@@ -1,7 +1,7 @@
 From: andersen@uclibc.org <andersen@uclibc.org>
-Date: Tue Jul 18 02:13:14 2006
-Subject: [Buildroot] svn commit: trunk/buildroot/package/libgtk12
-Message-ID: <20060718091313.7189F48BF5@busybox.net>
+Date: Tue Jul 18 15:59:00 2006
+Subject: [Buildroot] svn commit: trunk/buildroot:  package
+Message-ID: <20060718225858.A242248B55@busybox.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -9,69 +9,44 @@ Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
 Author: andersen
-Date: 2006-07-18 02:13:13 -0700 (Tue, 18 Jul 2006)
-New Revision: 15715
+Date: 2006-07-18 15:58:58 -0700 (Tue, 18 Jul 2006)
+New Revision: 15719
 
 Log:
-fixup patch
+move TAR_OPTIONS to its rightful place
 
 
 Modified:
-   trunk/buildroot/package/libgtk12/gtk+1.2-reconf.patch
+   trunk/buildroot/Makefile
+   trunk/buildroot/package/Makefile.in
 
 
 Changeset:
-Modified: trunk/buildroot/package/libgtk12/gtk+1.2-reconf.patch
+Modified: trunk/buildroot/Makefile
 ===================================================================
---- trunk/buildroot/package/libgtk12/gtk+1.2-reconf.patch	2006-07-18 08:53:30 UTC (rev 15714)
-+++ trunk/buildroot/package/libgtk12/gtk+1.2-reconf.patch	2006-07-18 09:13:13 UTC (rev 15715)
-@@ -641,49 +641,3 @@
-  AC_DEFUN(AM_GTK_WITH_NLS,
-    [AC_MSG_CHECKING([whether NLS is requested])
-      dnl Default is enabled NLS
----- gtk+-1.2.10/gtk-config.in~gtk+1.2-reconf-fix
--+++ gtk+-1.2.10/gtk-config.in
--@@ -1,10 +1,5 @@
-- #!/bin/sh
-- 
---glib_libs="@glib_libs@"
---glib_cflags="@glib_cflags@"
---glib_thread_libs="@glib_thread_libs@"
---glib_thread_cflags="@glib_thread_cflags@"
---
-- prefix=@prefix@
-- exec_prefix=@exec_prefix@
-- exec_prefix_set=no
--@@ -86,27 +81,16 @@
-- fi
-- 
-- if test "$lib_gthread" = "yes"; then
---      glib_cflags="$glib_thread_cflags"
---      glib_libs="$glib_thread_libs"
--+  modules="gtk+ gthread"
--+else
--+  modules="gtk+"
-- fi
-- 
-- if test "$echo_cflags" = "yes"; then
---      echo -I@includedir@/gtk-1.2 $glib_cflags @x_cflags@ 
--+  echo `pkg-config --cflags $modules`
-- fi
-- 
-- if test "$echo_libs" = "yes"; then
---      my_glib_libs=
---      libdirs=-L@libdir@
---      for i in $glib_libs ; do
---        if test $i != -L@libdir@ ; then
---          if test -z "$my_glib_libs" ; then
---            my_glib_libs="$i"
---          else
---            my_glib_libs="$my_glib_libs $i"
---          fi
---        fi
---      done
---
---      echo $libdirs @x_ldflags@ -lgtk -lgdk $my_glib_libs @INTLLIBS@ @x_libs@ @GDK_WLIBS@ -lm
--+  echo `pkg-config --libs $modules`
-- fi      
-- 
+--- trunk/buildroot/Makefile	2006-07-18 18:32:17 UTC (rev 15718)
++++ trunk/buildroot/Makefile	2006-07-18 22:58:58 UTC (rev 15719)
+@@ -35,9 +35,6 @@
+ -include $(TOPDIR).config
+ endif
+ 
+-TAR_OPTIONS=$(subst ",, $(BR2_TAR_OPTIONS)) -xf
+-#"
+-
+ ifeq ($(strip $(BR2_HAVE_DOT_CONFIG)),y)
+ 
+ #############################################################
+
+Modified: trunk/buildroot/package/Makefile.in
+===================================================================
+--- trunk/buildroot/package/Makefile.in	2006-07-18 18:32:17 UTC (rev 15718)
++++ trunk/buildroot/package/Makefile.in	2006-07-18 22:58:58 UTC (rev 15719)
+@@ -8,6 +8,8 @@
+ #"
+ SVN:=$(strip $(subst ",, $(BR2_SVN)))
+ #"
++TAR_OPTIONS=$(subst ",, $(BR2_TAR_OPTIONS)) -xf
++#"
+ 
+ 
+ 
