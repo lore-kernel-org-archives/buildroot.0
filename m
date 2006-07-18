@@ -1,7 +1,7 @@
 From: andersen@uclibc.org <andersen@uclibc.org>
-Date: Tue Jul 18 02:01:21 2006
+Date: Tue Jul 18 02:13:14 2006
 Subject: [Buildroot] svn commit: trunk/buildroot/package/libgtk12
-Message-ID: <20060718085330.89C6A48BD8@busybox.net>
+Message-ID: <20060718091313.7189F48BF5@busybox.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -9,75 +9,69 @@ Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
 Author: andersen
-Date: 2006-07-18 01:53:30 -0700 (Tue, 18 Jul 2006)
-New Revision: 15714
+Date: 2006-07-18 02:13:13 -0700 (Tue, 18 Jul 2006)
+New Revision: 15715
 
 Log:
-fixup build dependancies and such
+fixup patch
 
 
 Modified:
-   trunk/buildroot/package/libgtk12/libgtk12.mk
+   trunk/buildroot/package/libgtk12/gtk+1.2-reconf.patch
 
 
 Changeset:
-Modified: trunk/buildroot/package/libgtk12/libgtk12.mk
+Modified: trunk/buildroot/package/libgtk12/gtk+1.2-reconf.patch
 ===================================================================
---- trunk/buildroot/package/libgtk12/libgtk12.mk	2006-07-18 07:59:29 UTC (rev 15713)
-+++ trunk/buildroot/package/libgtk12/libgtk12.mk	2006-07-18 08:53:30 UTC (rev 15714)
-@@ -24,12 +24,15 @@
- $(LIBGTK12_DIR)/.configured: $(LIBGTK12_DIR)/.unpacked
- 	(cd $(LIBGTK12_DIR); rm -rf config.cache; \
- 		$(TARGET_CONFIGURE_OPTS) \
-+		GLIB_CONFIG=$(STAGING_DIR)/bin/glib-config \
- 		ac_cv_func_mmap_fixed_mapped=yes \
- 		./configure \
- 		--host=$(REAL_GNU_TARGET_NAME) \
- 		--build=$(GNU_HOST_NAME) \
--		--prefix=/usr \
--		--exec-prefix=/usr \
-+		--prefix=$(STAGING_DIR) \
-+		--exec_prefix=$(STAGING_DIR) \
-+		--libdir=$(STAGING_DIR)/lib \
-+		--includedir=$(STAGING_DIR)/include \
- 		--bindir=/usr/bin \
- 		--sbindir=/usr/sbin \
- 		--libexecdir=/usr/lib \
-@@ -41,7 +44,6 @@
- 		$(DISABLE_NLS) \
- 		--x-includes=$(STAGING_DIR)/usr/X11R6/include \
- 		--x-libraries=$(STAGING_DIR)/usr/X11R6/lib \
--		--with-glib-prefix=$(STAGING_DIR) \
- 		--enable-debug=no \
- 		--disable-glibtest \
- 		--disable-xim \
-@@ -49,10 +51,11 @@
- 	);
- 	touch $(LIBGTK12_DIR)/.configured
- 
--$(LIBGTK12_DIR)/.libs/$(LIBGTK12_BINARY): $(LIBGTK12_DIR)/.configured
-+$(LIBGTK12_DIR)/gtk/.libs/$(LIBGTK12_BINARY): $(LIBGTK12_DIR)/.configured
- 	$(MAKE) CC=$(TARGET_CC) -C $(LIBGTK12_DIR)
-+	touch -c $(LIBGTK12_DIR)/gtk/.libs/$(LIBGTK12_BINARY)
- 
--$(STAGING_DIR)/lib/$(LIBGTK12_BINARY): $(LIBGTK12_DIR)/.libs/$(LIBGTK12_BINARY)
-+$(STAGING_DIR)/lib/$(LIBGTK12_BINARY): $(LIBGTK12_DIR)/gtk/.libs/$(LIBGTK12_BINARY)
- 	$(MAKE) prefix=$(STAGING_DIR) \
- 	    exec_prefix=$(STAGING_DIR) \
- 	    bindir=$(STAGING_DIR)/bin \
-@@ -68,6 +71,7 @@
- 	    infodir=$(STAGING_DIR)/info \
- 	    mandir=$(STAGING_DIR)/man \
- 	    -C $(LIBGTK12_DIR) install;
-+	touch -c $(STAGING_DIR)/lib/$(LIBGTK12_BINARY)
- 
- $(TARGET_DIR)/lib/libgtk-1.2.so.0.9.1: $(STAGING_DIR)/lib/$(LIBGTK12_BINARY)
- 	cp -a $(STAGING_DIR)/lib/libgtk.so $(TARGET_DIR)/lib/
-@@ -78,6 +82,7 @@
- 	cp -a $(STAGING_DIR)/lib/libgdk-1.2.so.0.9.1 $(TARGET_DIR)/lib/
- 	$(STRIP) --strip-unneeded $(TARGET_DIR)/lib/libgtk-1.2.so.0.9.1
- 	$(STRIP) --strip-unneeded $(TARGET_DIR)/lib/libgdk-1.2.so.0.9.1
-+	touch -c $(TARGET_DIR)/lib/libgtk-1.2.so.0.9.1
- 
- libgtk12: uclibc libglib12 xorg $(TARGET_DIR)/lib/libgtk-1.2.so.0.9.1
- 
+--- trunk/buildroot/package/libgtk12/gtk+1.2-reconf.patch	2006-07-18 08:53:30 UTC (rev 15714)
++++ trunk/buildroot/package/libgtk12/gtk+1.2-reconf.patch	2006-07-18 09:13:13 UTC (rev 15715)
+@@ -641,49 +641,3 @@
+  AC_DEFUN(AM_GTK_WITH_NLS,
+    [AC_MSG_CHECKING([whether NLS is requested])
+      dnl Default is enabled NLS
+---- gtk+-1.2.10/gtk-config.in~gtk+1.2-reconf-fix
+-+++ gtk+-1.2.10/gtk-config.in
+-@@ -1,10 +1,5 @@
+- #!/bin/sh
+- 
+--glib_libs="@glib_libs@"
+--glib_cflags="@glib_cflags@"
+--glib_thread_libs="@glib_thread_libs@"
+--glib_thread_cflags="@glib_thread_cflags@"
+--
+- prefix=@prefix@
+- exec_prefix=@exec_prefix@
+- exec_prefix_set=no
+-@@ -86,27 +81,16 @@
+- fi
+- 
+- if test "$lib_gthread" = "yes"; then
+--      glib_cflags="$glib_thread_cflags"
+--      glib_libs="$glib_thread_libs"
+-+  modules="gtk+ gthread"
+-+else
+-+  modules="gtk+"
+- fi
+- 
+- if test "$echo_cflags" = "yes"; then
+--      echo -I@includedir@/gtk-1.2 $glib_cflags @x_cflags@ 
+-+  echo `pkg-config --cflags $modules`
+- fi
+- 
+- if test "$echo_libs" = "yes"; then
+--      my_glib_libs=
+--      libdirs=-L@libdir@
+--      for i in $glib_libs ; do
+--        if test $i != -L@libdir@ ; then
+--          if test -z "$my_glib_libs" ; then
+--            my_glib_libs="$i"
+--          else
+--            my_glib_libs="$my_glib_libs $i"
+--          fi
+--        fi
+--      done
+--
+--      echo $libdirs @x_ldflags@ -lgtk -lgdk $my_glib_libs @INTLLIBS@ @x_libs@ @GDK_WLIBS@ -lm
+-+  echo `pkg-config --libs $modules`
+- fi      
+- 
