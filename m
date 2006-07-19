@@ -1,7 +1,7 @@
 From: vapier@uclibc.org <vapier@uclibc.org>
-Date: Wed Jul 19 16:54:00 2006
-Subject: [Buildroot] svn commit: trunk/buildroot/package/dm
-Message-ID: <20060719235400.2BDEA48B24@busybox.net>
+Date: Wed Jul 19 16:56:35 2006
+Subject: [Buildroot] svn commit: trunk/buildroot/package/dhcp
+Message-ID: <20060719235634.14D7D48B24@busybox.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -9,27 +9,48 @@ Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
 Author: vapier
-Date: 2006-07-19 16:53:59 -0700 (Wed, 19 Jul 2006)
-New Revision: 15730
+Date: 2006-07-19 16:56:33 -0700 (Wed, 19 Jul 2006)
+New Revision: 15731
 
 Log:
-ver bump #962 by bowerymarc
+ver bump #958 by bowerymarc
 
 Modified:
-   trunk/buildroot/package/dm/dm.mk
+   trunk/buildroot/package/dhcp/dhcp.mk
+   trunk/buildroot/package/dhcp/dhcp_xecute.patch
 
 
 Changeset:
-Modified: trunk/buildroot/package/dm/dm.mk
+Modified: trunk/buildroot/package/dhcp/dhcp.mk
 ===================================================================
---- trunk/buildroot/package/dm/dm.mk	2006-07-19 21:45:30 UTC (rev 15729)
-+++ trunk/buildroot/package/dm/dm.mk	2006-07-19 23:53:59 UTC (rev 15730)
-@@ -24,7 +24,7 @@
- # USA
- 
- DM_BASEVER=1.02
--DM_PATCH=07
-+DM_PATCH=08
- DM_VERSION=$(DM_BASEVER).$(DM_PATCH)
- DM_SOURCE:=device-mapper.$(DM_VERSION).tgz
- DM_SITE:=ftp://sources.redhat.com/pub/dm
+--- trunk/buildroot/package/dhcp/dhcp.mk	2006-07-19 23:53:59 UTC (rev 15730)
++++ trunk/buildroot/package/dhcp/dhcp.mk	2006-07-19 23:56:33 UTC (rev 15731)
+@@ -3,7 +3,7 @@
+ # dhcp
+ #
+ #############################################################
+-DHCP_VER:=3.0.3
++DHCP_VER:=3.0.4
+ DHCP_SOURCE:=dhcp-$(DHCP_VER).tar.gz
+ DHCP_SITE:=ftp://ftp.isc.org/isc/dhcp
+ DHCP_CAT:=zcat
+
+Modified: trunk/buildroot/package/dhcp/dhcp_xecute.patch
+===================================================================
+--- trunk/buildroot/package/dhcp/dhcp_xecute.patch	2006-07-19 23:53:59 UTC (rev 15730)
++++ trunk/buildroot/package/dhcp/dhcp_xecute.patch	2006-07-19 23:56:33 UTC (rev 15731)
+@@ -412,11 +412,11 @@
+ --- dhcp-3.0.2.orig/includes/dhctoken.h	2004-09-21 13:25:38.000000000 -0600
+ +++ dhcp-3.0.2/includes/dhctoken.h	2005-02-24 12:33:21.000000000 -0700
+ @@ -308,7 +308,8 @@
+- 	REFRESH = 612,
+  	DOMAIN_NAME = 613,
+  	DO_FORWARD_UPDATE = 614,
+--	KNOWN_CLIENTS = 615
+-+	KNOWN_CLIENTS = 615,
++ 	KNOWN_CLIENTS = 615,
++-	ATSFP = 616
+++	ATSFP = 616,
+ +	EXECUTE = 616
+  };
+  
