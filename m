@@ -1,8 +1,7 @@
 From: andersen@uclibc.org <andersen@uclibc.org>
-Date: Tue Jul 18 23:38:01 2006
-Subject: [Buildroot] svn commit: trunk/buildroot: package/sed
-	toolchain/dependencies toolc etc...
-Message-ID: <20060719063759.18C6848B34@busybox.net>
+Date: Wed Jul 19 10:51:14 2006
+Subject: [Buildroot] svn commit: trunk/buildroot/package/dmraid
+Message-ID: <20060719175112.E7BB848698@busybox.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -10,105 +9,77 @@ Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
 Author: andersen
-Date: 2006-07-18 23:37:58 -0700 (Tue, 18 Jul 2006)
-New Revision: 15725
+Date: 2006-07-19 10:51:12 -0700 (Wed, 19 Jul 2006)
+New Revision: 15726
 
 Log:
-minor dependancy cleanup
+oops
 
+
+Added:
+   trunk/buildroot/package/dmraid/dmraid.init
 
 Modified:
-   trunk/buildroot/package/sed/sed.mk
-   trunk/buildroot/toolchain/dependencies/dependencies.mk
-   trunk/buildroot/toolchain/kernel-headers/kernel-headers.mk
-   trunk/buildroot/toolchain/uClibc/uClibc.config
-   trunk/buildroot/toolchain/uClibc/uClibc.config-locale
-   trunk/buildroot/toolchain/uClibc/uclibc.mk
+   trunk/buildroot/package/dmraid/dmraid.mk
 
 
 Changeset:
-Modified: trunk/buildroot/package/sed/sed.mk
+Added: trunk/buildroot/package/dmraid/dmraid.init
 ===================================================================
---- trunk/buildroot/package/sed/sed.mk	2006-07-19 00:06:06 UTC (rev 15724)
-+++ trunk/buildroot/package/sed/sed.mk	2006-07-19 06:37:58 UTC (rev 15725)
-@@ -156,3 +156,4 @@
- ifeq ($(strip $(BR2_PACKAGE_SED)),y)
- TARGETS+=sed
- endif
-+.PHONY: sed host-sed
-
-Modified: trunk/buildroot/toolchain/dependencies/dependencies.mk
-===================================================================
---- trunk/buildroot/toolchain/dependencies/dependencies.mk	2006-07-19 00:06:06 UTC (rev 15724)
-+++ trunk/buildroot/toolchain/dependencies/dependencies.mk	2006-07-19 06:37:58 UTC (rev 15725)
-@@ -6,7 +6,7 @@
- ######################################################################
- 
- dependencies: host-sed
--	$(TOPDIR)/toolchain/dependencies/dependencies.sh
-+	@$(TOPDIR)/toolchain/dependencies/dependencies.sh
- 
- dependencies-source:
- 
-@@ -21,5 +21,5 @@
- # Toplevel Makefile options
- #
- #############################################################
--# unconditionally include this one...
--TARGETS+=dependencies
-+.PHONY: dependencies
+--- trunk/buildroot/package/dmraid/dmraid.init	2006-07-19 06:37:58 UTC (rev 15725)
++++ trunk/buildroot/package/dmraid/dmraid.init	2006-07-19 17:51:12 UTC (rev 15726)
+@@ -0,0 +1,31 @@
++#!/bin/sh
 +
++# try to load module in case that hasn't been done yet
++modprobe dm-mod >/dev/null 2>&1
++
++set -e
++
++[ -x /sbin/dmraid ] || exit 0
++
++case "$1" in
++	start|"")
++		echo "Setting up DMRAID devices..."
++		/sbin/dmraid --activate yes --ignorelocking --verbose
++		;;
++
++	stop)
++		echo "Shutting down DMRAID devices... "
++		/sbin/dmraid --activate no --ignorelocking --verbose
++		;;
++
++	restart|force-reload)
++		$0 stop
++		sleep 1
++		$0 start
++		;;
++
++	*)
++		echo "Usage: dmraid {start|stop|restart|force-reload}"
++		exit 1
++		;;
++esac
 
-Modified: trunk/buildroot/toolchain/kernel-headers/kernel-headers.mk
+Modified: trunk/buildroot/package/dmraid/dmraid.mk
 ===================================================================
---- trunk/buildroot/toolchain/kernel-headers/kernel-headers.mk	2006-07-19 00:06:06 UTC (rev 15724)
-+++ trunk/buildroot/toolchain/kernel-headers/kernel-headers.mk	2006-07-19 06:37:58 UTC (rev 15725)
-@@ -177,3 +177,4 @@
- kernel-headers-dirclean:
- 	rm -rf $(LINUX_HEADERS_DIR)
+--- trunk/buildroot/package/dmraid/dmraid.mk	2006-07-19 06:37:58 UTC (rev 15725)
++++ trunk/buildroot/package/dmraid/dmraid.mk	2006-07-19 17:51:12 UTC (rev 15726)
+@@ -18,7 +18,7 @@
  
-+.PHONY: kernel-headers
-
-Modified: trunk/buildroot/toolchain/uClibc/uClibc.config
-===================================================================
---- trunk/buildroot/toolchain/uClibc/uClibc.config	2006-07-19 00:06:06 UTC (rev 15724)
-+++ trunk/buildroot/toolchain/uClibc/uClibc.config	2006-07-19 06:37:58 UTC (rev 15725)
-@@ -151,7 +151,7 @@
- # UCLIBC_HAS_WORDEXP is not set
- UCLIBC_HAS_FTW=y
- UCLIBC_HAS_GLOB=y
--# UCLIBC_HAS_GNU_GLOB is not set
-+UCLIBC_HAS_GNU_GLOB=y
+ $(DMRAID_DIR)/.unpacked: $(DL_DIR)/$(DMRAID_SOURCE)
+ 	$(DMRAID_CAT) $(DL_DIR)/$(DMRAID_SOURCE) | tar -C $(BUILD_DIR) -xvf -
+-	$(SOURCE_DIR)/patch-kernel.sh $(DMRAID_DIR) $(SOURCE_DIR) dmraid\*.patch
++	toolchain/patch-kernel.sh $(DMRAID_DIR) package/dmraid \*.patch
+ 	touch $(DMRAID_DIR)/.unpacked
  
- #
- # Library Installation Options
-
-Modified: trunk/buildroot/toolchain/uClibc/uClibc.config-locale
-===================================================================
---- trunk/buildroot/toolchain/uClibc/uClibc.config-locale	2006-07-19 00:06:06 UTC (rev 15724)
-+++ trunk/buildroot/toolchain/uClibc/uClibc.config-locale	2006-07-19 06:37:58 UTC (rev 15725)
-@@ -153,7 +153,7 @@
- # UCLIBC_HAS_WORDEXP is not set
- UCLIBC_HAS_FTW=y
- UCLIBC_HAS_GLOB=y
--# UCLIBC_HAS_GNU_GLOB is not set
-+UCLIBC_HAS_GNU_GLOB=y
+ $(DMRAID_DIR)/.configured: $(DMRAID_DIR)/.unpacked
+@@ -44,7 +44,7 @@
  
- #
- # Library Installation Options
-
-Modified: trunk/buildroot/toolchain/uClibc/uclibc.mk
-===================================================================
---- trunk/buildroot/toolchain/uClibc/uclibc.mk	2006-07-19 00:06:06 UTC (rev 15724)
-+++ trunk/buildroot/toolchain/uClibc/uclibc.mk	2006-07-19 06:37:58 UTC (rev 15725)
-@@ -67,8 +67,8 @@
- 	toolchain/patch-kernel.sh $(UCLIBC_DIR) toolchain/uClibc/ \*.patch
- 	touch $(UCLIBC_DIR)/.unpacked
+ $(DMRAID_TARGET_BINARY): $(DMRAID_DIR)/tools/$(DMRAID_BINARY)
+ 	$(INSTALL) -m 0755 $? $@
+-	$(INSTALL) -m 0755 $(SOURCE_DIR)/dmraid.init $(TARGET_DIR)/etc/init.d/dmraid
++	$(INSTALL) -m 0755 package/dmraid/dmraid.init $(TARGET_DIR)/etc/init.d/dmraid
  
--uclibc-configured: $(UCLIBC_DIR)/.configured
--$(UCLIBC_DIR)/.configured: dependencies kernel-headers $(UCLIBC_DIR)/.unpacked
-+uclibc-configured: dependencies kernel-headers $(UCLIBC_DIR)/.configured
-+$(UCLIBC_DIR)/.configured: $(UCLIBC_DIR)/.unpacked
- 	cp $(UCLIBC_CONFIG_FILE) $(UCLIBC_DIR)/.config
- 	$(SED) 's,^CROSS_COMPILER_PREFIX=.*,CROSS_COMPILER_PREFIX="$(TARGET_CROSS)",g' \
- 		-e 's,# TARGET_$(UCLIBC_TARGET_ARCH) is not set,TARGET_$(UCLIBC_TARGET_ARCH)=y,g' \
+ dmraid: uclibc dm $(DMRAID_TARGET_BINARY)
+ 
