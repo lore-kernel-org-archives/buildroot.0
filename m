@@ -1,31 +1,23 @@
 From: Ed Swierk <eswierk@arastra.com>
-Date: Fri Jul 21 16:32:15 2006
-Subject: [Buildroot] [PATCH] bash 3.1 compile error with parallel make
-Message-ID: <c1bf1cf0607211625q589f6d5bx48624c63048d1686@mail.gmail.com>
+Date: Fri Jul 21 16:34:36 2006
+Subject: [Buildroot] [PATCH] u_int undefined when compiling libpcap
+Message-ID: <c1bf1cf0607211634n7509600ft308f06c00296592e@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-The attached patch fixes a compile error that sometimes occurs when
-building bash with parallel make (-j2 or higher), due to a missing
-dependency.
-
-Actually it's a patch of a patch (bash31-018), so I've attached both.
+libpcap-0.9.4 fails to compile against uClibc-20060720, complaining
+that u_int is undefined. The attached patch adds -D_GNU_SOURCE to
+CFLAGS when configuring libpcap, ensuring that u_int is defined
+properly.
 
 --Ed
 -------------- next part --------------
 A non-text attachment was scrubbed...
-Name: buildroot-bash-parallel-make.patch
+Name: buildroot-libpcap-gnu-source.patch
 Type: text/x-patch
-Size: 643 bytes
+Size: 461 bytes
 Desc: not available
-Url : http://busybox.net/lists/buildroot/attachments/20060721/40a3041d/buildroot-bash-parallel-make.bin
--------------- next part --------------
-A non-text attachment was scrubbed...
-Name: bash31-018
-Type: application/octet-stream
-Size: 462 bytes
-Desc: not available
-Url : http://busybox.net/lists/buildroot/attachments/20060721/40a3041d/bash31-018.obj
+Url : http://busybox.net/lists/buildroot/attachments/20060721/e7c3634b/buildroot-libpcap-gnu-source.bin
