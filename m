@@ -1,22 +1,29 @@
 From: Ed Swierk <eswierk@arastra.com>
-Date: Fri Jul 21 16:51:13 2006
-Subject: [Buildroot] [PATCH] cross mod-init-tools target
-Message-ID: <c1bf1cf0607211651k12cbd900n63ca0e791cccd026@mail.gmail.com>
+Date: Fri Jul 21 17:02:24 2006
+Subject: [Buildroot] [PATCH] symlink $(STAGING_DIR)/usr to $(STAGING_DIR)
+Message-ID: <c1bf1cf0607211702g34227b6dye197301e8b8e7702@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Building a modular Linux 2.6 kernel requires a cross version of
-mod-init-tools, just as Linux 2.4 requires modutils. The attached
-patch adds a cross target to mod-init-tools.mk.
+Some toolchain packages install themselves to $(STAGING_DIR) while
+others end up in $(STAGING_DIR)/usr, resulting in two bin directories,
+two lib directories, two include directories, etc. This makes it
+harder to fix build problems within buildroot, and adds unnecessary
+complication to the process of configuring a package to build outside
+buildroot.
+
+The attached patch simply symlinks $(STAGING_DIR)/usr to
+$(STAGING_DIR), thereby merging the two directory hierarchies into
+one.
 
 --Ed
 -------------- next part --------------
 A non-text attachment was scrubbed...
-Name: buildroot-cross-module-init-tools.patch
+Name: buildroot-toolchain-usr-dir.patch
 Type: text/x-patch
-Size: 3392 bytes
+Size: 370 bytes
 Desc: not available
-Url : http://busybox.net/lists/buildroot/attachments/20060721/93f56bd1/buildroot-cross-module-init-tools.bin
+Url : http://busybox.net/lists/buildroot/attachments/20060721/d20a4888/buildroot-toolchain-usr-dir.bin
