@@ -1,31 +1,20 @@
 From: Ed Swierk <eswierk@arastra.com>
-Date: Fri Jul 21 17:11:33 2006
-Subject: [Buildroot] [PATCH] ccache fails if toolchain build dir is deleted
-Message-ID: <c1bf1cf0607211711g5b7f5d7bmbaad3f8e7c2add15@mail.gmail.com>
+Date: Fri Jul 21 17:14:54 2006
+Subject: [Buildroot] [PATCH] use busybox 1.2.0
+Message-ID: <c1bf1cf0607211713x35866f4fm227c1ab9c3f963b9@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Deleting the toolchain build directory causes ccache to stop working.
-This is unfortunate because the toolchain would otherwise be easy to
-package up and distribute as an rpm, which developers could then use
-to build packages outside buildroot.
-
-The attached patch prevents ccache.mk from hardcoding the ccache
-directory to the toolchain build tree. This restores ccache's default
-behavior of looking at the CCACHE_DIR environment variable or using
-$HOME/.ccache if it is unset. Using the same ccache directory with
-different toolchains shouldn't cause trouble, as ccache is smart
-enough to take the compiler into account when computing source file
-hashes.
+The attached patch bumps the default busybox version to 1.2.0.
 
 --Ed
 -------------- next part --------------
 A non-text attachment was scrubbed...
-Name: buildroot-ccache-unhardcode-cache-dir.patch
+Name: buildroot-busybox-120.patch
 Type: text/x-patch
-Size: 613 bytes
+Size: 464 bytes
 Desc: not available
-Url : http://busybox.net/lists/buildroot/attachments/20060721/3557ef9a/buildroot-ccache-unhardcode-cache-dir-0001.bin
+Url : http://busybox.net/lists/buildroot/attachments/20060721/e7d79d60/buildroot-busybox-120.bin
