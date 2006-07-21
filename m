@@ -1,23 +1,22 @@
 From: Ed Swierk <eswierk@arastra.com>
-Date: Fri Jul 21 16:48:30 2006
-Subject: [Buildroot] [PATCH] iproute2 configure fails
-Message-ID: <c1bf1cf0607211629r3e01b58fsb88ece07e7d654ee@mail.gmail.com>
+Date: Fri Jul 21 16:51:13 2006
+Subject: [Buildroot] [PATCH] cross mod-init-tools target
+Message-ID: <c1bf1cf0607211651k12cbd900n63ca0e791cccd026@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-The configure script in iproute2-2.6.14-051107 has the wrong mode, so
-it cannot be executed directly. The attached patch changes iproute2.mk
-to run the configure script inside a shell, as a workaround for this
-bug.
+Building a modular Linux 2.6 kernel requires a cross version of
+mod-init-tools, just as Linux 2.4 requires modutils. The attached
+patch adds a cross target to mod-init-tools.mk.
 
 --Ed
 -------------- next part --------------
 A non-text attachment was scrubbed...
-Name: buildroot-iproute2-configure.patch
+Name: buildroot-cross-module-init-tools.patch
 Type: text/x-patch
-Size: 430 bytes
+Size: 3392 bytes
 Desc: not available
-Url : http://busybox.net/lists/buildroot/attachments/20060721/3b113587/buildroot-iproute2-configure.bin
+Url : http://busybox.net/lists/buildroot/attachments/20060721/93f56bd1/buildroot-cross-module-init-tools.bin
