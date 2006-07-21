@@ -1,29 +1,31 @@
 From: Ed Swierk <eswierk@arastra.com>
-Date: Fri Jul 21 17:02:24 2006
-Subject: [Buildroot] [PATCH] symlink $(STAGING_DIR)/usr to $(STAGING_DIR)
-Message-ID: <c1bf1cf0607211702g34227b6dye197301e8b8e7702@mail.gmail.com>
+Date: Fri Jul 21 17:11:33 2006
+Subject: [Buildroot] [PATCH] ccache fails if toolchain build dir is deleted
+Message-ID: <c1bf1cf0607211711g5b7f5d7bmbaad3f8e7c2add15@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Some toolchain packages install themselves to $(STAGING_DIR) while
-others end up in $(STAGING_DIR)/usr, resulting in two bin directories,
-two lib directories, two include directories, etc. This makes it
-harder to fix build problems within buildroot, and adds unnecessary
-complication to the process of configuring a package to build outside
-buildroot.
+Deleting the toolchain build directory causes ccache to stop working.
+This is unfortunate because the toolchain would otherwise be easy to
+package up and distribute as an rpm, which developers could then use
+to build packages outside buildroot.
 
-The attached patch simply symlinks $(STAGING_DIR)/usr to
-$(STAGING_DIR), thereby merging the two directory hierarchies into
-one.
+The attached patch prevents ccache.mk from hardcoding the ccache
+directory to the toolchain build tree. This restores ccache's default
+behavior of looking at the CCACHE_DIR environment variable or using
+$HOME/.ccache if it is unset. Using the same ccache directory with
+different toolchains shouldn't cause trouble, as ccache is smart
+enough to take the compiler into account when computing source file
+hashes.
 
 --Ed
 -------------- next part --------------
 A non-text attachment was scrubbed...
-Name: buildroot-toolchain-usr-dir.patch
+Name: buildroot-ccache-unhardcode-cache-dir.patch
 Type: text/x-patch
-Size: 370 bytes
+Size: 613 bytes
 Desc: not available
-Url : http://busybox.net/lists/buildroot/attachments/20060721/d20a4888/buildroot-toolchain-usr-dir.bin
+Url : http://busybox.net/lists/buildroot/attachments/20060721/3557ef9a/buildroot-ccache-unhardcode-cache-dir-0001.bin
