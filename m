@@ -1,28 +1,30 @@
-From: Ed Swierk <eswierk@arastra.com>
-Date: Fri Jul 21 17:27:58 2006
-Subject: [Buildroot] [PATCH] build Linux 2.6 kernel
-Message-ID: <c1bf1cf0607211727s5b8f1334x48670099698fc2b3@mail.gmail.com>
+From: Neelima Wandre <neelima.wandre@silicus.com>
+Date: Sun Jul 23 22:59:47 2006
+Subject: FW: [Buildroot] error in compiling X11R6.9.0
+Message-ID: <PUNEX1Kosm82qhpp8eu000003ce@mail.silicus.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-The attached patch adds a Linux 2.6 kernel package to buildroot. I've
-only used it to build for a PowerPC, but it should be sufficiently
-parameterized to support any architecture.
-
-I understand that the preferred way of building a kernel with
-buildroot is to set up a target device tree, but for me this would
-just add extra work, as I already provide all the target
-device-specific parameters (UCLIBC_CONFIG_FILE, BUSYBOX_CONFIG_FILE,
-TARGET_SKELETON, etc.) on the command line when making buildroot.
-
---Ed
+Skipped content of type multipart/alternative-------------- next part --------------
+_______________________________________________
+buildroot mailing list
+buildroot@uclibc.org
+http://busybox.net/mailman/listinfo/buildroot
 -------------- next part --------------
-A non-text attachment was scrubbed...
-Name: buildroot-linux-package.patch
-Type: text/x-patch
-Size: 4011 bytes
-Desc: not available
-Url : http://busybox.net/lists/buildroot/attachments/20060721/6f249bc7/buildroot-linux-package.bin
+_______________________________________________
+buildroot mailing list
+buildroot@uclibc.org
+http://busybox.net/mailman/listinfo/buildroot
+-------------- next part --------------
+_______________________________________________
+xorg mailing list
+xorg@lists.freedesktop.org
+http://lists.freedesktop.org/mailman/listinfo/xorg
+-------------- next part --------------
+_______________________________________________
+xorg mailing list
+xorg@lists.freedesktop.org
+http://lists.freedesktop.org/mailman/listinfo/xorg
