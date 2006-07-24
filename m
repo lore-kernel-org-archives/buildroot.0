@@ -1,58 +1,43 @@
-From: Erik Andersen <andersen@codepoet.org>
-Date: Mon Jul 24 11:12:56 2006
-Subject: [Buildroot] problems and solutions for tinyx
-In-Reply-To: <44C4AD92.7000205@tiscali.de>
+From: Marc Lindahl <marc@bowery.com>
+Date: Mon Jul 24 11:19:52 2006
+Subject: [Buildroot] where to put patches for packages?
+In-Reply-To: <20060724180728.GA22730@codepoet.org>
 References: <44C4AD92.7000205@tiscali.de>
-Message-ID: <20060724181217.GB22730@codepoet.org>
+	<e03026b75efb187f2e170965e3c460d2@bowery.com>
+	<20060724180728.GA22730@codepoet.org>
+Message-ID: <16993bed37024f77f9641814e9a54b39@bowery.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Mon Jul 24, 2006 at 01:22:58PM +0200, Biucchi Gabriele wrote:
-> I want only to point out some problems I had with tinyx and the 
-> solutions that work with me: I hope, this can help somebody.
-> 
-> 1) change in tinyx-config.patch
-> 
-> tinyx-config.patch starts with:
-> 
-> --- xc/config/cf/host.def~ 2005-04-02 14:51:31.000000000 -0700
-> +++ xc/config/cf/host.def 2005-04-26 01:22:00.000000000 -0600
-> 
-> but I think it should be:
-> 
-> --- xc-011010/config/cf/host.def~ 2005-04-02 14:51:31.000000000 -0700
-> +++ xc-011010/config/cf/host.def 2005-04-26 01:22:00.000000000 -0600
 
-Patches are applied using 'patch -p1' so regardless of what the
-leading path is, it should be getting stripped.  Are you actually
-seeing a problem with this patch being applied?
+On Jul 24, 2006, at 2:07 PM, Erik Andersen wrote:
 
-> 2) change in tinyx.mk
-> 
-> Some programs (like rxvt) need x-includes and x-libraries in 
-> $(STAGING_DIR)/usr/X11R6/ , but tinyx.mk does not install anything there.
-> 
-> A naif solution consists to copy everything from $(TINYX_DIR)/exports/ 
-> into $(STAGING_DIR)/usr/X11R6/
+> On Mon Jul 24, 2006 at 01:17:23PM -0400, Marc Lindahl wrote:
+>> Hi,
+>> I'm a relative newbie to buildroot... I'm trying to figure out where 
+>> to
+>> put  (non-kernel) patches to packages (e.g. pcmcia-cs)... can someone
+>> point it out to me?
+>> Thx,
+>> M
+>
+> Packages have all their associated stuff in the
+> 	package/packagename/
+> directory.  So for example pcmcia-cs lives under
+> 	package/pcmcia/
+> and anything matching buildroot/package/pcmcia/pcmcia\*.patch
+> will be applied when building pcmcia-cs.
 
-This certainly seems to be Right Thing to do here.
+Thanks.... so I assume that you can control the order as usual by 
+naming the patches 001-blahblah.patch 002-blah.patch etc.?
 
-> 3) another change in tinyx.mk
-> 
-> The $PATH variable includes "/usr/bin/X11", but there is nothing there. 
-> A solution is to create a symbolic link between "/usr/bin/X11" and 
-> "/usr/X11R6/bin", putting in the tinyx.mk the line
-> 
-> ln -s /usr/X11R6/bin $(TARGET_DIR)/usr/bin/X11
 
-That seems best.  Any chance you could make these changes and
-submit a patch implementing them.
-
- -Erik
-
---
-Erik B. Andersen             http://codepoet-consulting.com/
---This message was written using 73% post-consumer electrons--
+>
+>  -Erik
+>
+> --
+> Erik B. Andersen             http://codepoet-consulting.com/
+> --This message was written using 73% post-consumer electrons--
