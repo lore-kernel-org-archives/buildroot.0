@@ -1,63 +1,65 @@
-From: amit bhosale <amitbhosale2000@rediffmail.com>
-Date: Mon Jul 24 01:06:55 2006
-Subject: [Buildroot] error during compiling Xorg-6.9.0 in buildroot
-Message-ID: <20060724075731.30220.qmail@webmail64.rediffmail.com>
+From: Biucchi Gabriele <biucchi@tiscali.de>
+Date: Mon Jul 24 04:25:11 2006
+Subject: [Buildroot] problems and solutions for tinyx
+Message-ID: <44C4AD92.7000205@tiscali.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-  
+I want only to point out some problems I had with tinyx and the 
+solutions that work with me: I hope, this can help somebody.
 
-hi
+1) change in tinyx-config.patch
 
-we are compiling Xorg using uclibc-buildroot. First of all we successfuly compile Xorg-6.8.2 which is present in buildroot option then i apply  patch 0000878 to update xorg to 6.9.0 (patch from buildroot based bug tracking)and make it compile.But we are getting following error while doing so
+tinyx-config.patch starts with:
 
-//------------------------------------------------------------------//
-making all in programs/Xserver/Xext...
-make[6]: Entering directory `/zamitwork/buildroot/build_i686/xc/programs/Xserver/Xext'
+--- xc/config/cf/host.def~ 2005-04-02 14:51:31.000000000 -0700
++++ xc/config/cf/host.def 2005-04-26 01:22:00.000000000 -0600
 
-/zamitwork/buildroot/build_i686/staging_dir/bin/i686-linux-uclibc-gcc -c -Os -ansi -Wall -Wpointer-arith -Wundef    -I. -I../include -I../../../exports/include/X11 -I../../../include/extensions            -I../../../include/fonts -I../mi -I../render -I../../../programs/Xserver/hw/xfree86/common -I../../../include/fonts          -I../hw/dmx  -I../../.. -I../../../exports/include  -Dlinux -D__i686__ -D_POSIX_SOURCE                            -D_BSD_SOURCE -D_GNU_SOURCE -DX_LOCALE -DSHAPE -DXINPUT -DXKB  -DXAPPGROUP  -DXCSECURITY -DTOGCUP  -DXF86BIGFONT -DDPMSExtension  -DXPRINT -DPIXPRIV -DPANORAMIX  -DRENDER -DRANDR    -DXFIXES -DDAMAGE -DCOMPOSITE -DXEVIE    -DGCCUSESGAS -DAVOID_GLYPHBLT -DPIXPRIV -DSINGLEDEPTH                      -DXFreeXDGA -DXvExtension                                -DXFree86LOADER -DDLOPEN_HACK -DXFree86Server                      -DXF86VIDMODE                            -DXvMCExtension                                -DSMART_SCHEDULE                    -DBUILDDEBUG -DXResExtension                            -DX_BYTE_ORDER=                                -DXORG_VERSION_CURRENT="(((6) * 10000000) + ((9) * 100000) + ((0) * 1000) + 0)" -DNDEBUG  -DFUNCPROTO=15 -DNARROWPROTO  -DMITMISC -DXTEST -DXTRAP      -DXSYNC -DXCMISC -DXRECORD      -DMITSHM -DBIGREQS -DXF86VIDMODE        -DXF86MISC -DDBE -DDPMSExtension -DEVI  -DSCREENSAVER -DXV -DXVMC              -DRES -DHAS_XVMCSHM  xf86vmode.c
-In file included from ../../../programs/Xserver/hw/xfree86/common/xf86str.h:45,
-                from ../../../programs/Xserver/hw/xfree86/common/xf86.h:40,
-                from xf86vmode.c:52:
-../../../programs/Xserver/hw/xfree86/common/xf86Pci.h:422:18: error: operator '==' has no left operand
-../../../programs/Xserver/hw/xfree86/common/xf86Pci.h:435:18: error: operator '==' has no left operand
-../../../programs/Xserver/hw/xfree86/common/xf86Pci.h:448:18: error: operator '==' has no left operand
-../../../programs/Xserver/hw/xfree86/common/xf86Pci.h:465:18: error: operator '==' has no left operand
-../../../programs/Xserver/hw/xfree86/common/xf86Pci.h:481:18: error: operator '==' has no left operand
-../../../programs/Xserver/hw/xfree86/common/xf86Pci.h:529:18: error: operator '==' has no left operand
-../../../programs/Xserver/hw/xfree86/common/xf86Pci.h:582:18: error: operator '==' has no left operand
-../../../programs/Xserver/hw/xfree86/common/xf86Pci.h:594:18: error: operator '==' has no left operand
-../../../programs/Xserver/hw/xfree86/common/xf86Pci.h:613:18: error: operator '==' has no left operand
-../../../programs/Xserver/hw/xfree86/common/xf86Pci.h:627:18: error: operator '==' has no left operand
-make[6]: *** [xf86vmode.o] Error 1
-make[6]: Leaving directory `/zamitwork/buildroot/build_i686/xc/programs/Xserver/Xext'
-make[5]: *** [Xext] Error 2
-make[5]: Leaving directory `/zamitwork/buildroot/build_i686/xc/programs/Xserver'
-make[4]: *** [all] Error 2
-make[4]: Leaving directory `/zamitwork/buildroot/build_i686/xc/programs'
-make[3]: *** [all] Error 2
-make[3]: Leaving directory `/zamitwork/buildroot/build_i686/xc'
-make[2]: *** [World] Error 2
-make[2]: Leaving directory `/zamitwork/buildroot/build_i686/xc'
-make[1]: *** [World] Error 2
-make[1]: Leaving directory `/zamitwork/buildroot/build_i686/xc'
-make: *** [/zamitwork/buildroot/build_i686/xc/programs/Xserver/Xorg] Error 2
-//------------------------------------------------------------------//
+but I think it should be:
 
-but this patch 0000878: "Update xorg to 6.9.0 and make it compile"
-description says==> that it altere host.def and cross.def envoriment.
-It should pass the correct ByteOrder, HasMMXSuppoer, hasMTRRSupport    and XF86INT10_BUILD depending on what Arch you are compiling for.
+--- xc-011010/config/cf/host.def~ 2005-04-02 14:51:31.000000000 -0700
++++ xc-011010/config/cf/host.def 2005-04-26 01:22:00.000000000 -0600
 
+2) change in tinyx.mk
 
-Can anyone please suggest us a solution to get rid of this error.
+Some programs (like rxvt) need x-includes and x-libraries in 
+$(STAGING_DIR)/usr/X11R6/ , but tinyx.mk does not install anything there.
+
+A naif solution consists to copy everything from $(TINYX_DIR)/exports/ 
+into $(STAGING_DIR)/usr/X11R6/, substituting the line
+
+tinyx: zlib $(TINYX_LIBX)/libX11.so.6.2 $(TINYX_BINX)/Xfbdev
+
+with the following lines (please note the "-L" option used with cp):
+
+$(STAGING_DIR)/usr/X11R6/lib/libX11.so.6.2: $(TINYX_LIBX)/libX11.so.6.2
+    mkdir -p $(STAGING_DIR)/usr/X11R6/lib
+    mkdir -p $(STAGING_DIR)/usr/X11R6/include
+    cp -fRL $(TINYX_DIR)/exports/include/* $(STAGING_DIR)/usr/X11R6/include/
+    cp -fRL $(TINYX_DIR)/exports/lib/* $(STAGING_DIR)/usr/X11R6/lib/
+
+tinyx: zlib $(TINYX_LIBX)/libX11.so.6.2 $(TINYX_BINX)/Xfbdev 
+$(STAGING_DIR)/usr/X11R6/lib/libX11.so.6.2
+
+3) another change in tinyx.mk
+
+The $PATH variable includes "/usr/bin/X11", but there is nothing there. 
+A solution is to create a symbolic link between "/usr/bin/X11" and 
+"/usr/X11R6/bin", putting in the tinyx.mk the line
+
+ln -s /usr/X11R6/bin $(TARGET_DIR)/usr/bin/X11
 
 
-Regards
+Best regards,
+Gabriele
 
-amit
--------------- next part --------------
-An HTML attachment was scrubbed...
-URL: http://busybox.net/lists/buildroot/attachments/20060724/4f0d5565/attachment.html
+
+	
+
+	
+		
+___________________________________________________________ 
+Der fr?he Vogel f?ngt den Wurm. Hier gelangen Sie zum neuen Yahoo! Mail: http://mail.yahoo.de
