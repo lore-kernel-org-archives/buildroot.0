@@ -1,43 +1,27 @@
-From: Biucchi Gabriele <biucchi@tiscali.de>
-Date: Tue Jul 25 04:26:42 2006
-Subject: [Buildroot] problems and solutions for tinyx
-In-Reply-To: <20060724181217.GB22730@codepoet.org>
-References: <44C4AD92.7000205@tiscali.de> <20060724181217.GB22730@codepoet.org>
-Message-ID: <44C5FF63.1040402@tiscali.de>
+From: amit bhosale <amitbhosale2000@rediffmail.com>
+Date: Tue Jul 25 05:35:43 2006
+Subject: [Buildroot] help need for install Xorg6.9.0
+Message-ID: <20060725122607.27290.qmail@webmail29.rediffmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Here is the patch for tinyx.mk
+  
+ hi 
 
-The change for tinyx-config.patch is not needed.
+  using buildroot i install Xorg6.9.0 successfully.
+  but after installing Xorg6.9.0 in root directory  
+  (buildroot/build_i686/root)
+  only following folder is present in  root/usr/X11R6/lib/X11/font
+  so pls tell me how to  install "xkb xserver xinit xdm".
 
-Best regards,
-Gabriele
+  Is there is any changes required to do in host.def xorg.cf xorgsite.df
+  or in Makefile 
 
+  pls send reply
+  amit        
 -------------- next part --------------
---- buildroot/package/tinyx/tinyx.mk	2006-07-25 11:56:45.000000000 +0200
-+++ br/package/tinyx/tinyx.mk	2006-07-25 12:03:45.000000000 +0200
-@@ -126,8 +126,19 @@
- 		cp -pRf $$file $(TINYX_LIBX) ; \
- 	done
- 
--tinyx: zlib $(TINYX_LIBX)/libX11.so.6.2 $(TINYX_BINX)/Xfbdev
-+#
-+# Install x-includes and x-libraries in $(STAGING_DIR)/usr/X11R6/
-+# and add a symbolic link between /usr/bin/X11 and /usr/X11R6/bin
-+#
-+$(STAGING_DIR)/usr/X11R6/lib/libX11.so.6.2: $(TINYX_LIBX)/libX11.so.6.2
-+	mkdir -p $(STAGING_DIR)/usr/X11R6/lib
-+	mkdir -p $(STAGING_DIR)/usr/X11R6/include
-+	cp -fRL $(TINYX_DIR)/exports/include/* $(STAGING_DIR)/usr/X11R6/include/
-+	cp -fRL $(TINYX_DIR)/exports/lib/* $(STAGING_DIR)/usr/X11R6/lib/
-+	ln -s /usr/X11R6/bin $(TARGET_DIR)/usr/bin/X11
- 
-+tinyx: zlib $(TINYX_LIBX)/libX11.so.6.2 $(TINYX_BINX)/Xfbdev $(STAGING_DIR)/usr/X11R6/lib/libX11.so.6.2 
-+	    
- tinyx-source: $(DL_DIR)/$(TINYX_SOURCE)
- 
- tinyx-clean:
+An HTML attachment was scrubbed...
+URL: http://busybox.net/lists/buildroot/attachments/20060725/95b1b0a1/attachment.html
