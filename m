@@ -1,63 +1,67 @@
-From: Erik Andersen <andersen@codepoet.org>
-Date: Wed Jul 26 12:02:47 2006
-Subject: [Buildroot] Re: toolchains and dependencies to libgcc_s.so.1
-In-Reply-To: <20060726190006.GA12305@codepoet.org>
-References: <20060726070427.25616.qmail@web26614.mail.ukl.yahoo.com>
-	<20060726190006.GA12305@codepoet.org>
-Message-ID: <20060726190151.GB12305@codepoet.org>
+From: andersen@uclibc.org <andersen@uclibc.org>
+Date: Wed Jul 26 12:11:39 2006
+Subject: [Buildroot] svn commit: trunk/buildroot/package/tinyx
+Message-ID: <20060726191137.1053948B0E@busybox.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Wed Jul 26, 2006 at 01:00:06PM -0600, Erik wrote:
-> On Wed Jul 26, 2006 at 09:04:27AM +0200, ayoub zaki wrote:
-> > Hi List,
-> >  
-> >  I have built toolchains for i386/arm/armeb with buildroot,and
-> >  when trying to compile a simple hello world I'm getting a
-> >  dependency to libgcc_s.so.1for i386/armeb :
-> [----------snip-------------]
-> >  Is that a bug in gcc or something else ? and how can I build
-> >  toolchains without this problem ?
-> 
-> This is on purpose.  If you don't like it, it can easily be
-> changed by telling gcc to staticly link all needed libgcc stuff
-> into each app (often making your target system larger, but not
-> always).  Anyway...
-> 
-> $ cd toolchain_build_XXX/gcc-Y.Y.Y/gcc/
-> $ ./configure --help | grep libgcc
->   --disable-shared        don't provide a shared libgcc
-> 
-> The change then that you are looking for is:
-> 
-> --- buildroot/toolchain/gcc/gcc-uclibc-3.x.mk	(revision 15746)
-> +++ buildroot/toolchain/gcc/gcc-uclibc-3.x.mk	(working copy)
-> @@ -175,7 +175,7 @@
->  		--host=$(GNU_HOST_NAME) \
->  		--target=$(REAL_GNU_TARGET_NAME) \
->  		--enable-languages=$(TARGET_LANGUAGES) \
-> -		--enable-shared \
-> +		--disable-shared \
->  		--disable-__cxa_atexit \
->  		--enable-target-optspace \
->  		--with-gnu-ld \
-> @@ -294,7 +294,7 @@
->  		--host=$(REAL_GNU_TARGET_NAME) \
->  		--target=$(REAL_GNU_TARGET_NAME) \
->  		--enable-languages=$(TARGET_LANGUAGES) \
-> -		--enable-shared \
-> +		--disable-shared \
->  		--with-gxx-include-dir=/usr/include/c++ \
->  		--disable-__cxa_atexit \
->  		--enable-target-optspace \
+Author: andersen
+Date: 2006-07-26 12:11:36 -0700 (Wed, 26 Jul 2006)
+New Revision: 15747
 
-Forwarded to the buildroot list where this was appropriate.
+Log:
+patch from Biucchi Gabriele:
+Some programs (like rxvt) need x-includes and x-libraries in
+$(STAGING_DIR)/usr/X11R6/ , but tinyx.mk does not install anything there.
+copy everything from $(TINYX_DIR)/exports/ into $(STAGING_DIR)/usr/X11R6/
 
- -Erik
 
---
-Erik B. Andersen             http://codepoet-consulting.com/
---This message was written using 73% post-consumer electrons--
+Modified:
+   trunk/buildroot/package/tinyx/tinyx.mk
+
+
+Changeset:
+Modified: trunk/buildroot/package/tinyx/tinyx.mk
+===================================================================
+--- trunk/buildroot/package/tinyx/tinyx.mk	2006-07-26 17:25:08 UTC (rev 15746)
++++ trunk/buildroot/package/tinyx/tinyx.mk	2006-07-26 19:11:36 UTC (rev 15747)
+@@ -100,8 +100,17 @@
+ 	( cd $(TINYX_DIR) ; $(MAKE) World )
+ 
+ #
++# Install x-includes and x-libraries in $(STAGING_DIR)/usr/X11R6/
++# and add a symbolic link between /usr/bin/X11 and /usr/X11R6/bin
++$(STAGING_DIR)/usr/X11R6/lib/libX11.so.6.2: $(TINYX_XFBDEV)
++       mkdir -p $(STAGING_DIR)/usr/X11R6/lib
++       mkdir -p $(STAGING_DIR)/usr/X11R6/include
++       cp -fRL $(TINYX_DIR)/exports/include/* $(STAGING_DIR)/usr/X11R6/include/
++       cp -fRL $(TINYX_DIR)/exports/lib/* $(STAGING_DIR)/usr/X11R6/lib/
++       ln -s /usr/X11R6/bin $(TARGET_DIR)/usr/bin/X11
++
++#
+ # Once Frame Buffer is built, we install executables.
+-#
+ $(TINYX_BINX)/Xfbdev: $(TINYX_XFBDEV)
+ 	-mkdir $(TARGET_DIR)/usr/X11R6
+ 	-mkdir $(TINYX_BINX)
+@@ -116,7 +125,6 @@
+ 
+ #
+ # After we have executables installed, install the libraries.
+-#
+ $(TINYX_LIBX)/libX11.so.6.2: $(TINYX_XFBDEV)
+ 	for dirs in $(TINYX_LIBS) ; do \
+ 		file=`find $(TINYX_LDIR)/$$dirs -type f -iname "lib$$dirs.so*"` ; \
+@@ -126,7 +134,8 @@
+ 		cp -pRf $$file $(TINYX_LIBX) ; \
+ 	done
+ 
+-tinyx: zlib $(TINYX_LIBX)/libX11.so.6.2 $(TINYX_BINX)/Xfbdev
++tinyx: zlib $(STAGING_DIR)/usr/X11R6/lib/libX11.so.6.2 \
++	$(TINYX_LIBX)/libX11.so.6.2 $(TINYX_BINX)/Xfbdev
+ 
+ tinyx-source: $(DL_DIR)/$(TINYX_SOURCE)
+ 
