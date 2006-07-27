@@ -1,9 +1,7 @@
-From: Johannes Winkelmann <winkj@ife.ee.ethz.ch>
-Date: Thu Jul 27 04:58:25 2006
-Subject: [Buildroot] svn commit: trunk/buildroot/package/tinyx
-In-Reply-To: <20060726191137.1053948B0E@busybox.net>
-References: <20060726191137.1053948B0E@busybox.net>
-Message-ID: <44C89B64.6010401@ife.ee.ethz.ch>
+From: Drew Cohan <drewcohan@gmail.com>
+Date: Thu Jul 27 06:45:50 2006
+Subject: [Buildroot] base busybox version for buildroot?
+Message-ID: <bf61e79a0607270644g7beea2b2p67890c1a88528436@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -12,56 +10,17 @@ To: buildroot@busybox.net
 
 Hi,
 
-This commit breaks compilation of tinyx due to using spaces for 
-indentation; fix attached.
+Is the base busybox version for buildroot is now 1.2.0, instead of
+1.1.3?  Is there a buildroot config somewhere that determines which
+version of busybox is used, or is it just based on the date of the
+buildroot package (builds after 30 June 2006 use busybox 1.2.0)?
+There seems to have been a file size change recently, just curious
+what that might have been:
 
-andersen@uclibc.org wrote:
-> Author: andersen
-> Date: 2006-07-26 12:11:36 -0700 (Wed, 26 Jul 2006)
-> New Revision: 15747
-[...]
-> Changeset:
-> Modified: trunk/buildroot/package/tinyx/tinyx.mk
-> ===================================================================
-> --- trunk/buildroot/package/tinyx/tinyx.mk	2006-07-26 17:25:08 UTC (rev 15746)
-> +++ trunk/buildroot/package/tinyx/tinyx.mk	2006-07-26 19:11:36 UTC (rev 15747)
-> @@ -100,8 +100,17 @@
->  	( cd $(TINYX_DIR) ; $(MAKE) World )
->  
->  #
-> +# Install x-includes and x-libraries in $(STAGING_DIR)/usr/X11R6/
-> +# and add a symbolic link between /usr/bin/X11 and /usr/X11R6/bin
-> +$(STAGING_DIR)/usr/X11R6/lib/libX11.so.6.2: $(TINYX_XFBDEV)
-> +       mkdir -p $(STAGING_DIR)/usr/X11R6/lib
-> +       mkdir -p $(STAGING_DIR)/usr/X11R6/include
-> +       cp -fRL $(TINYX_DIR)/exports/include/* $(STAGING_DIR)/usr/X11R6/include/
-> +       cp -fRL $(TINYX_DIR)/exports/lib/* $(STAGING_DIR)/usr/X11R6/lib/
-> +       ln -s /usr/X11R6/bin $(TARGET_DIR)/usr/bin/X11
-    ^^^^^^^
-Best regards, Johannes
--- 
-Johannes Winkelmann
-http://www.ife.ee.ethz.ch
+ buildroot-20060710.t..> 10-Jul-2006 00:17  3.8M
+ buildroot-20060711.t..> 11-Jul-2006 00:17  4.3M
 
--------------- next part --------------
-Index: package/tinyx/tinyx.mk
-===================================================================
---- package/tinyx/tinyx.mk	(revision 15749)
-+++ package/tinyx/tinyx.mk	(working copy)
-@@ -103,11 +103,11 @@
- # Install x-includes and x-libraries in $(STAGING_DIR)/usr/X11R6/
- # and add a symbolic link between /usr/bin/X11 and /usr/X11R6/bin
- $(STAGING_DIR)/usr/X11R6/lib/libX11.so.6.2: $(TINYX_XFBDEV)
--       mkdir -p $(STAGING_DIR)/usr/X11R6/lib
--       mkdir -p $(STAGING_DIR)/usr/X11R6/include
--       cp -fRL $(TINYX_DIR)/exports/include/* $(STAGING_DIR)/usr/X11R6/include/
--       cp -fRL $(TINYX_DIR)/exports/lib/* $(STAGING_DIR)/usr/X11R6/lib/
--       ln -s /usr/X11R6/bin $(TARGET_DIR)/usr/bin/X11
-+	mkdir -p $(STAGING_DIR)/usr/X11R6/lib
-+	mkdir -p $(STAGING_DIR)/usr/X11R6/include
-+	cp -fRL $(TINYX_DIR)/exports/include/* $(STAGING_DIR)/usr/X11R6/include/
-+	cp -fRL $(TINYX_DIR)/exports/lib/* $(STAGING_DIR)/usr/X11R6/lib/
-+	ln -s /usr/X11R6/bin $(TARGET_DIR)/usr/bin/X11
- 
- #
- # Once Frame Buffer is built, we install executables.
+
+TIA,
+
+Drew
