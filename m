@@ -1,34 +1,29 @@
-From: Erik Andersen <andersen@codepoet.org>
-Date: Thu Jul 27 11:38:44 2006
-Subject: [Buildroot] base busybox version for buildroot?
-In-Reply-To: <bf61e79a0607270644g7beea2b2p67890c1a88528436@mail.gmail.com>
-References: <bf61e79a0607270644g7beea2b2p67890c1a88528436@mail.gmail.com>
-Message-ID: <20060727183737.GB23639@codepoet.org>
+From: don <don_reid@comcast.net>
+Date: Thu Jul 27 11:50:58 2006
+Subject: [Buildroot] Busybox & Gcc
+Message-ID: <20060727184451.GA13078@reid1.localdomain>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Thu Jul 27, 2006 at 09:44:42AM -0400, Drew Cohan wrote:
-> Hi,
-> 
-> Is the base busybox version for buildroot is now 1.2.0, instead of
-> 1.1.3?  Is there a buildroot config somewhere that determines which
-> version of busybox is used, or is it just based on the date of the
-> buildroot package (builds after 30 June 2006 use busybox 1.2.0)?
-> There seems to have been a file size change recently, just curious
-> what that might have been:
-> 
-> buildroot-20060710.t..> 10-Jul-2006 00:17  3.8M
-> buildroot-20060711.t..> 11-Jul-2006 00:17  4.3M
+I am trying to compile busybox.  It is full of code which the newer
+gcc's don't like.  For example:
 
-It probably makes sense at this point to have configurable
-busybox versions (as with gcc and binuitls) with a specific
-default config for each.
+/home/don/Robots/Bot1/EPIA/buildroot/build_i486/busybox/modutils/lsmod.c: In function `lsmod_main':/home/don/Robots/Bot1/EPIA/buildroot/build_i486/busybox/modutils/lsmod.c:96:
+warning: dereferencing type-punned pointer will break strict-aliasing rules
+/home/don/Robots/Bot1/EPIA/buildroot/build_i486/busybox/modutils/lsmod.c:114:
+warning: dereferencing type-punned pointer will break strict-aliasing rules
+make[2]: *** [/home/don/Robots/Bot1/EPIA/buildroot/build_i486/busybox/modutils/lsmod.o] Error 1
+make[1]: *** [_all] Error 2
+make: *** [/home/don/Robots/Bot1/EPIA/buildroot/build_i486/busybox/busybox] Error 2
 
- -Erik
+From what I read, all versions of GCC after 3.3.1 have this "feature".
+The earliest gcc that buildroot supports is 3.3.5.
+Is anyone compiling busybox?
 
---
-Erik B. Andersen             http://codepoet-consulting.com/
---This message was written using 73% post-consumer electrons--
+I tried setting BR2_EXTRA_GCC_CONFIG_OPTIONS tp "-fpermissive" but that
+failed when some make file tried to pass that into ld.
+
+Don Reid
