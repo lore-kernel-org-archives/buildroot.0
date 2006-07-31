@@ -1,46 +1,35 @@
-From: amit bhosale <amitbhosale2000@rediffmail.com>
-Date: Mon Jul 31 07:40:41 2006
-Subject: [Buildroot] how to add monit package in buildroot
-Message-ID: <20060731143003.25363.qmail@webmail32.rediffmail.com>
+From: jacmet@uclibc.org <jacmet@uclibc.org>
+Date: Mon Jul 31 09:01:17 2006
+Subject: [Buildroot] svn commit: trunk/buildroot/package/busybox
+Message-ID: <20060731160116.40284486FF@busybox.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-  
- hi list
+Author: jacmet
+Date: 2006-07-31 09:01:15 -0700 (Mon, 31 Jul 2006)
+New Revision: 15757
 
-        i want to compile monit for my root file system.
-    In my buildroot (buildroot-20060606.tar) there is no option for  
-    monit package like modutils.
+Log:
+Bump to upstream v1.2.1
 
-    so i download monit-4.5.tar.gz in dl directory and add entry in 
-   pakage directory Config.in file 
-        source "package/monit/Config.in"
-   
-  then i download monit4.5.tgz from  
-               http://busybox.net/bugs/view.php?id=175
-  and then untar it as monit it contains
-            Config.in  Makefile.in  
-            monit-4.5-cross.patch  monit-4.5-summary.patch  
-             monit.mk 
-  i save monit dir in Pakages dir in buildroot
+Modified:
+   trunk/buildroot/package/busybox/busybox.mk
 
-  i made few changes in monit.mk
 
-   change:-#$(DL_DIR)/$(MONIT_SOURCE):
-           # $(WGET) -P $(DL_DIR) $(MONIT_SITE)/$(MONIT_SOURCE)
-   because i already download the code from that side
-   
-  then monit option is visible in make menuconfig after that i select that option and see it in .config file
-                
-           BR2_PACKAGE_MONIT=y
- after that i give command make but monit code is not compiled
-
- so please guide me to compile monit
-
-  amit
--------------- next part --------------
-An HTML attachment was scrubbed...
-URL: http://busybox.net/lists/buildroot/attachments/20060731/1ac54955/attachment.html
+Changeset:
+Modified: trunk/buildroot/package/busybox/busybox.mk
+===================================================================
+--- trunk/buildroot/package/busybox/busybox.mk	2006-07-30 18:56:29 UTC (rev 15756)
++++ trunk/buildroot/package/busybox/busybox.mk	2006-07-31 16:01:15 UTC (rev 15757)
+@@ -10,7 +10,7 @@
+ BUSYBOX_SOURCE:=busybox-snapshot.tar.bz2
+ BUSYBOX_SITE:=http://www.busybox.net/downloads/snapshots
+ else
+-BUSYBOX_VER:=1.1.3
++BUSYBOX_VER:=1.2.1
+ BUSYBOX_DIR:=$(BUILD_DIR)/busybox-$(BUSYBOX_VER)
+ BUSYBOX_SOURCE:=busybox-$(BUSYBOX_VER).tar.bz2
+ BUSYBOX_SITE:=http://www.busybox.net/downloads
