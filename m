@@ -1,46 +1,59 @@
-From: Marc Lindahl <marc@bowery.com>
-Date: Mon, 31 Jul 2006 20:15:25 -0400
-Subject: [Buildroot] base busybox version for buildroot?
-In-Reply-To: <200607312012.48613.rob@landley.net>
-References: <bf61e79a0607270644g7beea2b2p67890c1a88528436@mail.gmail.com>
-	<20060727183737.GB23639@codepoet.org>
-	<200607312012.48613.rob@landley.net>
-Message-ID: <9aa77677255835d7244f93dc4ed4b2f9@bowery.com>
+From: Rob Landley <rob@landley.net>
+Date: Mon, 31 Jul 2006 20:35:14 -0400
+Subject: [Buildroot] Busybox & Gcc
+In-Reply-To: <44C989A9.5070103@kulak.ca>
+References: <20060727184451.GA13078@reid1.localdomain>
+	<44C989A9.5070103@kulak.ca>
+Message-ID: <200607312035.14923.rob@landley.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+On Thursday 27 July 2006 11:51 pm, Kim Kulak wrote:
+> I had a problem with that too. Here are some patches:
 
-On Jul 31, 2006, at 8:12 PM, Rob Landley wrote:
+> -#ident "$Id: insmod.c,v 1.126 2004/12/26 09:13:32 vapier Exp $"
 
-> On Thursday 27 July 2006 2:37 pm, Erik Andersen wrote:
->> On Thu Jul 27, 2006 at 09:44:42AM -0400, Drew Cohan wrote:
->>> Hi,
->>>
->>> Is the base busybox version for buildroot is now 1.2.0, instead of
->>> 1.1.3?  Is there a buildroot config somewhere that determines which
->>> version of busybox is used, or is it just based on the date of the
->>> buildroot package (builds after 30 June 2006 use busybox 1.2.0)?
->>> There seems to have been a file size change recently, just curious
->>> what that might have been:
->>>
->>> buildroot-20060710.t..> 10-Jul-2006 00:17  3.8M
->>> buildroot-20060711.t..> 11-Jul-2006 00:17  4.3M
->>
->> It probably makes sense at this point to have configurable
->> busybox versions (as with gcc and binuitls) with a specific
->> default config for each.
->
-> I still think the latest release version is all you need, but what do I
-> know? :)
->
+Already did that.
 
-If you're building an embedded system you definitely want control over 
-the version... so you can freeze it once everything works, and ship it! 
-:)
+> -#ident "$Id: insmod.c,v 1.126 2004/12/26 09:13:32 vapier Exp $"
 
-just my $0.002
+And that.
 
-Marc
+>  	struct module_info info;
+> -	char *module_names, *mn, *deps, *dn;
+> +    union
+> +       {
+> +          char *buf;
+> +          void *ptr;
+> +       } module_names, deps;
+> +	char *mn, *dn;
+
+That's not going in.
+
+> +    void *bufptr = (void *)bb_common_bufsiz1;
+
+Nor is that.
+
+> -	pkt->icmp_seq = htons(ntransmitted++);
+> +	pkt->icmp_seq = htons(ntransmitted); ntransmitted += 1;
+
+What exactly is wrong with this one?  (Argh, maybe it'll like SWAP_BE16
+(ntransmitted++) better?  Yes.  Yes it does.  Sigh.  (Applied.)
+
+> Busybox built clean after this for me with gcc 3.4.2.
+
+And yet 4.0 isn't warning about this?
+
+I need some time alone with select gcc developers and a whiffle bat...
+
+So you're not seeing all the crazy "X could be used uninitialized 
+because 'if(a) X=0; else X=1' just isn't good enough!" messages?
+
+> Kim
+
+Rob
+-- 
+Never bet against the cheap plastic solution.
