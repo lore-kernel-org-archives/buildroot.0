@@ -1,43 +1,68 @@
-From: amit bhosale <amitbhosale2000@rediffmail.com>
-Date: 1 Aug 2006 10:56:48 -0000
-Subject: [Buildroot] Xfbdev:"Could not init font path element
-Message-ID: <20060801105648.27234.qmail@webmail47.rediffmail.com>
+From: Mukesh Kohli <mukesh.kohli@conexant.com>
+Date: Wed, 2 Aug 2006 16:33:03 +0530
+Subject: [Buildroot] tool chain for ARM1176jf_s
+Message-ID: <C580B5F132CA124193B2F531FF789F854A8F03@noida-mail.bbnet.ad>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-  
- hi sir
-  
-         I install TinyX and rxvt in my root file system using
-     buildroot. (  xc-011010 and rxvt-2.6.4 )
+I want to build tool chain for ARM1176JF_S core. But I am only seeing
+option for ARM1136JF_S flavor. 
 
-       Now when I try to run Xfbdev in two ways
-      
-  i) /usr/bin/Xfbdev -fp /usr/X11R6/lib/X11/fonts/misc,
-     I get an error saying "Could not init font path element
-     /usr/X11R6/lib/X11/fonts/misc, remoing from list!"
-     
-     and X server is not start.
+ 
 
-    but my /usr/X11R6/lib/X11/fonts dir contains
-           100dpi  75dpi  cyrillic  local  misc  util
+Will manually setting it in .config will work?
 
-  ii) when i run command Xfbdev with no arguments it display same error
-     i.e "Could not init font path element
-     /usr/X11R6/lib/X11/fonts/misc, remoing from list!"
+ 
 
-   but X server is started.
+Here is what I am trying to say:
 
-  so please guide me how to resolve this issue
+ 
 
- Amit 
+....
+
+# BR2_arm926t is not set
+
+BR2_arm1176jf_s=y
+
+# BR2_sa110 is not set
+
+# BR2_sa1100 is not set
+
+# BR2_xscale is not set
+
+BR2_ARM_TYPE="ARM1176JF_S"
+
+BR2_ARM_OABI=y
+
+# BR2_ARM_EABI is not set
+
+BR2_ARCH="arm"
+
+BR2_ENDIAN="LITTLE"
+
+....
+
+ 
+
+Thanks and Regards,
+
+Mukesh Kohli
+
+ 
+
+ 
 
 
-  
+
+
+
+********************** Legal Disclaimer ****************************
+"This email may contain confidential and privileged material for the sole use of the intended recipient.  Any unauthorized review, use or distribution by others is strictly prohibited.  If you have received the message in error, please advise the sender by reply email and delete the message. Thank you."
+**********************************************************************
 
 -------------- next part --------------
 An HTML attachment was scrubbed...
-URL: http://busybox.net/lists/buildroot/attachments/20060801/b14e9540/attachment.html 
+URL: http://busybox.net/lists/buildroot/attachments/20060802/2ee8a33e/attachment.htm 
