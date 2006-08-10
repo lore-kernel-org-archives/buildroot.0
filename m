@@ -1,103 +1,80 @@
-From: andersen at uclibc.org <andersen@uclibc.org>
-Date: Thu, 10 Aug 2006 13:08:31 -0700 (PDT)
-Subject: [Buildroot] svn commit: trunk/buildroot/package/hotplug
-Message-ID: <20060810200831.C0916485D2@busybox.net>
+From: Drew Cohan <drewcohan@gmail.com>
+Date: Thu, 10 Aug 2006 16:11:27 -0400
+Subject: [Buildroot] Packages that error out during build
+In-Reply-To: <20060810175113.GA20615@codepoet.org>
+References: <bf61e79a0608100739p4899b15brb988f9063f044978@mail.gmail.com>
+	<20060810175113.GA20615@codepoet.org>
+Message-ID: <bf61e79a0608101311r59a27c37qf9d9ed60a16d2f0b@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Author: andersen
-Date: 2006-08-10 13:08:31 -0700 (Thu, 10 Aug 2006)
-New Revision: 15796
+Some more build errors:
 
-Log:
-rework hotplug with a customized version not dependant on kernel sources
+using gcc version 3.4.5 20051201 (Red Hat 3.4.5-2) with buildroot 15795:
 
+Fakeroot:
 
-Added:
-   trunk/buildroot/package/hotplug/diethotplug-0.5.tar
+make -j1 CC=/home/user/buildroot/build_i686/staging_dir/bin/i686-linux-uclibc-gcc
+-C /home/user/buildroot/build_i686/fakeroot-1.5.8
+make[1]: Entering directory `/home/user/buildroot/build_i686/fakeroot-1.5.8'
+make  all-recursive
+make[2]: Entering directory `/home/user/buildroot/build_i686/fakeroot-1.5.8'
+Making all in scripts
+make[3]: Entering directory
+`/home/user/buildroot/build_i686/fakeroot-1.5.8/scripts'
+make[3]: Nothing to be done for `all'.
+make[3]: Leaving directory
+`/home/user/buildroot/build_i686/fakeroot-1.5.8/scripts'
+Making all in doc
+make[3]: Entering directory `/home/user/buildroot/build_i686/fakeroot-1.5.8/doc'
+po4a -k 0 --variable "srcdir=./" ./po4a/po4a.cfg
+/bin/sh: po4a: command not found
+make[3]: *** [po4a] Error 127
+make[3]: Leaving directory `/home/user/buildroot/build_i686/fakeroot-1.5.8/doc'
+make[2]: *** [all-recursive] Error 1
+make[2]: Leaving directory `/home/user/buildroot/build_i686/fakeroot-1.5.8'
+make[1]: *** [all] Error 2
+make[1]: Leaving directory `/home/user/buildroot/build_i686/fakeroot-1.5.8'
+make: *** [/home/user/buildroot/build_i686/fakeroot-1.5.8/faked] Error 2
 
-Removed:
-   trunk/buildroot/package/hotplug/hotplug.patch
+I understand that my dev envrionment is missing "po4a" but is that a
+required binary for compiling fakeroot?  No other module seems to care
+that I'm missing the documentation tool "po4a".
 
-Modified:
-   trunk/buildroot/package/hotplug/hotplug.mk
+Libusb:
 
+/bin/sh ./libtool --mode=compile
+/home/user/buildroot/build_i686/staging_dir/bin/i686-linux-uclibc-g++
+-DHAVE_CONFIG_H   -I.    -c -o usbpp.lo usbpp.cpp
+ /home/user/buildroot/build_i686/staging_dir/bin/i686-linux-uclibc-g++
+-DHAVE_CONFIG_H -I. -c usbpp.cpp  -DPIC
+./libtool: line 1092:
+/home/user/buildroot/build_i686/staging_dir/bin/i686-linux-uclibc-g++:
+No such file or directory
+make[3]: *** [usbpp.lo] Error 1
+make[3]: Leaving directory `/home/user/buildroot/build_i686/libusb-0.1.12'
+make[2]: *** [all-recursive] Error 1
+make[2]: Leaving directory `/home/user/buildroot/build_i686/libusb-0.1.12'
+make[1]: *** [all] Error 2
+make[1]: Leaving directory `/home/user/buildroot/build_i686/libusb-0.1.12'
+make: *** [/home/user/buildroot/build_i686/libusb-0.1.12/libusb.la] Error 2
 
-Changeset:
-Added: trunk/buildroot/package/hotplug/diethotplug-0.5.tar
-===================================================================
-(Binary files differ)
+Portage:
 
+(wrong url for download)
 
-Property changes on: trunk/buildroot/package/hotplug/diethotplug-0.5.tar
-___________________________________________________________________
-Name: svn:mime-type
-   + application/octet-stream
+wget --passive-ftp -P /home/user/buildroot/dl
+http://gentoo.osuosl.org/distfiles/sandbox-1.2.13.tar.bz2
+--15:48:29--  http://gentoo.osuosl.org/distfiles/sandbox-1.2.13.tar.bz2
+           => `/home/user/buildroot/dl/sandbox-1.2.13.tar.bz2'
+Resolving gentoo.osuosl.org... 64.50.236.52, 64.50.238.52
+Connecting to gentoo.osuosl.org|64.50.236.52|:80... connected.
+HTTP request sent, awaiting response... 404 Not Found
+15:48:29 ERROR 404: Not Found.
 
-Modified: trunk/buildroot/package/hotplug/hotplug.mk
-===================================================================
---- trunk/buildroot/package/hotplug/hotplug.mk	2006-08-10 01:09:37 UTC (rev 15795)
-+++ trunk/buildroot/package/hotplug/hotplug.mk	2006-08-10 20:08:31 UTC (rev 15796)
-@@ -3,15 +3,13 @@
- # hotplug support
- #
- #############################################################
--HOTPLUG_SOURCE=diethotplug-0.4.tar.gz
-+HOTPLUG_SOURCE=package/hotplug/diethotplug-0.5.tar
- HOTPLUG_SITE=http://www.kernel.org/pub/linux/utils/kernel/hotplug/
--HOTPLUG_DIR=$(BUILD_DIR)/diethotplug-0.4
-+HOTPLUG_DIR=$(BUILD_DIR)/diethotplug-0.5
-+HOTPLUG_CAT=cat
- 
--$(DL_DIR)/$(HOTPLUG_SOURCE):
--	$(WGET) -P $(DL_DIR) $(HOTPLUG_SITE)/$(HOTPLUG_SOURCE)
--
--$(HOTPLUG_DIR): $(DL_DIR)/$(HOTPLUG_SOURCE)
--	zcat $(DL_DIR)/$(HOTPLUG_SOURCE) | tar -C $(BUILD_DIR) $(TAR_OPTIONS) -
-+$(HOTPLUG_DIR): $(HOTPLUG_SOURCE)
-+	$(HOTPLUG_CAT) $(HOTPLUG_SOURCE) | tar -C $(BUILD_DIR) $(TAR_OPTIONS) -
- 	toolchain/patch-kernel.sh $(HOTPLUG_DIR) package/hotplug/ hotplug\*.patch
- 
- $(HOTPLUG_DIR)/hotplug: $(HOTPLUG_DIR)
+make: *** [/home/user/buildroot/dl/sandbox-1.2.13.tar.bz2] Error 1
 
-Deleted: trunk/buildroot/package/hotplug/hotplug.patch
-===================================================================
---- trunk/buildroot/package/hotplug/hotplug.patch	2006-08-10 01:09:37 UTC (rev 15795)
-+++ trunk/buildroot/package/hotplug/hotplug.patch	2006-08-10 20:08:31 UTC (rev 15796)
-@@ -1,33 +0,0 @@
--diff -urN diethotplug-0.4.orig/pci.c diethotplug-0.4/pci.c
----- diethotplug-0.4.orig/pci.c	Wed Jan  9 13:57:29 2002
--+++ diethotplug-0.4/pci.c	Wed Jan 30 22:35:24 2002
--@@ -68,8 +68,8 @@
-- 		}
-- 
-- 		/* check that the class matches */
---		class_temp = pci_module_map[i].class_mask & pci_class;
---		if (pci_module_map[i].class != class_temp) {
--+		class_temp = (pci_module_map[i].class ^ pci_class) & pci_module_map[i].class_mask; 
--+		if (class_temp != 0) { 
-- 			dbg ("class mask check failed %x != %x",
-- 			     pci_module_map[i].class, class_temp);
-- 			continue;
----- diethotplug-0.4/Makefile.orig	Wed Jan  9 14:28:05 2002
--+++ diethotplug-0.4/Makefile	Mon Jul  8 07:29:00 2002
--@@ -135,13 +135,13 @@
-- 
-- # Rules on how to create the generated header files
-- usb_modules.h:
---	perl convert_usb.pl < /lib/modules/$(KERNEL_VERSION)/modules.usbmap > $@
--+	perl convert_usb.pl < $(TARGET_DIR)/lib/modules/$(KERNEL_VERSION)/modules.usbmap > $@
-- 
-- pci_modules.h:
---	perl convert_pci.pl < /lib/modules/$(KERNEL_VERSION)/modules.pcimap > $@
--+	perl convert_pci.pl < $(TARGET_DIR)/lib/modules/$(KERNEL_VERSION)/modules.pcimap > $@
-- 
-- ieee1394_modules.h:
---	perl convert_ieee1394.pl < /lib/modules/$(KERNEL_VERSION)/modules.ieee1394map > $@
--+	perl convert_ieee1394.pl < $(TARGET_DIR)/lib/modules/$(KERNEL_VERSION)/modules.ieee1394map > $@
-- 
-- hotplug_version.h:
-- 	@echo \#define HOTPLUG_VERSION \"$(VERSION)\" > $@
+-- Drew
