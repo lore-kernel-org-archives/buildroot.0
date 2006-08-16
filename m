@@ -1,46 +1,27 @@
-From: Rob Landley <rob@landley.net>
-Date: Tue, 15 Aug 2006 17:31:32 -0400
-Subject: [Buildroot] svn commit: trunk/buildroot/package/hotplug
-In-Reply-To: <004f01c6bfe8$28afde10$e04565d5@atmel.com>
-References: <20060810200831.C0916485D2@busybox.net>
-	<20060814164542.GA16733@codepoet.org>
-	<004f01c6bfe8$28afde10$e04565d5@atmel.com>
-Message-ID: <200608151731.32449.rob@landley.net>
+From: Ron Kellam <ronkbox-buildroot@yahoo.com>
+Date: Wed, 16 Aug 2006 11:59:32 +1000 (EST)
+Subject: [Buildroot] Buildroot mailing list archive now being carried on
+	Gmane
+In-Reply-To: <200608112249.38842.rob@landley.net>
+Message-ID: <20060816015932.65135.qmail@web52705.mail.yahoo.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Monday 14 August 2006 5:22 pm, Ulf Samuelsson wrote:
-> 
-> ----- Original Message ----- 
-> From: "Erik Andersen" <andersen@codepoet.org>
-> To: "Ulf Samuelsson" <ulfs@dof.se>
-> Cc: <buildroot@uclibc.org>
-> Sent: Monday, August 14, 2006 6:45 PM
-> Subject: Re: [Buildroot] svn commit: trunk/buildroot/package/hotplug
-> 
-> 
-> > On Fri Aug 11, 2006 at 07:01:31AM +0200, Ulf Samuelsson wrote:
-> >> This patch does not work, since the "diethotplug-0.5.tar" file is missing
-> > 
-> > It worked fine for me...
-> > 
-> > -Erik
-> 
-> 
-> Yes because you may have the file already, but the patch sent on the 
-distribution list did only contain a comment
-> that it was a binary file, but not the file itself.
+http://dir.gmane.org/gmane.comp.lib.uclibc.buildroot
+  
+To read the archive as a newsgroup, either read it online at Gmane, or point your newsreader to news server news.gmane.org and subscribe to newsgroup gmane.comp.lib.uclibc.buildroot.
 
-I got the file out of the web thingy.
+It's been set up so that only buildroot mailing list subscribers can post via Gmane.  That can be changed, although I suspect the list would be more likely to get spammed then.
 
-http://buildroot.uclibc.org/cgi-bin/viewcvs.cgi/trunk/buildroot/package/hotplug/diethotplug-0.5.tar?rev=15796&view=markup
-
-I'm trying to resolve the license issues to get it into BusyBox proper.  (It's 
-gplv2 only, and busybox is gplv2 or later...)
-
-Rob
--- 
-Never bet against the cheap plastic solution.
+Cheers,
+Ron Kellam
+ 		
+---------------------------------
+Do you Yahoo!?
+  Yahoo! Music: Check out the gig guide for live music in your area
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: http://busybox.net/lists/buildroot/attachments/20060816/ee88c81f/attachment.htm 
