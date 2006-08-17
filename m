@@ -1,33 +1,58 @@
-From: Bhagyashri Bijwe <bhagyashri.bijwe@gmail.com>
-Date: Thu, 31 Aug 2006 16:35:19 +0530
-Subject: [Buildroot] Need buidroot for linux2.2.16 to add perl support
-Message-ID: <b386e6140608310405t394b0e4cjd2082a52a0f3c76b@mail.gmail.com>
+From: <bogus@does.not.exist.com>
+Date: Thu, 17 Aug 2006 01:58:45 -0000
+Subject: No subject
+Message-ID: <mailman.8.1161944407.4264.buildroot@uclibc.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi,
-     I embedded product with linux-2.2.16, busybox-0.60
-,uClibc-0.9.19 for Soekris4521.
-I know I am using very old stuff but that is requirement of product.
+gcc-4.x.x
+Latest stable GNU config usable for armeb is: binutils-2.16.1 +
+gcc-3.4.6
+I am wondering if anybody worked on the build of armeb gnu toolchain
+with gcc-4.x.x?
 
-Now, I need to add perl support to that distribution. I already tried
-statical compilation of perl.
-But when I run statically build perl image  on distribution .
-It gives  No such file error.
+gcc-4.x.x provides new interesting cpu types: arm966, arm1176, ...etc
 
-Can I use buidroot to add perl support to that distribution?
-I did not find buildroot for linux-2.2.16 and uClibc-0.9.19.
+Many thanks for your answers.
 
-Please help me.
+Regards - Luc
 
+-----Original Message-----
+From: buildroot-bounces@uclibc.org [mailto:buildroot-bounces at uclibc.org]
+On Behalf Of Tor Krill
+Sent: vendredi 27 octobre 2006 08:07
+To: Philippe Ney
+Cc: buildroot at uclibc.org
+Subject: Re: [Buildroot] Error building arm toolchain: undefined
+referenceto `raise'
 
--- 
-***********************************************
-   Ms Bhagyashri Bijwe
-     Project Eng.
-     Networking and Internet Software Group,
-     Centre for Research and Development,
-     Pune,India
+Quoting Philippe Ney <philippe.ney@pardes.ws>:
+
+> > Hi,
+> >
+> > I'm trying to build an up to date toolchain for our arm920t board,
+> at91rm9200.
+> > However compilation fails with a:
+> [...]
+> >
+>
+/home/tor/tmp/buildroot/toolchain_build_arm/gcc-4.1.1/gcc/config/arm/lib
+1funcs.asm:1000:
+> > undefined reference to `raise'
+> [...]
+> > Am i missing something here?
+>
+> Have a look at the gumstix buildroot (www.gumstix.org) for a patch=20
+> called uClibc-gcc-41-raise-error.patch, I think this will do the
+trick.
+
+Thanks Philippe, this solved the compilation error.
+
+/Tor
+_______________________________________________
+buildroot mailing list
+buildroot at uclibc.org
+http://busybox.net/mailman/listinfo/buildroot
