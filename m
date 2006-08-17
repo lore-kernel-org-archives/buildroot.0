@@ -1,7 +1,7 @@
 From: <bogus@does.not.exist.com>
 Date: Thu, 17 Aug 2006 01:58:45 -0000
 Subject: No subject
-Message-ID: <mailman.12.1164378087.4264.buildroot@uclibc.org>
+Message-ID: <mailman.13.1164378267.4264.buildroot@uclibc.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -27,6 +27,10 @@ Betreff: Re: [Buildroot] problem with absolute paths to tools in ccache
 > >Could you please tell me, why you do not use ccache?
 > 
 > I simply have no need for it.
+
+-- 
+Der GMX SmartSurfer hilft bis zu 70% Ihrer Onlinekosten zu sparen! 
+Ideal f?r Modem und ISDN: http://www.gmx.net/de/go/smartsurfer
 
 -- 
 Der GMX SmartSurfer hilft bis zu 70% Ihrer Onlinekosten zu sparen! 
