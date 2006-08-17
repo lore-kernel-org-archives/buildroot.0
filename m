@@ -1,29 +1,26 @@
-From: Erik Andersen <andersen@codepoet.org>
-Date: Wed, 16 Aug 2006 12:23:25 -0600
-Subject: [Buildroot] svn commit: trunk/buildroot/package/hotplug
-In-Reply-To: <004f01c6bfe8$28afde10$e04565d5@atmel.com>
-References: <20060814164542.GA16733@codepoet.org>
-	<004f01c6bfe8$28afde10$e04565d5@atmel.com>
-Message-ID: <20060816182325.GA32531@codepoet.org>
+From: NuNash <joebwa@gmail.com>
+Date: Thu, 17 Aug 2006 08:46:22 -0700
+Subject: [Buildroot] toolchain issues
+Message-ID: <7ea441dd0608170846n43baf986wa9e190a83877854d@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Mon Aug 14, 2006 at 11:22:43PM +0200, Ulf Samuelsson wrote:
-> Yes because you may have the file already, but the patch sent
-> on the distribution list did only contain a comment that it was
-> a binary file, but not the file itself.
+I'm able to successfully generate a toolchain for armeb platform.
+However, there seems to be some issues with the toolchain
+produced.
 
-It may not have been included in the patch automatically
-generated when the file was committed, but I can assure you the
-file is indeed checked into the buildroot svn repository, from
-which you can fetch it, and from which it is included in the
-daily buildroot snapshots.
+One of the issue is there is no crt0.o in the lib folder. Due to
+this, when I compile a small C program, it produces really
+small binary and it does not run on the target. I do have
+a pre-built toolchain for the same platform. It produces correct
+flat binary.
 
- -Erik
+I've enabled static linking.
 
---
-Erik B. Andersen             http://codepoet-consulting.com/
---This message was written using 73% post-consumer electrons--
+Any ideas?
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: http://busybox.net/lists/buildroot/attachments/20060817/569aed60/attachment.html 
