@@ -1,45 +1,47 @@
-From: Philippe Ney <philippe.ney@pardes.ws>
-Date: Mon, 21 Aug 2006 07:52:26 +0200
+From: don <don_reid@comcast.net>
+Date: Sun, 20 Aug 2006 23:13:32 -0700
 Subject: [Buildroot] Bootloader (grub?)
-In-Reply-To: <20060821034734.GA14534@reid1.localdomain>
+In-Reply-To: <20060821075226.0518718a.philippe.ney@pardes.ws>
 References: <20060821034734.GA14534@reid1.localdomain>
-Message-ID: <20060821075226.0518718a.philippe.ney@pardes.ws>
+	<20060821075226.0518718a.philippe.ney@pardes.ws>
+Message-ID: <20060821061332.GA9677@reid1.localdomain>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-> Which bootloader do you-all recommend for an x86 (Via EPIA) system
-> booting from a compact flash card?
+On Mon, Aug 21, 2006 at 07:52:26AM +0200, Philippe Ney wrote:
+> I use grub on EPIA/iDoC system with the following lines in my grub.mk
 > 
-> I have been trying to set up grub, just because that is the one I am
-> used to. First I found it wouldn't build (due to a makefile problem
-> reported in Jan.). Then I found the patch file called for is no longer
-> on the source server. These make me think it isn't getting much use.
+> GRUB_SOURCE:=grub_0.95+cvs20040624.orig.tar.gz
+> GRUB_PATCH=grub_0.95+cvs20040624-17.diff.gz
+> GRUB_SITE=http://ftp.debian.org/debian/pool/main/g/grub
 > 
-> When I finally got it all compiles, I couldn't find any trace of it in
-> the target file system.  I guess it could be nicely put into the MBR for
-> me. But shouldn't there still be some files (/boot/grub/*)?
-> 
-> Do I just need to create the menu file manually?
-> 
-> Don Reid
+> And the packages are both availlable.
 
-Hi Don,
+Thanks, I'll try that.  Buildroot installed:
 
-I use grub on EPIA/iDoC system with the following lines in my grub.mk
-
-GRUB_SOURCE:=grub_0.95+cvs20040624.orig.tar.gz
-GRUB_PATCH=grub_0.95+cvs20040624-17.diff.gz
+GRUB_SOURCE:=grub_0.97.orig.tar.gz
+GRUB_PATCH=grub_0.97-5.diff.gz
 GRUB_SITE=http://ftp.debian.org/debian/pool/main/g/grub
 
-And the packages are both availlable.
+I've had trouble before with build systems trying to use the debian servers
+as a source.  Things seem to get changed there fairly often.
 
-What target did you build ? I guess the only one target using grub is
-the iso9660 one.
 
-But if you want to install a firmware on the compact flash, you have 
-to write an installer that will run the grub shell to set the MBR.
+> What target did you build ? I guess the only one target using grub is
+> the iso9660 one.
 
-Philippe
+I have cramfs and ext2 turned on.  I expected to see /boot/grub in the
+root files regardless of the target.  Again, I'll look at the iso
+target.
+
+> But if you want to install a firmware on the compact flash, you have 
+> to write an installer that will run the grub shell to set the MBR.
+
+I think I can install it either from the workstation, or from the
+target system.  I can boot from a network right now, but that cable
+isn't part of the long term plan.
+
+Don
