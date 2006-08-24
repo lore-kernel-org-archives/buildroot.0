@@ -1,39 +1,36 @@
-From: jacmet at uclibc.org <jacmet@uclibc.org>
-Date: Tue, 22 Aug 2006 01:03:19 -0700 (PDT)
-Subject: [Buildroot] svn commit: trunk/buildroot/target/jffs2
-Message-ID: <20060822080319.0C625486BE@busybox.net>
+From: vapier at uclibc.org <vapier@uclibc.org>
+Date: Wed, 23 Aug 2006 20:40:11 -0700 (PDT)
+Subject: [Buildroot] svn commit: trunk/buildroot/toolchain/binutils
+Message-ID: <20060824034011.8FF78C80BB@busybox.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Author: jacmet
-Date: 2006-08-22 01:03:19 -0700 (Tue, 22 Aug 2006)
-New Revision: 15904
+Author: vapier
+Date: 2006-08-23 20:40:11 -0700 (Wed, 23 Aug 2006)
+New Revision: 15968
 
 Log:
-mkfs.jffs2 doesn't like short form of pad option with arg
+add URL for binutils 2.17 #1002
 
 Modified:
-   trunk/buildroot/target/jffs2/jffs2root.mk
+   trunk/buildroot/toolchain/binutils/binutils.mk
 
 
 Changeset:
-Modified: trunk/buildroot/target/jffs2/jffs2root.mk
+Modified: trunk/buildroot/toolchain/binutils/binutils.mk
 ===================================================================
---- trunk/buildroot/target/jffs2/jffs2root.mk	2006-08-22 02:42:47 UTC (rev 15903)
-+++ trunk/buildroot/target/jffs2/jffs2root.mk	2006-08-22 08:03:19 UTC (rev 15904)
-@@ -7,9 +7,10 @@
- JFFS2_OPTS := -e $(strip $(BR2_TARGET_ROOTFS_JFFS2_EBSIZE))
- 
- ifeq ($(strip $(BR2_TARGET_ROOTFS_JFFS2_PAD)),y)
-+ifneq ($(strip $(BR2_TARGET_ROOTFS_JFFS2_PADSIZE)),0x0)
-+JFFS2_OPTS += --pad=$(strip $(BR2_TARGET_ROOTFS_JFFS2_PADSIZE))
-+else
- JFFS2_OPTS += -p
--ifneq ($(strip $(BR2_TARGET_ROOTFS_JFFS2_PADSIZE)),0x0)
--JFFS2_OPTS += $(strip $(BR2_TARGET_ROOTFS_JFFS2_PADSIZE))
+--- trunk/buildroot/toolchain/binutils/binutils.mk	2006-08-24 03:20:06 UTC (rev 15967)
++++ trunk/buildroot/toolchain/binutils/binutils.mk	2006-08-24 03:40:11 UTC (rev 15968)
+@@ -8,6 +8,9 @@
+ EXTRA_BINUTILS_CONFIG_OPTIONS:=$(strip $(subst ",, $(BR2_EXTRA_BINUTILS_CONFIG_OPTIONS)))
+ #"
+ BINUTILS_SITE:=ftp://ftp.kernel.org/pub/linux/devel/binutils
++ifeq ($(BINUTILS_VERSION),2.17)
++BINUTILS_SITE:=ftp://ftp.gnu.org/gnu/binutils/
++endif
+ ifeq ($(BINUTILS_VERSION),2.16)
+ BINUTILS_SITE:=ftp://ftp.gnu.org/gnu/binutils/
  endif
- endif
- 
