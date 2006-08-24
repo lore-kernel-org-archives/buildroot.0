@@ -1,36 +1,26 @@
-From: vapier at uclibc.org <vapier@uclibc.org>
-Date: Wed, 23 Aug 2006 20:40:11 -0700 (PDT)
-Subject: [Buildroot] svn commit: trunk/buildroot/toolchain/binutils
-Message-ID: <20060824034011.8FF78C80BB@busybox.net>
+From: thomas.cooksey at bt.com <thomas.cooksey@bt.com>
+Date: Thu, 24 Aug 2006 14:13:26 +0100
+Subject: [Buildroot] New(?) package - OLSR daemon
+Message-ID: <0536FC9B908BEC4597EE721BE6A3538913868ADD@i2km07-ukbr.domain1.systemhost.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Author: vapier
-Date: 2006-08-23 20:40:11 -0700 (Wed, 23 Aug 2006)
-New Revision: 15968
+Hi,
 
-Log:
-add URL for binutils 2.17 #1002
+I have put together a quick package for www.olsr.org's implementation of
+the Optimized Link State Routing protocol. This is a daemon which does
+multi-hop routing for mobile ad hoc wireless networks. I'm actually
+using the gumstix buildroot branch, but it's a pretty simple package and
+I can't see any reason why it wouldn't work with the regular buildroot.
+I have also only tested it for an arm target, but again, it's a simple
+package and should work for other targets too.
 
-Modified:
-   trunk/buildroot/toolchain/binutils/binutils.mk
+Would this be of interest to anyone?
 
 
-Changeset:
-Modified: trunk/buildroot/toolchain/binutils/binutils.mk
-===================================================================
---- trunk/buildroot/toolchain/binutils/binutils.mk	2006-08-24 03:20:06 UTC (rev 15967)
-+++ trunk/buildroot/toolchain/binutils/binutils.mk	2006-08-24 03:40:11 UTC (rev 15968)
-@@ -8,6 +8,9 @@
- EXTRA_BINUTILS_CONFIG_OPTIONS:=$(strip $(subst ",, $(BR2_EXTRA_BINUTILS_CONFIG_OPTIONS)))
- #"
- BINUTILS_SITE:=ftp://ftp.kernel.org/pub/linux/devel/binutils
-+ifeq ($(BINUTILS_VERSION),2.17)
-+BINUTILS_SITE:=ftp://ftp.gnu.org/gnu/binutils/
-+endif
- ifeq ($(BINUTILS_VERSION),2.16)
- BINUTILS_SITE:=ftp://ftp.gnu.org/gnu/binutils/
- endif
+Cheers,
+
+Tom
