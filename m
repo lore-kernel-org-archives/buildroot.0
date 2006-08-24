@@ -1,40 +1,37 @@
-From: aldot at uclibc.org <aldot@uclibc.org>
-Date: Thu, 24 Aug 2006 15:00:36 -0700 (PDT)
-Subject: [Buildroot] svn commit: trunk/buildroot/package/expat
-Message-ID: <20060824220036.6747348AA1@busybox.net>
+From: don <don_reid@comcast.net>
+Date: Thu, 24 Aug 2006 15:22:35 -0700
+Subject: [Buildroot] patch for pcmcia.mk
+Message-ID: <20060824222235.GA12596@reid1.localdomain>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Author: aldot
-Date: 2006-08-24 15:00:36 -0700 (Thu, 24 Aug 2006)
-New Revision: 15988
 
-Log:
-- update to 2.0.0 and correct site.
+I got an error message while trying to build pcmia.
 
+------------------------
+.../buildroot/build_i486/busybox/examples/depmod.pl \
+        -b .../buildroot/build_i486/root/lib/modules/2.6.11.5/ \
+        -k .../buildroot/build_i486/linux-2.6.11.5/vmlinux \
+        -F .../buildroot/build_i486/linux-2.6.11.5/System.map \
+        > .../buildroot/build_i486/root/lib/modules/2.6.11.5/modules.dep
+can't use both -k and -F
+------------------------
 
-Modified:
-   trunk/buildroot/package/expat/expat.mk
+It looks like the linux binary is just used if a system map file cannot
+be found.  So I changed the make file to remove it.
 
+--- package/pcmcia/pcmcia.mk.orig	2006-08-24 13:42:37.000000000 -0700
++++ package/pcmcia/pcmcia.mk	2006-08-24 13:42:43.000000000 -0700
+@@ -91,7 +91,6 @@
+ 	[ -d $(TARGET_DIR)/lib/modules/$(LINUX_VERSION) ] && \
+ 	$(BUSYBOX_DIR)/examples/depmod.pl \
+ 		-b $(TARGET_DIR)/lib/modules/$(LINUX_VERSION)/ \
+-		-k $(LINUX_DIR)/vmlinux \
+ 		-F $(LINUX_DIR)/System.map \
+ 		> $(TARGET_DIR)/lib/modules/$(LINUX_VERSION)/modules.dep
+ 	touch $(PCMCIA_DIR)/.modules.dep
 
-Changeset:
-Modified: trunk/buildroot/package/expat/expat.mk
-===================================================================
---- trunk/buildroot/package/expat/expat.mk	2006-08-24 21:46:57 UTC (rev 15987)
-+++ trunk/buildroot/package/expat/expat.mk	2006-08-24 22:00:36 UTC (rev 15988)
-@@ -4,10 +4,10 @@
- #
- #############################################################
- 
--EXPAT_VERSION=1.95.8
-+EXPAT_VERSION=2.0.0
- 
- EXPAT_SOURCE=expat-$(EXPAT_VERSION).tar.gz
--EXPAT_SITE=http://internap.dl.sourceforge.net/sourceforge/expat
-+EXPAT_SITE=http://$(BR2_SOURCEFORGE_MIRROR).dl.sourceforge.net/sourceforge/expat
- EXPAT_DIR:=$(BUILD_DIR)/expat-$(EXPAT_VERSION)
- 
- $(DL_DIR)/$(EXPAT_SOURCE):
+Don Reid
