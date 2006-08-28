@@ -1,27 +1,56 @@
-From: Bill Somerville <bill.3@classdesign.com>
-Date: Mon, 28 Aug 2006 01:17:53 +0100
-Subject: [Buildroot] libsysfs doesn't build correctly
-Message-ID: <1156724273.30424.9.camel@wallace.classdesign.local>
+From: lethal at uclibc.org <lethal@uclibc.org>
+Date: Sun, 27 Aug 2006 23:52:44 -0700 (PDT)
+Subject: [Buildroot] svn commit: trunk/buildroot
+Message-ID: <20060828065244.0DA4C48695@busybox.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-libsysfs builds with the staging prefix in the installed libtool
-archive, attached is a patch to resolve this.
+Author: lethal
+Date: 2006-08-27 23:52:43 -0700 (Sun, 27 Aug 2006)
+New Revision: 15997
 
-Some warnings occur when DirectFB builds with it but I think these can
-be safely ignored as libtool is just griping about libsysfs.la not being
-where it says it should be ($(STAGING_DIR)/usr/lib instead of /usr/lib).
-
-Bill Somerville
+Log:
+Add an sh64 target to buildroot.
 
 
--------------- next part --------------
-A non-text attachment was scrubbed...
-Name: buildroot-svn.patch
-Type: text/x-patch
-Size: 1729 bytes
-Desc: not available
-Url : http://busybox.net/lists/buildroot/attachments/20060828/36a6b9fb/attachment.bin 
+
+Modified:
+   trunk/buildroot/Config.in
+
+
+Changeset:
+Modified: trunk/buildroot/Config.in
+===================================================================
+--- trunk/buildroot/Config.in	2006-08-25 04:59:43 UTC (rev 15996)
++++ trunk/buildroot/Config.in	2006-08-28 06:52:43 UTC (rev 15997)
+@@ -33,7 +33,9 @@
+ config BR2_powerpc
+ 	bool "powerpc"
+ config BR2_sh
+-	bool "sh"
++	bool "superh"
++config BR2_sh64
++	bool "superh64"
+ config BR2_sparc
+ 	bool "sparc"
+ config BR2_x86_64
+@@ -155,13 +157,15 @@
+ 	default "sh3eb"		if BR2_sh3eb
+ 	default "sh4"		if BR2_sh4
+ 	default "sh4eb"		if BR2_sh4eb
++	default "sh64"		if BR2_sh64
+ 	default "sparc"		if BR2_sparc
+ 	default "x86_64"	if BR2_x86_64
+ 
+ config BR2_ENDIAN
+ 	string
+ 	default "LITTLE" if BR2_arm || BR2_cris || BR2_i386 || BR2_mipsel || \
+-	                    BR2_sh3 || BR2_sh4 || BR2_x86_64 || BR2_nios2
++	                    BR2_sh3 || BR2_sh4 || BR2_x86_64 || BR2_nios2 || \
++			    BR2_sh64
+ 	default "BIG"    if BR2_alpha || BR2_armeb || BR2_m68k || BR2_mips || \
+ 	                    BR2_powerpc || BR2_sh2a_nofpueb || BR2_sh2eb || \
+ 	                    BR2_sh3eb || BR2_sh4eb || BR2_sparc
