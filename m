@@ -1,33 +1,33 @@
-From: Rob Landley <rob@landley.net>
-Date: Wed, 30 Aug 2006 12:55:52 -0400
-Subject: [Buildroot] glibc vs. uclibc
-In-Reply-To: <1156787482.30424.16.camel@wallace.classdesign.local>
-References: <1156787482.30424.16.camel@wallace.classdesign.local>
-Message-ID: <200608301255.53182.rob@landley.net>
+From: Ed Swierk <eswierk@arastra.com>
+Date: Wed, 30 Aug 2006 15:23:28 -0700
+Subject: [Buildroot] Exception support
+In-Reply-To: <200608290041.27413.thomas.moschny@gmx.de>
+References: <200608290041.27413.thomas.moschny@gmx.de>
+Message-ID: <c1bf1cf0608301523u1970bd8en61c048b94e796167@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Monday 28 August 2006 1:51 pm, Bill Somerville wrote:
-> Hi
-> 
-> I am forced to use glibc by a closed source package from Intel (IPP) so
-> I am having to use a rather dated patch from the crosstool project to
-> hack with the buildroot package. This is very unsatisfactory as the
-> patch only applies cleanly to a very old revision of buildroot.
-> 
-> Is there fresher way of using buildroot with glibc?
+On 8/28/06, Thomas Moschny <thomas.moschny@gmx.de> wrote:
+> is there a way to get a toolchain built for i686, that supports C++
+> exceptions?
+>
+> In a buildroot naively build using gcc 4.1.0 or 4.1.1 and uclibc 0.9.28, C++
+> exceptions don't work. Apps instead abort with "terminate called after
+> throwing an instance of foo" when an exception of type foo is thrown.
 
-Buildroot started life as a test harness for uClibc.  It's maintained by the 
-uClibc developers as a way of generating uClibc toolchains for various 
-platforms, and building packages against uClibc.  It was only about a month 
-ago that buildroot got its own mailing list rather than using the uclibc 
-mailing list, and said mailing list is still "buildroot at uclibc.org".
+I've got C++ exceptions working with gcc 4.1.1 by enabling
+BR2_GCC_USE_SJLJ_EXCEPTIONS in my buildroot configuration, and
+changing --disable-__cxa_atexit to --enable-__cxa_atexit in
+gcc-uclibc-3.x.mk. The former forces gcc to implement exceptions with
+setjmp/longjmp rather than the more efficient stack unwinding, while
+the latter enables code ensuring that static objects are cleaned up
+properly on exit.
 
-Did this answer your question?
+Apparently it is even possible to get stack unwinding to work, but I
+have not tried it myself. See the thread beginning at
+http://uclibc.org/lists/uclibc/2006-August/016090.html .
 
-Rob
--- 
-Never bet against the cheap plastic solution.
+--Ed
