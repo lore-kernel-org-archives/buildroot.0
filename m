@@ -1,32 +1,80 @@
-From: =?iso-8859-1?Q?=22Matthias_G=FClck=22?= <Real.Magic@gmx.de>
-Date: Tue, 05 Sep 2006 14:57:02 +0200
-Subject: [Buildroot] uClib 0.9.28 with gcc 4.0.3 for PPC
-Message-ID: <20060905125702.293880@gmx.net>
+From: Shaun Burdick <buildroot@shaunburdick.com>
+Date: Wed, 06 Sep 2006 15:25:06 -0400
+Subject: [Buildroot] "CONFIG_SYSLOGD" redefined
+Message-ID: <44FF2092.10509@shaunburdick.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Building a toolchain for PowerPC with gcc 4.0.3 and "Use a daily snapshot of uClibc" option works without any problem (uClib 0.9.27 is used).
+Hello everyone,
+I wanted to say hello and great idea on the buildroot project.
+I am having a little trouble finishing the compile however, and I was
+wondering if I could get some help.
+I searched in the malling list archives (recent google search) and could
+not find any reference to the make error I receive.
 
-But when I disable the daily snapshot option, uClib 0.9.28 is used, and stops with the following error:
+It errors out complaining:
 
-/home/guelckma/Projects/buildroot/build_powerpc/staging_dir/bin/powerpc-linux-uclibc-gcc  -Wall -Wstrict-prototypes -Wno-trigraphs -fno-strict-aliasing    -fno-builtin -nostdinc -D_LIBC -I../../../../include -I.  -Os -funit-at-a-time   -isystem /home/guelckma/Projects/buildroot/build_powerpc/staging_dir/lib/gcc/powerpc-linux-uclibc/4.0.3/include -DNDEBUG -fpic -c adjtimex.c -o adjtimex.o
-adjtimex.c:14: error: '__adjtimex' aliased to undefined symbol 'adjtimex'
-adjtimex.c:15: error: 'ntp_adjtime' aliased to undefined symbol 'adjtimex'
-make[5]: *** [adjtimex.o] Error 1
+/home/shaun/svn/buildroot/build_i686/busybox/init/init.c:13:1:
+"CONFIG_SYSLOGD" redefined
+In file included from
+/home/shaun/svn/buildroot/build_i686/busybox/include/busybox.h:10,
+                 from
+/home/shaun/svn/buildroot/build_i686/busybox/init/init.c:12:
+/home/shaun/svn/buildroot/build_i686/busybox/include/bb_config.h:2669:1:
+this is the location of the previous definition
 
-Why is the default uClib version 0.9.27?
-Is it possible, to fix this bug, or must I use a different compiler version (i.e. 4.1)?
+Full make output:
 
-Kind Regards,
+[shaun at deusexmachina buildroot]$ make
 
-Matthias
+Checking build system dependencies:
+sed works:                          Ok
+GNU make version '3.80':            Ok
+gcc version '3.4.6':                Ok
+which installed:                    Ok
+bison installed:                    Ok
+flex installed:                     Ok
+gettext installed:                  Ok
+Build system dependencies:          Ok
 
+make -j1
+CC=/home/shaun/svn/buildroot/build_i686/staging_dir/bin/i686-linux-uclibc-gcc
+CROSS_COMPILE="/home/shaun/svn/buildroot/build_i686/staging_dir/bin/i686-linux-uclibc-"
+CROSS="/home/shaun/svn/buildroot/build_i686/staging_dir/bin/i686-linux-uclibc-"
+PREFIX="/home/shaun/svn/buildroot/build_i686/root" \
+        EXTRA_CFLAGS="-Os -pipe " -C
+/home/shaun/svn/buildroot/build_i686/busybox
+make[1]: Entering directory `/home/shaun/svn/buildroot/build_i686/busybox'
+  CC init/init.o
+/home/shaun/svn/buildroot/build_i686/busybox/init/init.c:13:1:
+"CONFIG_SYSLOGD" redefined
+In file included from
+/home/shaun/svn/buildroot/build_i686/busybox/include/busybox.h:10,
+                 from
+/home/shaun/svn/buildroot/build_i686/busybox/init/init.c:12:
+/home/shaun/svn/buildroot/build_i686/busybox/include/bb_config.h:2669:1:
+this is the location of the previous definition
+make[2]: *** [/home/shaun/svn/buildroot/build_i686/busybox/init/init.o]
+Error 1
+make[1]: *** [_all] Error 2
+make[1]: Leaving directory `/home/shaun/svn/buildroot/build_i686/busybox'
+make: *** [/home/shaun/svn/buildroot/build_i686/busybox/busybox] Error 2
+[shaun at deusexmachina buildroot]$
 
--- 
+I attached my .config file, not sure if attachments are scraped off.  I
+can respond with it in an email if need be.
 
+My whole goal of this is to make a tiny DHCP/DNS server.  I want to use
+it for home use and it will facilitate my interest in learning DNS.  I
+will use it as a VM on my linux box so ssh access is a plus!
 
-"Feel free" ? 10 GB Mailbox, 100 FreeSMS/Monat ...
-Jetzt GMX TopMail testen: http://www.gmx.net/de/go/topmail
+My thanks in advance,
+-Shaun
+
+-------------- next part --------------
+An embedded and charset-unspecified text was scrubbed...
+Name: .config
+Url: http://busybox.net/lists/buildroot/attachments/20060906/dc16ef06/attachment.pot 
