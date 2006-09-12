@@ -1,36 +1,22 @@
-From: aldot at uclibc.org <aldot@uclibc.org>
-Date: Mon, 11 Sep 2006 11:12:13 -0700 (PDT)
-Subject: [Buildroot] svn commit: trunk/buildroot/toolchain/gcc/4.2
-Message-ID: <20060911181213.E510448610@busybox.net>
+From: Benjamin Delagoutte <BDE@teamlog.com>
+Date: Tue, 12 Sep 2006 10:36:30 +0200
+Subject: [Buildroot] patch : fix uClibc.config
+Message-ID: <1158050190.1935.3.camel@localhost>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Author: aldot
-Date: 2006-09-11 11:12:13 -0700 (Mon, 11 Sep 2006)
-New Revision: 16103
+uclibc version : snapshot
+problem : I always get prompted for some symbols that are missing in
+default uClibc.config file (ARCH_USE_MMU, UCLIBC_HAS_ARC4RANDOM etc.).
 
-Log:
-- add missing include
-
-
-Modified:
-   trunk/buildroot/toolchain/gcc/4.2/205-uclibc-locale-update.patch
-
-
-Changeset:
-Modified: trunk/buildroot/toolchain/gcc/4.2/205-uclibc-locale-update.patch
-===================================================================
---- trunk/buildroot/toolchain/gcc/4.2/205-uclibc-locale-update.patch	2006-09-11 17:42:44 UTC (rev 16102)
-+++ trunk/buildroot/toolchain/gcc/4.2/205-uclibc-locale-update.patch	2006-09-11 18:12:13 UTC (rev 16103)
-@@ -95,7 +95,7 @@
- +#ifdef HAVE_LIBINTL_H
-  #include <libintl.h> 		// For messages
-  #endif
-- 
-+ #include <cstdarg>
-  #ifdef __UCLIBC_MJN3_ONLY__
-  #warning what is _GLIBCXX_C_LOCALE_GNU for
- +// psm: used in os/gnu-linux/ctype_noninline.h
+This patch should solve this by adding missing symbols to uClibc.config.
+-------------- next part --------------
+A non-text attachment was scrubbed...
+Name: fix-uclibc_config.patch
+Type: text/x-patch
+Size: 1015 bytes
+Desc: not available
+Url : http://busybox.net/lists/buildroot/attachments/20060912/4f79c81f/attachment.bin 
