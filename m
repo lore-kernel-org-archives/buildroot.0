@@ -1,26 +1,32 @@
-From: Bernhard Fischer <rep.nop@aon.at>
-Date: Thu, 14 Sep 2006 19:16:25 +0200
-Subject: [Buildroot] Buildroot fails on powerpc with busybox login.c
-In-Reply-To: <200609141900.12420.vda.linux@googlemail.com>
-References: <45043EA7.5070709@pacbell.net> <20060913154433.GC13069@aon.at>
-	<200609141900.12420.vda.linux@googlemail.com>
-Message-ID: <20060914171625.GB23891@aon.at>
+From: Marcel Birthelmer <marcel@carrietech.com>
+Date: Thu, 14 Sep 2006 10:24:21 -0700
+Subject: [Buildroot] [BUILDROOT] root file system is mounted as ro
+In-Reply-To: <168bf0160609140029r77cb95b1mbfa7d32624c615d@mail.gmail.com>
+References: <168bf0160609140029r77cb95b1mbfa7d32624c615d@mail.gmail.com>
+Message-ID: <45099045.5080505@carrietech.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Thu, Sep 14, 2006 at 07:00:12PM +0200, Denis Vlasenko wrote:
->On Wednesday 13 September 2006 17:44, Bernhard Fischer wrote:
+Thomas Surrel wrote:
+> Hi,
+> 
+> I have a problem with recent buildroot : when booting Linux, the root
+> file system is always mounted as ro, whereas it was not with older
+> versions. A remount as rw makes the trick, but it is quite annoying to
+> have to do that. Does anyone have an idea where to start looking to
+> solve that problem or where that problem comes from ?
+> 
+> Thanks in advance !
+> 
+> Thomas
+> _______________________________________________
+> buildroot mailing list
+> buildroot at uclibc.org
+> http://busybox.net/mailman/listinfo/buildroot
 
->> r16112 has a partial fix to make it build again. We (e.g. vda ;) should
->> provide empty bodies for read_or_build_utent() and write_utent() if UTMP
->> support is disabled. This can go hand in hand with removing the
->> pointless forward decls for said functions.
->
->Done ;)
-
-Thanks for taking care of this.
-cheers,
-Bernhard
+Just put "rw" instead of "ro" in your boot configuration (in your
+bootloader config).
+- Marcel
