@@ -1,25 +1,47 @@
-From: don <don_reid@comcast.net>
-Date: Thu, 14 Sep 2006 10:22:28 -0700
-Subject: [Buildroot] [BUILDROOT] root file system is mounted as ro
-In-Reply-To: <168bf0160609140029r77cb95b1mbfa7d32624c615d@mail.gmail.com>
-References: <168bf0160609140029r77cb95b1mbfa7d32624c615d@mail.gmail.com>
-Message-ID: <20060914172228.GA12778@reid1.localdomain>
+From: Shaun Burdick <buildroot@shaunburdick.com>
+Date: Sun, 17 Sep 2006 11:27:40 -0400
+Subject: [Buildroot] Make ISO problem/Virtual Machine vmdk
+Message-ID: <450D696C.9060700@shaunburdick.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Thu, Sep 14, 2006 at 09:29:49AM +0200, Thomas Surrel wrote:
-> Hi,
-> 
-> I have a problem with recent buildroot : when booting Linux, the root
-> file system is always mounted as ro,...
+Hello,
+I am having a problem with the .iso output of buildroot.
+I am able to finish a build of buildroot without an iso and the .ext2
+filesystem comes out fine.
+For some reason it fails saying it can't find '/stage2/stage2_eltorito'
+Full message:
+make[4]: Leaving directory
+`/home/shaun/svn/buildroot/build_i686/cdrtools-2.01/man/man4'
+make[3]: Leaving directory
+`/home/shaun/svn/buildroot/build_i686/cdrtools-2.01/man/man4'
+make[2]: Leaving directory
+`/home/shaun/svn/buildroot/build_i686/cdrtools-2.01/man'
+make[1]: Leaving directory
+`/home/shaun/svn/buildroot/build_i686/cdrtools-2.01'
+touch -c /home/shaun/svn/buildroot/build_i686/cdrtools-2.01/mkisofs
+mkdir -p /home/shaun/svn/buildroot/build_i686/iso9660
+mkdir -p /home/shaun/svn/buildroot/build_i686/iso9660/boot/grub
+cp /stage2/stage2_eltorito
+/home/shaun/svn/buildroot/build_i686/iso9660/boot/grub/
+cp: cannot stat `/stage2/stage2_eltorito': No such file or directory
+make: *** [/home/shaun/svn/buildroot/rootfs.i686.new.iso] Error 1
 
-I have this in etc/inittab
+The full make output is in the attached make.txt along with my .config
 
-	null::sysinit:/bin/mount -o remount,rw /	
+Is there something I need to get and add to it?  I am at the latest svn
+checkout.
 
-Of course you need a file system that is writable like ext2.
-
-Don
+In an unrelated note, should I even bother? I am just trying to create a
+virtual machine, I just haven't seen a way to convert the rootfs to a .vmdk?
+-------------- next part --------------
+An embedded and charset-unspecified text was scrubbed...
+Name: .config
+Url: http://busybox.net/lists/buildroot/attachments/20060917/7577963b/attachment-0001.pot 
+-------------- next part --------------
+An embedded and charset-unspecified text was scrubbed...
+Name: make.txt
+Url: http://busybox.net/lists/buildroot/attachments/20060917/7577963b/attachment-0001.txt 
