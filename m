@@ -1,47 +1,28 @@
-From: Shaun Burdick <buildroot@shaunburdick.com>
-Date: Sun, 17 Sep 2006 11:27:40 -0400
-Subject: [Buildroot] Make ISO problem/Virtual Machine vmdk
-Message-ID: <450D696C.9060700@shaunburdick.com>
+From: Philippe Ney <philippe.ney@pardes.ws>
+Date: Mon, 18 Sep 2006 21:49:28 +0200
+Subject: [Buildroot] Building rrdtool
+Message-ID: <20060918214928.2c3fa275.philippe.ney@pardes.ws>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
-I am having a problem with the .iso output of buildroot.
-I am able to finish a build of buildroot without an iso and the .ext2
-filesystem comes out fine.
-For some reason it fails saying it can't find '/stage2/stage2_eltorito'
-Full message:
-make[4]: Leaving directory
-`/home/shaun/svn/buildroot/build_i686/cdrtools-2.01/man/man4'
-make[3]: Leaving directory
-`/home/shaun/svn/buildroot/build_i686/cdrtools-2.01/man/man4'
-make[2]: Leaving directory
-`/home/shaun/svn/buildroot/build_i686/cdrtools-2.01/man'
-make[1]: Leaving directory
-`/home/shaun/svn/buildroot/build_i686/cdrtools-2.01'
-touch -c /home/shaun/svn/buildroot/build_i686/cdrtools-2.01/mkisofs
-mkdir -p /home/shaun/svn/buildroot/build_i686/iso9660
-mkdir -p /home/shaun/svn/buildroot/build_i686/iso9660/boot/grub
-cp /stage2/stage2_eltorito
-/home/shaun/svn/buildroot/build_i686/iso9660/boot/grub/
-cp: cannot stat `/stage2/stage2_eltorito': No such file or directory
-make: *** [/home/shaun/svn/buildroot/rootfs.i686.new.iso] Error 1
+Hi,
 
-The full make output is in the attached make.txt along with my .config
+I'currently trying to build rrdtool to be used by ntop for an i386 target.
 
-Is there something I need to get and add to it?  I am at the latest svn
-checkout.
+I have automake/autoconf problems to tell rddtool to use the
+$(STAGING_DIR)/include directory for the headers of freetype2 and
+libart_lgpl. This because of the ac_cv_prog_PKGCONFIG macro.
 
-In an unrelated note, should I even bother? I am just trying to create a
-virtual machine, I just haven't seen a way to convert the rootfs to a .vmdk?
--------------- next part --------------
-An embedded and charset-unspecified text was scrubbed...
-Name: .config
-Url: http://busybox.net/lists/buildroot/attachments/20060917/7577963b/attachment-0001.pot 
--------------- next part --------------
-An embedded and charset-unspecified text was scrubbed...
-Name: make.txt
-Url: http://busybox.net/lists/buildroot/attachments/20060917/7577963b/attachment-0001.txt 
+Did someone already tried or succeeded in cross-compiling rrdtool ?
+
+For the automake/autoconf guru, what is the right way to tell rrdtool
+not to use the PKGCONFIG tool and search only in $(STAGING_DIR) for
+its headers ?
+
+Thanks in advance for any tips.
+
+Cheers,
+Philippe
