@@ -1,46 +1,43 @@
-From: jacmet at uclibc.org <jacmet@uclibc.org>
-Date: Tue, 19 Sep 2006 08:16:55 -0700 (PDT)
-Subject: [Buildroot] svn commit: trunk/buildroot/package/libglib12
-Message-ID: <20060919151655.658C0485DA@busybox.net>
+From: Qiu Yu <unicell@gmail.com>
+Date: Wed, 20 Sep 2006 21:34:24 +0800
+Subject: [Buildroot] can't resolve symbol bcopy
+Message-ID: <e068c5c30609200634i6b222c86r298f1fabe57a3049@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Author: jacmet
-Date: 2006-09-19 08:16:55 -0700 (Tue, 19 Sep 2006)
-New Revision: 16159
+Hi, all
 
-Log:
-fix big/little endian
+Paid some effort, I finally got my first buildroot-made rootfs image for
+mipsel platform, but this pleasure did't last long.
 
-Modified:
-   trunk/buildroot/package/libglib12/libglib12.mk
+When I mount it on my board, after kernel started, I got an error message:
+"bin/sh" can't resolve symbol bcopy
 
+I tried to google it, and only got this page "
+http://mailman.uclinux.org/pipermail/uclinux-dev/2006-April/037797.html". I
+contacted the guy who sent this message, and he did't find out the cause of
+the problem. All he suggests me is to try different version, and maybe
+change some compiler option.
 
-Changeset:
-Modified: trunk/buildroot/package/libglib12/libglib12.mk
-===================================================================
---- trunk/buildroot/package/libglib12/libglib12.mk	2006-09-19 15:12:12 UTC (rev 16158)
-+++ trunk/buildroot/package/libglib12/libglib12.mk	2006-09-19 15:16:55 UTC (rev 16159)
-@@ -9,6 +9,11 @@
- LIBGLIB12_DIR:=$(BUILD_DIR)/glib-1.2.10
- LIBGLIB12_BINARY:=libglib.a
- 
-+ifeq ($(BR2_ENDIAN),"BIG")
-+LIBGLIB12_BE:=yes
-+else
-+LIBGLIB12_BE:=no
-+endif
- 
- $(DL_DIR)/$(LIBGLIB12_SOURCE):
- 	 $(WGET) -P $(DL_DIR) $(LIBGLIB12_SITE)/$(LIBGLIB12_SOURCE)
-@@ -24,6 +29,7 @@
- $(LIBGLIB12_DIR)/.configured: $(LIBGLIB12_DIR)/.unpacked
- 	(cd $(LIBGLIB12_DIR); rm -rf config.cache; \
- 		$(TARGET_CONFIGURE_OPTS) \
-+		ac_cv_c_bigendian=$(LIBGLIB12_BE) \
- 		./configure \
- 		--host=$(REAL_GNU_TARGET_NAME) \
- 		--build=$(GNU_HOST_NAME) \
+But...any body knows why and how to fix it? Please help me out and thanks!
+
+My buildroot configuration:
+
+Kernel Headers (Linux 2.4.31 kernel headers)       <-- I'm using Linux
+2.4.17 to boot the board, can this be a problem?
+Binutils Version (binutils 2.16.1)
+GCC compiler Version (gcc 3.4.2)
+uClibc-0.9.28
+busybox-1.2.1
+
+-- 
+Qiu, Yu
+-----------------------------------------------------------
+email:  unicell@gmail.com
+-----------------------------------------------------------
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: http://busybox.net/lists/buildroot/attachments/20060920/cd7c4b20/attachment.html 
