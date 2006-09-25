@@ -1,7 +1,7 @@
 From: jacmet at uclibc.org <jacmet@uclibc.org>
-Date: Mon, 25 Sep 2006 01:48:47 -0700 (PDT)
-Subject: [Buildroot] svn commit: trunk/buildroot/package/valgrind
-Message-ID: <20060925084847.87853486B2@busybox.net>
+Date: Mon, 25 Sep 2006 05:35:27 -0700 (PDT)
+Subject: [Buildroot] svn commit: trunk/buildroot/target/iso9660
+Message-ID: <20060925123527.DB60E4865A@busybox.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -9,46 +9,27 @@ Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
 Author: jacmet
-Date: 2006-09-25 01:48:47 -0700 (Mon, 25 Sep 2006)
-New Revision: 16216
+Date: 2006-09-25 05:35:27 -0700 (Mon, 25 Sep 2006)
+New Revision: 16217
 
 Log:
-Valgrind works on PPC and AMD64 as well nowadays.
-Use Kconfig to ensure valgrind can only be enabled on supported archs.
-
+GRUB package is called BR2_TARGET_GRUB
 
 Modified:
-   trunk/buildroot/package/valgrind/Config.in
-   trunk/buildroot/package/valgrind/valgrind.mk
+   trunk/buildroot/target/iso9660/Config.in
 
 
 Changeset:
-Modified: trunk/buildroot/package/valgrind/Config.in
+Modified: trunk/buildroot/target/iso9660/Config.in
 ===================================================================
---- trunk/buildroot/package/valgrind/Config.in	2006-09-25 07:38:13 UTC (rev 16215)
-+++ trunk/buildroot/package/valgrind/Config.in	2006-09-25 08:48:47 UTC (rev 16216)
-@@ -1,6 +1,7 @@
- config BR2_PACKAGE_VALGRIND
- 	bool "valgrind"
+--- trunk/buildroot/target/iso9660/Config.in	2006-09-25 08:48:47 UTC (rev 16216)
++++ trunk/buildroot/target/iso9660/Config.in	2006-09-25 12:35:27 UTC (rev 16217)
+@@ -3,7 +3,7 @@
  	default n
-+	depends BR2_i386 || BR2_powerpc || BR2_x86_64
+ 	depends on BR2_i386
+ 	select BR2_TARGET_ROOTFS_EXT2
+-	select BR2_PACKAGE_GRUB
++	select BR2_TARGET_GRUB
  	help
- 	  Tool for debugging and profiling Linux programs.
- 
-
-Modified: trunk/buildroot/package/valgrind/valgrind.mk
-===================================================================
---- trunk/buildroot/package/valgrind/valgrind.mk	2006-09-25 07:38:13 UTC (rev 16215)
-+++ trunk/buildroot/package/valgrind/valgrind.mk	2006-09-25 08:48:47 UTC (rev 16216)
-@@ -77,11 +77,7 @@
- 	#cp $(VALGRIND_DIR)/woody.supp $(TARGET_DIR)/usr/lib/valgrind/
- 	touch -c $(TARGET_DIR)/usr/bin/valgrind
- 
--ifeq ($(BR2_i386),y)
- valgrind: $(TARGET_DIR)/usr/bin/valgrind
--else
--valgrind:
--endif
- 
- valgrind-source: $(DL_DIR)/$(VALGRIND_SOURCE)
+ 	  Build a bootable iso9660 image
  
