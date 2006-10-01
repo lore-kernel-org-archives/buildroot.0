@@ -1,36 +1,36 @@
-From: Scott Reese <sreese@indianaheart.org>
-Date: Sun, 01 Oct 2006 14:02:09 -0400
-Subject: [Buildroot] Problems with recent zcat changes
-Message-ID: <452002A1.2020400@indianaheart.org>
+From: aldot at uclibc.org <aldot@uclibc.org>
+Date: Sun,  1 Oct 2006 11:34:45 -0700 (PDT)
+Subject: [Buildroot] svn commit: trunk/buildroot/package
+Message-ID: <20061001183445.8A884485DD@busybox.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
------BEGIN PGP SIGNED MESSAGE-----
-Hash: SHA1
+Author: aldot
+Date: 2006-10-01 11:34:45 -0700 (Sun, 01 Oct 2006)
+New Revision: 16285
 
-Greetings:
+Log:
+- add missing hung from the BR2_ZCAT introduction
 
-I think that the zcat changes over the last few days have caused some
-problems in the makefile.  The newest buildroot fails to build the
-skeleton directories correctly.
 
-The Makefile should be changed to reference BR2_ZCAT instead of ZCAT:
+Modified:
+   trunk/buildroot/package/Makefile.in
 
-107c107
-<               $(ZCAT) $(TARGET_SKELETON) | tar -C $(BUILD_DIR) -xf -; \
-- ---
->               $(BR2_ZCAT) $(TARGET_SKELETON) | tar -C $(BUILD_DIR) -xf
-- -; \
 
-- -Scott
------BEGIN PGP SIGNATURE-----
-Version: GnuPG v1.4.2.2 (GNU/Linux)
-Comment: Using GnuPG with Mozilla - http://enigmail.mozdev.org
-
-iD8DBQFFIAJuS7FYdPX6+iYRAmcNAJ9IIC8f9tn1ObDR5soVsXVzCFRRPgCdHIxF
-hoYF5fYVStfctq4vxlQMUOQ=
-=uvcB
------END PGP SIGNATURE-----
+Changeset:
+Modified: trunk/buildroot/package/Makefile.in
+===================================================================
+--- trunk/buildroot/package/Makefile.in	2006-10-01 16:44:04 UTC (rev 16284)
++++ trunk/buildroot/package/Makefile.in	2006-10-01 18:34:45 UTC (rev 16285)
+@@ -8,6 +8,8 @@
+ #"
+ SVN:=$(strip $(subst ",, $(BR2_SVN)))
+ #"
++ZCAT:=$(strip $(subst ",, $(BR2_ZCAT)))
++#"
+ TAR_OPTIONS=$(subst ",, $(BR2_TAR_OPTIONS)) -xf
+ #"
+ 
