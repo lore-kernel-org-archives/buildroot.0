@@ -1,33 +1,44 @@
-From: mike <wtf62@rovoreed.com>
-Date: Sun, 01 Oct 2006 07:00:25 +0000
-Subject: [Buildroot] Setting up a new kernel with modules ?
-Message-ID: <1159686025.3472.7.camel@glynys>
+From: aldot at uclibc.org <aldot@uclibc.org>
+Date: Sun,  1 Oct 2006 08:07:46 -0700 (PDT)
+Subject: [Buildroot] svn commit: trunk/buildroot
+Message-ID: <20061001150746.5735648596@busybox.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-I've had Buildroot running for a couple of years on a (386) development
-machine that was running a 2.2.16 kernel developing code for a 2.4.31
-based target system. My root file system I gzip into fs.gz and unpack
-onto ram disk when my target system boots the kernel specified by
-syslinux.  Everything was OK.
+Author: aldot
+Date: 2006-10-01 08:07:45 -0700 (Sun, 01 Oct 2006)
+New Revision: 16281
 
-I've just upgraded my development machine to Fedora Core 4 and at the
-same time took the decision to upgrade my target environment to 2.6.12.
+Log:
+- add BR2_ZCAT in preparation of fixing bug #971
 
-I've rebuilt my target kernel and buildroot but seem to be missing some
-information on how to complete the upgrade.
 
-I've done a...
+Modified:
+   trunk/buildroot/Config.in
 
-make INSTALL_PATH=/home/mike/buildroot/build_i386/root install
 
-but that just seems to have moved the kernel image into my root system,
-which isn't exactly what I wanted or expected. Also I've not got the
-various compiled modules copied into my root filesystem.
-
-So how do I get the various modules copied into my root file system ? Am
-I expected to copy them into the right places myself or is there a
-script or something I've forgotten about ?
+Changeset:
+Modified: trunk/buildroot/Config.in
+===================================================================
+--- trunk/buildroot/Config.in	2006-10-01 10:58:54 UTC (rev 16280)
++++ trunk/buildroot/Config.in	2006-10-01 15:07:45 UTC (rev 16281)
+@@ -180,6 +180,16 @@
+ 	string "Subversion (svn) checkout command"
+ 	default "svn co"
+ 
++config BR2_ZCAT
++	string "zcat command"
++	default "zcat"
++	help
++	  Command to be used to extract a gzip'ed file to stdout.
++	  zcat is identical to gunzip -c except that the former may
++	  not be available on your system.
++	  Default is "zcat"
++	  Other possible values include "gunzip -c"
++
+ config BR2_TAR_OPTIONS
+ 	string "Tar options"
+ 	default ""
