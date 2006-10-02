@@ -1,7 +1,7 @@
 From: andersen at uclibc.org <andersen@uclibc.org>
-Date: Mon,  2 Oct 2006 11:52:15 -0700 (PDT)
-Subject: [Buildroot] svn commit: trunk/buildroot/toolchain/uClibc
-Message-ID: <20061002185215.5F54A4856A@busybox.net>
+Date: Mon,  2 Oct 2006 12:40:44 -0700 (PDT)
+Subject: [Buildroot] svn commit: trunk/buildroot/toolchain/gcc
+Message-ID: <20061002194044.E0AF84859A@busybox.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -9,239 +9,95 @@ Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
 Author: andersen
-Date: 2006-10-02 11:52:14 -0700 (Mon, 02 Oct 2006)
-New Revision: 16290
+Date: 2006-10-02 12:40:44 -0700 (Mon, 02 Oct 2006)
+New Revision: 16292
 
 Log:
-kill the separate 'uClibc.config-locale' file, which was generally left unmaintained
-and instead just update the installed uClibc config file in place to enable locale
-when selected
+add a know to enable/disable building a shared libgcc
 
-
-Removed:
-   trunk/buildroot/toolchain/uClibc/uClibc.config-locale
 
 Modified:
-   trunk/buildroot/toolchain/uClibc/uclibc.mk
+   trunk/buildroot/toolchain/gcc/Config.in
+   trunk/buildroot/toolchain/gcc/gcc-uclibc-3.x.mk
 
 
 Changeset:
-Deleted: trunk/buildroot/toolchain/uClibc/uClibc.config-locale
+Modified: trunk/buildroot/toolchain/gcc/Config.in
 ===================================================================
---- trunk/buildroot/toolchain/uClibc/uClibc.config-locale	2006-10-02 18:40:42 UTC (rev 16289)
-+++ trunk/buildroot/toolchain/uClibc/uClibc.config-locale	2006-10-02 18:52:14 UTC (rev 16290)
-@@ -1,186 +0,0 @@
--#
--# Automatically generated make config: don't edit
--#
--# TARGET_alpha is not set
--# TARGET_arm is not set
--# TARGET_bfin is not set
--# TARGET_cris is not set
--# TARGET_e1 is not set
--# TARGET_frv is not set
--# TARGET_h8300 is not set
--# TARGET_hppa is not set
--# TARGET_i386 is not set
--# TARGET_i960 is not set
--# TARGET_ia64 is not set
--# TARGET_m68k is not set
--# TARGET_microblaze is not set
--# TARGET_mips is not set
--# TARGET_nios is not set
--# TARGET_nios2 is not set
--# TARGET_powerpc is not set
--# TARGET_sh is not set
--# TARGET_sh64 is not set
--# TARGET_sparc is not set
--# TARGET_v850 is not set
--# TARGET_vax is not set
--# TARGET_x86_64 is not set
--
--#
--# Target Architecture Features and Options
--#
--HAVE_ELF=y
--TARGET_ARCH="none"
--# ARCH_LITTLE_ENDIAN is not set
--# ARCH_BIG_ENDIAN is not set
--# ARCH_WANTS_LITTLE_ENDIAN is not set
--# ARCH_WANTS_BIG_ENDIAN is not set
--# ARCH_HAS_NO_MMU is not set
--UCLIBC_HAS_FLOATS=y
--UCLIBC_HAS_FPU=y
--DO_C99_MATH=y
--WARNINGS="-Wall"
--KERNEL_SOURCE="/usr/src/linux"
--HAVE_DOT_CONFIG=y
--# CONFIG_ARM_EABI is not set
--# CONFIG_GENERIC_ARM is not set
--# CONFIG_ARM610 is not set
--# CONFIG_ARM710 is not set
--# CONFIG_ARM7TDMI is not set
--# CONFIG_ARM720T is not set
--# CONFIG_ARM920T is not set
--# CONFIG_ARM922T is not set
--# CONFIG_ARM926T is not set
--# CONFIG_ARM1136JF_S is not set
--# CONFIG_ARM_SA110 is not set
--# CONFIG_ARM_SA1100 is not set
--# CONFIG_ARM_XSCALE is not set
--
--#
--# General Library Settings
--#
--# HAVE_NO_PIC is not set
--DOPIC=y
--# HAVE_NO_SHARED is not set
--HAVE_SHARED=y
--# ARCH_HAS_NO_LDSO is not set
--BUILD_UCLIBC_LDSO=y
--# FORCE_SHAREABLE_TEXT_SEGMENTS is not set
--LDSO_LDD_SUPPORT=y
--LDSO_CACHE_SUPPORT=y
--# LDSO_PRELOAD_FILE_SUPPORT is not set
--LDSO_BASE_FILENAME="ld.so"
--LDSO_RUNPATH=n
--# DL_FINI_CRT_COMPAT is not set
--UCLIBC_CTOR_DTOR=y
--# HAS_NO_THREADS is not set
--# UCLIBC_HAS_THREADS is not set
--# PTHREADS_DEBUG_SUPPORT is not set
--# UCLIBC_HAS_THREADS_NATIVE is not set
--# LINUXTHREADS_OLD is not set
--UCLIBC_HAS_LFS=y
--# UCLIBC_STATIC_LDCONFIG is not set
--# MALLOC is not set
--# MALLOC_SIMPLE is not set
--MALLOC_STANDARD=y
--MALLOC_GLIBC_COMPAT=y
--UCLIBC_DYNAMIC_ATEXIT=y
--# COMPAT_ATEXIT is not set
--HAS_SHADOW=y
--# UNIX98PTY_ONLY is not set
--ASSUME_DEVPTS=y
--UCLIBC_HAS_TM_EXTENSIONS=y
--UCLIBC_HAS_TZ_CACHING=y
--UCLIBC_HAS_TZ_FILE=y
--UCLIBC_HAS_TZ_FILE_READ_MANY=y
--UCLIBC_TZ_FILE_PATH="/etc/TZ"
--
--#
--# Networking Support
--#
--UCLIBC_HAS_IPV6=y
--UCLIBC_HAS_RPC=y
--UCLIBC_HAS_FULL_RPC=y
--UCLIBC_HAS_REENTRANT_RPC=y
--
--#
--# String and Stdio Support
--#
--UCLIBC_HAS_STRING_GENERIC_OPT=y
--UCLIBC_HAS_STRING_ARCH_OPT=y
--UCLIBC_HAS_CTYPE_TABLES=y
--UCLIBC_HAS_CTYPE_SIGNED=y
--# UCLIBC_HAS_CTYPE_UNSAFE is not set
--UCLIBC_HAS_CTYPE_CHECKED=y
--# UCLIBC_HAS_CTYPE_ENFORCED is not set
--UCLIBC_HAS_WCHAR=y
--UCLIBC_HAS_LOCALE=y
--UCLIBC_PREGENERATED_LOCALE_DATA=y
--UCLIBC_DOWNLOAD_PREGENERATED_LOCALE_DATA=y
--UCLIBC_HAS_XLOCALE=y
--UCLIBC_HAS_HEXADECIMAL_FLOATS=y
--UCLIBC_HAS_GLIBC_CUSTOM_PRINTF=y
--UCLIBC_PRINTF_SCANF_POSITIONAL_ARGS=9
--UCLIBC_HAS_SCANF_GLIBC_A_FLAG=y
--# UCLIBC_HAS_STDIO_BUFSIZ_NONE is not set
--# UCLIBC_HAS_STDIO_BUFSIZ_256 is not set
--# UCLIBC_HAS_STDIO_BUFSIZ_512 is not set
--# UCLIBC_HAS_STDIO_BUFSIZ_1024 is not set
--# UCLIBC_HAS_STDIO_BUFSIZ_2048 is not set
--UCLIBC_HAS_STDIO_BUFSIZ_4096=y
--# UCLIBC_HAS_STDIO_BUFSIZ_8192 is not set
--UCLIBC_HAS_STDIO_BUILTIN_BUFFER_NONE=y
--# UCLIBC_HAS_STDIO_BUILTIN_BUFFER_4 is not set
--# UCLIBC_HAS_STDIO_BUILTIN_BUFFER_8 is not set
--UCLIBC_HAS_STDIO_SHUTDOWN_ON_ABORT=n
--UCLIBC_HAS_STDIO_GETC_MACRO=y
--UCLIBC_HAS_STDIO_PUTC_MACRO=y
--UCLIBC_HAS_STDIO_AUTO_RW_TRANSITION=y
--# UCLIBC_HAS_FOPEN_LARGEFILE_MODE is not set
--UCLIBC_HAS_FOPEN_EXCLUSIVE_MODE=y
--UCLIBC_HAS_GLIBC_CUSTOM_STREAMS=y
--UCLIBC_HAS_PRINTF_M_SPEC=y
--UCLIBC_HAS_ERRNO_MESSAGES=y
--# UCLIBC_HAS_SYS_ERRLIST is not set
--UCLIBC_HAS_SIGNUM_MESSAGES=y
--# UCLIBC_HAS_SYS_SIGLIST is not set
--UCLIBC_HAS_GNU_GETOPT=y
--
--#
--# Big and Tall
--#
--UCLIBC_HAS_REGEX=y
--UCLIBC_HAS_REGEX_OLD=y
--# UCLIBC_HAS_WORDEXP is not set
--UCLIBC_HAS_FTW=y
--UCLIBC_HAS_GLOB=y
--UCLIBC_HAS_GNU_GLOB=y
--
--#
--# Library Installation Options
--#
--SHARED_LIB_LOADER_PREFIX="/lib"
--RUNTIME_PREFIX="/"
--DEVEL_PREFIX="/usr/"
--
--#
--# uClibc security related options
--#
--# UCLIBC_SECURITY is not set
--UCLIBC_BUILD_PIE=n
--UCLIBC_HAS_SSP=n
--UCLIBC_BUILD_RELRO=y
--UCLIBC_BUILD_NOW=y
--UCLIBC_BUILD_NOEXECSTACK=y
--
--#
--# uClibc development/debugging options
--#
--CROSS_COMPILER_PREFIX=""
--# DODEBUG is not set
--# DODEBUG_PT is not set
--# DOASSERTS is not set
--# SUPPORT_LD_DEBUG is not set
--# SUPPORT_LD_DEBUG_EARLY is not set
--WARNINGS="-Wall"
--# DOMULTI is not set
--# UCLIBC_MJN3_ONLY is not set
+--- trunk/buildroot/toolchain/gcc/Config.in	2006-10-02 18:52:49 UTC (rev 16291)
++++ trunk/buildroot/toolchain/gcc/Config.in	2006-10-02 19:40:44 UTC (rev 16292)
+@@ -126,3 +126,9 @@
+ 	default n
+ 	help
+ 	    Build/install Objective-C compiler and runtime?
++
++config BR2_GCC_SHARED_LIBGCC
++	bool "Build/install a shared libgcc?"
++	default y
++	help
++	    Build/install a shared libgcc library
 
-Modified: trunk/buildroot/toolchain/uClibc/uclibc.mk
+Modified: trunk/buildroot/toolchain/gcc/gcc-uclibc-3.x.mk
 ===================================================================
---- trunk/buildroot/toolchain/uClibc/uclibc.mk	2006-10-02 18:40:42 UTC (rev 16289)
-+++ trunk/buildroot/toolchain/uClibc/uclibc.mk	2006-10-02 18:52:14 UTC (rev 16290)
-@@ -5,12 +5,8 @@
- #############################################################
- 
- ifndef UCLIBC_CONFIG_FILE
--ifeq ($(BR2_ENABLE_LOCALE),y)
--UCLIBC_CONFIG_FILE=toolchain/uClibc/uClibc.config-locale
--else
- UCLIBC_CONFIG_FILE=toolchain/uClibc/uClibc.config
+--- trunk/buildroot/toolchain/gcc/gcc-uclibc-3.x.mk	2006-10-02 18:52:49 UTC (rev 16291)
++++ trunk/buildroot/toolchain/gcc/gcc-uclibc-3.x.mk	2006-10-02 19:40:44 UTC (rev 16292)
+@@ -55,6 +55,12 @@
+ TARGET_LANGUAGES:=$(TARGET_LANGUAGES),fortran
  endif
--endif
  
- ifeq ($(BR2_UCLIBC_VERSION_SNAPSHOT),y)
- # Be aware that this changes daily....
-@@ -70,6 +66,9 @@
- uclibc-configured: dependencies kernel-headers $(UCLIBC_DIR)/.configured
- $(UCLIBC_DIR)/.configured: $(UCLIBC_DIR)/.unpacked
- 	cp $(UCLIBC_CONFIG_FILE) $(UCLIBC_DIR)/.config
-+ifeq ($(ENABLE_LOCALE),true)
-+	$(SED) 's,^.*UCLIBC_HAS_LOCALE.*,UCLIBC_HAS_LOCALE=y\nUCLIBC_PREGENERATED_LOCALE_DATA=y\nUCLIBC_DOWNLOAD_PREGENERATED_LOCALE_DATA=y\nUCLIBC_HAS_XLOCALE=y\nUCLIBC_HAS_GLIBC_DIGIT_GROUPING=n\n,g' $(UCLIBC_DIR)/.config
++ifeq ($(BR2_GCC_SHARED_LIBGCC),y)
++GCC_SHARED_LIBGCC:=--enable-shared
++else
++GCC_SHARED_LIBGCC:=--disable-shared
 +endif
- 	$(SED) 's,^CROSS_COMPILER_PREFIX=.*,CROSS_COMPILER_PREFIX="$(TARGET_CROSS)",g' \
- 		-e 's,# TARGET_$(UCLIBC_TARGET_ARCH) is not set,TARGET_$(UCLIBC_TARGET_ARCH)=y,g' \
- 		-e 's,^TARGET_ARCH="none",TARGET_ARCH=\"$(UCLIBC_TARGET_ARCH)\",g' \
++
+ #############################################################
+ #
+ # build the first pass gcc compiler
+@@ -119,11 +125,11 @@
+ 		--host=$(GNU_HOST_NAME) \
+ 		--target=$(REAL_GNU_TARGET_NAME) \
+ 		--enable-languages=c \
+-		--disable-shared \
+ 		--with-sysroot=$(TOOL_BUILD_DIR)/uClibc_dev/ \
+ 		--disable-__cxa_atexit \
+ 		--enable-target-optspace \
+ 		--with-gnu-ld \
++		--disable-shared \
+ 		$(DISABLE_NLS) \
+ 		$(THREADS) \
+ 		$(MULTILIB) \
+@@ -175,10 +181,10 @@
+ 		--host=$(GNU_HOST_NAME) \
+ 		--target=$(REAL_GNU_TARGET_NAME) \
+ 		--enable-languages=$(TARGET_LANGUAGES) \
+-		--enable-shared \
+ 		--disable-__cxa_atexit \
+ 		--enable-target-optspace \
+ 		--with-gnu-ld \
++		$(GCC_SHARED_LIBGCC) \
+ 		$(DISABLE_NLS) \
+ 		$(THREADS) \
+ 		$(MULTILIB) \
+@@ -264,7 +270,7 @@
+ 	touch -c $(TARGET_DIR)/lib/libgcc_s.so.1
+ 
+ gcc: uclibc-configured binutils gcc_initial $(LIBFLOAT_TARGET) uclibc \
+-	$(TARGET_DIR)/lib/libgcc_s.so.1 $(GCC_BUILD_DIR2)/.installed $(GCC_TARGETS)
++	$(GCC_BUILD_DIR2)/.installed $(GCC_TARGETS)
+ 
+ gcc-source: $(DL_DIR)/$(GCC_SOURCE)
+ 
+@@ -294,11 +300,11 @@
+ 		--host=$(REAL_GNU_TARGET_NAME) \
+ 		--target=$(REAL_GNU_TARGET_NAME) \
+ 		--enable-languages=$(TARGET_LANGUAGES) \
+-		--enable-shared \
+ 		--with-gxx-include-dir=/usr/include/c++ \
+ 		--disable-__cxa_atexit \
+ 		--enable-target-optspace \
+ 		--with-gnu-ld \
++		$(GCC_SHARED_LIBGCC) \
+ 		$(DISABLE_NLS) \
+ 		$(THREADS) \
+ 		$(MULTILIB) \
