@@ -1,59 +1,41 @@
-From: Bernhard Fischer <rep.nop@aon.at>
-Date: Tue, 3 Oct 2006 10:40:35 +0200
-Subject: [Buildroot] svn commit: trunk/buildroot/package/lsof
-In-Reply-To: <20061002184043.0CF8D4856C@busybox.net>
-References: <20061002184043.0CF8D4856C@busybox.net>
-Message-ID: <20061003084035.GB4585@aon.at>
+From: aldot at uclibc.org <aldot@uclibc.org>
+Date: Tue,  3 Oct 2006 06:42:43 -0700 (PDT)
+Subject: [Buildroot] svn commit: trunk/buildroot/package/sudo
+Message-ID: <20061003134243.2B50048593@busybox.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Mon, Oct 02, 2006 at 11:40:43AM -0700, andersen at uclibc.org wrote:
->Author: andersen
->Date: 2006-10-02 11:40:42 -0700 (Mon, 02 Oct 2006)
->New Revision: 16289
->
->Log:
->escape the wildcard
+Author: aldot
+Date: 2006-10-03 06:42:42 -0700 (Tue, 03 Oct 2006)
+New Revision: 16296
 
-Looks like these need escaping too, no?
+Log:
+- late binding isn't a good idea there, i did end up with an empty SOURCE.
 
-grep -rHl "patch-kernel.*[^\\]\*" *
-package/ed/ed.mk
-package/coreutils/coreutils.mk
-package/libpcap/libpcap.mk
-package/sysvinit/sysvinit.mk
-package/ruby/ruby.mk
-package/libglib12/libglib12.mk
-package/libgtk12/libgtk12.mk
-package/bash/bash.mk
-target/cloop/cloop.mk
 
->
->
->Modified:
->   trunk/buildroot/package/lsof/lsof.mk
->
->
->Changeset:
->Modified: trunk/buildroot/package/lsof/lsof.mk
->===================================================================
->--- trunk/buildroot/package/lsof/lsof.mk	2006-10-02 18:25:37 UTC (rev 16288)
->+++ trunk/buildroot/package/lsof/lsof.mk	2006-10-02 18:40:42 UTC (rev 16289)
->@@ -20,7 +20,7 @@
-> $(LSOF_DIR)/.unpacked: $(DL_DIR)/$(LSOF_SOURCE)
-> 	$(LSOF_CAT) $(DL_DIR)/$(LSOF_SOURCE) | tar -C $(BUILD_DIR) $(TAR_OPTIONS) -
-> 	(cd $(LSOF_DIR);tar xf lsof_4.77_src.tar;rm -f lsof_4.77_src.tar)
->-	toolchain/patch-kernel.sh $(LSOF_DIR) package/lsof/ *.patch
->+	toolchain/patch-kernel.sh $(LSOF_DIR) package/lsof/ \*.patch
-> 	touch $(LSOF_DIR)/.unpacked
-> 
-> $(LSOF_DIR)/.configured: $(LSOF_DIR)/.unpacked
->
->_______________________________________________
->buildroot mailing list
->buildroot at uclibc.org
->http://busybox.net/mailman/listinfo/buildroot
->
+Modified:
+   trunk/buildroot/package/sudo/sudo.mk
+
+
+Changeset:
+Modified: trunk/buildroot/package/sudo/sudo.mk
+===================================================================
+--- trunk/buildroot/package/sudo/sudo.mk	2006-10-03 10:47:35 UTC (rev 16295)
++++ trunk/buildroot/package/sudo/sudo.mk	2006-10-03 13:42:42 UTC (rev 16296)
+@@ -5,10 +5,10 @@
+ #############################################################
+ 
+ SUDO_VER:=1.6.8p9
++SUDO_SOURCE:=sudo-$(SUDO_VER).tar.gz
++SUDO_SITE:=http://www.courtesan.com/sudo/dist
+ SUDO_DIR:=$(BUILD_DIR)/sudo-$(SUDO_VER)
+-SUDO_SOURCE:=sudo-$(SUDO_VER).tar.gz
+-SUDO_SITE=http://www.courtesan.com/sudo/dist
+-SUDO_UNZIP=$(ZCAT)
++SUDO_UNZIP:=$(ZCAT)
+ 
+ $(DL_DIR)/$(SUDO_SOURCE):
+ 	 $(WGET) -P $(DL_DIR) $(SUDO_SITE)/$(SUDO_SOURCE)
