@@ -1,35 +1,59 @@
-From: Erik Andersen <andersen@codepoet.org>
-Date: Mon, 2 Oct 2006 16:19:05 -0600
-Subject: [Buildroot] Wrong pathnames in libtool and pkgconfig files
-In-Reply-To: <4521820B.8010008@isoar.ca>
-References: <4521820B.8010008@isoar.ca>
-Message-ID: <20061002221905.GA10942@codepoet.org>
+From: Bernhard Fischer <rep.nop@aon.at>
+Date: Tue, 3 Oct 2006 10:40:35 +0200
+Subject: [Buildroot] svn commit: trunk/buildroot/package/lsof
+In-Reply-To: <20061002184043.0CF8D4856C@busybox.net>
+References: <20061002184043.0CF8D4856C@busybox.net>
+Message-ID: <20061003084035.GB4585@aon.at>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Mon Oct 02, 2006 at 05:18:03PM -0400, Andrew E. Mileski wrote:
-> I'm repeatedly having problems with pathnames in *.la and *.pc files,
-> since packages are built for / but installed in $(STAGING_DIR).  This
-> breaks packages that rely on these files being accurate.
-> 
-> So far I've resorted to sed'in them, which mostly works:
->     sed -i filename -e 's#/usr#$(STAGING_DIR)/usr#g'
-> but is sure to cause problems if not prevented from being repeated.
-> 
-> This effects all packages built using libtool and pkgconfig.
-> 
-> Is there a more correct way to handle this?
+On Mon, Oct 02, 2006 at 11:40:43AM -0700, andersen at uclibc.org wrote:
+>Author: andersen
+>Date: 2006-10-02 11:40:42 -0700 (Mon, 02 Oct 2006)
+>New Revision: 16289
+>
+>Log:
+>escape the wildcard
 
-Ugh.  I'd never considered this, but yeah you are right.  I do
-not know of any way to teach libtool about a cross compiling
-setup, so unless someone else has a better idea I think your
-idea to use sed is the best thing we have going.
+Looks like these need escaping too, no?
 
- -Erik
+grep -rHl "patch-kernel.*[^\\]\*" *
+package/ed/ed.mk
+package/coreutils/coreutils.mk
+package/libpcap/libpcap.mk
+package/sysvinit/sysvinit.mk
+package/ruby/ruby.mk
+package/libglib12/libglib12.mk
+package/libgtk12/libgtk12.mk
+package/bash/bash.mk
+target/cloop/cloop.mk
 
---
-Erik B. Andersen             http://codepoet-consulting.com/
---This message was written using 73% post-consumer electrons--
+>
+>
+>Modified:
+>   trunk/buildroot/package/lsof/lsof.mk
+>
+>
+>Changeset:
+>Modified: trunk/buildroot/package/lsof/lsof.mk
+>===================================================================
+>--- trunk/buildroot/package/lsof/lsof.mk	2006-10-02 18:25:37 UTC (rev 16288)
+>+++ trunk/buildroot/package/lsof/lsof.mk	2006-10-02 18:40:42 UTC (rev 16289)
+>@@ -20,7 +20,7 @@
+> $(LSOF_DIR)/.unpacked: $(DL_DIR)/$(LSOF_SOURCE)
+> 	$(LSOF_CAT) $(DL_DIR)/$(LSOF_SOURCE) | tar -C $(BUILD_DIR) $(TAR_OPTIONS) -
+> 	(cd $(LSOF_DIR);tar xf lsof_4.77_src.tar;rm -f lsof_4.77_src.tar)
+>-	toolchain/patch-kernel.sh $(LSOF_DIR) package/lsof/ *.patch
+>+	toolchain/patch-kernel.sh $(LSOF_DIR) package/lsof/ \*.patch
+> 	touch $(LSOF_DIR)/.unpacked
+> 
+> $(LSOF_DIR)/.configured: $(LSOF_DIR)/.unpacked
+>
+>_______________________________________________
+>buildroot mailing list
+>buildroot at uclibc.org
+>http://busybox.net/mailman/listinfo/buildroot
+>
