@@ -1,36 +1,35 @@
-From: aldot at uclibc.org <aldot@uclibc.org>
-Date: Tue,  3 Oct 2006 07:11:12 -0700 (PDT)
-Subject: [Buildroot] svn commit: trunk/buildroot/package/mtd
-Message-ID: <20061003141112.A22F248582@busybox.net>
+From: Thomas Lundquist <lists@zelow.no>
+Date: Tue, 3 Oct 2006 19:30:02 +0200
+Subject: [Buildroot] LZMA in Buldroot.
+Message-ID: <20061003173002.GA19937@zelow.no>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Author: aldot
-Date: 2006-10-03 07:11:12 -0700 (Tue, 03 Oct 2006)
-New Revision: 16297
-
-Log:
-- use the HOSTCC for building host-tools.
+Hi folks.
 
 
-Modified:
-   trunk/buildroot/package/mtd/mtd.mk
+Since I have patches for lzma compressed initrds (ext2 root filesystem)
+I added BR2_PACKAGE_LZMA_HOST and moved the package/lzma/ to
+toolchain/lzma and made it just as sstrip.  (and tmake, which I've also
+added).
+
+about initrd kernel patches; I've attached one for 2.6.15.4 but if there
+are interest I'll maintain patches for newer versions aswell.
+
+I also have patches for lzma compressed kernel but only for i386 (I need it
+for ARM but have met some challenges.).
+
+Thanks to Ming-Ching Tiew for making the kernel patches.
 
 
-Changeset:
-Modified: trunk/buildroot/package/mtd/mtd.mk
-===================================================================
---- trunk/buildroot/package/mtd/mtd.mk	2006-10-03 13:42:42 UTC (rev 16296)
-+++ trunk/buildroot/package/mtd/mtd.mk	2006-10-03 14:11:12 UTC (rev 16297)
-@@ -57,7 +57,7 @@
- endif
- 
- $(MTD_HOST_DIR)/util/mkfs.jffs2: $(MTD_HOST_DIR)/.unpacked
--	CFLAGS=-I$(LINUX_HEADERS_DIR)/include \
-+	CC="$(HOSTCC)" CROSS= CFLAGS=-I$(LINUX_HEADERS_DIR)/include \
- 		$(MAKE) LINUXDIR=$(LINUX_DIR) -C $(MTD_HOST_DIR)/util mkfs.jffs2
- 
- mtd-host: $(MKFS_JFFS2)
+Thomas.
+-------------- next part --------------
+A non-text attachment was scrubbed...
+Name: lzma-buildroot.diff.gz
+Type: application/octet-stream
+Size: 2439 bytes
+Desc: not available
+Url : http://busybox.net/lists/buildroot/attachments/20061003/0f04042b/attachment.obj 
