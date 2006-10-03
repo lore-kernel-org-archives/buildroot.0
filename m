@@ -1,35 +1,35 @@
-From: Thomas Lundquist <lists@zelow.no>
-Date: Tue, 3 Oct 2006 19:30:02 +0200
-Subject: [Buildroot] LZMA in Buldroot.
-Message-ID: <20061003173002.GA19937@zelow.no>
+From: Erik Andersen <andersen@codepoet.org>
+Date: Tue, 3 Oct 2006 12:41:06 -0600
+Subject: [Buildroot] svn commit: trunk/buildroot/package/lsof
+In-Reply-To: <20061003084035.GB4585@aon.at>
+References: <20061002184043.0CF8D4856C@busybox.net>
+	<20061003084035.GB4585@aon.at>
+Message-ID: <20061003184106.GA3176@codepoet.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi folks.
+On Tue Oct 03, 2006 at 10:40:35AM +0200, Bernhard Fischer wrote:
+> Looks like these need escaping too, no?
+> 
+> grep -rHl "patch-kernel.*[^\\]\*" *
+> package/ed/ed.mk
+> package/coreutils/coreutils.mk
+> package/libpcap/libpcap.mk
+> package/sysvinit/sysvinit.mk
+> package/ruby/ruby.mk
+> package/libglib12/libglib12.mk
+> package/libgtk12/libgtk12.mk
+> package/bash/bash.mk
+> target/cloop/cloop.mk
 
+Yup.  Only noticed this since I (foolishly?) put a file named
+foo.patch under buildroot/ and wierd things started happening.
 
-Since I have patches for lzma compressed initrds (ext2 root filesystem)
-I added BR2_PACKAGE_LZMA_HOST and moved the package/lzma/ to
-toolchain/lzma and made it just as sstrip.  (and tmake, which I've also
-added).
+ -Erik
 
-about initrd kernel patches; I've attached one for 2.6.15.4 but if there
-are interest I'll maintain patches for newer versions aswell.
-
-I also have patches for lzma compressed kernel but only for i386 (I need it
-for ARM but have met some challenges.).
-
-Thanks to Ming-Ching Tiew for making the kernel patches.
-
-
-Thomas.
--------------- next part --------------
-A non-text attachment was scrubbed...
-Name: lzma-buildroot.diff.gz
-Type: application/octet-stream
-Size: 2439 bytes
-Desc: not available
-Url : http://busybox.net/lists/buildroot/attachments/20061003/0f04042b/attachment.obj 
+--
+Erik B. Andersen             http://codepoet-consulting.com/
+--This message was written using 73% post-consumer electrons--
