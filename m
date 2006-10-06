@@ -1,7 +1,7 @@
 From: aldot at uclibc.org <aldot@uclibc.org>
-Date: Fri,  6 Oct 2006 05:59:34 -0700 (PDT)
-Subject: [Buildroot] svn commit: trunk/buildroot/target/makedevs
-Message-ID: <20061006125934.83F6748568@busybox.net>
+Date: Fri,  6 Oct 2006 06:00:57 -0700 (PDT)
+Subject: [Buildroot] svn commit: trunk/buildroot: package/mtd target/jffs2
+Message-ID: <20061006130057.9002148568@busybox.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -9,28 +9,41 @@ Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
 Author: aldot
-Date: 2006-10-06 05:59:33 -0700 (Fri, 06 Oct 2006)
-New Revision: 16317
+Date: 2006-10-06 06:00:57 -0700 (Fri, 06 Oct 2006)
+New Revision: 16318
 
 Log:
-- use the HOSTCC given by the user.
+- jffs2 requires the mtd package for the mtd-host tools.
 
 
 Modified:
-   trunk/buildroot/target/makedevs/makedevs.mk
+   trunk/buildroot/package/mtd/Config.in
+   trunk/buildroot/target/jffs2/Config.in
 
 
 Changeset:
-Modified: trunk/buildroot/target/makedevs/makedevs.mk
+Modified: trunk/buildroot/package/mtd/Config.in
 ===================================================================
---- trunk/buildroot/target/makedevs/makedevs.mk	2006-10-06 09:49:47 UTC (rev 16316)
-+++ trunk/buildroot/target/makedevs/makedevs.mk	2006-10-06 12:59:33 UTC (rev 16317)
-@@ -13,7 +13,7 @@
- 	cp target/makedevs/makedevs.c $(MAKEDEVS_DIR)
+--- trunk/buildroot/package/mtd/Config.in	2006-10-06 12:59:33 UTC (rev 16317)
++++ trunk/buildroot/package/mtd/Config.in	2006-10-06 13:00:57 UTC (rev 16318)
+@@ -17,6 +17,7 @@
+ config BR2_PACKAGE_MTD_ORIG
+ 	bool "Default source"
+ 	depends on BR2_PACKAGE_MTD
++	default y
+ 	help
+ 	  Use the stable release.
  
- $(MAKEDEVS_DIR)/makedevs: $(MAKEDEVS_DIR)/makedevs.c
--	gcc -Wall -Werror -O2 $(MAKEDEVS_DIR)/makedevs.c -o $(MAKEDEVS_DIR)/makedevs
-+	$(HOSTCC) -Wall -Werror -O2 $(MAKEDEVS_DIR)/makedevs.c -o $(MAKEDEVS_DIR)/makedevs
- 	touch -c $(MAKEDEVS_DIR)/makedevs
+
+Modified: trunk/buildroot/target/jffs2/Config.in
+===================================================================
+--- trunk/buildroot/target/jffs2/Config.in	2006-10-06 12:59:33 UTC (rev 16317)
++++ trunk/buildroot/target/jffs2/Config.in	2006-10-06 13:00:57 UTC (rev 16318)
+@@ -1,6 +1,7 @@
+ config BR2_TARGET_ROOTFS_JFFS2
+ 	bool "jffs2 root filesystem"
+ 	default n
++	select BR2_PACKAGE_MTD
+ 	help
+ 	  Build a jffs2 root filesystem
  
- $(STAGING_DIR)/bin/makedevs: $(MAKEDEVS_DIR)/makedevs
