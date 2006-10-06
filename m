@@ -1,36 +1,23 @@
-From: aldot at uclibc.org <aldot@uclibc.org>
-Date: Fri,  6 Oct 2006 06:02:11 -0700 (PDT)
-Subject: [Buildroot] svn commit: trunk/buildroot/package/uemacs
-Message-ID: <20061006130211.AD82C48568@busybox.net>
+From: Will Newton <will.newton@gmail.com>
+Date: Fri, 6 Oct 2006 17:05:49 +0100
+Subject: [Buildroot] gettext fixes
+Message-ID: <87a5b0800610060905v7113e64cr25aea42df284976d@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Author: aldot
-Date: 2006-10-06 06:02:11 -0700 (Fri, 06 Oct 2006)
-New Revision: 16320
+Building gettext with the latest buildroot fails. I've attached a
+patch that fixes a couple of issues for me.
 
-Log:
-- passing the target arch in isn't useful
-
-
-Modified:
-   trunk/buildroot/package/uemacs/uemacs.mk
-
-
-Changeset:
-Modified: trunk/buildroot/package/uemacs/uemacs.mk
-===================================================================
---- trunk/buildroot/package/uemacs/uemacs.mk	2006-10-06 13:01:29 UTC (rev 16319)
-+++ trunk/buildroot/package/uemacs/uemacs.mk	2006-10-06 13:02:11 UTC (rev 16320)
-@@ -22,7 +22,7 @@
- 
- $(UEMACS_DIR)/$(UEMACS_BINARY): $(UEMACS_DIR)/.unpacked
- 	$(MAKE) -C $(UEMACS_DIR) \
--	CC="$(TARGET_CC)" DEFINES="-DAUTOCONF -DPOSIX -DUSG" CFLAGS+="$(TARGET_CFLAGS) -march=$(ARCH)" LIBS=-lcurses
-+	CC="$(TARGET_CC)" DEFINES="-DAUTOCONF -DPOSIX -DUSG" CFLAGS+="$(TARGET_CFLAGS) " LIBS=-lcurses
- 	$(STRIP) $(UEMACS_DIR)/$(UEMACS_BINARY)
- 
- $(TARGET_DIR)/$(UEMACS_TARGET_BINARY): $(UEMACS_DIR)/$(UEMACS_BINARY)
+1. am_cv_func_working_getline should be defined or the build fails
+with undefined "gnu_getline".
+2. The libintl binary has moved.
+-------------- next part --------------
+A non-text attachment was scrubbed...
+Name: gettext.patch
+Type: application/octet-stream
+Size: 932 bytes
+Desc: not available
+Url : http://busybox.net/lists/buildroot/attachments/20061006/4eefe686/attachment.obj 
