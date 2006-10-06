@@ -1,30 +1,25 @@
-From: =?ISO-8859-1?Q?Hern=E1n_Freschi?= <hjf@hjf.com.ar>
-Date: Thu, 05 Oct 2006 21:57:24 -0300
-Subject: [Buildroot] Compling buildroot - problems with libgcc_s.so.1
-Message-ID: <4525A9F4.4010903@hjf.com.ar>
+From: Thomas Lundquist <lists@zelow.no>
+Date: Fri, 6 Oct 2006 09:42:11 +0200
+Subject: [Buildroot] Qtopia core.
+In-Reply-To: <20060910133444.GA27411@zelow.no>
+References: <20060910133444.GA27411@zelow.no>
+Message-ID: <20061006074211.GA3800@zelow.no>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi folks, I'm trying to build the latest buildroot but I ran into some 
-problems. To make things easier, I'm just using the stable uClibc and 
-Busybox (couldn't make it to compile with the latest snapshots).
+On Sun, Sep 10, 2006 at 03:34:44PM +0200, Thomas Lundquist wrote:
+> 
+> Anyone with a package/make file for Qtopia Core 4.1?
+> 
+> I am working on it but if someone has done it, it would save me quite
+> some time.
 
-I succesfully generated an ext2 root, and tried to run it on qemu. It 
-boots, the kernel loads fine, but then it starts complaining about 
-missing libgcc_s.so.1.
+I am now building qtopia4 so I will send a patch when I am feeling a
+bit more comfortable with the package.
 
-I mounted that fs and copied libgcc_s.so.1 and it works when I chroot 
-into it (without copying that file bash fails) but not when I boot it. I 
-read somewhere that this is related to the development system's gcc 
-and/or libraries. But I didn't find what I have to do to make it work. 
-Can somebody help me?
 
-All I changed in the default configuration was to make it work with 
-stable uclibc/busybox, and enabled a couple of packages.
 
-Thanks in advance,
-
-Hernan
+Thomas
