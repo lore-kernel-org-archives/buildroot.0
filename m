@@ -1,41 +1,35 @@
-From: vapier at uclibc.org <vapier@uclibc.org>
-Date: Fri,  6 Oct 2006 23:28:23 -0700 (PDT)
-Subject: [Buildroot] svn commit: trunk/buildroot/package/mtd
-Message-ID: <20061007062823.841264858D@busybox.net>
+From: Ashok Shankar Das <ashok.s.das@gmail.com>
+Date: Sat, 7 Oct 2006 20:23:52 +0530
+Subject: [Buildroot] Networking apps not working
+In-Reply-To: <200610040935.33205.vapier@gentoo.org>
+References: <8032e0b00609301044s489c6efboc8754ce5309a6a9@mail.gmail.com>
+	<452175C3.3080608@mvista.com>
+	<8032e0b00610031251p81339afy6d906989e5df3632@mail.gmail.com>
+	<200610040935.33205.vapier@gentoo.org>
+Message-ID: <8032e0b00610070753n74e4fa04yf0aae1d164741213@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Author: vapier
-Date: 2006-10-06 23:28:23 -0700 (Fri, 06 Oct 2006)
-New Revision: 16329
+Hi.
 
-Log:
-remove duplicate/invalid options in choice
+On 10/4/06, Mike Frysinger <vapier@gentoo.org> wrote:
+> keep replies on the list
+> -mike
+>
+>
+>
+The problem I figured out is "route" incorectly sets the default gateway.
+To overcome What I did is
+* route del default
+*route add -net 0.0.0.0 gw 192.168.0.1 netmask 0.0.0.0
+and it solved the problem
 
-Modified:
-   trunk/buildroot/package/mtd/Config.in
+Well has anybody faced the same problem?
 
-
-Changeset:
-Modified: trunk/buildroot/package/mtd/Config.in
-===================================================================
---- trunk/buildroot/package/mtd/Config.in	2006-10-07 06:01:37 UTC (rev 16328)
-+++ trunk/buildroot/package/mtd/Config.in	2006-10-07 06:28:23 UTC (rev 16329)
-@@ -16,14 +16,11 @@
- 
- config BR2_PACKAGE_MTD_ORIG
- 	bool "Default source"
--	depends on BR2_PACKAGE_MTD
--	default y
- 	help
- 	  Use the stable release.
- 
- config BR2_PACKAGE_MTD_SNAPSHOT
- 	bool "Daily snapshot"
--	depends on BR2_PACKAGE_MTD
- 	help
- 	  Use the latest MTD daily snapshot instead of release.
- 	  You should probably say NO except for specific purpose.
+-- 
+Thanks
+Ashok.
+-------------
