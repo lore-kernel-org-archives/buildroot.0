@@ -1,41 +1,41 @@
-From: Andrew E. Mileski <andrewm@isoar.ca>
-Date: Fri, 06 Oct 2006 17:31:18 -0400
-Subject: [Buildroot] xorg pathnames
-Message-ID: <4526CB26.2050004@isoar.ca>
+From: vapier at uclibc.org <vapier@uclibc.org>
+Date: Fri,  6 Oct 2006 23:28:23 -0700 (PDT)
+Subject: [Buildroot] svn commit: trunk/buildroot/package/mtd
+Message-ID: <20061007062823.841264858D@busybox.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-The xorg package doesn't build for me currently, so I was grep'ing the
-source for -L usage and found a number of things not covered in xorg.mk
-or the patches:
+Author: vapier
+Date: 2006-10-06 23:28:23 -0700 (Fri, 06 Oct 2006)
+New Revision: 16329
 
-grep -r -- '-L' . | grep /usr/X11R6/lib
-   fontconfiglibs
-   freetypelibs
-   xrenderlibs
-   xlibs
-   LOCAL_LIBRARIES
-   APP_LIB_DEPS
-   GLW_LIB_DEPS
-   GL_LIB_DEPS
-   GLUT_LIB_DEPS
+Log:
+remove duplicate/invalid options in choice
 
-I believe these are the ones causing my immediate problem:
+Modified:
+   trunk/buildroot/package/mtd/Config.in
 
-grep -r '=.*/usr/X11R6/lib' .
-   USRLIBDIR
-   SHLIBDIR
-   LIBDIR
 
-Probably others (and /lib), and -I should probably get similar
-treatment.
-
-I don't know if they all are relevant; it's been several years since
-I left my name in the X code.  Someone more current in this area might
-want to take a peek at this while I brush up.
-
---
-Andrew E. Mileski
+Changeset:
+Modified: trunk/buildroot/package/mtd/Config.in
+===================================================================
+--- trunk/buildroot/package/mtd/Config.in	2006-10-07 06:01:37 UTC (rev 16328)
++++ trunk/buildroot/package/mtd/Config.in	2006-10-07 06:28:23 UTC (rev 16329)
+@@ -16,14 +16,11 @@
+ 
+ config BR2_PACKAGE_MTD_ORIG
+ 	bool "Default source"
+-	depends on BR2_PACKAGE_MTD
+-	default y
+ 	help
+ 	  Use the stable release.
+ 
+ config BR2_PACKAGE_MTD_SNAPSHOT
+ 	bool "Daily snapshot"
+-	depends on BR2_PACKAGE_MTD
+ 	help
+ 	  Use the latest MTD daily snapshot instead of release.
+ 	  You should probably say NO except for specific purpose.
