@@ -1,28 +1,33 @@
 From: Erik Andersen <andersen@codepoet.org>
-Date: Mon, 9 Oct 2006 11:33:06 -0600
+Date: Mon, 9 Oct 2006 11:56:26 -0600
 Subject: [Buildroot] svn commit: trunk/buildroot/toolchain/kernel-headers
-In-Reply-To: <20061009114134.C2C4E485D4@busybox.net>
-References: <20061009114134.C2C4E485D4@busybox.net>
-Message-ID: <20061009173306.GA24455@codepoet.org>
+In-Reply-To: <20061009161313.4F9374859A@busybox.net>
+References: <20061009161313.4F9374859A@busybox.net>
+Message-ID: <20061009175626.GB24455@codepoet.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Mon Oct 09, 2006 at 04:41:34AM -0700, aldot at uclibc.org wrote:
-> Author: aldot
-> Date: 2006-10-09 04:41:34 -0700 (Mon, 09 Oct 2006)
-> New Revision: 16345
-> 
-> Log:
-> - use headers_install for full kernel tarballs used as kernel-headers
+On Mon Oct 09, 2006 at 09:13:13AM -0700, aldot at uclibc.org wrote:
+> --- trunk/buildroot/toolchain/kernel-headers/kernel-headers.mk	2006-10-09 11:53:10 UTC (rev 16346)
+> +++ trunk/buildroot/toolchain/kernel-headers/kernel-headers.mk	2006-10-09 16:13:12 UTC (rev 16347)
+> @@ -128,12 +128,15 @@
+>  
+>  ifeq ($(LINUX_HEADERS_IS_KERNEL),y)
+>  # full kernel tarball >= 2.6.18
+> +
+> +KERNEL_ARCH:=$(shell $(SHELL) -c 'if test "$(ARCH)" = "i486" -o "$(ARCH)" = "i586"; then echo i386; else echo $(ARCH); fi')
+> +
 
-An alternative, is there are now some headers being
-produced for all architectures by dwmw2:
-    ftp://ftp.kernel.org/pub/linux/kernel/people/dwmw2/kernel-headers/
+How about something like this:
 
-which looks to be usable for uClibc for all arches with minor tweeks.
+KERNEL_ARCH := $(shell $(CC) -dumpmachine | sed -e s'/-.*//' \
+	-e s/i.86/i386/ -e s/sun4u/sparc64/ \
+	-e s/arm.*/arm/ -e s/sa110/arm/ \
+	-e s/s390x/s390/ -e s/parisc64/parisc/ \
+	-e s/ppc.*/powerpc/ -e s/mips.*/mips/)
 
  -Erik
 
