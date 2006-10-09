@@ -1,38 +1,54 @@
-From: Alexander Rigbo <alexander.rigbo@acgnystrom.se>
-Date: Mon, 9 Oct 2006 07:05:27 +0200
-Subject: [Buildroot] Networking apps not working
-In-Reply-To: <8032e0b00610070753n74e4fa04yf0aae1d164741213@mail.gmail.com>
-References: <8032e0b00609301044s489c6efboc8754ce5309a6a9@mail.gmail.com>
-	<200610040935.33205.vapier@gentoo.org>
-	<8032e0b00610070753n74e4fa04yf0aae1d164741213@mail.gmail.com>
-Message-ID: <200610090705.27272.alexander.rigbo@acgnystrom.se>
+From: Fredrik Roubert <roubert@df.lth.se>
+Date: Mon, 9 Oct 2006 10:37:21 +0200
+Subject: [Buildroot] CCACHE_DIR
+Message-ID: <20061009083721.GC20352@igloo.df.lth.se>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi,
+Hi!
 
-I have a similar problem.
-When i use dhclient to acuire and IP-address it says: "bla bla bla got reply 
-from 192.168.255.x, your IP-address is 192.168.255.188", but when i check 
-with ifconfig the ip is not set.
-Also, i have to do "ifconfig eth0 up" before i can use dhclient.
+Currently buildroot hardcodes the ccache directory patch, with the
+consequence that the built toolchain can't be used outside of the
+buildroot build tree.
 
-/ Alex
+Three months ago, Ed Swierk suggested on this mailing list to change
+that behaviour:
 
-On Saturday 07 October 2006 16:53, Ashok Shankar Das wrote:
-> Hi.
->
-> On 10/4/06, Mike Frysinger <vapier@gentoo.org> wrote:
-> > keep replies on the list
-> > -mike
->
-> The problem I figured out is "route" incorectly sets the default gateway.
-> To overcome What I did is
-> * route del default
-> *route add -net 0.0.0.0 gw 192.168.0.1 netmask 0.0.0.0
-> and it solved the problem
->
-> Well has anybody faced the same problem?
+http://www.busybox.net/lists/buildroot/2006-July/000027.html
+
+As far as I can see in the archives, there was no response to his mail.
+From my point of view, his suggestion is a good one and it would be a
+good idea to apply his patch to buildroot. I therefore attach his patch
+to this mail (so that everyone can see it immediately, it's very short),
+and ask for anyone who thinks that this patch is a bad idea to explain
+why.
+
+Cheers // Fredrik Roubert
+
+-- 
+Visserij 192  |  +32 473 344527 / +46 708 776974
+BE-9000 Gent  |  http://www.df.lth.se/~roubert/
+-------------- next part --------------
+--- buildroot.orig/toolchain/ccache/ccache.mk	2006-06-26 07:15:03.000000000 +0000
++++ buildroot/toolchain/ccache/ccache.mk	2006-07-17 16:34:58.000000000 +0000
+@@ -24,10 +24,6 @@
+ 	# Should probably patch things to use a relative path.
+ 	$(SED) "s,getenv(\"CCACHE_PATH\"),\"$(STAGING_DIR)/bin-ccache\",g" \
+ 		$(CCACHE_DIR1)/execute.c
+-	# WARNING - this will break if the toolchain build dir is deleted.
+-	$(SED) "s,getenv(\"CCACHE_DIR\"),\"$(CCACHE_DIR1)/cache\",g" \
+-		$(CCACHE_DIR1)/ccache.c
+-	mkdir -p $(CCACHE_DIR1)/cache
+ 	touch $(CCACHE_DIR1)/.patched
+ 
+ $(CCACHE_DIR1)/.configured: $(CCACHE_DIR1)/.patched
+-------------- next part --------------
+A non-text attachment was scrubbed...
+Name: not available
+Type: application/pgp-signature
+Size: 303 bytes
+Desc: not available
+Url : http://busybox.net/lists/buildroot/attachments/20061009/d2a61a12/attachment.pgp 
