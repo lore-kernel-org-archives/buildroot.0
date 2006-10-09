@@ -1,38 +1,24 @@
-From: jacmet at uclibc.org <jacmet@uclibc.org>
-Date: Mon,  9 Oct 2006 04:53:10 -0700 (PDT)
-Subject: [Buildroot] svn commit: trunk/buildroot/package/wireless-tools
-Message-ID: <20061009115310.B78C9485D8@busybox.net>
+From: Peter Korsgaard <peter.korsgaard@barco.com>
+Date: Mon, 09 Oct 2006 13:55:21 +0200
+Subject: [Buildroot] Wireless Tools 28
+In-Reply-To: <20061009083039.GB20352@igloo.df.lth.se> (Fredrik Roubert's
+	message of "Mon, 9 Oct 2006 10:30:39 +0200")
+References: <20061009083039.GB20352@igloo.df.lth.se>
+Message-ID: <87odslg0uu.fsf@sleipner.barco.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Author: jacmet
-Date: 2006-10-09 04:53:10 -0700 (Mon, 09 Oct 2006)
-New Revision: 16346
+>>>>> "Fredrik" == Fredrik Roubert <roubert@df.lth.se> writes:
 
-Log:
-Bump version (patch by Fredrik Roubert)
+Hi,
 
-Modified:
-   trunk/buildroot/package/wireless-tools/wireless-tools.mk
+Fredrik> The attached patch updates wireless-tools.mk to use Wireless
+Fredrik> Tools 28, instead of Wireless Tools 28 pre 3.
 
+Applied as r16346 - Thanks.
 
-Changeset:
-Modified: trunk/buildroot/package/wireless-tools/wireless-tools.mk
-===================================================================
---- trunk/buildroot/package/wireless-tools/wireless-tools.mk	2006-10-09 11:41:34 UTC (rev 16345)
-+++ trunk/buildroot/package/wireless-tools/wireless-tools.mk	2006-10-09 11:53:10 UTC (rev 16346)
-@@ -9,9 +9,9 @@
- # Jean II
- # v28.pre3 -> earliest possible
- WIRELESS_TOOLS_VER:=28
--WIRELESS_TOOLS_SUBVER:=.pre3
-+WIRELESS_TOOLS_SUBVER:=
- 
--WIRELESS_TOOLS_SOURCE_URL:=http://www.hpl.hp.com/personal/Jean_Tourrilhes/Linux
-+WIRELESS_TOOLS_SOURCE_URL:=http://pcmcia-cs.sourceforge.net/ftp/contrib
- WIRELESS_TOOLS_SOURCE:=wireless_tools.$(WIRELESS_TOOLS_VER)$(WIRELESS_TOOLS_SUBVER).tar.gz
- WIRELESS_TOOLS_BUILD_DIR=$(BUILD_DIR)/wireless_tools.$(WIRELESS_TOOLS_VER)
- 
+-- 
+Bye, Peter Korsgaard
