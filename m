@@ -1,63 +1,46 @@
-From: Bernhard Fischer <rep.nop@aon.at>
-Date: Mon, 9 Oct 2006 17:43:28 +0200
+From: aldot at uclibc.org <aldot@uclibc.org>
+Date: Mon,  9 Oct 2006 09:13:13 -0700 (PDT)
 Subject: [Buildroot] svn commit: trunk/buildroot/toolchain/kernel-headers
-In-Reply-To: <20061009151426.GA6437@aon.at>
-References: <20061009114134.C2C4E485D4@busybox.net>
-	<20061009142954.GL4171@igloo.df.lth.se>
-	<20061009151426.GA6437@aon.at>
-Message-ID: <20061009154328.GA6808@aon.at>
+Message-ID: <20061009161313.4F9374859A@busybox.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Mon, Oct 09, 2006 at 05:14:26PM +0200, Bernhard Fischer wrote:
->On Mon, Oct 09, 2006 at 04:29:54PM +0200, Fredrik Roubert wrote:
->>On Mon 09 Oct 13:41 CEST 2006, aldot at uclibc.org wrote:
->>
->>> +	 $(MAKE) INSTALL_HDR_PATH=$(LINUX_HEADERS_DIR) headers_install)
->>
->>Unless ARCH is set, the wrong asm header files will be used. The
->>attached patch fixes that.
->
->ARCH is always set, see package/Makefile.in
->Whatis ARCH for you without your patch? Could be an ordering issue
->between {toolchain,package}/Makefile.in.
+Author: aldot
+Date: 2006-10-09 09:13:12 -0700 (Mon, 09 Oct 2006)
+New Revision: 16347
 
-We cannot use ARCH there at any rate. We'd be better off to introduce
-a case statement to normalize e.g. i?86->i386 etc. The kernel doesn't
-grok an arch of let's say i586, which is embarrassing.
->
->>
->>Cheers // Fredrik Roubert
->>
->>-- 
->>Visserij 192  |  +32 473 344527 / +46 708 776974
->>BE-9000 Gent  |  http://www.df.lth.se/~roubert/
->
->>diff -ur buildroot-20061006-16345/toolchain/kernel-headers/kernel-headers.mk buildroot/toolchain/kernel-headers/kernel-headers.mk
->>--- buildroot-20061006-16345/toolchain/kernel-headers/kernel-headers.mk	2006-10-09 15:29:15.000000000 +0200
->>+++ buildroot/toolchain/kernel-headers/kernel-headers.mk	2006-10-09 15:28:06.000000000 +0200
->>@@ -133,7 +133,7 @@
->> 
->> $(LINUX_HEADERS_DIR)/.configured: $(LINUX_HEADERS_UNPACK_DIR)/.patched
->> 	(cd $(LINUX_HEADERS_UNPACK_DIR) ; \
->>-	 $(MAKE) INSTALL_HDR_PATH=$(LINUX_HEADERS_DIR) headers_install)
->>+	 $(MAKE) ARCH=$(ARCH) INSTALL_HDR_PATH=$(LINUX_HEADERS_DIR) headers_install)
->> 	touch $(LINUX_HEADERS_DIR)/.configured
->> else
->> # the sanitized kernel-headers
->
->
->
->
->>_______________________________________________
->>buildroot mailing list
->>buildroot at uclibc.org
->>http://busybox.net/mailman/listinfo/buildroot
->_______________________________________________
->buildroot mailing list
->buildroot at uclibc.org
->http://busybox.net/mailman/listinfo/buildroot
->
+Log:
+- we need to pass ARCH to the kernel; The kernel does not have a table to
+  normalize the passed in ARCH, from the looks, so we have to normalize it manually. XXX: FIXME upstream via a simple shell script like the cc-checks!
+  FIXME: flesh this out..
+
+
+Modified:
+   trunk/buildroot/toolchain/kernel-headers/kernel-headers.mk
+
+
+Changeset:
+Modified: trunk/buildroot/toolchain/kernel-headers/kernel-headers.mk
+===================================================================
+--- trunk/buildroot/toolchain/kernel-headers/kernel-headers.mk	2006-10-09 11:53:10 UTC (rev 16346)
++++ trunk/buildroot/toolchain/kernel-headers/kernel-headers.mk	2006-10-09 16:13:12 UTC (rev 16347)
+@@ -128,12 +128,15 @@
+ 
+ ifeq ($(LINUX_HEADERS_IS_KERNEL),y)
+ # full kernel tarball >= 2.6.18
++
++KERNEL_ARCH:=$(shell $(SHELL) -c 'if test "$(ARCH)" = "i486" -o "$(ARCH)" = "i586"; then echo i386; else echo $(ARCH); fi')
++
+ $(LINUX_HEADERS_UNPACK_DIR)/.patched: $(LINUX_HEADERS_UNPACK_DIR)/.unpacked
+ 	toolchain/patch-kernel.sh $(LINUX_HEADERS_UNPACK_DIR) toolchain/kernel-headers linux-$(LINUX_HEADERS_VERSION)\*.patch
+ 
+ $(LINUX_HEADERS_DIR)/.configured: $(LINUX_HEADERS_UNPACK_DIR)/.patched
+ 	(cd $(LINUX_HEADERS_UNPACK_DIR) ; \
+-	 $(MAKE) INSTALL_HDR_PATH=$(LINUX_HEADERS_DIR) headers_install)
++	 $(MAKE) ARCH=$(KERNEL_ARCH) INSTALL_HDR_PATH=$(LINUX_HEADERS_DIR) headers_install)
+ 	touch $(LINUX_HEADERS_DIR)/.configured
+ else
+ # the sanitized kernel-headers
