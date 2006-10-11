@@ -1,38 +1,44 @@
-From: Bernhard Fischer <rep.nop@aon.at>
-Date: Wed, 11 Oct 2006 10:10:30 +0200
-Subject: [Buildroot] How do I select the PCMCIA package ?
-In-Reply-To: <1160070993.4021.18.camel@glynys>
-References: <1160070993.4021.18.camel@glynys>
-Message-ID: <20061011081030.GB23507@aon.at>
+From: aldot at uclibc.org <aldot@uclibc.org>
+Date: Wed, 11 Oct 2006 04:36:58 -0700 (PDT)
+Subject: [Buildroot] svn commit: trunk/buildroot/toolchain/kernel-headers
+Message-ID: <20061011113658.426EF485F8@busybox.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Thu, Oct 05, 2006 at 05:56:33PM +0000, mike wrote:
->Simple question. How do I select the PCMCIA package? What do I need to
->select first ?
->
->I want to build a system with PCMCIA, but menuconfig doesn't allow it
->for selection.
->It seems to be dependent on BR2_PACKAGE_LINUX, and the only way I can
->see of getting that set is by selecting something in "Board Support
->Options" - none of which I really want.
+Author: aldot
+Date: 2006-10-11 04:36:57 -0700 (Wed, 11 Oct 2006)
+New Revision: 16360
 
-Perhaps try to remove that dependency. If you have LINUX_SOURCE_DIR et
-al set properly (see package/pcmcia/pcmcia.mk), then compilation should
-succeed.
+Log:
+- normalize KERNEL_ARCH via sed
 
-I have a patch that adds a target option for a generic x86 kernel, but
-i'm hesitating to apply it (since more than a year) due to the potential
-requests adding it will likely trigger ;)
 
->I have built my own "special" version of the linux kernel with the
->various drivers and things I want and set $(LINUX_DIR) and
->$(LINUX_SOURCE_DIR) to point to the right place. Are there other
->undocumented environment variables I need to set up ?
+Modified:
+   trunk/buildroot/toolchain/kernel-headers/kernel-headers.mk
 
-See above.
 
-HTH,
+Changeset:
+Modified: trunk/buildroot/toolchain/kernel-headers/kernel-headers.mk
+===================================================================
+--- trunk/buildroot/toolchain/kernel-headers/kernel-headers.mk	2006-10-10 23:26:05 UTC (rev 16359)
++++ trunk/buildroot/toolchain/kernel-headers/kernel-headers.mk	2006-10-11 11:36:57 UTC (rev 16360)
+@@ -129,10 +129,15 @@
+ ifeq ($(LINUX_HEADERS_IS_KERNEL),y)
+ # full kernel tarball >= 2.6.18
+ 
+-KERNEL_ARCH:=$(shell $(SHELL) -c 'if test "$(ARCH)" = "i486" -o "$(ARCH)" = "i586"; then echo i386; else echo $(ARCH); fi')
++KERNEL_ARCH:=$(shell $(SHELL) -c "echo \"$(ARCH)\" | sed -e \"s/-.*//\" \
++	-e s/i.86/i386/ -e s/sun4u/sparc64/ \
++	-e s/arm.*/arm/ -e s/sa110/arm/ \
++	-e s/s390x/s390/ -e s/parisc64/parisc/ \
++	-e s/ppc.*/powerpc/ -e s/mips.*/mips/")
+ 
+ $(LINUX_HEADERS_UNPACK_DIR)/.patched: $(LINUX_HEADERS_UNPACK_DIR)/.unpacked
+ 	toolchain/patch-kernel.sh $(LINUX_HEADERS_UNPACK_DIR) toolchain/kernel-headers linux-$(LINUX_HEADERS_VERSION)\*.patch
++	touch $(LINUX_HEADERS_UNPACK_DIR)/.patched
+ 
+ $(LINUX_HEADERS_DIR)/.configured: $(LINUX_HEADERS_UNPACK_DIR)/.patched
+ 	(cd $(LINUX_HEADERS_UNPACK_DIR) ; \
