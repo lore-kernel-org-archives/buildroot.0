@@ -1,43 +1,22 @@
-From: Ashwin Bihari <abihari@gmail.com>
-Date: Wed, 11 Oct 2006 09:30:42 -0400
-Subject: [Buildroot] libgcc_s.so.1 missing from filesystem
-In-Reply-To: <20061011132702.GL6271@igloo.df.lth.se>
-References: <452CE9EC.4050101@lambsys.com>
-	<20061011132702.GL6271@igloo.df.lth.se>
-Message-ID: <1f11a5490610110630i47847d40v3800b95043f0742f@mail.gmail.com>
+From: Bernhard Fischer <rep.nop@aon.at>
+Date: Wed, 11 Oct 2006 18:47:07 +0200
+Subject: [Buildroot] gettext fixes
+In-Reply-To: <87a5b0800610060905v7113e64cr25aea42df284976d@mail.gmail.com>
+References: <87a5b0800610060905v7113e64cr25aea42df284976d@mail.gmail.com>
+Message-ID: <20061011164707.GA28171@aon.at>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 10/11/06, Fredrik Roubert <roubert@df.lth.se> wrote:
+On Fri, Oct 06, 2006 at 05:05:49PM +0100, Will Newton wrote:
+>Building gettext with the latest buildroot fails. I've attached a
+>patch that fixes a couple of issues for me.
 >
-> On Wed 11 Oct 14:56 CEST 2006, David Lambert wrote:
->
-> > A commom problem seems to be that they depend on a library libgcc.so.1
-> > which appears in buildroot/build_arm/staging_dir/lib/libgcc_s.so.1,
-> > [...] Is there a more elegant solution?
->
-> One possible solution is to unset BR2_GCC_SHARED_LIBGCC in the buildroot
-> configuration, to get rid of the shared libgcc alltogether.
->
-> Information on libgcc can be found here:
->
-> http://gcc.gnu.org/onlinedocs/gccint/Libgcc.html
->
-> Cheers // Fredrik Roubert
->
->
-I haven't narrowed it down to exactly which version of Buildroot stopped
-deploying the libgcc_so.1, but I've found that an older cataloged version in
-our source control was deploying that library properly. The newer version of
-buildroot tends to skip over a few other libraries as well.
+>1. am_cv_func_working_getline should be defined or the build fails
+>with undefined "gnu_getline".
+>2. The libintl binary has moved.
 
-Regards
-
--- 
-~ Ashwin
--------------- next part --------------
-An HTML attachment was scrubbed...
-URL: http://busybox.net/lists/buildroot/attachments/20061011/f685ef7c/attachment.htm 
+Can you please check if gettext-0.15 works better?
+Do you use expat?
