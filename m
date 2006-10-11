@@ -1,37 +1,43 @@
-From: Fredrik Roubert <roubert@df.lth.se>
-Date: Wed, 11 Oct 2006 15:27:02 +0200
+From: Ashwin Bihari <abihari@gmail.com>
+Date: Wed, 11 Oct 2006 09:30:42 -0400
 Subject: [Buildroot] libgcc_s.so.1 missing from filesystem
-In-Reply-To: <452CE9EC.4050101@lambsys.com>
+In-Reply-To: <20061011132702.GL6271@igloo.df.lth.se>
 References: <452CE9EC.4050101@lambsys.com>
-Message-ID: <20061011132702.GL6271@igloo.df.lth.se>
+	<20061011132702.GL6271@igloo.df.lth.se>
+Message-ID: <1f11a5490610110630i47847d40v3800b95043f0742f@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Wed 11 Oct 14:56 CEST 2006, David Lambert wrote:
+On 10/11/06, Fredrik Roubert <roubert@df.lth.se> wrote:
+>
+> On Wed 11 Oct 14:56 CEST 2006, David Lambert wrote:
+>
+> > A commom problem seems to be that they depend on a library libgcc.so.1
+> > which appears in buildroot/build_arm/staging_dir/lib/libgcc_s.so.1,
+> > [...] Is there a more elegant solution?
+>
+> One possible solution is to unset BR2_GCC_SHARED_LIBGCC in the buildroot
+> configuration, to get rid of the shared libgcc alltogether.
+>
+> Information on libgcc can be found here:
+>
+> http://gcc.gnu.org/onlinedocs/gccint/Libgcc.html
+>
+> Cheers // Fredrik Roubert
+>
+>
+I haven't narrowed it down to exactly which version of Buildroot stopped
+deploying the libgcc_so.1, but I've found that an older cataloged version in
+our source control was deploying that library properly. The newer version of
+buildroot tends to skip over a few other libraries as well.
 
-> A commom problem seems to be that they depend on a library libgcc.so.1
-> which appears in buildroot/build_arm/staging_dir/lib/libgcc_s.so.1,
-> [...] Is there a more elegant solution?
-
-One possible solution is to unset BR2_GCC_SHARED_LIBGCC in the buildroot
-configuration, to get rid of the shared libgcc alltogether.
-
-Information on libgcc can be found here:
-
-http://gcc.gnu.org/onlinedocs/gccint/Libgcc.html
-
-Cheers // Fredrik Roubert
+Regards
 
 -- 
-Visserij 192  |  +32 473 344527 / +46 708 776974
-BE-9000 Gent  |  http://www.df.lth.se/~roubert/
+~ Ashwin
 -------------- next part --------------
-A non-text attachment was scrubbed...
-Name: not available
-Type: application/pgp-signature
-Size: 303 bytes
-Desc: not available
-Url : http://busybox.net/lists/buildroot/attachments/20061011/8648f995/attachment.pgp 
+An HTML attachment was scrubbed...
+URL: http://busybox.net/lists/buildroot/attachments/20061011/f685ef7c/attachment.htm 
