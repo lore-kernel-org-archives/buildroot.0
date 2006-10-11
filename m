@@ -1,44 +1,22 @@
-From: aldot at uclibc.org <aldot@uclibc.org>
-Date: Wed, 11 Oct 2006 04:36:58 -0700 (PDT)
+From: Bernhard Fischer <rep.nop@aon.at>
+Date: Wed, 11 Oct 2006 13:39:27 +0200
 Subject: [Buildroot] svn commit: trunk/buildroot/toolchain/kernel-headers
-Message-ID: <20061011113658.426EF485F8@busybox.net>
+In-Reply-To: <20061010160531.GA2258@codepoet.org>
+References: <20061009161313.4F9374859A@busybox.net>
+	<20061009175626.GB24455@codepoet.org>
+	<20061010072000.GC13303@aon.at>
+	<20061010160531.GA2258@codepoet.org>
+Message-ID: <20061011113927.GA25374@aon.at>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Author: aldot
-Date: 2006-10-11 04:36:57 -0700 (Wed, 11 Oct 2006)
-New Revision: 16360
+On Tue, Oct 10, 2006 at 10:05:31AM -0600, Erik Andersen wrote:
 
-Log:
-- normalize KERNEL_ARCH via sed
+>sure, using ARCH is fine.  Still should be adjusted to use the
+>kernel arch names with a pass through sed...
 
-
-Modified:
-   trunk/buildroot/toolchain/kernel-headers/kernel-headers.mk
-
-
-Changeset:
-Modified: trunk/buildroot/toolchain/kernel-headers/kernel-headers.mk
-===================================================================
---- trunk/buildroot/toolchain/kernel-headers/kernel-headers.mk	2006-10-10 23:26:05 UTC (rev 16359)
-+++ trunk/buildroot/toolchain/kernel-headers/kernel-headers.mk	2006-10-11 11:36:57 UTC (rev 16360)
-@@ -129,10 +129,15 @@
- ifeq ($(LINUX_HEADERS_IS_KERNEL),y)
- # full kernel tarball >= 2.6.18
- 
--KERNEL_ARCH:=$(shell $(SHELL) -c 'if test "$(ARCH)" = "i486" -o "$(ARCH)" = "i586"; then echo i386; else echo $(ARCH); fi')
-+KERNEL_ARCH:=$(shell $(SHELL) -c "echo \"$(ARCH)\" | sed -e \"s/-.*//\" \
-+	-e s/i.86/i386/ -e s/sun4u/sparc64/ \
-+	-e s/arm.*/arm/ -e s/sa110/arm/ \
-+	-e s/s390x/s390/ -e s/parisc64/parisc/ \
-+	-e s/ppc.*/powerpc/ -e s/mips.*/mips/")
- 
- $(LINUX_HEADERS_UNPACK_DIR)/.patched: $(LINUX_HEADERS_UNPACK_DIR)/.unpacked
- 	toolchain/patch-kernel.sh $(LINUX_HEADERS_UNPACK_DIR) toolchain/kernel-headers linux-$(LINUX_HEADERS_VERSION)\*.patch
-+	touch $(LINUX_HEADERS_UNPACK_DIR)/.patched
- 
- $(LINUX_HEADERS_DIR)/.configured: $(LINUX_HEADERS_UNPACK_DIR)/.patched
- 	(cd $(LINUX_HEADERS_UNPACK_DIR) ; \
+Done.
+thanks,
