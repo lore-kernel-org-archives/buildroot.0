@@ -1,224 +1,30 @@
-From: Thomas Lundquist <lists@zelow.no>
-Date: Thu, 12 Oct 2006 11:08:15 +0200
-Subject: [Buildroot] lzma, take two.
-Message-ID: <20061012090815.GA2270@zelow.no>
+From: Will Newton <will.newton@gmail.com>
+Date: Thu, 12 Oct 2006 10:13:46 +0100
+Subject: [Buildroot] gettext fixes
+In-Reply-To: <20061011164707.GA28171@aon.at>
+References: <87a5b0800610060905v7113e64cr25aea42df284976d@mail.gmail.com>
+	<20061011164707.GA28171@aon.at>
+Message-ID: <87a5b0800610120213m388e948v2eeb57a629d304cc@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+On 10/11/06, Bernhard Fischer <rep.nop@aon.at> wrote:
+> On Fri, Oct 06, 2006 at 05:05:49PM +0100, Will Newton wrote:
+> >Building gettext with the latest buildroot fails. I've attached a
+> >patch that fixes a couple of issues for me.
+> >
+> >1. am_cv_func_working_getline should be defined or the build fails
+> >with undefined "gnu_getline".
+> >2. The libintl binary has moved.
+>
+> Can you please check if gettext-0.15 works better?
 
-Just resending the fixed (and verified) lzma patches.
+Yes, it seems to not need the configure tweak.
 
+> Do you use expat?
 
-Thomas.
--------------- next part --------------
-Index: target/ext2/Config.in
-===================================================================
---- target/ext2/Config.in	(revision 16312)
-+++ target/ext2/Config.in	(working copy)
-@@ -34,6 +34,13 @@
- 	depends on 	BR2_TARGET_ROOTFS_EXT2
- 	default n
- 
-+config BR2_TARGET_ROOTFS_EXT2_LZMA
-+	bool "lzma the output file" 
-+	depends on	BR2_TARGET_ROOTFS_EXT2 
-+	select		BR2_PACKAGE_LZMA_HOST
-+	default n
-+
-+
- config BR2_TARGET_ROOTFS_EXT2_COPYTO
- 	string "also copy the image to..."
- 	depends on 	BR2_TARGET_ROOTFS_EXT2
-Index: target/ext2/ext2root.mk
-===================================================================
---- target/ext2/ext2root.mk	(revision 16312)
-+++ target/ext2/ext2root.mk	(working copy)
-@@ -66,6 +66,10 @@
- EXT2_TARGET := $(EXT2_BASE)
- endif
- 
-+ifeq ($(strip $(BR2_TARGET_ROOTFS_EXT2_LZMA)),y)
-+EXT2_TARGET := $(EXT2_BASE).lzma
-+endif
-+
- $(EXT2_BASE): host-fakeroot makedevs genext2fs
- 	- at find $(TARGET_DIR) -type f -perm +111 | xargs $(STRIP) 2>/dev/null || true;
- 	@rm -rf $(TARGET_DIR)/usr/man
-@@ -102,6 +106,9 @@
- $(EXT2_BASE).gz: $(EXT2_BASE)
- 	@gzip --best -fv $(EXT2_BASE)
- 
-+$(EXT2_BASE).lzma: lzma-host $(EXT2_BASE)
-+	@$(STAGING_DIR)/bin/lzma -vc $(EXT2_BASE) > $(EXT2_BASE).lzma
-+
- EXT2_COPYTO := $(strip $(subst ",,$(BR2_TARGET_ROOTFS_EXT2_COPYTO)))
- # " stupid syntax highlighting does not like unmatched quote from above line
- 
-Index: package/lzma/lzma.mk
-===================================================================
---- package/lzma/lzma.mk	(revision 16312)
-+++ package/lzma/lzma.mk	(working copy)
-@@ -6,7 +6,8 @@
- LZMA_VER:=4.32.0beta3
- LZMA_SOURCE:=lzma-$(LZMA_VER).tar.gz
- LZMA_SITE:=http://tukaani.org/lzma/
--LZMA_DIR:=$(BUILD_DIR)/lzma-$(LZMA_VER)
-+LZMA_HOST_DIR:=$(TOOL_BUILD_DIR)/lzma-$(LZMA_VER)
-+LZMA_TARGET_DIR:=$(BUILD_DIR)/lzma-$(LZMA_VER)
- LZMA_CFLAGS:=$(TARGET_CFLAGS)
- ifeq ($(BR2_LARGEFILE),y)
- LZMA_CFLAGS+=-D_LARGEFILE_SOURCE -D_LARGEFILE64_SOURCE -D_FILE_OFFSET_BITS=64
-@@ -18,13 +19,47 @@
- $(DL_DIR)/$(LZMA_SOURCE):
- 	$(WGET) -P $(DL_DIR) $(LZMA_SITE)/$(LZMA_SOURCE)
- 
--$(LZMA_DIR)/.source: $(DL_DIR)/$(LZMA_SOURCE)
--	$(ZCAT) $(DL_DIR)/$(LZMA_SOURCE) | tar -C $(BUILD_DIR) $(TAR_OPTIONS) -
--	toolchain/patch-kernel.sh $(LZMA_DIR) package/lzma/ lzma\*.patch
--	touch $(LZMA_DIR)/.source
-+######################################################################
-+#
-+# lzma host
-+#
-+######################################################################
- 
--$(LZMA_DIR)/.configured: $(LZMA_DIR)/.source
--	(cd $(LZMA_DIR); rm -f config.cache ;\
-+$(LZMA_HOST_DIR)/.source: $(DL_DIR)/$(LZMA_SOURCE)
-+	zcat $(DL_DIR)/$(LZMA_SOURCE) | tar -C $(TOOL_BUILD_DIR) $(TAR_OPTIONS) -
-+	toolchain/patch-kernel.sh $(LZMA_HOST_DIR) package/lzma/ lzma\*.patch
-+	touch $(LZMA_HOST_DIR)/.source
-+
-+$(LZMA_HOST_DIR)/.configured: $(LZMA_HOST_DIR)/.source
-+	(cd $(LZMA_HOST_DIR); rm -f config.cache ;\
-+		CC="$(HOSTCC)" \
-+		./configure \
-+		--prefix=/ \
-+	);
-+	touch $(LZMA_HOST_DIR)/.configured;
-+
-+$(LZMA_HOST_DIR)/src/lzma/lzma: $(LZMA_HOST_DIR)/.configured
-+	$(MAKE) -C $(LZMA_HOST_DIR) all
-+	touch -c $@
-+
-+$(STAGING_DIR)/bin/lzma: $(LZMA_HOST_DIR)/src/lzma/lzma
-+	$(MAKE) DESTDIR=$(STAGING_DIR) -C $(LZMA_HOST_DIR) install
-+
-+lzma-host: uclibc $(STAGING_DIR)/bin/lzma
-+
-+######################################################################
-+#
-+# lzma target
-+#
-+######################################################################
-+
-+$(LZMA_TARGET_DIR)/.source: $(DL_DIR)/$(LZMA_SOURCE)
-+	zcat $(DL_DIR)/$(LZMA_SOURCE) | tar -C $(BUILD_DIR) $(TAR_OPTIONS) -
-+	toolchain/patch-kernel.sh $(LZMA_TARGET_DIR) package/lzma/ lzma\*.patch
-+	touch $(LZMA_TARGET_DIR)/.source
-+
-+$(LZMA_TARGET_DIR)/.configured: $(LZMA_TARGET_DIR)/.source
-+	(cd $(LZMA_TARGET_DIR); rm -f config.cache ;\
- 		$(TARGET_CONFIGURE_OPTS) \
- 		CFLAGS="$(TARGET_CFLAGS) $(LZMA_CFLAGS)" \
- 		ac_cv_func_malloc_0_nonnull=yes \
-@@ -33,37 +68,33 @@
- 		--host=$(GNU_TARGET_NAME) \
- 		--build=$(GNU_HOST_NAME) \
- 		--prefix=/usr \
--		--exec-prefix=$(STAGING_DIR)/usr/bin \
--		--libdir=$(STAGING_DIR)/lib \
--		--includedir=$(STAGING_DIR)/include \
-+		--exec-prefix=$(TARGET_DIR)/usr/bin \
-+		--libdir=$(TARGET_DIR)/lib \
-+		--includedir=$(TARGET_DIR)/include \
- 		--disable-debug \
- 		$(DISABLE_NLS) \
- 		$(LZMA_LARGEFILE) \
- 	);
--	touch $(LZMA_DIR)/.configured;
-+	touch $(LZMA_TARGET_DIR)/.configured;
- 
--$(LZMA_DIR)/src/lzma/lzma: $(LZMA_DIR)/.configured
--	$(MAKE) -C $(LZMA_DIR) all
-+$(LZMA_TARGET_DIR)/src/lzma/lzma: $(LZMA_TARGET_DIR)/.configured
-+	$(MAKE) -C $(LZMA_TARGET_DIR) all
- 	touch -c $@
- 
--$(STAGING_DIR)/bin/lzma: $(LZMA_DIR)/src/lzma/lzma
--	-cp -dpf $(LZMA_DIR)/src/lzma/lzma $(STAGING_DIR)/bin/;
--	touch -c $(STAGING_DIR)/bin/lzma
--
--$(TARGET_DIR)/bin/lzma: $(STAGING_DIR)/bin/lzma
--	cp -dpf $(STAGING_DIR)/bin/lzma $(TARGET_DIR)/bin/;
-+$(TARGET_DIR)/usr/bin/lzma: $(LZMA_TARGET_DIR)/src/lzma/lzma
-+	-cp -dpf $(LZMA_TARGET_DIR)/src/lzma/lzma $(TARGET_DIR)/bin/;
- 	-$(STRIP) --strip-unneeded $(TARGET_DIR)/bin/lzma
- 	touch -c $(TARGET_DIR)/bin/lzma
- 
- #lzma-headers: $(TARGET_DIR)/bin/lzma
- 
--lzma: uclibc $(TARGET_DIR)/bin/lzma
-+lzma-target: uclibc $(TARGET_DIR)/usr/bin/lzma
- 
- lzma-source: $(DL_DIR)/$(LZMA_SOURCE)
- 
- lzma-clean:
--	rm -f $(TARGET_DIR)/bin/lzma
--	-$(MAKE) -C $(LZMA_DIR) clean
-+	rm -f $(TARGET_DIR)/usr/bin/lzma
-+	-$(MAKE) -C $(LZMA_TARGET_DIR) clean
- 
- lzma-dirclean:
- 	rm -rf $(LZMA_DIR)
-@@ -73,9 +104,14 @@
- # Toplevel Makefile options
- #
- #############################################################
--ifeq ($(strip $(BR2_PACKAGE_LZMA)),y)
--TARGETS+=lzma
-+ifeq ($(strip $(BR2_PACKAGE_LZMA_HOST)),y)
-+TARGETS+=lzma-host
- endif
-+
-+ifeq ($(strip $(BR2_PACKAGE_LZMA_TARGET)),y)
-+TARGETS+=lzma-target
-+endif
-+
- #ifeq ($(strip $(BR2_PACKAGE_LZMA_TARGET_HEADERS)),y)
- #TARGETS+=lzma-headers
- #endif
-Index: package/lzma/Config.in
-===================================================================
---- package/lzma/Config.in	(revision 16312)
-+++ package/lzma/Config.in	(working copy)
-@@ -1,14 +1,22 @@
--config BR2_PACKAGE_LZMA
--	bool "lzma"
-+config BR2_PACKAGE_LZMA_TARGET
-+	bool "Install lzma for the target system"
- 	default n
- 	help
--	  Compression utility.
-+	  lzma utils on the target
- 
- 	  http://tukaani.org/lzma/
- 
- config BR2_PACKAGE_LZMA_TARGET_HEADERS
- 	bool "lzma headers in target"
- 	default n
--	depends on BR2_PACKAGE_LZMA
-+	depends on BR2_PACKAGE_LZMA_TARGET
- 	help
- 	  Put headers files in the target.
-+
-+config BR2_PACKAGE_LZMA_HOST
-+	bool "Install lzma for the host/build system"
-+	default n
-+	help
-+	  lzma utils on the host
-+
-+	  http://tukaani.org/lzma/
+No, I'm just building libintl so I can build other things that require
+it such as glib.
