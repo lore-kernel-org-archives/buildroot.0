@@ -1,25 +1,33 @@
-From: Will Newton <will.newton@gmail.com>
-Date: Thu, 12 Oct 2006 10:38:23 +0100
-Subject: [Buildroot] Order of mounts in inittab
-Message-ID: <87a5b0800610120238l480df3c4lfefd6133afe981c@mail.gmail.com>
+From: Thomas Lundquist <lists@zelow.no>
+Date: Thu, 12 Oct 2006 12:15:33 +0200
+Subject: [Buildroot] gettext fixes
+In-Reply-To: <87a5b0800610120213m388e948v2eeb57a629d304cc@mail.gmail.com>
+References: <87a5b0800610060905v7113e64cr25aea42df284976d@mail.gmail.com>
+	<20061011164707.GA28171@aon.at>
+	<87a5b0800610120213m388e948v2eeb57a629d304cc@mail.gmail.com>
+Message-ID: <20061012101533.GB2704@zelow.no>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi all,
+On Thu, Oct 12, 2006 at 10:13:46AM +0100, Will Newton wrote:
+> >
+> > Can you please check if gettext-0.15 works better?
+> 
+> Yes, it seems to not need the configure tweak.
 
-I noticed that since upgrading to busybox 1.2.1 that I had to reorder
-the mount lines in inittab so proc was mounted before remounting / as
-rw took place or I would get "could not open /proc/mounts" and the
-remount would fail. Does anyone know why this might be?
+I didn't need to hack alot to get it working either.
 
-Patch attached.
--------------- next part --------------
-A non-text attachment was scrubbed...
-Name: inittab.patch
-Type: application/octet-stream
-Size: 504 bytes
-Desc: not available
-Url : http://busybox.net/lists/buildroot/attachments/20061012/082502ef/attachment.obj 
+> No, I'm just building libintl so I can build other things that require
+> it such as glib.
+
+I am trying to build glib2.0 and it barfed on missing gettext or gettext
+support in the libc but I have enabled it for uClibc in the config. 
+
+isn't it enough? (Using 0.9.28 so it may lack some of the needed
+features?)
+
+
+Thomas.
