@@ -1,7 +1,7 @@
 From: Olof Backing <olof.backing@tutus.se>
-Date: Thu, 12 Oct 2006 09:42:04 +0200
-Subject: [Buildroot] make clean (uninstall) problem with ccache-2.4
-Message-ID: <3D505624-B2A0-4CA2-9556-0DFBA4999BAC@tutus.se>
+Date: Thu, 12 Oct 2006 09:54:00 +0200
+Subject: [Buildroot] make clean (uninstall) problem with dropbear-0.47
+Message-ID: <B949099A-E580-4CA5-8C7A-14A17A8CAC64@tutus.se>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -10,16 +10,35 @@ To: buildroot@busybox.net
 
 Hi!
 I realise that I since some time have been locally fixing an makefile  
-error in ccache-2.4:
+error in dropbear-0.47:
 
-make -j3 -C /home/olof/gumstix-buildroot/toolchain_build_arm_nofpu/ 
-ccache-2.4 uninstall
+make -j3 DESTDIR=/home/olof/gumstix-buildroot/build_arm_nofpu/root  
+PATH=/home/olof/gumstix-buildroot/build_arm_nofpu/staging_dir/bin:/ 
+home/olof/gumstix-buildroot/toolchain_build_arm_nofpu/bin:/bin:/sbin:/ 
+usr/bin:/usr/sbin AR=/home/olof/gumstix-buildroot/build_arm_nofpu/ 
+staging_dir/bin/arm-linux-uclibc-ar AS=/home/olof/gumstix-buildroot/ 
+build_arm_nofpu/staging_dir/bin/arm-linux-uclibc-as LD=/home/olof/ 
+gumstix-buildroot/build_arm_nofpu/staging_dir/bin/arm-linux-uclibc-ld  
+NM=/home/olof/gumstix-buildroot/build_arm_nofpu/staging_dir/bin/arm- 
+linux-uclibc-nm CC=/home/olof/gumstix-buildroot/build_arm_nofpu/ 
+staging_dir/bin/arm-linux-uclibc-gcc GCC=/home/olof/gumstix-buildroot/ 
+build_arm_nofpu/staging_dir/bin/arm-linux-uclibc-gcc CXX=/home/olof/ 
+gumstix-buildroot/build_arm_nofpu/staging_dir/bin/arm-linux-uclibc-g+ 
++ CPP=/home/olof/gumstix-buildroot/build_arm_nofpu/staging_dir/bin/ 
+arm-linux-uclibc-cpp RANLIB=/home/olof/gumstix-buildroot/ 
+build_arm_nofpu/staging_dir/bin/arm-linux-uclibc-ranlib OBJCOPY=/home/ 
+olof/gumstix-buildroot/build_arm_nofpu/staging_dir/bin/arm-linux- 
+uclibc-objcopy \
+                 LD=/home/olof/gumstix-buildroot/build_arm_nofpu/ 
+staging_dir/bin/arm-linux-uclibc-gcc -C /home/olof/gumstix-buildroot/ 
+build_arm_nofpu/dropbear-0.47 uninstall
 make[1]: Entering directory `/home/olof/gumstix-buildroot/ 
-toolchain_build_arm_nofpu/ccache-2.4'
+build_arm_nofpu/dropbear-0.47'
 make[1]: *** No rule to make target `uninstall'.  Stop.
 make[1]: Leaving directory `/home/olof/gumstix-buildroot/ 
-toolchain_build_arm_nofpu/ccache-2.4'
-make: *** [ccache-clean] Error 2
+build_arm_nofpu/dropbear-0.47'
+make: *** [dropbear-clean] Error 2
+
 
 The ccache.mk file is trying to "uninstall" but the makefile in  
 toolchain doesn't like that. A lot of other packges have the  
