@@ -1,43 +1,25 @@
-From: Will Newton <will.newton@gmail.com>
-Date: Thu, 12 Oct 2006 12:05:08 +0100
-Subject: [Buildroot] gettext fixes
-In-Reply-To: <20061012105625.GC2704@zelow.no>
-References: <87a5b0800610060905v7113e64cr25aea42df284976d@mail.gmail.com>
-	<20061011164707.GA28171@aon.at>
-	<87a5b0800610120213m388e948v2eeb57a629d304cc@mail.gmail.com>
-	<20061012101533.GB2704@zelow.no>
-	<87a5b0800610120321k6509bebsec35656c4f9136fd@mail.gmail.com>
-	<20061012105625.GC2704@zelow.no>
-Message-ID: <87a5b0800610120405h2cef2eb7n59cd7f71634bcd48@mail.gmail.com>
+From: Andrew E. Mileski <andrewm@isoar.ca>
+Date: Fri, 13 Oct 2006 17:52:25 -0400
+Subject: [Buildroot] xorg: Correct CrossCompileDir substitution
+In-Reply-To: <4526CB26.2050004@isoar.ca>
+References: <4526CB26.2050004@isoar.ca>
+Message-ID: <45300A99.8000804@isoar.ca>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 10/12/06, Thomas Lundquist <lists@zelow.no> wrote:
+Correct substitution expression for CrossCompileDir (missing a space).
 
-> darn, this was probably the best timing I've had in ages.
-> Thanks alot.
->
-> But I ended up with:
->
-> checking for glib-genmarshal... no
-> configure: error: Could not find a glib-genmarshal in your PATH
-> make: *** [/home/thomasez/buildroot/build_arm/glib-2.12.4/.configured]
-> Error 1
+--
+Andrew E. Mileski
 
-I believe this is because you don't have the glib2.x development files
-installed on your build host. My build server has the RPM
-glib2-devel-2.4.7-1 installed which provides that.
 
-> > You will need to change the values of glib_cv_stack_grows and
-> > glib_cv_uscore for your arch I would imagine.
->
-> gotta find out what I have to put there then :=)
-
-glib_cv_uscore=no
-glib_cv_stack_grows=no
-
-if you are using ARM Linux (Stack grows down, C symbols have no
-leading underscore)
+-------------- next part --------------
+A non-text attachment was scrubbed...
+Name: mypatch.patch
+Type: text/x-patch
+Size: 751 bytes
+Desc: not available
+Url : http://busybox.net/lists/buildroot/attachments/20061013/47489fb1/attachment.bin 
