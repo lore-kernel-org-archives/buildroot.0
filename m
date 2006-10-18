@@ -1,51 +1,40 @@
-From: andersen at uclibc.org <andersen@uclibc.org>
-Date: Tue, 17 Oct 2006 13:11:47 -0700 (PDT)
-Subject: [Buildroot] svn commit: trunk/buildroot/toolchain: binutils gcc
-Message-ID: <20061017201147.B3DE8486C8@busybox.net>
+From: David Lambert <dave@lambsys.com>
+Date: Wed, 18 Oct 2006 07:12:17 -0500
+Subject: [Buildroot] libgcc_s.so.1 missing from filesystem
+In-Reply-To: <20061017190319.GA19820@codepoet.org>
+References: <452CE9EC.4050101@lambsys.com>
+	<20061017190319.GA19820@codepoet.org>
+Message-ID: <45361A21.4060901@lambsys.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Author: andersen
-Date: 2006-10-17 13:11:47 -0700 (Tue, 17 Oct 2006)
-New Revision: 16401
+Erik Andersen wrote:
+> Could I have a copy of your buildroot .config file?  I've tested
+> both with and without BR2_GCC_SHARED_LIBGCC set and both settings
+> produced working root filesystems for me....
+> 
+Erik,
+	I removed my manual copy and it now works! The only change is that I 
+have since run svn update (to revision 16401). Unfortunately I do not 
+remember the revision where the problem occurred. In any case I am 
+including my .config file as you requested.
 
-Log:
-update defaults
+Best regards,
+
+Dave.
 
 
-Modified:
-   trunk/buildroot/toolchain/binutils/Config.in
-   trunk/buildroot/toolchain/gcc/Config.in
-
-
-Changeset:
-Modified: trunk/buildroot/toolchain/binutils/Config.in
-===================================================================
---- trunk/buildroot/toolchain/binutils/Config.in	2006-10-17 16:57:49 UTC (rev 16400)
-+++ trunk/buildroot/toolchain/binutils/Config.in	2006-10-17 20:11:47 UTC (rev 16401)
-@@ -4,7 +4,7 @@
- 
- choice
- 	prompt "Binutils Version"
--	default BR2_BINUTILS_VERSION_2_16_1
-+	default BR2_BINUTILS_VERSION_2_16_91_0_7
- 	help
- 	  Select the version of binutils you wish to use.
- 
-
-Modified: trunk/buildroot/toolchain/gcc/Config.in
-===================================================================
---- trunk/buildroot/toolchain/gcc/Config.in	2006-10-17 16:57:49 UTC (rev 16400)
-+++ trunk/buildroot/toolchain/gcc/Config.in	2006-10-17 20:11:47 UTC (rev 16401)
-@@ -4,7 +4,7 @@
- 
- choice
- 	prompt "GCC compiler Version"
--	default BR2_GCC_VERSION_3_4_5
-+	default BR2_GCC_VERSION_3_4_6
- 	help
- 	  Select the version of gcc you wish to use.
- 
+-------------- next part --------------
+An embedded and charset-unspecified text was scrubbed...
+Name: .config
+Url: http://busybox.net/lists/buildroot/attachments/20061018/01912809/attachment.asc 
+-------------- next part --------------
+A non-text attachment was scrubbed...
+Name: dave.vcf
+Type: text/x-vcard
+Size: 288 bytes
+Desc: not available
+Url : http://busybox.net/lists/buildroot/attachments/20061018/01912809/attachment-0001.vcf 
