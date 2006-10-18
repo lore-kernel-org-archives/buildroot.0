@@ -1,40 +1,29 @@
-From: David Lambert <dave@lambsys.com>
-Date: Wed, 18 Oct 2006 07:12:17 -0500
-Subject: [Buildroot] libgcc_s.so.1 missing from filesystem
-In-Reply-To: <20061017190319.GA19820@codepoet.org>
-References: <452CE9EC.4050101@lambsys.com>
-	<20061017190319.GA19820@codepoet.org>
-Message-ID: <45361A21.4060901@lambsys.com>
+From: Rob Landley <rob@landley.net>
+Date: Wed, 18 Oct 2006 12:31:40 -0400
+Subject: [Buildroot] Order of mounts in inittab
+In-Reply-To: <87a5b0800610120238l480df3c4lfefd6133afe981c@mail.gmail.com>
+References: <87a5b0800610120238l480df3c4lfefd6133afe981c@mail.gmail.com>
+Message-ID: <200610181231.43387.rob@landley.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Erik Andersen wrote:
-> Could I have a copy of your buildroot .config file?  I've tested
-> both with and without BR2_GCC_SHARED_LIBGCC set and both settings
-> produced working root filesystems for me....
+On Thursday 12 October 2006 5:38 am, Will Newton wrote:
+> Hi all,
 > 
-Erik,
-	I removed my manual copy and it now works! The only change is that I 
-have since run svn update (to revision 16401). Unfortunately I do not 
-remember the revision where the problem occurred. In any case I am 
-including my .config file as you requested.
+> I noticed that since upgrading to busybox 1.2.1 that I had to reorder
+> the mount lines in inittab so proc was mounted before remounting / as
+> rw took place or I would get "could not open /proc/mounts" and the
+> remount would fail. Does anyone know why this might be?
 
-Best regards,
+Because the order in which inittab lines are executed is not specified by any 
+spec anywhere, and it's easier to create a linked list by inserting rather 
+than tracing to the end of the thing?  (There are such things as sysinit 
+scripts.  And fstab.  These things exist for a reason.)
 
-Dave.
-
-
--------------- next part --------------
-An embedded and charset-unspecified text was scrubbed...
-Name: .config
-Url: http://busybox.net/lists/buildroot/attachments/20061018/01912809/attachment.asc 
--------------- next part --------------
-A non-text attachment was scrubbed...
-Name: dave.vcf
-Type: text/x-vcard
-Size: 288 bytes
-Desc: not available
-Url : http://busybox.net/lists/buildroot/attachments/20061018/01912809/attachment-0001.vcf 
+Rob
+-- 
+"Perfection is reached, not when there is no longer anything to add, but
+when there is no longer anything to take away." - Antoine de Saint-Exupery
