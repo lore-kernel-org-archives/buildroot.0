@@ -1,32 +1,46 @@
-From: don <don_reid@comcast.net>
-Date: Sat, 21 Oct 2006 11:34:03 -0700
+From: Rob Landley <rob@landley.net>
+Date: Sat, 21 Oct 2006 16:22:28 -0400
 Subject: [Buildroot] Using udev, non-static /dev, and ramfs (or tmpfs)
-Message-ID: <20061021183403.GA21456@reid1.localdomain>
+In-Reply-To: <20061021183403.GA21456@reid1.localdomain>
+References: <20061021183403.GA21456@reid1.localdomain>
+Message-ID: <200610211622.28407.rob@landley.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-I have a buildroot system that has been working fine (thanks) using
-a static /dev in a ramfs rootfs.  Now I want to add a USB device and it 
-seems like I should let udev etc. handle it.
+On Saturday 21 October 2006 2:34 pm, don wrote:
+> I have a buildroot system that has been working fine (thanks) using
+> a static /dev in a ramfs rootfs.  Now I want to add a USB device and it 
+> seems like I should let udev etc. handle it.
 
-However udev cannot make entries in a read-only /dev.
+I'd recommend mdev from busybox, but then I wrote it. :)
 
-Is there a simple recipe for mounting /dev as writable?
+> However udev cannot make entries in a read-only /dev.
+>
+> Is there a simple recipe for mounting /dev as writable?
 
-There are several compilcations:
+mount -t tmpfs /dev /dev
+ 
+> There are several compilcations:
+> 
+> 	Normally to mount with ramfs I'd use /dev/ram*. 
 
-	Normally to mount with ramfs I'd use /dev/ram*.  
-	How does that work with mounting /dev?
+No, that's a ram disk not ramfs.  A ramfs (or tmpfs) doesn't have backing 
+store.
 
-	What about all the existing static /dev/entries?
+Install a recent busybox (1.2.2 would be best, once I get that up. :)
 
-I see that /etc/init.d/S10udev tries to use "/sbin/udevstart", but
-I don't have that.
+To populate dev:
 
-Would I be better off to keep things static?
+  mdev -s
 
-Thanks
-Don Reid
+To handle hotplug events:
+
+  echo "/sbin/mdev" > /proc/sys/kernel/hotplug
+
+Rob
+-- 
+"Perfection is reached, not when there is no longer anything to add, but
+when there is no longer anything to take away." - Antoine de Saint-Exupery
