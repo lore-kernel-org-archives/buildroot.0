@@ -1,50 +1,32 @@
-From: vapier at uclibc.org <vapier@uclibc.org>
-Date: Fri, 20 Oct 2006 22:34:00 -0700 (PDT)
-Subject: [Buildroot] svn commit: trunk/buildroot/toolchain/binutils
-Message-ID: <20061021053400.3D4F148984@busybox.net>
+From: don <don_reid@comcast.net>
+Date: Sat, 21 Oct 2006 11:34:03 -0700
+Subject: [Buildroot] Using udev, non-static /dev, and ramfs (or tmpfs)
+Message-ID: <20061021183403.GA21456@reid1.localdomain>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Author: vapier
-Date: 2006-10-20 22:33:59 -0700 (Fri, 20 Oct 2006)
-New Revision: 16418
+I have a buildroot system that has been working fine (thanks) using
+a static /dev in a ramfs rootfs.  Now I want to add a USB device and it 
+seems like I should let udev etc. handle it.
 
-Log:
-2.17.50.0.6 ver bump
+However udev cannot make entries in a read-only /dev.
 
-Added:
-   trunk/buildroot/toolchain/binutils/2.17.50.0.6/
+Is there a simple recipe for mounting /dev as writable?
 
-Modified:
-   trunk/buildroot/toolchain/binutils/Config.in
+There are several compilcations:
 
+	Normally to mount with ramfs I'd use /dev/ram*.  
+	How does that work with mounting /dev?
 
-Changeset:
-Copied: trunk/buildroot/toolchain/binutils/2.17.50.0.6 (from rev 16417, trunk/buildroot/toolchain/binutils/2.17.50.0.5)
+	What about all the existing static /dev/entries?
 
-Modified: trunk/buildroot/toolchain/binutils/Config.in
-===================================================================
---- trunk/buildroot/toolchain/binutils/Config.in	2006-10-20 23:48:30 UTC (rev 16417)
-+++ trunk/buildroot/toolchain/binutils/Config.in	2006-10-21 05:33:59 UTC (rev 16418)
-@@ -59,6 +59,10 @@
- 		depends !BR2_nios2
- 		bool "binutils 2.17.50.0.5"
- 
-+	config BR2_BINUTILS_VERSION_2_17_50_0_6
-+		depends !BR2_nios2
-+		bool "binutils 2.17.50.0.6"
-+
- endchoice
- 
- config BR2_BINUTILS_VERSION
-@@ -76,6 +80,7 @@
- 	default "2.17.50.0.3"     if BR2_BINUTILS_VERSION_2_17_50_0_3
- 	default "2.17.50.0.4"     if BR2_BINUTILS_VERSION_2_17_50_0_4
- 	default "2.17.50.0.5"     if BR2_BINUTILS_VERSION_2_17_50_0_5
-+	default "2.17.50.0.6"     if BR2_BINUTILS_VERSION_2_17_50_0_6
- 
- config BR2_EXTRA_BINUTILS_CONFIG_OPTIONS
- 	string "Additional binutils options"
+I see that /etc/init.d/S10udev tries to use "/sbin/udevstart", but
+I don't have that.
+
+Would I be better off to keep things static?
+
+Thanks
+Don Reid
