@@ -1,23 +1,37 @@
-From: mmynsted_news at comcast.net <mmynsted_news@comcast.net>
-Date: Wed, 25 Oct 2006 14:30:27 +0000
-Subject: [Buildroot] Working config file to get started? (Can't get
-	buildroot to compile)
-Message-ID: <102520061430.20936.453F750300021B58000051C822007348409C990A02A10B0A9B9C02970303@comcast.net>
+From: Paugam Luc <luc.paugam@thomson.net>
+Date: Wed, 25 Oct 2006 17:37:19 +0200
+Subject: [Buildroot] ERROR: ccache says "(No such file or directory)" !!!
+Message-ID: <E55CA8ECFBA85E4CB8E8173566B9EFEB287B3F@rennsmail04.eu.thmulti.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello.
+After compiling and installing the buildroot's toolchain for armeb with
+ccache enabled, I removed my build directories to keep only the
+installed toolchain.
+And then, it is impossible to execute gcc, like: armeb-linux-gcc
+--version
+I have the following error:
 
-This looks like a really cool project.  I can't wait to get started working with it.
+ccache: failed to create
+/opt/lpm/ARM926ej/buildroot_uClibc/buildroot-20061012_GCC3.4.6/toolchain
+_build_armeb_nofpu/ccache-2.4/cache (No such file or directory)
 
-I have attempted to build numerous different configurations, but can't get any to compile.  Each one ends with a different error message.   (With messages that say things like how it can't find one file or another.)
+It seems that ccache keep the information of the build directory path! I
+am wondering why?
+It does not allow to install the toolchain in other environment system.
 
-Does somebody have a configuration that they know works that I can try, just to see this compile through?   
+Could you tell me please, if I did something wrong?
 
-I am attempting to compile for i386/ i586 (Intel arch).
+PS: my toolchain config (buildroot-20061012)
+	armeb, generic arm (EABI)
+	kernel headers 2.4.31
+	uclibc snapshot (20061024)
+	binutils 2.16.1, gcc 3.4.6, multilib, softfloat
+	ccache enabled
 
---
-MM
+Many thanks for your collaboration.
+
+Regards - Luc
