@@ -1,50 +1,41 @@
-From: jacmet at uclibc.org <jacmet@uclibc.org>
-Date: Thu, 26 Oct 2006 08:15:09 -0700 (PDT)
-Subject: [Buildroot] svn commit: trunk/buildroot/toolchain/gcc
-Message-ID: <20061026151509.31D464868D@busybox.net>
+From: Michael Opdenacker <michael-lists@free-electrons.com>
+Date: Thu, 26 Oct 2006 19:48:58 +0200
+Subject: [Buildroot] Error building arm toolchain: undefined reference
+ to `raise'
+Message-ID: <4540F50A.7050106@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Author: jacmet
-Date: 2006-10-26 08:15:08 -0700 (Thu, 26 Oct 2006)
-New Revision: 16442
+Sorry for not replying to the original thread... I've just subscribed to 
+the list.
 
-Log:
-Fix missing libgcc_s.so.1 with BR2_GCC_SHARED_LIBGCC
+I've just faced the same issue, in a very similar configuration.
 
-Modified:
-   trunk/buildroot/toolchain/gcc/gcc-uclibc-3.x.mk
+When I use the latest uClibc snapshot, compiling stumbles on another error:
+
+AS libc/sysdeps/linux/arm/sigrestorer.os
+libc/sysdeps/linux/arm/sigrestorer.S: Assembler messages:
+libc/sysdeps/linux/arm/sigrestorer.S:43: Error: invalid constant -- `mov 
+r7,$((0x900000+119))'
+libc/sysdeps/linux/arm/sigrestorer.S:63: Error: invalid constant -- `mov 
+r7,$((0x900000+173))'
+make[2]: *** [libc/sysdeps/linux/arm/sigrestorer.os] Error 1
+make[1]: *** [lib/libc.so.0] Error 2
+make[1]: Leaving directory 
+`/home/mike/tmp/buildroot/buildroot/toolchain_build_arm/uClibc'
+
+Still investigating...
+
+Cheers,
+
+    Michael.
 
 
-Changeset:
-Modified: trunk/buildroot/toolchain/gcc/gcc-uclibc-3.x.mk
-===================================================================
---- trunk/buildroot/toolchain/gcc/gcc-uclibc-3.x.mk	2006-10-26 01:47:34 UTC (rev 16441)
-+++ trunk/buildroot/toolchain/gcc/gcc-uclibc-3.x.mk	2006-10-26 15:15:08 UTC (rev 16442)
-@@ -250,12 +250,11 @@
- 	#
- 	# Ok... that's enough of that.
- 	#
--	touch $(GCC_BUILD_DIR2)/.installed
--
--$(TARGET_DIR)/lib/libgcc_s.so.1: $(GCC_BUILD_DIR2)/.installed
-+ifeq ($(BR2_GCC_SHARED_LIBGCC),y)
- 	# These are in /lib, so...
- 	rm -rf $(TARGET_DIR)/usr/lib/libgcc_s*.so*
- 	-cp -a $(STAGING_DIR)/$(REAL_GNU_TARGET_NAME)/lib/libgcc_s* $(TARGET_DIR)/lib/
-+endif
- ifeq ($(BR2_INSTALL_LIBSTDCPP),y)
- 	-cp -a $(STAGING_DIR)/lib/libstdc++.so* $(TARGET_DIR)/lib/
- endif
-@@ -267,7 +266,7 @@
- 	-cp -a $(STAGING_DIR)/usr/lib/security/libgcj.security $(TARGET_DIR)/usr/lib/security/
- 	-cp -a $(STAGING_DIR)/usr/lib/security/classpath.security $(TARGET_DIR)/usr/lib/security/
- endif
--	touch -c $(TARGET_DIR)/lib/libgcc_s.so.1
-+	touch $(GCC_BUILD_DIR2)/.installed
- 
- gcc: uclibc-configured binutils gcc_initial $(LIBFLOAT_TARGET) uclibc \
- 	$(GCC_BUILD_DIR2)/.installed $(GCC_TARGETS)
+-- 
+Michael Opdenacker, Free Electrons
+Free Embedded Linux Training Materials
+on http://free-electrons.com/training
+(More than 1000 pages!)
