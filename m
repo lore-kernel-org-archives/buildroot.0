@@ -1,49 +1,50 @@
-From: Tor Krill <tor@krill.nu>
-Date: Thu, 26 Oct 2006 11:45:09 +0200
-Subject: [Buildroot] Error building arm toolchain: undefined reference to
-	`raise'
-Message-ID: <1161855909.454083a599a48@edna.homeip.net>
+From: Paugam Luc <luc.paugam@thomson.net>
+Date: Thu, 26 Oct 2006 12:25:04 +0200
+Subject: [Buildroot] ERROR: ccache says "(No such file or directory)" !!!
+Message-ID: <E55CA8ECFBA85E4CB8E8173566B9EFEB287C2C@rennsmail04.eu.thmulti.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi,
+Thanks for pointing it out.
+That's exactly what I was looking for.
 
-I'm trying to build an up to date toolchain for our arm920t board, at91rm9200.
-However compilation fails with a:
+Regards - Luc 
 
-/home/tor/tmp/buildroot/build_arm/staging_dir/bin/arm-linux-uclibc-ld -EL -e
-_start -z now -Bsymbolic -shared --warn-common --export-dynamic --sort-common
--z combreloc --discard-locals --discard-all --no-undefined -s
--soname=ld-uClibc.so.0 \
-        -o ld-uClibc-0.9.28.so arm/resolve.o ldso.o
-/home/tor/tmp/buildroot/build_arm/staging_dir/lib/gcc/arm-linux-uclibc/4.1.1/libgcc.a
-/home/tor/tmp/buildroot/build_arm/staging_dir/lib/gcc/arm-linux-uclibc/4.1.1/libgcc.a(_dvmd_lnx.o):
-In function `__div0':
-/home/tor/tmp/buildroot/toolchain_build_arm/gcc-4.1.1/gcc/config/arm/lib1funcs.asm:1000:
-undefined reference to `raise'
-make[3]: *** [ld-uClibc-0.9.28.so] Error 1
-make[3]: Leaving directory
-`/home/tor/tmp/buildroot/toolchain_build_arm/uClibc-0.9.28/ldso/ldso'
-make[2]: *** [ldso] Error 2
-make[2]: Leaving directory
-`/home/tor/tmp/buildroot/toolchain_build_arm/uClibc-0.9.28/ldso'
-make[1]: *** [_dir_ldso] Error 2
-make[1]: Leaving directory
-`/home/tor/tmp/buildroot/toolchain_build_arm/uClibc-0.9.28'
+-----Original Message-----
+From: buildroot-bounces@uclibc.org [mailto:buildroot-bounces at uclibc.org]
+On Behalf Of Fredrik Roubert
+Sent: jeudi 26 octobre 2006 11:33
+To: buildroot at uclibc.org
+Subject: Re: [Buildroot] ERROR: ccache says "(No such file or
+directory)" !!!
 
-I used latest possible stable versions,
- * gcc-4.1.1
- * Kernel headers 2.6.12
- * Binutils 2.17
- * no softfloat
- * Busybox snapshot
- * Default stable uClibc 0.9.28
+On Wed 25 Oct 17:37 CEST 2006, Paugam Luc wrote:
 
-Am i missing something here?
+> It seems that ccache keep the information of the build directory path!
 
-Regards
+> I am wondering why? It does not allow to install the toolchain in 
+> other environment system.
 
-/Tor
+In order to build a cross compiler that you can use outside of the build
+environment, you need to first apply Ed Swierk's patch to buildroot:
+
+http://www.busybox.net/lists/buildroot/2006-July/000027.html
+
+I don't know why the default behaviour is the way it is, but I would
+really like to know if there is a good reason for it. See:
+
+http://www.busybox.net/lists/buildroot/2006-October/000260.html
+http://www.busybox.net/lists/buildroot/2006-October/000333.html
+
+Cheers // Fredrik Roubert
+
+-- 
+Barco Medical Imaging          |  +32 56 233549
+http://www.barco.com/medical/  |  fredrik.roubert at barco.com
+_______________________________________________
+buildroot mailing list
+buildroot at uclibc.org
+http://busybox.net/mailman/listinfo/buildroot
