@@ -1,41 +1,33 @@
-From: Michael Opdenacker <michael-lists@free-electrons.com>
-Date: Thu, 26 Oct 2006 19:48:58 +0200
+From: Philippe Ney <philippe.ney@pardes.ws>
+Date: Thu, 26 Oct 2006 21:26:14 +0200
 Subject: [Buildroot] Error building arm toolchain: undefined reference
  to `raise'
-Message-ID: <4540F50A.7050106@free-electrons.com>
+In-Reply-To: <1161855909.454083a599a48@edna.homeip.net>
+References: <1161855909.454083a599a48@edna.homeip.net>
+Message-ID: <20061026212614.a050f468.philippe.ney@pardes.ws>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Sorry for not replying to the original thread... I've just subscribed to 
-the list.
+> Hi,
+> 
+> I'm trying to build an up to date toolchain for our arm920t board, at91rm9200.
+> However compilation fails with a:
+[...]
+> /home/tor/tmp/buildroot/toolchain_build_arm/gcc-4.1.1/gcc/config/arm/lib1funcs.asm:1000:
+> undefined reference to `raise'
+[...]
+> Am i missing something here?
+> 
+> Regards
+> 
+> /Tor
 
-I've just faced the same issue, in a very similar configuration.
+Hi,
 
-When I use the latest uClibc snapshot, compiling stumbles on another error:
+Have a look at the gumstix buildroot (www.gumstix.org) for a patch called
+uClibc-gcc-41-raise-error.patch, I think this will do the trick.
 
-AS libc/sysdeps/linux/arm/sigrestorer.os
-libc/sysdeps/linux/arm/sigrestorer.S: Assembler messages:
-libc/sysdeps/linux/arm/sigrestorer.S:43: Error: invalid constant -- `mov 
-r7,$((0x900000+119))'
-libc/sysdeps/linux/arm/sigrestorer.S:63: Error: invalid constant -- `mov 
-r7,$((0x900000+173))'
-make[2]: *** [libc/sysdeps/linux/arm/sigrestorer.os] Error 1
-make[1]: *** [lib/libc.so.0] Error 2
-make[1]: Leaving directory 
-`/home/mike/tmp/buildroot/buildroot/toolchain_build_arm/uClibc'
-
-Still investigating...
-
-Cheers,
-
-    Michael.
-
-
--- 
-Michael Opdenacker, Free Electrons
-Free Embedded Linux Training Materials
-on http://free-electrons.com/training
-(More than 1000 pages!)
+Philippe
