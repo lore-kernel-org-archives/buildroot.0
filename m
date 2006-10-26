@@ -1,50 +1,50 @@
-From: Paugam Luc <luc.paugam@thomson.net>
-Date: Thu, 26 Oct 2006 12:25:04 +0200
-Subject: [Buildroot] ERROR: ccache says "(No such file or directory)" !!!
-Message-ID: <E55CA8ECFBA85E4CB8E8173566B9EFEB287C2C@rennsmail04.eu.thmulti.com>
+From: jacmet at uclibc.org <jacmet@uclibc.org>
+Date: Thu, 26 Oct 2006 08:15:09 -0700 (PDT)
+Subject: [Buildroot] svn commit: trunk/buildroot/toolchain/gcc
+Message-ID: <20061026151509.31D464868D@busybox.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Thanks for pointing it out.
-That's exactly what I was looking for.
+Author: jacmet
+Date: 2006-10-26 08:15:08 -0700 (Thu, 26 Oct 2006)
+New Revision: 16442
 
-Regards - Luc 
+Log:
+Fix missing libgcc_s.so.1 with BR2_GCC_SHARED_LIBGCC
 
------Original Message-----
-From: buildroot-bounces@uclibc.org [mailto:buildroot-bounces at uclibc.org]
-On Behalf Of Fredrik Roubert
-Sent: jeudi 26 octobre 2006 11:33
-To: buildroot at uclibc.org
-Subject: Re: [Buildroot] ERROR: ccache says "(No such file or
-directory)" !!!
+Modified:
+   trunk/buildroot/toolchain/gcc/gcc-uclibc-3.x.mk
 
-On Wed 25 Oct 17:37 CEST 2006, Paugam Luc wrote:
 
-> It seems that ccache keep the information of the build directory path!
-
-> I am wondering why? It does not allow to install the toolchain in 
-> other environment system.
-
-In order to build a cross compiler that you can use outside of the build
-environment, you need to first apply Ed Swierk's patch to buildroot:
-
-http://www.busybox.net/lists/buildroot/2006-July/000027.html
-
-I don't know why the default behaviour is the way it is, but I would
-really like to know if there is a good reason for it. See:
-
-http://www.busybox.net/lists/buildroot/2006-October/000260.html
-http://www.busybox.net/lists/buildroot/2006-October/000333.html
-
-Cheers // Fredrik Roubert
-
--- 
-Barco Medical Imaging          |  +32 56 233549
-http://www.barco.com/medical/  |  fredrik.roubert at barco.com
-_______________________________________________
-buildroot mailing list
-buildroot at uclibc.org
-http://busybox.net/mailman/listinfo/buildroot
+Changeset:
+Modified: trunk/buildroot/toolchain/gcc/gcc-uclibc-3.x.mk
+===================================================================
+--- trunk/buildroot/toolchain/gcc/gcc-uclibc-3.x.mk	2006-10-26 01:47:34 UTC (rev 16441)
++++ trunk/buildroot/toolchain/gcc/gcc-uclibc-3.x.mk	2006-10-26 15:15:08 UTC (rev 16442)
+@@ -250,12 +250,11 @@
+ 	#
+ 	# Ok... that's enough of that.
+ 	#
+-	touch $(GCC_BUILD_DIR2)/.installed
+-
+-$(TARGET_DIR)/lib/libgcc_s.so.1: $(GCC_BUILD_DIR2)/.installed
++ifeq ($(BR2_GCC_SHARED_LIBGCC),y)
+ 	# These are in /lib, so...
+ 	rm -rf $(TARGET_DIR)/usr/lib/libgcc_s*.so*
+ 	-cp -a $(STAGING_DIR)/$(REAL_GNU_TARGET_NAME)/lib/libgcc_s* $(TARGET_DIR)/lib/
++endif
+ ifeq ($(BR2_INSTALL_LIBSTDCPP),y)
+ 	-cp -a $(STAGING_DIR)/lib/libstdc++.so* $(TARGET_DIR)/lib/
+ endif
+@@ -267,7 +266,7 @@
+ 	-cp -a $(STAGING_DIR)/usr/lib/security/libgcj.security $(TARGET_DIR)/usr/lib/security/
+ 	-cp -a $(STAGING_DIR)/usr/lib/security/classpath.security $(TARGET_DIR)/usr/lib/security/
+ endif
+-	touch -c $(TARGET_DIR)/lib/libgcc_s.so.1
++	touch $(GCC_BUILD_DIR2)/.installed
+ 
+ gcc: uclibc-configured binutils gcc_initial $(LIBFLOAT_TARGET) uclibc \
+ 	$(GCC_BUILD_DIR2)/.installed $(GCC_TARGETS)
