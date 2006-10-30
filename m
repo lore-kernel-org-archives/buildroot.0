@@ -1,32 +1,35 @@
-From: Will Newton <will.newton@gmail.com>
-Date: Mon, 30 Oct 2006 10:06:33 +0000
-Subject: [Buildroot] Order of mounts in inittab
-In-Reply-To: <200610181231.43387.rob@landley.net>
-References: <87a5b0800610120238l480df3c4lfefd6133afe981c@mail.gmail.com>
-	<200610181231.43387.rob@landley.net>
-Message-ID: <87a5b0800610300206y137eac20re7a0092ec70bdb89@mail.gmail.com>
+From: renxuefeng <renxf_maillist@126.com>
+Date: Mon, 30 Oct 2006 22:16:33 +0800
+Subject: [Buildroot] bash-3.1 link error "undefined reference to
+	`__fini_array_start'"
+Message-ID: <45460941.40607@126.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 10/18/06, Rob Landley <rob@landley.net> wrote:
-> On Thursday 12 October 2006 5:38 am, Will Newton wrote:
-> > Hi all,
-> >
-> > I noticed that since upgrading to busybox 1.2.1 that I had to reorder
-> > the mount lines in inittab so proc was mounted before remounting / as
-> > rw took place or I would get "could not open /proc/mounts" and the
-> > remount would fail. Does anyone know why this might be?
->
-> Because the order in which inittab lines are executed is not specified by any
-> spec anywhere, and it's easier to create a linked list by inserting rather
-> than tracing to the end of the thing?  (There are such things as sysinit
-> scripts.  And fstab.  These things exist for a reason.)
+i was build bash with buildroot.
+my target platform was arm720t, uclibc.
+when i compiling the bash-3.1 without -Wl,-elf2flt ,there was no error.
+but when i added the ldflags -Wl,-elf2flt , some link error showed as
+follows.
 
-Sorry about the long delay, I've been away.
+bash.elf2flt: In function `__uClibc_fini':
+/home/renxf/uclinux/cross_tool/buildroot/toolchain_build_arm_nofpu/gcc-3.4.3/gcc/config/arm/lib1funcs.asm:(.text+0x876f8):
+undefined reference to `__fini_array_start'
+/home/renxf/uclinux/cross_tool/buildroot/toolchain_build_arm_nofpu/gcc-3.4.3/gcc/config/arm/lib1funcs.asm:(.text+0x876fc):
+undefined reference to `__fini_array_end'
+bash.elf2flt: In function `__uClibc_main':
+/home/renxf/uclinux/cross_tool/buildroot/toolchain_build_arm_nofpu/gcc-3.4.3/gcc/config/arm/lib1funcs.asm:(.text+0x8788c):
+undefined reference to `__preinit_array_end'
+/home/renxf/uclinux/cross_tool/buildroot/toolchain_build_arm_nofpu/gcc-3.4.3/gcc/config/arm/lib1funcs.asm:(.text+0x87890):
+undefined reference to `__preinit_array_start'
+/home/renxf/uclinux/cross_tool/buildroot/toolchain_build_arm_nofpu/gcc-3.4.3/gcc/config/arm/lib1funcs.asm:(.text+0x8789c):
+undefined reference to `__init_array_end'
+/home/renxf/uclinux/cross_tool/buildroot/toolchain_build_arm_nofpu/gcc-3.4.3/gcc/config/arm/lib1funcs.asm:(.text+0x878a0):
+undefined reference to `__init_array_start'
+collect2: ld returned 1 exit status
+make[1]: *** [bash] Error 1
 
-The above explanation makes sense, but the fact remains that the
-inittab in buildroot does not work with the current version of the
-tools.
+anyone can help me?
