@@ -1,35 +1,38 @@
-From: renxuefeng <renxf_maillist@126.com>
-Date: Mon, 30 Oct 2006 22:16:33 +0800
-Subject: [Buildroot] bash-3.1 link error "undefined reference to
-	`__fini_array_start'"
-Message-ID: <45460941.40607@126.com>
+From: Robert Carter <r.carter@cs.auckland.ac.nz>
+Date: Tue, 31 Oct 2006 17:01:06 +1300
+Subject: [Buildroot] [patch] sfdisk: seek error
+In-Reply-To: <200610231115.19527.javierruere@apexar.com>
+References: <200610231115.19527.javierruere@apexar.com>
+Message-ID: <163A92C6-1084-4D2E-87F0-0E0203D6C7FA@cs.auckland.ac.nz>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-i was build bash with buildroot.
-my target platform was arm720t, uclibc.
-when i compiling the bash-3.1 without -Wl,-elf2flt ,there was no error.
-but when i added the ldflags -Wl,-elf2flt , some link error showed as
-follows.
+This patch to fix the error which appears with sfdisk when compiled  
+with gcc 3.4.6.
 
-bash.elf2flt: In function `__uClibc_fini':
-/home/renxf/uclinux/cross_tool/buildroot/toolchain_build_arm_nofpu/gcc-3.4.3/gcc/config/arm/lib1funcs.asm:(.text+0x876f8):
-undefined reference to `__fini_array_start'
-/home/renxf/uclinux/cross_tool/buildroot/toolchain_build_arm_nofpu/gcc-3.4.3/gcc/config/arm/lib1funcs.asm:(.text+0x876fc):
-undefined reference to `__fini_array_end'
-bash.elf2flt: In function `__uClibc_main':
-/home/renxf/uclinux/cross_tool/buildroot/toolchain_build_arm_nofpu/gcc-3.4.3/gcc/config/arm/lib1funcs.asm:(.text+0x8788c):
-undefined reference to `__preinit_array_end'
-/home/renxf/uclinux/cross_tool/buildroot/toolchain_build_arm_nofpu/gcc-3.4.3/gcc/config/arm/lib1funcs.asm:(.text+0x87890):
-undefined reference to `__preinit_array_start'
-/home/renxf/uclinux/cross_tool/buildroot/toolchain_build_arm_nofpu/gcc-3.4.3/gcc/config/arm/lib1funcs.asm:(.text+0x8789c):
-undefined reference to `__init_array_end'
-/home/renxf/uclinux/cross_tool/buildroot/toolchain_build_arm_nofpu/gcc-3.4.3/gcc/config/arm/lib1funcs.asm:(.text+0x878a0):
-undefined reference to `__init_array_start'
-collect2: ld returned 1 exit status
-make[1]: *** [bash] Error 1
+seek error: wanted 0x0000000000000000, got 0x0000000000000000
 
-anyone can help me?
+Solution from this article:
+http://linuxfromscratch.org/pipermail/lfs-dev/2004-August/048483.html
+
+Rob
+
+
+Index: package/sfdisk/sfdisk.mk
+===================================================================
+--- package/sfdisk/sfdisk.mk    (revision 16401)
++++ package/sfdisk/sfdisk.mk    (working copy)
+@@ -15,7 +15,7 @@
+
+  $(SFDISK_DIR)/sfdisk: $(SFDISK_DIR)
+         $(MAKE) \
+-               CROSS=$(TARGET_CROSS) DEBUG=false  OPTIMIZATION="$ 
+(TARGET_CFLAGS)" \
++               CROSS=$(TARGET_CROSS) DEBUG=false OPTIMIZATION="$ 
+(TARGET_CFLAGS) -fno-unit-at-a-time" \
+                 -C $(SFDISK_DIR)
+         -$(STRIP) $(SFDISK_DIR)/sfdisk;
+         touch -c $(SFDISK_DIR)/sfdisk
