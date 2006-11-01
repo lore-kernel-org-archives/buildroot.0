@@ -1,47 +1,51 @@
-From: MikeW <mw_phil@yahoo.co.uk>
-Date: Wed, 1 Nov 2006 15:46:32 +0000 (UTC)
+From: Ashwin Bihari <abihari@gmail.com>
+Date: Wed, 1 Nov 2006 10:01:34 -0600
 Subject: [Buildroot] Persistent tarball repository
+In-Reply-To: <loom.20061101T164136-413@post.gmane.org>
 References: <loom.20061101T151612-639@post.gmane.org>
 	<1162394701.2945.4.camel@iridium.gnat.ca>
-Message-ID: <loom.20061101T164136-413@post.gmane.org>
+	<loom.20061101T164136-413@post.gmane.org>
+Message-ID: <1f11a5490611010801o629294ffw7cde4e3f98778d16@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Nathanael D. Noblet <nathanael@...> writes:
+On 11/1/06, MikeW <mw_phil@yahoo.co.uk> wrote:
+>
+> Yes, but 'make clean' only removes object files, causing a straight
+> rebuild from
+> source, 'distclean' is supposed to remove any make-generated/config files
+> as
+> well - IIRC.
+>
+> Which is not quite the same as deleting all your patiently downloaded
+> tarballs as well !
+>
+> So I just wondered if there was a way to either allow distclean to spare
+> the package source files, or alternatively, if you could 'get' from a
+> local repository rather than having to download via FTP/HTTP, if your
+> required file existed.
+>
+> Regards,
+> MikeW
+>
 
-> 
-> On Wed, 2006-11-01 at 14:23 +0000, MikeW wrote:
-> > I found to my annoyance that 'make distclean' clears out
- your downloaded .tar.gz
-> > files in /dl, which could be a pain if you hadn't realised
- that (and was, since
-> > there appears to be a problem with ftp.kernel.org
- so I got the file 'manually')
-> > 
-> > May I ask if there is a setting to allow these files
- to be cached somewhere that
-> > 'distclean' doesn't clear out ?
-> > Might also be useful on a server in a team environment
- to ensure everyone
-> > uses the same reference downloads without local duplication
- and time penalty.
-> 
-> make clean?
+Predominently, "make distclean" is used to return a package to it's
+"distributed" state and in so that means removing any generated files and,
+in Buildroots case, any downloaded files.
 
-Yes, but 'make clean' only removes object files, causing a straight rebuild from
-source, 'distclean' is supposed to remove any make-generated/config files as
-well - IIRC.
+You can hack your Makefile to not remove the "dl" directory if you so wish,
+but I would think that the system is behaving as expected.
 
-Which is not quite the same as deleting all your patiently downloaded
-tarballs as well !
+You could also do the get from a local repository by modifying the
+appropriate <package>.mk file in the "package" directory.
 
-So I just wondered if there was a way to either allow distclean to spare
-the package source files, or alternatively, if you could 'get' from a
-local repository rather than having to download via FTP/HTTP, if your
-required file existed.
+Regards
 
-Regards,
-MikeW
+-- 
+~ Ashwin
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: http://busybox.net/lists/buildroot/attachments/20061101/199d7333/attachment.htm 
