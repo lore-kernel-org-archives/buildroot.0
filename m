@@ -1,34 +1,37 @@
-From: MikeW <mw_phil@yahoo.co.uk>
-Date: Wed, 1 Nov 2006 17:47:32 +0000 (UTC)
-Subject: [Buildroot] Persistent tarball repository - already exists
-References: <loom.20061101T151612-639@post.gmane.org>
-	<1162394701.2945.4.camel@iridium.gnat.ca>
-	<loom.20061101T164136-413@post.gmane.org>
-	<1f11a5490611010801o629294ffw7cde4e3f98778d16@mail.gmail.com>
-	<loom.20061101T171522-277@post.gmane.org>
-	<1f11a5490611010841n3a71baeei8d55aa4dc7251330@mail.gmail.com>
-Message-ID: <loom.20061101T181702-811@post.gmane.org>
+From: Bernhard Fischer <rep.nop@aon.at>
+Date: Wed, 1 Nov 2006 19:41:42 +0100
+Subject: [Buildroot] update to newer openssl and openssh?
+In-Reply-To: <1162394844.2945.6.camel@iridium.gnat.ca>
+References: <ecb4efd10610311716t17f73770g4b4b5e041006cb88@mail.gmail.com>
+	<1162394844.2945.6.camel@iridium.gnat.ca>
+Message-ID: <20061101184142.GM18267@aon.at>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Ashwin Bihari <abihari@...> writes:
+On Wed, Nov 01, 2006 at 08:27:24AM -0700, Nathanael D. Noblet wrote:
+>On Tue, 2006-10-31 at 20:16 -0500, Clem Taylor wrote:
+>> I was wondering if there is a reason why the openssl in buildroot is
+>> so old? buildroot-svn is using 0.9.7e (Oct 25, 2004) and the latest
+>> version 0.9.8d (Sept 28, 2006). Likewise openssh 3.9p1 and the latest
+>> is 4.4p1 (Sept 27, 2006). It would seem that you would want to keep
+>> something like this fairly current.
+>
+>All it takes is a patch bumping the version in
+>package/openssl/openssl.mk. You can email it to the mailing list or use
 
-> 
-> Mike,By all means provide a patch that allows you to change the location of
-the DL directory and whether or not it should be deleted during a distclean. I
-would definitely find it useful and if others agree, it might get committed.
-> Regards-- ~ Ashwin
-> 
+.. and verifying that it builds and runs as expected.
+It's quick and easy to bump to any version, but you also have to check
+that other apps that use an updated library (ssl in that case, see
+*/*/*.mk) work fine. It is possible that updating a lib alone is not
+sufficient but implies that some apps that use it have to be updated
+too (and tested, of course).
 
-Apologies to all, I take it all back - there /is/ a menuconfig option,
-and if I specify /opt/dl, 'make distclean' does not clean it out !
-
-Nice one, buildroot !
-
-Now, back to the 'unrecognised emulation' problem ... grrr !
-
-Regards,
-MikeW
+thanks,
+>http://bugs.uclibc.org/.
+>
+>-- 
+>Nathanael D. Noblet <nathanael@gnat.ca>
+>Gnat Solutions, Inc
