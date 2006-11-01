@@ -1,59 +1,37 @@
-From: Lars Munch <lars@segv.dk>
-Date: Tue, 31 Oct 2006 14:58:23 +0100
-Subject: [Buildroot] libgcc_s still missing
-Message-ID: <20061031135823.GA15326@tuxedo.home.lan>
+From: MikeW <mw_phil@yahoo.co.uk>
+Date: Wed, 1 Nov 2006 11:53:02 +0000 (UTC)
+Subject: [Buildroot]
+	=?utf-8?q?Error_building_arm_toolchain=3A_undefined_r?=
+	=?utf-8?q?eference_to_=60raise=27?=
+References: <1161855909.454083a599a48@edna.homeip.net>
+	<20061026212614.a050f468.philippe.ney@pardes.ws>
+	<4541C1B0.8080408@free-electrons.com>
+Message-ID: <loom.20061101T124730-455@post.gmane.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi
+Michael Opdenacker <michael-lists@...> writes:
 
-The BR2_GCC_SHARED_LIBGCC fix does not fix all BR2_GCC_SHARED_LIBGCC
-related issues.
+> 
+> Philippe Ney wrote:
+> > Have a look at the gumstix buildroot (www.gumstix.org) for a patch called
+> > uClibc-gcc-41-raise-error.patch, I think this will do the trick.
+> >   
+> To save time, here's the exact location of this patch:
+> http://svn.gumstix.com/gumstix-buildroot/trunk/
+toolchain/uClibc/uClibc-gcc-41-raise-error.patch
+> 
+> Cheers,
+> 
+>     Michael.
+> 
 
-buildroot/toolchain/gcc/gcc-uclibc-3.x.mk:
-------------------------------------------------------------------------
-r16442 | jacmet | 2006-10-26 17:15:08 +0200 (Thu, 26 Oct 2006) | 1 line
+When/How does this patch (and other similar) get incorporated
+into uClibC.org patches ?
+Surely that is the most appropriate location ?
 
-Fix missing libgcc_s.so.1 with BR2_GCC_SHARED_LIBGCC
-------------------------------------------------------------------------
-
-If I delete my build_ARCH/root directory and run "make", the library
-files libgcc_s* are missing again.
-
-The attached patch makes sure that libgcc_s.so.1 and friends always gets
-installed in TARGET_DIR.
-
-Regards
-Lars Munch
-
-
--------------- next part --------------
-Index: buildroot/toolchain/gcc/gcc-uclibc-3.x.mk
-===================================================================
---- buildroot/toolchain/gcc/gcc-uclibc-3.x.mk	(revision 16475)
-+++ buildroot/toolchain/gcc/gcc-uclibc-3.x.mk	(working copy)
-@@ -250,6 +250,9 @@
- 	#
- 	# Ok... that's enough of that.
- 	#
-+	touch $(GCC_BUILD_DIR2)/.installed
-+
-+gcc-target-libs: $(GCC_BUILD_DIR2)/.installed
- ifeq ($(BR2_GCC_SHARED_LIBGCC),y)
- 	# These are in /lib, so...
- 	rm -rf $(TARGET_DIR)/usr/lib/libgcc_s*.so*
-@@ -266,10 +269,9 @@
- 	-cp -a $(STAGING_DIR)/usr/lib/security/libgcj.security $(TARGET_DIR)/usr/lib/security/
- 	-cp -a $(STAGING_DIR)/usr/lib/security/classpath.security $(TARGET_DIR)/usr/lib/security/
- endif
--	touch $(GCC_BUILD_DIR2)/.installed
- 
- gcc: uclibc-configured binutils gcc_initial $(LIBFLOAT_TARGET) uclibc \
--	$(GCC_BUILD_DIR2)/.installed $(GCC_TARGETS)
-+	$(GCC_BUILD_DIR2)/.installed gcc-target-libs $(GCC_TARGETS)
- 
- gcc-source: $(DL_DIR)/$(GCC_SOURCE)
- 
+Regards,
+MikeW
