@@ -1,19 +1,18 @@
-From: Robert Carter <r.carter@cs.auckland.ac.nz>
-Date: Fri, 1 Sep 2006 12:52:15 +1200
-Subject: [Buildroot] open GL
-Message-ID: <0A87B33C-2376-41C4-9621-1869EE6A8F59@cs.auckland.ac.nz>
+From: Clem Taylor <clem.taylor@gmail.com>
+Date: Tue, 31 Oct 2006 20:16:26 -0500
+Subject: [Buildroot] update to newer openssl and openssh?
+Message-ID: <ecb4efd10610311716t17f73770g4b4b5e041006cb88@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-I see that SDL is included in the packages for buildroot. I have some  
-proof of concept code that uses OpenGL via SDL in an existing host OS  
-(MacOSX and win32).
+I was wondering if there is a reason why the openssl in buildroot is
+so old? buildroot-svn is using 0.9.7e (Oct 25, 2004) and the latest
+version 0.9.8d (Sept 28, 2006). Likewise openssh 3.9p1 and the latest
+is 4.4p1 (Sept 27, 2006). It would seem that you would want to keep
+something like this fairly current.
 
-I'm interested in using openGL in a simplified uClinux environment to  
-have hardware acceleration. Can anyone provide some guidance about  
-the requirements to achieve this?
-
-Rob
+                    Thanks,
+                    Clem
