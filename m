@@ -1,52 +1,34 @@
-From: Bernhard Fischer <rep.nop@aon.at>
-Date: Wed, 1 Nov 2006 18:25:29 +0100
-Subject: [Buildroot] Persistent tarball repository
-In-Reply-To: <1f11a5490611010841n3a71baeei8d55aa4dc7251330@mail.gmail.com>
+From: MikeW <mw_phil@yahoo.co.uk>
+Date: Wed, 1 Nov 2006 17:47:32 +0000 (UTC)
+Subject: [Buildroot] Persistent tarball repository - already exists
 References: <loom.20061101T151612-639@post.gmane.org>
 	<1162394701.2945.4.camel@iridium.gnat.ca>
 	<loom.20061101T164136-413@post.gmane.org>
 	<1f11a5490611010801o629294ffw7cde4e3f98778d16@mail.gmail.com>
 	<loom.20061101T171522-277@post.gmane.org>
 	<1f11a5490611010841n3a71baeei8d55aa4dc7251330@mail.gmail.com>
-Message-ID: <20061101172529.GK18267@aon.at>
+Message-ID: <loom.20061101T181702-811@post.gmane.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Wed, Nov 01, 2006 at 10:41:02AM -0600, Ashwin Bihari wrote:
->On 11/1/06, MikeW <mw_phil@yahoo.co.uk> wrote:
->>
->>Yes - I think my issue is that the downloads are held 'within' the
->>buildroot
->>tree, hence the semantics of distclean as you describe them mean that they
->>must go.
->>
->>If they were outside the buildroot tree, then I guess distclean ought not
->>to clear them out.
->>
->>Wonder if that's the making of a patch - only 'distclean' delete
->>downloaded tarballs if they occur under the buildroot directory;
->>but currently there's no menuconfig option to say where downloads are kept
->>...
->>however at the moment I just want something that 'works out of the box'!
->>
->>Thanks,
->>MikeW
->>
->
->Mike,
->
->By all means provide a patch that allows you to change the location of the
->DL directory and whether or not it should be deleted during a distclean. I
->would definitely find it useful and if others agree, it might get committed.
+Ashwin Bihari <abihari@...> writes:
 
-The DL_DIR will only be deleted if it's "dl" (i.e. the default). Change
-it (via menuconfig; no need for an additional patch, it's already in
-there).
+> 
+> Mike,By all means provide a patch that allows you to change the location of
+the DL directory and whether or not it should be deleted during a distclean. I
+would definitely find it useful and if others agree, it might get committed.
+> Regards-- ~ Ashwin
+> 
 
-You can "make dirclean" to clean everything but your .config and the
-stuff in your custom DL_DIR.
+Apologies to all, I take it all back - there /is/ a menuconfig option,
+and if I specify /opt/dl, 'make distclean' does not clean it out !
 
-HTH,
+Nice one, buildroot !
+
+Now, back to the 'unrecognised emulation' problem ... grrr !
+
+Regards,
+MikeW
