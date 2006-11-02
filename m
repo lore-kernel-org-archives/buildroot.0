@@ -1,63 +1,34 @@
-From: Assen Stoyanov <softa@ttechgroup.com>
-Date: Thu, 2 Nov 2006 02:25:57 +0200
-Subject: [Buildroot] How to use a buildroot disk image.
-References: <1d09f8b80611011236m74428fd7x3aeb6c31e3605118@mail.gmail.com>
-Message-ID: <003001c6fe15$775a9030$6614a8c0@lap>
+From: renxuefeng <renxf_maillist@126.com>
+Date: Thu, 02 Nov 2006 14:42:30 +0800
+Subject: [Buildroot] link error "undefined reference to `__fini_array_start'"
+Message-ID: <45499356.7000505@126.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+i was build bash with buildroot.
+my target platform was arm720t, uclibc.
+when i compiling the bash-3.1 without -Wl,-elf2flt ,there was no error.
+but when i added the ldflags -Wl,-elf2flt , some link error showed as
+follows.
 
------ Original Message ----- 
-From: "Will Buik" <willbuik@gmail.com>
-To: <buildroot@uclibc.org>
-Sent: Wednesday, November 01, 2006 22:36
-Subject: [Buildroot] How to use a buildroot disk image.
+bash.elf2flt: In function `__uClibc_fini':
+/home/renxf/uclinux/cross_tool/buildroot/toolchain_build_arm_nofpu/gcc-3.4.3/gcc/config/arm/lib1funcs.asm:(.text+0x876f8):
+undefined reference to `__fini_array_start'
+/home/renxf/uclinux/cross_tool/buildroot/toolchain_build_arm_nofpu/gcc-3.4.3/gcc/config/arm/lib1funcs.asm:(.text+0x876fc):
+undefined reference to `__fini_array_end'
+bash.elf2flt: In function `__uClibc_main':
+/home/renxf/uclinux/cross_tool/buildroot/toolchain_build_arm_nofpu/gcc-3.4.3/gcc/config/arm/lib1funcs.asm:(.text+0x8788c):
+undefined reference to `__preinit_array_end'
+/home/renxf/uclinux/cross_tool/buildroot/toolchain_build_arm_nofpu/gcc-3.4.3/gcc/config/arm/lib1funcs.asm:(.text+0x87890):
+undefined reference to `__preinit_array_start'
+/home/renxf/uclinux/cross_tool/buildroot/toolchain_build_arm_nofpu/gcc-3.4.3/gcc/config/arm/lib1funcs.asm:(.text+0x8789c):
+undefined reference to `__init_array_end'
+/home/renxf/uclinux/cross_tool/buildroot/toolchain_build_arm_nofpu/gcc-3.4.3/gcc/config/arm/lib1funcs.asm:(.text+0x878a0):
+undefined reference to `__init_array_start'
+collect2: ld returned 1 exit status
+make[1]: *** [bash] Error 1
 
-
-> I'm really sorry if I missed this in the documentation, but how do I
-> install the file system image to an actual disk drive.  I have tried
-> using dd to write it to the disk as super block and also just to the
-> first partition, but this has not worked.  Thanks in advance.
-> _______________________________________________
-> buildroot mailing list
-> buildroot at uclibc.org
-> http://busybox.net/mailman/listinfo/buildroot
->
->
-> -- 
-> No virus found in this incoming message.
-> Checked by AVG Free Edition.
-> Version: 7.1.409 / Virus Database: 268.13.21/509 - Release Date: 
-> 10/31/2006
->
->
-
-Hi Will,
-I use this script, if you plan to use x86 arch and LILO boot loader, maybe 
-it helps you.
-
-p.p. writing a fresh MBR to the loopback device is problematic, use patch.
-
-Best Regards,
-Assen 
--------------- next part --------------
-A non-text attachment was scrubbed...
-Name: lilo.MBR-in-loopdev.patch
-Type: application/octet-stream
-Size: 690 bytes
-Desc: not available
-Url : http://busybox.net/lists/buildroot/attachments/20061102/041c0c80/attachment.obj 
--------------- next part --------------
-A non-text attachment was scrubbed...
-Name: makeimage.sh
-Type: application/octet-stream
-Size: 2425 bytes
-Desc: not available
-Url : http://busybox.net/lists/buildroot/attachments/20061102/041c0c80/attachment-0001.obj 
--------------- next part --------------
-No virus found in this outgoing message.
-Checked by AVG Free Edition.
-Version: 7.1.409 / Virus Database: 268.13.21/509 - Release Date: 10/31/2006
+anyone can help me?
