@@ -1,28 +1,37 @@
-From: Bernhard Fischer <rep.nop@aon.at>
-Date: Sat, 4 Nov 2006 20:21:14 +0100
-Subject: [Buildroot] LZMA in Buldroot.
-In-Reply-To: <20061006105147.GA7047@zelow.no>
-References: <20061004084732.GA15165@aon.at> <20061004144046.GA32537@zelow.no>
-	<20061004162028.GA18682@aon.at> <20061004163742.GA2306@zelow.no>
-	<20061004192606.GO17455@aon.at> <20061005072907.GA17753@zelow.no>
-	<20061005081826.GB27271@aon.at>
-	<20061006061248.GA2458@zelow.no> <20061006081808.GA5591@aon.at>
-	<20061006105147.GA7047@zelow.no>
-Message-ID: <20061104192109.GE18267@aon.at>
+From: Rob Landley <rob@landley.net>
+Date: Sat, 4 Nov 2006 18:48:41 -0500
+Subject: [Buildroot] Naming of libraries.
+In-Reply-To: <20061103081507.GA9631@zelow.no>
+References: <20061103081507.GA9631@zelow.no>
+Message-ID: <200611041848.41847.rob@landley.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Thomas,
+On Friday 03 November 2006 3:15 am, Thomas Lundquist wrote:
+> 
+> I am making packages for qwt and gd and I ended up with pondering about
+> what to call the package.
+> 
+> It does look like all libraries are prefixed with "lib" but most of them
+> have lib prefixed in their name anyway.
+> 
+> Couldn't find anything in the docs either.
+> 
+> So, should all libraries be prefixed with "lib"?
 
-On Fri, Oct 06, 2006 at 12:51:47PM +0200, Thomas Lundquist wrote:
->On Fri, Oct 06, 2006 at 10:18:08AM +0200, Bernhard Fischer wrote:
->> 
->> Excellent; looking forward to it
->
->ok, here it is, lzma only and it does produce a rootfs.
+When you tell gcc "gcc -lcurses" it looks for libcurses in the library search 
+path.  Because gcc looks for things starting with "lib", people add that to 
+their library names to use gcc.  (Everybody agrees ".exe" is stupid for 
+executables, and libraries already have .a or .so anyway, but this is the FSF 
+we're talking about.  Making sense was never a strong suit with them.)
 
-I'm sorry, but i now see that i almost forgot to check your patch in.
-Applied as r16495, thanks!
+(And yes, I honestly think they believe "-liberty" as a command line option is 
+funny or something, hence libiberty.a)
+
+Rob
+-- 
+"Perfection is reached, not when there is no longer anything to add, but
+when there is no longer anything to take away." - Antoine de Saint-Exupery
