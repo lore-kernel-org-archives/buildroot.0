@@ -1,36 +1,33 @@
 From: Thomas Lundquist <lists@zelow.no>
-Date: Sun, 5 Nov 2006 09:27:26 +0100
-Subject: [Buildroot] Naming of libraries.
-In-Reply-To: <200611041848.41847.rob@landley.net>
-References: <20061103081507.GA9631@zelow.no>
-	<200611041848.41847.rob@landley.net>
-Message-ID: <20061105082726.GA1158@zelow.no>
+Date: Sun, 5 Nov 2006 10:13:00 +0100
+Subject: [Buildroot] make from scratch bugs..
+Message-ID: <20061105091300.GA11317@zelow.no>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Sat, Nov 04, 2006 at 06:48:41PM -0500, Rob Landley wrote:
-> 
-> When you tell gcc "gcc -lcurses" it looks for libcurses in the library search 
-> path.  Because gcc looks for things starting with "lib", people add that to 
-> their library names to use gcc.  (Everybody agrees ".exe" is stupid for 
-> executables, and libraries already have .a or .so anyway, but this is the FSF 
-> we're talking about.  Making sense was never a strong suit with them.)
+just a simple .config, clean buildroot kernel headers 2.6.18, uClibC
+0.9.28 (aka, not a snapshot).
 
-hehe, ok.
+make and then:
 
-the question was more of a naming convention issue in buildroot but I
-guess it's just like that for other purposes.
++ ./extra/scripts/fix_includes.sh -k
+/home/thomasez/Buildroot/buildroot.clean/toolchain_build_i686/linux -t
+i386 -n
+Unable to determine version for kernel headers
+provided in directory
+/home/thomasez/Buildroot/buildroot.clean/toolchain_build_i686/linux
+make[1]: *** [headers] Error 1
+make[1]: Leaving directory
+`/home/thomasez/Buildroot/buildroot.clean/toolchain_build_i686/uClibc-0.9.28'
+make: ***
+[/home/thomasez/Buildroot/buildroot.clean/toolchain_build_i686/uClibc-0.9.28/.configured]
+Error 2
 
-(slang and ncurses are not prefixed with lib, so I guess it's no real
-issue.)
-
-> (And yes, I honestly think they believe "-liberty" as a command line option is 
-> funny or something, hence libiberty.a)
-
-but it is :=)
+this is both using a .config that worked a month or two ago and a fresh
+one.
 
 
 Thomas.
