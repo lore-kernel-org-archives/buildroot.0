@@ -1,39 +1,33 @@
 From: Thomas Lundquist <lists@zelow.no>
-Date: Sun, 5 Nov 2006 12:39:57 +0100
-Subject: [Buildroot] make from scratch bugs..
-In-Reply-To: <20061105091300.GA11317@zelow.no>
-References: <20061105091300.GA11317@zelow.no>
-Message-ID: <20061105113957.GA14530@zelow.no>
+Date: Sun, 5 Nov 2006 13:05:46 +0100
+Subject: [Buildroot] Suggestion, move TARGET_DIR
+Message-ID: <20061105120546.GB14530@zelow.no>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Sun, Nov 05, 2006 at 10:13:00AM +0100, Thomas Lundquist wrote:
-> 
-> just a simple .config, clean buildroot kernel headers 2.6.18, uClibC
-> 0.9.28 (aka, not a snapshot).
-> 
-> make and then:
-> 
-> + ./extra/scripts/fix_includes.sh -k
-> /home/thomasez/Buildroot/buildroot.clean/toolchain_build_i686/linux -t
-> i386 -n
-> Unable to determine version for kernel headers
-> provided in directory
-> /home/thomasez/Buildroot/buildroot.clean/toolchain_build_i686/linux
-> make[1]: *** [headers] Error 1
-> make[1]: Leaving directory
-> `/home/thomasez/Buildroot/buildroot.clean/toolchain_build_i686/uClibc-0.9.28'
-> make: ***
-> [/home/thomasez/Buildroot/buildroot.clean/toolchain_build_i686/uClibc-0.9.28/.configured]
-> Error 2
-> 
-> this is both using a .config that worked a month or two ago and a fresh
-> one.
+Hello again.
 
-no problem with kernel headers 2.6.12.
+I have always felt that TARGET_DIR was kinda misplaced. build_<ARCH> is
+for the source and staging (well, maybe not even staging).
+
+so, what about making target_<ARCH> instead? 
+
+I am working on autonomous packages (choose between making a pcakage a
+part of the root file system or an autonomous tarball) and I am using 
+TARGET_PKG_DIR for that. right now it's build_<ARCH>/packages.
+
+but target_<ARCH>/root and target_<ARCH>/packages seems more right to
+me.
+
+but foloowing this logic would make us have to sed thorugh the whole
+tree to change TARGET_DIR to TARGET_ROOT_DIR but that ain't exactly
+difficult to do. (I can make a patch for it).
+
+anyone with anything to say which likes it and will help getting the
+patches in?
 
 
 Thomas.
