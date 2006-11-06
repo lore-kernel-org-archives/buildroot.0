@@ -1,30 +1,32 @@
-From: Thomas Lundquist <lists@zelow.no>
-Date: Mon, 6 Nov 2006 10:50:31 +0100
-Subject: [Buildroot] Suggestion, move TARGET_DIR
-In-Reply-To: <014601c70176$4b3fa760$c94565d5@atmel.com>
-References: <20061105120546.GB14530@zelow.no>
-	<014601c70176$4b3fa760$c94565d5@atmel.com>
-Message-ID: <20061106095031.GA9801@zelow.no>
+From: Konstantin Kletschke <kletschke@synertronixx.de>
+Date: Mon, 6 Nov 2006 10:59:17 +0100
+Subject: [Buildroot] echo cat, segfault with char device
+Message-ID: <20061106095917.GB5528@synertronixx3>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Mon, Nov 06, 2006 at 08:22:24AM +0100, Ulf Samuelsson wrote:
-> 
-> If you have, lets say, several ARM targets, it makes sense to have several "root"
-> which you can rebuild without recompiling each package.
+If I do "echo "12" > 12" echo from busybox works fine, but if I try to
+cat or echo something into a char device sometimes I get a segfault, and
+sometimes the whole system hangs.
+Sometimes the System hangs first time and I can C-c out, but never on
+the second time.
 
-and both buld_<ARCH> and target_<ARCH> ends up as the same thing.
+I have generated a gcc-3.4.6-uClibc-0.9.28 softfload toolchain with
+arm920t as a target. As I can see the other stuff works fine, inspite of
+the cat and echo error.
 
-but if I understand you, you'd like target_<TARGET_NAME> or
-target_<ARCH>_<TARGET_NAME> so we can build for more than one target?
+Does some experienced guru know, where I have to poke into the sytem to
+get the bug? May be the bug sits in fron of the screen though...
 
-> Also it would make sense to be able to generate binary rpm's for each package.
+Any uClibc or other option known to trigger some behaviour?
 
-Landley mentioned dependencies but it shouldn't be that hard if we drop 
-that headache.
+I activated NPTL AFAIK, could this cause such an error?
 
+Regards, Konsti
 
-Thomas.
+-- 
+GPG KeyID EF62FCEF
+Fingerprint: 13C9 B16B 9844 EC15 CC2E  A080 1E69 3FDA EF62 FCEF
