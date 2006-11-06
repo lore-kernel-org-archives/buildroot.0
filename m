@@ -1,28 +1,52 @@
-From: Peter Korsgaard <peter.korsgaard@barco.com>
-Date: Mon, 06 Nov 2006 14:30:06 +0100
-Subject: [Buildroot] Persistent tarball repository
-In-Reply-To: <loom.20061101T151612-639@post.gmane.org> (MikeW's message of
-	"Wed, 1 Nov 2006 14:23:36 +0000 (UTC)")
-References: <loom.20061101T151612-639@post.gmane.org>
-Message-ID: <87y7qozorl.fsf@sleipner.barco.com>
+From: Ulf Samuelsson <ulfs@dof.se>
+Date: Mon,  6 Nov 2006 21:57:51 +0200
+Subject: [Buildroot] Suggestion, move TARGET_DIR
+Message-ID: <DQ6KSKMJS5g8.cLWMbj8T@mailout.dof.se>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Mike" == MikeW  <mw_phil@yahoo.co.uk> writes:
 
-Hi,
+> 
+> If you have, lets say, several ARM targets, it makes sense to have several "root"
+> which you can rebuild without recompiling each package.
 
-Mike> May I ask if there is a setting to allow these files to be
-Mike> cached somewhere that 'distclean' doesn't clear out ?  Might
-Mike> also be useful on a server in a team environment to ensure
-Mike> everyone uses the same reference downloads without local
-Mike> duplication and time penalty.
+and both buld_<ARCH> and target_<ARCH> ends up as the same thing.
 
-We use a shared dl directory on a NFS server (setting
-BR2_DL_DIR). Make distclean doesn't delete that.
+but if I understand you, you'd like target_<TARGET_NAME> or
+target_<ARCH>_<TARGET_NAME> so we can build for more than one target?
 
--- 
-Bye, Peter Korsgaard
+=> Actually I'd like
+target_<ARCH>/<TARGET_NAME>
+
+and under that I'd
+like to put all things 
+related to that target
+including "root",
+the generated file system(s)
+the build for u-boot and
+linux so I can have 
+several configurations.
+Actually every package
+which have their own
+configuration file should
+be in a target specific
+directory, so maybe even
+busybox.
+build_<ARCH> should be used when you can use the same package for several targets.
+
+/Ulf
+
+> Also it would make sense to be able to generate binary rpm's for each package.
+
+Landley mentioned dependencies but it shouldn't be that hard if we drop 
+that headache.
+
+
+Thomas.
+_______________________________________________
+buildroot mailing list
+buildroot at uclibc.org
+http://busybox.net/mailman/listinfo/buildroot
