@@ -1,22 +1,24 @@
-From: MikeW <mw_phil@yahoo.co.uk>
-Date: Tue, 7 Nov 2006 18:54:51 +0000 (UTC)
-Subject: [Buildroot] =?utf-8?q?Building_libstdc++=3A_=22=5F=5Fctype=5Ftoup?=
-	=?utf-8?q?low=5Ft_has_incompatible_type=22?=
-Message-ID: <loom.20061107T195057-525@post.gmane.org>
+From: Will Buik <willbuik@gmail.com>
+Date: Tue, 7 Nov 2006 15:28:10 -0500
+Subject: [Buildroot] Cross compiling GRUB 1.95
+Message-ID: <1d09f8b80611071228r15abebc9k152444a6c512b1ac@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-(Buildroot snapshot 2006-10-31)
-Building gcc-3.4.x for ARM and enabling libstdc++ support I get the above error.
+I have gotten the buildroot cross compiler working to compile some
+simple programs, but when trying to compile GRUB 1.95 I am running
+into errors.  The configure script fails, giving me the error:
 
-It is mentioned in the Mantis system (id 904) but the final note says it is not a
-uClibc problem, and the issue is closed.
+checking if GCC has the regparm=3 bug... configure: error: cannot run
+test program while cross compiling
 
-Presumably the patch should have been included with current versions of
-Buildroot, but it has been omitted ?
+I sent a message similar to this to the grub message board several
+days ago but I have gotten no response.  After looking it up on the
+internet it said to try to use a newer version of autoconf to
+regenerate the packaged configure script, but this did not solve my
+problem.
 
-Regards,
-Mike
+How can I bypass this test or otherwise get it to compile?
