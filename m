@@ -1,39 +1,45 @@
-From: Ashwin Bihari <abihari@gmail.com>
-Date: Wed, 8 Nov 2006 09:32:40 -0500
-Subject: [Buildroot] How to add a (toolchain) patch
-In-Reply-To: <loom.20061108T150042-738@post.gmane.org>
-References: <loom.20061108T150042-738@post.gmane.org>
-Message-ID: <1f11a5490611080632o1a1d377bi2a1019916e696220@mail.gmail.com>
+From: Mircha Emanuel `ryuujin` D'Angelo <ryuujin@olografix.org>
+Date: Wed, 08 Nov 2006 15:23:03 +0100
+Subject: [Buildroot] using the buildroot toolchain
+Message-ID: <4551E847.60606@olografix.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 11/8/06, MikeW <mw_phil@yahoo.co.uk> wrote:
->
-> It would appear that I can add a patch file to (e.g.) gcc
-> by saving the file in the toolchain/gcc/3.x.y directory.
->
-> Is there a file naming requirement, or will any files
-> in the directory be applied as patches ?
->
-> (I have a patch file which is supposed to fix something, but it
-> doesn't appear to be fixed ...)
->
-> Regards,
-> MikeW
->
+-----BEGIN PGP SIGNED MESSAGE-----
+Hash: SHA1
 
-Mike,
+Hi all,
+this is my first post here :)
 
-If you check out the gcc-uclibc-3.x.mk file it indicates that any "*.patch"
-file will be applied. So you need only end it with that.
+I built a rootfs using buildroot and it works fine :).
 
-Regards
+Now, I have to build my own applications and I'm wondering how can I use
+the toolchain created with buildroot.
 
--- 
-~ Ashwin
--------------- next part --------------
-An HTML attachment was scrubbed...
-URL: http://busybox.net/lists/buildroot/attachments/20061108/e8219ed8/attachment.htm 
+I know I have the toolchain in {$BUILDROOT}/build_{$arch}/staging_dir/
+but I don't know how I can compile other applications with uClibc.
+
+For example, if I wanna build A-0.0. I export the toolchain path, then I
+go in A-0.0 directory.
+
+And now? I would have to do ./configure, but there is bad cause the
+script is looking on my host and not on my toolchain. I can't chroot in
+toolchain path cause I don't have make and other utility.
+
+I hope someone could explain me... :)
+
+thanks all
+mircha
+
+PS: sorry for my english
+-----BEGIN PGP SIGNATURE-----
+Version: GnuPG v1.2.7 (GNU/Linux)
+Comment: Using GnuPG with Thunderbird - http://enigmail.mozdev.org
+
+iD8DBQFFUehH0CI10whGevwRAmgHAJwLfEstwIbypDPD0hJrYimzxLb2/gCdGdWr
+jfsqkcduyj0cSQS7/TGu6bQ=
+=+TyE
+-----END PGP SIGNATURE-----
