@@ -1,35 +1,39 @@
-From: MikeW <mw_phil@yahoo.co.uk>
-Date: Wed, 8 Nov 2006 14:17:57 +0000 (UTC)
-Subject: [Buildroot] Building libstdc++: will Buildroot build uClibc++ ?
-References: <loom.20061107T195057-525@post.gmane.org>
-Message-ID: <loom.20061108T150727-429@post.gmane.org>
+From: Ashwin Bihari <abihari@gmail.com>
+Date: Wed, 8 Nov 2006 09:32:40 -0500
+Subject: [Buildroot] How to add a (toolchain) patch
+In-Reply-To: <loom.20061108T150042-738@post.gmane.org>
+References: <loom.20061108T150042-738@post.gmane.org>
+Message-ID: <1f11a5490611080632o1a1d377bi2a1019916e696220@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-MikeW <mw_phil@...> writes:
-
-> 
-> (Buildroot snapshot 2006-10-31)
-> Building gcc-3.4.x for ARM and enabling libstdc++ support I get
-the above error.
-> 
-> It is mentioned in the Mantis system (id 904) but the final note
-says it is not a
-> uClibc problem, and the issue is closed.
-> 
-> Presumably the patch should have been included with current versions of
-> Buildroot, but it has been omitted ?
-> 
+On 11/8/06, MikeW <mw_phil@yahoo.co.uk> wrote:
+>
+> It would appear that I can add a patch file to (e.g.) gcc
+> by saving the file in the toolchain/gcc/3.x.y directory.
+>
+> Is there a file naming requirement, or will any files
+> in the directory be applied as patches ?
+>
+> (I have a patch file which is supposed to fix something, but it
+> doesn't appear to be fixed ...)
+>
 > Regards,
-> Mike
-> 
+> MikeW
+>
 
-I note there is a uClibc C++ library, but apparently no Buildroot option
-to build it - how should one enable build/use of this library in place of
-libstdc++ ?
+Mike,
 
-Thanks,
-Mike
+If you check out the gcc-uclibc-3.x.mk file it indicates that any "*.patch"
+file will be applied. So you need only end it with that.
+
+Regards
+
+-- 
+~ Ashwin
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: http://busybox.net/lists/buildroot/attachments/20061108/e8219ed8/attachment.htm 
