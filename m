@@ -1,40 +1,24 @@
-From: Benjamin Delagoutte <benjamin.delagoutte@gmail.com>
-Date: Mon, 13 Nov 2006 15:54:22 +0100
-Subject: [Buildroot] Are skel.tar.gz and target_skeleton folder duplicates ?
-Message-ID: <30f88efd0611130654w598ff5daj8015e3548e2f7b7d@mail.gmail.com>
+From: Thomas Lundquist <lists@zelow.no>
+Date: Sun, 12 Nov 2006 10:47:59 +0100
+Subject: [Buildroot] make from scratch bugs..
+In-Reply-To: <20061105113957.GA14530@zelow.no>
+References: <20061105091300.GA11317@zelow.no> <20061105113957.GA14530@zelow.no>
+Message-ID: <20061112094759.GA26518@zelow.no>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi,
+On Sun, Nov 05, 2006 at 12:39:57PM +0100, Thomas Lundquist wrote:
+> 
+> no problem with kernel headers 2.6.12.
 
-While working on writing a device profile for Buildroot, I noticed Buildroot
-uses both a tarball (skel.tar.gz) and a folder (target_skeleton) to build
-the rootfs tree structure.
+It's the script fix_includes.sh in extra/scripts that doesen't
+understand the new versioning. I just copied the script from the latest
+uClibc snapshot and it seemed to work.
 
-As far as I understand, the tarball is first extracted, then we copy files
-found in target_skeleton to the resulting tree.
+(so, it's a sortof uClibc "bug" I guess.)
 
-$(TARGET_DIR):
-        if [ -f "$(TARGET_SKELETON)" ] ; then \
-                $(ZCAT) $(TARGET_SKELETON) | tar -C $(BUILD_DIR) -xf -; \
-        fi;
-        if [ -d "$(TARGET_SKEL_DIR)" ] ; then \
-                cp -fa $(TARGET_SKEL_DIR)/* $(TARGET_DIR)/; \
-        fi;
-        touch $(STAGING_DIR)/.fakeroot.00000
-        -find $(TARGET_DIR) -type d -name CVS | xargs rm -rf
-        -find $(TARGET_DIR) -type d -name .svn | xargs rm -rf
 
-Eventually I don't really understand why Buildroot makes use of two
-different prebuilt trees. Do someone mind explaining me the goals of this
-weird strategy ?
-
-Thank you.
-
-Benjamin
--------------- next part --------------
-An HTML attachment was scrubbed...
-URL: http://busybox.net/lists/buildroot/attachments/20061113/74dff4d1/attachment.htm 
+Thomas.
