@@ -1,38 +1,18 @@
-From: Erik Andersen <andersen@codepoet.org>
-Date: Tue, 14 Nov 2006 23:56:26 -0700
-Subject: [Buildroot] Are skel.tar.gz and target_skeleton folder
-	duplicates ?
-In-Reply-To: <30f88efd0611130654w598ff5daj8015e3548e2f7b7d@mail.gmail.com>
-References: <30f88efd0611130654w598ff5daj8015e3548e2f7b7d@mail.gmail.com>
-Message-ID: <20061115065626.GA7600@codepoet.org>
+From: MikeW <mw_phil@yahoo.co.uk>
+Date: Mon, 13 Nov 2006 16:26:29 +0000 (UTC)
+Subject: [Buildroot] Configure buildroot to provide /sbin/init (link to
+	busybox?)
+Message-ID: <loom.20061113T172233-107@post.gmane.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Mon Nov 13, 2006 at 03:54:22PM +0100, Benjamin Delagoutte wrote:
-> Eventually I don't really understand why Buildroot makes use of
-> two different prebuilt trees. Do someone mind explaining me the
-> goals of this weird strategy ?
+Should there be (is there !) a menuconfig way for buildroot to provide
+a /sbin/init entry in the filesystem ?
+If you don't specify 'init=...' at boot time, the kernel complains
+about 'no init'.
 
-We used to use CVS as our revision control system.  CVS refused
-to store and restore empty directories and symlinks.  As a result
-we ended up using a tarball for these items rather than a simple
-directory full of stuff.  But using a tarball proved to be a real
-pain, since using a tarball to store files which tend to be
-modified (such as the stuff under /etc for example) is unwieldly
-at best.  So I created the current hybrid approach.
-
-Subversion is a much more sane revision control system, so I
-think we can probably consolidate things now.
-
-	<sound of hacking in the distance>
-
-Fixed.  Thanks for bringing this up.
-
- -Erik
-
---
-Erik B. Andersen             http://codepoet-consulting.com/
---This message was written using 73% post-consumer electrons--
+Regards,
+Mike
