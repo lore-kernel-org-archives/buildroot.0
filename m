@@ -1,39 +1,68 @@
-From: MikeW <mw_phil@yahoo.co.uk>
-Date: Wed, 15 Nov 2006 14:47:23 +0000 (UTC)
+From: nina.holly at aerende.com <nina.holly@aerende.com>
+Date: Wed, 15 Nov 2006 07:04:47 -0800 (PST)
 Subject: [Buildroot] C++ cross compiler
+In-Reply-To: <20061115125910.a375dcbd.philippe.ney@pardes.ws>
 References: <22099.82.171.61.116.1163581168.squirrel@webmail.aerende.com>
-Message-ID: <loom.20061115T152329-249@post.gmane.org>
+	<20061115125910.a375dcbd.philippe.ney@pardes.ws>
+Message-ID: <23833.82.171.61.116.1163603087.squirrel@webmail.aerende.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
- <nina.holly@...> writes:
+Hi Philippe,
+    Could you tell me how you were able to
+create a c++ cross compiler for ARM?   I.E.
+can you tell me which boxes you checked?
 
-> 
-> Hi,
->     Is it possible to generate a C++ (g++) cross compiler
-> for ARM usng buildroot?  I have been able to generate
-> a GCC cross compiler for ARM using buildroot.
-> 
-> Thanks for any pointers.
-> 
-> Nina
-> 
-This is in make menuconfig: Toolchain options: Build/install
-c++ compiler and libstdc++
+    The following is what I did which doesn't
+seem to work.
 
-Also, if you get the problem raised here:
-http://bugs.uclibc.org/view.php?id=904
+In make menuconfig in the "toolchain" menu I checked
 
-applying the patch in the first Note solves the problem.
-http://gcc.gnu.org/bugzilla/attachment.cgi?id=6132
+[*] Build/install c++ compiler and libstdc++
 
-Method: save the text of the patch from the link, as something like
-libstdc++-3.4.0-uclibc.patch and then copy the file to toolchain/gcc/<version>/
+and it ended up setting in .config :
 
-You will need to repatch & rebuild the toolchain ... make dirclean first.
+BR2_INSTALL_LIBSTDCPP=y
 
-Regards,
-MikeW
+but did not set:
+
+BR2_PACKAGE_LIBCGICC or
+BR2_PACKAGE_QTE
+
+After running make, arm-linux-g++ does not show up in the
+bin directory specified in the "Build options" menu section
+for "Toolchain and header file location".
+
+1. Is there another make menuconfig option that needs to
+   be set to build a C++ cross compiler?
+
+2. When I googled "buildroot c++ cross compiler" other people
+   were not able to create a c++ cross compiler w/buildroot and
+   I didn't see a clear resolution from the responses.
+
+Thanks again for any pointers.
+
+Nina
+
+>> Hi,
+>>     Is it possible to generate a C++ (g++) cross compiler
+>> for ARM usng buildroot?  I have been able to generate
+>> a GCC cross compiler for ARM using buildroot.
+>>
+>> Thanks for any pointers.
+>
+> Sure.
+>
+> $ make menuconfig
+>
+> And check the right box.
+>
+> Philippe
+> _______________________________________________
+> buildroot mailing list
+> buildroot at uclibc.org
+> http://busybox.net/mailman/listinfo/buildroot
+>
