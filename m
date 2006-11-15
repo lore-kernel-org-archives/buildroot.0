@@ -1,27 +1,47 @@
-From: MikeW <mw_phil@yahoo.co.uk>
-Date: Mon, 13 Nov 2006 16:19:55 +0000 (UTC)
-Subject: [Buildroot] Toolchain clean ? rebuild with extra patch
-References: <loom.20061109T101231-410@post.gmane.org>
-	<20061109100315.GB29635@aon.at>
-Message-ID: <loom.20061113T171859-568@post.gmane.org>
+From: Benjamin Delagoutte <benjamin.delagoutte@gmail.com>
+Date: Wed, 15 Nov 2006 09:18:13 +0100
+Subject: [Buildroot] Are skel.tar.gz and target_skeleton folder
+	duplicates ?
+In-Reply-To: <20061115065626.GA7600@codepoet.org>
+References: <30f88efd0611130654w598ff5daj8015e3548e2f7b7d@mail.gmail.com>
+	<20061115065626.GA7600@codepoet.org>
+Message-ID: <30f88efd0611150018i543b8588paa0fb9f59e7c2ac5@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Bernhard Fischer <rep.nop@...> writes:
+Thank you for having cleared things.
 
-> 
-> On Thu, Nov 09, 2006 at 09:18:01AM +0000, MikeW wrote:
-> >All of the toolchain-build contents persist after make clean, distclean,
-> >so which 'clean' variant should be used if you want to rebuild the toolchain ?
-> 
-> Try make dirclean.
-> 
-
-Thanks - that worked.
-I expected 'distclean' to scrub back to distribution cleanliness !
-
-Regards,
-Mike
+2006/11/15, Erik Andersen <andersen@codepoet.org>:
+>
+> On Mon Nov 13, 2006 at 03:54:22PM +0100, Benjamin Delagoutte wrote:
+> > Eventually I don't really understand why Buildroot makes use of
+> > two different prebuilt trees. Do someone mind explaining me the
+> > goals of this weird strategy ?
+>
+> We used to use CVS as our revision control system.  CVS refused
+> to store and restore empty directories and symlinks.  As a result
+> we ended up using a tarball for these items rather than a simple
+> directory full of stuff.  But using a tarball proved to be a real
+> pain, since using a tarball to store files which tend to be
+> modified (such as the stuff under /etc for example) is unwieldly
+> at best.  So I created the current hybrid approach.
+>
+> Subversion is a much more sane revision control system, so I
+> think we can probably consolidate things now.
+>
+>         <sound of hacking in the distance>
+>
+> Fixed.  Thanks for bringing this up.
+>
+> -Erik
+>
+> --
+> Erik B. Andersen             http://codepoet-consulting.com/
+> --This message was written using 73% post-consumer electrons--
+>
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: http://busybox.net/lists/buildroot/attachments/20061115/efed4cf6/attachment.html 
