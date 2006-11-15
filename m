@@ -1,26 +1,27 @@
-From: Philippe Ney <philippe.ney@pardes.ws>
-Date: Wed, 15 Nov 2006 12:59:10 +0100
-Subject: [Buildroot] C++ cross compiler
-In-Reply-To: <22099.82.171.61.116.1163581168.squirrel@webmail.aerende.com>
-References: <22099.82.171.61.116.1163581168.squirrel@webmail.aerende.com>
-Message-ID: <20061115125910.a375dcbd.philippe.ney@pardes.ws>
+From: MikeW <mw_phil@yahoo.co.uk>
+Date: Wed, 15 Nov 2006 13:57:08 +0000 (UTC)
+Subject: [Buildroot] Better package 'howto' documentation - anywhere ?
+Message-ID: <loom.20061115T145029-246@post.gmane.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-> Hi,
->     Is it possible to generate a C++ (g++) cross compiler
-> for ARM usng buildroot?  I have been able to generate
-> a GCC cross compiler for ARM using buildroot.
-> 
-> Thanks for any pointers.
+I'd be grateful if anyone had a link to details / guidelines
+for adding a package containing possibly more than one Library target.
 
-Sure.
+The basic doc with Buildroot only considers one Binary target, and
+so there is no involvement with using objects in the Staging directory
+(headers and libraries), or with optional targets configured from Menuconfig.
 
-$ make menuconfig
+Yes, I can and have looked in other packages, but it would be good
+to have a 'vanilla' case, the others seem to have different exceptional
+requirements ! (And have been done in slightly different styles.)
 
-And check the right box.
+Alternatively a more theoretical treatment, that would allow you
+to derive the required steps, might be useful.
 
-Philippe
+Thanks,
+
+MikeW
