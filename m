@@ -1,60 +1,35 @@
-From: Lars Munch <lars@segv.dk>
-Date: Wed, 15 Nov 2006 21:07:00 +0100
-Subject: [Buildroot] [PATCH][RESEND] libgcc_s still missing
-Message-ID: <20061115200659.GA24410@tuxedo.home.lan>
+From: nina.holly at aerende.com <nina.holly@aerende.com>
+Date: Wed, 15 Nov 2006 12:59:55 -0800 (PST)
+Subject: [Buildroot] C++ cross compiler]
+Message-ID: <29305.82.171.61.116.1163624395.squirrel@webmail.aerende.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi All
+Phillipe,
+    If by staging_dir, you mean where the cross compiler
+executables go, there is no arm-linux-uclibc-g++
+in the bin directory where the arm-linux-uclibc-gcc
+executable is.
 
-This patch got ignored the first time, so here it is again:
+1.  I am using gcc-3.4.2, binutils-2.16.1 and a uClibc
+    snapshot from around Aug. 1, 2006.
 
-The BR2_GCC_SHARED_LIBGCC fix does not fix all BR2_GCC_SHARED_LIBGCC
-related issues.
+2.  In toolchain/gcc there is a gcc-uclibc-3.x.mk file.
+    Is this the .mk file you were referring to?
 
-buildroot/toolchain/gcc/gcc-uclibc-3.x.mk:
-------------------------------------------------------------------------               
-r16442 | jacmet | 2006-10-26 17:15:08 +0200 (Thu, 26 Oct 2006) | 1 line
 
-Fix missing libgcc_s.so.1 with BR2_GCC_SHARED_LIBGCC                    
-------------------------------------------------------------------------
+Nina
 
-If I delete my build_ARCH/root directory and run "make", the library
-files libgcc_s* are missing again.
-
-The attached patch makes sure that libgcc_s.so.1 and friends always gets
-installed in TARGET_DIR.
-
-Regards
-Lars Munch
-
--------------- next part --------------
-Index: buildroot/toolchain/gcc/gcc-uclibc-3.x.mk
-===================================================================
---- buildroot/toolchain/gcc/gcc-uclibc-3.x.mk	(revision 16475)
-+++ buildroot/toolchain/gcc/gcc-uclibc-3.x.mk	(working copy)
-@@ -250,6 +250,9 @@
- 	#
- 	# Ok... that's enough of that.
- 	#
-+	touch $(GCC_BUILD_DIR2)/.installed
-+
-+gcc-target-libs: $(GCC_BUILD_DIR2)/.installed
- ifeq ($(BR2_GCC_SHARED_LIBGCC),y)
- 	# These are in /lib, so...
- 	rm -rf $(TARGET_DIR)/usr/lib/libgcc_s*.so*
-@@ -266,10 +269,9 @@
- 	-cp -a $(STAGING_DIR)/usr/lib/security/libgcj.security $(TARGET_DIR)/usr/lib/security/
- 	-cp -a $(STAGING_DIR)/usr/lib/security/classpath.security $(TARGET_DIR)/usr/lib/security/
- endif
--	touch $(GCC_BUILD_DIR2)/.installed
- 
- gcc: uclibc-configured binutils gcc_initial $(LIBFLOAT_TARGET) uclibc \
--	$(GCC_BUILD_DIR2)/.installed $(GCC_TARGETS)
-+	$(GCC_BUILD_DIR2)/.installed gcc-target-libs $(GCC_TARGETS)
- 
- gcc-source: $(DL_DIR)/$(GCC_SOURCE)
- 
+> You ought to have something like :
+> buildroot/build_arm_nofpu/staging_dir/bin/arm-linux-uclibc-g++
+> (gcc-4.0.3 / binutils-2.17 / uClibc-0.9.28)
+> If the c++ support is not generated in your compiler, maybe you have to
+check in the corresponding .mk file if the right parameters are used.
+Philippe
+> _______________________________________________
+> buildroot mailing list
+> buildroot at uclibc.org
+> http://busybox.net/mailman/listinfo/buildroot
