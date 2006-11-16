@@ -1,43 +1,50 @@
-From: Philippe Ney <philippe.ney@pardes.ws>
-Date: Thu, 16 Nov 2006 10:44:41 +0100
-Subject: [Buildroot] C++ cross compiler]
-In-Reply-To: <29305.82.171.61.116.1163624395.squirrel@webmail.aerende.com>
-References: <29305.82.171.61.116.1163624395.squirrel@webmail.aerende.com>
-Message-ID: <20061116104441.17382885.philippe.ney@pardes.ws>
+From: jacmet at uclibc.org <jacmet@uclibc.org>
+Date: Thu, 16 Nov 2006 01:55:20 -0800 (PST)
+Subject: [Buildroot] svn commit: trunk/buildroot/toolchain/gcc
+Message-ID: <20061116095520.2C13848594@busybox.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-> Phillipe,
->     If by staging_dir, you mean where the cross compiler
-> executables go, there is no arm-linux-uclibc-g++
-> in the bin directory where the arm-linux-uclibc-gcc
-> executable is.
+Author: jacmet
+Date: 2006-11-16 01:55:20 -0800 (Thu, 16 Nov 2006)
+New Revision: 16536
 
-Yes, where the cross exec goes. This is defined by buildroot in fact.
-I just tried to generate a cross-compiler with the same settings as yours
-and it worked. Maybe you have to restart from scratch, try others gcc,
-binutils, uClibc versions.
-
-As said Mike
-
-  No, there should literally be a directory called
-  "buildroot/build_arm_nofpu/staging_dir/bin/"
-  (the "build_arm_nofpu" bit depends on your build settings)
-  which gets created as part of your buildroot make.
-
-You also could have a look at the gumstix project. They use gcc-3.4.5 and
-I guess they generate a C++ cross-compiler.
+Log:
+Make sure libgcc_s.so.1 and friends always gets installed in TARGET_DIR.
+Patch by Lars Munch.
 
 
-> 1.  I am using gcc-3.4.2, binutils-2.16.1 and a uClibc
->     snapshot from around Aug. 1, 2006.
-> 
-> 2.  In toolchain/gcc there is a gcc-uclibc-3.x.mk file.
->     Is this the .mk file you were referring to?
+Modified:
+   trunk/buildroot/toolchain/gcc/gcc-uclibc-3.x.mk
 
-Yes
 
-Philippe
+Changeset:
+Modified: trunk/buildroot/toolchain/gcc/gcc-uclibc-3.x.mk
+===================================================================
+--- trunk/buildroot/toolchain/gcc/gcc-uclibc-3.x.mk	2006-11-16 02:27:24 UTC (rev 16535)
++++ trunk/buildroot/toolchain/gcc/gcc-uclibc-3.x.mk	2006-11-16 09:55:20 UTC (rev 16536)
+@@ -250,6 +250,9 @@
+ 	#
+ 	# Ok... that's enough of that.
+ 	#
++	touch $(GCC_BUILD_DIR2)/.installed
++
++gcc-target-libs: $(GCC_BUILD_DIR2)/.installed
+ ifeq ($(BR2_GCC_SHARED_LIBGCC),y)
+ 	# These are in /lib, so...
+ 	rm -rf $(TARGET_DIR)/usr/lib/libgcc_s*.so*
+@@ -266,10 +269,9 @@
+ 	-cp -a $(STAGING_DIR)/usr/lib/security/libgcj.security $(TARGET_DIR)/usr/lib/security/
+ 	-cp -a $(STAGING_DIR)/usr/lib/security/classpath.security $(TARGET_DIR)/usr/lib/security/
+ endif
+-	touch $(GCC_BUILD_DIR2)/.installed
+ 
+ gcc: uclibc-configured binutils gcc_initial $(LIBFLOAT_TARGET) uclibc \
+-	$(GCC_BUILD_DIR2)/.installed $(GCC_TARGETS)
++	$(GCC_BUILD_DIR2)/.installed gcc-target-libs $(GCC_TARGETS)
+ 
+ gcc-source: $(DL_DIR)/$(GCC_SOURCE)
+ 
