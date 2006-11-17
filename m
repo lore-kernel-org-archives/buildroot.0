@@ -1,7 +1,7 @@
 From: aldot at uclibc.org <aldot@uclibc.org>
-Date: Fri, 17 Nov 2006 03:54:45 -0800 (PST)
-Subject: [Buildroot] svn commit: trunk/buildroot/package/sfdisk
-Message-ID: <20061117115445.7111B48613@busybox.net>
+Date: Fri, 17 Nov 2006 04:14:31 -0800 (PST)
+Subject: [Buildroot] svn commit: trunk/buildroot/package/pppd
+Message-ID: <20061117121431.B42BE4860C@busybox.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -9,56 +9,42 @@ Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
 Author: aldot
-Date: 2006-11-17 03:54:45 -0800 (Fri, 17 Nov 2006)
-New Revision: 16558
+Date: 2006-11-17 04:14:31 -0800 (Fri, 17 Nov 2006)
+New Revision: 16559
 
 Log:
-- I had to apply this patch to get it to build with a uClibc-snapshot..
+- bump version and pass the target cflags in properly (at least for most of the
+  tools. Needs fixing upstream).
 
-
-Added:
-   trunk/buildroot/package/sfdisk/sfdisk.001.include_sys_syscalls_h.patch
 
 Modified:
-   trunk/buildroot/package/sfdisk/sfdisk.mk
+   trunk/buildroot/package/pppd/pppd.mk
 
 
 Changeset:
-Added: trunk/buildroot/package/sfdisk/sfdisk.001.include_sys_syscalls_h.patch
+Modified: trunk/buildroot/package/pppd/pppd.mk
 ===================================================================
---- trunk/buildroot/package/sfdisk/sfdisk.001.include_sys_syscalls_h.patch	2006-11-17 11:52:58 UTC (rev 16557)
-+++ trunk/buildroot/package/sfdisk/sfdisk.001.include_sys_syscalls_h.patch	2006-11-17 11:54:45 UTC (rev 16558)
-@@ -0,0 +1,12 @@
-+--- sfdisk/sfdisk.c.oorig	2006-10-09 16:24:06.000000000 +0200
-++++ sfdisk/sfdisk.c	2006-10-09 16:24:20.000000000 +0200
-+@@ -47,6 +47,9 @@
-+ #include <sys/stat.h>
-+ #include <sys/utsname.h>
-+ #ifdef __linux__
-++#define _LIBC
-++#include <sys/syscall.h>
-++#undef _LIBC
-+ #include <linux/unistd.h>	/* _syscall */
-+ #endif
-+ #include "nls.h"
-
-Modified: trunk/buildroot/package/sfdisk/sfdisk.mk
-===================================================================
---- trunk/buildroot/package/sfdisk/sfdisk.mk	2006-11-17 11:52:58 UTC (rev 16557)
-+++ trunk/buildroot/package/sfdisk/sfdisk.mk	2006-11-17 11:54:45 UTC (rev 16558)
-@@ -10,10 +10,13 @@
- $(DL_DIR)/$(SFDISK_SOURCE):
- 	$(WGET) -P $(DL_DIR) $(SFDISK_SITE)/$(SFDISK_SOURCE)
+--- trunk/buildroot/package/pppd/pppd.mk	2006-11-17 11:54:45 UTC (rev 16558)
++++ trunk/buildroot/package/pppd/pppd.mk	2006-11-17 12:14:31 UTC (rev 16559)
+@@ -3,9 +3,10 @@
+ # pppd
+ #
+ #############################################################
+-PPPD_SOURCE:=ppp-2.4.3.tar.gz
++PPPD_VERSION:=2.4.4
++PPPD_SOURCE:=ppp-$(PPPD_VERSION).tar.gz
+ PPPD_SITE:=ftp://ftp.samba.org/pub/ppp
+-PPPD_DIR:=$(BUILD_DIR)/ppp-2.4.3
++PPPD_DIR:=$(BUILD_DIR)/ppp-$(PPPD_VERSION)
+ PPPD_CAT:=$(ZCAT)
+ PPPD_BINARY:=pppd/pppd
+ PPPD_TARGET_BINARY:=usr/sbin/pppd
+@@ -49,7 +50,7 @@
+ 	touch $(PPPD_DIR)/.configured
  
--$(SFDISK_DIR): $(DL_DIR)/$(SFDISK_SOURCE)
-+$(SFDISK_DIR)/.patched: $(DL_DIR)/$(SFDISK_SOURCE)
- 	bzcat $(DL_DIR)/$(SFDISK_SOURCE) | tar -C $(BUILD_DIR) $(TAR_OPTIONS) -
-+	toolchain/patch-kernel.sh $(SFDISK_DIR) package/sfdisk/ sfdisk.\*.patch
-+	touch $@
-+	
+ $(PPPD_DIR)/$(PPPD_BINARY): $(PPPD_DIR)/.configured
+-	$(MAKE) CC=$(TARGET_CC) -C $(PPPD_DIR)
++	$(MAKE) CC=$(TARGET_CC) COPTS="$(TARGET_CFLAGS)" -C $(PPPD_DIR)
  
--$(SFDISK_DIR)/sfdisk: $(SFDISK_DIR)
-+$(SFDISK_DIR)/sfdisk: $(SFDISK_DIR)/.patched
- 	$(MAKE) \
- 		CROSS=$(TARGET_CROSS) DEBUG=false OPTIMIZATION="$(TARGET_CFLAGS)" \
- 		-C $(SFDISK_DIR)
+ $(TARGET_DIR)/$(PPPD_TARGET_BINARY): $(PPPD_DIR)/$(PPPD_BINARY)
+ 	$(MAKE1) DESTDIR=$(TARGET_DIR)/usr CC=$(TARGET_CC) -C $(PPPD_DIR) install
