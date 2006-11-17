@@ -1,7 +1,7 @@
 From: andersen at uclibc.org <andersen@uclibc.org>
-Date: Fri, 17 Nov 2006 14:58:29 -0800 (PST)
-Subject: [Buildroot] svn commit: trunk/buildroot/package/qte
-Message-ID: <20061117225829.D62FD4862B@busybox.net>
+Date: Fri, 17 Nov 2006 15:17:03 -0800 (PST)
+Subject: [Buildroot] svn commit: trunk/buildroot/package/xorg
+Message-ID: <20061117231703.722E548639@busybox.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -9,27 +9,30 @@ Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
 Author: andersen
-Date: 2006-11-17 14:58:29 -0800 (Fri, 17 Nov 2006)
-New Revision: 16572
+Date: 2006-11-17 15:17:02 -0800 (Fri, 17 Nov 2006)
+New Revision: 16573
 
 Log:
-fix missing dependancy for BR2_QTE_TMAKE_VERSION
+fix deps so xorg can once again be selected
 
 
 Modified:
-   trunk/buildroot/package/qte/Config.in
+   trunk/buildroot/package/xorg/Config.in
 
 
 Changeset:
-Modified: trunk/buildroot/package/qte/Config.in
+Modified: trunk/buildroot/package/xorg/Config.in
 ===================================================================
---- trunk/buildroot/package/qte/Config.in	2006-11-17 20:29:00 UTC (rev 16571)
-+++ trunk/buildroot/package/qte/Config.in	2006-11-17 22:58:29 UTC (rev 16572)
-@@ -151,6 +151,7 @@
- config BR2_QTE_TMAKE_VERSION
-         string
- 	default "1.13"
-+	depends BR2_PACKAGE_QTE
+--- trunk/buildroot/package/xorg/Config.in	2006-11-17 22:58:29 UTC (rev 16572)
++++ trunk/buildroot/package/xorg/Config.in	2006-11-17 23:17:02 UTC (rev 16573)
+@@ -2,8 +2,8 @@
+ 	bool "X.org X Window System"
+ 	default n
+ 	depends !BR2_PACKAGE_TINYX
+-	depends BR2_PACKAGE_ZLIB
+-	depends BR2_PACKAGE_LIBPNG
++	select BR2_PACKAGE_ZLIB
++	select BR2_PACKAGE_LIBPNG
+ 	help
+ 	  The official X Window system and server.
  
- # generated from:
- # ls ~/src/buildroot/build_arm/qt-2.3.10/configs/*-static|cut -c56-|sed -e 's/-static//g'|\
