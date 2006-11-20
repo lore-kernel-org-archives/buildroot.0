@@ -1,30 +1,28 @@
 From: Goetz Bock <bock@blacknet.de>
-Date: Mon, 20 Nov 2006 16:29:50 +0100
-Subject: [Buildroot] patch: rsync
-Message-ID: <20061120152949.GC3065@priv.blacknet.de>
+Date: Mon, 20 Nov 2006 16:30:45 +0100
+Subject: [Buildroot] patch: device-mapper
+Message-ID: <20061120153045.GD3065@priv.blacknet.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear list,
+Use newer version of device mapper:
 
-the version of rsync used does no longer exist. Patch follows:
-
-Index: package/rsync/rsync.mk
+Index: package/dm/dm.mk
 ===================================================================
---- package/rsync/rsync.mk      (revision 16570)
-+++ package/rsync/rsync.mk      (working copy)
-@@ -3,7 +3,7 @@
- # rsync
- #
- #############################################################
--RSYNC_VER:=2.6.8
-+RSYNC_VER:=2.6.9
- RSYNC_SOURCE:=rsync-$(RSYNC_VER).tar.gz
- RSYNC_SITE:=http://rsync.samba.org/ftp/rsync/
- RSYNC_DIR:=$(BUILD_DIR)/rsync-$(RSYNC_VER)
+--- package/dm/dm.mk    (revision 16570)
++++ package/dm/dm.mk    (working copy)
+@@ -24,7 +24,7 @@
+ # USA
+ 
+ DM_BASEVER=1.02
+-DM_PATCH=10
++DM_PATCH=12
+ DM_VERSION=$(DM_BASEVER).$(DM_PATCH)
+ DM_SOURCE:=device-mapper.$(DM_VERSION).tgz
+ DM_SITE:=ftp://sources.redhat.com/pub/dm
 
 
 -- 
