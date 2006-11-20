@@ -1,37 +1,37 @@
 From: Goetz Bock <bock@blacknet.de>
-Date: Mon, 20 Nov 2006 16:25:59 +0100
-Subject: [Buildroot] patch for e2fsprogs
-Message-ID: <20061120152559.GA3065@priv.blacknet.de>
+Date: Mon, 20 Nov 2006 16:28:37 +0100
+Subject: [Buildroot] patch: lvm2.mk
+Message-ID: <20061120152837.GB3065@priv.blacknet.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear list, 
+Dear list,
 
-since buildroot is now it's own ML, i post my patches here:
+building lvm2 as user failes, as the install step tries to write to
+/etc/lvm/. Patch follows:
 
-use newer version of e2fsprogs
-
-Index: package/e2fsprogs/e2fsprogs.mk
+Index: package/lvm2/lvm2.mk
 ===================================================================
---- package/e2fsprogs/e2fsprogs.mk      (revision 16570)
-+++ package/e2fsprogs/e2fsprogs.mk      (working copy)
-@@ -3,7 +3,7 @@
- # e2fsprogs
- #
- #############################################################
--E2FSPROGS_VER:=1.38
-+E2FSPROGS_VER:=1.39
- E2FSPROGS_SOURCE=e2fsprogs-$(E2FSPROGS_VER).tar.gz
- E2FSPROGS_SITE=http://$(BR2_SOURCEFORGE_MIRROR).dl.sourceforge.net/sourceforge/
-e2fsprogs
- E2FSPROGS_DIR=$(BUILD_DIR)/e2fsprogs-$(E2FSPROGS_VER)
+--- package/lvm2/lvm2.mk        (revision 16570)
++++ package/lvm2/lvm2.mk        (working copy)
+@@ -56,7 +56,7 @@
+ 
+ $(LVM2_TARGET_SBINS): $(LVM2_DIR)/.configured
+        $(MAKE) CC=$(TARGET_CC) -C $(LVM2_DIR) DESTDIR=$(STAGING_DIR)
+-       $(MAKE) CC=$(TARGET_CC) -C $(LVM2_DIR) install prefix=$(STAGING_DIR) exe
+c_prefix=$(STAGING_DIR)
++       $(MAKE) CC=$(TARGET_CC) -C $(LVM2_DIR) install DESTDIR=$(STAGING_DIR)
+        for binary in $(LVM2_SBIN); do echo $$binary; cp -a $(STAGING_DIR)/sbin/
+$$binary $(TARGET_DIR)/sbin; done
+ 
+ lvm2: uclibc dm $(LVM2_TARGET_SBINS)
 
 
 -- 
-/"\ Goetz Bock at blacknet dot de  --  secure mobile Linux everNETting
-\ /       (c) 2006 Creative Commons, Attribution-ShareAlike 2.0 de
- X   [ 1. Use descriptive subjects - 2. Edit a reply for brevity -  ]
-/ \  [ 3. Reply to the list - 4. Read the archive *before* you post ]
+Goetz Bock       (c) 2006 as     blacknet.de - Munich - Germany   /"\
+IT Consultant  Creative Commons  secure mobile Linux everNETting  \ /
+                                                                   X
+ ASCII Ribbon Campaign against HTML email & microsoft attachments / \
