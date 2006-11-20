@@ -1,7 +1,7 @@
 From: aldot at uclibc.org <aldot@uclibc.org>
-Date: Mon, 20 Nov 2006 08:09:44 -0800 (PST)
-Subject: [Buildroot] svn commit: trunk/buildroot/package:  lzma
-Message-ID: <20061120160944.8BC0A485B7@busybox.net>
+Date: Mon, 20 Nov 2006 08:33:05 -0800 (PST)
+Subject: [Buildroot] svn commit: trunk/buildroot/package/openvpn
+Message-ID: <20061120163305.C9DA1485A6@busybox.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -9,41 +9,41 @@ Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
 Author: aldot
-Date: 2006-11-20 08:09:43 -0800 (Mon, 20 Nov 2006)
-New Revision: 16589
+Date: 2006-11-20 08:33:05 -0800 (Mon, 20 Nov 2006)
+New Revision: 16590
 
 Log:
-- add and use a HOSTCXX variable.
+- bump version.
 
 
 Modified:
-   trunk/buildroot/package/Makefile.in
-   trunk/buildroot/package/lzma/lzma.mk
+   trunk/buildroot/package/openvpn/openvpn.mk
 
 
 Changeset:
-Modified: trunk/buildroot/package/Makefile.in
+Modified: trunk/buildroot/package/openvpn/openvpn.mk
 ===================================================================
---- trunk/buildroot/package/Makefile.in	2006-11-20 13:37:09 UTC (rev 16588)
-+++ trunk/buildroot/package/Makefile.in	2006-11-20 16:09:43 UTC (rev 16589)
-@@ -23,6 +23,7 @@
- endif
- TARGET_CFLAGS=$(TARGET_OPTIMIZATION) $(TARGET_DEBUGGING)
- HOSTCC:=gcc
-+HOSTCXX:=g++
- 
- BASE_DIR:=${shell pwd}
- 
-
-Modified: trunk/buildroot/package/lzma/lzma.mk
-===================================================================
---- trunk/buildroot/package/lzma/lzma.mk	2006-11-20 13:37:09 UTC (rev 16588)
-+++ trunk/buildroot/package/lzma/lzma.mk	2006-11-20 16:09:43 UTC (rev 16589)
-@@ -34,6 +34,7 @@
- $(LZMA_HOST_DIR)/.configured: $(LZMA_HOST_DIR)/.source
- 	(cd $(LZMA_HOST_DIR); rm -f config.cache ;\
- 		CC="$(HOSTCC)" \
-+		CXX="$(HOSTCXX)" \
- 		./configure \
- 		--prefix=/ \
+--- trunk/buildroot/package/openvpn/openvpn.mk	2006-11-20 16:09:43 UTC (rev 16589)
++++ trunk/buildroot/package/openvpn/openvpn.mk	2006-11-20 16:33:05 UTC (rev 16590)
+@@ -6,9 +6,10 @@
+ # to enable that within busybox
+ #
+ #############################################################
+-OPENVPN_SOURCE:=openvpn-1.5.0.tar.gz
+-OPENVPN_SITE:=http://$(BR2_SOURCEFORGE_MIRROR).dl.sourceforge.net/sourceforge/openvpn/
+-OPENVPN_DIR:=$(BUILD_DIR)/openvpn-1.5.0
++OPENVPN_VERSION:=2.0.9
++OPENVPN_SOURCE:=openvpn-$(OPENVPN_VERSION).tar.gz
++OPENVPN_SITE:=http://openvpn.net/release/
++OPENVPN_DIR:=$(BUILD_DIR)/openvpn-$(OPENVPN_VERSION)
+ OPENVPN_CAT:=$(ZCAT)
+ OPENVPN_BINARY:=openvpn
+ OPENVPN_TARGET_BINARY:=usr/sbin/openvpn
+@@ -50,6 +51,7 @@
+ 		--mandir=/usr/man \
+ 		--infodir=/usr/info \
+ 		--program-prefix="" \
++		--enable-small \
+ 		$(THREAD_MODEL) \
  	);
+ 	touch $(OPENVPN_DIR)/.configured
