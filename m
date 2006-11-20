@@ -1,18 +1,33 @@
-From: Bernhard Fischer <rep.nop@aon.at>
-Date: Mon, 20 Nov 2006 17:45:16 +0100
-Subject: [Buildroot] patch: rsync
-In-Reply-To: <20061120152949.GC3065@priv.blacknet.de>
-References: <20061120152949.GC3065@priv.blacknet.de>
-Message-ID: <20061120164516.GC8032@aon.at>
+From: Philippe Ney <philippe.ney@pardes.ws>
+Date: Mon, 20 Nov 2006 18:01:43 +0100
+Subject: [Buildroot] patch: target/cpio
+In-Reply-To: <20061120154423.GG3065@priv.blacknet.de>
+References: <20061120154423.GG3065@priv.blacknet.de>
+Message-ID: <20061120180143.456f1bd0.philippe.ney@pardes.ws>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Mon, Nov 20, 2006 at 04:29:50PM +0100, Goetz Bock wrote:
->Dear list,
->
->the version of rsync used does no longer exist. Patch follows:
+> Dear list,
+> 
+> this patch adds a simple cpio target, to be used with an initramfs
+> 
+> Index: target/Config.in
+> ===================================================================
+> --- target/Config.in    (revision 16570)
+> +++ target/Config.in    (working copy)
+> @@ -8,6 +8,7 @@
+>  source "target/jffs2/Config.in"
 
-Applied, thanks.
+Hi,
+
+In my application, as I also use cpio on the target, then I added a cpio
+package that provide target and host cpio.
+I use it to update the initramfs and have a simple dynamic RIM system w/o
+use of cramfs/unionfs.
+
+If this could be useful, I will make a patch.
+
+Philippe
