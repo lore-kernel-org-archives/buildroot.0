@@ -1,39 +1,33 @@
-From: Goetz Bock <bock@blacknet.de>
-Date: Tue, 21 Nov 2006 10:55:14 +0100
-Subject: [Buildroot] patch: target/cpio
-In-Reply-To: <20061120180143.456f1bd0.philippe.ney@pardes.ws>
-References: <20061120154423.GG3065@priv.blacknet.de>
-	<20061120180143.456f1bd0.philippe.ney@pardes.ws>
-Message-ID: <20061121095514.GK3065@priv.blacknet.de>
+From: MikeW <mw_phil@yahoo.co.uk>
+Date: Tue, 21 Nov 2006 19:05:31 +0000 (UTC)
+Subject: [Buildroot] Using external toolchain for Buildroot ?
+Message-ID: <loom.20061121T195143-393@post.gmane.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+Is there a way to use an external GNU toolchain for buiding the
+Buildroot packages ?
 
-On Mon, Nov 20 '06 at 18:01, Philippe Ney wrote:
-> > this patch adds a simple cpio target, to be used with an initramfs
- 
-> In my application, as I also use cpio on the target, then I added a cpio
-> package that provide target and host cpio.
-> I use it to update the initramfs and have a simple dynamic RIM system w/o
-> use of cramfs/unionfs.
-> 
-> If this could be useful, I will make a patch.
+I would like to build some libraries under Buildroot to work with
+objects compiled with the external toolchain, however, I'm getting
+the "EABI version mismatch" problem, which I currently haven't solved.
 
-Shure, please provide a patch.
+(Buildroot is creating libraries with EABI version = 0,
+the other toolchain creates EABI version = 4;
+this is probably related to my not yet finding an acceptable value for
+"Build options: GNU target suffix" containing "-eabi")
 
-BTW: I wonder why there are hundrets^Wdozens of buildroot forkes, all
-     with more up to date/additional packages and noone ever seams to
-     provide patches on their own. 
-     Do they think that buildroot is to unmodular that additional stuff
-     would make it to bloated for the rest? Or is the addition just a
-     hack, they always wanted to clean up, just never found the time to
-     do so? Or do they simply not care?
-     - Just wondering. 
---  
-/"\ Goetz Bock at blacknet dot de  --  secure mobile Linux everNETting
-\ /       (c) 2006 Creative Commons, Attribution-ShareAlike 2.0 de
- X   [ 1. Use descriptive subjects - 2. Edit a reply for brevity -  ]
-/ \  [ 3. Reply to the list - 4. Read the archive *before* you post ]
+Hence, one temporary shortcut would be to allow Buildroot to use
+the other toolchain to build all the packages, instead of the one
+it would build itself.
+
+Is there any way in which I can do this, short of deleting all the
+Buildroot-built tool binaries etc. and symlinking to the external toolchain,
+which probably wouldn't work anyhow !!
+
+Regards,
+
+MikeW
