@@ -1,33 +1,65 @@
-From: Bernhard Fischer <rep.nop@aon.at>
-Date: Wed, 22 Nov 2006 23:27:42 +0100
-Subject: [Buildroot] trylink causes build errors
-In-Reply-To: <20061122220501.98305.qmail@web90307.mail.mud.yahoo.com>
-References: <20061122220501.98305.qmail@web90307.mail.mud.yahoo.com>
-Message-ID: <20061122222742.GA4247@aon.at>
+From: aldot at uclibc.org <aldot@uclibc.org>
+Date: Wed, 22 Nov 2006 15:03:57 -0800 (PST)
+Subject: [Buildroot] svn commit: trunk/buildroot/package/microwin
+Message-ID: <20061122230357.9067A485D7@busybox.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Wed, Nov 22, 2006 at 02:05:01PM -0800, No One wrote:
->
->Picked up the latest via svn (16637), did a default configuration with make menuconfig, ran make and got the following errors:
->
->
->make[1]: Entering directory `/home/will/box/buildroot/build_i686/busybox'
->  LINK    busybox_unstripped
->/home/will/box/buildroot/build_i686/busybox/scripts/trylink: 5: function: not found
->/home/will/box/buildroot/build_i686/busybox/scripts/trylink: 11: Syntax error: "}" unexpected
+Author: aldot
+Date: 2006-11-22 15:03:57 -0800 (Wed, 22 Nov 2006)
+New Revision: 16639
 
-What shell are you using?
-does 
-$ function foo () { echo bar ; }
-$ foo
-bar
-$ unset foo
+Log:
+- make microwindows do something. Closes #527
+  Not that it would compile or anything, but at least it's different than before..
 
-work? (note the parentheses)
-If so, then bug vda resp. the busybox list or fix it upstream.
 
-HTH,
+Modified:
+   trunk/buildroot/package/microwin/microwin.mk
+
+
+Changeset:
+Modified: trunk/buildroot/package/microwin/microwin.mk
+===================================================================
+--- trunk/buildroot/package/microwin/microwin.mk	2006-11-22 22:18:52 UTC (rev 16638)
++++ trunk/buildroot/package/microwin/microwin.mk	2006-11-22 23:03:57 UTC (rev 16639)
+@@ -13,6 +13,7 @@
+ MICROWIN_CAT:=$(ZCAT)
+ MICROWIN_BINARY:=$(MICROWIN_DIR)/src/bin/nano-X
+ MICROWIN_TARGET_BINARY:=$(TARGET_DIR)/usr/bin/nano-X
++MICROWIN_VERSION=$(subst $(MICROWIN_DIR)/microwindows-,,$(wildcard $(MICROWIN_DIR)/microwindows-*))
+ 
+ MICROWIN_CONFIG:=$(MICROWIN_DIR)/src/Configs/config.uclibc
+ 
+@@ -22,10 +23,16 @@
+ microwin-source: $(DL_DIR)/$(MICROWIN_SOURCE)
+ 
+ $(MICROWIN_DIR)/.unpacked: $(DL_DIR)/$(MICROWIN_SOURCE)
+-	$(MICROWIN_CAT) $(DL_DIR)/$(MICROWIN_SOURCE) | tar -C $(BUILD_DIR) $(TAR_OPTIONS) -
++	[ -d $(MICROWIN_DIR) ] || mkdir $(MICROWIN_DIR)
++	$(MICROWIN_CAT) $(DL_DIR)/$(MICROWIN_SOURCE) | tar -C $(MICROWIN_DIR) $(TAR_OPTIONS) -
+ 	touch $(MICROWIN_DIR)/.unpacked
+ 
+-$(MICROWIN_DIR)/.configured: $(MICROWIN_DIR)/.unpacked
++$(MICROWIN_DIR)/.prepared: $(MICROWIN_DIR)/.unpacked
++	mv $(MICROWIN_DIR)/microwindows-$(MICROWIN_VERSION)/* $(MICROWIN_DIR)
++	toolchain/patch-kernel.sh $(UEMACS_DIR) package/uemacs/ microwindows-$(MICROWIN_VERSION)\*.patch
++	touch $(MICROWIN_DIR)/.prepared
++
++$(MICROWIN_DIR)/.configured: $(MICROWIN_DIR)/.prepared
+ 	(cd $(MICROWIN_DIR); \
+ 	);
+ 	touch $(MICROWIN_DIR)/.configured
+@@ -49,6 +56,6 @@
+ # Toplevel Makefile options
+ #
+ #############################################################
+-#ifeq ($(strip $(BR2_PACKAGE_MICROWIN)),y)
+-#TARGETS+=microwin
+-#endif
++ifeq ($(strip $(BR2_PACKAGE_MICROWIN)),y)
++TARGETS+=microwin
++endif
