@@ -1,38 +1,25 @@
-From: aldot at uclibc.org <aldot@uclibc.org>
-Date: Wed, 22 Nov 2006 07:23:31 -0800 (PST)
-Subject: [Buildroot] svn commit: trunk/buildroot/package/iproute2
-Message-ID: <20061122152331.8B2F04859A@busybox.net>
+From: Michael K. Edwards <medwards.linux@gmail.com>
+Date: Wed, 22 Nov 2006 09:08:36 -0800
+Subject: [Buildroot] 'ld' gives "unrecognised emulation mode" - ARM
+	toolchain unbuildable ??
+In-Reply-To: <loom.20061122T095656-727@post.gmane.org>
+References: <loom.20061101T111436-827@post.gmane.org>
+	<loom.20061102T152239-949@post.gmane.org>
+	<loom.20061121T200844-447@post.gmane.org>
+	<f2b55d220611211208yef912b8p4c00bfd2ee2a2eca@mail.gmail.com>
+	<loom.20061122T095656-727@post.gmane.org>
+Message-ID: <f2b55d220611220908v2a8699bt61a298dbf3fcf100@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Author: aldot
-Date: 2006-11-22 07:23:31 -0800 (Wed, 22 Nov 2006)
-New Revision: 16621
+Did I say armelf-linux-eabi?  Silly me.  What's working for me (with
+glibc and crosstool) is armelf-linux-gnueabi.  I'm almost done
+scrubbing cross-configure problems out of my ptxdist userland and will
+start banging on uClibc/buildroot today; I'll let you know what I
+find.
 
-Log:
-- bump version
-
-
-Modified:
-   trunk/buildroot/package/iproute2/iproute2.mk
-
-
-Changeset:
-Modified: trunk/buildroot/package/iproute2/iproute2.mk
-===================================================================
---- trunk/buildroot/package/iproute2/iproute2.mk	2006-11-22 15:22:57 UTC (rev 16620)
-+++ trunk/buildroot/package/iproute2/iproute2.mk	2006-11-22 15:23:31 UTC (rev 16621)
-@@ -3,8 +3,8 @@
- # iproute2
- #
- #############################################################
--IPROUTE2_VER:=2.6.14
--IPROUTE2_STAMP:=051107
-+IPROUTE2_VER:=2.6.18
-+IPROUTE2_STAMP:=061002
- IPROUTE2_SOURCE:=iproute2-$(IPROUTE2_VER)-$(IPROUTE2_STAMP).tar.gz
- IPROUTE2_SITE:=http://developer.osdl.org/dev/iproute2/download/
- IPROUTE2_DIR:=$(BUILD_DIR)/iproute2-$(IPROUTE2_VER)-$(IPROUTE2_STAMP)
+Cheers,
+- Michael
