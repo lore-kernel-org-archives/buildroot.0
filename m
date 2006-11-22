@@ -1,36 +1,20 @@
-From: aldot at uclibc.org <aldot@uclibc.org>
-Date: Wed, 22 Nov 2006 11:18:47 -0800 (PST)
-Subject: [Buildroot] svn commit: trunk/buildroot/package/e2fsprogs
-Message-ID: <20061122191847.C8283485CE@busybox.net>
+From: Bernhard Fischer <rep.nop@aon.at>
+Date: Wed, 22 Nov 2006 20:27:39 +0100
+Subject: [Buildroot] patch for e2fsprogs
+In-Reply-To: <20061120152559.GA3065@priv.blacknet.de>
+References: <20061120152559.GA3065@priv.blacknet.de>
+Message-ID: <20061122192739.GA1727@aon.at>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Author: aldot
-Date: 2006-11-22 11:18:47 -0800 (Wed, 22 Nov 2006)
-New Revision: 16632
+On Mon, Nov 20, 2006 at 04:25:59PM +0100, Goetz Bock wrote:
+>Dear list, 
+>
+>since buildroot is now it's own ML, i post my patches here:
+>
+>use newer version of e2fsprogs
 
-Log:
-- bump version
-
-
-Modified:
-   trunk/buildroot/package/e2fsprogs/e2fsprogs.mk
-
-
-Changeset:
-Modified: trunk/buildroot/package/e2fsprogs/e2fsprogs.mk
-===================================================================
---- trunk/buildroot/package/e2fsprogs/e2fsprogs.mk	2006-11-22 19:10:59 UTC (rev 16631)
-+++ trunk/buildroot/package/e2fsprogs/e2fsprogs.mk	2006-11-22 19:18:47 UTC (rev 16632)
-@@ -3,7 +3,7 @@
- # e2fsprogs
- #
- #############################################################
--E2FSPROGS_VER:=1.38
-+E2FSPROGS_VER:=1.39
- E2FSPROGS_SOURCE=e2fsprogs-$(E2FSPROGS_VER).tar.gz
- E2FSPROGS_SITE=http://$(BR2_SOURCEFORGE_MIRROR).dl.sourceforge.net/sourceforge/e2fsprogs
- E2FSPROGS_DIR=$(BUILD_DIR)/e2fsprogs-$(E2FSPROGS_VER)
+Applied, thanks.
