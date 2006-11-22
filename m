@@ -1,43 +1,40 @@
-From: aldot at uclibc.org <aldot@uclibc.org>
-Date: Wed, 22 Nov 2006 12:26:06 -0800 (PST)
-Subject: [Buildroot] svn commit: trunk/buildroot/package/ipsec-tools
-Message-ID: <20061122202606.D7ACC485F4@busybox.net>
+From: Bernhard Fischer <rep.nop@aon.at>
+Date: Wed, 22 Nov 2006 21:32:32 +0100
+Subject: [Buildroot] Error compiling svn revision 16633.
+In-Reply-To: <33540.80.176.236.13.1164227129.squirrel@mail.primefarm.co.uk>
+References: <1d09f8b80611221150j5f12383fl1f4cb914f9c0d733@mail.gmail.com>
+	<20061122200454.GC1863@aon.at>
+	<33540.80.176.236.13.1164227129.squirrel@mail.primefarm.co.uk>
+Message-ID: <20061122203232.GB2626@aon.at>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Author: aldot
-Date: 2006-11-22 12:26:06 -0800 (Wed, 22 Nov 2006)
-New Revision: 16635
+On Wed, Nov 22, 2006 at 08:25:29PM -0000, lists at primefarm.co.uk wrote:
+>
+>
+>
+>On Wed, November 22, 2006 8:04 pm, Bernhard Fischer wrote:
+>> On Wed, Nov 22, 2006 at 02:50:42PM -0500, Will Buik wrote:
+>>
+>>> I used svn to checkout the latest revision 16632 and set up default
+>>> configuration with make menuconfig, but when trying to compile I
+>>> immidatly get the error: target/cpio/cpioroot.mk:10: *** missing
+>>> separator.  Stop.
+>>
+>> oh well. Fixed. Thanks for pointing this out.
+>> _______________________________________________
+>> buildroot mailing list buildroot at uclibc.org
+>> http://busybox.net/mailman/listinfo/buildroot
+>>
+>>
+>
+>
+>A clean install now gives the following error:
+>
+>target/cpio/cpioroot.mk:13: *** missing separator.  Stop.
 
-Log:
-- ignore GLOB_TILDE if it's not available.
-
-
-Added:
-   trunk/buildroot/package/ipsec-tools/ipsec-tools-0.6.6.102-GLOB_TILDE.patch
-
-
-Changeset:
-Added: trunk/buildroot/package/ipsec-tools/ipsec-tools-0.6.6.102-GLOB_TILDE.patch
-===================================================================
---- trunk/buildroot/package/ipsec-tools/ipsec-tools-0.6.6.102-GLOB_TILDE.patch	2006-11-22 20:21:24 UTC (rev 16634)
-+++ trunk/buildroot/package/ipsec-tools/ipsec-tools-0.6.6.102-GLOB_TILDE.patch	2006-11-22 20:26:06 UTC (rev 16635)
-@@ -0,0 +1,15 @@
-+--- ipsec-tools-0.6.6.oorig/src/racoon/cftoken.c	2006-06-13 10:49:01.000000000 +0200
-++++ ipsec-tools-0.6.6/src/racoon/cftoken.c	2006-11-22 21:20:30.000000000 +0100
-+@@ -4076,8 +4076,11 @@
-+ 			"Includes nested too deeply");
-+ 		return -1;
-+ 	}
-+-
-++#ifdef GLOB_TILDE
-+ 	if (glob(path, GLOB_TILDE, NULL, &incstack[incstackp].matches) != 0 ||
-++#else
-++	if (glob(path, 0, NULL, &incstack[incstackp].matches) != 0 ||
-++#endif
-+ 	    incstack[incstackp].matches.gl_pathc == 0) {
-+ 		plog(LLV_ERROR, LOCATION, NULL,
-+ 			"glob found no matches for path");
+Goetz Bock's patch had damaged whitespace that i didn't spot.
+Fixed now, sorry.
