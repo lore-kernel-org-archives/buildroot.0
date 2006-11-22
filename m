@@ -1,70 +1,35 @@
-From: aldot at uclibc.org <aldot@uclibc.org>
-Date: Wed, 22 Nov 2006 12:21:25 -0800 (PST)
-Subject: [Buildroot] svn commit: trunk/buildroot/target/cpio
-Message-ID: <20061122202125.8D01C485EE@busybox.net>
+From: lists at primefarm.co.uk <lists@primefarm.co.uk>
+Date: Wed, 22 Nov 2006 20:25:29 -0000 (UTC)
+Subject: [Buildroot] Error compiling svn revision 16633.
+In-Reply-To: <20061122200454.GC1863@aon.at>
+References: <1d09f8b80611221150j5f12383fl1f4cb914f9c0d733@mail.gmail.com>
+	<20061122200454.GC1863@aon.at>
+Message-ID: <33540.80.176.236.13.1164227129.squirrel@mail.primefarm.co.uk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Author: aldot
-Date: 2006-11-22 12:21:24 -0800 (Wed, 22 Nov 2006)
-New Revision: 16634
-
-Log:
-- fix indentation, second take :(
 
 
-Modified:
-   trunk/buildroot/target/cpio/cpioroot.mk
+
+On Wed, November 22, 2006 8:04 pm, Bernhard Fischer wrote:
+> On Wed, Nov 22, 2006 at 02:50:42PM -0500, Will Buik wrote:
+>
+>> I used svn to checkout the latest revision 16632 and set up default
+>> configuration with make menuconfig, but when trying to compile I
+>> immidatly get the error: target/cpio/cpioroot.mk:10: *** missing
+>> separator.  Stop.
+>
+> oh well. Fixed. Thanks for pointing this out.
+> _______________________________________________
+> buildroot mailing list buildroot at uclibc.org
+> http://busybox.net/mailman/listinfo/buildroot
+>
+>
 
 
-Changeset:
-Modified: trunk/buildroot/target/cpio/cpioroot.mk
-===================================================================
---- trunk/buildroot/target/cpio/cpioroot.mk	2006-11-22 19:58:35 UTC (rev 16633)
-+++ trunk/buildroot/target/cpio/cpioroot.mk	2006-11-22 20:21:24 UTC (rev 16634)
-@@ -10,24 +10,24 @@
- 	ln -s sbin/init $(TARGET_DIR)/init
- 
- cpioroot: host-fakeroot makedevs cpioroot-init
--       - at find $(TARGET_DIR) -type f -perm +111 | xargs $(STRIP) 2>/dev/null || true;
--       @rm -rf $(TARGET_DIR)/usr/man
--       @rm -rf $(TARGET_DIR)/usr/info
--       -/sbin/ldconfig -r $(TARGET_DIR) 2>/dev/null
--       # Use fakeroot to pretend all target binaries are owned by root
--       rm -f $(STAGING_DIR)/_fakeroot.$(notdir $(TAR_TARGET))
--       touch $(STAGING_DIR)/.fakeroot.00000
--       cat $(STAGING_DIR)/.fakeroot* > $(STAGING_DIR)/_fakeroot.$(notdir $(CPIO_TARGET))
--       echo "chown -R root:root $(TARGET_DIR)" >> $(STAGING_DIR)/_fakeroot.$(notdir $(CPIO_TARGET))
--       # Use fakeroot to pretend to create all needed device nodes
--       echo "$(STAGING_DIR)/bin/makedevs -d $(TARGET_DEVICE_TABLE) $(TARGET_DIR)" \
--               >> $(STAGING_DIR)/_fakeroot.$(notdir $(CPIO_TARGET))
--       # Use fakeroot so tar believes the previous fakery
--       echo "cd $(TARGET_DIR) && find . | cpio --quiet -o -H newc > $(CPIO_TARGET)" \
--               >> $(STAGING_DIR)/_fakeroot.$(notdir $(CPIO_TARGET))
--       chmod a+x $(STAGING_DIR)/_fakeroot.$(notdir $(CPIO_TARGET))
--       $(STAGING_DIR)/usr/bin/fakeroot -- $(STAGING_DIR)/_fakeroot.$(notdir $(CPIO_TARGET))
--       #- at rm -f $(STAGING_DIR)/_fakeroot.$(notdir $(CPIO_TARGET))
-+	- at find $(TARGET_DIR) -type f -perm +111 | xargs $(STRIP) 2>/dev/null || true;
-+	@rm -rf $(TARGET_DIR)/usr/man
-+	@rm -rf $(TARGET_DIR)/usr/info
-+	-/sbin/ldconfig -r $(TARGET_DIR) 2>/dev/null
-+	# Use fakeroot to pretend all target binaries are owned by root
-+	rm -f $(STAGING_DIR)/_fakeroot.$(notdir $(TAR_TARGET))
-+	touch $(STAGING_DIR)/.fakeroot.00000
-+	cat $(STAGING_DIR)/.fakeroot* > $(STAGING_DIR)/_fakeroot.$(notdir $(CPIO_TARGET))
-+	echo "chown -R root:root $(TARGET_DIR)" >> $(STAGING_DIR)/_fakeroot.$(notdir $(CPIO_TARGET))
-+	# Use fakeroot to pretend to create all needed device nodes
-+	echo "$(STAGING_DIR)/bin/makedevs -d $(TARGET_DEVICE_TABLE) $(TARGET_DIR)" \
-+		>> $(STAGING_DIR)/_fakeroot.$(notdir $(CPIO_TARGET))
-+	# Use fakeroot so tar believes the previous fakery
-+	echo "cd $(TARGET_DIR) && find . | cpio --quiet -o -H newc > $(CPIO_TARGET)" \
-+		>> $(STAGING_DIR)/_fakeroot.$(notdir $(CPIO_TARGET))
-+	chmod a+x $(STAGING_DIR)/_fakeroot.$(notdir $(CPIO_TARGET))
-+	$(STAGING_DIR)/usr/bin/fakeroot -- $(STAGING_DIR)/_fakeroot.$(notdir $(CPIO_TARGET))
-+	#- at rm -f $(STAGING_DIR)/_fakeroot.$(notdir $(CPIO_TARGET))
- 
- cpioroot-source:
- 
+A clean install now gives the following error:
+
+target/cpio/cpioroot.mk:13: *** missing separator.  Stop.
