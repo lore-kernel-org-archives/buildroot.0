@@ -1,21 +1,39 @@
-From: No One <justanotheraccount863494@yahoo.com>
-Date: Wed, 22 Nov 2006 14:05:01 -0800 (PST)
-Subject: [Buildroot] trylink causes build errors
-Message-ID: <20061122220501.98305.qmail@web90307.mail.mud.yahoo.com>
+From: aldot at uclibc.org <aldot@uclibc.org>
+Date: Wed, 22 Nov 2006 14:18:53 -0800 (PST)
+Subject: [Buildroot] svn commit: trunk/buildroot/package/xfsprogs
+Message-ID: <20061122221853.8FD7A485D9@busybox.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+Author: aldot
+Date: 2006-11-22 14:18:52 -0800 (Wed, 22 Nov 2006)
+New Revision: 16638
 
-Picked up the latest via svn (16637), did a default configuration with make menuconfig, ran make and got the following errors:
+Log:
+- xfsprogs-2.7.11 is old by now. Provide a fallback SITE until someone
+  verifies a newer version..
+  Closes bug #1019
 
 
-make[1]: Entering directory `/home/will/box/buildroot/build_i686/busybox'
-  LINK    busybox_unstripped
-/home/will/box/buildroot/build_i686/busybox/scripts/trylink: 5: function: not found
-/home/will/box/buildroot/build_i686/busybox/scripts/trylink: 11: Syntax error: "}" unexpected
-make[1]: *** [busybox_unstripped] Error 2
-make[1]: Leaving directory `/home/will/box/buildroot/build_i686/busybox'
-make: *** [/home/will/box/buildroot/build_i686/busybox/busybox] Error 2
+Modified:
+   trunk/buildroot/package/xfsprogs/xfsprogs.mk
+
+
+Changeset:
+Modified: trunk/buildroot/package/xfsprogs/xfsprogs.mk
+===================================================================
+--- trunk/buildroot/package/xfsprogs/xfsprogs.mk	2006-11-22 21:24:58 UTC (rev 16637)
++++ trunk/buildroot/package/xfsprogs/xfsprogs.mk	2006-11-22 22:18:52 UTC (rev 16638)
+@@ -5,7 +5,8 @@
+ #############################################################
+ XFSPROGS_VER:=2.7.11
+ XFSPROGS_SOURCE=xfsprogs-$(XFSPROGS_VER).src.tar.gz
+-XFSPROGS_SITE=ftp://oss.sgi.com/projects/xfs/cmd_tars
++#XFSPROGS_SITE=ftp://oss.sgi.com/projects/xfs/cmd_tars
++XFSPROGS_SITE=ftp://oss.sgi.com/projects/xfs/previous/cmd_tars/
+ XFSPROGS_DIR=$(BUILD_DIR)/xfsprogs-$(XFSPROGS_VER)
+ XFSPROGS_CAT:=$(ZCAT)
+ XFSPROGS_BINARY:=mkfs/mkfs.xfs
