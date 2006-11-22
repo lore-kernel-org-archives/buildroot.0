@@ -1,62 +1,57 @@
-From: Bernhard Fischer <rep.nop@aon.at>
-Date: Wed, 22 Nov 2006 21:18:34 +0100
+From: lists at primefarm.co.uk <lists@primefarm.co.uk>
+Date: Wed, 22 Nov 2006 20:21:00 -0000 (UTC)
 Subject: [Buildroot] problem generating c++ compiler for target arch
-In-Reply-To: <33446.80.176.236.13.1164226145.squirrel@mail.primefarm.co.uk>
+In-Reply-To: <20061122201834.GD1863@aon.at>
 References: <33335.80.176.236.13.1164224678.squirrel@mail.primefarm.co.uk>
 	<20061122200213.GB1863@aon.at>
 	<33446.80.176.236.13.1164226145.squirrel@mail.primefarm.co.uk>
-Message-ID: <20061122201834.GD1863@aon.at>
+	<20061122201834.GD1863@aon.at>
+Message-ID: <33518.80.176.236.13.1164226860.squirrel@mail.primefarm.co.uk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Wed, Nov 22, 2006 at 08:09:05PM -0000, lists at primefarm.co.uk wrote:
->On Wed, November 22, 2006 8:02 pm, Bernhard Fischer wrote:
->> On Wed, Nov 22, 2006 at 07:44:38PM -0000, lists at primefarm.co.uk wrote:
->>
->>> On Wed, November 22, 2006 6:52 pm, Bernhard Fischer wrote:
->>>
->>
->>> OK, I tried again with 3.4.6, those errors do indeed go away. I now
->>> have a differnt set of problems (hooray!).
->>>
->>> The error seems to center around fakeroot, although I'm no expert at
->>> reading these error dumps.
->>>
->>> Here is the whole lot:
->>>
->>>
->>> CONFIG_FILES= CONFIG_HEADERS= /bin/sh ./config.status
->>> config.status: executing depfiles commands
->>> config.status: executing libtool commands
->>> /bin/sh ./libtool --tag=CC --mode=link gcc  -g -O2   -o faked  faked.o
->>> libcommunicate.la -ldl libtool: link: gcc -g -O2 -o faked faked.o
->>> ./.libs/libcommunicate.a -ldl
->>> /usr/lib/libc_nonshared.a(elf-init.oS)(.gnu.linkonce.t.__i686.get_pc_thu
->>> nk.bx+0x0):
->>> In function `__i686.get_pc_thunk.bx':
->>> : multiple definition of `__i686.get_pc_thunk.bx'
->>>
->>
->>>
->>> Any ideas?
->>>
->>
->> Not sure, but it sounds like your host's toolchain is too old.
->> binutils-2.16.1 work for me..
->>
->
->
->I'm running it on 2.16.1 already. The box im running it on is debian sarge
->- which could explain some random things being far too old.
->
->What newer versions of binutils do you reccomend?
+OK,
 
-Perhaps try a more recent gcc for your host.
-If sarge's gcc is older than 3.4.6, then i'd bootstrap the 3.4.6 you
-already downloaded. If this fails to work properly, then i guess4.{1,2}
-should work fine.
+I managed to get buildroot to complete the build at last. Sadly, the c++
+compiler is b0rked.
 
-HTH,
+Looks like it's missing all sorts of libraries and things. Here is some
+sample output trying to compile a very simple program (C++ hello world):
+
+
+david at tulip:~/buildroot/build_arm/staging_dir/bin$ ./arm-linux-gcc foo.cpp
+/tmp/ccNH0d2c.o: In function `std::__verify_grouping(char const*, unsigned
+int, std::basic_string<char, std::char_traits<char>, std::allocator<char>
+> const&)':
+foo.cpp:(.text+0x20): undefined reference to `std::basic_string<char,
+std::char_traits<char>, std::allocator<char> >::size() const'
+foo.cpp:(.text+0x98): undefined reference to `std::basic_string<char,
+std::char_traits<char>, std::allocator<char> >::operator[](unsigned int)
+const'
+foo.cpp:(.text+0x100): undefined reference to `std::basic_string<char,
+std::char_traits<char>, std::allocator<char> >::operator[](unsigned int)
+const'
+foo.cpp:(.text+0x144): undefined reference to `std::basic_string<char,
+std::char_traits<char>, std::allocator<char> >::operator[](unsigned int)
+const'
+/tmp/ccNH0d2c.o: In function `main':
+foo.cpp:(.text+0x1ac): undefined reference to `std::basic_ostream<char,
+std::char_traits<char> >& std::operator<< <std::char_traits<char>
+>(std::basic_ostream<char, std::char_traits<char> >&, char const*)'
+foo.cpp:(.text+0x1bc): undefined reference to `std::cout'
+/tmp/ccNH0d2c.o: In function
+`__static_initialization_and_destruction_0(int, int)':
+foo.cpp:(.text+0x200): undefined reference to `std::ios_base::Init::Init()'
+foo.cpp:(.text+0x228): undefined reference to `std::ios_base::Init::~Init()'
+collect2: ld returned 1 exit status
+david at tulip:~/buildroot/build_arm/staging_dir/bin$ cat foo.cpp
+cat: foo.cpp: No such file or directory
+
+
+All sorts of things missing there - have I inadvertantly broken lots of
+buildroot?
+
+David
