@@ -1,40 +1,39 @@
-From: Bernhard Fischer <rep.nop@aon.at>
-Date: Wed, 22 Nov 2006 21:32:32 +0100
-Subject: [Buildroot] Error compiling svn revision 16633.
-In-Reply-To: <33540.80.176.236.13.1164227129.squirrel@mail.primefarm.co.uk>
-References: <1d09f8b80611221150j5f12383fl1f4cb914f9c0d733@mail.gmail.com>
-	<20061122200454.GC1863@aon.at>
-	<33540.80.176.236.13.1164227129.squirrel@mail.primefarm.co.uk>
-Message-ID: <20061122203232.GB2626@aon.at>
+From: aldot at uclibc.org <aldot@uclibc.org>
+Date: Wed, 22 Nov 2006 13:02:22 -0800 (PST)
+Subject: [Buildroot] svn commit: trunk/buildroot/toolchain/kernel-headers
+Message-ID: <20061122210222.41F36485CB@busybox.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Wed, Nov 22, 2006 at 08:25:29PM -0000, lists at primefarm.co.uk wrote:
->
->
->
->On Wed, November 22, 2006 8:04 pm, Bernhard Fischer wrote:
->> On Wed, Nov 22, 2006 at 02:50:42PM -0500, Will Buik wrote:
->>
->>> I used svn to checkout the latest revision 16632 and set up default
->>> configuration with make menuconfig, but when trying to compile I
->>> immidatly get the error: target/cpio/cpioroot.mk:10: *** missing
->>> separator.  Stop.
->>
->> oh well. Fixed. Thanks for pointing this out.
->> _______________________________________________
->> buildroot mailing list buildroot at uclibc.org
->> http://busybox.net/mailman/listinfo/buildroot
->>
->>
->
->
->A clean install now gives the following error:
->
->target/cpio/cpioroot.mk:13: *** missing separator.  Stop.
+Author: aldot
+Date: 2006-11-22 13:02:21 -0800 (Wed, 22 Nov 2006)
+New Revision: 16636
 
-Goetz Bock's patch had damaged whitespace that i didn't spot.
-Fixed now, sorry.
+Log:
+- bump version
+
+
+Modified:
+   trunk/buildroot/toolchain/kernel-headers/kernel-headers.mk
+
+
+Changeset:
+Modified: trunk/buildroot/toolchain/kernel-headers/kernel-headers.mk
+===================================================================
+--- trunk/buildroot/toolchain/kernel-headers/kernel-headers.mk	2006-11-22 20:26:06 UTC (rev 16635)
++++ trunk/buildroot/toolchain/kernel-headers/kernel-headers.mk	2006-11-22 21:02:21 UTC (rev 16636)
+@@ -98,9 +98,9 @@
+ PATCHLEVEL:=6
+ SUBLEVEL:=18
+ LINUX_HEADERS_SITE:=http://www.kernel.org/pub/linux/kernel/v2.6/
+-LINUX_HEADERS_SOURCE:=linux-2.6.18.tar.bz2
++LINUX_HEADERS_SOURCE:=linux-2.6.18.3.tar.bz2
+ LINUX_HEADERS_CAT:=$(BZCAT)
+-LINUX_HEADERS_UNPACK_DIR:=$(TOOL_BUILD_DIR)/linux-2.6.18
++LINUX_HEADERS_UNPACK_DIR:=$(TOOL_BUILD_DIR)/linux-2.6.18.3
+ LINUX_HEADERS_IS_KERNEL=y
+ endif
+ 
