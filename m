@@ -1,37 +1,42 @@
-From: aldot at uclibc.org <aldot@uclibc.org>
-Date: Wed, 22 Nov 2006 15:36:41 -0800 (PST)
-Subject: [Buildroot] svn commit: trunk/buildroot/target/ext2
-Message-ID: <20061122233641.AF556485A1@busybox.net>
+From: No One <justanotheraccount863494@yahoo.com>
+Date: Wed, 22 Nov 2006 19:01:36 -0800 (PST)
+Subject: [Buildroot] trylink causes build errors
+Message-ID: <20061123030136.75516.qmail@web90309.mail.mud.yahoo.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Author: aldot
-Date: 2006-11-22 15:36:41 -0800 (Wed, 22 Nov 2006)
-New Revision: 16642
+I tried
+$ function foo () { echo bar ; }
+and it worked correctly.  I am using the bash shell within a virtual terminal.
 
-Log:
-- pass a LC_ALL to du to avoid i18n trouble when calculating the size.
-  Fixes #1044
+----- Original Message ----
+From: Bernhard Fischer <rep.nop@aon.at>
+To: No One <justanotheraccount863494@yahoo.com>
+Cc: buildroot at uclibc.org
+Sent: Wednesday, November 22, 2006 5:27:42 PM
+Subject: Re: [Buildroot] trylink causes build errors
 
+On Wed, Nov 22, 2006 at 02:05:01PM -0800, No One wrote:
+>
+>Picked up the latest via svn (16637), did a default configuration with make menuconfig, ran make and got the following errors:
+>
+>
+>make[1]: Entering directory `/home/will/box/buildroot/build_i686/busybox'
+>  LINK    busybox_unstripped
+>/home/will/box/buildroot/build_i686/busybox/scripts/trylink: 5: function: not found
+>/home/will/box/buildroot/build_i686/busybox/scripts/trylink: 11: Syntax error: "}" unexpected
 
-Modified:
-   trunk/buildroot/target/ext2/ext2root.mk
+What shell are you using?
+does 
+$ function foo () { echo bar ; }
+$ foo
+bar
+$ unset foo
 
+work? (note the parentheses)
+If so, then bug vda resp. the busybox list or fix it upstream.
 
-Changeset:
-Modified: trunk/buildroot/target/ext2/ext2root.mk
-===================================================================
---- trunk/buildroot/target/ext2/ext2root.mk	2006-11-22 23:22:06 UTC (rev 16641)
-+++ trunk/buildroot/target/ext2/ext2root.mk	2006-11-22 23:36:41 UTC (rev 16642)
-@@ -86,7 +86,7 @@
- 		>> $(STAGING_DIR)/_fakeroot.$(notdir $(EXT2_TARGET))
- 	# Use fakeroot so genext2fs believes the previous fakery
- ifeq ($(strip $(BR2_TARGET_ROOTFS_EXT2_BLOCKS)),0)
--	GENEXT2_REALSIZE=`LANG=C du -l -s -c -k $(TARGET_DIR) | grep total | sed -e "s/total//"`; \
-+	GENEXT2_REALSIZE=`LANG=C LC_ALL=POSIX du -l -s -c -k $(TARGET_DIR) | grep total | sed -e "s/total//"`; \
- 	GENEXT2_ADDTOROOTSIZE=`if [ $$GENEXT2_REALSIZE -ge 20000 ] ; then echo 16384; else echo 2400; fi`; \
- 	GENEXT2_SIZE=`expr $$GENEXT2_REALSIZE + $$GENEXT2_ADDTOROOTSIZE`; \
- 	GENEXT2_ADDTOINODESIZE=`find $(TARGET_DIR) | wc -l`; \
+HTH,
