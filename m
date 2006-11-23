@@ -1,14 +1,9 @@
 From: Goetz Bock <bock@blacknet.de>
-Date: Thu, 23 Nov 2006 09:19:04 +0100
-Subject: [Buildroot] patch: target/cpio
-In-Reply-To: <20061122223459.91499561.philippe.ney@pardes.ws>
-References: <20061120154423.GG3065@priv.blacknet.de>
-	<20061120180143.456f1bd0.philippe.ney@pardes.ws>
-	<20061121095514.GK3065@priv.blacknet.de>
-	<20061122195646.9173ef42.philippe.ney@pardes.ws>
-	<20061122191759.GB1613@aon.at>
-	<20061122223459.91499561.philippe.ney@pardes.ws>
-Message-ID: <20061123081904.GM3065@priv.blacknet.de>
+Date: Thu, 23 Nov 2006 09:38:29 +0100
+Subject: [Buildroot] svn commit: trunk/buildroot/target/cpio
+In-Reply-To: <20061122212459.3EC24485FA@busybox.net>
+References: <20061122212459.3EC24485FA@busybox.net>
+Message-ID: <20061123083829.GN3065@priv.blacknet.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -16,23 +11,36 @@ Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
 
-On Wed, Nov 22 '06 at 22:34, Philippe Ney wrote:
-> > >+config BR2_PACKAGE_CPIO
-> > >+	bool "cpio"
-> > >+	default n
-> > >+	help
-> > >+	  Archiver that handles various types of cpio and tar archives
-> > >+	  (Busybox cpio doesn't support archive generation)
-> > 
-> > We should rather add write support to busybox's ar/cpio et al, IMO.
-> > 
+On Wed, Nov 22 '06 at 13:24, aldot at uclibc.org wrote:
+> Author: aldot
+> Date: 2006-11-22 13:24:58 -0800 (Wed, 22 Nov 2006)
+> New Revision: 16637
 > 
-> Yes sure. It was just more simple for me to use the cpio sources rather
-> than working on Busybox ones.
+> Log:
 > 
-> As this seems to be of interests for Goetz Bock, I posted.
+> 
+> Modified:
+>    trunk/buildroot/target/cpio/cpioroot.mk
 
-And I appreciated it, thanks.
+Could you change it like this?
+
+Index: target/cpio/cpioroot.mk
+===================================================================
+--- target/cpio/cpioroot.mk     (revision 16643)
++++ target/cpio/cpioroot.mk     (working copy)
+@@ -7,7 +7,7 @@
+ CPIO_TARGET:=$(IMAGE).cpio
+ 
+ cpioroot-init:
+-       rm -f $(TARGET_DIR)/init
++       [ -e $(TARGET_DIR)/init ] || \
+        ln -s sbin/init $(TARGET_DIR)/init
+ 
+ cpioroot: host-fakeroot makedevs cpioroot-init
+
+
+My skeleton now countains an init, and that should not be deleted. I
+initialy added the link as otherwise the initramfs does not work.
 --  
 /"\ Goetz Bock at blacknet dot de  --  secure mobile Linux everNETting
 \ /       (c) 2006 Creative Commons, Attribution-ShareAlike 2.0 de
