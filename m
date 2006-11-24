@@ -1,29 +1,21 @@
-From: Bernhard Fischer <rep.nop@aon.at>
-Date: Fri, 24 Nov 2006 13:07:41 +0100
-Subject: [Buildroot] problem with absolute paths to tools in ccache
-In-Reply-To: <20061124105312.100310@gmx.net>
-References: <20061124105312.100310@gmx.net>
-Message-ID: <20061124120740.GA5505@aon.at>
+From: julien.boibessot at free.fr <julien.boibessot@free.fr>
+Date: Fri, 24 Nov 2006 13:50:12 +0100
+Subject: [Buildroot] SDL_image, SDL_ttf & Co
+Message-ID: <1164372612.4566ea842d1b4@imp2-g19.free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Fri, Nov 24, 2006 at 11:53:12AM +0100, Real.Magic at gmx.de wrote:
+Hi !
 
->I have got a problem because ccache is using absolute paths to the ccache working directory and to the tools like gcc.
->
->To prevent ccache from using an absolute path to the ccache working directory, I have applied the following patch successfully:
->
->http://www.busybox.net/lists/buildroot/2006-October/000355.html
+I intend to add SDL_image, SDL_ttf (and probably some other) SDL extentions
+support to Buildroot and I'd like to know if the better way is to add these
+package generation inside "sdl/sdl.mk" or to create a "package/sdl_xx/"
+directory for each package ?
+I'm asking that because I want to commit my changes to Buildroot trunk and want
+to do it cleanly before submitting you a patch.
 
-1) I don't use ccache
-2) If somebody can come up with a patch that makes ccache behave like
-the majority desires (or as it is intended), then bug Eric or Mike or
-anybody else who uses ccache to apply it.
-
->But how can I prevent ccache from using absolute paths to tools like gcc?
-
-no idea, see 1)
-sorry but i can't help with this, fwiw.
+Thanks !
+Julien
