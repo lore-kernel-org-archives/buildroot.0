@@ -1,21 +1,21 @@
-From: julien.boibessot at free.fr <julien.boibessot@free.fr>
-Date: Fri, 24 Nov 2006 13:50:12 +0100
-Subject: [Buildroot] SDL_image, SDL_ttf & Co
-Message-ID: <1164372612.4566ea842d1b4@imp2-g19.free.fr>
+From: Bernhard Fischer <rep.nop@aon.at>
+Date: Fri, 24 Nov 2006 15:10:47 +0100
+Subject: [Buildroot] problem with absolute paths to tools in ccache
+In-Reply-To: <20061124140643.257400@gmx.net>
+References: <20061124105312.100310@gmx.net> <20061124120740.GA5505@aon.at>
+	<20061124140643.257400@gmx.net>
+Message-ID: <20061124141047.GA6335@aon.at>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi !
+On Fri, Nov 24, 2006 at 03:06:43PM +0100, "Matthias G?lck" wrote:
+>Thanks for your quick response.
 
-I intend to add SDL_image, SDL_ttf (and probably some other) SDL extentions
-support to Buildroot and I'd like to know if the better way is to add these
-package generation inside "sdl/sdl.mk" or to create a "package/sdl_xx/"
-directory for each package ?
-I'm asking that because I want to commit my changes to Buildroot trunk and want
-to do it cleanly before submitting you a patch.
+Well, it was not really helpful, i think.
 
-Thanks !
-Julien
+>Could you please tell me, why you do not use ccache?
+
+I simply have no need for it.
