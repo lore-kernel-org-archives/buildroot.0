@@ -1,43 +1,41 @@
-From: Goetz Bock <bock@blacknet.de>
-Date: Thu, 23 Nov 2006 10:59:47 +0100
-Subject: [Buildroot] svn commit: trunk/buildroot/target/cpio
-In-Reply-To: <20061123083829.GN3065@priv.blacknet.de>
-References: <20061122212459.3EC24485FA@busybox.net>
-	<20061123083829.GN3065@priv.blacknet.de>
-Message-ID: <20061123095947.GO3065@priv.blacknet.de>
+From: Crispin Wellington <cwellington@iipc.com.au>
+Date: Fri, 24 Nov 2006 13:30:54 +0800
+Subject: [Buildroot] Stunnel package added
+Message-ID: <1164346255.18338.5.camel@localhost.localdomain>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+Greetings,
 
-On Thu, Nov 23 '06 at 09:38, Goetz Bock wrote:
-> 
-> On Wed, Nov 22 '06 at 13:24, aldot at uclibc.org wrote:
-> > Author: aldot
-> Could you change it like this?
-> ...
+I have added stunnel as a supported package to the buildroot system.
+Find attached a tarball containing the package/stunnel directory
+contents and a diff file for the package/Config.in file.
 
-Sorry, but VIM's et messed up the tabs again. :-(
+This has only been tested so far on an intel build system with an intel
+target.
 
-Index: target/cpio/cpioroot.mk
-===================================================================
---- target/cpio/cpioroot.mk     (revision 16643)
-+++ target/cpio/cpioroot.mk     (working copy)
-@@ -7,7 +7,7 @@
- CPIO_TARGET:=$(IMAGE).cpio
- 
- cpioroot-init:
--	rm -f $(TARGET_DIR)/init
-+	[ -e $(TARGET_DIR)/init ] || \
- 	ln -s sbin/init $(TARGET_DIR)/init
- 
- cpioroot: host-fakeroot makedevs cpioroot-init
+Missing files or problems? let me know.
+
+Kind Regards
+
+Crispin Wellington
+retrogradeorbit at gmail.com
 
 
---  
-/"\ Goetz Bock at blacknet dot de  --  secure mobile Linux everNETting
-\ /       (c) 2006 Creative Commons, Attribution-ShareAlike 2.0 de
- X   [ 1. Use descriptive subjects - 2. Edit a reply for brevity -  ]
-/ \  [ 3. Reply to the list - 4. Read the archive *before* you post ]
+-------------- next part --------------
+A non-text attachment was scrubbed...
+Name: buildroot-stunnel.tar.gz
+Type: application/x-compressed-tar
+Size: 1381 bytes
+Desc: not available
+Url : http://busybox.net/lists/buildroot/attachments/20061124/1f477118/attachment.bin 
+-------------- next part --------------
+A non-text attachment was scrubbed...
+Name: buildroot-stunnel.diff
+Type: text/x-patch
+Size: 395 bytes
+Desc: not available
+Url : http://busybox.net/lists/buildroot/attachments/20061124/1f477118/attachment-0001.bin 
