@@ -1,31 +1,29 @@
-From: Real.Magic at gmx.de <Real.Magic@gmx.de>
-Date: Fri, 24 Nov 2006 11:53:12 +0100
+From: Bernhard Fischer <rep.nop@aon.at>
+Date: Fri, 24 Nov 2006 13:07:41 +0100
 Subject: [Buildroot] problem with absolute paths to tools in ccache
-Message-ID: <20061124105312.100310@gmx.net>
+In-Reply-To: <20061124105312.100310@gmx.net>
+References: <20061124105312.100310@gmx.net>
+Message-ID: <20061124120740.GA5505@aon.at>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+On Fri, Nov 24, 2006 at 11:53:12AM +0100, Real.Magic at gmx.de wrote:
 
-Hello all!
+>I have got a problem because ccache is using absolute paths to the ccache working directory and to the tools like gcc.
+>
+>To prevent ccache from using an absolute path to the ccache working directory, I have applied the following patch successfully:
+>
+>http://www.busybox.net/lists/buildroot/2006-October/000355.html
 
-I have got a problem because ccache is using absolute paths to the ccache working directory and to the tools like gcc.
+1) I don't use ccache
+2) If somebody can come up with a patch that makes ccache behave like
+the majority desires (or as it is intended), then bug Eric or Mike or
+anybody else who uses ccache to apply it.
 
-To prevent ccache from using an absolute path to the ccache working directory, I have applied the following patch successfully:
+>But how can I prevent ccache from using absolute paths to tools like gcc?
 
-http://www.busybox.net/lists/buildroot/2006-October/000355.html
-
- 
-But how can I prevent ccache from using absolute paths to tools like gcc?
-
-
-Kind regards,
-
-Matthias
-
-
--- 
-Der GMX SmartSurfer hilft bis zu 70% Ihrer Onlinekosten zu sparen! 
-Ideal f?r Modem und ISDN: http://www.gmx.net/de/go/smartsurfer
+no idea, see 1)
+sorry but i can't help with this, fwiw.
