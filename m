@@ -1,31 +1,20 @@
-From: Bernhard Fischer <rep.nop@aon.at>
-Date: Sat, 25 Nov 2006 12:25:56 +0100
-Subject: [Buildroot] SDL_image, SDL_ttf & Co
-In-Reply-To: <1164372612.4566ea842d1b4@imp2-g19.free.fr>
-References: <1164372612.4566ea842d1b4@imp2-g19.free.fr>
-Message-ID: <20061125112556.GB27344@aon.at>
+From: David Prime <david@primefarm.co.uk>
+Date: Sun, 26 Nov 2006 22:46:34 -0000 (UTC)
+Subject: [Buildroot] c++ cross compiler
+Message-ID: <64405.80.176.236.13.1164581194.squirrel@mail.primefarm.co.uk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Fri, Nov 24, 2006 at 01:50:12PM +0100, julien.boibessot at free.fr
-wrote:
->Hi !
->
->I intend to add SDL_image, SDL_ttf (and probably some other) SDL
->extentions
->support to Buildroot and I'd like to know if the better way is to add
->these
->package generation inside "sdl/sdl.mk" or to create a "package/sdl_xx/"
->directory for each package ?
+Hi,
 
-I'd put it in the existing sdl.mk
+Anyone with a working arm c++ cross compiler care to share their buildroot
+.config ?
 
-then
-config BR2_PACKAGE_SDL_IMAGE
-	bool "SDL_image"
-	depends on BR2_PACKAGE_SDL
-	help
-	  foo
+When I attempt to build it, it appears not to build the cpp libraries to
+go with it, so when I try to link my programs it all fails miserably :(
+
+
+David
