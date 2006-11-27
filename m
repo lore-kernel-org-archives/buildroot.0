@@ -1,23 +1,21 @@
-From: julien.boibessot at free.fr <julien.boibessot@free.fr>
-Date: Mon, 27 Nov 2006 12:29:52 +0100
-Subject: [Buildroot] SDL_image, SDL_ttf & Co (libpng12.So bug)
-Message-ID: <1164626992.456acc30b2a4a@imp1-g19.free.fr>
+From: d p <dogpointer@gmail.com>
+Date: Mon, 27 Nov 2006 14:14:19 +0100
+Subject: [Buildroot] Gdb & gdbserver segmentation fault
+Message-ID: <e3291e320611270514l7c51d9ffkdd45b30003e656e6@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi,
+I compiled buildroot under cygwin for a i686 linux target. If I try to
+launch the generated target gdb and gdbserver (version 6.5) on a linux
+machine with the compiled uClibc libraries copied from the cygwin build I
+get a segmentation fault for both the programs.
+Gdb and gdbserver also crash with the pre-compiled uClibc development system
+(root_fs_i386.ext2.bz2).
 
-I have tried an older Buildroot version (20060217) and SDL_image is compiling
-fine. uClibc version is the same (0.9.28) than on my "non working" Buildroot
-snapshot (20060908).
-
-Claudio, which Buildroot version are you using ?
-
-Does somebody from buildroot team working on the very similar
-DirectFB/libpng12.so bug (ID 959) has already found something ?
-
-regards,
-Julien
+Thanks in advance for your help.
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: http://busybox.net/lists/buildroot/attachments/20061127/0598093a/attachment.html 
