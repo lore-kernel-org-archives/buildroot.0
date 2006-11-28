@@ -1,34 +1,33 @@
-From: Rafael A Barrero <rafa@linux.it>
-Date: Tue, 28 Nov 2006 22:38:46 +0100 (CET)
+From: Pavel Roskin <proski@gnu.org>
+Date: Tue, 28 Nov 2006 17:28:11 -0500
 Subject: [Buildroot] new DHCP version and make error
-In-Reply-To: <54185.206.190.75.8.1164745659.squirrel@picard.linux.it>
+In-Reply-To: <25387.206.190.75.8.1164749926.squirrel@picard.linux.it>
 References: <54185.206.190.75.8.1164745659.squirrel@picard.linux.it>
-Message-ID: <25387.206.190.75.8.1164749926.squirrel@picard.linux.it>
+	<25387.206.190.75.8.1164749926.squirrel@picard.linux.it>
+Message-ID: <1164752891.4016.9.camel@dv>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Same goes for DirectFB... DirectFB-0.9.25.1.tar.gz is no longer available,
-new version is 1.0.0-rc2.tar.gz. Thoughts?
+Hello!
 
+On Tue, 2006-11-28 at 22:38 +0100, Rafael A Barrero wrote:
+> Same goes for DirectFB... DirectFB-0.9.25.1.tar.gz is no longer available,
+> new version is 1.0.0-rc2.tar.gz. Thoughts?
 
+I'd like to see buildroot become a distribution over time.  As a
+distribution, every release of buildroot would provide a fixed set of
+packages, perhaps with security and stability fixes added over time.
+For the distribution release to remain buildable, the project would have
+to mirror all the packages used in every release.
 
-> Hi guys;
->
-> New to the list... and to buildroot. I've been working with embedded linux
-> on the application side, but never really dug too deep enough to build my
-> own system until now. I also wanted to say thanks for all the hard work.
->
-> BusyBox seems to build against DHCP 3.0.4, but the FTP server at ISC
-> doesn't seem to host that version in the /isc/dhcp/ directory any longer
-> (moved to /isc/dhcp/dhcp-3.0-history/ now). Does anyone have any
-> experience building dhcp 3.0.5 instead of 3.0.4? Any problems?
->
-> Also, I was getting a make error "CONFIG_SYSLOGD: redefined". Has anyone
-> seen this?
->
-> Rafael.
->
->
+Since we are not there yet, the only solution is to keep up with the
+updates.  Somebody with plenty of computing resources should build the
+"full" configuration from time to time and report breakage, ideally
+accompanied by the patches.
+
+-- 
+Regards,
+Pavel Roskin
