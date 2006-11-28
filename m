@@ -1,57 +1,36 @@
-From: julien.boibessot at free.fr <julien.boibessot@free.fr>
-Date: Mon, 27 Nov 2006 18:27:50 +0100
-Subject: [Buildroot] [Fwd: Re:  SDL_image,
-	SDL_ttf & Co (libpng12.So bug)]
-In-Reply-To: <456AE6A3.1020409@elaxys.com.br>
-References: <456AE31F.9020200@elaxys.com.br> <456AE6A3.1020409@elaxys.com.br>
-Message-ID: <1164648470.456b2016bbf49@imp5-g19.free.fr>
+From: aldot at uclibc.org <aldot@uclibc.org>
+Date: Tue, 28 Nov 2006 00:49:17 -0800 (PST)
+Subject: [Buildroot] svn commit: trunk/buildroot/target/ext2
+Message-ID: <20061128084917.C786848576@busybox.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi,
+Author: aldot
+Date: 2006-11-28 00:49:17 -0800 (Tue, 28 Nov 2006)
+New Revision: 16701
 
-> I was using buildroot version 20061111 and managed to
-> compile SDL_image including the following flags (LDFLAGS) for the
-> linker.
->
-> $(SDL_IMAGE_DIR)/.compiled: $(SDL_IMAGE_DIR)/.configured
-> 	$(MAKE) LDFLAGS=$(STAGING_DIR)/lib/libpng12.so -C $(SDL_IMAGE_DIR)
-> 	touch $(SDL_IMAGE_DIR)/.compiled
->
+Log:
+- Change LC_ALL=POSIX to LC_ALL=C and remove LANG=C as suggested by vapier.
 
-Well I investigate a little too and find that when removing "showimage" example
-compilation from Makefile, then I was able to compile SDL_image. (The error on
-libpng12.so is during showimage tool link.) But if think your solution is
-cleaner
-;-)
 
-> I had to change the sdl.mk for SDL adding the following line
-> to configure:
-> 	--disable-video-directfb
->
-ok ,thanks for the tip !
+Modified:
+   trunk/buildroot/target/ext2/ext2root.mk
 
-> I am now having problems compiling SDL_ttf ...
 
-I had problems too :-). I suppose you have the same: missing OpenGL library.
-I was able to compile SDL_ttf (2.0.8) when adding the following options to
-configure:
-        --disable-sdltest
-	--without-x
-	--disable-opengl
-
-I attach my SDL_ttf makefile if it can help you. Let me know if it solves your
-problem !
-
-regards,
-Julien
--------------- next part --------------
-A non-text attachment was scrubbed...
-Name: sdl_ttf.mk
-Type: application/octet-stream
-Size: 2218 bytes
-Desc: not available
-Url : http://busybox.net/lists/buildroot/attachments/20061127/d139ca79/attachment.obj 
+Changeset:
+Modified: trunk/buildroot/target/ext2/ext2root.mk
+===================================================================
+--- trunk/buildroot/target/ext2/ext2root.mk	2006-11-28 00:46:49 UTC (rev 16700)
++++ trunk/buildroot/target/ext2/ext2root.mk	2006-11-28 08:49:17 UTC (rev 16701)
+@@ -86,7 +86,7 @@
+ 		>> $(STAGING_DIR)/_fakeroot.$(notdir $(EXT2_TARGET))
+ 	# Use fakeroot so genext2fs believes the previous fakery
+ ifeq ($(strip $(BR2_TARGET_ROOTFS_EXT2_BLOCKS)),0)
+-	GENEXT2_REALSIZE=`LANG=C LC_ALL=POSIX du -l -s -c -k $(TARGET_DIR) | grep total | sed -e "s/total//"`; \
++	GENEXT2_REALSIZE=`LC_ALL=C du -l -s -c -k $(TARGET_DIR) | grep total | sed -e "s/total//"`; \
+ 	GENEXT2_ADDTOROOTSIZE=`if [ $$GENEXT2_REALSIZE -ge 20000 ] ; then echo 16384; else echo 2400; fi`; \
+ 	GENEXT2_SIZE=`expr $$GENEXT2_REALSIZE + $$GENEXT2_ADDTOROOTSIZE`; \
+ 	GENEXT2_ADDTOINODESIZE=`find $(TARGET_DIR) | wc -l`; \
