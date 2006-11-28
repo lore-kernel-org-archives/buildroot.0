@@ -1,37 +1,25 @@
-From: Bernhard Fischer <rep.nop@aon.at>
-Date: Tue, 28 Nov 2006 21:15:14 +0100
-Subject: [Buildroot] Buildroot, NAND flash and missing mkfs.jffs2 option
-In-Reply-To: <1164737384.456c7b6809f9d@imp3-g19.free.fr>
-References: <1164737384.456c7b6809f9d@imp3-g19.free.fr>
-Message-ID: <20061128201514.GC27344@aon.at>
+From: Rafael A Barrero <rafa@linux.it>
+Date: Tue, 28 Nov 2006 21:27:39 +0100 (CET)
+Subject: [Buildroot] new DHCP version and make error
+Message-ID: <54185.206.190.75.8.1164745659.squirrel@picard.linux.it>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Tue, Nov 28, 2006 at 07:09:44PM +0100, julien.boibessot at free.fr wrote:
->Hi !
->
->I have found that on my NAND flash, if I want to burn a JFFS2 rootfs image
->generated with buildroot, I need to add "-n" option to JFFS2_OPTS variable in
->target/jffs2/jffs2.mk Makefile.
->
->Otherwise when mounting my rootfs, I have a lot of warning messages like this
->one:
->    CLEANMARKER node found at 0x00...... has totlen 0xc != normal 0x0
->
->Was anybody aware of that special case ?
+Hi guys;
 
->Should I send you a patch to support NAND flash ?
+New to the list... and to buildroot. I've been working with embedded linux
+on the application side, but never really dug too deep enough to build my
+own system until now. I also wanted to say thanks for all the hard work.
 
-I think there is at least one report at bugs.busybox.net about jffs2,
-namely an endian fix and maybe another report. It would be great if you
-could verify that the endian patch does break nothing for you, so that i
-can apply it safely and check if there is already a report WRT jffs2 and
--n. If there is already such a report, then i ask you to be so kind and
-to point me to it and also point out further problems you did encounter
-with jffs2 (like the -n you mentioned above).
+BusyBox seems to build against DHCP 3.0.4, but the FTP server at ISC
+doesn't seem to host that version in the /isc/dhcp/ directory any longer
+(moved to /isc/dhcp/dhcp-3.0-history/ now). Does anyone have any
+experience building dhcp 3.0.5 instead of 3.0.4? Any problems?
 
-TIA,
-Bernhard
+Also, I was getting a make error "CONFIG_SYSLOGD: redefined". Has anyone
+seen this?
+
+Rafael.
