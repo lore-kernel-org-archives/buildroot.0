@@ -1,23 +1,28 @@
 From: Bernhard Fischer <rep.nop@aon.at>
-Date: Wed, 29 Nov 2006 09:48:29 +0100
-Subject: [Buildroot] [PATCH] acpid vs gcc-4.1.1 fix
-In-Reply-To: <1164768906.4016.72.camel@dv>
-References: <1164768906.4016.72.camel@dv>
-Message-ID: <20061129084829.GB26441@aon.at>
+Date: Wed, 29 Nov 2006 09:52:12 +0100
+Subject: [Buildroot] new DHCP version and make error
+In-Reply-To: <54185.206.190.75.8.1164745659.squirrel@picard.linux.it>
+References: <54185.206.190.75.8.1164745659.squirrel@picard.linux.it>
+Message-ID: <20061129085212.GC26441@aon.at>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Tue, Nov 28, 2006 at 09:55:06PM -0500, Pavel Roskin wrote:
->acpid is compiled with -Werror, and gcc 4.1.1 warns about mismatching
->pointers.  Fix it by using socklen_t type.
+On Tue, Nov 28, 2006 at 09:27:39PM +0100, Rafael A Barrero wrote:
+>Hi guys;
 >
->Modify acpid.mk to apply all available patches.  Convert ACPI_SOCKETFILE
->adjustment from sed script to a patch.
+>New to the list... and to buildroot. I've been working with embedded linux
+>on the application side, but never really dug too deep enough to build my
+>own system until now. I also wanted to say thanks for all the hard work.
 >
->Please make sure to add the new 2 patches to Subversion.
+>BusyBox seems to build against DHCP 3.0.4, but the FTP server at ISC
 
-Merged as r16712.
-thanks,
+Busybox does definitely _not_ build against DHCP 3.0.4 :)
+Busybox has it's own dhcp impl which i recommend to use. If you have
+trouble with udhcp from busybox then let me point you to the busybox
+list.
+
+HTH,
+Bernhard
