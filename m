@@ -1,58 +1,114 @@
-From: aldot at uclibc.org <aldot@uclibc.org>
-Date: Wed, 29 Nov 2006 12:51:48 -0800 (PST)
-Subject: [Buildroot] svn commit: trunk/buildroot/package/openswan
-Message-ID: <20061129205148.4472448590@busybox.net>
+From: Petr Stetiar <ynezz@true.cz>
+Date: Wed, 29 Nov 2006 22:38:47 +0100
+Subject: [Buildroot] svn commit: trunk/buildroot/package/udev
+In-Reply-To: <20061129185944.32BC84858D@busybox.net>
+References: <20061129185944.32BC84858D@busybox.net>
+Message-ID: <20061129213847.GC15202@ibawizard.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Author: aldot
-Date: 2006-11-29 12:51:47 -0800 (Wed, 29 Nov 2006)
-New Revision: 16728
+aldot at uclibc.org <aldot@uclibc.org> [2006-11-29 10:59:44]:
 
-Log:
-- use the correct installation path.
+> Author: aldot
+> Date: 2006-11-29 10:59:43 -0800 (Wed, 29 Nov 2006)
+> New Revision: 16723
+> 
+> Log:
+> - build a udev for the target rather than for the host.
 
+Attached patch bumps version to 100, fixes Makefile and init script.
 
-Modified:
-   trunk/buildroot/package/openswan/openswan.mk
-
-
-Changeset:
-Modified: trunk/buildroot/package/openswan/openswan.mk
+-- ynezz
+-------------- next part --------------
+Index: init-udev
 ===================================================================
---- trunk/buildroot/package/openswan/openswan.mk	2006-11-29 20:26:05 UTC (rev 16727)
-+++ trunk/buildroot/package/openswan/openswan.mk	2006-11-29 20:51:47 UTC (rev 16728)
-@@ -11,8 +11,8 @@
- OPENSWAN_SITE:=http://www.openswan.org/download/
- OPENSWAN_DIR:=$(BUILD_DIR)/openswan-$(OPENSWAN_VERSION)
- OPENSWAN_CAT:=$(ZCAT)
--OPENSWAN_BINARY:=openswan
--OPENSWAN_TARGET_BINARY:=usr/sbin/openswan
-+OPENSWAN_BINARY:=programs/pluto/pluto
-+OPENSWAN_TARGET_BINARY:=usr/sbin/ipsec
+--- init-udev	(revision 16729)
++++ init-udev	(working copy)
+@@ -27,6 +27,8 @@
+ test -x $UDEV_BIN || exit 5
+ UDEVSTART_BIN=/sbin/udevstart
+ test -x $UDEVSTART_BIN || exit 5
++UDEVD_BIN=/sbin/udevd
++test -x $UDEVD_BIN || exit 5
  
- $(DL_DIR)/$(OPENSWAN_SOURCE):
- 	 $(WGET) -P $(DL_DIR) $(OPENSWAN_SITE)/$(OPENSWAN_SOURCE)
-@@ -28,16 +28,16 @@
- 	touch  $(OPENSWAN_DIR)/.configured
+ # Check for config file and read it
+ UDEV_CONFIG=/etc/udev/udev.conf
+@@ -64,7 +66,10 @@
+ 	echo -n "Populating $udev_root using udev... "
+ 	$UDEVSTART_BIN || (echo "FAIL" && exit 1)
+ 	mkdir $udev_root/pts $udev_root/shm
++	# start daemon
++	$UDEVD_BIN --daemon || (echo "udevd FAIL" && exit 1)
+ 	echo "done"
++	mount -a
+ 	;;
+     stop)
+ 	# do nothing
+Index: udev_fix_makefile.patch
+===================================================================
+--- udev_fix_makefile.patch	(revision 0)
++++ udev_fix_makefile.patch	(revision 0)
+@@ -0,0 +1,12 @@
++diff -u udev-100/Makefile udev-100.ynezz/Makefile
++--- udev-100/Makefile	2006-09-07 11:32:45.000000000 +0200
+++++ udev-100.ynezz/Makefile	2006-09-18 17:35:33.000000000 +0200
++@@ -276,6 +276,8 @@
++ install-bin:
++ 	$(INSTALL) -d $(DESTDIR)$(udevdir)
++ 	$(INSTALL_PROGRAM) -D udevd $(DESTDIR)$(sbindir)/udevd
+++	$(INSTALL_PROGRAM) -D udev $(DESTDIR)$(sbindir)/udev
+++	$(INSTALL_PROGRAM) -D udevstart $(DESTDIR)$(sbindir)/udevstart
++ 	$(INSTALL_PROGRAM) -D udevtrigger $(DESTDIR)$(sbindir)/udevtrigger
++ 	$(INSTALL_PROGRAM) -D udevsettle $(DESTDIR)$(sbindir)/udevsettle
++ 	$(INSTALL_PROGRAM) -D udevcontrol $(DESTDIR)$(sbindir)/udevcontrol
+Index: udev.mk
+===================================================================
+--- udev.mk	(revision 16729)
++++ udev.mk	(working copy)
+@@ -3,7 +3,7 @@
+ # udev
+ #
+ #############################################################
+-UDEV_VERSION:=094
++UDEV_VERSION:=100
+ UDEV_SOURCE:=udev-$(UDEV_VERSION).tar.bz2
+ UDEV_SITE:=ftp://ftp.kernel.org/pub/linux/utils/kernel/hotplug/
+ UDEV_CAT:=$(BZCAT)
+@@ -35,7 +35,7 @@
+ 	touch $(UDEV_DIR)/.configured
  
- $(OPENSWAN_DIR)/$(OPENSWAN_BINARY): $(OPENSWAN_DIR)/.configured
--	echo $(LINUX_KERNEL)
-+	@echo $(LINUX_KERNEL)
- 	$(TARGET_CONFIGURE_OPTS) \
- 	$(MAKE) -C $(OPENSWAN_DIR) \
--		KERNELSRC=$(LINUX_DIR) DESTDIR=$(TARGET_DIR) \
-+		KERNELSRC=$(LINUX_DIR) DESTDIR=$(TARGET_DIR) INC_USRLOCAL=/usr \
- 		CC=$(TARGET_CC) USERCOMPILE="-UDEBUG -DNO_DEBUG -ULEAK_DETECTIVE $(TARGET_CFLAGS) -I$(TARGET_DIR)/usr/include" LD_LIBRARY_PATH=$(TARGET_DIR)/usr/lib programs
+ $(UDEV_DIR)/$(UDEV_BINARY): $(UDEV_DIR)/.configured
+-	$(MAKE) CROSS=$(TARGET_CROSS) CC=$(TARGET_CC) LD=$(TARGET_CC) \
++	$(MAKE) CROSS_COMPILE=$(TARGET_CROSS) CC=$(TARGET_CC) LD=$(TARGET_CC)\
+ 		CFLAGS="$(BR2_UDEV_CFLAGS)" \
+ 		USE_LOG=false USE_SELINUX=false \
+ 		udevdir=$(UDEV_ROOT) -C $(UDEV_DIR)
+@@ -45,19 +45,21 @@
+ # default access controls prevent non-root tasks from running.  Many of the
+ # rule files rely on PROGRAM invocations (e.g. extra /etc/udev/scripts);
+ # for now we'll avoid having buildroot systems rely on them.
+-UDEV_CONF:=etc/udev/frugalware/udev.rules
++UDEV_CONF:=etc/udev/frugalware/*
  
- $(TARGET_DIR)/$(OPENSWAN_TARGET_BINARY): $(OPENSWAN_DIR)/$(OPENSWAN_BINARY)
- 	$(TARGET_CONFIGURE_OPTS) \
- 	$(MAKE) -C $(OPENSWAN_DIR) \
--		KERNELSRC=$(LINUX_DIR) DESTDIR=$(TARGET_DIR) \
-+		KERNELSRC=$(LINUX_DIR) DESTDIR=$(TARGET_DIR) INC_USRLOCAL=/usr \
- 		CC=$(TARGET_CC) USERCOMPILE="-UDEBUG -DNO_DEBUG -ULEAK_DETECTIVE $(TARGET_CFLAGS) -I$(TARGET_DIR)/usr/include" LD_LIBRARY_PATH=$(TARGET_DIR)/usr/lib install
- 	rm -rf $(TARGET_DIR)/share/locale $(TARGET_DIR)/usr/info \
- 		$(TARGET_DIR)/usr/man $(TARGET_DIR)/usr/share/doc
+ $(TARGET_DIR)/$(UDEV_TARGET_BINARY): $(UDEV_DIR)/$(UDEV_BINARY)
+ 	-mkdir $(TARGET_DIR)/sys
+-	install -D -m 0644 $(UDEV_DIR)/$(UDEV_CONF) \
+-		$(TARGET_DIR)/etc/udev/rules.d/50-udev.rules
+-	$(MAKE) CROSS=$(TARGET_CROSS) CC=$(TARGET_CC) LD=$(TARGET_CC) \
++	-mkdir -p $(TARGET_DIR)/etc/udev/rules.d
++	$(INSTALL) -D -m 0644 $(UDEV_DIR)/$(UDEV_CONF) \
++		$(TARGET_DIR)/etc/udev/rules.d
++	$(MAKE) CROSS_COMPILE=$(TARGET_CROSS) CC=$(TARGET_CC)  LD=$(TARGET_CC) \
+ 		DESTDIR=$(TARGET_DIR) \
+ 		CFLAGS="$(BR2_UDEV_CFLAGS)" \
+ 		LDFLAGS="-warn-common" \
+ 		USE_LOG=false USE_SELINUX=false \
+ 		udevdir=$(UDEV_ROOT) -C $(UDEV_DIR) install
+ 	$(INSTALL) -m 0755 -D package/udev/init-udev $(TARGET_DIR)/etc/init.d/S10udev
++	$(INSTALL) -m 0644 -D package/udev/udev.conf $(TARGET_DIR)/etc/udev
+ 
+ udev: uclibc $(TARGET_DIR)/$(UDEV_TARGET_BINARY)
+ 
