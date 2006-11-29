@@ -1,28 +1,40 @@
-From: Bernhard Fischer <rep.nop@aon.at>
-Date: Wed, 29 Nov 2006 14:27:15 +0100
-Subject: [Buildroot] List of broken packages
-In-Reply-To: <20061129093412.GE26441@aon.at>
-References: <1164787709.5573.6.camel@dv> <20061129093412.GE26441@aon.at>
-Message-ID: <20061129132715.GA6630@aon.at>
+From: MikeW <mw_phil@yahoo.co.uk>
+Date: Wed, 29 Nov 2006 13:25:41 +0000 (UTC)
+Subject: [Buildroot] Impossible to build EABI ARM gcc toolchain using
+	Buildroot ?
+Message-ID: <loom.20061129T130728-811@post.gmane.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Wed, Nov 29, 2006 at 10:34:12AM +0100, Bernhard Fischer wrote:
->On Wed, Nov 29, 2006 at 03:08:29AM -0500, Pavel Roskin wrote:
->>Hello!
->>
->>This is the complete list of the packages I had to disable when
->>cross-compiling current Buildroot on x86_64 for i686:
+gcc-3.4.3
+binutils-2.16.91.0.7
+buildroot-20061031
 
->>BR2_PACKAGE_OPENSWAN
->>(oswlog.c:46: error: expected '=', ',', ';', 'asm' or '__attribute__'
->>before 'openswan_passert_fail)
->
->That's guarded by !defined(NO_DEBUG) and we build with -DNO_DEBUG.
->Curious as to why you see this.. Works For Me, fwiw..
+Target Architecture: arm
+Target Architecture Variant: arm926t
+Target ABI: EABI
+Build Options: GNU Target Suffix: ????
+Toolchain options: Kernel Headers 2.6.11
 
-hmz. It helps if one actually applies the patches ;)
-Fixed in r16719.
+Is there a way of building an EABI ARM toolchain using Buildroot ?
+Or is it one of those things that is not currently possible ?
+
+If I set the target suffix to 'elf-linux' the toolchain build
+completes, but objects created with it have EABI version=0 (= no EABI).
+(These will not link with a 3rd-party-built library with EABI version=4.)
+
+If I set to to 'armelf-linux-eabi' or one of the other likely-
+looking values, I get a build error from ld: 
+ in/ld: unrecognised emulation mode: armelf_linux
+ Supported emulations: armelf_linux_eabi
+
+I can't see any other likely setting to change ...
+
+Any ideas ?
+Or do a need a newer version of Buildroot ... or a patch ?
+
+Thanks,
+MikeW
