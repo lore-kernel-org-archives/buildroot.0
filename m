@@ -1,22 +1,37 @@
-From: MikeW <mw_phil@yahoo.co.uk>
-Date: Wed, 29 Nov 2006 15:06:17 +0000 (UTC)
-Subject: [Buildroot] =?utf-8?q?=27ld=27_gives?=
-References: <loom.20061101T111436-827@post.gmane.org>
-	<loom.20061102T152239-949@post.gmane.org>
-	<loom.20061121T200844-447@post.gmane.org>
-	<f2b55d220611211208yef912b8p4c00bfd2ee2a2eca@mail.gmail.com>
-	<loom.20061122T095656-727@post.gmane.org>
-	<f2b55d220611220908v2a8699bt61a298dbf3fcf100@mail.gmail.com>
-	<loom.20061129T155533-364@post.gmane.org>
-Message-ID: <loom.20061129T160458-554@post.gmane.org>
+From: julien.boibessot at free.fr <julien.boibessot@free.fr>
+Date: Wed, 29 Nov 2006 16:38:50 +0100
+Subject: [Buildroot] [Fwd: Re:  SDL_image,
+	SDL_ttf & Co (libpng12.So bug)]
+In-Reply-To: <456D6B87.7070207@elaxys.com.br>
+References: <456AE31F.9020200@elaxys.com.br> <456AE6A3.1020409@elaxys.com.br>
+	<1164648470.456b2016bbf49@imp5-g19.free.fr>
+	<456D6B87.7070207@elaxys.com.br>
+Message-ID: <1164814730.456da98a27eea@imp7-g19.free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-MikeW <mw_phil@...> writes:
->
-> But where ... crosstool ?
+Hi,
 
-Except Buildroot doesn't use crosstool.       
+I have tried your "trick" for SDL_image compilation and even if I put the
+LDFLAGS you advised I always have the same link error (/usr/lib/libpng12.so pb)
+
+Are you sure it was the only thing you changed ?
+
+Thanks,
+Julien
+
+Quoting Claudio Leonel <cls@elaxys.com.br>:
+
+> >>I was using buildroot version 20061111 and managed to
+> >>compile SDL_image including the following flags (LDFLAGS) for the
+> >>linker.
+> >>
+> >>$(SDL_IMAGE_DIR)/.compiled: $(SDL_IMAGE_DIR)/.configured
+> >>	$(MAKE) LDFLAGS=$(STAGING_DIR)/lib/libpng12.so -C $(SDL_IMAGE_DIR)
+> >>	touch $(SDL_IMAGE_DIR)/.compiled
+> >>
+> >
+> >
