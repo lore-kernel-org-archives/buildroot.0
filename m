@@ -1,25 +1,103 @@
-From: Bernhard Fischer <rep.nop@aon.at>
-Date: Wed, 29 Nov 2006 11:30:42 +0100
-Subject: [Buildroot] [PATCH] Update version of device-mapper,
-	add alternate location
-In-Reply-To: <1164774561.4016.87.camel@dv>
-References: <1164774561.4016.87.camel@dv>
-Message-ID: <20061129103042.GA27354@aon.at>
+From: aldot at uclibc.org <aldot@uclibc.org>
+Date: Wed, 29 Nov 2006 02:39:30 -0800 (PST)
+Subject: [Buildroot] svn commit: trunk/buildroot/toolchain/dependencies
+Message-ID: <20061129103930.E07C04856B@busybox.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Tue, Nov 28, 2006 at 11:29:21PM -0500, Pavel Roskin wrote:
->Old versions of device-mapper are moved to the "old" directory.  Since
->new versions are released very often, tracking them would require
->frequent changes.
->
->To avoid the breakage, look in the "old" directory if the package is not
->found.
+Author: aldot
+Date: 2006-11-29 02:39:30 -0800 (Wed, 29 Nov 2006)
+New Revision: 16714
 
-I don't like the idea of silently using an old version, but then, i
-don't use dm myself.
+Log:
+- move check for which(1) before it's first use
+- fix printing a message when erroring out on non-existing HOSTCC
 
-Merged as r16713, thanks
+
+Modified:
+   trunk/buildroot/toolchain/dependencies/dependencies.sh
+
+
+Changeset:
+Modified: trunk/buildroot/toolchain/dependencies/dependencies.sh
+===================================================================
+--- trunk/buildroot/toolchain/dependencies/dependencies.sh	2006-11-29 10:23:54 UTC (rev 16713)
++++ trunk/buildroot/toolchain/dependencies/dependencies.sh	2006-11-29 10:39:30 UTC (rev 16714)
+@@ -1,6 +1,5 @@
+ #!/bin/sh
+ 
+-set -e
+ #set -x
+ 
+ echo ""
+@@ -31,6 +30,19 @@
+ 
+ #############################################################
+ #
++# check build system 'which'
++#
++#############################################################
++if ! which which > /dev/null ; then
++	echo "which installed:		    FALSE"
++	echo -e "\n\nYou must install 'which' on your build machine\n";
++	exit 1;
++fi;
++echo "which installed:		    Ok"
++
++
++#############################################################
++#
+ # check build system 'make'
+ #
+ #############################################################
+@@ -64,12 +76,13 @@
+ COMPILER=$(which $HOSTCC)
+ if [ -z "$COMPILER" ] ; then
+ 	COMPILER=$(which cc)
+-	if [ -z "$COMPILER" ] ; then
+-		echo "gcc installed:		    FALSE"
+-		echo -e "\n\nYou must install 'gcc' on your build machine\n";
+-		exit 1;
+-	fi;
+ fi;
++if [ -z "$COMPILER" ] ; then
++	echo "C Compiler installed:		    FALSE"
++	echo -e "\n\nYou must install 'gcc' on your build machine\n";
++	exit 1;
++fi;
++
+ COMPILER_VERSION=$($COMPILER --version 2>&1 | head -n1 | $XSED -e 's/^.*(.CC) \([0-9\.]\)/\1/g' -e "s/[-\ ].*//g")
+ if [ -z "$COMPILER_VERSION" ] ; then
+ 	echo "gcc installed:		    FALSE"
+@@ -82,26 +95,13 @@
+ 	echo "You have gcc '$COMPILER_VERSION' installed.  gcc >= 2.95 is required"
+ 	exit 1;
+ fi;
+-echo "gcc version '$COMPILER_VERSION':		    Ok"
++echo "C compiler '$COMPILER'"
++echo "C compiler version '$COMPILER_VERSION':	    Ok"
+ 
+ 
+ 
+-
+ #############################################################
+ #
+-# check build system 'which'
+-#
+-#############################################################
+-if ! which which > /dev/null ; then
+-	echo "which installed:		    FALSE"
+-	echo -e "\n\nYou must install 'which' on your build machine\n";
+-	exit 1;
+-fi;
+-echo "which installed:		    Ok"
+-
+-
+-#############################################################
+-#
+ # check build system 'bison'
+ #
+ #############################################################
