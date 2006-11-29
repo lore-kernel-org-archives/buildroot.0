@@ -1,61 +1,63 @@
-From: David Prime <david@primefarm.co.uk>
-Date: Wed, 29 Nov 2006 17:52:18 -0000 (UTC)
-Subject: [Buildroot] problem generating c++ compiler for target arch
-In-Reply-To: <loom.20061129T184236-586@post.gmane.org>
-References: <33335.80.176.236.13.1164224678.squirrel@mail.primefarm.co.uk>
-	<20061122200213.GB1863@aon.at>
-	<33446.80.176.236.13.1164226145.squirrel@mail.primefarm.co.uk>
-	<20061122201834.GD1863@aon.at>
-	<33518.80.176.236.13.1164226860.squirrel@mail.primefarm.co.uk>
-	<loom.20061129T184236-586@post.gmane.org>
-Message-ID: <27766.80.176.236.13.1164822738.squirrel@mail.primefarm.co.uk>
+From: aldot at uclibc.org <aldot@uclibc.org>
+Date: Wed, 29 Nov 2006 10:59:44 -0800 (PST)
+Subject: [Buildroot] svn commit: trunk/buildroot/package/udev
+Message-ID: <20061129185944.32BC84858D@busybox.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Wed, November 29, 2006 5:45 pm, MikeW wrote:
-> <lists@...> writes:
->
->
->>
->> OK,
->>
->>
->> I managed to get buildroot to complete the build at last. Sadly, the
->> c++ compiler is b0rked.
->>
->> Looks like it's missing all sorts of libraries and things. Here is some
->>  sample output trying to compile a very simple program (C++ hello
->> world):
->>
->>
->> david <at> tulip:~/buildroot/build_arm/staging_dir/bin$ ./arm-linux-gcc
->> foo.cpp /tmp/ccNH0d2c.o: In function `std::__verify_grouping(char
->> const*, unsigned int, std::basic_string<char, std::char_traits<char>,
->> std::allocator<char>
->>
->>> const&)':
->>>
->> foo.cpp:(.text+0x20): undefined reference to `std::basic_string<char,
->> std::char_traits<char>, std::allocator<char> >::size() const'
->> foo.cpp:(.text+0x98): undefined reference to `std::basic_string<char,
->> std::char_traits<char>, std::allocator<char> >::operator[](unsigned int)
->>  const'
-> ...
->
->>
->> All sorts of things missing there - have I inadvertantly broken lots of
->>  buildroot?
->>
->> David
->>
->>
->
-> Did you specify libstdc++ in your menuconfig ?
+Author: aldot
+Date: 2006-11-29 10:59:43 -0800 (Wed, 29 Nov 2006)
+New Revision: 16723
+
+Log:
+- build a udev for the target rather than for the host.
 
 
-Yes of course, but it's failing mysteriously. It seems to get built but I
-dunno where it breaks down after that, I've not much experience with this
-compiler bootstrapping stuff.
+Modified:
+   trunk/buildroot/package/udev/udev.mk
+
+
+Changeset:
+Modified: trunk/buildroot/package/udev/udev.mk
+===================================================================
+--- trunk/buildroot/package/udev/udev.mk	2006-11-29 18:15:52 UTC (rev 16722)
++++ trunk/buildroot/package/udev/udev.mk	2006-11-29 18:59:43 UTC (rev 16723)
+@@ -11,6 +11,13 @@
+ UDEV_TARGET_BINARY:=sbin/udev
+ UDEV_BINARY:=udev
+ 
++# 094 had _GNU_SOURCE set
++BR2_UDEV_CFLAGS:= -D_GNU_SOURCE $(TARGET_CFLAGS)
++ifeq ($(BR2_LARGEFILE),)
++BR2_UDEV_CFLAGS+=-U_FILE_OFFSET_BITS
++endif
++
++
+ # UDEV_ROOT is /dev so we can replace devfs, not /udev for experiments
+ UDEV_ROOT:=/dev
+ 
+@@ -28,7 +35,8 @@
+ 	touch $(UDEV_DIR)/.configured
+ 
+ $(UDEV_DIR)/$(UDEV_BINARY): $(UDEV_DIR)/.configured
+-	$(MAKE) CROSS=$(TARGET_CROSS) GCC=$(TARGET_CC) \
++	$(MAKE) CROSS=$(TARGET_CROSS) CC=$(TARGET_CC) LD=$(TARGET_CC) \
++		CFLAGS="$(BR2_UDEV_CFLAGS)" \
+ 		USE_LOG=false USE_SELINUX=false \
+ 		udevdir=$(UDEV_ROOT) -C $(UDEV_DIR)
+ 	touch -c $(UDEV_DIR)/$(UDEV_BINARY)
+@@ -43,7 +51,10 @@
+ 	-mkdir $(TARGET_DIR)/sys
+ 	install -D -m 0644 $(UDEV_DIR)/$(UDEV_CONF) \
+ 		$(TARGET_DIR)/etc/udev/rules.d/50-udev.rules
+-	$(MAKE) CROSS=$(TARGET_CROSS) GCC=$(TARGET_CC) DESTDIR=$(TARGET_DIR) \
++	$(MAKE) CROSS=$(TARGET_CROSS) CC=$(TARGET_CC) LD=$(TARGET_CC) \
++		DESTDIR=$(TARGET_DIR) \
++		CFLAGS="$(BR2_UDEV_CFLAGS)" \
++		LDFLAGS="-warn-common" \
+ 		USE_LOG=false USE_SELINUX=false \
+ 		udevdir=$(UDEV_ROOT) -C $(UDEV_DIR) install
+ 	$(INSTALL) -m 0755 -D package/udev/init-udev $(TARGET_DIR)/etc/init.d/S10udev
