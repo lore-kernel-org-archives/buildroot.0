@@ -1,29 +1,54 @@
-From: julien.boibessot at free.fr <julien.boibessot@free.fr>
-Date: Wed, 29 Nov 2006 18:21:07 +0100
-Subject: [Buildroot] Buildroot, NAND flash and missing mkfs.jffs2 option
-In-Reply-To: <20061129131717.GB6388@aon.at>
-References: <1164737384.456c7b6809f9d@imp3-g19.free.fr>
-	<20061128201514.GC27344@aon.at>
-	<1164805461.456d8555257e8@imp2-g19.free.fr>
-	<20061129131717.GB6388@aon.at>
-Message-ID: <1164820867.456dc1832cecc@imp7-g19.free.fr>
+From: MikeW <mw_phil@yahoo.co.uk>
+Date: Wed, 29 Nov 2006 17:45:52 +0000 (UTC)
+Subject: [Buildroot] problem generating c++ compiler for target arch
+References: <33335.80.176.236.13.1164224678.squirrel@mail.primefarm.co.uk>
+	<20061122200213.GB1863@aon.at>
+	<33446.80.176.236.13.1164226145.squirrel@mail.primefarm.co.uk>
+	<20061122201834.GD1863@aon.at>
+	<33518.80.176.236.13.1164226860.squirrel@mail.primefarm.co.uk>
+Message-ID: <loom.20061129T184236-586@post.gmane.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Quoting Bernhard Fischer <rep.nop@aon.at>:
-> >
-> >If you need a patch to correct the problem, let me know, I can generate one
-> >against Buildroot version 20060908 (the snapshot I'm using).
+<lists@...> writes:
+
 >
-> Yes, please send a patch.
+> OK,
+>
+> I managed to get buildroot to complete the build at last. Sadly, the c++
+> compiler is b0rked.
+>
+> Looks like it's missing all sorts of libraries and things. Here is some
+> sample output trying to compile a very simple program (C++ hello world):
+>
+> david <at> tulip:~/buildroot/build_arm/staging_dir/bin$ ./arm-linux-gcc foo.cpp
+> /tmp/ccNH0d2c.o: In function `std::__verify_grouping(char const*, unsigned
+> int, std::basic_string<char, std::char_traits<char>, std::allocator<char>
+> > const&)':
+> foo.cpp:(.text+0x20): undefined reference to `std::basic_string<char,
+> std::char_traits<char>, std::allocator<char> >::size() const'
+> foo.cpp:(.text+0x98): undefined reference to `std::basic_string<char,
+> std::char_traits<char>, std::allocator<char> >::operator[](unsigned int)
+> const'
+...
+> 
+> All sorts of things missing there - have I inadvertantly broken lots of
+> buildroot?
+>
+> David
 >
 
-I have attached the patch to the bug report. It has been generated against
-Buildroot 20061111.
+Did you specify libstdc++ in your menuconfig ?
+                                                                               
+MikeW
 
-I hope it will be helpfull !
 
-Julien
+
+
+
+
+xxxgmane-paddingxxxxxxgmane-paddingxxxxxxgmane-paddingxxxxxxgmane-paddingxxx
+xxxgmane-paddingxxxxxxgmane-paddingxxxxxxgmane-paddingxxxxxxgmane-paddingxxx
