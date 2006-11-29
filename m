@@ -1,40 +1,40 @@
 From: MikeW <mw_phil@yahoo.co.uk>
-Date: Wed, 29 Nov 2006 13:25:41 +0000 (UTC)
-Subject: [Buildroot] Impossible to build EABI ARM gcc toolchain using
-	Buildroot ?
-Message-ID: <loom.20061129T130728-811@post.gmane.org>
+Date: Wed, 29 Nov 2006 14:58:34 +0000 (UTC)
+Subject: [Buildroot]
+	=?utf-8?q?=27ld=27_gives_=22unrecognised_emulation_mo?=
+	=?utf-8?q?de=22_-_ARM=09toolchain_unbuildable_=3F=3F?=
+References: <loom.20061101T111436-827@post.gmane.org>
+	<loom.20061102T152239-949@post.gmane.org>
+	<loom.20061121T200844-447@post.gmane.org>
+	<f2b55d220611211208yef912b8p4c00bfd2ee2a2eca@mail.gmail.com>
+	<loom.20061122T095656-727@post.gmane.org>
+	<f2b55d220611220908v2a8699bt61a298dbf3fcf100@mail.gmail.com>
+Message-ID: <loom.20061129T155533-364@post.gmane.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-gcc-3.4.3
-binutils-2.16.91.0.7
-buildroot-20061031
+Michael K. Edwards <medwards.linux@...> writes:
 
-Target Architecture: arm
-Target Architecture Variant: arm926t
-Target ABI: EABI
-Build Options: GNU Target Suffix: ????
-Toolchain options: Kernel Headers 2.6.11
+> 
+> Did I say armelf-linux-eabi?  Silly me.  What's working for me (with
+> glibc and crosstool) is armelf-linux-gnueabi.  I'm almost done
+> scrubbing cross-configure problems out of my ptxdist userland and will
+> start banging on uClibc/buildroot today; I'll let you know what I
+> find.
+> 
+> Cheers,
+> - Michael
+> 
 
-Is there a way of building an EABI ARM toolchain using Buildroot ?
-Or is it one of those things that is not currently possible ?
+Even that gets rejected as being 'armelf_linux', not 'armelf_linux_eabi'.
 
-If I set the target suffix to 'elf-linux' the toolchain build
-completes, but objects created with it have EABI version=0 (= no EABI).
-(These will not link with a 3rd-party-built library with EABI version=4.)
+Looks to me as if there's a regexp somewhere picking out the subcomponents
+of the string, and it's somehow not getting the final '_eabi' section.
 
-If I set to to 'armelf-linux-eabi' or one of the other likely-
-looking values, I get a build error from ld: 
- in/ld: unrecognised emulation mode: armelf_linux
- Supported emulations: armelf_linux_eabi
+But where ... crosstool ?
 
-I can't see any other likely setting to change ...
-
-Any ideas ?
-Or do a need a newer version of Buildroot ... or a patch ?
-
-Thanks,
+Regards,
 MikeW
