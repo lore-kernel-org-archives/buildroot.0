@@ -1,103 +1,66 @@
-From: aldot at uclibc.org <aldot@uclibc.org>
-Date: Wed, 29 Nov 2006 02:39:30 -0800 (PST)
-Subject: [Buildroot] svn commit: trunk/buildroot/toolchain/dependencies
-Message-ID: <20061129103930.E07C04856B@busybox.net>
+From: Claudio Leonel <cls@elaxys.com.br>
+Date: Wed, 29 Nov 2006 09:14:15 -0200
+Subject: [Buildroot] [Fwd: Re:  SDL_image,
+	SDL_ttf & Co (libpng12.So bug)]
+In-Reply-To: <1164648470.456b2016bbf49@imp5-g19.free.fr>
+References: <456AE31F.9020200@elaxys.com.br> <456AE6A3.1020409@elaxys.com.br>
+	<1164648470.456b2016bbf49@imp5-g19.free.fr>
+Message-ID: <456D6B87.7070207@elaxys.com.br>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Author: aldot
-Date: 2006-11-29 02:39:30 -0800 (Wed, 29 Nov 2006)
-New Revision: 16714
+Hi,
 
-Log:
-- move check for which(1) before it's first use
-- fix printing a message when erroring out on non-existing HOSTCC
+Thanks, using this flags in configure, SDL_ttf
+compiled OK !
 
-
-Modified:
-   trunk/buildroot/toolchain/dependencies/dependencies.sh
+Regards,
 
 
-Changeset:
-Modified: trunk/buildroot/toolchain/dependencies/dependencies.sh
-===================================================================
---- trunk/buildroot/toolchain/dependencies/dependencies.sh	2006-11-29 10:23:54 UTC (rev 16713)
-+++ trunk/buildroot/toolchain/dependencies/dependencies.sh	2006-11-29 10:39:30 UTC (rev 16714)
-@@ -1,6 +1,5 @@
- #!/bin/sh
- 
--set -e
- #set -x
- 
- echo ""
-@@ -31,6 +30,19 @@
- 
- #############################################################
- #
-+# check build system 'which'
-+#
-+#############################################################
-+if ! which which > /dev/null ; then
-+	echo "which installed:		    FALSE"
-+	echo -e "\n\nYou must install 'which' on your build machine\n";
-+	exit 1;
-+fi;
-+echo "which installed:		    Ok"
-+
-+
-+#############################################################
-+#
- # check build system 'make'
- #
- #############################################################
-@@ -64,12 +76,13 @@
- COMPILER=$(which $HOSTCC)
- if [ -z "$COMPILER" ] ; then
- 	COMPILER=$(which cc)
--	if [ -z "$COMPILER" ] ; then
--		echo "gcc installed:		    FALSE"
--		echo -e "\n\nYou must install 'gcc' on your build machine\n";
--		exit 1;
--	fi;
- fi;
-+if [ -z "$COMPILER" ] ; then
-+	echo "C Compiler installed:		    FALSE"
-+	echo -e "\n\nYou must install 'gcc' on your build machine\n";
-+	exit 1;
-+fi;
-+
- COMPILER_VERSION=$($COMPILER --version 2>&1 | head -n1 | $XSED -e 's/^.*(.CC) \([0-9\.]\)/\1/g' -e "s/[-\ ].*//g")
- if [ -z "$COMPILER_VERSION" ] ; then
- 	echo "gcc installed:		    FALSE"
-@@ -82,26 +95,13 @@
- 	echo "You have gcc '$COMPILER_VERSION' installed.  gcc >= 2.95 is required"
- 	exit 1;
- fi;
--echo "gcc version '$COMPILER_VERSION':		    Ok"
-+echo "C compiler '$COMPILER'"
-+echo "C compiler version '$COMPILER_VERSION':	    Ok"
- 
- 
- 
--
- #############################################################
- #
--# check build system 'which'
--#
--#############################################################
--if ! which which > /dev/null ; then
--	echo "which installed:		    FALSE"
--	echo -e "\n\nYou must install 'which' on your build machine\n";
--	exit 1;
--fi;
--echo "which installed:		    Ok"
--
--
--#############################################################
--#
- # check build system 'bison'
- #
- #############################################################
+julien.boibessot at free.fr wrote:
+> Hi,
+> 
+> 
+>>I was using buildroot version 20061111 and managed to
+>>compile SDL_image including the following flags (LDFLAGS) for the
+>>linker.
+>>
+>>$(SDL_IMAGE_DIR)/.compiled: $(SDL_IMAGE_DIR)/.configured
+>>	$(MAKE) LDFLAGS=$(STAGING_DIR)/lib/libpng12.so -C $(SDL_IMAGE_DIR)
+>>	touch $(SDL_IMAGE_DIR)/.compiled
+>>
+> 
+> 
+> Well I investigate a little too and find that when removing "showimage" example
+> compilation from Makefile, then I was able to compile SDL_image. (The error on
+> libpng12.so is during showimage tool link.) But if think your solution is
+> cleaner
+> ;-)
+> 
+> 
+>>I had to change the sdl.mk for SDL adding the following line
+>>to configure:
+>>	--disable-video-directfb
+>>
+> 
+> ok ,thanks for the tip !
+> 
+> 
+>>I am now having problems compiling SDL_ttf ...
+> 
+> 
+> I had problems too :-). I suppose you have the same: missing OpenGL library.
+> I was able to compile SDL_ttf (2.0.8) when adding the following options to
+> configure:
+>         --disable-sdltest
+> 	--without-x
+> 	--disable-opengl
+> 
+> I attach my SDL_ttf makefile if it can help you. Let me know if it solves your
+> problem !
+> 
+> regards,
+> Julien
