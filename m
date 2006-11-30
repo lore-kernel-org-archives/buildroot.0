@@ -1,30 +1,31 @@
-From: Bernhard Fischer <rep.nop@aon.at>
-Date: Thu, 30 Nov 2006 17:51:43 +0100
-Subject: [Buildroot] uClibc/gcc build problems?
-In-Reply-To: <456F0A76.9060501@computing.dundee.ac.uk>
-References: <456F0A76.9060501@computing.dundee.ac.uk>
-Message-ID: <20061130165143.GA2156@aon.at>
+From: Michael Moser <mmoser@moser-engineering.de>
+Date: Thu, 30 Nov 2006 23:36:30 +0100
+Subject: [Buildroot] Build fails with zlib.h not found
+Message-ID: <456F5CEE.7060405@moser-engineering.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Thu, Nov 30, 2006 at 04:44:38PM +0000, Peter Mendham wrote:
->I am attempting to build buildroot revision 16738 (the latest at the 
->time of writing) for a powerpc.  It seems to hit a snag during the 
->compilation of gcc.  I don't think my configuration makes any difference 
->at this stage of play, but if it does: I went with almost all the 
->default options apart from software FP, I remooved the hdparm and sudo 
->packages and added DHCP client support, I answered all of the prompts 
->during make (is there an MMU etc.) with the default options.  The 
->relevant (I hope) portion of the output from the make is given below.
->
->I don't really know where to start with this. Any help greatly appreciated.
+I try to build a tool chain and initial filesystem for a xscale
+prozessor which uses a jffs2 file system. This fails with the following
+messages:
 
-wrong list. Ping andersee on the uclibc list that he caused this with
-r16733 ;)
+ > make[1]: Entering directory `/home/michael/development/buildroot/toolchain_build_arm/mtd_orig/util'
+ > gcc -I../include -O2 -Wall -g -c -o mkfs.jffs2.o mkfs.jffs2.c -g -Wp,-MD,.mkfs.jffs2.c.dep
+ > mkfs.jffs2.c:68:18: zlib.h: File or Directory not found
+ > make[1]: *** [mkfs.jffs2.o] Error 1
+ > make[1]: Leaving directory `/home/michael/development/buildroot/toolchain_build_arm/mtd_orig/util'
+ > make: *** [/home/michael/development/buildroot/toolchain_build_arm/mtd_orig/util/mkfs.jffs2] Fehler 2
 
-meanwhile, svn diff -r16732:16733 | patch -R -p0
-makes it compile again..
-HTH,
+I already tried to change the make file and specifed a path to zlib.h
+within the buildroot environment. Then the compilation succeeds but the
+linker didn't find a compatible libz
+
+I use gcc 4.1.1 on my development machine.
+
+Can anyone give me some hints?
+
+Regards,
+Michael
