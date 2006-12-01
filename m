@@ -1,32 +1,31 @@
 From: Pavel Roskin <proski@gnu.org>
-Date: Fri, 01 Dec 2006 03:11:39 -0500
-Subject: [Buildroot] Impossible to build EABI ARM gcc toolchain
-	using	Buildroot ?
-In-Reply-To: <loom.20061130T112254-849@post.gmane.org>
-References: <loom.20061129T130728-811@post.gmane.org>
-	<1164848869.23643.60.camel@dv>
-	<loom.20061130T112254-849@post.gmane.org>
-Message-ID: <1164960699.4870.67.camel@dv>
+Date: Fri, 01 Dec 2006 03:17:20 -0500
+Subject: [Buildroot] Build fails with zlib.h not found
+In-Reply-To: <456F5CEE.7060405@moser-engineering.de>
+References: <456F5CEE.7060405@moser-engineering.de>
+Message-ID: <1164961040.4870.74.camel@dv>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Thu, 2006-11-30 at 11:14 +0000, MikeW wrote:
-> This seems to be due to an incompatibility between:
-> 1) toolchain.../gcc-x.x.x/config/arm/linux-elf.h
-> 2) toolchain.../binutils-x.x.x/ld/earmelf_linux_eabi.c
+On Thu, 2006-11-30 at 23:36 +0100, Michael Moser wrote:
+> I try to build a tool chain and initial filesystem for a xscale
+> prozessor which uses a jffs2 file system. This fails with the following
+> messages:
 > 
-> In 1) there is a setting TARGET_LINKER_EMULATION "armelf_linux"
-> In 2) there is a string (part of a struct initialiser) "armelf_linux_eabi"
-> 
-> so unless I can find matching strings in a version of gcc and ld,
-> buildroot will never be able to build a toolchain.
+>  > make[1]: Entering directory `/home/michael/development/buildroot/toolchain_build_arm/mtd_orig/util'
+>  > gcc -I../include -O2 -Wall -g -c -o mkfs.jffs2.o mkfs.jffs2.c -g -Wp,-MD,.mkfs.jffs2.c.dep
+>  > mkfs.jffs2.c:68:18: zlib.h: File or Directory not found
+[skip]
+> Can anyone give me some hints?
 
-There are already patches for gcc in buildroot that change
-TARGET_LINKER_EMULATION for bigendian systems and uClibc.  I think
-support for EABI belongs there too.
+Since mkfs.jffs2.c is compiled by gcc for the host system, you need the
+zlib development package on the host system.  It's called zlib-devel on
+Fedora and provides both the header and the library.  I'm not sure about
+other distros, but it's likely a similar name, something matching
+{libz,zlib}{,1}-{dev,devel}
 
 -- 
 Regards,
