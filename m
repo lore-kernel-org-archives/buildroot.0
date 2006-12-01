@@ -1,32 +1,49 @@
-From: Pavel Roskin <proski@gnu.org>
-Date: Fri, 01 Dec 2006 03:17:20 -0500
-Subject: [Buildroot] Build fails with zlib.h not found
-In-Reply-To: <456F5CEE.7060405@moser-engineering.de>
-References: <456F5CEE.7060405@moser-engineering.de>
-Message-ID: <1164961040.4870.74.camel@dv>
+From: Peter Mendham <petermendham@computing.dundee.ac.uk>
+Date: Fri, 01 Dec 2006 10:09:39 +0000
+Subject: [Buildroot] Build problem with buildroot config of Busybox?
+Message-ID: <456FFF63.5050904@computing.dundee.ac.uk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Thu, 2006-11-30 at 23:36 +0100, Michael Moser wrote:
-> I try to build a tool chain and initial filesystem for a xscale
-> prozessor which uses a jffs2 file system. This fails with the following
-> messages:
-> 
->  > make[1]: Entering directory `/home/michael/development/buildroot/toolchain_build_arm/mtd_orig/util'
->  > gcc -I../include -O2 -Wall -g -c -o mkfs.jffs2.o mkfs.jffs2.c -g -Wp,-MD,.mkfs.jffs2.c.dep
->  > mkfs.jffs2.c:68:18: zlib.h: File or Directory not found
-[skip]
-> Can anyone give me some hints?
+I seem to have a knack for posting to the wrong list, but I think this 
+is buildrot rather than BusyBox related.  Having applied Berhard's trick 
+to get me past the uClibc build problems I've now hit another snag.  
+Buildroot *seems* to be trying to build BusyBox for an i386 even though 
+I specified PowerPC.  Is that right?  I may be misinterpreting the error 
+messages (which I have included below).  I may have configured something 
+incorrectly, but I thought  there was only one place to select the 
+target architecture.
 
-Since mkfs.jffs2.c is compiled by gcc for the host system, you need the
-zlib development package on the host system.  It's called zlib-devel on
-Fedora and provides both the header and the library.  I'm not sure about
-other distros, but it's likely a similar name, something matching
-{libz,zlib}{,1}-{dev,devel}
+Any ideas as to how to approach this problem greatly appreciated.
+-- Peter
 
--- 
-Regards,
-Pavel Roskin
+make -j1 
+CC=/home/pmendham/powerpc-405-linux-gnu/buildroot/build_powerpc_nofpu/staging_dir/bin/powerpc-linux-uclibc-gcc 
+CROSS_COMPILE="/home/pmendham/powerpc-405-linux-gnu/buildroot/build_powerpc_nofpu/staging_dir/bin/powerpc-linux-uclibc-" 
+\
+                
+CROSS="/home/pmendham/powerpc-405-linux-gnu/buildroot/build_powerpc_nofpu/staging_dir/bin/powerpc-linux-uclibc-" 
+PREFIX="/home/pmendham/powerpc-405-linux-gnu/buildroot/build_powerpc_nofpu/root" 
+\
+                EXTRA_CFLAGS="-Os -pipe " -C 
+/home/pmendham/powerpc-405-linux-gnu/buildroot/build_powerpc_nofpu/busybox
+make[1]: Entering directory 
+`/home/pmendham/powerpc-405-linux-gnu/buildroot/build_powerpc_nofpu/busybox'
+  SPLIT   include/autoconf.h -> include/config/*
+  GEN     include/bbconfigopts.h
+  HOSTCC  applets/usage
+  GEN     include/usage_compressed.h
+  CC      applets/applets.o
+cc1: error: invalid option `arch=i386'
+cc1: error: invalid option `preferred-stack-boundary=2'
+make[2]: *** [applets/applets.o] Error 1
+make[1]: *** [applets] Error 2
+make[1]: Leaving directory 
+`/home/pmendham/powerpc-405-linux-gnu/buildroot/build_powerpc_nofpu/busybox'
+make: *** 
+[/home/pmendham/powerpc-405-linux-gnu/buildroot/build_powerpc_nofpu/busybox/busybox] 
+Error 2
+ 
