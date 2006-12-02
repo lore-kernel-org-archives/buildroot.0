@@ -1,7 +1,7 @@
 From: aldot at uclibc.org <aldot@uclibc.org>
-Date: Sat,  2 Dec 2006 10:13:31 -0800 (PST)
-Subject: [Buildroot] svn commit: trunk/buildroot/package/iptables
-Message-ID: <20061202181331.036AD48593@busybox.net>
+Date: Sat,  2 Dec 2006 10:14:38 -0800 (PST)
+Subject: [Buildroot] svn commit: trunk/buildroot/package/mpfr
+Message-ID: <20061202181438.8C45F485E0@busybox.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -9,30 +9,38 @@ Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
 Author: aldot
-Date: 2006-12-02 10:13:31 -0800 (Sat, 02 Dec 2006)
-New Revision: 16756
+Date: 2006-12-02 10:14:38 -0800 (Sat, 02 Dec 2006)
+New Revision: 16757
 
 Log:
-- bump version to cope with changes imposed by 2.6.19.
+- bump version. No patches (yet). Yay! :)
 
 
 Modified:
-   trunk/buildroot/package/iptables/iptables.mk
+   trunk/buildroot/package/mpfr/mpfr.mk
 
 
 Changeset:
-Modified: trunk/buildroot/package/iptables/iptables.mk
+Modified: trunk/buildroot/package/mpfr/mpfr.mk
 ===================================================================
---- trunk/buildroot/package/iptables/iptables.mk	2006-12-02 18:12:18 UTC (rev 16755)
-+++ trunk/buildroot/package/iptables/iptables.mk	2006-12-02 18:13:31 UTC (rev 16756)
+--- trunk/buildroot/package/mpfr/mpfr.mk	2006-12-02 18:13:31 UTC (rev 16756)
++++ trunk/buildroot/package/mpfr/mpfr.mk	2006-12-02 18:14:38 UTC (rev 16757)
 @@ -3,8 +3,8 @@
- # iptables
+ # mpfr
  #
  #############################################################
--IPTABLES_VER:=1.3.5
--IPTABLES_SOURCE_URL:=ftp.netfilter.org/pub/iptables/
-+IPTABLES_VER:=1.3.6-20061129
-+IPTABLES_SOURCE_URL:=ftp.netfilter.org/pub/iptables/snapshot
- IPTABLES_SOURCE:=iptables-$(IPTABLES_VER).tar.bz2
- IPTABLES_CAT:=$(BZCAT)
- IPTABLES_BUILD_DIR:=$(BUILD_DIR)/iptables-$(IPTABLES_VER)
+-MPFR_VERSION:=2.2.0
+-MPFR_PATCH:=patches
++MPFR_VERSION:=2.2.1
++#MPFR_PATCH:=patches
+ MPFR_SOURCE:=mpfr-$(MPFR_VERSION).tar.bz2
+ MPFR_CAT:=$(BZCAT)
+ MPFR_SITE:=http://www.mpfr.org/mpfr-current/
+@@ -37,6 +37,7 @@
+ $(MPFR_DIR)/.configured: $(MPFR_DIR)/.unpacked
+ 	(cd $(MPFR_DIR); rm -rf config.cache; \
+ 		$(TARGET_CONFIGURE_OPTS) \
++		CFLAGS="$(TARGET_CFLAGS)" \
+ 		ac_cv_c_bigendian=$(MPFR_BE) \
+ 		./configure \
+ 		--host=$(REAL_GNU_TARGET_NAME) \
