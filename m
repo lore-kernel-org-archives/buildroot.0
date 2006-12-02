@@ -1,7 +1,7 @@
 From: aldot at uclibc.org <aldot@uclibc.org>
-Date: Sat,  2 Dec 2006 10:36:05 -0800 (PST)
-Subject: [Buildroot] svn commit: trunk/buildroot/package/busybox
-Message-ID: <20061202183605.98ECB485FB@busybox.net>
+Date: Sat,  2 Dec 2006 10:36:55 -0800 (PST)
+Subject: [Buildroot] svn commit: trunk/buildroot/package/at
+Message-ID: <20061202183655.644A0485FF@busybox.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -9,28 +9,29 @@ Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
 Author: aldot
-Date: 2006-12-02 10:36:04 -0800 (Sat, 02 Dec 2006)
-New Revision: 16761
+Date: 2006-12-02 10:36:55 -0800 (Sat, 02 Dec 2006)
+New Revision: 16762
 
 Log:
-- adjust busybox-source dependencies
+- rm cruft via fakeroot, not afterwards where it has no effect.
 
 
 Modified:
-   trunk/buildroot/package/busybox/busybox.mk
+   trunk/buildroot/package/at/at.mk
 
 
 Changeset:
-Modified: trunk/buildroot/package/busybox/busybox.mk
+Modified: trunk/buildroot/package/at/at.mk
 ===================================================================
---- trunk/buildroot/package/busybox/busybox.mk	2006-12-02 18:34:32 UTC (rev 16760)
-+++ trunk/buildroot/package/busybox/busybox.mk	2006-12-02 18:36:04 UTC (rev 16761)
-@@ -23,7 +23,7 @@
- $(DL_DIR)/$(BUSYBOX_SOURCE):
- 	 $(WGET) -P $(DL_DIR) $(BUSYBOX_SITE)/$(BUSYBOX_SOURCE)
+--- trunk/buildroot/package/at/at.mk	2006-12-02 18:36:04 UTC (rev 16761)
++++ trunk/buildroot/package/at/at.mk	2006-12-02 18:36:55 UTC (rev 16762)
+@@ -46,8 +46,8 @@
+ 	echo "$(MAKE) DAEMON_USERNAME=root DAEMON_GROUPNAME=root " \
+ 		"$(TARGET_CONFIGURE_OPTS) DESTDIR=$(TARGET_DIR) -C $(AT_DIR) install" \
+ 		> $(STAGING_DIR)/.fakeroot.at
++	echo "rm -rf $(TARGET_DIR)/usr/man" >> $(STAGING_DIR)/.fakeroot.at
+ 	$(INSTALL) -m 0755 -D $(AT_DIR)/debian/rc $(TARGET_DIR)/etc/init.d/S99at
+-	rm -rf $(TARGET_DIR)/usr/man
+ 	touch -c $(TARGET_DIR)/$(AT_TARGET_BINARY)
  
--busybox-source: $(DL_DIR)/$(BUSYBOX_SOURCE) $(BUSYBOX_CONFIG_FILE) dirs host-sed
-+busybox-source: $(DL_DIR)/$(BUSYBOX_SOURCE) $(BUSYBOX_CONFIG_FILE) dependencies
- 
- $(BUSYBOX_DIR)/.unpacked: $(DL_DIR)/$(BUSYBOX_SOURCE)
- 	$(BUSYBOX_UNZIP) $(DL_DIR)/$(BUSYBOX_SOURCE) | tar -C $(BUILD_DIR) $(TAR_OPTIONS) -
+ at: uclibc host-fakeroot $(TARGET_DIR)/$(AT_TARGET_BINARY)
