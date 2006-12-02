@@ -1,50 +1,40 @@
-From: vapier at uclibc.org <vapier@uclibc.org>
-Date: Sat,  2 Dec 2006 11:02:21 -0800 (PST)
-Subject: [Buildroot] svn commit: trunk/buildroot/toolchain/binutils
-Message-ID: <20061202190221.AC85B4860D@busybox.net>
+From: aldot at uclibc.org <aldot@uclibc.org>
+Date: Sat,  2 Dec 2006 11:34:18 -0800 (PST)
+Subject: [Buildroot] svn commit: trunk/buildroot/target/device: x86 x86/i386
+Message-ID: <20061202193418.D90704862F@busybox.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Author: vapier
-Date: 2006-12-02 11:02:21 -0800 (Sat, 02 Dec 2006)
-New Revision: 16764
+Author: aldot
+Date: 2006-12-02 11:34:17 -0800 (Sat, 02 Dec 2006)
+New Revision: 16768
 
 Log:
-ver bump
+- add generic target. X86 for now, don't fork this but generalize it!
+
 
 Added:
-   trunk/buildroot/toolchain/binutils/2.17.50.0.8/
+   trunk/buildroot/target/device/x86/
+   trunk/buildroot/target/device/x86/Config.in
+   trunk/buildroot/target/device/x86/Makefile.in
+   trunk/buildroot/target/device/x86/depmod.pl
+   trunk/buildroot/target/device/x86/i386/
+   trunk/buildroot/target/device/x86/i386/Makefile.in
+   trunk/buildroot/target/device/x86/i386/busybox.config
+   trunk/buildroot/target/device/x86/i386/linux.config
+   trunk/buildroot/target/device/x86/i386/linux.mk
+   trunk/buildroot/target/device/x86/i386/uClibc.config.i586
 
 Modified:
-   trunk/buildroot/toolchain/binutils/Config.in
+   trunk/buildroot/target/device/Config.in
 
 
 Changeset:
-Copied: trunk/buildroot/toolchain/binutils/2.17.50.0.8 (from rev 16762, trunk/buildroot/toolchain/binutils/2.17.50.0.7)
 
-Modified: trunk/buildroot/toolchain/binutils/Config.in
-===================================================================
---- trunk/buildroot/toolchain/binutils/Config.in	2006-12-02 19:01:10 UTC (rev 16763)
-+++ trunk/buildroot/toolchain/binutils/Config.in	2006-12-02 19:02:21 UTC (rev 16764)
-@@ -67,6 +67,10 @@
- 		depends !BR2_nios2
- 		bool "binutils 2.17.50.0.7"
- 
-+	config BR2_BINUTILS_VERSION_2_17_50_0_8
-+		depends !BR2_nios2
-+		bool "binutils 2.17.50.0.8"
-+
- endchoice
- 
- config BR2_BINUTILS_VERSION
-@@ -86,6 +90,7 @@
- 	default "2.17.50.0.5"     if BR2_BINUTILS_VERSION_2_17_50_0_5
- 	default "2.17.50.0.6"     if BR2_BINUTILS_VERSION_2_17_50_0_6
- 	default "2.17.50.0.7"     if BR2_BINUTILS_VERSION_2_17_50_0_7
-+	default "2.17.50.0.8"     if BR2_BINUTILS_VERSION_2_17_50_0_8
- 
- config BR2_EXTRA_BINUTILS_CONFIG_OPTIONS
- 	string "Additional binutils options"
+Sorry, the patch is too large to include (3172 lines).
+Please use ViewCVS to see it!
+
+http://uclibc.org/cgi-bin/viewcvs.cgi?view=rev&root=svn&rev=16768
