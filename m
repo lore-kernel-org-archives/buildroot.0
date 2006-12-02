@@ -1,8 +1,7 @@
 From: aldot at uclibc.org <aldot@uclibc.org>
-Date: Sat,  2 Dec 2006 10:34:33 -0800 (PST)
-Subject: [Buildroot] svn commit:
-	trunk/buildroot/target/generic/target_skeleton/etc
-Message-ID: <20061202183433.94F80485F4@busybox.net>
+Date: Sat,  2 Dec 2006 10:36:05 -0800 (PST)
+Subject: [Buildroot] svn commit: trunk/buildroot/package/busybox
+Message-ID: <20061202183605.98ECB485FB@busybox.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -10,29 +9,28 @@ Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
 Author: aldot
-Date: 2006-12-02 10:34:32 -0800 (Sat, 02 Dec 2006)
-New Revision: 16760
+Date: 2006-12-02 10:36:04 -0800 (Sat, 02 Dec 2006)
+New Revision: 16761
 
 Log:
-- eventually mount the crap /proc before remounting to make busybox's mount that incorrectly may rely on /proc work.
+- adjust busybox-source dependencies
 
 
 Modified:
-   trunk/buildroot/target/generic/target_skeleton/etc/inittab
+   trunk/buildroot/package/busybox/busybox.mk
 
 
 Changeset:
-Modified: trunk/buildroot/target/generic/target_skeleton/etc/inittab
+Modified: trunk/buildroot/package/busybox/busybox.mk
 ===================================================================
---- trunk/buildroot/target/generic/target_skeleton/etc/inittab	2006-12-02 18:32:33 UTC (rev 16759)
-+++ trunk/buildroot/target/generic/target_skeleton/etc/inittab	2006-12-02 18:34:32 UTC (rev 16760)
-@@ -14,8 +14,8 @@
- # process   == program to run
+--- trunk/buildroot/package/busybox/busybox.mk	2006-12-02 18:34:32 UTC (rev 16760)
++++ trunk/buildroot/package/busybox/busybox.mk	2006-12-02 18:36:04 UTC (rev 16761)
+@@ -23,7 +23,7 @@
+ $(DL_DIR)/$(BUSYBOX_SOURCE):
+ 	 $(WGET) -P $(DL_DIR) $(BUSYBOX_SITE)/$(BUSYBOX_SOURCE)
  
- # Startup the system
-+null::sysinit:/bin/mount -t proc proc /proc
- null::sysinit:/bin/mount -o remount,rw /
--null::sysinit:/bin/mount -t proc proc /proc
- null::sysinit:/bin/mount -a
- null::sysinit:/bin/hostname -F /etc/hostname
- null::sysinit:/sbin/ifconfig lo 127.0.0.1 up
+-busybox-source: $(DL_DIR)/$(BUSYBOX_SOURCE) $(BUSYBOX_CONFIG_FILE) dirs host-sed
++busybox-source: $(DL_DIR)/$(BUSYBOX_SOURCE) $(BUSYBOX_CONFIG_FILE) dependencies
+ 
+ $(BUSYBOX_DIR)/.unpacked: $(DL_DIR)/$(BUSYBOX_SOURCE)
+ 	$(BUSYBOX_UNZIP) $(DL_DIR)/$(BUSYBOX_SOURCE) | tar -C $(BUILD_DIR) $(TAR_OPTIONS) -
