@@ -1,30 +1,33 @@
-From: Bernhard Fischer <rep.nop@aon.at>
-Date: Wed, 6 Dec 2006 09:37:21 +0100
-Subject: [Buildroot] Removing packages
-In-Reply-To: <0997C816-22B5-4B76-B4EA-88A39989DA01@linux.it>
-References: <0997C816-22B5-4B76-B4EA-88A39989DA01@linux.it>
-Message-ID: <20061206083721.GB12161@aon.at>
+From: Rafael A Barrero <rafa@linux.it>
+Date: Wed, 6 Dec 2006 00:40:07 -0800
+Subject: [Buildroot] applying 'udev-fix-s3c2410-serial-perms.patch' fails
+In-Reply-To: <20061206083407.GA12161@aon.at>
+References: <0BD293AD-72AA-4B8F-9866-852B237EB81B@linux.it>
+	<20061206083407.GA12161@aon.at>
+Message-ID: <1CEC5C05-86B6-4542-96B2-27856A9257F7@linux.it>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Tue, Dec 05, 2006 at 10:27:13PM -0800, Rafael A Barrero wrote:
->Hi;
+
+That's what I ended up doing, but I thanks for the cvs update too.
+
+
+
+On Dec 6, 2006, at 12:34 AM, Bernhard Fischer wrote:
+
+> On Tue, Dec 05, 2006 at 10:22:19PM -0800, Rafael A Barrero wrote:
+>> Hi guys;
+>>
+>> I'm using buildroot from a few days ago and I'm coming across this
+>> error while building 'udev-100':
+>>
+>> "Applying udev-fix-s3c2410-serial-perms.patch
+>> can't find file to patch at input line 4."
+>>
+>> Skipping the patch doesn't seem to work and it just errors out and
+>> doesn't allow me to continue.
 >
->During the build process,  as the package is the configured and  
->compiled, is it possible to go back and unselect a particular package  
->so that it isn't included in the final distribution? Does unselecting  
->the package from the configuration menu actually allow the build  
->process to ignore it the next time around? How does one go about  
->doing so (removing a package)?
-
-Some packages have working foo-clean targets. Try e.g.
-$ make udev-clean
-
-If this fails, then either provide a patch to extend the -clean target
-to delete the package's file in the root, or
-rm -rf build_* toolchain_* to start over from scratch.
-
-HTH,
+> You can "skip" the patch by rm'ing it.
