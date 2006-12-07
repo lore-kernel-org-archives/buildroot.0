@@ -1,39 +1,45 @@
-From: Andre <armcc2000@yahoo.com>
-Date: Wed, 6 Dec 2006 17:08:54 -0800 (PST)
-Subject: [Buildroot] uClibc doesn't include legacy SuSv3 support by default
-	anymore...
-Message-ID: <820140.22973.qm@web35601.mail.mud.yahoo.com>
+From: Frank Ludwig <ludwig.frank@gmail.com>
+Date: Wed, 6 Dec 2006 22:26:06 -0500
+Subject: [Buildroot] Compiling gcc in the toolchain
+Message-ID: <200612062226.06445.ludwig.frank@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+Hello,
 
-http://buildroot.uclibc.org/cgi-bin/viewcvs.cgi?rev=16732&view=rev
+I have been using a buildroot root jail to compile components for a smallish 
+Linux system I am playing with, and it has so far been working great. With 
+apparently one exception: I have not been able to produce a gcc executable 
+that would in turn be able to create programs that would run inside the root 
+jail (anywhere, actually). Has anyone tried with more success than I have? 
+How did you pull it off?
 
-SuSv3 legacy support is required to build apps such as Wireless
-Tools. Tweak Buildroot's default uClibc.config to compensate:
+I am doing i386 to i386 (with only uclibc making my system "special"), trying 
+to compile gcc 3.4.2 (and some others), and the most common problem I run 
+into is a gcc executable that will link to the libraries at addresses 
+0x00000000.
 
-Index: toolchain/uClibc/uClibc.config
-===========================================================
---- toolchain/uClibc/uClibc.config      (revision 16783)
-+++ toolchain/uClibc/uClibc.config      (working copy)
-@@ -84,6 +84,7 @@
- UCLIBC_DYNAMIC_ATEXIT=y
- # COMPAT_ATEXIT is not set
- # UCLIBC_SUSV3_LEGACY is not set
-+UCLIBC_SUSV3_LEGACY_MACROS=y
- HAS_SHADOW=y
- # UCLIBC_HAS_PROGRAM_INVOCATION_NAME is not set
- UCLIBC_HAS___PROGNAME=y
+I don't think I should have to specify host/target (as the jail resembles the 
+target), and get little difference if I do. One of the many config parameter 
+sets I tried is that:
 
-Andre
---
-
-
-
+./configure \
+	--prefix=/usr \
+	--enable-shared \
+	--enable-threads=posix \
+	--disable-nls \
+	--disable-multilib \
+	--disable-__cxa_atexit \
+	--with-system-zlib \
+	--with-sysroot=/ \
+	--enable-languages=c \
+	--without-binutils
  
-____________________________________________________________________________________
-Need a quick answer? Get one in minutes from people who know.
-Ask your question on www.Answers.yahoo.com
+
+Any insight would be greatly appreciated!
+
+Frank
+(ludwig.frank at gmail.com)
