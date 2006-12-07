@@ -1,45 +1,36 @@
-From: Frank Ludwig <ludwig.frank@gmail.com>
-Date: Wed, 6 Dec 2006 22:26:06 -0500
-Subject: [Buildroot] Compiling gcc in the toolchain
-Message-ID: <200612062226.06445.ludwig.frank@gmail.com>
+From: sjhill at uclibc.org <sjhill@uclibc.org>
+Date: Wed,  6 Dec 2006 20:49:06 -0800 (PST)
+Subject: [Buildroot] svn commit: trunk/buildroot/toolchain/gcc
+Message-ID: <20061207044906.A477F48583@busybox.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+Author: sjhill
+Date: 2006-12-06 20:49:05 -0800 (Wed, 06 Dec 2006)
+New Revision: 16795
 
-I have been using a buildroot root jail to compile components for a smallish 
-Linux system I am playing with, and it has so far been working great. With 
-apparently one exception: I have not been able to produce a gcc executable 
-that would in turn be able to create programs that would run inside the root 
-jail (anywhere, actually). Has anyone tried with more success than I have? 
-How did you pull it off?
+Log:
+Update to newer snapshot.
 
-I am doing i386 to i386 (with only uclibc making my system "special"), trying 
-to compile gcc 3.4.2 (and some others), and the most common problem I run 
-into is a gcc executable that will link to the libraries at addresses 
-0x00000000.
 
-I don't think I should have to specify host/target (as the jail resembles the 
-target), and get little difference if I do. One of the many config parameter 
-sets I tried is that:
+Modified:
+   trunk/buildroot/toolchain/gcc/Config.in
 
-./configure \
-	--prefix=/usr \
-	--enable-shared \
-	--enable-threads=posix \
-	--disable-nls \
-	--disable-multilib \
-	--disable-__cxa_atexit \
-	--with-system-zlib \
-	--with-sysroot=/ \
-	--enable-languages=c \
-	--without-binutils
+
+Changeset:
+Modified: trunk/buildroot/toolchain/gcc/Config.in
+===================================================================
+--- trunk/buildroot/toolchain/gcc/Config.in	2006-12-06 23:14:31 UTC (rev 16794)
++++ trunk/buildroot/toolchain/gcc/Config.in	2006-12-07 04:49:05 UTC (rev 16795)
+@@ -68,7 +68,7 @@
  
-
-Any insight would be greatly appreciated!
-
-Frank
-(ludwig.frank at gmail.com)
+ config BR2_GCC_SNAP_DATE
+ 	string "GCC snapshot date"
+-	default "20060408"
++	default "20061121"
+ 	depends BR2_GCC_IS_SNAP
+ 	help
+ 	  Enter snapshot date to use for gcc.  Format is:
