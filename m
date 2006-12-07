@@ -1,7 +1,7 @@
 From: aldot at uclibc.org <aldot@uclibc.org>
-Date: Thu,  7 Dec 2006 08:31:21 -0800 (PST)
-Subject: [Buildroot] svn commit: trunk/buildroot/package/busybox
-Message-ID: <20061207163121.959B3485D3@busybox.net>
+Date: Thu,  7 Dec 2006 09:02:33 -0800 (PST)
+Subject: [Buildroot] svn commit: trunk/buildroot/toolchain/gcc
+Message-ID: <20061207170233.0C7C8485DA@busybox.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -9,43 +9,29 @@ Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
 Author: aldot
-Date: 2006-12-07 08:31:21 -0800 (Thu, 07 Dec 2006)
-New Revision: 16799
+Date: 2006-12-07 09:02:32 -0800 (Thu, 07 Dec 2006)
+New Revision: 16800
 
 Log:
-- pass the target (kernel-) arch in.
+- The sysroot requires an existing argument, so make sure that we did configure
+  uClibc properly before attempting to use it.
 
 
 Modified:
-   trunk/buildroot/package/busybox/busybox.mk
+   trunk/buildroot/toolchain/gcc/gcc-uclibc-3.x.mk
 
 
 Changeset:
-Modified: trunk/buildroot/package/busybox/busybox.mk
+Modified: trunk/buildroot/toolchain/gcc/gcc-uclibc-3.x.mk
 ===================================================================
---- trunk/buildroot/package/busybox/busybox.mk	2006-12-07 12:25:17 UTC (rev 16798)
-+++ trunk/buildroot/package/busybox/busybox.mk	2006-12-07 16:31:21 UTC (rev 16799)
-@@ -18,7 +18,7 @@
- BUSYBOX_UNZIP=$(BZCAT)
+--- trunk/buildroot/toolchain/gcc/gcc-uclibc-3.x.mk	2006-12-07 16:31:21 UTC (rev 16799)
++++ trunk/buildroot/toolchain/gcc/gcc-uclibc-3.x.mk	2006-12-07 17:02:32 UTC (rev 16800)
+@@ -115,7 +115,7 @@
+ # fixed, so we need to actually have working C library header files prior to
+ # the step or libgcc will not build...
  
- BUSYBOX_CONFIG_FILE=$(subst ",, $(strip $(BR2_PACKAGE_BUSYBOX_CONFIG)))
--#"
-+#")
- 
- $(DL_DIR)/$(BUSYBOX_SOURCE):
- 	 $(WGET) -P $(DL_DIR) $(BUSYBOX_SITE)/$(BUSYBOX_SOURCE)
-@@ -59,12 +59,14 @@
- $(BUSYBOX_DIR)/busybox: $(BUSYBOX_DIR)/.configured
- 	$(MAKE) CC=$(TARGET_CC) CROSS_COMPILE="$(TARGET_CROSS)" \
- 		CROSS="$(TARGET_CROSS)" PREFIX="$(TARGET_DIR)" \
-+		ARCH=$(KERNEL_ARCH) \
- 		EXTRA_CFLAGS="$(TARGET_CFLAGS)" -C $(BUSYBOX_DIR)
- 
- $(TARGET_DIR)/bin/busybox: $(BUSYBOX_DIR)/busybox
- ifeq ($(BR2_PACKAGE_BUSYBOX_INSTALL_SYMLINKS),y)
- 	$(MAKE) CC=$(TARGET_CC) CROSS_COMPILE="$(TARGET_CROSS)" \
- 		CROSS="$(TARGET_CROSS)" PREFIX="$(TARGET_DIR)" \
-+		ARCH=$(KERNEL_ARCH) \
- 		EXTRA_CFLAGS="$(TARGET_CFLAGS)" -C $(BUSYBOX_DIR) install
- else
- 	install -D -m 0755 $(BUSYBOX_DIR)/busybox $(TARGET_DIR)/bin/busybox
+-$(GCC_BUILD_DIR1)/.configured: $(GCC_DIR)/.patched
++$(GCC_BUILD_DIR1)/.configured: $(GCC_DIR)/.patched uclibc-configured
+ 	mkdir -p $(GCC_BUILD_DIR1)
+ 	(cd $(GCC_BUILD_DIR1); PATH=$(TARGET_PATH) \
+ 		CC="$(HOSTCC)" \
