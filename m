@@ -1,39 +1,40 @@
-From: andersen at uclibc.org <andersen@uclibc.org>
-Date: Thu,  7 Dec 2006 21:30:00 -0800 (PST)
-Subject: [Buildroot] svn commit: trunk/buildroot/package/ltp-testsuite
-Message-ID: <20061208053000.E70F0485DC@busybox.net>
+From: Petr Stetiar <ynezz@true.cz>
+Date: Fri, 8 Dec 2006 09:35:29 +0100
+Subject: [Buildroot] udev make errors
+In-Reply-To: <C6F82487-A777-4606-9447-B6AEDDEA1F00@linux.it>
+References: <3662182B-2B05-4C74-94FC-15AA4864BCB9@linux.it>
+	<C6F82487-A777-4606-9447-B6AEDDEA1F00@linux.it>
+Message-ID: <20061208083529.GA3087@ibawizard.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Author: andersen
-Date: 2006-12-07 21:30:00 -0800 (Thu, 07 Dec 2006)
-New Revision: 16812
+Rafael A Barrero <rafa@linux.it> [2006-12-07 19:55:50]:
 
-Log:
-sigh
+> Hi;
+> 
+> Here's what I've been able to come up with:
+> 
+> If you take a look at the make log I have below, you'll see the  
+> following line:
+> 
+>  > mkdir /root/src/buildroot/build_i686/root/udev/rules.d
+> 
+> This however, fails because the parent directory /root/src/buildroot/ 
+> build_i686/root/udev/ does not exist before the child directory is  
+> created (/root/src/buildroot/build_i686/root/udev/rules.d). A  
+> solution the process is to use"mkdir -p" will solve this, or simply  
+> creating both parent and the child directories sequentially.
 
+'mkdir -p'  was in my patch and probably not get commited :) 
+http://buildroot.uclibc.org/lists/buildroot/2006-November/000665.html
 
-Added:
-   trunk/buildroot/package/ltp-testsuite/ltp-testsuite-sh-is-not-C-code.patch
+> By reading this the error seems obvious to me... although someone  
+> help me out here - are we missing 'udev.conf' in buildroot? Can  
+> someone please import this file into CVS?
 
+I'll send a patch addressing both issues later today when I get home.
 
-Changeset:
-Added: trunk/buildroot/package/ltp-testsuite/ltp-testsuite-sh-is-not-C-code.patch
-===================================================================
---- trunk/buildroot/package/ltp-testsuite/ltp-testsuite-sh-is-not-C-code.patch	2006-12-08 05:24:59 UTC (rev 16811)
-+++ trunk/buildroot/package/ltp-testsuite/ltp-testsuite-sh-is-not-C-code.patch	2006-12-08 05:30:00 UTC (rev 16812)
-@@ -0,0 +1,11 @@
-+--- ltp-full-20061121/IDcheck.sh.orig	2006-12-07 22:31:29.000000000 -0700
-++++ ltp-full-20061121/IDcheck.sh	2006-12-07 22:32:58.000000000 -0700
-+@@ -85,7 +85,7 @@
-+ fi
-+ 
-+ whoami | grep root > /dev/null
-+-if [ $? == "0" ]; then
-++if [ $? = "0" ]; then
-+  I_AM_ROOT=1
-+ fi
-+ 
+-- ynezz
