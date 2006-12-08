@@ -1,96 +1,121 @@
-From: Rafael A Barrero <rafa@linux.it>
-Date: Thu, 7 Dec 2006 19:55:50 -0800
-Subject: [Buildroot] udev make errors
-In-Reply-To: <3662182B-2B05-4C74-94FC-15AA4864BCB9@linux.it>
-References: <3662182B-2B05-4C74-94FC-15AA4864BCB9@linux.it>
-Message-ID: <C6F82487-A777-4606-9447-B6AEDDEA1F00@linux.it>
+From: andersen at uclibc.org <andersen@uclibc.org>
+Date: Thu,  7 Dec 2006 21:16:21 -0800 (PST)
+Subject: [Buildroot] svn commit: trunk/buildroot/package/ltp-testsuite
+Message-ID: <20061208051621.0A399485C6@busybox.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi;
+Author: andersen
+Date: 2006-12-07 21:16:20 -0800 (Thu, 07 Dec 2006)
+New Revision: 16808
 
-Here's what I've been able to come up with:
-
-If you take a look at the make log I have below, you'll see the  
-following line:
-
- > mkdir /root/src/buildroot/build_i686/root/udev/rules.d
-
-This however, fails because the parent directory /root/src/buildroot/ 
-build_i686/root/udev/ does not exist before the child directory is  
-created (/root/src/buildroot/build_i686/root/udev/rules.d). A  
-solution the process is to use"mkdir -p" will solve this, or simply  
-creating both parent and the child directories sequentially.
-
-So, if you can get past that one...possibly by helping make out and  
-creating the directory yourself, most of 'udev-100' is installed but  
-then fails here:
-
-...
-make[1]: Leaving directory `/root/src/buildroot/build_i686/udev-100'
-/usr/bin/install -m 0755 -D package/udev/init-udev
-/root/src/buildroot/build_i686/root/etc/init.d/S10udev
-/usr/bin/install -m 0644 -D package/udev/udev.conf
-/root/src/buildroot/build_i686/root/etc/udev
-/usr/bin/install: cannot stat `package/udev/udev.conf': No such file or
-directory
-make: *** [/root/src/buildroot/build_i686/root/sbin/udev] Error 1
-[root at host buildroot]#
-
-By reading this the error seems obvious to me... although someone  
-help me out here - are we missing 'udev.conf' in buildroot? Can  
-someone please import this file into CVS?
-
-Thanks,
-
-PS - The udev README says: "kernel 2.6.15 is required for reliable  
-operation". Keyword being "reliable".
-
-Rafael.
+Log:
+stime is a reserved name, don't let ltp use it for a local variable
 
 
-On Dec 7, 2006, at 2:03 PM, Rafael A Barrero wrote:
+Added:
+   trunk/buildroot/package/ltp-testsuite/ltp-testsuite-stime-is-a-reserved-name.patch
 
-> Hi;
->
-> I'm having problems going through the install of udev-100. After it
-> builds properly, I get these errors:
->
-> // BEGIN FILE //
-> ....
->    LD       udevmonitor
->    CC       udevinfo.o
->    LD       udevinfo
->    CC       udevtest.o
->    LD       udevtest
->    CC       udevstart.o
->    LD       udevstart
-> make[1]: Leaving directory `/root/src/buildroot/build_i686/udev-100'
-> touch -c /root/src/buildroot/build_i686/udev-100/udev
-> mkdir /root/src/buildroot/build_i686/root/sys
-> mkdir /root/src/buildroot/build_i686/root/etc/udev/rules.d
-> mkdir: cannot create directory `/root/src/buildroot/build_i686/root/
-> etc/udev/rules.d': No such file or directory
-> make: [/root/src/buildroot/build_i686/root/sbin/udev] Error 1  
-> (ignored)
-> /usr/bin/install -D -m 0644 /root/src/buildroot/build_i686/udev-100/
-> etc/udev/frugalware/* \
->                  /root/src/buildroot/build_i686/root/etc/udev/rules.d
-> /usr/bin/install: target `/root/src/buildroot/build_i686/root/etc/
-> udev/rules.d'
-> is not a directory
-> make: *** [/root/src/buildroot/build_i686/root/sbin/udev] Error 1
-> [root at host buildroot]#
-> // END OF FILE //
->
-> Thanks,
->
-> Rafael.
->
-> _______________________________________________
-> buildroot mailing list
-> buildroot at uclibc.org
-> http://busybox.net/mailman/listinfo/buildroot
+
+Changeset:
+Added: trunk/buildroot/package/ltp-testsuite/ltp-testsuite-stime-is-a-reserved-name.patch
+===================================================================
+--- trunk/buildroot/package/ltp-testsuite/ltp-testsuite-stime-is-a-reserved-name.patch	2006-12-08 03:39:59 UTC (rev 16807)
++++ trunk/buildroot/package/ltp-testsuite/ltp-testsuite-stime-is-a-reserved-name.patch	2006-12-08 05:16:20 UTC (rev 16808)
+@@ -0,0 +1,93 @@
++--- ltp-full-20061121/testcases/misc/math/fptests/fptest01.c.orig	2006-12-07 22:14:38.000000000 -0700
+++++ ltp-full-20061121/testcases/misc/math/fptests/fptest01.c	2006-12-07 22:16:08.000000000 -0700
++@@ -84,7 +84,7 @@
++ struct event rtrevent;
++ int waiting[EVENTMX];	/* array of waiting processors */
++ int nwaiting;		/* number of waiting processors */
++-double stime;		/* global clock */
+++double xstime;		/* global clock */
++ double lsttime;		/* time used for editing */
++ double dtc, dts, alpha;	/* timing parameters */
++ int nproc;		/* number of processors */
++@@ -133,7 +133,7 @@
++ 	double dtw, dtwsig;
++ 
++ 	ncycle=0;
++-	stime=0;
+++	xstime=0;
++ 	lsttime=0;
++ 	barcnt=0;
++ 	nwaiting=0;
++@@ -148,7 +148,7 @@
++ 		}
++ 
++ 	for (p=1; p<=nproc; p++) {
++-		addevent(ENTERWORK,p,stime);
+++		addevent(ENTERWORK,p,xstime);
++ 		}
++ 
++ 	return(0);
++@@ -167,7 +167,7 @@
++ 	for (i=0; i < nproc; i++)
++ 		t_total += eventtab[i].time;
++ 
++-	avgspd=ncycle/stime;
+++	avgspd=ncycle/xstime;
++ 
++ 	v = t_total - MAGIC1;
++ 	if (v < 0.0)
++@@ -294,33 +294,33 @@
++ 	double nxttime;
++ 	int i, p, proc;
++ 
++-	stime = ev->time;
+++	xstime = ev->time;
++ 	proc = ev->proc;
++ 
++ 	switch (ev->type) {
++ 		case TRYCRIT :
++ 			if (critfree==TRUE) 
++-				addevent(ENTERCRIT,proc,stime);
+++				addevent(ENTERCRIT,proc,xstime);
++ 			else
++ 				addwaiting(proc);
++ 			break;
++ 		case ENTERCRIT :
++ 			critfree = FALSE;
++-			nxttime=stime+dtcrit();
+++			nxttime=xstime+dtcrit();
++ 			addevent(LEAVECRIT,proc,nxttime);
++ 			break;
++ 		case LEAVECRIT :
++ 			critfree = TRUE;
++-			addevent(ATBARRIER,proc,stime);
+++			addevent(ATBARRIER,proc,xstime);
++ 			if ((p=getwaiting())!=0) {
++-				nxttime=stime;
+++				nxttime=xstime;
++ 				addevent(ENTERCRIT,p,nxttime);
++ 				}
++ 			break;
++ 		case ATBARRIER :
++ 			barcnt++;
++ 			if (barcnt==nproc) {
++-				nxttime=stime;
+++				nxttime=xstime;
++ 				for (i=1; i<=nproc; i++) {
++ 					nxttime+=dtspinoff();
++ 					addevent(ENTERWORK,i,nxttime);
++@@ -330,12 +330,12 @@
++ 				}
++ 			break;
++ 		case ENTERWORK :
++-			nxttime=stime+dtwork();
+++			nxttime=xstime+dtwork();
++ 			if (ncycle<ncycmax)
++ 				addevent(LEAVEWORK,proc,nxttime);
++ 			break;
++ 		case LEAVEWORK :
++-			addevent(TRYCRIT,proc,stime);
+++			addevent(TRYCRIT,proc,xstime);
++ 			break;
++ 		default:
++ 			tst_resm(TBROK,"Illegal event");
