@@ -1,23 +1,44 @@
-From: Philippe Ney <philippe.ney@pardes.ws>
-Date: Fri, 8 Dec 2006 17:14:53 +0100
-Subject: [Buildroot] buildroot for ARM target problem
-In-Reply-To: <10551.72920.qm@web33202.mail.mud.yahoo.com>
-References: <10551.72920.qm@web33202.mail.mud.yahoo.com>
-Message-ID: <20061208171453.b454179a.philippe.ney@pardes.ws>
+From: Petr Stetiar <ynezz@true.cz>
+Date: Fri, 8 Dec 2006 21:06:54 +0100
+Subject: [Buildroot] [PATCH] udev package fixes
+Message-ID: <20061208200654.GB3087@ibawizard.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi,
+This patch fixes two issues in udev package:
 
-Did you try something like this ?
+1. mkdir: cannot create directory `/root/src/buildroot/build_i686/root/ 
+   etc/udev/rules.d': No such file or directory
+2. /usr/bin/install: cannot stat `package/udev/udev.conf': No such file or
+   directory
 
-http://gcc.gnu.org/ml/gcc-patches/2004-08/msg02436.html
-
-(Google, 1 second search time)
-
-And have a look to the gumstix project, it also use arm w/ buildroot.
-
-Philippe
+-- ynezz
+-------------- next part --------------
+Index: udev.conf
+===================================================================
+--- udev.conf	(revision 0)
++++ udev.conf	(revision 0)
+@@ -0,0 +1,7 @@
++# udev.conf
++
++# The initial syslog(3) priority: "err", "info", "debug" or its
++# numerical equivalent. For runtime debugging, the daemons internal
++# state can be changed with: "udevcontrol log_priority=<value>".
++udev_log="err"
++udev_root=/dev
+Index: udev.mk
+===================================================================
+--- udev.mk	(revision 16820)
++++ udev.mk	(working copy)
+@@ -49,7 +49,7 @@
+ 
+ $(TARGET_DIR)/$(UDEV_TARGET_BINARY): $(UDEV_DIR)/$(UDEV_BINARY)
+ 	-mkdir $(TARGET_DIR)/sys
+-	-mkdir $(TARGET_DIR)/etc/udev/rules.d
++	-mkdir -p $(TARGET_DIR)/etc/udev/rules.d
+ 	$(INSTALL) -D -m 0644 $(UDEV_DIR)/$(UDEV_CONF) \
+ 		$(TARGET_DIR)/etc/udev/rules.d
+ 	$(MAKE) CROSS_COMPILE=$(TARGET_CROSS) CC=$(TARGET_CC)  LD=$(TARGET_CC) \
