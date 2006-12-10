@@ -1,36 +1,23 @@
-From: aldot at uclibc.org <aldot@uclibc.org>
-Date: Sun, 10 Dec 2006 05:42:16 -0800 (PST)
-Subject: [Buildroot] svn commit: trunk/buildroot/target/cramfs
-Message-ID: <20061210134216.F4239485A8@busybox.net>
+From: Bernhard Fischer <rep.nop@aon.at>
+Date: Sun, 10 Dec 2006 14:59:34 +0100
+Subject: [Buildroot] [PATCH] udev package fixes
+In-Reply-To: <20061208200654.GB3087@ibawizard.net>
+References: <20061208200654.GB3087@ibawizard.net>
+Message-ID: <20061210135934.GC4442@aon.at>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Author: aldot
-Date: 2006-12-10 05:42:16 -0800 (Sun, 10 Dec 2006)
-New Revision: 16834
+On Fri, Dec 08, 2006 at 09:06:54PM +0100, Petr Stetiar wrote:
+>This patch fixes two issues in udev package:
+>
+>1. mkdir: cannot create directory `/root/src/buildroot/build_i686/root/ 
+>   etc/udev/rules.d': No such file or directory
+>2. /usr/bin/install: cannot stat `package/udev/udev.conf': No such file or
+>   directory
 
-Log:
-- cosmetic vi syntax highlighting improvement
-
-
-Modified:
-   trunk/buildroot/target/cramfs/cramfs.mk
-
-
-Changeset:
-Modified: trunk/buildroot/target/cramfs/cramfs.mk
-===================================================================
---- trunk/buildroot/target/cramfs/cramfs.mk	2006-12-10 13:40:16 UTC (rev 16833)
-+++ trunk/buildroot/target/cramfs/cramfs.mk	2006-12-10 13:42:16 UTC (rev 16834)
-@@ -6,7 +6,7 @@
- CRAMFS_DIR=$(BUILD_DIR)/cramfs-1.1
- CRAMFS_SOURCE=cramfs-1.1.tar.gz
- ifeq ($(strip $(subst ",,$(BR2_SOURCEFORGE_MIRROR))),unc)
--# " stupid syntax highlighting does not like unmatched quote from above line
-+# "))
- # UNC does not seem to have cramfs
- CRAMFS_SITE=http://internap.dl.sourceforge.net/sourceforge/cramfs
- else
+Applied, thanks.
+PS: please send patches so they can be applied with -p1 from the
+toplevel source-directory.
