@@ -1,7 +1,7 @@
 From: andersen at uclibc.org <andersen@uclibc.org>
-Date: Tue, 12 Dec 2006 14:16:41 -0800 (PST)
-Subject: [Buildroot] svn commit: trunk/buildroot/package:  dmalloc
-Message-ID: <20061212221641.99E66485AC@busybox.net>
+Date: Tue, 12 Dec 2006 14:18:16 -0800 (PST)
+Subject: [Buildroot] svn commit: trunk/buildroot/package:  mpatrol
+Message-ID: <20061212221816.23436485C2@busybox.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -9,18 +9,19 @@ Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
 Author: andersen
-Date: 2006-12-12 14:16:41 -0800 (Tue, 12 Dec 2006)
-New Revision: 16859
+Date: 2006-12-12 14:18:15 -0800 (Tue, 12 Dec 2006)
+New Revision: 16860
 
 Log:
-add dmalloc
+add mpatrol package
 
 
 Added:
-   trunk/buildroot/package/dmalloc/
-   trunk/buildroot/package/dmalloc/Config.in
-   trunk/buildroot/package/dmalloc/dmalloc-mips.patch
-   trunk/buildroot/package/dmalloc/dmalloc.mk
+   trunk/buildroot/package/mpatrol/
+   trunk/buildroot/package/mpatrol/Config.in
+   trunk/buildroot/package/mpatrol/mpatrol-uclibc.patch
+   trunk/buildroot/package/mpatrol/mpatrol-unwindcache.patch
+   trunk/buildroot/package/mpatrol/mpatrol.mk
 
 Modified:
    trunk/buildroot/package/Config.in
@@ -29,153 +30,891 @@ Modified:
 Changeset:
 Modified: trunk/buildroot/package/Config.in
 ===================================================================
---- trunk/buildroot/package/Config.in	2006-12-12 22:13:41 UTC (rev 16858)
-+++ trunk/buildroot/package/Config.in	2006-12-12 22:16:41 UTC (rev 16859)
-@@ -41,6 +41,7 @@
- source "package/directfb/Config.in"
- source "package/distcc/Config.in"
- source "package/dm/Config.in"
-+source "package/dmalloc/Config.in"
- source "package/dmraid/Config.in"
- source "package/dnsmasq/Config.in"
- source "package/dropbear/Config.in"
+--- trunk/buildroot/package/Config.in	2006-12-12 22:16:41 UTC (rev 16859)
++++ trunk/buildroot/package/Config.in	2006-12-12 22:18:15 UTC (rev 16860)
+@@ -96,6 +96,7 @@
+ source "package/mkdosfs/Config.in"
+ source "package/module-init-tools/Config.in"
+ source "package/modutils/Config.in"
++source "package/mpatrol/Config.in"
+ source "package/mpg123/Config.in"
+ source "package/mrouted/Config.in"
+ source "package/mtd/Config.in"
 
-Added: trunk/buildroot/package/dmalloc/Config.in
+Added: trunk/buildroot/package/mpatrol/Config.in
 ===================================================================
---- trunk/buildroot/package/dmalloc/Config.in	2006-12-12 22:13:41 UTC (rev 16858)
-+++ trunk/buildroot/package/dmalloc/Config.in	2006-12-12 22:16:41 UTC (rev 16859)
+--- trunk/buildroot/package/mpatrol/Config.in	2006-12-12 22:16:41 UTC (rev 16859)
++++ trunk/buildroot/package/mpatrol/Config.in	2006-12-12 22:18:15 UTC (rev 16860)
 @@ -0,0 +1,10 @@
-+config BR2_PACKAGE_DMALLOC
-+	bool "dmalloc"
++config BR2_PACKAGE_MPATROL
++	bool "mpatrol"
 +	default n
 +	help
-+	  A debug memory allocation library which is a drop in replacement for
-+	  the system's malloc, realloc, calloc, free and other memory management
-+	  routines while providing powerful debugging facilities configurable at
-+	  runtime.
++	  A debugging tool that attempts to diagnose run-time errors that are
++	  caused by the wrong use of dynamically allocated memory. It acts as
++	  a malloc() debugger for debugging dynamic memory allocations, although
++	  it can also trace and profile calls to malloc() and free() too.
 +
-+	  http://dmalloc.com/
++	  http://www.cbmamiga.demon.co.uk/mpatrol/
 
-Added: trunk/buildroot/package/dmalloc/dmalloc-mips.patch
+Added: trunk/buildroot/package/mpatrol/mpatrol-uclibc.patch
 ===================================================================
---- trunk/buildroot/package/dmalloc/dmalloc-mips.patch	2006-12-12 22:13:41 UTC (rev 16858)
-+++ trunk/buildroot/package/dmalloc/dmalloc-mips.patch	2006-12-12 22:16:41 UTC (rev 16859)
-@@ -0,0 +1,43 @@
-+--- dmalloc/configure	2006-09-01 18:28:51.000000000 -0700
-++++ dmalloc-mips/configure	2006-09-01 18:49:07.000000000 -0700
-+@@ -6114,7 +6114,7 @@
-+ echo $ECHO_N "checking return.h macros work... $ECHO_C" >&6
-+ if test "$cross_compiling" = yes; then
-+    cat >>confdefs.h <<\_ACEOF
-+-#define RETURN_MACROS_WORK 0
-++#define RETURN_MACROS_WORK 1
-+ _ACEOF
-+  echo "$as_me:$LINENO: result: no" >&5
-+ echo "${ECHO_T}no" >&6
-+--- dmalloc/return.h	2004-10-19 07:51:21.000000000 -0700
-++++ dmalloc-mips/return.h	2006-09-08 21:52:43.000000000 -0700
-+@@ -106,26 +106,16 @@
-+ /*************************************/
-+ 
-+ /*
-+- * For DEC Mips machines running Ultrix
-++ * For Mips machines running Linux
+--- trunk/buildroot/package/mpatrol/mpatrol-uclibc.patch	2006-12-12 22:16:41 UTC (rev 16859)
++++ trunk/buildroot/package/mpatrol/mpatrol-uclibc.patch	2006-12-12 22:18:15 UTC (rev 16860)
+@@ -0,0 +1,552 @@
++Patches for mpatrol to support uClibc and MIPS full call stack tracing
++by Dan Howell <dahowell@directv.com>
++
++diff -urN mpatrol/src/config.h mpatrol-uclibc/src/config.h
++--- mpatrol/src/config.h	2006-04-27 15:58:21.000000000 -0700
+++++ mpatrol-uclibc/src/config.h	2006-05-05 20:32:58.000000000 -0700
++@@ -795,6 +795,10 @@
 +  */
-+ #if __mips
 + 
-+ /*
-+- * I have no idea how to get inline assembly with the default cc.
-+- * Anyone know how?
-+- */
-+-
-+-#if 0
-+-
-+-/*
-+  * NOTE: we assume here that file is global.
-+  *
-+- * $31 is the frame pointer.  $2 looks to be the return address but maybe
-+- * not consistently.
-++ * $31 is the return address.
++ #ifndef MP_INIT_SUPPORT
+++/* Note that machine.c currently only implements MP_INIT_SUPPORT for
+++ * x86, 68k, 88k, and Sparc architechtures. */
+++#if ARCH == ARCH_IX86 || ARCH == ARCH_M68K || \
+++    ARCH == ARCH_M88K || ARCH == ARCH_SPARC
++ #if SYSTEM == SYSTEM_DGUX || SYSTEM == SYSTEM_DRSNX || \
++     SYSTEM == SYSTEM_DYNIX || SYSTEM == SYSTEM_LINUX || \
++     SYSTEM == SYSTEM_SOLARIS || SYSTEM == SYSTEM_UNIXWARE
++@@ -809,6 +813,9 @@
++ #else /* SYSTEM */
++ #define MP_INIT_SUPPORT 0
++ #endif /* SYSTEM */
+++#else /* ARCH */
+++#define MP_INIT_SUPPORT 0
+++#endif
++ #endif /* MP_INIT_SUPPORT */
++ 
++ 
++diff -urN mpatrol/src/inter.c mpatrol-uclibc/src/inter.c
++--- mpatrol/src/inter.c	2002-01-08 12:13:59.000000000 -0800
+++++ mpatrol-uclibc/src/inter.c	2006-05-17 18:02:04.000000000 -0700
++@@ -79,12 +79,24 @@
++ 
++ #if TARGET == TARGET_UNIX
++ #if SYSTEM == SYSTEM_LINUX
+++#ifndef __UCLIBC__
++ /* This contains a pointer to the environment variables for a process.  If
++  * it is not set up yet then we must use sbrk() to allocate all memory since
++  * we can't initialise mpatrol until the environment variable can be read.
 +  */
-+-#define GET_RET_ADDR(file)	asm("sw $2, file")
-+-
-+-#endif
-++#define GET_RET_ADDR(file)	asm("sw $31, %0" : "=m" (file))
 + 
-+ #endif /* __mips */
++ extern char **__environ;
+++#else /* __UCLIBC__ */
+++/* In uClibc, the dynamic loader calls malloc() and related functions,
+++ * and sets __environ before these calls, so we can't use it to determine
+++ * if we can initialize mpatrol. Instead, we use __progname, which is set
+++ * in __uClibc_main just before before uClibc transfers control to the
+++ * application's main() function (and static constructors, if any). Before
+++ * this, we must use sbrk() to allocate memory.
+++ */
+++
+++extern const char *__progname;
+++#endif /* __UCLIBC__ */
++ #elif SYSTEM == SYSTEM_TRU64
++ /* The exception support library on Tru64 always allocates some memory from
++  * the heap in order to initialise the code address range tables.  We need
++@@ -118,7 +130,11 @@
 + 
++ #if TARGET == TARGET_UNIX
++ #if SYSTEM == SYSTEM_LINUX
+++#ifndef __UCLIBC__
++ #define crt_initialised() (__environ)
+++#else /* __UCLIBC__ */
+++#define crt_initialised() (__progname)
+++#endif /* __UCLIBC__ */
++ #elif SYSTEM == SYSTEM_TRU64
++ #define crt_initialised() (__exc_crd_list_head && init_flag)
++ #else /* SYSTEM */
++@@ -306,7 +322,7 @@
++     alloctype t;
++     int c;
++ 
++-    if (memhead.fini || (memhead.astack.size == 0))
+++    if (memhead.fini || (memhead.astack.size == 0) || memhead.recur != 1)
++         return;
++ #if MP_FULLSTACK
++     /* Create the address nodes for the current call.  This is not necessarily
++@@ -1307,7 +1323,7 @@
++     loginfo v;
++     int j;
++ 
++-    if (!memhead.init || memhead.fini)
+++    if (!memhead.init || memhead.fini || memhead.recur != 0)
++     {
++         __mp_memset(p, c, l);
++         return p;
++@@ -1371,7 +1387,7 @@
++     loginfo v;
++     int j;
++ 
++-    if (!memhead.init || memhead.fini)
+++    if (!memhead.init || memhead.fini || memhead.recur != 0)
++         if (f == AT_MEMCCPY)
++         {
++             if (r = __mp_memfind(p, l, &c, 1))
++diff -ur mpatrol/src/machine.c mpatrol-uclibc/src/machine.c
++--- mpatrol/src/machine.c	2002-01-08 12:13:59.000000000 -0800
+++++ mpatrol-uclibc/src/machine.c	2006-06-07 15:11:20.000000000 -0700
++@@ -217,6 +217,19 @@
++ 	.end	__mp_stackpointer
++ 
++ 
+++/* Obtain the frame pointer (s8) for the current function.
+++ */
+++
+++	.text
+++	.globl	__mp_framepointer
+++	.ent	__mp_framepointer
+++__mp_framepointer:
+++	.frame	$29,0,$31
+++	move	$2,$30
+++	j	$31
+++	.end	__mp_framepointer
+++
+++
++ /* Obtain the return address for the current function.
++  */
++ 
++diff -urN mpatrol/src/memory.c mpatrol-uclibc/src/memory.c
++--- mpatrol/src/memory.c	2002-01-08 12:13:59.000000000 -0800
+++++ mpatrol-uclibc/src/memory.c	2006-05-12 18:12:39.000000000 -0700
++@@ -47,7 +47,7 @@
++ #endif /* SYSTEM */
++ #include <setjmp.h>
++ #include <signal.h>
++-#if MP_SIGINFO_SUPPORT
+++#if MP_SIGINFO_SUPPORT && SYSTEM != SYSTEM_LINUX
++ #include <siginfo.h>
++ #endif /* MP_SIGINFO_SUPPORT */
++ #include <fcntl.h>
++diff -urN mpatrol/src/signals.c mpatrol-uclibc/src/signals.c
++--- mpatrol/src/signals.c	2002-01-08 12:13:59.000000000 -0800
+++++ mpatrol-uclibc/src/signals.c	2006-05-12 18:12:19.000000000 -0700
++@@ -36,7 +36,7 @@
++ #include <stdlib.h>
++ #include <signal.h>
++ #if TARGET == TARGET_UNIX
++-#if MP_SIGINFO_SUPPORT
+++#if MP_SIGINFO_SUPPORT && SYSTEM != SYSTEM_LINUX
++ #include <siginfo.h>
++ #endif /* MP_SIGINFO_SUPPORT */
++ #elif TARGET == TARGET_WINDOWS
++diff -urN mpatrol/src/stack.c mpatrol-uclibc/src/stack.c
++--- mpatrol/src/stack.c	2002-01-08 12:13:59.000000000 -0800
+++++ mpatrol-uclibc/src/stack.c	2006-06-22 15:39:04.000000000 -0700
++@@ -48,7 +48,7 @@
++ #else /* MP_LIBRARYSTACK_SUPPORT */
++ #if TARGET == TARGET_UNIX
++ #include <setjmp.h>
++-#if MP_SIGINFO_SUPPORT
+++#if MP_SIGINFO_SUPPORT && SYSTEM != SYSTEM_LINUX
++ #include <siginfo.h>
++ #endif /* MP_SIGINFO_SUPPORT */
++ #if SYSTEM == SYSTEM_DRSNX || SYSTEM == SYSTEM_SOLARIS
++@@ -58,6 +58,17 @@
++ #define R_SP REG_SP
++ #endif /* R_SP */
++ #endif /* ARCH */
+++#elif SYSTEM == SYSTEM_LINUX
+++#if ARCH == ARCH_MIPS
+++#include <linux/unistd.h>
+++/* We need the ucontext defined in asm/ucontext.h, but sys/ucontext.h
+++ * has a conflicting definition of ucontext. So we'll trick the
+++ * preprocessor into letting the include file define a non-conflicting
+++ * name. */
+++#define ucontext asm_ucontext
+++#include <asm/ucontext.h>
+++#undef ucontext
+++#endif /* ARCH */
++ #endif /* SYSTEM */
++ #endif /* TARGET */
++ #endif /* MP_LIBRARYSTACK_SUPPORT */
++@@ -122,6 +133,15 @@
++ #define SP_OFFSET 2 /* stack pointer offset has been set */
++ #define SP_LOWER  4 /* lower part of stack pointer offset has been set */
++ #define SP_UPPER  8 /* upper part of stack pointer offset has been set */
+++#define BR_UNCOND 16 /* unconditional branch needs to be taken */
+++#define BR_COND   32 /* conditional branch encountered */
+++#define RA_NOFRAME 64 /* no frame - return address is in ra register */
+++#define SP_IN_FP  128 /* stack pointer stored in frame pointer (s8) register */
+++
+++#if SYSTEM == SYSTEM_LINUX
+++#define RA_SIGTRAMP  1 /* return address is a signal trampoline */
+++#define RA_SIGRETURN 2 /* return address is in the signalled function */
+++#endif /* SYSTEM */
++ #endif /* TARGET && ARCH */
++ #endif /* MP_BUILTINSTACK_SUPPORT && MP_LIBRARYSTACK_SUPPORT */
++ 
++@@ -152,6 +172,13 @@
++ #endif /* SYSTEM */
++ #endif /* SYSTEM */
++ #else /* MP_LIBRARYSTACK_SUPPORT */
+++/* On some systems, such as those using uClibc, the signal() function may
+++ * call memcpy() or other memory related functions, so we need to guard
+++ * against recursion.
+++ */
+++
+++static unsigned char recursive;
+++
++ static jmp_buf environment;
++ #if MP_SIGINFO_SUPPORT
++ static struct sigaction bushandler;
++@@ -261,23 +288,41 @@
++ int
++ unwind(frameinfo *f)
++ {
++-    long p, s;
++-    unsigned long a, i, q;
+++    long p, m, s;
+++    unsigned long a, i, q, t, b, r;
++     unsigned short l, u;
++ 
++     s = -1;
++-    p = 0;
+++    p = m = 0;
++     q = 0xFFFFFFFF;
++     l = u = 0;
++     a = 0;
+++    t = b = 0;
++     /* Determine the current stack pointer and return address if we are
++      * initiating call stack traversal.
++      */
++     if (f->ra == 0)
++     {
++         f->sp = __mp_stackpointer();
+++        f->fp = __mp_framepointer();
++         f->ra = __mp_returnaddress();
++     }
+++#if SYSTEM == SYSTEM_LINUX
+++    /* Handle signal frames.
+++     */
+++    if (f->ra & RA_SIGRETURN)
+++    {
+++        /* in case of frameless function, get ra and sp from sigcontext */
+++        p = ((struct sigcontext *) f->sp)->sc_regs[31];
+++        f->fp = ((struct sigcontext *) f->sp)->sc_regs[30];
+++        f->sp = ((struct sigcontext *) f->sp)->sc_regs[29];
+++        a |= RA_NOFRAME;
+++    }
+++    f->ra &= ~3;
+++#endif
+++    /* Save initial code-reading starting point.
+++     */
+++    r = f->ra;
++     /* Search for the return address offset in the stack frame.
++      */
++     while (!((a & RA_OFFSET) && (a & SP_OFFSET)) && (f->ra < q))
++@@ -294,6 +339,67 @@
++             s = 0;
++             a |= SP_OFFSET;
++         }
+++        else if (i == 0x03C0E821)
+++        {
+++            /* move sp,s8 */
+++            a |= SP_IN_FP;
+++        }
+++        else if ((i >> 28 == 0x1) || (i >> 26 == 0x01))
+++        {
+++            /* branch */
+++            t = f->ra + ((signed short)(i & 0xFFFF) * 4) + 4;
+++            if ((i >> 16 == 0x1000) && !(a & BR_COND))
+++            {
+++                /* unconditional branch, if no conditional branch could
+++                   branch past this code */
+++                b = t;
+++                a |= BR_UNCOND;
+++            }
+++            else
+++            {
+++                /* conditional branch, ignore if previous conditional branch
+++                   is further forwards */
+++                if ((t > b) && (t > f->ra))
+++                {
+++                    b = t;
+++                    a |= BR_COND;
+++                    /* can branch past an unconditional branch */
+++                    if (b > q)
+++                        q = 0xFFFFFFFF;
+++                }
+++                else if (t < r)
+++                {
+++                    /* but if branching backwards, set reverse branch target to
+++                       lowest address target encountered so far */
+++                    r = t;
+++                    /* ensure a loop back */
+++                    q = 0xFFFFFFFF;
+++                }
+++            }
+++        }
+++#if SYSTEM == SYSTEM_LINUX
+++        else if (i == 0x0000000c)
+++        {
+++            /* syscall - check for signal handler trampolines */
+++            if (*((unsigned long *) (f->ra - 4)) == 0x24020000 + __NR_sigreturn)
+++            {
+++                /* li v0,__NR_sigreturn */
+++                /* get pointer to sigcontext */
+++                f->sp = f->ra + 4;
+++                f->ra = ((struct sigcontext *) f->sp)->sc_pc | RA_SIGRETURN;
+++                return 1;
+++            }
+++            else if (*((unsigned long *) (f->ra - 4)) == 0x24020000 + __NR_rt_sigreturn)
+++            {
+++                /* li v0,__NR_rt_sigreturn */
+++                /* get pointer to sigcontext */
+++                f->sp = f->ra + 4 +
+++                    sizeof(struct siginfo) + offsetof(struct asm_ucontext, uc_mcontext);
+++                f->ra = ((struct sigcontext *) f->sp)->sc_pc | RA_SIGRETURN;
+++                return 1;
+++            }
+++        }
+++#endif
++         else
++             switch (i >> 16)
++             {
++@@ -319,6 +425,10 @@
++                 u = i & 0xFFFF;
++                 a |= SP_UPPER;
++                 break;
+++              case 0x8FBE:
+++                /* lw s8,##(sp) */
+++                m = i & 0xFFFF;
+++                break;
++               case 0x8FBF:
++                 /* lw ra,##(sp) */
++                 p = i & 0xFFFF;
++@@ -326,9 +436,52 @@
++                 break;
++             }
++         f->ra += 4;
+++        /* Process branch instructions.
+++         */
+++        if (a & BR_COND)
+++        {
+++            if (f->ra >= b)
+++            {
+++                /* reached target of previous conditional branch */
+++                a &= ~BR_COND;
+++                b = 0;
+++            }
+++        }
+++        else if (a & BR_UNCOND)
+++            /* clear branch flag and process instruction in delay slot */
+++            a &= ~BR_UNCOND;
+++        else if (b != 0)
+++        {
+++            /* now follow the unconditional branch */
+++            if (b < f->ra)
+++            {
+++                /* avoid infinite loops */
+++                q = f->ra - 8;
+++                /* go back as far as possible */
+++                if (r < b)
+++                    b = r;
+++            }
+++            f->ra = b;
+++            b = 0;
+++        }
++     }
++     if ((s == 0) && ((a & SP_LOWER) || (a & SP_UPPER)))
++         s = (u << 16) | l;
+++#if SYSTEM == SYSTEM_LINUX
+++    if ((a & RA_NOFRAME) && !(a & RA_OFFSET) &&
+++        ((*((unsigned long *) (p - 8)) == 0x0320F809) ||
+++         (*((unsigned long *) (p - 8)) >> 16 == 0x0C10)))
+++    {
+++        /* jalr ra,t9 or jal ## */
+++        /* f->sp already set */
+++        f->ra = p;
+++        return 1;
+++    }
+++#endif
+++    if (a & SP_IN_FP)
+++        f->sp = f->fp;
+++    if (m > 0)
+++        f->fp = ((unsigned long *) f->sp)[m >> 2];
++     if ((s > 0) && (i = ((unsigned long *) f->sp)[p >> 2]) &&
++         ((*((unsigned long *) (i - 8)) == 0x0320F809) ||
++          (*((unsigned long *) (i - 8)) >> 16 == 0x0C10)))
++@@ -338,6 +491,19 @@
++         f->ra = i;
++         return 1;
++     }
+++#if SYSTEM == SYSTEM_LINUX
+++    else if ((s > 0) && (i != 0) &&
+++             (*((unsigned long *) (i + 4)) == 0x0000000c) &&
+++             ((*((unsigned long *) i) == 0x24020000 + __NR_sigreturn) ||
+++              (*((unsigned long *) i) == 0x24020000 + __NR_rt_sigreturn)))
+++    {
+++        /* li v0,__NR_sigreturn or __NR_rt_sigreturn ; syscall */
+++        /* signal trampoline */
+++        f->sp += s;
+++        f->ra = i | RA_SIGTRAMP;
+++        return 1;
+++    }
+++#endif
++     f->sp = f->ra = 0;
++     return 0;
++ }
++@@ -573,16 +739,14 @@
++     }
++ #endif /* TARGET */
++ #else /* MP_BUILTINSTACK_SUPPORT && MP_LIBRARYSTACK_SUPPORT */
++-#if (TARGET == TARGET_UNIX && (ARCH == ARCH_IX86 || ARCH == ARCH_M68K || \
++-      ARCH == ARCH_M88K || ARCH == ARCH_POWER || ARCH == ARCH_POWERPC || \
++-      ARCH == ARCH_SPARC)) || ((TARGET == TARGET_WINDOWS || \
++-      TARGET == TARGET_NETWARE) && ARCH == ARCH_IX86)
++-    /* This section is not complete in any way for the OS / processor
++-     * combinations it supports, as it is intended to be as portable as possible
++-     * without writing in assembler.  In particular, optimised code is likely
++-     * to cause major problems for stack traversal on some platforms.
++-     */
++ #if TARGET == TARGET_UNIX
+++    /* On some systems, such as those using uClibc, the signal() function may
+++     * call memcpy() or other memory related functions, so we need to guard
+++     * against recursion here.
+++     */
+++   if (!recursive)
+++   {
+++    recursive = 1;
++ #if MP_SIGINFO_SUPPORT
++     i.sa_flags = 0;
++     (void *) i.sa_handler = (void *) stackhandler;
++@@ -597,6 +761,15 @@
++         __mp_newframe(p, p->first);
++     else
++ #endif /* TARGET */
+++#if (TARGET == TARGET_UNIX && (ARCH == ARCH_IX86 || ARCH == ARCH_M68K || \
+++      ARCH == ARCH_M88K || ARCH == ARCH_POWER || ARCH == ARCH_POWERPC || \
+++      ARCH == ARCH_SPARC)) || ((TARGET == TARGET_WINDOWS || \
+++      TARGET == TARGET_NETWARE) && ARCH == ARCH_IX86)
+++    /* This section is not complete in any way for the OS / processor
+++     * combinations it supports, as it is intended to be as portable as possible
+++     * without writing in assembler.  In particular, optimised code is likely
+++     * to cause major problems for stack traversal on some platforms.
+++     */
++     {
++         if (p->frame == NULL)
++             if (p->first == NULL)
++@@ -640,32 +813,10 @@
++             r = 1;
++         }
++     }
++-#if TARGET == TARGET_UNIX
++-#if MP_SIGINFO_SUPPORT
++-    sigaction(SIGBUS, &bushandler, NULL);
++-    sigaction(SIGSEGV, &segvhandler, NULL);
++-#else /* MP_SIGINFO_SUPPORT */
++-    signal(SIGBUS, bushandler);
++-    signal(SIGSEGV, segvhandler);
++-#endif /* MP_SIGINFO_SUPPORT */
++-#endif /* TARGET */
++ #elif TARGET == TARGET_UNIX && ARCH == ARCH_MIPS
++     /* For the MIPS architecture we perform code reading to determine the
++      * frame pointers and the return addresses.
++      */
++-#if MP_SIGINFO_SUPPORT
++-    i.sa_flags = 0;
++-    (void *) i.sa_handler = (void *) stackhandler;
++-    sigfillset(&i.sa_mask);
++-    sigaction(SIGBUS, &i, &bushandler);
++-    sigaction(SIGSEGV, &i, &segvhandler);
++-#else /* MP_SIGINFO_SUPPORT */
++-    bushandler = signal(SIGBUS, stackhandler);
++-    segvhandler = signal(SIGSEGV, stackhandler);
++-#endif /* MP_SIGINFO_SUPPORT */
++-    if (setjmp(environment))
++-        __mp_newframe(p, p->first);
++-    else
++     {
++         if (p->frame == NULL)
++             unwind(&p->next);
++@@ -673,6 +824,10 @@
++         {
++             p->frame = (void *) p->next.sp;
++             p->addr = (void *) (p->next.ra - 8);
+++#if SYSTEM == SYSTEM_LINUX
+++            if (p->next.ra & (RA_SIGTRAMP|RA_SIGRETURN))
+++                p->addr = (void *) (p->next.ra & ~3);
+++#endif /* SYSTEM */
++             r = 1;
++         }
++         else
++@@ -681,6 +836,8 @@
++             p->addr = NULL;
++         }
++     }
+++#endif /* TARGET && ARCH */
+++#if TARGET == TARGET_UNIX
++ #if MP_SIGINFO_SUPPORT
++     sigaction(SIGBUS, &bushandler, NULL);
++     sigaction(SIGSEGV, &segvhandler, NULL);
++@@ -688,7 +845,9 @@
++     signal(SIGBUS, bushandler);
++     signal(SIGSEGV, segvhandler);
++ #endif /* MP_SIGINFO_SUPPORT */
++-#endif /* TARGET && ARCH */
+++    recursive = 0;
+++   } /* if (!bushandler) */
+++#endif /* TARGET */
++ #endif /* MP_BUILTINSTACK_SUPPORT && MP_LIBRARYSTACK_SUPPORT */
++     return r;
++ }
++diff -ur mpatrol/src/stack.h mpatrol-uclibc/src/stack.h
++--- mpatrol/src/stack.h	2002-01-08 12:13:59.000000000 -0800
+++++ mpatrol-uclibc/src/stack.h	2006-06-07 15:12:58.000000000 -0700
++@@ -75,6 +75,7 @@
++ typedef struct frameinfo
++ {
++     unsigned int sp; /* stack pointer */
+++    unsigned int fp; /* frame pointer (s8) */
++     unsigned int ra; /* return address */
++ }
++ frameinfo;
++diff -urN mpatrol/src/symbol.c mpatrol-uclibc/src/symbol.c
++--- mpatrol/src/symbol.c	2002-01-08 12:13:59.000000000 -0800
+++++ mpatrol-uclibc/src/symbol.c	2006-05-24 15:43:04.000000000 -0700
++@@ -1157,7 +1157,7 @@
++             __mp_error(ET_MAX, AT_MAX, NULL, 0, "%s: %s\n", f, m);
++         return 0;
++     }
++-    if (n == 0)
+++    if (n <= sizeof(asymbol *))
++     {
++         /* If we couldn't find the symbol table then it is likely that the file
++          * has been stripped.  However, if the file was dynamically linked then
++@@ -1172,7 +1172,7 @@
++                 __mp_error(ET_MAX, AT_MAX, NULL, 0, "%s: %s\n", f, m);
++             return 0;
++         }
++-        if (n == 0)
+++        if (n <= sizeof(asymbol *))
++         {
++             m = "missing symbol table";
++             if (a != NULL)
++@@ -1893,6 +1893,17 @@
++                     l = (dynamiclink *) *((unsigned long *) d->d_un.d_ptr + 1);
++                 break;
++             }
+++#if ARCH == ARCH_MIPS
+++            else if (d->d_tag == DT_MIPS_RLD_MAP)
+++            {
+++                /* MIPS elf has DT_MIPS_RLD_MAP instead of DT_DEBUG. */
+++                if (!d->d_un.d_ptr || !(*(unsigned long **) d->d_un.d_ptr))
+++                    l = NULL;
+++                else
+++                    l = (dynamiclink *) *((*(unsigned long **) d->d_un.d_ptr) + 1);
+++                break;
+++            }
+++#endif /* ARCH */
++         /* We skip past the first item on the list since it represents the
++          * executable file, but we may wish to record the name of the file
++          * if we haven't already determined it.
 
-Added: trunk/buildroot/package/dmalloc/dmalloc.mk
+Added: trunk/buildroot/package/mpatrol/mpatrol-unwindcache.patch
 ===================================================================
---- trunk/buildroot/package/dmalloc/dmalloc.mk	2006-12-12 22:13:41 UTC (rev 16858)
-+++ trunk/buildroot/package/dmalloc/dmalloc.mk	2006-12-12 22:16:41 UTC (rev 16859)
-@@ -0,0 +1,76 @@
+--- trunk/buildroot/package/mpatrol/mpatrol-unwindcache.patch	2006-12-12 22:16:41 UTC (rev 16859)
++++ trunk/buildroot/package/mpatrol/mpatrol-unwindcache.patch	2006-12-12 22:18:15 UTC (rev 16860)
+@@ -0,0 +1,208 @@
++Patch to improve MIPS call stack unwind performance by caching the results
++of code reading.
++by Dan Howell <dahowell@directv.com>
++
++diff -urN mpatrol-uclibc/src/stack.c mpatrol-unwindcache/src/stack.c
++--- mpatrol-uclibc/src/stack.c	2006-06-22 15:39:04.000000000 -0700
+++++ mpatrol-unwindcache/src/stack.c	2006-06-22 15:42:20.000000000 -0700
++@@ -68,6 +68,7 @@
++ #define ucontext asm_ucontext
++ #include <asm/ucontext.h>
++ #undef ucontext
+++#include "heap.h"
++ #endif /* ARCH */
++ #endif /* SYSTEM */
++ #endif /* TARGET */
++@@ -280,6 +281,136 @@
++ 
++ #if !MP_BUILTINSTACK_SUPPORT && !MP_LIBRARYSTACK_SUPPORT
++ #if TARGET == TARGET_UNIX && ARCH == ARCH_MIPS
+++/* Set up a tree to cache the results of code searching to determine the
+++   location of the return address for each code point encountered. */
+++
+++/* An unwind node belongs to a binary search tree of nodes, ordered by
+++ * code address, and contains call stack unwinding details for a given
+++ * code address. An internal index node stores details of a single memory
+++ * block allocated for unwind node slots.
+++ */
+++typedef union unwindnode
+++{
+++    struct
+++    {
+++        treenode node;   /* internal tree node */
+++        void *block;     /* pointer to block of memory */
+++        size_t size;     /* size of block of memory */
+++    }
+++    index;
+++    struct
+++    {
+++        treenode node;   /* tree node */
+++        long p;          /* return address offset in the stack */
+++        long m;          /* frame pointer offset in stack */
+++        long s;          /* stack pointer offset from previous frame */
+++        unsigned long a; /* flags */
+++    }
+++    data;
+++}
+++unwindnode;
+++
+++/* An unwindhead holds the table of address node slots as well as the
+++ * internal list of memory blocks allocated for address node slots.
+++ */
+++typedef struct unwindhead
+++{
+++    heaphead heap;       /* pointer to heap */
+++    slottable table;     /* table of address nodes */
+++    treeroot itree;      /* internal list of memory blocks */
+++    treeroot dtree;      /* tree for sorting */
+++    size_t size;         /* memory used by internal blocks */
+++    char init;           /* initialization flag */
+++}
+++unwindhead;
+++
+++static unwindhead unwindcache;
+++
+++/* Initialise the fields of an unwindhead so that there are no allocated,
+++ * freed or free blocks.
+++ */
+++
+++static
+++void
+++newunwindcache(void)
+++{
+++    struct { char x; unwindnode y; } z;
+++    long n;
+++
+++    __mp_newheap(&unwindcache.heap);
+++    /* Determine the minimum alignment for an unwind node on this
+++     * system and force the alignment to be a power of two.  This
+++     * information is used when initialising the slot table.
+++     */
+++    n = (char *) &z.y - &z.x;
+++    __mp_newslots(&unwindcache.table, sizeof(unwindnode), __mp_poweroftwo(n));
+++    __mp_newtree(&unwindcache.itree);
+++    __mp_newtree(&unwindcache.dtree);
+++    unwindcache.size = 0;
+++    unwindcache.init = 1;
+++}
+++
+++
+++/* Forget all unwind information.
+++ */
+++
+++static
+++void
+++deleteunwindcache(void)
+++{
+++    /* We don't need to explicitly free any memory as this is dealt with
+++     * at a lower level by the heap manager.
+++     */
+++    __mp_deleteheap(&unwindcache.heap);
+++    unwindcache.table.free = NULL;
+++    unwindcache.table.size = 0;
+++    __mp_newtree(&unwindcache.itree);
+++    __mp_newtree(&unwindcache.dtree);
+++    unwindcache.size = 0;
+++    unwindcache.init = 0;
+++}
+++
+++
+++/* Allocate a new unwind node.
+++ */
+++
+++static
+++unwindnode *
+++getunwindnode(void)
+++{
+++    unwindnode *n;
+++    heapnode *p;
+++
+++    /* If we have no more allocation node slots left then we must allocate
+++     * some more memory for them.  An extra MP_ALLOCFACTOR pages of memory
+++     * should suffice.
+++     */
+++    if ((n = (unwindnode *) __mp_getslot(&unwindcache.table)) == NULL)
+++    {
+++        if ((p = __mp_heapalloc(&unwindcache.heap, unwindcache.heap.memory.page * MP_ALLOCFACTOR,
+++              unwindcache.table.entalign, 1)) == NULL)
+++            return NULL;
+++        __mp_initslots(&unwindcache.table, p->block, p->size);
+++        n = (unwindnode *) __mp_getslot(&unwindcache.table);
+++        __mp_treeinsert(&unwindcache.itree, &n->index.node, (unsigned long) p->block);
+++        n->index.block = p->block;
+++        n->index.size = p->size;
+++        unwindcache.size += p->size;
+++        n = (unwindnode *) __mp_getslot(&unwindcache.table);
+++    }
+++    return n;
+++}
+++
+++/* Search for the unwind node associated with a given address.
+++ */
+++static
+++unwindnode *
+++findunwindnode(unsigned long p)
+++{
+++    return (unwindnode *) __mp_search(unwindcache.dtree.root, p);
+++}
+++
+++
++ /* Determine the stack pointer and return address of the previous stack frame
++  * by performing code reading.
++  */
++@@ -289,8 +420,9 @@
++ unwind(frameinfo *f)
++ {
++     long p, m, s;
++-    unsigned long a, i, q, t, b, r;
+++    unsigned long a, i, q, t, b, r, k;
++     unsigned short l, u;
+++    unwindnode *n = NULL;
++ 
++     s = -1;
++     p = m = 0;
++@@ -322,7 +454,23 @@
++ #endif
++     /* Save initial code-reading starting point.
++      */
++-    r = f->ra;
+++    r = k = f->ra;
+++    /* Create the cache if not yet created.
+++     */
+++    if (!unwindcache.init)
+++    {
+++        newunwindcache();
+++        __mp_atexit(deleteunwindcache);
+++    }
+++    if ((n = findunwindnode(f->ra)) != NULL)
+++    {
+++        /* We've been here before, so get the cached information.
+++         */
+++        p = n->data.p;
+++        m = n->data.m;
+++        s = n->data.s;
+++        a = n->data.a;
+++    }
++     /* Search for the return address offset in the stack frame.
++      */
++     while (!((a & RA_OFFSET) && (a & SP_OFFSET)) && (f->ra < q))
++@@ -478,6 +626,19 @@
++         return 1;
++     }
++ #endif
+++    if (n == NULL)
+++    {
+++        if ((n = getunwindnode()) != NULL)
+++        {
+++            /* Cache the information we just got in the tree.
+++             */
+++            n->data.p = p;
+++            n->data.m = m;
+++            n->data.s = s;
+++            n->data.a = a;
+++            __mp_treeinsert(&unwindcache.dtree, &n->data.node, k);
+++        }
+++    }
++     if (a & SP_IN_FP)
++         f->sp = f->fp;
++     if (m > 0)
+
+Added: trunk/buildroot/package/mpatrol/mpatrol.mk
+===================================================================
+--- trunk/buildroot/package/mpatrol/mpatrol.mk	2006-12-12 22:16:41 UTC (rev 16859)
++++ trunk/buildroot/package/mpatrol/mpatrol.mk	2006-12-12 22:18:15 UTC (rev 16860)
+@@ -0,0 +1,91 @@
 +#############################################################
 +#
-+# dmalloc
++# mpatrol
 +#
 +#############################################################
-+DMALLOC_VER:=5.4.2
-+DMALLOC_SOURCE:=dmalloc-$(DMALLOC_VER).tgz
-+DMALLOC_SITE:=http://dmalloc.com/releases
-+DMALLOC_DIR:=$(BUILD_DIR)/dmalloc-$(DMALLOC_VER)
-+DMALLOC_CAT:=zcat
-+DMALLOC_BINARY:=dmalloc
-+DMALLOC_TARGET_BINARY:=usr/bin/dmalloc
++MPATROL_VER:=1.4.8
++MPATROL_SOURCE:=mpatrol_$(MPATROL_VER).tar.gz
++MPATROL_SITE:=http://www.cbmamiga.demon.co.uk/mpatrol/files
++MPATROL_DIR:=$(BUILD_DIR)/mpatrol
++MPATROL_CAT:=zcat
++MPATROL_BINARY:=mleak
++MPATROL_BUILD_DIR:=$(MPATROL_DIR)/build/unix
++MPATROL_TARGET_BINARY:=usr/bin/mleak
 +
-+$(DL_DIR)/$(DMALLOC_SOURCE):
-+	 $(WGET) -P $(DL_DIR) $(DMALLOC_SITE)/$(DMALLOC_SOURCE)
++# Pick a symbol library to use. We have a choice of GDB BFD, binutils BFD, or libelf.
++# If one of them is already being built, then use it, otherwise, default to GDB
++ifeq ($(BR2_PACKAGE_GDB),y)
++MPATROL_SYMBOL_LIBS:=-L$(GDB_TARGET_DIR)/bfd -lbfd -L$(GDB_TARGET_DIR)/libiberty -liberty
++MPATROL_SYMBOL_INCS:=-I$(GDB_TARGET_DIR)/bfd -I$(GDB_DIR)/include -DMP_SYMBOL_LIBS=
++MPATROL_SYMBOL_DEPS:=gdb_target
++else
++ifeq ($(BR2_PACKAGE_GCC_TARGET),y)
++MPATROL_SYMBOL_LIBS:=-L$(BINUTILS_DIR2)/bfd -lbfd -L$(BINUTILS_DIR2)/libiberty -liberty
++MPATROL_SYMBOL_INCS:=-I$(BINUTILS_DIR2)/bfd -I$(BINUTILS_DIR)/include -DMP_SYMBOL_LIBS=
++MPATROL_SYMBOL_DEPS:=binutils_target
++else
++ifeq ($(BR2_PACKAGE_LIBELF),y)
++MPATROL_SYMBOL_LIBS:=-L$(LIBELF_DIR)/lib -lelf
++MPATROL_SYMBOL_INCS:=-I$(STAGING_DIR)/usr/include -DFORMAT=FORMAT_ELF32 -DMP_SYMBOL_LIBS=
++MPATROL_SYMBOL_DEPS:=libelf
++else # use GDB by default
++MPATROL_SYMBOL_LIBS:=-L$(GDB_TARGET_DIR)/bfd -lbfd -L$(GDB_TARGET_DIR)/libiberty -liberty
++MPATROL_SYMBOL_INCS:=-I$(GDB_TARGET_DIR)/bfd -I$(GDB_DIR)/include -DMP_SYMBOL_LIBS=
++MPATROL_SYMBOL_DEPS:=gdb_target
++endif
++endif
++endif
 +
-+dmalloc-source: $(DL_DIR)/$(DMALLOC_SOURCE)
++$(DL_DIR)/$(MPATROL_SOURCE):
++	 $(WGET) -P $(DL_DIR) $(MPATROL_SITE)/$(MPATROL_SOURCE)
 +
-+$(DMALLOC_DIR)/.unpacked: $(DL_DIR)/$(DMALLOC_SOURCE)
-+	$(DMALLOC_CAT) $(DL_DIR)/$(DMALLOC_SOURCE) | tar -C $(BUILD_DIR) $(TAR_OPTIONS) -
-+	toolchain/patch-kernel.sh $(DMALLOC_DIR) package/dmalloc dmalloc\*.patch
-+	$(SED) 's/^ac_cv_page_size=0$$/ac_cv_page_size=12/' $(DMALLOC_DIR)/configure
-+	$(SED) 's/(ld -/($${LD-ld} -/' $(DMALLOC_DIR)/configure
-+	$(SED) 's/'\''ld -/"$${LD-ld}"'\'' -/' $(DMALLOC_DIR)/configure
-+	touch $(DMALLOC_DIR)/.unpacked
++mpatrol-source: $(DL_DIR)/$(MPATROL_SOURCE)
 +
-+$(DMALLOC_DIR)/.configured: $(DMALLOC_DIR)/.unpacked
-+	(cd $(DMALLOC_DIR); rm -rf config.cache; \
-+		$(TARGET_CONFIGURE_OPTS) \
-+		CFLAGS="-g $(TARGET_CFLAGS)" \
-+		LDFLAGS="-g" \
-+		./configure \
-+		--target=$(GNU_TARGET_NAME) \
-+		--host=$(GNU_TARGET_NAME) \
-+		--build=$(GNU_HOST_NAME) \
-+		--prefix=/usr \
-+		--enable-threads \
-+		--enable-shlib \
-+	);
-+	touch $(DMALLOC_DIR)/.configured
++$(MPATROL_DIR)/.unpacked: $(DL_DIR)/$(MPATROL_SOURCE)
++	$(MPATROL_CAT) $(DL_DIR)/$(MPATROL_SOURCE) | tar -C $(BUILD_DIR) $(TAR_OPTIONS) -
++	toolchain/patch-kernel.sh $(MPATROL_DIR) package/mpatrol mpatrol\*.patch
++	$(SED) '/LD.*MPTOBJS/s,$$, $$(LDLIBS),' $(MPATROL_BUILD_DIR)/Makefile
++	$(SED) '/CFLAGS.*=/s,$$, $$(IFLAGS),' $(MPATROL_BUILD_DIR)/Makefile
++	touch $(MPATROL_DIR)/.unpacked
 +
-+$(DMALLOC_DIR)/$(DMALLOC_BINARY): $(DMALLOC_DIR)/.configured
-+	$(MAKE) -C $(DMALLOC_DIR)
++$(MPATROL_BUILD_DIR)/$(MPATROL_BINARY): $(MPATROL_DIR)/.unpacked
++	$(MAKE) CC=$(TARGET_CROSS)gcc AR=$(TARGET_CROSS)ar LD=$(TARGET_CROSS)gcc \
++		IFLAGS="-g $(MPATROL_SYMBOL_INCS) -DMP_USE_ATEXIT=1 -DMP_SIGINFO_SUPPORT=1" \
++		LDLIBS="$(MPATROL_SYMBOL_LIBS)" -C $(MPATROL_BUILD_DIR) all
 +
-+$(TARGET_DIR)/$(DMALLOC_TARGET_BINARY): $(DMALLOC_DIR)/$(DMALLOC_BINARY)
-+	$(MAKE)	prefix=$(STAGING_DIR)/usr \
-+		exec_prefix=$(TARGET_DIR)/usr \
-+		libdir=$(STAGING_DIR)/usr/lib \
-+		shlibdir=$(TARGET_DIR)/usr/lib \
-+		includedir=$(STAGING_DIR)/include \
-+		-C $(DMALLOC_DIR) install
-+	(cd $(STAGING_DIR)/usr/lib; \
-+		mv libdmalloc*.so $(TARGET_DIR)/usr/lib);
-+	touch $(TARGET_DIR)/$(DMALLOC_TARGET_BINARY)
++$(TARGET_DIR)/$(MPATROL_TARGET_BINARY): $(MPATROL_BUILD_DIR)/$(MPATROL_BINARY)
++	mkdir -p $(TARGET_DIR)/usr/lib
++	(cd $(MPATROL_BUILD_DIR); \
++		cp -dpf lib*.so* $(TARGET_DIR)/usr/lib; \
++		cp -dpf mpatrol mprof mptrace mleak $(TARGET_DIR)/usr/bin)
++	if [ ! -e $(TARGET_DIR)/lib/libpthread.so ] ; then \
++		ln -sf libpthread.so.0 $(TARGET_DIR)/lib/libpthread.so; fi
++	(cd $(MPATROL_DIR); \
++		cp -dpf bin/mp* bin/hexwords $(TARGET_DIR)/usr/bin; \
++		cp -dpf src/mp*.h $(STAGING_DIR)/include; \
++		mkdir -p $(STAGING_DIR)/include/mpatrol; \
++		cp -dpf tools/*.h $(STAGING_DIR)/include/mpatrol)
++	touch $(TARGET_DIR)/$(MPATROL_TARGET_BINARY)
 +
-+dmalloc: uclibc $(TARGET_DIR)/$(DMALLOC_TARGET_BINARY)
++mpatrol: uclibc $(MPATROL_SYMBOL_DEPS) $(TARGET_DIR)/$(MPATROL_TARGET_BINARY)
 +
-+dmalloc-clean: 
-+	rm -f $(TARGET_DIR)/usr/lib/libdmalloc*
-+	rm -f $(STAGING_DIR)/usr/lib/libdmalloc*
-+	rm -f $(STAGING_DIR)/include/dmalloc.h
-+	rm -f $(TARGET_DIR)/$(DMALLOC_TARGET_BINARY)
-+	$(MAKE) -C $(DMALLOC_DIR) clean
++mpatrol-clean: 
++	(cd $(TARGET_DIR)/usr/lib; rm -f libmpatrol* libmpalloc*)
++	(cd $(TARGET_DIR)/usr/bin; \
++		rm -f mpatrol mprof mptrace mleak mpsym mpedit hexwords)
++	(cd $(STAGING_DIR)/include; \
++		rm -rf mpatrol.h mpalloc.h mpdebug.h mpatrol)
++	$(MAKE) -C $(MPATROL_DIR)/build/unix clobber
 +
-+dmalloc-dirclean: 
-+	rm -rf $(DMALLOC_DIR)
++mpatrol-dirclean: 
++	rm -rf $(MPATROL_DIR)
 +
 +
 +#############################################################
@@ -183,6 +922,6 @@ Added: trunk/buildroot/package/dmalloc/dmalloc.mk
 +# Toplevel Makefile options
 +#
 +#############################################################
-+ifeq ($(strip $(BR2_PACKAGE_DMALLOC)),y)
-+TARGETS+=dmalloc
++ifeq ($(strip $(BR2_PACKAGE_MPATROL)),y)
++TARGETS+=mpatrol
 +endif
