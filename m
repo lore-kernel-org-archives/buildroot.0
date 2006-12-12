@@ -1,27 +1,32 @@
-From: Bernhard Fischer <rep.nop@aon.at>
-Date: Tue, 12 Dec 2006 14:29:47 +0100
-Subject: [Buildroot] [PATCH] fix libcgi building
-In-Reply-To: <20061212124548.GA25794@tuxedo.home.lan>
-References: <20061212124548.GA25794@tuxedo.home.lan>
-Message-ID: <20061212132947.GA30548@aon.at>
+From: Ulf Samuelsson <ulf@atmel.com>
+Date: Tue, 12 Dec 2006 12:56:14 +0100
+Subject: [Buildroot] targetting buildroot at vmware
+References: <Pine.LNX.4.64.0612112143590.26350@q7.q7.com>
+	<20061212085344.GA5002@aon.at>
+Message-ID: <010e01c71de9$943efd50$0f31b10a@atmel.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Tue, Dec 12, 2006 at 01:45:48PM +0100, Lars Munch wrote:
->Hi all
->
->The attached patch fixes af few issues with libcgi:
->
->* Remove bogus tab in libcgi.mk that prevented the library from being build
->* Added headerfiles to STAGING_DIR in usr/include/libcgi so that we
->  can actually use the library with the toolchain
->* Added patch that fixes up the makefile.in and fixes a few bugs in libcgi
->
->Most of the patch has been taken from the debian package.
->
->Please apply.
+> On Mon, Dec 11, 2006 at 09:45:36PM -0800, Joe Pruett wrote:
+>>i haven't found any obvious hits on the web yet, but it seems like this 
+>>shouldn't be too hard.  i want to make a very small vmware image using 
+>>buildroot.  has anyone else done this and have suggestions?  i figure i'll 
+>>just start with defaults for 386 and see where i get...
+> 
+> There is no difference whether you build a rootfs for real hardware or
+> for any simulator, be it vmware, bochs, plex86, qemu, you-name-it). Just
+> build your rootfs, install a bootloader into an empty "disk" (you'd
+> normally use a file for this) and put your rootfs into a partition on
+> your "disk". Boot and enjoy.
 
-Applied. Thanks!
+I think he wants to create a complete disk for VMware, 
+and I believe that is it not possible.
+Once a complete disk is available, the file system created in 
+VMware can be copied to the disk.
+
+
+Best Regards
+Ulf Samuelsson 
