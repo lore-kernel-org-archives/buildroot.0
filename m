@@ -1,32 +1,50 @@
-From: Ulf Samuelsson <ulf@atmel.com>
-Date: Tue, 12 Dec 2006 12:56:14 +0100
-Subject: [Buildroot] targetting buildroot at vmware
-References: <Pine.LNX.4.64.0612112143590.26350@q7.q7.com>
-	<20061212085344.GA5002@aon.at>
-Message-ID: <010e01c71de9$943efd50$0f31b10a@atmel.com>
+From: MikeW <mw_phil@yahoo.co.uk>
+Date: Tue, 12 Dec 2006 15:09:25 +0000 (UTC)
+Subject: [Buildroot] Issue preparing a buildroot
+References: <1165919607.6628.4.camel@petitemort.i.digital-scurf.org>
+Message-ID: <loom.20061212T155919-203@post.gmane.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-> On Mon, Dec 11, 2006 at 09:45:36PM -0800, Joe Pruett wrote:
->>i haven't found any obvious hits on the web yet, but it seems like this 
->>shouldn't be too hard.  i want to make a very small vmware image using 
->>buildroot.  has anyone else done this and have suggestions?  i figure i'll 
->>just start with defaults for 386 and see where i get...
+Daniel Silverstone <dsilvers@...> writes:
+
+> Does anyone here have experience of getting buildroot going on an
+> Ubuntu/edgy system, or even experience of resolving such an error?
 > 
-> There is no difference whether you build a rootfs for real hardware or
-> for any simulator, be it vmware, bochs, plex86, qemu, you-name-it). Just
-> build your rootfs, install a bootloader into an empty "disk" (you'd
-> normally use a file for this) and put your rootfs into a partition on
-> your "disk". Boot and enjoy.
+....
+/space/dsilvers/dev-simtec/buildroot-curl-support/
+ toolchain_build_i686/uClibc_dev//usr/include/bits/local_lim.h:36:26:
+> error: linux/limits.h: No such file or directory
+> 
+> I hope you can help,
+> 
+> Thank,
+> 
+> D.
+> 
+Well it's often possible to temporarily 'fix' such issues by means of a
+symbolic link to the right place; as long as it's limited in scope,
+the use of an 'external' limits.h file shouldn't break anything ....?!
 
-I think he wants to create a complete disk for VMware, 
-and I believe that is it not possible.
-Once a complete disk is available, the file system created in 
-VMware can be copied to the disk.
+I would have thought there was an add-in package that would supply
+the missing headers - surely we are not in Windows "hide system files"
+territory ?
 
+I don't know whether Ubuntu is missing the entire /linux subdirectory
+or just the limits.h file, but just add the minimum required to get past
+this obstacle, i.e. don't link to the /linux directory if you can help it,
+just create an empty one (if missing) and add a symlink to the
+existing limits.h file.
 
-Best Regards
-Ulf Samuelsson 
+In this way the possible side-effects of using a 'foreign' file are
+reduced, and you use as much as possible from the correct toolchain.
+
+The above is *not* from direct Ubuntu experience, but I have made
+'enabling' fixups in the manner described to get things to build
+before now.
+
+Regards,
+Mike
