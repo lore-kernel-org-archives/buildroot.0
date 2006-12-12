@@ -1,28 +1,52 @@
-From: MikeW <mw_phil@yahoo.co.uk>
-Date: Tue, 12 Dec 2006 15:16:06 +0000 (UTC)
-Subject: [Buildroot] buildroot for ARM target problem
-References: <10551.72920.qm@web33202.mail.mud.yahoo.com>
-	<20061208171453.b454179a.philippe.ney@pardes.ws>
-Message-ID: <loom.20061212T161433-542@post.gmane.org>
+From: Daniel Silverstone <dsilvers@digital-scurf.org>
+Date: Tue, 12 Dec 2006 15:23:21 +0000
+Subject: [Buildroot] Issue preparing a buildroot
+In-Reply-To: <loom.20061212T155919-203@post.gmane.org>
+References: <1165919607.6628.4.camel@petitemort.i.digital-scurf.org>
+	<loom.20061212T155919-203@post.gmane.org>
+Message-ID: <1165937001.6628.13.camel@petitemort.i.digital-scurf.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Philippe Ney <philippe.ney@...> writes:
+On Tue, 2006-12-12 at 15:09 +0000, MikeW wrote:
+> Well it's often possible to temporarily 'fix' such issues by means of a
+> symbolic link to the right place; as long as it's limited in scope,
+> the use of an 'external' limits.h file shouldn't break anything ....?!
 
-> Hi,
-> 
-> Did you try something like this ?
-> http://gcc.gnu.org/ml/gcc-patches/2004-08/msg02436.html
-> (Google, 1 second search time)
-> And have a look to the gumstix project, it also use arm w/ buildroot.
-> Philippe
+Well, except for the fact that the kernel team explicitly state that
+linux/limits.h belongs to *LINUX* not to userland :-)
 
-Yes, but ideally ;-) 2-year-old patches should have made it into Buildroot
-... by now.
+> I would have thought there was an add-in package that would supply
+> the missing headers - surely we are not in Windows "hide system files"
+> territory ?
 
-(I won't mention EABI problems :( )
+No, this is a case of the libc breaking the kernel/userland divide in a
+way which it is not supposed to.
 
-Mike
+> The above is *not* from direct Ubuntu experience, but I have made
+> 'enabling' fixups in the manner described to get things to build
+> before now.
+
+Unfortunately it seems my initial suggestion that it might be
+Ubuntu/edgy may have been misplaced. Using a non-snapshot uClibc removes
+the issue.
+
+However I still cannot compile because snapshot busybox won't compile,
+and non-snapshot busybox won't even configure for me.
+
+*sigh*
+
+I do wonder if anyone tests this stuff in an automated environment ever.
+
+Thanks for your suggestions, but I cannot make in-place fixes on my
+machine, nor in any given tree because we intend to autobuild things and
+thus they get fresh chroots to be built in each time.
+
+D.
+
+-- 
+Daniel Silverstone                         http://www.digital-scurf.org/
+PGP mail accepted and encouraged.            Key Id: 2BC8 4016 2068 7895
