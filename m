@@ -1,50 +1,28 @@
 From: MikeW <mw_phil@yahoo.co.uk>
-Date: Tue, 12 Dec 2006 15:09:25 +0000 (UTC)
-Subject: [Buildroot] Issue preparing a buildroot
-References: <1165919607.6628.4.camel@petitemort.i.digital-scurf.org>
-Message-ID: <loom.20061212T155919-203@post.gmane.org>
+Date: Tue, 12 Dec 2006 15:16:06 +0000 (UTC)
+Subject: [Buildroot] buildroot for ARM target problem
+References: <10551.72920.qm@web33202.mail.mud.yahoo.com>
+	<20061208171453.b454179a.philippe.ney@pardes.ws>
+Message-ID: <loom.20061212T161433-542@post.gmane.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Daniel Silverstone <dsilvers@...> writes:
+Philippe Ney <philippe.ney@...> writes:
 
-> Does anyone here have experience of getting buildroot going on an
-> Ubuntu/edgy system, or even experience of resolving such an error?
+> Hi,
 > 
-....
-/space/dsilvers/dev-simtec/buildroot-curl-support/
- toolchain_build_i686/uClibc_dev//usr/include/bits/local_lim.h:36:26:
-> error: linux/limits.h: No such file or directory
-> 
-> I hope you can help,
-> 
-> Thank,
-> 
-> D.
-> 
-Well it's often possible to temporarily 'fix' such issues by means of a
-symbolic link to the right place; as long as it's limited in scope,
-the use of an 'external' limits.h file shouldn't break anything ....?!
+> Did you try something like this ?
+> http://gcc.gnu.org/ml/gcc-patches/2004-08/msg02436.html
+> (Google, 1 second search time)
+> And have a look to the gumstix project, it also use arm w/ buildroot.
+> Philippe
 
-I would have thought there was an add-in package that would supply
-the missing headers - surely we are not in Windows "hide system files"
-territory ?
+Yes, but ideally ;-) 2-year-old patches should have made it into Buildroot
+... by now.
 
-I don't know whether Ubuntu is missing the entire /linux subdirectory
-or just the limits.h file, but just add the minimum required to get past
-this obstacle, i.e. don't link to the /linux directory if you can help it,
-just create an empty one (if missing) and add a symlink to the
-existing limits.h file.
+(I won't mention EABI problems :( )
 
-In this way the possible side-effects of using a 'foreign' file are
-reduced, and you use as much as possible from the correct toolchain.
-
-The above is *not* from direct Ubuntu experience, but I have made
-'enabling' fixups in the manner described to get things to build
-before now.
-
-Regards,
 Mike
