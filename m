@@ -1,43 +1,48 @@
-From: andersen at uclibc.org <andersen@uclibc.org>
-Date: Mon, 11 Dec 2006 23:10:55 -0800 (PST)
-Subject: [Buildroot] svn commit: trunk/buildroot: target/device/AMD/DBAu1500
-	target/device etc...
-Message-ID: <20061212071055.DC96B48591@busybox.net>
+From: Andre <armcc2000@yahoo.com>
+Date: Mon, 11 Dec 2006 23:32:53 -0800 (PST)
+Subject: [Buildroot] ARM softfloat patch for gcc 4.2
+In-Reply-To: <20061210141537.GD4442@aon.at>
+Message-ID: <406186.89354.qm@web35612.mail.mud.yahoo.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Author: andersen
-Date: 2006-12-11 23:10:54 -0800 (Mon, 11 Dec 2006)
-New Revision: 16849
+Bernhard Fischer <rep.nop@aon.at> wrote:
+> On Fri, Dec 08, 2006 at 07:21:14PM -0800, Andre wrote:
+> >Tested with gcc 4.2 20061205 snapshot + binutils 2.17
+> >
+> >Seems to work with one minor issue: although the newly created
+> >arm-linux-uclibc-gcc defaults to -mfloat-abi=soft, binutils does
+> not.
+> 
+> There are (at least) two upstream bugs about arm softfloat:
+> gcc.gnu.org/PR16314
+> gcc.gnu.org/PR14352
+> 
+> Richard is the arm arch maintainer, so please discuss the problems
+> there and also fix it there. thanks,
+> 
 
-Log:
-update uClibc config settings and update installation of kernel headers
+Not quite sure I follow you... the issue with binutils seems likely
+to be in binutils or in the way buildroot configures and builds
+binutils, or not ??
+
+The gcc bugs you reference seem to be unrelated...
+
+Anyway, does the rest of the patch look OK ?? (There should be
+nothing too controversial in there, I just updated an existing
+buildroot patch for gcc so that it applies to the latest gcc 4.2
+snapshot).
+
+Andre
+--
 
 
-Added:
-   trunk/buildroot/toolchain/uClibc/fix_includes-uClibc-0.9.28.patch
-   trunk/buildroot/toolchain/uClibc/uClibc-0.9.28.config
-   trunk/buildroot/toolchain/uClibc/uClibc-0.9.29.config
 
-Removed:
-   trunk/buildroot/target/device/AMD/DBAu1500/uClibc.config.mips
-   trunk/buildroot/target/device/AMD/DBAu1500/uClibc.config.mipsel
-   trunk/buildroot/target/device/x86/i386/uClibc.config.i586
-   trunk/buildroot/toolchain/uClibc/uClibc.config
-
-Modified:
-   trunk/buildroot/target/device/AMD/DBAu1500/Makefile.in
-   trunk/buildroot/target/device/x86/i386/Makefile.in
-   trunk/buildroot/toolchain/uClibc/Config.in
-   trunk/buildroot/toolchain/uClibc/uclibc.mk
-
-
-Changeset:
-
-Sorry, the patch is too large to include (1415 lines).
-Please use ViewCVS to see it!
-
-http://uclibc.org/cgi-bin/viewcvs.cgi?view=rev&root=svn&rev=16849
+ 
+____________________________________________________________________________________
+Do you Yahoo!?
+Everyone is raving about the all-new Yahoo! Mail beta.
+http://new.mail.yahoo.com
