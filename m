@@ -1,46 +1,97 @@
-From: Joe Pruett <joey@clean.q7.com>
-Date: Tue, 12 Dec 2006 09:13:34 -0800 (PST)
-Subject: [Buildroot] targetting buildroot at vmware
-In-Reply-To: <20061212130045.GB30226@aon.at>
-References: <Pine.LNX.4.64.0612112143590.26350@q7.q7.com>
-	<20061212085344.GA5002@aon.at>
-	<010e01c71de9$943efd50$0f31b10a@atmel.com>
-	<20061212130045.GB30226@aon.at>
-Message-ID: <Pine.LNX.4.64.0612120910180.20521@q7.q7.com>
+From: Lars Munch <lars@segv.dk>
+Date: Tue, 12 Dec 2006 19:31:09 +0100
+Subject: [Buildroot] [PATCH] Add libraw1394 to buildroot
+In-Reply-To: <20061212165932.GA32047@aon.at>
+References: <20061212163513.GA1105@tuxedo.home.lan>
+	<20061212165932.GA32047@aon.at>
+Message-ID: <20061212183109.GA1480@tuxedo.home.lan>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-> >> There is no difference whether you build a rootfs for real hardware or
-> >> for any simulator, be it vmware, bochs, plex86, qemu, you-name-it). Just
-> >> build your rootfs, install a bootloader into an empty "disk" (you'd
-> >> normally use a file for this) and put your rootfs into a partition on
-> >> your "disk". Boot and enjoy.
+On Tue, Dec 12, 2006 at 05:59:32PM +0100, Bernhard Fischer wrote:
+> On Tue, Dec 12, 2006 at 05:35:14PM +0100, Lars Munch wrote:
+> >Hi all
 > >
-> >I think he wants to create a complete disk for VMware, 
-> >and I believe that is it not possible.
+> >The attached patch adds libraw1394-1.2.1 to buildroot. libraw1394 is a
+> >library for direct access to IEEE 1394 bus.
 > 
-> As long as you can cnofigure vmware to use file as disk or partition it
-> certainly is possible.
-> I regularly use qemu to boot a file that acts as disc-image, including
-> grub as a bootloader etc. If vmware doesn't support using a file as disk
-> or a spare partition, then bug vmware. It's a commercial program, AFAIK.
-> 
-> >Once a complete disk is available, the file system created in 
-> >VMware can be copied to the disk.
-> 
-> create a file, partition it, format the partitions. Install a bootloader
-> if you want (qemu can also boot a given kernel/initrd, so that's
-> optional) and untar the rootfs on it. Done, no magic involved :)
-> 
-> qemu is free software and may also work on windows or BSD-apple, so just
-> use that instead of vmware.
+> A few comments below..
 
-i am also looking for info about tweaks i might need to make to get 
-networking, disks, etc to work.  i currently ran into the same limits.h 
-issue i see being talked about on the list.  i'm going to try again with 
-non-snapshot versions.
+Thanks for the comments.
 
-i have looked at qemu, but i think vmware is more amenable to my desires.
+> >Index: buildroot/package/libraw1394/libraw1394.mk
+> >===================================================================
+> >--- buildroot/package/libraw1394/libraw1394.mk	(revision 0)
+> >+++ buildroot/package/libraw1394/libraw1394.mk	(revision 0)
+> >@@ -0,0 +1,60 @@
+> >+#############################################################
+> >+#
+> >+# libraw1394
+> >+#
+> >+#############################################################
+> >+
+> >+LIBRAW1394_VERSION:=1.2.1
+> >+LIBRAW1394_SOURCE:=libraw1394-$(LIBRAW1394_VERSION).tar.gz
+> >+LIBRAW1394_SITE:=http://www.linux1394.org/dl
+> >+LIBRAW1394_DIR:=$(BUILD_DIR)/libraw1394-$(LIBRAW1394_VERSION)
+> >+
+> >+$(DL_DIR)/$(LIBRAW1394_SOURCE):
+> >+	$(WGET) -P $(DL_DIR) $(LIBRAW1394_SITE)/$(LIBRAW1394_SOURCE)
+> >+
+> >+$(LIBRAW1394_DIR)/.source: $(DL_DIR)/$(LIBRAW1394_SOURCE)
+> >+	$(ZCAT) $(DL_DIR)/$(LIBRAW1394_SOURCE) | tar -C $(BUILD_DIR) $(TAR_OPTIONS) -
+> >+	touch $(LIBRAW1394_DIR)/.source
+> >+
+> >+$(LIBRAW1394_DIR)/.configured: $(LIBRAW1394_DIR)/.source
+> >+	(cd $(LIBRAW1394_DIR); \
+> >+		$(TARGET_CONFIGURE_OPTS) \
+> >+		CFLAGS="$(TARGET_CFLAGS)" \
+> 
+> Please make sure to use the HOSTCC and/or HOSTCXX the user gave us.
+> I don't have plain "gcc" nor "g++", but have to specify
+> make HOSTCC=... HOSTCXX=...
+> so packages that need the host-compiler pickup the right compiler.
+> 
+> I didn't look if libraw1394 is umong these packages, so this might not
+> apply for this particular package. Please double-check.
+
+You are right, libraw1394 seems to need a CC_FOR_BUILD="$(HOSTCC)". I will
+add that.
+
+> 
+> >+		./configure \
+> >+			--target=$(GNU_TARGET_NAME) \
+> >+			--host=$(GNU_TARGET_NAME) \
+> >+			--build=$(GNU_HOST_NAME) \
+> >+			--prefix=$(STAGING_DIR) \
+> >+	);
+> >+	touch $(LIBRAW1394_DIR)/.configured;
+> >+
+> >+$(LIBRAW1394_DIR)/.compiled: $(LIBRAW1394_DIR)/.configured
+> >+	$(MAKE) -C $(LIBRAW1394_DIR)
+> >+	touch $(LIBRAW1394_DIR)/.compiled
+> >+
+> >+$(STAGING_DIR)/lib/libraw1394.so: $(LIBRAW1394_DIR)/.compiled
+> >+	make -C $(LIBRAW1394_DIR)/src install
+> >+
+> >+$(TARGET_DIR)/usr/lib/libraw1394.so: $(STAGING_DIR)/lib/libraw1394.so
+> >+	cp -dpf $(STAGING_DIR)/lib/libraw1394.so* $(TARGET_DIR)/usr/lib/
+> >+
+> >+libraw1394: uclibc $(TARGET_DIR)/usr/lib/libraw1394.so
+> >+
+> >+libraw1394-source: $(DL_DIR)/$(LIBRAW1394_SOURCE)
+> >+
+> >+libraw1394-clean:
+> >+	rm $(TARGET_DIR)/usr/lib/libraw1394.so*
+> >+	-$(MAKE) -C $(LIBRAW1394_DIR) clean
+> 
+> Can we please settle on the convention that
+> foo-clean uninstalls itself from the target-dir?
+
+I am not sure what you mean. It already removes itself from the target-dir?
+
+Thanks for the help
+Lars Munch
