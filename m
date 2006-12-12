@@ -1,48 +1,29 @@
-From: Bernhard Fischer <rep.nop@aon.at>
-Date: Tue, 12 Dec 2006 11:21:09 +0100
-Subject: [Buildroot] [patch] qtopia4
-In-Reply-To: <37c712e0612120205p5c580f20k7696bbfe24626093@mail.gmail.com>
-References: <20061211093336.GA11591@zelow.no> <20061211102408.GB20661@aon.at>
-	<20061211120041.GB11591@zelow.no> <20061211134347.GA21997@aon.at>
-	<20061211215648.GA15000@zelow.no>
-	<20061211222708.GE4442@aon.at> <20061212083851.GA6677@zelow.no>
-	<37c712e0612120205p5c580f20k7696bbfe24626093@mail.gmail.com>
-Message-ID: <20061212102109.GA5767@aon.at>
+From: Koenraad lelong <buildroot@de-brouwerij.be>
+Date: Tue, 12 Dec 2006 11:09:39 +0100
+Subject: [Buildroot] Known working versions ?
+Message-ID: <457E7FE3.3020605@de-brouwerij.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Tue, Dec 12, 2006 at 06:05:31PM +0800, Allan Clark wrote:
->On 12/12/06, Thomas Lundquist <lists@zelow.no> wrote:
->> On Mon, Dec 11, 2006 at 11:27:08PM +0100, Bernhard Fischer wrote:
->> [...]
->>
->> > >It's a habit. Any real reason we should make it a requirement not to
->> > >have it or is it just for looks?
->> >
->> > Well, it's bloat :) Habit of mine to omit them if they are not needed.
->>
->> hehe.
->>
->> but space isn't much of an issue in the buildroot scripts.
->
->(I think we're still tlaking about ";")
-
-We do indeed.
->
->I'm involved in a project where a ";" instead of a "&&" between two
->dependent build steps is evil, naughty, and generally bad.  Seems the
-
-Note that we're talking about the command-separator of sed.
-
-I don't buy the argument that "space isn't much of an issue in the
-buildroot scripts", fwiw.
-
-Just don't add bloat in the first place, especially when it's
-superfluous, doesn't serve any purpose whatsoever etc. Anywhere.
-Anytime. At any rate.
-
-It's a no-go.
-Grossly OT, though. :P
+Hi,
+I'm very new at system-building, so excuse me if I'm asking "old" 
+questions. In that case, please redirect me to the answers.
+A few days ago I did an svn checkout, and with "make menuconfig" I made 
+a .config file. When I "make" it, I get compile-errors (in busybox, or 
+elsewhere). This morning I did an svn update, with more or less the same 
+  results.
+Since I think of svn as a system where you don't always have good 
+results, I would like to know a revision-number that is known to be 
+good. And I also would like to have a .config-file known to be good. 
+That way I could start from something that should be good, so if I have 
+problems, they have to come from my host-machine (a Suse 10.1 system 
+b.t.w.).
+Ah, I would like to make an ix86-system with a (recent) 2.16-kernel.
+I hope I'm not unreasonable when I ask these, thank you for _any_ help.
+P.S. just to test I downloaded the recommended gumstix-buildroot and 
+that seems to compile fine.
+Regards,
+Koenraad Lelong.
