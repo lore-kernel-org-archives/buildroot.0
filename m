@@ -1,30 +1,28 @@
-From: MikeW <mw_phil@yahoo.co.uk>
-Date: Wed, 13 Dec 2006 12:08:41 +0000 (UTC)
-Subject: [Buildroot]
-	=?utf-8?q?Impossible_to_build_EABI_ARM_gcc_toolchain?=
-	=?utf-8?q?=09using=09Buildroot_=3F?=
-References: <loom.20061129T130728-811@post.gmane.org>
-	<1164848869.23643.60.camel@dv>
-	<loom.20061130T112254-849@post.gmane.org>
-	<1164960699.4870.67.camel@dv>
-Message-ID: <loom.20061213T123854-410@post.gmane.org>
+From: Erik Andersen <andersen@codepoet.org>
+Date: Wed, 13 Dec 2006 05:15:03 -0700
+Subject: [Buildroot] svn commit: trunk/buildroot/package: avahi dmalloc
+	libdaemon mpatrol netplug
+In-Reply-To: <20061213101700.GA13288@aon.at>
+References: <20061213090459.6532948561@busybox.net>
+	<20061213092320.GA31488@codepoet.org>
+	<20061213101700.GA13288@aon.at>
+Message-ID: <20061213121503.GA32467@codepoet.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Pavel Roskin <proski@...> writes:
-> There are already patches for gcc in buildroot that change
-> TARGET_LINKER_EMULATION for bigendian systems and uClibc.  I think
-> support for EABI belongs there too.
-> 
+On Wed Dec 13, 2006 at 11:17:00AM +0100, Bernhard Fischer wrote:
+> btw.. from the looks, i'll need to build the initial binutils with
+> sysroot support to be able to build a libgmp to be used for the DIR2
+> gcc (for 4.2 fortran that i want to play with) and 4.3. Mind if i
+> make this change or should this be done differently?
 
-So how do we get these included into Buildroot ?
-There are patches for EABI working mentioned on gcc.gnu.org dating back to 2004.
-But no systematic list anywhere (?), or information about applying them.
-We need the wheel to be invented *once* !!
-;-)
+Can't see why that would be a problem.
 
-Thanks again,
-MikeW
+ -Erik
+
+--
+Erik B. Andersen             http://codepoet-consulting.com/
+--This message was written using 73% post-consumer electrons--
