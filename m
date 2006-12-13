@@ -1,7 +1,7 @@
 From: aldot at uclibc.org <aldot@uclibc.org>
-Date: Wed, 13 Dec 2006 12:09:07 -0800 (PST)
-Subject: [Buildroot] svn commit: trunk/buildroot/package/mpfr
-Message-ID: <20061213200907.B4537485A7@busybox.net>
+Date: Wed, 13 Dec 2006 12:26:27 -0800 (PST)
+Subject: [Buildroot] svn commit: trunk/buildroot/target/device/x86/i386
+Message-ID: <20061213202627.2C45D4857C@busybox.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -9,37 +9,25 @@ Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
 Author: aldot
-Date: 2006-12-13 12:09:07 -0800 (Wed, 13 Dec 2006)
-New Revision: 16905
+Date: 2006-12-13 12:26:27 -0800 (Wed, 13 Dec 2006)
+New Revision: 16906
 
 Log:
-- fix typo.
+- remove BR2_PACKAGE_BUSYBOX_CONFIG from here since we already have a default for it in busybox/Config.in
 
 
 Modified:
-   trunk/buildroot/package/mpfr/mpfr.mk
+   trunk/buildroot/target/device/x86/i386/Makefile.in
 
 
 Changeset:
-Modified: trunk/buildroot/package/mpfr/mpfr.mk
+Modified: trunk/buildroot/target/device/x86/i386/Makefile.in
 ===================================================================
---- trunk/buildroot/package/mpfr/mpfr.mk	2006-12-13 19:59:07 UTC (rev 16904)
-+++ trunk/buildroot/package/mpfr/mpfr.mk	2006-12-13 20:09:07 UTC (rev 16905)
-@@ -59,7 +59,7 @@
- 		--with-gmp=$(STAGING_DIR) \
- 		$(DISABLE_NLS) \
- 	);
--	touch $(MPFR_DIR)/.configured
-+	touch $@
+--- trunk/buildroot/target/device/x86/i386/Makefile.in	2006-12-13 20:09:07 UTC (rev 16905)
++++ trunk/buildroot/target/device/x86/i386/Makefile.in	2006-12-13 20:26:27 UTC (rev 16906)
+@@ -1,5 +1,3 @@
+ X86_I386_PATH=target/device/x86/i386
  
- $(MPFR_DIR)/.libs/$(MPFR_BINARY): $(MPFR_DIR)/.configured
- 	$(MAKE) CC=$(TARGET_CC) -C $(MPFR_DIR)
-@@ -125,7 +125,7 @@
- 		--with-gmp-build=$(GMP_HOST_DIR) \
- 		$(DISABLE_NLS) \
- 	) && \
--	touch $(MPFR_DIR)/.configured
-+	touch $@
- 
- $(MPFR_HOST_DIR)/.libs/$(MPFR_BINARY): $(MPFR_HOST_DIR)/.configured
- 	$(MAKE) -C $(MPFR_HOST_DIR)
+-BR2_PACKAGE_BUSYBOX_CONFIG=$(X86_I386_PATH)/busybox.config
+-
+ TARGETS+=linux26
