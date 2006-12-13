@@ -1,377 +1,42 @@
-From: andersen at uclibc.org <andersen@uclibc.org>
-Date: Wed, 13 Dec 2006 04:42:46 -0800 (PST)
-Subject: [Buildroot] svn commit: trunk/buildroot/toolchain/uClibc
-Message-ID: <20061213124246.45C4948583@busybox.net>
+From: Christophe Lucas <clucas@rotomalug.org>
+Date: Wed, 13 Dec 2006 13:23:13 +0100
+Subject: [Buildroot] Grub not working?
+In-Reply-To: <200612131303.54803.alexander.rigbo@acgnystrom.se>
+References: <200612131303.54803.alexander.rigbo@acgnystrom.se>
+Message-ID: <20061213122313.GU8157@rotomalug.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Author: andersen
-Date: 2006-12-13 04:42:45 -0800 (Wed, 13 Dec 2006)
-New Revision: 16893
+Alexander Rigbo (alexander.rigbo at acgnystrom.se) wrote:
+> Hi,
+> 
+> I'm making a small system for a pc/104 computer, but i'm having some troubles 
+> with grub.
+> Grub is built and installed to my root, but i can't use it to install the 
+> bootloader to MBR. See following output:
+> 
+> grub> root (hd0,1)
+>  Filesystem type is ext2fs, partition type 0x83
+> grub> setup (hd0)
+>  Checking if "/boot/grub/stage1" exists... no
+>  Checking if "/grub/stage1" exists... no
+> 
+> Error 15: File not found
+> 
+> But, on hda2 (my root partition) i have:
+> 
+> [root at uclibc grub]# ls -l /boot/grub/stage1
+> -rwxr-xr-x     1 root      root             512 Dec 13 03:25 /boot/grub/stage1
+> 
+> What can this be?
+> Grub bug? uClibc bug? buildroot? my fault (most likely though)?
 
-Log:
-use a more sensible naming scheme
+Only one partition ? (hd0,1) is your rootfs or your /boot partition ?
 
+I have had lot of problem with grub on wrap plateform. Now I use lilo
+for x86 processor family.
 
-Added:
-   trunk/buildroot/toolchain/uClibc/uClibc-0.9.28-fix_includes.patch
-
-Removed:
-   trunk/buildroot/toolchain/uClibc/fix_includes-uClibc-0.9.28.patch
-
-Modified:
-   trunk/buildroot/toolchain/uClibc/uclibc.mk
-
-
-Changeset:
-Deleted: trunk/buildroot/toolchain/uClibc/fix_includes-uClibc-0.9.28.patch
-===================================================================
---- trunk/buildroot/toolchain/uClibc/fix_includes-uClibc-0.9.28.patch	2006-12-13 12:41:42 UTC (rev 16892)
-+++ trunk/buildroot/toolchain/uClibc/fix_includes-uClibc-0.9.28.patch	2006-12-13 12:42:45 UTC (rev 16893)
-@@ -1,327 +0,0 @@
----- uClibc-0.9.28/Makefile.orig	2006-12-11 21:06:42.000000000 -0700
--+++ uClibc-0.9.28/Makefile	2006-12-11 21:06:53.000000000 -0700
--@@ -158,7 +158,7 @@
-- 	$(INSTALL) -d $(PREFIX)$(DEVEL_PREFIX)lib
-- 	$(INSTALL) -d $(PREFIX)$(DEVEL_PREFIX)include
-- 	-$(INSTALL) -m 644 lib/*.[ao] $(PREFIX)$(DEVEL_PREFIX)lib/
---	if [ "$(KERNEL_SOURCE)" == "$(DEVEL_PREFIX)" ] ; then \
--+	if [ "$(KERNEL_SOURCE)" = "$(DEVEL_PREFIX)" ] ; then \
-- 		extra_exclude="--exclude include/linux --exclude include/asm'*'" ; \
-- 	else \
-- 		extra_exclude="" ; \
----- uClibc-0.9.28/extra/scripts/fix_includes.sh.orig	2006-12-13 05:44:21.000000000 -0700
--+++ uClibc-0.9.28/extra/scripts/fix_includes.sh	2006-12-13 05:44:35.000000000 -0700
--@@ -1,183 +1,155 @@
-- #!/bin/sh
---# Copyright (C) 2003 Erik Andersen <andersen@uclibc.org>
-- #
---# This program is free software; you can redistribute it and/or
---# modify it under the terms of the GNU Library General Public
---# License as published by the Free Software Foundation; either
---# version 2 of the License, or (at your option) any later
---# version.
---#
---# This program is distributed in the hope that it will be useful,
---# but WITHOUT ANY WARRANTY; without even the implied warranty of
---# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
---# GNU Library General Public License for more details.
---#
---# You should have received a copy of the GNU Library General
---# Public License along with this program; if not, write to the
---# Free Software Foundation, Inc., 59 Temple Place, Suite 330,
---# Boston, MA 02111-1307 USA
---
---usage () {
---    echo ""
---    echo "usage: "`basename $0`" -k KERNEL_SOURCE_DIRECTORY -t TARGET_ARCH"
---    echo ""
---    echo "This utility scans the KERNEL_SOURCE_DIRECTORY directory and"
---    echo "checks that it contains well formed kernel headers suitable"
---    echo "for inclusion as the include/linux/ directory provided by"
---    echo "uClibc."
---    echo ""
---    echo "If the specified kernel headers are present and already"
---    echo "configured for the architecture specified by TARGET_ARCH,"
---    echo "they will be used as-is."
---    echo ""
---    echo "If the specified kernel headers are missing entirely, this"
---    echo "script will return an error."
---    echo ""
---    echo "If the specified kernel headers are present, but are either"
---    echo "not yet configured or are configured for an architecture"
---    echo "different than that specified by TARGET_ARCH, this script"
---    echo "will attempt to 'fix' the kernel headers and make them"
---    echo "suitable for use by uClibc.  This fixing process may fail."
---    echo "It is therefore best to always provide kernel headers that"
---    echo "are already configured for the selected architecture."
---    echo ""
---    echo "Most Linux distributions provide 'kernel-headers' packages"
---    echo "that are suitable for use by uClibc."
---    echo ""
---    echo ""
---    exit 1;
--+# Copyright (C) 2000-2005 Erik Andersen <andersen@uclibc.org>
--+#
--+# Licensed under the LGPL v2.1, see the file COPYING.LIB in this tarball.
--+#
--+
--+usage() {
--+	echo ""
--+	echo "usage: "`basename $0`" -k KERNEL_SOURCE_DIRECTORY -t TARGET_ARCH"
--+	echo ""
--+	echo "This utility scans the KERNEL_SOURCE_DIRECTORY directory and"
--+	echo "checks that it contains well formed kernel headers suitable"
--+	echo "for inclusion as the include/linux/ directory provided by"
--+	echo "uClibc."
--+	echo ""
--+	echo "If the specified kernel headers are present and already"
--+	echo "configured for the architecture specified by TARGET_ARCH,"
--+	echo "they will be used as-is."
--+	echo ""
--+	echo "If the specified kernel headers are missing entirely, this"
--+	echo "script will return an error."
--+	echo ""
--+	echo "If the specified kernel headers are present, but are either"
--+	echo "not yet configured or are configured for an architecture"
--+	echo "different than that specified by TARGET_ARCH, this script"
--+	echo "will attempt to 'fix' the kernel headers and make them"
--+	echo "suitable for use by uClibc.  This fixing process may fail."
--+	echo "It is therefore best to always provide kernel headers that"
--+	echo "are already configured for the selected architecture."
--+	echo ""
--+	echo "Most Linux distributions provide 'kernel-headers' packages"
--+	echo "that are suitable for use by uClibc."
--+	echo ""
--+	echo ""
--+	exit 1
-- }
-- 
---HAS_MMU="y";
--+
--+#
--+# Parse our arguments
--+#
--+HAS_MMU="y"
-- while [ -n "$1" ]; do
---    case $1 in
---	-k ) shift; if [ -n "$1" ]; then KERNEL_SOURCE=$1; shift; else usage; fi; ;;
---	-t ) shift; if [ -n "$1" ]; then TARGET_ARCH=$1; shift; else usage; fi; ;;
---	-n ) shift; HAS_MMU="n"; ;;
---	-* ) usage; ;;
---	* ) usage; ;;
---    esac;
---done;
--+	case $1 in
--+		-k ) shift; if [ -n "$1" ]; then KERNEL_SOURCE=$1; shift; else usage; fi; ;;
--+		-t ) shift; if [ -n "$1" ]; then TARGET_ARCH=$1; shift; else usage; fi; ;;
--+		-n ) shift; HAS_MMU="n"; ;;
--+		-* ) usage; ;;
--+		* ) usage; ;;
--+	esac
--+done
-- 
---if [ ! -f "$KERNEL_SOURCE/Makefile" -a ! -f "$KERNEL_SOURCE/include/linux/version.h" ]; then
---    echo "";
---    echo "";
---    echo "The file $KERNEL_SOURCE/Makefile or $KERNEL_SOURCE/include/linux/version.h is missing!";
---    echo "Perhaps your kernel source is broken?"
---    echo "";
---    echo "";
---    exit 1;
---fi;
-- 
---if [ ! -d "$KERNEL_SOURCE" ]; then
---    echo "";
---    echo "";
---    echo "$KERNEL_SOURCE is not a directory";
---    echo "";
---    echo "";
---    exit 1;
---fi;
---
---if [ -f "$KERNEL_SOURCE/Makefile" ] ; then
---# set current VERSION, PATCHLEVEL, SUBLEVEL, EXTRAVERSION
---eval `sed -n -e 's/^\([A-Z]*\) = \([0-9]*\)$/\1=\2/p' -e 's/^\([A-Z]*\) = \(-[-a-z0-9]*\)$/\1=\2/p' $KERNEL_SOURCE/Makefile`
---else
---ver=`grep UTS_RELEASE $KERNEL_SOURCE/include/linux/version.h | cut -d '"' -f 2`
---VERSION=`echo "$ver" | cut -d '.' -f 1`
---PATCHLEVEL=`echo "$ver" | cut -d '.' -f 2`
---if echo "$ver" | grep -q '-' ; then
---SUBLEVEL=`echo "$ver" | sed "s/${VERSION}.${PATCHLEVEL}.//" | cut -d '-' -f 1`
---EXTRAVERSION=`echo "$ver" | sed "s/${VERSION}.${PATCHLEVEL}.${SUBLEVEL}-//"`
---else
---SUBLEVEL=`echo "$ver" | cut -d '.' -f 3`
---#EXTRAVERSION=
---fi
--+#
--+# Perform some sanity checks on our kernel sources
--+#
--+if [ ! -f "$KERNEL_SOURCE/Makefile" -a ! -f "$KERNEL_SOURCE/include/linux/version.h" ]; then
--+	echo ""
--+	echo ""
--+	echo "The file $KERNEL_SOURCE/Makefile or $KERNEL_SOURCE/include/linux/version.h is missing!"
--+	echo "Perhaps your kernel source is broken?"
--+	echo ""
--+	echo ""
--+	exit 1
-- fi
---if [ -z "$VERSION" -o -z "$PATCHLEVEL" -o -z "$SUBLEVEL" ]
---then
---    echo "Unable to determine version for kernel headers"
---    echo -e "\tprovided in directory $KERNEL_SOURCE"
---    exit 1
--+if [ ! -d "$KERNEL_SOURCE" ]; then
--+	echo ""
--+	echo ""
--+	echo "$KERNEL_SOURCE is not a directory"
--+	echo ""
--+	echo ""
--+	exit 1
-- fi
-- 
---if [ "$MAKE_IS_SILENT" != "y" ]; then
---echo "Current kernel version is $VERSION.$PATCHLEVEL.$SUBLEVEL${EXTRAVERSION}"
---echo -e "\n"
---echo "Using kernel headers from $VERSION.$PATCHLEVEL.$SUBLEVEL${EXTRAVERSION} for architecture '$TARGET_ARCH'"
---echo -e "\tprovided in directory $KERNEL_SOURCE"
---echo -e "\n"
---fi
-- 
--+#
-- # Create a symlink to include/asm
---
--+#
-- rm -f include/asm*
-- if [ ! -d "$KERNEL_SOURCE/include/asm" ]; then
---    echo "";
---    echo "";
---    echo "The symlink $KERNEL_SOURCE/include/asm is missing\!";
---    echo "Perhaps you forgot to configure your kernel source?";
---    echo "You really should configure your kernel source tree so I";
---    echo "do not have to try and guess about this sort of thing.";
---    echo ""
---    echo "Attempting to guess a usable value....";
---    echo ""
---    echo "";
---    sleep 1;
---
---    if [ "$TARGET_ARCH" = "powerpc" ];then
---	set -x;
---	ln -fs $KERNEL_SOURCE/include/asm-ppc include/asm;
---	set +x;
---    elif [ "$TARGET_ARCH" = "mips" ];then
---	set -x;
---	ln -fs $KERNEL_SOURCE/include/asm-mips include/asm;
---	set +x;
---    elif [ "$TARGET_ARCH" = "arm" ];then
---	set -x;
---	ln -fs $KERNEL_SOURCE/include/asm-arm include/asm;
---	set +x;
---	if [ ! -L $KERNEL_SOURCE/include/asm-arm/proc ] ; then
---	    if [ ! -L proc ] ; then
---		(cd include/asm;
---		ln -fs proc-armv proc;
---		ln -fs arch-ebsa285 arch);
---	    fi
--+	echo ""
--+	echo ""
--+	echo "The symlink $KERNEL_SOURCE/include/asm is missing\!"
--+	echo "Perhaps you forgot to configure your kernel source?"
--+	echo "You really should configure your kernel source tree so I"
--+	echo "do not have to try and guess about this sort of thing."
--+	echo ""
--+	echo "Attempting to guess a usable value...."
--+	echo ""
--+	echo ""
--+	sleep 1
--+
--+	if [ "$TARGET_ARCH" = "powerpc" ]; then
--+		set -x
--+		ln -fs $KERNEL_SOURCE/include/asm-ppc include/asm
--+		set +x
--+	elif [ "$TARGET_ARCH" = "mips" ]; then
--+		set -x
--+		ln -fs $KERNEL_SOURCE/include/asm-mips include/asm
--+		set +x
--+	elif [ "$TARGET_ARCH" = "arm" ]; then
--+		set -x
--+		ln -fs $KERNEL_SOURCE/include/asm-arm include/asm
--+		set +x
--+	if [ ! -L $KERNEL_SOURCE/include/asm-arm/proc ]; then
--+		if [ ! -L proc ]; then
--+			(
--+				cd include/asm
--+				ln -fs proc-armv proc
--+				ln -fs arch-ebsa285 arch
--+			)
--+		fi
--+	fi
--+	elif [ "$TARGET_ARCH" = "cris" ]; then
--+		set -x
--+		ln -fs $KERNEL_SOURCE/include/asm-cris include/asm
--+		set +x
--+	elif [ "$HAS_MMU" != "y" ]; then
--+		if [ -d $KERNEL_SOURCE/include/asm-${TARGET_ARCH}nommu ]; then
--+			set -x
--+			ln -fs $KERNEL_SOURCE/include/asm-${TARGET_ARCH}nommu include/asm
--+			set +x
--+		else
--+			set -x
--+			ln -fs $KERNEL_SOURCE/include/asm-$TARGET_ARCH include/asm
--+			set +x
--+		fi
--+	else
--+		set -x
--+		ln -fs $KERNEL_SOURCE/include/asm-$TARGET_ARCH include/asm
--+		set +x
-- 	fi;
---    elif [ "$TARGET_ARCH" = "cris" ]; then
---	set -x;
---	ln -fs $KERNEL_SOURCE/include/asm-cris include/asm;
---	set +x;
---    elif [ "$HAS_MMU" != "y" ]; then
---	    if [ -d $KERNEL_SOURCE/include/asm-${TARGET_ARCH}nommu ] ; then
---		set -x;
---		ln -fs $KERNEL_SOURCE/include/asm-${TARGET_ARCH}nommu include/asm;
---		set +x;
---	    else
---		set -x;
---		ln -fs $KERNEL_SOURCE/include/asm-$TARGET_ARCH include/asm;
---		set +x;
---	    fi;
---    else
---	set -x;
---	ln -fs $KERNEL_SOURCE/include/asm-$TARGET_ARCH include/asm;
---	set +x;
---    fi;
-- else
---# No guessing required.....
---ln -fs $KERNEL_SOURCE/include/asm include/asm
---if [ -e $KERNEL_SOURCE/include/asm-$TARGET_ARCH ] ; then
---ln -fs $KERNEL_SOURCE/include/asm-$TARGET_ARCH include/asm-$TARGET_ARCH
--+	# No guessing required.....
--+	for x in $KERNEL_SOURCE/include/asm* ; do
--+		ln -fs ${x} include/
--+	done
-- fi
---fi;
-- 
-- 
--+#
-- # Annoyingly, 2.6.x kernel headers also need an include/asm-generic/ directory
---if [ $VERSION -eq 2 ] && [ $PATCHLEVEL -ge 6 ] ; then
---    ln -fs $KERNEL_SOURCE/include/asm-generic include/asm-generic
---fi;
--+#
--+if [ -e $KERNEL_SOURCE/include/asm-generic ]; then
--+	rm -f include/asm-generic
--+	ln -fs $KERNEL_SOURCE/include/asm-generic include/asm-generic
--+fi
-- 
-- 
--+#
-- # Create the include/linux symlink.
--+#
-- rm -f include/linux
-- ln -fs $KERNEL_SOURCE/include/linux include/linux
---
-
-Copied: trunk/buildroot/toolchain/uClibc/uClibc-0.9.28-fix_includes.patch (from rev 16892, trunk/buildroot/toolchain/uClibc/fix_includes-uClibc-0.9.28.patch)
-
-Modified: trunk/buildroot/toolchain/uClibc/uclibc.mk
-===================================================================
---- trunk/buildroot/toolchain/uClibc/uclibc.mk	2006-12-13 12:41:42 UTC (rev 16892)
-+++ trunk/buildroot/toolchain/uClibc/uclibc.mk	2006-12-13 12:42:45 UTC (rev 16893)
-@@ -65,7 +65,7 @@
- $(UCLIBC_DIR)/.unpacked: $(DL_DIR)/$(UCLIBC_SOURCE)
- 	mkdir -p $(TOOL_BUILD_DIR)
- 	$(UCLIBC_CAT) $(DL_DIR)/$(UCLIBC_SOURCE) | tar -C $(TOOL_BUILD_DIR) $(TAR_OPTIONS) -
--	toolchain/patch-kernel.sh $(UCLIBC_DIR) toolchain/uClibc/ \*$(UCLIBC_VER)\*.patch
-+	toolchain/patch-kernel.sh $(UCLIBC_DIR) toolchain/uClibc/ uClibc-$(UCLIBC_VER)\*.patch
- 	touch $(UCLIBC_DIR)/.unpacked
- 
- # Some targets may wish to provide their own UCLIBC_CONFIG_FILE...
+	Christophe
