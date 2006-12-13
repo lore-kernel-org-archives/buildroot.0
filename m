@@ -1,54 +1,68 @@
-From: Alexander Rigbo <alexander.rigbo@acgnystrom.se>
-Date: Wed, 13 Dec 2006 13:35:08 +0100
-Subject: [Buildroot] Grub not working?
-In-Reply-To: <20061213122313.GU8157@rotomalug.org>
-References: <200612131303.54803.alexander.rigbo@acgnystrom.se>
-	<20061213122313.GU8157@rotomalug.org>
-Message-ID: <200612131335.08362.alexander.rigbo@acgnystrom.se>
+From: andersen at uclibc.org <andersen@uclibc.org>
+Date: Wed, 13 Dec 2006 04:34:22 -0800 (PST)
+Subject: [Buildroot] svn commit: trunk/buildroot/toolchain/uClibc
+Message-ID: <20061213123422.EF01F48574@busybox.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Wednesday 13 December 2006 13:23, Christophe Lucas wrote:
-> Alexander Rigbo (alexander.rigbo at acgnystrom.se) wrote:
-> > Hi,
-> >
-> > I'm making a small system for a pc/104 computer, but i'm having some
-> > troubles with grub.
-> > Grub is built and installed to my root, but i can't use it to install the
-> > bootloader to MBR. See following output:
-> >
-> > grub> root (hd0,1)
-> >  Filesystem type is ext2fs, partition type 0x83
-> > grub> setup (hd0)
-> >  Checking if "/boot/grub/stage1" exists... no
-> >  Checking if "/grub/stage1" exists... no
-> >
-> > Error 15: File not found
-> >
-> > But, on hda2 (my root partition) i have:
-> >
-> > [root at uclibc grub]# ls -l /boot/grub/stage1
-> > -rwxr-xr-x     1 root      root             512 Dec 13 03:25
-> > /boot/grub/stage1
-> >
-> > What can this be?
-> > Grub bug? uClibc bug? buildroot? my fault (most likely though)?
->
-> Only one partition ? (hd0,1) is your rootfs or your /boot partition ?
->
-> I have had lot of problem with grub on wrap plateform. Now I use lilo
-> for x86 processor family.
->
-> 	Christophe
+Author: andersen
+Date: 2006-12-13 04:34:22 -0800 (Wed, 13 Dec 2006)
+New Revision: 16890
 
-Hi,
+Log:
+oops, typo
 
-I have a swap on hda1, hda2 is my root (/) and i have no other partitions. 
-I've been using this setup with grub before, just not uclibc/buildroot.
 
-I will try lilo, but i like grub better :)
+Modified:
+   trunk/buildroot/toolchain/uClibc/uclibc.mk
 
-Alex
+
+Changeset:
+Modified: trunk/buildroot/toolchain/uClibc/uclibc.mk
+===================================================================
+--- trunk/buildroot/toolchain/uClibc/uclibc.mk	2006-12-13 12:18:08 UTC (rev 16889)
++++ trunk/buildroot/toolchain/uClibc/uclibc.mk	2006-12-13 12:34:22 UTC (rev 16890)
+@@ -126,23 +126,23 @@
+ 	$(SED) 's,^.*UCLIBC_HAS_LOCALE.*,UCLIBC_HAS_LOCALE=n,g' $(UCLIBC_DIR)/.config
+ endif
+ ifeq ("$(KERNEL_ARCH)","i386")
+-	/bin/echo "# CONFIG_GENERIC_386 is not set" >> $(UCLIBC_DIR)/.__config
+-	/bin/echo "# CONFIG_386 is not set" >> $(UCLIBC_DIR)/.__config
+-	/bin/echo "# CONFIG_486 is not set" >> $(UCLIBC_DIR)/.__config
+-	/bin/echo "# CONFIG_586 is not set" >> $(UCLIBC_DIR)/.__config
+-	/bin/echo "# CONFIG_586MMX is not set" >> $(UCLIBC_DIR)/.__config
+-	/bin/echo "# CONFIG_686 is not set" >> $(UCLIBC_DIR)/.__config
+-	/bin/echo "# CONFIG_PENTIUMII is not set" >> $(UCLIBC_DIR)/.__config
+-	/bin/echo "# CONFIG_PENTIUMIII is not set" >> $(UCLIBC_DIR)/.__config
+-	/bin/echo "# CONFIG_PENTIUM4 is not set" >> $(UCLIBC_DIR)/.__config
+-	/bin/echo "# CONFIG_K6 is not set" >> $(UCLIBC_DIR)/.__config
+-	/bin/echo "# CONFIG_K7 is not set" >> $(UCLIBC_DIR)/.__config
+-	/bin/echo "# CONFIG_ELAN is not set" >> $(UCLIBC_DIR)/.__config
+-	/bin/echo "# CONFIG_CRUSOE is not set" >> $(UCLIBC_DIR)/.__config
+-	/bin/echo "# CONFIG_WINCHIPC6 is not set" >> $(UCLIBC_DIR)/.__config
+-	/bin/echo "# CONFIG_WINCHIP2 is not set" >> $(UCLIBC_DIR)/.__config
+-	/bin/echo "# CONFIG_CYRIXIII is not set" >> $(UCLIBC_DIR)/.__config
+-	/bin/echo "# CONFIG_NEHEMIAH is not set" >> $(UCLIBC_DIR)/.__config
++	/bin/echo "# CONFIG_GENERIC_386 is not set" >> $(UCLIBC_DIR)/.config
++	/bin/echo "# CONFIG_386 is not set" >> $(UCLIBC_DIR)/.config
++	/bin/echo "# CONFIG_486 is not set" >> $(UCLIBC_DIR)/.config
++	/bin/echo "# CONFIG_586 is not set" >> $(UCLIBC_DIR)/.config
++	/bin/echo "# CONFIG_586MMX is not set" >> $(UCLIBC_DIR)/.config
++	/bin/echo "# CONFIG_686 is not set" >> $(UCLIBC_DIR)/.config
++	/bin/echo "# CONFIG_PENTIUMII is not set" >> $(UCLIBC_DIR)/.config
++	/bin/echo "# CONFIG_PENTIUMIII is not set" >> $(UCLIBC_DIR)/.config
++	/bin/echo "# CONFIG_PENTIUM4 is not set" >> $(UCLIBC_DIR)/.config
++	/bin/echo "# CONFIG_K6 is not set" >> $(UCLIBC_DIR)/.config
++	/bin/echo "# CONFIG_K7 is not set" >> $(UCLIBC_DIR)/.config
++	/bin/echo "# CONFIG_ELAN is not set" >> $(UCLIBC_DIR)/.config
++	/bin/echo "# CONFIG_CRUSOE is not set" >> $(UCLIBC_DIR)/.config
++	/bin/echo "# CONFIG_WINCHIPC6 is not set" >> $(UCLIBC_DIR)/.config
++	/bin/echo "# CONFIG_WINCHIP2 is not set" >> $(UCLIBC_DIR)/.config
++	/bin/echo "# CONFIG_CYRIXIII is not set" >> $(UCLIBC_DIR)/.config
++	/bin/echo "# CONFIG_NEHEMIAH is not set" >> $(UCLIBC_DIR)/.config
+ ifeq ($(BR2_x86_i386),y)
+ 	$(SED) 's,# CONFIG_386 is not set,CONFIG_386=y,g' $(UCLIBC_DIR)/.config
+ endif
