@@ -1,7 +1,7 @@
 From: aldot at uclibc.org <aldot@uclibc.org>
-Date: Wed, 13 Dec 2006 08:56:59 -0800 (PST)
+Date: Wed, 13 Dec 2006 10:24:49 -0800 (PST)
 Subject: [Buildroot] svn commit: trunk/buildroot/toolchain/kernel-headers
-Message-ID: <20061213165659.E7A904856E@busybox.net>
+Message-ID: <20061213182449.811284857C@busybox.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -9,29 +9,30 @@ Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
 Author: aldot
-Date: 2006-12-13 08:56:59 -0800 (Wed, 13 Dec 2006)
-New Revision: 16899
+Date: 2006-12-13 10:24:48 -0800 (Wed, 13 Dec 2006)
+New Revision: 16901
 
 Log:
-- sh[234][[:alnum:]]* -> sh
+- pass the correct CC down to gcc-version.sh
 
 
 Modified:
-   trunk/buildroot/toolchain/kernel-headers/kernel-headers.mk
+   trunk/buildroot/toolchain/kernel-headers/kernel-headers-new.makefile
 
 
 Changeset:
-Modified: trunk/buildroot/toolchain/kernel-headers/kernel-headers.mk
+Modified: trunk/buildroot/toolchain/kernel-headers/kernel-headers-new.makefile
 ===================================================================
---- trunk/buildroot/toolchain/kernel-headers/kernel-headers.mk	2006-12-13 16:50:15 UTC (rev 16898)
-+++ trunk/buildroot/toolchain/kernel-headers/kernel-headers.mk	2006-12-13 16:56:59 UTC (rev 16899)
-@@ -16,7 +16,8 @@
- 	-e s/i.86/i386/ -e s/sun4u/sparc64/ \
- 	-e s/arm.*/arm/ -e s/sa110/arm/ \
- 	-e s/s390x/s390/ -e s/parisc64/parisc/ \
--	-e s/ppc.*/powerpc/ -e s/mips.*/mips/")
-+	-e s/ppc.*/powerpc/ -e s/mips.*/mips/ \
-+	-e s/sh2.*/sh/ -e s/sh3.*/sh/ -e s/sh4.*/sh/")
+--- trunk/buildroot/toolchain/kernel-headers/kernel-headers-new.makefile	2006-12-13 17:44:24 UTC (rev 16900)
++++ trunk/buildroot/toolchain/kernel-headers/kernel-headers-new.makefile	2006-12-13 18:24:48 UTC (rev 16901)
+@@ -34,7 +34,9 @@
  
+ $(LINUX_HEADERS_DIR)/.configured: $(LINUX_HEADERS_UNPACK_DIR)/.patched
+ 	(cd $(LINUX_HEADERS_UNPACK_DIR) ; \
+-	 $(MAKE) ARCH=$(KERNEL_ARCH) INSTALL_HDR_PATH=$(LINUX_HEADERS_DIR) headers_install)
++	 $(MAKE) ARCH=$(KERNEL_ARCH) CC="$(HOSTCC)" \
++		INSTALL_HDR_PATH=$(LINUX_HEADERS_DIR) headers_install ; \
++	)
+ 	touch $(LINUX_HEADERS_DIR)/.configured
  
- $(DL_DIR)/$(LINUX_HEADERS_SOURCE):
+ endif
