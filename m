@@ -1,42 +1,54 @@
-From: Christophe Lucas <clucas@rotomalug.org>
-Date: Wed, 13 Dec 2006 13:23:13 +0100
-Subject: [Buildroot] Grub not working?
-In-Reply-To: <200612131303.54803.alexander.rigbo@acgnystrom.se>
-References: <200612131303.54803.alexander.rigbo@acgnystrom.se>
-Message-ID: <20061213122313.GU8157@rotomalug.org>
+From: andersen at uclibc.org <andersen@uclibc.org>
+Date: Wed, 13 Dec 2006 05:07:48 -0800 (PST)
+Subject: [Buildroot] svn commit: trunk/buildroot/toolchain/uClibc
+Message-ID: <20061213130748.2EB7848569@busybox.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Alexander Rigbo (alexander.rigbo at acgnystrom.se) wrote:
-> Hi,
-> 
-> I'm making a small system for a pc/104 computer, but i'm having some troubles 
-> with grub.
-> Grub is built and installed to my root, but i can't use it to install the 
-> bootloader to MBR. See following output:
-> 
-> grub> root (hd0,1)
->  Filesystem type is ext2fs, partition type 0x83
-> grub> setup (hd0)
->  Checking if "/boot/grub/stage1" exists... no
->  Checking if "/grub/stage1" exists... no
-> 
-> Error 15: File not found
-> 
-> But, on hda2 (my root partition) i have:
-> 
-> [root at uclibc grub]# ls -l /boot/grub/stage1
-> -rwxr-xr-x     1 root      root             512 Dec 13 03:25 /boot/grub/stage1
-> 
-> What can this be?
-> Grub bug? uClibc bug? buildroot? my fault (most likely though)?
+Author: andersen
+Date: 2006-12-13 05:07:47 -0800 (Wed, 13 Dec 2006)
+New Revision: 16894
 
-Only one partition ? (hd0,1) is your rootfs or your /boot partition ?
+Log:
+install include/asm-generic if it is present
 
-I have had lot of problem with grub on wrap plateform. Now I use lilo
-for x86 processor family.
 
-	Christophe
+Modified:
+   trunk/buildroot/toolchain/uClibc/uclibc.mk
+
+
+Changeset:
+Modified: trunk/buildroot/toolchain/uClibc/uclibc.mk
+===================================================================
+--- trunk/buildroot/toolchain/uClibc/uclibc.mk	2006-12-13 12:42:45 UTC (rev 16893)
++++ trunk/buildroot/toolchain/uClibc/uclibc.mk	2006-12-13 13:07:47 UTC (rev 16894)
+@@ -178,6 +178,8 @@
+ 	if [ ! -f $(STAGING_DIR)/include/linux/version.h ] ; then \
+ 		cp -pLR $(LINUX_HEADERS_DIR)/include/asm $(TOOL_BUILD_DIR)/uClibc_dev/usr/include/ ; \
+ 		cp -pLR $(LINUX_HEADERS_DIR)/include/linux $(TOOL_BUILD_DIR)/uClibc_dev/usr/include/ ; \
++		[ -d $(LINUX_HEADERS_DIR)/include/asm-generic ] && \
++		cp -pLR $(LINUX_HEADERS_DIR)/include/asm-generic $(TOOL_BUILD_DIR)/uClibc_dev/usr/include/ ; \
+ 	fi;
+ 	touch $(UCLIBC_DIR)/.configured
+ 
+@@ -210,6 +212,8 @@
+ 	if [ ! -f $(STAGING_DIR)/include/linux/version.h ] ; then \
+ 		cp -pLR $(LINUX_HEADERS_DIR)/include/asm $(STAGING_DIR)/include/ ; \
+ 		cp -pLR $(LINUX_HEADERS_DIR)/include/linux $(STAGING_DIR)/include/ ; \
++		[ -d $(LINUX_HEADERS_DIR)/include/asm-generic ] && \
++		cp -pLR $(LINUX_HEADERS_DIR)/include/asm-generic $(STAGING_DIR)/include/ ; \
+ 	fi;
+ 	# Build the host utils.  Need to add an install target...
+ 	$(MAKE1) -C $(UCLIBC_DIR)/utils \
+@@ -276,6 +280,8 @@
+ 	if [ ! -f $(TARGET_DIR)/usr/include/linux/version.h ] ; then \
+ 		cp -pLR $(LINUX_HEADERS_DIR)/include/asm $(TARGET_DIR)/usr/include/ ; \
+ 		cp -pLR $(LINUX_HEADERS_DIR)/include/linux $(TARGET_DIR)/usr/include/ ; \
++		[ -d $(LINUX_HEADERS_DIR)/include/asm-generic ] && \
++		cp -pLR $(LINUX_HEADERS_DIR)/include/asm-generic $(TARGET_DIR)/usr/include/ ; \
+ 	fi;
+ 	touch -c $(TARGET_DIR)/usr/lib/libc.a
+ 
