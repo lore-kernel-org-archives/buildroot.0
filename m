@@ -1,7 +1,7 @@
 From: andersen at uclibc.org <andersen@uclibc.org>
-Date: Wed, 13 Dec 2006 03:49:20 -0800 (PST)
-Subject: [Buildroot] svn commit: trunk/buildroot/toolchain/kernel-headers
-Message-ID: <20061213114920.1086F48561@busybox.net>
+Date: Wed, 13 Dec 2006 03:51:42 -0800 (PST)
+Subject: [Buildroot] svn commit: trunk/buildroot/toolchain/uClibc
+Message-ID: <20061213115142.C030C48571@busybox.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -9,512 +9,122 @@ Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
 Author: andersen
-Date: 2006-12-13 03:49:19 -0800 (Wed, 13 Dec 2006)
-New Revision: 16883
+Date: 2006-12-13 03:51:42 -0800 (Wed, 13 Dec 2006)
+New Revision: 16884
 
 Log:
-split things up so this is not an unreadable mess
+update ordering, automagically handle x86 subtypes
 
-
-Added:
-   trunk/buildroot/toolchain/kernel-headers/kernel-headers-new.makefile
-   trunk/buildroot/toolchain/kernel-headers/kernel-headers-old.makefile
 
 Modified:
-   trunk/buildroot/toolchain/kernel-headers/Config.in
-   trunk/buildroot/toolchain/kernel-headers/kernel-headers.mk
+   trunk/buildroot/toolchain/uClibc/uclibc.mk
 
 
 Changeset:
-Modified: trunk/buildroot/toolchain/kernel-headers/Config.in
+Modified: trunk/buildroot/toolchain/uClibc/uclibc.mk
 ===================================================================
---- trunk/buildroot/toolchain/kernel-headers/Config.in	2006-12-13 11:01:54 UTC (rev 16882)
-+++ trunk/buildroot/toolchain/kernel-headers/Config.in	2006-12-13 11:49:19 UTC (rev 16883)
-@@ -38,9 +38,9 @@
- 		depends !BR2_nios2
- 		bool "Linux 2.6.12 kernel headers"
+--- trunk/buildroot/toolchain/uClibc/uclibc.mk	2006-12-13 11:49:19 UTC (rev 16883)
++++ trunk/buildroot/toolchain/uClibc/uclibc.mk	2006-12-13 11:51:42 UTC (rev 16884)
+@@ -68,11 +68,8 @@
+ 	toolchain/patch-kernel.sh $(UCLIBC_DIR) toolchain/uClibc/ \*$(UCLIBC_VER)\*.patch
+ 	touch $(UCLIBC_DIR)/.unpacked
  
--	config BR2_KERNEL_HEADERS_2_6_19
-+	config BR2_KERNEL_HEADERS_2_6_19_1
- 		depends !BR2_nios2
--		bool "Linux 2.6.19 kernel headers"
-+		bool "Linux 2.6.19.1 kernel headers"
+-# nothing to do -- some targets may wish to provide their own
+-# and then use sed to hack up the default uClibc config...
+-uclibc_config_file_prep::
+-
+-$(UCLIBC_DIR)/.prepared: $(UCLIBC_DIR)/.unpacked uclibc_config_file_prep
++# Some targets may wish to provide their own UCLIBC_CONFIG_FILE...
++$(UCLIBC_DIR)/.config: $(UCLIBC_DIR)/.unpacked $(UCLIBC_CONFIG_FILE)
+ 	cp $(UCLIBC_CONFIG_FILE) $(UCLIBC_DIR)/.config
+ 	$(SED) 's,^CROSS_COMPILER_PREFIX=.*,CROSS_COMPILER_PREFIX="$(TARGET_CROSS)",g' \
+ 		-e 's,# TARGET_$(UCLIBC_TARGET_ARCH) is not set,TARGET_$(UCLIBC_TARGET_ARCH)=y,g' \
+@@ -128,6 +125,37 @@
+ else
+ 	$(SED) 's,^.*UCLIBC_HAS_LOCALE.*,UCLIBC_HAS_LOCALE=n,g' $(UCLIBC_DIR)/.config
+ endif
++ifeq ("$(KERNEL_ARCH)","i386")
++	/bin/echo "# CONFIG_GENERIC_386 is not set" >> $(UCLIBC_DIR)/.__config
++	/bin/echo "# CONFIG_386 is not set" >> $(UCLIBC_DIR)/.__config
++	/bin/echo "# CONFIG_486 is not set" >> $(UCLIBC_DIR)/.__config
++	/bin/echo "# CONFIG_586 is not set" >> $(UCLIBC_DIR)/.__config
++	/bin/echo "# CONFIG_586MMX is not set" >> $(UCLIBC_DIR)/.__config
++	/bin/echo "# CONFIG_686 is not set" >> $(UCLIBC_DIR)/.__config
++	/bin/echo "# CONFIG_PENTIUMII is not set" >> $(UCLIBC_DIR)/.__config
++	/bin/echo "# CONFIG_PENTIUMIII is not set" >> $(UCLIBC_DIR)/.__config
++	/bin/echo "# CONFIG_PENTIUM4 is not set" >> $(UCLIBC_DIR)/.__config
++	/bin/echo "# CONFIG_K6 is not set" >> $(UCLIBC_DIR)/.__config
++	/bin/echo "# CONFIG_K7 is not set" >> $(UCLIBC_DIR)/.__config
++	/bin/echo "# CONFIG_ELAN is not set" >> $(UCLIBC_DIR)/.__config
++	/bin/echo "# CONFIG_CRUSOE is not set" >> $(UCLIBC_DIR)/.__config
++	/bin/echo "# CONFIG_WINCHIPC6 is not set" >> $(UCLIBC_DIR)/.__config
++	/bin/echo "# CONFIG_WINCHIP2 is not set" >> $(UCLIBC_DIR)/.__config
++	/bin/echo "# CONFIG_CYRIXIII is not set" >> $(UCLIBC_DIR)/.__config
++	/bin/echo "# CONFIG_NEHEMIAH is not set" >> $(UCLIBC_DIR)/.__config
++ifeq ($(BR2_x86_i386),y)
++	$(SED) 's,# CONFIG_386 is not set,CONFIG_386=y,g' $(UCLIBC_DIR)/.config
++endif
++ifeq ($(BR2_x86_i486),y)
++	$(SED) 's,# CONFIG_486 is not set,CONFIG_486=y,g' $(UCLIBC_DIR)/.config
++endif
++ifeq ($(BR2_x86_i586),y)
++	$(SED) 's,# CONFIG_586 is not set,CONFIG_586=y,g' $(UCLIBC_DIR)/.config
++endif
++ifeq ($(BR2_x86_i686),y)
++	$(SED) 's,# CONFIG_686 is not set,CONFIG_686=y,g' $(UCLIBC_DIR)/.config
++endif
++endif
+ 	mkdir -p $(TOOL_BUILD_DIR)/uClibc_dev/usr/include
+ 	mkdir -p $(TOOL_BUILD_DIR)/uClibc_dev/usr/lib
+ 	mkdir -p $(TOOL_BUILD_DIR)/uClibc_dev/lib
+@@ -137,9 +165,9 @@
+ 		RUNTIME_PREFIX=$(TOOL_BUILD_DIR)/uClibc_dev/ \
+ 		HOSTCC="$(HOSTCC)" \
+ 		oldconfig
+-	touch $(UCLIBC_DIR)/.prepared
++	touch $(UCLIBC_DIR)/.config
  
- endchoice
+-$(UCLIBC_DIR)/.configured: $(UCLIBC_DIR)/.prepared kernel-headers
++$(UCLIBC_DIR)/.configured: $(UCLIBC_DIR)/.config
+ 	set -x && $(MAKE1) -C $(UCLIBC_DIR) \
+ 		PREFIX=$(TOOL_BUILD_DIR)/uClibc_dev/ \
+ 		DEVEL_PREFIX=/usr/ \
+@@ -162,7 +190,7 @@
+ 		all
+ 	touch -c $(UCLIBC_DIR)/lib/libc.a
  
-@@ -53,4 +53,4 @@
- 	default "2.6.9"     if BR2_KERNEL_HEADERS_2_6_9
- 	default "2.6.11"    if BR2_KERNEL_HEADERS_2_6_11
- 	default "2.6.12"    if BR2_KERNEL_HEADERS_2_6_12
--	default "2.6.19"    if BR2_KERNEL_HEADERS_2_6_19
-+	default "2.6.19.1"  if BR2_KERNEL_HEADERS_2_6_19_1
-
-Added: trunk/buildroot/toolchain/kernel-headers/kernel-headers-new.makefile
-===================================================================
---- trunk/buildroot/toolchain/kernel-headers/kernel-headers-new.makefile	2006-12-13 11:01:54 UTC (rev 16882)
-+++ trunk/buildroot/toolchain/kernel-headers/kernel-headers-new.makefile	2006-12-13 11:49:19 UTC (rev 16883)
-@@ -0,0 +1,39 @@
-+#############################################################
-+#
-+# full kernel tarballs >= 2.6.19.1
-+#
-+#############################################################
-+LINUX_HEADERS_IS_KERNEL=n
-+
-+ifeq ("$(DEFAULT_KERNEL_HEADERS)","2.6.19.1")
-+VERSION:=2
-+PATCHLEVEL:=6
-+SUBLEVEL:=19
-+EXTRAVERSION:=1
-+LINUX_HEADERS_VERSION:=$(VERSION).$(PATCHLEVEL).$(SUBLEVEL)$(EXTRAVERSION)
-+LINUX_HEADERS_SITE:=http://www.kernel.org/pub/linux/kernel/v2.6/
-+LINUX_HEADERS_SOURCE:=linux-$(LINUX_HEADERS_VERSION).tar.bz2
-+LINUX_HEADERS_CAT:=$(BZCAT)
-+LINUX_HEADERS_UNPACK_DIR:=$(TOOL_BUILD_DIR)/linux-$(LINUX_HEADERS_VERSION)
-+LINUX_HEADERS_DIR:=$(TOOL_BUILD_DIR)/linux
-+LINUX_HEADERS_IS_KERNEL=y
-+endif
-+
-+ifeq ($(LINUX_HEADERS_IS_KERNEL),y)
-+
-+$(LINUX_HEADERS_UNPACK_DIR)/.unpacked: $(DL_DIR)/$(LINUX_HEADERS_SOURCE)
-+	rm -rf $(LINUX_HEADERS_DIR)
-+	$(LINUX_HEADERS_CAT) $(DL_DIR)/$(LINUX_HEADERS_SOURCE) | tar -C $(TOOL_BUILD_DIR) $(TAR_OPTIONS) -
-+	touch $(LINUX_HEADERS_UNPACK_DIR)/.unpacked
-+
-+$(LINUX_HEADERS_UNPACK_DIR)/.patched: $(LINUX_HEADERS_UNPACK_DIR)/.unpacked
-+	toolchain/patch-kernel.sh $(LINUX_HEADERS_UNPACK_DIR) toolchain/kernel-headers \
-+		linux-$(LINUX_HEADERS_VERSION)-\*.patch{,.gz,.bz2}
-+	touch $(LINUX_HEADERS_UNPACK_DIR)/.patched
-+
-+$(LINUX_HEADERS_DIR)/.configured: $(LINUX_HEADERS_UNPACK_DIR)/.patched
-+	(cd $(LINUX_HEADERS_UNPACK_DIR) ; \
-+	 $(MAKE) ARCH=$(KERNEL_ARCH) INSTALL_HDR_PATH=$(LINUX_HEADERS_DIR) headers_install)
-+	touch $(LINUX_HEADERS_DIR)/.configured
-+
-+endif
-
-Added: trunk/buildroot/toolchain/kernel-headers/kernel-headers-old.makefile
-===================================================================
---- trunk/buildroot/toolchain/kernel-headers/kernel-headers-old.makefile	2006-12-13 11:01:54 UTC (rev 16882)
-+++ trunk/buildroot/toolchain/kernel-headers/kernel-headers-old.makefile	2006-12-13 11:49:19 UTC (rev 16883)
-@@ -0,0 +1,190 @@
-+#############################################################
-+#
-+# Setup the kernel headers.  I include a generic package of
-+# kernel headers here, so you shouldn't need to include your
-+# own.  Be aware these kernel headers _will_ get blown away
-+# by a 'make clean' so don't put anything sacred in here...
-+#
-+#############################################################
-+ifeq ("$(DEFAULT_KERNEL_HEADERS)","2.4.25")
-+VERSION:=2
-+PATCHLEVEL:=4
-+SUBLEVEL:=25
-+LINUX_HEADERS_VERSION:=$(VERSION).$(PATCHLEVEL).$(SUBLEVEL)$(EXTRAVERSION)
-+LINUX_HEADERS_SITE:=http://www.uclibc.org/downloads/toolchain
-+LINUX_HEADERS_SOURCE:=linux-libc-headers-2.4.25.tar.bz2
-+LINUX_HEADERS_CAT:=$(BZCAT)
-+LINUX_HEADERS_DIR:=$(TOOL_BUILD_DIR)/linux
-+LINUX_HEADERS_UNPACK_DIR:=$(TOOL_BUILD_DIR)/linux-libc-headers-2.4.25
-+LINUX_HEADERS_IS_KERNEL=n
-+endif
-+
-+ifeq ("$(DEFAULT_KERNEL_HEADERS)","2.4.27")
-+VERSION:=2
-+PATCHLEVEL:=4
-+SUBLEVEL:=27
-+LINUX_HEADERS_VERSION:=$(VERSION).$(PATCHLEVEL).$(SUBLEVEL)$(EXTRAVERSION)
-+LINUX_HEADERS_SITE:=http://www.uclibc.org/downloads/toolchain
-+LINUX_HEADERS_CAT:=$(BZCAT)
-+LINUX_HEADERS_SOURCE:=linux-libc-headers-2.4.27.tar.bz2
-+LINUX_HEADERS_DIR:=$(TOOL_BUILD_DIR)/linux
-+LINUX_HEADERS_UNPACK_DIR:=$(TOOL_BUILD_DIR)/linux-libc-headers-2.4.27
-+LINUX_HEADERS_IS_KERNEL=n
-+endif
-+
-+ifeq ("$(DEFAULT_KERNEL_HEADERS)","2.4.29")
-+VERSION:=2
-+PATCHLEVEL:=4
-+SUBLEVEL:=29
-+LINUX_HEADERS_VERSION:=$(VERSION).$(PATCHLEVEL).$(SUBLEVEL)$(EXTRAVERSION)
-+LINUX_HEADERS_SITE:=http://www.uclibc.org/downloads/toolchain
-+LINUX_HEADERS_SOURCE:=linux-libc-headers-2.4.29.tar.bz2
-+LINUX_HEADERS_CAT:=$(BZCAT)
-+LINUX_HEADERS_DIR:=$(TOOL_BUILD_DIR)/linux
-+LINUX_HEADERS_UNPACK_DIR:=$(TOOL_BUILD_DIR)/linux-libc-headers-2.4.29
-+LINUX_HEADERS_IS_KERNEL=n
-+endif
-+
-+ifeq ("$(DEFAULT_KERNEL_HEADERS)","2.4.31")
-+VERSION:=2
-+PATCHLEVEL:=4
-+SUBLEVEL:=31
-+LINUX_HEADERS_VERSION:=$(VERSION).$(PATCHLEVEL).$(SUBLEVEL)$(EXTRAVERSION)
-+LINUX_HEADERS_SITE:=http://www.uclibc.org/downloads/toolchain
-+LINUX_HEADERS_SOURCE:=linux-libc-headers-2.4.31.tar.bz2
-+LINUX_HEADERS_CAT:=$(BZCAT)
-+LINUX_HEADERS_DIR:=$(TOOL_BUILD_DIR)/linux
-+LINUX_HEADERS_UNPACK_DIR:=$(TOOL_BUILD_DIR)/linux-libc-headers-2.4.31
-+LINUX_HEADERS_IS_KERNEL=n
-+endif
-+
-+ifeq ("$(DEFAULT_KERNEL_HEADERS)","2.6.9")
-+VERSION:=2
-+PATCHLEVEL:=6
-+SUBLEVEL:=9
-+LINUX_HEADERS_VERSION:=$(VERSION).$(PATCHLEVEL).$(SUBLEVEL)$(EXTRAVERSION)
-+LINUX_HEADERS_SITE:=http://ep09.pld-linux.org/~mmazur/linux-libc-headers/
-+LINUX_HEADERS_SOURCE:=linux-libc-headers-2.6.9.1.tar.bz2
-+LINUX_HEADERS_CAT:=$(BZCAT)
-+LINUX_HEADERS_DIR:=$(TOOL_BUILD_DIR)/linux
-+LINUX_HEADERS_UNPACK_DIR:=$(TOOL_BUILD_DIR)/linux-libc-headers-2.6.9.1
-+LINUX_HEADERS_IS_KERNEL=n
-+endif
-+
-+ifeq ("$(DEFAULT_KERNEL_HEADERS)","2.6.10")
-+VERSION:=2
-+PATCHLEVEL:=6
-+SUBLEVEL:=10
-+LINUX_HEADERS_VERSION:=$(VERSION).$(PATCHLEVEL).$(SUBLEVEL)$(EXTRAVERSION)
-+LINUX_HEADERS_SITE:=http://ep09.pld-linux.org/~mmazur/linux-libc-headers/
-+LINUX_HEADERS_SOURCE:=linux-libc-headers-2.6.10.0.tar.bz2
-+LINUX_HEADERS_CAT:=$(BZCAT)
-+LINUX_HEADERS_DIR:=$(TOOL_BUILD_DIR)/linux
-+LINUX_HEADERS_UNPACK_DIR:=$(TOOL_BUILD_DIR)/linux-libc-headers-2.6.10.0
-+LINUX_HEADERS_IS_KERNEL=n
-+endif
-+
-+ifeq ("$(DEFAULT_KERNEL_HEADERS)","2.6.11")
-+VERSION:=2
-+PATCHLEVEL:=6
-+SUBLEVEL:=11
-+LINUX_HEADERS_VERSION:=$(VERSION).$(PATCHLEVEL).$(SUBLEVEL)$(EXTRAVERSION)
-+LINUX_HEADERS_SITE:=http://ep09.pld-linux.org/~mmazur/linux-libc-headers/
-+LINUX_HEADERS_SOURCE:=linux-libc-headers-2.6.11.0.tar.bz2
-+LINUX_HEADERS_CAT:=$(BZCAT)
-+LINUX_HEADERS_DIR:=$(TOOL_BUILD_DIR)/linux
-+LINUX_HEADERS_UNPACK_DIR:=$(TOOL_BUILD_DIR)/linux-libc-headers-2.6.11.0
-+LINUX_HEADERS_IS_KERNEL=n
-+endif
-+
-+ifeq ("$(DEFAULT_KERNEL_HEADERS)","2.6.12")
-+VERSION:=2
-+PATCHLEVEL:=6
-+SUBLEVEL:=12
-+LINUX_HEADERS_VERSION:=$(VERSION).$(PATCHLEVEL).$(SUBLEVEL)$(EXTRAVERSION)
-+LINUX_HEADERS_SITE:=http://ep09.pld-linux.org/~mmazur/linux-libc-headers/
-+LINUX_HEADERS_SOURCE:=linux-libc-headers-2.6.12.0.tar.bz2
-+LINUX_HEADERS_CAT:=$(BZCAT)
-+LINUX_HEADERS_DIR:=$(TOOL_BUILD_DIR)/linux
-+LINUX_HEADERS_UNPACK_DIR:=$(TOOL_BUILD_DIR)/linux-libc-headers-2.6.12.0
-+LINUX_HEADERS_IS_KERNEL=n
-+endif
-+
-+
-+# the old sanitized kernel-headers
-+ifeq ($(LINUX_HEADERS_IS_KERNEL),n)
-+
-+$(LINUX_HEADERS_UNPACK_DIR)/.unpacked: $(DL_DIR)/$(LINUX_HEADERS_SOURCE)
-+	rm -rf $(LINUX_HEADERS_DIR)
-+	$(LINUX_HEADERS_CAT) $(DL_DIR)/$(LINUX_HEADERS_SOURCE) | tar -C $(TOOL_BUILD_DIR) $(TAR_OPTIONS) -
-+ifneq ($(LINUX_HEADERS_UNPACK_DIR),$(LINUX_HEADERS_DIR))
-+	ln -fs $(LINUX_HEADERS_UNPACK_DIR) $(LINUX_HEADERS_DIR)
-+endif
-+	touch $(LINUX_HEADERS_UNPACK_DIR)/.unpacked
-+
-+$(LINUX_HEADERS_DIR)/.patched: $(LINUX_HEADERS_UNPACK_DIR)/.unpacked
-+	toolchain/patch-kernel.sh $(LINUX_HEADERS_DIR) toolchain/kernel-headers \
-+		linux-libc-headers-$(LINUX_HEADERS_VERSION)\*.patch
-+ifeq ($(strip $(ARCH)),nios2)
-+	toolchain/patch-kernel.sh $(LINUX_HEADERS_DIR) toolchain/kernel-headers \
-+		linux-libc-headers-$(LINUX_HEADERS_VERSION)-nios2nommu.patch.conditional
-+endif
-+	touch $(LINUX_HEADERS_DIR)/.patched
-+
-+$(LINUX_HEADERS_DIR)/.configured: $(LINUX_HEADERS_DIR)/.patched
-+	rm -f $(LINUX_HEADERS_DIR)/include/asm
-+	@if [ ! -f $(LINUX_HEADERS_DIR)/Makefile ] ; then \
-+	    /bin/echo -e "VERSION = $(VERSION)\nPATCHLEVEL = $(PATCHLEVEL)\n" > \
-+		    $(LINUX_HEADERS_DIR)/Makefile; \
-+	    /bin/echo -e "SUBLEVEL = $(SUBLEVEL)\nEXTRAVERSION =\n" >> \
-+		    $(LINUX_HEADERS_DIR)/Makefile; \
-+	    /bin/echo -e "KERNELRELEASE=\$$(VERSION).\$$(PATCHLEVEL).\$$(SUBLEVEL)\$$(EXTRAVERSION)" >> \
-+		    $(LINUX_HEADERS_DIR)/Makefile; \
+-uclibc-menuconfig: $(UCLIBC_DIR)/.prepared
++uclibc-menuconfig: $(UCLIBC_DIR)/.config
+ 	$(MAKE1) -C $(UCLIBC_DIR) \
+ 		PREFIX=$(TOOL_BUILD_DIR)/uClibc_dev/ \
+ 		DEVEL_PREFIX=/usr/ \
+@@ -172,7 +200,7 @@
+ 	touch $(UCLIBC_DIR)/.configured
+ 
+ 
+-$(STAGING_DIR)/lib/libc.a: kernel-headers $(UCLIBC_DIR)/lib/libc.a
++$(STAGING_DIR)/lib/libc.a: $(UCLIBC_DIR)/lib/libc.a
+ 	$(MAKE1) -C $(UCLIBC_DIR) \
+ 		PREFIX= \
+ 		DEVEL_PREFIX=$(STAGING_DIR)/ \
+@@ -212,7 +240,7 @@
+ UCLIBC_TARGETS=$(TARGET_DIR)/lib/libc.so.0
+ endif
+ 
+-uclibc-configured: dependencies $(UCLIBC_DIR)/.configured
++uclibc-configured: dependencies kernel-headers $(UCLIBC_DIR)/.configured
+ 
+ 
+ uclibc: $(STAGING_DIR)/bin/$(REAL_GNU_TARGET_NAME)-gcc $(STAGING_DIR)/lib/libc.a \
+@@ -244,6 +272,11 @@
+ 		DEVEL_PREFIX=/usr/ \
+ 		RUNTIME_PREFIX=/ \
+ 		install_dev
++	# Install the kernel headers to the target dir if necessary
++	if [ ! -f $(TARGET_DIR)/usr/include/linux/version.h ] ; then \
++		cp -pLR $(LINUX_HEADERS_DIR)/include/asm $(TARGET_DIR)/usr/include/ ; \
++		cp -pLR $(LINUX_HEADERS_DIR)/include/linux $(TARGET_DIR)/usr/include/ ; \
 +	fi;
-+	@if [ "$(ARCH)" = "powerpc" ];then \
-+	    (cd $(LINUX_HEADERS_DIR)/include; ln -fs asm-ppc$(NOMMU) asm;) \
-+	elif [ "$(ARCH)" = "mips" ];then \
-+	    (cd $(LINUX_HEADERS_DIR)/include; ln -fs asm-mips$(NOMMU) asm;) \
-+	elif [ "$(ARCH)" = "mipsel" ];then \
-+	    (cd $(LINUX_HEADERS_DIR)/include; ln -fs asm-mips$(NOMMU) asm;) \
-+	elif [ "$(ARCH)" = "nios2" ];then \
-+	    (cd $(LINUX_HEADERS_DIR)/include; ln -fs asm-nios2nommu asm;) \
-+	elif [ "$(ARCH)" = "arm" ];then \
-+	    (cd $(LINUX_HEADERS_DIR)/include; ln -fs asm-arm$(NOMMU) asm; \
-+	     cd asm; \
-+	     if [ ! -L proc ] ; then \
-+	     ln -fs proc-armv proc; \
-+	     ln -fs arch-ebsa285 arch; fi); \
-+	elif [ "$(ARCH)" = "armeb" ];then \
-+	    (cd $(LINUX_HEADERS_DIR)/include; ln -fs asm-arm$(NOMMU) asm; \
-+	     cd asm; \
-+	     if [ ! -L proc ] ; then \
-+	     ln -fs proc-armv proc; \
-+	     ln -fs arch-ebsa285 arch; fi); \
-+	elif [ "$(ARCH)" = "cris" ];then \
-+	    (cd $(LINUX_HEADERS_DIR)/include; ln -fs asm-cris asm;) \
-+	elif [ "$(ARCH)" = "sh3" ];then \
-+	    (cd $(LINUX_HEADERS_DIR)/include; ln -fs asm-sh asm; \
-+	     cd asm; \
-+	     ln -s cpu-sh3 cpu) \
-+	elif [ "$(ARCH)" = "sh3eb" ];then \
-+	    (cd $(LINUX_HEADERS_DIR)/include; ln -fs asm-sh asm; \
-+	     cd asm; \
-+	     ln -s cpu-sh3 cpu) \
-+	elif [ "$(ARCH)" = "sh4" ];then \
-+	    (cd $(LINUX_HEADERS_DIR)/include; ln -fs asm-sh asm; \
-+	     cd asm; \
-+	     ln -s cpu-sh4 cpu) \
-+	elif [ "$(ARCH)" = "sh4eb" ];then \
-+	    (cd $(LINUX_HEADERS_DIR)/include; ln -fs asm-sh asm; \
-+	     cd asm; \
-+	     ln -s cpu-sh4 cpu) \
-+	elif [ "$(ARCH)" = "i386" -o "$(ARCH)" = "i486" -o "$(ARCH)" = "i586" -o "$(ARCH)" = "i686" ];then \
-+	    (cd $(LINUX_HEADERS_DIR)/include; ln -fs asm-i386$(NOMMU) asm;) \
-+	else \
-+	    (cd $(LINUX_HEADERS_DIR)/include; ln -fs asm-$(ARCH)$(NOMMU) asm;) \
-+	fi
-+	touch $(LINUX_HEADERS_DIR)/include/linux/autoconf.h;
-+	touch $(LINUX_HEADERS_DIR)/.configured
-+
-+endif
-
-Modified: trunk/buildroot/toolchain/kernel-headers/kernel-headers.mk
-===================================================================
---- trunk/buildroot/toolchain/kernel-headers/kernel-headers.mk	2006-12-13 11:01:54 UTC (rev 16882)
-+++ trunk/buildroot/toolchain/kernel-headers/kernel-headers.mk	2006-12-13 11:49:19 UTC (rev 16883)
-@@ -12,219 +12,24 @@
- LINUX_HEADERS_SOURCE:=unspecified-kernel-headers
- LINUX_HEADERS_UNPACK_DIR:=$(TOOL_BUILD_DIR)/linux-libc-headers-null
+ 	touch -c $(TARGET_DIR)/usr/lib/libc.a
  
--ifeq ("$(strip $(DEFAULT_KERNEL_HEADERS))","2.4.25")
--VERSION:=2
--PATCHLEVEL:=4
--SUBLEVEL:=25
--LINUX_HEADERS_SITE:=http://www.uclibc.org/downloads/toolchain
--LINUX_HEADERS_SOURCE:=linux-libc-headers-2.4.25.tar.bz2
--LINUX_HEADERS_CAT:=$(BZCAT)
--LINUX_HEADERS_UNPACK_DIR:=$(TOOL_BUILD_DIR)/linux-libc-headers-2.4.25
--endif
--
--ifeq ("$(strip $(DEFAULT_KERNEL_HEADERS))","2.4.27")
--VERSION:=2
--PATCHLEVEL:=4
--SUBLEVEL:=27
--LINUX_HEADERS_SITE:=http://www.uclibc.org/downloads/toolchain
--LINUX_HEADERS_CAT:=$(BZCAT)
--LINUX_HEADERS_SOURCE:=linux-libc-headers-2.4.27.tar.bz2
--LINUX_HEADERS_UNPACK_DIR:=$(TOOL_BUILD_DIR)/linux-libc-headers-2.4.27
--endif
--
--ifeq ("$(strip $(DEFAULT_KERNEL_HEADERS))","2.4.29")
--VERSION:=2
--PATCHLEVEL:=4
--SUBLEVEL:=29
--LINUX_HEADERS_SITE:=http://www.uclibc.org/downloads/toolchain
--LINUX_HEADERS_SOURCE:=linux-libc-headers-2.4.29.tar.bz2
--LINUX_HEADERS_CAT:=$(BZCAT)
--LINUX_HEADERS_UNPACK_DIR:=$(TOOL_BUILD_DIR)/linux-libc-headers-2.4.29
--endif
--
--ifeq ("$(strip $(DEFAULT_KERNEL_HEADERS))","2.4.31")
--VERSION:=2
--PATCHLEVEL:=4
--SUBLEVEL:=31
--LINUX_HEADERS_SITE:=http://www.uclibc.org/downloads/toolchain
--LINUX_HEADERS_SOURCE:=linux-libc-headers-2.4.31.tar.bz2
--LINUX_HEADERS_CAT:=$(BZCAT)
--LINUX_HEADERS_UNPACK_DIR:=$(TOOL_BUILD_DIR)/linux-libc-headers-2.4.31
--endif
--
--ifeq ("$(strip $(DEFAULT_KERNEL_HEADERS))","2.6.9")
--VERSION:=2
--PATCHLEVEL:=6
--SUBLEVEL:=9
--LINUX_HEADERS_SITE:=http://ep09.pld-linux.org/~mmazur/linux-libc-headers/
--LINUX_HEADERS_SOURCE:=linux-libc-headers-2.6.9.1.tar.bz2
--LINUX_HEADERS_CAT:=$(BZCAT)
--LINUX_HEADERS_UNPACK_DIR:=$(TOOL_BUILD_DIR)/linux-libc-headers-2.6.9.1
--endif
--
--ifeq ("$(strip $(DEFAULT_KERNEL_HEADERS))","2.6.10")
--VERSION:=2
--PATCHLEVEL:=6
--SUBLEVEL:=10
--LINUX_HEADERS_SITE:=http://ep09.pld-linux.org/~mmazur/linux-libc-headers/
--LINUX_HEADERS_SOURCE:=linux-libc-headers-2.6.10.0.tar.bz2
--LINUX_HEADERS_CAT:=$(BZCAT)
--LINUX_HEADERS_UNPACK_DIR:=$(TOOL_BUILD_DIR)/linux-libc-headers-2.6.10.0
--endif
--
--ifeq ("$(strip $(DEFAULT_KERNEL_HEADERS))","2.6.11")
--VERSION:=2
--PATCHLEVEL:=6
--SUBLEVEL:=11
--LINUX_HEADERS_SITE:=http://ep09.pld-linux.org/~mmazur/linux-libc-headers/
--LINUX_HEADERS_SOURCE:=linux-libc-headers-2.6.11.0.tar.bz2
--LINUX_HEADERS_CAT:=$(BZCAT)
--LINUX_HEADERS_UNPACK_DIR:=$(TOOL_BUILD_DIR)/linux-libc-headers-2.6.11.0
--endif
--
--ifeq ("$(strip $(DEFAULT_KERNEL_HEADERS))","2.6.12")
--VERSION:=2
--PATCHLEVEL:=6
--SUBLEVEL:=12
--LINUX_HEADERS_SITE:=http://ep09.pld-linux.org/~mmazur/linux-libc-headers/
--LINUX_HEADERS_SOURCE:=linux-libc-headers-2.6.12.0.tar.bz2
--LINUX_HEADERS_CAT:=$(BZCAT)
--LINUX_HEADERS_UNPACK_DIR:=$(TOOL_BUILD_DIR)/linux-libc-headers-2.6.12.0
--endif
--LINUX_HEADERS_IS_KERNEL=n
--
--ifeq ("$(strip $(DEFAULT_KERNEL_HEADERS))","2.6.19")
--VERSION:=2
--PATCHLEVEL:=6
--SUBLEVEL:=19
--EXTRAVERSION:=
--LINUX_HEADERS_VERSION:=$(VERSION).$(PATCHLEVEL).$(SUBLEVEL)$(EXTRAVERSION)
--LINUX_HEADERS_SITE:=http://www.kernel.org/pub/linux/kernel/v2.6/
--LINUX_HEADERS_SOURCE:=linux-$(LINUX_HEADERS_VERSION).tar.bz2
--LINUX_HEADERS_CAT:=$(BZCAT)
--LINUX_HEADERS_UNPACK_DIR:=$(TOOL_BUILD_DIR)/linux-$(LINUX_HEADERS_VERSION)
--LINUX_HEADERS_IS_KERNEL=y
--endif
--
--LINUX_HEADERS_VERSION:=$(VERSION).$(PATCHLEVEL).$(SUBLEVEL)$(EXTRAVERSION)
--
--LINUX_HEADERS_DIR:=$(TOOL_BUILD_DIR)/linux
--
--LINUX_HEADERS_DO_MOVE=n
--ifneq ($(LINUX_HEADERS_UNPACK_DIR),$(LINUX_HEADERS_DIR))
--LINUX_HEADERS_DO_MOVE=y
--endif
--ifeq ($(LINUX_HEADERS_IS_KERNEL),y)
--LINUX_HEADERS_DO_MOVE=n
--endif
--
--$(DL_DIR)/$(LINUX_HEADERS_SOURCE):
--	$(WGET) -P $(DL_DIR) $(LINUX_HEADERS_SITE)/$(LINUX_HEADERS_SOURCE)
--
--ifeq ($(LINUX_HEADERS_DO_MOVE),y)
--$(LINUX_HEADERS_DIR)/.unpacked: $(DL_DIR)/$(LINUX_HEADERS_SOURCE)
--	rm -rf $(LINUX_HEADERS_DIR)
--	$(LINUX_HEADERS_CAT) $(DL_DIR)/$(LINUX_HEADERS_SOURCE) | tar -C $(TOOL_BUILD_DIR) $(TAR_OPTIONS) -
--	mv $(LINUX_HEADERS_UNPACK_DIR) $(LINUX_HEADERS_DIR)
--	touch $(LINUX_HEADERS_DIR)/.unpacked
--else
--$(LINUX_HEADERS_UNPACK_DIR)/.unpacked: $(DL_DIR)/$(LINUX_HEADERS_SOURCE)
--	rm -rf $(LINUX_HEADERS_DIR)
--	$(LINUX_HEADERS_CAT) $(DL_DIR)/$(LINUX_HEADERS_SOURCE) | tar -C $(TOOL_BUILD_DIR) $(TAR_OPTIONS) -
--	touch $(LINUX_HEADERS_UNPACK_DIR)/.unpacked
--endif
--
--ifeq ($(LINUX_HEADERS_IS_KERNEL),y)
--# full kernel tarball >= 2.6.18
--
- KERNEL_ARCH:=$(shell $(SHELL) -c "echo \"$(ARCH)\" | sed -e \"s/-.*//\" \
- 	-e s/i.86/i386/ -e s/sun4u/sparc64/ \
- 	-e s/arm.*/arm/ -e s/sa110/arm/ \
- 	-e s/s390x/s390/ -e s/parisc64/parisc/ \
- 	-e s/ppc.*/powerpc/ -e s/mips.*/mips/")
- 
--$(LINUX_HEADERS_UNPACK_DIR)/.patched: $(LINUX_HEADERS_UNPACK_DIR)/.unpacked
--	toolchain/patch-kernel.sh $(LINUX_HEADERS_UNPACK_DIR) toolchain/kernel-headers linux-$(LINUX_HEADERS_VERSION)-\*.patch{,.gz,.bz2}
--	touch $(LINUX_HEADERS_UNPACK_DIR)/.patched
- 
--$(LINUX_HEADERS_DIR)/.configured: $(LINUX_HEADERS_UNPACK_DIR)/.patched
--	(cd $(LINUX_HEADERS_UNPACK_DIR) ; \
--	 $(MAKE) ARCH=$(KERNEL_ARCH) INSTALL_HDR_PATH=$(LINUX_HEADERS_DIR) headers_install)
--	touch $(LINUX_HEADERS_DIR)/.configured
--else
--# the sanitized kernel-headers
--$(LINUX_HEADERS_DIR)/.patched: $(LINUX_HEADERS_DIR)/.unpacked
--	toolchain/patch-kernel.sh $(LINUX_HEADERS_DIR) toolchain/kernel-headers linux-libc-headers-$(LINUX_HEADERS_VERSION)\*.patch
--ifeq ($(strip $(ARCH)),nios2)
--	toolchain/patch-kernel.sh $(LINUX_HEADERS_DIR) toolchain/kernel-headers linux-libc-headers-$(LINUX_HEADERS_VERSION)-nios2nommu.patch.conditional
--endif
--	touch $(LINUX_HEADERS_DIR)/.patched
-+$(DL_DIR)/$(LINUX_HEADERS_SOURCE):
-+	$(WGET) -P $(DL_DIR) $(LINUX_HEADERS_SITE)/$(LINUX_HEADERS_SOURCE)
- 
--$(LINUX_HEADERS_DIR)/.configured: $(LINUX_HEADERS_DIR)/.patched
--	rm -f $(LINUX_HEADERS_DIR)/include/asm
--	@if [ ! -f $(LINUX_HEADERS_DIR)/Makefile ] ; then \
--	    /bin/echo -e "VERSION = $(VERSION)\nPATCHLEVEL = $(PATCHLEVEL)\n" > \
--		    $(LINUX_HEADERS_DIR)/Makefile; \
--	    /bin/echo -e "SUBLEVEL = $(SUBLEVEL)\nEXTRAVERSION =\n" >> \
--		    $(LINUX_HEADERS_DIR)/Makefile; \
--	    /bin/echo -e "KERNELRELEASE=\$$(VERSION).\$$(PATCHLEVEL).\$$(SUBLEVEL)\$$(EXTRAVERSION)" >> \
--		    $(LINUX_HEADERS_DIR)/Makefile; \
--	fi;
--	@if [ "$(ARCH)" = "powerpc" ];then \
--	    (cd $(LINUX_HEADERS_DIR)/include; ln -fs asm-ppc$(NOMMU) asm;) \
--	elif [ "$(ARCH)" = "mips" ];then \
--	    (cd $(LINUX_HEADERS_DIR)/include; ln -fs asm-mips$(NOMMU) asm;) \
--	elif [ "$(ARCH)" = "mipsel" ];then \
--	    (cd $(LINUX_HEADERS_DIR)/include; ln -fs asm-mips$(NOMMU) asm;) \
--	elif [ "$(ARCH)" = "nios2" ];then \
--	    (cd $(LINUX_HEADERS_DIR)/include; ln -fs asm-nios2nommu asm;) \
--	elif [ "$(ARCH)" = "arm" ];then \
--	    (cd $(LINUX_HEADERS_DIR)/include; ln -fs asm-arm$(NOMMU) asm; \
--	     cd asm; \
--	     if [ ! -L proc ] ; then \
--	     ln -fs proc-armv proc; \
--	     ln -fs arch-ebsa285 arch; fi); \
--	elif [ "$(ARCH)" = "armeb" ];then \
--	    (cd $(LINUX_HEADERS_DIR)/include; ln -fs asm-arm$(NOMMU) asm; \
--	     cd asm; \
--	     if [ ! -L proc ] ; then \
--	     ln -fs proc-armv proc; \
--	     ln -fs arch-ebsa285 arch; fi); \
--	elif [ "$(ARCH)" = "cris" ];then \
--	    (cd $(LINUX_HEADERS_DIR)/include; ln -fs asm-cris asm;) \
--	elif [ "$(ARCH)" = "sh3" ];then \
--	    (cd $(LINUX_HEADERS_DIR)/include; ln -fs asm-sh asm; \
--	     cd asm; \
--	     ln -s cpu-sh3 cpu) \
--	elif [ "$(ARCH)" = "sh3eb" ];then \
--	    (cd $(LINUX_HEADERS_DIR)/include; ln -fs asm-sh asm; \
--	     cd asm; \
--	     ln -s cpu-sh3 cpu) \
--	elif [ "$(ARCH)" = "sh4" ];then \
--	    (cd $(LINUX_HEADERS_DIR)/include; ln -fs asm-sh asm; \
--	     cd asm; \
--	     ln -s cpu-sh4 cpu) \
--	elif [ "$(ARCH)" = "sh4eb" ];then \
--	    (cd $(LINUX_HEADERS_DIR)/include; ln -fs asm-sh asm; \
--	     cd asm; \
--	     ln -s cpu-sh4 cpu) \
--	elif [ "$(ARCH)" = "i386" -o "$(ARCH)" = "i486" -o "$(ARCH)" = "i586" -o "$(ARCH)" = "i686" ];then \
--	    (cd $(LINUX_HEADERS_DIR)/include; ln -fs asm-i386$(NOMMU) asm;) \
--	else \
--	    (cd $(LINUX_HEADERS_DIR)/include; ln -fs asm-$(ARCH)$(NOMMU) asm;) \
--	fi
--	touch $(LINUX_HEADERS_DIR)/include/linux/autoconf.h;
--	touch $(LINUX_HEADERS_DIR)/.configured
--endif
-+include toolchain/kernel-headers/kernel-headers-new.makefile
-+include toolchain/kernel-headers/kernel-headers-old.makefile
- 
--$(LINUX_KERNEL): $(LINUX_HEADERS_DIR)/.configured
--
- kernel-headers: $(LINUX_HEADERS_DIR)/.configured
- 
- kernel-headers-source: $(DL_DIR)/$(LINUX_HEADERS_SOURCE)
- 
- kernel-headers-clean: clean
--	rm -f $(LINUX_KERNEL)
- 	rm -rf $(LINUX_HEADERS_DIR)
- 
- kernel-headers-dirclean:
+ uclibc_target: gcc uclibc $(TARGET_DIR)/usr/lib/libc.a $(TARGET_DIR)/usr/bin/ldd
