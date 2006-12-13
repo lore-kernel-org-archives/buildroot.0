@@ -1,56 +1,37 @@
-From: Alex Song <songqf9@yahoo.ca>
-Date: Wed, 13 Dec 2006 11:16:52 -0500 (EST)
-Subject: [Buildroot]  support for SuperH
-Message-ID: <98746.66357.qm@web50012.mail.yahoo.com>
+From: aldot at uclibc.org <aldot@uclibc.org>
+Date: Wed, 13 Dec 2006 08:56:59 -0800 (PST)
+Subject: [Buildroot] svn commit: trunk/buildroot/toolchain/kernel-headers
+Message-ID: <20061213165659.E7A904856E@busybox.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi,
+Author: aldot
+Date: 2006-12-13 08:56:59 -0800 (Wed, 13 Dec 2006)
+New Revision: 16899
 
-Looks like buildroot supports SuperH, but I got
-several errors when trying to use it.
-
-1. When I select sh3, it tries to install the kernel
-headers by "make ARCH=sh3 ...". But kernel only has
-arch sh. I changed top level Config.in and made this
-pass. 
-
-2. Then duing building, it complains
-
-make[1]: Entering directory
-`/root/lab/buildroot-sh/buildroot/toolchain_build_sh/uClibc'
-  CC libc/sysdeps/linux/sh/syscall.os
-libc/sysdeps/linux/sh/syscall.c:11: error: conflicting
-types for 'syscall'
-./include/unistd.h:1014: error: previous declaration
-of 'syscall' was here
-make[2]: *** [libc/sysdeps/linux/sh/syscall.os] Error
-1
-
-   The syscall.c has 
-long syscall(long sysnum,
-             long arg1, long arg2, long arg3,
-             long arg4, long arg5, long arg6)
-
-   while unistd.h has 
-
-extern long int syscall (long int __sysno, ...)
-__THROW;
-
-  Is there a fix? What is the correct way to build a
-toolchain for sh?
-
-Thanks a lot,
-
-Alex
+Log:
+- sh[234][[:alnum:]]* -> sh
 
 
+Modified:
+   trunk/buildroot/toolchain/kernel-headers/kernel-headers.mk
 
 
-__________________________________________________
-Do You Yahoo!?
-Tired of spam?  Yahoo! Mail has the best spam protection around 
-http://mail.yahoo.com 
+Changeset:
+Modified: trunk/buildroot/toolchain/kernel-headers/kernel-headers.mk
+===================================================================
+--- trunk/buildroot/toolchain/kernel-headers/kernel-headers.mk	2006-12-13 16:50:15 UTC (rev 16898)
++++ trunk/buildroot/toolchain/kernel-headers/kernel-headers.mk	2006-12-13 16:56:59 UTC (rev 16899)
+@@ -16,7 +16,8 @@
+ 	-e s/i.86/i386/ -e s/sun4u/sparc64/ \
+ 	-e s/arm.*/arm/ -e s/sa110/arm/ \
+ 	-e s/s390x/s390/ -e s/parisc64/parisc/ \
+-	-e s/ppc.*/powerpc/ -e s/mips.*/mips/")
++	-e s/ppc.*/powerpc/ -e s/mips.*/mips/ \
++	-e s/sh2.*/sh/ -e s/sh3.*/sh/ -e s/sh4.*/sh/")
+ 
+ 
+ $(DL_DIR)/$(LINUX_HEADERS_SOURCE):
