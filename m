@@ -1,28 +1,34 @@
-From: Erik Andersen <andersen@codepoet.org>
-Date: Wed, 13 Dec 2006 05:15:03 -0700
-Subject: [Buildroot] svn commit: trunk/buildroot/package: avahi dmalloc
-	libdaemon mpatrol netplug
-In-Reply-To: <20061213101700.GA13288@aon.at>
-References: <20061213090459.6532948561@busybox.net>
-	<20061213092320.GA31488@codepoet.org>
-	<20061213101700.GA13288@aon.at>
-Message-ID: <20061213121503.GA32467@codepoet.org>
+From: Alexander Rigbo <alexander.rigbo@acgnystrom.se>
+Date: Wed, 13 Dec 2006 13:03:54 +0100
+Subject: [Buildroot] Grub not working?
+Message-ID: <200612131303.54803.alexander.rigbo@acgnystrom.se>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Wed Dec 13, 2006 at 11:17:00AM +0100, Bernhard Fischer wrote:
-> btw.. from the looks, i'll need to build the initial binutils with
-> sysroot support to be able to build a libgmp to be used for the DIR2
-> gcc (for 4.2 fortran that i want to play with) and 4.3. Mind if i
-> make this change or should this be done differently?
+Hi,
 
-Can't see why that would be a problem.
+I'm making a small system for a pc/104 computer, but i'm having some troubles 
+with grub.
+Grub is built and installed to my root, but i can't use it to install the 
+bootloader to MBR. See following output:
 
- -Erik
+grub> root (hd0,1)
+ Filesystem type is ext2fs, partition type 0x83
+grub> setup (hd0)
+ Checking if "/boot/grub/stage1" exists... no
+ Checking if "/grub/stage1" exists... no
 
---
-Erik B. Andersen             http://codepoet-consulting.com/
---This message was written using 73% post-consumer electrons--
+Error 15: File not found
+
+But, on hda2 (my root partition) i have:
+
+[root at uclibc grub]# ls -l /boot/grub/stage1
+-rwxr-xr-x     1 root      root             512 Dec 13 03:25 /boot/grub/stage1
+
+What can this be?
+Grub bug? uClibc bug? buildroot? my fault (most likely though)?
+
+Alexander
