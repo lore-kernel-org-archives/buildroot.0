@@ -1,7 +1,7 @@
 From: andersen at uclibc.org <andersen@uclibc.org>
-Date: Tue, 12 Dec 2006 22:58:15 -0800 (PST)
-Subject: [Buildroot] svn commit: trunk/buildroot/package/busybox
-Message-ID: <20061213065815.5C3134858A@busybox.net>
+Date: Tue, 12 Dec 2006 22:59:01 -0800 (PST)
+Subject: [Buildroot] svn commit: trunk/buildroot/toolchain/uClibc
+Message-ID: <20061213065901.D0B114859A@busybox.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -9,29 +9,44 @@ Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
 Author: andersen
-Date: 2006-12-12 22:58:14 -0800 (Tue, 12 Dec 2006)
-New Revision: 16870
+Date: 2006-12-12 22:59:01 -0800 (Tue, 12 Dec 2006)
+New Revision: 16871
 
 Log:
-let people select different versions of busybox to suit their needs
+fix a few little glitches I left in here the other day
 
-
-Added:
-   trunk/buildroot/package/busybox/busybox-1.0.1.config
-   trunk/buildroot/package/busybox/busybox-1.1.3.config
-   trunk/buildroot/package/busybox/busybox-1.2.2.1.config
-
-Removed:
-   trunk/buildroot/package/busybox/busybox.config
 
 Modified:
-   trunk/buildroot/package/busybox/Config.in
-   trunk/buildroot/package/busybox/busybox.mk
+   trunk/buildroot/toolchain/uClibc/Config.in
+   trunk/buildroot/toolchain/uClibc/uclibc.mk
 
 
 Changeset:
+Modified: trunk/buildroot/toolchain/uClibc/Config.in
+===================================================================
+--- trunk/buildroot/toolchain/uClibc/Config.in	2006-12-13 06:58:14 UTC (rev 16870)
++++ trunk/buildroot/toolchain/uClibc/Config.in	2006-12-13 06:59:01 UTC (rev 16871)
+@@ -7,7 +7,7 @@
+ 	prompt "uClibc C library Version"
+ 	default BR2_UCLIBC_VERSION_SNAPSHOT
+ 	help
+-	  Select the version of gcc you wish to use.
++	  Select the version of uClibc you wish to use.
+ 
+ 	config BR2_UCLIBC_VERSION_0_9_28
+ 		bool "uClibc 0.9.28"
 
-Sorry, the patch is too large to include (2034 lines).
-Please use ViewCVS to see it!
-
-http://uclibc.org/cgi-bin/viewcvs.cgi?view=rev&root=svn&rev=16870
+Modified: trunk/buildroot/toolchain/uClibc/uclibc.mk
+===================================================================
+--- trunk/buildroot/toolchain/uClibc/uclibc.mk	2006-12-13 06:58:14 UTC (rev 16870)
++++ trunk/buildroot/toolchain/uClibc/uclibc.mk	2006-12-13 06:59:01 UTC (rev 16871)
+@@ -9,7 +9,8 @@
+ # Be aware that this changes daily....
+ UCLIBC_VER:=0.9.29
+ UCLIBC_DIR:=$(TOOL_BUILD_DIR)/uClibc
+-UCLIBC_SOURCE:=uClibc-snapshot.tar.bz2
++UCLIBC_SOURCE:=uClibc-$(strip $(subst ",, $(BR2_USE_UCLIBC_SNAPSHOT))).tar.bz2
++#"))
+ UCLIBC_SITE:=http://www.uclibc.org/downloads/snapshots
+ ifndef UCLIBC_CONFIG_FILE
+ UCLIBC_CONFIG_FILE=toolchain/uClibc/uClibc-0.9.29.config
