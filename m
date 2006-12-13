@@ -1,36 +1,30 @@
-From: andersen at uclibc.org <andersen@uclibc.org>
-Date: Wed, 13 Dec 2006 03:59:53 -0800 (PST)
-Subject: [Buildroot] svn commit: trunk/buildroot/target/device/x86/i386
-Message-ID: <20061213115953.5DDE448583@busybox.net>
+From: MikeW <mw_phil@yahoo.co.uk>
+Date: Wed, 13 Dec 2006 12:08:41 +0000 (UTC)
+Subject: [Buildroot]
+	=?utf-8?q?Impossible_to_build_EABI_ARM_gcc_toolchain?=
+	=?utf-8?q?=09using=09Buildroot_=3F?=
+References: <loom.20061129T130728-811@post.gmane.org>
+	<1164848869.23643.60.camel@dv>
+	<loom.20061130T112254-849@post.gmane.org>
+	<1164960699.4870.67.camel@dv>
+Message-ID: <loom.20061213T123854-410@post.gmane.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Author: andersen
-Date: 2006-12-13 03:59:53 -0800 (Wed, 13 Dec 2006)
-New Revision: 16888
+Pavel Roskin <proski@...> writes:
+> There are already patches for gcc in buildroot that change
+> TARGET_LINKER_EMULATION for bigendian systems and uClibc.  I think
+> support for EABI belongs there too.
+> 
 
-Log:
-use the correct depmod for linux26
+So how do we get these included into Buildroot ?
+There are patches for EABI working mentioned on gcc.gnu.org dating back to 2004.
+But no systematic list anywhere (?), or information about applying them.
+We need the wheel to be invented *once* !!
+;-)
 
-
-Modified:
-   trunk/buildroot/target/device/x86/i386/linux26.mk
-
-
-Changeset:
-Modified: trunk/buildroot/target/device/x86/i386/linux26.mk
-===================================================================
---- trunk/buildroot/target/device/x86/i386/linux26.mk	2006-12-13 11:57:14 UTC (rev 16887)
-+++ trunk/buildroot/target/device/x86/i386/linux26.mk	2006-12-13 11:59:53 UTC (rev 16888)
-@@ -94,7 +94,7 @@
- 	rm -rf $(TARGET_DIR)/lib/modules/$(LINUX26_VERSION)
- 	rm -f $(TARGET_DIR)/sbin/cardmgr
- 	$(MAKE) $(LINUX26_MAKE_FLAGS) -C $(LINUX26_DIR) \
--		DEPMOD=$(STAGING_DIR)/bin/$(GNU_TARGET_NAME)-depmod \
-+		DEPMOD=$(STAGING_DIR)/bin/$(GNU_TARGET_NAME)-depmod26 \
- 		INSTALL_MOD_PATH=$(TARGET_DIR) modules_install
- 	rm -f $(TARGET_DIR)/lib/modules/$(LINUX26_VERSION)/build
- 	touch -c $(TARGET_DIR)/lib/modules/$(LINUX26_VERSION)/modules.dep
+Thanks again,
+MikeW
