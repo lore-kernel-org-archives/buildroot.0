@@ -1,44 +1,66 @@
-From: Joe Pruett <joey@clean.q7.com>
-Date: Wed, 13 Dec 2006 16:51:45 -0800 (PST)
-Subject: [Buildroot] issues with svn version
-In-Reply-To: <Pine.LNX.4.64.0612131637012.24865@q7.q7.com>
-References: <Pine.LNX.4.64.0612131637012.24865@q7.q7.com>
-Message-ID: <Pine.LNX.4.64.0612131649100.24865@q7.q7.com>
+From: andersen at uclibc.org <andersen@uclibc.org>
+Date: Wed, 13 Dec 2006 18:50:59 -0800 (PST)
+Subject: [Buildroot] svn commit: trunk/buildroot/toolchain/uClibc
+Message-ID: <20061214025059.9C7A048573@busybox.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-following up to myself.  i changed the destination to be the staging area, 
-but it still failed.  looking closer i see that the issue was the compound 
-command to check for the existence of asm-generic is the last part of the 
-if clause so it becomes the return value and since asm-generic doesn't 
-exist for me, that is false.  for now i have hacked a - on the front of 
-the if, but that's probably not the best solution, but things are building 
-much better now.  not finished yet, but things are flying by...
+Author: andersen
+Date: 2006-12-13 18:50:58 -0800 (Wed, 13 Dec 2006)
+New Revision: 16916
 
-On Wed, 13 Dec 2006, Joe Pruett wrote:
+Log:
+don't error out when asm-generic is absent
 
-> a clean svn build immediately fails because linux-libc-headers can't be 
-> found in the dl directory.  i did a make -k to see if it would appear 
-> later, but it didn't.  so i manually tracked it down and wget'ed it.
-> 
-> now it builds much further, but the uclibc bootstrapping is failing.  the 
-> section:
-> 
-> # Install the kernel headers to the first stage gcc include dir if necessary
-> if [ ! -f /home/joey/buildroot/build_i686/staging_dir/include/linux/version.h ] ; then \
->         cp -pLR /home/joey/buildroot/toolchain_build_i686/linux/include/asm /home/joey/buildroot/toolchain_build_i686/uClibc_dev/usr/include/ ; \
->         cp -pLR /home/joey/buildroot/toolchain_build_i686/linux/include/linux /home/joey/buildroot/toolchain_build_i686/uClibc_dev/usr/include/ ; \
->         [ -d /home/joey/buildroot/toolchain_build_i686/linux/include/asm-generic ] && \
->         cp -pLR /home/joey/buildroot/toolchain_build_i686/linux/include/asm-generic /home/joey/buildroot/toolchain_build_i686/uClibc_dev/usr/include/ ; \
-> fi;
-> 
-> looks wrong.  i am guessing that the destination for the copies should be 
-> the staging dir, but i'm not sure.  any input?
-> _______________________________________________
-> buildroot mailing list
-> buildroot at uclibc.org
-> http://busybox.net/mailman/listinfo/buildroot
-> 
+
+Modified:
+   trunk/buildroot/toolchain/uClibc/uclibc.mk
+
+
+Changeset:
+Modified: trunk/buildroot/toolchain/uClibc/uclibc.mk
+===================================================================
+--- trunk/buildroot/toolchain/uClibc/uclibc.mk	2006-12-14 00:37:57 UTC (rev 16915)
++++ trunk/buildroot/toolchain/uClibc/uclibc.mk	2006-12-14 02:50:58 UTC (rev 16916)
+@@ -178,8 +178,10 @@
+ 	if [ ! -f $(STAGING_DIR)/include/linux/version.h ] ; then \
+ 		cp -pLR $(LINUX_HEADERS_DIR)/include/asm $(TOOL_BUILD_DIR)/uClibc_dev/usr/include/ ; \
+ 		cp -pLR $(LINUX_HEADERS_DIR)/include/linux $(TOOL_BUILD_DIR)/uClibc_dev/usr/include/ ; \
+-		[ -d $(LINUX_HEADERS_DIR)/include/asm-generic ] && \
+-		cp -pLR $(LINUX_HEADERS_DIR)/include/asm-generic $(TOOL_BUILD_DIR)/uClibc_dev/usr/include/ ; \
++		if [ -d $(LINUX_HEADERS_DIR)/include/asm-generic ] ; then \
++			cp -pLR $(LINUX_HEADERS_DIR)/include/asm-generic \
++				$(TOOL_BUILD_DIR)/uClibc_dev/usr/include/ ; \
++		fi; \
+ 	fi;
+ 	touch $(UCLIBC_DIR)/.configured
+ 
+@@ -212,8 +214,10 @@
+ 	if [ ! -f $(STAGING_DIR)/include/linux/version.h ] ; then \
+ 		cp -pLR $(LINUX_HEADERS_DIR)/include/asm $(STAGING_DIR)/include/ ; \
+ 		cp -pLR $(LINUX_HEADERS_DIR)/include/linux $(STAGING_DIR)/include/ ; \
+-		[ -d $(LINUX_HEADERS_DIR)/include/asm-generic ] && \
+-		cp -pLR $(LINUX_HEADERS_DIR)/include/asm-generic $(STAGING_DIR)/include/ ; \
++		if [ -d $(LINUX_HEADERS_DIR)/include/asm-generic ] ; then \
++			cp -pLR $(LINUX_HEADERS_DIR)/include/asm-generic \
++				$(STAGING_DIR)/include/ ; \
++		fi; \
+ 	fi;
+ 	# Build the host utils.  Need to add an install target...
+ 	$(MAKE1) -C $(UCLIBC_DIR)/utils \
+@@ -280,8 +284,10 @@
+ 	if [ ! -f $(TARGET_DIR)/usr/include/linux/version.h ] ; then \
+ 		cp -pLR $(LINUX_HEADERS_DIR)/include/asm $(TARGET_DIR)/usr/include/ ; \
+ 		cp -pLR $(LINUX_HEADERS_DIR)/include/linux $(TARGET_DIR)/usr/include/ ; \
+-		[ -d $(LINUX_HEADERS_DIR)/include/asm-generic ] && \
+-		cp -pLR $(LINUX_HEADERS_DIR)/include/asm-generic $(TARGET_DIR)/usr/include/ ; \
++		if [ -d $(LINUX_HEADERS_DIR)/include/asm-generic ] ; then \
++			cp -pLR $(LINUX_HEADERS_DIR)/include/asm-generic \
++				$(TARGET_DIR)/usr/include/ ; \
++		fi; \
+ 	fi;
+ 	touch -c $(TARGET_DIR)/usr/lib/libc.a
+ 
