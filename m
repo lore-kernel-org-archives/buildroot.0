@@ -1,29 +1,23 @@
-From: Bernhard Fischer <rep.nop@aon.at>
-Date: Thu, 14 Dec 2006 16:11:17 +0100
-Subject: [Buildroot] svn commit: trunk/buildroot/package:  vsftpd
-In-Reply-To: <20061214142351.244B648579@busybox.net>
-References: <20061214142351.244B648579@busybox.net>
-Message-ID: <20061214151117.GA1714@aon.at>
+From: Ulrich Hecht <uli@suse.de>
+Date: Thu, 14 Dec 2006 16:14:53 +0100
+Subject: [Buildroot] [patch] asterisk URL update
+Message-ID: <200612141614.54428.uli@suse.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Thu, Dec 14, 2006 at 06:23:51AM -0800, aldot at uclibc.org wrote:
->Author: aldot
->Date: 2006-12-14 06:23:50 -0800 (Thu, 14 Dec 2006)
->New Revision: 16920
->
->Log:
->- Add skeleton for vsftpd, an FTP daemon.
->  sysdeputil needs treatment, perhaps it get's Claudio Leonel started
->
->
->Added:
->   trunk/buildroot/package/vsftpd/
->   trunk/buildroot/package/vsftpd/Config.in
->   trunk/buildroot/package/vsftpd/vsftpd-2.0.5-uclibc_lfs.patch
->   trunk/buildroot/package/vsftpd/vsftpd.mk
+Hi!
 
-There :)
+1.2.0-beta1 has moved.
+
+CU
+Uli
+-------------- next part --------------
+A non-text attachment was scrubbed...
+Name: asterisk.patch
+Type: text/x-diff
+Size: 621 bytes
+Desc: not available
+Url : http://busybox.net/lists/buildroot/attachments/20061214/2e7a62e6/attachment.bin 
