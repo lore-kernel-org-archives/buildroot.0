@@ -1,38 +1,28 @@
 From: MikeW <mw_phil@yahoo.co.uk>
-Date: Thu, 14 Dec 2006 09:29:52 +0000 (UTC)
-Subject: [Buildroot] Using external toolchain / toolchain as package
-References: <loom.20061213T195208-342@post.gmane.org>
-Message-ID: <loom.20061214T102900-433@post.gmane.org>
+Date: Thu, 14 Dec 2006 09:40:53 +0000 (UTC)
+Subject: [Buildroot]
+	=?utf-8?q?Impossible_to_build_EABI_ARM_gcc_toolchain?=
+	=?utf-8?q?=09using=09Buildroot_=3F?=
+References: <loom.20061129T130728-811@post.gmane.org>
+	<1164848869.23643.60.camel@dv>
+Message-ID: <loom.20061214T103502-915@post.gmane.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-MikeW <mw_phil@...> writes:
+Pavel Roskin <proski@...> writes:
 
-> 
-> Buildroot cannot build a required toolchain, but I would still like
-> to use it to build everything else.
-> 
-> Is there a preferred way to disable building the toolchain, and to set
-> Buildroot to use an external toolchain instead ?
-> 
-> (This is 'inside-out' from the BR docs which say how to use the BR toolchain
-> from outside.)
-> 
-> Looking at the top-level Makefile, this looks as if it would involve
-> edits to the file(s).
-> 
-> Regards,
-> MikeW
-> 
+> Maybe you can fix it.  You can try another compiler.
 
-On a related subject, it might be useful if a toolchain could be installed
-from a (special) package - this would allow prebuilt toolchains, or other
-source packages (the one I'm looking at is the ARM EABI one from CodeSourcery).
+Unfortunately, Buldroot gcc-4.1.1 which includes ARM EABI support won't build
+the 2.6.10 kernel we are using - fails in the get_user macro in uaccess.h.
 
-Maybe it's all in there now, and I just need to look ;-)
+Patch that, something else breaks in a similar way due to the compiler
+breaking code that worked under gcc-3.4.x (it needs a switch to turn this off!)
+
+The joys of bazaar development - grrr !
 
 Regards,
 MikeW
