@@ -1,35 +1,54 @@
-From: aldot at uclibc.org <aldot@uclibc.org>
-Date: Thu, 14 Dec 2006 06:32:33 -0800 (PST)
-Subject: [Buildroot] svn commit: trunk/buildroot/package/module-init-tools
-Message-ID: <20061214143233.2B64E48590@busybox.net>
+From: julien.boibessot at free.fr <julien.boibessot@free.fr>
+Date: Thu, 14 Dec 2006 15:57:38 +0100
+Subject: [Buildroot] FTP server for embedded application
+	(uClibc/buildroot)
+In-Reply-To: <4581501E.6080501@elaxys.com.br>
+References: <4581501E.6080501@elaxys.com.br>
+Message-ID: <1166108258.45816662218c4@imp6-g19.free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Author: aldot
-Date: 2006-12-14 06:32:32 -0800 (Thu, 14 Dec 2006)
-New Revision: 16921
+Hi Claudio,
 
-Log:
-- pass the correct compiler in
+I'm using pure-ftpd and it's working fine for me (but it's not the smallest
+existing one).
+
+Here is a preliminary patch I wanted to post on buildroot mailing list.
+Could you give it a try and help me to integrate it in buildroot ?
+
+Thanks !
+Julien
+
+Quoting Claudio Leonel <cls@elaxys.com.br>:
+
+> Hi,
+>
+> Sorry if this is somewhat off-topic,
+> but I am looking for a small FTP server
+> with basic functionality that compiles OK
+> with uClibc and has very few dependencies on
+> other libraries.
+> I didn't find any in buildroot standard
+> packages.
+> Do you have sugestions ?
+>
+> Best regards,
+> Claudio Leonel
+>
+> _______________________________________________
+> buildroot mailing list
+> buildroot at uclibc.org
+> http://busybox.net/mailman/listinfo/buildroot
+>
 
 
-Modified:
-   trunk/buildroot/package/module-init-tools/module-init-tools.mk
-
-
-Changeset:
-Modified: trunk/buildroot/package/module-init-tools/module-init-tools.mk
-===================================================================
---- trunk/buildroot/package/module-init-tools/module-init-tools.mk	2006-12-14 14:23:50 UTC (rev 16920)
-+++ trunk/buildroot/package/module-init-tools/module-init-tools.mk	2006-12-14 14:32:32 UTC (rev 16921)
-@@ -77,6 +77,7 @@
- 
- $(MODULE_INIT_TOOLS_DIR2)/.configured: $(MODULE_INIT_TOOLS_DIR2)/.source
- 	(cd $(MODULE_INIT_TOOLS_DIR2); \
-+		CC="$(HOSTCC)" \
- 		./configure \
- 		--target=$(GNU_TARGET_NAME) \
- 		--host=$(GNU_HOST_NAME) \
+-------------- next part --------------
+A non-text attachment was scrubbed...
+Name: pure-ftpd.diff
+Type: text/x-patch
+Size: 5608 bytes
+Desc: not available
+Url : http://busybox.net/lists/buildroot/attachments/20061214/9d138b04/attachment.bin 
