@@ -1,7 +1,7 @@
 From: andersen at uclibc.org <andersen@uclibc.org>
-Date: Wed, 13 Dec 2006 18:50:59 -0800 (PST)
-Subject: [Buildroot] svn commit: trunk/buildroot/toolchain/uClibc
-Message-ID: <20061214025059.9C7A048573@busybox.net>
+Date: Wed, 13 Dec 2006 21:40:06 -0800 (PST)
+Subject: [Buildroot] svn commit: trunk/buildroot/package/iptables
+Message-ID: <20061214054006.2A4B748579@busybox.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -9,58 +9,46 @@ Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
 Author: andersen
-Date: 2006-12-13 18:50:58 -0800 (Wed, 13 Dec 2006)
-New Revision: 16916
+Date: 2006-12-13 21:40:06 -0800 (Wed, 13 Dec 2006)
+New Revision: 16917
 
 Log:
-don't error out when asm-generic is absent
+iptables seems to not be safe for 'make -jN' for any N>1
 
 
 Modified:
-   trunk/buildroot/toolchain/uClibc/uclibc.mk
+   trunk/buildroot/package/iptables/iptables.mk
 
 
 Changeset:
-Modified: trunk/buildroot/toolchain/uClibc/uclibc.mk
+Modified: trunk/buildroot/package/iptables/iptables.mk
 ===================================================================
---- trunk/buildroot/toolchain/uClibc/uclibc.mk	2006-12-14 00:37:57 UTC (rev 16915)
-+++ trunk/buildroot/toolchain/uClibc/uclibc.mk	2006-12-14 02:50:58 UTC (rev 16916)
-@@ -178,8 +178,10 @@
- 	if [ ! -f $(STAGING_DIR)/include/linux/version.h ] ; then \
- 		cp -pLR $(LINUX_HEADERS_DIR)/include/asm $(TOOL_BUILD_DIR)/uClibc_dev/usr/include/ ; \
- 		cp -pLR $(LINUX_HEADERS_DIR)/include/linux $(TOOL_BUILD_DIR)/uClibc_dev/usr/include/ ; \
--		[ -d $(LINUX_HEADERS_DIR)/include/asm-generic ] && \
--		cp -pLR $(LINUX_HEADERS_DIR)/include/asm-generic $(TOOL_BUILD_DIR)/uClibc_dev/usr/include/ ; \
-+		if [ -d $(LINUX_HEADERS_DIR)/include/asm-generic ] ; then \
-+			cp -pLR $(LINUX_HEADERS_DIR)/include/asm-generic \
-+				$(TOOL_BUILD_DIR)/uClibc_dev/usr/include/ ; \
-+		fi; \
- 	fi;
- 	touch $(UCLIBC_DIR)/.configured
+--- trunk/buildroot/package/iptables/iptables.mk	2006-12-14 02:50:58 UTC (rev 16916)
++++ trunk/buildroot/package/iptables/iptables.mk	2006-12-14 05:40:06 UTC (rev 16917)
+@@ -26,13 +26,13 @@
  
-@@ -212,8 +214,10 @@
- 	if [ ! -f $(STAGING_DIR)/include/linux/version.h ] ; then \
- 		cp -pLR $(LINUX_HEADERS_DIR)/include/asm $(STAGING_DIR)/include/ ; \
- 		cp -pLR $(LINUX_HEADERS_DIR)/include/linux $(STAGING_DIR)/include/ ; \
--		[ -d $(LINUX_HEADERS_DIR)/include/asm-generic ] && \
--		cp -pLR $(LINUX_HEADERS_DIR)/include/asm-generic $(STAGING_DIR)/include/ ; \
-+		if [ -d $(LINUX_HEADERS_DIR)/include/asm-generic ] ; then \
-+			cp -pLR $(LINUX_HEADERS_DIR)/include/asm-generic \
-+				$(STAGING_DIR)/include/ ; \
-+		fi; \
- 	fi;
- 	# Build the host utils.  Need to add an install target...
- 	$(MAKE1) -C $(UCLIBC_DIR)/utils \
-@@ -280,8 +284,10 @@
- 	if [ ! -f $(TARGET_DIR)/usr/include/linux/version.h ] ; then \
- 		cp -pLR $(LINUX_HEADERS_DIR)/include/asm $(TARGET_DIR)/usr/include/ ; \
- 		cp -pLR $(LINUX_HEADERS_DIR)/include/linux $(TARGET_DIR)/usr/include/ ; \
--		[ -d $(LINUX_HEADERS_DIR)/include/asm-generic ] && \
--		cp -pLR $(LINUX_HEADERS_DIR)/include/asm-generic $(TARGET_DIR)/usr/include/ ; \
-+		if [ -d $(LINUX_HEADERS_DIR)/include/asm-generic ] ; then \
-+			cp -pLR $(LINUX_HEADERS_DIR)/include/asm-generic \
-+				$(TARGET_DIR)/usr/include/ ; \
-+		fi; \
- 	fi;
- 	touch -c $(TARGET_DIR)/usr/lib/libc.a
+ $(IPTABLES_BUILD_DIR)/iptables: $(IPTABLES_BUILD_DIR)/.configured
+ 	$(TARGET_CONFIGURE_OPTS) \
+-	$(MAKE) -C $(IPTABLES_BUILD_DIR) \
++	$(MAKE1) -C $(IPTABLES_BUILD_DIR) \
+ 		KERNEL_DIR=$(LINUX_DIR) PREFIX=/usr \
+ 		CC=$(TARGET_CC) COPT_FLAGS="$(TARGET_CFLAGS)"
  
+ $(TARGET_DIR)/usr/sbin/iptables: $(IPTABLES_BUILD_DIR)/iptables
+ 	$(TARGET_CONFIGURE_OPTS) \
+-	$(MAKE) -C $(IPTABLES_BUILD_DIR) \
++	$(MAKE1) -C $(IPTABLES_BUILD_DIR) \
+ 		KERNEL_DIR=$(LINUX_DIR) PREFIX=/usr \
+ 		CC=$(TARGET_CC) COPT_FLAGS="$(TARGET_CFLAGS)" \
+ 		DESTDIR=$(TARGET_DIR) install
+@@ -45,8 +45,8 @@
+ iptables-source: $(DL_DIR)/$(IPTABLES_SOURCE)
+ 
+ iptables-clean:
+-	$(MAKE) DESTDIR=$(TARGET_DIR) CC=$(TARGET_CC) -C $(IPTABLES_BUILD_DIR) uninstall
+-	-$(MAKE) -C $(IPTABLES_BUILD_DIR) clean
++	$(MAKE1) DESTDIR=$(TARGET_DIR) CC=$(TARGET_CC) -C $(IPTABLES_BUILD_DIR) uninstall
++	-$(MAKE1) -C $(IPTABLES_BUILD_DIR) clean
+ 
+ iptables-dirclean:
+ 	rm -rf $(IPTABLES_BUILD_DIR)
