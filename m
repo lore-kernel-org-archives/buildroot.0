@@ -1,27 +1,44 @@
 From: Joe Pruett <joey@clean.q7.com>
-Date: Wed, 13 Dec 2006 16:41:02 -0800 (PST)
+Date: Wed, 13 Dec 2006 16:51:45 -0800 (PST)
 Subject: [Buildroot] issues with svn version
-Message-ID: <Pine.LNX.4.64.0612131637012.24865@q7.q7.com>
+In-Reply-To: <Pine.LNX.4.64.0612131637012.24865@q7.q7.com>
+References: <Pine.LNX.4.64.0612131637012.24865@q7.q7.com>
+Message-ID: <Pine.LNX.4.64.0612131649100.24865@q7.q7.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-a clean svn build immediately fails because linux-libc-headers can't be 
-found in the dl directory.  i did a make -k to see if it would appear 
-later, but it didn't.  so i manually tracked it down and wget'ed it.
+following up to myself.  i changed the destination to be the staging area, 
+but it still failed.  looking closer i see that the issue was the compound 
+command to check for the existence of asm-generic is the last part of the 
+if clause so it becomes the return value and since asm-generic doesn't 
+exist for me, that is false.  for now i have hacked a - on the front of 
+the if, but that's probably not the best solution, but things are building 
+much better now.  not finished yet, but things are flying by...
 
-now it builds much further, but the uclibc bootstrapping is failing.  the 
-section:
+On Wed, 13 Dec 2006, Joe Pruett wrote:
 
-# Install the kernel headers to the first stage gcc include dir if necessary
-if [ ! -f /home/joey/buildroot/build_i686/staging_dir/include/linux/version.h ] ; then \
-        cp -pLR /home/joey/buildroot/toolchain_build_i686/linux/include/asm /home/joey/buildroot/toolchain_build_i686/uClibc_dev/usr/include/ ; \
-        cp -pLR /home/joey/buildroot/toolchain_build_i686/linux/include/linux /home/joey/buildroot/toolchain_build_i686/uClibc_dev/usr/include/ ; \
-        [ -d /home/joey/buildroot/toolchain_build_i686/linux/include/asm-generic ] && \
-        cp -pLR /home/joey/buildroot/toolchain_build_i686/linux/include/asm-generic /home/joey/buildroot/toolchain_build_i686/uClibc_dev/usr/include/ ; \
-fi;
-
-looks wrong.  i am guessing that the destination for the copies should be 
-the staging dir, but i'm not sure.  any input?
+> a clean svn build immediately fails because linux-libc-headers can't be 
+> found in the dl directory.  i did a make -k to see if it would appear 
+> later, but it didn't.  so i manually tracked it down and wget'ed it.
+> 
+> now it builds much further, but the uclibc bootstrapping is failing.  the 
+> section:
+> 
+> # Install the kernel headers to the first stage gcc include dir if necessary
+> if [ ! -f /home/joey/buildroot/build_i686/staging_dir/include/linux/version.h ] ; then \
+>         cp -pLR /home/joey/buildroot/toolchain_build_i686/linux/include/asm /home/joey/buildroot/toolchain_build_i686/uClibc_dev/usr/include/ ; \
+>         cp -pLR /home/joey/buildroot/toolchain_build_i686/linux/include/linux /home/joey/buildroot/toolchain_build_i686/uClibc_dev/usr/include/ ; \
+>         [ -d /home/joey/buildroot/toolchain_build_i686/linux/include/asm-generic ] && \
+>         cp -pLR /home/joey/buildroot/toolchain_build_i686/linux/include/asm-generic /home/joey/buildroot/toolchain_build_i686/uClibc_dev/usr/include/ ; \
+> fi;
+> 
+> looks wrong.  i am guessing that the destination for the copies should be 
+> the staging dir, but i'm not sure.  any input?
+> _______________________________________________
+> buildroot mailing list
+> buildroot at uclibc.org
+> http://busybox.net/mailman/listinfo/buildroot
+> 
