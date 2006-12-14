@@ -1,34 +1,23 @@
-From: Bernhard Fischer <rep.nop@aon.at>
-Date: Thu, 14 Dec 2006 17:03:03 +0100
-Subject: [Buildroot] [patch] mpg123 build issues
-In-Reply-To: <200612141653.07781.uli@suse.de>
-References: <200612141602.15413.uli@suse.de> <20061214152905.GA1993@aon.at>
-	<200612141653.07781.uli@suse.de>
-Message-ID: <20061214160303.GA2577@aon.at>
+From: Ulrich Hecht <uli@suse.de>
+Date: Thu, 14 Dec 2006 17:06:36 +0100
+Subject: [Buildroot] svn commit: trunk/buildroot/package/mpg123
+In-Reply-To: <20061214155533.BD78048609@busybox.net>
+References: <20061214155533.BD78048609@busybox.net>
+Message-ID: <200612141706.37031.uli@suse.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Thu, Dec 14, 2006 at 04:53:07PM +0100, Ulrich Hecht wrote:
->Hi!
->
->On Thursday 14 December 2006 16:29, Bernhard Fischer wrote:
->> On Thu, Dec 14, 2006 at 04:02:15PM +0100, Ulrich Hecht wrote:
->> >Hi!
->> >
->> >The current mpg123 package
->> >
->> >- ignores TARGET_CC (overwritten in Makefile)
->> >- ignores TARGET_CFLAGS
->> >- is hardcoded to use the i386 target
->> >
->> >The attached patch fixes these issues.
->>
->> May i ask you to verify that a) an mpg123 bug exists in the
->> bug-database and if so b) incooperate possible additional fixes?
->
->I couldn't find any.
+Hi!
 
-Thanks for checking. Merged.
+On Thursday 14 December 2006 16:55, aldot at uclibc.org wrote:
+> Modified:
+>    trunk/buildroot/package/mpg123/mpg123.mk
+
+The Makefile patch (mpg123-cross.patch) is missing. Without it, this 
+won't do any good.
+
+CU
+Uli
