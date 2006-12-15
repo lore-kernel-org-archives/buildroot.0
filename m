@@ -1,37 +1,34 @@
-From: Ulrich Hecht <uli@suse.de>
-Date: Fri, 15 Dec 2006 16:04:20 +0100
-Subject: [Buildroot] [patch] file update, fixes
-In-Reply-To: <20061215143107.GC13757@aon.at>
-References: <200612151429.50225.uli@suse.de> <20061215143107.GC13757@aon.at>
-Message-ID: <200612151604.20630.uli@suse.de>
+From: Bernhard Fischer <rep.nop@aon.at>
+Date: Fri, 15 Dec 2006 16:10:39 +0100
+Subject: [Buildroot] Problem with building sudo
+In-Reply-To: <4579D9F3.1070400@fortunet.com>
+References: <4579D9F3.1070400@fortunet.com>
+Message-ID: <20061215151039.GA14633@aon.at>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi!
-
-On Friday 15 December 2006 15:31, Bernhard Fischer wrote:
-> Another candidate.
+On Fri, Dec 08, 2006 at 01:32:35PM -0800, Boris Itkis (Linux) wrote:
+>sudu.mk has a problem for building:
 >
-> FILE_SOURCE_DIR:=$(BUILD_DIR)/file-$(FILE_VER)
-> FILE_DIR1:=$(BUILD_DIR)/file-$(FILE_VER)-target
-> FILE_DIR2:=$(TOOL_BUILD_DIR)/file-$(FILE_VER)
+>$(TARGET_DIR)/usr/bin/sudo
 >
-> Don't forget to CC="$(HOSTCC)" for the -host version.
+>it echo's the command to install sudu instead of running it.
+
+I'll look into this.
 >
-> Please resend? :)
+>It generally does not stop compile because on distributions like fedora 
+>because "touch -c" has a exit code of 0 even if the file does no exist.
 
-Alright, alright. But I would sure like to know what a "host file" is 
-good for. I don't see anything that depends on it.
+That's a bug.
+Point them to
+http://www.opengroup.org/onlinepubs/009695399/utilities/touch.html#tag_04_143_18
 
-CU
-Uli
--------------- next part --------------
-A non-text attachment was scrubbed...
-Name: file.patch
-Type: text/x-diff
-Size: 2710 bytes
-Desc: not available
-Url : http://busybox.net/lists/buildroot/attachments/20061215/62370ec5/attachment.bin 
+which reads
+"
+At least one historical implementation of touch incremented the exit
+code if -c was specified and the file did not exist. This volume of IEEE
+Std 1003.1-2001 requires exit status zero if no errors occur.
+"
