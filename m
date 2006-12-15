@@ -1,26 +1,35 @@
-From: Ulrich Hecht <uli@suse.de>
-Date: Fri, 15 Dec 2006 15:31:04 +0100
-Subject: [Buildroot] svn commit: trunk/buildroot/toolchain/uClibc
-In-Reply-To: <20061215133926.E32D74857D@busybox.net>
-References: <20061215133926.E32D74857D@busybox.net>
-Message-ID: <200612151531.04658.uli@suse.de>
+From: aldot at uclibc.org <aldot@uclibc.org>
+Date: Fri, 15 Dec 2006 06:37:02 -0800 (PST)
+Subject: [Buildroot] svn commit: trunk/buildroot/package
+Message-ID: <20061215143702.D709D4858A@busybox.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi!
+Author: aldot
+Date: 2006-12-15 06:37:02 -0800 (Fri, 15 Dec 2006)
+New Revision: 16945
 
-On Friday 15 December 2006 14:39, aldot at uclibc.org wrote:
-> Log:
-> - Only care about the locale stuff if we have locale in the first
-> place.
-[...]
-> +ifneq ($(UCLIBC_HAS_LOCALE),)
+Log:
+- pull bsdiff's Config in
 
-I guess that should have been BR2_ENABLE_LOCALE. UCLIBC_HAS_LOCALE is 
-from the uClibc config file.
 
-CU
-Uli
+Modified:
+   trunk/buildroot/package/Config.in
+
+
+Changeset:
+Modified: trunk/buildroot/package/Config.in
+===================================================================
+--- trunk/buildroot/package/Config.in	2006-12-15 14:18:30 UTC (rev 16944)
++++ trunk/buildroot/package/Config.in	2006-12-15 14:37:02 UTC (rev 16945)
+@@ -35,6 +35,7 @@
+ source "package/bison/Config.in"
+ source "package/boa/Config.in"
+ source "package/bridge/Config.in"
++source "package/bsdiff/Config.in"
+ source "package/customize/Config.in"
+ source "package/dhcp/Config.in"
+ source "package/dialog/Config.in"
