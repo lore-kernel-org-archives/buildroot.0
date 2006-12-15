@@ -1,36 +1,36 @@
-From: aldot at uclibc.org <aldot@uclibc.org>
-Date: Fri, 15 Dec 2006 06:05:52 -0800 (PST)
-Subject: [Buildroot] svn commit: trunk/buildroot/package/iostat
-Message-ID: <20061215140552.D7C2D4858F@busybox.net>
+From: Ulrich Hecht <uli@suse.de>
+Date: Fri, 15 Dec 2006 15:07:06 +0100
+Subject: [Buildroot] [patch] fakeroot does not apply patches
+In-Reply-To: <20061215134537.GA13485@aon.at>
+References: <200612151417.58106.uli@suse.de> <20061215134537.GA13485@aon.at>
+Message-ID: <200612151507.06146.uli@suse.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Author: aldot
-Date: 2006-12-15 06:05:51 -0800 (Fri, 15 Dec 2006)
-New Revision: 16943
+Hi!
 
-Log:
-- Update URL. Thanks to Ulrich Hecht.
+On Friday 15 December 2006 14:45, Bernhard Fischer wrote:
+> Several packages unpack their sources twice. These should ideally be
+> build out of tree for one make (i'd generally do it for the dir2, i.e.
+> the host).
+>
+> Uli, could you perhaps try if fakeroot builds out of tree? Several
+> packages may not support this and should receive upstream-fixes to
+> make them behave, IMHO.
 
+Building one in and one out of tree does not work (configure complains if 
+you try to use an unclean tree for external compilation). Building both 
+versions out of tree works though, see the attached patch.
 
-Modified:
-   trunk/buildroot/package/iostat/iostat.mk
-
-
-Changeset:
-Modified: trunk/buildroot/package/iostat/iostat.mk
-===================================================================
---- trunk/buildroot/package/iostat/iostat.mk	2006-12-15 13:57:07 UTC (rev 16942)
-+++ trunk/buildroot/package/iostat/iostat.mk	2006-12-15 14:05:51 UTC (rev 16943)
-@@ -5,7 +5,7 @@
- #############################################################
- IOSTAT_VER:=2.2
- IOSTAT_SOURCE:=iostat-$(IOSTAT_VER).tar.gz
--IOSTAT_SITE:=http://linux.inet.hr
-+IOSTAT_SITE:=http://linux.inet.hr/files
- IOSTAT_DIR:=$(BUILD_DIR)/iostat-$(IOSTAT_VER)
- IOSTAT_BINARY:=iostat
- IOSTAT_TARGET_BINARY:=usr/bin/iostat
+CU
+Uli
+-------------- next part --------------
+A non-text attachment was scrubbed...
+Name: fakeroot.patch
+Type: text/x-diff
+Size: 2589 bytes
+Desc: not available
+Url : http://busybox.net/lists/buildroot/attachments/20061215/6a1510e2/attachment.bin 
