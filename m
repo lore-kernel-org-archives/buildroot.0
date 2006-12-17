@@ -1,21 +1,30 @@
-From: Robin Mordasiewicz <rmordasiewicz@samuelmanutech.com>
-Date: Fri, 15 Dec 2006 15:14:34 -0500 (EST)
-Subject: [Buildroot] kernel compile problem
-Message-ID: <Pine.LNX.4.64.0612151513000.9011@smtcorms05.samuelmanutech.com>
+From: mike <wtf62@rovoreed.com>
+Date: Sun, 17 Dec 2006 10:35:46 +0000
+Subject: [Buildroot] Command not found error
+Message-ID: <1166351746.5253.11.camel@glynys>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-I am using the snapshot from yesterday
 
-I had two failures
+I've recently upgraded my buildroot using "svn update". When I now try
+to rebuild the toolchain it ends with the following error...
 
-1. the version of file which the make file looks for is not available on 
-that ftp site. I uipdated it to 4.19
+make[3]: i386-linux-uclibc-ar: Command not found
+make[3]: *** [libgcc.a] Error 127
+make[3]: Leaving directory `/home/mike/buildroot/toolchain
+make[2]: *** [libgcc.a] Error 2
+make[2]: Leaving directory `/home/mike/buildroot/toolchain
+make[1]: *** [all-gcc] Error 2
+make[1]: Leaving directory `/home/mike/buildroot/toolchain
+make: *** [/home/mike/buildroot/toolchain_build_i386/gcc-4
+[mike at glynys buildroot]$ 
 
-2. I had to apply this kernel patch
-http://www.kernel.org/pub/linux/devel/binutils/linux-2.6-seg-5.patch
+I'm guessing that this is something to do with a new feature in "Build
+Options". I'm using the default setting of "linux-uclibc" for GNU target
+suffix. Not sure where the "i386" is coming from but I don't have
+anything called *uclibc-ar* on my system.
 
--- 
+Can anyone give me a clue how to fix this problem. Thanks
