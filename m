@@ -1,7 +1,7 @@
 From: aldot at uclibc.org <aldot@uclibc.org>
-Date: Mon, 18 Dec 2006 06:10:47 -0800 (PST)
-Subject: [Buildroot] svn commit: trunk/buildroot/target/device/x86/i386
-Message-ID: <20061218141047.8584FC8021@busybox.net>
+Date: Mon, 18 Dec 2006 07:23:55 -0800 (PST)
+Subject: [Buildroot] svn commit: trunk/buildroot/package/iptables
+Message-ID: <20061218152355.8D9264858D@busybox.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -9,28 +9,45 @@ Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
 Author: aldot
-Date: 2006-12-18 06:10:46 -0800 (Mon, 18 Dec 2006)
-New Revision: 16991
+Date: 2006-12-18 07:23:54 -0800 (Mon, 18 Dec 2006)
+New Revision: 16993
 
 Log:
-- copy the final kernel (and System.map) to boot/
+- pass the correct kernel headers in and improve the -clean target.
 
 
 Modified:
-   trunk/buildroot/target/device/x86/i386/linux26.mk
+   trunk/buildroot/package/iptables/iptables.mk
 
 
 Changeset:
-Modified: trunk/buildroot/target/device/x86/i386/linux26.mk
+Modified: trunk/buildroot/package/iptables/iptables.mk
 ===================================================================
---- trunk/buildroot/target/device/x86/i386/linux26.mk	2006-12-18 13:48:02 UTC (rev 16990)
-+++ trunk/buildroot/target/device/x86/i386/linux26.mk	2006-12-18 14:10:46 UTC (rev 16991)
-@@ -100,7 +100,7 @@
- 	$(MAKE) $(LINUX26_MAKE_FLAGS) -C $(LINUX26_DIR) menuconfig
- 	-[ -f $(LINUX26_DIR)/.config ] && touch $(LINUX26_DIR)/.configured
+--- trunk/buildroot/package/iptables/iptables.mk	2006-12-18 14:20:01 UTC (rev 16992)
++++ trunk/buildroot/package/iptables/iptables.mk	2006-12-18 15:23:54 UTC (rev 16993)
+@@ -27,13 +27,13 @@
+ $(IPTABLES_BUILD_DIR)/iptables: $(IPTABLES_BUILD_DIR)/.configured
+ 	$(TARGET_CONFIGURE_OPTS) \
+ 	$(MAKE1) -C $(IPTABLES_BUILD_DIR) \
+-		KERNEL_DIR=$(LINUX_DIR) PREFIX=/usr \
++		KERNEL_DIR=$(LINUX_HEADERS_DIR) PREFIX=/usr \
+ 		CC=$(TARGET_CC) COPT_FLAGS="$(TARGET_CFLAGS)"
  
--linux26: cross-depmod26 $(TARGET_DIR)/lib/modules/$(LINUX26_VERSION)/modules.dep
-+linux26: cross-depmod26 $(TARGET_DIR)/lib/modules/$(LINUX26_VERSION)/modules.dep $(TARGET_DIR)/boot/$(LINUX26_BINLOC)
+ $(TARGET_DIR)/usr/sbin/iptables: $(IPTABLES_BUILD_DIR)/iptables
+ 	$(TARGET_CONFIGURE_OPTS) \
+ 	$(MAKE1) -C $(IPTABLES_BUILD_DIR) \
+-		KERNEL_DIR=$(LINUX_DIR) PREFIX=/usr \
++		KERNEL_DIR=$(LINUX_HEADERS_DIR) PREFIX=/usr \
+ 		CC=$(TARGET_CC) COPT_FLAGS="$(TARGET_CFLAGS)" \
+ 		DESTDIR=$(TARGET_DIR) install
+ 	$(STRIP) $(TARGET_DIR)/usr/sbin/iptables*
+@@ -45,8 +45,8 @@
+ iptables-source: $(DL_DIR)/$(IPTABLES_SOURCE)
  
- linux26-source: $(DL_DIR)/$(LINUX26_SOURCE)
+ iptables-clean:
+-	$(MAKE1) DESTDIR=$(TARGET_DIR) CC=$(TARGET_CC) -C $(IPTABLES_BUILD_DIR) uninstall
+ 	-$(MAKE1) -C $(IPTABLES_BUILD_DIR) clean
++	rm -rf $(TARGET_DIR)/usr/sbin/iptables* $(TARGET_DIR)/usr/lib/iptables
  
+ iptables-dirclean:
+ 	rm -rf $(IPTABLES_BUILD_DIR)
