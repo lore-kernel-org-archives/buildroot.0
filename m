@@ -1,22 +1,28 @@
-From: Robin Mordasiewicz <rmordasiewicz@samuelmanutech.com>
-Date: Tue, 19 Dec 2006 13:05:53 -0500 (EST)
-Subject: [Buildroot] Kernel Panic .....
-Message-ID: <Pine.LNX.4.64.0612191302220.31862@smtcorms05.samuelmanutech.com>
+From: Rafael A Barrero <rafa@linux.it>
+Date: Tue, 19 Dec 2006 12:10:17 -0800
+Subject: [Buildroot] Booting the rootfs ext2 image
+Message-ID: <7B808CFD-AB02-4E02-A220-CE241662C366@linux.it>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-I am trying to boot the image as an initrd filesystem over pxe, but I see 
-an error
-'Unpacking initramfs...<0>Kernel panic - not syncing: bad gzip magic numbers'
+Hi;
 
-in my pxelinux.cfg/default
+Now that I've successfully built a rootfs image that includes my  
+custom built kernel, I have a few questions about taking that rootfs  
+and actually running it on my dev. system. I've mounted the ext2 fs  
+as a loopback device and it looks great, but I'm looking for some  
+pointers on getting grub configured for that partition.
 
-label test
-   kernel linux-kernel-2.6.19.1-i386
-   append ramdisk_blocksize=4096 initrd=rootfs.i386.ext2 root=/dev/ram0 ramdisk_size=524288
+I selected grub during the buildroot configuration, but how do I go  
+about installing grub so that it boots properly?
+Once I copy this image to another disk, how will it be set as bootable?
+How do I configure grub within the loopback partition?
+What tools do you guys suggest for copying the FS to the new disk?  
+rsync? dd?
 
-Is there anything I am required to change to make this kernel and image 
-work over booting from pxe ?
+Thanks!
+
+-Rafael.
