@@ -1,29 +1,22 @@
-From: Bernhard Fischer <rep.nop@aon.at>
-Date: Tue, 19 Dec 2006 17:49:11 +0100
-Subject: [Buildroot] kernel compile problem
-In-Reply-To: <Pine.LNX.4.64.0612191120350.31862@smtcorms05.samuelmanutech.com>
-References: <Pine.LNX.4.64.0612151513000.9011@smtcorms05.samuelmanutech.com>
-	<Pine.LNX.4.64.0612191120350.31862@smtcorms05.samuelmanutech.com>
-Message-ID: <20061219164911.GA18730@aon.at>
+From: Robin Mordasiewicz <rmordasiewicz@samuelmanutech.com>
+Date: Tue, 19 Dec 2006 13:05:53 -0500 (EST)
+Subject: [Buildroot] Kernel Panic .....
+Message-ID: <Pine.LNX.4.64.0612191302220.31862@smtcorms05.samuelmanutech.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Tue, Dec 19, 2006 at 11:22:01AM -0500, Robin Mordasiewicz wrote:
->On Fri, 15 Dec 2006, Robin Mordasiewicz wrote:
->
->> 2. I had to apply this kernel patch
->> http://www.kernel.org/pub/linux/devel/binutils/linux-2.6-seg-5.patch
->
->I see a kernel-patches directory. Is it possible to drop the kernel patch 
->into that directory and have the ystem automatically patch the kernel, or 
->is there another way of doing this automatically, or am I to manually 
->apply the patch ?
+I am trying to boot the image as an initrd filesystem over pxe, but I see 
+an error
+'Unpacking initramfs...<0>Kernel panic - not syncing: bad gzip magic numbers'
 
-I don't see why you would need that patch unless you'd use old binutils
-or an anciant kernel.
+in my pxelinux.cfg/default
 
-If you think you need this patch, put it into that kernel-patches dir
-and recompile, it'll get applied automagically.
+label test
+   kernel linux-kernel-2.6.19.1-i386
+   append ramdisk_blocksize=4096 initrd=rootfs.i386.ext2 root=/dev/ram0 ramdisk_size=524288
+
+Is there anything I am required to change to make this kernel and image 
+work over booting from pxe ?
