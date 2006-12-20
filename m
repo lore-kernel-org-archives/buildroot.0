@@ -1,53 +1,45 @@
 From: Robin Mordasiewicz <rmordasiewicz@samuelmanutech.com>
-Date: Tue, 19 Dec 2006 23:47:54 -0500 (EST)
-Subject: [Buildroot] Kernel Panic .....
-In-Reply-To: <Pine.LNX.4.64.0612192039380.11555@q7.q7.com>
-References: <Pine.LNX.4.64.0612191302220.31862@smtcorms05.samuelmanutech.com>
-	<Pine.LNX.4.64.0612192336370.31862@smtcorms05.samuelmanutech.com>
-	<Pine.LNX.4.64.0612192039380.11555@q7.q7.com>
-Message-ID: <Pine.LNX.4.64.0612192344000.31862@smtcorms05.samuelmanutech.com>
+Date: Tue, 19 Dec 2006 23:52:25 -0500 (EST)
+Subject: [Buildroot] Booting the rootfs ext2 image
+In-Reply-To: <20061220043858.GA29988@reid1.localdomain>
+References: <7B808CFD-AB02-4E02-A220-CE241662C366@linux.it>
+	<Pine.LNX.4.64.0612192322530.31862@smtcorms05.samuelmanutech.com>
+	<20061220043858.GA29988@reid1.localdomain>
+Message-ID: <Pine.LNX.4.64.0612192348340.31862@smtcorms05.samuelmanutech.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Tue, 19 Dec 2006, Joe Pruett wrote:
-> On Tue, 19 Dec 2006, Robin Mordasiewicz wrote:
->> On Tue, 19 Dec 2006, Robin Mordasiewicz wrote:
+On Tue, 19 Dec 2006, don wrote:
+>> On Tue, 19 Dec 2006, Rafael A Barrero wrote:
 >>
->>> I am trying to boot the image as an initrd filesystem over pxe, but I see
->>> an error
->>> 'Unpacking initramfs...<0>Kernel panic - not syncing: bad gzip magic numbers'
->>>
->>> in my pxelinux.cfg/default
->>>
->>> label test
->>>   kernel linux-kernel-2.6.19.1-i386
->>>   append ramdisk_blocksize=4096 initrd=rootfs.i386.ext2 root=/dev/ram0 ramdisk_size=524288
->>>
->>> Is there anything I am required to change to make this kernel and image
->>> work over booting from pxe ?
->>
->> I needed to build some RAM disk drivers into the kernel.
+>>> Now that I've successfully built a rootfs image that includes my
+>>> custom built kernel, I have a few questions about taking that rootfs
+>>> and actually running it on my dev. system. I've mounted the ext2 fs
+>>> as a loopback device and it looks great, but I'm looking for some
+>>> pointers on getting grub configured for that partition.
 >
-> how exactly did you do that?  that is where i have finally gotten after
-> making that kernel-patches directory (as you also just posted) and fixing
-> the problem that grub no longer has a -19 version at debian.org (-20 seems
-> to be working).  i made an iso image and ran into the same kernel panic
-> because it seems to want a cpio image.  i have just rebuilt using the
-> linux26.config file instead of busybox.config and will be booting in a few
-> minutes to see how that goes...
+> I booted mine with PXE and then ran grub to install on to the CF card
+> in an IDE adapter.
+>
+> I believe you can install a disk or flash card onto your host and then
+> run grub there with arguments to install there instead of your main
+> hard drive.  But I didn't want to fight through that when I had PXE
+> working.
+>
+> It does not boot from the CF card.
 
-Not sure if I am following you. I think you may be getting the kernel 
-config and the busybox config confused. The documentation for customizing 
-busybox does not mention modifying the kernel, but what I did to customize 
-the kernel is something like the following.
+I am about to get to that point but I will be using a slightly different 
+aproach. I am building an installer for thinstation(sourceforge project) 
+which uses syslinux instead of grub or lilo.
 
-cd build_i386/linux-2.6.19.1
-cp .config .config.original
-make mrproper
-make menuconfig
-(set the kernel options you require)
-cd ../../
-make
+In your case I would expect it to work as well. Are you basically doing 
+something like the following ?
+
+1. fdisk the CF
+2. format the CF
+3. copy root filesystem including kernel etc. to CF
+4. chroot to new filesystem
+5. run grub installer
