@@ -1,44 +1,53 @@
-From: aldot at uclibc.org <aldot@uclibc.org>
-Date: Wed, 20 Dec 2006 06:41:05 -0800 (PST)
-Subject: [Buildroot] svn commit: trunk/buildroot/package/kexec
-Message-ID: <20061220144105.036A4485BD@busybox.net>
+From: Rory Slegtenhorst <rory.slegtenhorst@gmail.com>
+Date: Wed, 20 Dec 2006 16:02:48 +0100
+Subject: [Buildroot] Errors while building iproute2
+In-Reply-To: <5e15b0e10612200344u75903c18m80e72d5322cdc451@mail.gmail.com>
+References: <5e15b0e10612200344u75903c18m80e72d5322cdc451@mail.gmail.com>
+Message-ID: <5e15b0e10612200702j20318545k82a4d1b3fdb47189@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Author: aldot
-Date: 2006-12-20 06:41:04 -0800 (Wed, 20 Dec 2006)
-New Revision: 17014
+Fixed this by using a different version of flex.
 
-Log:
-- remove obsoleted dep on host-fakeroot
+Note:
+  SuSE 9.3 comes with flex 2.5.4 whilst SuSE 10.1 comes with flex 2.5.31.
+
+So for some reason this newer version breaks the iproute2 build...
+
+On 12/20/06, Rory Slegtenhorst <rory.slegtenhorst@gmail.com> wrote:
+> Hi,
+>
+> Renewed my buildroot env to the latest svn, and updated the various
+> toolchain selections.
+> Now my iproute2 fails:
+> flex  -oemp_ematch.lex.c emp_ematch.l
+> /cd-linux/buildroot/build_i386/staging_dir/bin/i386-linux-uclibc-gcc
+> -D_GNU_SOURCE -Os -pipe  -DHAVE_GETTIMEOFDAY_TZ -I../include
+> -DRESOLVE_HOSTNAMES -DCONFIG_GACT -DCONFIG_GACT_PROB   -c -o
+> emp_ematch.lex.o emp_ematch.lex.c
+> emp_ematch.lex.c:1686: error: syntax error before numeric constant
+> emp_ematch.lex.c: In function `ematch__scan_string':
+> emp_ematch.lex.c:1687: error: number of arguments doesn't match prototype
+> emp_ematch.lex.c:298: error: prototype declaration
+> emp_ematch.lex.c:1689: warning: passing arg 1 of `strlen' makes
+> pointer from integer without a cast
+> emp_ematch.lex.c:1689: warning: passing arg 1 of `ematch__scan_bytes'
+> makes pointer from integer without a cast
+> make[2]: *** [emp_ematch.lex.o] Error 1
+> rm emp_ematch.lex.c
+>
+> Any idea's are welcome...
+>
+> Thanks,
+> --
+> Rory Slegtenhorst
+> rory dot slegtenhorst at gmail dot com
+>
 
 
-Modified:
-   trunk/buildroot/package/kexec/kexec.mk
-
-
-Changeset:
-Modified: trunk/buildroot/package/kexec/kexec.mk
-===================================================================
---- trunk/buildroot/package/kexec/kexec.mk	2006-12-20 04:30:25 UTC (rev 17013)
-+++ trunk/buildroot/package/kexec/kexec.mk	2006-12-20 14:41:04 UTC (rev 17014)
-@@ -38,7 +38,6 @@
- 	(cd $(KEXEC_DIR) && $(KEXEC_CAT) $(DL_DIR)/$(KEXEC_PATCH) | patch -p1)
- 	toolchain/patch-kernel.sh $(KEXEC_DIR) $(KEXEC_DIR)/debian/patches \*.patch
- endif
--
- 	touch $(KEXEC_DIR)/.unpacked
- 
- $(KEXEC_DIR)/.configured: $(KEXEC_DIR)/.unpacked
-@@ -61,7 +60,7 @@
- 		$(KEXEC_DIR)/objdir-$(GNU_TARGET_NAME)/build/sbin/kdump \
- 		$(TARGET_DIR)/sbin/
- 
--kexec: uclibc host-fakeroot $(TARGET_DIR)/$(KEXEC_TARGET_BINARY)
-+kexec: uclibc $(TARGET_DIR)/$(KEXEC_TARGET_BINARY)
- 
- kexec-clean:
- 	-$(MAKE) -C $(KEXEC_DIR) clean
+-- 
+Rory Slegtenhorst
+rory dot slegtenhorst at gmail dot com
