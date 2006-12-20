@@ -1,25 +1,23 @@
-From: Robin Mordasiewicz <rmordasiewicz@samuelmanutech.com>
-Date: Wed, 20 Dec 2006 00:10:05 -0500 (EST)
-Subject: [Buildroot] Booting the rootfs ext2 image
-In-Reply-To: <20061220050211.GA30156@reid1.localdomain>
-References: <7B808CFD-AB02-4E02-A220-CE241662C366@linux.it>
-	<Pine.LNX.4.64.0612192322530.31862@smtcorms05.samuelmanutech.com>
-	<20061220043858.GA29988@reid1.localdomain>
-	<Pine.LNX.4.64.0612192348340.31862@smtcorms05.samuelmanutech.com>
-	<20061220050211.GA30156@reid1.localdomain>
-Message-ID: <Pine.LNX.4.64.0612200009490.31862@smtcorms05.samuelmanutech.com>
+From: Rory Slegtenhorst <rory.slegtenhorst@gmail.com>
+Date: Wed, 20 Dec 2006 10:57:53 +0100
+Subject: [Buildroot] Adding nasm to toolchain
+Message-ID: <5e15b0e10612200157l48183bd9tb77fc3c56f8981e9@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Tue, 19 Dec 2006, don wrote:
+Hi,
 
->> On Tue, 19 Dec 2006, don wrote:
->>> It does not boot from the CF card.
->
-> My fingers must have not been conected to my brain, I meant to say
-> It _does_ boot from the CF card.
+I'm working on integrating our software package into buildroot.
+Shouldn't be all that hard, but just one tiny matter.
+A small portion of our code needs nasm to compile.
 
-neat.
+How can I incorporate nasm into the toolchain without needing it on the target?
+I only need it in compile time...
+
+Many thanks for any help...
+-- 
+Rory Slegtenhorst
+rory dot slegtenhorst at gmail dot com
