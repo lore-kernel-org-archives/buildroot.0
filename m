@@ -1,7 +1,7 @@
 From: aldot at uclibc.org <aldot@uclibc.org>
-Date: Wed, 20 Dec 2006 09:40:53 -0800 (PST)
-Subject: [Buildroot] svn commit: trunk/buildroot/package/kexec
-Message-ID: <20061220174053.189C9485A6@busybox.net>
+Date: Wed, 20 Dec 2006 09:46:01 -0800 (PST)
+Subject: [Buildroot] svn commit: trunk/buildroot/package/netsnmp
+Message-ID: <20061220174601.969C3485A6@busybox.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -9,32 +9,41 @@ Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
 Author: aldot
-Date: 2006-12-20 09:40:52 -0800 (Wed, 20 Dec 2006)
-New Revision: 17020
+Date: 2006-12-20 09:46:00 -0800 (Wed, 20 Dec 2006)
+New Revision: 17021
 
 Log:
-- Add args patch.
+- fails for parallel builds, so force -j1
+- improve the -clean target
 
 
-Added:
-   trunk/buildroot/package/kexec/kexec-tools-my_shutdown-args.patch
+Modified:
+   trunk/buildroot/package/netsnmp/netsnmp.mk
 
 
 Changeset:
-Added: trunk/buildroot/package/kexec/kexec-tools-my_shutdown-args.patch
+Modified: trunk/buildroot/package/netsnmp/netsnmp.mk
 ===================================================================
---- trunk/buildroot/package/kexec/kexec-tools-my_shutdown-args.patch	2006-12-20 17:08:38 UTC (rev 17019)
-+++ trunk/buildroot/package/kexec/kexec-tools-my_shutdown-args.patch	2006-12-20 17:40:52 UTC (rev 17020)
-@@ -0,0 +1,12 @@
-+diff -rup kexec-tools-1.101.orig/kexec/kexec.c kexec-tools-1.101/kexec/kexec.c
-+--- kexec-tools-1.101.orig/kexec/kexec.c	2006-12-20 18:40:26.000000000 +0100
-++++ kexec-tools-1.101/kexec/kexec.c	2006-12-20 18:41:02.000000000 +0100
-+@@ -629,7 +629,7 @@ int k_unload (unsigned long kexec_flags)
-+  */
-+ static int my_shutdown(void)
-+ {
-+-	char *args[8];
-++	char *args[2];
-+ 
-+ 	args[0] = "reboot";
-+ 	args[1] = NULL;
+--- trunk/buildroot/package/netsnmp/netsnmp.mk	2006-12-20 17:40:52 UTC (rev 17020)
++++ trunk/buildroot/package/netsnmp/netsnmp.mk	2006-12-20 17:46:00 UTC (rev 17021)
+@@ -58,7 +58,7 @@
+ 	touch $(NETSNMP_DIR)/.configured
+ 
+ $(NETSNMP_DIR)/agent/snmpd: $(NETSNMP_DIR)/.configured
+-	$(MAKE) -C $(NETSNMP_DIR)
++	$(MAKE1) -C $(NETSNMP_DIR)
+ 
+ $(TARGET_DIR)/usr/sbin/snmpd: $(NETSNMP_DIR)/agent/snmpd
+ 	#$(MAKE) DESTDIR=$(TARGET_DIR) -C $(NETSNMP_DIR) install
+@@ -97,7 +97,11 @@
+ netsnmp-source: $(DL_DIR)/$(NETSNMP_SOURCE)
+ 
+ netsnmp-clean: 
++	$(MAKE) DESTDIR=$(TARGET_DIR) CC=$(TARGET_CC) -C $(NETSNMP_DIR) uninstall
+ 	$(MAKE) -C $(NETSNMP_DIR) clean
++	rm -rf $(TARGET_DIR)/etc/snmp/{snmpd{,trapd},mib2c*}.conf \
++		$(TARGET_DIR)/etc/default/snmpd \
++		$(TARGET_DIR)/usr/include/net-snmp
+ 
+ netsnmp-dirclean: 
+ 	rm -rf $(NETSNMP_DIR)
