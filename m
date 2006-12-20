@@ -1,29 +1,18 @@
 From: Robin Mordasiewicz <rmordasiewicz@samuelmanutech.com>
-Date: Tue, 19 Dec 2006 23:24:17 -0500 (EST)
-Subject: [Buildroot] Booting the rootfs ext2 image
-In-Reply-To: <7B808CFD-AB02-4E02-A220-CE241662C366@linux.it>
-References: <7B808CFD-AB02-4E02-A220-CE241662C366@linux.it>
-Message-ID: <Pine.LNX.4.64.0612192322530.31862@smtcorms05.samuelmanutech.com>
+Date: Tue, 19 Dec 2006 23:25:02 -0500 (EST)
+Subject: [Buildroot] SVN not functioning
+In-Reply-To: <4214.216.199.231.10.1166579275.squirrel@webmail.learningsoft.net>
+References: <4214.216.199.231.10.1166579275.squirrel@webmail.learningsoft.net>
+Message-ID: <Pine.LNX.4.64.0612192324580.31862@smtcorms05.samuelmanutech.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Tue, 19 Dec 2006, Rafael A Barrero wrote:
+On Tue, 19 Dec 2006, Sunil Gupta wrote:
 
-> Now that I've successfully built a rootfs image that includes my
-> custom built kernel, I have a few questions about taking that rootfs
-> and actually running it on my dev. system. I've mounted the ext2 fs
-> as a loopback device and it looks great, but I'm looking for some
-> pointers on getting grub configured for that partition.
->
-> I selected grub during the buildroot configuration, but how do I go
-> about installing grub so that it boots properly?
-> Once I copy this image to another disk, how will it be set as bootable?
-> How do I configure grub within the loopback partition?
-> What tools do you guys suggest for copying the FS to the new disk?
-> rsync? dd?
+> I haven't been able to check out or update via svn from uclibc.org
+> for the past few days. Anyone else having this issue?
 
-not really an answer to your Q. but I just booted my newly minted 
-buildroot over pxe
+I successfully ran svn checkout today
