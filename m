@@ -1,25 +1,34 @@
-From: Lars Munch <lars@segv.dk>
-Date: Wed, 20 Dec 2006 17:30:43 +0100
-Subject: [Buildroot] [PATCH] fix ext2 target compression
-Message-ID: <20061220163043.GA27929@tuxedo.home.lan>
+From: aldot at uclibc.org <aldot@uclibc.org>
+Date: Wed, 20 Dec 2006 08:38:23 -0800 (PST)
+Subject: [Buildroot] svn commit: trunk/buildroot/package:  argus
+Message-ID: <20061220163823.845C0485D5@busybox.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi
+Author: aldot
+Date: 2006-12-20 08:38:22 -0800 (Wed, 20 Dec 2006)
+New Revision: 17016
 
-Compressed ext2 target was broken in r16929. The attached patch should
-fix this.
+Log:
+- add argus
 
-Regards
-Lars Munch
 
--------------- next part --------------
-A non-text attachment was scrubbed...
-Name: fix_compressed_ext2.patch
-Type: text/x-diff
-Size: 1337 bytes
-Desc: not available
-Url : http://busybox.net/lists/buildroot/attachments/20061220/422d0b47/attachment.bin 
+Added:
+   trunk/buildroot/package/argus/
+   trunk/buildroot/package/argus/Config.in
+   trunk/buildroot/package/argus/argus-3.0.0.rc.34-00-susv3-legacy.patch
+   trunk/buildroot/package/argus/argus.mk
+
+Modified:
+   trunk/buildroot/package/Config.in
+
+
+Changeset:
+
+Sorry, the patch is too large to include (1417 lines).
+Please use ViewCVS to see it!
+
+http://uclibc.org/cgi-bin/viewcvs.cgi?view=rev&root=svn&rev=17016
