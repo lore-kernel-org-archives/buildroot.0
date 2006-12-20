@@ -1,7 +1,7 @@
 From: aldot at uclibc.org <aldot@uclibc.org>
-Date: Wed, 20 Dec 2006 08:45:47 -0800 (PST)
-Subject: [Buildroot] svn commit: trunk/buildroot/target/ext2
-Message-ID: <20061220164547.0A85A485DE@busybox.net>
+Date: Wed, 20 Dec 2006 08:50:04 -0800 (PST)
+Subject: [Buildroot] svn commit: trunk/buildroot/package/kexec
+Message-ID: <20061220165004.E3D5D48598@busybox.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -9,52 +9,98 @@ Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
 Author: aldot
-Date: 2006-12-20 08:45:47 -0800 (Wed, 20 Dec 2006)
-New Revision: 17017
+Date: 2006-12-20 08:50:04 -0800 (Wed, 20 Dec 2006)
+New Revision: 17018
 
 Log:
-- Lars Munch noticed that i broke the ext2 compressor. Thanks!
+- Petr Stetiar updated the kexec arm patch. Thanks!
 
 
 Modified:
-   trunk/buildroot/target/ext2/ext2root.mk
+   trunk/buildroot/package/kexec/kexec-tools-arm.patch
 
 
 Changeset:
-Modified: trunk/buildroot/target/ext2/ext2root.mk
+Modified: trunk/buildroot/package/kexec/kexec-tools-arm.patch
 ===================================================================
---- trunk/buildroot/target/ext2/ext2root.mk	2006-12-20 16:38:22 UTC (rev 17016)
-+++ trunk/buildroot/target/ext2/ext2root.mk	2006-12-20 16:45:47 UTC (rev 17017)
-@@ -61,8 +61,6 @@
- EXT2_BASE :=	$(subst ",,$(BR2_TARGET_ROOTFS_EXT2_OUTPUT))
- #")
- 
--EXT2_TARGET := $(EXT2_BASE)
--
- EXT2_ROOTFS_COMPRESSOR:=
- EXT2_ROOTFS_COMPRESSOR_EXT:=
- EXT2_ROOTFS_COMPRESSOR_PREREQ:=
-@@ -82,6 +80,12 @@
- EXT2_ROOTFS_COMPRESSOR_PREREQ:= lzma-host
- endif
- 
-+ifneq ($(EXT2_ROOTFS_COMPRESSOR),)
-+EXT2_TARGET := $(EXT2_BASE).$(EXT2_ROOTFS_COMPRESSOR_EXT)
-+else
-+EXT2_TARGET := $(EXT2_BASE)
-+endif
-+
- $(EXT2_BASE): host-fakeroot makedevs genext2fs
- 	- at find $(TARGET_DIR) -type f -perm +111 | xargs $(STRIP) 2>/dev/null || true;
- 	@rm -rf $(TARGET_DIR)/usr/man
-@@ -116,8 +120,8 @@
- 	- at rm -f $(STAGING_DIR)/_fakeroot.$(notdir $(EXT2_TARGET))
- 
- ifneq ($(EXT2_ROOTFS_COMPRESSOR),)
--$(EXT2_TARGET).(EXT2_ROOTFS_COMPRESSOR_EXT): $(EXT2_ROOTFS_COMPRESSOR_PREREQ) $(EXT2_BASE)
--	$(EXT2_ROOTFS_COMPRESSOR) $(EXT2_TARGET) > $(EXT2_TARGET).$(EXT2_ROOTFS_COMPRESSOR_EXT)
-+$(EXT2_BASE).$(EXT2_ROOTFS_COMPRESSOR_EXT): $(EXT2_ROOTFS_COMPRESSOR_PREREQ) $(EXT2_BASE)
-+	$(EXT2_ROOTFS_COMPRESSOR) $(EXT2_BASE) > $(EXT2_TARGET)
- endif
- 
- EXT2_COPYTO := $(strip $(subst ",,$(BR2_TARGET_ROOTFS_EXT2_COPYTO)))
+--- trunk/buildroot/package/kexec/kexec-tools-arm.patch	2006-12-20 16:45:47 UTC (rev 17017)
++++ trunk/buildroot/package/kexec/kexec-tools-arm.patch	2006-12-20 16:50:04 UTC (rev 17018)
+@@ -389,3 +389,78 @@
+ +typedef signed long long   int64_t;
+ +
+ +#endif /* STDINT_H */
++diff -ur kexec-tools-1.101/kexec/arch/arm/kexec-arm.c kexec-tools-1.101.patched/kexec/arch/arm/kexec-arm.c
++--- kexec-tools-1.101.orig/kexec/arch/arm/kexec-arm.c	2006-12-20 16:41:12.000000000 +0100
+++++ kexec-tools-1.101/kexec/arch/arm/kexec-arm.c	2006-12-20 16:40:19.000000000 +0100
++@@ -105,7 +105,7 @@
++ 	return 0;
++ }
++ 
++-int arch_compat_trampoline(struct kexec_info *info, unsigned long *flags)
+++int arch_compat_trampoline(struct kexec_info *info)
++ {
++ 	int result;
++ 	struct utsname utsname;
++@@ -115,11 +115,8 @@
++ 			strerror(errno));
++ 		return -1;
++ 	}
++-	if (strncmp(utsname.machine, "arm",3) == 0)
+++	if (strncmp(utsname.machine, "arm",3) != 0)
++ 	{
++-		*flags |= KEXEC_ARCH_ARM;
++-	}
++-	else {
++ 		fprintf(stderr, "Unsupported machine type: %s\n",
++ 			utsname.machine);
++ 		return -1;
++diff -ur kexec-tools-1.101/kexec/kexec.c kexec-tools-1.101.patched/kexec/kexec.c
++--- kexec-tools-1.101.orig/kexec/kexec.c	2006-09-20 04:39:38.000000000 +0200
+++++ kexec-tools-1.101/kexec/kexec.c	2006-12-20 16:39:10.000000000 +0100
++@@ -532,8 +532,7 @@
++ 		kernel_buf, kernel_size);
++ #endif
++ 
++-	if (get_memory_ranges(&memory_range, &memory_ranges,
++-		info.kexec_flags) < 0) {
+++	if (get_memory_ranges(&memory_range, &memory_ranges) < 0) {
++ 		fprintf(stderr, "Could not get memory layout\n");
++ 		return -1;
++ 	}
++diff -ur kexec-tools-1.101/kexec/kexec.h kexec-tools-1.101.patched/kexec/kexec.h
++--- kexec-tools-1.101.orig/kexec/kexec.h	2006-09-20 04:39:38.000000000 +0200
+++++ kexec-tools-1.101/kexec/kexec.h	2006-12-20 16:40:47.000000000 +0100
++@@ -119,8 +119,7 @@
++ };
++ 
++ void usage(void);
++-int get_memory_ranges(struct memory_range **range, int *ranges,
++-						unsigned long kexec_flags);
+++int get_memory_ranges(struct memory_range **range, int *ranges);
++ int valid_memory_range(unsigned long sstart, unsigned long send);
++ int valid_memory_segment(struct kexec_segment *segment);
++ void print_segments(FILE *file, struct kexec_info *info);
++diff -ur kexec-tools-1.101.orig/kexec/kexec.c kexec-tools-1.101/kexec/kexec.c
++--- kexec-tools-1.101.orig/kexec/kexec.c	2006-12-20 17:04:59.000000000 +0100
+++++ kexec-tools-1.101/kexec/kexec.c	2006-12-20 17:05:33.000000000 +0100
++@@ -630,16 +630,11 @@
++ static int my_shutdown(void)
++ {
++ 	char *args[8];
++-	int i = 0;
++ 
++-	args[i++] = "shutdown";
++-	args[i++] = "-r";
++-	args[i++] = "now";
++-	args[i++] = NULL;
++-
++-	execv("/sbin/shutdown", args);
++-	execv("/etc/shutdown", args);
++-	execv("/bin/shutdown", args);
+++	args[0] = "reboot";
+++	args[1] = NULL;
+++
+++	execv("/sbin/reboot", args);
++ 
++ 	perror("shutdown");
++ 	return -1;
