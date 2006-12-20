@@ -1,7 +1,7 @@
-From: Rory Slegtenhorst <rory.slegtenhorst@gmail.com>
-Date: Wed, 20 Dec 2006 12:44:26 +0100
-Subject: [Buildroot] Errors while building iproute2
-Message-ID: <5e15b0e10612200344u75903c18m80e72d5322cdc451@mail.gmail.com>
+From: Rory Vieira <rory.vieira@gmail.com>
+Date: Wed, 20 Dec 2006 14:32:10 +0100
+Subject: [Buildroot] Errors using gcc in target
+Message-ID: <5e15b0e10612200532w2682ecc9pe44dbdbaab20249e@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -10,28 +10,28 @@ To: buildroot@busybox.net
 
 Hi,
 
-Renewed my buildroot env to the latest svn, and updated the various
-toolchain selections.
-Now my iproute2 fails:
-flex  -oemp_ematch.lex.c emp_ematch.l
-/cd-linux/buildroot/build_i386/staging_dir/bin/i386-linux-uclibc-gcc
--D_GNU_SOURCE -Os -pipe  -DHAVE_GETTIMEOFDAY_TZ -I../include
--DRESOLVE_HOSTNAMES -DCONFIG_GACT -DCONFIG_GACT_PROB   -c -o
-emp_ematch.lex.o emp_ematch.lex.c
-emp_ematch.lex.c:1686: error: syntax error before numeric constant
-emp_ematch.lex.c: In function `ematch__scan_string':
-emp_ematch.lex.c:1687: error: number of arguments doesn't match prototype
-emp_ematch.lex.c:298: error: prototype declaration
-emp_ematch.lex.c:1689: warning: passing arg 1 of `strlen' makes
-pointer from integer without a cast
-emp_ematch.lex.c:1689: warning: passing arg 1 of `ematch__scan_bytes'
-makes pointer from integer without a cast
-make[2]: *** [emp_ematch.lex.o] Error 1
-rm emp_ematch.lex.c
+My excuses for the 'flood' of questions, but here's another one...
+I have succesfully built my buildroot, and am trying to configure a
+source package...
+After checking for gcc it tries a simple compile program:
 
-Any idea's are welcome...
+int
+main ()
+{
 
-Thanks,
+  ;
+  return 0;
+}
+
+and returns:
+configure:1721: gcc    conftest.c  >&5
+/usr/bin/ld: crt1.o: No such file: No such file or directory
+collect2: ld returned 1 exit status
+
+crt0.o is installed in /usr/lib on the target
+
+Any ideas are very welcome
+Cheers,
 -- 
 Rory Slegtenhorst
 rory dot slegtenhorst at gmail dot com
