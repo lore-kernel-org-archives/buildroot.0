@@ -1,38 +1,24 @@
-From: Petr Stetiar <ynezz@true.cz>
-Date: Wed, 20 Dec 2006 18:01:36 +0100
-Subject: [Buildroot] svn commit: trunk/buildroot/package/kexec
-In-Reply-To: <20061220165004.E3D5D48598@busybox.net>
-References: <20061220165004.E3D5D48598@busybox.net>
-Message-ID: <20061220170136.GY2778@ibawizard.net>
+From: Gilad Rom <gilad.rom@gmail.com>
+Date: Wed, 20 Dec 2006 19:01:52 +0200
+Subject: [Buildroot] [PATCH] (Resend) Add alsa-lib
+Message-ID: <39d7ed000612200901m4b3abe09xc83d8c7b15a9951f@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-aldot at uclibc.org <aldot@uclibc.org> [2006-12-20 08:50:04]:
+Add alsa-lib.
 
-> Author: aldot
-> Date: 2006-12-20 08:50:04 -0800 (Wed, 20 Dec 2006)
-> New Revision: 17018
-> + static int my_shutdown(void)
-> + {
-> + 	char *args[8];
+I've got a bunch more, will send if this one is commit-worthy.
 
-Sorry. Just noticed, that this correctly should be "char *args[2];".
+This patch is made against today's (Dec 20) buildroot.
 
--- ynezz
+Gilad.
 -------------- next part --------------
-Index: package/kexec/kexec-tools-arm.patch
-===================================================================
---- package/kexec/kexec-tools-arm.patch	(revision 17018)
-+++ package/kexec/kexec-tools-arm.patch	(working copy)
-@@ -446,7 +446,7 @@
- @@ -630,16 +630,11 @@
-  static int my_shutdown(void)
-  {
-- 	char *args[8];
-+ 	char *args[2];
- -	int i = 0;
-  
- -	args[i++] = "shutdown";
+A non-text attachment was scrubbed...
+Name: buildroot-alsa-lib.patch
+Type: text/x-patch
+Size: 2976 bytes
+Desc: not available
+Url : http://busybox.net/lists/buildroot/attachments/20061220/2cfd81c3/attachment.bin 
