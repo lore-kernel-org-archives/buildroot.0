@@ -1,53 +1,58 @@
-From: Rory Slegtenhorst <rory.slegtenhorst@gmail.com>
-Date: Wed, 20 Dec 2006 16:02:48 +0100
-Subject: [Buildroot] Errors while building iproute2
-In-Reply-To: <5e15b0e10612200344u75903c18m80e72d5322cdc451@mail.gmail.com>
-References: <5e15b0e10612200344u75903c18m80e72d5322cdc451@mail.gmail.com>
-Message-ID: <5e15b0e10612200702j20318545k82a4d1b3fdb47189@mail.gmail.com>
+From: Bernhard Fischer <rep.nop@aon.at>
+Date: Wed, 20 Dec 2006 16:43:04 +0100
+Subject: [Buildroot] Kernel Panic .....
+In-Reply-To: <Pine.LNX.4.64.0612192344000.31862@smtcorms05.samuelmanutech.com>
+References: <Pine.LNX.4.64.0612191302220.31862@smtcorms05.samuelmanutech.com>
+	<Pine.LNX.4.64.0612192336370.31862@smtcorms05.samuelmanutech.com>
+	<Pine.LNX.4.64.0612192039380.11555@q7.q7.com>
+	<Pine.LNX.4.64.0612192344000.31862@smtcorms05.samuelmanutech.com>
+Message-ID: <20061220154303.GA24288@aon.at>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Fixed this by using a different version of flex.
-
-Note:
-  SuSE 9.3 comes with flex 2.5.4 whilst SuSE 10.1 comes with flex 2.5.31.
-
-So for some reason this newer version breaks the iproute2 build...
-
-On 12/20/06, Rory Slegtenhorst <rory.slegtenhorst@gmail.com> wrote:
-> Hi,
+On Tue, Dec 19, 2006 at 11:47:54PM -0500, Robin Mordasiewicz wrote:
+>On Tue, 19 Dec 2006, Joe Pruett wrote:
+>> On Tue, 19 Dec 2006, Robin Mordasiewicz wrote:
+>>> On Tue, 19 Dec 2006, Robin Mordasiewicz wrote:
+>>>
+>>>> I am trying to boot the image as an initrd filesystem over pxe, but I see
+>>>> an error
+>>>> 'Unpacking initramfs...<0>Kernel panic - not syncing: bad gzip magic numbers'
+>>>>
+>>>> in my pxelinux.cfg/default
+>>>>
+>>>> label test
+>>>>   kernel linux-kernel-2.6.19.1-i386
+>>>>   append ramdisk_blocksize=4096 initrd=rootfs.i386.ext2 root=/dev/ram0 ramdisk_size=524288
+>>>>
+>>>> Is there anything I am required to change to make this kernel and image
+>>>> work over booting from pxe ?
+>>>
+>>> I needed to build some RAM disk drivers into the kernel.
+>>
+>> how exactly did you do that?  that is where i have finally gotten after
+>> making that kernel-patches directory (as you also just posted) and fixing
+>> the problem that grub no longer has a -19 version at debian.org (-20 seems
+>> to be working).  i made an iso image and ran into the same kernel panic
+>> because it seems to want a cpio image.  i have just rebuilt using the
+>> linux26.config file instead of busybox.config and will be booting in a few
+>> minutes to see how that goes...
 >
-> Renewed my buildroot env to the latest svn, and updated the various
-> toolchain selections.
-> Now my iproute2 fails:
-> flex  -oemp_ematch.lex.c emp_ematch.l
-> /cd-linux/buildroot/build_i386/staging_dir/bin/i386-linux-uclibc-gcc
-> -D_GNU_SOURCE -Os -pipe  -DHAVE_GETTIMEOFDAY_TZ -I../include
-> -DRESOLVE_HOSTNAMES -DCONFIG_GACT -DCONFIG_GACT_PROB   -c -o
-> emp_ematch.lex.o emp_ematch.lex.c
-> emp_ematch.lex.c:1686: error: syntax error before numeric constant
-> emp_ematch.lex.c: In function `ematch__scan_string':
-> emp_ematch.lex.c:1687: error: number of arguments doesn't match prototype
-> emp_ematch.lex.c:298: error: prototype declaration
-> emp_ematch.lex.c:1689: warning: passing arg 1 of `strlen' makes
-> pointer from integer without a cast
-> emp_ematch.lex.c:1689: warning: passing arg 1 of `ematch__scan_bytes'
-> makes pointer from integer without a cast
-> make[2]: *** [emp_ematch.lex.o] Error 1
-> rm emp_ematch.lex.c
+>Not sure if I am following you. I think you may be getting the kernel 
+>config and the busybox config confused. The documentation for customizing 
+>busybox does not mention modifying the kernel, but what I did to customize 
+>the kernel is something like the following.
 >
-> Any idea's are welcome...
->
-> Thanks,
-> --
-> Rory Slegtenhorst
-> rory dot slegtenhorst at gmail dot com
->
+>cd build_i386/linux-2.6.19.1
+>cp .config .config.original
+>make mrproper
+>make menuconfig
+>(set the kernel options you require)
+>cd ../../
+>make
 
-
--- 
-Rory Slegtenhorst
-rory dot slegtenhorst at gmail dot com
+there is a make linux26-menuconfig target for that (for i386 with
+the generic x86 target support option turned on, at least).
