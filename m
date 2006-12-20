@@ -1,36 +1,25 @@
-From: aldot at uclibc.org <aldot@uclibc.org>
-Date: Wed, 20 Dec 2006 09:08:38 -0800 (PST)
-Subject: [Buildroot] svn commit: trunk/buildroot/target/x86/grub
-Message-ID: <20061220170838.BD57B485C2@busybox.net>
+From: Bernhard Fischer <rep.nop@aon.at>
+Date: Wed, 20 Dec 2006 18:16:39 +0100
+Subject: [Buildroot] Adding nasm to toolchain
+In-Reply-To: <5e15b0e10612200157l48183bd9tb77fc3c56f8981e9@mail.gmail.com>
+References: <5e15b0e10612200157l48183bd9tb77fc3c56f8981e9@mail.gmail.com>
+Message-ID: <20061220171639.GA24825@aon.at>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Author: aldot
-Date: 2006-12-20 09:08:38 -0800 (Wed, 20 Dec 2006)
-New Revision: 17019
+On Wed, Dec 20, 2006 at 10:57:53AM +0100, Rory Slegtenhorst wrote:
+>Hi,
+>
+>I'm working on integrating our software package into buildroot.
+>Shouldn't be all that hard, but just one tiny matter.
+>A small portion of our code needs nasm to compile.
+>
+>How can I incorporate nasm into the toolchain without needing it on the target?
+>I only need it in compile time...
 
-Log:
-- bump patch version
+look at the -host targets, e.g. mtd
 
-
-Modified:
-   trunk/buildroot/target/x86/grub/grub.mk
-
-
-Changeset:
-Modified: trunk/buildroot/target/x86/grub/grub.mk
-===================================================================
---- trunk/buildroot/target/x86/grub/grub.mk	2006-12-20 16:50:04 UTC (rev 17018)
-+++ trunk/buildroot/target/x86/grub/grub.mk	2006-12-20 17:08:38 UTC (rev 17019)
-@@ -21,7 +21,7 @@
- #
- #############################################################
- GRUB_SOURCE:=grub_0.97.orig.tar.gz
--GRUB_PATCH=grub_0.97-19.diff.gz
-+GRUB_PATCH=grub_0.97-20.diff.gz
- GRUB_SITE=http://ftp.debian.org/debian/pool/main/g/grub
- GRUB_CAT:=$(ZCAT)
- GRUB_DIR:=$(BUILD_DIR)/grub-0.97
+HTH,
