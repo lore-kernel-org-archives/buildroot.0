@@ -1,18 +1,29 @@
 From: Robin Mordasiewicz <rmordasiewicz@samuelmanutech.com>
-Date: Tue, 19 Dec 2006 23:13:04 -0500 (EST)
-Subject: [Buildroot] make clean error
-Message-ID: <Pine.LNX.4.64.0612192312010.31862@smtcorms05.samuelmanutech.com>
+Date: Tue, 19 Dec 2006 23:24:17 -0500 (EST)
+Subject: [Buildroot] Booting the rootfs ext2 image
+In-Reply-To: <7B808CFD-AB02-4E02-A220-CE241662C366@linux.it>
+References: <7B808CFD-AB02-4E02-A220-CE241662C366@linux.it>
+Message-ID: <Pine.LNX.4.64.0612192322530.31862@smtcorms05.samuelmanutech.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-I am using an svn checkout from yesterday I built fine but when I run
-make clean I get an error
+On Tue, 19 Dec 2006, Rafael A Barrero wrote:
 
-make -j1 -C /var/home/rmordasiewicz/busybox/buildroot/toolchain_build_i386/ccache-2.4 uninstall
-make[1]: Entering directory `/var/home/rmordasiewicz/busybox/buildroot/toolchain_build_i386/ccache-2.4'
-make[1]: *** No rule to make target `uninstall'.  Stop.
-make[1]: Leaving directory `/var/home/rmordasiewicz/busybox/buildroot/toolchain_build_i386/ccache-2.4'
-make: *** [ccache-clean] Error 2
+> Now that I've successfully built a rootfs image that includes my
+> custom built kernel, I have a few questions about taking that rootfs
+> and actually running it on my dev. system. I've mounted the ext2 fs
+> as a loopback device and it looks great, but I'm looking for some
+> pointers on getting grub configured for that partition.
+>
+> I selected grub during the buildroot configuration, but how do I go
+> about installing grub so that it boots properly?
+> Once I copy this image to another disk, how will it be set as bootable?
+> How do I configure grub within the loopback partition?
+> What tools do you guys suggest for copying the FS to the new disk?
+> rsync? dd?
+
+not really an answer to your Q. but I just booted my newly minted 
+buildroot over pxe
