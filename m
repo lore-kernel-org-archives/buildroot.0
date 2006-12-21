@@ -1,91 +1,92 @@
 From: Bernhard Fischer <rep.nop@aon.at>
-Date: Thu, 21 Dec 2006 10:04:39 +0100
-Subject: [Buildroot] Kernel Panic .....
-In-Reply-To: <Pine.LNX.4.64.0612202113430.2373@q7.q7.com>
-References: <Pine.LNX.4.64.0612191302220.31862@smtcorms05.samuelmanutech.com>
-	<Pine.LNX.4.64.0612192336370.31862@smtcorms05.samuelmanutech.com>
-	<Pine.LNX.4.64.0612192039380.11555@q7.q7.com>
-	<Pine.LNX.4.64.0612192344000.31862@smtcorms05.samuelmanutech.com>
-	<20061220154303.GA24288@aon.at>
-	<Pine.LNX.4.64.0612202113430.2373@q7.q7.com>
-Message-ID: <20061221090438.GB1192@aon.at>
+Date: Thu, 21 Dec 2006 10:16:38 +0100
+Subject: [Buildroot] problems building buildroot
+In-Reply-To: <cd7850860612141059p73e6fcdu52f1b697737b0875@mail.gmail.com>
+References: <cd7850860612141059p73e6fcdu52f1b697737b0875@mail.gmail.com>
+Message-ID: <20061221091638.GC1192@aon.at>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Wed, Dec 20, 2006 at 09:19:32PM -0800, Joe Pruett wrote:
->On Wed, 20 Dec 2006, Bernhard Fischer wrote:
+On Thu, Dec 14, 2006 at 10:59:52AM -0800, mark roths wrote:
+>I am trying to use buildroot to create an RFS for an ARM926 variant (Atmel
+>9261)
+>and I have the following problems:
 >
->> On Tue, Dec 19, 2006 at 11:47:54PM -0500, Robin Mordasiewicz wrote:
->> >On Tue, 19 Dec 2006, Joe Pruett wrote:
->> >> On Tue, 19 Dec 2006, Robin Mordasiewicz wrote:
->> >>> On Tue, 19 Dec 2006, Robin Mordasiewicz wrote:
->> >>>
->> >>>> I am trying to boot the image as an initrd filesystem over pxe, but I see
->> >>>> an error
->> >>>> 'Unpacking initramfs...<0>Kernel panic - not syncing: bad gzip magic numbers'
->> >>>>
->> >>>> in my pxelinux.cfg/default
->> >>>>
->> >>>> label test
->> >>>>   kernel linux-kernel-2.6.19.1-i386
->> >>>>   append ramdisk_blocksize=4096 initrd=rootfs.i386.ext2 root=/dev/ram0 ramdisk_size=524288
->> >>>>
->> >>>> Is there anything I am required to change to make this kernel and image
->> >>>> work over booting from pxe ?
->> >>>
->> >>> I needed to build some RAM disk drivers into the kernel.
->> >>
->> >> how exactly did you do that?  that is where i have finally gotten after
->> >> making that kernel-patches directory (as you also just posted) and fixing
->> >> the problem that grub no longer has a -19 version at debian.org (-20 seems
->> >> to be working).  i made an iso image and ran into the same kernel panic
->> >> because it seems to want a cpio image.  i have just rebuilt using the
->> >> linux26.config file instead of busybox.config and will be booting in a few
->> >> minutes to see how that goes...
->> >
->> >Not sure if I am following you. I think you may be getting the kernel 
->> >config and the busybox config confused. The documentation for customizing 
->> >busybox does not mention modifying the kernel, but what I did to customize 
->> >the kernel is something like the following.
->> >
->> >cd build_i386/linux-2.6.19.1
->> >cp .config .config.original
->> >make mrproper
->> >make menuconfig
->> >(set the kernel options you require)
->> >cd ../../
->> >make
->> 
->> there is a make linux26-menuconfig target for that (for i386 with
->> the generic x86 target support option turned on, at least).
->> 
+>- despite running 'make menuconfig' and selecting EABI and my target arch
+>and variant,
+>I am always prompted for 3 config variables as in the following:
+
+Is this http://www.busybox.net/bugs/view.php?id=1112 ?
+
+thanks,
 >
->ok, i determined that the missing piece is that the ramdisk block device 
->needs to be set to compile in, not be a module.  to make an iso function, 
->i also had to hack in a makefile entry for LINUX_KERNEL (i just set it to 
->LINUX26_KERNEL).  after that things started working.  i also seem to see 
->an ordering problem that if i made a kernel change, i had to run make 
->twice in order for that to get into the iso.
-
-That's inconvenient, yes. The problem i faced (wrt the ordering) is that
-it's currently not possible to e.g. maintain a list of
-LINUX26_KERNEL_PATCHES that would be populated by package/* and that
-would be applied to the kernel(-headers) sources used for toolchain/*.
-
-It resembles a little bit of a chicken and egg problem: Certain stuff
-(from the toolchain) have to be known for correct package configuration
-while the package-config _may_ impose changes to the toolchain.
-
-I didn't pursue this issue (yet), perhaps somebody else is interrested
-in looking at it?
+>Target Architecture
+> 1. alpha (TARGET_alpha)
+>>2. arm (TARGET_arm)
+> 3. bfin (TARGET_bfin)
+> 4. cris (TARGET_cris)
+> 5. e1 (BROKEN) (TARGET_e1)
+> 6. frv (BROKEN) (TARGET_frv)
+> 7. h8300 (BROKEN) (TARGET_h8300)
+> 8. hppa (TARGET_hppa)
+> 9. i386 (TARGET_i386)
+> 10. i960 (BROKEN) (TARGET_i960)
+> 11. ia64 (TARGET_ia64)
+> 12. m68k (TARGET_m68k)
+> 13. microblaze (BROKEN) (TARGET_microblaze)
+> 14. mips (TARGET_mips)
+> 15. nios (TARGET_nios)
+> 16. nios2 (TARGET_nios2)
+> 17. powerpc (TARGET_powerpc)
+> 18. superh (TARGET_sh)
+> 19. sh64 (TARGET_sh64)
+> 20. sparc (TARGET_sparc)
+> 21. v850 (BROKEN) (TARGET_v850)
+> 22. vax (TARGET_vax)
+> 23. x86_64 (TARGET_x86_64)
+>choice[1-23?]: 2
+>*
+>* Target Architecture Features and Options
+>*
+>Target ABI
+>>1. OABI (CONFIG_ARM_OABI) (NEW)
+> 2. EABI (CONFIG_ARM_EABI) (NEW)
+>choice[1-2?]: 2
+>Target Processor Type
+>>1. Generic Arm (CONFIG_GENERIC_ARM) (NEW)
+> 2. Arm 610 (CONFIG_ARM610) (NEW)
+> 3. Arm 710 (CONFIG_ARM710) (NEW)
+> 4. Arm 7TDMI (CONFIG_ARM7TDMI) (NEW)
+> 5. Arm 720T (CONFIG_ARM720T) (NEW)
+> 6. Arm 920T (CONFIG_ARM920T) (NEW)
+> 7. Arm 922T (CONFIG_ARM922T) (NEW)
+> 8. Arm 926T (CONFIG_ARM926T) (NEW)
+> 9. Arm 10T (CONFIG_ARM10T) (NEW)
+> 10. Arm 1136JF-S (CONFIG_ARM1136JF_S) (NEW)
+> 11. Intel StrongArm SA-110 (CONFIG_ARM_SA110) (NEW)
+> 12. Intel StrongArm SA-1100 (CONFIG_ARM_SA1100) (NEW)
+> 13. Intel Xscale (CONFIG_ARM_XSCALE) (NEW)
+> 14. Intel Xscale With WMMX PXA27x (CONFIG_ARM_IWMMXT) (NEW)
+>choice[1-14?]:8
 >
->i'm not sure where those two changes should be done officially, or i'd 
->submit a patch.  it seems that if the iso relies on ramdisk support, then 
->it makes sense to have that enabled by default, and the LINUX_KERNEL vs 
->LINUX26_KERNEL make var should be addressed.  
+>Next, some header files turn up missing during the build of busybox and it
+>seems that the arch info is not
+>getting communicated to the busybox build.  I saw some other posts on this,
+>but the fix suggested seems to be
+>a part of my makefiles already.  My work around is as follows:
+>
+>made 2 softlinks in this dir:
+>buildroot/build_arm/staging_dir/arm-linux-uclibc/sys-include/asm
+>proc-armv -> proc
+>arch-at91rm9200 -> arch
+>
+>Mark Roths
+>Softair Microsystems
 
-Care to send your patch to outline what could be done to resolve this?
-TIA,
+>_______________________________________________
+>buildroot mailing list
+>buildroot at uclibc.org
+>http://busybox.net/mailman/listinfo/buildroot
