@@ -1,92 +1,126 @@
-From: Bernhard Fischer <rep.nop@aon.at>
-Date: Thu, 21 Dec 2006 10:16:38 +0100
-Subject: [Buildroot] problems building buildroot
-In-Reply-To: <cd7850860612141059p73e6fcdu52f1b697737b0875@mail.gmail.com>
-References: <cd7850860612141059p73e6fcdu52f1b697737b0875@mail.gmail.com>
-Message-ID: <20061221091638.GC1192@aon.at>
+From: aldot at uclibc.org <aldot@uclibc.org>
+Date: Thu, 21 Dec 2006 02:36:41 -0800 (PST)
+Subject: [Buildroot] svn commit: trunk/buildroot/package: argus berkeleydb
+	gzip lzma
+Message-ID: <20061221103641.EF908485A9@busybox.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Thu, Dec 14, 2006 at 10:59:52AM -0800, mark roths wrote:
->I am trying to use buildroot to create an RFS for an ARM926 variant (Atmel
->9261)
->and I have the following problems:
->
->- despite running 'make menuconfig' and selecting EABI and my target arch
->and variant,
->I am always prompted for 3 config variables as in the following:
+Author: aldot
+Date: 2006-12-21 02:36:40 -0800 (Thu, 21 Dec 2006)
+New Revision: 17025
 
-Is this http://www.busybox.net/bugs/view.php?id=1112 ?
+Log:
+- use global DISABLE_LARGEFILE
 
-thanks,
->
->Target Architecture
-> 1. alpha (TARGET_alpha)
->>2. arm (TARGET_arm)
-> 3. bfin (TARGET_bfin)
-> 4. cris (TARGET_cris)
-> 5. e1 (BROKEN) (TARGET_e1)
-> 6. frv (BROKEN) (TARGET_frv)
-> 7. h8300 (BROKEN) (TARGET_h8300)
-> 8. hppa (TARGET_hppa)
-> 9. i386 (TARGET_i386)
-> 10. i960 (BROKEN) (TARGET_i960)
-> 11. ia64 (TARGET_ia64)
-> 12. m68k (TARGET_m68k)
-> 13. microblaze (BROKEN) (TARGET_microblaze)
-> 14. mips (TARGET_mips)
-> 15. nios (TARGET_nios)
-> 16. nios2 (TARGET_nios2)
-> 17. powerpc (TARGET_powerpc)
-> 18. superh (TARGET_sh)
-> 19. sh64 (TARGET_sh64)
-> 20. sparc (TARGET_sparc)
-> 21. v850 (BROKEN) (TARGET_v850)
-> 22. vax (TARGET_vax)
-> 23. x86_64 (TARGET_x86_64)
->choice[1-23?]: 2
->*
->* Target Architecture Features and Options
->*
->Target ABI
->>1. OABI (CONFIG_ARM_OABI) (NEW)
-> 2. EABI (CONFIG_ARM_EABI) (NEW)
->choice[1-2?]: 2
->Target Processor Type
->>1. Generic Arm (CONFIG_GENERIC_ARM) (NEW)
-> 2. Arm 610 (CONFIG_ARM610) (NEW)
-> 3. Arm 710 (CONFIG_ARM710) (NEW)
-> 4. Arm 7TDMI (CONFIG_ARM7TDMI) (NEW)
-> 5. Arm 720T (CONFIG_ARM720T) (NEW)
-> 6. Arm 920T (CONFIG_ARM920T) (NEW)
-> 7. Arm 922T (CONFIG_ARM922T) (NEW)
-> 8. Arm 926T (CONFIG_ARM926T) (NEW)
-> 9. Arm 10T (CONFIG_ARM10T) (NEW)
-> 10. Arm 1136JF-S (CONFIG_ARM1136JF_S) (NEW)
-> 11. Intel StrongArm SA-110 (CONFIG_ARM_SA110) (NEW)
-> 12. Intel StrongArm SA-1100 (CONFIG_ARM_SA1100) (NEW)
-> 13. Intel Xscale (CONFIG_ARM_XSCALE) (NEW)
-> 14. Intel Xscale With WMMX PXA27x (CONFIG_ARM_IWMMXT) (NEW)
->choice[1-14?]:8
->
->Next, some header files turn up missing during the build of busybox and it
->seems that the arch info is not
->getting communicated to the busybox build.  I saw some other posts on this,
->but the fix suggested seems to be
->a part of my makefiles already.  My work around is as follows:
->
->made 2 softlinks in this dir:
->buildroot/build_arm/staging_dir/arm-linux-uclibc/sys-include/asm
->proc-armv -> proc
->arch-at91rm9200 -> arch
->
->Mark Roths
->Softair Microsystems
 
->_______________________________________________
->buildroot mailing list
->buildroot at uclibc.org
->http://busybox.net/mailman/listinfo/buildroot
+Modified:
+   trunk/buildroot/package/argus/argus.mk
+   trunk/buildroot/package/berkeleydb/berkeleydb.mk
+   trunk/buildroot/package/gzip/gzip.mk
+   trunk/buildroot/package/lzma/lzma.mk
+
+
+Changeset:
+Modified: trunk/buildroot/package/argus/argus.mk
+===================================================================
+--- trunk/buildroot/package/argus/argus.mk	2006-12-21 00:43:06 UTC (rev 17024)
++++ trunk/buildroot/package/argus/argus.mk	2006-12-21 10:36:40 UTC (rev 17025)
+@@ -12,11 +12,6 @@
+ ARGUS_BINARY:=bin/argus
+ ARGUS_TARGET_BINARY:=usr/sbin/argus
+ 
+-ARGUS_CONFIG_OPTS:=
+-ifneq ($(strip $(BR2_LARGEFILE)),y)
+-ARGUS_CONFIG_OPTS += --disable-largefile
+-endif
+-
+ ARGUS_TRAP_CHECK=ac_cv_lbl_unaligned_fail=yes
+ ifeq ($(BR2_i386),y)
+ ARGUS_TRAP_CHECK=ac_cv_lbl_unaligned_fail=no
+@@ -63,7 +58,7 @@
+ 		--host=$(GNU_TARGET_NAME) \
+ 		--build=$(GNU_HOST_NAME) \
+ 		--prefix=/usr \
+-		$(ARGUS_CONFIG_OPTS) \
++		$(DISABLE_LARGEFILE) \
+ 	);
+ 	touch $(ARGUS_DIR)/.configured
+ 
+
+Modified: trunk/buildroot/package/berkeleydb/berkeleydb.mk
+===================================================================
+--- trunk/buildroot/package/berkeleydb/berkeleydb.mk	2006-12-21 00:43:06 UTC (rev 17024)
++++ trunk/buildroot/package/berkeleydb/berkeleydb.mk	2006-12-21 10:36:40 UTC (rev 17025)
+@@ -10,10 +10,6 @@
+ DB_DIR:=$(BUILD_DIR)/db-$(DB_VER).NC
+ DB_SHARLIB:=libdb-$(DB_SO_VER).so
+ 
+-ifneq ($(BR2_LARGEFILE),y)
+-DB_LARGEFILE="--disable-largefile"
+-endif
+-
+ $(DL_DIR)/$(DB_SOURCE):
+ 	$(WGET) -P $(DL_DIR) $(DB_SITE)/$(DB_SOURCE)
+ 
+@@ -48,7 +44,7 @@
+ 		--disable-tcl \
+ 		--disable-compat185 \
+ 		--with-pic \
+-                $(DB_LARGEFILE) \
++                $(DISABLE_LARGEFILE) \
+ 	);
+ 	$(SED) 's/\.lo/.o/g' $(DB_DIR)/build_unix/Makefile
+ 	touch $(DB_DIR)/.configured
+
+Modified: trunk/buildroot/package/gzip/gzip.mk
+===================================================================
+--- trunk/buildroot/package/gzip/gzip.mk	2006-12-21 00:43:06 UTC (rev 17024)
++++ trunk/buildroot/package/gzip/gzip.mk	2006-12-21 10:36:40 UTC (rev 17025)
+@@ -12,10 +12,6 @@
+ GZIP_BINARY:=$(GZIP_DIR)/gzip
+ GZIP_TARGET_BINARY:=$(TARGET_DIR)/bin/zmore
+ 
+-ifneq ($(BR2_LARGEFILE),y)
+-GZIP_LARGEFILE="--disable-largefile"
+-endif
+-
+ $(DL_DIR)/$(GZIP_SOURCE):
+ 	 $(WGET) -P $(DL_DIR) $(GZIP_SITE)/$(GZIP_SOURCE)
+ 
+@@ -44,7 +40,7 @@
+ 		--mandir=/usr/man \
+ 		--infodir=/usr/info \
+ 		$(DISABLE_NLS) \
+-		$(GZIP_LARGEFILE) \
++		$(DISABLE_LARGEFILE) \
+ 	);
+ 	touch $(GZIP_DIR)/.configured
+ 
+
+Modified: trunk/buildroot/package/lzma/lzma.mk
+===================================================================
+--- trunk/buildroot/package/lzma/lzma.mk	2006-12-21 00:43:06 UTC (rev 17024)
++++ trunk/buildroot/package/lzma/lzma.mk	2006-12-21 10:36:40 UTC (rev 17025)
+@@ -12,9 +12,7 @@
+ LZMA_CFLAGS:=$(TARGET_CFLAGS)
+ ifeq ($(BR2_LARGEFILE),y)
+ LZMA_CFLAGS+=-D_LARGEFILE_SOURCE -D_LARGEFILE64_SOURCE -D_FILE_OFFSET_BITS=64
+-LZMA_LARGEFILE="--enable-largefile"
+ else
+-LZMA_LARGEFILE="--disable-largefile"
+ endif
+ 
+ $(DL_DIR)/$(LZMA_SOURCE):
+@@ -75,7 +73,7 @@
+ 		--includedir=$(TARGET_DIR)/include \
+ 		--disable-debug \
+ 		$(DISABLE_NLS) \
+-		$(LZMA_LARGEFILE) \
++		$(DISABLE_LARGEFILE) \
+ 	);
+ 	touch $(LZMA_TARGET_DIR)/.configured;
+ 
