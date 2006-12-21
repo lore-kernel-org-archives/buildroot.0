@@ -1,37 +1,36 @@
-From: Joe Pruett <joey@clean.q7.com>
-Date: Thu, 21 Dec 2006 07:26:38 -0800 (PST)
-Subject: [Buildroot] Kernel Panic .....
-In-Reply-To: <20061221090438.GB1192@aon.at>
-References: <Pine.LNX.4.64.0612191302220.31862@smtcorms05.samuelmanutech.com>
-	<Pine.LNX.4.64.0612192336370.31862@smtcorms05.samuelmanutech.com>
-	<Pine.LNX.4.64.0612192039380.11555@q7.q7.com>
-	<Pine.LNX.4.64.0612192344000.31862@smtcorms05.samuelmanutech.com>
-	<20061220154303.GA24288@aon.at>
-	<Pine.LNX.4.64.0612202113430.2373@q7.q7.com>
-	<20061221090438.GB1192@aon.at>
-Message-ID: <Pine.LNX.4.64.0612210719460.4708@q7.q7.com>
+From: aldot at uclibc.org <aldot@uclibc.org>
+Date: Thu, 21 Dec 2006 09:20:42 -0800 (PST)
+Subject: [Buildroot] svn commit: trunk/buildroot/package/mpfr
+Message-ID: <20061221172042.BF505C8020@busybox.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-> >i'm not sure where those two changes should be done officially, or i'd 
-> >submit a patch.  it seems that if the iso relies on ramdisk support, then 
-> >it makes sense to have that enabled by default, and the LINUX_KERNEL vs 
-> >LINUX26_KERNEL make var should be addressed.  
-> 
-> Care to send your patch to outline what could be done to resolve this?
+Author: aldot
+Date: 2006-12-21 09:20:42 -0800 (Thu, 21 Dec 2006)
+New Revision: 17035
 
-the kernel change was done by running make linux26-menuconfig and changing 
-the ramdisk device from m to y.  so that maybe goes into 
-target/device/x86/i386/linux26.config
+Log:
+- forgot to bump the libversion
 
-and the change i made for LINUX_KERNEL was to add the line:
-LINUX_KERNEL=$(LINUX26_KERNEL)
 
-into target/device/x86/i386/linux26.mk
+Modified:
+   trunk/buildroot/package/mpfr/mpfr.mk
 
-but i'm not sure those are the right places to do things.  maybe the uses 
-of LINUX_KERNEL should be changed to LINUX26_KERNEL?  and i'm not sure the 
-linux26.config is really used to config things.
+
+Changeset:
+Modified: trunk/buildroot/package/mpfr/mpfr.mk
+===================================================================
+--- trunk/buildroot/package/mpfr/mpfr.mk	2006-12-21 17:03:20 UTC (rev 17034)
++++ trunk/buildroot/package/mpfr/mpfr.mk	2006-12-21 17:20:42 UTC (rev 17035)
+@@ -10,7 +10,7 @@
+ MPFR_SITE:=http://www.mpfr.org/mpfr-current/
+ MPFR_DIR:=$(BUILD_DIR)/mpfr-$(MPFR_VERSION)
+ MPFR_BINARY:=libmpfr.a
+-MPFR_LIBVERSION:=1.0.0
++MPFR_LIBVERSION:=1.0.1
+ 
+ ifeq ($(BR2_ENDIAN),"BIG")
+ MPFR_BE:=yes
