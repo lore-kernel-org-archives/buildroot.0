@@ -1,7 +1,7 @@
 From: aldot at uclibc.org <aldot@uclibc.org>
-Date: Fri, 22 Dec 2006 03:38:08 -0800 (PST)
+Date: Fri, 22 Dec 2006 03:43:06 -0800 (PST)
 Subject: [Buildroot] svn commit: trunk/buildroot/toolchain/gcc
-Message-ID: <20061222113808.2BF924858A@busybox.net>
+Message-ID: <20061222114306.0460B4858E@busybox.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -9,12 +9,11 @@ Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
 Author: aldot
-Date: 2006-12-22 03:38:07 -0800 (Fri, 22 Dec 2006)
-New Revision: 17044
+Date: 2006-12-22 03:43:06 -0800 (Fri, 22 Dec 2006)
+New Revision: 17045
 
 Log:
-- fix setting the REAL_GCC_VERSION if no snapdate was given (i.e. we're using a svn co of the branch).
-  sjhill, please verify that this still works for you!
+- fix building the target-compiler by passing the correct HOSTCC in.
 
 
 Modified:
@@ -24,16 +23,22 @@ Modified:
 Changeset:
 Modified: trunk/buildroot/toolchain/gcc/gcc-uclibc-3.x.mk
 ===================================================================
---- trunk/buildroot/toolchain/gcc/gcc-uclibc-3.x.mk	2006-12-22 11:29:52 UTC (rev 17043)
-+++ trunk/buildroot/toolchain/gcc/gcc-uclibc-3.x.mk	2006-12-22 11:38:07 UTC (rev 17044)
-@@ -336,8 +336,8 @@
- GCC_LIB_SUBDIR=lib/gcc/$(REAL_GNU_TARGET_NAME)/$(GCC_VERSION)
- endif
- ifeq ($(findstring 4.2,$(GCC_VERSION)),4.2)
--ifneq ($(GCC_SNAP_DATE),)
--REAL_GCC_VERSION:=`cat ${GCC_DIR}/gcc/BASE-VER`
-+ifneq ($(findstring 4.2.,$(GCC_VERSION)),4.2.)
-+REAL_GCC_VERSION=$(shell cat $(GCC_DIR)/gcc/BASE-VER)
- GCC_LIB_SUBDIR=lib/gcc/$(REAL_GNU_TARGET_NAME)/$(REAL_GCC_VERSION)
- else
- GCC_LIB_SUBDIR=lib/gcc/$(REAL_GNU_TARGET_NAME)/$(GCC_VERSION)
+--- trunk/buildroot/toolchain/gcc/gcc-uclibc-3.x.mk	2006-12-22 11:38:07 UTC (rev 17044)
++++ trunk/buildroot/toolchain/gcc/gcc-uclibc-3.x.mk	2006-12-22 11:43:06 UTC (rev 17045)
+@@ -292,9 +292,14 @@
+ #############################################################
+ GCC_BUILD_DIR3:=$(BUILD_DIR)/gcc-$(GCC_VERSION)-target
+ 
+-$(GCC_BUILD_DIR3)/.configured: $(GCC_BUILD_DIR2)/.installed
++$(GCC_BUILD_DIR3)/.prepared: $(GCC_BUILD_DIR2)/.installed $(TARGET_PREREQ)
+ 	mkdir -p $(GCC_BUILD_DIR3)
+-	(cd $(GCC_BUILD_DIR3); PATH=$(TARGET_PATH) \
++	touch $@
++
++$(GCC_BUILD_DIR3)/.configured: $(GCC_BUILD_DIR3)/.prepared
++	(cd $(GCC_BUILD_DIR3); rm -rf config.cache ; \
++		PATH=$(TARGET_PATH) \
++		CC_FOR_BUILD="$(HOSTCC)" \
+ 		$(GCC_DIR)/configure \
+ 		--prefix=/usr \
+ 		--build=$(GNU_HOST_NAME) \
