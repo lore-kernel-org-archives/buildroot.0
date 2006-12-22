@@ -1,7 +1,7 @@
 From: aldot at uclibc.org <aldot@uclibc.org>
-Date: Fri, 22 Dec 2006 04:11:07 -0800 (PST)
-Subject: [Buildroot] svn commit: trunk/buildroot/docs
-Message-ID: <20061222121107.1CF4048584@busybox.net>
+Date: Fri, 22 Dec 2006 04:22:15 -0800 (PST)
+Subject: [Buildroot] svn commit: trunk/buildroot/target/cramfs
+Message-ID: <20061222122215.BD7384859A@busybox.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -9,43 +9,33 @@ Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
 Author: aldot
-Date: 2006-12-22 04:11:06 -0800 (Fri, 22 Dec 2006)
-New Revision: 17048
+Date: 2006-12-22 04:22:15 -0800 (Fri, 22 Dec 2006)
+New Revision: 17049
 
 Log:
-- add some more useful hints
+- patch from AndyI to make it behave on Cygwin. Closes #1127. Thanks!
 
 
-Modified:
-   trunk/buildroot/docs/README
+Added:
+   trunk/buildroot/target/cramfs/cramfs-03-cygwin_IO.patch
 
 
 Changeset:
-Modified: trunk/buildroot/docs/README
+Added: trunk/buildroot/target/cramfs/cramfs-03-cygwin_IO.patch
 ===================================================================
---- trunk/buildroot/docs/README	2006-12-22 11:47:19 UTC (rev 17047)
-+++ trunk/buildroot/docs/README	2006-12-22 12:11:06 UTC (rev 17048)
-@@ -13,5 +13,23 @@
- 
-  -Erik
- 
-+More finegrained configuration:
-+===============================
-+
-+You can specify a config-file for uClibc:
-+$ make UCLIBC_CONFIG_FILE=/my/uClibc.config
-+
-+To use a non-standart host-compiler (if you do not have 'gcc'),
-+make sure that the compiler is in your PATH and that the library paths are
-+setup properly, if your compiler is built dynamically:
-+$ make HOSTCC=gcc-4.3.orig HOSTCXX=gcc-4.3-mine
-+
-+Depending on your configuration, there are some targets you can use to
-+use menuconfig of certain packages. This includes:
-+$ make HOSTCC=gcc-4.3 linux26-menuconfig
-+$ make HOSTCC=gcc-4.3 uclibc-menuconfig
-+$ make HOSTCC=gcc-4.3 busybox-menuconfig
-+
- Please feed suggestions, bug reports, insults, and bribes back to:
- 	Erik Andersen <andersen@codepoet.org>
-+or the buildroot mailing list.
+--- trunk/buildroot/target/cramfs/cramfs-03-cygwin_IO.patch	2006-12-22 12:11:06 UTC (rev 17048)
++++ trunk/buildroot/target/cramfs/cramfs-03-cygwin_IO.patch	2006-12-22 12:22:15 UTC (rev 17049)
+@@ -0,0 +1,13 @@
++--- cramfs-1.1/cramfsck.c.orig	2006-12-22 22:16:59.328125000 +1100
+++++ cramfs-1.1/cramfsck.c	2006-12-19 01:02:05.531250000 +1100
++@@ -56,6 +56,10 @@
++ #include "linux/cramfs_fs.h"
++ #include <zlib.h>
++ 
+++#ifdef __CYGWIN__
+++#define _IO(type,nr)	_IOC(_IOC_NONE,(type),(nr),0)
+++#endif /* __CYGWIN__ */
+++
++ #define BLKGETSIZE	_IO(0x12,96) /* return device size /512 (long *arg) */
++ 
++ /* Exit codes used by fsck-type programs */
