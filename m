@@ -1,66 +1,52 @@
-From: aldot at uclibc.org <aldot@uclibc.org>
-Date: Fri, 22 Dec 2006 05:38:05 -0800 (PST)
-Subject: [Buildroot] svn commit: trunk/buildroot/package/dialog
-Message-ID: <20061222133805.4B07C4859C@busybox.net>
+From: Kishore K <hellokishore@gmail.com>
+Date: Tue, 26 Dec 2006 17:41:49 +0530
+Subject: [Buildroot] problem using mklibs
+Message-ID: <d7e88e1f0612260411hf7b8c48jf7b8170ea4122a71@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Author: aldot
-Date: 2006-12-22 05:38:04 -0800 (Fri, 22 Dec 2006)
-New Revision: 17052
+Hi,
+I am getting some problems with mklibs for MIPS. Since I am using mklibs
+along with buildroot, I thought this is the appropriate forum to post this
+message.
 
-Log:
-- bump version
-- add to targets. Closes #724
+I used buildroot to generate tool chain (gcc-3.4.6, binutils-2.16.91.0.7,
+uClibc - snapshot) and root file system for MIPS platform. After successful
+building of the root file system and tool chain, I executed the following
+commands to optimize libraries.
+
+These commands (with some modifications) are taken from mklibs.mk file in
+buildroot source.
+
+[kishorek at host05 buildroot]$  find build_mips/root/ -type f -perm +100 |
+xargs file -r -N -F '' {} + | awk ' /executable.*dynamically/ { print $1 }'
+> mklibs-progs
+
+[kishorek at host05 buildroot]$  python toolchain/mklibs/mklibs.py --target
+mips-linux-uclibc  --root $PWD/build_mips/staging_dir/  -D
+-L$PWD/build_mips/staging_dir/lib -d $PWD/reduced/  `cat mklibs-progs`
 
 
-Modified:
-   trunk/buildroot/package/dialog/Config.in
-   trunk/buildroot/package/dialog/dialog.mk
+I: Using ld-uClibc.so.0 as dynamic linker.
+I: library reduction pass 1
+352 symbols, 352 unresolved
+I: library reduction pass 2
+352 symbols, 352 unresolved
+Traceback (most recent call last):
+  File "toolchain/mklibs/mklibs.py", line 435, in ?
+    raise "Unresolvable symbol " + symbol
+Unresolvable symbol mmap
 
 
-Changeset:
-Modified: trunk/buildroot/package/dialog/Config.in
-===================================================================
---- trunk/buildroot/package/dialog/Config.in	2006-12-22 12:36:13 UTC (rev 17051)
-+++ trunk/buildroot/package/dialog/Config.in	2006-12-22 13:38:04 UTC (rev 17052)
-@@ -5,7 +5,7 @@
-     help
-         dialog - display dialog boxes from shell scripts
- 
--        This application provides a method of displaying several different types
--        of dialog boxes from shell scripts.  This allows a developer of a script
--        to interact with the user in a much friendlier manner.
-+        This application provides a method of displaying several different
-+	types of dialog boxes from shell scripts.  This allows a developer
-+	of a script to interact with the user in a much friendlier manner.
- 
+As can be seen, second command fails with "Unresolvable symbol mmap". Can
+you please guide me, whether there is any issue with the way, I am using
+mklibs. If so, can you suggest me a way to circumvent the problem.
 
-Modified: trunk/buildroot/package/dialog/dialog.mk
-===================================================================
---- trunk/buildroot/package/dialog/dialog.mk	2006-12-22 12:36:13 UTC (rev 17051)
-+++ trunk/buildroot/package/dialog/dialog.mk	2006-12-22 13:38:04 UTC (rev 17052)
-@@ -4,7 +4,7 @@
- #
- #############################################################
- ###testing: DIALOG_VERSION:=1.0-20050116-1
--DIALOG_VERSION:=1.0-20050206
-+DIALOG_VERSION:=1.0-20060221
- DIALOG_SOURCE:=dialog_$(DIALOG_VERSION).orig.tar.gz
- DIALOG_SITE:=http://ftp.debian.org/debian/pool/main/d/dialog
- DIALOG_DIR:=$(BUILD_DIR)/dialog-$(DIALOG_VERSION)
-@@ -56,3 +56,11 @@
- dialog-dirclean:
- 	rm -rf $(DIALOG_DIR)
- 
-+#############################################################
-+#
-+# Toplevel Makefile options
-+#
-+#############################################################
-+ifeq ($(strip $(BR2_PACKAGE_DIALOG)),y)
-+TARGETS+=dialog
-+endif
+TIA,
+--kishore
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: http://busybox.net/lists/buildroot/attachments/20061226/2165a055/attachment.html 
