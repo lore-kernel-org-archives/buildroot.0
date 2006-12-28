@@ -1,52 +1,64 @@
-From: Kishore K <hellokishore@gmail.com>
-Date: Tue, 26 Dec 2006 17:41:49 +0530
-Subject: [Buildroot] problem using mklibs
-Message-ID: <d7e88e1f0612260411hf7b8c48jf7b8170ea4122a71@mail.gmail.com>
+From: aldot at uclibc.org <aldot@uclibc.org>
+Date: Thu, 28 Dec 2006 00:46:31 -0800 (PST)
+Subject: [Buildroot] svn commit: trunk/buildroot/toolchain/gcc/4.2
+Message-ID: <20061228084631.85AAD485B0@busybox.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi,
-I am getting some problems with mklibs for MIPS. Since I am using mklibs
-along with buildroot, I thought this is the appropriate forum to post this
-message.
+Author: aldot
+Date: 2006-12-28 00:46:30 -0800 (Thu, 28 Dec 2006)
+New Revision: 17096
 
-I used buildroot to generate tool chain (gcc-3.4.6, binutils-2.16.91.0.7,
-uClibc - snapshot) and root file system for MIPS platform. After successful
-building of the root file system and tool chain, I executed the following
-commands to optimize libraries.
-
-These commands (with some modifications) are taken from mklibs.mk file in
-buildroot source.
-
-[kishorek at host05 buildroot]$  find build_mips/root/ -type f -perm +100 |
-xargs file -r -N -F '' {} + | awk ' /executable.*dynamically/ { print $1 }'
-> mklibs-progs
-
-[kishorek at host05 buildroot]$  python toolchain/mklibs/mklibs.py --target
-mips-linux-uclibc  --root $PWD/build_mips/staging_dir/  -D
--L$PWD/build_mips/staging_dir/lib -d $PWD/reduced/  `cat mklibs-progs`
+Log:
+- add missing namespace specifiers. Fixes compilation error.
 
 
-I: Using ld-uClibc.so.0 as dynamic linker.
-I: library reduction pass 1
-352 symbols, 352 unresolved
-I: library reduction pass 2
-352 symbols, 352 unresolved
-Traceback (most recent call last):
-  File "toolchain/mklibs/mklibs.py", line 435, in ?
-    raise "Unresolvable symbol " + symbol
-Unresolvable symbol mmap
+Added:
+   trunk/buildroot/toolchain/gcc/4.2/306-libstdc++-namespace.patch
 
 
-As can be seen, second command fails with "Unresolvable symbol mmap". Can
-you please guide me, whether there is any issue with the way, I am using
-mklibs. If so, can you suggest me a way to circumvent the problem.
-
-TIA,
---kishore
--------------- next part --------------
-An HTML attachment was scrubbed...
-URL: http://busybox.net/lists/buildroot/attachments/20061226/2165a055/attachment.html 
+Changeset:
+Added: trunk/buildroot/toolchain/gcc/4.2/306-libstdc++-namespace.patch
+===================================================================
+--- trunk/buildroot/toolchain/gcc/4.2/306-libstdc++-namespace.patch	2006-12-28 05:44:47 UTC (rev 17095)
++++ trunk/buildroot/toolchain/gcc/4.2/306-libstdc++-namespace.patch	2006-12-28 08:46:30 UTC (rev 17096)
+@@ -0,0 +1,36 @@
++diff -rup gcc-4.2.orig/libstdc++-v3/config/locale/uclibc/messages_members.h gcc-4.2/libstdc++-v3/config/locale/uclibc/messages_members.h
++--- gcc-4.2.orig/libstdc++-v3/config/locale/uclibc/messages_members.h	2006-12-22 13:06:56.000000000 +0100
+++++ gcc-4.2/libstdc++-v3/config/locale/uclibc/messages_members.h	2006-12-22 15:23:41.000000000 +0100
++@@ -32,7 +32,8 @@
++ //
++ 
++ // Written by Benjamin Kosnik <bkoz@redhat.com>
++-
+++namespace std
+++{
++ #ifdef __UCLIBC_MJN3_ONLY__
++ #warning fix prototypes for *textdomain funcs
++ #endif
++@@ -115,3 +116,4 @@
++ 	   this->_S_create_c_locale(this->_M_c_locale_messages, __s); 
++ 	 }
++      }
+++}
++diff -rup gcc-4.2.orig/libstdc++-v3/config/locale/uclibc/time_members.h gcc-4.2/libstdc++-v3/config/locale/uclibc/time_members.h
++--- gcc-4.2.orig/libstdc++-v3/config/locale/uclibc/time_members.h	2006-12-22 13:06:56.000000000 +0100
+++++ gcc-4.2/libstdc++-v3/config/locale/uclibc/time_members.h	2006-12-22 15:20:31.000000000 +0100
++@@ -33,7 +33,8 @@
++ //
++ 
++ // Written by Benjamin Kosnik <bkoz@redhat.com>
++-
+++namespace std
+++{
++   template<typename _CharT>
++     __timepunct<_CharT>::__timepunct(size_t __refs) 
++     : facet(__refs), _M_data(NULL), _M_c_locale_timepunct(NULL), 
++@@ -74,3 +75,4 @@
++       delete _M_data; 
++       _S_destroy_c_locale(_M_c_locale_timepunct); 
++     }
+++}
