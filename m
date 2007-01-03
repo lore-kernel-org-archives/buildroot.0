@@ -1,33 +1,19 @@
-From: mike <wtf62@rovoreed.com>
-Date: Sat, 30 Dec 2006 19:57:17 +0000
-Subject: [Buildroot] i2c undefines
-Message-ID: <1167508638.10282.35.camel@glynys>
+From: Will Buik <willbuik@gmail.com>
+Date: Tue, 2 Jan 2007 21:22:30 -0500
+Subject: [Buildroot] Cross compiling problems with OpenSSH
+Message-ID: <1d09f8b80701021822u562a6421v26d3578afb7fb0b@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-I'm trying to rebuild some applications that I used to have running with
-an old version of buildroot, but now I'm getting undefined symbols, and
-it's all stuff to do with i2c_smbus_* library routines.
+I am having trouble compiling the OpenSSH package into buildroot:
 
-e.g.
+checking compiler and flags for sanity... configure: error: cannot run
+test program while cross compiling
+See `config.log' for more details.
+make: *** [/home/will/box/buildroot/buildroot/build_i686/openssh-3.9p1/.configured]
+Error 1
 
-sensor.o: In function `main':/home/mike/work/sensor/sensor.c:77:
-undefined reference to `i2c_smbus_read_byte_data'
-:/home/mike/work/sensor/sensor.c:84: undefined reference to
-`i2c_smbus_write_block_data'
-:/home/mike/work/sensor/sensor.c:99: undefined reference to
-`i2c_smbus_write_byte'
-:/home/mike/work/sensor/sensor.c:111: undefined reference to
-`i2c_smbus_read_word_data'
-
-The linux kernel header file i2c.h supplied with a pukka kernel is
-different to the one I find in
-build_arch/staging_dir/include/linux/i2c.h
-
-So what's going on here ? Why is the i2c.h header in the staging_dir
-hierarchy different to the real i2c.h header ?
-
-Mike
+Is there a way around this error, I enabled the package using "make menuconfig".
