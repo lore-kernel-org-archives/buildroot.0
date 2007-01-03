@@ -1,19 +1,23 @@
-From: Will Buik <willbuik@gmail.com>
-Date: Tue, 2 Jan 2007 21:22:30 -0500
-Subject: [Buildroot] Cross compiling problems with OpenSSH
-Message-ID: <1d09f8b80701021822u562a6421v26d3578afb7fb0b@mail.gmail.com>
+From: Steven Woody <narkewoody@gmail.com>
+Date: Wed, 3 Jan 2007 16:51:18 +0800
+Subject: [Buildroot] offline buiding
+Message-ID: <ed4892840701030051q6893bf0bq4ac3f7427532f970@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-I am having trouble compiling the OpenSSH package into buildroot:
+hi,
 
-checking compiler and flags for sanity... configure: error: cannot run
-test program while cross compiling
-See `config.log' for more details.
-make: *** [/home/will/box/buildroot/buildroot/build_i686/openssh-3.9p1/.configured]
-Error 1
+i am about to use buidroot to build a cross toolchain on a linux host.
+ but the host does not get an internet connection.  after read the
+intro of buildroot, i found it need to grab files on internet in the
+building process.  is there an offline building mode? thanks.
 
-Is there a way around this error, I enabled the package using "make menuconfig".
+-- 
+woody
+
+then sun rose thinly from the sea and the old man could see the other
+boats, low on the water and well in toward the shore, spread out
+across the current.
