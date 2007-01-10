@@ -1,50 +1,169 @@
-From: nina.holly at aerende.com <nina.holly@aerende.com>
-Date: Tue, 9 Jan 2007 19:39:29 -0800 (PST)
-Subject: [Buildroot] buildroot compile error - "Rn must not overlap other
-	operands"
-Message-ID: <2179.63.193.249.101.1168400369.squirrel@webmail.aerende.com>
+From: andersen at uclibc.org <andersen@uclibc.org>
+Date: Tue,  9 Jan 2007 22:05:18 -0800 (PST)
+Subject: [Buildroot] svn commit: trunk/buildroot/package/gettext
+Message-ID: <20070110060518.E01A24858F@busybox.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi,
-    I downloaded the latest 17177 version of buildroot and got
-the following compile error (shown in the enclosed make_1.log):
+Author: andersen
+Date: 2007-01-09 22:05:18 -0800 (Tue, 09 Jan 2007)
+New Revision: 17217
 
-../xgcc .... buildroot/toolchain_build_arm/gcc-3.4.2/boehm-gc/finalize.c
-/tmp/ccVyKzUN.s: Assembler messages:
-/tmp/ccVyKzUN.s: Error: Rn must not overlap other operands -- `swp r3,5,[r3]'
-
-1.  Has anyone seen this before?  I googled it and it appears to be
-    a real ARM bug. Does anyone know how to find where the swp
-    assembly source that is causing the error is?
-
-2.  Does anyone know how to stop the /tmp/ccVyKzUN.s file from being
-    removed so that I can look at it?
+Log:
+fix gettext so it will actually compile and install
 
 
-Enclosed are:
+Modified:
+   trunk/buildroot/package/gettext/Config.in
+   trunk/buildroot/package/gettext/gettext.mk
 
-a.  make.log - make log file
-b.  config     - .config file
 
-Please let me know if any other information would be useful.
-Thanks in advance,
+Changeset:
+Modified: trunk/buildroot/package/gettext/Config.in
+===================================================================
+--- trunk/buildroot/package/gettext/Config.in	2007-01-10 00:24:50 UTC (rev 17216)
++++ trunk/buildroot/package/gettext/Config.in	2007-01-10 06:05:18 UTC (rev 17217)
+@@ -2,8 +2,8 @@
+ 	bool "gettext"
+ 	default n
+ 	help
+-	  The GNU `gettext' utilities are a set of tools that provide a 
+-	  framework to help other GNU packages produce multi-lingual 
++	  The GNU `gettext' utilities are a set of tools that provide a
++	  framework to help other GNU packages produce multi-lingual
+ 	  messages.
+ 
+ 	  http://www.gnu.org/software/gettext/
 
-Nina
--------------- next part --------------
-A non-text attachment was scrubbed...
-Name: make.log
-Type: application/octet-stream
-Size: 3370 bytes
-Desc: not available
-Url : http://busybox.net/lists/buildroot/attachments/20070109/09d8c265/attachment.obj 
--------------- next part --------------
-A non-text attachment was scrubbed...
-Name: config
-Type: application/octet-stream
-Size: 10238 bytes
-Desc: not available
-Url : http://busybox.net/lists/buildroot/attachments/20070109/09d8c265/attachment-0001.obj 
+Modified: trunk/buildroot/package/gettext/gettext.mk
+===================================================================
+--- trunk/buildroot/package/gettext/gettext.mk	2007-01-10 00:24:50 UTC (rev 17216)
++++ trunk/buildroot/package/gettext/gettext.mk	2007-01-10 06:05:18 UTC (rev 17217)
+@@ -8,8 +8,8 @@
+ GETTEXT_SITE:=http://ftp.gnu.org/pub/gnu/gettext
+ GETTEXT_DIR:=$(BUILD_DIR)/gettext-$(GETTEXT_VER)
+ GETTEXT_CAT:=$(ZCAT)
+-GETTEXT_BINARY:=src/gettext
+-GETTEXT_TARGET_BINARY:=usr/bin/gettext
++GETTEXT_BINARY:=gettext-runtime/src/gettext
++GETTEXT_TARGET_BINARY:=bin/gettext
+ 
+ $(DL_DIR)/$(GETTEXT_SOURCE):
+ 	 $(WGET) -P $(DL_DIR) $(GETTEXT_SITE)/$(GETTEXT_SOURCE)
+@@ -25,6 +25,59 @@
+ 	(cd $(GETTEXT_DIR); rm -rf config.cache; \
+ 		$(TARGET_CONFIGURE_OPTS) \
+ 		CFLAGS="$(TARGET_CFLAGS)" \
++		ac_cv_func_strtod=yes \
++		ac_fsusage_space=yes \
++		fu_cv_sys_stat_statfs2_bsize=yes \
++		ac_cv_func_closedir_void=no \
++		ac_cv_func_getloadavg=no \
++		ac_cv_lib_util_getloadavg=no \
++		ac_cv_lib_getloadavg_getloadavg=no \
++		ac_cv_func_getgroups=yes \
++		ac_cv_func_getgroups_works=yes \
++		ac_cv_func_chown_works=yes \
++		ac_cv_have_decl_euidaccess=no \
++		ac_cv_func_euidaccess=no \
++		ac_cv_have_decl_strnlen=yes \
++		ac_cv_func_strnlen_working=yes \
++		ac_cv_func_lstat_dereferences_slashed_symlink=yes \
++		ac_cv_func_lstat_empty_string_bug=no \
++		ac_cv_func_stat_empty_string_bug=no \
++		vb_cv_func_rename_trailing_slash_bug=no \
++		ac_cv_have_decl_nanosleep=yes \
++		jm_cv_func_nanosleep_works=yes \
++		gl_cv_func_working_utimes=yes \
++		ac_cv_func_utime_null=yes \
++		ac_cv_have_decl_strerror_r=yes \
++		ac_cv_func_strerror_r_char_p=no \
++		jm_cv_func_svid_putenv=yes \
++		ac_cv_func_getcwd_null=yes \
++		ac_cv_func_getdelim=yes \
++		ac_cv_func_mkstemp=yes \
++		utils_cv_func_mkstemp_limitations=no \
++		utils_cv_func_mkdir_trailing_slash_bug=no \
++		ac_cv_func_memcmp_working=yes \
++		ac_cv_have_decl_malloc=yes \
++		gl_cv_func_malloc_0_nonnull=yes \
++		ac_cv_func_malloc_0_nonnull=yes \
++		ac_cv_func_calloc_0_nonnull=yes \
++		ac_cv_func_realloc_0_nonnull=yes \
++		jm_cv_func_gettimeofday_clobber=no \
++		gl_cv_func_working_readdir=yes \
++		jm_ac_cv_func_link_follows_symlink=no \
++		utils_cv_localtime_cache=no \
++		ac_cv_struct_st_mtim_nsec=no \
++		gl_cv_func_tzset_clobber=no \
++		gl_cv_func_getcwd_null=yes \
++		gl_cv_func_getcwd_path_max=yes \
++		ac_cv_func_fnmatch_gnu=yes \
++		am_getline_needs_run_time_check=no \
++		am_cv_func_working_getline=yes \
++		gl_cv_func_mkdir_trailing_slash_bug=no \
++		gl_cv_func_mkstemp_limitations=no \
++		ac_cv_func_working_mktime=yes \
++		jm_cv_func_working_re_compile_pattern=yes \
++		ac_use_included_regex=no \
++		gl_cv_c_restrict=no \
+ 		./configure \
+ 		--target=$(GNU_TARGET_NAME) \
+ 		--host=$(GNU_TARGET_NAME) \
+@@ -39,19 +92,21 @@
+ 		--localstatedir=/var \
+ 		--mandir=/usr/man \
+ 		--infodir=/usr/info \
++		--disable-libasprintf \
+ 	);
+ 	touch $(GETTEXT_DIR)/.configured
+ 
+ $(GETTEXT_DIR)/$(GETTEXT_BINARY): $(GETTEXT_DIR)/.configured
+ 	$(MAKE) CC=$(TARGET_CC) -C $(GETTEXT_DIR)
++	touch -c $(GETTEXT_DIR)/$(GETTEXT_BINARY)
+ 
+ $(STAGING_DIR)/$(GETTEXT_TARGET_BINARY): $(GETTEXT_DIR)/$(GETTEXT_BINARY)
+-	$(MAKE) prefix=$(STAGING_DIR)/usr \
+-		exec_prefix=$(STAGING_DIR)/usr \
+-		bindir=$(STAGING_DIR)/usr/bin \
+-		sbindir=$(STAGING_DIR)/usr/sbin \
++	$(MAKE) prefix=$(STAGING_DIR) \
++		exec_prefix=$(STAGING_DIR) \
++		bindir=$(STAGING_DIR)/bin \
++		sbindir=$(STAGING_DIR)/sbin \
+ 		libexecdir=$(STAGING_DIR)/usr/lib \
+-		datadir=$(STAGING_DIR)/usr/share \
++		datadir=$(STAGING_DIR)/share \
+ 		sysconfdir=$(STAGING_DIR)/etc \
+ 		localstatedir=$(STAGING_DIR)/var \
+ 		libdir=$(STAGING_DIR)/usr/lib \
+@@ -74,22 +129,22 @@
+ # gettext on the target
+ #
+ #############################################################
+-   
++
+ gettext-target: $(GETTEXT_DIR)/$(GETTEXT_BINARY)
+ 	$(MAKE) DESTDIR=$(TARGET_DIR) CC=$(TARGET_CC) -C $(GETTEXT_DIR) install
+-	chmod +x $(TARGET_DIR)/usr/lib/libintl.so.2.2.0 # identify as needing to be stipped
++	chmod +x $(TARGET_DIR)/usr/lib/libintl.so.3.4.3 # identify as needing to be stipped
+ 	rm -rf  $(TARGET_DIR)/usr/info \
+ 		$(TARGET_DIR)/usr/man $(TARGET_DIR)/usr/share/doc \
+ 		$(TARGET_DIR)/usr/doc $(TARGET_DIR)/usr/share/aclocal \
+ 		$(TARGET_DIR)/usr/include/libintl.h
+ 	-rmdir $(TARGET_DIR)/usr/include
+-   
++
+ libintl: $(TARGET_DIR)/usr/lib/libintl.so
+ 
+ $(TARGET_DIR)/usr/lib/libintl.so: $(STAGING_DIR)/$(GETTEXT_TARGET_BINARY)
+ 	cp -a $(STAGING_DIR)/usr/lib/libintl.so* $(TARGET_DIR)/usr/lib
+ 	touch $@
+-    
++
+ #############################################################
+ #
+ # Toplevel Makefile options
