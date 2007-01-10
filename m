@@ -1,7 +1,7 @@
 From: andersen at uclibc.org <andersen@uclibc.org>
-Date: Wed, 10 Jan 2007 15:56:31 -0800 (PST)
-Subject: [Buildroot] svn commit: trunk/buildroot/package/xorg
-Message-ID: <20070110235631.3BE144858B@busybox.net>
+Date: Wed, 10 Jan 2007 15:57:40 -0800 (PST)
+Subject: [Buildroot] svn commit: trunk/buildroot/package:  cairo
+Message-ID: <20070110235740.996D94858B@busybox.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -9,94 +9,419 @@ Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
 Author: andersen
-Date: 2007-01-10 15:56:30 -0800 (Wed, 10 Jan 2007)
-New Revision: 17236
+Date: 2007-01-10 15:57:40 -0800 (Wed, 10 Jan 2007)
+New Revision: 17237
 
 Log:
-update xorg build and installation paths
+add in cairo
 
+
+Added:
+   trunk/buildroot/package/cairo/
+   trunk/buildroot/package/cairo/0001-Add-autoconf-macro-AX_C_FLOAT_WORDS_BIGENDIAN.patch
+   trunk/buildroot/package/cairo/0002-Change-_cairo_fixed_from_double-to-use-the-magic-number-technique.patch
+   trunk/buildroot/package/cairo/Config.in
+   trunk/buildroot/package/cairo/cairo.mk
 
 Modified:
-   trunk/buildroot/package/xorg/Config.in
-   trunk/buildroot/package/xorg/xorg-config.patch
-   trunk/buildroot/package/xorg/xorg.mk
+   trunk/buildroot/package/Config.in
 
 
 Changeset:
-Modified: trunk/buildroot/package/xorg/Config.in
+Modified: trunk/buildroot/package/Config.in
 ===================================================================
---- trunk/buildroot/package/xorg/Config.in	2007-01-10 23:54:35 UTC (rev 17235)
-+++ trunk/buildroot/package/xorg/Config.in	2007-01-10 23:56:30 UTC (rev 17236)
-@@ -4,6 +4,8 @@
- 	depends !BR2_PACKAGE_TINYX
- 	select BR2_PACKAGE_ZLIB
- 	select BR2_PACKAGE_LIBPNG
-+	select BR2_PACKAGE_FREETYPE
+--- trunk/buildroot/package/Config.in	2007-01-10 23:56:30 UTC (rev 17236)
++++ trunk/buildroot/package/Config.in	2007-01-10 23:57:40 UTC (rev 17237)
+@@ -37,6 +37,7 @@
+ source "package/boa/Config.in"
+ source "package/bridge/Config.in"
+ source "package/bsdiff/Config.in"
++source "package/cairo/Config.in"
+ source "package/customize/Config.in"
+ source "package/dhcp/Config.in"
+ source "package/dialog/Config.in"
+
+Added: trunk/buildroot/package/cairo/0001-Add-autoconf-macro-AX_C_FLOAT_WORDS_BIGENDIAN.patch
+===================================================================
+--- trunk/buildroot/package/cairo/0001-Add-autoconf-macro-AX_C_FLOAT_WORDS_BIGENDIAN.patch	                        (rev 0)
++++ trunk/buildroot/package/cairo/0001-Add-autoconf-macro-AX_C_FLOAT_WORDS_BIGENDIAN.patch	2007-01-10 23:57:40 UTC (rev 17237)
+@@ -0,0 +1,103 @@
++From nobody Mon Sep 17 00:00:00 2001
++From: Dan Amelang <dan@amelang.net>
++Date: Sun Oct 29 21:30:08 2006 -0800
++Subject: [PATCH] Add autoconf macro AX_C_FLOAT_WORDS_BIGENDIAN
++
++The symbol that this macro defines (FLOAT_WORDS_BIGENDIAN) can be used
++to make double arithmetic tricks portable.
++
++---
++
++ acinclude.m4 |   65 ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
++ configure.in |    1 +
++ 2 files changed, 66 insertions(+), 0 deletions(-)
++
++3231d91b59a6c2e1c40bbaa8b143694b6c693662
++diff --git a/acinclude.m4 b/acinclude.m4
++index af73800..a0eb13a 100644
++--- a/acinclude.m4
+++++ b/acinclude.m4
++@@ -51,3 +51,68 @@ ifelse([$1],[],,
++   AM_CONDITIONAL(ENABLE_GTK_DOC, test x$enable_gtk_doc = xyes)
++   AM_CONDITIONAL(GTK_DOC_USE_LIBTOOL, test -n "$LIBTOOL")
++ ])
+++
+++# AX_C_FLOAT_WORDS_BIGENDIAN ([ACTION-IF-TRUE], [ACTION-IF-FALSE],
+++#                             [ACTION-IF-UNKNOWN])
+++#
+++# Checks the ordering of words within a multi-word float. This check
+++# is necessary because on some systems (e.g. certain ARM systems), the
+++# float word ordering can be different from the byte ordering. In a
+++# multi-word float context, "big-endian" implies that the word containing
+++# the sign bit is found in the memory location with the lowest address.
+++# This implemenation was inspired by the AC_C_BIGENDIAN macro in autoconf.
+++# -------------------------------------------------------------------------
+++AC_DEFUN([AX_C_FLOAT_WORDS_BIGENDIAN],
+++  [AC_CACHE_CHECK(whether float word ordering is bigendian,
+++                  ax_cv_c_float_words_bigendian, [
+++
+++# The endianess is detected by first compiling C code that contains a special
+++# double float value, then grepping the resulting object file for certain
+++# strings of ascii values. The double is specially crafted to have a
+++# binary representation that corresponds with a simple string. In this
+++# implementation, the string "noonsees" was selected because the individual
+++# word values ("noon" and "sees") are palindromes, thus making this test
+++# byte-order agnostic. If grep finds the string "noonsees" in the object
+++# file, the target platform stores float words in big-endian order. If grep
+++# finds "seesnoon", float words are in little-endian order. If neither value
+++# is found, the user is instructed to specify the ordering.
+++
+++ax_cv_c_float_words_bigendian=unknown
+++AC_COMPILE_IFELSE([AC_LANG_SOURCE([[
+++
+++double d = 90904234967036810337470478905505011476211692735615632014797120844053488865816695273723469097858056257517020191247487429516932130503560650002327564517570778480236724525140520121371739201496540132640109977779420565776568942592.0;
+++
+++]])], [
+++
+++if grep noonsees conftest.$ac_objext >/dev/null ; then
+++  ax_cv_c_float_words_bigendian=yes
+++fi
+++if grep seesnoon conftest.$ac_objext >/dev/null ; then
+++  if test "$ax_cv_c_float_words_bigendian" = unknown; then
+++    ax_cv_c_float_words_bigendian=no
+++  else
+++    ax_cv_c_float_words_bigendian=unknown
+++  fi
+++fi
+++
+++])])
+++
+++case $ax_cv_c_float_words_bigendian in
+++  yes)
+++    m4_default([$1],
+++      [AC_DEFINE([FLOAT_WORDS_BIGENDIAN], 1,
+++                 [Define to 1 if your system stores words within floats
+++                  with the most significant word first])]) ;;
+++  no)
+++    $2 ;;
+++  *)
+++    m4_default([$3],
+++      [AC_MSG_ERROR([
+++
+++Unknown float word ordering. You need to manually preset
+++ax_cv_c_float_words_bigendian=no (or yes) according to your system.
+++
+++    ])]) ;;
+++esac
+++
+++])# AX_C_FLOAT_WORDS_BIGENDIAN
++diff --git a/configure.in b/configure.in
++index 2d2bf9f..797c7ce 100644
++--- a/configure.in
+++++ b/configure.in
++@@ -55,6 +55,7 @@ AC_PROG_CPP
++ AC_PROG_LIBTOOL dnl required version (1.4) DON'T REMOVE!
++ AC_STDC_HEADERS
++ AC_C_BIGENDIAN
+++AX_C_FLOAT_WORDS_BIGENDIAN
++ 
++ dnl ===========================================================================
++ dnl === Local macros
++-- 
++1.2.6
++
+
+Added: trunk/buildroot/package/cairo/0002-Change-_cairo_fixed_from_double-to-use-the-magic-number-technique.patch
+===================================================================
+--- trunk/buildroot/package/cairo/0002-Change-_cairo_fixed_from_double-to-use-the-magic-number-technique.patch	                        (rev 0)
++++ trunk/buildroot/package/cairo/0002-Change-_cairo_fixed_from_double-to-use-the-magic-number-technique.patch	2007-01-10 23:57:40 UTC (rev 17237)
+@@ -0,0 +1,79 @@
++From nobody Mon Sep 17 00:00:00 2001
++From: Dan Amelang <dan@amelang.net>
++Date: Sun Oct 29 21:31:23 2006 -0800
++Subject: [PATCH] Change _cairo_fixed_from_double to use the "magic number" technique
++
++See long thread here:
++http://lists.freedesktop.org/archives/cairo/2006-October/008285.html 
++
++---
++
++ src/cairo-fixed.c |   48 +++++++++++++++++++++++++++++++++++++++++++++++-
++ 1 files changed, 47 insertions(+), 1 deletions(-)
++
++d88acddcabe770e17664b34a2d5f74d3926e1642
++diff --git a/src/cairo-fixed.c b/src/cairo-fixed.c
++index 604c9e7..fe6c2dc 100644
++--- a/src/cairo-fixed.c
+++++ b/src/cairo-fixed.c
++@@ -42,10 +42,56 @@ _cairo_fixed_from_int (int i)
++     return i << 16;
++ }
++ 
+++/* This is the "magic number" approach to converting a double into fixed
+++ * point as described here:
+++ *
+++ * http://www.stereopsis.com/sree/fpu2006.html (an overview)
+++ * http://www.d6.com/users/checker/pdfs/gdmfp.pdf (in detail)
+++ *
+++ * The basic idea is to add a large enough number to the double that the
+++ * literal floating point is moved up to the extent that it forces the
+++ * double's value to be shifted down to the bottom of the mantissa (to make
+++ * room for the large number being added in). Since the mantissa is, at a
+++ * given moment in time, a fixed point integer itself, one can convert a
+++ * float to various fixed point representations by moving around the point
+++ * of a floating point number through arithmetic operations. This behavior
+++ * is reliable on most modern platforms as it is mandated by the IEEE-754
+++ * standard for floating point arithmetic.
+++ *
+++ * For our purposes, a "magic number" must be carefully selected that is
+++ * both large enough to produce the desired point-shifting effect, and also
+++ * has no lower bits in its representation that would interfere with our
+++ * value@the bottom of the mantissa. The magic number is calculated as
+++ * follows:
+++ *
+++ *          (2 ^ (MANTISSA_SIZE - FRACTIONAL_SIZE)) * 1.5
+++ *
+++ * where in our case:
+++ *  - MANTISSA_SIZE for 64-bit doubles is 52
+++ *  - FRACTIONAL_SIZE for 16.16 fixed point is 16
+++ *
+++ * Although this approach provides a very large speedup of this function
+++ * on a wide-array of systems, it does come with two caveats:
+++ *
+++ * 1) It uses banker's rounding as opposed to arithmetic rounding.
+++ * 2) It doesn't function properly if the FPU is in single-precision
+++ *    mode.
+++ */
+++#define CAIRO_MAGIC_NUMBER_FIXED_16_16 (103079215104.0)
++ cairo_fixed_t
++ _cairo_fixed_from_double (double d)
++ {
++-    return (cairo_fixed_t) floor (d * 65536 + 0.5);
+++    union {
+++        double d;
+++        int32_t i[2];
+++    } u;
+++
+++    u.d = d + CAIRO_MAGIC_NUMBER_FIXED_16_16;
+++#ifdef FLOAT_WORDS_BIGENDIAN
+++    return u.i[1];
+++#else
+++    return u.i[0];
+++#endif
++ }
++ 
++ cairo_fixed_t
++-- 
++1.2.6
++
+
+Added: trunk/buildroot/package/cairo/Config.in
+===================================================================
+--- trunk/buildroot/package/cairo/Config.in	                        (rev 0)
++++ trunk/buildroot/package/cairo/Config.in	2007-01-10 23:57:40 UTC (rev 17237)
+@@ -0,0 +1,14 @@
++config BR2_PACKAGE_CAIRO
++	bool "pango"
++	default n
 +	select BR2_PACKAGE_PKGCONFIG
- 	help
- 	  The official X Window system and server.
- 
++	select BR2_PACKAGE_LIBPNG
++	select BR2_PACKAGE_XORG
++	help
++	  Pango is a library for laying out and rendering of text, with an
++	  emphasis on internationalization. Pango can be used anywhere that
++	  text layout is needed, though most of the work on Pango so far has
++	  been done in the context of the GTK+ widget toolkit. Pango forms the
++	  core of text and font handling for GTK+-2.x.
++
++	  http://www.pango.org/
 
-Modified: trunk/buildroot/package/xorg/xorg-config.patch
+Added: trunk/buildroot/package/cairo/cairo.mk
 ===================================================================
---- trunk/buildroot/package/xorg/xorg-config.patch	2007-01-10 23:54:35 UTC (rev 17235)
-+++ trunk/buildroot/package/xorg/xorg-config.patch	2007-01-10 23:56:30 UTC (rev 17236)
-@@ -8,8 +8,8 @@
- +#define ProjectRoot		/usr/X11R6
- +#define NothingOutsideProjectRoot	YES
- +
--+#define HasFreetype2		REPLACE_HAS_FREETYPE2
--+#define Freetype2Dir		REPLACE_STAGING_DIR/usr
-++#define HasFreetype2		YES
-++#define Freetype2Dir		REPLACE_STAGING_DIR
- +#define HasFontconfig		NO
- +#define HasLibpng		YES
- +#define HasZlib			YES
-
-Modified: trunk/buildroot/package/xorg/xorg.mk
-===================================================================
---- trunk/buildroot/package/xorg/xorg.mk	2007-01-10 23:54:35 UTC (rev 17235)
-+++ trunk/buildroot/package/xorg/xorg.mk	2007-01-10 23:56:30 UTC (rev 17236)
-@@ -41,13 +41,6 @@
- XORG_XSERVER:=$(XORG_DIR)/programs/Xserver/$(XSERVER)
- TARGET_XSERVER:=$(XORG_BINX)/$(XSERVER)
- 
--# Check if we should use FreeType2.
--ifeq ($(BR2_PACKAGE_FREETYPE),y)
--HAS_FREETYPE2=YES
--else
--HAS_FREETYPE2=NO
--endif
--
- # figure out Xorg's idea of corresponding architecture name
- ifeq ($(BR2_alpha),y)
- XARCH=Alpha
-@@ -84,7 +77,6 @@
- 	$(XORG_CAT) $(DL_DIR)/$(XORG_SOURCE) | tar -C $(BUILD_DIR) $(TAR_OPTIONS) -
- 	toolchain/patch-kernel.sh $(XORG_DIR) package/xorg/ \*.patch
- 	$(SED) 's:REPLACE_STAGING_DIR:$(STAGING_DIR):g' $(XORG_HOST_DEF)
--	$(SED) 's:REPLACE_HAS_FREETYPE2:$(HAS_FREETYPE2):g' $(XORG_HOST_DEF)
- 	$(SED) 's:REPLACE_GCCINC_DIR:$(shell $(TARGET_CROSS)gcc -print-file-name=include):g' $(XORG_CF)
- 	$(SED) 's:REPLACE_STAGING_DIR:$(STAGING_DIR):g' $(XORG_CF)
- 	$(SED) 's:REPLACE_ARCH:$(ARCH):g' $(XORG_CF)
-@@ -106,8 +98,11 @@
- 
- $(STAGING_DIR)$(TARGET_LIBX)/libX11.so.6.2: $(XORG_XSERVER)
- 	-mkdir -p $(STAGING_DIR)$(TARGET_LIBX)
-+	rm -f $(STAGING_DIR)$(TARGET_LIBX)/pkgconfig
-+	ln -fs ../../../lib/pkgconfig $(STAGING_DIR)$(TARGET_LIBX)/pkgconfig
- 	( cd $(XORG_DIR); $(MAKE) \
- 		DESTDIR=$(STAGING_DIR) install XCURSORGEN=xcursorgen MKFONTSCALE=mkfontscale )
-+	$(SED) 's,/usr/X11R6,$(STAGING_DIR)/usr/X11R6,' $(STAGING_DIR)/usr/X11R6/lib/pkgconfig/*.pc
- 	touch -c $(STAGING_DIR)$(TARGET_LIBX)/libX11.so.6.2
- 
- $(TARGET_XSERVER): $(XORG_XSERVER)
-@@ -149,7 +144,7 @@
- 	touch -c $(XORG_LIBX)/libX11.so.6.2
- 
- 
--xorg: zlib png $(STAGING_DIR)$(TARGET_LIBX)/libX11.so.6.2 $(XORG_LIBX)/libX11.so.6.2
-+xorg: zlib png pkgconfig freetype $(STAGING_DIR)$(TARGET_LIBX)/libX11.so.6.2 $(XORG_LIBX)/libX11.so.6.2
- 
- xorg-source: $(DL_DIR)/$(XORG_SOURCE)
- 
+--- trunk/buildroot/package/cairo/cairo.mk	                        (rev 0)
++++ trunk/buildroot/package/cairo/cairo.mk	2007-01-10 23:57:40 UTC (rev 17237)
+@@ -0,0 +1,165 @@
++#############################################################
++#
++# cairo
++#
++#############################################################
++CAIRO_VERSION:=1.2.6
++CAIRO_SOURCE:=cairo-$(CAIRO_VERSION).tar.gz
++CAIRO_SITE:=http://cairographics.org/releases
++CAIRO_CAT:=$(ZCAT)
++CAIRO_DIR:=$(BUILD_DIR)/cairo-$(CAIRO_VERSION)
++CAIRO_BINARY:=libcairo-1.0.a
++
++ifeq ($(BR2_ENDIAN),"BIG")
++CAIRO_BE:=yes
++else
++CAIRO_BE:=no
++endif
++
++$(DL_DIR)/$(CAIRO_SOURCE):
++	 $(WGET) -P $(DL_DIR) $(CAIRO_SITE)/$(CAIRO_SOURCE)
++
++cairo-source: $(DL_DIR)/$(CAIRO_SOURCE)
++
++$(CAIRO_DIR)/.unpacked: $(DL_DIR)/$(CAIRO_SOURCE)
++	$(CAIRO_CAT) $(DL_DIR)/$(CAIRO_SOURCE) | tar -C $(BUILD_DIR) $(TAR_OPTIONS) -
++	toolchain/patch-kernel.sh $(CAIRO_DIR) package/cairo/ \*.patch*
++	$(CONFIG_UPDATE) $(CAIRO_DIR)
++	touch $(CAIRO_DIR)/.unpacked
++
++$(CAIRO_DIR)/.configured: $(CAIRO_DIR)/.unpacked
++	(cd $(CAIRO_DIR); rm -rf config.cache; \
++		$(TARGET_CONFIGURE_OPTS) \
++		PKG_CONFIG=$(STAGING_DIR)/usr/bin/pkg-config \
++		ac_cv_c_bigendian=$(CAIRO_BE) \
++		ac_cv_func_posix_getpwuid_r=yes \
++		glib_cv_stack_grows=no \
++		glib_cv_uscore=no \
++		ac_cv_func_strtod=yes \
++		ac_fsusage_space=yes \
++		fu_cv_sys_stat_statfs2_bsize=yes \
++		ac_cv_func_closedir_void=no \
++		ac_cv_func_getloadavg=no \
++		ac_cv_lib_util_getloadavg=no \
++		ac_cv_lib_getloadavg_getloadavg=no \
++		ac_cv_func_getgroups=yes \
++		ac_cv_func_getgroups_works=yes \
++		ac_cv_func_chown_works=yes \
++		ac_cv_have_decl_euidaccess=no \
++		ac_cv_func_euidaccess=no \
++		ac_cv_have_decl_strnlen=yes \
++		ac_cv_func_strnlen_working=yes \
++		ac_cv_func_lstat_dereferences_slashed_symlink=yes \
++		ac_cv_func_lstat_empty_string_bug=no \
++		ac_cv_func_stat_empty_string_bug=no \
++		vb_cv_func_rename_trailing_slash_bug=no \
++		ac_cv_have_decl_nanosleep=yes \
++		jm_cv_func_nanosleep_works=yes \
++		gl_cv_func_working_utimes=yes \
++		ac_cv_func_utime_null=yes \
++		ac_cv_have_decl_strerror_r=yes \
++		ac_cv_func_strerror_r_char_p=no \
++		jm_cv_func_svid_putenv=yes \
++		ac_cv_func_getcwd_null=yes \
++		ac_cv_func_getdelim=yes \
++		ac_cv_func_mkstemp=yes \
++		utils_cv_func_mkstemp_limitations=no \
++		utils_cv_func_mkdir_trailing_slash_bug=no \
++		ac_cv_func_memcmp_working=yes \
++		ac_cv_have_decl_malloc=yes \
++		gl_cv_func_malloc_0_nonnull=yes \
++		ac_cv_func_malloc_0_nonnull=yes \
++		ac_cv_func_calloc_0_nonnull=yes \
++		ac_cv_func_realloc_0_nonnull=yes \
++		jm_cv_func_gettimeofday_clobber=no \
++		gl_cv_func_working_readdir=yes \
++		jm_ac_cv_func_link_follows_symlink=no \
++		utils_cv_localtime_cache=no \
++		ac_cv_struct_st_mtim_nsec=no \
++		gl_cv_func_tzset_clobber=no \
++		gl_cv_func_getcwd_null=yes \
++		gl_cv_func_getcwd_path_max=yes \
++		ac_cv_func_fnmatch_gnu=yes \
++		am_getline_needs_run_time_check=no \
++		am_cv_func_working_getline=yes \
++		gl_cv_func_mkdir_trailing_slash_bug=no \
++		gl_cv_func_mkstemp_limitations=no \
++		ac_cv_func_working_mktime=yes \
++		jm_cv_func_working_re_compile_pattern=yes \
++		ac_use_included_regex=no \
++		gl_cv_c_restrict=no \
++		ac_cv_path_GLIB_GENMARSHAL=/usr/bin/glib-genmarshal \
++		./configure \
++		--host=$(REAL_GNU_TARGET_NAME) \
++		--build=$(GNU_HOST_NAME) \
++		--prefix=$(STAGING_DIR) \
++		--exec_prefix=$(STAGING_DIR) \
++		--libdir=$(STAGING_DIR)/lib \
++		--includedir=$(STAGING_DIR)/include \
++		--bindir=/usr/bin \
++		--sbindir=/usr/sbin \
++		--libexecdir=/usr/lib \
++		--sysconfdir=/etc \
++		--datadir=/usr/share \
++		--localstatedir=/var \
++		--mandir=/usr/man \
++		--infodir=/usr/info \
++		--enable-shared \
++		--enable-static \
++		--with-x \
++		--x-includes=$(STAGING_DIR)/usr/X11R6/include \
++		--x-libraries=$(STAGING_DIR)/usr/X11R6/lib \
++		--enable-ps=no \
++		--enable-pdf=no \
++		--enable-svg=no \
++		--enable-png=yes \
++		--enable-freetype=yes \
++		--enable-xlib=yes \
++		--enable-xlib-xrender=yes \
++	);
++	touch $(CAIRO_DIR)/.configured
++
++$(CAIRO_DIR)/cairo/.libs/$(CAIRO_BINARY): $(CAIRO_DIR)/.configured
++	$(MAKE) CC=$(TARGET_CC) -C $(CAIRO_DIR)
++	touch -c $(CAIRO_DIR)/cairo/.libs/$(CAIRO_BINARY)
++
++$(STAGING_DIR)/lib/$(CAIRO_BINARY): $(CAIRO_DIR)/cairo/.libs/$(CAIRO_BINARY)
++	$(MAKE) prefix=$(STAGING_DIR) \
++	    exec_prefix=$(STAGING_DIR) \
++	    bindir=$(STAGING_DIR)/bin \
++	    sbindir=$(STAGING_DIR)/sbin \
++	    libexecdir=$(STAGING_DIR)/libexec \
++	    datadir=$(STAGING_DIR)/share \
++	    sysconfdir=$(STAGING_DIR)/etc \
++	    sharedstatedir=$(STAGING_DIR)/com \
++	    localstatedir=$(STAGING_DIR)/var \
++	    libdir=$(STAGING_DIR)/lib \
++	    includedir=$(STAGING_DIR)/include \
++	    oldincludedir=$(STAGING_DIR)/include \
++	    infodir=$(STAGING_DIR)/info \
++	    mandir=$(STAGING_DIR)/man \
++	    -C $(CAIRO_DIR) install;
++
++$(TARGET_DIR)/lib/libcairo.so.2.9.3: $(STAGING_DIR)/lib/$(CAIRO_BINARY)
++	cp -a $(STAGING_DIR)/lib/libcairo.so $(TARGET_DIR)/lib/
++	cp -a $(STAGING_DIR)/lib/libcairo.so.2* $(TARGET_DIR)/lib/
++	$(STRIP) --strip-unneeded $(TARGET_DIR)/lib/libcairo.so.2.*
++	touch -c $(TARGET_DIR)/lib/libcairo.so.2.9.3
++
++cairo: uclibc gettext libintl pkgconfig libglib2 xorg cairo $(TARGET_DIR)/lib/libcairo.so.2.9.3
++
++cairo-clean:
++	rm -f $(TARGET_DIR)/lib/$(CAIRO_BINARY)
++	-$(MAKE) -C $(CAIRO_DIR) clean
++
++cairo-dirclean:
++	rm -rf $(CAIRO_DIR)
++
++#############################################################
++#
++# Toplevel Makefile options
++#
++#############################################################
++ifeq ($(strip $(BR2_PACKAGE_CAIRO)),y)
++TARGETS+=cairo
++endif
