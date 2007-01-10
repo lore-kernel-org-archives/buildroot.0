@@ -1,45 +1,58 @@
-From: Thomas Wedde <t.wedde@centersystems.com>
-Date: Wed, 10 Jan 2007 18:42:08 +0100
-Subject: [Buildroot] "gdb.mk" in buildroot does not respect extension in
-	cygwin
-Message-ID: <001701c734de$a6d24290$6b1410ac@Berlin1>
+From: aldot at uclibc.org <aldot@uclibc.org>
+Date: Wed, 10 Jan 2007 10:39:10 -0800 (PST)
+Subject: [Buildroot] svn commit: trunk/buildroot/package/m4
+Message-ID: <20070110183910.5F6FB4856D@busybox.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi list,
+Author: aldot
+Date: 2007-01-10 10:39:08 -0800 (Wed, 10 Jan 2007)
+New Revision: 17227
 
-Builing a croos ? toolchain from i386-pc-cygwin (host) for arm-linux-gnu
-(target) with Building gdb for the host and gdbserver for the target enabled
-ends whith following error:
-
-make[3]: Entering directory
-`/opt/buildroot/toolchain_build_arm/gdbhost-6.3/gdb'
-make[4]: Entering directory
-`/opt/buildroot/toolchain_build_arm/gdbhost-6.3/gdb/doc'
-make[4]: Nothing to be done for `all'.
-make[4]: Leaving directory
-`/opt/buildroot/toolchain_build_arm/gdbhost-6.3/gdb/doc'
-make[3]: Leaving directory
-`/opt/buildroot/toolchain_build_arm/gdbhost-6.3/gdb'
-make[2]: Leaving directory
-`/opt/buildroot/toolchain_build_arm/gdbhost-6.3/gdb'
-make[1]: Leaving directory `/opt/buildroot/toolchain_build_arm/gdbhost-6.3'
-strip /opt/buildroot/toolchain_build_arm/gdbhost-6.3/gdb/gdb
-strip: /opt/buildroot/toolchain_build_arm/gdbhost-6.3/gdb/gdb: No such file or
-directory
-make: *** [/opt/buildroot/toolchain_build_arm/gdbhost-6.3/gdb/gdb] Error 1
+Log:
+- bump version
 
 
-I found out that the "gdb.mk" in \buildroot\toolchain\gdb\" uses the plain
-filename "gdb" for the last steps of the makefile (stripping and installing).
-In cygwin, we always have an ".exe" extension for all the host tools.
+Added:
+   trunk/buildroot/package/m4/m4-1.4.8-001-MB_CUR_MAX.patch
 
-This is not a fatal problem, but I think this is easy to fix with a check of
-the host configuration.
+Modified:
+   trunk/buildroot/package/m4/m4.mk
 
-Best Regards
 
-Thomas
+Changeset:
+Added: trunk/buildroot/package/m4/m4-1.4.8-001-MB_CUR_MAX.patch
+===================================================================
+--- trunk/buildroot/package/m4/m4-1.4.8-001-MB_CUR_MAX.patch	                        (rev 0)
++++ trunk/buildroot/package/m4/m4-1.4.8-001-MB_CUR_MAX.patch	2007-01-10 18:39:08 UTC (rev 17227)
+@@ -0,0 +1,13 @@
++--- m4-1.4.8.orig/lib/regcomp.c	2006-09-24 06:28:37.000000000 +0200
+++++ m4-1.4.8/lib/regcomp.c	2007-01-06 20:53:10.000000000 +0100
++@@ -871,6 +871,10 @@ init_dfa (re_dfa_t *dfa, size_t pat_len)
++   dfa->state_table = calloc (sizeof (struct re_state_table_entry), table_size);
++   dfa->state_hash_mask = table_size - 1;
++ 
+++#ifndef MB_CUR_MAX
+++#define MB_CUR_MAX (0)
+++#endif
+++
++   dfa->mb_cur_max = MB_CUR_MAX;
++ #ifdef _LIBC
++   if (dfa->mb_cur_max == 6
+
+Modified: trunk/buildroot/package/m4/m4.mk
+===================================================================
+--- trunk/buildroot/package/m4/m4.mk	2007-01-10 17:46:19 UTC (rev 17226)
++++ trunk/buildroot/package/m4/m4.mk	2007-01-10 18:39:08 UTC (rev 17227)
+@@ -3,7 +3,7 @@
+ # m4
+ #
+ #############################################################
+-M4_VER:=1.4.4
++M4_VER:=1.4.8
+ M4_SOURCE:=m4-$(M4_VER).tar.bz2
+ M4_CAT:=$(BZCAT)
+ M4_SITE:=http://ftp.gnu.org/pub/gnu/m4
