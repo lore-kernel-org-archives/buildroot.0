@@ -1,7 +1,7 @@
 From: andersen at uclibc.org <andersen@uclibc.org>
-Date: Wed, 10 Jan 2007 23:36:46 -0800 (PST)
-Subject: [Buildroot] svn commit: trunk/buildroot/package/pango
-Message-ID: <20070111073646.B1E7E4858B@busybox.net>
+Date: Wed, 10 Jan 2007 23:44:15 -0800 (PST)
+Subject: [Buildroot] svn commit: trunk/buildroot/package:  atk
+Message-ID: <20070111074415.6DDC1485A2@busybox.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -9,51 +9,212 @@ Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
 Author: andersen
-Date: 2007-01-10 23:36:46 -0800 (Wed, 10 Jan 2007)
-New Revision: 17245
+Date: 2007-01-10 23:44:14 -0800 (Wed, 10 Jan 2007)
+New Revision: 17246
 
 Log:
-use a slightly more sensible dep, strip the correct library names
+add atk package
 
+
+Added:
+   trunk/buildroot/package/atk/
+   trunk/buildroot/package/atk/Config.in
+   trunk/buildroot/package/atk/atk.mk
 
 Modified:
-   trunk/buildroot/package/pango/pango.mk
+   trunk/buildroot/package/Config.in
 
 
 Changeset:
-Modified: trunk/buildroot/package/pango/pango.mk
+Modified: trunk/buildroot/package/Config.in
 ===================================================================
---- trunk/buildroot/package/pango/pango.mk	2007-01-11 07:35:59 UTC (rev 17244)
-+++ trunk/buildroot/package/pango/pango.mk	2007-01-11 07:36:46 UTC (rev 17245)
-@@ -141,7 +141,7 @@
- 	    mandir=$(STAGING_DIR)/man \
- 	    -C $(PANGO_DIR) install;
- 
--$(TARGET_DIR)/lib/libpango-1.0.so.0.1300.5: $(STAGING_DIR)/lib/$(PANGO_BINARY)
-+$(TARGET_DIR)/lib/libpango-1.0.so.0: $(STAGING_DIR)/lib/$(PANGO_BINARY)
- 	cp -a $(STAGING_DIR)/lib/libpango-1.0.so $(TARGET_DIR)/lib/
- 	cp -a $(STAGING_DIR)/lib/libpango-1.0.so.0* $(TARGET_DIR)/lib/
- 	cp -a $(STAGING_DIR)/lib/libpangox-1.0.so $(TARGET_DIR)/lib/
-@@ -152,15 +152,15 @@
- 	cp -a $(STAGING_DIR)/lib/libpangoxft-1.0.so.0* $(TARGET_DIR)/lib/
- 	cp -a $(STAGING_DIR)/lib/libpangocairo-1.0.so $(TARGET_DIR)/lib/
- 	cp -a $(STAGING_DIR)/lib/libpangocairo-1.0.so.0* $(TARGET_DIR)/lib/
--	$(STRIP) --strip-unneeded $(TARGET_DIR)/lib/libpango-2.0.so.0.*
--	$(STRIP) --strip-unneeded $(TARGET_DIR)/lib/libgpangox-2.0.so.0.*
--	$(STRIP) --strip-unneeded $(TARGET_DIR)/lib/libgoft2-2.0.so.0.*
--	$(STRIP) --strip-unneeded $(TARGET_DIR)/lib/libgoxft-2.0.so.0.*
--	$(STRIP) --strip-unneeded $(TARGET_DIR)/lib/libgocairo-2.0.so.0.*
--	touch -c $(TARGET_DIR)/lib/libpango-1.0.so.0.1300.5
-+	$(STRIP) --strip-unneeded $(TARGET_DIR)/lib/libpango-1.0.so.0.*
-+	$(STRIP) --strip-unneeded $(TARGET_DIR)/lib/libgpangox-1.0.so.0.*
-+	$(STRIP) --strip-unneeded $(TARGET_DIR)/lib/libgoft2-1.0.so.0.*
-+	$(STRIP) --strip-unneeded $(TARGET_DIR)/lib/libgoxft-1.0.so.0.*
-+	$(STRIP) --strip-unneeded $(TARGET_DIR)/lib/libgocairo-1.0.so.0.*
-+	touch -c $(TARGET_DIR)/lib/libpango-1.0.so.0
- 
- pango: uclibc gettext libintl pkgconfig libglib2 xorg cairo \
--	$(TARGET_DIR)/lib/libpango-1.0.so.0.1300.5
-+	$(TARGET_DIR)/lib/libpango-1.0.so.0
- 
- pango-clean:
- 	rm -f $(TARGET_DIR)/lib/$(PANGO_BINARY)
+--- trunk/buildroot/package/Config.in	2007-01-11 07:36:46 UTC (rev 17245)
++++ trunk/buildroot/package/Config.in	2007-01-11 07:44:14 UTC (rev 17246)
+@@ -28,6 +28,7 @@
+ source "package/argus/Config.in"
+ source "package/asterisk/Config.in"
+ source "package/at/Config.in"
++source "package/atk/Config.in"
+ source "package/autoconf/Config.in"
+ source "package/automake/Config.in"
+ source "package/avahi/Config.in"
+
+Added: trunk/buildroot/package/atk/Config.in
+===================================================================
+--- trunk/buildroot/package/atk/Config.in	                        (rev 0)
++++ trunk/buildroot/package/atk/Config.in	2007-01-11 07:44:14 UTC (rev 17246)
+@@ -0,0 +1,6 @@
++config BR2_PACKAGE_ATK
++	bool "atk"
++	default n
++	select BR2_PACKAGE_LIBGLIB2
++	help
++	  The ATK accessibility toolkit, needed to build GTK+-2.x.
+
+Added: trunk/buildroot/package/atk/atk.mk
+===================================================================
+--- trunk/buildroot/package/atk/atk.mk	                        (rev 0)
++++ trunk/buildroot/package/atk/atk.mk	2007-01-11 07:44:14 UTC (rev 17246)
+@@ -0,0 +1,162 @@
++#############################################################
++#
++# atk
++#
++#############################################################
++ATK_VERSION:=1.9.1
++ATK_SOURCE:=atk-$(ATK_VERSION).tar.bz2
++ATK_SITE:=ftp://ftp.gtk.org/pub/gtk/v2.10/dependencies
++ATK_CAT:=$(BZCAT)
++ATK_DIR:=$(BUILD_DIR)/atk-$(ATK_VERSION)
++ATK_BINARY:=libatk-1.0.a
++
++ifeq ($(BR2_ENDIAN),"BIG")
++ATK_BE:=yes
++else
++ATK_BE:=no
++endif
++
++$(DL_DIR)/$(ATK_SOURCE):
++	 $(WGET) -P $(DL_DIR) $(ATK_SITE)/$(ATK_SOURCE)
++
++atk-source: $(DL_DIR)/$(ATK_SOURCE)
++
++$(ATK_DIR)/.unpacked: $(DL_DIR)/$(ATK_SOURCE)
++	$(ATK_CAT) $(DL_DIR)/$(ATK_SOURCE) | tar -C $(BUILD_DIR) $(TAR_OPTIONS) -
++	toolchain/patch-kernel.sh $(ATK_DIR) package/atk/ \*.patch*
++	$(CONFIG_UPDATE) $(ATK_DIR)
++	touch $(ATK_DIR)/.unpacked
++
++$(ATK_DIR)/.configured: $(ATK_DIR)/.unpacked
++	(cd $(ATK_DIR); rm -rf config.cache; \
++		$(TARGET_CONFIGURE_OPTS) \
++		PKG_CONFIG=$(STAGING_DIR)/usr/bin/pkg-config \
++		ac_cv_c_bigendian=$(ATK_BE) \
++		ac_cv_func_posix_getpwuid_r=yes \
++		glib_cv_stack_grows=no \
++		glib_cv_uscore=no \
++		ac_cv_func_strtod=yes \
++		ac_fsusage_space=yes \
++		fu_cv_sys_stat_statfs2_bsize=yes \
++		ac_cv_func_closedir_void=no \
++		ac_cv_func_getloadavg=no \
++		ac_cv_lib_util_getloadavg=no \
++		ac_cv_lib_getloadavg_getloadavg=no \
++		ac_cv_func_getgroups=yes \
++		ac_cv_func_getgroups_works=yes \
++		ac_cv_func_chown_works=yes \
++		ac_cv_have_decl_euidaccess=no \
++		ac_cv_func_euidaccess=no \
++		ac_cv_have_decl_strnlen=yes \
++		ac_cv_func_strnlen_working=yes \
++		ac_cv_func_lstat_dereferences_slashed_symlink=yes \
++		ac_cv_func_lstat_empty_string_bug=no \
++		ac_cv_func_stat_empty_string_bug=no \
++		vb_cv_func_rename_trailing_slash_bug=no \
++		ac_cv_have_decl_nanosleep=yes \
++		jm_cv_func_nanosleep_works=yes \
++		gl_cv_func_working_utimes=yes \
++		ac_cv_func_utime_null=yes \
++		ac_cv_have_decl_strerror_r=yes \
++		ac_cv_func_strerror_r_char_p=no \
++		jm_cv_func_svid_putenv=yes \
++		ac_cv_func_getcwd_null=yes \
++		ac_cv_func_getdelim=yes \
++		ac_cv_func_mkstemp=yes \
++		utils_cv_func_mkstemp_limitations=no \
++		utils_cv_func_mkdir_trailing_slash_bug=no \
++		ac_cv_func_memcmp_working=yes \
++		ac_cv_have_decl_malloc=yes \
++		gl_cv_func_malloc_0_nonnull=yes \
++		ac_cv_func_malloc_0_nonnull=yes \
++		ac_cv_func_calloc_0_nonnull=yes \
++		ac_cv_func_realloc_0_nonnull=yes \
++		jm_cv_func_gettimeofday_clobber=no \
++		gl_cv_func_working_readdir=yes \
++		jm_ac_cv_func_link_follows_symlink=no \
++		utils_cv_localtime_cache=no \
++		ac_cv_struct_st_mtim_nsec=no \
++		gl_cv_func_tzset_clobber=no \
++		gl_cv_func_getcwd_null=yes \
++		gl_cv_func_getcwd_path_max=yes \
++		ac_cv_func_fnmatch_gnu=yes \
++		am_getline_needs_run_time_check=no \
++		am_cv_func_working_getline=yes \
++		gl_cv_func_mkdir_trailing_slash_bug=no \
++		gl_cv_func_mkstemp_limitations=no \
++		ac_cv_func_working_mktime=yes \
++		jm_cv_func_working_re_compile_pattern=yes \
++		ac_use_included_regex=no \
++		gl_cv_c_restrict=no \
++		ac_cv_path_GLIB_GENMARSHAL=/usr/bin/glib-genmarshal \
++		./configure \
++		--host=$(REAL_GNU_TARGET_NAME) \
++		--build=$(GNU_HOST_NAME) \
++		--prefix=$(STAGING_DIR) \
++		--exec_prefix=$(STAGING_DIR) \
++		--libdir=$(STAGING_DIR)/lib \
++		--includedir=$(STAGING_DIR)/include \
++		--bindir=/usr/bin \
++		--sbindir=/usr/sbin \
++		--libexecdir=/usr/lib \
++		--sysconfdir=/etc \
++		--datadir=/usr/share \
++		--localstatedir=/var \
++		--mandir=/usr/man \
++		--infodir=/usr/info \
++		--enable-shared \
++		--enable-static \
++		--with-x \
++		--x-includes=$(STAGING_DIR)/usr/X11R6/include \
++		--x-libraries=$(STAGING_DIR)/usr/X11R6/lib \
++		--disable-glibtest \
++		--enable-explicit-deps=no \
++		--disable-debug \
++	);
++	touch $(ATK_DIR)/.configured
++
++$(ATK_DIR)/atk/.libs/$(ATK_BINARY): $(ATK_DIR)/.configured
++	$(MAKE) CC=$(TARGET_CC) -C $(ATK_DIR)
++	touch -c $(ATK_DIR)/atk/.libs/$(ATK_BINARY)
++
++$(STAGING_DIR)/lib/$(ATK_BINARY): $(ATK_DIR)/atk/.libs/$(ATK_BINARY)
++	$(MAKE) prefix=$(STAGING_DIR) \
++	    exec_prefix=$(STAGING_DIR) \
++	    bindir=$(STAGING_DIR)/bin \
++	    sbindir=$(STAGING_DIR)/sbin \
++	    libexecdir=$(STAGING_DIR)/libexec \
++	    datadir=$(STAGING_DIR)/share \
++	    sysconfdir=$(STAGING_DIR)/etc \
++	    sharedstatedir=$(STAGING_DIR)/com \
++	    localstatedir=$(STAGING_DIR)/var \
++	    libdir=$(STAGING_DIR)/lib \
++	    includedir=$(STAGING_DIR)/include \
++	    oldincludedir=$(STAGING_DIR)/include \
++	    infodir=$(STAGING_DIR)/info \
++	    mandir=$(STAGING_DIR)/man \
++	    -C $(ATK_DIR) install;
++	touch -c $(STAGING_DIR)/lib/$(ATK_BINARY)
++
++$(TARGET_DIR)/lib/libatk-1.0.so.0: $(STAGING_DIR)/lib/$(ATK_BINARY)
++	cp -a $(STAGING_DIR)/lib/libatk-1.0.so $(TARGET_DIR)/lib/
++	cp -a $(STAGING_DIR)/lib/libatk-1.0.so.0* $(TARGET_DIR)/lib/
++	$(STRIP) --strip-unneeded $(TARGET_DIR)/lib/libatk-1.0.so.0.*
++	touch -c $(TARGET_DIR)/lib/libatk-1.0.so.0
++
++atk: libglib2 $(TARGET_DIR)/lib/libatk-1.0.so.0
++
++atk-clean:
++	rm -f $(TARGET_DIR)/lib/$(ATK_BINARY)
++	-$(MAKE) -C $(ATK_DIR) clean
++
++atk-dirclean:
++	rm -rf $(ATK_DIR)
++
++#############################################################
++#
++# Toplevel Makefile options
++#
++#############################################################
++ifeq ($(strip $(BR2_PACKAGE_ATK)),y)
++TARGETS+=atk
++endif
