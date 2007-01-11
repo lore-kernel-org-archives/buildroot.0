@@ -1,7 +1,7 @@
 From: andersen at uclibc.org <andersen@uclibc.org>
-Date: Wed, 10 Jan 2007 23:36:01 -0800 (PST)
-Subject: [Buildroot] svn commit: trunk/buildroot/package/cairo
-Message-ID: <20070111073601.0A4A64857F@busybox.net>
+Date: Wed, 10 Jan 2007 23:36:46 -0800 (PST)
+Subject: [Buildroot] svn commit: trunk/buildroot/package/pango
+Message-ID: <20070111073646.B1E7E4858B@busybox.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -9,60 +9,51 @@ Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
 Author: andersen
-Date: 2007-01-10 23:35:59 -0800 (Wed, 10 Jan 2007)
-New Revision: 17244
+Date: 2007-01-10 23:36:46 -0800 (Wed, 10 Jan 2007)
+New Revision: 17245
 
 Log:
-fix build deps
+use a slightly more sensible dep, strip the correct library names
 
 
 Modified:
-   trunk/buildroot/package/cairo/cairo.mk
+   trunk/buildroot/package/pango/pango.mk
 
 
 Changeset:
-Modified: trunk/buildroot/package/cairo/cairo.mk
+Modified: trunk/buildroot/package/pango/pango.mk
 ===================================================================
---- trunk/buildroot/package/cairo/cairo.mk	2007-01-11 07:27:37 UTC (rev 17243)
-+++ trunk/buildroot/package/cairo/cairo.mk	2007-01-11 07:35:59 UTC (rev 17244)
-@@ -8,7 +8,7 @@
- CAIRO_SITE:=http://cairographics.org/releases
- CAIRO_CAT:=$(ZCAT)
- CAIRO_DIR:=$(BUILD_DIR)/cairo-$(CAIRO_VERSION)
--CAIRO_BINARY:=libcairo-1.0.a
-+CAIRO_BINARY:=libcairo.a
- 
- ifeq ($(BR2_ENDIAN),"BIG")
- CAIRO_BE:=yes
-@@ -119,11 +119,11 @@
- 	);
- 	touch $(CAIRO_DIR)/.configured
- 
--$(CAIRO_DIR)/cairo/.libs/$(CAIRO_BINARY): $(CAIRO_DIR)/.configured
-+$(CAIRO_DIR)/src/.libs/$(CAIRO_BINARY): $(CAIRO_DIR)/.configured
- 	$(MAKE) CC=$(TARGET_CC) -C $(CAIRO_DIR)
--	touch -c $(CAIRO_DIR)/cairo/.libs/$(CAIRO_BINARY)
-+	touch -c $(CAIRO_DIR)/src/.libs/$(CAIRO_BINARY)
- 
--$(STAGING_DIR)/lib/$(CAIRO_BINARY): $(CAIRO_DIR)/cairo/.libs/$(CAIRO_BINARY)
-+$(STAGING_DIR)/lib/$(CAIRO_BINARY): $(CAIRO_DIR)/src/.libs/$(CAIRO_BINARY)
- 	$(MAKE) prefix=$(STAGING_DIR) \
- 	    exec_prefix=$(STAGING_DIR) \
- 	    bindir=$(STAGING_DIR)/bin \
-@@ -139,6 +139,7 @@
- 	    infodir=$(STAGING_DIR)/info \
+--- trunk/buildroot/package/pango/pango.mk	2007-01-11 07:35:59 UTC (rev 17244)
++++ trunk/buildroot/package/pango/pango.mk	2007-01-11 07:36:46 UTC (rev 17245)
+@@ -141,7 +141,7 @@
  	    mandir=$(STAGING_DIR)/man \
- 	    -C $(CAIRO_DIR) install;
-+	touch -c $(STAGING_DIR)/lib/$(CAIRO_BINARY)
+ 	    -C $(PANGO_DIR) install;
  
- $(TARGET_DIR)/lib/libcairo.so.2.9.3: $(STAGING_DIR)/lib/$(CAIRO_BINARY)
- 	cp -a $(STAGING_DIR)/lib/libcairo.so $(TARGET_DIR)/lib/
-@@ -146,7 +147,7 @@
- 	$(STRIP) --strip-unneeded $(TARGET_DIR)/lib/libcairo.so.2.*
- 	touch -c $(TARGET_DIR)/lib/libcairo.so.2.9.3
+-$(TARGET_DIR)/lib/libpango-1.0.so.0.1300.5: $(STAGING_DIR)/lib/$(PANGO_BINARY)
++$(TARGET_DIR)/lib/libpango-1.0.so.0: $(STAGING_DIR)/lib/$(PANGO_BINARY)
+ 	cp -a $(STAGING_DIR)/lib/libpango-1.0.so $(TARGET_DIR)/lib/
+ 	cp -a $(STAGING_DIR)/lib/libpango-1.0.so.0* $(TARGET_DIR)/lib/
+ 	cp -a $(STAGING_DIR)/lib/libpangox-1.0.so $(TARGET_DIR)/lib/
+@@ -152,15 +152,15 @@
+ 	cp -a $(STAGING_DIR)/lib/libpangoxft-1.0.so.0* $(TARGET_DIR)/lib/
+ 	cp -a $(STAGING_DIR)/lib/libpangocairo-1.0.so $(TARGET_DIR)/lib/
+ 	cp -a $(STAGING_DIR)/lib/libpangocairo-1.0.so.0* $(TARGET_DIR)/lib/
+-	$(STRIP) --strip-unneeded $(TARGET_DIR)/lib/libpango-2.0.so.0.*
+-	$(STRIP) --strip-unneeded $(TARGET_DIR)/lib/libgpangox-2.0.so.0.*
+-	$(STRIP) --strip-unneeded $(TARGET_DIR)/lib/libgoft2-2.0.so.0.*
+-	$(STRIP) --strip-unneeded $(TARGET_DIR)/lib/libgoxft-2.0.so.0.*
+-	$(STRIP) --strip-unneeded $(TARGET_DIR)/lib/libgocairo-2.0.so.0.*
+-	touch -c $(TARGET_DIR)/lib/libpango-1.0.so.0.1300.5
++	$(STRIP) --strip-unneeded $(TARGET_DIR)/lib/libpango-1.0.so.0.*
++	$(STRIP) --strip-unneeded $(TARGET_DIR)/lib/libgpangox-1.0.so.0.*
++	$(STRIP) --strip-unneeded $(TARGET_DIR)/lib/libgoft2-1.0.so.0.*
++	$(STRIP) --strip-unneeded $(TARGET_DIR)/lib/libgoxft-1.0.so.0.*
++	$(STRIP) --strip-unneeded $(TARGET_DIR)/lib/libgocairo-1.0.so.0.*
++	touch -c $(TARGET_DIR)/lib/libpango-1.0.so.0
  
--cairo: uclibc gettext libintl pkgconfig libglib2 xorg cairo $(TARGET_DIR)/lib/libcairo.so.2.9.3
-+cairo: uclibc gettext libintl pkgconfig libglib2 xorg $(TARGET_DIR)/lib/libcairo.so.2.9.3
+ pango: uclibc gettext libintl pkgconfig libglib2 xorg cairo \
+-	$(TARGET_DIR)/lib/libpango-1.0.so.0.1300.5
++	$(TARGET_DIR)/lib/libpango-1.0.so.0
  
- cairo-clean:
- 	rm -f $(TARGET_DIR)/lib/$(CAIRO_BINARY)
+ pango-clean:
+ 	rm -f $(TARGET_DIR)/lib/$(PANGO_BINARY)
