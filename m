@@ -1,83 +1,53 @@
-From: aldot at uclibc.org <aldot@uclibc.org>
-Date: Sun, 14 Jan 2007 03:25:23 -0800 (PST)
-Subject: [Buildroot] svn commit: trunk/buildroot/package: dash libevent
-	nfs-utils samba
-Message-ID: <20070114112523.BC982485C9@busybox.net>
+From: Bernhard Fischer <rep.dot.nop@gmail.com>
+Date: Sun, 14 Jan 2007 12:52:50 +0100
+Subject: [Buildroot] svn commit:
+	trunk/buildroot/target/generic/target_skeleton: etc var
+In-Reply-To: <20070114005652.7CBE44858A@busybox.net>
+References: <20070114005652.7CBE44858A@busybox.net>
+Message-ID: <20070114115250.GI14212@aon.at>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Author: aldot
-Date: 2007-01-14 03:25:22 -0800 (Sun, 14 Jan 2007)
-New Revision: 17296
+On Sat, Jan 13, 2007 at 04:56:52PM -0800, sjhill at uclibc.org wrote:
+>Author: sjhill
+>Date: 2007-01-13 16:56:52 -0800 (Sat, 13 Jan 2007)
+>New Revision: 17269
+>
+>Log:
+>Make '/var/cache' and symbolic link to '/tmp' like the others. We'll need this for Samba and friends. Also, change mount order of filesystems during boot.
 
-Log:
-- Remove CC_FOR_BUILD="$(HOSTCC)" since it is already contained in the
-  TARGET_CONFIGURE_OPTS
+>Modified: trunk/buildroot/target/generic/target_skeleton/etc/inittab
+>===================================================================
+>--- trunk/buildroot/target/generic/target_skeleton/etc/inittab	2007-01-14 00:55:25 UTC (rev 17268)
+>+++ trunk/buildroot/target/generic/target_skeleton/etc/inittab	2007-01-14 00:56:52 UTC (rev 17269)
+>@@ -14,8 +14,8 @@
+> # process   == program to run
+> 
+> # Startup the system
+>+null::sysinit:/bin/mount -o remount,rw /
+> null::sysinit:/bin/mount -t proc proc /proc
+>-null::sysinit:/bin/mount -o remount,rw /
+> null::sysinit:/bin/mount -a
+> null::sysinit:/bin/hostname -F /etc/hostname
+> null::sysinit:/sbin/ifconfig lo 127.0.0.1 up
+>
 
+This will break any of busybox's mount impls that were written by Rob if
+you have the BUSYBOX_EXEC_PATH set to "/proc/self/exe", which is the
+default.
 
-Modified:
-   trunk/buildroot/package/dash/dash.mk
-   trunk/buildroot/package/libevent/libevent.mk
-   trunk/buildroot/package/nfs-utils/nfs-utils.mk
-   trunk/buildroot/package/samba/samba.mk
+See http://busybox.net/cgi-bin/viewcvs.cgi?rev=16760&view=rev
 
+What should we do?
+I was planning on doing a completely separate skeleton for busybox to
+peruse mdev for hotplugging etc, etc. This skeleton should be smaller
+than the generic skel since we need only little in e.g. /dev. We need a
+different inittab (depending on busybox's .config :( ), of course.
 
-Changeset:
-Modified: trunk/buildroot/package/dash/dash.mk
-===================================================================
---- trunk/buildroot/package/dash/dash.mk	2007-01-14 11:14:27 UTC (rev 17295)
-+++ trunk/buildroot/package/dash/dash.mk	2007-01-14 11:25:22 UTC (rev 17296)
-@@ -27,7 +27,7 @@
- 
- $(DASH_DIR)/.configured: $(DASH_DIR)/.unpacked
- 	(cd $(DASH_DIR); rm -rf config.cache; \
--		$(TARGET_CONFIGURE_OPTS) CC_FOR_BUILD="$(HOSTCC)" \
-+		$(TARGET_CONFIGURE_OPTS) \
- 		CFLAGS="$(TARGET_CFLAGS)" \
- 		./configure \
- 		--target=$(GNU_TARGET_NAME) \
+Is that desirable and a worthwhile thing to have? Alternative
+approaches?
 
-Modified: trunk/buildroot/package/libevent/libevent.mk
-===================================================================
---- trunk/buildroot/package/libevent/libevent.mk	2007-01-14 11:14:27 UTC (rev 17295)
-+++ trunk/buildroot/package/libevent/libevent.mk	2007-01-14 11:25:22 UTC (rev 17296)
-@@ -24,7 +24,7 @@
- 
- $(LIBEVENT_DIR)/.configured: $(LIBEVENT_DIR)/.unpacked
- 	(cd $(LIBEVENT_DIR); rm -rf config.cache; \
--		$(TARGET_CONFIGURE_OPTS) CC_FOR_BUILD=$(HOSTCC) \
-+		$(TARGET_CONFIGURE_OPTS) \
- 		CFLAGS="$(TARGET_CFLAGS)" \
- 		./configure \
- 		--target=$(GNU_TARGET_NAME) \
-
-Modified: trunk/buildroot/package/nfs-utils/nfs-utils.mk
-===================================================================
---- trunk/buildroot/package/nfs-utils/nfs-utils.mk	2007-01-14 11:14:27 UTC (rev 17295)
-+++ trunk/buildroot/package/nfs-utils/nfs-utils.mk	2007-01-14 11:25:22 UTC (rev 17296)
-@@ -24,7 +24,7 @@
- 
- $(NFS_UTILS_DIR)/.configured: $(NFS_UTILS_DIR)/.unpacked
- 	(cd $(NFS_UTILS_DIR); rm -rf config.cache; \
--		$(TARGET_CONFIGURE_OPTS) CC_FOR_BUILD="$(HOSTCC)" \
-+		$(TARGET_CONFIGURE_OPTS) \
- 		CFLAGS="$(TARGET_CFLAGS)" \
- 		LDFLAGS="$(TARGET_LDFLAGS)" \
- 		knfsd_cv_bsd_signals=no \
-
-Modified: trunk/buildroot/package/samba/samba.mk
-===================================================================
---- trunk/buildroot/package/samba/samba.mk	2007-01-14 11:14:27 UTC (rev 17295)
-+++ trunk/buildroot/package/samba/samba.mk	2007-01-14 11:25:22 UTC (rev 17296)
-@@ -24,7 +24,7 @@
- $(SAMBA_DIR)/.configured: $(SAMBA_DIR)/.unpacked
- 	(cd $(SAMBA_DIR); rm -rf config.cache; \
- 		./autogen.sh; \
--		$(TARGET_CONFIGURE_OPTS) CC_FOR_BUILD="$(HOSTCC)" \
-+		$(TARGET_CONFIGURE_OPTS) \
- 		CFLAGS="$(TARGET_CFLAGS)" \
- 		samba_cv_HAVE_GETTIMEOFDAY_TZ=yes \
- 		samba_cv_USE_SETREUID=yes \
+thanks,
