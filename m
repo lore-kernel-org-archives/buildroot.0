@@ -1,7 +1,7 @@
 From: andersen at uclibc.org <andersen@uclibc.org>
-Date: Sun, 14 Jan 2007 15:26:16 -0800 (PST)
+Date: Sun, 14 Jan 2007 15:27:26 -0800 (PST)
 Subject: [Buildroot] svn commit: trunk/buildroot/package/libgtk2
-Message-ID: <20070114232616.0B6E148612@busybox.net>
+Message-ID: <20070114232726.D964D48614@busybox.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -9,36 +9,28 @@ Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
 Author: andersen
-Date: 2007-01-14 15:26:15 -0800 (Sun, 14 Jan 2007)
-New Revision: 17309
+Date: 2007-01-14 15:27:26 -0800 (Sun, 14 Jan 2007)
+New Revision: 17310
 
 Log:
-fix build and ensure we install needed runtime components
+oops, embed $(STAGING_DIR) rather than hard coding my home dir...
 
-
-Added:
-   trunk/buildroot/package/libgtk2/000_gtk+-2.0.6-exportsymbols.patch
-   trunk/buildroot/package/libgtk2/000_gtk+-2.2.0-buildfix-immodule.patch
-   trunk/buildroot/package/libgtk2/002_xpmico.patch
-   trunk/buildroot/package/libgtk2/007_password_char.patch
-   trunk/buildroot/package/libgtk2/0815_ia32-hack.patch
-   trunk/buildroot/package/libgtk2/gdk-pixbuf.loaders
-   trunk/buildroot/package/libgtk2/gtk.immodules
-   trunk/buildroot/package/libgtk2/gtklabel-resize.patch
-   trunk/buildroot/package/libgtk2/odd-include-problem.patch
-
-Removed:
-   trunk/buildroot/package/libgtk2/gtklabel-resize-patch
-   trunk/buildroot/package/libgtk2/pangoxft2.10.6.diff
 
 Modified:
    trunk/buildroot/package/libgtk2/libgtk2.mk
-   trunk/buildroot/package/libgtk2/run-iconcache.patch
 
 
 Changeset:
-
-Sorry, the patch is too large to include (3155 lines).
-Please use ViewCVS to see it!
-
-http://uclibc.org/cgi-bin/viewcvs.cgi?view=rev&root=svn&rev=17309
+Modified: trunk/buildroot/package/libgtk2/libgtk2.mk
+===================================================================
+--- trunk/buildroot/package/libgtk2/libgtk2.mk	2007-01-14 23:26:15 UTC (rev 17309)
++++ trunk/buildroot/package/libgtk2/libgtk2.mk	2007-01-14 23:27:26 UTC (rev 17310)
+@@ -88,7 +88,7 @@
+ 	# I dont yet understand why configure is not doing this right
+ 	# TODO: also remove 'odd-include-problem.patch' when this is fixed
+ 	$(SED) "s,^GDK_DEP_CFLAGS=.*,GDK_DEP_CFLAGS=\'-pthread -I$(STAGING_DIR)/include/glib-2.0 -I$(STAGING_DIR)/lib/glib-2.0/include -I$(STAGING_DIR)/include/pango-1.0 -I$(STAGING_DIR)/include/cairo\',g" $(LIBGTK2_DIR)/configure
+-	$(SED) "s,^GDK_DEP_LIBS=.*,GDK_DEP_LIBS=\'-L/home/andersen/SVN/buildroot/build_i686/staging_dir/lib -lpangocairo-1.0 -lpango-1.0 -lcairo -lgobject-2.0 -lgmodule-2.0 -ldl -lglib-2.0 -lfontconfig -lXext -lXrender -lX11 -lXinerama -lXrandr -lXcursor -lXfixes -lXft -lm\',g" $(LIBGTK2_DIR)/configure
++	$(SED) "s,^GDK_DEP_LIBS=.*,GDK_DEP_LIBS=\'-L$(STAGING_DIR)/lib -lpangocairo-1.0 -lpango-1.0 -lcairo -lgobject-2.0 -lgmodule-2.0 -ldl -lglib-2.0 -lfontconfig -lXext -lXrender -lX11 -lXinerama -lXrandr -lXcursor -lXfixes -lXft -lm\',g" $(LIBGTK2_DIR)/configure
+ 	(cd $(LIBGTK2_DIR); rm -rf config.cache; \
+ 		$(LIBGTK2_BUILD_ENV) \
+ 		./configure \
