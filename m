@@ -1,7 +1,7 @@
 From: sjhill at uclibc.org <sjhill@uclibc.org>
-Date: Sat, 13 Jan 2007 20:58:38 -0800 (PST)
-Subject: [Buildroot] svn commit: trunk/buildroot/package/mtd
-Message-ID: <20070114045838.EA9EA485C2@busybox.net>
+Date: Sat, 13 Jan 2007 21:38:01 -0800 (PST)
+Subject: [Buildroot] svn commit: trunk/buildroot/package:  libevent
+Message-ID: <20070114053801.894D7485C4@busybox.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -9,86 +9,115 @@ Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
 Author: sjhill
-Date: 2007-01-13 20:58:37 -0800 (Sat, 13 Jan 2007)
-New Revision: 17291
+Date: 2007-01-13 21:38:00 -0800 (Sat, 13 Jan 2007)
+New Revision: 17292
 
 Log:
-Update patch.
+Add libevent package. I started building all the components needed for NFSv4 support of which libevent is one of them. The rest of the needed components, however, are horrific to get building.
 
 
-Modified:
-   trunk/buildroot/package/mtd/mtd.patch
+Added:
+   trunk/buildroot/package/libevent/
+   trunk/buildroot/package/libevent/Config.in
+   trunk/buildroot/package/libevent/libevent-time_h.patch
+   trunk/buildroot/package/libevent/libevent.mk
 
 
 Changeset:
-Modified: trunk/buildroot/package/mtd/mtd.patch
+Added: trunk/buildroot/package/libevent/Config.in
 ===================================================================
---- trunk/buildroot/package/mtd/mtd.patch	2007-01-14 04:25:41 UTC (rev 17290)
-+++ trunk/buildroot/package/mtd/mtd.patch	2007-01-14 04:58:37 UTC (rev 17291)
-@@ -1,24 +1,45 @@
--diff -ur mtd-20050122.orig/include/mtd/jffs2-user.h mtd-20050122.orig-patched/include/mtd/jffs2-user.h
----- mtd-20050122.orig/include/mtd/jffs2-user.h	2004-05-05 06:57:54.000000000 -0500
--+++ mtd-20050122.orig-patched/include/mtd/jffs2-user.h	2005-08-17 22:17:32.000000000 -0500
--@@ -19,8 +19,6 @@
-- #undef je32_to_cpu
-- #undef jemode_to_cpu
-+diff -ur mtd-20050122.orig/util/flash_eraseall.c mtd-20050122.orig-patched/util/flash_eraseall.c
-+--- mtd-20050122.orig/util/flash_eraseall.c	2004-12-09 17:00:52.000000000 -0600
-++++ mtd-20050122.orig-patched/util/flash_eraseall.c	2007-01-13 22:56:51.864233154 -0600
-+@@ -54,7 +54,7 @@
-+ static void display_help (void);
-+ static void display_version (void);
-+ static struct jffs2_unknown_node cleanmarker;
-+-static int target_endian = __BYTE_ORDER;
-++int target_endian = __BYTE_ORDER;
-  
---extern int target_endian;
---
-- #define t16(x) ({ uint16_t __b = (x); (target_endian==__BYTE_ORDER)?__b:bswap_16(__b); })
-- #define t32(x) ({ uint32_t __b = (x); (target_endian==__BYTE_ORDER)?__b:bswap_32(__b); })
-+ int main (int argc, char *argv[])
-+ {
-+@@ -134,7 +134,7 @@
-+ 				if (!quiet)
-+ 					printf ("\nSkipping bad block at 0x%08x\n", erase.start);
-+ 				continue;
-+-			} else if (ret == -EOPNOTSUPP) {
-++			} else if (errno == -EOPNOTSUPP) {
-+ 				fprintf(stderr, "%s: %s: Bad block check not available\n", exe_name, mtd_device);
-+ 				bbtest = 0;
-+ 			} else if (ret < 0) {
-+diff -ur mtd-20050122.orig/util/mkfs.jffs2.c mtd-20050122.orig-patched/util/mkfs.jffs2.c
-+--- mtd-20050122.orig/util/mkfs.jffs2.c	2004-11-26 17:00:13.000000000 -0600
-++++ mtd-20050122.orig-patched/util/mkfs.jffs2.c	2007-01-13 22:55:53.627687214 -0600
-+@@ -101,7 +101,7 @@
-+ static int squash_uids = 0;
-+ static int squash_perms = 0;
-+ static int fake_times = 0;
-+-static int target_endian = __BYTE_ORDER;
-++int target_endian = __BYTE_ORDER;
-+ static const char *const app_name = "mkfs.jffs2";
-+ static const char *const memory_exhausted = "memory exhausted";
-  
--diff -ur mtd-20050122.orig/util/jffs3.h mtd-20050122.orig-patched/util/jffs3.h
----- mtd-20050122.orig/util/jffs3.h	2005-01-21 17:00:13.000000000 -0600
--+++ mtd-20050122.orig-patched/util/jffs3.h	2005-08-17 22:19:25.000000000 -0500
--@@ -177,8 +177,6 @@
-- #undef je32_to_cpu
-- #undef jemode_to_cpu
-+diff -ur mtd-20050122.orig/util/sumtool.c mtd-20050122.orig-patched/util/sumtool.c
-+--- mtd-20050122.orig/util/sumtool.c	2005-01-05 17:00:16.000000000 -0600
-++++ mtd-20050122.orig-patched/util/sumtool.c	2007-01-13 22:56:05.528616125 -0600
-+@@ -68,7 +68,7 @@
-+ static int cleanmarker_size = sizeof(cleanmarker);
-+ static const char *short_options = "o:i:e:hvVblnc:p";
-+ static int erase_block_size = 65536;
-+-static int target_endian = __BYTE_ORDER;
-++int target_endian = __BYTE_ORDER;
-+ static int out_fd = -1;
-+ static int in_fd = -1;
-  
---extern int target_endian;
---
-- #define t16(x) ({ uint16_t __b = (x); (target_endian==__BYTE_ORDER)?__b:bswap_16(__b); })
-- #define t32(x) ({ uint32_t __b = (x); (target_endian==__BYTE_ORDER)?__b:bswap_32(__b); })
-- 
+--- trunk/buildroot/package/libevent/Config.in	                        (rev 0)
++++ trunk/buildroot/package/libevent/Config.in	2007-01-14 05:38:00 UTC (rev 17292)
+@@ -0,0 +1,7 @@
++config BR2_PACKAGE_LIBEVENT
++	bool "libevent"
++	default n
++	help
++	  Userspace library for handling asynchronous notifications
++
++	  http://monkey.org/~provos/
+
+Added: trunk/buildroot/package/libevent/libevent-time_h.patch
+===================================================================
+--- trunk/buildroot/package/libevent/libevent-time_h.patch	                        (rev 0)
++++ trunk/buildroot/package/libevent/libevent-time_h.patch	2007-01-14 05:38:00 UTC (rev 17292)
+@@ -0,0 +1,11 @@
++diff -ur libevent-1.2/event.c libevent-1.2-patched/event.c
++--- libevent-1.2/event.c	2006-08-12 12:41:36.000000000 -0500
+++++ libevent-1.2-patched/event.c	2007-01-13 23:33:05.340351152 -0600
++@@ -41,6 +41,7 @@
++ #else 
++ #include <sys/_time.h>
++ #endif
+++#include <time.h>
++ #include <sys/queue.h>
++ #include <stdio.h>
++ #include <stdlib.h>
+
+Added: trunk/buildroot/package/libevent/libevent.mk
+===================================================================
+--- trunk/buildroot/package/libevent/libevent.mk	                        (rev 0)
++++ trunk/buildroot/package/libevent/libevent.mk	2007-01-14 05:38:00 UTC (rev 17292)
+@@ -0,0 +1,62 @@
++#############################################################
++#
++# libevent
++#
++#############################################################
++LIBEVENT_VER:=1.2
++LIBEVENT_SOURCE:=libevent-$(LIBEVENT_VER).tar.gz
++LIBEVENT_SITE:=http://monkey.org/~provos/
++LIBEVENT_DIR:=$(BUILD_DIR)/libevent-$(LIBEVENT_VER)
++LIBEVENT_CAT:=$(ZCAT)
++LIBEVENT_BINARY:=libevent.la
++LIBEVENT_TARGET_BINARY:=usr/lib/libevent.so
++
++$(DL_DIR)/$(LIBEVENT_SOURCE):
++	$(WGET) -P $(DL_DIR) $(LIBEVENT_SITE)/$(LIBEVENT_SOURCE)
++
++libevent-unpacked: $(LIBEVENT_DIR)/.unpacked
++$(LIBEVENT_DIR)/.unpacked: $(DL_DIR)/$(LIBEVENT_SOURCE)
++	$(LIBEVENT_CAT) $(DL_DIR)/$(LIBEVENT_SOURCE) | tar -C $(BUILD_DIR) $(TAR_OPTIONS) -
++	toolchain/patch-kernel.sh $(LIBEVENT_DIR) package/libevent/ *.patch
++	touch $(LIBEVENT_DIR)/.unpacked
++
++$(LIBEVENT_DIR)/.configured: $(LIBEVENT_DIR)/.unpacked
++	(cd $(LIBEVENT_DIR); rm -rf config.cache; \
++		$(TARGET_CONFIGURE_OPTS) CC_FOR_BUILD=$(HOSTCC) \
++		CFLAGS="$(TARGET_CFLAGS)" \
++		./configure \
++		--target=$(GNU_TARGET_NAME) \
++		--host=$(GNU_TARGET_NAME) \
++		--build=$(GNU_HOST_NAME) \
++		--prefix=/usr \
++		--disable-static \
++		--with-gnu-ld \
++	);
++	touch $(LIBEVENT_DIR)/.configured
++
++$(LIBEVENT_DIR)/$(LIBEVENT_BINARY): $(LIBEVENT_DIR)/.configured
++	$(TARGET_CONFIGURE_OPTS) $(MAKE) CC=$(TARGET_CC) -C $(LIBEVENT_DIR)
++
++$(STAGING_DIR)/$(LIBEVENT_TARGET_BINARY): $(LIBEVENT_DIR)/$(LIBEVENT_BINARY)
++	make -C $(LIBEVENT_DIR) DESTDIR=$(STAGING_DIR) install
++
++$(TARGET_DIR)/$(LIBEVENT_TARGET_BINARY): $(STAGING_DIR)/$(LIBEVENT_TARGET_BINARY)
++	make -C $(LIBEVENT_DIR) DESTDIR=$(TARGET_DIR) install
++	rm -f $(TARGET_DIR)/usr/lib/libevent*.la $(TARGET_DIR)/usr/include/ev*
++
++libevent: uclibc $(TARGET_DIR)/$(LIBEVENT_TARGET_BINARY)
++
++libevent-clean:
++	rm -f $(TARGET_DIR)/$(LIBEVENT_TARGET_BINARY)
++	-$(MAKE) -C $(LIBEVENT_DIR) clean
++
++libevent-dirclean:
++	rm -rf $(LIBEVENT_DIR)
++#############################################################
++#
++# Toplevel Makefile options
++#
++#############################################################
++ifeq ($(strip $(BR2_PACKAGE_LIBEVENT)),y)
++TARGETS+=libevent
++endif
