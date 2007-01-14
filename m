@@ -1,7 +1,7 @@
 From: andersen at uclibc.org <andersen@uclibc.org>
-Date: Sun, 14 Jan 2007 14:18:50 -0800 (PST)
-Subject: [Buildroot] svn commit: trunk/buildroot/package
-Message-ID: <20070114221850.DAD9B485EF@busybox.net>
+Date: Sun, 14 Jan 2007 14:52:27 -0800 (PST)
+Subject: [Buildroot] svn commit: trunk/buildroot/package: freetype libpng
+Message-ID: <20070114225227.CC459485FD@busybox.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -9,27 +9,43 @@ Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
 Author: andersen
-Date: 2007-01-14 14:18:49 -0800 (Sun, 14 Jan 2007)
-New Revision: 17305
+Date: 2007-01-14 14:52:26 -0800 (Sun, 14 Jan 2007)
+New Revision: 17306
 
 Log:
-there is no 'package/hal/' at present...
+silly typos
 
 
 Modified:
-   trunk/buildroot/package/Config.in
+   trunk/buildroot/package/freetype/freetype.mk
+   trunk/buildroot/package/libpng/libpng.mk
 
 
 Changeset:
-Modified: trunk/buildroot/package/Config.in
+Modified: trunk/buildroot/package/freetype/freetype.mk
 ===================================================================
---- trunk/buildroot/package/Config.in	2007-01-14 17:06:11 UTC (rev 17304)
-+++ trunk/buildroot/package/Config.in	2007-01-14 22:18:49 UTC (rev 17305)
-@@ -64,7 +64,6 @@
- source "package/gmp/Config.in"
- source "package/mpfr/Config.in"
- source "package/gzip/Config.in"
--source "package/hal/Config.in"
- source "package/haserl/Config.in"
- source "package/hdparm/Config.in"
- source "package/hostap/Config.in"
+--- trunk/buildroot/package/freetype/freetype.mk	2007-01-14 22:18:49 UTC (rev 17305)
++++ trunk/buildroot/package/freetype/freetype.mk	2007-01-14 22:52:26 UTC (rev 17306)
+@@ -52,7 +52,7 @@
+ 	$(SED) "s,^prefix=.*,prefix=\'$(STAGING_DIR)\',g" \
+ 		-e "s,^exec_prefix=.*,exec_prefix=\'$(STAGING_DIR)/usr\',g" \
+ 		-e "s,^includedir=.*,includedir=\'$(STAGING_DIR)/include\',g" \
+-		"s,^libdir=.*,libdir=\'$(STAGING_DIR)/lib\',g" \
++		-e "s,^libdir=.*,libdir=\'$(STAGING_DIR)/lib\',g" \
+ 		$(STAGING_DIR)/usr/bin/freetype-config
+ 	touch -c $(STAGING_DIR)/lib/libfreetype.so
+ 
+
+Modified: trunk/buildroot/package/libpng/libpng.mk
+===================================================================
+--- trunk/buildroot/package/libpng/libpng.mk	2007-01-14 22:18:49 UTC (rev 17305)
++++ trunk/buildroot/package/libpng/libpng.mk	2007-01-14 22:52:26 UTC (rev 17306)
+@@ -77,7 +77,7 @@
+ 	$(SED) "s,^prefix=.*,prefix=\'$(STAGING_DIR)\',g" \
+ 		-e "s,^exec_prefix=.*,exec_prefix=\'$(STAGING_DIR)/usr\',g" \
+ 		-e "s,^includedir=.*,includedir=\'$(STAGING_DIR)/include/libpng12\',g" \
+-		"s,^libdir=.*,libdir=\'$(STAGING_DIR)/lib\',g" \
++		-e "s,^libdir=.*,libdir=\'$(STAGING_DIR)/lib\',g" \
+ 		$(STAGING_DIR)/usr/bin/libpng12-config
+ 	touch -c $(STAGING_DIR)/lib/libpng.so
+ 
