@@ -1,36 +1,65 @@
-From: andersen at uclibc.org <andersen@uclibc.org>
-Date: Sun, 14 Jan 2007 15:27:26 -0800 (PST)
-Subject: [Buildroot] svn commit: trunk/buildroot/package/libgtk2
-Message-ID: <20070114232726.D964D48614@busybox.net>
+From: aldot at uclibc.org <aldot@uclibc.org>
+Date: Mon, 15 Jan 2007 07:55:45 -0800 (PST)
+Subject: [Buildroot] svn commit: trunk/buildroot/toolchain/kernel-headers
+Message-ID: <20070115155545.5CED74856A@busybox.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Author: andersen
-Date: 2007-01-14 15:27:26 -0800 (Sun, 14 Jan 2007)
-New Revision: 17310
+Author: aldot
+Date: 2007-01-15 07:55:43 -0800 (Mon, 15 Jan 2007)
+New Revision: 17311
 
 Log:
-oops, embed $(STAGING_DIR) rather than hard coding my home dir...
+- bump version to 2.6.19.2
 
 
 Modified:
-   trunk/buildroot/package/libgtk2/libgtk2.mk
+   trunk/buildroot/toolchain/kernel-headers/Config.in
+   trunk/buildroot/toolchain/kernel-headers/kernel-headers-new.makefile
 
 
 Changeset:
-Modified: trunk/buildroot/package/libgtk2/libgtk2.mk
+Modified: trunk/buildroot/toolchain/kernel-headers/Config.in
 ===================================================================
---- trunk/buildroot/package/libgtk2/libgtk2.mk	2007-01-14 23:26:15 UTC (rev 17309)
-+++ trunk/buildroot/package/libgtk2/libgtk2.mk	2007-01-14 23:27:26 UTC (rev 17310)
-@@ -88,7 +88,7 @@
- 	# I dont yet understand why configure is not doing this right
- 	# TODO: also remove 'odd-include-problem.patch' when this is fixed
- 	$(SED) "s,^GDK_DEP_CFLAGS=.*,GDK_DEP_CFLAGS=\'-pthread -I$(STAGING_DIR)/include/glib-2.0 -I$(STAGING_DIR)/lib/glib-2.0/include -I$(STAGING_DIR)/include/pango-1.0 -I$(STAGING_DIR)/include/cairo\',g" $(LIBGTK2_DIR)/configure
--	$(SED) "s,^GDK_DEP_LIBS=.*,GDK_DEP_LIBS=\'-L/home/andersen/SVN/buildroot/build_i686/staging_dir/lib -lpangocairo-1.0 -lpango-1.0 -lcairo -lgobject-2.0 -lgmodule-2.0 -ldl -lglib-2.0 -lfontconfig -lXext -lXrender -lX11 -lXinerama -lXrandr -lXcursor -lXfixes -lXft -lm\',g" $(LIBGTK2_DIR)/configure
-+	$(SED) "s,^GDK_DEP_LIBS=.*,GDK_DEP_LIBS=\'-L$(STAGING_DIR)/lib -lpangocairo-1.0 -lpango-1.0 -lcairo -lgobject-2.0 -lgmodule-2.0 -ldl -lglib-2.0 -lfontconfig -lXext -lXrender -lX11 -lXinerama -lXrandr -lXcursor -lXfixes -lXft -lm\',g" $(LIBGTK2_DIR)/configure
- 	(cd $(LIBGTK2_DIR); rm -rf config.cache; \
- 		$(LIBGTK2_BUILD_ENV) \
- 		./configure \
+--- trunk/buildroot/toolchain/kernel-headers/Config.in	2007-01-14 23:27:26 UTC (rev 17310)
++++ trunk/buildroot/toolchain/kernel-headers/Config.in	2007-01-15 15:55:43 UTC (rev 17311)
+@@ -38,9 +38,9 @@
+ 		depends !BR2_nios2
+ 		bool "Linux 2.6.12 kernel headers"
+ 
+-	config BR2_KERNEL_HEADERS_2_6_19_1
++	config BR2_KERNEL_HEADERS_2_6_19_2
+ 		depends !BR2_nios2
+-		bool "Linux 2.6.19.1 kernel headers"
++		bool "Linux 2.6.19.2 kernel headers"
+ 
+ endchoice
+ 
+@@ -53,4 +53,4 @@
+ 	default "2.6.9"     if BR2_KERNEL_HEADERS_2_6_9
+ 	default "2.6.11"    if BR2_KERNEL_HEADERS_2_6_11
+ 	default "2.6.12"    if BR2_KERNEL_HEADERS_2_6_12
+-	default "2.6.19.1"  if BR2_KERNEL_HEADERS_2_6_19_1
++	default "2.6.19.2"  if BR2_KERNEL_HEADERS_2_6_19_2
+
+Modified: trunk/buildroot/toolchain/kernel-headers/kernel-headers-new.makefile
+===================================================================
+--- trunk/buildroot/toolchain/kernel-headers/kernel-headers-new.makefile	2007-01-14 23:27:26 UTC (rev 17310)
++++ trunk/buildroot/toolchain/kernel-headers/kernel-headers-new.makefile	2007-01-15 15:55:43 UTC (rev 17311)
+@@ -4,11 +4,11 @@
+ #
+ #############################################################
+ 
+-ifeq ("$(DEFAULT_KERNEL_HEADERS)","2.6.19.1")
++ifeq ("$(DEFAULT_KERNEL_HEADERS)","2.6.19.2")
+ VERSION:=2
+ PATCHLEVEL:=6
+ SUBLEVEL:=19
+-EXTRAVERSION:=.1
++EXTRAVERSION:=.2
+ LOCALVERSION:=
+ LINUX_HEADERS_VERSION:=$(VERSION).$(PATCHLEVEL).$(SUBLEVEL)$(EXTRAVERSION)
+ LINUX_HEADERS_SITE:=http://www.kernel.org/pub/linux/kernel/v2.6/
