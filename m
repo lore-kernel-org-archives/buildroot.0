@@ -1,20 +1,46 @@
-From: Bernhard Fischer <rep.dot.nop@gmail.com>
-Date: Mon, 15 Jan 2007 17:45:44 +0100
-Subject: [Buildroot] chown 0 <file> fails while generating root file
-	system
-In-Reply-To: <009b01c7380f$a56568e0$01c4af0a@atmel.com>
-References: <009b01c7380f$a56568e0$01c4af0a@atmel.com>
-Message-ID: <20070115164544.GA5235@aon.at>
+From: aldot at uclibc.org <aldot@uclibc.org>
+Date: Mon, 15 Jan 2007 09:34:59 -0800 (PST)
+Subject: [Buildroot] svn commit: trunk/buildroot/target/device/x86/i386
+Message-ID: <20070115173459.72C3648581@busybox.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Sun, Jan 14, 2007 at 07:41:15PM +0100, Ulf Samuelsson wrote:
->I am using buildroot-2006-11-01 with my own modifications.
+Author: aldot
+Date: 2007-01-15 09:34:58 -0800 (Mon, 15 Jan 2007)
+New Revision: 17314
 
-There were 4 patches against sudo since your checkout, so i'd recommend
-you to update.
+Log:
+- andersee, why was this duplicated and hardcoded here?
 
-HTH,
+
+Modified:
+   trunk/buildroot/target/device/x86/i386/linux26.mk
+
+
+Changeset:
+Modified: trunk/buildroot/target/device/x86/i386/linux26.mk
+===================================================================
+--- trunk/buildroot/target/device/x86/i386/linux26.mk	2007-01-15 16:02:45 UTC (rev 17313)
++++ trunk/buildroot/target/device/x86/i386/linux26.mk	2007-01-15 17:34:58 UTC (rev 17314)
+@@ -6,13 +6,16 @@
+ ifneq ($(filter $(TARGETS),linux26),)
+ 
+ 
++ifeq ($(LINUX_HEADERS_VERSION),)
+ # Version of Linux to download and then apply patches to
+ DOWNLOAD_LINUX26_VERSION=2.6.19.1
+ # Version of Linux after applying any patches
+ LINUX26_VERSION=2.6.19.1
++else
++DOWNLOAD_LINUX26_VERSION=$(LINUX_HEADERS_VERSION)
++LINUX26_VERSION=$(LINUX_HEADERS_VERSION)
++endif
+ 
+-
+-
+ LINUX26_SOURCE=linux-$(DOWNLOAD_LINUX26_VERSION).tar.bz2
+ LINUX26_BZCAT:=$(BZCAT)
+ LINUX26_SITE=http://ftp.kernel.org/pub/linux/kernel/v2.6
