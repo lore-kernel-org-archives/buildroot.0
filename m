@@ -1,198 +1,256 @@
 From: andersen at uclibc.org <andersen@uclibc.org>
-Date: Mon, 15 Jan 2007 14:33:55 -0800 (PST)
-Subject: [Buildroot] svn commit: trunk/buildroot/package/xorg
-Message-ID: <20070115223355.C2E894856D@busybox.net>
+Date: Mon, 15 Jan 2007 14:34:53 -0800 (PST)
+Subject: [Buildroot] svn commit: trunk/buildroot/package:  metacity
+Message-ID: <20070115223453.426C448587@busybox.net>
 List-Id: <buildroot.busybox.net>
+MIME-Version: 1.0
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
 Author: andersen
-Date: 2007-01-15 14:33:55 -0800 (Mon, 15 Jan 2007)
-New Revision: 17318
+Date: 2007-01-15 14:34:53 -0800 (Mon, 15 Jan 2007)
+New Revision: 17319
 
 Log:
-update xorg build a bit more, trim the default set of bitmapped
-fonts, add in the DejaVu line of unicode supporting truetype fonts
+Add a somewhat basic window manager
 
 
 Added:
-   trunk/buildroot/package/xorg/Xserver
-   trunk/buildroot/package/xorg/Xsession
-   trunk/buildroot/package/xorg/fonts.alias
-   trunk/buildroot/package/xorg/fonts.cache-1
-
-Modified:
-   trunk/buildroot/package/xorg/xorg.conf
-   trunk/buildroot/package/xorg/xorg.mk
+   trunk/buildroot/package/metacity/
+   trunk/buildroot/package/metacity/Config.in
+   trunk/buildroot/package/metacity/Xsession
+   trunk/buildroot/package/metacity/metacity-gconf.patch
+   trunk/buildroot/package/metacity/metacity-nopo.patch
+   trunk/buildroot/package/metacity/metacity.mk
 
 
 Changeset:
-Added: trunk/buildroot/package/xorg/Xserver
+Added: trunk/buildroot/package/metacity/Config.in
 ===================================================================
---- trunk/buildroot/package/xorg/Xserver	                        (rev 0)
-+++ trunk/buildroot/package/xorg/Xserver	2007-01-15 22:33:55 UTC (rev 17318)
-@@ -0,0 +1,2 @@
-+#!/bin/sh
-+exec /usr/bin/X11/X -br dpms nologo -nolisten tcp
+--- trunk/buildroot/package/metacity/Config.in	                        (rev 0)
++++ trunk/buildroot/package/metacity/Config.in	2007-01-15 22:34:53 UTC (rev 17319)
+@@ -0,0 +1,7 @@
++config BR2_PACKAGE_METACITY
++	bool "metacity"
++	select BR2_PACKAGE_XORG
++	select BR2_PACKAGE_LIBGTK2
++	default n
++	help
++	  Metacity is a window manager for the X Window System.
 
-
-Property changes on: trunk/buildroot/package/xorg/Xserver
-___________________________________________________________________
-Name: svn:executable
-   + *
-
-Added: trunk/buildroot/package/xorg/Xsession
+Added: trunk/buildroot/package/metacity/Xsession
 ===================================================================
---- trunk/buildroot/package/xorg/Xsession	                        (rev 0)
-+++ trunk/buildroot/package/xorg/Xsession	2007-01-15 22:33:55 UTC (rev 17318)
-@@ -0,0 +1,5 @@
+--- trunk/buildroot/package/metacity/Xsession	                        (rev 0)
++++ trunk/buildroot/package/metacity/Xsession	2007-01-15 22:34:53 UTC (rev 17319)
+@@ -0,0 +1,6 @@
 +#!/bin/sh
 +export GDK_USE_XFT=1
 +export LANG="en_US.UTF-8"
 +export LC_ALL="en_US.UTF-8"
-+/usr/bin/X11/rxvt -bg black -fg gray90
++/usr/bin/X11/rxvt -bg black -fg gray90 &
++exec /bin/metacity
 
 
-Property changes on: trunk/buildroot/package/xorg/Xsession
+Property changes on: trunk/buildroot/package/metacity/Xsession
 ___________________________________________________________________
 Name: svn:executable
    + *
 
-Added: trunk/buildroot/package/xorg/fonts.alias
+Added: trunk/buildroot/package/metacity/metacity-gconf.patch
 ===================================================================
---- trunk/buildroot/package/xorg/fonts.alias	                        (rev 0)
-+++ trunk/buildroot/package/xorg/fonts.alias	2007-01-15 22:33:55 UTC (rev 17318)
-@@ -0,0 +1,6 @@
-+fixed        -misc-fixed-medium-r-normal--14-130-75-75-c-70-iso8859-1
-+variable     -*-helvetica-bold-r-normal-*-*-120-*-*-*-*-iso8859-1
-+7x14         -misc-fixed-medium-r-normal--14-130-75-75-c-70-iso8859-1
-+7x14bold     -misc-fixed-bold-r-normal--14-130-75-75-c-70-iso8859-1
-+
-+-misc-fixed-medium-r-normal--14-110-100-100-c-70-iso8859-1 -misc-fixed-medium-r-normal--14-130-75-75-c-70-iso8859-1
+--- trunk/buildroot/package/metacity/metacity-gconf.patch	                        (rev 0)
++++ trunk/buildroot/package/metacity/metacity-gconf.patch	2007-01-15 22:34:53 UTC (rev 17319)
+@@ -0,0 +1,18 @@
++--- metacity-2.17.3/src/prefs.c.orig	2007-01-12 21:42:53.000000000 -0700
+++++ metacity-2.17.3/src/prefs.c	2007-01-12 21:45:21.000000000 -0700
++@@ -2277,6 +2277,7 @@
++       key = g_strconcat (KEY_SCREEN_BINDINGS_PREFIX, "/",
++                          binding->name, NULL);
++       
+++#ifdef HAVE_GCONF
++       gconf_client_set_string (gconf_client_get_default (),
++                                key, old_setting, &err);
++ 
++@@ -2287,6 +2288,7 @@
++           g_error_free (err);
++           err = NULL;
++         }
+++#endif
++       
++       g_free (old_setting);
++       g_free (key);
 
-Added: trunk/buildroot/package/xorg/fonts.cache-1
+Added: trunk/buildroot/package/metacity/metacity-nopo.patch
 ===================================================================
---- trunk/buildroot/package/xorg/fonts.cache-1	                        (rev 0)
-+++ trunk/buildroot/package/xorg/fonts.cache-1	2007-01-15 22:33:55 UTC (rev 17318)
-@@ -0,0 +1,12 @@
-+"DejaVuSans-BoldOblique.ttf" 0 "DejaVu Sans:familylang=en:style=Bold Oblique:stylelang=en:slant=110:weight=200:width=100:foundry=unknown:index=0:outline=True:scalable=True:charset=  |>^1!|>^1!P0oWQ |>^1!|>^1!|>^1!!!!%#|>^1!|>^1!|>^1!|>^1!|>^1!|>^1!|>^1!|>^1!!!!)$|>^1!|>^1!|>T)%|>^1!|>^1!|>^1!|>^1!!3Vg{!!!.%|>^1!|>^1!4w}6a;wnZM|>[gE|>^0{|>XZQ|>^1!!!!1&|>^1!|>^1!|>^1!|>^1!|>^/Q|>^1!|>XZQ#?>K%!!!4(!!.)!|>J~~{ma}P|>^0~!!!;)   !!#$D|97t]!!!V[(1+e+$h6vZyf*@@{{B$~  !!#(E|>^1!|>^1!|>^1!|>^1!(1+e4|>^1!|>^1!#?>K%!!#+F9Bx6P|>^1!^{M at P9WIli|>^1!|97t]w)J%tP+*+*!!#0G|>^1!|>T.!P0oWQ|<;7s!!&TQ!(LZY  !!#3HKWc2J$^09z|<ls#|>^1!|>T)4|>^1!|>^1!|>^1!!!#6I|>^1!9UgxA|>^0~|>^1!|>^1!!)RAf{{D?(|>9/f!!#9J!|?)&!!!;Q /?6HG !!$<j!!&TR !!#>K !!!!1 !!!1%    !!#AL    |>^1!|>^1!|>^1!|>^1!!!#DM|>^1!|>^1!|>^1!|>^1!/?6HF!!B7)  !!#GN|>]fO|>^+~Ow1gH|>^0~{~h at FP0fQP !!!T5!!#JO|>^0~|>^1!|>^1!|>^1!|>^1!|>^1!|>^1!|>^1!!!#MP      !)n<!!!!?+!!#PQ!!%|B  q~Ki^|>^1!$WSXE #xw^)!!#SR!#>r1       !!+Wr&0h?q P0oWR     !!+u{!ANVJ       !!.%!       /?6HG:lang=aa|ab|af|ast|ava|ay|az|ba|bam|be|bg|bi|bin|br|bs|bua|ca|ce|ch|chm|co|cs|cu|cv|cy|da|de|el|en|eo|es|et|eu|fi|fj|fo|fr|ful|fur|fy|ga|gd|gl|gn|gv|ha|haw|ho|hr|hu|hy|ia|ibo|id|ie|ik|io|is|it|kaa|ki|kk|kl|ku|kum|kv|kw|ky|la|lb|lez|lt|lv|mg|mh|mi|mk|mo|mt|nb|nds|nl|nn|no|ny|oc|om|os|pl|pt|rm|ro|ru|sah|sco|se|sel|sh|sk|sl|sm|sma|smj|smn|sms|so|sq|sr|sv|sw|tg|tk|tn|to|tr|ts|tt|tw|tyv|uk|uz|ven|vi|vo|vot|wa|wen|wo|xh|yap|yo|zu:fontversion=176947:fontformat=TrueType"
-+"DejaVuSans-Bold.ttf" 0 "DejaVu Sans:familylang=en:style=Bold:stylelang=en:slant=0:weight=200:width=100:foundry=unknown:index=0:outline=True:scalable=True:charset=  |>^1!|>^1!P0oWQ |>^1!|>^1!|>^1!!!!%#|>^1!|>^1!|>^1!|>^1!|>^1!|>^1!|>^1!|>^1!!!!)$|>^1!|>^1!|>T)%|>^1!|>^1!|>^1!|>^1!!3Vg{!!!.%|>^1!|>^1!4xpki;wnZM|>[gE|>^0{|>XZQ|>^1!!!!1&|>^1!|>^1!|>^1!|>^1!|>^/Q|>^1!|>XZQ#?>K%!!!4(!!.)!|>J~~{ma}P|>^0~!!!;)   !!!7)Rim;3$WUr)#F+zm{ao04!FFpNQNVtK!!$qe#?3E%!!#$D|97t]!!!V[(1+e+$h6vZyf*@@{{B$~  !!#(E|>^1!|>^1!|>^1!|>^1!(1+e4|>^1!|>^1!#?>K%!!#+F9Bx6P|>^1!^{M at P9WIli|>^1!|97t]w)J%tP+*+*!!#0G|>^1!|>T.!P0oWQ|<;7s!!&TQ!(LZY  !!#3HKWc2J$^09z|<ls#|>^1!|>T)4|>^1!|>^1!|>^1!!!#6I|>^1!9UgxA|>^0~|>^1!|>^1!!)RAf{{D?(|>9/f!!#9J!|?)&!!!;Q /?6HG !!$<j!!&TR !!#>K !!!!1 !!!1%    !!#AL    |>^1!|>^1!|>^1!|>^1!!!#DM|>^1!|>^1!|>^1!|>^1!/?6HF!!B7)  !!#GN|>]fO|>^+~Ow1gH|>^0~{~h at FP0fQP !!!T5!!#JO|>^0~|>^1!|>^1!|>^1!|>^1!|>^1!|>^1!|>^1!!!#MP      !)n<!!!!?+!!#PQ!!%|B  q~Ki^|>^1!$WSXE #xw^)!!#SR!#>r1       !!+Wr&0h?q P0oWR     !!+u{!ANVJ |>6r||>^1!gm&i! #xw^)w0TUs!!+~~   |9.n]|>^1!|>^1!|>^1!ZK#{t!!.%!       /?6HG:lang=aa|ab|af|ar|ast|ava|ay|az|az-ir|ba|bam|be|bg|bi|bin|br|bs|bua|ca|ce|ch|chm|co|cs|cu|cv|cy|da|de|el|en|eo|es|et|eu|fa|fi|fj|fo|fr|ful|fur|fy|ga|gd|gl|gn|gv|ha|haw|ho|hr|hu|hy|ia|ibo|id|ie|ik|io|is|it|kaa|ki|kk|kl|ku|ku-ir|kum|kv|kw|ky|la|lb|lez|lt|lv|mg|mh|mi|mk|mo|mt|nb|nds|nl|nn|no|ny|oc|om|os|pl|pt|rm|ro|ru|sah|sco|se|sel|sh|sk|sl|sm|sma|smj|smn|sms|so|sq|sr|sv|sw|tg|tk|tn|to|tr|ts|tt|tw|tyv|ug|uk|uz|ven|vi|vo|vot|wa|wen|wo|xh|yap|yo|zu:fontversion=176947:fontformat=TrueType"
-+"DejaVuSans-Oblique.ttf" 0 "DejaVu Sans:familylang=en:style=Oblique:stylelang=en:slant=110:weight=80:width=100:foundry=unknown:index=0:outline=True:scalable=True:charset=  |>^1!|>^1!P0oWQ |>^1!|>^1!|>^1!!!!%#|>^1!|>^1!|>^1!|>^1!|>^1!|>^1!|>^1!|>^1!!!!)$|>^1!|>^1!|>T)%|>^1!|>^1!|>^1!|>^1!!3Vg{!!!.%|>^1!|>^1!4wUxZ;wnZM|>[gE|>^0{|>XZQ|>^1!!!!1&|>^1!|>^1!|>^1!|>^1!|>^/Q|>^1!|>XZQ#?>K%!!!4(!!.)!|>J~~{ma}P|>^0~!!!;)   !!#$D|97t]!!!V[(1+e+$h6vZyf*@@{{B$~  !!#(E|>^1!|>^1!|>^1!|>^1!(1+e4|>^1!|>^1!#?>K%!!#+F9Bx6P|>^1!^{M at P9WIli|>^1!|97t]w)J%tP+*+*!!#0G|>^1!|>T.!P0oWQ|<;7s!!&TQ!(LZY  !!#3HKWc2J$^09z|<ls#|>^1!|>T)4|>^1!|>^1!|>^1!!!#6I|>^1!9UgxA|>^0~|>^1!|>^1!!)RAf{{D?(|>9/f!!#9J!|?)&!!!;Q /?6HG !!$<j!!&TR !!#>K !!!!1 !!!1%    !!#AL    |>^1!|>^1!|>^1!|>^1!!!#DM|>^1!|>^1!|>^1!|>^1!/?6HF!!B7)  !!#GN|>]fO|>^+~Ow1gH|>^0~{~h at FP0fQP !!!T5!!#JO|>^0~|>^1!|>^1!|>^1!|>^1!|>^1!|>^1!|>^1!!!#MP      !)n<!!!!?+!!#PQ!!%|B  q~Ki^|>^1!$WSXE #xw^)!!#SR!#>r1       !!+Wr&0h?q P0oWR     !!+u{!ANVJ       !!.%!       /?6HG:lang=aa|ab|af|ast|ava|ay|az|ba|bam|be|bg|bi|bin|br|bs|bua|ca|ce|ch|chm|co|cs|cu|cv|cy|da|de|el|en|eo|es|et|eu|fi|fj|fo|fr|ful|fur|fy|ga|gd|gl|gn|gv|ha|haw|ho|hr|hu|hy|ia|ibo|id|ie|ik|io|is|it|kaa|ki|kk|kl|ku|kum|kv|kw|ky|la|lb|lez|lt|lv|mg|mh|mi|mk|mo|mt|nb|nds|nl|nn|no|ny|oc|om|os|pl|pt|rm|ro|ru|sah|sco|se|sel|sh|sk|sl|sm|sma|smj|smn|sms|so|sq|sr|sv|sw|tg|tk|tn|to|tr|ts|tt|tw|tyv|uk|uz|ven|vi|vo|vot|wa|wen|wo|xh|yap|yo|zu:fontversion=176947:fontformat=TrueType"
-+"DejaVuSans.ttf" 0 "DejaVu Sans:familylang=en:style=Book:stylelang=en:slant=0:weight=80:width=100:foundry=unknown:index=0:outline=True:scalable=True:charset=  |>^1!|>^1!P0oWQ |>^1!|>^1!|>^1!!!!%#|>^1!|>^1!|>^1!|>^1!|>^1!|>^1!|>^1!|>^1!!!!)$|>^1!|>^1!|>T)%|>^1!|>^1!|>^1!|>^1!!3Vg{!!!.%|>^1!|>^1!4xpki;wnZM|>[gE|>^0{|>XZQ|>^1!!!!1&|>^1!|>^1!|>^1!|>^1!|>^/Q|>^1!|>XZQ#?>K%!!!4(!!.)!|>J~~{ma}P|>^0~!!!;)   !!!7)Rim;3$WUr)#F+zm{ao04!FFpNQNVtK!!$qe#?3E%!!#$D|97t]!!!V[(1+e+$h6vZyf*@@{{B$~  !!#(E|>^1!|>^1!|>^1!|>^1!(1+e4|>^1!|>^1!#?>K%!!#+F9Bx6P|>^1!^{M at P9WIli|>^1!|97t]w)J%tP+*+*!!#0G|>^1!|>T.!P0oWQ|<;7s!!&TQ!(LZY  !!#3HKWc2J$^09z|<ls#|>^1!|>T)4|>^1!|>^1!|>^1!!!#6I|>^1!9UgxA|>^0~|>^1!|>^1!!)RAf{{D?(|>9/f!!#9J!|?)&!!!;Q /?6HG !!$<j!!&TR !!#>K !!!!1 !!!1%    !!#AL    |>^1!|>^1!|>^1!|>^1!!!#DM|>^1!|>^1!|>^1!|>^1!/?6HF!!B7)  !!#GN|>]fO|>^+~Ow1gH|>^0~{~h at FP0fQP !!!T5!!#JO|>^0~|>^1!|>^1!|>^1!|>^1!|>^1!|>^1!|>^1!!!#MP      !)n<!!!!?+!!#PQ!!%|B  q~Ki^|>^1!$WSXE #xw^)!!#SR!#>r1       !!+Wr&0h?q P0oWR     !!+u{!ANVJ |>6r||>^1!gm&i! #xw^)w0TUs!!+~~   |9.n]|>^1!|>^1!|>^1!ZK#{t!!.%!       /?6HG:lang=aa|ab|af|ar|ast|ava|ay|az|az-ir|ba|bam|be|bg|bi|bin|br|bs|bua|ca|ce|ch|chm|co|cs|cu|cv|cy|da|de|el|en|eo|es|et|eu|fa|fi|fj|fo|fr|ful|fur|fy|ga|gd|gl|gn|gv|ha|haw|ho|hr|hu|hy|ia|ibo|id|ie|ik|io|is|it|kaa|ki|kk|kl|ku|ku-ir|kum|kv|kw|ky|la|lb|lez|lt|lv|mg|mh|mi|mk|mo|mt|nb|nds|nl|nn|no|ny|oc|om|os|pl|pt|rm|ro|ru|sah|sco|se|sel|sh|sk|sl|sm|sma|smj|smn|sms|so|sq|sr|sv|sw|tg|tk|tn|to|tr|ts|tt|tw|tyv|ug|uk|uz|ven|vi|vo|vot|wa|wen|wo|xh|yap|yo|zu:fontversion=176947:fontformat=TrueType"
-+"DejaVuSansMono-Bold.ttf" 0 "DejaVu Sans Mono:familylang=en:style=Bold:stylelang=en:slant=0:weight=200:width=100:spacing=100:foundry=unknown:index=0:outline=True:scalable=True:charset=  |>^1!|>^1!P0oWQ |>^1!|>^1!|>^1!!!!%#|>^1!|>^1!|>^1!|>^1!|>^0~NrU1Mgbm{d#%n|^!!!)$&olY4|>S8A|>T)%|>^1!|>^1!p(S.VOwzo@!!!1%!!!.%|>^1!|>^1!!BB.#;wnZH|>[gE|>^0{|>XZQ|>T)%!!!1&|>^1!|>^1!|>^1! &vR%x%t7&H|>T}3#?>K%!!#$Dr;]W3 (1+e+$h6vZyf*@@{{B$~  !!#(E!#GD|xJenK8LmtDgfW>$!!)o!5H<IZ!!$/f!}93i!!#+F9Bx6P|>^1!^{M at P9WIli|>^1!|97t]w)J%tP+*+*!!#0G|5epCB^iC}!!!/UQIPyG!!!1%!(/|R  !!#3H!)rmR!!!Kz|<lWx     !!#6ItMN$89;+8L|>^0~|>]1c|;$OI!!!!%z~FrD!!!1%!!#9J!^{K.!!!%& /?6HG !!$<j!!&TR !!#>K !!!!+      !!#AL    |>^1!|>^1!|>^1!|>^1!!!#DM|>^1!{{K.!|>^1!|>^1!/?+uU!!!!%  !!#GN    {}$35|>T(~ !!!!#!!#MP       !!!?+!!#SR!#>r1       !!+fv      !!!!G !!+u{!!!!)       !!.%!       /?6HG:lang=aa|af|ast|ava|ay|bam|be|bg|bi|bin|br|bs|bua|ca|ce|ch|co|cs|cv|cy|da|de|el|en|eo|es|et|eu|fi|fj|fo|fr|ful|fur|fy|gd|gl|gn|gv|ha|haw|ho|hr|hu|ia|id|ie|ik|io|is|it|kaa|ki|kk|kl|ku|kum|kv|kw|ky|la|lb|lez|lt|lv|mg|mh|mi|mk|mo|mt|nb|nds|nl|nn|no|ny|oc|om|os|pl|pt|rm|ro|ru|se|sel|sh|sk|sl|sm|sma|smj|smn|so|sq|sr|sv|sw|tn|to|tr|ts|tw|tyv|uk|uz|ven|vo|vot|wa|wen|wo|xh|yap|yo|zu:fontversion=176947:fontformat=TrueType"
-+"DejaVuSansMono-BoldOblique.ttf" 0 "DejaVu Sans Mono:familylang=en:style=Bold Oblique:stylelang=en:slant=110:weight=200:width=100:spacing=100:foundry=unknown:index=0:outline=True:scalable=True:charset=  |>^1!|>^1!P0oWQ |>^1!|>^1!|>^1!!!!%#|>^1!|>^1!|>^1!|>^1!|>^0~NrU1Mgbm{d#%n|^!!!)$&olY4|>S8A|>T)%|>^1!|>^1!p(S.VOwzo@!!!1%!!!.%|>^1!|>^1!!BB.#;wnZH|>[gE|>^0{|>XZQ|>T)%!!!1&|>^1!|>^1!|>^1! &vR%x%t7&H|>T}3#?>K%!!#$Dr;]W3 (1+e+$h6vZyf*@@{{B$~  !!#(E!#GD|xJenK8LmtDgfW>$!!)o!5H<IZ!!$/f!}93i!!#+F9Bx6P|>^1!^{M at P9WIli|>^1!|97t]w)J%tP+*+*!!#0G|5epCB^iC}!!!/UQIPyG!!!1%!(/|R  !!#3H!)rmR!!!Kz|<lWx     !!#6ItMN$89;+8L|>^0~|>]1c|;$OI!!!!%z~FrD!!!1%!!#9J!^{K.!!!%& /?6HG !!$<j!!&TR !!#>K !!!!+      !!#AL    |>^1!|>^1!|>^1!|>^1!!!#DM!!!!#Z+ert!!!%!!!.$~    !!#GN       !!!!#!!#MP       !!!?+!!#SR!#>r1       !!+fv      !!!!G !!+u{!!!!)       !!.%!       /?6HG:lang=aa|af|ast|ava|ay|bam|be|bg|bi|bin|br|bs|bua|ca|ce|ch|co|cs|cv|cy|da|de|el|en|eo|es|et|eu|fi|fj|fo|fr|ful|fur|fy|gd|gl|gn|gv|ha|haw|ho|hr|hu|ia|id|ie|ik|io|is|it|kaa|ki|kk|kl|ku|kum|kv|kw|ky|la|lb|lez|lt|lv|mg|mh|mi|mk|mo|mt|nb|nds|nl|nn|no|ny|oc|om|os|pl|pt|rm|ro|ru|se|sel|sh|sk|sl|sm|sma|smj|smn|so|sq|sr|sv|sw|tn|to|tr|ts|tw|tyv|uk|uz|ven|vo|vot|wa|wen|wo|xh|yap|yo|zu:fontversion=176947:fontformat=TrueType"
-+"DejaVuSansMono-Oblique.ttf" 0 "DejaVu Sans Mono:familylang=en:style=Oblique:stylelang=en:slant=110:weight=80:width=100:spacing=100:foundry=unknown:index=0:outline=True:scalable=True:charset=  |>^1!|>^1!P0oWQ |>^1!|>^1!|>^1!!!!%#|>^1!|>^1!|>^1!|>^1!|>^0~NrU1Mgbm{d#%n|^!!!)$&olY4|>S8A|>T)%|>^1!|>^1!p(S.VOwzo@!!!1%!!!.%|>^1!|>^1!!BB.#;wnZH|>[gE|>^0{|>XZQ|>T)%!!!1&|>^1!|>^1!|>^1! &vR%x%t7&H|>T}3#?>K%!!#$Dr;]W3 (1+e+$h6vZyf*@@{{B$~  !!#(E!#GD|xJenK8LmtDgfW>$!!)o!5H<IZ!!$/f!}93i!!#+F9Bx6P|>^1!^{M at P9WIli|>^1!|97t]w)J%tP+*+*!!#0G|5epCB^iC}!!!/UQIPyG!!!1%!(/|R  !!#3H!)rmR!!!Kz|<lWx     !!#6ItMN$89;+8L|>^0~|>]1c|;$OI!!!!%z~FrD!!!1%!!#9J!^{K.!!!%& /?6HG !!$<j!!&TR !!#>K !!!!+      !!#AL|>^1!|>^1!|>^1!|>^1!|>^1!|>^1!|>^1!|>^1!!!#DM!!!!#Z+ert!!!%!!!.$~    !!#GN       !!!!#!!#MP       !!!?+!!#SR!#>r1       !!+fv      !!!!G !!+u{!!!!)       !!.%!       /?6HG:lang=aa|af|ast|ava|ay|bam|be|bg|bi|bin|br|bs|bua|ca|ce|ch|co|cs|cv|cy|da|de|el|en|eo|es|et|eu|fi|fj|fo|fr|ful|fur|fy|gd|gl|gn|gv|ha|haw|ho|hr|hu|ia|id|ie|ik|io|is|it|kaa|ki|kk|kl|ku|kum|kv|kw|ky|la|lb|lez|lt|lv|mg|mh|mi|mk|mo|mt|nb|nds|nl|nn|no|ny|oc|om|os|pl|pt|rm|ro|ru|se|sel|sh|sk|sl|sm|sma|smj|smn|so|sq|sr|sv|sw|tn|to|tr|ts|tw|tyv|uk|uz|ven|vo|vot|wa|wen|wo|xh|yap|yo|zu:fontversion=176947:fontformat=TrueType"
-+"DejaVuSansMono.ttf" 0 "DejaVu Sans Mono:familylang=en:style=Book:stylelang=en:slant=0:weight=80:width=100:spacing=100:foundry=unknown:index=0:outline=True:scalable=True:charset=  |>^1!|>^1!P0oWQ |>^1!|>^1!|>^1!!!!%#|>^1!|>^1!|>^1!|>^1!|>^0~NrU1Mgbm{d#%n|^!!!)$&olY4|>S8A|>T)%|>^1!|>^1!p(S.VOwzo@!!!1%!!!.%|>^1!|>^1!!BB.#;wnZH|>[gE|>^0{|>XZQ|>T)%!!!1&|>^1!|>^1!|>^1! &vR%x%t7&H|>T}3#?>K%!!#$Dr;]W3 (1+e+$h6vZyf*@@{{B$~  !!#(E!#GD|xJenK8LmtDgfW>$!!)o!5H<IZ!!$/f!}93i!!#+F9Bx6P|>^1!^{M at P9WIli|>^1!|97t]w)J%tP+*+*!!#0G|5epCB^iC}!!!/UQIPyG!!!1%!(/|R  !!#3H!)rmR!!!Kz|<lWx     !!#6ItMN$89;+8L|>^0~|>]1c|;$OI!!!!%z~FrD!!!1%!!#9J!^{K.!!!%& /?6HG !!$<j!!&TR !!#>K !!!!+      !!#AL|>^1!|>^1!|>^1!|>^1!|>^1!|>^1!|>^1!|>^1!!!#DM|>^1!{{K.!|>^1!|>^1!/?+uU!!!!%  !!#GN    {}$35P0fQP !!!!#!!#MP       !!!?+!!#SR!#>r1       !!+fv      !!!!G !!+u{!!!!)       !!.%!       /?6HG:lang=aa|af|ast|ava|ay|bam|be|bg|bi|bin|br|bs|bua|ca|ce|ch|co|cs|cv|cy|da|de|el|en|eo|es|et|eu|fi|fj|fo|fr|ful|fur|fy|gd|gl|gn|gv|ha|haw|ho|hr|hu|ia|id|ie|ik|io|is|it|kaa|ki|kk|kl|ku|kum|kv|kw|ky|la|lb|lez|lt|lv|mg|mh|mi|mk|mo|mt|nb|nds|nl|nn|no|ny|oc|om|os|pl|pt|rm|ro|ru|se|sel|sh|sk|sl|sm|sma|smj|smn|so|sq|sr|sv|sw|tn|to|tr|ts|tw|tyv|uk|uz|ven|vo|vot|wa|wen|wo|xh|yap|yo|zu:fontversion=176947:fontformat=TrueType"
-+"DejaVuSerif-Bold.ttf" 0 "DejaVu Serif:familylang=en:style=Bold:stylelang=en:slant=0:weight=200:width=100:foundry=unknown:index=0:outline=True:scalable=True:charset=  |>^1!|>^1!P0oWQ |>^1!|>^1!|>^1!!!!%#|>^1!|>^1!|>^1!|>^1!|>^0~NrU1M|>^1!|.}*Q!!!)$lrC&L|>^0r|>T)%|>^1!|>^1!zDgQyOwyiz!!$Im!!!.%|>^1!|>^1!!BB.#;wnZH|>[gE|>^0{|>XZQ|>T)%!!!1&|>^1!|>^1!|>^1!!#>r?lZj+i&3p()|>T}3#?>K%!!#$Dr;]W3 (1+e+$h6vZyf*@@{{B$~  !!#(ElrC&L|>VCi|>T^4|>^.4(1+e49WI7i!|(G@#>r3p!!#+F9Bx6P|>^1!^{M at P9WIli|>^1!|97t]w)J%tP+*+*!!#0G|5n[;B^iC}!!!/UQIPyG!!!1%!(4R#  !!#3H!)rmR!!!Kz|<lWx !#Z(4   !!#6Is|M]|!!!Ue!!!%2!!!!Z    !!#9J!|>T/!!!%K /?6HG !!$<j!!&TR !!#>K !!!!+      !!#AL    |>^1!|>^1!|>^1!|>^1!!!#DM!!!!#Z+ert!!!%!!!.$~    !!#GN       !!!!#!!#MP       !!!?+!!#SR!#>r1       !!+fv      !#x>Y !!+u{!!!!)       !!.%!       /?6HG:lang=aa|af|ast|ava|ay|ba|bam|be|bg|bi|bin|br|bs|bua|ca|ce|ch|chm|co|cs|cv|cy|da|de|el|en|eo|es|et|eu|fi|fj|fo|fr|ful|fur|fy|ga|gd|gl|gn|gv|ha|haw|ho|hr|hu|ia|id|ie|ik|io|is|it|kaa|ki|kk|kl|ku|kum|kv|kw|ky|la|lb|lez|lt|lv|mg|mh|mi|mk|mo|mt|nb|nds|nl|nn|no|ny|oc|om|os|pl|pt|rm|ro|ru|sah|se|sel|sh|sk|sl|sm|sma|smj|smn|sms|so|sq|sr|sv|sw|tg|tn|to|tr|ts|tw|tyv|uk|uz|ven|vo|vot|wa|wen|wo|xh|yap|yo|zu:fontversion=176947:fontformat=TrueType"
-+"DejaVuSerif-BoldOblique.ttf" 0 "DejaVu Serif:familylang=en:style=Bold Oblique:stylelang=en:slant=110:weight=200:width=100:foundry=unknown:index=0:outline=True:scalable=True:charset=  |>^1!|>^1!P0oWQ |>^1!|>^1!|>^1!!!!%#|>^1!|>^1!|>^1!|>^1!|>^0~NrU1M|>^1!|.}*Q!!!)$lrC&L|>^0r|>T)%|>^1!|>^1!zDgQyOwyiz!!$Im!!!.%|>^1!|>^1!!BB.#;wnZH|>[gE|>^0{|>XZQ|>T)%!!!1&|>^1!|>^1!|>^1!!#>r?lZj+i&3p()|>T}3#?>K%!!#$Dr;]W3 (1+e+$h6vZyf*@@{{B$~  !!#(ElrC&L|>VCi|>T^4|>^.4(1+e49WI7i!|(G@#>r3p!!#+F9Bx6P|>^1!^{M at P9WIli|>^1!|97t]w)J%tP+*+*!!#0G|5n[;B^iC}!!!/UQIPyG!!!1%!(4R#  !!#3H!)rmR!!!Kz|<lWx !#Z(4   !!#6Is|M]|!!!Ue!!!%2!!!!Z    !!#9J!|>T/!!!%K /?6HG !!$<j!!&TR !!#>K !!!!+      !!#AL    |>^1!|>^1!|>^1!|>^1!!!#DM!!!!#Z+ert!!!%!!!.$~    !!#GN       !!!!#!!#MP       !!!?+!!#SR!#>r1       !!+fv      !#x?D !!+u{!!!!)       !!.%!       /?6HG:lang=aa|af|ast|ava|ay|ba|bam|be|bg|bi|bin|br|bs|bua|ca|ce|ch|chm|co|cs|cv|cy|da|de|el|en|eo|es|et|eu|fi|fj|fo|fr|ful|fur|fy|ga|gd|gl|gn|gv|ha|haw|ho|hr|hu|ia|id|ie|ik|io|is|it|kaa|ki|kk|kl|ku|kum|kv|kw|ky|la|lb|lez|lt|lv|mg|mh|mi|mk|mo|mt|nb|nds|nl|nn|no|ny|oc|om|os|pl|pt|rm|ro|ru|sah|se|sel|sh|sk|sl|sm|sma|smj|smn|sms|so|sq|sr|sv|sw|tg|tn|to|tr|ts|tw|tyv|uk|uz|ven|vo|vot|wa|wen|wo|xh|yap|yo|zu:fontversion=176947:fontformat=TrueType"
-+"DejaVuSerif-Oblique.ttf" 0 "DejaVu Serif:familylang=en:style=Oblique:stylelang=en:slant=110:weight=80:width=100:foundry=unknown:index=0:outline=True:scalable=True:charset=  |>^1!|>^1!P0oWQ |>^1!|>^1!|>^1!!!!%#|>^1!|>^1!|>^1!|>^1!|>^0~NrU1M|>^1!|.}*Q!!!)$lrC&L|>^0r|>T)%|>^1!|>^1!zDgQyOwyiz!!$Im!!!.%|>^1!|>^1!!BB.#;wnZH|>[gE|>^0{|>XZQ|>T)%!!!1&|>^1!|>^1!|>^1!!#>r?lZj+i&3p()|>T}3#?>K%!!#$Dr;]W3 (1+e+$h6vZyf*@@{{B$~  !!#(ElrC&L|>VCi|>T^4|>^.4(1+e49WI7i!|(G@#>r3p!!#+F9Bx6P|>^1!^{M at P9WIli|>^1!|97t]w)J%tP+*+*!!#0G|5n[;B^iC}!!!/UQIPyG!!!1%!(4R#  !!#3H!)rmR!!!Kz|<lWx !#Z(4   !!#6Is|M]|!!!Ue!!!%2!!!!Z    !!#9J!|>T/!!!%K /?6HG !!$<j!!&TR !!#>K !!!!+      !!#AL    |>^1!|>^1!|>^1!|>^1!!!#DM!!!!#Z+ert!!!%!!!.$~    !!#GN       !!!!#!!#MP       !!!?+!!#SR!#>r1       !!+fv      !#x?D !!+u{!!!!)       !!.%!       /?6HG:lang=aa|af|ast|ava|ay|ba|bam|be|bg|bi|bin|br|bs|bua|ca|ce|ch|chm|co|cs|cv|cy|da|de|el|en|eo|es|et|eu|fi|fj|fo|fr|ful|fur|fy|ga|gd|gl|gn|gv|ha|haw|ho|hr|hu|ia|id|ie|ik|io|is|it|kaa|ki|kk|kl|ku|kum|kv|kw|ky|la|lb|lez|lt|lv|mg|mh|mi|mk|mo|mt|nb|nds|nl|nn|no|ny|oc|om|os|pl|pt|rm|ro|ru|sah|se|sel|sh|sk|sl|sm|sma|smj|smn|sms|so|sq|sr|sv|sw|tg|tn|to|tr|ts|tw|tyv|uk|uz|ven|vo|vot|wa|wen|wo|xh|yap|yo|zu:fontversion=176947:fontformat=TrueType"
-+"DejaVuSerif.ttf" 0 "DejaVu Serif:familylang=en:style=Book:stylelang=en:slant=0:weight=80:width=100:foundry=unknown:index=0:outline=True:scalable=True:charset=  |>^1!|>^1!P0oWQ |>^1!|>^1!|>^1!!!!%#|>^1!|>^1!|>^1!|>^1!|>^0~NrU1M|>^1!|.}*Q!!!)$lrC&L|>^0r|>T)%|>^1!|>^1!zDgQyOwyiz!!$Im!!!.%|>^1!|>^1!!BB.#;wnZH|>[gE|>^0{|>XZQ|>T)%!!!1&|>^1!|>^1!|>^1!!#>r?lZj+i&3p()|>T}3#?>K%!!#$Dr;]W3 (1+e+$h6vZyf*@@{{B$~  !!#(ElrC&L|>VCi|>T^4|>^.4(1+e49WI7i!|(G@#>r3p!!#+F9Bx6P|>^1!^{M at P9WIli|>^1!|97t]w)J%tP+*+*!!#0G|5n[;B^iC}!!!/UQIPyG!!!1%!(4R#  !!#3H!)rmR!!!Kz|<lWx !#Z(4   !!#6Is|M]|!!!Ue!!!%2!!!!Z    !!#9J!|>T/!!!%K /?6HG !!$<j!!&TR !!#>K !!!!+      !!#AL    |>^1!|>^1!|>^1!|>^1!!!#DM!!!!#Z+ert!!!%!!!.$~    !!#GN       !!!!#!!#MP       !!!?+!!#SR!#>r1       !!+fv      !#x>Y !!+u{!!!!)       !!.%!       /?6HG:lang=aa|af|ast|ava|ay|ba|bam|be|bg|bi|bin|br|bs|bua|ca|ce|ch|chm|co|cs|cv|cy|da|de|el|en|eo|es|et|eu|fi|fj|fo|fr|ful|fur|fy|ga|gd|gl|gn|gv|ha|haw|ho|hr|hu|ia|id|ie|ik|io|is|it|kaa|ki|kk|kl|ku|kum|kv|kw|ky|la|lb|lez|lt|lv|mg|mh|mi|mk|mo|mt|nb|nds|nl|nn|no|ny|oc|om|os|pl|pt|rm|ro|ru|sah|se|sel|sh|sk|sl|sm|sma|smj|smn|sms|so|sq|sr|sv|sw|tg|tn|to|tr|ts|tw|tyv|uk|uz|ven|vo|vot|wa|wen|wo|xh|yap|yo|zu:fontversion=176947:fontformat=TrueType"
+--- trunk/buildroot/package/metacity/metacity-nopo.patch	                        (rev 0)
++++ trunk/buildroot/package/metacity/metacity-nopo.patch	2007-01-15 22:34:53 UTC (rev 17319)
+@@ -0,0 +1,20 @@
++--- metacity-2.17.3/Makefile.am.orig	2007-01-14 16:50:52.000000000 -0700
+++++ metacity-2.17.3/Makefile.am	2007-01-14 16:51:46.000000000 -0700
++@@ -1,5 +1,5 @@
++ 
++-SUBDIRS=src po doc
+++SUBDIRS=src
++ 
++ EXTRA_DIST=HACKING rationales.txt \
++ 	intltool-extract.in intltool-merge.in intltool-update.in
++--- metacity-2.17.3/Makefile.in.orig	2007-01-14 16:51:38.000000000 -0700
+++++ metacity-2.17.3/Makefile.in	2007-01-14 16:51:58.000000000 -0700
++@@ -246,7 +246,7 @@
++ sharedstatedir = @sharedstatedir@
++ sysconfdir = @sysconfdir@
++ target_alias = @target_alias@
++-SUBDIRS = src po doc
+++SUBDIRS = src
++ EXTRA_DIST = HACKING rationales.txt \
++ 	intltool-extract.in intltool-merge.in intltool-update.in
++ 
 
-Modified: trunk/buildroot/package/xorg/xorg.conf
+Added: trunk/buildroot/package/metacity/metacity.mk
 ===================================================================
---- trunk/buildroot/package/xorg/xorg.conf	2007-01-15 21:28:15 UTC (rev 17317)
-+++ trunk/buildroot/package/xorg/xorg.conf	2007-01-15 22:33:55 UTC (rev 17318)
-@@ -100,6 +100,7 @@
- 	Option		"StandbyTime" "15"
- 	Option		"SuspendTime" "20"
- 	Option		"OffTime" "30"
-+	Option		"AllowMouseOpenFail" "true"
- EndSection
- 
- Section "ServerLayout"
-
-Modified: trunk/buildroot/package/xorg/xorg.mk
-===================================================================
---- trunk/buildroot/package/xorg/xorg.mk	2007-01-15 21:28:15 UTC (rev 17317)
-+++ trunk/buildroot/package/xorg/xorg.mk	2007-01-15 22:33:55 UTC (rev 17318)
-@@ -12,8 +12,8 @@
- 	mkfontscale/mkfontscale mkfontdir/mkfontdir \
- 	#xterm/xterm
- 
--XORG_LIBS:= Xft Xrender Xaw Xmu Xt \
--	SM ICE Xpm Xp Xext X11 Xmuu Xxf86misc
-+XORG_LIBS:= Xft Xrender Xaw Xmu Xt Xcursor Xrandr Xi Xinerama Xfixes \
-+	SM ICE Xpm Xp Xext X11 Xmuu Xxf86misc fontenc
- 
- 
- #############################################################
-@@ -36,6 +36,13 @@
- XORG_CF:=$(XORG_DIR)/config/cf/cross.def
- XORG_HOST_DEF:=$(XORG_DIR)/config/cf/host.def
- 
+--- trunk/buildroot/package/metacity/metacity.mk	                        (rev 0)
++++ trunk/buildroot/package/metacity/metacity.mk	2007-01-15 22:34:53 UTC (rev 17319)
+@@ -0,0 +1,142 @@
++#############################################################
++#
++# metacity
++#
++#############################################################
 +
-+DEJAVU_VERSION=2.13
-+DEJAVU_SOURCE=dejavu-ttf-$(DEJAVU_VERSION).tar.bz2
-+DEJAVU_CAT:=$(BZCAT)
-+DEJAVU_SITE=http://$(BR2_SOURCEFORGE_MIRROR).dl.sourceforge.net/sourceforge/dejavu
-+DEJAVU_DIR:=$(BUILD_DIR)/dejavu-ttf-$(DEJAVU_VERSION)
++METACITY_VER:=2.17.3
++METACITY_SOURCE:=metacity-$(METACITY_VER).tar.bz2
++METACITY_SITE:=http://ftp.gnome.org/pub/gnome/sources/metacity/2.17
++METACITY_DIR:=$(BUILD_DIR)/metacity-$(METACITY_VER)
++METACITY_CAT:=$(BZCAT)
 +
- # Install Xorg xserver
- XSERVER:=Xorg
- XORG_XSERVER:=$(XORG_DIR)/programs/Xserver/$(XSERVER)
-@@ -126,15 +133,46 @@
- 	cp -LRf $(XORG_DIR)/exports/lib/modules/ $(XORG_LIBX)/
- 	( cd $(XORG_DIR)/fonts ; $(MAKE) \
- 		DESTDIR=$(TARGET_DIR) install XCURSORGEN=xcursorgen MKFONTSCALE=mkfontscale )
--	cp -LRf $(XORG_DIR)/fonts/bdf/misc/*.bdf $(XORG_LIBX)/X11/fonts/misc/
-+	cp -LRf $(XORG_DIR)/fonts/bdf/misc/7x14.bdf $(XORG_LIBX)/X11/fonts/misc/
-+	cp -LRf $(XORG_DIR)/fonts/bdf/misc/7x14-L1.bdf $(XORG_LIBX)/X11/fonts/misc/
-+	cp -LRf $(XORG_DIR)/fonts/bdf/misc/7x14B.bdf $(XORG_LIBX)/X11/fonts/misc/
-+	cp -LRf $(XORG_DIR)/fonts/bdf/misc/7x14B-L1.bdf $(XORG_LIBX)/X11/fonts/misc/
-+	cp -LRf $(XORG_DIR)/fonts/bdf/misc/cursor.bdf $(XORG_LIBX)/X11/fonts/misc/
-+	cp -f package/xorg/fonts.alias $(XORG_LIBX)/X11/fonts/misc/
- 	( cd $(XORG_LIBX)/X11/fonts/misc/; mkfontdir )
- 	(cd $(TARGET_DIR)/usr/bin; ln -snf $(TARGET_BINX) X11)
- 	mkdir -p $(TARGET_DIR)/etc/X11/
--	cp package/xorg/xorg.conf $(TARGET_DIR)/etc/X11/
--	cp -a $(STAGING_DIR)$(TARGET_LIBX)/X11/rgb* $(XORG_LIBX)/X11/
-+	cp -LRf $(STAGING_DIR)$(TARGET_LIBX)/X11/rgb* $(XORG_LIBX)/X11/
-+	$(SED) "s,^sysclientrc=.*,sysclientrc=/etc/X11/Xsession,g" $(XORG_BINX)/startx
-+	$(SED) "s,^sysserverrc=.*,sysserverrc=/etc/X11/Xserver,g" $(XORG_BINX)/startx
-+	cp -LRf package/xorg/xorg.conf $(TARGET_DIR)/etc/X11/
-+	cp -LRf package/xorg/Xsession $(TARGET_DIR)/etc/X11/
-+	cp -LRf package/xorg/Xserver $(TARGET_DIR)/etc/X11/
- 	touch -c $(TARGET_XSERVER)
- 
--$(XORG_LIBX)/libX11.so.6.2: $(TARGET_XSERVER)
-+$(DL_DIR)/$(DEJAVU_SOURCE):
-+	$(WGET) -P $(DL_DIR) $(DEJAVU_SITE)/$(DEJAVU_SOURCE)
++$(DL_DIR)/$(METACITY_SOURCE):
++	 $(WGET) -P $(DL_DIR) $(METACITY_SITE)/$(METACITY_SOURCE)
 +
-+$(DEJAVU_DIR)/.unpacked: $(DL_DIR)/$(DEJAVU_SOURCE)
-+	$(DEJAVU_CAT) $(DL_DIR)/$(DEJAVU_SOURCE) | tar -C $(BUILD_DIR) $(TAR_OPTIONS) -
-+	touch $(DEJAVU_DIR)/.unpacked
++metacity-source: $(DL_DIR)/$(METACITY_SOURCE)
 +
-+$(XORG_LIBX)/X11/fonts/ttf-dejavu/DejaVuSansMono.ttf: $(DEJAVU_DIR)/.unpacked
-+	mkdir -p $(XORG_LIBX)/X11/fonts/ttf-dejavu
-+	rm $(DEJAVU_DIR)/*Condensed*.ttf
-+	rm $(DEJAVU_DIR)/*ExtraLight*.ttf
-+	cp -LRf $(DEJAVU_DIR)/DejaVu*-Bold.ttf $(XORG_LIBX)/X11/fonts/ttf-dejavu/
-+	cp -LRf $(DEJAVU_DIR)/DejaVu*-BoldOblique.ttf $(XORG_LIBX)/X11/fonts/ttf-dejavu/
-+	cp -LRf $(DEJAVU_DIR)/DejaVu*-Oblique.ttf $(XORG_LIBX)/X11/fonts/ttf-dejavu/
-+	cp -LRf $(DEJAVU_DIR)/DejaVuSans.ttf $(XORG_LIBX)/X11/fonts/ttf-dejavu/
-+	cp -LRf $(DEJAVU_DIR)/DejaVuSansMono.ttf $(XORG_LIBX)/X11/fonts/ttf-dejavu/
-+	cp -LRf $(DEJAVU_DIR)/DejaVuSerif.ttf $(XORG_LIBX)/X11/fonts/ttf-dejavu/
-+	cp -LRf $(DEJAVU_DIR)/DejaVuSerif.ttf $(XORG_LIBX)/X11/fonts/ttf-dejavu/
-+	cp package/xorg/fonts.cache-1 $(XORG_LIBX)/X11/fonts/ttf-dejavu/
-+	( cd $(XORG_LIBX)/X11/fonts/ttf-dejavu/; mkfontdir )
-+	touch -c $(XORG_LIBX)/X11/fonts/ttf-dejavu/DejaVuSansMono.ttf
++$(METACITY_DIR)/.unpacked: $(DL_DIR)/$(METACITY_SOURCE)
++	$(METACITY_CAT) $(DL_DIR)/$(METACITY_SOURCE) | tar -C $(BUILD_DIR) $(TAR_OPTIONS) -
++	toolchain/patch-kernel.sh $(METACITY_DIR) package/metacity/ \*.patch*
++	(cd $(METACITY_DIR); libtoolize --force;)
++	$(CONFIG_UPDATE) $(METACITY_DIR)
++	(cd $(METACITY_DIR); autoconf;)
++	touch $(METACITY_DIR)/.unpacked
 +
-+$(XORG_LIBX)/libX11.so.6.2: $(TARGET_XSERVER) $(XORG_LIBX)/X11/fonts/ttf-dejavu/DejaVuSansMono.ttf
- 	-mkdir -p $(XORG_LIBX)
- 	set -e; for dirs in $(XORG_LIBS) ; do \
- 		file=`find $(XORG_LDIR)/$$dirs -type f -iname "*$$dirs.so*"` ; \
-@@ -150,14 +188,13 @@
- 	fi;
- 	touch -c $(XORG_LIBX)/libX11.so.6.2
- 
--
- $(TARGET_DIR)/usr/bin/mcookie: package/xorg/mcookie.c
- 	$(TARGET_CROSS)gcc -Wall -Os -s package/xorg/mcookie.c -o $(TARGET_DIR)/usr/bin/mcookie
- 
- xorg: zlib png pkgconfig expat fontconfig $(STAGING_DIR)$(TARGET_LIBX)/libX11.so.6.2 \
- 	$(XORG_LIBX)/libX11.so.6.2 $(TARGET_DIR)/usr/bin/mcookie
- 
--xorg-source: $(DL_DIR)/$(XORG_SOURCE)
-+xorg-source: $(DL_DIR)/$(XORG_SOURCE) $(DL_DIR)/$(DEJAVU_SOURCE)
- 
- xorg-clean:
- 	-rm -rf $(TARGET_DIR)/usr/X11R6
++$(METACITY_DIR)/.configured: $(METACITY_DIR)/.unpacked
++	(cd $(METACITY_DIR); rm -rf config.cache; \
++		$(TARGET_CONFIGURE_OPTS) \
++		CFLAGS="$(TARGET_CFLAGS)" \
++		./configure \
++		PKG_CONFIG=$(STAGING_DIR)/usr/bin/pkg-config \
++		GLIB_CONFIG=$(STAGING_DIR)/bin/glib-config \
++		ac_cv_func_mmap_fixed_mapped=yes \
++		ac_cv_func_posix_getpwuid_r=yes \
++		glib_cv_stack_grows=no \
++		glib_cv_uscore=no \
++		ac_cv_func_strtod=yes \
++		ac_fsusage_space=yes \
++		fu_cv_sys_stat_statfs2_bsize=yes \
++		ac_cv_func_closedir_void=no \
++		ac_cv_func_getloadavg=no \
++		ac_cv_lib_util_getloadavg=no \
++		ac_cv_lib_getloadavg_getloadavg=no \
++		ac_cv_func_getgroups=yes \
++		ac_cv_func_getgroups_works=yes \
++		ac_cv_func_chown_works=yes \
++		ac_cv_have_decl_euidaccess=no \
++		ac_cv_func_euidaccess=no \
++		ac_cv_have_decl_strnlen=yes \
++		ac_cv_func_strnlen_working=yes \
++		ac_cv_func_lstat_dereferences_slashed_symlink=yes \
++		ac_cv_func_lstat_empty_string_bug=no \
++		ac_cv_func_stat_empty_string_bug=no \
++		vb_cv_func_rename_trailing_slash_bug=no \
++		ac_cv_have_decl_nanosleep=yes \
++		jm_cv_func_nanosleep_works=yes \
++		gl_cv_func_working_utimes=yes \
++		ac_cv_func_utime_null=yes \
++		ac_cv_have_decl_strerror_r=yes \
++		ac_cv_func_strerror_r_char_p=no \
++		jm_cv_func_svid_putenv=yes \
++		ac_cv_func_getcwd_null=yes \
++		ac_cv_func_getdelim=yes \
++		ac_cv_func_mkstemp=yes \
++		utils_cv_func_mkstemp_limitations=no \
++		utils_cv_func_mkdir_trailing_slash_bug=no \
++		ac_cv_func_memcmp_working=yes \
++		ac_cv_have_decl_malloc=yes \
++		gl_cv_func_malloc_0_nonnull=yes \
++		ac_cv_func_malloc_0_nonnull=yes \
++		ac_cv_func_calloc_0_nonnull=yes \
++		ac_cv_func_realloc_0_nonnull=yes \
++		jm_cv_func_gettimeofday_clobber=no \
++		gl_cv_func_working_readdir=yes \
++		jm_ac_cv_func_link_follows_symlink=no \
++		utils_cv_localtime_cache=no \
++		ac_cv_struct_st_mtim_nsec=no \
++		gl_cv_func_tzset_clobber=no \
++		gl_cv_func_getcwd_null=yes \
++		gl_cv_func_getcwd_path_max=yes \
++		ac_cv_func_fnmatch_gnu=yes \
++		am_getline_needs_run_time_check=no \
++		am_cv_func_working_getline=yes \
++		gl_cv_func_mkdir_trailing_slash_bug=no \
++		gl_cv_func_mkstemp_limitations=no \
++		ac_cv_func_working_mktime=yes \
++		jm_cv_func_working_re_compile_pattern=yes \
++		ac_use_included_regex=no \
++		gl_cv_c_restrict=no \
++		ac_cv_path_GLIB_GENMARSHAL=/usr/bin/glib-genmarshal \
++		--target=$(GNU_TARGET_NAME) \
++		--host=$(GNU_TARGET_NAME) \
++		--build=$(GNU_HOST_NAME) \
++		--prefix=/usr \
++		--exec_prefix=/ \
++		--libexecdir=/ \
++		--libdir=/lib \
++		--x-includes=$(STAGING_DIR)/usr/X11R6/include \
++		--x-libraries=$(STAGING_DIR)/usr/X11R6/lib \
++		--disable-glibtest \
++		--disable-gconf \
++		--disable-dependency-tracking \
++		--disable-sm \
++		--disable-nls \
++		--disable-startup-notification \
++	);
++	touch $(METACITY_DIR)/.configured
++
++$(METACITY_DIR)/.compiled: $(METACITY_DIR)/.configured
++	$(MAKE) -C $(METACITY_DIR)
++	touch $(METACITY_DIR)/.compiled
++
++$(STAGING_DIR)/lib/*metacity*.so: $(METACITY_DIR)/.compiled
++	$(MAKE) DESTDIR=$(STAGING_DIR) -C $(METACITY_DIR) install;
++	touch -c $(STAGING_DIR)/lib/*metacity*.so
++
++$(TARGET_DIR)/lib/*metacity*.so: $(STAGING_DIR)/lib/*metacity*.so
++	cp -dpf $(STAGING_DIR)/lib/*metacity*.so* $(TARGET_DIR)/lib/
++	-$(STRIP) --strip-unneeded $(TARGET_DIR)/lib/*metacity*.so
++	cp -dpf $(STAGING_DIR)/bin/*metacity* $(TARGET_DIR)/bin/
++	mkdir -p $(TARGET_DIR)/usr/share/metacity/icons
++	cp -dpf $(STAGING_DIR)/usr/share/metacity/icons/* $(TARGET_DIR)/usr/share/metacity/icons/
++	mkdir -p $(TARGET_DIR)/usr/share/themes
++	cp -a $(STAGING_DIR)/usr/share/themes/* $(TARGET_DIR)/usr/share/themes/
++	cp -a package/metacity/Xsession $(TARGET_DIR)/etc/X11/
++
++metacity: uclibc zlib xorg libgtk2 $(TARGET_DIR)/lib/*metacity*.so
++
++metacity-clean:
++	-$(MAKE) -C $(METACITY_DIR) clean
++
++metacity-dirclean:
++	rm -rf $(METACITY_DIR)
++
++#############################################################
++#
++# Toplevel Makefile options
++#
++#############################################################
++ifeq ($(strip $(BR2_PACKAGE_METACITY)),y)
++TARGETS+=metacity
++endif
