@@ -1,7 +1,7 @@
 From: andersen at uclibc.org <andersen@uclibc.org>
-Date: Mon, 15 Jan 2007 13:27:17 -0800 (PST)
-Subject: [Buildroot] svn commit: trunk/buildroot/package/expat
-Message-ID: <20070115212717.D0EDC48594@busybox.net>
+Date: Mon, 15 Jan 2007 13:28:15 -0800 (PST)
+Subject: [Buildroot] svn commit: trunk/buildroot/package/gettext
+Message-ID: <20070115212815.EB53E48595@busybox.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -9,27 +9,44 @@ Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
 Author: andersen
-Date: 2007-01-15 13:27:17 -0800 (Mon, 15 Jan 2007)
-New Revision: 17316
+Date: 2007-01-15 13:28:15 -0800 (Mon, 15 Jan 2007)
+New Revision: 17317
 
 Log:
-lose the extra space
+do not install build stuff into the target unless specifically asked to do so
 
 
 Modified:
-   trunk/buildroot/package/expat/expat.mk
+   trunk/buildroot/package/gettext/gettext.mk
 
 
 Changeset:
-Modified: trunk/buildroot/package/expat/expat.mk
+Modified: trunk/buildroot/package/gettext/gettext.mk
 ===================================================================
---- trunk/buildroot/package/expat/expat.mk	2007-01-15 21:26:43 UTC (rev 17315)
-+++ trunk/buildroot/package/expat/expat.mk	2007-01-15 21:27:17 UTC (rev 17316)
-@@ -5,7 +5,6 @@
- #############################################################
+--- trunk/buildroot/package/gettext/gettext.mk	2007-01-15 21:27:17 UTC (rev 17316)
++++ trunk/buildroot/package/gettext/gettext.mk	2007-01-15 21:28:15 UTC (rev 17317)
+@@ -137,12 +137,14 @@
+ 		$(TARGET_DIR)/usr/include/libintl.h
+ 	-rmdir $(TARGET_DIR)/usr/include
  
- EXPAT_VERSION=2.0.0
+-libintl: $(TARGET_DIR)/lib/libintl.so
 -
- EXPAT_SOURCE=expat-$(EXPAT_VERSION).tar.gz
- EXPAT_CAT:=$(ZCAT)
- EXPAT_SITE=http://$(BR2_SOURCEFORGE_MIRROR).dl.sourceforge.net/sourceforge/expat
+ $(TARGET_DIR)/lib/libintl.so: $(STAGING_DIR)/$(GETTEXT_TARGET_BINARY)
+-	cp -a $(STAGING_DIR)/lib/libintl.so* $(TARGET_DIR)/lib
++	cp -a $(STAGING_DIR)/lib/libgettext*.so* $(TARGET_DIR)/lib/
++	cp -a $(STAGING_DIR)/lib/libintl*.so* $(TARGET_DIR)/lib/
++	rm -f $(TARGET_DIR)/lib/libgettext*.so*.la $(TARGET_DIR)/lib/libintl*.so*.la
+ 	touch $@
+ 
++libintl: $(TARGET_DIR)/lib/libintl.so
++
+ #############################################################
+ #
+ # Toplevel Makefile options
+@@ -152,5 +154,5 @@
+ TARGETS+=libintl
+ endif
+ ifeq ($(strip $(BR2_PACKAGE_GETTEXT)),y)
+-TARGETS+=gettext-target
++TARGETS+=gettext
+ endif
