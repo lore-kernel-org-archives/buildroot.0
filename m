@@ -1,7 +1,7 @@
 From: andersen at uclibc.org <andersen@uclibc.org>
-Date: Mon, 15 Jan 2007 14:34:53 -0800 (PST)
-Subject: [Buildroot] svn commit: trunk/buildroot/package:  metacity
-Message-ID: <20070115223453.426C448587@busybox.net>
+Date: Mon, 15 Jan 2007 14:37:08 -0800 (PST)
+Subject: [Buildroot] svn commit: trunk/buildroot/package
+Message-ID: <20070115223708.3D0C048596@busybox.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -9,248 +9,29 @@ Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
 Author: andersen
-Date: 2007-01-15 14:34:53 -0800 (Mon, 15 Jan 2007)
-New Revision: 17319
+Date: 2007-01-15 14:37:08 -0800 (Mon, 15 Jan 2007)
+New Revision: 17320
 
 Log:
-Add a somewhat basic window manager
+missed a spot -- need to add metacity here as well.  We really should add some
+categories in here.  Things are getting a bit messy just shoving everything in
+with no ordering.
 
 
-Added:
-   trunk/buildroot/package/metacity/
-   trunk/buildroot/package/metacity/Config.in
-   trunk/buildroot/package/metacity/Xsession
-   trunk/buildroot/package/metacity/metacity-gconf.patch
-   trunk/buildroot/package/metacity/metacity-nopo.patch
-   trunk/buildroot/package/metacity/metacity.mk
+Modified:
+   trunk/buildroot/package/Config.in
 
 
 Changeset:
-Added: trunk/buildroot/package/metacity/Config.in
+Modified: trunk/buildroot/package/Config.in
 ===================================================================
---- trunk/buildroot/package/metacity/Config.in	                        (rev 0)
-+++ trunk/buildroot/package/metacity/Config.in	2007-01-15 22:34:53 UTC (rev 17319)
-@@ -0,0 +1,7 @@
-+config BR2_PACKAGE_METACITY
-+	bool "metacity"
-+	select BR2_PACKAGE_XORG
-+	select BR2_PACKAGE_LIBGTK2
-+	default n
-+	help
-+	  Metacity is a window manager for the X Window System.
-
-Added: trunk/buildroot/package/metacity/Xsession
-===================================================================
---- trunk/buildroot/package/metacity/Xsession	                        (rev 0)
-+++ trunk/buildroot/package/metacity/Xsession	2007-01-15 22:34:53 UTC (rev 17319)
-@@ -0,0 +1,6 @@
-+#!/bin/sh
-+export GDK_USE_XFT=1
-+export LANG="en_US.UTF-8"
-+export LC_ALL="en_US.UTF-8"
-+/usr/bin/X11/rxvt -bg black -fg gray90 &
-+exec /bin/metacity
-
-
-Property changes on: trunk/buildroot/package/metacity/Xsession
-___________________________________________________________________
-Name: svn:executable
-   + *
-
-Added: trunk/buildroot/package/metacity/metacity-gconf.patch
-===================================================================
---- trunk/buildroot/package/metacity/metacity-gconf.patch	                        (rev 0)
-+++ trunk/buildroot/package/metacity/metacity-gconf.patch	2007-01-15 22:34:53 UTC (rev 17319)
-@@ -0,0 +1,18 @@
-+--- metacity-2.17.3/src/prefs.c.orig	2007-01-12 21:42:53.000000000 -0700
-++++ metacity-2.17.3/src/prefs.c	2007-01-12 21:45:21.000000000 -0700
-+@@ -2277,6 +2277,7 @@
-+       key = g_strconcat (KEY_SCREEN_BINDINGS_PREFIX, "/",
-+                          binding->name, NULL);
-+       
-++#ifdef HAVE_GCONF
-+       gconf_client_set_string (gconf_client_get_default (),
-+                                key, old_setting, &err);
-+ 
-+@@ -2287,6 +2288,7 @@
-+           g_error_free (err);
-+           err = NULL;
-+         }
-++#endif
-+       
-+       g_free (old_setting);
-+       g_free (key);
-
-Added: trunk/buildroot/package/metacity/metacity-nopo.patch
-===================================================================
---- trunk/buildroot/package/metacity/metacity-nopo.patch	                        (rev 0)
-+++ trunk/buildroot/package/metacity/metacity-nopo.patch	2007-01-15 22:34:53 UTC (rev 17319)
-@@ -0,0 +1,20 @@
-+--- metacity-2.17.3/Makefile.am.orig	2007-01-14 16:50:52.000000000 -0700
-++++ metacity-2.17.3/Makefile.am	2007-01-14 16:51:46.000000000 -0700
-+@@ -1,5 +1,5 @@
-+ 
-+-SUBDIRS=src po doc
-++SUBDIRS=src
-+ 
-+ EXTRA_DIST=HACKING rationales.txt \
-+ 	intltool-extract.in intltool-merge.in intltool-update.in
-+--- metacity-2.17.3/Makefile.in.orig	2007-01-14 16:51:38.000000000 -0700
-++++ metacity-2.17.3/Makefile.in	2007-01-14 16:51:58.000000000 -0700
-+@@ -246,7 +246,7 @@
-+ sharedstatedir = @sharedstatedir@
-+ sysconfdir = @sysconfdir@
-+ target_alias = @target_alias@
-+-SUBDIRS = src po doc
-++SUBDIRS = src
-+ EXTRA_DIST = HACKING rationales.txt \
-+ 	intltool-extract.in intltool-merge.in intltool-update.in
-+ 
-
-Added: trunk/buildroot/package/metacity/metacity.mk
-===================================================================
---- trunk/buildroot/package/metacity/metacity.mk	                        (rev 0)
-+++ trunk/buildroot/package/metacity/metacity.mk	2007-01-15 22:34:53 UTC (rev 17319)
-@@ -0,0 +1,142 @@
-+#############################################################
-+#
-+# metacity
-+#
-+#############################################################
-+
-+METACITY_VER:=2.17.3
-+METACITY_SOURCE:=metacity-$(METACITY_VER).tar.bz2
-+METACITY_SITE:=http://ftp.gnome.org/pub/gnome/sources/metacity/2.17
-+METACITY_DIR:=$(BUILD_DIR)/metacity-$(METACITY_VER)
-+METACITY_CAT:=$(BZCAT)
-+
-+$(DL_DIR)/$(METACITY_SOURCE):
-+	 $(WGET) -P $(DL_DIR) $(METACITY_SITE)/$(METACITY_SOURCE)
-+
-+metacity-source: $(DL_DIR)/$(METACITY_SOURCE)
-+
-+$(METACITY_DIR)/.unpacked: $(DL_DIR)/$(METACITY_SOURCE)
-+	$(METACITY_CAT) $(DL_DIR)/$(METACITY_SOURCE) | tar -C $(BUILD_DIR) $(TAR_OPTIONS) -
-+	toolchain/patch-kernel.sh $(METACITY_DIR) package/metacity/ \*.patch*
-+	(cd $(METACITY_DIR); libtoolize --force;)
-+	$(CONFIG_UPDATE) $(METACITY_DIR)
-+	(cd $(METACITY_DIR); autoconf;)
-+	touch $(METACITY_DIR)/.unpacked
-+
-+$(METACITY_DIR)/.configured: $(METACITY_DIR)/.unpacked
-+	(cd $(METACITY_DIR); rm -rf config.cache; \
-+		$(TARGET_CONFIGURE_OPTS) \
-+		CFLAGS="$(TARGET_CFLAGS)" \
-+		./configure \
-+		PKG_CONFIG=$(STAGING_DIR)/usr/bin/pkg-config \
-+		GLIB_CONFIG=$(STAGING_DIR)/bin/glib-config \
-+		ac_cv_func_mmap_fixed_mapped=yes \
-+		ac_cv_func_posix_getpwuid_r=yes \
-+		glib_cv_stack_grows=no \
-+		glib_cv_uscore=no \
-+		ac_cv_func_strtod=yes \
-+		ac_fsusage_space=yes \
-+		fu_cv_sys_stat_statfs2_bsize=yes \
-+		ac_cv_func_closedir_void=no \
-+		ac_cv_func_getloadavg=no \
-+		ac_cv_lib_util_getloadavg=no \
-+		ac_cv_lib_getloadavg_getloadavg=no \
-+		ac_cv_func_getgroups=yes \
-+		ac_cv_func_getgroups_works=yes \
-+		ac_cv_func_chown_works=yes \
-+		ac_cv_have_decl_euidaccess=no \
-+		ac_cv_func_euidaccess=no \
-+		ac_cv_have_decl_strnlen=yes \
-+		ac_cv_func_strnlen_working=yes \
-+		ac_cv_func_lstat_dereferences_slashed_symlink=yes \
-+		ac_cv_func_lstat_empty_string_bug=no \
-+		ac_cv_func_stat_empty_string_bug=no \
-+		vb_cv_func_rename_trailing_slash_bug=no \
-+		ac_cv_have_decl_nanosleep=yes \
-+		jm_cv_func_nanosleep_works=yes \
-+		gl_cv_func_working_utimes=yes \
-+		ac_cv_func_utime_null=yes \
-+		ac_cv_have_decl_strerror_r=yes \
-+		ac_cv_func_strerror_r_char_p=no \
-+		jm_cv_func_svid_putenv=yes \
-+		ac_cv_func_getcwd_null=yes \
-+		ac_cv_func_getdelim=yes \
-+		ac_cv_func_mkstemp=yes \
-+		utils_cv_func_mkstemp_limitations=no \
-+		utils_cv_func_mkdir_trailing_slash_bug=no \
-+		ac_cv_func_memcmp_working=yes \
-+		ac_cv_have_decl_malloc=yes \
-+		gl_cv_func_malloc_0_nonnull=yes \
-+		ac_cv_func_malloc_0_nonnull=yes \
-+		ac_cv_func_calloc_0_nonnull=yes \
-+		ac_cv_func_realloc_0_nonnull=yes \
-+		jm_cv_func_gettimeofday_clobber=no \
-+		gl_cv_func_working_readdir=yes \
-+		jm_ac_cv_func_link_follows_symlink=no \
-+		utils_cv_localtime_cache=no \
-+		ac_cv_struct_st_mtim_nsec=no \
-+		gl_cv_func_tzset_clobber=no \
-+		gl_cv_func_getcwd_null=yes \
-+		gl_cv_func_getcwd_path_max=yes \
-+		ac_cv_func_fnmatch_gnu=yes \
-+		am_getline_needs_run_time_check=no \
-+		am_cv_func_working_getline=yes \
-+		gl_cv_func_mkdir_trailing_slash_bug=no \
-+		gl_cv_func_mkstemp_limitations=no \
-+		ac_cv_func_working_mktime=yes \
-+		jm_cv_func_working_re_compile_pattern=yes \
-+		ac_use_included_regex=no \
-+		gl_cv_c_restrict=no \
-+		ac_cv_path_GLIB_GENMARSHAL=/usr/bin/glib-genmarshal \
-+		--target=$(GNU_TARGET_NAME) \
-+		--host=$(GNU_TARGET_NAME) \
-+		--build=$(GNU_HOST_NAME) \
-+		--prefix=/usr \
-+		--exec_prefix=/ \
-+		--libexecdir=/ \
-+		--libdir=/lib \
-+		--x-includes=$(STAGING_DIR)/usr/X11R6/include \
-+		--x-libraries=$(STAGING_DIR)/usr/X11R6/lib \
-+		--disable-glibtest \
-+		--disable-gconf \
-+		--disable-dependency-tracking \
-+		--disable-sm \
-+		--disable-nls \
-+		--disable-startup-notification \
-+	);
-+	touch $(METACITY_DIR)/.configured
-+
-+$(METACITY_DIR)/.compiled: $(METACITY_DIR)/.configured
-+	$(MAKE) -C $(METACITY_DIR)
-+	touch $(METACITY_DIR)/.compiled
-+
-+$(STAGING_DIR)/lib/*metacity*.so: $(METACITY_DIR)/.compiled
-+	$(MAKE) DESTDIR=$(STAGING_DIR) -C $(METACITY_DIR) install;
-+	touch -c $(STAGING_DIR)/lib/*metacity*.so
-+
-+$(TARGET_DIR)/lib/*metacity*.so: $(STAGING_DIR)/lib/*metacity*.so
-+	cp -dpf $(STAGING_DIR)/lib/*metacity*.so* $(TARGET_DIR)/lib/
-+	-$(STRIP) --strip-unneeded $(TARGET_DIR)/lib/*metacity*.so
-+	cp -dpf $(STAGING_DIR)/bin/*metacity* $(TARGET_DIR)/bin/
-+	mkdir -p $(TARGET_DIR)/usr/share/metacity/icons
-+	cp -dpf $(STAGING_DIR)/usr/share/metacity/icons/* $(TARGET_DIR)/usr/share/metacity/icons/
-+	mkdir -p $(TARGET_DIR)/usr/share/themes
-+	cp -a $(STAGING_DIR)/usr/share/themes/* $(TARGET_DIR)/usr/share/themes/
-+	cp -a package/metacity/Xsession $(TARGET_DIR)/etc/X11/
-+
-+metacity: uclibc zlib xorg libgtk2 $(TARGET_DIR)/lib/*metacity*.so
-+
-+metacity-clean:
-+	-$(MAKE) -C $(METACITY_DIR) clean
-+
-+metacity-dirclean:
-+	rm -rf $(METACITY_DIR)
-+
-+#############################################################
-+#
-+# Toplevel Makefile options
-+#
-+#############################################################
-+ifeq ($(strip $(BR2_PACKAGE_METACITY)),y)
-+TARGETS+=metacity
-+endif
+--- trunk/buildroot/package/Config.in	2007-01-15 22:34:53 UTC (rev 17319)
++++ trunk/buildroot/package/Config.in	2007-01-15 22:37:08 UTC (rev 17320)
+@@ -106,6 +106,7 @@
+ source "package/m4/Config.in"
+ source "package/mdadm/Config.in"
+ source "package/memtester/Config.in"
++source "package/metacity/Config.in"
+ source "package/microcom/Config.in"
+ source "package/microperl/Config.in"
+ source "package/microwin/Config.in"
