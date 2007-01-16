@@ -1,37 +1,38 @@
-From: andersen at uclibc.org <andersen@uclibc.org>
-Date: Mon, 15 Jan 2007 14:37:08 -0800 (PST)
-Subject: [Buildroot] svn commit: trunk/buildroot/package
-Message-ID: <20070115223708.3D0C048596@busybox.net>
+From: sjhill at uclibc.org <sjhill@uclibc.org>
+Date: Mon, 15 Jan 2007 16:33:25 -0800 (PST)
+Subject: [Buildroot] svn commit: trunk/buildroot/package/file
+Message-ID: <20070116003325.425574857F@busybox.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Author: andersen
-Date: 2007-01-15 14:37:08 -0800 (Mon, 15 Jan 2007)
-New Revision: 17320
+Author: sjhill
+Date: 2007-01-15 16:33:24 -0800 (Mon, 15 Jan 2007)
+New Revision: 17321
 
 Log:
-missed a spot -- need to add metacity here as well.  We really should add some
-categories in here.  Things are getting a bit messy just shoving everything in
-with no ordering.
+Fix failed build due to addition of '--libdir=/lib' which changed the location of where libmagic.a and libmagic.la were located.
 
 
 Modified:
-   trunk/buildroot/package/Config.in
+   trunk/buildroot/package/file/file.mk
 
 
 Changeset:
-Modified: trunk/buildroot/package/Config.in
+Modified: trunk/buildroot/package/file/file.mk
 ===================================================================
---- trunk/buildroot/package/Config.in	2007-01-15 22:34:53 UTC (rev 17319)
-+++ trunk/buildroot/package/Config.in	2007-01-15 22:37:08 UTC (rev 17320)
-@@ -106,6 +106,7 @@
- source "package/m4/Config.in"
- source "package/mdadm/Config.in"
- source "package/memtester/Config.in"
-+source "package/metacity/Config.in"
- source "package/microcom/Config.in"
- source "package/microperl/Config.in"
- source "package/microwin/Config.in"
+--- trunk/buildroot/package/file/file.mk	2007-01-15 22:37:08 UTC (rev 17320)
++++ trunk/buildroot/package/file/file.mk	2007-01-16 00:33:24 UTC (rev 17321)
+@@ -91,8 +91,8 @@
+ 	-($(STRIP) $(TARGET_DIR)/usr/lib/libmagic.so.*.* > /dev/null 2>&1)
+ 	rm -rf $(TARGET_DIR)/share/locale $(TARGET_DIR)/usr/info \
+ 		$(TARGET_DIR)/usr/man $(TARGET_DIR)/usr/share/doc
+-	mv $(TARGET_DIR)/usr/lib/libmagic.a $(STAGING_DIR)/lib
+-	rm -f $(TARGET_DIR)/usr/lib/libmagic.la
++	mv $(TARGET_DIR)/lib/libmagic.a $(STAGING_DIR)/lib
++	rm -f $(TARGET_DIR)/lib/libmagic.la
+ 	mv $(TARGET_DIR)/usr/include/magic.h $(STAGING_DIR)/include
+ 
+ file: zlib uclibc $(TARGET_DIR)/$(FILE_TARGET_BINARY)
