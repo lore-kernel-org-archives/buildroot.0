@@ -1,40 +1,53 @@
-From: andersen at uclibc.org <andersen@uclibc.org>
-Date: Tue, 16 Jan 2007 00:10:28 -0800 (PST)
-Subject: [Buildroot] svn commit: trunk/buildroot/package/fontconfig
-Message-ID: <20070116081028.268424856A@busybox.net>
+From: aldot at uclibc.org <aldot@uclibc.org>
+Date: Tue, 16 Jan 2007 01:35:12 -0800 (PST)
+Subject: [Buildroot] svn commit: trunk/buildroot/toolchain/uClibc
+Message-ID: <20070116093512.0CBCD4856D@busybox.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Author: andersen
-Date: 2007-01-16 00:10:27 -0800 (Tue, 16 Jan 2007)
-New Revision: 17323
+Author: aldot
+Date: 2007-01-16 01:35:11 -0800 (Tue, 16 Jan 2007)
+New Revision: 17324
 
 Log:
-Add in a few useful bits for font handling
+- pass the selected arm variant and ABI setting down to uClibc.
+  Now does not prompt for the former entered arch variant and ABI setting anymore, but still does for USE_BX (should this be forced to y if supported?)
+- TODO: add missing variants that are supported by uClibc to buildroot
 
 
 Modified:
-   trunk/buildroot/package/fontconfig/fontconfig.mk
+   trunk/buildroot/toolchain/uClibc/uclibc.mk
 
 
 Changeset:
-Modified: trunk/buildroot/package/fontconfig/fontconfig.mk
+Modified: trunk/buildroot/toolchain/uClibc/uclibc.mk
 ===================================================================
---- trunk/buildroot/package/fontconfig/fontconfig.mk	2007-01-16 01:29:38 UTC (rev 17322)
-+++ trunk/buildroot/package/fontconfig/fontconfig.mk	2007-01-16 08:10:27 UTC (rev 17323)
-@@ -59,6 +59,12 @@
- 	mkdir -p $(TARGET_DIR)/etc/fonts
- 	cp $(STAGING_DIR)/etc/fonts/fonts.conf $(TARGET_DIR)/etc/fonts/
- 	-$(STRIP) --strip-unneeded $(TARGET_DIR)/lib/libfontconfig.so
-+	mkdir -p $(TARGET_DIR)/var/cache/fontconfig
-+	mkdir -p $(TARGET_DIR)/usr/bin
-+	cp -a $(STAGING_DIR)/usr/bin/fc-cache $(TARGET_DIR)/usr/bin/
-+	-$(STRIP) --strip-unneeded $(TARGET_DIR)/usr/bin/fc-cache
-+	cp -a $(STAGING_DIR)/usr/bin/fc-list $(TARGET_DIR)/usr/bin/
-+	-$(STRIP) --strip-unneeded $(TARGET_DIR)/usr/bin/fc-list
- 
- fontconfig: uclibc freetype $(TARGET_DIR)/lib/libfontconfig.so
- 
+--- trunk/buildroot/toolchain/uClibc/uclibc.mk	2007-01-16 08:10:27 UTC (rev 17323)
++++ trunk/buildroot/toolchain/uClibc/uclibc.mk	2007-01-16 09:35:11 UTC (rev 17324)
+@@ -97,12 +97,19 @@
+ 		-e 's,^SHARED_LIB_LOADER_PREFIX=.*,SHARED_LIB_LOADER_PREFIX=\"/lib\",g' \
+ 		$(UCLIBC_DIR)/.config
+ ifeq ($(UCLIBC_TARGET_ARCH),arm)
+-	$(SED) 's,^.*CONFIG_$(shell echo $(BR2_ARM_TYPE)).*,CONFIG_$(shell echo $(BR2_ARM_TYPE))=y,g' \
+-	$(UCLIBC_DIR)/.config
+-endif
++	$(SED) '/.*CONFIG_ARM.*/d' -e '/.*CONFIG_GENERIC_ARM.*/d' \
++		 $(UCLIBC_DIR)/.config
++	/bin/echo "CONFIG_$(shell echo $(BR2_ARM_TYPE))=y" >> \
++		$(UCLIBC_DIR)/.config
+ ifeq ($(BR2_ARM_EABI),y)
+-	$(SED) 's,# CONFIG_ARM_EABI is not set,CONFIG_ARM_EABI=y,g' $(UCLIBC_DIR)/.config
++	/bin/echo "# CONFIG_ARM_OABI is not set" >> $(UCLIBC_DIR)/.config
++	/bin/echo "CONFIG_ARM_EABI=y" >> $(UCLIBC_DIR)/.config
+ endif
++ifeq ($(BR2_ARM_OABI),y)
++	/bin/echo "CONFIG_ARM_OABI=y" >> $(UCLIBC_DIR)/.config
++	/bin/echo "# CONFIG_ARM_EABI is not set" >> $(UCLIBC_DIR)/.config
++endif
++endif
+ ifneq ($(UCLIBC_TARGET_ENDIAN),)
+ 	$(SED) '/^# ARCH_$(UCLIBC_TARGET_ENDIAN)_ENDIAN /{s,# ,,;s, is not set,=y,g}' \
+ 		-e '/^# ARCH_$(UCLIBC_NOT_TARGET_ENDIAN)_ENDIAN /{s,# ,,;s, is not set,=n,g}' \
