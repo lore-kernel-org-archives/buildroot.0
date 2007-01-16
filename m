@@ -1,36 +1,35 @@
-From: Nathanael D. Noblet <nathanael@gnat.ca>
-Date: Tue, 16 Jan 2007 11:55:05 -0700
-Subject: [Buildroot] /etc/network/interfaces
-Message-ID: <45AD1F89.4050901@gnat.ca>
+From: aldot at uclibc.org <aldot@uclibc.org>
+Date: Tue, 16 Jan 2007 13:00:55 -0800 (PST)
+Subject: [Buildroot] svn commit: trunk/buildroot/package/mpfr
+Message-ID: <20070116210055.7187648560@busybox.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello all,
-   I have a system that uses buildroot I built a few years ago. The 
-client asked that we changed the network config from a static one to 
-dhcp, dhclient seems to be installed and so we edited 
-/etc/network/interfaces and changed it from what it was to this:
+Author: aldot
+Date: 2007-01-16 13:00:54 -0800 (Tue, 16 Jan 2007)
+New Revision: 17330
 
-auto lo
-iface lo inet loopback
+Log:
+- forgot to mkdir
 
 
-iface eth0 inet dhcp
-#address 192.168.0.200
-#netmask 255.255.255.0
-#broadcast 192.168.0.255
-#address 10.0.0.199
-#netmask 255.255.255.0
-#broadcast 10.0.0.255
-auto eth0
+Modified:
+   trunk/buildroot/package/mpfr/mpfr.mk
 
-This machine doesn't have a keyboard or anything and is intended to be 
-remotely administered. Upon reboot, we don't have the IP of the machine 
-and can't seem to find it. Is this config file above correct? Its been 
-almost 2 years since I touched this.
 
--- 
-Nathanael D. Noblet
+Changeset:
+Modified: trunk/buildroot/package/mpfr/mpfr.mk
+===================================================================
+--- trunk/buildroot/package/mpfr/mpfr.mk	2007-01-16 19:51:03 UTC (rev 17329)
++++ trunk/buildroot/package/mpfr/mpfr.mk	2007-01-16 21:00:54 UTC (rev 17330)
+@@ -36,6 +36,7 @@
+ 	touch $(MPFR_DIR)/.unpacked
+ 
+ $(MPFR_TARGET_DIR)/.configured: $(MPFR_DIR)/.unpacked $(STAGING_DIR)/lib/$(GMP_BINARY)
++	mkdir -p $(MPFR_TARGET_DIR)
+ 	(cd $(MPFR_TARGET_DIR); rm -rf config.cache; \
+ 		$(TARGET_CONFIGURE_OPTS) \
+ 		CFLAGS="$(TARGET_CFLAGS)" \
