@@ -1,23 +1,25 @@
-From: iks hefem <ikshefem@gmail.com>
-Date: Wed, 17 Jan 2007 00:27:12 +0100
-Subject: [Buildroot] netcat returns
-Message-ID: <78e18a710701161527k16cb2503x2d728ad6deac6185@mail.gmail.com>
+From: Ulf Samuelsson <ulf@atmel.com>
+Date: Wed, 17 Jan 2007 00:38:00 +0100
+Subject: [Buildroot] Loop in Config.in Dependencies caused by
+	CAIRO/LIBGTK2/XORG
+Message-ID: <45AD61D8.4070706@atmel.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-hi, could you include netcat to your great buildroot distro ?
-A patch was submitted here :
-http://busybox.net/lists/buildroot/2006-November/000440.html (with a small
-problem : the last endif in the .mk file is not added properly due to a bad
-"patched patch file".)
+Setting BR2_PACKAGE_LIBGTK2 will select BR2_PACKAGE_CAIRO
+Setting BR2_PACKAGE_CAIRO will select BR2_PACKAGE_XORG
+but BR2_PACKAGE_LIBGTK2 depends on BR2_PACKAGE_XORG
+This will cause a loop in the dependencies.
 
-To answer the question : why not busybox ? Well , because is more powerful :
-udp mode by example.
+We can make BR2_PACKAGE_CAIRO depend on BR2_PACKAGE_XORG,
+or we can make BR2_PACKAGE_LIBGTK2 select BR2_PACKAGE_XORG.
 
-thanks !
--------------- next part --------------
-An HTML attachment was scrubbed...
-URL: http://busybox.net/lists/buildroot/attachments/20070117/3db76309/attachment.html 
+Both fixes will break the loop (I tried)
+
+What is the best way (Personally I think the latter)?
+
+Best Regards
+Ulf Samuelsson
