@@ -1,46 +1,37 @@
-From: sjhill at uclibc.org <sjhill@uclibc.org>
-Date: Mon, 15 Jan 2007 17:29:39 -0800 (PST)
-Subject: [Buildroot] svn commit: trunk/buildroot/package/gettext
-Message-ID: <20070116012939.EF80D48582@busybox.net>
+From: Liu Oyster <oysterliu@gmail.com>
+Date: Tue, 16 Jan 2007 12:08:52 +0800
+Subject: [Buildroot] Using buildroot to compiler the busybox,
+	but it could not run !!
+Message-ID: <1d702dd10701152008m1f3b4715ibf7162363882b9aa@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Author: sjhill
-Date: 2007-01-15 17:29:38 -0800 (Mon, 15 Jan 2007)
-New Revision: 17322
+hi, Dear :
+  I use the buildroot and busybox recently. But, I encountered some
+questions, please help me.
+  (1) buildroot : 0.9.27  , busybox : 1.0.0.rc2
+  (2) linux kernel header version 2.4.25
+       binutil : 2.25.91.0.02
+       gcc : 3.4.2
+   I run the "make menuconfig " at buildroot directory to set these fields.
+Then run "make " and it produced the root_fs_i386.ext2. And I checked the
+build_i386/busybox-1.0.0  directory, busybox file is generated, but I could
+run the file "busybox".
 
-Log:
-Remove all of the binaries except for the one used for the target even though it is a MIPS binary and cannot be used. This package is still crap.
+   If I did not use the buildroot toolchain to compiler this version
+busybox, I could run the execution file busybox.
+
+   Please let me know how to fix this question .
 
 
-Modified:
-   trunk/buildroot/package/gettext/gettext.mk
-
-
-Changeset:
-Modified: trunk/buildroot/package/gettext/gettext.mk
-===================================================================
---- trunk/buildroot/package/gettext/gettext.mk	2007-01-16 00:33:24 UTC (rev 17321)
-+++ trunk/buildroot/package/gettext/gettext.mk	2007-01-16 01:29:38 UTC (rev 17322)
-@@ -111,6 +111,9 @@
- 	$(SED) "s,^libdir=.*,libdir=\'$(STAGING_DIR)/lib\',g" $(STAGING_DIR)/lib/libgettextpo.la
- 	$(SED) "s,^libdir=.*,libdir=\'$(STAGING_DIR)/lib\',g" $(STAGING_DIR)/lib/libgettextsrc.la
- 	$(SED) "s,^libdir=.*,libdir=\'$(STAGING_DIR)/lib\',g" $(STAGING_DIR)/lib/libintl.la
-+	rm -f $(STAGING_DIR)/bin/autopoint $(STAGING_DIR)/bin/envsubst
-+	rm -f $(STAGING_DIR)/bin/gettext.sh $(STAGING_DIR)/bin/gettextize
-+	rm -f $(STAGING_DIR)/bin/msg* $(STAGING_DIR)/bin/?gettext
- 	touch -c $(STAGING_DIR)/$(GETTEXT_TARGET_BINARY)
- 
- gettext: uclibc pkgconfig $(STAGING_DIR)/$(GETTEXT_TARGET_BINARY)
-@@ -130,7 +133,7 @@
- 
- gettext-target: $(GETTEXT_DIR)/$(GETTEXT_BINARY)
- 	$(MAKE) DESTDIR=$(TARGET_DIR) CC=$(TARGET_CC) -C $(GETTEXT_DIR) install
--	chmod +x $(TARGET_DIR)/lib/libintl.so.3.4.3 # identify as needing to be stipped
-+	chmod +x $(TARGET_DIR)/lib/libintl.so.3.4.3 # identify as needing to be stripped
- 	rm -rf  $(TARGET_DIR)/usr/info \
- 		$(TARGET_DIR)/usr/man $(TARGET_DIR)/usr/share/doc \
- 		$(TARGET_DIR)/usr/doc $(TARGET_DIR)/usr/share/aclocal \
+-- 
+Oyster Liu(?B?t??)
+0911-679670
+E-mail: oysterliu at gmail.com
+           oysterliu at yahoo.com.tw
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: http://busybox.net/lists/buildroot/attachments/20070116/6df5c177/attachment.htm 
