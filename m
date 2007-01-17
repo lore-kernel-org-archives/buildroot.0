@@ -1,21 +1,34 @@
-From: Sunil A <sunil.ayyapureddy@semindia.in>
-Date: Wed, 17 Jan 2007 19:34:46 +0530
-Subject: [Buildroot] updating "make" in buildroot package
-Message-ID: <KLECJOHKIJNMEKLBDEGEKEJACDAA.sunil.ayyapureddy@semindia.in>
+From: jacmet at uclibc.org <jacmet@uclibc.org>
+Date: Wed, 17 Jan 2007 06:14:04 -0800 (PST)
+Subject: [Buildroot] svn commit: trunk/buildroot/package/rdesktop
+Message-ID: <20070117141404.755D748582@busybox.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi,
-   I have a buildroot package and while building the toolchain for my target
-with that package,ther is an error message ?make too old?,so I would like to
-know as how to update the makefile in a package.How do I integrate the new
-makepackage into the buildroot package.
+Author: jacmet
+Date: 2007-01-17 06:14:02 -0800 (Wed, 17 Jan 2007)
+New Revision: 17346
 
-Thanks
+Log:
+removed leftover debugging stuff
 
--------------- next part --------------
-An HTML attachment was scrubbed...
-URL: http://busybox.net/lists/buildroot/attachments/20070117/d6fd205c/attachment.htm 
+Modified:
+   trunk/buildroot/package/rdesktop/rdesktop.mk
+
+
+Changeset:
+Modified: trunk/buildroot/package/rdesktop/rdesktop.mk
+===================================================================
+--- trunk/buildroot/package/rdesktop/rdesktop.mk	2007-01-17 13:58:01 UTC (rev 17345)
++++ trunk/buildroot/package/rdesktop/rdesktop.mk	2007-01-17 14:14:02 UTC (rev 17346)
+@@ -29,7 +29,6 @@
+ 		--with-openssl=$(STAGING_DIR) \
+ 		--sysconfdir=/etc \
+ 	);
+-	read
+ 	touch $(RDESKTOP_DIR)/.configured
+ 
+ $(RDESKTOP_DIR)/rdesktop: $(RDESKTOP_DIR)/.configured
