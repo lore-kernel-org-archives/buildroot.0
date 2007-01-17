@@ -1,25 +1,37 @@
-From: Nathanael D. Noblet <nathanael@gnat.ca>
-Date: Wed, 17 Jan 2007 10:06:04 -0700
-Subject: [Buildroot] updating "make" in buildroot package
-In-Reply-To: <20070117152520.GA28672@aon.at>
-References: <KLECJOHKIJNMEKLBDEGEKEJACDAA.sunil.ayyapureddy@semindia.in>
-	<20070117152520.GA28672@aon.at>
-Message-ID: <45AE577C.6040404@gnat.ca>
+From: Bernhard Fischer <rep.dot.nop@gmail.com>
+Date: Wed, 17 Jan 2007 19:13:55 +0100
+Subject: [Buildroot] install uClibc daily snapshot failes
+In-Reply-To: <200701170833.04970.claus.klein@arcormail.de>
+References: <200701170833.04970.claus.klein@arcormail.de>
+Message-ID: <20070117181355.GA29900@aon.at>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Bernhard Fischer wrote:
-> On Wed, Jan 17, 2007 at 07:34:46PM +0530, Sunil A wrote:
->> Hi,
->>   I have a buildroot package and while building the toolchain for my target
->> with that package,ther is an error message ?make too old?,so I would like to
->> know as how to update the makefile in a package.How do I integrate the new
->> makepackage into the buildroot package.
-> 
-> The "make" package in buildroot already is at the current 3.81 release version.
-> What version do you suggest we update to?
+On Wed, Jan 17, 2007 at 08:33:04AM +0100, Claus Klein wrote:
+>Hi all!
+>
+>I'm not able to build uClibc daily snapshot:
+>
+># Host: Linux P3linux 2.6.16.21-0.25-default #1 Tue Sep 19 07:26:15 UTC 2006 i686 i686 i386 GNU/Linux
+># Target Architecture (powerpc)
+>
+>make[1]: Leaving directory `/home/claus/src/buildroot/toolchain_build_powerpc/uClibc'
+>touch -c /home/claus/src/buildroot/toolchain_build_powerpc/uClibc/lib/libc.a
+>make -C /home/claus/src/buildroot/toolchain_build_powerpc/uClibc \
+>        PREFIX= \
+>        DEVEL_PREFIX=/tools/LinuxCDK/ \
+>        RUNTIME_PREFIX=/tools/LinuxCDK/ \
+>        install_runtime install_dev
+>make[1]: Entering directory `/home/claus/src/buildroot/toolchain_build_powerpc/uClibc'
+>install -d /tools/LinuxCDK/lib
+>install -m 644 lib/lib*-0.9.29.so \
+>        /tools/LinuxCDK/lib
+>cd lib && tar -cf - *.so.* | tar -xf - -C /tools/LinuxCDK/lib
+>tar: error while loading shared libraries: libpthread.so.0: ELF file data encoding not little-endian
+>tar: error while loading shared libraries: libpthread.so.0: ELF file data encoding not little-endian
 
-I think the problem is with your *hosts* version of make.
+You don't have "." in your LD_LIBRARY_PATH, do you?
+What is your echo $LD_LIBRARY_PATH ?
