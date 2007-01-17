@@ -1,43 +1,45 @@
-From: jacmet at uclibc.org <jacmet@uclibc.org>
-Date: Wed, 17 Jan 2007 05:49:36 -0800 (PST)
-Subject: [Buildroot] svn commit: trunk/buildroot/package/cairo
-Message-ID: <20070117134936.E4C15485B3@busybox.net>
+From: aldot at uclibc.org <aldot@uclibc.org>
+Date: Wed, 17 Jan 2007 05:54:14 -0800 (PST)
+Subject: [Buildroot] svn commit: trunk/buildroot
+Message-ID: <20070117135414.48E88485BC@busybox.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Author: jacmet
-Date: 2007-01-17 05:49:35 -0800 (Wed, 17 Jan 2007)
-New Revision: 17343
+Author: aldot
+Date: 2007-01-17 05:54:12 -0800 (Wed, 17 Jan 2007)
+New Revision: 17344
 
 Log:
-Fixup description (pango cut'n'paste)
+- convert to lowercase to match the other sub-arches
+
 
 Modified:
-   trunk/buildroot/package/cairo/Config.in
+   trunk/buildroot/Config.in
 
 
 Changeset:
-Modified: trunk/buildroot/package/cairo/Config.in
+Modified: trunk/buildroot/Config.in
 ===================================================================
---- trunk/buildroot/package/cairo/Config.in	2007-01-17 13:46:45 UTC (rev 17342)
-+++ trunk/buildroot/package/cairo/Config.in	2007-01-17 13:49:35 UTC (rev 17343)
-@@ -5,10 +5,10 @@
- 	select BR2_PACKAGE_LIBPNG
- 	select BR2_PACKAGE_XORG
- 	help
--	  Pango is a library for laying out and rendering of text, with an
--	  emphasis on internationalization. Pango can be used anywhere that
--	  text layout is needed, though most of the work on Pango so far has
--	  been done in the context of the GTK+ widget toolkit. Pango forms the
--	  core of text and font handling for GTK+-2.x.
-+	  Cairo is a 2D graphics library with support for multiple
-+	  output devices. Currently supported output targets include
-+	  the X Window System, Win32, image buffers, and PostScript,
-+	  PDF, and SVG file output. Experimental backends include
-+	  OpenGL (through glitz), Quartz, and XCB.
+--- trunk/buildroot/Config.in	2007-01-17 13:49:35 UTC (rev 17343)
++++ trunk/buildroot/Config.in	2007-01-17 13:54:12 UTC (rev 17344)
+@@ -74,7 +74,7 @@
+ 	bool "sa1100"
+ config BR2_xscale
+ 	bool "xscale"
+-config BR2_IWMMXT
++config BR2_iwmmxt
+ 	bool "iwmmxt"
+ endchoice
  
--	  http://www.pango.org/
-+	  http://cairographics.org/
+@@ -90,7 +90,7 @@
+ 	default ARM_SA110	if BR2_sa110
+ 	default ARM_SA1100	if BR2_sa1100
+ 	default ARM_XSCALE	if BR2_xscale
+-	default ARM_IWMMXT	if BR2_IWMMXT
++	default ARM_IWMMXT	if BR2_iwmmxt
+ 	default GENERIC_ARM	if BR2_generic_arm
+ 
+ choice
