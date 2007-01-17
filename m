@@ -1,44 +1,29 @@
-From: aldot at uclibc.org <aldot@uclibc.org>
-Date: Wed, 17 Jan 2007 05:05:17 -0800 (PST)
-Subject: [Buildroot] svn commit: trunk/buildroot
-Message-ID: <20070117130517.04859485A3@busybox.net>
+From: iks hefem <ikshefem@gmail.com>
+Date: Wed, 17 Jan 2007 14:06:37 +0100
+Subject: [Buildroot] netcat returns
+In-Reply-To: <20070117093130.GA25996@aon.at>
+References: <78e18a710701161527k16cb2503x2d728ad6deac6185@mail.gmail.com>
+	<20070117093130.GA25996@aon.at>
+Message-ID: <78e18a710701170506l45f95580h8d60f0a6d947212e@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Author: aldot
-Date: 2007-01-17 05:05:14 -0800 (Wed, 17 Jan 2007)
-New Revision: 17341
+> Please make a complete svn diff --diff-cmd diff -x -rdup package/ >
+> ~/buildroot.add-package-netcat.diff  and test it.
+>
+> The patch you link to above
 
-Log:
-- add ARM_IWMMXT variant since uClibc supports it
+uh .. in fact I am a mere user of this patch and unfortunately I'm not
+sure I have the sufficient knowledge to perform & maintain the full
+implementation you propose. Maybe the original poster will notice ?
 
+I understand this would be more work for you than to simply add this
+patch and that you might not be too keen on doing  it.
 
-Modified:
-   trunk/buildroot/Config.in
+So, I'll see if I can propose a full patch, either that way or
+(ideally) busybox's nc to support UDP !
 
-
-Changeset:
-Modified: trunk/buildroot/Config.in
-===================================================================
---- trunk/buildroot/Config.in	2007-01-17 12:31:15 UTC (rev 17340)
-+++ trunk/buildroot/Config.in	2007-01-17 13:05:14 UTC (rev 17341)
-@@ -74,6 +74,8 @@
- 	bool "sa1100"
- config BR2_xscale
- 	bool "xscale"
-+config BR2_IWMMXT
-+	bool "iwmmxt"
- endchoice
- 
- config BR2_ARM_TYPE
-@@ -88,6 +90,7 @@
- 	default ARM_SA110	if BR2_sa110
- 	default ARM_SA1100	if BR2_sa1100
- 	default ARM_XSCALE	if BR2_xscale
-+	default ARM_IWMMXT	if BR2_IWMMXT
- 	default GENERIC_ARM	if BR2_generic_arm
- 
- choice
+thanks for your answer.
