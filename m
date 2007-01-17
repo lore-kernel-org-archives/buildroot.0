@@ -1,29 +1,33 @@
-From: iks hefem <ikshefem@gmail.com>
-Date: Wed, 17 Jan 2007 14:06:37 +0100
-Subject: [Buildroot] netcat returns
-In-Reply-To: <20070117093130.GA25996@aon.at>
-References: <78e18a710701161527k16cb2503x2d728ad6deac6185@mail.gmail.com>
-	<20070117093130.GA25996@aon.at>
-Message-ID: <78e18a710701170506l45f95580h8d60f0a6d947212e@mail.gmail.com>
+From: jacmet at uclibc.org <jacmet@uclibc.org>
+Date: Wed, 17 Jan 2007 05:46:47 -0800 (PST)
+Subject: [Buildroot] svn commit: trunk/buildroot/package/cairo
+Message-ID: <20070117134647.51B56485AE@busybox.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-> Please make a complete svn diff --diff-cmd diff -x -rdup package/ >
-> ~/buildroot.add-package-netcat.diff  and test it.
->
-> The patch you link to above
+Author: jacmet
+Date: 2007-01-17 05:46:45 -0800 (Wed, 17 Jan 2007)
+New Revision: 17342
 
-uh .. in fact I am a mere user of this patch and unfortunately I'm not
-sure I have the sufficient knowledge to perform & maintain the full
-implementation you propose. Maybe the original poster will notice ?
+Log:
+s/pango/cairo/
 
-I understand this would be more work for you than to simply add this
-patch and that you might not be too keen on doing  it.
+Modified:
+   trunk/buildroot/package/cairo/Config.in
 
-So, I'll see if I can propose a full patch, either that way or
-(ideally) busybox's nc to support UDP !
 
-thanks for your answer.
+Changeset:
+Modified: trunk/buildroot/package/cairo/Config.in
+===================================================================
+--- trunk/buildroot/package/cairo/Config.in	2007-01-17 13:05:14 UTC (rev 17341)
++++ trunk/buildroot/package/cairo/Config.in	2007-01-17 13:46:45 UTC (rev 17342)
+@@ -1,5 +1,5 @@
+ config BR2_PACKAGE_CAIRO
+-	bool "pango"
++	bool "cairo"
+ 	default n
+ 	select BR2_PACKAGE_PKGCONFIG
+ 	select BR2_PACKAGE_LIBPNG
