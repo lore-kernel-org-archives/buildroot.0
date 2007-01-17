@@ -1,7 +1,7 @@
 From: aldot at uclibc.org <aldot@uclibc.org>
-Date: Wed, 17 Jan 2007 04:28:24 -0800 (PST)
+Date: Wed, 17 Jan 2007 04:31:16 -0800 (PST)
 Subject: [Buildroot] svn commit: trunk/buildroot/package
-Message-ID: <20070117122824.7288948563@busybox.net>
+Message-ID: <20070117123116.8B25C4859A@busybox.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -9,11 +9,11 @@ Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
 Author: aldot
-Date: 2007-01-17 04:28:23 -0800 (Wed, 17 Jan 2007)
-New Revision: 17339
+Date: 2007-01-17 04:31:15 -0800 (Wed, 17 Jan 2007)
+New Revision: 17340
 
 Log:
-- wrap external sysklogd in !BR2_PACKAGE_BUSYBOX_HIDE_OTHERS
+- put haserl into the networking section
 
 
 Modified:
@@ -23,15 +23,21 @@ Modified:
 Changeset:
 Modified: trunk/buildroot/package/Config.in
 ===================================================================
---- trunk/buildroot/package/Config.in	2007-01-17 12:27:27 UTC (rev 17338)
-+++ trunk/buildroot/package/Config.in	2007-01-17 12:28:23 UTC (rev 17339)
-@@ -136,8 +136,8 @@
- source "package/sqlite/Config.in"
- source "package/strace/Config.in"
- source "package/sudo/Config.in"
-+if !BR2_PACKAGE_BUSYBOX_HIDE_OTHERS
- source "package/sysklogd/Config.in"
--if !BR2_PACKAGE_BUSYBOX_HIDE_OTHERS
- # busybox has init and the runit stuff
- source "package/sysvinit/Config.in"
- endif
+--- trunk/buildroot/package/Config.in	2007-01-17 12:28:23 UTC (rev 17339)
++++ trunk/buildroot/package/Config.in	2007-01-17 12:31:15 UTC (rev 17340)
+@@ -63,7 +63,6 @@
+ source "package/mpfr/Config.in"
+ source "package/gzip/Config.in"
+ source "package/hal/Config.in"
+-source "package/haserl/Config.in"
+ if !BR2_PACKAGE_BUSYBOX_HIDE_OTHERS
+ source "package/hdparm/Config.in"
+ source "package/hotplug/Config.in"
+@@ -181,6 +180,7 @@
+ source "package/dnsmasq/Config.in"
+ source "package/dropbear/Config.in"
+ source "package/ethtool/Config.in"
++source "package/haserl/Config.in"
+ source "package/hostap/Config.in"
+ source "package/iproute2/Config.in"
+ source "package/ipsec-tools/Config.in"
