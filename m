@@ -1,48 +1,48 @@
-From: Bernhard Fischer <rep.dot.nop@gmail.com>
-Date: Wed, 17 Jan 2007 19:18:55 +0100
-Subject: [Buildroot] build root error with nofpu
-In-Reply-To: <005501c739d4$a189ef90$0696a8c0@Thomas>
-References: <005501c739d4$a189ef90$0696a8c0@Thomas>
-Message-ID: <20070117181855.GB29900@aon.at>
+From: Claus Klein <claus.klein@arcormail.de>
+Date: Wed, 17 Jan 2007 21:14:07 +0100
+Subject: [Buildroot] install uClibc daily snapshot failes
+In-Reply-To: <20070117181355.GA29900@aon.at>
+References: <200701170833.04970.claus.klein@arcormail.de>
+	<20070117181355.GA29900@aon.at>
+Message-ID: <200701172114.08730.claus.klein@arcormail.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Wed, Jan 17, 2007 at 09:03:13AM +0800, thomas.luo wrote:
->[root at localhost buildroot]# make
->
->Checking build system dependencies:
->CC clean:                                       Ok
->CXX clean:                                      Ok
->CPP clean:                                      Ok
->CFLAGS clean:                                   Ok
->CXXFLAGS clean:                                 Ok
->sed works:                                      Ok
->which installed:                                Ok
->GNU make version '3.80':                        Ok
->C compiler '/usr/bin/gcc'
->C compiler version '3.4.6':                     Ok
->bison installed:                                Ok
->flex installed:                                 Ok
->gettext installed:                              Ok
->Build system dependencies:                      Ok
->
->make -C /mnt/rootbb/buildroot/toolchain_build_arm_nofpu/uClibc \
->       PREFIX= \
->       DEVEL_PREFIX=/mnt/rootbb/buildroot/build_arm_nofpu/staging_dir/ \
->       RUNTIME_PREFIX=/mnt/rootbb/buildroot/build_arm_nofpu/staging_dir/ \
->       install_runtime install_dev
->make[1]: Entering directory 
->`/mnt/rootbb/buildroot/toolchain_build_arm_nofpu/uClibc'
->install -d /mnt/rootbb/buildroot/build_arm_nofpu/staging_dir/lib
->install -m 644 lib/lib*-0.9.29.so \
->       /mnt/rootbb/buildroot/build_arm_nofpu/staging_dir/lib
->install: cannot stat `lib/lib*-0.9.29.so': No such file or directory
+On Wednesday 17 January 2007 19:13, Bernhard Fischer wrote:
+> On Wed, Jan 17, 2007 at 08:33:04AM +0100, Claus Klein wrote:
+> >Hi all!
+> >
+> >I'm not able to build uClibc daily snapshot:
+> >
+> ># Host: Linux P3linux 2.6.16.21-0.25-default #1 Tue Sep 19 07:26:15 UTC 2006 i686 i686 i386 GNU/Linux
+> ># Target Architecture (powerpc)
+> >
+> >make[1]: Leaving directory `/home/claus/src/buildroot/toolchain_build_powerpc/uClibc'
+> >touch -c /home/claus/src/buildroot/toolchain_build_powerpc/uClibc/lib/libc.a
+> >make -C /home/claus/src/buildroot/toolchain_build_powerpc/uClibc \
+> >        PREFIX= \
+> >        DEVEL_PREFIX=/tools/LinuxCDK/ \
+> >        RUNTIME_PREFIX=/tools/LinuxCDK/ \
+> >        install_runtime install_dev
+> >make[1]: Entering directory `/home/claus/src/buildroot/toolchain_build_powerpc/uClibc'
+> >install -d /tools/LinuxCDK/lib
+> >install -m 644 lib/lib*-0.9.29.so \
+> >        /tools/LinuxCDK/lib
+> >cd lib && tar -cf - *.so.* | tar -xf - -C /tools/LinuxCDK/lib
+> >tar: error while loading shared libraries: libpthread.so.0: ELF file data encoding not little-endian
+> >tar: error while loading shared libraries: libpthread.so.0: ELF file data encoding not little-endian
+> 
+> You don't have "." in your LD_LIBRARY_PATH, do you?
+I checked this alrady.
+That is not the problem.
 
-do a rm -rf build_arm_nofpu/* toolchain_build_arm_nofpu/*
-then make sure that your BR2_JLEVEL=1 and invoke "make" again and paste
-the first error you get.
-
-Providing your .config and the uclibc.config would help, too.
+> What is your echo $LD_LIBRARY_PATH ?
+> 
+> 
+claus at P3linux:~/src/buildroot> echo $LD_LIBRARY_PATH
+/usr/lib/qt3/lib:/usr/lib/qt3/lib:/usr/lib/qt3/lib:/usr/lib/qt3/lib:
+claus at P3linux:~/src/buildroot>          
+                             
