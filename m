@@ -1,41 +1,26 @@
 From: thomas.luo <thomas.luo@ieee.org>
-Date: Wed, 17 Jan 2007 09:03:13 +0800
-Subject: [Buildroot] build root error with nofpu
-Message-ID: <005501c739d4$a189ef90$0696a8c0@Thomas>
+Date: Wed, 17 Jan 2007 14:56:36 +0800
+Subject: [Buildroot] build root destroy the lib!
+Message-ID: <006c01c73a04$a471f380$0696a8c0@Thomas>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-[root at localhost buildroot]# make
+hi, all
+  i meet some strange things. the buildroot tools destroy the lib which i copyed in.
 
-Checking build system dependencies:
-CC clean:                                       Ok
-CXX clean:                                      Ok
-CPP clean:                                      Ok
-CFLAGS clean:                                   Ok
-CXXFLAGS clean:                                 Ok
-sed works:                                      Ok
-which installed:                                Ok
-GNU make version '3.80':                        Ok
-C compiler '/usr/bin/gcc'
-C compiler version '3.4.6':                     Ok
-bison installed:                                Ok
-flex installed:                                 Ok
-gettext installed:                              Ok
-Build system dependencies:                      Ok
+i use the make modules_install copy all the modules to the build_arm/root folder.and type
+make in the buildroot.
 
-make -C /mnt/rootbb/buildroot/toolchain_build_arm_nofpu/uClibc \
-        PREFIX= \
-        DEVEL_PREFIX=/mnt/rootbb/buildroot/build_arm_nofpu/staging_dir/ \
-        RUNTIME_PREFIX=/mnt/rootbb/buildroot/build_arm_nofpu/staging_dir/ \
-        install_runtime install_dev
-make[1]: Entering directory `/mnt/rootbb/buildroot/toolchain_build_arm_nofpu/uClibc'
-install -d /mnt/rootbb/buildroot/build_arm_nofpu/staging_dir/lib
-install -m 644 lib/lib*-0.9.29.so \
-        /mnt/rootbb/buildroot/build_arm_nofpu/staging_dir/lib
-install: cannot stat `lib/lib*-0.9.29.so': No such file or directory
-make[1]: *** [install_runtime] ?????? 1
-make[1]: Leaving directory `/mnt/rootbb/buildroot/toolchain_build_arm_nofpu/uClibc'
-make: *** [/mnt/rootbb/buildroot/build_arm_nofpu/staging_dir/lib/libc.a] ?????? 
+the modules file is be smaller!!
+
+who can help me?
+
+Dec 31 17:01:57 modprobe: WARNING: Error inserting snd_ac97_bus (/lib/modules/2.6.19/kernel/sound/pci/ac97/snd-ac97-bus.ko): Invalid 
+module format
+
+
+Br
+Thomas
