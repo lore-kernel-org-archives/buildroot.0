@@ -1,43 +1,38 @@
-From: aldot at uclibc.org <aldot@uclibc.org>
-Date: Wed, 17 Jan 2007 04:31:16 -0800 (PST)
-Subject: [Buildroot] svn commit: trunk/buildroot/package
-Message-ID: <20070117123116.8B25C4859A@busybox.net>
+From: Julien Vermillard <jvermillard@archean.fr>
+Date: Wed, 17 Jan 2007 13:49:14 +0100
+Subject: [Buildroot] Fontconfig
+Message-ID: <1169038154.6702.5.camel@localhost>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Author: aldot
-Date: 2007-01-17 04:31:15 -0800 (Wed, 17 Jan 2007)
-New Revision: 17340
+Hello,
 
-Log:
-- put haserl into the networking section
+Look like fontconfig got a problem :
 
+make[4]: Entering directory
+`/opt/buildroot/buildroot/build_i586/fontconfig-2.4.2/fc-case'
+gcc  -Os -pipe     -o fc-case  fc-case.o  
+fc-case.o: In function `main':
+fc-case.c:(.text+0x3e6): undefined reference to `__ctype_b'
+collect2: ld returned 1 exit status
+make[4]: *** [fc-case] Error 1
+make[4]: Leaving directory
+`/opt/buildroot/buildroot/build_i586/fontconfig-2.4.2/fc-case'
+make[3]: *** [all] Error 2
+make[3]: Leaving directory
+`/opt/buildroot/buildroot/build_i586/fontconfig-2.4.2/fc-case'
+make[2]: *** [all-recursive] Error 1
+make[2]: Leaving directory
+`/opt/buildroot/buildroot/build_i586/fontconfig-2.4.2'
+make[1]: *** [all] Error 2
+make[1]: Leaving directory
+`/opt/buildroot/buildroot/build_i586/fontconfig-2.4.2'
+make: *** 
+[/opt/buildroot/buildroot/build_i586/fontconfig-2.4.2/.compiled] Error 2
 
-Modified:
-   trunk/buildroot/package/Config.in
+Any idea ?
 
-
-Changeset:
-Modified: trunk/buildroot/package/Config.in
-===================================================================
---- trunk/buildroot/package/Config.in	2007-01-17 12:28:23 UTC (rev 17339)
-+++ trunk/buildroot/package/Config.in	2007-01-17 12:31:15 UTC (rev 17340)
-@@ -63,7 +63,6 @@
- source "package/mpfr/Config.in"
- source "package/gzip/Config.in"
- source "package/hal/Config.in"
--source "package/haserl/Config.in"
- if !BR2_PACKAGE_BUSYBOX_HIDE_OTHERS
- source "package/hdparm/Config.in"
- source "package/hotplug/Config.in"
-@@ -181,6 +180,7 @@
- source "package/dnsmasq/Config.in"
- source "package/dropbear/Config.in"
- source "package/ethtool/Config.in"
-+source "package/haserl/Config.in"
- source "package/hostap/Config.in"
- source "package/iproute2/Config.in"
- source "package/ipsec-tools/Config.in"
+Julien
