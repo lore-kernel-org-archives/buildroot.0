@@ -1,80 +1,52 @@
-From: aldot at uclibc.org <aldot@uclibc.org>
-Date: Fri, 19 Jan 2007 06:17:35 -0800 (PST)
-Subject: [Buildroot] svn commit: trunk/buildroot: package/busybox
-	toolchain/uClibc
-Message-ID: <20070119141735.DAD3A4859E@busybox.net>
+From: Bernhard Fischer <rep.dot.nop@gmail.com>
+Date: Fri, 19 Jan 2007 15:41:17 +0100
+Subject: [Buildroot] build root error with nofpu
+In-Reply-To: <02f701c73b97$144f4bb0$0c96a8c0@Thomas>
+References: <02f701c73b97$144f4bb0$0c96a8c0@Thomas>
+Message-ID: <20070119144117.GA16604@aon.at>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Author: aldot
-Date: 2007-01-19 06:17:34 -0800 (Fri, 19 Jan 2007)
-New Revision: 17380
+On Fri, Jan 19, 2007 at 02:57:20PM +0800, thomas.luo wrote:
+>>>do a rm -rf build_arm_nofpu/* toolchain_build_arm_nofpu/*
+>>>then make sure that your BR2_JLEVEL=1 and invoke "make" again and paste
+>>>the first error you get.
+>>>
+>>>Providing your .config and the uclibc.config would help, too.
+>>
+>>libc/libc_so.a(difftime.os): In function `difftime':
+>>difftime.c:(.text+0x8): undefined reference to `__floatsidf'
+>>difftime.c:(.text+0x2c): undefined reference to `__subdf3'
+>>libc/libc_so.a(_fpmaxtostr.os): In function `_fpmaxtostr':
+>>_fpmaxtostr.c:(.text+0xd4): undefined reference to `__nedf2'
+>>_fpmaxtostr.c:(.text+0xf8): undefined reference to `__eqdf2'
+>>_fpmaxtostr.c:(.text+0x114): undefined reference to `__divdf3'
+>>_fpmaxtostr.c:(.text+0x120): undefined reference to `__ltdf2'
+>>_fpmaxtostr.c:(.text+0x1c4): undefined reference to `__muldf3'
+>>_fpmaxtostr.c:(.text+0x388): undefined reference to `__gedf2'
+>>_fpmaxtostr.c:(.text+0x430): undefined reference to `__adddf3'
+>>libc/libc_so.a(__psfs_do_numeric.os): In function `__psfs_do_numeric':
+>>__psfs_do_numeric.c:(.text+0x51c): undefined reference to `__truncdfsf2'
+>>libc/libc_so.a(strtof.os): In function `strtof':
+>>strtof.c:(.text+0x1c): undefined reference to `__extendsfdf2'
+>>/mnt/rootbb/buildroot/build_arm_nofpu/staging_dir/lib/gcc/arm-linux-uclibc/4.1.1/libgcc.a(_fixunsdfsi.o): In function 
+>>`__fixunsdfsi':
+>>libgcc2.c:(.text+0x34): undefined reference to `__fixdfsi'
+>>make[2]: *** [lib/libc.so] Error 1
+>>make[1]: *** [lib/libc.so.0] ??? 2
+>>make[1]: Leaving directory 
+>>`/mnt/rootbb/buildroot/toolchain_build_arm_nofpu/uClibc'
+>>make: *** 
+>>[/mnt/rootbb/buildroot/toolchain_build_arm_nofpu/uClibc/lib/libc.a] ??? 2
+>>[root at localhost buildroot]# 
+>>
 
-Log:
-- copy the _CONFIG_FILES back
-- use the BUSYBOX_CONFIG_FILE if specified by the user
+[snip inlined buildroot.config]
+Looks like you did not send your uClibc.config?
 
-
-Modified:
-   trunk/buildroot/package/busybox/busybox.mk
-   trunk/buildroot/toolchain/uClibc/uclibc.mk
-
-
-Changeset:
-Modified: trunk/buildroot/package/busybox/busybox.mk
-===================================================================
---- trunk/buildroot/package/busybox/busybox.mk	2007-01-19 13:32:21 UTC (rev 17379)
-+++ trunk/buildroot/package/busybox/busybox.mk	2007-01-19 14:17:34 UTC (rev 17380)
-@@ -34,8 +34,10 @@
- 
- BUSYBOX_UNZIP=$(BZCAT)
- 
-+ifndef BUSYBOX_CONFIG_FILE
- BUSYBOX_CONFIG_FILE=$(subst ",, $(strip $(BR2_PACKAGE_BUSYBOX_CONFIG)))
- #")
-+endif
- 
- $(DL_DIR)/$(BUSYBOX_SOURCE):
- 	 $(WGET) -P $(DL_DIR) $(BUSYBOX_SITE)/$(BUSYBOX_SOURCE)
-@@ -53,7 +55,7 @@
- 	touch $(BUSYBOX_DIR)/.unpacked
- 
- $(BUSYBOX_DIR)/.configured: $(BUSYBOX_DIR)/.unpacked $(BUSYBOX_CONFIG_FILE)
--	cp $(BUSYBOX_CONFIG_FILE) $(BUSYBOX_DIR)/.config
-+	cp -f $(BUSYBOX_CONFIG_FILE) $(BUSYBOX_DIR)/.config
- ifeq ($(strip $(BR2_BUSYBOX_VERSION_1_0_1)),y)
- 	$(SED) "s,^CROSS.*,CROSS=$(TARGET_CROSS)\n\PREFIX=$(TARGET_DIR),;" \
- 		$(BUSYBOX_DIR)/Rules.mak ;
-@@ -111,6 +113,7 @@
- 
- busybox-menuconfig: busybox-source $(BUSYBOX_DIR)/.configured
- 	$(MAKE) __TARGET_ARCH=$(ARCH) -C $(BUSYBOX_DIR) menuconfig
-+	cp -f $(BUSYBOX_DIR)/.config $(BUSYBOX_CONFIG_FILE)
- 
- busybox-clean:
- 	rm -f $(TARGET_DIR)/bin/busybox
-
-Modified: trunk/buildroot/toolchain/uClibc/uclibc.mk
-===================================================================
---- trunk/buildroot/toolchain/uClibc/uclibc.mk	2007-01-19 13:32:21 UTC (rev 17379)
-+++ trunk/buildroot/toolchain/uClibc/uclibc.mk	2007-01-19 14:17:34 UTC (rev 17380)
-@@ -86,7 +86,7 @@
- 
- # Some targets may wish to provide their own UCLIBC_CONFIG_FILE...
- $(UCLIBC_DIR)/.config: $(UCLIBC_DIR)/.unpacked $(UCLIBC_CONFIG_FILE)
--	cp $(UCLIBC_CONFIG_FILE) $(UCLIBC_DIR)/.config
-+	cp -f $(UCLIBC_CONFIG_FILE) $(UCLIBC_DIR)/.config
- 	$(SED) 's,^CROSS_COMPILER_PREFIX=.*,CROSS_COMPILER_PREFIX="$(TARGET_CROSS)",g' \
- 		-e 's,# TARGET_$(UCLIBC_TARGET_ARCH) is not set,TARGET_$(UCLIBC_TARGET_ARCH)=y,g' \
- 		-e 's,^TARGET_ARCH="none",TARGET_ARCH=\"$(UCLIBC_TARGET_ARCH)\",g' \
-@@ -224,6 +224,7 @@
- 		RUNTIME_PREFIX=$(TOOL_BUILD_DIR)/uClibc_dev/ \
- 		HOSTCC="$(HOSTCC)" \
- 		menuconfig && \
-+	cp -f $(UCLIBC_DIR)/.config $(UCLIBC_CONFIG_FILE) && \
- 	touch $(UCLIBC_DIR)/.configured
- 
- 
+Please attach them both, non-inlined, so i can save them away easily and
+try to reproduce that problem.
+thanks,
