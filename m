@@ -1,31 +1,59 @@
-From: Bernhard Fischer <rep.dot.nop@gmail.com>
-Date: Fri, 19 Jan 2007 17:33:13 +0100
-Subject: [Buildroot] chown to root does not work
-In-Reply-To: <200701191612.12016.thilo@riessner.de>
-References: <200701191331.07579.thilo@riessner.de>
-	<20070119133516.GI14371@priv.blacknet.de>
-	<200701191612.12016.thilo@riessner.de>
-Message-ID: <20070119163313.GA17320@aon.at>
+From: aldot at uclibc.org <aldot@uclibc.org>
+Date: Fri, 19 Jan 2007 09:11:06 -0800 (PST)
+Subject: [Buildroot] svn commit: trunk/buildroot/toolchain/dependencies
+Message-ID: <20070119171106.928BC48580@busybox.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Fri, Jan 19, 2007 at 04:12:09PM +0100, Thilo Riessner wrote:
->Am Freitag, 19. Januar 2007 14:35 schrieb Goetz Bock:
->> On Fri, Jan 19 '07 at 13:31, Thilo Riessner wrote:
->> > In the docs is mentioned, that one doesn't need to be root to build a
->> > root filesystem. But when building the filesystem as a normal user, chown
->> > is not able to change owner to root in the target filesystem. Is there a
->> > solution of the problem, that I don't see?
+Author: aldot
+Date: 2007-01-19 09:11:05 -0800 (Fri, 19 Jan 2007)
+New Revision: 17383
 
-Who does call chown in there? Which package?
-Please show me the logs around the alleged call to chown that is
-failing.
+Log:
+- add sanity check to make sure that LD_LIBRARY_PATH doesn't contain CWD
 
->>
->> Use fakeroot. Than the cpio/tar/... root images are owned by root.
->I don't know fakeroot. What is it? A programme, an option of buildroot? How do 
->I have to use it?
->Thanks for your help so far.
+
+Modified:
+   trunk/buildroot/toolchain/dependencies/dependencies.sh
+
+
+Changeset:
+Modified: trunk/buildroot/toolchain/dependencies/dependencies.sh
+===================================================================
+--- trunk/buildroot/toolchain/dependencies/dependencies.sh	2007-01-19 16:23:35 UTC (rev 17382)
++++ trunk/buildroot/toolchain/dependencies/dependencies.sh	2007-01-19 17:11:05 UTC (rev 17383)
+@@ -55,6 +55,31 @@
+ fi;
+ echo "CXXFLAGS clean:					Ok"
+ 
++echo "WORKS" | grep "WORKS" >/dev/null 2>&1
++if test $? != 0 ; then
++	echo "grep works:				FALSE"
++	exit 1
++fi
++
++# sanity check for CWD in LD_LIBRARY_PATH
++# try not to rely on egrep..
++if test -n "$LD_LIBRARY_PATH" ; then
++	/bin/echo TRiGGER_start"$LD_LIBRARY_PATH"TRiGGER_end | /bin/grep ':.:' >/dev/null 2>&1 ||
++	/bin/echo TRiGGER_start"$LD_LIBRARY_PATH"TRiGGER_end | /bin/grep 'TRiGGER_start:' >/dev/null 2>&1 ||
++	/bin/echo TRiGGER_start"$LD_LIBRARY_PATH"TRiGGER_end | /bin/grep ':TRiGGER_end' >/dev/null 2>&1 ||
++	/bin/echo TRiGGER_start"$LD_LIBRARY_PATH"TRiGGER_end | /bin/grep '::' >/dev/null 2>&1
++	if test $? = 0; then
++		echo "LD_LIBRARY_PATH sane:				FALSE"
++		echo "You seem to have the current working directory in your"
++		echo "LD_LIBRARY_PATH environment variable. This doesn't work."
++		exit 1;
++	else
++		echo "LD_LIBRARY_PATH sane:				Ok"
++	fi
++fi;
++
++
++
+ #############################################################
+ #
+ # check build system 'sed'
