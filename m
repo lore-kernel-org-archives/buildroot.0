@@ -1,42 +1,80 @@
-From: Goetz Bock <bock@blacknet.de>
-Date: Fri, 19 Jan 2007 14:31:53 +0100
-Subject: [Buildroot] Building x86_64 failes
-Message-ID: <20070119133153.GH14371@priv.blacknet.de>
+From: aldot at uclibc.org <aldot@uclibc.org>
+Date: Fri, 19 Jan 2007 06:17:35 -0800 (PST)
+Subject: [Buildroot] svn commit: trunk/buildroot: package/busybox
+	toolchain/uClibc
+Message-ID: <20070119141735.DAD3A4859E@busybox.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear list,
+Author: aldot
+Date: 2007-01-19 06:17:34 -0800 (Fri, 19 Jan 2007)
+New Revision: 17380
 
-after I've successfully build buildroot for i586 on my
-amd64/debian/sarge box, I wanted to build the same rootfs for amd64.
+Log:
+- copy the _CONFIG_FILES back
+- use the BUSYBOX_CONFIG_FILE if specified by the user
 
-So I copied the existing buildroot, removed build_i586 and
-toolchain_build_i586, ran make clean and make menuconfig to
-reconfigureit for x86_64.
 
-But building the toolchain failes with:
+Modified:
+   trunk/buildroot/package/busybox/busybox.mk
+   trunk/buildroot/toolchain/uClibc/uclibc.mk
 
-/build/buildroot.amd64/toolchain_build_x86_64/gcc-4.1.1/gcc/config/i386/linux-unwind.h:
-In function 'x86_fallback_frame_state':
-/build/buildroot.amd64/toolchain_build_x86_64/gcc-4.1.1/gcc/config/i386/linux-unwind.h:152:
-error: 'struct sigcontext' has no member named 'esp'
-.
-. [ more missing e?? members ]
-.
 
-It does not matter what version of binutils/gcc I use, it's always the
-same error.
-(I've tried binutuils: 2.16.1, 2.17, 2.17.50.0.7, 2.17.50.0.9 and gcc
-4.0.3, 4.1.1, 4.2)
+Changeset:
+Modified: trunk/buildroot/package/busybox/busybox.mk
+===================================================================
+--- trunk/buildroot/package/busybox/busybox.mk	2007-01-19 13:32:21 UTC (rev 17379)
++++ trunk/buildroot/package/busybox/busybox.mk	2007-01-19 14:17:34 UTC (rev 17380)
+@@ -34,8 +34,10 @@
+ 
+ BUSYBOX_UNZIP=$(BZCAT)
+ 
++ifndef BUSYBOX_CONFIG_FILE
+ BUSYBOX_CONFIG_FILE=$(subst ",, $(strip $(BR2_PACKAGE_BUSYBOX_CONFIG)))
+ #")
++endif
+ 
+ $(DL_DIR)/$(BUSYBOX_SOURCE):
+ 	 $(WGET) -P $(DL_DIR) $(BUSYBOX_SITE)/$(BUSYBOX_SOURCE)
+@@ -53,7 +55,7 @@
+ 	touch $(BUSYBOX_DIR)/.unpacked
+ 
+ $(BUSYBOX_DIR)/.configured: $(BUSYBOX_DIR)/.unpacked $(BUSYBOX_CONFIG_FILE)
+-	cp $(BUSYBOX_CONFIG_FILE) $(BUSYBOX_DIR)/.config
++	cp -f $(BUSYBOX_CONFIG_FILE) $(BUSYBOX_DIR)/.config
+ ifeq ($(strip $(BR2_BUSYBOX_VERSION_1_0_1)),y)
+ 	$(SED) "s,^CROSS.*,CROSS=$(TARGET_CROSS)\n\PREFIX=$(TARGET_DIR),;" \
+ 		$(BUSYBOX_DIR)/Rules.mak ;
+@@ -111,6 +113,7 @@
+ 
+ busybox-menuconfig: busybox-source $(BUSYBOX_DIR)/.configured
+ 	$(MAKE) __TARGET_ARCH=$(ARCH) -C $(BUSYBOX_DIR) menuconfig
++	cp -f $(BUSYBOX_DIR)/.config $(BUSYBOX_CONFIG_FILE)
+ 
+ busybox-clean:
+ 	rm -f $(TARGET_DIR)/bin/busybox
 
-The i386 realy irritates me, and I've no idea where it comes from.
-
-Any pionters?
--- 
-/"\ Goetz Bock at blacknet dot de  --  secure mobile Linux everNETting
-\ /       (c) 2006 Creative Commons, Attribution-ShareAlike 2.0 de
- X   [ 1. Use descriptive subjects - 2. Edit a reply for brevity -  ]
-/ \  [ 3. Reply to the list - 4. Read the archive *before* you post ]
+Modified: trunk/buildroot/toolchain/uClibc/uclibc.mk
+===================================================================
+--- trunk/buildroot/toolchain/uClibc/uclibc.mk	2007-01-19 13:32:21 UTC (rev 17379)
++++ trunk/buildroot/toolchain/uClibc/uclibc.mk	2007-01-19 14:17:34 UTC (rev 17380)
+@@ -86,7 +86,7 @@
+ 
+ # Some targets may wish to provide their own UCLIBC_CONFIG_FILE...
+ $(UCLIBC_DIR)/.config: $(UCLIBC_DIR)/.unpacked $(UCLIBC_CONFIG_FILE)
+-	cp $(UCLIBC_CONFIG_FILE) $(UCLIBC_DIR)/.config
++	cp -f $(UCLIBC_CONFIG_FILE) $(UCLIBC_DIR)/.config
+ 	$(SED) 's,^CROSS_COMPILER_PREFIX=.*,CROSS_COMPILER_PREFIX="$(TARGET_CROSS)",g' \
+ 		-e 's,# TARGET_$(UCLIBC_TARGET_ARCH) is not set,TARGET_$(UCLIBC_TARGET_ARCH)=y,g' \
+ 		-e 's,^TARGET_ARCH="none",TARGET_ARCH=\"$(UCLIBC_TARGET_ARCH)\",g' \
+@@ -224,6 +224,7 @@
+ 		RUNTIME_PREFIX=$(TOOL_BUILD_DIR)/uClibc_dev/ \
+ 		HOSTCC="$(HOSTCC)" \
+ 		menuconfig && \
++	cp -f $(UCLIBC_DIR)/.config $(UCLIBC_CONFIG_FILE) && \
+ 	touch $(UCLIBC_DIR)/.configured
+ 
+ 
