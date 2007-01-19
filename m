@@ -1,101 +1,168 @@
-From: Bernhard Fischer <rep.dot.nop@gmail.com>
-Date: Fri, 19 Jan 2007 20:10:53 +0100
-Subject: [Buildroot] package makefile conventions
-In-Reply-To: <200701191912.49618.claus.klein@arcormail.de>
-References: <200701191912.49618.claus.klein@arcormail.de>
-Message-ID: <20070119191053.GA19990@aon.at>
+From: aldot at uclibc.org <aldot@uclibc.org>
+Date: Fri, 19 Jan 2007 11:14:35 -0800 (PST)
+Subject: [Buildroot] svn commit: trunk/buildroot/package/microcom
+Message-ID: <20070119191435.9B42B48586@busybox.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Fri, Jan 19, 2007 at 07:12:49PM +0100, Claus Klein wrote:
->Hallo,
->
->I found some packages which does not implement all needed targets.
+Author: aldot
+Date: 2007-01-19 11:14:33 -0800 (Fri, 19 Jan 2007)
+New Revision: 17386
 
-Ah, excellent.
-
->Too, some of them use 'make' or 'sed' without the common make variable.
-
-Those need fixing.
-
->
->Last, but not least, why is '$(MAKE1)' used in some package makefiles?
-
-Some packages are broken wrt parallel builds. $(MAKE1) expands to
-make -j 1
-
->claus at P3linux:~/src/buildroot> ./mklint
->package/gmp/gmp.mk lacks target gmp
-
-The upstream package is called "gmp" but is really "libgmp".
-Same for mpfr.
-
->package/gmp/gmp.mk lacks target gmp-source
->package/gmp/gmp.mk lacks target gmp-clean
->package/gmp/gmp.mk lacks target gmp-dirclean
->package/qte/qte.mk lacks target qte-source
->package/bash/bash.mk uses MAKE1 make var, why not $(MAKE) ?
->package/dash/dash.mk uses MAKE1 make var, why not $(MAKE) ?
->package/flex/flex.mk uses MAKE1 make var, why not $(MAKE) ?
->package/lzma/lzma.mk lacks target lzma
-
-That one has lzma-host and lzma-target targets
-
->package/mpfr/mpfr.mk lacks target mpfr
->package/mpfr/mpfr.mk lacks target mpfr-source
->package/mpfr/mpfr.mk lacks target mpfr-clean
->package/mpfr/mpfr.mk lacks target mpfr-dirclean
->package/pppd/pppd.mk uses MAKE1 make var, why not $(MAKE) ?
->package/ipsec-tools/ipsec-tools.mk uses make without make var $(MAKE) /!\
->package/expat/expat.mk lacks target expat-dirclean
->package/pango/pango.mk uses MAKE1 make var, why not $(MAKE) ?
->package/slang/slang.mk uses MAKE1 make var, why not $(MAKE) ?
->package/wireless-tools/wireless-tools.mk uses sed without make var $(SED) :-(
->package/iptables/iptables.mk uses MAKE1 make var, why not $(MAKE) ?
->package/modutils/modutils.mk uses MAKE1 make var, why not $(MAKE) ?
->package/ltp-testsuite/ltp-testsuite.mk uses MAKE1 make var, why not $(MAKE) ?
->package/dmraid/dmraid.mk uses MAKE1 make var, why not $(MAKE) ?
->package/ncurses/ncurses.mk uses MAKE1 make var, why not $(MAKE) ?
->package/netsnmp/netsnmp.mk uses MAKE1 make var, why not $(MAKE) ?
->package/pciutils/pciutils.mk uses MAKE1 make var, why not $(MAKE) ?
->package/libelf/libelf.mk uses MAKE1 make var, why not $(MAKE) ?
->package/libusb/libusb.mk uses make without make var $(MAKE) /!\
->package/python/python.mk uses make without make var $(MAKE) /!\
->package/e2fsprogs/e2fsprogs.mk uses MAKE1 make var, why not $(MAKE) ?
->package/thttpd/thttpd.mk uses sed without make var $(SED) :-(
->package/openntpd/openntpd.mk lacks target openntpd
->package/openntpd/openntpd.mk lacks target openntpd-source
->package/openntpd/openntpd.mk lacks target openntpd-clean
->package/openntpd/openntpd.mk lacks target openntpd-dirclean
-
-well:
-$ grep -L dirclean package/*/*mk
-package/customize/customize.mk
-package/expat/expat.mk
-package/gnuconfig/gnuconfig.mk
-
-where customize and gnuconfig are ok, expat not (but i didn't look)
-
-for the normal clean targets, we have about the same picture (all seems
-to be well):
-$ grep -L clean: package/*/*mk
-package/customize/customize.mk
-package/gnuconfig/gnuconfig.mk
+Log:
+- make it build.. compile-tested only. Closes #970
 
 
->package/raidtools/raidtools.mk lacks target raidtools
->package/raidtools/raidtools.mk lacks target raidtools-source
->package/raidtools/raidtools.mk lacks target raidtools-clean
->package/raidtools/raidtools.mk lacks target raidtools-dirclean
->package/usbutils/usbutils.mk uses make without make var $(MAKE) /!\
->package/openssl/openssl.mk uses MAKE1 make var, why not $(MAKE) ?
->package/libevent/libevent.mk uses make without make var $(MAKE) /!\
->package/libfloat/libfloat.mk uses make without make var $(MAKE) /!\
->package/xfsprogs/xfsprogs.mk uses MAKE1 make var, why not $(MAKE) ?
->package/microperl/microperl.mk uses make without make var $(MAKE) /!\
->package/readline/readline.mk uses MAKE1 make var, why not $(MAKE) ?
->package/asterisk/asterisk.mk uses MAKE1 make var, why not $(MAKE) ?
->claus at P3linux:~/src/buildroot>            
+Added:
+   trunk/buildroot/package/microcom/microcom-102-001-speed-defines.patch
+   trunk/buildroot/package/microcom/microcom-102-002-rename-variable-log.patch
+
+Modified:
+   trunk/buildroot/package/microcom/microcom.mk
+
+
+Changeset:
+Added: trunk/buildroot/package/microcom/microcom-102-001-speed-defines.patch
+===================================================================
+--- trunk/buildroot/package/microcom/microcom-102-001-speed-defines.patch	                        (rev 0)
++++ trunk/buildroot/package/microcom/microcom-102-001-speed-defines.patch	2007-01-19 19:14:33 UTC (rev 17386)
+@@ -0,0 +1,34 @@
++diff -rdup microcom-1.02.orig/help.c microcom-1.02/help.c
++--- microcom-1.02.orig/help.c	2000-07-30 06:15:47.000000000 +0200
+++++ microcom-1.02/help.c	2007-01-19 19:44:19.000000000 +0100
++@@ -273,12 +273,29 @@ static void help_set_speed(int fd, char 
++     B19200,
++     B38400,
++     B57600,
+++#if defined B115200
++     B115200,
+++#endif
+++#if defined B230400
++     B230400,
+++#endif
+++#if defined B460800
++     B460800
+++#endif
++   };
+++#undef __STOPCHAR
+++#if defined B115200
+++#define __STOPCHAR 'h'
+++#endif
+++#if defined B230400
+++#define __STOPCHAR 'i'
+++#endif
+++#if defined B460800
+++#define __STOPCHAR 'j'
+++#endif
++ 
++-  if (c < 'a' && c > 'j') {
+++
+++  if (c < 'a' && c > __STOPCHAR) {
++     if (c == '~') {
++       help_speed();
++       return;
+
+Added: trunk/buildroot/package/microcom/microcom-102-002-rename-variable-log.patch
+===================================================================
+--- trunk/buildroot/package/microcom/microcom-102-002-rename-variable-log.patch	                        (rev 0)
++++ trunk/buildroot/package/microcom/microcom-102-002-rename-variable-log.patch	2007-01-19 19:14:33 UTC (rev 17386)
+@@ -0,0 +1,78 @@
++diff -rdup microcom-1.02.speed/help.c microcom-1.02/help.c
++--- microcom-1.02.speed/help.c	2007-01-19 19:44:19.000000000 +0100
+++++ microcom-1.02/help.c	2007-01-19 19:48:20.000000000 +0100
++@@ -23,7 +23,7 @@ extern int crnl_mapping; //0 - no mappin
++ extern int script; /* script active flag */
++ extern char scr_name[MAX_SCRIPT_NAME]; /* default name of the script */
++ extern char device[MAX_DEVICE_NAME]; /* serial device name */
++-extern int log; /* log active flag */
+++extern int log_active; /* log active flag */
++ extern FILE* flog;   /* log file */
++ 
++ static int help_state = 0;
++@@ -85,7 +85,7 @@ static void help_escape(void) {
++ 
++   write(STDOUT_FILENO, str1, strlen(str1));
++ 
++-  if (log == 0)
+++  if (log_active == 0)
++     write(STDOUT_FILENO, "  l - log on             \n", 26);
++   else
++     write(STDOUT_FILENO, "  l - log off            \n", 26);
++@@ -156,11 +156,11 @@ static void help_send_escape(int fd, cha
++   case 'q': /* quit help */
++     break;
++   case 'l': /* log on/off */
++-    log = (log == 0)? 1: 0;
++-    if (log) { /* open log file */
+++    log_active = (log_active == 0)? 1: 0;
+++    if (log_active) { /* open log file */
++       if ((flog = fopen("microcom.log", "a")) == (FILE *)0) {
++ 	write(STDOUT_FILENO, "Cannot open microcom.log \n", 26);
++-	log = 0;
+++	log_active = 0;
++       }
++     }
++     else { /* cloase log file */
++diff -rdup microcom-1.02.speed/microcom.c microcom-1.02/microcom.c
++--- microcom-1.02.speed/microcom.c	2000-08-27 17:22:47.000000000 +0200
+++++ microcom-1.02/microcom.c	2007-01-19 19:48:37.000000000 +0100
++@@ -25,7 +25,7 @@ int crnl_mapping; //0 - no mapping, 1 ma
++ int script = 0; /* script active flag */
++ char scr_name[MAX_SCRIPT_NAME] = "script.scr"; /* default name of the script */
++ char device[MAX_DEVICE_NAME]; /* serial device name */
++-int log = 0; /* log active flag */
+++int log_active = 0; /* log active flag */
++ FILE* flog;   /* log file */
++ int  pf = 0;  /* port file descriptor */
++ struct termios pots; /* old port termios settings to restore */
++@@ -106,7 +106,7 @@ void main_usage(int exitcode, char *str,
++ /* restore original terminal settings on exit */
++ void cleanup_termios(int signal) {
++   /* cloase the log file first */
++-  if (log) {
+++  if (log_active) {
++     fflush(flog);
++     fclose(flog);
++   }
++diff -rdup microcom-1.02.speed/mux.c microcom-1.02/mux.c
++--- microcom-1.02.speed/mux.c	2000-07-30 06:15:47.000000000 +0200
+++++ microcom-1.02/mux.c	2007-01-19 19:48:48.000000000 +0100
++@@ -24,7 +24,7 @@
++ 
++ extern int script;
++ extern char scr_name[];
++-extern int log;
+++extern int log_active;
++ extern FILE* flog;
++ 
++ void mux_clear_sflag(void) {
++@@ -71,7 +71,7 @@ void mux_loop(int pf) {
++       i = read(pf, buf, BUFSIZE);
++       if (i > 0) {
++ 	write(STDOUT_FILENO, buf, i);
++-	if (log)
+++	if (log_active)
++ 	  fwrite(buf, 1, i, flog);
++ 	if (script) {
++ 	  i = script_process(S_DCE, buf, i);
+
+Modified: trunk/buildroot/package/microcom/microcom.mk
+===================================================================
+--- trunk/buildroot/package/microcom/microcom.mk	2007-01-19 18:33:40 UTC (rev 17385)
++++ trunk/buildroot/package/microcom/microcom.mk	2007-01-19 19:14:33 UTC (rev 17386)
+@@ -45,7 +45,11 @@
+ 	touch $@
+ 
+ $(MICROCOM_DIR)/microcom: $(MICROCOM_DIR)/.configured
+-	$(TARGET_CONFIGURE_OPTS) $(MAKE) -C $(MICROCOM_DIR)
++	$(TARGET_CONFIGURE_OPTS) CFLAGS="$(TARGET_CFLAGS)" $(MAKE) -C $(MICROCOM_DIR)
++	#(cd $(MICROCOM_DIR) ; \
++	# $(TARGET_CC) $(TARGET_CFLAGS) --combine -fwhole-program -o $@ $(wildcard $(MICROCOM_DIR)/*.c); \
++	#)
++	$(STRIP) -s $@
+ 
+ $(TARGET_DIR)/usr/bin/microcom: $(MICROCOM_DIR)/microcom
+ 	install -c $(MICROCOM_DIR)/microcom $(TARGET_DIR)/usr/bin/microcom
