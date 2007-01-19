@@ -1,46 +1,42 @@
-From: Claus Klein <claus.klein@arcormail.de>
-Date: Fri, 19 Jan 2007 16:51:07 +0100
-Subject: [Buildroot] install uClibc daily snapshot failes
-In-Reply-To: <20070118102927.GB6515@aon.at>
-References: <200701170833.04970.claus.klein@arcormail.de>
-	<200701172114.08730.claus.klein@arcormail.de>
-	<20070118102927.GB6515@aon.at>
-Message-ID: <200701191651.07462.claus.klein@arcormail.de>
+From: aldot at uclibc.org <aldot@uclibc.org>
+Date: Fri, 19 Jan 2007 08:23:36 -0800 (PST)
+Subject: [Buildroot] svn commit: trunk/buildroot/package/udev
+Message-ID: <20070119162336.0715748585@busybox.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Thursday 18 January 2007 11:29, Bernhard Fischer wrote:
-> >> What is your echo $LD_LIBRARY_PATH ?
-> >> 
-> >> 
-> >claus at P3linux:~/src/buildroot> echo $LD_LIBRARY_PATH
-> >/usr/lib/qt3/lib:/usr/lib/qt3/lib:/usr/lib/qt3/lib:/usr/lib/qt3/lib:
-> --------------------------------------------------------------------^
-> 
-> fix your LD_LIBRARY_PATH, no patch needed.
-> 
-> HTH,
-> 
-> 
-Hi,
+Author: aldot
+Date: 2007-01-19 08:23:35 -0800 (Fri, 19 Jan 2007)
+New Revision: 17382
 
-thanks for your help, you are right.
-
-I din't know that the tailing ':' is the same as ':.'
-
-I'm working with OpenSuse 10.1 and I can't find the config file, which writes this LD_LIBRARY_PATH.
-While about 2 years working with buildrout I had no problem with my LD_LIBRARY_PATH!
-
-I would like to hear that the Makefile will be changed to my version. 
-This works always!
+Log:
+- remove superfluous intermediate target
 
 
-PS: There is no note about LD_LIBRARY_PATH in the buildroot docu!
+Modified:
+   trunk/buildroot/package/udev/udev.mk
 
 
-Bye,
-
-Claus
+Changeset:
+Modified: trunk/buildroot/package/udev/udev.mk
+===================================================================
+--- trunk/buildroot/package/udev/udev.mk	2007-01-19 14:54:58 UTC (rev 17381)
++++ trunk/buildroot/package/udev/udev.mk	2007-01-19 16:23:35 UTC (rev 17382)
+@@ -29,12 +29,9 @@
+ $(UDEV_DIR)/.unpacked: $(DL_DIR)/$(UDEV_SOURCE)
+ 	$(UDEV_CAT) $(DL_DIR)/$(UDEV_SOURCE) | tar -C $(BUILD_DIR) $(TAR_OPTIONS) -
+ 	toolchain/patch-kernel.sh $(UDEV_DIR) package/udev \*.patch
+-	touch $(UDEV_DIR)/.unpacked
++	touch $@
+ 
+-$(UDEV_DIR)/.configured: $(UDEV_DIR)/.unpacked
+-	touch $(UDEV_DIR)/.configured
+-
+-$(UDEV_DIR)/$(UDEV_BINARY): $(UDEV_DIR)/.configured
++$(UDEV_DIR)/$(UDEV_BINARY): $(UDEV_DIR)/.unpacked
+ 	$(MAKE) CROSS_COMPILE=$(TARGET_CROSS) CC=$(TARGET_CC) LD=$(TARGET_CC)\
+ 		CFLAGS="$(BR2_UDEV_CFLAGS)" \
+ 		USE_LOG=false USE_SELINUX=false \
