@@ -1,42 +1,31 @@
-From: aldot at uclibc.org <aldot@uclibc.org>
-Date: Fri, 19 Jan 2007 08:23:36 -0800 (PST)
-Subject: [Buildroot] svn commit: trunk/buildroot/package/udev
-Message-ID: <20070119162336.0715748585@busybox.net>
+From: Bernhard Fischer <rep.dot.nop@gmail.com>
+Date: Fri, 19 Jan 2007 17:33:13 +0100
+Subject: [Buildroot] chown to root does not work
+In-Reply-To: <200701191612.12016.thilo@riessner.de>
+References: <200701191331.07579.thilo@riessner.de>
+	<20070119133516.GI14371@priv.blacknet.de>
+	<200701191612.12016.thilo@riessner.de>
+Message-ID: <20070119163313.GA17320@aon.at>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Author: aldot
-Date: 2007-01-19 08:23:35 -0800 (Fri, 19 Jan 2007)
-New Revision: 17382
+On Fri, Jan 19, 2007 at 04:12:09PM +0100, Thilo Riessner wrote:
+>Am Freitag, 19. Januar 2007 14:35 schrieb Goetz Bock:
+>> On Fri, Jan 19 '07 at 13:31, Thilo Riessner wrote:
+>> > In the docs is mentioned, that one doesn't need to be root to build a
+>> > root filesystem. But when building the filesystem as a normal user, chown
+>> > is not able to change owner to root in the target filesystem. Is there a
+>> > solution of the problem, that I don't see?
 
-Log:
-- remove superfluous intermediate target
+Who does call chown in there? Which package?
+Please show me the logs around the alleged call to chown that is
+failing.
 
-
-Modified:
-   trunk/buildroot/package/udev/udev.mk
-
-
-Changeset:
-Modified: trunk/buildroot/package/udev/udev.mk
-===================================================================
---- trunk/buildroot/package/udev/udev.mk	2007-01-19 14:54:58 UTC (rev 17381)
-+++ trunk/buildroot/package/udev/udev.mk	2007-01-19 16:23:35 UTC (rev 17382)
-@@ -29,12 +29,9 @@
- $(UDEV_DIR)/.unpacked: $(DL_DIR)/$(UDEV_SOURCE)
- 	$(UDEV_CAT) $(DL_DIR)/$(UDEV_SOURCE) | tar -C $(BUILD_DIR) $(TAR_OPTIONS) -
- 	toolchain/patch-kernel.sh $(UDEV_DIR) package/udev \*.patch
--	touch $(UDEV_DIR)/.unpacked
-+	touch $@
- 
--$(UDEV_DIR)/.configured: $(UDEV_DIR)/.unpacked
--	touch $(UDEV_DIR)/.configured
--
--$(UDEV_DIR)/$(UDEV_BINARY): $(UDEV_DIR)/.configured
-+$(UDEV_DIR)/$(UDEV_BINARY): $(UDEV_DIR)/.unpacked
- 	$(MAKE) CROSS_COMPILE=$(TARGET_CROSS) CC=$(TARGET_CC) LD=$(TARGET_CC)\
- 		CFLAGS="$(BR2_UDEV_CFLAGS)" \
- 		USE_LOG=false USE_SELINUX=false \
+>>
+>> Use fakeroot. Than the cpio/tar/... root images are owned by root.
+>I don't know fakeroot. What is it? A programme, an option of buildroot? How do 
+>I have to use it?
+>Thanks for your help so far.
