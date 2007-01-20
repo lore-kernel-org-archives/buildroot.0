@@ -1,62 +1,84 @@
-From: Bernhard Fischer <rep.dot.nop@gmail.com>
-Date: Sat, 20 Jan 2007 21:18:29 +0100
-Subject: [Buildroot]
-	buildroot/toolchain_build_i686/binutils-2.16.91.0.7/bfd/doc/bfd.info:
-	build error
-In-Reply-To: <200701201855.31245.claus.klein@arcormail.de>
-References: <200701192249.57232.claus.klein@arcormail.de>
-	<20070120173409.GB23354@aon.at>
-	<200701201842.12522.claus.klein@arcormail.de>
-	<200701201855.31245.claus.klein@arcormail.de>
-Message-ID: <20070120201829.GC23354@aon.at>
+From: aldot at uclibc.org <aldot@uclibc.org>
+Date: Sat, 20 Jan 2007 12:54:06 -0800 (PST)
+Subject: [Buildroot] svn commit: trunk/buildroot/package/dmalloc
+Message-ID: <20070120205406.3D4DE4857C@busybox.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Sat, Jan 20, 2007 at 06:55:31PM +0100, Claus Klein wrote:
->On Saturday 20 January 2007 18:42, Claus Klein wrote:
->> On Saturday 20 January 2007 18:34, Bernhard Fischer wrote:
->> > On Sat, Jan 20, 2007 at 02:10:05PM +0100, Claus Klein wrote:
->> > >On Friday 19 January 2007 22:49, Claus Klein wrote:
->> > >> Hi,
->> > >> 
->> > >> I got a Warning: `makeinfo' is missing on your system. 
->> > >> 	and the make failed?
->> > >> 
->> > >> Is this a known problem?
->> > 
->> > Fix this upstream or just install texinfo.
->> 
->> Ok; I installed texinfo package, this works now...
->> 
->> > >> 
->> > >> Best Regards,
->> > >> 
->> > >> Claus
->> > >
->> > >I stop at this point!
->> > >I'm not able to build any toolchain under OpenSuse 10.1 without `makeinfo'
->> > >
->> > >What is the stable toolchain combination today?
->> > >I expected the 'make defconfig' would work.
->> > >It seems not?
->> > 
->> > 2.6.19.2 headers, current svn of busybox and uClibc with current
->> > binutils and gcc-4.2 from today work for me to create i386 and x86_64
->> > rootfs. I currently have no need for other arches but they are
->> > _supposed_ to work, of course.
->> > 
->> 
->> but I had to do some work to build the gcc:
->> ##################################################################################
->> 
->> ===================================
->> Quickfix for ERROR:
->> in:     toolchain_build_i686/gcc-3.4.2
->> and:    toolchain_build_i686/gcc-3.3.6
+Author: aldot
+Date: 2007-01-20 12:54:05 -0800 (Sat, 20 Jan 2007)
+New Revision: 17412
 
-I don't do gcc-3.x, it's closed upstream. Use 4.x. I, personally, am
-willing to help with 4.2, fwiw. 0.9.28 does work for several people, from
-what i read, but i use uClibc trunk and don't have interrest in 0.9.28.
+Log:
+- dmalloc attempted to install itself to /
+- make certain features dependant on the respective BR2 settings.
+
+
+Modified:
+   trunk/buildroot/package/dmalloc/dmalloc.mk
+
+
+Changeset:
+Modified: trunk/buildroot/package/dmalloc/dmalloc.mk
+===================================================================
+--- trunk/buildroot/package/dmalloc/dmalloc.mk	2007-01-20 20:48:33 UTC (rev 17411)
++++ trunk/buildroot/package/dmalloc/dmalloc.mk	2007-01-20 20:54:05 UTC (rev 17412)
+@@ -22,8 +22,23 @@
+ 	$(SED) 's/^ac_cv_page_size=0$$/ac_cv_page_size=12/' $(DMALLOC_DIR)/configure
+ 	$(SED) 's/(ld -/($${LD-ld} -/' $(DMALLOC_DIR)/configure
+ 	$(SED) 's/'\''ld -/"$${LD-ld}"'\'' -/' $(DMALLOC_DIR)/configure
+-	touch $(DMALLOC_DIR)/.unpacked
++	-$(SED) 's/ar cr/$$(AR) cr/' $(DMALLOC_DIR)/Makefile.in
++	touch $@
+ 
++ifeq ($(BR2_INSTALL_LIBSTDCPP),y)
++DMALLOC_CONFIG_ARGS:=--enable-cxx
++else
++DMALLOC_CONFIG_ARGS:=--disable-cxx
++endif
++
++ifeq ($(BR2_PTHREADS_NONE),y)
++DMALLOC_CONFIG_ARGS+=--disable-threads
++else
++DMALLOC_CONFIG_ARGS+=--enable-threads
++endif
++
++
++
+ $(DMALLOC_DIR)/.configured: $(DMALLOC_DIR)/.unpacked
+ 	(cd $(DMALLOC_DIR); rm -rf config.cache; \
+ 		$(TARGET_CONFIGURE_OPTS) \
+@@ -45,19 +60,26 @@
+ 		--includedir=/include \
+ 		--mandir=/usr/man \
+ 		--infodir=/usr/info \
+-		--enable-threads \
+ 		--enable-shlib \
++		$(DMALLOC_CONFIG_ARGS) \
+ 	);
+-	touch $(DMALLOC_DIR)/.configured
++	touch $@
+ 
+ $(DMALLOC_DIR)/$(DMALLOC_BINARY): $(DMALLOC_DIR)/.configured
+ 	$(MAKE) -C $(DMALLOC_DIR)
+ 
+ $(TARGET_DIR)/$(DMALLOC_TARGET_BINARY): $(DMALLOC_DIR)/$(DMALLOC_BINARY)
+-	$(MAKE)	DESTDIR=$(STAGING_DIR) -C $(DMALLOC_DIR) install
++	# both DESTDIR and PREFIX are ignored..
++	$(MAKE)	includedir="$(STAGING_DIR)/usr/include" \
++		bindir="$(STAGING_DIR)/usr/bin" \
++		libdir="$(STAGING_DIR)/usr/lib" \
++		shlibdir="$(STAGING_DIR)/usr/lib" \
++		includedir="$(STAGING_DIR)/usr/share/info/" \
++		-C $(DMALLOC_DIR) install
+ 	(cd $(STAGING_DIR)/usr/lib; \
+ 		mv libdmalloc*.so $(TARGET_DIR)/usr/lib);
+-	touch $(TARGET_DIR)/$(DMALLOC_TARGET_BINARY)
++	cp -dpf $(STAGING_DIR)/usr/bin/dmalloc $(TARGET_DIR)/$(DMALLOC_TARGET_BINARY)
++	$(STRIP) -s $(TARGET_DIR)/$(DMALLOC_TARGET_BINARY)
+ 
+ dmalloc: uclibc $(TARGET_DIR)/$(DMALLOC_TARGET_BINARY)
+ 
