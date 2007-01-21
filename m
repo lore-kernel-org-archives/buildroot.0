@@ -1,50 +1,35 @@
-From: sjhill at uclibc.org <sjhill@uclibc.org>
-Date: Sat, 20 Jan 2007 21:17:08 -0800 (PST)
-Subject: [Buildroot] svn commit: trunk/buildroot/package/samba
-Message-ID: <20070121051708.3D5C648583@busybox.net>
+From: Bernhard Fischer <rep.dot.nop@gmail.com>
+Date: Sun, 21 Jan 2007 11:43:50 +0100
+Subject: [Buildroot] Wrong pathnames in libtool and pkgconfig files
+In-Reply-To: <20061002221905.GA10942@codepoet.org>
+References: <4521820B.8010008@isoar.ca> <20061002221905.GA10942@codepoet.org>
+Message-ID: <20070121104350.GH23354@aon.at>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Author: sjhill
-Date: 2007-01-20 21:17:06 -0800 (Sat, 20 Jan 2007)
-New Revision: 17428
+On Mon, Oct 02, 2006 at 04:19:05PM -0600, Erik Andersen wrote:
+>On Mon Oct 02, 2006 at 05:18:03PM -0400, Andrew E. Mileski wrote:
+>> I'm repeatedly having problems with pathnames in *.la and *.pc files,
+>> since packages are built for / but installed in $(STAGING_DIR).  This
+>> breaks packages that rely on these files being accurate.
+>> 
+>> So far I've resorted to sed'in them, which mostly works:
+>>     sed -i filename -e 's#/usr#$(STAGING_DIR)/usr#g'
+>> but is sure to cause problems if not prevented from being repeated.
+>> 
+>> This effects all packages built using libtool and pkgconfig.
+>> 
+>> Is there a more correct way to handle this?
+>
+>Ugh.  I'd never considered this, but yeah you are right.  I do
+>not know of any way to teach libtool about a cross compiling
+>setup, so unless someone else has a better idea I think your
+>idea to use sed is the best thing we have going.
 
-Log:
-Patch to remove usage of legacy 'index' function.
+In the meantime Erik did fix those up, so if you experience trouble with
+individual packages that still get this wrong, please let us know.
 
-
-Added:
-   trunk/buildroot/package/samba/samba-remove-legacy-index.patch
-
-
-Changeset:
-Added: trunk/buildroot/package/samba/samba-remove-legacy-index.patch
-===================================================================
---- trunk/buildroot/package/samba/samba-remove-legacy-index.patch	                        (rev 0)
-+++ trunk/buildroot/package/samba/samba-remove-legacy-index.patch	2007-01-21 05:17:06 UTC (rev 17428)
-@@ -0,0 +1,22 @@
-+diff -ur samba-3.0.23d/source/registry/reg_perfcount.c samba-3.0.23d-patched/source/registry/reg_perfcount.c
-+--- samba-3.0.23d/source/registry/reg_perfcount.c	2006-07-10 11:27:54.000000000 -0500
-++++ samba-3.0.23d-patched/source/registry/reg_perfcount.c	2007-01-20 23:12:23.456180669 -0600
-+@@ -614,15 +614,15 @@
-+ 	obj = NULL;
-+ 	memset(buf, 0, PERFCOUNT_MAX_LEN);
-+ 	memcpy(buf, data.dptr, data.dsize);
-+-	begin = index(buf, '[');
-+-	end = index(buf, ']');
-++	begin = strchr(buf, '[');
-++	end = strchr(buf, ']');
-+ 	if(begin == NULL || end == NULL)
-+ 		return False;
-+ 	start = begin+1;
-+ 
-+ 	while(start < end)
-+ 	{
-+-		stop = index(start, ',');
-++		stop = strchr(start, ',');
-+ 		if(stop == NULL)
-+ 			stop = end;
-+ 		*stop = '\0';
+cheers,
