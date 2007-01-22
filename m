@@ -1,39 +1,32 @@
-From: Sean M. Brennan <brennan@lanl.gov>
-Date: Mon, 22 Jan 2007 08:42:17 -0700
-Subject: [Buildroot] i386 soft float
-Message-ID: <1169480537.4373.6.camel@smb1>
+From: Bernhard Fischer <rep.dot.nop@gmail.com>
+Date: Mon, 22 Jan 2007 17:45:15 +0100
+Subject: [Buildroot] svn commit: trunk/buildroot/package/kexec
+In-Reply-To: <20061220170136.GY2778@ibawizard.net>
+References: <20061220165004.E3D5D48598@busybox.net>
+	<20061220170136.GY2778@ibawizard.net>
+Message-ID: <20070122164515.GA4981@aon.at>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi,
+On Wed, Dec 20, 2006 at 06:01:36PM +0100, Petr Stetiar wrote:
+>aldot at uclibc.org <aldot@uclibc.org> [2006-12-20 08:50:04]:
+>
+>> Author: aldot
+>> Date: 2006-12-20 08:50:04 -0800 (Wed, 20 Dec 2006)
+>> New Revision: 17018
+>> + static int my_shutdown(void)
+>> + {
+>> + 	char *args[8];
+>
+>Sorry. Just noticed, that this correctly should be "char *args[2];".
 
-I've been attempting to compile buildroot with soft float support for
-i386. I've checked the list archives and even tried resurrecting quite
-old uClibc patches for gcc 3.3.3, all to no avail.
+I saw that your arm-support patch broke anybody else (so i broke arm in
+turn ;)
 
-My current impasse involves recent gcc versions balking at '-with-
-float=soft' for the i386 target.
+Can you please update the kexec/002-add-arch-arm.patch without changing
+get_memory..() params in kexec/kexec.c?
 
-If anyone is at all familiar with this, I'd appreciate being pointed in
-the right direction.
-
-Thanks,
-
-Sean
--- 
-############################
-
-Sean M. Brennan
-
-Space Data Systems Group
-International, Space and Response Division
-Los Alamos National Laboratory
-PO Box 1663, MS D440  Los Alamos, NM 87545
-
-(505) 667-3319, fax: (505) 665-4197
-brennan at lanl.gov
-
-DSN-CC project: http://www.lanl.gov/dsn
+Thanks in advance and cheers,
