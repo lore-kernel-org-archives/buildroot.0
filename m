@@ -1,29 +1,36 @@
-From: David Lambert <dave@lambsys.com>
-Date: Mon, 22 Jan 2007 16:31:02 -0600
-Subject: [Buildroot] Problem with revision 17357 missing .config.cmd?
-In-Reply-To: <20070122205920.GA8610@aon.at>
-References: <45B52343.1010503@lambsys.com> <20070122205920.GA8610@aon.at>
-Message-ID: <45B53B26.6080906@lambsys.com>
+From: andersen at uclibc.org <andersen@uclibc.org>
+Date: Mon, 22 Jan 2007 15:52:08 -0800 (PST)
+Subject: [Buildroot] svn commit: trunk/buildroot/package/ncurses
+Message-ID: <20070122235208.4D4824857B@busybox.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-My bad. Had a stale .config file in the wrong place  :-(
-Bernhard Fischer wrote:
->
-> Current svn works fine for me.
-> .config.cmd is a generated file, it would be a bug if would be checked
-> into the repo..
->
->
->   
+Author: andersen
+Date: 2007-01-22 15:52:06 -0800 (Mon, 22 Jan 2007)
+New Revision: 17483
 
--------------- next part --------------
-A non-text attachment was scrubbed...
-Name: dave.vcf
-Type: text/x-vcard
-Size: 288 bytes
-Desc: not available
-Url : http://busybox.net/lists/buildroot/attachments/20070122/c27d42aa/attachment.vcf 
+Log:
+fix symlink
+
+
+Modified:
+   trunk/buildroot/package/ncurses/ncurses.mk
+
+
+Changeset:
+Modified: trunk/buildroot/package/ncurses/ncurses.mk
+===================================================================
+--- trunk/buildroot/package/ncurses/ncurses.mk	2007-01-22 23:39:08 UTC (rev 17482)
++++ trunk/buildroot/package/ncurses/ncurses.mk	2007-01-22 23:52:06 UTC (rev 17483)
+@@ -121,7 +121,7 @@
+ 	cp -dpf $(NCURSES_DIR)/include/termcap.h $(TARGET_DIR)/usr/include/
+ 	cp -dpf $(NCURSES_DIR)/lib/libncurses.a $(TARGET_DIR)/usr/lib/
+ 	rm -f $(TARGET_DIR)/usr/lib/terminfo
+-	(cd $(TARGET_DIR)/usr/lib; ln -fs /usr/share/terminfo)
++	(cd $(TARGET_DIR)/usr/lib; ln -fs ../share/terminfo)
+ 	(cd $(TARGET_DIR)/usr/lib; ln -fs libncurses.a libcurses.a)
+ 	(cd $(TARGET_DIR)/usr/lib; ln -fs libncurses.a libtermcap.a)
+ 	(cd $(TARGET_DIR)/usr/include; ln -fs ncurses.h curses.h)
