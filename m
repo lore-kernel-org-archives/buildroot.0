@@ -1,36 +1,29 @@
-From: andersen at uclibc.org <andersen@uclibc.org>
-Date: Mon, 22 Jan 2007 15:52:08 -0800 (PST)
-Subject: [Buildroot] svn commit: trunk/buildroot/package/ncurses
-Message-ID: <20070122235208.4D4824857B@busybox.net>
+From: Ulf Samuelsson <ulfs@dof.se>
+Date: Tue, 23 Jan 2007 00:32:37 +0100
+Subject: [Buildroot] microcom broken with latest uclibc snapshot.
+Message-ID: <049801c73e80$cf0bedf0$01c4af0a@atmel.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Author: andersen
-Date: 2007-01-22 15:52:06 -0800 (Mon, 22 Jan 2007)
-New Revision: 17483
+When using the latest uClibc snapshot to build the toolchain,
+It looks like the high speeds are not acceptable (> 1151200) 
+and the generated <staging_dir>/arm-linux/sys-include/bits/termios.h
+has higher speeds commented away.
 
-Log:
-fix symlink
+#if 0 /* limited on uClibc, keep in sync w/ cfsetspeed.c */
+#define B230400 0010003
+...
+#endif
 
+This is not a good idea, if the MCU can handle higher speed!
 
-Modified:
-   trunk/buildroot/package/ncurses/ncurses.mk
+It also breaks microcom-1.02.
 
-
-Changeset:
-Modified: trunk/buildroot/package/ncurses/ncurses.mk
-===================================================================
---- trunk/buildroot/package/ncurses/ncurses.mk	2007-01-22 23:39:08 UTC (rev 17482)
-+++ trunk/buildroot/package/ncurses/ncurses.mk	2007-01-22 23:52:06 UTC (rev 17483)
-@@ -121,7 +121,7 @@
- 	cp -dpf $(NCURSES_DIR)/include/termcap.h $(TARGET_DIR)/usr/include/
- 	cp -dpf $(NCURSES_DIR)/lib/libncurses.a $(TARGET_DIR)/usr/lib/
- 	rm -f $(TARGET_DIR)/usr/lib/terminfo
--	(cd $(TARGET_DIR)/usr/lib; ln -fs /usr/share/terminfo)
-+	(cd $(TARGET_DIR)/usr/lib; ln -fs ../share/terminfo)
- 	(cd $(TARGET_DIR)/usr/lib; ln -fs libncurses.a libcurses.a)
- 	(cd $(TARGET_DIR)/usr/lib; ln -fs libncurses.a libtermcap.a)
- 	(cd $(TARGET_DIR)/usr/include; ln -fs ncurses.h curses.h)
+Best Regards,
+Ulf Samuelsson
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: http://busybox.net/lists/buildroot/attachments/20070123/d9c4616a/attachment.htm 
