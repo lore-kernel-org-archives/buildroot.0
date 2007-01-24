@@ -1,7 +1,7 @@
 From: aldot at uclibc.org <aldot@uclibc.org>
-Date: Wed, 24 Jan 2007 06:50:22 -0800 (PST)
-Subject: [Buildroot] svn commit: trunk/buildroot/toolchain
-Message-ID: <20070124145022.3B89C48598@busybox.net>
+Date: Wed, 24 Jan 2007 07:12:13 -0800 (PST)
+Subject: [Buildroot] svn commit: trunk/buildroot/toolchain/uClibc
+Message-ID: <20070124151213.1A214485C2@busybox.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -9,55 +9,40 @@ Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
 Author: aldot
-Date: 2007-01-24 06:50:21 -0800 (Wed, 24 Jan 2007)
-New Revision: 17498
+Date: 2007-01-24 07:12:12 -0800 (Wed, 24 Jan 2007)
+New Revision: 17500
 
 Log:
-- reformat help text to fit default width better
+- apply vapier's comments
 
 
 Modified:
-   trunk/buildroot/toolchain/Config.in
+   trunk/buildroot/toolchain/uClibc/uClibc-0.9.29-fix-fget_putc.diff
 
 
 Changeset:
-Modified: trunk/buildroot/toolchain/Config.in
+Modified: trunk/buildroot/toolchain/uClibc/uClibc-0.9.29-fix-fget_putc.diff
 ===================================================================
---- trunk/buildroot/toolchain/Config.in	2007-01-24 14:49:49 UTC (rev 17497)
-+++ trunk/buildroot/toolchain/Config.in	2007-01-24 14:50:21 UTC (rev 17498)
-@@ -36,11 +36,15 @@
- 	help
- 	  If your target CPU does not have a Floating Point Unit (FPU) or a
- 	  kernel FPU emulator, but you still wish to support floating point
--	  functions, then everything will need to be compiled with soft floating
--	  point support (-msoft-float).
-+	  functions, then everything will need to be compiled with soft
-+	  floating point support (-msoft-float).
- 
- 	  Most people will answer N.
- 
-+#config BR2_SOFT_FLOAT_FP
-+#	bool "Use softfp"
-+#	default n
-+
- config BR2_TARGET_OPTIMIZATION
- 	string "Target Optimizations"
- 	default "-Os -pipe"
-@@ -51,12 +55,13 @@
- 	bool "Include target utils in cross toolchain"
- 	default y
- 	help
--	  When using buildroot to build a deployable cross toolchain, it is handy
--	  to include certain target apps with that toolchain as a convenience.
-+	  When using buildroot to build a deployable cross toolchain,
-+	  it is handy to include certain target apps with that toolchain
-+	  as a convenience.
- 	  Examples include ldd, gdbserver, and strace.
- 
--	  Answer Y if you want these apps (if built) copied into the cross toolchain
--	  dir under <arch>-linux-uclibc/target_utils/.
-+	  Answer Y if you want these apps (if built) copied into the
-+	  cross toolchain dir under <arch>-linux-uclibc/target_utils/.
- 
- endmenu
- 
+--- trunk/buildroot/toolchain/uClibc/uClibc-0.9.29-fix-fget_putc.diff	2007-01-24 14:50:27 UTC (rev 17499)
++++ trunk/buildroot/toolchain/uClibc/uClibc-0.9.29-fix-fget_putc.diff	2007-01-24 15:12:12 UTC (rev 17500)
+@@ -219,7 +219,7 @@
+  	if ((n = fputs_unlocked(s, stream)) != EOF) {
+  		++n;
+ -		if (__fputc_unlocked('\n', stream) == EOF) {
+-+		if (__FPUTC_UNLOCKED('\n', stream) == EOF) {
+++		if (fputc_unlocked('\n', stream) == EOF) {
+  			n = EOF;
+  		}
+  	}
+@@ -411,9 +411,9 @@
+  libc_hidden_proto(fflush)
+ -libc_hidden_proto(fputc)
+ -libc_hidden_proto(__fputc_unlocked)
+-+#ifdef __UCLIBC_HAS_STDIO_PUTC_MACRO__
+++//#ifdef __UCLIBC_HAS_STDIO_PUTC_MACRO__
+ +libc_hidden_proto(fputc_unlocked)
+-+#endif
+++//#endif
+  
+  /* This variable is incremented each time `error' is called.  */
+  unsigned int error_message_count = 0;
