@@ -1,32 +1,44 @@
-From: Ulf Samuelsson <ulfs@dof.se>
-Date: Wed, 24 Jan 2007 13:11:01 +0100
-Subject: [Buildroot] [PATCH] Add local directory for non-public packages
-References: <1169593120.5361.17.camel@elrond.sweden.atmel.com><20070124001104.GB17761@codepoet.org><053501c73f56$01663000$01c4af0a@atmel.com>
-	<8559127.post@talk.nabble.com>
-Message-ID: <01a601c73fb2$f47538c0$01c4af0a@atmel.com>
+From: Elric Milon <elric-brl@ikuszen.com>
+Date: Wed, 24 Jan 2007 13:55:57 +0100
+Subject: [Buildroot] My first patch :-) (updated soekris support)
+In-Reply-To: <200701221950.27856.elric-brl@ikuszen.com>
+References: <200701221950.27856.elric-brl@ikuszen.com>
+Message-ID: <200701241355.57979.elric-brl@ikuszen.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Daniel Laird wrote:
-> Do you need to patch the top level Config.in to include
-> local/Config.in? I think this is needed for the menuconfig stuff.
-
-True.
-
+El Lunes 22 Enero 2007 19:50, Elric Milon escribi?:
+> Well, this is the first one, it unbreaks soekris 4801 support, and updates
+> the kernel used to 2.6.19.2 version.
 >
-> Cheers
-> Dan
+> I'ts my first patch, so maybe something is not right. Constructive
+> cryticism is welcome :-)
+>
+> Regards!
 
-Best Regards,
-Ulf Samuelsson
-ulf at atmel.com
-GSM:  +46 (706) 22 44 57
-Tel:     +46  (8) 441 54 22
-Fax:     +46 (8) 441 54 29
-Mail: Box 2033  174 02 Sundbyberg
-Visit: Kavalleriv?gen 24
-          174 58 Sundbyberg'
-Sweden
+Ok, second attempt, smaller patch and cleaner.
+
+Remember to delete:
+
+target/device/Soekris/net4801/linux*.mk
+target/device/Soekris/net4801/linux.config
+
+It's not used anymore.
+
+;-)
+
+-- 
+
+        Elric Milon Beltran
+        ZEN Programari lliure i xarxes SLL
+        www.ikuszen.com | www.grupoikusnet.com
+-------------- next part --------------
+A non-text attachment was scrubbed...
+Name: soekris-support.diff.bz2
+Type: application/x-bzip2
+Size: 14140 bytes
+Desc: not available
+Url : http://busybox.net/lists/buildroot/attachments/20070124/4f1742cd/attachment.bin 
