@@ -1,47 +1,121 @@
-From: Bernhard Fischer <rep.dot.nop@gmail.com>
-Date: Wed, 24 Jan 2007 23:57:53 +0100
-Subject: [Buildroot] [PATCH] Select MTD before EXT2/CRAMFS/SQUASHFS are
-	built
-In-Reply-To: <053601c73f56$016879f0$01c4af0a@atmel.com>
-References: <1169591688.5361.7.camel@elrond.sweden.atmel.com>
-	<20070124000746.GA17761@codepoet.org>
-	<053601c73f56$016879f0$01c4af0a@atmel.com>
-Message-ID: <20070124225753.GD28221@aon.at>
+From: aldot at uclibc.org <aldot@uclibc.org>
+Date: Wed, 24 Jan 2007 15:18:09 -0800 (PST)
+Subject: [Buildroot] svn commit: trunk/buildroot/target/jffs2
+Message-ID: <20070124231809.3A38D485DA@busybox.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Wed, Jan 24, 2007 at 02:18:07AM +0100, Ulf Samuelsson wrote:
->Erik Andersen wrote:
->> On Tue Jan 23, 2007 at 11:34:48PM +0100, Ulf Samuelsson wrote:
->>> Building a file sysrtem will fail if the mtd tools are not
->>> available. THis patch ensure MTD is selected if either of
->>> ext2/cramfs/squashfs are selected.
->>
->> Nak.  There are a great many situations where people use ext2
->> and/or cramfs and/or squashfs without wanting to also use MTD...
->> I happen to use all of them without wanting MTD at various times.
->>
->> -Erik
->
->Hmm,
->
->The intention is, that if ext2/squashfs/cramfs etc is selected,
->you ensure you build the  MTD utilities for the *host*.
+Author: aldot
+Date: 2007-01-24 15:18:08 -0800 (Wed, 24 Jan 2007)
+New Revision: 17512
 
-What specific failure do you see?
+Log:
+- Additional JFFS2 options to support Dataflash (Ulf Samuelsson)
+- cleanup a bit while at it
 
 
-Since you seem to use cramfs, may i ask you to look if these patches are ok?
-http://busybox.net/bugs/view.php?id=512
-http://busybox.net/bugs/view.php?id=1027
->
->$ mkfs.ext2 etc.
->
->Not that you put the MTD utilities into the root file system.
->How do I do what I intended then?
->(I hope building the host tools is not inconvenient).
+Modified:
+   trunk/buildroot/target/jffs2/Config.in
+   trunk/buildroot/target/jffs2/jffs2root.mk
 
-I do not want to download nor build a package that i do not need..
+
+Changeset:
+Modified: trunk/buildroot/target/jffs2/Config.in
+===================================================================
+--- trunk/buildroot/target/jffs2/Config.in	2007-01-24 22:22:11 UTC (rev 17511)
++++ trunk/buildroot/target/jffs2/Config.in	2007-01-24 23:18:08 UTC (rev 17512)
+@@ -5,6 +5,26 @@
+ 	help
+ 	  Build a jffs2 root filesystem
+ 
++config BR2_TARGET_ROOTFS_JFFS2_DEFAULT_PAGESIZE
++	bool "Use default 4 kB pagesize"
++	depends on BR2_TARGET_ROOTFS_JFFS2
++	default y			
++
++config BR2_TARGET_ROOTFS_JFFS2_PAGESIZE
++	hex "Page Size (0x0 = Use default 4 kB)"
++	depends on !BR2_TARGET_ROOTFS_JFFS2_DEFAULT_PAGESIZE
++	default 0x420
++	help
++	  Set to pagesize of memory (Dataflash is 0x210 or 0x420)
++
++config BR2_TARGET_ROOTFS_JFFS2_NOCLEANMARKER
++	bool	"Do not use Cleanmarker"
++	depends on !BR2_TARGET_ROOTFS_JFFS2_DEFAULT_PAGESIZE
++	default y
++	help
++	  Do not use cleanmarkers if using NAND flash or Dataflash where
++	  the pagesize is not a power of 2
++
+ config BR2_TARGET_ROOTFS_JFFS2_EBSIZE
+ 	hex "Erase block size"
+ 	depends on BR2_TARGET_ROOTFS_JFFS2
+@@ -19,7 +39,7 @@
+ 	depends on BR2_TARGET_ROOTFS_JFFS2_PAD
+ 	default 0x0
+ 	help
+-		Set to 0x0 to pad to end of erase block.
++	  Set to 0x0 to pad to end of erase block.
+ 
+ choice
+ 	prompt "Endianess"
+@@ -50,6 +70,5 @@
+ 	depends on 	BR2_TARGET_ROOTFS_JFFS2
+ 	default ""
+ 	help
+-		Copies the resulting image to a secondary location.
++	  Copies the resulting image to a secondary location.
+ 
+-
+
+Modified: trunk/buildroot/target/jffs2/jffs2root.mk
+===================================================================
+--- trunk/buildroot/target/jffs2/jffs2root.mk	2007-01-24 22:22:11 UTC (rev 17511)
++++ trunk/buildroot/target/jffs2/jffs2root.mk	2007-01-24 23:18:08 UTC (rev 17512)
+@@ -14,20 +14,29 @@
+ endif
+ endif
+ 
+-ifeq ($(strip $(BR2_TARGET_ROOTFS_JFFS2_SQUASH)),y)
++ifeq ($(BR2_TARGET_ROOTFS_JFFS2_SQUASH),y)
+ JFFS2_OPTS += -q
+ endif
+ 
+-ifeq ($(strip $(BR2_TARGET_ROOTFS_JFFS2_LE)),y)
++ifeq ($(BR2_TARGET_ROOTFS_JFFS2_LE),y)
+ JFFS2_OPTS += -l
+ endif
+ 
+-ifeq ($(strip $(BR2_TARGET_ROOTFS_JFFS2_BE)),y)
++ifeq ($(BR2_TARGET_ROOTFS_JFFS2_BE),y)
+ JFFS2_OPTS += -b
+ endif
+ 
+-JFFS2_TARGET := $(subst ",,$(BR2_TARGET_ROOTFS_JFFS2_OUTPUT))
++ifneq ($(BR2_TARGET_ROOTFS_JFFS2_DEFAULT_PAGESIZE),y)
++JFFS2_OPTS += -s $(BR2_TARGET_ROOTFS_JFFS2_PAGESIZE)
++ifeq ($(BR2_TARGET_ROOTFS_JFFS2_NOCLEANMARKER),y)
++JFFS2_OPTS += -n
++endif
++endif
++
++JFFS2_TARGET := $(strip $(subst ",,$(BR2_TARGET_ROOTFS_JFFS2_OUTPUT)))
++#"))
+ JFFS2_DEVFILE = $(strip $(subst ",,$(BR2_TARGET_ROOTFS_JFFS2_DEVFILE)))
++#"))
+ ifneq ($(JFFS2_DEVFILE),)
+ JFFS2_OPTS += -D $(TARGET_DEVICE_TABLE)
+ endif
+@@ -62,7 +71,7 @@
+ 	@ls -l $(JFFS2_TARGET)
+ 
+ JFFS2_COPYTO := $(strip $(subst ",,$(BR2_TARGET_ROOTFS_JFFS2_COPYTO)))
+-# " stupid syntax highlighting does not like unmatched quote from above line
++#"))
+ 
+ jffs2root: $(JFFS2_TARGET)
+ ifneq ($(JFFS2_COPYTO),)
