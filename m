@@ -1,40 +1,66 @@
-From: Stephan Raue <stephan.raue@gmx.net>
-Date: Wed, 24 Jan 2007 11:49:51 +0100
-Subject: [Buildroot] python build fails
-In-Reply-To: <20070123230423.GJ23354@aon.at>
-References: <20070123140937.212380@gmx.net> <20070123230423.GJ23354@aon.at>
-Message-ID: <20070124104951.296880@gmx.net>
+From: Ulf Samuelsson <ulfs@dof.se>
+Date: Wed, 24 Jan 2007 12:06:31 +0100
+Subject: [Buildroot] Target support for Atmel ARM/AVR32
+Message-ID: <014901c73faa$8e9c8100$01c4af0a@atmel.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-with revision 17489 it works,
+I am hoping to add Target support for a number of Atmel Development board,
+but before I do that, I would like to discuss how this is done.
 
-thank you
+Would like to separate building the root file system from other utilities,
+since the "build_<arch>" directory is overcrowded.
 
-Stephan
+Currently I am using a "target_build_<arch>" directory.
+In this directory, I create a subdirectory for each target_board.
 
--------- Original-Nachricht --------
-Datum: Wed, 24 Jan 2007 00:04:23 +0100
-Von: Bernhard Fischer <rep.dot.nop@gmail.com>
-An: Stephan Raue <stephan.raue@gmx.net>
-Betreff: Re: [Buildroot] python build fails
+I.E:
+buildroot/target_build_arm
+        at91rm9200dk
+        at91rm9200df
+        at91rm9200ek
+        at91sam9260ek
+        at91sam9261ek
+        at91sam9262ek
+or 
+buildroot/target_build_avr32
+        atstk1002
 
-> On Tue, Jan 23, 2007 at 03:09:37PM +0100, Stephan Raue wrote:
-> >ith buildroot-20070123 build of python (2.4.2 and 2.4.4) fails with:
-> 
-> I must have missed the patch wich fixed this..
-> 
-> Anyway. Believed to compile again in revision >= 17489.
-> This time i even checked it:
-> >>> print("darn context diffs\t..")
-> darn context diffs	..
-> >>> 
-> 
-> Please confirm..
+In the target_build_<arch>/<target_board> directory
+I download patches for Linux/U-Boot before I apply them
+and then build 
+* Bootstrap
+* U-Boot
+* Linux
+* Other Utitlties 
+in that directory.
 
--- 
-Der GMX SmartSurfer hilft bis zu 70% Ihrer Onlinekosten zu sparen! 
-Ideal f?r Modem und ISDN: http://www.gmx.net/de/go/smartsurfer
+The results are renamed to show <target_board> and date.
+
+Would like to move "buildroot/build_<arch>/root" to
+"buildroot/target_build_<arch>/<target_board>/root" as well,
+but have not yet gotten this to work.
+(This will allow me to have different contents for different boards)
+
+At the end, the result is moved to "buildroot/binaries/<target_board>"
+so that I have easy way to create a delivery by just compressing
+that directory into a tarball.
+
+Does this seem to be a reasonable approach?
+
+Best Regards,
+Ulf Samuelsson
+ulf at atmel.com
+GSM:  +46 (706) 22 44 57
+Tel:     +46  (8) 441 54 22
+Fax:     +46 (8) 441 54 29
+Mail: Box 2033  174 02 Sundbyberg
+Visit: Kavalleriv?gen 24
+          174 58 Sundbyberg'
+Sweden
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: http://busybox.net/lists/buildroot/attachments/20070124/edc5a8b4/attachment.html 
