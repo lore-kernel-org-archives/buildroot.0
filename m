@@ -1,47 +1,56 @@
-From: Ulf Samuelsson <ulfs@dof.se>
-Date: Wed, 24 Jan 2007 02:18:07 +0100
-Subject: [Buildroot] [PATCH] Select MTD before EXT2/CRAMFS/SQUASHFS are
-	built
-References: <1169591688.5361.7.camel@elrond.sweden.atmel.com>
-	<20070124000746.GA17761@codepoet.org>
-Message-ID: <053601c73f56$016879f0$01c4af0a@atmel.com>
+From: Claus Klein <claus.klein@arcormail.de>
+Date: Wed, 24 Jan 2007 07:14:16 +0100
+Subject: [Buildroot] chown to root does not work
+In-Reply-To: <20070123231407.GM23354@aon.at>
+References: <200701191331.07579.thilo@riessner.de>
+	<200701232320.34740.claus.klein@arcormail.de>
+	<20070123231407.GM23354@aon.at>
+Message-ID: <200701240714.16310.claus.klein@arcormail.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Erik Andersen wrote:
-> On Tue Jan 23, 2007 at 11:34:48PM +0100, Ulf Samuelsson wrote:
->> Building a file sysrtem will fail if the mtd tools are not
->> available. THis patch ensure MTD is selected if either of
->> ext2/cramfs/squashfs are selected.
->
-> Nak.  There are a great many situations where people use ext2
-> and/or cramfs and/or squashfs without wanting to also use MTD...
-> I happen to use all of them without wanting MTD at various times.
->
-> -Erik
+On Wednesday 24 January 2007 00:14, Bernhard Fischer wrote:
+> On Tue, Jan 23, 2007 at 11:20:34PM +0100, Claus Klein wrote:
+> >On Monday 22 January 2007 21:30, Bernhard Fischer wrote:
+> >> On Mon, Jan 22, 2007 at 09:02:53PM +0100, Bernhard Fischer wrote:
+> >> >On Mon, Jan 22, 2007 at 07:16:35PM +0100, Thilo Riessner wrote:
+> >> >>Am Freitag, 19. Januar 2007 17:33 schrieben Sie:
+> >> >>> On Fri, Jan 19, 2007 at 04:12:09PM +0100, Thilo Riessner wrote:
+> >> >>> >Am Freitag, 19. Januar 2007 14:35 schrieb Goetz Bock:
+> >> >>> >> On Fri, Jan 19 '07 at 13:31, Thilo Riessner wrote:
+> >> >>> >> > In the docs is mentioned, that one doesn't need to be root to build a
+> >> >>> >> > root filesystem. But when building the filesystem as a normal user,
+> >> >>> >> > chown is not able to change owner to root in the target filesystem. Is
+> >> >>> >> > there a solution of the problem, that I don't see?
+> >> >>>
+> >> >>> Who does call chown in there? Which package?
+> >> >>> Please show me the logs around the alleged call to chown that is
+> >> >>> failing.
+> >> 
+> >> I've updated fakeroot, both the old version and the new one work for me.
+> >> Please update, make dirclean && make and let me know if you still get
+> >> this error..
+> >
+> >it works, but there are still the error messges?
+> 
+> Please report this against your distro and/or against fakeroot if your
+> distro fails to fix this.
+> 
+It is the buildroote host fakeroute which is running while build builroout target tarroot.
+claus at P3linux:~/src/buildroot> /tools/Linuxi386CDK/usr/bin/fakeroot -v
+fakeroot version 1.5.12
 
-Hmm,
+My Host (OpenSuse 10.2) has no fakeroot!
+claus at P3linux:~/src/buildroot> which fakeroot
+claus at P3linux:~/src/buildroot> 
 
-The intention is, that if ext2/squashfs/cramfs etc is selected,
-you ensure you build the  MTD utilities for the *host*.
+> PS: Works for me
+> PPS: please provide a patch that fixes this for you if you think
+> fakeroot is in error.
+Ok, I will try to find the problem. But first I have to understand how fakeroot works.
 
-$ mkfs.ext2 etc.
-
-Not that you put the MTD utilities into the root file system.
-How do I do what I intended then?
-(I hope building the host tools is not inconvenient).
-
-
-Best Regards,
-Ulf Samuelsson
-ulf at atmel.com
-GSM:  +46 (706) 22 44 57
-Tel:     +46  (8) 441 54 22
-Fax:     +46 (8) 441 54 29
-Mail: Box 2033  174 02 Sundbyberg
-Visit: Kavalleriv?gen 24
-          174 58 Sundbyberg'
-Sweden
+Bye, 
+Claus
