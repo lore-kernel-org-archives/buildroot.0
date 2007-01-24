@@ -1,66 +1,58 @@
-From: Ulf Samuelsson <ulfs@dof.se>
-Date: Wed, 24 Jan 2007 12:06:31 +0100
-Subject: [Buildroot] Target support for Atmel ARM/AVR32
-Message-ID: <014901c73faa$8e9c8100$01c4af0a@atmel.com>
+From: Daniel Laird <danieljlaird@hotmail.com>
+Date: Wed, 24 Jan 2007 03:37:38 -0800 (PST)
+Subject: [Buildroot] [PATCH] Add local directory for non-public packages
+In-Reply-To: <20070124001104.GB17761@codepoet.org>
+References: <1169593120.5361.17.camel@elrond.sweden.atmel.com>
+	<20070124001104.GB17761@codepoet.org>
+Message-ID: <8558857.post@talk.nabble.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-I am hoping to add Target support for a number of Atmel Development board,
-but before I do that, I would like to discuss how this is done.
 
-Would like to separate building the root file system from other utilities,
-since the "build_<arch>" directory is overcrowded.
 
-Currently I am using a "target_build_<arch>" directory.
-In this directory, I create a subdirectory for each target_board.
 
-I.E:
-buildroot/target_build_arm
-        at91rm9200dk
-        at91rm9200df
-        at91rm9200ek
-        at91sam9260ek
-        at91sam9261ek
-        at91sam9262ek
-or 
-buildroot/target_build_avr32
-        atstk1002
-
-In the target_build_<arch>/<target_board> directory
-I download patches for Linux/U-Boot before I apply them
-and then build 
-* Bootstrap
-* U-Boot
-* Linux
-* Other Utitlties 
-in that directory.
-
-The results are renamed to show <target_board> and date.
-
-Would like to move "buildroot/build_<arch>/root" to
-"buildroot/target_build_<arch>/<target_board>/root" as well,
-but have not yet gotten this to work.
-(This will allow me to have different contents for different boards)
-
-At the end, the result is moved to "buildroot/binaries/<target_board>"
-so that I have easy way to create a delivery by just compressing
-that directory into a tarball.
-
-Does this seem to be a reasonable approach?
-
-Best Regards,
-Ulf Samuelsson
-ulf at atmel.com
-GSM:  +46 (706) 22 44 57
-Tel:     +46  (8) 441 54 22
-Fax:     +46 (8) 441 54 29
-Mail: Box 2033  174 02 Sundbyberg
-Visit: Kavalleriv?gen 24
-          174 58 Sundbyberg'
-Sweden
--------------- next part --------------
-An HTML attachment was scrubbed...
-URL: http://busybox.net/lists/buildroot/attachments/20070124/edc5a8b4/attachment.html 
+Erik Andersen wrote:
+> 
+> On Tue Jan 23, 2007 at 11:58:40PM +0100, Ulf Samuelsson wrote:
+>> This adds a "buildroot/local" directory.
+>> The structure of "local" is the same as that of "packages"
+>> but the contents of "local" is never
+>> intended to be merged upstream.
+>> 
+>> It allows simple maintenance of those application
+>> since you only need to move the local directory from
+>> one version of buildroot to a newer.
+>> 
+>> Best Regards
+>> Ulf Samuelsson
+> 
+> See package/customize/ which tries to do the same thing.
+> 
+> If you think perhaps package/customize/ should be renamed
+> or better documented I'm open to that.  Adding a second
+> directory doing the same thing however seems unwise.
+> 
+> 
+>  -Erik
+> 
+> --
+> Erik B. Andersen             http://codepoet-consulting.com/
+> --This message was written using 73% post-consumer electrons--
+> _______________________________________________
+> buildroot mailing list
+> buildroot at uclibc.org
+> http://busybox.net/mailman/listinfo/buildroot
+> 
+> 
+I too would be very happy to see this patch go in.  It means buildroot can
+be a more generic build system allowing people to easily move from version
+to version.  But also allows people to use it to build their own packages
+that are not going to be ever part of the open-source world, or are so
+specialised as to be of limited use to the main buildroot community.
+Dan
+-- 
+View this message in context: http://www.nabble.com/-PATCH--Add-local-directory-for-non-public-packages-tf3078310.html#a8558857
+Sent from the BuildRoot mailing list archive at Nabble.com.
