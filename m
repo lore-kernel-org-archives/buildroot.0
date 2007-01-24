@@ -1,31 +1,27 @@
-From: Ulf Samuelsson <ulf@atmel.com>
-Date: Tue, 23 Jan 2007 23:58:40 +0100
-Subject: [Buildroot] [PATCH] Add local directory for non-public packages
-Message-ID: <1169593120.5361.17.camel@elrond.sweden.atmel.com>
+From: Erik Andersen <andersen@codepoet.org>
+Date: Tue, 23 Jan 2007 17:07:46 -0700
+Subject: [Buildroot] [PATCH] Select MTD before EXT2/CRAMFS/SQUASHFS are
+	built
+In-Reply-To: <1169591688.5361.7.camel@elrond.sweden.atmel.com>
+References: <1169591688.5361.7.camel@elrond.sweden.atmel.com>
+Message-ID: <20070124000746.GA17761@codepoet.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-This adds a "buildroot/local" directory.
-The structure of "local" is the same as that of "packages"
-but the contents of "local" is never
-intended to be merged upstream.
+On Tue Jan 23, 2007 at 11:34:48PM +0100, Ulf Samuelsson wrote:
+> Building a file sysrtem will fail if the mtd tools are not
+> available. THis patch ensure MTD is selected if either of
+> ext2/cramfs/squashfs are selected.
 
-It allows simple maintenance of those application
-since you only need to move the local directory from
-one version of buildroot to a newer.
+Nak.  There are a great many situations where people use ext2
+and/or cramfs and/or squashfs without wanting to also use MTD...
+I happen to use all of them without wanting MTD at various times.
 
-Best Regards
-Ulf Samuelsson
+ -Erik
 
-
-
--------------- next part --------------
-A non-text attachment was scrubbed...
-Name: Makefile_local.patch
-Type: text/x-patch
-Size: 1458 bytes
-Desc: not available
-Url : http://busybox.net/lists/buildroot/attachments/20070123/74be3a88/attachment-0001.bin 
+--
+Erik B. Andersen             http://codepoet-consulting.com/
+--This message was written using 73% post-consumer electrons--
