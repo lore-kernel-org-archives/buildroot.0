@@ -1,41 +1,47 @@
 From: Bernhard Fischer <rep.dot.nop@gmail.com>
-Date: Wed, 24 Jan 2007 23:23:10 +0100
-Subject: [Buildroot] [PATCH] Prepatory patch for Atmel AT91/AVR32 Target
-	support
-In-Reply-To: <1169591366.5361.3.camel@elrond.sweden.atmel.com>
-References: <1169591366.5361.3.camel@elrond.sweden.atmel.com>
-Message-ID: <20070124222310.GB28221@aon.at>
+Date: Wed, 24 Jan 2007 23:57:53 +0100
+Subject: [Buildroot] [PATCH] Select MTD before EXT2/CRAMFS/SQUASHFS are
+	built
+In-Reply-To: <053601c73f56$016879f0$01c4af0a@atmel.com>
+References: <1169591688.5361.7.camel@elrond.sweden.atmel.com>
+	<20070124000746.GA17761@codepoet.org>
+	<053601c73f56$016879f0$01c4af0a@atmel.com>
+Message-ID: <20070124225753.GD28221@aon.at>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Tue, Jan 23, 2007 at 11:29:26PM +0100, Ulf Samuelsson wrote:
->Have target support allowing
->* Dataflashboot/at91bootstrap
->* U-Boot
->* Linux Kernel
+On Wed, Jan 24, 2007 at 02:18:07AM +0100, Ulf Samuelsson wrote:
+>Erik Andersen wrote:
+>> On Tue Jan 23, 2007 at 11:34:48PM +0100, Ulf Samuelsson wrote:
+>>> Building a file sysrtem will fail if the mtd tools are not
+>>> available. THis patch ensure MTD is selected if either of
+>>> ext2/cramfs/squashfs are selected.
+>>
+>> Nak.  There are a great many situations where people use ext2
+>> and/or cramfs and/or squashfs without wanting to also use MTD...
+>> I happen to use all of them without wanting MTD at various times.
+>>
+>> -Erik
 >
->This is the first patch in a series to support 
->* AT91RM9200
->* AT91SAM9260
->* AT91SAM9261
->* AT91SAM9263
->* AT32AP700x
+>Hmm,
 >
->It will rearrange the taarget/Config.in in Alphapbetical order and 
->create the target/device/Atmel directory with an empty Config.in
->
->Best Regards
->Ulf Samuelsson
->
+>The intention is, that if ext2/squashfs/cramfs etc is selected,
+>you ensure you build the  MTD utilities for the *host*.
 
->Author:	Ulf Samuelsson
->Date:	2007-01-23
->
->Log:
->Prepatory patch for new Atmel targets boards
->Rearrange in Alphabetical order
+What specific failure do you see?
 
-Merged. Thanks
+
+Since you seem to use cramfs, may i ask you to look if these patches are ok?
+http://busybox.net/bugs/view.php?id=512
+http://busybox.net/bugs/view.php?id=1027
+>
+>$ mkfs.ext2 etc.
+>
+>Not that you put the MTD utilities into the root file system.
+>How do I do what I intended then?
+>(I hope building the host tools is not inconvenient).
+
+I do not want to download nor build a package that i do not need..
