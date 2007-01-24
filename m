@@ -1,43 +1,60 @@
-From: Ulf Samuelsson <ulfs@dof.se>
-Date: Wed, 24 Jan 2007 22:35:48 +0100
-Subject: [Buildroot] [PATCH] Add local directory for non-public packages
-References: <1169593120.5361.17.camel@elrond.sweden.atmel.com>
-	<20070124001104.GB17761@codepoet.org>
-	<8558857.post@talk.nabble.com>
-	<1169650922.21018.4.camel@elrond.sweden.atmel.com>
-	<20070124202942.GA21800@tuxedo.home.lan>
-Message-ID: <028401c74002$a4c318b0$01c4af0a@atmel.com>
+From: aldot at uclibc.org <aldot@uclibc.org>
+Date: Wed, 24 Jan 2007 14:22:12 -0800 (PST)
+Subject: [Buildroot] svn commit: trunk/buildroot/target/device:  Atmel
+Message-ID: <20070124222212.A2DBA485C1@busybox.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Lars Munch wrote:
-> Hi Ulf
-> 
-> On Wed, Jan 24, 2007 at 04:02:02PM +0100, Ulf Samuelsson wrote:
->> Here is an updated patch which includes the local/Config.in.
->> As I explained in the previous Email, the "package/customize"
->> and "local" have two distinct functions.
->> If you move up "buildroot/package/customize" to "buildroot/customize"
->> and make the "Config.in" and "customize.mk" empty,
->> then that would be ok as well.
-> [snip]
-> 
-> I really like this idea of having a directory for "local" packages,
-> but I think it would be nice to take it a step further and make it
-> possible to set the directory where the "local" packages are located.
-> Then it will be possible to have your "local" packages out of the
-> buildroot tree. 
-> 
+Author: aldot
+Date: 2007-01-24 14:22:11 -0800 (Wed, 24 Jan 2007)
+New Revision: 17511
 
-Not a bad idea!
+Log:
+- Prepatory patch for new Atmel targets boards
+  Rearrange in Alphabetical order (Ulf Samuelsson)
 
 
-> Just my 2 cent.
-> 
-> -- Lars Munch
+Added:
+   trunk/buildroot/target/device/Atmel/
+   trunk/buildroot/target/device/Atmel/Config.in
 
-Best Regards,
-Ulf Samuelsson
+Modified:
+   trunk/buildroot/target/device/Config.in
+
+
+Changeset:
+Added: trunk/buildroot/target/device/Atmel/Config.in
+===================================================================
+--- trunk/buildroot/target/device/Atmel/Config.in	                        (rev 0)
++++ trunk/buildroot/target/device/Atmel/Config.in	2007-01-24 22:22:11 UTC (rev 17511)
+@@ -0,0 +1,5 @@
++menu "Atmel Target"
++
++comment "Add Atmel Target here"
++
++endmenu
+
+Modified: trunk/buildroot/target/device/Config.in
+===================================================================
+--- trunk/buildroot/target/device/Config.in	2007-01-24 22:12:35 UTC (rev 17510)
++++ trunk/buildroot/target/device/Config.in	2007-01-24 22:22:11 UTC (rev 17511)
+@@ -1,11 +1,12 @@
+ menu "Board Support Options"
+ 
++source "target/device/AMD/Config.in"
++source "target/device/Atmel/Config.in"
++source "target/device/Hitachi/Config.in"
++source "target/device/jp/Config.in"
++source "target/device/Sharp/Config.in"
+ source "target/device/Soekris/Config.in"
+-source "target/device/Hitachi/Config.in"
+-source "target/device/AMD/Config.in"
+ source "target/device/Via/Config.in"
+-source "target/device/Sharp/Config.in"
+-source "target/device/jp/Config.in"
+ source "target/device/x86/Config.in"
+ 
+ # This must be last
