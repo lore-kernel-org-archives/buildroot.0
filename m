@@ -1,64 +1,77 @@
-From: Bernhard Fischer <rep.dot.nop@gmail.com>
-Date: Thu, 25 Jan 2007 10:18:10 +0100
-Subject: [Buildroot] [PATCH] Set CFLAGS = $(TARGET_CFLAGS) for many
-	packages
-In-Reply-To: <02b901c74014$8da2aa80$01c4af0a@atmel.com>
-References: <1169596433.5361.23.camel@elrond.sweden.atmel.com>
-	<20070124232349.GF28221@aon.at>
-	<02b901c74014$8da2aa80$01c4af0a@atmel.com>
-Message-ID: <20070125091810.GC15747@aon.at>
+From: Kleegrewe, Christian <christian.kleegrewe@siemens.com>
+Date: Thu, 25 Jan 2007 10:15:12 +0100
+Subject: [Buildroot] Make problems
+Message-ID: <D10BFA8BB60FBC43849BFB49875965CC02D9C4@MCHP7IEA.ww002.siemens.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Thu, Jan 25, 2007 at 01:02:49AM +0100, Ulf Samuelsson wrote:
->Bernhard Fischer wrote:
->>On Wed, Jan 24, 2007 at 12:53:53AM +0100, Ulf Samuelsson wrote:
->>>If you make Buildroot from scratch, CFLAGS gets set during the build,
->>>but if you add packages later, then CFLAGS should be set in the
->>>makefile fragment of the new package.
->>
->>I don't understand what you mean here. Please elaborate
->>>
->
->Some packages require kernel headers.
+Hi all,
 
-The few packages that really need kernel-internal or any other
-non-standard include path have to specify their include manually. 
+I tried to integrate a simple software project into the buildroot, but it does not compile. The problem is, that the compilation process is not started. The target is added correctly to TARGETS and the copying at the beginning of the hello.mk is performed correctly, but the $(MAKE) is never called. I suspect that it is a problem with the definition of the corresponding target.
 
->If you build from scratch, something sets CFLAGS to a good value.
->
->If you come back the next day, reconfigure your system,
->to include a new package, and recompile, many packages
->will bomb out because they do not find the "asm-generic.h"
+Here are my Config.in
 
-I cannot reproduce this. Can you paste an error and describe how i can
-reproduce this, locally?
+config BR2_PACKAGE_HELLO
+	bool "hello"
+	default y
+	help
+	  hello world test programm to test integration of a 
+	  third party software to the buildroot
 
->By adding this CFLAGS patch you can compile those packages.
->
->Many packages have this already, many don't.
->Can you explain when you have it and when you don't?
+And my hello.mk File
 
-See above. If a package needs any headers that do not live in a standard
-place (see e.g. gmp/mpfr.h for gcc or openswan that has a broken
-makefile in this respect) have to specify that explicitely.
+#############################################################
+#
+# Any custom stuff you feel like doing....
+#
+#############################################################
+HELLO_DIR=package/hello
+HELLO_SOURCE_DIR=$(HOME)/embedded_p2p/hello
+HELLO=hello
+HELLO_BINARY=hello
 
->>>I believe that TARGET_CFLAGS needs to include the Linux Include
->>>Directory or you will get compolie time errors.
->>
->>I don't have the linux include in my TARGET_CFLAGS AFAIK and do not
->>get compile errors. What kernel-headers are you using? What errors
->>are you seeing with what package?
+$(HELLO):
+	-cp -af $(HELLO_SOURCE_DIR)/* $(HELLO_DIR)/
+	touch $@
+	touch -c $(HELLO_DIR)/hello.cpp
 
-Please provide an example.
+$(HELLO_DIR)/$(HELLO_BINARY): $(HELLO_DIR)/hello.cpp $(HELLO_DIR)
+	$(MAKE) CFLAGS="$(TARGET_CFLAGS)" DEBUG=true KLIBC?lse \
+	    KERNEL_INCLUDE_DIR=$(STAGING_DIR)/include \
+	    TARGET_DIR=$(TARGET_DIR) -C $(HELLO_SOURCE_DIR) -o $(HELLO_BINARY);
 
-for me, e.g., my cross-compiler works. What do you see if you do the
-equivalent thing?
+#############################################################
+#
+# Toplevel Makefile options
+#
+#############################################################
+ifeq ($(strip $(BR2_PACKAGE_HELLO)),y)
+TARGETS+=hello
+Endif
 
-$ echo "#include <asm/unistd.h>" | \
-/scratch/obj.x86_64/buildroot.mine/build_i586/staging_dir/bin/i586-linux-gcc \
--xc -dD -E - | grep unistd
-# 1 "/scratch/obj.x86_64/buildroot.mine/build_i586/staging_dir/lib/gcc/i586-linux-uclibc/4.2.0/../../../../i586-linux-uclibc/sys-include/asm/unistd.h" 1 3 4
+I tried to find a sollution for my problem in the mailing list archives, but it is difficult to search.
+
+Any help will be appreciated
+
+Thanks Christian
+--------------------------------------8<-----------------------------------------------------
+
+Christian Kleegrewe
+CT IC 6
+Fon: +49 89 636 42722
+Fax: +49 89 636 41423
+Mail: mailto:christian.kleegrewe@siemens.com
+
+> Siemens Aktiengesellschaft: 
+> Vorsitzender des Aufsichtsrats: Heinrich v. Pierer; 
+> Vorstand: Klaus Kleinfeld, Vorsitzender; Johannes Feldmayer, Joe Kaeser, Rudi Lamprecht, Eduardo Montes, J?rgen Radomski, Erich R. Reinhardt, Hermann Requardt, Uriel J. Sharef, Klaus Wucherer
+> Sitz der Gesellschaft: Berlin und M?nchen
+> Registergericht: Berlin Charlottenburg, HRB 12300, M?nchen, HRB 6684
+> WEEE-Reg.-Nr. DE 23691322
+> 
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: http://busybox.net/lists/buildroot/attachments/20070125/2c29b208/attachment-0001.htm 
