@@ -1,63 +1,90 @@
 From: Bernhard Fischer <rep.dot.nop@gmail.com>
-Date: Thu, 25 Jan 2007 09:46:52 +0100
-Subject: [Buildroot] [PATCH] Select MTD before EXT2/CRAMFS/SQUASHFS
-	arebuilt
-In-Reply-To: <02a001c74013$6ad21e60$01c4af0a@atmel.com>
-References: <20070124225753.GD28221@aon.at>
-	<02a001c74013$6ad21e60$01c4af0a@atmel.com>
-Message-ID: <20070125084652.GA15747@aon.at>
+Date: Thu, 25 Jan 2007 10:04:34 +0100
+Subject: [Buildroot] Target support for Atmel ARM/AVR32
+In-Reply-To: <02b801c74014$8ceb1a50$01c4af0a@atmel.com>
+References: <014901c73faa$8e9c8100$01c4af0a@atmel.com>
+	<20070124233707.GG28221@aon.at>
+	<02b801c74014$8ceb1a50$01c4af0a@atmel.com>
+Message-ID: <20070125090434.GB15747@aon.at>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Thu, Jan 25, 2007 at 12:51:12AM +0100, Ulf Samuelsson wrote:
->>>>Nak.  There are a great many situations where people use ext2
->>>>and/or cramfs and/or squashfs without wanting to also use MTD...
->>>>I happen to use all of them without wanting MTD at various times.
->>>>
->>>>-Erik
+On Thu, Jan 25, 2007 at 12:58:57AM +0100, Ulf Samuelsson wrote:
+>Bernhard Fischer wrote:
+>>On Wed, Jan 24, 2007 at 12:06:31PM +0100, Ulf Samuelsson wrote:
+>>>I am hoping to add Target support for a number of Atmel Development
+>>>board, but before I do that, I would like to discuss how this is
+>>>done.
 >>>
->>>Hmm,
+>>>Would like to separate building the root file system from other
+>>>utilities, since the "build_<arch>" directory is overcrowded.
 >>>
->>>The intention is, that if ext2/squashfs/cramfs etc is selected,
->>>you ensure you build the  MTD utilities for the *host*.
->>
->>What specific failure do you see?
->>
+>>>Currently I am using a "target_build_<arch>" directory.
+>>>In this directory, I create a subdirectory for each target_board.
+>>>
+>>>I.E:
+>>>buildroot/target_build_arm
+>>>       at91rm9200dk
+>>>       at91rm9200df
+>>>       at91rm9200ek
+>>>       at91sam9260ek
+>>>       at91sam9261ek
+>>>       at91sam9262ek
+>>>or
+>>>buildroot/target_build_avr32
+>>>       atstk1002
+>>>
+>>>In the target_build_<arch>/<target_board> directory
+>>>I download patches for Linux/U-Boot before I apply them
+>>>and then build
+>>>* Bootstrap
+>>>* U-Boot
+>>>* Linux
+>>>* Other Utitlties
+>>>in that directory.
+>>>
+>>>The results are renamed to show <target_board> and date.
+>>>
+>>>Would like to move "buildroot/build_<arch>/root" to
+>>>"buildroot/target_build_<arch>/<target_board>/root" as well,
+>>>but have not yet gotten this to work.
+>>>(This will allow me to have different contents for different boards)
+>>>
+>>>At the end, the result is moved to
+>>>"buildroot/binaries/<target_board>"
+>>>so that I have easy way to create a delivery by just compressing
+>>>that directory into a tarball.
+>>>
+>>>Does this seem to be a reasonable approach?
+[snip]
+>My goal is to have people download the buildroot source,
+>then copy a .config file to the topdir and type "make".
+>Then everything should work without surprises.
 >
->There are no mkfs.jffs2 application on the host, so it fails.
-
-How does an eventual missing mkfs.jffs2 inhibit the generation of an
-ext2 image?
-Can you paste the error you were getting?
-
->>>$ mkfs.ext2 etc.
->>>
->>>Not that you put the MTD utilities into the root file system.
->>>How do I do what I intended then?
->>>(I hope building the host tools is not inconvenient).
->>
->>I do not want to download nor build a package that i do not need..
+>"Grand-Ma" should be able to do it!
 >
->How can you create an ext2/cramfs/squashfs if you have no
->application on your host that takes a directory and generates the fs????
+>Many people that will uses this will be complete new to Linux and
+>the thing below looks dangerous if you want to avoid support phone calls.
+>
+>The question is really, will a patch be rejected if it is built up as above?
 
-See above. Perhaps you ment to select e2fsprogs for the ext2 filesystem
-iff the host doesn't have an mkfs2? But then we seem to use genext2fs so
-there is no need for an mkfs.ext2 installed on the host that i can see.
+If the TODO that is mentioned in r17516 would be fixed, would that help
+that problem in any way? I, personally, don't use the concept of a board
+in the context of buildroot. Put that aside, what about this layout:
+-) toolchain_<arch>_<subarch>_<cpu>
+-) same for build_
+-) board_<device> as default COPY_TO
 
-genext2fs should live in the TOOL_BUILD_DIR and not in the BUILD_DIR,
-btw.
+where
+	$device is target/device/*
+	$arch would be generic arch e.g. i386, arm
+	$subarch is the real -march=
+	$cpu is the real -mtune=
 
-The BR2_TARGET_ROOTFS_JFFS2 already builds an host-mtd automatically, so
-again this works (i did try this sometimes ago, it does work indeed).
-$ grep  _MTD target/jffs2/Config.in -B2
-        bool "jffs2 root filesystem"
-        default n
-        select BR2_PACKAGE_MTD
-$ grep -e mtd-host$ target/jffs2/jffs2root.mk 
-$(JFFS2_TARGET): host-fakeroot makedevs mtd-host
+Opinions?
 
-Again, paste the error you were seeing, please.
+PS: r17516 was, for your convenience:
+http://uclibc.org/cgi-bin/viewcvs.cgi?rev=17516&view=rev
