@@ -1,61 +1,79 @@
-From: Ulf Samuelsson <ulfs@dof.se>
-Date: Fri, 26 Jan 2007 19:45:39 +0100
-Subject: [Buildroot] Using external toolchain / disabling
-	Buildroottoolchain
-References: <loom.20061213T195208-342@post.gmane.org>
-	<loom.20070126T192656-570@post.gmane.org>
-Message-ID: <02a401c7417c$928c0af0$01c4af0a@atmel.com>
+From: Ulf Samuelsson <ulf@atmel.com>
+Date: Fri, 26 Jan 2007 21:37:18 +0100
+Subject: [Buildroot] [PATCH] Updated "local" patch to avoid duplication
+	w	package/customize
+Message-ID: <1169843838.30887.5.camel@elrond.sweden.atmel.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-MikeW wrote:
-> MikeW <mw_phil@...> writes:
->
->>
->> Buildroot cannot build a required toolchain, but I would still like
->> to use it to build everything else.
->>
->> Is there a preferred way to disable building the toolchain, and to
->> set Buildroot to use an external toolchain instead ?
+Here is a new version of the "local" patch to avoid the
+believed duplication with "package/customize"
 
-It would be good to specify a toolchain once, and be done with
-it, so you don't have to rebuild the toolchain
-every time you start on a new version of buildroot.
 
->> (This is 'inside-out' from the BR docs which say how to use the BR
->> toolchain from outside.)
->>
->> Looking at the top-level Makefile, this looks as if it would involve
->> edits to the file(s).
->>
->> Regards,
->> MikeW
->>
->
-> Looks like there's a possible patch here
-> http://bugs.uclibc.org/view.php?id=237
->
-> Don't you wish there was a 'patch gallery' ?!
->
-> MikeW
->
->
->
-> _______________________________________________
-> buildroot mailing list
-> buildroot at uclibc.org
-> http://busybox.net/mailman/listinfo/buildroot
+Author:	Ulf Samuelsson
+Date:	2007-01-26
 
-Best Regards,
+Log:
+Move the customization feature to the top level for easier maintenance.
+The user would copy the contents of his/her own local directory
+structure into the "local" directory, 
+overwriting "local/Config.in" and "local/Makefile.in"
+The contents of "local/root" is copied into the "$(BUILD_DIR)/root"
+after it is created from the template.
+
+-----------------------------------------------------------------------
+1) Remove "package/customize/*"
+2) Remove include of "package/customize" from package/Config.in
+
+3) Create "local" as replacement for "package/customize"
+4) include "local/Config.in" from top Config.in
+	No configurations options in this patch
+5) include "local/Makefile.in" from top Makefile
+	No actions in this patch
+
+6) Make a "local/root/etc" directory
+7) Create a "local/root/etc/boardname" file from $(BR2_BOARDNAME)
+   to ensure directory structure is there with at least one useful file.
+   (BR2_BOARDNAME is created in top Config.in -also in previously    
+    submitted BSP patch)
+8) Copy "local/root" (if present) $(BUILD_DIR)/root after the template
+is created
+
+9) "local/*/*.mk" is included by top Makefile
+10) "local/dummy/dummy.mk" created to ensure there is at least one *.mk
+
+Modified:
+	Config.in
+	Makefile
+	local/Config.in
+	local/Makefile.in
+	local/root/etc/boardname	- contents = "board"
+	local/dummy/dummy.mk
+	-package/customize/Config.in
+	-package/customize/customize.mk
+
+Changeset
+	Config.in
+	Makefile
+	local/Config.in
+	local/Makefile.in
+	local/root/etc/boardname	- contents = "board"
+	local/dummy/dummy.mk
+	-package/customize/Config.in
+	-package/customize/customize.mk
+
+
+Best Regards
 Ulf Samuelsson
-ulf at atmel.com
-GSM:  +46 (706) 22 44 57
-Tel:     +46  (8) 441 54 22
-Fax:     +46 (8) 441 54 29
-Mail: Box 2033  174 02 Sundbyberg
-Visit: Kavalleriv?gen 24
-          174 58 Sundbyberg'
-Sweden
+
+
+-------------- next part --------------
+A non-text attachment was scrubbed...
+Name: buildroot-local.patch
+Type: text/x-patch
+Size: 6215 bytes
+Desc: not available
+Url : http://busybox.net/lists/buildroot/attachments/20070126/2421c693/attachment.bin 
