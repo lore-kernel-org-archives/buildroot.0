@@ -1,30 +1,43 @@
-From: MikeW <mw_phil@yahoo.co.uk>
-Date: Fri, 26 Jan 2007 16:18:58 +0000 (UTC)
-Subject: [Buildroot] [PATCH] Add local directory for non-public packages
-References: <1169593120.5361.17.camel@elrond.sweden.atmel.com>
-	<20070124001104.GB17761@codepoet.org>
-	<8558857.post@talk.nabble.com>
-Message-ID: <loom.20070126T171425-957@post.gmane.org>
+From: Ulf Samuelsson <ulfs@dof.se>
+Date: Fri, 26 Jan 2007 18:14:37 +0100
+Subject: [Buildroot] [PATCH] Prepatory patch to Config.in to
+	allowAT91/AVR32 support	(Resend)
+References: <1169772235.28479.2.camel@elrond.sweden.atmel.com>
+	<00e501c740e3$87edf020$01c4af0a@atmel.com>
+	<20070126081037.GA27878@aon.at>
+Message-ID: <000101c7416f$fa66b9c0$01c4af0a@atmel.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Daniel Laird <danieljlaird@...> writes:
+Bernhard Fischer wrote:
+> On Fri, Jan 26, 2007 at 01:47:11AM +0100, Ulf Samuelsson wrote:
+>> Ulf Samuelsson wrote:
+>>>> Author: Ulf Samuelsson
+>>>> Date: 2007-01-25
+>>
+>> Hmm, for everyone that is now confused:
+>
+> like me ;)
 
-> 
-> I too would be very happy to see this patch go in.  It means buildroot can
-> be a more generic build system allowing people to easily move from version
-> to version.  But also allows people to use it to build their own packages
-> that are not going to be ever part of the open-source world, or are so
-> specialised as to be of limited use to the main buildroot community.
-> Dan
+Anything marked (resend) is OK.
 
-All that's missing now is a menuconfig option to allow use
-of an external toolchain ...
 
-Cheers,
-MikeW
+>
+> Is this the correct version?
+> Please ping the one you consider ok, otherwise i'll apply this
+> "resend" one later today..
+> TIA,
 
-PS hi to 225/810 guys Dan !
+Best Regards,
+Ulf Samuelsson
+ulf at atmel.com
+GSM:  +46 (706) 22 44 57
+Tel:     +46  (8) 441 54 22
+Fax:     +46 (8) 441 54 29
+Mail: Box 2033  174 02 Sundbyberg
+Visit: Kavalleriv?gen 24
+          174 58 Sundbyberg'
+Sweden
