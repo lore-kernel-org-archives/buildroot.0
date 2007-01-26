@@ -1,60 +1,30 @@
-From: nina.holly at aerende.com <nina.holly@aerende.com>
-Date: Fri, 26 Jan 2007 07:37:37 -0800 (PST)
-Subject: [Buildroot] __getpgid in glibc but not in uClibc?
-In-Reply-To: <200701251428.42661.alexander.rigbo@acgnystrom.se>
-References: <1369.63.193.249.101.1169730868.squirrel@webmail.aerende.com>
-	<200701251428.42661.alexander.rigbo@acgnystrom.se>
-Message-ID: <3968.63.193.249.101.1169825857.squirrel@webmail.aerende.com>
+From: MikeW <mw_phil@yahoo.co.uk>
+Date: Fri, 26 Jan 2007 16:18:58 +0000 (UTC)
+Subject: [Buildroot] [PATCH] Add local directory for non-public packages
+References: <1169593120.5361.17.camel@elrond.sweden.atmel.com>
+	<20070124001104.GB17761@codepoet.org>
+	<8558857.post@talk.nabble.com>
+Message-ID: <loom.20070126T171425-957@post.gmane.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Alexander,
-    Replacing __getpgid with getpgid worked.
-Thanks for the link.
+Daniel Laird <danieljlaird@...> writes:
 
+> 
+> I too would be very happy to see this patch go in.  It means buildroot can
+> be a more generic build system allowing people to easily move from version
+> to version.  But also allows people to use it to build their own packages
+> that are not going to be ever part of the open-source world, or are so
+> specialised as to be of limited use to the main buildroot community.
+> Dan
 
-Nina
+All that's missing now is a menuconfig option to allow use
+of an external toolchain ...
 
-> Hi,
->
-> Can't you use getpid()?
->
-> PS.
-> http://www.novell.com/coolsolutions/feature/15355.html
->
-> / Alexander
->
-> On Thursday 25 January 2007 14.14.28 nina.holly at aerende.com wrote:
->> I have an application that requires __getpgid.
->> This system call appears to be in glibc.
->>
->> 1.  Is the __getpgid system call in uClibc?
->>     If so, can someone tell me how to enable the
->>     compilation of __getpgid in uClibc?
->>
->> 2.  If Q#1's answer is no, is it possible for
->>     __getpgid to be added from glibc to uClibc as
->>     source code?  Or does __getpgid need to be
->>     rewritten for uClibc?  Or can I inline the
->>     __getpgid source code in my application's
->>     source code?
->>
->> Thanks for any pointers,
->>
->> Nina
->>
->> _______________________________________________
->> buildroot mailing list
->> buildroot at uclibc.org
->> http://busybox.net/mailman/listinfo/buildroot
->
->
->
-> _______________________________________________
-> buildroot mailing list
-> buildroot at uclibc.org
-> http://busybox.net/mailman/listinfo/buildroot
->
+Cheers,
+MikeW
+
+PS hi to 225/810 guys Dan !
