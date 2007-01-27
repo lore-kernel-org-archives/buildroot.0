@@ -1,68 +1,43 @@
-From: Ulf Samuelsson <ulf@atmel.com>
-Date: Sat, 27 Jan 2007 22:20:07 +0100
-Subject: [Buildroot] [PATCH] yet another update to the "local" patch
-Message-ID: <1169932807.5798.1.camel@elrond.sweden.atmel.com>
+From: aldot at uclibc.org <aldot@uclibc.org>
+Date: Sat, 27 Jan 2007 15:11:17 -0800 (PST)
+Subject: [Buildroot] svn commit: trunk/buildroot/target/jffs2
+Message-ID: <20070127231117.8090148576@busybox.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Author:	Ulf Samuelsson
-Date:	2007-01-27
+Author: aldot
+Date: 2007-01-27 15:11:16 -0800 (Sat, 27 Jan 2007)
+New Revision: 17563
 
 Log:
-Move the customization feature to the top level for easier maintenance.
-The user would copy the contents of his/her own local directory
-structure into the "local" directory, 
-overwriting "local/Config.in" and "local/Makefile.in"
-The contents of "local/root" is copied into the "$(BUILD_DIR)/root"
-after it is created from the template.
-Update $(TARGET_DIR)/etc/hostname from BR2_BOARDNAME
-Update $(TARGET_DIR)/etc/issue from BR2_ISSUE
+- fix dependencies
 
-
------------------------------------------------------------------------
-1) Remove "package/customize/*"
-2) Remove include of "package/customize" from package/Config.in
-
-3) Create "local" as replacement for "package/customize"
-4) include "local/Config.in" from top Config.in
-	No configurations options in this patch
-5) include "local/Makefile.in" from top Makefile
-	No actions in this patch
-
-6) Make a "local/root/etc" directory
-7) Create a "local/root/etc/hostname" file from $(BR2_BOARDNAME)
-   to ensure directory structure is there with at least one useful file.
-   (BR2_BOARDNAME is created in top Config.in)
-8) Copy "local/root"  to $(TARGET_DIR) after the template is created
-
-9) "local/*/*.mk" is included by top Makefile
-10) "local/dummy/dummy.mk" created to ensure there is at least one *.mk
-11) Define $(BR2_ISSUE) used to create a login banner
 
 Modified:
-	Config.in
-	Makefile
-	local/Config.in
-	local/Makefile.in
-	local/root/etc/boardname	- contents = "board"
-	local/dummy/dummy.mk
-	-package/customize/Config.in
-	-package/customize/customize.mk
-
-Changeset
-	Config.in
-	Makefile
-	local/Config.in
-	local/Makefile.in
-	local/root/etc/hostname
-	local/root/etc/issue
-	local/dummy/dummy.mk
-	-package/customize/Config.in
-	-package/customize/customize.mk
+   trunk/buildroot/target/jffs2/Config.in
 
 
-Best Regards
-Ulf Samuelsson
+Changeset:
+Modified: trunk/buildroot/target/jffs2/Config.in
+===================================================================
+--- trunk/buildroot/target/jffs2/Config.in	2007-01-27 22:47:08 UTC (rev 17562)
++++ trunk/buildroot/target/jffs2/Config.in	2007-01-27 23:11:16 UTC (rev 17563)
+@@ -12,6 +12,7 @@
+ 
+ config BR2_TARGET_ROOTFS_JFFS2_PAGESIZE
+ 	hex "Page Size (0x0 = Use default 4 kB)"
++	depends on BR2_TARGET_ROOTFS_JFFS2
+ 	depends on !BR2_TARGET_ROOTFS_JFFS2_DEFAULT_PAGESIZE
+ 	default 0x420
+ 	help
+@@ -19,6 +20,7 @@
+ 
+ config BR2_TARGET_ROOTFS_JFFS2_NOCLEANMARKER
+ 	bool	"Do not use Cleanmarker"
++	depends on BR2_TARGET_ROOTFS_JFFS2
+ 	depends on !BR2_TARGET_ROOTFS_JFFS2_DEFAULT_PAGESIZE
+ 	default y
+ 	help
