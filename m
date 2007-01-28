@@ -1,7 +1,7 @@
 From: aldot at uclibc.org <aldot@uclibc.org>
-Date: Sun, 28 Jan 2007 08:38:49 -0800 (PST)
-Subject: [Buildroot] svn commit: trunk/buildroot/toolchain/binutils
-Message-ID: <20070128163849.790E6485F3@busybox.net>
+Date: Sun, 28 Jan 2007 09:35:12 -0800 (PST)
+Subject: [Buildroot] svn commit: trunk/buildroot:  target
+Message-ID: <20070128173512.B0099485C4@busybox.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -9,56 +9,44 @@ Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
 Author: aldot
-Date: 2007-01-28 08:38:48 -0800 (Sun, 28 Jan 2007)
-New Revision: 17602
+Date: 2007-01-28 09:35:11 -0800 (Sun, 28 Jan 2007)
+New Revision: 17604
 
 Log:
-- fix prereq of current binutils wrt gmp
+- make sure to add board specific targets before the final generation of the filesystems/tarballs.
+  Until now, we did created the fs and only after that built/installed grub et al
 
 
 Modified:
-   trunk/buildroot/toolchain/binutils/binutils.mk
+   trunk/buildroot/Makefile
+   trunk/buildroot/target/Makefile.in
 
 
 Changeset:
-Modified: trunk/buildroot/toolchain/binutils/binutils.mk
+Modified: trunk/buildroot/Makefile
 ===================================================================
---- trunk/buildroot/toolchain/binutils/binutils.mk	2007-01-28 16:07:45 UTC (rev 17601)
-+++ trunk/buildroot/toolchain/binutils/binutils.mk	2007-01-28 16:38:48 UTC (rev 17602)
-@@ -14,27 +14,33 @@
- endif
- ifeq ($(BINUTILS_VERSION),2.16)
- BINUTILS_SITE:=ftp://ftp.gnu.org/gnu/binutils/
-+BINUTILS_NO_MPFR:=y
- endif
- ifeq ($(BINUTILS_VERSION),2.16.1)
- BINUTILS_SITE:=ftp://ftp.gnu.org/gnu/binutils/
-+BINUTILS_NO_MPFR:=y
- endif
- ifeq ($(BINUTILS_VERSION),2.15)
- BINUTILS_SITE:=ftp://ftp.gnu.org/gnu/binutils/
-+BINUTILS_NO_MPFR:=y
- endif
- ifeq ($(BINUTILS_VERSION),2.14)
- BINUTILS_SITE:=ftp://ftp.gnu.org/gnu/binutils/
-+BINUTILS_NO_MPFR:=y
- endif
- ifeq ($(BINUTILS_VERSION),2.13)
- BINUTILS_SITE:=ftp://ftp.gnu.org/gnu/binutils/
-+BINUTILS_NO_MPFR:=y
- endif
- ifeq ($(BINUTILS_VERSION),2.15.97)
- BINUTILS_SITE:=ftp://sources.redhat.com/pub/binutils/snapshots/
-+BINUTILS_NO_MPFR:=y
- endif
+--- trunk/buildroot/Makefile	2007-01-28 16:59:30 UTC (rev 17603)
++++ trunk/buildroot/Makefile	2007-01-28 17:35:11 UTC (rev 17604)
+@@ -67,7 +67,6 @@
+ # in the .config file.
+ include toolchain/*/*.mk
+ include package/*/*.mk
+-include target/*/*.mk
  
- # We do not rely on the host's gmp/mpfr but use a known working one
--BINUTILS_HOST_PREREQ:= #nothing
--BINUTILS_TARGET_PREREQ:= #nothing
--ifeq ($(BR2_BINUTILS_VERSION_2_17_50_0_9),y)
-+BINUTILS_HOST_PREREQ:=
-+BINUTILS_TARGET_PREREQ:=
-+ifndef BINUTILS_NO_MPFR
- 
- BINUTILS_HOST_PREREQ:=$(TOOL_BUILD_DIR)/gmp/lib/libgmp.so \
- 	$(TOOL_BUILD_DIR)/mpfr/lib/libmpfr.so
+ # target stuff is last so it can override anything else
+ include target/Makefile.in
+
+Modified: trunk/buildroot/target/Makefile.in
+===================================================================
+--- trunk/buildroot/target/Makefile.in	2007-01-28 16:59:30 UTC (rev 17603)
++++ trunk/buildroot/target/Makefile.in	2007-01-28 17:35:11 UTC (rev 17604)
+@@ -1,3 +1,4 @@
++# make sure to put everything that is board-specific before the tarroot targets
+ include target/generic/Makefile.in
+ include target/device/Makefile.in
+ include target/x86/Makefile.in
+@@ -3,2 +4,4 @@
+ include target/arm/Makefile.in
+ include target/powerpc/Makefile.in
++# and finally build the filesystems/tarballs
++include target/*/*.mk
