@@ -1,45 +1,20 @@
-From: aldot at uclibc.org <aldot@uclibc.org>
-Date: Sun, 28 Jan 2007 07:27:12 -0800 (PST)
-Subject: [Buildroot] svn commit: trunk/buildroot/package/gnuconfig
-Message-ID: <20070128152712.B7917485ED@busybox.net>
+From: Bernhard Fischer <rep.dot.nop@gmail.com>
+Date: Sun, 28 Jan 2007 16:27:34 +0100
+Subject: [Buildroot] AVR32 support during ./configure
+In-Reply-To: <1169997842.21218.2.camel@elrond.sweden.atmel.com>
+References: <1169997842.21218.2.camel@elrond.sweden.atmel.com>
+Message-ID: <20070128152734.GS28221@aon.at>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Author: aldot
-Date: 2007-01-28 07:27:11 -0800 (Sun, 28 Jan 2007)
-New Revision: 17599
+On Sun, Jan 28, 2007 at 04:24:02PM +0100, Ulf Samuelsson wrote:
+>Author:	Ulf Samuelsson
+>Date:	2007-01-28
+>
+>Log:
+>Support AVR32 during GNU configuration
 
-Log:
-- Support AVR32 during GNU configuration (Ulf Samuelsson)
-
-
-Modified:
-   trunk/buildroot/package/gnuconfig/config.sub
-
-
-Changeset:
-Modified: trunk/buildroot/package/gnuconfig/config.sub
-===================================================================
---- trunk/buildroot/package/gnuconfig/config.sub	2007-01-28 15:15:53 UTC (rev 17598)
-+++ trunk/buildroot/package/gnuconfig/config.sub	2007-01-28 15:27:11 UTC (rev 17599)
-@@ -241,7 +241,7 @@
- 	| alpha | alphaev[4-8] | alphaev56 | alphaev6[78] | alphapca5[67] \
- 	| alpha64 | alpha64ev[4-8] | alpha64ev56 | alpha64ev6[78] | alpha64pca5[67] \
- 	| am33_2.0 \
--	| arc | arm | arm[bl]e | arme[lb] | armv[2345] | armv[345][lb] | avr \
-+	| arc | arm | arm[bl]e | arme[lb] | armv[2345] | armv[345][lb] | avr | avr32 \
- 	| bfin \
- 	| c4x | clipper \
- 	| d10v | d30v | dlx | dsp16xx | dvp \
-@@ -319,7 +319,7 @@
- 	| alpha64-* | alpha64ev[4-8]-* | alpha64ev56-* | alpha64ev6[78]-* \
- 	| alphapca5[67]-* | alpha64pca5[67]-* | arc-* \
- 	| arm-*  | armbe-* | armle-* | armeb-* | armv*-* \
--	| avr-* \
-+	| avr-* | avr32-* \
- 	| bfin-* | bs2000-* \
- 	| c[123]* | c30-* | [cjt]90-* | c4x-* | c54x-* | c55x-* | c6x-* \
- 	| clipper-* | craynv-* | cydra-* \
+Merged. Thanks
