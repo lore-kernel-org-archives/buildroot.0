@@ -1,36 +1,23 @@
-From: aldot at uclibc.org <aldot@uclibc.org>
-Date: Sun, 28 Jan 2007 05:34:03 -0800 (PST)
-Subject: [Buildroot] svn commit: trunk/buildroot/package/readline
-Message-ID: <20070128133403.B88E8485BA@busybox.net>
+From: Ulf Samuelsson <ulf@atmel.com>
+Date: Sun, 28 Jan 2007 14:38:00 +0100
+Subject: [Buildroot] AVR32 patch (& others)
+References: <20070128002047.841C748581@busybox.net><200701280208.43998.vda.linux@googlemail.com>
+	<20070128111333.GO28221@aon.at>
+Message-ID: <563e01c742e2$fb5b8670$dcc4af0a@atmel.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Author: aldot
-Date: 2007-01-28 05:34:02 -0800 (Sun, 28 Jan 2007)
-New Revision: 17596
+Hi Bernard,
+You said that you would commit the prepatory AVR32 patch as soon as
+the confusion of multiple sends was sorted out.
+Still any problems?
 
-Log:
-- correct improper prerequisite of -source target
+Also:
+    No reply on the "BSP" patch, the "TARGET_CFLAGS" and the "local"  patches.
+    Are they rejected, or are you guys still thinking about them or ?
 
-
-Modified:
-   trunk/buildroot/package/readline/readline.mk
-
-
-Changeset:
-Modified: trunk/buildroot/package/readline/readline.mk
-===================================================================
---- trunk/buildroot/package/readline/readline.mk	2007-01-28 13:16:58 UTC (rev 17595)
-+++ trunk/buildroot/package/readline/readline.mk	2007-01-28 13:34:02 UTC (rev 17596)
-@@ -75,7 +75,7 @@
- readline-dirclean:
- 	rm -rf $(READLINE_DIR)
- 
--readline-source:  $(DL_DIR)/$(READLINE_SOURCE)   $(READLINE_DIR)/.unpacked
-+readline-source:  $(DL_DIR)/$(READLINE_SOURCE)
- 
- ifeq ($(strip $(BR2_READLINE)),y)
- TARGETS+=readline
+Best Regards
+Ulf Samuelsson
