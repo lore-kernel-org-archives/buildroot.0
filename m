@@ -1,52 +1,36 @@
-From: aldot at uclibc.org <aldot@uclibc.org>
-Date: Sun, 28 Jan 2007 09:35:12 -0800 (PST)
-Subject: [Buildroot] svn commit: trunk/buildroot:  target
-Message-ID: <20070128173512.B0099485C4@busybox.net>
+From: Ulf Samuelsson <ulf@atmel.com>
+Date: Sun, 28 Jan 2007 18:45:48 +0100
+Subject: [Buildroot] AVR32 support during ./configure
+References: <1169997842.21218.2.camel@elrond.sweden.atmel.com>
+	<20070128152734.GS28221@aon.at> <20070128153737.GT28221@aon.at>
+Message-ID: <570c01c74304$da9c6040$dcc4af0a@atmel.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Author: aldot
-Date: 2007-01-28 09:35:11 -0800 (Sun, 28 Jan 2007)
-New Revision: 17604
+> On Sun, Jan 28, 2007 at 04:27:34PM +0100, Bernhard Fischer wrote:
+>>On Sun, Jan 28, 2007 at 04:24:02PM +0100, Ulf Samuelsson wrote:
+>>>Author: Ulf Samuelsson
+>>>Date: 2007-01-28
+>>>
+>>>Log:
+>>>Support AVR32 during GNU configuration
+>>
+>>Merged. Thanks
+> 
+> You need to make sure that packages pick this up as well, don't you?
+> $(FOO_DIR)/.configured:
+> (cd $(@D) ; rm -rf config.cache ; \
+> $(CONFIG_UPDATE); \
+> ./configure ... \
+> 
+>
 
-Log:
-- make sure to add board specific targets before the final generation of the filesystems/tarballs.
-  Until now, we did created the fs and only after that built/installed grub et al
+Rome was not built in a day ;-)
+For the moment, you can only build a few packages but
+this patch seemed to make it easier to continue.
 
-
-Modified:
-   trunk/buildroot/Makefile
-   trunk/buildroot/target/Makefile.in
-
-
-Changeset:
-Modified: trunk/buildroot/Makefile
-===================================================================
---- trunk/buildroot/Makefile	2007-01-28 16:59:30 UTC (rev 17603)
-+++ trunk/buildroot/Makefile	2007-01-28 17:35:11 UTC (rev 17604)
-@@ -67,7 +67,6 @@
- # in the .config file.
- include toolchain/*/*.mk
- include package/*/*.mk
--include target/*/*.mk
- 
- # target stuff is last so it can override anything else
- include target/Makefile.in
-
-Modified: trunk/buildroot/target/Makefile.in
-===================================================================
---- trunk/buildroot/target/Makefile.in	2007-01-28 16:59:30 UTC (rev 17603)
-+++ trunk/buildroot/target/Makefile.in	2007-01-28 17:35:11 UTC (rev 17604)
-@@ -1,3 +1,4 @@
-+# make sure to put everything that is board-specific before the tarroot targets
- include target/generic/Makefile.in
- include target/device/Makefile.in
- include target/x86/Makefile.in
-@@ -3,2 +4,4 @@
- include target/arm/Makefile.in
- include target/powerpc/Makefile.in
-+# and finally build the filesystems/tarballs
-+include target/*/*.mk
+Best Regards
+Ulf Samuelsson                ulf at atmel.com
