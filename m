@@ -1,40 +1,37 @@
-From: aldot at uclibc.org <aldot@uclibc.org>
-Date: Mon, 29 Jan 2007 13:53:21 -0800 (PST)
-Subject: [Buildroot] svn commit: trunk/buildroot/target: device/Soekris
-	device/Soekris/net4801 d etc...
-Message-ID: <20070129215321.2E08648584@busybox.net>
+From: Bernhard Fischer <rep.dot.nop@gmail.com>
+Date: Mon, 29 Jan 2007 22:55:37 +0100
+Subject: [Buildroot] My first patch :-) (updated soekris support)
+In-Reply-To: <200701241355.57979.elric-brl@ikuszen.com>
+References: <200701221950.27856.elric-brl@ikuszen.com>
+	<200701241355.57979.elric-brl@ikuszen.com>
+Message-ID: <20070129215537.GA28221@aon.at>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Author: aldot
-Date: 2007-01-29 13:53:20 -0800 (Mon, 29 Jan 2007)
-New Revision: 17648
+On Wed, Jan 24, 2007 at 01:55:57PM +0100, Elric Milon wrote:
+>El Lunes 22 Enero 2007 19:50, Elric Milon escribi?:
+>> Well, this is the first one, it unbreaks soekris 4801 support, and updates
+>> the kernel used to 2.6.19.2 version.
+>>
+>> I'ts my first patch, so maybe something is not right. Constructive
+>> cryticism is welcome :-)
+>>
+>> Regards!
+>
+>Ok, second attempt, smaller patch and cleaner.
+>
+>Remember to delete:
+>
+>target/device/Soekris/net4801/linux*.mk
+>target/device/Soekris/net4801/linux.config
 
-Log:
-- apply Soekris update from Eric Milon
-- mv the linux26.mk into a more generic place for use with other arches/boards (breaks the kernel, will fix up soonish)
+I've applied you patch, thanks.
 
-
-Added:
-   trunk/buildroot/target/device/Soekris/net4801/linux26.config
-   trunk/buildroot/target/linux26.mk
-
-Removed:
-   trunk/buildroot/target/device/Soekris/net4801/linux.mk
-   trunk/buildroot/target/device/x86/i386/linux26.mk
-
-Modified:
-   trunk/buildroot/target/device/Soekris/Makefile.in
-   trunk/buildroot/target/device/Soekris/net4801/busybox.config
-   trunk/buildroot/target/device/x86/i386/Makefile.in
-
-
-Changeset:
-
-Sorry, the patch is too large to include (3155 lines).
-Please use ViewCVS to see it!
-
-http://uclibc.org/cgi-bin/viewcvs.cgi?view=rev&root=svn&rev=17648
+I'll take care of generalizing the linux26 target so that other arches
+also can use it by just passing their name and a config in. That config
+will be overridable by a path specified on the command-line (see
+docs/README for other examples for this, or
+buildroot.uclibc.org/buildroot.html for that matter).
