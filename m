@@ -1,43 +1,44 @@
-From: andersen at uclibc.org <andersen@uclibc.org>
-Date: Mon, 29 Jan 2007 14:23:00 -0800 (PST)
-Subject: [Buildroot] svn commit: trunk/buildroot/toolchain/uClibc
-Message-ID: <20070129222300.56FD7485B3@busybox.net>
+From: aldot at uclibc.org <aldot@uclibc.org>
+Date: Mon, 29 Jan 2007 15:01:43 -0800 (PST)
+Subject: [Buildroot] svn commit: trunk/buildroot/target:  device/x86
+Message-ID: <20070129230143.187EC48569@busybox.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Author: andersen
-Date: 2007-01-29 14:22:59 -0800 (Mon, 29 Jan 2007)
-New Revision: 17651
+Author: aldot
+Date: 2007-01-29 15:01:42 -0800 (Mon, 29 Jan 2007)
+New Revision: 17657
 
 Log:
-fix broken spot caused by my having checked in the wrong dst patch for 0.9.28
+- fixup after self. Kernel for the x86 family is now built again
 
 
-Added:
-   trunk/buildroot/toolchain/uClibc/uClibc-0.9.28.1-time-locale.patch
+Modified:
+   trunk/buildroot/target/Makefile.in
+   trunk/buildroot/target/device/x86/Makefile.in
 
 
 Changeset:
-Added: trunk/buildroot/toolchain/uClibc/uClibc-0.9.28.1-time-locale.patch
+Modified: trunk/buildroot/target/Makefile.in
 ===================================================================
---- trunk/buildroot/toolchain/uClibc/uClibc-0.9.28.1-time-locale.patch	                        (rev 0)
-+++ trunk/buildroot/toolchain/uClibc/uClibc-0.9.28.1-time-locale.patch	2007-01-29 22:22:59 UTC (rev 17651)
-@@ -0,0 +1,15 @@
-+Index: libc/misc/time/time.c
-+===================================================================
-+--- a/libc/misc/time/time.c	(revision 17534)
-++++ b/libc/misc/time/time.c	(revision 17647)
-+@@ -158,7 +158,9 @@
-+ #endif
-+ 
-+ #if defined (L_tzset) || defined (L_localtime_r) || defined(L_strftime) || \
-+-    defined(L__time_mktime) || defined(L__time_mktime_tzi)
-++	 defined(L__time_mktime) || defined(L__time_mktime_tzi) || \
-++	 ((defined(L_strftime) || defined(L_strftime_l)) && \
-++	  defined(__UCLIBC_HAS_XLOCALE__))
-+ 
-+ void _time_tzset (int);
-+ 
+--- trunk/buildroot/target/Makefile.in	2007-01-29 22:51:58 UTC (rev 17656)
++++ trunk/buildroot/target/Makefile.in	2007-01-29 23:01:42 UTC (rev 17657)
+@@ -6,3 +6,5 @@
+ include target/powerpc/Makefile.in
+ # and finally build the filesystems/tarballs
+ include target/*/*.mk
++# kernel rules
++include target/linux*.mk
+
+Modified: trunk/buildroot/target/device/x86/Makefile.in
+===================================================================
+--- trunk/buildroot/target/device/x86/Makefile.in	2007-01-29 22:51:58 UTC (rev 17656)
++++ trunk/buildroot/target/device/x86/Makefile.in	2007-01-29 23:01:42 UTC (rev 17657)
+@@ -1,4 +1,3 @@
+ ifeq ($(strip $(BR2_TARGET_X86_GENERIC)),y)
+ include target/device/x86/i386/Makefile.in
+-include target/device/x86/i386/*.mk
+ endif
