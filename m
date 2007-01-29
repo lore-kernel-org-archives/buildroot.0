@@ -1,7 +1,8 @@
 From: aldot at uclibc.org <aldot@uclibc.org>
-Date: Mon, 29 Jan 2007 12:15:24 -0800 (PST)
-Subject: [Buildroot] svn commit: trunk/buildroot/package/microperl
-Message-ID: <20070129201524.B29A04857C@busybox.net>
+Date: Mon, 29 Jan 2007 13:53:21 -0800 (PST)
+Subject: [Buildroot] svn commit: trunk/buildroot/target: device/Soekris
+	device/Soekris/net4801 d etc...
+Message-ID: <20070129215321.2E08648584@busybox.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -9,29 +10,31 @@ Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
 Author: aldot
-Date: 2007-01-29 12:15:24 -0800 (Mon, 29 Jan 2007)
-New Revision: 17644
+Date: 2007-01-29 13:53:20 -0800 (Mon, 29 Jan 2007)
+New Revision: 17648
 
 Log:
-- it misses Carp/Heavy.pm but is unable to diagnose this fact and just throws "unknown error".
-  Now automake at least fails with an explicit error..
+- apply Soekris update from Eric Milon
+- mv the linux26.mk into a more generic place for use with other arches/boards (breaks the kernel, will fix up soonish)
 
+
+Added:
+   trunk/buildroot/target/device/Soekris/net4801/linux26.config
+   trunk/buildroot/target/linux26.mk
+
+Removed:
+   trunk/buildroot/target/device/Soekris/net4801/linux.mk
+   trunk/buildroot/target/device/x86/i386/linux26.mk
 
 Modified:
-   trunk/buildroot/package/microperl/microperl.mk
+   trunk/buildroot/target/device/Soekris/Makefile.in
+   trunk/buildroot/target/device/Soekris/net4801/busybox.config
+   trunk/buildroot/target/device/x86/i386/Makefile.in
 
 
 Changeset:
-Modified: trunk/buildroot/package/microperl/microperl.mk
-===================================================================
---- trunk/buildroot/package/microperl/microperl.mk	2007-01-29 20:06:00 UTC (rev 17643)
-+++ trunk/buildroot/package/microperl/microperl.mk	2007-01-29 20:15:24 UTC (rev 17644)
-@@ -16,7 +16,7 @@
- ifeq ($(BR2_PACKAGE_AUTOMAKE),y)
- MICROPERL_MODS+=File/Basename.pm Errno.pm Config.pm IO/File.pm Symbol.pm \
- 	SelectSaver.pm IO/Seekable.pm IO/Handle.pm IO.pm XSLoader.pm \
--	DynaLoader.pm AutoLoader.pm
-+	DynaLoader.pm AutoLoader.pm Carp/Heavy.pm
- endif
- $(DL_DIR)/$(MICROPERL_SOURCE):
- 	$(WGET) -P $(DL_DIR) $(MICROPERL_SITE)/$(MICROPERL_SOURCE)
+
+Sorry, the patch is too large to include (3155 lines).
+Please use ViewCVS to see it!
+
+http://uclibc.org/cgi-bin/viewcvs.cgi?view=rev&root=svn&rev=17648
