@@ -1,7 +1,7 @@
 From: aldot at uclibc.org <aldot@uclibc.org>
-Date: Mon, 29 Jan 2007 10:34:38 -0800 (PST)
-Subject: [Buildroot] svn commit: trunk/buildroot/target/x86/grub
-Message-ID: <20070129183438.A26EF485D5@busybox.net>
+Date: Mon, 29 Jan 2007 12:06:01 -0800 (PST)
+Subject: [Buildroot] svn commit: trunk/buildroot/package: automake microperl
+Message-ID: <20070129200601.A51B2485AD@busybox.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -9,304 +9,98 @@ Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
 Author: aldot
-Date: 2007-01-29 10:34:37 -0800 (Mon, 29 Jan 2007)
-New Revision: 17642
+Date: 2007-01-29 12:06:00 -0800 (Mon, 29 Jan 2007)
+New Revision: 17643
 
 Log:
-- added diskless/net support and new patches, mainly network drivers.
-  Closes #721. Thanks, janlana
+- start populating perl stuff into the rootfs to make automake work
 
-
-Added:
-   trunk/buildroot/target/x86/grub/grub.400-nic_update2.patch.bz2
 
 Modified:
-   trunk/buildroot/target/x86/grub/Config.in
-   trunk/buildroot/target/x86/grub/grub.mk
+   trunk/buildroot/package/automake/automake.mk
+   trunk/buildroot/package/microperl/microperl.mk
 
 
 Changeset:
-Modified: trunk/buildroot/target/x86/grub/Config.in
+Modified: trunk/buildroot/package/automake/automake.mk
 ===================================================================
---- trunk/buildroot/target/x86/grub/Config.in	2007-01-29 18:03:54 UTC (rev 17641)
-+++ trunk/buildroot/target/x86/grub/Config.in	2007-01-29 18:34:37 UTC (rev 17642)
-@@ -15,3 +15,156 @@
- 	  A splashimage is a 14-color indexed .xpm picture which
- 	  is displayed as background for the grub menu.
+--- trunk/buildroot/package/automake/automake.mk	2007-01-29 18:34:37 UTC (rev 17642)
++++ trunk/buildroot/package/automake/automake.mk	2007-01-29 20:06:00 UTC (rev 17643)
+@@ -18,6 +18,7 @@
  
-+config BR2_TARGET_GRUB_DISKLESS
-+	bool "enable diskless support"
-+	default n
-+	depends on BR2_TARGET_GRUB
-+	help
-+	  enable diskless support
-+
-+config BR2_TARGET_GRUB_3c595
-+	bool "enable 3Com595 driver"
-+	default n
-+	depends on BR2_TARGET_GRUB
-+	help
-+	  enable 3Com595 driver
-+
-+config BR2_TARGET_GRUB_3c90x
-+	bool "enable 3Com90x driver"
-+	default n
-+	depends on BR2_TARGET_GRUB
-+	help
-+	  enable 3Com90x driver
-+
-+config BR2_TARGET_GRUB_davicom
-+	bool "enable Davicom driver"
-+	default n
-+	depends on BR2_TARGET_GRUB
-+	help
-+	  enable Davicom driver
-+
-+config BR2_TARGET_GRUB_e1000
-+	bool "enable Etherexpress Pro/1000 driver"
-+	default n
-+	depends on BR2_TARGET_GRUB
-+	help
-+	  enable Etherexpress Pro/1000 driver
-+
-+config BR2_TARGET_GRUB_eepro100
-+	bool "enable Etherexpress Pro/100 driver"
-+	default n
-+	depends on BR2_TARGET_GRUB
-+	help
-+	  enable Etherexpress Pro/100 driver
-+
-+config BR2_TARGET_GRUB_epic100
-+	bool "enable SMC 83c170 EPIC/100 driver"
-+	default n
-+	depends on BR2_TARGET_GRUB
-+	help
-+	  enable SMC 83c170 EPIC/100 driver
-+
-+config BR2_TARGET_GRUB_forcedeth
-+	bool "enable Nvidia Geforce driver"
-+	default n
-+	depends on BR2_TARGET_GRUB
-+	help
-+	  enable Nvidia Geforce driver
-+
-+config BR2_TARGET_GRUB_natsemi
-+	bool "enable NatSemi DP8381x driver"
-+	default n
-+	depends on BR2_TARGET_GRUB
-+	help
-+	  enable NatSemi DP8381x driver
-+
-+config BR2_TARGET_GRUB_ns83820
-+	bool "enable NS83820 driver"
-+	default n
-+	depends on BR2_TARGET_GRUB
-+	help
-+	  enable NS83820 driver
-+
-+config BR2_TARGET_GRUB_ns8390
-+	bool "enable NE2000 PCI driver"
-+	default n
-+	depends on BR2_TARGET_GRUB
-+	help
-+	  enable NE2000 PCI driver
-+
-+config BR2_TARGET_GRUB_pcnet32
-+	bool "enable AMD Lance/PCI PCNet/32 driver"
-+	default n
-+	depends on BR2_TARGET_GRUB
-+	help
-+	  enable AMD Lance/PCI PCNet/32 driver
-+
-+config BR2_TARGET_GRUB_pnic
-+	bool "enable Bochs Pseudo Nic driver"
-+	default n
-+	depends on BR2_TARGET_GRUB
-+	help
-+	  enable Bochs Pseudo Nic driver
-+
-+config BR2_TARGET_GRUB_rtl8139
-+	bool "enable Realtek 8139 driver"
-+	default n
-+	depends on BR2_TARGET_GRUB
-+	help
-+	  enable Realtek 8139 driver
-+
-+config BR2_TARGET_GRUB_r8169
-+	bool "enable Realtek 8169 driver"
-+	default n
-+	depends on BR2_TARGET_GRUB
-+	help
-+	  enable Realtek 8169 driver
-+
-+config BR2_TARGET_GRUB_sis900
-+	bool "enable SIS 900 and SIS 7016 driver"
-+	default n
-+	depends on BR2_TARGET_GRUB
-+	help
-+	  enable SIS 900 and SIS 7016 driver
-+
-+config BR2_TARGET_GRUB_tg3
-+	bool "enable Broadcom Tigon3 driver"
-+	default n
-+	depends on BR2_TARGET_GRUB
-+	help
-+	  enable Broadcom Tigon3 driver
-+
-+config BR2_TARGET_GRUB_tulip
-+	bool "enable Tulip driver"
-+	default n
-+	depends on BR2_TARGET_GRUB
-+	help
-+	  enable Tulip driver
-+
-+config BR2_TARGET_GRUB_tlan
-+	bool "enable TI ThunderLAN driver"
-+	default n
-+	depends on BR2_TARGET_GRUB
-+	help
-+	  enable TI ThunderLAN driver
-+
-+config BR2_TARGET_GRUB_undi
-+	bool "enable PXE UNDI driver"
-+	default n
-+	depends on BR2_TARGET_GRUB
-+	help
-+	  enable PXE UNDI driver
-+
-+config BR2_TARGET_GRUB_via_rhine
-+	bool "enable Rhine-I/II driver"
-+	default n
-+	depends on BR2_TARGET_GRUB
-+	help
-+	  enable Rhine-I/II driver
-+
-+config BR2_TARGET_GRUB_w89c840
-+	bool "enable Winbond W89c840 driver"
-+	default n
-+	depends on BR2_TARGET_GRUB
-+	help
-+	  enable Winbond W89c840 driver
-
-Added: trunk/buildroot/target/x86/grub/grub.400-nic_update2.patch.bz2
-===================================================================
-(Binary files differ)
-
-
-Property changes on: trunk/buildroot/target/x86/grub/grub.400-nic_update2.patch.bz2
-___________________________________________________________________
-Name: svn:mime-type
-   + application/octet-stream
-
-Modified: trunk/buildroot/target/x86/grub/grub.mk
-===================================================================
---- trunk/buildroot/target/x86/grub/grub.mk	2007-01-29 18:03:54 UTC (rev 17641)
-+++ trunk/buildroot/target/x86/grub/grub.mk	2007-01-29 18:34:37 UTC (rev 17642)
-@@ -21,41 +21,62 @@
- #
- #############################################################
- GRUB_SOURCE:=grub_0.97.orig.tar.gz
--GRUB_PATCH=grub_0.97-20.diff.gz
-+GRUB_PATCH:=grub_0.97-20.diff.gz
- GRUB_SITE=http://ftp.debian.org/debian/pool/main/g/grub
-+GRUB_PATCH_SITE:=http://ftp.debian.org/debian/pool/main/g/grub
- GRUB_CAT:=$(ZCAT)
- GRUB_DIR:=$(BUILD_DIR)/grub-0.97
- GRUB_BINARY:=grub/grub
- GRUB_TARGET_BINARY:=bin/grub
-+GRUB_SPLASHIMAGE=$(TOPDIR)/target/x86/grub/splash.xpm.gz
+ $(AUTOMAKE_DIR)/.unpacked: $(DL_DIR)/$(AUTOMAKE_SOURCE)
+ 	$(AUTOMAKE_CAT) $(DL_DIR)/$(AUTOMAKE_SOURCE) | tar -C $(BUILD_DIR) $(TAR_OPTIONS) -
++	$(CONFIG_UPDATE) $(AUTOMAKE_DIR)
+ 	touch $@
  
--GRUB_TARGET_FILES:=
--ifeq ($(BR2_TARGET_GRUB_SPLASH),y)
--GRUB_CONFIGURE_ARGS+=--enable-graphics
--GRUB_SPLASHIMAGE=$(TOPDIR)/target/x86/grub/splash.xpm.gz
--GRUB_TARGET_FILES+=$(GRUB_SPLASHIMAGE)
--endif
-+
- GRUB_CFLAGS=-DSUPPORT_LOOPDEV
+ $(AUTOMAKE_DIR)/.configured: $(AUTOMAKE_DIR)/.unpacked
+@@ -61,7 +62,7 @@
+ 	    infodir=$(TARGET_DIR)/usr/info \
+ 	    mandir=$(TARGET_DIR)/usr/man \
+ 	    includedir=$(TARGET_DIR)/usr/include \
+-	    -C $(AUTOMAKE_DIR) install;
++	    -C $(AUTOMAKE_DIR) install
+ 	rm -rf $(TARGET_DIR)/share/locale $(TARGET_DIR)/usr/info \
+ 		$(TARGET_DIR)/usr/man $(TARGET_DIR)/usr/share/doc
+ 	touch -c $(TARGET_DIR)/$(AUTOMAKE_TARGET_BINARY)
+
+Modified: trunk/buildroot/package/microperl/microperl.mk
+===================================================================
+--- trunk/buildroot/package/microperl/microperl.mk	2007-01-29 18:34:37 UTC (rev 17642)
++++ trunk/buildroot/package/microperl/microperl.mk	2007-01-29 20:06:00 UTC (rev 17643)
+@@ -13,7 +13,11 @@
+ MICROPERL_MODS_DIR=/usr/lib/perl$(MICROPERL_MAJ)/$(MICROPERL_VER)
+ MICROPERL_MODS=$(subst ",,$(BR2_PACKAGE_MICROPERL_MODULES))
+ # ")
 -
- ifeq ($(BR2_LARGEFILE),)
- GRUB_CFLAGS+=-U_FILE_OFFSET_BITS
- endif
++ifeq ($(BR2_PACKAGE_AUTOMAKE),y)
++MICROPERL_MODS+=File/Basename.pm Errno.pm Config.pm IO/File.pm Symbol.pm \
++	SelectSaver.pm IO/Seekable.pm IO/Handle.pm IO.pm XSLoader.pm \
++	DynaLoader.pm AutoLoader.pm
++endif
+ $(DL_DIR)/$(MICROPERL_SOURCE):
+ 	$(WGET) -P $(DL_DIR) $(MICROPERL_SITE)/$(MICROPERL_SOURCE)
  
-+
-+GRUB_CONFIG-$(BR2_TARGET_GRUB_SPLASH) += --enable-graphics
-+GRUB_CONFIG-$(BR2_TARGET_GRUB_DISKLESS) += --enable-diskless
-+GRUB_CONFIG-$(BR2_TARGET_GRUB_3c595) += --enable-3c595
-+GRUB_CONFIG-$(BR2_TARGET_GRUB_3c90x) += --enable-3c90x
-+GRUB_CONFIG-$(BR2_TARGET_GRUB_davicom) += --enable-davicom
-+GRUB_CONFIG-$(BR2_TARGET_GRUB_e1000) += --enable-e1000
-+GRUB_CONFIG-$(BR2_TARGET_GRUB_eepro100) += --enable-eepro100
-+GRUB_CONFIG-$(BR2_TARGET_GRUB_epic100) += --enable-epic100
-+GRUB_CONFIG-$(BR2_TARGET_GRUB_forcedeth) += --enable-forcedeth
-+GRUB_CONFIG-$(BR2_TARGET_GRUB_natsemi) += --enable-natsemi
-+GRUB_CONFIG-$(BR2_TARGET_GRUB_ns83820) += --enable-ns83820
-+GRUB_CONFIG-$(BR2_TARGET_GRUB_ns8390) += --enable-ns8390
-+GRUB_CONFIG-$(BR2_TARGET_GRUB_pcnet32) += --enable-pcnet32
-+GRUB_CONFIG-$(BR2_TARGET_GRUB_pnic) += --enable-pnic
-+GRUB_CONFIG-$(BR2_TARGET_GRUB_rtl8139) += --enable-rtl8139
-+GRUB_CONFIG-$(BR2_TARGET_GRUB_r8169) += --enable-r8169
-+GRUB_CONFIG-$(BR2_TARGET_GRUB_sis900) += --enable-sis900
-+GRUB_CONFIG-$(BR2_TARGET_GRUB_tg3) += --enable-tg3
-+GRUB_CONFIG-$(BR2_TARGET_GRUB_tulip) += --enable-tulip
-+GRUB_CONFIG-$(BR2_TARGET_GRUB_tlan) += --enable-tlan
-+GRUB_CONFIG-$(BR2_TARGET_GRUB_undi) += --enable-undi
-+GRUB_CONFIG-$(BR2_TARGET_GRUB_via_rhine) += --enable-via-rhine
-+GRUB_CONFIG-$(BR2_TARGET_GRUB_w89c840) += --enable-w89c840
-+
- $(DL_DIR)/$(GRUB_SOURCE):
- 	 $(WGET) -P $(DL_DIR) $(GRUB_SITE)/$(GRUB_SOURCE)
+@@ -22,6 +26,13 @@
+ 	touch $@
  
- $(DL_DIR)/$(GRUB_PATCH):
--	 $(WGET) -P $(DL_DIR) $(GRUB_SITE)/$(GRUB_PATCH)
-+	 $(WGET) -P $(DL_DIR) $(GRUB_PATCH_SITE)/$(GRUB_PATCH)
- 
- grub-source: $(DL_DIR)/$(GRUB_SOURCE) $(DL_DIR)/$(GRUB_PATCH)
- 
- $(GRUB_DIR)/.unpacked: $(DL_DIR)/$(GRUB_SOURCE) $(DL_DIR)/$(GRUB_PATCH)
- 	$(GRUB_CAT) $(DL_DIR)/$(GRUB_SOURCE) | tar -C $(BUILD_DIR) -xvf -
--	$(GRUB_CAT) $(DL_DIR)/$(GRUB_PATCH)  | patch -p1 -d $(GRUB_DIR)
-+	toolchain/patch-kernel.sh $(GRUB_DIR) $(DL_DIR) $(GRUB_PATCH)
- 	for i in `grep -v "^#" $(GRUB_DIR)/debian/patches/00list`; do \
- 		cat $(GRUB_DIR)/debian/patches/$$i | patch -p1 -d $(GRUB_DIR); \
- 	done
--	toolchain/patch-kernel.sh $(GRUB_DIR) target/x86/grub/ grub\*.patch
--	touch $(GRUB_DIR)/.unpacked
-+	toolchain/patch-kernel.sh $(GRUB_DIR) target/x86/grub grub.\*.patch{,.bz2}
-+	touch $@
- 
- $(GRUB_DIR)/.configured: $(GRUB_DIR)/.unpacked
- 	(cd $(GRUB_DIR); rm -rf config.cache; \
-@@ -70,9 +91,9 @@
- 		--mandir=/usr/man \
- 		--infodir=/usr/info \
- 		--disable-auto-linux-mem-opt \
--		$(GRUB_CONFIGURE_ARGS) \
-+		$(GRUB_CONFIG-y) \
- 	);
--	touch  $(GRUB_DIR)/.configured
-+	touch  $@
- 
- $(GRUB_DIR)/$(GRUB_BINARY): $(GRUB_DIR)/.configured
- 	$(MAKE) CC=$(TARGET_CC) -C $(GRUB_DIR)
-@@ -81,13 +102,19 @@
- 	cp $(GRUB_DIR)/$(GRUB_BINARY) $(TARGET_DIR)/sbin/
- 	test -d $(TARGET_DIR)/boot/grub || mkdir -p $(TARGET_DIR)/boot/grub
- 	cp $(GRUB_DIR)/stage1/stage1 $(GRUB_DIR)/stage2/*1_5 $(GRUB_DIR)/stage2/stage2 $(TARGET_DIR)/boot/grub/
-+ifeq ($(BR2_TARGET_GRUB_SPLASH),y)
-+	test -f $(TARGET_DIR)/boot/grub/$(GRUB_SPLASHIMAGE) || \
-+		cp $(GRUB_SPLASHIMAGE) $(TARGET_DIR)/boot/grub/
+ $(MICROPERL_DIR)/.configured: $(MICROPERL_DIR)/.source
++ifeq ($(BR2_PACKAGE_AUTOMAKE),y)
++	# we need to build a perl for the host just for Errno.pm
++	(cd $(MICROPERL_DIR) ; ./Configure -de ; \
++	 $(MAKE) CC="$(HOSTCC)" ; \
++	 $(SHELL) ext/util/make_ext nonxs Errno MAKE="$(firstword $(MAKE))" ; \
++	)
++endif
+ 	(cd $(MICROPERL_DIR) ; chmod u+w uconfig.h ; . ./uconfig.sh ; \
+ 	 $(MAKE) -f Makefile.micro regen_uconfig ; \
+ 	 $(SED) 's,PRIVLIB ".*,PRIVLIB "/$(MICROPERL_MODS_DIR)",' \
+@@ -34,6 +45,11 @@
+ $(MICROPERL_DIR)/microperl: $(MICROPERL_DIR)/.configured
+ 	$(MAKE) -f Makefile.micro CC=$(TARGET_CC) \
+ 		OPTIMIZE="$(TARGET_CFLAGS)" -C $(MICROPERL_DIR)
++ifeq ($(BR2_PACKAGE_AUTOMAKE),y)
++	#(cd $(@D) ; \
++	# CONFIG=uconfig.h $(SHELL) ext/util/make_ext nonxs Errno MAKE="$(firstword $(MAKE))" ; \
++	#)
 +endif
  
--
- grub: grub-target_binary
+ $(TARGET_DIR)/usr/bin/microperl: $(MICROPERL_DIR)/microperl
+ ifneq ($(MICROPERL_MODS),)
+@@ -47,13 +63,15 @@
+ 	)
+ endif
+ 	cp -dpf $(MICROPERL_DIR)/microperl $(TARGET_DIR)/usr/bin/microperl
++	(cd $(TARGET_DIR)/usr/bin ; rm -f perl ; ln -s microperl perl ;)
  
- grub-clean:
- 	$(MAKE) DESTDIR=$(TARGET_DIR) CC=$(TARGET_CC) -C $(GRUB_DIR) uninstall
- 	-$(MAKE) -C $(GRUB_DIR) clean
-+	rm -f $(TARGET_DIR)/boot/grub/$(GRUB_SPLASHIMAGE) \
-+		$(TARGET_DIR)/sbin/$(GRUB_BINARY) \
-+		$(TARGET_DIR)/boot/grub/{stage{1,2},*1_5}
+ microperl: uclibc $(TARGET_DIR)/usr/bin/microperl
  
- grub-dirclean:
- 	rm -rf $(GRUB_DIR)
+ microperl-source: $(DL_DIR)/$(MICROPERL_SOURCE)
+ 
+ microperl-clean:
+-	rm -rf $(TARGET_DIR)/usr/bin/microperl $(TARGET_DIR)/$(MICROPERL_MODS_DIR)
++	rm -rf $(TARGET_DIR)/usr/bin/microperl \
++		$(TARGET_DIR)/$(MICROPERL_MODS_DIR) $(TARGET_DIR)/usr/bin/perl
+ 	-rmdir $(TARGET_DIR)/usr/lib/perl$(MICROPERL_MAJ)
+ 	-$(MAKE) -C $(MICROPERL_DIR) -f Makefile.micro clean
+ 
