@@ -1,78 +1,208 @@
 From: Ulf Samuelsson <ulf@atmel.com>
-Date: Mon, 29 Jan 2007 00:18:31 +0100
-Subject: [Buildroot] Toolchain/Busybox configuration for AVR32
-Message-ID: <1170026311.21218.13.camel@elrond.sweden.atmel.com>
+Date: Mon, 29 Jan 2007 01:26:52 +0100
+Subject: [Buildroot] BSP patch
+References: <1169765076.25586.8.camel@elrond.sweden.atmel.com>
+	<20070128221818.GY28221@aon.at>
+Message-ID: <578301c7433c$5c2f4910$dcc4af0a@atmel.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Author:	Ulf Samuelsson
-Date:	2007-01-28
+> On Thu, Jan 25, 2007 at 11:44:36PM +0100, Ulf Samuelsson wrote:
+>>Author: Ulf Samuelsson
+>>Date: 2007-01-25
+>>
 
-Log:
-	Config.in and *.mk for AVR32 configurations
+Bernard, Thanks for taking your time (on a Sunday)
+I really appreciate it.
 
-	Working configuration file for busybox.
-		insmod not supported...
-	Create patch directory
-		toolchain/binutils/2.16.1-atmel.0.99.2/
-		The file "empty" is a workaround to 
-		create the directory and is not needed...
-		Once the directory is part of the
-		patchset, it can be removed.
+>>Log:
+>> Here is my suggestion for supporting different BSP's
+>> in the same buildroot structure
+>> Add BINARIES_DIR directory, 
+>> where resulting binaries can be stored
+>> Typically this directory contains a subdirectory for each BSP.
+>>
+>> Add TARGET_BUILD_DIR directory, where BSP for different
+>> boards can be built without destroying results of previous
+>> builds. Typically each BSP would build in a subdirectory of 
+>> TARGET_BUILD_DIR
+>>
+>>Modified:
+>> Config.in
+>> Makefile
+>> package/Makefile.in
+>>
+>>Changeset
+>> Config.in
+>> Makefile
+>> package/Makefile.in
+>>
+> 
+>>Author: Ulf Samuelsson
+>>Date: 2007-01-25
+>>
+>>Log:
+>> Here is my suggestion for supporting different BSP's
+>> in the same buildroot structure
+>> Add BINARIES_DIR directory, 
+>> where resulting binaries can be stored
+>> Typically this directory contains a subdirectory for each BSP.
+>>
+>> Add TARGET_BUILD_DIR directory, where BSP for different
+>> boards can be built without destroying results of previous builds.
+>> Typically each BSP would build in a subdirectory of TARGET_BUILD_DIR
+>>
+>>Modified:
+>> Config.in
+>> Makefile
+>> package/Makefile.in
+>>
+>>Changeset
+>> Config.in
+>> Makefile
+>> package/Makefile.in
+>>
+>>diff -urN buildroot/Config.in buildroot-atmel/Config.in
+>>--- buildroot/Config.in 2007-01-25 21:58:40.000000000 +0100
+>>+++ buildroot-atmel/Config.in 2007-01-25 23:34:50.000000000 +0100
+>>@@ -2,6 +2,17 @@
+>> 
+>> mainmenu "Buildroot2 Configuration"
+>> 
+>>+config BR2_BOARDNAME
+>>+ string "Boardname"
+>>+ default "board"
+> 
+> That default should be ""
 
-	Use Atmel mirror to download preconfigured binutils.
-	Patching vanilla binutils-2.16.1 was a nightmare!
+I create a subdirectory under target_build named $(BR2_BOARDNAME)
+so having it empty will try to create "target_build//<target_packages/"
+which will be wrong.
 
-	Ensure in all Config.in that:
-		gcc-4.0.2
-		binutils-2.16.1-atmel.0.99.2 (prepatched)
-		uClibc-0.9.28
-		busybox-1.2.2.1
-		2.6.19.2 kernel headers
-	is the only toolchain.
-	There is nothing more modern around just yet :-(
+I think it would be cool to set /etc/hostname to $(BR2_BOARDNAME)
+(Part of the "local" patch)
+so to be compatible, maybe it should default to "uclibc"?
 
-	gdb is disabled, since it does not work
+> and specific target/*/* should set this, no?
 
-	The remining part to support AVR32 are the 
-	* patchsets for the toolchain.
-		
-	* updated MTD
+Other way around, you define your board at the beginning
+and target/$(BR2_BOARDNAME)/* is set.
 
-Modified:
-	toolchain/binutils/2.16.1-atmel.0.99.2/empty
-	toolchain/binutils/binutils.mk
-	toolchain/binutils/Config.in
-	toolchain/gcc/Config.in
-	toolchain/gdb/Config.in
-	toolchain/uClibc/Config.in
-	toolchain/kernel-headers/Config.in
-	package/busybox/Config.in
-	package/busybox/busybox-1.2.2.1-avr32.config
+This way, you can have two targets of the same type
+for different customers.
+I.E: you can build 
 
+TARGET_BUILD_ARM/customer1/...
+TARGET_BUILD_ARM/customer2/...
 
-Changeset:
-	toolchain/binutils/2.16.1-atmel.0.99.2/empty
-	toolchain/binutils/binutils.mk
-	toolchain/binutils/Config.in
-	toolchain/gcc/Config.in
-	toolchain/gdb/Config.in
-	toolchain/uClibc/Config.in
-	toolchain/kernel-headers/Config.in
-	package/busybox/Config.in
-	package/busybox/busybox-1.2.2.1-avr32.config
+They are both using the same target information,
+but you use the .config to select different options.
+(maybe different Linux Kernels)
+
+> 
+> Also, please move below HAVE_DOT_CONFIG.
+> 
+
+OK.
+
+>>+ help
+>>+   Name is used to define subdirectories
+>>+   * where the Board Support Packages are built
+>>+     (Linux,Root fs Bootmonitor,Utilities etc.)
+>>+   * where the resulting binaries are stored.
+>>+   Older target may still build in the build_<arch>
+>>+   and store binaries in the top directory.
+>>+
+>> config BR2_HAVE_DOT_CONFIG
+>> bool
+>> default y
+>>@@ -266,6 +277,7 @@
+>> depends BR2_arm
+>> string "Atmel AT91 Linux Patch download site"
+>> default "http://maxim.org.za/AT91RM9200/2.6/"
+>>+ help
+>>     Patches for the AT91 generated by the Linux community
+>>     usually ends up here, courtesy of Andrew Victor
+>>     
+> hunk not needed anymore.
+> 
+>>diff -urN buildroot/Makefile buildroot-atmel/Makefile
+>>--- buildroot/Makefile 2007-01-25 21:05:25.000000000 +0100
+>>+++ buildroot-atmel/Makefile 2007-01-25 23:36:12.000000000 +0100
+>>@@ -76,12 +76,16 @@
+>> TARGETS_SOURCE:=$(patsubst %,%-source,$(TARGETS))
+>> TARGETS_DIRCLEAN:=$(patsubst %,%-dirclean,$(TARGETS))
+>> 
+>>-world: $(DL_DIR) $(BUILD_DIR) $(STAGING_DIR) $(TARGET_DIR) $(TARGETS)
+>>+world: $(DL_DIR) $(BUILD_DIR) $(STAGING_DIR) $(TARGET_DIR) \
+>>+ $(TARGET_BUILD_DIR) $(BINARIES_DIR) \
+>>+ $(TARGETS)
+>>+
+>> dirs: $(DL_DIR) $(BUILD_DIR) $(STAGING_DIR)
+>> 
+>> .PHONY: all world dirs clean dirclean distclean source $(TARGETS) \
+>> $(TARGETS_CLEAN) $(TARGETS_DIRCLEAN) $(TARGETS_SOURCE) \
+>>- $(DL_DIR) $(BUILD_DIR) $(TOOL_BUILD_DIR) $(STAGING_DIR)
+>>+ $(DL_DIR) $(BUILD_DIR) $(TOOL_BUILD_DIR) $(STAGING_DIR) \
+>>+ $(TARGET_BUILD_DIR) $(BINARIES_DIR)
+>> 
+>> #############################################################
+>> #
+>>@@ -115,6 +119,12 @@
+>> -find $(TARGET_DIR) -type d -name CVS | xargs rm -rf
+>> -find $(TARGET_DIR) -type d -name .svn | xargs rm -rf
+>> 
+>>+$(TARGET_BUILD_DIR):
+>>+ mkdir -p $(TARGET_BUILD_DIR)
+>>+
+>>+$(BINARIES_DIR):
+>>+ mkdir -p $(BINARIES_DIR)
+>>+
+> 
+> an
+> $(DL_DIR) $(BUILD_DIR) $(TOOL_BUILD_DIR) $(STAGING_DIR) \
+> $(TARGET_BUILD_DIR) $(BINARIES_DIR):
+> mkdir -p $@
+> 
+> should do, too, i'd say. We could delete the other superfluous rules
+> then.
+
+Yes, that makes sense!
+
+> 
+>> source: $(TARGETS_SOURCE)
+>> 
+>> #############################################################
+>>diff -urN buildroot/package/Makefile.in buildroot-atmel/package/Makefile.in
+>>--- buildroot/package/Makefile.in 2007-01-25 21:05:25.000000000 +0100
+>>+++ buildroot-atmel/package/Makefile.in 2007-01-25 23:19:11.000000000 +0100
+>>@@ -42,6 +42,8 @@
+>> BUILD_DIR:=$(BASE_DIR)/$(TOPDIR_PREFIX)build_$(ARCH)$(ARCH_FPU_SUFFIX)$(TOPDIR_SUFFIX)
+>> TARGET_DIR:=$(BUILD_DIR)/root
+>> TOOL_BUILD_DIR=$(BASE_DIR)/$(TOPDIR_PREFIX)toolchain_build_$(ARCH)$(ARCH_FPU_SUFFIX)$(TOPDIR_SUFFIX)
+>>+TARGET_BUILD_DIR:=$(BASE_DIR)/$(TOPDIR_PREFIX)target_build_$(ARCH)$(ARCH_FPU_SUFFIX)$(TOPDIR_SUFFIX)/$(BR2_BOARDNAME)
+>>+BINARIES_DIR:=$(BASE_DIR)/binaries/$(BR2_BOARDNAME)
+> 
+> shouldn't the BINARIES_DIR rather be only visible in targets/Makefile.in
+> and below?  Just curious..
+>
+
+BINARIES_DIR will store
+linux        - built by target
+u-boot     - built by target
+utilities     - built by target
+rootfs      - built by target
+
+so you are right, but then I dont understand how the Makefile system works
+I thought the makefile includes everything and sets all the variables
+before the rules are applied.
+
+I put in the package/Makefile.in directory , because there is where the 
+other similar stuff is, and it gives you a better overview but
+If you want it in the target/Makefile.in, that is no big problem.
 
 Best Regards
 Ulf Samuelsson
-
-
--------------- next part --------------
-A non-text attachment was scrubbed...
-Name: avr32_config.patch
-Type: text/x-patch
-Size: 29857 bytes
-Desc: not available
-Url : http://busybox.net/lists/buildroot/attachments/20070129/42478396/attachment-0001.bin 
