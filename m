@@ -1,35 +1,38 @@
-From: jacmet at uclibc.org <jacmet@uclibc.org>
-Date: Tue, 30 Jan 2007 08:47:28 -0800 (PST)
-Subject: [Buildroot] svn commit: trunk/buildroot/package/busybox
-Message-ID: <20070130164728.8C72B48580@busybox.net>
+From: aldot at uclibc.org <aldot@uclibc.org>
+Date: Tue, 30 Jan 2007 09:33:53 -0800 (PST)
+Subject: [Buildroot] svn commit: trunk/buildroot/package
+Message-ID: <20070130173353.AD755485BA@busybox.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Author: jacmet
-Date: 2007-01-30 08:47:27 -0800 (Tue, 30 Jan 2007)
-New Revision: 17670
+Author: aldot
+Date: 2007-01-30 09:33:53 -0800 (Tue, 30 Jan 2007)
+New Revision: 17672
 
 Log:
-busybox 1.4.0 seems to use CONFIG_PREFIX instead of PREFIX
+- make absolutely sure that we are not trying to go into jobserver mode for MAKE1
+
 
 Modified:
-   trunk/buildroot/package/busybox/busybox.mk
+   trunk/buildroot/package/Makefile.in
 
 
 Changeset:
-Modified: trunk/buildroot/package/busybox/busybox.mk
+Modified: trunk/buildroot/package/Makefile.in
 ===================================================================
---- trunk/buildroot/package/busybox/busybox.mk	2007-01-30 13:37:21 UTC (rev 17669)
-+++ trunk/buildroot/package/busybox/busybox.mk	2007-01-30 16:47:27 UTC (rev 17670)
-@@ -116,7 +116,7 @@
- ifeq ($(BR2_PACKAGE_BUSYBOX_INSTALL_SYMLINKS),y)
- 	$(MAKE) CC=$(TARGET_CC) CROSS_COMPILE="$(TARGET_CROSS)" \
- 		CROSS="$(TARGET_CROSS)" PREFIX="$(TARGET_DIR)" \
--		ARCH=$(KERNEL_ARCH) \
-+		CONFIG_PREFIX="$(TARGET_DIR)" ARCH=$(KERNEL_ARCH) \
- 		EXTRA_CFLAGS="$(TARGET_CFLAGS)" -C $(BUSYBOX_DIR) install
- else
- 	install -D -m 0755 $(BUSYBOX_DIR)/busybox $(TARGET_DIR)/bin/busybox
+--- trunk/buildroot/package/Makefile.in	2007-01-30 17:26:38 UTC (rev 17671)
++++ trunk/buildroot/package/Makefile.in	2007-01-30 17:33:53 UTC (rev 17672)
+@@ -1,5 +1,8 @@
+-MAKE1=make
+-MAKE=make -j$(BR2_JLEVEL)
++ifndef MAKE
++MAKE=make
++endif
++MAKE1:=$(MAKE) MAKE="$(firstword $(MAKE)) -j1"
++MAKE:=$(MAKE) -j$(BR2_JLEVEL)
+ 
+ # Strip off the annoying quoting
+ ARCH:=$(strip $(subst ",, $(BR2_ARCH)))
