@@ -1,46 +1,32 @@
-From: aldot at uclibc.org <aldot@uclibc.org>
-Date: Tue, 30 Jan 2007 09:47:04 -0800 (PST)
-Subject: [Buildroot] svn commit: trunk/buildroot/package/ncurses
-Message-ID: <20070130174704.74D91485CF@busybox.net>
+From: Eric Schwartz <eric.schwartz@hp.com>
+Date: Tue, 30 Jan 2007 10:59:24 -0700
+Subject: [Buildroot] can't compile ccache with static uClibc
+In-Reply-To: <20070127050639.GA23033@codepoet.org>
+References: <45BA7434.3010404@hp.com> <20070127050639.GA23033@codepoet.org>
+Message-ID: <45BF877C.2020707@hp.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Author: aldot
-Date: 2007-01-30 09:47:03 -0800 (Tue, 30 Jan 2007)
-New Revision: 17677
+Erik Andersen wrote:
+> On Fri Jan 26, 2007 at 02:35:48PM -0700, Eric Schwartz wrote:
+>   
+>> I'm actually working on xm-test, a xen testing tool, but it uses 
+>> buildroot to create a disk
+>> image for things like creating guests, running small programs in them, 
+>> that sort of thing.  The platform I'm working on is a bit unusual for 
+>> buildroot-- ia64-- and uClibc does not, to the best of my current 
+>> knowledge, compile a shared library for ia64, only static.
+>>
+>> I added ia64 to the toplevel Config.in file like so:
+>>     
+>
+> Were you using uClibc 0.9.28 or the latest uClibc snapshot?
+>
+>  -Erik
+I was using uClibc 0.9.28. I'll go ahead and try with the snapshot, 
+shall I, unless you know it's going to fail in the same way?
 
-Log:
-- explicitely pass the configured $(DISABLE_LFS) in. Also set --disable-big-core
-
-
-Modified:
-   trunk/buildroot/package/ncurses/ncurses.mk
-
-
-Changeset:
-Modified: trunk/buildroot/package/ncurses/ncurses.mk
-===================================================================
---- trunk/buildroot/package/ncurses/ncurses.mk	2007-01-30 17:45:30 UTC (rev 17676)
-+++ trunk/buildroot/package/ncurses/ncurses.mk	2007-01-30 17:47:03 UTC (rev 17677)
-@@ -65,7 +65,8 @@
- 		--with-terminfo-dirs=/usr/share/terminfo \
- 		--with-default-terminfo-dir=/usr/share/terminfo \
- 		--with-shared --without-cxx --without-cxx-binding \
--		--without-ada --without-progs $(DISABLE_NLS) \
-+		--without-ada --without-progs --disable-big-core \
-+		$(DISABLE_NLS) $(DISABLE_LARGEFILE) \
- 		--without-profile --without-debug --disable-rpath \
- 		--enable-echo --enable-const --enable-overwrite \
- 		--enable-broken_linker \
-@@ -114,7 +115,7 @@
- 	touch -c $(TARGET_DIR)/lib/libncurses.so.$(NCURSES_VER)
- 
- $(TARGET_DIR)/usr/lib/libncurses.a: $(STAGING_DIR)/lib/libncurses.a
--	mkdir -p $(TARGET_DIR)/usr/include
-+	-mkdir -p $(TARGET_DIR)/usr/include
- 	cp -dpf $(NCURSES_DIR)/include/curses.h $(TARGET_DIR)/usr/include/ncurses.h
- 	cp -dpf $(NCURSES_DIR)/include/term.h $(TARGET_DIR)/usr/include/
- 	cp -dpf $(NCURSES_DIR)/include/unctrl.h $(TARGET_DIR)/usr/include/
+-=Eric
