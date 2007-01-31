@@ -1,7 +1,7 @@
 From: Koenraad lelong <buildroot@de-brouwerij.be>
-Date: Wed, 31 Jan 2007 19:06:15 +0100
-Subject: [Buildroot] Setserial package
-Message-ID: <45C0DA97.2080303@de-brouwerij.be>
+Date: Wed, 31 Jan 2007 20:48:15 +0100
+Subject: [Buildroot] Xorg questions
+Message-ID: <45C0F27F.1000700@de-brouwerij.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -9,17 +9,17 @@ Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
 Hi,
-I needed to configure some serial ports. Apparently the only way to do
-this is "setserial".
-Enclosed the package for setserial. It downloads and compiles fine. I
-hope it can be included.
+I'm trying to run an application under Xorg/X11. It needs (amongst 
+others) libXi and libXinerama. I wonder why these aren't installed in 
+the image, although they are present in the staging dir. The same for xterm.
+If I manually copy those libraries to their destination 
+(/usr/X11R6/lib), the application can't find the libraries. I thought 
+/etc/ld.so.conf took care of this (it contains /usr/X11R6/lib). If I am 
+in the directory where the application is "ldd" reports those libraries 
+not found. If I go to the directory with the libraries "ldd" finds those 
+libraries, but starting the application (startx /path/to/appname) from 
+there does not work.
+What am I missing ?
+
 Regards,
 Koenraad Lelong.
-
--------------- next part --------------
-A non-text attachment was scrubbed...
-Name: setserial.tar.gz
-Type: application/x-gzip
-Size: 851 bytes
-Desc: not available
-Url : http://busybox.net/lists/buildroot/attachments/20070131/a60c3755/attachment.bin 
