@@ -1,37 +1,35 @@
-From: aldot at uclibc.org <aldot@uclibc.org>
-Date: Wed, 31 Jan 2007 13:22:35 -0800 (PST)
-Subject: [Buildroot] svn commit: trunk/buildroot/package:  l2tp
-Message-ID: <20070131212235.DB5C748580@busybox.net>
+From: Koenraad lelong <buildroot@de-brouwerij.be>
+Date: Wed, 31 Jan 2007 22:23:56 +0100
+Subject: [Buildroot] Xorg questions
+In-Reply-To: <45C10369.7070301@gnat.ca>
+References: <45C0F27F.1000700@de-brouwerij.be> <45C10369.7070301@gnat.ca>
+Message-ID: <45C108EC.10202@de-brouwerij.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Author: aldot
-Date: 2007-01-31 13:22:33 -0800 (Wed, 31 Jan 2007)
-New Revision: 17688
-
-Log:
-- add a layer 2 tunneling protocol package
-
-
-Added:
-   trunk/buildroot/package/l2tp/
-   trunk/buildroot/package/l2tp/Config.in
-   trunk/buildroot/package/l2tp/l2tp-legacy.patch
-   trunk/buildroot/package/l2tp/l2tp-no-gnu-extensions.patch
-   trunk/buildroot/package/l2tp/l2tp-rename-func-log.patch
-   trunk/buildroot/package/l2tp/l2tp-sanity.patch
-   trunk/buildroot/package/l2tp/l2tp.mk
-
-Modified:
-   trunk/buildroot/package/Config.in
-
-
-Changeset:
-
-Sorry, the patch is too large to include (3113 lines).
-Please use ViewCVS to see it!
-
-http://uclibc.org/cgi-bin/viewcvs.cgi?view=rev&root=svn&rev=17688
+Nathanael D. Noblet schreef:
+> Koenraad lelong wrote:
+> 
+>> Hi,
+>> I'm trying to run an application under Xorg/X11. It needs (amongst 
+>> others) libXi and libXinerama. I wonder why these aren't installed in 
+>> the image, although they are present in the staging dir. The same for 
+>> xterm.
+>> If I manually copy those libraries to their destination 
+>> (/usr/X11R6/lib), the application can't find the libraries. I thought 
+>> /etc/ld.so.conf took care of this (it contains /usr/X11R6/lib). If I 
+>> am in the directory where the application is "ldd" reports those 
+>> libraries not found. If I go to the directory with the libraries "ldd" 
+>> finds those libraries, but starting the application (startx 
+>> /path/to/appname) from there does not work.
+>> What am I missing ?
+>>   
+> 
+> Once copied into the destination directory, did you run ldcache to 
+> update the ld.so.conf cachefile?
+I'll try that.
+Thanks,
+Koenraad Lelong.
