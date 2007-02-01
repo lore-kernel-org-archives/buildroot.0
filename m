@@ -1,56 +1,24 @@
-From: Michel Benoit <murpme@gmail.com>
-Date: Thu, 1 Feb 2007 01:09:45 +0100
-Subject: [Buildroot] building ARM toolchain with nofpu
-Message-ID: <c88e466f0701311609u4896b81ehb99cb2eb01f78886@mail.gmail.com>
+From: James L Henrickson <jim.henrickson@critical.com>
+Date: Thu, 01 Feb 2007 01:17:27 -0500
+Subject: [Buildroot] working .config for nios2?
+Message-ID: <45C185F7.5080406@critical.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi,
+After a lot of experimenting, I managed to generate .config files that 
+resulted in the successful build of i586 and i486 targets (including the 
+linux kernel).  Now I seem to be stuck trying to build for a nios2 
+target.  If I try using the uclibc snapshot, it gets stuck trying to 
+build for the various elf, flat, etc options  (all four options fail).  
+If I try using an earlier version of uclibc, it tries to use 
+nios2-elf-gcc (which doesn't exist) instead of nios2-linux-uclibc-gcc 
+(which does exist).  I tried using various versions of gcc and both of 
+the supported 2.6.x kernel versions.  I also tried both a few-days-old 
+version of BuildRoot and the latest snapshot, with those various 
+permutations of config items.  I'm running out of ideas.  Does anyone 
+have a working .config for nios2?
 
-I'm trying to build a toolchain with soft floating point enabled for
-ARM arm26t target platform.  I'm doing this in order to build u-boot
-for my target.
-
-I downloaded the latest verison of buildroot and selected "Use
-software floating point by defaul" in buildroot menuconfig and
-unselected "Target CPU has a floating point unit (FPU) " in
-uclib-menuconfig.
-
-The build stops due to missing symbols while linking uclibc:
-
-make[1]: Entering directory
-`/home/michel/Projects/sepab/exyplus/sw/bsp/build/buildroot/toolchain_build_arm_nofpu/uClibc'
-  LD libuClibc-0.9.29.so
-libc/libc_so.a(difftime.os): In function `difftime':
-difftime.c:(.text+0x8): undefined reference to `__floatsidf'
-difftime.c:(.text+0x2c): undefined reference to `__subdf3'
-libc/libc_so.a(_fpmaxtostr.os): In function `_fpmaxtostr':
-_fpmaxtostr.c:(.text+0xd4): undefined reference to `__nedf2'
-_fpmaxtostr.c:(.text+0xf8): undefined reference to `__eqdf2'
-_fpmaxtostr.c:(.text+0x114): undefined reference to `__divdf3'
-_fpmaxtostr.c:(.text+0x120): undefined reference to `__ltdf2'
-_fpmaxtostr.c:(.text+0x1c4): undefined reference to `__muldf3'
-_fpmaxtostr.c:(.text+0x388): undefined reference to `__gedf2'
-_fpmaxtostr.c:(.text+0x430): undefined reference to `__adddf3'
-libc/libc_so.a(__psfs_do_numeric.os): In function `__psfs_do_numeric':
-__psfs_do_numeric.c:(.text+0x520): undefined reference to `__truncdfsf2'
-libc/libc_so.a(strtof.os): In function `strtof':
-strtof.c:(.text+0x1c): undefined reference to `__extendsfdf2'
-/home/michel/Projects/sepab/exyplus/sw/bsp/build/buildroot/build_arm_nofpu/staging_dir/lib/gcc/arm-linux-uclibc/4.1.1/libgcc.a(_fixunsdfsi.o):
-In function `__fixunsdfsi':
-libgcc2.c:(.text+0x34): undefined reference to `__fixdfsi'
-make[2]: *** [lib/libc.so] Error 1
-make[1]: *** [lib/libc.so.0] Error 2
-make[1]: Leaving directory
-`/home/michel/Projects/sepab/exyplus/sw/bsp/build/buildroot/toolchain_build_arm_nofpu/uClibc'
-make: *** [/home/michel/Projects/sepab/exyplus/sw/bsp/build/buildroot/toolchain_build_arm_nofpu/uClibc/lib/libc.a]
-Error 2
-
-
-Are there any other config options that need to be selected/unselected
-in order to get this to work?
-
-Michel
+Jim Henrickson
