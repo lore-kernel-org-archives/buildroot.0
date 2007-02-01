@@ -1,129 +1,36 @@
-From: joe at smittys.pointclark.net <joe@smittys.pointclark.net>
-Date: Thu, 01 Feb 2007 05:54:32 -0500
-Subject: [Buildroot] buildroot svn version failed to build
-	using	(almost) defconfig(busybox 1.2.2.1)
-In-Reply-To: <370380949.08379@eyou.net>
-References: <370380949.08379@eyou.net>
-Message-ID: <20070201055432.rh9j6xxm8sgowkgw@www.smittys.pointclark.net>
+From: aldot at uclibc.org <aldot@uclibc.org>
+Date: Thu,  1 Feb 2007 04:30:35 -0800 (PST)
+Subject: [Buildroot] svn commit: trunk/buildroot/package/busybox
+Message-ID: <20070201123035.3B7974859A@busybox.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Quoting "Wang, Baojun" <wangbj@lzu.edu.cn>:
+Author: aldot
+Date: 2007-02-01 04:30:34 -0800 (Thu, 01 Feb 2007)
+New Revision: 17697
 
-> hi,
->
-> buildroot failed to build on busybox 1.2.2.1:
->
-> cp -dpf   
-> /opt/build/buildroot/build_i686/staging_dir/lib/libstdc++.so*   
-> /opt/build/buildroot/build_i686/root/lib/
-> cp -f
-> target/device/x86/i386/busybox.config   
-> /opt/build/buildroot/build_i686/busybox-1.2.2.1/.config
-> /opt/build/buildroot/toolchain_build_i686/bin/sed -i -e
-> s,^CROSS_COMPILER_PREFIX=.*,CROSS_COMPILER_PREFIX=\"/opt/build/buildroot/build_i686/staging_dir/bin/i686-linux-uclibc-\",
-> \
->         /opt/build/buildroot/build_i686/busybox-1.2.2.1/.config ;
-> /opt/build/buildroot/toolchain_build_i686/bin/sed -i -e
-> s,^PREFIX=.*,CROSS_COMPILER_PREFIX=\"/opt/build/buildroot/build_i686/staging_dir/bin/i686-linux-uclibc-\",
-> \
->         /opt/build/buildroot/build_i686/busybox-1.2.2.1/.config ;
-> /opt/build/buildroot/toolchain_build_i686/bin/sed -i -e   
-> "s/^.*CONFIG_LFS.*/CONFIG_LFS=y/;"   
-> /opt/build/buildroot/build_i686/busybox-1.2.2.1/.config
-> yes "" | make -j1
-> CC=/opt/build/buildroot/build_i686/staging_dir/bin/i686-linux-uclibc-gcc
-> CROSS_COMPILE="/opt/build/buildroot/build_i686/staging_dir/bin/i686-linux-uclibc-"
-> \
->
-> CROSS="/opt/build/buildroot/build_i686/staging_dir/bin/i686-linux-uclibc-"   
-> -C /opt/build/buildroot/build_i686/busybox-1.2.2.1
-> oldconfig
-> make[1]: Entering directory `/opt/build/buildroot/build_i686/busybox-1.2.2.1'
-> #
-> # using defaults found in .config
-> #
-> .config:6: trying to assign nonexistent symbol CONFIG_HAVE_DOT_CONFIG
-> .config:16: trying to assign nonexistent symbol CONFIG_DESKTOP
-> .config:29: trying to assign nonexistent symbol CONFIG_FEATURE_SYSLOG
-> .config:32: trying to assign nonexistent symbol CONFIG_FEATURE_HAVE_RPC
-> .config:34: trying to assign nonexistent symbol
-> CONFIG_FEATURE_EXEC_PREFER_APPLETS
-> .config:51: trying to assign nonexistent symbol CONFIG_WERROR
-> .config:55: trying to assign nonexistent symbol CONFIG_INCLUDE_SUSv2
-> .config:64: trying to assign nonexistent symbol CONFIG_PREFIX
-> .config:69: trying to assign nonexistent symbol CONFIG_PASSWORD_MINLEN
-> .config:71: trying to assign nonexistent symbol CONFIG_FEATURE_EDITING
-> .config:72: trying to assign nonexistent symbol
-> CONFIG_FEATURE_EDITING_FANCY_KEYS
-> .config:73: trying to assign nonexistent symbol CONFIG_FEATURE_EDITING_VI
-> .config:74: trying to assign nonexistent symbol   
-> CONFIG_FEATURE_EDITING_HISTORY
-> .config:75: trying to assign nonexistent symbol
-> CONFIG_FEATURE_EDITING_SAVEHISTORY
-> .config:76: trying to assign nonexistent symbol CONFIG_FEATURE_TAB_COMPLETION
-> .config:77: trying to assign nonexistent symbol
-> CONFIG_FEATURE_USERNAME_COMPLETION
-> .config:78: trying to assign nonexistent symbol
-> CONFIG_FEATURE_EDITING_FANCY_PROMPT
-> .config:225: trying to assign nonexistent symbol CONFIG_FEATURE_WC_LARGE
-> .config:261: trying to assign nonexistent symbol CONFIG_RESIZE
-> .config:262: trying to assign nonexistent symbol CONFIG_FEATURE_RESIZE_PRINT
-> .config:301: trying to assign nonexistent symbol CONFIG_FEATURE_ALLOW_EXEC
-> .config:353: trying to assign nonexistent symbol CONFIG_LOGIN_SCRIPTS
-> .config:356: trying to assign nonexistent symbol
-> CONFIG_FEATURE_PASSWD_WEAK_CHECK
-> .config:358: trying to assign nonexistent symbol CONFIG_FEATURE_SU_SYSLOG
-> .config:359: trying to assign nonexistent symbol
-> CONFIG_FEATURE_SU_CHECKS_SHELLS
-> .config:384: trying to assign nonexistent symbol
-> CONFIG_FEATURE_MODPROBE_FANCY_ALIAS
-> .config:398: trying to assign nonexistent symbol CONFIG_FEATURE_DMESG_PRETTY
-> .config:405: trying to assign nonexistent symbol
-> CONFIG_FDISK_SUPPORT_LARGE_DISKS
-> .config:433: trying to assign nonexistent symbol CONFIG_FEATURE_MOUNT_CIFS
-> .config:434: trying to assign nonexistent symbol CONFIG_FEATURE_MOUNT_FLAGS
-> .config:435: trying to assign nonexistent symbol CONFIG_FEATURE_MOUNT_FSTAB
-> .config:469: trying to assign nonexistent symbol CONFIG_FEATURE_LESS_MAXLINES
-> .config:487: trying to assign nonexistent symbol CONFIG_NMETER
-> .config:488: trying to assign nonexistent symbol CONFIG_RAIDAUTORUN
-> .config:489: trying to assign nonexistent symbol CONFIG_READAHEAD
-> .config:495: trying to assign nonexistent symbol CONFIG_FEATURE_TASKSET_FANCY
-> .config:503: trying to assign nonexistent symbol
-> CONFIG_VERBOSE_RESOLUTION_ERRORS
-> .config:504: trying to assign nonexistent symbol CONFIG_ARP
-> .config:532: trying to assign nonexistent symbol
-> CONFIG_FEATURE_IFUPDOWN_IFCONFIG_BUILTIN
-> .config:549: trying to assign nonexistent symbol CONFIG_FEATURE_IP_RULE
-> .config:555: trying to assign nonexistent symbol CONFIG_IPRULE
-> .config:561: trying to assign nonexistent symbol CONFIG_NC_SERVER
-> .config:562: trying to assign nonexistent symbol CONFIG_NC_EXTRA
-> .config:573: trying to assign nonexistent symbol
-> CONFIG_FEATURE_TELNETD_STANDALONE
-> .config:584: trying to assign nonexistent symbol CONFIG_APP_DHCPRELAY
-> .config:603: trying to assign nonexistent symbol CONFIG_KILLALL5
-> .config:659: symbol value '' invalid for   
-> CONFIG_FEATURE_IPC_SYSLOG_BUFFER_SIZE
-> make[2]: *** [oldconfig] Error 1
-> make[1]: *** [oldconfig] Error 2
-> make[1]: Leaving directory `/opt/build/buildroot/build_i686/busybox-1.2.2.1'
-> make: *** [/opt/build/buildroot/build_i686/busybox-1.2.2.1/.configured] Error
-> 2
->
-> sounds like it's the target/device/x86/i386/busybox.config is wrong ...
->
-> --
-> Wang, Baojun                                        Lanzhou University
-> Distributed & Embedded System Lab              http://dslab.lzu.edu.cn
-> School of Information Science and Engeneering        wangbj at lzu.edu.cn
-> Tianshui South Road 222. Lanzhou 730000                     .P.R.China
-> Tel:+86-931-8912025                                Fax:+86-931-8912022
->
+Log:
+- the generic x86 busybox config is ment for current busybox trunk
 
-Yeh, I had this same problem also, I just used a newer viersion of  
-busybox and it built fine.
 
-- Joe
+Modified:
+   trunk/buildroot/package/busybox/Config.in
+
+
+Changeset:
+Modified: trunk/buildroot/package/busybox/Config.in
+===================================================================
+--- trunk/buildroot/package/busybox/Config.in	2007-02-01 07:30:37 UTC (rev 17696)
++++ trunk/buildroot/package/busybox/Config.in	2007-02-01 12:30:34 UTC (rev 17697)
+@@ -50,7 +50,7 @@
+ config BR2_PACKAGE_BUSYBOX_CONFIG
+ 	string "BusyBox configuration file to use?"
+ 	depends BR2_PACKAGE_BUSYBOX
+-	default "target/device/x86/i386/busybox.config" if BR2_i386
++	default "target/device/x86/i386/busybox.config" if BR2_i386 && BR2_PACKAGE_BUSYBOX_SNAPSHOT
+ 	default "package/busybox/busybox-1.0.1.config" if BR2_BUSYBOX_VERSION_1_0_1
+ 	default "package/busybox/busybox-1.1.3.config" if BR2_BUSYBOX_VERSION_1_1_3
+ 	default "package/busybox/busybox-1.2.2.1.config" if BR2_BUSYBOX_VERSION_1_2_2_1
