@@ -1,36 +1,23 @@
-From: aldot at uclibc.org <aldot@uclibc.org>
-Date: Thu,  1 Feb 2007 04:30:35 -0800 (PST)
-Subject: [Buildroot] svn commit: trunk/buildroot/package/busybox
-Message-ID: <20070201123035.3B7974859A@busybox.net>
+From: Bernhard Fischer <rep.dot.nop@gmail.com>
+Date: Thu, 1 Feb 2007 13:31:19 +0100
+Subject: [Buildroot] buildroot svn version failed to build using
+	(almost) defconfig(busybox 1.2.2.1)
+In-Reply-To: <200702011651.05062.wangbj@lzu.edu.cn>
+References: <200702011651.05062.wangbj@lzu.edu.cn>
+Message-ID: <20070201123119.GB23185@aon.at>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Author: aldot
-Date: 2007-02-01 04:30:34 -0800 (Thu, 01 Feb 2007)
-New Revision: 17697
+On Thu, Feb 01, 2007 at 04:51:02PM +0800, Wang, Baojun wrote:
+>hi,
+>
+>buildroot failed to build on busybox 1.2.2.1:
+>
+>cp -dpf /opt/build/buildroot/build_i686/staging_dir/lib/libstdc++.so* /opt/build/buildroot/build_i686/root/lib/
+>cp -f  
+>target/device/x86/i386/busybox.config /opt/build/buildroot/build_i686/busybox-1.2.2.1/.config
 
-Log:
-- the generic x86 busybox config is ment for current busybox trunk
-
-
-Modified:
-   trunk/buildroot/package/busybox/Config.in
-
-
-Changeset:
-Modified: trunk/buildroot/package/busybox/Config.in
-===================================================================
---- trunk/buildroot/package/busybox/Config.in	2007-02-01 07:30:37 UTC (rev 17696)
-+++ trunk/buildroot/package/busybox/Config.in	2007-02-01 12:30:34 UTC (rev 17697)
-@@ -50,7 +50,7 @@
- config BR2_PACKAGE_BUSYBOX_CONFIG
- 	string "BusyBox configuration file to use?"
- 	depends BR2_PACKAGE_BUSYBOX
--	default "target/device/x86/i386/busybox.config" if BR2_i386
-+	default "target/device/x86/i386/busybox.config" if BR2_i386 && BR2_PACKAGE_BUSYBOX_SNAPSHOT
- 	default "package/busybox/busybox-1.0.1.config" if BR2_BUSYBOX_VERSION_1_0_1
- 	default "package/busybox/busybox-1.1.3.config" if BR2_BUSYBOX_VERSION_1_1_3
- 	default "package/busybox/busybox-1.2.2.1.config" if BR2_BUSYBOX_VERSION_1_2_2_1
+Right. That config is ment for trunk. Please try r17697 or later
