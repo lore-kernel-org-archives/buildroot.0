@@ -1,56 +1,81 @@
-From: andersen at uclibc.org <andersen@uclibc.org>
-Date: Thu,  1 Feb 2007 11:20:16 -0800 (PST)
-Subject: [Buildroot] svn commit: trunk/buildroot/package/libglib2
-Message-ID: <20070201192016.6D951485AF@busybox.net>
+From: Michel Benoit <murpme@gmail.com>
+Date: Thu, 1 Feb 2007 21:51:04 +0100
+Subject: [Buildroot] building ARM toolchain with nofpu
+In-Reply-To: <200702012015.55089.yann.morin.1998@anciens.enib.fr>
+References: <c88e466f0701311609u4896b81ehb99cb2eb01f78886@mail.gmail.com>
+	<200702012015.55089.yann.morin.1998@anciens.enib.fr>
+Message-ID: <c88e466f0702011251g65a604a0ja8e9fd4ca9389f4e@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Author: andersen
-Date: 2007-02-01 11:20:16 -0800 (Thu, 01 Feb 2007)
-New Revision: 17699
+Thanks that worked!
 
-Log:
-bump version
-
-
-Removed:
-   trunk/buildroot/package/libglib2/configure-libtool.patch
-
-Modified:
-   trunk/buildroot/package/libglib2/libglib2.mk
-
-
-Changeset:
-Deleted: trunk/buildroot/package/libglib2/configure-libtool.patch
-===================================================================
---- trunk/buildroot/package/libglib2/configure-libtool.patch	2007-02-01 19:19:59 UTC (rev 17698)
-+++ trunk/buildroot/package/libglib2/configure-libtool.patch	2007-02-01 19:20:16 UTC (rev 17699)
-@@ -1,11 +0,0 @@
----- glib-2.8.4/configure.in.orig	2006-06-05 13:34:08.000000000 +0100
--+++ glib-2.8.4/configure.in	2006-06-05 13:34:36.000000000 +0100
--@@ -1106,7 +1106,7 @@
--   dnl No use for this on Win32
--   G_MODULE_LDFLAGS=
-- else
---  G_MODULE_LDFLAGS=`(./libtool --config; echo eval echo \\$export_dynamic_flag_spec) | sh`
--+  G_MODULE_LDFLAGS=`(./$host_alias-libtool --config; echo eval echo \\$export_dynamic_flag_spec) | sh`
-- fi
-- dnl G_MODULE_IMPL= don't reset, so cmd-line can override
-- G_MODULE_NEED_USCORE=0
-
-Modified: trunk/buildroot/package/libglib2/libglib2.mk
-===================================================================
---- trunk/buildroot/package/libglib2/libglib2.mk	2007-02-01 19:19:59 UTC (rev 17698)
-+++ trunk/buildroot/package/libglib2/libglib2.mk	2007-02-01 19:20:16 UTC (rev 17699)
-@@ -3,7 +3,7 @@
- # libglib2
- #
- #############################################################
--LIBGLIB2_VERSION:=2.12.6
-+LIBGLIB2_VERSION:=2.12.9
- LIBGLIB2_SOURCE:=glib-$(LIBGLIB2_VERSION).tar.bz2
- LIBGLIB2_SITE:=http://ftp.gtk.org/pub/glib/2.12
- LIBGLIB2_CAT:=$(BZCAT)
+On 2/1/07, Yann E. MORIN <yann.morin.1998@anciens.enib.fr> wrote:
+> Hello all!
+> Michel, Carl.
+>
+> On Thursday 01 February 2007 010, Michel Benoit wrote:
+> > I'm trying to build a toolchain with soft floating point enabled for
+> > ARM arm26t target platform.  I'm doing this in order to build u-boot
+> > for my target.
+> [--SNIP--]
+> > The build stops due to missing symbols while linking uclibc:
+> >
+> > make[1]: Entering directory
+> > `/home/michel/Projects/sepab/exyplus/sw/bsp/build/buildroot/toolchain_build_arm_nofpu/uClibc'
+> >   LD libuClibc-0.9.29.so
+> > libc/libc_so.a(difftime.os): In function `difftime':
+> > difftime.c:(.text+0x8): undefined reference to `__floatsidf'
+> > difftime.c:(.text+0x2c): undefined reference to `__subdf3'
+> > libc/libc_so.a(_fpmaxtostr.os): In function `_fpmaxtostr':
+> > _fpmaxtostr.c:(.text+0xd4): undefined reference to `__nedf2'
+> > _fpmaxtostr.c:(.text+0xf8): undefined reference to `__eqdf2'
+> > _fpmaxtostr.c:(.text+0x114): undefined reference to `__divdf3'
+> > _fpmaxtostr.c:(.text+0x120): undefined reference to `__ltdf2'
+> > _fpmaxtostr.c:(.text+0x1c4): undefined reference to `__muldf3'
+> > _fpmaxtostr.c:(.text+0x388): undefined reference to `__gedf2'
+> > _fpmaxtostr.c:(.text+0x430): undefined reference to `__adddf3'
+> > libc/libc_so.a(__psfs_do_numeric.os): In function `__psfs_do_numeric':
+> > __psfs_do_numeric.c:(.text+0x520): undefined reference to `__truncdfsf2'
+> > libc/libc_so.a(strtof.os): In function `strtof':
+> > strtof.c:(.text+0x1c): undefined reference to `__extendsfdf2'
+> > /home/michel/Projects/sepab/exyplus/sw/bsp/build/buildroot/build_arm_nofpu/staging_dir/lib/gcc/arm-linux-uclibc/4.1.1/libgcc.a(_fixunsdfsi.o):
+> > In function `__fixunsdfsi':
+> > libgcc2.c:(.text+0x34): undefined reference to `__fixdfsi'
+> > make[2]: *** [lib/libc.so] Error 1
+> > make[1]: *** [lib/libc.so.0] Error 2
+> > make[1]: Leaving directory
+> > `/home/michel/Projects/sepab/exyplus/sw/bsp/build/buildroot/toolchain_build_arm_nofpu/uClibc'
+> > make: *** [/home/michel/Projects/sepab/exyplus/sw/bsp/build/buildroot/toolchain_build_arm_nofpu/uClibc/lib/libc.a]
+> > Error 2
+>
+> I'm tracking this down right now, and I've found that those functions are not
+> included in libgcc.a because gcc-4.1.1/gcc/config.gcc does not validate
+> arm/t-arm-elf for arm*-linux* targets, but arm/t-arm, which does not describe
+> those functions as to be included in libgcc.a.
+>
+> I've tried a quick fix (replacing t-arm with t-arm-elf), but it still does
+> not work. I haven't had time right to investigate more. Later tongiht.
+>
+> > Are there any other config options that need to be selected/unselected
+> > in order to get this to work?
+>
+> You could try with a known working gcc (gcc-3.4.4 is working real fine here),
+> unless you really can't for very good reasons, but compiling u-boot should
+> Just Work (TM).
+>
+> Regards,
+> Yann E. MORIN.
+>
+> --
+> .-----------------.--------------------.------------------.--------------------.
+> |  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+> | +0/33 662376056 | Software  Designer | \ / CAMPAIGN     |   ^                |
+> | --==< ?_? >==-- ?------------.-------:  X  AGAINST      |  /e\  There is no  |
+> | http://ymorin.is-a-geek.org/ | (*_*) | / \ HTML MAIL    |  """  conspiracy.  |
+> ?------------------------------?-------?------------------?--------------------?
+>
+>
