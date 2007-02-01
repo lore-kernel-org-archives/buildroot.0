@@ -1,21 +1,36 @@
-From: David Lambert <dave@lambsys.com>
-Date: Thu, 01 Feb 2007 09:04:55 -0600
-Subject: [Buildroot] Undefined 'raise' roblem with gcc 4.2 in buildroot
-Message-ID: <45C20197.7040602@lambsys.com>
+From: andersen at uclibc.org <andersen@uclibc.org>
+Date: Thu,  1 Feb 2007 11:20:00 -0800 (PST)
+Subject: [Buildroot] svn commit: trunk/buildroot/package/libgtk2
+Message-ID: <20070201192000.2FE5048590@busybox.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-I am getting the following error when compiling under buildroot using 
-the gcc 4.2 compiler:
-/buildroot/toolchain_build_arm/gcc-4.2-20061121/gcc/config/arm/lib1funcs.asm:1000: 
-undefined reference to `raise'
+Author: andersen
+Date: 2007-02-01 11:19:59 -0800 (Thu, 01 Feb 2007)
+New Revision: 17698
 
-I have noticed similar posts regarding gcc 4.1.1, but nothing to date 
-for 4.2. Am I missing something? Any suggestions?
+Log:
+bump version
 
-Best regards,
 
-Dave.
+Modified:
+   trunk/buildroot/package/libgtk2/libgtk2.mk
+
+
+Changeset:
+Modified: trunk/buildroot/package/libgtk2/libgtk2.mk
+===================================================================
+--- trunk/buildroot/package/libgtk2/libgtk2.mk	2007-02-01 12:30:34 UTC (rev 17697)
++++ trunk/buildroot/package/libgtk2/libgtk2.mk	2007-02-01 19:19:59 UTC (rev 17698)
+@@ -3,7 +3,7 @@
+ # libgtk2.0
+ #
+ #############################################################
+-LIBGTK2_VERSION:=2.10.7
++LIBGTK2_VERSION:=2.10.9
+ LIBGTK2_SOURCE:=gtk+-$(LIBGTK2_VERSION).tar.bz2
+ LIBGTK2_SITE:=ftp://ftp.gtk.org/pub/gtk/v2.10
+ LIBGTK2_CAT:=$(BZCAT)
