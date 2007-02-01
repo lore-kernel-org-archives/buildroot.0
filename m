@@ -1,23 +1,21 @@
-From: Bernhard Fischer <rep.dot.nop@gmail.com>
-Date: Thu, 1 Feb 2007 13:31:19 +0100
-Subject: [Buildroot] buildroot svn version failed to build using
-	(almost) defconfig(busybox 1.2.2.1)
-In-Reply-To: <200702011651.05062.wangbj@lzu.edu.cn>
-References: <200702011651.05062.wangbj@lzu.edu.cn>
-Message-ID: <20070201123119.GB23185@aon.at>
+From: David Lambert <dave@lambsys.com>
+Date: Thu, 01 Feb 2007 09:04:55 -0600
+Subject: [Buildroot] Undefined 'raise' roblem with gcc 4.2 in buildroot
+Message-ID: <45C20197.7040602@lambsys.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Thu, Feb 01, 2007 at 04:51:02PM +0800, Wang, Baojun wrote:
->hi,
->
->buildroot failed to build on busybox 1.2.2.1:
->
->cp -dpf /opt/build/buildroot/build_i686/staging_dir/lib/libstdc++.so* /opt/build/buildroot/build_i686/root/lib/
->cp -f  
->target/device/x86/i386/busybox.config /opt/build/buildroot/build_i686/busybox-1.2.2.1/.config
+I am getting the following error when compiling under buildroot using 
+the gcc 4.2 compiler:
+/buildroot/toolchain_build_arm/gcc-4.2-20061121/gcc/config/arm/lib1funcs.asm:1000: 
+undefined reference to `raise'
 
-Right. That config is ment for trunk. Please try r17697 or later
+I have noticed similar posts regarding gcc 4.1.1, but nothing to date 
+for 4.2. Am I missing something? Any suggestions?
+
+Best regards,
+
+Dave.
