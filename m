@@ -1,32 +1,35 @@
-From: Sunil A <sunil.ayyapureddy@semindia.in>
-Date: Fri, 2 Feb 2007 13:03:11 +0530
-Subject: [Buildroot] Error:forced unwind support is required
-Message-ID: <KLECJOHKIJNMEKLBDEGEOEPECDAA.sunil.ayyapureddy@semindia.in>
+From: jacmet at uclibc.org <jacmet@uclibc.org>
+Date: Fri,  2 Feb 2007 04:41:17 -0800 (PST)
+Subject: [Buildroot] svn commit: trunk/buildroot/package/directfb
+Message-ID: <20070202124117.52C9D485E3@busybox.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi,
-   Iam trying to build a cross toolchain for powepc and during the
-compliation of glibc-2.3.3,I got stuck with the follwing error:
+Author: jacmet
+Date: 2007-02-02 04:41:16 -0800 (Fri, 02 Feb 2007)
+New Revision: 17722
 
-checking for forced unwind support... no
-configure: error: forced unwind support is required
+Log:
+0.9.25.1 release moved to Old. Reported by Jack Robinson
 
-Iam using the follwing :
-binutils-2.15
-glibc-2.3.3
-gcc-3.4.1
-glibc-linuxthreads-2.3.3
+Modified:
+   trunk/buildroot/package/directfb/directfb.mk
 
-I have tried googling,but couldn?t get any solution.
 
-Can anybody direct me how to overcome the error??
-
-Thanks
-
--------------- next part --------------
-An HTML attachment was scrubbed...
-URL: http://busybox.net/lists/buildroot/attachments/20070202/cfaf9262/attachment.htm 
+Changeset:
+Modified: trunk/buildroot/package/directfb/directfb.mk
+===================================================================
+--- trunk/buildroot/package/directfb/directfb.mk	2007-02-02 12:32:27 UTC (rev 17721)
++++ trunk/buildroot/package/directfb/directfb.mk	2007-02-02 12:41:16 UTC (rev 17722)
+@@ -5,7 +5,7 @@
+ #############################################################
+ DIRECTFB_VERSION:=0.9.25.1
+ DIRECTFB_SOURCE:=DirectFB-$(DIRECTFB_VERSION).tar.gz
+-DIRECTFB_SITE:=http://www.directfb.org/downloads/Core
++DIRECTFB_SITE:=http://www.directfb.org/downloads/Old
+ DIRECTFB_CAT:=$(ZCAT)
+ DIRECTFB_DIR:=$(BUILD_DIR)/DirectFB-$(DIRECTFB_VERSION)
+ 
