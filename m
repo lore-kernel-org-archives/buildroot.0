@@ -1,7 +1,7 @@
 From: aldot at uclibc.org <aldot@uclibc.org>
-Date: Fri,  2 Feb 2007 05:49:39 -0800 (PST)
-Subject: [Buildroot] svn commit: trunk/buildroot/toolchain/gcc/4.1.2
-Message-ID: <20070202134939.8061D485E8@busybox.net>
+Date: Fri,  2 Feb 2007 05:50:23 -0800 (PST)
+Subject: [Buildroot] svn commit: trunk/buildroot/toolchain/uClibc
+Message-ID: <20070202135023.5C15E485E8@busybox.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -9,107 +9,61 @@ Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
 Author: aldot
-Date: 2007-02-02 05:49:38 -0800 (Fri, 02 Feb 2007)
-New Revision: 17724
+Date: 2007-02-02 05:50:23 -0800 (Fri, 02 Feb 2007)
+New Revision: 17725
 
 Log:
-- update for default endian
+- fixup setting the UCLIBC_TARGET_ENDIAN
 
 
 Modified:
-   trunk/buildroot/toolchain/gcc/4.1.2/800-arm-bigendian.patch
+   trunk/buildroot/toolchain/uClibc/uclibc.mk
 
 
 Changeset:
-Modified: trunk/buildroot/toolchain/gcc/4.1.2/800-arm-bigendian.patch
+Modified: trunk/buildroot/toolchain/uClibc/uclibc.mk
 ===================================================================
---- trunk/buildroot/toolchain/gcc/4.1.2/800-arm-bigendian.patch	2007-02-02 12:50:17 UTC (rev 17723)
-+++ trunk/buildroot/toolchain/gcc/4.1.2/800-arm-bigendian.patch	2007-02-02 13:49:38 UTC (rev 17724)
-@@ -3,8 +3,10 @@
+--- trunk/buildroot/toolchain/uClibc/uclibc.mk	2007-02-02 13:49:38 UTC (rev 17724)
++++ trunk/buildroot/toolchain/uClibc/uclibc.mk	2007-02-02 13:50:23 UTC (rev 17725)
+@@ -32,7 +32,7 @@
  
- See http://gcc.gnu.org/PR16350
+ UCLIBC_CAT:=$(BZCAT)
  
----- gcc-4.1.0/gcc/config/arm/linux-elf.h
--+++ gcc-4.1.0/gcc/config/arm/linux-elf.h
-+Index: gcc-4.1.1/gcc/config/arm/linux-elf.h
-+===================================================================
-+--- gcc-4.1.1.orig/gcc/config/arm/linux-elf.h
-++++ gcc-4.1.1/gcc/config/arm/linux-elf.h
- @@ -28,19 +28,33 @@
-  #undef  TARGET_VERSION
-  #define TARGET_VERSION  fputs (" (ARM GNU/Linux with ELF)", stderr);
-@@ -51,9 +53,11 @@
-     SUBTARGET_EXTRA_LINK_SPEC
-  
-  #undef  LINK_SPEC
----- gcc-4.1.0/gcc/config.gcc
--+++ gcc-4.1.0/gcc/config.gcc
--@@ -672,6 +672,11 @@
-+Index: gcc-4.1.1/gcc/config.gcc
-+===================================================================
-+--- gcc-4.1.1.orig/gcc/config.gcc
-++++ gcc-4.1.1/gcc/config.gcc
-+@@ -672,6 +672,11 @@ arm*-*-netbsd*)
-  	;;
-  arm*-*-linux*)			# ARM GNU/Linux with ELF
-  	tm_file="dbxelf.h elfos.h linux.h arm/elf.h arm/linux-gas.h arm/linux-elf.h" 
-@@ -65,3 +69,59 @@
-  	tmake_file="${tmake_file} t-linux arm/t-arm"
-  	case ${target} in
-  	arm*-*-linux-gnueabi)
-+Index: gcc-4.1.1/gcc/config/arm/linux-eabi.h
-+===================================================================
-+--- gcc-4.1.1.orig/gcc/config/arm/linux-eabi.h
-++++ gcc-4.1.1/gcc/config/arm/linux-eabi.h
-+@@ -20,6 +20,17 @@
-+    the Free Software Foundation, 51 Franklin Street, Fifth Floor,
-+    Boston, MA 02110-1301, USA.  */
-+ 
-++/*
-++ * 'config.gcc' defines TARGET_BIG_ENDIAN_DEFAULT as 1 for arm*b-*
-++ * (big endian) configurations.
-++ */
-++#undef TARGET_LINKER_EMULATION
-++#if TARGET_BIG_ENDIAN_DEFAULT
-++#define TARGET_LINKER_EMULATION "armelfb_linux_eabi"
-++#else
-++#define TARGET_LINKER_EMULATION "armelf_linux_eabi"
-++#endif
-++
-+ /* On EABI GNU/Linux, we want both the BPABI builtins and the
-+    GNU/Linux builtins.  */
-+ #undef TARGET_OS_CPP_BUILTINS
-+@@ -48,7 +59,7 @@
-+ #define SUBTARGET_CPU_DEFAULT TARGET_CPU_arm10tdmi
-+ 
-+ #undef SUBTARGET_EXTRA_LINK_SPEC
-+-#define SUBTARGET_EXTRA_LINK_SPEC " -m armelf_linux_eabi"
-++#define SUBTARGET_EXTRA_LINK_SPEC " -m " TARGET_LINKER_EMULATION
-+ 
-+ /* Use ld-linux.so.3 so that it will be possible to run "classic"
-+    GNU/Linux binaries on an EABI system.  */
-+Index: gcc-4.1.1/gcc/config/arm/bpabi.h
-+===================================================================
-+--- gcc-4.1.1.orig/gcc/config/arm/bpabi.h
-++++ gcc-4.1.1/gcc/config/arm/bpabi.h
-+@@ -33,9 +33,19 @@
-+ #undef FPUTYPE_DEFAULT
-+ #define FPUTYPE_DEFAULT FPUTYPE_VFP
-+ 
-++/*
-++ * 'config.gcc' defines TARGET_BIG_ENDIAN_DEFAULT as 1 for arm*b-*
-++ * (big endian) configurations.
-++ */
-++#if TARGET_BIG_ENDIAN_DEFAULT
-++#define TARGET_ENDIAN_DEFAULT MASK_BIG_END
-++#else
-++#define TARGET_ENDIAN_DEFAULT 0
-++#endif
-++
-+ /* EABI targets should enable interworking by default.  */
-+ #undef TARGET_DEFAULT
-+-#define TARGET_DEFAULT MASK_INTERWORK
-++#define TARGET_DEFAULT (MASK_INTERWORK | TARGET_ENDIAN_DEFAULT)
-+ 
-+ /* The ARM BPABI functions return a boolean; they use no special
-+    calling convention.  */
+-UCLIBC_TARGET_ARCH:=$(shell echo $(ARCH) | sed -e s'/-.*//' \
++UCLIBC_TARGET_ARCH:=$(shell $(SHELL) -c "echo $(ARCH) | sed -e s'/-.*//' \
+ 		-e 's/i.86/i386/' \
+ 		-e 's/sparc.*/sparc/' \
+ 		-e 's/arm.*/arm/g' \
+@@ -44,14 +44,14 @@
+ 		-e 's/mipsel.*/mips/' \
+ 		-e 's/cris.*/cris/' \
+ 		-e 's/nios2.*/nios2/' \
+-)
++")
+ # just handle the ones that can be big or little
+-UCLIBC_TARGET_ENDIAN:=$(shell echo $(ARCH) | sed \
++UCLIBC_TARGET_ENDIAN:=$(shell $(SHELL) -c "echo $(ARCH) | sed \
+ 		-e 's/armeb/BIG/' \
+ 		-e 's/arm/LITTLE/' \
+ 		-e 's/mipsel/LITTLE/' \
+ 		-e 's/mips/BIG/' \
+-)
++")
+ ifneq ($(UCLIBC_TARGET_ENDIAN),LITTLE)
+ ifneq ($(UCLIBC_TARGET_ENDIAN),BIG)
+ UCLIBC_TARGET_ENDIAN:=
+@@ -122,6 +122,14 @@
+ 		-e '/^# ARCH_WANTS_$(UCLIBC_NOT_TARGET_ENDIAN)_ENDIAN /{s,# ,,;s, is not set,=n,g}' \
+ 		$(UCLIBC_DIR)/.config
+ endif
++ifneq ($(UCLIBC_TARGET_ENDIAN),)
++	# The above doesn't work for me, so redo
++	$(SED) 's/.*\(ARCH_$(UCLIBC_NOT_TARGET_ENDIAN)_ENDIAN\).*/# \1 is not set/g' \
++		-e 's/.*\(ARCH_WANTS_$(UCLIBC_NOT_TARGET_ENDIAN)_ENDIAN\).*/# \1 is not set/g' \
++		-e 's/.*\(ARCH_$(UCLIBC_TARGET_ENDIAN)_ENDIAN\).*/\1=y/g' \
++		-e 's/.*\(ARCH_WANTS_$(UCLIBC_TARGET_ENDIAN)_ENDIAN\).*/\1=y/g' \
++		$(UCLIBC_DIR)/.config
++endif
+ ifeq ($(BR2_LARGEFILE),y)
+ 	$(SED) 's,.*UCLIBC_HAS_LFS.*,UCLIBC_HAS_LFS=y,g' $(UCLIBC_DIR)/.config
+ else
