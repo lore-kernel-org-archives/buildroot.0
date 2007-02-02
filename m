@@ -1,26 +1,39 @@
 From: d giddy <rickyrockrat@yahoo.com>
-Date: Fri, 2 Feb 2007 09:07:21 -0800 (PST)
-Subject: [Buildroot] gettext: incorrect classpath:
-	/usr/share/java/libgcj-3.4.2.jar mipsel BR-17697
-Message-ID: <349711.56530.qm@web62007.mail.re1.yahoo.com>
+Date: Fri, 2 Feb 2007 09:00:54 -0800 (PST)
+Subject: [Buildroot] binutils 2.16.1,
+	mipsel (au1200) broken build and solution (PACKAGE bucomm.c app.c)
+Message-ID: <734298.32859.qm@web62005.mail.re1.yahoo.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-I get this error with gettext if I select Y to gettext
-awareness in the uclib configuration.  Select N
-"fixes" the problem.
+I don't know if it is my environment or what, but
+binutils won't compile as-is, so here are my notes on
+how to get it to build:
 
-buildroot revision 17697
-mipsel build
+Add #define PACKAGE "intl" to top of config.h in
+toolchain_build_mipsel/binutils-2.16.1-build/intl
 
-Cheers
+When it fails about TARGET undefined in bucomm.c,
+create a link from   
+toolchain_build_mipsel/binutils-2.16.1-build/binutils/config.h
+    to
+toolchain_build_mipsel/binutils-2.16.1/binutils/config.h
+
+When app.c fails, create another link from 
+   
+toolchain_build_mipsel/binutils-2.16.1-build/gas/config.h
+to
+toolchain_build_mipsel/binutils-2.16.1/gas/config.h
+
+Cheers,
+Doug
 
 
  
 ____________________________________________________________________________________
-8:00? 8:25? 8:40? Find a flick in no time 
-with the Yahoo! Search movie showtime shortcut.
-http://tools.search.yahoo.com/shortcuts/#news
+Be a PS3 game guru.
+Get your game face on with the latest PS3 news and previews at Yahoo! Games.
+http://videogames.yahoo.com/platform?platform=120121
