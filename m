@@ -1,35 +1,26 @@
-From: jacmet at uclibc.org <jacmet@uclibc.org>
-Date: Fri,  2 Feb 2007 04:41:17 -0800 (PST)
-Subject: [Buildroot] svn commit: trunk/buildroot/package/directfb
-Message-ID: <20070202124117.52C9D485E3@busybox.net>
+From: Peter Korsgaard <peter.korsgaard@barco.com>
+Date: Fri, 02 Feb 2007 13:42:04 +0100
+Subject: [Buildroot] Build Root Error: direct fb no longer exists in the
+	Core directory for latest (2007-02-02)SVN
+In-Reply-To: <718276.6118.qm@web32202.mail.mud.yahoo.com> (jack Robinson's
+	message of "Thu, 1 Feb 2007 23:18:00 -0800 (PST)")
+References: <718276.6118.qm@web32202.mail.mud.yahoo.com>
+Message-ID: <8764akbujn.fsf@sleipner.barco.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Author: jacmet
-Date: 2007-02-02 04:41:16 -0800 (Fri, 02 Feb 2007)
-New Revision: 17722
+>>>>> "JR" == jack Robinson <junkmailbyebye@yahoo.com> writes:
 
-Log:
-0.9.25.1 release moved to Old. Reported by Jack Robinson
+Hi,
 
-Modified:
-   trunk/buildroot/package/directfb/directfb.mk
+JR> They've moved DirectFB-0.9.25.1.tar.gz to
+JR> http://www.directfb.org/downloads/Old/ I had to download it
+JR> manually.
 
+Thanks for reporting it. Fixed in r17722.
 
-Changeset:
-Modified: trunk/buildroot/package/directfb/directfb.mk
-===================================================================
---- trunk/buildroot/package/directfb/directfb.mk	2007-02-02 12:32:27 UTC (rev 17721)
-+++ trunk/buildroot/package/directfb/directfb.mk	2007-02-02 12:41:16 UTC (rev 17722)
-@@ -5,7 +5,7 @@
- #############################################################
- DIRECTFB_VERSION:=0.9.25.1
- DIRECTFB_SOURCE:=DirectFB-$(DIRECTFB_VERSION).tar.gz
--DIRECTFB_SITE:=http://www.directfb.org/downloads/Core
-+DIRECTFB_SITE:=http://www.directfb.org/downloads/Old
- DIRECTFB_CAT:=$(ZCAT)
- DIRECTFB_DIR:=$(BUILD_DIR)/DirectFB-$(DIRECTFB_VERSION)
- 
+-- 
+Bye, Peter Korsgaard
