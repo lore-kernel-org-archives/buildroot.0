@@ -1,7 +1,7 @@
 From: Ulf Samuelsson <ulf@atmel.com>
-Date: Fri, 02 Feb 2007 01:26:33 +0100
-Subject: [Buildroot] [PATCH] at45-split (2/3)
-Message-ID: <1170375993.9063.45.camel@elrond.sweden.atmel.com>
+Date: Fri, 02 Feb 2007 01:26:39 +0100
+Subject: [Buildroot] [PATCH] at45-split (3/3)
+Message-ID: <1170375999.9063.46.camel@elrond.sweden.atmel.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -15,8 +15,8 @@ Ulf Samuelsson
 
 -------------- next part --------------
 A non-text attachment was scrubbed...
-Name: u-boot-2007-02-01-at45_split.2_3.patch
+Name: u-boot-2007-02-01-at45_split.3_3.patch
 Type: text/x-patch
-Size: 24355 bytes
+Size: 24326 bytes
 Desc: not available
-Url : http://busybox.net/lists/buildroot/attachments/20070202/176c842b/attachment-0001.bin 
+Url : http://busybox.net/lists/buildroot/attachments/20070202/ea2d5148/attachment.bin 
