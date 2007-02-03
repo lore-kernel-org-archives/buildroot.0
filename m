@@ -1,7 +1,7 @@
 From: andersen at uclibc.org <andersen@uclibc.org>
-Date: Sat,  3 Feb 2007 13:05:54 -0800 (PST)
-Subject: [Buildroot] svn commit: trunk/buildroot/package/flex
-Message-ID: <20070203210554.3444448634@busybox.net>
+Date: Sat,  3 Feb 2007 13:07:43 -0800 (PST)
+Subject: [Buildroot] svn commit: trunk/buildroot/toolchain/ccache
+Message-ID: <20070203210743.8820B48634@busybox.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -9,28 +9,52 @@ Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
 Author: andersen
-Date: 2007-02-03 13:05:53 -0800 (Sat, 03 Feb 2007)
-New Revision: 17744
+Date: 2007-02-03 13:07:43 -0800 (Sat, 03 Feb 2007)
+New Revision: 17745
 
 Log:
-new patch version
+patch from rick68:
+make certain uninstall works more than once.
 
 
 Modified:
-   trunk/buildroot/package/flex/flex.mk
+   trunk/buildroot/toolchain/ccache/ccache.mk
 
 
 Changeset:
-Modified: trunk/buildroot/package/flex/flex.mk
+Modified: trunk/buildroot/toolchain/ccache/ccache.mk
 ===================================================================
---- trunk/buildroot/package/flex/flex.mk	2007-02-03 20:52:33 UTC (rev 17743)
-+++ trunk/buildroot/package/flex/flex.mk	2007-02-03 21:05:53 UTC (rev 17744)
-@@ -4,7 +4,7 @@
- #
- #############################################################
- FLEX_VERSION:=2.5.33
--FLEX_PATCH_VERSION:=10
-+FLEX_PATCH_VERSION:=11
- FLEX_SOURCE:=flex_$(FLEX_VERSION).orig.tar.gz
- FLEX_PATCH:=flex_$(FLEX_VERSION)-$(FLEX_PATCH_VERSION).diff.gz
- FLEX_SITE:=http://ftp.debian.org/debian/pool/main/f/flex
+--- trunk/buildroot/toolchain/ccache/ccache.mk	2007-02-03 21:05:53 UTC (rev 17744)
++++ trunk/buildroot/toolchain/ccache/ccache.mk	2007-02-03 21:07:43 UTC (rev 17745)
+@@ -84,18 +84,21 @@
+ 	rm -rf  $(STAGING_DIR)/bin/$(GNU_TARGET_NAME)-gcc
+ 	rm -rf  $(STAGING_DIR)/bin/$(REAL_GNU_TARGET_NAME)-cc
+ 	rm -rf  $(STAGING_DIR)/bin/$(REAL_GNU_TARGET_NAME)-gcc
+-	[ -f $(STAGING_DIR)/bin-ccache/$(REAL_GNU_TARGET_NAME)-gcc ] && \
+-		mv $(STAGING_DIR)/bin-ccache/$(REAL_GNU_TARGET_NAME)-gcc $(STAGING_DIR)/bin/
+-	(cd $(STAGING_DIR)/bin; \
+-		ln -fs $(REAL_GNU_TARGET_NAME)-gcc $(REAL_GNU_TARGET_NAME)-cc; \
+-		ln -fs $(REAL_GNU_TARGET_NAME)-gcc $(GNU_TARGET_NAME)-cc; \
+-		ln -fs $(REAL_GNU_TARGET_NAME)-gcc $(GNU_TARGET_NAME)-gcc;)
+-	[ -f $(STAGING_DIR)/bin-ccache/$(REAL_GNU_TARGET_NAME)-c++ ] && \
++	if [ -f $(STAGING_DIR)/bin-ccache/$(REAL_GNU_TARGET_NAME)-gcc ] ; then \
++		mv $(STAGING_DIR)/bin-ccache/$(REAL_GNU_TARGET_NAME)-gcc $(STAGING_DIR)/bin/; \
++		(cd $(STAGING_DIR)/bin; \
++		    ln -fs $(REAL_GNU_TARGET_NAME)-gcc $(REAL_GNU_TARGET_NAME)-cc; \
++		    ln -fs $(REAL_GNU_TARGET_NAME)-gcc $(GNU_TARGET_NAME)-cc; \
++		    ln -fs $(REAL_GNU_TARGET_NAME)-gcc $(GNU_TARGET_NAME)-gcc); \
++	fi;
++	if [ -f $(STAGING_DIR)/bin-ccache/$(REAL_GNU_TARGET_NAME)-c++ ] ; then \
+ 		rm -f $(STAGING_DIR)/bin/$(REAL_GNU_TARGET_NAME)-c++; \
+-		mv $(STAGING_DIR)/bin-ccache/$(REAL_GNU_TARGET_NAME)-c++ $(STAGING_DIR)/bin/
+-	[ -f $(STAGING_DIR)/bin-ccache/$(REAL_GNU_TARGET_NAME)-g++ ] && \
++		mv $(STAGING_DIR)/bin-ccache/$(REAL_GNU_TARGET_NAME)-c++ $(STAGING_DIR)/bin/; \
++	fi;
++	if [ -f $(STAGING_DIR)/bin-ccache/$(REAL_GNU_TARGET_NAME)-g++ ] ; then \
+ 		rm -f $(STAGING_DIR)/bin/$(REAL_GNU_TARGET_NAME)-g++; \
+-		mv $(STAGING_DIR)/bin-ccache/$(REAL_GNU_TARGET_NAME)-g++  $(STAGING_DIR)/bin/
++		mv $(STAGING_DIR)/bin-ccache/$(REAL_GNU_TARGET_NAME)-g++  $(STAGING_DIR)/bin/; \
++	fi;
+ 	rm -rf  $(STAGING_DIR)/bin-ccache/*
+ 	(cd $(STAGING_DIR)/bin; \
+ 		ln -fs $(REAL_GNU_TARGET_NAME)-g++ $(GNU_TARGET_NAME)-c++; \
