@@ -1,7 +1,7 @@
 From: andersen at uclibc.org <andersen@uclibc.org>
-Date: Sat,  3 Feb 2007 13:07:43 -0800 (PST)
-Subject: [Buildroot] svn commit: trunk/buildroot/toolchain/ccache
-Message-ID: <20070203210743.8820B48634@busybox.net>
+Date: Sat,  3 Feb 2007 15:09:05 -0800 (PST)
+Subject: [Buildroot] svn commit: trunk/buildroot/package/rxvt
+Message-ID: <20070203230905.C1A6648632@busybox.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -9,52 +9,36 @@ Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
 Author: andersen
-Date: 2007-02-03 13:07:43 -0800 (Sat, 03 Feb 2007)
-New Revision: 17745
+Date: 2007-02-03 15:09:04 -0800 (Sat, 03 Feb 2007)
+New Revision: 17746
 
 Log:
-patch from rick68:
-make certain uninstall works more than once.
+bump version
 
 
 Modified:
-   trunk/buildroot/toolchain/ccache/ccache.mk
+   trunk/buildroot/package/rxvt/rxvt.mk
 
 
 Changeset:
-Modified: trunk/buildroot/toolchain/ccache/ccache.mk
+Modified: trunk/buildroot/package/rxvt/rxvt.mk
 ===================================================================
---- trunk/buildroot/toolchain/ccache/ccache.mk	2007-02-03 21:05:53 UTC (rev 17744)
-+++ trunk/buildroot/toolchain/ccache/ccache.mk	2007-02-03 21:07:43 UTC (rev 17745)
-@@ -84,18 +84,21 @@
- 	rm -rf  $(STAGING_DIR)/bin/$(GNU_TARGET_NAME)-gcc
- 	rm -rf  $(STAGING_DIR)/bin/$(REAL_GNU_TARGET_NAME)-cc
- 	rm -rf  $(STAGING_DIR)/bin/$(REAL_GNU_TARGET_NAME)-gcc
--	[ -f $(STAGING_DIR)/bin-ccache/$(REAL_GNU_TARGET_NAME)-gcc ] && \
--		mv $(STAGING_DIR)/bin-ccache/$(REAL_GNU_TARGET_NAME)-gcc $(STAGING_DIR)/bin/
--	(cd $(STAGING_DIR)/bin; \
--		ln -fs $(REAL_GNU_TARGET_NAME)-gcc $(REAL_GNU_TARGET_NAME)-cc; \
--		ln -fs $(REAL_GNU_TARGET_NAME)-gcc $(GNU_TARGET_NAME)-cc; \
--		ln -fs $(REAL_GNU_TARGET_NAME)-gcc $(GNU_TARGET_NAME)-gcc;)
--	[ -f $(STAGING_DIR)/bin-ccache/$(REAL_GNU_TARGET_NAME)-c++ ] && \
-+	if [ -f $(STAGING_DIR)/bin-ccache/$(REAL_GNU_TARGET_NAME)-gcc ] ; then \
-+		mv $(STAGING_DIR)/bin-ccache/$(REAL_GNU_TARGET_NAME)-gcc $(STAGING_DIR)/bin/; \
-+		(cd $(STAGING_DIR)/bin; \
-+		    ln -fs $(REAL_GNU_TARGET_NAME)-gcc $(REAL_GNU_TARGET_NAME)-cc; \
-+		    ln -fs $(REAL_GNU_TARGET_NAME)-gcc $(GNU_TARGET_NAME)-cc; \
-+		    ln -fs $(REAL_GNU_TARGET_NAME)-gcc $(GNU_TARGET_NAME)-gcc); \
-+	fi;
-+	if [ -f $(STAGING_DIR)/bin-ccache/$(REAL_GNU_TARGET_NAME)-c++ ] ; then \
- 		rm -f $(STAGING_DIR)/bin/$(REAL_GNU_TARGET_NAME)-c++; \
--		mv $(STAGING_DIR)/bin-ccache/$(REAL_GNU_TARGET_NAME)-c++ $(STAGING_DIR)/bin/
--	[ -f $(STAGING_DIR)/bin-ccache/$(REAL_GNU_TARGET_NAME)-g++ ] && \
-+		mv $(STAGING_DIR)/bin-ccache/$(REAL_GNU_TARGET_NAME)-c++ $(STAGING_DIR)/bin/; \
-+	fi;
-+	if [ -f $(STAGING_DIR)/bin-ccache/$(REAL_GNU_TARGET_NAME)-g++ ] ; then \
- 		rm -f $(STAGING_DIR)/bin/$(REAL_GNU_TARGET_NAME)-g++; \
--		mv $(STAGING_DIR)/bin-ccache/$(REAL_GNU_TARGET_NAME)-g++  $(STAGING_DIR)/bin/
-+		mv $(STAGING_DIR)/bin-ccache/$(REAL_GNU_TARGET_NAME)-g++  $(STAGING_DIR)/bin/; \
-+	fi;
- 	rm -rf  $(STAGING_DIR)/bin-ccache/*
- 	(cd $(STAGING_DIR)/bin; \
- 		ln -fs $(REAL_GNU_TARGET_NAME)-g++ $(GNU_TARGET_NAME)-c++; \
+--- trunk/buildroot/package/rxvt/rxvt.mk	2007-02-03 21:07:43 UTC (rev 17745)
++++ trunk/buildroot/package/rxvt/rxvt.mk	2007-02-03 23:09:04 UTC (rev 17746)
+@@ -20,7 +20,7 @@
+ # Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307
+ # USA
+ 
+-RXVT_VERSION:=2.6.4
++RXVT_VERSION:=2.7.5
+ RXVT_SOURCE:=rxvt-$(RXVT_VERSION).tar.gz
+ RXVT_SITE:=http://$(BR2_SOURCEFORGE_MIRROR).dl.sourceforge.net/sourceforge/rxvt
+ RXVT_CAT:=$(ZCAT)
+@@ -52,7 +52,6 @@
+ 		--x-libraries=$(STAGING_DIR)/usr/X11R6/lib \
+ 		--disable-resources \
+ 		--disable-memset \
+-		--enable-xgetdefault \
+ 	);
+ 	touch $(RXVT_DIR)/.configured
+ 
