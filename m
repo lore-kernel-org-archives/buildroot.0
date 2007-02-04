@@ -1,7 +1,8 @@
 From: aldot at uclibc.org <aldot@uclibc.org>
-Date: Sun,  4 Feb 2007 08:30:08 -0800 (PST)
-Subject: [Buildroot] svn commit: trunk/buildroot/target
-Message-ID: <20070204163008.723B648606@busybox.net>
+Date: Sun,  4 Feb 2007 08:34:56 -0800 (PST)
+Subject: [Buildroot] svn commit: trunk/buildroot: package/lzma
+	target/x86/grub target/x86/ etc...
+Message-ID: <20070204163456.F0C6E48621@busybox.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -9,81 +10,143 @@ Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
 Author: aldot
-Date: 2007-02-04 08:30:07 -0800 (Sun, 04 Feb 2007)
-New Revision: 17762
+Date: 2007-02-04 08:34:56 -0800 (Sun, 04 Feb 2007)
+New Revision: 17763
 
 Log:
-- propagate BR2_ARM_EABI setting down to LINUX26_KCONFIG
+- avoid spurious rebuilds. Thanks to janlana, closes #1191
+- provide a syslinux-source target while at it
 
 
 Modified:
-   trunk/buildroot/target/linux26.mk
+   trunk/buildroot/package/lzma/lzma.mk
+   trunk/buildroot/target/x86/grub/grub.mk
+   trunk/buildroot/target/x86/syslinux/syslinux.mk
+   trunk/buildroot/toolchain/gcc/gcc-uclibc-3.x.mk
 
 
 Changeset:
-Modified: trunk/buildroot/target/linux26.mk
+Modified: trunk/buildroot/package/lzma/lzma.mk
 ===================================================================
---- trunk/buildroot/target/linux26.mk	2007-02-04 16:11:51 UTC (rev 17761)
-+++ trunk/buildroot/target/linux26.mk	2007-02-04 16:30:07 UTC (rev 17762)
-@@ -67,38 +67,40 @@
- 	# Rename the dir from the downloaded version to the AFTER patch version
- 	mv -f $(BUILD_DIR)/linux-$(DOWNLOAD_LINUX26_VERSION) $(BUILD_DIR)/linux-$(LINUX26_VERSION)
+--- trunk/buildroot/package/lzma/lzma.mk	2007-02-04 16:30:07 UTC (rev 17762)
++++ trunk/buildroot/package/lzma/lzma.mk	2007-02-04 16:34:56 UTC (rev 17763)
+@@ -12,8 +12,8 @@
+ LZMA_CFLAGS:=$(TARGET_CFLAGS)
+ ifeq ($(BR2_LARGEFILE),y)
+ LZMA_CFLAGS+=-D_LARGEFILE_SOURCE -D_LARGEFILE64_SOURCE -D_FILE_OFFSET_BITS=64
+-else
  endif
--	touch $(LINUX26_DIR)/.unpacked
++LZMA_TARGET_BINARY:=bin/lzma
+ 
+ $(DL_DIR)/$(LZMA_SOURCE):
+ 	$(WGET) -P $(DL_DIR) $(LZMA_SITE)/$(LZMA_SOURCE)
+@@ -81,14 +81,14 @@
+ 	$(MAKE) -C $(LZMA_TARGET_DIR) all
+ 	touch -c $@
+ 
+-$(TARGET_DIR)/usr/bin/lzma: $(LZMA_TARGET_DIR)/src/lzma/lzma
+-	-cp -dpf $(LZMA_TARGET_DIR)/src/lzma/lzma $(TARGET_DIR)/bin/;
+-	-$(STRIP) --strip-unneeded $(TARGET_DIR)/bin/lzma
+-	touch -c $(TARGET_DIR)/bin/lzma
++$(TARGET_DIR)/$(LZMA_TARGET_BINARY): $(LZMA_TARGET_DIR)/src/lzma/lzma
++	cp -dpf $(LZMA_TARGET_DIR)/src/lzma/lzma $@
++	-$(STRIP) --strip-unneeded $@
++	touch -c $@
+ 
+-#lzma-headers: $(TARGET_DIR)/bin/lzma
++#lzma-headers: $(TARGET_DIR)/$(LZMA_TARGET_BINARY)
+ 
+-lzma-target: uclibc $(TARGET_DIR)/usr/bin/lzma
++lzma-target: uclibc $(TARGET_DIR)/$(LZMA_TARGET_BINARY)
+ 
+ lzma-source: $(DL_DIR)/$(LZMA_SOURCE)
+ 
+
+Modified: trunk/buildroot/target/x86/grub/grub.mk
+===================================================================
+--- trunk/buildroot/target/x86/grub/grub.mk	2007-02-04 16:30:07 UTC (rev 17762)
++++ trunk/buildroot/target/x86/grub/grub.mk	2007-02-04 16:34:56 UTC (rev 17763)
+@@ -27,7 +27,7 @@
+ GRUB_CAT:=$(ZCAT)
+ GRUB_DIR:=$(BUILD_DIR)/grub-0.97
+ GRUB_BINARY:=grub/grub
+-GRUB_TARGET_BINARY:=bin/grub
++GRUB_TARGET_BINARY:=sbin/grub
+ GRUB_SPLASHIMAGE=$(TOPDIR)/target/x86/grub/splash.xpm.gz
+ 
+ 
+@@ -93,21 +93,22 @@
+ 		--disable-auto-linux-mem-opt \
+ 		$(GRUB_CONFIG-y) \
+ 	);
+-	touch  $@
 +	touch $@
  
- $(LINUX26_DIR)/.patched: $(LINUX26_DIR)/.unpacked
- 	toolchain/patch-kernel.sh $(LINUX26_DIR) $(LINUX26_PATCH_DIR)
--	touch $(LINUX26_DIR)/.patched
--
-+	touch $@
- endif # ($(LINUX26_VERSION),$(LINUX_HEADERS_VERSION))
+ $(GRUB_DIR)/$(GRUB_BINARY): $(GRUB_DIR)/.configured
+ 	$(MAKE) CC=$(TARGET_CC) -C $(GRUB_DIR)
  
- $(LINUX26_DIR)/.configured:  $(LINUX26_DIR)/.patched  $(LINUX26_KCONFIG)
--	-cp $(LINUX26_KCONFIG) $(LINUX26_DIR)/.config
--	$(SED) 's,^CONFIG_EABI.*,# CONFIG_EABI is not set,g' \
--		$(LINUX26_DIR)/.config
-+	cp -dpf $(LINUX26_KCONFIG) $(LINUX26_DIR)/.config
-+	$(SED) '/CONFIG_AEABI/d' $(LINUX26_DIR)/.config
- ifeq ($(BR2_ARM_EABI),y)
--	echo "CONFIG_EABI=y" >> $(LINUX26_DIR)/.config
-+	echo "CONFIG_AEABI=y" >> $(LINUX26_DIR)/.config
-+	$(SED) '/CONFIG_OABI_COMPAT/d' $(LINUX26_DIR)/.config
-+	echo "# CONFIG_OABI_COMPAT is not set" >> $(LINUX26_DIR)/.config
-+else
-+	echo "# CONFIG_AEABI is not set" >> $(LINUX26_DIR)/.config
+-grub-target_binary: $(GRUB_DIR)/$(GRUB_BINARY)
+-	cp $(GRUB_DIR)/$(GRUB_BINARY) $(TARGET_DIR)/sbin/
++$(GRUB_DIR)/.installed: $(GRUB_DIR)/$(GRUB_BINARY)
++	cp $(GRUB_DIR)/$(GRUB_BINARY) $(TARGET_DIR)/$(GRUB_TARGET_BINARY)
+ 	test -d $(TARGET_DIR)/boot/grub || mkdir -p $(TARGET_DIR)/boot/grub
+ 	cp $(GRUB_DIR)/stage1/stage1 $(GRUB_DIR)/stage2/*1_5 $(GRUB_DIR)/stage2/stage2 $(TARGET_DIR)/boot/grub/
+ ifeq ($(BR2_TARGET_GRUB_SPLASH),y)
+ 	test -f $(TARGET_DIR)/boot/grub/$(GRUB_SPLASHIMAGE) || \
+ 		cp $(GRUB_SPLASHIMAGE) $(TARGET_DIR)/boot/grub/
  endif
- 	$(MAKE) $(LINUX26_MAKE_FLAGS) -C $(LINUX26_DIR) oldconfig
--	touch $(LINUX26_DIR)/.configured
 +	touch $@
  
- $(LINUX26_DIR)/.depend_done:  $(LINUX26_DIR)/.configured
- 	$(MAKE) $(LINUX26_MAKE_FLAGS) -C $(LINUX26_DIR) prepare
--	touch $(LINUX26_DIR)/.depend_done
-+	touch $@
+-grub: grub-target_binary
++grub: uclibc $(GRUB_DIR)/.installed
  
- $(LINUX26_KERNEL): $(LINUX26_DIR)/.depend_done
- 	$(MAKE) $(LINUX26_MAKE_FLAGS) -C $(LINUX26_DIR) $(LINUX26_FORMAT)
- 	$(MAKE) $(LINUX26_MAKE_FLAGS) -C $(LINUX26_DIR) modules
--	cp -fa $(LINUX26_DIR)/$(LINUX26_BINLOC) $(LINUX26_KERNEL)
--	touch -c $(LINUX26_KERNEL)
-+	cp -dpf $(LINUX26_DIR)/$(LINUX26_BINLOC) $(LINUX26_KERNEL)
+ grub-clean:
+ 	$(MAKE) DESTDIR=$(TARGET_DIR) CC=$(TARGET_CC) -C $(GRUB_DIR) uninstall
+
+Modified: trunk/buildroot/target/x86/syslinux/syslinux.mk
+===================================================================
+--- trunk/buildroot/target/x86/syslinux/syslinux.mk	2007-02-04 16:30:07 UTC (rev 17762)
++++ trunk/buildroot/target/x86/syslinux/syslinux.mk	2007-02-04 16:34:56 UTC (rev 17763)
+@@ -34,14 +34,16 @@
+ $(DL_DIR)/$(SYSLINUX_SOURCE):
+ 	 $(WGET) -P $(DL_DIR) $(SYSLINUX_SITE)/$(SYSLINUX_SOURCE)
+ 
++syslinux-source: $(DL_DIR)/$(SYSLINUX_SOURCE)
++
+ $(SYSLINUX_DIR)/Makefile: $(DL_DIR)/$(SYSLINUX_SOURCE) $(SYSLINUX_PATCH)
+ 	$(SYSLINUX_CAT) $(DL_DIR)/$(SYSLINUX_SOURCE) | tar -C $(BUILD_DIR) -xvf -
+ 	toolchain/patch-kernel.sh $(SYSLINUX_DIR) target/x86/syslinux/ \*.patch
+-	touch -c $(SYSLINUX_DIR)/Makefile
 +	touch -c $@
  
- $(TARGET_DIR)/boot/$(LINUX26_BINLOC): $(LINUX26_KERNEL)
- 	[ -d $(TARGET_DIR)/boot/ ] || mkdir $(TARGET_DIR)/boot
- 	cp -a $(LINUX26_DIR)/$(LINUX26_BINLOC) $(LINUX26_DIR)/System.map $(TARGET_DIR)/boot/
--	touch -c $(TARGET_DIR)/boot/$(LINUX26_BINLOC)
+ $(SYSLINUX_DIR)/isolinux.bin: $(SYSLINUX_DIR)/Makefile
+ 	$(MAKE) -C $(SYSLINUX_DIR)
+-	touch -c $(SYSLINUX_DIR)/isolinux.bin
 +	touch -c $@
  
- $(TARGET_DIR)/lib/modules/$(LINUX26_VERSION)/modules.dep: $(LINUX26_KERNEL)
- 	rm -rf $(TARGET_DIR)/lib/modules/$(LINUX26_VERSION)
-@@ -107,7 +109,7 @@
- 		DEPMOD=$(STAGING_DIR)/bin/$(GNU_TARGET_NAME)-depmod26 \
- 		INSTALL_MOD_PATH=$(TARGET_DIR) modules_install
- 	rm -f $(TARGET_DIR)/lib/modules/$(LINUX26_VERSION)/build
--	touch -c $(TARGET_DIR)/lib/modules/$(LINUX26_VERSION)/modules.dep
-+	touch -c $@
+ syslinux: $(SYSLINUX_DIR)/isolinux.bin
  
- linux26-menuconfig: $(LINUX26_DIR)/.patched
- 	[ -f $(LINUX26_DIR)/.config ] || cp $(LINUX26_KCONFIG) $(LINUX26_DIR)/.config
+
+Modified: trunk/buildroot/toolchain/gcc/gcc-uclibc-3.x.mk
+===================================================================
+--- trunk/buildroot/toolchain/gcc/gcc-uclibc-3.x.mk	2007-02-04 16:30:07 UTC (rev 17762)
++++ trunk/buildroot/toolchain/gcc/gcc-uclibc-3.x.mk	2007-02-04 16:34:56 UTC (rev 17763)
+@@ -292,7 +292,7 @@
+ 	#
+ 	touch $@
+ 
+-gcc-target-libs: $(GCC_BUILD_DIR2)/.installed
++$(GCC_BUILD_DIR2)/.libs_installed: $(GCC_BUILD_DIR2)/.installed
+ ifeq ($(BR2_GCC_SHARED_LIBGCC),y)
+ 	# These are in /lib, so...
+ 	rm -rf $(TARGET_DIR)/usr/lib/libgcc_s*.so*
+@@ -311,7 +311,8 @@
+ endif
+ 
+ gcc: uclibc-configured binutils gcc_initial $(LIBFLOAT_TARGET) uclibc \
+-	$(GCC_BUILD_DIR2)/.installed gcc-target-libs $(GCC_TARGETS)
++	$(GCC_BUILD_DIR2)/.installed $(GCC_BUILD_DIR2)/.libs_installed \
++	$(GCC_TARGETS)
+ 
+ gcc-source: $(DL_DIR)/$(GCC_SOURCE)
+ 
