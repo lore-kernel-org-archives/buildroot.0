@@ -1,44 +1,43 @@
-From: andersen at uclibc.org <andersen@uclibc.org>
-Date: Sat,  3 Feb 2007 15:09:05 -0800 (PST)
-Subject: [Buildroot] svn commit: trunk/buildroot/package/rxvt
-Message-ID: <20070203230905.C1A6648632@busybox.net>
+From: aldot at uclibc.org <aldot@uclibc.org>
+Date: Sun,  4 Feb 2007 07:23:27 -0800 (PST)
+Subject: [Buildroot] svn commit: trunk/buildroot/toolchain/gcc
+Message-ID: <20070204152327.9A7E34856A@busybox.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Author: andersen
-Date: 2007-02-03 15:09:04 -0800 (Sat, 03 Feb 2007)
-New Revision: 17746
+Author: aldot
+Date: 2007-02-04 07:23:26 -0800 (Sun, 04 Feb 2007)
+New Revision: 17759
 
 Log:
-bump version
+- allow intermodule also for 4.1
 
 
 Modified:
-   trunk/buildroot/package/rxvt/rxvt.mk
+   trunk/buildroot/toolchain/gcc/Makefile.in
 
 
 Changeset:
-Modified: trunk/buildroot/package/rxvt/rxvt.mk
+Modified: trunk/buildroot/toolchain/gcc/Makefile.in
 ===================================================================
---- trunk/buildroot/package/rxvt/rxvt.mk	2007-02-03 21:07:43 UTC (rev 17745)
-+++ trunk/buildroot/package/rxvt/rxvt.mk	2007-02-03 23:09:04 UTC (rev 17746)
-@@ -20,7 +20,7 @@
- # Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307
- # USA
+--- trunk/buildroot/toolchain/gcc/Makefile.in	2007-02-04 11:16:21 UTC (rev 17758)
++++ trunk/buildroot/toolchain/gcc/Makefile.in	2007-02-04 15:23:26 UTC (rev 17759)
+@@ -60,12 +60,11 @@
+ #"))
  
--RXVT_VERSION:=2.6.4
-+RXVT_VERSION:=2.7.5
- RXVT_SOURCE:=rxvt-$(RXVT_VERSION).tar.gz
- RXVT_SITE:=http://$(BR2_SOURCEFORGE_MIRROR).dl.sourceforge.net/sourceforge/rxvt
- RXVT_CAT:=$(ZCAT)
-@@ -52,7 +52,6 @@
- 		--x-libraries=$(STAGING_DIR)/usr/X11R6/lib \
- 		--disable-resources \
- 		--disable-memset \
--		--enable-xgetdefault \
- 	);
- 	touch $(RXVT_DIR)/.configured
+ ifeq ($(BR2_PREFER_IMA),y)
+-# >= 4.2
+-ifeq ($(findstring 4.2,$(GCC_VERSION)),4.2)
++# >= 4.1
++ifeq ($(findstring 4.,$(GCC_VERSION)),4.)
++ifneq ($(findstring 4.0,$(GCC_VERSION)),4.0)
+ EXTRA_TARGET_GCC_CONFIG_OPTIONS+=--enable-intermodule
+ endif
+-ifeq ($(findstring 4.3,$(GCC_VERSION)),4.3)
+-EXTRA_TARGET_GCC_CONFIG_OPTIONS+=--enable-intermodule
+ endif
+ endif # BR2_PREFER_IMA=y
  
