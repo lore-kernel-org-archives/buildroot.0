@@ -1,41 +1,36 @@
-From: aldot at uclibc.org <aldot@uclibc.org>
-Date: Mon,  5 Feb 2007 05:01:08 -0800 (PST)
-Subject: [Buildroot] svn commit: trunk/buildroot/toolchain/uClibc
-Message-ID: <20070205130108.EC8CB4866B@busybox.net>
+From: andersen at uclibc.org <andersen@uclibc.org>
+Date: Mon,  5 Feb 2007 11:24:30 -0800 (PST)
+Subject: [Buildroot] svn commit: trunk/buildroot/package/sqlite
+Message-ID: <20070205192430.D9AB248687@busybox.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Author: aldot
-Date: 2007-02-05 05:01:08 -0800 (Mon, 05 Feb 2007)
-New Revision: 17779
+Author: andersen
+Date: 2007-02-05 11:24:29 -0800 (Mon, 05 Feb 2007)
+New Revision: 17781
 
 Log:
-- proposed fix for gethostent_r: if no host was found, return HOST_NOT_FOUND instead of garbage.
+Make certain the sqlite libs are actually installed in the target
 
 
-Added:
-   trunk/buildroot/toolchain/uClibc/uClibc-0.9.29-fix-gethostent_r-failure-retval.patch
+Modified:
+   trunk/buildroot/package/sqlite/sqlite.mk
 
 
 Changeset:
-Added: trunk/buildroot/toolchain/uClibc/uClibc-0.9.29-fix-gethostent_r-failure-retval.patch
+Modified: trunk/buildroot/package/sqlite/sqlite.mk
 ===================================================================
---- trunk/buildroot/toolchain/uClibc/uClibc-0.9.29-fix-gethostent_r-failure-retval.patch	                        (rev 0)
-+++ trunk/buildroot/toolchain/uClibc/uClibc-0.9.29-fix-gethostent_r-failure-retval.patch	2007-02-05 13:01:08 UTC (rev 17779)
-@@ -0,0 +1,13 @@
-+Index: uClibc/libc/inet/resolv.c
-+===================================================================
-+--- uClibc/libc/inet/resolv.c	(revision 17775)
-++++ uClibc/libc/inet/resolv.c	(working copy)
-+@@ -1689,7 +1689,7 @@
-+ int gethostent_r(struct hostent *result_buf, char *buf, size_t buflen,
-+ 	struct hostent **result, int *h_errnop)
-+ {
-+-    int ret;
-++    int ret = HOST_NOT_FOUND;
-+ 
-+     __UCLIBC_MUTEX_LOCK(mylock);
-+     if (__gethostent_fp == NULL) {
+--- trunk/buildroot/package/sqlite/sqlite.mk	2007-02-05 16:16:51 UTC (rev 17780)
++++ trunk/buildroot/package/sqlite/sqlite.mk	2007-02-05 19:24:29 UTC (rev 17781)
+@@ -58,7 +58,7 @@
+ 
+ $(TARGET_DIR)/usr/bin/sqlite3: $(STAGING_DIR)/usr/bin/sqlite3
+ 	cp -a $(STAGING_DIR)/usr/bin/sqlite3 $(TARGET_DIR)/usr/bin
+-	cp -a $(STAGING_DIR)/lib/libsqlite3.so* $(TARGET_DIR)/lib/
++	cp -a $(STAGING_DIR)/lib/libsqlite3*.so* $(TARGET_DIR)/lib/
+ 	$(STRIP) --strip-unneeded $(TARGET_DIR)/lib/libsqlite3.so*
+ 
+ sqlite:	uclibc readline-target ncurses $(TARGET_DIR)/usr/bin/sqlite3
