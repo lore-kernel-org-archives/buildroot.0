@@ -1,36 +1,61 @@
-From: Bernhard Fischer <rep.dot.nop@gmail.com>
-Date: Mon, 5 Feb 2007 09:57:18 +0100
-Subject: [Buildroot] submitting a nice patch - quickguide for CVS users
-	[was: Re:..]
-In-Reply-To: <964506.40087.qm@web62003.mail.re1.yahoo.com>
-References: <20070204111755.GL12488@aon.at>
-	<964506.40087.qm@web62003.mail.re1.yahoo.com>
-Message-ID: <20070205085718.GD5399@aon.at>
+From: Michel Benoit <murpme@gmail.com>
+Date: Mon, 5 Feb 2007 10:26:55 +0100
+Subject: [Buildroot] building ARM toolchain with nofpu
+In-Reply-To: <007e01c74652$d9c41f40$01c4af0a@atmel.com>
+References: <c88e466f0701311609u4896b81ehb99cb2eb01f78886@mail.gmail.com>
+	<200702012015.55089.yann.morin.1998@anciens.enib.fr>
+	<c88e466f0702011251g65a604a0ja8e9fd4ca9389f4e@mail.gmail.com>
+	<007e01c74652$d9c41f40$01c4af0a@atmel.com>
+Message-ID: <c88e466f0702050126p997c485g97a29bc99d5d7348@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Sun, Feb 04, 2007 at 02:57:44PM -0800, Doug the RockRat wrote:
->Bernhard,
->If/when I submit patches, what form is most useful for
->you?  If it is svn related, would you dump me a short
->command that I might use? I'm a CVS dog, and just
->haven't had time to see what it might take to move my
->CVS repo to svn.
+Hej Ulf
 
-If you create a new directory or add new files, you have to
-$ svn add package/mything
-resp.
-$ svn add package/existing/newfile
+I don't think that the NWFPE stuff is linked into the u-boot code
+automatically.  The build instructions in the u-boot tree are very
+explicit about using -msoft-float.
 
-To create a patch that we can apply with patch -p1, do
-$ foo=$(basename $(pwd))
-$ cd ..
-$ svn diff --diff-cmd diff -x -rdup $foo > ~/mypatch.diff
-$ mail -a ~/mypatch.diff -s "blah" buildroot at there
+When I build u-boot with a buildroot toolchain based on gcc 3.4.3 with
+no fpu support the bootloader works as it should.
 
-or the like, depending on your preferred MUA and svn defaults.
+When I build u-boot with fpu support in the toolchain and I remove the
+-msfot-float option according to your suggestion, the bootloader
+crashes almost immediately.  It may be related to NAND access but
+could also be due to the printouts (printf can use float ops).
 
-HTH,
+On 2/1/07, Ulf Samuelsson <ulf@atmel.com> wrote:
+> Michel Benoit wrote:
+> > Thanks that worked!
+> >
+> > On 2/1/07, Yann E. MORIN <yann.morin.1998@anciens.enib.fr> wrote:
+> >> Hello all!
+> >> Michel, Carl.
+> >>
+> >> On Thursday 01 February 2007 010, Michel Benoit wrote:
+> >>> I'm trying to build a toolchain with soft floating point enabled for
+> >>> ARM arm26t target platform.  I'm doing this in order to build u-boot
+> >>> for my target.
+> >> [--SNIP--]
+>
+> You can build u-boot with a NWFPE compiler
+> if you just remove the "-msoft-float" from cpu/arm926ejs/config.mk and
+> from cpu/arm926ejs/at91sam926x/config.mk
+> That is what I do in my buildroot (That part yet to be submitted).
+>
+>
+> Best Regards,
+> Ulf Samuelsson
+> ulf at atmel.com
+> GSM:  +46 (706) 22 44 57
+> Tel:     +46  (8) 441 54 22
+> Fax:     +46 (8) 441 54 29
+> Mail: Box 2033  174 02 Sundbyberg
+> Visit: Kavalleriv?gen 24
+>           174 58 Sundbyberg'
+> Sweden
+>
+>
