@@ -1,36 +1,44 @@
-From: bugs at busybox.net <bugs@busybox.net>
-Date: Mon, 12 Feb 2007 05:45:19 -0800
-Subject: [Buildroot] [buildroot 0000567]: [patch] gettext installing into
-	the wrong staging_dir sub directory location
-Message-ID: <db63bc14e3eec64818a1f1c808c40cce@bugs.busybox.net>
+From: <bogus@does.not.exist.com>
+Date: Tue, 06 Feb 2007 07:08:39 -0000
+Subject: No subject
+Message-ID: <mailman.1.1171287961.4267.buildroot@uclibc.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+the build_i386/staging_dir. It seems to be creating a full usr/include,
+usr/lib, etc directory hierarchy under inside build_i386/staging_dir,
+rather than integrating with the include/lib/etc dirs that exist at the
+staging_dir level (ie. the installation of gettext files occurs at one
+level too deep)
 
-The following issue has been ASSIGNED. 
-====================================================================== 
-http://busybox.net/bugs/view.php?id=567 
-====================================================================== 
-Reported By:                crafterm
-Assigned To:                buildroot
-====================================================================== 
-Project:                    buildroot
-Issue ID:                   567
-Category:                   Architecture Specific
-Reproducibility:            always
-Severity:                   minor
-Priority:                   normal
-Status:                     assigned
-====================================================================== 
-Date Submitted:             11-29-2005 07:56 PST
-Last Modified:              02-12-2007 05:45 PST
-====================================================================== 
-Summary:                    [patch] gettext installing into the wrong
-staging_dir sub directory location
-Description: 
-Hi There,
+This means that libintl.h and the shared libraries aren't where other apps
+expect it and compilation errors can occur.
 
-Hope all is going well.
+The attached patch fixes this - hope it's ok.
+
+Cheers,
+
+Marcus
+====================================================================== 
+
+---------------------------------------------------------------------- 
+ prpplague - 05-24-06 07:49  
+---------------------------------------------------------------------- 
+fixed as of revision 15160 
+
+Issue History 
+Date Modified   Username       Field                    Change               
+====================================================================== 
+11-29-05 07:56  crafterm       New Issue                                    
+11-29-05 07:56  crafterm       Status                   new => assigned     
+11-29-05 07:56  crafterm       Assigned To               => uClibc          
+11-29-05 07:56  crafterm       File Added: gettext-stagingfix.patch             
+      
+05-24-06 07:49  prpplague      Note Added: 0001377                          
+05-24-06 07:49  prpplague      Status                   assigned => closed  
+02-12-07 05:45  vapier         Status                   closed => assigned  
+02-12-07 05:45  vapier         Assigned To              uClibc => buildroot 
+======================================================================
