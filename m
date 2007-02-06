@@ -1,32 +1,52 @@
-From: bugs at busybox.net <bugs@busybox.net>
-Date: Mon, 12 Feb 2007 05:51:11 -0800
-Subject: [Buildroot] [buildroot 0000095]: make menuconfig does not work.
-Message-ID: <6b1b1691b345f18a3cfd84480d720de4@bugs.busybox.net>
+From: <bogus@does.not.exist.com>
+Date: Tue, 06 Feb 2007 07:08:39 -0000
+Subject: No subject
+Message-ID: <mailman.3.1171288604.4267.buildroot@uclibc.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+make[1]: Leaving directory `/tmp/buildroot/package/config'
+package/Config.in:33: can't open file "package/config/Config.in"
+make: *** [menuconfig] Error 1
 
-The following issue has been ASSIGNED. 
+Adding Config.h fomr a cvs ckeckout fixed it.
 ====================================================================== 
-http://busybox.net/bugs/view.php?id=95 
+
+---------------------------------------------------------------------- 
+ vapier - 03-20-05 18:38  
+---------------------------------------------------------------------- 
+works fine for me ...
+
+i turned on these options under packages:
+[*] DHCP support
+[*]  dhcp server
+[*]  dhcp relay
+[*]  dhcp client 
+
+---------------------------------------------------------------------- 
+ thomasez - 03-31-05 11:22  
+---------------------------------------------------------------------- 
+It has obviously been fixed. This bug should be closed (Yes, I tested this
+now aswell). 
+
+---------------------------------------------------------------------- 
+ vapier - 03-31-05 12:02  
+---------------------------------------------------------------------- 
+sounds good 
+
+Issue History 
+Date Modified   Username       Field                    Change               
 ====================================================================== 
-Reported By:                thomasez
-Assigned To:                buildroot
-====================================================================== 
-Project:                    buildroot
-Issue ID:                   95
-Category:                   Architecture Specific
-Reproducibility:            always
-Severity:                   minor
-Priority:                   normal
-Status:                     assigned
-====================================================================== 
-Date Submitted:             02-10-2005 13:53 PST
-Last Modified:              02-12-2007 05:51 PST
-====================================================================== 
-Summary:                    make menuconfig does not work.
-Description: 
-After the switch to svn, something might have been forgotten:
+02-10-05 13:53  thomasez       New Issue                                    
+03-16-05 12:13  andersen       Status                   new => assigned     
+03-16-05 12:13  andersen       Assigned To               => uClibc          
+03-20-05 18:38  vapier         Note Added: 0000109                          
+03-31-05 11:22  thomasez       Note Added: 0000121                          
+03-31-05 12:02  vapier         Status                   assigned => closed  
+03-31-05 12:02  vapier         Note Added: 0000122                          
+02-12-07 05:51  vapier         Status                   closed => assigned  
+02-12-07 05:51  vapier         Assigned To              uClibc => buildroot 
+======================================================================
