@@ -1,7 +1,7 @@
 From: jacmet at uclibc.org <jacmet@uclibc.org>
-Date: Tue,  6 Feb 2007 08:20:29 -0800 (PST)
+Date: Tue,  6 Feb 2007 08:23:33 -0800 (PST)
 Subject: [Buildroot] svn commit: trunk/buildroot/package/busybox
-Message-ID: <20070206162029.B0190485FD@busybox.net>
+Message-ID: <20070206162333.4FE314869A@busybox.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -9,26 +9,27 @@ Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
 Author: jacmet
-Date: 2007-02-06 08:20:29 -0800 (Tue, 06 Feb 2007)
-New Revision: 17790
+Date: 2007-02-06 08:23:33 -0800 (Tue, 06 Feb 2007)
+New Revision: 17791
 
 Log:
-hide busybox version selector if disabled
+CONFIG_PREFIX hack (r17670) no longer needed
 
 Modified:
-   trunk/buildroot/package/busybox/Config.in
+   trunk/buildroot/package/busybox/busybox.mk
 
 
 Changeset:
-Modified: trunk/buildroot/package/busybox/Config.in
+Modified: trunk/buildroot/package/busybox/busybox.mk
 ===================================================================
---- trunk/buildroot/package/busybox/Config.in	2007-02-06 16:18:12 UTC (rev 17789)
-+++ trunk/buildroot/package/busybox/Config.in	2007-02-06 16:20:29 UTC (rev 17790)
-@@ -11,6 +11,7 @@
- 
- choice
- 	prompt "BusyBox Version"
-+	depends BR2_PACKAGE_BUSYBOX
- 	default BR2_BUSYBOX_VERSION_1_2_2_1
- 	help
- 	  Select the version of BusyBox you wish to use.
+--- trunk/buildroot/package/busybox/busybox.mk	2007-02-06 16:20:29 UTC (rev 17790)
++++ trunk/buildroot/package/busybox/busybox.mk	2007-02-06 16:23:33 UTC (rev 17791)
+@@ -132,7 +132,7 @@
+ ifeq ($(BR2_PACKAGE_BUSYBOX_INSTALL_SYMLINKS),y)
+ 	$(MAKE) CC=$(TARGET_CC) CROSS_COMPILE="$(TARGET_CROSS)" \
+ 		CROSS="$(TARGET_CROSS)" PREFIX="$(TARGET_DIR)" \
+-		CONFIG_PREFIX="$(TARGET_DIR)" ARCH=$(KERNEL_ARCH) \
++		ARCH=$(KERNEL_ARCH) \
+ 		EXTRA_CFLAGS="$(TARGET_CFLAGS)" -C $(BUSYBOX_DIR) install
+ else
+ 	install -D -m 0755 $(BUSYBOX_DIR)/busybox $(TARGET_DIR)/bin/busybox
