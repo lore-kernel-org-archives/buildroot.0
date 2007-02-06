@@ -1,72 +1,128 @@
-From: F.Roch <f.roch@ibsdisplay.de>
-Date: Tue, 06 Feb 2007 08:59:39 +0100
-Subject: [Buildroot] Building Xorg for arm926t softfloat fails with error at
-	linux_vm86.c
-Message-ID: <45C8356B.4030107@ibsdisplay.de>
+From: aldot at uclibc.org <aldot@uclibc.org>
+Date: Tue,  6 Feb 2007 01:04:44 -0800 (PST)
+Subject: [Buildroot] svn commit: trunk/buildroot/package:  setserial
+Message-ID: <20070206090444.17F164864B@busybox.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-hi,
+Author: aldot
+Date: 2007-02-06 01:04:44 -0800 (Tue, 06 Feb 2007)
+New Revision: 17786
 
-i'm trying to build a graphical environment for my board with buildroot.
-i tryed with tinyx + gtk2 but my cairo build fails because it depends on
-newer Xrender header files that tinyx don't provide.
+Log:
+- add setserial package
 
-so i tryed with xorg and i get the following build error:
 
-[snip]
-make[10]: Entering directory 
-`/home/frank/linux-at91sam9261/buildroot/build_arm_nofpu/xc/programs/Xserver/hw/xfree86/os-support/linux/int10/vm86'
-rm -f linux_vm86.o
-/home/frank/linux-at91sam9261/buildroot/build_arm_nofpu/staging_dir/bin/arm-linux-uclibc-gcc 
--Os -ansi -pedantic -Wall -Wpointer-arith -Wundef     -I. 
--I../../../../../../../../programs/Xserver/hw/xfree86/common 
--I../../../../../../../../programs/Xserver/hw/xfree86/int10            
--I../../../../../../../../programs/Xserver/hw/xfree86/os-support            
--I../../../../../../../../programs/Xserver/include 
--I../../../../../../../../exports/include/X11 -I  
--I../../../../../../../.. -I../../../../../../../../exports/include   
--Dlinux -D__arm__ -D_POSIX_SOURCE                               
--D_BSD_SOURCE -D_GNU_SOURCE -DX_LOCALE -DSHAPE -DXINPUT -DXKB  
--DXAPPGROUP    -DXCSECURITY -DTOGCUP   -DXF86BIGFONT -DDPMSExtension    
--DPIXPRIV -DPANORAMIX   -DRENDER -DRANDR       -DXFIXES -DDAMAGE 
--DCOMPOSITE -DXEVIE          -DGCCUSESGAS -DAVOID_GLYPHBLT -DPIXPRIV 
--DSINGLEDEPTH                          -DXFreeXDGA 
--DXvExtension                    -DXFree86LOADER  
--DXFree86Server                                 
--DXF86VIDMODE                           
--DXvMCExtension                                 
--DSMART_SCHEDULE                              -DBUILDDEBUG 
--DXResExtension                            
--DX_BYTE_ORDER=X_LITTLE_ENDIAN                          
--DXORG_VERSION_CURRENT="(((6) * 10000000) + ((8) * 100000) + ((2) * 
-1000) + 0)" -DNDEBUG   -DFUNCPROTO=15 -DNARROWPROTO  -DIN_MODULE 
--DXFree86Module -DHAVE_SYSV_IPC     -D_VM86_LINUX -c linux_vm86.c
-In file included from linux_vm86.c:14:
-../../../../../../../../programs/Xserver/hw/xfree86/os-support/int10Defines.h:34:24: 
-asm/vm86.h: No such file or directory
-[snip]
+Added:
+   trunk/buildroot/package/setserial/
+   trunk/buildroot/package/setserial/Config.in
+   trunk/buildroot/package/setserial/setserial.mk
 
-when i do a find for this missing file i get:
+Modified:
+   trunk/buildroot/package/Config.in
 
-find ./ -name vm86.h
-./toolchain_build_arm_nofpu/linux-libc-headers-2.4.31/include/asm-i386/vm86.h
-./toolchain_build_arm_nofpu/uClibc-0.9.28.1/libc/sysdeps/linux/i386/sys/vm86.h
 
-and i think the script searches for this file in the "asm-arm" folder, 
-right ?
-has someone managed to build xorg (or tinyx + gtk2) for arm-nofpu ?
+Changeset:
+Modified: trunk/buildroot/package/Config.in
+===================================================================
+--- trunk/buildroot/package/Config.in	2007-02-06 01:20:12 UTC (rev 17785)
++++ trunk/buildroot/package/Config.in	2007-02-06 09:04:44 UTC (rev 17786)
+@@ -209,6 +209,7 @@
+ source "package/pciutils/Config.in"
+ source "package/pcmcia/Config.in"
+ source "package/raidtools/Config.in"
++source "package/setserial/Config.in"
+ if !BR2_PACKAGE_BUSYBOX_HIDE_OTHERS
+ # busybox has fdisk
+ source "package/sfdisk/Config.in"
 
-i'm using :
+Added: trunk/buildroot/package/setserial/Config.in
+===================================================================
+--- trunk/buildroot/package/setserial/Config.in	                        (rev 0)
++++ trunk/buildroot/package/setserial/Config.in	2007-02-06 09:04:44 UTC (rev 17786)
+@@ -0,0 +1,5 @@
++config BR2_PACKAGE_SETSERIAL
++        bool "setserial"
++        default n
++        help
++             Setserial : configuration of serial ports
 
-linux 2.4.31 headers
-uClibc 0.9.28.1
-binutils 2.17
-gcc 3.4.6
-busybox 1.2.2.1
-
-thank you for your help,
-Frank Roch
+Added: trunk/buildroot/package/setserial/setserial.mk
+===================================================================
+--- trunk/buildroot/package/setserial/setserial.mk	                        (rev 0)
++++ trunk/buildroot/package/setserial/setserial.mk	2007-02-06 09:04:44 UTC (rev 17786)
+@@ -0,0 +1,71 @@
++#############################################################
++#
++# Setserial
++#
++#############################################################
++SETSERIAL_VERSION:=2.17
++SETSERIAL_SOURCE:=setserial_$(SETSERIAL_VERSION).orig.tar.gz
++SETSERIAL_SITE:=http://ftp.debian.org/debian/pool/main/s/setserial/
++SETSERIAL_PATCH:=setserial_$(SETSERIAL_VERSION)-43.diff.gz
++SETSERIAL_DIR:=$(BUILD_DIR)/setserial-$(SETSERIAL_VERSION)
++SETSERIAL_BINARY:=setserial
++SETSERIAL_TARGET_BINARY:=usr/bin/setserial
++
++$(DL_DIR)/$(SETSERIAL_SOURCE):
++	$(WGET) -P $(DL_DIR) $(SETSERIAL_SITE)/$(SETSERIAL_SOURCE)
++
++$(SETSERIAL_DIR)/.unpacked: $(DL_DIR)/$(SETSERIAL_SOURCE)
++	$(ZCAT) $(DL_DIR)/$(SETSERIAL_SOURCE) | tar -C $(BUILD_DIR) $(TAR_OPTIONS) -
++	$(CONFIG_UPDATE) $(SETSERIAL_DIR)
++	toolchain/patch-kernel.sh $(SETSERIAL_DIR) package/setserial setserial\*.patch
++ifneq ($(SETSERIAL_PATCH),)
++	toolchain/patch-kernel.sh $(SETSERIAL_DIR) $(DL_DIR) $(SETSERIAL_PATCH)
++	if [ -d $(SETSERIAL_DIR)/debian/patches ]; then \
++		toolchain/patch-kernel.sh $(SETSERIAL_DIR) $(SETSERIAL_DIR)/debian/patches \*.patch ; \
++	fi
++endif
++	touch $@
++
++ifeq ($(BR2_PREFER_IMA),y)
++SETSERIAL_CFLAGS=--combine -fwhole-program
++endif
++
++$(SETSERIAL_DIR)/.configured: $(SETSERIAL_DIR)/.unpacked
++	(cd $(SETSERIAL_DIR); rm -rf config.cache ; \
++		$(TARGET_CONFIGURE_OPTS) \
++		CFLAGS="$(TARGET_CFLAGS) $(SETSERIAL_CFLAGS)" \
++		./configure \
++		--target=$(GNU_TARGET_NAME) \
++		--host=$(GNU_TARGET_NAME) \
++		--build=$(GNU_HOST_NAME) \
++		--prefix=/usr \
++		--sysconfdir=/etc \
++	);
++	touch $@
++
++$(SETSERIAL_DIR)/$(SETSERIAL_BINARY): $(SETSERIAL_DIR)/.configured
++	$(MAKE) CC=$(TARGET_CC) -C $(SETSERIAL_DIR)
++
++$(TARGET_DIR)/$(SETSERIAL_TARGET_BINARY): $(SETSERIAL_DIR)/$(SETSERIAL_BINARY)
++	install -c $(SETSERIAL_DIR)/$(SETSERIAL_BINARY) $(TARGET_DIR)/$(SETSERIAL_TARGET_BINARY)
++	$(STRIP) -s $(TARGET_DIR)/$(SETSERIAL_TARGET_BINARY)
++
++setserial: uclibc $(TARGET_DIR)/$(SETSERIAL_TARGET_BINARY)
++
++setserial-source: $(DL_DIR)/$(SETSERIAL_SOURCE) $(DL_DIR)/$(SETSERIAL_PATCH)
++
++setserial-clean:
++	rm -f $(TARGET_DIR)/$(SETSERIAL_TARGET_BINARY)
++	-$(MAKE) -C $(SETSERIAL_DIR) clean
++
++setserial-dirclean:
++	rm -rf $(SETSERIAL_DIR)
++
++#############################################################
++#
++# Toplevel Makefile options
++#
++#############################################################
++ifeq ($(strip $(BR2_PACKAGE_SETSERIAL)),y)
++TARGETS+=setserial
++endif
