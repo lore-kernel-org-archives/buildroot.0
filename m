@@ -1,40 +1,25 @@
-From: sjhill at uclibc.org <sjhill@uclibc.org>
-Date: Tue,  6 Feb 2007 18:51:45 -0800 (PST)
-Subject: [Buildroot] svn commit: trunk/buildroot/package/strace
-Message-ID: <20070207025145.E36D0485FB@busybox.net>
+From: Alexander Rigbo <alexander.rigbo@acgnystrom.se>
+Date: Wed, 7 Feb 2007 10:41:45 +0100
+Subject: [Buildroot] Updates usbmount files
+Message-ID: <200702071041.45804.alexander.rigbo@acgnystrom.se>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Author: sjhill
-Date: 2007-02-06 18:51:45 -0800 (Tue, 06 Feb 2007)
-New Revision: 17804
+Hi,
 
-Log:
-Fix building of strace for MIPS.
+usbmount 0.0.14 is no more and 0.0.14.1 is slightly changed so the old patch 
+doesn't work.
+all fixed with this patch.
 
-
-Added:
-   trunk/buildroot/package/strace/strace-mips-sprintsigmask-fix.patch
-
-
-Changeset:
-Added: trunk/buildroot/package/strace/strace-mips-sprintsigmask-fix.patch
-===================================================================
---- trunk/buildroot/package/strace/strace-mips-sprintsigmask-fix.patch	                        (rev 0)
-+++ trunk/buildroot/package/strace/strace-mips-sprintsigmask-fix.patch	2007-02-07 02:51:45 UTC (rev 17804)
-@@ -0,0 +1,12 @@
-+diff -ur strace-4.5.15/signal.c strace-4.5.15-patched/signal.c
-+--- strace-4.5.15/signal.c	2007-01-11 16:08:38.000000000 -0600
-++++ strace-4.5.15-patched/signal.c	2007-02-06 20:49:34.714320249 -0600
-+@@ -1440,7 +1440,7 @@
-+ 	  	tcp->u_rval = tcp->u_error = 0;
-+ 		if(tcp->u_arg[0] == 0)
-+ 		  	return 0;
-+-		tcp->auxstr = sprintsigmask("mask now ", tcp->u_arg[1]);
-++		tcp->auxstr = sprintsigmask("mask now ", tcp->u_arg[1], 0);
-+ 		return RVAL_NONE | RVAL_STR;
-+ 	}
-+ 	return 0;
+Best Regards
+Alexander Rigbo
+-------------- next part --------------
+A non-text attachment was scrubbed...
+Name: usmount-fix.patch
+Type: text/x-diff
+Size: 8028 bytes
+Desc: not available
+Url : http://busybox.net/lists/buildroot/attachments/20070207/d604109f/attachment.bin 
