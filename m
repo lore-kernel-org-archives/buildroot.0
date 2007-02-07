@@ -1,41 +1,21 @@
-From: Konstantin Kletschke <kletschke@synertronixx.de>
-Date: Wed, 7 Feb 2007 16:29:01 +0100
-Subject: [Buildroot] eabi for ARM9
-Message-ID: <20070207152901.GA14948@synertronixx3>
+From: Daniel Laird <danieljlaird@hotmail.com>
+Date: Wed, 7 Feb 2007 09:00:29 -0800 (PST)
+Subject: [Buildroot] Enabling Static builds
+Message-ID: <8849503.post@talk.nabble.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Folks!
 
-Actually I am trying to get an eabi Userspace environment running with
-2.6.18 and eabi. This is due to the fact that I want to upgrade my
-gcc-3.4.6 to gcc-4.x with softfloat support wo hardware FPU. The
-gcc-4.x toolchain with this option enabled only compile with
-BR2_ARM_EABI=y. So I have a toolchain now with gcc-4.1.2 and
-uclibc-0.9.29 (snapshot). The kernel compiles fine, I chose 2.6.18
-with 
-
-CONFIG_AEABI=y
-CONFIG_OABI_COMPAT=y
-
-enabled.
-
-But my userspace bails out with "Illegal instruction". What I found
-out is, that busybox run as init process puts out its compiled in
-programs and disclaimer, but running /bin/sh (configured as standalone
-shell) gives no output anymore.
-
-Is this combination of software to be known to work?
-
-Additional queston is: Is it possible to use an old ABI compat kernel
-and chroot with it from non EABI userspace into EABI userspace or
-can't this work?
-
-Regards, Konsti
-
+I have been looking at a number of the packages in the system.  Do people
+think that -enable-static is a good idea as it seems to be used in a log of
+package configures.
+would a global enable-static option and enable-shared option be good idea?
+This would mean that if you choose it it passes --enable-option to configure
+else --disable-option this could be helpful for embedded systems
+What do people think?
 -- 
-GPG KeyID EF62FCEF
-Fingerprint: 13C9 B16B 9844 EC15 CC2E  A080 1E69 3FDA EF62 FCEF
+View this message in context: http://www.nabble.com/Enabling-Static-builds-tf3188244.html#a8849503
+Sent from the BuildRoot mailing list archive at Nabble.com.
