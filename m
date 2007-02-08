@@ -1,34 +1,34 @@
-From: Daniel Laird <danieljlaird@hotmail.com>
-Date: Thu, 8 Feb 2007 08:36:38 -0800 (PST)
-Subject: [Buildroot] using pkg-config when building
-Message-ID: <8868910.post@talk.nabble.com>
+From: Bernhard Fischer <rep.dot.nop@gmail.com>
+Date: Thu, 8 Feb 2007 18:23:18 +0100
+Subject: [Buildroot] First Step in allowing Static / shared library
+	choice
+In-Reply-To: <8867285.post@talk.nabble.com>
+References: <8867285.post@talk.nabble.com>
+Message-ID: <20070208172318.GA8945@aon.at>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+On Thu, Feb 08, 2007 at 07:18:08AM -0800, Daniel Laird wrote:
+>
+>Following on from my question of 'how do we deal with shared and static
+>builds"
+>I enclose the following patch.
+>This is for the top level Config.in
+>It will appear under Build options
+>this means that the variables BR2_STATIC_LIBS and BR2_SHARED_LIBS are
+>available.
+>
+>Once this patch is in we can start to modify packages to use this
+>information. (no packages modified yet)
 
-If I try to use pkg-config when doing a cross-compile it does not work. 
-Paths not found etc.
+Sounds good.
 
-If I make the following modification to package/Makefile.in
+Can you please also add $(BR2_ENABLE_SHARED) rsp. $(BR2_ENABLE_STATIC)
+variables (and the corresponding DISABLE) that get passed to
+TARGET_CONFIGURE_OPTS (spelling?) to toolchain/Makefile.in or an
+appropriate place?
 
-@@ -91,6 +91,7 @@
- 		OBJCOPY=$(TARGET_CROSS)objcopy \
- 		CC_FOR_BUILD="$(HOSTCC)" \
- 		PKG_CONFIG_SYSROOT=$(STAGING_DIR) \
-+	
-PKG_CONFIG_PATH=$(STAGING_DIR)/lib/pkgconfig:$(STAGING_DIR)/usr/lib/pkgconfig:$(STAGING_DIR)/usr/local/lib/pkgconfig
-\
- 		PKG_CONFIG=$(STAGING_DIR)/usr/bin/pkg-config
-
- This sets up the search path for pkgconfig and it will search these dirs
-for pkgconfig files.  Seems to have made all the difference for me.  Maybe
-this can make it into the tree.....
-
-Cheers
-Dan
--- 
-View this message in context: http://www.nabble.com/using-pkg-config-when-building-tf3194366.html#a8868910
-Sent from the BuildRoot mailing list archive at Nabble.com.
+TIA,
