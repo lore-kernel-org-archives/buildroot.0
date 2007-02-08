@@ -1,135 +1,68 @@
-From: Ulf Samuelsson <ulf@atmel.com>
-Date: Thu, 08 Feb 2007 22:55:48 +0100
-Subject: [Buildroot] BSP patch vs 20070208 (updated according to suggestions)
-Message-ID: <45CB9C64.9090202@atmel.com>
+From: Steve Rodgers <hwstar@rodgers.sdcoxmail.com>
+Date: Thu, 8 Feb 2007 15:59:40 -0800
+Subject: [Buildroot] Buildroot: Problem locating crt1.o on target system
+	[more info]
+In-Reply-To: <200702081138.38218.hwstar@rodgers.sdcoxmail.com>
+References: <200702081138.38218.hwstar@rodgers.sdcoxmail.com>
+Message-ID: <200702081559.40799.hwstar@rodgers.sdcoxmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Author:    Ulf Samuelsson
-Date:    2007-02-08
 
-Log:
-    Here is my suggestion for supporting different BSP's
-    in the same buildroot structure
-    Updated according to suggestions.
-    BR2_BOARDNAME cannot be empty,since it is used to define directory
-names.
-    I don't think it should be defined by the targtets, since you may
-want to build
-    several different boards, using the same target
+I discovered that if I move crt1.o, crti.o and crtn.o to my build directory on 
+the target system where the C source lives, the test.c file compiles 
+correctly. 
 
-    Add BINARIES_DIR directory,
-    where resulting binaries can be stored
-    Typically this directory contains a subdirectory for each BSP.
+Looking at the gcc-v output, gcc is expecting these files to be in the build 
+directory, not in /usr/lib! 
 
-    Add TARGET_BUILD_DIR directory, where BSP for different
-    boards can be built without destroying results of previous builds.
-    Typically each BSP would build in a subdirectory of TARGET_BUILD_DIR
+What changes would be required to gcc- gcc-uclibc-3.x.mk to resolve this so 
+that /usr/lib/crtX.0 files can be brought in from /usr/lib?
 
 
-Modified:
-    Config.in
-    Makefile
-    package/Makefile.in
+Here's the output of gcc -v test.c:
 
-Changeset
-    Config.in
-    Makefile
-    package/Makefile.in
+GNU assembler version 2.16.1 (i586-linux-uclibc) using BFD version 2.16.1
+ /usr/libexec/gcc/i586-linux-uclibc/3.4.2/collect2 --eh-frame-hdr -m elf_i386 
+-dynamic-linker /lib/ld-uClibc.so.0 crt1.o 
+crti.o /usr/lib/gcc/i586-linux-uclibc/3.4.2/crtbegin.o 
+-L/usr/lib/gcc/i586-linux-uclibc/3.4.2 
+-L/usr/lib/gcc/i586-linux-uclibc/3.4.2 /tmp/ccAcPbA4.o -lgcc --as-needed 
+-lgcc_s --no-as-needed -lc -lgcc --as-needed -lgcc_s 
+--no-as-needed /usr/lib/gcc/i586-linux-uclibc/3.4.2/crtend.o crtn.o
+/usr/bin/ld: crt1.o: No such file: No such file or directory
+collect2: ld returned 1 exit status
 
-diff -purN buildroot-0rig/Config.in buildroot-atmel/Config.in
---- buildroot-0rig/Config.in    2007-02-08 22:17:40.000000000 +0100
-+++ buildroot-atmel/Config.in    2007-02-08 22:35:48.000000000 +0100
-@@ -6,6 +6,21 @@ config BR2_HAVE_DOT_CONFIG
-     bool
-     default y
- 
-+menu "Board"
-+
-+config BR2_BOARDNAME
-+    string "Boardname"
-+    default "uclibc"
-+    help
-+      The boardname is used to define subdirectories
-+      * where the Board Support Packages are built
-+        (Linux,Root fs Bootmonitor,Utilities etc.)
-+      * where the resulting binaries are stored.
-+      Older target may still build in the build_<arch>
-+      and store binaries in the top directory.
-+
-+endmenu
-+
- choice
-     prompt "Target Architecture"
-     default BR2_i386
-diff -purN buildroot-0rig/Makefile buildroot-atmel/Makefile
---- buildroot-0rig/Makefile    2007-02-08 22:17:40.000000000 +0100
-+++ buildroot-atmel/Makefile    2007-02-08 22:29:14.000000000 +0100
-@@ -79,12 +79,15 @@ TARGETS_CLEAN:=$(patsubst %,%-clean,$(TA
- TARGETS_SOURCE:=$(patsubst %,%-source,$(TARGETS))
- TARGETS_DIRCLEAN:=$(patsubst %,%-dirclean,$(TARGETS))
- 
--world: $(DL_DIR) $(BUILD_DIR) $(STAGING_DIR) $(TARGET_DIR) $(TARGETS)
-+world: $(DL_DIR) $(BUILD_DIR) $(STAGING_DIR) $(TARGET_DIR) \
-+    $(TARGET_BUILD_DIR) $(BINARIES_DIR) $(TARGETS)
-+
- dirs: $(DL_DIR) $(BUILD_DIR) $(STAGING_DIR)
- 
- .PHONY: all world dirs clean dirclean distclean source $(TARGETS) \
-     $(TARGETS_CLEAN) $(TARGETS_DIRCLEAN) $(TARGETS_SOURCE) \
--    $(DL_DIR) $(BUILD_DIR) $(TOOL_BUILD_DIR) $(STAGING_DIR)
-+    $(DL_DIR) $(BUILD_DIR) $(TOOL_BUILD_DIR) $(STAGING_DIR) \
-+    $(TARGET_BUILD_DIR) $(BINARIES_DIR)
- 
- #############################################################
- #
-@@ -92,7 +95,8 @@ dirs: $(DL_DIR) $(BUILD_DIR) $(STAGING_D
- # dependencies anywhere else
- #
- #############################################################
--$(DL_DIR) $(BUILD_DIR) $(TOOL_BUILD_DIR):
-+$(DL_DIR) $(BUILD_DIR) $(TOOL_BUILD_DIR) \
-+$(TARGET_BUILD_DIR) $(BINARIES_DIR):
-     @mkdir -p $@
- 
- $(STAGING_DIR):
-diff -purN buildroot-0rig/package/Makefile.in
-buildroot-atmel/package/Makefile.in
---- buildroot-0rig/package/Makefile.in    2007-02-08 22:17:40.000000000
-+0100
-+++ buildroot-atmel/package/Makefile.in    2007-02-08 22:31:52.000000000
-+0100
-@@ -71,6 +71,8 @@ TOOLCHAIN_EXTERNAL_PREFIX:=$(strip $(sub
- TOOLCHAIN_EXTERNAL_PATH:=$(strip $(subst ",,
-$(BR2_TOOLCHAIN_EXTERNAL_PATH)))
- #"))
- TOOL_BUILD_DIR=$(BASE_DIR)/$(TOPDIR_PREFIX)toolchain_build_$(TOOLCHAIN_EXTERNAL_PREFIX)
-+TARGET_BUILD_DIR:=$(BASE_DIR)/$(TOPDIR_PREFIX)target_build_$(ARCH)$(ARCH_FPU_SUFFIX)$(TOPDIR_SUFFIX)/$(BR2_BOARDNAME)
-+BINARIES_DIR:=$(BASE_DIR)/binaries/$(BR2_BOARDNAME)
- TARGET_PATH="$(STAGING_DIR)/bin:$(TOOL_BUILD_DIR)/bin:$(TOOLCHAIN_EXTERNAL_PATH)/bin:$(PATH)"
- IMAGE:=$(BASE_DIR)/rootfs.$(TOOLCHAIN_EXTERNAL_PREFIX)
- REAL_GNU_TARGET_NAME=$(TOOLCHAIN_EXTERNAL_PREFIX)
 
--- 
-Best Regards,
-Ulf Samuelsson
+Steve.
 
 
 
--------------- next part --------------
-A non-text attachment was scrubbed...
-Name: BSP_Support-20070208.patch
-Type: text/x-patch
-Size: 3606 bytes
-Desc: not available
-Url : http://busybox.net/lists/buildroot/attachments/20070208/2d371ddd/attachment.bin 
--------------- next part --------------
-A non-text attachment was scrubbed...
-Name: ulf.vcf
-Type: text/x-vcard
-Size: 301 bytes
-Desc: not available
-Url : http://busybox.net/lists/buildroot/attachments/20070208/2d371ddd/attachment.vcf 
+On Thursday 08 February 2007 11:38, Steve Rodgers wrote:
+> I've been using buildroot for quite some time and recently decided to
+> upgrade it as some of the packages in the older version I'm using are no
+> longer available for download.
+>
+> I've run into a problem using the C compiler and linker on the target
+> system. I can't compile a simple "hello world" program written in C on the
+> target system.
+>
+> The compiler/linker complains it can't find crt1.o, even though it is
+> located in /user/lib. The exact error message is:
+>
+> ?/usr/bin/ld: crt1.o: No such file: No such file or directory
+>
+> I configured buildroot for gcc 3.4.2 and binutils 2.16. I selected the the
+> 2.4.31 kernel headers.
+>
+> The system in question ?was built using the 2/6/07 snapshot tarball of
+> buildroot.
+>
+> The config file for buildroot is attached.
+>
+> Is there some configuration option I missed?
+>
+> TIA Steve.
