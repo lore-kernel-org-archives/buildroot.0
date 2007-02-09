@@ -1,37 +1,45 @@
-From: James Newell <jnewell@wgate.com>
-Date: Thu, 08 Feb 2007 20:41:53 -0500
-Subject: [Buildroot] building ARM toolchain with nofpu
-In-Reply-To: <200702072136.41131.yann.morin.1998@anciens.enib.fr>
-References: <c88e466f0701311609u4896b81ehb99cb2eb01f78886@mail.gmail.com>
-	<1170878990.10007.4.camel@ndragon.eng.wgate.com>
-	<200702072124.30009.yann.morin.1998@anciens.enib.fr>
-	<200702072136.41131.yann.morin.1998@anciens.enib.fr>
-Message-ID: <1170985313.3423.1.camel@ndragon.eng.wgate.com>
+From: Alexander Rigbo <alexander.rigbo@acgnystrom.se>
+Date: Fri, 9 Feb 2007 07:32:55 +0100
+Subject: [Buildroot] Buildroot: Problem locating crt1.o on target system.
+In-Reply-To: <200702081138.38218.hwstar@rodgers.sdcoxmail.com>
+References: <200702081138.38218.hwstar@rodgers.sdcoxmail.com>
+Message-ID: <200702090732.55625.alexander.rigbo@acgnystrom.se>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-The buildroot only seems to go to gcc 4.0.3? 
+Hi,
 
-On Wed, 2007-02-07 at 21:36 +0100, Yann E. MORIN wrote:
-> On Wednesday 07 February 2007 212, Yann E. MORIN wrote:
-> > Short answer: it does not work.
-> > See: http://gcc.gnu.org/bugzilla/show_bug.cgi?id=29329  [1]
-> > (not directly related, but yet, useless on ARM).
-> 
-> I realise I'm being vague. Some explanations below.
-> 
-> In fact, the patch I posted allows one to successfully build a x-compiler
-> for soft-float armeb (mine is armeb-xscale-linux-uclibc, tuned for Xscale).
-> Unfortunately, the resulting gcc barfs on the squashfs code in the kernel.
-> A smaller test-case is available in the bug report, suggesting this is quite
-> easy to hit.
-> 
-> That's why I've reverted to gcc-4.0.4, which still needs the attached patch,
-> but Just Work (TM).
-> 
-> Regards,
-> Yann E. MORIN.
-> 
+Any special reason why you choose gcc 3.4.2 over 4.1.1? If not, then i suggest 
+you try gcc 4.1.1 instead.
+
+Best Regards
+Alexander Rigbo
+
+On Thursday 08 February 2007 20.38.38 Steve Rodgers wrote:
+> I've been using buildroot for quite some time and recently decided to
+> upgrade it as some of the packages in the older version I'm using are no
+> longer available for download.
+>
+> I've run into a problem using the C compiler and linker on the target
+> system. I can't compile a simple "hello world" program written in C on the
+> target system.
+>
+> The compiler/linker complains it can't find crt1.o, even though it is
+> located in /user/lib. The exact error message is:
+>
+> ?/usr/bin/ld: crt1.o: No such file: No such file or directory
+>
+> I configured buildroot for gcc 3.4.2 and binutils 2.16. I selected the the
+> 2.4.31 kernel headers.
+>
+> The system in question ?was built using the 2/6/07 snapshot tarball of
+> buildroot.
+>
+> The config file for buildroot is attached.
+>
+> Is there some configuration option I missed?
+>
+> TIA Steve.
