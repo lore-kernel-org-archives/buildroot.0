@@ -1,68 +1,37 @@
-From: Steve Rodgers <hwstar@rodgers.sdcoxmail.com>
-Date: Thu, 8 Feb 2007 15:59:40 -0800
-Subject: [Buildroot] Buildroot: Problem locating crt1.o on target system
-	[more info]
-In-Reply-To: <200702081138.38218.hwstar@rodgers.sdcoxmail.com>
-References: <200702081138.38218.hwstar@rodgers.sdcoxmail.com>
-Message-ID: <200702081559.40799.hwstar@rodgers.sdcoxmail.com>
+From: James Newell <jnewell@wgate.com>
+Date: Thu, 08 Feb 2007 20:41:53 -0500
+Subject: [Buildroot] building ARM toolchain with nofpu
+In-Reply-To: <200702072136.41131.yann.morin.1998@anciens.enib.fr>
+References: <c88e466f0701311609u4896b81ehb99cb2eb01f78886@mail.gmail.com>
+	<1170878990.10007.4.camel@ndragon.eng.wgate.com>
+	<200702072124.30009.yann.morin.1998@anciens.enib.fr>
+	<200702072136.41131.yann.morin.1998@anciens.enib.fr>
+Message-ID: <1170985313.3423.1.camel@ndragon.eng.wgate.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+The buildroot only seems to go to gcc 4.0.3? 
 
-I discovered that if I move crt1.o, crti.o and crtn.o to my build directory on 
-the target system where the C source lives, the test.c file compiles 
-correctly. 
-
-Looking at the gcc-v output, gcc is expecting these files to be in the build 
-directory, not in /usr/lib! 
-
-What changes would be required to gcc- gcc-uclibc-3.x.mk to resolve this so 
-that /usr/lib/crtX.0 files can be brought in from /usr/lib?
-
-
-Here's the output of gcc -v test.c:
-
-GNU assembler version 2.16.1 (i586-linux-uclibc) using BFD version 2.16.1
- /usr/libexec/gcc/i586-linux-uclibc/3.4.2/collect2 --eh-frame-hdr -m elf_i386 
--dynamic-linker /lib/ld-uClibc.so.0 crt1.o 
-crti.o /usr/lib/gcc/i586-linux-uclibc/3.4.2/crtbegin.o 
--L/usr/lib/gcc/i586-linux-uclibc/3.4.2 
--L/usr/lib/gcc/i586-linux-uclibc/3.4.2 /tmp/ccAcPbA4.o -lgcc --as-needed 
--lgcc_s --no-as-needed -lc -lgcc --as-needed -lgcc_s 
---no-as-needed /usr/lib/gcc/i586-linux-uclibc/3.4.2/crtend.o crtn.o
-/usr/bin/ld: crt1.o: No such file: No such file or directory
-collect2: ld returned 1 exit status
-
-
-Steve.
-
-
-
-On Thursday 08 February 2007 11:38, Steve Rodgers wrote:
-> I've been using buildroot for quite some time and recently decided to
-> upgrade it as some of the packages in the older version I'm using are no
-> longer available for download.
->
-> I've run into a problem using the C compiler and linker on the target
-> system. I can't compile a simple "hello world" program written in C on the
-> target system.
->
-> The compiler/linker complains it can't find crt1.o, even though it is
-> located in /user/lib. The exact error message is:
->
-> ?/usr/bin/ld: crt1.o: No such file: No such file or directory
->
-> I configured buildroot for gcc 3.4.2 and binutils 2.16. I selected the the
-> 2.4.31 kernel headers.
->
-> The system in question ?was built using the 2/6/07 snapshot tarball of
-> buildroot.
->
-> The config file for buildroot is attached.
->
-> Is there some configuration option I missed?
->
-> TIA Steve.
+On Wed, 2007-02-07 at 21:36 +0100, Yann E. MORIN wrote:
+> On Wednesday 07 February 2007 212, Yann E. MORIN wrote:
+> > Short answer: it does not work.
+> > See: http://gcc.gnu.org/bugzilla/show_bug.cgi?id=29329  [1]
+> > (not directly related, but yet, useless on ARM).
+> 
+> I realise I'm being vague. Some explanations below.
+> 
+> In fact, the patch I posted allows one to successfully build a x-compiler
+> for soft-float armeb (mine is armeb-xscale-linux-uclibc, tuned for Xscale).
+> Unfortunately, the resulting gcc barfs on the squashfs code in the kernel.
+> A smaller test-case is available in the bug report, suggesting this is quite
+> easy to hit.
+> 
+> That's why I've reverted to gcc-4.0.4, which still needs the attached patch,
+> but Just Work (TM).
+> 
+> Regards,
+> Yann E. MORIN.
+> 
