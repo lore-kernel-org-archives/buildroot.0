@@ -1,36 +1,71 @@
-From: Bernhard Fischer <rep.dot.nop@gmail.com>
-Date: Thu, 8 Feb 2007 18:40:07 +0100
-Subject: [Buildroot] building ARM toolchain with nofpu
-In-Reply-To: <200702081833.53780.yann.morin.1998@anciens.enib.fr>
-References: <c88e466f0701311609u4896b81ehb99cb2eb01f78886@mail.gmail.com>
-	<200702072124.30009.yann.morin.1998@anciens.enib.fr>
-	<20070208172531.GB8945@aon.at>
-	<200702081833.53780.yann.morin.1998@anciens.enib.fr>
-Message-ID: <20070208174007.GA9196@aon.at>
+From: aldot at uclibc.org <aldot@uclibc.org>
+Date: Fri,  9 Feb 2007 09:53:56 -0800 (PST)
+Subject: [Buildroot] svn commit: trunk/buildroot/toolchain/uClibc
+Message-ID: <20070209175356.23EB44863B@busybox.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Thu, Feb 08, 2007 at 06:33:53PM +0100, Yann E. MORIN wrote:
->Bernhard,
->All,
->
->On Thursday 08 February 2007 182, Bernhard Fischer wrote:
->> It would be of tremendous help to have one non-float mmu-less config for
->> a kernel that i can check against qemu (i.e. run the resulting
->> filesystem and kernel via current qemu).
->> Does anybody have such a .config i could play with?
->
->I'm using a highly modified, soon-to-be-available version of crosstool to
->build my toolchains, not buildroot (except for vampirising its patches! :-) ).
->
->I can try with buildroot, and submit a patch if I succeed. More later (I'm
->kind of busy right now with a BluePAD tablet PC and my crosstool).
->
->The problem lies more with gcc than with uClibc or binutils or the kernel
->headers.
+Author: aldot
+Date: 2007-02-09 09:53:55 -0800 (Fri, 09 Feb 2007)
+New Revision: 17843
 
-I was talking about a kernel .config and a hint on what arm variant qemu
-supports (nick-name plus cpu name like "dominator" arm0815xyz).
+Log:
+- honor BR2_PTHREAD_DEBUG
+  Stop asking any thread related questions while at it.
+
+
+Modified:
+   trunk/buildroot/toolchain/uClibc/uclibc.mk
+
+
+Changeset:
+Modified: trunk/buildroot/toolchain/uClibc/uclibc.mk
+===================================================================
+--- trunk/buildroot/toolchain/uClibc/uclibc.mk	2007-02-09 17:32:16 UTC (rev 17842)
++++ trunk/buildroot/toolchain/uClibc/uclibc.mk	2007-02-09 17:53:55 UTC (rev 17843)
+@@ -149,19 +149,36 @@
+ else
+ 	$(SED) 's,.*UCLIBC_HAS_FPU.*,UCLIBC_HAS_FPU=y\nHAS_FPU=y\nUCLIBC_HAS_FLOATS=y\n,g' $(UCLIBC_DIR)/.config
+ endif
+-ifneq ($(BR2_PTHREADS_NONE),y)
+-	$(SED) 's,# UCLIBC_HAS_THREADS is not set,UCLIBC_HAS_THREADS=y,g' $(UCLIBC_DIR)/.config
+-	$(SED) 's,# PTHREADS_DEBUG_SUPPORT is not set,PTHREADS_DEBUG_SUPPORT=y,g' $(UCLIBC_DIR)/.config
++	$(SED) '/UCLIBC_HAS_THREADS/d' $(UCLIBC_DIR)/.config
++	$(SED) '/LINUXTHREADS/d' $(UCLIBC_DIR)/.config
++	$(SED) '/LINUXTHREADS_OLD/d' $(UCLIBC_DIR)/.config
++	$(SED) '/PTHREADS_DEBUG_SUPPORT/d' $(UCLIBC_DIR)/.config
++	$(SED) '/UCLIBC_HAS_THREADS_NATIVE/d' $(UCLIBC_DIR)/.config
++ifeq ($(BR2_PTHREADS_NONE),y)
++	echo "# UCLIBC_HAS_THREADS is not set" >> $(UCLIBC_DIR)/.config
++else
++	echo "UCLIBC_HAS_THREADS=y" >> $(UCLIBC_DIR)/.config
+ endif
+ ifeq ($(BR2_PTHREADS),y)
+-	$(SED) 's,# LINUXTHREADS is not set,LINUXTHREADS=y,g' $(UCLIBC_DIR)/.config
++	echo "LINUXTHREADS=y" >> $(UCLIBC_DIR)/.config
++else
++	echo "# LINUXTHREADS is not set" >> $(UCLIBC_DIR)/.config
+ endif
+ ifeq ($(BR2_PTHREADS_OLD),y)
+-	$(SED) 's,# LINUXTHREADS_OLD is not set,LINUXTHREADS_OLD=y,g' $(UCLIBC_DIR)/.config
++	echo "LINUXTHREADS_OLD=y" >> $(UCLIBC_DIR)/.config
++else
++	echo "# LINUXTHREADS_OLD is not set" >> $(UCLIBC_DIR)/.config
+ endif
+ ifeq ($(BR2_PTHREADS_NATIVE),y)
+-	$(SED) 's,# UCLIBC_HAS_THREADS_NATIVE is not set,UCLIBC_HAS_THREADS_NATIVE=y,g' $(UCLIBC_DIR)/.config
++	echo "UCLIBC_HAS_THREADS_NATIVE=y" >> $(UCLIBC_DIR)/.config
++else
++	echo "# UCLIBC_HAS_THREADS_NATIVE is not set" >> $(UCLIBC_DIR)/.config
+ endif
++ifeq ($(BR2_PTHREAD_DEBUG),y)
++	echo "PTHREADS_DEBUG_SUPPORT=y" >> $(UCLIBC_DIR)/.config
++else
++	echo "# PTHREADS_DEBUG_SUPPORT is not set" >> $(UCLIBC_DIR)/.config
++endif
+ ifeq ($(BR2_ENABLE_LOCALE),y)
+ 	$(SED) 's,^.*UCLIBC_HAS_LOCALE.*,UCLIBC_HAS_LOCALE=y\nUCLIBC_PREGENERATED_LOCALE_DATA=y\nUCLIBC_DOWNLOAD_PREGENERATED_LOCALE_DATA=y\nUCLIBC_HAS_XLOCALE=y\nUCLIBC_HAS_GLIBC_DIGIT_GROUPING=n\n,g' $(UCLIBC_DIR)/.config
+ else
