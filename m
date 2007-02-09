@@ -1,36 +1,31 @@
-From: aldot at uclibc.org <aldot@uclibc.org>
-Date: Fri,  9 Feb 2007 06:05:53 -0800 (PST)
-Subject: [Buildroot] svn commit: trunk/buildroot/toolchain/gcc
-Message-ID: <20070209140553.532024864D@busybox.net>
+From: James Newell <jnewell@wgate.com>
+Date: Fri, 9 Feb 2007 09:10:03 -0500
+Subject: [Buildroot] building ARM toolchain with nofpu
+Message-ID: <FA7EECCA3735EF46BE49245D249B788CE2E308@exchange1.wgate.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Author: aldot
-Date: 2007-02-09 06:05:51 -0800 (Fri, 09 Feb 2007)
-New Revision: 17838
-
-Log:
-- new prerelease
-
-
-Modified:
-   trunk/buildroot/toolchain/gcc/gcc-uclibc-3.x.mk
-
-
-Changeset:
-Modified: trunk/buildroot/toolchain/gcc/gcc-uclibc-3.x.mk
-===================================================================
---- trunk/buildroot/toolchain/gcc/gcc-uclibc-3.x.mk	2007-02-09 13:56:01 UTC (rev 17837)
-+++ trunk/buildroot/toolchain/gcc/gcc-uclibc-3.x.mk	2007-02-09 14:05:51 UTC (rev 17838)
-@@ -28,7 +28,7 @@
  
- # Temporary for 4.1.2-RC1
- ifeq ($(BR2_GCC_VERSION_4_1_2),y)
--GCC_SNAP_DATE:=20070128
-+GCC_SNAP_DATE:=20070208
- GCC_OFFICIAL_VER:=$(GCC_VERSION)-$(GCC_SNAP_DATE)
- GCC_SITE:=ftp://gcc.gnu.org/pub/gcc/prerelease-$(GCC_OFFICIAL_VER)/
- endif
+
+> -----Original Message-----
+> From: Bernhard Fischer [mailto:rep.dot.nop at gmail.com] 
+> Sent: Friday, February 09, 2007 8:11 AM
+> To: James Newell
+> Cc: Yann E. MORIN; buildroot at uclibc.org
+> Subject: Re: [Buildroot] building ARM toolchain with nofpu
+> 
+> On Thu, Feb 08, 2007 at 08:41:53PM -0500, James Newell wrote:
+> >The buildroot only seems to go to gcc 4.0.3? 
+> 
+> I'll add 4.0.4 later today (provided that it builds and works), fwiw
+> 
+> 
+
+I was able to add 4.0.4 myself, and it worked as described by Yann.
+
+Thanks,
+
+Jim
