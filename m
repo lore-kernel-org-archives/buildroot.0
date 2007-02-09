@@ -1,71 +1,47 @@
-From: aldot at uclibc.org <aldot@uclibc.org>
-Date: Fri,  9 Feb 2007 09:53:56 -0800 (PST)
-Subject: [Buildroot] svn commit: trunk/buildroot/toolchain/uClibc
-Message-ID: <20070209175356.23EB44863B@busybox.net>
+From: Yann E. MORIN <yann.morin.1998@anciens.enib.fr>
+Date: Fri, 9 Feb 2007 18:57:13 +0100
+Subject: [Buildroot] building ARM toolchain with nofpu
+In-Reply-To: <20070209142934.GA17891@aon.at>
+References: <FA7EECCA3735EF46BE49245D249B788CE2E308@exchange1.wgate.com>
+	<20070209142934.GA17891@aon.at>
+Message-ID: <200702091857.13886.yann.morin.1998@anciens.enib.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Author: aldot
-Date: 2007-02-09 09:53:55 -0800 (Fri, 09 Feb 2007)
-New Revision: 17843
+Bernhard,
+All,
 
-Log:
-- honor BR2_PTHREAD_DEBUG
-  Stop asking any thread related questions while at it.
+On Friday 09 February 2007 152, Bernhard Fischer wrote:
+> I'm curious as to why you think we don't have -lfloat?
 
+I din't say that either.
+As I said in an earlier post, I don't use buildroot to build my toolchains
+(because I need toolchains, not a rootfs, and for other technical reasons).
 
-Modified:
-   trunk/buildroot/toolchain/uClibc/uclibc.mk
+For reference, I'm using a highly modified version of crosstool, please see:
+  http://sources.redhat.com/ml/crossgcc/2007-02/msg00009.html
 
+> Could somebody please follow up on
+> http://www.busybox.net/lists/buildroot/2007-January/001182.html
 
-Changeset:
-Modified: trunk/buildroot/toolchain/uClibc/uclibc.mk
-===================================================================
---- trunk/buildroot/toolchain/uClibc/uclibc.mk	2007-02-09 17:32:16 UTC (rev 17842)
-+++ trunk/buildroot/toolchain/uClibc/uclibc.mk	2007-02-09 17:53:55 UTC (rev 17843)
-@@ -149,19 +149,36 @@
- else
- 	$(SED) 's,.*UCLIBC_HAS_FPU.*,UCLIBC_HAS_FPU=y\nHAS_FPU=y\nUCLIBC_HAS_FLOATS=y\n,g' $(UCLIBC_DIR)/.config
- endif
--ifneq ($(BR2_PTHREADS_NONE),y)
--	$(SED) 's,# UCLIBC_HAS_THREADS is not set,UCLIBC_HAS_THREADS=y,g' $(UCLIBC_DIR)/.config
--	$(SED) 's,# PTHREADS_DEBUG_SUPPORT is not set,PTHREADS_DEBUG_SUPPORT=y,g' $(UCLIBC_DIR)/.config
-+	$(SED) '/UCLIBC_HAS_THREADS/d' $(UCLIBC_DIR)/.config
-+	$(SED) '/LINUXTHREADS/d' $(UCLIBC_DIR)/.config
-+	$(SED) '/LINUXTHREADS_OLD/d' $(UCLIBC_DIR)/.config
-+	$(SED) '/PTHREADS_DEBUG_SUPPORT/d' $(UCLIBC_DIR)/.config
-+	$(SED) '/UCLIBC_HAS_THREADS_NATIVE/d' $(UCLIBC_DIR)/.config
-+ifeq ($(BR2_PTHREADS_NONE),y)
-+	echo "# UCLIBC_HAS_THREADS is not set" >> $(UCLIBC_DIR)/.config
-+else
-+	echo "UCLIBC_HAS_THREADS=y" >> $(UCLIBC_DIR)/.config
- endif
- ifeq ($(BR2_PTHREADS),y)
--	$(SED) 's,# LINUXTHREADS is not set,LINUXTHREADS=y,g' $(UCLIBC_DIR)/.config
-+	echo "LINUXTHREADS=y" >> $(UCLIBC_DIR)/.config
-+else
-+	echo "# LINUXTHREADS is not set" >> $(UCLIBC_DIR)/.config
- endif
- ifeq ($(BR2_PTHREADS_OLD),y)
--	$(SED) 's,# LINUXTHREADS_OLD is not set,LINUXTHREADS_OLD=y,g' $(UCLIBC_DIR)/.config
-+	echo "LINUXTHREADS_OLD=y" >> $(UCLIBC_DIR)/.config
-+else
-+	echo "# LINUXTHREADS_OLD is not set" >> $(UCLIBC_DIR)/.config
- endif
- ifeq ($(BR2_PTHREADS_NATIVE),y)
--	$(SED) 's,# UCLIBC_HAS_THREADS_NATIVE is not set,UCLIBC_HAS_THREADS_NATIVE=y,g' $(UCLIBC_DIR)/.config
-+	echo "UCLIBC_HAS_THREADS_NATIVE=y" >> $(UCLIBC_DIR)/.config
-+else
-+	echo "# UCLIBC_HAS_THREADS_NATIVE is not set" >> $(UCLIBC_DIR)/.config
- endif
-+ifeq ($(BR2_PTHREAD_DEBUG),y)
-+	echo "PTHREADS_DEBUG_SUPPORT=y" >> $(UCLIBC_DIR)/.config
-+else
-+	echo "# PTHREADS_DEBUG_SUPPORT is not set" >> $(UCLIBC_DIR)/.config
-+endif
- ifeq ($(BR2_ENABLE_LOCALE),y)
- 	$(SED) 's,^.*UCLIBC_HAS_LOCALE.*,UCLIBC_HAS_LOCALE=y\nUCLIBC_PREGENERATED_LOCALE_DATA=y\nUCLIBC_DOWNLOAD_PREGENERATED_LOCALE_DATA=y\nUCLIBC_HAS_XLOCALE=y\nUCLIBC_HAS_GLIBC_DIGIT_GROUPING=n\n,g' $(UCLIBC_DIR)/.config
- else
+Quoted from the message referenced above:
+> Please edit package/libfloat/libfloat.mk
+> and remove the check for the gcc version 3.3 and let me know if that
+> fixed it.
+
+I'm gonna give it a try in the WE. The fact that having to link with an
+external library when gcc has the adequate code seems odd to me... :-/
+
+Regards,
+Yann E. MORIN.
+
+-- 
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +0/33 662376056 | Software  Designer | \ / CAMPAIGN     |   ^                |
+| --==< ?_? >==-- ?------------.-------:  X  AGAINST      |  /e\  There is no  |
+| http://ymorin.is-a-geek.org/ | (*_*) | / \ HTML MAIL    |  """  conspiracy.  |
+?------------------------------?-------?------------------?--------------------?
