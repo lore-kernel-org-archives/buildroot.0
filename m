@@ -1,7 +1,7 @@
 From: aldot at uclibc.org <aldot@uclibc.org>
-Date: Sat, 10 Feb 2007 11:36:26 -0800 (PST)
-Subject: [Buildroot] svn commit: trunk/buildroot/toolchain/gcc/4.2
-Message-ID: <20070210193626.4321D4865E@busybox.net>
+Date: Sat, 10 Feb 2007 13:24:03 -0800 (PST)
+Subject: [Buildroot] svn commit: trunk/buildroot/toolchain/uClibc
+Message-ID: <20070210212403.06FDD4858B@busybox.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -9,33 +9,28 @@ Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
 Author: aldot
-Date: 2007-02-10 11:36:25 -0800 (Sat, 10 Feb 2007)
-New Revision: 17850
+Date: 2007-02-10 13:24:02 -0800 (Sat, 10 Feb 2007)
+New Revision: 17851
 
 Log:
-- add first hunk to fix PR30620
+- fix propagation of BR2_SOFT_FLOAT down to uClibc
 
 
-Added:
-   trunk/buildroot/toolchain/gcc/4.2/402-libbackend_dep_gcov-iov.h.patch
+Modified:
+   trunk/buildroot/toolchain/uClibc/uclibc.mk
 
 
 Changeset:
-Added: trunk/buildroot/toolchain/gcc/4.2/402-libbackend_dep_gcov-iov.h.patch
+Modified: trunk/buildroot/toolchain/uClibc/uclibc.mk
 ===================================================================
---- trunk/buildroot/toolchain/gcc/4.2/402-libbackend_dep_gcov-iov.h.patch	                        (rev 0)
-+++ trunk/buildroot/toolchain/gcc/4.2/402-libbackend_dep_gcov-iov.h.patch	2007-02-10 19:36:25 UTC (rev 17850)
-@@ -0,0 +1,13 @@
-+Index: gcc-4.2/gcc/Makefile.in
-+===================================================================
-+--- gcc-4.2/gcc/Makefile.in	(revision 121758)
-++++ gcc-4.2/gcc/Makefile.in	(working copy)
-+@@ -2658,7 +2658,7 @@ mips-tdump.o : mips-tdump.c $(CONFIG_H) 
-+ # FIXME: writing proper dependencies for this is a *LOT* of work.
-+ libbackend.o : $(OBJS-common:.o=.c) $(out_file) \
-+   insn-config.h insn-flags.h insn-codes.h insn-constants.h \
-+-  insn-attr.h  $(DATESTAMP) $(BASEVER) $(DEVPHASE)
-++  insn-attr.h  $(DATESTAMP) $(BASEVER) $(DEVPHASE) gcov-iov.h
-+ 	$(CC) $(ALL_CFLAGS) $(ALL_CPPFLAGS) \
-+ 	  -DTARGET_NAME=\"$(target_noncanonical)\" \
-+ 	  -DLOCALEDIR=\"$(localedir)\" \
+--- trunk/buildroot/toolchain/uClibc/uclibc.mk	2007-02-10 19:36:25 UTC (rev 17850)
++++ trunk/buildroot/toolchain/uClibc/uclibc.mk	2007-02-10 21:24:02 UTC (rev 17851)
+@@ -141,7 +141,7 @@
+ 	$(SED) 's,.*UCLIBC_HAS_WCHAR.*,UCLIBC_HAS_WCHAR=y,g' $(UCLIBC_DIR)/.config
+ ifeq ($(BR2_SOFT_FLOAT),y)
+ 	$(SED) 's,.*UCLIBC_HAS_FPU.*,UCLIBC_HAS_FPU=n,g' \
+-		-e 's,.*HAS_FPU.*,HAS_FPU=n,g' \
++		-e 's,.*[^_]HAS_FPU.*,HAS_FPU=n,g' \
+ 		-e 's,.*UCLIBC_HAS_FLOATS.*,UCLIBC_HAS_FLOATS=y,g' \
+ 		-e 's,.*DO_C99_MATH.*,DO_C99_MATH=y,g' \
+ 		$(UCLIBC_DIR)/.config
