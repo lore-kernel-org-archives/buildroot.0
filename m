@@ -1,36 +1,31 @@
-From: aldot at uclibc.org <aldot@uclibc.org>
-Date: Sun, 11 Feb 2007 10:08:25 -0800 (PST)
-Subject: [Buildroot] svn commit: trunk/buildroot/package/lighttpd
-Message-ID: <20070211180825.4A3A248618@busybox.net>
+From: Bobby Ramsook <bobby.83x2@gmail.com>
+Date: Sun, 11 Feb 2007 16:35:38 -0500
+Subject: [Buildroot] Problem building build root in a squashhfs image
+Message-ID: <12d878080702111335j1a41b86s40e77ae1533ba075@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Author: aldot
-Date: 2007-02-11 10:08:24 -0800 (Sun, 11 Feb 2007)
-New Revision: 17855
+I Have been trying to compile buildroot, but i keep getting stuck on the
+following error:
 
-Log:
-- bump version. Closes #1206
-
-
-Modified:
-   trunk/buildroot/package/lighttpd/lighttpd.mk
+make: *** No rule to make target
+`/usr/src/buildroot/build_i586/linux-2.6.12/.patched',
+needed by `/usr/src/buildroot/build_i586/linux-2.6.12/.configured'.  Stop.
 
 
-Changeset:
-Modified: trunk/buildroot/package/lighttpd/lighttpd.mk
-===================================================================
---- trunk/buildroot/package/lighttpd/lighttpd.mk	2007-02-11 16:19:28 UTC (rev 17854)
-+++ trunk/buildroot/package/lighttpd/lighttpd.mk	2007-02-11 18:08:24 UTC (rev 17855)
-@@ -3,7 +3,7 @@
- # lighttpd
- #
- #############################################################
--LIGHTTPD_VER:=1.4.3
-+LIGHTTPD_VER:=1.4.13
- LIGHTTPD_SOURCE:=lighttpd-$(LIGHTTPD_VER).tar.gz
- LIGHTTPD_SITE:=http://www.lighttpd.net/download
- LIGHTTPD_DIR:=$(BUILD_DIR)/lighttpd-$(LIGHTTPD_VER)
+I looked through the build_i586 directory butr ther  was no
+linux-2.6.12dir, I tried to link the
+linux-headers-2.6.12 to the dir linux-2.6.12
+and I get this error:
+
+
+-- 
+Bobby Ramsook
+CCNY Computer Tech
+Grad Date (EXP):  07'
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: http://busybox.net/lists/buildroot/attachments/20070211/dda16bf9/attachment.html 
