@@ -1,7 +1,8 @@
 From: bugs at busybox.net <bugs@busybox.net>
-Date: Mon, 12 Feb 2007 05:50:31 -0800
-Subject: [Buildroot] [buildroot 0000390]: misleading bison error durring make
-Message-ID: <163f390535b0dfc6151eb2f6b9e7ce79@bugs.busybox.net>
+Date: Mon, 12 Feb 2007 05:50:32 -0800
+Subject: [Buildroot] [buildroot 0000393]: dhcp client set to non-existent
+	version
+Message-ID: <09d90a23e50f5e4ea90bbca85e038aa6@bugs.busybox.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -11,54 +12,54 @@ To: buildroot@busybox.net
 
 The following issue has been ASSIGNED. 
 ====================================================================== 
-http://busybox.net/bugs/view.php?id=390 
+http://busybox.net/bugs/view.php?id=393 
 ====================================================================== 
-Reported By:                jdupre
+Reported By:                marcusbrutus
 Assigned To:                buildroot
 ====================================================================== 
 Project:                    buildroot
-Issue ID:                   390
+Issue ID:                   393
 Category:                   Other
 Reproducibility:            always
-Severity:                   trivial
+Severity:                   minor
 Priority:                   normal
 Status:                     assigned
 ====================================================================== 
-Date Submitted:             08-18-2005 14:34 PDT
+Date Submitted:             08-20-2005 21:01 PDT
 Last Modified:              02-12-2007 05:50 PST
 ====================================================================== 
-Summary:                    misleading bison error durring make
+Summary:                    dhcp client set to non-existent version
 Description: 
-When trying to use buildroot tool on a really stripped down distribution
-(Linux from Scratch 6.1), "make" failed with a message that said bison
-needs to be installed.  I checked and I did have Bison 2.0 installed.
-
-Tried again and I noticed that the failure wasn't because of bison, but
-rather
-/bin/sh: which: command not found
-followed by the 'need to install bison' message
-
-I installed which-2.16 and everything proceded.  I am unsure as to why the
-bison error was reported.
-
-- Joe
+Build scripts are set to download 3.0.2,
+which no longer exists at ftp://ftp.isc.org/isc/dhcp/
+Current version is 3.0.3
+It it helpful to change version in dhcp.mk to
+'latest' so that script retrieves
+ftp://ftp.isc.org/isc/dhcp/dhcp-latest.tar.gz
+rather than
+ftp://ftp.isc.org/isc/dhcp/dhcp-3.0.3.tar.gz ?
 ====================================================================== 
 
 ---------------------------------------------------------------------- 
- vapier - 08-28-05 00:56  
+ marcusbrutus - 08-20-05 21:29  
 ---------------------------------------------------------------------- 
-added a check for which before bison 
+oops, see bug 0000382 
+
+---------------------------------------------------------------------- 
+ vapier - 08-28-05 00:53  
+---------------------------------------------------------------------- 
+thanks, added to svn 
 
 Issue History 
 Date Modified   Username       Field                    Change               
 ====================================================================== 
-08-18-05 14:34  jdupre         New Issue                                    
-08-18-05 14:34  jdupre         Status                   new => assigned     
-08-18-05 14:34  jdupre         Assigned To               => uClibc          
-08-28-05 00:56  vapier         Note Added: 0000448                          
-08-28-05 00:56  vapier         Status                   assigned => resolved
-08-28-05 00:56  vapier         Resolution               open => fixed       
-08-28-05 00:57  vapier         Status                   resolved => closed  
+08-20-05 21:01  marcusbrutus   New Issue                                    
+08-20-05 21:01  marcusbrutus   Status                   new => assigned     
+08-20-05 21:01  marcusbrutus   Assigned To               => uClibc          
+08-20-05 21:29  marcusbrutus   Note Added: 0000427                          
+08-28-05 00:53  vapier         Note Added: 0000447                          
+08-28-05 00:53  vapier         Status                   assigned => closed  
+08-28-05 00:53  vapier         Resolution               open => fixed       
 02-12-07 05:50  vapier         Status                   closed => assigned  
 02-12-07 05:50  vapier         Assigned To              uClibc => buildroot 
 ======================================================================
