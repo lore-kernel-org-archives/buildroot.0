@@ -1,8 +1,7 @@
 From: bugs at busybox.net <bugs@busybox.net>
-Date: Mon, 12 Feb 2007 05:49:00 -0800
-Subject: [Buildroot] [buildroot 0000447]: [ New Package ] S/Key (One-Time
-	passwords) for OpenSSH
-Message-ID: <1b67f02abbb8b3233e82de4a39f690f0@bugs.busybox.net>
+Date: Mon, 12 Feb 2007 05:49:01 -0800
+Subject: [Buildroot] [buildroot 0000551]: Package noip for buildroot
+Message-ID: <89e0f5a535c1083e121133217ef48fc8@bugs.busybox.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -12,45 +11,39 @@ To: buildroot@busybox.net
 
 The following issue has been ASSIGNED. 
 ====================================================================== 
-http://busybox.net/bugs/view.php?id=447 
+http://busybox.net/bugs/view.php?id=551 
 ====================================================================== 
-Reported By:                ktraum
+Reported By:                hwstar
 Assigned To:                buildroot
 ====================================================================== 
 Project:                    buildroot
-Issue ID:                   447
-Category:                   Other
+Issue ID:                   551
+Category:                   Architecture Specific
 Reproducibility:            N/A
-Severity:                   minor
+Severity:                   feature
 Priority:                   normal
 Status:                     assigned
 ====================================================================== 
-Date Submitted:             09-26-2005 05:00 PDT
-Last Modified:              02-12-2007 05:48 PST
+Date Submitted:             11-20-2005 14:48 PST
+Last Modified:              02-12-2007 05:49 PST
 ====================================================================== 
-Summary:                    [ New Package ] S/Key (One-Time passwords) for
-OpenSSH
+Summary:                    Package noip for buildroot
 Description: 
-A port of OpenBSD's One-Time Passwords library and utils.
-
-Adds One-Time password support to OpenSSH.
-
-patch attached.
+Allows DDNS registration to no-ip.com's DDNS services. Please consider
+adding it to the buildroot distro.
 ====================================================================== 
 
 Issue History 
 Date Modified   Username       Field                    Change               
 ====================================================================== 
-09-26-05 05:00  ktraum         New Issue                                    
-09-26-05 05:00  ktraum         Status                   new => assigned     
-09-26-05 05:00  ktraum         Assigned To               => uClibc          
-09-26-05 05:00  ktraum         File Added: buildroot-libskey-1.1.5.patch        
-           
-09-26-05 05:23  ktraum         Issue Monitored: ktraum                      
-01-24-06 13:31  prpplague      Status                   assigned => closed  
-01-24-06 13:31  prpplague      Resolution               open => won't fix   
-01-24-06 13:31  prpplague      Additional Information Updated                   
+11-20-05 14:48  hwstar         New Issue                                    
+11-20-05 14:48  hwstar         Status                   new => assigned     
+11-20-05 14:48  hwstar         Assigned To               => uClibc          
+11-20-05 14:48  hwstar         File Added: noip2.mk                         
+01-24-06 11:57  prpplague      Status                   assigned => closed  
+01-24-06 11:57  prpplague      Resolution               open => won't fix   
+01-24-06 11:57  prpplague      Additional Information Updated                   
 
-02-12-07 05:48  vapier         Status                   closed => assigned  
-02-12-07 05:48  vapier         Assigned To              uClibc => buildroot 
+02-12-07 05:49  vapier         Status                   closed => assigned  
+02-12-07 05:49  vapier         Assigned To              uClibc => buildroot 
 ======================================================================
