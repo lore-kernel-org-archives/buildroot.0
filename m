@@ -1,7 +1,8 @@
 From: bugs at busybox.net <bugs@busybox.net>
-Date: Mon, 12 Feb 2007 05:33:59 -0800
-Subject: [Buildroot] [buildroot 0000452]: Updated OpenSSL to version 0.9.8
-Message-ID: <8290371b41439cfd484f9ebc0531ff9a@bugs.busybox.net>
+Date: Mon, 12 Feb 2007 05:34:01 -0800
+Subject: [Buildroot] [buildroot 0000944]: Some portability fixes for running
+	on a MacOSX host
+Message-ID: <a9054f841592fc76636f49e105d16e9c@bugs.busybox.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -11,72 +12,69 @@ To: buildroot@busybox.net
 
 The following issue has been ASSIGNED. 
 ====================================================================== 
-http://busybox.net/bugs/view.php?id=452 
+http://busybox.net/bugs/view.php?id=944 
 ====================================================================== 
-Reported By:                gnat
+Reported By:                wiml
 Assigned To:                buildroot
 ====================================================================== 
 Project:                    buildroot
-Issue ID:                   452
-Category:                   New Features
+Issue ID:                   944
+Category:                   Other
 Reproducibility:            always
-Severity:                   feature
+Severity:                   minor
 Priority:                   normal
 Status:                     assigned
 ====================================================================== 
-Date Submitted:             09-29-2005 15:46 PDT
-Last Modified:              02-12-2007 05:33 PST
+Date Submitted:             07-12-2006 23:48 PDT
+Last Modified:              02-12-2007 05:34 PST
 ====================================================================== 
-Summary:                    Updated OpenSSL to version 0.9.8
+Summary:                    Some portability fixes for running on a MacOSX host
 Description: 
-Updates openssl from 0.9.7e to 0.9.8
+This patch addresses a few minor linuxisms or (non-BSD)isms in buildroot's
+shell scripts.
+
+1. Replaces "cp -a" with "cp -pPR". "-a" is just a conveinence for -pPR,
+and none of the BSD-derived systems I've checked have it.
+
+2. My 'sed' reqires an explicit empty string after -i, or else it will use
+the "-e" arg as the extension for backups. Oops.
+
+3. My 'sed' requires an EOL or semicolon before the closing curly in a
+{foo...} construct.
+
+4. Apple's GCC prints a version string that dependencies.sh can't handle.
+This change removes any parenthesized bits from the version string before
+looking for numbers, so it can handle version strings like
+    powerpc-apple-darwin8-gcc-4.0.1 (GCC) 4.0.1 (Apple Computer, Inc.
+build 5250)
+
 ====================================================================== 
 
 ---------------------------------------------------------------------- 
- vapier - 09-29-05 18:52  
+ bernhardf - 12-22-06 04:30  
 ---------------------------------------------------------------------- 
-thanks, now in svn 
+1) I'd rather prefer if you could expand the host-sed check so we build a
+working sed for your system.
+2) That cp -a patch looks ok. For files, we usually (try to) use "cp
+-dpf", so please use -dpf resp. -Rdpf
+  Please attach a new split patch with just the cp changes.
+3) I think that the current dependencies.sh should deal with this, please
+verify.
 
----------------------------------------------------------------------- 
- gnat - 09-30-05 08:27  
----------------------------------------------------------------------- 
-if this patch was applied, please reverse it. There are patches used for
-0.9.7e that do not apply cleanly that I need to review. 
-
----------------------------------------------------------------------- 
- akvadrako - 10-28-05 12:05  
----------------------------------------------------------------------- 
-I think your review should show that the patch no longer applies.  openssl
-now contains a [no-]fips configure option, and it is disables by default. 
-Attached is my patch to upgrade to 0.9.7h.  Notice that the openssl.patch
-file needs some changes. 
-
----------------------------------------------------------------------- 
- bernhardf - 12-22-06 04:44  
----------------------------------------------------------------------- 
-what's the status of this report? openssl in svn builds fine for me..
-
-Should we update to the current debian-version? 
+Thanks in advance for attaching updated, separate patches that take the
+comments above into account.
+cheers,
+Bernhard 
 
 Issue History 
 Date Modified   Username       Field                    Change               
 ====================================================================== 
-09-29-05 15:46  gnat           New Issue                                    
-09-29-05 15:46  gnat           Status                   new => assigned     
-09-29-05 15:46  gnat           Assigned To               => uClibc          
-09-29-05 18:52  vapier         Note Added: 0000590                          
-09-29-05 18:52  vapier         Status                   assigned => resolved
-09-29-05 18:52  vapier         Resolution               open => fixed       
-09-30-05 08:27  gnat           Status                   resolved => feedback
-09-30-05 08:27  gnat           Resolution               fixed => reopened   
-09-30-05 08:27  gnat           Note Added: 0000592                          
-09-30-05 10:03  schieli        Issue Monitored: schieli                     
-10-12-05 08:48  schieli        Issue End Monitor: schieli                    
-10-28-05 12:05  akvadrako      Note Added: 0000646                          
-10-28-05 12:05  akvadrako      File Added: br-openssl-upgrade.patch             
-      
-09-14-06 10:06  Scott B        Issue Monitored: Scott B                     
-12-22-06 04:44  bernhardf      Note Added: 0001919                          
-02-12-07 05:33  vapier         Status                   feedback => assigned
-02-12-07 05:33  vapier         Assigned To              uClibc => buildroot 
+07-12-06 23:48  wiml           New Issue                                    
+07-12-06 23:48  wiml           Status                   new => assigned     
+07-12-06 23:48  wiml           Assigned To               => uClibc          
+07-12-06 23:48  wiml           File Added: buildroot1.patch                    
+12-22-06 04:30  bernhardf      Note Added: 0001914                          
+12-22-06 04:30  bernhardf      Status                   assigned => feedback
+02-12-07 05:34  vapier         Status                   feedback => assigned
+02-12-07 05:34  vapier         Assigned To              uClibc => buildroot 
 ======================================================================
