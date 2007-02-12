@@ -1,8 +1,8 @@
 From: bugs at busybox.net <bugs@busybox.net>
-Date: Mon, 12 Feb 2007 05:49:43 -0800
-Subject: [Buildroot] [buildroot 0000598]: [patch] Host CPP used rather than
-	toolchain CPP
-Message-ID: <40035ab1a0235bab4e03b915558f2542@bugs.busybox.net>
+Date: Mon, 12 Feb 2007 05:49:45 -0800
+Subject: [Buildroot] [buildroot 0000495]: openssl build fails for Target
+	Architecture i386 Variant i386
+Message-ID: <1308ddf29c74daf3fc55fc545905a848@bugs.busybox.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -12,71 +12,78 @@ To: buildroot@busybox.net
 
 The following issue has been ASSIGNED. 
 ====================================================================== 
-http://busybox.net/bugs/view.php?id=598 
+http://busybox.net/bugs/view.php?id=495 
 ====================================================================== 
-Reported By:                crafterm
+Reported By:                noah
 Assigned To:                buildroot
 ====================================================================== 
 Project:                    buildroot
-Issue ID:                   598
-Category:                   Other
+Issue ID:                   495
+Category:                   Architecture Specific
 Reproducibility:            always
-Severity:                   major
+Severity:                   minor
 Priority:                   normal
 Status:                     assigned
 ====================================================================== 
-Date Submitted:             12-12-2005 03:02 PST
+Date Submitted:             10-20-2005 17:26 PDT
 Last Modified:              02-12-2007 05:49 PST
 ====================================================================== 
-Summary:                    [patch] Host CPP used rather than toolchain CPP
+Summary:                    openssl build fails for Target Architecture i386 
+Variant i386
 Description: 
+The openssl.mk file sets OPENSSL_TARGET_ARCH to
+i386-i386, but this wrong. This is a special case.
+It should be set to just i386. The following patch
+fixes the problem, diff -u openssl.mk.original openssl.mk
+--- openssl.mk.original	2005-10-20 16:46:28.000000000 -0700
++++ openssl.mk	2005-10-20 17:17:12.569581608 -0700
+@@ -14,8 +14,12 @@
+ ifeq ($(ARCH),i686)
+ OPENSSL_TARGET_ARCH:=i386-i686/cmov
+ else
++ifeq ($(ARCH),i386)
++OPENSSL_TARGET_ARCH:=i386
++else
+ OPENSSL_TARGET_ARCH:=i386-$(ARCH)
+ endif
++endif
+ else
+ OPENSSL_TARGET_ARCH:=$(ARCH)
+ endif
+
+
+====================================================================== 
+
+---------------------------------------------------------------------- 
+ crafterm - 11-29-05 08:42  
+---------------------------------------------------------------------- 
 Hi All,
 
-Hope all is going well.
+I can confirm this problem still occurs in the latest SVN cut of
+buildroot.
 
-buildroot/packages/Makefile.in defines $(TARGET_CONFIGURE_OPTS) to be:
-
-TARGET_CONFIGURE_OPTS=PATH=$(TARGET_PATH) \
-                AR=$(TARGET_CROSS)ar \
-                AS=$(TARGET_CROSS)as \
-                LD=$(TARGET_CROSS)ld \
-                NM=$(TARGET_CROSS)nm \
-                CC=$(TARGET_CROSS)gcc \
-                GCC=$(TARGET_CROSS)gcc \
-                CXX=$(TARGET_CROSS)g++ \
-                RANLIB=$(TARGET_CROSS)ranlib \
-                OBJCOPY=$(TARGET_CROSS)objcopy
-
-but doesn't set CPP. This results in the host CPP be used rather than the
-toolchain version and various configure scripts break when this happens,
-thinking that a certain header exists in the staging filesystem when they
-don't (eg. strace, coreutils, and others).
-
-The attached patch fixes this.
+The above patch works fine though to fix it.
 
 Cheers,
 
-Marcus
-====================================================================== 
+Marcus 
 
 ---------------------------------------------------------------------- 
- vapier - 12-16-05 17:34  
+ boris64 - 12-03-05 11:16  
 ---------------------------------------------------------------------- 
-that doesnt really make much sense ... configure scripts default CPP to
-doing `$(CC) -E` which we override
-
-fixed in svn anyways as it shouldnt break anything 
+Problem still exists, thx for the  patch which seems to work flawlessly ;) 
 
 Issue History 
 Date Modified   Username       Field                    Change               
 ====================================================================== 
-12-12-05 03:02  crafterm       New Issue                                    
-12-12-05 03:02  crafterm       Status                   new => assigned     
-12-12-05 03:02  crafterm       Assigned To               => uClibc          
-12-12-05 03:02  crafterm       File Added: cpp.diff                         
-12-16-05 17:34  vapier         Note Added: 0000792                          
-12-16-05 17:34  vapier         Status                   assigned => closed  
-12-16-05 17:34  vapier         Resolution               open => fixed       
+10-20-05 17:26  noah           New Issue                                    
+10-20-05 17:26  noah           Status                   new => assigned     
+10-20-05 17:26  noah           Assigned To               => uClibc          
+10-20-05 17:26  noah           File Added: openssl.mk.patch                    
+11-29-05 08:42  crafterm       Note Added: 0000711                          
+12-03-05 11:16  boris64        Note Added: 0000720                          
+12-03-05 12:32  vapier         Status                   assigned => closed  
+12-03-05 12:32  vapier         Resolution               open => fixed       
 02-12-07 05:49  vapier         Status                   closed => assigned  
 02-12-07 05:49  vapier         Assigned To              uClibc => buildroot 
 ======================================================================
