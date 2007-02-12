@@ -1,7 +1,8 @@
 From: bugs at busybox.net <bugs@busybox.net>
-Date: Mon, 12 Feb 2007 05:33:45 -0800
-Subject: [Buildroot] [buildroot 0001153]: sfdisk fails to compile
-Message-ID: <1a39a92928a59b4c9d02a59ae5330744@bugs.busybox.net>
+Date: Mon, 12 Feb 2007 05:33:47 -0800
+Subject: [Buildroot] [buildroot 0000959]: DirectFB-0.9.25.1' link error:
+	/usr/lib/libpng12.so: could not read symbols: File in wrong format
+Message-ID: <7ff657b4a9a901ca29508e778f5f4254@bugs.busybox.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -11,32 +12,80 @@ To: buildroot@busybox.net
 
 The following issue has been ASSIGNED. 
 ====================================================================== 
-http://busybox.net/bugs/view.php?id=1153 
+http://busybox.net/bugs/view.php?id=959 
 ====================================================================== 
-Reported By:                Steven_Carr
+Reported By:                bowerymarc
 Assigned To:                buildroot
 ====================================================================== 
 Project:                    buildroot
-Issue ID:                   1153
+Issue ID:                   959
 Category:                   Architecture Specific
 Reproducibility:            always
-Severity:                   minor
+Severity:                   major
 Priority:                   normal
 Status:                     assigned
 ====================================================================== 
-Date Submitted:             01-09-2007 23:31 PST
+Date Submitted:             07-16-2006 23:17 PDT
 Last Modified:              02-12-2007 05:33 PST
 ====================================================================== 
-Summary:                    sfdisk fails to compile
+Summary:                    DirectFB-0.9.25.1' link error: 
+/usr/lib/libpng12.so: could not read symbols: File in wrong format
 Description: 
-Buildroot failes when compiling sfdisk 
+/home/tools/buildroot/build_arm_nofpu/staging_dir/bin/arm-linux-uclibc-gcc
+-O3 -ffast-math -pipe -Os -pipe
+-I/home/tools/buildroot/build_arm_nofpu/staging_dir/usr/include
+-D_GNU_SOURCE -Werror-implicit-function-declaration -o directfb-csource
+directfb-csource.o 
+-L/home/tools/buildroot/build_arm_nofpu/staging_dir/lib
+-L/home/tools/buildroot/build_arm_nofpu/staging_dir/usr/lib
+/usr/lib/libpng12.so -lz -lm -ldl -lpthread
+/usr/lib/libpng12.so: could not read symbols: File in wrong format
+collect2: ld returned 1 exit status
+make[3]: *** [directfb-csource] Error 1
+make[3]: Leaving directory
+`/home/tools/buildroot/build_arm_nofpu/DirectFB-0.9.25.1/tools'
+make[2]: *** [all-recursive] Error 1
+make[2]: Leaving directory
+`/home/tools/buildroot/build_arm_nofpu/DirectFB-0.9.25.1'
+make[1]: *** [all-recursive-am] Error 2
+make[1]: Leaving directory
+`/home/tools/buildroot/build_arm_nofpu/DirectFB-0.9.25.1'
+make: ***
+[/home/tools/buildroot/build_arm_nofpu/DirectFB-0.9.25.1/.compiled] Error
+2
+
 ====================================================================== 
+
+---------------------------------------------------------------------- 
+ rashbaugh - 12-31-06 13:43  
+---------------------------------------------------------------------- 
+I had this same problem while building an Xscale cross-compile of
+DirectFB-1.0.0-rc2 on an Ubuntu Edgy desktop.
+For some reason libtool makes a substitution of "/usr/lib/libpng12.so"
+when "-lpng12" is specified, and then passes this path to gcc. This path
+happens to be the host libpng12.so library, when we really want the
+target's library, so it has the wrong format. Why libtool does this I have
+no idea, but I was able to work around it by explicitly specifiying the
+full path of target libpng12.so library in the corresponding DirectFB
+"Makefile". In my case, I had to make this correction in only 2 places,
+though "-lpng12" is specified in hundreds of places within the DirectFB
+Makefile source tree.
+For example, in DirectFB/tools/Makefile:
+# LIBPNG = -lpng12 << comment this one out
+# and add this in
+LIBPNG = /home/user/path-to-target-toolchain/lib/libpng12.so 
+
+I also needed this same change in
+DirectFB/interfaces/IDirectFBImageProvider/Makefile.
+Hope this helps. 
 
 Issue History 
 Date Modified   Username       Field                    Change               
 ====================================================================== 
-01-09-07 23:31  Steven_Carr    New Issue                                    
-01-09-07 23:31  Steven_Carr    Status                   new => assigned     
-01-09-07 23:31  Steven_Carr    Assigned To               => uClibc          
+07-16-06 23:17  bowerymarc     New Issue                                    
+07-16-06 23:17  bowerymarc     Status                   new => assigned     
+07-16-06 23:17  bowerymarc     Assigned To               => uClibc          
+10-09-06 12:23  jruere         Issue Monitored: jruere                      
+12-31-06 13:43  rashbaugh      Note Added: 0001949                          
 02-12-07 05:33  vapier         Assigned To              uClibc => buildroot 
 ======================================================================
