@@ -1,96 +1,119 @@
-From: bugs at busybox.net <bugs@busybox.net>
-Date: Mon, 12 Feb 2007 06:05:16 -0800
-Subject: [Buildroot] [buildroot 0000881]: Buildroot new feature: Generate
-	initramfs description file of root filesystem for initial
-	kernel ramdisk
-Message-ID: <0908d712d168dc6735096b8a98ab1c91@busybox.net>
+From: jacmet at uclibc.org <jacmet@uclibc.org>
+Date: Mon, 12 Feb 2007 06:43:58 -0800 (PST)
+Subject: [Buildroot] svn commit: trunk/buildroot/package/busybox
+Message-ID: <20070212144358.5C3E148684@busybox.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+Author: jacmet
+Date: 2007-02-12 06:43:57 -0800 (Mon, 12 Feb 2007)
+New Revision: 17865
 
-A NOTE has been added to this issue. 
-====================================================================== 
-http://busybox.net/bugs/view.php?id=881 
-====================================================================== 
-Reported By:                fred
-Assigned To:                buildroot
-====================================================================== 
-Project:                    buildroot
-Issue ID:                   881
-Category:                   New Features
-Reproducibility:            N/A
-Severity:                   feature
-Priority:                   normal
-Status:                     assigned
-====================================================================== 
-Date Submitted:             05-24-2006 16:27 PDT
-Last Modified:              02-12-2007 06:05 PST
-====================================================================== 
-Summary:                    Buildroot new feature: Generate initramfs
-description file of root filesystem for initial kernel ramdisk
-Description: 
-This patch contains a new target "initramfs" which builds a description
-file for the initial kernel ramdisk. I use this together with kernel
-2.6.12. The mechanism is based on a shell script "gen_initramfs_list.sh"
-which is provided together with the kernel. The description file is then
-used to build a cpio filesystem via the gen_init_cpio tool during the
-kernel build.
+Log:
+Additional 1.4.1 patches
 
-This is inspired by the procedure described here: 
+Added:
+   trunk/buildroot/package/busybox/busybox-1.4.1-iproute.patch
+   trunk/buildroot/package/busybox/busybox-1.4.1-wgetSEGV.patch
 
-http://www.student.tue.nl/Q/t.f.a.wilms/adm5120/
 
-That procedure produces an ext2 filesystem with buildroot. Then this
-filesystem is mounted in the kernel build directory where
-"gen_initramfs_list.sh" produces a filesystem description file which is
-used then by gen_init_cpio to produce the cpio filesystem. This procedure
-requires root rights to mount the filesystem. The idea is to produce the
-filesystem description file directly from buildroot. Then the complete
-kernel including rootfilesystem as ramdisk can be build as normal user.
+Changeset:
+Added: trunk/buildroot/package/busybox/busybox-1.4.1-iproute.patch
+===================================================================
+--- trunk/buildroot/package/busybox/busybox-1.4.1-iproute.patch	                        (rev 0)
++++ trunk/buildroot/package/busybox/busybox-1.4.1-iproute.patch	2007-02-12 14:43:57 UTC (rev 17865)
+@@ -0,0 +1,71 @@
++diff -urN busybox-1.4.1/networking/ip.c busybox-1.4.1-iproute/networking/ip.c
++--- busybox-1.4.1/networking/ip.c	2007-01-24 22:34:34.000000000 +0100
+++++ busybox-1.4.1-iproute/networking/ip.c	2007-01-27 14:07:05.000000000 +0100
++@@ -33,8 +33,9 @@
++ 		if (ENABLE_FEATURE_IP_LINK && matches(argv[1], "link") == 0) {
++ 			ret = do_iplink(argc-2, argv+2);
++ 		}
++-		if (ENABLE_FEATURE_IP_TUNNEL &&
++-			(matches(argv[1], "tunnel") == 0 || strcmp(argv[1], "tunl") == 0)) {
+++		if (ENABLE_FEATURE_IP_TUNNEL
+++		 && (matches(argv[1], "tunnel") == 0 || strcmp(argv[1], "tunl") == 0)
+++		) {
++ 			ret = do_iptunnel(argc-2, argv+2);
++ 		}
++ 		if (ENABLE_FEATURE_IP_RULE && matches(argv[1], "rule") == 0) {
++diff -urN busybox-1.4.1/networking/libiproute/iproute.c busybox-1.4.1-iproute/networking/libiproute/iproute.c
++--- busybox-1.4.1/networking/libiproute/iproute.c	2007-01-24 22:34:33.000000000 +0100
+++++ busybox-1.4.1-iproute/networking/libiproute/iproute.c	2007-01-27 14:07:05.000000000 +0100
++@@ -835,9 +835,11 @@
++ 
++ int do_iproute(int argc, char **argv)
++ {
++-	static const char * const ip_route_commands[] =
++-		{ "add", "append", "change", "chg", "delete", "get",
++-		"list", "show", "prepend", "replace", "test", "flush", 0 };
+++	static const char * const ip_route_commands[] = {
+++	/*0-3*/	"add", "append", "change", "chg",
+++	/*4-7*/	"delete", "get", "list", "show",
+++	/*8..*/	"prepend", "replace", "test", "flush", 0
+++	};
++ 	int command_num = 6;
++ 	unsigned int flags = 0;
++ 	int cmd = RTM_NEWROUTE;
++@@ -848,7 +850,7 @@
++ 		command_num = index_in_substr_array(ip_route_commands, *argv);
++ 	}
++ 	switch (command_num) {
++-		case 0: /* add*/
+++		case 0: /* add */
++ 			flags = NLM_F_CREATE|NLM_F_EXCL;
++ 			break;
++ 		case 1: /* append */
++@@ -859,21 +861,20 @@
++ 			flags = NLM_F_REPLACE;
++ 			break;
++ 		case 4: /* delete */
++-		case 5: /* del */
++ 			cmd = RTM_DELROUTE;
++ 			break;
++-		case 6: /* get */
+++		case 5: /* get */
++ 			return iproute_get(argc-1, argv+1);
++-		case 7: /* list */
++-		case 8: /* show */
+++		case 6: /* list */
+++		case 7: /* show */
++ 			return iproute_list_or_flush(argc-1, argv+1, 0);
++-		case 9: /* prepend */
+++		case 8: /* prepend */
++ 			flags = NLM_F_CREATE;
++-		case 10: /* replace */
+++		case 9: /* replace */
++ 			flags = NLM_F_CREATE|NLM_F_REPLACE;
++-		case 11: /* test */
+++		case 10: /* test */
++ 			flags = NLM_F_EXCL;
++-		case 12: /* flush */
+++		case 11: /* flush */
++ 			return iproute_list_or_flush(argc-1, argv+1, 1);
++ 		default:
++ 			bb_error_msg_and_die("unknown command %s", *argv);
 
-The patch adds a new target and modifies the config.in file in the target
-directory.
-====================================================================== 
-
----------------------------------------------------------------------- 
- bernhardf - 12-01-06 10:12  
----------------------------------------------------------------------- 
-That's an excellent idea except for the mount.
-
-Please be so kind and update the patch to
-     select tarroot # or however the creation of a tarball is named
-
-or just ln -s the build_$()/root to the dir gen_initramfs expects.
-Also, it's easier for me if you could (also) send the patch with a copy'n
-paste of the adjusted description above to the mailing-list.
-
-TIA! 
-
----------------------------------------------------------------------- 
- fred - 02-12-07 06:05  
----------------------------------------------------------------------- 
-Hi,
-
-thanks for the reply to the patch! Unfortunatly I do not get the
-suggestion you made below. Just to make sure: Is it clear that you do not
-need to mount any filesystem with this proposed procedure? 
-
-Regards
-
-Friedrich 
-
-Issue History 
-Date Modified   Username       Field                    Change               
-====================================================================== 
-05-24-06 16:27  fred           New Issue                                    
-05-24-06 16:27  fred           Status                   new => assigned     
-05-24-06 16:27  fred           Assigned To               => uClibc          
-05-24-06 16:27  fred           File Added: buildroot_initramfs_target.patch     
-              
-12-01-06 10:12  bernhardf      Note Added: 0001850                          
-02-12-07 05:34  vapier         Assigned To              uClibc => buildroot 
-02-12-07 06:05  fred           Note Added: 0002153                          
-======================================================================
+Added: trunk/buildroot/package/busybox/busybox-1.4.1-wgetSEGV.patch
+===================================================================
+--- trunk/buildroot/package/busybox/busybox-1.4.1-wgetSEGV.patch	                        (rev 0)
++++ trunk/buildroot/package/busybox/busybox-1.4.1-wgetSEGV.patch	2007-02-12 14:43:57 UTC (rev 17865)
+@@ -0,0 +1,14 @@
++diff -urN busybox-1.4.1/networking/wget.c busybox-1.4.1-wgetSEGV/networking/wget.c
++--- busybox-1.4.1/networking/wget.c	2007-01-24 22:34:34.000000000 +0100
+++++ busybox-1.4.1-wgetSEGV/networking/wget.c	2007-02-11 17:21:18.000000000 +0100
++@@ -543,7 +543,9 @@
++ 	p = strchr(h->host, '?'); if (!sp || (p && sp > p)) sp = p;
++ 	p = strchr(h->host, '#'); if (!sp || (p && sp > p)) sp = p;
++ 	if (!sp) {
++-		h->path = "";
+++		/* must be writable because of bb_get_last_path_component() */
+++		static char nullstr[] = "";
+++		h->path = nullstr;
++ 	} else if (*sp == '/') {
++ 		*sp = '\0';
++ 		h->path = sp + 1;
