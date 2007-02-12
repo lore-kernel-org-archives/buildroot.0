@@ -1,7 +1,7 @@
 From: bugs at busybox.net <bugs@busybox.net>
-Date: Mon, 12 Feb 2007 05:50:05 -0800
-Subject: [Buildroot] [buildroot 0000460]: Support for netkit-rsh [patch]
-Message-ID: <bed713a2cf7f89c1235fc09ee786d048@bugs.busybox.net>
+Date: Mon, 12 Feb 2007 05:50:06 -0800
+Subject: [Buildroot] [buildroot 0000451]: OpenSSL 0.9.7e
+Message-ID: <83f36e31f6ad22850015b595f64902f1@bugs.busybox.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -11,38 +11,42 @@ To: buildroot@busybox.net
 
 The following issue has been ASSIGNED. 
 ====================================================================== 
-http://busybox.net/bugs/view.php?id=460 
+http://busybox.net/bugs/view.php?id=451 
 ====================================================================== 
-Reported By:                sho
+Reported By:                gnat
 Assigned To:                buildroot
 ====================================================================== 
 Project:                    buildroot
-Issue ID:                   460
-Category:                   New Features
-Reproducibility:            N/A
-Severity:                   feature
+Issue ID:                   451
+Category:                   Architecture Specific
+Reproducibility:            always
+Severity:                   tweak
 Priority:                   normal
 Status:                     assigned
 ====================================================================== 
-Date Submitted:             10-01-2005 13:14 PDT
+Date Submitted:             09-29-2005 15:45 PDT
 Last Modified:              02-12-2007 05:50 PST
 ====================================================================== 
-Summary:                    Support for netkit-rsh [patch]
+Summary:                    OpenSSL 0.9.7e
 Description: 
-The attached patch adds support for the netkit-rsh package to buildroot,
-important for low-end systems that are too slow to run ssh servers (e.g.
-386). Telnet is no alternative because it allows only interactive logins.
-
-
+Configure fails when $(ARCH) == i686. Apparently there is no linux-i686
+target for OpenSSL.
 ====================================================================== 
+
+---------------------------------------------------------------------- 
+ vapier - 09-29-05 16:06  
+---------------------------------------------------------------------- 
+dupe of bug 450 
 
 Issue History 
 Date Modified   Username       Field                    Change               
 ====================================================================== 
-10-01-05 13:14  sho            New Issue                                    
-10-01-05 13:14  sho            Status                   new => assigned     
-10-01-05 13:14  sho            Assigned To               => uClibc          
-10-01-05 13:14  sho            File Added: buildroot-netkitrsh.patch            
-       
+09-29-05 15:45  gnat           New Issue                                    
+09-29-05 15:45  gnat           Status                   new => assigned     
+09-29-05 15:45  gnat           Assigned To               => uClibc          
+09-29-05 16:06  vapier         Note Added: 0000589                          
+09-29-05 16:06  vapier         Status                   assigned => closed  
+09-29-05 16:06  vapier         Resolution               open => duplicate   
+02-12-07 05:50  vapier         Status                   closed => assigned  
 02-12-07 05:50  vapier         Assigned To              uClibc => buildroot 
 ======================================================================
