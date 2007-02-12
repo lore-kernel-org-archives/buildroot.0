@@ -1,8 +1,8 @@
 From: bugs at busybox.net <bugs@busybox.net>
-Date: Mon, 12 Feb 2007 05:48:52 -0800
-Subject: [Buildroot] [buildroot 0000417]: makedevs behavior differs from
-	documentation
-Message-ID: <265e8c8dc174a0ffce0470ad40a33d96@bugs.busybox.net>
+Date: Mon, 12 Feb 2007 05:48:53 -0800
+Subject: [Buildroot] [buildroot 0000367]: [Busybox commands and options doc
+	link] Bad web browser display
+Message-ID: <036a749ece6cfd2b9694abb0e4927e4c@bugs.busybox.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -12,47 +12,83 @@ To: buildroot@busybox.net
 
 The following issue has been ASSIGNED. 
 ====================================================================== 
-http://busybox.net/bugs/view.php?id=417 
+http://busybox.net/bugs/view.php?id=367 
 ====================================================================== 
-Reported By:                sho
+Reported By:                mdeschamps
 Assigned To:                buildroot
 ====================================================================== 
 Project:                    buildroot
-Issue ID:                   417
-Category:                   Other
+Issue ID:                   367
+Category:                   Website
 Reproducibility:            always
-Severity:                   major
+Severity:                   minor
 Priority:                   normal
 Status:                     assigned
 ====================================================================== 
-Date Submitted:             09-07-2005 11:37 PDT
+Date Submitted:             08-08-2005 01:05 PDT
 Last Modified:              02-12-2007 05:48 PST
 ====================================================================== 
-Summary:                    makedevs behavior differs from documentation
+Summary:                    [Busybox commands and options doc link] Bad web
+browser display
 Description: 
-According to the documentation, the makedevs interprets the value in the
-last column of its input file as the number of devices to create. This is
-not true, for exampele should the default configuration create hda[1-15],
-but hda15 is missing. Changing the statement
+http://bugs.busybox.net/proj_doc_page.php presents a link leading to
+http://bugs.busybox.net/file_download.php?file_id=1&type=doc
+Upon clicking my firefox 1.0.4 (Mozilla/5.0 (X11; U; Linux i686; fr-FR;
+rv:1.7.8) Gecko/20050511 Firefox/1.0.4) 
 
-  for (i = start; i < count; i++)
+I got the source code displayed in plain (not interpreted by firefox ?)
+-------
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+"http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<title>BusyBox - The Swiss Army Knife of Embedded Linux</title>
+<link rev="made" href="mailto:root@localhost" />
+</head>
 
-in makedevs.c into
+<body style="background-color: white">
 
-  for (i = start; i < start+count; i++)
+<p><a name="__index__"></a></p>
+<!-- INDEX BEGIN -->
+<!--
 
-should fix the problem.
+<ul>
+
+	<li>#name</li>
+	<li>#syntax</li>
+	<li>#description</li>
+	<li>#usage</li>
+	<li>#common_options</li>
+	<li>#commands</li>
+	<li>#command_descriptions</li>
+	<li>#libc_nss</li>
+	<li>#maintainer</li>
+	<li>#authors</li>
+</ul>
+-->
+<!-- INDEX END -->
+
+<p>
+.
+.
+.
+--------- etc, etc...
+
+
+
+
 ====================================================================== 
 
 Issue History 
 Date Modified   Username       Field                    Change               
 ====================================================================== 
-09-07-05 11:37  sho            New Issue                                    
-09-07-05 11:37  sho            Status                   new => assigned     
-09-07-05 11:37  sho            Assigned To               => uClibc          
-01-25-06 07:27  prpplague      Status                   assigned => closed  
-01-25-06 07:27  prpplague      Resolution               open => won't fix   
-01-25-06 07:27  prpplague      Additional Information Updated                   
+08-08-05 01:05  mdeschamps     New Issue                                    
+08-08-05 01:05  mdeschamps     Status                   new => assigned     
+08-08-05 01:05  mdeschamps     Assigned To               => uClibc          
+01-25-06 06:29  prpplague      Status                   assigned => closed  
+01-25-06 06:29  prpplague      Resolution               open => no change
+required
+01-25-06 06:29  prpplague      Additional Information Updated                   
 
 02-12-07 05:48  vapier         Status                   closed => assigned  
 02-12-07 05:48  vapier         Assigned To              uClibc => buildroot 
