@@ -1,8 +1,7 @@
 From: bugs at busybox.net <bugs@busybox.net>
 Date: Mon, 12 Feb 2007 05:34:08 -0800
-Subject: [Buildroot] [buildroot 0001090]: stdlibc++ fails putting a double
-	in a stream.
-Message-ID: <85cb46e7f0fc91843e8357a4225e773a@bugs.busybox.net>
+Subject: [Buildroot] [buildroot 0001043]: ada support for buildroot
+Message-ID: <dfeaaf806fdc8ccf9996f442ec4c8cb2@bugs.busybox.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -12,40 +11,84 @@ To: buildroot@busybox.net
 
 The following issue has been ASSIGNED. 
 ====================================================================== 
-http://busybox.net/bugs/view.php?id=1090 
+http://busybox.net/bugs/view.php?id=1043 
 ====================================================================== 
-Reported By:                GJanak
+Reported By:                belandor
 Assigned To:                buildroot
 ====================================================================== 
 Project:                    buildroot
-Issue ID:                   1090
-Category:                   Architecture Specific
-Reproducibility:            always
-Severity:                   major
+Issue ID:                   1043
+Category:                   New Features
+Reproducibility:            N/A
+Severity:                   feature
 Priority:                   normal
 Status:                     assigned
 ====================================================================== 
-Date Submitted:             11-14-2006 00:01 PST
+Date Submitted:             09-21-2006 06:37 PDT
 Last Modified:              02-12-2007 05:34 PST
 ====================================================================== 
-Summary:                    stdlibc++ fails putting a double in a stream.
+Summary:                    ada support for buildroot
 Description: 
-The problem was:
-putting a double in a stream:
-cout << 10.5 ;
+I have included the option to add --enable-languages=ada when compiling
+gcc.
 
-Produce an empty string, or some garbage characters.
+The problem is though, that gcc-4.1.1 needs a patch to compile - namely
+the files
+s-wchcon.adb and s-wchcon.ads need to be replaced with the SVN versions.
+gcc-SVN should compile fine though.
+I haven't tried compiling Ada support for older gcc versions.
 
-I could resolve the error down to some wired Code combination between
-uclibc and libstdc++
+I got this to compile targetting arm-linux-uclibcgnueabi. However,
+building the target compiler supporting ada did not work (Configure chokes
+over the wrong gmp.h version).
+
+Any comments?
+
 ====================================================================== 
+
+---------------------------------------------------------------------- 
+ belandor - 09-26-06 18:26  
+---------------------------------------------------------------------- 
+the issue with the failing target compiler is due to a bug in gcc-4.1.1:
+when running, the cross-compiler emits a warning like this:
+
+<built-in>:0: warning: 'const' attribute directive ignored
+<built-in>:0: warning: 'nothrow' attribute directive ignored
+
+When configure for gcc-4.1.1-target tests for ada capabilities (line
+2145), it checks for creation of conftest.o and makes sure, that the call
+did not issue any output. - Well, as output is issued the test fails, even
+though the compiler is actually functional.
+
+The gmp.h warning is misleading - it's actually the last error message
+produced in config.log, but unrelated to ada language support...
+
+This is fixed in the gcc-4.1.2 release branch. - So full Ada support
+should probably wait for that release. 
+
+---------------------------------------------------------------------- 
+ bernhardf - 09-30-06 14:02  
+---------------------------------------------------------------------- 
+I'm thinking about adding fortran support, so i'll need gmp and mpfr too,
+fwiw.
+Stubs for the latter two are already in place but not yet activated since
+they are incomplete at the moment. Does ada too require gmp? 
+
+---------------------------------------------------------------------- 
+ belandor - 10-01-06 04:49  
+---------------------------------------------------------------------- 
+Ada doesn't need gmp, no. As I said, cross-compiler can be built and works
+(more or less) 
 
 Issue History 
 Date Modified   Username       Field                    Change               
 ====================================================================== 
-11-14-06 00:01  GJanak         New Issue                                    
-11-14-06 00:01  GJanak         Status                   new => assigned     
-11-14-06 00:01  GJanak         Assigned To               => uClibc          
-11-14-06 00:05  GJanak         Issue Monitored: GJanak                      
+09-21-06 06:37  belandor       New Issue                                    
+09-21-06 06:37  belandor       Status                   new => assigned     
+09-21-06 06:37  belandor       Assigned To               => uClibc          
+09-21-06 22:05  belandor       Issue Monitored: belandor                    
+09-26-06 18:26  belandor       Note Added: 0001646                          
+09-30-06 14:02  bernhardf      Note Added: 0001671                          
+10-01-06 04:49  belandor       Note Added: 0001680                          
 02-12-07 05:34  vapier         Assigned To              uClibc => buildroot 
 ======================================================================
