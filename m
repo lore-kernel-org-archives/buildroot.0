@@ -1,8 +1,8 @@
 From: bugs at busybox.net <bugs@busybox.net>
-Date: Mon, 12 Feb 2007 05:47:08 -0800
-Subject: [Buildroot] [buildroot 0000566]: [patch] ruby 1.8 support for
-	buildroot
-Message-ID: <a1923d4765072c7c53a155a15596a959@bugs.busybox.net>
+Date: Mon, 12 Feb 2007 05:47:10 -0800
+Subject: [Buildroot] [buildroot 0000546]: make menuconfig is incomplete;
+	some config options get asked on 'make'
+Message-ID: <7d8c380be943151bb7412df868fd2621@bugs.busybox.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -12,66 +12,69 @@ To: buildroot@busybox.net
 
 The following issue has been ASSIGNED. 
 ====================================================================== 
-http://busybox.net/bugs/view.php?id=566 
+http://busybox.net/bugs/view.php?id=546 
 ====================================================================== 
-Reported By:                crafterm
+Reported By:                alemc
 Assigned To:                buildroot
 ====================================================================== 
 Project:                    buildroot
-Issue ID:                   566
-Category:                   New Features
-Reproducibility:            N/A
-Severity:                   feature
+Issue ID:                   546
+Category:                   Other
+Reproducibility:            always
+Severity:                   minor
 Priority:                   normal
 Status:                     assigned
 ====================================================================== 
-Date Submitted:             11-29-2005 05:41 PST
+Date Submitted:             11-15-2005 23:29 PST
 Last Modified:              02-12-2007 05:47 PST
 ====================================================================== 
-Summary:                    [patch] ruby 1.8 support for buildroot
+Summary:                    make menuconfig is incomplete; some config options
+get asked on 'make'
 Description: 
-Hi All,
+The following config options are not set my make menuconfig, resulting in
+the settings for these questions being asked when doing 'make'
 
-Hope all is going well.
+Target x86 Processor Family
+> 1. Generic 386 (CONFIG_GENERIC_386) (NEW)
+  2. 386 (CONFIG_386) (NEW)
+  3. 486 (CONFIG_486) (NEW)
+  4. Pentium/586/K5/5x86/6x86/6x86MX (CONFIG_586) (NEW)
+  5. Pentium-MMX (CONFIG_586MMX) (NEW)
+  6. Pentium-Pro (CONFIG_686) (NEW)
+  7. Celeron/Pentium-II (CONFIG_PENTIUMII) (NEW)
+  8. Pentium-III/Celeron(Coppermine)/Pentium-III Xeon (CONFIG_PENTIUMIII)
+(NEW)
+  9. Pentium-4/Celeron(P4-based)/Xeon (CONFIG_PENTIUM4) (NEW)
+  10. K6/K6-II/K6-III (CONFIG_K6) (NEW)
+  11. Athlon/Duron/K7 (CONFIG_K7) (NEW)
+  12. Elan (CONFIG_ELAN) (NEW)
+  13. Crusoe (CONFIG_CRUSOE) (NEW)
+  14. Winchip-C6 (CONFIG_WINCHIPC6) (NEW)
+  15. Winchip-2/Winchip-2A/Winchip-3 (CONFIG_WINCHIP2) (NEW)
+  16. CyrixIII/VIA-C3 (CONFIG_CYRIXIII) (NEW)
+  17. VIA C3-2 (Nehemiah) (CONFIG_NEHEMIAH) (NEW)
+choice[1-17?]: 
 
-Attached is the first support for building ruby within buildroot.
+  Shared library loader naming prefix (LDSO_BASE_FILENAME) [ld.so] ld.so
+  Enable ELF RUNPATH tag support (LDSO_RUNPATH) [Y/n/?] (NEW) 
 
-The tar file includes the package directory related files (ie. ruby.mk and
-Config.in) and the diff is to the package/Config.in file to enable support
-during a make menuconfig.
+Attemt to shutdown stdio subsystem when abort() is called.
+(UCLIBC_HAS_STDIO_SHUTDOWN_ON_ABORT) [N/y/?] (NEW) 
 
-Cheers,
+Build pthread with debugging output (DODEBUG_PT) [N/y/?] (NEW)
 
-Marcus
+
 ====================================================================== 
-
----------------------------------------------------------------------- 
- crafterm - 12-14-05 09:35  
----------------------------------------------------------------------- 
-Updated the ruby archive to install Ruby 1.8.2. Ruby 1.8.3 has issues with
-IO, in particular the following script results in error.
-
-File.open("/tmp/test.txt", 'rb') {|r|
-  puts r.read(1024)
-}
-
-Also fixed in Ruby 1.8.4pre2. 
 
 Issue History 
 Date Modified   Username       Field                    Change               
 ====================================================================== 
-11-29-05 05:41  crafterm       New Issue                                    
-11-29-05 05:41  crafterm       Status                   new => assigned     
-11-29-05 05:41  crafterm       Assigned To               => uClibc          
-11-29-05 05:41  crafterm       File Added: ruby.tar.gz                      
-11-29-05 05:42  crafterm       File Added: config.in.ruby.patch                 
-  
-12-14-05 09:35  crafterm       Note Added: 0000761                          
-12-14-05 09:50  crafterm       File Added: ruby-updated-20051214.tar.gz         
-          
-01-23-06 12:24  prpplague      Status                   assigned => resolved
-01-23-06 12:24  prpplague      Resolution               open => fixed       
-01-23-06 12:24  prpplague      Additional Information Updated                   
+11-15-05 23:29  alemc          New Issue                                    
+11-15-05 23:29  alemc          Status                   new => assigned     
+11-15-05 23:29  alemc          Assigned To               => uClibc          
+01-23-06 12:36  prpplague      Status                   assigned => resolved
+01-23-06 12:36  prpplague      Resolution               open => fixed       
+01-23-06 12:36  prpplague      Additional Information Updated                   
 
 03-08-06 16:55  vapier         Status                   resolved => closed  
 02-12-07 05:47  vapier         Status                   closed => assigned  
