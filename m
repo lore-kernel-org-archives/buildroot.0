@@ -1,8 +1,8 @@
 From: bugs at busybox.net <bugs@busybox.net>
-Date: Mon, 12 Feb 2007 05:33:21 -0800
-Subject: [Buildroot] [buildroot 0000888]: FLOAT: Toolchain build fails on
-	non-FPU ARM
-Message-ID: <a258642485815aeb9847d2ae47f37c0b@bugs.busybox.net>
+Date: Mon, 12 Feb 2007 05:33:24 -0800
+Subject: [Buildroot] [buildroot 0001069]: FLOAT: buildroot mipsel with
+	soft-float does not compile libgcc with -msoft-float
+Message-ID: <72fc8731a9ee46eecee63062494d6de8@bugs.busybox.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -12,49 +12,61 @@ To: buildroot@busybox.net
 
 The following issue has been ASSIGNED. 
 ====================================================================== 
-http://busybox.net/bugs/view.php?id=888 
+http://busybox.net/bugs/view.php?id=1069 
 ====================================================================== 
-Reported By:                fmoya
+Reported By:                spblinux
 Assigned To:                buildroot
 ====================================================================== 
 Project:                    buildroot
-Issue ID:                   888
+Issue ID:                   1069
 Category:                   Architecture Specific
 Reproducibility:            always
-Severity:                   major
+Severity:                   minor
 Priority:                   normal
 Status:                     assigned
 ====================================================================== 
-Date Submitted:             05-31-2006 02:17 PDT
+Date Submitted:             10-10-2006 07:32 PDT
 Last Modified:              02-12-2007 05:33 PST
 ====================================================================== 
-Summary:                    FLOAT: Toolchain build fails on non-FPU ARM
+Summary:                    FLOAT: buildroot mipsel with soft-float does not
+compile libgcc with -msoft-float
 Description: 
-t-linux and t-linux-uclibc are missing the new hand-coded FP functions of
-newer GCCs.  This triggers a link failure due to unresolved symbols during
-uClibc compilation.
+Buildroot toolchain gcc-4.1.0/uClibc-0.9.28 mipsel
+Compilation of asterisk-1.2.1 (with openwrt patches):
+- asterisk works if compiled with 
+  buildroot toolchain without soft-float option
+- asterisk runs but does not work properly if compiled with 
+  buildroot toolchain  with -msoft-float
 
+Issue: many embedded device do not have a fpu; so -msoft-float should be
+used.
+
+Solution: when gcc is compiled libgcc has to be compiled with
+-msoft-float:
+the buildroot patch
+ toolchain/gcc/4.1.0/100-uclibc-conf.patch
+has to add
+ TARGET_LIBGCC2_CFLAGS= -fPIC -msoft-float
+to gcc-4.1.0/gcc/config/t-linux-uclibc.
+
+Credits go to  David Wuertele
+(http://gcc.gnu.org/ml/gcc/2003-08/msg00634.html)
+who found the solution.
+
+It would be nice if BR2_SOFT_FLOAT=y would automagically add
+-msoft-float.
+
+Christian Ostheimer
 ====================================================================== 
-
----------------------------------------------------------------------- 
- shail - 06-28-06 04:05  
----------------------------------------------------------------------- 
-after puting this patch in config/arm/t-linux, in final build of gcc... ld
-gives error as following. 
-
-libgcc2......./multiple defination of __floatundidf...
-
-unable to fix it. 
 
 Issue History 
 Date Modified   Username       Field                    Change               
 ====================================================================== 
-05-31-06 02:17  fmoya          New Issue                                    
-05-31-06 02:17  fmoya          Status                   new => assigned     
-05-31-06 02:17  fmoya          Assigned To               => uClibc          
-06-28-06 04:05  shail          Note Added: 0001468                          
-10-09-06 12:24  jruere         Issue Monitored: jruere                      
-02-04-07 09:14  bernhardf      Summary                  Toolchain build fails on
-non-FPU ARM => FLOAT: Toolchain build fails on non-FPU ARM
+10-10-06 07:32  spblinux       New Issue                                    
+10-10-06 07:32  spblinux       Status                   new => assigned     
+10-10-06 07:32  spblinux       Assigned To               => uClibc          
+02-04-07 09:11  bernhardf      Summary                  buildroot mipsel with
+soft-float does not compile libgcc with -msoft-float => FLOAT: buildroot mipsel
+with soft-float does not compile libgcc with -msoft-float
 02-12-07 05:33  vapier         Assigned To              uClibc => buildroot 
 ======================================================================
