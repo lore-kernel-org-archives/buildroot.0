@@ -1,8 +1,8 @@
 From: bugs at busybox.net <bugs@busybox.net>
-Date: Mon, 12 Feb 2007 05:49:18 -0800
-Subject: [Buildroot] [buildroot 0000654]: Changing the thread model selected
-	does not force a rebuild on SH4
-Message-ID: <35e8ff742be7b53f33d8be2378a9093d@bugs.busybox.net>
+Date: Mon, 12 Feb 2007 05:49:19 -0800
+Subject: [Buildroot] [buildroot 0000220]: buildroot: Problems building
+	genext2fs
+Message-ID: <70ff3e893f0956a1bb3fde3b7a20e66b@bugs.busybox.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -12,48 +12,52 @@ To: buildroot@busybox.net
 
 The following issue has been ASSIGNED. 
 ====================================================================== 
-http://busybox.net/bugs/view.php?id=654 
+http://busybox.net/bugs/view.php?id=220 
 ====================================================================== 
-Reported By:                zx80user
+Reported By:                kk
 Assigned To:                buildroot
 ====================================================================== 
 Project:                    buildroot
-Issue ID:                   654
+Issue ID:                   220
 Category:                   Architecture Specific
 Reproducibility:            always
-Severity:                   minor
+Severity:                   major
 Priority:                   normal
 Status:                     assigned
 ====================================================================== 
-Date Submitted:             01-21-2006 13:38 PST
+Date Submitted:             04-08-2005 05:42 PDT
 Last Modified:              02-12-2007 05:49 PST
 ====================================================================== 
-Summary:                    Changing the thread model selected does not force a
-rebuild on SH4
+Summary:                    buildroot: Problems building genext2fs
 Description: 
-Shifting between differnt thread library models does not cause a rebuild on
-SH4
+I tried to run buildroot on an Interix host system (with most Interix
+programs replaced by GNU versions).
+
+There were two problems building genext2fs:
+
+1.) genext2fs unconditionally includes "getopt.h". This is a non-POSIX
+header which does not exist on my system. By POSIX standards, getopt is
+declared in "unistd.h".
+
+2.) genext2fs uses a function named "getline" to read from a file. This
+function is nonstandard and does not exist on my system, linking fails.
+
 ====================================================================== 
 
 ---------------------------------------------------------------------- 
- vapier - 01-22-06 08:20  
+ prpplague - 01-20-06 12:42  
 ---------------------------------------------------------------------- 
-this is true of just about every config option in uClibc
-
-i dont really see it being worth the effort at this time to track how
-every config option affects files
-
-run `make clean` after tweaking your config 
+don't have access to the unusual configuration you have, therefor we are
+unable to reproduce the issue 
 
 Issue History 
 Date Modified   Username       Field                    Change               
 ====================================================================== 
-01-21-06 13:38  zx80user       New Issue                                    
-01-21-06 13:38  zx80user       Status                   new => assigned     
-01-21-06 13:38  zx80user       Assigned To               => uClibc          
-01-22-06 08:20  vapier         Note Added: 0000973                          
-01-22-06 08:20  vapier         Status                   assigned => closed  
-01-22-06 08:20  vapier         Resolution               open => won't fix   
+04-08-05 05:42  kk             New Issue                                    
+01-20-06 12:42  prpplague      Note Added: 0000964                          
+01-20-06 12:42  prpplague      Status                   assigned => closed  
+01-20-06 12:42  prpplague      Resolution               open => unable to
+reproduce
 02-12-07 05:49  vapier         Status                   closed => assigned  
 02-12-07 05:49  vapier         Assigned To              uClibc => buildroot 
 ======================================================================
