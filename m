@@ -1,8 +1,7 @@
 From: bugs at busybox.net <bugs@busybox.net>
-Date: Mon, 12 Feb 2007 05:51:18 -0800
-Subject: [Buildroot] [buildroot 0000065]: trying to download 2.6 headers
-	from ep09.pld-linux.org failed
-Message-ID: <3abaa020bb056e0e7eed5c8fc6de3e26@bugs.busybox.net>
+Date: Mon, 12 Feb 2007 05:51:20 -0800
+Subject: [Buildroot] [buildroot 0000161]: Linux 2.6.10 kernel headers
+Message-ID: <c35def649544e89bf4fd099768c97c3b@bugs.busybox.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -12,73 +11,53 @@ To: buildroot@busybox.net
 
 The following issue has been ASSIGNED. 
 ====================================================================== 
-http://busybox.net/bugs/view.php?id=65 
+http://busybox.net/bugs/view.php?id=161 
 ====================================================================== 
-Reported By:                mspatar
+Reported By:                pgrayson
 Assigned To:                buildroot
 ====================================================================== 
 Project:                    buildroot
-Issue ID:                   65
-Category:                   Website
+Issue ID:                   161
+Category:                   Other
 Reproducibility:            always
-Severity:                   block
+Severity:                   minor
 Priority:                   normal
 Status:                     assigned
 ====================================================================== 
-Date Submitted:             01-27-2005 04:27 PST
+Date Submitted:             03-15-2005 18:16 PST
 Last Modified:              02-12-2007 05:51 PST
 ====================================================================== 
-Summary:                    trying to download 2.6 headers from
-ep09.pld-linux.org failed
+Summary:                    Linux 2.6.10 kernel headers
 Description: 
-Site ep09.pld-linux.org seems to be down.
+This patch obviates the other 2.6.10 kernel header patch which has an error
+in it.
 
+Adds support to buildroot for 2.6.10 kernel headers.
 ====================================================================== 
 
 ---------------------------------------------------------------------- 
- prism - 01-27-05 06:44  
+ pgrayson - 03-15-05 18:34  
 ---------------------------------------------------------------------- 
-It's a maintenance break. From http://www.pld-linux.org :
-26 January 2005 Main resources unavailable
+The other patch was in bug 0000086.
 
-Among other things, our main ftp server, jabber server and CVS/SVN
-repositories are currently down. Planned downtime was two hours, but due
-to (currently) unknown issues it is not known by when those machines will
-be back up. A good bet might be tomorrow morning (that's GMT). For now,
-here is a list of mirrors. 
-
-24 January 2005 Downtime ahead
-
-During the weekend (and before it) parts of our infrastructure will be
-changing location which will result in some downtime. Of particular notice
-are: CVS and SVN repositories, distfiles, jabber server and everything
-placed on ep09.pld-linux.org (including users' accounts).
-
- 
+http://bugs.uclibc.org/view.php?id=86 
 
 ---------------------------------------------------------------------- 
- jswensen - 02-04-05 14:21  
+ vapier - 03-20-05 18:20  
 ---------------------------------------------------------------------- 
-The server is up and running again.  This can probably be closed, although
-maybe someone should try to set up a mirror for this web site. 
-
----------------------------------------------------------------------- 
- vapier - 03-20-05 18:34  
----------------------------------------------------------------------- 
-site is back up now ... next time, just wait :P 
+already been added 
 
 Issue History 
 Date Modified   Username       Field                    Change               
 ====================================================================== 
-01-27-05 04:27  mspatar        New Issue                                    
-01-27-05 04:58  mspatar        Issue Monitored: mspatar                     
-01-27-05 06:43  prism          Note Added: 0000027                          
-01-27-05 06:44  prism          Note Edited: 0000027                         
-02-04-05 14:21  jswensen       Note Added: 0000042                          
-03-16-05 12:14  andersen       Status                   new => assigned     
-03-16-05 12:14  andersen       Assigned To               => uClibc          
-03-20-05 18:34  vapier         Status                   assigned => closed  
-03-20-05 18:34  vapier         Note Added: 0000107                          
+03-15-05 18:16  pgrayson       New Issue                                    
+03-15-05 18:16  pgrayson       File Added: buildroot-2.6.10-headers.patch       
+            
+03-15-05 18:34  pgrayson       Note Added: 0000088                          
+03-16-05 12:10  andersen       Status                   new => assigned     
+03-16-05 12:10  andersen       Assigned To               => uClibc          
+03-20-05 18:20  vapier         Status                   assigned => closed  
+03-20-05 18:20  vapier         Note Added: 0000104                          
 02-12-07 05:51  vapier         Status                   closed => assigned  
 02-12-07 05:51  vapier         Assigned To              uClibc => buildroot 
 ======================================================================
