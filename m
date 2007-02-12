@@ -1,8 +1,9 @@
 From: bugs at busybox.net <bugs@busybox.net>
-Date: Mon, 12 Feb 2007 05:49:16 -0800
-Subject: [Buildroot] [buildroot 0000129]: Make menuconfig toolchain option
-	"Additional gcc options" passed into wrong build phase
-Message-ID: <70b1c9863cc2ab433ff746eb819a1aa7@bugs.busybox.net>
+Date: Mon, 12 Feb 2007 05:49:17 -0800
+Subject: [Buildroot] [buildroot 0000625]: rootfs isn't updated with changes
+	made in target_skeleton or device_table.txt as described in
+	documentation
+Message-ID: <2717315338eb8e869ea54d1c6f6efdff@bugs.busybox.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -12,65 +13,64 @@ To: buildroot@busybox.net
 
 The following issue has been ASSIGNED. 
 ====================================================================== 
-http://busybox.net/bugs/view.php?id=129 
+http://busybox.net/bugs/view.php?id=625 
 ====================================================================== 
-Reported By:                rlc
+Reported By:                hagepe
 Assigned To:                buildroot
 ====================================================================== 
 Project:                    buildroot
-Issue ID:                   129
-Category:                   Architecture Specific
+Issue ID:                   625
+Category:                   Documentation
 Reproducibility:            always
-Severity:                   block
+Severity:                   major
 Priority:                   normal
 Status:                     assigned
 ====================================================================== 
-Date Submitted:             03-02-2005 22:55 PST
+Date Submitted:             01-06-2006 06:19 PST
 Last Modified:              02-12-2007 05:49 PST
 ====================================================================== 
-Summary:                    Make menuconfig toolchain option "Additional gcc
-options" passed into wrong build phase
+Summary:                    rootfs isn't updated with changes made in
+target_skeleton or device_table.txt as described in documentation
 Description: 
-My embedded linux target requires the -mcpu=860 option to be passed into
-the compilation phase of the GCC cross-compiler (if I don't, nothing
-compiled with gcc will work!  It attempts to use non-existent
-floating-point registers).  I put this option into the "Additional gcc
-options" section of make menuconfig, but it attempted to use this as a
-configure script option instead.  Here's the output:
+At least with the daily snapshot from 5.1.2006:
+If I understand the documentation right,
+changing files in /target/generic/target_skeleton 
+and a simple make in the main directory should rebuild the
+rootfs including the changes. 
+In fact the rootfs is rebuild but without the changes. There
+must be something else that has to be done between the changes
+and the "make" or the major makefile needs some changes?
 
-configure: error: -mcpu=860: invalid option; use --help to show usage
-make: ***
-[/home/powerpc-linux/host/build/working/buildroot/toolchain_build_powerpc_nofpu/gcc-3.4.2-initial/.configured]
-Error 1
 
-If this is the intended use for this toolchain option, please tell me how
-I can build gcc with the -mcpu=860 option.
+
 
 ====================================================================== 
 
 ---------------------------------------------------------------------- 
- rlc - 03-02-05 23:05  
+ scott - 01-19-06 13:42  
 ---------------------------------------------------------------------- 
-I found the correct configure option:
---with-cpu=860
+To fix this, we need to change the main Makefile.  It's a one liner...
 
-I believe this causes the cross-compiler version of gcc to assume
--mcpu=860
+buildroot/Makefile:
 
-I was confused about where this option would be used, perhaps a more
-descriptive name or help information could be added?
-Please reduce the severity to trivial, my mistake. 
+--- Old Line...
+$(TARGET_DIR):
+
++++ New Line...
+$(TARGET_DIR): $(TARGET_SKELETON) $(TARGET_SKEL_DIR) 
 
 Issue History 
 Date Modified   Username       Field                    Change               
 ====================================================================== 
-03-02-05 22:55  rlc            New Issue                                    
-03-02-05 23:05  rlc            Note Added: 0000071                          
-03-16-05 12:12  andersen       Status                   new => assigned     
-03-16-05 12:12  andersen       Assigned To               => uClibc          
-01-23-06 07:18  prpplague      Status                   assigned => closed  
-01-23-06 07:18  prpplague      Resolution               open => no change
+01-06-06 06:19  hagepe         New Issue                                    
+01-06-06 06:19  hagepe         Status                   new => assigned     
+01-06-06 06:19  hagepe         Assigned To               => uClibc          
+01-19-06 13:42  scott          Note Added: 0000957                          
+01-23-06 06:29  prpplague      Status                   assigned => closed  
+01-23-06 06:29  prpplague      Resolution               open => no change
 required
+01-23-06 06:29  prpplague      Additional Information Updated                   
+
 02-12-07 05:49  vapier         Status                   closed => assigned  
 02-12-07 05:49  vapier         Assigned To              uClibc => buildroot 
 ======================================================================
