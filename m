@@ -1,8 +1,8 @@
 From: bugs at busybox.net <bugs@busybox.net>
-Date: Mon, 12 Feb 2007 05:33:24 -0800
-Subject: [Buildroot] [buildroot 0001069]: FLOAT: buildroot mipsel with
-	soft-float does not compile libgcc with -msoft-float
-Message-ID: <72fc8731a9ee46eecee63062494d6de8@bugs.busybox.net>
+Date: Mon, 12 Feb 2007 05:33:25 -0800
+Subject: [Buildroot] [buildroot 0001052]: MMU: Build fails for MIPS-1 target,
+	vfork.c, `fork' undeclared here
+Message-ID: <8856ed89aad9ba5005945f33c07fec49@bugs.busybox.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -12,61 +12,55 @@ To: buildroot@busybox.net
 
 The following issue has been ASSIGNED. 
 ====================================================================== 
-http://busybox.net/bugs/view.php?id=1069 
+http://busybox.net/bugs/view.php?id=1052 
 ====================================================================== 
-Reported By:                spblinux
+Reported By:                dash77
 Assigned To:                buildroot
 ====================================================================== 
 Project:                    buildroot
-Issue ID:                   1069
+Issue ID:                   1052
 Category:                   Architecture Specific
 Reproducibility:            always
-Severity:                   minor
+Severity:                   block
 Priority:                   normal
 Status:                     assigned
 ====================================================================== 
-Date Submitted:             10-10-2006 07:32 PDT
+Date Submitted:             09-25-2006 11:16 PDT
 Last Modified:              02-12-2007 05:33 PST
 ====================================================================== 
-Summary:                    FLOAT: buildroot mipsel with soft-float does not
-compile libgcc with -msoft-float
+Summary:                    MMU: Build fails for MIPS-1 target, vfork.c, `fork'
+undeclared here
 Description: 
-Buildroot toolchain gcc-4.1.0/uClibc-0.9.28 mipsel
-Compilation of asterisk-1.2.1 (with openwrt patches):
-- asterisk works if compiled with 
-  buildroot toolchain without soft-float option
-- asterisk runs but does not work properly if compiled with 
-  buildroot toolchain  with -msoft-float
+  CC libc/sysdeps/linux/common/uselib.os
+  CC libc/sysdeps/linux/common/ustat.os
+  CC libc/sysdeps/linux/common/utime.os
+  CC libc/sysdeps/linux/common/utimes.os
+  CC libc/sysdeps/linux/common/vfork.os
+libc/sysdeps/linux/common/vfork.c:13: error: `fork' undeclared here (not
+in a function)
+libc/sysdeps/linux/common/vfork.c:13: warning: type defaults to `int' in
+declaration of `fork'
+libc/sysdeps/linux/common/vfork.c: In function `__vfork':
+libc/sysdeps/linux/common/vfork.c:18: error: called object is not a
+function
+make[2]: *** [libc/sysdeps/linux/common/vfork.os] Error 1
+make[1]: *** [lib/libc.so.0] Error 2
+make[1]: Leaving directory
+`/home/dash/code/vhdl/buildroot/buildroot/toolchain_build_mips_nofpu/uClibc'
+make: ***
+[/home/dash/code/vhdl/buildroot/buildroot/toolchain_build_mips_nofpu/uClibc/lib/libc.a]
+Error 2
 
-Issue: many embedded device do not have a fpu; so -msoft-float should be
-used.
-
-Solution: when gcc is compiled libgcc has to be compiled with
--msoft-float:
-the buildroot patch
- toolchain/gcc/4.1.0/100-uclibc-conf.patch
-has to add
- TARGET_LIBGCC2_CFLAGS= -fPIC -msoft-float
-to gcc-4.1.0/gcc/config/t-linux-uclibc.
-
-Credits go to  David Wuertele
-(http://gcc.gnu.org/ml/gcc/2003-08/msg00634.html)
-who found the solution.
-
-It would be nice if BR2_SOFT_FLOAT=y would automagically add
--msoft-float.
-
-Christian Ostheimer
 ====================================================================== 
 
 Issue History 
 Date Modified   Username       Field                    Change               
 ====================================================================== 
-10-10-06 07:32  spblinux       New Issue                                    
-10-10-06 07:32  spblinux       Status                   new => assigned     
-10-10-06 07:32  spblinux       Assigned To               => uClibc          
-02-04-07 09:11  bernhardf      Summary                  buildroot mipsel with
-soft-float does not compile libgcc with -msoft-float => FLOAT: buildroot mipsel
-with soft-float does not compile libgcc with -msoft-float
+09-25-06 11:16  dash77         New Issue                                    
+09-25-06 11:16  dash77         Status                   new => assigned     
+09-25-06 11:16  dash77         Assigned To               => uClibc          
+02-04-07 09:10  bernhardf      Summary                  Build fails for MIPS-1
+target, vfork.c, `fork' undeclared here => MMU: Build fails for MIPS-1 target,
+vfork.c, `fork' undeclared here
 02-12-07 05:33  vapier         Assigned To              uClibc => buildroot 
 ======================================================================
