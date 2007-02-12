@@ -1,7 +1,7 @@
 From: bugs at busybox.net <bugs@busybox.net>
-Date: Mon, 12 Feb 2007 05:47:16 -0800
-Subject: [Buildroot] [buildroot 0000439]: ipsec-tools package
-Message-ID: <d77490c8fe1b57d0de6cdbe1b277e01c@bugs.busybox.net>
+Date: Mon, 12 Feb 2007 05:47:19 -0800
+Subject: [Buildroot] [buildroot 0000398]: Update to microperl package
+Message-ID: <97d58437747ae79b11897dd4e83a6ca8@bugs.busybox.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -11,43 +11,41 @@ To: buildroot@busybox.net
 
 The following issue has been ASSIGNED. 
 ====================================================================== 
-http://busybox.net/bugs/view.php?id=439 
+http://busybox.net/bugs/view.php?id=398 
 ====================================================================== 
-Reported By:                steelman
+Reported By:                daisuke
 Assigned To:                buildroot
 ====================================================================== 
 Project:                    buildroot
-Issue ID:                   439
-Category:                   New Features
+Issue ID:                   398
+Category:                   Other
 Reproducibility:            always
 Severity:                   minor
 Priority:                   normal
 Status:                     assigned
 ====================================================================== 
-Date Submitted:             09-21-2005 07:45 PDT
+Date Submitted:             08-23-2005 05:35 PDT
 Last Modified:              02-12-2007 05:47 PST
 ====================================================================== 
-Summary:                    ipsec-tools package
+Summary:                    Update to microperl package
 Description: 
-This is ipsec-tools-0.6.1 buildroot package. Just add an entry in
-./packages/Config.in /e voila/. It also dpends on libfl.a which is not
-installed by default in staging_dir (see issue 438;
-http://bugs.busybox.net/view.php?id=438 )
+This patch updates the microperl package to build version 5.8.7. The 5.8.7
+version of microperl adds additional features.
 
-Everything works fine on i386 platform. I haven't tested other platfrms.
+This patch was created against buildroot-20050823 snapshot.
+
 ====================================================================== 
 
 Issue History 
 Date Modified   Username       Field                    Change               
 ====================================================================== 
-09-21-05 07:45  steelman       New Issue                                    
-09-21-05 07:45  steelman       Status                   new => assigned     
-09-21-05 07:45  steelman       Assigned To               => uClibc          
-09-21-05 07:46  steelman       File Added: ipsec-tools.tar.gz                   
-
-01-23-06 13:44  prpplague      Status                   assigned => resolved
-01-23-06 13:44  prpplague      Resolution               open => fixed       
-01-23-06 13:44  prpplague      Additional Information Updated                   
+08-23-05 05:35  daisuke        New Issue                                    
+08-23-05 05:35  daisuke        Status                   new => assigned     
+08-23-05 05:35  daisuke        Assigned To               => uClibc          
+08-23-05 05:35  daisuke        File Added: microperl.patch                    
+01-23-06 13:47  prpplague      Status                   assigned => resolved
+01-23-06 13:47  prpplague      Resolution               open => fixed       
+01-23-06 13:47  prpplague      Additional Information Updated                   
 
 03-08-06 16:54  vapier         Status                   resolved => closed  
 02-12-07 05:47  vapier         Status                   closed => assigned  
