@@ -1,7 +1,7 @@
 From: bugs at busybox.net <bugs@busybox.net>
-Date: Mon, 12 Feb 2007 05:45:34 -0800
-Subject: [Buildroot] [buildroot 0000664]: bind package update
-Message-ID: <9b34d44c48e55eb27e077549dcec2063@bugs.busybox.net>
+Date: Mon, 12 Feb 2007 05:45:36 -0800
+Subject: [Buildroot] [buildroot 0000303]: Sym links in skel.tar.gz
+Message-ID: <07a4968b83767b9fb1c92dab3b1a843c@bugs.busybox.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -11,52 +11,58 @@ To: buildroot@busybox.net
 
 The following issue has been ASSIGNED. 
 ====================================================================== 
-http://busybox.net/bugs/view.php?id=664 
+http://busybox.net/bugs/view.php?id=303 
 ====================================================================== 
-Reported By:                akvadrako
+Reported By:                lmt
 Assigned To:                buildroot
 ====================================================================== 
 Project:                    buildroot
-Issue ID:                   664
-Category:                   Other
+Issue ID:                   303
+Category:                   Architecture Specific
 Reproducibility:            always
-Severity:                   minor
+Severity:                   tweak
 Priority:                   normal
 Status:                     assigned
 ====================================================================== 
-Date Submitted:             01-27-2006 14:23 PST
+Date Submitted:             06-20-2005 12:25 PDT
 Last Modified:              02-12-2007 05:45 PST
 ====================================================================== 
-Summary:                    bind package update
+Summary:                    Sym links in skel.tar.gz
 Description: 
-This patch consists of:
-(1) bind version bump
-(2) removing some X-compiling build fixes merged upstream
-(3) removing the bind-dlopen patch: not of general enough use
-(4) remove the package/bind/bind9 file - it isn't used
-(5) Use $(STAGING_DIR)/lib instead of $(STAGING_DIR)/usr/lib
-(6) Fix chroot'ed bind handling by init script
+Suggestion:
 
-Thanks,
-Devin Bayer
+Change all of the following symbolic links:
+
+From:                               To:
+
+./dev/log -> /tmp/log           -> ../tmp/log
+./etc/mtab -> /proc/mounts      -> ../proc/mounts
+./var/lib/pcmcia -> /tmp        -> ../../tmp
+./var/lock -> /tmp              -> ../tmp 
+./var/log -> /tmp               -> ../tmp
+./var/pcmcia -> /tmp            -> ../tmp 
+./var/run -> /tmp               -> ../tmp
+./var/spool -> /tmp             -> ../tmp
+./var/tmp -> /tmp               -> ../tmp
+
+This way, when the target file system is staged in a workspace, a
+recursive search in that workspace will not follow the links to the host
+/tmp or /proc directory.
+
 ====================================================================== 
 
 ---------------------------------------------------------------------- 
- andersen - 04-14-06 12:26  
+ andersen - 04-14-06 12:11  
 ---------------------------------------------------------------------- 
-applied 
+good point.  fixed 
 
 Issue History 
 Date Modified   Username       Field                    Change               
 ====================================================================== 
-01-27-06 14:23  akvadrako      New Issue                                    
-01-27-06 14:23  akvadrako      Status                   new => assigned     
-01-27-06 14:23  akvadrako      Assigned To               => uClibc          
-01-27-06 14:23  akvadrako      File Added: br-bind-9.3.2.patch                  
- 
-04-14-06 12:26  andersen       Note Added: 0001297                          
-04-14-06 12:26  andersen       Status                   assigned => closed  
-04-14-06 12:26  andersen       Resolution               open => fixed       
+06-20-05 12:25  lmt            New Issue                                    
+04-14-06 12:11  andersen       Note Added: 0001296                          
+04-14-06 12:11  andersen       Status                   assigned => closed  
+04-14-06 12:11  andersen       Resolution               open => fixed       
 02-12-07 05:45  vapier         Status                   closed => assigned  
 02-12-07 05:45  vapier         Assigned To              uClibc => buildroot 
 ======================================================================
