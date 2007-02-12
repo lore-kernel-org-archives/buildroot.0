@@ -1,7 +1,7 @@
 From: bugs at busybox.net <bugs@busybox.net>
-Date: Mon, 12 Feb 2007 05:50:25 -0800
-Subject: [Buildroot] [buildroot 0000212]: Adds grub bootloader
-Message-ID: <18a63cbf5a1771567c62f7e1b3378b60@bugs.busybox.net>
+Date: Mon, 12 Feb 2007 05:50:26 -0800
+Subject: [Buildroot] [buildroot 0000266]: Broken link in documentation
+Message-ID: <1555ecb38cc5fe728fe35204a3f0b0cb@bugs.busybox.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -11,60 +11,52 @@ To: buildroot@busybox.net
 
 The following issue has been ASSIGNED. 
 ====================================================================== 
-http://busybox.net/bugs/view.php?id=212 
+http://busybox.net/bugs/view.php?id=266 
 ====================================================================== 
-Reported By:                SnarlCat
+Reported By:                acutetech
 Assigned To:                buildroot
 ====================================================================== 
 Project:                    buildroot
-Issue ID:                   212
-Category:                   New Features
+Issue ID:                   266
+Category:                   Documentation
 Reproducibility:            always
-Severity:                   feature
+Severity:                   minor
 Priority:                   normal
 Status:                     assigned
 ====================================================================== 
-Date Submitted:             04-06-2005 13:09 PDT
+Date Submitted:             05-23-2005 08:55 PDT
 Last Modified:              02-12-2007 05:50 PST
 ====================================================================== 
-Summary:                    Adds grub bootloader
+Summary:                    Broken link in documentation
 Description: 
-This patch will add the grub bootloader to the build menu and process.
+This page http://buildroot.uclibc.org/buildroot.html#about says this:
 
-Please do go over it (especially the grub.mk file) to be sure it's
-compliant with your file layout design -- this was just a quick hack to
-get it with no concern for style or beauty...
+The latest snapshot is always available at
+http://uclibc.org/downloads/snapshots/buildroot-snapshot.tar.bz2, and
+previous snapshots are also available at
+http://uclibc.org/downloads/snapshots/.
 
-Thanks!
+But the first of these links is broken. I got mine from here
+http://buildroot.uclibc.org/downloads/snapshots/ selecting the latest
+version.
+
+BTW, most s/w download sites make available "latest snapshots" but also  a
+"latest stable version". You don't seem to do this, no doubt for a very
+good reason - perhpas you could add a word explaining why.
 ====================================================================== 
 
 ---------------------------------------------------------------------- 
- SnarlCat - 04-07-05 07:27  
+ vapier - 08-28-05 01:08  
 ---------------------------------------------------------------------- 
-Ug.. so I canned a line that I shouldn't have.. manual diff of
-package/grub/grub.mk
-
- GRUB_SITE:=ftp://alpha.gnu.org/gnu/grub
- GRUB_DIR:=$(BUILD_DIR)/grub-$(GRUB_VER)
- GRUB_BOOT_PATH:=$(TARGET_DIR)/boot
-+GRUB_CAT:=zcat
- GRUB_BINARY:=$(GRUB_DIR)/sbin/grub 
-
----------------------------------------------------------------------- 
- vapier - 08-28-05 01:10  
----------------------------------------------------------------------- 
-grub is in buildroot now 
+thanks, fixed in svn 
 
 Issue History 
 Date Modified   Username       Field                    Change               
 ====================================================================== 
-04-06-05 13:09  SnarlCat       New Issue                                    
-04-06-05 13:09  SnarlCat       File Added: buildroot-grub.patch                 
-  
-04-07-05 07:27  SnarlCat       Note Added: 0000135                          
-08-28-05 01:10  vapier         Note Added: 0000455                          
-08-28-05 01:10  vapier         Status                   assigned => closed  
-08-28-05 01:10  vapier         Resolution               open => fixed       
+05-23-05 08:55  acutetech      New Issue                                    
+08-28-05 01:08  vapier         Note Added: 0000454                          
+08-28-05 01:08  vapier         Status                   assigned => closed  
+08-28-05 01:08  vapier         Resolution               open => fixed       
 02-12-07 05:50  vapier         Status                   closed => assigned  
 02-12-07 05:50  vapier         Assigned To              uClibc => buildroot 
 ======================================================================
