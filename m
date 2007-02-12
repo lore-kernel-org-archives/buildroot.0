@@ -1,8 +1,8 @@
 From: bugs at busybox.net <bugs@busybox.net>
 Date: Mon, 12 Feb 2007 05:45:33 -0800
-Subject: [Buildroot] [buildroot 0000842]: I can not build gcc inside
-	buildroot
-Message-ID: <326301934ee5036dd1fc5cf40475fce2@bugs.busybox.net>
+Subject: [Buildroot] [buildroot 0000838]: New package: cryptsetup and
+	suppporting library popt
+Message-ID: <3588f617b56ef5b21f2f27572c75c6a6@bugs.busybox.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -12,48 +12,45 @@ To: buildroot@busybox.net
 
 The following issue has been ASSIGNED. 
 ====================================================================== 
-http://busybox.net/bugs/view.php?id=842 
+http://busybox.net/bugs/view.php?id=838 
 ====================================================================== 
-Reported By:                thienpc
+Reported By:                toidinamai
 Assigned To:                buildroot
 ====================================================================== 
 Project:                    buildroot
-Issue ID:                   842
-Category:                   Documentation
+Issue ID:                   838
+Category:                   New Features
 Reproducibility:            always
-Severity:                   minor
+Severity:                   feature
 Priority:                   normal
 Status:                     assigned
 ====================================================================== 
-Date Submitted:             04-19-2006 22:35 PDT
+Date Submitted:             04-14-2006 14:02 PDT
 Last Modified:              02-12-2007 05:45 PST
 ====================================================================== 
-Summary:                    I can not build gcc inside buildroot
+Summary:                    New package: cryptsetup and suppporting library popt
 Description: 
-Dear Sir/Madam,
-I am using buildroot-0.9.27. I can build the target. I can also build the
-toolchain outside target_root.
-I want to have gcc inside target_root. Please tell me how?
-Best regards,
-Pham C. Thien
+cryptsetup is a tool for creating dm-crypt mappings. dm-crypt provides
+transparent encryption of block devices using the new Linux 2.6 cryptoapi.
 ====================================================================== 
 
 ---------------------------------------------------------------------- 
- vapier - 04-19-06 23:05  
+ toidinamai - 04-15-06 06:23  
 ---------------------------------------------------------------------- 
-dont use buildroot-0.9.27
-
-grab the latest snapshot 
+New patch, former one resulted in an unusable cryptsetup binary because
+libdevmapper was missing. 
 
 Issue History 
 Date Modified   Username       Field                    Change               
 ====================================================================== 
-04-19-06 22:35  thienpc        New Issue                                    
-04-19-06 22:35  thienpc        Status                   new => assigned     
-04-19-06 22:35  thienpc        Assigned To               => uClibc          
-04-19-06 23:05  vapier         Note Added: 0001308                          
-04-19-06 23:05  vapier         Status                   assigned => closed  
-04-19-06 23:05  vapier         Resolution               open => won't fix   
-02-12-07 05:45  vapier         Status                   closed => assigned  
+04-14-06 14:02  toidinamai     New Issue                                    
+04-14-06 14:02  toidinamai     Status                   new => assigned     
+04-14-06 14:02  toidinamai     Assigned To               => uClibc          
+04-14-06 14:02  toidinamai     File Added: buildroot-cryptsetup.patch           
+        
+04-15-06 06:22  toidinamai     Issue Monitored: toidinamai                    
+04-15-06 06:23  toidinamai     File Added: buildroot-cryptsetup-2.patch         
+          
+04-15-06 06:23  toidinamai     Note Added: 0001298                          
 02-12-07 05:45  vapier         Assigned To              uClibc => buildroot 
 ======================================================================
