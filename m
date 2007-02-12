@@ -1,7 +1,7 @@
 From: bugs at busybox.net <bugs@busybox.net>
-Date: Mon, 12 Feb 2007 05:50:15 -0800
-Subject: [Buildroot] [buildroot 0000331]: Can't compile ntp
-Message-ID: <93b88726ab92d88d477b18b2faceb422@bugs.busybox.net>
+Date: Mon, 12 Feb 2007 05:50:16 -0800
+Subject: [Buildroot] [buildroot 0000194]: ntp package does not compile
+Message-ID: <7ac64b3d8153bf91f17b9e8eef9eee27@bugs.busybox.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -11,80 +11,64 @@ To: buildroot@busybox.net
 
 The following issue has been ASSIGNED. 
 ====================================================================== 
-http://busybox.net/bugs/view.php?id=331 
+http://busybox.net/bugs/view.php?id=194 
 ====================================================================== 
-Reported By:                ssaguiar
+Reported By:                clausklein
 Assigned To:                buildroot
 ====================================================================== 
 Project:                    buildroot
-Issue ID:                   331
-Category:                   Architecture Specific
+Issue ID:                   194
+Category:                   Other
 Reproducibility:            always
-Severity:                   crash
+Severity:                   minor
 Priority:                   normal
 Status:                     assigned
 ====================================================================== 
-Date Submitted:             07-08-2005 20:19 PDT
+Date Submitted:             03-28-2005 08:22 PST
 Last Modified:              02-12-2007 05:50 PST
 ====================================================================== 
-Summary:                    Can't compile ntp
+Summary:                    ntp package does not compile
 Description: 
-When trying to compile ntp in buildroot, after a while, it gives this
-error:
+There is an error while make ntp
 
+The ntp program: ntpdc - special NTP query program
+can't be build while crosscompiling.
 
-/home/ssaguiar/tmp/buildroot/build_i386/staging_dir/bin/i386-linux-uclibc-gcc
- -Os -pipe  -Wall -Wcast-qual -Wmissing-prototypes -Wpointer-arith -Wshadow
--Wstrict-prototypes   -o ntpdc-layout  ntpdc-layout.o
-./ntpdc-layout > layout.here
-/bin/sh: line 1: ./ntpdc-layout: File or directory not found
-make[4]: ** [layout.here] Erro 127
-make[4]: Leaving directory
-`/home/ssaguiar/tmp/buildroot/build_i386/ntp-4.2.0/ntpdc'
-make[3]: ** [maybe-layout] Erro 2
-make[3]: Leaving directory
-`/home/ssaguiar/tmp/buildroot/build_i386/ntp-4.2.0/ntpdc'
-make[2]: ** [all-recursive] Erro 1
-make[2]: Leaving directory
-`/home/ssaguiar/tmp/buildroot/build_i386/ntp-4.2.0'
-make[1]: ** [all] Erro 2
-make[1]: Leaving directory
-`/home/ssaguiar/tmp/buildroot/build_i386/ntp-4.2.0'
-make: **
-[/home/ssaguiar/tmp/buildroot/build_i386/ntp-4.2.0/ntpdate/ntpdate] Erro
-2
+# make[1]: Entering directory
+`/home/claus/src/buildroot/build_i386/ntp-4.2.0/ntpdc'
+# ./ntpdc-layout > layout.here
+# /bin/sh: line 1: ./ntpdc-layout: No such file or directory
+# make[1]: *** [layout.here] Error 127
+# make[1]: Leaving directory
+`/home/claus/src/buildroot/build_i386/ntp-4.2.0/ntpdc'
+# make: *** [maybe-layout] Error 2
+
+My patch prevent the build of ntpdc as a configure option:
+
+--disable-ntpdc         Disable build of special NTP query program (while
+crosscompileing)
+
+Too the CPPFLAGS and LDFLAGS are set while configure to prevent host
+header or libs to be used.
+
+The sntp program is now compiled too.
+
+claus
 
 ====================================================================== 
-
----------------------------------------------------------------------- 
- ssaguiar - 07-09-05 07:18  
----------------------------------------------------------------------- 
-This error happens at the end of the ntpdc Makefile, at :
-
-ntpdc-layout.o: nl.c
-
-layout.here: ntpdc-layout
-        ./ntpdc-layout > $@
-
-
-This is caused by the fact that the Makefile try to execute the
-ntpdc-layout in the host system, but, as the ntpdc-layout is compiled with
-the uclibc, it gives the error of 'file not found' for the ntpdc-layout
-compiled program.
-
-Sergio 
 
 ---------------------------------------------------------------------- 
  vapier - 09-07-05 17:51  
 ---------------------------------------------------------------------- 
-fixed in svn 
+fixed in cvs 
 
 Issue History 
 Date Modified   Username       Field                    Change               
 ====================================================================== 
-07-08-05 20:19  ssaguiar       New Issue                                    
-07-09-05 07:18  ssaguiar       Note Added: 0000274                          
-09-07-05 17:51  vapier         Note Added: 0000505                          
+03-28-05 08:22  clausklein     New Issue                                    
+03-28-05 08:22  clausklein     File Added: ntp.diff                         
+03-30-05 11:25  Cy8aer         Issue Monitored: Cy8aer                      
+09-07-05 17:51  vapier         Note Added: 0000504                          
 09-07-05 17:51  vapier         Status                   assigned => closed  
 09-07-05 17:51  vapier         Resolution               open => fixed       
 02-12-07 05:50  vapier         Status                   closed => assigned  
