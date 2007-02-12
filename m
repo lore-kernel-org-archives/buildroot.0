@@ -1,8 +1,7 @@
 From: bugs at busybox.net <bugs@busybox.net>
-Date: Mon, 12 Feb 2007 05:45:02 -0800
-Subject: [Buildroot] [buildroot 0000956]: Patch failed! Please fix
-	ncurses-100-hostccflags.patch!
-Message-ID: <1fa53d5eddec440e817559963c7a2ff4@bugs.busybox.net>
+Date: Mon, 12 Feb 2007 05:45:03 -0800
+Subject: [Buildroot] [buildroot 0000943]: DHCP Link broken
+Message-ID: <909599dd6ace3ca933ea7a6afbacab31@bugs.busybox.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -12,76 +11,56 @@ To: buildroot@busybox.net
 
 The following issue has been ASSIGNED. 
 ====================================================================== 
-http://busybox.net/bugs/view.php?id=956 
+http://busybox.net/bugs/view.php?id=943 
 ====================================================================== 
-Reported By:                bowerymarc
+Reported By:                kfries6
 Assigned To:                buildroot
 ====================================================================== 
 Project:                    buildroot
-Issue ID:                   956
-Category:                   Architecture Specific
+Issue ID:                   943
+Category:                   Other
 Reproducibility:            always
 Severity:                   major
 Priority:                   normal
 Status:                     assigned
 ====================================================================== 
-Date Submitted:             07-16-2006 20:17 PDT
+Date Submitted:             07-12-2006 09:59 PDT
 Last Modified:              02-12-2007 05:45 PST
 ====================================================================== 
-Summary:                    Patch failed!  Please fix
-ncurses-100-hostccflags.patch!
+Summary:                    DHCP Link broken
 Description: 
-[root at localhost buildroot]# make
-package/dropbear_sshd/dropbear_sshd.mk:59: warning: overriding commands
-for target `/home/tools/buildroot/build_arm_nofpu/root/usr/sbin/dropbear'
-package/dropbear/dropbear.mk:59: warning: ignoring old commands for target
-`/home/tools/buildroot/build_arm_nofpu/root/usr/sbin/dropbear'
-.//toolchain/dependencies/dependencies.sh
-Checking build system dependencies:
-
-GNU make version '3.80':            Ok
-gcc version '4.0.2':                Ok
-which installed:                    Ok
-bison installed:                    Ok
-flex installed:                     Ok
-gettext installed:                  Ok
-Build system dependencies:          Ok
-gunzip -c /home/tools/buildroot/dl/ncurses-5.5.tar.gz | tar -C
-/home/tools/buildroot/build_arm_nofpu   -xf -
-tar: Read 2048 bytes from -
-#use the local tic and not whatever the build system was going to find.
-/home/tools/buildroot/toolchain_build_arm_nofpu/bin/sed -i -e
-'s~\$srcdir/shlib tic\$suffix~/usr/bin/tic~' \
-        /home/tools/buildroot/build_arm_nofpu/ncurses-5.5/misc/run_tic.in
-toolchain/patch-kernel.sh
-/home/tools/buildroot/build_arm_nofpu/ncurses-5.5 package/ncurses/
-ncurses\*.patch
-
-Applying ncurses-100-hostccflags.patch using plaintext:
-patching file ncurses/Makefile.in
-Hunk http://busybox.net/bugs/view.php?id=1 FAILED at 85.
-1 out of 1 hunk FAILED -- saving rejects to file ncurses/Makefile.in.rej
-Patch failed!  Please fix ncurses-100-hostccflags.patch!
-make: *** [/home/tools/buildroot/build_arm_nofpu/ncurses-5.5/.dist] Error
-1
+ISC has moved version 3.0.3 of the DHCP source into a new subdirectory:
+   ftp://ftp.isc.org/isc/dhcp/dhcp-3.0-history/
 
 ====================================================================== 
 
 ---------------------------------------------------------------------- 
- vapier - 07-19-06 16:58  
+ kfries6 - 07-12-06 10:02  
 ---------------------------------------------------------------------- 
-your repo is screwed up, that patch isnt in svn 
+Oops, sorry, missed bug 000911 which this is a dup of 
+
+---------------------------------------------------------------------- 
+ bjdooks - 07-13-06 04:02  
+---------------------------------------------------------------------- 
+The patch dosen't seem to be required for the 3.0.4, and dhclient works
+fine without it being there 
+
+---------------------------------------------------------------------- 
+ vapier - 07-19-06 16:57  
+---------------------------------------------------------------------- 
+dupe of 911 
 
 Issue History 
 Date Modified   Username       Field                    Change               
 ====================================================================== 
-07-16-06 20:17  bowerymarc     New Issue                                    
-07-16-06 20:17  bowerymarc     Status                   new => assigned     
-07-16-06 20:17  bowerymarc     Assigned To               => uClibc          
-07-19-06 16:58  vapier         Note Added: 0001537                          
-07-19-06 16:58  vapier         Status                   assigned => closed  
-07-19-06 16:58  vapier         Resolution               open => unable to
-reproduce
+07-12-06 09:59  kfries6        New Issue                                    
+07-12-06 09:59  kfries6        Status                   new => assigned     
+07-12-06 09:59  kfries6        Assigned To               => uClibc          
+07-12-06 10:02  kfries6        Note Added: 0001517                          
+07-13-06 04:02  bjdooks        Note Added: 0001522                          
+07-19-06 16:57  vapier         Note Added: 0001536                          
+07-19-06 16:57  vapier         Status                   assigned => closed  
+07-19-06 16:57  vapier         Resolution               open => duplicate   
 02-12-07 05:45  vapier         Status                   closed => assigned  
 02-12-07 05:45  vapier         Assigned To              uClibc => buildroot 
 ======================================================================
