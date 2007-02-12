@@ -1,7 +1,8 @@
 From: bugs at busybox.net <bugs@busybox.net>
-Date: Mon, 12 Feb 2007 05:49:09 -0800
-Subject: [Buildroot] [buildroot 0000051]: C++ without LFS support
-Message-ID: <d33f0c34d5850457404d1faeb05c0967@bugs.busybox.net>
+Date: Mon, 12 Feb 2007 05:49:10 -0800
+Subject: [Buildroot] [buildroot 0000156]: Fail to compile the c++ toolchain
+	for m68k
+Message-ID: <52a70b1b7c432e3831d0ced9b1f93656@bugs.busybox.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -11,43 +12,47 @@ To: buildroot@busybox.net
 
 The following issue has been ASSIGNED. 
 ====================================================================== 
-http://busybox.net/bugs/view.php?id=51 
+http://busybox.net/bugs/view.php?id=156 
 ====================================================================== 
-Reported By:                acmay
+Reported By:                flaget
 Assigned To:                buildroot
 ====================================================================== 
 Project:                    buildroot
-Issue ID:                   51
-Category:                   Shared Library Support
+Issue ID:                   156
+Category:                   Architecture Specific
 Reproducibility:            always
-Severity:                   major
+Severity:                   crash
 Priority:                   normal
 Status:                     assigned
 ====================================================================== 
-Date Submitted:             01-20-2005 10:09 PST
+Date Submitted:             03-14-2005 14:06 PST
 Last Modified:              02-12-2007 05:49 PST
 ====================================================================== 
-Summary:                    C++ without LFS support
+Summary:                    Fail to compile the c++ toolchain for m68k
 Description: 
-When trying to build the libstdc++-v3 in the GCC final step it fails when
-trying to use some of the LFS functions when they are not supported.
+I want to build a root filesystem for an mvme162 board.
+When I build busybox it work well but when i want to compile buildroot it
+generate an error when i add support for c++.
+
 ====================================================================== 
 
 ---------------------------------------------------------------------- 
- prpplague - 01-23-06 11:00  
+ acmay - 03-14-05 18:17  
 ---------------------------------------------------------------------- 
-enable LFS and it will work 
+dupe of http://busybox.net/bugs/view.php?id=051
+enable LFS and it will work
+or hack the configure script 
 
 Issue History 
 Date Modified   Username       Field                    Change               
 ====================================================================== 
-01-20-05 10:09  acmay          New Issue                                    
-01-20-05 10:09  acmay          File Added: uc-lfs.patch                     
-03-16-05 12:14  andersen       Status                   new => assigned     
-03-16-05 12:14  andersen       Assigned To               => uClibc          
-08-08-05 01:52  mdeschamps     Issue Monitored: mdeschamps                    
-08-11-05 07:32  mdeschamps     Issue End Monitor: mdeschamps                    
-01-23-06 11:00  prpplague      Note Added: 0000985                          
+03-14-05 14:06  flaget         New Issue                                    
+03-14-05 14:06  flaget         File Added: log                              
+03-14-05 14:44  flaget         Issue Monitored: flaget                      
+03-14-05 14:44  flaget         Issue End Monitor: flaget                    
+03-14-05 18:17  acmay          Note Added: 0000087                          
+03-16-05 12:11  andersen       Status                   new => assigned     
+03-16-05 12:11  andersen       Assigned To               => uClibc          
 01-23-06 11:00  prpplague      Status                   assigned => closed  
 01-23-06 11:00  prpplague      Resolution               open => won't fix   
 02-12-07 05:49  vapier         Status                   closed => assigned  
