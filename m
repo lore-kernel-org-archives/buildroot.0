@@ -1,7 +1,7 @@
 From: bugs at busybox.net <bugs@busybox.net>
-Date: Mon, 12 Feb 2007 05:46:15 -0800
-Subject: [Buildroot] [buildroot 0000676]: fix build problem in mtd
-Message-ID: <4d6a3e0ebd83c62e1a2781318d779b8b@bugs.busybox.net>
+Date: Mon, 12 Feb 2007 05:46:16 -0800
+Subject: [Buildroot] [buildroot 0000753]: missing libfusion and libdirect
+Message-ID: <c0580ffb63e7eaa069f3f83228cb8b4e@bugs.busybox.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -11,45 +11,53 @@ To: buildroot@busybox.net
 
 The following issue has been ASSIGNED. 
 ====================================================================== 
-http://busybox.net/bugs/view.php?id=676 
+http://busybox.net/bugs/view.php?id=753 
 ====================================================================== 
-Reported By:                jp-embedded
+Reported By:                vspaceg
 Assigned To:                buildroot
 ====================================================================== 
 Project:                    buildroot
-Issue ID:                   676
-Category:                   Other
+Issue ID:                   753
+Category:                   Architecture Specific
 Reproducibility:            always
-Severity:                   minor
+Severity:                   major
 Priority:                   normal
 Status:                     assigned
 ====================================================================== 
-Date Submitted:             02-01-2006 00:37 PST
+Date Submitted:             02-23-2006 09:36 PST
 Last Modified:              02-12-2007 05:46 PST
 ====================================================================== 
-Summary:                    fix build problem in mtd
+Summary:                    missing libfusion and libdirect
 Description: 
-replaces 'dl' with '$(DL_DIR) to make mtd build when the download dir is
-not configured to default
+After I generated the root file system, my directfb application misses
+libfusion and libdirect. Those library are provided by directfb
+
+Workaround:
+I patched directfb.mk:
+
+$(STAGING_DIR)/usr/lib/libdirectfb.so: $(DIRECTFB_DIR)/.compiled
+	$(MAKE) -C $(DIRECTFB_DIR) install
+	$(MAKE) -C $(DIRECTFB_DIR)/lib/fusion install
+	$(MAKE) -C $(DIRECTFB_DIR)/lib/direct install
+	touch -c $(STAGING_DIR)/lib/libdirectfb.so
+
+
 ====================================================================== 
 
 ---------------------------------------------------------------------- 
- andersen - 04-06-06 10:51  
+ andersen - 04-06-06 10:50  
 ---------------------------------------------------------------------- 
-fixed thanks 
+This problem has been fixed. 
 
 Issue History 
 Date Modified   Username       Field                    Change               
 ====================================================================== 
-02-01-06 00:37  jp-embedded    New Issue                                    
-02-01-06 00:37  jp-embedded    Status                   new => assigned     
-02-01-06 00:37  jp-embedded    Assigned To               => uClibc          
-02-01-06 00:37  jp-embedded    File Added: mtd-jp-20060131.patch                
-   
-02-21-06 02:32  hmargies       Issue Monitored: hmargies                    
-04-06-06 10:51  andersen       Note Added: 0001232                          
-04-06-06 10:51  andersen       Status                   assigned => closed  
-04-06-06 10:51  andersen       Resolution               open => fixed       
+02-23-06 09:36  vspaceg        New Issue                                    
+02-23-06 09:36  vspaceg        Status                   new => assigned     
+02-23-06 09:36  vspaceg        Assigned To               => uClibc          
+04-06-06 10:50  andersen       Note Added: 0001231                          
+04-06-06 10:50  andersen       Status                   assigned => closed  
+04-06-06 10:50  andersen       Resolution               open => fixed       
 02-12-07 05:46  vapier         Status                   closed => assigned  
 02-12-07 05:46  vapier         Assigned To              uClibc => buildroot 
 ======================================================================
