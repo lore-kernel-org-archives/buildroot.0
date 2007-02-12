@@ -1,8 +1,7 @@
 From: bugs at busybox.net <bugs@busybox.net>
 Date: Mon, 12 Feb 2007 05:50:12 -0800
-Subject: [Buildroot] [buildroot 0000432]: I would like compile buildroot
-	with gcc 4.1.0 but URL is wrong
-Message-ID: <39f27cbee46220e502ffd8658d7d6878@bugs.busybox.net>
+Subject: [Buildroot] [buildroot 0000391]: Add Qtopia and Qt/Embedded builds
+Message-ID: <0f290b1a6c1a3adc1c271d490ef53707@bugs.busybox.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -12,51 +11,47 @@ To: buildroot@busybox.net
 
 The following issue has been ASSIGNED. 
 ====================================================================== 
-http://busybox.net/bugs/view.php?id=432 
+http://busybox.net/bugs/view.php?id=391 
 ====================================================================== 
-Reported By:                marvin
+Reported By:                chickenandporn
 Assigned To:                buildroot
 ====================================================================== 
 Project:                    buildroot
-Issue ID:                   432
-Category:                   Standards Compliance
+Issue ID:                   391
+Category:                   New Features
 Reproducibility:            always
 Severity:                   minor
 Priority:                   normal
 Status:                     assigned
 ====================================================================== 
-Date Submitted:             09-14-2005 14:11 PDT
+Date Submitted:             08-19-2005 00:00 PDT
 Last Modified:              02-12-2007 05:50 PST
 ====================================================================== 
-Summary:                    I would like compile buildroot with gcc 4.1.0 but
-URL is wrong
+Summary:                    Add Qtopia and Qt/Embedded builds
 Description: 
---23:07:50-- 
-http://mirrors.rcn.net/pub/sourceware/gcc/releases/gcc-4.1.0/gcc-4.1.0.tar.bz2
-           => `/mnt/film2/ARM2/buildroot/dl/gcc-4.1.0.tar.bz2'
-Resolving mirrors.rcn.net... hotovo.
-Connecting to mirrors.rcn.net[207.172.2.141]:80... connected.
-HTTP po?adavek odesl?n, program ?ek? na odpov?? ... 404 Not Found
-23:07:51 CHYBA 404: Not Found.
-
-I cannot download gcc 4.1.0 URL is wrong or mirror is not synced
+Buildroot can now do a basic build of Qtopia and Qt-Embedded.
 ====================================================================== 
 
 ---------------------------------------------------------------------- 
- vapier - 09-14-05 18:35  
+ vapier - 09-08-05 20:16  
 ---------------------------------------------------------------------- 
-there is no 4.1.0 release, you'll have to grab a snapshot and rename it
-yourself 
+added to svn, thanks 
 
 Issue History 
 Date Modified   Username       Field                    Change               
 ====================================================================== 
-09-14-05 14:11  marvin         New Issue                                    
-09-14-05 14:11  marvin         Status                   new => assigned     
-09-14-05 14:11  marvin         Assigned To               => uClibc          
-09-14-05 18:35  vapier         Note Added: 0000533                          
-09-14-05 18:35  vapier         Status                   assigned => closed  
-09-14-05 18:35  vapier         Resolution               open => won't fix   
+08-19-05 00:00  chickenandporn New Issue                                    
+08-19-05 00:00  chickenandporn Status                   new => assigned     
+08-19-05 00:00  chickenandporn Assigned To               => uClibc          
+08-19-05 00:00  chickenandporn File Added: qte.patch                        
+08-19-05 00:07  chickenandporn Issue Monitored: chickenandporn                  
+ 
+08-21-05 16:50  pnoffke        Issue Monitored: pnoffke                     
+09-08-05 20:16  vapier         Note Added: 0000508                          
+09-08-05 20:16  vapier         Status                   assigned => closed  
+09-08-05 20:16  vapier         Resolution               open => fixed       
+09-21-05 02:00  chickenandporn Issue End Monitor: chickenandporn                
+   
 02-12-07 05:50  vapier         Status                   closed => assigned  
 02-12-07 05:50  vapier         Assigned To              uClibc => buildroot 
 ======================================================================
