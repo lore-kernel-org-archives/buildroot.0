@@ -1,7 +1,8 @@
 From: bugs at busybox.net <bugs@busybox.net>
-Date: Mon, 12 Feb 2007 05:51:17 -0800
-Subject: [Buildroot] [buildroot 0000084]: gcc 3.4.3 fail compiling dhcp-3.0.1
-Message-ID: <9086f2fb46d47b6dcef598af5c30d456@bugs.busybox.net>
+Date: Mon, 12 Feb 2007 05:51:18 -0800
+Subject: [Buildroot] [buildroot 0000065]: trying to download 2.6 headers
+	from ep09.pld-linux.org failed
+Message-ID: <3abaa020bb056e0e7eed5c8fc6de3e26@bugs.busybox.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -11,51 +12,73 @@ To: buildroot@busybox.net
 
 The following issue has been ASSIGNED. 
 ====================================================================== 
-http://busybox.net/bugs/view.php?id=84 
+http://busybox.net/bugs/view.php?id=65 
 ====================================================================== 
-Reported By:                rickb
+Reported By:                mspatar
 Assigned To:                buildroot
 ====================================================================== 
 Project:                    buildroot
-Issue ID:                   84
-Category:                   Other
+Issue ID:                   65
+Category:                   Website
 Reproducibility:            always
-Severity:                   major
+Severity:                   block
 Priority:                   normal
 Status:                     assigned
 ====================================================================== 
-Date Submitted:             02-04-2005 09:32 PST
+Date Submitted:             01-27-2005 04:27 PST
 Last Modified:              02-12-2007 05:51 PST
 ====================================================================== 
-Summary:                    gcc 3.4.3 fail compiling dhcp-3.0.1
+Summary:                    trying to download 2.6 headers from
+ep09.pld-linux.org failed
 Description: 
-it seems a bug of gcc(http://gcc.gnu.org/bugzilla/show_bug.cgi?id=18282),
-later versions from cvs are fixed. This patch is derived from the cvs
-version contained in the FC3 src.rpm
-(http://rpmfind.net//linux/RPM/fedora/development/src/gcc-3.4.3-17.src.html),
-this rpm contains many other patches, someone more skilled should check
-them..
-The patch is really big, how to send?
-ciao
-Ric
+Site ep09.pld-linux.org seems to be down.
 
 ====================================================================== 
 
 ---------------------------------------------------------------------- 
- vapier - 03-20-05 18:41  
+ prism - 01-27-05 06:44  
 ---------------------------------------------------------------------- 
-dhcp-3.0.2 + gcc-3.4.3 builds fine 
+It's a maintenance break. From http://www.pld-linux.org :
+26 January 2005 Main resources unavailable
+
+Among other things, our main ftp server, jabber server and CVS/SVN
+repositories are currently down. Planned downtime was two hours, but due
+to (currently) unknown issues it is not known by when those machines will
+be back up. A good bet might be tomorrow morning (that's GMT). For now,
+here is a list of mirrors. 
+
+24 January 2005 Downtime ahead
+
+During the weekend (and before it) parts of our infrastructure will be
+changing location which will result in some downtime. Of particular notice
+are: CVS and SVN repositories, distfiles, jabber server and everything
+placed on ep09.pld-linux.org (including users' accounts).
+
+ 
+
+---------------------------------------------------------------------- 
+ jswensen - 02-04-05 14:21  
+---------------------------------------------------------------------- 
+The server is up and running again.  This can probably be closed, although
+maybe someone should try to set up a mirror for this web site. 
+
+---------------------------------------------------------------------- 
+ vapier - 03-20-05 18:34  
+---------------------------------------------------------------------- 
+site is back up now ... next time, just wait :P 
 
 Issue History 
 Date Modified   Username       Field                    Change               
 ====================================================================== 
-02-04-05 09:32  rickb          New Issue                                    
+01-27-05 04:27  mspatar        New Issue                                    
+01-27-05 04:58  mspatar        Issue Monitored: mspatar                     
+01-27-05 06:43  prism          Note Added: 0000027                          
+01-27-05 06:44  prism          Note Edited: 0000027                         
+02-04-05 14:21  jswensen       Note Added: 0000042                          
 03-16-05 12:14  andersen       Status                   new => assigned     
 03-16-05 12:14  andersen       Assigned To               => uClibc          
-03-20-05 18:41  vapier         Status                   assigned => resolved
-03-20-05 18:41  vapier         Resolution               open => won't fix   
-03-20-05 18:41  vapier         Note Added: 0000110                          
-03-20-05 18:55  vapier         Status                   resolved => closed  
+03-20-05 18:34  vapier         Status                   assigned => closed  
+03-20-05 18:34  vapier         Note Added: 0000107                          
 02-12-07 05:51  vapier         Status                   closed => assigned  
 02-12-07 05:51  vapier         Assigned To              uClibc => buildroot 
 ======================================================================
