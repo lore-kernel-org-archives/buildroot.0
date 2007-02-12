@@ -1,7 +1,8 @@
 From: bugs at busybox.net <bugs@busybox.net>
-Date: Mon, 12 Feb 2007 05:46:03 -0800
-Subject: [Buildroot] [buildroot 0000755]: New package: haserl
-Message-ID: <ac26461c7059505433d61c061d14d272@bugs.busybox.net>
+Date: Mon, 12 Feb 2007 05:46:10 -0800
+Subject: [Buildroot] [buildroot 0000772]: udev creates wrong permissions on
+	/dev/s3c2410_serial devices
+Message-ID: <95c512736a0bf18cbc73ce7b04019f11@bugs.busybox.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -11,49 +12,47 @@ To: buildroot@busybox.net
 
 The following issue has been ASSIGNED. 
 ====================================================================== 
-http://busybox.net/bugs/view.php?id=755 
+http://busybox.net/bugs/view.php?id=772 
 ====================================================================== 
-Reported By:                jacmet
+Reported By:                bjdooks
 Assigned To:                buildroot
 ====================================================================== 
 Project:                    buildroot
-Issue ID:                   755
-Category:                   New Features
-Reproducibility:            N/A
-Severity:                   feature
+Issue ID:                   772
+Category:                   Architecture Specific
+Reproducibility:            always
+Severity:                   major
 Priority:                   normal
 Status:                     assigned
 ====================================================================== 
-Date Submitted:             02-24-2006 04:50 PST
+Date Submitted:             03-06-2006 02:36 PST
 Last Modified:              02-12-2007 05:46 PST
 ====================================================================== 
-Summary:                    New package: haserl
+Summary:                    udev creates wrong permissions on
+/dev/s3c2410_serial devices
 Description: 
-This little patch adds a target for haserl to buildroot.
+udev creates wrong permissions on /dev/s3c2410_serial devices
 
-Haserl - Html And Shell Embedded Report Language
+Attached patch adds a line for s3c2410_serial with the correct MODE/group
 
-Haserl is a small cgi wrapper that enables shell scripts to be embedded
-into html documents. It is intended for environments where something like
-PHP is too big.
-
-It was written for Linux, but is known to run on FreeBSD. The binary
-generally compiles to less than 20K. A typical use is to run cgi scripts
-run under a small web server, such as mini-httpd, thttpd, or the server
-built into busybox.
-
-See http://haserl.sf.net for details.
 ====================================================================== 
+
+---------------------------------------------------------------------- 
+ andersen - 04-06-06 11:22  
+---------------------------------------------------------------------- 
+applied 
 
 Issue History 
 Date Modified   Username       Field                    Change               
 ====================================================================== 
-02-24-06 04:50  jacmet         New Issue                                    
-02-24-06 04:50  jacmet         Status                   new => assigned     
-02-24-06 04:50  jacmet         Assigned To               => uClibc          
-02-24-06 04:50  jacmet         File Added: haserl.patch                     
-04-10-06 16:34  andersen       Status                   assigned => closed  
-04-10-06 16:34  andersen       Resolution               open => fixed       
+03-06-06 02:36  bjdooks        New Issue                                    
+03-06-06 02:36  bjdooks        Status                   new => assigned     
+03-06-06 02:36  bjdooks        Assigned To               => uClibc          
+03-06-06 02:36  bjdooks        File Added: buildroot-udev-s3c2410.patch         
+          
+04-06-06 11:22  andersen       Note Added: 0001235                          
+04-06-06 11:22  andersen       Status                   assigned => closed  
+04-06-06 11:22  andersen       Resolution               open => fixed       
 02-12-07 05:46  vapier         Status                   closed => assigned  
 02-12-07 05:46  vapier         Assigned To              uClibc => buildroot 
 ======================================================================
