@@ -1,8 +1,9 @@
 From: bugs at busybox.net <bugs@busybox.net>
-Date: Mon, 12 Feb 2007 05:34:04 -0800
-Subject: [Buildroot] [buildroot 0000891]: Segfault in snmpd apparantly
-	caused by non initialised shared library BSS
-Message-ID: <b166d331b140e516f076a0a3a218804d@bugs.busybox.net>
+Date: Mon, 12 Feb 2007 05:34:05 -0800
+Subject: [Buildroot] [buildroot 0000881]: Buildroot new feature: Generate
+	initramfs description file of root filesystem for initial
+	kernel ramdisk
+Message-ID: <f62c28929cc0b9b885b2c87096be8e57@bugs.busybox.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -12,58 +13,70 @@ To: buildroot@busybox.net
 
 The following issue has been ASSIGNED. 
 ====================================================================== 
-http://busybox.net/bugs/view.php?id=891 
+http://busybox.net/bugs/view.php?id=881 
 ====================================================================== 
-Reported By:                mfuzzey
+Reported By:                fred
 Assigned To:                buildroot
 ====================================================================== 
 Project:                    buildroot
-Issue ID:                   891
-Category:                   Shared Library Support
-Reproducibility:            sometimes
-Severity:                   major
+Issue ID:                   881
+Category:                   New Features
+Reproducibility:            N/A
+Severity:                   feature
 Priority:                   normal
 Status:                     assigned
 ====================================================================== 
-Date Submitted:             06-01-2006 08:45 PDT
+Date Submitted:             05-24-2006 16:27 PDT
 Last Modified:              02-12-2007 05:34 PST
 ====================================================================== 
-Summary:                    Segfault in snmpd apparantly caused by non
-initialised shared library BSS
+Summary:                    Buildroot new feature: Generate initramfs
+description file of root filesystem for initial kernel ramdisk
 Description: 
-net-snmpd 5.1.2 built with buildroot sometimes segfaults on startup.
-Once this occurs it is 100% reproducable until reboot...
+This patch contains a new target "initramfs" which builds a description
+file for the initial kernel ramdisk. I use this together with kernel
+2.6.12. The mechanism is based on a shell script "gen_initramfs_list.sh"
+which is provided together with the kernel. The description file is then
+used to build a cpio filesystem via the gen_init_cpio tool during the
+kernel build.
 
-Prelimery investigation points to uClibc shared library support (but I may
-be wrong...)
+This is inspired by the procedure described here: 
 
-Segfault occurs because external_signal_scheduled[] and
-external_signal_handler[] defined in agents/agent_registry.c and compiled
-to libnetsnmpagent.so are not initialised but the code assumes they are
-zero filled on startup.
+http://www.student.tue.nl/Q/t.f.a.wilms/adm5120/
 
+That procedure produces an ext2 filesystem with buildroot. Then this
+filesystem is mounted in the kernel build directory where
+"gen_initramfs_list.sh" produces a filesystem description file which is
+used then by gen_init_cpio to produce the cpio filesystem. This procedure
+requires root rights to mount the filesystem. The idea is to produce the
+filesystem description file directly from buildroot. Then the complete
+kernel including rootfilesystem as ramdisk can be build as normal user.
 
+The patch adds a new target and modifies the config.in file in the target
+directory.
 ====================================================================== 
 
 ---------------------------------------------------------------------- 
- bernhardf - 12-22-06 03:06  
+ bernhardf - 12-01-06 10:12  
 ---------------------------------------------------------------------- 
-Please provide a
-package/netsnmp/netsnmp-5.2.1-fix-extern-initializers.patch
-that corrects this bug in netsnmp.
-Make sure to send the patch upstream too.
+That's an excellent idea except for the mount.
 
-TIA, 
+Please be so kind and update the patch to
+     select tarroot # or however the creation of a tarball is named
+
+or just ln -s the build_$()/root to the dir gen_initramfs expects.
+Also, it's easier for me if you could (also) send the patch with a copy'n
+paste of the adjusted description above to the mailing-list.
+
+TIA! 
 
 Issue History 
 Date Modified   Username       Field                    Change               
 ====================================================================== 
-06-01-06 08:45  mfuzzey        New Issue                                    
-06-01-06 08:45  mfuzzey        Status                   new => assigned     
-06-01-06 08:45  mfuzzey        Assigned To               => uClibc          
-06-01-06 09:06  mfuzzey        Issue Monitored: mfuzzey                     
-12-22-06 03:06  bernhardf      Note Added: 0001910                          
-12-22-06 03:06  bernhardf      Status                   assigned => feedback
-02-12-07 05:34  vapier         Status                   feedback => assigned
+05-24-06 16:27  fred           New Issue                                    
+05-24-06 16:27  fred           Status                   new => assigned     
+05-24-06 16:27  fred           Assigned To               => uClibc          
+05-24-06 16:27  fred           File Added: buildroot_initramfs_target.patch     
+              
+12-01-06 10:12  bernhardf      Note Added: 0001850                          
 02-12-07 05:34  vapier         Assigned To              uClibc => buildroot 
 ======================================================================
