@@ -1,7 +1,7 @@
 From: bugs at busybox.net <bugs@busybox.net>
-Date: Mon, 12 Feb 2007 05:43:10 -0800
-Subject: [Buildroot] [buildroot 0000911]: Buildroot 2006-06-08 broken links
-Message-ID: <6e3e89cf268b019c4a9075848ae69981@bugs.busybox.net>
+Date: Mon, 12 Feb 2007 05:43:13 -0800
+Subject: [Buildroot] [buildroot 0001039]: distclean dont remove all files
+Message-ID: <8b1a2d0449356ccdebf9ec5152c52281@bugs.busybox.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -11,91 +11,42 @@ To: buildroot@busybox.net
 
 The following issue has been ASSIGNED. 
 ====================================================================== 
-http://busybox.net/bugs/view.php?id=911 
+http://busybox.net/bugs/view.php?id=1039 
 ====================================================================== 
-Reported By:                Ulf Samuelsson
+Reported By:                GJanak
 Assigned To:                buildroot
 ====================================================================== 
 Project:                    buildroot
-Issue ID:                   911
-Category:                   Other
+Issue ID:                   1039
+Category:                   New Features
 Reproducibility:            always
-Severity:                   block
+Severity:                   feature
 Priority:                   normal
 Status:                     assigned
 ====================================================================== 
-Date Submitted:             06-18-2006 11:53 PDT
+Date Submitted:             09-20-2006 03:58 PDT
 Last Modified:              02-12-2007 05:43 PST
 ====================================================================== 
-Summary:                    Buildroot 2006-06-08 broken links
+Summary:                    distclean dont remove all files
 Description: 
-"dhcp 3.0.3" at DHCP_SITE is replaced by "dhcp 3.0.4".
-        3.0.4 will not accept the buildroot patches.
-        3.0.3 can now be downloaded from 
-        DHCP_SITE:=ftp://ftp.isc.org/isc/dhcp/dhcp-3.0-history
-"minicom-1.02" is no longer available at the MICROCOM_SITE
-        MICROCOM_SITE:=http://familiar.handhelds.org/source/v0.8.2/ works
-
-"expat" uses a hardwired sourceforge mirror which does not work
-        -EXPAT_SITE=http://internap.dl.sourceforge.net/sourceforge/expat 
-
-+EXPAT_SITE=http://$(BR2_SOURCEFORGE_MIRROR).dl.sourceforge.net/sourceforge/expat
-
-"fakeroot" require po4a 
-        Available on
-http://dl.atrpms.net/all/po4a-0.23-1.rhfc5.at.src.rpm
-
-
-"portage" 
-                package sandbox is no longer available at site
-        -http://gentoo.osuosl.org/distfiles/sandbox-1.2.13.tar.bz2
-        +http://gentoo.osuosl.org/distfiles/sandbox-1.2.18.tar.bz2
-"QT/E"  
-        lacks a way to automatically download TMAKE
-
-"rxvt"  
-        SITE has moved to sourceforge.
-        -RXVT_SITE:=ftp://ftp.rxvt.org/pub/rxvt/
-        +RXVT_SITE=
-
-http://$(BR2_SOURCEFORGE_MIRROR).dl.sourceforge.net/sourceforge/rxvt
-        Change extension from bz2 to gz
-        Maybe use http://software.schmorp.de/pkg/rxvt-unicode.html
-instead?
-        Also available on http://freshmeat.net/projects/rxvt-unicode/
-
-
+distclean dont remove lxdialog builded files in package/conf/*
 
 ====================================================================== 
 
 ---------------------------------------------------------------------- 
- bjdooks - 08-02-06 09:33  
+ bernhardf - 01-19-07 10:01  
 ---------------------------------------------------------------------- 
-The latest release has upgraded the dhcp to 3.0.4, and modified the
-patch to ensure it applies to the new version. Tested on an Simtec
-S3C2440 board with an Asix AX88796, and it seems to work fine. 
-
----------------------------------------------------------------------- 
- bernhardf - 01-19-07 10:08  
----------------------------------------------------------------------- 
-Most if not all of these were updated meanwhile.
-Thanks for the report! 
+Fixed in r17384. Thanks for pointing this out. 
 
 Issue History 
 Date Modified   Username       Field                    Change               
 ====================================================================== 
-06-18-06 11:53  Ulf Samuelsson New Issue                                    
-06-18-06 11:53  Ulf Samuelsson Status                   new => assigned     
-06-18-06 11:53  Ulf Samuelsson Assigned To               => uClibc          
-06-18-06 11:53  Ulf Samuelsson File Added: buildroot-20060608.patch             
-      
-08-02-06 09:33  bjdooks        Note Added: 0001556                          
-08-02-06 09:35  bjdooks        Issue Monitored: bjdooks                     
-08-09-06 21:45  futaris        Issue Monitored: futaris                     
-09-14-06 10:28  Scott B        Issue Monitored: Scott B                     
-01-19-07 10:08  bernhardf      Status                   assigned => closed  
-01-19-07 10:08  bernhardf      Note Added: 0002006                          
-01-19-07 10:08  bernhardf      Resolution               open => fixed       
+09-20-06 03:58  GJanak         New Issue                                    
+09-20-06 03:58  GJanak         Status                   new => assigned     
+09-20-06 03:58  GJanak         Assigned To               => uClibc          
+01-19-07 10:01  bernhardf      Status                   assigned => closed  
+01-19-07 10:01  bernhardf      Note Added: 0002005                          
+01-19-07 10:01  bernhardf      Resolution               open => fixed       
 02-12-07 05:43  vapier         Status                   closed => assigned  
 02-12-07 05:43  vapier         Assigned To              uClibc => buildroot 
 ======================================================================
