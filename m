@@ -1,8 +1,8 @@
 From: bugs at busybox.net <bugs@busybox.net>
-Date: Mon, 12 Feb 2007 05:33:42 -0800
-Subject: [Buildroot] [buildroot 0000466]: filefrag.c in e2fsprogs in
-	buildroot does not compile
-Message-ID: <e4fcdc47d529f0e2d807fd15ec00b50f@bugs.busybox.net>
+Date: Mon, 12 Feb 2007 05:33:44 -0800
+Subject: [Buildroot] [buildroot 0000512]: Make cramfs bootable at least
+	sometimes
+Message-ID: <9c58b16ce937b2a905785b638aae75b5@bugs.busybox.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -12,63 +12,62 @@ To: buildroot@busybox.net
 
 The following issue has been ASSIGNED. 
 ====================================================================== 
-http://busybox.net/bugs/view.php?id=466 
+http://busybox.net/bugs/view.php?id=512 
 ====================================================================== 
-Reported By:                jdupre
+Reported By:                akvadrako
 Assigned To:                buildroot
 ====================================================================== 
 Project:                    buildroot
-Issue ID:                   466
-Category:                   Architecture Specific
-Reproducibility:            always
-Severity:                   minor
+Issue ID:                   512
+Category:                   New Features
+Reproducibility:            N/A
+Severity:                   feature
 Priority:                   normal
 Status:                     assigned
 ====================================================================== 
-Date Submitted:             10-04-2005 10:21 PDT
+Date Submitted:             10-28-2005 09:29 PDT
 Last Modified:              02-12-2007 05:33 PST
 ====================================================================== 
-Summary:                    filefrag.c in e2fsprogs in buildroot does not
-compile
+Summary:                    Make cramfs bootable at least sometimes
 Description: 
-I get the following errors when I add e2fsprogs to my buildroot 
-configuration:
+This configure option includes the linux kernel in the cramfs image, at a
+set spot (sector 2), so that normal bootloaders can use it.  Otherwise
+grub and lilo don't work with cramfs because of it's readonly nature.
 
-filefrag.c: In function 'frag_report':
-filefrag.c:72: error: storage size of 'fileinfo' isn't known
-filefrag.c:104: error: 'O_LARGEFILE' undeclared (first use in this 
-function
-filefrag.c:104: error: (Each undeclared identifier is reported only 
-once
-filefrag.c:104: error: for each function it appears in.)
-
-This compile time error happens with todays (20051003) snapshot of 
-buildroot (using e2fsprogs-1.38) and the 20050817 snapshot (using 
-e2fsprogs-1.37).
-
-In both instances I am using the latest "released" version of uClibc, not
-the current SVN, and the latest available kernel headers (2.6.12).
-
-I tried enabling largefile support in buildroot menuconfig, but that made
-no difference. 
-
+This adds an assembly bootloader to cramfs which doesn't work all that
+well.  But I think it's worth including since somebody may have time to
+fix it.  And it's a better longterm solution since it's akward to require
+people to force their normal bootloader to boot from sector 2.  This comes
+from the midori project.
 ====================================================================== 
 
 ---------------------------------------------------------------------- 
- bernhardf - 01-21-07 09:14  
+ akvadrako - 01-27-06 16:23  
 ---------------------------------------------------------------------- 
-We currently are using e2fsprogs-1.39. Do you still see the error you
-descibe in the initial report? 
+This updated patch does a few things:
+(1) stripping is now down on temporary copies so it doesn't effect the
+TARGET_DIR
+(2) included a standard workaround for vim syntax highlighting bug 
+
+---------------------------------------------------------------------- 
+ bernhardf - 01-21-07 06:49  
+---------------------------------------------------------------------- 
+Are these patches still required with current trunk?
+If so, please rediff against current trunk.
+
+Thanks alot in advance and cheers, 
 
 Issue History 
 Date Modified   Username       Field                    Change               
 ====================================================================== 
-10-04-05 10:21  jdupre         New Issue                                    
-10-04-05 10:21  jdupre         Status                   new => assigned     
-10-04-05 10:21  jdupre         Assigned To               => uClibc          
-10-04-05 10:21  jdupre         File Added: .config                          
-01-21-07 09:14  bernhardf      Note Added: 0002022                          
-01-21-07 09:14  bernhardf      Status                   assigned => feedback
-02-12-07 05:33  vapier         Status                   feedback => assigned
+10-28-05 09:29  akvadrako      New Issue                                    
+10-28-05 09:29  akvadrako      Status                   new => assigned     
+10-28-05 09:29  akvadrako      Assigned To               => uClibc          
+10-28-05 09:29  akvadrako      File Added: br-cramfsboot.patch                  
+ 
+01-27-06 16:21  akvadrako      File Added: br-cramfsboot-v2.patch               
+    
+01-27-06 16:23  akvadrako      Note Added: 0001015                          
+01-21-07 06:49  bernhardf      Note Added: 0002020                          
 02-12-07 05:33  vapier         Assigned To              uClibc => buildroot 
 ======================================================================
