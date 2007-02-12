@@ -1,7 +1,8 @@
 From: bugs at busybox.net <bugs@busybox.net>
-Date: Mon, 12 Feb 2007 05:43:34 -0800
-Subject: [Buildroot] [buildroot 0001031]: header files
-Message-ID: <381e2909285d7fa9c16f682e1ab3ea3d@bugs.busybox.net>
+Date: Mon, 12 Feb 2007 05:43:36 -0800
+Subject: [Buildroot] [buildroot 0000926]: lvm2 fails to install (DESTDIR
+	issues)
+Message-ID: <900aaaa00a1bed7110fac319780b223d@bugs.busybox.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -11,56 +12,53 @@ To: buildroot@busybox.net
 
 The following issue has been ASSIGNED. 
 ====================================================================== 
-http://busybox.net/bugs/view.php?id=1031 
+http://busybox.net/bugs/view.php?id=926 
 ====================================================================== 
-Reported By:                cheng
+Reported By:                redhatter
 Assigned To:                buildroot
 ====================================================================== 
 Project:                    buildroot
-Issue ID:                   1031
+Issue ID:                   926
 Category:                   Other
 Reproducibility:            always
-Severity:                   feature
+Severity:                   minor
 Priority:                   normal
 Status:                     assigned
 ====================================================================== 
-Date Submitted:             09-18-2006 13:35 PDT
+Date Submitted:             06-27-2006 03:59 PDT
 Last Modified:              02-12-2007 05:43 PST
 ====================================================================== 
-Summary:                    header files
+Summary:                    lvm2 fails to install (DESTDIR issues)
 Description: 
-buildroot has support for kernel headers up to 2.4.25.
-i am using a target kernel of 2.4.20 and keep getting seg fault
-of compiled applications. however, simpler programs worked fine.
-
-i suspect it's a kernel header issue. can buildroot include
-sanitized header for 2.4.20 kernel? there are still a number
-of cpu out there which uses this out of factory.
-
-i can work on upgrading the whole kernel or downgrading the
-header. guess the latter would be the first choice to avoid
-peripheral support issue.
-
+When running the `make install` stage of the LVM2 build, the install
+scripts attempt to write to /etc/lvm (instead of
+/path/to/staging_dir/etc/lvm), yeilding a "permission denied" when run as
+a non-root user.  The supplied patch fixes this issue.
 ====================================================================== 
 
 ---------------------------------------------------------------------- 
- bernhardf - 12-22-06 01:22  
+ redhatter - 06-27-06 04:01  
 ---------------------------------------------------------------------- 
-buildroot supports 2.4.25 kernel-headers as the oldest headers.
+Hrmm, this seems to have wound up in the uClibc bug list... (I *swear* I
+clicked Busybox)... if it's out of place, I appologise. 
 
-Even 2.4.25 is two and a half year old, 2.4.20 would be more than 4 years
-old!
-Current is 2.6.19.1, closing. 
+---------------------------------------------------------------------- 
+ bernhardf - 12-21-06 03:57  
+---------------------------------------------------------------------- 
+Fixed in r17026. Thanks! 
 
 Issue History 
 Date Modified   Username       Field                    Change               
 ====================================================================== 
-09-18-06 13:35  cheng          New Issue                                    
-09-18-06 13:35  cheng          Status                   new => assigned     
-09-18-06 13:35  cheng          Assigned To               => uClibc          
-12-22-06 01:22  bernhardf      Status                   assigned => closed  
-12-22-06 01:22  bernhardf      Note Added: 0001908                          
-12-22-06 01:22  bernhardf      Resolution               open => fixed       
+06-27-06 03:59  redhatter      New Issue                                    
+06-27-06 03:59  redhatter      Status                   new => assigned     
+06-27-06 03:59  redhatter      Assigned To               => uClibc          
+06-27-06 04:00  redhatter      File Added: buildroot-lvm2-fix.diff              
+     
+06-27-06 04:01  redhatter      Note Added: 0001458                          
+12-21-06 03:57  bernhardf      Status                   assigned => closed  
+12-21-06 03:57  bernhardf      Note Added: 0001902                          
+12-21-06 03:57  bernhardf      Resolution               open => fixed       
 02-12-07 05:43  vapier         Status                   closed => assigned  
 02-12-07 05:43  vapier         Assigned To              uClibc => buildroot 
 ======================================================================
