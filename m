@@ -1,8 +1,8 @@
 From: bugs at busybox.net <bugs@busybox.net>
-Date: Mon, 12 Feb 2007 05:49:49 -0800
-Subject: [Buildroot] [buildroot 0000561]: DirectFB 0.9.22 no longer
-	available, most recent version is 0.9.24
-Message-ID: <d449c8e7af4f7bacd8ddeb650d1e726a@bugs.busybox.net>
+Date: Mon, 12 Feb 2007 05:49:50 -0800
+Subject: [Buildroot] [buildroot 0000560]: SDL 1.2.9 won't compile with GCC4
+	and Nasm
+Message-ID: <b5389b3698047eac6f88f1a46acb3a01@bugs.busybox.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -12,55 +12,45 @@ To: buildroot@busybox.net
 
 The following issue has been ASSIGNED. 
 ====================================================================== 
-http://busybox.net/bugs/view.php?id=561 
+http://busybox.net/bugs/view.php?id=560 
 ====================================================================== 
-Reported By:                crafterm
+Reported By:                chainsaw
 Assigned To:                buildroot
 ====================================================================== 
 Project:                    buildroot
-Issue ID:                   561
+Issue ID:                   560
 Category:                   Other
 Reproducibility:            always
 Severity:                   minor
 Priority:                   normal
 Status:                     assigned
 ====================================================================== 
-Date Submitted:             11-24-2005 06:14 PST
+Date Submitted:             11-24-2005 02:04 PST
 Last Modified:              02-12-2007 05:49 PST
 ====================================================================== 
-Summary:                    DirectFB 0.9.22 no longer available, most recent
-version is 0.9.24
+Summary:                    SDL 1.2.9 won't compile with GCC4 and Nasm
 Description: 
-Hi There,
-
-Hope all is going well.
-
-When selecting the inclusion of directfb in the buildroot toolchain, it
-attempts to download directfb 0.9.22, however this version no longer
-exists at the directfb website. The current version is 0.9.24 however the
-bundled patch against 0.9.22 unfortunately fails to apply against 0.9.24.
-
-Cheers,
-
-Marcus
+When using GCC4 and having Nasm installed in your system, SDL won't compile
+because of undefined functions. This one-liner disables the use of Nasm.
 ====================================================================== 
 
 ---------------------------------------------------------------------- 
- vapier - 11-24-05 11:53  
+ vapier - 11-24-05 02:40  
 ---------------------------------------------------------------------- 
-upstream fixed the issue that patch addressed so it is no longer needed
-
-0.9.24 is in svn now, thanks 
+build failure isnt the only problems the nasm code has ... ive added your
+patch, thanks for pointing it out 
 
 Issue History 
 Date Modified   Username       Field                    Change               
 ====================================================================== 
-11-24-05 06:14  crafterm       New Issue                                    
-11-24-05 06:14  crafterm       Status                   new => assigned     
-11-24-05 06:14  crafterm       Assigned To               => uClibc          
-11-24-05 11:53  vapier         Note Added: 0000695                          
-11-24-05 11:53  vapier         Status                   assigned => closed  
-11-24-05 11:53  vapier         Resolution               open => fixed       
+11-24-05 02:04  chainsaw       New Issue                                    
+11-24-05 02:04  chainsaw       Status                   new => assigned     
+11-24-05 02:05  chainsaw       Assigned To               => uClibc          
+11-24-05 02:05  chainsaw       File Added: sdl-1.2.9-gcc4.patch                 
+  
+11-24-05 02:40  vapier         Note Added: 0000694                          
+11-24-05 02:40  vapier         Status                   assigned => closed  
+11-24-05 02:40  vapier         Resolution               open => fixed       
 02-12-07 05:49  vapier         Status                   closed => assigned  
 02-12-07 05:49  vapier         Assigned To              uClibc => buildroot 
 ======================================================================
