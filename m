@@ -1,8 +1,8 @@
 From: bugs at busybox.net <bugs@busybox.net>
-Date: Mon, 12 Feb 2007 05:33:47 -0800
-Subject: [Buildroot] [buildroot 0000959]: DirectFB-0.9.25.1' link error:
-	/usr/lib/libpng12.so: could not read symbols: File in wrong format
-Message-ID: <7ff657b4a9a901ca29508e778f5f4254@bugs.busybox.net>
+Date: Mon, 12 Feb 2007 05:33:48 -0800
+Subject: [Buildroot] [buildroot 0000526]: Missing header files when building
+	libstdc++
+Message-ID: <5b69999f80479ba2f7874b4e14488b0c@bugs.busybox.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -12,80 +12,51 @@ To: buildroot@busybox.net
 
 The following issue has been ASSIGNED. 
 ====================================================================== 
-http://busybox.net/bugs/view.php?id=959 
+http://busybox.net/bugs/view.php?id=526 
 ====================================================================== 
-Reported By:                bowerymarc
+Reported By:                thraxisp
 Assigned To:                buildroot
 ====================================================================== 
 Project:                    buildroot
-Issue ID:                   959
+Issue ID:                   526
 Category:                   Architecture Specific
 Reproducibility:            always
 Severity:                   major
 Priority:                   normal
 Status:                     assigned
 ====================================================================== 
-Date Submitted:             07-16-2006 23:17 PDT
+Date Submitted:             11-03-2005 09:02 PST
 Last Modified:              02-12-2007 05:33 PST
 ====================================================================== 
-Summary:                    DirectFB-0.9.25.1' link error: 
-/usr/lib/libpng12.so: could not read symbols: File in wrong format
+Summary:                    Missing header files when building libstdc++
 Description: 
-/home/tools/buildroot/build_arm_nofpu/staging_dir/bin/arm-linux-uclibc-gcc
--O3 -ffast-math -pipe -Os -pipe
--I/home/tools/buildroot/build_arm_nofpu/staging_dir/usr/include
--D_GNU_SOURCE -Werror-implicit-function-declaration -o directfb-csource
-directfb-csource.o 
--L/home/tools/buildroot/build_arm_nofpu/staging_dir/lib
--L/home/tools/buildroot/build_arm_nofpu/staging_dir/usr/lib
-/usr/lib/libpng12.so -lz -lm -ldl -lpthread
-/usr/lib/libpng12.so: could not read symbols: File in wrong format
-collect2: ld returned 1 exit status
-make[3]: *** [directfb-csource] Error 1
-make[3]: Leaving directory
-`/home/tools/buildroot/build_arm_nofpu/DirectFB-0.9.25.1/tools'
-make[2]: *** [all-recursive] Error 1
-make[2]: Leaving directory
-`/home/tools/buildroot/build_arm_nofpu/DirectFB-0.9.25.1'
-make[1]: *** [all-recursive-am] Error 2
-make[1]: Leaving directory
-`/home/tools/buildroot/build_arm_nofpu/DirectFB-0.9.25.1'
-make: ***
-[/home/tools/buildroot/build_arm_nofpu/DirectFB-0.9.25.1/.compiled] Error
-2
-
+The header file bits/atomic_word.h is missing from the final build of
+libstdc++. They are located in
+/include/c++/3.4.3/armeb_linux-uclibc/bits/, but these don't seem to be
+searched.
 ====================================================================== 
 
 ---------------------------------------------------------------------- 
- rashbaugh - 12-31-06 13:43  
+ thraxisp - 11-03-05 10:10  
 ---------------------------------------------------------------------- 
-I had this same problem while building an Xscale cross-compile of
-DirectFB-1.0.0-rc2 on an Ubuntu Edgy desktop.
-For some reason libtool makes a substitution of "/usr/lib/libpng12.so"
-when "-lpng12" is specified, and then passes this path to gcc. This path
-happens to be the host libpng12.so library, when we really want the
-target's library, so it has the wrong format. Why libtool does this I have
-no idea, but I was able to work around it by explicitly specifiying the
-full path of target libpng12.so library in the corresponding DirectFB
-"Makefile". In my case, I had to make this correction in only 2 places,
-though "-lpng12" is specified in hundreds of places within the DirectFB
-Makefile source tree.
-For example, in DirectFB/tools/Makefile:
-# LIBPNG = -lpng12 << comment this one out
-# and add this in
-LIBPNG = /home/user/path-to-target-toolchain/lib/libpng12.so 
+This may be a false alarm. There appear to be two sets (of mismatched)
+libraries in my build. 
 
-I also needed this same change in
-DirectFB/interfaces/IDirectFBImageProvider/Makefile.
-Hope this helps. 
+---------------------------------------------------------------------- 
+ bernhardf - 12-28-06 01:09  
+---------------------------------------------------------------------- 
+Works for me with the fixes i just installed (revision 17099) for gcc-4.2
+on i386. Please try 4.2 with the current uClibc snapshot and report back. 
 
 Issue History 
 Date Modified   Username       Field                    Change               
 ====================================================================== 
-07-16-06 23:17  bowerymarc     New Issue                                    
-07-16-06 23:17  bowerymarc     Status                   new => assigned     
-07-16-06 23:17  bowerymarc     Assigned To               => uClibc          
-10-09-06 12:23  jruere         Issue Monitored: jruere                      
-12-31-06 13:43  rashbaugh      Note Added: 0001949                          
+11-03-05 09:02  thraxisp       New Issue                                    
+11-03-05 09:02  thraxisp       Status                   new => assigned     
+11-03-05 09:02  thraxisp       Assigned To               => uClibc          
+11-03-05 10:10  thraxisp       Note Added: 0000651                          
+12-28-06 01:09  bernhardf      Note Added: 0001946                          
+12-28-06 01:09  bernhardf      Status                   assigned => feedback
+02-12-07 05:33  vapier         Status                   feedback => assigned
 02-12-07 05:33  vapier         Assigned To              uClibc => buildroot 
 ======================================================================
