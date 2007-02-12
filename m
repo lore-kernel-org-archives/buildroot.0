@@ -1,7 +1,8 @@
 From: bugs at busybox.net <bugs@busybox.net>
-Date: Mon, 12 Feb 2007 05:43:31 -0800
-Subject: [Buildroot] [buildroot 0001127]: Cramfs make failed
-Message-ID: <57c5809ddc6423158f57b6bf30899865@bugs.busybox.net>
+Date: Mon, 12 Feb 2007 05:43:33 -0800
+Subject: [Buildroot] [buildroot 0000782]: Config path for uClibc not
+	included in uClibc makefile
+Message-ID: <c43638bf63ebc0bc02f364dab5683e50@bugs.busybox.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -11,67 +12,73 @@ To: buildroot@busybox.net
 
 The following issue has been ASSIGNED. 
 ====================================================================== 
-http://busybox.net/bugs/view.php?id=1127 
+http://busybox.net/bugs/view.php?id=782 
 ====================================================================== 
-Reported By:                AndyI
+Reported By:                maroc
 Assigned To:                buildroot
 ====================================================================== 
 Project:                    buildroot
-Issue ID:                   1127
+Issue ID:                   782
 Category:                   Other
 Reproducibility:            always
 Severity:                   minor
 Priority:                   normal
 Status:                     assigned
 ====================================================================== 
-Date Submitted:             12-22-2006 04:12 PST
+Date Submitted:             03-10-2006 16:39 PST
 Last Modified:              02-12-2007 05:43 PST
 ====================================================================== 
-Summary:                    Cramfs make failed
+Summary:                    Config path for uClibc not included in uClibc
+makefile
 Description: 
-CYGWIN_NT-5.1 andrey 1.5.23(0.156/4/2) 2006-12-19 10:52 i686 Cygwin
+In the buildroot config, if you specify the path to the uClibc config, this
+config is not included when compiling uClibc. The make file for uClibc in
+toolchain/uClibc contains the statement:
 
-make -j1 CFLAGS="-Wall -O2 -D_LARGEFILE_SOURCE -D_LARGEFILE64_SOURCE
--D_FILE_OFF
-SET_BITS=64" -C /opt/buildroot/build_mips/cramfs-1.1;
-make[1]: Entering directory `/opt/buildroot/build_mips/cramfs-1.1'
-gcc -Wall -O2 -D_LARGEFILE_SOURCE -D_LARGEFILE64_SOURCE
--D_FILE_OFFSET_BITS=64 -
-I.   mkcramfs.c  -lz -o mkcramfs
-mkcramfs.c: In function `parse_directory':
-mkcramfs.c:390: warning: passing arg 4 of `scandir' from incompatible
-pointer ty
-pe
-gcc -Wall -O2 -D_LARGEFILE_SOURCE -D_LARGEFILE64_SOURCE
--D_FILE_OFFSET_BITS=64 -
-I.   cramfsck.c  -lz -o cramfsck
-cramfsck.c: In function `test_super':
-cramfsck.c:152: warning: implicit declaration of function `_IO'
-/cygdrive/d/TEMP/ccIA2xOB.o:cramfsck.c:(.text+0x17f7): undefined reference
-to `_
-_IO'
-collect2: ld returned 1 exit status
-make[1]: *** [cramfsck] Error 1
-make[1]: Leaving directory `/opt/buildroot/build_mips/cramfs-1.1'
-make: *** [/opt/buildroot/build_mips/cramfs-1.1/mkcramfs] Error 2
+ifndef $(UCLIBC_CONFIG_FILE)
+
+but the config option for the uClibc config path is named:
+
+BR2_PACKAGE_UCLIBC_CONFIG
+
+so the config file specifed in the buildroot config is not used.
+
 ====================================================================== 
 
 ---------------------------------------------------------------------- 
- bernhardf - 12-22-06 04:22  
+ maroc - 03-16-06 13:35  
 ---------------------------------------------------------------------- 
-Fixed in r17049. Thanks! 
+Looking at the make file for busybox, I see a line like
+
+BUSYBOX_CONFIG_FILE=$(subst ",, $(strip $(BR2_PACKAGE_BUSYBOX_CONFIG)))
+
+where the busybox config is set from the buildroot config option.
+
+Maybe the uclibc make file needs a similar statement to get the path for
+the uclibc config? e.g.
+
+UCLIBC_CONFIG_FILE=$(subst ",, $(strip $(BR2_PACKAGE_UCLIBC_CONFIG))) 
+
+---------------------------------------------------------------------- 
+ bernhardf - 12-22-06 04:15  
+---------------------------------------------------------------------- 
+AFAICS there is no BR2_PACKAGE_UCLIBC_CONFIG anymore.
+
+If you want to use a pre-configured .config for uClibc, then
+$ make UCLIBC_CONFIG_FILE=/my/uClibc.config
+
+See docs/README. 
 
 Issue History 
 Date Modified   Username       Field                    Change               
 ====================================================================== 
-12-22-06 04:12  AndyI          New Issue                                    
-12-22-06 04:12  AndyI          Status                   new => assigned     
-12-22-06 04:12  AndyI          Assigned To               => uClibc          
-12-22-06 04:12  AndyI          File Added: cramfs-03-cygwin.patch               
-    
-12-22-06 04:22  bernhardf      Status                   assigned => closed  
-12-22-06 04:22  bernhardf      Note Added: 0001913                          
-12-22-06 04:22  bernhardf      Resolution               open => fixed       
+03-10-06 16:39  maroc          New Issue                                    
+03-10-06 16:39  maroc          Status                   new => assigned     
+03-10-06 16:39  maroc          Assigned To               => uClibc          
+03-16-06 13:35  maroc          Note Added: 0001186                          
+12-22-06 04:15  bernhardf      Status                   assigned => closed  
+12-22-06 04:15  bernhardf      Note Added: 0001912                          
+12-22-06 04:15  bernhardf      Resolution               open => fixed       
 02-12-07 05:43  vapier         Status                   closed => assigned  
 02-12-07 05:43  vapier         Assigned To              uClibc => buildroot 
 ======================================================================
