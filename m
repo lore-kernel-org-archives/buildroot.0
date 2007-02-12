@@ -1,7 +1,7 @@
 From: bugs at busybox.net <bugs@busybox.net>
-Date: Mon, 12 Feb 2007 05:47:27 -0800
-Subject: [Buildroot] [buildroot 0000557]: syslogd-1.4.1 patch
-Message-ID: <0d26a8f1f2ddb579e7b33f922374059e@bugs.busybox.net>
+Date: Mon, 12 Feb 2007 05:47:31 -0800
+Subject: [Buildroot] [buildroot 0000497]: libpthreads is broken for sh4
+Message-ID: <305949569e2df5505bcdc823aa3eabd5@bugs.busybox.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -11,99 +11,82 @@ To: buildroot@busybox.net
 
 The following issue has been ASSIGNED. 
 ====================================================================== 
-http://busybox.net/bugs/view.php?id=557 
+http://busybox.net/bugs/view.php?id=497 
 ====================================================================== 
-Reported By:                frank sabella
+Reported By:                Masta-G
 Assigned To:                buildroot
 ====================================================================== 
 Project:                    buildroot
-Issue ID:                   557
+Issue ID:                   497
 Category:                   Architecture Specific
 Reproducibility:            always
-Severity:                   major
+Severity:                   minor
 Priority:                   normal
 Status:                     assigned
 ====================================================================== 
-Date Submitted:             11-23-2005 10:02 PST
+Date Submitted:             10-21-2005 07:35 PDT
 Last Modified:              02-12-2007 05:47 PST
 ====================================================================== 
-Summary:                    syslogd-1.4.1 patch
+Summary:                    libpthreads is broken for sh4
 Description: 
-Compiling syslogd-1.4.1 either with the buildroot environment or against
-uClibc results in the build failing with the following error:
+Tried the latest cvs of buildroot to build a toolchain for sh4 little
+endian.
+I used the latest snapshot of uClibc, gcc 3.4.2 and the 2.6.12 headers.
+When I try to build the toolchain it will give the following error:
 
-In file included from ksym_mod.c:97:
-/router/apps/buildroot/build_i686/staging_dir/i686-linux-uclibc/sys-include/linux/module.h:41:
-error: field `at
-tr' has incomplete type
-/router/apps/buildroot/build_i686/staging_dir/i686-linux-uclibc/sys-include/linux/module.h:49:
-error: field `ko
-bj' has incomplete type
-ksym_mod.c:99: warning: `struct kernel_sym' declared inside parameter
-list
-ksym_mod.c:99: warning: its scope is only this definition or declaration,
-which is probably not what you want
-ksym_mod.c:139: error: field `module' has incomplete type
-ksym_mod.c:141: error: field `module_info' has incomplete type
-ksym_mod.c: In function `InitMsyms':
-ksym_mod.c:210: warning: passing arg 1 of `get_kernel_syms' from
-incompatible pointer type
-ksym_mod.c:224: error: invalid application of `sizeof' to an incomplete
-type
-ksym_mod.c:232: warning: passing arg 1 of `get_kernel_syms' from
-incompatible pointer type
-ksym_mod.c:248: error: dereferencing pointer to incomplete type
-ksym_mod.c:248: error: dereferencing pointer to incomplete type
-ksym_mod.c:255: error: increment of pointer to unknown structure
-ksym_mod.c:255: error: arithmetic on pointer to an incomplete type
-ksym_mod.c: In function `AddModule':
-ksym_mod.c:413: error: invalid application of `sizeof' to an incomplete
-type
-make[1]: *** [ksym_mod.o] Error 1
+/home/mastag/dc/buildroot/build_sh4/staging_dir/bin/sh4-linux-uclibc-strip
+-X --strip-debug -R .note -R .comment attr.o cancel.o condvar.o errno.o
+events.o join.o lockfile.o manager.o mutex.o oldsemaphore.o pt-machine.o
+ptfork.o pthread.o ptlongjmp.o rwlock.o semaphore.o signals.o specific.o
+spinlock.o
+/home/mastag/dc/buildroot/build_sh4/staging_dir/bin/sh4-linux-uclibc-ar cr
+../../lib/libpthread.a attr.o cancel.o condvar.o errno.o events.o join.o
+lockfile.o manager.o mutex.o oldsemaphore.o pt-machine.o ptfork.o
+pthread.o ptlongjmp.o rwlock.o semaphore.o signals.o specific.o
+spinlock.o
+/home/mastag/dc/buildroot/build_sh4/staging_dir/bin/sh4-linux-uclibc-ar cr
+../../lib/libpthread.a
+rm -f ../../lib/libpthread-0.9.28.so ../../lib/libpthread.so.0
+../../lib/libpthread.so
+/home/mastag/dc/buildroot/build_sh4/staging_dir/bin/sh4-linux-uclibc-ld
+-EL -shared --warn-common --warn-once -z combreloc -z defs
+-soname=libpthread.so.0 \
+        -o ../../lib/libpthread-0.9.28.so ../../lib/crti.o
+/home/mastag/dc/buildroot/build_sh4/staging_dir/lib/gcc/sh4-linux-uclibc/3.4.2/crtbeginS.o
+--whole-archive ../../lib/libpthread.a \
+        --no-whole-archive ../../libc/misc/internals/interp.o \
+        -L../../lib -lc 
+/home/mastag/dc/buildroot/build_sh4/staging_dir/lib/gcc/sh4-linux-uclibc/3.4.2/libgcc.a
+/home/mastag/dc/buildroot/build_sh4/staging_dir/lib/gcc/sh4-linux-uclibc/3.4.2/crtendS.o
+../../lib/crtn.o
+../../lib/libpthread.a(attr.o): In function
+`__pthread_attr_setstacksize':
+: undefined reference to `__pthread_max_stacksize'
+../../lib/libpthread.a(attr.o): In function
+`__pthread_attr_setstacksize':
+: undefined reference to `__pthread_init_max_stacksize'
+make[3]: *** [../../lib/libpthread.so] Error 1
+make[3]: Leaving directory
+`/home/mastag/dc/buildroot/toolchain_build_sh4/uClibc/libpthread/linuxthreads'
+make[2]: *** [_dir_linuxthreads] Error 2
+make[2]: Leaving directory
+`/home/mastag/dc/buildroot/toolchain_build_sh4/uClibc/libpthread'
+make[1]: *** [_dir_libpthread] Fout 2
 make[1]: Leaving directory
-`/router/apps/buildroot/build_i686/sysklogd-1.4.1'
-make: *** [/router/apps/buildroot/build_i686/sysklogd-1.4.1/klogd] Error
-2
-
-
+`/home/mastag/dc/buildroot/toolchain_build_sh4/uClibc'
+make: ***
+[/home/mastag/dc/buildroot/toolchain_build_sh4/uClibc/lib/libc.a] Fout 2
 ====================================================================== 
-
----------------------------------------------------------------------- 
- lord_apollyon - 11-30-05 04:04  
----------------------------------------------------------------------- 
-Whoops, my apologies.  I thought my comment would be enclosed with the
-patch.
-
-I also didn't mean to subvert someone else's bug report.
-
-To reiterate:
-
-The first patch does not gate the replacement code for non-2.6 kernels,
-which from my experience, is what breaks the sysklogd build.  My patch
-uses substantially the same patch as the first, but also adds some gating
-to the code in the .c file to use it only for kernels >= 2.5.0.
-
-If the maintainers would prefer a different bug report be filed thusly,
-I'm happy to oblige.  Feel free to undo what I've done here if that's the
-case.
-
-Cheers!
-=Apollyon= 
 
 Issue History 
 Date Modified   Username       Field                    Change               
 ====================================================================== 
-11-23-05 10:02  frank sabella  New Issue                                    
-11-23-05 10:02  frank sabella  Status                   new => assigned     
-11-23-05 10:02  frank sabella  Assigned To               => uClibc          
-11-23-05 10:02  frank sabella  File Added: sysklogd-1.4.1-kernel_headers-1.patch
-                   
-11-30-05 04:00  lord_apollyon  File Added: sysklogd26fix.patch                  
- 
-11-30-05 04:04  lord_apollyon  Note Added: 0000715                          
-01-24-06 07:55  prpplague      Status                   assigned => resolved
-01-24-06 07:55  prpplague      Resolution               open => fixed       
-01-24-06 07:55  prpplague      Additional Information Updated                   
+10-21-05 07:35  Masta-G        New Issue                                    
+10-21-05 07:35  Masta-G        Status                   new => assigned     
+10-21-05 07:35  Masta-G        Assigned To               => uClibc          
+01-24-06 11:36  prpplague      Status                   assigned => resolved
+01-24-06 11:36  prpplague      Resolution               open => fixed       
+01-24-06 11:36  prpplague      Additional Information Updated                   
 
 03-08-06 16:54  vapier         Status                   resolved => closed  
 02-12-07 05:47  vapier         Status                   closed => assigned  
