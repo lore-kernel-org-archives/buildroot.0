@@ -1,9 +1,9 @@
 From: bugs at busybox.net <bugs@busybox.net>
-Date: Mon, 12 Feb 2007 05:47:22 -0800
-Subject: [Buildroot] [buildroot 0000419]: [patch mkdosfs] Resolved
+Date: Mon, 12 Feb 2007 05:47:24 -0800
+Subject: [Buildroot] [buildroot 0000418]: [patchmkdosfs] Resolved
 	compilation error, update version to 2.11,
 	remove debug symbol generation
-Message-ID: <0ff0b782a90893116d504e57c9429b4e@bugs.busybox.net>
+Message-ID: <c975c8703b16656affab1be7de366ee9@bugs.busybox.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,13 +13,13 @@ To: buildroot@busybox.net
 
 The following issue has been ASSIGNED. 
 ====================================================================== 
-http://busybox.net/bugs/view.php?id=419 
+http://busybox.net/bugs/view.php?id=418 
 ====================================================================== 
 Reported By:                abogani
 Assigned To:                buildroot
 ====================================================================== 
 Project:                    buildroot
-Issue ID:                   419
+Issue ID:                   418
 Category:                   Other
 Reproducibility:            N/A
 Severity:                   trivial
@@ -29,7 +29,7 @@ Status:                     assigned
 Date Submitted:             09-08-2005 02:36 PDT
 Last Modified:              02-12-2007 05:47 PST
 ====================================================================== 
-Summary:                    [patch mkdosfs] Resolved compilation error, update
+Summary:                    [patchmkdosfs] Resolved compilation error, update
 version to 2.11, remove debug symbol generation
 Description: 
 Index: mkdosfs.mk
@@ -68,7 +68,6 @@ Date Modified   Username       Field                    Change
 09-08-05 02:36  abogani        New Issue                                    
 09-08-05 02:36  abogani        Status                   new => assigned     
 09-08-05 02:36  abogani        Assigned To               => uClibc          
-09-13-05 01:46  abogani        File Added: mkdosfs.mk.patch                    
 01-23-06 13:58  prpplague      Status                   assigned => resolved
 01-23-06 13:58  prpplague      Resolution               open => fixed       
 01-23-06 13:58  prpplague      Additional Information Updated                   
