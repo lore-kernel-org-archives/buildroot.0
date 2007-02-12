@@ -1,8 +1,8 @@
 From: bugs at busybox.net <bugs@busybox.net>
-Date: Mon, 12 Feb 2007 05:43:20 -0800
-Subject: [Buildroot] [buildroot 0000571]: sysfstools-1.3.0 fails to build at
-	all with Linux 2.6.x headers
-Message-ID: <b74c16512870c9e462a07e804552c711@bugs.busybox.net>
+Date: Mon, 12 Feb 2007 05:43:21 -0800
+Subject: [Buildroot] [buildroot 0000779]: Error during compilation of uclibc
+	and libstdc++ related to large file support
+Message-ID: <dbb23330b42074b4ae3fcdaa662a726a@bugs.busybox.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -12,98 +12,113 @@ To: buildroot@busybox.net
 
 The following issue has been ASSIGNED. 
 ====================================================================== 
-http://busybox.net/bugs/view.php?id=571 
+http://busybox.net/bugs/view.php?id=779 
 ====================================================================== 
-Reported By:                lord_apollyon
+Reported By:                blurgk
 Assigned To:                buildroot
 ====================================================================== 
 Project:                    buildroot
-Issue ID:                   571
+Issue ID:                   779
 Category:                   Architecture Specific
 Reproducibility:            always
-Severity:                   minor
+Severity:                   major
 Priority:                   normal
 Status:                     assigned
 ====================================================================== 
-Date Submitted:             11-30-2005 04:27 PST
+Date Submitted:             03-08-2006 06:51 PST
 Last Modified:              02-12-2007 05:43 PST
 ====================================================================== 
-Summary:                    sysfstools-1.3.0 fails to build at all with Linux
-2.6.x headers
+Summary:                    Error during compilation of uclibc and libstdc++
+related to large file support
 Description: 
-It looks like there's some kind of libtool or build system problem with
-sysfsutils.  The following error is observed when attempting to build
-sysfsutils-1.3.0 with gcc 3.4.4 or 3.3.5 against kernel 2.6.12 headers:
+I am trying to compile a cross-compilation toolchain for an ARM system
+under cygwin, without large file support (buildroot config file attached),
+but I get several errors.
 
-make -j1 -C /rootnew/buildroot/build_i686/sysfsutils-1.3.0
-make[1]: Entering directory
-`/rootnew/buildroot/build_i686/sysfsutils-1.3.0'
-make  all-recursive
-make[2]: Entering directory
-`/rootnew/buildroot/build_i686/sysfsutils-1.3.0'
-Making all in lib
-make[3]: Entering directory
-`/rootnew/buildroot/build_i686/sysfsutils-1.3.0/lib'
-source='sysfs_utils.c' object='libsysfs_la-sysfs_utils.lo' libtool=yes \
-depfile='.deps/libsysfs_la-sysfs_utils.Plo'
-tmpdepfile='.deps/libsysfs_la-sysfs_utils.TPlo' \
-depmode=gcc3 /bin/sh ../depcomp \
-/bin/sh ../libtool --mode=compile
-/rootnew/buildroot/build_i686/staging_dir/bin/i686-linux-uclibc-gcc
--DHAVE_CONFIG_H -I. -I. -I.. -I../include   -Wall -W -Wshadow
--Wstrict-prototypes -Wmissing-prototypes -Wmissing-declarations
--Wredundant-decls -pipe -O2 -march=pentium3 -mcpu=pentium3   -c -o
-libsysfs_la-sysfs_utils.lo `test -f 'sysfs_utils.c' || echo
-'./'`sysfs_utils.c
-rm -f .libs/libsysfs_la-sysfs_utils.lo
-/rootnew/buildroot/build_i686/staging_dir/bin/i686-linux-uclibc-gcc
--DHAVE_CONFIG_H -I. -I. -I.. -I../include -Wall -W -Wshadow
--Wstrict-prototypes -Wmissing-prototypes -Wmissing-declarations
--Wredundant-decls -pipe -O2 -march=pentium3 -mcpu=pentium3 -c
-sysfs_utils.c -MT libsysfs_la-sysfs_utils.lo -MD -MP -MF
-.deps/libsysfs_la-sysfs_utils.TPlo  -fPIC -DPIC
-`-mcpu=' is deprecated. Use `-mtune=' or '-march=' instead.
-`-mcpu=' is deprecated. Use `-mtune=' or '-march=' instead.
-mv -f libsysfs_la-sysfs_utils.o .libs/libsysfs_la-sysfs_utils.lo
-mv: cannot stat `libsysfs_la-sysfs_utils.o': No such file or directory
-make[3]: *** [libsysfs_la-sysfs_utils.lo] Error 1
+First during the compilation of uclibc:
+error: 'lseek64' undeclared here (not in a function)
+in
+toolchain_build_arm_nofpu/uClibc/libc/sysdeps/linux/common/pread_write.c
+
+Then several times during the compilation of libstdc++, because of
+_GLIBCXX_USE_LFS incorrectly set:
+
+toolchain_buid_arm_nofpu/gcc-3.4.5-final/arm-linux-uclibc/libstdc++-v3/include/ext/stdio_sync_filebuf.h:170:
+error: there are no arguments to 'fseek64' that depend on a template
+parameter, so a declaration of 'fseeko64' must be available 
+
+and
+
+/usr/src/buildroot/toolchain_build_arm_nofpu/gcc-3.4.5-final/gcc/xgcc
+-shared-libgcc
+-B/usr/src/buildroot/toolchain_build_arm_nofpu/gcc-3.4.5-final/gcc/
+-nostdinc++
+-L/usr/src/buildroot/toolchain_build_arm_nofpu/gcc-3.4.5-final/arm-linux-uclibc/libstdc++-v3/src
+-L/usr/src/buildroot/toolchain_build_arm_nofpu/gcc-3.4.5-final/arm-linux-uclibc/libstdc++-v3/src/.libs
+-B/usr/src/buildroot/build_arm_nofpu/staging_dir/arm-linux-uclibc/bin/
+-B/usr/src/buildroot/build_arm_nofpu/staging_dir/arm-linux-uclibc/lib/
+-isystem
+/usr/src/buildroot/build_arm_nofpu/staging_dir/arm-linux-uclibc/include
+-isystem
+/usr/src/buildroot/build_arm_nofpu/staging_dir/arm-linux-uclibc/sys-include
+-I/usr/src/buildroot/toolchain_build_arm_nofpu/gcc-3.4.5-final/arm-linux-uclibc/libstdc++-v3/include/arm-linux-uclibc
+-I/usr/src/buildroot/toolchain_build_arm_nofpu/gcc-3.4.5-final/arm-linux-uclibc/libstdc++-v3/include
+-I/usr/src/buildroot/toolchain_build_arm_nofpu/gcc-3.4.5/libstdc++-v3/libsupc++
+-g -Os -g -Os -fno-implicit-templates -Wall -W -Wwrite-strings -Wcast-qual
+-fdiagnostics-show-location=once -ffunction-sections -fdata-sections -c
+basic_file.cc  -fPIC -DPIC -o .libs/basic_file.o
+basic_file.cc: In member function `std::__basic_file<char>*
+std::__basic_file<char>::open(const char*, std::_Ios_Openmode, int)':
+basic_file.cc:232: error: `fopen64' was not declared in this scope
+basic_file.cc:232: warning: unused variable 'fopen64'
+basic_file.cc: In member function `std::streamoff
+std::__basic_file<char>::seekoff(std::streamoff, std::_Ios_Seekdir)':
+basic_file.cc:316: error: `lseek64' was not declared in this scope
+basic_file.cc:316: warning: unused variable 'lseek64'
+make[4]: *** [basic_file.lo] Error 1
+make[4]: Leaving directory
+`/usr/src/buildroot/toolchain_build_arm_nofpu/gcc-3.4.5-final/arm-linux-uclibc/libstdc++-v3/src'
+make[3]: *** [all-recursive] Error 1
 make[3]: Leaving directory
-`/rootnew/buildroot/build_i686/sysfsutils-1.3.0/lib'
-make[2]: *** [all-recursive] Error 1
+`/usr/src/buildroot/toolchain_build_arm_nofpu/gcc-3.4.5-final/arm-linux-uclibc/libstdc++-v3'
+make[2]: *** [all] Error 2
 make[2]: Leaving directory
-`/rootnew/buildroot/build_i686/sysfsutils-1.3.0'
-make[1]: *** [all] Error 2
+`/usr/src/buildroot/toolchain_build_arm_nofpu/gcc-3.4.5-final/arm-linux-uclibc/libstdc++-v3'
+make[1]: *** [all-target-libstdc++-v3] Error 2
 make[1]: Leaving directory
-`/rootnew/buildroot/build_i686/sysfsutils-1.3.0'
-make: *** [/rootnew/buildroot/build_i686/sysfsutils-1.3.0/.compiled] Error
-2
+`/usr/src/buildroot/toolchain_build_arm_nofpu/gcc-3.4.5-final'
+make: ***
+[/usr/src/buildroot/toolchain_build_arm_nofpu/gcc-3.4.5-final/.compiled]
+Error 2
 
 ====================================================================== 
 
 ---------------------------------------------------------------------- 
- bernhardf - 12-22-06 04:37  
+ bernhardf - 12-28-06 01:08  
 ---------------------------------------------------------------------- 
-Works for me with linux-2.6.19-1 headers and gcc-4.2.
-Please update and retry and let us know if this is fixed.
-thanks, 
+Works for me with the fixes i just installed (revision 17099) for gcc-4.2
+on i386. Please try 4.2 and report back. 
 
 ---------------------------------------------------------------------- 
- bernhardf - 01-19-07 08:18  
+ bernhardf - 01-19-07 08:15  
 ---------------------------------------------------------------------- 
-Works with sysfsutils-2.1.0 and gcc >= 4.2, linux >= 2.6.19.2 headers,
-closing. 
+Fixed in gcc-4.2 and gcc-4.3; See
+http://gcc.gnu.org/bugzilla/show_bug.cgi?id=30365 
 
 Issue History 
 Date Modified   Username       Field                    Change               
 ====================================================================== 
-11-30-05 04:27  lord_apollyon  New Issue                                    
-11-30-05 04:27  lord_apollyon  Status                   new => assigned     
-11-30-05 04:27  lord_apollyon  Assigned To               => uClibc          
-12-22-06 04:37  bernhardf      Note Added: 0001917                          
-12-22-06 04:37  bernhardf      Status                   assigned => feedback
-01-19-07 08:18  bernhardf      Status                   feedback => closed  
-01-19-07 08:18  bernhardf      Note Added: 0001998                          
-01-19-07 08:18  bernhardf      Resolution               open => fixed       
+03-08-06 06:51  blurgk         New Issue                                    
+03-08-06 06:51  blurgk         Status                   new => assigned     
+03-08-06 06:51  blurgk         Assigned To               => uClibc          
+03-08-06 06:51  blurgk         File Added: .config                          
+05-22-06 11:14  tabgal         Issue Monitored: tabgal                      
+12-28-06 01:08  bernhardf      Note Added: 0001944                          
+12-28-06 01:08  bernhardf      Status                   assigned => feedback
+01-09-07 06:15  stephaneC      Issue Monitored: stephaneC                    
+01-19-07 08:15  bernhardf      Status                   feedback => closed  
+01-19-07 08:15  bernhardf      Note Added: 0001997                          
+01-19-07 08:15  bernhardf      Resolution               open => fixed       
 02-12-07 05:43  vapier         Status                   closed => assigned  
 02-12-07 05:43  vapier         Assigned To              uClibc => buildroot 
 ======================================================================
