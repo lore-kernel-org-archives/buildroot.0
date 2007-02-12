@@ -1,8 +1,8 @@
 From: bugs at busybox.net <bugs@busybox.net>
-Date: Mon, 12 Feb 2007 05:42:29 -0800
-Subject: [Buildroot] [buildroot 0001203]: grub patch grub_0.97-20.diff.gz
-	doesn't exists
-Message-ID: <5a97b4341ecbe9b63385c4010d2bc7e5@bugs.busybox.net>
+Date: Mon, 12 Feb 2007 05:42:31 -0800
+Subject: [Buildroot] [buildroot 0001199]: CVS not inserted in config and
+	broken. Patch attached.
+Message-ID: <cf3c3c04a26d3b279e58156a6c34e3d4@bugs.busybox.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -12,48 +12,45 @@ To: buildroot@busybox.net
 
 The following issue has been ASSIGNED. 
 ====================================================================== 
-http://busybox.net/bugs/view.php?id=1203 
+http://busybox.net/bugs/view.php?id=1199 
 ====================================================================== 
-Reported By:                rgenoud
+Reported By:                stoecker
 Assigned To:                buildroot
 ====================================================================== 
 Project:                    buildroot
-Issue ID:                   1203
+Issue ID:                   1199
 Category:                   Other
 Reproducibility:            always
 Severity:                   minor
 Priority:                   normal
 Status:                     assigned
 ====================================================================== 
-Date Submitted:             02-07-2007 05:39 PST
+Date Submitted:             02-05-2007 23:29 PST
 Last Modified:              02-12-2007 05:42 PST
 ====================================================================== 
-Summary:                    grub patch grub_0.97-20.diff.gz doesn't exists
+Summary:                    CVS not inserted in config and broken. Patch
+attached.
 Description: 
-the file http://ftp.debian.org/debian/pool/main/g/grub/grub_0.97-20.diff.gz
-doesn't exists any more.
-=> wget fails.
-we just have to change from grub_0.97-20.diff.gz to grub_0.97-22.diff.gz
+The building of cvs is broken and disabled.
 
-patch included
+Attached is a patch fixing this.
 ====================================================================== 
 
 ---------------------------------------------------------------------- 
- bernhardf - 02-07-07 06:28  
+ bernhardf - 02-06-07 03:23  
 ---------------------------------------------------------------------- 
-This was already fixed several hours ago. 
+Fixed in r17787. Thanks for pointing this out. 
 
 Issue History 
 Date Modified   Username       Field                    Change               
 ====================================================================== 
-02-07-07 05:39  rgenoud        New Issue                                    
-02-07-07 05:39  rgenoud        Status                   new => assigned     
-02-07-07 05:39  rgenoud        Assigned To               => uClibc          
-02-07-07 05:39  rgenoud        File Added: grub.mk.patch                    
-02-07-07 06:28  bernhardf      Status                   assigned => closed  
-02-07-07 06:28  bernhardf      Note Added: 0002133                          
-02-07-07 06:28  bernhardf      Resolution               open => no change
-required
+02-05-07 23:29  stoecker       New Issue                                    
+02-05-07 23:29  stoecker       Status                   new => assigned     
+02-05-07 23:29  stoecker       Assigned To               => uClibc          
+02-05-07 23:29  stoecker       File Added: cvs.diff                         
+02-06-07 03:23  bernhardf      Status                   assigned => closed  
+02-06-07 03:23  bernhardf      Note Added: 0002125                          
+02-06-07 03:23  bernhardf      Resolution               open => fixed       
 02-12-07 05:42  vapier         Status                   closed => assigned  
 02-12-07 05:42  vapier         Assigned To              uClibc => buildroot 
 ======================================================================
