@@ -1,7 +1,7 @@
 From: bugs at busybox.net <bugs@busybox.net>
-Date: Mon, 12 Feb 2007 05:48:55 -0800
-Subject: [Buildroot] [buildroot 0000175]: new package provided: monit
-Message-ID: <dd1318ed1ad60de1c5889a4e0cf69b71@bugs.busybox.net>
+Date: Mon, 12 Feb 2007 05:48:56 -0800
+Subject: [Buildroot] [buildroot 0000269]: lm_sensors support
+Message-ID: <1825b364adcaad5b4d1bda6295cddc91@bugs.busybox.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -11,54 +11,36 @@ To: buildroot@busybox.net
 
 The following issue has been ASSIGNED. 
 ====================================================================== 
-http://busybox.net/bugs/view.php?id=175 
+http://busybox.net/bugs/view.php?id=269 
 ====================================================================== 
-Reported By:                clausklein
+Reported By:                ch
 Assigned To:                buildroot
 ====================================================================== 
 Project:                    buildroot
-Issue ID:                   175
+Issue ID:                   269
 Category:                   New Features
-Reproducibility:            N/A
+Reproducibility:            always
 Severity:                   feature
 Priority:                   normal
 Status:                     assigned
 ====================================================================== 
-Date Submitted:             03-20-2005 08:58 PST
+Date Submitted:             05-23-2005 20:46 PDT
 Last Modified:              02-12-2007 05:48 PST
 ====================================================================== 
-Summary:                    new package provided: monit
+Summary:                    lm_sensors support
 Description: 
-monit - utility for monitoring services on a Unix system
-
-monit is a utility for managing and monitoring, processes, files,
-directories and devices on a UNIX system. monit conducts automatic
-maintenance and repair and can execute meaningful causal actions in error
-situations.
-
-website        http://www.tildeslash.com/monit/
-version        4.4
+makefile to support the interesting i2c bits of lm_sensors for embedded
+platforms
 ====================================================================== 
-
----------------------------------------------------------------------- 
- clausklein - 04-03-05 11:36  
----------------------------------------------------------------------- 
-Update to new current monit version 4.5;
-This includes a patch to get a brief summary instead of the full status on
-commandline.
-
-Claus Klein 
 
 Issue History 
 Date Modified   Username       Field                    Change               
 ====================================================================== 
-03-20-05 08:58  clausklein     New Issue                                    
-03-20-05 08:58  clausklein     File Added: monit.tgz                        
-04-03-05 11:36  clausklein     File Added: monit-4.5.tgz                    
-04-03-05 11:36  clausklein     Note Added: 0000128                          
-01-25-06 06:27  prpplague      Status                   assigned => closed  
-01-25-06 06:27  prpplague      Resolution               open => won't fix   
-01-25-06 06:27  prpplague      Additional Information Updated                   
+05-23-05 20:46  ch             New Issue                                    
+05-23-05 20:46  ch             File Added: lm_sensors.mk                    
+01-25-06 06:20  prpplague      Status                   assigned => closed  
+01-25-06 06:20  prpplague      Resolution               open => won't fix   
+01-25-06 06:20  prpplague      Additional Information Updated                   
 
 02-12-07 05:48  vapier         Status                   closed => assigned  
 02-12-07 05:48  vapier         Assigned To              uClibc => buildroot 
