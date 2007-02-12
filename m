@@ -1,7 +1,7 @@
 From: bugs at busybox.net <bugs@busybox.net>
 Date: Mon, 12 Feb 2007 05:48:47 -0800
-Subject: [Buildroot] [buildroot 0000508]: New Package: libidn
-Message-ID: <66f530b35d2b11a3dce50291c4b1d7c7@bugs.busybox.net>
+Subject: [Buildroot] [buildroot 0000201]: New Package: LILO-22.6.1
+Message-ID: <7d99760f6750329ae71d46d316c76249@bugs.busybox.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -11,48 +11,36 @@ To: buildroot@busybox.net
 
 The following issue has been ASSIGNED. 
 ====================================================================== 
-http://busybox.net/bugs/view.php?id=508 
+http://busybox.net/bugs/view.php?id=201 
 ====================================================================== 
-Reported By:                akvadrako
+Reported By:                shuhao_chang
 Assigned To:                buildroot
 ====================================================================== 
 Project:                    buildroot
-Issue ID:                   508
+Issue ID:                   201
 Category:                   New Features
 Reproducibility:            N/A
 Severity:                   feature
 Priority:                   normal
 Status:                     assigned
 ====================================================================== 
-Date Submitted:             10-28-2005 09:20 PDT
+Date Submitted:             03-31-2005 02:38 PST
 Last Modified:              02-12-2007 05:48 PST
 ====================================================================== 
-Summary:                    New Package: libidn
+Summary:                    New Package: LILO-22.6.1
 Description: 
-+           GNU Libidn is an implementation of the Stringprep, Punycode and
-IDNA
-+           specifications defined by the IETF Internationalized Domain
-Names
-+           (IDN) working group, used for internationalized domain names.
-+           Currently the Nameprep, Kerberos 5 and XMPP Stringprep
-profiles are
-+           supported.
-+
-+           http://www.gnu.org/software/libidn/
+LILO: Linux Loader
 
 ====================================================================== 
 
 Issue History 
 Date Modified   Username       Field                    Change               
 ====================================================================== 
-10-28-05 09:20  akvadrako      New Issue                                    
-10-28-05 09:20  akvadrako      Status                   new => assigned     
-10-28-05 09:20  akvadrako      Assigned To               => uClibc          
-10-28-05 09:20  akvadrako      File Added: br-libidn-package.patch              
-     
-01-25-06 09:08  prpplague      Status                   assigned => closed  
-01-25-06 09:08  prpplague      Resolution               open => won't fix   
-01-25-06 09:08  prpplague      Additional Information Updated                   
+03-31-05 02:38  shuhao_chang   New Issue                                    
+03-31-05 02:38  shuhao_chang   File Added: lilo.tar.gz                      
+01-25-06 08:54  prpplague      Status                   assigned => closed  
+01-25-06 08:54  prpplague      Resolution               open => won't fix   
+01-25-06 08:54  prpplague      Additional Information Updated                   
 
 02-12-07 05:48  vapier         Status                   closed => assigned  
 02-12-07 05:48  vapier         Assigned To              uClibc => buildroot 
