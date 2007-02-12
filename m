@@ -1,8 +1,8 @@
 From: bugs at busybox.net <bugs@busybox.net>
 Date: Mon, 12 Feb 2007 05:43:29 -0800
-Subject: [Buildroot] [buildroot 0000484]: target/ext2/ext2root.mk ignores
-	reserved-block count of 0 (RESBLKS=0)
-Message-ID: <15430cffedbe64b5061e8c2ec960c83f@bugs.busybox.net>
+Subject: [Buildroot] [buildroot 0000703]: MIPS *.h requires
+	include/linux/autoconf.h
+Message-ID: <d97ec26dc7e10ed3981172dd480832b6@bugs.busybox.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -12,45 +12,50 @@ To: buildroot@busybox.net
 
 The following issue has been ASSIGNED. 
 ====================================================================== 
-http://busybox.net/bugs/view.php?id=484 
+http://busybox.net/bugs/view.php?id=703 
 ====================================================================== 
-Reported By:                timw
+Reported By:                alec_v
 Assigned To:                buildroot
 ====================================================================== 
 Project:                    buildroot
-Issue ID:                   484
-Category:                   Other
+Issue ID:                   703
+Category:                   Architecture Specific
 Reproducibility:            always
 Severity:                   minor
 Priority:                   normal
 Status:                     assigned
 ====================================================================== 
-Date Submitted:             10-12-2005 08:32 PDT
+Date Submitted:             02-08-2006 08:54 PST
 Last Modified:              02-12-2007 05:43 PST
 ====================================================================== 
-Summary:                    target/ext2/ext2root.mk ignores reserved-block count
-of 0 (RESBLKS=0)
+Summary:                    MIPS *.h requires include/linux/autoconf.h
 Description: 
-In target/ext2/ext2root.mk (in HEAD), BR2_TARGET_ROOTFS_EXT2_RESBLKS is
-ignored if it is 0. It should be used if it is 0 (since 0 means something
-here--"do not reserve any blocks".
+Some *.h files for the MIPS architecture requres *real* working
+include/linux/autoconf.h file.
+
+For example <asm/mipsregs.h> requires 
+
+#define CONFIG_PAGE_SIZE_4KB 1
+
+which usually defined in the "autoconf.h" by the linux kernel
+configurator.
 ====================================================================== 
 
 ---------------------------------------------------------------------- 
- bernhardf - 12-22-06 04:35  
+ bernhardf - 12-22-06 04:31  
 ---------------------------------------------------------------------- 
-Fixed in 17050. Better late than never.. Thanks! 
+Fixed by using linux-2.6.19.1 and later. 
 
 Issue History 
 Date Modified   Username       Field                    Change               
 ====================================================================== 
-10-12-05 08:32  timw           New Issue                                    
-10-12-05 08:32  timw           Status                   new => assigned     
-10-12-05 08:32  timw           Assigned To               => uClibc          
-10-12-05 08:32  timw           File Added: ext2root.patch                    
-12-22-06 04:35  bernhardf      Status                   assigned => closed  
-12-22-06 04:35  bernhardf      Note Added: 0001916                          
-12-22-06 04:35  bernhardf      Resolution               open => fixed       
+02-08-06 08:54  alec_v         New Issue                                    
+02-08-06 08:54  alec_v         Status                   new => assigned     
+02-08-06 08:54  alec_v         Assigned To               => uClibc          
+02-08-06 08:55  alec_v         File Added: autoconf.h                       
+12-22-06 04:31  bernhardf      Status                   assigned => closed  
+12-22-06 04:31  bernhardf      Note Added: 0001915                          
+12-22-06 04:31  bernhardf      Resolution               open => fixed       
 02-12-07 05:43  vapier         Status                   closed => assigned  
 02-12-07 05:43  vapier         Assigned To              uClibc => buildroot 
 ======================================================================
