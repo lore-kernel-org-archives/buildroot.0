@@ -1,7 +1,8 @@
 From: bugs at busybox.net <bugs@busybox.net>
-Date: Mon, 12 Feb 2007 05:33:35 -0800
-Subject: [Buildroot] [buildroot 0000898]: [PATCH] New feature: iscsi support
-Message-ID: <a1626029c01b660083d0affa91b726c7@bugs.busybox.net>
+Date: Mon, 12 Feb 2007 05:33:37 -0800
+Subject: [Buildroot] [buildroot 0001138]: Adds the ability to select
+	dmidecode as part of the buildroot system.
+Message-ID: <28b518768c62133beb8640d8b6413d71@bugs.busybox.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -11,158 +12,82 @@ To: buildroot@busybox.net
 
 The following issue has been ASSIGNED. 
 ====================================================================== 
-http://busybox.net/bugs/view.php?id=898 
+http://busybox.net/bugs/view.php?id=1138 
 ====================================================================== 
-Reported By:                Gregory Haskins
+Reported By:                decandia50
 Assigned To:                buildroot
 ====================================================================== 
 Project:                    buildroot
-Issue ID:                   898
+Issue ID:                   1138
 Category:                   New Features
-Reproducibility:            N/A
+Reproducibility:            always
 Severity:                   feature
 Priority:                   normal
 Status:                     assigned
 ====================================================================== 
-Date Submitted:             06-07-2006 09:28 PDT
+Date Submitted:             12-29-2006 12:23 PST
 Last Modified:              02-12-2007 05:33 PST
 ====================================================================== 
-Summary:                    [PATCH] New feature: iscsi support
+Summary:                    Adds the ability to select dmidecode as part of the
+buildroot system.
 Description: 
-Index: package/Config.in
-===================================================================
---- package/Config.in	(revision 15298)
-+++ package/Config.in	(working copy)
-@@ -97,6 +97,7 @@
- source "package/netsnmp/Config.in"
- source "package/newt/Config.in"
- source "package/ntp/Config.in"
-+source "package/open-iscsi/Config.in"
- source "package/openntpd/Config.in"
- source "package/openssh/Config.in"
- source "package/openssl/Config.in"
-Index: package/open-iscsi/open-iscsi.mk
-===================================================================
---- package/open-iscsi/open-iscsi.mk	(revision 0)
-+++ package/open-iscsi/open-iscsi.mk	(revision 0)
-@@ -0,0 +1,57 @@
-+#############################################################
-+#
-+# open-iscsi
-+#
-+#############################################################
-+
-+OPENISCSI_VER:=1.0-485
-+OPENISCSI_SITE:=http://www.open-iscsi.org/bits
-+OPENISCSI_DIR:=$(BUILD_DIR)/open-iscsi-$(OPENISCSI_VER)
-+OPENISCSI_SOURCE:=open-iscsi-$(OPENISCSI_VER).tar.gz
-+
-+$(DL_DIR)/$(OPENISCSI_SOURCE):
-+	$(WGET) -P $(DL_DIR) $(OPENISCSI_SITE)/$(OPENISCSI_SOURCE)
-+
-+$(OPENISCSI_DIR)/.unpacked: $(DL_DIR)/$(OPENISCSI_SOURCE)
-+	zcat $(DL_DIR)/$(OPENISCSI_SOURCE) | tar -C $(BUILD_DIR) $(TAR_OPTIONS)
--;
-+	cat package/open-iscsi/open-iscsi-$(OPENISCSI_VER).patch | (cd
-$(OPENISCSI_DIR); patch -p1);
-+	touch $(OPENISCSI_DIR)/.unpacked
-+
-+BINS = iscsid iscsiadm
-+TARGET_BINS:=$(patsubst %,$(TARGET_DIR)/sbin/%, $(BINS))
-+
-+#$(OPENISCSI_DIR)/usr/%: open-iscsi-unpack
-+#	@echo "Building $(notdir $@)"
-+#	cd $(OPENISCSI_DIR)/usr; $(MAKE) $(notdir $@) CC=$(TARGET_CC)
-+#
-+#$(TARGET_DIR)/sbin/%: $(OPENISCSI_DIR)/usr/%
-+#	@echo "Installing $(notdir $@)"
-+#	cp $^ $@
-+
-+$(TARGET_DIR)/sbin/%: open-iscsi-unpack
-+	@echo "Building $(notdir $@)"
-+	cd $(OPENISCSI_DIR)/usr; $(MAKE) $(notdir $@) CC=$(TARGET_CC)
-+	@echo "Installing $(notdir $@)"
-+	cp $(OPENISCSI_DIR)/usr/$(notdir $@) $@
-+
-+open-iscsi: berkeleydb $(TARGET_BINS)
-+
-+open-iscsi-source: $(DL_DIR)/$(OPENISCSI_SOURCE)
-+
-+open-iscsi-unpack: $(OPENISCSI_DIR)/.unpacked
-+
-+open-iscsi-clean: 
-+	-$(MAKE) -C $(OPENISCSI_DIR) clean
-+	-rm -f $(TARGET_BINS)
-+
-+open-iscsi-dirclean: 
-+	rm -rf $(OPENISCSI_DIR)
-+
-+#############################################################
-+#
-+# Toplevel Makefile options
-+#
-+#############################################################
-+ifeq ($(strip $(BR2_PACKAGE_OPENISCSI)),y)
-+TARGETS+=open-iscsi
-+endif
-Index: package/open-iscsi/open-iscsi-1.0-485.patch
-===================================================================
---- package/open-iscsi/open-iscsi-1.0-485.patch	(revision 0)
-+++ package/open-iscsi/open-iscsi-1.0-485.patch	(revision 0)
-@@ -0,0 +1,12 @@
-+diff -Naur open-iscsi-1.0-485.orig/usr/Makefile
-open-iscsi-1.0-485/usr/Makefile
-+--- open-iscsi-1.0-485.orig/usr/Makefile	2006-02-02 03:13:44.000000000
--0500
-++++ open-iscsi-1.0-485/usr/Makefile	2006-06-07 11:16:59.000000000 -0400
-+@@ -21,7 +21,7 @@
-+ 	endif
-+ 	endif
-+ IPC_OBJ=netlink.o
-+-DBM_LIB=-ldb
-++DBM_LIB=-ldb -lpthread
-+ else
-+ ifeq ($(OSNAME),FreeBSD)
-+ IPC_CFLAGS=
-Index: package/open-iscsi/Config.in
-===================================================================
---- package/open-iscsi/Config.in	(revision 0)
-+++ package/open-iscsi/Config.in	(revision 0)
-@@ -0,0 +1,8 @@
-+config BR2_PACKAGE_OPENISCSI
-+	bool "open-iscsi"
-+	default n
-+	select BR2_PACKAGE_BERKELEYDB
-+	help
-+	  An iSCSI Initiator tools package.  Requires kernel support
-+
-+	  http://www.open-iscsi.com/
+I have a yet to be released open source project that requires dmidecode to
+be loaded on the system and pull the serial number of the machine out of
+the BIOS.  Since I'm using busybox/buildroot to create my boot image, I
+thought it would be nice to give back to the community ;)
 
+So I've added the ability to wget dmidecode and compile it in to the
+current buildroot.  Also thanks for the documentation, that made it all
+possible.
+
+FYI: I'm not sure how well this will cross compile, but it's fine on x86
+architectures.
 ====================================================================== 
 
 ---------------------------------------------------------------------- 
- bernhardf - 01-27-07 15:14  
+ bernhardf - 01-19-07 08:11  
 ---------------------------------------------------------------------- 
-Can you please attach a patch?
+Can you please send a complete
+$ svn diff package/ > ~/buildroot.add-dmidecode.patch
+to the list?
 
-+ zcat $(DL_DIR)/$(OPENISCSI_SOURCE) | tar -C $(BUILD_DIR) $(TAR_OPTIONS)
--;
+TIA, 
 
-Use $(ZCAT)
+---------------------------------------------------------------------- 
+ decandia50 - 01-23-07 20:30  
+---------------------------------------------------------------------- 
+uploaded the diff...  Since there have been so many revisions ahead, you
+will probably have to make dmidecode fit in a better category.
 
-+ cat package/open-iscsi/open-iscsi-$(OPENISCSI_VER).patch | (cd
-$(OPENISCSI_DIR); patch -p1);
+Maybe something more along the lines of the following from today's
+(01/23/2007) SVN snapshot
 
-Use 
-toolchain/patch-kernel.sh $(OPENISCSI_DIR) package/open-iscsi/
-open-iscsi-$(OPENISCSI_VER)\*.patch 
+Index: package/Config.in
+===================================================================
+--- package/Config.in   (revision 17489)
++++ package/Config.in   (working copy)
+@@ -57,6 +57,7 @@
+ source "package/bsdiff/Config.in"
+ source "package/customize/Config.in"
+ source "package/dash/Config.in"
++source "package/dmidecode/Config.in"
+ source "package/file/Config.in"
+ source "package/kexec/Config.in"
+ if !BR2_PACKAGE_BUSYBOX_HIDE_OTHERS 
 
 Issue History 
 Date Modified   Username       Field                    Change               
 ====================================================================== 
-06-07-06 09:28  Gregory HaskinsNew Issue                                    
-06-07-06 09:28  Gregory HaskinsStatus                   new => assigned     
-06-07-06 09:28  Gregory HaskinsAssigned To               => uClibc          
-01-27-07 15:14  bernhardf      Note Added: 0002062                          
+12-29-06 12:23  decandia50     New Issue                                    
+12-29-06 12:23  decandia50     Status                   new => assigned     
+12-29-06 12:23  decandia50     Assigned To               => uClibc          
+12-29-06 12:23  decandia50     File Added: dmidecode-patch.tgz                  
+ 
+01-19-07 08:11  bernhardf      Note Added: 0001996                          
+01-19-07 08:11  bernhardf      Status                   assigned => feedback
+01-23-07 20:25  decandia50     File Added: buildroot.add-dmidecode.patch        
+           
+01-23-07 20:30  decandia50     Note Added: 0002038                          
+02-12-07 05:33  vapier         Status                   feedback => assigned
 02-12-07 05:33  vapier         Assigned To              uClibc => buildroot 
 ======================================================================
