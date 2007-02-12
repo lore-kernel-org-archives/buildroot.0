@@ -1,8 +1,8 @@
 From: bugs at busybox.net <bugs@busybox.net>
-Date: Mon, 12 Feb 2007 05:42:59 -0800
-Subject: [Buildroot] [buildroot 0000919]: makedevs device files creation can
-	fail
-Message-ID: <b5a1ba5d6c23fffb74564a11fb068b83@bugs.busybox.net>
+Date: Mon, 12 Feb 2007 05:43:00 -0800
+Subject: [Buildroot] [buildroot 0000860]: bash segfaults on "chroot
+	<toolchain-jail> /bin/bash
+Message-ID: <6b7aad1d3870aefcad23de2becc0c092@bugs.busybox.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -12,56 +12,76 @@ To: buildroot@busybox.net
 
 The following issue has been ASSIGNED. 
 ====================================================================== 
-http://busybox.net/bugs/view.php?id=919 
+http://busybox.net/bugs/view.php?id=860 
 ====================================================================== 
-Reported By:                blurgk
+Reported By:                zugvogel
 Assigned To:                buildroot
 ====================================================================== 
 Project:                    buildroot
-Issue ID:                   919
+Issue ID:                   860
 Category:                   Architecture Specific
 Reproducibility:            always
-Severity:                   major
+Severity:                   minor
 Priority:                   normal
 Status:                     assigned
 ====================================================================== 
-Date Submitted:             06-21-2006 02:25 PDT
-Last Modified:              02-12-2007 05:42 PST
+Date Submitted:             04-29-2006 16:00 PDT
+Last Modified:              02-12-2007 05:43 PST
 ====================================================================== 
-Summary:                    makedevs device files creation can fail
+Summary:                    bash segfaults on "chroot <toolchain-jail> /bin/bash
 Description: 
-makedevs should use the makedev() macro to create device numbers, else it
-gives wrong major/minor numbers to devices files on systems which use big
-device numbers. Patch attached.
+Context: Trying to use buildroot to set up a local root-jail for
+development against     uClibc (i686->i686).
+
+Symptom: When unwrapping the ext2 target, and attempting to chroot into
+executing        bash, I get an immediate "segmentation fault". Chrooting
+into /bin/ash will work       fine. Once inside the jail, bash will still
+segfault. Other commands I have sampled    do work fine.
+
+
+
 ====================================================================== 
 
 ---------------------------------------------------------------------- 
- bernhardf - 01-19-07 11:46  
+ crito - 05-01-06 11:47  
 ---------------------------------------------------------------------- 
-Sounds reasonable. Please ping me again if i didn't check this in within
-let's say a week from now on.
+Since i have the same problem i uploaded a strace output from the chroot
+call:
 
-Thanks for the patch and sorry for the long delay..
+# chroot /target strace /bin/bash
 
-cheers, 
+hope it can help. 
 
 ---------------------------------------------------------------------- 
- bernhardf - 01-21-07 06:36  
+ vapier - 05-03-06 21:40  
 ---------------------------------------------------------------------- 
-Fixed in svn revision 17434.
-Thanks! 
+known issue
+
+change strong_alias() to weak_alias() and search the uClibc mailing list
+for more info 
+
+---------------------------------------------------------------------- 
+ bernhardf - 01-21-07 06:33  
+---------------------------------------------------------------------- 
+This should be fixed in uClibc trunk. If you still get this, please report
+it against uClibc (and the uClibc-list) and not buildroot.
+
+Thanks for the report. 
 
 Issue History 
 Date Modified   Username       Field                    Change               
 ====================================================================== 
-06-21-06 02:25  blurgk         New Issue                                    
-06-21-06 02:25  blurgk         Status                   new => assigned     
-06-21-06 02:25  blurgk         Assigned To               => uClibc          
-06-21-06 02:25  blurgk         File Added: use_makedev.diff                    
-01-19-07 11:46  bernhardf      Note Added: 0002008                          
-01-21-07 06:36  bernhardf      Status                   assigned => closed  
-01-21-07 06:36  bernhardf      Note Added: 0002015                          
-01-21-07 06:36  bernhardf      Resolution               open => fixed       
-02-12-07 05:42  vapier         Status                   closed => assigned  
-02-12-07 05:42  vapier         Assigned To              uClibc => buildroot 
+04-29-06 16:00  zugvogel       New Issue                                    
+04-29-06 16:00  zugvogel       Status                   new => assigned     
+04-29-06 16:00  zugvogel       Assigned To               => uClibc          
+05-01-06 11:46  crito          File Added: uclibc_bash.strace                   
+
+05-01-06 11:47  crito          Note Added: 0001340                          
+05-01-06 12:03  crito          Issue Monitored: crito                       
+05-03-06 21:40  vapier         Note Added: 0001341                          
+01-21-07 06:33  bernhardf      Status                   assigned => closed  
+01-21-07 06:33  bernhardf      Note Added: 0002014                          
+01-21-07 06:33  bernhardf      Resolution               open => fixed       
+02-12-07 05:43  vapier         Status                   closed => assigned  
+02-12-07 05:43  vapier         Assigned To              uClibc => buildroot 
 ======================================================================
