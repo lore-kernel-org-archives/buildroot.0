@@ -1,8 +1,8 @@
 From: bugs at busybox.net <bugs@busybox.net>
-Date: Mon, 12 Feb 2007 05:49:33 -0800
-Subject: [Buildroot] [buildroot 0000533]: Forgotten changes from
-	BR2_PACKAGE_DROPBEAR_SSHD to BR2_PACKAGE_DROPBEAR
-Message-ID: <e66a472e8c3b3a63a780492f6a23eb87@bugs.busybox.net>
+Date: Mon, 12 Feb 2007 05:49:37 -0800
+Subject: [Buildroot] [buildroot 0000537]: mkdosfs auto-build from buildroot
+	checkout 12813 from 2005-11-07 fails
+Message-ID: <a6b54413894788c027cdef3f245b335d@bugs.busybox.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -12,55 +12,51 @@ To: buildroot@busybox.net
 
 The following issue has been ASSIGNED. 
 ====================================================================== 
-http://busybox.net/bugs/view.php?id=533 
+http://busybox.net/bugs/view.php?id=537 
 ====================================================================== 
-Reported By:                vlad
+Reported By:                alemc
 Assigned To:                buildroot
 ====================================================================== 
 Project:                    buildroot
-Issue ID:                   533
+Issue ID:                   537
 Category:                   Other
 Reproducibility:            always
 Severity:                   minor
 Priority:                   normal
 Status:                     assigned
 ====================================================================== 
-Date Submitted:             11-05-2005 09:47 PST
+Date Submitted:             11-09-2005 13:50 PST
 Last Modified:              02-12-2007 05:49 PST
 ====================================================================== 
-Summary:                    Forgotten changes from BR2_PACKAGE_DROPBEAR_SSHD to
-BR2_PACKAGE_DROPBEAR
+Summary:                    mkdosfs auto-build from buildroot checkout 12813
+from 2005-11-07 fails
 Description: 
-buildroot-orig/package/dropbear/dropbear.mk:
---- buildroot-orig/package/dropbear/dropbear.mk.orig    2005-11-05
-19:39:38.862322520 +0200
-+++ buildroot-orig/package/dropbear/dropbear.mk 2005-11-05
-19:39:51.869345152 +0200
-@@ -88,6 +88,6 @@
- # Toplevel Makefile options
- #
- #############################################################
--ifeq ($(strip $(BR2_PACKAGE_DROPBEAR_SSHD)),y)
-+ifeq ($(strip $(BR2_PACKAGE_DROPBEAR)),y)
- TARGETS+=dropbear
- endif
+mkdosfs auto-build from buildroot checkout 12813 from 2005-11-07 fails with
+the following error message:
+mkdosfs.c:50:24: ../version.h: No such file or directory
+mkdosfs.c: In function `main':
+mkdosfs.c:1415: error: parse error before "VERSION"
 
+Creating a version.h file in build_i386/dosfstools-2.8 with #define
+VERSION "xyz" and #define VERSION_DATE "a_date" works as a temporary
+workaround
 ====================================================================== 
 
 ---------------------------------------------------------------------- 
- vapier - 11-05-05 12:56  
+ vapier - 12-29-05 03:30  
 ---------------------------------------------------------------------- 
-thanks, fixed in svn 
+ver bumped dosfstools from 2.8 to 2.11 and should fix this 
 
 Issue History 
 Date Modified   Username       Field                    Change               
 ====================================================================== 
-11-05-05 09:47  vlad           New Issue                                    
-11-05-05 09:47  vlad           Status                   new => assigned     
-11-05-05 09:47  vlad           Assigned To               => uClibc          
-11-05-05 12:56  vapier         Note Added: 0000667                          
+11-09-05 13:50  alemc          New Issue                                    
+11-09-05 13:50  alemc          Status                   new => assigned     
+11-09-05 13:50  alemc          Assigned To               => uClibc          
+12-29-05 03:30  vapier         Note Added: 0000827                          
 12-29-05 03:30  vapier         Status                   assigned => closed  
 12-29-05 03:30  vapier         Resolution               open => fixed       
+12-29-05 03:30  vapier         Description Updated                          
 02-12-07 05:49  vapier         Status                   closed => assigned  
 02-12-07 05:49  vapier         Assigned To              uClibc => buildroot 
 ======================================================================
