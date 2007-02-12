@@ -1,8 +1,8 @@
 From: bugs at busybox.net <bugs@busybox.net>
-Date: Mon, 12 Feb 2007 05:44:09 -0800
-Subject: [Buildroot] [buildroot 0001035]: Powerpc c++ compiler unresolved
-	symbols
-Message-ID: <a72d5147d3fc43b679248937b4c027a8@bugs.busybox.net>
+Date: Mon, 12 Feb 2007 05:44:10 -0800
+Subject: [Buildroot] [buildroot 0001068]: install kernel header
+	failure.(kernel-2.6.18)
+Message-ID: <70d79166b4e3ff84c6228dd260f1d778@bugs.busybox.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -12,59 +12,66 @@ To: buildroot@busybox.net
 
 The following issue has been ASSIGNED. 
 ====================================================================== 
-http://busybox.net/bugs/view.php?id=1035 
+http://busybox.net/bugs/view.php?id=1068 
 ====================================================================== 
-Reported By:                GJanak
+Reported By:                jdiwu
 Assigned To:                buildroot
 ====================================================================== 
 Project:                    buildroot
-Issue ID:                   1035
-Category:                   Architecture Specific
+Issue ID:                   1068
+Category:                   Other
 Reproducibility:            always
-Severity:                   major
+Severity:                   minor
 Priority:                   normal
 Status:                     assigned
 ====================================================================== 
-Date Submitted:             09-19-2006 10:08 PDT
+Date Submitted:             10-09-2006 23:46 PDT
 Last Modified:              02-12-2007 05:44 PST
 ====================================================================== 
-Summary:                    Powerpc c++ compiler unresolved symbols
+Summary:                    install kernel header failure.(kernel-2.6.18)
 Description: 
-A c++ compiler bould with current Snapshot Version of buildroot produce a
-not working stdc++ library.
+configure options:
 
-When I enable the C++  buidlroot enables Large File Support automaticaly.
+    Target Architecture : i386
+    Target Architecture Variant : i686
+    Linux 2.6.18 kernel headers
 
-All build together, the c++ compiler always fails linking a executable by
-missing the symbols fstat64 fopen54 ftello64 and so on in libstdc++.so
+output of make like:
+......
+toolchain/patch-kernel.sh /buildroot/tc_toolchain_build_i686/linux-2.6.18
+toolchain/kernel-headers linux-2.6.18\*.patch
+(cd /buildroot/tc_toolchain_build_i686/linux-2.6.18 ; \
+         make -j1 ARCH=i686
+INSTALL_HDR_PATH=/buildroot/tc_toolchain_build_i686/linux
+headers_install)
+make[1]: Entering directory
+`/buildroot/tc_toolchain_build_i686/linux-2.6.18'
+Makefile:486:
+/buildroot/tc_toolchain_build_i686/linux-2.6.18/arch/i686/Makefile: No
+such file or directory
+make[1]: *** No rule to make target
+`/buildroot/tc_toolchain_build_i686/linux-2.6.18/arch/i686/Makefile'. 
+Stop.
+make[1]: Leaving directory
+`/buildroot/tc_toolchain_build_i686/linux-2.6.18'
+make: *** [/buildroot/tc_toolchain_build_i686/linux/.configured] Error 2
 
-Is this broken ?
 ====================================================================== 
 
 ---------------------------------------------------------------------- 
- GJanak - 09-19-06 11:18  
+ bernhardf - 11-22-06 14:29  
 ---------------------------------------------------------------------- 
-6 hours later. fresh checkout, build on another Host.
-And it works....
-
-D'oh. 
-
----------------------------------------------------------------------- 
- bernhardf - 11-22-06 15:24  
----------------------------------------------------------------------- 
-Closing. 
+This was already fixed. 
 
 Issue History 
 Date Modified   Username       Field                    Change               
 ====================================================================== 
-09-19-06 10:08  GJanak         New Issue                                    
-09-19-06 10:08  GJanak         Status                   new => assigned     
-09-19-06 10:08  GJanak         Assigned To               => uClibc          
-09-19-06 11:18  GJanak         Note Added: 0001637                          
-11-22-06 15:24  bernhardf      Status                   assigned => closed  
-11-22-06 15:24  bernhardf      Note Added: 0001785                          
-11-22-06 15:24  bernhardf      Resolution               open => no change
-required
+10-09-06 23:46  jdiwu          New Issue                                    
+10-09-06 23:46  jdiwu          Status                   new => assigned     
+10-09-06 23:46  jdiwu          Assigned To               => uClibc          
+11-22-06 14:29  bernhardf      Status                   assigned => closed  
+11-22-06 14:29  bernhardf      Note Added: 0001781                          
+11-22-06 14:29  bernhardf      Resolution               open => fixed       
 02-12-07 05:44  vapier         Status                   closed => assigned  
 02-12-07 05:44  vapier         Assigned To              uClibc => buildroot 
 ======================================================================
