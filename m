@@ -1,8 +1,8 @@
 From: bugs at busybox.net <bugs@busybox.net>
-Date: Mon, 12 Feb 2007 05:47:34 -0800
-Subject: [Buildroot] [buildroot 0000448]: Wrong link in
-	'toolchain_build_i586/linux/include'
-Message-ID: <2f736099885e77b186c3ed465cc5a647@bugs.busybox.net>
+Date: Mon, 12 Feb 2007 05:47:35 -0800
+Subject: [Buildroot] [buildroot 0000477]: update iproute2 to latest released
+	version
+Message-ID: <e0fd1ef12b3b2090402025ad46a21792@bugs.busybox.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -12,39 +12,36 @@ To: buildroot@busybox.net
 
 The following issue has been ASSIGNED. 
 ====================================================================== 
-http://busybox.net/bugs/view.php?id=448 
+http://busybox.net/bugs/view.php?id=477 
 ====================================================================== 
-Reported By:                hix
+Reported By:                bbonev
 Assigned To:                buildroot
 ====================================================================== 
 Project:                    buildroot
-Issue ID:                   448
-Category:                   Architecture Specific
-Reproducibility:            always
-Severity:                   minor
+Issue ID:                   477
+Category:                   New Features
+Reproducibility:            N/A
+Severity:                   trivial
 Priority:                   normal
 Status:                     assigned
 ====================================================================== 
-Date Submitted:             09-27-2005 06:47 PDT
+Date Submitted:             10-08-2005 05:03 PDT
 Last Modified:              02-12-2007 05:47 PST
 ====================================================================== 
-Summary:                    Wrong link in 'toolchain_build_i586/linux/include'
+Summary:                    update iproute2 to latest released version
 Description: 
-When selecting 'i386' as 'Target Architecture' and 'i586' as 'Target
-Architecture Variant', a link 'asm' is created in
-'toolchain_build_i586/linux/include/' pointing to (a non existant)
-'asm-i586' directory. The right target would obviously be 'asm-i386'.
+a simple patch to update iproute to latest released version
 ====================================================================== 
 
 Issue History 
 Date Modified   Username       Field                    Change               
 ====================================================================== 
-09-27-05 06:47  hix            New Issue                                    
-09-27-05 06:47  hix            Status                   new => assigned     
-09-27-05 06:47  hix            Assigned To               => uClibc          
-01-24-06 12:21  prpplague      Status                   assigned => resolved
-01-24-06 12:21  prpplague      Resolution               open => fixed       
-01-24-06 12:21  prpplague      Additional Information Updated                   
+10-08-05 05:03  bbonev         New Issue                                    
+10-08-05 05:03  bbonev         Status                   new => assigned     
+10-08-05 05:03  bbonev         Assigned To               => uClibc          
+01-24-06 12:27  prpplague      Status                   assigned => resolved
+01-24-06 12:27  prpplague      Resolution               open => fixed       
+01-24-06 12:27  prpplague      Additional Information Updated                   
 
 03-08-06 16:54  vapier         Status                   resolved => closed  
 02-12-07 05:47  vapier         Status                   closed => assigned  
