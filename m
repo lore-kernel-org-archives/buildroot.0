@@ -1,8 +1,7 @@
 From: bugs at busybox.net <bugs@busybox.net>
-Date: Mon, 12 Feb 2007 05:42:41 -0800
-Subject: [Buildroot] [buildroot 0000861]: buildroot jail unable to compile
-	busybox --- "missing" output directory
-Message-ID: <2324ed8ee1b5c1c72818515600cdf9d6@bugs.busybox.net>
+Date: Mon, 12 Feb 2007 05:42:43 -0800
+Subject: [Buildroot] [buildroot 0001185]: 17669 won't compile Busybox
+Message-ID: <f1db097846e4f871635cc297e8f021af@bugs.busybox.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -12,81 +11,80 @@ To: buildroot@busybox.net
 
 The following issue has been ASSIGNED. 
 ====================================================================== 
-http://busybox.net/bugs/view.php?id=861 
+http://busybox.net/bugs/view.php?id=1185 
 ====================================================================== 
-Reported By:                zugvogel
+Reported By:                jcoppens
 Assigned To:                buildroot
 ====================================================================== 
 Project:                    buildroot
-Issue ID:                   861
-Category:                   Other
+Issue ID:                   1185
+Category:                   Architecture Specific
 Reproducibility:            always
-Severity:                   major
+Severity:                   minor
 Priority:                   normal
 Status:                     assigned
 ====================================================================== 
-Date Submitted:             05-01-2006 19:33 PDT
+Date Submitted:             01-30-2007 12:32 PST
 Last Modified:              02-12-2007 05:42 PST
 ====================================================================== 
-Summary:                    buildroot jail unable to compile busybox ---
-"missing" output directory
+Summary:                    17669 won't compile Busybox
 Description: 
-Background: I am attempting to use buildroot as a root jail for making
-components to be linked against uClibc. For the jail, I am using an
-unwrapped copy of the ext2 target file system as produced by buildroot.
+I downloaded SVN 17669, before applying the patch from
 
-Symptom: I am attempting to rebuild busybox inside the jail with my own
-setting. Unfortunately, "make menuconfig" (or just "make" with a planted
-.config) fails with the following ominous error:
+http://busybox.net/bugs/view.php?id=1182
 
-/tmp/busybox $ make
-Makefile:72: *** output directory "/tmp/busybox" does not exist.  Stop.
+This is surely unrelated, but now I cannot finish compilation of
+Busybox. I'm not sure this is before or after the above patch.
 
-The listed output directory does exist (relative to chroot) as I am
-currently in it. Disabling the check in the makefile results in a segfault
-instead--- so
-I would guess that the "missing" output directory is just a symptom of
-something more sinister going on.
-
-
+John
 ====================================================================== 
 
 ---------------------------------------------------------------------- 
- zugvogel - 05-04-06 18:34  
+ bagland - 01-30-07 13:11  
 ---------------------------------------------------------------------- 
-Tried the same trick on a plain vanilla Debian 3.1r1. Same result (i.e. I
-get a toolchain that does not compile busybox). 
+I had the same error when I updated to 17677, I had to change the
+configuration file for busybox to package/busybox/busybox-1.2.2.1.config
 
-Will now try to reproduce the toolchain using the busybox/uClibc snapshots
-that were used for the "preassembled" i386 toolchain (basically, a sanity
-check). Will update once I have some results.
-
-Frank 
+Rgds,
+Benjamin 
 
 ---------------------------------------------------------------------- 
- bernhardf - 12-21-06 04:05  
+ jcoppens - 01-30-07 14:55  
 ---------------------------------------------------------------------- 
-Any update on this?
-busybox now has approached 1.3.0 and buildroot recently received quite
-some changes, so please retest. 
+Great! Thanks. Just to be clear, maybe someone else hits the same
+problem. The file to edit is .config:
+
+# BR2_BUSYBOX_VERSION_1_0_1 is not set
+# BR2_BUSYBOX_VERSION_1_1_3 is not set
+BR2_BUSYBOX_VERSION_1_2_2_1=y
+# BR2_BUSYBOX_VERSION_1_4_0 is not set
+# BR2_PACKAGE_BUSYBOX_SNAPSHOT is not set
+BR2_PACKAGE_BUSYBOX_INSTALL_SYMLINKS=y
+BR2_PACKAGE_BUSYBOX_CONFIG="target/device/x86/i386/busybox.config"
+
+And the last line to be changed to
+
+BR2_PACKAGE_BUSYBOX_CONFIG="package/busybox/busybox-1.2.2.1.config"
+
+Thanks, Benjamin.
+(I suppose this should've happened automatically?) 
 
 ---------------------------------------------------------------------- 
- bernhardf - 02-04-07 09:04  
+ bernhardf - 02-04-07 08:40  
 ---------------------------------------------------------------------- 
-Assumed to be fixed with current setups. 
+This was fixed last week. Thanks for the report. 
 
 Issue History 
 Date Modified   Username       Field                    Change               
 ====================================================================== 
-05-01-06 19:33  zugvogel       New Issue                                    
-05-01-06 19:33  zugvogel       Status                   new => assigned     
-05-01-06 19:33  zugvogel       Assigned To               => uClibc          
-05-04-06 18:34  zugvogel       Note Added: 0001344                          
-12-21-06 04:05  bernhardf      Note Added: 0001903                          
-12-21-06 04:05  bernhardf      Status                   assigned => feedback
-02-04-07 09:04  bernhardf      Status                   feedback => closed  
-02-04-07 09:04  bernhardf      Note Added: 0002103                          
-02-04-07 09:05  bernhardf      Resolution               open => fixed       
+01-30-07 12:32  jcoppens       New Issue                                    
+01-30-07 12:32  jcoppens       Status                   new => assigned     
+01-30-07 12:32  jcoppens       Assigned To               => uClibc          
+01-30-07 13:11  bagland        Note Added: 0002078                          
+01-30-07 14:55  jcoppens       Note Added: 0002079                          
+02-04-07 08:40  bernhardf      Status                   assigned => closed  
+02-04-07 08:40  bernhardf      Note Added: 0002098                          
+02-04-07 08:40  bernhardf      Resolution               open => fixed       
 02-12-07 05:42  vapier         Status                   closed => assigned  
 02-12-07 05:42  vapier         Assigned To              uClibc => buildroot 
 ======================================================================
