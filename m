@@ -1,8 +1,8 @@
 From: bugs at busybox.net <bugs@busybox.net>
-Date: Mon, 12 Feb 2007 05:43:28 -0800
-Subject: [Buildroot] [buildroot 0000522]: busybox doesn't contain a udhcp
-	script
-Message-ID: <207621153a0b9e5df7d06e836b2a77fb@bugs.busybox.net>
+Date: Mon, 12 Feb 2007 05:43:29 -0800
+Subject: [Buildroot] [buildroot 0000484]: target/ext2/ext2root.mk ignores
+	reserved-block count of 0 (RESBLKS=0)
+Message-ID: <15430cffedbe64b5061e8c2ec960c83f@bugs.busybox.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -12,47 +12,45 @@ To: buildroot@busybox.net
 
 The following issue has been ASSIGNED. 
 ====================================================================== 
-http://busybox.net/bugs/view.php?id=522 
+http://busybox.net/bugs/view.php?id=484 
 ====================================================================== 
-Reported By:                akvadrako
+Reported By:                timw
 Assigned To:                buildroot
 ====================================================================== 
 Project:                    buildroot
-Issue ID:                   522
+Issue ID:                   484
 Category:                   Other
 Reproducibility:            always
 Severity:                   minor
 Priority:                   normal
 Status:                     assigned
 ====================================================================== 
-Date Submitted:             10-28-2005 10:02 PDT
+Date Submitted:             10-12-2005 08:32 PDT
 Last Modified:              02-12-2007 05:43 PST
 ====================================================================== 
-Summary:                    busybox doesn't contain a udhcp script
+Summary:                    target/ext2/ext2root.mk ignores reserved-block count
+of 0 (RESBLKS=0)
 Description: 
-udhcp requires a script installed in /usr/share/udhcp/default, but busybox
-doesn't come with one.  This installs a good sample script there if
-busybox builds the udhcp binary.  Perhaps this belongs in busybox instead,
-though it borders on something distribution specific.
+In target/ext2/ext2root.mk (in HEAD), BR2_TARGET_ROOTFS_EXT2_RESBLKS is
+ignored if it is 0. It should be used if it is 0 (since 0 means something
+here--"do not reserve any blocks".
 ====================================================================== 
 
 ---------------------------------------------------------------------- 
- bernhardf - 12-22-06 04:39  
+ bernhardf - 12-22-06 04:35  
 ---------------------------------------------------------------------- 
-This works in current svn (r17050, currently) with busybox-1.2.2.1 and
-busybox-trunk. 
+Fixed in 17050. Better late than never.. Thanks! 
 
 Issue History 
 Date Modified   Username       Field                    Change               
 ====================================================================== 
-10-28-05 10:02  akvadrako      New Issue                                    
-10-28-05 10:02  akvadrako      Status                   new => assigned     
-10-28-05 10:02  akvadrako      Assigned To               => uClibc          
-10-28-05 10:02  akvadrako      File Added: br-busybox-udhcp.patch               
-    
-12-22-06 04:39  bernhardf      Status                   assigned => closed  
-12-22-06 04:39  bernhardf      Note Added: 0001918                          
-12-22-06 04:39  bernhardf      Resolution               open => fixed       
+10-12-05 08:32  timw           New Issue                                    
+10-12-05 08:32  timw           Status                   new => assigned     
+10-12-05 08:32  timw           Assigned To               => uClibc          
+10-12-05 08:32  timw           File Added: ext2root.patch                    
+12-22-06 04:35  bernhardf      Status                   assigned => closed  
+12-22-06 04:35  bernhardf      Note Added: 0001916                          
+12-22-06 04:35  bernhardf      Resolution               open => fixed       
 02-12-07 05:43  vapier         Status                   closed => assigned  
 02-12-07 05:43  vapier         Assigned To              uClibc => buildroot 
 ======================================================================
