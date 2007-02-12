@@ -1,8 +1,7 @@
 From: bugs at busybox.net <bugs@busybox.net>
-Date: Mon, 12 Feb 2007 05:46:18 -0800
-Subject: [Buildroot] [buildroot 0000754]: "prefix" path is used to retrieve
-	data files by directfb
-Message-ID: <faf6a675cbdeb40eb80944cabe7529ec@bugs.busybox.net>
+Date: Mon, 12 Feb 2007 05:46:20 -0800
+Subject: [Buildroot] [buildroot 0000813]: thttpd install fails
+Message-ID: <001c8458ab715cfa3148a6570954c9eb@bugs.busybox.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -12,73 +11,63 @@ To: buildroot@busybox.net
 
 The following issue has been ASSIGNED. 
 ====================================================================== 
-http://busybox.net/bugs/view.php?id=754 
+http://busybox.net/bugs/view.php?id=813 
 ====================================================================== 
-Reported By:                vspaceg
+Reported By:                will_newton
 Assigned To:                buildroot
 ====================================================================== 
 Project:                    buildroot
-Issue ID:                   754
-Category:                   Architecture Specific
+Issue ID:                   813
+Category:                   Other
 Reproducibility:            always
 Severity:                   minor
 Priority:                   normal
 Status:                     assigned
 ====================================================================== 
-Date Submitted:             02-23-2006 09:43 PST
+Date Submitted:             04-04-2006 06:27 PDT
 Last Modified:              02-12-2007 05:46 PST
 ====================================================================== 
-Summary:                    "prefix" path is used to retrieve data files by
-directfb
+Summary:                    thttpd install fails
 Description: 
-Directfb is using the "prefix" path to retrieve data files.
-So the host path of the build appears as missing when I execute on the
-target.
+The thttpd makefile is broken. The following patch allows it to build.
 
-Work-around:
-I patched directfb this way, in order to have "prefix" having two
-different values when compiling and when installing:
-
-(note: look for "--prefix="):
-$(DIRECTFB_DIR)/.configured: $(DIRECTFB_DIR)/.unpacked
-	(cd $(DIRECTFB_DIR); \
-	$(TARGET_CONFIGURE_OPTS) \
-	CFLAGS="$(TARGET_CFLAGS) -I$(STAGING_DIR)/usr/include" \
-	LDFLAGS="-L$(STAGING_DIR)/lib -L$(STAGING_DIR)/usr/lib" \
-	ac_cv_header_linux_wm97xx_h=no \
-	ac_cv_header_linux_sisfb_h=no \
-	./configure \
-	--target=$(GNU_TARGET_NAME) \
-	--host=$(GNU_TARGET_NAME) \
-	--build=$(GNU_HOST_NAME) \
-	--prefix=/usr \
-	--with-gfxdrivers=cle266,unichrome \
-	--enable-jpeg \
-[...]
-
-(note: look for "prefix=")
-$(STAGING_DIR)/usr/lib/libdirectfb.so: $(DIRECTFB_DIR)/.compiled
-	$(MAKE) -C $(DIRECTFB_DIR) install prefix=$(STAGING_DIR)/usr
-	$(MAKE) -C $(DIRECTFB_DIR)/lib/fusion install prefix=$(STAGING_DIR)/usr
-	$(MAKE) -C $(DIRECTFB_DIR)/lib/direct install prefix=$(STAGING_DIR)/usr
-	touch -c $(STAGING_DIR)/lib/libdirectfb.so
+diff -u -r1.1.1.1 thttpd.mk
+--- package/thttpd/thttpd.mk    10 Mar 2006 14:47:05 -0000      1.1.1.1
++++ package/thttpd/thttpd.mk    4 Apr 2006 13:27:04 -0000
+@@ -40,7 +40,7 @@
+        install -D $(THTTPD_DIR)/extras/htpasswd
+$(TARGET_DIR)/bin/htpasswd
+        install -D $(THTTPD_DIR)/extras/makeweb $(TARGET_DIR)/bin/makeweb
+        install -D $(THTTPD_DIR)/extras/syslogtocern
+$(TARGET_DIR)/bin/syslogtocern
+-       install -D $(THTTPD_DIR)/scripts/thttpd_wrapper
+$(TARGET_DIR)/sbin
++       install -D $(THTTPD_DIR)/scripts/thttpd_wrapper
+$(TARGET_DIR)/sbin/thttpd_wrapper
+        install -D $(THTTPD_DIR)/scripts/thttpd.sh
+$(TARGET_DIR)/etc/init.d/S90thttpd
+        cp $(TARGET_DIR)/etc/init.d/S90thttpd
+$(TARGET_DIR)/etc/init.d/S90thttpd.in
+        cp $(TARGET_DIR)/sbin/thttpd_wrapper
+$(TARGET_DIR)/sbin/thttpd_wrapper.in
 
 ====================================================================== 
 
 ---------------------------------------------------------------------- 
- andersen - 04-06-06 10:49  
+ andersen - 04-06-06 10:48  
 ---------------------------------------------------------------------- 
-This problem is now fixed 
+applied thanks 
 
 Issue History 
 Date Modified   Username       Field                    Change               
 ====================================================================== 
-02-23-06 09:43  vspaceg        New Issue                                    
-02-23-06 09:43  vspaceg        Status                   new => assigned     
-02-23-06 09:43  vspaceg        Assigned To               => uClibc          
-04-06-06 10:49  andersen       Note Added: 0001230                          
-04-06-06 10:49  andersen       Status                   assigned => closed  
-04-06-06 10:49  andersen       Resolution               open => fixed       
+04-04-06 06:27  will_newton    New Issue                                    
+04-04-06 06:27  will_newton    Status                   new => assigned     
+04-04-06 06:27  will_newton    Assigned To               => uClibc          
+04-06-06 10:48  andersen       Note Added: 0001229                          
+04-06-06 10:48  andersen       Status                   assigned => closed  
+04-06-06 10:48  andersen       Resolution               open => fixed       
+04-06-06 10:48  andersen       Description Updated                          
 02-12-07 05:46  vapier         Status                   closed => assigned  
 02-12-07 05:46  vapier         Assigned To              uClibc => buildroot 
 ======================================================================
