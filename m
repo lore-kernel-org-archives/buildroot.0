@@ -1,8 +1,7 @@
 From: bugs at busybox.net <bugs@busybox.net>
-Date: Mon, 12 Feb 2007 05:46:58 -0800
-Subject: [Buildroot] [buildroot 0000453]: hostap depends on pcmcia but
-	doesn't select it.
-Message-ID: <4adcf655f0fb124fc9108103224f626b@bugs.busybox.net>
+Date: Mon, 12 Feb 2007 05:46:57 -0800
+Subject: [Buildroot] [buildroot 0000148]: new package to add: dialog
+Message-ID: <24a736a8853f8b1bc5dd1c532f255fd7@bugs.busybox.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -12,42 +11,42 @@ To: buildroot@busybox.net
 
 The following issue has been ASSIGNED. 
 ====================================================================== 
-http://busybox.net/bugs/view.php?id=453 
+http://busybox.net/bugs/view.php?id=148 
 ====================================================================== 
-Reported By:                gnat
+Reported By:                clausklein
 Assigned To:                buildroot
 ====================================================================== 
 Project:                    buildroot
-Issue ID:                   453
+Issue ID:                   148
 Category:                   New Features
-Reproducibility:            always
-Severity:                   minor
+Reproducibility:            N/A
+Severity:                   feature
 Priority:                   normal
 Status:                     assigned
 ====================================================================== 
-Date Submitted:             09-29-2005 15:49 PDT
+Date Submitted:             03-13-2005 12:14 PST
 Last Modified:              02-12-2007 05:46 PST
 ====================================================================== 
-Summary:                    hostap depends on pcmcia but doesn't select it.
+Summary:                    new package to add: dialog
 Description: 
-When one selects hostap in buildroot, it attempts to build, but needs
-pcmcia to be built as well, included patch adds that dependancy.
-====================================================================== 
+dialog - display dialog boxes from shell scripts
 
----------------------------------------------------------------------- 
- prpplague - 01-23-06 10:40  
----------------------------------------------------------------------- 
-corrected as revision 13516. 
+Dialog  is  a program that will let you to present a variety of questions
+or display messages using dialog boxes from a shell script.  These  types
+of  dialog boxes are implemented
+====================================================================== 
 
 Issue History 
 Date Modified   Username       Field                    Change               
 ====================================================================== 
-09-29-05 15:49  gnat           New Issue                                    
-09-29-05 15:49  gnat           Status                   new => assigned     
-09-29-05 15:49  gnat           Assigned To               => uClibc          
-01-23-06 10:40  prpplague      Note Added: 0000984                          
-01-23-06 10:40  prpplague      Status                   assigned => resolved
-01-23-06 10:40  prpplague      Resolution               open => fixed       
+03-13-05 12:14  clausklein     New Issue                                    
+03-13-05 12:14  clausklein     File Added: dialog.tgz                       
+03-16-05 12:12  andersen       Status                   new => assigned     
+03-16-05 12:12  andersen       Assigned To               => uClibc          
+01-23-06 10:28  prpplague      Status                   assigned => resolved
+01-23-06 10:28  prpplague      Resolution               open => fixed       
+01-23-06 10:28  prpplague      Additional Information Updated                   
+
 03-08-06 16:55  vapier         Status                   resolved => closed  
 02-12-07 05:46  vapier         Status                   closed => assigned  
 02-12-07 05:46  vapier         Assigned To              uClibc => buildroot 
