@@ -1,7 +1,8 @@
 From: bugs at busybox.net <bugs@busybox.net>
-Date: Mon, 12 Feb 2007 05:50:35 -0800
-Subject: [Buildroot] [buildroot 0000375]: libiberty regex warnings
-Message-ID: <b945346d40d03490f787ded43516c20b@bugs.busybox.net>
+Date: Mon, 12 Feb 2007 05:50:36 -0800
+Subject: [Buildroot] [buildroot 0000369]: hardlinks break when creating
+	root_fs_i386.ext2
+Message-ID: <fb1e5e1ddd9e2caba230216d2672d5c9@bugs.busybox.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -11,52 +12,44 @@ To: buildroot@busybox.net
 
 The following issue has been ASSIGNED. 
 ====================================================================== 
-http://busybox.net/bugs/view.php?id=375 
+http://busybox.net/bugs/view.php?id=369 
 ====================================================================== 
-Reported By:                mdeschamps
+Reported By:                jakelly
 Assigned To:                buildroot
 ====================================================================== 
 Project:                    buildroot
-Issue ID:                   375
-Category:                   Architecture Specific
+Issue ID:                   369
+Category:                   Other
 Reproducibility:            always
 Severity:                   minor
 Priority:                   normal
 Status:                     assigned
 ====================================================================== 
-Date Submitted:             08-11-2005 01:38 PDT
+Date Submitted:             08-08-2005 10:26 PDT
 Last Modified:              02-12-2007 05:50 PST
 ====================================================================== 
-Summary:                    libiberty regex warnings
+Summary:                    hardlinks break when creating root_fs_i386.ext2
 Description: 
-gcc-4.0.0/libiberty/regex.c uses a strcmp (s1,s2) in a macro which is a
-basis
-of regex char type recognition. Problem s1 is given arch specific var
-whereas
-s2 is used a a type base string. ex: 
+hardlinks break when creating root_fs_i386.ext2
 
-bool isalpha = STREQ (str, "alpha") : str is (unsigned) char *, is const
-char * alpha
+I noticed this when trying to fit a small buildroot onto a floppy.  I had
+e2fsck, fsck.ext2, fsck.ext3 all hardlinked in build_i386/root/sbin, but
+they became separate inodes in root_fs_i386.ext2.  The genext2fs man page
+says it does not support hard links, and that "hard links present in the
+input tree will be represented as separate files in the ext2 image."
 
-Worse is sometimes is breaks down my make process. Put it minor yet.
+Well that's not much good when you need to squeeze root into a very small
+space.  So now I create my own filesystem image, without using genext2fs. 
+It's not too hard to replace genext2fs with a script, and maintain the
+hardlinks.
+
 ====================================================================== 
-
----------------------------------------------------------------------- 
- vapier - 08-11-05 05:34  
----------------------------------------------------------------------- 
-gcc bug, not buildroot bug
-
-file a bug at the gcc bugzilla 
 
 Issue History 
 Date Modified   Username       Field                    Change               
 ====================================================================== 
-08-11-05 01:38  mdeschamps     New Issue                                    
-08-11-05 01:38  mdeschamps     Status                   new => assigned     
-08-11-05 01:38  mdeschamps     Assigned To               => uClibc          
-08-11-05 05:34  vapier         Note Added: 0000403                          
-08-11-05 05:34  vapier         Status                   assigned => closed  
-08-11-05 05:34  vapier         Resolution               open => won't fix   
-02-12-07 05:50  vapier         Status                   closed => assigned  
+08-08-05 10:26  jakelly        New Issue                                    
+08-08-05 10:26  jakelly        Status                   new => assigned     
+08-08-05 10:26  jakelly        Assigned To               => uClibc          
 02-12-07 05:50  vapier         Assigned To              uClibc => buildroot 
 ======================================================================
