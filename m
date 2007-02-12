@@ -1,7 +1,7 @@
 From: bugs at busybox.net <bugs@busybox.net>
-Date: Mon, 12 Feb 2007 05:43:13 -0800
-Subject: [Buildroot] [buildroot 0001039]: distclean dont remove all files
-Message-ID: <8b1a2d0449356ccdebf9ec5152c52281@bugs.busybox.net>
+Date: Mon, 12 Feb 2007 05:43:14 -0800
+Subject: [Buildroot] [buildroot 0001083]: package dhcp building error
+Message-ID: <7725194782c52b1019b29f00bbd3c233@bugs.busybox.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -11,42 +11,42 @@ To: buildroot@busybox.net
 
 The following issue has been ASSIGNED. 
 ====================================================================== 
-http://busybox.net/bugs/view.php?id=1039 
+http://busybox.net/bugs/view.php?id=1083 
 ====================================================================== 
-Reported By:                GJanak
+Reported By:                kas
 Assigned To:                buildroot
 ====================================================================== 
 Project:                    buildroot
-Issue ID:                   1039
-Category:                   New Features
+Issue ID:                   1083
+Category:                   Other
 Reproducibility:            always
-Severity:                   feature
+Severity:                   minor
 Priority:                   normal
 Status:                     assigned
 ====================================================================== 
-Date Submitted:             09-20-2006 03:58 PDT
+Date Submitted:             11-07-2006 05:48 PST
 Last Modified:              02-12-2007 05:43 PST
 ====================================================================== 
-Summary:                    distclean dont remove all files
+Summary:                    package dhcp building error
 Description: 
-distclean dont remove lxdialog builded files in package/conf/*
-
+Package dhcp building error. Patch in the attachment.
 ====================================================================== 
 
 ---------------------------------------------------------------------- 
- bernhardf - 01-19-07 10:01  
+ bernhardf - 01-19-07 09:54  
 ---------------------------------------------------------------------- 
-Fixed in r17384. Thanks for pointing this out. 
+This was fixed in r16896. 
 
 Issue History 
 Date Modified   Username       Field                    Change               
 ====================================================================== 
-09-20-06 03:58  GJanak         New Issue                                    
-09-20-06 03:58  GJanak         Status                   new => assigned     
-09-20-06 03:58  GJanak         Assigned To               => uClibc          
-01-19-07 10:01  bernhardf      Status                   assigned => closed  
-01-19-07 10:01  bernhardf      Note Added: 0002005                          
-01-19-07 10:01  bernhardf      Resolution               open => fixed       
+11-07-06 05:48  kas            New Issue                                    
+11-07-06 05:48  kas            Status                   new => assigned     
+11-07-06 05:48  kas            Assigned To               => uClibc          
+11-07-06 05:48  kas            File Added: dhcp.mk.patch                    
+01-19-07 09:54  bernhardf      Status                   assigned => closed  
+01-19-07 09:54  bernhardf      Note Added: 0002004                          
+01-19-07 09:54  bernhardf      Resolution               open => fixed       
 02-12-07 05:43  vapier         Status                   closed => assigned  
 02-12-07 05:43  vapier         Assigned To              uClibc => buildroot 
 ======================================================================
