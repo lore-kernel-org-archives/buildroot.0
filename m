@@ -1,8 +1,8 @@
 From: bugs at busybox.net <bugs@busybox.net>
-Date: Mon, 12 Feb 2007 05:42:39 -0800
-Subject: [Buildroot] [buildroot 0001105]: Missing mkfs.jffs2 option for NAND
-	Flash
-Message-ID: <52c82473f90ec2762f84cf123f7318c0@bugs.busybox.net>
+Date: Mon, 12 Feb 2007 05:42:40 -0800
+Subject: [Buildroot] [buildroot 0001010]: Build-root make error - missing
+	shadow.h
+Message-ID: <b76b4d4cb5f3e3f1c060bc118422172f@bugs.busybox.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -12,53 +12,91 @@ To: buildroot@busybox.net
 
 The following issue has been ASSIGNED. 
 ====================================================================== 
-http://busybox.net/bugs/view.php?id=1105 
+http://busybox.net/bugs/view.php?id=1010 
 ====================================================================== 
-Reported By:                artemys
+Reported By:                mboutte
 Assigned To:                buildroot
 ====================================================================== 
 Project:                    buildroot
-Issue ID:                   1105
+Issue ID:                   1010
 Category:                   Architecture Specific
 Reproducibility:            always
-Severity:                   trivial
+Severity:                   major
 Priority:                   normal
 Status:                     assigned
 ====================================================================== 
-Date Submitted:             11-29-2006 04:12 PST
+Date Submitted:             08-27-2006 15:57 PDT
 Last Modified:              02-12-2007 05:42 PST
 ====================================================================== 
-Summary:                    Missing mkfs.jffs2 option for NAND Flash
+Summary:                    Build-root make error - missing shadow.h
 Description: 
-When generating a JFFS2 rootfs for a NAND flash, an option should be added
-to mkfs.jffs2 otherwise Linux kernel is printing a lot of warning messages
-(during rootfs mounting) like:
-  CLEANMARKER node found at 0x00...... has totlen 0xc != normal 0x0
+I am new to build-root so forgive my possible lack of knowledge. I am
+attempting a new run of build-root for an x86 host to powerpc target. As a
+first attempt I left most of the defaults as-is, but used fairly new gcc
+4.1.1 headers and a linux 2.6 type system. The initial make menuconfig
+went OK, and the svn checkout seemed to work fine during the make process
+too, except that after about 15 minutes of work the compilation stops with
+an error --
+"/home/mike/projects/software/snip875/build-tools/uclibc/buildroot/build_powerpc
+/busybox/include/shadow_.h:23:20: error: shadow.h: No such file or
+directory"
 
-These messages are considerably slowing down system boot.
+I googled your site and see other mentions of this error, but nothing I
+try seems to resolve it, including older gcc, linux 2.4, enabling or
+disableing shadow password support from the make config in the busybox
+directory. I also tried a make clean during this. I'm lost and have not
+more ideas now.
 
-"-n" option should be added to JFFS2_OPTS variable in
-target/jffs2/jffs2root.mk Makefile.
+Note that svn checked out the new vresion 0.9.28. 
+
+Mike
 ====================================================================== 
 
 ---------------------------------------------------------------------- 
- bernhardf - 02-04-07 09:09  
+ vapier - 08-28-06 11:19  
 ---------------------------------------------------------------------- 
-Fixed in svn a week or two ago.
+your uClibc is configured without shadow support ... that means you need to
+either enable shadow support in uClibc or disable everything in busybox
+that requries shadow 
 
-Thanks for the report! 
+---------------------------------------------------------------------- 
+ mboutte - 08-28-06 14:38  
+---------------------------------------------------------------------- 
+Vapier,
+Not to belabor this issue, but I had tried modifying the busybox
+configuration by going to the busybox folder and running "make menuconfig"
+to no avail. On more testing I saw when I went back to busybox
+configuration after attempting a new build, that the configuration had
+reverted to that before my changes. A more careful read of your docs
+showed copying the new busybox configuration back to the
+package/busybox/busybox.config file. When I did that the build worked. So,
+for me the problem was that I assumed that using make menuconfig on busybox
+actually modified the configuration that build-root would use. Again, this
+is my first attempt at using this incredible tool, and I was unaware of
+that requirement. 
+
+---------------------------------------------------------------------- 
+ bernhardf - 02-04-07 09:06  
+---------------------------------------------------------------------- 
+This was a bug in busybox that was fixed in the 1.4.x series. 
 
 Issue History 
 Date Modified   Username       Field                    Change               
 ====================================================================== 
-11-29-06 04:12  artemys        New Issue                                    
-11-29-06 04:12  artemys        Status                   new => assigned     
-11-29-06 04:12  artemys        Assigned To               => uClibc          
-11-29-06 09:13  artemys        File Added: 003-buildroot-cleanmarkers.diff      
-             
-02-04-07 09:09  bernhardf      Status                   assigned => closed  
-02-04-07 09:09  bernhardf      Note Added: 0002107                          
-02-04-07 09:09  bernhardf      Resolution               open => fixed       
+08-27-06 15:57  mboutte        New Issue                                    
+08-27-06 15:57  mboutte        Status                   new => assigned     
+08-27-06 15:57  mboutte        Assigned To               => uClibc          
+08-28-06 11:19  vapier         Note Added: 0001596                          
+08-28-06 11:19  vapier         Status                   assigned => closed  
+08-28-06 11:19  vapier         Resolution               open => no change
+required
+08-28-06 14:38  mboutte        Status                   closed => feedback  
+08-28-06 14:38  mboutte        Resolution               no change required =>
+reopened
+08-28-06 14:38  mboutte        Note Added: 0001597                          
+02-04-07 09:06  bernhardf      Status                   feedback => closed  
+02-04-07 09:06  bernhardf      Note Added: 0002105                          
+02-04-07 09:06  bernhardf      Resolution               reopened => fixed   
 02-12-07 05:42  vapier         Status                   closed => assigned  
 02-12-07 05:42  vapier         Assigned To              uClibc => buildroot 
 ======================================================================
