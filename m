@@ -1,8 +1,7 @@
 From: bugs at busybox.net <bugs@busybox.net>
-Date: Mon, 12 Feb 2007 05:45:33 -0800
-Subject: [Buildroot] [buildroot 0000838]: New package: cryptsetup and
-	suppporting library popt
-Message-ID: <3588f617b56ef5b21f2f27572c75c6a6@bugs.busybox.net>
+Date: Mon, 12 Feb 2007 05:45:34 -0800
+Subject: [Buildroot] [buildroot 0000664]: bind package update
+Message-ID: <9b34d44c48e55eb27e077549dcec2063@bugs.busybox.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -12,45 +11,52 @@ To: buildroot@busybox.net
 
 The following issue has been ASSIGNED. 
 ====================================================================== 
-http://busybox.net/bugs/view.php?id=838 
+http://busybox.net/bugs/view.php?id=664 
 ====================================================================== 
-Reported By:                toidinamai
+Reported By:                akvadrako
 Assigned To:                buildroot
 ====================================================================== 
 Project:                    buildroot
-Issue ID:                   838
-Category:                   New Features
+Issue ID:                   664
+Category:                   Other
 Reproducibility:            always
-Severity:                   feature
+Severity:                   minor
 Priority:                   normal
 Status:                     assigned
 ====================================================================== 
-Date Submitted:             04-14-2006 14:02 PDT
+Date Submitted:             01-27-2006 14:23 PST
 Last Modified:              02-12-2007 05:45 PST
 ====================================================================== 
-Summary:                    New package: cryptsetup and suppporting library popt
+Summary:                    bind package update
 Description: 
-cryptsetup is a tool for creating dm-crypt mappings. dm-crypt provides
-transparent encryption of block devices using the new Linux 2.6 cryptoapi.
+This patch consists of:
+(1) bind version bump
+(2) removing some X-compiling build fixes merged upstream
+(3) removing the bind-dlopen patch: not of general enough use
+(4) remove the package/bind/bind9 file - it isn't used
+(5) Use $(STAGING_DIR)/lib instead of $(STAGING_DIR)/usr/lib
+(6) Fix chroot'ed bind handling by init script
+
+Thanks,
+Devin Bayer
 ====================================================================== 
 
 ---------------------------------------------------------------------- 
- toidinamai - 04-15-06 06:23  
+ andersen - 04-14-06 12:26  
 ---------------------------------------------------------------------- 
-New patch, former one resulted in an unusable cryptsetup binary because
-libdevmapper was missing. 
+applied 
 
 Issue History 
 Date Modified   Username       Field                    Change               
 ====================================================================== 
-04-14-06 14:02  toidinamai     New Issue                                    
-04-14-06 14:02  toidinamai     Status                   new => assigned     
-04-14-06 14:02  toidinamai     Assigned To               => uClibc          
-04-14-06 14:02  toidinamai     File Added: buildroot-cryptsetup.patch           
-        
-04-15-06 06:22  toidinamai     Issue Monitored: toidinamai                    
-04-15-06 06:23  toidinamai     File Added: buildroot-cryptsetup-2.patch         
-          
-04-15-06 06:23  toidinamai     Note Added: 0001298                          
+01-27-06 14:23  akvadrako      New Issue                                    
+01-27-06 14:23  akvadrako      Status                   new => assigned     
+01-27-06 14:23  akvadrako      Assigned To               => uClibc          
+01-27-06 14:23  akvadrako      File Added: br-bind-9.3.2.patch                  
+ 
+04-14-06 12:26  andersen       Note Added: 0001297                          
+04-14-06 12:26  andersen       Status                   assigned => closed  
+04-14-06 12:26  andersen       Resolution               open => fixed       
+02-12-07 05:45  vapier         Status                   closed => assigned  
 02-12-07 05:45  vapier         Assigned To              uClibc => buildroot 
 ======================================================================
