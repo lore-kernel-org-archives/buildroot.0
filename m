@@ -1,7 +1,8 @@
 From: bugs at busybox.net <bugs@busybox.net>
-Date: Mon, 12 Feb 2007 05:43:25 -0800
-Subject: [Buildroot] [buildroot 0001151]: flex package fails
-Message-ID: <ce663fdde60c964c8e59cfaaba098087@bugs.busybox.net>
+Date: Mon, 12 Feb 2007 05:43:26 -0800
+Subject: [Buildroot] [buildroot 0000724]: dialog package in 20060217
+	snapshot doesn't build
+Message-ID: <ae11a0ca92601d45283ce69c376f6d78@bugs.busybox.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -11,43 +12,48 @@ To: buildroot@busybox.net
 
 The following issue has been ASSIGNED. 
 ====================================================================== 
-http://busybox.net/bugs/view.php?id=1151 
+http://busybox.net/bugs/view.php?id=724 
 ====================================================================== 
-Reported By:                Steven_Carr
+Reported By:                sblaisot
 Assigned To:                buildroot
 ====================================================================== 
 Project:                    buildroot
-Issue ID:                   1151
+Issue ID:                   724
 Category:                   Architecture Specific
 Reproducibility:            always
-Severity:                   major
+Severity:                   minor
 Priority:                   normal
 Status:                     assigned
 ====================================================================== 
-Date Submitted:             01-09-2007 22:43 PST
+Date Submitted:             02-17-2006 03:14 PST
 Last Modified:              02-12-2007 05:43 PST
 ====================================================================== 
-Summary:                    flex package fails
+Summary:                    dialog package in 20060217 snapshot doesn't build
 Description: 
-flex_2.5.4a.orig.tar.gz is no longer available from
-http://ftp.debian.org/debian/pool/main/f/flex
-need to uplevel to flex_2.5.33.orig.tar.gz
+the dialog package, even if selected during configuration, doesn't build
+properly and doesn't appear in the target.
+
+make dialog, just after the make command, solves the problem. Looks like
+the "dialog" target is not added even if the package was selected.
+
+below is a proposed patch
 ====================================================================== 
 
 ---------------------------------------------------------------------- 
- bernhardf - 01-19-07 07:58  
+ bernhardf - 12-22-06 05:38  
 ---------------------------------------------------------------------- 
-I fixed this proper in svn r17381. 
+Fixed in r17052. Thanks for pointing this out. 
 
 Issue History 
 Date Modified   Username       Field                    Change               
 ====================================================================== 
-01-09-07 22:43  Steven_Carr    New Issue                                    
-01-09-07 22:43  Steven_Carr    Status                   new => assigned     
-01-09-07 22:43  Steven_Carr    Assigned To               => uClibc          
-01-19-07 07:58  bernhardf      Status                   assigned => closed  
-01-19-07 07:58  bernhardf      Note Added: 0001993                          
-01-19-07 07:58  bernhardf      Resolution               open => fixed       
+02-17-06 03:14  sblaisot       New Issue                                    
+02-17-06 03:14  sblaisot       Status                   new => assigned     
+02-17-06 03:14  sblaisot       Assigned To               => uClibc          
+02-17-06 03:15  sblaisot       Issue Monitored: sblaisot                    
+12-22-06 05:38  bernhardf      Status                   assigned => closed  
+12-22-06 05:38  bernhardf      Note Added: 0001923                          
+12-22-06 05:38  bernhardf      Resolution               open => fixed       
 02-12-07 05:43  vapier         Status                   closed => assigned  
 02-12-07 05:43  vapier         Assigned To              uClibc => buildroot 
 ======================================================================
