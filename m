@@ -1,8 +1,8 @@
 From: bugs at busybox.net <bugs@busybox.net>
 Date: Mon, 12 Feb 2007 05:33:10 -0800
-Subject: [Buildroot] [buildroot 0001209]: uClibc won't build when
-	GREP_OPTIONS is set
-Message-ID: <899d5016597756f15ed48598df7eab1b@bugs.busybox.net>
+Subject: [Buildroot] [buildroot 0001208]: sqllite cannot link to
+	/lib/libc.so when building for gumstix
+Message-ID: <0f804b54a6119daa3f2b51bec175217e@bugs.busybox.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -12,40 +12,53 @@ To: buildroot@busybox.net
 
 The following issue has been ASSIGNED. 
 ====================================================================== 
-http://busybox.net/bugs/view.php?id=1209 
+http://busybox.net/bugs/view.php?id=1208 
 ====================================================================== 
-Reported By:                bagland
+Reported By:                codehero
 Assigned To:                buildroot
 ====================================================================== 
 Project:                    buildroot
-Issue ID:                   1209
+Issue ID:                   1208
 Category:                   Architecture Specific
 Reproducibility:            always
-Severity:                   minor
+Severity:                   crash
 Priority:                   normal
 Status:                     assigned
 ====================================================================== 
-Date Submitted:             02-12-2007 05:12 PST
+Date Submitted:             02-11-2007 08:08 PST
 Last Modified:              02-12-2007 05:33 PST
 ====================================================================== 
-Summary:                    uClibc won't build when GREP_OPTIONS is set
+Summary:                    sqllite cannot link to /lib/libc.so when building
+for gumstix
 Description: 
-If the environment variable GREP_OPTIONS contains -n, uClibc won't build
-because of this line:  TARGET_ARCH:=$(shell grep -s ^TARGET_ARCH
-$(TOPDIR)/.config | sed -e 's/^TARGET_ARCH=//' -e 's/"//g') in
-uClibc/Rules.mk.
-TARGET_ARCH becomes "30:arm", which leads to problems while running
-fix_includes.sh.
-The attached patch test for GREP_OPTIONS at the beginning of the build.
+No idea why this is happening, there don't seem to be any problems in
+compilation
 ====================================================================== 
+
+---------------------------------------------------------------------- 
+ bernhardf - 02-11-07 10:05  
+---------------------------------------------------------------------- 
+What's your
+$ grep EXTERN .config 
+
+---------------------------------------------------------------------- 
+ codehero - 02-11-07 10:23  
+---------------------------------------------------------------------- 
+grep EXTERN .config yields nothing 
+
+---------------------------------------------------------------------- 
+ codehero - 02-11-07 10:23  
+---------------------------------------------------------------------- 
+grep EXTERN .config yields nothing 
 
 Issue History 
 Date Modified   Username       Field                    Change               
 ====================================================================== 
-02-12-07 05:12  bagland        New Issue                                    
-02-12-07 05:12  bagland        Status                   new => assigned     
-02-12-07 05:12  bagland        Assigned To               => uClibc          
-02-12-07 05:12  bagland        File Added: grep_options.patch                   
-
+02-11-07 08:08  codehero       New Issue                                    
+02-11-07 08:08  codehero       Status                   new => assigned     
+02-11-07 08:08  codehero       Assigned To               => uClibc          
+02-11-07 10:05  bernhardf      Note Added: 0002147                          
+02-11-07 10:23  codehero       Note Added: 0002150                          
+02-11-07 10:23  codehero       Note Added: 0002151                          
 02-12-07 05:33  vapier         Assigned To              uClibc => buildroot 
 ======================================================================
