@@ -1,8 +1,8 @@
 From: bugs at busybox.net <bugs@busybox.net>
-Date: Mon, 12 Feb 2007 05:49:59 -0800
-Subject: [Buildroot] [buildroot 0000489]: ncurses library is incorrectly
-	installed in /lib, not /usr/lib
-Message-ID: <d885545d120394243b0be7ca92f6b873@bugs.busybox.net>
+Date: Mon, 12 Feb 2007 05:50:01 -0800
+Subject: [Buildroot] [buildroot 0000490]: building c++ fails if largefile
+	support disabled.
+Message-ID: <08439be4abe606a80b18fe9afb411c29@bugs.busybox.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -12,107 +12,109 @@ To: buildroot@busybox.net
 
 The following issue has been ASSIGNED. 
 ====================================================================== 
-http://busybox.net/bugs/view.php?id=489 
+http://busybox.net/bugs/view.php?id=490 
 ====================================================================== 
-Reported By:                mikewhit
+Reported By:                gnat
 Assigned To:                buildroot
 ====================================================================== 
 Project:                    buildroot
-Issue ID:                   489
-Category:                   Standards Compliance
+Issue ID:                   490
+Category:                   Architecture Specific
 Reproducibility:            always
 Severity:                   major
 Priority:                   normal
 Status:                     assigned
 ====================================================================== 
-Date Submitted:             10-17-2005 04:17 PDT
-Last Modified:              02-12-2007 05:49 PST
+Date Submitted:             10-17-2005 10:18 PDT
+Last Modified:              02-12-2007 05:50 PST
 ====================================================================== 
-Summary:                    ncurses library is incorrectly installed in /lib,
-not /usr/lib
+Summary:                    building c++ fails if largefile support disabled.
 Description: 
-libncurses.so is installed in /lib, which is reserved for libraries needed
-for boot and operation of /bin and /sbin commands.
+Using buildroot, (for gcc 3.4.2, 3.4.3, 3.4.4, 4.0.4) With
+i386/i586/i686.and/or Via C3/Cyrix and generic i386 processors. Each time
+failing because of a missing template 'ftello64'. When I enable largefile
+support the error message goes away.
 
-Other packages (e.g. CUnit) expect to find it there.
+
+I will post the actual error message once the current build completes.
 ====================================================================== 
 
 ---------------------------------------------------------------------- 
- vapier - 10-17-05 08:54  
+ gnat - 10-17-05 11:02  
 ---------------------------------------------------------------------- 
-shells typically link against ncurses hence it goes in /lib
-
-if you have a package which expects a library in a certain directory then
-that package is broken 
+/mnt/Projects/buildroot/nolargefile_toolchain_build_i386/gcc-3.4.3-final/gcc/xgcc
+-shared-libgcc
+-B/mnt/Projects/buildroot/nolargefile_toolchain_build_i386/gcc-3.4.3-final/gcc/
+-nostdinc++
+-L/mnt/Projects/buildroot/nolargefile_toolchain_build_i386/gcc-3.4.3-final/i386-linux-uclibc/libstdc++-v3/src
+-L/mnt/Projects/buildroot/nolargefile_toolchain_build_i386/gcc-3.4.3-final/i386-linux-uclibc/libstdc++-v3/src/.libs
+-B/mnt/Projects/buildroot/nolargefile_build_i386/staging_dir/i386-linux-uclibc/bin/
+-B/mnt/Projects/buildroot/nolargefile_build_i386/staging_dir/i386-linux-uclibc/lib/
+-isystem
+/mnt/Projects/buildroot/nolargefile_build_i386/staging_dir/i386-linux-uclibc/include
+-isystem
+/mnt/Projects/buildroot/nolargefile_build_i386/staging_dir/i386-linux-uclibc/sys-include
+-I/mnt/Projects/buildroot/nolargefile_toolchain_build_i386/gcc-3.4.3-final/i386-linux-uclibc/libstdc++-v3/include/i386-linux-uclibc
+-I/mnt/Projects/buildroot/nolargefile_toolchain_build_i386/gcc-3.4.3-final/i386-linux-uclibc/libstdc++-v3/include
+-I/mnt/Projects/buildroot/nolargefile_toolchain_build_i386/gcc-3.4.3/libstdc++-v3/libsupc++
+-g -Os -g -Os -fno-implicit-templates -Wall -W -Wwrite-strings -Wcast-qual
+-fdiagnostics-show-location=once -ffunction-sections -fdata-sections -c
+/mnt/Projects/buildroot/nolargefile_toolchain_build_i386/gcc-3.4.3/libstdc++-v3/src/globals_io.cc
+ -fPIC -DPIC -o .libs/globals_io.o
+In file included from
+/mnt/Projects/buildroot/nolargefile_toolchain_build_i386/gcc-3.4.3/libstdc++-v3/src/globals_io.cc:34:
+/mnt/Projects/buildroot/nolargefile_toolchain_build_i386/gcc-3.4.3-final/i386-linux-uclibc/libstdc++-v3/include/ext/stdio_sync_filebuf.h:
+In member function `virtual std::streampos
+__gnu_cxx::stdio_sync_filebuf<_CharT, _Traits>::seekoff(std::streamoff,
+std::_Ios_Seekdir, std::_Ios_Openmode)':
+/mnt/Projects/buildroot/nolargefile_toolchain_build_i386/gcc-3.4.3-final/i386-linux-uclibc/libstdc++-v3/include/ext/stdio_sync_filebuf.h:170:
+error: there are no arguments to `fseeko64' that depend on a template
+parameter, so a declaration of `fseeko64' must be available
+/mnt/Projects/buildroot/nolargefile_toolchain_build_i386/gcc-3.4.3-final/i386-linux-uclibc/libstdc++-v3/include/ext/stdio_sync_filebuf.h:170:
+error: (if you use `-fpermissive', G++ will accept your code, but allowing
+the use of an undeclared name is deprecated)
+/mnt/Projects/buildroot/nolargefile_toolchain_build_i386/gcc-3.4.3-final/i386-linux-uclibc/libstdc++-v3/include/ext/stdio_sync_filebuf.h:171:
+error: there are no arguments to `ftello64' that depend on a template
+parameter, so a declaration of `ftello64' must be available
+make[4]: *** [globals_io.lo] Error 1
+make[4]: Leaving directory
+`/mnt/Projects/buildroot/nolargefile_toolchain_build_i386/gcc-3.4.3-final/i386-linux-uclibc/libstdc++-v3/src'
+make[3]: *** [all-recursive] Error 1
+make[3]: Leaving directory
+`/mnt/Projects/buildroot/nolargefile_toolchain_build_i386/gcc-3.4.3-final/i386-linux-uclibc/libstdc++-v3'
+make[2]: *** [all] Error 2
+make[2]: Leaving directory
+`/mnt/Projects/buildroot/nolargefile_toolchain_build_i386/gcc-3.4.3-final/i386-linux-uclibc/libstdc++-v3'
+make[1]: *** [all-target-libstdc++-v3] Error 2
+make[1]: Leaving directory
+`/mnt/Projects/buildroot/nolargefile_toolchain_build_i386/gcc-3.4.3-final'
+make: ***
+[/mnt/Projects/buildroot/nolargefile_toolchain_build_i386/gcc-3.4.3-final/.compiled]
+Error 2 
 
 ---------------------------------------------------------------------- 
- mikewhit - 10-17-05 09:54  
+ gnat - 10-17-05 11:30  
 ---------------------------------------------------------------------- 
-Maybe on your systems, not ours, but you should still be able to configure
-it.
-
-The ncurses.mk file hardwires it.
-
-Not strictly relevant, but my desktop Fedora system works happily with it
-in /usr/lib !
-
- 
+I even added $(DISABLE_LARGEFILE) to the toochain/gcc/gcc-3.x..mk file at
+all configure stages and still get the error below. enabling largefile
+support allows it to complete the build properly. 
 
 ---------------------------------------------------------------------- 
- vapier - 10-17-05 10:45  
+ vapier - 10-17-05 15:12  
 ---------------------------------------------------------------------- 
-seeing as how you have the source it should be easy enough to make the
-change on your side of things 
-
----------------------------------------------------------------------- 
- mikewhit - 10-18-05 01:04  
----------------------------------------------------------------------- 
-Editing individual package make files is NOT the reason for choosing an
-off-the-shelf package-based build component such as buildroot !!
-
-If there was some means of tweaking some of the options (like /lib vs.
-/usr/lib) using a configure step/file, then that would be most useful.
-Forgive me if this exists and I am unaware of it.
-
-As it stands, busybox and boot components in our system do not require
-ncurses so it needs to live in /usr/lib rather than occupying space in a
-minimal /lib, apart from any package compatibility issues.
-
-Thanks. 
-
----------------------------------------------------------------------- 
- vapier - 10-18-05 05:49  
----------------------------------------------------------------------- 
-buildroot is more of a development tool ... and it isnt meant to be an
-'off-the-shelf' system but more of a tool to easily build and test uClibc
-
-if you can come up with a flexible way to control packages in general i'll
-consider it but adding a configure option simply to control the location of
-libncurses is not acceptable 
+dupe of http://busybox.net/bugs/view.php?id=51 
 
 Issue History 
 Date Modified   Username       Field                    Change               
 ====================================================================== 
-10-17-05 04:17  mikewhit       New Issue                                    
-10-17-05 04:17  mikewhit       Status                   new => assigned     
-10-17-05 04:17  mikewhit       Assigned To               => uClibc          
-10-17-05 08:54  vapier         Note Added: 0000625                          
-10-17-05 08:54  vapier         Status                   assigned => closed  
-10-17-05 08:54  vapier         Resolution               open => won't fix   
-10-17-05 09:52  mikewhit       Status                   closed => feedback  
-10-17-05 09:52  mikewhit       Resolution               won't fix => reopened
-10-17-05 09:52  mikewhit       Note Added: 0000626                          
-10-17-05 09:54  mikewhit       Note Edited: 0000626                         
-10-17-05 10:45  vapier         Note Added: 0000627                          
-10-17-05 10:45  vapier         Status                   feedback => closed  
-10-17-05 10:45  vapier         Resolution               reopened => won't fix
-10-18-05 01:04  mikewhit       Status                   closed => feedback  
-10-18-05 01:04  mikewhit       Resolution               won't fix => reopened
-10-18-05 01:04  mikewhit       Note Added: 0000633                          
-10-18-05 05:49  vapier         Note Added: 0000636                          
-10-18-05 05:49  vapier         Status                   feedback => closed  
-10-18-05 05:49  vapier         Resolution               reopened => won't fix
-10-25-05 03:53  danieljlaird   Issue Monitored: danieljlaird                    
-02-12-07 05:49  vapier         Status                   closed => assigned  
-02-12-07 05:49  vapier         Assigned To              uClibc => buildroot 
+10-17-05 10:18  gnat           New Issue                                    
+10-17-05 10:18  gnat           Status                   new => assigned     
+10-17-05 10:18  gnat           Assigned To               => uClibc          
+10-17-05 11:02  gnat           Note Added: 0000628                          
+10-17-05 11:30  gnat           Note Added: 0000629                          
+10-17-05 15:12  vapier         Note Added: 0000632                          
+10-17-05 15:12  vapier         Status                   assigned => closed  
+10-17-05 15:12  vapier         Resolution               open => duplicate   
+02-12-07 05:50  vapier         Status                   closed => assigned  
+02-12-07 05:50  vapier         Assigned To              uClibc => buildroot 
 ======================================================================
