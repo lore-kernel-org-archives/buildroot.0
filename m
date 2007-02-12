@@ -1,8 +1,8 @@
 From: bugs at busybox.net <bugs@busybox.net>
-Date: Mon, 12 Feb 2007 05:34:07 -0800
-Subject: [Buildroot] [buildroot 0001101]: Build of Ruby crashes when its
-	version is different from the host Ruby version
-Message-ID: <1a792e663306bd921e238487d4259182@bugs.busybox.net>
+Date: Mon, 12 Feb 2007 05:34:08 -0800
+Subject: [Buildroot] [buildroot 0001090]: stdlibc++ fails putting a double
+	in a stream.
+Message-ID: <85cb46e7f0fc91843e8357a4225e773a@bugs.busybox.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -12,38 +12,40 @@ To: buildroot@busybox.net
 
 The following issue has been ASSIGNED. 
 ====================================================================== 
-http://busybox.net/bugs/view.php?id=1101 
+http://busybox.net/bugs/view.php?id=1090 
 ====================================================================== 
-Reported By:                znmeb
+Reported By:                GJanak
 Assigned To:                buildroot
 ====================================================================== 
 Project:                    buildroot
-Issue ID:                   1101
+Issue ID:                   1090
 Category:                   Architecture Specific
 Reproducibility:            always
-Severity:                   minor
+Severity:                   major
 Priority:                   normal
 Status:                     assigned
 ====================================================================== 
-Date Submitted:             11-22-2006 17:03 PST
+Date Submitted:             11-14-2006 00:01 PST
 Last Modified:              02-12-2007 05:34 PST
 ====================================================================== 
-Summary:                    Build of Ruby crashes when its version is different
-from the host Ruby version
+Summary:                    stdlibc++ fails putting a double in a stream.
 Description: 
-I have a system with Ruby 1.8.5 installed. When I try to build the Ruby in
-"buildroot", which is 1.8.2, it throws an error. Apparently part of the
-build uses the host Ruby installation. I'm going to dig into this further,
-but in the meantime, changing the version of Ruby in target/ruby/ruby.mk
-allows Ruby to build successfully.
+The problem was:
+putting a double in a stream:
+cout << 10.5 ;
+
+Produce an empty string, or some garbage characters.
+
+I could resolve the error down to some wired Code combination between
+uclibc and libstdc++
 ====================================================================== 
 
 Issue History 
 Date Modified   Username       Field                    Change               
 ====================================================================== 
-11-22-06 17:03  znmeb          New Issue                                    
-11-22-06 17:03  znmeb          Status                   new => assigned     
-11-22-06 17:03  znmeb          Assigned To               => uClibc          
-11-22-06 17:04  znmeb          Issue Monitored: znmeb                       
+11-14-06 00:01  GJanak         New Issue                                    
+11-14-06 00:01  GJanak         Status                   new => assigned     
+11-14-06 00:01  GJanak         Assigned To               => uClibc          
+11-14-06 00:05  GJanak         Issue Monitored: GJanak                      
 02-12-07 05:34  vapier         Assigned To              uClibc => buildroot 
 ======================================================================
