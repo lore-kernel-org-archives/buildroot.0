@@ -1,7 +1,7 @@
 From: bugs at busybox.net <bugs@busybox.net>
-Date: Mon, 12 Feb 2007 05:45:04 -0800
-Subject: [Buildroot] [buildroot 0000958]: No such file `dhcp-3.0.3.tar.gz'.
-Message-ID: <ed4290da6e630e21996b8807b07269a2@bugs.busybox.net>
+Date: Mon, 12 Feb 2007 05:45:06 -0800
+Subject: [Buildroot] [buildroot 0000962]: device-mapper.1.02.08 is out
+Message-ID: <afad53c3404157a35b926da38dc0a92c@bugs.busybox.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -11,59 +11,48 @@ To: buildroot@busybox.net
 
 The following issue has been ASSIGNED. 
 ====================================================================== 
-http://busybox.net/bugs/view.php?id=958 
+http://busybox.net/bugs/view.php?id=962 
 ====================================================================== 
 Reported By:                bowerymarc
 Assigned To:                buildroot
 ====================================================================== 
 Project:                    buildroot
-Issue ID:                   958
+Issue ID:                   962
 Category:                   Architecture Specific
 Reproducibility:            always
 Severity:                   major
 Priority:                   normal
 Status:                     assigned
 ====================================================================== 
-Date Submitted:             07-16-2006 22:29 PDT
+Date Submitted:             07-19-2006 12:12 PDT
 Last Modified:              02-12-2007 05:45 PST
 ====================================================================== 
-Summary:                    No such file `dhcp-3.0.3.tar.gz'.
+Summary:                    device-mapper.1.02.08 is out
 Description: 
-wget --passive-ftp -P /home/tools/buildroot/dl
-ftp://ftp.isc.org/isc/dhcp/dhcp-3.0.3.tar.gz
---23:38:30--  ftp://ftp.isc.org/isc/dhcp/dhcp-3.0.3.tar.gz
-           => `/home/tools/buildroot/dl/dhcp-3.0.3.tar.gz'
-Resolving ftp.isc.org... 204.152.184.110
-Connecting to ftp.isc.org[204.152.184.110]:21... connected.
-Logging in as anonymous ... Logged in!
-==> SYST ... done.    ==> PWD ... done.
-==> TYPE I ... done.  ==> CWD /isc/dhcp ... done.
-==> PASV ... done.    ==> RETR dhcp-3.0.3.tar.gz ...
-No such file `dhcp-3.0.3.tar.gz'.
+that version isn't in the main dir anymore, only patch 05 and 08.
+changing package/dm/dm.mk 
 
+DM_PATCH=08
+
+gets the newer one which compiles... no other testing has been done.
 ====================================================================== 
 
 ---------------------------------------------------------------------- 
- bjdooks - 07-17-06 01:15  
+ vapier - 07-19-06 16:54  
 ---------------------------------------------------------------------- 
-See http://bugs.uclibc.org/view.php?id=943 and
-http://bugs.uclibc.org/view.php?id=911 
-
----------------------------------------------------------------------- 
- vapier - 07-19-06 16:57  
----------------------------------------------------------------------- 
-dupe of 911 
+updated dm.mk 
 
 Issue History 
 Date Modified   Username       Field                    Change               
 ====================================================================== 
-07-16-06 22:29  bowerymarc     New Issue                                    
-07-16-06 22:29  bowerymarc     Status                   new => assigned     
-07-16-06 22:29  bowerymarc     Assigned To               => uClibc          
-07-17-06 01:15  bjdooks        Note Added: 0001528                          
-07-19-06 16:57  vapier         Note Added: 0001535                          
-07-19-06 16:57  vapier         Status                   assigned => closed  
-07-19-06 16:57  vapier         Resolution               open => duplicate   
+07-19-06 12:12  bowerymarc     New Issue                                    
+07-19-06 12:12  bowerymarc     Status                   new => assigned     
+07-19-06 12:12  bowerymarc     Assigned To               => uClibc          
+07-19-06 16:54  vapier         Note Added: 0001534                          
+07-19-06 16:54  vapier         Status                   assigned => closed  
+07-19-06 16:54  vapier         Resolution               open => fixed       
+07-19-06 16:54  vapier         Summary                  No such file
+`device-mapper.1.02.07.tgz'. => device-mapper.1.02.08 is out
 02-12-07 05:45  vapier         Status                   closed => assigned  
 02-12-07 05:45  vapier         Assigned To              uClibc => buildroot 
 ======================================================================
