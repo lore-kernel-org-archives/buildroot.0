@@ -1,8 +1,7 @@
 From: bugs at busybox.net <bugs@busybox.net>
-Date: Mon, 12 Feb 2007 05:45:28 -0800
-Subject: [Buildroot] [buildroot 0000851]: toolchain/kernel-headers: Use
-	LINUX_HEADERS_VERSION instead of LINUX_VERSION
-Message-ID: <b55a662ac0f325bb77a515a523dbcb56@bugs.busybox.net>
+Date: Mon, 12 Feb 2007 05:45:29 -0800
+Subject: [Buildroot] [buildroot 0000856]: Not finding ethtool sources
+Message-ID: <6c217ec0261f7fb679ab96392b00d5b4@bugs.busybox.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -12,52 +11,50 @@ To: buildroot@busybox.net
 
 The following issue has been ASSIGNED. 
 ====================================================================== 
-http://busybox.net/bugs/view.php?id=851 
+http://busybox.net/bugs/view.php?id=856 
 ====================================================================== 
-Reported By:                jacmet
+Reported By:                Jordi_Polo
 Assigned To:                buildroot
 ====================================================================== 
 Project:                    buildroot
-Issue ID:                   851
+Issue ID:                   856
 Category:                   Other
 Reproducibility:            always
 Severity:                   major
 Priority:                   normal
 Status:                     assigned
 ====================================================================== 
-Date Submitted:             04-26-2006 05:15 PDT
+Date Submitted:             04-28-2006 04:28 PDT
 Last Modified:              02-12-2007 05:45 PST
 ====================================================================== 
-Summary:                    toolchain/kernel-headers: Use LINUX_HEADERS_VERSION
-instead of LINUX_VERSION
+Summary:                    Not finding ethtool sources
 Description: 
-Use LINUX_HEADERS_VERSION instead of LINUX_VERSION as that variable is
-used
-for the actual kernel version used which might be different than the
-headers
-version.
-
-E.G. LINUX_VERSION is set in the target/device/* files. If this version
-doesn't match the selected kernel headers version the patches won't be
-applied.
+The buildroot downloaded at April 27, 2006 can't find the sources for
+ethtool
 ====================================================================== 
 
 ---------------------------------------------------------------------- 
- jacmet - 04-28-06 12:41  
+ jacmet - 04-28-06 05:47  
 ---------------------------------------------------------------------- 
-Thanks. Fixed in r14953. 
+Ups, sorry about that. The following tiny patch fixes it 
+
+---------------------------------------------------------------------- 
+ jacmet - 04-28-06 12:35  
+---------------------------------------------------------------------- 
+Thanks. Fixed in r14951. 
 
 Issue History 
 Date Modified   Username       Field                    Change               
 ====================================================================== 
-04-26-06 05:15  jacmet         New Issue                                    
-04-26-06 05:16  jacmet         Status                   new => assigned     
-04-26-06 05:16  jacmet         Assigned To               => uClibc          
-04-26-06 05:16  jacmet         File Added:
-kernel-headers-LINUX_HEADERS_VERSION.patch                    
-04-28-06 12:41  jacmet         Status                   assigned => closed  
-04-28-06 12:41  jacmet         Note Added: 0001335                          
-04-28-06 12:41  jacmet         Resolution               open => fixed       
+04-28-06 04:28  Jordi_Polo     New Issue                                    
+04-28-06 04:28  Jordi_Polo     Status                   new => assigned     
+04-28-06 04:28  Jordi_Polo     Assigned To               => uClibc          
+04-28-06 05:47  jacmet         Note Added: 0001332                          
+04-28-06 05:47  jacmet         File Added: ethtool-download-url.patch           
+        
+04-28-06 12:35  jacmet         Status                   assigned => closed  
+04-28-06 12:35  jacmet         Note Added: 0001334                          
+04-28-06 12:35  jacmet         Resolution               open => fixed       
 02-12-07 05:45  vapier         Status                   closed => assigned  
 02-12-07 05:45  vapier         Assigned To              uClibc => buildroot 
 ======================================================================
