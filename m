@@ -1,8 +1,7 @@
 From: bugs at busybox.net <bugs@busybox.net>
-Date: Mon, 12 Feb 2007 05:46:40 -0800
-Subject: [Buildroot] [buildroot 0000426]: grub and syslinux are not properly
-	integrated into build process
-Message-ID: <0715a05b172024623413fd4750396463@bugs.busybox.net>
+Date: Mon, 12 Feb 2007 05:46:42 -0800
+Subject: [Buildroot] [buildroot 0000179]: libelf Source URI is broken
+Message-ID: <31b3b630b0300770f3e6df244ba519a6@bugs.busybox.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -12,56 +11,48 @@ To: buildroot@busybox.net
 
 The following issue has been ASSIGNED. 
 ====================================================================== 
-http://busybox.net/bugs/view.php?id=426 
+http://busybox.net/bugs/view.php?id=179 
 ====================================================================== 
-Reported By:                sho
+Reported By:                klford
 Assigned To:                buildroot
 ====================================================================== 
 Project:                    buildroot
-Issue ID:                   426
+Issue ID:                   179
 Category:                   Other
 Reproducibility:            always
 Severity:                   minor
 Priority:                   normal
 Status:                     assigned
 ====================================================================== 
-Date Submitted:             09-12-2005 02:00 PDT
+Date Submitted:             03-21-2005 09:20 PST
 Last Modified:              02-12-2007 05:46 PST
 ====================================================================== 
-Summary:                    grub and syslinux are not properly integrated into
-build process
+Summary:                    libelf Source URI is broken
 Description: 
-It is possible to select grub and syslinux during "make menuconfig", but
-both packages are not compiled, because the line
+libelf SRC_URI is broken:
 
-  include */*/*.mk
+The correct URI is now:  http://www.mr511.de/software
 
-is missing inside the main Makefile (grub.mk resides in target/x86/grub
-which is nested one level too deep for the default configuration).
-
-Besides, grub is cross-compiled, but the binaries are not copied into the
-target filesystem (at least grub, stage1, stage2 are needed) . I am not
-sure if it is better to do this or to compile grub for the host system
-instead.
+I guess Micheal moved his site.
+======================================================================
+Relationships       ID      Summary
+----------------------------------------------------------------------
+has duplicate       0000196 libelf-0.8.5 wrong location
 ====================================================================== 
 
 ---------------------------------------------------------------------- 
- prpplague - 01-20-06 12:16  
+ prpplague - 01-20-06 12:30  
 ---------------------------------------------------------------------- 
-adding the include with such wild cards seems a little risky. instead,
-keeping with the current tree style, i've add Makefile.in files so that
-they are read properly. fixed as of 13456 
+fixed as of 10083 
 
 Issue History 
 Date Modified   Username       Field                    Change               
 ====================================================================== 
-09-12-05 02:00  sho            New Issue                                    
-09-12-05 02:00  sho            Status                   new => assigned     
-09-12-05 02:00  sho            Assigned To               => uClibc          
-09-19-05 12:51  mhe            Issue Monitored: mhe                         
-01-20-06 12:16  prpplague      Note Added: 0000961                          
-01-20-06 12:16  prpplague      Status                   assigned => resolved
-01-20-06 12:16  prpplague      Resolution               open => fixed       
+03-21-05 09:20  klford         New Issue                                    
+03-29-05 12:11  vapier         Relationship added       has duplicate 0000196
+01-20-06 12:30  prpplague      Note Added: 0000962                          
+01-20-06 12:30  prpplague      Status                   assigned => resolved
+01-20-06 12:30  prpplague      Resolution               open => fixed       
 03-08-06 16:56  vapier         Status                   resolved => closed  
 02-12-07 05:46  vapier         Status                   closed => assigned  
 02-12-07 05:46  vapier         Assigned To              uClibc => buildroot 
