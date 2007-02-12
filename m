@@ -1,8 +1,8 @@
 From: bugs at busybox.net <bugs@busybox.net>
-Date: Mon, 12 Feb 2007 05:42:40 -0800
-Subject: [Buildroot] [buildroot 0001010]: Build-root make error - missing
-	shadow.h
-Message-ID: <b76b4d4cb5f3e3f1c060bc118422172f@bugs.busybox.net>
+Date: Mon, 12 Feb 2007 05:42:41 -0800
+Subject: [Buildroot] [buildroot 0000861]: buildroot jail unable to compile
+	busybox --- "missing" output directory
+Message-ID: <2324ed8ee1b5c1c72818515600cdf9d6@bugs.busybox.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -12,91 +12,81 @@ To: buildroot@busybox.net
 
 The following issue has been ASSIGNED. 
 ====================================================================== 
-http://busybox.net/bugs/view.php?id=1010 
+http://busybox.net/bugs/view.php?id=861 
 ====================================================================== 
-Reported By:                mboutte
+Reported By:                zugvogel
 Assigned To:                buildroot
 ====================================================================== 
 Project:                    buildroot
-Issue ID:                   1010
-Category:                   Architecture Specific
+Issue ID:                   861
+Category:                   Other
 Reproducibility:            always
 Severity:                   major
 Priority:                   normal
 Status:                     assigned
 ====================================================================== 
-Date Submitted:             08-27-2006 15:57 PDT
+Date Submitted:             05-01-2006 19:33 PDT
 Last Modified:              02-12-2007 05:42 PST
 ====================================================================== 
-Summary:                    Build-root make error - missing shadow.h
+Summary:                    buildroot jail unable to compile busybox ---
+"missing" output directory
 Description: 
-I am new to build-root so forgive my possible lack of knowledge. I am
-attempting a new run of build-root for an x86 host to powerpc target. As a
-first attempt I left most of the defaults as-is, but used fairly new gcc
-4.1.1 headers and a linux 2.6 type system. The initial make menuconfig
-went OK, and the svn checkout seemed to work fine during the make process
-too, except that after about 15 minutes of work the compilation stops with
-an error --
-"/home/mike/projects/software/snip875/build-tools/uclibc/buildroot/build_powerpc
-/busybox/include/shadow_.h:23:20: error: shadow.h: No such file or
-directory"
+Background: I am attempting to use buildroot as a root jail for making
+components to be linked against uClibc. For the jail, I am using an
+unwrapped copy of the ext2 target file system as produced by buildroot.
 
-I googled your site and see other mentions of this error, but nothing I
-try seems to resolve it, including older gcc, linux 2.4, enabling or
-disableing shadow password support from the make config in the busybox
-directory. I also tried a make clean during this. I'm lost and have not
-more ideas now.
+Symptom: I am attempting to rebuild busybox inside the jail with my own
+setting. Unfortunately, "make menuconfig" (or just "make" with a planted
+.config) fails with the following ominous error:
 
-Note that svn checked out the new vresion 0.9.28. 
+/tmp/busybox $ make
+Makefile:72: *** output directory "/tmp/busybox" does not exist.  Stop.
 
-Mike
+The listed output directory does exist (relative to chroot) as I am
+currently in it. Disabling the check in the makefile results in a segfault
+instead--- so
+I would guess that the "missing" output directory is just a symptom of
+something more sinister going on.
+
+
 ====================================================================== 
 
 ---------------------------------------------------------------------- 
- vapier - 08-28-06 11:19  
+ zugvogel - 05-04-06 18:34  
 ---------------------------------------------------------------------- 
-your uClibc is configured without shadow support ... that means you need to
-either enable shadow support in uClibc or disable everything in busybox
-that requries shadow 
+Tried the same trick on a plain vanilla Debian 3.1r1. Same result (i.e. I
+get a toolchain that does not compile busybox). 
+
+Will now try to reproduce the toolchain using the busybox/uClibc snapshots
+that were used for the "preassembled" i386 toolchain (basically, a sanity
+check). Will update once I have some results.
+
+Frank 
 
 ---------------------------------------------------------------------- 
- mboutte - 08-28-06 14:38  
+ bernhardf - 12-21-06 04:05  
 ---------------------------------------------------------------------- 
-Vapier,
-Not to belabor this issue, but I had tried modifying the busybox
-configuration by going to the busybox folder and running "make menuconfig"
-to no avail. On more testing I saw when I went back to busybox
-configuration after attempting a new build, that the configuration had
-reverted to that before my changes. A more careful read of your docs
-showed copying the new busybox configuration back to the
-package/busybox/busybox.config file. When I did that the build worked. So,
-for me the problem was that I assumed that using make menuconfig on busybox
-actually modified the configuration that build-root would use. Again, this
-is my first attempt at using this incredible tool, and I was unaware of
-that requirement. 
+Any update on this?
+busybox now has approached 1.3.0 and buildroot recently received quite
+some changes, so please retest. 
 
 ---------------------------------------------------------------------- 
- bernhardf - 02-04-07 09:06  
+ bernhardf - 02-04-07 09:04  
 ---------------------------------------------------------------------- 
-This was a bug in busybox that was fixed in the 1.4.x series. 
+Assumed to be fixed with current setups. 
 
 Issue History 
 Date Modified   Username       Field                    Change               
 ====================================================================== 
-08-27-06 15:57  mboutte        New Issue                                    
-08-27-06 15:57  mboutte        Status                   new => assigned     
-08-27-06 15:57  mboutte        Assigned To               => uClibc          
-08-28-06 11:19  vapier         Note Added: 0001596                          
-08-28-06 11:19  vapier         Status                   assigned => closed  
-08-28-06 11:19  vapier         Resolution               open => no change
-required
-08-28-06 14:38  mboutte        Status                   closed => feedback  
-08-28-06 14:38  mboutte        Resolution               no change required =>
-reopened
-08-28-06 14:38  mboutte        Note Added: 0001597                          
-02-04-07 09:06  bernhardf      Status                   feedback => closed  
-02-04-07 09:06  bernhardf      Note Added: 0002105                          
-02-04-07 09:06  bernhardf      Resolution               reopened => fixed   
+05-01-06 19:33  zugvogel       New Issue                                    
+05-01-06 19:33  zugvogel       Status                   new => assigned     
+05-01-06 19:33  zugvogel       Assigned To               => uClibc          
+05-04-06 18:34  zugvogel       Note Added: 0001344                          
+12-21-06 04:05  bernhardf      Note Added: 0001903                          
+12-21-06 04:05  bernhardf      Status                   assigned => feedback
+02-04-07 09:04  bernhardf      Status                   feedback => closed  
+02-04-07 09:04  bernhardf      Note Added: 0002103                          
+02-04-07 09:05  bernhardf      Resolution               open => fixed       
 02-12-07 05:42  vapier         Status                   closed => assigned  
 02-12-07 05:42  vapier         Assigned To              uClibc => buildroot 
 ======================================================================
