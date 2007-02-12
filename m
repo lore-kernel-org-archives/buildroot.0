@@ -1,8 +1,7 @@
 From: bugs at busybox.net <bugs@busybox.net>
-Date: Mon, 12 Feb 2007 05:49:23 -0800
-Subject: [Buildroot] [buildroot 0000109]: ARM uClibc prompts for configure
-	variables
-Message-ID: <6b9c0584ef250d0539ab89fb6b74a9cc@bugs.busybox.net>
+Date: Mon, 12 Feb 2007 05:49:24 -0800
+Subject: [Buildroot] [buildroot 0000646]: Buildroot can't download gcc
+Message-ID: <1d5495541f41b3b7c4e5dfe4e183c022@bugs.busybox.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -12,46 +11,56 @@ To: buildroot@busybox.net
 
 The following issue has been ASSIGNED. 
 ====================================================================== 
-http://busybox.net/bugs/view.php?id=109 
+http://busybox.net/bugs/view.php?id=646 
 ====================================================================== 
-Reported By:                acmay
+Reported By:                jslyster
 Assigned To:                buildroot
 ====================================================================== 
 Project:                    buildroot
-Issue ID:                   109
-Category:                   Architecture Specific
+Issue ID:                   646
+Category:                   Other
 Reproducibility:            always
-Severity:                   minor
+Severity:                   major
 Priority:                   normal
 Status:                     assigned
 ====================================================================== 
-Date Submitted:             02-17-2005 17:05 PST
+Date Submitted:             01-17-2006 07:45 PST
 Last Modified:              02-12-2007 05:49 PST
 ====================================================================== 
-Summary:                    ARM uClibc prompts for configure variables
+Summary:                    Buildroot can't download gcc
 Description: 
-When building for ARM the config file for uClibc is missing some values and
-it prompts the user for them during the build.
-
-I did this patch to fix the problem but I don't know if there is a better
-way.
+Buildroot cannot download gcc because the server at mirrors.rcn.net isn't
+up. mirrors.rcn.net hasn't been up for at least a week, and possibly much
+more time than that.
 ====================================================================== 
 
 ---------------------------------------------------------------------- 
- prpplague - 01-19-06 07:18  
+ scott - 01-18-06 08:17  
 ---------------------------------------------------------------------- 
-fixed with the addition of the arm variants patch as of 13422 
+This is what we are now using....
+
+#GCC_SITE:=ftp://ftp.gnu.org/gnu/gcc/releases/gcc-$(GCC_VERSION)
+#GCC_SITE:=http://mirrors.rcn.net/pub/sourceware/gcc/releases/gcc-$(GCC_VERSION)
+GCC_SITE:=ftp://mirrors.laffeycomputer.com/pub/gcc.gnu.org/pub/gcc/releases/gcc-$(GCC_VERSION)
+
+
+---------------------------------------------------------------------- 
+ prpplague - 01-19-06 07:08  
+---------------------------------------------------------------------- 
+GCC_SITE:=ftp://ftp.ibiblio.org/pub/mirrors/gnu/ftp/gnu/gcc/gcc-$(GCC_VERSION)
+
+was fixed with 13394 
 
 Issue History 
 Date Modified   Username       Field                    Change               
 ====================================================================== 
-02-17-05 17:05  acmay          New Issue                                    
-02-17-05 17:05  acmay          File Added: arm-uc.patch                     
-03-16-05 12:13  andersen       Status                   new => assigned     
-03-16-05 12:13  andersen       Assigned To               => uClibc          
-01-19-06 07:18  prpplague      Note Added: 0000955                          
-01-19-06 07:18  prpplague      Status                   assigned => closed  
-01-19-06 07:18  prpplague      Resolution               open => fixed       
+01-17-06 07:45  jslyster       New Issue                                    
+01-17-06 07:45  jslyster       Status                   new => assigned     
+01-17-06 07:45  jslyster       Assigned To               => uClibc          
+01-18-06 08:17  scott          Note Added: 0000946                          
+01-19-06 07:08  prpplague      Note Added: 0000954                          
+01-19-06 07:08  prpplague      Status                   assigned => closed  
+01-19-06 07:08  prpplague      Resolution               open => fixed       
 02-12-07 05:49  vapier         Status                   closed => assigned  
 02-12-07 05:49  vapier         Assigned To              uClibc => buildroot 
 ======================================================================
