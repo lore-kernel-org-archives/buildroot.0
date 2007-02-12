@@ -1,8 +1,8 @@
 From: bugs at busybox.net <bugs@busybox.net>
-Date: Mon, 12 Feb 2007 05:48:59 -0800
-Subject: [Buildroot] [buildroot 0000162]: Busybox and uClibc configuration
-	files fix
-Message-ID: <79eebd1ddc99bb907b728807b4dcbc0d@bugs.busybox.net>
+Date: Mon, 12 Feb 2007 05:49:00 -0800
+Subject: [Buildroot] [buildroot 0000447]: [ New Package ] S/Key (One-Time
+	passwords) for OpenSSH
+Message-ID: <1b67f02abbb8b3233e82de4a39f690f0@bugs.busybox.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -12,41 +12,44 @@ To: buildroot@busybox.net
 
 The following issue has been ASSIGNED. 
 ====================================================================== 
-http://busybox.net/bugs/view.php?id=162 
+http://busybox.net/bugs/view.php?id=447 
 ====================================================================== 
-Reported By:                pgrayson
+Reported By:                ktraum
 Assigned To:                buildroot
 ====================================================================== 
 Project:                    buildroot
-Issue ID:                   162
+Issue ID:                   447
 Category:                   Other
-Reproducibility:            always
+Reproducibility:            N/A
 Severity:                   minor
 Priority:                   normal
 Status:                     assigned
 ====================================================================== 
-Date Submitted:             03-15-2005 18:21 PST
+Date Submitted:             09-26-2005 05:00 PDT
 Last Modified:              02-12-2007 05:48 PST
 ====================================================================== 
-Summary:                    Busybox and uClibc configuration files fix
+Summary:                    [ New Package ] S/Key (One-Time passwords) for
+OpenSSH
 Description: 
-This patch provides fixes to uclibc.mk and busybox.mk to be able to
-successfully override UCLIBC_CONFIG_FILE and BUSYBOX_CONFIG_FILE,
-respectively. These were not able to be overridden correctly by
-environment variables.
+A port of OpenBSD's One-Time Passwords library and utils.
+
+Adds One-Time password support to OpenSSH.
+
+patch attached.
 ====================================================================== 
 
 Issue History 
 Date Modified   Username       Field                    Change               
 ====================================================================== 
-03-15-05 18:21  pgrayson       New Issue                                    
-03-15-05 18:21  pgrayson       File Added: buildroot-bb-uclibc-config.patch     
-              
-03-16-05 12:11  andersen       Status                   new => assigned     
-03-16-05 12:11  andersen       Assigned To               => uClibc          
-01-25-06 05:50  prpplague      Status                   assigned => closed  
-01-25-06 05:50  prpplague      Resolution               open => won't fix   
-01-25-06 05:50  prpplague      Additional Information Updated                   
+09-26-05 05:00  ktraum         New Issue                                    
+09-26-05 05:00  ktraum         Status                   new => assigned     
+09-26-05 05:00  ktraum         Assigned To               => uClibc          
+09-26-05 05:00  ktraum         File Added: buildroot-libskey-1.1.5.patch        
+           
+09-26-05 05:23  ktraum         Issue Monitored: ktraum                      
+01-24-06 13:31  prpplague      Status                   assigned => closed  
+01-24-06 13:31  prpplague      Resolution               open => won't fix   
+01-24-06 13:31  prpplague      Additional Information Updated                   
 
 02-12-07 05:48  vapier         Status                   closed => assigned  
 02-12-07 05:48  vapier         Assigned To              uClibc => buildroot 
