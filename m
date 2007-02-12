@@ -1,8 +1,7 @@
 From: bugs at busybox.net <bugs@busybox.net>
-Date: Mon, 12 Feb 2007 05:47:42 -0800
-Subject: [Buildroot] [buildroot 0000416]: busybox binary is overwritten by
-	netkitbase inetd
-Message-ID: <19ff0b1e931202a3e11d4d82721ccef7@bugs.busybox.net>
+Date: Mon, 12 Feb 2007 05:47:44 -0800
+Subject: [Buildroot] [buildroot 0000441]: sed/sed.exe and linking on cygwin
+Message-ID: <c5eee08ce958817839a792a65214d2a6@bugs.busybox.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -12,48 +11,38 @@ To: buildroot@busybox.net
 
 The following issue has been ASSIGNED. 
 ====================================================================== 
-http://busybox.net/bugs/view.php?id=416 
+http://busybox.net/bugs/view.php?id=441 
 ====================================================================== 
-Reported By:                sho
+Reported By:                ee_doright
 Assigned To:                buildroot
 ====================================================================== 
 Project:                    buildroot
-Issue ID:                   416
-Category:                   Other
+Issue ID:                   441
+Category:                   Architecture Specific
 Reproducibility:            always
-Severity:                   minor
+Severity:                   trivial
 Priority:                   normal
 Status:                     assigned
 ====================================================================== 
-Date Submitted:             09-07-2005 11:29 PDT
+Date Submitted:             09-21-2005 20:23 PDT
 Last Modified:              02-12-2007 05:47 PST
 ====================================================================== 
-Summary:                    busybox binary is overwritten by netkitbase inetd
+Summary:                    sed/sed.exe and linking on cygwin
 Description: 
-If both the inetd applet of busybox and the netkit inetd are enabled, the
-netkit version overwrites the busybox binary inside the target filesystem
-via the symbolic link /usr/sbin/inetd. It seems that the command
-
-  rm -f $(TARGET_DIR)/$(NETKITBASE_TARGET_BINARY)
-
-is missing right in front of the line
-
-cp $(NETKITBASE_DIR)/$(NETKITBASE_BINARY)
-$(TARGET_DIR)/$(NETKITBASE_TARGET_BINARY)
-
-in package/netkitbase/netkitbase.mk
+When the build fails on cygwin, running make again always results in a
+failure, due to the line(s) in {BUILDROOT}/package/sed/sed.mk
 
 ====================================================================== 
 
 Issue History 
 Date Modified   Username       Field                    Change               
 ====================================================================== 
-09-07-05 11:29  sho            New Issue                                    
-09-07-05 11:29  sho            Status                   new => assigned     
-09-07-05 11:29  sho            Assigned To               => uClibc          
-01-24-06 13:22  prpplague      Status                   assigned => resolved
-01-24-06 13:22  prpplague      Resolution               open => fixed       
-01-24-06 13:22  prpplague      Additional Information Updated                   
+09-21-05 20:23  ee_doright     New Issue                                    
+09-21-05 20:23  ee_doright     Status                   new => assigned     
+09-21-05 20:23  ee_doright     Assigned To               => uClibc          
+01-24-06 13:35  prpplague      Status                   assigned => resolved
+01-24-06 13:35  prpplague      Resolution               open => fixed       
+01-24-06 13:35  prpplague      Additional Information Updated                   
 
 03-08-06 16:53  vapier         Status                   resolved => closed  
 02-12-07 05:47  vapier         Status                   closed => assigned  
