@@ -1,8 +1,7 @@
 From: bugs at busybox.net <bugs@busybox.net>
-Date: Mon, 12 Feb 2007 05:50:24 -0800
-Subject: [Buildroot] [buildroot 0000192]: buildroot.tar.bz2/buildroot.tar.gz
-	is missing on the http://www.uclibc.org/downloads/ page
-Message-ID: <372e8d0733d490f46c1418f5bc9b39c1@bugs.busybox.net>
+Date: Mon, 12 Feb 2007 05:50:25 -0800
+Subject: [Buildroot] [buildroot 0000212]: Adds grub bootloader
+Message-ID: <18a63cbf5a1771567c62f7e1b3378b60@bugs.busybox.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -12,43 +11,60 @@ To: buildroot@busybox.net
 
 The following issue has been ASSIGNED. 
 ====================================================================== 
-http://busybox.net/bugs/view.php?id=192 
+http://busybox.net/bugs/view.php?id=212 
 ====================================================================== 
-Reported By:                mywave
+Reported By:                SnarlCat
 Assigned To:                buildroot
 ====================================================================== 
 Project:                    buildroot
-Issue ID:                   192
-Category:                   Website
+Issue ID:                   212
+Category:                   New Features
 Reproducibility:            always
-Severity:                   block
+Severity:                   feature
 Priority:                   normal
 Status:                     assigned
 ====================================================================== 
-Date Submitted:             03-24-2005 03:23 PST
+Date Submitted:             04-06-2005 13:09 PDT
 Last Modified:              02-12-2007 05:50 PST
 ====================================================================== 
-Summary:                    buildroot.tar.bz2/buildroot.tar.gz is missing on the
-http://www.uclibc.org/downloads/ page
+Summary:                    Adds grub bootloader
 Description: 
-If you point your browser at http://www.uclibc.org/downloads/ ,the
-buildroot tar balls are no longer available for download. I put the
-severity on this to blocker, since it makes it hard for people to build a
-toolchain on their own.
+This patch will add the grub bootloader to the build menu and process.
+
+Please do go over it (especially the grub.mk file) to be sure it's
+compliant with your file layout design -- this was just a quick hack to
+get it with no concern for style or beauty...
+
+Thanks!
 ====================================================================== 
 
 ---------------------------------------------------------------------- 
- vapier - 08-28-05 01:14  
+ SnarlCat - 04-07-05 07:27  
 ---------------------------------------------------------------------- 
-the buildroot website has all the information requested here 
+Ug.. so I canned a line that I shouldn't have.. manual diff of
+package/grub/grub.mk
+
+ GRUB_SITE:=ftp://alpha.gnu.org/gnu/grub
+ GRUB_DIR:=$(BUILD_DIR)/grub-$(GRUB_VER)
+ GRUB_BOOT_PATH:=$(TARGET_DIR)/boot
++GRUB_CAT:=zcat
+ GRUB_BINARY:=$(GRUB_DIR)/sbin/grub 
+
+---------------------------------------------------------------------- 
+ vapier - 08-28-05 01:10  
+---------------------------------------------------------------------- 
+grub is in buildroot now 
 
 Issue History 
 Date Modified   Username       Field                    Change               
 ====================================================================== 
-03-24-05 03:23  mywave         New Issue                                    
-08-28-05 01:14  vapier         Note Added: 0000458                          
-08-28-05 01:14  vapier         Status                   assigned => closed  
-08-28-05 01:14  vapier         Resolution               open => fixed       
+04-06-05 13:09  SnarlCat       New Issue                                    
+04-06-05 13:09  SnarlCat       File Added: buildroot-grub.patch                 
+  
+04-07-05 07:27  SnarlCat       Note Added: 0000135                          
+08-28-05 01:10  vapier         Note Added: 0000455                          
+08-28-05 01:10  vapier         Status                   assigned => closed  
+08-28-05 01:10  vapier         Resolution               open => fixed       
 02-12-07 05:50  vapier         Status                   closed => assigned  
 02-12-07 05:50  vapier         Assigned To              uClibc => buildroot 
 ======================================================================
