@@ -1,8 +1,8 @@
 From: bugs at busybox.net <bugs@busybox.net>
-Date: Mon, 12 Feb 2007 05:50:03 -0800
-Subject: [Buildroot] [buildroot 0000091]: toolchain c++ compiler was not
-	built
-Message-ID: <5e8e4162c2ffd090ca57d8ac72549d7e@bugs.busybox.net>
+Date: Mon, 12 Feb 2007 05:50:04 -0800
+Subject: [Buildroot] [buildroot 0000463]: [New package] lcdproc - interface
+	to a lot of LCD displays
+Message-ID: <9af88d172dd3dd4e978a13117423fd74@bugs.busybox.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -12,72 +12,43 @@ To: buildroot@busybox.net
 
 The following issue has been ASSIGNED. 
 ====================================================================== 
-http://busybox.net/bugs/view.php?id=91 
+http://busybox.net/bugs/view.php?id=463 
 ====================================================================== 
-Reported By:                Michael
+Reported By:                dinkel
 Assigned To:                buildroot
 ====================================================================== 
 Project:                    buildroot
-Issue ID:                   91
-Category:                   Other
-Reproducibility:            always
+Issue ID:                   463
+Category:                   New Features
+Reproducibility:            N/A
 Severity:                   minor
 Priority:                   normal
 Status:                     assigned
 ====================================================================== 
-Date Submitted:             02-09-2005 02:30 PST
+Date Submitted:             10-03-2005 16:25 PDT
 Last Modified:              02-12-2007 05:50 PST
 ====================================================================== 
-Summary:                    toolchain c++ compiler was not built
+Summary:                    [New package] lcdproc - interface to a lot of LCD
+displays
 Description: 
-- Configure buildroot wihthout the c++ compiler
-- Build the system by calling make in the top level dir
-- Call make menuconfig and select 'Build/install c++ compiler and
-libstdc++'
-- Call make again and the c++ compiler will not be build
+The attached patch adds the lcdproc package to the buildroot system.
 
+In the configuration menu 'make menuconfig' you can choose what drivers
+should be compiled in LCDd. The 'svgalib' driver is currently not
+supported because of a lack of SVGALib in buildroot. The package is tested
+to compile every other driver. but only the HD44780 driver is tested to
+work correctly.
+
+The diff was done against svn revision 11731!
 ====================================================================== 
-
----------------------------------------------------------------------- 
- scott - 02-22-05 10:54  
----------------------------------------------------------------------- 
-I've had this same problem.  It's because that flag (to build C++) only
-changes an option passed to configure for gcc.  The solution is to force
-configure to run again either my removing the '.configured' file or by
-doing a full clean on gcc.
-remove the .configured file, which will cause gcc mk to run configure:
-
-   rm $(TOOL_BUILD_DIR)/gcc-$(GCC_VERSION)-final
-
-which for me, looks like:
-
-   rm toolchain_build_powerpc/gcc-3.4.3-final/.configured
-
-
-Or, you can remove the whole gcc area, causing it to build again.
-
-   make gcc-clean; make gcc
-
-The ideal solution would sense a change in the flag setting, and remove
-the .configured file automatically.
-
-hope this helps. 
-
----------------------------------------------------------------------- 
- vapier - 10-17-05 15:11  
----------------------------------------------------------------------- 
-dupe of http://busybox.net/bugs/view.php?id=51 
 
 Issue History 
 Date Modified   Username       Field                    Change               
 ====================================================================== 
-02-09-05 02:30  Michael        New Issue                                    
-02-22-05 10:54  scott          Note Added: 0000053                          
-03-16-05 12:13  andersen       Status                   new => assigned     
-03-16-05 12:13  andersen       Assigned To               => uClibc          
-10-17-05 15:11  vapier         Note Added: 0000630                          
-10-17-05 15:11  vapier         Status                   assigned => closed  
-10-17-05 15:11  vapier         Resolution               open => duplicate   
-02-12-07 05:50  vapier         Status                   closed => assigned  
+10-03-05 16:25  dinkel         New Issue                                    
+10-03-05 16:25  dinkel         Status                   new => assigned     
+10-03-05 16:25  dinkel         Assigned To               => uClibc          
+10-03-05 16:25  dinkel         File Added: buildroot-lcdproc.patch              
+     
 02-12-07 05:50  vapier         Assigned To              uClibc => buildroot 
 ======================================================================
