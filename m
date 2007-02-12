@@ -1,7 +1,8 @@
 From: bugs at busybox.net <bugs@busybox.net>
-Date: Mon, 12 Feb 2007 05:34:06 -0800
-Subject: [Buildroot] [buildroot 0001094]: ntpd version bump
-Message-ID: <4adb88c7b13578f067ba7c0101bd6084@bugs.busybox.net>
+Date: Mon, 12 Feb 2007 05:34:07 -0800
+Subject: [Buildroot] [buildroot 0001101]: Build of Ruby crashes when its
+	version is different from the host Ruby version
+Message-ID: <1a792e663306bd921e238487d4259182@bugs.busybox.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -11,50 +12,38 @@ To: buildroot@busybox.net
 
 The following issue has been ASSIGNED. 
 ====================================================================== 
-http://busybox.net/bugs/view.php?id=1094 
+http://busybox.net/bugs/view.php?id=1101 
 ====================================================================== 
-Reported By:                daisuke
+Reported By:                znmeb
 Assigned To:                buildroot
 ====================================================================== 
 Project:                    buildroot
-Issue ID:                   1094
-Category:                   Other
+Issue ID:                   1101
+Category:                   Architecture Specific
 Reproducibility:            always
 Severity:                   minor
 Priority:                   normal
 Status:                     assigned
 ====================================================================== 
-Date Submitted:             11-18-2006 03:06 PST
+Date Submitted:             11-22-2006 17:03 PST
 Last Modified:              02-12-2007 05:34 PST
 ====================================================================== 
-Summary:                    ntpd version bump
+Summary:                    Build of Ruby crashes when its version is different
+from the host Ruby version
 Description: 
-This patch does these things:
-(1) bump version from 4.2.0 to 4.2.2p4
-(2) remove tickadj utility. It causes make to fail for current uClibc
-
-This patch was created against buildroot-20061118 snapshot.
+I have a system with Ruby 1.8.5 installed. When I try to build the Ruby in
+"buildroot", which is 1.8.2, it throws an error. Apparently part of the
+build uses the host Ruby installation. I'm going to dig into this further,
+but in the meantime, changing the version of Ruby in target/ruby/ruby.mk
+allows Ruby to build successfully.
 ====================================================================== 
-
----------------------------------------------------------------------- 
- daisuke - 11-24-06 06:18  
----------------------------------------------------------------------- 
-Sorry, I uploaded wrong patch. Here is right patch.
-Please use `ntp-new.patch'.
-
- 
 
 Issue History 
 Date Modified   Username       Field                    Change               
 ====================================================================== 
-11-18-06 03:06  daisuke        New Issue                                    
-11-18-06 03:06  daisuke        Status                   new => assigned     
-11-18-06 03:06  daisuke        Assigned To               => uClibc          
-11-18-06 03:06  daisuke        File Added: ntp.patch                        
-11-24-06 06:08  daisuke        Note Added: 0001802                          
-11-24-06 06:09  daisuke        Issue Monitored: daisuke                     
-11-24-06 06:09  daisuke        Issue End Monitor: daisuke                    
-11-24-06 06:13  daisuke        File Added: ntp-new.patch                    
-11-24-06 06:18  daisuke        Note Edited: 0001802                         
+11-22-06 17:03  znmeb          New Issue                                    
+11-22-06 17:03  znmeb          Status                   new => assigned     
+11-22-06 17:03  znmeb          Assigned To               => uClibc          
+11-22-06 17:04  znmeb          Issue Monitored: znmeb                       
 02-12-07 05:34  vapier         Assigned To              uClibc => buildroot 
 ======================================================================
