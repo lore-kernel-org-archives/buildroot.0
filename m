@@ -1,7 +1,8 @@
 From: bugs at busybox.net <bugs@busybox.net>
-Date: Mon, 12 Feb 2007 05:44:47 -0800
-Subject: [Buildroot] [buildroot 0000969]: lsof website missing/down
-Message-ID: <b696ff2d26743743d627c2cdc28b7a9f@bugs.busybox.net>
+Date: Mon, 12 Feb 2007 05:44:48 -0800
+Subject: [Buildroot] [buildroot 0001042]: package/Makefile.in sets wrong
+	TARGET_PATH
+Message-ID: <8b6d264dac516ee09f94feb31694ce1a@bugs.busybox.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -11,65 +12,55 @@ To: buildroot@busybox.net
 
 The following issue has been ASSIGNED. 
 ====================================================================== 
-http://busybox.net/bugs/view.php?id=969 
+http://busybox.net/bugs/view.php?id=1042 
 ====================================================================== 
-Reported By:                bowerymarc
+Reported By:                belandor
 Assigned To:                buildroot
 ====================================================================== 
 Project:                    buildroot
-Issue ID:                   969
-Category:                   Architecture Specific
+Issue ID:                   1042
+Category:                   Other
 Reproducibility:            always
 Severity:                   minor
 Priority:                   normal
 Status:                     assigned
 ====================================================================== 
-Date Submitted:             07-25-2006 06:37 PDT
+Date Submitted:             09-21-2006 06:23 PDT
 Last Modified:              02-12-2007 05:44 PST
 ====================================================================== 
-Summary:                    lsof website missing/down
+Summary:                    package/Makefile.in sets wrong TARGET_PATH
 Description: 
-nightly build 20060724...
+in buildroot svn revision {2006-09-21}, package/Makefile.in sets 
 
-the LSOF website seems to be gone, found anotherone, here's a patch:
+TARGET_PATH=$(STAGING_DIR)/bin:$(TOOL_BUILD_DIR)/bin:/bin:/sbin:/usr/bin:/usr/sbin:$(PATH)
 
---- Config.in.orig	2006-07-25 09:32:00.000000000 -0400
-+++ Config.in	2006-07-25 09:33:14.000000000 -0400
-@@ -6,4 +6,4 @@
-           The lsof tool lists information about files opened by 
-           processes.
- 
--	  ftp://lsof.itap.purdue.edu/pub/tools/unix/lsof/
-+	  ftp://ftp.cerias.purdue.edu/pub/tools/unix/sysutils/lsof/
---- lsof.mk.orig	2006-07-25 09:32:10.000000000 -0400
-+++ lsof.mk	2006-07-25 09:32:59.000000000 -0400
-@@ -4,7 +4,7 @@
- #
- #############################################################
- LSOF_SOURCE:=lsof_4.77.tar.bz2
--LSOF_SITE:=ftp://lsof.itap.purdue.edu/pub/tools/unix/lsof/
-+LSOF_SITE:=ftp://ftp.cerias.purdue.edu/pub/tools/unix/sysutils/lsof/
- LSOF_CAT:=bzip2 -cd
- LSOF_DIR:=$(BUILD_DIR)/lsof_4.77
- LSOF_BINARY:=lsof
+This makes it impossible to use a gcc which is not installed in the system
+to compile uClibc (e.g. if /usr/bin/gcc does not support ada, it is not
+possible to provide an ada capable gcc in the path and install)
+
+This should be changed into
+TARGET_PATH=$(STAGING_DIR)/bin:$(TOOL_BUILD_DIR)/bin:$(PATH)
+
+If /bin:/sbin:/usr/bin:/usr/sbin are not in PATH, then this has probably
+good reasons and buildroot should not attempt to include them in the
+TARGET_PATH. - Otherwise they should come _AFTER_ the inclusion of PATH.
 
 ====================================================================== 
 
 ---------------------------------------------------------------------- 
- vapier - 08-23-06 19:48  
+ bernhardf - 09-30-06 14:09  
 ---------------------------------------------------------------------- 
-site is back up 
+Sounds reasonable. Done. 
 
 Issue History 
 Date Modified   Username       Field                    Change               
 ====================================================================== 
-07-25-06 06:37  bowerymarc     New Issue                                    
-07-25-06 06:37  bowerymarc     Status                   new => assigned     
-07-25-06 06:37  bowerymarc     Assigned To               => uClibc          
-08-23-06 19:48  vapier         Note Added: 0001580                          
-08-23-06 19:48  vapier         Status                   assigned => resolved
-08-23-06 19:48  vapier         Resolution               open => won't fix   
-09-30-06 14:10  bernhardf      Status                   resolved => closed  
+09-21-06 06:23  belandor       New Issue                                    
+09-21-06 06:23  belandor       Status                   new => assigned     
+09-21-06 06:23  belandor       Assigned To               => uClibc          
+09-30-06 14:09  bernhardf      Status                   assigned => closed  
+09-30-06 14:09  bernhardf      Note Added: 0001673                          
+09-30-06 14:09  bernhardf      Resolution               open => fixed       
 02-12-07 05:44  vapier         Status                   closed => assigned  
 02-12-07 05:44  vapier         Assigned To              uClibc => buildroot 
 ======================================================================
