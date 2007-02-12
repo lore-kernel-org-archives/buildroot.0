@@ -1,8 +1,7 @@
 From: bugs at busybox.net <bugs@busybox.net>
-Date: Mon, 12 Feb 2007 05:44:48 -0800
-Subject: [Buildroot] [buildroot 0001042]: package/Makefile.in sets wrong
-	TARGET_PATH
-Message-ID: <8b6d264dac516ee09f94feb31694ce1a@bugs.busybox.net>
+Date: Mon, 12 Feb 2007 05:44:52 -0800
+Subject: [Buildroot] [buildroot 0001045]: failure to build for x86_64
+Message-ID: <c608dd2ebc6a29766a42d81810c61750@bugs.busybox.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -12,55 +11,45 @@ To: buildroot@busybox.net
 
 The following issue has been ASSIGNED. 
 ====================================================================== 
-http://busybox.net/bugs/view.php?id=1042 
+http://busybox.net/bugs/view.php?id=1045 
 ====================================================================== 
-Reported By:                belandor
+Reported By:                d3bug
 Assigned To:                buildroot
 ====================================================================== 
 Project:                    buildroot
-Issue ID:                   1042
-Category:                   Other
+Issue ID:                   1045
+Category:                   Architecture Specific
 Reproducibility:            always
-Severity:                   minor
+Severity:                   major
 Priority:                   normal
 Status:                     assigned
 ====================================================================== 
-Date Submitted:             09-21-2006 06:23 PDT
+Date Submitted:             09-23-2006 19:26 PDT
 Last Modified:              02-12-2007 05:44 PST
 ====================================================================== 
-Summary:                    package/Makefile.in sets wrong TARGET_PATH
+Summary:                    failure to build for x86_64
 Description: 
-in buildroot svn revision {2006-09-21}, package/Makefile.in sets 
-
-TARGET_PATH=$(STAGING_DIR)/bin:$(TOOL_BUILD_DIR)/bin:/bin:/sbin:/usr/bin:/usr/sbin:$(PATH)
-
-This makes it impossible to use a gcc which is not installed in the system
-to compile uClibc (e.g. if /usr/bin/gcc does not support ada, it is not
-possible to provide an ada capable gcc in the path and install)
-
-This should be changed into
-TARGET_PATH=$(STAGING_DIR)/bin:$(TOOL_BUILD_DIR)/bin:$(PATH)
-
-If /bin:/sbin:/usr/bin:/usr/sbin are not in PATH, then this has probably
-good reasons and buildroot should not attempt to include them in the
-TARGET_PATH. - Otherwise they should come _AFTER_ the inclusion of PATH.
-
+buildroot fails to build for target x86_64... nothing has been changed,
+nothing extra selected - only arch x86_64 selected... nothing else, and
+all prompts accepted as default
 ====================================================================== 
 
 ---------------------------------------------------------------------- 
- bernhardf - 09-30-06 14:09  
+ vapier - 09-24-06 01:39  
 ---------------------------------------------------------------------- 
-Sounds reasonable. Done. 
+multilib is not supported 
 
 Issue History 
 Date Modified   Username       Field                    Change               
 ====================================================================== 
-09-21-06 06:23  belandor       New Issue                                    
-09-21-06 06:23  belandor       Status                   new => assigned     
-09-21-06 06:23  belandor       Assigned To               => uClibc          
-09-30-06 14:09  bernhardf      Status                   assigned => closed  
-09-30-06 14:09  bernhardf      Note Added: 0001673                          
-09-30-06 14:09  bernhardf      Resolution               open => fixed       
+09-23-06 19:26  d3bug          New Issue                                    
+09-23-06 19:26  d3bug          Status                   new => assigned     
+09-23-06 19:26  d3bug          Assigned To               => uClibc          
+09-23-06 19:26  d3bug          File Added: ss.jpg                           
+09-24-06 01:39  vapier         Note Added: 0001645                          
+09-24-06 01:39  vapier         Status                   assigned => closed  
+09-24-06 01:39  vapier         Resolution               open => no change
+required
 02-12-07 05:44  vapier         Status                   closed => assigned  
 02-12-07 05:44  vapier         Assigned To              uClibc => buildroot 
 ======================================================================
