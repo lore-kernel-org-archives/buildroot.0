@@ -1,8 +1,8 @@
 From: bugs at busybox.net <bugs@busybox.net>
 Date: Mon, 12 Feb 2007 05:50:24 -0800
-Subject: [Buildroot] [buildroot 0000184]: buildroot -
-	toolchain/kernel-headers/kernel-headers.mk
-Message-ID: <844f5bb4167630359c904821ee5202e6@bugs.busybox.net>
+Subject: [Buildroot] [buildroot 0000192]: buildroot.tar.bz2/buildroot.tar.gz
+	is missing on the http://www.uclibc.org/downloads/ page
+Message-ID: <372e8d0733d490f46c1418f5bc9b39c1@bugs.busybox.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -12,48 +12,43 @@ To: buildroot@busybox.net
 
 The following issue has been ASSIGNED. 
 ====================================================================== 
-http://busybox.net/bugs/view.php?id=184 
+http://busybox.net/bugs/view.php?id=192 
 ====================================================================== 
-Reported By:                gnat
+Reported By:                mywave
 Assigned To:                buildroot
 ====================================================================== 
 Project:                    buildroot
-Issue ID:                   184
-Category:                   Other
+Issue ID:                   192
+Category:                   Website
 Reproducibility:            always
-Severity:                   minor
+Severity:                   block
 Priority:                   normal
 Status:                     assigned
 ====================================================================== 
-Date Submitted:             03-22-2005 15:39 PST
+Date Submitted:             03-24-2005 03:23 PST
 Last Modified:              02-12-2007 05:50 PST
 ====================================================================== 
-Summary:                    buildroot -
-toolchain/kernel-headers/kernel-headers.mk
+Summary:                    buildroot.tar.bz2/buildroot.tar.gz is missing on the
+http://www.uclibc.org/downloads/ page
 Description: 
-on line 89 "toolchain/patch-kernel.sh $(LINUX_HEADERS_DIR)
-toolchain/kernel-headers linux-libc-headers-$(LINUX_VERSION)-\*.patch"
-
-won't pull in kernel patch "linux-libc-headers-2.6.11.0.patch as it is
-0.patch and not -iptables or some other .patch
-
-Didn't know which way you wanted to fix it (either rename
-linux-libc-headers-2.6.11.0.patch) or pull $(LINUX_VERSION)\*patch
+If you point your browser at http://www.uclibc.org/downloads/ ,the
+buildroot tar balls are no longer available for download. I put the
+severity on this to blocker, since it makes it hard for people to build a
+toolchain on their own.
 ====================================================================== 
 
 ---------------------------------------------------------------------- 
- vapier - 08-28-05 01:15  
+ vapier - 08-28-05 01:14  
 ---------------------------------------------------------------------- 
-this was fixed sometime ago by changing it to
-$(LINUX_VERSION)\*.patch 
+the buildroot website has all the information requested here 
 
 Issue History 
 Date Modified   Username       Field                    Change               
 ====================================================================== 
-03-22-05 15:39  gnat           New Issue                                    
-08-28-05 01:15  vapier         Note Added: 0000459                          
-08-28-05 01:15  vapier         Status                   assigned => closed  
-08-28-05 01:15  vapier         Resolution               open => fixed       
+03-24-05 03:23  mywave         New Issue                                    
+08-28-05 01:14  vapier         Note Added: 0000458                          
+08-28-05 01:14  vapier         Status                   assigned => closed  
+08-28-05 01:14  vapier         Resolution               open => fixed       
 02-12-07 05:50  vapier         Status                   closed => assigned  
 02-12-07 05:50  vapier         Assigned To              uClibc => buildroot 
 ======================================================================
