@@ -1,7 +1,7 @@
 From: bugs at busybox.net <bugs@busybox.net>
 Date: Mon, 12 Feb 2007 05:50:48 -0800
-Subject: [Buildroot] [buildroot 0000297]: Update to ccache package
-Message-ID: <f64309fa734eb23598f309434f636697@bugs.busybox.net>
+Subject: [Buildroot] [buildroot 0000188]: New target/device:  Via epia-mii
+Message-ID: <3f21f0a4065ee5a9c35371539461d3a9@bugs.busybox.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -11,38 +11,37 @@ To: buildroot@busybox.net
 
 The following issue has been ASSIGNED. 
 ====================================================================== 
-http://busybox.net/bugs/view.php?id=297 
+http://busybox.net/bugs/view.php?id=188 
 ====================================================================== 
-Reported By:                daisuke
+Reported By:                gnat
 Assigned To:                buildroot
 ====================================================================== 
 Project:                    buildroot
-Issue ID:                   297
-Category:                   Other
-Reproducibility:            always
-Severity:                   minor
+Issue ID:                   188
+Category:                   New Features
+Reproducibility:            N/A
+Severity:                   feature
 Priority:                   normal
 Status:                     assigned
 ====================================================================== 
-Date Submitted:             06-11-2005 06:02 PDT
+Date Submitted:             03-23-2005 16:02 PST
 Last Modified:              02-12-2007 05:50 PST
 ====================================================================== 
-Summary:                    Update to ccache package
+Summary:                    New target/device:  Via epia-mii
 Description: 
-This patch updates the ccache package to build version 2.4. The 2.4 version
-of ccache adds additional features.
-
-This patch was created against buildroot-20050611 snapshot.
-
+Creates a target for the epia-mii board. Fairly generic, based on 2.6
+kernel. Doesn't override the busybox or uclibc configurations. Includes
+one patch, which I still can't get to apply (it applies cleanly manually,
+but isn't applied through buildroot).
 ====================================================================== 
 
 Issue History 
 Date Modified   Username       Field                    Change               
 ====================================================================== 
-06-11-05 06:02  daisuke        New Issue                                    
-06-11-05 06:02  daisuke        File Added: ccache.patch                     
-06-23-05 15:45  andersen       Status                   assigned => closed  
-06-23-05 15:45  andersen       Resolution               open => fixed       
+03-23-05 16:02  gnat           New Issue                                    
+03-23-05 16:02  gnat           File Added: via-epia.patch                    
+06-23-05 14:34  andersen       Status                   assigned => closed  
+06-23-05 14:34  andersen       Resolution               open => fixed       
 02-12-07 05:50  vapier         Status                   closed => assigned  
 02-12-07 05:50  vapier         Assigned To              uClibc => buildroot 
 ======================================================================
