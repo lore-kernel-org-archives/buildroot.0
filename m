@@ -1,8 +1,8 @@
 From: bugs at busybox.net <bugs@busybox.net>
-Date: Mon, 12 Feb 2007 05:50:07 -0800
-Subject: [Buildroot] [buildroot 0000219]: pciutils runs `uname` to detect
-	target OS and fails on Internix
-Message-ID: <8afb2780d558b05c9efc7cccc890674e@bugs.busybox.net>
+Date: Mon, 12 Feb 2007 05:50:08 -0800
+Subject: [Buildroot] [buildroot 0000445]: [patch openntpd] Fix build,
+	add init script
+Message-ID: <fa60c5b1f395490b454885ffcf27376d@bugs.busybox.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -12,48 +12,42 @@ To: buildroot@busybox.net
 
 The following issue has been ASSIGNED. 
 ====================================================================== 
-http://busybox.net/bugs/view.php?id=219 
+http://busybox.net/bugs/view.php?id=445 
 ====================================================================== 
-Reported By:                kk
+Reported By:                ktraum
 Assigned To:                buildroot
 ====================================================================== 
 Project:                    buildroot
-Issue ID:                   219
-Category:                   Architecture Specific
-Reproducibility:            always
-Severity:                   major
+Issue ID:                   445
+Category:                   Other
+Reproducibility:            N/A
+Severity:                   minor
 Priority:                   normal
 Status:                     assigned
 ====================================================================== 
-Date Submitted:             04-08-2005 05:35 PDT
+Date Submitted:             09-26-2005 01:03 PDT
 Last Modified:              02-12-2007 05:50 PST
 ====================================================================== 
-Summary:                    pciutils runs `uname` to detect target OS and fails
-on Internix
+Summary:                    [patch openntpd] Fix build, add init script
 Description: 
-When the pciutils package is selected, buildroot's make stops with
-"The PCI library currently supports only Linux, AIX, FreeBSD and NetBSD"
-when configuring pciutils.
+Fix build to use user "daemon" as privsep user (uses _ntp by default, which
+doesn't exist).
 
-I am building for a Linux target. The host is Interix, but this should not
-matter at all.
+Point "OPENNTPD_TARGET_BINARY" to real target binary, so install runs only
+once.
+
+Add init script.
+
+Patch attached.
 ====================================================================== 
-
----------------------------------------------------------------------- 
- vapier - 09-29-05 00:28  
----------------------------------------------------------------------- 
-patched pciutils to assume Linux is always the target 
 
 Issue History 
 Date Modified   Username       Field                    Change               
 ====================================================================== 
-04-08-05 05:35  kk             New Issue                                    
-08-28-05 01:11  vapier         Summary                  buildroot: Configure
-problem when building pciutils => pciutils runs `uname` to detect target OS and
-fails on Internix
-09-29-05 00:28  vapier         Note Added: 0000585                          
-09-29-05 00:28  vapier         Status                   assigned => closed  
-09-29-05 00:28  vapier         Resolution               open => fixed       
-02-12-07 05:50  vapier         Status                   closed => assigned  
+09-26-05 01:03  ktraum         New Issue                                    
+09-26-05 01:03  ktraum         Status                   new => assigned     
+09-26-05 01:03  ktraum         Assigned To               => uClibc          
+09-26-05 01:03  ktraum         File Added: openntpd.patch                    
+09-26-05 05:23  ktraum         Issue Monitored: ktraum                      
 02-12-07 05:50  vapier         Assigned To              uClibc => buildroot 
 ======================================================================
