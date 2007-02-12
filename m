@@ -1,7 +1,8 @@
 From: bugs at busybox.net <bugs@busybox.net>
-Date: Mon, 12 Feb 2007 05:46:42 -0800
-Subject: [Buildroot] [buildroot 0000179]: libelf Source URI is broken
-Message-ID: <31b3b630b0300770f3e6df244ba519a6@bugs.busybox.net>
+Date: Mon, 12 Feb 2007 05:46:43 -0800
+Subject: [Buildroot] [buildroot 0000476]: buildroot patch to build linux
+	kernel for target/device/Via/epia-mii
+Message-ID: <ff0e858bfdef8778784b7c45a0685cde@bugs.busybox.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -11,48 +12,44 @@ To: buildroot@busybox.net
 
 The following issue has been ASSIGNED. 
 ====================================================================== 
-http://busybox.net/bugs/view.php?id=179 
+http://busybox.net/bugs/view.php?id=476 
 ====================================================================== 
-Reported By:                klford
+Reported By:                gnat
 Assigned To:                buildroot
 ====================================================================== 
 Project:                    buildroot
-Issue ID:                   179
+Issue ID:                   476
 Category:                   Other
-Reproducibility:            always
+Reproducibility:            N/A
 Severity:                   minor
 Priority:                   normal
 Status:                     assigned
 ====================================================================== 
-Date Submitted:             03-21-2005 09:20 PST
+Date Submitted:             10-06-2005 22:55 PDT
 Last Modified:              02-12-2007 05:46 PST
 ====================================================================== 
-Summary:                    libelf Source URI is broken
+Summary:                    buildroot patch to build linux kernel for
+target/device/Via/epia-mii
 Description: 
-libelf SRC_URI is broken:
-
-The correct URI is now:  http://www.mr511.de/software
-
-I guess Micheal moved his site.
-======================================================================
-Relationships       ID      Summary
-----------------------------------------------------------------------
-has duplicate       0000196 libelf-0.8.5 wrong location
+some update somewhere made the Via/Makefile.in file no longer build the
+kernel when TARGET+= is after the include file. The following patch fixes
+this.
 ====================================================================== 
 
 ---------------------------------------------------------------------- 
- prpplague - 01-20-06 12:30  
+ prpplague - 01-20-06 12:52  
 ---------------------------------------------------------------------- 
-fixed as of 10083 
+fixed as of 13458 
 
 Issue History 
 Date Modified   Username       Field                    Change               
 ====================================================================== 
-03-21-05 09:20  klford         New Issue                                    
-03-29-05 12:11  vapier         Relationship added       has duplicate 0000196
-01-20-06 12:30  prpplague      Note Added: 0000962                          
-01-20-06 12:30  prpplague      Status                   assigned => resolved
-01-20-06 12:30  prpplague      Resolution               open => fixed       
+10-06-05 22:55  gnat           New Issue                                    
+10-06-05 22:55  gnat           Status                   new => assigned     
+10-06-05 22:55  gnat           Assigned To               => uClibc          
+01-20-06 12:52  prpplague      Note Added: 0000965                          
+01-20-06 12:52  prpplague      Status                   assigned => resolved
+01-20-06 12:52  prpplague      Resolution               open => fixed       
 03-08-06 16:56  vapier         Status                   resolved => closed  
 02-12-07 05:46  vapier         Status                   closed => assigned  
 02-12-07 05:46  vapier         Assigned To              uClibc => buildroot 
