@@ -1,8 +1,8 @@
 From: bugs at busybox.net <bugs@busybox.net>
-Date: Mon, 12 Feb 2007 05:44:58 -0800
-Subject: [Buildroot] [buildroot 0000883]: [patch] Gettext progname per case
-	patch did not get fully commited in revision 15161
-Message-ID: <86467aa133e34c586ab750a28c0d5c8a@bugs.busybox.net>
+Date: Mon, 12 Feb 2007 05:45:00 -0800
+Subject: [Buildroot] [buildroot 0000886]: awk does not call END if next is
+	called on last last line of input and input file has no newline.
+Message-ID: <9fa9e952381fd7ad8ee8644c3bb0d794@bugs.busybox.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -12,169 +12,97 @@ To: buildroot@busybox.net
 
 The following issue has been ASSIGNED. 
 ====================================================================== 
-http://busybox.net/bugs/view.php?id=883 
+http://busybox.net/bugs/view.php?id=886 
 ====================================================================== 
-Reported By:                mastag
+Reported By:                limey
 Assigned To:                buildroot
 ====================================================================== 
 Project:                    buildroot
-Issue ID:                   883
+Issue ID:                   886
 Category:                   Other
 Reproducibility:            always
-Severity:                   minor
+Severity:                   major
 Priority:                   normal
 Status:                     assigned
 ====================================================================== 
-Date Submitted:             05-25-2006 07:08 PDT
+Date Submitted:             05-29-2006 10:27 PDT
 Last Modified:              02-12-2007 05:44 PST
 ====================================================================== 
-Summary:                    [patch] Gettext progname per case patch did not get
-fully commited in revision 15161
+Summary:                    awk does not call END if next is called on last last
+line of input and input file has no newline.
 Description: 
-As of revision 15161 the gettext makefile was edited to apply the patch:
+The END section of my awk script does not get called if i match the final
+line of the input file, call next, and the input file does not end in a
+new line. If I add new lines to the end of the input file, all is well. If
+I do not call next after the match, all is well.
 
---- trunk/buildroot/package/gettext/gettext.mk	2006/05/24 14:41:30	15160
-+++ trunk/buildroot/package/gettext/gettext.mk	2006/05/24 14:57:27	15161
-@@ -17,6 +17,7 @@
- 
- $(GETTEXT_DIR)/.unpacked: $(DL_DIR)/$(GETTEXT_SOURCE)
- 	$(GETTEXT_CAT) $(DL_DIR)/$(GETTEXT_SOURCE) | tar -C $(BUILD_DIR)
-$(TAR_OPTIONS) -
-+	toolchain/patch-kernel.sh $(GETTEXT_DIR) package/gettext/
-gettext\*.patch
- 	touch $(GETTEXT_DIR)/.unpacked
- 
- $(GETTEXT_DIR)/.configured: $(GETTEXT_DIR)/.unpacked
-
-But there was no patch commited, so it still fails as of revision 15161
-
-creating ngettext
-/home/mastag/buildroot/build_mipsel/staging_dir/bin/mipsel-linux-uclibc-gcc
--DLOCALEDIR=\"/usr/share/locale\" -DUSEJEXE=0
--DGETTEXTJEXEDIR=\"/usr/lib/gettext\"
--DGETTEXTJAR=\"/usr/share/gettext/gettext.jar\" -DLIBDIR=\"/usr/lib\"
--DGETTEXTDATADIR=\"/usr/share/gettext\"
--DPROJECTSDIR=\"/usr/share/gettext/projects\" -DHAVE_CONFIG_H -I. -I. -I..
--I. -I. -I.. -I../libuniname -I../lib -I../lib -I../intl -I../intl    -Os
--pipe  -c msgcmp.c
-/bin/sh ../libtool --mode=link
-/home/mastag/buildroot/build_mipsel/staging_dir/bin/mipsel-linux-uclibc-gcc
- -Os -pipe    -o msgcmp  msgcmp.o libgettextsrc.la
-/home/mastag/buildroot/build_mipsel/staging_dir/bin/mipsel-linux-uclibc-gcc
--Os -pipe -o .libs/msgcmp msgcmp.o  ./.libs/libgettextsrc.so
-/home/mastag/buildroot/build_mipsel/gettext-0.11.5/lib/.libs/libgettextlib.so
-/home/mastag/buildroot/build_mipsel/gettext-0.11.5/intl/.libs/libintl.so
--lc
-msgcmp.o: In function `main':
-msgcmp.c:(.text+0x9d4): undefined reference to `error_print_progname'
-collect2: ld returned 1 exit status
-make[4]: *** [msgcmp] Fout 1
-make[4]: Leaving directory
-`/home/mastag/buildroot/build_mipsel/gettext-0.11.5/src'
-make[3]: *** [all] Fout 2
-make[3]: Leaving directory
-`/home/mastag/buildroot/build_mipsel/gettext-0.11.5/src'
-make[2]: *** [all-recursive] Fout 1
-make[2]: Leaving directory
-`/home/mastag/buildroot/build_mipsel/gettext-0.11.5'
-make[1]: *** [all] Fout 2
-make[1]: Leaving directory
-`/home/mastag/buildroot/build_mipsel/gettext-0.11.5'
-make: *** [/home/mastag/buildroot/build_mipsel/gettext-0.11.5/src/gettext]
-Fout 2
-
-Anyways here's the patch anyways against 15161
-
-diff -Naur buildroot.old/package/gettext/gettext_progname.patch
-buildroot/package/gettext/gettext_progname.patch
---- buildroot.old/package/gettext/gettext_progname.patch	1970-01-01
-01:00:00.000000000 +0100
-+++ buildroot/package/gettext/gettext_progname.patch	2006-05-23
-21:45:26.000000000 +0200
-@@ -0,0 +1,63 @@
-+--- gettext-0.11.5/lib/error.c.orig	2002-01-30 14:47:27.000000000 +0100
-++++ gettext-0.11.5/lib/error.c	2006-04-14 19:44:33.000000000 +0200
-+@@ -62,15 +62,6 @@
-+ # endif
-+ #endif
-+ 
-+-/* If NULL, error will flush stdout, then print on stderr the program
-+-   name, a colon and a space.  Otherwise, error will call this
-+-   function without parameters instead.  */
-+-void (*error_print_progname) (
-+-#if __STDC__ - 0
-+-			      void
-+-#endif
-+-			      );
-+-
-+ /* This variable is incremented each time `error' is called.  */
-+ unsigned int error_message_count;
-+ 
-+--- gettext-0.11.5/lib/error.h.orig	2001-02-20 16:15:03.000000000 +0100
-++++ gettext-0.11.5/lib/error.h	2006-04-14 19:45:28.000000000 +0200
-+@@ -53,11 +53,6 @@
-+ 			   unsigned int lineno, const char *format, ...)
-+      __attribute__ ((__format__ (__printf__, 5, 6)));
-+ 
-+-/* If NULL, error will flush stdout, then print on stderr the program
-+-   name, a colon and a space.  Otherwise, error will call this
-+-   function without parameters instead.  */
-+-extern void (*error_print_progname) (void);
-+-
-+ #else
-+ void error ();
-+ void error_at_line ();
-+--- gettext-0.11.5/lib/progname.c.orig	2001-10-30 12:08:15.000000000
-+0100
-++++ gettext-0.11.5/lib/progname.c	2006-04-14 19:45:59.000000000 +0200
-+@@ -67,3 +67,12 @@
-+   if (error_with_progname)
-+     fprintf (stderr, "%s: ", program_name);
-+ }
-++
-++/* If NULL, error will flush stdout, then print on stderr the program
-++   name, a colon and a space.  Otherwise, error will call this
-++   function without parameters instead.  */
-++void (*error_print_progname) (
-++#if __STDC__ - 0
-++			      void
-++#endif
-++			      );
-+--- gettext-0.11.5/lib/progname.h.orig	2001-07-02 14:49:08.000000000
-+0200
-++++ gettext-0.11.5/lib/progname.h	2006-04-14 19:46:57.000000000 +0200
-+@@ -45,4 +45,13 @@
-+    is true.  */
-+ extern void maybe_print_progname PARAMS ((void));
-+ 
-++/* If NULL, error will flush stdout, then print on stderr the program
-++   name, a colon and a space.  Otherwise, error will call this
-++   function without parameters instead.  */
-++extern void (*error_print_progname) (
-++#if defined (__STDC__) && __STDC__
-++				    void
-++#endif
-++				    );
-++
-+ #endif /* _PROGNAME_H */
+This is differnt to the result I get with the awk program shipped with
+Fedora Core 4. 
 
 ====================================================================== 
 
 ---------------------------------------------------------------------- 
- vapier - 07-19-06 17:06  
+ limey - 05-29-06 10:37  
 ---------------------------------------------------------------------- 
-should work fine with latest uclibc snapshot 
+Should be reproducable using the attached files:
+
+./awk -f script.awk input_newline.txt
+BEGIN
+matched
+END
+
+./awk -f script.awk input_no_newline.txt
+BEGIN
+matched
+
+
+The second with the no newline input does not produce END. 
+
+---------------------------------------------------------------------- 
+ limey - 05-29-06 10:42  
+---------------------------------------------------------------------- 
+And to show how calling/not calling next effects this:
+
+./awk -f script_no_next.awk input_no_newline.txt
+BEGIN
+matched
+END
+
+
+./awk -f script_no_next.awk input_newline.txt
+BEGIN
+matched
+END
+
+
+The END section gets called this time. 
+
+---------------------------------------------------------------------- 
+ vapier - 07-19-06 17:05  
+---------------------------------------------------------------------- 
+no idea what awk you're talking about, but assuming you're talking about
+busybox's awk, busybox-1.2.0's awk works just fine with your example
+scripts 
 
 Issue History 
 Date Modified   Username       Field                    Change               
 ====================================================================== 
-05-25-06 07:08  mastag         New Issue                                    
-05-25-06 07:08  mastag         Status                   new => assigned     
-05-25-06 07:08  mastag         Assigned To               => uClibc          
-07-19-06 17:06  vapier         Note Added: 0001540                          
-07-19-06 17:06  vapier         Status                   assigned => closed  
-07-19-06 17:06  vapier         Resolution               open => no change
-required
+05-29-06 10:27  limey          New Issue                                    
+05-29-06 10:27  limey          Status                   new => assigned     
+05-29-06 10:27  limey          Assigned To               => uClibc          
+05-29-06 10:37  limey          Note Added: 0001387                          
+05-29-06 10:38  limey          File Added: input_newline.txt                    
+05-29-06 10:38  limey          File Added: input_no_newline.txt                 
+  
+05-29-06 10:38  limey          File Added: script.awk                       
+05-29-06 10:41  limey          File Added: script_no_next.awk                   
+
+05-29-06 10:42  limey          Note Added: 0001388                          
+05-29-06 10:42  limey          Issue Monitored: limey                       
+07-19-06 17:05  vapier         Note Added: 0001539                          
+07-19-06 17:05  vapier         Status                   assigned => closed  
+07-19-06 17:05  vapier         Resolution               open => unable to
+reproduce
 02-12-07 05:44  vapier         Status                   closed => assigned  
 02-12-07 05:44  vapier         Assigned To              uClibc => buildroot 
 ======================================================================
