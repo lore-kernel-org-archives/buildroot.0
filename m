@@ -1,8 +1,7 @@
 From: bugs at busybox.net <bugs@busybox.net>
-Date: Mon, 12 Feb 2007 05:43:52 -0800
-Subject: [Buildroot] [buildroot 0000853]: acpid make fails (at least on x86
-	for i386 and arm)
-Message-ID: <8a39dc80f96465f5cf784b22a581c705@bugs.busybox.net>
+Date: Mon, 12 Feb 2007 05:43:54 -0800
+Subject: [Buildroot] [buildroot 0000471]: gdb 6.3 does not build on arm
+Message-ID: <a624da42a6aee6350f795813ad9eec45@bugs.busybox.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -12,62 +11,55 @@ To: buildroot@busybox.net
 
 The following issue has been ASSIGNED. 
 ====================================================================== 
-http://busybox.net/bugs/view.php?id=853 
+http://busybox.net/bugs/view.php?id=471 
 ====================================================================== 
-Reported By:                nils
+Reported By:                bjdooks
 Assigned To:                buildroot
 ====================================================================== 
 Project:                    buildroot
-Issue ID:                   853
-Category:                   Other
+Issue ID:                   471
+Category:                   Architecture Specific
 Reproducibility:            always
 Severity:                   minor
 Priority:                   normal
 Status:                     assigned
 ====================================================================== 
-Date Submitted:             04-26-2006 08:00 PDT
+Date Submitted:             10-05-2005 13:29 PDT
 Last Modified:              02-12-2007 05:43 PST
 ====================================================================== 
-Summary:                    acpid make fails (at least on x86 for i386 and arm)
+Summary:                    gdb 6.3 does not build on arm
 Description: 
-make[1]: Entering directory
-`/home/nils/workspace/rootfs/cmx/build/acpid-1.0.4'
-arm-linux-gcc -Wall -Werror -g -DVERSION="\"1.0.4\""   -c -o acpid.o
-acpid.c
-arm-linux-gcc -Wall -Werror -g -DVERSION="\"1.0.4\""   -c -o event.o
-event.c
-arm-linux-gcc -Wall -Werror -g -DVERSION="\"1.0.4\""   -c -o ud_socket.o
-ud_socket.c
-cc1: warnings being treated as errors
-ud_socket.c: In function 'ud_accept':
-ud_socket.c:63: warning: pointer targets in passing argument 3 of 'accept'
-differ in signedness
-ud_socket.c:74: warning: pointer targets in passing argument 5 of
-'getsockopt' differ in signedness
-make[1]: *** [ud_socket.o] Error 1
-make[1]: Leaving directory
-`/home/nils/workspace/rootfs/cmx/build/acpid-1.0.4'
+GDB 6.3 does not currently build on ARM with compiler gcc 3.4.2
+due to casting problems in iwmmx.c. 6.2.1 builds fine.
+
+Possibly do not offer 6.3 as default on ARM?
+
 ====================================================================== 
 
 ---------------------------------------------------------------------- 
- bernhardf - 11-29-06 05:09  
+ psm - 10-05-05 13:49  
 ---------------------------------------------------------------------- 
-I think this was fixed in r16712.
-Thanks for the report.
+not a good idea, it builds w/ gcc-3.4.4 
 
-PS: please send a small note to the mailing-list if it is not fixed now. 
+---------------------------------------------------------------------- 
+ bjdooks - 10-05-05 14:28  
+---------------------------------------------------------------------- 
+Sorry, mis-read the compilation, and realised that it
+was a problem with the host machine's last debian
+upgrade taking the host compiler to 4.0.1, which was
+causing gdb 6.3 to fail when building the local client. 
 
 Issue History 
 Date Modified   Username       Field                    Change               
 ====================================================================== 
-04-26-06 08:00  nils           New Issue                                    
-04-26-06 08:00  nils           Status                   new => assigned     
-04-26-06 08:00  nils           Assigned To               => uClibc          
-04-26-06 08:00  nils           File Added: acpid-werror.patch                   
-
-11-29-06 05:09  bernhardf      Status                   assigned => closed  
-11-29-06 05:09  bernhardf      Note Added: 0001833                          
-11-29-06 05:09  bernhardf      Resolution               open => fixed       
+10-05-05 13:29  bjdooks        New Issue                                    
+10-05-05 13:29  bjdooks        Status                   new => assigned     
+10-05-05 13:29  bjdooks        Assigned To               => uClibc          
+10-05-05 13:49  psm            Note Added: 0000600                          
+10-05-05 14:28  bjdooks        Note Added: 0000603                          
+11-29-06 05:06  bernhardf      Status                   assigned => closed  
+11-29-06 05:06  bernhardf      Resolution               open => no change
+required
 02-12-07 05:43  vapier         Status                   closed => assigned  
 02-12-07 05:43  vapier         Assigned To              uClibc => buildroot 
 ======================================================================
