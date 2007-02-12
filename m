@@ -1,8 +1,7 @@
 From: bugs at busybox.net <bugs@busybox.net>
 Date: Mon, 12 Feb 2007 05:50:08 -0800
-Subject: [Buildroot] [buildroot 0000445]: [patch openntpd] Fix build,
-	add init script
-Message-ID: <fa60c5b1f395490b454885ffcf27376d@bugs.busybox.net>
+Subject: [Buildroot] [buildroot 0000400]: Update to tcpdump package
+Message-ID: <836ba609620a8dc3637a7052e54f33df@bugs.busybox.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -12,42 +11,48 @@ To: buildroot@busybox.net
 
 The following issue has been ASSIGNED. 
 ====================================================================== 
-http://busybox.net/bugs/view.php?id=445 
+http://busybox.net/bugs/view.php?id=400 
 ====================================================================== 
-Reported By:                ktraum
+Reported By:                daisuke
 Assigned To:                buildroot
 ====================================================================== 
 Project:                    buildroot
-Issue ID:                   445
+Issue ID:                   400
 Category:                   Other
-Reproducibility:            N/A
+Reproducibility:            always
 Severity:                   minor
 Priority:                   normal
 Status:                     assigned
 ====================================================================== 
-Date Submitted:             09-26-2005 01:03 PDT
+Date Submitted:             08-23-2005 05:47 PDT
 Last Modified:              02-12-2007 05:50 PST
 ====================================================================== 
-Summary:                    [patch openntpd] Fix build, add init script
+Summary:                    Update to tcpdump package
 Description: 
-Fix build to use user "daemon" as privsep user (uses _ntp by default, which
-doesn't exist).
+This patch updates the tcpdump package to build version 3.9.3, and the 
+dhcpdump to build version 1.7. This patch need the libpcap 0.9.3 patch by
+ID 0000399.
 
-Point "OPENNTPD_TARGET_BINARY" to real target binary, so install runs only
-once.
+This patch was created against buildroot-20050823 snapshot.
 
-Add init script.
-
-Patch attached.
 ====================================================================== 
+
+---------------------------------------------------------------------- 
+ vapier - 09-23-05 22:41  
+---------------------------------------------------------------------- 
+thanks, now in svn 
 
 Issue History 
 Date Modified   Username       Field                    Change               
 ====================================================================== 
-09-26-05 01:03  ktraum         New Issue                                    
-09-26-05 01:03  ktraum         Status                   new => assigned     
-09-26-05 01:03  ktraum         Assigned To               => uClibc          
-09-26-05 01:03  ktraum         File Added: openntpd.patch                    
-09-26-05 05:23  ktraum         Issue Monitored: ktraum                      
+08-23-05 05:47  daisuke        New Issue                                    
+08-23-05 05:47  daisuke        Status                   new => assigned     
+08-23-05 05:47  daisuke        Assigned To               => uClibc          
+08-23-05 05:47  daisuke        File Added: tcpdump.patch                    
+09-06-05 01:33  martin         Issue Monitored: martin                      
+09-23-05 22:41  vapier         Note Added: 0000572                          
+09-23-05 22:41  vapier         Status                   assigned => closed  
+09-23-05 22:41  vapier         Resolution               open => fixed       
+02-12-07 05:50  vapier         Status                   closed => assigned  
 02-12-07 05:50  vapier         Assigned To              uClibc => buildroot 
 ======================================================================
