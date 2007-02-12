@@ -1,8 +1,8 @@
 From: bugs at busybox.net <bugs@busybox.net>
-Date: Mon, 12 Feb 2007 05:43:26 -0800
-Subject: [Buildroot] [buildroot 0000724]: dialog package in 20060217
-	snapshot doesn't build
-Message-ID: <ae11a0ca92601d45283ce69c376f6d78@bugs.busybox.net>
+Date: Mon, 12 Feb 2007 05:43:28 -0800
+Subject: [Buildroot] [buildroot 0000522]: busybox doesn't contain a udhcp
+	script
+Message-ID: <207621153a0b9e5df7d06e836b2a77fb@bugs.busybox.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -12,48 +12,47 @@ To: buildroot@busybox.net
 
 The following issue has been ASSIGNED. 
 ====================================================================== 
-http://busybox.net/bugs/view.php?id=724 
+http://busybox.net/bugs/view.php?id=522 
 ====================================================================== 
-Reported By:                sblaisot
+Reported By:                akvadrako
 Assigned To:                buildroot
 ====================================================================== 
 Project:                    buildroot
-Issue ID:                   724
-Category:                   Architecture Specific
+Issue ID:                   522
+Category:                   Other
 Reproducibility:            always
 Severity:                   minor
 Priority:                   normal
 Status:                     assigned
 ====================================================================== 
-Date Submitted:             02-17-2006 03:14 PST
+Date Submitted:             10-28-2005 10:02 PDT
 Last Modified:              02-12-2007 05:43 PST
 ====================================================================== 
-Summary:                    dialog package in 20060217 snapshot doesn't build
+Summary:                    busybox doesn't contain a udhcp script
 Description: 
-the dialog package, even if selected during configuration, doesn't build
-properly and doesn't appear in the target.
-
-make dialog, just after the make command, solves the problem. Looks like
-the "dialog" target is not added even if the package was selected.
-
-below is a proposed patch
+udhcp requires a script installed in /usr/share/udhcp/default, but busybox
+doesn't come with one.  This installs a good sample script there if
+busybox builds the udhcp binary.  Perhaps this belongs in busybox instead,
+though it borders on something distribution specific.
 ====================================================================== 
 
 ---------------------------------------------------------------------- 
- bernhardf - 12-22-06 05:38  
+ bernhardf - 12-22-06 04:39  
 ---------------------------------------------------------------------- 
-Fixed in r17052. Thanks for pointing this out. 
+This works in current svn (r17050, currently) with busybox-1.2.2.1 and
+busybox-trunk. 
 
 Issue History 
 Date Modified   Username       Field                    Change               
 ====================================================================== 
-02-17-06 03:14  sblaisot       New Issue                                    
-02-17-06 03:14  sblaisot       Status                   new => assigned     
-02-17-06 03:14  sblaisot       Assigned To               => uClibc          
-02-17-06 03:15  sblaisot       Issue Monitored: sblaisot                    
-12-22-06 05:38  bernhardf      Status                   assigned => closed  
-12-22-06 05:38  bernhardf      Note Added: 0001923                          
-12-22-06 05:38  bernhardf      Resolution               open => fixed       
+10-28-05 10:02  akvadrako      New Issue                                    
+10-28-05 10:02  akvadrako      Status                   new => assigned     
+10-28-05 10:02  akvadrako      Assigned To               => uClibc          
+10-28-05 10:02  akvadrako      File Added: br-busybox-udhcp.patch               
+    
+12-22-06 04:39  bernhardf      Status                   assigned => closed  
+12-22-06 04:39  bernhardf      Note Added: 0001918                          
+12-22-06 04:39  bernhardf      Resolution               open => fixed       
 02-12-07 05:43  vapier         Status                   closed => assigned  
 02-12-07 05:43  vapier         Assigned To              uClibc => buildroot 
 ======================================================================
