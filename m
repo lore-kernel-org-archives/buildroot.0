@@ -1,7 +1,8 @@
 From: bugs at busybox.net <bugs@busybox.net>
-Date: Mon, 12 Feb 2007 05:29:09 -0800
-Subject: [Buildroot] [BusyBox Bug and Patch Tracking] Account registration
-Message-ID: <d235cab3e54873273a66204c4f69234c@bugs.busybox.net>
+Date: Mon, 12 Feb 2007 05:33:10 -0800
+Subject: [Buildroot] [buildroot 0001209]: uClibc won't build when
+	GREP_OPTIONS is set
+Message-ID: <899d5016597756f15ed48598df7eab1b@bugs.busybox.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -9,14 +10,42 @@ Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
 
-Thank you for registering. You have account with username 'buildroot'. In order
-to complete your registration, visit the following URL (make sure it is entered
-as the single line) and set your own access password: 
+The following issue has been ASSIGNED. 
+====================================================================== 
+http://busybox.net/bugs/view.php?id=1209 
+====================================================================== 
+Reported By:                bagland
+Assigned To:                buildroot
+====================================================================== 
+Project:                    buildroot
+Issue ID:                   1209
+Category:                   Architecture Specific
+Reproducibility:            always
+Severity:                   minor
+Priority:                   normal
+Status:                     assigned
+====================================================================== 
+Date Submitted:             02-12-2007 05:12 PST
+Last Modified:              02-12-2007 05:33 PST
+====================================================================== 
+Summary:                    uClibc won't build when GREP_OPTIONS is set
+Description: 
+If the environment variable GREP_OPTIONS contains -n, uClibc won't build
+because of this line:  TARGET_ARCH:=$(shell grep -s ^TARGET_ARCH
+$(TOPDIR)/.config | sed -e 's/^TARGET_ARCH=//' -e 's/"//g') in
+uClibc/Rules.mk.
+TARGET_ARCH becomes "30:arm", which leads to problems while running
+fix_includes.sh.
+The attached patch test for GREP_OPTIONS at the beginning of the build.
+====================================================================== 
 
-http://busybox.net/bugs/verify.php?id=1074&confirm_hash=561d971fc53226d451169f6338249fa9
+Issue History 
+Date Modified   Username       Field                    Change               
+====================================================================== 
+02-12-07 05:12  bagland        New Issue                                    
+02-12-07 05:12  bagland        Status                   new => assigned     
+02-12-07 05:12  bagland        Assigned To               => uClibc          
+02-12-07 05:12  bagland        File Added: grep_options.patch                   
 
-
-If you didn't request any registration, ignore this message and nothing will
-happen.
-
-DO NOT REPLY TO THIS MESSAGE
+02-12-07 05:33  vapier         Assigned To              uClibc => buildroot 
+======================================================================
