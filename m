@@ -1,7 +1,8 @@
 From: bugs at busybox.net <bugs@busybox.net>
-Date: Mon, 12 Feb 2007 05:49:24 -0800
-Subject: [Buildroot] [buildroot 0000646]: Buildroot can't download gcc
-Message-ID: <1d5495541f41b3b7c4e5dfe4e183c022@bugs.busybox.net>
+Date: Mon, 12 Feb 2007 05:49:26 -0800
+Subject: [Buildroot] [buildroot 0000532]: adds ARM variant support and
+	little/big endian support to config
+Message-ID: <edf8d8b92db7fdd41158414c4e51849f@bugs.busybox.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -11,56 +12,64 @@ To: buildroot@busybox.net
 
 The following issue has been ASSIGNED. 
 ====================================================================== 
-http://busybox.net/bugs/view.php?id=646 
+http://busybox.net/bugs/view.php?id=532 
 ====================================================================== 
-Reported By:                jslyster
+Reported By:                prpplague
 Assigned To:                buildroot
 ====================================================================== 
 Project:                    buildroot
-Issue ID:                   646
-Category:                   Other
-Reproducibility:            always
-Severity:                   major
+Issue ID:                   532
+Category:                   New Features
+Reproducibility:            N/A
+Severity:                   feature
 Priority:                   normal
 Status:                     assigned
 ====================================================================== 
-Date Submitted:             01-17-2006 07:45 PST
+Date Submitted:             11-04-2005 12:07 PST
 Last Modified:              02-12-2007 05:49 PST
 ====================================================================== 
-Summary:                    Buildroot can't download gcc
+Summary:                    adds ARM variant support and little/big endian
+support to config
 Description: 
-Buildroot cannot download gcc because the server at mirrors.rcn.net isn't
-up. mirrors.rcn.net hasn't been up for at least a week, and possibly much
-more time than that.
+this patch adds options to specify the arm variant and little endian
+configurations.
 ====================================================================== 
 
 ---------------------------------------------------------------------- 
- scott - 01-18-06 08:17  
+ vapier - 11-04-05 12:14  
 ---------------------------------------------------------------------- 
-This is what we are now using....
-
-#GCC_SITE:=ftp://ftp.gnu.org/gnu/gcc/releases/gcc-$(GCC_VERSION)
-#GCC_SITE:=http://mirrors.rcn.net/pub/sourceware/gcc/releases/gcc-$(GCC_VERSION)
-GCC_SITE:=ftp://mirrors.laffeycomputer.com/pub/gcc.gnu.org/pub/gcc/releases/gcc-$(GCC_VERSION)
-
+adding an option for selection endian doesnt make any sense, that's the
+entire point of making people select 'arm' or 'armeb' 
 
 ---------------------------------------------------------------------- 
- prpplague - 01-19-06 07:08  
+ prpplague - 11-04-05 12:20  
 ---------------------------------------------------------------------- 
-GCC_SITE:=ftp://ftp.ibiblio.org/pub/mirrors/gnu/ftp/gnu/gcc/gcc-$(GCC_VERSION)
+changed the arm_generic to generic_arm to match naming inside uClibc 
 
-was fixed with 13394 
+---------------------------------------------------------------------- 
+ prpplague - 11-04-05 12:42  
+---------------------------------------------------------------------- 
+per vapier i've changed the little/big endian support to be selected via
+the arm/armeb arch selection. i've also made the endianesse setting in
+uClibc not arm specific and across all archs 
 
 Issue History 
 Date Modified   Username       Field                    Change               
 ====================================================================== 
-01-17-06 07:45  jslyster       New Issue                                    
-01-17-06 07:45  jslyster       Status                   new => assigned     
-01-17-06 07:45  jslyster       Assigned To               => uClibc          
-01-18-06 08:17  scott          Note Added: 0000946                          
-01-19-06 07:08  prpplague      Note Added: 0000954                          
-01-19-06 07:08  prpplague      Status                   assigned => closed  
-01-19-06 07:08  prpplague      Resolution               open => fixed       
+11-04-05 12:07  prpplague      New Issue                                    
+11-04-05 12:07  prpplague      Status                   new => assigned     
+11-04-05 12:07  prpplague      Assigned To               => uClibc          
+11-04-05 12:07  prpplague      File Added: patch-buildroot-subarm               
+    
+11-04-05 12:14  vapier         Note Added: 0000661                          
+11-04-05 12:19  prpplague      File Added: patch-buildroot-subarm-v2            
+       
+11-04-05 12:20  prpplague      Note Added: 0000662                          
+11-04-05 12:41  prpplague      File Added: patch-buildroot-subarm-v3            
+       
+11-04-05 12:42  prpplague      Note Added: 0000663                          
+01-19-06 07:04  prpplague      Status                   assigned => closed  
+01-19-06 07:04  prpplague      Resolution               open => fixed       
 02-12-07 05:49  vapier         Status                   closed => assigned  
 02-12-07 05:49  vapier         Assigned To              uClibc => buildroot 
 ======================================================================
