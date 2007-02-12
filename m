@@ -1,8 +1,8 @@
 From: bugs at busybox.net <bugs@busybox.net>
-Date: Mon, 12 Feb 2007 05:43:36 -0800
-Subject: [Buildroot] [buildroot 0000926]: lvm2 fails to install (DESTDIR
-	issues)
-Message-ID: <900aaaa00a1bed7110fac319780b223d@bugs.busybox.net>
+Date: Mon, 12 Feb 2007 05:43:37 -0800
+Subject: [Buildroot] [buildroot 0000896]: buildroot download path for
+	asterisk
+Message-ID: <eed8a8050636d76ef1c69a6854dfb68c@bugs.busybox.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -12,53 +12,50 @@ To: buildroot@busybox.net
 
 The following issue has been ASSIGNED. 
 ====================================================================== 
-http://busybox.net/bugs/view.php?id=926 
+http://busybox.net/bugs/view.php?id=896 
 ====================================================================== 
-Reported By:                redhatter
+Reported By:                bt
 Assigned To:                buildroot
 ====================================================================== 
 Project:                    buildroot
-Issue ID:                   926
+Issue ID:                   896
 Category:                   Other
 Reproducibility:            always
-Severity:                   minor
+Severity:                   trivial
 Priority:                   normal
 Status:                     assigned
 ====================================================================== 
-Date Submitted:             06-27-2006 03:59 PDT
+Date Submitted:             06-05-2006 14:06 PDT
 Last Modified:              02-12-2007 05:43 PST
 ====================================================================== 
-Summary:                    lvm2 fails to install (DESTDIR issues)
+Summary:                    buildroot download path for asterisk
 Description: 
-When running the `make install` stage of the LVM2 build, the install
-scripts attempt to write to /etc/lvm (instead of
-/path/to/staging_dir/etc/lvm), yeilding a "permission denied" when run as
-a non-root user.  The supplied patch fixes this issue.
+Download path for asterisks has changed.
+Buildroot uses Version 1.2.0-beta1 which can now be found in the directory
+old-releases. I attach a patch to fix that.
+(Actually I would prefer to use a newer version of Asterisk, but it does
+not compile ...)
 ====================================================================== 
 
 ---------------------------------------------------------------------- 
- redhatter - 06-27-06 04:01  
+ bernhardf - 12-14-06 07:26  
 ---------------------------------------------------------------------- 
-Hrmm, this seems to have wound up in the uClibc bug list... (I *swear* I
-clicked Busybox)... if it's out of place, I appologise. 
+Fixed in r16924.
 
----------------------------------------------------------------------- 
- bernhardf - 12-21-06 03:57  
----------------------------------------------------------------------- 
-Fixed in r17026. Thanks! 
+Thanks! 
 
 Issue History 
 Date Modified   Username       Field                    Change               
 ====================================================================== 
-06-27-06 03:59  redhatter      New Issue                                    
-06-27-06 03:59  redhatter      Status                   new => assigned     
-06-27-06 03:59  redhatter      Assigned To               => uClibc          
-06-27-06 04:00  redhatter      File Added: buildroot-lvm2-fix.diff              
-     
-06-27-06 04:01  redhatter      Note Added: 0001458                          
-12-21-06 03:57  bernhardf      Status                   assigned => closed  
-12-21-06 03:57  bernhardf      Note Added: 0001902                          
-12-21-06 03:57  bernhardf      Resolution               open => fixed       
+06-05-06 14:06  bt             New Issue                                    
+06-05-06 14:06  bt             Status                   new => assigned     
+06-05-06 14:06  bt             Assigned To               => uClibc          
+06-05-06 14:06  bt             File Added: change-asterisk-download-path.patch  
+                 
+06-05-06 14:16  bt             Issue Monitored: bt                          
+12-14-06 07:26  bernhardf      Status                   assigned => closed  
+12-14-06 07:26  bernhardf      Note Added: 0001861                          
+12-14-06 07:26  bernhardf      Resolution               open => fixed       
 02-12-07 05:43  vapier         Status                   closed => assigned  
 02-12-07 05:43  vapier         Assigned To              uClibc => buildroot 
 ======================================================================
