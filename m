@@ -1,7 +1,7 @@
 From: bugs at busybox.net <bugs@busybox.net>
 Date: Mon, 12 Feb 2007 05:42:36 -0800
-Subject: [Buildroot] [buildroot 0001188]: samba package build sometimes fails
-Message-ID: <76bbc5b9d0550b49d0fab87e19782fa0@bugs.busybox.net>
+Subject: [Buildroot] [buildroot 0000803]: Buildroot stops
+Message-ID: <7e1f618444662f8576acce025342f96e@bugs.busybox.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -11,54 +11,125 @@ To: buildroot@busybox.net
 
 The following issue has been ASSIGNED. 
 ====================================================================== 
-http://busybox.net/bugs/view.php?id=1188 
+http://busybox.net/bugs/view.php?id=803 
 ====================================================================== 
-Reported By:                janlana
+Reported By:                Zhukov
 Assigned To:                buildroot
 ====================================================================== 
 Project:                    buildroot
-Issue ID:                   1188
-Category:                   Other
-Reproducibility:            sometimes
-Severity:                   minor
+Issue ID:                   803
+Category:                   Architecture Specific
+Reproducibility:            always
+Severity:                   block
 Priority:                   normal
 Status:                     assigned
 ====================================================================== 
-Date Submitted:             01-31-2007 05:06 PST
+Date Submitted:             03-28-2006 02:51 PST
 Last Modified:              02-12-2007 05:42 PST
 ====================================================================== 
-Summary:                    samba package build sometimes fails
+Summary:                    Buildroot stops
 Description: 
-because a error in samba makefile the make -j... sometimes fails because
-include/proto.h is not generated yet. 
+Buildroot (version ~ march 20-24), configured for arm920t stops: the reason
+is some little-big endian incompatibility. 
+Notes:
+1. Make 3.80 used. 
+2. I don't change anything about endians (little endian set by default).
 
-It happens in http://busybox.net/bugs/view.php?id=118#50% with -j3 on my
-computer. 
+...
 
-Suggested fix: change $(MAKE) to $(MAKE1) in samba.mk
+  LD libuClibc-0.9.28.so
+/home/andrew/BusyBox_uClibc/buildroot/build_arm/staging_dir/bin/arm-linux-uclibc-ld:
+/home/andrew/BusyBox_uClibc/buildroot/build_arm/staging_dir/lib/gcc/arm-linux-uclibc/3.4.2/libgcc.a(_udivsi3.o):
+compiled for a little endian system and target is big endian
+/home/andrew/BusyBox_uClibc/buildroot/build_arm/staging_dir/bin/arm-linux-uclibc-ld:
+failed to merge target specific data of file
+/home/andrew/BusyBox_uClibc/buildroot/build_arm/staging_dir/lib/gcc/arm-linux-uclibc/3.4.2/libgcc.a(_udivsi3.o)
+/home/andrew/BusyBox_uClibc/buildroot/build_arm/staging_dir/bin/arm-linux-uclibc-ld:
+/home/andrew/BusyBox_uClibc/buildroot/build_arm/staging_dir/lib/gcc/arm-linux-uclibc/3.4.2/libgcc.a(_divsi3.o):
+compiled for a little endian system and target is big endian
+/home/andrew/BusyBox_uClibc/buildroot/build_arm/staging_dir/bin/arm-linux-uclibc-ld:
+failed to merge target specific data of file
+/home/andrew/BusyBox_uClibc/buildroot/build_arm/staging_dir/lib/gcc/arm-linux-uclibc/3.4.2/libgcc.a(_divsi3.o)
+/home/andrew/BusyBox_uClibc/buildroot/build_arm/staging_dir/bin/arm-linux-uclibc-ld:
+/home/andrew/BusyBox_uClibc/buildroot/build_arm/staging_dir/lib/gcc/arm-linux-uclibc/3.4.2/libgcc.a(_umodsi3.o):
+compiled for a little endian system and target is big endian
+/home/andrew/BusyBox_uClibc/buildroot/build_arm/staging_dir/bin/arm-linux-uclibc-ld:
+failed to merge target specific data of file
+/home/andrew/BusyBox_uClibc/buildroot/build_arm/staging_dir/lib/gcc/arm-linux-uclibc/3.4.2/libgcc.a(_umodsi3.o)
+/home/andrew/BusyBox_uClibc/buildroot/build_arm/staging_dir/bin/arm-linux-uclibc-ld:
+/home/andrew/BusyBox_uClibc/buildroot/build_arm/staging_dir/lib/gcc/arm-linux-uclibc/3.4.2/libgcc.a(_modsi3.o):
+compiled for a little endian system and target is big endian
+/home/andrew/BusyBox_uClibc/buildroot/build_arm/staging_dir/bin/arm-linux-uclibc-ld:
+failed to merge target specific data of file
+/home/andrew/BusyBox_uClibc/buildroot/build_arm/staging_dir/lib/gcc/arm-linux-uclibc/3.4.2/libgcc.a(_modsi3.o)
+/home/andrew/BusyBox_uClibc/buildroot/build_arm/staging_dir/bin/arm-linux-uclibc-ld:
+/home/andrew/BusyBox_uClibc/buildroot/build_arm/staging_dir/lib/gcc/arm-linux-uclibc/3.4.2/libgcc.a(_dvmd_lnx.o):
+compiled for a little endian system and target is big endian
+/home/andrew/BusyBox_uClibc/buildroot/build_arm/staging_dir/bin/arm-linux-uclibc-ld:
+failed to merge target specific data of file
+/home/andrew/BusyBox_uClibc/buildroot/build_arm/staging_dir/lib/gcc/arm-linux-uclibc/3.4.2/libgcc.a(_dvmd_lnx.o)
+/home/andrew/BusyBox_uClibc/buildroot/build_arm/staging_dir/bin/arm-linux-uclibc-ld:
+/home/andrew/BusyBox_uClibc/buildroot/build_arm/staging_dir/lib/gcc/arm-linux-uclibc/3.4.2/libgcc.a(_divdi3.o):
+compiled for a little endian system and target is big endian
+/home/andrew/BusyBox_uClibc/buildroot/build_arm/staging_dir/bin/arm-linux-uclibc-ld:
+failed to merge target specific data of file
+/home/andrew/BusyBox_uClibc/buildroot/build_arm/staging_dir/lib/gcc/arm-linux-uclibc/3.4.2/libgcc.a(_divdi3.o)
+/home/andrew/BusyBox_uClibc/buildroot/build_arm/staging_dir/bin/arm-linux-uclibc-ld:
+/home/andrew/BusyBox_uClibc/buildroot/build_arm/staging_dir/lib/gcc/arm-linux-uclibc/3.4.2/libgcc.a(_moddi3.o):
+compiled for a little endian system and target is big endian
+/home/andrew/BusyBox_uClibc/buildroot/build_arm/staging_dir/bin/arm-linux-uclibc-ld:
+failed to merge target specific data of file
+/home/andrew/BusyBox_uClibc/buildroot/build_arm/staging_dir/lib/gcc/arm-linux-uclibc/3.4.2/libgcc.a(_moddi3.o)
+/home/andrew/BusyBox_uClibc/buildroot/build_arm/staging_dir/bin/arm-linux-uclibc-ld:
+/home/andrew/BusyBox_uClibc/buildroot/build_arm/staging_dir/lib/gcc/arm-linux-uclibc/3.4.2/libgcc.a(_clz.o):
+compiled for a little endian system and target is big endian
+/home/andrew/BusyBox_uClibc/buildroot/build_arm/staging_dir/bin/arm-linux-uclibc-ld:
+failed to merge target specific data of file
+/home/andrew/BusyBox_uClibc/buildroot/build_arm/staging_dir/lib/gcc/arm-linux-uclibc/3.4.2/libgcc.a(_clz.o)
+/home/andrew/BusyBox_uClibc/buildroot/build_arm/staging_dir/bin/arm-linux-uclibc-ld:
+BFD 2.16.1 assertion fail
+/home/andrew/BusyBox_uClibc/buildroot/toolchain_build_arm/binutils-2.16.1/bfd/elf32-arm.c:2890
+/home/andrew/BusyBox_uClibc/buildroot/build_arm/staging_dir/bin/arm-linux-uclibc-ld:
+BFD 2.16.1 assertion fail
+/home/andrew/BusyBox_uClibc/buildroot/toolchain_build_arm/binutils-2.16.1/bfd/elf32-arm.c:2890
+make[2]: *** [lib/libc.so] Error 1
+make[1]: *** [lib/libc.so.0] Error 2
+make[1]: Leaving directory
+`/home/andrew/BusyBox_uClibc/buildroot/toolchain_build_arm/uClibc'
+make: ***
+[/home/andrew/BusyBox_uClibc/buildroot/toolchain_build_arm/uClibc/lib/libc.a]
+Error 2
+
 ====================================================================== 
 
 ---------------------------------------------------------------------- 
- janlana - 02-02-07 01:13  
+ bernhardf - 12-01-06 09:59  
 ---------------------------------------------------------------------- 
-it looks that just $(MAKE1) does not solve the problem. Suggest to close
-the bug for now. I will submit new issue when I find a fix. 
+I think that this is fixed with current buildroot and current
+uClibc-snapshot.
+I shall close this report unless i hear that there are any current
+failures in this respect withing two weeks.
+
+thanks, 
 
 ---------------------------------------------------------------------- 
- bernhardf - 02-04-07 09:15  
+ bernhardf - 02-04-07 09:13  
 ---------------------------------------------------------------------- 
-Closed upon reporters request. 
+Fixed. 
 
 Issue History 
 Date Modified   Username       Field                    Change               
 ====================================================================== 
-01-31-07 05:06  janlana        New Issue                                    
-01-31-07 05:06  janlana        Status                   new => assigned     
-01-31-07 05:06  janlana        Assigned To               => uClibc          
-02-02-07 01:13  janlana        Note Added: 0002086                          
-02-04-07 09:15  bernhardf      Status                   assigned => closed  
-02-04-07 09:15  bernhardf      Note Added: 0002109                          
-02-04-07 09:15  bernhardf      Resolution               open => fixed       
+03-28-06 02:51  Zhukov         New Issue                                    
+03-28-06 02:51  Zhukov         Status                   new => assigned     
+03-28-06 02:51  Zhukov         Assigned To               => uClibc          
+03-28-06 02:51  Zhukov         File Added: .config                          
+06-01-06 20:51  KsenZ          Issue Monitored: KsenZ                       
+12-01-06 09:59  bernhardf      Note Added: 0001848                          
+12-01-06 10:07  bernhardf      Status                   assigned => feedback
+02-04-07 09:13  bernhardf      Status                   feedback => closed  
+02-04-07 09:13  bernhardf      Note Added: 0002108                          
+02-04-07 09:13  bernhardf      Resolution               open => fixed       
 02-12-07 05:42  vapier         Status                   closed => assigned  
 02-12-07 05:42  vapier         Assigned To              uClibc => buildroot 
 ======================================================================
