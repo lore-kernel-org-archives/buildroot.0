@@ -1,8 +1,8 @@
 From: bugs at busybox.net <bugs@busybox.net>
-Date: Mon, 12 Feb 2007 05:49:54 -0800
-Subject: [Buildroot] [buildroot 0000536]: Selecting busybox in buildroot's
-	config clobbers ar (and probably other binutils)
-Message-ID: <acf0abd607a7acfec35b3c04968f4c2e@bugs.busybox.net>
+Date: Mon, 12 Feb 2007 05:49:55 -0800
+Subject: [Buildroot] [buildroot 0000514]: generic target device table: add
+	/dev/udb[ab]
+Message-ID: <3570236fe247d7087947f8c7d12496c9@bugs.busybox.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -12,73 +12,48 @@ To: buildroot@busybox.net
 
 The following issue has been ASSIGNED. 
 ====================================================================== 
-http://busybox.net/bugs/view.php?id=536 
+http://busybox.net/bugs/view.php?id=514 
 ====================================================================== 
-Reported By:                alemc
+Reported By:                akvadrako
 Assigned To:                buildroot
 ====================================================================== 
 Project:                    buildroot
-Issue ID:                   536
-Category:                   Architecture Specific
-Reproducibility:            have not tried
-Severity:                   minor
+Issue ID:                   514
+Category:                   Other
+Reproducibility:            N/A
+Severity:                   tweak
 Priority:                   normal
 Status:                     assigned
 ====================================================================== 
-Date Submitted:             11-07-2005 17:35 PST
+Date Submitted:             10-28-2005 09:36 PDT
 Last Modified:              02-12-2007 05:49 PST
 ====================================================================== 
-Summary:                    Selecting busybox in buildroot's config clobbers ar
-(and probably other binutils)
+Summary:                    generic target device table: add /dev/udb[ab]
 Description: 
-Using buildroot from 20051105 I run into a problem trying to compile apps
-in my target system due to the fact that busybox's mini apps clobber the
-real binutils in buildroot.  This is most noticable with ar for which the
-busybox version cannot create archives as is necessary to compile many
-apps/tools.
+As long as buildroot as the philosophy of including any device under the
+sun, these are truly useful.
 ====================================================================== 
 
 ---------------------------------------------------------------------- 
- vapier - 11-07-05 18:38  
+ vapier - 10-28-05 23:49  
 ---------------------------------------------------------------------- 
-this was disabled a while ago:
-$ grep _AR package/busybox/busybox.config
-# CONFIG_AR is not set 
+we comment all the devices under the sun, but we dont enable them by
+default
 
----------------------------------------------------------------------- 
- alemc - 11-09-05 13:58  
----------------------------------------------------------------------- 
-I forget to mention that I was using a custom busybox config.  It would be
-nice (wishlist) if there were and option to build but not install busybox,
-but not to create it's links.  Or perhaps when changing the busybox config
-path if there were a message warning about this problem. 
-
----------------------------------------------------------------------- 
- vapier - 11-09-05 18:59  
----------------------------------------------------------------------- 
-if you're using a custom config then it's your own fault you enabled the ar
-util
-
-i will add an option to control whether or not to generate symlinks though
-as i would find that a useful option myself ;) 
+udb is already in there and commented so anyone who wants to use it can
+just uncomment the lines 
 
 Issue History 
 Date Modified   Username       Field                    Change               
 ====================================================================== 
-11-07-05 17:35  alemc          New Issue                                    
-11-07-05 17:35  alemc          Status                   new => assigned     
-11-07-05 17:35  alemc          Assigned To               => uClibc          
-11-07-05 18:38  vapier         Note Added: 0000672                          
-11-07-05 18:38  vapier         Status                   assigned => closed  
-11-07-05 18:38  vapier         Resolution               open => unable to
-reproduce
-11-09-05 13:58  alemc          Status                   closed => feedback  
-11-09-05 13:58  alemc          Resolution               unable to reproduce =>
-reopened
-11-09-05 13:58  alemc          Note Added: 0000674                          
-11-09-05 18:59  vapier         Note Added: 0000676                          
-11-09-05 18:59  vapier         Status                   feedback => closed  
-11-09-05 18:59  vapier         Resolution               reopened => fixed   
+10-28-05 09:36  akvadrako      New Issue                                    
+10-28-05 09:36  akvadrako      Status                   new => assigned     
+10-28-05 09:36  akvadrako      Assigned To               => uClibc          
+10-28-05 09:36  akvadrako      File Added: br-generic-devicetable-fixes.patch   
+                
+10-28-05 23:49  vapier         Note Added: 0000647                          
+10-28-05 23:49  vapier         Status                   assigned => closed  
+10-28-05 23:49  vapier         Resolution               open => won't fix   
 02-12-07 05:49  vapier         Status                   closed => assigned  
 02-12-07 05:49  vapier         Assigned To              uClibc => buildroot 
 ======================================================================
