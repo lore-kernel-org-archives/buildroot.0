@@ -1,35 +1,58 @@
-From: jacmet at uclibc.org <jacmet@uclibc.org>
-Date: Tue, 13 Feb 2007 06:00:52 -0800 (PST)
-Subject: [Buildroot] svn commit: trunk/buildroot/package/dialog
-Message-ID: <20070213140052.9AC3B485C4@busybox.net>
+From: bugs at busybox.net <bugs@busybox.net>
+Date: Tue, 13 Feb 2007 09:49:29 -0800
+Subject: [Buildroot] [buildroot 0001197]: UCLIBC_HAS_RPC should be part of
+	the default config
+Message-ID: <8af55025d6228f77ccfe0672ea877261@bugs.busybox.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Author: jacmet
-Date: 2007-02-13 06:00:49 -0800 (Tue, 13 Feb 2007)
-New Revision: 17874
 
-Log:
--2 patch no longer available. Patch by Stefan Feilmeier
+The following issue has been ASSIGNED. 
+====================================================================== 
+http://busybox.net/bugs/view.php?id=1197 
+====================================================================== 
+Reported By:                smithj
+Assigned To:                buildroot
+====================================================================== 
+Project:                    buildroot
+Issue ID:                   1197
+Category:                   Other
+Reproducibility:            always
+Severity:                   minor
+Priority:                   normal
+Status:                     assigned
+====================================================================== 
+Date Submitted:             02-05-2007 17:48 PST
+Last Modified:              02-13-2007 09:49 PST
+====================================================================== 
+Summary:                    UCLIBC_HAS_RPC should be part of the default config
+Description: 
+Busybox's default config should be buildable with uclibc's default config.
+Busybox's default has CONFIG_FEATURE_MOUNT_NFS=y, which requires
+UCLIBC_HAS_RPC=y. However, the default "defconfig" in uclibc has this
+feature undefined.
+====================================================================== 
 
-Modified:
-   trunk/buildroot/package/dialog/dialog.mk
+---------------------------------------------------------------------- 
+ smithj - 02-05-07 17:50  
+---------------------------------------------------------------------- 
+Sorry, obviously this is not arch-specific, but i can't seem to change it
+now... 
 
-
-Changeset:
-Modified: trunk/buildroot/package/dialog/dialog.mk
-===================================================================
---- trunk/buildroot/package/dialog/dialog.mk	2007-02-13 09:47:44 UTC (rev 17873)
-+++ trunk/buildroot/package/dialog/dialog.mk	2007-02-13 14:00:49 UTC (rev 17874)
-@@ -9,7 +9,7 @@
- DIALOG_SITE:=http://ftp.debian.org/debian/pool/main/d/dialog
- DIALOG_DIR:=$(BUILD_DIR)/dialog-$(DIALOG_VERSION)
- # http://ftp.debian.org/debian/pool/main/d/dialog/dialog_1.0-20050306-1.diff.gz
--DIALOG_PATCH1:=dialog_$(DIALOG_VERSION)-2.diff.gz
-+DIALOG_PATCH1:=dialog_$(DIALOG_VERSION)-3.diff.gz
- DIALOG_PATCH1_URL:=$(DIALOG_SITE)
- DIALOG_BINARY:=dialog
- DIALOG_TARGET_BINARY:=usr/bin/dialog
+Issue History 
+Date Modified   Username       Field                    Change               
+====================================================================== 
+02-05-07 17:48  smithj         New Issue                                    
+02-05-07 17:48  smithj         Status                   new => assigned     
+02-05-07 17:48  smithj         Assigned To               => uClibc          
+02-05-07 17:48  smithj         Issue Monitored: smithj                      
+02-05-07 17:50  smithj         Note Added: 0002123                          
+02-13-07 09:49  vapier         Project                  uClibc => buildroot 
+02-13-07 09:49  vapier         Assigned To              uClibc => buildroot 
+02-13-07 09:49  vapier         Category                 Architecture Specific =>
+Other
+02-13-07 09:49  vapier         version                  0.9.28 =>           
+======================================================================
