@@ -1,58 +1,40 @@
-From: bugs at busybox.net <bugs@busybox.net>
-Date: Tue, 13 Feb 2007 09:49:29 -0800
-Subject: [Buildroot] [buildroot 0001197]: UCLIBC_HAS_RPC should be part of
-	the default config
-Message-ID: <8af55025d6228f77ccfe0672ea877261@bugs.busybox.net>
+From: aldot at uclibc.org <aldot@uclibc.org>
+Date: Tue, 13 Feb 2007 10:56:55 -0800 (PST)
+Subject: [Buildroot] svn commit: trunk/buildroot/toolchain/gcc/4.1.2
+Message-ID: <20070213185655.40EDD485E5@busybox.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+Author: aldot
+Date: 2007-02-13 10:56:54 -0800 (Tue, 13 Feb 2007)
+New Revision: 17876
 
-The following issue has been ASSIGNED. 
-====================================================================== 
-http://busybox.net/bugs/view.php?id=1197 
-====================================================================== 
-Reported By:                smithj
-Assigned To:                buildroot
-====================================================================== 
-Project:                    buildroot
-Issue ID:                   1197
-Category:                   Other
-Reproducibility:            always
-Severity:                   minor
-Priority:                   normal
-Status:                     assigned
-====================================================================== 
-Date Submitted:             02-05-2007 17:48 PST
-Last Modified:              02-13-2007 09:49 PST
-====================================================================== 
-Summary:                    UCLIBC_HAS_RPC should be part of the default config
-Description: 
-Busybox's default config should be buildable with uclibc's default config.
-Busybox's default has CONFIG_FEATURE_MOUNT_NFS=y, which requires
-UCLIBC_HAS_RPC=y. However, the default "defconfig" in uclibc has this
-feature undefined.
-====================================================================== 
+Log:
+- backport fix for PR30620
 
----------------------------------------------------------------------- 
- smithj - 02-05-07 17:50  
----------------------------------------------------------------------- 
-Sorry, obviously this is not arch-specific, but i can't seem to change it
-now... 
 
-Issue History 
-Date Modified   Username       Field                    Change               
-====================================================================== 
-02-05-07 17:48  smithj         New Issue                                    
-02-05-07 17:48  smithj         Status                   new => assigned     
-02-05-07 17:48  smithj         Assigned To               => uClibc          
-02-05-07 17:48  smithj         Issue Monitored: smithj                      
-02-05-07 17:50  smithj         Note Added: 0002123                          
-02-13-07 09:49  vapier         Project                  uClibc => buildroot 
-02-13-07 09:49  vapier         Assigned To              uClibc => buildroot 
-02-13-07 09:49  vapier         Category                 Architecture Specific =>
-Other
-02-13-07 09:49  vapier         version                  0.9.28 =>           
-======================================================================
+Added:
+   trunk/buildroot/toolchain/gcc/4.1.2/402-libbackend_dep_gcov-iov.h.patch
+
+
+Changeset:
+Added: trunk/buildroot/toolchain/gcc/4.1.2/402-libbackend_dep_gcov-iov.h.patch
+===================================================================
+--- trunk/buildroot/toolchain/gcc/4.1.2/402-libbackend_dep_gcov-iov.h.patch	                        (rev 0)
++++ trunk/buildroot/toolchain/gcc/4.1.2/402-libbackend_dep_gcov-iov.h.patch	2007-02-13 18:56:54 UTC (rev 17876)
+@@ -0,0 +1,12 @@
++# gcc.gnu.org/PR30620
++--- gcc-4.1.2-20070208.orig/gcc/Makefile.in	2006-11-01 15:40:44.000000000 +0100
+++++ gcc-4.1.2-20070208/gcc/Makefile.in	2007-02-13 19:23:31.000000000 +0100
++@@ -2522,7 +2522,7 @@
++ # FIXME: writing proper dependencies for this is a *LOT* of work.
++ libbackend.o : $(OBJS-common:.o=.c) $(out_file) \
++   insn-config.h insn-flags.h insn-codes.h insn-constants.h \
++-  insn-attr.h  $(DATESTAMP) $(BASEVER) $(DEVPHASE)
+++  insn-attr.h  $(DATESTAMP) $(BASEVER) $(DEVPHASE) gcov-iov.h
++ 	$(CC) $(ALL_CFLAGS) $(ALL_CPPFLAGS) \
++ 	  -DTARGET_NAME=\"$(target_noncanonical)\" \
++ 	  -DLOCALEDIR=\"$(localedir)\" \
