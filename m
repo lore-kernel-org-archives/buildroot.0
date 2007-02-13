@@ -1,50 +1,21 @@
-From: bugs at busybox.net <bugs@busybox.net>
-Date: Mon, 12 Feb 2007 19:55:12 -0800
-Subject: [Buildroot] [buildroot 0001211]: PATCH: Incomplete configuration
-	for uClibc when locale support selected
-Message-ID: <c5ebecece9e87e58af40329e11b5815b@busybox.net>
+From: izak marais <izakmarais@yahoo.com>
+Date: Mon, 12 Feb 2007 23:53:05 -0800 (PST)
+Subject: [Buildroot] bugs at busybox.net
+Message-ID: <41213.34996.qm@web50909.mail.yahoo.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+Yes, I just joined the buildroot list yesterday and took the sudden deluge to imply new posts should be directed at the bugs at busybox list.
 
-The following issue has been SUBMITTED. 
-====================================================================== 
-http://busybox.net/bugs/view.php?id=1211 
-====================================================================== 
-Reported By:                foogod
-Assigned To:                buildroot
-====================================================================== 
-Project:                    buildroot
-Issue ID:                   1211
-Category:                   Other
-Reproducibility:            always
-Severity:                   minor
-Priority:                   normal
-Status:                     assigned
-====================================================================== 
-Date Submitted:             02-12-2007 19:55 PST
-Last Modified:              02-12-2007 19:55 PST
-====================================================================== 
-Summary:                    PATCH: Incomplete configuration for uClibc when
-locale support selected
-Description: 
-If the configuration option "Enable locale/gettext/i18n support?" is
-selected, the uClibc build scripts do not configure all of the necessary
-options for uClibc, resulting in the user being prompted for configuration
-during the compile.
+So if I am having problems with getting buildroot make to work and I am not certain that it is a bug, this is still the place to post? 
 
-The attached patch (against 17872) fixes this issue.
-====================================================================== 
-
-Issue History 
-Date Modified   Username       Field                    Change               
-====================================================================== 
-02-12-07 19:55  foogod         New Issue                                    
-02-12-07 19:55  foogod         Status                   new => assigned     
-02-12-07 19:55  foogod         Assigned To               => buildroot       
-02-12-07 19:55  foogod         File Added:
-buildroot.17872.uclibc_gettext_conf.patch                    
-======================================================================
+ 
+---------------------------------
+Finding fabulous fares is fun.
+Let Yahoo! FareChase search your favorite travel sites to find flight and hotel bargains.
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: http://busybox.net/lists/buildroot/attachments/20070212/f1ca72fd/attachment.html 
