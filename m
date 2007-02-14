@@ -1,7 +1,7 @@
 From: bugs at busybox.net <bugs@busybox.net>
-Date: Wed, 14 Feb 2007 09:30:16 -0800
+Date: Wed, 14 Feb 2007 15:22:27 -0800
 Subject: [Buildroot] [buildroot 0001114]: Cannot build ARM eabi toolchain
-Message-ID: <9061f5c432b8cb776c77ba3452d1f485@bugs.uclibc.org>
+Message-ID: <082cd4b8c12c7fe6a6d507d08bc31f3d@busybox.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -9,7 +9,7 @@ Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
 
-The following issue has been REOPENED. 
+The following issue has been CLOSED 
 ====================================================================== 
 http://busybox.net/bugs/view.php?id=1114 
 ====================================================================== 
@@ -22,10 +22,12 @@ Category:                   Architecture Specific
 Reproducibility:            always
 Severity:                   major
 Priority:                   normal
-Status:                     feedback
+Status:                     closed
+Resolution:                 reopened
+Fixed in Version:           
 ====================================================================== 
 Date Submitted:             12-13-2006 01:58 PST
-Last Modified:              02-14-2007 09:30 PST
+Last Modified:              02-14-2007 15:22 PST
 ====================================================================== 
 Summary:                    Cannot build ARM eabi toolchain
 Description: 
@@ -333,6 +335,23 @@ BR2_TARGET_ROOTFS_JFFS2_COPYTO=""
 
 << 
 
+---------------------------------------------------------------------- 
+ bernhardf - 02-14-07 15:22  
+---------------------------------------------------------------------- 
+Let me spell this out:
+
+- 3.4 is DEAD.
+- 4.1, which is the current stable release deals with this fine
+
+It will not be fixed for the long outdated and not maintained, deprecated
+version 3.4.x nor 4.0.x unless _you_ provide a working patch that _you_
+support for this alleged glitch.
+
+Put short, Not an issue since it works for current, _stable_ stuff.
+Not an issue since it works for current expreimental (new) toolchains.
+Will not fix for outdated, unmaintained, deprecated setups.
+Thanks for your understanding. 
+
 Issue History 
 Date Modified   Username       Field                    Change               
 ====================================================================== 
@@ -353,4 +372,6 @@ Date Modified   Username       Field                    Change
 02-14-07 09:30  mikewhit       Status                   closed => feedback  
 02-14-07 09:30  mikewhit       Resolution               fixed => reopened   
 02-14-07 09:30  mikewhit       Note Added: 0002162                          
+02-14-07 15:22  bernhardf      Status                   feedback => closed  
+02-14-07 15:22  bernhardf      Note Added: 0002164                          
 ======================================================================
