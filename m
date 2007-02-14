@@ -1,53 +1,51 @@
 From: <bogus@does.not.exist.com>
 Date: Wed, 14 Feb 2007 08:32:59 -0000
 Subject: No subject
-Message-ID: <mailman.2.1173341606.16065.buildroot@uclibc.org>
+Message-ID: <mailman.3.1174413754.16065.buildroot@uclibc.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-make[1]: Leaving directory `/tmp/buildroot/package/config'
-package/Config.in:33: can't open file "package/config/Config.in"
-make: *** [menuconfig] Error 1
+the build_i386/staging_dir. It seems to be creating a full usr/include,
+usr/lib, etc directory hierarchy under inside build_i386/staging_dir,
+rather than integrating with the include/lib/etc dirs that exist at the
+staging_dir level (ie. the installation of gettext files occurs at one
+level too deep)
 
-Adding Config.h fomr a cvs ckeckout fixed it.
+This means that libintl.h and the shared libraries aren't where other apps
+expect it and compilation errors can occur.
+
+The attached patch fixes this - hope it's ok.
+
+Cheers,
+
+Marcus
 ====================================================================== 
 
 ---------------------------------------------------------------------- 
- vapier - 03-20-05 18:38  
+ prpplague - 05-24-06 07:49  
 ---------------------------------------------------------------------- 
-works fine for me ...
-
-i turned on these options under packages:
-[*] DHCP support
-[*]  dhcp server
-[*]  dhcp relay
-[*]  dhcp client 
+fixed as of revision 15160 
 
 ---------------------------------------------------------------------- 
- thomasez - 03-31-05 11:22  
+ bernhardf - 03-20-07 11:02  
 ---------------------------------------------------------------------- 
-It has obviously been fixed. This bug should be closed (Yes, I tested this
-now aswell). 
-
----------------------------------------------------------------------- 
- vapier - 03-31-05 12:02  
----------------------------------------------------------------------- 
-sounds good 
+This was apparently fixed back in r15160. Closing (again). 
 
 Issue History 
 Date Modified   Username       Field                    Change               
 ====================================================================== 
-02-10-05 13:53  thomasez       New Issue                                    
-03-16-05 12:13  andersen       Status                   new => assigned     
-03-16-05 12:13  andersen       Assigned To               => uClibc          
-03-20-05 18:38  vapier         Note Added: 0000109                          
-03-31-05 11:22  thomasez       Note Added: 0000121                          
-03-31-05 12:02  vapier         Status                   assigned => closed  
-03-31-05 12:02  vapier         Note Added: 0000122                          
-02-12-07 05:51  vapier         Status                   closed => assigned  
-02-12-07 05:51  vapier         Assigned To              uClibc => buildroot 
-03-08-07 00:13  bernhardf      Status                   assigned => closed  
+11-29-05 07:56  crafterm       New Issue                                    
+11-29-05 07:56  crafterm       Status                   new => assigned     
+11-29-05 07:56  crafterm       Assigned To               => uClibc          
+11-29-05 07:56  crafterm       File Added: gettext-stagingfix.patch             
+      
+05-24-06 07:49  prpplague      Note Added: 0001377                          
+05-24-06 07:49  prpplague      Status                   assigned => closed  
+02-12-07 05:45  vapier         Status                   closed => assigned  
+02-12-07 05:45  vapier         Assigned To              uClibc => buildroot 
+03-20-07 11:02  bernhardf      Status                   assigned => closed  
+03-20-07 11:02  bernhardf      Note Added: 0002256                          
 ======================================================================
