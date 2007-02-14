@@ -1,56 +1,64 @@
-From: aldot at uclibc.org <aldot@uclibc.org>
-Date: Wed, 14 Feb 2007 00:49:00 -0800 (PST)
-Subject: [Buildroot] svn commit: trunk/buildroot/toolchain/gcc
-Message-ID: <20070214084900.D7BE94856E@busybox.net>
+From: bugs at busybox.net <bugs@busybox.net>
+Date: Wed, 14 Feb 2007 01:11:05 -0800
+Subject: [Buildroot] [buildroot 0001218]: PATCH: X.org xkbcomp library path
+	issues
+Message-ID: <8b34e6b4f9aa5da55f2d419b0dfb4f50@busybox.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Author: aldot
-Date: 2007-02-14 00:49:00 -0800 (Wed, 14 Feb 2007)
-New Revision: 17884
 
-Log:
-- gcc-4.1.2 released
+The following issue has been SUBMITTED. 
+====================================================================== 
+http://busybox.net/bugs/view.php?id=1218 
+====================================================================== 
+Reported By:                foogod
+Assigned To:                buildroot
+====================================================================== 
+Project:                    buildroot
+Issue ID:                   1218
+Category:                   Other
+Reproducibility:            always
+Severity:                   major
+Priority:                   normal
+Status:                     assigned
+====================================================================== 
+Date Submitted:             02-14-2007 01:11 PST
+Last Modified:              02-14-2007 01:11 PST
+====================================================================== 
+Summary:                    PATCH: X.org xkbcomp library path issues
+Description: 
+The X.org 6.8.2 source needs to build a native version of the xkbcomp
+utility during cross-compilation.  To do this, it attempts to link it with
+libxkbfile and libX11 from the build system, which it assumes will be found
+in /usr/X11R6/lib.
 
+The attached patch adds /usr/lib to the search path for those people using
+distributions that put the X libraries in /usr/lib instead of /usr/X11/lib.
+ Note that it is still necessary to have the appropriate devel package for
+libxkbfile and libX11 installed in order to build properly.
 
-Modified:
-   trunk/buildroot/toolchain/gcc/Config.in
-   trunk/buildroot/toolchain/gcc/gcc-uclibc-3.x.mk
+This is all rather broken anyway, as the X sources are blindly assuming
+that the host system not only has X libraries installed but that they're
+going to be compatible with the utilities (from a potentially different X
+distribution) that are being built.  A more correct solution would be to
+modify things to build a host version of libxkbfile and libX11 from the
+6.8.2 sources and link to those (but that's a much larger endeavor, and if
+I'm going to work on that sort of thing I think I'll just start over with
+the newer 7.1 sources, which I'll probably look into shortly.)
 
+But anyway, this patch at least allows X to compile on my system (Ubuntu
+Edgy)..
+====================================================================== 
 
-Changeset:
-Modified: trunk/buildroot/toolchain/gcc/Config.in
-===================================================================
---- trunk/buildroot/toolchain/gcc/Config.in	2007-02-14 08:36:13 UTC (rev 17883)
-+++ trunk/buildroot/toolchain/gcc/Config.in	2007-02-14 08:49:00 UTC (rev 17884)
-@@ -60,7 +60,7 @@
- 		bool "gcc 4.1.0"
- 
- 	config BR2_GCC_VERSION_4_1_1
--		depends !BR2_nios2
-+		depends !BR2_nios2 && BR2_DEPRECATED
- 		bool "gcc 4.1.1"
- 
- 	config BR2_GCC_VERSION_4_1_2
-
-Modified: trunk/buildroot/toolchain/gcc/gcc-uclibc-3.x.mk
-===================================================================
---- trunk/buildroot/toolchain/gcc/gcc-uclibc-3.x.mk	2007-02-14 08:36:13 UTC (rev 17883)
-+++ trunk/buildroot/toolchain/gcc/gcc-uclibc-3.x.mk	2007-02-14 08:49:00 UTC (rev 17884)
-@@ -26,13 +26,6 @@
- GCC_SITE:=ftp://sources.redhat.com/pub/gcc/snapshots/$(GCC_OFFICIAL_VER)
- endif
- 
--# Temporary for 4.1.2-RC1
--ifeq ($(BR2_GCC_VERSION_4_1_2),y)
--GCC_SNAP_DATE:=20070208
--GCC_OFFICIAL_VER:=$(GCC_VERSION)-$(GCC_SNAP_DATE)
--GCC_SITE:=ftp://gcc.gnu.org/pub/gcc/prerelease-$(GCC_OFFICIAL_VER)/
--endif
--
- GCC_SOURCE:=gcc-$(GCC_OFFICIAL_VER).tar.bz2
- GCC_DIR:=$(TOOL_BUILD_DIR)/gcc-$(GCC_OFFICIAL_VER)
- GCC_CAT:=$(BZCAT)
+Issue History 
+Date Modified   Username       Field                    Change               
+====================================================================== 
+02-14-07 01:11  foogod         New Issue                                    
+02-14-07 01:11  foogod         Status                   new => assigned     
+02-14-07 01:11  foogod         Assigned To               => buildroot       
+02-14-07 01:11  foogod         File Added: buildroot.17879.xorg_xkbcomp.patch   
+                
+======================================================================
