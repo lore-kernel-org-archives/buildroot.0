@@ -1,40 +1,50 @@
-From: aldot at uclibc.org <aldot@uclibc.org>
-Date: Tue, 13 Feb 2007 10:56:55 -0800 (PST)
-Subject: [Buildroot] svn commit: trunk/buildroot/toolchain/gcc/4.1.2
-Message-ID: <20070213185655.40EDD485E5@busybox.net>
+From: bugs at busybox.net <bugs@busybox.net>
+Date: Wed, 14 Feb 2007 00:44:00 -0800
+Subject: [Buildroot] [buildroot 0001217]: PATCH: X.org won't compile with
+	newer kernel headers (joystick.h)
+Message-ID: <9db983e8dc388d8658fe38b43866bc36@busybox.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Author: aldot
-Date: 2007-02-13 10:56:54 -0800 (Tue, 13 Feb 2007)
-New Revision: 17876
 
-Log:
-- backport fix for PR30620
+The following issue has been SUBMITTED. 
+====================================================================== 
+http://busybox.net/bugs/view.php?id=1217 
+====================================================================== 
+Reported By:                foogod
+Assigned To:                buildroot
+====================================================================== 
+Project:                    buildroot
+Issue ID:                   1217
+Category:                   Other
+Reproducibility:            always
+Severity:                   major
+Priority:                   normal
+Status:                     assigned
+====================================================================== 
+Date Submitted:             02-14-2007 00:43 PST
+Last Modified:              02-14-2007 00:44 PST
+====================================================================== 
+Summary:                    PATCH: X.org won't compile with newer kernel headers
+(joystick.h)
+Description: 
+The X.org server has problems compiling with newer kernel headers because
+joystick.h (from the kernel headers) uses __s64 which isn't defined when
+gcc is invoked with the -ansi flag (which it is when compiling xorg).
 
+The attached patch (against 17879) works around this issue by turning off
+-ansi mode for the one file which includes joystick.h.
+====================================================================== 
 
-Added:
-   trunk/buildroot/toolchain/gcc/4.1.2/402-libbackend_dep_gcov-iov.h.patch
-
-
-Changeset:
-Added: trunk/buildroot/toolchain/gcc/4.1.2/402-libbackend_dep_gcov-iov.h.patch
-===================================================================
---- trunk/buildroot/toolchain/gcc/4.1.2/402-libbackend_dep_gcov-iov.h.patch	                        (rev 0)
-+++ trunk/buildroot/toolchain/gcc/4.1.2/402-libbackend_dep_gcov-iov.h.patch	2007-02-13 18:56:54 UTC (rev 17876)
-@@ -0,0 +1,12 @@
-+# gcc.gnu.org/PR30620
-+--- gcc-4.1.2-20070208.orig/gcc/Makefile.in	2006-11-01 15:40:44.000000000 +0100
-++++ gcc-4.1.2-20070208/gcc/Makefile.in	2007-02-13 19:23:31.000000000 +0100
-+@@ -2522,7 +2522,7 @@
-+ # FIXME: writing proper dependencies for this is a *LOT* of work.
-+ libbackend.o : $(OBJS-common:.o=.c) $(out_file) \
-+   insn-config.h insn-flags.h insn-codes.h insn-constants.h \
-+-  insn-attr.h  $(DATESTAMP) $(BASEVER) $(DEVPHASE)
-++  insn-attr.h  $(DATESTAMP) $(BASEVER) $(DEVPHASE) gcov-iov.h
-+ 	$(CC) $(ALL_CFLAGS) $(ALL_CPPFLAGS) \
-+ 	  -DTARGET_NAME=\"$(target_noncanonical)\" \
-+ 	  -DLOCALEDIR=\"$(localedir)\" \
+Issue History 
+Date Modified   Username       Field                    Change               
+====================================================================== 
+02-14-07 00:43  foogod         New Issue                                    
+02-14-07 00:44  foogod         Status                   new => assigned     
+02-14-07 00:44  foogod         Assigned To               => buildroot       
+02-14-07 00:44  foogod         File Added: buildroot.17879.xorg_joystick_h.patch
+                   
+======================================================================
