@@ -1,50 +1,56 @@
-From: bugs at busybox.net <bugs@busybox.net>
-Date: Wed, 14 Feb 2007 00:44:00 -0800
-Subject: [Buildroot] [buildroot 0001217]: PATCH: X.org won't compile with
-	newer kernel headers (joystick.h)
-Message-ID: <9db983e8dc388d8658fe38b43866bc36@busybox.net>
+From: aldot at uclibc.org <aldot@uclibc.org>
+Date: Wed, 14 Feb 2007 00:49:00 -0800 (PST)
+Subject: [Buildroot] svn commit: trunk/buildroot/toolchain/gcc
+Message-ID: <20070214084900.D7BE94856E@busybox.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+Author: aldot
+Date: 2007-02-14 00:49:00 -0800 (Wed, 14 Feb 2007)
+New Revision: 17884
 
-The following issue has been SUBMITTED. 
-====================================================================== 
-http://busybox.net/bugs/view.php?id=1217 
-====================================================================== 
-Reported By:                foogod
-Assigned To:                buildroot
-====================================================================== 
-Project:                    buildroot
-Issue ID:                   1217
-Category:                   Other
-Reproducibility:            always
-Severity:                   major
-Priority:                   normal
-Status:                     assigned
-====================================================================== 
-Date Submitted:             02-14-2007 00:43 PST
-Last Modified:              02-14-2007 00:44 PST
-====================================================================== 
-Summary:                    PATCH: X.org won't compile with newer kernel headers
-(joystick.h)
-Description: 
-The X.org server has problems compiling with newer kernel headers because
-joystick.h (from the kernel headers) uses __s64 which isn't defined when
-gcc is invoked with the -ansi flag (which it is when compiling xorg).
+Log:
+- gcc-4.1.2 released
 
-The attached patch (against 17879) works around this issue by turning off
--ansi mode for the one file which includes joystick.h.
-====================================================================== 
 
-Issue History 
-Date Modified   Username       Field                    Change               
-====================================================================== 
-02-14-07 00:43  foogod         New Issue                                    
-02-14-07 00:44  foogod         Status                   new => assigned     
-02-14-07 00:44  foogod         Assigned To               => buildroot       
-02-14-07 00:44  foogod         File Added: buildroot.17879.xorg_joystick_h.patch
-                   
-======================================================================
+Modified:
+   trunk/buildroot/toolchain/gcc/Config.in
+   trunk/buildroot/toolchain/gcc/gcc-uclibc-3.x.mk
+
+
+Changeset:
+Modified: trunk/buildroot/toolchain/gcc/Config.in
+===================================================================
+--- trunk/buildroot/toolchain/gcc/Config.in	2007-02-14 08:36:13 UTC (rev 17883)
++++ trunk/buildroot/toolchain/gcc/Config.in	2007-02-14 08:49:00 UTC (rev 17884)
+@@ -60,7 +60,7 @@
+ 		bool "gcc 4.1.0"
+ 
+ 	config BR2_GCC_VERSION_4_1_1
+-		depends !BR2_nios2
++		depends !BR2_nios2 && BR2_DEPRECATED
+ 		bool "gcc 4.1.1"
+ 
+ 	config BR2_GCC_VERSION_4_1_2
+
+Modified: trunk/buildroot/toolchain/gcc/gcc-uclibc-3.x.mk
+===================================================================
+--- trunk/buildroot/toolchain/gcc/gcc-uclibc-3.x.mk	2007-02-14 08:36:13 UTC (rev 17883)
++++ trunk/buildroot/toolchain/gcc/gcc-uclibc-3.x.mk	2007-02-14 08:49:00 UTC (rev 17884)
+@@ -26,13 +26,6 @@
+ GCC_SITE:=ftp://sources.redhat.com/pub/gcc/snapshots/$(GCC_OFFICIAL_VER)
+ endif
+ 
+-# Temporary for 4.1.2-RC1
+-ifeq ($(BR2_GCC_VERSION_4_1_2),y)
+-GCC_SNAP_DATE:=20070208
+-GCC_OFFICIAL_VER:=$(GCC_VERSION)-$(GCC_SNAP_DATE)
+-GCC_SITE:=ftp://gcc.gnu.org/pub/gcc/prerelease-$(GCC_OFFICIAL_VER)/
+-endif
+-
+ GCC_SOURCE:=gcc-$(GCC_OFFICIAL_VER).tar.bz2
+ GCC_DIR:=$(TOOL_BUILD_DIR)/gcc-$(GCC_OFFICIAL_VER)
+ GCC_CAT:=$(BZCAT)
