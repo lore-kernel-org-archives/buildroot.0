@@ -1,8 +1,8 @@
 From: bugs at busybox.net <bugs@busybox.net>
-Date: Wed, 14 Feb 2007 05:45:50 -0800
+Date: Wed, 14 Feb 2007 07:10:28 -0800
 Subject: [Buildroot] [buildroot 0001173]: initial make error "Unrecognised
 	emulation mode: armelf_linux_eabi"
-Message-ID: <3ee4a7ed9853c7642e48619286e78b51@bugs.busybox.net>
+Message-ID: <c3e3bed8c7e089f3c3f1439e9fd9d540@bugs.busybox.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -10,7 +10,7 @@ Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
 
-A NOTE has been added to this issue. 
+The following issue has been CLOSED 
 ====================================================================== 
 http://busybox.net/bugs/view.php?id=1173 
 ====================================================================== 
@@ -23,10 +23,12 @@ Category:                   Architecture Specific
 Reproducibility:            always
 Severity:                   block
 Priority:                   normal
-Status:                     assigned
+Status:                     closed
+Resolution:                 won't fix
+Fixed in Version:           
 ====================================================================== 
 Date Submitted:             01-24-2007 16:46 PST
-Last Modified:              02-14-2007 05:45 PST
+Last Modified:              02-14-2007 07:10 PST
 ====================================================================== 
 Summary:                    initial make error  "Unrecognised emulation mode:
 armelf_linux_eabi"
@@ -374,6 +376,11 @@ stable one, fwiw.
 Of course i'm using linuxthreads since there simply is no NPTL support for
 arm yet, just linuxthreads or linuxthreads.old 
 
+---------------------------------------------------------------------- 
+ vapier - 02-14-07 07:10  
+---------------------------------------------------------------------- 
+if you want to use EABI, then use linux-2.6 headers 
+
 Issue History 
 Date Modified   Username       Field                    Change               
 ====================================================================== 
@@ -395,4 +402,7 @@ Date Modified   Username       Field                    Change
 02-12-07 08:57  pferrell       Note Added: 0002154                          
 02-12-07 08:57  pferrell       Note Edited: 0002154                         
 02-14-07 05:45  bernhardf      Note Added: 0002160                          
+02-14-07 07:10  vapier         Note Added: 0002161                          
+02-14-07 07:10  vapier         Status                   assigned => closed  
+02-14-07 07:10  vapier         Resolution               open => won't fix   
 ======================================================================
