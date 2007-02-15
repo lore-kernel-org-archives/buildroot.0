@@ -1,71 +1,25 @@
-From: bugs at busybox.net <bugs@busybox.net>
-Date: Thu, 15 Feb 2007 14:06:43 -0800
-Subject: [Buildroot] [buildroot 0001094]: ntpd version bump
-Message-ID: <dca54e477e72c1db5a52c2d799bbd022@bugs.uclibc.org>
+From: Alex Stewart <alex@foogod.com>
+Date: Thu, 15 Feb 2007 14:09:29 -0800
+Subject: [Buildroot] Preferred procedure for submitting patches?
+Message-ID: <20070215220929.GA1805@foogod.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+Hi all..
 
-A NOTE has been added to this issue. 
-====================================================================== 
-http://busybox.net/bugs/view.php?id=1094 
-====================================================================== 
-Reported By:                daisuke
-Assigned To:                buildroot
-====================================================================== 
-Project:                    buildroot
-Issue ID:                   1094
-Category:                   Other
-Reproducibility:            always
-Severity:                   minor
-Priority:                   normal
-Status:                     assigned
-====================================================================== 
-Date Submitted:             11-18-2006 03:06 PST
-Last Modified:              02-15-2007 14:06 PST
-====================================================================== 
-Summary:                    ntpd version bump
-Description: 
-This patch does these things:
-(1) bump version from 4.2.0 to 4.2.2p4
-(2) remove tickadj utility. It causes make to fail for current uClibc
+I was wondering what the preferred method for submitting patches to buildroot
+is?  I've recently submitted several patches through the bug reporting system,
+but now I'm noticing that there seem to be other patches in the bug system from
+several months ago (bug 1094, for example, which I just noticed is basically a
+duplicate of something I just submitted, that somebody else provided a fix for
+last November) that still apparently haven't been applied to the current
+sources, so now I'm beginning to wonder whether anybody's really paying
+attention to the bug system?
 
-This patch was created against buildroot-20061118 snapshot.
-====================================================================== 
+Is there some other method I should be using to submit patches to make sure
+they make it into the distribution in a timely fashion?
 
----------------------------------------------------------------------- 
- daisuke - 11-24-06 06:18  
----------------------------------------------------------------------- 
-Sorry, I uploaded wrong patch. Here is right patch.
-Please use `ntp-new.patch'.
-
- 
-
----------------------------------------------------------------------- 
- foogod - 02-15-07 14:06  
----------------------------------------------------------------------- 
-I just noticed that this is basically a duplicate of the patch I just
-submitted in bug 1222 (mine bumps the version to 4.2.4 (which is now
-current))
-
-Please note that _some_ version bump is required to get ntpd to compile at
-all, as far as I can tell.  4.2.0 just does not work. 
-
-Issue History 
-Date Modified   Username       Field                    Change               
-====================================================================== 
-11-18-06 03:06  daisuke        New Issue                                    
-11-18-06 03:06  daisuke        Status                   new => assigned     
-11-18-06 03:06  daisuke        Assigned To               => uClibc          
-11-18-06 03:06  daisuke        File Added: ntp.patch                        
-11-24-06 06:08  daisuke        Note Added: 0001802                          
-11-24-06 06:09  daisuke        Issue Monitored: daisuke                     
-11-24-06 06:09  daisuke        Issue End Monitor: daisuke                    
-11-24-06 06:13  daisuke        File Added: ntp-new.patch                    
-11-24-06 06:18  daisuke        Note Edited: 0001802                         
-02-12-07 05:34  vapier         Assigned To              uClibc => buildroot 
-02-15-07 14:06  foogod         Note Added: 0002170                          
-======================================================================
+-alex
