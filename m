@@ -1,32 +1,24 @@
-From: aldot at uclibc.org <aldot@uclibc.org>
-Date: Thu, 15 Feb 2007 05:54:28 -0800 (PST)
-Subject: [Buildroot] svn commit: trunk/buildroot/package/openswan
-Message-ID: <20070215135428.09BD64859F@busybox.net>
+From: Bernhard Fischer <rep.dot.nop@gmail.com>
+Date: Thu, 15 Feb 2007 15:01:11 +0100
+Subject: [Buildroot] Problem building build root in a squashhfs image
+In-Reply-To: <12d878080702142356o85daefetee5e8eb2cfbc90c1@mail.gmail.com>
+References: <12d878080702111341q1b2b9468w53aff97f6c6ccb0c@mail.gmail.com>
+	<20070212090729.58cf28f0.philippe.ney@pardes.ws>
+	<12d878080702142303k63ed50a7jb99f7b5d3bf21617@mail.gmail.com>
+	<12d878080702142341q47408d7fib76e4954763a3677@mail.gmail.com>
+	<12d878080702142356o85daefetee5e8eb2cfbc90c1@mail.gmail.com>
+Message-ID: <20070215140111.GB18188@aon.at>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Author: aldot
-Date: 2007-02-15 05:54:25 -0800 (Thu, 15 Feb 2007)
-New Revision: 17896
+On Thu, Feb 15, 2007 at 02:56:27AM -0500, Bobby Ramsook wrote:
+>If any one else is having problems, may be it might be related to the
+>following lines:
 
-Log:
-- store the current patches for the kernel part somewhere
+I cannot really see what you did below, so please do a "svn diff" and
+send that instead
 
-
-Added:
-   trunk/buildroot/package/openswan/linux-2.6.20-openswan-2.4.7.kernel-2.6-klips.patch
-   trunk/buildroot/package/openswan/linux-2.6.20-openswan-2.4.7.kernel-2.6-natt.patch
-   trunk/buildroot/package/openswan/linux-2.6.20-openswan-2.4.7.kernel-2.6-nfmark-rename.patch
-   trunk/buildroot/package/openswan/linux-2.6.20-openswan-2.4.7.kernel-2.6-zzz-crypto_alg_available.patch
-   trunk/buildroot/package/openswan/linux-2.6.20-openswan-2.4.7.kernel-2.6-zzz-void-sock_unregister.patch
-
-
-Changeset:
-
-Sorry, the patch is too large to include (59595 lines).
-Please use ViewCVS to see it!
-
-http://uclibc.org/cgi-bin/viewcvs.cgi?view=rev&root=svn&rev=17896
+thanks,
