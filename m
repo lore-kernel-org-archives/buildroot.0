@@ -1,8 +1,8 @@
 From: bugs at busybox.net <bugs@busybox.net>
-Date: Thu, 15 Feb 2007 13:56:22 -0800
-Subject: [Buildroot] [buildroot 0001222]: PATCH: ntpd 4.2.0 build fails with
-	"incomplete element type"
-Message-ID: <35535214c611342444ee3b7fe435582f@bugs.uclibc.org>
+Date: Thu, 15 Feb 2007 14:00:38 -0800
+Subject: [Buildroot] [buildroot 0001223]: PATCH: 'make source' does not
+	download dhcp package source.
+Message-ID: <cbae84b10d11679e58b3d30cc76f2e54@bugs.uclibc.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -12,48 +12,41 @@ To: buildroot@busybox.net
 
 The following issue has been SUBMITTED. 
 ====================================================================== 
-http://busybox.net/bugs/view.php?id=1222 
+http://busybox.net/bugs/view.php?id=1223 
 ====================================================================== 
 Reported By:                foogod
 Assigned To:                buildroot
 ====================================================================== 
 Project:                    buildroot
-Issue ID:                   1222
+Issue ID:                   1223
 Category:                   Other
 Reproducibility:            always
-Severity:                   major
+Severity:                   minor
 Priority:                   normal
 Status:                     assigned
 ====================================================================== 
-Date Submitted:             02-15-2007 13:56 PST
-Last Modified:              02-15-2007 13:56 PST
+Date Submitted:             02-15-2007 14:00 PST
+Last Modified:              02-15-2007 14:00 PST
 ====================================================================== 
-Summary:                    PATCH: ntpd 4.2.0 build fails with "incomplete
-element type"
+Summary:                    PATCH: 'make source' does not download dhcp package
+source.
 Description: 
-The ntpd 4.2.0 sources which are the default for buildroot are apparently
-broken and will not compile (I'm not sure how they would ever compile on
-anyone's system, actually).  They fail with the following error:
+The dhcp package .mk file has apparently been modified to support separate
+building of server/relay/client binaries, and thus separate targets, but
+the "-source" target wasn't modified to match.  As a result, 'make source'
+will not download the dhcp source package (it instead tries to download it
+just before building it, which can be a problem when the build system is
+not connected to the internet).
 
-In file included from systime.c:11:
-../include/ntp_stdlib.h:138: error: array type has incomplete element
-type
-
-This is apparently due to a coding error in the 4.2.0 distribution which
-has been fixed in 4.2.0b and later.
-
-The attached patch bumps the ntpd version to 4.2.4 (the current version)
-which fixes this compilation error.  Note that it also removes the
-ntp-cross-compile.patch, which is no longer needed with newer versions of
-ntpd.
+The attached patch (against 17902) fixes this issue.
 ====================================================================== 
 
 Issue History 
 Date Modified   Username       Field                    Change               
 ====================================================================== 
-02-15-07 13:56  foogod         New Issue                                    
-02-15-07 13:56  foogod         Status                   new => assigned     
-02-15-07 13:56  foogod         Assigned To               => buildroot       
-02-15-07 13:56  foogod         File Added: buildroot.17902.ntp.patch            
-       
+02-15-07 14:00  foogod         New Issue                                    
+02-15-07 14:00  foogod         Status                   new => assigned     
+02-15-07 14:00  foogod         Assigned To               => buildroot       
+02-15-07 14:00  foogod         File Added: buildroot.17902.dhcp_source.patch    
+               
 ======================================================================
