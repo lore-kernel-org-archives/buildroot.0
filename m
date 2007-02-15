@@ -1,8 +1,7 @@
 From: bugs at busybox.net <bugs@busybox.net>
-Date: Thu, 15 Feb 2007 14:00:38 -0800
-Subject: [Buildroot] [buildroot 0001223]: PATCH: 'make source' does not
-	download dhcp package source.
-Message-ID: <cbae84b10d11679e58b3d30cc76f2e54@bugs.uclibc.org>
+Date: Thu, 15 Feb 2007 14:06:43 -0800
+Subject: [Buildroot] [buildroot 0001094]: ntpd version bump
+Message-ID: <dca54e477e72c1db5a52c2d799bbd022@bugs.uclibc.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -10,43 +9,63 @@ Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
 
-The following issue has been SUBMITTED. 
+A NOTE has been added to this issue. 
 ====================================================================== 
-http://busybox.net/bugs/view.php?id=1223 
+http://busybox.net/bugs/view.php?id=1094 
 ====================================================================== 
-Reported By:                foogod
+Reported By:                daisuke
 Assigned To:                buildroot
 ====================================================================== 
 Project:                    buildroot
-Issue ID:                   1223
+Issue ID:                   1094
 Category:                   Other
 Reproducibility:            always
 Severity:                   minor
 Priority:                   normal
 Status:                     assigned
 ====================================================================== 
-Date Submitted:             02-15-2007 14:00 PST
-Last Modified:              02-15-2007 14:00 PST
+Date Submitted:             11-18-2006 03:06 PST
+Last Modified:              02-15-2007 14:06 PST
 ====================================================================== 
-Summary:                    PATCH: 'make source' does not download dhcp package
-source.
+Summary:                    ntpd version bump
 Description: 
-The dhcp package .mk file has apparently been modified to support separate
-building of server/relay/client binaries, and thus separate targets, but
-the "-source" target wasn't modified to match.  As a result, 'make source'
-will not download the dhcp source package (it instead tries to download it
-just before building it, which can be a problem when the build system is
-not connected to the internet).
+This patch does these things:
+(1) bump version from 4.2.0 to 4.2.2p4
+(2) remove tickadj utility. It causes make to fail for current uClibc
 
-The attached patch (against 17902) fixes this issue.
+This patch was created against buildroot-20061118 snapshot.
 ====================================================================== 
+
+---------------------------------------------------------------------- 
+ daisuke - 11-24-06 06:18  
+---------------------------------------------------------------------- 
+Sorry, I uploaded wrong patch. Here is right patch.
+Please use `ntp-new.patch'.
+
+ 
+
+---------------------------------------------------------------------- 
+ foogod - 02-15-07 14:06  
+---------------------------------------------------------------------- 
+I just noticed that this is basically a duplicate of the patch I just
+submitted in bug 1222 (mine bumps the version to 4.2.4 (which is now
+current))
+
+Please note that _some_ version bump is required to get ntpd to compile at
+all, as far as I can tell.  4.2.0 just does not work. 
 
 Issue History 
 Date Modified   Username       Field                    Change               
 ====================================================================== 
-02-15-07 14:00  foogod         New Issue                                    
-02-15-07 14:00  foogod         Status                   new => assigned     
-02-15-07 14:00  foogod         Assigned To               => buildroot       
-02-15-07 14:00  foogod         File Added: buildroot.17902.dhcp_source.patch    
-               
+11-18-06 03:06  daisuke        New Issue                                    
+11-18-06 03:06  daisuke        Status                   new => assigned     
+11-18-06 03:06  daisuke        Assigned To               => uClibc          
+11-18-06 03:06  daisuke        File Added: ntp.patch                        
+11-24-06 06:08  daisuke        Note Added: 0001802                          
+11-24-06 06:09  daisuke        Issue Monitored: daisuke                     
+11-24-06 06:09  daisuke        Issue End Monitor: daisuke                    
+11-24-06 06:13  daisuke        File Added: ntp-new.patch                    
+11-24-06 06:18  daisuke        Note Edited: 0001802                         
+02-12-07 05:34  vapier         Assigned To              uClibc => buildroot 
+02-15-07 14:06  foogod         Note Added: 0002170                          
 ======================================================================
