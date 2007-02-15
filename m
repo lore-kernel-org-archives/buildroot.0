@@ -1,24 +1,43 @@
-From: Bernhard Fischer <rep.dot.nop@gmail.com>
-Date: Thu, 15 Feb 2007 15:01:11 +0100
-Subject: [Buildroot] Problem building build root in a squashhfs image
-In-Reply-To: <12d878080702142356o85daefetee5e8eb2cfbc90c1@mail.gmail.com>
-References: <12d878080702111341q1b2b9468w53aff97f6c6ccb0c@mail.gmail.com>
-	<20070212090729.58cf28f0.philippe.ney@pardes.ws>
-	<12d878080702142303k63ed50a7jb99f7b5d3bf21617@mail.gmail.com>
-	<12d878080702142341q47408d7fib76e4954763a3677@mail.gmail.com>
-	<12d878080702142356o85daefetee5e8eb2cfbc90c1@mail.gmail.com>
-Message-ID: <20070215140111.GB18188@aon.at>
+From: aldot at uclibc.org <aldot@uclibc.org>
+Date: Thu, 15 Feb 2007 06:07:09 -0800 (PST)
+Subject: [Buildroot] svn commit: trunk/buildroot/toolchain/dependencies
+Message-ID: <20070215140709.AC39C485B0@busybox.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Thu, Feb 15, 2007 at 02:56:27AM -0500, Bobby Ramsook wrote:
->If any one else is having problems, may be it might be related to the
->following lines:
+Author: aldot
+Date: 2007-02-15 06:07:08 -0800 (Thu, 15 Feb 2007)
+New Revision: 17897
 
-I cannot really see what you did below, so please do a "svn diff" and
-send that instead
+Log:
+- warn about missing makeinfo on the host.
 
-thanks,
+
+Modified:
+   trunk/buildroot/toolchain/dependencies/dependencies.sh
+
+
+Changeset:
+Modified: trunk/buildroot/toolchain/dependencies/dependencies.sh
+===================================================================
+--- trunk/buildroot/toolchain/dependencies/dependencies.sh	2007-02-15 13:54:25 UTC (rev 17896)
++++ trunk/buildroot/toolchain/dependencies/dependencies.sh	2007-02-15 14:07:08 UTC (rev 17897)
+@@ -248,9 +248,14 @@
+ echo "gettext installed:				Ok"
+ 
+ 
++if ! which makeinfo > /dev/null ; then \
++	echo "makeinfo installed:		    FALSE"
++	/bin/echo -e "\n\nMost likely some packages will fail to build their documentation"
++	/bin/echo -e "Either install 'makeinfo' on your host or fix the respective packages"
++fi
++echo "makeinfo installed:				Ok"
+ 
+ 
+-
+ #############################################################
+ #
+ # All done
