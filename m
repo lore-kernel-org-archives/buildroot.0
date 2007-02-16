@@ -1,58 +1,43 @@
-From: aldot at uclibc.org <aldot@uclibc.org>
-Date: Fri, 16 Feb 2007 05:11:04 -0800 (PST)
-Subject: [Buildroot] svn commit: trunk/buildroot/package/bash
-Message-ID: <20070216131104.CFC34480A1@busybox.net>
+From: bugs at busybox.net <bugs@busybox.net>
+Date: Fri, 16 Feb 2007 05:19:13 -0800
+Subject: [Buildroot] [buildroot 0001225]: Bump genext2fs
+Message-ID: <ff31989c3cf04fa4990adc70cfb7fb26@busybox.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Author: aldot
-Date: 2007-02-16 05:11:04 -0800 (Fri, 16 Feb 2007)
-New Revision: 17906
 
-Log:
-- bump to bash 3.2. Thanks to Alexander Rigbo
+The following issue has been SUBMITTED. 
+====================================================================== 
+http://busybox.net/bugs/view.php?id=1225 
+====================================================================== 
+Reported By:                alexer
+Assigned To:                buildroot
+====================================================================== 
+Project:                    buildroot
+Issue ID:                   1225
+Category:                   New Features
+Reproducibility:            N/A
+Severity:                   minor
+Priority:                   normal
+Status:                     assigned
+====================================================================== 
+Date Submitted:             02-16-2007 05:19 PST
+Last Modified:              02-16-2007 05:19 PST
+====================================================================== 
+Summary:                    Bump genext2fs
+Description: 
+Just a new version, no more CVS-patches
+====================================================================== 
 
-
-Added:
-   trunk/buildroot/package/bash/bash32-001
-   trunk/buildroot/package/bash/bash32-002
-   trunk/buildroot/package/bash/bash32-003
-   trunk/buildroot/package/bash/bash32-004
-   trunk/buildroot/package/bash/bash32-005
-   trunk/buildroot/package/bash/bash32-006
-   trunk/buildroot/package/bash/bash32-007
-   trunk/buildroot/package/bash/bash32-008
-   trunk/buildroot/package/bash/bash32-009
-
-Removed:
-   trunk/buildroot/package/bash/bash31-001
-   trunk/buildroot/package/bash/bash31-002
-   trunk/buildroot/package/bash/bash31-003
-   trunk/buildroot/package/bash/bash31-004
-   trunk/buildroot/package/bash/bash31-005
-   trunk/buildroot/package/bash/bash31-006
-   trunk/buildroot/package/bash/bash31-007
-   trunk/buildroot/package/bash/bash31-008
-   trunk/buildroot/package/bash/bash31-009
-   trunk/buildroot/package/bash/bash31-010
-   trunk/buildroot/package/bash/bash31-011
-   trunk/buildroot/package/bash/bash31-012
-   trunk/buildroot/package/bash/bash31-013
-   trunk/buildroot/package/bash/bash31-014
-   trunk/buildroot/package/bash/bash31-015
-   trunk/buildroot/package/bash/bash31-016
-   trunk/buildroot/package/bash/bash31-017
-
-Modified:
-   trunk/buildroot/package/bash/bash.mk
-
-
-Changeset:
-
-Sorry, the patch is too large to include (2445 lines).
-Please use ViewCVS to see it!
-
-http://uclibc.org/cgi-bin/viewcvs.cgi?view=rev&root=svn&rev=17906
+Issue History 
+Date Modified   Username       Field                    Change               
+====================================================================== 
+02-16-07 05:19  alexer         New Issue                                    
+02-16-07 05:19  alexer         Status                   new => assigned     
+02-16-07 05:19  alexer         Assigned To               => buildroot       
+02-16-07 05:19  alexer         File Added: genext2fs-1.4-upgrade.patch          
+         
+======================================================================
