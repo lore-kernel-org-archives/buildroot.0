@@ -1,40 +1,133 @@
-From: Alex Stewart <alex@foogod.com>
-Date: Fri, 16 Feb 2007 11:16:49 -0800
-Subject: [Buildroot] Preferred procedure for submitting patches?
-In-Reply-To: <20070216083019.GA27053@aon.at>
-References: <20070215220929.GA1805@foogod.com> <20070216083019.GA27053@aon.at>
-Message-ID: <20070216191649.GA13041@foogod.com>
+From: jacmet at uclibc.org <jacmet@uclibc.org>
+Date: Fri, 16 Feb 2007 12:16:25 -0800 (PST)
+Subject: [Buildroot] svn commit: trunk/buildroot/package:  iperf
+Message-ID: <20070216201625.ADF17485A1@busybox.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Fri, Feb 16, 2007 at 09:30:19AM +0100, Bernhard Fischer wrote:
-> The timely bit could be solved by paying somebody. Ask Erik or whomever
-> if you want this. I'm just a volunteer, ultimately, so i'm not going to
-> adhere to anybody putting any constraints on me in this respect ;)
+Author: jacmet
+Date: 2007-02-16 12:16:24 -0800 (Fri, 16 Feb 2007)
+New Revision: 17913
 
-Please don't take my message the wrong way.  I wasn't attempting to demand a
-timely response ("fix my bugs now! waah!") or anything, I'm quite familiar with
-the nature of open source projects sometimes.  I just wanted to make sure I was
-sending my submissions to the right place, which it sounds like I have been..
+Log:
+iperf package. Closes #0001224
 
-It's just that I was seeing svn commits happening all the time, but they didn't
-seem to be related to any of the existing patches I see that have been
-submitted through the bug system, so I was wondering if they were coming
-through some other channel instead.
+Added:
+   trunk/buildroot/package/iperf/
+   trunk/buildroot/package/iperf/Config.in
+   trunk/buildroot/package/iperf/iperf.mk
 
-(Please also note, I wasn't talking about bug reports that people have to track
-down and isolate and figure out a fix for and then code up a solution.  I can
-understand that that would take some effort and might not happen at all.  I'm
-talking about issues where a patch already exists and has been submitted, and
-just needs to be applied to the svn repo.  I've tried to make all of my bug
-reports of this form, to minimize the work for maintainers)
+Modified:
+   trunk/buildroot/package/Config.in
 
-As for people not having enough time to handle all of the bugs, I would be
-willing to volunteer some of my time to this as well if it would help, but
-unfortunately I don't have svn commit access, so when it comes to applying
-patches that already exist, I can't help much there...
 
--alex
+Changeset:
+Modified: trunk/buildroot/package/Config.in
+===================================================================
+--- trunk/buildroot/package/Config.in	2007-02-16 18:32:20 UTC (rev 17912)
++++ trunk/buildroot/package/Config.in	2007-02-16 20:16:24 UTC (rev 17913)
+@@ -128,6 +128,7 @@
+ source "package/ethtool/Config.in"
+ source "package/haserl/Config.in"
+ source "package/hostap/Config.in"
++source "package/iperf/Config.in"
+ source "package/iproute2/Config.in"
+ source "package/ipsec-tools/Config.in"
+ source "package/iptables/Config.in"
+
+Added: trunk/buildroot/package/iperf/Config.in
+===================================================================
+--- trunk/buildroot/package/iperf/Config.in	                        (rev 0)
++++ trunk/buildroot/package/iperf/Config.in	2007-02-16 20:16:24 UTC (rev 17913)
+@@ -0,0 +1,9 @@
++config BR2_PACKAGE_IPERF
++	bool "iperf"
++	default n
++	select BR2_INSTALL_LIBSTDCPP
++	help
++	  Internet Protocol bandwidth measuring tool for measuring
++	  TCP/UDP performance.
++
++	  http://dast.nlanr.net/projects/iperf/
+
+Added: trunk/buildroot/package/iperf/iperf.mk
+===================================================================
+--- trunk/buildroot/package/iperf/iperf.mk	                        (rev 0)
++++ trunk/buildroot/package/iperf/iperf.mk	2007-02-16 20:16:24 UTC (rev 17913)
+@@ -0,0 +1,73 @@
++#############################################################
++#
++# iperf
++#
++#############################################################
++
++IPERF_VERSION:=2.0.2
++IPERF_SOURCE:=iperf-$(IPERF_VERSION).tar.gz
++IPERF_SITE:=http://$(BR2_SOURCEFORGE_MIRROR).dl.sourceforge.net/sourceforge/iperf
++IPERF_DIR:=$(BUILD_DIR)/iperf-$(IPERF_VERSION)
++IPERF_CAT:=$(ZCAT)
++
++$(DL_DIR)/$(IPERF_SOURCE):
++	$(WGET) -P $(DL_DIR) $(IPERF_SITE)/$(IPERF_SOURCE)
++
++$(IPERF_DIR)/.unpacked: $(DL_DIR)/$(IPERF_SOURCE)
++	$(IPERF_CAT) $(DL_DIR)/$(IPERF_SOURCE) | tar -C $(BUILD_DIR) $(TAR_OPTIONS) -
++	toolchain/patch-kernel.sh $(IPERF_DIR) package/iperf/ iperf\*.patch
++	touch $(IPERF_DIR)/.unpacked
++
++$(IPERF_DIR)/.configured: $(IPERF_DIR)/.unpacked
++	(	cd $(IPERF_DIR); rm -rf config.cache;  \
++		$(TARGET_CONFIGURE_OPTS) \
++		CFLAGS="$(TARGET_CFLAGS)" \
++		ac_cv_func_malloc_0_nonnull=yes \
++		./configure \
++		--with-gnu-ld \
++		--target=$(GNU_TARGET_NAME) \
++		--host=$(GNU_TARGET_NAME) \
++		--build=$(GNU_HOST_NAME) \
++		--disable-ipv6 \
++		--disable-dependency-tracking \
++		--disable-web100 \
++		--prefix=/usr \
++		--exec-prefix=/usr \
++		--bindir=/usr/bin \
++		--sbindir=/usr/sbin \
++		--libexecdir=/usr/sbin \
++		--sysconfdir=/etc \
++		--datadir=/usr/share \
++		--localstatedir=/var \
++		--mandir=/usr/man \
++		--infodir=/usr/info \
++		--includedir=$(STAGING_DIR)/include \
++	);
++	touch $(IPERF_DIR)/.configured
++
++$(IPERF_DIR)/src/iperf: $(IPERF_DIR)/.configured
++	$(MAKE) CC=$(TARGET_CC) -C $(IPERF_DIR)
++	-$(STRIP) --strip-unneeded $(IPERF_DIR)/src/iperf
++
++$(TARGET_DIR)/usr/bin/iperf: $(IPERF_DIR)/src/iperf
++	cp $(IPERF_DIR)/src/iperf $(TARGET_DIR)/usr/bin/iperf
++
++iperf: $(TARGET_DIR)/usr/bin/iperf
++
++iperf-source: $(DL_DIR)/$(IPERF_SOURCE)
++
++iperf-clean:
++	@if [ -d $(IPERF_KDIR)/Makefile ] ; then \
++		$(MAKE) -C $(IPERF_DIR) clean ; \
++	fi;
++
++iperf-dirclean:
++	rm -rf $(IPERF_DIR)
++#############################################################
++#
++# Toplevel Makefile options
++#
++#############################################################
++ifeq ($(strip $(BR2_PACKAGE_IPERF)),y)
++TARGETS+=iperf
++endif
