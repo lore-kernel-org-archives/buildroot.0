@@ -1,62 +1,51 @@
-From: Alexander Rigbo <alexander.rigbo@acgnystrom.se>
-Date: Fri, 16 Feb 2007 08:32:35 +0100
-Subject: [Buildroot] changing the mk file in a package
-In-Reply-To: <20070215192046.HM.00000000000000h@daniel_ng11.bos-mail-wwl24.lycos.com>
-References: <20070215192046.HM.00000000000000h@daniel_ng11.bos-mail-wwl24.lycos.com>
-Message-ID: <200702160832.36046.alexander.rigbo@acgnystrom.se>
+From: Bernhard Fischer <rep.dot.nop@gmail.com>
+Date: Fri, 16 Feb 2007 09:30:19 +0100
+Subject: [Buildroot] Preferred procedure for submitting patches?
+In-Reply-To: <20070215220929.GA1805@foogod.com>
+References: <20070215220929.GA1805@foogod.com>
+Message-ID: <20070216083019.GA27053@aon.at>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi,
+On Thu, Feb 15, 2007 at 02:09:29PM -0800, Alex Stewart wrote:
+>Hi all..
+>
+>I was wondering what the preferred method for submitting patches to buildroot
+>is?  I've recently submitted several patches through the bug reporting system,
+>but now I'm noticing that there seem to be other patches in the bug system from
+>several months ago (bug 1094, for example, which I just noticed is basically a
+>duplicate of something I just submitted, that somebody else provided a fix for
+>last November) that still apparently haven't been applied to the current
+>sources, so now I'm beginning to wonder whether anybody's really paying
+>attention to the bug system?
 
-Sounds like this is some other error. I doubt that cramfs would fail just 
-because you changed a .mk.
-My suggestion: disable the creation of the cramfs-image when you're changing 
-the .mk. Also, if you want your package completely rebuilt just do:
+Given that there were more than 250 open buildroot bugs in november and
+we already were < 75 last time i looked, yes, i'm slowly going through
+the bugs entered there.
 
-rm -rf build_<arch>/<package>-<version>
+Some categories of reports i cannot really deal with (cannot emulate the
+arch the bug is reported against and noone is able/willing to provide a
+kernel .config that i can use qith e.g. qemu).
+Other categories (external toolchain, ancient versions that have working
+current counterparts) i don't care about, personally.
 
-Best regards
-Alexander Rigbo
+>
+>Is there some other method I should be using to submit patches to make sure
+>they make it into the distribution in a timely fashion?
 
-On Friday 16 February 2007 01.20.46 Daniel Ng wrote:
-> Hi,
->
-> I'm adding a new package to buildroot. Following the standard docco I add a
-> new package directory and the relevant config.in and xxx.mk file.
->
-> I've noticed that if I make changes to xxx.mk I have to do a 'make clean'
-> then a 'make' ie. a full rebuild. Otherwise if I just try to run 'make'
-> after changing xxx.mk, I get the following error from fakeroot-
->
-> # Use fakeroot so mkcramfs believes the previous fakery
-> /home/dng/linuxppc/gcc-4.0.2_uclibc/usr/bin/fakeroot \
->  -i /home/dng/linuxppc/gcc-4.0.2_uclibc/fakeroot.env \
->  -s /home/dng/linuxppc/gcc-4.0.2_uclibc/fakeroot.env -- \
->  /home/ppcroot/swdev/buildroot-dng/build_powerpc/cramfs-1.1/mkcramfs -q -
-> b \
->  /home/ppcroot/swdev/buildroot-
-> dng/build_powerpc/root
-> /home/ppcroot/swdev/buildroot-dng/rootfs.powerpc.cramfs Swapping filesystem
-> endian-ness
-> mkcramfs: mmap failed: /home/ppcroot/swdev/buildroot-
-> dng/build_powerpc/root/usr/usr/local
-> make: *** [cramfsroot] Error 8
->
-> -but my new package has nothing to do with mmap!
->
-> If I do a full rebuild, I don't get the above problem. But the fully
-> rebuild takes about 30 minutes! Is there a way to get a more sensible
-> 'make' behaviour, so that I can avoid having to do these full rebuilds?
->
-> Cheers,
-> Daniel
->
->
->
->
->  Free Movies?100's of Free Feature Length Films - Meet Friends, Watch
-> Movies & Win!
+Submitting patches to the bugtracker is nice, provided that it comes
+along a good description of the problem/feature it is solving and/or has
+a way to reproduce the failure while i can actually _test_ that the
+outcome works for an emulated target.
+Sometimes i ask that patches are also sent to the list. Patches that are
+solely sent to the list are sometimes lost if noone immediately "takes"
+them, of course.
+
+The timely bit could be solved by paying somebody. Ask Erik or whomever
+if you want this. I'm just a volunteer, ultimately, so i'm not going to
+adhere to anybody putting any constraints on me in this respect ;)
+
+HTH. Cheers,
