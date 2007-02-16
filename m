@@ -1,37 +1,40 @@
-From: aldot at uclibc.org <aldot@uclibc.org>
-Date: Fri, 16 Feb 2007 01:34:12 -0800 (PST)
-Subject: [Buildroot] svn commit: trunk/buildroot/toolchain/dependencies
-Message-ID: <20070216093412.5115D48560@busybox.net>
+From: Bernhard Fischer <rep.dot.nop@gmail.com>
+Date: Fri, 16 Feb 2007 10:36:26 +0100
+Subject: [Buildroot] difference between this list and gmane?
+In-Reply-To: <20070215192523.HM.00000000000000i@daniel_ng11.bos-mail-wwl24.lycos.com>
+References: <20070215192523.HM.00000000000000i@daniel_ng11.bos-mail-wwl24.lycos.com>
+Message-ID: <20070216093626.GA27487@aon.at>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Author: aldot
-Date: 2007-02-16 01:34:11 -0800 (Fri, 16 Feb 2007)
-New Revision: 17904
+On Thu, Feb 15, 2007 at 07:25:23PM -0500, Daniel Ng wrote:
+>Hi,
+><br>
 
-Log:
-- mention the package that usually provides makeinfo
+brrr. Don't send html mail.
 
+><br>What is the difference between this list and gmane.comp.lib.uclibc.buildroot?
+><br>
+><br>They seem like different lists because posting my question on the gmane list did
+><br>not result in the same post going to this list- I had to post to each manually.
 
-Modified:
-   trunk/buildroot/toolchain/dependencies/dependencies.sh
+Read gmane.com/ and
+http://dir.gmane.org/gmane.comp.lib.uclibc.buildroot
 
-
-Changeset:
-Modified: trunk/buildroot/toolchain/dependencies/dependencies.sh
-===================================================================
---- trunk/buildroot/toolchain/dependencies/dependencies.sh	2007-02-16 09:32:12 UTC (rev 17903)
-+++ trunk/buildroot/toolchain/dependencies/dependencies.sh	2007-02-16 09:34:11 UTC (rev 17904)
-@@ -251,7 +251,8 @@
- if ! which makeinfo > /dev/null ; then \
- 	echo "makeinfo installed:		    FALSE"
- 	/bin/echo -e "\n\nMost likely some packages will fail to build their documentation"
--	/bin/echo -e "Either install 'makeinfo' on your host or fix the respective packages"
-+	echo "Either install 'makeinfo' on your host or fix the respective packages."
-+	echo "Makeinfo can usually be found in the texinfo package for your host."
- else
- 	echo "makeinfo installed:				Ok"
- fi
+><br>
+><br>Also the gmane list traffic looks very one-way: lots of updates and questions, but not many answers.
+><br>
+><br>-whereas this list seems to have as many answers as questions....
+><br>
+><br>Cheers,
+><br>Daniel<br/>
+><div>
+><hr style="width:85%;margin-left:0px;text-align:left"/><br/>
+><a href="http://cinema.lycos.com/?if_Event=mail" target="_blank"><u>Free
+>Movies</u></a>&nbsp;100's of Free Feature Length Films - Meet Friends, Watch
+>Movies & Win!
+></div>
+>
