@@ -1,7 +1,7 @@
 From: aldot at uclibc.org <aldot@uclibc.org>
-Date: Fri, 16 Feb 2007 05:01:07 -0800 (PST)
-Subject: [Buildroot] svn commit: trunk/buildroot/package/dhcp
-Message-ID: <20070216130107.9878548561@busybox.net>
+Date: Fri, 16 Feb 2007 05:11:04 -0800 (PST)
+Subject: [Buildroot] svn commit: trunk/buildroot/package/bash
+Message-ID: <20070216131104.CFC34480A1@busybox.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -9,31 +9,50 @@ Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
 Author: aldot
-Date: 2007-02-16 05:01:06 -0800 (Fri, 16 Feb 2007)
-New Revision: 17905
+Date: 2007-02-16 05:11:04 -0800 (Fri, 16 Feb 2007)
+New Revision: 17906
 
 Log:
-- provide -source targets for the 3 parts of the split dhcp.
-  Closes #1223. Thanks
+- bump to bash 3.2. Thanks to Alexander Rigbo
 
+
+Added:
+   trunk/buildroot/package/bash/bash32-001
+   trunk/buildroot/package/bash/bash32-002
+   trunk/buildroot/package/bash/bash32-003
+   trunk/buildroot/package/bash/bash32-004
+   trunk/buildroot/package/bash/bash32-005
+   trunk/buildroot/package/bash/bash32-006
+   trunk/buildroot/package/bash/bash32-007
+   trunk/buildroot/package/bash/bash32-008
+   trunk/buildroot/package/bash/bash32-009
+
+Removed:
+   trunk/buildroot/package/bash/bash31-001
+   trunk/buildroot/package/bash/bash31-002
+   trunk/buildroot/package/bash/bash31-003
+   trunk/buildroot/package/bash/bash31-004
+   trunk/buildroot/package/bash/bash31-005
+   trunk/buildroot/package/bash/bash31-006
+   trunk/buildroot/package/bash/bash31-007
+   trunk/buildroot/package/bash/bash31-008
+   trunk/buildroot/package/bash/bash31-009
+   trunk/buildroot/package/bash/bash31-010
+   trunk/buildroot/package/bash/bash31-011
+   trunk/buildroot/package/bash/bash31-012
+   trunk/buildroot/package/bash/bash31-013
+   trunk/buildroot/package/bash/bash31-014
+   trunk/buildroot/package/bash/bash31-015
+   trunk/buildroot/package/bash/bash31-016
+   trunk/buildroot/package/bash/bash31-017
 
 Modified:
-   trunk/buildroot/package/dhcp/dhcp.mk
+   trunk/buildroot/package/bash/bash.mk
 
 
 Changeset:
-Modified: trunk/buildroot/package/dhcp/dhcp.mk
-===================================================================
---- trunk/buildroot/package/dhcp/dhcp.mk	2007-02-16 09:34:11 UTC (rev 17904)
-+++ trunk/buildroot/package/dhcp/dhcp.mk	2007-02-16 13:01:06 UTC (rev 17905)
-@@ -23,6 +23,10 @@
- 
- dhcp-source: $(DL_DIR)/$(DHCP_SOURCE)
- 
-+dhcp_server-source: dhcp-source
-+dhcp_relay-source: dhcp-source
-+dhcp_client-source: dhcp-source
-+
- $(DHCP_DIR)/.unpacked: $(DL_DIR)/$(DHCP_SOURCE)
- 	$(DHCP_CAT) $(DL_DIR)/$(DHCP_SOURCE) | tar -C $(BUILD_DIR) $(TAR_OPTIONS) -
- 	toolchain/patch-kernel.sh $(DHCP_DIR) package/dhcp/ dhcp\*.patch
+
+Sorry, the patch is too large to include (2445 lines).
+Please use ViewCVS to see it!
+
+http://uclibc.org/cgi-bin/viewcvs.cgi?view=rev&root=svn&rev=17906
