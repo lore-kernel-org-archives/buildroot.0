@@ -1,8 +1,8 @@
 From: bugs at busybox.net <bugs@busybox.net>
-Date: Sat, 17 Feb 2007 14:10:59 -0800
-Subject: [Buildroot] [buildroot 0001227]: PATCH: Unresolved symbols in
-	libXfixes.so.3.0 with RTLD_NOW
-Message-ID: <8b03a685e604a56f756ad7f3fd694007@bugs.uclibc.org>
+Date: Sat, 17 Feb 2007 14:19:38 -0800
+Subject: [Buildroot] [buildroot 0001228]: PATCH: Unresolved symbols in
+	libgdk-x11-2.0.so with RTLD_NOW
+Message-ID: <709781a99a5e692e3aea7ca123d45fe4@bugs.uclibc.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -12,45 +12,45 @@ To: buildroot@busybox.net
 
 The following issue has been SUBMITTED. 
 ====================================================================== 
-http://busybox.net/bugs/view.php?id=1227 
+http://busybox.net/bugs/view.php?id=1228 
 ====================================================================== 
 Reported By:                foogod
 Assigned To:                buildroot
 ====================================================================== 
 Project:                    buildroot
-Issue ID:                   1227
+Issue ID:                   1228
 Category:                   Other
 Reproducibility:            always
 Severity:                   minor
 Priority:                   normal
 Status:                     assigned
 ====================================================================== 
-Date Submitted:             02-17-2007 14:10 PST
-Last Modified:              02-17-2007 14:10 PST
+Date Submitted:             02-17-2007 14:19 PST
+Last Modified:              02-17-2007 14:19 PST
 ====================================================================== 
-Summary:                    PATCH: Unresolved symbols in libXfixes.so.3.0 with
+Summary:                    PATCH: Unresolved symbols in libgdk-x11-2.0.so with
 RTLD_NOW
 Description: 
-libXfixes.so is missing a couple of library references in its link command.
- This is not usually a problem for programs which link against it because
-they typically also link against the other X libraries which are needed,
-and the lazy function binding will find and resolve them, but when
-libXfixes (or something which uses libXfixes) is loaded using dlopen()
-with the RTLD_NOW flag, the dynamic linker is unable to resolve the
-function references and the operation fails.
+libgdk-x11-2.0.so uses libintl_dgettext, but does not have -lintl in its
+link command.  This is not usually a problem for programs which link
+against it because libintl is included by other libraries which libgdk
+does reference, so the lazy function binding will find and resolve
+libintl_dgettext eventually, but when libgdk-x11-2.0.so (or something
+which uses it) is loaded using dlopen() with the RTLD_NOW flag, the
+dynamic linker is unable to resolve the function reference and the
+operation fails.
 
 (I can provide a test case if desired)
 
-The attached patch adds the required library dependencies to libXfixes.so
-to fix this issue.
+The attached patch adds -lintl to GDK_DEP_LIBS to fix this issue.
 ====================================================================== 
 
 Issue History 
 Date Modified   Username       Field                    Change               
 ====================================================================== 
-02-17-07 14:10  foogod         New Issue                                    
-02-17-07 14:10  foogod         Status                   new => assigned     
-02-17-07 14:10  foogod         Assigned To               => buildroot       
-02-17-07 14:10  foogod         File Added:
-buildroot.17919.xorg_xfixes_libs.patch                    
+02-17-07 14:19  foogod         New Issue                                    
+02-17-07 14:19  foogod         Status                   new => assigned     
+02-17-07 14:19  foogod         Assigned To               => buildroot       
+02-17-07 14:19  foogod         File Added:
+buildroot.17919.libgtk2_gdk_lintl.patch                    
 ======================================================================
