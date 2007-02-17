@@ -1,7 +1,7 @@
 From: bugs at busybox.net <bugs@busybox.net>
-Date: Fri, 16 Feb 2007 18:40:24 -0800
+Date: Sat, 17 Feb 2007 13:24:51 -0800
 Subject: [Buildroot] [buildroot 0001094]: ntpd version bump
-Message-ID: <397750e1e41687d3637fe1a251bb0b4a@bugs.uclibc.org>
+Message-ID: <ee31882ed46597a378bba51bc900ef95@bugs.uclibc.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -25,7 +25,7 @@ Priority:                   normal
 Status:                     assigned
 ====================================================================== 
 Date Submitted:             11-18-2006 03:06 PST
-Last Modified:              02-16-2007 18:40 PST
+Last Modified:              02-17-2007 13:24 PST
 ====================================================================== 
 Summary:                    ntpd version bump
 Description: 
@@ -65,6 +65,12 @@ worked.
 Updated patch is `ntp-new2.patch', which bump version to 4.2.4, remove
 ntp-cross-compile.patch and remove tickadj utility. 
 
+---------------------------------------------------------------------- 
+ foogod - 02-17-07 13:24  
+---------------------------------------------------------------------- 
+That's interesting.. I don't have any problem with the tickadj utility on
+my builds.  Can you post your buildroot .config? 
+
 Issue History 
 Date Modified   Username       Field                    Change               
 ====================================================================== 
@@ -81,4 +87,5 @@ Date Modified   Username       Field                    Change
 02-15-07 14:06  foogod         Note Added: 0002170                          
 02-16-07 18:40  daisuke        File Added: ntp-new2.patch                    
 02-16-07 18:40  daisuke        Note Added: 0002176                          
+02-17-07 13:24  foogod         Note Added: 0002178                          
 ======================================================================
