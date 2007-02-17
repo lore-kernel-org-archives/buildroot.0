@@ -1,7 +1,8 @@
 From: bugs at busybox.net <bugs@busybox.net>
-Date: Sat, 17 Feb 2007 13:24:51 -0800
-Subject: [Buildroot] [buildroot 0001094]: ntpd version bump
-Message-ID: <ee31882ed46597a378bba51bc900ef95@bugs.uclibc.org>
+Date: Sat, 17 Feb 2007 14:10:59 -0800
+Subject: [Buildroot] [buildroot 0001227]: PATCH: Unresolved symbols in
+	libXfixes.so.3.0 with RTLD_NOW
+Message-ID: <8b03a685e604a56f756ad7f3fd694007@bugs.uclibc.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -9,83 +10,47 @@ Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
 
-A NOTE has been added to this issue. 
+The following issue has been SUBMITTED. 
 ====================================================================== 
-http://busybox.net/bugs/view.php?id=1094 
+http://busybox.net/bugs/view.php?id=1227 
 ====================================================================== 
-Reported By:                daisuke
+Reported By:                foogod
 Assigned To:                buildroot
 ====================================================================== 
 Project:                    buildroot
-Issue ID:                   1094
+Issue ID:                   1227
 Category:                   Other
 Reproducibility:            always
 Severity:                   minor
 Priority:                   normal
 Status:                     assigned
 ====================================================================== 
-Date Submitted:             11-18-2006 03:06 PST
-Last Modified:              02-17-2007 13:24 PST
+Date Submitted:             02-17-2007 14:10 PST
+Last Modified:              02-17-2007 14:10 PST
 ====================================================================== 
-Summary:                    ntpd version bump
+Summary:                    PATCH: Unresolved symbols in libXfixes.so.3.0 with
+RTLD_NOW
 Description: 
-This patch does these things:
-(1) bump version from 4.2.0 to 4.2.2p4
-(2) remove tickadj utility. It causes make to fail for current uClibc
+libXfixes.so is missing a couple of library references in its link command.
+ This is not usually a problem for programs which link against it because
+they typically also link against the other X libraries which are needed,
+and the lazy function binding will find and resolve them, but when
+libXfixes (or something which uses libXfixes) is loaded using dlopen()
+with the RTLD_NOW flag, the dynamic linker is unable to resolve the
+function references and the operation fails.
 
-This patch was created against buildroot-20061118 snapshot.
+(I can provide a test case if desired)
+
+The attached patch adds the required library dependencies to libXfixes.so
+to fix this issue.
 ====================================================================== 
-
----------------------------------------------------------------------- 
- daisuke - 11-24-06 06:18  
----------------------------------------------------------------------- 
-Sorry, I uploaded wrong patch. Here is right patch.
-Please use `ntp-new.patch'.
-
- 
-
----------------------------------------------------------------------- 
- foogod - 02-15-07 14:06  
----------------------------------------------------------------------- 
-I just noticed that this is basically a duplicate of the patch I just
-submitted in bug 1222 (mine bumps the version to 4.2.4 (which is now
-current))
-
-Please note that _some_ version bump is required to get ntpd to compile at
-all, as far as I can tell.  4.2.0 just does not work. 
-
----------------------------------------------------------------------- 
- daisuke - 02-16-07 18:40  
----------------------------------------------------------------------- 
-I just tried bumps the version to 4.2.4 like as bug 1222,
-buildroot-20070216 and uClibc-20070216, but I got error "sys/var.h: No
-such file or directory" at tickadj . I removed tickadj utility, it
-worked.
-
-Updated patch is `ntp-new2.patch', which bump version to 4.2.4, remove
-ntp-cross-compile.patch and remove tickadj utility. 
-
----------------------------------------------------------------------- 
- foogod - 02-17-07 13:24  
----------------------------------------------------------------------- 
-That's interesting.. I don't have any problem with the tickadj utility on
-my builds.  Can you post your buildroot .config? 
 
 Issue History 
 Date Modified   Username       Field                    Change               
 ====================================================================== 
-11-18-06 03:06  daisuke        New Issue                                    
-11-18-06 03:06  daisuke        Status                   new => assigned     
-11-18-06 03:06  daisuke        Assigned To               => uClibc          
-11-18-06 03:06  daisuke        File Added: ntp.patch                        
-11-24-06 06:08  daisuke        Note Added: 0001802                          
-11-24-06 06:09  daisuke        Issue Monitored: daisuke                     
-11-24-06 06:09  daisuke        Issue End Monitor: daisuke                    
-11-24-06 06:13  daisuke        File Added: ntp-new.patch                    
-11-24-06 06:18  daisuke        Note Edited: 0001802                         
-02-12-07 05:34  vapier         Assigned To              uClibc => buildroot 
-02-15-07 14:06  foogod         Note Added: 0002170                          
-02-16-07 18:40  daisuke        File Added: ntp-new2.patch                    
-02-16-07 18:40  daisuke        Note Added: 0002176                          
-02-17-07 13:24  foogod         Note Added: 0002178                          
+02-17-07 14:10  foogod         New Issue                                    
+02-17-07 14:10  foogod         Status                   new => assigned     
+02-17-07 14:10  foogod         Assigned To               => buildroot       
+02-17-07 14:10  foogod         File Added:
+buildroot.17919.xorg_xfixes_libs.patch                    
 ======================================================================
