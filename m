@@ -1,7 +1,8 @@
 From: bugs at busybox.net <bugs@busybox.net>
-Date: Sat, 17 Feb 2007 14:29:18 -0800
-Subject: [Buildroot] [buildroot 0001229]: PATCH: Add $(PYTHON_FOR_BUILD)
-Message-ID: <1fa3d0ed032affc95434db4373b7f626@bugs.uclibc.org>
+Date: Sat, 17 Feb 2007 14:36:16 -0800
+Subject: [Buildroot] [buildroot 0001230]: PATCH: Add pygtk, pygobject,
+	and pycairo packages
+Message-ID: <b379a437391a24ecea377fbf0f988e42@bugs.uclibc.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -11,37 +12,43 @@ To: buildroot@busybox.net
 
 The following issue has been SUBMITTED. 
 ====================================================================== 
-http://busybox.net/bugs/view.php?id=1229 
+http://busybox.net/bugs/view.php?id=1230 
 ====================================================================== 
 Reported By:                foogod
 Assigned To:                buildroot
 ====================================================================== 
 Project:                    buildroot
-Issue ID:                   1229
+Issue ID:                   1230
 Category:                   New Features
 Reproducibility:            always
-Severity:                   minor
+Severity:                   feature
 Priority:                   normal
 Status:                     assigned
 ====================================================================== 
-Date Submitted:             02-17-2007 14:29 PST
-Last Modified:              02-17-2007 14:29 PST
+Date Submitted:             02-17-2007 14:36 PST
+Last Modified:              02-17-2007 14:36 PST
 ====================================================================== 
-Summary:                    PATCH: Add $(PYTHON_FOR_BUILD)
+Summary:                    PATCH: Add pygtk, pygobject, and pycairo packages
 Description: 
-The attached patch adds the ability to build a native version of python
-from the same sources and build options as the target version.  This is
-needed for cross-compiling many python extensions, as their configure
-scripts attempt to run a native python interpreter assuming it will
-provide sensible values for building to the target.
+The attached patch adds the following new packages to buildroot:
+
+* PyGobject -- Python bindings for the GLIB Gobject library
+* PyCairo -- Python bindings for cairo
+* PyGTK -- Python bindings for GTK+ 2.x (requires PyGobject and PyCairo)
+
+Note that these new packages all require the python.mk enhancements from
+bug 1229 in order to build.
+
+Note also that PyGTK requires the library fixes in bugs 1227 and 1228 in
+order to run properly once built.
 ====================================================================== 
 
 Issue History 
 Date Modified   Username       Field                    Change               
 ====================================================================== 
-02-17-07 14:29  foogod         New Issue                                    
-02-17-07 14:29  foogod         Status                   new => assigned     
-02-17-07 14:29  foogod         Assigned To               => buildroot       
-02-17-07 14:29  foogod         File Added:
-buildroot.17919.python_for_build.patch                    
+02-17-07 14:36  foogod         New Issue                                    
+02-17-07 14:36  foogod         Status                   new => assigned     
+02-17-07 14:36  foogod         Assigned To               => buildroot       
+02-17-07 14:36  foogod         File Added: buildroot.17919.package_pygtk.patch  
+                 
 ======================================================================
