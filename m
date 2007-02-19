@@ -1,17 +1,45 @@
-From: Daniel Ng <daniel_ng11@lycos.com>
-Date: Mon, 19 Feb 2007 01:07:40 +0000 (UTC)
-Subject: [Buildroot] which make target?
-Message-ID: <loom.20070219T020427-332@post.gmane.org>
+From: bugs at busybox.net <bugs@busybox.net>
+Date: Sun, 18 Feb 2007 22:47:40 -0800
+Subject: [Buildroot] [buildroot 0001232]: dialog from
+	buildroot-20070218.tar.bz2 will not compile
+Message-ID: <d4fef892ab9ce933cd0985bb766190f5@bugs.uclibc.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi,
 
-If I edit skel.tar.gz, is there a make target I can specify instead of doing 
-a 'make clean' then 'make' eg. something like 'make skel'?
+The following issue has been SUBMITTED. 
+====================================================================== 
+http://busybox.net/bugs/view.php?id=1232 
+====================================================================== 
+Reported By:                BLS
+Assigned To:                buildroot
+====================================================================== 
+Project:                    buildroot
+Issue ID:                   1232
+Category:                   Shared Library Support
+Reproducibility:            always
+Severity:                   major
+Priority:                   normal
+Status:                     assigned
+====================================================================== 
+Date Submitted:             02-18-2007 22:47 PST
+Last Modified:              02-18-2007 22:47 PST
+====================================================================== 
+Summary:                    dialog from buildroot-20070218.tar.bz2 will not
+compile
+Description: 
+dialog from buildroot-20070218.tar.bz2 will not compile.
+It cannot find the ncurses library.
+====================================================================== 
 
-Cheers,
-Daniel
+Issue History 
+Date Modified   Username       Field                    Change               
+====================================================================== 
+02-18-07 22:47  BLS            New Issue                                    
+02-18-07 22:47  BLS            Status                   new => assigned     
+02-18-07 22:47  BLS            Assigned To               => buildroot       
+02-18-07 22:47  BLS            File Added: dialog.patch                     
+======================================================================
