@@ -1,28 +1,36 @@
-From: Philippe Ney <philippe.ney@pardes.ws>
-Date: Mon, 19 Feb 2007 08:54:14 +0100
-Subject: [Buildroot] which make target?
-In-Reply-To: <loom.20070219T020427-332@post.gmane.org>
-References: <loom.20070219T020427-332@post.gmane.org>
-Message-ID: <20070219085414.1a5072ed.philippe.ney@pardes.ws>
+From: MikeW <mw_phil@yahoo.co.uk>
+Date: Mon, 19 Feb 2007 10:39:31 +0000 (UTC)
+Subject: [Buildroot] [BusyBox Bug and Patch Tracking] Account
+	registration
+References: <d235cab3e54873273a66204c4f69234c@bugs.busybox.net>
+Message-ID: <loom.20070219T113655-951@post.gmane.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-> Hi,
+ <bugs@...> writes:
+
 > 
-> If I edit skel.tar.gz, is there a make target I can specify instead of doing 
-> a 'make clean' then 'make' eg. something like 'make skel'?
 > 
-> Cheers,
-> Daniel
+> Thank you for registering. You have account with username 'buildroot'. In order
+> to complete your registration, visit the following URL (make sure it is entered
+> as the single line) and set your own access password: 
+> 
+>
+http://busybox.net/bugs/verify.php?id=1074&confirm_hash=561d971fc53226d451169f6338249fa9
+> 
+> If you didn't request any registration, ignore this message and nothing will
+> happen.
+> 
+> DO NOT REPLY TO THIS MESSAGE
+> 
+Was this registration intentional ?
 
-Hi,
+I don't mind seeing the svn commit messages, but entire pages of this list
+dedicated to Mantis status change emails seems a bit excessive ...
 
-# rm -rf $(BUILD_DIR)/root
-# make
+But someone must like it !
 
-Should do the trick.
-
-Philippe
+MikeW
