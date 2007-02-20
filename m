@@ -1,63 +1,56 @@
-From: bugs at busybox.net <bugs@busybox.net>
-Date: Tue, 20 Feb 2007 00:48:04 -0800
-Subject: [Buildroot] [buildroot 0001234]: Allow common configuration options
-	to be specified in one place
-Message-ID: <aa396c1a35f794d4477291fcbdec00e8@bugs.uclibc.org>
+From: MikeW <mw_phil@yahoo.co.uk>
+Date: Tue, 20 Feb 2007 09:00:26 +0000 (UTC)
+Subject: [Buildroot] [buildroot 0001173]: initial make error
+References: <c3e3bed8c7e089f3c3f1439e9fd9d540@bugs.busybox.net>
+Message-ID: <loom.20070220T095651-291@post.gmane.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+ <bugs@...> writes:
 
-A NOTE has been added to this issue. 
-====================================================================== 
-http://busybox.net/bugs/view.php?id=1234 
-====================================================================== 
-Reported By:                djl197
-Assigned To:                buildroot
-====================================================================== 
-Project:                    buildroot
-Issue ID:                   1234
-Category:                   Architecture Specific
-Reproducibility:            always
-Severity:                   minor
-Priority:                   normal
-Status:                     assigned
-====================================================================== 
-Date Submitted:             02-19-2007 07:15 PST
-Last Modified:              02-20-2007 00:48 PST
-====================================================================== 
-Summary:                    Allow common configuration options to be specified
-in one place
-Description: 
-This change allows users to use menuconfig to select Static or Shared
-package builds (or both).
-At the same time it allows a set of common configure options to be
-specified.
-(TARGET_CONFIGURE_FLAGS).
-These flags specify common flags based upon which packages are specified. 
-For instance enabling LIBJPEG will pass --enable-libjpeg and
---enable-jpeg=yes to configure.
-The package makefiles will need to be modified to start using this
-variable and that is not done in this patch. I hope people will start to
-use this variable.
-====================================================================== 
+> 
+> 
+> The following issue has been CLOSED 
+> ====================================================================== 
+> http://busybox.net/bugs/view.php?id=1173 
+> ====================================================================== 
+> Reported By:                pferrell
+> Assigned To:                buildroot
+> ====================================================================== 
+> Project:                    buildroot
+> Issue ID:                   1173
+> Category:                   Architecture Specific
+> Reproducibility:            always
+> Severity:                   block
+> Priority:                   normal
+> Status:                     closed
+> Resolution:                 won't fix
+> Fixed in Version:           
+> ====================================================================== 
+> Date Submitted:             01-24-2007 16:46 PST
+> Last Modified:              02-14-2007 07:10 PST
+> ====================================================================== 
+> Summary:                    initial make error  "Unrecognised emulation mode:
+> armelf_linux_eabi"
+> Description: 
+> Initial make errors out as follows.
+> ====================================================================== 
+> 
 
----------------------------------------------------------------------- 
- djl197 - 02-20-07 00:48  
----------------------------------------------------------------------- 
-Updated patch as first one had a trailing \ missing !!!! 
+It's a pity that the ARM EABI change isn't more 'modular' (or better
+documented) thus allowing it to be easily backported.
 
-Issue History 
-Date Modified   Username       Field                    Change               
-====================================================================== 
-02-19-07 07:15  djl197         New Issue                                    
-02-19-07 07:15  djl197         Status                   new => assigned     
-02-19-07 07:15  djl197         Assigned To               => buildroot       
-02-19-07 07:15  djl197         File Added: buildroot_common_config_opts.patch   
-                
-02-20-07 00:47  djl197         File Added: buildroot_common_config_opts_2.patch 
-                  
-02-20-07 00:48  djl197         Note Added: 0002183                          
-======================================================================
+If I had a spare day or two ...
+                                     
+MikeW
+
+
+
+
+
+
+gmane-padding-gmane-padding-gmane-padding-gmane-padding-gmane-padding-
+gmane-padding-gmane-padding-gmane-padding-gmane-padding-gmane-padding-
