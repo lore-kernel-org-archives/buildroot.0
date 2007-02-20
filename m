@@ -1,37 +1,40 @@
-From: Thomas Lundquist <lists@zelow.no>
-Date: Tue, 20 Feb 2007 14:42:53 +0100
-Subject: [Buildroot] Xorg.
-Message-ID: <20070220134253.GA24769@zelow.no>
+From: Neil Wilson <NWilson@Airspan.com>
+Date: Tue, 20 Feb 2007 14:27:24 -0000
+Subject: [Buildroot] openssl
+Message-ID: <31FE7326559B534EA6C03ACF19B25A315FFCEA@fs5.airspan.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+Hi,
 
-Is it just me or won't Xorg (the full one, not tiny X) compile?
+First post, hello.
 
-This is what it ends up with:
+I am having a slight problem building openssl as shown below:
 
-cc -I../../.. -I../../../exports/include -I..  -I../../../include/extensions      -c -o utils.o utils.c
+/opt/tools/bin/powerpc-linux-uclibc-gcc -I. -I.. -I../include
+-mfloat-abi=soft  -fPIC -DDSO_DLFCN -DHAVE_DLFCN_H -DOPENSSL_NO_KRB5
+-I/opt/tools/include -DOPENSSL_NO_IDEA -DOPENSSL_NO_MDC2
+-DOPENSSL_NO_RC5 -DB_ENDIAN -DTERMIO -O3 -fomit-frame-pointer -Wall -Os
+-pipe    -c -o cryptlib.o cryptlib.c
+cc1: error: unrecognized command line option "-mfloat-abi=soft"
 
-rm -f xkbcomp
+This is configured to build gcc 4.1.2 etc for a powerpc system so I have
+enabled the "use soft floating point" configuration item and the
+buildroot make is being hosted on a Kubuntu system.
 
-cc -I../../../exports/include -o xkbcomp  xkbcomp.o xkbscan.o expr.o vmod.o indicators.o misc.o alias.o                keymap.o keycodes.o keytypes.o compat.o action.o                symbols.o geometry.o xkbpath.o listing.o              xkbparse.o parseutils.o utils.o -L/usr/X11R6/lib -lxkbfile -lX11
+Before I start digging into it a bit more has anyone else seen this ?
+Thanks.
 
-/usr/bin/ld: cannot find -lxkbfile
+Neil
 
-collect2: ld returned 1 exit status
-
-make[6]: *** [xkbcomp] Error 1
-make[6]: Leaving directory
-`/local/export/home/thomasez/Buildroot/buildroot.rolls/build_i686/xc/programs/xkbcomp/cross'
-make[5]: *** [all] Error 2
-
-Is this known? (I presume that -L../../../exports/lib is missing but
-haven't found any simple method to add it)
-
-This is on x86, most of buildroot options are default but gcc is 4.2
-
-
-Thomas.
+--
+Neil Wilson
+Principal Engineer, Embedded Software
+Airspan Communications Ltd
+Cambridge House, Oxford Road
+Uxbridge, Middlesex, UB8 1UN, UK.
++44(0)1895-467265
+neilwilson at airspan.com
