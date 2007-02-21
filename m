@@ -1,49 +1,30 @@
-From: bugs at busybox.net <bugs@busybox.net>
-Date: Wed, 21 Feb 2007 06:30:14 -0800
-Subject: [Buildroot] [buildroot 0001235]: don't do legacy IO on ARM or S/390
-	(Xorg crashes)
-Message-ID: <8728aaa0e5fd0e0f1fa4610751034a48@bugs.uclibc.org>
+From: Thomas Lundquist <lists@zelow.no>
+Date: Wed, 21 Feb 2007 16:16:12 +0100
+Subject: [Buildroot] Xorg.
+In-Reply-To: <45DB07FC.7060100@ibsdisplay.de>
+References: <20070220134253.GA24769@zelow.no> <45DB07FC.7060100@ibsdisplay.de>
+Message-ID: <20070221151612.GA23972@zelow.no>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+On Tue, Feb 20, 2007 at 03:38:52PM +0100, F.Roch wrote:
 
-The following issue has been SUBMITTED. 
-====================================================================== 
-http://busybox.net/bugs/view.php?id=1235 
-====================================================================== 
-Reported By:                rgenoud
-Assigned To:                buildroot
-====================================================================== 
-Project:                    buildroot
-Issue ID:                   1235
-Category:                   Architecture Specific
-Reproducibility:            always
-Severity:                   crash
-Priority:                   normal
-Status:                     assigned
-====================================================================== 
-Date Submitted:             02-21-2007 06:30 PST
-Last Modified:              02-21-2007 06:30 PST
-====================================================================== 
-Summary:                    don't do legacy IO on ARM or S/390 (Xorg crashes)
-Description: 
-on ARM, Xorg crashes with the error :
-xf86EnableIOPorts: Failed to set IOPL for I/O
-at the very beginning.
-This was originaly pointed out by Bastian Blank
-I've just modified his patch for X11R6.8.2 to eliminate the fuzzes.
+> you have to provide the xkbfile library on your build system.
+> do this by installing a xorg on your build machine.
+
+It's there now, together with the patch but same thing happens.
+
+I tried to add another -L but then I'd have to use -rpath and such to
+tell configure where uClibc resides (which makes kinda sense.)
+
+I think I'd rather try to compile a newer xorg (I may even need it) than
+go further with this one. 
+
+Or do you have any plans to do it in the next few days? :=)
 
 
-====================================================================== 
 
-Issue History 
-Date Modified   Username       Field                    Change               
-====================================================================== 
-02-21-07 06:30  rgenoud        New Issue                                    
-02-21-07 06:30  rgenoud        Status                   new => assigned     
-02-21-07 06:30  rgenoud        Assigned To               => buildroot       
-02-21-07 06:30  rgenoud        File Added: patchIOPL                        
-======================================================================
+Thomas.
