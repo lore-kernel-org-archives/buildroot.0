@@ -1,46 +1,49 @@
-From: Will Crozier <willjcroz@yahoo.co.uk>
-Date: Tue, 20 Feb 2007 23:48:19 +0000 (GMT)
-Subject: [Buildroot] target gdb fails to compile - needs libintl.a
-Message-ID: <20070220234819.89233.qmail@web26015.mail.ukl.yahoo.com>
+From: bugs at busybox.net <bugs@busybox.net>
+Date: Wed, 21 Feb 2007 06:30:14 -0800
+Subject: [Buildroot] [buildroot 0001235]: don't do legacy IO on ARM or S/390
+	(Xorg crashes)
+Message-ID: <8728aaa0e5fd0e0f1fa4610751034a48@bugs.uclibc.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi,
 
-I get this error when buildroot tries to make a target
-gdb build:
-
-make[2]: Entering directory
-`/home/will/devel-builds/xbox-media/buildroot/build_i686/gdb-6.3-target/gdb'
-make[2]: *** No rule to make target
-`../intl/libintl.a', needed by `gdb'.  Stop.
-make[2]: Leaving directory
-`/home/will/devel-builds/xbox-media/buildroot/build_i686/gdb-6.3-target/gdb'
-make[1]: *** [all-gdb] Error 2
-make[1]: Leaving directory
-`/home/will/devel-builds/xbox-media/buildroot/build_i686/gdb-6.3-target'
-make: ***
-[/home/will/devel-builds/xbox-media/buildroot/build_i686/gdb-6.3-target/gdb/gdb]
-Error 2
-
-I have libintl, gettext and locale support enabled in
-my .config but I have checked for the intl/ directory
-where it is looking for it and it does not exist. The
-gcc and binutils toolchain build dirs have the intl/
-but gdb dir does not.
-
-Has anyone else had this issue?
-
-Regards,
-
-Will  
+The following issue has been SUBMITTED. 
+====================================================================== 
+http://busybox.net/bugs/view.php?id=1235 
+====================================================================== 
+Reported By:                rgenoud
+Assigned To:                buildroot
+====================================================================== 
+Project:                    buildroot
+Issue ID:                   1235
+Category:                   Architecture Specific
+Reproducibility:            always
+Severity:                   crash
+Priority:                   normal
+Status:                     assigned
+====================================================================== 
+Date Submitted:             02-21-2007 06:30 PST
+Last Modified:              02-21-2007 06:30 PST
+====================================================================== 
+Summary:                    don't do legacy IO on ARM or S/390 (Xorg crashes)
+Description: 
+on ARM, Xorg crashes with the error :
+xf86EnableIOPorts: Failed to set IOPL for I/O
+at the very beginning.
+This was originaly pointed out by Bastian Blank
+I've just modified his patch for X11R6.8.2 to eliminate the fuzzes.
 
 
+====================================================================== 
 
-		
-___________________________________________________________ 
-What kind of emailer are you? Find out today - get a free analysis of your email personality. Take the quiz at the Yahoo! Mail Championship. 
-http://uk.rd.yahoo.com/evt=44106/*http://mail.yahoo.net/uk 
+Issue History 
+Date Modified   Username       Field                    Change               
+====================================================================== 
+02-21-07 06:30  rgenoud        New Issue                                    
+02-21-07 06:30  rgenoud        Status                   new => assigned     
+02-21-07 06:30  rgenoud        Assigned To               => buildroot       
+02-21-07 06:30  rgenoud        File Added: patchIOPL                        
+======================================================================
