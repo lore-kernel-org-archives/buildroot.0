@@ -1,68 +1,60 @@
-From: Thomas Lundquist <lists@zelow.no>
-Date: Thu, 22 Feb 2007 20:50:11 +0100
-Subject: [Buildroot] make menuconfig in a buildroot env.
-Message-ID: <20070222195010.GA30949@zelow.no>
+From: James Newell <jnewell@wgate.com>
+Date: Thu, 22 Feb 2007 15:58:52 -0500
+Subject: [Buildroot] undefined __aeabi_read_tp
+Message-ID: <1172177933.22966.13.camel@ndragon.eng.wgate.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+I was building the ubuntu upstart package, and ran into an undefined
+__aeabi_read_tp call.  
 
-I've made a buildroot development environment and have a buildroot
-checkout in it.
+The gcc defines:
+-mtp=name
+           Specify the access model for the thread local storage pointer.  The
+           valid models are soft, which generates calls to "__aeabi_read_tp",
+           cp15, which fetches the thread pointer from "cp15" directly (sup-
+           ported in the arm6k architecture), and auto, which uses the best
+           available method for the selected processor.  The default setting
+           is auto.
 
-I've done this many times before but since the last time I did it, this
-have started to happen:
+The __aeabi_read_tp is not defined in the uclibc libs:
+[jnewell at ndragon staging_dir]$ nm $(find . -type f -name "*.a")|grep
+eabi_read_tp
+         U __aeabi_read_tp
+         U __aeabi_read_tp
+         U __aeabi_read_tp
+         U __aeabi_read_tp
+         U __aeabi_read_tp
+         U __aeabi_read_tp
+         U __aeabi_read_tp
+         U __aeabi_read_tp
+         U __aeabi_read_tp
+         U __aeabi_read_tp
+         U __aeabi_read_tp
+         U __aeabi_read_tp
 
-It is not the ncurses library since another (earlier) br2 I have works in 
-the same built rootfs.
+Does anyone know who should be defining this call? 
 
-root at hamp buildroot.rolls]# make menuconfig
-make -C package/config ncurses conf mconf
-make[1]: Entering directory `/buildroot.rolls/package/config'
-make[1]: `conf' is up to date.
-gcc -Wall -Wstrict-prototypes -O2 -fomit-frame-pointer
--DCURSES_LOC="<ncurses.h>" -I. -c mconf.c -o mconf.o
-In file included from lxdialog/dialog.h:33,
-                 from mconf.c:26:
-/usr/include/ncurses.h:66:25: error: ncurses_dll.h: No such file or
-directory
-In file included from /usr/include/ncurses.h:123,
-                 from lxdialog/dialog.h:33,
-                 from mconf.c:26:
-/usr/include/unctrl.h: In function 'NCURSES_EXPORT':
-/usr/include/unctrl.h:57: error: expected declaration specifiers before
-'unctrl'
-In file included from lxdialog/dialog.h:33,
-                 from mconf.c:26:
-/usr/include/ncurses.h:147: error: storage class specified for parameter
-'NCURSES_BOOL'
-In file included from lxdialog/dialog.h:33,
-                 from mconf.c:26:
-/usr/include/ncurses.h:198: error: expected '=', ',', ';', 'asm' or
-'__attribute__' before 'COLORS'
-/usr/include/ncurses.h:199: error: expected '=', ',', ';', 'asm' or
-'__attribute__' before 'COLOR_PAIRS'
-/usr/include/ncurses.h:213: error: expected '=', ',', ';', 'asm' or
-'__attribute__' before '_nc_acs_map'
-/usr/include/ncurses.h:306: error: storage class specified for parameter
-'SCREEN'
-/usr/include/ncurses.h:307: error: storage class specified for parameter
-'WINDOW'
-/usr/include/ncurses.h:309: error: storage class specified for parameter
-'attr_t'
-/usr/include/ncurses.h:358: error: expected specifier-qualifier-list
-before 'attr_t'
-/usr/include/ncurses.h:402: error: expected ')' before '*' token
-/usr/include/ncurses.h:403: error: expected ')' before '*' token
-/usr/include/ncurses.h:404: error: expected ')' before '*' token
-/usr/include/ncurses.h:406: error: expected '=', ',', ';', 'asm' or
-'__attribute__' before 'LINES'
-/usr/include/ncurses.h:407: error: expected '=', ',', ';', 'asm' or
-'__attribute__' before 'COLS'
-/usr/include/ncurses.h:408: error: expected '=', ',', ';', 'asm' or
-'__attribute__' before 'TABSIZE'
+Thanks,
+Jim
 
+Some of my config:
+[jnewell at ndragon buildroot]$ grep -e ^BR2_GCC -e ABI -e THREAD .config
+# BR2_ARM_OABI is not set
+BR2_ARM_EABI=y
+# BR2_PTHREADS_NONE is not set
+# BR2_PTHREADS is not set
+# BR2_PTHREADS_OLD is not set
+BR2_PTHREADS_NATIVE=y
+# BR2_PTHREAD_DEBUG is not set
+BR2_GCC_VERSION_4_2=y
+BR2_GCC_IS_SNAP=y
+BR2_GCC_SNAP_DATE="20070214"
+BR2_GCC_VERSION="4.2"
+BR2_GCC_SHARED_LIBGCC=y
+BR2_SOFT_FLOAT=y
 
-Thomas.
+ 
