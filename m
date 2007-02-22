@@ -1,36 +1,35 @@
-From: Richard Genoud <richard.genoud@gmail.com>
-Date: Thu, 22 Feb 2007 11:37:45 +0100
-Subject: [Buildroot] Building Xorg for arm926t softfloat fails with error at
-	linux_vm86.c
-Message-ID: <80b317760702220237j2bd115d8tf1de6985a8887601@mail.gmail.com>
+From: jacmet at uclibc.org <jacmet@uclibc.org>
+Date: Thu, 22 Feb 2007 04:00:16 -0800 (PST)
+Subject: [Buildroot] svn commit: trunk/buildroot/package/sqlite
+Message-ID: <20070222120016.1158C485C3@busybox.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Frank !
-if I remember correctly, you should add
-#define XF86INT10_BUILD       X86EMU_GENERIC
-in the file build_arm/xc/config/cf/host.def
+Author: jacmet
+Date: 2007-02-22 04:00:15 -0800 (Thu, 22 Feb 2007)
+New Revision: 17951
 
-the patch for package/xorg/xorg-config.patch is :
-[snip]
---- a/package/xorg/xorg-config.patch    2007-02-09 15:55:37.000000000 +0100
-+++ b/package/xorg/xorg-config.patch    2007-02-22 11:33:27.000000000 +0100
-@@ -1,6 +1,7 @@
- --- xc/config/cf/host.def~     Thu May 12 15:28:01 MDT 2005
- +++ xc/config/cf/host.def      Thu May 12 15:28:01 MDT 2005
--@@ -0,0 +1,45 @@
-+@@ -0,0 +1,46 @@
-++#define XF86INT10_BUILD       X86EMU_GENERIC
- +#define KDriveXServer         YES
- +#define TinyXServer           YES
- +#define XfbdevServer          YES
-[snip]
+Log:
+Bumped version
 
-regards,
-Richard Genoud
--------------- next part --------------
-An HTML attachment was scrubbed...
-URL: http://busybox.net/lists/buildroot/attachments/20070222/21971630/attachment.html 
+Modified:
+   trunk/buildroot/package/sqlite/sqlite.mk
+
+
+Changeset:
+Modified: trunk/buildroot/package/sqlite/sqlite.mk
+===================================================================
+--- trunk/buildroot/package/sqlite/sqlite.mk	2007-02-22 08:53:20 UTC (rev 17950)
++++ trunk/buildroot/package/sqlite/sqlite.mk	2007-02-22 12:00:15 UTC (rev 17951)
+@@ -4,7 +4,7 @@
+ #
+ #############################################################
+ 
+-SQLITE_VERSION=3.3.12
++SQLITE_VERSION=3.3.13
+ SQLITE_SOURCE=sqlite-$(SQLITE_VERSION).tar.gz
+ SQLITE_SITE=http://www.sqlite.org
+ SQLITE_DIR=$(BUILD_DIR)/sqlite-$(SQLITE_VERSION)
