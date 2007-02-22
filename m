@@ -1,30 +1,55 @@
-From: Thomas Lundquist <lists@zelow.no>
-Date: Wed, 21 Feb 2007 16:16:12 +0100
-Subject: [Buildroot] Xorg.
-In-Reply-To: <45DB07FC.7060100@ibsdisplay.de>
-References: <20070220134253.GA24769@zelow.no> <45DB07FC.7060100@ibsdisplay.de>
-Message-ID: <20070221151612.GA23972@zelow.no>
+From: jacmet at uclibc.org <jacmet@uclibc.org>
+Date: Thu, 22 Feb 2007 00:53:20 -0800 (PST)
+Subject: [Buildroot] svn commit: trunk/buildroot/toolchain/uClibc
+Message-ID: <20070222085320.242BC4859B@busybox.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Tue, Feb 20, 2007 at 03:38:52PM +0100, F.Roch wrote:
+Author: jacmet
+Date: 2007-02-22 00:53:20 -0800 (Thu, 22 Feb 2007)
+New Revision: 17950
 
-> you have to provide the xkbfile library on your build system.
-> do this by installing a xorg on your build machine.
+Log:
+0.9.28.2 support
 
-It's there now, together with the patch but same thing happens.
-
-I tried to add another -L but then I'd have to use -rpath and such to
-tell configure where uClibc resides (which makes kinda sense.)
-
-I think I'd rather try to compile a newer xorg (I may even need it) than
-go further with this one. 
-
-Or do you have any plans to do it in the next few days? :=)
+Modified:
+   trunk/buildroot/toolchain/uClibc/Config.in
+   trunk/buildroot/toolchain/uClibc/uclibc.mk
 
 
+Changeset:
+Modified: trunk/buildroot/toolchain/uClibc/Config.in
+===================================================================
+--- trunk/buildroot/toolchain/uClibc/Config.in	2007-02-21 23:46:45 UTC (rev 17949)
++++ trunk/buildroot/toolchain/uClibc/Config.in	2007-02-22 08:53:20 UTC (rev 17950)
+@@ -14,8 +14,12 @@
+ 		bool "uClibc 0.9.28"
+ 
+ 	config BR2_UCLIBC_VERSION_0_9_28_1
++		depends BR2_DEPRECATED
+ 		bool "uClibc 0.9.28.1"
+ 
++	config BR2_UCLIBC_VERSION_0_9_28_2
++		bool "uClibc 0.9.28.2"
++
+ 	config BR2_UCLIBC_VERSION_SNAPSHOT
+ 		bool "daily snapshot"
+ 
 
-Thomas.
+Modified: trunk/buildroot/toolchain/uClibc/uclibc.mk
+===================================================================
+--- trunk/buildroot/toolchain/uClibc/uclibc.mk	2007-02-21 23:46:45 UTC (rev 17949)
++++ trunk/buildroot/toolchain/uClibc/uclibc.mk	2007-02-22 08:53:20 UTC (rev 17950)
+@@ -17,6 +17,9 @@
+ UCLIBC_CONFIG_FILE=toolchain/uClibc/uClibc-0.9.29.config
+ endif
+ else
++ifeq ($(BR2_UCLIBC_VERSION_0_9_28_2),y)
++UCLIBC_VER:=0.9.28.2
++endif
+ ifeq ($(BR2_UCLIBC_VERSION_0_9_28_1),y)
+ UCLIBC_VER:=0.9.28.1
+ endif
