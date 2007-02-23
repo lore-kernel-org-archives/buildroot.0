@@ -1,82 +1,69 @@
-From: James Newell <jnewell@wgate.com>
-Date: Thu, 22 Feb 2007 16:15:38 -0500
-Subject: [Buildroot] undefined __aeabi_read_tp
-In-Reply-To: <1172177933.22966.13.camel@ndragon.eng.wgate.com>
-References: <1172177933.22966.13.camel@ndragon.eng.wgate.com>
-Message-ID: <1172178939.22966.16.camel@ndragon.eng.wgate.com>
+From: Thomas Lundquist <lists@zelow.no>
+Date: Fri, 23 Feb 2007 07:56:20 +0100
+Subject: [Buildroot] make menuconfig in a buildroot env.
+In-Reply-To: <20070222195010.GA30949@zelow.no>
+References: <20070222195010.GA30949@zelow.no>
+Message-ID: <20070223065620.GB30949@zelow.no>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hmmmm .. I found them defined in glibc2.5:
-$findsym __aeabi_read_tp
-Searching library: ./arm-926ejs-linux-gnueabi/lib/libc_nonshared.a
-  Found object __aeabi_read_tp in    
-library ./arm-926ejs-linux-gnueabi/lib/libc_nonshared.a
-Searching library: ./arm-926ejs-linux-gnueabi/lib/libc.a
-  Found object __aeabi_read_tp in
-library ./arm-926ejs-linux-gnueabi/lib/libc.a
+On Thu, Feb 22, 2007 at 08:50:11PM +0100, Thomas Lundquist wrote:
+> 
+> I've made a buildroot development environment and have a buildroot
+> checkout in it.
+> 
+> I've done this many times before but since the last time I did it, this
+> have started to happen:
+> 
+> It is not the ncurses library since another (earlier) br2 I have works in 
+> the same built rootfs.
 
-Could my uclibc be mis-configured for threading?
-Thanks,
-Jim
+BTW; just typing make (and not use menuconfig, doesen't work either, it
+bombs in uClibc:
 
-On Thu, 2007-02-22 at 15:58 -0500, James Newell wrote:
-> I was building the ubuntu upstart package, and ran into an undefined
-> __aeabi_read_tp call.  
-> 
-> The gcc defines:
-> -mtp=name
->            Specify the access model for the thread local storage pointer.  The
->            valid models are soft, which generates calls to "__aeabi_read_tp",
->            cp15, which fetches the thread pointer from "cp15" directly (sup-
->            ported in the arm6k architecture), and auto, which uses the best
->            available method for the selected processor.  The default setting
->            is auto.
-> 
-> The __aeabi_read_tp is not defined in the uclibc libs:
-> [jnewell at ndragon staging_dir]$ nm $(find . -type f -name "*.a")|grep
-> eabi_read_tp
->          U __aeabi_read_tp
->          U __aeabi_read_tp
->          U __aeabi_read_tp
->          U __aeabi_read_tp
->          U __aeabi_read_tp
->          U __aeabi_read_tp
->          U __aeabi_read_tp
->          U __aeabi_read_tp
->          U __aeabi_read_tp
->          U __aeabi_read_tp
->          U __aeabi_read_tp
->          U __aeabi_read_tp
-> 
-> Does anyone know who should be defining this call? 
-> 
-> Thanks,
-> Jim
-> 
-> Some of my config:
-> [jnewell at ndragon buildroot]$ grep -e ^BR2_GCC -e ABI -e THREAD .config
-> # BR2_ARM_OABI is not set
-> BR2_ARM_EABI=y
-> # BR2_PTHREADS_NONE is not set
-> # BR2_PTHREADS is not set
-> # BR2_PTHREADS_OLD is not set
-> BR2_PTHREADS_NATIVE=y
-> # BR2_PTHREAD_DEBUG is not set
-> BR2_GCC_VERSION_4_2=y
-> BR2_GCC_IS_SNAP=y
-> BR2_GCC_SNAP_DATE="20070214"
-> BR2_GCC_VERSION="4.2"
-> BR2_GCC_SHARED_LIBGCC=y
-> BR2_SOFT_FLOAT=y
-> 
->  
-> 
-> _______________________________________________
-> buildroot mailing list
-> buildroot at uclibc.org
-> http://busybox.net/mailman/listinfo/buildroot
-> 
+set -x && make MAKE="make -j1" -C
+/buildroot.rolls/toolchain_build_i686/uClibc \
+                PREFIX=/buildroot.rolls/toolchain_build_i686/uClibc_dev/
+\
+                DEVEL_PREFIX=/usr/ \
+                RUNTIME_PREFIX=/buildroot.rolls/toolchain_build_i686/uClibc_dev/
+\
+                HOSTCC="gcc" \
+                pregen install_dev
++ make 'MAKE=make -j1' -C /buildroot.rolls/toolchain_build_i686/uClibc
+PREFIX=/buildroot.rolls/toolchain_build_i686/uClibc_dev/
+DEVEL_PREFIX=/usr/
+RUNTIME_PREFIX=/buildroot.rolls/toolchain_build_i686/uClibc_dev/
+HOSTCC=gcc pregen install_dev
+/bin/sh:
+/buildroot.rolls/build_i686/staging_dir/bin/i686-linux-uclibc-gcc: No
+such file or directory
+make[1]:
+/buildroot.rolls/build_i686/staging_dir/bin/i686-linux-uclibc-gcc:
+Command not found
+make[1]: Entering directory
+`/buildroot.rolls/toolchain_build_i686/uClibc'
+make[1]:
+/buildroot.rolls/build_i686/staging_dir/bin/i686-linux-uclibc-gcc:
+Command not found
+/bin/sh:
+/buildroot.rolls/build_i686/staging_dir/bin/i686-linux-uclibc-gcc: No
+such file or directory
+make[2]:
+/buildroot.rolls/build_i686/staging_dir/bin/i686-linux-uclibc-gcc:
+Command not found
+make[2]:
+/buildroot.rolls/build_i686/staging_dir/bin/i686-linux-uclibc-gcc:
+Command not found
+gcc -DCURSES_LOC="<ncurses.h>" -DLOCALE -DKBUILD_NO_NLS  -c
+lxdialog/checklist.c -o lxdialog/checklist.o
+In file included from lxdialog/dialog.h:32,
+                 from lxdialog/checklist.c:24:
+/usr/include/ncurses.h:66:25: error: ncurses_dll.h: No such file or
+directory
+In file included from /usr/include/ncurses.h:123,
+                 from lxdialog/dialog.h:32,
+                 from lxdialog/checklist.c:24:
