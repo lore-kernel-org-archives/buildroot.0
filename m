@@ -1,34 +1,35 @@
-From: Philippe Ney <philippe.ney@pardes.ws>
-Date: Fri, 23 Feb 2007 09:19:15 +0100
+From: Thomas Lundquist <lists@zelow.no>
+Date: Fri, 23 Feb 2007 10:14:33 +0100
 Subject: [Buildroot] make menuconfig in a buildroot env.
-In-Reply-To: <20070222195010.GA30949@zelow.no>
+In-Reply-To: <20070223091915.8209f683.philippe.ney@pardes.ws>
 References: <20070222195010.GA30949@zelow.no>
-Message-ID: <20070223091915.8209f683.philippe.ney@pardes.ws>
+	<20070223091915.8209f683.philippe.ney@pardes.ws>
+Message-ID: <20070223091432.GC30949@zelow.no>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-> I've made a buildroot development environment and have a buildroot
-> checkout in it.
-[...]
-> root at hamp buildroot.rolls]# make menuconfig
-> make -C package/config ncurses conf mconf
-> make[1]: Entering directory `/buildroot.rolls/package/config'
-> make[1]: `conf' is up to date.
+On Fri, Feb 23, 2007 at 09:19:15AM +0100, Philippe Ney wrote:
+> 
+> Hi,
+> 
+> I like starting my messages with something like 'hi', 'hello' or 'yo
+> guys'. I don't know exactly why. Maybe... respect. And this even if my
+> response is not the right one.
 
-Hi,
+:=) true enough. messing with this for a few hours and an aching
+shoulder made me less polite..
 
-I like starting my messages with something like 'hi', 'hello' or 'yo
-guys'. I don't know exactly why. Maybe... respect. And this even if my
-response is not the right one.
+> Have you try :
+> 
+> >$ make -C package/config clean
 
-Have you try :
+Yup, I've done that. Also; since it happens with uClibc (latest snapshot) 
+on a clean buildroot aswell, it can't be that.
 
->$ make -C package/config clean
+I really wish I could blush instead :=)
 
-Seems you have updated some of your tools without having cleaned your
-half-built buildroot.
 
-Philippe
+Thomas.
