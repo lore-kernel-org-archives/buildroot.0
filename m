@@ -1,20 +1,25 @@
-From: Heikki Lindholm <holindho@cs.helsinki.fi>
-Date: Sun, 25 Feb 2007 13:38:06 +0200
-Subject: [Buildroot] Mac OS X status
-Message-ID: <45E1751E.2010406@cs.helsinki.fi>
+From: Thomas Lundquist <lists@zelow.no>
+Date: Sun, 25 Feb 2007 17:46:54 +0100
+Subject: [Buildroot] Xorg.
+In-Reply-To: <20070221151612.GA23972@zelow.no>
+References: <20070220134253.GA24769@zelow.no> <45DB07FC.7060100@ibsdisplay.de>
+	<20070221151612.GA23972@zelow.no>
+Message-ID: <20070225164654.GA12169@zelow.no>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+On Wed, Feb 21, 2007 at 04:16:12PM +0100, Thomas Lundquist wrote:
+> 
+> I think I'd rather try to compile a newer xorg (I may even need it) than
+> go further with this one. 
+> 
+> Or do you have any plans to do it in the next few days? :=)
 
-In case there are some other parties interested in seeing buildroot 
-working on a Mac OS X host, here's a short status report. Using the sed 
-patch I posted and after fixing some incompatible "cp"'s, one "du -l", a 
-few missing headers, and a missing "getline" function, I can build a 
-simple uclibc+busybox installation up to where it would need fakeroot, 
-which, unfortunately, doesn't seem to work on OS X.
+BTW, I am working on xorg 7.2 now. not sure how far I'll get but it's at
+least going forward.
 
--- Heikki Lindholm
+
+Thomas.
