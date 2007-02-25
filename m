@@ -1,25 +1,64 @@
-From: Thomas Lundquist <lists@zelow.no>
-Date: Sun, 25 Feb 2007 17:46:54 +0100
-Subject: [Buildroot] Xorg.
-In-Reply-To: <20070221151612.GA23972@zelow.no>
-References: <20070220134253.GA24769@zelow.no> <45DB07FC.7060100@ibsdisplay.de>
-	<20070221151612.GA23972@zelow.no>
-Message-ID: <20070225164654.GA12169@zelow.no>
+From: don <don_reid@comcast.net>
+Date: Sun, 25 Feb 2007 13:14:13 -0800
+Subject: [Buildroot] Linux version or Variable conflict.
+Message-ID: <20070225211413.GA5886@reid1.localdomain>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Wed, Feb 21, 2007 at 04:16:12PM +0100, Thomas Lundquist wrote:
-> 
-> I think I'd rather try to compile a newer xorg (I may even need it) than
-> go further with this one. 
-> 
-> Or do you have any plans to do it in the next few days? :=)
+I have a new directory with the latest svn files (At revision 17976).
 
-BTW, I am working on xorg 7.2 now. not sure how far I'll get but it's at
-least going forward.
+There seems to be some confict with the Linux version or with variable
+names.
+
+The file toolchain/kernel-headers/kernel-headers-new.mk wants 2.6.12,
+and target/device/Via/epia-mii/linux.mk wants 2.6.11.5.
+
+Also the file target/linux26.mk has
+
+	LINUX_DIR=$(LINUX26_DIR)
+
+I am getting this result from the make target "linux" which is in
+target/device/Via/epia-mii/linux.mk.
 
 
-Thomas.
+******************************************************************************
+wget --passive-ftp -P /home/don/Robots/Bot1/EPIA/buildroot/dl
+http://www.kernel.org/pub/linux/kernel/v2.6/linux-2.6.11.5.tar.bz2
+--11:30:32--
+http://www.kernel.org/pub/linux/kernel/v2.6/linux-2.6.11.5.tar.bz2
+           =>
+`/home/don/Robots/Bot1/EPIA/buildroot/dl/linux-2.6.11.5.tar.bz2'
+Resolving www.kernel.org... 204.152.191.37, 204.152.191.5
+Connecting to www.kernel.org|204.152.191.37|:80... connected.
+HTTP request sent, awaiting response... 200 OK
+Length: 37,088,482 (35M) [application/x-bzip2]
+
+100%[====================================>] 37,088,482   754.57K/s
+ETA 00:00
+
+11:31:12 (926.65 KB/s) -
+`/home/don/Robots/Bot1/EPIA/buildroot/dl/linux-2.6.11.5.tar.bz2' saved
+[37088482/37088482]
+
+mkdir -p /home/don/Robots/Bot1/EPIA/buildroot/toolchain_build_i486
+(cd /home/don/Robots/Bot1/EPIA/buildroot/toolchain_build_i486; ln -sf
+/home/don/Robots/Bot1/EPIA/buildroot/build_i486/linux-2.6.12 linux)
+bzcat /home/don/Robots/Bot1/EPIA/buildroot/dl/linux-2.6.11.5.tar.bz2 |
+tar -C /home/don/Robots/Bot1/EPIA/buildroot/build_i486   -xf -
+mkdir -p package/linux/kernel-patches
+toolchain/patch-kernel.sh
+/home/don/Robots/Bot1/EPIA/buildroot/build_i486/linux-2.6.12
+package/linux/kernel-patches
+Aborting.
+'/home/don/Robots/Bot1/EPIA/buildroot/build_i486/linux-2.6.12' is not a
+directory.
+make: ***
+[/home/don/Robots/Bot1/EPIA/buildroot/build_i486/linux-2.6.11.5/.unpacked]
+Error 1
+******************************************************************************
+
+-- 
+Don
