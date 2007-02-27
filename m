@@ -1,29 +1,19 @@
-From: James Newell <jnewell@wgate.com>
-Date: Tue, 27 Feb 2007 11:36:07 -0500
-Subject: [Buildroot] Native POSIX Threading (NPTL)
-Message-ID: <1172594168.2813.6.camel@ndragon.eng.wgate.com>
+From: Prabhakar Chaganti <pchaganti@gmail.com>
+Date: Tue, 27 Feb 2007 12:03:55 -0500
+Subject: [Buildroot] Ruby
+Message-ID: <bc5d574e0702270903o273bc0f7hf24026ff8be7ed07@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+i have been able to get the Ruby package to build, but it doesnt seem like
+all the files are there for a ruby installation. We seem to be missing
+rbconfig for one. Has anyone successfully compiled and used the Ruby package
+with busybox?
 
-The latest snapshot of uclibc seems to have removed NPTL support for
-arm.
-
- CC libpthread/linuxthreads/sysdeps/pthread/errno-loc.os
-libpthread/linuxthreads/sysdeps/pthread/errno-loc.c:23:27: error:
-sysdep-cancel.h: No such file or directory
-make: *** [libpthread/linuxthreads/sysdeps/pthread/errno-loc.os] Error 1
-
-There isn't
-any ./uClibc/libpthread/linuxthreads/sysdeps/unix/sysv/linux/arm
-directory containing the needed arm implementation therefore the
-sysdep-cancel.h is missing.
-
-Has anyone else experienced this?
-
-Thanks,
-Jim
+thanks
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: http://busybox.net/lists/buildroot/attachments/20070227/8323c45f/attachment.htm 
