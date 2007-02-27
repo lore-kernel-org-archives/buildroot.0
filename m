@@ -1,38 +1,65 @@
-From: Allan Clark <allanc@chickenandporn.com>
-Date: Sun, 25 Feb 2007 19:26:01 -0600
-Subject: [Buildroot] Mac OS X status
-In-Reply-To: <b15982770702251720v71d2dd5fo87e5a6f56f34d6a5@mail.gmail.com>
-References: <45E1751E.2010406@cs.helsinki.fi>
-	<b15982770702251720v71d2dd5fo87e5a6f56f34d6a5@mail.gmail.com>
-Message-ID: <37c712e0702251726m95f94a8h35d46440de18fb36@mail.gmail.com>
+From: bugs at busybox.net <bugs@busybox.net>
+Date: Mon, 26 Feb 2007 19:54:09 -0800
+Subject: [Buildroot] [buildroot 0001238]: Buildroot fails when building
+	binutils 2.17 on an 32 bit Ubuntu edgy box.
+Message-ID: <aa175cf58fc74619016138538a4e32b7@bugs.uclibc.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 2/25/07, David Smoot <davidsmoot@gmail.com> wrote:
-> On 2/25/07, Heikki Lindholm <holindho@cs.helsinki.fi> wrote:
-> > Hello,
-> >
-> > In case there are some other parties interested in seeing buildroot
-> > working on a Mac OS X host, here's a short status report. Using the sed
-> > patch I posted and after fixing some incompatible "cp"'s, one "du -l", a
-> > few missing headers, and a missing "getline" function, I can build a
-> > simple uclibc+busybox installation up to where it would need fakeroot,
-> > which, unfortunately, doesn't seem to work on OS X.
-> >
-> > -- Heikki Lindholm
->
-> Big thumbs up to you for doing this.  I'm sure it is a small group of people
-> that would use buildroot on a Mac but I appreciate it.  And I would imagine
-> Buildroot will benefit by the extra effort to make it POSIX compliant.
-> David
 
-I've contributed to this in the past, others have, this would need
-some assurance that the parts for buildroot on MacOSX would have a
-chance of merging to baseline, or there will probably be an annual
-"hey, I have an idea, buildroot on MacOSX" attempt.  If the changes go
-to baseline, then the issue becomes maintenance, not re-invention.
+A NOTE has been added to this issue. 
+====================================================================== 
+http://busybox.net/bugs/view.php?id=1238 
+====================================================================== 
+Reported By:                hwstar
+Assigned To:                buildroot
+====================================================================== 
+Project:                    buildroot
+Issue ID:                   1238
+Category:                   Architecture Specific
+Reproducibility:            always
+Severity:                   minor
+Priority:                   normal
+Status:                     assigned
+====================================================================== 
+Date Submitted:             02-23-2007 20:22 PST
+Last Modified:              02-26-2007 19:54 PST
+====================================================================== 
+Summary:                    Buildroot fails when building binutils 2.17 on an 32
+bit Ubuntu edgy box.
+Description: 
+Buildroot fails when building binutils 2.17 on an Ubuntu edgy box.
+Originally I noticed the problem when using a snapshot dated 1/7/07, so I
+tried downloading the latest buildroot snapshot (2/23/07) and the build
+failure occurs in exactly the same spot. My .config file is included below
+so the the problem can be reproduced.
+The target system is an i586 via mini-itx motherboard. 
 
-Allan
+The buildroot package dated 1/7/07 did compile successfully on a Fedora
+Core 4 box,  and only when I updated that box to Ubuntu Edgy did I see
+this build failure crop up.
+
+====================================================================== 
+
+---------------------------------------------------------------------- 
+ hwstar - 02-26-07 19:54  
+---------------------------------------------------------------------- 
+*Solved* 
+
+Binutils-2.17 requires makeinfo (part of the texinfo package) to be
+installed. 
+
+Issue History 
+Date Modified   Username       Field                    Change               
+====================================================================== 
+02-23-07 20:22  hwstar         New Issue                                    
+02-23-07 20:22  hwstar         Status                   new => assigned     
+02-23-07 20:22  hwstar         Assigned To               => buildroot       
+02-23-07 20:22  hwstar         File Added: failed-build-config                  
+ 
+02-24-07 10:56  hwstar         Issue Monitored: hwstar                      
+02-26-07 19:54  hwstar         Note Added: 0002189                          
+======================================================================
