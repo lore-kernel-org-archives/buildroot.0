@@ -1,103 +1,29 @@
-From: jacmet at uclibc.org <jacmet@uclibc.org>
-Date: Tue, 27 Feb 2007 01:04:32 -0800 (PST)
-Subject: [Buildroot] svn commit: trunk/buildroot/package/busybox
-Message-ID: <20070227090432.67D2B485C1@busybox.net>
+From: James Newell <jnewell@wgate.com>
+Date: Tue, 27 Feb 2007 11:36:07 -0500
+Subject: [Buildroot] Native POSIX Threading (NPTL)
+Message-ID: <1172594168.2813.6.camel@ndragon.eng.wgate.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Author: jacmet
-Date: 2007-02-27 01:04:31 -0800 (Tue, 27 Feb 2007)
-New Revision: 17978
+Hello,
 
-Log:
-tar -t hotfix
+The latest snapshot of uclibc seems to have removed NPTL support for
+arm.
 
-Added:
-   trunk/buildroot/package/busybox/busybox-1.4.1-tar_t.patch
+ CC libpthread/linuxthreads/sysdeps/pthread/errno-loc.os
+libpthread/linuxthreads/sysdeps/pthread/errno-loc.c:23:27: error:
+sysdep-cancel.h: No such file or directory
+make: *** [libpthread/linuxthreads/sysdeps/pthread/errno-loc.os] Error 1
 
+There isn't
+any ./uClibc/libpthread/linuxthreads/sysdeps/unix/sysv/linux/arm
+directory containing the needed arm implementation therefore the
+sysdep-cancel.h is missing.
 
-Changeset:
-Added: trunk/buildroot/package/busybox/busybox-1.4.1-tar_t.patch
-===================================================================
---- trunk/buildroot/package/busybox/busybox-1.4.1-tar_t.patch	                        (rev 0)
-+++ trunk/buildroot/package/busybox/busybox-1.4.1-tar_t.patch	2007-02-27 09:04:31 UTC (rev 17978)
-@@ -0,0 +1,76 @@
-+--- busybox-1.4.1/archival/tar.c	Wed Jan 24 22:49:25 2007
-++++ busybox-1.4.1-tar_t/archival/tar.c	Sun Feb 25 21:50:35 2007
-+@@ -760,7 +760,9 @@
-+ 	const char *tar_filename = "-";
-+ 	unsigned opt;
-+ 	int verboseFlag = 0;
-++#if ENABLE_FEATURE_TAR_LONG_OPTIONS && ENABLE_FEATURE_TAR_FROM
-+ 	llist_t *excludes = NULL;
-++#endif
-+ 
-+ 	/* Initialise default values */
-+ 	tar_handle = init_handle();
-+@@ -773,7 +775,9 @@
-+ 		"tt:vv:" // count -t,-v
-+ 		"?:" // bail out with usage instead of error return
-+ 		"X::T::" // cumulative lists
-++#if ENABLE_FEATURE_TAR_LONG_OPTIONS && ENABLE_FEATURE_TAR_FROM
-+ 		"\xff::" // cumulative lists for --exclude
-++#endif
-+ 		USE_FEATURE_TAR_CREATE("c:") "t:x:" // at least one of these is reqd
-+ 		USE_FEATURE_TAR_CREATE("c--tx:t--cx:x--ct") // mutually exclusive
-+ 		SKIP_FEATURE_TAR_CREATE("t--x:x--t"); // mutually exclusive
-+@@ -788,14 +792,15 @@
-+ 		USE_FEATURE_TAR_FROM(    "T:X:")
-+ 		USE_FEATURE_TAR_GZIP(    "z"   )
-+ 		USE_FEATURE_TAR_COMPRESS("Z"   )
-+-		,
-+-		&base_dir, // -C dir
-+-		&tar_filename, // -f filename
-+-		USE_FEATURE_TAR_FROM(&(tar_handle->accept),) // T
-+-		USE_FEATURE_TAR_FROM(&(tar_handle->reject),) // X
-+-		USE_FEATURE_TAR_FROM(&excludes            ,) // --exclude
-+-		&verboseFlag, // combined count for -t and -v
-+-		&verboseFlag // combined count for -t and -v
-++		, &base_dir // -C dir
-++		, &tar_filename // -f filename
-++		USE_FEATURE_TAR_FROM(, &(tar_handle->accept)) // T
-++		USE_FEATURE_TAR_FROM(, &(tar_handle->reject)) // X
-++#if ENABLE_FEATURE_TAR_LONG_OPTIONS && ENABLE_FEATURE_TAR_FROM
-++		, &excludes // --exclude
-++#endif
-++		, &verboseFlag // combined count for -t and -v
-++		, &verboseFlag // combined count for -t and -v
-+ 		);
-+ 
-+ 	if (verboseFlag) tar_handle->action_header = header_verbose_list;
-+@@ -828,17 +833,19 @@
-+ 	if (opt & OPT_COMPRESS)
-+ 		get_header_ptr = get_header_tar_Z;
-+ 
-+-	if (ENABLE_FEATURE_TAR_FROM) {
-+-		tar_handle->reject = append_file_list_to_list(tar_handle->reject);
-+-		/* Append excludes to reject */
-+-		while (excludes) {
-+-			llist_t *temp = excludes->link;
-+-			excludes->link = tar_handle->reject;
-+-			tar_handle->reject = excludes;
-+-			excludes = temp;
-+-		}
-+-		tar_handle->accept = append_file_list_to_list(tar_handle->accept);
-++#if ENABLE_FEATURE_TAR_FROM
-++	tar_handle->reject = append_file_list_to_list(tar_handle->reject);
-++#if ENABLE_FEATURE_TAR_LONG_OPTIONS
-++	/* Append excludes to reject */
-++	while (excludes) {
-++		llist_t *next = excludes->link;
-++		excludes->link = tar_handle->reject;
-++		tar_handle->reject = excludes;
-++		excludes = next;
-+ 	}
-++#endif
-++	tar_handle->accept = append_file_list_to_list(tar_handle->accept);
-++#endif
-+ 
-+ 	/* Check if we are reading from stdin */
-+ 	if (argv[optind] && *argv[optind] == '-') {
+Has anyone else experienced this?
+
+Thanks,
+Jim
