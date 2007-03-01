@@ -1,35 +1,60 @@
-From: Koenraad lelong <buildroot@de-brouwerij.be>
-Date: Wed, 31 Jan 2007 22:23:56 +0100
-Subject: [Buildroot] Xorg questions
-In-Reply-To: <45C10369.7070301@gnat.ca>
-References: <45C0F27F.1000700@de-brouwerij.be> <45C10369.7070301@gnat.ca>
-Message-ID: <45C108EC.10202@de-brouwerij.be>
+From: Piotr Adam Zolnierczuk <pzolnier@indiana.edu>
+Date: Wed, 28 Feb 2007 19:48:36 -0500
+Subject: [Buildroot] static libgcc_s
+In-Reply-To: <20070228214534.GA23235@codepoet.org>
+References: <45E5A4E6.3010508@indiana.edu>
+	<20070228214534.GA23235@codepoet.org>
+Message-ID: <45E622E4.6010600@indiana.edu>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Nathanael D. Noblet schreef:
-> Koenraad lelong wrote:
-> 
->> Hi,
->> I'm trying to run an application under Xorg/X11. It needs (amongst 
->> others) libXi and libXinerama. I wonder why these aren't installed in 
->> the image, although they are present in the staging dir. The same for 
->> xterm.
->> If I manually copy those libraries to their destination 
->> (/usr/X11R6/lib), the application can't find the libraries. I thought 
->> /etc/ld.so.conf took care of this (it contains /usr/X11R6/lib). If I 
->> am in the directory where the application is "ldd" reports those 
->> libraries not found. If I go to the directory with the libraries "ldd" 
->> finds those libraries, but starting the application (startx 
->> /path/to/appname) from there does not work.
->> What am I missing ?
->>   
-> 
-> Once copied into the destination directory, did you run ldcache to 
-> update the ld.so.conf cachefile?
-I'll try that.
-Thanks,
-Koenraad Lelong.
+Thanks Eric
+It's a good thought. I will certainly give it a try.
+
+It still, though,  leaves me with two toolchains:
+one 'static' for dataflash and u-boot  and a second 'dynamic'  for 
+kernel and applications (for space considerations)
+
+I am still curious if one could have just one toolchain that rules them 
+all ... :)
+
+Piotr
+
+Erik Andersen wrote:
+> On Wed Feb 28, 2007 at 10:51:02AM -0500, Piotr Adam Zolnierczuk wrote:
+>   
+>> Any ideas how can I "force" buildroot to build a static version of libgcc_s?
+>>     
+>
+> disable BR2_GCC_SHARED_LIBGCC in your buildroot .config
+> and rebuild your toolchain.  No more shared libgcc_s...
+>
+>  -Erik
+>
+> --
+> Erik B. Andersen             http://codepoet-consulting.com/
+> --This message was written using 73% post-consumer electrons--
+>   
+
+
+-- 
+ __________________________________________________________________
+ Piotr Adam Zolnierczuk
+ Indiana University                          phone:  (812) 855-3613
+ Cyclotron Facility                          fax:    (812) 855-6645
+ 2401 Milo B Sampson Ln               e-mail:  pzolnier at indiana.edu
+ Bloomington,IN 47408, USA   http://www.iucf.indiana.edu/u/pzolnier
+ __________________________________________________________________
+                   written on recycled electrons                 	
+
+
+-------------- next part --------------
+A non-text attachment was scrubbed...
+Name: pzolnier.vcf
+Type: text/x-vcard
+Size: 317 bytes
+Desc: not available
+Url : http://lists.busybox.net/pipermail/buildroot/attachments/20070228/5deb8137/attachment-0002.vcf 
