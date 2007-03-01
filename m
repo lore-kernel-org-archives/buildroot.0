@@ -1,7 +1,7 @@
 From: bugs at busybox.net <bugs@busybox.net>
-Date: Thu, 1 Mar 2007 14:56:19 -0800
+Date: Thu, 1 Mar 2007 15:14:29 -0800
 Subject: [Buildroot] [buildroot 0001241]: fakeroot download fails
-Message-ID: <212d12f77766c97b402ab31aada6b349@bugs.uclibc.org>
+Message-ID: <2a14de55f3070cae1e50720950086342@bugs.uclibc.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -25,7 +25,7 @@ Priority:                   normal
 Status:                     assigned
 ====================================================================== 
 Date Submitted:             02-28-2007 05:18 PST
-Last Modified:              03-01-2007 14:56 PST
+Last Modified:              03-01-2007 15:14 PST
 ====================================================================== 
 Summary:                    fakeroot download fails
 Description: 
@@ -54,6 +54,16 @@ http://ftp.br.debian.org/debian/pool/main/f/fakeroot/fakeroot_1.5.12.tar.gz
 Now it seems the br link doesn't work either.  Perhaps the brazilian
 mirror kept a copy for a short time before getting 'updated'. 
 
+---------------------------------------------------------------------- 
+ bifferos - 03-01-07 15:14  
+---------------------------------------------------------------------- 
+SVN Revision 17476 upped the fakeroot version from 1.5.8 -> 1.5.12
+
+It seems to be OK to simply change the version number in
+buildroot/package/fakeroot/fakeroot.mk from 1.5.12 to 1.5.10.  That will
+at least compile.  I don't know anything about fakeroot, so no idea if it
+works properly like this though. 
+
 Issue History 
 Date Modified   Username       Field                    Change               
 ====================================================================== 
@@ -62,4 +72,5 @@ Date Modified   Username       Field                    Change
 02-28-07 05:18  amckinle       Assigned To               => buildroot       
 02-28-07 05:18  amckinle       File Added: Config.in                        
 03-01-07 14:56  bifferos       Note Added: 0002192                          
+03-01-07 15:14  bifferos       Note Added: 0002193                          
 ======================================================================
