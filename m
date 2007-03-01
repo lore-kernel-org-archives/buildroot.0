@@ -1,76 +1,484 @@
-From: bugs at busybox.net <bugs@busybox.net>
-Date: Thu, 1 Mar 2007 15:14:29 -0800
-Subject: [Buildroot] [buildroot 0001241]: fakeroot download fails
-Message-ID: <2a14de55f3070cae1e50720950086342@bugs.uclibc.org>
+From: Zachary P. Landau <kapheine@gmail.com>
+Date: Thu, 1 Mar 2007 18:54:07 -0500
+Subject: [Buildroot] Odd behavior when displaying locale date and decimal
+	information
+Message-ID: <a04f56da0703011554n6572d5bdxffde5b8f90bc65cd@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+Hello,
 
-A NOTE has been added to this issue. 
-====================================================================== 
-http://busybox.net/bugs/view.php?id=1241 
-====================================================================== 
-Reported By:                amckinle
-Assigned To:                buildroot
-====================================================================== 
-Project:                    buildroot
-Issue ID:                   1241
-Category:                   Architecture Specific
-Reproducibility:            always
-Severity:                   minor
-Priority:                   normal
-Status:                     assigned
-====================================================================== 
-Date Submitted:             02-28-2007 05:18 PST
-Last Modified:              03-01-2007 15:14 PST
-====================================================================== 
-Summary:                    fakeroot download fails
-Description: 
-wget --passive-ftp -P /home/austin/src/buildroot/dl
-http://ftp.debian.org/debian/pool/main/f/fakeroot/fakeroot_1.5.12.tar.gz
---08:14:55-- 
-http://ftp.debian.org/debian/pool/main/f/fakeroot/fakeroot_1.5.12.tar.gz
-           => `/home/austin/src/buildroot/dl/fakeroot_1.5.12.tar.gz'
-Resolving ftp.debian.org... 128.101.240.212
-Connecting to ftp.debian.org|128.101.240.212|:80... connected.
-HTTP request sent, awaiting response... 404 Not Found
-08:14:55 ERROR 404: Not Found.
+I am having a (locale related?) issue with the current svn version of
+buildroot.  I first noticed it when I typed 'date' and got the following
+output:
 
-make: *** [/home/austin/src/buildroot/dl/fakeroot_1.5.12.tar.gz] Error 1
-austin at eve:~/src/buildroot$ svn update
-At revision 17982.
+    un 
+????  1 21:48:34 MST 2000
 
-====================================================================== 
+I tried running the command in a unicode-capable terminal and it still
+printed as garbage, so I'm not sure what that garbage represents.  I
+wrote a small program that called strftime() with the %c option and that
+also came out as similar garbage.
 
----------------------------------------------------------------------- 
- bifferos - 03-01-07 14:56  
----------------------------------------------------------------------- 
-http://ftp.br.debian.org/debian/pool/main/f/fakeroot/fakeroot_1.5.12.tar.gz
-[^]
+The problem seems to extend beyond just date printing.  I wrote a tiny
+program with:
 
-Now it seems the br link doesn't work either.  Perhaps the brazilian
-mirror kept a copy for a short time before getting 'updated'. 
+    printf("floating point: %f\n", 10.11");
 
----------------------------------------------------------------------- 
- bifferos - 03-01-07 15:14  
----------------------------------------------------------------------- 
-SVN Revision 17476 upped the fakeroot version from 1.5.8 -> 1.5.12
+And the number came out as something like '101100000'.  Everything
+indicated that the number was fine internally, but the decimal place was
+being dropped when displaying it.  Since the character printed out for a
+decimal place varies by location, I figure the issue is related.
 
-It seems to be OK to simply change the version number in
-buildroot/package/fakeroot/fakeroot.mk from 1.5.12 to 1.5.10.  That will
-at least compile.  I don't know anything about fakeroot, so no idea if it
-works properly like this though. 
+I'm not sure what is going on here.  I tried various combinations of
+locale options in the buildroot and uClib configuration but nothing
+seemed to help.  I'll attach my config files to this email.  I'm
+running                  a checkout of buildroot from today
+(2007-01-03), uClibc 0.9.28.3, and                     busybox
+1.2.2.1.  The busybox version is a bit old, but I see the
+           problem with programs outside of busybox, so I don't think
+that should
+matter.  I'm not sure what other information would help, but please let
+me know if there is more I can provide.
 
-Issue History 
-Date Modified   Username       Field                    Change               
-====================================================================== 
-02-28-07 05:18  amckinle       New Issue                                    
-02-28-07 05:18  amckinle       Status                   new => assigned     
-02-28-07 05:18  amckinle       Assigned To               => buildroot       
-02-28-07 05:18  amckinle       File Added: Config.in                        
-03-01-07 14:56  bifferos       Note Added: 0002192                          
-03-01-07 15:14  bifferos       Note Added: 0002193                          
-======================================================================
+Thanks for any tips you can give.
+
+-- 
+Zachary P. Landau <kapheine@gmail.com>
+
+-- buildroot-20070301 .config
+BR2_HAVE_DOT_CONFIG=y
+BR2_arm=y
+BR2_arm920t=y
+BR2_ARM_TYPE="ARM920T"
+BR2_ARM_OABI=y
+BR2_ARCH="arm"
+BR2_ENDIAN="LITTLE"
+BR2_WGET="wget --passive-ftp"
+BR2_SVN="svn co"
+BR2_ZCAT="zcat"
+BR2_BZCAT="bzcat"
+BR2_TAR_OPTIONS=""
+BR2_DL_DIR="$(BASE_DIR)/dl"
+BR2_SOURCEFORGE_MIRROR="easynews"
+BR2_ATMEL_MIRROR="ftp://at91dist:distrib at 81.80.104.162/AT91_Third_Party_Design_Flow/Linux_Host/"
+BR2_AT91_PATCH_MIRROR="http://maxim.org.za/AT91RM9200/2.6/"
+BR2_STAGING_DIR="/opt/buildroot"
+BR2_TOPDIR_PREFIX=""
+BR2_TOPDIR_SUFFIX=""
+BR2_GNU_BUILD_SUFFIX="pc-linux-gnu"
+BR2_GNU_TARGET_SUFFIX="linux-uclibc"
+BR2_JLEVEL=2
+BR2_TOOLCHAIN_BUILDROOT=y
+BR2_KERNEL_HEADERS_2_6_20=y
+BR2_DEFAULT_KERNEL_HEADERS="2.6.20"
+BR2_UCLIBC_VERSION_0_9_28_3=y
+BR2_ENABLE_LOCALE=y
+BR2_PTHREADS_OLD=y
+BR2_BINUTILS_VERSION_2_17=y
+BR2_BINUTILS_VERSION="2.17"
+BR2_EXTRA_BINUTILS_CONFIG_OPTIONS=""
+BR2_GCC_VERSION_3_4_6=y
+BR2_GCC_VERSION="3.4.6"
+BR2_EXTRA_GCC_CONFIG_OPTIONS=""
+BR2_GCC_SHARED_LIBGCC=y
+BR2_CCACHE=y
+BR2_ENABLE_MULTILIB=y
+BR2_LARGEFILE=y
+BR2_SOFT_FLOAT=y
+BR2_TARGET_OPTIMIZATION="-O2 -pipe"
+BR2_CROSS_TOOLCHAIN_TARGET_UTILS=y
+BR2_PACKAGE_BUSYBOX=y
+BR2_BUSYBOX_VERSION_1_2_2_1=y
+BR2_PACKAGE_BUSYBOX_INSTALL_SYMLINKS=y
+BR2_PACKAGE_BUSYBOX_CONFIG="package/busybox/busybox-1.2.2.1.config"
+BR2_PACKAGE_BUSYBOX_HIDE_OTHERS=y
+BR2_EXTRA_TARGET_GCC_CONFIG_OPTIONS=""
+BR2_PACKAGE_EXPAT=y
+BR2_PACKAGE_GETTEXT=y
+BR2_PACKAGE_LIBINTL=y
+BR2_PACKAGE_PKGCONFIG=y
+BR2_READLINE=y
+BR2_PACKAGE_LIBFLOAT=y
+BR2_PACKAGE_MINICOM=y
+BR2_PACKAGE_STRACE=y
+BR2_NETWORK_SUPPORT=y
+BR2_PACKAGE_AVAHI=y
+BR2_PACKAGE_IPROUTE2=y
+BR2_PACKAGE_PORTMAP=y
+BR2_BLOCKDEV_SUPPORT=y
+BR2_PACKAGE_DBUS=y
+BR2_PACKAGE_DBUS_GLIB=y
+BR2_PACKAGE_MTD=y
+BR2_PACKAGE_MTD_ORIG=y
+BR2_PACKAGE_MTD_ORIG_STRING="mtd_20050122.orig.tar.gz"
+BR2_PACKAGE_MTD_FLASH_ERASE=y
+BR2_PACKAGE_MTD_FLASH_ERASEALL=y
+BR2_PACKAGE_MTD_FLASH_INFO=y
+BR2_PACKAGE_MTD_FLASH_LOCK=y
+BR2_PACKAGE_MTD_FLASH_UNLOCK=y
+BR2_PACKAGE_MTD_FLASHCP=y
+BR2_PACKAGE_MTD_ERASE=y
+BR2_PACKAGE_MTD_JFFS2DUMP=y
+BR2_PACKAGE_MTD_JFFS3DUMP=y
+BR2_PACKAGE_MTD_SUMTOOL=y
+BR2_PACKAGE_MTD_FTL_CHECK=y
+BR2_PACKAGE_MTD_FTL_FORMAT=y
+BR2_PACKAGE_MTD_NFTL_FORMAT=y
+BR2_PACKAGE_MTD_NFTLDUMP=y
+BR2_PACKAGE_MTD_MKFSJFFS2=y
+BR2_PACKAGE_MTD_MKFSJFFS=y
+BR2_PACKAGE_MTD_NANDDUMP=y
+BR2_PACKAGE_MTD_NANDWRITE=y
+BR2_PACKAGE_MTD_MTD_DEBUG=y
+BR2_PACKAGE_MTD_DOCFDISK=y
+BR2_PACKAGE_MTD_DOC_LOADBIOS=y
+BR2_AUDIO_SUPPORT=y
+BR2_GRAPHIC_SUPPORT=y
+BR2_PACKAGE_NCURSES=y
+BR2_PACKAGE_LIBPNG=y
+BR2_PACKAGE_LIBGD=y
+BR2_PACKAGE_GDCHART=y
+BR2_PACKAGE_LIBGLIB2=y
+BR2_COMPRESSOR_SUPPORT=y
+BR2_PACKAGE_ZLIB=y
+BR2_SCRIPTING_SUPPORT=y
+BR2_PACKAGE_LUA=y
+BR2_TARGET_ROOTFS_EXT2=y
+BR2_TARGET_ROOTFS_EXT2_BLOCKS=0
+BR2_TARGET_ROOTFS_EXT2_INODES=0
+BR2_TARGET_ROOTFS_EXT2_RESBLKS=0
+BR2_TARGET_ROOTFS_EXT2_SQUASH=y
+BR2_TARGET_ROOTFS_EXT2_OUTPUT="$(IMAGE).ext2"
+BR2_TARGET_ROOTFS_EXT2_NONE=y
+BR2_TARGET_ROOTFS_EXT2_COPYTO=""
+BR2_TARGET_ROOTFS_JFFS2=y
+BR2_TARGET_ROOTFS_JFFS2_PAGESIZE=0x200
+BR2_TARGET_ROOTFS_JFFS2_NOCLEANMARKER=y
+BR2_TARGET_ROOTFS_JFFS2_EBSIZE=0x4000
+BR2_TARGET_ROOTFS_JFFS2_PAD=y
+BR2_TARGET_ROOTFS_JFFS2_PADSIZE=0x0
+BR2_TARGET_ROOTFS_JFFS2_LE=y
+BR2_TARGET_ROOTFS_JFFS2_OUTPUT="$(IMAGE).jffs2"
+BR2_TARGET_ROOTFS_JFFS2_COPYTO=""
+BR2_TARGET_ROOTFS_TAR=y
+BR2_TARGET_ROOTFS_TAR_GZIP=y
+BR2_TARGET_ROOTFS_TAR_OPTIONS=""
+
+-- uClibc 0.9.28.3
+TARGET_ARCH="none"
+FORCE_OPTIONS_FOR_ARCH=y
+ARCH_HAS_MMU=y
+ARCH_USE_MMU=y
+UCLIBC_HAS_FLOATS=y
+UCLIBC_HAS_FPU=y
+DO_C99_MATH=y
+KERNEL_SOURCE="/usr/src/linux"
+KERNEL_HEADERS="/usr/src/linux/include"
+HAVE_DOT_CONFIG=y
+DOPIC=y
+HAVE_SHARED=y
+LDSO_LDD_SUPPORT=y
+LDSO_CACHE_SUPPORT=y
+LDSO_BASE_FILENAME="ld.so"
+UCLIBC_CTOR_DTOR=y
+UCLIBC_HAS_THREADS=y
+PTHREADS_DEBUG_SUPPORT=y
+LINUXTHREADS_OLD=y
+UCLIBC_HAS_LFS=y
+MALLOC_STANDARD=y
+MALLOC_GLIBC_COMPAT=y
+UCLIBC_DYNAMIC_ATEXIT=y
+UCLIBC_SUSV3_LEGACY_MACROS=y
+UCLIBC_HAS_SHADOW=y
+UCLIBC_HAS___PROGNAME=y
+ASSUME_DEVPTS=y
+UCLIBC_HAS_TM_EXTENSIONS=y
+UCLIBC_HAS_TZ_CACHING=y
+UCLIBC_HAS_TZ_FILE=y
+UCLIBC_HAS_TZ_FILE_READ_MANY=y
+UCLIBC_TZ_FILE_PATH="/etc/TZ"
+UCLIBC_HAS_IPV6=y
+UCLIBC_HAS_RPC=y
+UCLIBC_HAS_FULL_RPC=y
+UCLIBC_HAS_REENTRANT_RPC=y
+UCLIBC_HAS_STRING_GENERIC_OPT=y
+UCLIBC_HAS_STRING_ARCH_OPT=y
+UCLIBC_HAS_CTYPE_TABLES=y
+UCLIBC_HAS_CTYPE_SIGNED=y
+UCLIBC_HAS_CTYPE_CHECKED=y
+UCLIBC_HAS_WCHAR=y
+UCLIBC_HAS_HEXADECIMAL_FLOATS=y
+UCLIBC_HAS_GLIBC_CUSTOM_PRINTF=y
+UCLIBC_PRINTF_SCANF_POSITIONAL_ARGS=9
+UCLIBC_HAS_SCANF_GLIBC_A_FLAG=y
+UCLIBC_HAS_STDIO_BUFSIZ_4096=y
+UCLIBC_HAS_STDIO_BUILTIN_BUFFER_NONE=y
+UCLIBC_HAS_STDIO_GETC_MACRO=y
+UCLIBC_HAS_STDIO_PUTC_MACRO=y
+UCLIBC_HAS_STDIO_AUTO_RW_TRANSITION=y
+UCLIBC_HAS_FOPEN_EXCLUSIVE_MODE=y
+UCLIBC_HAS_GLIBC_CUSTOM_STREAMS=y
+UCLIBC_HAS_PRINTF_M_SPEC=y
+UCLIBC_HAS_ERRNO_MESSAGES=y
+UCLIBC_HAS_SIGNUM_MESSAGES=y
+UCLIBC_HAS_GNU_GETOPT=y
+UCLIBC_HAS_GNU_GETSUBOPT=y
+UCLIBC_HAS_REGEX=y
+UCLIBC_HAS_REGEX_OLD=y
+UCLIBC_HAS_FNMATCH=y
+UCLIBC_HAS_FNMATCH_OLD=y
+UCLIBC_HAS_FTW=y
+UCLIBC_HAS_GLOB=y
+UCLIBC_HAS_GNU_GLOB=y
+SHARED_LIB_LOADER_PREFIX="/lib"
+RUNTIME_PREFIX="/"
+DEVEL_PREFIX="/usr/"
+UCLIBC_BUILD_RELRO=y
+UCLIBC_BUILD_NOW=y
+CROSS_COMPILER_PREFIX=""
+DOSTRIP=y
+WARNINGS="-Wall"
+
+-- busybox 1.2.2.1 .config
+HAVE_DOT_CONFIG=y
+CONFIG_SHOW_USAGE=y
+CONFIG_FEATURE_VERBOSE_USAGE=y
+CONFIG_GETOPT_LONG=y
+CONFIG_FEATURE_DEVPTS=y
+CONFIG_FEATURE_SUID=y
+CONFIG_BUSYBOX_EXEC_PATH="/proc/self/exe"
+CONFIG_LFS=y
+CROSS_COMPILER_PREFIX=""
+CONFIG_DEBUG_YANK_SUSv2=y
+CONFIG_INSTALL_APPLET_SYMLINKS=y
+PREFIX="./_install"
+CONFIG_MD5_SIZE_VS_SPEED=2
+CONFIG_BUNZIP2=y
+CONFIG_GUNZIP=y
+CONFIG_GZIP=y
+CONFIG_TAR=y
+CONFIG_FEATURE_TAR_CREATE=y
+CONFIG_FEATURE_TAR_BZIP2=y
+CONFIG_FEATURE_TAR_GZIP=y
+CONFIG_FEATURE_TAR_GNU_EXTENSIONS=y
+CONFIG_UNZIP=y
+CONFIG_BASENAME=y
+CONFIG_CAT=y
+CONFIG_CHGRP=y
+CONFIG_CHMOD=y
+CONFIG_CHOWN=y
+CONFIG_CHROOT=y
+CONFIG_CMP=y
+CONFIG_CP=y
+CONFIG_CUT=y
+CONFIG_DATE=y
+CONFIG_FEATURE_DATE_ISOFMT=y
+CONFIG_DD=y
+CONFIG_DF=y
+CONFIG_DIRNAME=y
+CONFIG_DOS2UNIX=y
+CONFIG_UNIX2DOS=y
+CONFIG_DU=y
+CONFIG_FEATURE_DU_DEFAULT_BLOCKSIZE_1K=y
+CONFIG_ECHO=y
+CONFIG_FEATURE_FANCY_ECHO=y
+CONFIG_ENV=y
+CONFIG_EXPR=y
+CONFIG_EXPR_MATH_SUPPORT_64=y
+CONFIG_FALSE=y
+CONFIG_HEAD=y
+CONFIG_HOSTID=y
+CONFIG_ID=y
+CONFIG_INSTALL=y
+CONFIG_LN=y
+CONFIG_LOGNAME=y
+CONFIG_LS=y
+CONFIG_FEATURE_LS_FILETYPES=y
+CONFIG_FEATURE_LS_FOLLOWLINKS=y
+CONFIG_FEATURE_LS_RECURSIVE=y
+CONFIG_FEATURE_LS_SORTFILES=y
+CONFIG_FEATURE_LS_TIMESTAMPS=y
+CONFIG_FEATURE_LS_USERNAME=y
+CONFIG_FEATURE_LS_COLOR=y
+CONFIG_FEATURE_LS_COLOR_IS_DEFAULT=y
+CONFIG_MD5SUM=y
+CONFIG_MKDIR=y
+CONFIG_MKFIFO=y
+CONFIG_MKNOD=y
+CONFIG_MV=y
+CONFIG_PWD=y
+CONFIG_RM=y
+CONFIG_RMDIR=y
+CONFIG_SHA1SUM=y
+CONFIG_SLEEP=y
+CONFIG_SORT=y
+CONFIG_FEATURE_SORT_BIG=y
+CONFIG_STTY=y
+CONFIG_SYNC=y
+CONFIG_TAIL=y
+CONFIG_FEATURE_FANCY_TAIL=y
+CONFIG_TEE=y
+CONFIG_FEATURE_TEE_USE_BLOCK_IO=y
+CONFIG_TEST=y
+CONFIG_FEATURE_TEST_64=y
+CONFIG_TOUCH=y
+CONFIG_TRUE=y
+CONFIG_TTY=y
+CONFIG_UNAME=y
+CONFIG_UNIQ=y
+CONFIG_USLEEP=y
+CONFIG_UUDECODE=y
+CONFIG_UUENCODE=y
+CONFIG_WC=y
+CONFIG_WHOAMI=y
+CONFIG_YES=y
+CONFIG_FEATURE_PRESERVE_HARDLINKS=y
+CONFIG_FEATURE_AUTOWIDTH=y
+CONFIG_FEATURE_HUMAN_READABLE=y
+CONFIG_FEATURE_MD5_SHA1_SUM_CHECK=y
+CONFIG_CHVT=y
+CONFIG_CLEAR=y
+CONFIG_DEALLOCVT=y
+CONFIG_OPENVT=y
+CONFIG_RESET=y
+CONFIG_MKTEMP=y
+CONFIG_READLINK=y
+CONFIG_FEATURE_READLINK_FOLLOW=y
+CONFIG_RUN_PARTS=y
+CONFIG_FEATURE_RUN_PARTS_LONG_OPTIONS=y
+CONFIG_START_STOP_DAEMON=y
+CONFIG_FEATURE_START_STOP_DAEMON_FANCY=y
+CONFIG_FEATURE_START_STOP_DAEMON_LONG_OPTIONS=y
+CONFIG_WHICH=y
+CONFIG_SED=y
+CONFIG_VI=y
+CONFIG_FEATURE_VI_COLON=y
+CONFIG_FEATURE_VI_YANKMARK=y
+CONFIG_FEATURE_VI_SEARCH=y
+CONFIG_FEATURE_VI_USE_SIGNALS=y
+CONFIG_FEATURE_VI_DOT_CMD=y
+CONFIG_FEATURE_VI_READONLY=y
+CONFIG_FEATURE_VI_SETOPTS=y
+CONFIG_FEATURE_VI_SET=y
+CONFIG_FEATURE_VI_WIN_RESIZE=y
+CONFIG_FEATURE_VI_OPTIMIZE_CURSOR=y
+CONFIG_FIND=y
+CONFIG_FEATURE_FIND_PRINT0=y
+CONFIG_FEATURE_FIND_MTIME=y
+CONFIG_FEATURE_FIND_PERM=y
+CONFIG_FEATURE_FIND_TYPE=y
+CONFIG_FEATURE_FIND_XDEV=y
+CONFIG_FEATURE_FIND_EXEC=y
+CONFIG_GREP=y
+CONFIG_FEATURE_GREP_EGREP_ALIAS=y
+CONFIG_FEATURE_GREP_FGREP_ALIAS=y
+CONFIG_FEATURE_GREP_CONTEXT=y
+CONFIG_XARGS=y
+CONFIG_FEATURE_XARGS_SUPPORT_QUOTES=y
+CONFIG_FEATURE_XARGS_SUPPORT_TERMOPT=y
+CONFIG_FEATURE_XARGS_SUPPORT_ZERO_TERM=y
+CONFIG_INIT=y
+CONFIG_FEATURE_USE_INITTAB=y
+CONFIG_FEATURE_INIT_SCTTY=y
+CONFIG_FEATURE_EXTRA_QUIET=y
+CONFIG_FEATURE_INITRD=y
+CONFIG_HALT=y
+CONFIG_FEATURE_SHADOWPASSWDS=y
+CONFIG_ADDGROUP=y
+CONFIG_DELGROUP=y
+CONFIG_ADDUSER=y
+CONFIG_DELUSER=y
+CONFIG_GETTY=y
+CONFIG_LOGIN=y
+CONFIG_PASSWD=y
+CONFIG_SU=y
+CONFIG_SULOGIN=y
+CONFIG_VLOCK=y
+CONFIG_INSMOD=y
+CONFIG_RMMOD=y
+CONFIG_LSMOD=y
+CONFIG_FEATURE_LSMOD_PRETTY_2_6_OUTPUT=y
+CONFIG_MODPROBE=y
+CONFIG_FEATURE_MODPROBE_MULTIPLE_OPTIONS=y
+CONFIG_FEATURE_CHECK_TAINTED_MODULE=y
+CONFIG_FEATURE_2_6_MODULES=y
+CONFIG_DMESG=y
+CONFIG_FDFORMAT=y
+CONFIG_FDISK=y
+FDISK_SUPPORT_LARGE_DISKS=y
+CONFIG_FEATURE_FDISK_WRITABLE=y
+CONFIG_GETOPT=y
+CONFIG_HEXDUMP=y
+CONFIG_HWCLOCK=y
+CONFIG_MORE=y
+CONFIG_FEATURE_USE_TERMIOS=y
+CONFIG_MOUNT=y
+CONFIG_FEATURE_MOUNT_NFS=y
+CONFIG_PIVOT_ROOT=y
+CONFIG_RDATE=y
+CONFIG_SWAPONOFF=y
+CONFIG_SWITCH_ROOT=y
+CONFIG_UMOUNT=y
+CONFIG_FEATURE_UMOUNT_ALL=y
+CONFIG_FEATURE_MOUNT_LOOP=y
+CONFIG_DC=y
+CONFIG_LESS=y
+CONFIG_FEATURE_LESS_REGEXP=y
+CONFIG_MT=y
+CONFIG_STRINGS=y
+CONFIG_TIME=y
+CONFIG_HOSTNAME=y
+CONFIG_IFCONFIG=y
+CONFIG_FEATURE_IFCONFIG_STATUS=y
+CONFIG_FEATURE_IFCONFIG_HW=y
+CONFIG_IFUPDOWN=y
+CONFIG_FEATURE_IFUPDOWN_IP=y
+CONFIG_FEATURE_IFUPDOWN_IPV4=y
+CONFIG_NETSTAT=y
+CONFIG_NSLOOKUP=y
+CONFIG_PING=y
+CONFIG_FEATURE_FANCY_PING=y
+CONFIG_ROUTE=y
+CONFIG_TELNET=y
+CONFIG_FEATURE_TELNET_TTYPE=y
+CONFIG_TELNETD=y
+CONFIG_APP_UDHCPC=y
+CONFIG_FEATURE_UDHCP_SYSLOG=y
+CONFIG_WGET=y
+CONFIG_FEATURE_WGET_STATUSBAR=y
+CONFIG_FEATURE_WGET_AUTHENTICATION=y
+CONFIG_FREE=y
+CONFIG_KILL=y
+CONFIG_KILLALL=y
+CONFIG_PIDOF=y
+CONFIG_PS=y
+CONFIG_FEATURE_PS_WIDE=y
+CONFIG_TOP=y
+CONFIG_FEATURE_TOP_CPU_USAGE_PERCENTAGE=y
+CONFIG_UPTIME=y
+CONFIG_FEATURE_SH_IS_ASH=y
+CONFIG_ASH=y
+CONFIG_ASH_JOB_CONTROL=y
+CONFIG_ASH_READ_NCHARS=y
+CONFIG_ASH_READ_TIMEOUT=y
+CONFIG_ASH_ALIAS=y
+CONFIG_ASH_MATH_SUPPORT=y
+CONFIG_ASH_MATH_SUPPORT_64=y
+CONFIG_ASH_BUILTIN_ECHO=y
+CONFIG_ASH_BUILTIN_TEST=y
+CONFIG_ASH_OPTIMIZE_FOR_SIZE=y
+CONFIG_ASH_EXPAND_PRMT=y
+CONFIG_FEATURE_COMMAND_EDITING=y
+CONFIG_FEATURE_COMMAND_HISTORY=15
+CONFIG_FEATURE_COMMAND_SAVEHISTORY=y
+CONFIG_FEATURE_COMMAND_TAB_COMPLETION=y
+CONFIG_FEATURE_SH_FANCY_PROMPT=y
+CONFIG_SYSLOGD=y
+CONFIG_FEATURE_ROTATE_LOGFILE=y
+CONFIG_FEATURE_IPC_SYSLOG_BUFFER_SIZE=0
+CONFIG_KLOGD=y
+CONFIG_LOGGER=y
