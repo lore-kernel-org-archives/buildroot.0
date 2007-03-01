@@ -1,8 +1,7 @@
 From: bugs at busybox.net <bugs@busybox.net>
-Date: Thu, 1 Mar 2007 11:55:24 -0800
-Subject: [Buildroot] [buildroot 0001243]: buildroot fails to download
-	fakeroot_1.5.12.tar.gz
-Message-ID: <cedd5191a427ba4ef86e58b85320393d@busybox.net>
+Date: Thu, 1 Mar 2007 14:56:19 -0800
+Subject: [Buildroot] [buildroot 0001241]: fakeroot download fails
+Message-ID: <212d12f77766c97b402ab31aada6b349@bugs.uclibc.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -12,41 +11,55 @@ To: buildroot@busybox.net
 
 A NOTE has been added to this issue. 
 ====================================================================== 
-http://busybox.net/bugs/view.php?id=1243 
+http://busybox.net/bugs/view.php?id=1241 
 ====================================================================== 
-Reported By:                bifferos
+Reported By:                amckinle
 Assigned To:                buildroot
 ====================================================================== 
 Project:                    buildroot
-Issue ID:                   1243
-Category:                   Other
+Issue ID:                   1241
+Category:                   Architecture Specific
 Reproducibility:            always
 Severity:                   minor
 Priority:                   normal
 Status:                     assigned
 ====================================================================== 
-Date Submitted:             03-01-2007 11:53 PST
-Last Modified:              03-01-2007 11:55 PST
+Date Submitted:             02-28-2007 05:18 PST
+Last Modified:              03-01-2007 14:56 PST
 ====================================================================== 
-Summary:                    buildroot fails to download fakeroot_1.5.12.tar.gz
+Summary:                    fakeroot download fails
 Description: 
-It appears that this file must have been removed from
-http://ftp.debian.org/debian/pool/main/f/fakeroot
-because I'm sure I didn't have this problem in the past.
+wget --passive-ftp -P /home/austin/src/buildroot/dl
+http://ftp.debian.org/debian/pool/main/f/fakeroot/fakeroot_1.5.12.tar.gz
+--08:14:55-- 
+http://ftp.debian.org/debian/pool/main/f/fakeroot/fakeroot_1.5.12.tar.gz
+           => `/home/austin/src/buildroot/dl/fakeroot_1.5.12.tar.gz'
+Resolving ftp.debian.org... 128.101.240.212
+Connecting to ftp.debian.org|128.101.240.212|:80... connected.
+HTTP request sent, awaiting response... 404 Not Found
+08:14:55 ERROR 404: Not Found.
 
-I'm using the subversion snapshot from 28/2/07.
+make: *** [/home/austin/src/buildroot/dl/fakeroot_1.5.12.tar.gz] Error 1
+austin at eve:~/src/buildroot$ svn update
+At revision 17982.
+
 ====================================================================== 
 
 ---------------------------------------------------------------------- 
- bifferos - 03-01-07 11:55  
+ bifferos - 03-01-07 14:56  
 ---------------------------------------------------------------------- 
-Sorry -this is a duplicate. 
+http://ftp.br.debian.org/debian/pool/main/f/fakeroot/fakeroot_1.5.12.tar.gz
+[^]
+
+Now it seems the br link doesn't work either.  Perhaps the brazilian
+mirror kept a copy for a short time before getting 'updated'. 
 
 Issue History 
 Date Modified   Username       Field                    Change               
 ====================================================================== 
-03-01-07 11:53  bifferos       New Issue                                    
-03-01-07 11:53  bifferos       Status                   new => assigned     
-03-01-07 11:53  bifferos       Assigned To               => buildroot       
-03-01-07 11:55  bifferos       Note Added: 0002191                          
+02-28-07 05:18  amckinle       New Issue                                    
+02-28-07 05:18  amckinle       Status                   new => assigned     
+02-28-07 05:18  amckinle       Assigned To               => buildroot       
+02-28-07 05:18  amckinle       File Added: Config.in                        
+03-01-07 14:56  bifferos       Note Added: 0002192                          
 ======================================================================
