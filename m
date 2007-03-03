@@ -1,8 +1,7 @@
 From: bugs at busybox.net <bugs@busybox.net>
-Date: Fri, 2 Mar 2007 23:45:07 -0800
-Subject: [Buildroot] [buildroot 0001250]: Targets do not work correctly on
-	Mac OS X
-Message-ID: <f6bf3987448919fb8f6685368a7b2048@bugs.uclibc.org>
+Date: Fri, 2 Mar 2007 23:49:31 -0800
+Subject: [Buildroot] [buildroot 0001225]: Bump genext2fs
+Message-ID: <c002cd14f33f968ea9fc4693c252d158@bugs.uclibc.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -12,44 +11,48 @@ To: buildroot@busybox.net
 
 A NOTE has been added to this issue. 
 ====================================================================== 
-http://busybox.net/bugs/view.php?id=1250 
+http://busybox.net/bugs/view.php?id=1225 
 ====================================================================== 
-Reported By:                holin
+Reported By:                alexer
 Assigned To:                buildroot
 ====================================================================== 
 Project:                    buildroot
-Issue ID:                   1250
-Category:                   Architecture Specific
-Reproducibility:            always
-Severity:                   major
+Issue ID:                   1225
+Category:                   New Features
+Reproducibility:            N/A
+Severity:                   minor
 Priority:                   normal
 Status:                     assigned
 ====================================================================== 
-Date Submitted:             03-02-2007 13:17 PST
-Last Modified:              03-02-2007 23:45 PST
+Date Submitted:             02-16-2007 05:19 PST
+Last Modified:              03-02-2007 23:49 PST
 ====================================================================== 
-Summary:                    Targets do not work correctly on Mac OS X
+Summary:                    Bump genext2fs
 Description: 
-Mac OS X has no "root" group, it has "wheel" instead as group 0. Therefore,
-it would seem better to use numeric ids for chown commands in target build
-scripts. Also, genext2fs 1.3 does not build on OS X, but the newly
-released 1.4 does. Some arguments have changed and it should support hard
-links now. Attached a patch to, hopefully, handle all these issues. 
+Just a new version, no more CVS-patches
 ====================================================================== 
 
 ---------------------------------------------------------------------- 
- holin - 03-02-07 23:45  
+ alexer - 02-16-07 05:23  
 ---------------------------------------------------------------------- 
-"0001225: Bump genext2fs" probably does a better job at upgrading genext2fs
-than this one. The other parts still apply, though. 
+Uploaded the wrong patch first :/ Sorry about that 
+
+---------------------------------------------------------------------- 
+ holin - 03-02-07 23:49  
+---------------------------------------------------------------------- 
+Could the "-l" in "du -l..." in the ext2root.mk file perhaps be removed,
+since genext2fs claims to support hardlinks now? 
 
 Issue History 
 Date Modified   Username       Field                    Change               
 ====================================================================== 
-03-02-07 13:17  holin          New Issue                                    
-03-02-07 13:17  holin          Status                   new => assigned     
-03-02-07 13:17  holin          Assigned To               => buildroot       
-03-02-07 13:17  holin          File Added: buildroot-070302-targets-osx.patch   
-                
-03-02-07 23:45  holin          Note Added: 0002198                          
+02-16-07 05:19  alexer         New Issue                                    
+02-16-07 05:19  alexer         Status                   new => assigned     
+02-16-07 05:19  alexer         Assigned To               => buildroot       
+02-16-07 05:19  alexer         File Added: genext2fs-1.4-upgrade.patch          
+         
+02-16-07 05:23  alexer         File Added: genext2fs_upgrade.patch              
+     
+02-16-07 05:23  alexer         Note Added: 0002172                          
+03-02-07 23:49  holin          Note Added: 0002199                          
 ======================================================================
