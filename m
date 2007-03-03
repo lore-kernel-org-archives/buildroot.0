@@ -1,30 +1,55 @@
-From: Drew Cohan <drewcohan@gmail.com>
-Date: Fri, 2 Mar 2007 17:17:43 -0500
-Subject: [Buildroot] unable to retrieve dhcp-3.0.4.tar.gz?
-Message-ID: <bf61e79a0703021417t69f25404g6c9df6be4f9e4cc1@mail.gmail.com>
+From: bugs at busybox.net <bugs@busybox.net>
+Date: Fri, 2 Mar 2007 23:45:07 -0800
+Subject: [Buildroot] [buildroot 0001250]: Targets do not work correctly on
+	Mac OS X
+Message-ID: <f6bf3987448919fb8f6685368a7b2048@bugs.uclibc.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-revision 17997
 
-wget --passive-ftp -q -P /home/pkuser/buildroot/dl
-ftp://ftp.isc.org/isc/dhcp/dhcp-3.0.4.tar.gz
-make: *** [/home/pkuser/buildroot/dl/dhcp-3.0.4.tar.gz] Error 1
+A NOTE has been added to this issue. 
+====================================================================== 
+http://busybox.net/bugs/view.php?id=1250 
+====================================================================== 
+Reported By:                holin
+Assigned To:                buildroot
+====================================================================== 
+Project:                    buildroot
+Issue ID:                   1250
+Category:                   Architecture Specific
+Reproducibility:            always
+Severity:                   major
+Priority:                   normal
+Status:                     assigned
+====================================================================== 
+Date Submitted:             03-02-2007 13:17 PST
+Last Modified:              03-02-2007 23:45 PST
+====================================================================== 
+Summary:                    Targets do not work correctly on Mac OS X
+Description: 
+Mac OS X has no "root" group, it has "wheel" instead as group 0. Therefore,
+it would seem better to use numeric ids for chown commands in target build
+scripts. Also, genext2fs 1.3 does not build on OS X, but the newly
+released 1.4 does. Some arguments have changed and it should support hard
+links now. Attached a patch to, hopefully, handle all these issues. 
+====================================================================== 
 
-$ wget ftp.isc.org/isc/dhcp/dhcp-3.0.4.tar.gz
---17:17:02--  http://ftp.isc.org/isc/dhcp/dhcp-3.0.4.tar.gz
-           => `dhcp-3.0.4.tar.gz'
-Resolving ftp.isc.org... 204.152.184.110
-Connecting to ftp.isc.org|204.152.184.110|:80... connected.
-HTTP request sent, awaiting response... 404 Not Found
-17:17:04 ERROR 404: Not Found.
+---------------------------------------------------------------------- 
+ holin - 03-02-07 23:45  
+---------------------------------------------------------------------- 
+"0001225: Bump genext2fs" probably does a better job at upgrading genext2fs
+than this one. The other parts still apply, though. 
 
-Thanks,
-
-Drew
--------------- next part --------------
-An HTML attachment was scrubbed...
-URL: http://busybox.net/lists/buildroot/attachments/20070302/fe34bc85/attachment.htm 
+Issue History 
+Date Modified   Username       Field                    Change               
+====================================================================== 
+03-02-07 13:17  holin          New Issue                                    
+03-02-07 13:17  holin          Status                   new => assigned     
+03-02-07 13:17  holin          Assigned To               => buildroot       
+03-02-07 13:17  holin          File Added: buildroot-070302-targets-osx.patch   
+                
+03-02-07 23:45  holin          Note Added: 0002198                          
+======================================================================
