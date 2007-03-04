@@ -1,47 +1,58 @@
-From: bugs at busybox.net <bugs@busybox.net>
-Date: Sat, 3 Mar 2007 11:47:53 -0800
-Subject: [Buildroot] [buildroot 0001255]: mpfr compilation fails on OS X
-Message-ID: <b15c61f958801488ea3dd6f4f534e673@bugs.uclibc.org>
+From: Ormund Williams <ormundw@panix.com>
+Date: Sat, 03 Mar 2007 20:53:13 -0500
+Subject: [Buildroot] building glib2 fails
+Message-ID: <1172973194.17423.23.camel@station1.ormlab.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+Hi All
 
-The following issue has been SUBMITTED. 
-====================================================================== 
-http://busybox.net/bugs/view.php?id=1255 
-====================================================================== 
-Reported By:                holin
-Assigned To:                buildroot
-====================================================================== 
-Project:                    buildroot
-Issue ID:                   1255
-Category:                   Architecture Specific
-Reproducibility:            always
-Severity:                   minor
-Priority:                   normal
-Status:                     assigned
-====================================================================== 
-Date Submitted:             03-03-2007 11:47 PST
-Last Modified:              03-03-2007 11:47 PST
-====================================================================== 
-Summary:                    mpfr compilation fails on OS X
-Description: 
-On OS X, mpfr fails to compile with the following linker error:
-ld: common symbols not allowed with MH_DYLIB output format with the
--multi_module option
-This seems to be gmp's fault and can be fixed with the attached patch.
+I've been sucessfully building a file system using BuildRoot, but when I
+added glib2 . . .
 
-====================================================================== 
+====================>
+...
+...
+...
+Making install in gobject
+make[3]: Entering directory
+`/home/ormund/abti/extentrac/software/gui/os/buildroot/build_i686/glib-2.12.9/gobject'
+make glib-genmarshal
+make[4]: Entering directory
+`/home/ormund/abti/extentrac/software/gui/os/buildroot/build_i686/glib-2.12.9/gobject'
+make[4]: `glib-genmarshal' is up to date.
+make[4]: Leaving directory
+`/home/ormund/abti/extentrac/software/gui/os/buildroot/build_i686/glib-2.12.9/gobject'
+echo "#ifndef __G_MARSHAL_H__" > xgen-gmh \
+        && echo "#define __G_MARSHAL_H__" >> xgen-gmh \
+        && /usr/bin/glib-genmarshal --nostdinc
+--prefix=g_cclosure_marshal ./gmarshal.list --header >> xgen-gmh \
+        && echo "#endif /* __G_MARSHAL_H__ */" >> xgen-gmh \
+        && (cmp -s xgen-gmh gmarshal.h 2>/dev/null || cp xgen-gmh
+gmarshal.h) \
+        && rm -f xgen-gmh xgen-gmh~ \
+        && echo timestamp > stamp-gmarshal.h
+/bin/sh: line 2: /usr/bin/glib-genmarshal: No such file or directory
+make[3]: *** [stamp-gmarshal.h] Error 127
+make[3]: Leaving directory
+`/home/ormund/abti/extentrac/software/gui/os/buildroot/build_i686/glib-2.12.9/gobject'
+make[2]: *** [install-recursive] Error 1
+make[2]: Leaving directory
+`/home/ormund/abti/extentrac/software/gui/os/buildroot/build_i686/glib-2.12.9'
+make[1]: *** [install] Error 2
+make[1]: Leaving directory
+`/home/ormund/abti/extentrac/software/gui/os/buildroot/build_i686/glib-2.12.9'
+make: ***
+[/home/ormund/abti/extentrac/software/gui/os/buildroot/build_i686/staging_dir/lib/libglib-2.0.a] Error 2
 
-Issue History 
-Date Modified   Username       Field                    Change               
-====================================================================== 
-03-03-07 11:47  holin          New Issue                                    
-03-03-07 11:47  holin          Status                   new => assigned     
-03-03-07 11:47  holin          Assigned To               => buildroot       
-03-03-07 11:47  holin          File Added: buildroot-070303-gmp-osxbuild.patch  
-                 
-======================================================================
+<====================
+
+This is today's buildroot snapshot (buildroot-20070303).
+
+Any idea why it does'nt install?
+
+__
+Ormund
