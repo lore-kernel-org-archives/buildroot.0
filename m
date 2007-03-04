@@ -1,8 +1,8 @@
 From: bugs at busybox.net <bugs@busybox.net>
-Date: Sun, 4 Mar 2007 05:38:15 -0800
-Subject: [Buildroot] [buildroot 0001257]: Some build targets use hard-coded
-	library names, which causes forced rebuild on Mac OS X
-Message-ID: <c6aea0d61b36c91c06060bd7e3c891e4@bugs.uclibc.org>
+Date: Sun, 4 Mar 2007 07:29:37 -0800
+Subject: [Buildroot] [buildroot 0001258]: Packages with "self-written"
+	configure scripts fail with non-Linux hosts
+Message-ID: <aaa1ab7798cbe38900df49f67ced8b34@bugs.uclibc.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -12,38 +12,39 @@ To: buildroot@busybox.net
 
 The following issue has been SUBMITTED. 
 ====================================================================== 
-http://busybox.net/bugs/view.php?id=1257 
+http://busybox.net/bugs/view.php?id=1258 
 ====================================================================== 
 Reported By:                holin
 Assigned To:                buildroot
 ====================================================================== 
 Project:                    buildroot
-Issue ID:                   1257
+Issue ID:                   1258
 Category:                   Architecture Specific
 Reproducibility:            always
-Severity:                   minor
+Severity:                   major
 Priority:                   normal
 Status:                     assigned
 ====================================================================== 
-Date Submitted:             03-04-2007 05:38 PST
-Last Modified:              03-04-2007 05:38 PST
+Date Submitted:             03-04-2007 07:29 PST
+Last Modified:              03-04-2007 07:29 PST
 ====================================================================== 
-Summary:                    Some build targets use hard-coded library names,
-which causes forced rebuild on Mac OS X
+Summary:                    Packages with "self-written" configure scripts fail
+with non-Linux hosts
 Description: 
-Library names ending with .so should have .dylib in makefile targets on OS
-X. Otherwise, the build system always thinks that the library isn't built
-and tries to (re-)build it on every make invocation. Attached a patch that
-adds a config option for library filename extension and fixes the packages
-that seemed to suffer from this. 
+Non-autoconf packages seem to be unfriendly towards cross-building. Few
+examples are zlib and jpeg. On Mac OS X host, they cannot link shared
+libraries correctly, because they identify the host system as the target
+system and try to pass OS X linker flags to, for example,
+i686-linux-uclibc-gcc. Autoconfed packages, such as gmp, seem to work
+fine.
+
+
 ====================================================================== 
 
 Issue History 
 Date Modified   Username       Field                    Change               
 ====================================================================== 
-03-04-07 05:38  holin          New Issue                                    
-03-04-07 05:38  holin          Status                   new => assigned     
-03-04-07 05:38  holin          Assigned To               => buildroot       
-03-04-07 05:38  holin          File Added: buildroot-070304-dlext.patch         
-          
+03-04-07 07:29  holin          New Issue                                    
+03-04-07 07:29  holin          Status                   new => assigned     
+03-04-07 07:29  holin          Assigned To               => buildroot       
 ======================================================================
