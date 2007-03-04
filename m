@@ -1,8 +1,7 @@
 From: bugs at busybox.net <bugs@busybox.net>
-Date: Sun, 4 Mar 2007 02:21:23 -0800
-Subject: [Buildroot] [buildroot 0001252]: makedevs does not compile on Mac
-	OS X
-Message-ID: <818c7cf8d1ca3be48d945c630363de0e@bugs.uclibc.org>
+Date: Sun, 4 Mar 2007 02:51:50 -0800
+Subject: [Buildroot] [buildroot 0001255]: mpfr compilation fails on OS X
+Message-ID: <f9a35a43df110d907fb08cc267b15da2@bugs.uclibc.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -12,45 +11,47 @@ To: buildroot@busybox.net
 
 A NOTE has been added to this issue. 
 ====================================================================== 
-http://busybox.net/bugs/view.php?id=1252 
+http://busybox.net/bugs/view.php?id=1255 
 ====================================================================== 
 Reported By:                holin
 Assigned To:                buildroot
 ====================================================================== 
 Project:                    buildroot
-Issue ID:                   1252
+Issue ID:                   1255
 Category:                   Architecture Specific
 Reproducibility:            always
-Severity:                   major
+Severity:                   minor
 Priority:                   normal
 Status:                     assigned
 ====================================================================== 
-Date Submitted:             03-02-2007 13:30 PST
-Last Modified:              03-04-2007 02:21 PST
+Date Submitted:             03-03-2007 11:47 PST
+Last Modified:              03-04-2007 02:51 PST
 ====================================================================== 
-Summary:                    makedevs does not compile on Mac OS X
+Summary:                    mpfr compilation fails on OS X
 Description: 
-Mac OS X does not have sysmacros.h and hence makedevs does not compile.
-Attached a patch to fix that. I'm not sure though, whether sysmacros.h
-include could be removed altogether - it doesn't seem to be used
-anymore(?).
+On OS X, mpfr fails to compile with the following linker error:
+ld: common symbols not allowed with MH_DYLIB output format with the
+-multi_module option
+This seems to be gmp's fault and can be fixed with the attached patch.
+
 ====================================================================== 
 
 ---------------------------------------------------------------------- 
- holin - 03-04-07 02:21  
+ holin - 03-04-07 02:51  
 ---------------------------------------------------------------------- 
-OS X seems to give EISDIR instead of EEXIST for existing directories.
-Updated the patch to take that into account. 
+The gmp autoconf scripts are also bugged and won't install shared
+libraries. Attached a fairly large patch to update the scripts. The first
+gmp patch might actually be unneccessary after this (not tested, though.) 
 
 Issue History 
 Date Modified   Username       Field                    Change               
 ====================================================================== 
-03-02-07 13:30  holin          New Issue                                    
-03-02-07 13:30  holin          Status                   new => assigned     
-03-02-07 13:30  holin          Assigned To               => buildroot       
-03-02-07 13:30  holin          File Added: buildroot-070302-makedevs.patch      
-             
-03-04-07 02:20  holin          File Added: buildroot-070304-makedevs.patch      
-             
-03-04-07 02:21  holin          Note Added: 0002200                          
+03-03-07 11:47  holin          New Issue                                    
+03-03-07 11:47  holin          Status                   new => assigned     
+03-03-07 11:47  holin          Assigned To               => buildroot       
+03-03-07 11:47  holin          File Added: buildroot-070303-gmp-osxbuild.patch  
+                 
+03-04-07 02:49  holin          File Added:
+buildroot-070304-gmp-osxautoconf.patch.gz                    
+03-04-07 02:51  holin          Note Added: 0002201                          
 ======================================================================
