@@ -1,8 +1,8 @@
 From: bugs at busybox.net <bugs@busybox.net>
-Date: Sat, 3 Mar 2007 21:05:50 -0800
-Subject: [Buildroot] [buildroot 0001256]: build fails for buildroot selected
-	for i386/i386 pthread.c compile error
-Message-ID: <05216ccfbc0949f027855b46141c05bb@bugs.uclibc.org>
+Date: Sun, 4 Mar 2007 02:21:23 -0800
+Subject: [Buildroot] [buildroot 0001252]: makedevs does not compile on Mac
+	OS X
+Message-ID: <818c7cf8d1ca3be48d945c630363de0e@bugs.uclibc.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -10,50 +10,47 @@ Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
 
-The following issue has been SUBMITTED. 
+A NOTE has been added to this issue. 
 ====================================================================== 
-http://busybox.net/bugs/view.php?id=1256 
+http://busybox.net/bugs/view.php?id=1252 
 ====================================================================== 
-Reported By:                douglas_goodall
+Reported By:                holin
 Assigned To:                buildroot
 ====================================================================== 
 Project:                    buildroot
-Issue ID:                   1256
+Issue ID:                   1252
 Category:                   Architecture Specific
-Reproducibility:            have not tried
-Severity:                   block
+Reproducibility:            always
+Severity:                   major
 Priority:                   normal
 Status:                     assigned
 ====================================================================== 
-Date Submitted:             03-03-2007 21:05 PST
-Last Modified:              03-03-2007 21:05 PST
+Date Submitted:             03-02-2007 13:30 PST
+Last Modified:              03-04-2007 02:21 PST
 ====================================================================== 
-Summary:                    build fails for buildroot selected for i386/i386
-pthread.c compile error
+Summary:                    makedevs does not compile on Mac OS X
 Description: 
-  CC libpthread/linuxthreads.old/pthread.oS
-  STRIP -x -R .note -R .comment
-libpthread/linuxthreads.old/libpthread_so.a
-  AR cr libpthread/linuxthreads.old/libpthread_so.a
-  LD libpthread-0.9.29.so
-libpthread/linuxthreads.old/libpthread_so.a(pthread.oS): In function
-`__pthread_initialize_minimal':
-pthread.c:(.text+0x13f): undefined reference to `_errno'
-pthread.c:(.text+0x148): undefined reference to `_h_errno'
-make[1]: *** [lib/libpthread.so] Error 1
-make[1]: Leaving directory
-`/home/doug/buildroot/toolchain_build_i386/uClibc'
-make: *** [/home/doug/buildroot/toolchain_build_i386/uClibc/lib/libc.a]
-Error 2
-doug at ubuntu-i386:~/buildroot$
-
-
+Mac OS X does not have sysmacros.h and hence makedevs does not compile.
+Attached a patch to fix that. I'm not sure though, whether sysmacros.h
+include could be removed altogether - it doesn't seem to be used
+anymore(?).
 ====================================================================== 
+
+---------------------------------------------------------------------- 
+ holin - 03-04-07 02:21  
+---------------------------------------------------------------------- 
+OS X seems to give EISDIR instead of EEXIST for existing directories.
+Updated the patch to take that into account. 
 
 Issue History 
 Date Modified   Username       Field                    Change               
 ====================================================================== 
-03-03-07 21:05  douglas_goodallNew Issue                                    
-03-03-07 21:05  douglas_goodallStatus                   new => assigned     
-03-03-07 21:05  douglas_goodallAssigned To               => buildroot       
+03-02-07 13:30  holin          New Issue                                    
+03-02-07 13:30  holin          Status                   new => assigned     
+03-02-07 13:30  holin          Assigned To               => buildroot       
+03-02-07 13:30  holin          File Added: buildroot-070302-makedevs.patch      
+             
+03-04-07 02:20  holin          File Added: buildroot-070304-makedevs.patch      
+             
+03-04-07 02:21  holin          Note Added: 0002200                          
 ======================================================================
