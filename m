@@ -1,50 +1,54 @@
-From: bugs at busybox.net <bugs@busybox.net>
-Date: Sun, 4 Mar 2007 07:29:37 -0800
-Subject: [Buildroot] [buildroot 0001258]: Packages with "self-written"
-	configure scripts fail with non-Linux hosts
-Message-ID: <aaa1ab7798cbe38900df49f67ced8b34@bugs.uclibc.org>
+From: jacmet at uclibc.org <jacmet@uclibc.org>
+Date: Mon,  5 Mar 2007 03:06:59 -0800 (PST)
+Subject: [Buildroot] svn commit: trunk/buildroot/package/fakeroot
+Message-ID: <20070305110659.27A27485DB@busybox.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+Author: jacmet
+Date: 2007-03-05 03:06:58 -0800 (Mon, 05 Mar 2007)
+New Revision: 18007
 
-The following issue has been SUBMITTED. 
-====================================================================== 
-http://busybox.net/bugs/view.php?id=1258 
-====================================================================== 
-Reported By:                holin
-Assigned To:                buildroot
-====================================================================== 
-Project:                    buildroot
-Issue ID:                   1258
-Category:                   Architecture Specific
-Reproducibility:            always
-Severity:                   major
-Priority:                   normal
-Status:                     assigned
-====================================================================== 
-Date Submitted:             03-04-2007 07:29 PST
-Last Modified:              03-04-2007 07:29 PST
-====================================================================== 
-Summary:                    Packages with "self-written" configure scripts fail
-with non-Linux hosts
-Description: 
-Non-autoconf packages seem to be unfriendly towards cross-building. Few
-examples are zlib and jpeg. On Mac OS X host, they cannot link shared
-libraries correctly, because they identify the host system as the target
-system and try to pass OS X linker flags to, for example,
-i686-linux-uclibc-gcc. Autoconfed packages, such as gmp, seem to work
-fine.
+Log:
+Bump version. Closes #1241, #1243 and #1248
+
+Modified:
+   trunk/buildroot/package/fakeroot/fakeroot-doc.patch
+   trunk/buildroot/package/fakeroot/fakeroot.mk
 
 
-====================================================================== 
+Changeset:
+Modified: trunk/buildroot/package/fakeroot/fakeroot-doc.patch
+===================================================================
+--- trunk/buildroot/package/fakeroot/fakeroot-doc.patch	2007-03-05 04:04:14 UTC (rev 18006)
++++ trunk/buildroot/package/fakeroot/fakeroot-doc.patch	2007-03-05 11:06:58 UTC (rev 18007)
+@@ -9,9 +9,9 @@
+  libcommunicate_la_SOURCES = communicate.c
+ --- fakeroot/Makefile.in.orig	2006-04-19 11:50:43.000000000 -0600
+ +++ fakeroot/Makefile.in	2006-04-19 11:51:21.000000000 -0600
+-@@ -214,7 +214,7 @@
+- target_os = @target_os@
+- target_vendor = @target_vendor@
++@@ -230,7 +230,7 @@
++ top_builddir = @top_builddir@
++ top_srcdir = @top_srcdir@
+  AUTOMAKE_OPTIONS = foreign
+ -SUBDIRS = scripts doc test
+ +SUBDIRS = scripts test
 
-Issue History 
-Date Modified   Username       Field                    Change               
-====================================================================== 
-03-04-07 07:29  holin          New Issue                                    
-03-04-07 07:29  holin          Status                   new => assigned     
-03-04-07 07:29  holin          Assigned To               => buildroot       
-======================================================================
+Modified: trunk/buildroot/package/fakeroot/fakeroot.mk
+===================================================================
+--- trunk/buildroot/package/fakeroot/fakeroot.mk	2007-03-05 04:04:14 UTC (rev 18006)
++++ trunk/buildroot/package/fakeroot/fakeroot.mk	2007-03-05 11:06:58 UTC (rev 18007)
+@@ -3,7 +3,7 @@
+ # fakeroot
+ #
+ #############################################################
+-FAKEROOT_VERSION:=1.5.12
++FAKEROOT_VERSION:=1.6.4
+ FAKEROOT_SOURCE:=fakeroot_$(FAKEROOT_VERSION).tar.gz
+ FAKEROOT_SITE:=http://ftp.debian.org/debian/pool/main/f/fakeroot
+ FAKEROOT_CAT:=$(ZCAT)
