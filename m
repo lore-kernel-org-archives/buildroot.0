@@ -1,8 +1,7 @@
 From: bugs at busybox.net <bugs@busybox.net>
-Date: Mon, 5 Mar 2007 03:09:46 -0800
-Subject: [Buildroot] [buildroot 0001243]: buildroot fails to download
-	fakeroot_1.5.12.tar.gz
-Message-ID: <52a8b5cfb3ebe0538cd459f82e693dc7@buildroot.uclibc.org>
+Date: Mon, 5 Mar 2007 03:10:10 -0800
+Subject: [Buildroot] [buildroot 0001248]: Update fakeroot to 1.6.2.
+Message-ID: <0b2b10a3ecb87f87d79e5f8b8b4eeb3b@buildroot.uclibc.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -12,13 +11,13 @@ To: buildroot@busybox.net
 
 The following issue has been CLOSED 
 ====================================================================== 
-http://busybox.net/bugs/view.php?id=1243 
+http://busybox.net/bugs/view.php?id=1248 
 ====================================================================== 
-Reported By:                bifferos
+Reported By:                holin
 Assigned To:                buildroot
 ====================================================================== 
 Project:                    buildroot
-Issue ID:                   1243
+Issue ID:                   1248
 Category:                   Other
 Reproducibility:            always
 Severity:                   minor
@@ -27,35 +26,30 @@ Status:                     closed
 Resolution:                 open
 Fixed in Version:           
 ====================================================================== 
-Date Submitted:             03-01-2007 11:53 PST
-Last Modified:              03-05-2007 03:09 PST
+Date Submitted:             03-02-2007 13:02 PST
+Last Modified:              03-05-2007 03:10 PST
 ====================================================================== 
-Summary:                    buildroot fails to download fakeroot_1.5.12.tar.gz
+Summary:                    Update fakeroot to 1.6.2.
 Description: 
-It appears that this file must have been removed from
-http://ftp.debian.org/debian/pool/main/f/fakeroot
-because I'm sure I didn't have this problem in the past.
+There are already two reports that fakeroot 1.5.12 is removed from the
+debian ftp. Please, update fakeroot to, at least, 1.6.2, since it also
+includes Mac OS X support. Attached a patch to do the update.
 
-I'm using the subversion snapshot from 28/2/07.
 ====================================================================== 
 
 ---------------------------------------------------------------------- 
- bifferos - 03-01-07 11:55  
----------------------------------------------------------------------- 
-Sorry -this is a duplicate. 
-
----------------------------------------------------------------------- 
- jacmet - 03-05-07 03:09  
+ jacmet - 03-05-07 03:10  
 ---------------------------------------------------------------------- 
 Fixed in r18007. 
 
 Issue History 
 Date Modified   Username       Field                    Change               
 ====================================================================== 
-03-01-07 11:53  bifferos       New Issue                                    
-03-01-07 11:53  bifferos       Status                   new => assigned     
-03-01-07 11:53  bifferos       Assigned To               => buildroot       
-03-01-07 11:55  bifferos       Note Added: 0002191                          
-03-05-07 03:09  jacmet         Status                   assigned => closed  
-03-05-07 03:09  jacmet         Note Added: 0002205                          
+03-02-07 13:02  holin          New Issue                                    
+03-02-07 13:02  holin          Status                   new => assigned     
+03-02-07 13:02  holin          Assigned To               => buildroot       
+03-02-07 13:02  holin          File Added:
+buildroot-070302-fakeroot-update.patch                    
+03-05-07 03:10  jacmet         Status                   assigned => closed  
+03-05-07 03:10  jacmet         Note Added: 0002206                          
 ======================================================================
