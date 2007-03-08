@@ -1,34 +1,21 @@
-From: bugs at busybox.net <bugs@busybox.net>
-Date: Thu, 8 Mar 2007 00:13:21 -0800
-Subject: [Buildroot] [buildroot 0000095]: make menuconfig does not work.
-Message-ID: <bbc7a8aea0351d356096c4e5b2d60e2b@busybox.net>
+From: Bernhard Fischer <rep.dot.nop@gmail.com>
+Date: Thu, 8 Mar 2007 11:36:26 +0100
+Subject: [Buildroot] target busybox skeleton.
+In-Reply-To: <20070218173211.GA31717@zelow.no>
+References: <20070218173211.GA31717@zelow.no>
+Message-ID: <20070308103626.GB31261@aon.at>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+On Sun, Feb 18, 2007 at 06:32:11PM +0100, Thomas Lundquist wrote:
+>Maybe it's a bit too tiny?
+>
+>I'd suggest that /usr/lib is added.
 
-The following issue has been CLOSED 
-====================================================================== 
-http://busybox.net/bugs/view.php?id=95 
-====================================================================== 
-Reported By:                thomasez
-Assigned To:                buildroot
-====================================================================== 
-Project:                    buildroot
-Issue ID:                   95
-Category:                   Architecture Specific
-Reproducibility:            always
-Severity:                   minor
-Priority:                   normal
-Status:                     closed
-Resolution:                 open
-Fixed in Version:           
-====================================================================== 
-Date Submitted:             02-10-2005 13:53 PST
-Last Modified:              03-08-2007 00:13 PST
-====================================================================== 
-Summary:                    make menuconfig does not work.
-Description: 
-After the switch to svn, something might have been forgotten:
+hmz. And what if i don't have anything in /usr/lib? Wasted dentry.
+
+What about switching to "install -D" instead, where appropriate?
+>(it hit me when building libpng.)
