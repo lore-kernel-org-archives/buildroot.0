@@ -1,10 +1,10 @@
 From: Heikki Lindholm <holindho@cs.helsinki.fi>
-Date: Thu, 08 Mar 2007 23:36:22 +0200
-Subject: [Buildroot] [RFC/PATCH 1/3] fix buildroot sed handling on Mac
+Date: Thu, 08 Mar 2007 23:44:55 +0200
+Subject: [Buildroot] [RFC/PATCH 2/3] fix buildroot sed handling on Mac
  OS X
-In-Reply-To: <20070308163500.GC1389@aon.at>
-References: <45E1717E.1030305@cs.helsinki.fi> <20070308163500.GC1389@aon.at>
-Message-ID: <45F081D6.3050803@cs.helsinki.fi>
+In-Reply-To: <20070308163826.GD1389@aon.at>
+References: <45E17186.2080208@cs.helsinki.fi> <20070308163826.GD1389@aon.at>
+Message-ID: <45F083D7.9050100@cs.helsinki.fi>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -12,46 +12,110 @@ Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
 Bernhard Fischer kirjoitti:
-> On Sun, Feb 25, 2007 at 01:22:38PM +0200, Heikki Lindholm wrote:
+> On Sun, Feb 25, 2007 at 01:22:46PM +0200, Heikki Lindholm wrote:
 > 
->>Improve the checking of sed by adding some common GNU sed installation
->>names (gsed/gnused), checking for a basic OS X sed feature in command
->>line option handling, checking the actual result of the sed run against
->>the expected result, and placing common code for the check under
->>toolchain/dependencies/.
+>>Include a patch for GNU sed that allows building it on Mac OS X and
+>>remove a spurious --prefix from sed.mk.
 >>
 >>-- Heikki Lindholm
 >>
 > 
 > 
->>diff -Nru buildroot/package/sed/sedcheck.sh buildroot-devel/package/sed/sedcheck.sh
->>--- buildroot/package/sed/sedcheck.sh	2007-02-22 10:50:29.000000000 +0200
->>+++ buildroot-devel/package/sed/sedcheck.sh	2007-02-23 17:39:04.000000000 +0200
->>@@ -2,24 +2,10 @@
->>
->># Make sure the host sed supports '-i' (in-place).
->># If it doesn't, we'll build and use our own.
->>+SED=$(toolchain/dependencies/check-host-sed.sh)
->>
->>-if test -x /usr/bin/sed ; then
->>-	SED="/usr/bin/sed"
->>-else
->>-	if test -x /bin/sed ; then
->>-		SED="/bin/sed"
->>-	else
->>-		SED="sed"
->>-	fi
->>-fi
->>-
->>-echo "HELLO" > .sedtest
->>-$SED -i -e "s/HELLO/GOODBYE/" .sedtest >/dev/null 2>&1
+>>diff -Nru buildroot/package/sed/configure.patch buildroot-devel/package/sed/configure.patch
+>>--- buildroot/package/sed/configure.patch	1970-01-01 02:00:00.000000000 +0200
+>>+++ buildroot-devel/package/sed/configure.patch	2007-02-23 14:04:16.000000000 +0200
+>>@@ -0,0 +1,29 @@
+>>+diff -Nru sed-4.1.5.orig/configure sed-4.1.5/configure
+>>+--- sed-4.1.5.orig/configure	2006-02-03 11:24:40.000000000 +0200
+>>++++ sed-4.1.5/configure	2007-02-23 14:03:55.000000000 +0200
+>>+@@ -10147,8 +10147,6 @@
+>>+     LINGUAS="${LINGUAS-%UNSET%}"
+>>+ 
+>>+ 
+>>+-  install_sh="$install_sh"
+>>+-
+>>+ _ACEOF
+>>+ 
+>>+ 
+>>+@@ -11265,14 +11263,10 @@
+>>+       esac
+>>+     done ;;
+>>+     gettext-fix )
+>>+-  sed -e '/^mkinstalldirs *=/a\' \
+>>+-      -e "install_sh=$install_sh" \
+>>+-      -e 's/^mkinstalldirs *=.*/mkinstalldirs=$(MKINSTALLDIRS)/' \
+>>++  sed -e 's/^mkinstalldirs *=.*/mkinstalldirs=$(MKINSTALLDIRS)/' \
+>>+       intl/Makefile > intl/Makefile.tmp
+>>+   mv intl/Makefile.tmp intl/Makefile
+>>+-  sed -e '/^mkinstalldirs *=/a\' \
+>>+-      -e "install_sh=$install_sh" \
+>>+-      -e 's/^mkinstalldirs *=.*/mkinstalldirs=$(MKINSTALLDIRS)/' \
+>>++  sed -e 's/^mkinstalldirs *=.*/mkinstalldirs=$(MKINSTALLDIRS)/' \
+>>+       po/Makefile > po/Makefile.tmp
+>>+   mv po/Makefile.tmp po/Makefile ;;
+>>+   esac
 > 
 > 
-> Why don't you mv check-host-sed.sh here instead and use it in
-> dependencies.sh? I'd prefer it this way..
+> It is not immediately apparent to me why you need this patch. Please
+> elaborate.
 
-Well. I tossed a coin on the placement. I thought checking the host sed 
-would belong better to something build-framework-ish than the sed 
-package. I'll do a respin of this if you like.
+Nor to me. But it seems to fix a sed incompatibility - it's funny, but 
+building GNU sed does seem to require GNU sed. If I try to build 
+sed-4.1.5 on OS X without this patch, ./configure fails with
+sed: 1: "install_sh=/tmp/sed-4.1 ...": command i expects \ followed by text
+sed: 1: "install_sh=/tmp/sed-4.1 ...": command i expects \ followed by text
+The patch itself is just copied from Darwinports (macports these days.)
 
--- Heikki Lindholm
+>>diff -Nru buildroot/package/sed/sed.mk buildroot-devel/package/sed/sed.mk
+>>--- buildroot/package/sed/sed.mk	2007-02-22 10:50:29.000000000 +0200
+>>+++ buildroot-devel/package/sed/sed.mk	2007-02-24 17:05:12.000000000 +0200
+>>@@ -18,6 +18,7 @@
+>>HOST_SED_DIR:=$(TOOL_BUILD_DIR)
+>>SED:=$(HOST_SED_DIR)/bin/sed -i -e
+>>HOST_SED_TARGET=$(shell package/sed/sedcheck.sh)
+>>+HOST_SED_IF_ANY=$(shell toolchain/dependencies/check-host-sed.sh)
+>>
+>>$(DL_DIR)/$(SED_SOURCE):
+>>	mkdir -p $(DL_DIR)
+>>@@ -35,13 +36,13 @@
+>>	mkdir -p $(TOOL_BUILD_DIR)
+>>	mkdir -p $(HOST_SED_DIR)/bin;
+>>	$(SED_CAT) $(DL_DIR)/$(SED_SOURCE) | tar -C $(TOOL_BUILD_DIR) $(TAR_OPTIONS) -
+>>+	toolchain/patch-kernel.sh $(SED_DIR1) package/sed/ configure.patch
+>>	touch $(SED_DIR1)/.unpacked
+>>
+>>$(SED_DIR1)/.configured: $(SED_DIR1)/.unpacked
+>>	(cd $(SED_DIR1); rm -rf config.cache; \
+>>		./configure \
+>>		--prefix=$(HOST_SED_DIR) \
+>>-		--prefix=/usr \
+>>	);
+>>	touch $(SED_DIR1)/.configured
+>>
+>>@@ -62,17 +63,10 @@
+>>		    $(HOST_SED_DIR)/usr/man $(HOST_SED_DIR)/usr/share/doc; fi
+>>
+>>use-sed-host-binary:
+>>-	@if [ -x /usr/bin/sed ] ; then \
+>>-		SED="/usr/bin/sed" ; \
+>>-	else \
+>>-		if [ -x /bin/sed ] ; then \
+>>-			SED="/bin/sed" ; \
+>>-		fi \
+>>-	fi ; \
+>>-	if [ ! -e "$(HOST_SED_DIR)/$(SED_TARGET_BINARY)" ] ; then \
+>>+	@if [ ! -e "$(HOST_SED_DIR)/$(SED_TARGET_BINARY)" ] ; then \
+> 
+> 
+> Please do not hide away these commands.
+
+Uhm. What do you mean? sed checking is already done for HOST_SED_IF_ANY 
+by the same check-sed script.
+
+>>		mkdir -p "$(HOST_SED_DIR)/bin"; \
+>>		rm -f "$(HOST_SED_DIR)/$(SED_TARGET_BINARY)"; \
+>>-		ln -sf "$$SED" "$(HOST_SED_DIR)/$(SED_TARGET_BINARY)"; \
+>>+		ln -sf "$(HOST_SED_IF_ANY)" "$(HOST_SED_DIR)/$(SED_TARGET_BINARY)"; \
+>>	fi
+>>
+>>host-sed: $(HOST_SED_TARGET)
