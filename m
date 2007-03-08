@@ -1,26 +1,57 @@
-From: Bernhard Fischer <rep.dot.nop@gmail.com>
-Date: Thu, 8 Mar 2007 17:43:42 +0100
-Subject: [Buildroot] Mac OS X status
-In-Reply-To: <45E49FFC.4020404@cs.helsinki.fi>
-References: <45E1751E.2010406@cs.helsinki.fi>
-	<b15982770702251720v71d2dd5fo87e5a6f56f34d6a5@mail.gmail.com>
-	<37c712e0702251726m95f94a8h35d46440de18fb36@mail.gmail.com>
-	<b15982770702271213l2c59fb27nc2050d97831ef62a@mail.gmail.com>
-	<45E49FFC.4020404@cs.helsinki.fi>
-Message-ID: <20070308164342.GF1389@aon.at>
+From: Heikki Lindholm <holindho@cs.helsinki.fi>
+Date: Thu, 08 Mar 2007 23:36:22 +0200
+Subject: [Buildroot] [RFC/PATCH 1/3] fix buildroot sed handling on Mac
+ OS X
+In-Reply-To: <20070308163500.GC1389@aon.at>
+References: <45E1717E.1030305@cs.helsinki.fi> <20070308163500.GC1389@aon.at>
+Message-ID: <45F081D6.3050803@cs.helsinki.fi>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Tue, Feb 27, 2007 at 11:17:48PM +0200, Heikki Lindholm wrote:
->...and should patches be put exclusively to the bug tracker to be noted 
->at all? A discouraging fact is that the only OS X patch I found in the 
->tracker took half a year to get any response. Trying to keep out-of-tree 
->patches in sync with SVN changes for that long can be a pain. In the 
+Bernhard Fischer kirjoitti:
+> On Sun, Feb 25, 2007 at 01:22:38PM +0200, Heikki Lindholm wrote:
+> 
+>>Improve the checking of sed by adding some common GNU sed installation
+>>names (gsed/gnused), checking for a basic OS X sed feature in command
+>>line option handling, checking the actual result of the sed run against
+>>the expected result, and placing common code for the check under
+>>toolchain/dependencies/.
+>>
+>>-- Heikki Lindholm
+>>
+> 
+> 
+>>diff -Nru buildroot/package/sed/sedcheck.sh buildroot-devel/package/sed/sedcheck.sh
+>>--- buildroot/package/sed/sedcheck.sh	2007-02-22 10:50:29.000000000 +0200
+>>+++ buildroot-devel/package/sed/sedcheck.sh	2007-02-23 17:39:04.000000000 +0200
+>>@@ -2,24 +2,10 @@
+>>
+>># Make sure the host sed supports '-i' (in-place).
+>># If it doesn't, we'll build and use our own.
+>>+SED=$(toolchain/dependencies/check-host-sed.sh)
+>>
+>>-if test -x /usr/bin/sed ; then
+>>-	SED="/usr/bin/sed"
+>>-else
+>>-	if test -x /bin/sed ; then
+>>-		SED="/bin/sed"
+>>-	else
+>>-		SED="sed"
+>>-	fi
+>>-fi
+>>-
+>>-echo "HELLO" > .sedtest
+>>-$SED -i -e "s/HELLO/GOODBYE/" .sedtest >/dev/null 2>&1
+> 
+> 
+> Why don't you mv check-host-sed.sh here instead and use it in
+> dependencies.sh? I'd prefer it this way..
 
-We'll get the MACos patches merged, don't worry.
+Well. I tossed a coin on the placement. I thought checking the host sed 
+would belong better to something build-framework-ish than the sed 
+package. I'll do a respin of this if you like.
 
-cheers,
-Bernhard
+-- Heikki Lindholm
