@@ -1,121 +1,23 @@
-From: Heikki Lindholm <holindho@cs.helsinki.fi>
-Date: Thu, 08 Mar 2007 23:44:55 +0200
-Subject: [Buildroot] [RFC/PATCH 2/3] fix buildroot sed handling on Mac
- OS X
-In-Reply-To: <20070308163826.GD1389@aon.at>
-References: <45E17186.2080208@cs.helsinki.fi> <20070308163826.GD1389@aon.at>
-Message-ID: <45F083D7.9050100@cs.helsinki.fi>
+From: zentrale at.work <zentrale.at.work@gmail.com>
+Date: Thu, 8 Mar 2007 22:48:44 +0100
+Subject: [Buildroot] math.h / frexp problem
+Message-ID: <82b0e9c80703081348v59584768xac210f9df4c3f3c9@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Bernhard Fischer kirjoitti:
-> On Sun, Feb 25, 2007 at 01:22:46PM +0200, Heikki Lindholm wrote:
-> 
->>Include a patch for GNU sed that allows building it on Mac OS X and
->>remove a spurious --prefix from sed.mk.
->>
->>-- Heikki Lindholm
->>
-> 
-> 
->>diff -Nru buildroot/package/sed/configure.patch buildroot-devel/package/sed/configure.patch
->>--- buildroot/package/sed/configure.patch	1970-01-01 02:00:00.000000000 +0200
->>+++ buildroot-devel/package/sed/configure.patch	2007-02-23 14:04:16.000000000 +0200
->>@@ -0,0 +1,29 @@
->>+diff -Nru sed-4.1.5.orig/configure sed-4.1.5/configure
->>+--- sed-4.1.5.orig/configure	2006-02-03 11:24:40.000000000 +0200
->>++++ sed-4.1.5/configure	2007-02-23 14:03:55.000000000 +0200
->>+@@ -10147,8 +10147,6 @@
->>+     LINGUAS="${LINGUAS-%UNSET%}"
->>+ 
->>+ 
->>+-  install_sh="$install_sh"
->>+-
->>+ _ACEOF
->>+ 
->>+ 
->>+@@ -11265,14 +11263,10 @@
->>+       esac
->>+     done ;;
->>+     gettext-fix )
->>+-  sed -e '/^mkinstalldirs *=/a\' \
->>+-      -e "install_sh=$install_sh" \
->>+-      -e 's/^mkinstalldirs *=.*/mkinstalldirs=$(MKINSTALLDIRS)/' \
->>++  sed -e 's/^mkinstalldirs *=.*/mkinstalldirs=$(MKINSTALLDIRS)/' \
->>+       intl/Makefile > intl/Makefile.tmp
->>+   mv intl/Makefile.tmp intl/Makefile
->>+-  sed -e '/^mkinstalldirs *=/a\' \
->>+-      -e "install_sh=$install_sh" \
->>+-      -e 's/^mkinstalldirs *=.*/mkinstalldirs=$(MKINSTALLDIRS)/' \
->>++  sed -e 's/^mkinstalldirs *=.*/mkinstalldirs=$(MKINSTALLDIRS)/' \
->>+       po/Makefile > po/Makefile.tmp
->>+   mv po/Makefile.tmp po/Makefile ;;
->>+   esac
-> 
-> 
-> It is not immediately apparent to me why you need this patch. Please
-> elaborate.
+i'm using buildroot to build for a at91rm9200 (arm 920t core), and it works
+quite fine except for:
 
-Nor to me. But it seems to fix a sed incompatibility - it's funny, but 
-building GNU sed does seem to require GNU sed. If I try to build 
-sed-4.1.5 on OS X without this patch, ./configure fails with
-sed: 1: "install_sh=/tmp/sed-4.1 ...": command i expects \ followed by text
-sed: 1: "install_sh=/tmp/sed-4.1 ...": command i expects \ followed by text
-The patch itself is just copied from Darwinports (macports these days.)
+it obviously fails to build a proper math.h and/or the lib behind it. if
+code uses frexp(), it will fail to build with "frexp() not found" any ideas?
+config is:
+kernel 2.6.12.with NWFPE, uclibc 0.28.3 set to kernel fpu. gcc 4.1.1,
+binutils 2.17 ... did i miss something?
 
->>diff -Nru buildroot/package/sed/sed.mk buildroot-devel/package/sed/sed.mk
->>--- buildroot/package/sed/sed.mk	2007-02-22 10:50:29.000000000 +0200
->>+++ buildroot-devel/package/sed/sed.mk	2007-02-24 17:05:12.000000000 +0200
->>@@ -18,6 +18,7 @@
->>HOST_SED_DIR:=$(TOOL_BUILD_DIR)
->>SED:=$(HOST_SED_DIR)/bin/sed -i -e
->>HOST_SED_TARGET=$(shell package/sed/sedcheck.sh)
->>+HOST_SED_IF_ANY=$(shell toolchain/dependencies/check-host-sed.sh)
->>
->>$(DL_DIR)/$(SED_SOURCE):
->>	mkdir -p $(DL_DIR)
->>@@ -35,13 +36,13 @@
->>	mkdir -p $(TOOL_BUILD_DIR)
->>	mkdir -p $(HOST_SED_DIR)/bin;
->>	$(SED_CAT) $(DL_DIR)/$(SED_SOURCE) | tar -C $(TOOL_BUILD_DIR) $(TAR_OPTIONS) -
->>+	toolchain/patch-kernel.sh $(SED_DIR1) package/sed/ configure.patch
->>	touch $(SED_DIR1)/.unpacked
->>
->>$(SED_DIR1)/.configured: $(SED_DIR1)/.unpacked
->>	(cd $(SED_DIR1); rm -rf config.cache; \
->>		./configure \
->>		--prefix=$(HOST_SED_DIR) \
->>-		--prefix=/usr \
->>	);
->>	touch $(SED_DIR1)/.configured
->>
->>@@ -62,17 +63,10 @@
->>		    $(HOST_SED_DIR)/usr/man $(HOST_SED_DIR)/usr/share/doc; fi
->>
->>use-sed-host-binary:
->>-	@if [ -x /usr/bin/sed ] ; then \
->>-		SED="/usr/bin/sed" ; \
->>-	else \
->>-		if [ -x /bin/sed ] ; then \
->>-			SED="/bin/sed" ; \
->>-		fi \
->>-	fi ; \
->>-	if [ ! -e "$(HOST_SED_DIR)/$(SED_TARGET_BINARY)" ] ; then \
->>+	@if [ ! -e "$(HOST_SED_DIR)/$(SED_TARGET_BINARY)" ] ; then \
-> 
-> 
-> Please do not hide away these commands.
-
-Uhm. What do you mean? sed checking is already done for HOST_SED_IF_ANY 
-by the same check-sed script.
-
->>		mkdir -p "$(HOST_SED_DIR)/bin"; \
->>		rm -f "$(HOST_SED_DIR)/$(SED_TARGET_BINARY)"; \
->>-		ln -sf "$$SED" "$(HOST_SED_DIR)/$(SED_TARGET_BINARY)"; \
->>+		ln -sf "$(HOST_SED_IF_ANY)" "$(HOST_SED_DIR)/$(SED_TARGET_BINARY)"; \
->>	fi
->>
->>host-sed: $(HOST_SED_TARGET)
+thanks, zap
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: http://busybox.net/lists/buildroot/attachments/20070308/ca7c5a4f/attachment.html 
