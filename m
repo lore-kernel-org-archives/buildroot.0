@@ -1,63 +1,68 @@
-From: Konstantin Kletschke <kletschke@synertronixx.de>
-Date: Wed, 07 Mar 2007 15:49:28 +0100
-Subject: [Buildroot] building Kernel with target/device/vendor/board
-Message-ID: <874poxglc7.fsf@z1.synertronixx>
+From: bugs at busybox.net <bugs@busybox.net>
+Date: Thu, 8 Mar 2007 00:10:16 -0800
+Subject: [Buildroot] [buildroot 0001238]: Buildroot fails when building
+	binutils 2.17 on an 32 bit Ubuntu edgy box.
+Message-ID: <c8246b432534bbaf5597ddfc250eb0b9@busybox.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Actually I am trying to build a custom Kernel to get its modules into
-the jffs2 image. My Makefile looks this:
 
-BR2_BOARD_PATH:=target/device/synertronixx/scb9328
+The following issue has been CLOSED 
+====================================================================== 
+http://busybox.net/bugs/view.php?id=1238 
+====================================================================== 
+Reported By:                hwstar
+Assigned To:                buildroot
+====================================================================== 
+Project:                    buildroot
+Issue ID:                   1238
+Category:                   Architecture Specific
+Reproducibility:            always
+Severity:                   minor
+Priority:                   normal
+Status:                     closed
+Resolution:                 open
+Fixed in Version:           
+====================================================================== 
+Date Submitted:             02-23-2007 20:22 PST
+Last Modified:              03-08-2007 00:10 PST
+====================================================================== 
+Summary:                    Buildroot fails when building binutils 2.17 on an 32
+bit Ubuntu edgy box.
+Description: 
+Buildroot fails when building binutils 2.17 on an Ubuntu edgy box.
+Originally I noticed the problem when using a snapshot dated 1/7/07, so I
+tried downloading the latest buildroot snapshot (2/23/07) and the build
+failure occurs in exactly the same spot. My .config file is included below
+so the the problem can be reproduced.
+The target system is an i586 via mini-itx motherboard. 
 
-ifndef LINUX26_KCONFIG
-LINUX26_KCONFIG=$(BR2_BOARD_PATH)/linux26.config
-endif
+The buildroot package dated 1/7/07 did compile successfully on a Fedora
+Core 4 box,  and only when I updated that box to Ubuntu Edgy did I see
+this build failure crop up.
 
-LINUX26_FORMAT=uImage
+====================================================================== 
 
-BR2_PACKAGE_BUSYBOX_CONFIG=$(BR2_BOARD_PATH)/busybox-1.4.0.config
-UCLIBC_CONFIG_FILE:=target/device/synertronixx/scb9328/uClibc-0.9.29.config
+---------------------------------------------------------------------- 
+ hwstar - 02-26-07 19:54  
+---------------------------------------------------------------------- 
+*Solved* 
 
-TARGET_SKELETON=$(BR2_BOARD_PATH)/target_skeleton
-TARGET_DEVICE_TABLE=$(BR2_BOARD_PATH)/device_table.txt
+Binutils-2.17 requires makeinfo (part of the texinfo package) to be
+installed. 
 
-This works well after I added 2.6.20 headers support into my buildroot
-and after I enabled
-
-BR2_PACKAGE_LINUX=y
-
-buildroot tries to build my 2.6.20 kernel. But it does not apply
-patches in LINUX26_PATCH_DIR=$(BR2_BOARD_PATH)/kernel-patches/ because
-there is an (strange) ifneq around patching command in
-target/linux26.mk:
-
-#KONSTI ifneq ($(strip $(LINUX26_VERSION)),$(strip $(LINUX_HEADERS_VERSION)))
-$(DL_DIR)/$(LINUX26_SOURCE):
-	 $(WGET) -P $(DL_DIR) $(LINUX26_SITE)/$(LINUX26_SOURCE)
-
-$(LINUX26_DIR)/.unpacked: $(DL_DIR)/$(LINUX26_SOURCE)
-	rm -rf $(LINUX26_DIR)
-	$(LINUX26_BZCAT) $(DL_DIR)/$(LINUX26_SOURCE) | tar -C $(BUILD_DIR) $(TAR_OPTIONS) -
-ifneq ($(DOWNLOAD_LINUX26_VERSION),$(LINUX26_VERSION))
-	# Rename the dir from the downloaded version to the AFTER patch version
-	mv -f $(BUILD_DIR)/linux-$(DOWNLOAD_LINUX26_VERSION) $(BUILD_DIR)/linux-$(LINUX26_VERSION)
-endif
-	touch $@
-
-$(LINUX26_DIR)/.patched: $(LINUX26_DIR)/.unpacked
-	toolchain/patch-kernel.sh $(LINUX26_DIR) $(LINUX26_PATCH_DIR)
-	touch $@
-#KONSTI endif # ($(LINUX26_VERSION),$(LINUX_HEADERS_VERSION))
-
-If I disable this (already done with the "#KONSTI "s), things are
-working like I expect, my .config is apllied and my modules get
-installed and all.
-
-Whats the canonical way to install custom headers including vendor
-patches? Or did I found a bug?
-
-Regards, Konsti
+Issue History 
+Date Modified   Username       Field                    Change               
+====================================================================== 
+02-23-07 20:22  hwstar         New Issue                                    
+02-23-07 20:22  hwstar         Status                   new => assigned     
+02-23-07 20:22  hwstar         Assigned To               => buildroot       
+02-23-07 20:22  hwstar         File Added: failed-build-config                  
+ 
+02-24-07 10:56  hwstar         Issue Monitored: hwstar                      
+02-26-07 19:54  hwstar         Note Added: 0002189                          
+03-08-07 00:10  bernhardf      Status                   assigned => closed  
+======================================================================
