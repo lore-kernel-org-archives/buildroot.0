@@ -1,49 +1,44 @@
-From: Heikki Lindholm <holindho@cs.helsinki.fi>
-Date: Thu, 08 Mar 2007 14:23:09 +0200
-Subject: [Buildroot] target busybox skeleton.
-In-Reply-To: <20070308114948.GE31261@aon.at>
-References: <20070218173211.GA31717@zelow.no> <20070308103626.GB31261@aon.at>
-	<45EFF020.2020406@cs.helsinki.fi> <20070308114948.GE31261@aon.at>
-Message-ID: <45F0002D.7020203@cs.helsinki.fi>
+From: Bernhard Fischer <rep.dot.nop@gmail.com>
+Date: Thu, 8 Mar 2007 14:56:39 +0100
+Subject: [Buildroot] cp command incompatibility
+In-Reply-To: <45DF2131.2020404@cs.helsinki.fi>
+References: <45DF2131.2020404@cs.helsinki.fi>
+Message-ID: <20070308135639.GG32231@aon.at>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Bernhard Fischer kirjoitti:
-> On Thu, Mar 08, 2007 at 01:14:40PM +0200, Heikki Lindholm wrote:
-> 
->>Bernhard Fischer kirjoitti:
->>
->>>On Sun, Feb 18, 2007 at 06:32:11PM +0100, Thomas Lundquist wrote:
->>>
->>>
->>>>Maybe it's a bit too tiny?
->>>>
->>>>I'd suggest that /usr/lib is added.
->>>
->>>
->>>hmz. And what if i don't have anything in /usr/lib? Wasted dentry.
->>>
->>>What about switching to "install -D" instead, where appropriate?
->>
->>If doing major changes, please consider taking portability issues into 
->>account. In this case, "-D" isn't supported on OS X.
-> 
-> 
-> It shouldn't be too hard to ship our own working install source an
-> compile and use that for the host, but thanks for the hint anyway.
-> 
-> MacOS-BSD already has trouble due to the use of "cp -a", IIRC and i was
-> gradually switching those over to cp -dpf like suggested in one
-> bug-report.
+On Fri, Feb 23, 2007 at 07:15:29PM +0200, Heikki Lindholm wrote:
+>Hi,
+>
+>there's some incompatilibity between GNU cp and Mac OS X (probably BSD, 
+>too) cp commands. GNU cp arguments -d and -a do not exist on OS X. -a 
+>can be written -pPR on OS X. -d is partly covered by -P and partly by 
+>-R. -P is the --no-dereference part of -d and -R does what 
+>--preserve=links does AFAICT.
 
-Getting a bit off-topic here maybe, but I have to comment that your 
-effort has not been that useful, because such bug report has been wrong: 
-Mac OS X doesn't support the -d option for cp and thus every cp -dfp is 
-as dysfunctional as cp -a. Proper way would be cp -RPfp, which, as an 
-unavoidable side-effect, is also recursive. I also filed a bug report on 
-this a while ago.
+There was a bug about cp -a not working on MacOS10 that (IIRC) suggested
+to use cp -dpf instead.
 
--- Heikki Lindholm
+
+>
+>Doing a quick grep -r "cp " `find . -iname "*.mk"` reveals that there is 
+>quite a bit of work to fix all the incompatible cp occurences, so, I'm 
+>asking here what might be the best way to do it:
+>(1) hand-edit all incompatible cp occurences to something that works on 
+>both systems ("POSIXify")
+>(2) introduce some menuconfig options for common cp "use cases" and use 
+>shell variables to pass these configurable options to cp, for example, 
+>.mk scripts might have "cp $ARCHIVE foo bar", where $ARCHIVE would, for 
+>instance, be "-a" on Linux and "-pPR" on OS X.
+>(3) give up and build a local copy of GNU fileutils, instead
+
+4) ship, build and use a working install(1)
+
+short of 4) and re 2). I'd introduce CP_A CP_F that'd do something like
+cp -a (resp -dpf)  and cp -pf. I do not think that $(ARCHIVE) et al are
+what we want, fwiw.
+
+Comments?
