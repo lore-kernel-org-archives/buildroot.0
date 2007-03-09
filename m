@@ -1,62 +1,39 @@
-From: bugs at busybox.net <bugs@busybox.net>
-Date: Fri, 9 Mar 2007 02:25:08 -0800
-Subject: [Buildroot] [buildroot 0001249]: buildroot cannot correctly handle
-	sed differencies on Mac OS X
-Message-ID: <cca73ea19adfad110dc0ea882df0490c@busybox.net>
+From: ing. Federico Fuga <fuga@studiofuga.com>
+Date: Fri, 9 Mar 2007 12:46:16 +0100
+Subject: [Buildroot] modutils and kernel 2.6.33 - Unresolved symbols
+Message-ID: <20070309124616.584f6fb7@lama.infinity.home>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+Hi all,
 
-The following issue has been CLOSED 
-====================================================================== 
-http://busybox.net/bugs/view.php?id=1249 
-====================================================================== 
-Reported By:                holin
-Assigned To:                buildroot
-====================================================================== 
-Project:                    buildroot
-Issue ID:                   1249
-Category:                   Architecture Specific
-Reproducibility:            always
-Severity:                   major
-Priority:                   normal
-Status:                     closed
-Resolution:                 open
-Fixed in Version:           
-====================================================================== 
-Date Submitted:             03-02-2007 13:06 PST
-Last Modified:              03-09-2007 02:25 PST
-====================================================================== 
-Summary:                    buildroot cannot correctly handle sed differencies
-on Mac OS X
-Description: 
-Mac OS X native sed does not seem good for buildroot usage and buildroot
-cannot detect that. Attached three patches to fix the sed detection and
-make buildroot use either a third-party gsed/gnused or build gnu sed
-locally.
+I have some trouble while creating an installation with the kernel
+2.4.33 + RTAI patches 3.4
+The kernel is woking good but I cannot load any module.
+The error reported by modutils is some unresolved symbols, printk and
+kalloc for example. the CONFIG_MODVERSIONS option is not an issue - the
+problem is present with and without that option - remark that I always
+rebuild the entire kernel tree and modules so there is not any mismatch
+between the modversions.
+I noticed that
 
-====================================================================== 
+- sometimes the kernel i built with the modversions
+incerrectly, that means that  /proc/ksyms  reports for example
+printk__ver_prink instead of printk_R_xxxxx . it seems a compilation
+error.
 
----------------------------------------------------------------------- 
- bernhardf - 03-09-07 02:25  
----------------------------------------------------------------------- 
-Applied, thanks. 
+- it seems that modutils cannot resolve the symbols, because if depmod
+or insmod reports printk not present, I can see that /proc/ksyms haves
+printk -- without the modversions, for example.
 
-Issue History 
-Date Modified   Username       Field                    Change               
-====================================================================== 
-03-02-07 13:06  holin          New Issue                                    
-03-02-07 13:06  holin          Status                   new => assigned     
-03-02-07 13:06  holin          Assigned To               => buildroot       
-03-02-07 13:06  holin          File Added: buildroot-070225-sed-check.patch     
-              
-03-02-07 13:07  holin          File Added: buildroot-070225-sed-hostdir.patch   
-                
-03-02-07 13:07  holin          File Added: buildroot-070225-sed-osxbuild.patch  
-                 
-03-09-07 02:25  bernhardf      Status                   assigned => closed  
-03-09-07 02:25  bernhardf      Note Added: 0002223                          
-======================================================================
+- ksyms -a reports nothing
+
+Anyone experienced something like this?
+
+Thank you in advance! 
+Regards
+
+ing. Federico Fuga
