@@ -1,32 +1,24 @@
 From: Bernhard Fischer <rep.dot.nop@gmail.com>
-Date: Fri, 9 Mar 2007 09:35:30 +0100
-Subject: [Buildroot] [RFC/PATCH 2/3] fix buildroot sed handling on Mac
-	OS X
-In-Reply-To: <45F083D7.9050100@cs.helsinki.fi>
-References: <45E17186.2080208@cs.helsinki.fi> <20070308163826.GD1389@aon.at>
-	<45F083D7.9050100@cs.helsinki.fi>
-Message-ID: <20070309083530.GC11011@aon.at>
+Date: Fri, 9 Mar 2007 09:53:08 +0100
+Subject: [Buildroot] Native POSIX Threading (NPTL)
+In-Reply-To: <1172594168.2813.6.camel@ndragon.eng.wgate.com>
+References: <1172594168.2813.6.camel@ndragon.eng.wgate.com>
+Message-ID: <20070309085308.GE11011@aon.at>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Thu, Mar 08, 2007 at 11:44:55PM +0200, Heikki Lindholm wrote:
->Bernhard Fischer kirjoitti:
->>On Sun, Feb 25, 2007 at 01:22:46PM +0200, Heikki Lindholm wrote:
->>
->>>Include a patch for GNU sed that allows building it on Mac OS X and
->>>remove a spurious --prefix from sed.mk.
-
->>It is not immediately apparent to me why you need this patch. Please
->>elaborate.
+On Tue, Feb 27, 2007 at 11:36:07AM -0500, James Newell wrote:
+>Hello,
 >
->Nor to me. But it seems to fix a sed incompatibility - it's funny, but 
->building GNU sed does seem to require GNU sed. If I try to build 
->sed-4.1.5 on OS X without this patch, ./configure fails with
->sed: 1: "install_sh=/tmp/sed-4.1 ...": command i expects \ followed by text
->sed: 1: "install_sh=/tmp/sed-4.1 ...": command i expects \ followed by text
->The patch itself is just copied from Darwinports (macports these days.)
+>The latest snapshot of uclibc seems to have removed NPTL support for
+>arm.
 
-applied, thanks.
+AFAIK there never was NTPL support before, and nothing was removed.
+This is a uClibc issue, so you'd be better off to have asked on the
+uClibc list. That said, current uClibc-svn has working linuxthreads.old
+support for ARM, ask your favourite web indexer about uClibc arm NTPL
+
+HTH,
