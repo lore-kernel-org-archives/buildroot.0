@@ -1,49 +1,62 @@
-From: Alex Ugarte <augarte@vicomtech.es>
-Date: Fri, 09 Mar 2007 10:24:08 +0100
-Subject: [Buildroot] [buildroot] mkisofs patch
-Message-ID: <op.tow0einbfolmf1@inv17.vicomtech.es>
+From: bugs at busybox.net <bugs@busybox.net>
+Date: Fri, 9 Mar 2007 02:25:08 -0800
+Subject: [Buildroot] [buildroot 0001249]: buildroot cannot correctly handle
+	sed differencies on Mac OS X
+Message-ID: <cca73ea19adfad110dc0ea882df0490c@busybox.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi all,
 
-I have been testing buildroot for a couple of weeks, and at the beginning  
-i could build an iso9660 image with no problems. But two days ago i  
-cleaned all generated directories and I got an error that mkisofs did not  
-exist.
+The following issue has been CLOSED 
+====================================================================== 
+http://busybox.net/bugs/view.php?id=1249 
+====================================================================== 
+Reported By:                holin
+Assigned To:                buildroot
+====================================================================== 
+Project:                    buildroot
+Issue ID:                   1249
+Category:                   Architecture Specific
+Reproducibility:            always
+Severity:                   major
+Priority:                   normal
+Status:                     closed
+Resolution:                 open
+Fixed in Version:           
+====================================================================== 
+Date Submitted:             03-02-2007 13:06 PST
+Last Modified:              03-09-2007 02:25 PST
+====================================================================== 
+Summary:                    buildroot cannot correctly handle sed differencies
+on Mac OS X
+Description: 
+Mac OS X native sed does not seem good for buildroot usage and buildroot
+cannot detect that. Attached three patches to fix the sed detection and
+make buildroot use either a third-party gsed/gnused or build gnu sed
+locally.
 
-I don't know why it worked the first time or why it didn't the second one,  
-but after copying this patch  
-(http://lfs.securewebservices.co.uk/patches/downloads/cdrtools/cdrtools-2.01-kernel_2.6-3.patch  
-) into target/iso9660 it worked again. It's not necessary to modify the  
-iso9660.mk file, as it already contains a instruction to apply every patch  
-present on the target/iso9660 directory.
+====================================================================== 
 
-cheers,
+---------------------------------------------------------------------- 
+ bernhardf - 03-09-07 02:25  
+---------------------------------------------------------------------- 
+Applied, thanks. 
 
-Alex
-
--- 
-
-?lex Ugarte I?iguez de Heredia
-Investigador / Researcher
-
-VICOMTech - Visual Interaction and Communication Technologies Center
-Mikeletegi Pasealekua, 57 - Parque Tecnol?gico
-E-20009 Donostia - San Sebasti?n, Spain
-Tel: +[34] 943 30 92 30
-Fax: +[34] 943 30 93 93
-e-mail: augarte at vicomtech.es
-http://www.vicomtech.es
-
-*** member of INI-GraphicsNet ****
-http://www.inigraphics.net
-*** member of IK4 Research Alliance ****
-http://www.ik4.es
-
------------------------------------------------------
-VICOMTech is an ISO 9001:2000 certified institute
------------------------------------------------------
+Issue History 
+Date Modified   Username       Field                    Change               
+====================================================================== 
+03-02-07 13:06  holin          New Issue                                    
+03-02-07 13:06  holin          Status                   new => assigned     
+03-02-07 13:06  holin          Assigned To               => buildroot       
+03-02-07 13:06  holin          File Added: buildroot-070225-sed-check.patch     
+              
+03-02-07 13:07  holin          File Added: buildroot-070225-sed-hostdir.patch   
+                
+03-02-07 13:07  holin          File Added: buildroot-070225-sed-osxbuild.patch  
+                 
+03-09-07 02:25  bernhardf      Status                   assigned => closed  
+03-09-07 02:25  bernhardf      Note Added: 0002223                          
+======================================================================
