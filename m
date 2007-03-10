@@ -1,20 +1,22 @@
-From: Thomas Lundquist <lists@zelow.no>
-Date: Sat, 10 Mar 2007 14:41:19 +0100
-Subject: [Buildroot] target busybox skeleton.
-In-Reply-To: <20070308103626.GB31261@aon.at>
-References: <20070218173211.GA31717@zelow.no> <20070308103626.GB31261@aon.at>
-Message-ID: <20070310134119.GA3400@zelow.no>
+From: ing. Federico Fuga <fuga@studiofuga.com>
+Date: Sat, 10 Mar 2007 16:00:15 +0100
+Subject: [Buildroot] __cxa_atexit in gcc 3.4.6
+Message-ID: <20070310160015.5a40c583@lama.infinity.home>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Thu, Mar 08, 2007 at 11:36:26AM +0100, Bernhard Fischer wrote:
-> 
-> What about switching to "install -D" instead, where appropriate?
+Hi,
 
-Ok with me, you have the commit access, I've not :=)
+I have browsed the ml archive but found nothing directly appropriated:
+Is there any reason for putting the --disable-__cxa_atexit in the gcc
+3.4.6 script? I have a binary-only library that requires __cxa_atexit
+(it gives me a unresolved symbol error while linking my sources).
 
+Thank you in advance!
 
-Thomas.
+Regards,
+
+ing. Federico Fuga
