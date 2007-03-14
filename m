@@ -1,34 +1,28 @@
-From: Stefan Feilmeier <stefan@deeproot.co.in>
-Date: Wed, 14 Mar 2007 08:34:59 +0530
-Subject: [Buildroot] hardware detection
-Message-ID: <1173841499.5844.11.camel@stefan-nb.feilmeier>
+From: Mr.Satit Phermsawang <satit@mail.wbac.ac.th>
+Date: Wed, 14 Mar 2007 10:10:05 +0700
+Subject: [Buildroot] SMB segmentation fault
+In-Reply-To: <45F77169.6070004@critical.com>
+References: <45F77169.6070004@critical.com>
+Message-ID: <20070314030827.M69587@mail.wbac.ac.th>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello.
+Yes, I fished buildroot(svn) on X86 platform with uclibc-snapshot and 
+busybox1.2.2 with samba  support after boot the erorr message show: 
 
-First of all buildroot is a really useful tool and we use it to build
-the initial system for our install cd. The only problem is that I am
-stuck on hardware detection. I am trying to store my kernel modules on
-the cd and mount it during boot process to keep my initrd small. Modules
-for the cdrom drive are compiled into the kernel. This is what I do
-currently: 
+Starting SMB services: Segmentation fault 
+Starting NMB services: Segmentation fault 
 
-1. Boot initrd
-2. /etc/init.d/S10udev starts udev and populates /dev
-3. Mount cdrom(s) on /mnt/cdrom/
-4. Mount --bind /lib/modules
+and also issue command : 
+smbd 
+Segmentation fault 
 
-Till here everything works just fine and the modules are accessible
-in /lib/modules. Now I try to run `udevtrigger` but it doesn't detect my
-network card. Loading the module manually with `modprobe pcnet32` works
-fine. I am trying this in a VMware virtual machine.
+the same error. 
 
-Does anybody have a hint for me?
+Anybody have know to fix it? 
 
-Regards,
-Stefan
-DeepRoot Linux
+-- 
+Satir P. 
