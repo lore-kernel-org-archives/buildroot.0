@@ -1,49 +1,72 @@
-From: Bernhard Fischer <rep.dot.nop@gmail.com>
-Date: Wed, 14 Mar 2007 11:35:55 +0100
-Subject: [Buildroot] hardware detection
-In-Reply-To: <1173867907.5844.15.camel@stefan-nb.feilmeier>
-References: <1173841499.5844.11.camel@stefan-nb.feilmeier>
-	<20070314100809.GD12028@aon.at>
-	<1173867907.5844.15.camel@stefan-nb.feilmeier>
-Message-ID: <20070314103555.GA13587@aon.at>
+From: aldot at uclibc.org <aldot@uclibc.org>
+Date: Wed, 14 Mar 2007 04:15:09 -0700 (PDT)
+Subject: [Buildroot] svn commit: trunk/buildroot: package/sed
+	toolchain/uClibc
+Message-ID: <20070314111509.777C9485EB@busybox.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Wed, Mar 14, 2007 at 03:55:07PM +0530, Stefan Feilmeier wrote:
->On Mi, 2007-03-14 at 11:08 +0100, Bernhard Fischer wrote:
->> On Wed, Mar 14, 2007 at 08:34:59AM +0530, Stefan Feilmeier wrote:
->> >Hello.
->> >
->> >First of all buildroot is a really useful tool and we use it to build
->> >the initial system for our install cd. The only problem is that I am
->> >stuck on hardware detection. I am trying to store my kernel modules on
->> >the cd and mount it during boot process to keep my initrd small. Modules
->> >for the cdrom drive are compiled into the kernel. This is what I do
->> >currently: 
->> >
->> >1. Boot initrd
->> >2. /etc/init.d/S10udev starts udev and populates /dev
->> >3. Mount cdrom(s) on /mnt/cdrom/
->> >4. Mount --bind /lib/modules
->> >
->> >Till here everything works just fine and the modules are accessible
->> >in /lib/modules. Now I try to run `udevtrigger` but it doesn't detect my
->> >network card. Loading the module manually with `modprobe pcnet32` works
->> >fine. I am trying this in a VMware virtual machine.
->> >
->> >Does anybody have a hint for me?
->> 
->> 1) delete udev and use busybox's mdev instead
->> 2) echo alias eth0 pcnet32 >> /etc/modprobe.conf; ifup eth0
->>  or something to that effect.
->
->Thanks for your answer. The problem is that I need real hardware
->detection as the cd will run on many different platforms and not only on
->VMware virtual machines. Any idea?
+Author: aldot
+Date: 2007-03-14 04:15:08 -0700 (Wed, 14 Mar 2007)
+New Revision: 18099
 
-I'm confident that there are numerous tools with varying dependencies to
-accomplish that task.
-discover (i use the one from debian) should do the trick, perhaps?
+Log:
+- s/HOST_SED_TARGET/HOST_SED_BINARY/g for clarity
+- make sure that we have a working sed for the uclibc-menuconfig target
+
+
+Modified:
+   trunk/buildroot/package/sed/sed.mk
+   trunk/buildroot/toolchain/uClibc/uclibc.mk
+
+
+Changeset:
+Modified: trunk/buildroot/package/sed/sed.mk
+===================================================================
+--- trunk/buildroot/package/sed/sed.mk	2007-03-14 08:52:28 UTC (rev 18098)
++++ trunk/buildroot/package/sed/sed.mk	2007-03-14 11:15:08 UTC (rev 18099)
+@@ -17,7 +17,7 @@
+ #HOST_SED_DIR:=$(STAGING_DIR)
+ HOST_SED_DIR:=$(TOOL_BUILD_DIR)
+ SED:=$(HOST_SED_DIR)/bin/sed -i -e
+-HOST_SED_TARGET=$(shell package/sed/sedcheck.sh)
++HOST_SED_BINARY=$(shell package/sed/sedcheck.sh)
+ HOST_SED_IF_ANY=$(shell toolchain/dependencies/check-host-sed.sh)
+ 
+ $(DL_DIR)/$(SED_SOURCE):
+@@ -63,15 +63,15 @@
+ 		    $(HOST_SED_DIR)/usr/man $(HOST_SED_DIR)/usr/share/doc; fi
+ 
+ use-sed-host-binary:
+-	@if [ ! -e "$(HOST_SED_DIR)/$(SED_TARGET_BINARY)" ] ; then \
++	if [ ! -e "$(HOST_SED_DIR)/$(SED_TARGET_BINARY)" ] ; then \
+ 		mkdir -p "$(HOST_SED_DIR)/bin"; \
+ 		rm -f "$(HOST_SED_DIR)/$(SED_TARGET_BINARY)"; \
+ 		ln -sf "$(HOST_SED_IF_ANY)" "$(HOST_SED_DIR)/$(SED_TARGET_BINARY)"; \
+ 	fi
+ 
+-host-sed: $(HOST_SED_TARGET)
++host-sed: $(HOST_SED_BINARY)
+ 
+-ifeq ($(HOST_SED_TARGET),build-sed-host-binary)
++ifeq ($(HOST_SED_BINARY),build-sed-host-binary)
+ host-sed-clean:
+ 	$(MAKE) DESTDIR=$(HOST_SED_DIR) -C $(SED_DIR1) uninstall
+ 	-$(MAKE) -C $(SED_DIR1) clean
+
+Modified: trunk/buildroot/toolchain/uClibc/uclibc.mk
+===================================================================
+--- trunk/buildroot/toolchain/uClibc/uclibc.mk	2007-03-14 08:52:28 UTC (rev 18098)
++++ trunk/buildroot/toolchain/uClibc/uclibc.mk	2007-03-14 11:15:08 UTC (rev 18099)
+@@ -254,7 +254,7 @@
+ 		all
+ 	touch -c $(UCLIBC_DIR)/lib/libc.a
+ 
+-uclibc-menuconfig: $(UCLIBC_DIR)/.config host-sed
++uclibc-menuconfig: host-sed $(UCLIBC_DIR)/.config
+ 	$(MAKE1) -C $(UCLIBC_DIR) \
+ 		PREFIX=$(TOOL_BUILD_DIR)/uClibc_dev/ \
+ 		DEVEL_PREFIX=/usr/ \
