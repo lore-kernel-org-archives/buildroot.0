@@ -1,25 +1,139 @@
-From: =?iso-8859-1?Q?=22Matthias_G=FClck=22?= <Matthias.Guelck@gmx.de>
-Date: Thu, 15 Mar 2007 09:35:44 +0100
-Subject: [Buildroot] NPTL for PPC
-Message-ID: <20070315083544.182730@gmx.net>
+From: jacmet at uclibc.org <jacmet@uclibc.org>
+Date: Thu, 15 Mar 2007 01:36:20 -0700 (PDT)
+Subject: [Buildroot] svn commit: trunk/buildroot/package/busybox
+Message-ID: <20070315083620.34B0E48022@busybox.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi all!
+Author: jacmet
+Date: 2007-03-15 01:36:18 -0700 (Thu, 15 Mar 2007)
+New Revision: 18117
 
-I am trying to configure my buildroot toochain for PPC to use NPTL instead of linuxthreads.
-Within the menuconfig I have activated the NPTL selection, but how can I check the difference to linuxthreads?
+Log:
+tftp patch
 
-Is NPTL supported for PPC?
+Added:
+   trunk/buildroot/package/busybox/busybox-1.4.1-tftp.patch
 
 
-Kind Regards,
-
-Matthias
-
--- 
-"Feel free" - 5 GB Mailbox, 50 FreeSMS/Monat ...
-Jetzt GMX ProMail testen: www.gmx.net/de/go/mailfooter/promail-out
+Changeset:
+Added: trunk/buildroot/package/busybox/busybox-1.4.1-tftp.patch
+===================================================================
+--- trunk/buildroot/package/busybox/busybox-1.4.1-tftp.patch	                        (rev 0)
++++ trunk/buildroot/package/busybox/busybox-1.4.1-tftp.patch	2007-03-15 08:36:18 UTC (rev 18117)
+@@ -0,0 +1,112 @@
++--- busybox-1.4.1/include/libbb.h	Wed Jan 24 22:34:48 2007
+++++ busybox-1.4.1-tftp/include/libbb.h	Sat Mar  3 00:02:34 2007
++@@ -290,7 +290,7 @@
++ 
++ /* "new" (ipv4+ipv6) API */
++ typedef struct len_and_sockaddr {
++-	int len;
+++	socklen_t len;
++ 	union {
++ 		struct sockaddr sa;
++ 		struct sockaddr_in sin;
++--- busybox-1.4.1/networking/tftp.c	Wed Jan 24 22:34:34 2007
+++++ busybox-1.4.1-tftp/networking/tftp.c	Sat Mar  3 00:02:56 2007
++@@ -132,7 +132,7 @@
++ #if ENABLE_FEATURE_TFTP_GET && ENABLE_FEATURE_TFTP_PUT
++ 		const int cmd,
++ #endif
++-		const len_and_sockaddr *peer_lsa,
+++		len_and_sockaddr *peer_lsa,
++ 		const char *remotefile, const int localfd,
++ 		unsigned port, int tftp_bufsize)
++ {
++@@ -149,6 +149,9 @@
++ 
++ 	USE_FEATURE_TFTP_BLOCKSIZE(int want_option_ack = 0;)
++ 
+++	unsigned org_port;
+++	len_and_sockaddr *const from = alloca(offsetof(len_and_sockaddr, sa) + peer_lsa->len);
+++
++ 	/* Can't use RESERVE_CONFIG_BUFFER here since the allocation
++ 	 * size varies meaning BUFFERS_GO_ON_STACK would fail */
++ 	/* We must keep the transmit and receive buffers seperate */
++@@ -156,7 +159,7 @@
++ 	char *xbuf = xmalloc(tftp_bufsize += 4);
++ 	char *rbuf = xmalloc(tftp_bufsize);
++ 
++-	port = htons(port);
+++	port = org_port = htons(port);
++ 
++ 	socketfd = xsocket(peer_lsa->sa.sa_family, SOCK_DGRAM, 0);
++ 
++@@ -167,10 +170,10 @@
++ 	}
++ 
++ 	while (1) {
++-
++ 		cp = xbuf;
++ 
++ 		/* first create the opcode part */
+++		/* (this 16bit store is aligned) */
++ 		*((uint16_t*)cp) = htons(opcode);
++ 		cp += 2;
++ 
++@@ -222,6 +225,7 @@
++ 		/* add ack and data */
++ 
++ 		if (CMD_GET(cmd) ? (opcode == TFTP_ACK) : (opcode == TFTP_DATA)) {
+++			/* TODO: unaligned access! */
++ 			*((uint16_t*)cp) = htons(block_nr);
++ 			cp += 2;
++ 			block_nr++;
++@@ -273,28 +277,26 @@
++ 			FD_SET(socketfd, &rfds);
++ 
++ 			switch (select(socketfd + 1, &rfds, NULL, NULL, &tv)) {
++-				struct sockaddr *from;
++-				socklen_t fromlen;
++-
+++				unsigned from_port;
++ 			case 1:
++-				fromlen = peer_lsa->len;
++-				from = alloca(fromlen);
++-				memset(from, 0, fromlen);
++-
+++				from->len = peer_lsa->len;
+++				memset(&from->sa, 0, peer_lsa->len);
++ 				len = recvfrom(socketfd, rbuf, tftp_bufsize, 0,
++-							from, &fromlen);
+++							&from->sa, &from->len);
++ 				if (len < 0) {
++ 					bb_perror_msg("recvfrom");
++ 					break;
++ 				}
++-#if ENABLE_FEATURE_IPV6
++-				if (from->sa_family == AF_INET6)
++-					if (((struct sockaddr_in6*)from)->sin6_port != port)
++-						goto recv_again;
++-#endif
++-				if (from->sa_family == AF_INET)
++-					if (((struct sockaddr_in*)from)->sin_port != port)
++-						goto recv_again;
+++				from_port = get_nport(from);
+++				if (port == org_port) {
+++					/* Our first query went to port 69
+++					 * but reply will come from different one.
+++					 * Remember and use this new port */
+++					port = from_port;
+++					set_nport(peer_lsa, from_port);
+++				}
+++				if (port != from_port)
+++					goto recv_again;
++ 				timeout = 0;
++ 				break;
++ 			case 0:
++@@ -317,6 +319,7 @@
++ 		}
++ 
++ 		/* process received packet */
+++		/* (both accesses seems to be aligned) */
++ 
++ 		opcode = ntohs( ((uint16_t*)rbuf)[0] );
++ 		tmp = ntohs( ((uint16_t*)rbuf)[1] );
