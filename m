@@ -1,7 +1,7 @@
 From: bugs at busybox.net <bugs@busybox.net>
-Date: Fri, 16 Mar 2007 18:37:40 -0700
+Date: Sat, 17 Mar 2007 11:19:38 -0700
 Subject: [Buildroot] [buildroot 0001212]: build stops after makeinfo warning
-Message-ID: <8bdab79c700cf5e3b42275ac3a87eb30@bugs.uclibc.org>
+Message-ID: <fafcf3acac8cc21d992eb0cf6c3159a9@bugs.uclibc.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -25,7 +25,7 @@ Priority:                   normal
 Status:                     assigned
 ====================================================================== 
 Date Submitted:             02-13-2007 00:09 PST
-Last Modified:              03-16-2007 18:37 PDT
+Last Modified:              03-17-2007 11:19 PDT
 ====================================================================== 
 Summary:                    build stops after makeinfo warning
 Description: 
@@ -166,6 +166,15 @@ tried to explicitely set the path to makeinfo, with exactly the same
 smitty at tiger:~/src/buildroot/toolchain_build_i686/binutils-2.17.50.0.10-build/bfd$
 MAKEINFO=/usr/local/bin/makeinfo make 
 
+---------------------------------------------------------------------- 
+ smitty_one_each - 03-17-07 11:19  
+---------------------------------------------------------------------- 
+I think this is a configure-time problem.
+After installing texinfo on my Ubuntu, I blew away the binutils-*-build
+directory, did a make clean, and started again.
+Having the binutils ./configure script run, with texinfo actually
+installed, cured what ailed me. 
+
 Issue History 
 Date Modified   Username       Field                    Change               
 ====================================================================== 
@@ -178,4 +187,5 @@ Date Modified   Username       Field                    Change
 03-16-07 18:34  smitty_one_eachIssue Monitored: smitty_one_each                 
   
 03-16-07 18:37  smitty_one_eachNote Added: 0002237                          
+03-17-07 11:19  smitty_one_eachNote Added: 0002238                          
 ======================================================================
