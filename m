@@ -1,36 +1,31 @@
-From: aldot at uclibc.org <aldot@uclibc.org>
-Date: Mon, 19 Mar 2007 07:16:10 -0700 (PDT)
-Subject: [Buildroot] svn commit: trunk/buildroot/package/mpfr
-Message-ID: <20070319141610.DDDFF485B9@busybox.net>
+From: Francisco =?iso-8859-1?q?P=E9rez_Botella?= <xerox@eivissaweb.net>
+Date: Mon, 19 Mar 2007 21:41:06 +0100
+Subject: [Buildroot] Cannot compile kernel with toolchain
+Message-ID: <200703192141.07227.xerox@eivissaweb.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Author: aldot
-Date: 2007-03-19 07:16:10 -0700 (Mon, 19 Mar 2007)
-New Revision: 18159
+Hello:
 
-Log:
-- apply bugfixes ontop of 2.2.1
+this is my first try to buildroot.
+I could commplete compilation of buildroot with 2.6.8 kernel headers, I'm 
+using toolchain to build images for bcm96438 mips board.
+I'm not using root filesystem.
 
+I can compile programs I could not do before with toolchain provided with the 
+gpl source firmware... rint() problems on iproute and if_ifnametoindex etc..
 
-Modified:
-   trunk/buildroot/package/mpfr/mpfr.mk
+The problem is I could not compile the kernel anymore, when  Itry quickly 
+returns me a error in scall-o32.S telling me that the macro sys is already 
+definned, I think it can be some of duplication of header files, I do not 
+know very much about it, is just a guess.
 
+Do you know how to correct this
 
-Changeset:
-Modified: trunk/buildroot/package/mpfr/mpfr.mk
-===================================================================
---- trunk/buildroot/package/mpfr/mpfr.mk	2007-03-19 13:44:18 UTC (rev 18158)
-+++ trunk/buildroot/package/mpfr/mpfr.mk	2007-03-19 14:16:10 UTC (rev 18159)
-@@ -4,7 +4,7 @@
- #
- #############################################################
- MPFR_VERSION:=2.2.1
--#MPFR_PATCH:=patches
-+MPFR_PATCH:=patches
- MPFR_SOURCE:=mpfr-$(MPFR_VERSION).tar.bz2
- MPFR_CAT:=$(BZCAT)
- MPFR_SITE:=http://www.mpfr.org/mpfr-current/
+thanks
+
+-- 
+Francisco J. P?rez Botella
