@@ -1,36 +1,53 @@
-From: aldot at uclibc.org <aldot@uclibc.org>
-Date: Mon, 19 Mar 2007 03:49:12 -0700 (PDT)
-Subject: [Buildroot] svn commit: trunk/buildroot/target
-Message-ID: <20070319104912.046C848083@busybox.net>
+From: bugs at busybox.net <bugs@busybox.net>
+Date: Mon, 19 Mar 2007 03:50:00 -0700
+Subject: [Buildroot] [buildroot 0001277]: LINUX_VERSION refrences itself
+Message-ID: <90ce87c41776967be56bfb0407738015@busybox.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Author: aldot
-Date: 2007-03-19 03:49:11 -0700 (Mon, 19 Mar 2007)
-New Revision: 18157
 
-Log:
-- pin LINUX_VERSION. Closes #1277
+The following issue has been CLOSED 
+====================================================================== 
+http://busybox.net/bugs/view.php?id=1277 
+====================================================================== 
+Reported By:                nevr
+Assigned To:                buildroot
+====================================================================== 
+Project:                    buildroot
+Issue ID:                   1277
+Category:                   Other
+Reproducibility:            always
+Severity:                   minor
+Priority:                   normal
+Status:                     closed
+Resolution:                 open
+Fixed in Version:           
+====================================================================== 
+Date Submitted:             03-19-2007 02:11 PDT
+Last Modified:              03-19-2007 03:50 PDT
+====================================================================== 
+Summary:                    LINUX_VERSION refrences itself
+Description: 
+in target/linux26.mk:44 LINUX_VERSION is set to equal to $(LINUX_VERSION)
+make errors out with recursion errors.  Not sure what it should be set to,
+still trying to understand all the internals of buildroot, so no patch
+posted, hopefully someone else will be able to figure it out.
+====================================================================== 
 
+---------------------------------------------------------------------- 
+ bernhardf - 03-19-07 03:50  
+---------------------------------------------------------------------- 
+Fixed in r18157. Thanks for pointing this out. 
 
-Modified:
-   trunk/buildroot/target/linux26.mk
-
-
-Changeset:
-Modified: trunk/buildroot/target/linux26.mk
-===================================================================
---- trunk/buildroot/target/linux26.mk	2007-03-19 09:59:50 UTC (rev 18156)
-+++ trunk/buildroot/target/linux26.mk	2007-03-19 10:49:11 UTC (rev 18157)
-@@ -41,7 +41,7 @@
- LINUX26_DIR=$(BUILD_DIR)/linux-$(LINUX26_VERSION)
- 
- # for packages that need it
--LINUX_VERSION=$(LINUX_VERSION)
-+LINUX_VERSION:=$(LINUX_VERSION)
- LINUX_DIR=$(LINUX26_DIR)
- LINUX_KERNEL=$(LINUX26_KERNEL)
- 
+Issue History 
+Date Modified   Username       Field                    Change               
+====================================================================== 
+03-19-07 02:11  nevr           New Issue                                    
+03-19-07 02:11  nevr           Status                   new => assigned     
+03-19-07 02:11  nevr           Assigned To               => buildroot       
+03-19-07 03:49  bernhardf      Status                   assigned => closed  
+03-19-07 03:50  bernhardf      Note Added: 0002244                          
+======================================================================
