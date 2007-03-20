@@ -1,58 +1,37 @@
-From: bugs at busybox.net <bugs@busybox.net>
-Date: Tue, 20 Mar 2007 10:50:45 -0700
-Subject: [Buildroot] [buildroot 0000968]: readline inclusion into target
-	image [patch to enable this]
-Message-ID: <0cc96318f62c38e4e000f8a172fb007a@busybox.net>
+From: aldot at uclibc.org <aldot@uclibc.org>
+Date: Tue, 20 Mar 2007 10:58:36 -0700 (PDT)
+Subject: [Buildroot] svn commit: trunk/buildroot/package
+Message-ID: <20070320175836.B39D84859F@busybox.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+Author: aldot
+Date: 2007-03-20 10:58:36 -0700 (Tue, 20 Mar 2007)
+New Revision: 18184
 
-The following issue has been CLOSED 
-====================================================================== 
-http://busybox.net/bugs/view.php?id=968 
-====================================================================== 
-Reported By:                rhunger
-Assigned To:                buildroot
-====================================================================== 
-Project:                    buildroot
-Issue ID:                   968
-Category:                   New Features
-Reproducibility:            always
-Severity:                   trivial
-Priority:                   normal
-Status:                     closed
-Resolution:                 open
-Fixed in Version:           
-====================================================================== 
-Date Submitted:             07-24-2006 03:10 PDT
-Last Modified:              03-20-2007 10:50 PDT
-====================================================================== 
-Summary:                    readline inclusion into target image [patch to
-enable this]
-Description: 
-The readline libraries are only installed into the staging directory not
-the target root filesystem. The infrastructure present in
-package/readline/readline.mk is not used/enabled. The attached patch
-enables the make rule readline-target with some minor tweaks.
-====================================================================== 
+Log:
+- put staging_dir/usr/bin into the target path, so X-stuff can find freetype-config.
+  Closes #1233
 
----------------------------------------------------------------------- 
- bernhardf - 03-20-07 10:50  
----------------------------------------------------------------------- 
-Fixed in r18183. Thanks for the report. 
 
-Issue History 
-Date Modified   Username       Field                    Change               
-====================================================================== 
-07-24-06 03:10  rhunger        New Issue                                    
-07-24-06 03:10  rhunger        Status                   new => assigned     
-07-24-06 03:10  rhunger        Assigned To               => uClibc          
-07-24-06 03:10  rhunger        File Added:
-readline-target_for_buildroot-20060120.patch                    
-02-12-07 05:34  vapier         Assigned To              uClibc => buildroot 
-03-20-07 10:50  bernhardf      Status                   assigned => closed  
-03-20-07 10:50  bernhardf      Note Added: 0002254                          
-======================================================================
+Modified:
+   trunk/buildroot/package/Makefile.in
+
+
+Changeset:
+Modified: trunk/buildroot/package/Makefile.in
+===================================================================
+--- trunk/buildroot/package/Makefile.in	2007-03-20 17:50:23 UTC (rev 18183)
++++ trunk/buildroot/package/Makefile.in	2007-03-20 17:58:36 UTC (rev 18184)
+@@ -59,7 +59,7 @@
+ TOOL_BUILD_DIR=$(BASE_DIR)/$(TOPDIR_PREFIX)toolchain_build_$(ARCH)$(ARCH_FPU_SUFFIX)$(TOPDIR_SUFFIX)
+ 
+ # Quotes are needed for spaces et al in path components.
+-TARGET_PATH="$(STAGING_DIR)/bin:$(TOOL_BUILD_DIR)/bin:$(PATH)"
++TARGET_PATH="$(STAGING_DIR)/bin:$(TOOL_BUILD_DIR)/bin:$(STAGING_DIR)/usr/bin:$(PATH)"
+ IMAGE:=$(BASE_DIR)/rootfs.$(ARCH)$(ARCH_FPU_SUFFIX)
+ REAL_GNU_TARGET_NAME=$(OPTIMIZE_FOR_CPU)$(GNU_TARGET_SUFFIX)
+ GNU_TARGET_NAME=$(OPTIMIZE_FOR_CPU)-linux
