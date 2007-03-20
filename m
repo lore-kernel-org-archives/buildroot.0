@@ -1,65 +1,86 @@
-From: bugs at busybox.net <bugs@busybox.net>
-Date: Tue, 20 Mar 2007 11:08:18 -0700
-Subject: [Buildroot] [buildroot 0001231]: PATCH: 'make source' does not
-	download kernel-headers source.
-Message-ID: <c1c75b42ad7b68a662b4475a432e7988@busybox.net>
+From: Eric P Caillibot <epc@xiphos.ca>
+Date: Tue, 20 Mar 2007 13:57:33 -0400
+Subject: [Buildroot] Problem involving libc/libc_so.a(pread_write.os)
+Message-ID: <1174413454.32392.4.camel@tintin>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+Hello,
 
-A NOTE has been added to this issue. 
-====================================================================== 
-http://busybox.net/bugs/view.php?id=1231 
-====================================================================== 
-Reported By:                foogod
-Assigned To:                buildroot
-====================================================================== 
-Project:                    buildroot
-Issue ID:                   1231
-Category:                   Other
-Reproducibility:            always
-Severity:                   minor
-Priority:                   normal
-Status:                     assigned
-====================================================================== 
-Date Submitted:             02-17-2007 16:54 PST
-Last Modified:              03-20-2007 11:08 PDT
-====================================================================== 
-Summary:                    PATCH: 'make source' does not download
-kernel-headers source.
-Description: 
-There is no make dependency connecting the 'source' target to the
-kernel-headers-source target.  Thus, 'make source' does not download the
-kernel-headers source, and it doesn't actually get downloaded until it
-comes time to build it.
+I am trying to set up Buildroot on a host running ubuntu, my target
+being a powerpc 405, running version 2.4.26 of the Linux kernel.
 
-The attached patch fixes this issue by adding kernel-headers-source as a
-dependency for uclibc-configured-source.
-====================================================================== 
+This is what I did, after checking Buildroot out of SVN:
 
----------------------------------------------------------------------- 
- bernhardf - 03-20-07 11:08  
----------------------------------------------------------------------- 
-What kernel-headers version were you seeing this with?
-I cannot reproduce the alleged bug that "make source" does not download
-the kernel-headers-source.
+$ make menuconfig
 
-Works fine for me with linux-2.6.20.
+-> In the menu, I changed GCC compiler version to 4.1.2 (although in a
+previous attempt I left the default choice in place and ended up with
+the same result)
+-> Changed Target Architecture to powerpc
+-> Kernel Headers left at Linux 2.4.31 (since 2.4.26 is not in the
+list) 
 
-Your proposed fix is inappropriate, IMO. Just make sure that make source
-groks that your $(TARGETS) contain kernel-headers.
-Thanks for the report 
+$ make
 
-Issue History 
-Date Modified   Username       Field                    Change               
-====================================================================== 
-02-17-07 16:54  foogod         New Issue                                    
-02-17-07 16:54  foogod         Status                   new => assigned     
-02-17-07 16:54  foogod         Assigned To               => buildroot       
-02-17-07 16:54  foogod         File Added:
-buildroot.17919.kernel_headers_source.patch                    
-03-20-07 11:08  bernhardf      Note Added: 0002257                          
-======================================================================
+When prompted, I chose:
+
+Target Processor Type
+> 1. CLASSIC (CONFIG_CLASSIC) (NEW)
+
+...
+
+  STRIP -x -R .note -R .comment lib/libc.a
+  AR cr lib/libc.a
+  STRIP -x -R .note -R .comment lib/uclibc_nonshared.a
+  AR cr lib/uclibc_nonshared.a
+  AR cr libc/libc_so.a
+  LD libuClibc-0.9.29.so
+libc/libc_so.a(pread_write.os):(.text+0x14): undefined reference to
+`__illegally_sized_syscall_arg4'
+make[2]: *** [lib/libc.so] Error 1
+make[1]: *** [lib/libc.so.0] Error 2
+make[1]: Leaving directory
+`/home/epc/dev/buildroot/toolchain_build_powerpc/uClibc'
+make: ***
+[/home/epc/dev/buildroot/toolchain_build_powerpc/uClibc/lib/libc.a]
+Error 2
+
+
+After this point, I tried changing different settings, but ultimately,
+subsequent attempts always got me the same error.
+
+$ make clean
+$ make
+
+...
+
+make MAKE="make -j1"
+-C /home/epc/dev/buildroot/toolchain_build_powerpc/uClibc \
+                PREFIX= \
+
+DEVEL_PREFIX=/home/epc/dev/buildroot/build_powerpc/staging_dir/ \
+
+RUNTIME_PREFIX=/home/epc/dev/buildroot/build_powerpc/staging_dir/ \
+                install_runtime install_dev
+make[1]: Entering directory
+`/home/epc/dev/buildroot/toolchain_build_powerpc/uClibc'
+install -d /home/epc/dev/buildroot/build_powerpc/staging_dir/lib
+install -m 644 lib/lib*-0.9.29.so \
+                /home/epc/dev/buildroot/build_powerpc/staging_dir/lib
+install: cannot stat `lib/lib*-0.9.29.so': No such file or directory
+make[1]: *** [install_runtime] Error 1
+make[1]: Leaving directory
+`/home/epc/dev/buildroot/toolchain_build_powerpc/uClibc'
+make: *** [/home/epc/dev/buildroot/build_powerpc/staging_dir/lib/libc.a]
+Error 2
+
+
+Can anyone help me figure out what is going wrong?
+
+Thank you very much!
+
+Eric
