@@ -1,28 +1,61 @@
-From: Bernhard Fischer <rep.dot.nop@gmail.com>
-Date: Tue, 20 Mar 2007 19:43:46 +0100
-Subject: [Buildroot] Problem involving libc/libc_so.a(pread_write.os)
-In-Reply-To: <1174413454.32392.4.camel@tintin>
-References: <1174413454.32392.4.camel@tintin>
-Message-ID: <20070320184346.GA24948@aon.at>
+From: don <don_reid@comcast.net>
+Date: Tue, 20 Mar 2007 12:04:21 -0700
+Subject: [Buildroot] Error patching kernel for headers
+Message-ID: <20070320190421.GA29210@reid1.localdomain>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Tue, Mar 20, 2007 at 01:57:33PM -0400, Eric P Caillibot wrote:
->Hello,
->
->I am trying to set up Buildroot on a host running ubuntu, my target
->being a powerpc 405, running version 2.4.26 of the Linux kernel.
+With current svn files, I get these errors.  It looks like there is a
+problem with a patch file (linux-2.6.20.3-ipmisensors-20070314-1214.patch)
+in the kernel-headers stuff.
 
->  STRIP -x -R .note -R .comment lib/libc.a
->  AR cr lib/libc.a
->  STRIP -x -R .note -R .comment lib/uclibc_nonshared.a
->  AR cr lib/uclibc_nonshared.a
->  AR cr libc/libc_so.a
->  LD libuClibc-0.9.29.so
->libc/libc_so.a(pread_write.os):(.text+0x14): undefined reference to
->`__illegally_sized_syscall_arg4'
+----------
+toolchain/patch-kernel.sh /home/don/Robots/Bot1/EPIA/buildroot/build_i486/linux-2.6.20.3 toolchain/kernel-headers \
+		linux-2.6.20.3-\*.patch{,.gz,.bz2}
 
-You should ask this on the uclibc list.
+Applying linux-2.6.20.3-ipmisensors-20070314-1214.patch using plaintext: 
+patching file drivers/char/ipmi/ipmi_msghandler.c
+Reversed (or previously applied) patch detected!  Assume -R? [n] 
+Apply anyway? [n] 
+Skipping patch.
+2 out of 2 hunks ignored -- saving rejects to file drivers/char/ipmi/ipmi_msghandler.c.rej
+The next patch would create the file drivers/char/ipmi/ipmi_msghandler.c.orig,
+which already exists!  Assume -R? [n] 
+Apply anyway? [n] 
+Skipping patch.
+1 out of 1 hunk ignored -- saving rejects to file drivers/char/ipmi/ipmi_msghandler.c.orig.rej
+patching file drivers/hwmon/Kconfig
+Reversed (or previously applied) patch detected!  Assume -R? [n] 
+Apply anyway? [n] 
+Skipping patch.
+1 out of 1 hunk ignored -- saving rejects to file drivers/hwmon/Kconfig.rej
+patching file drivers/hwmon/Makefile
+Reversed (or previously applied) patch detected!  Assume -R? [n] 
+Apply anyway? [n] 
+Skipping patch.
+1 out of 1 hunk ignored -- saving rejects to file drivers/hwmon/Makefile.rej
+The next patch would create the file drivers/hwmon/ipmisensors.c,
+which already exists!  Assume -R? [n] 
+Apply anyway? [n] 
+Skipping patch.
+1 out of 1 hunk ignored -- saving rejects to file drivers/hwmon/ipmisensors.c.rej
+The next patch would create the file drivers/hwmon/ipmisensors.h,
+which already exists!  Assume -R? [n] 
+Apply anyway? [n] 
+Skipping patch.
+1 out of 1 hunk ignored -- saving rejects to file drivers/hwmon/ipmisensors.h.rej
+patching file include/linux/ipmi.h
+Reversed (or previously applied) patch detected!  Assume -R? [n] 
+Apply anyway? [n] 
+Skipping patch.
+1 out of 1 hunk ignored -- saving rejects to file include/linux/ipmi.h.rej
+patching file include/linux/ipmi_msgdefs.h
+Reversed (or previously applied) patch detected!  Assume -R? [n] 
+Apply anyway? [n] 
+Skipping patch.
+3 out of 3 hunks ignored -- saving rejects to file include/linux/ipmi_msgdefs.h.rej
+Patch failed!  Please fix linux-2.6.20.3-ipmisensors-20070314-1214.patch!
+make: *** [/home/don/Robots/Bot1/EPIA/buildroot/build_i486/linux-2.6.20.3/.patched] Error 1
