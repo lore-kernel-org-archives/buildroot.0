@@ -1,36 +1,69 @@
-From: aldot at uclibc.org <aldot@uclibc.org>
-Date: Tue, 20 Mar 2007 09:42:51 -0700 (PDT)
-Subject: [Buildroot] svn commit: trunk/buildroot/target/ext2
-Message-ID: <20070320164251.C6FA34807B@busybox.net>
+From: bugs at busybox.net <bugs@busybox.net>
+Date: Tue, 20 Mar 2007 09:43:16 -0700
+Subject: [Buildroot] [buildroot 0001225]: Bump genext2fs
+Message-ID: <dbe45ae629c6b0b278a1a9f7cf668e09@busybox.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Author: aldot
-Date: 2007-03-20 09:42:51 -0700 (Tue, 20 Mar 2007)
-New Revision: 18180
 
-Log:
-- bump version. Closes #1225
+The following issue has been CLOSED 
+====================================================================== 
+http://busybox.net/bugs/view.php?id=1225 
+====================================================================== 
+Reported By:                alexer
+Assigned To:                buildroot
+====================================================================== 
+Project:                    buildroot
+Issue ID:                   1225
+Category:                   New Features
+Reproducibility:            N/A
+Severity:                   minor
+Priority:                   normal
+Status:                     closed
+Resolution:                 open
+Fixed in Version:           
+====================================================================== 
+Date Submitted:             02-16-2007 05:19 PST
+Last Modified:              03-20-2007 09:43 PDT
+====================================================================== 
+Summary:                    Bump genext2fs
+Description: 
+Just a new version, no more CVS-patches
+====================================================================== 
 
+---------------------------------------------------------------------- 
+ alexer - 02-16-07 05:23  
+---------------------------------------------------------------------- 
+Uploaded the wrong patch first :/ Sorry about that 
 
-Added:
-   trunk/buildroot/target/ext2/genext2fs-1.4-nosquash.patch
-   trunk/buildroot/target/ext2/genext2fs-1.4-remove_ugly_warnings.patch
+---------------------------------------------------------------------- 
+ holin - 03-02-07 23:49  
+---------------------------------------------------------------------- 
+Could the "-l" in "du -l..." in the ext2root.mk file perhaps be removed,
+since genext2fs claims to support hardlinks now? 
 
-Removed:
-   trunk/buildroot/target/ext2/genext2fs-01-cvs-updates.patch
-   trunk/buildroot/target/ext2/genext2fs-02-nosquash_devtable.patch
+---------------------------------------------------------------------- 
+ bernhardf - 03-20-07 09:43  
+---------------------------------------------------------------------- 
+Applied as r18180.
 
-Modified:
-   trunk/buildroot/target/ext2/ext2root.mk
+Thanks! 
 
-
-Changeset:
-
-Sorry, the patch is too large to include (9837 lines).
-Please use ViewCVS to see it!
-
-http://uclibc.org/cgi-bin/viewcvs.cgi?view=rev&root=svn&rev=18180
+Issue History 
+Date Modified   Username       Field                    Change               
+====================================================================== 
+02-16-07 05:19  alexer         New Issue                                    
+02-16-07 05:19  alexer         Status                   new => assigned     
+02-16-07 05:19  alexer         Assigned To               => buildroot       
+02-16-07 05:19  alexer         File Added: genext2fs-1.4-upgrade.patch          
+         
+02-16-07 05:23  alexer         File Added: genext2fs_upgrade.patch              
+     
+02-16-07 05:23  alexer         Note Added: 0002172                          
+03-02-07 23:49  holin          Note Added: 0002199                          
+03-20-07 09:43  bernhardf      Status                   assigned => closed  
+03-20-07 09:43  bernhardf      Note Added: 0002245                          
+======================================================================
