@@ -1,7 +1,8 @@
 From: bugs at busybox.net <bugs@busybox.net>
-Date: Tue, 20 Mar 2007 09:43:16 -0700
-Subject: [Buildroot] [buildroot 0001225]: Bump genext2fs
-Message-ID: <dbe45ae629c6b0b278a1a9f7cf668e09@busybox.net>
+Date: Tue, 20 Mar 2007 09:46:48 -0700
+Subject: [Buildroot] [buildroot 0001232]: dialog from
+	buildroot-20070218.tar.bz2 will not compile
+Message-ID: <144978768e0a15da424089526af61ece@busybox.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -9,61 +10,46 @@ Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
 
-The following issue has been CLOSED 
+A NOTE has been added to this issue. 
 ====================================================================== 
-http://busybox.net/bugs/view.php?id=1225 
+http://busybox.net/bugs/view.php?id=1232 
 ====================================================================== 
-Reported By:                alexer
+Reported By:                BLS
 Assigned To:                buildroot
 ====================================================================== 
 Project:                    buildroot
-Issue ID:                   1225
-Category:                   New Features
-Reproducibility:            N/A
-Severity:                   minor
+Issue ID:                   1232
+Category:                   Shared Library Support
+Reproducibility:            always
+Severity:                   major
 Priority:                   normal
-Status:                     closed
-Resolution:                 open
-Fixed in Version:           
+Status:                     assigned
 ====================================================================== 
-Date Submitted:             02-16-2007 05:19 PST
-Last Modified:              03-20-2007 09:43 PDT
+Date Submitted:             02-18-2007 22:47 PST
+Last Modified:              03-20-2007 09:46 PDT
 ====================================================================== 
-Summary:                    Bump genext2fs
+Summary:                    dialog from buildroot-20070218.tar.bz2 will not
+compile
 Description: 
-Just a new version, no more CVS-patches
+dialog from buildroot-20070218.tar.bz2 will not compile.
+It cannot find the ncurses library.
 ====================================================================== 
 
 ---------------------------------------------------------------------- 
- alexer - 02-16-07 05:23  
+ bernhardf - 03-20-07 09:46  
 ---------------------------------------------------------------------- 
-Uploaded the wrong patch first :/ Sorry about that 
+I think that this was fixed already in svn.
 
----------------------------------------------------------------------- 
- holin - 03-02-07 23:49  
----------------------------------------------------------------------- 
-Could the "-l" in "du -l..." in the ext2root.mk file perhaps be removed,
-since genext2fs claims to support hardlinks now? 
-
----------------------------------------------------------------------- 
- bernhardf - 03-20-07 09:43  
----------------------------------------------------------------------- 
-Applied as r18180.
-
-Thanks! 
+Please retest without your patch and let me know if that works now with an
+unpatched checkout.
+thanks, 
 
 Issue History 
 Date Modified   Username       Field                    Change               
 ====================================================================== 
-02-16-07 05:19  alexer         New Issue                                    
-02-16-07 05:19  alexer         Status                   new => assigned     
-02-16-07 05:19  alexer         Assigned To               => buildroot       
-02-16-07 05:19  alexer         File Added: genext2fs-1.4-upgrade.patch          
-         
-02-16-07 05:23  alexer         File Added: genext2fs_upgrade.patch              
-     
-02-16-07 05:23  alexer         Note Added: 0002172                          
-03-02-07 23:49  holin          Note Added: 0002199                          
-03-20-07 09:43  bernhardf      Status                   assigned => closed  
-03-20-07 09:43  bernhardf      Note Added: 0002245                          
+02-18-07 22:47  BLS            New Issue                                    
+02-18-07 22:47  BLS            Status                   new => assigned     
+02-18-07 22:47  BLS            Assigned To               => buildroot       
+02-18-07 22:47  BLS            File Added: dialog.patch                     
+03-20-07 09:46  bernhardf      Note Added: 0002246                          
 ======================================================================
