@@ -1,48 +1,65 @@
-From: aldot at uclibc.org <aldot@uclibc.org>
-Date: Tue, 20 Mar 2007 10:21:35 -0700 (PDT)
-Subject: [Buildroot] svn commit: trunk/buildroot/target/makedevs
-Message-ID: <20070320172135.6471A4809F@busybox.net>
+From: bugs at busybox.net <bugs@busybox.net>
+Date: Tue, 20 Mar 2007 10:21:59 -0700
+Subject: [Buildroot] [buildroot 0001252]: makedevs does not compile on Mac
+	OS X
+Message-ID: <274926e0f49934ec1d5fcc08b3d93ddf@busybox.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Author: aldot
-Date: 2007-03-20 10:21:35 -0700 (Tue, 20 Mar 2007)
-New Revision: 18182
 
-Log:
-- make it work with MacOSX. Closes #1252
+The following issue has been CLOSED 
+====================================================================== 
+http://busybox.net/bugs/view.php?id=1252 
+====================================================================== 
+Reported By:                holin
+Assigned To:                buildroot
+====================================================================== 
+Project:                    buildroot
+Issue ID:                   1252
+Category:                   Architecture Specific
+Reproducibility:            always
+Severity:                   major
+Priority:                   normal
+Status:                     closed
+Resolution:                 open
+Fixed in Version:           
+====================================================================== 
+Date Submitted:             03-02-2007 13:30 PST
+Last Modified:              03-20-2007 10:21 PDT
+====================================================================== 
+Summary:                    makedevs does not compile on Mac OS X
+Description: 
+Mac OS X does not have sysmacros.h and hence makedevs does not compile.
+Attached a patch to fix that. I'm not sure though, whether sysmacros.h
+include could be removed altogether - it doesn't seem to be used
+anymore(?).
+====================================================================== 
 
+---------------------------------------------------------------------- 
+ holin - 03-04-07 02:21  
+---------------------------------------------------------------------- 
+OS X seems to give EISDIR instead of EEXIST for existing directories.
+Updated the patch to take that into account. 
 
-Modified:
-   trunk/buildroot/target/makedevs/makedevs.c
+---------------------------------------------------------------------- 
+ bernhardf - 03-20-07 10:21  
+---------------------------------------------------------------------- 
+Fixed in r18182. Thanks! 
 
-
-Changeset:
-Modified: trunk/buildroot/target/makedevs/makedevs.c
-===================================================================
---- trunk/buildroot/target/makedevs/makedevs.c	2007-03-20 16:52:44 UTC (rev 18181)
-+++ trunk/buildroot/target/makedevs/makedevs.c	2007-03-20 17:21:35 UTC (rev 18182)
-@@ -31,9 +31,10 @@
- #include <stdarg.h>
- #include <sys/stat.h>
- #include <sys/types.h>
-+#ifndef __APPLE__
- #include <sys/sysmacros.h>     /* major() and minor() */
-+#endif
- 
--
- const char *bb_applet_name;
- 
- void bb_verror_msg(const char *s, va_list p)
-@@ -146,7 +147,7 @@
- 		if (mkdir(path, 0777) < 0) {
- 			/* If we failed for any other reason than the directory
- 			 * already exists, output a diagnostic and return -1.*/
--			if (errno != EEXIST
-+			if ((errno != EEXIST && errno != EISDIR)
- 					|| !(flags & FILEUTILS_RECUR)
- 					|| (stat(path, &st) < 0 || !S_ISDIR(st.st_mode))) {
- 				fail_msg = "create";
+Issue History 
+Date Modified   Username       Field                    Change               
+====================================================================== 
+03-02-07 13:30  holin          New Issue                                    
+03-02-07 13:30  holin          Status                   new => assigned     
+03-02-07 13:30  holin          Assigned To               => buildroot       
+03-02-07 13:30  holin          File Added: buildroot-070302-makedevs.patch      
+             
+03-04-07 02:20  holin          File Added: buildroot-070304-makedevs.patch      
+             
+03-04-07 02:21  holin          Note Added: 0002200                          
+03-20-07 10:21  bernhardf      Status                   assigned => closed  
+03-20-07 10:21  bernhardf      Note Added: 0002248                          
+======================================================================
