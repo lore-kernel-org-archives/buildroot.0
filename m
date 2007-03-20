@@ -1,7 +1,8 @@
 From: bugs at busybox.net <bugs@busybox.net>
-Date: Tue, 20 Mar 2007 10:23:11 -0700
-Subject: [Buildroot] [buildroot 0001255]: mpfr compilation fails on OS X
-Message-ID: <34360a5b3122921c3f225926567df8d6@busybox.net>
+Date: Tue, 20 Mar 2007 10:24:58 -0700
+Subject: [Buildroot] [buildroot 0000369]: hardlinks break when creating
+	root_fs_i386.ext2
+Message-ID: <bf3da9b0e264e4f95d2eaa9acf1a935d@busybox.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -11,14 +12,14 @@ To: buildroot@busybox.net
 
 The following issue has been CLOSED 
 ====================================================================== 
-http://busybox.net/bugs/view.php?id=1255 
+http://busybox.net/bugs/view.php?id=369 
 ====================================================================== 
-Reported By:                holin
+Reported By:                jakelly
 Assigned To:                buildroot
 ====================================================================== 
 Project:                    buildroot
-Issue ID:                   1255
-Category:                   Architecture Specific
+Issue ID:                   369
+Category:                   Other
 Reproducibility:            always
 Severity:                   minor
 Priority:                   normal
@@ -26,41 +27,42 @@ Status:                     closed
 Resolution:                 open
 Fixed in Version:           
 ====================================================================== 
-Date Submitted:             03-03-2007 11:47 PST
-Last Modified:              03-20-2007 10:23 PDT
+Date Submitted:             08-08-2005 10:26 PDT
+Last Modified:              03-20-2007 10:24 PDT
 ====================================================================== 
-Summary:                    mpfr compilation fails on OS X
+Summary:                    hardlinks break when creating root_fs_i386.ext2
 Description: 
-On OS X, mpfr fails to compile with the following linker error:
-ld: common symbols not allowed with MH_DYLIB output format with the
--multi_module option
-This seems to be gmp's fault and can be fixed with the attached patch.
+hardlinks break when creating root_fs_i386.ext2
+
+I noticed this when trying to fit a small buildroot onto a floppy.  I had
+e2fsck, fsck.ext2, fsck.ext3 all hardlinked in build_i386/root/sbin, but
+they became separate inodes in root_fs_i386.ext2.  The genext2fs man page
+says it does not support hard links, and that "hard links present in the
+input tree will be represented as separate files in the ext2 image."
+
+Well that's not much good when you need to squeeze root into a very small
+space.  So now I create my own filesystem image, without using genext2fs. 
+It's not too hard to replace genext2fs with a script, and maintain the
+hardlinks.
 
 ====================================================================== 
 
 ---------------------------------------------------------------------- 
- holin - 03-04-07 02:51  
+ bernhardf - 03-20-07 10:24  
 ---------------------------------------------------------------------- 
-The gmp autoconf scripts are also bugged and won't install shared
-libraries. Attached a fairly large patch to update the scripts. The first
-gmp patch might actually be unneccessary after this (not tested, though.) 
+This should be fixed in the meantime. We switched to genext2fs-1.4
+recently.
+Please re-open this bug if you still encounter problems.
 
----------------------------------------------------------------------- 
- bernhardf - 03-20-07 10:23  
----------------------------------------------------------------------- 
-Please fix this upstream instead. 
+thanks 
 
 Issue History 
 Date Modified   Username       Field                    Change               
 ====================================================================== 
-03-03-07 11:47  holin          New Issue                                    
-03-03-07 11:47  holin          Status                   new => assigned     
-03-03-07 11:47  holin          Assigned To               => buildroot       
-03-03-07 11:47  holin          File Added: buildroot-070303-gmp-osxbuild.patch  
-                 
-03-04-07 02:49  holin          File Added:
-buildroot-070304-gmp-osxautoconf.patch.gz                    
-03-04-07 02:51  holin          Note Added: 0002201                          
-03-20-07 10:23  bernhardf      Status                   assigned => closed  
-03-20-07 10:23  bernhardf      Note Added: 0002249                          
+08-08-05 10:26  jakelly        New Issue                                    
+08-08-05 10:26  jakelly        Status                   new => assigned     
+08-08-05 10:26  jakelly        Assigned To               => uClibc          
+02-12-07 05:50  vapier         Assigned To              uClibc => buildroot 
+03-20-07 10:24  bernhardf      Status                   assigned => closed  
+03-20-07 10:24  bernhardf      Note Added: 0002250                          
 ======================================================================
