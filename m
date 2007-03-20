@@ -1,143 +1,65 @@
-From: aldot at uclibc.org <aldot@uclibc.org>
-Date: Tue, 20 Mar 2007 09:52:44 -0700 (PDT)
-Subject: [Buildroot] svn commit: trunk/buildroot/target: cpio cramfs ext2
-	iso9660 jffs2 squashfs etc...
-Message-ID: <20070320165244.3DAE948092@busybox.net>
+From: bugs at busybox.net <bugs@busybox.net>
+Date: Tue, 20 Mar 2007 09:53:04 -0700
+Subject: [Buildroot] [buildroot 0001250]: Targets do not work correctly on
+	Mac OS X
+Message-ID: <97a71b8a1325219f422c3439ea4f03fc@busybox.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Author: aldot
-Date: 2007-03-20 09:52:44 -0700 (Tue, 20 Mar 2007)
-New Revision: 18181
 
-Log:
-- use numeric values for the superuser to be more portable.
-  Closes #1250
+The following issue has been CLOSED 
+====================================================================== 
+http://busybox.net/bugs/view.php?id=1250 
+====================================================================== 
+Reported By:                holin
+Assigned To:                buildroot
+====================================================================== 
+Project:                    buildroot
+Issue ID:                   1250
+Category:                   Architecture Specific
+Reproducibility:            always
+Severity:                   major
+Priority:                   normal
+Status:                     closed
+Resolution:                 open
+Fixed in Version:           
+====================================================================== 
+Date Submitted:             03-02-2007 13:17 PST
+Last Modified:              03-20-2007 09:53 PDT
+====================================================================== 
+Summary:                    Targets do not work correctly on Mac OS X
+Description: 
+Mac OS X has no "root" group, it has "wheel" instead as group 0. Therefore,
+it would seem better to use numeric ids for chown commands in target build
+scripts. Also, genext2fs 1.3 does not build on OS X, but the newly
+released 1.4 does. Some arguments have changed and it should support hard
+links now. Attached a patch to, hopefully, handle all these issues. 
+====================================================================== 
 
+---------------------------------------------------------------------- 
+ holin - 03-02-07 23:45  
+---------------------------------------------------------------------- 
+"0001225: Bump genext2fs" probably does a better job at upgrading genext2fs
+than this one. The other parts still apply, though. 
 
-Modified:
-   trunk/buildroot/target/cpio/cpioroot.mk
-   trunk/buildroot/target/cramfs/cramfs.mk
-   trunk/buildroot/target/ext2/Config.in
-   trunk/buildroot/target/ext2/ext2root.mk
-   trunk/buildroot/target/iso9660/iso9660.mk
-   trunk/buildroot/target/jffs2/jffs2root.mk
-   trunk/buildroot/target/squashfs/squashfsroot.mk
-   trunk/buildroot/target/tar/tarroot.mk
+---------------------------------------------------------------------- 
+ bernhardf - 03-20-07 09:53  
+---------------------------------------------------------------------- 
+Fixed in r18181.
+Thanks! 
 
-
-Changeset:
-Modified: trunk/buildroot/target/cpio/cpioroot.mk
-===================================================================
---- trunk/buildroot/target/cpio/cpioroot.mk	2007-03-20 16:42:51 UTC (rev 18180)
-+++ trunk/buildroot/target/cpio/cpioroot.mk	2007-03-20 16:52:44 UTC (rev 18181)
-@@ -19,7 +19,7 @@
- 	rm -f $(STAGING_DIR)/_fakeroot.$(notdir $(TAR_TARGET))
- 	touch $(STAGING_DIR)/.fakeroot.00000
- 	cat $(STAGING_DIR)/.fakeroot* > $(STAGING_DIR)/_fakeroot.$(notdir $(CPIO_TARGET))
--	echo "chown -R root:root $(TARGET_DIR)" >> $(STAGING_DIR)/_fakeroot.$(notdir $(CPIO_TARGET))
-+	echo "chown -R 0:0 $(TARGET_DIR)" >> $(STAGING_DIR)/_fakeroot.$(notdir $(CPIO_TARGET))
- ifneq ($(TARGET_DEVICE_TABLE),)
- 	# Use fakeroot to pretend to create all needed device nodes
- 	echo "$(STAGING_DIR)/bin/makedevs -d $(TARGET_DEVICE_TABLE) $(TARGET_DIR)" \
-
-Modified: trunk/buildroot/target/cramfs/cramfs.mk
-===================================================================
---- trunk/buildroot/target/cramfs/cramfs.mk	2007-03-20 16:42:51 UTC (rev 18180)
-+++ trunk/buildroot/target/cramfs/cramfs.mk	2007-03-20 16:52:44 UTC (rev 18181)
-@@ -71,7 +71,7 @@
- 	rm -f $(STAGING_DIR)/_fakeroot.$(notdir $(CRAMFS_TARGET))
- 	touch $(STAGING_DIR)/.fakeroot.00000
- 	cat $(STAGING_DIR)/.fakeroot* > $(STAGING_DIR)/_fakeroot.$(notdir $(CRAMFS_TARGET))
--	echo "chown -R root:root $(TARGET_DIR)" >> $(STAGING_DIR)/_fakeroot.$(notdir $(CRAMFS_TARGET))
-+	echo "chown -R 0:0 $(TARGET_DIR)" >> $(STAGING_DIR)/_fakeroot.$(notdir $(CRAMFS_TARGET))
- ifneq ($(TARGET_DEVICE_TABLE),)
- 	# Use fakeroot to pretend to create all needed device nodes
- 	echo "$(STAGING_DIR)/bin/makedevs -d $(TARGET_DEVICE_TABLE) $(TARGET_DIR)" \
-
-Modified: trunk/buildroot/target/ext2/Config.in
-===================================================================
---- trunk/buildroot/target/ext2/Config.in	2007-03-20 16:42:51 UTC (rev 18180)
-+++ trunk/buildroot/target/ext2/Config.in	2007-03-20 16:52:44 UTC (rev 18181)
-@@ -15,7 +15,7 @@
- 	default	0
- 
- config BR2_TARGET_ROOTFS_EXT2_RESBLKS
--	int "reserved blocks"
-+	int "reserved blocks percentage"
- 	depends on BR2_TARGET_ROOTFS_EXT2
- 	default 0
- 
-
-Modified: trunk/buildroot/target/ext2/ext2root.mk
-===================================================================
---- trunk/buildroot/target/ext2/ext2root.mk	2007-03-20 16:42:51 UTC (rev 18180)
-+++ trunk/buildroot/target/ext2/ext2root.mk	2007-03-20 16:52:44 UTC (rev 18181)
-@@ -96,7 +96,7 @@
- 	rm -f $(STAGING_DIR)/_fakeroot.$(notdir $(EXT2_TARGET))
- 	touch $(STAGING_DIR)/.fakeroot.00000
- 	cat $(STAGING_DIR)/.fakeroot* > $(STAGING_DIR)/_fakeroot.$(notdir $(EXT2_TARGET))
--	echo "chown -R root:root $(TARGET_DIR)" >> $(STAGING_DIR)/_fakeroot.$(notdir $(EXT2_TARGET))
-+	echo "chown -R 0:0 $(TARGET_DIR)" >> $(STAGING_DIR)/_fakeroot.$(notdir $(EXT2_TARGET))
- ifneq ($(TARGET_DEVICE_TABLE),)
- 	# Use fakeroot to pretend to create all needed device nodes
- 	echo "$(STAGING_DIR)/bin/makedevs -d $(TARGET_DEVICE_TABLE) $(TARGET_DIR)" \
-
-Modified: trunk/buildroot/target/iso9660/iso9660.mk
-===================================================================
---- trunk/buildroot/target/iso9660/iso9660.mk	2007-03-20 16:42:51 UTC (rev 18180)
-+++ trunk/buildroot/target/iso9660/iso9660.mk	2007-03-20 16:52:44 UTC (rev 18181)
-@@ -65,7 +65,7 @@
- 	rm -f $(STAGING_DIR)/_fakeroot.$(notdir $(ISO9660_TARGET))
- 	touch $(STAGING_DIR)/.fakeroot.00000
- 	cat $(STAGING_DIR)/.fakeroot* > $(STAGING_DIR)/_fakeroot.$(notdir $(ISO9660_TARGET))
--	echo "chown -R root:root $(ISO9660_TARGET_DIR)" >> $(STAGING_DIR)/_fakeroot.$(notdir $(ISO9660_TARGET))
-+	echo "chown -R 0:0 $(ISO9660_TARGET_DIR)" >> $(STAGING_DIR)/_fakeroot.$(notdir $(ISO9660_TARGET))
- 	# Use fakeroot so mkisofs believes the previous fakery
- 	echo "$(MKISOFS_TARGET) -R -b boot/grub/stage2_eltorito -no-emul-boot " \
- 		"-boot-load-size 4 -boot-info-table -o $(ISO9660_TARGET) $(ISO9660_TARGET_DIR)" \
-
-Modified: trunk/buildroot/target/jffs2/jffs2root.mk
-===================================================================
---- trunk/buildroot/target/jffs2/jffs2root.mk	2007-03-20 16:42:51 UTC (rev 18180)
-+++ trunk/buildroot/target/jffs2/jffs2root.mk	2007-03-20 16:52:44 UTC (rev 18181)
-@@ -58,7 +58,7 @@
- 	rm -f $(STAGING_DIR)/_fakeroot.$(notdir $(JFFS2_TARGET))
- 	touch $(STAGING_DIR)/.fakeroot.00000
- 	cat $(STAGING_DIR)/.fakeroot* > $(STAGING_DIR)/_fakeroot.$(notdir $(JFFS2_TARGET))
--	echo "chown -R root:root $(TARGET_DIR)" >> $(STAGING_DIR)/_fakeroot.$(notdir $(JFFS2_TARGET))
-+	echo "chown -R 0:0 $(TARGET_DIR)" >> $(STAGING_DIR)/_fakeroot.$(notdir $(JFFS2_TARGET))
- ifneq ($(TARGET_DEVICE_TABLE),)
- 	# Use fakeroot to pretend to create all needed device nodes
- 	echo "$(STAGING_DIR)/bin/makedevs -d $(TARGET_DEVICE_TABLE) $(TARGET_DIR)" \
-
-Modified: trunk/buildroot/target/squashfs/squashfsroot.mk
-===================================================================
---- trunk/buildroot/target/squashfs/squashfsroot.mk	2007-03-20 16:42:51 UTC (rev 18180)
-+++ trunk/buildroot/target/squashfs/squashfsroot.mk	2007-03-20 16:52:44 UTC (rev 18181)
-@@ -66,7 +66,7 @@
- 	rm -f $(STAGING_DIR)/_fakeroot.$(notdir $(SQUASHFS_TARGET))
- 	touch $(STAGING_DIR)/.fakeroot.00000
- 	cat $(STAGING_DIR)/.fakeroot* > $(STAGING_DIR)/_fakeroot.$(notdir $(SQUASHFS_TARGET))
--	echo "chown -R root:root $(TARGET_DIR)" >> $(STAGING_DIR)/_fakeroot.$(notdir $(SQUASHFS_TARGET))
-+	echo "chown -R 0:0 $(TARGET_DIR)" >> $(STAGING_DIR)/_fakeroot.$(notdir $(SQUASHFS_TARGET))
- ifneq ($(TARGET_DEVICE_TABLE),)
- 	# Use fakeroot to pretend to create all needed device nodes
- 	echo "$(STAGING_DIR)/bin/makedevs -d $(TARGET_DEVICE_TABLE) $(TARGET_DIR)" \
-
-Modified: trunk/buildroot/target/tar/tarroot.mk
-===================================================================
---- trunk/buildroot/target/tar/tarroot.mk	2007-03-20 16:42:51 UTC (rev 18180)
-+++ trunk/buildroot/target/tar/tarroot.mk	2007-03-20 16:52:44 UTC (rev 18181)
-@@ -31,7 +31,7 @@
- 	rm -f $(STAGING_DIR)/_fakeroot.$(notdir $(TAR_TARGET))
- 	touch $(STAGING_DIR)/.fakeroot.00000
- 	cat $(STAGING_DIR)/.fakeroot* > $(STAGING_DIR)/_fakeroot.$(notdir $(TAR_TARGET))
--	echo "chown -R root:root $(TARGET_DIR)" >> $(STAGING_DIR)/_fakeroot.$(notdir $(TAR_TARGET))
-+	echo "chown -R 0:0 $(TARGET_DIR)" >> $(STAGING_DIR)/_fakeroot.$(notdir $(TAR_TARGET))
- ifneq ($(TARGET_DEVICE_TABLE),)
- 	# Use fakeroot to pretend to create all needed device nodes
- 	echo "$(STAGING_DIR)/bin/makedevs -d $(TARGET_DEVICE_TABLE) $(TARGET_DIR)" \
+Issue History 
+Date Modified   Username       Field                    Change               
+====================================================================== 
+03-02-07 13:17  holin          New Issue                                    
+03-02-07 13:17  holin          Status                   new => assigned     
+03-02-07 13:17  holin          Assigned To               => buildroot       
+03-02-07 13:17  holin          File Added: buildroot-070302-targets-osx.patch   
+                
+03-02-07 23:45  holin          Note Added: 0002198                          
+03-20-07 09:53  bernhardf      Status                   assigned => closed  
+03-20-07 09:53  bernhardf      Note Added: 0002247                          
+======================================================================
