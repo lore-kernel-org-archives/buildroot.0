@@ -1,37 +1,62 @@
-From: aldot at uclibc.org <aldot@uclibc.org>
-Date: Tue, 20 Mar 2007 10:58:36 -0700 (PDT)
-Subject: [Buildroot] svn commit: trunk/buildroot/package
-Message-ID: <20070320175836.B39D84859F@busybox.net>
+From: bugs at busybox.net <bugs@busybox.net>
+Date: Tue, 20 Mar 2007 11:00:55 -0700
+Subject: [Buildroot] [buildroot 0001233]: Incorrect freetype-config being
+	used.
+Message-ID: <c4bfc4bcde9404a4da22ac919fe261b1@busybox.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Author: aldot
-Date: 2007-03-20 10:58:36 -0700 (Tue, 20 Mar 2007)
-New Revision: 18184
 
-Log:
-- put staging_dir/usr/bin into the target path, so X-stuff can find freetype-config.
-  Closes #1233
+The following issue has been CLOSED 
+====================================================================== 
+http://busybox.net/bugs/view.php?id=1233 
+====================================================================== 
+Reported By:                djl197
+Assigned To:                buildroot
+====================================================================== 
+Project:                    buildroot
+Issue ID:                   1233
+Category:                   Other
+Reproducibility:            always
+Severity:                   major
+Priority:                   normal
+Status:                     closed
+Resolution:                 open
+Fixed in Version:           
+====================================================================== 
+Date Submitted:             02-19-2007 05:58 PST
+Last Modified:              03-20-2007 11:00 PDT
+====================================================================== 
+Summary:                    Incorrect freetype-config being used.
+Description: 
+The Incorrect freetype-config is being used.  This is because
+freetype-config is located in $(STAGING_DIR)/usr/bin this is not included
+in the target path.
+This means some packages (like directfb) use freetype-config they can find
+which is the Host (Build PC)
+====================================================================== 
 
+---------------------------------------------------------------------- 
+ bernhardf - 03-20-07 11:00  
+---------------------------------------------------------------------- 
+Applied as r18184.
 
-Modified:
-   trunk/buildroot/package/Makefile.in
+We seem to mix target- and host- binaries in the staging dir, so i expect
+these to fail in funny ways.. Also not so good.. *shrug*
 
+Thanks for the patch. 
 
-Changeset:
-Modified: trunk/buildroot/package/Makefile.in
-===================================================================
---- trunk/buildroot/package/Makefile.in	2007-03-20 17:50:23 UTC (rev 18183)
-+++ trunk/buildroot/package/Makefile.in	2007-03-20 17:58:36 UTC (rev 18184)
-@@ -59,7 +59,7 @@
- TOOL_BUILD_DIR=$(BASE_DIR)/$(TOPDIR_PREFIX)toolchain_build_$(ARCH)$(ARCH_FPU_SUFFIX)$(TOPDIR_SUFFIX)
- 
- # Quotes are needed for spaces et al in path components.
--TARGET_PATH="$(STAGING_DIR)/bin:$(TOOL_BUILD_DIR)/bin:$(PATH)"
-+TARGET_PATH="$(STAGING_DIR)/bin:$(TOOL_BUILD_DIR)/bin:$(STAGING_DIR)/usr/bin:$(PATH)"
- IMAGE:=$(BASE_DIR)/rootfs.$(ARCH)$(ARCH_FPU_SUFFIX)
- REAL_GNU_TARGET_NAME=$(OPTIMIZE_FOR_CPU)$(GNU_TARGET_SUFFIX)
- GNU_TARGET_NAME=$(OPTIMIZE_FOR_CPU)-linux
+Issue History 
+Date Modified   Username       Field                    Change               
+====================================================================== 
+02-19-07 05:58  djl197         New Issue                                    
+02-19-07 05:58  djl197         Status                   new => assigned     
+02-19-07 05:58  djl197         Assigned To               => buildroot       
+02-19-07 05:58  djl197         File Added: freetype-config.patch                
+   
+03-20-07 11:00  bernhardf      Status                   assigned => closed  
+03-20-07 11:00  bernhardf      Note Added: 0002255                          
+======================================================================
