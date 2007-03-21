@@ -1,66 +1,92 @@
-From: bugs at busybox.net <bugs@busybox.net>
-Date: Tue, 20 Mar 2007 15:37:01 -0700
-Subject: [Buildroot] [buildroot 0001279]: bad compiler version discover in
-	dependencies.sh
-Message-ID: <857a9f5378ecf80a9370db62c2c3c60b@bugs.busybox.net>
+From: aldot at uclibc.org <aldot@uclibc.org>
+Date: Wed, 21 Mar 2007 01:04:20 -0700 (PDT)
+Subject: [Buildroot] svn commit: trunk/buildroot/package/readline
+Message-ID: <20070321080420.43B5B48073@busybox.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+Author: aldot
+Date: 2007-03-21 01:04:19 -0700 (Wed, 21 Mar 2007)
+New Revision: 18190
 
-A NOTE has been added to this issue. 
-====================================================================== 
-http://busybox.net/bugs/view.php?id=1279 
-====================================================================== 
-Reported By:                Franck78
-Assigned To:                buildroot
-====================================================================== 
-Project:                    buildroot
-Issue ID:                   1279
-Category:                   Architecture Specific
-Reproducibility:            always
-Severity:                   major
-Priority:                   normal
-Status:                     assigned
-====================================================================== 
-Date Submitted:             03-20-2007 15:19 PDT
-Last Modified:              03-20-2007 15:37 PDT
-====================================================================== 
-Summary:                    bad compiler version discover in dependencies.sh
-Description: 
-Hello,
-I don't know wheter or not $HOSTCC have to be defined before lauching
-'make'.
-
-Anyway, when not configured, the following test fails:
-COMPILER=$(which $HOSTCC)
-
-'which' gracefully respond with helps text....
-that next $XSED is unable to understand ;)
-
-file:
-toolchain/dependencies/dependencies.sh; line
-http://busybox.net/bugs/view.php?id=208#152
+Log:
+- install target headers into the correct dir
+- make sure not to create libwhatever...old cruft
 
 
-Bye
-====================================================================== 
+Modified:
+   trunk/buildroot/package/readline/readline.mk
 
----------------------------------------------------------------------- 
- Franck78 - 03-20-07 15:37  
----------------------------------------------------------------------- 
-same for $HOSTCXX, next test.
 
-Note also 'head' is used before testing presence by the script. 
-
-Issue History 
-Date Modified   Username       Field                    Change               
-====================================================================== 
-03-20-07 15:19  Franck78       New Issue                                    
-03-20-07 15:19  Franck78       Status                   new => assigned     
-03-20-07 15:19  Franck78       Assigned To               => buildroot       
-03-20-07 15:20  Franck78       Issue Monitored: Franck78                    
-03-20-07 15:37  Franck78       Note Added: 0002259                          
-======================================================================
+Changeset:
+Modified: trunk/buildroot/package/readline/readline.mk
+===================================================================
+--- trunk/buildroot/package/readline/readline.mk	2007-03-21 04:13:14 UTC (rev 18189)
++++ trunk/buildroot/package/readline/readline.mk	2007-03-21 08:04:19 UTC (rev 18190)
+@@ -20,7 +20,7 @@
+ 	mkdir -p $(READLINE_DIR)
+ 	tar -C $(BUILD_DIR) -zxf $(DL_DIR)/$(READLINE_SOURCE)
+ 	$(CONFIG_UPDATE) $(READLINE_DIR)
+-	touch $(READLINE_DIR)/.unpacked
++	touch $@
+ 
+ $(READLINE_DIR)/.configured: $(READLINE_DIR)/.unpacked
+ 	(cd $(READLINE_DIR); rm -rf config.cache; \
+@@ -45,29 +45,30 @@
+ 		--mandir=/usr/man \
+ 		--infodir=/usr/info \
+ 	);
+-	touch $(READLINE_DIR)/.configured
++	touch $@
+ 
+ $(READLINE_DIR)/$(READLINE_BINARY): $(READLINE_DIR)/.configured
+ 	$(MAKE)  -C $(READLINE_DIR)
+-	touch -c $(READLINE_DIR)/$(READLINE_BINARY)
++	touch -c $@
+ 
+ $(STAGING_DIR)/$(READLINE_TARGET_BINARY): $(READLINE_DIR)/.configured
+ 	$(MAKE) -C $(READLINE_DIR)  install
+-	touch -c $(STAGING_DIR)/$(READLINE_TARGET_BINARY)
++	touch -c $@
+ 
+ # Install to Staging area
+ $(STAGING_DIR)/include/readline/readline.h: $(READLINE_DIR)/$(READLINE_BINARY)
+ 	BUILD_CC=$(TARGET_CC) HOSTCC="$(HOSTCC)" CC=$(TARGET_CC) \
+-	$(MAKE1) DESTDIR=$(STAGING_DIR) -C $(READLINE_DIR) install;
+-	touch -c $(STAGING_DIR)/include/readline/readline.h
++	$(MAKE1) DESTDIR=$(STAGING_DIR) -C $(READLINE_DIR) install
++	touch -c $@
+ 
+-
+ # Install to Target directory
+-$(TARGET_DIR)/include/readline/readline.h: $(READLINE_DIR)/$(READLINE_BINARY)
++$(TARGET_DIR)/$(READLINE_TARGET_BINARY): $(READLINE_DIR)/$(READLINE_BINARY)
++	# make sure we don't end up with lib{readline,hostory}...old
++	$(MAKE1) DESTDIR=$(TARGET_DIR) includedir=/usr/include \
++		-C $(READLINE_DIR) uninstall
+ 	BUILD_CC=$(TARGET_CC) HOSTCC="$(HOSTCC)" CC=$(TARGET_CC) \
+-	$(MAKE1) DESTDIR=$(TARGET_DIR) -C $(READLINE_DIR) install-shared \
+-		uninstall-doc
+-	touch -c $(TARGET_DIR)/include/readline/readline.h
++	$(MAKE1) DESTDIR=$(TARGET_DIR) includedir=/usr/include \
++		-C $(READLINE_DIR) install-shared uninstall-doc
+ 
+ readline: $(STAGING_DIR)/include/readline/readline.h
+ 
+@@ -78,10 +79,11 @@
+ readline-dirclean:
+ 	rm -rf $(READLINE_DIR)
+ 
+-readline-target: $(TARGET_DIR)/include/readline/readline.h
++readline-target: $(TARGET_DIR)/$(READLINE_TARGET_BINARY)
+ 
+ readline-target-clean:
+-	$(MAKE1) DESTDIR=$(TARGET_DIR) -C $(READLINE_DIR) uninstall
++	$(MAKE1) DESTDIR=$(TARGET_DIR) includedir=/usr/include \
++		-C $(READLINE_DIR) uninstall
+ 
+ ifeq ($(strip $(BR2_READLINE)),y)
+ TARGETS+=readline
