@@ -1,63 +1,31 @@
-From: bugs at busybox.net <bugs@busybox.net>
-Date: Wed, 21 Mar 2007 11:56:16 -0700
-Subject: [Buildroot] [buildroot 0001282]: ccache
-Message-ID: <bb63311bd748c25d3bf478867782ab72@busybox.net>
+From: William Somerset <williamsomerset@gmail.com>
+Date: Wed, 21 Mar 2007 17:09:35 -0500
+Subject: [Buildroot] Problems loading buildroot image to CompactFlash
+Message-ID: <16732d180703211509g47d56803q56f64dce7f02329b@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-
-The following issue has been SUBMITTED. 
-====================================================================== 
-http://busybox.net/bugs/view.php?id=1282 
-====================================================================== 
-Reported By:                Franck78
-Assigned To:                buildroot
-====================================================================== 
-Project:                    buildroot
-Issue ID:                   1282
-Category:                   Architecture Specific
-Reproducibility:            always
-Severity:                   feature
-Priority:                   normal
-Status:                     assigned
-====================================================================== 
-Date Submitted:             03-21-2007 11:56 PDT
-Last Modified:              03-21-2007 11:56 PDT
-====================================================================== 
-Summary:                    ccache
-Description: 
 Hello,
 
-1) ccache is built at the end of the toolchain (gcc/uclibc/binutils). It
-serves for nothing (ok I except if you slected other package it may...).
+I'm having problems getting a BuildRoot Image to boot on a compactflash.  I
+got grub installed on the disk but whenever I try to boot the CompactFlash,
+I just get a blank screen.  I tried just dd'ing the image to the
+compactflash but I get 'missing OS' whenever I boot the compactflash that
+way.
 
-2) the ccache_dir is fixed inside 'toolchain_build_i486' It would be
-better if the  CCACHE_DIR could be setup somewhere else outside
-'buildroot'.
-Why? In automated procedure constructing distro, buildroot.tar.gz is
-expanded then configured then built as all other packages making the
-distro.
-It means everytime, buildroot dir is like a virgin.. ;-) No ccache_dir
-inside.
+Also, I tried installing the Linux Kernel from the menu and it had problems
+installing.  This is from getting the copy of buildroot from svn at around
+2pm CST today (March 21, 2007).  I loaded the grub prompt, changed the root
+to the compact flash and got grub to install to the compactflash but I guess
+without a kernel, it's kinda pointless.  Should I just make 1 partition or 2
+(one for boot, one for main)?  Also, when I tried making an ISO, I got
+errors from it not having some place to copy to.
 
-but if ccache_dir is outside....ok, it will be preserved accross rebuilds
-and the final touch would have ccache used for ALL the toolchain
-construction...!
-
-
-Adding a new option in 'make menuconfig' is beyond my knowledge of
-buildroot for now.
-
-Franck
-====================================================================== 
-
-Issue History 
-Date Modified   Username       Field                    Change               
-====================================================================== 
-03-21-07 11:56  Franck78       New Issue                                    
-03-21-07 11:56  Franck78       Status                   new => assigned     
-03-21-07 11:56  Franck78       Assigned To               => buildroot       
-======================================================================
+Does anyone have a walkthrough or anything to help me out getting a
+buildroot image to compactflash?
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: http://busybox.net/lists/buildroot/attachments/20070321/2b8a68c6/attachment.htm 
