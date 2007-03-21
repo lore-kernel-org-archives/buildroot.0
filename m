@@ -1,8 +1,8 @@
 From: bugs at busybox.net <bugs@busybox.net>
-Date: Wed, 21 Mar 2007 02:55:26 -0700
+Date: Wed, 21 Mar 2007 03:11:41 -0700
 Subject: [Buildroot] [buildroot 0001279]: bad compiler version discover in
 	dependencies.sh
-Message-ID: <9c332f0935adbe9c6fef0df4309cfc6b@busybox.net>
+Message-ID: <0656eb331fe32953014973fca504173d@busybox.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -26,7 +26,7 @@ Priority:                   normal
 Status:                     assigned
 ====================================================================== 
 Date Submitted:             03-20-2007 15:19 PDT
-Last Modified:              03-21-2007 02:55 PDT
+Last Modified:              03-21-2007 03:11 PDT
 ====================================================================== 
 Summary:                    bad compiler version discover in dependencies.sh
 Description: 
@@ -85,6 +85,17 @@ Guess what happens when HOSTSCC is empty....
 
 Franck 
 
+---------------------------------------------------------------------- 
+ Franck78 - 03-21-07 03:11  
+---------------------------------------------------------------------- 
+I understand why you don't understand the comment...
+
+The link-pointer was a real text entered by me and it is the mantis bug
+tracking system that replaced it.
+
+http://busybox.net/bugs/view.php?id=222#172=> was "~~ line 172
+~x172 
+
 Issue History 
 Date Modified   Username       Field                    Change               
 ====================================================================== 
@@ -95,4 +106,5 @@ Date Modified   Username       Field                    Change
 03-20-07 15:37  Franck78       Note Added: 0002259                          
 03-21-07 01:07  bernhardf      Note Added: 0002260                          
 03-21-07 02:55  Franck78       Note Added: 0002261                          
+03-21-07 03:11  Franck78       Note Added: 0002262                          
 ======================================================================
