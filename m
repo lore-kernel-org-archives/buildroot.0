@@ -1,7 +1,7 @@
 From: aldot at uclibc.org <aldot@uclibc.org>
-Date: Wed, 21 Mar 2007 03:35:43 -0700 (PDT)
-Subject: [Buildroot] svn commit: trunk/buildroot/package/openswan
-Message-ID: <20070321103543.59D1A48021@busybox.net>
+Date: Wed, 21 Mar 2007 03:54:24 -0700 (PDT)
+Subject: [Buildroot] svn commit: trunk/buildroot/toolchain/dependencies
+Message-ID: <20070321105424.B62F548082@busybox.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -9,31 +9,46 @@ Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
 Author: aldot
-Date: 2007-03-21 03:35:40 -0700 (Wed, 21 Mar 2007)
-New Revision: 18192
+Date: 2007-03-21 03:54:24 -0700 (Wed, 21 Mar 2007)
+New Revision: 18193
 
 Log:
-- fwd port
+- stop using head and use sed -e '1d' at the end instead
 
 
-Added:
-   trunk/buildroot/package/openswan/linux-2.6.20.3-openswan-2.4.7.kernel-2.6-klips.patch
-   trunk/buildroot/package/openswan/linux-2.6.20.3-openswan-2.4.7.kernel-2.6-natt.patch
-   trunk/buildroot/package/openswan/linux-2.6.20.3-openswan-2.4.7.kernel-2.6-nfmark-rename.patch
-   trunk/buildroot/package/openswan/linux-2.6.20.3-openswan-2.4.7.kernel-2.6-zzz-crypto_alg_available.patch
-   trunk/buildroot/package/openswan/linux-2.6.20.3-openswan-2.4.7.kernel-2.6-zzz-void-sock_unregister.patch
-
-Removed:
-   trunk/buildroot/package/openswan/linux-2.6.20-openswan-2.4.7.kernel-2.6-klips.patch
-   trunk/buildroot/package/openswan/linux-2.6.20-openswan-2.4.7.kernel-2.6-natt.patch
-   trunk/buildroot/package/openswan/linux-2.6.20-openswan-2.4.7.kernel-2.6-nfmark-rename.patch
-   trunk/buildroot/package/openswan/linux-2.6.20-openswan-2.4.7.kernel-2.6-zzz-crypto_alg_available.patch
-   trunk/buildroot/package/openswan/linux-2.6.20-openswan-2.4.7.kernel-2.6-zzz-void-sock_unregister.patch
+Modified:
+   trunk/buildroot/toolchain/dependencies/dependencies.sh
 
 
 Changeset:
-
-Sorry, the patch is too large to include (119191 lines).
-Please use ViewCVS to see it!
-
-http://uclibc.org/cgi-bin/viewcvs.cgi?view=rev&root=svn&rev=18192
+Modified: trunk/buildroot/toolchain/dependencies/dependencies.sh
+===================================================================
+--- trunk/buildroot/toolchain/dependencies/dependencies.sh	2007-03-21 10:35:40 UTC (rev 18192)
++++ trunk/buildroot/toolchain/dependencies/dependencies.sh	2007-03-21 10:54:24 UTC (rev 18193)
+@@ -129,7 +129,7 @@
+ 	/bin/echo -e "\n\nYou must install 'make' on your build machine\n";
+ 	exit 1;
+ fi;
+-MAKE_VERSION=$($MAKE --version 2>&1 | head -n1 | $XSED -e 's/^.* \([0-9\.]\)/\1/g' -e 's/[-\ ].*//g')
++MAKE_VERSION=$($MAKE --version 2>&1 | $XSED -e 's/^.* \([0-9\.]\)/\1/g' -e 's/[-\ ].*//g' -e '1q')
+ if [ -z "$MAKE_VERSION" ] ; then
+ 	echo "make installed:		    FALSE"
+ 	/bin/echo -e "\n\nYou must install 'make' on your build machine\n";
+@@ -160,7 +160,7 @@
+ 	exit 1;
+ fi;
+ 
+-COMPILER_VERSION=$($COMPILER --version 2>&1 | head -n1 | $XSED -e 's/^.*(.CC) \([0-9\.]\)/\1/g' -e "s/[-\ ].*//g")
++COMPILER_VERSION=$($COMPILER --version 2>&1 | $XSED -e 's/^.*(.CC) \([0-9\.]\)/\1/g' -e "s/[-\ ].*//g" -e '1q')
+ if [ -z "$COMPILER_VERSION" ] ; then
+ 	echo "gcc installed:		    FALSE"
+ 	/bin/echo -e "\n\nYou must install 'gcc' on your build machine\n";
+@@ -187,7 +187,7 @@
+ 	#exit 1
+ fi
+ if [ ! -z "$CXXCOMPILER" ] ; then
+-	CXXCOMPILER_VERSION=$($CXXCOMPILER --version 2>&1 | head -n1 | $XSED -e 's/^.*(.CC) \([0-9\.]\)/\1/g' -e "s/[-\ ].*//g")
++	CXXCOMPILER_VERSION=$($CXXCOMPILER --version 2>&1 | $XSED -e 's/^.*(.CC) \([0-9\.]\)/\1/g' -e "s/[-\ ].*//g" -e '1q')
+ 	if [ -z "$CXXCOMPILER_VERSION" ] ; then
+ 		echo "c++ installed:		    FALSE"
+ 		/bin/echo -e "\nYou may have to install 'g++' on your build machine\n"
