@@ -1,8 +1,8 @@
 From: bugs at busybox.net <bugs@busybox.net>
-Date: Wed, 21 Mar 2007 04:00:16 -0700
+Date: Wed, 21 Mar 2007 04:36:44 -0700
 Subject: [Buildroot] [buildroot 0001279]: bad compiler version discover in
 	dependencies.sh
-Message-ID: <f4d5b2fccfe101ce6a98dbf379653312@busybox.net>
+Message-ID: <7c308005eaeeed9e54b7960e00db5a93@busybox.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -26,7 +26,7 @@ Priority:                   normal
 Status:                     assigned
 ====================================================================== 
 Date Submitted:             03-20-2007 15:19 PDT
-Last Modified:              03-21-2007 04:00 PDT
+Last Modified:              03-21-2007 04:36 PDT
 ====================================================================== 
 Summary:                    bad compiler version discover in dependencies.sh
 Description: 
@@ -110,6 +110,74 @@ PS: If you don't provide a copy and paste of the error you are getting
 from dependencies.sh with HOSTCC and HOSTCXX unset, then i'll blissfully
 ignore this part of your report. Thanks for your understanding. 
 
+---------------------------------------------------------------------- 
+ Franck78 - 03-21-07 04:36  
+---------------------------------------------------------------------- 
+my which prog comes from 'gnu' repository.
+It does not print anything too, from command line.
+
+but inside the script, it is not the same !?
+
+
+
+Checking build system dependencies:
+CC clean:                                       Ok
+CXX clean:                                      Ok
+CPP clean:                                      Ok
+CFLAGS clean:                                   Ok
+INCLUDES clean:                                 Ok
+CXXFLAGS clean:                                 Ok
+LD_LIBRARY_PATH sane:                           Ok
+which installed:                                Ok
+./dependencies.sh: line 108: toolchain/dependencies/check-host-sed.sh:
+Aucun fichier ou r?pertoire de ce type
+sed works:                                      No, using buildroot
+version instead
+GNU make version '3.80':                        Ok
+Usage: which [options] [--] programname [...]
+Options: --version, -[vV] Print version and exit successfully.
+         --help,          Print this help and exit successfully.
+         --skip-dot       Skip directories in PATH that start with a dot.
+         --skip-tilde     Skip directories in PATH that start with a
+tilde.
+         --show-dot       Don't expand a dot to current directory in
+output.
+         --show-tilde     Output a tilde for HOME directory for non-root.
+         --tty-only       Stop processing options on the right if not on
+tty.
+         --all, -a        Print all matches in PATH, not just the first
+         --read-alias, -i Read list of aliases from stdin.
+         --skip-alias     Ignore option --read-alias; don't read stdin.
+         --read-functions Read shell functions from stdin.
+         --skip-functions Ignore option --read-functions; don't read
+stdin.
+C compiler '/usr/bin/cc'
+C compiler version '4.0.2':                     Ok
+Usage: which [options] [--] programname [...]
+Options: --version, -[vV] Print version and exit successfully.
+         --help,          Print this help and exit successfully.
+         --skip-dot       Skip directories in PATH that start with a dot.
+         --skip-tilde     Skip directories in PATH that start with a
+tilde.
+         --show-dot       Don't expand a dot to current directory in
+output.
+         --show-tilde     Output a tilde for HOME directory for non-root.
+         --tty-only       Stop processing options on the right if not on
+tty.
+         --all, -a        Print all matches in PATH, not just the first
+         --read-alias, -i Read list of aliases from stdin.
+         --skip-alias     Ignore option --read-alias; don't read stdin.
+         --read-functions Read shell functions from stdin.
+         --skip-functions Ignore option --read-functions; don't read
+stdin.
+C++ compiler '/usr/bin/c++'
+C++ compiler version '4.0.2':                   Ok
+bison installed:                                Ok
+flex installed:                                 Ok
+gettext installed:                              Ok
+makeinfo installed:                             Ok
+Build system dependencies:                      Ok 
+
 Issue History 
 Date Modified   Username       Field                    Change               
 ====================================================================== 
@@ -122,4 +190,5 @@ Date Modified   Username       Field                    Change
 03-21-07 02:55  Franck78       Note Added: 0002261                          
 03-21-07 03:11  Franck78       Note Added: 0002262                          
 03-21-07 04:00  bernhardf      Note Added: 0002263                          
+03-21-07 04:36  Franck78       Note Added: 0002264                          
 ======================================================================
