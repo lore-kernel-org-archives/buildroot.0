@@ -1,9 +1,9 @@
 From: Ulf Samuelsson <ulf@atmel.com>
-Date: Thu, 22 Mar 2007 00:13:59 +0100
+Date: Thu, 22 Mar 2007 00:16:51 +0100
 Subject: [Buildroot] BSP patch
 References: <02a401c76c07$c75473c0$01c4af0a@Glamdring>
 	<20070321224324.GD5468@aon.at>
-Message-ID: <02e801c76c0e$c9eec980$01c4af0a@Glamdring>
+Message-ID: <02e901c76c0f$09244670$01c4af0a@Glamdring>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -42,12 +42,20 @@ to be built within the same buildroot directory so they can share:
 * toolchain
 * root file system build directory.
 but have different configurations for linux kernel and busybox
-and eventually you may want to have different content of the root file 
+and eventually you may want to have different content of the root file
 system.
 
 The solution is to create a new directory structure
 target_build_<arch>/<board> where everything is built.
 The patch allows pre/postfixes to this directory name.
+
+When I have time, I would like to be able to download kernel patches
+to this directory instead of storing the patch in the target directory.
+
+The current linux.mk is very limited in functionality and forces
+duplication of the linux patch for each board.
+I do not see why the same patch (size > 1 MB) should be stored 10 times
+just because I have 10 boards.
 
 The BSP patch also put some structure on where the result ends up.
 Today everything is stored in the top directory, but if you
@@ -60,8 +68,11 @@ S?ren also would like to separate the target build from the build
 of the root file system, so I think he supports this patch.
 
 
-So in short, I think there is really no reason to delay either of the 
+
+So in short, I think there is really no reason to delay either of the
 patches.
+
+
 
 Best Regards
 Ulf Samuelsson
