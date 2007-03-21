@@ -1,54 +1,45 @@
-From: Bernhard Fischer <rep.dot.nop@gmail.com>
-Date: Wed, 21 Mar 2007 18:40:03 +0100
-Subject: [Buildroot] Problems with gmp
-In-Reply-To: <ed5eec790703210900m5781184eu893292fc7cc9b349@mail.gmail.com>
-References: <ed5eec790703210900m5781184eu893292fc7cc9b349@mail.gmail.com>
-Message-ID: <20070321174003.GA2700@aon.at>
+From: aldot at uclibc.org <aldot@uclibc.org>
+Date: Wed, 21 Mar 2007 10:53:02 -0700 (PDT)
+Subject: [Buildroot] svn commit: trunk/buildroot/package/microcom
+Message-ID: <20070321175302.470B148085@busybox.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Wed, Mar 21, 2007 at 05:00:24PM +0100, massimeddu wrote:
->Hi,
->I'm trying to make a image for the Soekris net4801 with buildroot.
->I do use a Ubuntu edgy with Linux Kernel 2.6.17 and gcc 4.1.2, lic6 2.4 and
->libgmp3c2 4.2.1.
->In the make menuconfig script i have set the linux kernel 2.6.20, gcc
->4.1.2and i have selected the gmp package too but the make failed with
->these
->errors:
->
->checking whether the
->/home/wire/Desktop/buildroot/build_i586/staging_dir/bin/i586-linux-uclibc-gcc
->linker
->(/home/wire/Desktop/buildroot/build_i586/staging_dir/bin/i586-linux-uclibc-ld)
->supports shared libraries... yes
->checking whether -lc should be explicitly linked in... no
->checking dynamic linker characteristics... cat: /etc/ld.so.conf.d/*.conf: No
->such file or directory
->GNU/Linux ld.so
->checking how to hardcode library paths into programs... immediate
->checking whether stripping libraries is possible... yes
->checking if libtool supports shared libraries... yes
->checking whether to build shared libraries... yes
->checking whether to build static libraries... yes
->configure: creating libtool
->checking whether gcc __attribute__ ((mode (XX))) works... yes
->checking for recent GMP... yes
->checking for gmp internal files... no
->checking for working alloca.h... yes
->checking for alloca... yes
->checking for __gmpz_init in -lgmp... no
->configure: error: libgmp not found
->make: *** [/home/wire/Desktop/buildroot/build_i586/mpfr-2.2.1/.configured]
->Error 1
+Author: aldot
+Date: 2007-03-21 10:53:00 -0700 (Wed, 21 Mar 2007)
+New Revision: 18196
 
-$ rm -rf build_* toolchain_*
-$ make
+Log:
+- support BR2_PREFER_IMA for microcom
 
-and paste the full invocation of "./configure ....." of mpfr
 
-Is gmp built correctly? Watch out for errors when gmp is built.
-PS: you cannot step into any of build_*/*/ and issue a "make" there
+Modified:
+   trunk/buildroot/package/microcom/microcom.mk
+
+
+Changeset:
+Modified: trunk/buildroot/package/microcom/microcom.mk
+===================================================================
+--- trunk/buildroot/package/microcom/microcom.mk	2007-03-21 10:55:31 UTC (rev 18195)
++++ trunk/buildroot/package/microcom/microcom.mk	2007-03-21 17:53:00 UTC (rev 18196)
+@@ -45,10 +45,14 @@
+ 	touch $@
+ 
+ $(MICROCOM_DIR)/microcom: $(MICROCOM_DIR)/.configured
++ifeq ($(BR2_PREFER_IMA),y)
++	(cd $(MICROCOM_DIR) ; \
++	 $(TARGET_CC) $(TARGET_CFLAGS) $(CFLAGS_COMBINE) \
++	 	$(CFLAGS_WHOLE_PROGRAM) -o $@ $(wildcard $(MICROCOM_DIR)/*.c); \
++	)
++else
+ 	$(TARGET_CONFIGURE_OPTS) CFLAGS="$(TARGET_CFLAGS)" $(MAKE) -C $(MICROCOM_DIR)
+-	#(cd $(MICROCOM_DIR) ; \
+-	# $(TARGET_CC) $(TARGET_CFLAGS) --combine -fwhole-program -o $@ $(wildcard $(MICROCOM_DIR)/*.c); \
+-	#)
++endif
+ 	$(STRIP) -s $@
+ 
+ $(TARGET_DIR)/usr/bin/microcom: $(MICROCOM_DIR)/microcom
