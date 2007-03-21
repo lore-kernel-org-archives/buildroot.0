@@ -1,8 +1,8 @@
 From: bugs at busybox.net <bugs@busybox.net>
-Date: Wed, 21 Mar 2007 01:07:41 -0700
+Date: Wed, 21 Mar 2007 02:55:26 -0700
 Subject: [Buildroot] [buildroot 0001279]: bad compiler version discover in
 	dependencies.sh
-Message-ID: <0f078fa21cee61833915d10ae0d7f8a1@busybox.net>
+Message-ID: <9c332f0935adbe9c6fef0df4309cfc6b@busybox.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -26,7 +26,7 @@ Priority:                   normal
 Status:                     assigned
 ====================================================================== 
 Date Submitted:             03-20-2007 15:19 PDT
-Last Modified:              03-21-2007 01:07 PDT
+Last Modified:              03-21-2007 02:55 PDT
 ====================================================================== 
 Summary:                    bad compiler version discover in dependencies.sh
 Description: 
@@ -65,6 +65,26 @@ Please post the exact error you are seeing.
 I don't understand why you point to an unrelated comment? Please
 elaborate. 
 
+---------------------------------------------------------------------- 
+ Franck78 - 03-21-07 02:55  
+---------------------------------------------------------------------- 
+Hello,
+
+Just log all the make programs output to see details of the error.
+Or ever simpler: go directly in dependencies subir and lauch
+dependencies.sh.
+It tests every needed support program presence (except for 'head')
+and it completly fails the compiler test version
+WHEN HOSTCC IS NOT SET (then HOSTCXX)
+Can't be more clear than that, sorry.
+
+Asking 'which something' returns pathto something
+Asking 'which' returns which's syntax usage.
+
+Guess what happens when HOSTSCC is empty....
+
+Franck 
+
 Issue History 
 Date Modified   Username       Field                    Change               
 ====================================================================== 
@@ -74,4 +94,5 @@ Date Modified   Username       Field                    Change
 03-20-07 15:20  Franck78       Issue Monitored: Franck78                    
 03-20-07 15:37  Franck78       Note Added: 0002259                          
 03-21-07 01:07  bernhardf      Note Added: 0002260                          
+03-21-07 02:55  Franck78       Note Added: 0002261                          
 ======================================================================
