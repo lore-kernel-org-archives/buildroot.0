@@ -1,181 +1,218 @@
-From: Ulf Samuelsson <ulf@atmel.com>
-Date: Thu, 22 Mar 2007 18:24:20 +0100
-Subject: [Buildroot] BSP patch
-References: <02a401c76c07$c75473c0$01c4af0a@Glamdring>
-	<20070321224324.GD5468@aon.at>
-	<02e801c76c0e$c9eec980$01c4af0a@Glamdring>
-	<20070322132609.GA11410@aon.at>
-	<01a101c76c8a$2450a4e0$01c4af0a@Glamdring>
-	<20070322164017.GB3907@codepoet.org>
-Message-ID: <020401c76ca6$f37a2db0$01c4af0a@Glamdring>
+From: bugs at busybox.net <bugs@busybox.net>
+Date: Thu, 22 Mar 2007 10:47:24 -0700
+Subject: [Buildroot] [buildroot 0001279]: bad compiler version discover in
+	dependencies.sh
+Message-ID: <45c58869ea3a7ea8267c952ea296b08d@busybox.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
------ Original Message ----- 
-From: "Erik Andersen" <andersen@codepoet.org>
-To: "Ulf Samuelsson" <ulf@atmel.com>
-Cc: "Bernhard Fischer" <rep.dot.nop@gmail.com>; <buildroot@uclibc.org>
-Sent: Thursday, March 22, 2007 5:40 PM
-Subject: Re: [Buildroot] BSP patch
+
+The following issue has been CLOSED 
+====================================================================== 
+http://busybox.net/bugs/view.php?id=1279 
+====================================================================== 
+Reported By:                Franck78
+Assigned To:                buildroot
+====================================================================== 
+Project:                    buildroot
+Issue ID:                   1279
+Category:                   Architecture Specific
+Reproducibility:            always
+Severity:                   major
+Priority:                   normal
+Status:                     closed
+Resolution:                 open
+Fixed in Version:           
+====================================================================== 
+Date Submitted:             03-20-2007 15:19 PDT
+Last Modified:              03-22-2007 10:47 PDT
+====================================================================== 
+Summary:                    bad compiler version discover in dependencies.sh
+Description: 
+Hello,
+I don't know wheter or not $HOSTCC have to be defined before lauching
+'make'.
+
+Anyway, when not configured, the following test fails:
+COMPILER=$(which $HOSTCC)
+
+'which' gracefully respond with helps text....
+that next $XSED is unable to understand ;)
+
+file:
+toolchain/dependencies/dependencies.sh; line
+http://busybox.net/bugs/view.php?id=208#152
 
 
-> On Thu Mar 22, 2007 at 02:53:12PM +0100, Ulf Samuelsson wrote:
->>
->> >>The BSP patch also put some structure on where the result ends up.
->> >>Today everything is stored in the top directory, but if you
->> >>want to build multiple boards, then you are going to get a lot of 
->> >>clutter.
->> >
->> > We need to better differentiate between arch and cpu (generally, not in
->> > your board support patch).
->> >
->> > Applying your patch now locally. Let's see..
->> >
->>
->> Thank You,
->>
->> So far the patch does not create anything, only defines locations.
->>
->> The beef is in the patches that follows
->> but I plan to submit the AVR32 toolset patches first.
->>
->> The idea is to avoid keeping the toolset patches
->> inside the buildroot,and instead download the patches
->> before they are applied.
->
-> Mind sharing the the next patchset with us, so we can see where
-> you are going with this?  I do like the general idea and I
-> recognize the need to make changes such as you describe.  But I
-> would like to have a chance to review the actual changes you plan
-> to implement should this be applied...
->
-> -Erik
->
-> --
+Bye
+====================================================================== 
+
+---------------------------------------------------------------------- 
+ Franck78 - 03-20-07 15:37  
+---------------------------------------------------------------------- 
+same for $HOSTCXX, next test.
+
+Note also 'head' is used before testing presence by the script. 
+
+---------------------------------------------------------------------- 
+ bernhardf - 03-21-07 01:07  
+---------------------------------------------------------------------- 
+HOSTCC and HOSTCXX are optional.
+
+Please post the exact error you are seeing.
+
+I don't understand why you point to an unrelated comment? Please
+elaborate. 
+
+---------------------------------------------------------------------- 
+ Franck78 - 03-21-07 02:55  
+---------------------------------------------------------------------- 
+Hello,
+
+Just log all the make programs output to see details of the error.
+Or ever simpler: go directly in dependencies subir and lauch
+dependencies.sh.
+It tests every needed support program presence (except for 'head')
+and it completly fails the compiler test version
+WHEN HOSTCC IS NOT SET (then HOSTCXX)
+Can't be more clear than that, sorry.
+
+Asking 'which something' returns pathto something
+Asking 'which' returns which's syntax usage.
+
+Guess what happens when HOSTSCC is empty....
+
+Franck 
+
+---------------------------------------------------------------------- 
+ Franck78 - 03-21-07 03:11  
+---------------------------------------------------------------------- 
+I understand why you don't understand the comment...
+
+The link-pointer was a real text entered by me and it is the mantis bug
+tracking system that replaced it.
+
+http://busybox.net/bugs/view.php?id=222#172=> was "~~ line 172
+~x172 
+
+---------------------------------------------------------------------- 
+ bernhardf - 03-21-07 04:00  
+---------------------------------------------------------------------- 
+foo=$(which) does not print anything for me.
+
+what version of which do you see this with?
+
+i replaced the use of head with sed -e '1d', please svn up and let me know
+if that's better now.
+
+PS: If you don't provide a copy and paste of the error you are getting
+from dependencies.sh with HOSTCC and HOSTCXX unset, then i'll blissfully
+ignore this part of your report. Thanks for your understanding. 
+
+---------------------------------------------------------------------- 
+ Franck78 - 03-21-07 04:44  
+---------------------------------------------------------------------- 
+my which prog comes from 'gnu' repository.
+It does not print anything too, from command line.
+
+but inside the script, it is not the same !?
+
+Also, another thing changed in my system and now, dependencies.sh finds
+the rigth version of gcc. Previously, it was an error message with
+something 'not numeric'.
 
 
-Once the structure is available in the main buildroot,
-I want to add the
-target/device/Atmel/<board> directories
+Checking build system dependencies:
+CC clean:                                       Ok
+CXX clean:                                      Ok
+CPP clean:                                      Ok
+CFLAGS clean:                                   Ok
+INCLUDES clean:                                 Ok
+CXXFLAGS clean:                                 Ok
+LD_LIBRARY_PATH sane:                           Ok
+which installed:                                Ok
+./dependencies.sh: line 108: toolchain/dependencies/check-host-sed.sh:
+Aucun fichier ou r?pertoire de ce type
+sed works:                                      No, using buildroot
+version instead
+GNU make version '3.80':                        Ok
+Usage: which [options] [--] programname [...]
+Options: --version, -[vV] Print version and exit successfully.
+         --help,          Print this help and exit successfully.
+         --skip-dot       Skip directories in PATH that start with a dot.
+         --skip-tilde     Skip directories in PATH that start with a
+tilde.
+         --show-dot       Don't expand a dot to current directory in
+output.
+         --show-tilde     Output a tilde for HOME directory for non-root.
+         --tty-only       Stop processing options on the right if not on
+tty.
+         --all, -a        Print all matches in PATH, not just the first
+         --read-alias, -i Read list of aliases from stdin.
+         --skip-alias     Ignore option --read-alias; don't read stdin.
+         --read-functions Read shell functions from stdin.
+         --skip-functions Ignore option --read-functions; don't read
+stdin.
+C compiler '/usr/bin/cc'
+C compiler version '4.0.2':                     Ok
+Usage: which [options] [--] programname [...]
+Options: --version, -[vV] Print version and exit successfully.
+         --help,          Print this help and exit successfully.
+         --skip-dot       Skip directories in PATH that start with a dot.
+         --skip-tilde     Skip directories in PATH that start with a
+tilde.
+         --show-dot       Don't expand a dot to current directory in
+output.
+         --show-tilde     Output a tilde for HOME directory for non-root.
+         --tty-only       Stop processing options on the right if not on
+tty.
+         --all, -a        Print all matches in PATH, not just the first
+         --read-alias, -i Read list of aliases from stdin.
+         --skip-alias     Ignore option --read-alias; don't read stdin.
+         --read-functions Read shell functions from stdin.
+         --skip-functions Ignore option --read-functions; don't read
+stdin.
+C++ compiler '/usr/bin/c++'
+C++ compiler version '4.0.2':                   Ok
+bison installed:                                Ok
+flex installed:                                 Ok
+gettext installed:                              Ok
+makeinfo installed:                             Ok
+Build system dependencies:                      Ok
 
-The Atmel directory will support building board support for
-AT91 (ARM9) and AVR32 chips.
+ 
 
-I also can build
-* linux
-* U-Boot
-* at91-bootstrap
-* dataflashboot.bin
-* various download utilities
+---------------------------------------------------------------------- 
+ bernhardf - 03-21-07 11:16  
+---------------------------------------------------------------------- 
+Please update. Better now? 
 
-My final directory structiure, after patches, would look like
+---------------------------------------------------------------------- 
+ Franck78 - 03-22-07 09:22  
+---------------------------------------------------------------------- 
+ok, no more junk in the log file and no more error about the first numeric
+error also (the one that returned bad version for compiler).
+The ">dev/null" doesn't explain why ;-) 
 
-configs
-toolchain
-target
-packages
-local
-doc
-
-After configuring and running "make"
-the following directories will be added:
-
-toolchain_build_arm
-toolchain_build_avr32
-build_arm
-build_avr32
-
-as usual but also:
-
-target_build_dir/<board1>
-target_build_dir/<board2>
-binaries/<board1>
-binaries/<board2>
-
-where <board1>, <board2> is defined as contents of   $(BR2_BOARDNAME)
-Note that this is separate from the board type.
-If you have an AT91SAM9260EK, you should be able to build
-a number of <boards> based on this platform.
-Imagine a consultant which has designed a board and sells this
-to 10 customers, and each customer wants to have a customized
-linux kernel/u-boot/file system.
-Still you want to use a common toolchain, and you do not want to
-rebuild all the packages, just because you have a new configuration.
-build_<arch>/packages should be reused as much as possible.
-
-The "target_build_dir/<board>" should contain the builds of all packages
-which are configurable.
-Currently this is linux, u-boot and the low level boot utilities.
-
-If it is acceptable I would like to extend that to more things.
-
-First by moving "build_<arch>/root" to "target_build_<arch>/<board>/root.
-This would allow you to have two different file systems for different 
-configurations.
-I am not sure buildroot of today likes that you just delete the root 
-directory
-and then start from scratch.
-Ideally this should result in binaries in the build_<arch>/<package> 
-directories
-just beeing copied to the new file system.
-
-I do not see why I should rebuild packages over and over again.
-It would be better if I could build the package only once and then
-reuse it for each board.
-
-Having a unique "root" directory, is key to better functionality.
-
-It would be good to build busybox in target_build_<arch>/<board> as well.
-
-Lets say you have designed a board, and then you want to try out
-busybox with two different configuration files.
-Today you have to build the first root file system, and then after you have 
-to
-start from scratch. It would be much easier if you could build the busybox
-separaterly for each configuration.
-
-Basically all packages that can be configured should be in the 
-target_build_<arch>/<board>
-
-Another thing I would like to add is version support.
-Just because a new fancy version is available on internet
-does not mean that it is really working together with
-everything else in a certain file system.
-Without version support, buildroot is really a toy to get started.
-
-What you want, as a support organisation is to have supported "releases"
-This means that you want to provide info allowing someone else
-to follow your exact steps to build something.
-This means that you want a certain version of  "fileutils" etc.
-If buildroot is in a continuos flux, then there is a big risk that
-suddenly things do not work any longer.
-As well as you have stable releases of busybox, support
-organisations will have a need to provide a configuration file
-which shows what they have tested.
-
-This does not mean that it is bugfree, just that this is
-what has been tested and can be supported by that organisation.
-
-As for the question of sharing the patchset, I will need to update it,
-The introduction of "linux.mk" really wrought havoc on by BSP.
-
-I think next step (after supplying BSP) is really to make "linux.mk"
-useful in a multiboard environment.
-
-Best Regards
-Ulf Samuelsson                ulf at atmel.com
-Atmel Nordic AB
-Mail:  Box 2033, 174 02 Sundbyberg, Sweden
-Visit:  Kavalleriv?gen 24, 174 58 Sundbyberg, Sweden
-Phone +46 (8) 441 54 22     Fax +46 (8) 441 54 29
-GSM    +46 (706) 22 44 57
-
-Technical support when I am not available:
-AT89 C51 Applications Group: mailto:micro.hotline at nto.atmel.com
-AT90 AVR Applications Group: mailto:avr at atmel.com
-AT91 ARM Applications Group: mailto:at91support at atmel.com
-FPSLIC Application Group: mailto:fpslic at atmel.com Best AVR
-link: www.avrfreaks.net 
+Issue History 
+Date Modified   Username       Field                    Change               
+====================================================================== 
+03-20-07 15:19  Franck78       New Issue                                    
+03-20-07 15:19  Franck78       Status                   new => assigned     
+03-20-07 15:19  Franck78       Assigned To               => buildroot       
+03-20-07 15:20  Franck78       Issue Monitored: Franck78                    
+03-20-07 15:37  Franck78       Note Added: 0002259                          
+03-21-07 01:07  bernhardf      Note Added: 0002260                          
+03-21-07 02:55  Franck78       Note Added: 0002261                          
+03-21-07 03:11  Franck78       Note Added: 0002262                          
+03-21-07 04:00  bernhardf      Note Added: 0002263                          
+03-21-07 04:36  Franck78       Note Added: 0002264                          
+03-21-07 04:44  Franck78       Note Edited: 0002264                         
+03-21-07 11:16  bernhardf      Note Added: 0002265                          
+03-22-07 06:22  bernhardf      Status                   assigned => feedback
+03-22-07 09:22  Franck78       Note Added: 0002269                          
+03-22-07 10:47  bernhardf      Status                   feedback => closed  
+======================================================================
