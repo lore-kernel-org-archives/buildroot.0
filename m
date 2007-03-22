@@ -1,40 +1,85 @@
-From: andersen at uclibc.org <andersen@uclibc.org>
-Date: Thu, 22 Mar 2007 09:23:43 -0700 (PDT)
-Subject: [Buildroot] svn commit: trunk/buildroot/toolchain/uClibc
-Message-ID: <20070322162343.C275448097@busybox.net>
+From: Erik Andersen <andersen@codepoet.org>
+Date: Thu, 22 Mar 2007 10:30:50 -0600
+Subject: [Buildroot] BSP patch
+In-Reply-To: <02e901c76c0f$09244670$01c4af0a@Glamdring>
+References: <02a401c76c07$c75473c0$01c4af0a@Glamdring>
+	<20070321224324.GD5468@aon.at>
+	<02e901c76c0f$09244670$01c4af0a@Glamdring>
+Message-ID: <20070322163050.GA3907@codepoet.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Author: andersen
-Date: 2007-03-22 09:23:43 -0700 (Thu, 22 Mar 2007)
-New Revision: 18203
+On Thu Mar 22, 2007 at 12:16:51AM +0100, Ulf Samuelsson wrote:
+> He wants an easy way to configure buildroot by having a set
+> of ".config" files and a way to select  *which* config file
+> by doing
+> 
+> $ make <board>-defconfig
+> 
+> where the defconfig files are stored in the "configs" directory.
 
-Log:
-install hostutils (i.e. 'ldd' and 'ldconfig') into $STAGING_DIR
+A reasonable thing I suppose.
 
+> I actually have a "configs" directory as well in my private buildroot
+> but I copy stuff manually to the top level.
+> I think that S?ren's patch is orthogonal to my work.
+> 
+> 
+> The BSP patch is really there to allow two different configurations
+> to be built within the same buildroot directory so they can share:
+> 
+> * toolchain
+> * root file system build directory.
+> but have different configurations for linux kernel and busybox
+> and eventually you may want to have different content of the root file
+> system.
 
-Modified:
-   trunk/buildroot/toolchain/uClibc/uclibc.mk
+I agree this is a desirable thing for many situations.
 
+> The solution is to create a new directory structure
+> target_build_<arch>/<board> where everything is built.
+> The patch allows pre/postfixes to this directory name.
 
-Changeset:
-Modified: trunk/buildroot/toolchain/uClibc/uclibc.mk
-===================================================================
---- trunk/buildroot/toolchain/uClibc/uclibc.mk	2007-03-22 16:14:42 UTC (rev 18202)
-+++ trunk/buildroot/toolchain/uClibc/uclibc.mk	2007-03-22 16:23:43 UTC (rev 18203)
-@@ -285,6 +285,12 @@
- 		PREFIX=$(STAGING_DIR) \
- 		HOSTCC="$(HOSTCC)" \
- 		hostutils
-+	install -c $(UCLIBC_DIR)/utils/ldd.host $(STAGING_DIR)/$(REAL_GNU_TARGET_NAME)/bin/ldd
-+	(cd $(STAGING_DIR)/bin; ln -s ../$(REAL_GNU_TARGET_NAME)/bin/ldd $(GNU_TARGET_NAME)-ldd)
-+	(cd $(STAGING_DIR)/bin; ln -s ../$(REAL_GNU_TARGET_NAME)/bin/ldd $(REAL_GNU_TARGET_NAME)-ldd)
-+	install -c $(UCLIBC_DIR)/utils/ldconfig.host $(STAGING_DIR)/$(REAL_GNU_TARGET_NAME)/bin/ldconfig
-+	(cd $(STAGING_DIR)/bin; ln -s ../$(REAL_GNU_TARGET_NAME)/bin/ldconfig $(GNU_TARGET_NAME)-ldconfig)
-+	(cd $(STAGING_DIR)/bin; ln -s ../$(REAL_GNU_TARGET_NAME)/bin/ldconfig $(REAL_GNU_TARGET_NAME)-ldconfig)
- 	touch -c $(STAGING_DIR)/lib/libc.a
- 
- ifneq ($(TARGET_DIR),)
+Ok
+
+> When I have time, I would like to be able to download kernel patches
+> to this directory instead of storing the patch in the target directory.
+> 
+> The current linux.mk is very limited in functionality and forces
+> duplication of the linux patch for each board.
+
+I agree.  It works, but this is a rather annoying limitation.
+When a company has i.e. PRODUCT20, PRODUCT21, PRODUCT22, etc,
+there is no easy way to build for all of them without doing a
+lot of needless duplication.
+
+> I do not see why the same patch (size > 1 MB) should be stored 10 times
+> just because I have 10 boards.
+
+Yes, this is a weakness that should be addressed.
+
+> The BSP patch also put some structure on where the result ends up.
+> Today everything is stored in the top directory, but if you
+> want to build multiple boards, then you are going to get a lot of clutter.
+> 
+> The BSP patch will put bootloaders, kernel and root file systems in
+> binaries/<board>
+> 
+> S?ren also would like to separate the target build from the build
+> of the root file system, so I think he supports this patch.
+> 
+> 
+> 
+> So in short, I think there is really no reason to delay either of the
+> patches.
+
+Ok.
+
+ -Erik
+
+--
+Erik B. Andersen             http://codepoet-consulting.com/
+--This message was written using 73% post-consumer electrons--
