@@ -1,64 +1,69 @@
-From: Alexander Rigbo <alexander.rigbo@acgnystrom.se>
-Date: Thu, 22 Mar 2007 07:39:51 +0100
-Subject: [Buildroot] Problems loading buildroot image to CompactFlash
-In-Reply-To: <20070321224109.GC5468@aon.at>
-References: <16732d180703211509g47d56803q56f64dce7f02329b@mail.gmail.com>
-	<20070321224109.GC5468@aon.at>
-Message-ID: <200703220739.52058.alexander.rigbo@acgnystrom.se>
+From: aldot at uclibc.org <aldot@uclibc.org>
+Date: Thu, 22 Mar 2007 06:21:06 -0700 (PDT)
+Subject: [Buildroot] svn commit: trunk/buildroot/package/mpfr
+Message-ID: <20070322132106.6127B4801D@busybox.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi,
+Author: aldot
+Date: 2007-03-22 06:21:05 -0700 (Thu, 22 Mar 2007)
+New Revision: 18201
 
-AFAIK the boot loader is not "installed" (running lilo with lilo and doing 
-setup(hdX) in grub).
-Also, the image created (i take it you have a roofs.<arch>.ext2) is not a full 
-disk, it's a partition.
+Log:
+- download eventual mpfr patchfile to dl_dir. Closes #1283
 
-Hope this gives you info enough to solve this.
 
-Best regards
-Alexander Rigbo
-ACG Nystr?m AB
+Modified:
+   trunk/buildroot/package/mpfr/mpfr.mk
 
-On Wednesday 21 March 2007 23.41.09 Bernhard Fischer wrote:
-> On Wed, Mar 21, 2007 at 05:09:35PM -0500, William Somerset wrote:
-> >Hello,
-> >
-> >I'm having problems getting a BuildRoot Image to boot on a compactflash. 
-> > I got grub installed on the disk but whenever I try to boot the
-> > CompactFlash, I just get a blank screen.  I tried just dd'ing the image
-> > to the
-> >compactflash but I get 'missing OS' whenever I boot the compactflash that
-> >way.
-> >
-> >Also, I tried installing the Linux Kernel from the menu and it had
-> > problems installing.  This is from getting the copy of buildroot from svn
-> > at around 2pm CST today (March 21, 2007).  I loaded the grub prompt,
-> > changed the root to the compact flash and got grub to install to the
-> > compactflash but I guess without a kernel, it's kinda pointless.  Should
-> > I just make 1 partition or 2 (one for boot, one for main)?  Also, when I
-> > tried making an ISO, I got errors from it not having some place to copy
-> > to.
-> >
-> >Does anyone have a walkthrough or anything to help me out getting a
-> >buildroot image to compactflash?
->
-> - install grub unto the CF
-> - mount the CF at (e.g.) /mnt/l0
-> - tar -C /mnt/l0 -xf /my/rootfs.$myarch.tar
-> - sync && umount /mnt/l0
-> - qemu -snapshot -hda /dev/$cf_device -boot c
-> - enjoy
->
-> Procedure varies depending on your target, of course. Since you're ia32
-> compatible the above works nicely; Alternatively you can provide a e.g.
-> 512k disk to let grub boot from and use a jffs2 as -hdb or something
-> like that.
-> _______________________________________________
-> buildroot mailing list
-> buildroot at uclibc.org
-> http://busybox.net/mailman/listinfo/buildroot
+
+Changeset:
+Modified: trunk/buildroot/package/mpfr/mpfr.mk
+===================================================================
+--- trunk/buildroot/package/mpfr/mpfr.mk	2007-03-21 22:31:24 UTC (rev 18200)
++++ trunk/buildroot/package/mpfr/mpfr.mk	2007-03-22 13:21:05 UTC (rev 18201)
+@@ -5,6 +5,7 @@
+ #############################################################
+ MPFR_VERSION:=2.2.1
+ MPFR_PATCH:=patches
++MPFR_PATCH_FILE:=mpfr-$(MPFR_VERSION).patch
+ MPFR_SOURCE:=mpfr-$(MPFR_VERSION).tar.bz2
+ MPFR_CAT:=$(BZCAT)
+ MPFR_SITE:=http://www.mpfr.org/mpfr-current/
+@@ -19,19 +20,30 @@
+ MPFR_BE:=no
+ endif
+ 
++# No patch
++ifeq ($(MPFR_PATCH),)
+ $(DL_DIR)/$(MPFR_SOURCE):
+ 	 $(WGET) -P $(DL_DIR) $(MPFR_SITE)/$(MPFR_SOURCE)
+ 
+-
+ libmpfr-source: $(DL_DIR)/$(MPFR_SOURCE)
++endif
++# need patch
++ifneq ($(MPFR_PATCH),)
++$(DL_DIR)/$(MPFR_SOURCE):
++	 $(WGET) -P $(DL_DIR) $(MPFR_SITE)/$(MPFR_SOURCE)
+ 
++$(DL_DIR)/$(MPFR_PATCH_FILE):
++	$(WGET) -O $@ $(MPFR_SITE)/$(MPFR_PATCH)
++
++libmpfr-source: $(DL_DIR)/$(MPFR_SOURCE) $(DL_DIR)/$(MPFR_PATCH_FILE)
++endif
++
+ $(MPFR_DIR)/.unpacked: $(DL_DIR)/$(MPFR_SOURCE)
+ 	$(MPFR_CAT) $(DL_DIR)/$(MPFR_SOURCE) | tar -C $(TOOL_BUILD_DIR) $(TAR_OPTIONS) -
+ 	toolchain/patch-kernel.sh $(MPFR_DIR) package/mpfr/ \*.patch
+ 	$(CONFIG_UPDATE) $(MPFR_DIR)
+ ifneq ($(MPFR_PATCH),)
+-	$(WGET) -P $(MPFR_DIR) $(MPFR_SITE)/$(MPFR_PATCH)
+-	( cd $(MPFR_DIR) ; patch -p1 < $(MPFR_PATCH) ; )
++	( cd $(MPFR_DIR) ; patch -p1 < $(MPFR_PATCH_FILE) ; )
+ endif
+ 	touch $@
+ 
