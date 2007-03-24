@@ -1,84 +1,96 @@
-From: bugs at busybox.net <bugs@busybox.net>
-Date: Sat, 24 Mar 2007 12:57:09 -0700
-Subject: [Buildroot] [buildroot 0001287]: posix_memalign() declared but not
-	implemented
-Message-ID: <c252918fb0930b5ef0f0253ac098985f@busybox.net>
+From: aldot at uclibc.org <aldot@uclibc.org>
+Date: Sat, 24 Mar 2007 13:49:08 -0700 (PDT)
+Subject: [Buildroot] svn commit: trunk/buildroot/toolchain/binutils:
+	2.17.50.0.14
+Message-ID: <20070324204908.3165D48614@busybox.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+Author: aldot
+Date: 2007-03-24 13:49:07 -0700 (Sat, 24 Mar 2007)
+New Revision: 18233
 
-The following issue has been set as DUPLICATE OF issue 0001275. 
-====================================================================== 
-http://busybox.net/bugs/view.php?id=1287 
-====================================================================== 
-Reported By:                Franck78
-Assigned To:                buildroot
-====================================================================== 
-Project:                    buildroot
-Issue ID:                   1287
-Category:                   Standards Compliance
-Reproducibility:            always
-Severity:                   block
-Priority:                   normal
-Status:                     assigned
-====================================================================== 
-Date Submitted:             03-24-2007 12:15 PDT
-Last Modified:              03-24-2007 12:57 PDT
-====================================================================== 
-Summary:                    posix_memalign() declared but not implemented
-Description: 
-Hello,
-For a reason totally ununderstandable for me, 'Vapier' made a correction
-19 months ago to uClibc and this correction is not present in latest
-uClibc release (0.9.28.3) Why such a delay.....
+Log:
+- bump version to 2.17.50.0.14
 
-The facts:
-posix_memalign() function is declared in header file (stdlib.h)
-posix_memalign() is implemented nowhere
 
-=>compilations run smoothly
-=>linking final application sucks (of course)
-For example try 'parted version 1.8.2'
+Added:
+   trunk/buildroot/toolchain/binutils/2.17.50.0.14/
 
-Either the function is present or not. But half done job is idiot.
-Provided patch to drop in "buildroot/toolchain/uClibc"
-to implement the function in next snapshot.
+Modified:
+   trunk/buildroot/toolchain/binutils/2.17.50.0.14/100-uclibc-conf.patch
+   trunk/buildroot/toolchain/binutils/2.17.50.0.14/110-arm-eabi-conf.patch
+   trunk/buildroot/toolchain/binutils/Config.in
 
-Thank you for read (and fixing).
 
-======================================================================
-Relationships       ID      Summary
-----------------------------------------------------------------------
-duplicate of        0001275 posix_memalign missing
-====================================================================== 
+Changeset:
+Copied: trunk/buildroot/toolchain/binutils/2.17.50.0.14 (from rev 18214, trunk/buildroot/toolchain/binutils/2.17.50.0.10)
 
----------------------------------------------------------------------- 
- bernhardf - 03-24-07 12:31  
----------------------------------------------------------------------- 
-So.. why do you file this against buildroot and not properly against
-uClibc? 
+Modified: trunk/buildroot/toolchain/binutils/2.17.50.0.14/100-uclibc-conf.patch
+===================================================================
+--- trunk/buildroot/toolchain/binutils/2.17.50.0.10/100-uclibc-conf.patch	2007-03-23 13:26:51 UTC (rev 18214)
++++ trunk/buildroot/toolchain/binutils/2.17.50.0.14/100-uclibc-conf.patch	2007-03-24 20:49:07 UTC (rev 18233)
+@@ -40,8 +40,8 @@
+      case "${host}" in
+        i[3456789]86-*-vsta) ;; # don't add gprof back in
+        i[3456789]86-*-go32*) ;; # don't add gprof back in
+---- binutils-2.16.91.0.7/configure.in
+-+++ binutils-2.16.91.0.7/configure.in
++--- binutils-2.16.91.0.7/configure.ac
+++++ binutils-2.16.91.0.7/configure.ac
+ @@ -468,7 +468,7 @@
+    am33_2.0-*-linux*)
+      noconfigdirs="$noconfigdirs ${libgcj} target-newlib target-libgloss"
 
----------------------------------------------------------------------- 
- Franck78 - 03-24-07 12:48  
----------------------------------------------------------------------- 
-I did !
-http://busybox.net/bugs/view.php?id=1275
+Modified: trunk/buildroot/toolchain/binutils/2.17.50.0.14/110-arm-eabi-conf.patch
+===================================================================
+--- trunk/buildroot/toolchain/binutils/2.17.50.0.10/110-arm-eabi-conf.patch	2007-03-23 13:26:51 UTC (rev 18214)
++++ trunk/buildroot/toolchain/binutils/2.17.50.0.14/110-arm-eabi-conf.patch	2007-03-24 20:49:07 UTC (rev 18233)
+@@ -10,9 +10,9 @@
+      noconfigdirs="$noconfigdirs target-libffi target-qthreads"
+      noconfigdirs="$noconfigdirs target-libjava target-libobjc"
+      ;;
+-diff -urN binutils-2.16.91.0.7.orig/configure.in binutils-2.16.91.0.7/configure.in
+---- binutils-2.16.91.0.7.orig/configure.in	2006-05-31 14:54:24.000000000 +0300
+-+++ binutils-2.16.91.0.7/configure.in	2006-05-31 14:55:53.000000000 +0300
++diff -urN binutils-2.16.91.0.7.orig/configure.ac binutils-2.16.91.0.7/configure.ac
++--- binutils-2.16.91.0.7.orig/configure.ac	2006-05-31 14:54:24.000000000 +0300
+++++ binutils-2.16.91.0.7/configure.ac	2006-05-31 14:55:53.000000000 +0300
+ @@ -497,7 +497,7 @@
+    arm-*-elf* | strongarm-*-elf* | xscale-*-elf* | arm*-*-eabi* )
+      noconfigdirs="$noconfigdirs target-libffi target-qthreads"
 
-If a correction is not released after 19 months, it will never be, no ? 
-
-Issue History 
-Date Modified   Username       Field                    Change               
-====================================================================== 
-03-24-07 12:15  Franck78       New Issue                                    
-03-24-07 12:15  Franck78       Status                   new => assigned     
-03-24-07 12:15  Franck78       Assigned To               => buildroot       
-03-24-07 12:15  Franck78       File Added: uClibc-0.9.28.3-posix_memalign.patch 
-                  
-03-24-07 12:17  Franck78       Issue Monitored: Franck78                    
-03-24-07 12:31  bernhardf      Note Added: 0002276                          
-03-24-07 12:48  Franck78       Note Added: 0002277                          
-03-24-07 12:57  bernhardf      Relationship added       duplicate of 0001275
-======================================================================
+Modified: trunk/buildroot/toolchain/binutils/Config.in
+===================================================================
+--- trunk/buildroot/toolchain/binutils/Config.in	2007-03-24 19:29:06 UTC (rev 18232)
++++ trunk/buildroot/toolchain/binutils/Config.in	2007-03-24 20:49:07 UTC (rev 18233)
+@@ -4,7 +4,7 @@
+ 
+ choice
+ 	prompt "Binutils Version"
+-	default BR2_BINUTILS_VERSION_2_16_91_0_7
++	default BR2_BINUTILS_VERSION_2_17
+ 	help
+ 	  Select the version of binutils you wish to use.
+ 
+@@ -80,6 +80,9 @@
+ 		depends !BR2_nios2
+ 		bool "binutils 2.17.50.0.10"
+ 
++	config BR2_BINUTILS_VERSION_2_17_50_0_14
++		depends !BR2_nios2
++		bool "binutils 2.17.50.0.14"
+ endchoice
+ 
+ config BR2_BINUTILS_VERSION
+@@ -102,6 +105,7 @@
+ 	default "2.17.50.0.8"     if BR2_BINUTILS_VERSION_2_17_50_0_8
+ 	default "2.17.50.0.9"     if BR2_BINUTILS_VERSION_2_17_50_0_9
+ 	default "2.17.50.0.10"    if BR2_BINUTILS_VERSION_2_17_50_0_10
++	default "2.17.50.0.14"    if BR2_BINUTILS_VERSION_2_17_50_0_14
+ 
+ config BR2_EXTRA_BINUTILS_CONFIG_OPTIONS
+ 	string "Additional binutils options"
