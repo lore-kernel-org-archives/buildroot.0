@@ -1,8 +1,8 @@
 From: bugs at busybox.net <bugs@busybox.net>
-Date: Sat, 24 Mar 2007 12:48:08 -0700
+Date: Sat, 24 Mar 2007 12:57:09 -0700
 Subject: [Buildroot] [buildroot 0001287]: posix_memalign() declared but not
 	implemented
-Message-ID: <93bf8b621253bf2ec48dd4c7f30269ed@busybox.net>
+Message-ID: <c252918fb0930b5ef0f0253ac098985f@busybox.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -10,7 +10,7 @@ Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
 
-A NOTE has been added to this issue. 
+The following issue has been set as DUPLICATE OF issue 0001275. 
 ====================================================================== 
 http://busybox.net/bugs/view.php?id=1287 
 ====================================================================== 
@@ -26,7 +26,7 @@ Priority:                   normal
 Status:                     assigned
 ====================================================================== 
 Date Submitted:             03-24-2007 12:15 PDT
-Last Modified:              03-24-2007 12:48 PDT
+Last Modified:              03-24-2007 12:57 PDT
 ====================================================================== 
 Summary:                    posix_memalign() declared but not implemented
 Description: 
@@ -49,6 +49,10 @@ to implement the function in next snapshot.
 
 Thank you for read (and fixing).
 
+======================================================================
+Relationships       ID      Summary
+----------------------------------------------------------------------
+duplicate of        0001275 posix_memalign missing
 ====================================================================== 
 
 ---------------------------------------------------------------------- 
@@ -76,4 +80,5 @@ Date Modified   Username       Field                    Change
 03-24-07 12:17  Franck78       Issue Monitored: Franck78                    
 03-24-07 12:31  bernhardf      Note Added: 0002276                          
 03-24-07 12:48  Franck78       Note Added: 0002277                          
+03-24-07 12:57  bernhardf      Relationship added       duplicate of 0001275
 ======================================================================
