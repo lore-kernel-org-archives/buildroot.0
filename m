@@ -1,8 +1,8 @@
 From: bugs at busybox.net <bugs@busybox.net>
-Date: Sat, 24 Mar 2007 12:32:00 -0700
+Date: Sat, 24 Mar 2007 12:48:08 -0700
 Subject: [Buildroot] [buildroot 0001287]: posix_memalign() declared but not
 	implemented
-Message-ID: <7fb060c86634cf8684e8149f8467bb86@busybox.net>
+Message-ID: <93bf8b621253bf2ec48dd4c7f30269ed@busybox.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -26,7 +26,7 @@ Priority:                   normal
 Status:                     assigned
 ====================================================================== 
 Date Submitted:             03-24-2007 12:15 PDT
-Last Modified:              03-24-2007 12:31 PDT
+Last Modified:              03-24-2007 12:48 PDT
 ====================================================================== 
 Summary:                    posix_memalign() declared but not implemented
 Description: 
@@ -57,6 +57,14 @@ Thank you for read (and fixing).
 So.. why do you file this against buildroot and not properly against
 uClibc? 
 
+---------------------------------------------------------------------- 
+ Franck78 - 03-24-07 12:48  
+---------------------------------------------------------------------- 
+I did !
+http://busybox.net/bugs/view.php?id=1275
+
+If a correction is not released after 19 months, it will never be, no ? 
+
 Issue History 
 Date Modified   Username       Field                    Change               
 ====================================================================== 
@@ -67,4 +75,5 @@ Date Modified   Username       Field                    Change
                   
 03-24-07 12:17  Franck78       Issue Monitored: Franck78                    
 03-24-07 12:31  bernhardf      Note Added: 0002276                          
+03-24-07 12:48  Franck78       Note Added: 0002277                          
 ======================================================================
