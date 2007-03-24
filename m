@@ -1,39 +1,62 @@
-From: aldot at uclibc.org <aldot@uclibc.org>
-Date: Sat, 24 Mar 2007 05:46:53 -0700 (PDT)
-Subject: [Buildroot] svn commit: trunk/buildroot/package/openswan
-Message-ID: <20070324124653.BC430485C6@busybox.net>
+From: bugs at busybox.net <bugs@busybox.net>
+Date: Sat, 24 Mar 2007 12:15:57 -0700
+Subject: [Buildroot] [buildroot 0001287]: posix_memalign() declared but not
+	implemented
+Message-ID: <51101e23a408ec5076798600f8389c2e@bugs.uclibc.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Author: aldot
-Date: 2007-03-24 05:46:46 -0700 (Sat, 24 Mar 2007)
-New Revision: 18223
 
-Log:
-- fwd port
+The following issue has been SUBMITTED. 
+====================================================================== 
+http://busybox.net/bugs/view.php?id=1287 
+====================================================================== 
+Reported By:                Franck78
+Assigned To:                buildroot
+====================================================================== 
+Project:                    buildroot
+Issue ID:                   1287
+Category:                   Standards Compliance
+Reproducibility:            always
+Severity:                   block
+Priority:                   normal
+Status:                     assigned
+====================================================================== 
+Date Submitted:             03-24-2007 12:15 PDT
+Last Modified:              03-24-2007 12:15 PDT
+====================================================================== 
+Summary:                    posix_memalign() declared but not implemented
+Description: 
+Hello,
+For a reason totally ununderstandable for me, 'Vapier' made a correction
+19 months ago to uClibc and this correction is not present in latest
+uClibc release (0.9.28.3) Why such a delay.....
 
+The facts:
+posix_memalign() function is declared in header file (stdlib.h)
+posix_memalign() is implemented nowhere
 
-Added:
-   trunk/buildroot/package/openswan/linux-2.6.20.4-openswan-2.4.7.kernel-2.6-klips.patch
-   trunk/buildroot/package/openswan/linux-2.6.20.4-openswan-2.4.7.kernel-2.6-natt.patch
-   trunk/buildroot/package/openswan/linux-2.6.20.4-openswan-2.4.7.kernel-2.6-nfmark-rename.patch
-   trunk/buildroot/package/openswan/linux-2.6.20.4-openswan-2.4.7.kernel-2.6-zzz-crypto_alg_available.patch
-   trunk/buildroot/package/openswan/linux-2.6.20.4-openswan-2.4.7.kernel-2.6-zzz-void-sock_unregister.patch
+=>compilations run smoothly
+=>linking final application sucks (of course)
+For example try 'parted version 1.8.2'
 
-Removed:
-   trunk/buildroot/package/openswan/linux-2.6.20.3-openswan-2.4.7.kernel-2.6-klips.patch
-   trunk/buildroot/package/openswan/linux-2.6.20.3-openswan-2.4.7.kernel-2.6-natt.patch
-   trunk/buildroot/package/openswan/linux-2.6.20.3-openswan-2.4.7.kernel-2.6-nfmark-rename.patch
-   trunk/buildroot/package/openswan/linux-2.6.20.3-openswan-2.4.7.kernel-2.6-zzz-crypto_alg_available.patch
-   trunk/buildroot/package/openswan/linux-2.6.20.3-openswan-2.4.7.kernel-2.6-zzz-void-sock_unregister.patch
+Either the function is present or not. But half done job is idiot.
+Provided patch to drop in "buildroot/toolchain/uClibc"
+to implement the function in next snapshot.
 
+Thank you for read (and fixing).
 
-Changeset:
+====================================================================== 
 
-Sorry, the patch is too large to include (119191 lines).
-Please use ViewCVS to see it!
-
-http://uclibc.org/cgi-bin/viewcvs.cgi?view=rev&root=svn&rev=18223
+Issue History 
+Date Modified   Username       Field                    Change               
+====================================================================== 
+03-24-07 12:15  Franck78       New Issue                                    
+03-24-07 12:15  Franck78       Status                   new => assigned     
+03-24-07 12:15  Franck78       Assigned To               => buildroot       
+03-24-07 12:15  Franck78       File Added: uClibc-0.9.28.3-posix_memalign.patch 
+                  
+======================================================================
