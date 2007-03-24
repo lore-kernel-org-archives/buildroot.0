@@ -1,43 +1,78 @@
-From: Christophe Lucas <clucas@rotomalug.org>
-Date: Sat, 24 Mar 2007 10:06:16 +0100
-Subject: [Buildroot] Problems loading buildroot image to CompactFlash
-In-Reply-To: <16732d180703230747v38d9b4c7j1784554e9ed7a6a7@mail.gmail.com>
-References: <16732d180703211509g47d56803q56f64dce7f02329b@mail.gmail.com>
-	<20070321224109.GC5468@aon.at>
-	<200703220739.52058.alexander.rigbo@acgnystrom.se>
-	<16732d180703230747v38d9b4c7j1784554e9ed7a6a7@mail.gmail.com>
-Message-ID: <20070324090616.GC7625@rotomalug.org>
+From: aldot at uclibc.org <aldot@uclibc.org>
+Date: Sat, 24 Mar 2007 04:47:19 -0700 (PDT)
+Subject: [Buildroot] svn commit: trunk/buildroot/package/setserial
+Message-ID: <20070324114719.1376A4857D@busybox.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-William Somerset (williamsomerset at gmail.com) wrote:
-> I'm probably missing something here since usually, I just have whatever
-> flavor of Linux install grub for me but the directions I found on the net
-> had me copy over the /boot directory I use currently to the flash card.  I'm
-> using Sabayon Linux 3.2 with a 2.6.18-gentoo-r5 kernel.  The kernel was also
-> created with genkernel.  This is probably going to be a problem, huh?
-> 
-> Is installing grub as easy and changing the root in the boot prompt and
-> doing the correct 'install' line?
-> 
-> I'm trying to target either VIA EPIA boards with x86 CPUs or something like
-> PCEngines WRAP or Soekris net4501.
+Author: aldot
+Date: 2007-03-24 04:47:00 -0700 (Sat, 24 Mar 2007)
+New Revision: 18215
 
-Hi william,
+Log:
+- fix downloading the setserial patch
 
-If grub is installed. So you can mount your CF card, un-tar your tarball
-in CF-mounted directorty. Then you install grub with something like :
 
-	echo -e 'root (hd0,0)\nsetup (hd0)'|grub --batch
+Modified:
+   trunk/buildroot/package/setserial/setserial.mk
 
-I have done this kind of command, but I don't remember exactly syntax.
-man grub is your friend.
 
-Hope this can help you.
-
-Regards,
-
-	- Christophe -
+Changeset:
+Modified: trunk/buildroot/package/setserial/setserial.mk
+===================================================================
+--- trunk/buildroot/package/setserial/setserial.mk	2007-03-23 13:26:51 UTC (rev 18214)
++++ trunk/buildroot/package/setserial/setserial.mk	2007-03-24 11:47:00 UTC (rev 18215)
+@@ -6,7 +6,7 @@
+ SETSERIAL_VERSION:=2.17
+ SETSERIAL_SOURCE:=setserial_$(SETSERIAL_VERSION).orig.tar.gz
+ SETSERIAL_SITE:=http://ftp.debian.org/debian/pool/main/s/setserial/
+-SETSERIAL_PATCH:=setserial_$(SETSERIAL_VERSION)-43.diff.gz
++SETSERIAL_PATCH_FILE:=setserial_$(SETSERIAL_VERSION)-43.diff.gz
+ SETSERIAL_DIR:=$(BUILD_DIR)/setserial-$(SETSERIAL_VERSION)
+ SETSERIAL_BINARY:=setserial
+ SETSERIAL_TARGET_BINARY:=usr/bin/setserial
+@@ -14,12 +14,20 @@
+ $(DL_DIR)/$(SETSERIAL_SOURCE):
+ 	$(WGET) -P $(DL_DIR) $(SETSERIAL_SITE)/$(SETSERIAL_SOURCE)
+ 
+-$(SETSERIAL_DIR)/.unpacked: $(DL_DIR)/$(SETSERIAL_SOURCE)
++ifneq ($(SETSERIAL_PATCH_FILE),)
++SETSERIAL_PATCH:=$(DL_DIR)/$(SETSERIAL_PATCH_FILE)
++$(SETSERIAL_PATCH):
++	$(WGET) -O $@ $(SETSERIAL_SITE)/$(SETSERIAL_PATCH_FILE)
++else
++SETSERIAL_PATCH:=
++endif
++
++$(SETSERIAL_DIR)/.unpacked: $(DL_DIR)/$(SETSERIAL_SOURCE) $(SETSERIAL_PATCH)
+ 	$(ZCAT) $(DL_DIR)/$(SETSERIAL_SOURCE) | tar -C $(BUILD_DIR) $(TAR_OPTIONS) -
+ 	$(CONFIG_UPDATE) $(SETSERIAL_DIR)
+ 	toolchain/patch-kernel.sh $(SETSERIAL_DIR) package/setserial setserial\*.patch
+-ifneq ($(SETSERIAL_PATCH),)
+-	toolchain/patch-kernel.sh $(SETSERIAL_DIR) $(DL_DIR) $(SETSERIAL_PATCH)
++ifneq ($(SETSERIAL_PATCH_FILE),)
++	toolchain/patch-kernel.sh $(SETSERIAL_DIR) $(DL_DIR) $(SETSERIAL_PATCH_FILE)
+ 	if [ -d $(SETSERIAL_DIR)/debian/patches ]; then \
+ 		toolchain/patch-kernel.sh $(SETSERIAL_DIR) $(SETSERIAL_DIR)/debian/patches \*.patch ; \
+ 	fi
+@@ -27,7 +35,7 @@
+ 	touch $@
+ 
+ ifeq ($(BR2_PREFER_IMA),y)
+-SETSERIAL_CFLAGS=--combine $(CFLAGS_WHOLE_PROGRAM)
++SETSERIAL_CFLAGS=$(CFLAGS_COMBINE) $(CFLAGS_WHOLE_PROGRAM)
+ endif
+ 
+ $(SETSERIAL_DIR)/.configured: $(SETSERIAL_DIR)/.unpacked
+@@ -53,7 +61,7 @@
+ 
+ setserial: uclibc $(TARGET_DIR)/$(SETSERIAL_TARGET_BINARY)
+ 
+-setserial-source: $(DL_DIR)/$(SETSERIAL_SOURCE) $(DL_DIR)/$(SETSERIAL_PATCH)
++setserial-source: $(DL_DIR)/$(SETSERIAL_SOURCE) $(SETSERIAL_PATCH)
+ 
+ setserial-clean:
+ 	rm -f $(TARGET_DIR)/$(SETSERIAL_TARGET_BINARY)
