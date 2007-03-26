@@ -1,57 +1,56 @@
-From: bugs at busybox.net <bugs@busybox.net>
-Date: Sun, 25 Mar 2007 17:25:32 -0700
-Subject: [Buildroot] [buildroot 0001290]: linux header & libc header files
-	should go in /usr/include
-Message-ID: <c71e1e03b6f7982b66b7e3eb6656fb65@bugs.busybox.net>
+From: aldot at uclibc.org <aldot@uclibc.org>
+Date: Mon, 26 Mar 2007 03:31:57 -0700 (PDT)
+Subject: [Buildroot] svn commit: trunk/buildroot/target/jffs2
+Message-ID: <20070326103157.BA1884800C@busybox.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+Author: aldot
+Date: 2007-03-26 03:31:56 -0700 (Mon, 26 Mar 2007)
+New Revision: 18238
 
-The following issue has been SUBMITTED. 
-====================================================================== 
-http://busybox.net/bugs/view.php?id=1290 
-====================================================================== 
-Reported By:                Franck78
-Assigned To:                buildroot
-====================================================================== 
-Project:                    buildroot
-Issue ID:                   1290
-Category:                   Standards Compliance
-Reproducibility:            always
-Severity:                   minor
-Priority:                   normal
-Status:                     assigned
-====================================================================== 
-Date Submitted:             03-25-2007 17:25 PDT
-Last Modified:              03-25-2007 17:25 PDT
-====================================================================== 
-Summary:                    linux header & libc header files should go in
-/usr/include
-Description: 
-Hello,
-Inside the toolchain (fakeroot.0000), the header files (linux&uclibc) are
-not in the correct subdir.
-They reside in "/include" but should reside in "/usr/include"
-
-It is annoying because the toolchain tools (gcc,cpp,..) look in "/include"
-and package build with classic options (just a simple configure
---prefix=/usr) put them in what is correct for most of them,
-"/usr/include".
-
-I'm not absolute certain on the correct standart but what is sure, is that
-there is no "/include" dir on my linuxes (ubuntu, mandrake, suse).
+Log:
+- add option to create a jffs2 filesystem in srec format. Thanks to Xride.
 
 
-Franck
-====================================================================== 
+Modified:
+   trunk/buildroot/target/jffs2/Config.in
+   trunk/buildroot/target/jffs2/jffs2root.mk
 
-Issue History 
-Date Modified   Username       Field                    Change               
-====================================================================== 
-03-25-07 17:25  Franck78       New Issue                                    
-03-25-07 17:25  Franck78       Status                   new => assigned     
-03-25-07 17:25  Franck78       Assigned To               => buildroot       
-======================================================================
+
+Changeset:
+Modified: trunk/buildroot/target/jffs2/Config.in
+===================================================================
+--- trunk/buildroot/target/jffs2/Config.in	2007-03-25 23:21:05 UTC (rev 18237)
++++ trunk/buildroot/target/jffs2/Config.in	2007-03-26 10:31:56 UTC (rev 18238)
+@@ -32,6 +32,11 @@
+ 	depends on BR2_TARGET_ROOTFS_JFFS2
+ 	default 0x20000
+ 
++config BR2_JFFS2_TARGET_SREC
++	bool "RootFS in SREC file formet"
++	depends on BR2_TARGET_ROOTFS_JFFS2
++	default n
++
+ config BR2_TARGET_ROOTFS_JFFS2_PAD
+ 	bool "Pad output"
+ 	depends on BR2_TARGET_ROOTFS_JFFS2
+
+Modified: trunk/buildroot/target/jffs2/jffs2root.mk
+===================================================================
+--- trunk/buildroot/target/jffs2/jffs2root.mk	2007-03-25 23:21:05 UTC (rev 18237)
++++ trunk/buildroot/target/jffs2/jffs2root.mk	2007-03-26 10:31:56 UTC (rev 18238)
+@@ -71,6 +71,10 @@
+ 	$(STAGING_DIR)/usr/bin/fakeroot -- $(STAGING_DIR)/_fakeroot.$(notdir $(JFFS2_TARGET))
+ 	- at rm -f $(STAGING_DIR)/_fakeroot.$(notdir $(JFFS2_TARGET))
+ 	@ls -l $(JFFS2_TARGET)
++ifeq ($(BR2_JFFS2_TARGET_SREC),y)
++	$(TARGET_CROSS)objcopy -I binary -O srec --adjust-vma 0xa1000000 $(JFFS2_TARGET) $(JFFS2_TARGET).srec
++	@ls -l $(JFFS2_TARGET).srec
++endif
+ 
+ JFFS2_COPYTO := $(strip $(subst ",,$(BR2_TARGET_ROOTFS_JFFS2_COPYTO)))
+ #"))
