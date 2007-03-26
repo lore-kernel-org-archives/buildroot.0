@@ -1,7 +1,8 @@
 From: bugs at busybox.net <bugs@busybox.net>
-Date: Sun, 25 Mar 2007 10:29:50 -0700
-Subject: [Buildroot] [buildroot 0001288]: cannot build libstdc++
-Message-ID: <36bb6c13190ca7a732ec76b0db826b88@busybox.net>
+Date: Sun, 25 Mar 2007 17:25:32 -0700
+Subject: [Buildroot] [buildroot 0001290]: linux header & libc header files
+	should go in /usr/include
+Message-ID: <c71e1e03b6f7982b66b7e3eb6656fb65@bugs.busybox.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -9,65 +10,48 @@ Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
 
-A NOTE has been added to this issue. 
+The following issue has been SUBMITTED. 
 ====================================================================== 
-http://busybox.net/bugs/view.php?id=1288 
+http://busybox.net/bugs/view.php?id=1290 
 ====================================================================== 
 Reported By:                Franck78
 Assigned To:                buildroot
 ====================================================================== 
 Project:                    buildroot
-Issue ID:                   1288
-Category:                   Architecture Specific
+Issue ID:                   1290
+Category:                   Standards Compliance
 Reproducibility:            always
-Severity:                   block
+Severity:                   minor
 Priority:                   normal
 Status:                     assigned
 ====================================================================== 
-Date Submitted:             03-25-2007 09:02 PDT
-Last Modified:              03-25-2007 10:29 PDT
+Date Submitted:             03-25-2007 17:25 PDT
+Last Modified:              03-25-2007 17:25 PDT
 ====================================================================== 
-Summary:                    cannot build libstdc++
+Summary:                    linux header & libc header files should go in
+/usr/include
 Description: 
 Hello,
-The following buildroot settings:
--binutils 2.17
--hostCC gcc4.02
--target toolchain= gcc4.20,g++
--uclibc 0.9.28.3
+Inside the toolchain (fakeroot.0000), the header files (linux&uclibc) are
+not in the correct subdir.
+They reside in "/include" but should reside in "/usr/include"
 
-produce everytime the following error in build-gcc-4.2-final:
+It is annoying because the toolchain tools (gcc,cpp,..) look in "/include"
+and package build with classic options (just a simple configure
+--prefix=/usr) put them in what is correct for most of them,
+"/usr/include".
 
-In file included from
-/data/users/root/buildroot/toolchain_build_i686/gcc-4.2-final/i686-linux-uclibc/libstdc++-v3/include/bits/locale_facets.h:3034,
-                 from
-/data/users/root/buildroot/toolchain_build_i686/gcc-4.2-final/i686-linux-uclibc/libstdc++-v3/include/bits/basic_ios.h:44,
-                 from
-/data/users/root/buildroot/toolchain_build_i686/gcc-4.2-final/i686-linux-uclibc/libstdc++-v3/include/ios:50,
-                 from
-/data/users/root/buildroot/toolchain_build_i686/gcc-4.2-final/i686-linux-uclibc/libstdc++-v3/include/ostream:44,
-                 from
-/data/users/root/buildroot/toolchain_build_i686/gcc-4.2-final/i686-linux-uclibc/libstdc++-v3/include/bitset:59,
-                 from
-/data/users/root/buildroot/toolchain_build_i686/gcc-4.2-20061121/libstdc++-v3/include/precompiled/stdc++.h:52:
-/data/users/root/buildroot/toolchain_build_i686/gcc-4.2-final/i686-linux-uclibc/libstdc++-v3/include/i686-linux-uclibc/bits/time_members.h:39:
-error: definition of 'void std::__timepunct<_CharT>::__timepunct(size_t)'
-is not in namespace enclosing 'std::__timepunct<_CharT>'
+I'm not absolute certain on the correct standart but what is sure, is that
+there is no "/include" dir on my linuxes (ubuntu, mandrake, suse).
 
+
+Franck
 ====================================================================== 
-
----------------------------------------------------------------------- 
- Franck78 - 03-25-07 10:29  
----------------------------------------------------------------------- 
-Moving to gcc 4.1.2 works. 
 
 Issue History 
 Date Modified   Username       Field                    Change               
 ====================================================================== 
-03-25-07 09:02  Franck78       New Issue                                    
-03-25-07 09:02  Franck78       Status                   new => assigned     
-03-25-07 09:02  Franck78       Assigned To               => buildroot       
-03-25-07 09:02  Franck78       File Added: logerror420                      
-03-25-07 09:03  Franck78       Issue Monitored: Franck78                    
-03-25-07 10:29  Franck78       Note Added: 0002279                          
+03-25-07 17:25  Franck78       New Issue                                    
+03-25-07 17:25  Franck78       Status                   new => assigned     
+03-25-07 17:25  Franck78       Assigned To               => buildroot       
 ======================================================================
