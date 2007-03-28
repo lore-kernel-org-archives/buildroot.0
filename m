@@ -1,31 +1,25 @@
 From: Bernhard Fischer <rep.dot.nop@gmail.com>
-Date: Wed, 28 Mar 2007 23:07:31 +0200
-Subject: [Buildroot] Error with Busybox
-In-Reply-To: <460A9989.6030108@mbdsys.com>
-References: <460A9989.6030108@mbdsys.com>
-Message-ID: <20070328210731.GE24135@aon.at>
+Date: Wed, 28 Mar 2007 23:13:40 +0200
+Subject: [Buildroot] how i can crosscompiling mysql with buildroot
+In-Reply-To: <20070328153601.49940@gmx.net>
+References: <20070328153601.49940@gmx.net>
+Message-ID: <20070328211340.GF24135@aon.at>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Wed, Mar 28, 2007 at 06:36:25PM +0200, kimtuan wrote:
->Hello,
+On Wed, Mar 28, 2007 at 05:36:01PM +0200, Stephan Raue wrote:
+>Hi,
 >
->I'm trying to build with Busybox but  I can't find out why I got this 
->building error :
->
->/home/kimtuan/work/buildroot/build_arm/staging_dir/bin/arm-linux-uclibc-strip: 
->'busybox_unstripped': No such file
->install: cannot stat `busybox': No such file or directory
->make[1]: *** [install] Error 1
->make[1]: Leaving directory 
->`/home/kimtuan/work/buildroot/build_arm/busybox-1.5.0'
->make: *** [/home/kimtuan/work/buildroot/build_arm/root/bin/busybox] Error 2
+>i need a "working" mysql.mk (version 5.0.xx or version 4.xx) for buildroot to build MySQL Server and Client, does anyone know where i can get this? Or where i can get patches and instructions to crosscompiling mysql with uclibc (buildroot)?
 
-$ make busybox-clean
-$ make
-or, for more verbose output
-$ make V=1
-and show us the first error you are getting
+http://buildroot.uclibc.org/buildroot.html#add_software
+
+I didn't build mysql in a long time myself, so i can't say if you'll
+have to patch it to behave.. If you need to patch it, perhaps ask the
+mysql folks for help so it still does what it's supposed to do,
+afterwards.
+
+HTH,
