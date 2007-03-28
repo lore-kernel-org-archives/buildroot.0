@@ -1,19 +1,24 @@
-From: Stephan Raue <stephan.raue@gmx.net>
-Date: Wed, 28 Mar 2007 17:36:01 +0200
-Subject: [Buildroot] how i can crosscompiling mysql with buildroot
-Message-ID: <20070328153601.49940@gmx.net>
+From: kimtuan <kimtuan@mbdsys.com>
+Date: Wed, 28 Mar 2007 18:36:25 +0200
+Subject: [Buildroot]  Error with Busybox
+Message-ID: <460A9989.6030108@mbdsys.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi,
+Hello,
 
-i need a "working" mysql.mk (version 5.0.xx or version 4.xx) for buildroot to build MySQL Server and Client, does anyone know where i can get this? Or where i can get patches and instructions to crosscompiling mysql with uclibc (buildroot)?
+I'm trying to build with Busybox but  I can't find out why I got this 
+building error :
 
-Stephan
+/home/kimtuan/work/buildroot/build_arm/staging_dir/bin/arm-linux-uclibc-strip: 
+'busybox_unstripped': No such file
+install: cannot stat `busybox': No such file or directory
+make[1]: *** [install] Error 1
+make[1]: Leaving directory 
+`/home/kimtuan/work/buildroot/build_arm/busybox-1.5.0'
+make: *** [/home/kimtuan/work/buildroot/build_arm/root/bin/busybox] Error 2
 
--- 
-"Feel free" - 5 GB Mailbox, 50 FreeSMS/Monat ...
-Jetzt GMX ProMail testen: http://www.gmx.net/de/go/promail
+Kim Tuan
