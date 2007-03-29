@@ -1,32 +1,57 @@
-From: Yann E. MORIN <yann.morin.1998@anciens.enib.fr>
-Date: Wed, 28 Mar 2007 22:31:18 +0200
-Subject: [Buildroot] Busybox 1.5.0 support NFS with built-in NFS
-In-Reply-To: <ad84a70a0703281305w2f1df657s70e6e7f695110118@mail.gmail.com>
-References: <ad84a70a0703281305w2f1df657s70e6e7f695110118@mail.gmail.com>
-Message-ID: <200703282231.18848.yann.morin.1998@anciens.enib.fr>
+From: bugs at busybox.net <bugs@busybox.net>
+Date: Wed, 28 Mar 2007 20:52:40 -0700
+Subject: [Buildroot] [buildroot 0001293]: Can't build 20070328: configure:
+	error: get libusb 0.1.8 or newer
+Message-ID: <e861b13e021f6577ba12f399e52174e8@bugs.uclibc.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hunter,
-All,
 
-On Wednesday 28 March 2007 220, Hunter Cobbs wrote:
-> I see the option in the config file for busybox 1.5.0, but I'm not able to
-> find where to enable this feature.  Since I must have nfs to get my file
-> system fully operational, this is a must have feature.
+The following issue has been SUBMITTED. 
+====================================================================== 
+http://busybox.net/bugs/view.php?id=1293 
+====================================================================== 
+Reported By:                tony_cureington
+Assigned To:                buildroot
+====================================================================== 
+Project:                    buildroot
+Issue ID:                   1293
+Category:                   Other
+Reproducibility:            always
+Severity:                   block
+Priority:                   normal
+Status:                     assigned
+====================================================================== 
+Date Submitted:             03-28-2007 20:52 PDT
+Last Modified:              03-28-2007 20:52 PDT
+====================================================================== 
+Summary:                    Can't build 20070328: configure: error: get libusb
+0.1.8 or newer
+Description: 
+I've attached the .config file that should contain all the info needed to
+repro. I just extracted buildroot-20070328.tar.bz2, make menuconfig, make,
+and got this error. I've tried earlier builds and they had the same
+problem.
 
-Enable "RPC support" in "Busybox Settings ---> General Configuration"
+checking for strtoul... yes
+checking for uname... yes
+checking for usb_get_string_simple in -lusb... no
+configure: error: get libusb 0.1.8 or newer
+make: ***
+[/home/tony/Buildroot/buildroot/build_i486/usbutils-0.72/.configured]
+Error 1
+[tony at penguin buildroot]$
 
-Regards,
-Yann E. MORIN.
+====================================================================== 
 
--- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +0/33 662376056 | Software  Designer | \ / CAMPAIGN     |   ^                |
-| --==< ?_? >==-- ?------------.-------:  X  AGAINST      |  /e\  There is no  |
-| http://ymorin.is-a-geek.org/ | (*_*) | / \ HTML MAIL    |  """  conspiracy.  |
-?------------------------------?-------?------------------?--------------------?
+Issue History 
+Date Modified   Username       Field                    Change               
+====================================================================== 
+03-28-07 20:52  tony_cureingtonNew Issue                                    
+03-28-07 20:52  tony_cureingtonStatus                   new => assigned     
+03-28-07 20:52  tony_cureingtonAssigned To               => buildroot       
+03-28-07 20:52  tony_cureingtonFile Added: dot_config                       
+======================================================================
