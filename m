@@ -1,53 +1,44 @@
-From: bugs at busybox.net <bugs@busybox.net>
-Date: Thu, 29 Mar 2007 02:47:46 -0700
-Subject: [Buildroot] [buildroot 0001295]: GumStix Buildroot on VMWare Fedora
-	Core 6
-Message-ID: <bfc92fe1243762b520fda1eb618c01bb@bugs.busybox.net>
+From: Ulf Samuelsson <ulf@atmel.com>
+Date: Thu, 29 Mar 2007 12:30:43 +0200
+Subject: [Buildroot] BSP patch
+References: <02a401c76c07$c75473c0$01c4af0a@Glamdring>
+	<20070321224324.GD5468@aon.at>
+	<02e801c76c0e$c9eec980$01c4af0a@Glamdring>
+	<20070322132609.GA11410@aon.at>
+Message-ID: <017101c771ed$52dbe8c0$01c4af0a@Glamdring>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+[snip]
 
-The following issue has been SUBMITTED. 
-====================================================================== 
-http://busybox.net/bugs/view.php?id=1295 
-====================================================================== 
-Reported By:                nehalsh
-Assigned To:                buildroot
-====================================================================== 
-Project:                    buildroot
-Issue ID:                   1295
-Category:                   Architecture Specific
-Reproducibility:            always
-Severity:                   minor
-Priority:                   normal
-Status:                     assigned
-====================================================================== 
-Date Submitted:             03-29-2007 02:47 PDT
-Last Modified:              03-29-2007 02:47 PDT
-====================================================================== 
-Summary:                    GumStix Buildroot on VMWare Fedora Core 6
-Description: 
-I am using Fedoracore 6 on VMware ...Trying to build toolchain for GumStix
-boards. I tried with gcc 4.1.1 and Binutils 2.16.x and make gives an error
-of unrecognized emulation mode : armelf_linux_eabi
-supported mode : linux_armelf armelf
+>>The BSP patch is really there to allow two different configurations
+>>to be built within the same buildroot directory so they can share:
+>>
+>>* toolchain
+>>* root file system build directory.
+>>but have different configurations for linux kernel and busybox
+>>and eventually you may want to have different content of the root file
+>>system.
+>>
+>>The solution is to create a new directory structure
+>>target_build_<arch>/<board> where everything is built.
+>>The patch allows pre/postfixes to this directory name.
+>>
+>>The BSP patch also put some structure on where the result ends up.
+>>Today everything is stored in the top directory, but if you
+>>want to build multiple boards, then you are going to get a lot of clutter.
+>
+> We need to better differentiate between arch and cpu (generally, not in
+> your board support patch).
+>
+> Applying your patch now locally. Let's see..
+>
 
-Then i chnage gcc version 3.4.5 but in that case created output files give
-EABI version mismatch error.
-
-Rest of settings are default one
-Any one who tried this compilation with above mentioned combination ?
+Any progress?
 
 
-====================================================================== 
-
-Issue History 
-Date Modified   Username       Field                    Change               
-====================================================================== 
-03-29-07 02:47  nehalsh        New Issue                                    
-03-29-07 02:47  nehalsh        Status                   new => assigned     
-03-29-07 02:47  nehalsh        Assigned To               => buildroot       
-======================================================================
+Best Regards
+Ulf Samuelsson
