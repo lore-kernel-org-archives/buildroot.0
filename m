@@ -1,7 +1,7 @@
 From: bugs at busybox.net <bugs@busybox.net>
-Date: Wed, 28 Mar 2007 21:12:24 -0700
+Date: Wed, 28 Mar 2007 21:28:07 -0700
 Subject: [Buildroot] [buildroot 0001294]: makedevs errors out in build
-Message-ID: <d0f4c3ee24adcb9b8d0079b6d3dbefe7@bugs.uclibc.org>
+Message-ID: <87c585945a1c60d1ff53a52e08bbdbf6@bugs.uclibc.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -9,7 +9,7 @@ Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
 
-The following issue has been SUBMITTED. 
+A NOTE has been added to this issue. 
 ====================================================================== 
 http://busybox.net/bugs/view.php?id=1294 
 ====================================================================== 
@@ -25,7 +25,7 @@ Priority:                   normal
 Status:                     assigned
 ====================================================================== 
 Date Submitted:             03-28-2007 21:12 PDT
-Last Modified:              03-28-2007 21:12 PDT
+Last Modified:              03-28-2007 21:28 PDT
 ====================================================================== 
 Summary:                    makedevs errors out in build
 Description: 
@@ -59,6 +59,12 @@ exist: No such file or directory
 
 ====================================================================== 
 
+---------------------------------------------------------------------- 
+ tony_cureington - 03-28-07 21:28  
+---------------------------------------------------------------------- 
+I copied the busybox binary to the location makedevs expected it and things
+seemed to build OK. 
+
 Issue History 
 Date Modified   Username       Field                    Change               
 ====================================================================== 
@@ -66,4 +72,5 @@ Date Modified   Username       Field                    Change
 03-28-07 21:12  tony_cureingtonStatus                   new => assigned     
 03-28-07 21:12  tony_cureingtonAssigned To               => buildroot       
 03-28-07 21:12  tony_cureingtonFile Added: dot_config                       
+03-28-07 21:28  tony_cureingtonNote Added: 0002289                          
 ======================================================================
