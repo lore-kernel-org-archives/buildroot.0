@@ -1,46 +1,47 @@
-From: Ulf Samuelsson <ulf@atmel.com>
-Date: Fri, 30 Mar 2007 21:12:27 +0200
-Subject: [Buildroot] Including AT91 *.h files in arm-linux-gcc
-References: <61c0054e0703301158sdb771a8p9ffa4150289d7de0@mail.gmail.com>
-Message-ID: <010e01c772ff$6bf3b870$01c4af0a@Glamdring>
+From: Zachary P. Landau <kapheine@gmail.com>
+Date: Fri, 30 Mar 2007 16:16:03 -0400
+Subject: [Buildroot] GCC version detection in toolchain/gcc/Makefile.in
+In-Reply-To: <20070330183459.GB22338@aon.at>
+References: <a04f56da0703290736x257e4f8aqb968db9a2402e06c@mail.gmail.com>
+	<20070330183459.GB22338@aon.at>
+Message-ID: <a04f56da0703301316g58268c11qe6a18ffba4929df3@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
------ Original Message ----- 
-From: "Paul Kavan" <pkavan@gmail.com>
-To: <buildroot@uclibc.org>
-Sent: Friday, March 30, 2007 8:58 PM
-Subject: [Buildroot] Including AT91 *.h files in arm-linux-gcc
+> >Inside of that file, it uses the line: "ifeq ($(findstring
+> >3.4.,$(GCC_VERSION)),3.4.)" to detect gcc version 3.4.X.  But then a
+> >few lines down, in a separate ifeq, it uses the line: "ifeq
+> >($(findstring 4.,$(GCC_VERSION)),4.)".  I believe this is supposed to
+> >detect version "4.X.X" of GCC.  But it also seems to match 3.4.X
+> >(because that also has '4.' in it.
+> >
+> >Am I right that this is an issue, or am I missing something?
+>
+> That sounds plausible, yes.
+> What do you suggest to distinguish between gcc version 4.4.9 and 3.4.6?
 
+I don't particularly love this solution, we could parse the version
+into its individual parts, and then match against those.  Something
+like this:
 
-> Hello All:
-> 
-> I am working on some code that requires me to include some of the
-> AT91-specific header files (e.g. gpio.h) that are in the
-> buildroot/build_arm/linux-2.6.20.3/include/asm-arm directory. I am
-> more of a hardware engineer than a software engineer, so this may seem
-> basic, but what is the best way to be able to include these files and
-> the others (e.g. asm/irq.h) without having to specify the paths, which
-> can get sticky when one *.h gile calls another and so on?
-> 
-> By the way, I am using buildroot configured for an AT91SAM9260.
-> 
-> 
-> Thanks.
-> 
-> Paul
-> 
+  GCC_MAJOR:=$(shell echo $(GCC_VERSION) | cut -d'.' -f1)
+  GCC_MINOR:=$(shell echo $(GCC_VERSION) | cut -d'.' -f2)
+  GCC_SUB:=$(shell echo $(GCC_VERSION) | cut -d'.' -f3)
 
-You would be better off taking the linux-2.4.6.20 and applying my patch
-from www.at91.com Project AT91 buildroot
+Then we could do the tests like this:
 
-I think that adding the directory is the proper way to do things.
-Other people may disagree
+  ifeq ($(GCC_MAJOR).$(GCC_MINOR),3.4)
+  SOFT_FLOAT_CONFIG_OPTION:=--with-float=soft
+  else
+  SOFT_FLOAT_CONFIG_OPTION:=--without-float
+  endif
 
+and so on, for the other GCC version tests.  That way we can make sure
+we are testing the right part.  If you think this solution is okay, I
+could make a patch for Makefile.in to use this scheme.
 
-
-Best Regards
-Ulf Samuelsson
+-- 
+Zachary P. Landau <kapheine@gmail.com>
