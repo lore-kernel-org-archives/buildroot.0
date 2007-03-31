@@ -1,34 +1,61 @@
-From: don <don_reid@comcast.net>
-Date: Fri, 30 Mar 2007 16:25:57 -0700
-Subject: [Buildroot]  GCC version detection in toolchain/gcc/Makefile.in
-Message-ID: <20070330232557.GA18174@reid1.localdomain>
+From: David Lambert <dave@lambsys.com>
+Date: Fri, 30 Mar 2007 22:17:30 -0500
+Subject: [Buildroot] Error with Busybox
+In-Reply-To: <20070329103458.GA870@aon.at>
+References: <460A9989.6030108@mbdsys.com>
+	<20070328210731.GE24135@aon.at>	<460B80C7.5040804@mbdsys.com>
+	<20070329103458.GA870@aon.at>
+Message-ID: <460DD2CA.5000209@lambsys.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->> Inside of that file, it uses the line: "ifeq ($(findstring
-> >3.4.,$(GCC_VERSION)),3.4.)" to detect gcc version 3.4.X.  But then a
-> >few lines down, in a separate ifeq, it uses the line: "ifeq
-> >($(findstring 4.,$(GCC_VERSION)),4.)".  I believe this is supposed to
-> >detect version "4.X.X" of GCC.  But it also seems to match 3.4.X
-> >(because that also has '4.' in it.
-> >
-> >Am I right that this is an issue, or am I missing something?
+Bernhard Fischer wrote:
 >
-> That sounds plausible, yes.
-> What do you suggest to distinguish between gcc version 4.4.9 and
-> 3.4.6?
+> This is most likely not the first error.
+>   
+I am getting a similar problem. My error log with make V=1 is:
 
-Does make accept the '^' character for start of string/line?
+miscutils/taskset.c:17: error: expected ')' before '*' token
+miscutils/taskset.c: In function 'taskset_main':
+miscutils/taskset.c:47: error: 'cpu_set_t' undeclared (first use in this
+function)
+miscutils/taskset.c:47: error: (Each undeclared identifier is reported
+only once
+miscutils/taskset.c:47: error: for each function it appears in.)
+miscutils/taskset.c:47: error: expected ';' before 'mask'
+miscutils/taskset.c:48: warning: ISO C90 forbids mixed declarations and code
+miscutils/taskset.c:68: warning: implicit declaration of function 'CPU_ZERO'
+miscutils/taskset.c:68: error: 'new_mask' undeclared (first use in this
+function)
+miscutils/taskset.c:69: error: 'CPU_SETSIZE' undeclared (first use in
+this function)
+miscutils/taskset.c:71: warning: implicit declaration of function 'CPU_SET'
+miscutils/taskset.c:78: warning: implicit declaration of function
+'sched_getaffinity'
+miscutils/taskset.c:78: error: 'mask' undeclared (first use in this
+function)
+miscutils/taskset.c:81: warning: implicit declaration of function
+'__from_cpuset'
+miscutils/taskset.c:81: warning: format '%s' expects type 'char *', but
+argument 4 has type 'int'
+miscutils/taskset.c:86: warning: implicit declaration of function
+'sched_setaffinity'
+make[2]: *** [miscutils/taskset.o] Error 1
+make[1]: *** [miscutils] Error 2
+make[1]: Leaving directory
+`/home/dlambert/Breakaway/ARM/buildroot/build_arm/busybox'
+make: ***
+[/home/dlambert/Breakaway/ARM/buildroot/build_arm/busybox/busybox] Error 2
 
-With grep you can do this:
+Compilation exited abnormally with code 2 at Fri Mar 30 22:14:47
 
- $ echo 3.4.1 | grep "4.1"
- 3.4.1
- $ 
- $ echo 3.4.1 | grep "^4.1"
-
--- 
-Don
+> _______________________________________________
+> buildroot mailing list
+> buildroot at uclibc.org
+> http://busybox.net/mailman/listinfo/buildroot
+>
+>
+>   
