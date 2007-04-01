@@ -1,55 +1,101 @@
-From: Ulf Samuelsson <ulf@atmel.com>
-Date: Thu, 1 Mar 2007 07:13:40 +0100
-Subject: [Buildroot] static libgcc_s
-References: <45E5A4E6.3010508@indiana.edu><20070228214534.GA23235@codepoet.org>
-	<45E622E4.6010600@indiana.edu>
-Message-ID: <004901c75bcc$356388c0$8c1d10ac@atmel.com>
+From: bugs at busybox.net <bugs@busybox.net>
+Date: Sun, 1 Apr 2007 12:27:50 -0700
+Subject: [Buildroot] [buildroot 0001298]: Compilation error for busybox 1.5.0
+Message-ID: <41eecdefa2fb95fbcd58923db05272c5@bugs.uclibc.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-> Thanks Eric
-> It's a good thought. I will certainly give it a try.
-> 
-> It still, though,  leaves me with two toolchains:
-> one 'static' for dataflash and u-boot  and a second 'dynamic'  for 
-> kernel and applications (for space considerations)
-> 
-> I am still curious if one could have just one toolchain that rules them 
-> all ... :)
 
-I removed the -msoftfloat from the 
-cpu/arm920t/config.mk and
-from
-cpu/arm920t/at91rm9200/config.mk
+The following issue has been SUBMITTED. 
+====================================================================== 
+http://busybox.net/bugs/view.php?id=1298 
+====================================================================== 
+Reported By:                bifferos
+Assigned To:                buildroot
+====================================================================== 
+Project:                    buildroot
+Issue ID:                   1298
+Category:                   Architecture Specific
+Reproducibility:            always
+Severity:                   major
+Priority:                   normal
+Status:                     assigned
+====================================================================== 
+Date Submitted:             04-01-2007 12:27 PDT
+Last Modified:              04-01-2007 12:27 PDT
+====================================================================== 
+Summary:                    Compilation error for busybox 1.5.0
+Description: 
+This was from 1 Apr 2007 daily snapshot.
 
-After this I have a single toolchain which allows me to build:
+Target: mipsel
+Kernel headers: 2.4.31
+System:  Slackware 11.0  under Qemu 0.9.0.
+uclibc:   0.9.28.3
 
-* dataflashboot.bin (for AT91RM9200)
-* U-Boot
-* Linux
-* Root File System
+Pretty much everything else was defaults.
 
-It does not allow me to build at91-bootstrap.
+Error follows:
 
-> 
-> Piotr
-> 
+make -j1
+CC=/usr/src/buildroot/build_mipsel/staging_dir/bin/mipsel-linux-uclibc-gcc
+CROSS_COMPILE="/us
+r/src/buildroot/build_mipsel/staging_dir/bin/mipsel-linux-uclibc-" \
+               
+CROSS="/usr/src/buildroot/build_mipsel/staging_dir/bin/mipsel-linux-uclibc-"
+PREFIX="/
+usr/src/buildroot/build_mipsel/root" \
+                ARCH=mips \
+                EXTRA_CFLAGS="-Os -pipe " -C
+/usr/src/buildroot/build_mipsel/busybox-1.5.0
+make[1]: Entering directory
+`/usr/src/buildroot/build_mipsel/busybox-1.5.0'
+  CC      miscutils/taskset.o
+miscutils/taskset.c:17: error: syntax error before '*' token
+miscutils/taskset.c:18: warning: function declaration isn't a prototype
+miscutils/taskset.c: In function `__from_cpuset':
+miscutils/taskset.c:22: error: `CPU_SETSIZE' undeclared (first use in this
+function)
+miscutils/taskset.c:22: error: (Each undeclared identifier is reported
+only once
+miscutils/taskset.c:22: error: for each function it appears in.)
+miscutils/taskset.c:26: warning: implicit declaration of function
+`CPU_ISSET'
+miscutils/taskset.c:26: error: `mask' undeclared (first use in this
+function)
+miscutils/taskset.c: In function `taskset_main':
+miscutils/taskset.c:47: error: `cpu_set_t' undeclared (first use in this
+function)
+miscutils/taskset.c:47: error: syntax error before "mask"
+miscutils/taskset.c:68: warning: implicit declaration of function
+`CPU_ZERO'
+miscutils/taskset.c:68: error: `new_mask' undeclared (first use in this
+function)
+miscutils/taskset.c:69: error: `CPU_SETSIZE' undeclared (first use in this
+function)
+miscutils/taskset.c:71: warning: implicit declaration of function
+`CPU_SET'
+miscutils/taskset.c:78: warning: implicit declaration of function
+`sched_getaffinity'
+miscutils/taskset.c:78: error: `mask' undeclared (first use in this
+function)
+miscutils/taskset.c:86: warning: implicit declaration of function
+`sched_setaffinity'
+make[2]: *** [miscutils/taskset.o] Error 1
+make[1]: *** [miscutils] Error 2
+make[1]: Leaving directory
+`/usr/src/buildroot/build_mipsel/busybox-1.5.0'
+make: *** [/usr/src/buildroot/build_mipsel/busybox-1.5.0/busybox] Error 2
 
+====================================================================== 
 
-Best Regards
-Ulf Samuelsson                ulf at atmel.com
-Atmel Nordic AB
-Mail:  Box 2033, 174 02 Sundbyberg, Sweden
-Visit:  Kavalleriv?gen 24, 174 58 Sundbyberg, Sweden
-Phone +46 (8) 441 54 22     Fax +46 (8) 441 54 29
-GSM    +46 (706) 22 44 57
-
-Technical support when I am not available:
-AT89 C51 Applications Group: mailto:micro.hotline at nto.atmel.com
-AT90 AVR Applications Group: mailto:avr at atmel.com
-AT91 ARM Applications Group: mailto:at91support at atmel.com
-FPSLIC Application Group: mailto:fpslic at atmel.com
-Best AVR  link: www.avrfreaks.net
+Issue History 
+Date Modified   Username       Field                    Change               
+====================================================================== 
+04-01-07 12:27  bifferos       New Issue                                    
+04-01-07 12:27  bifferos       Status                   new => assigned     
+04-01-07 12:27  bifferos       Assigned To               => buildroot       
+======================================================================
