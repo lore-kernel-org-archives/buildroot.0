@@ -1,7 +1,7 @@
 From: bugs at busybox.net <bugs@busybox.net>
-Date: Sun, 1 Apr 2007 12:27:50 -0700
+Date: Mon, 2 Apr 2007 01:32:54 -0700
 Subject: [Buildroot] [buildroot 0001298]: Compilation error for busybox 1.5.0
-Message-ID: <41eecdefa2fb95fbcd58923db05272c5@bugs.uclibc.org>
+Message-ID: <f4f0bea88bc23cf14f74d907cd357214@busybox.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -9,7 +9,7 @@ Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
 
-The following issue has been SUBMITTED. 
+The following issue has been CLOSED 
 ====================================================================== 
 http://busybox.net/bugs/view.php?id=1298 
 ====================================================================== 
@@ -22,10 +22,12 @@ Category:                   Architecture Specific
 Reproducibility:            always
 Severity:                   major
 Priority:                   normal
-Status:                     assigned
+Status:                     closed
+Resolution:                 open
+Fixed in Version:           
 ====================================================================== 
 Date Submitted:             04-01-2007 12:27 PDT
-Last Modified:              04-01-2007 12:27 PDT
+Last Modified:              04-02-2007 01:32 PDT
 ====================================================================== 
 Summary:                    Compilation error for busybox 1.5.0
 Description: 
@@ -92,10 +94,18 @@ make: *** [/usr/src/buildroot/build_mipsel/busybox-1.5.0/busybox] Error 2
 
 ====================================================================== 
 
+---------------------------------------------------------------------- 
+ bernhardf - 04-02-07 01:32  
+---------------------------------------------------------------------- 
+set_sched/get_sched is only supported in uClibc-snapshot and not in
+0.9.28.x 
+
 Issue History 
 Date Modified   Username       Field                    Change               
 ====================================================================== 
 04-01-07 12:27  bifferos       New Issue                                    
 04-01-07 12:27  bifferos       Status                   new => assigned     
 04-01-07 12:27  bifferos       Assigned To               => buildroot       
+04-02-07 01:32  bernhardf      Status                   assigned => closed  
+04-02-07 01:32  bernhardf      Note Added: 0002291                          
 ======================================================================
