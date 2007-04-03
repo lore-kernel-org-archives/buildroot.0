@@ -1,45 +1,54 @@
-From: Drew Cohan <drewcohan@gmail.com>
-Date: Tue, 3 Apr 2007 15:06:11 -0400
-Subject: [Buildroot] dhcp needs a version bump
-Message-ID: <bf61e79a0704031206p522e4cffw75b7af84ebf48d72@mail.gmail.com>
+From: Benedict, Michael <MBenedict@twacs.com>
+Date: Tue, 3 Apr 2007 13:09:11 -0500
+Subject: [Buildroot] svn commit: trunk/buildroot/package/fakeroot
+In-Reply-To: <20070403153604.26FBA4807E@busybox.net>
+References: <20070403153604.26FBA4807E@busybox.net>
+Message-ID: <CF7E46FCFF66AD478BB72724345289EC2795A3@twx-exch01.twacs.local>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-dhcp-3.0.4.tar.gz is 404.  A minor version bump fixes this.
+Thanks!  As an added bonus, you can close bug #0001292 (found it after I
+posted to the list).
+	-Michael 
 
-wget --passive-ftp -P /home/myuser/buildroot/dl
-ftp://ftp.isc.org/isc/dhcp/dhcp-3.0.4.tar.gz | tee outout.txt
---14:06:01--  ftp://ftp.isc.org/isc/dhcp/dhcp-3.0.4.tar.gz
-           => `/home/myuser/buildroot/dl/dhcp-3.0.4.tar.gz'
-Resolving ftp.isc.org... 204.152.184.110, 2001:4f8:0:2::18
-Connecting to ftp.isc.org|204.152.184.110|:21... connected.
-Logging in as anonymous ... Logged in!
-==> SYST ... done.    ==> PWD ... done.
-==> TYPE I ... done.  ==> CWD /isc/dhcp ... done.
-==> PASV ... done.    ==> RETR dhcp-3.0.4.tar.gz ...
-No such file `dhcp-3.0.4.tar.gz'.
+-----Original Message-----
+From: buildroot-bounces@uclibc.org [mailto:buildroot-bounces at uclibc.org]
+On Behalf Of jacmet at uclibc.org
+Sent: Tuesday, April 03, 2007 10:36 AM
+To: buildroot at uclibc.org
+Subject: [Buildroot] svn commit: trunk/buildroot/package/fakeroot
+
+Author: jacmet
+Date: 2007-04-03 08:36:03 -0700 (Tue, 03 Apr 2007) New Revision: 18314
+
+Log:
+Version bump. Thanks to Michael Benedict
+
+Modified:
+   trunk/buildroot/package/fakeroot/fakeroot.mk
 
 
-Index: buildroot/package/dhcp/dhcp.mk
+Changeset:
+Modified: trunk/buildroot/package/fakeroot/fakeroot.mk
 ===================================================================
---- buildroot/package/dhcp/dhcp.mk    (revision 16609)
-+++ buildroot/package/dhcp/dhcp.mk    (working copy)
+--- trunk/buildroot/package/fakeroot/fakeroot.mk	2007-04-03
+15:35:26 UTC (rev 18313)
++++ trunk/buildroot/package/fakeroot/fakeroot.mk	2007-04-03
+15:36:03 UTC (rev 18314)
 @@ -3,7 +3,7 @@
- # dhcp
+ # fakeroot
  #
  #############################################################
--DHCP_VER:=3.0.4
-+DHCP_VER:=3.0.5
- DHCP_SOURCE:=dhcp-$(DHCP_VER).tar.gz
- DHCP_SITE:=ftp://ftp.isc.org/isc/dhcp
- DHCP_CAT:=$(ZCAT)
+-FAKEROOT_VERSION:=1.6.4
++FAKEROOT_VERSION:=1.6.5
+ FAKEROOT_SOURCE:=fakeroot_$(FAKEROOT_VERSION).tar.gz
+ FAKEROOT_SITE:=http://ftp.debian.org/debian/pool/main/f/fakeroot
+ FAKEROOT_CAT:=$(ZCAT)
 
-Thanks,
-
-Drew
--------------- next part --------------
-An HTML attachment was scrubbed...
-URL: http://busybox.net/lists/buildroot/attachments/20070403/86e934da/attachment.htm 
+_______________________________________________
+buildroot mailing list
+buildroot at uclibc.org
+http://busybox.net/mailman/listinfo/buildroot
