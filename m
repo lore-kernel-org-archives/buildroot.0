@@ -1,7 +1,7 @@
 From: jacmet at uclibc.org <jacmet@uclibc.org>
-Date: Tue,  3 Apr 2007 08:35:28 -0700 (PDT)
-Subject: [Buildroot] svn commit: trunk/buildroot/package/samba
-Message-ID: <20070403153528.6A2B34807B@busybox.net>
+Date: Tue,  3 Apr 2007 08:36:04 -0700 (PDT)
+Subject: [Buildroot] svn commit: trunk/buildroot/package/fakeroot
+Message-ID: <20070403153604.26FBA4807E@busybox.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -9,27 +9,27 @@ Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
 Author: jacmet
-Date: 2007-04-03 08:35:26 -0700 (Tue, 03 Apr 2007)
-New Revision: 18313
+Date: 2007-04-03 08:36:03 -0700 (Tue, 03 Apr 2007)
+New Revision: 18314
 
 Log:
-3.0.23d now under old-versions. Thanks to Michael Benedict
+Version bump. Thanks to Michael Benedict
 
 Modified:
-   trunk/buildroot/package/samba/samba.mk
+   trunk/buildroot/package/fakeroot/fakeroot.mk
 
 
 Changeset:
-Modified: trunk/buildroot/package/samba/samba.mk
+Modified: trunk/buildroot/package/fakeroot/fakeroot.mk
 ===================================================================
---- trunk/buildroot/package/samba/samba.mk	2007-04-03 12:09:46 UTC (rev 18312)
-+++ trunk/buildroot/package/samba/samba.mk	2007-04-03 15:35:26 UTC (rev 18313)
-@@ -5,7 +5,7 @@
+--- trunk/buildroot/package/fakeroot/fakeroot.mk	2007-04-03 15:35:26 UTC (rev 18313)
++++ trunk/buildroot/package/fakeroot/fakeroot.mk	2007-04-03 15:36:03 UTC (rev 18314)
+@@ -3,7 +3,7 @@
+ # fakeroot
+ #
  #############################################################
- SAMBA_VER:=3.0.23d
- SAMBA_SOURCE:=samba-$(SAMBA_VER).tar.gz
--SAMBA_SITE:=ftp://us1.samba.org/pub/samba/
-+SAMBA_SITE:=ftp://us4.samba.org/pub/samba/old-versions/
- SAMBA_DIR:=$(BUILD_DIR)/samba-$(SAMBA_VER)/source
- SAMBA_CAT:=$(ZCAT)
- SAMBA_BINARY:=bin/smbd
+-FAKEROOT_VERSION:=1.6.4
++FAKEROOT_VERSION:=1.6.5
+ FAKEROOT_SOURCE:=fakeroot_$(FAKEROOT_VERSION).tar.gz
+ FAKEROOT_SITE:=http://ftp.debian.org/debian/pool/main/f/fakeroot
+ FAKEROOT_CAT:=$(ZCAT)
