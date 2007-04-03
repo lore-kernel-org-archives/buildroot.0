@@ -1,56 +1,35 @@
-From: Benedict, Michael <MBenedict@twacs.com>
-Date: Tue, 3 Apr 2007 09:43:54 -0500
-Subject: [Buildroot] version updates (trivial patch inlined)
-Message-ID: <CF7E46FCFF66AD478BB72724345289EC2795A1@twx-exch01.twacs.local>
+From: jacmet at uclibc.org <jacmet@uclibc.org>
+Date: Tue,  3 Apr 2007 08:35:28 -0700 (PDT)
+Subject: [Buildroot] svn commit: trunk/buildroot/package/samba
+Message-ID: <20070403153528.6A2B34807B@busybox.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-These packages went 404 for me.  I grabbed the latest for valgrind and
-fakeroot, but did not change the samba version.  I do not know which is
-preferred (newer or stable version).  If there is a better way to
-distribute these updates, let me know.
-	Cheers,
-		Michael
+Author: jacmet
+Date: 2007-04-03 08:35:26 -0700 (Tue, 03 Apr 2007)
+New Revision: 18313
 
-Index: package/valgrind/valgrind.mk
-===================================================================
---- package/valgrind/valgrind.mk        (revision 18312)
-+++ package/valgrind/valgrind.mk        (working copy)
-@@ -4,7 +4,7 @@
- #
- #############################################################
+Log:
+3.0.23d now under old-versions. Thanks to Michael Benedict
 
--VALGRIND_VERSION=3.2.1
-+VALGRIND_VERSION=3.2.3
- VALGRIND_SITE:=http://valgrind.org/downloads/
- VALGRIND_DIR:=$(BUILD_DIR)/valgrind-$(VALGRIND_VERSION)
- VALGRIND_SOURCE:=valgrind-$(VALGRIND_VERSION).tar.bz2
-Index: package/fakeroot/fakeroot.mk
+Modified:
+   trunk/buildroot/package/samba/samba.mk
+
+
+Changeset:
+Modified: trunk/buildroot/package/samba/samba.mk
 ===================================================================
---- package/fakeroot/fakeroot.mk        (revision 18312)
-+++ package/fakeroot/fakeroot.mk        (working copy)
-@@ -3,7 +3,7 @@
- # fakeroot
- #
- #############################################################
--FAKEROOT_VERSION:=1.6.4
-+FAKEROOT_VERSION:=1.6.5
- FAKEROOT_SOURCE:=fakeroot_$(FAKEROOT_VERSION).tar.gz
- FAKEROOT_SITE:=http://ftp.debian.org/debian/pool/main/f/fakeroot
- FAKEROOT_CAT:=$(ZCAT)
-Index: package/samba/samba.mk
-===================================================================
---- package/samba/samba.mk      (revision 18312)
-+++ package/samba/samba.mk      (working copy)
+--- trunk/buildroot/package/samba/samba.mk	2007-04-03 12:09:46 UTC (rev 18312)
++++ trunk/buildroot/package/samba/samba.mk	2007-04-03 15:35:26 UTC (rev 18313)
 @@ -5,7 +5,7 @@
  #############################################################
  SAMBA_VER:=3.0.23d
  SAMBA_SOURCE:=samba-$(SAMBA_VER).tar.gz
 -SAMBA_SITE:=ftp://us1.samba.org/pub/samba/
-+SAMBA_SITE:=http://us3.samba.org/samba/ftp/old-versions/
++SAMBA_SITE:=ftp://us4.samba.org/pub/samba/old-versions/
  SAMBA_DIR:=$(BUILD_DIR)/samba-$(SAMBA_VER)/source
  SAMBA_CAT:=$(ZCAT)
  SAMBA_BINARY:=bin/smbd
