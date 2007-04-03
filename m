@@ -1,7 +1,7 @@
 From: jacmet at uclibc.org <jacmet@uclibc.org>
-Date: Tue,  3 Apr 2007 08:36:04 -0700 (PDT)
-Subject: [Buildroot] svn commit: trunk/buildroot/package/fakeroot
-Message-ID: <20070403153604.26FBA4807E@busybox.net>
+Date: Tue,  3 Apr 2007 08:36:18 -0700 (PDT)
+Subject: [Buildroot] svn commit: trunk/buildroot/package/valgrind
+Message-ID: <20070403153618.7F9ED4808A@busybox.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -9,27 +9,27 @@ Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
 Author: jacmet
-Date: 2007-04-03 08:36:03 -0700 (Tue, 03 Apr 2007)
-New Revision: 18314
+Date: 2007-04-03 08:36:16 -0700 (Tue, 03 Apr 2007)
+New Revision: 18315
 
 Log:
 Version bump. Thanks to Michael Benedict
 
 Modified:
-   trunk/buildroot/package/fakeroot/fakeroot.mk
+   trunk/buildroot/package/valgrind/valgrind.mk
 
 
 Changeset:
-Modified: trunk/buildroot/package/fakeroot/fakeroot.mk
+Modified: trunk/buildroot/package/valgrind/valgrind.mk
 ===================================================================
---- trunk/buildroot/package/fakeroot/fakeroot.mk	2007-04-03 15:35:26 UTC (rev 18313)
-+++ trunk/buildroot/package/fakeroot/fakeroot.mk	2007-04-03 15:36:03 UTC (rev 18314)
-@@ -3,7 +3,7 @@
- # fakeroot
+--- trunk/buildroot/package/valgrind/valgrind.mk	2007-04-03 15:36:03 UTC (rev 18314)
++++ trunk/buildroot/package/valgrind/valgrind.mk	2007-04-03 15:36:16 UTC (rev 18315)
+@@ -4,7 +4,7 @@
  #
  #############################################################
--FAKEROOT_VERSION:=1.6.4
-+FAKEROOT_VERSION:=1.6.5
- FAKEROOT_SOURCE:=fakeroot_$(FAKEROOT_VERSION).tar.gz
- FAKEROOT_SITE:=http://ftp.debian.org/debian/pool/main/f/fakeroot
- FAKEROOT_CAT:=$(ZCAT)
+ 
+-VALGRIND_VERSION=3.2.1
++VALGRIND_VERSION=3.2.3
+ VALGRIND_SITE:=http://valgrind.org/downloads/
+ VALGRIND_DIR:=$(BUILD_DIR)/valgrind-$(VALGRIND_VERSION)
+ VALGRIND_SOURCE:=valgrind-$(VALGRIND_VERSION).tar.bz2
