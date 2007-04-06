@@ -1,35 +1,31 @@
-From: aldot at uclibc.org <aldot@uclibc.org>
-Date: Fri,  6 Apr 2007 08:05:06 -0700 (PDT)
-Subject: [Buildroot] svn commit: trunk/buildroot/package/ltrace
-Message-ID: <20070406150506.2AF3448603@busybox.net>
+From: nina.holly at aerende.com <nina.holly@aerende.com>
+Date: Fri, 6 Apr 2007 09:14:33 -0700 (PDT)
+Subject: [Buildroot] frame buffer problems
+Message-ID: <2034.63.193.249.101.1175876073.squirrel@webmail.aerende.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Author: aldot
-Date: 2007-04-06 08:05:05 -0700 (Fri, 06 Apr 2007)
-New Revision: 18351
+Hi,
+    I am using Linux 2.6.10 with devfs on ARM.  I know that
+devfs is deprecated/obsolete.  The framebuffer works fine
+with buildroot svn version 15763.  But when I switched to
+buildroot version 17224 I get a return value < 0 when I try to execute
 
-Log:
-- doesn't compile if LFS is off
+ioctl(frame_buffer_ptr, FBIOGET_VSCREENINFO, &var_info);
 
+I.E. I can't read the basic frame buffer information.
 
-Modified:
-   trunk/buildroot/package/ltrace/Config.in
+1.  Is this a problem in the version of buildroot that I am using?
 
+2.  Is this because buildroot version 17224 doesn't work
+    with devfs and I need to switch to using udev?
 
-Changeset:
-Modified: trunk/buildroot/package/ltrace/Config.in
-===================================================================
---- trunk/buildroot/package/ltrace/Config.in	2007-04-06 15:01:32 UTC (rev 18350)
-+++ trunk/buildroot/package/ltrace/Config.in	2007-04-06 15:05:05 UTC (rev 18351)
-@@ -1,6 +1,7 @@
- config BR2_PACKAGE_LTRACE
- 	bool "ltrace"
- 	default n
-+	depends on BR2_LARGEFILE
- 	depends on BR2_PACKAGE_LIBELF
- 	help
- 	  Debugging program which runs a specified command until it exits.
+3.  Do I need to use Linux version greater than 2.6.15 (which works
+    with udev) to work with buildroot version 17224?
+
+Thanks in advance for any pointers.
+
+Nina
