@@ -1,31 +1,36 @@
-From: nina.holly at aerende.com <nina.holly@aerende.com>
-Date: Fri, 6 Apr 2007 09:14:33 -0700 (PDT)
-Subject: [Buildroot] frame buffer problems
-Message-ID: <2034.63.193.249.101.1175876073.squirrel@webmail.aerende.com>
+From: aldot at uclibc.org <aldot@uclibc.org>
+Date: Fri,  6 Apr 2007 09:32:05 -0700 (PDT)
+Subject: [Buildroot] svn commit: trunk/buildroot/package/readline
+Message-ID: <20070406163205.E4541485E8@busybox.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi,
-    I am using Linux 2.6.10 with devfs on ARM.  I know that
-devfs is deprecated/obsolete.  The framebuffer works fine
-with buildroot svn version 15763.  But when I switched to
-buildroot version 17224 I get a return value < 0 when I try to execute
+Author: aldot
+Date: 2007-04-06 09:32:05 -0700 (Fri, 06 Apr 2007)
+New Revision: 18352
 
-ioctl(frame_buffer_ptr, FBIOGET_VSCREENINFO, &var_info);
+Log:
+- commentary typo fix
 
-I.E. I can't read the basic frame buffer information.
 
-1.  Is this a problem in the version of buildroot that I am using?
+Modified:
+   trunk/buildroot/package/readline/readline.mk
 
-2.  Is this because buildroot version 17224 doesn't work
-    with devfs and I need to switch to using udev?
 
-3.  Do I need to use Linux version greater than 2.6.15 (which works
-    with udev) to work with buildroot version 17224?
-
-Thanks in advance for any pointers.
-
-Nina
+Changeset:
+Modified: trunk/buildroot/package/readline/readline.mk
+===================================================================
+--- trunk/buildroot/package/readline/readline.mk	2007-04-06 15:05:05 UTC (rev 18351)
++++ trunk/buildroot/package/readline/readline.mk	2007-04-06 16:32:05 UTC (rev 18352)
+@@ -63,7 +63,7 @@
+ 
+ # Install to Target directory
+ $(TARGET_DIR)/$(READLINE_TARGET_BINARY): $(READLINE_DIR)/$(READLINE_BINARY)
+-	# make sure we don't end up with lib{readline,hostory}...old
++	# make sure we don't end up with lib{readline,history}...old
+ 	$(MAKE1) DESTDIR=$(TARGET_DIR) includedir=/usr/include \
+ 		-C $(READLINE_DIR) uninstall
+ 	BUILD_CC=$(TARGET_CC) HOSTCC="$(HOSTCC)" CC=$(TARGET_CC) \
