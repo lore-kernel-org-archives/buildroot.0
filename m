@@ -1,66 +1,41 @@
-From: bugs at busybox.net <bugs@busybox.net>
-Date: Sun, 8 Apr 2007 01:09:25 -0700
-Subject: [Buildroot] [buildroot 0001305]: target "ARM" does not build
-Message-ID: <c03c24dc8759d0596c85897d20b7a074@bugs.uclibc.org>
+From: Ulf Samuelsson <ulf@atmel.com>
+Date: Sun, 8 Apr 2007 10:01:56 +0200
+Subject: [Buildroot] Building GCC/C++ compilers using Buildroot
+Message-ID: <01d901c779b6$221ca5a0$dcc4af0a@atmel.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+Tried to upgrade my ARM gcc-3.4.6 compiler in buildroot
+My host compiler is gcc-4.1.2 running on OpenSuse 10.2.
 
-The following issue has been SUBMITTED. 
-====================================================================== 
-http://busybox.net/bugs/view.php?id=1305 
-====================================================================== 
-Reported By:                bell
-Assigned To:                buildroot
-====================================================================== 
-Project:                    buildroot
-Issue ID:                   1305
-Category:                   Architecture Specific
-Reproducibility:            always
-Severity:                   minor
-Priority:                   normal
-Status:                     assigned
-====================================================================== 
-Date Submitted:             04-08-2007 01:09 PDT
-Last Modified:              04-08-2007 01:09 PDT
-====================================================================== 
-Summary:                    target "ARM" does not build
-Description: 
-Target architecture "arm" with no other changes on default config does not
-build:
+First tried gcc-4.2 and latest supported binutils    - Failed
+Then tried gcc-4.2 and binutils-2.17    failed.
+Looked into the error messages and found that the problem
+seems to occur when building the C++ compilers.
 
+Now trying gcc-4.1.2 and binutils-2.17 without C++ compilers.
 
-.debug_varnames
- *(.debug_varnames)
-
-.note.gnu.arm.ident
- *(.note.gnu.arm.ident)
-
-/DISCARD/
- *(.note.GNU-stack)
-OUTPUT(busybox_unstripped elf32-littlearm)
-collect2: ld returned 1 exit status
-/home/anwender/embedded/elta8882a/buildroot/buildroot/build_arm/staging_dir/bin/arm-linux-uclibc-strip:
-'busybox_unstripped': No such file
-install: cannot stat `busybox': No such file or directory
-make[1]: *** [install] Fehler 1
-make[1]: Leaving directory
-`/home/anwender/embedded/elta8882a/buildroot/buildroot/build_arm/busybox-1.5.0'
-make: ***
-[/home/anwender/embedded/elta8882a/buildroot/buildroot/build_arm/root/bin/busybox]
-Fehler 2
+Whats is a recommended combination of gcc and binutils 
+if you want to have a c++ cross compiler?
 
 
 
-====================================================================== 
 
-Issue History 
-Date Modified   Username       Field                    Change               
-====================================================================== 
-04-08-07 01:09  bell           New Issue                                    
-04-08-07 01:09  bell           Status                   new => assigned     
-04-08-07 01:09  bell           Assigned To               => buildroot       
-======================================================================
+
+Best Regards
+Ulf Samuelsson                ulf at atmel.com
+Atmel Nordic AB
+Mail:  Box 2033, 174 02 Sundbyberg, Sweden
+Visit:  Kavalleriv?gen 24, 174 58 Sundbyberg, Sweden
+Phone +46 (8) 441 54 22     Fax +46 (8) 441 54 29
+GSM    +46 (706) 22 44 57
+
+Technical support when I am not available:
+AT90 AVR Applications Group: mailto:avr at atmel.com
+AT91 ARM Applications Group: mailto:at91support at atmel.com
+AVR32 Applications Group        mailto:avr32 at atmel.com
+http://www.avrfreaks.net/;            http://avr32linux.org/
+http://www.at91.com/ ;                ftp://at91dist:distrib at 81.80.104.162/
