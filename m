@@ -1,51 +1,66 @@
-From: nina.holly at aerende.com <nina.holly@aerende.com>
-Date: Sat, 7 Apr 2007 06:31:44 -0700 (PDT)
-Subject: [Buildroot] frame buffer problems
-In-Reply-To: <43e72e890704061005g7acb436es181f5d9e2c788427@mail.gmail.com>
-References: <2034.63.193.249.101.1175876073.squirrel@webmail.aerende.com>
-	<43e72e890704061005g7acb436es181f5d9e2c788427@mail.gmail.com>
-Message-ID: <2666.63.193.249.101.1175952704.squirrel@webmail.aerende.com>
+From: bugs at busybox.net <bugs@busybox.net>
+Date: Sun, 8 Apr 2007 01:09:25 -0700
+Subject: [Buildroot] [buildroot 0001305]: target "ARM" does not build
+Message-ID: <c03c24dc8759d0596c85897d20b7a074@bugs.uclibc.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-The frame buffer test program I am using does the following:
 
-A.  Open /dev/fb/0 with fb_ptr = open("/dev/fb/0", O_RDWR);
-B.  ioctl(frame_buffer_ptr, FBIOGET_FSCREENINFO, &fix_info);
-C.  ioctl(frame_buffer_ptr, FBIOGET_VSCREENINFO, &var_info);
-D.  fbp = (char *)mmap(0, screensize, READ | WRITE, MAP_SHARED, fb_ptr, 0);
+The following issue has been SUBMITTED. 
+====================================================================== 
+http://busybox.net/bugs/view.php?id=1305 
+====================================================================== 
+Reported By:                bell
+Assigned To:                buildroot
+====================================================================== 
+Project:                    buildroot
+Issue ID:                   1305
+Category:                   Architecture Specific
+Reproducibility:            always
+Severity:                   minor
+Priority:                   normal
+Status:                     assigned
+====================================================================== 
+Date Submitted:             04-08-2007 01:09 PDT
+Last Modified:              04-08-2007 01:09 PDT
+====================================================================== 
+Summary:                    target "ARM" does not build
+Description: 
+Target architecture "arm" with no other changes on default config does not
+build:
 
 
-1.  If the kernel is compiled using buildroot version 17224
-    and run in a buildroot version 17224 root filesystem it
-    is failing with errno = -1 on
+.debug_varnames
+ *(.debug_varnames)
 
-    errno = ioctl(frame_buffer_ptr, FBIOGET_FSCREENINFO, &fix_info);
+.note.gnu.arm.ident
+ *(.note.gnu.arm.ident)
 
-2.  If the kernel is compiled using buildroot version 15763 but
-    run in a buildroot 17224 root filesystem, the failure occurs
-    when trying to map the framebuffer to memory using mmap with
-    a return value of -1.
+/DISCARD/
+ *(.note.GNU-stack)
+OUTPUT(busybox_unstripped elf32-littlearm)
+collect2: ld returned 1 exit status
+/home/anwender/embedded/elta8882a/buildroot/buildroot/build_arm/staging_dir/bin/arm-linux-uclibc-strip:
+'busybox_unstripped': No such file
+install: cannot stat `busybox': No such file or directory
+make[1]: *** [install] Fehler 1
+make[1]: Leaving directory
+`/home/anwender/embedded/elta8882a/buildroot/buildroot/build_arm/busybox-1.5.0'
+make: ***
+[/home/anwender/embedded/elta8882a/buildroot/buildroot/build_arm/root/bin/busybox]
+Fehler 2
 
 
-Nina
 
+====================================================================== 
 
-
-
-> On 4/6/07, nina.holly at aerende.com <nina.holly@aerende.com> wrote:
->> Hi,
->>     I am using Linux 2.6.10 with devfs on ARM.  I know that
->> devfs is deprecated/obsolete.  The framebuffer works fine
->> with buildroot svn version 15763.  But when I switched to
->> buildroot version 17224 I get a return value < 0 when I try to execute
->>
->> ioctl(frame_buffer_ptr, FBIOGET_VSCREENINFO, &var_info);
->
-> Was the return value -14 or -19?
->
->   Luis
->
+Issue History 
+Date Modified   Username       Field                    Change               
+====================================================================== 
+04-08-07 01:09  bell           New Issue                                    
+04-08-07 01:09  bell           Status                   new => assigned     
+04-08-07 01:09  bell           Assigned To               => buildroot       
+======================================================================
