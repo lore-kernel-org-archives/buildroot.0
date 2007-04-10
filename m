@@ -1,39 +1,51 @@
 From: Bernhard Fischer <rep.dot.nop@gmail.com>
-Date: Tue, 10 Apr 2007 12:18:39 +0200
-Subject: [Buildroot] Building GCC/C++ compilers using Buildroot
-In-Reply-To: <011e01c77b4f$50a67eb0$dcc4af0a@atmel.com>
-References: <01d901c779b6$221ca5a0$dcc4af0a@atmel.com>
-	<20070410080525.GB13906@aon.at>
-	<011e01c77b4f$50a67eb0$dcc4af0a@atmel.com>
-Message-ID: <20070410101838.GA15274@aon.at>
+Date: Tue, 10 Apr 2007 12:39:01 +0200
+Subject: [Buildroot] [patch] sysroot support in toolchain,
+	use correct pathes in staging_dir
+Message-ID: <20070410103901.GC15274@aon.at>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Tue, Apr 10, 2007 at 11:02:00AM +0200, Ulf Samuelsson wrote:
->> On Sun, Apr 08, 2007 at 10:01:56AM +0200, Ulf Samuelsson wrote:
->>>Tried to upgrade my ARM gcc-3.4.6 compiler in buildroot
->>>My host compiler is gcc-4.1.2 running on OpenSuse 10.2.
->>>
->>>First tried gcc-4.2 and latest supported binutils    - Failed
->> 
->> The snapshot-date is from sjhill and is outdated. I use the
->> gcc-4_2-branch, c, c++, fortran frontends work fine. If one of those
->> fails, i'm interrested in hearing about it (at least about c and
->> fortran; c++ lacks uClibc++ integration/support so isn't interresting
->> for me and i don't have spare-time to look into it).
->> 
->
->The failure was when building the C++ compiler.
->
->Are you saying that you cannot build a g++ compiler using buildroot and uClibc?
+Hi,
 
-I'm saying that the snapshot-date from gcc-4.2 is one sjhill used at one
-point -- or still uses, i don't know= and that gcc-4.2 from the 4_2-branch
--- which i'm using -- can build a c, c++ and fortran frontend just fine.
+This is a heads-up that i mean to correct the pathes to includes and
+libs in the staging dir as suggested in bug 
+http://busybox.net/bugs/view.php?id=1290
+Doing so is ment to ease moving the staging-dir (and it's
+cross-compiler) to a different machine for re-use.
 
-Furthermore i'm observing that we do not (yet, patches welcome) use
-uClibc++ (http://cxx.uclibc.org/ for your convenience) for gcc in
-buildroot.
+The theory of operation is that we aim to keep the positions of "normal"
+desktop machines for the directory layout and also build the toolchain
+with full sysroot-support to avoid trouble with hardcoded search pathes
+to headers and libraries.
+
+A preliminary incarnation which only takes care of gcc-4.x is here:
+
+http://uclibc.org/~aldot/buildroot.mine.cow.20070406-1957.diff.bz2
+(134688 Bytes)
+diffstat:
+ toolchain/sstrip/sstrip.mk                             |   10 
+ toolchain/binutils/binutils.mk                         |   38 
+ toolchain/gcc/gcc-uclibc-3.x.mk                        |    6 
+ toolchain/gcc/gcc-uclibc-4.x.mk                        |  451 
+ toolchain/uClibc/uclibc.mk                             |   65 
+ Config.in                                              |   27 
+ package/ncurses/ncurses.mk                             |   38 
+ package/openssh/openssh.mk                             |   10 
+ package/openssl/openssl.mk                             |   55 
+ package/m4/m4.mk                                       |   11 
+ package/mpfr/mpfr.mk                                   |   47 
+ package/ltrace/ltrace-svn-20070406.01.autoreconf.patch | 5948 +++++
+ package/ltrace/ltrace.mk                               |   37 
+ package/ltrace/ltrace-svn-20070406.00.patch            |19000 +++++++++++++++++
+ package/Makefile.in                                    |   54 
+ package/zlib/zlib.mk                                   |   56 
+ package/gmp/gmp.mk                                     |   49 
+ Makefile                                               |    7 
+ 18 files changed, 25681 insertions(+), 228 deletions(-)
+
+The ltrace patch is not strictly related to the patch but i had to
+pickup the latest version of it locally, fwiw.
