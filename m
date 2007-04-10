@@ -1,36 +1,33 @@
-From: Yann E. MORIN <yann.morin.1998@anciens.enib.fr>
-Date: Tue, 10 Apr 2007 10:38:06 +0200
-Subject: [Buildroot] arm compile problem around multi-cpu stuff
-In-Reply-To: <cd7850860704091507t6d0e1d46s329828870aa429d0@mail.gmail.com>
-References: <cd7850860704091507t6d0e1d46s329828870aa429d0@mail.gmail.com>
-Message-ID: <200704101038.06153.yann.morin.1998@anciens.enib.fr>
+From: Ulf Samuelsson <ulf@atmel.com>
+Date: Tue, 10 Apr 2007 11:02:00 +0200
+Subject: [Buildroot] Building GCC/C++ compilers using Buildroot
+References: <01d901c779b6$221ca5a0$dcc4af0a@atmel.com>
+	<20070410080525.GB13906@aon.at>
+Message-ID: <011e01c77b4f$50a67eb0$dcc4af0a@atmel.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Mark,
-All,
-
-On Tuesday 10 April 2007 00:07, mark roths wrote:
-> I am trying to build a recent (uclibc9.28.3 based) rfs using one of the
-> latest buildroot snapshots.  All are failing
-> to compile ./build_arm/busybox-1.5.0/miscutils/taskset.c
+> On Sun, Apr 08, 2007 at 10:01:56AM +0200, Ulf Samuelsson wrote:
+>>Tried to upgrade my ARM gcc-3.4.6 compiler in buildroot
+>>My host compiler is gcc-4.1.2 running on OpenSuse 10.2.
+>>
+>>First tried gcc-4.2 and latest supported binutils    - Failed
 > 
-> cpu_set_t is used but nowhere defined.  In addition there are lots of
-> undefined macros e.g. CPU_SETSIZE()
-> that also create errors.
+> The snapshot-date is from sjhill and is outdated. I use the
+> gcc-4_2-branch, c, c++, fortran frontends work fine. If one of those
+> fails, i'm interrested in hearing about it (at least about c and
+> fortran; c++ lacks uClibc++ integration/support so isn't interresting
+> for me and i don't have spare-time to look into it).
+> 
 
-uClibc-0.9.28.* and before does not support cpu_set. Disable taskset in BusyBox,
-or try a snapshot of uClibc.
+The failure was when building the C++ compiler.
 
-Yann E. MORIN.
+Are you saying that you cannot build a g++ compiler using buildroot and uClibc?
 
--- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +0/33 662376056 | Software  Designer | \ / CAMPAIGN     |   ^                |
-| --==< ?_? >==-- ?------------.-------:  X  AGAINST      |  /e\  There is no  |
-| http://ymorin.is-a-geek.org/ | (*_*) | / \ HTML MAIL    |  """  conspiracy.  |
-?------------------------------?-------?------------------?--------------------?
+
+
+Best Regards
+Ulf Samuelsson
