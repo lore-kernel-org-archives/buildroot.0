@@ -1,31 +1,28 @@
-From: Philippe Ney <philippe.ney@pardes.ws>
-Date: Tue, 10 Apr 2007 09:59:45 +0200
+From: Bernhard Fischer <rep.dot.nop@gmail.com>
+Date: Tue, 10 Apr 2007 10:05:25 +0200
 Subject: [Buildroot] Building GCC/C++ compilers using Buildroot
 In-Reply-To: <01d901c779b6$221ca5a0$dcc4af0a@atmel.com>
 References: <01d901c779b6$221ca5a0$dcc4af0a@atmel.com>
-Message-ID: <20070410095945.a9927000.philippe.ney@pardes.ws>
+Message-ID: <20070410080525.GB13906@aon.at>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-> Tried to upgrade my ARM gcc-3.4.6 compiler in buildroot
-> My host compiler is gcc-4.1.2 running on OpenSuse 10.2.
-> 
-> First tried gcc-4.2 and latest supported binutils    - Failed
-> Then tried gcc-4.2 and binutils-2.17    failed.
-> Looked into the error messages and found that the problem
-> seems to occur when building the C++ compilers.
-> 
-> Now trying gcc-4.1.2 and binutils-2.17 without C++ compilers.
-> 
-> Whats is a recommended combination of gcc and binutils 
-> if you want to have a c++ cross compiler?
+On Sun, Apr 08, 2007 at 10:01:56AM +0200, Ulf Samuelsson wrote:
+>Tried to upgrade my ARM gcc-3.4.6 compiler in buildroot
+>My host compiler is gcc-4.1.2 running on OpenSuse 10.2.
+>
+>First tried gcc-4.2 and latest supported binutils    - Failed
 
-Hello,
+The snapshot-date is from sjhill and is outdated. I use the
+gcc-4_2-branch, c, c++, fortran frontends work fine. If one of those
+fails, i'm interrested in hearing about it (at least about c and
+fortran; c++ lacks uClibc++ integration/support so isn't interresting
+for me and i don't have spare-time to look into it).
 
-gcc 4.0.3 with binutils 2.17 works for me with gcc 4.1.2 (Debian)
-and gcc 4.0.3 (Ubuntu).
-
-Philippe
+binutils should be fine, too. I use HJ's but 2.17 should work, i
+seldomely use it, though.
+gcc-4.1.2 works (or worked when it was released, at least).
+I, personally do not use binutils < 2.17 nor gcc < 4.1.2 ever, fwiw.
