@@ -1,25 +1,33 @@
-From: mark roths <mroths@gmail.com>
-Date: Mon, 9 Apr 2007 15:07:39 -0700
-Subject: [Buildroot] arm compile problem around multi-cpu stuff
-Message-ID: <cd7850860704091507t6d0e1d46s329828870aa429d0@mail.gmail.com>
+From: Alexander Rigbo <alexander.rigbo@acgnystrom.se>
+Date: Tue, 10 Apr 2007 07:23:17 +0200
+Subject: [Buildroot] Kernel version's
+In-Reply-To: <46195F39.2020108@teamboyce.co.uk>
+References: <46195F39.2020108@teamboyce.co.uk>
+Message-ID: <461B1F45.7000100@acgnystrom.se>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-I am trying to build a recent (uclibc9.28.3 based) rfs using one of the
-latest buildroot snapshots.  All are failing
-to compile ./build_arm/busybox-1.5.0/miscutils/taskset.c
+Hello,
 
-cpu_set_t is used but nowhere defined.  In addition there are lots of
-undefined macros e.g. CPU_SETSIZE()
-that also create errors.
-
-Any help appreciated.
-
-Mark Roths
-Softair Microsystems
--------------- next part --------------
-An HTML attachment was scrubbed...
-URL: http://busybox.net/lists/buildroot/attachments/20070409/8d626c02/attachment.htm 
+Rod Boyce wrote:
+> All,
+>
+> I have testing out build root for my embedded Via project.  But I cannot 
+> figure out why the system insists on downloading Linux kernel version 
+> 2.6.11.5 when I have asked for 2.6.20.4?
+>   
+My guess would be that buildroot is still configured to use kernel 
+headers version 2.6.11.5. Can you check this out?
+> Regards,
+> Rod Boyce
+> _______________________________________________
+> buildroot mailing list
+> buildroot at uclibc.org
+> http://busybox.net/mailman/listinfo/buildroot
+>
+>   
+Best Regards
+Alexander
