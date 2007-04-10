@@ -1,28 +1,36 @@
-From: Bernhard Fischer <rep.dot.nop@gmail.com>
-Date: Tue, 10 Apr 2007 10:05:25 +0200
-Subject: [Buildroot] Building GCC/C++ compilers using Buildroot
-In-Reply-To: <01d901c779b6$221ca5a0$dcc4af0a@atmel.com>
-References: <01d901c779b6$221ca5a0$dcc4af0a@atmel.com>
-Message-ID: <20070410080525.GB13906@aon.at>
+From: Yann E. MORIN <yann.morin.1998@anciens.enib.fr>
+Date: Tue, 10 Apr 2007 10:38:06 +0200
+Subject: [Buildroot] arm compile problem around multi-cpu stuff
+In-Reply-To: <cd7850860704091507t6d0e1d46s329828870aa429d0@mail.gmail.com>
+References: <cd7850860704091507t6d0e1d46s329828870aa429d0@mail.gmail.com>
+Message-ID: <200704101038.06153.yann.morin.1998@anciens.enib.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Sun, Apr 08, 2007 at 10:01:56AM +0200, Ulf Samuelsson wrote:
->Tried to upgrade my ARM gcc-3.4.6 compiler in buildroot
->My host compiler is gcc-4.1.2 running on OpenSuse 10.2.
->
->First tried gcc-4.2 and latest supported binutils    - Failed
+Mark,
+All,
 
-The snapshot-date is from sjhill and is outdated. I use the
-gcc-4_2-branch, c, c++, fortran frontends work fine. If one of those
-fails, i'm interrested in hearing about it (at least about c and
-fortran; c++ lacks uClibc++ integration/support so isn't interresting
-for me and i don't have spare-time to look into it).
+On Tuesday 10 April 2007 00:07, mark roths wrote:
+> I am trying to build a recent (uclibc9.28.3 based) rfs using one of the
+> latest buildroot snapshots.  All are failing
+> to compile ./build_arm/busybox-1.5.0/miscutils/taskset.c
+> 
+> cpu_set_t is used but nowhere defined.  In addition there are lots of
+> undefined macros e.g. CPU_SETSIZE()
+> that also create errors.
 
-binutils should be fine, too. I use HJ's but 2.17 should work, i
-seldomely use it, though.
-gcc-4.1.2 works (or worked when it was released, at least).
-I, personally do not use binutils < 2.17 nor gcc < 4.1.2 ever, fwiw.
+uClibc-0.9.28.* and before does not support cpu_set. Disable taskset in BusyBox,
+or try a snapshot of uClibc.
+
+Yann E. MORIN.
+
+-- 
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +0/33 662376056 | Software  Designer | \ / CAMPAIGN     |   ^                |
+| --==< ?_? >==-- ?------------.-------:  X  AGAINST      |  /e\  There is no  |
+| http://ymorin.is-a-geek.org/ | (*_*) | / \ HTML MAIL    |  """  conspiracy.  |
+?------------------------------?-------?------------------?--------------------?
