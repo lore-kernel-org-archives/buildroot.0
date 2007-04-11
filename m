@@ -1,42 +1,24 @@
 From: Ulf Samuelsson <ulf@atmel.com>
-Date: Wed, 11 Apr 2007 22:07:23 +0200
-Subject: [Buildroot] busybox-1.5.0 miscutils/taskset.c compile errors
-References: <010001c77c24$e9ee8ba0$254565d5@atmel.com>
-	<200704112118.19272.vda.linux@googlemail.com>
-Message-ID: <031901c77c75$55f6e450$254565d5@atmel.com>
+Date: Thu, 12 Apr 2007 00:19:12 +0200
+Subject: [Buildroot] LINUX_HEADERS_DIR
+Message-ID: <001501c77c87$75b60200$dcc4af0a@atmel.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+Today we define this as:
 
+LINUX_HEADERS_DIR:=$(TOOL_BUILD_DIR)/linux
 
-> On Wednesday 11 April 2007 12:29, Ulf Samuelsson wrote:
->> It seems that there is some undefined defines's in the "taskset.c"
->> 
->> CPU_ISSET
->> CPU_SETSIZE
->> CPU_ZERO
->> CPU_SET
->> 
->> They are supposed to be set in "sched.h", and they are present in 
->> 
->> /usr/include/sched.h 
->> 
->> on my OpenSuse PC, but they are not present in linux-2.6.20.4 tarball
->> 
->> I could not find them in the toolchain includes...
-> 
-> my copy of glibc 2.4 supplies /usr/include/sched.h, and it does contain
-> those defines.
-> --
-> vda
->
+which means that the Linux Headers is not part of the toolchain built by buildroot
 
-The buildroot toolchain is built using uclibc so maybe it is an uclibc problem then?
-Then definitely, buildroot busybox configs should not enable building "taskset.c"...
+At first sight, it appears to me that you could as well have 
 
+LINUX_HEADERS_DIR:=$(STAGING_DIR)
+
+Any reason not to change to this?
 
 Best Regards
 Ulf Samuelsson
