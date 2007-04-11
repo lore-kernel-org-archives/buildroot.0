@@ -1,73 +1,45 @@
-From: bugs at busybox.net <bugs@busybox.net>
-Date: Wed, 11 Apr 2007 05:46:18 -0700
-Subject: [Buildroot] [buildroot 0001309]: Busybox 1.5.0 build crashes when
-	building miscutils/patchset.c under buildroot
-Message-ID: <226d87f12595209fd96a821038362ce8@busybox.net>
+From: Ulf Samuelsson <ulf@atmel.com>
+Date: Wed, 11 Apr 2007 17:01:44 +0200
+Subject: [Buildroot] svn commit: trunk/buildroot:
+	target/devicetarget/device/x86/i386 too etc...
+References: <20070411082200.973434808C@busybox.net>
+Message-ID: <01ce01c77c4b$27966e70$254565d5@atmel.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+While it is nice to have these things, I propose that we put the 
+linux stuff in a subdirectory of its own.
 
-The following issue has been CLOSED 
-====================================================================== 
-http://busybox.net/bugs/view.php?id=1309 
-====================================================================== 
-Reported By:                Ulf Samuelsson
-Assigned To:                buildroot
-====================================================================== 
-Project:                    buildroot
-Issue ID:                   1309
-Category:                   Architecture Specific
-Reproducibility:            always
-Severity:                   minor
-Priority:                   normal
-Status:                     closed
-Resolution:                 open
-Fixed in Version:           
-====================================================================== 
-Date Submitted:             04-11-2007 03:44 PDT
-Last Modified:              04-11-2007 05:46 PDT
-====================================================================== 
-Summary:                    Busybox 1.5.0 build crashes when building
-miscutils/patchset.c under buildroot
-Description: 
-It seems that there is some undefined "defines"'s in the "taskset.c"
+I.E:  targets/linux
 
-CPU_ISSET
-CPU_SETSIZE
-CPU_ZERO
-CPU_SET
+which should include a     "Config.in" and a "Makefile.in"
 
-They are supposed to be set in "include/sched.h", and they are present in
+Also I think you do not want to store the LINUX26_KCONFIG in just
+any place in your file system.
+Is it not better to have the configurable, but normally  in the board directory? 
+
+A more flexible way would be to have the default value to be
+
+$(BR2_BOARD_PATH)/.config
+
+I.E: 
+
+config BR2_PACKAGE_LINUX_KCONFIG
+ string ".config file"
+ depends on BR2_PACKAGE_LINUX
+ default "$(BR2_BOARD_PATH)/linux26.config"
+ help
+   kernel's .config to use  
+
+We should also consider running
+"make <board>_defconfig"
+on the kernel as an option to providing the kconfig file.
 
 
-/usr/include/sched.h 
+Will send a patch which will do just this, (but not your latest patch)
 
-on my OpenSuse 10.2 PC, but they are not present in the linux-2.6.20.4
-tarball
-
-I could not find them in the toolchain includes...
-
-
-There is a compile error at line 17 as well...
-
-====================================================================== 
-
----------------------------------------------------------------------- 
- bernhardf - 04-11-07 05:46  
----------------------------------------------------------------------- 
-1) this is not a buildroot issue.
-2) read the helptext for taskset
-3) if you need taskset, use uClibc-trunk 
-
-Issue History 
-Date Modified   Username       Field                    Change               
-====================================================================== 
-04-11-07 03:44  Ulf Samuelsson New Issue                                    
-04-11-07 03:44  Ulf Samuelsson Status                   new => assigned     
-04-11-07 03:44  Ulf Samuelsson Assigned To               => buildroot       
-04-11-07 05:46  bernhardf      Status                   assigned => closed  
-04-11-07 05:46  bernhardf      Note Added: 0002306                          
-======================================================================
+Best Regards
+Ulf Samuelsson
