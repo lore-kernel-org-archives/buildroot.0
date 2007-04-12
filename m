@@ -1,50 +1,45 @@
-From: Bernhard Fischer <rep.dot.nop@gmail.com>
-Date: Thu, 12 Apr 2007 09:12:05 +0200
-Subject: [Buildroot] busybox-1.5.0 miscutils/taskset.c compile errors
-In-Reply-To: <031901c77c75$55f6e450$254565d5@atmel.com>
-References: <010001c77c24$e9ee8ba0$254565d5@atmel.com>
-	<200704112118.19272.vda.linux@googlemail.com>
-	<031901c77c75$55f6e450$254565d5@atmel.com>
-Message-ID: <20070412071205.GC4244@aon.at>
+From: Haavard Skinnemoen <hskinnemoen@atmel.com>
+Date: Thu, 12 Apr 2007 13:02:30 +0200
+Subject: [Buildroot] BSP patch
+In-Reply-To: <009801c77b74$6b3533a0$dcc4af0a@atmel.com>
+References: <02a401c76c07$c75473c0$01c4af0a@Glamdring>
+	<20070321224324.GD5468@aon.at>
+	<02e801c76c0e$c9eec980$01c4af0a@Glamdring>
+	<20070322132609.GA11410@aon.at>
+	<017101c771ed$52dbe8c0$01c4af0a@Glamdring>
+	<20070410121838.GA16751@aon.at>
+	<009801c77b74$6b3533a0$dcc4af0a@atmel.com>
+Message-ID: <20070412130230.6638d243@dhcp-252-105.norway.atmel.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Wed, Apr 11, 2007 at 10:07:23PM +0200, Ulf Samuelsson wrote:
->
->
->> On Wednesday 11 April 2007 12:29, Ulf Samuelsson wrote:
->>> It seems that there is some undefined defines's in the "taskset.c"
->>> 
->>> CPU_ISSET
->>> CPU_SETSIZE
->>> CPU_ZERO
->>> CPU_SET
->>> 
->>> They are supposed to be set in "sched.h", and they are present in 
->>> 
->>> /usr/include/sched.h 
->>> 
->>> on my OpenSuse PC, but they are not present in linux-2.6.20.4 tarball
->>> 
->>> I could not find them in the toolchain includes...
->> 
->> my copy of glibc 2.4 supplies /usr/include/sched.h, and it does contain
->> those defines.
->> --
->> vda
->>
->
->The buildroot toolchain is built using uclibc so maybe it is an uclibc problem then?
->Then definitely, buildroot busybox configs should not enable building "taskset.c"...
+On Tue, 10 Apr 2007 15:22:38 +0200
+"Ulf Samuelsson" <ulf@atmel.com> wrote:
 
-The user should not choose to use stuff that does not work for their
-config. taskset works perfectly well with uClibc trunk, so, as said, if
-you need taskset then use uClibc-trunk otherwise turn it off.
-Keep in mind that buildroot's config is supposed to be set by the user
-depending on their needs. It's really a "doctor, it hurts when i.."
-(non-)issue.
+> > avr32_gcc/toolchain_gcc_4.0.2_gcc-4.0.2-atmel.0.99.2.patch.patch
+> > 4.0.2 is deprecated. The current stable release is 4.1.2, 4.0.4 was the
+> > last release of 4.0 so far.  
+> 
+> I know, you told me before.
+> And does not contain any AVR32 patches.
+> Everyone using the AVR32 will have to live with the 4.0.1 release
+> until the AVR32 team provides an updated compiler.
+> The only viable alternative is to not provide AVR32 support at all in buildroot.
 
-kind regards,
+We're currently testing binutils-2.17 and gcc-4.1.2 on avr32. I'll let
+you know when we're confident that it's working properly, but at least
+binutils seems to be working fine (I haven't gotten around to test gcc
+myself yet.)
+
+In the long term, we want to get support for avr32 upstream, but it
+will probably take a while before we get everything sorted out.
+
+In the mean time, you might want to check out the patches I've put up
+at http://avr32linux.org/twiki/bin/view/Main/DevelopmentTools for
+binutils 2.17 and gcc 4.0.4. Those are the patches I used to generate
+the filesystem I'm currently using on my test system (using buildroot.)
+
+Haavard
