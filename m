@@ -1,24 +1,68 @@
-From: Ulf Samuelsson <ulf@atmel.com>
-Date: Thu, 12 Apr 2007 00:19:12 +0200
-Subject: [Buildroot] LINUX_HEADERS_DIR
-Message-ID: <001501c77c87$75b60200$dcc4af0a@atmel.com>
+From: Samir <samir.rawal@tokheimkaizen.com>
+Date: Thu, 12 Apr 2007 09:18:57 +0530
+Subject: [Buildroot] C++ support not working by Buildroot
+Message-ID: <MAILrRjbDt3HvoFOAmE000001a9@mail.tokheimkaizen.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Today we define this as:
+Dear All
 
-LINUX_HEADERS_DIR:=$(TOOL_BUILD_DIR)/linux
+ 
 
-which means that the Linux Headers is not part of the toolchain built by buildroot
+I am building Tool chain using Build root.
 
-At first sight, it appears to me that you could as well have 
+My target is at91rm9200(arm920t).
 
-LINUX_HEADERS_DIR:=$(STAGING_DIR)
+ 
 
-Any reason not to change to this?
+I also enable C++ support for that.
 
-Best Regards
-Ulf Samuelsson
+Tool chain is build successfully 
+
+ 
+
+But when I compile my CPP project.
+
+It doesn't work.
+
+The ERROR is:
+
+/home/buildroot/build_arm/staging_dir/gcc/arm-linux-uclibc/3.4.6/../../../ar
+m-linux-uclibc/bin/ld:test1.o: Relocations in generic ELF (EM: 3).
+
+Test1.o: could not read symbols:File is in wrong format
+
+Collect2: ld returned 1 exit status.
+
+ 
+
+I think my toolchain is OK.
+
+There is some linking is required.
+
+ 
+
+How to resolve this?
+
+What parameter I need to support for enable C++?
+
+What library should link?
+
+ 
+
+Samir Raval
+
+(R&D Department)
+
+Tokheim Kaizen Pvt. Ltd.
+
+ 
+
+ 
+
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: http://busybox.net/lists/buildroot/attachments/20070412/087629f0/attachment.htm 
