@@ -1,7 +1,7 @@
 From: bugs at busybox.net <bugs@busybox.net>
-Date: Fri, 13 Apr 2007 07:10:59 -0700
+Date: Fri, 13 Apr 2007 07:13:39 -0700
 Subject: [Buildroot] [buildroot 0001300]: gettext building problem.
-Message-ID: <04592020b85679c24252b400f23b72e7@busybox.net>
+Message-ID: <ce3c78d01213ee6361ae89f8399524dc@busybox.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -25,7 +25,7 @@ Priority:                   normal
 Status:                     assigned
 ====================================================================== 
 Date Submitted:             04-04-2007 06:50 PDT
-Last Modified:              04-13-2007 07:10 PDT
+Last Modified:              04-13-2007 07:13 PDT
 ====================================================================== 
 Summary:                    gettext building problem.
 Description: 
@@ -81,6 +81,27 @@ Put it into packages/gettext and build will work
 Cheers, 
 Fran?ois Visconte 
 
+---------------------------------------------------------------------- 
+ fv - 04-13-07 07:13  
+---------------------------------------------------------------------- 
+Sorry for the error, the good patch is : 
+
+
+
+--- gettext-0.14.6/gettext-runtime/intl/plural-exp.h.old        2005-05-20
+23:03:38.000000000 +0200
++++ gettext-0.14.6/gettext-runtime/intl/plural-exp.h    2007-04-13
+15:54:54.000000000 +0200
+@@ -110,7 +110,7 @@
+                               unsigned long int *npluralsp)
+      internal_function;
+ 
+-#if !defined (_LIBC) && !defined (IN_LIBINTL)
++#if !defined (__UCLIBC__) && !defined (_LIBC) && !defined (IN_LIBINTL)
+ extern unsigned long int plural_eval (struct expression *pexp,
+                              unsigned long int n);
+ #endif 
+
 Issue History 
 Date Modified   Username       Field                    Change               
 ====================================================================== 
@@ -88,4 +109,7 @@ Date Modified   Username       Field                    Change
 04-04-07 06:50  fv             Status                   new => assigned     
 04-04-07 06:50  fv             Assigned To               => buildroot       
 04-13-07 07:10  fv             Note Added: 0002311                          
+04-13-07 07:11  fv             File Added: gettext-plural-exp.patch             
+      
+04-13-07 07:13  fv             Note Added: 0002312                          
 ======================================================================
