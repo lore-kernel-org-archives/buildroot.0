@@ -1,7 +1,7 @@
 From: sjhill at uclibc.org <sjhill@uclibc.org>
-Date: Thu, 12 Apr 2007 19:04:33 -0700 (PDT)
-Subject: [Buildroot] svn commit: trunk/buildroot/toolchain/gcc
-Message-ID: <20070413020433.38A534807B@busybox.net>
+Date: Thu, 12 Apr 2007 19:43:29 -0700 (PDT)
+Subject: [Buildroot] svn commit: trunk/buildroot/package/file
+Message-ID: <20070413024329.24C704808A@busybox.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -9,34 +9,32 @@ Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
 Author: sjhill
-Date: 2007-04-12 19:04:32 -0700 (Thu, 12 Apr 2007)
-New Revision: 18422
+Date: 2007-04-12 19:43:28 -0700 (Thu, 12 Apr 2007)
+New Revision: 18423
 
 Log:
-If using an external toolchain, don't include any of this stuff.
+Need the target LDFLAGS for this to link using external toolchain.
 
 
 Modified:
-   trunk/buildroot/toolchain/gcc/gcc-uclibc-3.x.mk
+   trunk/buildroot/package/file/file.mk
 
 
 Changeset:
-Modified: trunk/buildroot/toolchain/gcc/gcc-uclibc-3.x.mk
+Modified: trunk/buildroot/package/file/file.mk
 ===================================================================
---- trunk/buildroot/toolchain/gcc/gcc-uclibc-3.x.mk	2007-04-12 21:20:25 UTC (rev 18421)
-+++ trunk/buildroot/toolchain/gcc/gcc-uclibc-3.x.mk	2007-04-13 02:04:32 UTC (rev 18422)
-@@ -17,6 +17,8 @@
- # along with this program; if not, write to the Free Software
- # Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
+--- trunk/buildroot/package/file/file.mk	2007-04-13 02:04:32 UTC (rev 18422)
++++ trunk/buildroot/package/file/file.mk	2007-04-13 02:43:28 UTC (rev 18423)
+@@ -86,10 +86,10 @@
+ 	touch $(FILE_DIR2)/.configured
  
-+ifeq ($(BR2_TOOLCHAIN_BUILDROOT),y)
-+
- ifeq ($(GCC_SNAP_DATE),)
- GCC_OFFICIAL_VER:=$(GCC_VERSION)
- GCC_SITE:=http://ftp.gnu.org/gnu/gcc/gcc-$(GCC_VERSION)
-@@ -443,3 +445,5 @@
+ $(FILE_DIR2)/$(FILE_BINARY): $(FILE_DIR2)/.configured $(TOOL_BUILD_DIR)/bin/file
+-	$(MAKE) $(TARGET_CONFIGURE_OPTS) LDFLAGS="-static" -C $(FILE_DIR2)
++	$(MAKE) $(TARGET_CONFIGURE_OPTS) LDFLAGS="$(TARGET_LDFLAGS) -static" -C $(FILE_DIR2)
  
- gcc_target-dirclean:
- 	rm -rf $(GCC_BUILD_DIR3)
-+
-+endif
+ $(TARGET_DIR)/$(FILE_TARGET_BINARY): $(FILE_DIR2)/$(FILE_BINARY)
+-	$(MAKE) $(TARGET_CONFIGURE_OPTS) DESTDIR=$(TARGET_DIR) -C $(FILE_DIR2) install
++	$(MAKE) $(TARGET_CONFIGURE_OPTS) LDFLAGS="$(TARGET_LDFLAGS)" DESTDIR=$(TARGET_DIR) -C $(FILE_DIR2) install
+ 	-($(STRIP) $(TARGET_DIR)/usr/lib/libmagic.so.*.* > /dev/null 2>&1)
+ 	rm -rf $(TARGET_DIR)/share/locale $(TARGET_DIR)/usr/info \
+ 		$(TARGET_DIR)/usr/man $(TARGET_DIR)/usr/share/doc
