@@ -1,8 +1,7 @@
 From: bugs at busybox.net <bugs@busybox.net>
-Date: Sun, 15 Apr 2007 07:46:44 -0700
-Subject: [Buildroot] [buildroot 0001315]: buildroot compilation error in gdb
-	for ARM
-Message-ID: <e46135a47feb492c84e82eb388c7f070@busybox.net>
+Date: Sun, 15 Apr 2007 07:49:30 -0700
+Subject: [Buildroot] [buildroot 0001305]: target "ARM" does not build
+Message-ID: <f895a5a329f62346e4156e14e903e75e@busybox.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -10,57 +9,65 @@ Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
 
-The following issue has been SUBMITTED. 
+A NOTE has been added to this issue. 
 ====================================================================== 
-http://busybox.net/bugs/view.php?id=1315 
+http://busybox.net/bugs/view.php?id=1305 
 ====================================================================== 
-Reported By:                Matthias Kaehlcke
+Reported By:                bell
 Assigned To:                buildroot
 ====================================================================== 
 Project:                    buildroot
-Issue ID:                   1315
+Issue ID:                   1305
 Category:                   Architecture Specific
 Reproducibility:            always
-Severity:                   major
+Severity:                   minor
 Priority:                   normal
 Status:                     assigned
 ====================================================================== 
-Date Submitted:             04-15-2007 07:46 PDT
-Last Modified:              04-15-2007 07:46 PDT
+Date Submitted:             04-08-2007 01:09 PDT
+Last Modified:              04-15-2007 07:49 PDT
 ====================================================================== 
-Summary:                    buildroot compilation error in gdb for ARM
+Summary:                    target "ARM" does not build
 Description: 
-i'm trying to build the current buildroot subversion snapshot for ARM
-targets. gcc (v4.1.2) aborts with errors in the file
-toolchain_build_arm/gdb-6.3/sim/arm/iwmmxt.c:
+Target architecture "arm" with no other changes on default config does not
+build:
 
-buildroot/toolchain_build_arm/gdb-6.3/sim/arm/iwmmxt.c: In function
-?WMAC?:
-buildroot/toolchain_build_arm/gdb-6.3/sim/arm/iwmmxt.c:2117: error:
-invalid lvalue in assignment
-buildroot/toolchain_build_arm/gdb-6.3/sim/arm/iwmmxt.c:2133: error:
-invalid lvalue in assignment
-buildroot/toolchain_build_arm/gdb-6.3/sim/arm/iwmmxt.c: In function
-?WMADD?:
-/data/private/prog/embedded/toolchains/buildroot/toolchain_build_arm/gdb-6.3/sim/arm/iwmmxt.c:2169:
-error: invalid lvalue in assignment
-buildroot/toolchain_build_arm/gdb-6.3/sim/arm/iwmmxt.c:2177: error:
-invalid lvalue in assignment
-buildroot/toolchain_build_arm/gdb-6.3/sim/arm/iwmmxt.c:2186: error:
-invalid lvalue in assignment
-buildroot/toolchain_build_arm/gdb-6.3/sim/arm/iwmmxt.c:2191: error:
-invalid lvalue in assignment
 
-(and more errors of the same type)
+.debug_varnames
+ *(.debug_varnames)
 
-the host system is Debian testing with kernel 2.6.20
+.note.gnu.arm.ident
+ *(.note.gnu.arm.ident)
+
+/DISCARD/
+ *(.note.GNU-stack)
+OUTPUT(busybox_unstripped elf32-littlearm)
+collect2: ld returned 1 exit status
+/home/anwender/embedded/elta8882a/buildroot/buildroot/build_arm/staging_dir/bin/arm-linux-uclibc-strip:
+'busybox_unstripped': No such file
+install: cannot stat `busybox': No such file or directory
+make[1]: *** [install] Fehler 1
+make[1]: Leaving directory
+`/home/anwender/embedded/elta8882a/buildroot/buildroot/build_arm/busybox-1.5.0'
+make: ***
+[/home/anwender/embedded/elta8882a/buildroot/buildroot/build_arm/root/bin/busybox]
+Fehler 2
+
+
 
 ====================================================================== 
+
+---------------------------------------------------------------------- 
+ Matthias Kaehlcke - 04-15-07 07:49  
+---------------------------------------------------------------------- 
+i have the same (or similar) behaviour when trying to build busybox (for
+ARM) with the ELDK-uClibc 4.1 toolchain 
 
 Issue History 
 Date Modified   Username       Field                    Change               
 ====================================================================== 
-04-15-07 07:46  Matthias KaehlckeNew Issue                                    
-04-15-07 07:46  Matthias KaehlckeStatus                   new => assigned     
-04-15-07 07:46  Matthias KaehlckeAssigned To               => buildroot       
+04-08-07 01:09  bell           New Issue                                    
+04-08-07 01:09  bell           Status                   new => assigned     
+04-08-07 01:09  bell           Assigned To               => buildroot       
+04-15-07 07:49  Matthias KaehlckeNote Added: 0002318                          
 ======================================================================
