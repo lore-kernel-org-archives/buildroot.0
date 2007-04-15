@@ -1,50 +1,40 @@
-From: Alexander Kriegisch <Alexander@Kriegisch.name>
-Date: Fri, 13 Apr 2007 23:16:18 +0200
-Subject: [Buildroot] Kconfig - how to implement hierarchical (un-)select
- trees?
-In-Reply-To: <461FC6D8.9050803@Kriegisch.name>
-References: <461FC6D8.9050803@Kriegisch.name>
-Message-ID: <461FF322.9090007@Kriegisch.name>
+From: Bernhard Fischer <rep.dot.nop@gmail.com>
+Date: Sun, 15 Apr 2007 11:02:15 +0200
+Subject: [Buildroot] Buildroot fails to compile for QEMU,
+	with flag BR2_TARGET_ARM_INTEGRATOR_926=y
+In-Reply-To: <545178E7F5D6364CA182451CF7958ADAE14422@BLR-EC-MBX01.wipro.com>
+References: <545178E7F5D6364CA182451CF7958ADAE14422@BLR-EC-MBX01.wipro.com>
+Message-ID: <20070415090215.GE23570@aon.at>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-I wrote earlier tonight:
->   - If package n is unselected, I want everything below it (sub-package,
->     shared libs, kernel modules) unselected, too. this is the most
->     important point.
+On Tue, Apr 03, 2007 at 10:18:01AM +0530, kumar.gireesh at wipro.com wrote:
+>
+>
+>Hi,
+>
+>I'm using buildroot-20070330.tar.bz2 for compiling an arm-linux-uclibc toolchain. 
+>My intention is to run it on qemu, but when I compile the toolchain with option BR2_TARGET_ARM_INTEGRATOR_926=y, it fails.
+>
+>Kindly help me if anyone has fixed this.
+>
+>Please find the error log and config file inline.
+>
+>Thanks,
+>Gireesh 
+>
+>ERROR LOG:
+>----------
+>
+>make[1]: Entering directory `/home/wipro/arm-cross-tools/arm-qemu-test/buildroot/build_arm/linux-2.6.20.4'
+>  CHK     include/linux/version.h
+>make[2]: `include/asm-arm/mach-types.h' is up to date.
+>  CHK     include/linux/utsrelease.h
+>  CC      arch/arm/kernel/asm-offsets.s
+>cc1: error: invalid option `abi=aapcs-linux'
 
-I think I got this one working now. What disturbed my efforts were
-double definitions of config variables in other Config.in includes at
-unexpected places. (Did I mention the whole thing was a mess?) Sorry for
-asking at all.
-
->   - Some kernel modules (or shared libs, respectively) in the same
->     hierarchy may be interdependent. I want to auto-(un)select dependent
->     modules. I got part of this working with "select", but unselecting
->     works strangely. I cannot describe it any better. Somebody knowing
->     the kconfig language and its tricks and tweaks may know what I mean.
-
-Still problematic.
-
->   - It is necessary to auto-(un)select several shared libs if related
->     kernel modules are (un)selected.
-
-Haven't got there yet.
-
->   - Sub-package n1 from the example above automatically selects a number
->     of kernel modules and shared libs. They don't get unselected cleanly
->     if I define additional interdependencies between elements on the
->     same hierarchy level.
-
-More precisely, they do not get unselected at all, interdependency or
-not. I cannot use "requires" (=depends [on]), though, because they might
-be needed by other modules as well. Not sure how to resolves this, but
-at least now I can unselect all libs or all kernel modules and start
-over selecting packages which in turn select modules/libs they need.
-
->   - Muli-level hierarchies as such seem to be problematic anyway.
-
-Resolved.
+Could very well be that gcc-3.4 doesn't support it, 4.1 or 4.2
+have it, IIRC
