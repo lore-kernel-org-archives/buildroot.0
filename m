@@ -1,36 +1,67 @@
-From: aldot at uclibc.org <aldot@uclibc.org>
-Date: Tue, 17 Apr 2007 10:30:12 -0700 (PDT)
-Subject: [Buildroot] svn commit: trunk/buildroot/target
-Message-ID: <20070417173012.CE5A44860A@busybox.net>
+From: bugs at busybox.net <bugs@busybox.net>
+Date: Tue, 17 Apr 2007 10:59:31 -0700
+Subject: [Buildroot] [buildroot 0001197]: UCLIBC_HAS_RPC should be part of
+	the default config
+Message-ID: <af5858fdf2c6197fbbe1f6d2bb2020b0@busybox.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Author: aldot
-Date: 2007-04-17 10:30:12 -0700 (Tue, 17 Apr 2007)
-New Revision: 18481
 
-Log:
-- strip eventual quotes
+The following issue has been CLOSED 
+====================================================================== 
+http://busybox.net/bugs/view.php?id=1197 
+====================================================================== 
+Reported By:                smithj
+Assigned To:                buildroot
+====================================================================== 
+Project:                    buildroot
+Issue ID:                   1197
+Category:                   Other
+Reproducibility:            always
+Severity:                   minor
+Priority:                   normal
+Status:                     closed
+Resolution:                 open
+Fixed in Version:           
+====================================================================== 
+Date Submitted:             02-05-2007 17:48 PST
+Last Modified:              04-17-2007 10:59 PDT
+====================================================================== 
+Summary:                    UCLIBC_HAS_RPC should be part of the default config
+Description: 
+Busybox's default config should be buildable with uclibc's default config.
+Busybox's default has CONFIG_FEATURE_MOUNT_NFS=y, which requires
+UCLIBC_HAS_RPC=y. However, the default "defconfig" in uclibc has this
+feature undefined.
+====================================================================== 
 
+---------------------------------------------------------------------- 
+ smithj - 02-05-07 17:50  
+---------------------------------------------------------------------- 
+Sorry, obviously this is not arch-specific, but i can't seem to change it
+now... 
 
-Modified:
-   trunk/buildroot/target/Makefile.in
+---------------------------------------------------------------------- 
+ bernhardf - 04-17-07 10:59  
+---------------------------------------------------------------------- 
+Fixed in busybox-1.5.0 which has MOUNT_NFS off per default. 
 
-
-Changeset:
-Modified: trunk/buildroot/target/Makefile.in
-===================================================================
---- trunk/buildroot/target/Makefile.in	2007-04-17 17:24:29 UTC (rev 18480)
-+++ trunk/buildroot/target/Makefile.in	2007-04-17 17:30:12 UTC (rev 18481)
-@@ -1,3 +1,8 @@
-+BR2_PACKAGE_LINUX_FORMAT:=$(strip $(subst ",,$(BR2_PACKAGE_LINUX_FORMAT)))
-+#"))
-+BR2_PACKAGE_LINUX_KCONFIG:=$(strip $(subst ",,$(BR2_PACKAGE_LINUX_KCONFIG)))
-+#"))
-+
- # make sure to put everything that is board-specific before the tarroot targets
- include target/generic/Makefile.in
- 
+Issue History 
+Date Modified   Username       Field                    Change               
+====================================================================== 
+02-05-07 17:48  smithj         New Issue                                    
+02-05-07 17:48  smithj         Status                   new => assigned     
+02-05-07 17:48  smithj         Assigned To               => uClibc          
+02-05-07 17:48  smithj         Issue Monitored: smithj                      
+02-05-07 17:50  smithj         Note Added: 0002123                          
+02-13-07 09:49  vapier         Project                  uClibc => buildroot 
+02-13-07 09:49  vapier         Assigned To              uClibc => buildroot 
+02-13-07 09:49  vapier         Category                 Architecture Specific =>
+Other
+02-13-07 09:49  vapier         version                  0.9.28 =>           
+04-17-07 10:59  bernhardf      Status                   assigned => closed  
+04-17-07 10:59  bernhardf      Note Added: 0002325                          
+======================================================================
