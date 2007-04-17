@@ -1,67 +1,44 @@
-From: bugs at busybox.net <bugs@busybox.net>
-Date: Tue, 17 Apr 2007 10:59:31 -0700
-Subject: [Buildroot] [buildroot 0001197]: UCLIBC_HAS_RPC should be part of
-	the default config
-Message-ID: <af5858fdf2c6197fbbe1f6d2bb2020b0@busybox.net>
+From: Thomas Lundquist <lists@zelow.no>
+Date: Tue, 17 Apr 2007 22:05:01 +0200
+Subject: [Buildroot] which ipkg?
+In-Reply-To: <20070417150722.GJ23570@aon.at>
+References: <20070417101631.GA12039@zelow.no> <20070417111330.GB12656@zelow.no>
+	<20070417150722.GJ23570@aon.at>
+Message-ID: <20070417200501.GA25039@zelow.no>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+On Tue, Apr 17, 2007 at 05:07:22PM +0200, Bernhard Fischer wrote:
+> 
+> Ideally, we want ipkg in busybox, ultimately.
 
-The following issue has been CLOSED 
-====================================================================== 
-http://busybox.net/bugs/view.php?id=1197 
-====================================================================== 
-Reported By:                smithj
-Assigned To:                buildroot
-====================================================================== 
-Project:                    buildroot
-Issue ID:                   1197
-Category:                   Other
-Reproducibility:            always
-Severity:                   minor
-Priority:                   normal
-Status:                     closed
-Resolution:                 open
-Fixed in Version:           
-====================================================================== 
-Date Submitted:             02-05-2007 17:48 PST
-Last Modified:              04-17-2007 10:59 PDT
-====================================================================== 
-Summary:                    UCLIBC_HAS_RPC should be part of the default config
-Description: 
-Busybox's default config should be buildable with uclibc's default config.
-Busybox's default has CONFIG_FEATURE_MOUNT_NFS=y, which requires
-UCLIBC_HAS_RPC=y. However, the default "defconfig" in uclibc has this
-feature undefined.
-====================================================================== 
+true enough. I was discusssed a few years ago but nothing happened.
 
----------------------------------------------------------------------- 
- smithj - 02-05-07 17:50  
----------------------------------------------------------------------- 
-Sorry, obviously this is not arch-specific, but i can't seem to change it
-now... 
+Just checked and the ipkg shell script is 28K and ipkg-cl 2K but it
+needs libpkg which is 134K.. 
 
----------------------------------------------------------------------- 
- bernhardf - 04-17-07 10:59  
----------------------------------------------------------------------- 
-Fixed in busybox-1.5.0 which has MOUNT_NFS off per default. 
+but libipkg seems to have quite alot of libbb in it but I'm not sure how
+much can be shaved off when putting it into busybox.
 
-Issue History 
-Date Modified   Username       Field                    Change               
-====================================================================== 
-02-05-07 17:48  smithj         New Issue                                    
-02-05-07 17:48  smithj         Status                   new => assigned     
-02-05-07 17:48  smithj         Assigned To               => uClibc          
-02-05-07 17:48  smithj         Issue Monitored: smithj                      
-02-05-07 17:50  smithj         Note Added: 0002123                          
-02-13-07 09:49  vapier         Project                  uClibc => buildroot 
-02-13-07 09:49  vapier         Assigned To              uClibc => buildroot 
-02-13-07 09:49  vapier         Category                 Architecture Specific =>
-Other
-02-13-07 09:49  vapier         version                  0.9.28 =>           
-04-17-07 10:59  bernhardf      Status                   assigned => closed  
-04-17-07 10:59  bernhardf      Note Added: 0002325                          
-======================================================================
+> I once looked at the
+> normal ipkg for a few minutes, and from what i remember, providing
+> a nice, working and small applet from it (by rewriting it) looked quite
+> reasonable, fwiw.
+
+I may some day try it but not before I need it or someone pays me.
+
+Until then I'll use ipkt-utils (mainly ipkg-build and hopefully not
+needing the python part of the utils.) for building the packages and let
+the user choose between the shell script and ipkg-cl.
+
+hopefully they are compatible enough. if not I'll do as OpenWRT seems to
+have; choose the shell script.
+
+(unless someone here tells me what to do.)
+
+
+
+Thomas.
