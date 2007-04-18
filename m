@@ -1,12 +1,31 @@
 From: Arnon Meydav <ArnonM@metalinkBB.com>
-Date: Wed, 18 Apr 2007 09:56:20 +0300
+Date: Wed, 18 Apr 2007 10:20:36 +0300
 Subject: [Buildroot] Need help building toolchain for mips32
-Message-ID: <5002BD9FB045734DB9F20119530FB01701129EBC@ilmail2.metalink.dsl>
+In-Reply-To: <5002BD9FB045734DB9F20119530FB01701129EBC@ilmail2.metalink.dsl>
+References: <5002BD9FB045734DB9F20119530FB01701129EBC@ilmail2.metalink.dsl>
+Message-ID: <5002BD9FB045734DB9F20119530FB01701129EDC@ilmail2.metalink.dsl>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
+
+
+I found that in order to compile uClibc with CPU MIPS32, I must select
+the O32 ABI and not N32.
+What is the difference, and is there any problem/disadvantage of leaving
+this setting? (I assume O/N stand for old and new)
+ 
+Thanks,
+ - Arnon
+
+________________________________
+
+From: buildroot-bounces@uclibc.org [mailto:buildroot-bounces at uclibc.org]
+On Behalf Of Arnon Meydav
+Sent: Wednesday, April 18, 2007 09:56
+To: buildroot at uclibc.org
+Subject: [Buildroot] Need help building toolchain for mips32
 
 
 Hi all, 
@@ -45,6 +64,18 @@ Any suggestions?
 Thanks,
  - Arnon Meydav
  
+-- Disclaimer: --
+This e-mail is intended solely for the person to whom it is addressed
+and may contain confidential or legally privileged information. Access
+to this e-mail by anyone else is unauthorized. If an addressing or
+transmission error has misdirected this e-mail, please notify the author
+by replying to this e-mail and destroy this e-mail and any attachments. 
+E-mail may be susceptible to data corruption, interception, unauthorized
+amendment, viruses and delays or the consequences thereof. If you are
+not the intended recipient, be advised that you have received this email
+in error and that any use, dissemination, forwarding, printing or
+copying of this email is strictly prohibited.
+	
 
 
 -- Disclaimer: --
@@ -52,4 +83,4 @@ This e-mail is intended solely for the person to whom it is addressed and may co
 E-mail may be susceptible to data corruption, interception, unauthorized amendment, viruses and delays or the consequences thereof. If you are not the intended recipient, be advised that you have received this email in error and that any use, dissemination, forwarding, printing or copying of this email is strictly prohibited.
 -------------- next part --------------
 An HTML attachment was scrubbed...
-URL: http://busybox.net/lists/buildroot/attachments/20070418/ae4e3f5a/attachment.htm 
+URL: http://busybox.net/lists/buildroot/attachments/20070418/07d2e7d3/attachment.htm 
