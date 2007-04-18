@@ -1,45 +1,22 @@
-From: Samir <samir.rawal@tokheimkaizen.com>
-Date: Wed, 18 Apr 2007 15:50:36 +0530
-Subject: [Buildroot] FW: Configration required for C++
-Message-ID: <MAILYDlrjbudzxxfYXF0000084d@mail.tokheimkaizen.com>
+From: Bernhard Fischer <rep.dot.nop@gmail.com>
+Date: Wed, 18 Apr 2007 13:40:46 +0200
+Subject: [Buildroot] RFC  Building Linux under Buildroot.
+In-Reply-To: <1176885902.8660.5.camel@elrond.sweden.atmel.com>
+References: <1176885902.8660.5.camel@elrond.sweden.atmel.com>
+Message-ID: <20070418114046.GA10335@aon.at>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello
-
- 
-
-I am not able to compile C++ application using buildroot.
-
- 
-
-I am facing the problem:
-
-/home/buildroot/build_arm/staging_dir/gcc/arm-linux-uclibc/4.1.2/../../../ar
-m-linux-uclibc/bin/ld:test1.o: Relocations in generic ELF (EM: 3).
-
-Test1.o: could not read symbols:File is in wrong format
-
-Collect2: ld returned 1 exit status.
-
- 
-
-Please find attach my config file for buildroot.
-
-Can anybody tell where I am doing wrong?
-
- 
-
--------------- next part --------------
-An HTML attachment was scrubbed...
-URL: http://busybox.net/lists/buildroot/attachments/20070418/9ad4cbe8/attachment.htm 
--------------- next part --------------
-A non-text attachment was scrubbed...
-Name: config
-Type: application/octet-stream
-Size: 11623 bytes
-Desc: not available
-Url : http://busybox.net/lists/buildroot/attachments/20070418/9ad4cbe8/attachment.obj 
+On Wed, Apr 18, 2007 at 10:45:02AM +0200, Ulf Samuelsson wrote:
+>I enclose the Makefile.in and Config.in I use to Build Linux.
+>I have them in my targets/linux directory.
+>
+>Would like to have comments on that before I generate a real patch.
+>Think it makes for easier reading than the patch.
+>
+>Basically I would like to bbe able to select the most
+>common choices using checkboxes, but also allow full flexiubility
+>by providing a text version as well.
