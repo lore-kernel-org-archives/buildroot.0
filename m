@@ -1,9 +1,7 @@
-From: Arnon Meydav <ArnonM@metalinkBB.com>
-Date: Wed, 18 Apr 2007 10:20:36 +0300
-Subject: [Buildroot] Need help building toolchain for mips32
-In-Reply-To: <5002BD9FB045734DB9F20119530FB01701129EBC@ilmail2.metalink.dsl>
-References: <5002BD9FB045734DB9F20119530FB01701129EBC@ilmail2.metalink.dsl>
-Message-ID: <5002BD9FB045734DB9F20119530FB01701129EDC@ilmail2.metalink.dsl>
+From: Francois Visconte <fv@kh3.org>
+Date: Wed, 18 Apr 2007 09:37:12 +0200
+Subject: [Buildroot] patch for gettext package (bug#13000)
+Message-ID: <4625CAA8.5050005@kh3.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -11,76 +9,24 @@ Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
 
-I found that in order to compile uClibc with CPU MIPS32, I must select
-the O32 ABI and not N32.
-What is the difference, and is there any problem/disadvantage of leaving
-this setting? (I assume O/N stand for old and new)
- 
-Thanks,
- - Arnon
-
-________________________________
-
-From: buildroot-bounces@uclibc.org [mailto:buildroot-bounces at uclibc.org]
-On Behalf Of Arnon Meydav
-Sent: Wednesday, April 18, 2007 09:56
-To: buildroot at uclibc.org
-Subject: [Buildroot] Need help building toolchain for mips32
+Here is the path to put in 'package/gettext/gettext-plural-exp.patch':
 
 
-Hi all, 
-I am new to the world of buildroot.
-I am trying to build a toolchain for a mips32 based CPU (based on 24K
-core).
-I selected mips32 in the menuconfig and also as the ABI, but buildroot
-fails with the following error:
- 
-make MAKE="make -j1" -C
-/home/arnonm/RG/buildroot/toolchain_build_mips_nofpu/uClibc \
-        PREFIX= \
-        DEVEL_PREFIX=/ \
-        RUNTIME_PREFIX=/ \
-        HOSTCC="gcc" \
-        all
-make[1]: Entering directory
-`/home/arnonm/RG/buildroot/toolchain_build_mips_nofpu/uClibc'
-make[2]: `conf' is up to date.
-ln -fs sgidefs.h ./include/
-:0: error: -march=mips32 is not compatible with the selected ABI
-:0: error: -march=mips32 is not compatible with the selected ABI
-  CC ldso/ldso/ldso.oS
-ldso/ldso/ldso.c:1: error: -march=mips32 is not compatible with the
-selected ABI
-make[1]: *** [ldso/ldso/ldso.oS] Error 1
-make[1]: Leaving directory
-`/home/arnonm/RG/buildroot/toolchain_build_mips_nofpu/uClibc'
-make: ***
-[/home/arnonm/RG/buildroot/toolchain_build_mips_nofpu/uClibc/lib/libc.a]
-Error 2
- 
- 
- 
-Any suggestions?
-Thanks,
- - Arnon Meydav
- 
--- Disclaimer: --
-This e-mail is intended solely for the person to whom it is addressed
-and may contain confidential or legally privileged information. Access
-to this e-mail by anyone else is unauthorized. If an addressing or
-transmission error has misdirected this e-mail, please notify the author
-by replying to this e-mail and destroy this e-mail and any attachments. 
-E-mail may be susceptible to data corruption, interception, unauthorized
-amendment, viruses and delays or the consequences thereof. If you are
-not the intended recipient, be advised that you have received this email
-in error and that any use, dissemination, forwarding, printing or
-copying of this email is strictly prohibited.
-	
+Cheers,
+Fran?ois Visconte
 
 
--- Disclaimer: --
-This e-mail is intended solely for the person to whom it is addressed and may contain confidential or legally privileged information. Access to this e-mail by anyone else is unauthorized. If an addressing or transmission error has misdirected this e-mail, please notify the author by replying to this e-mail and destroy this e-mail and any attachments. 
-E-mail may be susceptible to data corruption, interception, unauthorized amendment, viruses and delays or the consequences thereof. If you are not the intended recipient, be advised that you have received this email in error and that any use, dissemination, forwarding, printing or copying of this email is strictly prohibited.
--------------- next part --------------
-An HTML attachment was scrubbed...
-URL: http://busybox.net/lists/buildroot/attachments/20070418/07d2e7d3/attachment.htm 
+
+--- gettext-0.14.6/gettext-runtime/intl/plural-exp.h   2005-05-20 
+23:03:38.000000000 +0200
++++ gettext-0.14.6/gettext-runtime/intl/plural-exp.h   2007-04-13
+15:54:54.000000000 +0200
+@@ -110,7 +110,7 @@
+                                unsigned long int *npluralsp)
+       internal_function;
+
+-#if !defined (_LIBC) && !defined (IN_LIBINTL)
++#if !defined (__UCLIBC__) && !defined (_LIBC) && !defined (IN_LIBINTL)
+  extern unsigned long int plural_eval (struct expression *pexp,
+                               unsigned long int n);
+  #endif
