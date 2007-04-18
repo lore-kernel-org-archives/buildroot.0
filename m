@@ -1,45 +1,58 @@
-From: Ulf Samuelsson <ulf@atmel.com>
-Date: Wed, 18 Apr 2007 16:42:02 +0200
-Subject: [Buildroot] RFC  Building Linux under Buildroot.
-References: <1176885902.8660.5.camel@elrond.sweden.atmel.com>
-	<20070418114046.GA10335@aon.at>
-	<01ba01c781b2$63d89a90$01c4af0a@Glamdring>
-	<20070418133906.GA11554@aon.at>
-Message-ID: <020f01c781c9$c7ba8d90$01c4af0a@Glamdring>
+From: aldot at uclibc.org <aldot@uclibc.org>
+Date: Wed, 18 Apr 2007 12:55:15 -0700 (PDT)
+Subject: [Buildroot] svn commit: trunk/buildroot/package/mdadm
+Message-ID: <20070418195515.D6DA2485AC@busybox.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>Yes, but the patchfiles are in a linux  patch directory.
->
-> So, IIUC, it doesn't handle downloading multiple patchfiles yet?
-> $(patsubst %,$(PATCHFILE_DIR)/%,$(foo_CUSTOM_PATCHES)): same_for_http
-> wget ... -O $@
-> may work.
->
+Author: aldot
+Date: 2007-04-18 12:55:14 -0700 (Wed, 18 Apr 2007)
+New Revision: 18488
 
-As I see it, you want to have multiple patches
-each located in different places in internet so you need to specify
-both the name and the location.
-
-I am more thinking of a
-
-$ make atmel
-
-command which will download a script with predefined name from a predefined 
-server
-
-atmel:
-    wget    $(DL_DIR) $(BR2_ATMEL_SITE)/get_latest_atmel_patches.sh
-    source $(DL_DIR)/get_latest_atmel_patches.sh
-    rm -fr $(LINUX26_DIR)
-
-The script will download target/device/Atmel/Linux/kernel.../*.patch
-
-Probably better I supply the linux patch and then you patch on top of that.
+Log:
+- it helps to apply the patches.. ;)
+- mdadm-clean tried to uninstall mdadm from the host, which may not be what was intended in the end
 
 
-Best Regards
-Ulf Samuelsson
+Modified:
+   trunk/buildroot/package/mdadm/mdadm.mk
+
+
+Changeset:
+Modified: trunk/buildroot/package/mdadm/mdadm.mk
+===================================================================
+--- trunk/buildroot/package/mdadm/mdadm.mk	2007-04-18 19:54:26 UTC (rev 18487)
++++ trunk/buildroot/package/mdadm/mdadm.mk	2007-04-18 19:55:14 UTC (rev 18488)
+@@ -14,23 +14,25 @@
+ $(DL_DIR)/$(MDADM_SOURCE):
+ 	$(WGET) -P $(DL_DIR) $(MDADM_SITE)/$(MDADM_SOURCE)
+ 
+-$(MDADM_DIR)/.source: $(DL_DIR)/$(MDADM_SOURCE)
++$(MDADM_DIR)/.unpacked: $(DL_DIR)/$(MDADM_SOURCE)
+ 	$(MDADM_CAT) $(DL_DIR)/$(MDADM_SOURCE) | tar -C $(BUILD_DIR) $(TAR_OPTIONS) -
+-	touch $(MDADM_DIR)/.source
++	toolchain/patch-kernel.sh $(MDADM_DIR) package/mdadm mdadm-$(MDADM_VERSION)\*.patch
++	touch $@
+ 
+-$(MDADM_DIR)/$(MDADM_BINARY): $(MDADM_DIR)/.source
++$(MDADM_DIR)/$(MDADM_BINARY): $(MDADM_DIR)/.unpacked
+ 	$(MAKE) CFLAGS="$(TARGET_CFLAGS)" CC=$(TARGET_CC) -C $(MDADM_DIR)
+ 
+ $(TARGET_DIR)/$(MDADM_TARGET_BINARY): $(MDADM_DIR)/$(MDADM_BINARY)
+ 	$(MAKE) DESTDIR=$(TARGET_DIR) -C $(MDADM_DIR) install
+ 	rm -Rf $(TARGET_DIR)/usr/share/man
++	$(STRIP) -s $@
+ 
+ mdadm: uclibc $(TARGET_DIR)/$(MDADM_TARGET_BINARY)
+ 
+ mdadm-source: $(DL_DIR)/$(MDADM_SOURCE)
+ 
+ mdadm-clean:
+-	$(MAKE) prefix=$(TARGET_DIR)/usr -C $(MDADM_DIR) uninstall
++	$(MAKE) DESTDIR=$(TARGET_DIR) -C $(MDADM_DIR) uninstall
+ 	-$(MAKE) -C $(MDADM_DIR) clean
+ 
+ mdadm-dirclean:
