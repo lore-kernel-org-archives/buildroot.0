@@ -1,42 +1,36 @@
-From: Jeremy R. Geeo <jeremy@geeo.net>
-Date: Wed, 18 Apr 2007 20:17:45 -0500
-Subject: [Buildroot] Problem booting 2.6.20.4 on AT91RM9200EK
-In-Reply-To: <1176934731.28639.10.camel@elrond.sweden.atmel.com>
-References: <1176934731.28639.10.camel@elrond.sweden.atmel.com>
-Message-ID: <4626C339.6020603@geeo.net>
+From: sjhill at uclibc.org <sjhill@uclibc.org>
+Date: Wed, 18 Apr 2007 19:04:16 -0700 (PDT)
+Subject: [Buildroot] svn commit: trunk/buildroot/toolchain/external-toolchain
+Message-ID: <20070419020416.B726648562@busybox.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Ulf Samuelsson wrote:
-> Trying out linux-2.6.20.4 on an AT91RM9200EK
-> built by a buildroot downloaded 20070405 (with fixes).
->
->
-> Using gcc-3.4.6/binutils 2.16.1 initially built by buildroot
-> but now used as an external toolchain.
->
->
-> Getting the following error messages.
->
-> /sbin/ init: can't load library 'libgcc_s.so.1'
-> Kernel panic - not syncing: Attempted to kill init!
->
->
-> Any clues?
->
-> Found "toolchain_build_arm_small/gcc-3.4.6-final/gcc/libgcc_s.so.1"
-> which I guess is what I am looking for.
-> What is the approriate way to get that into the root file system?
->
->
-> [...]
+Author: sjhill
+Date: 2007-04-18 19:04:15 -0700 (Wed, 18 Apr 2007)
+New Revision: 18495
 
-I've had this problem in the past when I have defined 
-"BR2_GCC_SHARED_LIBGCC" via "Build/install a shared libgcc" in your 
-Toolchain Options. Unless you otherwise need it, you might try disabling 
-and rebuilding.
+Log:
+Some 'find' commands get a little picky.
 
-Jeremy
+
+Modified:
+   trunk/buildroot/toolchain/external-toolchain/ext-tool.mk
+
+
+Changeset:
+Modified: trunk/buildroot/toolchain/external-toolchain/ext-tool.mk
+===================================================================
+--- trunk/buildroot/toolchain/external-toolchain/ext-tool.mk	2007-04-19 00:09:34 UTC (rev 18494)
++++ trunk/buildroot/toolchain/external-toolchain/ext-tool.mk	2007-04-19 02:04:15 UTC (rev 18495)
+@@ -18,7 +18,7 @@
+ 	fi;											\
+ 												\
+ 	LIB="$(strip $1)";									\
+-	for FILE in `find $${LIB_DIR} -type l -name "$${LIB}*" -maxdepth 1`; do			\
++	for FILE in `find $${LIB_DIR} -maxdepth 1 -type l -name "$${LIB}*"`; do			\
+ 		LIB=`basename $${FILE}`;							\
+ 		while test \! -z "$${LIB}"; do							\
+ 			echo "copy_toolchain_lib_root lib=$${LIB} dst=$${DST}";			\
