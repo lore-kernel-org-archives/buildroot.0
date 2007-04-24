@@ -1,56 +1,75 @@
-From: bugs at busybox.net <bugs@busybox.net>
-Date: Tue, 24 Apr 2007 06:44:22 -0700
-Subject: [Buildroot] [buildroot 0001325]: added libsndfile
-Message-ID: <159caf774e8f355841caff0365508b31@buildroot.uclibc.org>
+From: Paul Kavan <pkavan@gmail.com>
+Date: Tue, 24 Apr 2007 16:10:02 -0500
+Subject: [Buildroot] i2c-at91 Driver
+Message-ID: <61c0054e0704241410ga495506sed2d4859a16cf6f8@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+Hello all:
 
-The following issue has been CLOSED 
-====================================================================== 
-http://busybox.net/bugs/view.php?id=1325 
-====================================================================== 
-Reported By:                zonque
-Assigned To:                buildroot
-====================================================================== 
-Project:                    buildroot
-Issue ID:                   1325
-Category:                   New Features
-Reproducibility:            N/A
-Severity:                   feature
-Priority:                   normal
-Status:                     closed
-Resolution:                 open
-Fixed in Version:           
-====================================================================== 
-Date Submitted:             04-23-2007 21:35 PDT
-Last Modified:              04-24-2007 06:44 PDT
-====================================================================== 
-Summary:                    added libsndfile
-Description: 
-Libsndfile is a C library for reading and writing files containing sampled
-sound (such as MS Windows WAV and the Apple/SGI AIFF format) through one
-standard library interface. It is released in source code format under the
-Gnu Lesser General Public License.
+I am having some difficulties determining how to utilize the i2c-at91
+driver. Has anyone had experience getting this driver to work correctly? If
+so, do you mind giving me some pointers on how you did so? I have tried to
+use
 
-This patch adds support for building this library.
-====================================================================== 
+open("/dev/i2c", O_RDWR)
 
----------------------------------------------------------------------- 
- jacmet - 04-24-07 06:44  
----------------------------------------------------------------------- 
-Thanks. Committed as r18517 
+with the i2c dev driver....to no avail. I am looking at the source code for
+i2c-at91.c and it does not appear to be similar to the gpio driver where it
+exports symbols that I can use in another driver. As such, I am a little
+unsure what to do from here.
 
-Issue History 
-Date Modified   Username       Field                    Change               
-====================================================================== 
-04-23-07 21:35  zonque         New Issue                                    
-04-23-07 21:35  zonque         Status                   new => assigned     
-04-23-07 21:35  zonque         Assigned To               => buildroot       
-04-23-07 21:35  zonque         File Added: br2-libsndfile.gz                    
-04-24-07 06:44  jacmet         Status                   assigned => closed  
-04-24-07 06:44  jacmet         Note Added: 0002330                          
-======================================================================
+One other point of concern. I have my kernel configured with
+
+#
+# I2C support
+#
+CONFIG_I2C=y
+CONFIG_I2C_CHARDEV=y
+
+#
+# I2C Algorithms
+#
+# CONFIG_I2C_ALGOBIT is not set
+# CONFIG_I2C_ALGOPCF is not set
+# CONFIG_I2C_ALGOPCA is not set
+
+#
+# I2C Hardware Bus support
+#
+CONFIG_I2C_AT91=y
+CONFIG_I2C_AT91_CLOCKRATE=100000
+# CONFIG_I2C_OCORES is not set
+# CONFIG_I2C_PARPORT_LIGHT is not set
+# CONFIG_I2C_STUB is not set
+# CONFIG_I2C_PCA_ISA is not set
+
+#
+# Miscellaneous I2C Chip support
+#
+# CONFIG_SENSORS_DS1337 is not set
+# CONFIG_SENSORS_DS1374 is not set
+# CONFIG_SENSORS_EEPROM is not set
+# CONFIG_SENSORS_PCF8574 is not set
+# CONFIG_SENSORS_PCA9539 is not set
+# CONFIG_SENSORS_PCF8591 is not set
+# CONFIG_SENSORS_MAX6875 is not set
+# CONFIG_I2C_DEBUG_CORE is not set
+# CONFIG_I2C_DEBUG_ALGO is not set
+CONFIG_I2C_DEBUG_BUS=y
+# CONFIG_I2C_DEBUG_CHIP is not set
+
+Is there something I am missing in the configuration as well?
+
+I would appreciate any pointers or tips on how to get the twi operating as
+an i2c.
+
+Thanks.
+
+Paul
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: http://busybox.net/lists/buildroot/attachments/20070424/98d7c904/attachment.htm 
