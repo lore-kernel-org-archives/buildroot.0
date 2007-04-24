@@ -1,8 +1,7 @@
 From: bugs at busybox.net <bugs@busybox.net>
-Date: Mon, 23 Apr 2007 19:05:43 -0700
-Subject: [Buildroot] [buildroot 0001324]: Adding custom package does not
-	include the editing of buildroot/package/Config.in
-Message-ID: <f22b8d9de4a361467eb35e2c72a4a20c@busybox.net>
+Date: Mon, 23 Apr 2007 21:35:53 -0700
+Subject: [Buildroot] [buildroot 0001325]: added libsndfile
+Message-ID: <e796b9d0b640245f294404bd5ec03384@busybox.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -12,51 +11,37 @@ To: buildroot@busybox.net
 
 The following issue has been SUBMITTED. 
 ====================================================================== 
-http://busybox.net/bugs/view.php?id=1324 
+http://busybox.net/bugs/view.php?id=1325 
 ====================================================================== 
-Reported By:                bobwired
+Reported By:                zonque
 Assigned To:                buildroot
 ====================================================================== 
 Project:                    buildroot
-Issue ID:                   1324
-Category:                   Documentation
-Reproducibility:            always
-Severity:                   tweak
+Issue ID:                   1325
+Category:                   New Features
+Reproducibility:            N/A
+Severity:                   feature
 Priority:                   normal
 Status:                     assigned
 ====================================================================== 
-Date Submitted:             04-23-2007 19:05 PDT
-Last Modified:              04-23-2007 19:05 PDT
+Date Submitted:             04-23-2007 21:35 PDT
+Last Modified:              04-23-2007 21:35 PDT
 ====================================================================== 
-Summary:                    Adding custom package does not include the editing
-of buildroot/package/Config.in
+Summary:                    added libsndfile
 Description: 
-The docs (http://buildroot.uclibc.org/buildroot.html) for adding a new
-package do not mention that you need to add an entry to the
-buildroot/package/Config.in file.
+Libsndfile is a C library for reading and writing files containing sampled
+sound (such as MS Windows WAV and the Apple/SGI AIFF format) through one
+standard library interface. It is released in source code format under the
+Gnu Lesser General Public License.
 
-For example, to add the package foo, you might edit Config.in from 
-...
-source "package/fakeroot/Config.in"
-source "package/gettext/Config.in"
-...
-
-to
-
-...
-source "package/fakeroot/Config.in"
-source "package/foo/Config.in"
-source "package/gettext/Config.in"
-...
-
-Inserting the new package in the existing Config.in file in alphabetical
-order.
+This patch adds support for building this library.
 ====================================================================== 
 
 Issue History 
 Date Modified   Username       Field                    Change               
 ====================================================================== 
-04-23-07 19:05  bobwired       New Issue                                    
-04-23-07 19:05  bobwired       Status                   new => assigned     
-04-23-07 19:05  bobwired       Assigned To               => buildroot       
+04-23-07 21:35  zonque         New Issue                                    
+04-23-07 21:35  zonque         Status                   new => assigned     
+04-23-07 21:35  zonque         Assigned To               => buildroot       
+04-23-07 21:35  zonque         File Added: br2-libsndfile.gz                    
 ======================================================================
