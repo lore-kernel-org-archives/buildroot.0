@@ -1,38 +1,46 @@
-From: Ulf Samuelsson <ulf@atmel.com>
-Date: Mon, 23 Apr 2007 21:02:53 +0200
-Subject: [Buildroot] New version of AT91 Buildroot available
-References: <1177318904.4872.67.camel@elrond.sweden.atmel.com>
-	<462CFDE6.7040307@apexar.com>
-Message-ID: <006001c785da$041331c0$9003960a@atmel.com>
+From: bugs at busybox.net <bugs@busybox.net>
+Date: Mon, 23 Apr 2007 17:18:39 -0700
+Subject: [Buildroot] [buildroot 0001323]: zlib problems
+Message-ID: <b1a3348ae1eb325eacd70203a976cfea@bugs.uclibc.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>
-> Hi,
-> 
-> I'was testing de script and i got this error:
-> 
-> checking for iconv_open... no
-> checking for libiconv_open in -liconv... no
-> checking for iconv_open in -liconv... no
-> configure: error: *** No iconv() implementation found in C library or 
-> libiconv
-> make: *** 
-> [/home/dfons/buildroot_atmel/buildroot-atmel/build_arm_small/glib-2.12.9/.configured] 
-> Error 1
-> 
-> Is it possible that uClib 0.9.28.3 doesn't have an iconv() implementation?
 
-Exchange packages/glib with the vanilla buildroot and see if it changes.
-There are some patches there from the AVR32 BSP which does not yet support 0.9.28.3
+The following issue has been SUBMITTED. 
+====================================================================== 
+http://busybox.net/bugs/view.php?id=1323 
+====================================================================== 
+Reported By:                asquared
+Assigned To:                buildroot
+====================================================================== 
+Project:                    buildroot
+Issue ID:                   1323
+Category:                   Architecture Specific
+Reproducibility:            always
+Severity:                   major
+Priority:                   normal
+Status:                     assigned
+====================================================================== 
+Date Submitted:             04-23-2007 17:18 PDT
+Last Modified:              04-23-2007 17:18 PDT
+====================================================================== 
+Summary:                    zlib problems
+Description: 
+Many packages are failing to compile because they are unable to find the
+zlib headers. This appears to happen regardless of whether or not
+installation of zlib headers is enabled in 'make menuconfig'. Zlib headers
+have been installed on the development system, and this does not solve the
+problem. This has been reproduced with both default and customized
+configurations of buildroot.
+====================================================================== 
 
-I did not build this with a lot of packages yet, since then it wont fit into the 8 MB Dataflashcards..
-When I can get some time to test out the NAND flash functionality, then this problem will go away
-but I do not plan to do extensive testing of more than minimal root fs functionality.
-
-
-Best Regards
-Ulf Samuelsson
+Issue History 
+Date Modified   Username       Field                    Change               
+====================================================================== 
+04-23-07 17:18  asquared       New Issue                                    
+04-23-07 17:18  asquared       Status                   new => assigned     
+04-23-07 17:18  asquared       Assigned To               => buildroot       
+======================================================================
