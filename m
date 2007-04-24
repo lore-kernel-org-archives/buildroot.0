@@ -1,7 +1,7 @@
 From: bugs at busybox.net <bugs@busybox.net>
-Date: Mon, 23 Apr 2007 17:18:39 -0700
+Date: Mon, 23 Apr 2007 17:20:07 -0700
 Subject: [Buildroot] [buildroot 0001323]: zlib problems
-Message-ID: <b1a3348ae1eb325eacd70203a976cfea@bugs.uclibc.org>
+Message-ID: <ef7b87d2092d3f955fc48e250da46b92@bugs.uclibc.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -9,7 +9,7 @@ Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
 
-The following issue has been SUBMITTED. 
+A NOTE has been added to this issue. 
 ====================================================================== 
 http://busybox.net/bugs/view.php?id=1323 
 ====================================================================== 
@@ -25,7 +25,7 @@ Priority:                   normal
 Status:                     assigned
 ====================================================================== 
 Date Submitted:             04-23-2007 17:18 PDT
-Last Modified:              04-23-2007 17:18 PDT
+Last Modified:              04-23-2007 17:20 PDT
 ====================================================================== 
 Summary:                    zlib problems
 Description: 
@@ -37,10 +37,17 @@ problem. This has been reproduced with both default and customized
 configurations of buildroot.
 ====================================================================== 
 
+---------------------------------------------------------------------- 
+ asquared - 04-23-07 17:20  
+---------------------------------------------------------------------- 
+It appears that I have filed this bug under the architecture-specific
+category, so I probably should add that this occurs when targeting x86. 
+
 Issue History 
 Date Modified   Username       Field                    Change               
 ====================================================================== 
 04-23-07 17:18  asquared       New Issue                                    
 04-23-07 17:18  asquared       Status                   new => assigned     
 04-23-07 17:18  asquared       Assigned To               => buildroot       
+04-23-07 17:20  asquared       Note Added: 0002328                          
 ======================================================================
