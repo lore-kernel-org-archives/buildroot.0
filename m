@@ -1,38 +1,39 @@
-From: jacmet at uclibc.org <jacmet@uclibc.org>
-Date: Wed, 25 Apr 2007 00:11:10 -0700 (PDT)
-Subject: [Buildroot] svn commit: trunk/buildroot/package/busybox
-Message-ID: <20070425071110.8721048002@busybox.net>
+From: =?GB2312?B?xeHd7Q==?= <pbman2002@gmail.com>
+Date: Thu, 26 Apr 2007 09:43:16 +0800
+Subject: [Buildroot] Failed to build the toolchain for ARM7TDMI
+Message-ID: <bc56c6d90704251843l7a0d278cn2ee437e77afefe2f@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Author: jacmet
-Date: 2007-04-25 00:11:10 -0700 (Wed, 25 Apr 2007)
-New Revision: 18518
+Can anybody tell me what should I do,thx.  The following info was
+displayed in terminal:
 
-Log:
-sed patch
-
-Added:
-   trunk/buildroot/package/busybox/busybox-1.5.0-sed.patch
-
-
-Changeset:
-Added: trunk/buildroot/package/busybox/busybox-1.5.0-sed.patch
-===================================================================
---- trunk/buildroot/package/busybox/busybox-1.5.0-sed.patch	                        (rev 0)
-+++ trunk/buildroot/package/busybox/busybox-1.5.0-sed.patch	2007-04-25 07:11:10 UTC (rev 18518)
-@@ -0,0 +1,11 @@
-+--- busybox-1.5.0/editors/sed.c	Thu Mar 22 22:21:38 2007
-++++ busybox-1.5.0-sed/editors/sed.c	Fri Apr 13 22:10:24 2007
-+@@ -481,7 +481,7 @@
-+ 	if (bbg.add_cmd_line) {
-+ 		char *tp = xasprintf("%s\n%s", bbg.add_cmd_line, cmdstr);
-+ 		free(bbg.add_cmd_line);
-+-		bbg.add_cmd_line = tp;
-++		cmdstr = bbg.add_cmd_line = tp;
-+ 	}
-+ 
-+ 	/* If this line ends with backslash, request next line. */
+config.status: creating po/Makefile.in
+config.status: executing depfiles commands
+config.status: executing default commands
+make[4]: Leaving directory
+`/arm/src/buildroot/toolchain_build_arm_nofpu/binutils-2.17-build/bfd/po'
+make[4]: Entering directory
+`/arm/src/buildroot/toolchain_build_arm_nofpu/binutils-2.17-build/bfd/po'
+make[4]: Nothing to be done for `info'.
+make[4]: Leaving directory
+`/arm/src/buildroot/toolchain_build_arm_nofpu/binutils-2.17-build/bfd/po'
+make[4]: Entering directory
+`/arm/src/buildroot/toolchain_build_arm_nofpu/binutils-2.17-build/bfd'
+make[4]: Nothing to be done for `info-am'.
+make[4]: Leaving directory
+`/arm/src/buildroot/toolchain_build_arm_nofpu/binutils-2.17-build/bfd'
+make[3]: *** [info-recursive] ?? 1
+make[3]: Leaving directory
+`/arm/src/buildroot/toolchain_build_arm_nofpu/binutils-2.17-build/bfd'
+make[2]: *** [all-bfd] ?? 2
+make[2]: Leaving directory
+`/arm/src/buildroot/toolchain_build_arm_nofpu/binutils-2.17-build'
+make[1]: *** [all] ?? 2
+make[1]: Leaving directory
+`/arm/src/buildroot/toolchain_build_arm_nofpu/binutils-2.17-build'
+make: *** [/arm/src/buildroot/toolchain_build_arm_nofpu/binutils-2.17-build/binutils/objdump]
+?? 2
