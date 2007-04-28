@@ -1,43 +1,32 @@
-From: bugs at busybox.net <bugs@busybox.net>
-Date: Sat, 28 Apr 2007 04:41:44 -0700
-Subject: [Buildroot] [buildroot 0001328]: fontconfig-2.4.2 fail to build in
-	r18518
-Message-ID: <83fb8a259f9437578045e64a19adec58@busybox.net>
+From: sjhill at uclibc.org <sjhill@uclibc.org>
+Date: Sat, 28 Apr 2007 10:08:57 -0700 (PDT)
+Subject: [Buildroot] svn commit: trunk/buildroot/toolchain/uClibc
+Message-ID: <20070428170857.917EC48020@busybox.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+Author: sjhill
+Date: 2007-04-28 10:08:57 -0700 (Sat, 28 Apr 2007)
+New Revision: 18527
 
-The following issue has been SUBMITTED. 
-====================================================================== 
-http://busybox.net/bugs/view.php?id=1328 
-====================================================================== 
-Reported By:                ALEXANDER WOLD
-Assigned To:                buildroot
-====================================================================== 
-Project:                    buildroot
-Issue ID:                   1328
-Category:                   Architecture Specific
-Reproducibility:            always
-Severity:                   major
-Priority:                   normal
-Status:                     assigned
-====================================================================== 
-Date Submitted:             04-28-2007 04:41 PDT
-Last Modified:              04-28-2007 04:41 PDT
-====================================================================== 
-Summary:                    fontconfig-2.4.2 fail to build in r18518
-Description: 
-fontconfig is broken with default .config and added fontconfig. Log is
-attached.
-====================================================================== 
+Log:
+Get rid of blank line.
 
-Issue History 
-Date Modified   Username       Field                    Change               
-====================================================================== 
-04-28-07 04:41  ALEXANDER WOLD New Issue                                    
-04-28-07 04:41  ALEXANDER WOLD Status                   new => assigned     
-04-28-07 04:41  ALEXANDER WOLD Assigned To               => buildroot       
-======================================================================
+
+Modified:
+   trunk/buildroot/toolchain/uClibc/Config.in
+
+
+Changeset:
+Modified: trunk/buildroot/toolchain/uClibc/Config.in
+===================================================================
+--- trunk/buildroot/toolchain/uClibc/Config.in	2007-04-28 16:48:27 UTC (rev 18526)
++++ trunk/buildroot/toolchain/uClibc/Config.in	2007-04-28 17:08:57 UTC (rev 18527)
+@@ -63,4 +63,3 @@
+ 	default n
+ 	help
+ 	  Build the thread library with debugging enabled.
+-
