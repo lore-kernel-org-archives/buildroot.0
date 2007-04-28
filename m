@@ -1,7 +1,8 @@
 From: bugs at busybox.net <bugs@busybox.net>
-Date: Sat, 28 Apr 2007 04:38:22 -0700
-Subject: [Buildroot] [buildroot 0001327]: busybox taskset.c fail to build.
-Message-ID: <17983e67191d79c41d4fb0987ed9892c@busybox.net>
+Date: Sat, 28 Apr 2007 04:41:44 -0700
+Subject: [Buildroot] [buildroot 0001328]: fontconfig-2.4.2 fail to build in
+	r18518
+Message-ID: <83fb8a259f9437578045e64a19adec58@busybox.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -9,39 +10,34 @@ Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
 
-A NOTE has been added to this issue. 
+The following issue has been SUBMITTED. 
 ====================================================================== 
-http://busybox.net/bugs/view.php?id=1327 
+http://busybox.net/bugs/view.php?id=1328 
 ====================================================================== 
 Reported By:                ALEXANDER WOLD
 Assigned To:                buildroot
 ====================================================================== 
 Project:                    buildroot
-Issue ID:                   1327
+Issue ID:                   1328
 Category:                   Architecture Specific
 Reproducibility:            always
 Severity:                   major
 Priority:                   normal
 Status:                     assigned
 ====================================================================== 
-Date Submitted:             04-28-2007 04:33 PDT
-Last Modified:              04-28-2007 04:38 PDT
+Date Submitted:             04-28-2007 04:41 PDT
+Last Modified:              04-28-2007 04:41 PDT
 ====================================================================== 
-Summary:                    busybox taskset.c fail to build.
+Summary:                    fontconfig-2.4.2 fail to build in r18518
 Description: 
-Busybox taskset fails to build in buildroot r18518.
+fontconfig is broken with default .config and added fontconfig. Log is
+attached.
 ====================================================================== 
-
----------------------------------------------------------------------- 
- ALEXANDER WOLD - 04-28-07 04:38  
----------------------------------------------------------------------- 
-This is a duplicate of bug 0001309 
 
 Issue History 
 Date Modified   Username       Field                    Change               
 ====================================================================== 
-04-28-07 04:33  ALEXANDER WOLD New Issue                                    
-04-28-07 04:33  ALEXANDER WOLD Status                   new => assigned     
-04-28-07 04:33  ALEXANDER WOLD Assigned To               => buildroot       
-04-28-07 04:38  ALEXANDER WOLD Note Added: 0002334                          
+04-28-07 04:41  ALEXANDER WOLD New Issue                                    
+04-28-07 04:41  ALEXANDER WOLD Status                   new => assigned     
+04-28-07 04:41  ALEXANDER WOLD Assigned To               => buildroot       
 ======================================================================
