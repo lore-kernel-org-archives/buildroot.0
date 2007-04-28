@@ -1,7 +1,7 @@
 From: bugs at busybox.net <bugs@busybox.net>
-Date: Sat, 28 Apr 2007 04:33:29 -0700
+Date: Sat, 28 Apr 2007 04:38:22 -0700
 Subject: [Buildroot] [buildroot 0001327]: busybox taskset.c fail to build.
-Message-ID: <8684bbc1e36b5598b1a9a8d351caf1f0@busybox.net>
+Message-ID: <17983e67191d79c41d4fb0987ed9892c@busybox.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -9,7 +9,7 @@ Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
 
-The following issue has been SUBMITTED. 
+A NOTE has been added to this issue. 
 ====================================================================== 
 http://busybox.net/bugs/view.php?id=1327 
 ====================================================================== 
@@ -25,12 +25,17 @@ Priority:                   normal
 Status:                     assigned
 ====================================================================== 
 Date Submitted:             04-28-2007 04:33 PDT
-Last Modified:              04-28-2007 04:33 PDT
+Last Modified:              04-28-2007 04:38 PDT
 ====================================================================== 
 Summary:                    busybox taskset.c fail to build.
 Description: 
 Busybox taskset fails to build in buildroot r18518.
 ====================================================================== 
+
+---------------------------------------------------------------------- 
+ ALEXANDER WOLD - 04-28-07 04:38  
+---------------------------------------------------------------------- 
+This is a duplicate of bug 0001309 
 
 Issue History 
 Date Modified   Username       Field                    Change               
@@ -38,4 +43,5 @@ Date Modified   Username       Field                    Change
 04-28-07 04:33  ALEXANDER WOLD New Issue                                    
 04-28-07 04:33  ALEXANDER WOLD Status                   new => assigned     
 04-28-07 04:33  ALEXANDER WOLD Assigned To               => buildroot       
+04-28-07 04:38  ALEXANDER WOLD Note Added: 0002334                          
 ======================================================================
