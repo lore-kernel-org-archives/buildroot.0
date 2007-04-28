@@ -1,40 +1,74 @@
-From: Slayn angel <slaynangel@myrealbox.com>
-Date: Thu, 26 Apr 2007 10:36:20 +0200
-Subject: [Buildroot] Missing sysdep.h linuxpthreads
-Message-ID: <1177576580.c7e8127cslaynangel@myrealbox.com>
+From: bugs at busybox.net <bugs@busybox.net>
+Date: Fri, 27 Apr 2007 20:39:13 -0700
+Subject: [Buildroot] [buildroot 0001323]: zlib problems
+Message-ID: <9c81aed0ed4d629940a44e85fbe62ea6@busybox.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi,
 
-i have Problems buildgin ucLibc with Linuxthreads or NPLT
+A NOTE has been added to this issue. 
+====================================================================== 
+http://busybox.net/bugs/view.php?id=1323 
+====================================================================== 
+Reported By:                asquared
+Assigned To:                buildroot
+====================================================================== 
+Project:                    buildroot
+Issue ID:                   1323
+Category:                   Architecture Specific
+Reproducibility:            always
+Severity:                   major
+Priority:                   normal
+Status:                     assigned
+====================================================================== 
+Date Submitted:             04-23-2007 17:18 PDT
+Last Modified:              04-27-2007 20:39 PDT
+====================================================================== 
+Summary:                    zlib problems
+Description: 
+Many packages are failing to compile because they are unable to find the
+zlib headers. This appears to happen regardless of whether or not
+installation of zlib headers is enabled in 'make menuconfig'. Zlib headers
+have been installed on the development system, and this does not solve the
+problem. This has been reproduced with both default and customized
+configurations of buildroot.
+====================================================================== 
 
---
+---------------------------------------------------------------------- 
+ asquared - 04-23-07 17:20  
+---------------------------------------------------------------------- 
+It appears that I have filed this bug under the architecture-specific
+category, so I probably should add that this occurs when targeting x86. 
 
-make[1]: Entering directory `/mnt/tinygentoo/buildroot/toolchain_build_i686/uClibc'
-make[2]: `conf' is up to date.
-make -j1 locale_headers
-make[3]: `conf' is up to date.
-  CC ldso/ldso/ldso.oS
-In file included from ./libpthread/linuxthreads/sysdeps/i386/i686/pt-machine.h:73,
-                 from ./libpthread/linuxthreads/sysdeps/i386/pt-machine.h:24,
-                 from ./libpthread/linuxthreads/sysdeps/i386/tls.h:23,
-                 from ./include/bits/uClibc_errno.h:35,
-                 from ./include/errno.h:62,
-                 from ./include/bits/syscalls.h:14,
-                 from ./include/sys/syscall.h:34,
-                 from ./ldso/ldso/i386/dl-syscalls.h:3,
-                 from ./ldso/include/dl-syscall.h:12,
-                 from ./ldso/include/ldso.h:36,
-                 from ldso/ldso/ldso.c:33:
-./libpthread/linuxthreads/sysdeps/i386/i686/../useldt.h:25:20: error: sysdep.h: No such file or directory
-make[1]: *** [ldso/ldso/ldso.oS] Error 1
-make[1]: Leaving directory `/mnt/tinygentoo/buildroot/toolchain_build_i686/uClibc'
-make: *** [/mnt/tinygentoo/buildroot/toolchain_build_i686/uClibc/lib/libc.a] Error 2
+---------------------------------------------------------------------- 
+ asquared - 04-24-07 05:33  
+---------------------------------------------------------------------- 
+Bug only appears to occur when zlib has been selected for installation.
+'make defconfig; make' succeeds. 
 
----
+---------------------------------------------------------------------- 
+ rordway - 04-27-07 20:39  
+---------------------------------------------------------------------- 
+The problem looks to be a missing symlink in build_<arch>/staging_dir/usr.
 
-Any hints? (using uclibc-snapshot with buildroot snapshot)
+When the build fails, cd to build_<arch>/staging_dir/usr and run:
+
+ln -s ../include include
+
+This fixed the problem for me. 
+
+I have not tested it, but I expect that this patch will fix the problem. 
+
+Issue History 
+Date Modified   Username       Field                    Change               
+====================================================================== 
+04-23-07 17:18  asquared       New Issue                                    
+04-23-07 17:18  asquared       Status                   new => assigned     
+04-23-07 17:18  asquared       Assigned To               => buildroot       
+04-23-07 17:20  asquared       Note Added: 0002328                          
+04-24-07 05:33  asquared       Note Added: 0002329                          
+04-27-07 20:39  rordway        Note Added: 0002333                          
+======================================================================
