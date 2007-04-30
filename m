@@ -1,8 +1,7 @@
 From: bugs at busybox.net <bugs@busybox.net>
-Date: Mon, 30 Apr 2007 04:50:37 -0700
-Subject: [Buildroot] [buildroot 0001309]: Busybox 1.5.0 build crashes when
-	building miscutils/patchset.c under buildroot
-Message-ID: <bff4d37d79edef89ce87b85d0796a599@busybox.net>
+Date: Mon, 30 Apr 2007 04:50:48 -0700
+Subject: [Buildroot] [buildroot 0001327]: busybox taskset.c fail to build.
+Message-ID: <aaa2a4a3e665797aa964fa3c907171a5@busybox.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -10,71 +9,47 @@ Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
 
-The issue 0001327 has been set as DUPLICATE OF the following issue. 
+The following issue has been CLOSED 
 ====================================================================== 
-http://busybox.net/bugs/view.php?id=1309 
+http://busybox.net/bugs/view.php?id=1327 
 ====================================================================== 
-Reported By:                Ulf Samuelsson
+Reported By:                ALEXANDER WOLD
 Assigned To:                buildroot
 ====================================================================== 
 Project:                    buildroot
-Issue ID:                   1309
+Issue ID:                   1327
 Category:                   Architecture Specific
 Reproducibility:            always
-Severity:                   minor
+Severity:                   major
 Priority:                   normal
 Status:                     closed
-Resolution:                 no change required
+Resolution:                 open
 Fixed in Version:           
 ====================================================================== 
-Date Submitted:             04-11-2007 03:44 PDT
-Last Modified:              04-11-2007 05:46 PDT
+Date Submitted:             04-28-2007 04:33 PDT
+Last Modified:              04-30-2007 04:50 PDT
 ====================================================================== 
-Summary:                    Busybox 1.5.0 build crashes when building
-miscutils/patchset.c under buildroot
+Summary:                    busybox taskset.c fail to build.
 Description: 
-It seems that there is some undefined "defines"'s in the "taskset.c"
-
-CPU_ISSET
-CPU_SETSIZE
-CPU_ZERO
-CPU_SET
-
-They are supposed to be set in "include/sched.h", and they are present in
-
-
-/usr/include/sched.h 
-
-on my OpenSuse 10.2 PC, but they are not present in the linux-2.6.20.4
-tarball
-
-I could not find them in the toolchain includes...
-
-
-There is a compile error at line 17 as well...
-
+Busybox taskset fails to build in buildroot r18518.
 ======================================================================
 Relationships       ID      Summary
 ----------------------------------------------------------------------
-has duplicate       0001327 busybox taskset.c fail to build.
+duplicate of        0001309 Busybox 1.5.0 build crashes when buildi...
 ====================================================================== 
 
 ---------------------------------------------------------------------- 
- bernhardf - 04-11-07 05:46  
+ ALEXANDER WOLD - 04-28-07 04:38  
 ---------------------------------------------------------------------- 
-1) this is not a buildroot issue.
-2) read the helptext for taskset
-3) if you need taskset, use uClibc-trunk 
+This is a duplicate of bug 0001309 
 
 Issue History 
 Date Modified   Username       Field                    Change               
 ====================================================================== 
-04-11-07 03:44  Ulf Samuelsson New Issue                                    
-04-11-07 03:44  Ulf Samuelsson Status                   new => assigned     
-04-11-07 03:44  Ulf Samuelsson Assigned To               => buildroot       
-04-11-07 05:46  bernhardf      Status                   assigned => closed  
-04-11-07 05:46  bernhardf      Note Added: 0002306                          
-04-11-07 05:46  bernhardf      Resolution               open => no change
-required
-04-30-07 04:50  bernhardf      Relationship added       has duplicate 0001327
+04-28-07 04:33  ALEXANDER WOLD New Issue                                    
+04-28-07 04:33  ALEXANDER WOLD Status                   new => assigned     
+04-28-07 04:33  ALEXANDER WOLD Assigned To               => buildroot       
+04-28-07 04:38  ALEXANDER WOLD Note Added: 0002334                          
+04-30-07 04:50  bernhardf      Relationship added       duplicate of 0001309
+04-30-07 04:50  bernhardf      Status                   assigned => closed  
 ======================================================================
