@@ -1,41 +1,26 @@
-From: Ulf Samuelsson <ulf@atmel.com>
-Date: Sat, 28 Apr 2007 20:53:35 +0200
-Subject: [Buildroot] svn commit: trunk/buildroot
-Message-ID: <rNCcSWXrZpl2.Rt5FpPkZ@mailout.dof.se>
+From: =?iso-8859-1?q?=D8yvind_Repvik?= <repvik@kynisk.com>
+Date: Mon, 30 Apr 2007 03:07:58 +0200
+Subject: [Buildroot] [PATCH] e2fsprogs symlinking
+Message-ID: <200704300307.58865.repvik@kynisk.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-________________ Sidrubrik f?r svar ________________ ?rende:	[Buildroot] svn commit: trunk/buildroot F?rfattare:	sjhill at uclibc.org Datum:		2007 april 28:e 17:13 
-Author: sjhill
-Date: 2007-04-28 10:09:44 -0700 (Sat, 28 Apr 2007)
-New Revision: 18528
+Hi,
 
-Log:
-Create symlink for 'usr/include' in the staging directory so that packages like zlib and others who expect that to exist will install properly.
+	When e2fsprogs is installed, it duplicates several binaries, which isn't 
+really very space efficient. This patch removes these duplicate binaries and 
+replaces them with symlinks pointing to the original binary.
+This saves 448kb on an uncompressed rootfs.
 
-
-Modified:
-   trunk/buildroot/Makefile
-
-
-Changeset:
-Modified: trunk/buildroot/Makefile
-===================================================================
---- trunk/buildroot/Makefile	2007-04-28 17:08:57 UTC (rev 18527)
-+++ trunk/buildroot/Makefile	2007-04-28 17:09:44 UTC (rev 18528)
-@@ -107,6 +107,7 @@
- 	@mkdir -p $(STAGING_DIR)/include
- 	@mkdir -p $(STAGING_DIR)/usr
- 	@mkdir -p $(STAGING_DIR)/$(REAL_GNU_TARGET_NAME)
-+	@ln -snf ../include $(STAGING_DIR)/usr/include
- 	@ln -snf ../lib $(STAGING_DIR)/usr/lib
- 	@ln -snf ../lib $(STAGING_DIR)/$(REAL_GNU_TARGET_NAME)/lib
- 
-
-_______________________________________________
-buildroot mailing list
-buildroot at uclibc.org
-http://busybox.net/mailman/listinfo/buildroot
+Regards,
+?yvind Repvik
+-------------- next part --------------
+A non-text attachment was scrubbed...
+Name: e2fsprogs_symlinks.diff
+Type: text/x-diff
+Size: 1020 bytes
+Desc: not available
+Url : http://busybox.net/lists/buildroot/attachments/20070430/cf849f11/attachment.bin 
