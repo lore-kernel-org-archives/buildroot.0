@@ -1,38 +1,39 @@
 From: Bernhard Fischer <rep.dot.nop@gmail.com>
-Date: Mon, 30 Apr 2007 14:54:00 +0200
-Subject: [Buildroot] Failed to build the toolchain for ARM7TDMI
-In-Reply-To: <bc56c6d90704251843l7a0d278cn2ee437e77afefe2f@mail.gmail.com>
-References: <bc56c6d90704251843l7a0d278cn2ee437e77afefe2f@mail.gmail.com>
-Message-ID: <20070430125400.GB18543@aon.at>
+Date: Mon, 30 Apr 2007 14:57:31 +0200
+Subject: [Buildroot] gcc-4.1.2 eabi softfloat toolchain,
+	undefined reference to "raise"
+In-Reply-To: <20070426080257.GA7608@z1.synertronixx>
+References: <20070426080257.GA7608@z1.synertronixx>
+Message-ID: <20070430125731.GC18543@aon.at>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Thu, Apr 26, 2007 at 09:43:16AM +0800, ???? wrote:
->Can anybody tell me what should I do,thx.  The following info was
->displayed in terminal:
+On Thu, Apr 26, 2007 at 10:02:59AM +0200, Konstantin Kletschke wrote:
+>I have a toolcahin working quite well: gcc-4.1.2 binutils-2.17, generic
+>arm softfloat supporting EABI. This works with kernel and userspace
+>well. Only on u-boot it fails at the final stage:
 >
->config.status: creating po/Makefile.in
->config.status: executing depfiles commands
->config.status: executing default commands
->make[4]: Leaving directory
->`/arm/src/buildroot/toolchain_build_arm_nofpu/binutils-2.17-build/bfd/po'
->make[4]: Entering directory
->`/arm/src/buildroot/toolchain_build_arm_nofpu/binutils-2.17-build/bfd/po'
->make[4]: Nothing to be done for `info'.
->make[4]: Leaving directory
->`/arm/src/buildroot/toolchain_build_arm_nofpu/binutils-2.17-build/bfd/po'
->make[4]: Entering directory
->`/arm/src/buildroot/toolchain_build_arm_nofpu/binutils-2.17-build/bfd'
->make[4]: Nothing to be done for `info-am'.
->make[4]: Leaving directory
->`/arm/src/buildroot/toolchain_build_arm_nofpu/binutils-2.17-build/bfd'
->make[3]: *** [info-recursive] ???? 1
+>UNDEF_SYM=`arm-linux-objdump -x lib_generic/libgeneric.a board/scb9328/libscb9328.a cpu/arm920t/libarm920t.a cpu/arm920t/imx/libimx.a lib_arm/libarm.a fs/cramfs/libcramfs.a fs/fat/libfat.a fs/fdos/libfdos.a fs/jffs2/libjffs2.a fs/reiserfs/libreiserfs.a fs/ext2/libext2fs.a net/libnet.a disk/libdisk.a rtc/librtc.a dtt/libdtt.a drivers/libdrivers.a drivers/nand/libnand.a drivers/nand_legacy/libnand_legacy.a drivers/sk98lin/libsk98lin.a post/libpost.a post/cpu/libcpu.a common/libcommon.a |sed  -n -e 's/.*\(__u_boot_cmd_.*\)/-u\1/p'|sort|uniq`;\
+>                cd /usr/src/u-boot/1.2.0 && arm-linux-ld -Bstatic -T /usr/src/u-boot/1.2.0/board/scb9328/u-boot.lds -Ttext 0x08f00000  $UNDEF_SYM cpu/arm920t/start.o \
+>                        --start-group lib_generic/libgeneric.a board/scb9328/libscb9328.a cpu/arm920t/libarm920t.a cpu/arm920t/imx/libimx.a lib_arm/libarm.a fs/cramfs/libcramfs.a fs/fat/libfat.a fs/fdos/libfdos.a fs/jffs2/libjffs2.a fs/reiserfs/libreiserfs.a fs/ext2/libext2fs.a net/libnet.a disk/libdisk.a rtc/librtc.a dtt/libdtt.a drivers/libdrivers.a drivers/nand/libnand.a drivers/nand_legacy/libnand_legacy.a drivers/sk98lin/libsk98lin.a post/libpost.a post/cpu/libcpu.a common/libcommon.a --end-group -L /usr/local/arm/gcc-4.1.2/lib/gcc/arm-linux-uclibcgnueabi/4.1.2 -lgcc \
+>                        -Map u-boot.map -o u-boot
+>/usr/local/arm/gcc-4.1.2/lib/gcc/arm-linux-uclibcgnueabi/4.1.2/libgcc.a(_dvmd_lnx.o): In function `__div0':
+>/usr/src/br/buildroot-20070206/toolchain_build_arm_nofpu/gcc-4.1.2-20070128/gcc/config/arm/lib1funcs.asm:1000: undefined reference to `raise'
+>make: *** [u-boot] Error 1
 
-An error should have been printed here. Do a
-$ make binutils-clean binutils-dirclean
-and paste the first error you get from running
-$ make
-afterwards.
+This is a known bug with gcc. There is a bugfix (that i don't really
+understand and consequently don't know if it is really accurate)
+floating around for this one.
+
+If in doubt, please file a PR in http://gcc.gnu.org/bugzilla/ about this bug
+and perhaps add a pointer to the patch if this bug is not yet entered in
+bugzilla.
+
+TIA,
+>
+>Well, compiling u-boot works fine with another arch (pxa xscale), only my arm9 
+>i.MX arch triggers a bug here. Does somebody have an advise or tip for
+>me how to fix this?
