@@ -1,7 +1,7 @@
-From: Arnon Meydav <ArnonM@metalinkBB.com>
-Date: Mon, 30 Apr 2007 13:48:15 +0300
-Subject: [Buildroot] Error trying to compile linux kernel
-Message-ID: <5002BD9FB045734DB9F20119530FB01701173046@ilmail2.metalink.dsl>
+From: bugs at busybox.net <bugs@busybox.net>
+Date: Mon, 30 Apr 2007 04:50:36 -0700
+Subject: [Buildroot] [buildroot 0001327]: busybox taskset.c fail to build.
+Message-ID: <2d2a7707263836b90764fedf198a2c95@busybox.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -9,37 +9,44 @@ Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
 
-Hi,
-I am trying to compile the linux kernel for a mips core using buildroot,
-and I keep getting the following error.
-cp is missing an argument when copying the linux .config file.
- 
- 
-The error dump:
- 
-/usr/bin/install -D
-/home/arnonm/RG/buildroot/toolchain_build_mips_nofpu/module-init-tools-3
-.2.2/depmod
-/home/arnonm/RG/buildroot/build_mips_nofpu/staging_dir/bin/mips-linux-de
-pmod26
-cp -dpf
-/home/arnonm/RG/buildroot/build_mips_nofpu/linux-2.6.20.4/.config
-cp: missing destination file
-Try `cp --help' for more information.
-make: ***
-[/home/arnonm/RG/buildroot/build_mips_nofpu/linux-2.6.20.4/.configured]
-Error 1
+The following issue has been set as DUPLICATE OF issue 0001309. 
+====================================================================== 
+http://busybox.net/bugs/view.php?id=1327 
+====================================================================== 
+Reported By:                ALEXANDER WOLD
+Assigned To:                buildroot
+====================================================================== 
+Project:                    buildroot
+Issue ID:                   1327
+Category:                   Architecture Specific
+Reproducibility:            always
+Severity:                   major
+Priority:                   normal
+Status:                     assigned
+====================================================================== 
+Date Submitted:             04-28-2007 04:33 PDT
+Last Modified:              04-30-2007 04:50 PDT
+====================================================================== 
+Summary:                    busybox taskset.c fail to build.
+Description: 
+Busybox taskset fails to build in buildroot r18518.
+======================================================================
+Relationships       ID      Summary
+----------------------------------------------------------------------
+duplicate of        0001309 Busybox 1.5.0 build crashes when buildi...
+====================================================================== 
 
- 
-Any suggestions?
- 
-Thanks, 
-- Arnon M
+---------------------------------------------------------------------- 
+ ALEXANDER WOLD - 04-28-07 04:38  
+---------------------------------------------------------------------- 
+This is a duplicate of bug 0001309 
 
-
--- Disclaimer: --
-This e-mail is intended solely for the person to whom it is addressed and may contain confidential or legally privileged information. Access to this e-mail by anyone else is unauthorized. If an addressing or transmission error has misdirected this e-mail, please notify the author by replying to this e-mail and destroy this e-mail and any attachments. 
-E-mail may be susceptible to data corruption, interception, unauthorized amendment, viruses and delays or the consequences thereof. If you are not the intended recipient, be advised that you have received this email in error and that any use, dissemination, forwarding, printing or copying of this email is strictly prohibited.
--------------- next part --------------
-An HTML attachment was scrubbed...
-URL: http://busybox.net/lists/buildroot/attachments/20070430/15cea5e1/attachment.htm 
+Issue History 
+Date Modified   Username       Field                    Change               
+====================================================================== 
+04-28-07 04:33  ALEXANDER WOLD New Issue                                    
+04-28-07 04:33  ALEXANDER WOLD Status                   new => assigned     
+04-28-07 04:33  ALEXANDER WOLD Assigned To               => buildroot       
+04-28-07 04:38  ALEXANDER WOLD Note Added: 0002334                          
+04-30-07 04:50  bernhardf      Relationship added       duplicate of 0001309
+======================================================================
