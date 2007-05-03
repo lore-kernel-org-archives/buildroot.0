@@ -1,168 +1,154 @@
-From: Ken Cecka <ceckak@alumni.washington.edu>
-Date: Wed, 02 May 2007 09:21:59 -0700
-Subject: [Buildroot] wrong address when linking simple ARM test application
-Message-ID: <f1adr8$d8g$1@sea.gmane.org>
+From: jacmet at uclibc.org <jacmet@uclibc.org>
+Date: Thu,  3 May 2007 01:25:19 -0700 (PDT)
+Subject: [Buildroot] svn commit: trunk/buildroot: package/fakeroot
+	target/cpio target/cram etc...
+Message-ID: <20070503082519.4E4D64859E@busybox.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi,
+Author: jacmet
+Date: 2007-05-03 01:25:17 -0700 (Thu, 03 May 2007)
+New Revision: 18549
 
-May need to go to a GCC list for this, but I thought I'd start here.  I've
-constructed a very minimal standalone ARM test application that I am trying
-to load into SRAM on an ARM1136JFS target.  The SRAM is at address
-0x1fffc000, and I am trying to link my elf file at that address, but when I
-go to download it, the debugger tries to write to address 0x1fff8000.
+Log:
+s/FAKEROUTE/FAKEROOT/
 
-When I look at the elf file using objdump, I see that all the sections are
-at 0x1fffc000, but there's a program header at 0x1fff8000.  Why does the
-header have this address, and how can I fix it?
-
-Source files and objdump output are copied below.
-
-Thanks,
-Ken
-
----- Begin Makefile ----
-
-TOOLCHAIN=/home/kcecka/projects/zasfiles/buildroot/build_arm/staging_dir
-PREFIX=arm-linux-
-AS=$(TOOLCHAIN)/bin/$(PREFIX)as
-CC=$(TOOLCHAIN)/bin/$(PREFIX)gcc
-CXX=$(TOOLCHAIN)/bin/$(PREFIX)g++
-LD=$(TOOLCHAIN)/bin/$(PREFIX)ld
-OBJDUMP=$(TOOLCHAIN)/bin/$(PREFIX)objdump
-STRIP=$(TOOLCHAIN)/bin/$(PREFIX)strip
-
-ASFLAGS=-gdwarf-2
-CFLAGS=-gdwarf-2
-LDFLAGS=-Ttext 0x1fffc000 --defsym stack=0x1fffffff
-
-all: testapp.elf testapp.srec testapp.elf.s
-
-testapp.elf: start.o main.o
-        $(LD) $(LDFLAGS) -o $@ $^
-
-%.elf.s: %.elf
-        $(OBJDUMP) --disassemble-all $< > $@
-
-%.srec: %.elf
-        cp $< $@
-        $(STRIP) -O srec $@
-
----- end Makefile ----
-
----- begin start.s ----
-
-        .text
-        .global _start
-        .global main
-_start:
-        LDR r13, =stack
-        BL main
-stall:
-        B stall
-
----- end start.s ----
-
----- begin main.c ----
-
-int foo(int);
-
-int bar(int);
+Modified:
+   trunk/buildroot/package/fakeroot/Config.in
+   trunk/buildroot/package/fakeroot/fakeroot.mk
+   trunk/buildroot/target/cpio/Config.in
+   trunk/buildroot/target/cramfs/Config.in
+   trunk/buildroot/target/ext2/Config.in
+   trunk/buildroot/target/iso9660/Config.in
+   trunk/buildroot/target/jffs2/Config.in
+   trunk/buildroot/target/squashfs/Config.in
+   trunk/buildroot/target/tar/Config.in
 
 
-int main()
-{
-        int i = 0;
+Changeset:
+Modified: trunk/buildroot/package/fakeroot/Config.in
+===================================================================
+--- trunk/buildroot/package/fakeroot/Config.in	2007-05-02 23:39:04 UTC (rev 18548)
++++ trunk/buildroot/package/fakeroot/Config.in	2007-05-03 08:25:17 UTC (rev 18549)
+@@ -7,6 +7,6 @@
+ 	  http://joostje.op.het.net/fakeroot/
+ 
+ # dummy for fakeroot-source
+-config BR2_HOST_FAKEROUTE
++config BR2_HOST_FAKEROOT
+ 	bool
+ 	default n
 
-        i = foo(i);
+Modified: trunk/buildroot/package/fakeroot/fakeroot.mk
+===================================================================
+--- trunk/buildroot/package/fakeroot/fakeroot.mk	2007-05-02 23:39:04 UTC (rev 18548)
++++ trunk/buildroot/package/fakeroot/fakeroot.mk	2007-05-03 08:25:17 UTC (rev 18549)
+@@ -123,6 +123,6 @@
+ TARGETS+=fakeroot
+ endif
+ 
+-ifeq ($(strip $(BR2_HOST_FAKEROUTE)),y)
++ifeq ($(strip $(BR2_HOST_FAKEROOT)),y)
+ HOST_SOURCE+=fakeroot-source
+ endif
 
-        while(1)
-                i = bar(i);
-}
+Modified: trunk/buildroot/target/cpio/Config.in
+===================================================================
+--- trunk/buildroot/target/cpio/Config.in	2007-05-02 23:39:04 UTC (rev 18548)
++++ trunk/buildroot/target/cpio/Config.in	2007-05-03 08:25:17 UTC (rev 18549)
+@@ -1,7 +1,7 @@
+ config BR2_TARGET_ROOTFS_CPIO
+ 	bool "cpio the root filesystem"
+ 	default n
+-	select BR2_HOST_FAKEROUTE
++	select BR2_HOST_FAKEROOT
+ 	help
+ 	  Build a cpio archive of the root filesystem
+ 
 
-int foo(int i)
-{
-        return i+1;
-}
+Modified: trunk/buildroot/target/cramfs/Config.in
+===================================================================
+--- trunk/buildroot/target/cramfs/Config.in	2007-05-02 23:39:04 UTC (rev 18548)
++++ trunk/buildroot/target/cramfs/Config.in	2007-05-03 08:25:17 UTC (rev 18549)
+@@ -1,7 +1,7 @@
+ config BR2_TARGET_ROOTFS_CRAMFS
+ 	bool "cramfs root filesystem"
+ 	default n
+-	select BR2_HOST_FAKEROUTE
++	select BR2_HOST_FAKEROOT
+ 	help
+ 	  Build a cramfs root filesystem
+ 
 
-int bar(int i)
-{
-        return i;
-}
+Modified: trunk/buildroot/target/ext2/Config.in
+===================================================================
+--- trunk/buildroot/target/ext2/Config.in	2007-05-02 23:39:04 UTC (rev 18548)
++++ trunk/buildroot/target/ext2/Config.in	2007-05-03 08:25:17 UTC (rev 18549)
+@@ -1,7 +1,7 @@
+ config BR2_TARGET_ROOTFS_EXT2
+ 	bool "ext2 root filesystem"
+ 	default y
+-	select BR2_HOST_FAKEROUTE
++	select BR2_HOST_FAKEROOT
+ 	help
+ 	  Build an ext2 root filesystem
+ 
 
----- end main.c ----
+Modified: trunk/buildroot/target/iso9660/Config.in
+===================================================================
+--- trunk/buildroot/target/iso9660/Config.in	2007-05-02 23:39:04 UTC (rev 18548)
++++ trunk/buildroot/target/iso9660/Config.in	2007-05-03 08:25:17 UTC (rev 18549)
+@@ -4,7 +4,7 @@
+ 	depends on BR2_i386
+ 	select BR2_TARGET_ROOTFS_EXT2
+ 	select BR2_TARGET_GRUB
+-	select BR2_HOST_FAKEROUTE
++	select BR2_HOST_FAKEROOT
+ 	help
+ 	  Build a bootable iso9660 image
+ 
 
----- begin objdump output ----
+Modified: trunk/buildroot/target/jffs2/Config.in
+===================================================================
+--- trunk/buildroot/target/jffs2/Config.in	2007-05-02 23:39:04 UTC (rev 18548)
++++ trunk/buildroot/target/jffs2/Config.in	2007-05-03 08:25:17 UTC (rev 18549)
+@@ -1,7 +1,7 @@
+ config BR2_TARGET_ROOTFS_JFFS2
+ 	bool "jffs2 root filesystem"
+ 	default n
+-	select BR2_HOST_FAKEROUTE
++	select BR2_HOST_FAKEROOT
+ 	select BR2_PACKAGE_MTD
+ 	help
+ 	  Build a jffs2 root filesystem
 
-$ arm-linux-objdump -x testapp.elf
+Modified: trunk/buildroot/target/squashfs/Config.in
+===================================================================
+--- trunk/buildroot/target/squashfs/Config.in	2007-05-02 23:39:04 UTC (rev 18548)
++++ trunk/buildroot/target/squashfs/Config.in	2007-05-03 08:25:17 UTC (rev 18549)
+@@ -1,7 +1,7 @@
+ config BR2_TARGET_ROOTFS_SQUASHFS
+ 	bool "squashfs root filesystem"
+ 	default n
+-	select BR2_HOST_FAKEROUTE
++	select BR2_HOST_FAKEROOT
+ 	help
+ 	  Build a squashfs root filesystem
+ 
 
-testapp.elf:     file format elf32-littlearm
-testapp.elf
-architecture: arm, flags 0x00000112:
-EXEC_P, HAS_SYMS, D_PAGED
-start address 0x1fffc000
-
-Program Header:
-    LOAD off    0x00000000 vaddr 0x1fff8000 paddr 0x1fff8000 align 2**15
-         filesz 0x00004098 memsz 0x00004098 flags r-x
-private flags = 4000002: [Version4 EABI] [has entry point]
-
-Sections:
-Idx Name          Size      VMA       LMA       File off  Algn
-  0 .text         00000098  1fffc000  1fffc000  00004000  2**2
-                  CONTENTS, ALLOC, LOAD, READONLY, CODE
-  1 .comment      00000012  00000000  00000000  00004098  2**0
-                  CONTENTS, READONLY
-  2 .debug_aranges 00000040  00000000  00000000  000040b0  2**3
-                  CONTENTS, READONLY, DEBUGGING
-  3 .debug_pubnames 0000002b  00000000  00000000  000040f0  2**0
-                  CONTENTS, READONLY, DEBUGGING
-  4 .debug_info   00000132  00000000  00000000  0000411b  2**0
-                  CONTENTS, READONLY, DEBUGGING
-  5 .debug_abbrev 00000098  00000000  00000000  0000424d  2**0
-                  CONTENTS, READONLY, DEBUGGING
-  6 .debug_line   00000074  00000000  00000000  000042e5  2**0
-                  CONTENTS, READONLY, DEBUGGING
-  7 .debug_frame  00000070  00000000  00000000  0000435c  2**2
-                  CONTENTS, READONLY, DEBUGGING
-  8 .debug_loc    0000007e  00000000  00000000  000043cc  2**0
-                  CONTENTS, READONLY, DEBUGGING
-  9 .ARM.attributes 00000010  00000000  00000000  0000444a  2**0
-                  CONTENTS, READONLY
-SYMBOL TABLE:
-1fffc000 l    d  .text  00000000 .text
-00000000 l    d  .comment       00000000 .comment
-00000000 l    d  .debug_aranges 00000000 .debug_aranges
-00000000 l    d  .debug_pubnames        00000000 .debug_pubnames
-00000000 l    d  .debug_info    00000000 .debug_info
-00000000 l    d  .debug_abbrev  00000000 .debug_abbrev
-00000000 l    d  .debug_line    00000000 .debug_line
-00000000 l    d  .debug_frame   00000000 .debug_frame
-00000000 l    d  .debug_loc     00000000 .debug_loc
-00000000 l    d  .ARM.attributes        00000000 .ARM.attributes
-00000000 l    d  *ABS*  00000000 .shstrtab
-00000000 l    d  *ABS*  00000000 .symtab
-00000000 l    d  *ABS*  00000000 .strtab
-1fffc008 l       .text  00000000 stall
-00000000 l    df *ABS*  00000000 main.c
-1fffc098 g       *ABS*  00000000 __exidx_end
-20004098 g       *ABS*  00000000 _bss_end__
-20004098 g       *ABS*  00000000 __bss_start__
-1fffc098 g       *ABS*  00000000 __exidx_start
-1fffffff g       *ABS*  00000000 stack
-20004098 g       *ABS*  00000000 __bss_end__
-1fffc000 g       .text  00000000 _start
-20004098 g       *ABS*  00000000 __bss_start
-1fffc010 g     F .text  0000003c main
-20004098 g       *ABS*  00000000 __end__
-1fffc04c g     F .text  00000028 foo
-20004098 g       *ABS*  00000000 _edata
-20004098 g       *ABS*  00000000 _end
-1fffc074 g     F .text  00000024 bar
-20004098 g       *ABS*  00000000 __data_start
-
----- end objdump output ----
+Modified: trunk/buildroot/target/tar/Config.in
+===================================================================
+--- trunk/buildroot/target/tar/Config.in	2007-05-02 23:39:04 UTC (rev 18548)
++++ trunk/buildroot/target/tar/Config.in	2007-05-03 08:25:17 UTC (rev 18549)
+@@ -1,7 +1,7 @@
+ config BR2_TARGET_ROOTFS_TAR
+ 	bool "tar the root filesystem"
+ 	default n
+-	select BR2_HOST_FAKEROUTE
++	select BR2_HOST_FAKEROOT
+ 	help
+ 	  Build a tar archive of the root filesystem
+ 
