@@ -1,39 +1,22 @@
-From: Bernhard Fischer <rep.dot.nop@gmail.com>
-Date: Thu, 3 May 2007 11:57:59 +0200
-Subject: [Buildroot] gcc-4.1.2 eabi softfloat toolchain,
-	undefined reference to "raise"
-In-Reply-To: <20070503083551.GB2783@z1.synertronixx>
-References: <20070426080257.GA7608@z1.synertronixx>
-	<20070430125731.GC18543@aon.at>
-	<20070503083551.GB2783@z1.synertronixx>
-Message-ID: <20070503095759.GA552@aon.at>
+From: Diego A. Fons <diegofons@apexar.com>
+Date: Thu, 03 May 2007 11:48:29 -0300
+Subject: [Buildroot] No rule to make target
+Message-ID: <4639F63D.8090902@apexar.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Thu, May 03, 2007 at 10:35:52AM +0200, Konstantin Kletschke wrote:
->Am 2007-04-30 14:57 +0200 schrieb Bernhard Fischer:
->
->> This is a known bug with gcc. There is a bugfix (that i don't really
->> understand and consequently don't know if it is really accurate)
->> floating around for this one.
->
->Well I searched like mad but I did not find one.
+Hi, it's me again...
 
-A quick google for these keywords:
-__div0 raise arm softfloat
+Once i built tinyX using buildroot and an external toolchain i tried to 
+build libgtk2 but i get this error:
 
-would have turned up said patch, fwiw.
+make: *** No rule to make target `tinyx', needed by `cairo'.  Stop.
 
->I digged around and added an empty raise() function and my bootloader
->compiled after that and the binary runs fine so far. Hmm...
->
->> If in doubt, please file a PR in http://gcc.gnu.org/bugzilla/ about this bug
->> and perhaps add a pointer to the patch if this bug is not yet entered in
->> bugzilla.
->
->I will enter it. 
+It seems that tinyX can't be built but i've already built tinyX in a 
+previous make. Does anyone know how to fix it?
 
-TIA,
+Thanks and regards,
+Diego A. Fons.
