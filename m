@@ -1,55 +1,52 @@
-From: Anoop Krishnan <anoop.krishnan@einfochips.com>
-Date: Fri, 4 May 2007 07:31:27 +0530
-Subject: [Buildroot] U-boot 1.1.4 build error
-Message-ID: <001401c78df0$202a9ec0$b101660a@eInfochips>
+From: Konstantin Kletschke <kletschke@synertronixx.de>
+Date: Fri, 4 May 2007 09:34:25 +0200
+Subject: [Buildroot] gcc-4.1.2 eabi softfloat toolchain,
+	undefined reference to "raise"
+In-Reply-To: <20070503095759.GA552@aon.at>
+References: <20070426080257.GA7608@z1.synertronixx>
+	<20070430125731.GC18543@aon.at>
+	<20070503083551.GB2783@z1.synertronixx>
+	<20070503095759.GA552@aon.at>
+Message-ID: <20070504073424.GA1982@z1.synertronixx>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi,
- 
+Am 2007-05-03 11:57 +0200 schrieb Bernhard Fischer:
 
+> A quick google for these keywords:
+> __div0 raise arm softfloat
 
-I have used crosstool-0.42 to build tool chain and it builds the toolchain without any problems
+Well, one trace leads to an uClibc-gcc-41-raise-error.patch which yields
+into a 404. But as I understand this "fixes" uClibc to compile but does
+not change the toolchain itself.
 
-and I can even compile the kernel Image with the same cross-compiler perfectly
+Another trace yields into a discussion suggesting replacing u-boot's
+__div(0) by a raise() stub. May be I did something like that with my
+very ugly hack.
 
-The probelm I am facing is that when I use the same toolchain to compile U-boot 1.1.4, I get
-the following error
+So did I understand right, that the libgcc calls raise() which is
+provided by glibc not uClibc?
 
-/opt/crosstool/gcc-4.1.0-glibc-2.4/arm-926ejs-linux-gnueabi/lib/gcc/arm-926ejs-linux-gnueabi/4.1.0/libgcc.a(_dvmd_lnx.o): In function `__div0':
-/home/anoop/Tool_chain/crosstool-0.42/build/arm-926ejs-linux-gnueabi/gcc-4.1.0-glibc-2.4/gcc-4.1.0/gcc/config/arm/lib1funcs.asm:1000: undefined reference to `raise'
-make: *** [u-boot] Error 1
+How comes only u-boot triggers that? I compiled many other stuff with
+this toolchain, kernel and userspace leading into perfect working
+binaries.
 
-I found that raise is defined in raise.c which is under the following path
-/home/anoop/Tool_chain/crosstool-0.42/build/arm-926ejs-linux-gnueabi/gcc-4.1.0-glibc-2.4/glibc-2.4/signal/raise.c
- 
-and its contents are as follows
+Kind regards, Konsti
 
-#include <signal.h>
-#include <errno.h>
-
-/* Raise the signal SIG.  */
-int
-raise (sig)
-     int sig;
-{
-  __set_errno (ENOSYS);
-  return -1;
-}
-weak_alias (raise, gsignal)
-
-stub_warning (raise)
-stub_warning (gsignal)
-#include <stub-tag.h>
-
-
-How can I solve this issue? Is there any patch for glibc-2.4 , applying which the issue can be solved?
-
-Thanks in advance
-Anoop 
--------------- next part --------------
-An HTML attachment was scrubbed...
-URL: http://busybox.net/lists/buildroot/attachments/20070504/95dead11/attachment.htm 
+-- 
+synertronixx GmbH
+Dipl.-Ing. (FH) Konstantin Kletschke
+Vahrenwalder Str. 7
+30165 Hannover
+Tel.    : 0511 / 3574 - 661
+Fax     : 0511 / 93 57 - 679
+E-mail  : kletschke at synertronixx.de
+Internet: http://www.synertronixx.de
+Vertretungsberechtigte Gesch?ftsf?hrer:
+Marc-Oliver Borck, Dr. Matthias Blaschke
+Registergericht: Amtsgericht Hannover
+Registernummer: HRB 59670
+USt-ID: DE 216 559 901
