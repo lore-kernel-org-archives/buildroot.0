@@ -1,7 +1,7 @@
 From: sjhill at uclibc.org <sjhill@uclibc.org>
-Date: Sun,  6 May 2007 21:02:31 -0700 (PDT)
-Subject: [Buildroot] svn commit: trunk/buildroot/package/udev
-Message-ID: <20070507040231.4133A48573@busybox.net>
+Date: Sun,  6 May 2007 21:03:43 -0700 (PDT)
+Subject: [Buildroot] svn commit: trunk/buildroot/package/usbmount
+Message-ID: <20070507040343.2A60B4857F@busybox.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -9,83 +9,104 @@ Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
 Author: sjhill
-Date: 2007-05-06 21:02:31 -0700 (Sun, 06 May 2007)
-New Revision: 18578
+Date: 2007-05-06 21:03:42 -0700 (Sun, 06 May 2007)
+New Revision: 18579
 
 Log:
-Add ability to build 'scsi_id' utility for udev.
+Modify the main script to use the lockfile program utilities. Mounting and un-mounting do not work reliably without them.
 
 
 Modified:
-   trunk/buildroot/package/udev/Config.in
-   trunk/buildroot/package/udev/udev.mk
+   trunk/buildroot/package/usbmount/Config.in
+   trunk/buildroot/package/usbmount/usbmount-0.0.14.1.patch
 
 
 Changeset:
-Modified: trunk/buildroot/package/udev/Config.in
+Modified: trunk/buildroot/package/usbmount/Config.in
 ===================================================================
---- trunk/buildroot/package/udev/Config.in	2007-05-07 04:01:58 UTC (rev 18577)
-+++ trunk/buildroot/package/udev/Config.in	2007-05-07 04:02:31 UTC (rev 18578)
-@@ -24,4 +24,11 @@
-         help
-           Build and install volume identification library.
- 
-+config BR2_PACKAGE_UDEV_SCSI_ID
-+        bool "udev-scsi_id"
-+        default n
-+        depends on BR2_PACKAGE_UDEV
-+        help
-+          Build and install SCSI disk identification library.
-+
- endmenu
+--- trunk/buildroot/package/usbmount/Config.in	2007-05-07 04:02:31 UTC (rev 18578)
++++ trunk/buildroot/package/usbmount/Config.in	2007-05-07 04:03:42 UTC (rev 18579)
+@@ -2,6 +2,8 @@
+ 	bool "usbmount"
+ 	default n
+ 	select BR2_PACKAGE_UDEV_VOLUME_ID
++	select BR2_PACKAGE_UDEV_SCSI_ID
++	select BR2_PACKAGE_LOCKFILE_PROGS
+ 	help
+ 	  The usbmount package automatically mounts USB mass storage devices
+ 	  when they are plugged in, and unmounts them when they are removed.
 
-Modified: trunk/buildroot/package/udev/udev.mk
+Modified: trunk/buildroot/package/usbmount/usbmount-0.0.14.1.patch
 ===================================================================
---- trunk/buildroot/package/udev/udev.mk	2007-05-07 04:01:58 UTC (rev 18577)
-+++ trunk/buildroot/package/udev/udev.mk	2007-05-07 04:02:31 UTC (rev 18578)
-@@ -84,13 +84,35 @@
- 	-$(MAKE) EXTRAS="extras/volume_id" -C $(UDEV_DIR) clean
- endif
- 
--udev-clean:
-+ifeq ($(strip $(BR2_PACKAGE_UDEV_SCSI_ID)),y)
-+$(TARGET_DIR)/lib/udev/scsi_id: $(STAGING_DIR)/usr/lib/libvolume_id.so.0.72.0
-+	$(MAKE) CROSS_COMPILE=$(TARGET_CROSS) \
-+		USE_LOG=false USE_SELINUX=false \
-+		udevdir=$(UDEV_ROOT) EXTRAS="extras/scsi_id" -C $(UDEV_DIR)
-+	$(INSTALL) -m 0755 -D $(UDEV_DIR)/extras/scsi_id/scsi_id $(TARGET_DIR)/lib/udev/scsi_id
-+	$(STRIP) --strip-unneeded $(TARGET_DIR)/lib/udev/scsi_id
-+	$(MAKE) CROSS_COMPILE=$(TARGET_CROSS) \
-+		USE_LOG=false USE_SELINUX=false \
-+		udevdir=$(UDEV_ROOT) EXTRAS="extras/usb_id" -C $(UDEV_DIR)
-+	$(INSTALL) -m 0755 -D $(UDEV_DIR)/extras/usb_id/usb_id $(TARGET_DIR)/lib/udev/usb_id
-+	$(STRIP) --strip-unneeded $(TARGET_DIR)/lib/udev/usb_id
-+
-+udev-scsi_id: udev $(TARGET_DIR)/lib/udev/scsi_id
-+
-+udev-scsi_id-clean:
-+	rm -f $(TARGET_DIR)/lib/udev/scsi_id
-+
-+udev-scsi_id-dirclean:
-+	-$(MAKE) EXTRAS="extras/scsi_id" -C $(UDEV_DIR) clean
-+endif
-+
-+udev-clean: udev-volume_id-clean udev-scsi_id-clean
- 	rm -f $(TARGET_DIR)/etc/init.d/S10udev $(TARGET_DIR)/sbin/udev*
- 	rm -f $(TARGET_DIR)/usr/sbin/udevmonitor $(TARGET_DIR)/usr/bin/udev*
- 	rmdir $(TARGET_DIR)/sys
- 	-$(MAKE) -C $(UDEV_DIR) clean
- 
--udev-dirclean:
-+udev-dirclean: udev-volume_id-dirclean udev-scsi_id-dirclean
- 	rm -rf $(UDEV_DIR)
- 
- #############################################################
-@@ -105,3 +127,7 @@
- ifeq ($(strip $(BR2_PACKAGE_UDEV_VOLUME_ID)),y)
- TARGETS+=udev-volume_id
- endif
-+
-+ifeq ($(strip $(BR2_PACKAGE_UDEV_SCSI_ID)),y)
-+TARGETS+=udev-scsi_id
-+endif
+--- trunk/buildroot/package/usbmount/usbmount-0.0.14.1.patch	2007-05-07 04:02:31 UTC (rev 18578)
++++ trunk/buildroot/package/usbmount/usbmount-0.0.14.1.patch	2007-05-07 04:03:42 UTC (rev 18579)
+@@ -1,22 +1,7 @@
+-diff -ru usbmount-0.0.14.1/usbmount usbmount-patched/usbmount
+---- usbmount-0.0.14.1/usbmount	2007-01-27 12:22:14.000000000 +0100
+-+++ usbmount-patched/usbmount	2007-02-07 12:47:16.000000000 +0100
+-@@ -11,7 +11,14 @@
+- # but WITHOUT ANY WARRANTY, to the extent permitted by law; without
+- # even the implied warranty of MERCHANTABILITY or FITNESS FOR A
+- # PARTICULAR PURPOSE.
+-+
+-+#
+-+# Changed to support config of logfile and vol_id and creating locks
+-+# without the use of lockfile-create all for embedded use.
+-+# Joshua D Henderson <jdhende1@rockwellcollins.com>
+-+# Patch touched by Alexander Rigbo <alexander.rigbo@acgnystrom.se>
+- #
+-+
+- set -e
+- exec > /dev/null 2>&1
+- 
+-@@ -20,7 +27,7 @@
++diff -ur usbmount-0.0.14.1/usbmount usbmount-0.0.14.1-patched/usbmount
++--- usbmount-0.0.14.1/usbmount	2007-01-27 05:22:14.000000000 -0600
+++++ usbmount-0.0.14.1-patched/usbmount	2007-03-15 07:25:18.000000000 -0500
++@@ -20,7 +20,7 @@
+  log()
+  {
+      if test $1 != debug || expr "$VERBOSE" : "[yY]" > /dev/null; then
+@@ -25,7 +10,7 @@
+      fi
+  }
+  
+-@@ -57,11 +64,11 @@
++@@ -57,11 +57,11 @@
+  if test "$1" = add; then
+  
+      # Acquire lock.
+@@ -34,17 +19,25 @@
+ -	{ log err "cannot acquire lock /var/run/usbmount/.mount.lock"; exit 1; }
+ -    trap '( lockfile-remove /var/run/usbmount/.mount )' 0
+ -    log debug "acquired lock /var/run/usbmount/.mount.lock"
+-+#    log debug "trying to acquire lock /var/run/usbmount/.mount.lock"
+-+#    lockfile-create --retry 3 /var/run/usbmount/.mount || \
+-+#	{ log err "cannot acquire lock /var/run/usbmount/.mount.lock"; exit 1; }
+-+#    trap '( lockfile-remove /var/run/usbmount/.mount )' 0
+-+#    log debug "acquired lock /var/run/usbmount/.mount.lock"
+++    log debug "trying to acquire lock /var/run/.usbmount.lock"
+++    lockfile-create --retry 5 /var/run/.usbmount || \
+++	{ log err "cannot acquire lock /var/run/.usbmount.lock"; exit 1; }
+++    trap '( lockfile-remove /var/run/.usbmount )' 0
+++    log debug "acquired lock /var/run/.usbmount.lock"
+  
+      # Try to read from the device.  Some devices need a few seconds
+      # initialization time before they can be accessed.  Give up after
+-diff -ru usbmount-0.0.14.1/usbmount.conf usbmount-patched/usbmount.conf
+---- usbmount-0.0.14.1/usbmount.conf	2005-04-08 16:05:10.000000000 +0200
+-+++ usbmount-patched/usbmount.conf	2007-02-07 12:44:39.000000000 +0100
++@@ -184,6 +184,7 @@
++ 		log info "executing command: run-parts /etc/usbmount/umount.d"
++ 		run-parts /etc/usbmount/umount.d || :
++ 	    fi
+++	    lockfile-remove /var/run/.usbmount
++ 	    break
++ 	fi
++     done < /proc/mounts
++diff -ur usbmount-0.0.14.1/usbmount.conf usbmount-0.0.14.1-patched/usbmount.conf
++--- usbmount-0.0.14.1/usbmount.conf	2005-04-08 09:05:10.000000000 -0500
+++++ usbmount-0.0.14.1-patched/usbmount.conf	2007-03-15 07:21:33.000000000 -0500
+ @@ -17,7 +17,7 @@
+  # sure all data is written to the medium before you remove it (e.g. run the #
+  # "sync" command in a terminal window).  Otherwise, you *WILL* lose data!   #
