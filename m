@@ -1,7 +1,7 @@
 From: sjhill at uclibc.org <sjhill@uclibc.org>
-Date: Sun,  6 May 2007 21:01:25 -0700 (PDT)
-Subject: [Buildroot] svn commit: trunk/buildroot/package
-Message-ID: <20070507040125.5349B48568@busybox.net>
+Date: Sun,  6 May 2007 21:01:58 -0700 (PDT)
+Subject: [Buildroot] svn commit: trunk/buildroot/package/tftpd
+Message-ID: <20070507040158.92D4E48573@busybox.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -9,28 +9,38 @@ Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
 Author: sjhill
-Date: 2007-05-06 21:01:24 -0700 (Sun, 06 May 2007)
-New Revision: 18576
+Date: 2007-05-06 21:01:58 -0700 (Sun, 06 May 2007)
+New Revision: 18577
 
 Log:
-Add another include path to the CFLAGS.
+Install the default script only if one was not found from the platform.
 
 
 Modified:
-   trunk/buildroot/package/Makefile.in
+   trunk/buildroot/package/tftpd/tftpd.mk
 
 
 Changeset:
-Modified: trunk/buildroot/package/Makefile.in
+Modified: trunk/buildroot/package/tftpd/tftpd.mk
 ===================================================================
---- trunk/buildroot/package/Makefile.in	2007-05-07 04:01:07 UTC (rev 18575)
-+++ trunk/buildroot/package/Makefile.in	2007-05-07 04:01:24 UTC (rev 18576)
-@@ -22,7 +22,7 @@
- ifeq ($(BR2_TOOLCHAIN_BUILDROOT),y)
- TARGET_CFLAGS=$(TARGET_OPTIMIZATION) $(TARGET_DEBUGGING)
- else
--TARGET_CFLAGS=$(TARGET_OPTIMIZATION) $(TARGET_DEBUGGING) -I$(STAGING_DIR)/include -I$(TOOLCHAIN_EXTERNAL_PATH)/$(TOOLCHAIN_EXTERNAL_PREFIX)/include
-+TARGET_CFLAGS=$(TARGET_OPTIMIZATION) $(TARGET_DEBUGGING) -I$(STAGING_DIR)/include -I$(STAGING_DIR)/usr/include -I$(TOOLCHAIN_EXTERNAL_PATH)/$(TOOLCHAIN_EXTERNAL_PREFIX)/include
- TARGET_LDFLAGS=-L$(STAGING_DIR)/lib -L$(STAGING_DIR)/usr/lib
- endif
- HOSTCC:=gcc
+--- trunk/buildroot/package/tftpd/tftpd.mk	2007-05-07 04:01:24 UTC (rev 18576)
++++ trunk/buildroot/package/tftpd/tftpd.mk	2007-05-07 04:01:58 UTC (rev 18577)
+@@ -58,13 +58,15 @@
+ 	    set -x; \
+ 	    rm -f $(TARGET_DIR)/$(TFTP_HPA_TARGET_BINARY); \
+ 	    cp -a $(TFTP_HPA_DIR)/$(TFTP_HPA_BINARY) $(TARGET_DIR)/$(TFTP_HPA_TARGET_BINARY); fi ;
+-	$(INSTALL) -D -m 0755 package/tftpd/init-tftpd $(TARGET_DIR)/etc/init.d/S80tftpd-hpa
++	@if [ ! -f $(TARGET_DIR)/etc/init.d/S80tftpd-hpa ] ; then \
++		$(INSTALL) -m 0755 -D package/tftpd/init-tftpd $(TARGET_DIR)/etc/init.d/S80tftpd-hpa; \
++	fi;
+ 
+ tftpd: uclibc $(TARGET_DIR)/$(TFTP_HPA_TARGET_BINARY)
+ 
+ tftpd-clean:
+-	rm -rf $(TARGET_DIR)/etc/init.d/S80tftpd-hpa
+-	rm -rf $(TARGET_DIR)/usr/sbin/in.tftpd
++	rm -f $(TARGET_DIR)/etc/init.d/S80tftpd-hpa
++	rm -f $(TARGET_DIR)/usr/sbin/in.tftpd
+ 	-$(MAKE) -C $(TFTP_HPA_DIR) clean
+ 
+ tftpd-dirclean:
