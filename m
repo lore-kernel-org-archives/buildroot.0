@@ -1,53 +1,64 @@
-From: bugs at busybox.net <bugs@busybox.net>
-Date: Tue, 8 May 2007 08:02:21 -0700
-Subject: [Buildroot] [buildroot 0001341]: e2fsprogs installs duplicate
-	binaries instead of symlinking
-Message-ID: <6e0a1a4021aef302e1c126a9e08e433d@busybox.net>
+From: aldot at uclibc.org <aldot@uclibc.org>
+Date: Tue,  8 May 2007 08:17:44 -0700 (PDT)
+Subject: [Buildroot] svn commit: trunk/buildroot/package/cvs
+Message-ID: <20070508151744.5996548012@busybox.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+Author: aldot
+Date: 2007-05-08 08:17:41 -0700 (Tue, 08 May 2007)
+New Revision: 18582
 
-The following issue has been SUBMITTED. 
-====================================================================== 
-http://busybox.net/bugs/view.php?id=1341 
-====================================================================== 
-Reported By:                repvik
-Assigned To:                buildroot
-====================================================================== 
-Project:                    buildroot
-Issue ID:                   1341
-Category:                   Other
-Reproducibility:            always
-Severity:                   trivial
-Priority:                   normal
-Status:                     assigned
-====================================================================== 
-Date Submitted:             05-08-2007 08:02 PDT
-Last Modified:              05-08-2007 08:02 PDT
-====================================================================== 
-Summary:                    e2fsprogs installs duplicate binaries instead of
-symlinking
-Description: 
-e2fsprogs install several duplicate binaries that act slightly differently
-depending on what name they're called as. They can safely be removed and
-replaced with symlinks. This saves 480kb space.
+Log:
+- bump version. Closes #1339
 
-fsck.ext2 == fsck.ext3 == e2fsck
-e2label == tune2fs == findfs
-mkfs.ext2 == mkfs.ext3 == mke2fs
 
-I've attached a patch which fixes this.
-====================================================================== 
+Modified:
+   trunk/buildroot/package/cvs/cvs.mk
 
-Issue History 
-Date Modified   Username       Field                    Change               
-====================================================================== 
-05-08-07 08:02  repvik         New Issue                                    
-05-08-07 08:02  repvik         Status                   new => assigned     
-05-08-07 08:02  repvik         Assigned To               => buildroot       
-05-08-07 08:02  repvik         File Added: e2fsprogs_symlinks.diff              
-     
-======================================================================
+
+Changeset:
+Modified: trunk/buildroot/package/cvs/cvs.mk
+===================================================================
+--- trunk/buildroot/package/cvs/cvs.mk	2007-05-07 04:07:06 UTC (rev 18581)
++++ trunk/buildroot/package/cvs/cvs.mk	2007-05-08 15:17:41 UTC (rev 18582)
+@@ -5,7 +5,7 @@
+ #############################################################
+ CVS_VER:=1.12.13
+ CVS_SOURCE:=cvs_$(CVS_VER).orig.tar.gz
+-CVS_PATCH:=cvs_$(CVS_VER)-7.diff.gz
++CVS_PATCH:=cvs_$(CVS_VER)-8.diff.gz
+ CVS_SITE:=http://ftp.debian.org/debian/pool/main/c/cvs/
+ CVS_DIR:=$(BUILD_DIR)/cvs-$(CVS_VER)
+ CVS_CAT:=$(ZCAT)
+@@ -25,12 +25,14 @@
+ $(DL_DIR)/$(CVS_SOURCE):
+ 	$(WGET) -P $(DL_DIR) $(CVS_SITE)/$(CVS_SOURCE)
+ 
+-$(DL_DIR)/$(CVS_PATCH):
++ifneq ($(CVS_PATCH),)
++CVS_PATCH_FILE=$(DL_DIR)/$(CVS_PATCH)
++$(CVS_PATCH_FILE):
+ 	$(WGET) -P $(DL_DIR) $(CVS_SITE)/$(CVS_PATCH)
++endif
++cvs-source: $(DL_DIR)/$(CVS_SOURCE) $(CVS_PATCH_FILE)
+ 
+-cvs-source: $(DL_DIR)/$(CVS_SOURCE) $(DL_DIR)/$(CVS_PATCH)
+-
+-$(CVS_DIR)/.unpacked: $(DL_DIR)/$(CVS_SOURCE) $(DL_DIR)/$(CVS_PATCH)
++$(CVS_DIR)/.unpacked: $(DL_DIR)/$(CVS_SOURCE) $(CVS_PATCH_FILE)
+ 	-mkdir $(CVS_DIR)
+ 	$(CVS_CAT) $(DL_DIR)/$(CVS_SOURCE) | tar -C $(CVS_DIR) $(TAR_OPTIONS) -
+ 	$(BZCAT) $(CVS_DIR)/cvs-$(CVS_VER)/cvs-$(CVS_VER).tar.bz2 | tar -C $(BUILD_DIR) $(TAR_OPTIONS) -
+@@ -47,7 +49,7 @@
+ 		toolchain/patch-kernel.sh $(CVS_DIR) $(CVS_DIR)/debian/patches \* ; \
+ 	fi
+ endif
+-	touch $(CVS_DIR)/.unpacked
++	touch $@
+ 
+ $(CVS_DIR)/.configured: $(CVS_DIR)/.unpacked
+ 	(cd $(CVS_DIR); rm -rf config.cache; \
