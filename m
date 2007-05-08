@@ -1,30 +1,59 @@
-From: rafael2k <rafael@riseup.net>
-Date: Mon, 7 May 2007 08:46:58 -0300
-Subject: [Buildroot] 0.9.29 need to be supported
-Message-ID: <200705070847.01096.rafael@riseup.net>
+From: bugs at busybox.net <bugs@busybox.net>
+Date: Tue, 8 May 2007 07:25:17 -0700
+Subject: [Buildroot] [buildroot 0001339]: package/cvs/cvs.mk does not
+	compile any longer
+Message-ID: <a52f80250581277e0e371a9d4a284aa4@busybox.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-hi all,
-in buildroot r18581 there is no "uClibc C library Version" 0.9.29.
 
-thanks,
-rafael diniz
+The following issue has been SUBMITTED. 
+====================================================================== 
+http://busybox.net/bugs/view.php?id=1339 
+====================================================================== 
+Reported By:                sveinerikskjelbred
+Assigned To:                buildroot
+====================================================================== 
+Project:                    buildroot
+Issue ID:                   1339
+Category:                   Other
+Reproducibility:            always
+Severity:                   minor
+Priority:                   normal
+Status:                     assigned
+====================================================================== 
+Date Submitted:             05-08-2007 07:25 PDT
+Last Modified:              05-08-2007 07:25 PDT
+====================================================================== 
+Summary:                    package/cvs/cvs.mk does not compile any longer
+Description: 
 
--- 
-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-
-Eng. da Computa??o @  Unicamp
-R?dio Muda, radiolivre.org, TV Piolho, tvlivre.org, www.midiaindependente.org
-Chave PGP: http://pgp.mit.edu:11371/pks/lookup?op=get&search=0x2FF86098
-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-
+http://ftp.debian.org/debian/pool/main/c/cvs/cvs_1.12.13-7.diff.gz
+is no longer present at the web site. Change to version -8
 
--------------- next part --------------
-A non-text attachment was scrubbed...
-Name: not available
-Type: application/pgp-signature
-Size: 189 bytes
-Desc: not available
-Url : http://busybox.net/lists/buildroot/attachments/20070507/647c05b4/attachment.pgp 
+Index: package/cvs/cvs.mk
+===================================================================
+--- package/cvs/cvs.mk  (revision 18581)
++++ package/cvs/cvs.mk  (working copy)
+@@ -5,7 +5,7 @@
+ #############################################################
+ CVS_VER:=1.12.13
+ CVS_SOURCE:=cvs_$(CVS_VER).orig.tar.gz
+-CVS_PATCH:=cvs_$(CVS_VER)-7.diff.gz
++CVS_PATCH:=cvs_$(CVS_VER)-8.diff.gz
+ CVS_SITE:=http://ftp.debian.org/debian/pool/main/c/cvs/
+ CVS_DIR:=$(BUILD_DIR)/cvs-$(CVS_VER)
+ CVS_CAT:=$(ZCAT)
+
+====================================================================== 
+
+Issue History 
+Date Modified   Username       Field                    Change               
+====================================================================== 
+05-08-07 07:25  sveinerikskjelbredNew Issue                                    
+05-08-07 07:25  sveinerikskjelbredStatus                   new => assigned     
+05-08-07 07:25  sveinerikskjelbredAssigned To               => buildroot       
+======================================================================
