@@ -1,27 +1,53 @@
-From: Alex Parkinson <okalex@gmail.com>
-Date: Fri, 11 May 2007 09:57:40 -0400
-Subject: [Buildroot] libgcc.a and hardware vs. software FP
-Message-ID: <1ec5776b0705110657p4acd925dn2995136dbc42073c@mail.gmail.com>
+From: Hans-Christian Egtvedt <hcegtvedt@norway.atmel.com>
+Date: Fri, 11 May 2007 16:31:49 +0200
+Subject: [Buildroot] kernel patch not applied
+In-Reply-To: <46433B79.50101@rcn.com>
+References: <46432A7D.6050808@rcn.com>  <46433B79.50101@rcn.com>
+Message-ID: <1178893909.11554.75.camel@localhost.localdomain>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello all,
+> This actually causes an override of the .patched target in
+> toolchain/kernel-headers/kernel-headers-new.makefile.
+> 
+> Suggestions?
 
-I'm currently trying to build U-Boot v1.2.0 for an Atmel AT91SAM9260
-using gcc v4.1.2, binutils v2.17, and uClibc v0.98.2 built with
-Buildroot.  I'm coming across an error stating that libgcc.a uses
-hardware FP, whereas u-boot uses software FP.  I've been told by
-Wolfgang Denk, the creator of U-Boot, that my toolchain is using
-hardware FP unconditionally.  How can I rebuild my toolchain using
-Buildroot to accommodate software FP, but still be useful for
-compiling the Linux kernel?  I've tried selecting the option to use
-software FP by default, but it failed to compile (browsing the lists,
-I see that this is a current bug).  I've also tried changing the
-uClibc configuration which selects whether the target has an FPU (I'm
-actually not sure what the proper setting is for this).
+I just bumped into the same issue myself.
 
-Cheers,
-Alex Parkinson
+in toolchain/kernel-headers/kernel-headers-new.makefile
+
+I had to change
+
+$(LINUX_HEADERS_UNPACK_DIR)/.patched:
+$(LINUX_HEADERS_UNPACK_DIR)/.unpacked
+        toolchain/patch-kernel.sh $(LINUX_HEADERS_UNPACK_DIR)
+toolchain/kernel-headers \
+                linux-$(LINUX_HEADERS_VERSION)-\*.patch{,.gz,.bz2}
+ifeq ($(BR2_PACKAGE_OPENSWAN),y)
+        toolchain/patch-kernel.sh $(LINUX_HEADERS_UNPACK_DIR) package/openswan \
+                linux-$(LINUX_HEADERS_VERSION)-\*.patch{,.gz,.bz2}
+endif
+        touch $@
+
+
+to
+
+$(LINUX_HEADERS_UNPACK_DIR)/.patched:
+$(LINUX_HEADERS_UNPACK_DIR)/.unpacked
+        toolchain/patch-kernel.sh $(LINUX_HEADERS_UNPACK_DIR)
+toolchain/kernel-headers \
+                linux-$(LINUX_HEADERS_VERSION)-\*.patch.\*
+ifeq ($(BR2_PACKAGE_OPENSWAN),y)
+        toolchain/patch-kernel.sh $(LINUX_HEADERS_UNPACK_DIR) package/openswan \
+                linux-$(LINUX_HEADERS_VERSION)-\*.patch.\*
+endif
+        touch $@
+
+-- 
+With kind regards,
+
+Hans-Christian Egtvedt, siv.ing. (M.Sc.)
+Applications Engineer - AVR32 System Solutions - Atmel Norway
