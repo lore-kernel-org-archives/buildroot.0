@@ -1,39 +1,69 @@
-From: Leo Zhang <netboy_feng@163.com>
-Date: Fri, 11 May 2007 16:34:19 +0800
-Subject: [Buildroot] help,config.sub i386- failed
-Message-ID: <46442DEF.30252C.22055@m12-13.163.com>
+From: aldot at uclibc.org <aldot@uclibc.org>
+Date: Fri, 11 May 2007 05:50:16 -0700 (PDT)
+Subject: [Buildroot] svn commit: trunk/buildroot/toolchain/dependencies
+Message-ID: <20070511125016.3E81648007@busybox.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-buildroot at uclibc.orghello list,
-I am a new user of buildroot,I want build a cross toolchain for arm.
-but when i make,something err display.who can help me?
-error info:
-mkdir -p /home/zhf/LeoProject/buildchain/buildroot_1/toolchain_build_arm/mpfr-2.2.1-host
-(cd /home/zhf/LeoProject/buildchain/buildroot_1/toolchain_build_arm/mpfr-2.2.1-host; \
-        CC="gcc" CC_FOR_BUILD="gcc" \
-        CXX="g++" \
-        /home/zhf/LeoProject/buildchain/buildroot_1/toolchain_build_arm/mpfr-2.2.1/configure \
-        --prefix="/home/zhf/LeoProject/buildchain/buildroot_1/toolchain_build_arm/mpfr" \
-        --build=i386- \
-        --host=i386- \
-        --target=arm-linux-uclibc \
-        --enable-shared \
-        --enable-static \
-        --with-gmp=/home/zhf/LeoProject/buildchain/buildroot_1/toolchain_build_arm/gmp \
-        --disable-nls \
-);
-checking for a BSD-compatible install... /usr/bin/install -c
-checking whether build environment is sane... yes
-checking for gawk... gawk
-checking whether make sets $(MAKE)... yes
-checking build system type... Invalid configuration `i386-': system `' not recognized
-configure: error: /bin/sh /home/zhf/LeoProject/buildchain/buildroot_1/toolchain_build_arm/mpfr-2.2.1/config.sub i386- failed
-make: *** [/home/zhf/LeoProject/buildchain/buildroot_1/toolchain_build_arm/mpfr-2.2.1-host/.configured] error 1
-	
-thanks!
-								leo zhang
-????????2007-05-11
+Author: aldot
+Date: 2007-05-11 05:50:15 -0700 (Fri, 11 May 2007)
+New Revision: 18607
+
+Log:
+- ignore eventual errors from which(1)
+
+
+Modified:
+   trunk/buildroot/toolchain/dependencies/check-host-sed.sh
+   trunk/buildroot/toolchain/dependencies/dependencies.sh
+
+
+Changeset:
+Modified: trunk/buildroot/toolchain/dependencies/check-host-sed.sh
+===================================================================
+--- trunk/buildroot/toolchain/dependencies/check-host-sed.sh	2007-05-10 23:06:55 UTC (rev 18606)
++++ trunk/buildroot/toolchain/dependencies/check-host-sed.sh	2007-05-11 12:50:15 UTC (rev 18607)
+@@ -3,7 +3,7 @@
+ for SED in $SEDLIST
+ do
+ 	if ! test -x $SED ; then
+-		SED=$(which $SED)
++		SED=$(which $SED 2> /dev/null)
+ 		if ! test -x "$SED" > /dev/null ; then
+ 			SED=""
+ 			continue
+
+Modified: trunk/buildroot/toolchain/dependencies/dependencies.sh
+===================================================================
+--- trunk/buildroot/toolchain/dependencies/dependencies.sh	2007-05-10 23:06:55 UTC (rev 18606)
++++ trunk/buildroot/toolchain/dependencies/dependencies.sh	2007-05-11 12:50:15 UTC (rev 18607)
+@@ -123,7 +123,7 @@
+ # check build system 'make'
+ #
+ #############################################################
+-MAKE=$(which make)
++MAKE=$(which make 2> /dev/null)
+ if [ -z "$MAKE" ] ; then
+ 	echo "make installed:		    FALSE"
+ 	/bin/echo -e "\n\nYou must install 'make' on your build machine\n";
+@@ -152,7 +152,7 @@
+ #############################################################
+ COMPILER=$(which $HOSTCC 2> /dev/null)
+ if [ -z "$COMPILER" ] ; then
+-	COMPILER=$(which cc)
++	COMPILER=$(which cc 2> /dev/null)
+ fi;
+ if [ -z "$COMPILER" ] ; then
+ 	echo "C Compiler installed:		    FALSE"
+@@ -179,7 +179,7 @@
+ # check for host CXX
+ CXXCOMPILER=$(which $HOSTCXX 2> /dev/null)
+ if [ -z "$CXXCOMPILER" ] ; then
+-	CXXCOMPILER=$(which c++)
++	CXXCOMPILER=$(which c++ 2> /dev/null)
+ fi
+ if [ -z "$CXXCOMPILER" ] ; then
+ 	echo "C++ Compiler installed:		    FALSE"
