@@ -1,53 +1,52 @@
-From: Hans-Christian Egtvedt <hcegtvedt@norway.atmel.com>
-Date: Fri, 11 May 2007 16:31:49 +0200
+From: Bernhard Fischer <rep.dot.nop@gmail.com>
+Date: Fri, 11 May 2007 17:40:59 +0200
 Subject: [Buildroot] kernel patch not applied
-In-Reply-To: <46433B79.50101@rcn.com>
-References: <46432A7D.6050808@rcn.com>  <46433B79.50101@rcn.com>
-Message-ID: <1178893909.11554.75.camel@localhost.localdomain>
+In-Reply-To: <1178893909.11554.75.camel@localhost.localdomain>
+References: <46432A7D.6050808@rcn.com> <46433B79.50101@rcn.com>
+	<1178893909.11554.75.camel@localhost.localdomain>
+Message-ID: <20070511154059.GA4710@aon.at>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-> This actually causes an override of the .patched target in
-> toolchain/kernel-headers/kernel-headers-new.makefile.
-> 
-> Suggestions?
+On Fri, May 11, 2007 at 04:31:49PM +0200, Hans-Christian Egtvedt wrote:
+>> This actually causes an override of the .patched target in
+>> toolchain/kernel-headers/kernel-headers-new.makefile.
+>> 
+>> Suggestions?
+>
+>I just bumped into the same issue myself.
+>
+>in toolchain/kernel-headers/kernel-headers-new.makefile
+>
+>I had to change
+>
+>$(LINUX_HEADERS_UNPACK_DIR)/.patched:
+>$(LINUX_HEADERS_UNPACK_DIR)/.unpacked
+>        toolchain/patch-kernel.sh $(LINUX_HEADERS_UNPACK_DIR)
+>toolchain/kernel-headers \
+>                linux-$(LINUX_HEADERS_VERSION)-\*.patch{,.gz,.bz2}
+>ifeq ($(BR2_PACKAGE_OPENSWAN),y)
+>        toolchain/patch-kernel.sh $(LINUX_HEADERS_UNPACK_DIR) package/openswan \
+>                linux-$(LINUX_HEADERS_VERSION)-\*.patch{,.gz,.bz2}
+>endif
+>        touch $@
+>
+>
+>to
+>
+>$(LINUX_HEADERS_UNPACK_DIR)/.patched:
+>$(LINUX_HEADERS_UNPACK_DIR)/.unpacked
+>        toolchain/patch-kernel.sh $(LINUX_HEADERS_UNPACK_DIR)
+>toolchain/kernel-headers \
+>                linux-$(LINUX_HEADERS_VERSION)-\*.patch.\*
+>ifeq ($(BR2_PACKAGE_OPENSWAN),y)
+>        toolchain/patch-kernel.sh $(LINUX_HEADERS_UNPACK_DIR) package/openswan \
+>                linux-$(LINUX_HEADERS_VERSION)-\*.patch.\*
 
-I just bumped into the same issue myself.
+which means that your shell just doesn't expand ba{r,z}
 
-in toolchain/kernel-headers/kernel-headers-new.makefile
-
-I had to change
-
-$(LINUX_HEADERS_UNPACK_DIR)/.patched:
-$(LINUX_HEADERS_UNPACK_DIR)/.unpacked
-        toolchain/patch-kernel.sh $(LINUX_HEADERS_UNPACK_DIR)
-toolchain/kernel-headers \
-                linux-$(LINUX_HEADERS_VERSION)-\*.patch{,.gz,.bz2}
-ifeq ($(BR2_PACKAGE_OPENSWAN),y)
-        toolchain/patch-kernel.sh $(LINUX_HEADERS_UNPACK_DIR) package/openswan \
-                linux-$(LINUX_HEADERS_VERSION)-\*.patch{,.gz,.bz2}
-endif
-        touch $@
-
-
-to
-
-$(LINUX_HEADERS_UNPACK_DIR)/.patched:
-$(LINUX_HEADERS_UNPACK_DIR)/.unpacked
-        toolchain/patch-kernel.sh $(LINUX_HEADERS_UNPACK_DIR)
-toolchain/kernel-headers \
-                linux-$(LINUX_HEADERS_VERSION)-\*.patch.\*
-ifeq ($(BR2_PACKAGE_OPENSWAN),y)
-        toolchain/patch-kernel.sh $(LINUX_HEADERS_UNPACK_DIR) package/openswan \
-                linux-$(LINUX_HEADERS_VERSION)-\*.patch.\*
-endif
-        touch $@
-
--- 
-With kind regards,
-
-Hans-Christian Egtvedt, siv.ing. (M.Sc.)
-Applications Engineer - AVR32 System Solutions - Atmel Norway
+We use patterns also to specify targets we intend to strip, so either
+use a different shell or fix all occurances, i'd say.
