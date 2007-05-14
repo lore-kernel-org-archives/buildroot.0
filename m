@@ -1,65 +1,40 @@
-From: bugs at busybox.net <bugs@busybox.net>
-Date: Sun, 13 May 2007 17:42:19 -0700
-Subject: [Buildroot] [buildroot 0001345]: uClibc fails to mmap shared
-	libraries with CONFIG_PAGE_SIZE_16KB set in kernel
-Message-ID: <be1a5ccb52a910fec9017148901686e6@bugs.uclibc.org>
+From: Hans-Christian Egtvedt <hcegtvedt@norway.atmel.com>
+Date: Mon, 14 May 2007 07:21:25 +0200
+Subject: [Buildroot] kernel patch not applied
+In-Reply-To: <20070511154059.GA4710@aon.at>
+References: <46432A7D.6050808@rcn.com> <46433B79.50101@rcn.com>
+	<1178893909.11554.75.camel@localhost.localdomain>
+	<20070511154059.GA4710@aon.at>
+Message-ID: <1179120085.21753.1.camel@localhost.localdomain>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+On Fri, 2007-05-11 at 17:40 +0200, Bernhard Fischer wrote:
+> On Fri, May 11, 2007 at 04:31:49PM +0200, Hans-Christian Egtvedt wrote:
 
-A NOTE has been added to this issue. 
-====================================================================== 
-http://busybox.net/bugs/view.php?id=1345 
-====================================================================== 
-Reported By:                redhatter
-Assigned To:                buildroot
-====================================================================== 
-Project:                    buildroot
-Issue ID:                   1345
-Category:                   Architecture Specific
-Reproducibility:            always
-Severity:                   major
-Priority:                   normal
-Status:                     assigned
-====================================================================== 
-Date Submitted:             05-13-2007 17:40 PDT
-Last Modified:              05-13-2007 17:42 PDT
-====================================================================== 
-Summary:                    uClibc fails to mmap shared libraries with
-CONFIG_PAGE_SIZE_16KB set in kernel
-Description: 
-Hi...
+<cut>
 
-Recently I started building some uClibc userland environments for a mipsel
-target.  My build host is a Lemote Fulong miniPC running a Loongson2E
-processor (subset MIPS-3), and I've also been doing testing with a Cobalt
-Qube2 (MIPS-4).
+> >$(LINUX_HEADERS_UNPACK_DIR)/.patched:
+> >$(LINUX_HEADERS_UNPACK_DIR)/.unpacked
+> >        toolchain/patch-kernel.sh $(LINUX_HEADERS_UNPACK_DIR)
+> >toolchain/kernel-headers \
+> >                linux-$(LINUX_HEADERS_VERSION)-\*.patch.\*
+> >ifeq ($(BR2_PACKAGE_OPENSWAN),y)
+> >        toolchain/patch-kernel.sh $(LINUX_HEADERS_UNPACK_DIR) package/openswan \
+> >                linux-$(LINUX_HEADERS_VERSION)-\*.patch.\*
+> 
+> which means that your shell just doesn't expand ba{r,z}
 
-Everything builds fine, however, when I try to chroot in on the Loongson,
-I get told uClibc "can't map" the libraries.  However, when I rsync this
-chroot across to the Qube2, everything works fine.
+Weird, I tried zsh, bash and sh. I am building on Ubuntu 7.04.
 
-It would appear that uClibc's ld.so assumes the kernel uses a page size of
-4KB (0x1000).  When it specifies an offset of 0x3000, this works fine on a
-kernel with a 4KB page size, since 3?1000h=3000h.  However, this fails
-when the kernel has a 16KB page size (0x4000), since 0x3000 is not a
-multiple of 0x4000.  Presumably it'll fail when 64KB pages are in use too.
-====================================================================== 
+> We use patterns also to specify targets we intend to strip, so either
+> use a different shell or fix all occurances, i'd say.
 
----------------------------------------------------------------------- 
- redhatter - 05-13-07 17:42  
----------------------------------------------------------------------- 
-Whoops, this was _meant_ for the uClibc project, not buildroot.  Can this
-be reassigned please? 
+Which shell on which distribution works?
 
-Issue History 
-Date Modified   Username       Field                    Change               
-====================================================================== 
-05-13-07 17:40  redhatter      New Issue                                    
-05-13-07 17:40  redhatter      Status                   new => assigned     
-05-13-07 17:40  redhatter      Assigned To               => buildroot       
-05-13-07 17:42  redhatter      Note Added: 0002354                          
-======================================================================
+-- 
+Best regards
+Hans-Christian Egtvedt
