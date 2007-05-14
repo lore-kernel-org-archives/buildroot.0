@@ -1,109 +1,58 @@
-From: aldot at uclibc.org <aldot@uclibc.org>
-Date: Sat, 12 May 2007 11:39:29 -0700 (PDT)
-Subject: [Buildroot] svn commit: trunk/buildroot/toolchain/uClibc
-Message-ID: <20070512183929.DD6B048012@busybox.net>
+From: bugs at busybox.net <bugs@busybox.net>
+Date: Sun, 13 May 2007 17:40:24 -0700
+Subject: [Buildroot] [buildroot 0001345]: uClibc fails to mmap shared
+	libraries with CONFIG_PAGE_SIZE_16KB set in kernel
+Message-ID: <6a610191bc49732802d910b79cb03dd2@bugs.uclibc.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Author: aldot
-Date: 2007-05-12 11:39:28 -0700 (Sat, 12 May 2007)
-New Revision: 18610
 
-Log:
-- store uClibc's configfile as BR2_UCLIBC_CONFIG in menuconfig
+The following issue has been SUBMITTED. 
+====================================================================== 
+http://busybox.net/bugs/view.php?id=1345 
+====================================================================== 
+Reported By:                redhatter
+Assigned To:                buildroot
+====================================================================== 
+Project:                    buildroot
+Issue ID:                   1345
+Category:                   Architecture Specific
+Reproducibility:            always
+Severity:                   major
+Priority:                   normal
+Status:                     assigned
+====================================================================== 
+Date Submitted:             05-13-2007 17:40 PDT
+Last Modified:              05-13-2007 17:40 PDT
+====================================================================== 
+Summary:                    uClibc fails to mmap shared libraries with
+CONFIG_PAGE_SIZE_16KB set in kernel
+Description: 
+Hi...
 
+Recently I started building some uClibc userland environments for a mipsel
+target.  My build host is a Lemote Fulong miniPC running a Loongson2E
+processor (subset MIPS-3), and I've also been doing testing with a Cobalt
+Qube2 (MIPS-4).
 
-Modified:
-   trunk/buildroot/toolchain/uClibc/Config.in
-   trunk/buildroot/toolchain/uClibc/uclibc.mk
+Everything builds fine, however, when I try to chroot in on the Loongson,
+I get told uClibc "can't map" the libraries.  However, when I rsync this
+chroot across to the Qube2, everything works fine.
 
+It would appear that uClibc's ld.so assumes the kernel uses a page size of
+4KB (0x1000).  When it specifies an offset of 0x3000, this works fine on a
+kernel with a 4KB page size, since 3?1000h=3000h.  However, this fails
+when the kernel has a 16KB page size (0x4000), since 0x3000 is not a
+multiple of 0x4000.  Presumably it'll fail when 64KB pages are in use too.
+====================================================================== 
 
-Changeset:
-Modified: trunk/buildroot/toolchain/uClibc/Config.in
-===================================================================
---- trunk/buildroot/toolchain/uClibc/Config.in	2007-05-11 12:57:35 UTC (rev 18609)
-+++ trunk/buildroot/toolchain/uClibc/Config.in	2007-05-12 18:39:28 UTC (rev 18610)
-@@ -14,8 +14,12 @@
- 		bool "uClibc 0.9.28"
- 
- 	config BR2_UCLIBC_VERSION_0_9_28_3
-+		depends BR2_DEPRECATED
- 		bool "uClibc 0.9.28.3"
- 
-+	config BR2_UCLIBC_VERSION_0_9_29
-+		bool "uClibc 0.9.29"
-+
- 	config BR2_UCLIBC_VERSION_SNAPSHOT
- 		bool "daily snapshot"
- 
-@@ -29,6 +33,19 @@
- 	help
- 	    Use latest snapshot or one from a specific date?
- 
-+config BR2_UCLIBC_CONFIG
-+	string "uClibc configuration file to use?"
-+	default "toolchain/uClibc/uClibc-0.9.28.config" if BR2_UCLIBC_VERSION_0_9_28
-+	default "toolchain/uClibc/uClibc-0.9.28.config" if BR2_UCLIBC_VERSION_0_9_28_3
-+	default "toolchain/uClibc/uClibc-0.9.29.config" if BR2_UCLIBC_VERSION_0_9_29
-+	default "toolchain/uClibc/uClibc-0.9.29.config" if BR2_UCLIBC_VERSION_0_9_30
-+	default "toolchain/uClibc/uClibc-0.9.29.config" if BR2_UCLIBC_VERSION_SNAPSHOT
-+	help
-+	  Some people may wish to use their own modified uClibc configuration
-+	  file and will specify their config file location with this option.
-+	  See also docs/README in this package.
-+	  If unsure, use the default.
-+
- config BR2_ENABLE_LOCALE
- 	bool "Enable locale/gettext/i18n support?"
- 	default n
-
-Modified: trunk/buildroot/toolchain/uClibc/uclibc.mk
-===================================================================
---- trunk/buildroot/toolchain/uClibc/uclibc.mk	2007-05-11 12:57:35 UTC (rev 18609)
-+++ trunk/buildroot/toolchain/uClibc/uclibc.mk	2007-05-12 18:39:28 UTC (rev 18610)
-@@ -6,6 +6,13 @@
- 
- ifeq ($(BR2_TOOLCHAIN_BUILDROOT),y)
- 
-+# specifying UCLIBC_CONFIG_FILE on the command-line overrides the .config
-+# setting.
-+ifndef UCLIBC_CONFIG_FILE
-+UCLIBC_CONFIG_FILE=$(subst ",, $(strip $(BR2_UCLIBC_CONFIG)))
-+#")
-+endif
-+
- ifeq ($(BR2_UCLIBC_VERSION_SNAPSHOT),y)
- # Be aware that this changes daily....
- UCLIBC_VER:=0.9.29
-@@ -13,23 +20,22 @@
- UCLIBC_SOURCE:=uClibc-$(strip $(subst ",, $(BR2_USE_UCLIBC_SNAPSHOT))).tar.bz2
- #"))
- UCLIBC_SITE:=http://www.uclibc.org/downloads/snapshots
--ifndef UCLIBC_CONFIG_FILE
--UCLIBC_CONFIG_FILE=toolchain/uClibc/uClibc-0.9.29.config
-+else
-+# releases
-+ifeq ($(BR2_UCLIBC_VERSION_0_9_29),y)
-+UCLIBC_VER:=0.9.29
- endif
--else
- ifeq ($(BR2_UCLIBC_VERSION_0_9_28_3),y)
- UCLIBC_VER:=0.9.28.3
- endif
- ifeq ($(BR2_UCLIBC_VERSION_0_9_28),y)
- UCLIBC_VER:=0.9.28
- endif
-+
- UCLIBC_DIR:=$(TOOL_BUILD_DIR)/uClibc-$(UCLIBC_VER)
- UCLIBC_SOURCE:=uClibc-$(UCLIBC_VER).tar.bz2
- UCLIBC_SITE:=http://www.uclibc.org/downloads
--ifndef UCLIBC_CONFIG_FILE
--UCLIBC_CONFIG_FILE=toolchain/uClibc/uClibc-0.9.28.config
- endif
--endif
- 
- UCLIBC_CAT:=$(BZCAT)
- 
+Issue History 
+Date Modified   Username       Field                    Change               
+====================================================================== 
+05-13-07 17:40  redhatter      New Issue                                    
+05-13-07 17:40  redhatter      Status                   new => assigned     
+05-13-07 17:40  redhatter      Assigned To               => buildroot       
+======================================================================
