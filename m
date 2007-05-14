@@ -1,22 +1,20 @@
-From: Christopher Reder <creder@digitalcpt.com>
-Date: Mon, 14 May 2007 07:41:35 -0500
-Subject: [Buildroot] Matchbox Support
-In-Reply-To: <20070514071131.GA11391@aon.at>
-Message-ID: <008001c79625$3558b1f0$2600a8c0@engineering5>
+From: Bob Quincy <bqproductions@gmail.com>
+Date: Mon, 14 May 2007 09:37:58 -0500
+Subject: [Buildroot] openssl user land binary
+Message-ID: <3064975c0705140737me0cadeewa81481ff17ec2e16@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello all.  I am using buildroot for a project with an ARM at91rm9200 and it
-is working nicely after getting some assistance building.  It is building a
-file system with busybox and tiny-x and I'd like to incorporate a desktop
-like matchbox in with it.  I read that there were a few people incorporating
-it into the build but I could not find it in there.  Can someone let me know
-if it is in there or if they have a patch to add it in?
+I am trying to get ssl support, including being able to execute openssl.
 
+It looks like line to copy it to the target folder is commented out and
+when I remove the comment, it cannot find the file.
 
-
-Thanks in advance!
-Christopher Reder
+It'd like to include it, but I can't seem where to switch it back on. Any
+ideas?
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: http://busybox.net/lists/buildroot/attachments/20070514/355eb9eb/attachment.htm 
