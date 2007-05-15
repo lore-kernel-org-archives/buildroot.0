@@ -1,39 +1,73 @@
-From: Erik Andersen <andersen@codepoet.org>
-Date: Tue, 15 May 2007 13:04:49 -0600
-Subject: [Buildroot] Whats happened to Eric?
-In-Reply-To: <01f601c796dd$41e935d0$01c4af0a@Glamdring>
-References: <46432A7D.6050808@rcn.com> <20070515085355.GB13889@aon.at>
-	<01f601c796dd$41e935d0$01c4af0a@Glamdring>
-Message-ID: <20070515190449.GA7429@codepoet.org>
+From: Ajay Sharma <linuxnajay@gmail.com>
+Date: Tue, 15 May 2007 13:16:47 -0700
+Subject: [Buildroot] buildroot Digest, Vol 11, Issue 19
+In-Reply-To: <mailman.1.1179255601.12844.buildroot@uclibc.org>
+References: <mailman.1.1179255601.12844.buildroot@uclibc.org>
+Message-ID: <1b0abb4c0705151316j760a48co480ce75984aadbfa@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Tue May 15, 2007 at 12:35:25PM +0200, Ulf Samuelsson wrote:
-> He does not answer mails...
+Hi Brian,
 
-Erik is buried in a huge project for his work.  While I do run a
-small consulting business doing embedded Linux stuff, mainly for
-the fun and diversion it affords me, my main job is doing
-computer forensics work, which has at best only a peripheral
-relationship with embedded Linux.  With my main job taking up
-most of my time, between work and family (I'm happily married
-with 4 young kids) I have had almost no surplus time for my usual
-leisure time work on uClibc, buildroot, for the past few months.
-I remain hundreds of emails behind most of the time of late...
-Sortof sucks, but that is the way it is.
+As you can read above in my previous message. I too had the same problem.
+Good to know that this will happen for other busy box versions too. I didnot
+try them.
+Also I tried Mats solution but that was of no help. you may want to see my
+post and its reply.
+Has it got to do with the Kernel Headers ? Can we edit and use a different
+kernel version? or a different version of uclibc will help ?
+Let me try with a different version of uclibc as  i know how to try that...
 
-If you would like to obtain svn commit privs I would be happy to
-get you setup, at which point you would be able to get your board
-support work in place on your own.  I agree with having it
-included in buildroot but I do not presently have the personal
-bandwidth to shepherd it into place and it seems noone else has
-done so either.  Sorry I've been so busy/absent/negligent,
+Thanks
+-Ajay
 
- -Erik
-
---
-Erik B. Andersen             http://codepoet-consulting.com/
---This message was written using 73% post-consumer electrons--
+Message: 5
+> Date: Tue, 15 May 2007 06:15:41 -0500
+> From: Brian Austin <brian.austin@cirrus.com>
+> Subject: [Buildroot] EABI toolchains do not free init in busybox
+> To: buildroot at uclibc.org
+> Message-ID: <1179227741.17486.52.camel@localhost.localdomain>
+> Content-Type: text/plain
+>
+> Hello,
+>
+> I have been building gcc-4.1.1, 4.1.2, 4.2 toolchains for ARM9 EABI with
+> 2.6.20.4 kernel headers from buildroot. I am using daily snapshots of
+> uClibc as well.
+>
+> I have tried busybox 1.2.0, 1.4.1, and 1.5.0,  same results.
+>
+> the files are built in EABI format as well
+>
+> they build fine and compile all lf my code and generate a ramdisk.
+>
+> kernel boots, but init does not let go and bring me to a shell.
+>
+> Has anyone had any success with building EABI toolchains for ARM9 from
+> buildroot?
+>
+> I can post my uclibc and buildroot configs if needed.
+>
+> Thanks,
+>
+> Brian
+>
+>
+>
+>
+> ------------------------------
+>
+> _______________________________________________
+> buildroot mailing list
+> buildroot at uclibc.org
+> http://busybox.net/mailman/listinfo/buildroot
+>
+> End of buildroot Digest, Vol 11, Issue 19
+> *****************************************
+>
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: http://busybox.net/lists/buildroot/attachments/20070515/714f1cbf/attachment.htm 
