@@ -1,72 +1,79 @@
-From: Brian Austin <brian.austin@cirrus.com>
-Date: Tue, 15 May 2007 08:15:19 -0500
-Subject: [Buildroot] EABI toolchains do not free init in busybox
-In-Reply-To: <00e301c79723$c1caa040$2600a8c0@engineering5>
-References: <00e301c79723$c1caa040$2600a8c0@engineering5>
-Message-ID: <1179234919.17486.56.camel@localhost.localdomain>
+From: Ulf Samuelsson <ulf@atmel.com>
+Date: Wed, 16 May 2007 01:08:08 +0200
+Subject: [Buildroot] VB: SV: Re:  Whats happened to Eric?
+Message-ID: <vqPMbtYz4SQM.D8g6bqCD@mailout.dof.se>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-I get nothing.
+_______________ Sidrubrik f?r vidarebefordran _______________ ?rende:	SV: Re: [Buildroot] Whats happened to Eric? F?rfattare:	"Ulf Samuelsson" <ulf@atmel.com> Datum:		2007 maj 15:e 22:56 
+________________ Sidrubrik f?r svar ________________ ?rende:	Re: [Buildroot] Whats happened to Eric? F?rfattare:	Erik Andersen <andersen@codepoet.org> Datum:		2007 maj 15:e 19:05 
+On Tue May 15, 2007 at 12:35:25PM +0200, Ulf Samuelsson wrote:
+> He does not answer mails...
 
-freeing init.........
+Erik is buried in a huge project for his work.  While I do run a
+small consulting business doing embedded Linux stuff, mainly for
+the fun and diversion it affords me, my main job is doing
+computer forensics work, which has at best only a peripheral
+relationship with embedded Linux.  With my main job taking up
+most of my time, between work and family (I'm happily married
+with 4 young kids) I have had almost no surplus time for my usual
+leisure time work on uClibc, buildroot, for the past few months.
+I remain hundreds of emails behind most of the time of late...
+Sortof sucks, but that is the way it is.
 
-I can pass init=busybox and get the busybox help output, and I can make
-a hello world app say hello world,  but it doesnt give me a shell.
+=> Looks like the personal
+   project is as large!
+   
 
-I traced it to setting the consoles in busybox init, it seems to die
-with snprintf.
+If you would like to obtain svn commit privs I would be happy to
+get you setup, at which point you would be able to get your board
+support work in place on your own.  I agree with having it
+included in buildroot but I do not presently have the personal
+bandwidth to shepherd it into place and it seems noone else has
+done so either.  Sorry I've been so busy/absent/negligent,
 
+=> Everyone contributes for
+    the fun of it and I guess
+    you really do not "owe"
+    people any time.
 
+    I feel honured by your 
+    proposal. - Thank You!
 
+    I would really appreciate 
+    to be able to get my 
+     stuff into Buildroot.
+    Have accumulated quite 
+    a collection of patches
+    by now.
 
+    Will try to focus on three things.
 
+    * Support for building
+      multiple boards (BSP)
+    * AVR32 Toolchain.
+    * Atmel Dev Kit support.
 
-On Tue, 2007-05-15 at 14:03 -0500, Christopher Reder wrote:
-> I had an issue with something similar where I didn't have console defined
-> under dev in my fs.  Probably not what you have, but thought I'd pass it
-> along as I had an issue where everything would boot, it would find init, but
-> I didn't get anything on the console.  
-> 
-> What are you seeing as output?
-> 
-> -----Original Message-----
-> From: buildroot-bounces at uclibc.org [mailto:buildroot-bounces at uclibc.org] On
-> Behalf Of Brian Austin
-> Sent: Tuesday, May 15, 2007 6:16 AM
-> To: buildroot at uclibc.org
-> Subject: [Buildroot] EABI toolchains do not free init in busybox
-> 
-> Hello,
-> 
-> I have been building gcc-4.1.1, 4.1.2, 4.2 toolchains for ARM9 EABI with
-> 2.6.20.4 kernel headers from buildroot. I am using daily snapshots of
-> uClibc as well.
-> 
-> I have tried busybox 1.2.0, 1.4.1, and 1.5.0,  same results.
-> 
-> the files are built in EABI format as well
-> 
-> they build fine and compile all lf my code and generate a ramdisk.
-> 
-> kernel boots, but init does not let go and bring me to a shell.
-> 
-> Has anyone had any success with building EABI toolchains for ARM9 from
-> buildroot?
-> 
-> I can post my uclibc and buildroot configs if needed.
-> 
-> Thanks,
-> 
-> Brian
-> 
-> 
-> _______________________________________________
-> buildroot mailing list
-> buildroot at uclibc.org
-> http://busybox.net/mailman/listinfo/buildroot
-> 
-> 
+     Also have a number of 
+     patches
+     for the packages directory 
+     as well but I think I want
+     them discussed before   
+     committing.
+
+     Last thing is that I would
+     like to have a target/linux
+     directory allowing you
+     to select easily kernel
+     version using menuconfig.
+
+     
+
+ -Erik
+
+--
+Erik B. Andersen             http://codepoet-consulting.com/
+--This message was written using 73% post-consumer electrons--
