@@ -1,37 +1,49 @@
 From: Mats Erik Andersson <mats.andersson64@comhem.se>
-Date: Tue, 15 May 2007 11:57:59 +0200
-Subject: [Buildroot] Busybox console wont show up
-In-Reply-To: <1b0abb4c0705141717m43eeef65r4e0a593e21dc87e7@mail.gmail.com>
-References: <1b0abb4c0705141717m43eeef65r4e0a593e21dc87e7@mail.gmail.com>
-Message-ID: <1179223079.3613.12.camel@localhost>
+Date: Tue, 15 May 2007 11:58:08 +0200
+Subject: [Buildroot] Iptables incompatible with linux-headers!
+In-Reply-To: <1179181946.6609.17.camel@localhost>
+References: <1179181946.6609.17.camel@localhost>
+Message-ID: <1179223088.3613.14.camel@localhost>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-m?n 2007-05-14 klockan 17:17 -0700 skrev Ajay Sharma:
-> Hi All,
-> I have built successfully kernel and file system  image  for IXP425
-> development board. When I try to boot the system, it boots till it
-> shows 
-> this screen and does not show the Busybox prompt on the screen . 
-> I am trying to see that on the Serial Console. 
-> I have also changed the line 
-> 
-> #ttyS0::respawn:/sbin/getty -L ttyS0 115200 vt100
-> 
-> to
-> 
-> ttyS0::respawn:/sbin/getty -L ttyS0 115200 vt100
-> 
+I have been able to reproduce the strange phenomenon
+that a buildroot setting of
 
-Somewhat naively on my side, try the conservative convention
-of only allowing two letter names for actions in inittab:
+gcc-3.4.4
+binutils-2.17
+buildroot-20070514
+uClibc-0.9.28.3
+busybox-1.5.0
+linux-headers-2.4.27
+dropbear
+iptables-1.3.7 (and 1.3.5)
 
-S0::respawn:/sbin/getty -L ttyS0 115200 vt100
+cannot compile
 
-i.e., replace "ttyS0" by "S0" in the beginning. Some years ago
-there was always a recommendation/demand two only use two letters.
+    iptables-1.3.7/extensions/libipt_string.c
+
+due to non-existing structure members of ipt_string_info.
+However, when I finally got the idea to alter the value
+inside
+
+      package/iptables/iptables.mk
+
+to explicitely replace the header reference by the directory
+
+       KERNEL_DIR=/tmp2/linux-2.4.27
+
+where I separately compiled the kernel, the previous failure is
+changed into success. 
+
+Until today I have only used Buildroot for 2.6-kernels
+and I did never encounter the same failure. Would someone
+venture to call this a bug, or is it my handling that could
+have caused my troubles? Aside from one complaint on getopt.h
+when I aimed at a SuSv3-version, the above was the only trouble
+I had in this setting.
 
 Regards,   Mats Erik Andersson
