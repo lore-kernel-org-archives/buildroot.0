@@ -1,7 +1,7 @@
 From: aldot at uclibc.org <aldot@uclibc.org>
-Date: Tue, 15 May 2007 04:23:47 -0700 (PDT)
-Subject: [Buildroot] svn commit: trunk/buildroot/package/lsof
-Message-ID: <20070515112347.61BCF48022@busybox.net>
+Date: Tue, 15 May 2007 04:24:28 -0700 (PDT)
+Subject: [Buildroot] svn commit: trunk/buildroot/package: libpcap tcpdump
+Message-ID: <20070515112428.56FAD48029@busybox.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -9,139 +9,132 @@ Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
 Author: aldot
-Date: 2007-05-15 04:23:46 -0700 (Tue, 15 May 2007)
-New Revision: 18621
+Date: 2007-05-15 04:24:27 -0700 (Tue, 15 May 2007)
+New Revision: 18622
 
 Log:
 - bump version
 
 
 Added:
-   trunk/buildroot/package/lsof/lsof-remove-susvlegacy-funcs.patch
+   trunk/buildroot/package/tcpdump/tcpdump.00-extern-inline-fixup.patch
 
 Modified:
-   trunk/buildroot/package/lsof/lsof-makefile.patch
-   trunk/buildroot/package/lsof/lsof-noportmap.patch
-   trunk/buildroot/package/lsof/lsof-uclibc.patch
-   trunk/buildroot/package/lsof/lsof.mk
+   trunk/buildroot/package/libpcap/libpcap.mk
+   trunk/buildroot/package/tcpdump/tcpdump.mk
 
 
 Changeset:
-Modified: trunk/buildroot/package/lsof/lsof-makefile.patch
+Modified: trunk/buildroot/package/libpcap/libpcap.mk
 ===================================================================
---- trunk/buildroot/package/lsof/lsof-makefile.patch	2007-05-15 09:45:21 UTC (rev 18620)
-+++ trunk/buildroot/package/lsof/lsof-makefile.patch	2007-05-15 11:23:46 UTC (rev 18621)
-@@ -1,6 +1,6 @@
- diff -ru lsof_4.77.orig/lsof_4.77_src/lib/Makefile.skel lsof_4.77/lsof_4.77_src/lib/Makefile.skel
- --- lsof_4.77.orig/lsof_4.77_src/lib/Makefile.skel	2001-02-13 03:12:22.000000000 +0100
--+++ lsof_4.77/lsof_4.77_src/lib/Makefile.skel	2006-11-29 13:51:44.000000000 +0100
-++++ lsof_4.77/lsof_4.78_src/lib/Makefile.skel	2006-11-29 13:51:44.000000000 +0100
- @@ -21,8 +21,8 @@
-  all:	${LIB}
-  
+--- trunk/buildroot/package/libpcap/libpcap.mk	2007-05-15 11:23:46 UTC (rev 18621)
++++ trunk/buildroot/package/libpcap/libpcap.mk	2007-05-15 11:24:27 UTC (rev 18622)
+@@ -21,7 +21,7 @@
+ # Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307
+ # USA
+ 
+-LIBPCAP_VER:=0.9.4
++LIBPCAP_VER:=0.9.5
+ LIBPCAP_DIR:=$(BUILD_DIR)/libpcap-$(LIBPCAP_VER)
+ LIBPCAP_SITE:=http://www.tcpdump.org/release
+ LIBPCAP_SOURCE:=libpcap-$(LIBPCAP_VER).tar.gz
+@@ -35,7 +35,7 @@
+ $(LIBPCAP_DIR)/.unpacked: $(DL_DIR)/$(LIBPCAP_SOURCE)
+ 	$(LIBPCAP_CAT) $(DL_DIR)/$(LIBPCAP_SOURCE) | tar -C $(BUILD_DIR) $(TAR_OPTIONS) -
+ 	toolchain/patch-kernel.sh $(LIBPCAP_DIR) package/libpcap/ *.patch
+-	touch $(LIBPCAP_DIR)/.unpacked
++	touch $@
+ 
+ $(LIBPCAP_DIR)/.configured: $(LIBPCAP_DIR)/.unpacked
+ 	( \
+@@ -66,7 +66,7 @@
+ 		--prefix=/usr \
+ 		--with-pcap=linux \
+ 	)
+-	touch $(LIBPCAP_DIR)/.configured
++	touch $@
+ 
+ $(LIBPCAP_DIR)/libpcap.a: $(LIBPCAP_DIR)/.configured
+ 	$(MAKE) CC="$(TARGET_CC)" \
 
-Modified: trunk/buildroot/package/lsof/lsof-noportmap.patch
+Added: trunk/buildroot/package/tcpdump/tcpdump.00-extern-inline-fixup.patch
 ===================================================================
---- trunk/buildroot/package/lsof/lsof-noportmap.patch	2007-05-15 09:45:21 UTC (rev 18620)
-+++ trunk/buildroot/package/lsof/lsof-noportmap.patch	2007-05-15 11:23:46 UTC (rev 18621)
-@@ -1,5 +1,5 @@
- --- lsof_4.77/lsof_4.77_src/print.orig.c	2006-08-23 13:37:43.000000000 -0600
--+++ lsof_4.77/lsof_4.77_src/print.c	2006-08-23 13:38:29.000000000 -0600
-++++ lsof_4.77/lsof_4.78_src/print.c	2006-08-23 13:38:29.000000000 -0600
- @@ -148,6 +148,7 @@
-  static void
-  fill_portmap()
-
-Added: trunk/buildroot/package/lsof/lsof-remove-susvlegacy-funcs.patch
-===================================================================
---- trunk/buildroot/package/lsof/lsof-remove-susvlegacy-funcs.patch	                        (rev 0)
-+++ trunk/buildroot/package/lsof/lsof-remove-susvlegacy-funcs.patch	2007-05-15 11:23:46 UTC (rev 18621)
-@@ -0,0 +1,12 @@
-+diff -rdup lsof_4.78.orig/lsof_4.78_src/dialects/linux/machine.h lsof_4.78/lsof_4.78_src/dialects/linux/machine.h
-+--- lsof_4.78.orig/lsof_4.78_src/dialects/linux/machine.h	2007-04-24 18:20:58.000000000 +0200
-++++ lsof_4.78/lsof_4.78_src/dialects/linux/machine.h	2007-05-15 12:17:03.000000000 +0200
-+@@ -616,6 +616,6 @@
-+  * zeromem is a macro that uses bzero or memset.
-+  */
+--- trunk/buildroot/package/tcpdump/tcpdump.00-extern-inline-fixup.patch	                        (rev 0)
++++ trunk/buildroot/package/tcpdump/tcpdump.00-extern-inline-fixup.patch	2007-05-15 11:24:27 UTC (rev 18622)
+@@ -0,0 +1,30 @@
++--- tcpdump-3.9.5.oorig/tcpdump-stdinc.h	2006-06-23 04:07:27.000000000 +0200
+++++ tcpdump-3.9.5/tcpdump-stdinc.h	2007-05-14 10:26:25.000000000 +0200
++@@ -149,15 +149,15 @@ typedef char* caddr_t;
++   #undef htonl
++   #undef htons
 + 
-+-#define	zeromem(a, l)	bzero(a, l)
-++#define	zeromem(a, l)	memset(a, 0, l)
++-  extern __inline__ unsigned long __ntohl (unsigned long x);
++-  extern __inline__ unsigned short __ntohs (unsigned short x);
+++  static __inline__ unsigned long __ntohl (unsigned long x);
+++  static __inline__ unsigned short __ntohs (unsigned short x);
 + 
-+ #endif	/* !defined(LSOF_MACHINE_H) */
-+
++   #define ntohl(x)  __ntohl(x)
++   #define ntohs(x)  __ntohs(x)
++   #define htonl(x)  __ntohl(x)
++   #define htons(x)  __ntohs(x)
++ 
++-  extern __inline__ unsigned long __ntohl (unsigned long x)
+++  static __inline__ unsigned long __ntohl (unsigned long x)
++   {
++     __asm__ ("xchgb %b0, %h0\n\t"   /* swap lower bytes  */
++              "rorl  $16, %0\n\t"    /* swap words        */
++@@ -166,7 +166,7 @@ typedef char* caddr_t;
++     return (x);
++   }
++ 
++-  extern __inline__ unsigned short __ntohs (unsigned short x)
+++  static __inline__ unsigned short __ntohs (unsigned short x)
++   {
++     __asm__ ("xchgb %b0, %h0"       /* swap bytes */
++             : "=q" (x) : "0" (x));
 
-Modified: trunk/buildroot/package/lsof/lsof-uclibc.patch
+Modified: trunk/buildroot/package/tcpdump/tcpdump.mk
 ===================================================================
---- trunk/buildroot/package/lsof/lsof-uclibc.patch	2007-05-15 09:45:21 UTC (rev 18620)
-+++ trunk/buildroot/package/lsof/lsof-uclibc.patch	2007-05-15 11:23:46 UTC (rev 18621)
-@@ -1,6 +1,6 @@
- diff -ru lsof_4.77.orig/lsof_4.77_src/dialects/linux/dlsof.h lsof_4.77/lsof_4.77_src/dialects/linux/dlsof.h
- --- lsof_4.77.orig/lsof_4.77_src/dialects/linux/dlsof.h	2006-03-28 00:57:14.000000000 +0200
--+++ lsof_4.77/lsof_4.77_src/dialects/linux/dlsof.h	2006-11-29 14:03:07.000000000 +0100
-++++ lsof_4.77/lsof_4.78_src/dialects/linux/dlsof.h	2006-11-29 14:03:07.000000000 +0100
- @@ -49,7 +49,7 @@
-  #include <unistd.h>
-  #include <netinet/in.h>
-
-Modified: trunk/buildroot/package/lsof/lsof.mk
-===================================================================
---- trunk/buildroot/package/lsof/lsof.mk	2007-05-15 09:45:21 UTC (rev 18620)
-+++ trunk/buildroot/package/lsof/lsof.mk	2007-05-15 11:23:46 UTC (rev 18621)
-@@ -3,10 +3,11 @@
- # lsof
- #
- #############################################################
--LSOF_SOURCE:=lsof_4.77.tar.bz2
-+LSOF_VERSION:=4.78
-+LSOF_SOURCE:=lsof_$(LSOF_VERSION).tar.bz2
- LSOF_SITE:=ftp://lsof.itap.purdue.edu/pub/tools/unix/lsof/
- LSOF_CAT:=$(BZCAT)
--LSOF_DIR:=$(BUILD_DIR)/lsof_4.77
-+LSOF_DIR:=$(BUILD_DIR)/lsof_$(LSOF_VERSION)
- LSOF_BINARY:=lsof
- LSOF_TARGET_BINARY:=bin/lsof
+--- trunk/buildroot/package/tcpdump/tcpdump.mk	2007-05-15 11:23:46 UTC (rev 18621)
++++ trunk/buildroot/package/tcpdump/tcpdump.mk	2007-05-15 11:24:27 UTC (rev 18622)
+@@ -6,7 +6,7 @@
+ # Copyright (C) 2001-2003 by Erik Andersen <andersen@codepoet.org>
+ # Copyright (C) 2002 by Tim Riker <Tim@Rikers.org>
  
-@@ -27,33 +28,33 @@
+-TCPDUMP_VER:=3.9.4
++TCPDUMP_VER:=3.9.5
+ TCPDUMP_DIR:=$(BUILD_DIR)/tcpdump-$(TCPDUMP_VER)
+ TCPDUMP_SITE:=http://www.tcpdump.org/release
+ TCPDUMP_SOURCE:=tcpdump-$(TCPDUMP_VER).tar.gz
+@@ -19,7 +19,8 @@
  
- $(LSOF_DIR)/.unpacked: $(DL_DIR)/$(LSOF_SOURCE)
- 	$(LSOF_CAT) $(DL_DIR)/$(LSOF_SOURCE) | tar -C $(BUILD_DIR) $(TAR_OPTIONS) -
--	(cd $(LSOF_DIR);tar xf lsof_4.77_src.tar;rm -f lsof_4.77_src.tar)
-+	(cd $(LSOF_DIR);tar xf lsof_$(LSOF_VERSION)_src.tar;rm -f lsof_$(LSOF_VERSION)_src.tar)
- 	toolchain/patch-kernel.sh $(LSOF_DIR) package/lsof/ \*.patch
- 	touch $(LSOF_DIR)/.unpacked
+ $(TCPDUMP_DIR)/.unpacked: $(DL_DIR)/$(TCPDUMP_SOURCE)
+ 	$(TCPDUMP_CAT) $(DL_DIR)/$(TCPDUMP_SOURCE) | tar -C $(BUILD_DIR) $(TAR_OPTIONS) -
+-	touch $(TCPDUMP_DIR)/.unpacked
++	toolchain/patch-kernel.sh $(TCPDUMP_DIR) package/tcpdump tcpdump*\.patch
++	touch $@
  
- $(LSOF_DIR)/.configured: $(LSOF_DIR)/.unpacked
--	(cd $(LSOF_DIR)/lsof_4.77_src; echo n | $(TARGET_CONFIGURE_OPTS) DEBUG="$(TARGET_CFLAGS) $(BR2_LSOF_CFLAGS)" ./Configure linux)
-+	(cd $(LSOF_DIR)/lsof_$(LSOF_VERSION)_src; echo n | $(TARGET_CONFIGURE_OPTS) DEBUG="$(TARGET_CFLAGS) $(BR2_LSOF_CFLAGS)" ./Configure linux)
- 	touch $(LSOF_DIR)/.configured
+ $(TCPDUMP_DIR)/.configured: $(TCPDUMP_DIR)/.unpacked
+ 	( \
+@@ -47,9 +48,10 @@
+ 		--infodir=/usr/info \
+ 		--with-build-cc="$(HOSTCC)" \
+ 		--without-crypto \
++		--disable-smb \
+ 	)
+ 	$(SED) '/HAVE_PCAP_DEBUG/d' $(TCPDUMP_DIR)/config.h
+-	touch $(TCPDUMP_DIR)/.configured
++	touch $@
  
--$(LSOF_DIR)/lsof_4.77_src/$(LSOF_BINARY): $(LSOF_DIR)/.configured
-+$(LSOF_DIR)/lsof_$(LSOF_VERSION)_src/$(LSOF_BINARY): $(LSOF_DIR)/.configured
- ifeq ($(UCLIBC_HAS_WCHAR),)
--	$(SED) 's,^#define[ 	]*HASWIDECHAR.*,#undef HASWIDECHAR,' $(LSOF_DIR)/lsof_4.77_src/machine.h
--	$(SED) 's,^#define[ 	]*WIDECHARINCL.*,,' $(LSOF_DIR)/lsof_4.77_src/machine.h
-+	$(SED) 's,^#define[ 	]*HASWIDECHAR.*,#undef HASWIDECHAR,' $(LSOF_DIR)/lsof_$(LSOF_VERSION)_src/machine.h
-+	$(SED) 's,^#define[ 	]*WIDECHARINCL.*,,' $(LSOF_DIR)/lsof_$(LSOF_VERSION)_src/machine.h
- endif
- ifeq ($(UCLIBC_HAS_LOCALE),)
--	$(SED) 's,^#define[ 	]*HASSETLOCALE.*,#undef HASSETLOCALE,' $(LSOF_DIR)/lsof_4.77_src/machine.h
-+	$(SED) 's,^#define[ 	]*HASSETLOCALE.*,#undef HASSETLOCALE,' $(LSOF_DIR)/lsof_$(LSOF_VERSION)_src/machine.h
- endif
--	$(MAKE) $(TARGET_CONFIGURE_OPTS) DEBUG="$(TARGET_CFLAGS) $(BR2_LSOF_CFLAGS)" -C $(LSOF_DIR)/lsof_4.77_src
-+	$(MAKE) $(TARGET_CONFIGURE_OPTS) DEBUG="$(TARGET_CFLAGS) $(BR2_LSOF_CFLAGS)" -C $(LSOF_DIR)/lsof_$(LSOF_VERSION)_src
+ $(TCPDUMP_DIR)/tcpdump: $(TCPDUMP_DIR)/.configured
+ 	$(MAKE) CC="$(TARGET_CC)" \
+@@ -59,7 +61,8 @@
+ 		-C $(TCPDUMP_DIR)
  
--$(TARGET_DIR)/$(LSOF_TARGET_BINARY): $(LSOF_DIR)/lsof_4.77_src/$(LSOF_BINARY)
--	cp $(LSOF_DIR)/lsof_4.77_src/$(LSOF_BINARY) $@
-+$(TARGET_DIR)/$(LSOF_TARGET_BINARY): $(LSOF_DIR)/lsof_$(LSOF_VERSION)_src/$(LSOF_BINARY)
-+	cp $(LSOF_DIR)/lsof_$(LSOF_VERSION)_src/$(LSOF_BINARY) $@
- 	$(STRIP) $@
+ $(TARGET_DIR)/sbin/tcpdump: $(TCPDUMP_DIR)/tcpdump
+-	cp -af $< $@
++	cp -f $< $@
++	$(STRIP) -s $@
  
- lsof: uclibc $(TARGET_DIR)/$(LSOF_TARGET_BINARY)
+ tcpdump: uclibc zlib libpcap $(TARGET_DIR)/sbin/tcpdump
  
- lsof-clean:
- 	-rm -f $(TARGET_DIR)/$(LSOF_TARGET_BINARY)
--	-$(MAKE) -C $(LSOF_DIR)/lsof_4.77_src clean
-+	-$(MAKE) -C $(LSOF_DIR)/lsof_$(LSOF_VERSION)_src clean
- 
- lsof-dirclean:
- 	rm -rf $(LSOF_DIR)
