@@ -1,73 +1,32 @@
-From: MikeW <mw_phil@yahoo.co.uk>
-Date: Tue, 15 May 2007 15:19:02 +0000 (UTC)
-Subject: [Buildroot] U-boot 1.1.4 build error - Search First !
-References: <001401c78df0$202a9ec0$b101660a@eInfochips>
-Message-ID: <loom.20070515T171616-545@post.gmane.org>
+From: Brian Austin <brian.austin@cirrus.com>
+Date: Tue, 15 May 2007 06:15:41 -0500
+Subject: [Buildroot] EABI toolchains do not free init in busybox
+Message-ID: <1179227741.17486.52.camel@localhost.localdomain>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Anoop Krishnan <anoop.krishnan@...> writes:
+Hello,
 
-> 
-> 
-> Hi,
->  
->  
->  
-> I have used crosstool-0.42 to build tool chain and 
-> it builds the toolchain without any problems
->  
-> and I can even compile the kernel Image with the 
-> same cross-compiler perfectly
->  
-> The probelm I am facing is that when I use the same 
-> toolchain to compile U-boot 1.1.4, I getthe following error
->  
->
-/opt/crosstool/gcc-4.1.0-glibc-2.4/arm-926ejs-linux-gnueabi/
-lib/gcc/arm-926ejs-linux-gnueabi/4.1.0/libgcc.a(_dvmd_lnx.o):
+I have been building gcc-4.1.1, 4.1.2, 4.2 toolchains for ARM9 EABI with
+2.6.20.4 kernel headers from buildroot. I am using daily snapshots of
+uClibc as well.
 
-> In function 
->
-`__div0':/home/anoop/Tool_chain/crosstool-0.42/build/
-arm-926ejs-linux-gnueabi/gcc-4.1.0-glibc-2.4/gcc-4.1.0/
-gcc/config/arm/lib1funcs.asm:1000:
+I have tried busybox 1.2.0, 1.4.1, and 1.5.0,  same results.
 
-> undefined reference to `raise'make: *** [u-boot] Error 1
->  
-> I found that raise is defined in raise.c which is 
-> under the following 
->
-path/home/anoop/Tool_chain/crosstool-0.42/build/
-arm-926ejs-linux-gnueabi/gcc-4.1.0-glibc-2.4/glibc-2.4/signal/raise.c
-and 
-> its contents are as follows
->  
-> #include <signal.h>#include 
-> <errno.h>
->  
-> /* Raise the signal SIG.  */intraise 
-> (sig)     int sig;{  __set_errno 
-> (ENOSYS);  return -1;}weak_alias (raise, gsignal)
->  
-> stub_warning (raise)stub_warning 
-> (gsignal)#include <stub-tag.h>
->  
-> 
-> How can I solve this issue? Is there any patch for glibc-2.4 , applying 
-> which the issue can be solved?
-> 
-> Thanks in advance
-> Anoop 
+the files are built in EABI format as well
 
-There's a thread here:
-http://thread.gmane.org/gmane.comp.lib.uclibc.buildroot/248/focus=252
-found by a Search on "undefined reference to raise"
+they build fine and compile all lf my code and generate a ramdisk.
 
-Search the newsgroup first !!!!
+kernel boots, but init does not let go and bring me to a shell.
 
-Regards,
-MikeW
+Has anyone had any success with building EABI toolchains for ARM9 from
+buildroot?
+
+I can post my uclibc and buildroot configs if needed.
+
+Thanks,
+
+Brian
