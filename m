@@ -1,43 +1,87 @@
-From: Bernhard Fischer <rep.dot.nop@gmail.com>
-Date: Tue, 15 May 2007 10:53:55 +0200
-Subject: [Buildroot] kernel patch not applied
-In-Reply-To: <1179215247.21753.43.camel@localhost.localdomain>
-References: <46432A7D.6050808@rcn.com> <46433B79.50101@rcn.com>
-	<1178893909.11554.75.camel@localhost.localdomain>
-	<20070511154059.GA4710@aon.at>
-	<1179120085.21753.1.camel@localhost.localdomain>
-	<20070514071131.GA11391@aon.at>
-	<1179156353.21753.31.camel@localhost.localdomain>
-	<20070514153409.GA27033@aon.at>
-	<1179215247.21753.43.camel@localhost.localdomain>
-Message-ID: <20070515085355.GB13889@aon.at>
+From: aldot at uclibc.org <aldot@uclibc.org>
+Date: Tue, 15 May 2007 02:34:00 -0700 (PDT)
+Subject: [Buildroot] svn commit: trunk/buildroot/package/busybox
+Message-ID: <20070515093400.7808C48013@busybox.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Tue, May 15, 2007 at 09:47:27AM +0200, Hans-Christian Egtvedt wrote:
->On Mon, 2007-05-14 at 17:34 +0200, Bernhard Fischer wrote:
->> On Mon, May 14, 2007 at 05:25:53PM +0200, Hans-Christian Egtvedt wrote:
->
-><cut>
->
->> >Aha, setting SHELL to /bin/bash makes this work, thanks.
->> >
->> >Perhaps the top level Makefile should modify SHELL for you?
->> 
->> The user is supposed to set the environment he wants to use.
->> This includes but is not limited to SHELL, HOSTCXX, HOSTCC, MAKE etc,
->> etc.
->
->I understand HOST..., MAKE, etc. But since some of the scripts really
->depend on you using the bash shell, then I think it should be either
->forced or at least given a warning when starting to build.
->
->Will keep the noise a bit down on this email list if people know why
->some parts of the build process fails :)
+Author: aldot
+Date: 2007-05-15 02:33:57 -0700 (Tue, 15 May 2007)
+New Revision: 18619
 
-I don't think depending on bash is desirable. The scripts should also
-work at least with ash, imo. Short of that, $(wildcard ) comes to mind,
-which would fix this proper in the realm of make (patches welcome).
+Log:
+- fixed upstream in r18618
+
+
+Removed:
+   trunk/buildroot/package/busybox/busybox.network-odd-dependencies.patch
+
+
+Changeset:
+Deleted: trunk/buildroot/package/busybox/busybox.network-odd-dependencies.patch
+===================================================================
+--- trunk/buildroot/package/busybox/busybox.network-odd-dependencies.patch	2007-05-15 09:33:32 UTC (rev 18618)
++++ trunk/buildroot/package/busybox/busybox.network-odd-dependencies.patch	2007-05-15 09:33:57 UTC (rev 18619)
+@@ -1,59 +0,0 @@
+-Index: busybox/networking/libiproute/Kbuild
+-===================================================================
+---- busybox/networking/libiproute/Kbuild	(revision 17720)
+-+++ busybox/networking/libiproute/Kbuild	(working copy)
+-@@ -8,11 +8,6 @@
+- lib-y:=
+- lib-$(CONFIG_IP) += \
+- 	ip_parse_common_args.o \
+--	ipaddress.o \
+--	iplink.o \
+--	iproute.o \
+--	iptunnel.o \
+--	iprule.o \
+- 	libnetlink.o \
+- 	ll_addr.o \
+- 	ll_map.o \
+-@@ -22,7 +17,7 @@
+- 	rtm_map.o \
+- 	utils.o
+- 
+--lib-$(CONFIG_IPADDR) += \
+-+lib-$(CONFIG_FEATURE_IP_ADDRESS) += \
+- 	ip_parse_common_args.o \
+- 	ipaddress.o \
+- 	libnetlink.o \
+-@@ -32,7 +27,7 @@
+- 	rt_names.o \
+- 	utils.o
+- 
+--lib-$(CONFIG_IPLINK) += \
+-+lib-$(CONFIG_FEATURE_IP_LINK) += \
+- 	ip_parse_common_args.o \
+- 	ipaddress.o \
+- 	iplink.o \
+-@@ -43,7 +38,7 @@
+- 	rt_names.o \
+- 	utils.o
+- 
+--lib-$(CONFIG_IPROUTE) += \
+-+lib-$(CONFIG_FEATURE_IP_ROUTE) += \
+- 	ip_parse_common_args.o \
+- 	iproute.o \
+- 	libnetlink.o \
+-@@ -52,13 +47,13 @@
+- 	rtm_map.o \
+- 	utils.o
+- 
+--lib-$(CONFIG_IPTUNNEL) += \
+-+lib-$(CONFIG_FEATURE_IP_TUNNEL) += \
+- 	ip_parse_common_args.o \
+- 	iptunnel.o \
+- 	rt_names.o \
+- 	utils.o
+- 
+--lib-$(CONFIG_IPRULE) += \
+-+lib-$(CONFIG_FEATURE_IP_RULE) += \
+- 	ip_parse_common_args.o \
+- 	iprule.o \
+- 	rt_names.o \
