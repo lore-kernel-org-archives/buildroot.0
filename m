@@ -1,38 +1,62 @@
-From: jacmet at uclibc.org <jacmet@uclibc.org>
-Date: Tue, 15 May 2007 06:58:35 -0700 (PDT)
-Subject: [Buildroot] svn commit: trunk/buildroot/toolchain/gcc
-Message-ID: <20070515135835.AFEA94807F@busybox.net>
+From: Assen Stoyanov <softa@ttechgroup.com>
+Date: Tue, 15 May 2007 17:05:11 +0300
+Subject: [Buildroot] Makefile for xorg-server 7.1
+References: <f90898420705150527s59c90911j5ed5b64e830c65fa@mail.gmail.com>
+Message-ID: <004101c796fa$0db3dc30$6614a8c0@lap>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Author: jacmet
-Date: 2007-05-15 06:58:35 -0700 (Tue, 15 May 2007)
-New Revision: 18630
+Hi Simon,
 
-Log:
-Strip libraries
+I am ready with the X11R7.2 libs and kdrive (TinyX) server, now I clean some of the dependencies. I think, that tomorow i will send the patches.
 
-Modified:
-   trunk/buildroot/toolchain/gcc/gcc-uclibc-3.x.mk
+Assen
+  ----- Original Message ----- 
+  From: Frederik Pasch 
+  To: buildroot at uclibc.org 
+  Sent: Tuesday, May 15, 2007 15:27
+  Subject: [Buildroot] Makefile for xorg-server 7.1
 
 
-Changeset:
-Modified: trunk/buildroot/toolchain/gcc/gcc-uclibc-3.x.mk
-===================================================================
---- trunk/buildroot/toolchain/gcc/gcc-uclibc-3.x.mk	2007-05-15 12:50:04 UTC (rev 18629)
-+++ trunk/buildroot/toolchain/gcc/gcc-uclibc-3.x.mk	2007-05-15 13:58:35 UTC (rev 18630)
-@@ -292,9 +292,11 @@
- 	# These are in /lib, so...
- 	rm -rf $(TARGET_DIR)/usr/lib/libgcc_s*.so*
- 	-cp -dpf $(STAGING_DIR)/$(REAL_GNU_TARGET_NAME)/lib/libgcc_s* $(TARGET_DIR)/lib/
-+	$(STRIP) --strip-unneeded $(TARGET_DIR)/lib/libgcc_s*
- endif
- ifeq ($(BR2_INSTALL_LIBSTDCPP),y)
- 	-cp -dpf $(STAGING_DIR)/lib/libstdc++.so* $(TARGET_DIR)/lib/
-+	$(STRIP) --strip-unneeded $(TARGET_DIR)/lib/libstc++.so*
- endif
- ifeq ($(BR2_INSTALL_LIBGCJ),y)
- 	-cp -dpf $(STAGING_DIR)/lib/libgcj.so* $(TARGET_DIR)/lib/
+  Hello List!
+
+  Has anyone tried to create a buildroot-Makefile for X.org-Server 7.1?
+
+  I found a patch from someone who created one for xorg 6.9.0:
+  http://bugs.busybox.net/view.php?id=878 
+
+  but 6.9.0 is quite old...
+
+  If no one has done that, I will try to create one for 7.1. 
+  If anyone has tips, on what to pay attention, when cross-compiling xorg 7.1, feel free to post them...
+
+
+  Simon
+
+
+
+------------------------------------------------------------------------------
+
+
+  _______________________________________________
+  buildroot mailing list
+  buildroot at uclibc.org
+  http://busybox.net/mailman/listinfo/buildroot
+
+
+------------------------------------------------------------------------------
+
+
+  No virus found in this incoming message.
+  Checked by AVG Free Edition. 
+  Version: 7.5.467 / Virus Database: 269.7.0/804 - Release Date: 5/14/2007 4:46 PM
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: http://busybox.net/lists/buildroot/attachments/20070515/874728d6/attachment.htm 
+-------------- next part --------------
+No virus found in this outgoing message.
+Checked by AVG Free Edition. 
+Version: 7.5.467 / Virus Database: 269.7.0/804 - Release Date: 5/14/2007 4:46 PM
