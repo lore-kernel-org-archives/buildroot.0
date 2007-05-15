@@ -1,62 +1,73 @@
-From: Assen Stoyanov <softa@ttechgroup.com>
-Date: Tue, 15 May 2007 17:05:11 +0300
-Subject: [Buildroot] Makefile for xorg-server 7.1
-References: <f90898420705150527s59c90911j5ed5b64e830c65fa@mail.gmail.com>
-Message-ID: <004101c796fa$0db3dc30$6614a8c0@lap>
+From: MikeW <mw_phil@yahoo.co.uk>
+Date: Tue, 15 May 2007 15:19:02 +0000 (UTC)
+Subject: [Buildroot] U-boot 1.1.4 build error - Search First !
+References: <001401c78df0$202a9ec0$b101660a@eInfochips>
+Message-ID: <loom.20070515T171616-545@post.gmane.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Simon,
+Anoop Krishnan <anoop.krishnan@...> writes:
 
-I am ready with the X11R7.2 libs and kdrive (TinyX) server, now I clean some of the dependencies. I think, that tomorow i will send the patches.
+> 
+> 
+> Hi,
+>  
+>  
+>  
+> I have used crosstool-0.42 to build tool chain and 
+> it builds the toolchain without any problems
+>  
+> and I can even compile the kernel Image with the 
+> same cross-compiler perfectly
+>  
+> The probelm I am facing is that when I use the same 
+> toolchain to compile U-boot 1.1.4, I getthe following error
+>  
+>
+/opt/crosstool/gcc-4.1.0-glibc-2.4/arm-926ejs-linux-gnueabi/
+lib/gcc/arm-926ejs-linux-gnueabi/4.1.0/libgcc.a(_dvmd_lnx.o):
 
-Assen
-  ----- Original Message ----- 
-  From: Frederik Pasch 
-  To: buildroot at uclibc.org 
-  Sent: Tuesday, May 15, 2007 15:27
-  Subject: [Buildroot] Makefile for xorg-server 7.1
+> In function 
+>
+`__div0':/home/anoop/Tool_chain/crosstool-0.42/build/
+arm-926ejs-linux-gnueabi/gcc-4.1.0-glibc-2.4/gcc-4.1.0/
+gcc/config/arm/lib1funcs.asm:1000:
 
+> undefined reference to `raise'make: *** [u-boot] Error 1
+>  
+> I found that raise is defined in raise.c which is 
+> under the following 
+>
+path/home/anoop/Tool_chain/crosstool-0.42/build/
+arm-926ejs-linux-gnueabi/gcc-4.1.0-glibc-2.4/glibc-2.4/signal/raise.c
+and 
+> its contents are as follows
+>  
+> #include <signal.h>#include 
+> <errno.h>
+>  
+> /* Raise the signal SIG.  */intraise 
+> (sig)     int sig;{  __set_errno 
+> (ENOSYS);  return -1;}weak_alias (raise, gsignal)
+>  
+> stub_warning (raise)stub_warning 
+> (gsignal)#include <stub-tag.h>
+>  
+> 
+> How can I solve this issue? Is there any patch for glibc-2.4 , applying 
+> which the issue can be solved?
+> 
+> Thanks in advance
+> Anoop 
 
-  Hello List!
+There's a thread here:
+http://thread.gmane.org/gmane.comp.lib.uclibc.buildroot/248/focus=252
+found by a Search on "undefined reference to raise"
 
-  Has anyone tried to create a buildroot-Makefile for X.org-Server 7.1?
+Search the newsgroup first !!!!
 
-  I found a patch from someone who created one for xorg 6.9.0:
-  http://bugs.busybox.net/view.php?id=878 
-
-  but 6.9.0 is quite old...
-
-  If no one has done that, I will try to create one for 7.1. 
-  If anyone has tips, on what to pay attention, when cross-compiling xorg 7.1, feel free to post them...
-
-
-  Simon
-
-
-
-------------------------------------------------------------------------------
-
-
-  _______________________________________________
-  buildroot mailing list
-  buildroot at uclibc.org
-  http://busybox.net/mailman/listinfo/buildroot
-
-
-------------------------------------------------------------------------------
-
-
-  No virus found in this incoming message.
-  Checked by AVG Free Edition. 
-  Version: 7.5.467 / Virus Database: 269.7.0/804 - Release Date: 5/14/2007 4:46 PM
--------------- next part --------------
-An HTML attachment was scrubbed...
-URL: http://busybox.net/lists/buildroot/attachments/20070515/874728d6/attachment.htm 
--------------- next part --------------
-No virus found in this outgoing message.
-Checked by AVG Free Edition. 
-Version: 7.5.467 / Virus Database: 269.7.0/804 - Release Date: 5/14/2007 4:46 PM
+Regards,
+MikeW
