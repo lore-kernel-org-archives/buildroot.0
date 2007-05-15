@@ -1,17 +1,33 @@
-From: Ulf Samuelsson <ulf@atmel.com>
-Date: Tue, 15 May 2007 12:35:25 +0200
-Subject: [Buildroot] Whats happened to Eric?
-References: <46432A7D.6050808@rcn.com>
-	<46433B79.50101@rcn.com><1178893909.11554.75.camel@localhost.localdomain><20070511154059.GA4710@aon.at><1179120085.21753.1.camel@localhost.localdomain><20070514071131.GA11391@aon.at><1179156353.21753.31.camel@localhost.localdomain><20070514153409.GA27033@aon.at><1179215247.21753.43.camel@localhost.localdomain>
-	<20070515085355.GB13889@aon.at>
-Message-ID: <01f601c796dd$41e935d0$01c4af0a@Glamdring>
+From: Peter Korsgaard <peter.korsgaard@barco.com>
+Date: Tue, 15 May 2007 12:55:12 +0200
+Subject: [Buildroot] Matchbox Support
+In-Reply-To: <005301c796cd$98e56120$6614a8c0@lap> (Assen Stoyanov's message of
+	"Tue, 15 May 2007 11:46:57 +0300")
+References: <008001c79625$3558b1f0$2600a8c0@engineering5>
+	<005301c796cd$98e56120$6614a8c0@lap>
+Message-ID: <87y7jqwe3z.fsf@sleipner.barco.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-He does not answer mails...
+>>>>> "AS" == Assen Stoyanov <softa@ttechgroup.com> writes:
 
-Best Regards
-Ulf Samuelsson
+Hi,
+
+AS> Hello All, I am 99% ready with the port of matchbox
+AS> project. Incl.: - Matchbox Window Manager - Matchbox Startup
+AS> Notification - Matchbox Desktop - Matchbox Virtual Keyboard
+
+AS> Also other thinks that are 100% done are:
+
+Cool!
+
+AS> My question is - what is the best way to submit all these changes
+AS> to the buildroot repository?
+
+Send patches to the bug tracker or this ml.
+
+-- 
+Bye, Peter Korsgaard
