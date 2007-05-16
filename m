@@ -1,31 +1,24 @@
-From: Bernhard Fischer <rep.dot.nop@gmail.com>
-Date: Wed, 16 May 2007 15:59:37 +0200
-Subject: [Buildroot] download problem
-In-Reply-To: <Pine.LNX.4.44.0705161521040.17821-100000@slslc02.psi.ch>
-References: <20070516122808.GA9747@aon.at>
-	<Pine.LNX.4.44.0705161521040.17821-100000@slslc02.psi.ch>
-Message-ID: <20070516135937.GA12536@aon.at>
+From: Brian Austin <brian.austin@cirrus.com>
+Date: Wed, 16 May 2007 02:58:48 -0500
+Subject: [Buildroot] EABI toolchains do not free init in busybox
+In-Reply-To: <20070516073530.GB2056@z1.synertronixx>
+References: <1179227741.17486.52.camel@localhost.localdomain>
+	<20070516073530.GB2056@z1.synertronixx>
+Message-ID: <1179302328.17486.79.camel@localhost.localdomain>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Wed, May 16, 2007 at 03:27:05PM +0200, Miroslaw Dach wrote:
->Thank you for the suggestion:
->
->I have downloaded the buildroot-snapshot.tar.bz2
->
->I have followed the instruction to make the proper configuration before 
->building the toolchain. 
->
->I have selected powerpc but I did not find anything specific concerning the 
->architecture I would like to use.
->
->The processor I have is the powerpc 405 without Floating Point support.
->Where I can set this settings in order to properly build the toolchain.
+Yea, that was the problem.  I have been building this in an automated
+system and I was initially building an OABI kernel, then an EABI kernel,
+and the wrong one was being placed in the tftp directory.
 
-BR2_SOFT_FLOAT
-BR2_TARGET_OPTIMIZATION
+my bad.
 
-The menuconfig entries have help-text for further information.
+Thanks
+
+
+
+On Wed, 2007-05-16 at 09:35 +0200, Konstantin Kletschke wrote:
