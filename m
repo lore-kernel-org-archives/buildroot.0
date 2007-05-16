@@ -1,28 +1,31 @@
-From: Diego A. Fons <diegofons@apexar.com>
-Date: Wed, 16 May 2007 13:45:27 -0300
-Subject: [Buildroot] Problem with FB
-Message-ID: <464B3527.4080406@apexar.com>
+From: Mats Erik Andersson <mats.andersson64@comhem.se>
+Date: Wed, 16 May 2007 19:51:29 +0200
+Subject: [Buildroot] _IO_getc inconsistent with uClibc?
+Message-ID: <1179337889.9676.22.camel@localhost>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi,
+Hi there,
 
-First of all i'm not sure if it is the correct list for posting this 
-mail, if it's not, please tell me wich list is the correct one.
+in an effort to implement bluez-utils-2.15 for
+an embedded system using uClibc, I ran into
+unexpected problems, since my linker cannot
+resolve the the symbol _IO_getc. Using a similar
+configuration with Debian Sarge and building
+bluez-utils, does not pose any problems, and
+its linker kindly points to
 
-I'm working on an embedded device (a Ronetix pm9261 board with an 
-AT91SAM9261 cpu), i could build the linux kernel version 2.6.19.7 with 
-framebuffer support and it works fine. The problem is when i run any 
-command that uses net services, i.e. when i run sftp the sreen moves and 
-it kept like this, the offset (0,0) is in position (100,0) (it's just an 
-example, i don't know thw correct values) and i'm not able to correct 
-it. It occurs every time i run a net comand. The display i'm usin is a 
-LCD and the driver is sidsab.c.
+    _IO_getc@@GLIBC_2.0
 
-Thank you for your time and i'll be waiting any suggestions.
+when the relevant object files have been linkt
+together. It was exactly at this stage that my
+Buildroot setting decided to cancel work for the day!
 
-Regards,
-Diego A. Fons.
+Now, I did allow uClibc to use macros for getc
+and puts in the configuration, out of old habit.
+Is it these macros that cause the mess?
+
+Regards,   Mats Erik Andersson
