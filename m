@@ -1,24 +1,73 @@
-From: Brian Austin <brian.austin@cirrus.com>
-Date: Wed, 16 May 2007 02:58:48 -0500
-Subject: [Buildroot] EABI toolchains do not free init in busybox
-In-Reply-To: <20070516073530.GB2056@z1.synertronixx>
-References: <1179227741.17486.52.camel@localhost.localdomain>
-	<20070516073530.GB2056@z1.synertronixx>
-Message-ID: <1179302328.17486.79.camel@localhost.localdomain>
+From: Miroslaw Dach <miroslaw.dach@psi.ch>
+Date: Wed, 16 May 2007 17:12:15 +0200 (CEST)
+Subject: [Buildroot] download problem
+In-Reply-To: <20070516135937.GA12536@aon.at>
+Message-ID: <Pine.LNX.4.44.0705161650060.21165-100000@slslc02.psi.ch>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Yea, that was the problem.  I have been building this in an automated
-system and I was initially building an OABI kernel, then an EABI kernel,
-and the wrong one was being placed in the tftp directory.
+I have set BR2_TARGET_OPTIMIZATION
 
-my bad.
-
-Thanks
+BR2_TARGET_OPTIMIZATION="-Os -pipe -O -mcpu=405 --with-cpu=405 
+--enable-cxx-flags=-mcpu=405"
 
 
 
-On Wed, 2007-05-16 at 09:35 +0200, Konstantin Kletschke wrote:
+but I do not see that the toolchain was build with 
+those options for the ppc_405 architecture:
+
+/root/buildroot/build_powerpc/staging_dir/bin/powerpc-linux-uclibc-gcc -v
+
+Using built-in specs.
+Target: powerpc-linux-uclibc
+Configured with: 
+/root/buildroot/toolchain_build_powerpc/gcc-4.1.2/configure 
+--prefix=/root/buildroot/build_powerpc/staging_dir 
+--build=i386-pc-linux-gnu --host=i386-pc-linux-gnu 
+--target=powerpc-linux-uclibc --enable-languages=c --disable-__cxa_atexit 
+--enable-target-optspace --with-gnu-ld 
+--with-gmp=/root/buildroot/toolchain_build_powerpc/gmp 
+--with-mpfr=/root/buildroot/toolchain_build_powerpc/mpfr --enable-shared 
+--disable-nls --enable-threads --disable-multilib
+Thread model: posix
+gcc version 4.1.2
+
+
+My previously build crosstool gave the output as following:
+
+bash SLSBASE=]# ./powerpc-405-linux-gnu-gcc -v
+Using built-in specs.
+Target: powerpc-405-linux-gnu
+Configured with: 
+/home/ioc/crosstool-0.43/build/powerpc-405-linux-gnu/gcc-4.0.2-glibc-2.3.2/gcc-4.0.2/configure 
+--target=powerpc-405-linux-gnu --host=i686-host_pc-linux-gnu 
+--prefix=/opt/crosstool/gcc-4.0.2-glibc-2.3.2/powerpc-405-linux-gnu 
+--with-cpu=405 --enable-cxx-flags=-mcpu=405 
+--with-headers=/opt/crosstool/gcc-4.0.2-glibc-2.3.2/powerpc-405-linux-gnu/powerpc-405-linux-gnu/include 
+--with-local-prefix=/opt/crosstool/gcc-4.0.2-glibc-2.3.2/powerpc-405-linux-gnu/powerpc-405-linux-gnu 
+--disable-nls --enable-threads=posix --enable-symvers=gnu 
+--enable-__cxa_atexit --enable-languages=c,c++ --enable-shared 
+--enable-c99 --enable-long-long
+Thread model: posix
+gcc version 4.0.2
+
+
+In the toolchain which was created by buildroot I do not see the options 
+like:
+
+--with-cpu=405 
+--enable-cxx-flags=-mcpu=405
+
+Best Regards
+
+Mirek
+
+
+
+=============================================================================
+          Miroslaw Dach (Miroslaw.Dach at psi.ch) - SLS/Controls Group 
+                PSI - Paul Scherrer Institut CH-5232 Villigen
+=============================================================================
