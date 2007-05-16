@@ -1,13 +1,25 @@
 From: Christopher Reder <creder@digitalcpt.com>
-Date: Wed, 16 May 2007 15:55:29 -0500
+Date: Wed, 16 May 2007 16:19:22 -0500
 Subject: [Buildroot] libiconv
-In-Reply-To: <20070516181623.GA20902@aon.at>
-Message-ID: <011f01c797fc$89971080$2600a8c0@engineering5>
+In-Reply-To: <011f01c797fc$89971080$2600a8c0@engineering5>
+Message-ID: <012001c797ff$df983f60$2600a8c0@engineering5>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
+
+To add to the question, when I install libiconv, do I need to cross compile
+it as well?  When I do, if I should, do I install it in a specific
+directory?  What about the libiconv.so.2 for the pc?  Can someone clarify
+what should happen with that?
+
+-----Original Message-----
+From: buildroot-bounces@uclibc.org [mailto:buildroot-bounces at uclibc.org] On
+Behalf Of Christopher Reder
+Sent: Wednesday, May 16, 2007 3:55 PM
+To: buildroot at uclibc.org
+Subject: [Buildroot] libiconv
 
 I have searched around for a solution to the problem I have been having and
 while there are a number of entries with the same issue, no one has a posted
@@ -41,3 +53,8 @@ Has anyone gotten something like this working for the arm (920T
 architecture) ?
 
 Christopher
+
+_______________________________________________
+buildroot mailing list
+buildroot at uclibc.org
+http://busybox.net/mailman/listinfo/buildroot
