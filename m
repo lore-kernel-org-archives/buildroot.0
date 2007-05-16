@@ -1,41 +1,33 @@
-From: Bernhard Fischer <rep.dot.nop@gmail.com>
-Date: Wed, 16 May 2007 13:56:33 +0200
-Subject: [Buildroot] sshd always wants to change password
-In-Reply-To: <20070516113748.296680@gmx.net>
-References: <20070516095957.296670@gmx.net> <20070516110107.GB6566@aon.at>
-	<20070516113748.296680@gmx.net>
-Message-ID: <20070516115633.GB8387@aon.at>
+From: Mats Erik Andersson <mats.andersson64@comhem.se>
+Date: Wed, 16 May 2007 13:58:34 +0200
+Subject: [Buildroot] no gcc in rootfs.i386.ext2
+In-Reply-To: <20070516110226.GC6566@aon.at>
+References: <464AC2D4.9080306@belkam.com>  <20070516110226.GC6566@aon.at>
+Message-ID: <1179316714.9676.2.camel@localhost>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Wed, May 16, 2007 at 01:37:48PM +0200, fritz huber wrote:
->> On Wed, May 16, 2007 at 11:59:57AM +0200, fritz huber wrote:
->> >Hello
->> >
->> >I'm working with buildroot from 2006-04-18 and kernel 2.6.12 on a ARM9
->> system. Now i have a problem with the ssh deamon. I would like to use ssh
->> with classic login. My problem:
->> >
->> >When i would like to login with a non-root user:
->> >
->> >sshd at 10.0.0.190's password: 
->> >WARNING: Your password has expired.
->> >You must change your password now and login again!
->> >passwd: This applet requires root priviledges!
->> >Connection to 10.0.0.190 closed.
->> 
->> 1) your password is set to expired, fix the expiration date.
->> 2) configure busybox according to your needs (suid bits, busybox.conf)
->
->
->Thank you for your answer. 
->
->1) When i login on the standard terminal with RS232 it works correct. Just with ssh i must change my passwords (doesn't matter witch account). 
->
->Here is the entry from my shadow file:
->sshd:"PASSWORD":0:0:99999:7:::
+ons 2007-05-16 klockan 13:02 +0200 skrev Bernhard Fischer:
+> On Wed, May 16, 2007 at 01:37:40PM +0500, Dmitry Melekhov wrote:
+> >Hello!
+> >
+> >Sorry, I'm newbie.
+> >I want get root with gcc installed, gcc is compiled OK, but there is no
+> >gcc in rootfs.i386.ext2.
+> >What can be wrong?
+> >btw, I use yesterday svn...
+> 
 
-set the last changed field to non-null
+It should be
+
+   Package selection for the target -->
+
+       native toolchain in the target filesystem
+
+
+although I never used it so far.
+
+Regards,   Mats Erik Andersson
