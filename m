@@ -1,33 +1,29 @@
-From: Mats Erik Andersson <mats.andersson64@comhem.se>
-Date: Wed, 16 May 2007 13:58:34 +0200
-Subject: [Buildroot] no gcc in rootfs.i386.ext2
-In-Reply-To: <20070516110226.GC6566@aon.at>
-References: <464AC2D4.9080306@belkam.com>  <20070516110226.GC6566@aon.at>
-Message-ID: <1179316714.9676.2.camel@localhost>
+From: Miroslaw Dach <miroslaw.dach@psi.ch>
+Date: Wed, 16 May 2007 13:55:21 +0200 (CEST)
+Subject: [Buildroot] download problem
+Message-ID: <Pine.LNX.4.44.0705161350320.14078-100000@slslc02.psi.ch>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-ons 2007-05-16 klockan 13:02 +0200 skrev Bernhard Fischer:
-> On Wed, May 16, 2007 at 01:37:40PM +0500, Dmitry Melekhov wrote:
-> >Hello!
-> >
-> >Sorry, I'm newbie.
-> >I want get root with gcc installed, gcc is compiled OK, but there is no
-> >gcc in rootfs.i386.ext2.
-> >What can be wrong?
-> >btw, I use yesterday svn...
-> 
+Hi All,
 
-It should be
+	I wanted to build the rootfile system for ppc_405 processor.
+Originally I wanted to build the busybox against uClibc libraries.
+I have read that build root project does all in one goal.
 
-   Package selection for the target -->
+Unfortunately I have the difficulties to install the svn on my Linux PC.
+Would it be somehow possible to download the version of buildroot suitable 
+for ppc_405 from the net directly omitting svn.
 
-       native toolchain in the target filesystem
+Best Regards
 
+Mirek
 
-although I never used it so far.
-
-Regards,   Mats Erik Andersson
+-- 
+=============================================================================
+          Miroslaw Dach (Miroslaw.Dach at psi.ch) - SLS/Controls Group 
+                PSI - Paul Scherrer Institut CH-5232 Villigen
+=============================================================================
