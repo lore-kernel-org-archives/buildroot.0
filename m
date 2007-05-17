@@ -1,14 +1,31 @@
 From: Christopher Reder <creder@digitalcpt.com>
-Date: Thu, 17 May 2007 13:53:35 -0500
-Subject: [Buildroot] __ctype_b undefined reference after adding fontconfig
-	support
-In-Reply-To: <002801c7986d$10df37f0$6614a8c0@lap>
-Message-ID: <015f01c798b4$ac3fdc30$2600a8c0@engineering5>
+Date: Thu, 17 May 2007 14:05:31 -0500
+Subject: [Buildroot] __ctype_b undefined reference after adding
+	fontconfig support
+Message-ID: <017201c798b6$573bb8b0$2600a8c0@engineering5>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
+
+I also see that Bernhard also saw this issue but I did not see if anyone
+found a solution.
+
+ 
+
+http://osdir.com/ml/lib.uclibc.buildroot/2007-01/msg00140.html
+
+ 
+
+  _____  
+
+From: Christopher Reder [mailto:creder at digitalcpt.com] 
+Sent: Thursday, May 17, 2007 1:54 PM
+To: 'Assen Stoyanov'; 'buildroot at uclibc.org'
+Subject: __ctype_b undefined reference after adding fontconfig support
+
+ 
 
 All - I will attempt to provide as much detail and if there is more than
 should be added, I'll be happy to do so.
@@ -87,4 +104,4 @@ http://bugs.busybox.net/view.php?id=1328
 
 -------------- next part --------------
 An HTML attachment was scrubbed...
-URL: http://busybox.net/lists/buildroot/attachments/20070517/da67ff88/attachment.htm 
+URL: http://busybox.net/lists/buildroot/attachments/20070517/94f5a5b7/attachment.htm 
