@@ -1,101 +1,184 @@
-From: Tom <fivemiletom@gmail.com>
-Date: Thu, 17 May 2007 22:31:11 -0700
-Subject: [Buildroot] cygwin buildroot error - how to include libs ?
-Message-ID: <464D3A1F.9060600@gmail.com>
+From: Doug the RockRat <rickyrockrat@yahoo.com>
+Date: Thu, 17 May 2007 23:17:46 -0700 (PDT)
+Subject: [Buildroot] PATCH against 18643 to add unzip (info-zip),
+	the standard Linux unzip
+Message-ID: <131426.20830.qm@web62011.mail.re1.yahoo.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+This has encrypted support, which the busy box one
+does not, and pulls from source forge.
 
-when building building cygwin I get the error shown below, due the lost 
-linker not finding functions from the libintl library. The packages 
-libintl, libintl1 etc are part of my cygwin installation.
+As this is the first package I've added, I would
+appreciate feedback on if it's done correctly or not.
 
-I first ran into a similar problem when building the 2.6.21.1 kernel, 
-which could be fixed by adding HOST_LOADLIBES="-lcurses -lintl" to the 
-invocation and thus to the make commands. No luck. Would anyone know a 
-place that will cause make to add it for all HOSTCC(linker) invocations?
+Thanks,
+Doug
 
-Furthermore, is there a minimum requirement for the host gcc, is 3.4.4 
-good enough?
+Index: buildroot-2007-05-17/package/Config.in
+===================================================================
+--- buildroot-2007-05-17/package/Config.in     
+(revision 18643)
++++ buildroot-2007-05-17/package/Config.in     
+(working copy)
+@@ -311,6 +311,7 @@ endif
+ source "package/lzo/Config.in"
+ source "package/lzma/Config.in"
+ source "package/zlib/Config.in"
++source "package/unzip/Config.in"
+ endif
 
-Thanks
-Tom
+ menuconfig BR2_SCRIPTING_SUPPORT
+Index: buildroot-2007-05-17/package/unzip/Config.in
+===================================================================
+--- buildroot-2007-05-17/package/unzip/Config.in      
+ (revision 0)
++++ buildroot-2007-05-17/package/unzip/Config.in      
+ (revision 0)
+@@ -0,0 +1,14 @@
++config BR2_PACKAGE_UNZIP
++       bool "unzip"
++       default n
++       help
++         list, test and extract compressed files in a
+ZIP archive
++         unzip is the standard unzip utility used on
+Linux.
++
++config BR2_PACKAGE_UNZIP_STATIC
++       bool "Static Compile of unzip"
++       default n
++       depends on BR2_PACKAGE_UNZIP
++       help
++         Set this to statically compile unzip
++
+Index:
+buildroot-2007-05-17/package/unzip/unzip-5.52.patch
+===================================================================
+---
+buildroot-2007-05-17/package/unzip/unzip-5.52.patch
+(revision 0)
++++
+buildroot-2007-05-17/package/unzip/unzip-5.52.patch
+(revision 0)
+@@ -0,0 +1,22 @@
++--- unzip-5.52/unix/Makefile   2005-02-26
+12:58:34.000000000 -0700
+++++ unzip-5.52.mipsel/unix/Makefile    2007-05-17
+14:12:29.000000000 -0600
++@@ -42,13 +42,15 @@
++ # such as -DDOSWILD).
++
++ # UnZip flags
++-CC = cc#      try using "gcc" target rather than
+changing this (CC and LD
+++ # use mipsel-linux- form for below
+++TARGET_PREFIX?=
+++STATIC?=
+++CC = $(TARGET_PREFIX)gcc#     try using "gcc" target
+rather than changing this (CC and LD
++ LD = $(CC)#   must match, else "unresolved symbol: 
+___main" is possible)
++-AS = as
+++AS = $(TARGET_PREFIX)as
++ LOC = $(LOCAL_UNZIP)
++ AF = $(LOC)
++ CF = -O -I. -DUNIX $(LOC)
++-LF = -o unzip
+++LF = $(STATIC) -o unzip
++ LF2 = -s
++
++ # UnZipSFX flags
+Index: buildroot-2007-05-17/package/unzip/unzip.mk
+===================================================================
+--- buildroot-2007-05-17/package/unzip/unzip.mk
+(revision 0)
++++ buildroot-2007-05-17/package/unzip/unzip.mk
+(revision 0)
+@@ -0,0 +1,58 @@
++#############################################################
++#
++# unzip
++#
+http://easynews.dl.sourceforge.net/sourceforge/infozip/unzip552.tar.gz
++# http://www.info-zip.org/UnZip.html
++#############################################################
++# come on, folks, please name the file the same as
+the dir!
++UNZIP_VTAR=552
++UNZIP_VDIR=5.52
++UNZIP_SOURCE:=unzip$(UNZIP_VTAR).tar.gz
++UNZIP_PATCH:=unzip-$(UNZIP_VDIR).patch
++UNZIP_SITE:=http://$(BR2_SOURCEFORGE_MIRROR).dl.sourceforge.net/sourceforge/infozip
++UNZIP_CAT:=$(ZCAT)
++UNZIP_DIR:=$(BUILD_DIR)/unzip-$(UNZIP_VDIR)
++UNZIP_BINARY:=unzip
++UNZIP_TARGET_BINARY:=bin/unzip
++
++$(DL_DIR)/$(UNZIP_SOURCE):
++        $(WGET) -P $(DL_DIR)
+$(UNZIP_SITE)/$(UNZIP_SOURCE)
++
++unzip-source: $(DL_DIR)/$(UNZIP_SOURCE)
++
++$(UNZIP_DIR)/.unpacked: $(DL_DIR)/$(UNZIP_SOURCE)
++       $(UNZIP_CAT) $(DL_DIR)/$(UNZIP_SOURCE) | tar
+-C $(BUILD_DIR) $(TAR_OPTIONS) -
++       toolchain/patch-kernel.sh $(UNZIP_DIR)
+package/unzip/ unzip\*.patch
++       touch $(UNZIP_DIR)/.unpacked
++
++$(UNZIP_DIR)/.configured: $(UNZIP_DIR)/.unpacked
++       cp $(UNZIP_DIR)/unix/Makefile $(UNZIP_DIR)
++       touch  $(UNZIP_DIR)/.configured
++
++$(UNZIP_DIR)/$(UNZIP_BINARY):
+$(UNZIP_DIR)/.configured
++ifeq ($(strip $(BR2_PACKAGE_UNZIP_STATIC)),y)
++       $(MAKE) STATIC=-static
+TARGET_PREFIX=$(GNU_TARGET_NAME)- -C $(UNZIP_DIR) 
+generic
++else
++       $(MAKE) TARGET_PREFIX=$(GNU_TARGET_NAME)- -C
+$(UNZIP_DIR)  generic
++endif
++
++$(TARGET_DIR)/$(UNZIP_TARGET_BINARY):
+$(UNZIP_DIR)/$(UNZIP_BINARY)
++       cp -a $(UNZIP_DIR)/$(UNZIP_BINARY)
+$(TARGET_DIR)/$(UNZIP_TARGET_BINARY)
++
++unzip: uclibc $(TARGET_DIR)/$(UNZIP_TARGET_BINARY)
++
++unzip-clean:
++       #$(MAKE) DESTDIR=$(TARGET_DIR) CC=$(TARGET_CC)
+-C $(UNZIP_DIR) uninstall
++       -$(MAKE) -C $(UNZIP_DIR) clean
++
++unzip-dirclean:
++       rm -rf $(UNZIP_DIR)
++
++#############################################################
++#
++# Toplevel Makefile options
++#
++#############################################################
++ifeq ($(strip $(BR2_PACKAGE_UNZIP)),y)
++TARGETS+=unzip
++endif
 
 
-******************************************************
-Buildroot cygwin build error
-******************************************************
-
-
-CC clean:                                       Ok
-CXX clean:                                      Ok
-CPP clean:                                      Ok
-CFLAGS clean:                                   Ok
-INCLUDES clean:                                 Ok
-CXXFLAGS clean:                                 Ok
-which installed:                                Ok
-sed works:                                      Ok (/usr/bin/sed)
-GNU make version '3.81':                        Ok
-C compiler '/usr/bin/gcc'
-C compiler version '3.4.4':                     Ok
-C++ compiler '/usr/bin/c++'
-C++ compiler version '3.4.4':                   Ok
-bison installed:                                Ok
-flex installed:                                 Ok
-gettext installed:                              Ok
-makeinfo installed:                             Ok
-Build system dependencies:                      Ok
-
-set -x && make MAKE="make -j1" -C /tw/buildroot/toolchain_build_arm/uClibc \
-                 PREFIX=/tw/buildroot/toolchain_build_arm/uClibc_dev/ \
-                 DEVEL_PREFIX=/usr/ \
- 
-RUNTIME_PREFIX=/tw/buildroot/toolchain_build_arm/uClibc_dev/ \
-                 HOSTCC="gcc" \
-                 pregen install_dev
-+ make 'MAKE=make -j1' -C /tw/buildroot/toolchain_build_arm/uClibc 
-PREFIX=/tw/bu
-ildroot/toolchain_build_arm/uClibc_dev/ DEVEL_PREFIX=/usr/ 
-RUNTIME_PREFIX=/tw/bu
-ildroot/toolchain_build_arm/uClibc_dev/ HOSTCC=gcc pregen install_dev
-/bin/sh: 
-/tw/buildroot/build_arm/staging_dir/bin/arm-linux-uclibcgnueabi-gcc: No
-  such file or directory
-make[1]: 
-/tw/buildroot/build_arm/staging_dir/bin/arm-linux-uclibcgnueabi-gcc: Co
-mmand not found
-make[1]: Entering directory `/tw/buildroot/toolchain_build_arm/uClibc'
-make[1]: 
-/tw/buildroot/build_arm/staging_dir/bin/arm-linux-uclibcgnueabi-gcc: Co
-mmand not found
-make[1]: Entering directory `/tw/buildroot/toolchain_build_arm/uClibc'
-make[1]: Entering directory `/tw/buildroot/toolchain_build_arm/uClibc'
-/bin/sh: 
-/tw/buildroot/build_arm/staging_dir/bin/arm-linux-uclibcgnueabi-gcc: No
-  such file or directory
-make[2]: 
-/tw/buildroot/build_arm/staging_dir/bin/arm-linux-uclibcgnueabi-gcc: Co
-mmand not found
-make[2]: 
-/tw/buildroot/build_arm/staging_dir/bin/arm-linux-uclibcgnueabi-gcc: Co
-mmand not found
-gcc -I/usr/include/ncurses -DCURSES_LOC="<ncurses.h>" -DLOCALE    conf.o 
-  zconf.
-tab.o -o conf
-conf.o:conf.c:(.text+0xb2): undefined reference to `_libintl_gettext'
-conf.o:conf.c:(.text+0xc6): undefined reference to `_libintl_gettext'
-conf.o:conf.c:(.text+0xda): undefined reference to `_libintl_gettext'
-conf.o:conf.c:(.text+0xf2c): undefined reference to `_libintl_gettext'
-conf.o:conf.c:(.text+0x10c5): undefined reference to `_libintl_gettext'
-conf.o:conf.c:(.text+0x116f): more undefined references to 
-`_libintl_gettext' fo
-llow
-collect2: ld returned 1 exit status
-make[2]: *** [conf] Error 1
-make[1]: *** [extra/config/conf] Error 2
-make[1]: Leaving directory `/tw/buildroot/toolchain_build_arm/uClibc'
-make: *** [/tw/buildroot/toolchain_build_arm/uClibc/.configured] Error 2
+__________________________________________________
+Do You Yahoo!?
+Tired of spam?  Yahoo! Mail has the best spam protection around 
+http://mail.yahoo.com 
+-------------- next part --------------
+A non-text attachment was scrubbed...
+Name: unzip.patch
+Type: application/octet-stream
+Size: 4232 bytes
+Desc: 1460141012-unzip.patch
+Url : http://busybox.net/lists/buildroot/attachments/20070517/eab838de/attachment-0001.obj 
