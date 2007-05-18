@@ -1,7 +1,8 @@
 From: bugs at busybox.net <bugs@busybox.net>
-Date: Fri, 18 May 2007 03:55:31 -0700
-Subject: [Buildroot] [buildroot 0001355]: new package ncftp
-Message-ID: <762ee336532e9b33b57691687d3609a4@bugs.uclibc.org>
+Date: Fri, 18 May 2007 14:53:12 -0700
+Subject: [Buildroot] [buildroot 0001356]: Cannot compile busybox under
+	buldroot with SPARC target
+Message-ID: <8b1aba9f1ab79e3991d96e3bce42fb5a@bugs.uclibc.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -11,34 +12,44 @@ To: buildroot@busybox.net
 
 The following issue has been SUBMITTED. 
 ====================================================================== 
-http://busybox.net/bugs/view.php?id=1355 
+http://busybox.net/bugs/view.php?id=1356 
 ====================================================================== 
-Reported By:                razzor
+Reported By:                marvin
 Assigned To:                buildroot
 ====================================================================== 
 Project:                    buildroot
-Issue ID:                   1355
-Category:                   New Features
-Reproducibility:            N/A
-Severity:                   feature
+Issue ID:                   1356
+Category:                   Architecture Specific
+Reproducibility:            always
+Severity:                   block
 Priority:                   normal
 Status:                     assigned
 ====================================================================== 
-Date Submitted:             05-18-2007 03:55 PDT
-Last Modified:              05-18-2007 03:55 PDT
+Date Submitted:             05-18-2007 14:53 PDT
+Last Modified:              05-18-2007 14:53 PDT
 ====================================================================== 
-Summary:                    new package ncftp
+Summary:                    Cannot compile busybox under buldroot with SPARC
+target
 Description: 
-ncftp is a cli ftp client with background queuing and bookmark support.
+If I compile buidroot on i386 with SPARC target I gate this
+ LINK    busybox_unstripped
+miscutils/lib.a(taskset.o): In function `taskset_main':
+taskset.c:(.text.taskset_main+0x128): undefined reference to
+`sched_getaffinity'
+taskset.c:(.text.taskset_main+0x20c): undefined reference to
+`sched_setaffinity'
+collect2: ld returned 1 exit status
+/home/marvin/tmp/SPARC/buildroot/build_sparc/staging_dir/bin/sparc-linux-uclibc-strip:
+'busybox_unstripped': No such file
+make[1]: Leaving directory
+`/home/marvin/tmp/SPARC/buildroot/build_sparc/busybox'
 
-This is my first package for buildroot, so feedback is appreciated.
 ====================================================================== 
 
 Issue History 
 Date Modified   Username       Field                    Change               
 ====================================================================== 
-05-18-07 03:55  razzor         New Issue                                    
-05-18-07 03:55  razzor         Status                   new => assigned     
-05-18-07 03:55  razzor         Assigned To               => buildroot       
-05-18-07 03:55  razzor         File Added: ncftp.patch                      
+05-18-07 14:53  marvin         New Issue                                    
+05-18-07 14:53  marvin         Status                   new => assigned     
+05-18-07 14:53  marvin         Assigned To               => buildroot       
 ======================================================================
