@@ -1,8 +1,8 @@
 From: bugs at busybox.net <bugs@busybox.net>
-Date: Sat, 19 May 2007 03:27:17 -0700
+Date: Sat, 19 May 2007 07:01:41 -0700
 Subject: [Buildroot] [buildroot 0001357]: EABI on ARM compiled buildroot
 	doesn't work
-Message-ID: <c0dac53344d8da3e1e51d1772a15d4d8@busybox.net>
+Message-ID: <effc176093245cdea4bee2ce168ec444@busybox.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -26,7 +26,7 @@ Priority:                   normal
 Status:                     assigned
 ====================================================================== 
 Date Submitted:             05-18-2007 14:56 PDT
-Last Modified:              05-19-2007 03:27 PDT
+Last Modified:              05-19-2007 07:01 PDT
 ====================================================================== 
 Summary:                    EABI on ARM compiled buildroot doesn't work
 Description: 
@@ -53,6 +53,15 @@ this but nothing helps. Do you need config ? Or information about hw ?
 marvin... Try reading http://www.catb.org/~esr/faqs/smart-questions.html
 first. 
 
+---------------------------------------------------------------------- 
+ rashbaugh - 05-19-07 07:01  
+---------------------------------------------------------------------- 
+When you build programs with an EABI toolchain, you must build your kernel
+with EABI enabled also, otherwise programs will crash.
+With EABI, program syscalls to the kernal use a different format and
+unless
+the kernel is prepared to accept this new format, syscalls will fail. 
+
 Issue History 
 Date Modified   Username       Field                    Change               
 ====================================================================== 
@@ -62,4 +71,5 @@ Date Modified   Username       Field                    Change
 05-18-07 15:15  bernhardf      Note Added: 0002375                          
 05-18-07 15:51  marvin         Note Added: 0002377                          
 05-19-07 03:27  repvik         Note Added: 0002379                          
+05-19-07 07:01  rashbaugh      Note Added: 0002380                          
 ======================================================================
