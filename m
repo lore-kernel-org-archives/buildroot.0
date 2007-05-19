@@ -1,8 +1,8 @@
 From: bugs at busybox.net <bugs@busybox.net>
-Date: Sat, 19 May 2007 12:28:09 -0700
+Date: Sat, 19 May 2007 12:44:09 -0700
 Subject: [Buildroot] [buildroot 0001357]: EABI on ARM compiled buildroot
 	doesn't work
-Message-ID: <dc0cc9f69d36643a252b44f59e5afc7e@busybox.net>
+Message-ID: <632d92869caefe07fd78b5b3fdc70c58@busybox.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -26,7 +26,7 @@ Priority:                   normal
 Status:                     assigned
 ====================================================================== 
 Date Submitted:             05-18-2007 14:56 PDT
-Last Modified:              05-19-2007 12:28 PDT
+Last Modified:              05-19-2007 12:44 PDT
 ====================================================================== 
 Summary:                    EABI on ARM compiled buildroot doesn't work
 Description: 
@@ -87,6 +87,14 @@ it compatible with EABI? You might check into that.
 Also, where in the code do your applications fail? Have you debugged it at
 all? What instruction types are failing? 
 
+---------------------------------------------------------------------- 
+ marvin - 05-19-07 12:44  
+---------------------------------------------------------------------- 
+Thanks good note I try disable Maverick Crunch this may be good way. I
+didn't backtrace crash because I could not  boot to EABI build root. We
+can stop talking about this  problem  I try disable MaverickCruch and let
+you know. Thanks for help. 
+
 Issue History 
 Date Modified   Username       Field                    Change               
 ====================================================================== 
@@ -103,4 +111,5 @@ Date Modified   Username       Field                    Change
 05-19-07 11:52  marvin         File Added: config_kernel_eabi                   
 
 05-19-07 12:28  rashbaugh      Note Added: 0002382                          
+05-19-07 12:44  marvin         Note Added: 0002383                          
 ======================================================================
