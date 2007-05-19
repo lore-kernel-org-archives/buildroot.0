@@ -1,8 +1,8 @@
 From: bugs at busybox.net <bugs@busybox.net>
-Date: Fri, 18 May 2007 15:51:42 -0700
+Date: Sat, 19 May 2007 03:27:17 -0700
 Subject: [Buildroot] [buildroot 0001357]: EABI on ARM compiled buildroot
 	doesn't work
-Message-ID: <382b959b3a746ebc2588f95b6522affd@busybox.net>
+Message-ID: <c0dac53344d8da3e1e51d1772a15d4d8@busybox.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -26,7 +26,7 @@ Priority:                   normal
 Status:                     assigned
 ====================================================================== 
 Date Submitted:             05-18-2007 14:56 PDT
-Last Modified:              05-18-2007 15:51 PDT
+Last Modified:              05-19-2007 03:27 PDT
 ====================================================================== 
 Summary:                    EABI on ARM compiled buildroot doesn't work
 Description: 
@@ -47,6 +47,12 @@ unless you provide details.
 Please tell me which information you need I spend time to gogling to solve
 this but nothing helps. Do you need config ? Or information about hw ? 
 
+---------------------------------------------------------------------- 
+ repvik - 05-19-07 03:27  
+---------------------------------------------------------------------- 
+marvin... Try reading http://www.catb.org/~esr/faqs/smart-questions.html
+first. 
+
 Issue History 
 Date Modified   Username       Field                    Change               
 ====================================================================== 
@@ -55,4 +61,5 @@ Date Modified   Username       Field                    Change
 05-18-07 14:56  marvin         Assigned To               => buildroot       
 05-18-07 15:15  bernhardf      Note Added: 0002375                          
 05-18-07 15:51  marvin         Note Added: 0002377                          
+05-19-07 03:27  repvik         Note Added: 0002379                          
 ======================================================================
