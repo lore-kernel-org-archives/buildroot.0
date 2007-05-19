@@ -1,8 +1,8 @@
 From: bugs at busybox.net <bugs@busybox.net>
-Date: Sat, 19 May 2007 11:50:59 -0700
+Date: Sat, 19 May 2007 12:28:09 -0700
 Subject: [Buildroot] [buildroot 0001357]: EABI on ARM compiled buildroot
 	doesn't work
-Message-ID: <2eb6c65967c1c17bd7b0c422bf9f0423@busybox.net>
+Message-ID: <dc0cc9f69d36643a252b44f59e5afc7e@busybox.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -26,7 +26,7 @@ Priority:                   normal
 Status:                     assigned
 ====================================================================== 
 Date Submitted:             05-18-2007 14:56 PDT
-Last Modified:              05-19-2007 11:50 PDT
+Last Modified:              05-19-2007 12:28 PDT
 ====================================================================== 
 Summary:                    EABI on ARM compiled buildroot doesn't work
 Description: 
@@ -76,6 +76,17 @@ Config of buldroot. If you know that EABI with buildroot is working on ARM
 I stop 
 madden with this and try found my fault :-) 
 
+---------------------------------------------------------------------- 
+ rashbaugh - 05-19-07 12:28  
+---------------------------------------------------------------------- 
+The other thing EABI affecte is floating point. I see you are using HW
+floating point. The EP9302 processor on that board has something called
+'MaverickCrunch' as a floating point coprocessor. The cirrus website has a
+bunch of errata around the use of that unit (stuff that doesn't work). Is
+it compatible with EABI? You might check into that.
+Also, where in the code do your applications fail? Have you debugged it at
+all? What instruction types are failing? 
+
 Issue History 
 Date Modified   Username       Field                    Change               
 ====================================================================== 
@@ -87,4 +98,9 @@ Date Modified   Username       Field                    Change
 05-19-07 03:27  repvik         Note Added: 0002379                          
 05-19-07 07:01  rashbaugh      Note Added: 0002380                          
 05-19-07 11:50  marvin         Note Added: 0002381                          
+05-19-07 11:51  marvin         File Added: config_buildroot_EABI                
+   
+05-19-07 11:52  marvin         File Added: config_kernel_eabi                   
+
+05-19-07 12:28  rashbaugh      Note Added: 0002382                          
 ======================================================================
