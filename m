@@ -1,27 +1,37 @@
-From: Peter Chiu <peter.m.chiu@gmail.com>
-Date: Mon, 21 May 2007 09:30:17 +0800
-Subject: [Buildroot] How can I build the arm-linux-gcc with lintl support
-Message-ID: <50062c450705201830x59b93edw3bc9cb308a58fd73@mail.gmail.com>
+From: rafael2k <rafael@riseup.net>
+Date: Sun, 20 May 2007 17:08:28 -0300
+Subject: [Buildroot] uclibc compilation w/ locale not supported?
+Message-ID: <200705201708.30037.rafael@riseup.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello All,
+hi all,
+I made a .config for my uclibc 0.9.29, but when i run 'make' inside buildroot, 
+it changes my config to:
 
-When I compiled the freetype 1.3.1 with arm-linux-gcc(3.4.6) witch is build
-by buildroot, it reported the error info as follows:
-====================
-extend/ftxerr18.c:31:21: libintl.h: No such file or directory
-extend/ftxerr18.c: In function `TT_ErrToString18':
-extend/ftxerr18.c:47: warning: implicit declaration of function `dgettext'
-====================
+-UCLIBC_HAS_LOCALE=y
+-# UCLIBC_PREGENERATED_LOCALE_DATA is not set
+-# UCLIBC_HAS_XLOCALE is not set
++# UCLIBC_HAS_LOCALE is not set
 
-So, how can I build the arm-linux-gcc with lintl support?
 
-Best Regards,
-Peter
+thx,
+rafael diniz
+
+-- 
++-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-
+Eng. da Computa??o @  Unicamp
+R?dio Muda, radiolivre.org, TV Piolho, tvlivre.org, www.midiaindependente.org
+Chave PGP: http://pgp.mit.edu:11371/pks/lookup?op=get&search=0x2FF86098
++-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-
+
 -------------- next part --------------
-An HTML attachment was scrubbed...
-URL: http://busybox.net/lists/buildroot/attachments/20070521/3e8d46af/attachment.htm 
+A non-text attachment was scrubbed...
+Name: not available
+Type: application/pgp-signature
+Size: 189 bytes
+Desc: not available
+Url : http://busybox.net/lists/buildroot/attachments/20070520/5a2b5787/attachment.pgp 
