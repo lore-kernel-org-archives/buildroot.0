@@ -1,43 +1,27 @@
-From: bugs at busybox.net <bugs@busybox.net>
-Date: Sun, 20 May 2007 03:11:51 -0700
-Subject: [Buildroot] [buildroot 0001358]: Tinyx Failed
-Message-ID: <f07c13050ceff7d18d05fa089ed46a8e@busybox.net>
+From: Peter Chiu <peter.m.chiu@gmail.com>
+Date: Mon, 21 May 2007 09:30:17 +0800
+Subject: [Buildroot] How can I build the arm-linux-gcc with lintl support
+Message-ID: <50062c450705201830x59b93edw3bc9cb308a58fd73@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+Hello All,
 
-The following issue has been SUBMITTED. 
-====================================================================== 
-http://busybox.net/bugs/view.php?id=1358 
-====================================================================== 
-Reported By:                dmurungi
-Assigned To:                buildroot
-====================================================================== 
-Project:                    buildroot
-Issue ID:                   1358
-Category:                   Architecture Specific
-Reproducibility:            always
-Severity:                   crash
-Priority:                   normal
-Status:                     assigned
-====================================================================== 
-Date Submitted:             05-20-2007 03:11 PDT
-Last Modified:              05-20-2007 03:11 PDT
-====================================================================== 
-Summary:                    Tinyx Failed
-Description: 
-I selected all the X packages and tinyx but when the build reaches tinyx,
-the erro r is;
-make: ***no rule to make target 'tinyx', needed by cairo
-====================================================================== 
+When I compiled the freetype 1.3.1 with arm-linux-gcc(3.4.6) witch is build
+by buildroot, it reported the error info as follows:
+====================
+extend/ftxerr18.c:31:21: libintl.h: No such file or directory
+extend/ftxerr18.c: In function `TT_ErrToString18':
+extend/ftxerr18.c:47: warning: implicit declaration of function `dgettext'
+====================
 
-Issue History 
-Date Modified   Username       Field                    Change               
-====================================================================== 
-05-20-07 03:11  dmurungi       New Issue                                    
-05-20-07 03:11  dmurungi       Status                   new => assigned     
-05-20-07 03:11  dmurungi       Assigned To               => buildroot       
-======================================================================
+So, how can I build the arm-linux-gcc with lintl support?
+
+Best Regards,
+Peter
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: http://busybox.net/lists/buildroot/attachments/20070521/3e8d46af/attachment.htm 
