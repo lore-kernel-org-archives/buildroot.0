@@ -1,55 +1,53 @@
-From: Stuart Wood <stuart.wood@labxtechnologies.com>
-Date: Mon, 21 May 2007 09:53:39 -0400
-Subject: [Buildroot] configure: error: zlib.h was not found
-Message-ID: <003801c79baf$6f87a090$7100a8c0@SDW>
+From: bugs at busybox.net <bugs@busybox.net>
+Date: Mon, 21 May 2007 08:43:19 -0700
+Subject: [Buildroot] [buildroot 0001362]: kernel 2.6.20.4 termios.h header
+	has B230400 commented out, etc.
+Message-ID: <f07fe89c6289b4289e1018efab521abb@busybox.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-I can't seem to get rid of this error. It's being generated from the
-configure 
-file for libid3tag-0.15.1b. The host system has the zlib installed, but this
 
-looks like its for the target? 
+The following issue has been SUBMITTED. 
+====================================================================== 
+http://busybox.net/bugs/view.php?id=1362 
+====================================================================== 
+Reported By:                jcurl
+Assigned To:                buildroot
+====================================================================== 
+Project:                    buildroot
+Issue ID:                   1362
+Category:                   Architecture Specific
+Reproducibility:            always
+Severity:                   tweak
+Priority:                   normal
+Status:                     assigned
+====================================================================== 
+Date Submitted:             05-21-2007 08:43 PDT
+Last Modified:              05-21-2007 08:43 PDT
+====================================================================== 
+Summary:                    kernel 2.6.20.4 termios.h header has B230400
+commented out, etc.
+Description: 
+When using buildroot to create a tool chain (GCC 4.1.2, binutils 2.17,
+kernel 2.6.20.4, uClibc 0.9.29) from buildroot-20070515, notice that the
+'termios.h' header in the Linux kernel has higher baudrates removed. The
+comment there states to "keep inline with uclibc". No other components in
+buildroot were compiled. The compilation system is x86.
 
-Buildroot is set up as:
-Target Architecture (arm)
-Target Architecture Variant (arm920t)
-Target ABI (OABI)
-Toolchain type (Build toolchain)
-Toolchain Options
-????????Kernel Headers (Linux 2.6.20)
-????????uClibc C library Version (uClibc 0.9.29)
-????????Binutils Version (2.17)
-????????GCC compiler Version (4.1.2)
-Package Selection
-????????BusyBox Version (1.5.0)
-????????Audio Libraries and Applications
-????????????????[*] madplay
-????????????????[*] mpg123
+When looking at module cfsetspeed.c in uclibc it appears it does support
+these other baudrates in the kernel and passes them on in the
+termios_struct to the OS. Thus it probably isn't needed anymore to comment
+out these defines for uclibc 0.9.29.
 
-Any thoughts on what I'm doing wrong? Or is this a bug?
+====================================================================== 
 
-checking for assert.h... yes
-checking for unistd.h... (cached) yes
-checking zlib.h usability... no
-checking zlib.h presence... no
-checking for zlib.h... no
-SDW no
-configure: error: zlib.h was not found
-*** You must first install zlib (libz) before you can build this package.
-*** If zlib is already installed, you may need to use the CPPFLAGS
-*** environment variable to specify its installed location, e.g. -I<dir>.
-make: *** 
-[/home/stuart/ArmLinux/buildroot/build_arm/libid3tag-0.15.1b/.configured] 
-Error 1
-
--- 
-Sincerely, 
-
-Stuart Wood
-Lab X Technologies,LLC
-176 Anderson Ave., Suite 302
-Rochester, NY 14607
+Issue History 
+Date Modified   Username       Field                    Change               
+====================================================================== 
+05-21-07 08:43  jcurl          New Issue                                    
+05-21-07 08:43  jcurl          Status                   new => assigned     
+05-21-07 08:43  jcurl          Assigned To               => buildroot       
+======================================================================
