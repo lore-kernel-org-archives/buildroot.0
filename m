@@ -1,52 +1,38 @@
-From: bugs at busybox.net <bugs@busybox.net>
-Date: Tue, 22 May 2007 03:31:40 -0700
-Subject: [Buildroot] [buildroot 0001328]: fontconfig-2.4.2 fail to build in
-	r18518
-Message-ID: <3b86ea2a13819f6abfc262c944e2d881@bugs.busybox.net>
+From: jacmet at uclibc.org <jacmet@uclibc.org>
+Date: Tue, 22 May 2007 04:17:28 -0700 (PDT)
+Subject: [Buildroot] svn commit: trunk/buildroot/package/xorg
+Message-ID: <20070522111728.C534648561@busybox.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+Author: jacmet
+Date: 2007-05-22 04:17:27 -0700 (Tue, 22 May 2007)
+New Revision: 18667
 
-The following issue has been CLOSED 
-====================================================================== 
-http://busybox.net/bugs/view.php?id=1328 
-====================================================================== 
-Reported By:                ALEXANDER WOLD
-Assigned To:                buildroot
-====================================================================== 
-Project:                    buildroot
-Issue ID:                   1328
-Category:                   Architecture Specific
-Reproducibility:            always
-Severity:                   major
-Priority:                   normal
-Status:                     closed
-Resolution:                 open
-Fixed in Version:           
-====================================================================== 
-Date Submitted:             04-28-2007 04:41 PDT
-Last Modified:              05-22-2007 03:31 PDT
-====================================================================== 
-Summary:                    fontconfig-2.4.2 fail to build in r18518
-Description: 
-fontconfig is broken with default .config and added fontconfig. Log is
-attached.
-====================================================================== 
+Log:
+Fixup joystick.h include with modern kernel headers. Patch from #1217.
 
----------------------------------------------------------------------- 
- jacmet - 05-22-07 03:31  
----------------------------------------------------------------------- 
-Fixed in r18666. 
 
-Issue History 
-Date Modified   Username       Field                    Change               
-====================================================================== 
-04-28-07 04:41  ALEXANDER WOLD New Issue                                    
-04-28-07 04:41  ALEXANDER WOLD Status                   new => assigned     
-04-28-07 04:41  ALEXANDER WOLD Assigned To               => buildroot       
-05-22-07 03:31  jacmet         Status                   assigned => closed  
-05-22-07 03:31  jacmet         Note Added: 0002393                          
-======================================================================
+Added:
+   trunk/buildroot/package/xorg/xorg-6.8.2-joystick_h.patch
+
+
+Changeset:
+Added: trunk/buildroot/package/xorg/xorg-6.8.2-joystick_h.patch
+===================================================================
+--- trunk/buildroot/package/xorg/xorg-6.8.2-joystick_h.patch	                        (rev 0)
++++ trunk/buildroot/package/xorg/xorg-6.8.2-joystick_h.patch	2007-05-22 11:17:27 UTC (rev 18667)
+@@ -0,0 +1,10 @@
++--- xc/programs/Xserver/hw/xfree86/input/ur98/xf86Ur-98.c.orig	2007-02-13 21:17:02.000000000 -0800
+++++ xc/programs/Xserver/hw/xfree86/input/ur98/xf86Ur-98.c	2007-02-13 21:17:32.000000000 -0800
++@@ -1,5 +1,7 @@
++ /* $XFree86: xc/programs/Xserver/hw/xfree86/input/ur98/xf86Ur-98.c,v 1.1tsi Exp $ */
++ 
+++#undef __STRICT_ANSI__
+++
++ #include <sys/types.h>
++ #include <unistd.h>
++ #include <string.h>
