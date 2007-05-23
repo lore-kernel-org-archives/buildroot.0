@@ -1,7 +1,7 @@
 From: bugs at busybox.net <bugs@busybox.net>
-Date: Wed, 23 May 2007 08:31:54 -0700
-Subject: [Buildroot] [buildroot 0001369]: New package: ntfsprogs
-Message-ID: <5de9d8f87c7d06ad0e67e18d5c8bf219@bugs.uclibc.org>
+Date: Wed, 23 May 2007 08:39:20 -0700
+Subject: [Buildroot] [buildroot 0001365]: ncftp: strip binarys
+Message-ID: <0d8c410c4bd84719801db2b013004cac@bugs.uclibc.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -9,39 +9,69 @@ Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
 
-The following issue has been SUBMITTED. 
+A NOTE has been added to this issue. 
 ====================================================================== 
-http://busybox.net/bugs/view.php?id=1369 
+http://busybox.net/bugs/view.php?id=1365 
 ====================================================================== 
 Reported By:                razzor
 Assigned To:                buildroot
 ====================================================================== 
 Project:                    buildroot
-Issue ID:                   1369
-Category:                   New Features
+Issue ID:                   1365
+Category:                   Other
 Reproducibility:            always
-Severity:                   feature
+Severity:                   trivial
 Priority:                   normal
 Status:                     assigned
 ====================================================================== 
-Date Submitted:             05-23-2007 08:31 PDT
-Last Modified:              05-23-2007 08:31 PDT
+Date Submitted:             05-23-2007 08:18 PDT
+Last Modified:              05-23-2007 08:39 PDT
 ====================================================================== 
-Summary:                    New package: ntfsprogs
+Summary:                    ncftp: strip binarys
 Description: 
-A wide collection of NTFS utilities (ntfsprogs).
-I'm using these on a (buildroot based) rescue system to backup/recover
-windows workstations.
-
-
+Strip binarys with correct strip (from http://busybox.net/bugs/view.php?id=1355)
 ====================================================================== 
+
+---------------------------------------------------------------------- 
+ jacmet - 05-23-07 08:27  
+---------------------------------------------------------------------- 
+Why is this needed? The ncftp makefile alreay strips the executables as
+part of the build.
+
+E.G.
+file bin/ncftp
+bin/ncftp: ELF 64-bit LSB executable, AMD x86-64, version 1 (SYSV), for
+GNU/Linux 2.6.0, dynamically linked (uses shared libs), for GNU/Linux
+2.6.0, stripped 
+
+---------------------------------------------------------------------- 
+ razzor - 05-23-07 08:39  
+---------------------------------------------------------------------- 
+Ah, okay. That explains why stripping saves only 2kb :)
+Guess the patch can be dropped.
+
+# ls -l build_i686/ncftp-3.2.0/bin/ncftp build_i686/root/usr/bin/ncftp
+-rwxr-xr-x 1 root root 191160 2007-05-23 15:53
+build_i686/ncftp-3.2.0/bin/ncftp
+-rwxr-xr-x 1 root root 189276 2007-05-23 17:53
+build_i686/root/usr/bin/ncftp
+
+# file build_i686/ncftp-3.2.0/bin/ncftp
+ncftp: ELF 32-bit LSB executable, Intel 80386, version 1 (SYSV),
+dynamically linked (uses shared libs), stripped
+
+# file build_i686/root/usr/bin/ncftp
+ncftp: ELF 32-bit LSB executable, Intel 80386, version 1 (SYSV),
+dynamically linked (uses shared libs), stripped 
 
 Issue History 
 Date Modified   Username       Field                    Change               
 ====================================================================== 
-05-23-07 08:31  razzor         New Issue                                    
-05-23-07 08:31  razzor         Status                   new => assigned     
-05-23-07 08:31  razzor         Assigned To               => buildroot       
-05-23-07 08:31  razzor         File Added: 0005-New-package-ntfsprogs.txt       
-            
+05-23-07 08:18  razzor         New Issue                                    
+05-23-07 08:18  razzor         Status                   new => assigned     
+05-23-07 08:18  razzor         Assigned To               => buildroot       
+05-23-07 08:18  razzor         File Added: 0001-ncftp-strip-binarys.txt         
+          
+05-23-07 08:27  jacmet         Note Added: 0002396                          
+05-23-07 08:39  razzor         Note Added: 0002397                          
 ======================================================================
