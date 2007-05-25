@@ -1,39 +1,36 @@
 From: Tom <fivemiletom@gmail.com>
-Date: Fri, 25 May 2007 13:59:06 -0700
+Date: Fri, 25 May 2007 14:10:45 -0700
 Subject: [Buildroot] Package selection question
-In-Reply-To: <20070525200333.GT24585@aon.at>
-References: <4656F77D.30303@teamboyce.co.uk> <465737B9.8070008@gmail.com>
-	<20070525200333.GT24585@aon.at>
-Message-ID: <46574E1A.7020705@gmail.com>
+In-Reply-To: <200705252245.32243.yann.morin.1998@anciens.enib.fr>
+References: <4656F77D.30303@teamboyce.co.uk>	<200705252151.38804.yann.morin.1998@anciens.enib.fr>	<20070525203819.GA15885@aon.at>
+	<200705252245.32243.yann.morin.1998@anciens.enib.fr>
+Message-ID: <465750D5.80409@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Thanks.
+I have selected "Buildroot toolchain" and in the toolchain->GCC option I 
+have selected 4.1.2.
 
-I am working to isolate and find a workaround to my mpfr problem on 
-cygwin. Once I do, I will post the results of all workarounds I had to 
-do (or the error log should I not get it done). In a separate thread as 
-requested.
+(HOSTCC I have tried both 3.4.4 and 4.2.0)
 
-Bernhard Fischer wrote:
-> On Fri, May 25, 2007 at 12:23:37PM -0700, Tom wrote:
->> Hello,
->>
->> I just want to build the toolchain and the debugger on host: cygwin, 
->> target: arm.
->>
->> So, even after I unchecked busybox and all packages, it still builds gmp 
->> (and, unsuccessfully, mpfr). Why does it need it please and why is this 
->> an option then? Or am I doing something wrong here?
+Why does it download and try to build mpfr if it is not used?
+
+
+Yann E. MORIN wrote:
+> Bernhard,
+> All,
 > 
-> gcc uses gmp/mpfr, you're doing nothing wrong. Please report build
-> failures of gmp/mpfr to the respective lists.
+> On Friday 25 May 2007 22:38, Bernhard Fischer wrote:
+>> On Fri, May 25, 2007 at 09:51:38PM +0200, Yann E. MORIN wrote:
+>>> PS. gcc-4.1.x and earlier require neither gmp nor mpfr.
+>> Is this true? IIRC the middle-end of 4.1 does use them, no?
 > 
-> Before you report it to the mpfr folks, please paste the error here,
-> since i suspect that it could have to do something with the
-> binary/library name extensions, which (IIRC) we currently do not handle
-> at all (there's a bug somewhere about this, if memory serves me right).
+> I don't have mpfr here and gcc-4.1.2 does build OK. I do have gmp, but gcc does
+> not linked against it.
+> 
+> Regards,
+> Yann E. MORIN.
 > 
