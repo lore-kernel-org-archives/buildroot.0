@@ -1,17 +1,16 @@
 From: Rod Boyce <buildroot@teamboyce.co.uk>
-Date: Sat, 26 May 2007 15:35:04 +0100
+Date: Sat, 26 May 2007 15:45:18 +0100
 Subject: [Buildroot] ALSA for build root
-In-Reply-To: <KRKghF7Kp6q2.1lf2WpS3@mailout.dof.se>
-References: <KRKghF7Kp6q2.1lf2WpS3@mailout.dof.se>
-Message-ID: <46584598.5090504@teamboyce.co.uk>
+In-Reply-To: <4656F77D.30303@teamboyce.co.uk>
+References: <4656F77D.30303@teamboyce.co.uk>
+Message-ID: <465847FE.6050304@teamboyce.co.uk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Ulf Samuelsson wrote:
->  ________________ ?rende:	[Buildroot] ALSA for build root F?rfattare:	Rod Boyce <buildroot@teamboyce.co.uk> Datum:		2007 maj 25:e 14:50 
+Rod Boyce wrote:
 > All,
 >
 > I have been adding ALSA to the build root package system I am only able 
@@ -30,25 +29,27 @@ Ulf Samuelsson wrote:
 >
 > Regards,
 > Rod Boyce
->
->
-> I know that some guys are working on moving the 
-> existing AVR32 ALSA stuff
-> to buildroot.
-> You might want to include
-> the ALSA patches found
-> at avr32linux.org
->
-> Best Regards
-> Ulf Samuelsson
->
+> _______________________________________________
+> buildroot mailing list
+> buildroot at uclibc.org
+> http://busybox.net/mailman/listinfo/buildroot
 >
 >   
-Ulf & All,
+All,
 
-My preference would be to submit what I have so others can play and 
-submit their patches after testing.
-I am ready to e-mail my patch now without the AVR32 changes.
+As promised attached is a patch to add ALSA packages to build root I 
+have only tested on i386 but it seems to work for me.  This patch is 
+against the latest SVN repository No. 18694.  I have not tested the 
+alsa-tools well and in-fact because I am not using X or GTK most will 
+not compile I have disabled all the the ac3dec by default.  Also I am 
+assuming the latest version of ALSA and a compatible kernel.
 
 Regards,
 Rod Boyce
+-------------- next part --------------
+A non-text attachment was scrubbed...
+Name: alsa.patch
+Type: text/x-patch
+Size: 23409 bytes
+Desc: not available
+Url : http://busybox.net/lists/buildroot/attachments/20070526/0dee6bb5/attachment.bin 
