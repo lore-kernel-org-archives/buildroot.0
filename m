@@ -1,36 +1,54 @@
-From: Yann E. MORIN <yann.morin.1998@anciens.enib.fr>
-Date: Sat, 26 May 2007 12:22:39 +0200
-Subject: [Buildroot] Package selection question
-In-Reply-To: <20070526092343.GB15885@aon.at>
-References: <4656F77D.30303@teamboyce.co.uk>
-	<200705252245.32243.yann.morin.1998@anciens.enib.fr>
-	<20070526092343.GB15885@aon.at>
-Message-ID: <200705261222.39950.yann.morin.1998@anciens.enib.fr>
+From: Rod Boyce <buildroot@teamboyce.co.uk>
+Date: Sat, 26 May 2007 15:35:04 +0100
+Subject: [Buildroot] ALSA for build root
+In-Reply-To: <KRKghF7Kp6q2.1lf2WpS3@mailout.dof.se>
+References: <KRKghF7Kp6q2.1lf2WpS3@mailout.dof.se>
+Message-ID: <46584598.5090504@teamboyce.co.uk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Bernhard,
-All,
+Ulf Samuelsson wrote:
+>  ________________ ?rende:	[Buildroot] ALSA for build root F?rfattare:	Rod Boyce <buildroot@teamboyce.co.uk> Datum:		2007 maj 25:e 14:50 
+> All,
+>
+> I have been adding ALSA to the build root package system I am only able 
+> to test on a x86 platform.  Is anybody else interested in ALSA for 
+> build-root?  I have also been adding libogg and libvorbis would it be OK 
+> if I submitted a combined patch or would you prefer 2 separate patches?  
+> Is anybody else working on this who would like an advanced copy to test 
+> out and or compare against?
+>
+> This would include the following packages:
+> alsa-lib-1.0.14rc4
+> alsa-utils-1.0.14rc4
+> libogg-1.1.3
+> libvorbis-1.1.2
+>
+>
+> Regards,
+> Rod Boyce
+>
+>
+> I know that some guys are working on moving the 
+> existing AVR32 ALSA stuff
+> to buildroot.
+> You might want to include
+> the ALSA patches found
+> at avr32linux.org
+>
+> Best Regards
+> Ulf Samuelsson
+>
+>
+>   
+Ulf & All,
 
-On Saturday 26 May 2007 11:23, Bernhard Fischer wrote:
-> On Fri, May 25, 2007 at 10:45:32PM +0200, Yann E. MORIN wrote:
-> >I don't have mpfr here and gcc-4.1.2 does build OK. I do have gmp, but gcc does
-> >not linked against it.
-> Fair enough, in 4.1, only the fortran frontend needs it.
-
-So gmp and mpfr are needed for Fortran from 4.1 onward. I thought only 4.2
-would need them. I didn't stumble upon this as I don't do Fortran...
+My preference would be to submit what I have so others can play and 
+submit their patches after testing.
+I am ready to e-mail my patch now without the AVR32 changes.
 
 Regards,
-Yann E. MORIN.
-
--- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +0/33 662376056 | Software  Designer | \ / CAMPAIGN     |   ^                |
-| --==< ?_? >==-- ?------------.-------:  X  AGAINST      |  /e\  There is no  |
-| http://ymorin.is-a-geek.org/ | (*_*) | / \ HTML MAIL    |  """  conspiracy.  |
-?------------------------------?-------?------------------?--------------------?
+Rod Boyce
