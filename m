@@ -1,22 +1,21 @@
-From: Peter Korsgaard <peter.korsgaard@barco.com>
-Date: Tue, 29 May 2007 16:55:54 +0200
-Subject: [Buildroot] bug for libid3tag Config.in
-In-Reply-To: <002301c7a1fe$b4645d70$016efea9@SDW> (Stuart Wood's message of
-	"Tue, 29 May 2007 10:36:12 -0400")
-References: <002301c7a1fe$b4645d70$016efea9@SDW>
-Message-ID: <87hcpvn0g5.fsf@sleipner.barco.com>
+From: Bernhard Fischer <rep.dot.nop@gmail.com>
+Date: Tue, 29 May 2007 22:00:50 +0200
+Subject: [Buildroot] ALSA for build root
+In-Reply-To: <1180422192.32245.22.camel@localhost.localdomain>
+References: <4656F77D.30303@teamboyce.co.uk> <465847FE.6050304@teamboyce.co.uk>
+	<1180422192.32245.22.camel@localhost.localdomain>
+Message-ID: <20070529200050.GA30684@aon.at>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "SW" == Stuart Wood <stuart.wood@labxtechnologies.com> writes:
+On Tue, May 29, 2007 at 09:03:12AM +0200, Hans-Christian Egtvedt wrote:
+>On Sat, 2007-05-26 at 15:45 +0100, Rod Boyce wrote:
+>> Rod Boyce wrote:
 
-SW> I believe that the libid3tag Config.in needs select
-SW> BR2_PACKAGE_ZLIB
+Rod, care t osend an updated patch taking Hans-Christian's comments
+(thanks for those!) into account?
 
-Ah yes. Fixed in r18700.
-
--- 
-Bye, Peter Korsgaard
+TIA,
