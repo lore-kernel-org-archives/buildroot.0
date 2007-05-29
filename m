@@ -1,21 +1,34 @@
-From: Stuart Wood <stuart.wood@labxtechnologies.com>
-Date: Tue, 29 May 2007 10:36:12 -0400
-Subject: [Buildroot] bug for libid3tag Config.in
-In-Reply-To: <4651B83D.1010905@apexar.com>
-Message-ID: <002301c7a1fe$b4645d70$016efea9@SDW>
+From: jacmet at uclibc.org <jacmet@uclibc.org>
+Date: Tue, 29 May 2007 07:55:28 -0700 (PDT)
+Subject: [Buildroot] svn commit: trunk/buildroot/package/libid3tag
+Message-ID: <20070529145528.5920E48573@busybox.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-I believe that the libid3tag Config.in needs
+Author: jacmet
+Date: 2007-05-29 07:55:27 -0700 (Tue, 29 May 2007)
+New Revision: 18700
 
-    select BR2_PACKAGE_ZLIB 
+Log:
+libid3tag requires zlib. Noticed by Stuart Wood
 
-Added to it. Otherwise you get an error that zlib
-Is missing when compiling libid3tag.
-My system is ARM920T, OABI, uClibc 0.9.29,
-Binutils 2.16.1, gcc 3.4.6.
+Modified:
+   trunk/buildroot/package/libid3tag/Config.in
 
-Stuart
+
+Changeset:
+Modified: trunk/buildroot/package/libid3tag/Config.in
+===================================================================
+--- trunk/buildroot/package/libid3tag/Config.in	2007-05-27 22:03:58 UTC (rev 18699)
++++ trunk/buildroot/package/libid3tag/Config.in	2007-05-29 14:55:27 UTC (rev 18700)
+@@ -1,6 +1,7 @@
+ config BR2_PACKAGE_LIBID3TAG
+ 	bool "libid3tag"
+ 	default n
++	select BR2_PACKAGE_ZLIB
+ 	help
+ 	  ID3 tag reading library from the MAD project.
+ 
