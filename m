@@ -1,7 +1,7 @@
 From: jacmet at uclibc.org <jacmet@uclibc.org>
-Date: Thu, 31 May 2007 08:19:38 -0700 (PDT)
-Subject: [Buildroot] svn commit: trunk/buildroot/package/haserl
-Message-ID: <20070531151938.826BB4859B@busybox.net>
+Date: Thu, 31 May 2007 08:27:05 -0700 (PDT)
+Subject: [Buildroot] svn commit: trunk/buildroot/package/ethtool
+Message-ID: <20070531152705.C8459485B1@busybox.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -9,73 +9,73 @@ Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
 Author: jacmet
-Date: 2007-05-31 08:19:37 -0700 (Thu, 31 May 2007)
-New Revision: 18710
+Date: 2007-05-31 08:27:05 -0700 (Thu, 31 May 2007)
+New Revision: 18711
 
 Log:
-Cleanup, get rid of HASERL_WORKDIR, use $@
+Cleanup, get rid of ETHTOOL_WORKDIR, use $@
 
 Modified:
-   trunk/buildroot/package/haserl/haserl.mk
+   trunk/buildroot/package/ethtool/ethtool.mk
 
 
 Changeset:
-Modified: trunk/buildroot/package/haserl/haserl.mk
+Modified: trunk/buildroot/package/ethtool/ethtool.mk
 ===================================================================
---- trunk/buildroot/package/haserl/haserl.mk	2007-05-31 08:26:29 UTC (rev 18709)
-+++ trunk/buildroot/package/haserl/haserl.mk	2007-05-31 15:19:37 UTC (rev 18710)
+--- trunk/buildroot/package/ethtool/ethtool.mk	2007-05-31 15:19:37 UTC (rev 18710)
++++ trunk/buildroot/package/ethtool/ethtool.mk	2007-05-31 15:27:05 UTC (rev 18711)
 @@ -7,8 +7,7 @@
- HASERL_VERSION=0.8.0
- HASERL_SOURCE=haserl-$(HASERL_VERSION).tar.gz
- HASERL_SITE=http://$(BR2_SOURCEFORGE_MIRROR).dl.sourceforge.net/sourceforge/haserl/
--HASERL_DIR=$(BUILD_DIR)/${shell basename $(HASERL_SOURCE) .tar.gz}
--HASERL_WORKDIR=$(BUILD_DIR)/haserl-$(HASERL_VERSION)
-+HASERL_DIR=$(BUILD_DIR)/haserl-$(HASERL_VERSION)
- HASERL_CAT:=$(ZCAT)
+ ETHTOOL_VERSION=3
+ ETHTOOL_SOURCE=ethtool-$(ETHTOOL_VERSION).tar.gz
+ ETHTOOL_SITE=http://$(BR2_SOURCEFORGE_MIRROR).dl.sourceforge.net/sourceforge/gkernel/
+-ETHTOOL_DIR=$(BUILD_DIR)/${shell basename $(ETHTOOL_SOURCE) .tar.gz}
+-ETHTOOL_WORKDIR=$(BUILD_DIR)/ethtool-$(ETHTOOL_VERSION)
++ETHTOOL_DIR=$(BUILD_DIR)/ethtool-$(ETHTOOL_VERSION)
+ ETHTOOL_CAT:=$(ZCAT)
  
- $(DL_DIR)/$(HASERL_SOURCE):
+ $(DL_DIR)/$(ETHTOOL_SOURCE):
 @@ -16,7 +15,7 @@
  
- $(HASERL_DIR)/.unpacked: $(DL_DIR)/$(HASERL_SOURCE)
- 	$(HASERL_CAT) $(DL_DIR)/$(HASERL_SOURCE) | tar -C $(BUILD_DIR) $(TAR_OPTIONS) -
--	touch $(HASERL_DIR)/.unpacked
+ $(ETHTOOL_DIR)/.unpacked: $(DL_DIR)/$(ETHTOOL_SOURCE)
+ 	$(ETHTOOL_CAT) $(DL_DIR)/$(ETHTOOL_SOURCE) | tar -C $(BUILD_DIR) $(TAR_OPTIONS) -
+-	touch $(ETHTOOL_DIR)/.unpacked
 +	touch $@
  
- $(HASERL_DIR)/.configured: $(HASERL_DIR)/.unpacked
- 	(cd $(HASERL_DIR); rm -rf config.cache; \
+ $(ETHTOOL_DIR)/.configured: $(ETHTOOL_DIR)/.unpacked
+ 	(cd $(ETHTOOL_DIR); rm -rf config.cache; \
 @@ -30,26 +29,24 @@
  		--prefix=/usr \
  		--sysconfdir=/etc \
  	);
--	touch $(HASERL_DIR)/.configured
+-	touch $(ETHTOOL_DIR)/.configured
 +	touch $@
  
--$(HASERL_WORKDIR)/src/haserl: $(HASERL_DIR)/.configured
--	$(MAKE) CC=$(TARGET_CC) -C $(HASERL_WORKDIR)
-+$(HASERL_DIR)/src/haserl: $(HASERL_DIR)/.configured
-+	$(MAKE) CC=$(TARGET_CC) -C $(HASERL_DIR)
+-$(ETHTOOL_WORKDIR)/ethtool: $(ETHTOOL_DIR)/.configured
+-	$(MAKE) CC=$(TARGET_CC) -C $(ETHTOOL_WORKDIR)
++$(ETHTOOL_DIR)/ethtool: $(ETHTOOL_DIR)/.configured
++	$(MAKE) CC=$(TARGET_CC) -C $(ETHTOOL_DIR)
  
--$(HASERL_WORKDIR)/.installed: $(HASERL_WORKDIR)/src/haserl
--	cp $(HASERL_WORKDIR)/src/haserl $(TARGET_DIR)/usr/bin
--	touch $(HASERL_WORKDIR)/.installed
-+$(HASERL_DIR)/.installed: $(HASERL_DIR)/src/haserl
-+	cp $(HASERL_DIR)/src/haserl $(TARGET_DIR)/usr/bin
+-$(ETHTOOL_WORKDIR)/.installed: $(ETHTOOL_WORKDIR)/ethtool
+-	cp $(ETHTOOL_WORKDIR)/ethtool $(TARGET_DIR)/usr/sbin
+-	touch $(ETHTOOL_WORKDIR)/.installed
++$(ETHTOOL_DIR)/.installed: $(ETHTOOL_DIR)/ethtool
++	cp $(ETHTOOL_DIR)/ethtool $(TARGET_DIR)/usr/sbin
 +	touch $@
  
--haserl:	uclibc $(HASERL_WORKDIR)/.installed
-+haserl:	uclibc $(HASERL_DIR)/.installed
+-ethtool:	uclibc $(ETHTOOL_WORKDIR)/.installed
++ethtool:	uclibc $(ETHTOOL_DIR)/.installed
  
- haserl-source: $(DL_DIR)/$(HASERL_SOURCE)
+ ethtool-source: $(DL_DIR)/$(ETHTOOL_SOURCE)
  
- haserl-clean:
--	@if [ -d $(HASERL_WORKDIR)/Makefile ] ; then \
--		$(MAKE) -C $(HASERL_WORKDIR) clean ; \
+ ethtool-clean:
+-	@if [ -d $(ETHTOOL_WORKDIR)/Makefile ] ; then \
+-		$(MAKE) -C $(ETHTOOL_WORKDIR) clean ; \
 -	fi;
-+	-$(MAKE) -C $(HASERL_DIR) clean
++	-$(MAKE) -C $(ETHTOOL_DIR) clean
  
- haserl-dirclean:
--	rm -rf $(HASERL_DIR) $(HASERL_WORKDIR)
-+	rm -rf $(HASERL_DIR)
+ ethtool-dirclean:
+-	rm -rf $(ETHTOOL_DIR) $(ETHTOOL_WORKDIR)
++	rm -rf $(ETHTOOL_DIR)
  #############################################################
  #
  # Toplevel Makefile options
