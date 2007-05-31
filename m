@@ -1,37 +1,46 @@
-From: Rod Boyce <buildroot@teamboyce.co.uk>
-Date: Thu, 31 May 2007 19:54:08 +0100
-Subject: [Buildroot] Ogg and Vorbis patch part 2
-In-Reply-To: <20070529202507.GC30684@aon.at>
-References: <465AD791.2040108@teamboyce.co.uk> <20070529202507.GC30684@aon.at>
-Message-ID: <465F19D0.6020001@teamboyce.co.uk>
+From: Tom <fivemiletom@gmail.com>
+Date: Thu, 31 May 2007 12:16:10 -0700
+Subject: [Buildroot] BR2_STAGING_DIR config?
+In-Reply-To: <20070531164543.GA22322@aon.at>
+References: <465EF8D5.30902@gmail.com> <20070531164543.GA22322@aon.at>
+Message-ID: <465F1EFA.3090403@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+Thanks.
 
-> just
-> 	-$(MAKE) -C $(LIBOGG_WORKDIR) clean
-> and drop the if.
-> [snip]
->
->   
+ From the systems I use, 3.4 could be dropped: Fedora Core 6 comes with 
+4.1.1 and Cygwin is (soon?) to upgrade from 3.4.4 to 4.2.0.
 
-All,
-
-Attached is a new improved patch to add libvorbis and libogg to build 
-root.  I have only tested on 386 hopefully others can test on other 
-platforms.  I have a floating point unit so I do not need to use an 
-integer only version.
-
-Regards,
-Rod Boyce
-
--------------- next part --------------
-A non-text attachment was scrubbed...
-Name: libogg-libvorbis.patch
-Type: text/x-patch
-Size: 13686 bytes
-Desc: not available
-Url : http://busybox.net/lists/buildroot/attachments/20070531/87718c09/attachment-0001.bin 
+Bernhard Fischer wrote:
+> On Thu, May 31, 2007 at 09:33:25AM -0700, Tom wrote:
+>> Hello,
+>>
+>> I want to use the cross development toolchain also for other projects 
+>> and thus defined:
+>> BR2_STAGING_DIR="/tw/tools/gnu/cygwin/arm-linux"
+>>
+>> However, I am getting this error in libutils, what am I missing please?
+> 
+> I was looking into toolchains that can be moved around to other machines
+> without problems.
+> See the archives, thread
+> Subject: Re: [Buildroot] [patch] sysroot support in toolchain,
+>         use correct pathes in staging_dir
+> 
+> for details.
+> The last patch is here:
+> http://uclibc.org/~aldot/buildroot.mine.cow.20070515-1321.diff.bz2
+> 
+> But i am hesitating to fix this, since the outdated, deprecated gcc-3.4
+> series will break with these changes (and i didn't see yet how to fix
+> that without touching this ancient gcc, which i refuse to do).
+> 
+>>From my POV, it would be fine to discontinue gcc-3.4, not sure what
+> people think about this, though.
+> 
+> HTH,
+> 
