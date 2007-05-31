@@ -1,34 +1,81 @@
-From: Johnny Karlsson <Johnny.Karlsson@manodo.se>
-Date: Thu, 31 May 2007 09:51:02 +0200
-Subject: [Buildroot] Trouble building libglib2
-Message-ID: <787E2E49F620DD44BB4F375B971805431CC27FEFA5@ex03.YODA.se>
+From: jacmet at uclibc.org <jacmet@uclibc.org>
+Date: Thu, 31 May 2007 08:19:38 -0700 (PDT)
+Subject: [Buildroot] svn commit: trunk/buildroot/package/haserl
+Message-ID: <20070531151938.826BB4859B@busybox.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi, i'm trying to build libglib2 with buildroot but when I run make I get this error:
+Author: jacmet
+Date: 2007-05-31 08:19:37 -0700 (Thu, 31 May 2007)
+New Revision: 18710
 
-checking for _FILE_OFFSET_BITS value needed for large files... 64
-checking for _LARGE_FILES value needed for large files... no
-checking for pkg-config... /buildroot/buildroot/build_arm/staging_dir/usr/bin/pkg-config
-checking for gawk... (cached) mawk
-checking for perl5... no
-checking for perl... perl
-checking for indent... no
-checking for perl... /usr/bin/perl
-checking for iconv_open... no
-checking for libiconv_open in -liconv... no
-checking for iconv_open in -liconv... no
-configure: error: *** No iconv() implementation found in C library or libiconv
-make: *** [/buildroot/buildroot/build_arm/glib-2.12.9/.configured] Error 1
+Log:
+Cleanup, get rid of HASERL_WORKDIR, use $@
 
-How do I fix this? I'm running ubuntu 7.04 and the trunk version of buildroot.
+Modified:
+   trunk/buildroot/package/haserl/haserl.mk
 
-Best Regards
 
-Johnny Karlsson
--------------- next part --------------
-An HTML attachment was scrubbed...
-URL: http://busybox.net/lists/buildroot/attachments/20070531/7ffb833e/attachment.htm 
+Changeset:
+Modified: trunk/buildroot/package/haserl/haserl.mk
+===================================================================
+--- trunk/buildroot/package/haserl/haserl.mk	2007-05-31 08:26:29 UTC (rev 18709)
++++ trunk/buildroot/package/haserl/haserl.mk	2007-05-31 15:19:37 UTC (rev 18710)
+@@ -7,8 +7,7 @@
+ HASERL_VERSION=0.8.0
+ HASERL_SOURCE=haserl-$(HASERL_VERSION).tar.gz
+ HASERL_SITE=http://$(BR2_SOURCEFORGE_MIRROR).dl.sourceforge.net/sourceforge/haserl/
+-HASERL_DIR=$(BUILD_DIR)/${shell basename $(HASERL_SOURCE) .tar.gz}
+-HASERL_WORKDIR=$(BUILD_DIR)/haserl-$(HASERL_VERSION)
++HASERL_DIR=$(BUILD_DIR)/haserl-$(HASERL_VERSION)
+ HASERL_CAT:=$(ZCAT)
+ 
+ $(DL_DIR)/$(HASERL_SOURCE):
+@@ -16,7 +15,7 @@
+ 
+ $(HASERL_DIR)/.unpacked: $(DL_DIR)/$(HASERL_SOURCE)
+ 	$(HASERL_CAT) $(DL_DIR)/$(HASERL_SOURCE) | tar -C $(BUILD_DIR) $(TAR_OPTIONS) -
+-	touch $(HASERL_DIR)/.unpacked
++	touch $@
+ 
+ $(HASERL_DIR)/.configured: $(HASERL_DIR)/.unpacked
+ 	(cd $(HASERL_DIR); rm -rf config.cache; \
+@@ -30,26 +29,24 @@
+ 		--prefix=/usr \
+ 		--sysconfdir=/etc \
+ 	);
+-	touch $(HASERL_DIR)/.configured
++	touch $@
+ 
+-$(HASERL_WORKDIR)/src/haserl: $(HASERL_DIR)/.configured
+-	$(MAKE) CC=$(TARGET_CC) -C $(HASERL_WORKDIR)
++$(HASERL_DIR)/src/haserl: $(HASERL_DIR)/.configured
++	$(MAKE) CC=$(TARGET_CC) -C $(HASERL_DIR)
+ 
+-$(HASERL_WORKDIR)/.installed: $(HASERL_WORKDIR)/src/haserl
+-	cp $(HASERL_WORKDIR)/src/haserl $(TARGET_DIR)/usr/bin
+-	touch $(HASERL_WORKDIR)/.installed
++$(HASERL_DIR)/.installed: $(HASERL_DIR)/src/haserl
++	cp $(HASERL_DIR)/src/haserl $(TARGET_DIR)/usr/bin
++	touch $@
+ 
+-haserl:	uclibc $(HASERL_WORKDIR)/.installed
++haserl:	uclibc $(HASERL_DIR)/.installed
+ 
+ haserl-source: $(DL_DIR)/$(HASERL_SOURCE)
+ 
+ haserl-clean:
+-	@if [ -d $(HASERL_WORKDIR)/Makefile ] ; then \
+-		$(MAKE) -C $(HASERL_WORKDIR) clean ; \
+-	fi;
++	-$(MAKE) -C $(HASERL_DIR) clean
+ 
+ haserl-dirclean:
+-	rm -rf $(HASERL_DIR) $(HASERL_WORKDIR)
++	rm -rf $(HASERL_DIR)
+ #############################################################
+ #
+ # Toplevel Makefile options
