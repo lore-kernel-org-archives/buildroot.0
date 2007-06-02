@@ -1,88 +1,37 @@
-From: bugs at busybox.net <bugs@busybox.net>
-Date: Sat, 2 Jun 2007 02:07:40 -0700
-Subject: [Buildroot] [buildroot 0001257]: Some build targets use hard-coded
-	library names, which causes forced rebuild on Mac OS X
-Message-ID: <c0b622a3a01aed094eba59e50bdb6af9@bugs.uclibc.org>
+From: Rod Boyce <buildroot@teamboyce.co.uk>
+Date: Sat, 02 Jun 2007 10:18:29 +0100
+Subject: [Buildroot] Flite for build root
+Message-ID: <466135E5.8000603@teamboyce.co.uk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+All,
 
-A NOTE has been added to this issue. 
-====================================================================== 
-http://busybox.net/bugs/view.php?id=1257 
-====================================================================== 
-Reported By:                holin
-Assigned To:                buildroot
-====================================================================== 
-Project:                    buildroot
-Issue ID:                   1257
-Category:                   Architecture Specific
-Reproducibility:            always
-Severity:                   minor
-Priority:                   normal
-Status:                     assigned
-====================================================================== 
-Date Submitted:             03-04-2007 05:38 PST
-Last Modified:              06-02-2007 02:07 PDT
-====================================================================== 
-Summary:                    Some build targets use hard-coded library names,
-which causes forced rebuild on Mac OS X
-Description: 
-Library names ending with .so should have .dylib in makefile targets on OS
-X. Otherwise, the build system always thinks that the library isn't built
-and tries to (re-)build it on every make invocation. Attached a patch that
-adds a config option for library filename extension and fixes the packages
-that seemed to suffer from this. 
-====================================================================== 
+Attached is a patch to add flite applications to the build-root system.  
+There are a few issues with flite and I have e-mailed the developers 
+about and will feed back any patches and changes I make for build-root 
+here.  Currently I can build flite and run it on my target Via C3 
+hardware.  Flite currently only produces a static library files but 
+these do not need to go on the target only the final executable.  The 
+building on shared libraries is currently broken and I am trying to see 
+if there are fixes for this.  Also the install target for flite is 
+broken so I have created my own.  Please excuse the 'shell' sillyness it 
+was the simplest architecture independent way I could think of to 
+install the library files into the staging directory.  I'm sure it could 
+be made more efficient but for me it works.
 
----------------------------------------------------------------------- 
- holin - 06-02-07 00:14  
----------------------------------------------------------------------- 
-Attached an updated patch for current SVN. Some EXEEXTs would probably be
-needed in binutils.mk makerules for Windows hosts. 
+Again I can only test on 386 hardware and somebody else test on other 
+hardware platforms?
 
----------------------------------------------------------------------- 
- bernhardf - 06-02-07 01:46  
----------------------------------------------------------------------- 
-You have to use LIBTGTEXT where possible (i.e. in packages that can be
-built as static or dynamic library). See the toplevel Makefile for
-LIBTGTEXT.
-
-Please update the patch accordingly.
-thanks, 
-
----------------------------------------------------------------------- 
- bernhardf - 06-02-07 02:01  
----------------------------------------------------------------------- 
-erm. You're concerned about the host extensions, right?
-
-If so, then you'll have to add HOST_EXEEXT et al and use them where
-needed. 
-
----------------------------------------------------------------------- 
- holin - 06-02-07 02:07  
----------------------------------------------------------------------- 
-What?!? No way! Buildroot target is always linux, isn't it? And Linux
-always uses the same extensions. What other use would EXEEXT, et al. have?
-They are derived from the (BR2_GNU_BUILD_SUFFIX) build toolchain suffix,
-which comes from the host system. (host=build system, target="run" target) 
-
-Issue History 
-Date Modified   Username       Field                    Change               
-====================================================================== 
-03-04-07 05:38  holin          New Issue                                    
-03-04-07 05:38  holin          Status                   new => assigned     
-03-04-07 05:38  holin          Assigned To               => buildroot       
-03-04-07 05:38  holin          File Added: buildroot-070304-dlext.patch         
-          
-03-31-07 09:43  bendiken       Issue Monitored: bendiken                    
-06-02-07 00:13  holin          File Added: buildroot-070602-dlext-v2.patch      
-             
-06-02-07 00:14  holin          Note Added: 0002427                          
-06-02-07 01:46  bernhardf      Note Added: 0002428                          
-06-02-07 02:01  bernhardf      Note Added: 0002429                          
-06-02-07 02:07  holin          Note Added: 0002430                          
-======================================================================
+Regards,
+Rod Boyce
+-------------- next part --------------
+A non-text attachment was scrubbed...
+Name: flite.patch
+Type: text/x-patch
+Size: 3629 bytes
+Desc: not available
+Url : http://busybox.net/lists/buildroot/attachments/20070602/4a7cb32b/attachment-0001.bin 
