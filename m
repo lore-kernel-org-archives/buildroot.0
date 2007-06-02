@@ -1,52 +1,120 @@
-From: Bernhard Fischer <rep.dot.nop@gmail.com>
-Date: Sat, 2 Jun 2007 12:32:47 +0200
-Subject: [Buildroot] ALSA tools for build-root
-In-Reply-To: <46613FBE.7080709@teamboyce.co.uk>
-References: <46613FBE.7080709@teamboyce.co.uk>
-Message-ID: <20070602103246.GL12010@aon.at>
+From: bugs at busybox.net <bugs@busybox.net>
+Date: Sat, 2 Jun 2007 03:35:04 -0700
+Subject: [Buildroot] [buildroot 0001257]: Some build targets use hard-coded
+	library names, which causes forced rebuild on Mac OS X
+Message-ID: <8153156f06ccabcb947a694c6f153399@bugs.uclibc.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Sat, Jun 02, 2007 at 11:00:30AM +0100, Rod Boyce wrote:
->All,
->
->I have also added alsa-tools to build-root and attached is the patch.  
->These tools have a lot of dependencies that I am not using the tools 
->that build fine for me I have defaulted to 'default y' in the Config.in 
->file, all tools that depend on X, GTK, or some other library I am not 
->using I have set 'default n' there are also tools that are going to 
->require a custom target that my makefile does not do anything with these 
->are all commented out in the config file.  The makefile is quite simple 
->I have a macro that creates a target for each simple selected tool the 
->tools are selected from the configure script this was the simplest way I 
->could think of doing the simple targets for this tool set.  I have not 
->looked at what is needed for the more complicated targets and I don't 
->plan on using then.  But I have left them in for the next to make the 
->job easier for the next person hopefully.
->
->Regards,
->Rod Boyce
 
->Index: package/alsa-tools/alsa-tools.mk
->===================================================================
->--- package/alsa-tools/alsa-tools.mk	(revision 0)
->+++ package/alsa-tools/alsa-tools.mk	(revision 0)
->@@ -0,0 +1,134 @@
->+#############################################################
->+#
->+# ALSA Tools
->+#
->+#############################################################
->+ALSA-TOOLS_VERSION := 1.0.14rc3
->+ALSA-TOOLS_SOURCE := alsa-tools-$(ALSA-TOOLS_VERSION).tar.bz2
->+ALSA-TOOLS_SITE := ftp://ftp.alsa-project.org/pub/tools/
->+ALSA-TOOLS_DIR := $(BUILD_DIR)/$(patsubst %.tar.bz2,%,$(ALSA-TOOLS_SOURCE))
+A NOTE has been added to this issue. 
+====================================================================== 
+http://busybox.net/bugs/view.php?id=1257 
+====================================================================== 
+Reported By:                holin
+Assigned To:                buildroot
+====================================================================== 
+Project:                    buildroot
+Issue ID:                   1257
+Category:                   Architecture Specific
+Reproducibility:            always
+Severity:                   minor
+Priority:                   normal
+Status:                     assigned
+====================================================================== 
+Date Submitted:             03-04-2007 05:38 PST
+Last Modified:              06-02-2007 03:35 PDT
+====================================================================== 
+Summary:                    Some build targets use hard-coded library names,
+which causes forced rebuild on Mac OS X
+Description: 
+Library names ending with .so should have .dylib in makefile targets on OS
+X. Otherwise, the build system always thinks that the library isn't built
+and tries to (re-)build it on every make invocation. Attached a patch that
+adds a config option for library filename extension and fixes the packages
+that seemed to suffer from this. 
+====================================================================== 
 
-Also, i'm curious where you picked up this notion of setting the
-FOO_DIR.
+---------------------------------------------------------------------- 
+ holin - 06-02-07 00:14  
+---------------------------------------------------------------------- 
+Attached an updated patch for current SVN. Some EXEEXTs would probably be
+needed in binutils.mk makerules for Windows hosts. 
 
-The established way is a simple
-FOO_DIR:=$(BUILD_DIR)/foo-$(FOO_VERSION)
+---------------------------------------------------------------------- 
+ bernhardf - 06-02-07 01:46  
+---------------------------------------------------------------------- 
+You have to use LIBTGTEXT where possible (i.e. in packages that can be
+built as static or dynamic library). See the toplevel Makefile for
+LIBTGTEXT.
+
+Please update the patch accordingly.
+thanks, 
+
+---------------------------------------------------------------------- 
+ bernhardf - 06-02-07 02:01  
+---------------------------------------------------------------------- 
+erm. You're concerned about the host extensions, right?
+
+If so, then you'll have to add HOST_EXEEXT et al and use them where
+needed. 
+
+---------------------------------------------------------------------- 
+ holin - 06-02-07 02:07  
+---------------------------------------------------------------------- 
+What?!? No way! Buildroot target is always linux, isn't it? And Linux
+always uses the same extensions. What other use would EXEEXT, et al. have?
+They are derived from the (BR2_GNU_BUILD_SUFFIX) build toolchain suffix,
+which comes from the host system. (host=build system, target="run" target) 
+
+---------------------------------------------------------------------- 
+ holin - 06-02-07 02:25  
+---------------------------------------------------------------------- 
+Updated the patch to use LIBTGTEXT. 
+
+---------------------------------------------------------------------- 
+ bernhardf - 06-02-07 03:16  
+---------------------------------------------------------------------- 
+ugh! Let me wake up and get some coffee.. 
+
+---------------------------------------------------------------------- 
+ bernhardf - 06-02-07 03:18  
+---------------------------------------------------------------------- 
+Turns out that of course LIBTGTEXT should rather be HOST_LIBEXT. Not sure
+what i was thinking about :-/
+
+May i ask you to fix that too?
+Many thanks in advance. 
+
+---------------------------------------------------------------------- 
+ holin - 06-02-07 03:35  
+---------------------------------------------------------------------- 
+Updated patch with LIBTGTEXT -> HOST_LIBEXT. 
+
+Issue History 
+Date Modified   Username       Field                    Change               
+====================================================================== 
+03-04-07 05:38  holin          New Issue                                    
+03-04-07 05:38  holin          Status                   new => assigned     
+03-04-07 05:38  holin          Assigned To               => buildroot       
+03-04-07 05:38  holin          File Added: buildroot-070304-dlext.patch         
+          
+03-31-07 09:43  bendiken       Issue Monitored: bendiken                    
+06-02-07 00:13  holin          File Added: buildroot-070602-dlext-v2.patch      
+             
+06-02-07 00:14  holin          Note Added: 0002427                          
+06-02-07 01:46  bernhardf      Note Added: 0002428                          
+06-02-07 02:01  bernhardf      Note Added: 0002429                          
+06-02-07 02:07  holin          Note Added: 0002430                          
+06-02-07 02:24  holin          File Added: buildroot-070602-dlext-v3.patch      
+             
+06-02-07 02:25  holin          Note Added: 0002431                          
+06-02-07 03:16  bernhardf      Note Added: 0002432                          
+06-02-07 03:18  bernhardf      Note Added: 0002433                          
+06-02-07 03:34  holin          File Added: buildroot-070602-dlext-v4.patch      
+             
+06-02-07 03:35  holin          Note Added: 0002434                          
+======================================================================
