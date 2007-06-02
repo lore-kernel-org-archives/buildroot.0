@@ -1,102 +1,36 @@
-From: bugs at busybox.net <bugs@busybox.net>
-Date: Sat, 2 Jun 2007 03:16:31 -0700
-Subject: [Buildroot] [buildroot 0001257]: Some build targets use hard-coded
-	library names, which causes forced rebuild on Mac OS X
-Message-ID: <52db566110a2b2e4480638ac6ba9e9a2@busybox.net>
+From: Mats Erik Andersson <mats.andersson64@comhem.se>
+Date: Sat, 02 Jun 2007 12:16:49 +0200
+Subject: [Buildroot] Bluetooth for build-root
+In-Reply-To: <46613906.3040802@teamboyce.co.uk>
+References: <46613906.3040802@teamboyce.co.uk>
+Message-ID: <1180779409.13390.5.camel@localhost>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+l?r 2007-06-02 klockan 10:31 +0100 skrev Rod Boyce:
+> All,
+> 
+> I am about to start looking at Bluetooth packages for build-root is any 
+> body else looking at this?  If so perhaps we can coordinate our 
+> activities? 
+> I will be working with a USB 2.0 EDR Bluetooth dongle and my kernel 
+> currently recognizes it so now I have to get the user side stuff 
+> working.  I want to implement A2DP, SCO (Audio gateway) multi-phones, 
+> file-share, networking and anything else I want in my application as 
+> well.  While this is a significant amount of work if anybody it 
+> currently working on this I would be very interested in combining our work.
 
-A NOTE has been added to this issue. 
-====================================================================== 
-http://busybox.net/bugs/view.php?id=1257 
-====================================================================== 
-Reported By:                holin
-Assigned To:                buildroot
-====================================================================== 
-Project:                    buildroot
-Issue ID:                   1257
-Category:                   Architecture Specific
-Reproducibility:            always
-Severity:                   minor
-Priority:                   normal
-Status:                     assigned
-====================================================================== 
-Date Submitted:             03-04-2007 05:38 PST
-Last Modified:              06-02-2007 03:16 PDT
-====================================================================== 
-Summary:                    Some build targets use hard-coded library names,
-which causes forced rebuild on Mac OS X
-Description: 
-Library names ending with .so should have .dylib in makefile targets on OS
-X. Otherwise, the build system always thinks that the library isn't built
-and tries to (re-)build it on every make invocation. Attached a patch that
-adds a config option for library filename extension and fixes the packages
-that seemed to suffer from this. 
-====================================================================== 
+Hello there,
 
----------------------------------------------------------------------- 
- holin - 06-02-07 00:14  
----------------------------------------------------------------------- 
-Attached an updated patch for current SVN. Some EXEEXTs would probably be
-needed in binutils.mk makerules for Windows hosts. 
+I have created buildroot packages for bluez-libs and bluez-utils
+and they are under testing in my project since two weeks. The testing
+is mainly a matter of tweeking the settings, since the library and
+executables integrate well on my target system. To be honest, I am also
+gleaning on other package implementations before I dare to make my own
+public!
 
----------------------------------------------------------------------- 
- bernhardf - 06-02-07 01:46  
----------------------------------------------------------------------- 
-You have to use LIBTGTEXT where possible (i.e. in packages that can be
-built as static or dynamic library). See the toplevel Makefile for
-LIBTGTEXT.
 
-Please update the patch accordingly.
-thanks, 
-
----------------------------------------------------------------------- 
- bernhardf - 06-02-07 02:01  
----------------------------------------------------------------------- 
-erm. You're concerned about the host extensions, right?
-
-If so, then you'll have to add HOST_EXEEXT et al and use them where
-needed. 
-
----------------------------------------------------------------------- 
- holin - 06-02-07 02:07  
----------------------------------------------------------------------- 
-What?!? No way! Buildroot target is always linux, isn't it? And Linux
-always uses the same extensions. What other use would EXEEXT, et al. have?
-They are derived from the (BR2_GNU_BUILD_SUFFIX) build toolchain suffix,
-which comes from the host system. (host=build system, target="run" target) 
-
----------------------------------------------------------------------- 
- holin - 06-02-07 02:25  
----------------------------------------------------------------------- 
-Updated the patch to use LIBTGTEXT. 
-
----------------------------------------------------------------------- 
- bernhardf - 06-02-07 03:16  
----------------------------------------------------------------------- 
-ugh! Let me wake up and get some coffee.. 
-
-Issue History 
-Date Modified   Username       Field                    Change               
-====================================================================== 
-03-04-07 05:38  holin          New Issue                                    
-03-04-07 05:38  holin          Status                   new => assigned     
-03-04-07 05:38  holin          Assigned To               => buildroot       
-03-04-07 05:38  holin          File Added: buildroot-070304-dlext.patch         
-          
-03-31-07 09:43  bendiken       Issue Monitored: bendiken                    
-06-02-07 00:13  holin          File Added: buildroot-070602-dlext-v2.patch      
-             
-06-02-07 00:14  holin          Note Added: 0002427                          
-06-02-07 01:46  bernhardf      Note Added: 0002428                          
-06-02-07 02:01  bernhardf      Note Added: 0002429                          
-06-02-07 02:07  holin          Note Added: 0002430                          
-06-02-07 02:24  holin          File Added: buildroot-070602-dlext-v3.patch      
-             
-06-02-07 02:25  holin          Note Added: 0002431                          
-06-02-07 03:16  bernhardf      Note Added: 0002432                          
-======================================================================
+Best regards,    Mats Erik Andersson
