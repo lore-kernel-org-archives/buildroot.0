@@ -1,7 +1,7 @@
 From: aldot at uclibc.org <aldot@uclibc.org>
-Date: Sat,  2 Jun 2007 09:36:44 -0700 (PDT)
-Subject: [Buildroot] svn commit: trunk/buildroot
-Message-ID: <20070602163644.643CB485C6@busybox.net>
+Date: Sat,  2 Jun 2007 10:41:04 -0700 (PDT)
+Subject: [Buildroot] svn commit: trunk/buildroot/target/device/x86/i386
+Message-ID: <20070602174104.99384485A8@busybox.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -9,88 +9,221 @@ Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
 Author: aldot
-Date: 2007-06-02 09:36:43 -0700 (Sat, 02 Jun 2007)
-New Revision: 18733
+Date: 2007-06-02 10:41:02 -0700 (Sat, 02 Jun 2007)
+New Revision: 18734
 
 Log:
-- improve wording of BR2_PREFER_STATIC_LIB
+- update config
 
 
 Modified:
-   trunk/buildroot/Config.in
+   trunk/buildroot/target/device/x86/i386/busybox.config
 
 
 Changeset:
-Modified: trunk/buildroot/Config.in
+Modified: trunk/buildroot/target/device/x86/i386/busybox.config
 ===================================================================
---- trunk/buildroot/Config.in	2007-06-02 13:13:56 UTC (rev 18732)
-+++ trunk/buildroot/Config.in	2007-06-02 16:36:43 UTC (rev 18733)
-@@ -169,8 +169,29 @@
- 	bool "i586"
- config BR2_x86_i686
- 	bool "i686"
-+config BR2_x86_pentium4
-+	bool "pentium4"
-+config BR2_x86_nocona
-+	bool "nocona"
-+config BR2_x86_core2
-+	bool "core2"
- endchoice
+--- trunk/buildroot/target/device/x86/i386/busybox.config	2007-06-02 16:36:43 UTC (rev 18733)
++++ trunk/buildroot/target/device/x86/i386/busybox.config	2007-06-02 17:41:02 UTC (rev 18734)
+@@ -1,7 +1,7 @@
+ #
+ # Automatically generated make config: don't edit
+-# Busybox version: 1.5.0.svn
+-# Tue Jan 30 01:32:00 2007
++# Busybox version: 1.6.0
++# Sat Jun  2 19:38:43 2007
+ #
+ CONFIG_HAVE_DOT_CONFIG=y
  
-+choice
-+	prompt "Target Architecture Variant"
-+	depends BR2_x86_64
-+	default BR2_x86_64_core2
-+	help
-+	  Specific CPU variant to use
+@@ -25,13 +25,14 @@
+ CONFIG_GETOPT_LONG=y
+ CONFIG_FEATURE_DEVPTS=y
+ # CONFIG_FEATURE_CLEAN_UP is not set
++# CONFIG_FEATURE_PIDFILE is not set
+ CONFIG_FEATURE_SUID=y
+ CONFIG_FEATURE_SYSLOG=y
+ # CONFIG_FEATURE_SUID_CONFIG is not set
+ # CONFIG_FEATURE_SUID_CONFIG_QUIET is not set
+ # CONFIG_FEATURE_HAVE_RPC is not set
+ # CONFIG_SELINUX is not set
+-CONFIG_FEATURE_EXEC_PREFER_APPLETS=y
++# CONFIG_FEATURE_PREFER_APPLETS is not set
+ CONFIG_BUSYBOX_EXEC_PATH="/bin/busybox"
+ 
+ #
+@@ -49,7 +50,7 @@
+ #
+ # CONFIG_DEBUG is not set
+ # CONFIG_WERROR is not set
+-# CONFIG_NO_DEBUG_LIB is not set
++CONFIG_NO_DEBUG_LIB=y
+ # CONFIG_DMALLOC is not set
+ # CONFIG_EFENCE is not set
+ # CONFIG_INCLUDE_SUSv2 is not set
+@@ -68,14 +69,14 @@
+ #
+ CONFIG_PASSWORD_MINLEN=6
+ CONFIG_MD5_SIZE_VS_SPEED=3
+-# CONFIG_FEATURE_EDITING is not set
+-# CONFIG_FEATURE_EDITING_FANCY_KEYS is not set
+-# CONFIG_FEATURE_EDITING_VI is not set
+-CONFIG_FEATURE_EDITING_HISTORY=
+-# CONFIG_FEATURE_EDITING_SAVEHISTORY is not set
+-# CONFIG_FEATURE_TAB_COMPLETION is not set
++CONFIG_FEATURE_EDITING=y
++CONFIG_FEATURE_EDITING_FANCY_KEYS=y
++CONFIG_FEATURE_EDITING_VI=y
++CONFIG_FEATURE_EDITING_HISTORY=99
++CONFIG_FEATURE_EDITING_SAVEHISTORY=y
++CONFIG_FEATURE_TAB_COMPLETION=y
+ # CONFIG_FEATURE_USERNAME_COMPLETION is not set
+-# CONFIG_FEATURE_EDITING_FANCY_PROMPT is not set
++CONFIG_FEATURE_EDITING_FANCY_PROMPT=y
+ 
+ #
+ # Applets
+@@ -84,7 +85,7 @@
+ #
+ # Archival Utilities
+ #
+-# CONFIG_AR is not set
++CONFIG_AR=y
+ # CONFIG_FEATURE_AR_LONG_FILENAMES is not set
+ CONFIG_BUNZIP2=y
+ # CONFIG_CPIO is not set
+@@ -198,6 +199,8 @@
+ # CONFIG_FEATURE_FANCY_SLEEP is not set
+ CONFIG_SORT=y
+ # CONFIG_FEATURE_SORT_BIG is not set
++# CONFIG_SPLIT is not set
++# CONFIG_FEATURE_SPLIT_FANCY is not set
+ # CONFIG_STAT is not set
+ # CONFIG_FEATURE_STAT_FORMAT is not set
+ CONFIG_STTY=y
+@@ -274,6 +277,7 @@
+ CONFIG_FEATURE_READLINK_FOLLOW=y
+ CONFIG_RUN_PARTS=y
+ CONFIG_FEATURE_RUN_PARTS_LONG_OPTIONS=y
++# CONFIG_FEATURE_RUN_PARTS_FANCY is not set
+ # CONFIG_START_STOP_DAEMON is not set
+ # CONFIG_FEATURE_START_STOP_DAEMON_FANCY is not set
+ # CONFIG_FEATURE_START_STOP_DAEMON_LONG_OPTIONS is not set
+@@ -313,6 +317,15 @@
+ # CONFIG_FEATURE_FIND_NEWER is not set
+ # CONFIG_FEATURE_FIND_INUM is not set
+ CONFIG_FEATURE_FIND_EXEC=y
++CONFIG_FEATURE_FIND_USER=y
++CONFIG_FEATURE_FIND_GROUP=y
++CONFIG_FEATURE_FIND_NOT=y
++CONFIG_FEATURE_FIND_DEPTH=y
++CONFIG_FEATURE_FIND_PAREN=y
++CONFIG_FEATURE_FIND_SIZE=y
++CONFIG_FEATURE_FIND_PRUNE=y
++# CONFIG_FEATURE_FIND_DELETE is not set
++CONFIG_FEATURE_FIND_PATH=y
+ CONFIG_GREP=y
+ CONFIG_FEATURE_GREP_EGREP_ALIAS=y
+ CONFIG_FEATURE_GREP_FGREP_ALIAS=y
+@@ -330,6 +343,7 @@
+ # CONFIG_DEBUG_INIT is not set
+ CONFIG_FEATURE_USE_INITTAB=y
+ CONFIG_FEATURE_INIT_SCTTY=y
++# CONFIG_FEATURE_INIT_SYSLOG is not set
+ CONFIG_FEATURE_EXTRA_QUIET=y
+ # CONFIG_FEATURE_INIT_COREDUMPS is not set
+ CONFIG_FEATURE_INITRD=y
+@@ -343,7 +357,9 @@
+ # CONFIG_USE_BB_SHADOW is not set
+ # CONFIG_USE_BB_PWD_GRP is not set
+ CONFIG_ADDGROUP=y
++# CONFIG_FEATURE_ADDUSER_TO_GROUP is not set
+ CONFIG_DELGROUP=y
++# CONFIG_FEATURE_DEL_USER_FROM_GROUP is not set
+ CONFIG_ADDUSER=y
+ CONFIG_DELUSER=y
+ CONFIG_GETTY=y
+@@ -354,6 +370,7 @@
+ CONFIG_FEATURE_SECURETTY=y
+ CONFIG_PASSWD=y
+ CONFIG_FEATURE_PASSWD_WEAK_CHECK=y
++# CONFIG_CRYPTPW is not set
+ CONFIG_SU=y
+ CONFIG_FEATURE_SU_SYSLOG=y
+ CONFIG_FEATURE_SU_CHECKS_SHELLS=y
+@@ -453,6 +470,7 @@
+ #
+ # CONFIG_ADJTIMEX is not set
+ # CONFIG_BBCONFIG is not set
++# CONFIG_CHRT is not set
+ # CONFIG_CROND is not set
+ # CONFIG_DEBUG_CROND_OPTION is not set
+ # CONFIG_FEATURE_CROND_CALL_SENDMAIL is not set
+@@ -532,8 +550,8 @@
+ # CONFIG_FEATURE_IFUPDOWN_IFCONFIG_BUILTIN is not set
+ CONFIG_FEATURE_IFUPDOWN_IPV4=y
+ # CONFIG_FEATURE_IFUPDOWN_IPV6 is not set
+-# CONFIG_FEATURE_IFUPDOWN_IPX is not set
+ # CONFIG_FEATURE_IFUPDOWN_MAPPING is not set
++# CONFIG_FEATURE_IFUPDOWN_EXTERNAL_DHCP is not set
+ # CONFIG_INETD is not set
+ # CONFIG_FEATURE_INETD_SUPPORT_BUILTIN_ECHO is not set
+ # CONFIG_FEATURE_INETD_SUPPORT_BUILTIN_DISCARD is not set
+@@ -561,6 +579,7 @@
+ # CONFIG_NC_SERVER is not set
+ # CONFIG_NC_EXTRA is not set
+ CONFIG_NETSTAT=y
++# CONFIG_FEATURE_NETSTAT_WIDE is not set
+ CONFIG_NSLOOKUP=y
+ CONFIG_PING=y
+ # CONFIG_PING6 is not set
+@@ -586,6 +605,7 @@
+ CONFIG_APP_UDHCPC=y
+ CONFIG_FEATURE_UDHCP_SYSLOG=y
+ # CONFIG_FEATURE_UDHCP_DEBUG is not set
++# CONFIG_FEATURE_RFC3397 is not set
+ # CONFIG_VCONFIG is not set
+ CONFIG_WGET=y
+ # CONFIG_FEATURE_WGET_STATUSBAR is not set
+@@ -640,6 +660,12 @@
+ # CONFIG_ASH_RANDOM_SUPPORT is not set
+ CONFIG_ASH_EXPAND_PRMT=y
+ # CONFIG_HUSH is not set
++# CONFIG_HUSH_HELP is not set
++# CONFIG_HUSH_INTERACTIVE is not set
++# CONFIG_HUSH_JOB is not set
++# CONFIG_HUSH_TICK is not set
++# CONFIG_HUSH_IF is not set
++# CONFIG_HUSH_LOOPS is not set
+ # CONFIG_LASH is not set
+ # CONFIG_MSH is not set
+ 
+@@ -647,7 +673,8 @@
+ # Bourne Shell Options
+ #
+ # CONFIG_FEATURE_SH_EXTRA_QUIET is not set
+-CONFIG_FEATURE_SH_STANDALONE_SHELL=y
++# CONFIG_FEATURE_SH_STANDALONE is not set
++# CONFIG_CTTYHACK is not set
+ 
+ #
+ # System Logging Utilities
+@@ -674,3 +701,19 @@
+ # CONFIG_ENVUIDGID is not set
+ # CONFIG_ENVDIR is not set
+ # CONFIG_SOFTLIMIT is not set
++# CONFIG_CHCON is not set
++# CONFIG_FEATURE_CHCON_LONG_OPTIONS is not set
++# CONFIG_GETENFORCE is not set
++# CONFIG_GETSEBOOL is not set
++# CONFIG_LOAD_POLICY is not set
++# CONFIG_MATCHPATHCON is not set
++# CONFIG_RUNCON is not set
++# CONFIG_FEATURE_RUNCON_LONG_OPTIONS is not set
++# CONFIG_SELINUXENABLED is not set
++# CONFIG_SETENFORCE is not set
 +
-+config BR2_x86_64_opteron
-+	bool "opteron"
-+config BR2_x86_64_nocona
-+	bool "nocona"
-+config BR2_x86_64_core2
-+	bool "core2"
-+endchoice
-+
- config BR2_ARCH
- 	string
- 	default "alpha"		if BR2_alpha
-@@ -182,6 +203,9 @@
- 	default "i486"		if BR2_x86_i486
- 	default "i586"		if BR2_x86_i586
- 	default "i686"		if BR2_x86_i686
-+	default "i686"		if BR2_x86_pentium4
-+	default "i686"		if BR2_x86_nocona
-+	default "i686"		if BR2_x86_core2
- 	default "m68k"		if BR2_m68k
- 	default "mips"		if BR2_mips
- 	default "mipsel"	if BR2_mipsel
-@@ -196,6 +220,9 @@
- 	default "sh64"		if BR2_sh64
- 	default "sparc"		if BR2_sparc
- 	default "x86_64"	if BR2_x86_64
-+	default "x86_64"	if BR2_x86_64_nocona
-+	default "x86_64"	if BR2_x86_64_core2
-+	default "x86_64"	if BR2_x86_64_opteron
- 
- config BR2_ENDIAN
- 	string
-@@ -377,13 +404,12 @@
- 	bool "prefer static libraries"
- 	default n
- 	help
--	  Where possible, use static libraries.
--	  This increases your code size a lot and should only be
--	  used with a good reason why not use the default, which
--	  is dynamic libraries.
-+	  Where possible, build and use static libraries for the target.
-+	  This potentially increases your code size and should only be
-+	  used if you know what you do.
-+	  The default is to build dynamic libraries and use those on
-+	  the target filesystem.
- 
--	  If unsure, say No.
--
- 	  WARNING: This is highly experimental at the moment.
- 
- endmenu
++#
++# ipsvd utilities
++#
++# CONFIG_TCPSVD is not set
++# CONFIG_UDPSVD is not set
