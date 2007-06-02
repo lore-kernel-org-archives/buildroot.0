@@ -1,112 +1,22 @@
-From: bugs at busybox.net <bugs@busybox.net>
-Date: Sat, 2 Jun 2007 03:18:59 -0700
-Subject: [Buildroot] [buildroot 0001257]: Some build targets use hard-coded
-	library names, which causes forced rebuild on Mac OS X
-Message-ID: <c65f8ceff31748e490946b39ddcdba58@busybox.net>
+From: Bernhard Fischer <rep.dot.nop@gmail.com>
+Date: Sat, 2 Jun 2007 12:26:14 +0200
+Subject: [Buildroot] ALSA tools for build-root
+In-Reply-To: <46613FBE.7080709@teamboyce.co.uk>
+References: <46613FBE.7080709@teamboyce.co.uk>
+Message-ID: <20070602102614.GK12010@aon.at>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+On Sat, Jun 02, 2007 at 11:00:30AM +0100, Rod Boyce wrote:
+>All,
 
-A NOTE has been added to this issue. 
-====================================================================== 
-http://busybox.net/bugs/view.php?id=1257 
-====================================================================== 
-Reported By:                holin
-Assigned To:                buildroot
-====================================================================== 
-Project:                    buildroot
-Issue ID:                   1257
-Category:                   Architecture Specific
-Reproducibility:            always
-Severity:                   minor
-Priority:                   normal
-Status:                     assigned
-====================================================================== 
-Date Submitted:             03-04-2007 05:38 PST
-Last Modified:              06-02-2007 03:18 PDT
-====================================================================== 
-Summary:                    Some build targets use hard-coded library names,
-which causes forced rebuild on Mac OS X
-Description: 
-Library names ending with .so should have .dylib in makefile targets on OS
-X. Otherwise, the build system always thinks that the library isn't built
-and tries to (re-)build it on every make invocation. Attached a patch that
-adds a config option for library filename extension and fixes the packages
-that seemed to suffer from this. 
-====================================================================== 
+>+$(foreach var,$(ALSA-TOOLS_TGTS),$(eval $(call alsa-mk_target,$(var))))
 
----------------------------------------------------------------------- 
- holin - 06-02-07 00:14  
----------------------------------------------------------------------- 
-Attached an updated patch for current SVN. Some EXEEXTs would probably be
-needed in binutils.mk makerules for Windows hosts. 
+I think that creating rules with a define was horribly broken with
+anything older than make-3.81
 
----------------------------------------------------------------------- 
- bernhardf - 06-02-07 01:46  
----------------------------------------------------------------------- 
-You have to use LIBTGTEXT where possible (i.e. in packages that can be
-built as static or dynamic library). See the toplevel Makefile for
-LIBTGTEXT.
-
-Please update the patch accordingly.
-thanks, 
-
----------------------------------------------------------------------- 
- bernhardf - 06-02-07 02:01  
----------------------------------------------------------------------- 
-erm. You're concerned about the host extensions, right?
-
-If so, then you'll have to add HOST_EXEEXT et al and use them where
-needed. 
-
----------------------------------------------------------------------- 
- holin - 06-02-07 02:07  
----------------------------------------------------------------------- 
-What?!? No way! Buildroot target is always linux, isn't it? And Linux
-always uses the same extensions. What other use would EXEEXT, et al. have?
-They are derived from the (BR2_GNU_BUILD_SUFFIX) build toolchain suffix,
-which comes from the host system. (host=build system, target="run" target) 
-
----------------------------------------------------------------------- 
- holin - 06-02-07 02:25  
----------------------------------------------------------------------- 
-Updated the patch to use LIBTGTEXT. 
-
----------------------------------------------------------------------- 
- bernhardf - 06-02-07 03:16  
----------------------------------------------------------------------- 
-ugh! Let me wake up and get some coffee.. 
-
----------------------------------------------------------------------- 
- bernhardf - 06-02-07 03:18  
----------------------------------------------------------------------- 
-Turns out that of course LIBTGTEXT should rather be HOST_LIBEXT. Not sure
-what i was thinking about :-/
-
-May i ask you to fix that too?
-Many thanks in advance. 
-
-Issue History 
-Date Modified   Username       Field                    Change               
-====================================================================== 
-03-04-07 05:38  holin          New Issue                                    
-03-04-07 05:38  holin          Status                   new => assigned     
-03-04-07 05:38  holin          Assigned To               => buildroot       
-03-04-07 05:38  holin          File Added: buildroot-070304-dlext.patch         
-          
-03-31-07 09:43  bendiken       Issue Monitored: bendiken                    
-06-02-07 00:13  holin          File Added: buildroot-070602-dlext-v2.patch      
-             
-06-02-07 00:14  holin          Note Added: 0002427                          
-06-02-07 01:46  bernhardf      Note Added: 0002428                          
-06-02-07 02:01  bernhardf      Note Added: 0002429                          
-06-02-07 02:07  holin          Note Added: 0002430                          
-06-02-07 02:24  holin          File Added: buildroot-070602-dlext-v3.patch      
-             
-06-02-07 02:25  holin          Note Added: 0002431                          
-06-02-07 03:16  bernhardf      Note Added: 0002432                          
-06-02-07 03:18  bernhardf      Note Added: 0002433                          
-======================================================================
+Did you test these changes against make-3.80, which is the oldest
+version that is currently needed to use buildroot?
