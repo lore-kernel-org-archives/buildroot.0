@@ -1,59 +1,94 @@
-From: bugs at busybox.net <bugs@busybox.net>
-Date: Sat, 2 Jun 2007 00:14:42 -0700
-Subject: [Buildroot] [buildroot 0001257]: Some build targets use hard-coded
-	library names, which causes forced rebuild on Mac OS X
-Message-ID: <750021aeb077c88c3774bd2c168fc6ba@bugs.uclibc.org>
+From: Heikki Lindholm <holindho@cs.helsinki.fi>
+Date: Sat, 02 Jun 2007 10:16:30 +0300
+Subject: [Buildroot] svn commit: trunk/buildroot: package/gmp toolchain
+In-Reply-To: <4661079D.90303@cs.helsinki.fi>
+References: <20070601221630.067824855D@busybox.net>
+	<4661079D.90303@cs.helsinki.fi>
+Message-ID: <4661194E.5010707@cs.helsinki.fi>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+Heikki Lindholm kirjoitti:
+> aldot at uclibc.org kirjoitti:
+> 
+>>Author: aldot
+>>Date: 2007-06-01 15:16:28 -0700 (Fri, 01 Jun 2007)
+>>New Revision: 18723
+>>
+>>Log:
+>>- add BR2_PREFER_STATIC_LIB config option to be able to select if we prefer to build static or dynamic libs/bins.
+>>- depending on the BR2_GNU_BUILD_SUFFIX, set the respective EXEEXT, LIBEXT, SHREXT extensions for use on the target.
+>>Thanks to Tom for suplying a diff which implements these.
+>>
+>>
+>>Modified:
+>>   trunk/buildroot/Config.in
+>>   trunk/buildroot/Makefile
+>>   trunk/buildroot/package/gmp/gmp.mk
+>>   trunk/buildroot/toolchain/Makefile.in
+>>
+>>
+>>Changeset:
+>>Modified: trunk/buildroot/Config.in
+>>===================================================================
+>>--- trunk/buildroot/Config.in	2007-06-01 19:17:36 UTC (rev 18722)
+>>+++ trunk/buildroot/Config.in	2007-06-01 22:16:28 UTC (rev 18723)
+>>@@ -373,6 +373,19 @@
+>> 	help
+>> 	  This option hides outdated/obsolete versions of packages.
+>> 
+>>+config BR2_PREFER_STATIC_LIB
+>>+	bool "prefer static libraries"
+>>+	default n
+>>+	help
+>>+	  Where possible, use static libraries.
+>>+	  This increases your code size a lot and should only be
+>>+	  used with a good reason why not use the default, which
+>>+	  is dynamic libraries.
+>>+
+>>+	  If unsure, say No.
+>>+
+>>+	  WARNING: This is highly experimental at the moment.
+>>+
+>> endmenu
+>> 
+>> source "toolchain/Config.in"
+>>
+>>Modified: trunk/buildroot/Makefile
+>>===================================================================
+>>--- trunk/buildroot/Makefile	2007-06-01 19:17:36 UTC (rev 18722)
+>>+++ trunk/buildroot/Makefile	2007-06-01 22:16:28 UTC (rev 18723)
+>>@@ -66,7 +66,32 @@
+>> #
+>> #############################################################
+>> 
+>>+ifneq (,$(findstring linux,$(BR2_GNU_BUILD_SUFFIX)))
+>>+EXEEXT:=
+>>+LIBEXT:=.a
+>>+SHREXT:=.so
+>>+endif
+>>+ifneq (,$(findstring apple,$(BR2_GNU_BUILD_SUFFIX)))
+>>+EXEEXT:=.pear
+>>+LIBEXT:=.dunno
+>>+SHREXT:=.dylib
+>>+endif
+> 
+> 
+> Oh, please! How about
+> EXEEXT:=
+> LIBEXT:=.a
+> SHREXT:=.dylib
+> 
+> A while back I submitted a bug report
+> http://bugs.uclibc.org/view.php?id=1257
+> which has the places I had to patch hard-coded lib extensions for a 
+> basic toolchain build. Otherwise, this approach is probably better than 
+> mine.
 
-A NOTE has been added to this issue. 
-====================================================================== 
-http://busybox.net/bugs/view.php?id=1257 
-====================================================================== 
-Reported By:                holin
-Assigned To:                buildroot
-====================================================================== 
-Project:                    buildroot
-Issue ID:                   1257
-Category:                   Architecture Specific
-Reproducibility:            always
-Severity:                   minor
-Priority:                   normal
-Status:                     assigned
-====================================================================== 
-Date Submitted:             03-04-2007 05:38 PST
-Last Modified:              06-02-2007 00:14 PDT
-====================================================================== 
-Summary:                    Some build targets use hard-coded library names,
-which causes forced rebuild on Mac OS X
-Description: 
-Library names ending with .so should have .dylib in makefile targets on OS
-X. Otherwise, the build system always thinks that the library isn't built
-and tries to (re-)build it on every make invocation. Attached a patch that
-adds a config option for library filename extension and fixes the packages
-that seemed to suffer from this. 
-====================================================================== 
+I updated the bug report with a refresh of my patch, taking the above 
+stuff into account.
 
----------------------------------------------------------------------- 
- holin - 06-02-07 00:14  
----------------------------------------------------------------------- 
-Attached an updated patch for current SVN. Some EXEEXTs would probably be
-needed in binutils.mk makerules for Windows hosts. 
-
-Issue History 
-Date Modified   Username       Field                    Change               
-====================================================================== 
-03-04-07 05:38  holin          New Issue                                    
-03-04-07 05:38  holin          Status                   new => assigned     
-03-04-07 05:38  holin          Assigned To               => buildroot       
-03-04-07 05:38  holin          File Added: buildroot-070304-dlext.patch         
-          
-03-31-07 09:43  bendiken       Issue Monitored: bendiken                    
-06-02-07 00:13  holin          File Added: buildroot-070602-dlext-v2.patch      
-             
-06-02-07 00:14  holin          Note Added: 0002427                          
-======================================================================
+-- hl
