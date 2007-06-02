@@ -1,226 +1,126 @@
-From: aldot at uclibc.org <aldot@uclibc.org>
-Date: Sat,  2 Jun 2007 04:22:18 -0700 (PDT)
-Subject: [Buildroot] svn commit: trunk/buildroot: package/gmp package/mpfr
-	toolchain/binu etc...
-Message-ID: <20070602112218.1A137C8055@busybox.net>
+From: bugs at busybox.net <bugs@busybox.net>
+Date: Sat, 2 Jun 2007 04:23:10 -0700
+Subject: [Buildroot] [buildroot 0001257]: Some build targets use hard-coded
+	library names, which causes forced rebuild on Mac OS X
+Message-ID: <ab49b49fb73ff39ab191f1fc075d7c1d@busybox.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Author: aldot
-Date: 2007-06-02 04:22:17 -0700 (Sat, 02 Jun 2007)
-New Revision: 18726
 
-Log:
-- fixup the extension for the host and start to honor BR2_PREFER_STATIC_LIB
+A NOTE has been added to this issue. 
+====================================================================== 
+http://busybox.net/bugs/view.php?id=1257 
+====================================================================== 
+Reported By:                holin
+Assigned To:                buildroot
+====================================================================== 
+Project:                    buildroot
+Issue ID:                   1257
+Category:                   Architecture Specific
+Reproducibility:            always
+Severity:                   minor
+Priority:                   normal
+Status:                     assigned
+====================================================================== 
+Date Submitted:             03-04-2007 05:38 PST
+Last Modified:              06-02-2007 04:23 PDT
+====================================================================== 
+Summary:                    Some build targets use hard-coded library names,
+which causes forced rebuild on Mac OS X
+Description: 
+Library names ending with .so should have .dylib in makefile targets on OS
+X. Otherwise, the build system always thinks that the library isn't built
+and tries to (re-)build it on every make invocation. Attached a patch that
+adds a config option for library filename extension and fixes the packages
+that seemed to suffer from this. 
+====================================================================== 
 
+---------------------------------------------------------------------- 
+ holin - 06-02-07 00:14  
+---------------------------------------------------------------------- 
+Attached an updated patch for current SVN. Some EXEEXTs would probably be
+needed in binutils.mk makerules for Windows hosts. 
 
-Modified:
-   trunk/buildroot/Makefile
-   trunk/buildroot/package/gmp/gmp.mk
-   trunk/buildroot/package/mpfr/mpfr.mk
-   trunk/buildroot/toolchain/binutils/binutils.mk
+---------------------------------------------------------------------- 
+ bernhardf - 06-02-07 01:46  
+---------------------------------------------------------------------- 
+You have to use LIBTGTEXT where possible (i.e. in packages that can be
+built as static or dynamic library). See the toplevel Makefile for
+LIBTGTEXT.
 
+Please update the patch accordingly.
+thanks, 
 
-Changeset:
-Modified: trunk/buildroot/Makefile
-===================================================================
---- trunk/buildroot/Makefile	2007-06-02 09:05:40 UTC (rev 18725)
-+++ trunk/buildroot/Makefile	2007-06-02 11:22:17 UTC (rev 18726)
-@@ -48,38 +48,38 @@
- 
- #############################################################
- #
--# Setup the proper filename extensions for the target
-+# Setup the proper filename extensions for the host
- #
- ##############################################################
- ifneq ($(findstring linux,$(BR2_GNU_BUILD_SUFFIX)),)
--EXEEXT:=
--LIBEXT:=.a
--SHREXT:=.so
-+HOST_EXEEXT:=
-+HOST_LIBEXT:=.a
-+HOST_SHREXT:=.so
- endif
- ifneq ($(findstring apple,$(BR2_GNU_BUILD_SUFFIX)),)
--EXEEXT:=
--LIBEXT:=.a
--SHREXT:=.dylib
-+HOST_EXEEXT:=
-+HOST_LIBEXT:=.a
-+HOST_SHREXT:=.dylib
- endif
- ifneq ($(findstring cygwin,$(BR2_GNU_BUILD_SUFFIX)),)
--EXEEXT:=.exe
--LIBEXT:=.lib
--SHREXT:=.dll
-+HOST_EXEEXT:=.exe
-+HOST_LIBEXT:=.lib
-+HOST_SHREXT:=.dll
- endif
- ifneq ($(findstring mingw,$(BR2_GNU_BUILD_SUFFIX)),)
--EXEEXT:=.exe
--LIBEXT:=.lib
--SHREXT:=.dll
-+HOST_EXEEXT:=.exe
-+HOST_LIBEXT:=.lib
-+HOST_SHREXT:=.dll
- endif
- 
-+# The preferred type of libs we build for the target
- ifeq ($(BR2_PREFER_STATIC_LIB),y)
--LIBTGTEXT=$(LIBEXT)
-+LIBTGTEXT=.a
- else
--LIBTGTEXT=$(SHREXT)
-+LIBTGTEXT=.so
- endif
- 
- 
--
- #############################################################
- #
- # The list of stuff to build for the target toolchain
+---------------------------------------------------------------------- 
+ bernhardf - 06-02-07 02:01  
+---------------------------------------------------------------------- 
+erm. You're concerned about the host extensions, right?
 
-Modified: trunk/buildroot/package/gmp/gmp.mk
-===================================================================
---- trunk/buildroot/package/gmp/gmp.mk	2007-06-02 09:05:40 UTC (rev 18725)
-+++ trunk/buildroot/package/gmp/gmp.mk	2007-06-02 11:22:17 UTC (rev 18726)
-@@ -9,7 +9,8 @@
- GMP_CAT:=$(BZCAT)
- GMP_DIR:=$(TOOL_BUILD_DIR)/gmp-$(GMP_VERSION)
- GMP_TARGET_DIR:=$(BUILD_DIR)/gmp-$(GMP_VERSION)
--GMP_BINARY:=libgmp.so
-+GMP_BINARY:=libgmp$(LIBTGTEXT)
-+GMP_HOST_BINARY:=libgmp$(HOST_LIBEXT)
- GMP_LIBVERSION:=3.4.1
- 
- ifeq ($(BR2_ENDIAN),"BIG")
-@@ -20,7 +21,7 @@
- 
- # this is a workaround for a bug in GMP, please see 
- # http://gmplib.org/list-archives/gmp-devel/2006-April/000618.html
--ifeq ($(EXEEXT),.exe)
-+ifeq ($(HOST_EXEEXT),.exe)
- GMP_CPP_FLAGS:=-DDLL_EXPORT
- else
- GMP_CPP_FLAGS:=
-@@ -88,19 +89,17 @@
- 	$(STRIP) --strip-unneeded $(STAGING_DIR)/lib/libgmp.{so*,a}
- 
- $(TARGET_DIR)/lib/libgmp.so $(TARGET_DIR)/lib/libgmp.so.$(GMP_LIBVERSION) $(TARGET_DIR)/lib/libgmp.a: $(STAGING_DIR)/lib/$(GMP_BINARY)
--	cp -dpf $(STAGING_DIR)/lib/libgmp.so* $(STAGING_DIR)/lib/libgmp.a \
--		 $(TARGET_DIR)/lib/
-+	cp -dpf $(STAGING_DIR)/lib/libgmp$(LIBTGTEXT) $(TARGET_DIR)/lib/
- ifeq ($(BR2_PACKAGE_LIBGMP_HEADERS),y)
- 	test -d $(TARGET_DIR)/usr/include || mkdir -p $(TARGET_DIR)/usr/include
- 	cp -dpf $(STAGING_DIR)/include/gmp.h $(TARGET_DIR)/usr/include/
- endif
- 
--libgmp: uclibc $(TARGET_DIR)/lib/libgmp.so.$(GMP_LIBVERSION)
-+libgmp: uclibc $(TARGET_DIR)/lib/libgmp$(LIBTGTEXT)
- stage-libgmp: uclibc $(STAGING_DIR)/lib/$(GMP_BINARY)
- 
- libgmp-clean:
--	rm -f $(TARGET_DIR)/lib/$(GMP_BINARY) $(TARGET_DIR)/lib/libgmp.so* \
--		$(TARGET_DIR)/usr/include/gmp.h
-+	rm -f $(TARGET_DIR)/lib/libgmp.* $(TARGET_DIR)/usr/include/gmp.h
- 	-$(MAKE) -C $(GMP_TARGET_DIR) clean
- 
- libgmp-dirclean:
-@@ -124,10 +123,10 @@
- 	);
- 	touch $@
- 
--$(GMP_HOST_DIR)/lib/$(GMP_BINARY): $(GMP_DIR2)/.configured
-+$(GMP_HOST_DIR)/lib/$(GMP_HOST_BINARY): $(GMP_DIR2)/.configured
- 	$(MAKE) -C $(GMP_DIR2) install
- 
--host-libgmp: $(GMP_HOST_DIR)/lib/$(GMP_BINARY)
-+host-libgmp: $(GMP_HOST_DIR)/lib/$(GMP_HOST_BINARY)
- host-libgmp-clean:
- 	rm -rf $(GMP_HOST_DIR)
- 	-$(MAKE) -C $(GMP_DIR2) clean
+If so, then you'll have to add HOST_EXEEXT et al and use them where
+needed. 
 
-Modified: trunk/buildroot/package/mpfr/mpfr.mk
-===================================================================
---- trunk/buildroot/package/mpfr/mpfr.mk	2007-06-02 09:05:40 UTC (rev 18725)
-+++ trunk/buildroot/package/mpfr/mpfr.mk	2007-06-02 11:22:17 UTC (rev 18726)
-@@ -11,7 +11,8 @@
- MPFR_SITE:=http://www.mpfr.org/mpfr-current/
- MPFR_DIR:=$(TOOL_BUILD_DIR)/mpfr-$(MPFR_VERSION)
- MPFR_TARGET_DIR:=$(BUILD_DIR)/mpfr-$(MPFR_VERSION)
--MPFR_BINARY:=libmpfr.so
-+MPFR_BINARY:=libmpfr$(LIBTGTEXT)
-+MPFR_HOST_BINARY:=libmpfr$(HOST_LIBEXT)
- MPFR_LIBVERSION:=1.0.1
- 
- ifeq ($(BR2_ENDIAN),"BIG")
-@@ -102,18 +103,17 @@
- 	$(STRIP) --strip-unneeded $(STAGING_DIR)/lib/libmpfr.{so*,a}
- 
- $(TARGET_DIR)/lib/libmpfr.so $(TARGET_DIR)/lib/libmpfr.so.$(MPFR_LIBVERSION) $(TARGET_DIR)/lib/libmpfr.a: $(STAGING_DIR)/lib/$(MPFR_BINARY)
--	cp -dpf $(STAGING_DIR)/lib/libmpfr.so* $(STAGING_DIR)/lib/libmpfr.a \
--		$(TARGET_DIR)/lib/
-+	cp -dpf $(STAGING_DIR)/lib/libmpfr$(LIBTGTEXT) $(TARGET_DIR)/lib/
- ifeq ($(BR2_PACKAGE_LIBMPFR_HEADERS),y)
- 	cp -dpf $(STAGING_DIR)/include/mpfr.h $(STAGING_DIR)/include/mpf2mpfr.h \
- 		$(TARGET_DIR)/usr/include/
- endif
- 
--libmpfr: uclibc $(TARGET_DIR)/lib/libmpfr.so.$(MPFR_LIBVERSION)
-+libmpfr: uclibc $(TARGET_DIR)/lib/libmpfr$(LIBTGTEXT)
- stage-libmpfr: uclibc $(STAGING_DIR)/lib/$(MPFR_BINARY)
- 
- libmpfr-clean:
--	rm -f $(TARGET_DIR)/lib/$(MPFR_BINARY) $(TARGET_DIR)/lib/libmpfr.so* \
-+	rm -f $(TARGET_DIR)/lib/libmpfr.* \
- 		$(TARGET_DIR)/usr/include/mpfr.h \
- 		$(TARGET_DIR)/usr/include/mpf2mpfr.h
- 	-$(MAKE) -C $(MPFR_TARGET_DIR) clean
-@@ -123,7 +123,7 @@
- 
- MPFR_DIR2:=$(TOOL_BUILD_DIR)/mpfr-$(MPFR_VERSION)-host
- MPFR_HOST_DIR:=$(TOOL_BUILD_DIR)/mpfr
--$(MPFR_DIR2)/.configured: $(MPFR_DIR)/.unpacked $(GMP_HOST_DIR)/lib/$(GMP_BINARY)
-+$(MPFR_DIR2)/.configured: $(MPFR_DIR)/.unpacked $(GMP_HOST_DIR)/lib/$(GMP_HOST_BINARY)
- 	mkdir -p $(MPFR_DIR2)
- 	(cd $(MPFR_DIR2); \
- 		CC="$(HOSTCC)" CC_FOR_BUILD="$(HOSTCC)" \
-@@ -140,10 +140,10 @@
- 	);
- 	touch $@
- 
--$(MPFR_HOST_DIR)/lib/$(MPFR_BINARY): $(MPFR_DIR2)/.configured
-+$(MPFR_HOST_DIR)/lib/$(MPFR_HOST_BINARY): $(MPFR_DIR2)/.configured
- 	$(MAKE) -C $(MPFR_DIR2) install
- 
--host-libmpfr: $(MPFR_HOST_DIR)/lib/$(MPFR_BINARY)
-+host-libmpfr: $(MPFR_HOST_DIR)/lib/$(MPFR_HOST_BINARY)
- host-libmpfr-clean:
- 	rm -rf $(MPFR_HOST_DIR)
- 	-$(MAKE) -C $(MPFR_DIR2) clean
+---------------------------------------------------------------------- 
+ holin - 06-02-07 02:07  
+---------------------------------------------------------------------- 
+What?!? No way! Buildroot target is always linux, isn't it? And Linux
+always uses the same extensions. What other use would EXEEXT, et al. have?
+They are derived from the (BR2_GNU_BUILD_SUFFIX) build toolchain suffix,
+which comes from the host system. (host=build system, target="run" target) 
 
-Modified: trunk/buildroot/toolchain/binutils/binutils.mk
-===================================================================
---- trunk/buildroot/toolchain/binutils/binutils.mk	2007-06-02 09:05:40 UTC (rev 18725)
-+++ trunk/buildroot/toolchain/binutils/binutils.mk	2007-06-02 11:22:17 UTC (rev 18726)
-@@ -49,11 +49,11 @@
- endif
- 
- ifndef BINUTILS_NO_MPFR
--BINUTILS_HOST_PREREQ:=$(TOOL_BUILD_DIR)/gmp/lib/libgmp.so \
--	$(TOOL_BUILD_DIR)/mpfr/lib/libmpfr.so
-+BINUTILS_HOST_PREREQ:=$(TOOL_BUILD_DIR)/gmp/lib/libgmp$(HOST_LIBEXT) \
-+	$(TOOL_BUILD_DIR)/mpfr/lib/libmpfr$(HOST_LIBEXT)
- 
--BINUTILS_TARGET_PREREQ:=$(TARGET_DIR)/lib/libgmp.so \
--	$(TARGET_DIR)/lib/libmpfr.so
-+BINUTILS_TARGET_PREREQ:=$(TARGET_DIR)/lib/libgmp$(LIBTGTEXT) \
-+	$(TARGET_DIR)/lib/libmpfr$(LIBTGTEXT)
- EXTRA_BINUTILS_CONFIG_OPTIONS+=--with-gmp="$(GMP_HOST_DIR)"
- EXTRA_BINUTILS_CONFIG_OPTIONS+=--with-mpfr="$(MPFR_HOST_DIR)"
- 
+---------------------------------------------------------------------- 
+ holin - 06-02-07 02:25  
+---------------------------------------------------------------------- 
+Updated the patch to use LIBTGTEXT. 
+
+---------------------------------------------------------------------- 
+ bernhardf - 06-02-07 03:16  
+---------------------------------------------------------------------- 
+ugh! Let me wake up and get some coffee.. 
+
+---------------------------------------------------------------------- 
+ bernhardf - 06-02-07 03:18  
+---------------------------------------------------------------------- 
+Turns out that of course LIBTGTEXT should rather be HOST_LIBEXT. Not sure
+what i was thinking about :-/
+
+May i ask you to fix that too?
+Many thanks in advance. 
+
+---------------------------------------------------------------------- 
+ holin - 06-02-07 03:35  
+---------------------------------------------------------------------- 
+Updated patch with LIBTGTEXT -> HOST_LIBEXT. 
+
+---------------------------------------------------------------------- 
+ bernhardf - 06-02-07 04:23  
+---------------------------------------------------------------------- 
+Applied, thanks. Please let me know when you think i can close this bug. 
+
+Issue History 
+Date Modified   Username       Field                    Change               
+====================================================================== 
+03-04-07 05:38  holin          New Issue                                    
+03-04-07 05:38  holin          Status                   new => assigned     
+03-04-07 05:38  holin          Assigned To               => buildroot       
+03-04-07 05:38  holin          File Added: buildroot-070304-dlext.patch         
+          
+03-31-07 09:43  bendiken       Issue Monitored: bendiken                    
+06-02-07 00:13  holin          File Added: buildroot-070602-dlext-v2.patch      
+             
+06-02-07 00:14  holin          Note Added: 0002427                          
+06-02-07 01:46  bernhardf      Note Added: 0002428                          
+06-02-07 02:01  bernhardf      Note Added: 0002429                          
+06-02-07 02:07  holin          Note Added: 0002430                          
+06-02-07 02:24  holin          File Added: buildroot-070602-dlext-v3.patch      
+             
+06-02-07 02:25  holin          Note Added: 0002431                          
+06-02-07 03:16  bernhardf      Note Added: 0002432                          
+06-02-07 03:18  bernhardf      Note Added: 0002433                          
+06-02-07 03:34  holin          File Added: buildroot-070602-dlext-v4.patch      
+             
+06-02-07 03:35  holin          Note Added: 0002434                          
+06-02-07 04:23  bernhardf      Note Added: 0002435                          
+======================================================================
