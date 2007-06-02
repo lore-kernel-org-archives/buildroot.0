@@ -1,9 +1,9 @@
 From: Rod Boyce <buildroot@teamboyce.co.uk>
-Date: Sat, 02 Jun 2007 11:40:10 +0100
+Date: Sat, 02 Jun 2007 12:06:50 +0100
 Subject: [Buildroot] ALSA tools for build-root
-In-Reply-To: <20070602102614.GK12010@aon.at>
-References: <46613FBE.7080709@teamboyce.co.uk> <20070602102614.GK12010@aon.at>
-Message-ID: <4661490A.1080907@teamboyce.co.uk>
+In-Reply-To: <20070602103246.GL12010@aon.at>
+References: <46613FBE.7080709@teamboyce.co.uk> <20070602103246.GL12010@aon.at>
+Message-ID: <46614F4A.8090703@teamboyce.co.uk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -11,37 +11,31 @@ Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
 Bernhard Fischer wrote:
-> On Sat, Jun 02, 2007 at 11:00:30AM +0100, Rod Boyce wrote:
->   
->> All,
+>> +ALSA-TOOLS_DIR := $(BUILD_DIR)/$(patsubst %.tar.bz2,%,$(ALSA-TOOLS_SOURCE))
 >>     
 >
+> Also, i'm curious where you picked up this notion of setting the
+> FOO_DIR.
+>
+> The established way is a simple
+> FOO_DIR:=$(BUILD_DIR)/foo-$(FOO_VERSION)
 >   
->> +$(foreach var,$(ALSA-TOOLS_TGTS),$(eval $(call alsa-mk_target,$(var))))
->>     
->
-> I think that creating rules with a define was horribly broken with
-> anything older than make-3.81
->
-> Did you test these changes against make-3.80, which is the oldest
-> version that is currently needed to use buildroot?
->
->   
-Bernhard,
+This way means I only have to type the name and version once, I'm a 
+great believer in if I can make something automatic then eliminate the 
+chance the user (mostly me) can get it wrong the second time.  You 
+rejected the $(shell basename .... ) approach which I agree with the 
+rejection of using another shell to do something that make is quite 
+capable of doing just makes sense.  I guess when I started looking at 
+all this I used mpg123 version 16930 as my starting point.  I would 
+prefer not to see this changed as long at the packaging convention is 
+kept the same.  If the ALSA group ever change there packaging convention 
+to not use name+version for the folder then I will change the *_DIR to 
+suit.  But while it is the same and can be automatically extracted from 
+the package filename I would prefer to use this automated approach.
 
-I cannot believe my luck but the output from make --version on my 
-development machine is:
-
-[rod at celeron root]$ make --version
-GNU Make 3.80
-Copyright (C) 2002  Free Software Foundation, Inc.
-This is free software; see the source for copying conditions.
-There is NO warranty; not even for MERCHANTABILITY or FITNESS FOR A
-PARTICULAR PURPOSE.
-
-
-So I guess that means I have tested this on 3.80 :-) 8-) :-)
-
+Hope that makes sense, ultimately since I will not be personally 
+committing this to SVN it is up to whoever commits this patch to SVN to 
+decide.
 
 Regards,
 Rod Boyce
