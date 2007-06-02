@@ -1,42 +1,87 @@
-From: Nam Hoang <rosemanit@gmail.com>
-Date: Sat, 2 Jun 2007 08:45:05 +0700
-Subject: [Buildroot] Problem in compiling package Metacity
-Message-ID: <b872c6870706011845j26b44cc5ua676bf13e48a8cfc@mail.gmail.com>
+From: Heikki Lindholm <holindho@cs.helsinki.fi>
+Date: Sat, 02 Jun 2007 09:01:01 +0300
+Subject: [Buildroot] svn commit: trunk/buildroot: package/gmp toolchain
+In-Reply-To: <20070601221630.067824855D@busybox.net>
+References: <20070601221630.067824855D@busybox.net>
+Message-ID: <4661079D.90303@cs.helsinki.fi>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-When I compile package Metacity using buildroot (after compiling libgtk2),
-it shows error message:
+aldot at uclibc.org kirjoitti:
+> Author: aldot
+> Date: 2007-06-01 15:16:28 -0700 (Fri, 01 Jun 2007)
+> New Revision: 18723
+> 
+> Log:
+> - add BR2_PREFER_STATIC_LIB config option to be able to select if we prefer to build static or dynamic libs/bins.
+> - depending on the BR2_GNU_BUILD_SUFFIX, set the respective EXEEXT, LIBEXT, SHREXT extensions for use on the target.
+> Thanks to Tom for suplying a diff which implements these.
+> 
+> 
+> Modified:
+>    trunk/buildroot/Config.in
+>    trunk/buildroot/Makefile
+>    trunk/buildroot/package/gmp/gmp.mk
+>    trunk/buildroot/toolchain/Makefile.in
+> 
+> 
+> Changeset:
+> Modified: trunk/buildroot/Config.in
+> ===================================================================
+> --- trunk/buildroot/Config.in	2007-06-01 19:17:36 UTC (rev 18722)
+> +++ trunk/buildroot/Config.in	2007-06-01 22:16:28 UTC (rev 18723)
+> @@ -373,6 +373,19 @@
+>  	help
+>  	  This option hides outdated/obsolete versions of packages.
+>  
+> +config BR2_PREFER_STATIC_LIB
+> +	bool "prefer static libraries"
+> +	default n
+> +	help
+> +	  Where possible, use static libraries.
+> +	  This increases your code size a lot and should only be
+> +	  used with a good reason why not use the default, which
+> +	  is dynamic libraries.
+> +
+> +	  If unsure, say No.
+> +
+> +	  WARNING: This is highly experimental at the moment.
+> +
+>  endmenu
+>  
+>  source "toolchain/Config.in"
+> 
+> Modified: trunk/buildroot/Makefile
+> ===================================================================
+> --- trunk/buildroot/Makefile	2007-06-01 19:17:36 UTC (rev 18722)
+> +++ trunk/buildroot/Makefile	2007-06-01 22:16:28 UTC (rev 18723)
+> @@ -66,7 +66,32 @@
+>  #
+>  #############################################################
+>  
+> +ifneq (,$(findstring linux,$(BR2_GNU_BUILD_SUFFIX)))
+> +EXEEXT:=
+> +LIBEXT:=.a
+> +SHREXT:=.so
+> +endif
+> +ifneq (,$(findstring apple,$(BR2_GNU_BUILD_SUFFIX)))
+> +EXEEXT:=.pear
+> +LIBEXT:=.dunno
+> +SHREXT:=.dylib
+> +endif
 
-...
-> make[4]: Entering directory
-> `/home/roseman/mini-linux/buildroot/build_i386/metacity-2.16.3/src'
-> Making all in wm-tester
-> make[5]: Entering directory
-> `/home/roseman/mini-linux/buildroot/build_i386/metacity-2.16.3
-> /src/wm-tester'
-> /home/roseman/mini-linux/buildroot/build_i386/staging_dir/bin/i386-linux-uclibc-gcc
-> -DHAVE_CONFIG_H -I. -I. -I../..     -Os -pipe  -Wall -Wchar-subscripts
-> -Wmissing-declarations -Wmissing-prototypes -Wnested-externs -Wpointer-arith
-> -Wcast-align -Wsign-compare -c main.c
-> main.c:22:21: error: gtk/gtk.h: No such file or directory
-> main.c: In function 'usage':
-> main.c:36: warning: implicit declaration of function 'g_print'
-> main.c:36: warning: nested extern declaration of 'g_print'
-> main.c: In function 'main':
-> ...
->
+Oh, please! How about
+EXEEXT:=
+LIBEXT:=.a
+SHREXT:=.dylib
 
-I checked, and see that gtk include-file exists in both host and target
-system. It's in :
-        /usr/include/gtk-2.0
-        buildroot/build_i386/staging_dir/include/gtk-2.0
-        buildroot/build_i386/staging_dir/usr/include/gtk-2.0
-I don't understand why compiler can't see the gtk library. What wrong I did
-?
--------------- next part --------------
-An HTML attachment was scrubbed...
-URL: http://busybox.net/lists/buildroot/attachments/20070602/a879bdd4/attachment.htm 
+A while back I submitted a bug report
+http://bugs.uclibc.org/view.php?id=1257
+which has the places I had to patch hard-coded lib extensions for a 
+basic toolchain build. Otherwise, this approach is probably better than 
+mine.
+
+-- Heikki Lindholm
