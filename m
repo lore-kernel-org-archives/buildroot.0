@@ -1,94 +1,52 @@
-From: Heikki Lindholm <holindho@cs.helsinki.fi>
-Date: Sat, 02 Jun 2007 10:16:30 +0300
-Subject: [Buildroot] svn commit: trunk/buildroot: package/gmp toolchain
-In-Reply-To: <4661079D.90303@cs.helsinki.fi>
-References: <20070601221630.067824855D@busybox.net>
-	<4661079D.90303@cs.helsinki.fi>
-Message-ID: <4661194E.5010707@cs.helsinki.fi>
+From: Bernhard Fischer <rep.dot.nop@gmail.com>
+Date: Sat, 2 Jun 2007 10:41:52 +0200
+Subject: [Buildroot] mpfr error on cygwin for arm
+In-Reply-To: <4660C796.70902@gmail.com>
+References: <465F9792.9000200@gmail.com> <20070601094409.GA23984@aon.at>
+	<46608246.5060008@gmail.com> <20070601221115.GI12010@aon.at>
+	<4660C796.70902@gmail.com>
+Message-ID: <20070602084151.GJ12010@aon.at>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Heikki Lindholm kirjoitti:
-> aldot at uclibc.org kirjoitti:
-> 
->>Author: aldot
->>Date: 2007-06-01 15:16:28 -0700 (Fri, 01 Jun 2007)
->>New Revision: 18723
+On Fri, Jun 01, 2007 at 06:27:50PM -0700, Tom wrote:
+>
+>
+>Bernhard Fischer wrote:
+>>On Fri, Jun 01, 2007 at 01:32:06PM -0700, Tom wrote:
+>>>Hi Bernhard,
+>>>
+>>>Per your request, now attached the patch cygwin-3a.svndiff as an svn 
+>>>diff to the current trunk.
 >>
->>Log:
->>- add BR2_PREFER_STATIC_LIB config option to be able to select if we prefer to build static or dynamic libs/bins.
->>- depending on the BR2_GNU_BUILD_SUFFIX, set the respective EXEEXT, LIBEXT, SHREXT extensions for use on the target.
->>Thanks to Tom for suplying a diff which implements these.
+>>Well, that one applies cleanly, thanks, but you do not use the
+>>corrected extensions at all?
 >>
->>
->>Modified:
->>   trunk/buildroot/Config.in
->>   trunk/buildroot/Makefile
->>   trunk/buildroot/package/gmp/gmp.mk
->>   trunk/buildroot/toolchain/Makefile.in
->>
->>
->>Changeset:
->>Modified: trunk/buildroot/Config.in
->>===================================================================
->>--- trunk/buildroot/Config.in	2007-06-01 19:17:36 UTC (rev 18722)
->>+++ trunk/buildroot/Config.in	2007-06-01 22:16:28 UTC (rev 18723)
->>@@ -373,6 +373,19 @@
->> 	help
->> 	  This option hides outdated/obsolete versions of packages.
->> 
->>+config BR2_PREFER_STATIC_LIB
->>+	bool "prefer static libraries"
->>+	default n
->>+	help
->>+	  Where possible, use static libraries.
->>+	  This increases your code size a lot and should only be
->>+	  used with a good reason why not use the default, which
->>+	  is dynamic libraries.
->>+
->>+	  If unsure, say No.
->>+
->>+	  WARNING: This is highly experimental at the moment.
->>+
->> endmenu
->> 
->> source "toolchain/Config.in"
->>
->>Modified: trunk/buildroot/Makefile
->>===================================================================
->>--- trunk/buildroot/Makefile	2007-06-01 19:17:36 UTC (rev 18722)
->>+++ trunk/buildroot/Makefile	2007-06-01 22:16:28 UTC (rev 18723)
->>@@ -66,7 +66,32 @@
->> #
->> #############################################################
->> 
->>+ifneq (,$(findstring linux,$(BR2_GNU_BUILD_SUFFIX)))
->>+EXEEXT:=
->>+LIBEXT:=.a
->>+SHREXT:=.so
->>+endif
->>+ifneq (,$(findstring apple,$(BR2_GNU_BUILD_SUFFIX)))
->>+EXEEXT:=.pear
->>+LIBEXT:=.dunno
->>+SHREXT:=.dylib
->>+endif
-> 
-> 
-> Oh, please! How about
-> EXEEXT:=
-> LIBEXT:=.a
-> SHREXT:=.dylib
-> 
-> A while back I submitted a bug report
-> http://bugs.uclibc.org/view.php?id=1257
-> which has the places I had to patch hard-coded lib extensions for a 
-> basic toolchain build. Otherwise, this approach is probably better than 
-> mine.
+>>How does that help with building a useable rootfs? Just curious..
+>
+>This patch is only the first step. It got me past gmp and mpfr. This has 
+>been good enough to build a cygwin toolchain with a host gdb, which in 
+>turn has been used to compile, debug and run a kernel :).
 
-I updated the bug report with a refresh of my patch, taking the above 
-stuff into account.
+Ah, ok.
 
--- hl
+>Maybe this is also good enough for a first check-in, is it?
+
+yes, it went in as r18723. Thanks.
+
+>I see that more work is ahead of me before I can build the rootfs, and 
+>it would be good if I can verify my understanding of what needs to be 
+>done, using mpfr as an example:
+>-I need to change package/mpfr/mpfr.mk (hardcoded extensions, maybe 
+>strip cmd).
+
+right
+>
+>-This package/mpfr folder is the only place where I can make changes; 
+>anything else about the mpfr module just downloaded / configured code, 
+>right?
+
+exactly.
