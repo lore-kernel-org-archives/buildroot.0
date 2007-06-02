@@ -1,107 +1,88 @@
-From: aldot at uclibc.org <aldot@uclibc.org>
-Date: Sat,  2 Jun 2007 02:05:41 -0700 (PDT)
-Subject: [Buildroot] svn commit: trunk/buildroot
-Message-ID: <20070602090541.53E274809E@busybox.net>
+From: bugs at busybox.net <bugs@busybox.net>
+Date: Sat, 2 Jun 2007 02:07:40 -0700
+Subject: [Buildroot] [buildroot 0001257]: Some build targets use hard-coded
+	library names, which causes forced rebuild on Mac OS X
+Message-ID: <c0b622a3a01aed094eba59e50bdb6af9@bugs.uclibc.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Author: aldot
-Date: 2007-06-02 02:05:40 -0700 (Sat, 02 Jun 2007)
-New Revision: 18725
 
-Log:
-- move setting up the extensions to correct place (like i said but tom didn't do..)
+A NOTE has been added to this issue. 
+====================================================================== 
+http://busybox.net/bugs/view.php?id=1257 
+====================================================================== 
+Reported By:                holin
+Assigned To:                buildroot
+====================================================================== 
+Project:                    buildroot
+Issue ID:                   1257
+Category:                   Architecture Specific
+Reproducibility:            always
+Severity:                   minor
+Priority:                   normal
+Status:                     assigned
+====================================================================== 
+Date Submitted:             03-04-2007 05:38 PST
+Last Modified:              06-02-2007 02:07 PDT
+====================================================================== 
+Summary:                    Some build targets use hard-coded library names,
+which causes forced rebuild on Mac OS X
+Description: 
+Library names ending with .so should have .dylib in makefile targets on OS
+X. Otherwise, the build system always thinks that the library isn't built
+and tries to (re-)build it on every make invocation. Attached a patch that
+adds a config option for library filename extension and fixes the packages
+that seemed to suffer from this. 
+====================================================================== 
 
+---------------------------------------------------------------------- 
+ holin - 06-02-07 00:14  
+---------------------------------------------------------------------- 
+Attached an updated patch for current SVN. Some EXEEXTs would probably be
+needed in binutils.mk makerules for Windows hosts. 
 
-Modified:
-   trunk/buildroot/Makefile
+---------------------------------------------------------------------- 
+ bernhardf - 06-02-07 01:46  
+---------------------------------------------------------------------- 
+You have to use LIBTGTEXT where possible (i.e. in packages that can be
+built as static or dynamic library). See the toplevel Makefile for
+LIBTGTEXT.
 
+Please update the patch accordingly.
+thanks, 
 
-Changeset:
-Modified: trunk/buildroot/Makefile
-===================================================================
---- trunk/buildroot/Makefile	2007-06-02 08:49:45 UTC (rev 18724)
-+++ trunk/buildroot/Makefile	2007-06-02 09:05:40 UTC (rev 18725)
-@@ -45,43 +45,28 @@
- cc-option = $(shell if $(TARGET_CC) $(TARGET_CFLAGS) $(1) -S -o /dev/null -xc /dev/null \
- 	> /dev/null 2>&1; then echo "$(1)"; else echo "$(2)"; fi ;)
- 
-+
- #############################################################
- #
--# The list of stuff to build for the target toolchain
--# along with the packages to build for the target.
-+# Setup the proper filename extensions for the target
- #
- ##############################################################
--ifeq ($(BR2_TOOLCHAIN_BUILDROOT),y)
--TARGETS:=uclibc-configured binutils gcc uclibc-target-utils
--else
--TARGETS:=uclibc
--endif
--include toolchain/Makefile.in
--include package/Makefile.in
--
--#############################################################
--#
--# You should probably leave this stuff alone unless you know
--# what you are doing.
--#
--#############################################################
--
--ifneq (,$(findstring linux,$(BR2_GNU_BUILD_SUFFIX)))
-+ifneq ($(findstring linux,$(BR2_GNU_BUILD_SUFFIX)),)
- EXEEXT:=
- LIBEXT:=.a
- SHREXT:=.so
- endif
--ifneq (,$(findstring apple,$(BR2_GNU_BUILD_SUFFIX)))
-+ifneq ($(findstring apple,$(BR2_GNU_BUILD_SUFFIX)),)
- EXEEXT:=
- LIBEXT:=.a
- SHREXT:=.dylib
- endif
--ifneq (,$(findstring cygwin,$(BR2_GNU_BUILD_SUFFIX)))
-+ifneq ($(findstring cygwin,$(BR2_GNU_BUILD_SUFFIX)),)
- EXEEXT:=.exe
- LIBEXT:=.lib
- SHREXT:=.dll
- endif
--ifneq (,$(findstring mingw,$(BR2_GNU_BUILD_SUFFIX)))
-+ifneq ($(findstring mingw,$(BR2_GNU_BUILD_SUFFIX)),)
- EXEEXT:=.exe
- LIBEXT:=.lib
- SHREXT:=.dll
-@@ -93,6 +78,29 @@
- LIBTGTEXT=$(SHREXT)
- endif
- 
-+
-+
-+#############################################################
-+#
-+# The list of stuff to build for the target toolchain
-+# along with the packages to build for the target.
-+#
-+##############################################################
-+ifeq ($(BR2_TOOLCHAIN_BUILDROOT),y)
-+TARGETS:=uclibc-configured binutils gcc uclibc-target-utils
-+else
-+TARGETS:=uclibc
-+endif
-+include toolchain/Makefile.in
-+include package/Makefile.in
-+
-+#############################################################
-+#
-+# You should probably leave this stuff alone unless you know
-+# what you are doing.
-+#
-+#############################################################
-+
- all:   world
- 
- # In this section, we need .config
+---------------------------------------------------------------------- 
+ bernhardf - 06-02-07 02:01  
+---------------------------------------------------------------------- 
+erm. You're concerned about the host extensions, right?
+
+If so, then you'll have to add HOST_EXEEXT et al and use them where
+needed. 
+
+---------------------------------------------------------------------- 
+ holin - 06-02-07 02:07  
+---------------------------------------------------------------------- 
+What?!? No way! Buildroot target is always linux, isn't it? And Linux
+always uses the same extensions. What other use would EXEEXT, et al. have?
+They are derived from the (BR2_GNU_BUILD_SUFFIX) build toolchain suffix,
+which comes from the host system. (host=build system, target="run" target) 
+
+Issue History 
+Date Modified   Username       Field                    Change               
+====================================================================== 
+03-04-07 05:38  holin          New Issue                                    
+03-04-07 05:38  holin          Status                   new => assigned     
+03-04-07 05:38  holin          Assigned To               => buildroot       
+03-04-07 05:38  holin          File Added: buildroot-070304-dlext.patch         
+          
+03-31-07 09:43  bendiken       Issue Monitored: bendiken                    
+06-02-07 00:13  holin          File Added: buildroot-070602-dlext-v2.patch      
+             
+06-02-07 00:14  holin          Note Added: 0002427                          
+06-02-07 01:46  bernhardf      Note Added: 0002428                          
+06-02-07 02:01  bernhardf      Note Added: 0002429                          
+06-02-07 02:07  holin          Note Added: 0002430                          
+======================================================================
