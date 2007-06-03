@@ -1,43 +1,72 @@
-From: Gernot Kvas <gernot@kvas.at>
-Date: Sun, 03 Jun 2007 22:00:47 +0200
-Subject: [Buildroot] udev/grep problems
-Message-ID: <1180900847.6330.10.camel@eve>
+From: Ormund Williams <ormundw@panix.com>
+Date: Sun, 03 Jun 2007 16:09:44 -0400
+Subject: [Buildroot] build failed on the latest svn version using	uclibc
+	0.9.29/NPTL
+In-Reply-To: <200705241736.30384.wangbj@lzu.edu.cn>
+References: <200705241736.30384.wangbj@lzu.edu.cn>
+Message-ID: <1180901384.4532.24.camel@localhost.localdomain>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
-
-Prerequisities:
-
-I've been setting up a system (arm926) with an older version of
-buildroot, ca. December 2006. However I changed the respective packages
-(udev/grep) to version as of yesterday, just to be sure.
-
-Problem:
-
-1.) No grep - udev complains
-
-udev seems to complain about missing grep. I checked, and for sure, I do
-have egrep and fgrep, but no "grep". I selected it as an indivdual
-package. The package grep compiles, but it seems the binaries dont get
-copied to root. Strange. I then selected it as busybox binaries and
-again, no grep. What am I missing?
-
-2.) udev_root not set and defaults to empty string
-
-udev trouble continues, as it seems that out of the box, $udev_root is
-set to "". The man page states it defaults to "/dev", which is fine,
-however I have to add it explicitly ("udev_root=/dev") to udev.conf in
-the root file system. Is this supposed to happen that way or is the
-package missing that entries in the config file?
-
-udev works with me manually copying egrep to grep and editing the
-udev.conf file on the target. Shouldnt that be automated? Or don't I see
-the bigger picture?
-
-Cheers,
-
-Gernot
+On Thu, 2007-05-24 at 17:36 +0800, Wang, Baojun wrote:
+> platform is: i386/i686
+> 
+> error messages:
+> 
+> 
+> Checking build system dependencies:
+> CC clean:                                       Ok
+> CXX clean:                                      Ok
+> CPP clean:                                      Ok
+> CFLAGS clean:                                   Ok
+> INCLUDES clean:                                 Ok
+> CXXFLAGS clean:                                 Ok
+> which installed:                                Ok
+> sed works:                                      Ok (/bin/sed)
+> GNU make version '3.81':                        Ok
+> C compiler '/usr/bin/gcc'
+> C compiler version '4.1.2':                     Ok
+> C++ compiler '/usr/bin/c++'
+> C++ compiler version '4.1.2':                   Ok
+> bison installed:                                Ok
+> flex installed:                                 Ok
+> gettext installed:                              Ok
+> makeinfo installed:                             Ok
+> Build system dependencies:                      Ok
+> 
+> make 
+> MAKE="make -j1" -C /home/wangbj/build/buildroot-x86/toolchain_build_i686/uClibc-0.9.29 
+> \
+>                 PREFIX= \
+>                 DEVEL_PREFIX=/ \
+>                 RUNTIME_PREFIX=/ \
+>                 HOSTCC="gcc" \
+>                 all
+> make[1]: Entering directory 
+> `/home/wangbj/build/buildroot-x86/toolchain_build_i686/uClibc-0.9.29'
+> make[2]: `conf' is up to date.
+>   CC ldso/ldso/ldso.oS
+> In file included 
+> from ./libpthread/linuxthreads/sysdeps/i386/i686/pt-machine.h:73,
+>                  from ./libpthread/linuxthreads/sysdeps/i386/pt-machine.h:24,
+>                  from ./libpthread/linuxthreads/sysdeps/i386/tls.h:23,
+>                  from ./include/bits/uClibc_errno.h:35,
+>                  from ./include/errno.h:62,
+>                  from ./include/bits/syscalls.h:14,
+>                  from ./include/sys/syscall.h:34,
+>                  from ./ldso/ldso/i386/dl-syscalls.h:3,
+>                  from ./ldso/include/dl-syscall.h:12,
+>                  from ./ldso/include/ldso.h:36,
+>                  from ldso/ldso/ldso.c:33:
+> ./libpthread/linuxthreads/sysdeps/i386/i686/../useldt.h:25:20: error: 
+> sysdep.h: No such file or directory
+> make[1]: *** [ldso/ldso/ldso.oS] Error 1
+> make[1]: Leaving directory 
+> `/home/wangbj/build/buildroot-x86/toolchain_build_i686/uClibc-0.9.29'
+> make: *** 
+> 
+Is there a solution for this?  Google brings me back to this post and another
+one from April.
