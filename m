@@ -1,44 +1,42 @@
-From: Peter Korsgaard <peter.korsgaard@barco.com>
-Date: Mon, 04 Jun 2007 11:04:50 +0200
-Subject: [Buildroot] Update to mpg123
-In-Reply-To: <46616A78.7000804@teamboyce.co.uk> (Rod Boyce's message of "Sat, 
-	02 Jun 2007 14:02:48 +0100")
-References: <46616A78.7000804@teamboyce.co.uk>
-Message-ID: <878xb0gkel.fsf@sleipner.barco.com>
+From: Stuart Wood <stuart.wood@labxtechnologies.com>
+Date: Mon, 4 Jun 2007 11:07:19 -0400
+Subject: [Buildroot] Soft float toolchain on ARM
+In-Reply-To: <46631CAE.4090305@lambsys.com>
+Message-ID: <000601c7a6ba$0bd959b0$016efea9@SDW>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "RB" == Rod Boyce <buildroot@teamboyce.co.uk> writes:
+Dave, 
 
-RB> All,
+Our systems are running
 
-RB> Attached is an update to mpg123 this brings the build-root package up
-RB> to the latest version of mpg123 version 0.65 I have only tested this
-RB> with my 386 target others will have to test as well.  I have also
-RB> attach a patch that conditionally uses ALSA when it is added to
-RB> build-root and a patch that does not use ALSA.
+GCC 3.4.6
+binutils 2.16.1
+uClibc 0.9.29
 
-Thanks - A few commments:
+My understanding is that soft floating-point is broken in the gcc 4 series.
 
-RB> -MPG123_VERSION=0.59r
-RB> +MPG123_VERSION := 0.65
 
-In the mean time 0.66 got released.
+-----Original Message-----
+From: buildroot-bounces@uclibc.org [mailto:buildroot-bounces at uclibc.org] On
+Behalf Of David Lambert
+Sent: Sunday, June 03, 2007 3:55 PM
+To: buildroot at uclibc.org
+Subject: [Buildroot] Soft float toolchain on ARM
 
-RB> -MPG123_SOURCE=mpg123-$(MPG123_VERSION).tar.gz
-RB> -MPG123_CAT:=$(ZCAT)
-RB> -MPG123_SITE=http://www.mpg123.de/mpg123
-RB> -MPG123_DIR=$(BUILD_DIR)/mpg123-$(MPG123_VERSION)
-RB> +MPG123_SOURCE := mpg123-$(MPG123_VERSION).tar.bz2
-RB> +MPG123_CAT := $(BZCAT)
-RB> +MPG123_SITE := http://www.mpg123.de/download
-RB> +MPG123_DIR := $(BUILD_DIR)/mpg123-$(MPG123_VERSION)
 
-What's with all those white space changes? Could you please send an
-updated patch without those and with the version bumped to 0.66?
+I am running into problems when attempting to make a toolchain for the ARM
+using soft-float. Does anyone have the magic combination of versions for
+uClibc, gcc, etc. that provide a stable working toolchain?
 
--- 
-Bye, Peter Korsgaard
+TIA,
+
+Dave.
+
+
+_______________________________________________
+buildroot mailing list
+buildroot at uclibc.org http://busybox.net/mailman/listinfo/buildroot
