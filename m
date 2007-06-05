@@ -1,36 +1,25 @@
-From: aldot at uclibc.org <aldot@uclibc.org>
-Date: Tue,  5 Jun 2007 00:38:08 -0700 (PDT)
-Subject: [Buildroot] svn commit: trunk/buildroot/toolchain/dependencies
-Message-ID: <20070605073808.BB20348574@busybox.net>
+From: Bernhard Fischer <rep.dot.nop@gmail.com>
+Date: Tue, 5 Jun 2007 09:39:31 +0200
+Subject: [Buildroot] buildroot-20070604.tar.bz2 dont compile under
+	redhat9
+In-Reply-To: <4694D9AB90E944668197DA69C981360F@zsn1976>
+References: <4694D9AB90E944668197DA69C981360F@zsn1976>
+Message-ID: <20070605073931.GA30837@aon.at>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Author: aldot
-Date: 2007-06-05 00:38:07 -0700 (Tue, 05 Jun 2007)
-New Revision: 18745
+On Tue, Jun 05, 2007 at 11:33:09AM +0800, zhangsn98 wrote:
+>Hi,
+>  How are you!
+>  I'm first time use buildroot under redhat9(kernel:2.4.20.8;gcc:3.2.2).
+>  I use the default(i386) in buildroot complier.then run"make";
+>
+>
+>  the following message show:
 
-Log:
-- fix typo in version check
+>GNU make version '3.79.1,':                     Ok
 
-
-Modified:
-   trunk/buildroot/toolchain/dependencies/dependencies.sh
-
-
-Changeset:
-Modified: trunk/buildroot/toolchain/dependencies/dependencies.sh
-===================================================================
---- trunk/buildroot/toolchain/dependencies/dependencies.sh	2007-06-04 23:32:35 UTC (rev 18744)
-+++ trunk/buildroot/toolchain/dependencies/dependencies.sh	2007-06-05 07:38:07 UTC (rev 18745)
-@@ -137,7 +137,7 @@
- fi;
- MAKE_MAJOR=$(echo $MAKE_VERSION | $XSED -e "s/\..*//g")
- MAKE_MINOR=$(echo $MAKE_VERSION | $XSED -e "s/^$MAKE_MAJOR\.//g" -e "s/\..*//g" -e "s/[a-zA-Z].*//g")
--if [ $MAKE_MAJOR -lt 3 -o $MAKE_MAJOR -eq 3 -a $MAKE_MINOR -lt 8 ] ; then
-+if [ $MAKE_MAJOR -lt 3 ] || [ $MAKE_MAJOR -eq 3 -a $MAKE_MINOR -lt 80 ] ; then
- 	echo "You have make '$MAKE_VERSION' installed.  GNU make >=3.80 is required"
- 	exit 1;
- fi;
+This is fixed in svn now. Thanks for the note.
