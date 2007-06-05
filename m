@@ -1,83 +1,89 @@
-From: Jon Nalley <buildroot@nalleynet.com>
-Date: Tue, 05 Jun 2007 12:20:53 -0500
-Subject: [Buildroot] Error: duplicate .personality directive while building
-	libstdc++	w/ ARM EABI
-Message-ID: <1181064053.10600.27.camel@argo>
+From: kevint <kevint@lanl.gov>
+Date: Tue, 5 Jun 2007 10:16:26 -0700
+Subject: [Buildroot] problems building x86_64 target
+Message-ID: <3AF470EE-B97B-40FC-B806-12627EC946D0@lanl.gov>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-All,
+Hello,
 
-I have been attempting to produce an ARM EABI toolchain (including g++)
-using the buildroot.  The build fails while building libstdc++ with the
-error "duplicate .personality directive".  I did some googling and it
-looks like this is coming from gas from binutils.  Although the build
-fails to create libstdc++ it does successfully build gcc and I have
-verified that gcc produces EABI binaries.  I have also verified that if
-I disable EABI (and change the GNU target suffix to linux-uclibc) in the
-buildroot config that the c++ compiler along with everything else
-successfully builds.
+This is my first post to this mailing list, so please excuse (and  
+point out) anything that doesn't follow the list's protocol.
 
-Does anyone know why enabling EABI would prevent libstdc++ from
-building?
+I have been trying to build an x86_64 toolchain using different  
+buildroot snapshots, uClibc versions, gcc versions.  I have  
+successfully built i386 images with several configuration  
+combinations, but no configuration combinations are providing a  
+successful build for x86_64.
 
-I have selected the following in the Buildroot Configuration:
+The two most common errors I come across are the following (using  
+buildroot-20070605.tar.bz2):
 
-Target Architecture (armeb)
-Target Architecture Variant (xscale)
-Target ABI (EABI)
-GNU target suffix (linux-uclibcgnueabi)
-Binutils Version (binutils 2.17.50.0.16)
-GCC compiler Version (gcc 4.1.2)
-Build/install c++ compiler and libstdc++ (y)
+(1)
+Target Architecture: x86_64
+Target Architecture Variant: opteron
+uClibc C library version (uClibc 0.9.29)
+(toolchain/uClibc/uClibc-0.9.29.config) uClibc configuration file to  
+use?
+GCC Compiler version (gcc 3.4.6)
 
-More context for the error is attached below.
+All other options are default.  This is my desired configuration, but  
+I tried different compiler versions, described in (2).
 
-Any ideas on this issue are greatly appreciated.
+This configuration appears to build the target toolchain with no  
+errors, but when it starts to compile busybox, it errors out on:
 
-Thanks,
+/tmp/buildroot/build_x86_64/staging_dir/lib/gcc/x86_64-linux-uclibc/ 
+3.4.6/../../../../x86_64-linux-uclibc/sys-include/asm/param.h:5:32:  
+asm-x86_64/param.h: No such file or directory
 
-Jon Nalley
+I tried linking /tmp/buildroot/build_x86_64/staging_dir/include/asm  
+to /tmp/buildroot/build_x86_64/staging_dir/include/asm-x86_64 just to  
+see how far it would get, and the busybox compile fails here:
+
+console-tools/resize.c: In function `resize_main':
+console-tools/resize.c:61: error: `TIOCSWINSZ' undeclared (first use  
+in this function)
+console-tools/resize.c:61: error: (Each undeclared identifier is  
+reported only once
+console-tools/resize.c:61: error: for each function it appears in.)
 
 
-Making all in libsupc++
-make[5]: Entering directory \
-    `/uclibc-buildroot/toolchain_build_armeb_nofpu/gcc-4.1.2-final/armeb-linux-uclibcgnueabi/libstdc++-v3/libsupc++'
-/bin/sh ../libtool --tag CXX --tag disable-shared --mode=compile \
-    /uclibc-buildroot/toolchain_build_armeb_nofpu/gcc-4.1.2-final/./gcc/xgcc \
-    -shared-libgcc -B/uclibc-buildroot/toolchain_build_armeb_nofpu/gcc-4.1.2-final/./gcc \
-    -nostdinc++ \
-    -L/uclibc-buildroot/toolchain_build_armeb_nofpu/gcc-4.1.2-final/armeb-linux-uclibcgnueabi/libstdc++-v3/src \
-    -L/uclibc-buildroot/toolchain_build_armeb_nofpu/gcc-4.1.2-final/armeb-linux-uclibcgnueabi/libstdc++-v3/src/.libs \
-    -B/uclibc-buildroot/build_armeb_nofpu/staging_dir/armeb-linux-uclibcgnueabi/bin/ \
-    -B/uclibc-buildroot/build_armeb_nofpu/staging_dir/armeb-linux-uclibcgnueabi/lib/ \
-    -isystem /uclibc-buildroot/build_armeb_nofpu/staging_dir/armeb-linux-uclibcgnueabi/include \
-    -isystem /uclibc-buildroot/build_armeb_nofpu/staging_dir/armeb-linux-uclibcgnueabi/sys-include \
-    -I/uclibc-buildroot/toolchain_build_armeb_nofpu/gcc-4.1.2/libstdc++-v3/../gcc \
-    -I/uclibc-buildroot/toolchain_build_armeb_nofpu/gcc-4.1.2-final/armeb-linux-uclibcgnueabi/libstdc++-v3/include/armeb-linux-uclibcgnueabi \
-    -I/uclibc-buildroot/toolchain_build_armeb_nofpu/gcc-4.1.2-final/armeb-linux-uclibcgnueabi/libstdc++-v3/include \
-    -I/uclibc-buildroot/toolchain_build_armeb_nofpu/gcc-4.1.2/libstdc++-v3/libsupc++  \
-    -g -Os -fno-implicit-templates -prefer-pic -Wall -Wextra -Wwrite-strings -Wcast-qual \
-    -fdiagnostics-show-location=once  -ffunction-sections -fdata-sections  -c -o eh_alloc.lo \
-    /uclibc-buildroot/toolchain_build_armeb_nofpu/gcc-4.1.2/libstdc++-v3/libsupc++/eh_alloc.cc
-/uclibc-buildroot/toolchain_build_armeb_nofpu/gcc-4.1.2-final/./gcc/xgcc -shared-libgcc \
-    -B/uclibc-buildroot/toolchain_build_armeb_nofpu/gcc-4.1.2-final/./gcc -nostdinc++ \
-    -L/uclibc-buildroot/toolchain_build_armeb_nofpu/gcc-4.1.2-final/armeb-linux-uclibcgnueabi/libstdc++-v3/src \
-    -L/uclibc-buildroot/toolchain_build_armeb_nofpu/gcc-4.1.2-final/armeb-linux-uclibcgnueabi/libstdc++-v3/src/.libs \
-    -B/uclibc-buildroot/build_armeb_nofpu/staging_dir/armeb-linux-uclibcgnueabi/bin/ \
-    -B/uclibc-buildroot/build_armeb_nofpu/staging_dir/armeb-linux-uclibcgnueabi/lib/ \
-    -isystem /uclibc-buildroot/build_armeb_nofpu/staging_dir/armeb-linux-uclibcgnueabi/include \
-    -isystem /uclibc-buildroot/build_armeb_nofpu/staging_dir/armeb-linux-uclibcgnueabi/sys-include \
-    -I/uclibc-buildroot/toolchain_build_armeb_nofpu/gcc-4.1.2/libstdc++-v3/../gcc \
-    -I/uclibc-buildroot/toolchain_build_armeb_nofpu/gcc-4.1.2-final/armeb-linux-uclibcgnueabi/libstdc++-v3/include/armeb-linux-uclibcgnueabi \
-    -I/uclibc-buildroot/toolchain_build_armeb_nofpu/gcc-4.1.2-final/armeb-linux-uclibcgnueabi/libstdc++-v3/include \
-    -I/uclibc-buildroot/toolchain_build_armeb_nofpu/gcc-4.1.2/libstdc++-v3/libsupc++ \
-    -g -Os -fno-implicit-templates -Wall -Wextra -Wwrite-strings -Wcast-qual -fdiagnostics-show-location=once \
-    -ffunction-sections -fdata-sections -c /uclibc-buildroot/toolchain_build_armeb_nofpu/gcc-4.1.2/libstdc++-v3/libsupc++/eh_alloc.cc \ 
-    -fPIC -DPIC -o eh_alloc.o
-/tmp/ccPjsGDj.s: Assembler messages:
-/tmp/ccPjsGDj.s:354: Error: duplicate .personality directive
-make[5]: *** [eh_alloc.lo] Error 1
+(2)
+Target Architecture: x86_64
+Target Architecture Variant: opteron
+uClibc C library version (uClibc 0.9.29)
+(toolchain/uClibc/uClibc-0.9.29.config) uClibc configuration file to  
+use?
+GCC Compiler version (gcc 4.1.2)
+
+Almost the same as above, except for compiler versions.  This  
+configuration does not successfully build gcc, and errors out on:
+
+In file included from /tmp/buildroot/toolchain_build_x86_64/gcc-4.1.2/ 
+libmudflap/mf-hooks1.c:58:
+/tmp/buildroot/build_x86_64/staging_dir/x86_64-linux-uclibc/sys- 
+include/unistd.h:243: error: two or more data types in declaration  
+specifiers
+
+
+I would appreciate any insight you are willing to offer on x86_64  
+builds, as we will be using buildroot extensively in the months ahead.
+
+Thank you for your help,
+
+********************************************
+Kevin Tegtmeier
+HPC-3 Scientific Computing Resources
+Los Alamos National Laboratory
+email:  kevint at lanl.gov
+********************************************
+
+
+
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: http://busybox.net/lists/buildroot/attachments/20070605/0679f3c5/attachment.htm 
