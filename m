@@ -1,25 +1,27 @@
 From: Bernhard Fischer <rep.dot.nop@gmail.com>
-Date: Tue, 5 Jun 2007 09:39:31 +0200
-Subject: [Buildroot] buildroot-20070604.tar.bz2 dont compile under
-	redhat9
-In-Reply-To: <4694D9AB90E944668197DA69C981360F@zsn1976>
-References: <4694D9AB90E944668197DA69C981360F@zsn1976>
-Message-ID: <20070605073931.GA30837@aon.at>
+Date: Tue, 5 Jun 2007 10:05:39 +0200
+Subject: [Buildroot] STILL soft float toolchain problems on ARM
+In-Reply-To: <466505C9.6020007@gfplab.com>
+References: <466505C9.6020007@gfplab.com>
+Message-ID: <20070605080539.GB30837@aon.at>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Tue, Jun 05, 2007 at 11:33:09AM +0800, zhangsn98 wrote:
->Hi,
->  How are you!
->  I'm first time use buildroot under redhat9(kernel:2.4.20.8;gcc:3.2.2).
->  I use the default(i386) in buildroot complier.then run"make";
->
->
->  the following message show:
+On Tue, Jun 05, 2007 at 08:42:17AM +0200, Paolo Scaffardi wrote:
+>Hi there!
+>I'm still trying to get a working buildroot for my ARM platform (EP9302
+>cirrus logic CPU, T920), with soft float enabled. My configuration uses
+>GCC 4.1.2, libfloat, soft float and uclibc 0.9.29 (i tried both
+>snapshots and 0.9.29 official release).
 
->GNU make version '3.79.1,':                     Ok
+I flagged several such reports with FLOAT in the subject. Can you
+provide me with a kernel-config that i can use with qemu that does:
+1) use xscale (but t920 t926 should do too, if you prefer)
+2) have framebuffer support
+3) is noMMU
+4) wants soft-float
 
-This is fixed in svn now. Thanks for the note.
+perhaps we can get this going again
