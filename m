@@ -1,7 +1,7 @@
 From: aldot at uclibc.org <aldot@uclibc.org>
-Date: Wed,  6 Jun 2007 12:59:02 -0700 (PDT)
-Subject: [Buildroot] svn commit: trunk/buildroot/target
-Message-ID: <20070606195902.B57F148580@busybox.net>
+Date: Wed,  6 Jun 2007 13:25:17 -0700 (PDT)
+Subject: [Buildroot] svn commit: trunk/buildroot/package: gmp mpfr
+Message-ID: <20070606202517.1C2924857E@busybox.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -9,37 +9,43 @@ Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
 Author: aldot
-Date: 2007-06-06 12:59:01 -0700 (Wed, 06 Jun 2007)
-New Revision: 18762
+Date: 2007-06-06 13:25:16 -0700 (Wed, 06 Jun 2007)
+New Revision: 18763
 
 Log:
-- fix typo which led to a superfluous cp invocation
+- fix typo
 
 
 Modified:
-   trunk/buildroot/target/linux26.mk
+   trunk/buildroot/package/gmp/gmp.mk
+   trunk/buildroot/package/mpfr/mpfr.mk
 
 
 Changeset:
-Modified: trunk/buildroot/target/linux26.mk
+Modified: trunk/buildroot/package/gmp/gmp.mk
 ===================================================================
---- trunk/buildroot/target/linux26.mk	2007-06-06 19:50:05 UTC (rev 18761)
-+++ trunk/buildroot/target/linux26.mk	2007-06-06 19:59:01 UTC (rev 18762)
-@@ -103,7 +103,7 @@
- 	cp -dpf $(LINUX26_DIR)/$(LINUX26_BINLOC) $(LINUX26_KERNEL)
- 	touch -c $@
+--- trunk/buildroot/package/gmp/gmp.mk	2007-06-06 19:59:01 UTC (rev 18762)
++++ trunk/buildroot/package/gmp/gmp.mk	2007-06-06 20:25:16 UTC (rev 18763)
+@@ -123,7 +123,7 @@
+ 	);
+ 	touch $@
  
--$(TARGET_DIR)/boot/$(LINUX26_BINLOC): $(LINUX26_KERNEL)
-+$(TARGET_DIR)/boot/$(LINUX26_FORMAT): $(LINUX26_KERNEL)
- 	[ -d $(TARGET_DIR)/boot/ ] || mkdir $(TARGET_DIR)/boot
- 	cp -a $(LINUX26_DIR)/$(LINUX26_BINLOC) $(LINUX26_DIR)/System.map $(TARGET_DIR)/boot/
- 	touch -c $@
-@@ -122,7 +122,7 @@
- 	$(MAKE) $(LINUX26_MAKE_FLAGS) -C $(LINUX26_DIR) menuconfig
- 	-[ -f $(LINUX26_DIR)/.config ] && touch $(LINUX26_DIR)/.configured
+-$(GMP_HOST_DIR)/lib/libgmp$(HOST_LIBEXT)/lib/libgmp$(HOST_SHREXT): $(GMP_DIR2)/.configured
++$(GMP_HOST_DIR)/lib/libgmp$(HOST_LIBEXT) $(GMP_HOST_DIR)/lib/libgmp$(HOST_SHREXT) $(GMP_HOST_DIR)/lib/libgmp$(HOST_SHREXT).(GMP_LIBVERSION): $(GMP_DIR2)/.configured
+ 	$(MAKE) -C $(GMP_DIR2) install
  
--linux26: cross-depmod26 $(TARGET_DIR)/lib/modules/$(LINUX26_VERSION)/modules.dep $(TARGET_DIR)/boot/$(LINUX26_BINLOC)
-+linux26: cross-depmod26 $(TARGET_DIR)/lib/modules/$(LINUX26_VERSION)/modules.dep $(TARGET_DIR)/boot/$(LINUX26_FORMAT)
+ host-libgmp: $(GMP_HOST_DIR)/lib/$(GMP_HOST_BINARY)
+
+Modified: trunk/buildroot/package/mpfr/mpfr.mk
+===================================================================
+--- trunk/buildroot/package/mpfr/mpfr.mk	2007-06-06 19:59:01 UTC (rev 18762)
++++ trunk/buildroot/package/mpfr/mpfr.mk	2007-06-06 20:25:16 UTC (rev 18763)
+@@ -140,7 +140,7 @@
+ 	);
+ 	touch $@
  
- linux26-source: $(DL_DIR)/$(LINUX26_SOURCE)
+-$(MPFR_HOST_DIR)/lib/libmpfr$(HOST_LIBEXT) $(MPFR_HOST_DIR)/lib/libmpfr$(HOST_SHREXT): $(MPFR_DIR2)/.configured
++$(MPFR_HOST_DIR)/lib/libmpfr$(HOST_LIBEXT) $(MPFR_HOST_DIR)/lib/libmpfr$(HOST_SHREXT) $(MPFR_HOST_DIR)/lib/libmpfr$(HOST_SHREXT).$(MPFR_LIBVERSION): $(MPFR_DIR2)/.configured
+ 	$(MAKE) -C $(MPFR_DIR2) install
  
+ host-libmpfr: $(MPFR_HOST_DIR)/lib/$(MPFR_HOST_BINARY)
