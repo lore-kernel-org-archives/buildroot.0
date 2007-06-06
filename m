@@ -1,7 +1,7 @@
 From: aldot at uclibc.org <aldot@uclibc.org>
-Date: Wed,  6 Jun 2007 13:25:17 -0700 (PDT)
-Subject: [Buildroot] svn commit: trunk/buildroot/package: gmp mpfr
-Message-ID: <20070606202517.1C2924857E@busybox.net>
+Date: Wed,  6 Jun 2007 14:05:19 -0700 (PDT)
+Subject: [Buildroot] svn commit: trunk/buildroot
+Message-ID: <20070606210519.2A15A4859D@busybox.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -9,43 +9,37 @@ Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
 Author: aldot
-Date: 2007-06-06 13:25:16 -0700 (Wed, 06 Jun 2007)
-New Revision: 18763
+Date: 2007-06-06 14:05:18 -0700 (Wed, 06 Jun 2007)
+New Revision: 18764
 
 Log:
-- fix typo
+- the at91 mirrors depend on BR2_TARGET_ATMEL which may add at91 support later on which itself will select BR2_TARGET_ATMEL
 
 
 Modified:
-   trunk/buildroot/package/gmp/gmp.mk
-   trunk/buildroot/package/mpfr/mpfr.mk
+   trunk/buildroot/Config.in
 
 
 Changeset:
-Modified: trunk/buildroot/package/gmp/gmp.mk
+Modified: trunk/buildroot/Config.in
 ===================================================================
---- trunk/buildroot/package/gmp/gmp.mk	2007-06-06 19:59:01 UTC (rev 18762)
-+++ trunk/buildroot/package/gmp/gmp.mk	2007-06-06 20:25:16 UTC (rev 18763)
-@@ -123,7 +123,7 @@
- 	);
- 	touch $@
+--- trunk/buildroot/Config.in	2007-06-06 20:25:16 UTC (rev 18763)
++++ trunk/buildroot/Config.in	2007-06-06 21:05:18 UTC (rev 18764)
+@@ -290,7 +290,7 @@
+ 	  http://prdownloads.sourceforge.net/index-sf.html?download
  
--$(GMP_HOST_DIR)/lib/libgmp$(HOST_LIBEXT)/lib/libgmp$(HOST_SHREXT): $(GMP_DIR2)/.configured
-+$(GMP_HOST_DIR)/lib/libgmp$(HOST_LIBEXT) $(GMP_HOST_DIR)/lib/libgmp$(HOST_SHREXT) $(GMP_HOST_DIR)/lib/libgmp$(HOST_SHREXT).(GMP_LIBVERSION): $(GMP_DIR2)/.configured
- 	$(MAKE) -C $(GMP_DIR2) install
+ config BR2_ATMEL_MIRROR
+-	depends BR2_avr32 || BR2_arm
++	depends BR2_TARGET_ATMEL && (BR2_avr32 || BR2_arm)
+ 	string "Atmel AVR32/AT91 download site"
+ 	default "ftp://at91dist:distrib at 81.80.104.162/AT91_Third_Party_Design_Flow/Linux_Host/"
+ 	help
+@@ -308,7 +308,7 @@
+ 	  Community  AT91 Linux support is through http://maxim.org.za/AT91_26.html
  
- host-libgmp: $(GMP_HOST_DIR)/lib/$(GMP_HOST_BINARY)
-
-Modified: trunk/buildroot/package/mpfr/mpfr.mk
-===================================================================
---- trunk/buildroot/package/mpfr/mpfr.mk	2007-06-06 19:59:01 UTC (rev 18762)
-+++ trunk/buildroot/package/mpfr/mpfr.mk	2007-06-06 20:25:16 UTC (rev 18763)
-@@ -140,7 +140,7 @@
- 	);
- 	touch $@
- 
--$(MPFR_HOST_DIR)/lib/libmpfr$(HOST_LIBEXT) $(MPFR_HOST_DIR)/lib/libmpfr$(HOST_SHREXT): $(MPFR_DIR2)/.configured
-+$(MPFR_HOST_DIR)/lib/libmpfr$(HOST_LIBEXT) $(MPFR_HOST_DIR)/lib/libmpfr$(HOST_SHREXT) $(MPFR_HOST_DIR)/lib/libmpfr$(HOST_SHREXT).$(MPFR_LIBVERSION): $(MPFR_DIR2)/.configured
- 	$(MAKE) -C $(MPFR_DIR2) install
- 
- host-libmpfr: $(MPFR_HOST_DIR)/lib/$(MPFR_HOST_BINARY)
+ config BR2_AT91_PATCH_MIRROR
+-	depends BR2_arm
++	depends BR2_TARGET_ATMEL && BR2_arm
+ 	string "Atmel AT91 Linux Patch download site"
+ 	default "http://maxim.org.za/AT91RM9200/2.6/"
+ 	help
