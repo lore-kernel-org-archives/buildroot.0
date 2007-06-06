@@ -1,45 +1,64 @@
-From: aldot at uclibc.org <aldot@uclibc.org>
-Date: Wed,  6 Jun 2007 14:05:19 -0700 (PDT)
-Subject: [Buildroot] svn commit: trunk/buildroot
-Message-ID: <20070606210519.2A15A4859D@busybox.net>
+From: Philippe Ney <philippe.ney@pardes.ws>
+Date: Wed, 6 Jun 2007 23:55:35 +0200
+Subject: [Buildroot] problem with openssh
+In-Reply-To: <e19d85410706061235g63cadda9s364849b0737a39ec@mail.gmail.com>
+References: <e19d85410706050700s69e06497gef032dddb6eef9c9@mail.gmail.com>
+	<e19d85410706051935j42739782ndf1307022f2e9031@mail.gmail.com>
+	<20070606100917.e0724deb.philippe.ney@pardes.ws>
+	<e19d85410706060839l6baf072cte7a5c9c9d58b67ab@mail.gmail.com>
+	<e19d85410706061235g63cadda9s364849b0737a39ec@mail.gmail.com>
+Message-ID: <20070606235535.ddc532ee.philippe.ney@pardes.ws>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Author: aldot
-Date: 2007-06-06 14:05:18 -0700 (Wed, 06 Jun 2007)
-New Revision: 18764
+Just forwarding to the list as it seems to be its right destination.
 
-Log:
-- the at91 mirrors depend on BR2_TARGET_ATMEL which may add at91 support later on which itself will select BR2_TARGET_ATMEL
-
-
-Modified:
-   trunk/buildroot/Config.in
-
-
-Changeset:
-Modified: trunk/buildroot/Config.in
-===================================================================
---- trunk/buildroot/Config.in	2007-06-06 20:25:16 UTC (rev 18763)
-+++ trunk/buildroot/Config.in	2007-06-06 21:05:18 UTC (rev 18764)
-@@ -290,7 +290,7 @@
- 	  http://prdownloads.sourceforge.net/index-sf.html?download
- 
- config BR2_ATMEL_MIRROR
--	depends BR2_avr32 || BR2_arm
-+	depends BR2_TARGET_ATMEL && (BR2_avr32 || BR2_arm)
- 	string "Atmel AVR32/AT91 download site"
- 	default "ftp://at91dist:distrib at 81.80.104.162/AT91_Third_Party_Design_Flow/Linux_Host/"
- 	help
-@@ -308,7 +308,7 @@
- 	  Community  AT91 Linux support is through http://maxim.org.za/AT91_26.html
- 
- config BR2_AT91_PATCH_MIRROR
--	depends BR2_arm
-+	depends BR2_TARGET_ATMEL && BR2_arm
- 	string "Atmel AT91 Linux Patch download site"
- 	default "http://maxim.org.za/AT91RM9200/2.6/"
- 	help
+> Hey all,
+> 
+> Well, both openssh AND samba works perfectly fine with older uclibc
+> (0.9.28.3), regardless of which gcc/binutils combo (all combos ive
+> tried worked), so now i can pinpoint the problem to uclibc 0.9.29
+> (also the svn version fails).
+> 
+> Thank you so much Philippe for pointing that out - i mistakenly
+> thought a newer uclibc (ie, subversion) would be the fix, but it turns
+> out an older one is the solution.
+> 
+> Blessings to you all,
+> Elia Yehuda.
+> 
+> On 6/6/07, z4ziggy <z4ziggy@gmail.com> wrote:
+> > Hey Philippe,
+> >
+> > MANY thanks for that suggestion! ssh works with
+> > uclibc-0.9.28.3/gcc-4.0.4/binutils-2.17.
+> >
+> > i will make more tests to see where it fails to pinpoint the problem
+> > and report here.
+> >
+> > many thanks again!
+> >
+> > Blessings,
+> > Elia.
+> >
+> > On 6/6/07, Philippe Ney <philippe.ney@pardes.ws> wrote:
+> > > > i found a fix for openssh, and i might try it with samba as well.
+> > > > although its not a good fix (imo) but it works. i simply added
+> > > > "--static" to LDFLAGS in openssh.mk
+> > >
+> > > Hi,
+> > > Did you try uClibc-0.9.28 ?
+> > > It works for me with gcc-4.0.3 and binutils-2.17 on arm XScale.
+> > > But it certainly works also for many people with uClibc-0.9.29.
+> > > The problem must be somewhere else.
+> > >
+> > > Philippe
+> > > _______________________________________________
+> > > buildroot mailing list
+> > > buildroot at uclibc.org
+> > > http://busybox.net/mailman/listinfo/buildroot
+> > >
+> >
