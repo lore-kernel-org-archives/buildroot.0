@@ -1,31 +1,39 @@
-From: Bernhard Fischer <rep.dot.nop@gmail.com>
-Date: Thu, 7 Jun 2007 12:19:48 +0200
-Subject: [Buildroot] problems building x86_64 target
-In-Reply-To: <FC6B700F-A073-4E83-A3AB-BFD8A9E5ED56@lanl.gov>
-References: <3AF470EE-B97B-40FC-B806-12627EC946D0@lanl.gov>
-	<20070606173826.GA4543@aon.at> <20070606184023.GA7593@aon.at>
-	<FC6B700F-A073-4E83-A3AB-BFD8A9E5ED56@lanl.gov>
-Message-ID: <20070607101948.GH2853@aon.at>
+From: aldot at uclibc.org <aldot@uclibc.org>
+Date: Thu,  7 Jun 2007 03:48:01 -0700 (PDT)
+Subject: [Buildroot] svn commit: trunk/buildroot/target/device/Atmel
+Message-ID: <20070607104801.B49CC48027@busybox.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Wed, Jun 06, 2007 at 05:31:25PM -0700, kevint wrote:
->Hello,
->
->Thanks for your tips.  I set --disable-libmudflap in "Additional gcc  
->options", and that got past the error I first came across, but I also  
->had to modify a couple things to get it to compile the rest of the way:
+Author: aldot
+Date: 2007-06-07 03:48:01 -0700 (Thu, 07 Jun 2007)
+New Revision: 18765
 
-I tried this yesterday and yes, it's broken ATM.
-The includes are pretty messed up, could be that the patch in the thread
-with subject "sysroot support in toolchain, use correct pathes" in the
-archives helps there. This needs proper fixing anyway and this patch
-does make it better (didn't try x86_64, though) but since gcc-3.4
-doesn't have sysroot support, it breaks in many funny ways, of course.
-All vaguely recent gcc -- i.e. the 4.x series onward -- do have proper
-sysroot support and work flawlessly.
+Log:
+- hide atmel target if arch is not arm nor avr32
 
-I'll have a look at it again.
+
+Modified:
+   trunk/buildroot/target/device/Atmel/Config.in
+
+
+Changeset:
+Modified: trunk/buildroot/target/device/Atmel/Config.in
+===================================================================
+--- trunk/buildroot/target/device/Atmel/Config.in	2007-06-06 21:05:18 UTC (rev 18764)
++++ trunk/buildroot/target/device/Atmel/Config.in	2007-06-07 10:48:01 UTC (rev 18765)
+@@ -1,5 +1,9 @@
+-menu "Atmel Target"
++menuconfig BR2_TARGET_ATMEL
++	bool "Atmel Target"
++	depends on BR2_arm || BR2_avr32
++	default n
+ 
++if BR2_TARGET_ATMEL
+ comment "Add Atmel Target here"
+ 
+-endmenu
++endif
