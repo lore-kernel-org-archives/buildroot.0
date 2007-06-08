@@ -1,32 +1,29 @@
-From: Ormund Williams <ormundw@panix.com>
-Date: Fri, 08 Jun 2007 07:41:59 -0400
-Subject: [Buildroot] Building buildroot with threads
-In-Reply-To: <f0528b5b0706080125n18eeb685q3ea7472c396803bf@mail.gmail.com>
-References: <1180989229.4532.44.camel@localhost.localdomain>
-	<20070604205913.GE2853@aon.at>
-	<1181277467.4898.11.camel@localhost.localdomain>
-	<f0528b5b0706080125n18eeb685q3ea7472c396803bf@mail.gmail.com>
-Message-ID: <1181302920.4898.14.camel@localhost.localdomain>
+From: Julien Letessier <julien.letessier@technosens.fr>
+Date: Fri, 8 Jun 2007 15:53:00 +0200
+Subject: [Buildroot] X11R7 package(s)
+In-Reply-To: <Pine.LNX.4.58.0706081157250.22966@jule.tellus>
+References: <f0528b5b0706080128k7ade6f8k3e0cd6c18be550c1@mail.gmail.com>
+	<Pine.LNX.4.58.0706081157250.22966@jule.tellus>
+Message-ID: <f0528b5b0706080653lc06032fmf3514f7ad53f00d2@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Fri, 2007-06-08 at 10:25 +0200, Julien Letessier wrote:
-> 2007/6/8, Ormund Williams <ormundw@panix.com>:
-> > On Mon, 2007-06-04 at 22:59 +0200, Bernhard Fischer wrote:
-> > > 0.9.29 works fine with threads here. The thread impl highly depends on
-> > > your target, ATM. Read the helptext of the thread-impl selection and
-> > > the ML archives for futher details.
-> >
-> > My target is i386, what's yours?
-> My target also is i386. Vanilla buildroot (today's trunk) builds with
-> linuxthreads-old, but I never got it to work with NPTL.
-> 
-Thanks Julien,
+Great!
+I'm also almost done with X11R7, so I suppose we should compare our solutions.
 
-I'll give that another try.
+FYI, I'm creating one package per X module. My objective is to be able
+to build only the necessary drivers, much like for the kernel.
 
-__
-Ormund
+Currently I'm using a small Python script to generate all the *.mk and
+Config.in's from a "packages.ini" description file. I created
+additional packages for the non-X dependancies that are not in
+buildroot either (Mesa, libdrm and libxcb).
+Using Benjamin Tietz's autotools meta-makefile might be a prettier solution.
+
+What's your opinion about this approach?
+-- 
+Julien Letessier
+<julien.letessier@technosens.fr>
