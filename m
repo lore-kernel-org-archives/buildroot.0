@@ -1,43 +1,37 @@
-From: Assen Stoyanov <softa@ttechgroup.com>
-Date: Fri, 8 Jun 2007 11:59:13 +0300 (EEST)
-Subject: [Buildroot] X11R7 package(s)
-In-Reply-To: <f0528b5b0706080128k7ade6f8k3e0cd6c18be550c1@mail.gmail.com>
-References: <f0528b5b0706080128k7ade6f8k3e0cd6c18be550c1@mail.gmail.com>
-Message-ID: <Pine.LNX.4.58.0706081157250.22966@jule.tellus>
+From: Konstantin Kletschke <kletschke@synertronixx.de>
+Date: Fri, 8 Jun 2007 11:51:02 +0200
+Subject: [Buildroot] problem with openssh
+In-Reply-To: <4668E09B.1000200@e-ml.jp>
+References: <e19d85410706050700s69e06497gef032dddb6eef9c9@mail.gmail.com>
+	<e19d85410706051935j42739782ndf1307022f2e9031@mail.gmail.com>
+	<20070606100917.e0724deb.philippe.ney@pardes.ws>
+	<e19d85410706060839l6baf072cte7a5c9c9d58b67ab@mail.gmail.com>
+	<e19d85410706061235g63cadda9s364849b0737a39ec@mail.gmail.com>
+	<20070606235535.ddc532ee.philippe.ney@pardes.ws>
+	<4668E09B.1000200@e-ml.jp>
+Message-ID: <20070608095101.GA32442@z1.synertronixx>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+Am 2007-06-08 13:52 +0900 schrieb Tomohiro Masubuchi:
 
-Hi Julien,
-currently i work on X11R7 port for the buildroot,
-i have some problems but after couple of days i will submit the new set of
-patches.
+> > Ive been trying to compile openssh using buildroot, and just like
+> > samba, it compiles fine but any executable halts with "segmentation
+> > fault".
 
-Regards,
-Assen Stoyanov
+> UCLIBC_HAS_PROGRAM_INVOCATION_NAME=y
+> 
+> It works fine with arm(iwmmxt), gcc-4.2.0, binutils-2.17.50.0.16,
+> uClibc-0.9.29.
 
-On Fri, 8 Jun 2007, Julien Letessier wrote:
+Sadly this does not fix the smbd/nmbd issue. I can't check the fix for
+openssh, may be I install it for testing purposes.
 
-> Hi list,
->
-> Has anyone built a package or set of packages to support X11R7 in buildroot?
->
-> IMHO this is a point where buildroot is late, e.g. with respect to T2.
->
-> I have it almost working here, but it will require of few more days of
-> work before submitting patches, and if anyone has workied on this I
-> wouldn't want to be redundant.
-> [disclaimer: I'm new here]
->
-> Thanks,
-> --
-> Julien Letessier
-> <julien.letessier@technosens.fr>
-> _______________________________________________
-> buildroot mailing list
-> buildroot at uclibc.org
-> http://busybox.net/mailman/listinfo/buildroot
->
+Regards, Konsti
+
+-- 
+GPG KeyID EF62FCEF
+Fingerprint: 13C9 B16B 9844 EC15 CC2E  A080 1E69 3FDA EF62 FCEF
