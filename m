@@ -1,40 +1,28 @@
-From: Ulf Samuelsson <ulf@atmel.com>
-Date: Fri, 8 Jun 2007 08:22:26 +0200
-Subject: [Buildroot] Easier adding of new packages / alsa-lib & utils
-References: <20070607132945.GC4224@firebird.dresden.micronet24.de>
-Message-ID: <007501c7a995$663af6b0$0302a8c0@atmel.com>
+From: Julien Letessier <julien.letessier@technosens.fr>
+Date: Fri, 8 Jun 2007 10:25:12 +0200
+Subject: [Buildroot] Building buildroot with threads
+In-Reply-To: <1181277467.4898.11.camel@localhost.localdomain>
+References: <1180989229.4532.44.camel@localhost.localdomain>
+	<20070604205913.GE2853@aon.at>
+	<1181277467.4898.11.camel@localhost.localdomain>
+Message-ID: <f0528b5b0706080125n18eeb685q3ea7472c396803bf@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-> Hi,
-> 
-> the attachment contains two patches. The first one will rapidly shorten
-> the Makefile to add a new package to the buildroot (at least for most
-> packages), while being fully compatible to the standard way used up to
-> now.
-
-As I see it we lack two things in the build.
-1) Ability to use backup sites if the main site is temporarily or permanently down.
-2) Handling of distributions.    I.E. ability to specify which package version you 
-    want to build in a way which is separated from the package build script.
-3) Ability to generate binary packages which can be added/removed from 
-    the root fs.
-
-Any chance of looking into this?
-An alternative to this patch could be to use the OpenWRT build script
-which does (1) and (3) above.
-
-OpenWRT seems to be a split from buildroot.
-Is there a heated history here?
-
-> While the Config.in follows the same rules, the Makefile for the new
-> package provides only the NEEDED information to add the package. Let see
-> on an example (Its nearly the same included in the second patch):
-> 
+2007/6/8, Ormund Williams <ormundw@panix.com>:
+> On Mon, 2007-06-04 at 22:59 +0200, Bernhard Fischer wrote:
+> > 0.9.29 works fine with threads here. The thread impl highly depends on
+> > your target, ATM. Read the helptext of the thread-impl selection and
+> > the ML archives for futher details.
+>
+> My target is i386, what's yours?
+My target also is i386. Vanilla buildroot (today's trunk) builds with
+linuxthreads-old, but I never got it to work with NPTL.
 
 
-Best Regards
-Ulf Samuelsson 
+-- 
+Julien Letessier
+<julien.letessier@technosens.fr>
