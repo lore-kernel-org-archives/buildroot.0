@@ -1,34 +1,25 @@
 From: Thomas Lundquist <lists@zelow.no>
-Date: Sat, 9 Jun 2007 22:09:59 +0200
-Subject: [Buildroot] X11R7 package(s)
-In-Reply-To: <Pine.LNX.4.58.0706081157250.22966@jule.tellus>
-References: <f0528b5b0706080128k7ade6f8k3e0cd6c18be550c1@mail.gmail.com>
-	<Pine.LNX.4.58.0706081157250.22966@jule.tellus>
-Message-ID: <20070609200959.GB32353@zelow.no>
+Date: Sat, 9 Jun 2007 21:53:45 +0200
+Subject: [Buildroot] Easier adding of new packages / alsa-lib & utils
+In-Reply-To: <007501c7a995$663af6b0$0302a8c0@atmel.com>
+References: <20070607132945.GC4224@firebird.dresden.micronet24.de>
+	<007501c7a995$663af6b0$0302a8c0@atmel.com>
+Message-ID: <20070609195345.GA32353@zelow.no>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Fri, Jun 08, 2007 at 11:59:13AM +0300, Assen Stoyanov wrote:
-> 
-> 
-> Hi Julien,
-> currently i work on X11R7 port for the buildroot,
-> i have some problems but after couple of days i will submit the new set of
-> patches.
+On Fri, Jun 08, 2007 at 08:22:26AM +0200, Ulf Samuelsson wrote:
 
-as did I say a few months ago.
+> 3) Ability to generate binary packages which can be added/removed from 
+>     the root fs.
 
-but I'm stuck in the (full) xserver with somme stupid compile error I
-just can't vet rid of. (dbxbeforereset).
+I have this ready, both .deb and ipkgs (none of'em with all the
+versioning, descriptiuon md5 and so on, yet) but haven't had time to
+wrap up a good patch.
 
-I just felt like putting it away and started working on the package
-issues again before work hit me.
-
-Now I guess I'll wait for 7.3 which, according to x.org, is just around
-the corner.
 
 
 Thomas.
