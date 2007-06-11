@@ -1,65 +1,44 @@
-From: Julien Letessier <julien.letessier@technosens.fr>
-Date: Mon, 11 Jun 2007 16:36:14 +0200
-Subject: [Buildroot] X11R7 package(s)
-In-Reply-To: <20070609200959.GB32353@zelow.no>
-References: <f0528b5b0706080128k7ade6f8k3e0cd6c18be550c1@mail.gmail.com>
-	<Pine.LNX.4.58.0706081157250.22966@jule.tellus>
-	<20070609200959.GB32353@zelow.no>
-Message-ID: <f0528b5b0706110736h1ca33b9fn7affde80dd699870@mail.gmail.com>
+From: Bernhard Fischer <rep.dot.nop@gmail.com>
+Date: Mon, 11 Jun 2007 17:56:24 +0200
+Subject: [Buildroot] problems building x86_64 target
+In-Reply-To: <20070607101948.GH2853@aon.at>
+References: <3AF470EE-B97B-40FC-B806-12627EC946D0@lanl.gov>
+	<20070606173826.GA4543@aon.at> <20070606184023.GA7593@aon.at>
+	<FC6B700F-A073-4E83-A3AB-BFD8A9E5ED56@lanl.gov>
+	<20070607101948.GH2853@aon.at>
+Message-ID: <20070611155624.GB28991@aon.at>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Good news here:
-
-
-I now have all of X11R7.2 compiling, including almost all drivers, DRI
-support, and GLX support which was what I needed. [Thomas: for some reason I
-didn't hit the compile error you're describing]
-
-Obviously I didn't test all drivers, though :)
-Tested in VMware, it just works ? although I wouldn't swear about its
-stability.
-
-I'm polishing the whole thing, I'll submit a (large) patch in a day or two.
-
-2007/6/9, Thomas Lundquist <lists@zelow.no>:
+On Thu, Jun 07, 2007 at 12:19:48PM +0200, Bernhard Fischer wrote:
+>On Wed, Jun 06, 2007 at 05:31:25PM -0700, kevint wrote:
+>>Hello,
+>>
+>>Thanks for your tips.  I set --disable-libmudflap in "Additional gcc  
+>>options", and that got past the error I first came across, but I also  
+>>had to modify a couple things to get it to compile the rest of the way:
 >
-> On Fri, Jun 08, 2007 at 11:59:13AM +0300, Assen Stoyanov wrote:
-> >
-> >
-> > Hi Julien,
-> > currently i work on X11R7 port for the buildroot,
-> > i have some problems but after couple of days i will submit the new set
-> of
-> > patches.
+>I tried this yesterday and yes, it's broken ATM.
+>The includes are pretty messed up, could be that the patch in the thread
+>with subject "sysroot support in toolchain, use correct pathes" in the
+>archives helps there. This needs proper fixing anyway and this patch
+>does make it better (didn't try x86_64, though) but since gcc-3.4
+>doesn't have sysroot support, it breaks in many funny ways, of course.
+>All vaguely recent gcc -- i.e. the 4.x series onward -- do have proper
+>sysroot support and work flawlessly.
 >
-> as did I say a few months ago.
->
-> but I'm stuck in the (full) xserver with somme stupid compile error I
-> just can't vet rid of. (dbxbeforereset).
->
-> I just felt like putting it away and started working on the package
-> issues again before work hit me.
->
-> Now I guess I'll wait for 7.3 which, according to x.org, is just around
-> the corner.
->
->
-> Thomas.
-> _______________________________________________
-> buildroot mailing list
-> buildroot at uclibc.org
-> http://busybox.net/mailman/listinfo/buildroot
->
+>I'll have a look at it again.
 
+http://uclibc.org/~aldot/buildroot/buildroot.mine.cow.20070611-1730.diff.bz2
 
+This was tested with sysroot support enabled, gcc-4.2.0. I intend to apply
+this once i get a chance to test if building gcc-3.4.6 without sysroot works
+as expected.
 
--- 
-Julien Letessier
-<julien.letessier@technosens.fr>
--------------- next part --------------
-An HTML attachment was scrubbed...
-URL: http://busybox.net/lists/buildroot/attachments/20070611/19f3b08e/attachment.htm 
+In the meantime you can use this patch to build a working x86_64 rootfs.
+
+HTH,
+Bernhard
