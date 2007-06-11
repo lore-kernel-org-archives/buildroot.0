@@ -1,35 +1,65 @@
-From: Konstantin Kletschke <kletschke@synertronixx.de>
-Date: Mon, 11 Jun 2007 14:05:23 +0200
-Subject: [Buildroot] problem with openssh/samba
-In-Reply-To: <466D1423.1060904@e-ml.jp>
-References: <e19d85410706050700s69e06497gef032dddb6eef9c9@mail.gmail.com>
-	<e19d85410706051935j42739782ndf1307022f2e9031@mail.gmail.com>
-	<20070606100917.e0724deb.philippe.ney@pardes.ws>
-	<e19d85410706060839l6baf072cte7a5c9c9d58b67ab@mail.gmail.com>
-	<e19d85410706061235g63cadda9s364849b0737a39ec@mail.gmail.com>
-	<20070606235535.ddc532ee.philippe.ney@pardes.ws>
-	<4668E09B.1000200@e-ml.jp> <20070608095101.GA32442@z1.synertronixx>
-	<466D1423.1060904@e-ml.jp>
-Message-ID: <20070611120522.GB27209@z1.synertronixx>
+From: Julien Letessier <julien.letessier@technosens.fr>
+Date: Mon, 11 Jun 2007 16:36:14 +0200
+Subject: [Buildroot] X11R7 package(s)
+In-Reply-To: <20070609200959.GB32353@zelow.no>
+References: <f0528b5b0706080128k7ade6f8k3e0cd6c18be550c1@mail.gmail.com>
+	<Pine.LNX.4.58.0706081157250.22966@jule.tellus>
+	<20070609200959.GB32353@zelow.no>
+Message-ID: <f0528b5b0706110736h1ca33b9fn7affde80dd699870@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Am 2007-06-11 18:21 +0900 schrieb Tomohiro Masubuchi:
+Good news here:
 
-> To solve this problem, patch this attachment file to uClibc-0.9.29,
-> and rebuild it.
 
-Indeed.
+I now have all of X11R7.2 compiling, including almost all drivers, DRI
+support, and GLX support which was what I needed. [Thomas: for some reason I
+didn't hit the compile error you're describing]
 
-> However, I am not confident about this way...
+Obviously I didn't test all drivers, though :)
+Tested in VMware, it just works ? although I wouldn't swear about its
+stability.
 
-At least it makes smbd and nmbd not segfaulting at startup anymore.
+I'm polishing the whole thing, I'll submit a (large) patch in a day or two.
 
-Konsti
+2007/6/9, Thomas Lundquist <lists@zelow.no>:
+>
+> On Fri, Jun 08, 2007 at 11:59:13AM +0300, Assen Stoyanov wrote:
+> >
+> >
+> > Hi Julien,
+> > currently i work on X11R7 port for the buildroot,
+> > i have some problems but after couple of days i will submit the new set
+> of
+> > patches.
+>
+> as did I say a few months ago.
+>
+> but I'm stuck in the (full) xserver with somme stupid compile error I
+> just can't vet rid of. (dbxbeforereset).
+>
+> I just felt like putting it away and started working on the package
+> issues again before work hit me.
+>
+> Now I guess I'll wait for 7.3 which, according to x.org, is just around
+> the corner.
+>
+>
+> Thomas.
+> _______________________________________________
+> buildroot mailing list
+> buildroot at uclibc.org
+> http://busybox.net/mailman/listinfo/buildroot
+>
+
+
 
 -- 
-GPG KeyID EF62FCEF
-Fingerprint: 13C9 B16B 9844 EC15 CC2E  A080 1E69 3FDA EF62 FCEF
+Julien Letessier
+<julien.letessier@technosens.fr>
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: http://busybox.net/lists/buildroot/attachments/20070611/19f3b08e/attachment.htm 
