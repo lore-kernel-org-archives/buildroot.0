@@ -1,53 +1,35 @@
-From: bugs at busybox.net <bugs@busybox.net>
-Date: Tue, 12 Jun 2007 08:02:29 -0700
-Subject: [Buildroot] [buildroot 0001390]: syslinux broken link
-Message-ID: <7b21935a508c07bc82c5ee5cbf19d008@busybox.net>
+From: jacmet at uclibc.org <jacmet@uclibc.org>
+Date: Tue, 12 Jun 2007 08:19:30 -0700 (PDT)
+Subject: [Buildroot] svn commit: trunk/buildroot/package/avahi
+Message-ID: <20070612151930.0A3AE4800F@busybox.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+Author: jacmet
+Date: 2007-06-12 08:19:27 -0700 (Tue, 12 Jun 2007)
+New Revision: 18802
 
-The following issue has been SUBMITTED. 
-====================================================================== 
-http://busybox.net/bugs/view.php?id=1390 
-====================================================================== 
-Reported By:                eneko
-Assigned To:                buildroot
-====================================================================== 
-Project:                    buildroot
-Issue ID:                   1390
-Category:                   Other
-Reproducibility:            have not tried
-Severity:                   major
-Priority:                   normal
-Status:                     assigned
-====================================================================== 
-Date Submitted:             06-12-2007 08:02 PDT
-Last Modified:              06-12-2007 08:02 PDT
-====================================================================== 
-Summary:                    syslinux broken link
-Description: 
-Trying to make with syslinux selected as bootloader for target devices and
-fails when trying to download syslinux. The problem is that it search
-syslinux at URL:
+Log:
+Bumped version
 
-http://www.kernel.org/pub/linux/utils/boot/syslinux/syslinux-3.31.tar.bz2
+Modified:
+   trunk/buildroot/package/avahi/avahi.mk
 
-but it is at:
 
-http://www.kernel.org/pub/linux/utils/boot/syslinux/Old/syslinux-3.31.tar.bz2
-
-Nice project!!
-
-Eneko
-====================================================================== 
-
-Issue History 
-Date Modified   Username       Field                    Change               
-====================================================================== 
-06-12-07 08:02  eneko          New Issue                                    
-06-12-07 08:02  eneko          Status                   new => assigned     
-06-12-07 08:02  eneko          Assigned To               => buildroot       
-======================================================================
+Changeset:
+Modified: trunk/buildroot/package/avahi/avahi.mk
+===================================================================
+--- trunk/buildroot/package/avahi/avahi.mk	2007-06-12 13:21:08 UTC (rev 18801)
++++ trunk/buildroot/package/avahi/avahi.mk	2007-06-12 15:19:27 UTC (rev 18802)
+@@ -10,7 +10,7 @@
+ # either version 2.1 of the License, or (at your option) any 
+ # later version.
+ 
+-AVAHI_VER:=0.6.18
++AVAHI_VER:=0.6.19
+ AVAHI_DIR:=$(BUILD_DIR)/avahi-$(AVAHI_VER)
+ AVAHI_SITE:=http://www.avahi.org/download/
+ AVAHI_SOURCE:=avahi-$(AVAHI_VER).tar.gz
