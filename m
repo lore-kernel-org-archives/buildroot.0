@@ -1,77 +1,69 @@
-From: jacmet at uclibc.org <jacmet@uclibc.org>
-Date: Thu, 14 Jun 2007 06:09:09 -0700 (PDT)
-Subject: [Buildroot] svn commit: trunk/buildroot/package/busybox
-Message-ID: <20070614130909.D2C8548088@busybox.net>
+From: Julien Letessier <julien.letessier@technosens.fr>
+Date: Thu, 14 Jun 2007 17:08:09 +0200
+Subject: [Buildroot] Easy packaging - Makefile.autotools.in with extra make
+	magic
+Message-ID: <f0528b5b0706140808s41ac007fn7f25a58b06e4b2f4@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Author: jacmet
-Date: 2007-06-14 06:09:06 -0700 (Thu, 14 Jun 2007)
-New Revision: 18822
+Hi list,
 
-Log:
-busybox 1.6.0 patches
+I've been working on an upgrade to Benjamin's buildroot makefile for
+GNU autotools-compliant packages.
+Package makefiles themselves can now be even simpler (see example at
+end of email). I also addressed a few shortcomings:
+- packages aren't re-downloaded at every build.
+- packages can have archives with nonstandard names (e.g. "tcl8.4.15")
+- human-writable are provided (like "foo-extract", "foo-configure", etc.)
+- packages which don't [totally] use the autotools can from this
+makefile by overriding some targets.
+- autoreconf(1) is supported, e.g. when configure scripts are broken
+and  configure.ac's have to be patched
+- libtool 'foo.la' files are properly patched once installed in the
+staging directory
+- the makefile is documented ;)
 
-Added:
-   trunk/buildroot/package/busybox/busybox-1.6.0-echo.patch
-   trunk/buildroot/package/busybox/busybox-1.6.0-hushdep.patch
+For the alsa-lib examples, the makefile becomes:
 
+> alsa-lib_VERSION = 1.0.14
+> alsa-lib_SITE = ftp://ftp.alsa-project.org/pub/lib
+> alsa-lib_SOURCE = alsa-lib-$(alsa-lib_VERSION).tar.bz2
+> $(eval $(call AUTOTARGETS,alsa-lib))
 
-Changeset:
-Added: trunk/buildroot/package/busybox/busybox-1.6.0-echo.patch
-===================================================================
---- trunk/buildroot/package/busybox/busybox-1.6.0-echo.patch	                        (rev 0)
-+++ trunk/buildroot/package/busybox/busybox-1.6.0-echo.patch	2007-06-14 13:09:06 UTC (rev 18822)
-@@ -0,0 +1,11 @@
-+--- busybox-1.6.0/coreutils/echo.c	Fri Jun  1 13:48:34 2007
-++++ busybox-1.6.0-echo/coreutils/echo.c	Wed Jun  6 09:49:18 2007
-+@@ -33,7 +33,7 @@
-+ 		eflag = '\\',
-+ 		nflag = 1,  /* 1 -- print '\n' */
-+ 	};
-+-	++argv;
-++	arg = ++argv;
-+ #else
-+ 	const char *p;
-+ 	char nflag = 1;
+Attachements:
+- autotools2.patch (Makefile.autools.in and replace.sh)
+- apr.patch (apache portable runtime package)
+- alsa-lib.patch (alsa libraries)
 
-Added: trunk/buildroot/package/busybox/busybox-1.6.0-hushdep.patch
-===================================================================
---- trunk/buildroot/package/busybox/busybox-1.6.0-hushdep.patch	                        (rev 0)
-+++ trunk/buildroot/package/busybox/busybox-1.6.0-hushdep.patch	2007-06-14 13:09:06 UTC (rev 18822)
-@@ -0,0 +1,32 @@
-+--- busybox-1.6.0/shell/Config.in	Fri Jun  1 13:48:33 2007
-++++ busybox-1.6.0-hushdep/shell/Config.in	Sun Jun 10 01:02:47 2007
-+@@ -179,6 +179,7 @@
-+ config HUSH_HELP
-+ 	bool "help builtin"
-+ 	default n
-++	depends on HUSH
-+ 	help
-+ 	  Enable help builtin in hush. Code size + ~1 kbyte.
-+ 
-+@@ -206,18 +207,21 @@
-+ config HUSH_TICK
-+ 	bool "Process substitution"
-+ 	default n
-++	depends on HUSH
-+ 	help
-+ 	  Enable process substitution `command` and $(command) in hush.
-+ 
-+ config HUSH_IF
-+ 	bool "Support if/then/elif/else/fi"
-+ 	default n
-++	depends on HUSH
-+ 	help
-+ 	  Enable if/then/elif/else/fi in hush.
-+ 
-+ config HUSH_LOOPS
-+ 	bool "Support for, while and until loops"
-+ 	default n
-++	depends on HUSH
-+ 	help
-+ 	  Enable for, while and until loops in hush.
-+ 
+Apply these with "patch -p0"
+
+Benjamin, please give me your opinion about this!
+
+Cheers,
+-- 
+Julien Letessier
+<julien.letessier@technosens.fr>
+-------------- next part --------------
+A non-text attachment was scrubbed...
+Name: autotools2.patch
+Type: application/octet-stream
+Size: 11852 bytes
+Desc: not available
+Url : http://busybox.net/lists/buildroot/attachments/20070614/96e2f3b8/attachment-0003.obj 
+-------------- next part --------------
+A non-text attachment was scrubbed...
+Name: alsa.patch
+Type: application/octet-stream
+Size: 555 bytes
+Desc: not available
+Url : http://busybox.net/lists/buildroot/attachments/20070614/96e2f3b8/attachment-0004.obj 
+-------------- next part --------------
+A non-text attachment was scrubbed...
+Name: apr.patch
+Type: application/octet-stream
+Size: 5208 bytes
+Desc: not available
+Url : http://busybox.net/lists/buildroot/attachments/20070614/96e2f3b8/attachment-0005.obj 
