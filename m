@@ -1,31 +1,25 @@
-From: Tom <fivemiletom@gmail.com>
-Date: Fri, 15 Jun 2007 01:10:21 -0700
-Subject: [Buildroot] Arm / buildroot / kernel issue: init crashes?
-Message-ID: <4672496D.1060904@gmail.com>
+From: Claudio Leonel <cls@elaxys.com.br>
+Date: Sat, 16 Jun 2007 10:19:26 -0300
+Subject: [Buildroot] Toolchain for i386 with floating point emulation
+Message-ID: <4673E35E.70905@elaxys.com.br>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+Hi
 
-I have built an ARM toolchain via buildroot. I am building my kernel 
-2.6.21.1 successfully with this toolchain, it boots up OK.
+I need to build a buildroot toolchain for the Vortex86SX chip.
+This is a new low power chip from DMP which was shown in the
+latest COMPUTEX (www.vortex86sx.com).
+This chip is a 486 without the floating point coprocessor.
 
-I am compiling a very simple init program (hello world & endless loop) 
-'arm-linux-uclibcgnueabi-gcc -static init.c -o init'. It crashes "init 
-(1): undefined instruction: pc=00008c60"
+I didn't find any options in buildroot to build a toolchain for
+the i386 architecture with floating point emulation.
 
-Both buildroot and kernel are using EABI. I presume that the headers 
-2.6.21.1 (my kernel) and 2.6.20.4 (buildroot) are close enough in 
-respect to system calls.
-I tried toolchain and kernel both with and without SOFT_FLOAT(after 
-reading a thread "Problem with EABI"), but same crash either way. Tried 
-both generic_arm and ARM920T.
+Any suggestions ?
 
-I suspect my options for buildroot / uclibc, but don't know what exactly 
-to look for, anyone any ideas?
 
-Thanks
-Tom
+Best regards,
+Claudio Leonel
