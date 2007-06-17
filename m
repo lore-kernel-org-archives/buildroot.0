@@ -1,56 +1,26 @@
-From: Heikki Lindholm <holindho@cs.helsinki.fi>
-Date: Sun, 17 Jun 2007 08:11:03 +0300
-Subject: [Buildroot] svn commit: trunk/buildroot/target: cloop ext2
-In-Reply-To: <20070616175532.AC94A485EB@busybox.net>
-References: <20070616175532.AC94A485EB@busybox.net>
-Message-ID: <4674C267.90708@cs.helsinki.fi>
+From: souf <souf_oued@yahoo.fr>
+Date: Sun, 17 Jun 2007 13:46:31 +0200
+Subject: [Buildroot] Alsa (lib, utils) support
+Message-ID: <1182080791.20937.6.camel@localhost.localdomain>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-sjhill at uclibc.org kirjoitti:
-> Author: sjhill
-> Date: 2007-06-16 10:55:32 -0700 (Sat, 16 Jun 2007)
-> New Revision: 18834
-> 
-> Log:
-> Get rid of extra directory entries.
-> 
-> 
-> Modified:
->    trunk/buildroot/target/cloop/cloop.mk
->    trunk/buildroot/target/ext2/ext2root.mk
-> 
-> 
-> Changeset:
-> Modified: trunk/buildroot/target/cloop/cloop.mk
-> ===================================================================
-> --- trunk/buildroot/target/cloop/cloop.mk	2007-06-16 17:55:05 UTC (rev 18833)
-> +++ trunk/buildroot/target/cloop/cloop.mk	2007-06-16 17:55:32 UTC (rev 18834)
-> @@ -77,6 +77,7 @@
->  	@rm -rf $(TARGET_DIR)/usr/man
->  	@rm -rf $(TARGET_DIR)/usr/share/man
->  	@rm -rf $(TARGET_DIR)/usr/info
-> +	@rmdir -p --ignore-fail-on-non-empty $(TARGET_DIR)/usr/share
->  	### $(CLOOP_DIR)/create_compressed_fs -q -D target/default/device_table.txt $(TARGET_DIR) $(IMAGE).cloop
->  	## mkisofs -r $(TARGET_DIR) | $(CLOOP_DIR)/create_compressed_fs - 65536 > $(IMAGE).cloop
->  	sudo /sbin/losetup -d /dev/loop1
-> 
-> Modified: trunk/buildroot/target/ext2/ext2root.mk
-> ===================================================================
-> --- trunk/buildroot/target/ext2/ext2root.mk	2007-06-16 17:55:05 UTC (rev 18833)
-> +++ trunk/buildroot/target/ext2/ext2root.mk	2007-06-16 17:55:32 UTC (rev 18834)
-> @@ -91,6 +91,7 @@
->  	@rm -rf $(TARGET_DIR)/usr/man
->  	@rm -rf $(TARGET_DIR)/usr/share/man
->  	@rm -rf $(TARGET_DIR)/usr/info
-> +	@rmdir -p --ignore-fail-on-non-empty $(TARGET_DIR)/usr/share
->  	-/sbin/ldconfig -r $(TARGET_DIR) 2>/dev/null
->  	# Use fakeroot to pretend all target binaries are owned by root
->  	rm -f $(STAGING_DIR)/_fakeroot.$(notdir $(EXT2_TARGET))
+Hi all,
 
-Ugh, more GNUisms. Could we perhaps find a POSIX way of doing these?
+I added the suppot of alsa in buildroot (I know, this is not the first
+patch for alsa), What do you think about it ?
 
--- Heikki Lindholm
+Thanks.
+
+Malek
+
+-------------- next part --------------
+A non-text attachment was scrubbed...
+Name: buildroot-alsa.patch
+Type: text/x-patch
+Size: 11617 bytes
+Desc: not available
+Url : http://busybox.net/lists/buildroot/attachments/20070617/09ccfdb6/attachment.bin 
