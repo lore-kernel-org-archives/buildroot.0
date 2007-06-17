@@ -1,66 +1,56 @@
-From: Rex Ashbaugh <rexa@xeratech.com>
-Date: Sat, 16 Jun 2007 11:36:53 -0700
-Subject: [Buildroot] Arm / buildroot / kernel issue: init crashes?
-In-Reply-To: <6311fe0b0706161040h626e4d85x227e490373938537@mail.gmail.com>
-References: <4672496D.1060904@gmail.com>
-	<6311fe0b0706161040h626e4d85x227e490373938537@mail.gmail.com>
-Message-ID: <6311fe0b0706161136q30c4ca11qbd6ac0e50baf66d8@mail.gmail.com>
+From: Heikki Lindholm <holindho@cs.helsinki.fi>
+Date: Sun, 17 Jun 2007 08:11:03 +0300
+Subject: [Buildroot] svn commit: trunk/buildroot/target: cloop ext2
+In-Reply-To: <20070616175532.AC94A485EB@busybox.net>
+References: <20070616175532.AC94A485EB@busybox.net>
+Message-ID: <4674C267.90708@cs.helsinki.fi>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Go right to the problem,
-make a text dump of your init program and see what the undefined instruction
-is (at pc=00008c60).
+sjhill at uclibc.org kirjoitti:
+> Author: sjhill
+> Date: 2007-06-16 10:55:32 -0700 (Sat, 16 Jun 2007)
+> New Revision: 18834
+> 
+> Log:
+> Get rid of extra directory entries.
+> 
+> 
+> Modified:
+>    trunk/buildroot/target/cloop/cloop.mk
+>    trunk/buildroot/target/ext2/ext2root.mk
+> 
+> 
+> Changeset:
+> Modified: trunk/buildroot/target/cloop/cloop.mk
+> ===================================================================
+> --- trunk/buildroot/target/cloop/cloop.mk	2007-06-16 17:55:05 UTC (rev 18833)
+> +++ trunk/buildroot/target/cloop/cloop.mk	2007-06-16 17:55:32 UTC (rev 18834)
+> @@ -77,6 +77,7 @@
+>  	@rm -rf $(TARGET_DIR)/usr/man
+>  	@rm -rf $(TARGET_DIR)/usr/share/man
+>  	@rm -rf $(TARGET_DIR)/usr/info
+> +	@rmdir -p --ignore-fail-on-non-empty $(TARGET_DIR)/usr/share
+>  	### $(CLOOP_DIR)/create_compressed_fs -q -D target/default/device_table.txt $(TARGET_DIR) $(IMAGE).cloop
+>  	## mkisofs -r $(TARGET_DIR) | $(CLOOP_DIR)/create_compressed_fs - 65536 > $(IMAGE).cloop
+>  	sudo /sbin/losetup -d /dev/loop1
+> 
+> Modified: trunk/buildroot/target/ext2/ext2root.mk
+> ===================================================================
+> --- trunk/buildroot/target/ext2/ext2root.mk	2007-06-16 17:55:05 UTC (rev 18833)
+> +++ trunk/buildroot/target/ext2/ext2root.mk	2007-06-16 17:55:32 UTC (rev 18834)
+> @@ -91,6 +91,7 @@
+>  	@rm -rf $(TARGET_DIR)/usr/man
+>  	@rm -rf $(TARGET_DIR)/usr/share/man
+>  	@rm -rf $(TARGET_DIR)/usr/info
+> +	@rmdir -p --ignore-fail-on-non-empty $(TARGET_DIR)/usr/share
+>  	-/sbin/ldconfig -r $(TARGET_DIR) 2>/dev/null
+>  	# Use fakeroot to pretend all target binaries are owned by root
+>  	rm -f $(STAGING_DIR)/_fakeroot.$(notdir $(EXT2_TARGET))
 
+Ugh, more GNUisms. Could we perhaps find a POSIX way of doing these?
 
--Rex
-
-
-
-On 6/16/07, Rex Ashbaugh <rexonator@gmail.com> wrote:
->
-> Go right to the problem,
-> make a text dump of your init program and see what the undefined
-> instruction is (at pc=00008c60).
->
->
-> -Rex
->
->
->
-> On 6/15/07, Tom <fivemiletom@gmail.com> wrote:
-> >
-> > Hello,
-> >
-> > I have built an ARM toolchain via buildroot. I am building my kernel
-> > 2.6.21.1 successfully with this toolchain, it boots up OK.
-> >
-> > I am compiling a very simple init program (hello world & endless loop)
-> > 'arm-linux-uclibcgnueabi-gcc -static init.c -o init'. It crashes "init
-> > (1): undefined instruction: pc=00008c60"
-> >
-> > Both buildroot and kernel are using EABI. I presume that the headers
-> > 2.6.21.1 (my kernel) and 2.6.20.4 (buildroot) are close enough in
-> > respect to system calls.
-> > I tried toolchain and kernel both with and without SOFT_FLOAT(after
-> > reading a thread "Problem with EABI"), but same crash either way. Tried
-> > both generic_arm and ARM920T.
-> >
-> > I suspect my options for buildroot / uclibc, but don't know what exactly
-> > to look for, anyone any ideas?
-> >
-> > Thanks
-> > Tom
-> > _______________________________________________
-> > buildroot mailing list
-> > buildroot at uclibc.org
-> > http://busybox.net/mailman/listinfo/buildroot
-> >
->
->
--------------- next part --------------
-An HTML attachment was scrubbed...
-URL: http://busybox.net/lists/buildroot/attachments/20070616/ece26eb8/attachment-0001.htm 
+-- Heikki Lindholm
