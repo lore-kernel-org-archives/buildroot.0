@@ -1,31 +1,46 @@
-From: souf <souf_oued@yahoo.fr>
-Date: Mon, 18 Jun 2007 23:35:54 +0200
+From: Paul Kavan <pkavan@gmail.com>
+Date: Mon, 18 Jun 2007 16:43:30 -0500
 Subject: [Buildroot] ALSA libs and utils
-In-Reply-To: <61c0054e0706181333n3fd79fekf918318d3ba208b7@mail.gmail.com>
+In-Reply-To: <1182202554.22765.3.camel@localhost.localdomain>
 References: <61c0054e0706181333n3fd79fekf918318d3ba208b7@mail.gmail.com>
-Message-ID: <1182202554.22765.3.camel@localhost.localdomain>
+	<1182202554.22765.3.camel@localhost.localdomain>
+Message-ID: <61c0054e0706181443s539fef41s298ef8690b237476@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Le lundi 18 juin 2007 ? 15:33 -0500, Paul Kavan a ?crit :
-> Hello all:
-> 
-> I am using revision 18126--I *think*. I know there is someplace I can
-> check, but cannot remember where. I would like to add the alsa-lib and
-> alsa-utils to my buildroot system, but am unsure how. Does anyone know
-> and care to share with me how to get these integrated with buildroot. 
-> 
-> Thanks.
-> 
-> Paul
+Malek:
 
-you can try my patch that I had posted yesterday
 
-http://busybox.net/lists/buildroot/attachments/20070617/09ccfdb6/attachment.bin
+> you can try my patch that I had posted yesterday
+>
+>
+> http://busybox.net/lists/buildroot/attachments/20070617/09ccfdb6/attachment.bin
 
-Good luck.
 
-Malek
+
+I have never patched buildroot before. Would  I go to the top level
+directory of buildroot and do something like:
+
+patch -p1 < [patchname]
+
+Thanks
+
+Paul
+
+
+
+
+-- 
+***************************************
+Paul David Kavan
+Project Engineer
+GRH Electronics, Inc.
+402-734-4900
+pkavan@gmail.com
+***************************************
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: http://busybox.net/lists/buildroot/attachments/20070618/5c2774b3/attachment.htm 
