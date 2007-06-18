@@ -1,39 +1,26 @@
-From: Konstantin Kletschke <kletschke@synertronixx.de>
-Date: Mon, 18 Jun 2007 18:30:20 +0200
-Subject: [Buildroot] uClibc's index function
-In-Reply-To: <20070618151333.GA860@aon.at>
-References: <20070618074508.GD1841@z1.synertronixx>
-	<20070618085343.GA17187@aon.at>
-	<20070618130452.GA7970@z1.synertronixx>
-	<20070618151333.GA860@aon.at>
-Message-ID: <20070618163020.GD7970@z1.synertronixx>
+From: Peter Korsgaard <peter.korsgaard@barco.com>
+Date: Mon, 18 Jun 2007 16:15:39 +0200
+Subject: [Buildroot] Ping bug
+In-Reply-To: <1943652279.20070618111644@styx.cabel.net> (Iouri Kharon's
+	message of "Mon, 18 Jun 2007 11:16:44 +0400")
+References: <1943652279.20070618111644@styx.cabel.net>
+Message-ID: <87ir9l5oxg.fsf@sleipner.barco.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Am 2007-06-18 17:13 +0200 schrieb Bernhard Fischer:
+>>>>> "IK" == Iouri Kharon <bc-info@styx.cabel.net> writes:
 
-> buildroot/toolchain/gcc/4.2.0/305-libmudflap-susv3-legacy.patch
+Hi,
 
-Thanks for the hint :-)
-That helped me fiddling that out.
+IK> Applet 'ping' set source addres (option -I) incorrect (as destination :).
+IK> Also this patch make additional check for source interface.
 
-Kind Regards, Konsti
+Please send patch to busybox list instead.
 
+Thanks!
 
 -- 
-synertronixx GmbH
-Dipl.-Ing. (FH) Konstantin Kletschke
-Vahrenwalder Str. 7
-30165 Hannover
-Tel.    : 0511 / 3574 - 661
-Fax     : 0511 / 93 57 - 679
-E-mail  : kletschke at synertronixx.de
-Internet: http://www.synertronixx.de
-Vertretungsberechtigte Gesch?ftsf?hrer:
-Marc-Oliver Borck, Dr. Matthias Blaschke
-Registergericht: Amtsgericht Hannover
-Registernummer: HRB 59670
-USt-ID: DE 216 559 901
+Bye, Peter Korsgaard
