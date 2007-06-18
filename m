@@ -1,31 +1,39 @@
-From: Bernhard Fischer <rep.dot.nop@gmail.com>
-Date: Mon, 18 Jun 2007 17:13:33 +0200
+From: Konstantin Kletschke <kletschke@synertronixx.de>
+Date: Mon, 18 Jun 2007 18:30:20 +0200
 Subject: [Buildroot] uClibc's index function
-In-Reply-To: <20070618130452.GA7970@z1.synertronixx>
+In-Reply-To: <20070618151333.GA860@aon.at>
 References: <20070618074508.GD1841@z1.synertronixx>
 	<20070618085343.GA17187@aon.at>
 	<20070618130452.GA7970@z1.synertronixx>
-Message-ID: <20070618151333.GA860@aon.at>
+	<20070618151333.GA860@aon.at>
+Message-ID: <20070618163020.GD7970@z1.synertronixx>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Mon, Jun 18, 2007 at 03:04:52PM +0200, Konstantin Kletschke wrote:
->Am 2007-06-18 10:53 +0200 schrieb Bernhard Fischer:
->
->> See the help-text of UCLIBC_SUSV3_LEGACY
->
->Aaahh! Thanks for the Hint me stupid did not find it...
->
->> You should not use these anymore but use their modern, current
->> counterparts.
->
->What are these modern counterparts then (again I have no luck with
->google & Co today).
+Am 2007-06-18 17:13 +0200 schrieb Bernhard Fischer:
 
-man bzero
+> buildroot/toolchain/gcc/4.2.0/305-libmudflap-susv3-legacy.patch
 
-see e.g.:
-buildroot/toolchain/gcc/4.2.0/305-libmudflap-susv3-legacy.patch
+Thanks for the hint :-)
+That helped me fiddling that out.
+
+Kind Regards, Konsti
+
+
+-- 
+synertronixx GmbH
+Dipl.-Ing. (FH) Konstantin Kletschke
+Vahrenwalder Str. 7
+30165 Hannover
+Tel.    : 0511 / 3574 - 661
+Fax     : 0511 / 93 57 - 679
+E-mail  : kletschke at synertronixx.de
+Internet: http://www.synertronixx.de
+Vertretungsberechtigte Gesch?ftsf?hrer:
+Marc-Oliver Borck, Dr. Matthias Blaschke
+Registergericht: Amtsgericht Hannover
+Registernummer: HRB 59670
+USt-ID: DE 216 559 901
