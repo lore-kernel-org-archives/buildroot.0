@@ -1,41 +1,42 @@
-From: Johan Thelin <e8johan@gmail.com>
-Date: Mon, 18 Jun 2007 10:53:55 +0200
-Subject: [Buildroot] nios2 and TLS
-Message-ID: <d1f7544e0706180153v28b69cc6w268bf5ccd3230120@mail.gmail.com>
+From: Konstantin Kletschke <kletschke@synertronixx.de>
+Date: Mon, 18 Jun 2007 15:04:52 +0200
+Subject: [Buildroot] uClibc's index function
+In-Reply-To: <20070618085343.GA17187@aon.at>
+References: <20070618074508.GD1841@z1.synertronixx>
+	<20070618085343.GA17187@aon.at>
+Message-ID: <20070618130452.GA7970@z1.synertronixx>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi all,
+Am 2007-06-18 10:53 +0200 schrieb Bernhard Fischer:
 
-I've been spending some time now trying to use buildroot to build a
-working toolchain and root for nios2. My requirements include C++
-support and threading support.
+> See the help-text of UCLIBC_SUSV3_LEGACY
 
-My problem is that I keep getting stuck on the TLS stuff. The error
-message goes something like:
+Aaahh! Thanks for the Hint me stupid did not find it...
 
-  In file included from ./include/errno.h:62,
-                 from libm/k_standard.c:19:
-  ./include/bits/uClibc_errno.h:14:18: tls.h: No such file or directory
+> You should not use these anymore but use their modern, current
+> counterparts.
 
-Removing the need for TLS in the libm only means postponing the error
-messages from hell to the libpthread build. As I understand it, this
-is inevitable as TLS handles the thread-local storage of variables.
+What are these modern counterparts then (again I have no luck with
+google & Co today).
 
-After having studied mailing archived and googled around I've found
-two traces of hope:
-
-  #1 The "TLS stuff" seems to be optional. Is it possible to build a
-toolchain supporting C++ and threading without it?
-
-  #2 Finding the mystery patch that solves this. I see hints of
-Microtronix having a solution that can be found. I just don't know
-where to look.
+Konsti
 
 
-Best regards,
-
-Johan Thelin
+-- 
+synertronixx GmbH
+Dipl.-Ing. (FH) Konstantin Kletschke
+Vahrenwalder Str. 7
+30165 Hannover
+Tel.    : 0511 / 3574 - 661
+Fax     : 0511 / 93 57 - 679
+E-mail  : kletschke at synertronixx.de
+Internet: http://www.synertronixx.de
+Vertretungsberechtigte Gesch?ftsf?hrer:
+Marc-Oliver Borck, Dr. Matthias Blaschke
+Registergericht: Amtsgericht Hannover
+Registernummer: HRB 59670
+USt-ID: DE 216 559 901
