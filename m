@@ -1,26 +1,32 @@
-From: Peter Korsgaard <peter.korsgaard@barco.com>
-Date: Mon, 18 Jun 2007 16:15:39 +0200
-Subject: [Buildroot] Ping bug
-In-Reply-To: <1943652279.20070618111644@styx.cabel.net> (Iouri Kharon's
-	message of "Mon, 18 Jun 2007 11:16:44 +0400")
-References: <1943652279.20070618111644@styx.cabel.net>
-Message-ID: <87ir9l5oxg.fsf@sleipner.barco.com>
+From: Paul Kavan <pkavan@gmail.com>
+Date: Mon, 18 Jun 2007 15:33:21 -0500
+Subject: [Buildroot] ALSA libs and utils
+Message-ID: <61c0054e0706181333n3fd79fekf918318d3ba208b7@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "IK" == Iouri Kharon <bc-info@styx.cabel.net> writes:
+Hello all:
 
-Hi,
+I am using revision 18126--I *think*. I know there is someplace I can check,
+but cannot remember where. I would like to add the alsa-lib and alsa-utils
+to my buildroot system, but am unsure how. Does anyone know and care to
+share with me how to get these integrated with buildroot.
 
-IK> Applet 'ping' set source addres (option -I) incorrect (as destination :).
-IK> Also this patch make additional check for source interface.
+Thanks.
 
-Please send patch to busybox list instead.
-
-Thanks!
+Paul
 
 -- 
-Bye, Peter Korsgaard
+***************************************
+Paul David Kavan
+Project Engineer
+GRH Electronics, Inc.
+402-734-4900
+pkavan at gmail.com
+***************************************
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: http://busybox.net/lists/buildroot/attachments/20070618/c1f1ee3b/attachment.htm 
