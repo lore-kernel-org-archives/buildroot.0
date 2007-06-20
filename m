@@ -1,5 +1,5 @@
 From: Tom <fivemiletom@gmail.com>
-Date: Wed, 20 Jun 2007 00:42:07 -0700
+Date: Wed, 20 Jun 2007 00:49:38 -0700
 Subject: [Buildroot] Arm / buildroot / kernel issue: init crashes?
 In-Reply-To: <6311fe0b0706191700g54364c24s3440e62e45eec187@mail.gmail.com>
 References: <4672496D.1060904@gmail.com>	
@@ -7,7 +7,7 @@ References: <4672496D.1060904@gmail.com>
 	<6311fe0b0706161136q30c4ca11qbd6ac0e50baf66d8@mail.gmail.com>	
 	<467721B4.3090906@gmail.com> <4678663A.6060606@gmail.com>
 	<6311fe0b0706191700g54364c24s3440e62e45eec187@mail.gmail.com>
-Message-ID: <4678DA4F.90004@gmail.com>
+Message-ID: <4678DC12.9010603@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -26,13 +26,13 @@ Rex Ashbaugh wrote:
 > Have you done the above? and is the resulting toolchain still inserting 
 > illegal instructions for arm920T?
 
-Yes, I had specified ARM920T in both buildroot and uclibc configurations 
-and got the specs below. While the resulting toolchain could certainly 
-compile code for this cpu, it seemed to happen frequently that gcc would 
-use a different default cpu, which caused these ARMv5 instructions to be 
+Yes, I had specified ARM920T in both buildroot and uclibc configurations
+and got the specs below. While the resulting toolchain could certainly
+compile code for this cpu, it seemed to happen frequently that gcc would
+use a different default cpu, which caused these ARMv5 instructions to be
 included.
 
-Just now, after adding --with-spec=arm9tdmi to the binutils/gcc options 
+Just now, after adding --with-spec=arm9tdmi to the binutils/gcc options
 of buildroot, it seems to work better. (More testing tomorrow.)
 
 Thanks
