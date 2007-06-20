@@ -1,42 +1,46 @@
-From: Julien Letessier <julien.letessier@technosens.fr>
-Date: Wed, 20 Jun 2007 12:02:48 +0200
-Subject: [Buildroot] Patch: makefile debugging help
-Message-ID: <f0528b5b0706200302j15d13f77re3c77619b9094805@mail.gmail.com>
+From: Chris Malarky <chris@malarky.org>
+Date: Wed, 20 Jun 2007 11:05:23 +0100
+Subject: [Buildroot] buildroot-20070620.tar.bz2 snapshot issue
+In-Reply-To: <5d75f4610706200238ud163a2jbe00525e00b274a9@mail.gmail.com>
+References: <5d75f4610706200238ud163a2jbe00525e00b274a9@mail.gmail.com>
+Message-ID: <1182333923.5719.30.camel@shadow.muzakdomain.imagesound.co.uk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi list,
+Hi,
 
-One very small patch to the main Makefile:
+On Wed, 2007-06-20 at 16:38 +0700, BuraphaLinux Server wrote:
+> Hello,
+> 
+> Using buildroot-20070620.tar.bz2 snapshot on a linux system, when I
+> try to compile
+> the gettext I get an error.  I used the default gcc and uclibc
+> settings.  How can I solve
+> this problem?
+> 
+>< SNIP ><
+>
+> In file included from plural-eval.c:33:
+> ../../gettext-runtime/intl/eval-plural.h:28: error: conflicting types
+> for 'plural_eval'
+> ../../gettext-runtime/intl/plural-exp.h:115: error: previous
+> declaration of 'plural_eval' was here
+> make[4]: *** [msgfmt-plural-eval.o] Error 1
+> make[4]: Leaving directory
+> '/var/www/htdocs/download/bls1.0/sourcecd/source/4/isolinux/initrd2/buildroot/build_i586/gettext-0.14.6/gettext-tools/src'
 
-Two new targets, show-var and print-var, can help one to debug package
-makefiles.
-[credit: inspired by my days with the pkgsrc team at NetBSD]
+See: http://bugs.uclibc.org/view.php?id=1300 
 
-Example:
+This is the first hit in Google for 'gettext plural_eval uclibc'.  I can
+definitely recommend having a good search around when you hit a problem
+- I have found three fixes so far from notes and patches in the bug
+system that haven't yet made it in to SVN.
 
-$ make show-var VARNAME=GENEXT2_DIR
-GENEXT2_DIR expands to     /home/mezis/buildroot/build_i686/genext2fs-1.4
-GENEXT2_DIR is defined as  $(BUILD_DIR)/genext2fs-$(GENEXT2_VERSION)
-
-$ make print-var VARNAME=GENEXT2_DIR
-/home/mezis/buildroot/build_i686/genext2fs-1.4
-
-Very basic but saves me a lot of time...
-Also allows me to use build automation tools that run make and
-check/install the resulting image.
-
-Hope this helps
+Regards,
+Chris
 -- 
-Julien Letessier
-<julien.letessier@technosens.fr>
--------------- next part --------------
-A non-text attachment was scrubbed...
-Name: mk-debugging-helper.patch
-Type: application/octet-stream
-Size: 428 bytes
-Desc: not available
-Url : http://busybox.net/lists/buildroot/attachments/20070620/616bbc39/attachment.obj 
+Chris Malarky
+chris at malarky dot org
