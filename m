@@ -1,15 +1,22 @@
-From: Steven J. Hill <sjhill@realitydiluted.com>
-Date: Wed, 20 Jun 2007 22:45:18 -0500
-Subject: [Buildroot] nios2 and TLS
-In-Reply-To: <d1f7544e0706180153v28b69cc6w268bf5ccd3230120@mail.gmail.com>
-References: <d1f7544e0706180153v28b69cc6w268bf5ccd3230120@mail.gmail.com>
-Message-ID: <4679F44E.9060407@realitydiluted.com>
+From: Gilad Rom <gilad.rom@gmail.com>
+Date: Thu, 21 Jun 2007 12:41:58 +0300
+Subject: [Buildroot] [PATCH] ALSA Libraries
+Message-ID: <39d7ed000706210241s12b9cbaage4fc1266c88e776a@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-You need to NOT select NPTL threading.
+Hi,
 
--Steve
+This patch adds support for the ALSA libraries.
+
+Gilad
+-------------- next part --------------
+A non-text attachment was scrubbed...
+Name: alsa-lib.patch
+Type: text/x-patch
+Size: 3050 bytes
+Desc: not available
+Url : http://busybox.net/lists/buildroot/attachments/20070621/8dc13f2c/attachment.bin 
