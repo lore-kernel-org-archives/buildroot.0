@@ -1,24 +1,41 @@
-From: Bernhard Fischer <rep.dot.nop@gmail.com>
-Date: Thu, 21 Jun 2007 18:59:27 +0200
-Subject: [Buildroot] Toolchain installation location changed
-In-Reply-To: <d824fc380706210838u5e2b3a91jfa2d0a4bd701d7ca@mail.gmail.com>
-References: <d824fc380706210838u5e2b3a91jfa2d0a4bd701d7ca@mail.gmail.com>
-Message-ID: <20070621165927.GA23519@aon.at>
+From: Claudio Leonel <cls@elaxys.com.br>
+Date: Thu, 21 Jun 2007 15:54:32 -0300
+Subject: [Buildroot] Toolchain for  i386 with  floating point emulation
+In-Reply-To: <1182166638.3576.20.camel@localhost>
+References: <4673E35E.70905@elaxys.com.br>	
+	<1182015829.13620.3.camel@localhost>
+	<46754508.2020606@elaxys.com.br>	
+	<1182092405.3642.20.camel@localhost>
+	<46766463.8030504@elaxys.com.br>
+	<1182166638.3576.20.camel@localhost>
+Message-ID: <467AC968.1000004@elaxys.com.br>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Thu, Jun 21, 2007 at 10:38:59AM -0500, Jin Jiu wrote:
->I compiled 6/20/2007's snapshot and found the cross toolchain for
->ARM-(little endian) is at build_arm/staging_dir/bin(consistent with
->the document). Then I did a svn checkout same day at night, and tried
->a 6/21/2007's snapshot, the location for the cross toolchain moved to
->build_arm/staging_dir/usr/bin. New to this list, wondering why this
->has changed all of a sudden.
+Hi,
 
-The documentation was updates as r18884. Please wait a few minutes for
-the website to be regenerated.
+That's it, there is nothing to be done with the toolchain
+or uClibc, we just need to configure the kernel to use math emulation !
+The kernel will intercept the FPU instructions and
+emulate them in software.
 
-Thanks for mentioning the outdated docs.
+Thanks,
+
+Claudio Leonel
+
+
+
+Mats Erik Andersson wrote:
+> Hi again!
+> 
+> Just a quick idea: In the kernel configuration there is an
+> option for building floating point emulation when targeting
+> to i386. Could you find some function name in that code in
+> order to search for the corresponding part within uClibc?
+> I will keep thinking!
+> 
+> Best regards          Mats E A
+> 
