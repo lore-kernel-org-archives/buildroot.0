@@ -1,22 +1,20 @@
-From: Gilad Rom <gilad.rom@gmail.com>
-Date: Thu, 21 Jun 2007 12:41:58 +0300
-Subject: [Buildroot] [PATCH] ALSA Libraries
-Message-ID: <39d7ed000706210241s12b9cbaage4fc1266c88e776a@mail.gmail.com>
+From: Clark Rawlins <clark.rawlins@escient.com>
+Date: Thu, 21 Jun 2007 06:40:03 -0400
+Subject: [Buildroot] [PATCH] gzip cpio
+Message-ID: <1182422403.7911.2.camel@venture.bit63.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi,
-
-This patch adds support for the ALSA libraries.
-
-Gilad
+This patch is useful to me.  It permits gzipping the cpio archive after
+creation.  This is my first attempt so if there are better, or more
+correct ways to accomplish this I am interested in improving my changes.
 -------------- next part --------------
 A non-text attachment was scrubbed...
-Name: alsa-lib.patch
+Name: target-cpio.patch
 Type: text/x-patch
-Size: 3050 bytes
+Size: 1059 bytes
 Desc: not available
-Url : http://busybox.net/lists/buildroot/attachments/20070621/8dc13f2c/attachment.bin 
+Url : http://busybox.net/lists/buildroot/attachments/20070621/86e2606c/attachment.bin 
