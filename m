@@ -1,41 +1,36 @@
-From: Claudio Leonel <cls@elaxys.com.br>
-Date: Thu, 21 Jun 2007 15:54:32 -0300
-Subject: [Buildroot] Toolchain for  i386 with  floating point emulation
-In-Reply-To: <1182166638.3576.20.camel@localhost>
-References: <4673E35E.70905@elaxys.com.br>	
-	<1182015829.13620.3.camel@localhost>
-	<46754508.2020606@elaxys.com.br>	
-	<1182092405.3642.20.camel@localhost>
-	<46766463.8030504@elaxys.com.br>
-	<1182166638.3576.20.camel@localhost>
-Message-ID: <467AC968.1000004@elaxys.com.br>
+From: aldot at uclibc.org <aldot@uclibc.org>
+Date: Thu, 21 Jun 2007 15:05:39 -0700 (PDT)
+Subject: [Buildroot] svn commit: trunk/buildroot/package/pkgconfig
+Message-ID: <20070621220539.0300B4864D@busybox.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi,
+Author: aldot
+Date: 2007-06-21 15:05:39 -0700 (Thu, 21 Jun 2007)
+New Revision: 18885
 
-That's it, there is nothing to be done with the toolchain
-or uClibc, we just need to configure the kernel to use math emulation !
-The kernel will intercept the FPU instructions and
-emulate them in software.
-
-Thanks,
-
-Claudio Leonel
+Log:
+- use the correct path to the pkgconfig .pc
 
 
+Modified:
+   trunk/buildroot/package/pkgconfig/pkgconfig.mk
 
-Mats Erik Andersson wrote:
-> Hi again!
-> 
-> Just a quick idea: In the kernel configuration there is an
-> option for building floating point emulation when targeting
-> to i386. Could you find some function name in that code in
-> order to search for the corresponding part within uClibc?
-> I will keep thinking!
-> 
-> Best regards          Mats E A
-> 
+
+Changeset:
+Modified: trunk/buildroot/package/pkgconfig/pkgconfig.mk
+===================================================================
+--- trunk/buildroot/package/pkgconfig/pkgconfig.mk	2007-06-21 16:58:36 UTC (rev 18884)
++++ trunk/buildroot/package/pkgconfig/pkgconfig.mk	2007-06-21 22:05:39 UTC (rev 18885)
+@@ -48,7 +48,7 @@
+ 	$(MAKE) DESTDIR=$(STAGING_DIR) -C $(PKGCONFIG_DIR) install
+ 	mv $(STAGING_DIR)/usr/bin/pkg-config $(STAGING_DIR)/usr/bin/pkg-config.real
+ 	cp package/pkgconfig/pkgconfig-filter.sh $(STAGING_DIR)/usr/bin/pkg-config
+-	mkdir -p $(STAGING_DIR)/lib/pkgconfig
++	mkdir -p $(STAGING_DIR)/usr/lib/pkgconfig
+ 	rm -rf $(STAGING_DIR)/share/locale $(STAGING_DIR)/usr/info \
+ 		$(STAGING_DIR)/usr/man $(STAGING_DIR)/usr/share/doc
+ 
