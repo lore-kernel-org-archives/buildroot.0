@@ -1,91 +1,142 @@
-From: A M <madwifi@vermark.com>
-Date: Fri, 22 Jun 2007 16:55:30 -0400
-Subject: [Buildroot] Help Building Buildroot
-In-Reply-To: <1182539747.3733.9.camel@max.vermark.net>
-References: <20070622084710.5B20648010@busybox.net>
-	<f0528b5b0706220940l5543936cw53cee028dfdc9012@mail.gmail.com>
-	<1182533072.3733.7.camel@max.vermark.net>
-	<20070622182054.GC2799@aon.at> <20070622190236.GA3480@aon.at>
-	<1182539747.3733.9.camel@max.vermark.net>
-Message-ID: <1182545730.3733.20.camel@max.vermark.net>
+From: Stuart Wood <stuart.wood@labxtechnologies.com>
+Date: Fri, 22 Jun 2007 16:52:31 -0400
+Subject: [Buildroot] Buildroot failed arm linux eabi gcc 4.1.2
+Message-ID: <200706221652.31953.stuart.wood@labxtechnologies.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Update:
+Hi All, 
 
-Now I have a different error which is still related to ccache.
+Any thoughts on how to fix this would be appreciated!
 
-I have attached config.log from  buildroot/build_i586/ccache-2.4
-directory.
+Thanks 
 
-I have also noticed that under buildroot/build_i586/staging_dir/usr/bin
-there is a broken link for cc -> gcc. cc is link to gcc which is not
-there.
+Stuart
 
-The only time I have successfully compile buildroot is when I use the
-default configuration. Meaning I run "make menuconfig", look around,
-don't change anything, save and exit.
+My configuration is:
 
-I will give that a try again and see if it makes a difference.
+#
+# Automatically generated make config: don't edit
+#
+BR2_HAVE_DOT_CONFIG=y
+BR2_arm=y
+BR2_arm920t=y
+BR2_ARM_TYPE="ARM920T"
+BR2_ARM_EABI=y
+BR2_ARCH="arm"
+BR2_ENDIAN="LITTLE"
 
-Thanks again for your help.
+#
+# Build options
+#
+BR2_WGET="wget --passive-ftp"
+BR2_SVN="svn co"
+BR2_ZCAT="gzip -d -c"
+BR2_BZCAT="bzcat"
+BR2_TAR_OPTIONS=""
+BR2_DL_DIR="$(BASE_DIR)/dl"
+BR2_SOURCEFORGE_MIRROR="easynews"
+BR2_STAGING_DIR="/opt/buildroot_eabi"
+BR2_TOPDIR_PREFIX=""
+BR2_TOPDIR_SUFFIX=""
+BR2_GNU_BUILD_SUFFIX="pc-linux-gnu"
+BR2_GNU_TARGET_SUFFIX="linux-uclibc"
+BR2_JLEVEL=4
+BR2_TOOLCHAIN_BUILDROOT=y
 
-A M
+#
+# Toolchain Options
+#
+
+#
+# Kernel Header Options
+#
+BR2_KERNEL_HEADERS_2_6_20=y
+BR2_DEFAULT_KERNEL_HEADERS="2.6.20.4"
+
+#
+# uClibc Options
+#
+BR2_UCLIBC_VERSION_SNAPSHOT=y
+BR2_USE_UCLIBC_SNAPSHOT="snapshot"
+BR2_UCLIBC_CONFIG="toolchain/uClibc/uClibc-0.9.29.config"
+BR2_PTHREADS_OLD=y
+
+#
+# Binutils Options
+#
+BR2_BINUTILS_VERSION_2_17=y
+BR2_BINUTILS_VERSION="2.17"
+BR2_EXTRA_BINUTILS_CONFIG_OPTIONS=""
+
+#
+# Gcc Options
+#
+BR2_GCC_VERSION_4_1_2=y
+BR2_GCC_VERSION="4.1.2"
+BR2_TOOLCHAIN_SYSROOT=y
+BR2_EXTRA_GCC_CONFIG_OPTIONS=""
 
 
-On Fri, 2007-06-22 at 15:15 -0400, A M wrote:
-> Thanks will give it a try now. Will let you know the outcome.
-> 
-> A M
-> 
-> On Fri, 2007-06-22 at 21:02 +0200, Bernhard Fischer wrote:
-> > On Fri, Jun 22, 2007 at 08:20:54PM +0200, Bernhard Fischer wrote:
-> > >On Fri, Jun 22, 2007 at 01:24:32PM -0400, A M wrote:
-> > >>Hi Guys,
-> > >>
-> > >>I can not seem to run make sucessfully using the daily snapshot of
-> > >>buildroot. It seems to always break just after downloading ccache.  Here
-> > >>is the out put of what I have. I have tried this over and over again.
-> > >>
-> > >>I have also attached my .config file.  Maybe there is something am
-> > >>missing.
-> > >>
-> > >>My target board is the WRAP 2E-E PC Engines
-> > >
-> > >>(cd /home/amark/development/buildroot/build_i586/staging_dir/bin-ccache;
-> > >>\
-> > >>                ln -fs i586-linux-uclibc-gcc i586-linux-gcc; \
-> > >>                ln -fs i586-linux-uclibc-gcc i586-linux-cc; \
-> > >>                ln -fs i586-linux-uclibc-gcc i586-linux-uclibc-cc);
-> > >>[ -f /home/amark/development/buildroot/build_i586/staging_dir/bin/i586-linux-uclibc-gcc ] && \
-> > >>
-> > >>mv /home/amark/development/buildroot/build_i586/staging_dir/bin/i586-linux-uclibc-gcc /home/amark/development/buildroot/build_i586/staging_dir/bin-ccache/
-> > >>make: ***
-> > >>[/home/amark/development/buildroot/build_i586/staging_dir/usr/bin/ccache] Error 1
-> > >
-> > >The toolchain now resides in staging_dir/usr/bin (formerly it was in
-> > >staging_dir/bin), so this needs to be adjusted.
-> > >I will fix that up ASAP, disable ccache for now until this is fixed.
-> > 
-> > Should be fixed as of r18897, please let me know if this works for you
-> > again.
-> > 
-> > _______________________________________________
-> > buildroot mailing list
-> > buildroot at uclibc.org
-> > http://busybox.net/mailman/listinfo/buildroot
-> 
-> _______________________________________________
-> buildroot mailing list
-> buildroot at uclibc.org
-> http://busybox.net/mailman/listinfo/buildroot
--------------- next part --------------
-A non-text attachment was scrubbed...
-Name: config.log
-Type: text/x-log
-Size: 6860 bytes
-Desc: not available
-Url : http://busybox.net/lists/buildroot/attachments/20070622/a25bc54b/attachment.bin 
+#
+# Common Toolchain Options
+#
+BR2_LARGEFILE=y
+BR2_SOFT_FLOAT=y
+BR2_TARGET_OPTIMIZATION="-Os -pipe"
+
+Make Output is:
+
+$make
+if 
+[ ! -e "/home/stuart/ArmLinux/buildroot/toolchain_build_arm_nofpu/bin/sed" ] ; 
+then \
+                
+mkdir -p "/home/stuart/ArmLinux/buildroot/toolchain_build_arm_nofpu/bin"; \
+                
+rm -f "/home/stuart/ArmLinux/buildroot/toolchain_build_arm_nofpu/bin/sed"; \
+                
+ln -sf "/bin/sed" "/home/stuart/ArmLinux/buildroot/toolchain_build_arm_nofpu/bin/sed"; 
+\
+        fi
+
+Checking build system dependencies:
+CC clean:                                       Ok
+CXX clean:                                      Ok
+CPP clean:                                      Ok
+CFLAGS clean:                                   Ok
+INCLUDES clean:                                 Ok
+CXXFLAGS clean:                                 Ok
+which installed:                                Ok
+sed works:                                      Ok (/bin/sed)
+GNU make version '3.81':                        Ok
+C compiler '/usr/bin/gcc'
+C compiler version '4.1.2':                     Ok
+C++ compiler '/usr/bin/c++'
+C++ compiler version '4.1.2':                   Ok
+bison installed:                                Ok
+flex installed:                                 Ok
+gettext installed:                              Ok
+makeinfo installed:                             Ok
+Build system dependencies:                      Ok
+
+make 
+MAKE="make -j1" -C /home/stuart/ArmLinux/buildroot/toolchain_build_arm_nofpu/uClibc 
+\
+                PREFIX=/opt/buildroot_eabi \
+                DEVEL_PREFIX=/usr/ \
+                RUNTIME_PREFIX=/ \
+                install_runtime install_dev
+make[1]: Entering directory 
+`/home/stuart/ArmLinux/buildroot/toolchain_build_arm_nofpu/uClibc'
+install -d /opt/buildroot_eabi/lib
+install -m 644 lib/lib*-0.9.29.so \
+                /opt/buildroot_eabi/lib
+install: cannot stat `lib/lib*-0.9.29.so': No such file or directory
+make[1]: *** [install_runtime] Error 1
+make[1]: Leaving directory 
+`/home/stuart/ArmLinux/buildroot/toolchain_build_arm_nofpu/uClibc'
+make: *** [/opt/buildroot_eabi/usr/lib/libc.a] Error 2
