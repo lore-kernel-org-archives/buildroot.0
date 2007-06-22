@@ -1,34 +1,58 @@
-From: Bernhard Fischer <rep.dot.nop@gmail.com>
-Date: Fri, 22 Jun 2007 23:07:30 +0200
-Subject: [Buildroot] Help Building Buildroot
-In-Reply-To: <1182545730.3733.20.camel@max.vermark.net>
-References: <20070622084710.5B20648010@busybox.net>
-	<f0528b5b0706220940l5543936cw53cee028dfdc9012@mail.gmail.com>
-	<1182533072.3733.7.camel@max.vermark.net>
-	<20070622182054.GC2799@aon.at> <20070622190236.GA3480@aon.at>
-	<1182539747.3733.9.camel@max.vermark.net>
-	<1182545730.3733.20.camel@max.vermark.net>
-Message-ID: <20070622210730.GC4096@aon.at>
+From: Rick Foos <rick@synchromeshcomputing.com>
+Date: Fri, 22 Jun 2007 17:04:35 -0500
+Subject: [Buildroot] Can "make <>_defconfig" rules be restored?
+Message-ID: <01c301c7b519$52679b40$6e02a8c0@k2>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Fri, Jun 22, 2007 at 04:55:30PM -0400, A M wrote:
->Update:
->
->Now I have a different error which is still related to ccache.
+Hi All,
 
-Works fine here. rm -rf toolchain_* build_* and retry. Sounds like the
-non-working ccache from before did damage your compiler.
+I would like to use "_defconfig" files to save and restore specific defaults 
+for several platforms.
 
->I have attached config.log from  buildroot/build_i586/ccache-2.4
->directory.
->
->I have also noticed that under buildroot/build_i586/staging_dir/usr/bin
->there is a broken link for cc -> gcc. cc is link to gcc which is not
->there.
+The Makefile at one point supported loading of user defined "_defconfig" 
+files. In the current Makefile the noconfig_targets part of "_defconfig" is 
+commented out.
 
-I saw that too, but IIRC this is there since ages, you can safely ignore
-it (does anybody know why it is there?).
+Is there a problem with restoring "_defconfig" file loading?
+
+I searched the list archives on defconfig, but could not find any decision 
+on this.
+
+The following patch, restores "_defconfig" file loading limited to files at 
+a maxdepth of 4.
+
+This allows "_defconfig" files in packages and tools while avoiding the 
+_defconfig files in the linux source directories.
+
+The patch also fixes the find syntax, and allows "_defconfig" files to be in 
+the same directory as make.
+
+I'd like to propose that this patch be added, or let me know a better way to 
+manage multiple default configurations.
+
+Thanks,
+Rick Foos
+
+Index: Makefile
+===================================================================
+--- Makefile    (revision 9)
++++ Makefile    (working copy)
+@@ -28,10 +28,9 @@
+
+ noconfig_targets := menuconfig config oldconfig randconfig \
+        defconfig allyesconfig allnoconfig release tags    \
+-       source-check
++       source-check \
++       $(shell find $(TOPDIR) -mindepth 2 -maxdepth 4 -name \*_defconfig | 
+sed
+'s|.*\/||')
+
+-#      $(shell find . -name *_defconfig |sed 's/.*\///')
+-
+ # Pull in the user's configuration file
+ ifeq ($(filter $(noconfig_targets),$(MAKECMDGOALS)),)
+ -include $(TOPDIR).config
