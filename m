@@ -1,34 +1,52 @@
-From: Hans-Christian Egtvedt <hcegtvedt@norway.atmel.com>
-Date: Mon, 25 Jun 2007 11:27:47 +0200
-Subject: [Buildroot] Make the top rule %_defconfig work
-Message-ID: <1182763667.10703.21.camel@localhost.localdomain>
+From: Hans-Christian Egtvedt <hcegtvedt@atmel.com>
+Date: Fri, 22 Jun 2007 13:53:21 +0200
+Subject: [PATCH 1/1] Search for defconfigs in target, not entire tree
+Message-ID: <mailman.0.1182763698.1096.buildroot@uclibc.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi,
+This patch changes the way the top level Makefile searches for a
+<board>_defconfig file, it will only look in the target/ directory and its sub
+directories.
 
-Please see the included patch as a comment to the earlier discussion
-about having _defconfig. By only searching the target/ directory it will
-not conflict with the extracted kernel and similar.
+The patch also enables loading a defconfig even if there already is a .config.
 
-It makes the most sense to be able to load a BR2 <board>_defconfig from
-the target directory. What this build target does is to overwrite
-the .config with a premade default configuration.
+Signed-off-by: Hans-Christian Egtvedt <hcegtvedt@atmel.com>
+---
+ Makefile |    8 ++++----
+ 1 files changed, 4 insertions(+), 4 deletions(-)
 
-For example as a hardware (and software) provider I would like to be
-able to build a "standard" image having a collection of applications
-useful for the board.
-
+diff --git a/Makefile b/Makefile
+index 1285144..1517653 100644
+--- a/Makefile
++++ b/Makefile
+@@ -191,10 +191,6 @@ allnoconfig: $(CONFIG)/conf
+ defconfig: $(CONFIG)/conf
+ 	@$(CONFIG)/conf -d $(CONFIG_CONFIG_IN)
+ 
+-%_defconfig: $(CONFIG)/conf
+-	cp $(shell find . -name $@) .config
+-	@$(CONFIG)/conf -o $(CONFIG_CONFIG_IN)
+-
+ #############################################################
+ #
+ # Cleanup and misc junk
+@@ -209,6 +205,10 @@ distclean: clean
+ 
+ endif # ifeq ($(strip $(BR2_HAVE_DOT_CONFIG)),y)
+ 
++%_defconfig: $(CONFIG)/conf
++	cp $(shell find target/ -name $@) .config
++	@$(CONFIG)/conf -o $(CONFIG_CONFIG_IN)
++
+ .PHONY: dummy subdirs release distclean clean config oldconfig \
+ 	menuconfig tags check test depend defconfig
+ 
 -- 
-Mvh
-Hans-Christian Egtvedt
--------------- next part --------------
-A non-text attachment was scrubbed...
-Name: 0001-Search-for-defconfigs-in-target-not-entire-tree.txt
-Type: application/mbox
-Size: 0 bytes
-Desc: not available
-Url : http://busybox.net/lists/buildroot/attachments/20070625/f14863a8/attachment.bin 
+1.4.4.2
+
+
+--=-GryXooXpkmpk+Kv25C72--
