@@ -1,115 +1,45 @@
-From: aldot at uclibc.org <aldot@uclibc.org>
-Date: Fri, 22 Jun 2007 12:01:51 -0700 (PDT)
-Subject: [Buildroot] svn commit: trunk/buildroot/toolchain/ccache
-Message-ID: <20070622190151.09C9D48673@busybox.net>
+From: Bernhard Fischer <rep.dot.nop@gmail.com>
+Date: Fri, 22 Jun 2007 21:02:36 +0200
+Subject: [Buildroot] Help Building Buildroot
+In-Reply-To: <20070622182054.GC2799@aon.at>
+References: <20070622084710.5B20648010@busybox.net>
+	<f0528b5b0706220940l5543936cw53cee028dfdc9012@mail.gmail.com>
+	<1182533072.3733.7.camel@max.vermark.net>
+	<20070622182054.GC2799@aon.at>
+Message-ID: <20070622190236.GA3480@aon.at>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Author: aldot
-Date: 2007-06-22 12:01:48 -0700 (Fri, 22 Jun 2007)
-New Revision: 18897
+On Fri, Jun 22, 2007 at 08:20:54PM +0200, Bernhard Fischer wrote:
+>On Fri, Jun 22, 2007 at 01:24:32PM -0400, A M wrote:
+>>Hi Guys,
+>>
+>>I can not seem to run make sucessfully using the daily snapshot of
+>>buildroot. It seems to always break just after downloading ccache.  Here
+>>is the out put of what I have. I have tried this over and over again.
+>>
+>>I have also attached my .config file.  Maybe there is something am
+>>missing.
+>>
+>>My target board is the WRAP 2E-E PC Engines
+>
+>>(cd /home/amark/development/buildroot/build_i586/staging_dir/bin-ccache;
+>>\
+>>                ln -fs i586-linux-uclibc-gcc i586-linux-gcc; \
+>>                ln -fs i586-linux-uclibc-gcc i586-linux-cc; \
+>>                ln -fs i586-linux-uclibc-gcc i586-linux-uclibc-cc);
+>>[ -f /home/amark/development/buildroot/build_i586/staging_dir/bin/i586-linux-uclibc-gcc ] && \
+>>
+>>mv /home/amark/development/buildroot/build_i586/staging_dir/bin/i586-linux-uclibc-gcc /home/amark/development/buildroot/build_i586/staging_dir/bin-ccache/
+>>make: ***
+>>[/home/amark/development/buildroot/build_i586/staging_dir/usr/bin/ccache] Error 1
+>
+>The toolchain now resides in staging_dir/usr/bin (formerly it was in
+>staging_dir/bin), so this needs to be adjusted.
+>I will fix that up ASAP, disable ccache for now until this is fixed.
 
-Log:
-- fixup ccache to know about usr/bin
-
-
-Modified:
-   trunk/buildroot/toolchain/ccache/ccache.mk
-
-
-Changeset:
-Modified: trunk/buildroot/toolchain/ccache/ccache.mk
-===================================================================
---- trunk/buildroot/toolchain/ccache/ccache.mk	2007-06-22 17:49:14 UTC (rev 18896)
-+++ trunk/buildroot/toolchain/ccache/ccache.mk	2007-06-22 19:01:48 UTC (rev 18897)
-@@ -46,7 +46,7 @@
- 	$(MAKE) CC="$(HOSTCC)" -C $(CCACHE_DIR1)
- 
- $(STAGING_DIR)/$(CCACHE_TARGET_BINARY): $(CCACHE_DIR1)/$(CCACHE_BINARY)
--	mkdir -p $(STAGING_DIR)/usr/bin;
-+	mkdir -p $(STAGING_DIR)/usr/bin
- 	cp $(CCACHE_DIR1)/ccache $(STAGING_DIR)/usr/bin
- 	# Keep the actual toolchain binaries in a directory at the same level.
- 	# Otherwise, relative paths for include dirs break.
-@@ -55,23 +55,23 @@
- 		ln -fs $(REAL_GNU_TARGET_NAME)-gcc $(GNU_TARGET_NAME)-gcc; \
- 		ln -fs $(REAL_GNU_TARGET_NAME)-gcc $(GNU_TARGET_NAME)-cc; \
- 		ln -fs $(REAL_GNU_TARGET_NAME)-gcc $(REAL_GNU_TARGET_NAME)-cc);
--	[ -f $(STAGING_DIR)/bin/$(REAL_GNU_TARGET_NAME)-gcc ] && \
--		mv $(STAGING_DIR)/bin/$(REAL_GNU_TARGET_NAME)-gcc $(STAGING_DIR)/bin-ccache/
--	(cd $(STAGING_DIR)/bin; \
--		ln -fs ../usr/bin/ccache $(GNU_TARGET_NAME)-cc; \
--		ln -fs ../usr/bin/ccache $(GNU_TARGET_NAME)-gcc; \
--		ln -fs ../usr/bin/ccache $(REAL_GNU_TARGET_NAME)-cc; \
--		ln -fs ../usr/bin/ccache $(REAL_GNU_TARGET_NAME)-gcc);
-+	[ -f $(STAGING_DIR)/usr/bin/$(REAL_GNU_TARGET_NAME)-gcc ] && \
-+		mv $(STAGING_DIR)/usr/bin/$(REAL_GNU_TARGET_NAME)-gcc $(STAGING_DIR)/bin-ccache/
-+	(cd $(STAGING_DIR)/usr/bin; \
-+		ln -fs ccache $(GNU_TARGET_NAME)-cc; \
-+		ln -fs ccache $(GNU_TARGET_NAME)-gcc; \
-+		ln -fs ccache $(REAL_GNU_TARGET_NAME)-cc; \
-+		ln -fs ccache $(REAL_GNU_TARGET_NAME)-gcc);
- ifeq ($(BR2_INSTALL_LIBSTDCPP),y)
--	[ -f $(STAGING_DIR)/bin/$(REAL_GNU_TARGET_NAME)-c++ ] && \
--		mv $(STAGING_DIR)/bin/$(REAL_GNU_TARGET_NAME)-c++ $(STAGING_DIR)/bin-ccache/
--	[ -f $(STAGING_DIR)/bin/$(REAL_GNU_TARGET_NAME)-g++ ] && \
--		mv $(STAGING_DIR)/bin/$(REAL_GNU_TARGET_NAME)-g++  $(STAGING_DIR)/bin-ccache/
--	(cd $(STAGING_DIR)/bin; \
--		ln -fs ../usr/bin/ccache $(GNU_TARGET_NAME)-c++; \
--		ln -fs ../usr/bin/ccache $(GNU_TARGET_NAME)-g++;\
--		ln -fs ../usr/bin/ccache $(REAL_GNU_TARGET_NAME)-c++; \
--		ln -fs ../usr/bin/ccache $(REAL_GNU_TARGET_NAME)-g++);
-+	[ -f $(STAGING_DIR)/usr/bin/$(REAL_GNU_TARGET_NAME)-c++ ] && \
-+		mv $(STAGING_DIR)/usr/bin/$(REAL_GNU_TARGET_NAME)-c++ $(STAGING_DIR)/bin-ccache/
-+	[ -f $(STAGING_DIR)/usr/bin/$(REAL_GNU_TARGET_NAME)-g++ ] && \
-+		mv $(STAGING_DIR)/usr/bin/$(REAL_GNU_TARGET_NAME)-g++  $(STAGING_DIR)/bin-ccache/
-+	(cd $(STAGING_DIR)/usr/bin; \
-+		ln -fs ccache $(GNU_TARGET_NAME)-c++; \
-+		ln -fs ccache $(GNU_TARGET_NAME)-g++;\
-+		ln -fs ccache $(REAL_GNU_TARGET_NAME)-c++; \
-+		ln -fs ccache $(REAL_GNU_TARGET_NAME)-g++);
- 	(cd $(STAGING_DIR)/bin-ccache; \
- 		ln -fs $(REAL_GNU_TARGET_NAME)-c++ $(GNU_TARGET_NAME)-c++; \
- 		ln -fs $(REAL_GNU_TARGET_NAME)-g++ $(GNU_TARGET_NAME)-g++);
-@@ -80,27 +80,27 @@
- ccache: gcc $(STAGING_DIR)/$(CCACHE_TARGET_BINARY)
- 
- ccache-clean:
--	rm -rf  $(STAGING_DIR)/bin/$(GNU_TARGET_NAME)-cc
--	rm -rf  $(STAGING_DIR)/bin/$(GNU_TARGET_NAME)-gcc
--	rm -rf  $(STAGING_DIR)/bin/$(REAL_GNU_TARGET_NAME)-cc
--	rm -rf  $(STAGING_DIR)/bin/$(REAL_GNU_TARGET_NAME)-gcc
-+	rm -rf  $(STAGING_DIR)/usr/bin/$(GNU_TARGET_NAME)-cc
-+	rm -rf  $(STAGING_DIR)/usr/bin/$(GNU_TARGET_NAME)-gcc
-+	rm -rf  $(STAGING_DIR)/usr/bin/$(REAL_GNU_TARGET_NAME)-cc
-+	rm -rf  $(STAGING_DIR)/usr/bin/$(REAL_GNU_TARGET_NAME)-gcc
- 	if [ -f $(STAGING_DIR)/bin-ccache/$(REAL_GNU_TARGET_NAME)-gcc ] ; then \
--		mv $(STAGING_DIR)/bin-ccache/$(REAL_GNU_TARGET_NAME)-gcc $(STAGING_DIR)/bin/; \
--		(cd $(STAGING_DIR)/bin; \
-+		mv $(STAGING_DIR)/bin-ccache/$(REAL_GNU_TARGET_NAME)-gcc $(STAGING_DIR)/usr/bin/; \
-+		(cd $(STAGING_DIR)/usr/bin; \
- 		    ln -fs $(REAL_GNU_TARGET_NAME)-gcc $(REAL_GNU_TARGET_NAME)-cc; \
- 		    ln -fs $(REAL_GNU_TARGET_NAME)-gcc $(GNU_TARGET_NAME)-cc; \
- 		    ln -fs $(REAL_GNU_TARGET_NAME)-gcc $(GNU_TARGET_NAME)-gcc); \
- 	fi;
- 	if [ -f $(STAGING_DIR)/bin-ccache/$(REAL_GNU_TARGET_NAME)-c++ ] ; then \
--		rm -f $(STAGING_DIR)/bin/$(REAL_GNU_TARGET_NAME)-c++; \
--		mv $(STAGING_DIR)/bin-ccache/$(REAL_GNU_TARGET_NAME)-c++ $(STAGING_DIR)/bin/; \
-+		rm -f $(STAGING_DIR)/usr/bin/$(REAL_GNU_TARGET_NAME)-c++; \
-+		mv $(STAGING_DIR)/bin-ccache/$(REAL_GNU_TARGET_NAME)-c++ $(STAGING_DIR)/usr/bin/; \
- 	fi;
- 	if [ -f $(STAGING_DIR)/bin-ccache/$(REAL_GNU_TARGET_NAME)-g++ ] ; then \
--		rm -f $(STAGING_DIR)/bin/$(REAL_GNU_TARGET_NAME)-g++; \
--		mv $(STAGING_DIR)/bin-ccache/$(REAL_GNU_TARGET_NAME)-g++  $(STAGING_DIR)/bin/; \
-+		rm -f $(STAGING_DIR)/usr/bin/$(REAL_GNU_TARGET_NAME)-g++; \
-+		mv $(STAGING_DIR)/bin-ccache/$(REAL_GNU_TARGET_NAME)-g++  $(STAGING_DIR)/usr/bin/; \
- 	fi;
- 	rm -rf  $(STAGING_DIR)/bin-ccache/*
--	(cd $(STAGING_DIR)/bin; \
-+	(cd $(STAGING_DIR)/usr/bin; \
- 		ln -fs $(REAL_GNU_TARGET_NAME)-g++ $(GNU_TARGET_NAME)-c++; \
- 		ln -fs $(REAL_GNU_TARGET_NAME)-g++ $(GNU_TARGET_NAME)-g++;\
- 		ln -fs $(REAL_GNU_TARGET_NAME)-g++ $(REAL_GNU_TARGET_NAME)-c++);
+Should be fixed as of r18897, please let me know if this works for you
+again.
