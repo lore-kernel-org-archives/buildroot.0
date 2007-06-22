@@ -1,39 +1,56 @@
-From: Bernhard Fischer <rep.dot.nop@gmail.com>
-Date: Fri, 22 Jun 2007 13:24:00 +0200
-Subject: [Buildroot] This linker was not configured to use sysroots
-In-Reply-To: <009401c7b4ba$7613bbf0$2311a8c0@OneWorld.local>
-References: <009401c7b4ba$7613bbf0$2311a8c0@OneWorld.local>
-Message-ID: <20070622112400.GB31755@aon.at>
+From: Julien Letessier <julien.letessier@technosens.fr>
+Date: Fri, 22 Jun 2007 18:40:02 +0200
+Subject: [Buildroot] svn commit: trunk/buildroot/target: device
+	device/mips
+In-Reply-To: <20070622084710.5B20648010@busybox.net>
+References: <20070622084710.5B20648010@busybox.net>
+Message-ID: <f0528b5b0706220940l5543936cw53cee028dfdc9012@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Fri, Jun 22, 2007 at 11:45:34AM +0100, Nuno da Costa Ferro wrote:
->Hello,
->
->I'm getting this error while compiling 'fontconfig':
->make[4]: Entering directory 
->`/build/firmware/buildroot/build_arm/fontconfig-2.4.2/fc-case'
->/usr/bin/gcc  -Os -pipe  -I/build/firmware/buildroot/build_arm/staging_dir/usr/include 
-> --sysroot=/build/firmware/buildroot/build_arm/staging_dir/ -isysroot 
->/build/firmware/buildroot/build_arm/staging_dir   -L/build/firmware/buildroot/build_arm/staging_dir/lib 
-> -L/build/firmware/buildroot/build_arm/staging_dir/usr/lib -o fc-case 
->fc-case.o
->
->/usr/bin/ld: this linker was not configured to use sysroots
+Bug: This breaks building the linux kernel for other devices, which
+use zImage or bzImage.
 
-IIRC this fc-case is ment to be run on the host (to create some stuff).
-Last time i looked, fontconfig was utterly broken for cross-compiling.
+Why: LINUX26_BINLOC is always defined in target/device/mips/Makefile.in
+Therefore it its definition in target/linux26.mk is never used
 
-I suggests you add -march=armv5 (or any arm* that matches your target)
-to your BR2_TARGET_OPTIMIZATION, this will make it very, very clear
-which packages are broken (are and also were even before the sysroot
-support).
+Fix: For now, remove target/device/mips/Makefile.in, which is not
+protected by a board-support menuconfig option.
+
+2007/6/22, aldot at uclibc.org <aldot@uclibc.org>:
+> Author: aldot
+> Date: 2007-06-22 01:47:09 -0700 (Fri, 22 Jun 2007)
+> New Revision: 18892
 >
->What do I need to do in order to fix this?
+> Log:
+> - add a sample (pseudo-)board for a mips malta box
+>
+>
+> Added:
+>    trunk/buildroot/target/device/mips/
+>    trunk/buildroot/target/device/mips/Makefile.in
+>    trunk/buildroot/target/device/mips/linux26.config
+>
+> Modified:
+>    trunk/buildroot/target/linux26.mk
+>
+>
+> Changeset:
+>
+> Sorry, the patch is too large to include (1635 lines).
+> Please use ViewCVS to see it!
+>
+> http://uclibc.org/cgi-bin/viewcvs.cgi?view=rev&root=svn&rev=18892
+> _______________________________________________
+> buildroot mailing list
+> buildroot at uclibc.org
+> http://busybox.net/mailman/listinfo/buildroot
+>
 
-fix fontconfig upstream so it can properly be cross-compiled, i.e. so
-that it uses CC_FOR_BUILD CFLAGS_FOR_BUILD when creating binaries ment
-to be run on the host, and CC/CFLAGS for stuff that is cross-compiled.
+
+-- 
+Julien Letessier
+<julien.letessier@technosens.fr>
