@@ -1,31 +1,36 @@
-From: Bernhard Fischer <rep.dot.nop@gmail.com>
-Date: Sat, 23 Jun 2007 15:55:39 +0200
-Subject: [Buildroot] Buildroot failed arm linux eabi gcc 4.1.2
-In-Reply-To: <200706221652.31953.stuart.wood@labxtechnologies.com>
-References: <200706221652.31953.stuart.wood@labxtechnologies.com>
-Message-ID: <20070623135539.GL4096@aon.at>
+From: aldot at uclibc.org <aldot@uclibc.org>
+Date: Sat, 23 Jun 2007 06:56:53 -0700 (PDT)
+Subject: [Buildroot] svn commit: trunk/buildroot/package/ncurses
+Message-ID: <20070623135653.61B40485CC@busybox.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Fri, Jun 22, 2007 at 04:52:31PM -0400, Stuart Wood wrote:
->Hi All, 
->
->Any thoughts on how to fix this would be appreciated!
->
->Thanks 
->
->Stuart
->
->My configuration is:
+Author: aldot
+Date: 2007-06-23 06:56:52 -0700 (Sat, 23 Jun 2007)
+New Revision: 18901
 
->BR2_ARM_EABI=y
+Log:
+- bump version
 
->BR2_GNU_TARGET_SUFFIX="linux-uclibc"
 
-This is plain wrong. You clearly didn't read the helptext.
+Modified:
+   trunk/buildroot/package/ncurses/ncurses.mk
 
-Works fine for me with gcc-4.2.0 softfloat/eabi and
-binutils-2.17.50.0.16, headers from 2.6.21.5
+
+Changeset:
+Modified: trunk/buildroot/package/ncurses/ncurses.mk
+===================================================================
+--- trunk/buildroot/package/ncurses/ncurses.mk	2007-06-23 13:49:33 UTC (rev 18900)
++++ trunk/buildroot/package/ncurses/ncurses.mk	2007-06-23 13:56:52 UTC (rev 18901)
+@@ -23,7 +23,7 @@
+ # USA
+ 
+ # TARGETS
+-NCURSES_VER:=5.5
++NCURSES_VER:=5.6
+ NCURSES_SITE:=http://ftp.gnu.org/pub/gnu/ncurses
+ NCURSES_DIR:=$(BUILD_DIR)/ncurses-$(NCURSES_VER)
+ NCURSES_SOURCE:=ncurses-$(NCURSES_VER).tar.gz
