@@ -1,47 +1,28 @@
-From: Ivan Kuten <ivan.kuten@promwad.com>
-Date: Sat, 30 Jun 2007 13:56:13 +0300
-Subject: [Buildroot] buildroot uClibc build problems for powerpc
-In-Reply-To: <468411CB.8040200@freescale.com>
-References: <468411CB.8040200@freescale.com>
-Message-ID: <20070630135613.27661bd0@newbox>
+From: <bogus@does.not.exist.com>
+Date: Sat, 23 Jun 2007 20:07:03 -0000
+Subject: No subject
+Message-ID: <mailman.1.1184255627.1096.buildroot@uclibc.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Thu, 28 Jun 2007 15:53:47 -0400
-Paul Barrette wrote:
+* under $(STAGING_DIR)/{bin,lib,include} and $(STAGING_DIR)/{bin,lib}
+for the toolchain (e.g. uclibc)
+* under $(STAGING_DIR)/usr/{bin,lib,include} and
+$(STAGING_DIR)/usr/{bin,lib} for other packages (e.g. gtk)
 
-> 
-> I get the following error:
-> 
-> make[1]: Entering directory 
-> `/localdisk/pb/latest_buildroot/buildroot/toolchain_build_powerpc_nofpu/uClibc' 
-> 
->  CC utils/readelf
->  STRIP -x -R .note -R .comment ../utils/readelf
->  CC utils/ldconfig
->  STRIP -x -R .note -R .comment ../utils/ldconfig
->  CC utils/ldd
->  STRIP -x -R .note -R .comment ../utils/ldd
->  CC utils/iconv
-> ../libc/misc/wchar/wchar.c:132:2: warning: #warning 
-> __CTYPE_HAS_UTF_8_LOCALES not set!
-> ../libc/misc/wchar/wchar.c: In function '_wchar_utf8sntowcs':
-> ../libc/misc/wchar/wchar.c:169: error: expected declaration specifiers 
-> before 'attribute_hidden'
-> ../libc/misc/wchar/wchar.c:172: error: expected '=', ',', ';', 'asm' or 
-> '__attribute__' before 'attribute_hidden'
-> ../libc/misc/wchar/wchar.c:1186: error: storage class specified for 
-> parameter '_UC_iconv_t'
+Is this correct?
 
-> 
+If so, we have a problem.
+Half the of the package/*/*.mk use one option, half use the other.
+As I "svn uped" today, the fontconfig package I had a hard time
+patching broke, because expat decided AGAIN to install directly under
+/lib.
 
-Hi Paul, 
-
-you may try this patch:
-http://article.gmane.org/gmane.comp.lib.uclibc.buildroot/3143
-
-BR,
-Ivan
+Please, please establish a clear policy on this, so we can start
+submiting patches
+-- 
+Julien Letessier
+<julien.letessier@technosens.fr>
