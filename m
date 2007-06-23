@@ -1,44 +1,33 @@
-From: Bernhard Fischer <rep.dot.nop@gmail.com>
-Date: Sat, 23 Jun 2007 22:31:09 +0200
-Subject: [Buildroot] gettext breakage on ia32 [was: Re:
-	buildroot-20070620.tar.bz2 snapshot issue]
-In-Reply-To: <5d75f4610706230553h7ea29972nd07670adf70cc23a@mail.gmail.com>
-References: <5d75f4610706200238ud163a2jbe00525e00b274a9@mail.gmail.com>
-	<1182333923.5719.30.camel@shadow.muzakdomain.imagesound.co.uk>
-	<20070620121339.GB28828@aon.at>
-	<5d75f4610706230553h7ea29972nd07670adf70cc23a@mail.gmail.com>
-Message-ID: <20070623203109.GQ4096@aon.at>
+From: AM <madwifi@vermark.com>
+Date: Sat, 23 Jun 2007 18:24:36 -0400
+Subject: [Buildroot] Need Help. Error running Make bzip2-1.0.3
+Message-ID: <007501c7b5e5$48285710$0c02a8c0@vgsdt100>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Sat, Jun 23, 2007 at 07:53:02PM +0700, BuraphaLinux Server wrote:
+I am having trouble running "make" after selecting a few package:
+Here is what am getting.
 
->/var/www/htdocs/download/bls1.0/sourcecd/source/4/isolinux/initrd2/buildroot/build_i586/staging_dir/usr/bin/i586-linux-uclibc-gcc
->-DLOCALEDIR=\"/usr/share/locale\"
->-DBISON_LOCALEDIR=\"/usr/share/locale\"
->-DLOCALE_ALIAS_PATH=\"/usr/share/locale\" -DUSEJEXE=0
->-DGETTEXTJEXEDIR=\"/lib/gettext\"
->-DGETTEXTJAR=\"/usr/share/gettext/gettext.jar\" -DLIBDIR=\"/lib\"
->-DGETTEXTDATADIR=\"/usr/share/gettext\"
->-DPROJECTSDIR=\"/usr/share/gettext/projects\" -DHAVE_CONFIG_H -I. -I..
->-I. -I. -I.. -I.. -I../libgrep -I../libuniname -I../gnulib-lib
->-I../gnulib-lib -I../intl -I../../gettext-runtime/intl -Os -pipe
->-I/var/www/htdocs/download/bls1.0/sourcecd/source/4/isolinux/initrd2/buildroot/build_i586/staging_dir/usr/include
->--sysroot=/var/www/htdocs/download/bls1.0/sourcecd/source/4/isolinux/initrd2/buildroot/build_i586/staging_dir/
->-isysroot 
->/var/www/htdocs/download/bls1.0/sourcecd/source/4/isolinux/initrd2/buildroot/build_i586/staging_dir
->-c plural-eval.c  -fPIC -DPIC -o .libs/plural-eval.o
->In file included from plural-eval.c:36:
->../../gettext-runtime/intl/eval-plural.h:28: error: conflicting types
->for 'plural_eval'
->../../gettext-runtime/intl/plural-exp.h:115: error: previous
->declaration of 'plural_eval' was here
+        make -j1 CC=/home/amark/development/1.1/buildroot/build_i586/staging_dir/usr/bin/i586-linux-uclibc-gcc RANLIB=/home/amark/development/1.1/buildroot/build_i586/staging_dir/usr/bin/i586-linux-uclibc-ranlib -C /home/amark/development/1.1/buildroot/build_i586/bzip2-1.0.3 libbz2.a
+make[1]: Entering directory `/home/amark/development/1.1/buildroot/build_i586/bzip2-1.0.3'
+rm -f libbz2.a
+ar cq libbz2.a blocksort.o huffman.o crctable.o randtable.o compress.o decompress.o bzlib.o
+/home/amark/development/1.1/buildroot/build_i586/staging_dir/usr/bin/i586-linux-uclibc-ranlib libbz2.a
+make[1]: Leaving directory `/home/amark/development/1.1/buildroot/build_i586/bzip2-1.0.3'
+cp /home/amark/development/1.1/buildroot/build_i586/bzip2-1.0.3/bzlib.h /home/amark/development/1.1/buildroot/build_i586/staging_dir/include/
+cp: cannot create regular file `/home/amark/development/1.1/buildroot/build_i586/staging_dir/include/': Is a directory
+make: *** [/home/amark/development/1.1/buildroot/build_i586/staging_dir/lib/libbz2.so.1.0.3] Error 1
 
-uclibc.org/~aldot/uClibc/uClibc-0.9.29-fix-internal_function-definition.patch
 
-for uClibc-0.9.29, keep the name.
-for trunk, name it uClibc.fix-internal_function-definition.patch
-so it gets applied to the corresponding version(s).
+I looked in the Makefile of bzip2-1.0.3 and the PREFIX is set /usr, I also see where is suppose to create the directory include if it does not exist.
+Here is the copy command from the Makefile: cp -f bzlib.h $(PREFIX)/include. Base on this, I would think it's suppose to go into staging_dir/usr/include. But the copy command above seems to be going to the wrong directory. Can somebody tell me why this is happening?
+
+Thanks everybody....
+
+A M
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: http://busybox.net/lists/buildroot/attachments/20070623/0be60f9b/attachment.htm 
