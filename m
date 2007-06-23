@@ -1,25 +1,19 @@
 From: Bernhard Fischer <rep.dot.nop@gmail.com>
-Date: Sat, 23 Jun 2007 11:14:26 +0200
-Subject: [Buildroot] svn commit: trunk/buildroot/toolchain/ccache
-In-Reply-To: <f0528b5b0706221458w11b681a6q4029cc57b8871077@mail.gmail.com>
-References: <20070622190151.09C9D48673@busybox.net>
-	<f0528b5b0706221458w11b681a6q4029cc57b8871077@mail.gmail.com>
-Message-ID: <20070623091426.GE4096@aon.at>
+Date: Sat, 23 Jun 2007 11:21:02 +0200
+Subject: [Buildroot] Buildroot failed arm linux eabi gcc 4.1.2
+In-Reply-To: <200706221652.31953.stuart.wood@labxtechnologies.com>
+References: <200706221652.31953.stuart.wood@labxtechnologies.com>
+Message-ID: <20070623092102.GF4096@aon.at>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Fri, Jun 22, 2007 at 11:58:11PM +0200, Julien Letessier wrote:
->Almost exactly what I was about to submit  :)
->(my builds were broken)
+On Fri, Jun 22, 2007 at 04:52:31PM -0400, Stuart Wood wrote:
+>Hi All, 
 >
->Extra patch:
->- replace $(STAGING_DIR)/ccache-bin with a $(CCACHE_PATH) variable
->(lower redundandy)
->- define CCACHE_PATH to be under usr/libexec, which is more LSB-ish.
+>Any thoughts on how to fix this would be appreciated!
 
-Sounds nice. Care to send a tested patch?
-
-cheers,
+Your kernel-headers sound like you are using an old version (a day or
+two old), and should svn up
