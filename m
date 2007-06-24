@@ -1,22 +1,24 @@
 From: Julien Letessier <julien.letessier@technosens.fr>
-Date: Sun, 24 Jun 2007 19:47:23 +0200
-Subject: [Buildroot] [PATCH] libraw1394 package : correct install
-Message-ID: <f0528b5b0706241047s4ec3474dpaafcf06e8a97673e@mail.gmail.com>
+Date: Sun, 24 Jun 2007 19:49:47 +0200
+Subject: [Buildroot] [PATCH] libdc1394 : new package
+Message-ID: <f0528b5b0706241049wd348da3v4c822d5b301d0738@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Install the library under $(STAGING_DIR)/usr/lib .
+libdc1394: The Linux API for IEEE1394 / Firewire cameras .
 
+Depends in libraw1394.
+Requires the autotools3 patch.
 -- 
 Julien Letessier
 <julien.letessier@technosens.fr>
 -------------- next part --------------
 A non-text attachment was scrubbed...
-Name: buildroot-libraw1394.patch
+Name: buildroot-libdc1394.patch
 Type: application/octet-stream
-Size: 1052 bytes
+Size: 980 bytes
 Desc: not available
-Url : http://busybox.net/lists/buildroot/attachments/20070624/74068891/attachment.obj 
+Url : http://busybox.net/lists/buildroot/attachments/20070624/37a012d1/attachment.obj 
