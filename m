@@ -1,46 +1,36 @@
-From: AM <madwifi@vermark.com>
-Date: Sun, 24 Jun 2007 14:15:10 -0400
-Subject: [Buildroot] gettext-0.16.1 compile error
-References: <f0528b5b0706241049wd348da3v4c822d5b301d0738@mail.gmail.com>
-Message-ID: <006201c7b68b$9a097950$0c02a8c0@vgsdt100>
+From: Julien Letessier <julien.letessier@technosens.fr>
+Date: Sun, 24 Jun 2007 20:33:18 +0200
+Subject: [Buildroot] [PATCH] fontconfig package : cross-compilation
+In-Reply-To: <f0528b5b0706240958h5b0c9148k319aea532df6eda0@mail.gmail.com>
+References: <f0528b5b0706240958h5b0c9148k319aea532df6eda0@mail.gmail.com>
+Message-ID: <f0528b5b0706241133v5f294ba0o6117a599a85cc39a@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Has anyone come across this before? I appreciate your help/input
+Functionnaly identical patch, slightly simpler.
+Installation directories are also corrected.
 
-Thanks
+2007/6/24, Julien Letessier <julien.letessier@technosens.fr>:
+> ... or rather, host-compilation of utilities used during build.
+>
+>
+> --
+> Julien Letessier
+> <julien.letessier@technosens.fr>
+>
+>
 
-AM
 
-
-I.. -I.. -I../libgrep -I../libuniname -I../gnulib-lib -I../gnulib-lib -I../intl 
- -I../../gettext-runtime/intl -Os -pipe -I/home/amark/development/1.1/buildroot/build_i586/staging_dir/usr/include 
- --sysroot=/home/amark/development/1.1/buildroot/build_i586/staging_dir/ -isysroot 
-/home/amark/development/1.1/buildroot/build_i586/staging_dir -c 
-plural-eval.c  -fPIC -DPIC -o .libs/plural-eval.o
-In file included from plural-eval.c:37:
-../../gettext-runtime/intl/eval-plural.h:28: error: conflicting types for 
-'plural_eval'
-../../gettext-runtime/intl/plural-exp.h:115: error: previous declaration of 
-'plural_eval' was here
-make[5]: *** [plural-eval.lo] Error 1
-make[5]: Leaving directory 
-`/home/amark/development/1.1/buildroot/build_i586/gettext-0.16.1/gettext-tools/src'
-make[4]: *** [all] Error 2
-make[4]: Leaving directory 
-`/home/amark/development/1.1/buildroot/build_i586/gettext-0.16.1/gettext-tools/src'
-make[3]: *** [all-recursive] Error 1
-make[3]: Leaving directory 
-`/home/amark/development/1.1/buildroot/build_i586/gettext-0.16.1/gettext-tools'
-make[2]: *** [all] Error 2
-make[2]: Leaving directory 
-`/home/amark/development/1.1/buildroot/build_i586/gettext-0.16.1/gettext-tools'
-make[1]: *** [all-recursive] Error 1
-make[1]: Leaving directory 
-`/home/amark/development/1.1/buildroot/build_i586/gettext-0.16.1'
-make: *** 
-[/home/amark/development/1.1/buildroot/build_i586/gettext-0.16.1/gettext-runtime/src/gettext] 
-Error 2
+-- 
+Julien Letessier
+<julien.letessier@technosens.fr>
+-------------- next part --------------
+A non-text attachment was scrubbed...
+Name: buildroot-fontconfig.patch
+Type: application/octet-stream
+Size: 7650 bytes
+Desc: not available
+Url : http://busybox.net/lists/buildroot/attachments/20070624/a6ec297c/attachment-0001.obj 
