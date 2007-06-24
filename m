@@ -1,42 +1,36 @@
-From: Bernhard Fischer <rep.dot.nop@gmail.com>
-Date: Sun, 24 Jun 2007 13:34:25 +0200
-Subject: [Buildroot] 4.1.2 build breakage [was: Re: svn commit:
-	trunk/buildroot/toolchain/gcc]
-In-Reply-To: <20070624113006.5A946A65FE@busybox.net>
-References: <20070624113006.5A946A65FE@busybox.net>
-Message-ID: <20070624113425.GV4096@aon.at>
+From: aldot at uclibc.org <aldot@uclibc.org>
+Date: Sun, 24 Jun 2007 05:27:09 -0700 (PDT)
+Subject: [Buildroot] svn commit: trunk/buildroot
+Message-ID: <20070624122709.C006930041@busybox.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Sun, Jun 24, 2007 at 04:30:06AM -0700, aldot at uclibc.org wrote:
->Author: aldot
->Date: 2007-06-24 04:30:05 -0700 (Sun, 24 Jun 2007)
->New Revision: 18904
->
->Log:
->- disable sysroot support for anything but the current, stable release series
+Author: aldot
+Date: 2007-06-24 05:27:08 -0700 (Sun, 24 Jun 2007)
+New Revision: 18905
 
-> config BR2_TOOLCHAIN_SYSROOT
-> #	bool "Enable toolchain with --sysroot support"
-> 	bool
->-	depends on !BR2_GCC_VERSION_3_3_5 && !BR2_GCC_VERSION_3_3_6 && !BR2_GCC_VERSION_3_4_2 && !BR2_GCC_VERSION_3_4_3 && !BR2_GCC_VERSION_3_4_4 && !BR2_GCC_VERSION_3_4_5 && !BR2_GCC_VERSION_3_4_6
->+	depends on !BR2_GCC_VERSION_3_3_5 && !BR2_GCC_VERSION_3_3_6 && !BR2_GCC_VERSION_3_4_2 && !BR2_GCC_VERSION_3_4_3 && !BR2_GCC_VERSION_3_4_4 && !BR2_GCC_VERSION_3_4_5 && !BR2_GCC_VERSION_3_4_6 &&!BR2_GCC_VERSION_4_0_0 && !BR2_GCC_VERSION_4_0_1 && !BR2_GCC_VERSION_4_0_2 && !BR2_GCC_VERSION_4_0_3 && !BR2_GCC_VERSION_4_0_4 && !BR2_GCC_VERSION_4_1_0 && !BR2_GCC_VERSION_4_1_1 && !BR2_GCC_VERSION_4_1_2
-> 	default y
-> 	help
-> 	  Enables --sysroot=dir for binutils and gcc.
->@@ -122,6 +122,9 @@
-> 	  /usr/include and libraries in /usr/lib, it will instead search
-> 	  dir/usr/include and dir/usr/lib.
-> 
->+	  This does not work with gcc < 4.2.0 (4.1.2 gets
->+	  ORIGINAL_AS_FOR_TARGET wrong)
->+
+Log:
+- forgot to apply this hunk that should have belonged to r18904
 
-If anyone uses 4.1.2 and wants sysroot support then send a patch. In my
-mind, 4.2.0 is the current, stable release which is actively
-maintained and works.
 
-regards,
+Modified:
+   trunk/buildroot/Makefile
+
+
+Changeset:
+Modified: trunk/buildroot/Makefile
+===================================================================
+--- trunk/buildroot/Makefile	2007-06-24 11:30:05 UTC (rev 18904)
++++ trunk/buildroot/Makefile	2007-06-24 12:27:08 UTC (rev 18905)
+@@ -149,7 +149,7 @@
+ $(STAGING_DIR):
+ 	@mkdir -p $(STAGING_DIR)/bin
+ 	@mkdir -p $(STAGING_DIR)/lib
+-ifneq ($(findstring y,$(BR2_GCC_VERSION_3_3_5)$(BR2_GCC_VERSION_3_3_6)$(BR2_GCC_VERSION_3_4_2)$(BR2_GCC_VERSION_3_4_3)$(BR2_GCC_VERSION_3_4_4)$(BR2_GCC_VERSION_3_4_5)$(BR2_GCC_VERSION_3_4_6)),y)
++ifeq ($(BR2_TOOLCHAIN_SYSROOT),y)
+ 	@mkdir -p $(STAGING_DIR)/usr/lib
+ else
+ 	@ln -snf . $(STAGING_DIR)/usr
