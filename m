@@ -1,23 +1,23 @@
 From: Julien Letessier <julien.letessier@technosens.fr>
-Date: Sun, 24 Jun 2007 18:57:32 +0200
-Subject: [Buildroot] [PATCH] expat package : correct install
-Message-ID: <f0528b5b0706240957r41f3afadt7304199d005a33fd@mail.gmail.com>
+Date: Sun, 24 Jun 2007 18:58:38 +0200
+Subject: [Buildroot] [PATCH] fontconfig package : cross-compilation
+Message-ID: <f0528b5b0706240958h5b0c9148k319aea532df6eda0@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Install expat cleanly under $(STAGING_DIR)/usr/ and $(TARGET_DIR)/usr/
-instead of $(STAGING_DIR)/ and $(TARGET_DIR)/
+... or rather, host-compilation of utilities used during build.
+
 
 -- 
 Julien Letessier
 <julien.letessier@technosens.fr>
 -------------- next part --------------
 A non-text attachment was scrubbed...
-Name: buildroot-expat.patch
+Name: buildroot-fontconfig.patch
 Type: application/octet-stream
-Size: 2645 bytes
+Size: 4791 bytes
 Desc: not available
-Url : http://busybox.net/lists/buildroot/attachments/20070624/6dfd5250/attachment.obj 
+Url : http://busybox.net/lists/buildroot/attachments/20070624/19956e11/attachment.obj 
