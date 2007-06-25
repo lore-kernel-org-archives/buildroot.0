@@ -1,7 +1,7 @@
 From: bugs at busybox.net <bugs@busybox.net>
-Date: Mon, 25 Jun 2007 11:28:24 -0700
-Subject: [Buildroot] [buildroot 0000518]: Add a system-V init script to ntpd
-Message-ID: <9afd55d98bf70a004a57ec9944f52055@busybox.net>
+Date: Mon, 25 Jun 2007 11:38:36 -0700
+Subject: [Buildroot] [buildroot 0001282]: ccache
+Message-ID: <5f6249237b1e567e799ce1495b9613bb@busybox.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -9,45 +9,79 @@ Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
 
-The following issue has been CLOSED 
+A NOTE has been added to this issue. 
 ====================================================================== 
-http://busybox.net/bugs/view.php?id=518 
+http://busybox.net/bugs/view.php?id=1282 
 ====================================================================== 
-Reported By:                akvadrako
+Reported By:                Franck78
 Assigned To:                buildroot
 ====================================================================== 
 Project:                    buildroot
-Issue ID:                   518
-Category:                   Other
-Reproducibility:            N/A
-Severity:                   minor
+Issue ID:                   1282
+Category:                   Architecture Specific
+Reproducibility:            always
+Severity:                   feature
 Priority:                   normal
-Status:                     closed
-Resolution:                 open
-Fixed in Version:           
+Status:                     assigned
 ====================================================================== 
-Date Submitted:             10-28-2005 09:46 PDT
-Last Modified:              06-25-2007 11:28 PDT
+Date Submitted:             03-21-2007 11:56 PDT
+Last Modified:              06-25-2007 11:38 PDT
 ====================================================================== 
-Summary:                    Add a system-V init script to ntpd
+Summary:                    ccache
 Description: 
-As long as some packages have these, they all should.
+Hello,
+
+1) ccache is built at the end of the toolchain (gcc/uclibc/binutils). It
+serves for nothing (ok I except if you slected other package it may...).
+
+2) the ccache_dir is fixed inside 'toolchain_build_i486' It would be
+better if the  CCACHE_DIR could be setup somewhere else outside
+'buildroot'.
+Why? In automated procedure constructing distro, buildroot.tar.gz is
+expanded then configured then built as all other packages making the
+distro.
+It means everytime, buildroot dir is like a virgin.. ;-) No ccache_dir
+inside.
+
+but if ccache_dir is outside....ok, it will be preserved accross rebuilds
+and the final touch would have ccache used for ALL the toolchain
+construction...!
+
+
+Adding a new option in 'make menuconfig' is beyond my knowledge of
+buildroot for now.
+
+Franck
 ====================================================================== 
 
 ---------------------------------------------------------------------- 
- bernhardf - 06-25-07 11:28  
+ bernhardf - 06-25-07 11:02  
 ---------------------------------------------------------------------- 
-Fixed in r18934. Thanks! 
+Although i don't understand a word, i think that this sounds like "Doctor,
+it hurts when i do.."
+
+Please describe the problem you are facing and suggest what should be done
+why and how, i shall close this bug otherwise. 
+
+---------------------------------------------------------------------- 
+ Franck78 - 06-25-07 11:38  
+---------------------------------------------------------------------- 
+Ok,
+A distro is something more complete than buildroot alone. The buildroot
+package is only 'one step among others'. The full build can follow some
+method like lfs (linux from scratch). 
+Having ccache dir outside of the tree build avoid loosing what have been
+already compiled when some kind of full rebuild of the distro is
+performed. In other words, the cachedir is in a safe configurable place. 
+
+tchuss. 
 
 Issue History 
 Date Modified   Username       Field                    Change               
 ====================================================================== 
-10-28-05 09:46  akvadrako      New Issue                                    
-10-28-05 09:46  akvadrako      Status                   new => assigned     
-10-28-05 09:46  akvadrako      Assigned To               => uClibc          
-10-28-05 09:46  akvadrako      File Added: br-ntp-sysvinit.patch                
-   
-02-12-07 05:49  vapier         Assigned To              uClibc => buildroot 
-06-25-07 11:28  bernhardf      Status                   assigned => closed  
-06-25-07 11:28  bernhardf      Note Added: 0002512                          
+03-21-07 11:56  Franck78       New Issue                                    
+03-21-07 11:56  Franck78       Status                   new => assigned     
+03-21-07 11:56  Franck78       Assigned To               => buildroot       
+06-25-07 11:02  bernhardf      Note Added: 0002507                          
+06-25-07 11:38  Franck78       Note Added: 0002513                          
 ======================================================================
