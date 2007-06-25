@@ -1,97 +1,45 @@
-From: Bernhard Fischer <rep.dot.nop@gmail.com>
-Date: Mon, 25 Jun 2007 22:41:57 +0200
-Subject: [Buildroot] [buildroot 0001282]: ccache
-In-Reply-To: <5f6249237b1e567e799ce1495b9613bb@busybox.net>
-References: <5f6249237b1e567e799ce1495b9613bb@busybox.net>
-Message-ID: <20070625204157.GZ4096@aon.at>
+From: Ivan Kuten <ivan.kuten@promwad.com>
+Date: Tue, 26 Jun 2007 01:36:23 +0300 (EEST)
+Subject: [Buildroot] PATCH: DirectFB PAGE_SIZE handling
+Message-ID: <36606.127.0.0.1.1182810983.squirrel@localhost>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-If somebody who regularly uses ccache could comment on the bugreport
-below then this would be great.. Iff he is talking about exporting
-CACHE_DIR to (let's say) $(STAGING_DIR).ccache then it sounds like it
-should be (easily?) doable.
+Hello,
 
-*shrug*
+DirectFB lib/direct/system.c uses PAGE_SIZE definition and fails to build:
+system.c: In function 'direct_pagesize':
+system.c:64: error: 'PAGE_SIZE' undeclared (first use in this function)
+system.c:64: error: (Each undeclared identifier is reported only once
+system.c:64: error: for each function it appears in.)
 
-On Mon, Jun 25, 2007 at 11:38:36AM -0700, bugs at busybox.net wrote:
->
->A NOTE has been added to this issue. 
->====================================================================== 
->http://busybox.net/bugs/view.php?id=1282 
->====================================================================== 
->Reported By:                Franck78
->Assigned To:                buildroot
->====================================================================== 
->Project:                    buildroot
->Issue ID:                   1282
->Category:                   Architecture Specific
->Reproducibility:            always
->Severity:                   feature
->Priority:                   normal
->Status:                     assigned
->====================================================================== 
->Date Submitted:             03-21-2007 11:56 PDT
->Last Modified:              06-25-2007 11:38 PDT
->====================================================================== 
->Summary:                    ccache
->Description: 
->Hello,
->
->1) ccache is built at the end of the toolchain (gcc/uclibc/binutils). It
->serves for nothing (ok I except if you slected other package it may...).
->
->2) the ccache_dir is fixed inside 'toolchain_build_i486' It would be
->better if the  CCACHE_DIR could be setup somewhere else outside
->'buildroot'.
->Why? In automated procedure constructing distro, buildroot.tar.gz is
->expanded then configured then built as all other packages making the
->distro.
->It means everytime, buildroot dir is like a virgin.. ;-) No ccache_dir
->inside.
->
->but if ccache_dir is outside....ok, it will be preserved accross rebuilds
->and the final touch would have ccache used for ALL the toolchain
->construction...!
->
->
->Adding a new option in 'make menuconfig' is beyond my knowledge of
->buildroot for now.
->
->Franck
->====================================================================== 
->
->---------------------------------------------------------------------- 
-> bernhardf - 06-25-07 11:02  
->---------------------------------------------------------------------- 
->Although i don't understand a word, i think that this sounds like "Doctor,
->it hurts when i do.."
->
->Please describe the problem you are facing and suggest what should be done
->why and how, i shall close this bug otherwise. 
->
->---------------------------------------------------------------------- 
-> Franck78 - 06-25-07 11:38  
->---------------------------------------------------------------------- 
->Ok,
->A distro is something more complete than buildroot alone. The buildroot
->package is only 'one step among others'. The full build can follow some
->method like lfs (linux from scratch). 
->Having ccache dir outside of the tree build avoid loosing what have been
->already compiled when some kind of full rebuild of the distro is
->performed. In other words, the cachedir is in a safe configurable place. 
->
->tchuss. 
->
->Issue History 
->Date Modified   Username       Field                    Change               
->====================================================================== 
->03-21-07 11:56  Franck78       New Issue                                    
->03-21-07 11:56  Franck78       Status                   new => assigned     
->03-21-07 11:56  Franck78       Assigned To               => buildroot       
->06-25-07 11:02  bernhardf      Note Added: 0002507                          
->06-25-07 11:38  Franck78       Note Added: 0002513                          
->======================================================================
+There is no PAGE_SIZE in <asm/page.h> at least on ARM, the following patch
+forces DirectFB to detect PAGE_SIZE via sysconf( _SC_PAGESIZE ) libc call:
+
+diff -urN buildroot.orig/package/directfb/directfb.mk
+buildroot.new/package/directfb/directfb.mk
+--- buildroot.orig/package/directfb/directfb.mk 2007-05-18 10:15:13.000000000 +0300
++++ buildroot.new/package/directfb/directfb.mk  2007-06-26 00:17:13.000000000 +0300
+@@ -26,6 +26,7 @@
+        LDFLAGS="$(TARGET_LDFLAGS)" \
+        ac_cv_header_linux_wm97xx_h=no \
+        ac_cv_header_linux_sisfb_h=no \
++       ac_cv_header_asm_page_h=no \
+        ./configure \
+                --target=$(GNU_TARGET_NAME) \
+                --host=$(GNU_TARGET_NAME) \
+
+Also patch is attached because my mailer breaks formatting.
+
+Best regards,
+Ivan
+-------------- next part --------------
+A non-text attachment was scrubbed...
+Name: DirectFB-patch_PAGE_SIZE.diff
+Type: application/octet-stream
+Size: 493 bytes
+Desc: not available
+Url : http://busybox.net/lists/buildroot/attachments/20070626/f1993d5e/attachment.obj 
