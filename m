@@ -1,25 +1,35 @@
-From: Bernhard Fischer <rep.dot.nop@gmail.com>
-Date: Mon, 25 Jun 2007 13:12:29 +0200
-Subject: [Buildroot] PATCH: fix SDL-1.2.11 PAGE_SIZE missing definition
-In-Reply-To: <20070625134241.07169998@newbox>
-References: <20070625134241.07169998@newbox>
-Message-ID: <20070625111229.GH5134@aon.at>
+From: aldot at uclibc.org <aldot@uclibc.org>
+Date: Mon, 25 Jun 2007 04:17:52 -0700 (PDT)
+Subject: [Buildroot] svn commit: trunk/buildroot/package/bash
+Message-ID: <20070625111752.2923CA4601@busybox.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Mon, Jun 25, 2007 at 01:42:41PM +0300, Ivan Kuten wrote:
->Hello,
->
->When SDL configured to use fbcon, the build is failed because PAGE_SIZE is undeclared in <asm/page.h> 
->referred from src/video/fbcon/SDL_fbvideo.c
->
->Instead we are using libc functions to know PAGE_SIZE and only as last resort make it hardcoded to 4096.
->The patch below fixes the problem.
->
->Best regards,
+Author: aldot
+Date: 2007-06-25 04:17:52 -0700 (Mon, 25 Jun 2007)
+New Revision: 18927
 
-Please send this to the SDL guys too.
-Applied, thanks!
+Log:
+- pull some additional fixes from upstream
+
+
+Added:
+   trunk/buildroot/package/bash/bash32-010
+   trunk/buildroot/package/bash/bash32-011
+   trunk/buildroot/package/bash/bash32-012
+   trunk/buildroot/package/bash/bash32-013
+   trunk/buildroot/package/bash/bash32-014
+   trunk/buildroot/package/bash/bash32-015
+   trunk/buildroot/package/bash/bash32-016
+   trunk/buildroot/package/bash/bash32-017
+
+
+Changeset:
+
+Sorry, the patch is too large to include (1092 lines).
+Please use ViewCVS to see it!
+
+http://uclibc.org/cgi-bin/viewcvs.cgi?view=rev&root=svn&rev=18927
