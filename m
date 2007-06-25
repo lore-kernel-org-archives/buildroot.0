@@ -1,48 +1,34 @@
-From: aldot at uclibc.org <aldot@uclibc.org>
-Date: Mon, 25 Jun 2007 02:07:08 -0700 (PDT)
-Subject: [Buildroot] svn commit: trunk/buildroot/package/zlib
-Message-ID: <20070625090708.B8929A45B5@busybox.net>
+From: Hans-Christian Egtvedt <hcegtvedt@norway.atmel.com>
+Date: Mon, 25 Jun 2007 11:27:47 +0200
+Subject: [Buildroot] Make the top rule %_defconfig work
+Message-ID: <1182763667.10703.21.camel@localhost.localdomain>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Author: aldot
-Date: 2007-06-25 02:07:08 -0700 (Mon, 25 Jun 2007)
-New Revision: 18913
+Hi,
 
-Log:
-- improve the zlib-clean target
+Please see the included patch as a comment to the earlier discussion
+about having _defconfig. By only searching the target/ directory it will
+not conflict with the extracted kernel and similar.
 
+It makes the most sense to be able to load a BR2 <board>_defconfig from
+the target directory. What this build target does is to overwrite
+the .config with a premade default configuration.
 
-Modified:
-   trunk/buildroot/package/zlib/zlib.mk
+For example as a hardware (and software) provider I would like to be
+able to build a "standard" image having a collection of applications
+useful for the board.
 
-
-Changeset:
-Modified: trunk/buildroot/package/zlib/zlib.mk
-===================================================================
---- trunk/buildroot/package/zlib/zlib.mk	2007-06-25 09:01:53 UTC (rev 18912)
-+++ trunk/buildroot/package/zlib/zlib.mk	2007-06-25 09:07:08 UTC (rev 18913)
-@@ -50,6 +50,7 @@
- 	touch -c $@
- 
- $(TARGET_DIR)/usr/lib/libz.so.$(ZLIB_VER): $(STAGING_DIR)/usr/lib/libz.so.$(ZLIB_VER)
-+	mkdir -p $(TARGET_DIR)/usr/lib
- 	cp -dpf $(STAGING_DIR)/usr/lib/libz.so* $(TARGET_DIR)/usr/lib
- 	-$(STRIP) --strip-unneeded $(TARGET_DIR)/usr/lib/libz.so*
- 	touch -c $@
-@@ -71,7 +72,11 @@
- 
- zlib-clean:
- 	rm -f $(TARGET_DIR)/usr/lib/libz.so* \
--		$(TARGET_DIR)/usr/include/z{lib,conf}.h
-+		$(TARGET_DIR)/usr/include/zlib.h \
-+		$(TARGET_DIR)/usr/include/zconf.h \
-+		$(STAGING_DIR)/usr/include/zlib.h \
-+		$(STAGING_DIR)/usr/include/zconf.h \
-+		$(STAGING_DIR)/usr/lib/libz.*
- 	-$(MAKE) -C $(ZLIB_DIR) clean
- 
- zlib-dirclean:
+-- 
+Mvh
+Hans-Christian Egtvedt
+-------------- next part --------------
+A non-text attachment was scrubbed...
+Name: 0001-Search-for-defconfigs-in-target-not-entire-tree.txt
+Type: application/mbox
+Size: 0 bytes
+Desc: not available
+Url : http://busybox.net/lists/buildroot/attachments/20070625/f14863a8/attachment.bin 
