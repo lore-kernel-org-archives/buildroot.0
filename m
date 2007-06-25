@@ -1,56 +1,96 @@
-From: Ulf Samuelsson <ulf@atmel.com>
-Date: Mon, 25 Jun 2007 16:42:12 +0200
-Subject: [Buildroot] Can "make <>_defconfig" rules be restored?
-In-Reply-To: <20070625134008.GA7287@aon.at>
-References: <01c301c7b519$52679b40$6e02a8c0@k2>
-	<20070623093927.GG4096@aon.at> <003801c7b605$0e32cb10$6604a8c0@shukson>
-	<1182776909.20950.4.camel@aeglos.sweden.atmel.com>
-	<1182777605.10703.37.camel@localhost.localdomain>
-	<20070625134008.GA7287@aon.at>
-Message-ID: <1182782532.22583.21.camel@aeglos.sweden.atmel.com>
+From: aldot at uclibc.org <aldot@uclibc.org>
+Date: Mon, 25 Jun 2007 07:53:25 -0700 (PDT)
+Subject: [Buildroot] svn commit: trunk/buildroot/package/bzip2
+Message-ID: <20070625145325.B7A91A45F4@busybox.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-> >> It is not particularily efficient to search the whole tree for config files.
-> 
-> That whole quirk is not efficient, that's why i don't use it but have my
-> configs separarately and do a simple
-> 'make reconfigure CONFIG_DEFCONFIG=/my/foo-config'
-> 
-> As long as you folks don't slow down my testsuite like that (")??=% find
-> invocation did, i'm happy. That %_defconfig thing is something that i do
-> not want (and do not want to understand either), and as it doesn't hurt
-> me and complicates maintenance (which it doesn't from my POV), then it's
-> fine to apply.
->
-> I'm attaching the hunk that i am using to do something like you guy seem
-> to be up to (or perhaps not, dunno) for your amusement. No find, no ugly
-> separate dirs that reside in svn, nothing disturbing, just simply does
-> what it's supposed to do, and doesn't add any bloat or creeping
-> featureitis. I'll shut up for now.
+Author: aldot
+Date: 2007-06-25 07:53:24 -0700 (Mon, 25 Jun 2007)
+New Revision: 18929
 
-Similar to my stuff.
-The reason I use a separate directory, is that I do not want to specify
-where the config file is located inside the command to configure.
-
-"make reconfigure
-CONFIG_DEFCONFIG=/home/ulf/projects/Buildroot/20070531/buildroot-atmel/configs/at91sam9263-2007-06-25.config"
-
-is just a little more typing than I like.
+Log:
+- bump version and correct installation path
 
 
-I prefer the <board>_defconfig syntax, since this is easier
-to remember than and there is therefore less likelyhood that errors
-occur, I.E: less support calls.
-
-Also the stuff does not easily lend it to updating the config file.
-I can save the configuration in a new file, and this is a nice feature
-I really like to have.
+Modified:
+   trunk/buildroot/package/bzip2/bzip2.mk
 
 
--- 
-Best Regards,
-Ulf Samuelsson
+Changeset:
+Modified: trunk/buildroot/package/bzip2/bzip2.mk
+===================================================================
+--- trunk/buildroot/package/bzip2/bzip2.mk	2007-06-25 11:22:26 UTC (rev 18928)
++++ trunk/buildroot/package/bzip2/bzip2.mk	2007-06-25 14:53:24 UTC (rev 18929)
+@@ -3,7 +3,7 @@
+ # bzip2
+ #
+ #############################################################
+-BZIP2_VER:=1.0.3
++BZIP2_VER:=1.0.4
+ BZIP2_SOURCE:=bzip2-$(BZIP2_VER).tar.gz
+ BZIP2_SITE:=http://www.bzip.org/$(BZIP2_VER)
+ BZIP2_DIR:=$(BUILD_DIR)/bzip2-$(BZIP2_VER)
+@@ -27,23 +27,24 @@
+ endif
+ 	$(SED) "s:-O2:$(TARGET_CFLAGS):" $(BZIP2_DIR)/Makefile
+ 	$(SED) "s:-O2:$(TARGET_CFLAGS):" $(BZIP2_DIR)/Makefile-libbz2_so
+-	touch $(BZIP2_DIR)/.unpacked
++	touch $@
+ 
+ $(STAGING_DIR)/lib/libbz2.so.$(BZIP2_VER): $(BZIP2_DIR)/.unpacked
+ 	$(TARGET_CONFIGURE_OPTS) \
+ 	$(MAKE) CC=$(TARGET_CC) RANLIB=$(TARGET_RANLIB) -C $(BZIP2_DIR) -f Makefile-libbz2_so
+ 	$(TARGET_CONFIGURE_OPTS) \
+ 	$(MAKE) CC=$(TARGET_CC) RANLIB=$(TARGET_RANLIB) -C $(BZIP2_DIR) libbz2.a
+-	cp $(BZIP2_DIR)/bzlib.h $(STAGING_DIR)/include/
++	cp $(BZIP2_DIR)/bzlib.h $(STAGING_DIR)/usr/include/
+ 	cp $(BZIP2_DIR)/libbz2.so.$(BZIP2_VER) $(STAGING_DIR)/lib/
+-	cp $(BZIP2_DIR)/libbz2.a $(STAGING_DIR)/lib/
+-	(cd $(STAGING_DIR)/lib/; ln -snf libbz2.so.$(BZIP2_VER) libbz2.so)
+-	(cd $(STAGING_DIR)/lib/; ln -snf libbz2.so.$(BZIP2_VER) libbz2.so.1.0)
++	cp $(BZIP2_DIR)/libbz2.a $(STAGING_DIR)/usr/lib/
++	(cd $(STAGING_DIR)/usr/lib/ ; ln -snf ../../lib/libbz2.so.$(BZIP2_VER) libbz2.so)
++	(cd $(STAGING_DIR)/lib ; ln -snf libbz2.so.$(BZIP2_VER) libbz2.so.1.0; \
++	 ln -snf libbz2.so.$(BZIP2_VER) libbz2.so.1)
+ 
+ $(BZIP2_BINARY): $(STAGING_DIR)/lib/libbz2.so.$(BZIP2_VER)
+ 	$(TARGET_CONFIGURE_OPTS) \
+ 	$(MAKE) CC=$(TARGET_CC) -C $(BZIP2_DIR) bzip2 bzip2recover
+-	touch -c $(BZIP2_BINARY)
++	touch -c $@
+ 
+ $(BZIP2_TARGET_BINARY): $(BZIP2_BINARY)
+ 	(cd $(TARGET_DIR)/usr/bin; \
+@@ -68,21 +69,25 @@
+ 
+ $(TARGET_DIR)/usr/lib/libbz2.a: $(STAGING_DIR)/lib/libbz2.a
+ 	mkdir -p $(TARGET_DIR)/usr/include
+-	cp $(STAGING_DIR)/include/bzlib.h $(TARGET_DIR)/usr/include/
++	cp $(STAGING_DIR)/usr/include/bzlib.h $(TARGET_DIR)/usr/include/
+ 	cp $(STAGING_DIR)/lib/libbz2.a $(TARGET_DIR)/usr/lib/
+ 	rm -f $(TARGET_DIR)/lib/libbz2.so
+ 	(cd $(TARGET_DIR)/usr/lib; \
+ 		ln -fs /usr/lib/libbz2.so.1.0 libbz2.so; \
+ 	)
+ 	-$(STRIP) --strip-unneeded $(TARGET_DIR)/usr/lib/libbz2.so.1.0
+-	touch -c $(TARGET_DIR)/usr/lib/libbz2.a
++	touch -c $@
+ 
+ bzip2-headers: $(TARGET_DIR)/usr/lib/libbz2.a
+ 
+ bzip2: uclibc $(BZIP2_TARGET_BINARY)
+ 
+ bzip2-clean:
+-	$(MAKE) DESTDIR=$(TARGET_DIR) CC=$(TARGET_CC) -C $(BZIP2_DIR) uninstall
++	-$(MAKE) DESTDIR=$(TARGET_DIR) CC=$(TARGET_CC) -C $(BZIP2_DIR) uninstall
++	rm -f $(TARGET_DIR)/usr/lib/libbz2.* $(TARGET_DIR)/lib/libbz2.* \
++		$(TARGET_DIR)/usr/include/bzlib.h \
++		$(STAGING_DIR)/usr/include/bzlib.h \
++		$(STAGING_DIR)/usr/lib/libbz2.* $(STAGING_DIR)/lib/libbz2.*
+ 	-$(MAKE) -C $(BZIP2_DIR) clean
+ 
+ bzip2-dirclean:
