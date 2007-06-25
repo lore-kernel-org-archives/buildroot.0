@@ -1,7 +1,8 @@
 From: aldot at uclibc.org <aldot@uclibc.org>
-Date: Mon, 25 Jun 2007 02:41:36 -0700 (PDT)
-Subject: [Buildroot] svn commit: trunk/buildroot/package/ipsec-tools
-Message-ID: <20070625094136.2E09FA45B5@busybox.net>
+Date: Mon, 25 Jun 2007 02:43:17 -0700 (PDT)
+Subject: [Buildroot] svn commit: trunk/buildroot/toolchain/binutils:
+	2.17.50.0.17
+Message-ID: <20070625094317.34EC0A45B5@busybox.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -9,303 +10,191 @@ Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
 Author: aldot
-Date: 2007-06-25 02:41:35 -0700 (Mon, 25 Jun 2007)
-New Revision: 18914
+Date: 2007-06-25 02:43:16 -0700 (Mon, 25 Jun 2007)
+New Revision: 18915
 
 Log:
-- bump version
-- add SUSV legacy fixups
+- add 2.17.50.0.17
 
 
 Added:
-   trunk/buildroot/package/ipsec-tools/ipsec-tools-0.6.7.100-do_not_use_addr_as_truthval.patch
-   trunk/buildroot/package/ipsec-tools/ipsec-tools-0.6.7.101-string_legacy.patch
-   trunk/buildroot/package/ipsec-tools/ipsec-tools-0.6.7.102-GLOB_TILDE.patch
-
-Removed:
-   trunk/buildroot/package/ipsec-tools/ipsec-tools-0.6.6.100-do_not_use_addr_as_truthval.patch
-   trunk/buildroot/package/ipsec-tools/ipsec-tools-0.6.6.101-string_legacy.patch
-   trunk/buildroot/package/ipsec-tools/ipsec-tools-0.6.6.102-GLOB_TILDE.patch
+   trunk/buildroot/toolchain/binutils/2.17.50.0.17/
 
 Modified:
-   trunk/buildroot/package/ipsec-tools/ipsec-tools.mk
+   trunk/buildroot/toolchain/binutils/2.17.50.0.17/110-arm-eabi-conf.patch
+   trunk/buildroot/toolchain/binutils/2.17.50.0.17/300-001_ld_makefile_patch.patch
+   trunk/buildroot/toolchain/binutils/2.17.50.0.17/300-012_check_ldrunpath_length.patch
+   trunk/buildroot/toolchain/binutils/Config.in
 
 
 Changeset:
-Deleted: trunk/buildroot/package/ipsec-tools/ipsec-tools-0.6.6.100-do_not_use_addr_as_truthval.patch
-===================================================================
---- trunk/buildroot/package/ipsec-tools/ipsec-tools-0.6.6.100-do_not_use_addr_as_truthval.patch	2007-06-25 09:07:08 UTC (rev 18913)
-+++ trunk/buildroot/package/ipsec-tools/ipsec-tools-0.6.6.100-do_not_use_addr_as_truthval.patch	2007-06-25 09:41:35 UTC (rev 18914)
-@@ -1,45 +0,0 @@
--diff -rup ipsec-tools-0.6.6.oorig/src/racoon/eaytest.c ipsec-tools-0.6.6/src/racoon/eaytest.c
----- ipsec-tools-0.6.6.oorig/src/racoon/eaytest.c	2005-06-29 00:38:02.000000000 +0200
--+++ ipsec-tools-0.6.6/src/racoon/eaytest.c	2006-10-11 16:01:45.000000000 +0200
--@@ -311,7 +311,7 @@ certtest(ac, av)
-- 
-- 	printf("exact match: succeed.\n");
-- 
---	if (dnstr_w1) {
--+	if (*dnstr_w1) {
-- 		asn1dn = eay_str2asn1dn(dnstr_w1, strlen(dnstr_w1));
-- 		if (asn1dn == NULL || asn1dn->l == asn1dn0.l)
-- 			errx(1, "asn1dn length wrong for wildcard 1\n");
--@@ -321,7 +321,7 @@ certtest(ac, av)
-- 		printf("wildcard 1 match: succeed.\n");
-- 	}
-- 
---	if (dnstr_w1) {
--+	if (*dnstr_w1) {
-- 		asn1dn = eay_str2asn1dn(dnstr_w2, strlen(dnstr_w2));
-- 		if (asn1dn == NULL || asn1dn->l == asn1dn0.l)
-- 			errx(1, "asn1dn length wrong for wildcard 2\n");
--diff -rup ipsec-tools-0.6.6.oorig/src/racoon/var.h ipsec-tools-0.6.6/src/racoon/var.h
----- ipsec-tools-0.6.6.oorig/src/racoon/var.h	2004-11-20 17:16:59.000000000 +0100
--+++ ipsec-tools-0.6.6/src/racoon/var.h	2006-10-11 16:00:15.000000000 +0200
--@@ -76,9 +76,9 @@
-- do { \
-- 	if (getnameinfo((x), sysdep_sa_len(x), (y), sizeof(y), (z), sizeof(z), \
-- 			NIFLAGS) != 0) { \
---		if (y) \
--+		if (*y) \
-- 			strncpy((y), "(invalid)", sizeof(y)); \
---		if (z) \
--+		if (*z) \
-- 			strncpy((z), "(invalid)", sizeof(z)); \
-- 	} \
-- } while (0);
--@@ -87,7 +87,7 @@ do { \
-- do { \
-- 	if (getnameinfo((x), sysdep_sa_len(x), (y), sizeof(y), NULL, 0, \
-- 			NIFLAGS) != 0) { \
---		if (y) \
--+		if (*y) \
-- 			strncpy((y), "(invalid)", sizeof(y)); \
-- 	} \
-- } while (0);
+Copied: trunk/buildroot/toolchain/binutils/2.17.50.0.17 (from rev 18889, trunk/buildroot/toolchain/binutils/2.17.50.0.16)
 
-Deleted: trunk/buildroot/package/ipsec-tools/ipsec-tools-0.6.6.101-string_legacy.patch
+Modified: trunk/buildroot/toolchain/binutils/2.17.50.0.17/110-arm-eabi-conf.patch
 ===================================================================
---- trunk/buildroot/package/ipsec-tools/ipsec-tools-0.6.6.101-string_legacy.patch	2007-06-25 09:07:08 UTC (rev 18913)
-+++ trunk/buildroot/package/ipsec-tools/ipsec-tools-0.6.6.101-string_legacy.patch	2007-06-25 09:41:35 UTC (rev 18914)
-@@ -1,32 +0,0 @@
--diff -rup ipsec-tools-0.6.6.oorig/src/racoon/missing/crypto/rijndael/rijndael-api-fst.c ipsec-tools-0.6.6/src/racoon/missing/crypto/rijndael/rijndael-api-fst.c
----- ipsec-tools-0.6.6.oorig/src/racoon/missing/crypto/rijndael/rijndael-api-fst.c	2004-01-12 23:31:45.000000000 +0100
--+++ ipsec-tools-0.6.6/src/racoon/missing/crypto/rijndael/rijndael-api-fst.c	2006-10-11 16:29:42.000000000 +0200
--@@ -30,8 +30,12 @@
-- #include <crypto/rijndael/rijndael_local.h>
-- 
-- #include <err.h>
--+#ifndef bcopy
-- #define bcopy(a, b, c) memcpy(b, a, c)
--+#endif
--+#ifndef bzero
-- #define bzero(a, b) memset(a, 0, b)
--+#endif
-- #define panic(a) err(1, (a))
-- 
-- int rijndael_makeKey(keyInstance *key, BYTE direction, int keyLen, char *keyMaterial) {
--diff -rup ipsec-tools-0.6.6.oorig/src/racoon/missing/crypto/sha2/sha2.c ipsec-tools-0.6.6/src/racoon/missing/crypto/sha2/sha2.c
----- ipsec-tools-0.6.6.oorig/src/racoon/missing/crypto/sha2/sha2.c	2004-09-21 16:35:25.000000000 +0200
--+++ ipsec-tools-0.6.6/src/racoon/missing/crypto/sha2/sha2.c	2006-10-11 16:29:08.000000000 +0200
--@@ -50,8 +50,12 @@
-- 
-- #include <err.h>
-- #include <string.h>
--+#ifndef bcopy
-- #define bcopy(a, b, c) memcpy((b), (a), (c))
--+#endif
--+#ifndef bzero
-- #define bzero(a, b) memset((a), 0, (b))
--+#endif
-- #define panic(a) err(1, (a))
-- 
-- #if OPENSSL_VERSION_NUMBER >= 0x00907000L
+--- trunk/buildroot/toolchain/binutils/2.17.50.0.16/110-arm-eabi-conf.patch	2007-06-21 22:10:12 UTC (rev 18889)
++++ trunk/buildroot/toolchain/binutils/2.17.50.0.17/110-arm-eabi-conf.patch	2007-06-25 09:43:16 UTC (rev 18915)
+@@ -1,7 +1,7 @@
+-diff -urN binutils-2.16.91.0.7.orig/configure binutils-2.16.91.0.7/configure
+---- binutils-2.16.91.0.7.orig/configure	2006-05-31 14:54:24.000000000 +0300
+-+++ binutils-2.16.91.0.7/configure	2006-05-31 14:55:53.000000000 +0300
+-@@ -1299,7 +1299,7 @@
++diff -u binutils-2.17.50.0.17.oorig/configure binutils-2.17.50.0.17/configure
++--- binutils-2.17.50.0.17.oorig/configure	2007-06-18 19:29:28.000000000 +0200
+++++ binutils-2.17.50.0.17/configure	2007-06-25 09:58:36.000000000 +0200
++@@ -2224,7 +2224,7 @@
+    arm-*-elf* | strongarm-*-elf* | xscale-*-elf* | arm*-*-eabi* )
+      noconfigdirs="$noconfigdirs target-libffi target-qthreads"
+      ;;
+@@ -10,10 +10,10 @@
+      noconfigdirs="$noconfigdirs target-libffi target-qthreads"
+      noconfigdirs="$noconfigdirs target-libjava target-libobjc"
+      ;;
+-diff -urN binutils-2.16.91.0.7.orig/configure.ac binutils-2.16.91.0.7/configure.ac
+---- binutils-2.16.91.0.7.orig/configure.ac	2006-05-31 14:54:24.000000000 +0300
+-+++ binutils-2.16.91.0.7/configure.ac	2006-05-31 14:55:53.000000000 +0300
+-@@ -497,7 +497,7 @@
++diff -u binutils-2.17.50.0.17.oorig/configure.ac binutils-2.17.50.0.17/configure.ac
++--- binutils-2.17.50.0.17.oorig/configure.ac	2007-06-18 19:29:28.000000000 +0200
+++++ binutils-2.17.50.0.17/configure.ac	2007-06-25 09:58:36.000000000 +0200
++@@ -513,7 +513,7 @@
+    arm-*-elf* | strongarm-*-elf* | xscale-*-elf* | arm*-*-eabi* )
+      noconfigdirs="$noconfigdirs target-libffi target-qthreads"
+      ;;
 
-Deleted: trunk/buildroot/package/ipsec-tools/ipsec-tools-0.6.6.102-GLOB_TILDE.patch
+Modified: trunk/buildroot/toolchain/binutils/2.17.50.0.17/300-001_ld_makefile_patch.patch
 ===================================================================
---- trunk/buildroot/package/ipsec-tools/ipsec-tools-0.6.6.102-GLOB_TILDE.patch	2007-06-25 09:07:08 UTC (rev 18913)
-+++ trunk/buildroot/package/ipsec-tools/ipsec-tools-0.6.6.102-GLOB_TILDE.patch	2007-06-25 09:41:35 UTC (rev 18914)
-@@ -1,15 +0,0 @@
----- ipsec-tools-0.6.6.oorig/src/racoon/cftoken.c	2006-06-13 10:49:01.000000000 +0200
--+++ ipsec-tools-0.6.6/src/racoon/cftoken.c	2006-11-22 21:20:30.000000000 +0100
--@@ -4076,8 +4076,11 @@
-- 			"Includes nested too deeply");
-- 		return -1;
-- 	}
---
--+#ifdef GLOB_TILDE
-- 	if (glob(path, GLOB_TILDE, NULL, &incstack[incstackp].matches) != 0 ||
--+#else
--+	if (glob(path, 0, NULL, &incstack[incstackp].matches) != 0 ||
--+#endif
-- 	    incstack[incstackp].matches.gl_pathc == 0) {
-- 		plog(LLV_ERROR, LOCATION, NULL,
-- 			"glob found no matches for path");
-
-Copied: trunk/buildroot/package/ipsec-tools/ipsec-tools-0.6.7.100-do_not_use_addr_as_truthval.patch (from rev 18907, trunk/buildroot/package/ipsec-tools/ipsec-tools-0.6.6.100-do_not_use_addr_as_truthval.patch)
-===================================================================
---- trunk/buildroot/package/ipsec-tools/ipsec-tools-0.6.7.100-do_not_use_addr_as_truthval.patch	                        (rev 0)
-+++ trunk/buildroot/package/ipsec-tools/ipsec-tools-0.6.7.100-do_not_use_addr_as_truthval.patch	2007-06-25 09:41:35 UTC (rev 18914)
-@@ -0,0 +1,45 @@
-+diff -rup ipsec-tools-0.6.6.oorig/src/racoon/eaytest.c ipsec-tools-0.6.6/src/racoon/eaytest.c
-+--- ipsec-tools-0.6.6.oorig/src/racoon/eaytest.c	2005-06-29 00:38:02.000000000 +0200
-++++ ipsec-tools-0.6.6/src/racoon/eaytest.c	2006-10-11 16:01:45.000000000 +0200
-+@@ -311,7 +311,7 @@ certtest(ac, av)
-+ 
-+ 	printf("exact match: succeed.\n");
-+ 
-+-	if (dnstr_w1) {
-++	if (*dnstr_w1) {
-+ 		asn1dn = eay_str2asn1dn(dnstr_w1, strlen(dnstr_w1));
-+ 		if (asn1dn == NULL || asn1dn->l == asn1dn0.l)
-+ 			errx(1, "asn1dn length wrong for wildcard 1\n");
-+@@ -321,7 +321,7 @@ certtest(ac, av)
-+ 		printf("wildcard 1 match: succeed.\n");
-+ 	}
-+ 
-+-	if (dnstr_w1) {
-++	if (*dnstr_w1) {
-+ 		asn1dn = eay_str2asn1dn(dnstr_w2, strlen(dnstr_w2));
-+ 		if (asn1dn == NULL || asn1dn->l == asn1dn0.l)
-+ 			errx(1, "asn1dn length wrong for wildcard 2\n");
-+diff -rup ipsec-tools-0.6.6.oorig/src/racoon/var.h ipsec-tools-0.6.6/src/racoon/var.h
-+--- ipsec-tools-0.6.6.oorig/src/racoon/var.h	2004-11-20 17:16:59.000000000 +0100
-++++ ipsec-tools-0.6.6/src/racoon/var.h	2006-10-11 16:00:15.000000000 +0200
-+@@ -76,9 +76,9 @@
-+ do { \
-+ 	if (getnameinfo((x), sysdep_sa_len(x), (y), sizeof(y), (z), sizeof(z), \
-+ 			NIFLAGS) != 0) { \
-+-		if (y) \
-++		if (*y) \
-+ 			strncpy((y), "(invalid)", sizeof(y)); \
-+-		if (z) \
-++		if (*z) \
-+ 			strncpy((z), "(invalid)", sizeof(z)); \
-+ 	} \
-+ } while (0);
-+@@ -87,7 +87,7 @@ do { \
-+ do { \
-+ 	if (getnameinfo((x), sysdep_sa_len(x), (y), sizeof(y), NULL, 0, \
-+ 			NIFLAGS) != 0) { \
-+-		if (y) \
-++		if (*y) \
-+ 			strncpy((y), "(invalid)", sizeof(y)); \
-+ 	} \
-+ } while (0);
-
-Copied: trunk/buildroot/package/ipsec-tools/ipsec-tools-0.6.7.101-string_legacy.patch (from rev 18907, trunk/buildroot/package/ipsec-tools/ipsec-tools-0.6.6.101-string_legacy.patch)
-===================================================================
---- trunk/buildroot/package/ipsec-tools/ipsec-tools-0.6.7.101-string_legacy.patch	                        (rev 0)
-+++ trunk/buildroot/package/ipsec-tools/ipsec-tools-0.6.7.101-string_legacy.patch	2007-06-25 09:41:35 UTC (rev 18914)
-@@ -0,0 +1,32 @@
-+diff -rup ipsec-tools-0.6.6.oorig/src/racoon/missing/crypto/rijndael/rijndael-api-fst.c ipsec-tools-0.6.6/src/racoon/missing/crypto/rijndael/rijndael-api-fst.c
-+--- ipsec-tools-0.6.6.oorig/src/racoon/missing/crypto/rijndael/rijndael-api-fst.c	2004-01-12 23:31:45.000000000 +0100
-++++ ipsec-tools-0.6.6/src/racoon/missing/crypto/rijndael/rijndael-api-fst.c	2006-10-11 16:29:42.000000000 +0200
-+@@ -30,8 +30,12 @@
-+ #include <crypto/rijndael/rijndael_local.h>
-+ 
-+ #include <err.h>
-++#ifndef bcopy
-+ #define bcopy(a, b, c) memcpy(b, a, c)
-++#endif
-++#ifndef bzero
-+ #define bzero(a, b) memset(a, 0, b)
-++#endif
-+ #define panic(a) err(1, (a))
-+ 
-+ int rijndael_makeKey(keyInstance *key, BYTE direction, int keyLen, char *keyMaterial) {
-+diff -rup ipsec-tools-0.6.6.oorig/src/racoon/missing/crypto/sha2/sha2.c ipsec-tools-0.6.6/src/racoon/missing/crypto/sha2/sha2.c
-+--- ipsec-tools-0.6.6.oorig/src/racoon/missing/crypto/sha2/sha2.c	2004-09-21 16:35:25.000000000 +0200
-++++ ipsec-tools-0.6.6/src/racoon/missing/crypto/sha2/sha2.c	2006-10-11 16:29:08.000000000 +0200
-+@@ -50,8 +50,12 @@
-+ 
-+ #include <err.h>
-+ #include <string.h>
-++#ifndef bcopy
-+ #define bcopy(a, b, c) memcpy((b), (a), (c))
-++#endif
-++#ifndef bzero
-+ #define bzero(a, b) memset((a), 0, (b))
-++#endif
-+ #define panic(a) err(1, (a))
-+ 
-+ #if OPENSSL_VERSION_NUMBER >= 0x00907000L
-
-Copied: trunk/buildroot/package/ipsec-tools/ipsec-tools-0.6.7.102-GLOB_TILDE.patch (from rev 18907, trunk/buildroot/package/ipsec-tools/ipsec-tools-0.6.6.102-GLOB_TILDE.patch)
-===================================================================
---- trunk/buildroot/package/ipsec-tools/ipsec-tools-0.6.7.102-GLOB_TILDE.patch	                        (rev 0)
-+++ trunk/buildroot/package/ipsec-tools/ipsec-tools-0.6.7.102-GLOB_TILDE.patch	2007-06-25 09:41:35 UTC (rev 18914)
-@@ -0,0 +1,15 @@
-+--- ipsec-tools-0.6.6.oorig/src/racoon/cftoken.c	2006-06-13 10:49:01.000000000 +0200
-++++ ipsec-tools-0.6.6/src/racoon/cftoken.c	2006-11-22 21:20:30.000000000 +0100
-+@@ -4076,8 +4076,11 @@
-+ 			"Includes nested too deeply");
-+ 		return -1;
-+ 	}
-+-
-++#ifdef GLOB_TILDE
-+ 	if (glob(path, GLOB_TILDE, NULL, &incstack[incstackp].matches) != 0 ||
-++#else
-++	if (glob(path, 0, NULL, &incstack[incstackp].matches) != 0 ||
-++#endif
-+ 	    incstack[incstackp].matches.gl_pathc == 0) {
-+ 		plog(LLV_ERROR, LOCATION, NULL,
-+ 			"glob found no matches for path");
-
-Modified: trunk/buildroot/package/ipsec-tools/ipsec-tools.mk
-===================================================================
---- trunk/buildroot/package/ipsec-tools/ipsec-tools.mk	2007-06-25 09:07:08 UTC (rev 18913)
-+++ trunk/buildroot/package/ipsec-tools/ipsec-tools.mk	2007-06-25 09:41:35 UTC (rev 18914)
-@@ -4,7 +4,7 @@
- #
- #############################################################
- 
--IPSEC_TOOLS_VER:=0.6.6
-+IPSEC_TOOLS_VER:=0.6.7
- IPSEC_TOOLS_SOURCE:=ipsec-tools-$(IPSEC_TOOLS_VER).tar.bz2
- IPSEC_TOOLS_CAT:=$(BZCAT)
- IPSEC_TOOLS_DIR:=$(BUILD_DIR)/ipsec-tools-$(IPSEC_TOOLS_VER)
-@@ -63,17 +63,15 @@
- $(DL_DIR)/$(IPSEC_TOOLS_SOURCE):
- 	$(WGET) -P $(DL_DIR) $(IPSEC_TOOLS_SITE)/$(IPSEC_TOOLS_SOURCE)
- 
+--- trunk/buildroot/toolchain/binutils/2.17.50.0.16/300-001_ld_makefile_patch.patch	2007-06-21 22:10:12 UTC (rev 18889)
++++ trunk/buildroot/toolchain/binutils/2.17.50.0.17/300-001_ld_makefile_patch.patch	2007-06-25 09:43:16 UTC (rev 18915)
+@@ -1,34 +1,7 @@
+-#!/bin/sh -e
+-## 001_ld_makefile_patch.dpatch
+-##
+-## All lines beginning with `## DP:' are a description of the patch.
+-## DP: Description: correct where ld scripts are installed
+-## DP: Author: Chris Chimelis <chris@debian.org>
+-## DP: Upstream status: N/A
+-## DP: Date: ??
 -
--$(IPSEC_TOOLS_DIR)/.source: $(DL_DIR)/$(IPSEC_TOOLS_SOURCE)
-+$(IPSEC_TOOLS_DIR)/.patched: $(DL_DIR)/$(IPSEC_TOOLS_SOURCE)
- 	$(IPSEC_TOOLS_CAT) $(DL_DIR)/$(IPSEC_TOOLS_SOURCE) | tar -C $(BUILD_DIR) $(TAR_OPTIONS) -
- 	toolchain/patch-kernel.sh $(IPSEC_TOOLS_DIR) package/ipsec-tools ipsec-tools-$(IPSEC_TOOLS_VER)\*.patch
--	touch $(IPSEC_TOOLS_DIR)/.source
-+	$(CONFIG_UPDATE) $(IPSEC_TOOLS_DIR)
-+	touch $@
+-if [ $# -ne 1 ]; then
+-    echo >&2 "`basename $0`: script expects -patch|-unpatch as argument"
+-    exit 1
+-fi
+-
+-[ -f debian/patches/00patch-opts ] && . debian/patches/00patch-opts
+-patch_opts="${patch_opts:--f --no-backup-if-mismatch}"
+-
+-case "$1" in
+-       -patch) patch $patch_opts -p1 < $0;;
+-       -unpatch) patch $patch_opts -p1 -R < $0;;
+-        *)
+-                echo >&2 "`basename $0`: script expects -patch|-unpatch as argument"
+-                exit 1;;
+-esac
+-
+-exit 0
+-
+- at DPATCH@
+---- binutils-2.16.91.0.1/ld/Makefile.am
+-+++ binutils-2.16.91.0.1/ld/Makefile.am
+-@@ -20,7 +20,7 @@
++diff -u binutils-2.17.50.0.17.oorig/ld/Makefile.am binutils-2.17.50.0.17/ld/Makefile.am
++--- binutils-2.17.50.0.17.oorig/ld/Makefile.am	2007-06-18 19:29:29.000000000 +0200
+++++ binutils-2.17.50.0.17/ld/Makefile.am	2007-06-25 10:00:36.000000000 +0200
++@@ -18,7 +18,7 @@
+  # We put the scripts in the directory $(scriptdir)/ldscripts.
+  # We can't put the scripts in $(datadir) because the SEARCH_DIR
+  # directives need to be different for native and cross linkers.
+@@ -37,9 +10,10 @@
+  
+  EMUL = @EMUL@
+  EMULATION_OFILES = @EMULATION_OFILES@
+---- binutils-2.16.91.0.1/ld/Makefile.in
+-+++ binutils-2.16.91.0.1/ld/Makefile.in
+-@@ -268,7 +268,7 @@
++diff -u binutils-2.17.50.0.17.oorig/ld/Makefile.in binutils-2.17.50.0.17/ld/Makefile.in
++--- binutils-2.17.50.0.17.oorig/ld/Makefile.in	2007-06-18 19:29:29.000000000 +0200
+++++ binutils-2.17.50.0.17/ld/Makefile.in	2007-06-25 10:00:36.000000000 +0200
++@@ -287,7 +287,7 @@
+  # We put the scripts in the directory $(scriptdir)/ldscripts.
+  # We can't put the scripts in $(datadir) because the SEARCH_DIR
+  # directives need to be different for native and cross linkers.
+
+Modified: trunk/buildroot/toolchain/binutils/2.17.50.0.17/300-012_check_ldrunpath_length.patch
+===================================================================
+--- trunk/buildroot/toolchain/binutils/2.17.50.0.16/300-012_check_ldrunpath_length.patch	2007-06-21 22:10:12 UTC (rev 18889)
++++ trunk/buildroot/toolchain/binutils/2.17.50.0.17/300-012_check_ldrunpath_length.patch	2007-06-25 09:43:16 UTC (rev 18915)
+@@ -1,33 +1,7 @@
+-#!/bin/sh -e
+-## 012_check_ldrunpath_length.dpatch by Chris Chimelis <chris@debian.org>
+-##
+-## All lines beginning with `## DP:' are a description of the patch.
+-## DP: Only generate an RPATH entry if LD_RUN_PATH is not empty, for
+-## DP: cases where -rpath isn't specified. (#151024)
+-
+-if [ $# -ne 1 ]; then
+-    echo >&2 "`basename $0`: script expects -patch|-unpatch as argument"
+-    exit 1
+-fi
+-
+-[ -f debian/patches/00patch-opts ] && . debian/patches/00patch-opts
+-patch_opts="${patch_opts:--f --no-backup-if-mismatch}"
+-
+-case "$1" in
+-       -patch) patch $patch_opts -p1 < $0;;
+-       -unpatch) patch $patch_opts -p1 -R < $0;;
+-        *)
+-                echo >&2 "`basename $0`: script expects -patch|-unpatch as argument"
+-                exit 1;;
+-esac
+-
+-exit 0
+-
+- at DPATCH@
+-diff -urNad /home/james/debian/packages/binutils/new/binutils-2.15/ld/emultempl/elf32.em binutils-2.15/ld/emultempl/elf32.em
+---- /home/james/debian/packages/binutils/new/binutils-2.15/ld/emultempl/elf32.em	2004-05-21 23:12:58.000000000 +0100
+-+++ binutils-2.15/ld/emultempl/elf32.em	2004-05-21 23:12:59.000000000 +0100
+-@@ -692,6 +692,8 @@
++diff -u binutils-2.17.50.0.17.oorig/ld/emultempl/elf32.em binutils-2.17.50.0.17/ld/emultempl/elf32.em
++--- binutils-2.17.50.0.17.oorig/ld/emultempl/elf32.em	2007-06-18 19:31:40.000000000 +0200
+++++ binutils-2.17.50.0.17/ld/emultempl/elf32.em	2007-06-25 10:01:25.000000000 +0200
++@@ -1007,6 +1007,8 @@
+  	      && command_line.rpath == NULL)
+  	    {
+  	      lib_path = (const char *) getenv ("LD_RUN_PATH");
+@@ -36,7 +10,7 @@
+  	      if (gld${EMULATION_NAME}_search_needed (lib_path, &n,
+  						      force))
+  		break;
+-@@ -871,6 +873,8 @@
++@@ -1191,6 +1193,8 @@
+    rpath = command_line.rpath;
+    if (rpath == NULL)
+      rpath = (const char *) getenv ("LD_RUN_PATH");
+
+Modified: trunk/buildroot/toolchain/binutils/Config.in
+===================================================================
+--- trunk/buildroot/toolchain/binutils/Config.in	2007-06-25 09:41:35 UTC (rev 18914)
++++ trunk/buildroot/toolchain/binutils/Config.in	2007-06-25 09:43:16 UTC (rev 18915)
+@@ -89,8 +89,12 @@
+ 		bool "binutils 2.17.50.0.14"
  
--$(IPSEC_TOOLS_DIR)/.configured: $(IPSEC_TOOLS_DIR)/.source
--	( cd $(IPSEC_TOOLS_DIR); \
-+$(IPSEC_TOOLS_DIR)/.configured: $(IPSEC_TOOLS_DIR)/.patched
-+	( cd $(IPSEC_TOOLS_DIR); rm -rf config.cache ; \
- 	  $(TARGET_CONFIGURE_OPTS) \
--	  CFLAGS="$(TARGET_CFLAGS)" \
--	  LDFLAGS="$(TARGET_LDFLAGS)" \
- 	  ./configure \
- 	  --target=$(GNU_TARGET_NAME) \
- 	  --host=$(GNU_TARGET_NAME) \
-@@ -83,10 +81,18 @@
- 	  --disable-hybrid \
- 	  --without-libpam \
- 	  --disable-gssapi \
--	  --with-kernel-headers=$(STAGING_DIR)/include \
-+	  --with-kernel-headers=$(STAGING_DIR)/usr/include \
- 	  $(IPSEC_TOOLS_CONFIG_FLAGS) \
- 	); 
--	touch $(IPSEC_TOOLS_DIR)/.configured
-+	# simpler than patching that cruft..
-+	(echo '#undef bzero' ; \
-+	 echo '#define bzero(a, b) memset((a), 0, (b))' ; \
-+	 echo '#undef bcopy' ; \
-+	 echo '#define bcopy(src, dest, len) memmove(dest, src, len)' ; \
-+	 echo '#undef index' ; \
-+	 echo '#define index(a, b) strchr(a, b)' ; \
-+	) >> $(IPSEC_TOOLS_DIR)/config.h
-+	touch $@
+ 	config BR2_BINUTILS_VERSION_2_17_50_0_16
++		depends !BR2_nios2 && BR2_DEPRECATED
++		bool "binutils 2.17.50.0.16"
++
++	config BR2_BINUTILS_VERSION_2_17_50_0_17
+ 		depends !BR2_nios2
+-		bool "binutils 2.17.50.0.16"
++		bool "binutils 2.17.50.0.17"
+ endchoice
  
- $(IPSEC_TOOLS_DIR)/$(IPSEC_TOOLS_BINARY_SETKEY) \
- $(IPSEC_TOOLS_DIR)/$(IPSEC_TOOLS_BINARY_RACOON) \
+ config BR2_BINUTILS_VERSION
+@@ -116,6 +120,7 @@
+ 	default "2.17.50.0.12"    if BR2_BINUTILS_VERSION_2_17_50_0_12
+ 	default "2.17.50.0.14"    if BR2_BINUTILS_VERSION_2_17_50_0_14
+ 	default "2.17.50.0.16"    if BR2_BINUTILS_VERSION_2_17_50_0_16
++	default "2.17.50.0.17"    if BR2_BINUTILS_VERSION_2_17_50_0_17
+ 
+ config BR2_EXTRA_BINUTILS_CONFIG_OPTIONS
+ 	string "Additional binutils options"
