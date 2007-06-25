@@ -1,7 +1,7 @@
 From: aldot at uclibc.org <aldot@uclibc.org>
-Date: Mon, 25 Jun 2007 02:44:13 -0700 (PDT)
-Subject: [Buildroot] svn commit: trunk/buildroot/toolchain/gcc/4.2.0
-Message-ID: <20070625094413.ECE9DA45D1@busybox.net>
+Date: Mon, 25 Jun 2007 03:23:27 -0700 (PDT)
+Subject: [Buildroot] svn commit: trunk/buildroot/package/at
+Message-ID: <20070625102327.1A5A5A45B6@busybox.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -9,173 +9,33 @@ Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
 Author: aldot
-Date: 2007-06-25 02:44:12 -0700 (Mon, 25 Jun 2007)
-New Revision: 18916
+Date: 2007-06-25 03:23:24 -0700 (Mon, 25 Jun 2007)
+New Revision: 18917
 
 Log:
-- for -Os, turn switch statements into if-else chains
+- preserve quotes
 
 
-Added:
-   trunk/buildroot/toolchain/gcc/4.2.0/904-flatten-switch-stmt-00.patch
+Modified:
+   trunk/buildroot/package/at/at.mk
 
 
 Changeset:
-Added: trunk/buildroot/toolchain/gcc/4.2.0/904-flatten-switch-stmt-00.patch
+Modified: trunk/buildroot/package/at/at.mk
 ===================================================================
---- trunk/buildroot/toolchain/gcc/4.2.0/904-flatten-switch-stmt-00.patch	                        (rev 0)
-+++ trunk/buildroot/toolchain/gcc/4.2.0/904-flatten-switch-stmt-00.patch	2007-06-25 09:44:12 UTC (rev 18916)
-@@ -0,0 +1,153 @@
-+Hi,
-+
-+The attached patch makes sure that we create smaller object code for
-+simple switch statements. We just make sure to flatten the switch
-+statement into an if-else chain, basically.
-+
-+This fixes a size-regression as compared to gcc-3.4, as can be seen
-+below.
-+
-+2007-04-15  Bernhard Fischer  <..>
-+
-+	* stmt.c (expand_case): Do not create a complex binary tree when
-+	optimizing for size but rather use the simple ordered list.
-+	(emit_case_nodes): do not emit jumps to the default_label when
-+	optimizing for size.
-+
-+Not regtested so far.
-+Comments?
-+
-+Attached is the test switch.c mentioned below.
-+
-+$ for i in 2.95 3.3 3.4 4.0 4.1 4.2.orig-HEAD 4.3.orig-HEAD 4.3-HEAD;do
-+gcc-$i  -DCHAIN -Os -o switch-CHAIN-$i.o -c switch.c ;done
-+$ for i in 2.95 3.3 3.4 4.0 4.1 4.2.orig-HEAD 4.3.orig-HEAD 4.3-HEAD;do
-+gcc-$i  -UCHAIN -Os -o switch-$i.o -c switch.c ;done
-+
-+$ size switch-*.o
-+   text	   data	    bss	    dec	    hex	filename
-+    169	      0	      0	    169	     a9	switch-2.95.o
-+    115	      0	      0	    115	     73	switch-3.3.o
-+    103	      0	      0	    103	     67	switch-3.4.o
-+    124	      0	      0	    124	     7c	switch-4.0.o
-+    124	      0	      0	    124	     7c	switch-4.1.o
-+    124	      0	      0	    124	     7c	switch-4.2.orig-HEAD.o
-+     95	      0	      0	     95	     5f	switch-4.3-HEAD.o
-+    124	      0	      0	    124	     7c	switch-4.3.orig-HEAD.o
-+    166	      0	      0	    166	     a6	switch-CHAIN-2.95.o
-+    111	      0	      0	    111	     6f	switch-CHAIN-3.3.o
-+     95	      0	      0	     95	     5f	switch-CHAIN-3.4.o
-+     95	      0	      0	     95	     5f	switch-CHAIN-4.0.o
-+     95	      0	      0	     95	     5f	switch-CHAIN-4.1.o
-+     95	      0	      0	     95	     5f	switch-CHAIN-4.2.orig-HEAD.o
-+     95	      0	      0	     95	     5f	switch-CHAIN-4.3-HEAD.o
-+     95	      0	      0	     95	     5f	switch-CHAIN-4.3.orig-HEAD.o
-+
-+
-+Content-Type: text/x-diff; charset=us-ascii
-+Content-Disposition: attachment; filename="gcc-4.3.gcc-flatten-switch-stmt.00.diff"
-+
-+Index: gcc-4.2.0/gcc/stmt.c
-+===================================================================
-+--- gcc-4.2.0.orig/gcc/stmt.c	(revision 123843)
-++++ gcc-4.2.0/gcc/stmt.c	(working copy)
-+@@ -2517,7 +2517,11 @@ expand_case (tree exp)
-+ 	  use_cost_table
-+ 	    = (TREE_CODE (orig_type) != ENUMERAL_TYPE
-+ 	       && estimate_case_costs (case_list));
-+-	  balance_case_nodes (&case_list, NULL);
-++	  /* When optimizing for size, we want a straight list to avoid
-++	     jumps as much as possible. This basically creates an if-else
-++	     chain.  */
-++	  if (!optimize_size)
-++	    balance_case_nodes (&case_list, NULL);
-+ 	  emit_case_nodes (index, case_list, default_label, index_type);
-+ 	  emit_jump (default_label);
-+ 	}
-+@@ -3075,6 +3079,7 @@ emit_case_nodes (rtx index, case_node_pt
-+ 	    {
-+ 	      if (!node_has_low_bound (node, index_type))
-+ 		{
-++		  if (!optimize_size) /* don't jl to the .default_label. */
-+ 		  emit_cmp_and_jump_insns (index,
-+ 					   convert_modes
-+ 					   (mode, imode,
-+
-+
-+Content-Type: text/x-csrc; charset=us-ascii
-+Content-Disposition: attachment; filename="switch.c"
-+
-+int
-+commutative_tree_code (int code)
-+{
-+#define CASE(val, ret) case val:/* __asm__("# val="#val ",ret="#ret);*/ return ret;
-+#ifndef CHAIN
-+  switch (code)
-+    {
-+# if 1
-+  CASE(1,3)
-+  CASE(3,2)
-+  CASE(5,8)
-+  CASE(7,1)
-+  CASE(33,4)
-+  CASE(44,9)
-+  CASE(55,10)
-+  CASE(66,-1)
-+  CASE(77,99)
-+  CASE(666,0)
-+# else
-+    case 1:
-+      return 3;
-+    case 3:
-+      return 2;
-+    case 5:
-+      return 8;
-+    case 7:
-+      return 1;
-+    case 33:
-+      return 4;
-+    case 44:
-+      return 9;
-+    case 55:
-+      return 10;
-+    case 66:
-+      return -1;
-+    case 77:
-+      return 99;
-+    case 666:
-+      return 0;
-+# endif
-+    default:
-+      break;
-+    }
-+  return 4711;
-+
-+#else
-+   if (code == 1)
-+	return 3;
-+  else if (code == 3)
-+	return 2;
-+  else if (code == 5)
-+	return 8;
-+  else if (code == 7)
-+	return 1;
-+  else if (code == 33)
-+	return 4;
-+  else if (code == 44)
-+	return 9;
-+  else if (code == 55)
-+	return 10;
-+  else if (code == 66)
-+	return -1;
-+  else if (code == 77)
-+	return 99;
-+  else if (code == 666)
-+	return 0;
-+  else
-+	return 4711;
-+#endif
-+}
-+
-+
-+--AhhlLboLdkugWU4S--
-+
+--- trunk/buildroot/package/at/at.mk	2007-06-25 09:44:12 UTC (rev 18916)
++++ trunk/buildroot/package/at/at.mk	2007-06-25 10:23:24 UTC (rev 18917)
+@@ -48,10 +48,10 @@
+ 
+ $(TARGET_DIR)/$(AT_TARGET_BINARY): $(AT_DIR)/$(AT_BINARY)
+ 	# Use fakeroot to pretend to do 'make install' as root
+-	echo "$(MAKE) DAEMON_USERNAME=root DAEMON_GROUPNAME=root " \
+-		"$(TARGET_CONFIGURE_OPTS) DESTDIR=$(TARGET_DIR) -C $(AT_DIR) install" \
++	echo '$(MAKE) DAEMON_USERNAME=root DAEMON_GROUPNAME=root ' \
++		'$(TARGET_CONFIGURE_OPTS) DESTDIR=$(TARGET_DIR) -C $(AT_DIR) install' \
+ 		> $(STAGING_DIR)/.fakeroot.at
+-	echo "rm -rf $(TARGET_DIR)/usr/man $(TARGET_DIR)/usr/doc/at" >> $(STAGING_DIR)/.fakeroot.at
++	echo 'rm -rf $(TARGET_DIR)/usr/man $(TARGET_DIR)/usr/doc/at' >> $(STAGING_DIR)/.fakeroot.at
+ 	$(INSTALL) -m 0755 -D $(AT_DIR)/debian/rc $(TARGET_DIR)/etc/init.d/S99at
+ 	touch -c $(TARGET_DIR)/$(AT_TARGET_BINARY)
+ 
