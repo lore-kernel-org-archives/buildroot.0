@@ -1,8 +1,8 @@
 From: aldot at uclibc.org <aldot@uclibc.org>
-Date: Mon, 25 Jun 2007 03:29:48 -0700 (PDT)
-Subject: [Buildroot] svn commit: trunk/buildroot/package: ltp-testsuite
-	nfs-utils
-Message-ID: <20070625102948.85366A45C3@busybox.net>
+Date: Mon, 25 Jun 2007 03:40:32 -0700 (PDT)
+Subject: [Buildroot] svn commit:
+	trunk/buildroot/toolchain/binutils/2.17.50.0.17
+Message-ID: <20070625104032.23CD8A45D1@busybox.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -10,77 +10,159 @@ Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
 Author: aldot
-Date: 2007-06-25 03:29:47 -0700 (Mon, 25 Jun 2007)
-New Revision: 18918
+Date: 2007-06-25 03:40:32 -0700 (Mon, 25 Jun 2007)
+New Revision: 18920
 
 Log:
-- preserve quotes
+- remove erroneously copied patch
 
 
-Modified:
-   trunk/buildroot/package/ltp-testsuite/ltp-testsuite.mk
-   trunk/buildroot/package/nfs-utils/nfs-utils.mk
+Removed:
+   trunk/buildroot/toolchain/binutils/2.17.50.0.17/100-uclibc-conf.patch
 
 
 Changeset:
-Modified: trunk/buildroot/package/ltp-testsuite/ltp-testsuite.mk
+Deleted: trunk/buildroot/toolchain/binutils/2.17.50.0.17/100-uclibc-conf.patch
 ===================================================================
---- trunk/buildroot/package/ltp-testsuite/ltp-testsuite.mk	2007-06-25 10:23:24 UTC (rev 18917)
-+++ trunk/buildroot/package/ltp-testsuite/ltp-testsuite.mk	2007-06-25 10:29:47 UTC (rev 18918)
-@@ -47,8 +47,8 @@
- 
- $(LTP_TESTSUITE_DIR)/.installed: $(LTP_TESTSUITE_DIR)/.compiled
- 	# Use fakeroot to pretend to do 'make install' as root
--	echo "$(MAKE1) $(TARGET_CONFIGURE_OPTS) CROSS_COMPILER=$(TARGET_CROSS) " \
--			"-C $(LTP_TESTSUITE_DIR) install" \
-+	echo '$(MAKE1) $(TARGET_CONFIGURE_OPTS) CROSS_COMPILER=$(TARGET_CROSS) ' \
-+			'-C $(LTP_TESTSUITE_DIR) install' \
- 			> $(STAGING_DIR)/.fakeroot.ltp
- 	touch $@
- 
-
-Modified: trunk/buildroot/package/nfs-utils/nfs-utils.mk
-===================================================================
---- trunk/buildroot/package/nfs-utils/nfs-utils.mk	2007-06-25 10:23:24 UTC (rev 18917)
-+++ trunk/buildroot/package/nfs-utils/nfs-utils.mk	2007-06-25 10:29:47 UTC (rev 18918)
-@@ -43,13 +43,13 @@
- 		--prefix=/usr \
- 		--disable-nfsv4 \
- 		--disable-gss \
--	);
-+	)
- 	touch $@
- 
- $(NFS_UTILS_DIR)/$(NFS_UTILS_BINARY): $(NFS_UTILS_DIR)/.configured
- 	$(MAKE) CC=$(TARGET_CC) CC_FOR_BUILD="$(HOSTCC)" \
- 		RPCGEN=/usr/bin/rpcgen -C $(NFS_UTILS_DIR)
--	touch -c $(NFS_UTILS_DIR)/$(NFS_UTILS_BINARY)
-+	touch -c $@
- 
- NFS_UTILS_TARGETS_  :=
- NFS_UTILS_TARGETS_y :=	usr/sbin/exportfs usr/sbin/rpc.mountd	\
-@@ -61,17 +61,17 @@
- 
- $(STAGING_DIR)/.fakeroot.nfs-utils: $(NFS_UTILS_DIR)/$(NFS_UTILS_BINARY)
- 	# Use fakeroot to pretend to do 'make install' as root
--	echo "$(MAKE) prefix=$(TARGET_DIR)/usr statedir=$(TARGET_DIR)/var/lib/nfs CC=$(TARGET_CC) -C $(NFS_UTILS_DIR) install" > $@
--	echo "rm -f $(TARGET_DIR)/usr/bin/event_rpcgen.py $(TARGET_DIR)/usr/sbin/nhfs* $(TARGET_DIR)/usr/sbin/nfsstat $(TARGET_DIR)/usr/sbin/showmount" >> $@
--	echo "rm -rf $(TARGET_DIR)/usr/share/man" >> $@
--	echo "$(INSTALL) -m 0755 package/nfs-utils/S60nfs $(TARGET_DIR)/etc/init.d" >> $@
--	echo -n "for file in $(NFS_UTILS_TARGETS_) ; do rm -f $(TARGET_DIR)/" >> $@
-+	echo '$(MAKE) prefix=$(TARGET_DIR)/usr statedir=$(TARGET_DIR)/var/lib/nfs $(TARGET_CONFIGURE_OPTS) -C $(NFS_UTILS_DIR) install' > $@
-+	echo 'rm -f $(TARGET_DIR)/usr/bin/event_rpcgen.py $(TARGET_DIR)/usr/sbin/nhfs* $(TARGET_DIR)/usr/sbin/nfsstat $(TARGET_DIR)/usr/sbin/showmount' >> $@
-+	echo 'rm -rf $(TARGET_DIR)/usr/share/man' >> $@
-+	echo '$(INSTALL) -m 0755 package/nfs-utils/S60nfs $(TARGET_DIR)/etc/init.d' >> $@
-+	echo -n 'for file in $(NFS_UTILS_TARGETS_) ; do rm -f $(TARGET_DIR)/' >> $@
- 	echo -n "\$$" >> $@
- 	echo "file; done" >> $@
--	echo "rm -rf $(TARGET_DIR)/var/lib/nfs" >> $@
-+	echo 'rm -rf $(TARGET_DIR)/var/lib/nfs' >> $@
- 
- $(TARGET_DIR)/$(NFS_UTILS_TARGET_BINARY): $(STAGING_DIR)/.fakeroot.nfs-utils
--	touch -c $(TARGET_DIR)/$(NFS_UTILS_TARGET_BINARY)
-+	touch -c $@
- 
- nfs-utils: uclibc host-fakeroot $(TARGET_DIR)/$(NFS_UTILS_TARGET_BINARY)
- 
+--- trunk/buildroot/toolchain/binutils/2.17.50.0.17/100-uclibc-conf.patch	2007-06-25 10:35:11 UTC (rev 18919)
++++ trunk/buildroot/toolchain/binutils/2.17.50.0.17/100-uclibc-conf.patch	2007-06-25 10:40:32 UTC (rev 18920)
+@@ -1,139 +0,0 @@
+---- binutils-2.16.91.0.7/bfd/configure
+-+++ binutils-2.16.91.0.7/bfd/configure
+-@@ -3576,7 +3576,7 @@
+-   ;;
+- 
+- # This must be Linux ELF.
+--linux-gnu*)
+-+linux-gnu*|linux-uclibc*)
+-   lt_cv_deplibs_check_method=pass_all
+-   ;;
+- 
+---- binutils-2.16.91.0.7/binutils/configure
+-+++ binutils-2.16.91.0.7/binutils/configure
+-@@ -3411,7 +3411,7 @@
+-   ;;
+- 
+- # This must be Linux ELF.
+--linux-gnu*)
+-+linux-gnu*|linux-uclibc*)
+-   lt_cv_deplibs_check_method=pass_all
+-   ;;
+- 
+---- binutils-2.16.91.0.7/configure
+-+++ binutils-2.16.91.0.7/configure
+-@@ -1270,7 +1270,7 @@
+-   am33_2.0-*-linux*)
+-     noconfigdirs="$noconfigdirs ${libgcj} target-newlib target-libgloss"
+-     ;;
+--  sh-*-linux*)
+-+  sh*-*-linux*)
+-     noconfigdirs="$noconfigdirs ${libgcj} target-newlib target-libgloss"
+-     ;;    
+-   sh*-*-pe|mips*-*-pe|*arm-wince-pe)
+-@@ -1578,7 +1578,7 @@
+-   romp-*-*)
+-     noconfigdirs="$noconfigdirs bfd binutils ld gas opcodes target-libgloss ${libgcj}"
+-     ;;
+--  sh-*-* | sh64-*-*)
+-+  sh*-*-* | sh64-*-*)
+-     case "${host}" in
+-       i[3456789]86-*-vsta) ;; # don't add gprof back in
+-       i[3456789]86-*-go32*) ;; # don't add gprof back in
+---- binutils-2.16.91.0.7/configure.ac
+-+++ binutils-2.16.91.0.7/configure.ac
+-@@ -468,7 +468,7 @@
+-   am33_2.0-*-linux*)
+-     noconfigdirs="$noconfigdirs ${libgcj} target-newlib target-libgloss"
+-     ;;
+--  sh-*-linux*)
+-+  sh*-*-linux*)
+-     noconfigdirs="$noconfigdirs ${libgcj} target-newlib target-libgloss"
+-     ;;    
+-   sh*-*-pe|mips*-*-pe|*arm-wince-pe)
+-@@ -776,7 +776,7 @@
+-   romp-*-*)
+-     noconfigdirs="$noconfigdirs bfd binutils ld gas opcodes target-libgloss ${libgcj}"
+-     ;;
+--  sh-*-* | sh64-*-*)
+-+  sh*-*-* | sh64-*-*)
+-     case "${host}" in
+-       i[[3456789]]86-*-vsta) ;; # don't add gprof back in
+-       i[[3456789]]86-*-go32*) ;; # don't add gprof back in
+---- binutils-2.16.91.0.7/gas/configure
+-+++ binutils-2.16.91.0.7/gas/configure
+-@@ -3411,7 +3411,7 @@
+-   ;;
+- 
+- # This must be Linux ELF.
+--linux-gnu*)
+-+linux-gnu*|linux-uclibc*)
+-   lt_cv_deplibs_check_method=pass_all
+-   ;;
+- 
+---- binutils-2.16.91.0.7/gprof/configure
+-+++ binutils-2.16.91.0.7/gprof/configure
+-@@ -3419,6 +3419,11 @@
+-   lt_cv_file_magic_test_file=`echo /lib/libc.so* /lib/libc-*.so`
+-   ;;
+- 
+-+linux-uclibc*)
+-+  lt_cv_deplibs_check_method=pass_all
+-+  lt_cv_file_magic_test_file=`echo /lib/libuClibc-*.so`
+-+  ;;
+-+
+- netbsd* | knetbsd*-gnu)
+-   if echo __ELF__ | $CC -E - | grep __ELF__ > /dev/null; then
+-     lt_cv_deplibs_check_method='match_pattern /lib[^/\.]+\.so\.[0-9]+\.[0-9]+$'
+---- binutils-2.16.91.0.7/ld/configure
+-+++ binutils-2.16.91.0.7/ld/configure
+-@@ -3413,7 +3413,7 @@
+-   ;;
+- 
+- # This must be Linux ELF.
+--linux-gnu*)
+-+linux-gnu*|linux-uclibc*)
+-   lt_cv_deplibs_check_method=pass_all
+-   ;;
+- 
+---- binutils-2.16.91.0.7/libtool.m4
+-+++ binutils-2.16.91.0.7/libtool.m4
+-@@ -739,7 +739,7 @@
+-   ;;
+- 
+- # This must be Linux ELF.
+--linux-gnu*)
+-+linux-gnu*|linux-uclibc*)
+-   lt_cv_deplibs_check_method=pass_all
+-   ;;
+- 
+---- binutils-2.16.91.0.7/ltconfig
+-+++ binutils-2.16.91.0.7/ltconfig
+-@@ -602,6 +602,7 @@
+- 
+- # Transform linux* to *-*-linux-gnu*, to support old configure scripts.
+- case $host_os in
+-+linux-uclibc*) ;;
+- linux-gnu*) ;;
+- linux*) host=`echo $host | sed 's/^\(.*-.*-linux\)\(.*\)$/\1-gnu\2/'`
+- esac
+-@@ -1247,7 +1248,7 @@
+-   ;;
+- 
+- # This must be Linux ELF.
+--linux-gnu*)
+-+linux-gnu*|linux-uclibc*)
+-   version_type=linux
+-   need_lib_prefix=no
+-   need_version=no
+---- binutils-2.16.91.0.7/opcodes/configure
+-+++ binutils-2.16.91.0.7/opcodes/configure
+-@@ -3579,7 +3579,7 @@
+-   ;;
+- 
+- # This must be Linux ELF.
+--linux-gnu*)
+-+linux-gnu*|linux-uclibc*)
+-   lt_cv_deplibs_check_method=pass_all
+-   ;;
+- 
