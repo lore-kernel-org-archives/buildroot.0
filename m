@@ -1,8 +1,7 @@
 From: aldot at uclibc.org <aldot@uclibc.org>
-Date: Mon, 25 Jun 2007 02:43:17 -0700 (PDT)
-Subject: [Buildroot] svn commit: trunk/buildroot/toolchain/binutils:
-	2.17.50.0.17
-Message-ID: <20070625094317.34EC0A45B5@busybox.net>
+Date: Mon, 25 Jun 2007 02:44:13 -0700 (PDT)
+Subject: [Buildroot] svn commit: trunk/buildroot/toolchain/gcc/4.2.0
+Message-ID: <20070625094413.ECE9DA45D1@busybox.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -10,191 +9,173 @@ Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
 Author: aldot
-Date: 2007-06-25 02:43:16 -0700 (Mon, 25 Jun 2007)
-New Revision: 18915
+Date: 2007-06-25 02:44:12 -0700 (Mon, 25 Jun 2007)
+New Revision: 18916
 
 Log:
-- add 2.17.50.0.17
+- for -Os, turn switch statements into if-else chains
 
 
 Added:
-   trunk/buildroot/toolchain/binutils/2.17.50.0.17/
-
-Modified:
-   trunk/buildroot/toolchain/binutils/2.17.50.0.17/110-arm-eabi-conf.patch
-   trunk/buildroot/toolchain/binutils/2.17.50.0.17/300-001_ld_makefile_patch.patch
-   trunk/buildroot/toolchain/binutils/2.17.50.0.17/300-012_check_ldrunpath_length.patch
-   trunk/buildroot/toolchain/binutils/Config.in
+   trunk/buildroot/toolchain/gcc/4.2.0/904-flatten-switch-stmt-00.patch
 
 
 Changeset:
-Copied: trunk/buildroot/toolchain/binutils/2.17.50.0.17 (from rev 18889, trunk/buildroot/toolchain/binutils/2.17.50.0.16)
-
-Modified: trunk/buildroot/toolchain/binutils/2.17.50.0.17/110-arm-eabi-conf.patch
+Added: trunk/buildroot/toolchain/gcc/4.2.0/904-flatten-switch-stmt-00.patch
 ===================================================================
---- trunk/buildroot/toolchain/binutils/2.17.50.0.16/110-arm-eabi-conf.patch	2007-06-21 22:10:12 UTC (rev 18889)
-+++ trunk/buildroot/toolchain/binutils/2.17.50.0.17/110-arm-eabi-conf.patch	2007-06-25 09:43:16 UTC (rev 18915)
-@@ -1,7 +1,7 @@
--diff -urN binutils-2.16.91.0.7.orig/configure binutils-2.16.91.0.7/configure
----- binutils-2.16.91.0.7.orig/configure	2006-05-31 14:54:24.000000000 +0300
--+++ binutils-2.16.91.0.7/configure	2006-05-31 14:55:53.000000000 +0300
--@@ -1299,7 +1299,7 @@
-+diff -u binutils-2.17.50.0.17.oorig/configure binutils-2.17.50.0.17/configure
-+--- binutils-2.17.50.0.17.oorig/configure	2007-06-18 19:29:28.000000000 +0200
-++++ binutils-2.17.50.0.17/configure	2007-06-25 09:58:36.000000000 +0200
-+@@ -2224,7 +2224,7 @@
-    arm-*-elf* | strongarm-*-elf* | xscale-*-elf* | arm*-*-eabi* )
-      noconfigdirs="$noconfigdirs target-libffi target-qthreads"
-      ;;
-@@ -10,10 +10,10 @@
-      noconfigdirs="$noconfigdirs target-libffi target-qthreads"
-      noconfigdirs="$noconfigdirs target-libjava target-libobjc"
-      ;;
--diff -urN binutils-2.16.91.0.7.orig/configure.ac binutils-2.16.91.0.7/configure.ac
----- binutils-2.16.91.0.7.orig/configure.ac	2006-05-31 14:54:24.000000000 +0300
--+++ binutils-2.16.91.0.7/configure.ac	2006-05-31 14:55:53.000000000 +0300
--@@ -497,7 +497,7 @@
-+diff -u binutils-2.17.50.0.17.oorig/configure.ac binutils-2.17.50.0.17/configure.ac
-+--- binutils-2.17.50.0.17.oorig/configure.ac	2007-06-18 19:29:28.000000000 +0200
-++++ binutils-2.17.50.0.17/configure.ac	2007-06-25 09:58:36.000000000 +0200
-+@@ -513,7 +513,7 @@
-    arm-*-elf* | strongarm-*-elf* | xscale-*-elf* | arm*-*-eabi* )
-      noconfigdirs="$noconfigdirs target-libffi target-qthreads"
-      ;;
-
-Modified: trunk/buildroot/toolchain/binutils/2.17.50.0.17/300-001_ld_makefile_patch.patch
-===================================================================
---- trunk/buildroot/toolchain/binutils/2.17.50.0.16/300-001_ld_makefile_patch.patch	2007-06-21 22:10:12 UTC (rev 18889)
-+++ trunk/buildroot/toolchain/binutils/2.17.50.0.17/300-001_ld_makefile_patch.patch	2007-06-25 09:43:16 UTC (rev 18915)
-@@ -1,34 +1,7 @@
--#!/bin/sh -e
--## 001_ld_makefile_patch.dpatch
--##
--## All lines beginning with `## DP:' are a description of the patch.
--## DP: Description: correct where ld scripts are installed
--## DP: Author: Chris Chimelis <chris@debian.org>
--## DP: Upstream status: N/A
--## DP: Date: ??
--
--if [ $# -ne 1 ]; then
--    echo >&2 "`basename $0`: script expects -patch|-unpatch as argument"
--    exit 1
--fi
--
--[ -f debian/patches/00patch-opts ] && . debian/patches/00patch-opts
--patch_opts="${patch_opts:--f --no-backup-if-mismatch}"
--
--case "$1" in
--       -patch) patch $patch_opts -p1 < $0;;
--       -unpatch) patch $patch_opts -p1 -R < $0;;
--        *)
--                echo >&2 "`basename $0`: script expects -patch|-unpatch as argument"
--                exit 1;;
--esac
--
--exit 0
--
-- at DPATCH@
----- binutils-2.16.91.0.1/ld/Makefile.am
--+++ binutils-2.16.91.0.1/ld/Makefile.am
--@@ -20,7 +20,7 @@
-+diff -u binutils-2.17.50.0.17.oorig/ld/Makefile.am binutils-2.17.50.0.17/ld/Makefile.am
-+--- binutils-2.17.50.0.17.oorig/ld/Makefile.am	2007-06-18 19:29:29.000000000 +0200
-++++ binutils-2.17.50.0.17/ld/Makefile.am	2007-06-25 10:00:36.000000000 +0200
-+@@ -18,7 +18,7 @@
-  # We put the scripts in the directory $(scriptdir)/ldscripts.
-  # We can't put the scripts in $(datadir) because the SEARCH_DIR
-  # directives need to be different for native and cross linkers.
-@@ -37,9 +10,10 @@
-  
-  EMUL = @EMUL@
-  EMULATION_OFILES = @EMULATION_OFILES@
----- binutils-2.16.91.0.1/ld/Makefile.in
--+++ binutils-2.16.91.0.1/ld/Makefile.in
--@@ -268,7 +268,7 @@
-+diff -u binutils-2.17.50.0.17.oorig/ld/Makefile.in binutils-2.17.50.0.17/ld/Makefile.in
-+--- binutils-2.17.50.0.17.oorig/ld/Makefile.in	2007-06-18 19:29:29.000000000 +0200
-++++ binutils-2.17.50.0.17/ld/Makefile.in	2007-06-25 10:00:36.000000000 +0200
-+@@ -287,7 +287,7 @@
-  # We put the scripts in the directory $(scriptdir)/ldscripts.
-  # We can't put the scripts in $(datadir) because the SEARCH_DIR
-  # directives need to be different for native and cross linkers.
-
-Modified: trunk/buildroot/toolchain/binutils/2.17.50.0.17/300-012_check_ldrunpath_length.patch
-===================================================================
---- trunk/buildroot/toolchain/binutils/2.17.50.0.16/300-012_check_ldrunpath_length.patch	2007-06-21 22:10:12 UTC (rev 18889)
-+++ trunk/buildroot/toolchain/binutils/2.17.50.0.17/300-012_check_ldrunpath_length.patch	2007-06-25 09:43:16 UTC (rev 18915)
-@@ -1,33 +1,7 @@
--#!/bin/sh -e
--## 012_check_ldrunpath_length.dpatch by Chris Chimelis <chris@debian.org>
--##
--## All lines beginning with `## DP:' are a description of the patch.
--## DP: Only generate an RPATH entry if LD_RUN_PATH is not empty, for
--## DP: cases where -rpath isn't specified. (#151024)
--
--if [ $# -ne 1 ]; then
--    echo >&2 "`basename $0`: script expects -patch|-unpatch as argument"
--    exit 1
--fi
--
--[ -f debian/patches/00patch-opts ] && . debian/patches/00patch-opts
--patch_opts="${patch_opts:--f --no-backup-if-mismatch}"
--
--case "$1" in
--       -patch) patch $patch_opts -p1 < $0;;
--       -unpatch) patch $patch_opts -p1 -R < $0;;
--        *)
--                echo >&2 "`basename $0`: script expects -patch|-unpatch as argument"
--                exit 1;;
--esac
--
--exit 0
--
-- at DPATCH@
--diff -urNad /home/james/debian/packages/binutils/new/binutils-2.15/ld/emultempl/elf32.em binutils-2.15/ld/emultempl/elf32.em
----- /home/james/debian/packages/binutils/new/binutils-2.15/ld/emultempl/elf32.em	2004-05-21 23:12:58.000000000 +0100
--+++ binutils-2.15/ld/emultempl/elf32.em	2004-05-21 23:12:59.000000000 +0100
--@@ -692,6 +692,8 @@
-+diff -u binutils-2.17.50.0.17.oorig/ld/emultempl/elf32.em binutils-2.17.50.0.17/ld/emultempl/elf32.em
-+--- binutils-2.17.50.0.17.oorig/ld/emultempl/elf32.em	2007-06-18 19:31:40.000000000 +0200
-++++ binutils-2.17.50.0.17/ld/emultempl/elf32.em	2007-06-25 10:01:25.000000000 +0200
-+@@ -1007,6 +1007,8 @@
-  	      && command_line.rpath == NULL)
-  	    {
-  	      lib_path = (const char *) getenv ("LD_RUN_PATH");
-@@ -36,7 +10,7 @@
-  	      if (gld${EMULATION_NAME}_search_needed (lib_path, &n,
-  						      force))
-  		break;
--@@ -871,6 +873,8 @@
-+@@ -1191,6 +1193,8 @@
-    rpath = command_line.rpath;
-    if (rpath == NULL)
-      rpath = (const char *) getenv ("LD_RUN_PATH");
-
-Modified: trunk/buildroot/toolchain/binutils/Config.in
-===================================================================
---- trunk/buildroot/toolchain/binutils/Config.in	2007-06-25 09:41:35 UTC (rev 18914)
-+++ trunk/buildroot/toolchain/binutils/Config.in	2007-06-25 09:43:16 UTC (rev 18915)
-@@ -89,8 +89,12 @@
- 		bool "binutils 2.17.50.0.14"
- 
- 	config BR2_BINUTILS_VERSION_2_17_50_0_16
-+		depends !BR2_nios2 && BR2_DEPRECATED
-+		bool "binutils 2.17.50.0.16"
+--- trunk/buildroot/toolchain/gcc/4.2.0/904-flatten-switch-stmt-00.patch	                        (rev 0)
++++ trunk/buildroot/toolchain/gcc/4.2.0/904-flatten-switch-stmt-00.patch	2007-06-25 09:44:12 UTC (rev 18916)
+@@ -0,0 +1,153 @@
++Hi,
 +
-+	config BR2_BINUTILS_VERSION_2_17_50_0_17
- 		depends !BR2_nios2
--		bool "binutils 2.17.50.0.16"
-+		bool "binutils 2.17.50.0.17"
- endchoice
- 
- config BR2_BINUTILS_VERSION
-@@ -116,6 +120,7 @@
- 	default "2.17.50.0.12"    if BR2_BINUTILS_VERSION_2_17_50_0_12
- 	default "2.17.50.0.14"    if BR2_BINUTILS_VERSION_2_17_50_0_14
- 	default "2.17.50.0.16"    if BR2_BINUTILS_VERSION_2_17_50_0_16
-+	default "2.17.50.0.17"    if BR2_BINUTILS_VERSION_2_17_50_0_17
- 
- config BR2_EXTRA_BINUTILS_CONFIG_OPTIONS
- 	string "Additional binutils options"
++The attached patch makes sure that we create smaller object code for
++simple switch statements. We just make sure to flatten the switch
++statement into an if-else chain, basically.
++
++This fixes a size-regression as compared to gcc-3.4, as can be seen
++below.
++
++2007-04-15  Bernhard Fischer  <..>
++
++	* stmt.c (expand_case): Do not create a complex binary tree when
++	optimizing for size but rather use the simple ordered list.
++	(emit_case_nodes): do not emit jumps to the default_label when
++	optimizing for size.
++
++Not regtested so far.
++Comments?
++
++Attached is the test switch.c mentioned below.
++
++$ for i in 2.95 3.3 3.4 4.0 4.1 4.2.orig-HEAD 4.3.orig-HEAD 4.3-HEAD;do
++gcc-$i  -DCHAIN -Os -o switch-CHAIN-$i.o -c switch.c ;done
++$ for i in 2.95 3.3 3.4 4.0 4.1 4.2.orig-HEAD 4.3.orig-HEAD 4.3-HEAD;do
++gcc-$i  -UCHAIN -Os -o switch-$i.o -c switch.c ;done
++
++$ size switch-*.o
++   text	   data	    bss	    dec	    hex	filename
++    169	      0	      0	    169	     a9	switch-2.95.o
++    115	      0	      0	    115	     73	switch-3.3.o
++    103	      0	      0	    103	     67	switch-3.4.o
++    124	      0	      0	    124	     7c	switch-4.0.o
++    124	      0	      0	    124	     7c	switch-4.1.o
++    124	      0	      0	    124	     7c	switch-4.2.orig-HEAD.o
++     95	      0	      0	     95	     5f	switch-4.3-HEAD.o
++    124	      0	      0	    124	     7c	switch-4.3.orig-HEAD.o
++    166	      0	      0	    166	     a6	switch-CHAIN-2.95.o
++    111	      0	      0	    111	     6f	switch-CHAIN-3.3.o
++     95	      0	      0	     95	     5f	switch-CHAIN-3.4.o
++     95	      0	      0	     95	     5f	switch-CHAIN-4.0.o
++     95	      0	      0	     95	     5f	switch-CHAIN-4.1.o
++     95	      0	      0	     95	     5f	switch-CHAIN-4.2.orig-HEAD.o
++     95	      0	      0	     95	     5f	switch-CHAIN-4.3-HEAD.o
++     95	      0	      0	     95	     5f	switch-CHAIN-4.3.orig-HEAD.o
++
++
++Content-Type: text/x-diff; charset=us-ascii
++Content-Disposition: attachment; filename="gcc-4.3.gcc-flatten-switch-stmt.00.diff"
++
++Index: gcc-4.2.0/gcc/stmt.c
++===================================================================
++--- gcc-4.2.0.orig/gcc/stmt.c	(revision 123843)
+++++ gcc-4.2.0/gcc/stmt.c	(working copy)
++@@ -2517,7 +2517,11 @@ expand_case (tree exp)
++ 	  use_cost_table
++ 	    = (TREE_CODE (orig_type) != ENUMERAL_TYPE
++ 	       && estimate_case_costs (case_list));
++-	  balance_case_nodes (&case_list, NULL);
+++	  /* When optimizing for size, we want a straight list to avoid
+++	     jumps as much as possible. This basically creates an if-else
+++	     chain.  */
+++	  if (!optimize_size)
+++	    balance_case_nodes (&case_list, NULL);
++ 	  emit_case_nodes (index, case_list, default_label, index_type);
++ 	  emit_jump (default_label);
++ 	}
++@@ -3075,6 +3079,7 @@ emit_case_nodes (rtx index, case_node_pt
++ 	    {
++ 	      if (!node_has_low_bound (node, index_type))
++ 		{
+++		  if (!optimize_size) /* don't jl to the .default_label. */
++ 		  emit_cmp_and_jump_insns (index,
++ 					   convert_modes
++ 					   (mode, imode,
++
++
++Content-Type: text/x-csrc; charset=us-ascii
++Content-Disposition: attachment; filename="switch.c"
++
++int
++commutative_tree_code (int code)
++{
++#define CASE(val, ret) case val:/* __asm__("# val="#val ",ret="#ret);*/ return ret;
++#ifndef CHAIN
++  switch (code)
++    {
++# if 1
++  CASE(1,3)
++  CASE(3,2)
++  CASE(5,8)
++  CASE(7,1)
++  CASE(33,4)
++  CASE(44,9)
++  CASE(55,10)
++  CASE(66,-1)
++  CASE(77,99)
++  CASE(666,0)
++# else
++    case 1:
++      return 3;
++    case 3:
++      return 2;
++    case 5:
++      return 8;
++    case 7:
++      return 1;
++    case 33:
++      return 4;
++    case 44:
++      return 9;
++    case 55:
++      return 10;
++    case 66:
++      return -1;
++    case 77:
++      return 99;
++    case 666:
++      return 0;
++# endif
++    default:
++      break;
++    }
++  return 4711;
++
++#else
++   if (code == 1)
++	return 3;
++  else if (code == 3)
++	return 2;
++  else if (code == 5)
++	return 8;
++  else if (code == 7)
++	return 1;
++  else if (code == 33)
++	return 4;
++  else if (code == 44)
++	return 9;
++  else if (code == 55)
++	return 10;
++  else if (code == 66)
++	return -1;
++  else if (code == 77)
++	return 99;
++  else if (code == 666)
++	return 0;
++  else
++	return 4711;
++#endif
++}
++
++
++--AhhlLboLdkugWU4S--
++
