@@ -1,34 +1,47 @@
-From: Ivan Kuten <ivan.kuten@promwad.com>
-Date: Mon, 25 Jun 2007 15:44:04 +0300
-Subject: [Buildroot] PATCH: fix SDL-1.2.11 PAGE_SIZE missing definition
-In-Reply-To: <20070625111229.GH5134@aon.at>
-References: <20070625134241.07169998@newbox>
-	<20070625111229.GH5134@aon.at>
-Message-ID: <20070625154404.3c691558@newbox>
+From: Ulf Samuelsson <ulf@atmel.com>
+Date: Mon, 25 Jun 2007 15:08:28 +0200
+Subject: [Buildroot] Can "make <>_defconfig" rules be restored?
+In-Reply-To: <003801c7b605$0e32cb10$6604a8c0@shukson>
+References: <01c301c7b519$52679b40$6e02a8c0@k2>
+	<20070623093927.GG4096@aon.at> <003801c7b605$0e32cb10$6604a8c0@shukson>
+Message-ID: <1182776909.20950.4.camel@aeglos.sweden.atmel.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Mon, 25 Jun 2007 13:12:29 +0200
-Bernhard Fischer wrote:
 
-> On Mon, Jun 25, 2007 at 01:42:41PM +0300, Ivan Kuten wrote:
-> >Hello,
+> >>
+> >>I would like to use "_defconfig" files to save and restore specific 
+> >>defaults
+> >>for several platforms.
+> >>
+> >>The Makefile at one point supported loading of user defined "_defconfig"
+> >>files. In the current Makefile the noconfig_targets part of "_defconfig" 
+> >>is
+> >>commented out.
+> >>
 > >
-> >When SDL configured to use fbcon, the build is failed because PAGE_SIZE is undeclared in <asm/page.h> 
-> >referred from src/video/fbcon/SDL_fbvideo.c
-> >
-> >Instead we are using libc functions to know PAGE_SIZE and only as last resort make it hardcoded to 4096.
-> >The patch below fixes the problem.
-> >
-> >Best regards,
+> > Yes, the problem with this kind of _defconfig was that in a tree that
+> > had already one or two compiled arches lying around, the find was the
+> > cause for a delay in the order of several minutes on my box.
+> The purpose of this patch is to have several arches lying around.
 > 
-> Please send this to the SDL guys too.
-> Applied, thanks!
+> 
+> 
+It is not particularily efficient to search the whole tree for config files.
 
-They have it fixed in SVN SDL 1.3.x branch - but it's not released as stable version.
+In my private implementation, I only use the "configs" directory for
+storage of such files.
+make B=<board> board
+will copy the latest version (they are stored as <board>-<date>.config)
+to .config.
+The implementation is simplistic.
+Copy ALL the files to .confiug, so the latest file will overwrite all other files.
 
-Best regards,
-Ivan
+
+
+- 
+Best Regards,
+Ulf Samuelsson
