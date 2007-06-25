@@ -1,87 +1,97 @@
-From: bugs at busybox.net <bugs@busybox.net>
-Date: Mon, 25 Jun 2007 11:38:36 -0700
+From: Bernhard Fischer <rep.dot.nop@gmail.com>
+Date: Mon, 25 Jun 2007 22:41:57 +0200
 Subject: [Buildroot] [buildroot 0001282]: ccache
-Message-ID: <5f6249237b1e567e799ce1495b9613bb@busybox.net>
+In-Reply-To: <5f6249237b1e567e799ce1495b9613bb@busybox.net>
+References: <5f6249237b1e567e799ce1495b9613bb@busybox.net>
+Message-ID: <20070625204157.GZ4096@aon.at>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+If somebody who regularly uses ccache could comment on the bugreport
+below then this would be great.. Iff he is talking about exporting
+CACHE_DIR to (let's say) $(STAGING_DIR).ccache then it sounds like it
+should be (easily?) doable.
 
-A NOTE has been added to this issue. 
-====================================================================== 
-http://busybox.net/bugs/view.php?id=1282 
-====================================================================== 
-Reported By:                Franck78
-Assigned To:                buildroot
-====================================================================== 
-Project:                    buildroot
-Issue ID:                   1282
-Category:                   Architecture Specific
-Reproducibility:            always
-Severity:                   feature
-Priority:                   normal
-Status:                     assigned
-====================================================================== 
-Date Submitted:             03-21-2007 11:56 PDT
-Last Modified:              06-25-2007 11:38 PDT
-====================================================================== 
-Summary:                    ccache
-Description: 
-Hello,
+*shrug*
 
-1) ccache is built at the end of the toolchain (gcc/uclibc/binutils). It
-serves for nothing (ok I except if you slected other package it may...).
-
-2) the ccache_dir is fixed inside 'toolchain_build_i486' It would be
-better if the  CCACHE_DIR could be setup somewhere else outside
-'buildroot'.
-Why? In automated procedure constructing distro, buildroot.tar.gz is
-expanded then configured then built as all other packages making the
-distro.
-It means everytime, buildroot dir is like a virgin.. ;-) No ccache_dir
-inside.
-
-but if ccache_dir is outside....ok, it will be preserved accross rebuilds
-and the final touch would have ccache used for ALL the toolchain
-construction...!
-
-
-Adding a new option in 'make menuconfig' is beyond my knowledge of
-buildroot for now.
-
-Franck
-====================================================================== 
-
----------------------------------------------------------------------- 
- bernhardf - 06-25-07 11:02  
----------------------------------------------------------------------- 
-Although i don't understand a word, i think that this sounds like "Doctor,
-it hurts when i do.."
-
-Please describe the problem you are facing and suggest what should be done
-why and how, i shall close this bug otherwise. 
-
----------------------------------------------------------------------- 
- Franck78 - 06-25-07 11:38  
----------------------------------------------------------------------- 
-Ok,
-A distro is something more complete than buildroot alone. The buildroot
-package is only 'one step among others'. The full build can follow some
-method like lfs (linux from scratch). 
-Having ccache dir outside of the tree build avoid loosing what have been
-already compiled when some kind of full rebuild of the distro is
-performed. In other words, the cachedir is in a safe configurable place. 
-
-tchuss. 
-
-Issue History 
-Date Modified   Username       Field                    Change               
-====================================================================== 
-03-21-07 11:56  Franck78       New Issue                                    
-03-21-07 11:56  Franck78       Status                   new => assigned     
-03-21-07 11:56  Franck78       Assigned To               => buildroot       
-06-25-07 11:02  bernhardf      Note Added: 0002507                          
-06-25-07 11:38  Franck78       Note Added: 0002513                          
-======================================================================
+On Mon, Jun 25, 2007 at 11:38:36AM -0700, bugs at busybox.net wrote:
+>
+>A NOTE has been added to this issue. 
+>====================================================================== 
+>http://busybox.net/bugs/view.php?id=1282 
+>====================================================================== 
+>Reported By:                Franck78
+>Assigned To:                buildroot
+>====================================================================== 
+>Project:                    buildroot
+>Issue ID:                   1282
+>Category:                   Architecture Specific
+>Reproducibility:            always
+>Severity:                   feature
+>Priority:                   normal
+>Status:                     assigned
+>====================================================================== 
+>Date Submitted:             03-21-2007 11:56 PDT
+>Last Modified:              06-25-2007 11:38 PDT
+>====================================================================== 
+>Summary:                    ccache
+>Description: 
+>Hello,
+>
+>1) ccache is built at the end of the toolchain (gcc/uclibc/binutils). It
+>serves for nothing (ok I except if you slected other package it may...).
+>
+>2) the ccache_dir is fixed inside 'toolchain_build_i486' It would be
+>better if the  CCACHE_DIR could be setup somewhere else outside
+>'buildroot'.
+>Why? In automated procedure constructing distro, buildroot.tar.gz is
+>expanded then configured then built as all other packages making the
+>distro.
+>It means everytime, buildroot dir is like a virgin.. ;-) No ccache_dir
+>inside.
+>
+>but if ccache_dir is outside....ok, it will be preserved accross rebuilds
+>and the final touch would have ccache used for ALL the toolchain
+>construction...!
+>
+>
+>Adding a new option in 'make menuconfig' is beyond my knowledge of
+>buildroot for now.
+>
+>Franck
+>====================================================================== 
+>
+>---------------------------------------------------------------------- 
+> bernhardf - 06-25-07 11:02  
+>---------------------------------------------------------------------- 
+>Although i don't understand a word, i think that this sounds like "Doctor,
+>it hurts when i do.."
+>
+>Please describe the problem you are facing and suggest what should be done
+>why and how, i shall close this bug otherwise. 
+>
+>---------------------------------------------------------------------- 
+> Franck78 - 06-25-07 11:38  
+>---------------------------------------------------------------------- 
+>Ok,
+>A distro is something more complete than buildroot alone. The buildroot
+>package is only 'one step among others'. The full build can follow some
+>method like lfs (linux from scratch). 
+>Having ccache dir outside of the tree build avoid loosing what have been
+>already compiled when some kind of full rebuild of the distro is
+>performed. In other words, the cachedir is in a safe configurable place. 
+>
+>tchuss. 
+>
+>Issue History 
+>Date Modified   Username       Field                    Change               
+>====================================================================== 
+>03-21-07 11:56  Franck78       New Issue                                    
+>03-21-07 11:56  Franck78       Status                   new => assigned     
+>03-21-07 11:56  Franck78       Assigned To               => buildroot       
+>06-25-07 11:02  bernhardf      Note Added: 0002507                          
+>06-25-07 11:38  Franck78       Note Added: 0002513                          
+>======================================================================
