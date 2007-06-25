@@ -1,7 +1,7 @@
 From: bugs at busybox.net <bugs@busybox.net>
-Date: Mon, 25 Jun 2007 11:02:13 -0700
-Subject: [Buildroot] [buildroot 0001282]: ccache
-Message-ID: <b62ed16d4ea778746792529833f575a9@busybox.net>
+Date: Mon, 25 Jun 2007 11:02:54 -0700
+Subject: [Buildroot] [buildroot 0001300]: gettext building problem.
+Message-ID: <eb39b7cff1362c2178e31d34524e0c2b@busybox.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -9,65 +9,116 @@ Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
 
-A NOTE has been added to this issue. 
+The following issue has been CLOSED 
 ====================================================================== 
-http://busybox.net/bugs/view.php?id=1282 
+http://busybox.net/bugs/view.php?id=1300 
 ====================================================================== 
-Reported By:                Franck78
+Reported By:                fv
 Assigned To:                buildroot
 ====================================================================== 
 Project:                    buildroot
-Issue ID:                   1282
-Category:                   Architecture Specific
+Issue ID:                   1300
+Category:                   Other
 Reproducibility:            always
-Severity:                   feature
+Severity:                   minor
 Priority:                   normal
-Status:                     assigned
+Status:                     closed
+Resolution:                 open
+Fixed in Version:           
 ====================================================================== 
-Date Submitted:             03-21-2007 11:56 PDT
+Date Submitted:             04-04-2007 06:50 PDT
 Last Modified:              06-25-2007 11:02 PDT
 ====================================================================== 
-Summary:                    ccache
+Summary:                    gettext building problem.
 Description: 
-Hello,
+Gettext build fail in -snapshot version (of today).
+There is a multiple definition of 'plural_eval(...)' function.
 
-1) ccache is built at the end of the toolchain (gcc/uclibc/binutils). It
-serves for nothing (ok I except if you slected other package it may...).
+from: 
+  build_i686/gettext-0.14.6/gettext-runtime/intl/eval-plural.h:28
+  build_i686/gettext-0.14.6/gettext-runtime/intl/plural-exp.h:115
 
-2) the ccache_dir is fixed inside 'toolchain_build_i486' It would be
-better if the  CCACHE_DIR could be setup somewhere else outside
-'buildroot'.
-Why? In automated procedure constructing distro, buildroot.tar.gz is
-expanded then configured then built as all other packages making the
-distro.
-It means everytime, buildroot dir is like a virgin.. ;-) No ccache_dir
-inside.
+from eval-plural.h: 
 
-but if ccache_dir is outside....ok, it will be preserved accross rebuilds
-and the final touch would have ccache used for ALL the toolchain
-construction...!
+        /* Evaluate the plural expression and return an index value.  */
+        STATIC 
+        unsigned long int
+        internal_function      
+        plural_eval (struct expression *pexp, unsigned long int n)        
+                                                                      
+        {
+
+from plural-exp.h: 
+
+        #if !defined (_LIBC) && !defined (IN_LIBINTL)                     
+                                                                      
+        extern unsigned long int plural_eval (struct expression *pexp,
+                              unsigned long int n);
+        #endif
 
 
-Adding a new option in 'make menuconfig' is beyond my knowledge of
-buildroot for now.
+Seems like a condition has to be added ( eg. !defined(_BUILDROOT) )  in
+plural-exp.h
 
-Franck
+My LANG environment variable is set to "fr_FR.UTF-8". 
+Strangely, changing it to LANG=C and re-launching the build
+seems to solve the problem
+
+
+Cheers,
+Francois Visconte
+
+
 ====================================================================== 
+
+---------------------------------------------------------------------- 
+ fv - 04-13-07 07:10  
+---------------------------------------------------------------------- 
+In fact doing "export LANG=C" does not solve the problem.
+
+The attached patch solves the problem.
+Put it into packages/gettext and build will work
+
+
+Cheers, 
+Fran?ois Visconte 
+
+---------------------------------------------------------------------- 
+ fv - 04-13-07 07:13  
+---------------------------------------------------------------------- 
+Sorry for the error, the good patch is : 
+
+
+
+--- gettext-0.14.6/gettext-runtime/intl/plural-exp.h.old        2005-05-20
+23:03:38.000000000 +0200
++++ gettext-0.14.6/gettext-runtime/intl/plural-exp.h    2007-04-13
+15:54:54.000000000 +0200
+@@ -110,7 +110,7 @@
+                               unsigned long int *npluralsp)
+      internal_function;
+ 
+-#if !defined (_LIBC) && !defined (IN_LIBINTL)
++#if !defined (__UCLIBC__) && !defined (_LIBC) && !defined (IN_LIBINTL)
+ extern unsigned long int plural_eval (struct expression *pexp,
+                              unsigned long int n);
+ #endif 
 
 ---------------------------------------------------------------------- 
  bernhardf - 06-25-07 11:02  
 ---------------------------------------------------------------------- 
-Although i don't understand a word, i think that this sounds like "Doctor,
-it hurts when i do.."
-
-Please describe the problem you are facing and suggest what should be done
-why and how, i shall close this bug otherwise. 
+The patch is wrong. This was fixed properly in svn by now. 
 
 Issue History 
 Date Modified   Username       Field                    Change               
 ====================================================================== 
-03-21-07 11:56  Franck78       New Issue                                    
-03-21-07 11:56  Franck78       Status                   new => assigned     
-03-21-07 11:56  Franck78       Assigned To               => buildroot       
-06-25-07 11:02  bernhardf      Note Added: 0002507                          
+04-04-07 06:50  fv             New Issue                                    
+04-04-07 06:50  fv             Status                   new => assigned     
+04-04-07 06:50  fv             Assigned To               => buildroot       
+04-13-07 07:10  fv             Note Added: 0002311                          
+04-13-07 07:11  fv             File Added: gettext-plural-exp.patch             
+      
+04-13-07 07:13  fv             Note Added: 0002312                          
+06-25-07 11:02  bernhardf      Status                   assigned => closed  
+06-25-07 11:02  bernhardf      Note Added: 0002508                          
 ======================================================================
