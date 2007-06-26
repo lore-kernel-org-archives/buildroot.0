@@ -1,46 +1,35 @@
-From: aldot at uclibc.org <aldot@uclibc.org>
-Date: Tue, 26 Jun 2007 07:32:10 -0700 (PDT)
-Subject: [Buildroot] svn commit: trunk/buildroot/toolchain/gdb
-Message-ID: <20070626143210.B23F9A4667@busybox.net>
+From: Julien Letessier <julien.letessier@technosens.fr>
+Date: Tue, 26 Jun 2007 17:21:05 +0200
+Subject: [Buildroot] [PATCH] libraw1394 package : correct install
+In-Reply-To: <f0528b5b0706241047s4ec3474dpaafcf06e8a97673e@mail.gmail.com>
+References: <f0528b5b0706241047s4ec3474dpaafcf06e8a97673e@mail.gmail.com>
+Message-ID: <f0528b5b0706260821s31f7eeb5n677d8498b44cdbde@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Author: aldot
-Date: 2007-06-26 07:32:10 -0700 (Tue, 26 Jun 2007)
-New Revision: 18939
+Update: also correctly install headers.
+(replaces previous patch)
 
-Log:
-- don't bail out on cc warnings
+2007/6/24, Julien Letessier <julien.letessier@technosens.fr>:
+> Install the library under $(STAGING_DIR)/usr/lib .
+>
+> --
+> Julien Letessier
+> <julien.letessier@technosens.fr>
+>
+>
 
 
-Modified:
-   trunk/buildroot/toolchain/gdb/gdb.mk
-
-
-Changeset:
-Modified: trunk/buildroot/toolchain/gdb/gdb.mk
-===================================================================
---- trunk/buildroot/toolchain/gdb/gdb.mk	2007-06-26 14:02:29 UTC (rev 18938)
-+++ trunk/buildroot/toolchain/gdb/gdb.mk	2007-06-26 14:32:10 UTC (rev 18939)
-@@ -75,8 +75,8 @@
- 	(cd $(GDB_TARGET_DIR); rm -rf config.cache ; \
- 		gdb_cv_func_sigsetjmp=yes \
- 		$(TARGET_CONFIGURE_OPTS) \
--		CFLAGS_FOR_TARGET="$(TARGET_CFLAGS) $(TARGET_LDFLAGS)" \
--		CFLAGS="$(TARGET_CFLAGS) $(TARGET_LDFLAGS)" \
-+		CFLAGS_FOR_TARGET="$(TARGET_CFLAGS) $(TARGET_LDFLAGS) -Wno-error" \
-+		CFLAGS="$(TARGET_CFLAGS) $(TARGET_LDFLAGS) -Wno-error" \
- 		$(GDB_TARGET_CONFIGURE_VARS) \
- 		$(GDB_DIR)/configure \
- 		--build=$(GNU_HOST_NAME) \
-@@ -88,6 +88,7 @@
- 		--disable-tui --disable-gdbtk --without-x \
- 		--disable-sim --enable-gdbserver \
- 		--without-included-gettext \
-+		--disable-werror \
- 	);
- ifeq ($(BR2_ENABLE_LOCALE),y)
- 	-$(SED) "s,^INTL *=.*,INTL = -lintl,g;" $(GDB_DIR)/gdb/Makefile
+-- 
+Julien Letessier
+<julien.letessier@technosens.fr>
+-------------- next part --------------
+A non-text attachment was scrubbed...
+Name: buildroot_libraw1394-v2.patch
+Type: application/octet-stream
+Size: 1292 bytes
+Desc: not available
+Url : http://busybox.net/lists/buildroot/attachments/20070626/339f7cf3/attachment.obj 
