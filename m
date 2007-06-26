@@ -1,37 +1,56 @@
-From: Nam Hoang <rosemanit@gmail.com>
-Date: Tue, 26 Jun 2007 15:32:45 +0700
-Subject: [Buildroot] [buildroot] HELP : bash-3.2 - build problem
-Message-ID: <b872c6870706260132w2ebda71bwe69eaca9d7babd9f@mail.gmail.com>
+From: aldot at uclibc.org <aldot@uclibc.org>
+Date: Tue, 26 Jun 2007 06:26:51 -0700 (PDT)
+Subject: [Buildroot] svn commit: trunk/buildroot/toolchain/dependencies
+Message-ID: <20070626132651.36A39A460C@busybox.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-When compiling bash package, i met the following error message:
-/usr/bin/gcc -L/home/namhh/mini-linux/buildroot/build_i686/staging_dir/lib
--L/home/namhh/mini-linux/buildroot/build_i686/staging_dir/usr/lib -rdynamic
--Os -pipe
--I/home/namhh/mini-linux/buildroot/build_i686/staging_dir/usr/include
---sysroot=/home/namhh/mini-linux/buildroot/build_i686/staging_dir/ -isysroot
-/home/namhh/mini-linux/buildroot/build_i686/staging_dir -o mkbuiltins
-mkbuiltins.o
-/usr/bin/ld: this linker was not configured to use sysroots
-collect2: ld returned 1 exit status
-make[2]: *** [mkbuiltins] Error 1
-make[2]: Leaving directory
-`/home/namhh/mini-linux/buildroot/build_i686/bash-3.2/builtins'
-make[1]: *** [builtins/builtext.h] Error 1
-make[1]: Leaving directory
-`/home/namhh/mini-linux/buildroot/build_i686/bash-3.2'
-make: *** [/home/namhh/mini-linux/buildroot/build_i686/bash-3.2/bash] Error
-2
+Author: aldot
+Date: 2007-06-26 06:26:51 -0700 (Tue, 26 Jun 2007)
+New Revision: 18937
 
-Past few days, i still built bash successfully, but now, i can't. What wrong
-i did ?
+Log:
+- check for clean environment variables ARCH, CROSS_COMPILE, GREP_OPTIONS
 
-Thanks,
-HONGNAM
--------------- next part --------------
-An HTML attachment was scrubbed...
-URL: http://busybox.net/lists/buildroot/attachments/20070626/2d0ce926/attachment.htm 
+
+Modified:
+   trunk/buildroot/toolchain/dependencies/dependencies.sh
+
+
+Changeset:
+Modified: trunk/buildroot/toolchain/dependencies/dependencies.sh
+===================================================================
+--- trunk/buildroot/toolchain/dependencies/dependencies.sh	2007-06-26 06:24:37 UTC (rev 18936)
++++ trunk/buildroot/toolchain/dependencies/dependencies.sh	2007-06-26 13:26:51 UTC (rev 18937)
+@@ -61,6 +61,28 @@
+ fi;
+ echo "CXXFLAGS clean:					Ok"
+ 
++if test -n "$GREP_OPTIONS" ; then
++        echo "GREP_OPTIONS clean:                               FALSE"
++        /bin/echo -e "\n\nYou must run 'unset GREP_OPTIONS' so buildroot can run with";
++        /bin/echo -e "a clean environment on your build machine\n";
++        exit 1;
++fi;
++
++if test -n "$CROSS_COMPILE" ; then
++        echo "CROSS_COMPILE clean:                               FALSE"
++        /bin/echo -e "\n\nYou must run 'unset CROSS_COMPILE' so buildroot can run with";
++        /bin/echo -e "a clean environment on your build machine\n";
++        exit 1;
++fi;
++
++if test -n "$ARCH" ; then
++        echo "ARCH clean:                               FALSE"
++        /bin/echo -e "\n\nYou must run 'unset ARCH' so buildroot can run with";
++        /bin/echo -e "a clean environment on your build machine\n";
++        exit 1;
++fi;
++
++
+ echo "WORKS" | grep "WORKS" >/dev/null 2>&1
+ if test $? != 0 ; then
+ 	echo "grep works:				FALSE"
