@@ -1,55 +1,22 @@
-From: bugs at busybox.net <bugs@busybox.net>
-Date: Tue, 26 Jun 2007 07:10:31 -0700
-Subject: [Buildroot] [buildroot 0000666]: openntpd init script and version
-	bump
-Message-ID: <6605bc8c44fbc00757287876a15edf8e@busybox.net>
+From: Ben Dooks <ben@fluff.org>
+Date: Tue, 26 Jun 2007 14:33:27 +0100
+Subject: [Buildroot] ARM EABI builds
+Message-ID: <20070626133327.GA5989@trinity.fluff.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+Has anyone had success with building an EABI buildroot? I have tried
+building ARM (arm920t,gcc 4.1.2) and the image produced hangs (it
+seems vfprintf does not work)
 
-The issue 0001029 has been set as DUPLICATE OF the following issue. 
-====================================================================== 
-http://busybox.net/bugs/view.php?id=666 
-====================================================================== 
-Reported By:                akvadrako
-Assigned To:                buildroot
-====================================================================== 
-Project:                    buildroot
-Issue ID:                   666
-Category:                   Other
-Reproducibility:            always
-Severity:                   minor
-Priority:                   normal
-Status:                     assigned
-====================================================================== 
-Date Submitted:             01-27-2006 16:07 PST
-Last Modified:              06-26-2007 07:07 PDT
-====================================================================== 
-Summary:                    openntpd init script and version bump
-Description: 
-This patch does these things:
-(1) bump version from 3.6p1 to 3.7p1
-(2) fix TARGET_BINARY var (was foo)
-(3) add an init script
-======================================================================
-Relationships       ID      Summary
-----------------------------------------------------------------------
-duplicate of        0000445 [patch openntpd] Fix build, add init sc...
-has duplicate       0001029 SNTP doesn't work - update ntp to newer...
-====================================================================== 
+I have succesfully built images with gcc 4.1.2 and a patch to make it
+build gcc with OABI.
 
-Issue History 
-Date Modified   Username       Field                    Change               
-====================================================================== 
-01-27-06 16:07  akvadrako      New Issue                                    
-01-27-06 16:07  akvadrako      Status                   new => assigned     
-01-27-06 16:07  akvadrako      Assigned To               => uClibc          
-01-27-06 16:07  akvadrako      File Added: br-openntp-sysvinit-v2.patch         
-          
-02-12-07 05:48  vapier         Assigned To              uClibc => buildroot 
-06-26-07 07:07  bernhardf      Relationship added       duplicate of 0000445
-06-26-07 07:10  bernhardf      Relationship added       has duplicate 0001029
-======================================================================
+-- 
+Ben
+
+Q:      What's a light-year?
+A:      One-third less calories than a regular year.
