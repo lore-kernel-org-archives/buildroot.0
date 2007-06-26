@@ -1,29 +1,35 @@
-From: Bernhard Fischer <rep.dot.nop@gmail.com>
-Date: Tue, 26 Jun 2007 08:21:35 +0200
-Subject: [Buildroot] Problem building latest arm
-In-Reply-To: <6B9D9C36F5A26347A593D6945C470AE90F3FF8@delta-two.prga.net>
-References: <6B9D9C36F5A26347A593D6945C470AE90F3FF8@delta-two.prga.net>
-Message-ID: <20070626062135.GA4096@aon.at>
+From: aldot at uclibc.org <aldot@uclibc.org>
+Date: Mon, 25 Jun 2007 23:24:38 -0700 (PDT)
+Subject: [Buildroot] svn commit: trunk/buildroot/package/directfb
+Message-ID: <20070626062438.550D8A45E2@busybox.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Mon, Jun 25, 2007 at 10:04:44PM -0500, michael.miller at prga.com wrote:
->I'm trying to build for an Xscale (ARM), EABI, NPTL with binutils
->2.17.50.0.16, software floating point, and target options bash, bzip2
->and diffutils.  All other options are default (gcc 4.2.0).  I'm using
->the latest snapshot for uclibc, and have tried buildroot snapshots from
->6/20, 6/21 and 6/23.
->
->If I use 6/20, 6/21 or 6/23 buildroot snapshots then the build fails in
->pthreads because sysdep-cancel.h is not found.  Looking in the
->linuxthreads/sysdeps/unix/sysv/linux directory, I see subdirectories for
->i386, mips, etc. but not for arm.
->
->Searching recent mailing list archives, Bernhard says things that make
->me think this configuration should work.  He hints that helptext will
+Author: aldot
+Date: 2007-06-25 23:24:37 -0700 (Mon, 25 Jun 2007)
+New Revision: 18936
 
-I was talking about eabi. Threading is a different issue (but even
-that one has a nice, IMHO descriptive help-text).
+Log:
+- force DirectFB to detect PAGE_SIZE via sysconf (Ivan Kuten)
+
+
+Modified:
+   trunk/buildroot/package/directfb/directfb.mk
+
+
+Changeset:
+Modified: trunk/buildroot/package/directfb/directfb.mk
+===================================================================
+--- trunk/buildroot/package/directfb/directfb.mk	2007-06-25 22:55:34 UTC (rev 18935)
++++ trunk/buildroot/package/directfb/directfb.mk	2007-06-26 06:24:37 UTC (rev 18936)
+@@ -26,6 +26,7 @@
+ 	LDFLAGS="$(TARGET_LDFLAGS)" \
+ 	ac_cv_header_linux_wm97xx_h=no \
+ 	ac_cv_header_linux_sisfb_h=no \
++	ac_cv_header_asm_page_h=no \
+ 	./configure \
+ 		--target=$(GNU_TARGET_NAME) \
+ 		--host=$(GNU_TARGET_NAME) \
