@@ -1,7 +1,7 @@
 From: aldot at uclibc.org <aldot@uclibc.org>
-Date: Tue, 26 Jun 2007 09:36:32 -0700 (PDT)
-Subject: [Buildroot] svn commit: trunk/buildroot/target
-Message-ID: <20070626163632.3ACE1A464B@busybox.net>
+Date: Tue, 26 Jun 2007 09:58:12 -0700 (PDT)
+Subject: [Buildroot] svn commit: trunk/buildroot/toolchain/uClibc
+Message-ID: <20070626165812.7D40AA4598@busybox.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -9,71 +9,47 @@ Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
 Author: aldot
-Date: 2007-06-26 09:36:31 -0700 (Tue, 26 Jun 2007)
-New Revision: 18945
+Date: 2007-06-26 09:58:11 -0700 (Tue, 26 Jun 2007)
+New Revision: 18946
 
 Log:
-- filter out eventual -fPIC -fpic -DPIC flags from the target cflags
-  Honor the .config setting for KCONFIG and FORMAT iff not imposed by the target/device. If they are not set in the config, the defaults (zImage etc) still apply.
+- fix typo in sed expr
 
 
 Modified:
-   trunk/buildroot/target/linux26.mk
+   trunk/buildroot/toolchain/uClibc/uclibc.mk
 
 
 Changeset:
-Modified: trunk/buildroot/target/linux26.mk
+Modified: trunk/buildroot/toolchain/uClibc/uclibc.mk
 ===================================================================
---- trunk/buildroot/target/linux26.mk	2007-06-26 16:35:07 UTC (rev 18944)
-+++ trunk/buildroot/target/linux26.mk	2007-06-26 16:36:31 UTC (rev 18945)
-@@ -24,7 +24,26 @@
- #LINUX26_FORMAT=vmlinux
- #LINUX26_BINLOC=$(LINUX26_FORMAT)
- 
-+# Linux kernel configuration file
- # Has to be set by the target/device
-+# If it is not set by the target/device, then pick the one from .config
-+# LINUX26_KCONFIG=$(BR2_BOARD_PATH)/linux26.config
-+ifndef LINUX26_KCONFIG
-+ifneq ($(strip $(subst ",,$(BR2_PACKAGE_LINUX_KCONFIG))),)
-+LINUX26_KCONFIG=$(strip $(subst ",,$(BR2_PACKAGE_LINUX_KCONFIG)))
-+#"))
-+#"))
-+endif
-+endif
-+ifndef LINUX26_FORMAT
-+ifneq ($(strip $(subst ",,$(BR2_PACKAGE_LINUX_FORMAT))),)
-+LINUX26_FORMAT=$(strip $(subst ",,$(BR2_PACKAGE_LINUX_FORMAT)))
-+#"))
-+#"))
-+endif
-+endif
-+
-+# Has to be set by the target/device
- # LINUX26_FORMAT=bzImage
- ifndef LINUX26_FORMAT
- LINUX26_FORMAT=zImage
-@@ -35,10 +54,6 @@
- LINUX26_BINLOC=arch/$(KERNEL_ARCH)/boot/$(LINUX26_FORMAT)
+--- trunk/buildroot/toolchain/uClibc/uclibc.mk	2007-06-26 16:36:31 UTC (rev 18945)
++++ trunk/buildroot/toolchain/uClibc/uclibc.mk	2007-06-26 16:58:11 UTC (rev 18946)
+@@ -143,19 +143,19 @@
+ 	echo "# UCLIBC_HAS_FOPEN_LARGEFILE_MODE is not set" >> $(UCLIBC_DIR)/.config
  endif
- 
--# Linux kernel configuration file
--# Has to be set by the target/device
--# LINUX26_KCONFIG=$(BR2_BOARD_PATH)/linux26.config
--
- # File name for the Linux kernel binary
- LINUX26_KERNEL=linux-kernel-$(LINUX26_VERSION)-$(KERNEL_ARCH)
- 
-@@ -52,10 +67,10 @@
- 
- # kernel patches
- LINUX26_PATCH_DIR=$(BR2_BOARD_PATH)/kernel-patches/
--
-+__LINUX26_NO_PIC=-fPIC -fpic -DPIC
- LINUX26_MAKE_FLAGS = HOSTCC="$(HOSTCC)" HOSTCFLAGS=$(HOSTCFLAGS) \
- 	ARCH=$(KERNEL_ARCH) \
--	CFLAGS_KERNEL="$(TARGET_CFLAGS)" \
-+	CFLAGS_KERNEL="$(filter-out $(__LINUX26_NO_PIC),$(TARGET_CFLAGS))" \
- 	INSTALL_MOD_PATH=$(TARGET_DIR) \
- 	CROSS_COMPILE=$(KERNEL_CROSS)
- 
+ ifeq ($(BR2_INET_IPV6),y)
+-	$(SED) 's.^.*UCLIBC_HAS_IPV6.*,UCLIBC_HAS_IPV6=y,g' $(UCLIBC_DIR)/.config
++	$(SED) 's,^.*UCLIBC_HAS_IPV6.*,UCLIBC_HAS_IPV6=y,g' $(UCLIBC_DIR)/.config
+ else
+-	$(SED) 's.^.*UCLIBC_HAS_IPV6.*,UCLIBC_HAS_IPV6=n,g' $(UCLIBC_DIR)/.config
++	$(SED) 's,^.*UCLIBC_HAS_IPV6.*,UCLIBC_HAS_IPV6=n,g' $(UCLIBC_DIR)/.config
+ endif
+ ifeq ($(BR2_INET_RPC),y)
+-	$(SED) 's.^.*UCLIBC_HAS_RPC.*,UCLIBC_HAS_RPC=y,g' \
+-		-e 's.^.*UCLIBC_HAS_FULL_RPC.*,UCLIBC_HAS_FULL_RPC=y,g' \
+-		-e 's.^.*UCLIBC_HAS_REENTRANT_RPC.*,UCLIBC_HAS_REENTRANT_RPC=y,g'
++	$(SED) 's,^.*UCLIBC_HAS_RPC.*,UCLIBC_HAS_RPC=y,g' \
++		-e 's,^.*UCLIBC_HAS_FULL_RPC.*,UCLIBC_HAS_FULL_RPC=y,g' \
++		-e 's,^.*UCLIBC_HAS_REENTRANT_RPC.*,UCLIBC_HAS_REENTRANT_RPC=y,g' \
+ 		$(UCLIBC_DIR)/.config
+ else
+-	$(SED) 's.^.*UCLIBC_HAS_RPC.*,UCLIBC_HAS_RPC=n,g' \
+-		-e 's.^.*UCLIBC_HAS_FULL_RPC.*,UCLIBC_HAS_FULL_RPC=n,g' \
+-		-e 's.^.*UCLIBC_HAS_REENTRANT_RPC.*,UCLIBC_HAS_REENTRANT_RPC=n,g'
++	$(SED) 's,^.*UCLIBC_HAS_RPC.*,UCLIBC_HAS_RPC=n,g' \
++		-e 's,^.*UCLIBC_HAS_FULL_RPC.*,UCLIBC_HAS_FULL_RPC=n,g' \
++		-e 's,^.*UCLIBC_HAS_REENTRANT_RPC.*,UCLIBC_HAS_REENTRANT_RPC=n,g' \
+ 		$(UCLIBC_DIR)/.config
+ endif
+ ifeq ($(BR2_SOFT_FLOAT),y)
