@@ -1,116 +1,61 @@
-From: aldot at uclibc.org <aldot@uclibc.org>
-Date: Tue, 26 Jun 2007 08:41:03 -0700 (PDT)
-Subject: [Buildroot] svn commit: trunk/buildroot/package/ntp
-Message-ID: <20070626154103.37875A464C@busybox.net>
+From: bugs at busybox.net <bugs@busybox.net>
+Date: Tue, 26 Jun 2007 08:41:19 -0700
+Subject: [Buildroot] [buildroot 0001029]: SNTP doesn't work - update ntp to
+	newer version
+Message-ID: <1f22a399f40e49ab064df362d866fc9e@busybox.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Author: aldot
-Date: 2007-06-26 08:41:01 -0700 (Tue, 26 Jun 2007)
-New Revision: 18940
 
-Log:
-- bump version, make it compile. tickadjust has to be disabled. Closes #1029
-  Provide means for installing sntp
+The following issue has been CLOSED 
+====================================================================== 
+http://busybox.net/bugs/view.php?id=1029 
+====================================================================== 
+Reported By:                Scott B
+Assigned To:                buildroot
+====================================================================== 
+Project:                    buildroot
+Issue ID:                   1029
+Category:                   Other
+Reproducibility:            always
+Severity:                   major
+Priority:                   normal
+Status:                     closed
+Resolution:                 open
+Fixed in Version:           
+====================================================================== 
+Date Submitted:             09-14-2006 10:15 PDT
+Last Modified:              06-26-2007 08:41 PDT
+====================================================================== 
+Summary:                    SNTP doesn't work - update ntp to newer version
+Description: 
+This patch changes the NTP version from ntp-4.2.0 to ntp-4.2.2p3. Version
+4.2.0
+doesn't appear to properly support SNTP. Note that this patch also
+removes
+the "ntp-cross-compile.patch".
 
+====================================================================== 
 
-Modified:
-   trunk/buildroot/package/ntp/Config.in
-   trunk/buildroot/package/ntp/ntp.mk
+---------------------------------------------------------------------- 
+ bernhardf - 06-26-07 08:41  
+---------------------------------------------------------------------- 
+Fixed in r18940 
 
-
-Changeset:
-Modified: trunk/buildroot/package/ntp/Config.in
-===================================================================
---- trunk/buildroot/package/ntp/Config.in	2007-06-26 14:32:10 UTC (rev 18939)
-+++ trunk/buildroot/package/ntp/Config.in	2007-06-26 15:41:01 UTC (rev 18940)
-@@ -6,3 +6,10 @@
- 	  Provides things like ntpd, ntpdate, ntpq, etc...
- 
- 	  http://www.ntp.org/
-+
-+config BR2_PACKAGE_NTP_SNTP
-+	bool "sntp"
-+	default n
-+	depends BR2_PACKAGE_NTP
-+	help
-+	  Simple network time protocol program
-
-Modified: trunk/buildroot/package/ntp/ntp.mk
-===================================================================
---- trunk/buildroot/package/ntp/ntp.mk	2007-06-26 14:32:10 UTC (rev 18939)
-+++ trunk/buildroot/package/ntp/ntp.mk	2007-06-26 15:41:01 UTC (rev 18940)
-@@ -3,7 +3,7 @@
- # ntp
- #
- #############################################################
--NTP_VERSION:=4.2.0
-+NTP_VERSION:=4.2.4
- NTP_SOURCE:=ntp-$(NTP_VERSION).tar.gz
- NTP_SITE:=http://www.eecis.udel.edu/~ntp/ntp_spool/ntp4/ntp-4.2
- NTP_DIR:=$(BUILD_DIR)/ntp-$(NTP_VERSION)
-@@ -16,18 +16,19 @@
- 
- ntp-source: $(DL_DIR)/$(NTP_SOURCE)
- 
--$(NTP_DIR)/.unpacked: $(DL_DIR)/$(NTP_SOURCE)
-+$(NTP_DIR)/.patched: $(DL_DIR)/$(NTP_SOURCE)
- 	$(NTP_CAT) $(DL_DIR)/$(NTP_SOURCE) | tar -C $(BUILD_DIR) $(TAR_OPTIONS) -
- 	toolchain/patch-kernel.sh $(NTP_DIR) package/ntp/ ntp\*.patch
- 	$(SED) "s,^#if.*__GLIBC__.*_BSD_SOURCE.*$$,#if 0," \
- 		$(NTP_DIR)/ntpd/refclock_pcf.c;
--	touch $(NTP_DIR)/.unpacked
-+	$(SED) '/[[:space:](]index[[:space:]]*(/s/[[:space:]]*index[[:space:]]*(/ strchr(/g' $(NTP_DIR)/libisc/*.c $(NTP_DIR)/arlib/sample.c
-+	$(SED) '/[[:space:](]rindex[[:space:]]*(/s/[[:space:]]*rindex[[:space:]]*(/ strrchr(/g' $(NTP_DIR)/ntpd/*.c
-+	#$(SED) 's/\(^#[[:space:]]*include[[:space:]]*<sys\/var.h>\)/\/\/ \1/' $(NTP_DIR)/util/tickadj.c
-+	touch $@
- 
--$(NTP_DIR)/.configured: $(NTP_DIR)/.unpacked
-+$(NTP_DIR)/.configured: $(NTP_DIR)/.patched
- 	(cd $(NTP_DIR); rm -rf config.cache; \
- 		$(TARGET_CONFIGURE_OPTS) \
--		CFLAGS="$(TARGET_CFLAGS)" \
--		LDFLAGS="$(TARGET_LDFLAGS)" \
- 		ac_cv_lib_md5_MD5Init=no \
- 		./configure \
- 		--target=$(GNU_TARGET_NAME) \
-@@ -45,11 +46,13 @@
- 		--mandir=/usr/man \
- 		--infodir=/usr/info \
- 		$(DISABLE_NLS) \
-+		$(DISABLE_IPV6) \
- 		--with-shared \
- 		--program-transform-name=s,,, \
- 		--without-crypto \
-+		--enable-tickadj=no \
- 	);
--	touch $(NTP_DIR)/.configured
-+	touch $@
- 
- $(NTP_DIR)/$(NTP_BINARY): $(NTP_DIR)/.configured
- 	$(MAKE) -C $(NTP_DIR)
-@@ -57,14 +60,18 @@
- $(TARGET_DIR)/$(NTP_TARGET_BINARY): $(NTP_DIR)/$(NTP_BINARY)
- 	install -m 755 $(NTP_DIR)/ntpd/ntpd $(TARGET_DIR)/usr/sbin/ntpd
- 	install -m 755 $(NTP_DIR)/$(NTP_BINARY) $(TARGET_DIR)/$(NTP_TARGET_BINARY)
-+ifeq ($(BR2_PACKAGE_NTP_SNTP),y)
-+	install -m 755 $(NTP_DIR)/sntp/sntp $(TARGET_DIR)/usr/bin/sntp
-+endif
- 	install -m 755 package/ntp/ntp.sysvinit $(TARGET_DIR)/etc/init.d/S49ntp
- 
- ntp: uclibc $(TARGET_DIR)/$(NTP_TARGET_BINARY)
- 
- ntp-clean:
--	rm -f $(TARGET_DIR)/usr/sbin/ntpd
--	rm -f $(TARGET_DIR)/$(NTP_TARGET_BINARY)
--	-$(MAKE) -C $(NTP_DIR) clean
-+	rm -f $(TARGET_DIR)/usr/sbin/ntpd $(TARGET_DIR)/usr/bin/sntp \
-+		$(TARGET_DIR)/etc/init.d/S49ntp \
-+		$(TARGET_DIR)/$(NTP_TARGET_BINARY)
-+	-$(MAKE) -C $(NTP_DIR) clean 
- 
- ntp-dirclean:
- 	rm -rf $(NTP_DIR)
+Issue History 
+Date Modified   Username       Field                    Change               
+====================================================================== 
+09-14-06 10:15  Scott B        New Issue                                    
+09-14-06 10:15  Scott B        Status                   new => assigned     
+09-14-06 10:15  Scott B        Assigned To               => uClibc          
+09-14-06 10:15  Scott B        File Added: 0300-SNTP.patch                    
+09-14-06 10:16  Scott B        Issue Monitored: Scott B                     
+02-12-07 05:34  vapier         Assigned To              uClibc => buildroot 
+06-26-07 07:10  bernhardf      Relationship added       duplicate of 0000666
+06-26-07 08:39  bernhardf      Relationship deleted     duplicate of 0000666
+06-26-07 08:41  bernhardf      Status                   assigned => closed  
+06-26-07 08:41  bernhardf      Note Added: 0002524                          
+======================================================================
