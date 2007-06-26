@@ -1,8 +1,8 @@
 From: bugs at busybox.net <bugs@busybox.net>
-Date: Tue, 26 Jun 2007 07:07:59 -0700
-Subject: [Buildroot] [buildroot 0000666]: openntpd init script and version
-	bump
-Message-ID: <7c744040126d0c9105e7e3b2ea7d057d@busybox.net>
+Date: Tue, 26 Jun 2007 07:08:00 -0700
+Subject: [Buildroot] [buildroot 0000445]: [patch openntpd] Fix build,
+	add init script
+Message-ID: <7929aa6dbb1438ae1d32133ae863ff59@busybox.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -10,44 +10,49 @@ Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
 
-The following issue has been set as DUPLICATE OF issue 0000445. 
+The issue 0000666 has been set as DUPLICATE OF the following issue. 
 ====================================================================== 
-http://busybox.net/bugs/view.php?id=666 
+http://busybox.net/bugs/view.php?id=445 
 ====================================================================== 
-Reported By:                akvadrako
+Reported By:                ktraum
 Assigned To:                buildroot
 ====================================================================== 
 Project:                    buildroot
-Issue ID:                   666
+Issue ID:                   445
 Category:                   Other
-Reproducibility:            always
+Reproducibility:            N/A
 Severity:                   minor
 Priority:                   normal
 Status:                     assigned
 ====================================================================== 
-Date Submitted:             01-27-2006 16:07 PST
-Last Modified:              06-26-2007 07:07 PDT
+Date Submitted:             09-26-2005 01:03 PDT
+Last Modified:              02-12-2007 05:50 PST
 ====================================================================== 
-Summary:                    openntpd init script and version bump
+Summary:                    [patch openntpd] Fix build, add init script
 Description: 
-This patch does these things:
-(1) bump version from 3.6p1 to 3.7p1
-(2) fix TARGET_BINARY var (was foo)
-(3) add an init script
+Fix build to use user "daemon" as privsep user (uses _ntp by default, which
+doesn't exist).
+
+Point "OPENNTPD_TARGET_BINARY" to real target binary, so install runs only
+once.
+
+Add init script.
+
+Patch attached.
 ======================================================================
 Relationships       ID      Summary
 ----------------------------------------------------------------------
-duplicate of        0000445 [patch openntpd] Fix build, add init sc...
+has duplicate       0000666 openntpd init script and version bump
 ====================================================================== 
 
 Issue History 
 Date Modified   Username       Field                    Change               
 ====================================================================== 
-01-27-06 16:07  akvadrako      New Issue                                    
-01-27-06 16:07  akvadrako      Status                   new => assigned     
-01-27-06 16:07  akvadrako      Assigned To               => uClibc          
-01-27-06 16:07  akvadrako      File Added: br-openntp-sysvinit-v2.patch         
-          
-02-12-07 05:48  vapier         Assigned To              uClibc => buildroot 
-06-26-07 07:07  bernhardf      Relationship added       duplicate of 0000445
+09-26-05 01:03  ktraum         New Issue                                    
+09-26-05 01:03  ktraum         Status                   new => assigned     
+09-26-05 01:03  ktraum         Assigned To               => uClibc          
+09-26-05 01:03  ktraum         File Added: openntpd.patch                    
+09-26-05 05:23  ktraum         Issue Monitored: ktraum                      
+02-12-07 05:50  vapier         Assigned To              uClibc => buildroot 
+06-26-07 07:07  bernhardf      Relationship added       has duplicate 0000666
 ======================================================================
