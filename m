@@ -1,56 +1,60 @@
-From: aldot at uclibc.org <aldot@uclibc.org>
-Date: Tue, 26 Jun 2007 06:26:51 -0700 (PDT)
-Subject: [Buildroot] svn commit: trunk/buildroot/toolchain/dependencies
-Message-ID: <20070626132651.36A39A460C@busybox.net>
+From: bugs at busybox.net <bugs@busybox.net>
+Date: Tue, 26 Jun 2007 06:48:53 -0700
+Subject: [Buildroot] [buildroot 0001209]: uClibc won't build when
+	GREP_OPTIONS is set
+Message-ID: <7aef065d4b3c05c413f024f2f28bae16@busybox.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Author: aldot
-Date: 2007-06-26 06:26:51 -0700 (Tue, 26 Jun 2007)
-New Revision: 18937
 
-Log:
-- check for clean environment variables ARCH, CROSS_COMPILE, GREP_OPTIONS
+The following issue has been CLOSED 
+====================================================================== 
+http://busybox.net/bugs/view.php?id=1209 
+====================================================================== 
+Reported By:                bagland
+Assigned To:                buildroot
+====================================================================== 
+Project:                    buildroot
+Issue ID:                   1209
+Category:                   Architecture Specific
+Reproducibility:            always
+Severity:                   minor
+Priority:                   normal
+Status:                     closed
+Resolution:                 open
+Fixed in Version:           
+====================================================================== 
+Date Submitted:             02-12-2007 05:12 PST
+Last Modified:              06-26-2007 06:48 PDT
+====================================================================== 
+Summary:                    uClibc won't build when GREP_OPTIONS is set
+Description: 
+If the environment variable GREP_OPTIONS contains -n, uClibc won't build
+because of this line:  TARGET_ARCH:=$(shell grep -s ^TARGET_ARCH
+$(TOPDIR)/.config | sed -e 's/^TARGET_ARCH=//' -e 's/"//g') in
+uClibc/Rules.mk.
+TARGET_ARCH becomes "30:arm", which leads to problems while running
+fix_includes.sh.
+The attached patch test for GREP_OPTIONS at the beginning of the build.
+====================================================================== 
 
+---------------------------------------------------------------------- 
+ bernhardf - 06-26-07 06:48  
+---------------------------------------------------------------------- 
+Applied, thanks. 
 
-Modified:
-   trunk/buildroot/toolchain/dependencies/dependencies.sh
+Issue History 
+Date Modified   Username       Field                    Change               
+====================================================================== 
+02-12-07 05:12  bagland        New Issue                                    
+02-12-07 05:12  bagland        Status                   new => assigned     
+02-12-07 05:12  bagland        Assigned To               => uClibc          
+02-12-07 05:12  bagland        File Added: grep_options.patch                   
 
-
-Changeset:
-Modified: trunk/buildroot/toolchain/dependencies/dependencies.sh
-===================================================================
---- trunk/buildroot/toolchain/dependencies/dependencies.sh	2007-06-26 06:24:37 UTC (rev 18936)
-+++ trunk/buildroot/toolchain/dependencies/dependencies.sh	2007-06-26 13:26:51 UTC (rev 18937)
-@@ -61,6 +61,28 @@
- fi;
- echo "CXXFLAGS clean:					Ok"
- 
-+if test -n "$GREP_OPTIONS" ; then
-+        echo "GREP_OPTIONS clean:                               FALSE"
-+        /bin/echo -e "\n\nYou must run 'unset GREP_OPTIONS' so buildroot can run with";
-+        /bin/echo -e "a clean environment on your build machine\n";
-+        exit 1;
-+fi;
-+
-+if test -n "$CROSS_COMPILE" ; then
-+        echo "CROSS_COMPILE clean:                               FALSE"
-+        /bin/echo -e "\n\nYou must run 'unset CROSS_COMPILE' so buildroot can run with";
-+        /bin/echo -e "a clean environment on your build machine\n";
-+        exit 1;
-+fi;
-+
-+if test -n "$ARCH" ; then
-+        echo "ARCH clean:                               FALSE"
-+        /bin/echo -e "\n\nYou must run 'unset ARCH' so buildroot can run with";
-+        /bin/echo -e "a clean environment on your build machine\n";
-+        exit 1;
-+fi;
-+
-+
- echo "WORKS" | grep "WORKS" >/dev/null 2>&1
- if test $? != 0 ; then
- 	echo "grep works:				FALSE"
+02-12-07 05:33  vapier         Assigned To              uClibc => buildroot 
+06-26-07 06:48  bernhardf      Status                   assigned => closed  
+06-26-07 06:48  bernhardf      Note Added: 0002518                          
+======================================================================
