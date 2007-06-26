@@ -1,59 +1,46 @@
-From: bugs at busybox.net <bugs@busybox.net>
-Date: Tue, 26 Jun 2007 07:17:43 -0700
-Subject: [Buildroot] [buildroot 0001405]: ARM OABI builds fail for gcc 4.x
-Message-ID: <4b3189422d9e22ca4114ffdf9269d8bd@busybox.net>
+From: aldot at uclibc.org <aldot@uclibc.org>
+Date: Tue, 26 Jun 2007 07:32:10 -0700 (PDT)
+Subject: [Buildroot] svn commit: trunk/buildroot/toolchain/gdb
+Message-ID: <20070626143210.B23F9A4667@busybox.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+Author: aldot
+Date: 2007-06-26 07:32:10 -0700 (Tue, 26 Jun 2007)
+New Revision: 18939
 
-A NOTE has been added to this issue. 
-====================================================================== 
-http://busybox.net/bugs/view.php?id=1405 
-====================================================================== 
-Reported By:                bjdooks
-Assigned To:                buildroot
-====================================================================== 
-Project:                    buildroot
-Issue ID:                   1405
-Category:                   Architecture Specific
-Reproducibility:            always
-Severity:                   major
-Priority:                   normal
-Status:                     assigned
-====================================================================== 
-Date Submitted:             06-26-2007 06:50 PDT
-Last Modified:              06-26-2007 07:17 PDT
-====================================================================== 
-Summary:                    ARM OABI builds fail for gcc 4.x
-Description: 
-ARM OABI configured builds cannot produce working gcc output due to missing
-items in libgcc. 
-====================================================================== 
+Log:
+- don't bail out on cc warnings
 
----------------------------------------------------------------------- 
- bjdooks - 06-26-07 06:56  
----------------------------------------------------------------------- 
-uploaded the correct build patch, buildroot-gcc-412-oabi2.build 
 
----------------------------------------------------------------------- 
- bernhardf - 06-26-07 07:17  
----------------------------------------------------------------------- 
-Please attach your buildroot-bug1405.config.txt
-thanks. 
+Modified:
+   trunk/buildroot/toolchain/gdb/gdb.mk
 
-Issue History 
-Date Modified   Username       Field                    Change               
-====================================================================== 
-06-26-07 06:50  bjdooks        New Issue                                    
-06-26-07 06:50  bjdooks        Status                   new => assigned     
-06-26-07 06:50  bjdooks        Assigned To               => buildroot       
-06-26-07 06:50  bjdooks        File Added: buildroot-gcc-412-oabi.build         
-          
-06-26-07 06:56  bjdooks        File Added: buildroot-gcc-412-oabi2.build        
-           
-06-26-07 06:56  bjdooks        Note Added: 0002519                          
-06-26-07 07:17  bernhardf      Note Added: 0002522                          
-======================================================================
+
+Changeset:
+Modified: trunk/buildroot/toolchain/gdb/gdb.mk
+===================================================================
+--- trunk/buildroot/toolchain/gdb/gdb.mk	2007-06-26 14:02:29 UTC (rev 18938)
++++ trunk/buildroot/toolchain/gdb/gdb.mk	2007-06-26 14:32:10 UTC (rev 18939)
+@@ -75,8 +75,8 @@
+ 	(cd $(GDB_TARGET_DIR); rm -rf config.cache ; \
+ 		gdb_cv_func_sigsetjmp=yes \
+ 		$(TARGET_CONFIGURE_OPTS) \
+-		CFLAGS_FOR_TARGET="$(TARGET_CFLAGS) $(TARGET_LDFLAGS)" \
+-		CFLAGS="$(TARGET_CFLAGS) $(TARGET_LDFLAGS)" \
++		CFLAGS_FOR_TARGET="$(TARGET_CFLAGS) $(TARGET_LDFLAGS) -Wno-error" \
++		CFLAGS="$(TARGET_CFLAGS) $(TARGET_LDFLAGS) -Wno-error" \
+ 		$(GDB_TARGET_CONFIGURE_VARS) \
+ 		$(GDB_DIR)/configure \
+ 		--build=$(GNU_HOST_NAME) \
+@@ -88,6 +88,7 @@
+ 		--disable-tui --disable-gdbtk --without-x \
+ 		--disable-sim --enable-gdbserver \
+ 		--without-included-gettext \
++		--disable-werror \
+ 	);
+ ifeq ($(BR2_ENABLE_LOCALE),y)
+ 	-$(SED) "s,^INTL *=.*,INTL = -lintl,g;" $(GDB_DIR)/gdb/Makefile
