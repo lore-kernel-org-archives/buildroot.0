@@ -1,99 +1,29 @@
-From: bugs at busybox.net <bugs@busybox.net>
-Date: Mon, 25 Jun 2007 21:13:43 -0700
-Subject: [Buildroot] [buildroot 0001282]: ccache
-Message-ID: <5bdefec4498b180045ca170636c88cda@busybox.net>
+From: Bernhard Fischer <rep.dot.nop@gmail.com>
+Date: Tue, 26 Jun 2007 08:21:35 +0200
+Subject: [Buildroot] Problem building latest arm
+In-Reply-To: <6B9D9C36F5A26347A593D6945C470AE90F3FF8@delta-two.prga.net>
+References: <6B9D9C36F5A26347A593D6945C470AE90F3FF8@delta-two.prga.net>
+Message-ID: <20070626062135.GA4096@aon.at>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+On Mon, Jun 25, 2007 at 10:04:44PM -0500, michael.miller at prga.com wrote:
+>I'm trying to build for an Xscale (ARM), EABI, NPTL with binutils
+>2.17.50.0.16, software floating point, and target options bash, bzip2
+>and diffutils.  All other options are default (gcc 4.2.0).  I'm using
+>the latest snapshot for uclibc, and have tried buildroot snapshots from
+>6/20, 6/21 and 6/23.
+>
+>If I use 6/20, 6/21 or 6/23 buildroot snapshots then the build fails in
+>pthreads because sysdep-cancel.h is not found.  Looking in the
+>linuxthreads/sysdeps/unix/sysv/linux directory, I see subdirectories for
+>i386, mips, etc. but not for arm.
+>
+>Searching recent mailing list archives, Bernhard says things that make
+>me think this configuration should work.  He hints that helptext will
 
-A NOTE has been added to this issue. 
-====================================================================== 
-http://busybox.net/bugs/view.php?id=1282 
-====================================================================== 
-Reported By:                Franck78
-Assigned To:                buildroot
-====================================================================== 
-Project:                    buildroot
-Issue ID:                   1282
-Category:                   Architecture Specific
-Reproducibility:            always
-Severity:                   feature
-Priority:                   normal
-Status:                     assigned
-====================================================================== 
-Date Submitted:             03-21-2007 11:56 PDT
-Last Modified:              06-25-2007 21:13 PDT
-====================================================================== 
-Summary:                    ccache
-Description: 
-Hello,
-
-1) ccache is built at the end of the toolchain (gcc/uclibc/binutils). It
-serves for nothing (ok I except if you slected other package it may...).
-
-2) the ccache_dir is fixed inside 'toolchain_build_i486' It would be
-better if the  CCACHE_DIR could be setup somewhere else outside
-'buildroot'.
-Why? In automated procedure constructing distro, buildroot.tar.gz is
-expanded then configured then built as all other packages making the
-distro.
-It means everytime, buildroot dir is like a virgin.. ;-) No ccache_dir
-inside.
-
-but if ccache_dir is outside....ok, it will be preserved accross rebuilds
-and the final touch would have ccache used for ALL the toolchain
-construction...!
-
-
-Adding a new option in 'make menuconfig' is beyond my knowledge of
-buildroot for now.
-
-Franck
-====================================================================== 
-
----------------------------------------------------------------------- 
- bernhardf - 06-25-07 11:02  
----------------------------------------------------------------------- 
-Although i don't understand a word, i think that this sounds like "Doctor,
-it hurts when i do.."
-
-Please describe the problem you are facing and suggest what should be done
-why and how, i shall close this bug otherwise. 
-
----------------------------------------------------------------------- 
- Franck78 - 06-25-07 11:38  
----------------------------------------------------------------------- 
-Ok,
-A distro is something more complete than buildroot alone. The buildroot
-package is only 'one step among others'. The full build can follow some
-method like lfs (linux from scratch). 
-Having ccache dir outside of the tree build avoid loosing what have been
-already compiled when some kind of full rebuild of the distro is
-performed. In other words, the cachedir is in a safe configurable place. 
-
-tchuss. 
-
----------------------------------------------------------------------- 
- chickenandporn - 06-25-07 21:13  
----------------------------------------------------------------------- 
-It seems the request is:
-
-Add a Config.in/Kconfig option for user-specified CCACHE_DIR defaulting to
-current value
-
-This is within my ability, but I don't have a ccache build working (I'm
-broken with MacOSX right now).  I will contact submitter. 
-
-Issue History 
-Date Modified   Username       Field                    Change               
-====================================================================== 
-03-21-07 11:56  Franck78       New Issue                                    
-03-21-07 11:56  Franck78       Status                   new => assigned     
-03-21-07 11:56  Franck78       Assigned To               => buildroot       
-06-25-07 11:02  bernhardf      Note Added: 0002507                          
-06-25-07 11:38  Franck78       Note Added: 0002513                          
-06-25-07 21:13  chickenandporn Note Added: 0002515                          
-======================================================================
+I was talking about eabi. Threading is a different issue (but even
+that one has a nice, IMHO descriptive help-text).
