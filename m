@@ -1,8 +1,8 @@
 From: bugs at busybox.net <bugs@busybox.net>
-Date: Tue, 26 Jun 2007 07:07:04 -0700
-Subject: [Buildroot] [buildroot 0000632]: Fail to build crtstuff.c on
-	pc-cygwin
-Message-ID: <9664a60cc4316125ddd7fbff304a5bd2@busybox.net>
+Date: Tue, 26 Jun 2007 07:07:59 -0700
+Subject: [Buildroot] [buildroot 0000666]: openntpd init script and version
+	bump
+Message-ID: <7c744040126d0c9105e7e3b2ea7d057d@busybox.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -10,65 +10,44 @@ Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
 
-The following issue requires your FEEDBACK. 
+The following issue has been set as DUPLICATE OF issue 0000445. 
 ====================================================================== 
-http://busybox.net/bugs/view.php?id=632 
+http://busybox.net/bugs/view.php?id=666 
 ====================================================================== 
-Reported By:                petev
+Reported By:                akvadrako
 Assigned To:                buildroot
 ====================================================================== 
 Project:                    buildroot
-Issue ID:                   632
-Category:                   Architecture Specific
+Issue ID:                   666
+Category:                   Other
 Reproducibility:            always
-Severity:                   major
+Severity:                   minor
 Priority:                   normal
-Status:                     feedback
+Status:                     assigned
 ====================================================================== 
-Date Submitted:             01-09-2006 16:30 PST
+Date Submitted:             01-27-2006 16:07 PST
 Last Modified:              06-26-2007 07:07 PDT
 ====================================================================== 
-Summary:                    Fail to build crtstuff.c on pc-cygwin
+Summary:                    openntpd init script and version bump
 Description: 
-I'm using buildroot-20060109.tar.bz2 to build a mipsel-linux target on the
-latest cygwin with the snapshot of uClibc. crtstuff.c fails to compile as
-bits/pthreadtypes.h cannot be found by the compiler. It appears as if the
-file is supposed to be in:
-
--isystem
-/cygdrive/c/buildroot/buildroot/build_mipsel_nofpu/staging_dir/mipsel-linux-uclibc/include
-
-However, this include directory does not even exist. When does it get
-setup? The file does exist in:
-
-/cygdrive/c/buildroot/buildroot/toolchain_mipsel_nofpu/uClibc/include
-
-
-
+This patch does these things:
+(1) bump version from 3.6p1 to 3.7p1
+(2) fix TARGET_BINARY var (was foo)
+(3) add an init script
+======================================================================
+Relationships       ID      Summary
+----------------------------------------------------------------------
+duplicate of        0000445 [patch openntpd] Fix build, add init sc...
 ====================================================================== 
-
----------------------------------------------------------------------- 
- bernhardf - 12-22-06 04:46  
----------------------------------------------------------------------- 
-Does this work with linux-2.6.19.1 kernel headers and a gcc-4.1 and current
-uClibc-svn ? 
-
----------------------------------------------------------------------- 
- bernhardf - 06-26-07 07:07  
----------------------------------------------------------------------- 
-Please retry with current svn. Thanks, 
 
 Issue History 
 Date Modified   Username       Field                    Change               
 ====================================================================== 
-01-09-06 16:30  petev          New Issue                                    
-01-09-06 16:30  petev          Status                   new => assigned     
-01-09-06 16:30  petev          Assigned To               => uClibc          
-01-09-06 16:30  petev          File Added: make_log.txt                     
-12-22-06 04:46  bernhardf      Note Added: 0001920                          
-12-22-06 04:46  bernhardf      Status                   assigned => feedback
-02-12-07 05:33  vapier         Status                   feedback => assigned
-02-12-07 05:33  vapier         Assigned To              uClibc => buildroot 
-06-26-07 07:07  bernhardf      Note Added: 0002521                          
-06-26-07 07:07  bernhardf      Status                   assigned => feedback
+01-27-06 16:07  akvadrako      New Issue                                    
+01-27-06 16:07  akvadrako      Status                   new => assigned     
+01-27-06 16:07  akvadrako      Assigned To               => uClibc          
+01-27-06 16:07  akvadrako      File Added: br-openntp-sysvinit-v2.patch         
+          
+02-12-07 05:48  vapier         Assigned To              uClibc => buildroot 
+06-26-07 07:07  bernhardf      Relationship added       duplicate of 0000445
 ======================================================================
