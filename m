@@ -1,35 +1,18 @@
-From: aldot at uclibc.org <aldot@uclibc.org>
-Date: Mon, 25 Jun 2007 23:24:38 -0700 (PDT)
-Subject: [Buildroot] svn commit: trunk/buildroot/package/directfb
-Message-ID: <20070626062438.550D8A45E2@busybox.net>
+From: Bernhard Fischer <rep.dot.nop@gmail.com>
+Date: Tue, 26 Jun 2007 08:23:40 +0200
+Subject: [Buildroot] PATCH: DirectFB PAGE_SIZE handling
+In-Reply-To: <36606.127.0.0.1.1182810983.squirrel@localhost>
+References: <36606.127.0.0.1.1182810983.squirrel@localhost>
+Message-ID: <20070626062340.GB4096@aon.at>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Author: aldot
-Date: 2007-06-25 23:24:37 -0700 (Mon, 25 Jun 2007)
-New Revision: 18936
+On Tue, Jun 26, 2007 at 01:36:23AM +0300, Ivan Kuten wrote:
+>Hello,
+>
+>DirectFB lib/direct/system.c uses PAGE_SIZE definition and fails to build:
 
-Log:
-- force DirectFB to detect PAGE_SIZE via sysconf (Ivan Kuten)
-
-
-Modified:
-   trunk/buildroot/package/directfb/directfb.mk
-
-
-Changeset:
-Modified: trunk/buildroot/package/directfb/directfb.mk
-===================================================================
---- trunk/buildroot/package/directfb/directfb.mk	2007-06-25 22:55:34 UTC (rev 18935)
-+++ trunk/buildroot/package/directfb/directfb.mk	2007-06-26 06:24:37 UTC (rev 18936)
-@@ -26,6 +26,7 @@
- 	LDFLAGS="$(TARGET_LDFLAGS)" \
- 	ac_cv_header_linux_wm97xx_h=no \
- 	ac_cv_header_linux_sisfb_h=no \
-+	ac_cv_header_asm_page_h=no \
- 	./configure \
- 		--target=$(GNU_TARGET_NAME) \
- 		--host=$(GNU_TARGET_NAME) \
+applied, thanks!
