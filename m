@@ -1,8 +1,7 @@
 From: bugs at busybox.net <bugs@busybox.net>
-Date: Tue, 26 Jun 2007 06:48:53 -0700
-Subject: [Buildroot] [buildroot 0001209]: uClibc won't build when
-	GREP_OPTIONS is set
-Message-ID: <7aef065d4b3c05c413f024f2f28bae16@busybox.net>
+Date: Tue, 26 Jun 2007 06:50:47 -0700
+Subject: [Buildroot] [buildroot 0001405]: ARM OABI builds fail for gcc 4.x
+Message-ID: <89c9717b681471690bf553eee0232c81@bugs.busybox.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -10,51 +9,36 @@ Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
 
-The following issue has been CLOSED 
+The following issue has been SUBMITTED. 
 ====================================================================== 
-http://busybox.net/bugs/view.php?id=1209 
+http://busybox.net/bugs/view.php?id=1405 
 ====================================================================== 
-Reported By:                bagland
+Reported By:                bjdooks
 Assigned To:                buildroot
 ====================================================================== 
 Project:                    buildroot
-Issue ID:                   1209
+Issue ID:                   1405
 Category:                   Architecture Specific
 Reproducibility:            always
-Severity:                   minor
+Severity:                   major
 Priority:                   normal
-Status:                     closed
-Resolution:                 open
-Fixed in Version:           
+Status:                     assigned
 ====================================================================== 
-Date Submitted:             02-12-2007 05:12 PST
-Last Modified:              06-26-2007 06:48 PDT
+Date Submitted:             06-26-2007 06:50 PDT
+Last Modified:              06-26-2007 06:50 PDT
 ====================================================================== 
-Summary:                    uClibc won't build when GREP_OPTIONS is set
+Summary:                    ARM OABI builds fail for gcc 4.x
 Description: 
-If the environment variable GREP_OPTIONS contains -n, uClibc won't build
-because of this line:  TARGET_ARCH:=$(shell grep -s ^TARGET_ARCH
-$(TOPDIR)/.config | sed -e 's/^TARGET_ARCH=//' -e 's/"//g') in
-uClibc/Rules.mk.
-TARGET_ARCH becomes "30:arm", which leads to problems while running
-fix_includes.sh.
-The attached patch test for GREP_OPTIONS at the beginning of the build.
+ARM OABI configured builds cannot produce working gcc output due to missing
+items in libgcc. 
 ====================================================================== 
-
----------------------------------------------------------------------- 
- bernhardf - 06-26-07 06:48  
----------------------------------------------------------------------- 
-Applied, thanks. 
 
 Issue History 
 Date Modified   Username       Field                    Change               
 ====================================================================== 
-02-12-07 05:12  bagland        New Issue                                    
-02-12-07 05:12  bagland        Status                   new => assigned     
-02-12-07 05:12  bagland        Assigned To               => uClibc          
-02-12-07 05:12  bagland        File Added: grep_options.patch                   
-
-02-12-07 05:33  vapier         Assigned To              uClibc => buildroot 
-06-26-07 06:48  bernhardf      Status                   assigned => closed  
-06-26-07 06:48  bernhardf      Note Added: 0002518                          
+06-26-07 06:50  bjdooks        New Issue                                    
+06-26-07 06:50  bjdooks        Status                   new => assigned     
+06-26-07 06:50  bjdooks        Assigned To               => buildroot       
+06-26-07 06:50  bjdooks        File Added: buildroot-gcc-412-oabi.build         
+          
 ======================================================================
