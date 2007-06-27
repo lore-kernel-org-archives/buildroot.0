@@ -1,60 +1,87 @@
-From: Julien Letessier <julien.letessier@technosens.fr>
-Date: Wed, 27 Jun 2007 11:35:02 +0200
-Subject: [Buildroot] where is the initrd image?
-In-Reply-To: <1497cb6d0706270226o6f86fe31lcfa31ba8d8740982@mail.gmail.com>
-References: <mailman.136.1182935450.1099.buildroot@uclibc.org>
-	<1497cb6d0706270226o6f86fe31lcfa31ba8d8740982@mail.gmail.com>
-Message-ID: <f0528b5b0706270235w2b25920j5f37ec067ae5fbfc@mail.gmail.com>
+From: aldot at uclibc.org <aldot@uclibc.org>
+Date: Wed, 27 Jun 2007 02:40:26 -0700 (PDT)
+Subject: [Buildroot] svn commit: trunk/buildroot/package/libpcap
+Message-ID: <20070627094026.30D14A4649@busybox.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-As far as I known there is no support for initrd in buildroot.
-And you don't need one for an embedded system!
+Author: aldot
+Date: 2007-06-27 02:40:25 -0700 (Wed, 27 Jun 2007)
+New Revision: 18950
 
-In desktop distributions, the initrd is used e.g. to load device/filesystem
-drivers before mounting the root filesystem (which may reside on a
-nonstandard device/filesystem). [1]
-
-In an embedded system, you should include all appropriate drivers in the
-kernel itself, so an initrd is useless.
-Just compile a proper kernel, and configure grub on your target with e.g.
-
-kernel /boot/bzImage root=/dev/hda1
-
-[1] http://en.wikipedia.org/wiki/Initrd
-
-2007/6/27, Lee JJ <jengjr@gmail.com>:
->
-> Dear All Guru :
->
->      I can generate the target achi rootfs , and kernel
-> but I can't find the initrd file
->
-> Thus I met the booting problem , VFS cannot open root device "hdxx"
->
-> Do I nust have the initrd file , or not ?
-> If do , how and where to build it ?
->
-> Thanks !!
->
-> ps: I am using buildroot snapshot , June 23 '07
-> and the target archi is i386
->
->
-> _______________________________________________
-> buildroot mailing list
-> buildroot at uclibc.org
-> http://busybox.net/mailman/listinfo/buildroot
->
+Log:
+- use correct installation path
 
 
+Modified:
+   trunk/buildroot/package/libpcap/libpcap.mk
 
--- 
-Julien Letessier
-<julien.letessier@technosens.fr>
--------------- next part --------------
-An HTML attachment was scrubbed...
-URL: http://busybox.net/lists/buildroot/attachments/20070627/b68163c2/attachment-0001.htm 
+
+Changeset:
+Modified: trunk/buildroot/package/libpcap/libpcap.mk
+===================================================================
+--- trunk/buildroot/package/libpcap/libpcap.mk	2007-06-27 09:18:58 UTC (rev 18949)
++++ trunk/buildroot/package/libpcap/libpcap.mk	2007-06-27 09:40:25 UTC (rev 18950)
+@@ -37,14 +37,13 @@
+ 	toolchain/patch-kernel.sh $(LIBPCAP_DIR) package/libpcap/ \*.patch
+ 	touch $@
+ 
++# XXX: FIXME: put the argus ac_cv_lbl_unaligned_fail setting to som commonly
++# seen place and introduce TARGET_CONFIGURE_HINTS or the like!
+ $(LIBPCAP_DIR)/.configured: $(LIBPCAP_DIR)/.unpacked
+-	( \
+-		cd $(LIBPCAP_DIR) ; \
++	(cd $(LIBPCAP_DIR) ; rm -rf config.cache ; \
+ 		ac_cv_linux_vers=$(BR2_DEFAULT_KERNEL_HEADERS) \
+ 		BUILD_CC=$(TARGET_CC) HOSTCC="$(HOSTCC)" \
+ 		$(TARGET_CONFIGURE_OPTS) \
+-		CFLAGS="$(TARGET_CFLAGS)" \
+-		LDFLAGS="$(TARGET_LDFLAGS)" \
+ 		./configure \
+ 		--target=$(GNU_TARGET_NAME) \
+ 		--host=$(GNU_TARGET_NAME) \
+@@ -53,33 +52,33 @@
+ 		--exec-prefix=/usr \
+ 		--bindir=/usr/bin \
+ 		--sbindir=/usr/sbin \
+-		--libdir=/lib \
++		--libdir=/usr/lib \
+ 		--libexecdir=/usr/lib \
+ 		--sysconfdir=/etc \
+ 		--datadir=/usr/share \
+ 		--localstatedir=/var \
+-		--includedir=/include \
++		--includedir=/usr/include \
+ 		--mandir=/usr/man \
+ 		--infodir=/usr/info \
+ 		--with-build-cc="$(HOSTCC)" \
+ 		--disable-yydebug \
+ 		--prefix=/usr \
+ 		--with-pcap=linux \
++		$(DISABLE_IPV6) \
+ 	)
+ 	touch $@
+ 
+ $(LIBPCAP_DIR)/libpcap.a: $(LIBPCAP_DIR)/.configured
+-	$(MAKE) CC="$(TARGET_CC)" \
+-		AR="$(TARGET_CROSS)ar" \
+-		-C $(LIBPCAP_DIR)
++	$(MAKE) AR=$(TARGET_CROSS)ar -C $(LIBPCAP_DIR)
+ 
+-$(STAGING_DIR)/lib/libpcap.a: $(LIBPCAP_DIR)/libpcap.a
++$(STAGING_DIR)/usr/lib/libpcap.a: $(LIBPCAP_DIR)/libpcap.a
+ 	$(MAKE) DESTDIR=$(STAGING_DIR) -C $(LIBPCAP_DIR) install
+ 
+-libpcap: uclibc zlib $(STAGING_DIR)/lib/libpcap.a
++libpcap: uclibc zlib $(STAGING_DIR)/usr/lib/libpcap.a
+ 
+ libpcap-clean:
+-	rm -f $(STAGING_DIR)/include/pcap*.h $(STAGING_DIR)/lib/libpcap.a
++	rm -f $(STAGING_DIR)/usr/include/pcap*.h \
++		$(STAGING_DIR)/usr/lib/libpcap.a
+ 	-$(MAKE) -C $(LIBPCAP_DIR) clean
+ 
+ libpcap-dirclean:
