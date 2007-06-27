@@ -1,46 +1,19 @@
-From: aldot at uclibc.org <aldot@uclibc.org>
-Date: Wed, 27 Jun 2007 02:19:00 -0700 (PDT)
+From: Bernhard Fischer <rep.dot.nop@gmail.com>
+Date: Wed, 27 Jun 2007 11:17:30 +0200
 Subject: [Buildroot] svn commit: trunk/buildroot/package/ntp
-Message-ID: <20070627091900.69F52A461E@busybox.net>
+In-Reply-To: <f0528b5b0706262326o381263a7k6a9c6768861a9d1a@mail.gmail.com>
+References: <20070626154103.37875A464C@busybox.net>
+	<f0528b5b0706262326o381263a7k6a9c6768861a9d1a@mail.gmail.com>
+Message-ID: <20070627091730.GB5349@aon.at>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Author: aldot
-Date: 2007-06-27 02:18:58 -0700 (Wed, 27 Jun 2007)
-New Revision: 18949
+On Wed, Jun 27, 2007 at 08:26:38AM +0200, Julien Letessier wrote:
+>Update:
+>- the actual current version of NTP is 4.2p2
+>- fixed the configure flag
 
-Log:
-- the actual current version of NTP is 4.2p2 (Julien Letessier)
-- fixed the configure flag (Julien Letessier)
-
-
-Modified:
-   trunk/buildroot/package/ntp/ntp.mk
-
-
-Changeset:
-Modified: trunk/buildroot/package/ntp/ntp.mk
-===================================================================
---- trunk/buildroot/package/ntp/ntp.mk	2007-06-27 00:20:38 UTC (rev 18948)
-+++ trunk/buildroot/package/ntp/ntp.mk	2007-06-27 09:18:58 UTC (rev 18949)
-@@ -3,7 +3,7 @@
- # ntp
- #
- #############################################################
--NTP_VERSION:=4.2.4
-+NTP_VERSION:=4.2.4p2
- NTP_SOURCE:=ntp-$(NTP_VERSION).tar.gz
- NTP_SITE:=http://www.eecis.udel.edu/~ntp/ntp_spool/ntp4/ntp-4.2
- NTP_DIR:=$(BUILD_DIR)/ntp-$(NTP_VERSION)
-@@ -50,7 +50,7 @@
- 		--with-shared \
- 		--program-transform-name=s,,, \
- 		--without-crypto \
--		--enable-tickadj=no \
-+		--disable-tickadj \
- 	);
- 	touch $@
- 
+Merged. Thanks!
