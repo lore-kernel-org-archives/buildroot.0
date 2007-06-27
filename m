@@ -1,68 +1,67 @@
-From: Ben Dooks <ben@fluff.org>
-Date: Wed, 27 Jun 2007 16:25:15 +0100
-Subject: [Buildroot] ARM EABI builds
-In-Reply-To: <20070627090329.GA3741@z1.synertronixx>
-References: <20070626133327.GA5989@trinity.fluff.org>
-	<468182D7.30509@gmail.com>
-	<20070626222500.GP31791@trinity.fluff.org>
-	<20070627081954.GR31791@trinity.fluff.org>
-	<20070627090329.GA3741@z1.synertronixx>
-Message-ID: <20070627152514.GS31791@trinity.fluff.org>
+From: Bernhard Fischer <rep.dot.nop@gmail.com>
+Date: Wed, 27 Jun 2007 18:20:03 +0200
+Subject: [Buildroot] Problem building latest arm
+In-Reply-To: <6B9D9C36F5A26347A593D6945C470AE90F4031@delta-two.prga.net>
+References: <6B9D9C36F5A26347A593D6945C470AE90F3FF8@delta-two.prga.net>
+	<20070626062135.GA4096@aon.at>
+	<6B9D9C36F5A26347A593D6945C470AE90F4031@delta-two.prga.net>
+Message-ID: <20070627162003.GA8454@aon.at>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+On Wed, Jun 27, 2007 at 07:45:02AM -0500, michael.miller at prga.com wrote:
+>>-----Original Message-----
+>>From: Bernhard Fischer [mailto:rep.dot.nop at gmail.com] 
+>>Sent: Tuesday, June 26, 2007 1:22 AM
+>>To: Michael D. Miller
+>>Cc: buildroot at uclibc.org
+>>Subject: Re: [Buildroot] Problem building latest arm
+>>
+>>On Mon, Jun 25, 2007 at 10:04:44PM -0500, michael.miller at prga.com
+>wrote:
+>>>I'm trying to build for an Xscale (ARM), EABI, NPTL with binutils 
+>>>2.17.50.0.16, software floating point, and target options bash, bzip2 
+>>>and diffutils.  All other options are default (gcc 4.2.0).  I'm using 
+>>>the latest snapshot for uclibc, and have tried buildroot snapshots
+>from 
+>>>6/20, 6/21 and 6/23.
+>>>
+>>>If I use 6/20, 6/21 or 6/23 buildroot snapshots then the build fails
+>in 
+>>>pthreads because sysdep-cancel.h is not found.  Looking in the 
+>>>linuxthreads/sysdeps/unix/sysv/linux directory, I see subdirectories 
+>>>for i386, mips, etc. but not for arm.
+>>>
+>>>Searching recent mailing list archives, Bernhard says things that make
+>
+>>>me think this configuration should work.  He hints that helptext will
+>>
+>>I was talking about eabi. Threading is a different issue (but even that
+>one has a nice, >IMHO descriptive help-text).
+>
+>I tried just building for "old" Linux threads instead of POSIX threads.
+>In that case I got an error because build_arm_nofpu/staging_dir/include
 
-On Wed, Jun 27, 2007 at 11:03:29AM +0200, Konstantin Kletschke wrote:
-> Am 2007-06-27 09:19 +0100 schrieb Ben Dooks:
-> 
-> > I have finally tracked down the problem, and will be submitting a
-> > fix as soon as I have reviewed the patch.
-> 
-> *argh* 
-> 
-> I followed your thread and I am so sorry that I forgot that I for myself
-> apply a patch regarding this issue. It floated around a while ago and
-> it is called unbreak-armv4t.patch:
+this area changed recently. You may need to erase build_* toolchain_*
 
-Whilst this is also a fix, I think that passing --with-cpu= to the
-compiler at generation time is a better option. This will allow OABI
-builds for any pre-armv4 sytems, and ensure that xscale/v5/v6/etc will
-also produce optimal output as they will be configured with the correct
-cpu architecture.
- 
-> ff -urN gcc-4.1.1/gcc/config/arm/linux-eabi.h gcc-4.1.1-arm9tdmi/gcc/config/arm/linux-eabi.h
-> --- gcc-4.1.1/gcc/config/arm/linux-eabi.h       2006-10-22 11:11:49.000000000 -0700
-> +++ gcc-4.1.1-arm9tdmi/gcc/config/arm/linux-eabi.h      2006-10-24 21:34:01.000000000 -0700
-> @@ -45,7 +45,7 @@
->     The ARM10TDMI core is the default for armv5t, so set
->     SUBTARGET_CPU_DEFAULT to achieve this.  */
->  #undef SUBTARGET_CPU_DEFAULT
-> -#define SUBTARGET_CPU_DEFAULT TARGET_CPU_arm10tdmi
-> +#define SUBTARGET_CPU_DEFAULT TARGET_CPU_arm9tdmi
-> 
->  #undef SUBTARGET_EXTRA_LINK_SPEC
->  #define SUBTARGET_EXTRA_LINK_SPEC " -m armelf_linux_eabi"
-> 
-> 
-> > The next thing is, do we then need to produce our compiler and
-> > libraries in toolchain_arm_<cpu>_<fp> and build_arm_<cpu>_<fp> ?
-> 
-> Well... why not? The toolchain_arm_<cpu>_<fp> directory is some sort of
-> PIC in the filesystem and can moved around and used for crosscompiling
-> other stuff standing alone.
+>didn't exist.  I manually created the directory and restarted the build.
+>Things continued without further incident and completed with a tool
+>chain.  A quick test seems to indicate the generated cross compiler
+>works, checked with a simple "Hello world" compiled after exporting the
+>staging_dir/usr/bin.
+>
+>So, NPTL seems broken for ARM.  I've tried using an old ecos version of
 
-That was more a request for comments, it can sometimes be difficult
-to guage exactly how people view these things until you've asked.
+you're better off to ask the uclibc list about the state of NTPL
+support.
+>sysdep-cancel.h and things reach the point that during the gcc-final
+>stage libgomp blows up because the pthread library can't be found.  This
+>is a configure error saying that pthreads are required for libgomp.  I'd
+>say I don't even want libgomp.  Is there an easy way to prevent this
+>from even being attempted?  I'm thinking of some additional build flag I
+>can pass in to buildroot.
 
-It would also need EABI/OABI in there. I tried switching an already
-configured buildroot from EABI to OABI, and found that it did not
-build correctly (but that is for another post).
-
--- 
-Ben
-
-Q:      What's a light-year?
-A:      One-third less calories than a regular year.
+See menuconfig. ()  Additional gcc options
