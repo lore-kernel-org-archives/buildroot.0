@@ -1,19 +1,29 @@
-From: Bernhard Fischer <rep.dot.nop@gmail.com>
-Date: Wed, 27 Jun 2007 11:17:30 +0200
-Subject: [Buildroot] svn commit: trunk/buildroot/package/ntp
-In-Reply-To: <f0528b5b0706262326o381263a7k6a9c6768861a9d1a@mail.gmail.com>
-References: <20070626154103.37875A464C@busybox.net>
-	<f0528b5b0706262326o381263a7k6a9c6768861a9d1a@mail.gmail.com>
-Message-ID: <20070627091730.GB5349@aon.at>
+From: Lee JJ <jengjr@gmail.com>
+Date: Wed, 27 Jun 2007 09:26:14 +0000
+Subject: [Buildroot] where is the initrd image?
+In-Reply-To: <mailman.136.1182935450.1099.buildroot@uclibc.org>
+References: <mailman.136.1182935450.1099.buildroot@uclibc.org>
+Message-ID: <1497cb6d0706270226o6f86fe31lcfa31ba8d8740982@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Wed, Jun 27, 2007 at 08:26:38AM +0200, Julien Letessier wrote:
->Update:
->- the actual current version of NTP is 4.2p2
->- fixed the configure flag
+Dear All Guru :
 
-Merged. Thanks!
+     I can generate the target achi rootfs , and kernel
+but I can't find the initrd file
+
+Thus I met the booting problem , VFS cannot open root device "hdxx"
+
+Do I nust have the initrd file , or not ?
+If do , how and where to build it ?
+
+Thanks !!
+
+ps: I am using buildroot snapshot , June 23 '07
+and the target archi is i386
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: http://busybox.net/lists/buildroot/attachments/20070627/9cb32a5d/attachment.htm 
