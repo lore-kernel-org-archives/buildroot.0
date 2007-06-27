@@ -1,60 +1,46 @@
-From: michael.miller at prga.com <michael.miller@prga.com>
-Date: Wed, 27 Jun 2007 07:45:02 -0500
-Subject: [Buildroot] Problem building latest arm
-In-Reply-To: <20070626062135.GA4096@aon.at>
-References: <6B9D9C36F5A26347A593D6945C470AE90F3FF8@delta-two.prga.net>
-	<20070626062135.GA4096@aon.at>
-Message-ID: <6B9D9C36F5A26347A593D6945C470AE90F4031@delta-two.prga.net>
+From: Julien Letessier <julien.letessier@technosens.fr>
+Date: Wed, 27 Jun 2007 15:59:56 +0200
+Subject: [Buildroot] [PATCH] fontconfig package : cross-compilation
+In-Reply-To: <20070626170727.GC4096@aon.at>
+References: <f0528b5b0706240958h5b0c9148k319aea532df6eda0@mail.gmail.com>
+	<f0528b5b0706241133v5f294ba0o6117a599a85cc39a@mail.gmail.com>
+	<20070625083203.GA5134@aon.at>
+	<f0528b5b0706260819i3cc09a10v2b015d6293d2f92a@mail.gmail.com>
+	<20070626170727.GC4096@aon.at>
+Message-ID: <f0528b5b0706270659w72029034q696ae178f7285e71@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->-----Original Message-----
->From: Bernhard Fischer [mailto:rep.dot.nop at gmail.com] 
->Sent: Tuesday, June 26, 2007 1:22 AM
->To: Michael D. Miller
->Cc: buildroot at uclibc.org
->Subject: Re: [Buildroot] Problem building latest arm
+2007/6/26, Bernhard Fischer <rep.dot.nop@gmail.com>:
+
+In order to avoid to have the sources unpacked in two locations, we
+> usually unpack them into $(TOOL_BUILD_DIR), i.e.:
+> AUTOMAKE_SRC_DIR:=$(TOOL_BUILD_DIR)/automake-$(AUTOMAKE_VER)
+> AUTOMAKE_DIR:=$(BUILD_DIR)/automake-$(AUTOMAKE_VER)
+> AUTOMAKE_HOST_DIR:=$(TOOL_BUILD_DIR)/automake-$(AUTOMAKE_VER)-host
 >
->On Mon, Jun 25, 2007 at 10:04:44PM -0500, michael.miller at prga.com
-wrote:
->>I'm trying to build for an Xscale (ARM), EABI, NPTL with binutils 
->>2.17.50.0.16, software floating point, and target options bash, bzip2 
->>and diffutils.  All other options are default (gcc 4.2.0).  I'm using 
->>the latest snapshot for uclibc, and have tried buildroot snapshots
-from 
->>6/20, 6/21 and 6/23.
->>
->>If I use 6/20, 6/21 or 6/23 buildroot snapshots then the build fails
-in 
->>pthreads because sysdep-cancel.h is not found.  Looking in the 
->>linuxthreads/sysdeps/unix/sysv/linux directory, I see subdirectories 
->>for i386, mips, etc. but not for arm.
->>
->>Searching recent mailing list archives, Bernhard says things that make
-
->>me think this configuration should work.  He hints that helptext will
+> Can you please adjust accordingly?
 >
->I was talking about eabi. Threading is a different issue (but even that
-one has a nice, >IMHO descriptive help-text).
 
-I tried just building for "old" Linux threads instead of POSIX threads.
-In that case I got an error because build_arm_nofpu/staging_dir/include
-didn't exist.  I manually created the directory and restarted the build.
-Things continued without further incident and completed with a tool
-chain.  A quick test seems to indicate the generated cross compiler
-works, checked with a simple "Hello world" compiled after exporting the
-staging_dir/usr/bin.
+Done.
+I took the liberty to add a few 'touch -c $@' where relevant.
+I also changed the targets from foo-host to host-foo, as seems to be the
+policy elswhere in buildroot.
 
-So, NPTL seems broken for ARM.  I've tried using an old ecos version of
-sysdep-cancel.h and things reach the point that during the gcc-final
-stage libgomp blows up because the pthread library can't be found.  This
-is a configure error saying that pthreads are required for libgomp.  I'd
-say I don't even want libgomp.  Is there an easy way to prevent this
-from even being attempted?  I'm thinking of some additional build flag I
-can pass in to buildroot.
-
-	Regards,
-	Mike
+Cheers,
+-- 
+Julien Letessier
+< julien.letessier@technosens.fr>
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: http://busybox.net/lists/buildroot/attachments/20070627/15d17043/attachment-0001.htm 
+-------------- next part --------------
+A non-text attachment was scrubbed...
+Name: buildroot_autoconf-automake-libtool-host-v2.patch
+Type: application/octet-stream
+Size: 10411 bytes
+Desc: not available
+Url : http://busybox.net/lists/buildroot/attachments/20070627/15d17043/attachment-0001.obj 
