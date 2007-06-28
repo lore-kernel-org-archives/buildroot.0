@@ -1,7 +1,8 @@
 From: aldot at uclibc.org <aldot@uclibc.org>
-Date: Thu, 28 Jun 2007 06:06:22 -0700 (PDT)
-Subject: [Buildroot] svn commit: trunk/buildroot/package/config:  lxdialog
-Message-ID: <20070628130622.5F0F4A461D@busybox.net>
+Date: Thu, 28 Jun 2007 06:51:08 -0700 (PDT)
+Subject: [Buildroot] svn commit: trunk/buildroot/package: autoconf automake
+	libtool
+Message-ID: <20070628135108.28F41A4584@busybox.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -9,694 +10,335 @@ Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
 Author: aldot
-Date: 2007-06-28 06:06:21 -0700 (Thu, 28 Jun 2007)
-New Revision: 18961
+Date: 2007-06-28 06:51:07 -0700 (Thu, 28 Jun 2007)
+New Revision: 18962
 
 Log:
-- rm some old files
+- provide autotools for the host (Julien Letessier)
 
 
-Removed:
-   trunk/buildroot/package/config/Kconfig-language.txt
-   trunk/buildroot/package/config/lxdialog/colors.h
-   trunk/buildroot/package/config/lxdialog/msgbox.c
-   trunk/buildroot/package/config/zconf.tab.h_shipped
+Modified:
+   trunk/buildroot/package/autoconf/autoconf.mk
+   trunk/buildroot/package/automake/automake.mk
+   trunk/buildroot/package/libtool/libtool.mk
 
 
 Changeset:
-Deleted: trunk/buildroot/package/config/Kconfig-language.txt
+Modified: trunk/buildroot/package/autoconf/autoconf.mk
 ===================================================================
---- trunk/buildroot/package/config/Kconfig-language.txt	2007-06-28 12:14:16 UTC (rev 18960)
-+++ trunk/buildroot/package/config/Kconfig-language.txt	2007-06-28 13:06:21 UTC (rev 18961)
-@@ -1,282 +0,0 @@
--Introduction
--------------
--
--The configuration database is collection of configuration options
--organized in a tree structure:
--
--	+- Code maturity level options
--	|  +- Prompt for development and/or incomplete code/drivers
--	+- General setup
--	|  +- Networking support
--	|  +- System V IPC
--	|  +- BSD Process Accounting
--	|  +- Sysctl support
--	+- Loadable module support
--	|  +- Enable loadable module support
--	|     +- Set version information on all module symbols
--	|     +- Kernel module loader
--	+- ...
--
--Every entry has its own dependencies. These dependencies are used
--to determine the visibility of an entry. Any child entry is only
--visible if its parent entry is also visible.
--
--Menu entries
--------------
--
--Most entries define a config option, all other entries help to organize
--them. A single configuration option is defined like this:
--
--config MODVERSIONS
--	bool "Set version information on all module symbols"
--	depends MODULES
--	help
--	  Usually, modules have to be recompiled whenever you switch to a new
--	  kernel.  ...
--
--Every line starts with a key word and can be followed by multiple
--arguments.  "config" starts a new config entry. The following lines
--define attributes for this config option. Attributes can be the type of
--the config option, input prompt, dependencies, help text and default
--values. A config option can be defined multiple times with the same
--name, but every definition can have only a single input prompt and the
--type must not conflict.
--
--Menu attributes
-----------------
--
--A menu entry can have a number of attributes. Not all of them are
--applicable everywhere (see syntax).
--
--- type definition: "bool"/"tristate"/"string"/"hex"/"integer"
--  Every config option must have a type. There are only two basic types:
--  tristate and string, the other types are based on these two. The type
--  definition optionally accepts an input prompt, so these two examples
--  are equivalent:
--
--	bool "Networking support"
--  and
--	bool
--	prompt "Networking support"
--
--- input prompt: "prompt" <prompt> ["if" <expr>]
--  Every menu entry can have at most one prompt, which is used to display
--  to the user. Optionally dependencies only for this prompt can be added
--  with "if".
--
--- default value: "default" <expr> ["if" <expr>]
--  A config option can have any number of default values. If multiple
--  default values are visible, only the first defined one is active.
--  Default values are not limited to the menu entry, where they are
--  defined, this means the default can be defined somewhere else or be
--  overridden by an earlier definition.
--  The default value is only assigned to the config symbol if no other
--  value was set by the user (via the input prompt above). If an input
--  prompt is visible the default value is presented to the user and can
--  be overridden by him.
--  Optionally dependencies only for this default value can be added with
--  "if".
--
--- dependencies: "depends on"/"requires" <expr>
--  This defines a dependency for this menu entry. If multiple
--  dependencies are defined they are connected with '&&'. Dependencies
--  are applied to all other options within this menu entry (which also
--  accept an "if" expression), so these two examples are equivalent:
--
--	bool "foo" if BAR
--	default y if BAR
--  and
--	depends on BAR
--	bool "foo"
--	default y
--
--- reverse dependencies: "select" <symbol> ["if" <expr>]
--  While normal dependencies reduce the upper limit of a symbol (see
--  below), reverse dependencies can be used to force a lower limit of
--  another symbol. The value of the current menu symbol is used as the
--  minimal value <symbol> can be set to. If <symbol> is selected multiple
--  times, the limit is set to the largest selection.
--  Reverse dependencies can only be used with boolean or tristate
--  symbols.
--
--- numerical ranges: "range" <symbol> <symbol> ["if" <expr>]
--  This allows to limit the range of possible input values for integer
--  and hex symbols. The user can only input a value which is larger than
--  or equal to the first symbol and smaller than or equal to the second
--  symbol.
--
--- help text: "help" or "---help---"
--  This defines a help text. The end of the help text is determined by
--  the indentation level, this means it ends at the first line which has
--  a smaller indentation than the first line of the help text.
--  "---help---" and "help" do not differ in behaviour, "---help---" is
--  used to help visually separate configuration logic from help within
--  the file as an aid to developers.
--
--
--Menu dependencies
-------------------
--
--Dependencies define the visibility of a menu entry and can also reduce
--the input range of tristate symbols. The tristate logic used in the
--expressions uses one more state than normal boolean logic to express the
--module state. Dependency expressions have the following syntax:
--
--<expr> ::= <symbol>                             (1)
--           <symbol> '=' <symbol>                (2)
--           <symbol> '!=' <symbol>               (3)
--           '(' <expr> ')'                       (4)
--           '!' <expr>                           (5)
--           <expr> '&&' <expr>                   (6)
--           <expr> '||' <expr>                   (7)
--
--Expressions are listed in decreasing order of precedence. 
--
--(1) Convert the symbol into an expression. Boolean and tristate symbols
--    are simply converted into the respective expression values. All
--    other symbol types result in 'n'.
--(2) If the values of both symbols are equal, it returns 'y',
--    otherwise 'n'.
--(3) If the values of both symbols are equal, it returns 'n',
--    otherwise 'y'.
--(4) Returns the value of the expression. Used to override precedence.
--(5) Returns the result of (2-/expr/).
--(6) Returns the result of min(/expr/, /expr/).
--(7) Returns the result of max(/expr/, /expr/).
--
--An expression can have a value of 'n', 'm' or 'y' (or 0, 1, 2
--respectively for calculations). A menu entry becomes visible when it's
--expression evaluates to 'm' or 'y'.
--
--There are two types of symbols: constant and nonconstant symbols.
--Nonconstant symbols are the most common ones and are defined with the
--'config' statement. Nonconstant symbols consist entirely of alphanumeric
--characters or underscores.
--Constant symbols are only part of expressions. Constant symbols are
--always surrounded by single or double quotes. Within the quote any
--other character is allowed and the quotes can be escaped using '\'.
--
--Menu structure
----------------
--
--The position of a menu entry in the tree is determined in two ways. First
--it can be specified explicitly:
--
--menu "Network device support"
--	depends NET
--
--config NETDEVICES
--	...
--
--endmenu
--
--All entries within the "menu" ... "endmenu" block become a submenu of
--"Network device support". All subentries inherit the dependencies from
--the menu entry, e.g. this means the dependency "NET" is added to the
--dependency list of the config option NETDEVICES.
--
--The other way to generate the menu structure is done by analyzing the
--dependencies. If a menu entry somehow depends on the previous entry, it
--can be made a submenu of it. First, the previous (parent) symbol must
--be part of the dependency list and then one of these two conditions
--must be true:
--- the child entry must become invisible, if the parent is set to 'n'
--- the child entry must only be visible, if the parent is visible
--
--config MODULES
--	bool "Enable loadable module support"
--
--config MODVERSIONS
--	bool "Set version information on all module symbols"
--	depends MODULES
--
--comment "module support disabled"
--	depends !MODULES
--
--MODVERSIONS directly depends on MODULES, this means it's only visible if
--MODULES is different from 'n'. The comment on the other hand is always
--visible when MODULES is visible (the (empty) dependency of MODULES is
--also part of the comment dependencies).
--
--
--Kconfig syntax
----------------
--
--The configuration file describes a series of menu entries, where every
--line starts with a keyword (except help texts). The following keywords
--end a menu entry:
--- config
--- menuconfig
--- choice/endchoice
--- comment
--- menu/endmenu
--- if/endif
--- source
--The first five also start the definition of a menu entry.
--
--config:
--
--	"config" <symbol>
--	<config options>
--
--This defines a config symbol <symbol> and accepts any of above
--attributes as options.
--
--menuconfig:
--	"menuconfig" <symbol>
--	<config options>
--
--This is similiar to the simple config entry above, but it also gives a
--hint to front ends, that all suboptions should be displayed as a
--separate list of options.
--
--choices:
--
--	"choice"
--	<choice options>
--	<choice block>
--	"endchoice"
--
--This defines a choice group and accepts any of above attributes as
--options. A choice can only be of type bool or tristate, while a boolean
--choice only allows a single config entry to be selected, a tristate
--choice also allows any number of config entries to be set to 'm'. This
--can be used if multiple drivers for a single hardware exists and only a
--single driver can be compiled/loaded into the kernel, but all drivers
--can be compiled as modules.
--A choice accepts another option "optional", which allows to set the
--choice to 'n' and no entry needs to be selected.
--
--comment:
--
--	"comment" <prompt>
--	<comment options>
--
--This defines a comment which is displayed to the user during the
--configuration process and is also echoed to the output files. The only
--possible options are dependencies.
--
--menu:
--
--	"menu" <prompt>
--	<menu options>
--	<menu block>
--	"endmenu"
--
--This defines a menu block, see "Menu structure" above for more
--information. The only possible options are dependencies.
--
--if:
--
--	"if" <expr>
--	<if block>
--	"endif"
--
--This defines an if block. The dependency expression <expr> is appended
--to all enclosed menu entries.
--
--source:
--
--	"source" <prompt>
--
--This reads the specified configuration file. This file is always parsed.
+--- trunk/buildroot/package/autoconf/autoconf.mk	2007-06-28 13:06:21 UTC (rev 18961)
++++ trunk/buildroot/package/autoconf/autoconf.mk	2007-06-28 13:51:07 UTC (rev 18962)
+@@ -7,25 +7,38 @@
+ AUTOCONF_SOURCE:=autoconf-$(AUTOCONF_VER).tar.bz2
+ AUTOCONF_SITE:=http://ftp.gnu.org/pub/gnu/autoconf
+ AUTOCONF_CAT:=$(BZCAT)
++AUTOCONF_SRC_DIR:=$(TOOL_BUILD_DIR)/autoconf-$(AUTOCONF_VER)
+ AUTOCONF_DIR:=$(BUILD_DIR)/autoconf-$(AUTOCONF_VER)
++AUTOCONF_HOST_DIR:=$(TOOL_BUILD_DIR)/autoconf-$(AUTOCONF_VER)-host
+ AUTOCONF_BINARY:=autoconf
+ AUTOCONF_TARGET_BINARY:=usr/bin/autoconf
++AUTOCONF:=$(STAGING_DIR)/usr/bin/autoconf
+ 
++# variables used by other packages
++AUTORECONF = $(HOST_CONFIGURE_OPTS) ACLOCAL="$(ACLOCAL)" autoreconf -v -f -i -I "$(ACLOCAL_DIR)"
++
+ $(DL_DIR)/$(AUTOCONF_SOURCE):
+ 	 $(WGET) -P $(DL_DIR) $(AUTOCONF_SITE)/$(AUTOCONF_SOURCE)
+ 
+ autoconf-source: $(DL_DIR)/$(AUTOCONF_SOURCE)
+ 
+-$(AUTOCONF_DIR)/.unpacked: $(DL_DIR)/$(AUTOCONF_SOURCE)
+-	$(AUTOCONF_CAT) $(DL_DIR)/$(AUTOCONF_SOURCE) | tar -C $(BUILD_DIR) $(TAR_OPTIONS) -
++$(AUTOCONF_SRC_DIR)/.unpacked: $(DL_DIR)/$(AUTOCONF_SOURCE)
++	$(AUTOCONF_CAT) $(DL_DIR)/$(AUTOCONF_SOURCE) | tar -C $(TOOL_BUILD_DIR) $(TAR_OPTIONS) -
+ 	touch $@
+ 
+-$(AUTOCONF_DIR)/.configured: $(AUTOCONF_DIR)/.unpacked
++#############################################################
++#
++# autoconf for the host
++#
++#############################################################
++
++$(AUTOCONF_DIR)/.configured: $(AUTOCONF_SRC_DIR)/.unpacked
++	mkdir -p $(AUTOCONF_DIR)
+ 	(cd $(AUTOCONF_DIR); rm -rf config.cache; \
+ 		$(TARGET_CONFIGURE_OPTS) \
+ 		$(TARGET_CONFIGURE_ARGS) \
+ 		EMACS="no" \
+-		./configure \
++		$(AUTOCONF_SRC_DIR)/configure \
+ 		--target=$(GNU_TARGET_NAME) \
+ 		--host=$(GNU_TARGET_NAME) \
+ 		--build=$(GNU_HOST_NAME) \
+@@ -63,6 +76,7 @@
+ 	    -C $(AUTOCONF_DIR) install;
+ 	rm -rf $(TARGET_DIR)/share/locale $(TARGET_DIR)/usr/info \
+ 		$(TARGET_DIR)/usr/man $(TARGET_DIR)/usr/share/doc
++	touch -c $@
+ 
+ autoconf: uclibc $(TARGET_DIR)/$(AUTOCONF_TARGET_BINARY)
+ 
+@@ -75,6 +89,40 @@
+ 
+ #############################################################
+ #
++# autoconf for the host
++#
++#############################################################
++
++$(AUTOCONF_HOST_DIR)/.configured: $(AUTOCONF_SRC_DIR)/.unpacked
++	mkdir -p $(AUTOCONF_HOST_DIR)
++	(cd $(AUTOCONF_HOST_DIR); rm -rf config.cache; \
++		$(HOST_CONFIGURE_OPTS) \
++		CFLAGS="$(HOST_CFLAGS)" \
++		LDFLAGS="$(HOST_LDFLAGS)" \
++		EMACS="no" \
++		$(AUTOCONF_SRC_DIR)/configure \
++		--prefix=$(STAGING_DIR)/usr \
++	);
++	touch $@
++
++$(AUTOCONF_HOST_DIR)/bin/$(AUTOCONF_BINARY): $(AUTOCONF_HOST_DIR)/.configured
++	$(MAKE1) -C $(AUTOCONF_HOST_DIR)
++
++$(AUTOCONF): $(AUTOCONF_HOST_DIR)/bin/$(AUTOCONF_BINARY)
++	$(MAKE) -C $(AUTOCONF_HOST_DIR) install;
++
++host-autoconf: m4-host host-libtool $(AUTOCONF)
++
++host-autoconf-clean:
++	$(MAKE) CC=$(HOST_CC) -C $(AUTOCONF_HOST_DIR) uninstall
++	-$(MAKE) -C $(AUTOCONF_HOST_DIR) clean
++
++host-autoconf-dirclean:
++	rm -rf $(AUTOCONF_HOST_DIR)
++
++
++#############################################################
++#
+ # Toplevel Makefile options
+ #
+ #############################################################
 
-Deleted: trunk/buildroot/package/config/lxdialog/colors.h
+Modified: trunk/buildroot/package/automake/automake.mk
 ===================================================================
---- trunk/buildroot/package/config/lxdialog/colors.h	2007-06-28 12:14:16 UTC (rev 18960)
-+++ trunk/buildroot/package/config/lxdialog/colors.h	2007-06-28 13:06:21 UTC (rev 18961)
-@@ -1,161 +0,0 @@
--/*
-- *  colors.h -- color attribute definitions
-- *
-- *  AUTHOR: Savio Lam (lam836 at cs.cuhk.hk)
-- *
-- *  This program is free software; you can redistribute it and/or
-- *  modify it under the terms of the GNU General Public License
-- *  as published by the Free Software Foundation; either version 2
-- *  of the License, or (at your option) any later version.
-- *
-- *  This program is distributed in the hope that it will be useful,
-- *  but WITHOUT ANY WARRANTY; without even the implied warranty of
-- *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-- *  GNU General Public License for more details.
-- *
-- *  You should have received a copy of the GNU General Public License
-- *  along with this program; if not, write to the Free Software
-- *  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
-- */
--
--
--/*
-- *   Default color definitions
-- *
-- *   *_FG = foreground
-- *   *_BG = background
-- *   *_HL = highlight?
-- */
--#define SCREEN_FG                    COLOR_CYAN
--#define SCREEN_BG                    COLOR_BLUE
--#define SCREEN_HL                    TRUE
--
--#define SHADOW_FG                    COLOR_BLACK
--#define SHADOW_BG                    COLOR_BLACK
--#define SHADOW_HL                    TRUE
--
--#define DIALOG_FG                    COLOR_BLACK
--#define DIALOG_BG                    COLOR_WHITE
--#define DIALOG_HL                    FALSE
--
--#define TITLE_FG                     COLOR_YELLOW
--#define TITLE_BG                     COLOR_WHITE
--#define TITLE_HL                     TRUE
--
--#define BORDER_FG                    COLOR_WHITE
--#define BORDER_BG                    COLOR_WHITE
--#define BORDER_HL                    TRUE
--
--#define BUTTON_ACTIVE_FG             COLOR_WHITE
--#define BUTTON_ACTIVE_BG             COLOR_BLUE
--#define BUTTON_ACTIVE_HL             TRUE
--
--#define BUTTON_INACTIVE_FG           COLOR_BLACK
--#define BUTTON_INACTIVE_BG           COLOR_WHITE
--#define BUTTON_INACTIVE_HL           FALSE
--
--#define BUTTON_KEY_ACTIVE_FG         COLOR_WHITE
--#define BUTTON_KEY_ACTIVE_BG         COLOR_BLUE
--#define BUTTON_KEY_ACTIVE_HL         TRUE
--
--#define BUTTON_KEY_INACTIVE_FG       COLOR_RED
--#define BUTTON_KEY_INACTIVE_BG       COLOR_WHITE
--#define BUTTON_KEY_INACTIVE_HL       FALSE
--
--#define BUTTON_LABEL_ACTIVE_FG       COLOR_YELLOW
--#define BUTTON_LABEL_ACTIVE_BG       COLOR_BLUE
--#define BUTTON_LABEL_ACTIVE_HL       TRUE
--
--#define BUTTON_LABEL_INACTIVE_FG     COLOR_BLACK
--#define BUTTON_LABEL_INACTIVE_BG     COLOR_WHITE
--#define BUTTON_LABEL_INACTIVE_HL     TRUE
--
--#define INPUTBOX_FG                  COLOR_BLACK
--#define INPUTBOX_BG                  COLOR_WHITE
--#define INPUTBOX_HL                  FALSE
--
--#define INPUTBOX_BORDER_FG           COLOR_BLACK
--#define INPUTBOX_BORDER_BG           COLOR_WHITE
--#define INPUTBOX_BORDER_HL           FALSE
--
--#define SEARCHBOX_FG                 COLOR_BLACK
--#define SEARCHBOX_BG                 COLOR_WHITE
--#define SEARCHBOX_HL                 FALSE
--
--#define SEARCHBOX_TITLE_FG           COLOR_YELLOW
--#define SEARCHBOX_TITLE_BG           COLOR_WHITE
--#define SEARCHBOX_TITLE_HL           TRUE
--
--#define SEARCHBOX_BORDER_FG          COLOR_WHITE
--#define SEARCHBOX_BORDER_BG          COLOR_WHITE
--#define SEARCHBOX_BORDER_HL          TRUE
--
--#define POSITION_INDICATOR_FG        COLOR_YELLOW
--#define POSITION_INDICATOR_BG        COLOR_WHITE
--#define POSITION_INDICATOR_HL        TRUE
--
--#define MENUBOX_FG                   COLOR_BLACK
--#define MENUBOX_BG                   COLOR_WHITE
--#define MENUBOX_HL                   FALSE
--
--#define MENUBOX_BORDER_FG            COLOR_WHITE
--#define MENUBOX_BORDER_BG            COLOR_WHITE
--#define MENUBOX_BORDER_HL            TRUE
--
--#define ITEM_FG                      COLOR_BLACK
--#define ITEM_BG                      COLOR_WHITE
--#define ITEM_HL                      FALSE
--
--#define ITEM_SELECTED_FG             COLOR_WHITE
--#define ITEM_SELECTED_BG             COLOR_BLUE
--#define ITEM_SELECTED_HL             TRUE
--
--#define TAG_FG                       COLOR_YELLOW
--#define TAG_BG                       COLOR_WHITE
--#define TAG_HL                       TRUE
--
--#define TAG_SELECTED_FG              COLOR_YELLOW
--#define TAG_SELECTED_BG              COLOR_BLUE
--#define TAG_SELECTED_HL              TRUE
--
--#define TAG_KEY_FG                   COLOR_YELLOW
--#define TAG_KEY_BG                   COLOR_WHITE
--#define TAG_KEY_HL                   TRUE
--
--#define TAG_KEY_SELECTED_FG          COLOR_YELLOW
--#define TAG_KEY_SELECTED_BG          COLOR_BLUE
--#define TAG_KEY_SELECTED_HL          TRUE
--
--#define CHECK_FG                     COLOR_BLACK
--#define CHECK_BG                     COLOR_WHITE
--#define CHECK_HL                     FALSE
--
--#define CHECK_SELECTED_FG            COLOR_WHITE
--#define CHECK_SELECTED_BG            COLOR_BLUE
--#define CHECK_SELECTED_HL            TRUE
--
--#define UARROW_FG                    COLOR_GREEN
--#define UARROW_BG                    COLOR_WHITE
--#define UARROW_HL                    TRUE
--
--#define DARROW_FG                    COLOR_GREEN
--#define DARROW_BG                    COLOR_WHITE
--#define DARROW_HL                    TRUE
--
--/* End of default color definitions */
--
--#define C_ATTR(x,y)                  ((x ? A_BOLD : 0) | COLOR_PAIR((y)))
--#define COLOR_NAME_LEN               10
--#define COLOR_COUNT                  8
--
--/*
-- * Global variables
-- */
--
--typedef struct {
--    char name[COLOR_NAME_LEN];
--    int value;
--} color_names_st;
--
--extern color_names_st color_names[];
--extern int color_table[][3];
+--- trunk/buildroot/package/automake/automake.mk	2007-06-28 13:06:21 UTC (rev 18961)
++++ trunk/buildroot/package/automake/automake.mk	2007-06-28 13:51:07 UTC (rev 18962)
+@@ -7,26 +7,40 @@
+ AUTOMAKE_SOURCE:=automake-$(AUTOMAKE_VER).tar.bz2
+ AUTOMAKE_SITE:=http://ftp.gnu.org/pub/gnu/automake
+ AUTOMAKE_CAT:=$(BZCAT)
++AUTOMAKE_SRC_DIR:=$(TOOL_BUILD_DIR)/automake-$(AUTOMAKE_VER)
+ AUTOMAKE_DIR:=$(BUILD_DIR)/automake-$(AUTOMAKE_VER)
++AUTOMAKE_HOST_DIR:=$(TOOL_BUILD_DIR)/automake-$(AUTOMAKE_VER)-host
+ AUTOMAKE_BINARY:=automake
+ AUTOMAKE_TARGET_BINARY:=usr/bin/automake
++AUTOMAKE:=$(STAGING_DIR)/usr/bin/automake
+ 
++# variables used by other packages
++ACLOCAL_DIR = $(STAGING_DIR)/usr/share/aclocal
++ACLOCAL = aclocal -I $(ACLOCAL_DIR)
++
+ $(DL_DIR)/$(AUTOMAKE_SOURCE):
+ 	 $(WGET) -P $(DL_DIR) $(AUTOMAKE_SITE)/$(AUTOMAKE_SOURCE)
+ 
+ automake-source: $(DL_DIR)/$(AUTOMAKE_SOURCE)
+ 
+-$(AUTOMAKE_DIR)/.unpacked: $(DL_DIR)/$(AUTOMAKE_SOURCE)
+-	$(AUTOMAKE_CAT) $(DL_DIR)/$(AUTOMAKE_SOURCE) | tar -C $(BUILD_DIR) $(TAR_OPTIONS) -
+-	$(CONFIG_UPDATE) $(AUTOMAKE_DIR)
++$(AUTOMAKE_SRC_DIR)/.unpacked: $(DL_DIR)/$(AUTOMAKE_SOURCE)
++	$(AUTOMAKE_CAT) $(DL_DIR)/$(AUTOMAKE_SOURCE) | tar -C $(TOOL_BUILD_DIR) $(TAR_OPTIONS) -
++	$(CONFIG_UPDATE) $(AUTOMAKE_SRC_DIR)
+ 	touch $@
+ 
+-$(AUTOMAKE_DIR)/.configured: $(AUTOMAKE_DIR)/.unpacked
++#############################################################
++#
++# automake for the target
++#
++#############################################################
++
++$(AUTOMAKE_DIR)/.configured: $(AUTOMAKE_SRC_DIR)/.unpacked
++	mkdir -p $(AUTOMAKE_DIR)
+ 	(cd $(AUTOMAKE_DIR); rm -rf config.cache; \
+ 		$(TARGET_CONFIGURE_OPTS) \
+ 		$(TARGET_CONFIGURE_ARGS) \
+ 		WANT_AUTOCONF=2.5 \
+-		./configure \
++		$(AUTOMAKE_SRC_DIR)/configure \
+ 		--target=$(GNU_TARGET_NAME) \
+ 		--host=$(GNU_TARGET_NAME) \
+ 		--build=$(GNU_HOST_NAME) \
+@@ -46,7 +60,7 @@
+ 
+ $(AUTOMAKE_DIR)/$(AUTOMAKE_BINARY): $(AUTOMAKE_DIR)/.configured
+ 	$(MAKE) -C $(AUTOMAKE_DIR)
+-	touch -c $(AUTOMAKE_DIR)/$(AUTOMAKE_BINARY)
++	touch -c $@
+ 
+ $(TARGET_DIR)/$(AUTOMAKE_TARGET_BINARY): $(AUTOMAKE_DIR)/$(AUTOMAKE_BINARY)
+ 	$(MAKE) \
+@@ -65,9 +79,9 @@
+ 	    -C $(AUTOMAKE_DIR) install
+ 	rm -rf $(TARGET_DIR)/share/locale $(TARGET_DIR)/usr/info \
+ 		$(TARGET_DIR)/usr/man $(TARGET_DIR)/usr/share/doc
+-	touch -c $(TARGET_DIR)/$(AUTOMAKE_TARGET_BINARY)
++	touch -c $@
+ 
+-automake: uclibc $(TARGET_DIR)/$(AUTOMAKE_TARGET_BINARY)
++automake: uclibc autoconf $(TARGET_DIR)/$(AUTOMAKE_TARGET_BINARY)
+ 
+ automake-clean:
+ 	$(MAKE) DESTDIR=$(TARGET_DIR) -C $(AUTOMAKE_DIR) uninstall
+@@ -78,6 +92,40 @@
+ 
+ #############################################################
+ #
++# automake for the host
++#
++#############################################################
++
++$(AUTOMAKE_HOST_DIR)/.configured: $(AUTOMAKE_SRC_DIR)/.unpacked
++	mkdir -p $(AUTOMAKE_HOST_DIR)
++	(cd $(AUTOMAKE_HOST_DIR); rm -rf config.cache; \
++		$(HOST_CONFIGURE_OPTS) \
++		CFLAGS="$(HOST_CFLAGS)" \
++		LDFLAGS="$(HOST_LDFLAGS)" \
++		WANT_AUTOCONF=2.5 \
++		$(AUTOMAKE_SRC_DIR)/configure \
++		--prefix=$(STAGING_DIR)/usr \
++	);
++	touch $@
++
++$(AUTOMAKE_HOST_DIR)/$(AUTOMAKE_BINARY): $(AUTOMAKE_HOST_DIR)/.configured
++	$(MAKE) -C $(AUTOMAKE_HOST_DIR)
++	touch -c $@
++
++$(AUTOMAKE): $(AUTOMAKE_HOST_DIR)/$(AUTOMAKE_BINARY)
++	$(MAKE) -C $(AUTOMAKE_HOST_DIR) install
++
++host-automake: host-autoconf host-libtool $(AUTOMAKE)
++
++host-automake-clean:
++	$(MAKE) -C $(AUTOMAKE_HOST_DIR) uninstall
++	-$(MAKE) -C $(AUTOMAKE_HOST_DIR) clean
++
++host-automake-dirclean:
++	rm -rf $(AUTOMAKE_HOST_DIR)
++
++#############################################################
++#
+ # Toplevel Makefile options
+ #
+ #############################################################
 
-Deleted: trunk/buildroot/package/config/lxdialog/msgbox.c
+Modified: trunk/buildroot/package/libtool/libtool.mk
 ===================================================================
---- trunk/buildroot/package/config/lxdialog/msgbox.c	2007-06-28 12:14:16 UTC (rev 18960)
-+++ trunk/buildroot/package/config/lxdialog/msgbox.c	2007-06-28 13:06:21 UTC (rev 18961)
-@@ -1,85 +0,0 @@
--/*
-- *  msgbox.c -- implements the message box and info box
-- *
-- *  ORIGINAL AUTHOR: Savio Lam (lam836 at cs.cuhk.hk)
-- *  MODIFIED FOR LINUX KERNEL CONFIG BY: William Roadcap (roadcapw at cfw.com)
-- *
-- *  This program is free software; you can redistribute it and/or
-- *  modify it under the terms of the GNU General Public License
-- *  as published by the Free Software Foundation; either version 2
-- *  of the License, or (at your option) any later version.
-- *
-- *  This program is distributed in the hope that it will be useful,
-- *  but WITHOUT ANY WARRANTY; without even the implied warranty of
-- *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-- *  GNU General Public License for more details.
-- *
-- *  You should have received a copy of the GNU General Public License
-- *  along with this program; if not, write to the Free Software
-- *  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
-- */
--
--#include "dialog.h"
--
--/*
-- * Display a message box. Program will pause and display an "OK" button
-- * if the parameter 'pause' is non-zero.
-- */
--int
--dialog_msgbox (const char *title, const char *prompt, int height, int width,
--		int pause)
--{
--    int i, x, y, key = 0;
--    WINDOW *dialog;
--
--    /* center dialog box on screen */
--    x = (COLS - width) / 2;
--    y = (LINES - height) / 2;
--
--    draw_shadow (stdscr, y, x, height, width);
--
--    dialog = newwin (height, width, y, x);
--    keypad (dialog, TRUE);
--
--    draw_box (dialog, 0, 0, height, width, dialog_attr, border_attr);
--
--    if (title != NULL && strlen(title) >= width-2 ) {
--	/* truncate long title -- mec */
--	char * title2 = malloc(width-2+1);
--	memcpy( title2, title, width-2 );
--	title2[width-2] = '\0';
--	title = title2;
--    }
--
--    if (title != NULL) {
--	wattrset (dialog, title_attr);
--	mvwaddch (dialog, 0, (width - strlen(title))/2 - 1, ' ');
--	waddstr (dialog, (char *)title);
--	waddch (dialog, ' ');
--    }
--    wattrset (dialog, dialog_attr);
--    print_autowrap (dialog, prompt, width - 2, 1, 2);
--
--    if (pause) {
--	wattrset (dialog, border_attr);
--	mvwaddch (dialog, height - 3, 0, ACS_LTEE);
--	for (i = 0; i < width - 2; i++)
--	    waddch (dialog, ACS_HLINE);
--	wattrset (dialog, dialog_attr);
--	waddch (dialog, ACS_RTEE);
--
--	print_button (dialog, "  Ok  ",
--		      height - 2, width / 2 - 4, TRUE);
--
--	wrefresh (dialog);
--	while (key != ESC && key != '\n' && key != ' ' &&
--               key != 'O' && key != 'o' && key != 'X' && key != 'x')
--	    key = wgetch (dialog);
--    } else {
--	key = '\n';
--	wrefresh (dialog);
--    }
--
--    delwin (dialog);
--    return key == ESC ? -1 : 0;
--}
-
-Deleted: trunk/buildroot/package/config/zconf.tab.h_shipped
-===================================================================
---- trunk/buildroot/package/config/zconf.tab.h_shipped	2007-06-28 12:14:16 UTC (rev 18960)
-+++ trunk/buildroot/package/config/zconf.tab.h_shipped	2007-06-28 13:06:21 UTC (rev 18961)
-@@ -1,125 +0,0 @@
--/* A Bison parser, made from zconf.y, by GNU bison 1.75.  */
--
--/* Skeleton parser for Yacc-like parsing with Bison,
--   Copyright (C) 1984, 1989, 1990, 2000, 2001, 2002 Free Software Foundation, Inc.
--
--   This program is free software; you can redistribute it and/or modify
--   it under the terms of the GNU General Public License as published by
--   the Free Software Foundation; either version 2, or (at your option)
--   any later version.
--
--   This program is distributed in the hope that it will be useful,
--   but WITHOUT ANY WARRANTY; without even the implied warranty of
--   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
--   GNU General Public License for more details.
--
--   You should have received a copy of the GNU General Public License
--   along with this program; if not, write to the Free Software
--   Foundation, Inc., 59 Temple Place - Suite 330,
--   Boston, MA 02111-1307, USA.  */
--
--/* As a special exception, when this file is copied by Bison into a
--   Bison output file, you may use that output file without restriction.
--   This special exception was added by the Free Software Foundation
--   in version 1.24 of Bison.  */
--
--#ifndef BISON_ZCONF_TAB_H
--# define BISON_ZCONF_TAB_H
--
--/* Tokens.  */
--#ifndef YYTOKENTYPE
--# define YYTOKENTYPE
--   /* Put the tokens into the symbol table, so that GDB and other debuggers
--      know about them.  */
--   enum yytokentype {
--     T_MAINMENU = 258,
--     T_MENU = 259,
--     T_ENDMENU = 260,
--     T_SOURCE = 261,
--     T_CHOICE = 262,
--     T_ENDCHOICE = 263,
--     T_COMMENT = 264,
--     T_CONFIG = 265,
--     T_HELP = 266,
--     T_HELPTEXT = 267,
--     T_IF = 268,
--     T_ENDIF = 269,
--     T_DEPENDS = 270,
--     T_REQUIRES = 271,
--     T_OPTIONAL = 272,
--     T_PROMPT = 273,
--     T_DEFAULT = 274,
--     T_TRISTATE = 275,
--     T_BOOLEAN = 276,
--     T_INT = 277,
--     T_HEX = 278,
--     T_WORD = 279,
--     T_STRING = 280,
--     T_UNEQUAL = 281,
--     T_EOF = 282,
--     T_EOL = 283,
--     T_CLOSE_PAREN = 284,
--     T_OPEN_PAREN = 285,
--     T_ON = 286,
--     T_OR = 287,
--     T_AND = 288,
--     T_EQUAL = 289,
--     T_NOT = 290
--   };
--#endif
--#define T_MAINMENU 258
--#define T_MENU 259
--#define T_ENDMENU 260
--#define T_SOURCE 261
--#define T_CHOICE 262
--#define T_ENDCHOICE 263
--#define T_COMMENT 264
--#define T_CONFIG 265
--#define T_HELP 266
--#define T_HELPTEXT 267
--#define T_IF 268
--#define T_ENDIF 269
--#define T_DEPENDS 270
--#define T_REQUIRES 271
--#define T_OPTIONAL 272
--#define T_PROMPT 273
--#define T_DEFAULT 274
--#define T_TRISTATE 275
--#define T_BOOLEAN 276
--#define T_INT 277
--#define T_HEX 278
--#define T_WORD 279
--#define T_STRING 280
--#define T_UNEQUAL 281
--#define T_EOF 282
--#define T_EOL 283
--#define T_CLOSE_PAREN 284
--#define T_OPEN_PAREN 285
--#define T_ON 286
--#define T_OR 287
--#define T_AND 288
--#define T_EQUAL 289
--#define T_NOT 290
--
--
--
--
--#ifndef YYSTYPE
--#line 33 "zconf.y"
--typedef union {
--	int token;
--	char *string;
--	struct symbol *symbol;
--	struct expr *expr;
--	struct menu *menu;
--} yystype;
--/* Line 1281 of /usr/share/bison/yacc.c.  */
--#line 118 "zconf.tab.h"
--# define YYSTYPE yystype
--#endif
--
--extern YYSTYPE zconflval;
--
--
--#endif /* not BISON_ZCONF_TAB_H */
--
+--- trunk/buildroot/package/libtool/libtool.mk	2007-06-28 13:06:21 UTC (rev 18961)
++++ trunk/buildroot/package/libtool/libtool.mk	2007-06-28 13:51:07 UTC (rev 18962)
+@@ -7,7 +7,9 @@
+ LIBTOOL_SOURCE:=libtool-$(LIBTOOL_VER).tar.gz
+ LIBTOOL_SITE:=http://ftp.gnu.org/pub/gnu/libtool
+ LIBTOOL_CAT:=$(ZCAT)
++LIBTOOL_SRC_DIR:=$(TOOL_BUILD_DIR)/libtool-$(LIBTOOL_VER)
+ LIBTOOL_DIR:=$(BUILD_DIR)/libtool-$(LIBTOOL_VER)
++LIBTOOL_HOST_DIR:=$(TOOL_BUILD_DIR)/libtool-$(LIBTOOL_VER)-host
+ LIBTOOL_BINARY:=libtool
+ LIBTOOL_TARGET_BINARY:=usr/bin/libtool
+ 
+@@ -16,15 +18,22 @@
+ 
+ libtool-source: $(DL_DIR)/$(LIBTOOL_SOURCE)
+ 
+-$(LIBTOOL_DIR)/.unpacked: $(DL_DIR)/$(LIBTOOL_SOURCE)
+-	$(LIBTOOL_CAT) $(DL_DIR)/$(LIBTOOL_SOURCE) | tar -C $(BUILD_DIR) $(TAR_OPTIONS) -
+-	touch $(LIBTOOL_DIR)/.unpacked
++$(LIBTOOL_SRC_DIR)/.unpacked: $(DL_DIR)/$(LIBTOOL_SOURCE)
++	$(LIBTOOL_CAT) $(DL_DIR)/$(LIBTOOL_SOURCE) | tar -C $(TOOL_BUILD_DIR) $(TAR_OPTIONS) -
++	touch $@
+ 
+-$(LIBTOOL_DIR)/.configured: $(LIBTOOL_DIR)/.unpacked
++#############################################################
++#
++# libtool for the target
++#
++#############################################################
++
++$(LIBTOOL_DIR)/.configured: $(LIBTOOL_SRC_DIR)/.unpacked
++	mkdir -p $(LIBTOOL_DIR)
+ 	(cd $(LIBTOOL_DIR); rm -rf config.cache; \
+ 		$(TARGET_CONFIGURE_OPTS) \
+ 		$(TARGET_CONFIGURE_ARGS) \
+-		./configure \
++		$(LIBTOOL_SRC_DIR)/configure \
+ 		--target=$(GNU_TARGET_NAME) \
+ 		--host=$(GNU_TARGET_NAME) \
+ 		--build=$(GNU_HOST_NAME) \
+@@ -41,11 +50,11 @@
+ 		--infodir=/usr/info \
+ 		$(DISABLE_NLS) \
+ 	);
+-	touch $(LIBTOOL_DIR)/.configured
++	touch $@
+ 
+ $(LIBTOOL_DIR)/$(LIBTOOL_BINARY): $(LIBTOOL_DIR)/.configured
+ 	$(MAKE) CC=$(TARGET_CC) -C $(LIBTOOL_DIR)
+-	touch -c $(LIBTOOL_DIR)/$(LIBTOOL_BINARY)
++	touch -c $@
+ 
+ $(TARGET_DIR)/$(LIBTOOL_TARGET_BINARY): $(LIBTOOL_DIR)/$(LIBTOOL_BINARY)
+ 	$(MAKE) \
+@@ -67,6 +76,7 @@
+ 	$(SED) "s,^LD.*,LD=\"/usr/bin/ld\"," $(TARGET_DIR)/usr/bin/libtool
+ 	rm -rf $(TARGET_DIR)/share/locale $(TARGET_DIR)/usr/info \
+ 		$(TARGET_DIR)/usr/man $(TARGET_DIR)/usr/share/doc
++	touch -c $@
+ 
+ libtool: uclibc $(TARGET_DIR)/$(LIBTOOL_TARGET_BINARY)
+ 
+@@ -84,6 +94,43 @@
+ 
+ #############################################################
+ #
++# libtool for the host
++#
++#############################################################
++
++$(LIBTOOL_HOST_DIR)/.configured: $(LIBTOOL_SRC_DIR)/.unpacked
++	mkdir -p $(LIBTOOL_HOST_DIR)
++	(cd $(LIBTOOL_HOST_DIR); rm -rf config.cache; \
++		$(HOST_CONFIGURE_OPTS) \
++		CFLAGS="$(HOST_CFLAGS)" \
++		LDFLAGS="$(HOST_LDFLAGS)" \
++		$(LIBTOOL_SRC_DIR)/configure \
++		--prefix=$(STAGING_DIR)/usr \
++		$(DISABLE_NLS) \
++	);
++	touch $@
++
++$(LIBTOOL_HOST_DIR)/$(LIBTOOL_BINARY): $(LIBTOOL_HOST_DIR)/.configured
++	$(MAKE) -C $(LIBTOOL_HOST_DIR)
++	touch -c $@
++
++$(STAGING_DIR)/$(LIBTOOL_TARGET_BINARY): $(LIBTOOL_HOST_DIR)/$(LIBTOOL_BINARY)
++	$(MAKE) -C $(LIBTOOL_HOST_DIR) install
++	rm -rf $(STAGING_DIR)/share/locale $(STAGING_DIR)/usr/info \
++		$(STAGING_DIR)/usr/man $(STAGING_DIR)/usr/share/doc
++	touch -c $@
++
++host-libtool: $(STAGING_DIR)/$(LIBTOOL_TARGET_BINARY)
++
++host-libtool-clean:
++	$(MAKE) -C $(LIBTOOL_HOST_DIR) uninstall
++	-$(MAKE) -C $(LIBTOOL_HOST_DIR) clean
++
++host-libtool-dirclean:
++	rm -rf $(LIBTOOL_HOST_DIR)
++
++#############################################################
++#
+ # Toplevel Makefile options
+ #
+ #############################################################
