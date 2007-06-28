@@ -1,71 +1,40 @@
-From: Tom <fivemiletom@gmail.com>
-Date: Thu, 28 Jun 2007 12:13:18 -0700
-Subject: [Buildroot] ARM EABI builds
-In-Reply-To: <20070628103443.GT31791@trinity.fluff.org>
-References: <20070626133327.GA5989@trinity.fluff.org>
-	<468182D7.30509@gmail.com>
-	<20070626222500.GP31791@trinity.fluff.org>
-	<20070627081954.GR31791@trinity.fluff.org>
-	<4682A1F7.3020402@gmail.com>
-	<20070628103443.GT31791@trinity.fluff.org>
-Message-ID: <4684084E.3080606@gmail.com>
+From: Paul Kavan <pkavan@gmail.com>
+Date: Thu, 28 Jun 2007 14:52:21 -0500
+Subject: [Buildroot] Bad aterisk url
+Message-ID: <61c0054e0706281252s3d40beb3h476a2dbd8dddc921@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Ben Dooks wrote:
->> We need to keep in mind that the same gcc toolchain can support several 
->> subarchitectures, thus this naming would be somewhat misleading (for 
->> example, in our cases it did produce both ARMv4 (in the kernel) and 
->> ARMv5 (in user libs)).
-> 
-> Yes, the naming would indicate the default cpu the compiler is configured
-> for. The gcc docs[1] indicate the --with-cpu= option only sets the
-> default cpu to compile for. Unfortunately this affects how it produces
-> libgcc.
-> 
-> I don't see why you would end up producing ARMv4 kernel when producing
-> an ARMv5 user space. Either you are producing a kernel to run on the 
-> same arch as your userspace (the kernel will correctly assign -mcpu=<x>)
-> when it is building.
->  
-Why? Because of the bug: Configured all builds with ARM920T:
-Buildroot creates "incorrect" toolchain, "incorrect" toolchain fails to 
-build uclibc in ARMv4 only  but uses ARMv5. However, it did build a 
-kernel in ARMv4 fine.
+Hello all:
+
+Trying to include asterisk in my build fails with:
 
 
->> To me it would be great if the gcc toolchain always printed out whatever 
->> the default SUBTARGET / CPU is as part of its specs. (It does this only 
->> if one is passed with the --with-cpu option, so if it's not passed, you 
->> can't easily find the default.) This would have helped me immensely to 
->> find the --with-cpu workaround, but I am afraid this is not really a 
->> buildroot issue.
-> 
-> It is part of a problem with gcc where libgcc is being built for some
-> arbitrary default, instead of one suitable for each architecture that
-> can be selected at run-time.
-> 
-> The problem with buildroot is that it gives you a choice of ARM cpus.
-> If you select ARM920T, then you have an expectation of being able
-> to run the binaries produced on an ARM920T, which currently if EABI
-> is also selected is impossible.
+wget --passive-ftp -P /home/grhuser/buildroot/dl
+http://www.zlib.net//zlib-1.2.3.tar.bz2
+--14:48:33--  http://www.zlib.net//zlib-1.2.3.tar.bz2
+           => `/home/grhuser/buildroot/dl/zlib-1.2.3.tar.bz2'
+Resolving www.zlib.net... 69.73.181.135
+Connecting to www.zlib.net|69.73.181.135|:80... failed: No route to host.
+make: *** [/home/grhuser/buildroot/dl/zlib-1.2.3.tar.bz2] Error 1
 
-Yes, I agree. I like your solution in 
-http://busybox.net/bugs/view.php?id=1406 .
+Checked the url myself. It is a dead link. Is there an alternative to this.
+Searched the archives and did not find one.
 
-> 
-> I did think about adding -mcpu=<cpu> to the build CFLAGS, but that
-> is not going to help with the problem that libgcc is not going to
-> be compiled correctly.
-> 
-Why not? The kernel image, built with the same "incorrect" toolchain, 
-must have used only ARMv4 instructions. If it hadn't, I would have never 
-gotten far enough to even execute vprintf, libc. I would suspect that 
-the kernel does a better job of setting -mcpu, -mtune. Thus these 
-options should work for libc too. What makes you think that it wouldn't 
-work for libc, have you tried? (PS: Even if it did, bug #1406 is 
-probably the better fix, in particular as buildroot users might use its 
-toolchain to build their own code w/o always setting these options)
+Thanks.
+
+Paul
+-- 
+***************************************
+Paul David Kavan
+Project Engineer
+GRH Electronics, Inc.
+402-734-4900
+pkavan at gmail.com
+***************************************
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: http://busybox.net/lists/buildroot/attachments/20070628/b2137b5c/attachment.htm 
