@@ -1,74 +1,96 @@
 From: Bernhard Fischer <rep.dot.nop@gmail.com>
-Date: Fri, 29 Jun 2007 00:38:27 +0200
-Subject: [Buildroot] PATCH: Clear package config build warnings on newer
-	GCC's
-In-Reply-To: <090a01c7b9d1$cc9579c0$6e02a8c0@k2>
-References: <059401c7b819$e2c1e6c0$6e02a8c0@k2> <20070626180913.GE4096@aon.at>
-	<061701c7b821$b2450dd0$6e02a8c0@k2> <20070626192757.GF4096@aon.at>
-	<090a01c7b9d1$cc9579c0$6e02a8c0@k2>
-Message-ID: <20070628223827.GI4096@aon.at>
+Date: Fri, 29 Jun 2007 01:01:31 +0200
+Subject: [Buildroot] ARM EABI builds
+In-Reply-To: <002a01c7b9be$22a79000$7100a8c0@SDW>
+References: <002a01c7b9be$22a79000$7100a8c0@SDW>
+Message-ID: <20070628230131.GJ4096@aon.at>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Thu, Jun 28, 2007 at 05:14:59PM -0500, Rick Foos wrote:
->Missed one merge fix. In the current tree, make defconfig no longer works.
+On Thu, Jun 28, 2007 at 03:54:22PM -0400, Stuart Wood wrote:
+>Just a note on what Tom said about user land application. I've already 
 
-Thanks for the hint. Merged as r18968. Thanks!
+Just as a note on what everybody seems to say about configuring GCC:
+It is very amusing that you guys seem to be excited about _not_ setting
+a config option -- CONFIG_BR2_EXTRA_TARGET_GCC_CONFIG_OPTIONS -- which
+is specifically exported to you, to spell out specific requirements put
+upon gcc (other toolchain parts of course also provide said means for
+hand-crafted  options, mind you).
+
+>found that I had to add -march=armv4t to properly build my application, Just
+
+doh!
+
+>because gcc was not using the right load register code for the data 
+
+well, if you don't tell it to do and _do not help in improving the
+generic situation_ how should we guess what you are trying to achieve?
+
+Get real. (yes, i'm in a bad mood and i'm fond of stupid whining about
+'Doctor, it hurts when i..'
+
+Q:
+Dear X-mas whatever. I want this and that. Now. Immediately. No, i have
+no idea how to implement 'this' 'now', but it has to be done. What? Nah,
+no idea what 'this' nor 'that' nor 'now' is supposed to do, i'd have
+provided a guidance otherwise.
+A: alright. At your service.
+
+>size I wanted to read. It would use ldrw instead of ldrh. So, It would 
+>help avoid those errors.
+
+Try searching the archives for CPU selection (from memory, so may not be
+accurate) for further details.
 >
->Cheers,
->Rick
+>Stuart
+
+See below.
 >
->----- Original Message ----- 
->From: "Bernhard Fischer" <rep.dot.nop@gmail.com>
->To: "Rick Foos" <rick@synchromeshcomputing.com>
->Sent: Tuesday, June 26, 2007 2:27 PM
->Subject: Re: [Buildroot] PATCH: Clear package config build warnings on 
->newer GCC's
->
->
->>On Tue, Jun 26, 2007 at 01:42:05PM -0500, Rick Foos wrote:
->>>Sorry, missed that one.
->>>
->>>Was the provided patch file incorrect for buildroot specific changes?
->>
->>If you touch package/config/*, then please make a clean copy of the
->>pristine thing from the kernel (e.g. from 2.6.21.5) and incooperate
->>buildroot specific changes which you keep as a .diff in that very same
->>directory, along the patched source.
->>
->>See?
->>
->>It is not worthwhile to hack the old version that we currently use. It
->>works, but if you touch it, you're better off to update it before doing
->>anything else.
->>
->>thanks,
->>>
->>>Rick
->>>
->>>----- Original Message ----- 
->>>From: "Bernhard Fischer" <rep.dot.nop@gmail.com>
->>>To: "Rick Foos" <rick@synchromeshcomputing.com>
->>>Cc: "Buildroot" <buildroot@uclibc.org>
->>>Sent: Tuesday, June 26, 2007 1:09 PM
->>>Subject: Re: [Buildroot] PATCH: Clear package config build warnings on
->>>newer GCC's
->>>
->>>
->>>>On Tue, Jun 26, 2007 at 12:46:11PM -0500, Rick Foos wrote:
->>>>>Watching all the warnings on package/config finally got to me.
->>>>>
->>>>>A patch that clears the gcc warnings from config with cast changes only.
->>>>>
->>>>>thanks, I feel better now,
->>>>
->>>>:)
->>>>
->>>>A few days ago, i said:
->>>>i wouldn't mind if we would pull the lxdialog from the current kernel,
->>>>fwiw. patches welcome
->>>>Lta, if you do this, please also provide a diff with the buildroot
->>>>specific changes, so we can easily pull upstream changes
+>Tom wrote:
+>> 
+>> I did think about adding -mcpu=<cpu> to the build CFLAGS, but that is
+>> not going to help with the problem that libgcc is not going to be 
+>> compiled correctly.
+>> 
+>Why not? The kernel image, built with the same "incorrect" toolchain, 
+>must have used only ARMv4 instructions. If it hadn't, I would have never 
+>gotten far enough to even execute vprintf, libc. I would suspect that 
+>the kernel does a better job of setting -mcpu, -mtune. Thus these 
+>options should work for libc too. What makes you think that it wouldn't 
+>work for libc, have you tried? (PS: Even if it did, bug #1406 is 
+>probably the better fix, in particular as buildroot users might use its 
+
+bug #1406 is completely crap. Let me cite:
+<quote>
+ Reporter  	 bjdooks
+ Summary  	 0001403: printf and anything using vfprintf() hangs
+ system
+ Description 	Any function using vfprintf, such as printf and snprintf
+ cause the system to stop. A test program shows that stdout is
+ functional, as fwrite() to stdout will display messages on the console
+ Additional Information 	uclibc 0.9.29
+ gcc 4.1.2 (arm-linux-uclibcgnueabi)
+ binutils 2.17.50.0.16
+ configure for ARM920T, EABI
+---
+(0002514)
+bjdooks
+06-25-07 17:26
+
+	The bug is still present in the development snapshot 
+---
+(0002517)
+bjdooks
+06-26-07 05:03
+
+	Building gcc 4.1.2 for OABI (patches will be sent in seperate
+	report) does not work either.
+</quote>
+>toolchain to build their own code w/o always setting these options)
+
+- No actual error shown.
+- no code/arch/toolchain hints to reproduce.
+This is one of the 'Doctor, it hurts'.. goto above;
