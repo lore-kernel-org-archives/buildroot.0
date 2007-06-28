@@ -1,84 +1,97 @@
-From: harshal shete <harshalshete@gmail.com>
-Date: Thu, 28 Jun 2007 10:41:50 +0400
-Subject: [Buildroot] Compilation of buildroot on cygwin gives problem
-Message-ID: <b85b23590706272341n15bc030bjccfe446f4049215@mail.gmail.com>
+From: Ben Dooks <ben@fluff.org>
+Date: Thu, 28 Jun 2007 11:34:43 +0100
+Subject: [Buildroot] ARM EABI builds
+In-Reply-To: <4682A1F7.3020402@gmail.com>
+References: <20070626133327.GA5989@trinity.fluff.org>
+	<468182D7.30509@gmail.com>
+	<20070626222500.GP31791@trinity.fluff.org>
+	<20070627081954.GR31791@trinity.fluff.org>
+	<4682A1F7.3020402@gmail.com>
+Message-ID: <20070628103443.GT31791@trinity.fluff.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi group,
+On Wed, Jun 27, 2007 at 10:44:23AM -0700, Tom wrote:
+> Ben Dooks wrote:
+> >On Tue, Jun 26, 2007 at 11:25:00PM +0100, Ben Dooks wrote:
+> >>On Tue, Jun 26, 2007 at 02:19:19PM -0700, Tom wrote:
+> >>>Ben Dooks wrote:
+> >>>>Has anyone had success with building an EABI buildroot? I have tried
+> >>>>building ARM (arm920t,gcc 4.1.2) and the image produced hangs (it
+> >>>>seems vfprintf does not work)
+> >>>>
+> >>>>I have succesfully built images with gcc 4.1.2 and a patch to make it
+> >>>>build gcc with OABI.
+> >>>>
+> >>>Yes, I had success. (After an issue described in "[Buildroot] Arm / 
+> >>>buildroot / kernel issue: init crashes?", maybe this is your problem 
+> >>>too.)
+> >>Next time, could you please post an URL, it doesn't seem to be trivially
+> >>findable with google.
+> >>
+> >>I have tried EABI build with what should be an EABI only kernel, and this
+> >>still shows that /bin/sh is not running to a point where you can interact
+> >>with it.
+> >
+> >I have finally tracked down the problem, and will be submitting a
+> >fix as soon as I have reviewed the patch.
+> >
+> >The basic problem is as so:
+> >
+> >1) Buildroot asks for the processor type (ARM920,etc)
+> >2) Buildroot does not pass this to gcc when building
+> >3) GCC makes a guess about architecture based on internal configuration
+> >4) GCC EABI defaults to ARMv5
+> >5) ARMv5 produces instructions that cannot execute on ARMv4
+> >6) applications fail to work due to invalid instructions in libgcc
+> >
+> >The first part of the solution is to pass --with-cpu=<cpu> to the
+> >gcc configuration, thus forcing the use of a particular cpu and
+> >architecture.
+> >
+> >The next thing is, do we then need to produce our compiler and
+> >libraries in toolchain_arm_<cpu>_<fp> and build_arm_<cpu>_<fp> ?
+> >
+> We need to keep in mind that the same gcc toolchain can support several 
+> subarchitectures, thus this naming would be somewhat misleading (for 
+> example, in our cases it did produce both ARMv4 (in the kernel) and 
+> ARMv5 (in user libs)).
 
-This is my first mail so please forgive me if i am unknowingly broke some
-rules.
-actually i am trying to compile buildroot on windows with the help of
-cygwin.
+Yes, the naming would indicate the default cpu the compiler is configured
+for. The gcc docs[1] indicate the --with-cpu= option only sets the
+default cpu to compile for. Unfortunately this affects how it produces
+libgcc.
 
-i have deselected rootfs and busybox options from make menuconfig.
-and selected appropriate processor (arm) and variant (arm920t).
-gcc and gdb (host) version is also selected.
+I don't see why you would end up producing ARMv4 kernel when producing
+an ARMv5 user space. Either you are producing a kernel to run on the 
+same arch as your userspace (the kernel will correctly assign -mcpu=<x>)
+when it is building.
+ 
+> To me it would be great if the gcc toolchain always printed out whatever 
+> the default SUBTARGET / CPU is as part of its specs. (It does this only 
+> if one is passed with the --with-cpu option, so if it's not passed, you 
+> can't easily find the default.) This would have helped me immensely to 
+> find the --with-cpu workaround, but I am afraid this is not really a 
+> buildroot issue.
 
-uclibc option is selected as daily snapshot but while compilation i get the
-error
-+ make -C /cygdrive/e/buildroot/buildroot/toolchain_build_arm/uClibc
-PREFIX=/cygdrive/e/buildroot/buildroot/toolchain_build_arm/uClibc_dev/
-DEVEL_PREFIX=/usr/
-RUNTIME_PREFIX=/cygdrive/e/buildroot/buildroot/toolchain_build_arm/uClibc_dev/
-HOSTCC=gcc pregen install_dev
-/bin/sh:
-/cygdrive/e/buildroot/buildroot/build_arm/staging_dir/bin/arm-linux-uclibc-gcc:
-No such file or directory
-make[1]:
-/cygdrive/e/buildroot/buildroot/build_arm/staging_dir/bin/arm-linux-uclibc-gcc:
-Command not found
-make[1]: Entering directory
-`/cygdrive/e/buildroot/buildroot/toolchain_build_arm/uClibc'
-make[1]:
-/cygdrive/e/buildroot/buildroot/build_arm/staging_dir/bin/arm-linux-uclibc-gcc:
-Command not found
-make[1]: Entering directory
-`/cygdrive/e/buildroot/buildroot/toolchain_build_arm/uClibc'
-/bin/sh:
-/cygdrive/e/buildroot/buildroot/build_arm/staging_dir/bin/arm-linux-uclibc-gcc:
-No such file or directory
-make[2]:
-/cygdrive/e/buildroot/buildroot/build_arm/staging_dir/bin/arm-linux-uclibc-gcc:
-Command not found
-make[2]:
-/cygdrive/e/buildroot/buildroot/build_arm/staging_dir/bin/arm-linux-uclibc-gcc:
-Command not found
-/bin/sh:
-/cygdrive/e/buildroot/buildroot/build_arm/staging_dir/bin/arm-linux-uclibc-gcc:
-No such file or directory
-make[2]:
-/cygdrive/e/buildroot/buildroot/build_arm/staging_dir/bin/arm-linux-uclibc-gcc:
-Command not found
-make[2]:
-/cygdrive/e/buildroot/buildroot/build_arm/staging_dir/bin/arm-linux-uclibc-gcc:
-Command not found
-conf.o:conf.c:(.text+0xb2): undefined reference to `_libintl_gettext'
-conf.o:conf.c:(.text+0xc6): undefined reference to `_libintl_gettext'
-conf.o:conf.c:(.text+0xda): undefined reference to `_libintl_gettext'
-conf.o:conf.c:(.text+0xf2c): undefined reference to `_libintl_gettext'
-conf.o:conf.c:(.text+0x10c5): undefined reference to `_libintl_gettext'
-conf.o:conf.c:(.text+0x116f): more undefined references to
-`_libintl_gettext' follow
-collect2: ld returned 1 exit status
-make[2]: *** [conf] Error 1
-make[1]: *** [extra/config/conf] Error 2
-make: ***
-[/cygdrive/e/buildroot/buildroot/toolchain_build_arm/uClibc/.configured]
-Error 2
+It is part of a problem with gcc where libgcc is being built for some
+arbitrary default, instead of one suitable for each architecture that
+can be selected at run-time.
 
-So if anyone has faced the same situation then please tell me the
-workaround..
-do i need to change some Makefiles?
-because i tink it is demanding for arm-linux-uclibc-gcc before creating it.
-Please help me out of this.
+The problem with buildroot is that it gives you a choice of ARM cpus.
+If you select ARM920T, then you have an expectation of being able
+to run the binaries produced on an ARM920T, which currently if EABI
+is also selected is impossible.
 
-Thanks and regards
-Harshal shete
--------------- next part --------------
-An HTML attachment was scrubbed...
-URL: http://busybox.net/lists/buildroot/attachments/20070628/590b50b7/attachment.htm 
+I did think about adding -mcpu=<cpu> to the build CFLAGS, but that
+is not going to help with the problem that libgcc is not going to
+be compiled correctly.
+
+-- 
+Ben
+
+Q:      What's a light-year?
+A:      One-third less calories than a regular year.
