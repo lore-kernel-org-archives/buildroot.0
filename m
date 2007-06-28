@@ -1,41 +1,27 @@
-From: Rick Foos <rick@synchromeshcomputing.com>
-Date: Thu, 28 Jun 2007 15:48:00 -0500
-Subject: [Buildroot] svn commit: trunk/buildroot/package/config: lxdialog
-References: <20070628130622.5F0F4A461D@busybox.net>
-Message-ID: <08be01c7b9c5$9dedc610$6e02a8c0@k2>
+From: Ulf Samuelsson <ulf@atmel.com>
+Date: Thu, 28 Jun 2007 22:53:44 +0200
+Subject: [Buildroot] Bad aterisk url
+References: <61c0054e0706281252s3d40beb3h476a2dbd8dddc921@mail.gmail.com>
+Message-ID: <012901c7b9cc$153b6730$ebba820a@atmel.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-I was also updating config from earlier. Most of it was the same, but when I 
-merged yours into my changes, a few things came up to pass along.
 
-The patch is based on the revision 18967
+> wget --passive-ftp -P /home/grhuser/buildroot/dl
+> http://www.zlib.net//zlib-1.2.3.tar.bz2
+> --14:48:33--  http://www.zlib.net//zlib-1.2.3.tar.bz2
+>           => `/home/grhuser/buildroot/dl/zlib-1.2.3.tar.bz2'
+> Resolving www.zlib.net... 69.73.181.135
+> Connecting to www.zlib.net|69.73.181.135|:80... failed: No route to host.
+> make: *** [/home/grhuser/buildroot/dl/zlib-1.2.3.tar.bz2] Error 1
+> 
+> Checked the url myself. It is a dead link. Is there an alternative to this.
+> Searched the archives and did not find one.
+> 
+http://prdownloads.sourceforge.net/libpng/zlib-1.2.3.tar.bz2 
 
-The lxdialog shell script is added as non-executable. so adding 
-svn:executable to the lxdialog shell would be good too.
-
-util.c - .kconfig.d should be .config.cmd
-lkc.h - PACKAGE should be buildroot not linux.
-lex.zconf.c - line 3 path doesn't exist (scripts/kconfig)
-Makefile - fix standalone build, and distclean for mconf
-Makefile.kconfig - add else rules to LKC_GENPARSER to regenerate from 
-shipped versions.
-
-Rick
-
------ Original Message ----- 
-From: <aldot@uclibc.org>
-To: <buildroot@uclibc.org>
-Sent: Thursday, June 28, 2007 8:06 AM
-Subject: [Buildroot] svn commit: trunk/buildroot/package/config: lxdialog
-
--------------- next part --------------
-A non-text attachment was scrubbed...
-Name: config-fixes.patch
-Type: application/octet-stream
-Size: 2732 bytes
-Desc: not available
-Url : http://busybox.net/lists/buildroot/attachments/20070628/85f53967/attachment.obj 
+Best Regards
+Ulf Samuelsson                ulf at atmel.com
