@@ -1,27 +1,30 @@
-From: Tom <fivemiletom@gmail.com>
-Date: Thu, 28 Jun 2007 16:57:32 -0700
-Subject: [Buildroot] ARM EABI builds
-In-Reply-To: <019801c7b9d6$ba07ed10$ebba820a@atmel.com>
-References: <20070626133327.GA5989@trinity.fluff.org><468182D7.30509@gmail.com><20070626222500.GP31791@trinity.fluff.org><20070627081954.GR31791@trinity.fluff.org><4682A1F7.3020402@gmail.com>
-	<20070628103443.GT31791@trinity.fluff.org>
-	<019801c7b9d6$ba07ed10$ebba820a@atmel.com>
-Message-ID: <46844AEC.7020007@gmail.com>
+From: Ken Cecka <ceckak@alumni.washington.edu>
+Date: Thu, 28 Jun 2007 16:28:51 -0700 (PDT)
+Subject: [Buildroot] Debugging across uClibc calls
+Message-ID: <Pine.LNX.4.64.0706281628150.7887@pitt>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Ulf Samuelsson wrote:
->> The problem with buildroot is that it gives you a choice of ARM cpus.
->> If you select ARM920T, then you have an expectation of being able
->> to run the binaries produced on an ARM920T, which currently if EABI
->> is also selected is impossible.
->>
-> 
-> So should we not just make EABI depend on !ARM920T
-> 
+Hi All,
 
-I would say no, because this combination works for buildroot. (However, 
-if you _only_ select ARM920T and EABI and don't take care of the CPU 
-options, it will fail.)
+I've got a PPC405 target up and running with a buildroot/uClibc linux
+environment, and now I'm trying to debug an application.  I can launch the
+application using gdbserver and then connect to it using my host gdb, and
+everything is great as I step through the code... until I reach a C 
+library
+call.  Any time I try to step over one of these (e.g. print, memcpy, etc),
+I end up getting stuck in call___do_global_ctors_aux.
+
+I did a little searching around on the web and the only thing I could find
+about this is that this symbol is related to runtime linking of shared
+library functions.  That's fine and dandy, but how do I get past it?  I'm
+not trying to step into the call, just over it so I can continue debugging
+my high level code.
+
+Any suggestions?
+
+Thanks,
+Ken
