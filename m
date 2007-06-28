@@ -1,55 +1,25 @@
-From: bugs at busybox.net <bugs@busybox.net>
-Date: Thu, 28 Jun 2007 04:04:55 -0700
-Subject: [Buildroot] [buildroot 0001406]: ARM: gcc is not configured for the
-	ARM cpu selected in the menuconfig
-Message-ID: <1e4a2d8fc2187ef2b22d3c154c0ee092@bugs.busybox.net>
+From: Bernhard Fischer <rep.dot.nop@gmail.com>
+Date: Thu, 28 Jun 2007 13:05:49 +0200
+Subject: [Buildroot] Compilation of buildroot on cygwin gives problem
+In-Reply-To: <b85b23590706272341n15bc030bjccfe446f4049215@mail.gmail.com>
+References: <b85b23590706272341n15bc030bjccfe446f4049215@mail.gmail.com>
+Message-ID: <20070628110549.GA30557@aon.at>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+On Thu, Jun 28, 2007 at 10:41:50AM +0400, harshal shete wrote:
+>Hi group,
+>
+>This is my first mail so please forgive me if i am unknowingly broke some
+>rules.
+>actually i am trying to compile buildroot on windows with the help of
+>cygwin.
+[snip gettext/intl]
 
-The following issue has been SUBMITTED. 
-====================================================================== 
-http://busybox.net/bugs/view.php?id=1406 
-====================================================================== 
-Reported By:                bjdooks
-Assigned To:                buildroot
-====================================================================== 
-Project:                    buildroot
-Issue ID:                   1406
-Category:                   Architecture Specific
-Reproducibility:            always
-Severity:                   major
-Priority:                   normal
-Status:                     assigned
-====================================================================== 
-Date Submitted:             06-28-2007 04:04 PDT
-Last Modified:              06-28-2007 04:04 PDT
-====================================================================== 
-Summary:                    ARM: gcc is not configured for the ARM cpu selected
-in the menuconfig
-Description: 
-The CPU selected in the menuconfig is not used to configure the gcc build
-to use the configured CPU. This causes code to be built that will not run
-on the target due to instructions that can never be executed.
+Please retry with r18957 or higher. If this doesn't work, then search the
+kernel-archives for a solution.
 
-If the cpu type is not specified, then not only is the compiler producing
-builds of packages that are incorrect, but it will also produce an libgcc
-with invalid instructions in it.
-
-Passing CFLAGS with -mcpu=<configured-cpu> to the package builds was
-considered as a posibility, but this will not ensure that libgcc is built
-with the correct architecture flags.
-====================================================================== 
-
-Issue History 
-Date Modified   Username       Field                    Change               
-====================================================================== 
-06-28-07 04:04  bjdooks        New Issue                                    
-06-28-07 04:04  bjdooks        Status                   new => assigned     
-06-28-07 04:04  bjdooks        Assigned To               => buildroot       
-06-28-07 04:04  bjdooks        File Added: gcc-pass-cpu-config.patch            
-       
-======================================================================
+HTH,
