@@ -1,7 +1,7 @@
 From: aldot at uclibc.org <aldot@uclibc.org>
-Date: Thu, 28 Jun 2007 03:46:21 -0700 (PDT)
-Subject: [Buildroot] svn commit: trunk/buildroot/package/config:  lxdialog
-Message-ID: <20070628104621.58B1DA4606@busybox.net>
+Date: Thu, 28 Jun 2007 03:47:06 -0700 (PDT)
+Subject: [Buildroot] svn commit: trunk/buildroot:  package
+Message-ID: <20070628104706.7B17DA4633@busybox.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -9,57 +9,133 @@ Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
 Author: aldot
-Date: 2007-06-28 03:46:19 -0700 (Thu, 28 Jun 2007)
-New Revision: 18956
+Date: 2007-06-28 03:47:05 -0700 (Thu, 28 Jun 2007)
+New Revision: 18957
 
 Log:
-- pull kconfig from linux-2.6.21.5
+- adjust infrastructure for new kconfig
 
-
-Added:
-   trunk/buildroot/package/config/Makefile.kconfig
-   trunk/buildroot/package/config/POTFILES.in
-   trunk/buildroot/package/config/README.buildroot2
-   trunk/buildroot/package/config/gconf.c
-   trunk/buildroot/package/config/gconf.glade
-   trunk/buildroot/package/config/images.c
-   trunk/buildroot/package/config/kconfig-to-buildroot2.patch
-   trunk/buildroot/package/config/kconfig_load.c
-   trunk/buildroot/package/config/kxgettext.c
-   trunk/buildroot/package/config/lxdialog/check-lxdialog.sh
-   trunk/buildroot/package/config/qconf.cc
-   trunk/buildroot/package/config/qconf.h
-   trunk/buildroot/package/config/zconf.gperf
-   trunk/buildroot/package/config/zconf.hash.c_shipped
 
 Modified:
-   trunk/buildroot/package/config/Makefile
-   trunk/buildroot/package/config/conf.c
-   trunk/buildroot/package/config/confdata.c
-   trunk/buildroot/package/config/expr.c
-   trunk/buildroot/package/config/expr.h
-   trunk/buildroot/package/config/lex.zconf.c_shipped
-   trunk/buildroot/package/config/lkc.h
-   trunk/buildroot/package/config/lkc_proto.h
-   trunk/buildroot/package/config/lxdialog/checklist.c
-   trunk/buildroot/package/config/lxdialog/dialog.h
-   trunk/buildroot/package/config/lxdialog/inputbox.c
-   trunk/buildroot/package/config/lxdialog/menubox.c
-   trunk/buildroot/package/config/lxdialog/textbox.c
-   trunk/buildroot/package/config/lxdialog/util.c
-   trunk/buildroot/package/config/lxdialog/yesno.c
-   trunk/buildroot/package/config/mconf.c
-   trunk/buildroot/package/config/menu.c
-   trunk/buildroot/package/config/symbol.c
-   trunk/buildroot/package/config/util.c
-   trunk/buildroot/package/config/zconf.l
-   trunk/buildroot/package/config/zconf.tab.c_shipped
-   trunk/buildroot/package/config/zconf.y
+   trunk/buildroot/Makefile
+   trunk/buildroot/package/Makefile.in
 
 
 Changeset:
+Modified: trunk/buildroot/Makefile
+===================================================================
+--- trunk/buildroot/Makefile	2007-06-28 10:46:19 UTC (rev 18956)
++++ trunk/buildroot/Makefile	2007-06-28 10:47:05 UTC (rev 18957)
+@@ -37,6 +37,58 @@
+ -include $(TOPDIR).config
+ endif
+ 
++# To put more focus on warnings, be less verbose as default
++# Use 'make V=1' to see the full commands
++ifdef V
++  ifeq ("$(origin V)", "command line")
++    KBUILD_VERBOSE = $(V)
++  endif
++endif
++ifndef KBUILD_VERBOSE
++  KBUILD_VERBOSE = 0
++endif
++
++ifeq ($(KBUILD_VERBOSE),1)
++  quiet =
++  Q =
++else
++  quiet=quiet_
++  Q = @
++endif
++
++CONFIG_SHELL := $(shell if [ -x "$$BASH" ]; then echo $$BASH; \
++	else if [ -x /bin/bash ]; then echo /bin/bash; \
++	else echo sh; fi ; fi)
++
++export CONFIG_SHELL quiet Q KBUILD_VERBOSE
++
++ifndef HOSTAR
++HOSTAR:=ar
++endif
++ifndef HOSTAS
++HOSTAS:=as
++endif
++ifndef HOSTCC
++HOSTCC:=gcc
++else
++endif
++ifndef HOSTCXX
++HOSTCXX:=g++
++endif
++ifndef HOSTLD
++HOSTLD:=ld
++endif
++HOSTAR:=$(shell $(CONFIG_SHELL) which $(HOSTAR) || type -p $(HOSTAR) || echo ar)
++HOSTAS:=$(shell $(CONFIG_SHELL) which $(HOSTAS) || type -p $(HOSTAS) || echo as)
++HOSTCC:=$(shell $(CONFIG_SHELL) which $(HOSTCC) || type -p $(HOSTCC) || echo gcc)
++HOSTCXX:=$(shell $(CONFIG_SHELL) which $(HOSTCXX) || type -p $(HOSTCXX) || echo g++)
++HOSTLD:=$(shell $(CONFIG_SHELL) which $(HOSTLD) || type -p $(HOSTLD) || echo ld)
++ifndef CFLAGS_FOR_BUILD
++CFLAGS_FOR_BUILD:="-g -O2"
++endif
++export HOSTAR HOSTAS HOSTCC HOSTCXX HOSTLD
++
++
+ ifeq ($(strip $(BR2_HAVE_DOT_CONFIG)),y)
+ 
+ # cc-option
+@@ -212,12 +264,14 @@
+ # ---------------------------------------------------------------------------
+ 
+ $(CONFIG)/conf:
+-	$(MAKE) -C $(CONFIG) conf
++	$(MAKE) CC="$(HOSTCC)" CFLAGS=$(CFLAGS_FOR_BUILD) MAKECMDGOALS="$(MAKECMDGOALS)" \
++		-C $(CONFIG) conf
+ 	- at if [ ! -f .config ] ; then \
+ 		cp $(CONFIG_DEFCONFIG) .config; \
+ 	fi
+ $(CONFIG)/mconf:
+-	$(MAKE) -C $(CONFIG) ncurses conf mconf
++	$(MAKE) CC="$(HOSTCC)" CFLAGS=$(CFLAGS_FOR_BUILD) MAKECMDGOALS="$(MAKECMDGOALS)" \
++		-C $(CONFIG) conf mconf
+ 	- at if [ ! -f .config ] ; then \
+ 		cp $(CONFIG_DEFCONFIG) .config; \
+ 	fi
 
-Sorry, the patch is too large to include (18385 lines).
-Please use ViewCVS to see it!
-
-http://uclibc.org/cgi-bin/viewcvs.cgi?view=rev&root=svn&rev=18956
+Modified: trunk/buildroot/package/Makefile.in
+===================================================================
+--- trunk/buildroot/package/Makefile.in	2007-06-28 10:46:19 UTC (rev 18956)
++++ trunk/buildroot/package/Makefile.in	2007-06-28 10:47:05 UTC (rev 18957)
+@@ -48,31 +48,7 @@
+ endif
+ #########################################################################
+ 
+-ifndef HOSTAR
+-HOSTAR:=ar
+-endif
+-ifndef HOSTAS
+-HOSTAS:=as
+-endif
+-ifndef HOSTCC
+-HOSTCC:=gcc
+-endif
+-ifndef HOSTCXX
+-HOSTCXX:=g++
+-endif
+-ifndef HOSTLD
+-HOSTLD:=ld
+-endif
+-HOSTAR:=$(shell which $(HOSTAR) || type -p $(HOSTAR) || echo ar)
+-HOSTAS:=$(shell which $(HOSTAS) || type -p $(HOSTAS) || echo as)
+-HOSTCC:=$(shell which $(HOSTCC) || type -p $(HOSTCC) || echo gcc)
+-HOSTCXX:=$(shell which $(HOSTCXX) || type -p $(HOSTCXX) || echo g++)
+-HOSTLD:=$(shell which $(HOSTLD) || type -p $(HOSTLD) || echo ld)
+-ifndef CFLAGS_FOR_BUILD
+-CFLAGS_FOR_BUILD:="-g -O2"
+-endif
+ 
+-
+ BASE_DIR:=$(shell pwd)
+ 
+ TOPDIR_PREFIX:=$(strip $(subst ",, $(BR2_TOPDIR_PREFIX)))_
