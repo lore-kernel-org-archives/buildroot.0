@@ -1,56 +1,41 @@
-From: Paul Kavan <pkavan@gmail.com>
-Date: Thu, 28 Jun 2007 14:46:51 -0500
-Subject: [Buildroot] ALSA Build Crashes in buildroot
-Message-ID: <61c0054e0706281246t1abb96f3xa9687f9c65d2d24f@mail.gmail.com>
+From: Rick Foos <rick@synchromeshcomputing.com>
+Date: Thu, 28 Jun 2007 15:48:00 -0500
+Subject: [Buildroot] svn commit: trunk/buildroot/package/config: lxdialog
+References: <20070628130622.5F0F4A461D@busybox.net>
+Message-ID: <08be01c7b9c5$9dedc610$6e02a8c0@k2>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello all:
+I was also updating config from earlier. Most of it was the same, but when I 
+merged yours into my changes, a few things came up to pass along.
 
-Trying to include the alsa libs and utils in buildroot. However, buildroot
-terminates make with:
+The patch is based on the revision 18967
 
-.
-.
-.
-../src/.libs/libasound.so: undefined reference to `snd_hwdep_info_get_name'
-../src/.libs/libasound.so: undefined reference to
-`snd_rawmidi_info_get_name'
-../src/.libs/libasound.so: undefined reference to `snd_rawmidi_info_sizeof'
-../src/.libs/libasound.so: undefined reference to
-`snd_rawmidi_info_set_device'
-../src/.libs/libasound.so: undefined reference to
-`snd_hwdep_info_set_device'
-../src/.libs/libasound.so: undefined reference to `snd_hwdep_info_sizeof'
-../src/.libs/libasound.so: undefined reference to
-`snd_rawmidi_info_set_stream'
-collect2: ld returned 1 exit status
-make[2]: *** [aserver] Error 1
-make[2]: Leaving directory
-`/home/grhuser/Linux_Builds/buildroot/build_arm/alsa-lib-1.0.14/aserver'
-make[1]: *** [all-recursive] Error 1
-make[1]: Leaving directory
-`/home/grhuser/Linux_Builds/buildroot/build_arm/alsa-lib-1.0.14'
-make: *** [/home/grhuser/Linux_Builds/buildroot/build_arm/alsa-lib-1.0.14/.compiled]
-Error 2
+The lxdialog shell script is added as non-executable. so adding 
+svn:executable to the lxdialog shell would be good too.
 
-Any clues as to why it is doing this?
+util.c - .kconfig.d should be .config.cmd
+lkc.h - PACKAGE should be buildroot not linux.
+lex.zconf.c - line 3 path doesn't exist (scripts/kconfig)
+Makefile - fix standalone build, and distclean for mconf
+Makefile.kconfig - add else rules to LKC_GENPARSER to regenerate from 
+shipped versions.
 
-Thanks.
+Rick
 
-Paul
+----- Original Message ----- 
+From: <aldot@uclibc.org>
+To: <buildroot@uclibc.org>
+Sent: Thursday, June 28, 2007 8:06 AM
+Subject: [Buildroot] svn commit: trunk/buildroot/package/config: lxdialog
 
--- 
-***************************************
-Paul David Kavan
-Project Engineer
-GRH Electronics, Inc.
-402-734-4900
-pkavan at gmail.com
-***************************************
 -------------- next part --------------
-An HTML attachment was scrubbed...
-URL: http://busybox.net/lists/buildroot/attachments/20070628/15b1934d/attachment.htm 
+A non-text attachment was scrubbed...
+Name: config-fixes.patch
+Type: application/octet-stream
+Size: 2732 bytes
+Desc: not available
+Url : http://busybox.net/lists/buildroot/attachments/20070628/85f53967/attachment.obj 
