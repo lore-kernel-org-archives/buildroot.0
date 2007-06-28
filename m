@@ -1,39 +1,84 @@
-From: aldot at uclibc.org <aldot@uclibc.org>
-Date: Wed, 27 Jun 2007 14:07:10 -0700 (PDT)
-Subject: [Buildroot] svn commit: trunk/buildroot/package/busybox
-Message-ID: <20070627210710.8578FA608D@busybox.net>
+From: harshal shete <harshalshete@gmail.com>
+Date: Thu, 28 Jun 2007 10:41:50 +0400
+Subject: [Buildroot] Compilation of buildroot on cygwin gives problem
+Message-ID: <b85b23590706272341n15bc030bjccfe446f4049215@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Author: aldot
-Date: 2007-06-27 14:07:09 -0700 (Wed, 27 Jun 2007)
-New Revision: 18954
+Hi group,
 
-Log:
-- use BR2_INET_IPV6
+This is my first mail so please forgive me if i am unknowingly broke some
+rules.
+actually i am trying to compile buildroot on windows with the help of
+cygwin.
 
+i have deselected rootfs and busybox options from make menuconfig.
+and selected appropriate processor (arm) and variant (arm920t).
+gcc and gdb (host) version is also selected.
 
-Modified:
-   trunk/buildroot/package/busybox/busybox.mk
+uclibc option is selected as daily snapshot but while compilation i get the
+error
++ make -C /cygdrive/e/buildroot/buildroot/toolchain_build_arm/uClibc
+PREFIX=/cygdrive/e/buildroot/buildroot/toolchain_build_arm/uClibc_dev/
+DEVEL_PREFIX=/usr/
+RUNTIME_PREFIX=/cygdrive/e/buildroot/buildroot/toolchain_build_arm/uClibc_dev/
+HOSTCC=gcc pregen install_dev
+/bin/sh:
+/cygdrive/e/buildroot/buildroot/build_arm/staging_dir/bin/arm-linux-uclibc-gcc:
+No such file or directory
+make[1]:
+/cygdrive/e/buildroot/buildroot/build_arm/staging_dir/bin/arm-linux-uclibc-gcc:
+Command not found
+make[1]: Entering directory
+`/cygdrive/e/buildroot/buildroot/toolchain_build_arm/uClibc'
+make[1]:
+/cygdrive/e/buildroot/buildroot/build_arm/staging_dir/bin/arm-linux-uclibc-gcc:
+Command not found
+make[1]: Entering directory
+`/cygdrive/e/buildroot/buildroot/toolchain_build_arm/uClibc'
+/bin/sh:
+/cygdrive/e/buildroot/buildroot/build_arm/staging_dir/bin/arm-linux-uclibc-gcc:
+No such file or directory
+make[2]:
+/cygdrive/e/buildroot/buildroot/build_arm/staging_dir/bin/arm-linux-uclibc-gcc:
+Command not found
+make[2]:
+/cygdrive/e/buildroot/buildroot/build_arm/staging_dir/bin/arm-linux-uclibc-gcc:
+Command not found
+/bin/sh:
+/cygdrive/e/buildroot/buildroot/build_arm/staging_dir/bin/arm-linux-uclibc-gcc:
+No such file or directory
+make[2]:
+/cygdrive/e/buildroot/buildroot/build_arm/staging_dir/bin/arm-linux-uclibc-gcc:
+Command not found
+make[2]:
+/cygdrive/e/buildroot/buildroot/build_arm/staging_dir/bin/arm-linux-uclibc-gcc:
+Command not found
+conf.o:conf.c:(.text+0xb2): undefined reference to `_libintl_gettext'
+conf.o:conf.c:(.text+0xc6): undefined reference to `_libintl_gettext'
+conf.o:conf.c:(.text+0xda): undefined reference to `_libintl_gettext'
+conf.o:conf.c:(.text+0xf2c): undefined reference to `_libintl_gettext'
+conf.o:conf.c:(.text+0x10c5): undefined reference to `_libintl_gettext'
+conf.o:conf.c:(.text+0x116f): more undefined references to
+`_libintl_gettext' follow
+collect2: ld returned 1 exit status
+make[2]: *** [conf] Error 1
+make[1]: *** [extra/config/conf] Error 2
+make: ***
+[/cygdrive/e/buildroot/buildroot/toolchain_build_arm/uClibc/.configured]
+Error 2
 
+So if anyone has faced the same situation then please tell me the
+workaround..
+do i need to change some Makefiles?
+because i tink it is demanding for arm-linux-uclibc-gcc before creating it.
+Please help me out of this.
 
-Changeset:
-Modified: trunk/buildroot/package/busybox/busybox.mk
-===================================================================
---- trunk/buildroot/package/busybox/busybox.mk	2007-06-27 21:03:42 UTC (rev 18953)
-+++ trunk/buildroot/package/busybox/busybox.mk	2007-06-27 21:07:09 UTC (rev 18954)
-@@ -74,6 +74,11 @@
- 	$(SED) "s/^.*CONFIG_LFS.*/CONFIG_LFS=n/;" $(BUSYBOX_DIR)/.config
- 	$(SED) "s/^.*FDISK_SUPPORT_LARGE_DISKS.*/FDISK_SUPPORT_LARGE_DISKS=n/;" $(BUSYBOX_DIR)/.config
- endif
-+ifeq ($(BR2_INET_IPV6),y)
-+	$(SED) "s/^.*CONFIG_FEATURE_IPV6.*/CONFIG_FEATURE_IPV6=y/;" $(BUSYBOX_DIR)/.config
-+else
-+	$(SED) "s/^.*CONFIG_FEATURE_IPV6.*/CONFIG_FEATURE_IPV6=n/;" $(BUSYBOX_DIR)/.config
-+endif
- ifeq ($(BR2_PACKAGE_BUSYBOX_SKELETON),y)
- 	# force mdev on
- 	$(SED) "s/^.*CONFIG_MDEV.*/CONFIG_MDEV=y/" $(BUSYBOX_DIR)/.config
+Thanks and regards
+Harshal shete
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: http://busybox.net/lists/buildroot/attachments/20070628/590b50b7/attachment.htm 
