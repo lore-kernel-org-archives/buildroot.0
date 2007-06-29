@@ -1,51 +1,45 @@
-From: Bernhard Fischer <rep.dot.nop@gmail.com>
-Date: Fri, 29 Jun 2007 10:01:15 +0200
-Subject: [Buildroot] kconfig [was: Re: svn commit:
-	trunk/buildroot/package/config: lxdialog]
-In-Reply-To: <08be01c7b9c5$9dedc610$6e02a8c0@k2>
-References: <20070628130622.5F0F4A461D@busybox.net>
-	<08be01c7b9c5$9dedc610$6e02a8c0@k2>
-Message-ID: <20070629080115.GC8033@aon.at>
+From: aldot at uclibc.org <aldot@uclibc.org>
+Date: Fri, 29 Jun 2007 01:18:14 -0700 (PDT)
+Subject: [Buildroot] svn commit: trunk/buildroot/package/zlib
+Message-ID: <20070629081814.4D6A8A5E1C@busybox.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Thu, Jun 28, 2007 at 03:48:00PM -0500, Rick Foos wrote:
->I was also updating config from earlier. Most of it was the same, but when 
->I merged yours into my changes, a few things came up to pass along.
->
->The patch is based on the revision 18967
->
->The lxdialog shell script is added as non-executable. so adding 
->svn:executable to the lxdialog shell would be good too.
+Author: aldot
+Date: 2007-06-29 01:18:13 -0700 (Fri, 29 Jun 2007)
+New Revision: 18969
 
-Since we call it via $(shell $(CONFIG_SHELL) ...) it doesn't have to be
-executable. Since it is not executable in the kernel it is better not to
-rely on it being executable to avoid surprises if it would be updated
-later on.
+Log:
+- change download site to sourceforge
 
->
->util.c - .kconfig.d should be .config.cmd
 
-What does this solve?
+Modified:
+   trunk/buildroot/package/zlib/zlib.mk
 
->lkc.h - PACKAGE should be buildroot not linux.
 
-ok.
-
->lex.zconf.c - line 3 path doesn't exist (scripts/kconfig)
-
-I don't understand. Please elaborate.
-
->Makefile - fix standalone build, and distclean for mconf
-
-ok.
-
->Makefile.kconfig - add else rules to LKC_GENPARSER to regenerate from 
-
-What does this solve? I do not want to touch this file. If the kernel
-folks accept such a patch, we can pull it from them.
-
->shipped versions.
+Changeset:
+Modified: trunk/buildroot/package/zlib/zlib.mk
+===================================================================
+--- trunk/buildroot/package/zlib/zlib.mk	2007-06-28 22:38:48 UTC (rev 18968)
++++ trunk/buildroot/package/zlib/zlib.mk	2007-06-29 08:18:13 UTC (rev 18969)
+@@ -6,7 +6,7 @@
+ ZLIB_VER:=1.2.3
+ ZLIB_SOURCE:=zlib-$(ZLIB_VER).tar.bz2
+ ZLIB_CAT:=$(BZCAT)
+-ZLIB_SITE:=http://www.zlib.net/
++ZLIB_SITE:=http://$(BR2_SOURCEFORGE_MIRROR).dl.sourceforge.net/sourceforge/libpng
+ ZLIB_DIR:=$(BUILD_DIR)/zlib-$(ZLIB_VER)
+ ZLIB_CFLAGS:=$(TARGET_CFLAGS) -fPIC
+ ifeq ($(BR2_LARGEFILE),y)
+@@ -33,7 +33,7 @@
+ 		--exec-prefix=$(STAGING_DIR)/usr/bin \
+ 		--libdir=$(STAGING_DIR)/usr/lib \
+ 		--includedir=$(STAGING_DIR)/usr/include \
+-	);
++	)
+ 	touch $@
+ 
+ $(ZLIB_DIR)/libz.so.$(ZLIB_VER): $(ZLIB_DIR)/.configured
