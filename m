@@ -1,41 +1,40 @@
-From: Ben Dooks <ben@fluff.org>
-Date: Fri, 29 Jun 2007 14:53:55 +0100
-Subject: [Buildroot] ARM EABI builds
-In-Reply-To: <46844AEC.7020007@gmail.com>
-References: <20070628103443.GT31791@trinity.fluff.org>
-	<019801c7b9d6$ba07ed10$ebba820a@atmel.com>
-	<46844AEC.7020007@gmail.com>
-Message-ID: <20070629135355.GE3856@trinity.fluff.org>
+From: Ivan Kuten <ivan.kuten@promwad.com>
+Date: Fri, 29 Jun 2007 17:28:15 +0300
+Subject: [Buildroot] build fails with current uclibc
+In-Reply-To: <20070629122556.5f4c5c3a@newbox>
+References: <20070628212634.51a2fb0d@newbox> <20070628223106.GH4096@aon.at>
+	<001501c7ba26$7f25dd60$6614a8c0@softalap>
+	<20070629122556.5f4c5c3a@newbox>
+Message-ID: <20070629172815.0a92e6cf@newbox>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Thu, Jun 28, 2007 at 04:57:32PM -0700, Tom wrote:
-> Ulf Samuelsson wrote:
-> >>The problem with buildroot is that it gives you a choice of ARM cpus.
-> >>If you select ARM920T, then you have an expectation of being able
-> >>to run the binaries produced on an ARM920T, which currently if EABI
-> >>is also selected is impossible.
-> >>
-> >
-> >So should we not just make EABI depend on !ARM920T
-> >
+On Fri, 29 Jun 2007 12:25:56 +0300
+Ivan Kuten wrote:
 
-1) EABI will work fine on ARM920T (and other ARMv4) targets 
-2) Currently, until other patches, a number of the available gcc choices
-   do not currently build a compiler, let alone make it to the application
-   stage.
-3) The proposed fix in 1406 attempts to ensure that down the road we don't
-   fall into this trap again.
- 
-> I would say no, because this combination works for buildroot. (However, 
-> if you _only_ select ARM920T and EABI and don't take care of the CPU 
-> options, it will fail.)
+> > >
+> 
+> Wchar and locale uCLibc build is correct - i just enabled wchar&locale in uclibc config 
+> but not in BR2_ENABLE_LOCALE. Sorry for confusion.
+> 
 
--- 
-Ben
+>Hi,
+>
+>The problem is in *iconv* binary for target, wchar support seems to be ok.
+>For successful compilation, remove iconv from makefile. I spend 1 day 
+>digging in this problem and finaly decide to disable iconv in the target 
+>platform.
+>Attached is patch that must be copied into buildroot/toolchain/uClibc/ dir.
 
-Q:      What's a light-year?
-A:      One-third less calories than a regular year.
+>BR,
+>Assen Stoyanov
+
+Again, I messed with ucLibc install - if doing from clean install build root this problem appears
+and indeed Assen's patch fixes behaviour. 
+
+However doing make from uclibc dir and uclibc .config I can make compile successfully - so it's more buildroot issue that of uclibc.
+
+BR, Ivan
