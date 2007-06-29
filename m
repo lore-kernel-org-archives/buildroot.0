@@ -1,50 +1,47 @@
-From: softa at ttechgroup.com <softa@ttechgroup.com>
-Date: Fri, 29 Jun 2007 11:32:00 +0300
-Subject: [Buildroot] x86_64 , cannot find /lib/libc.so.0
-References: <1497cb6d0706290020n269e359av8682c69fb22b3e79@mail.gmail.com>
-	<20070629082320.GE8033@aon.at>
-Message-ID: <005501c7ba27$f69e7860$6614a8c0@softalap>
+From: Ivan Kuten <ivan.kuten@promwad.com>
+Date: Fri, 29 Jun 2007 12:25:56 +0300
+Subject: [Buildroot] build fails with current uclibc
+In-Reply-To: <001501c7ba26$7f25dd60$6614a8c0@softalap>
+References: <20070628212634.51a2fb0d@newbox> <20070628223106.GH4096@aon.at>
+	<001501c7ba26$7f25dd60$6614a8c0@softalap>
+Message-ID: <20070629122556.5f4c5c3a@newbox>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi,
+On Fri, 29 Jun 2007 11:21:30 +0300
+softa at ttechgroup.com wrote:
 
-i have the same problem, if someone gives to me short instructions what/how 
-to do, i will try to make it.
+> >>
+> >>BR2_arm=y
+> >>BR2_arm920t=y
+> >>BR2_ARM_TYPE="ARM920T"
+> >>BR2_ARM_OABI=y
+> >>BR2_KERNEL_HEADERS_2_6_21=y
+> >>BR2_DEFAULT_KERNEL_HEADERS="2.6.21.5"
+> >>BR2_UCLIBC_VERSION_SNAPSHOT=y
+> >>BR2_USE_UCLIBC_SNAPSHOT="snapshot"
+> >>BR2_UCLIBC_CONFIG="toolchain/uClibc/uClibc-0.9.29.config"
+> >>BR2_PTHREADS_OLD=y
+> >>BR2_GCC_VERSION="3.4.6"
+> >>
+> >>make[1]: Entering directory `buildroot/toolchain_build_arm/uClibc'
+> >>../libc/misc/wchar/wchar.c:170: error: syntax error before 
+> >>"attribute_hidden"
+> >>../libc/misc/wchar/wchar.c:170: warning: data definition has no type or 
+> >>storage class
+> >>../libc/misc/wchar/wchar.c:173: error: syntax error before 
+> >>"attribute_hidden"
+> >>../libc/misc/wchar/wchar.c:173: warning: data definition has no type or 
+> >>storage class
+> >>make[2]: *** [../utils/iconv] Error 1
+> >>make[1]: *** [utils] ?????? 2
+> >
 
-Assen
+Wchar and locale uCLibc build is correct - i just enabled wchar&locale in uclibc config 
+but not in BR2_ENABLE_LOCALE. Sorry for confusion.
 
------ Original Message ----- 
-From: "Bernhard Fischer" <rep.dot.nop@gmail.com>
-To: "Lee JJ" <jengjr@gmail.com>
-Cc: <buildroot@uclibc.org>
-Sent: Friday, June 29, 2007 11:23 AM
-Subject: Re: [Buildroot] x86_64 , cannot find /lib/libc.so.0
-
-
-> On Fri, Jun 29, 2007 at 03:20:35PM +0800, Lee JJ wrote:
->>/root/buildroot/build_x86_64/staging_dir/usr/x86_64-linux-uclibc/bin/ld:
->>skipping incompatible /root/buildroot/build_x86_64/s
->>taging_dir/lib/libc.so.0 when searching for /lib/libc.so.0
->>/root/buildroot/build_x86_64/staging_dir/usr/x86_64-linux-uclibc/bin/ld:
->>cannot
->>find /lib/libc.so.0 inside /root/buildroot/bu
->>ild_x86_64/staging_dir
->>collect2: ld returned 1 exit status
->>make[4]: *** [32/libgcc_s.so] Error 1
->>
->># ls build_x86_64/staging_dir/lib/libc.so.0 -lt
->>lrwxrwxrwx 1 root root 19 Jun 28 15:11
->>build_x86_64/staging_dir/lib/libc.so.0 -> libuClibc-0.9.29.so
->>
->>But the file do exist !??
-> 'skipping incompatible' != 'ENOENT'
->
-> Patches to fix multilib support are welcome.
-> _______________________________________________
-> buildroot mailing list
-> buildroot at uclibc.org
-> http://busybox.net/mailman/listinfo/buildroot 
+BR,
+Ivan
