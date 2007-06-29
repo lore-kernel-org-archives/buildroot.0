@@ -1,8 +1,8 @@
 From: bugs at busybox.net <bugs@busybox.net>
-Date: Fri, 29 Jun 2007 04:20:29 -0700
-Subject: [Buildroot] [buildroot 0001410]: uclibc.mk produces .config that
-	confuses uclibc's configuration system
-Message-ID: <6834cb00285c7f842cf86fc7cfb042e7@bugs.busybox.net>
+Date: Fri, 29 Jun 2007 04:30:19 -0700
+Subject: [Buildroot] [buildroot 0001357]: EABI on ARM compiled buildroot
+	doesn't work
+Message-ID: <56fd821e621dd4f03893be58ea2d78e0@bugs.busybox.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -12,71 +12,118 @@ To: buildroot@busybox.net
 
 A NOTE has been added to this issue. 
 ====================================================================== 
-http://busybox.net/bugs/view.php?id=1410 
+http://busybox.net/bugs/view.php?id=1357 
 ====================================================================== 
-Reported By:                bjdooks
+Reported By:                marvin
 Assigned To:                buildroot
 ====================================================================== 
 Project:                    buildroot
-Issue ID:                   1410
+Issue ID:                   1357
 Category:                   Architecture Specific
 Reproducibility:            always
-Severity:                   major
+Severity:                   block
 Priority:                   normal
 Status:                     assigned
 ====================================================================== 
-Date Submitted:             06-29-2007 04:18 PDT
-Last Modified:              06-29-2007 04:20 PDT
+Date Submitted:             05-18-2007 14:56 PDT
+Last Modified:              06-29-2007 04:30 PDT
 ====================================================================== 
-Summary:                    uclibc.mk produces .config that confuses uclibc's
-configuration system
+Summary:                    EABI on ARM compiled buildroot doesn't work
 Description: 
-If building for ARM, and providing an configuration from a file in a target
-sub-directory, the uclibc.mk file incorrectly re-writes the .config for
-building uclibc, causing warnings and an incorrect .config
-
-The problem stems from unsetting CONFIG_<x> options, then re-specifying
-them as CONFIG_<x>=y later in the file. The current configuration system
-(make oldconfig) seems to take the first occurence as the proper setting.
-This means that options that should be set end up being unset as 'make
-oldconfig' removes any further refrences to CONFIG_<x> from the file.
-
-For example, if you specify the buildroot config as CONFIG_ARM920T=y, then
-the uclibc.mk removes that turning it into # CONFIG_ARM920T is unset and
-then adds CONFIG_ARM920T=y to the end of the file. Then 'make oldconfig'
-is run, and CONFIG_ARM920T=y is deleted, thus causing CONFIG_GENERIC_ARM=y
-to be placed in the config file.
-
-The warnings produced by 'make oldconfig' are:
-config:209:warning: trying to reassign symbol CONFIG_ARM920T
-.config:210:warning: trying to reassign symbol CONFIG_ARM_OABI
-.config:211:warning: trying to reassign symbol CONFIG_ARM_EABI
-
-Also note, that the EABI/OABI are also being warned about, so are
-also fixed.
-
-The simple fix is to change the sed expressions unsetting these options to
-simply deleting them from the file.
+I compile latest buildroot with target ARM and EABI al without problems.
+But when I boot to new root all programs crash with Illegal instruction. I
+use default config only chose generic ARM and EABI.
 ====================================================================== 
 
 ---------------------------------------------------------------------- 
- bjdooks - 06-29-07 04:20  
+ bernhardf - 05-18-07 15:15  
 ---------------------------------------------------------------------- 
-Uploaded the original configuration for uclibc, and the one produced by
-oldconfig.  as well as the overall buildroot config. 
+Without *any* information, this is not a valid bug-report. Will close
+unless you provide details. 
+
+---------------------------------------------------------------------- 
+ marvin - 05-18-07 15:51  
+---------------------------------------------------------------------- 
+Please tell me which information you need I spend time to gogling to solve
+this but nothing helps. Do you need config ? Or information about hw ? 
+
+---------------------------------------------------------------------- 
+ repvik - 05-19-07 03:27  
+---------------------------------------------------------------------- 
+marvin... Try reading http://www.catb.org/~esr/faqs/smart-questions.html
+first. 
+
+---------------------------------------------------------------------- 
+ rashbaugh - 05-19-07 07:01  
+---------------------------------------------------------------------- 
+When you build programs with an EABI toolchain, you must build your kernel
+with EABI enabled also, otherwise programs will crash.
+With EABI, program syscalls to the kernal use a different format and
+unless
+the kernel is prepared to accept this new format, syscalls will fail. 
+
+---------------------------------------------------------------------- 
+ marvin - 05-19-07 11:50  
+---------------------------------------------------------------------- 
+Yes I know it I compile kernel with EABI build in. I use
+buildroot-20070519.tar.bz2 kernel 2.6.18 for ARM my machine is Debian
+Etch.
+I use buildroot 2 years with ARM and OABI without problem. Only difference
+is that I in kernel switch to EABI and in buidroot too. And after this  it
+stop work.
+As HW I use TS-7250 (www.embeddedarm.com). I attach config of arm kernel.
+Config of buldroot. If you know that EABI with buildroot is working on ARM
+I stop 
+madden with this and try found my fault :-) 
+
+---------------------------------------------------------------------- 
+ rashbaugh - 05-19-07 12:28  
+---------------------------------------------------------------------- 
+The other thing EABI affecte is floating point. I see you are using HW
+floating point. The EP9302 processor on that board has something called
+'MaverickCrunch' as a floating point coprocessor. The cirrus website has a
+bunch of errata around the use of that unit (stuff that doesn't work). Is
+it compatible with EABI? You might check into that.
+Also, where in the code do your applications fail? Have you debugged it at
+all? What instruction types are failing? 
+
+---------------------------------------------------------------------- 
+ marvin - 05-19-07 12:44  
+---------------------------------------------------------------------- 
+Thanks good note I try disable Maverick Crunch this may be good way. I
+didn't backtrace crash because I could not  boot to EABI build root. We
+can stop talking about this  problem  I try disable MaverickCruch and let
+you know. Thanks for help. 
+
+---------------------------------------------------------------------- 
+ marvin - 05-29-07 04:59  
+---------------------------------------------------------------------- 
+I try disable Maverick Cruch in kernel and still all crash with illegal
+instruction.
+Dan 
+
+---------------------------------------------------------------------- 
+ bjdooks - 06-29-07 04:30  
+---------------------------------------------------------------------- 
+See bug 1406 at http://bugs.busybox.net/view.php?id=1406 
 
 Issue History 
 Date Modified   Username       Field                    Change               
 ====================================================================== 
-06-29-07 04:18  bjdooks        New Issue                                    
-06-29-07 04:18  bjdooks        Status                   new => assigned     
-06-29-07 04:18  bjdooks        Assigned To               => buildroot       
-06-29-07 04:18  bjdooks        File Added: uclibc-arm-config.patch              
-     
-06-29-07 04:19  bjdooks        File Added: uClibc-original.config               
-    
-06-29-07 04:19  bjdooks        File Added: uClibc-oldconfiged.config            
-       
-06-29-07 04:19  bjdooks        File Added: buildropt.config                    
-06-29-07 04:20  bjdooks        Note Added: 0002532                          
+05-18-07 14:56  marvin         New Issue                                    
+05-18-07 14:56  marvin         Status                   new => assigned     
+05-18-07 14:56  marvin         Assigned To               => buildroot       
+05-18-07 15:15  bernhardf      Note Added: 0002375                          
+05-18-07 15:51  marvin         Note Added: 0002377                          
+05-19-07 03:27  repvik         Note Added: 0002379                          
+05-19-07 07:01  rashbaugh      Note Added: 0002380                          
+05-19-07 11:50  marvin         Note Added: 0002381                          
+05-19-07 11:51  marvin         File Added: config_buildroot_EABI                
+   
+05-19-07 11:52  marvin         File Added: config_kernel_eabi                   
+
+05-19-07 12:28  rashbaugh      Note Added: 0002382                          
+05-19-07 12:44  marvin         Note Added: 0002383                          
+05-29-07 04:59  marvin         Note Added: 0002411                          
+06-29-07 04:30  bjdooks        Note Added: 0002533                          
 ======================================================================
