@@ -1,31 +1,27 @@
-From: Bernhard Fischer <rep.dot.nop@gmail.com>
-Date: Fri, 29 Jun 2007 09:16:21 +0200
-Subject: [Buildroot] ARM EABI builds
-In-Reply-To: <20070629014206.GL24520@foogod.com>
-References: <002a01c7b9be$22a79000$7100a8c0@SDW> <20070628230131.GJ4096@aon.at>
-	<20070629014206.GL24520@foogod.com>
-Message-ID: <20070629071621.GA8033@aon.at>
+From: Lee JJ <jengjr@gmail.com>
+Date: Fri, 29 Jun 2007 15:20:35 +0800
+Subject: [Buildroot] x86_64 , cannot find /lib/libc.so.0
+Message-ID: <1497cb6d0706290020n269e359av8682c69fb22b3e79@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Thu, Jun 28, 2007 at 06:42:06PM -0700, Alex Stewart wrote:
->Umm, I don't really know anything about Buildroot on ARM or EABI, but reading
->through this discussion I did feel compelled to point out one thing I noticed:
->
->On Fri, Jun 29, 2007 at 01:01:31AM +0200, Bernhard Fischer wrote:
->> >work for libc, have you tried? (PS: Even if it did, bug #1406 is 
+/root/buildroot/build_x86_64/staging_dir/usr/x86_64-linux-uclibc/bin/ld:
+skipping incompatible /root/buildroot/build_x86_64/s
+taging_dir/lib/libc.so.0 when searching for /lib/libc.so.0
+/root/buildroot/build_x86_64/staging_dir/usr/x86_64-linux-uclibc/bin/ld: cannot
+find /lib/libc.so.0 inside /root/buildroot/bu
+ild_x86_64/staging_dir
+collect2: ld returned 1 exit status
+make[4]: *** [32/libgcc_s.so] Error 1
 
->>  Summary  	 0001403: printf and anything using vfprintf() hangs
+# ls build_x86_64/staging_dir/lib/libc.so.0 -lt
+lrwxrwxrwx 1 root root 19 Jun 28 15:11
+build_x86_64/staging_dir/lib/libc.so.0 -> libuClibc-0.9.29.so
 
->As noted in the "Summary" line, the bug you quoted is 1403, not 1406.
-
-my bad.
-
->Bug 1406 does appear to have a clear description of the issue and a proposed
->patch to fix it, so while I can't comment on the merit of the patch contents,
->the bug report itself, at least, does not appear to be "completely crap"..
-
-Yes, that one is ok.
+But the file do exist !??
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: http://busybox.net/lists/buildroot/attachments/20070629/431fd99b/attachment.htm 
