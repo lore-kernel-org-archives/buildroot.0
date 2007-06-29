@@ -1,8 +1,8 @@
 From: bugs at busybox.net <bugs@busybox.net>
-Date: Fri, 29 Jun 2007 04:18:21 -0700
+Date: Fri, 29 Jun 2007 04:20:29 -0700
 Subject: [Buildroot] [buildroot 0001410]: uclibc.mk produces .config that
 	confuses uclibc's configuration system
-Message-ID: <d4e547cc265b99a2f4e744ca6187e362@bugs.busybox.net>
+Message-ID: <6834cb00285c7f842cf86fc7cfb042e7@bugs.busybox.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -10,7 +10,7 @@ Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
 
-The following issue has been SUBMITTED. 
+A NOTE has been added to this issue. 
 ====================================================================== 
 http://busybox.net/bugs/view.php?id=1410 
 ====================================================================== 
@@ -26,7 +26,7 @@ Priority:                   normal
 Status:                     assigned
 ====================================================================== 
 Date Submitted:             06-29-2007 04:18 PDT
-Last Modified:              06-29-2007 04:18 PDT
+Last Modified:              06-29-2007 04:20 PDT
 ====================================================================== 
 Summary:                    uclibc.mk produces .config that confuses uclibc's
 configuration system
@@ -59,6 +59,12 @@ The simple fix is to change the sed expressions unsetting these options to
 simply deleting them from the file.
 ====================================================================== 
 
+---------------------------------------------------------------------- 
+ bjdooks - 06-29-07 04:20  
+---------------------------------------------------------------------- 
+Uploaded the original configuration for uclibc, and the one produced by
+oldconfig.  as well as the overall buildroot config. 
+
 Issue History 
 Date Modified   Username       Field                    Change               
 ====================================================================== 
@@ -67,4 +73,10 @@ Date Modified   Username       Field                    Change
 06-29-07 04:18  bjdooks        Assigned To               => buildroot       
 06-29-07 04:18  bjdooks        File Added: uclibc-arm-config.patch              
      
+06-29-07 04:19  bjdooks        File Added: uClibc-original.config               
+    
+06-29-07 04:19  bjdooks        File Added: uClibc-oldconfiged.config            
+       
+06-29-07 04:19  bjdooks        File Added: buildropt.config                    
+06-29-07 04:20  bjdooks        Note Added: 0002532                          
 ======================================================================
