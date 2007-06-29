@@ -1,27 +1,39 @@
-From: Lee JJ <jengjr@gmail.com>
-Date: Fri, 29 Jun 2007 15:20:35 +0800
-Subject: [Buildroot] x86_64 , cannot find /lib/libc.so.0
-Message-ID: <1497cb6d0706290020n269e359av8682c69fb22b3e79@mail.gmail.com>
+From: Bernhard Fischer <rep.dot.nop@gmail.com>
+Date: Fri, 29 Jun 2007 09:46:45 +0200
+Subject: [Buildroot] syslinux.mk & bzip2 errors, modification
+In-Reply-To: <1497cb6d0706282337g19372f54t3275752462df147e@mail.gmail.com>
+References: <1497cb6d0706282337g19372f54t3275752462df147e@mail.gmail.com>
+Message-ID: <20070629074645.GB8033@aon.at>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-/root/buildroot/build_x86_64/staging_dir/usr/x86_64-linux-uclibc/bin/ld:
-skipping incompatible /root/buildroot/build_x86_64/s
-taging_dir/lib/libc.so.0 when searching for /lib/libc.so.0
-/root/buildroot/build_x86_64/staging_dir/usr/x86_64-linux-uclibc/bin/ld: cannot
-find /lib/libc.so.0 inside /root/buildroot/bu
-ild_x86_64/staging_dir
-collect2: ld returned 1 exit status
-make[4]: *** [32/libgcc_s.so] Error 1
+On Fri, Jun 29, 2007 at 02:37:18PM +0800, Lee JJ wrote:
+>Sorry , this may already appear somewhere else
+>PLS forgive to bother you
+>
+>1
+>buildroot/target/x86/syslinux/syslinux.mk
+>
+>SYSLINUX_SITE=http://www.kernel.org/pub/linux/utils/boot/syslinux/Old<---Old
+>now the web director change to "Old"
 
-# ls build_x86_64/staging_dir/lib/libc.so.0 -lt
-lrwxrwxrwx 1 root root 19 Jun 28 15:11
-build_x86_64/staging_dir/lib/libc.so.0 -> libuClibc-0.9.29.so
+Does version 3.51 work for you?
+>
+>2.
+>cp /root/buildroot/build_i686/bzip2-1.0.3/bzlib.h
+>/root/buildroot/build_i686/staging_dir/include/
+>cp: cannot create regular file
+>`/root/buildroot/build_i686/staging_dir/include/bzlib.h': No such file or
+>directory
+>
+>buildroot/build_i686/staging_dir/"include/" <--- do not know where is the
+>script error
+>have to create the "include" directory by hand
 
-But the file do exist !??
--------------- next part --------------
-An HTML attachment was scrubbed...
-URL: http://busybox.net/lists/buildroot/attachments/20070629/431fd99b/attachment.htm 
+This is most likely coming from old sources or an old build.
+svn up
+rm -rf build_* toolchain_* && make
+and it should be fixed.
