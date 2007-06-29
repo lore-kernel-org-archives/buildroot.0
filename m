@@ -1,110 +1,34 @@
-From: michael.miller at prga.com <michael.miller@prga.com>
-Date: Fri, 29 Jun 2007 00:16:14 -0500
-Subject: [Buildroot] Problem building latest arm
-In-Reply-To: <20070627162003.GA8454@aon.at>
-References: <6B9D9C36F5A26347A593D6945C470AE90F3FF8@delta-two.prga.net>
-	<20070626062135.GA4096@aon.at>
-	<6B9D9C36F5A26347A593D6945C470AE90F4031@delta-two.prga.net>
-	<20070627162003.GA8454@aon.at>
-Message-ID: <6B9D9C36F5A26347A593D6945C470AE90F408E@delta-two.prga.net>
+From: Lee JJ <jengjr@gmail.com>
+Date: Fri, 29 Jun 2007 14:37:18 +0800
+Subject: [Buildroot] syslinux.mk & bzip2 errors, modification
+Message-ID: <1497cb6d0706282337g19372f54t3275752462df147e@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->-----Original Message-----
->From: Bernhard Fischer [mailto:rep.dot.nop at gmail.com] 
->Sent: Wednesday, June 27, 2007 11:20 AM
->To: Michael D. Miller
->Cc: buildroot at uclibc.org
->Subject: Re: [Buildroot] Problem building latest arm
->
->On Wed, Jun 27, 2007 at 07:45:02AM -0500, michael.miller at prga.com
-wrote:
->>>-----Original Message-----
->>>From: Bernhard Fischer [mailto:rep.dot.nop at gmail.com]
->>>Sent: Tuesday, June 26, 2007 1:22 AM
->>>To: Michael D. Miller
->>>Cc: buildroot at uclibc.org
->>>Subject: Re: [Buildroot] Problem building latest arm
->>>
->>>On Mon, Jun 25, 2007 at 10:04:44PM -0500, michael.miller at prga.com
->>wrote:
->>>>I'm trying to build for an Xscale (ARM), EABI, NPTL with binutils 
->>>>2.17.50.0.16, software floating point, and target options bash,
-bzip2 
->>>>and diffutils.  All other options are default (gcc 4.2.0).  I'm
-using 
->>>>the latest snapshot for uclibc, and have tried buildroot snapshots
->>>from
->>>>6/20, 6/21 and 6/23.
->>>>
->>>>If I use 6/20, 6/21 or 6/23 buildroot snapshots then the build fails
->>in
->>>>pthreads because sysdep-cancel.h is not found.  Looking in the 
->>>>linuxthreads/sysdeps/unix/sysv/linux directory, I see subdirectories
+Sorry , this may already appear somewhere else
+PLS forgive to bother you
 
->>>>for i386, mips, etc. but not for arm.
->>>>
->>>>Searching recent mailing list archives, Bernhard says things that 
->>>>make
->>
->>>>me think this configuration should work.  He hints that helptext
-will
->>>
->>>I was talking about eabi. Threading is a different issue (but even 
->>>that
->>one has a nice, >IMHO descriptive help-text).
->>
->>I tried just building for "old" Linux threads instead of POSIX
-threads.
->>In that case I got an error because
-build_arm_nofpu/staging_dir/include
->
->this area changed recently. You may need to erase build_* toolchain_*
+1
+buildroot/target/x86/syslinux/syslinux.mk
 
-I've been doing clean builds by removing the entire buildroot directory
-and starting over each time.
+SYSLINUX_SITE=http://www.kernel.org/pub/linux/utils/boot/syslinux/Old<---Old
+now the web director change to "Old"
 
->>didn't exist.  I manually created the directory and restarted the
-build.
->>Things continued without further incident and completed with a tool 
->>chain.  A quick test seems to indicate the generated cross compiler 
->>works, checked with a simple "Hello world" compiled after exporting
-the 
->>staging_dir/usr/bin.
->>
->>So, NPTL seems broken for ARM.  I've tried using an old ecos version
-of
->
->you're better off to ask the uclibc list about the state of NTPL
-support.
+2.
+cp /root/buildroot/build_i686/bzip2-1.0.3/bzlib.h
+/root/buildroot/build_i686/staging_dir/include/
+cp: cannot create regular file
+`/root/buildroot/build_i686/staging_dir/include/bzlib.h': No such file or
+directory
 
-This really seems more of a buildroot issue since the problem is the
-gcc-final stage.  I'll query the uclibc list if you think it might help,
-but I expect I'll get one of Rob's famous flames for being off topic.
+buildroot/build_i686/staging_dir/"include/" <--- do not know where is the
+script error
+have to create the "include" directory by hand
 
-I'm not sure why the pthread test is failing, so I'll poke around a
-little more there.  A check via -dumpspecs of xgcc indicates that the
-pthread support is there.  Maybe configure is looking for the library.
-
->>sysdep-cancel.h and things reach the point that during the gcc-final 
->>stage libgomp blows up because the pthread library can't be found.  
->>This is a configure error saying that pthreads are required for 
->>libgomp.  I'd say I don't even want libgomp.  Is there an easy way to 
->>prevent this from even being attempted?  I'm thinking of some 
->>additional build flag I can pass in to buildroot.
->
->See menuconfig. ()  Additional gcc options
-
-On more reflection, I can't decide for sure if libgomp support is needed
-in the final gcc.  It seems to me that OpenMP and POSIX threads are
-different beasts.  I can understand OpenMP requiring pthreads, but it
-doesn't' seem like pthreads should really require OpenMP.  That's a vote
-for getting libgomp out of the final gcc.  We're talking about the cross
-tool that runs on a x686 platform here, not the final ARM target.  I'll
-give --disable-libgomp a try and see if that gets me further.
-
-	Regards,
-	Mike
+Cheers
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: http://busybox.net/lists/buildroot/attachments/20070629/d697ae3d/attachment.htm 
