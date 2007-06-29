@@ -1,129 +1,44 @@
-From: bugs at busybox.net <bugs@busybox.net>
-Date: Fri, 29 Jun 2007 04:30:19 -0700
-Subject: [Buildroot] [buildroot 0001357]: EABI on ARM compiled buildroot
-	doesn't work
-Message-ID: <56fd821e621dd4f03893be58ea2d78e0@bugs.busybox.net>
+From: michael.miller at prga.com <michael.miller@prga.com>
+Date: Fri, 29 Jun 2007 08:22:08 -0500
+Subject: [Buildroot] syslinux.mk & bzip2 errors, modification
+In-Reply-To: <20070629074645.GB8033@aon.at>
+References: <1497cb6d0706282337g19372f54t3275752462df147e@mail.gmail.com>
+	<20070629074645.GB8033@aon.at>
+Message-ID: <6B9D9C36F5A26347A593D6945C470AE90F4090@delta-two.prga.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+>-----Original Message-----
+From: buildroot-bounces@uclibc.org
+[mailto:buildroot-bounces at uclibc.org] On Behalf Of Bernhard Fischer
+>Sent: Friday, June 29, 2007 2:47 AM
+>To: Lee JJ
+>Cc: buildroot at uclibc.org
+>Subject: Re: [Buildroot] syslinux.mk & bzip2 errors, modification
+>>2.
+>>cp /root/buildroot/build_i686/bzip2-1.0.3/bzlib.h
+>>/root/buildroot/build_i686/staging_dir/include/
+>>cp: cannot create regular file
+>>`/root/buildroot/build_i686/staging_dir/include/bzlib.h': No such file
 
-A NOTE has been added to this issue. 
-====================================================================== 
-http://busybox.net/bugs/view.php?id=1357 
-====================================================================== 
-Reported By:                marvin
-Assigned To:                buildroot
-====================================================================== 
-Project:                    buildroot
-Issue ID:                   1357
-Category:                   Architecture Specific
-Reproducibility:            always
-Severity:                   block
-Priority:                   normal
-Status:                     assigned
-====================================================================== 
-Date Submitted:             05-18-2007 14:56 PDT
-Last Modified:              06-29-2007 04:30 PDT
-====================================================================== 
-Summary:                    EABI on ARM compiled buildroot doesn't work
-Description: 
-I compile latest buildroot with target ARM and EABI al without problems.
-But when I boot to new root all programs crash with Illegal instruction. I
-use default config only chose generic ARM and EABI.
-====================================================================== 
+>>or directory
+>>
+>>buildroot/build_i686/staging_dir/"include/" <--- do not know where is 
+>>the script error have to create the "include" directory by hand
+>
+>This is most likely coming from old sources or an old build.
+>svn up
+>rm -rf build_* toolchain_* && make
+>and it should be fixed.
 
----------------------------------------------------------------------- 
- bernhardf - 05-18-07 15:15  
----------------------------------------------------------------------- 
-Without *any* information, this is not a valid bug-report. Will close
-unless you provide details. 
+I built and installed Subversion to test this.  I tried this with SVN
+18952 and the include directory problem was indeed fixed.  Unfortunately
+some people "cannot or do not wish to use Subversion (svn)."  Is it
+possible to get the daily snapshots working again?  6/23 is still the
+latest on the website.
 
----------------------------------------------------------------------- 
- marvin - 05-18-07 15:51  
----------------------------------------------------------------------- 
-Please tell me which information you need I spend time to gogling to solve
-this but nothing helps. Do you need config ? Or information about hw ? 
-
----------------------------------------------------------------------- 
- repvik - 05-19-07 03:27  
----------------------------------------------------------------------- 
-marvin... Try reading http://www.catb.org/~esr/faqs/smart-questions.html
-first. 
-
----------------------------------------------------------------------- 
- rashbaugh - 05-19-07 07:01  
----------------------------------------------------------------------- 
-When you build programs with an EABI toolchain, you must build your kernel
-with EABI enabled also, otherwise programs will crash.
-With EABI, program syscalls to the kernal use a different format and
-unless
-the kernel is prepared to accept this new format, syscalls will fail. 
-
----------------------------------------------------------------------- 
- marvin - 05-19-07 11:50  
----------------------------------------------------------------------- 
-Yes I know it I compile kernel with EABI build in. I use
-buildroot-20070519.tar.bz2 kernel 2.6.18 for ARM my machine is Debian
-Etch.
-I use buildroot 2 years with ARM and OABI without problem. Only difference
-is that I in kernel switch to EABI and in buidroot too. And after this  it
-stop work.
-As HW I use TS-7250 (www.embeddedarm.com). I attach config of arm kernel.
-Config of buldroot. If you know that EABI with buildroot is working on ARM
-I stop 
-madden with this and try found my fault :-) 
-
----------------------------------------------------------------------- 
- rashbaugh - 05-19-07 12:28  
----------------------------------------------------------------------- 
-The other thing EABI affecte is floating point. I see you are using HW
-floating point. The EP9302 processor on that board has something called
-'MaverickCrunch' as a floating point coprocessor. The cirrus website has a
-bunch of errata around the use of that unit (stuff that doesn't work). Is
-it compatible with EABI? You might check into that.
-Also, where in the code do your applications fail? Have you debugged it at
-all? What instruction types are failing? 
-
----------------------------------------------------------------------- 
- marvin - 05-19-07 12:44  
----------------------------------------------------------------------- 
-Thanks good note I try disable Maverick Crunch this may be good way. I
-didn't backtrace crash because I could not  boot to EABI build root. We
-can stop talking about this  problem  I try disable MaverickCruch and let
-you know. Thanks for help. 
-
----------------------------------------------------------------------- 
- marvin - 05-29-07 04:59  
----------------------------------------------------------------------- 
-I try disable Maverick Cruch in kernel and still all crash with illegal
-instruction.
-Dan 
-
----------------------------------------------------------------------- 
- bjdooks - 06-29-07 04:30  
----------------------------------------------------------------------- 
-See bug 1406 at http://bugs.busybox.net/view.php?id=1406 
-
-Issue History 
-Date Modified   Username       Field                    Change               
-====================================================================== 
-05-18-07 14:56  marvin         New Issue                                    
-05-18-07 14:56  marvin         Status                   new => assigned     
-05-18-07 14:56  marvin         Assigned To               => buildroot       
-05-18-07 15:15  bernhardf      Note Added: 0002375                          
-05-18-07 15:51  marvin         Note Added: 0002377                          
-05-19-07 03:27  repvik         Note Added: 0002379                          
-05-19-07 07:01  rashbaugh      Note Added: 0002380                          
-05-19-07 11:50  marvin         Note Added: 0002381                          
-05-19-07 11:51  marvin         File Added: config_buildroot_EABI                
-   
-05-19-07 11:52  marvin         File Added: config_kernel_eabi                   
-
-05-19-07 12:28  rashbaugh      Note Added: 0002382                          
-05-19-07 12:44  marvin         Note Added: 0002383                          
-05-29-07 04:59  marvin         Note Added: 0002411                          
-06-29-07 04:30  bjdooks        Note Added: 0002533                          
-======================================================================
+	Regards,
+	Mike
