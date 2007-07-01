@@ -1,94 +1,50 @@
-From: <bogus@does.not.exist.com>
-Date: Mon, 23 Jul 2007 18:04:13 -0000
-Subject: No subject
-Message-ID: <mailman.1.1187102296.1107.buildroot@uclibc.org>
+From: BuraphaLinux Server <buraphalinuxserver@gmail.com>
+Date: Sun, 1 Jul 2007 13:54:37 +0700
+Subject: [Buildroot] top-level Makefile
+Message-ID: <5d75f4610706302354m56c341c4mc9aa045852e2d4cd@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-> 
-> I Think we should modify this so that the Makefile
-> checks for the existance of the source file in $(DL_DIR)
-> like most other packages.
-> Tried, (see patch below), but the rule:
-> 
-> +$(DL_DIR)/$$($(PKG)_SOURCE):
->         $(call MESSAGE,"Downloading")
->         test -e $(DL_DIR)/$($(PKG)_SOURCE) || $(WGET) -P $(DL_DIR)
-> $($(PKG)_SITE)/$($(PKG)_SOURCE)
->         mkdir -p $(@D)
-Mainly because of the way, make handles variables. They get
-expanded,when the makefile is parsed. Even the doubled dollarsign can't
-help you here.
+Hello,
 
-> 
-> fails (is not found) so I had to add 
-> 
-> +$$($(2)_TARGET_SOURCE):
-> +       $(WGET) -P $(DL_DIR) $$($(2)_SITE)/$$($(2)_SOURCE)
-> +
-> 
-In the macro it gets evaluated every time any package wants it to use.
-Does that really pays the one unneeded stamp-file?
+   I used subversion to get the source for buildroot; it says I have
+revision 18980.  There are some lines in the top-level Makefile
+that always give me errors, but this didn't happen before.  These
+lines look like this:
 
-> to make it work.
-> Anyone got a clue why the first rule fails?
-> 
-> 
-> Maybe we should also consider building x11r7 in $(BUILD_DIR)/x11r7
-> due to crowding.
-You even get afraid of crowding, aren't you?
-> 
-> 
-> Index: package/Makefile.autotools.in
-> ===================================================================
-> --- package/Makefile.autotools.in       (revision 19425)
-> +++ package/Makefile.autotools.in       (arbetskopia)
-> @@ -127,7 +127,7 @@
-> 
-> ################################################################################
->  
->  # Retrieve and unpack the archive
-> -$(BUILD_DIR)/%/.stamp_downloaded:
-> +$(DL_DIR)/$$($(PKG)_SOURCE):
->         $(call MESSAGE,"Downloading")
->         test -e $(DL_DIR)/$($(PKG)_SOURCE) || $(WGET) -P $(DL_DIR)
-> $($(PKG)_SITE)/$($(PKG)_SOURCE)
->         mkdir -p $(@D)
-> @@ -279,7 +279,7 @@
->  $(2)_TARGET_AUTORECONF =       $$($(2)_DIR)/.stamp_autoconfigured
->  $(2)_TARGET_PATCH =            $$($(2)_DIR)/.stamp_patched
->  $(2)_TARGET_EXTRACT =          $$($(2)_DIR)/.stamp_extracted
-> -$(2)_TARGET_SOURCE =           $$($(2)_DIR)/.stamp_downloaded
-> +$(2)_TARGET_SOURCE =           $$(DL_DIR)/$$($(2)_SOURCE)
->  $(2)_TARGET_UNINSTALL =                $$($(2)_DIR)/.stamp_uninstalled
->  $(2)_TARGET_CLEAN =            $$($(2)_DIR)/.stamp_cleaned
->  $(2)_TARGET_DIRCLEAN =         $$($(2)_DIR)/.stamp_dircleaned
-> @@ -322,6 +322,9 @@
->  
->  $(1)-depends:          $(1)-source $$($(2)_DEPENDANCIES)
->  
-> +$$($(2)_TARGET_SOURCE):
-> +       $(WGET) -P $(DL_DIR) $$($(2)_SITE)/$$($(2)_SOURCE)
-> +
->  $(1)-source:           $$($(2)_TARGET_SOURCE)
->  
->  # non-build targets
-> 
-> 
-> Best Regards
-> Ulf Samuelsson
-> 
-> 
-> 
-> 
-> 
-> 
-> 
-> _______________________________________________
-> buildroot mailing list
-> buildroot at uclibc.org
-> http://busybox.net/mailman/listinfo/buildroot
-> 
+HOSTAR:=$(shell $(CONFIG_SHELL) which $(HOSTAR) || type -p $(HOSTAR) || echo ar)
+
+My /bin/which is not a shell script, it is a normal compiled C program.
+I get these errors when I try to configure:
+
+BLS #make menuconfig
+/bin/which: /bin/which: cannot execute binary file
+/bin/which: /bin/which: cannot execute binary file
+/bin/which: /bin/which: cannot execute binary file
+/bin/which: /bin/which: cannot execute binary file
+/bin/which: /bin/which: cannot execute binary file
+make CC="/usr/bin/gcc" CFLAGS="-g -O2" MAKECMDGOALS="menuconfig" \
+                -C package/config conf mconf
+
+and eventually it does show the menu.  However, the menu will
+not generate the .config.cmd file any more and so I cannot build
+after I configure.
+
+BLS #make
+/bin/which: /bin/which: cannot execute binary file
+/bin/which: /bin/which: cannot execute binary file
+/bin/which: /bin/which: cannot execute binary file
+/bin/which: /bin/which: cannot execute binary file
+/bin/which: /bin/which: cannot execute binary file
+Makefile:170: .config.cmd: No such file or directory
+make: *** No rule to make target `.config.cmd'.  Stop.
+
+My which version:
+BLS #/bin/which --version
+GNU which v2.16, Copyright (C) 1999 - 2003 Carlo Wood.
+GNU which comes with ABSOLUTELY NO WARRANTY;
+This program is free software; your freedom to use, change
+and distribute this program is protected by the GPL.
