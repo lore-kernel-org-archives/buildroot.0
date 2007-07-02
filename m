@@ -1,8 +1,8 @@
 From: bugs at busybox.net <bugs@busybox.net>
-Date: Mon, 2 Jul 2007 04:56:07 -0700
+Date: Mon, 2 Jul 2007 04:58:07 -0700
 Subject: [Buildroot] [buildroot 0001415]: SVN buildroot does not build
 	configuration package
-Message-ID: <b48cb65bb8ca3d8789ef5723860367d9@bugs.uclibc.org>
+Message-ID: <47977a25356ecf8d026a17afd41408b1@bugs.uclibc.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -10,7 +10,7 @@ Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
 
-The following issue has been SUBMITTED. 
+A NOTE has been added to this issue. 
 ====================================================================== 
 http://busybox.net/bugs/view.php?id=1415 
 ====================================================================== 
@@ -26,7 +26,7 @@ Priority:                   normal
 Status:                     assigned
 ====================================================================== 
 Date Submitted:             07-02-2007 04:56 PDT
-Last Modified:              07-02-2007 04:56 PDT
+Last Modified:              07-02-2007 04:58 PDT
 ====================================================================== 
 Summary:                    SVN buildroot does not build configuration package
 Description: 
@@ -56,10 +56,24 @@ I do not have enough make expertise to try and fix this, as it is a
 complicated piece of make.
 ====================================================================== 
 
+---------------------------------------------------------------------- 
+ bjdooks - 07-02-07 04:58  
+---------------------------------------------------------------------- 
+URL: svn://uclibc.org/trunk/buildroot
+Repository Root: svn://uclibc.org
+Repository UUID: 69ca8d6d-28ef-0310-b511-8ec308f3f277
+Revision: 18991
+Node Kind: directory
+Schedule: normal
+Last Changed Author: aldot
+Last Changed Rev: 18991
+Last Changed Date: 2007-07-02 10:54:18 +0100 (Mon, 02 Jul 2007) 
+
 Issue History 
 Date Modified   Username       Field                    Change               
 ====================================================================== 
 07-02-07 04:56  bjdooks        New Issue                                    
 07-02-07 04:56  bjdooks        Status                   new => assigned     
 07-02-07 04:56  bjdooks        Assigned To               => buildroot       
+07-02-07 04:58  bjdooks        Note Added: 0002542                          
 ======================================================================
