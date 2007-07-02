@@ -1,19 +1,43 @@
-From: Bernhard Fischer <rep.dot.nop@gmail.com>
-Date: Mon, 2 Jul 2007 10:56:15 +0200
-Subject: [Buildroot] bug in udhcp where sed fails
-In-Reply-To: <4685F6A0.1090202@teamboyce.co.uk>
-References: <4685F6A0.1090202@teamboyce.co.uk>
-Message-ID: <20070702085615.GB4937@aon.at>
+From: aldot at uclibc.org <aldot@uclibc.org>
+Date: Mon,  2 Jul 2007 02:54:22 -0700 (PDT)
+Subject: [Buildroot] svn commit: trunk/buildroot/package/busybox
+Message-ID: <20070702095422.C8E8EA65F7@busybox.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Sat, Jun 30, 2007 at 07:22:24AM +0100, Rod Boyce wrote:
->All,
->
->I have tracked down a bug in the package/udhcp/udhcp.mk file where sed 
+Author: aldot
+Date: 2007-07-02 02:54:18 -0700 (Mon, 02 Jul 2007)
+New Revision: 18991
 
-udhcp was merged intobusybox some years ago; use a recent busybox
-instead! (see r18990)
+Log:
+- bump version
+
+
+Modified:
+   trunk/buildroot/package/busybox/Config.in
+
+
+Changeset:
+Modified: trunk/buildroot/package/busybox/Config.in
+===================================================================
+--- trunk/buildroot/package/busybox/Config.in	2007-07-02 08:58:56 UTC (rev 18990)
++++ trunk/buildroot/package/busybox/Config.in	2007-07-02 09:54:18 UTC (rev 18991)
+@@ -46,10 +46,15 @@
+ 
+ 	config BR2_BUSYBOX_VERSION_1_5_1
+ 		bool "BusyBox 1.5.1"
++		depends on BR2_DEPRECATED
+ 
+ 	config BR2_BUSYBOX_VERSION_1_6_0
+ 		bool "BusyBox 1.6.0"
++		depends on BR2_DEPRECATED
+ 
++	config BR2_BUSYBOX_VERSION_1_6_1
++		bool "BusyBox 1.6.1"
++
+ 	config BR2_PACKAGE_BUSYBOX_SNAPSHOT
+ 		bool "daily snapshot"
+ 
