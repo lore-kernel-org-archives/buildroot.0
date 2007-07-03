@@ -1,53 +1,34 @@
-From: bugs at busybox.net <bugs@busybox.net>
-Date: Tue, 3 Jul 2007 07:02:44 -0700
-Subject: [Buildroot] [buildroot 0001419]: Selecting 2.6.19.2 as kernel
-	header source should pull from www.kernel.org
-Message-ID: <29f4e97d08af00d994bb1dc0d5eb9528@bugs.uclibc.org>
+From: Ulf Samuelsson <ulf@atmel.com>
+Date: Tue, 03 Jul 2007 16:34:03 +0200
+Subject: [Buildroot] Requirements for building OpenEmbedded
+Message-ID: <1183473243.5568.23.camel@aeglos.sweden.atmel.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+According to Stelios at Digital Opsis, the AVR32 toolchain does not
+support shared libraries, which means that it will not be possible
+to build X-Windows, allowing a complete OpenEmbedded Angstrom Image
+to be built.
 
-The following issue has been SUBMITTED. 
-====================================================================== 
-http://busybox.net/bugs/view.php?id=1419 
-====================================================================== 
-Reported By:                bjdooks
-Assigned To:                buildroot
-====================================================================== 
-Project:                    buildroot
-Issue ID:                   1419
-Category:                   Other
-Reproducibility:            always
-Severity:                   minor
-Priority:                   normal
-Status:                     assigned
-====================================================================== 
-Date Submitted:             07-03-2007 07:02 PDT
-Last Modified:              07-03-2007 07:02 PDT
-====================================================================== 
-Summary:                    Selecting 2.6.19.2 as kernel header source should
-pull from www.kernel.org
-Description: 
-If the following options are selected, then the build does not pull from
-kernel.org.
+Any comments?
 
-BR2_DEPRECATED=y
-BR2_KERNEL_HEADERS_2_6_19_2=y
+Are we planning to make an AVR32 DSP library available as part of the
+Buildroot?
+They have been working with different DSP applications for PowerPC,
+and think it might be poissible to run VoIP on the AVR32
+if the right type of libraries are available.
+G.729 and echo cancellation are key algorithm to handle.
 
-Attached is a patch to update 2.6.19.2 in the
-toolchain/kernel-headers/kernel-headers-new.makefile to correctly download
-that release for use as headers and a build kernel.
-====================================================================== 
+Have we done any work on the Helix Audio player?
 
-Issue History 
-Date Modified   Username       Field                    Change               
-====================================================================== 
-07-03-07 07:02  bjdooks        New Issue                                    
-07-03-07 07:02  bjdooks        Status                   new => assigned     
-07-03-07 07:02  bjdooks        Assigned To               => buildroot       
-07-03-07 07:02  bjdooks        File Added: patch-add-2619-2-to-new-headers.patch
-                   
-======================================================================
+-- 
+Best Regards,
+Ulf Samuelsson          mail:   ulf at atmel.com
+Atmel Nordic AB
+Box 2033, 174 52 Sundbyberg
+Kavalleriv?gen 24, 174 58 Sundbyberg
+Sweden
+Tel:    +46 8 441 54 22 GSM:    +46 706 224457
