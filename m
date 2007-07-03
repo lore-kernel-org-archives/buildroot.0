@@ -1,98 +1,92 @@
-From: bugs at busybox.net <bugs@busybox.net>
-Date: Mon, 2 Jul 2007 18:07:26 -0700
-Subject: [Buildroot] [buildroot 0001415]: SVN buildroot does not build
-	configuration package
-Message-ID: <00434e9504ea7f7788aa0ded1f8095c5@bugs.uclibc.org>
+From: =?big5?B?V2VpY2hlbiBMZWUgKKf1q8K+XyAtIEFza2V5IC0gVFcp?= <weichen.lee@askey.com.tw>
+Date: Tue, 3 Jul 2007 13:24:49 +0800
+Subject: [Buildroot] Buildroot Make error at dropbear package - help
+Message-ID: <9C1F4801E7902C4DB99BD17E121A00925F5BAEBD@tpex07.askey.com.tw>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+ Hi:
+I encounter the same error in buildroot make (revision 18954).
+While I enter the dir. "${buildroot}/build_arm/dropbear-0.49/" and type "make" that procedure is successful.
+So I comment some line in ${buildroot}/package/dropbear/dropbear.mk,
+Please see the attached file.
 
-A NOTE has been added to this issue. 
-====================================================================== 
-http://busybox.net/bugs/view.php?id=1415 
-====================================================================== 
-Reported By:                bjdooks
-Assigned To:                buildroot
-====================================================================== 
-Project:                    buildroot
-Issue ID:                   1415
-Category:                   Other
-Reproducibility:            always
-Severity:                   block
-Priority:                   normal
-Status:                     assigned
-====================================================================== 
-Date Submitted:             07-02-2007 04:56 PDT
-Last Modified:              07-02-2007 18:07 PDT
-====================================================================== 
-Summary:                    SVN buildroot does not build configuration package
-Description: 
-The new import of the package/config no longer builds even for the default
-by using 'make'
+-----Original Message-----
+From: buildroot-bounces@uclibc.org [mailto:buildroot-bounces at uclibc.org] On Behalf Of A M
+Sent: Tuesday, June 26, 2007 12:15 AM
+To: buildroot
+Subject: [Buildroot] Buildroot Make error at dropbear package - help
 
-The following fails building mconf.c.
+Does anyone have an idea why am getting this error during make? I know the message seems clear, but I do not see an option for extra options when I ran make menuconfig.  I see dropbear as a package.
 
-/usr/bin/gcc -g -O2   -c -o mconf.o mconf.c
-In file included from mconf.c:27:
-lxdialog/dialog.h:32:10: error: #include expects "FILENAME" or <FILENAME>
-In file included from mconf.c:27:
-lxdialog/dialog.h:97: error: expected specifier-qualifier-list before
-'chtype'
+Here is the error message:
 
-This seems to require the $(HOST_EXTRACFLAGS) to build. 
+                make[1]: Entering directory
+                `/home/amark/development/1.0/buildroot/build_i586/dropbear-0.49'
+                /home/amark/development/1.0/buildroot/build_i586/staging_dir/usr/bin/i586-linux-uclibc-gcc -Os -pipe  -I/home/amark/development/1.0/buildroot/build_i586/staging_dir/usr/include --sysroot=/home/amark/development/1.0/buildroot/build_i586/staging_dir/ -isysroot /home/amark/development/1.0/buildroot/build_i586/staging_dir   -c -o dbmulti.o dbmulti.c
+                In file included from includes.h:30,
+                                 from dbmulti.c:25:
+                options.h:410:2: error: #error You must compiled with
+                either DROPBEAR_CLIENT or DROPBEAR_SERVER selected
+                In file included from includes.h:123,
+                                 from dbmulti.c:25:
+                libtomcrypt/src/headers/tomcrypt.h:12:29: error:
+                tomcrypt_custom.h: No such file or directory
+                libtomcrypt/src/headers/tomcrypt.h:67:26: error:
+                tomcrypt_cfg.h: No such file or directory
+                libtomcrypt/src/headers/tomcrypt.h:68:29: error:
+                tomcrypt_macros.h: No such file or directory
+                libtomcrypt/src/headers/tomcrypt.h:69:29: error:
+                tomcrypt_cipher.h: No such file or directory
+                libtomcrypt/src/headers/tomcrypt.h:70:27: error:
+                tomcrypt_hash.h: No such file or directory
+                libtomcrypt/src/headers/tomcrypt.h:71:26: error:
+                tomcrypt_mac.h: No such file or directory
+                libtomcrypt/src/headers/tomcrypt.h:72:27: error:
+                tomcrypt_prng.h: No such file or directory
+                libtomcrypt/src/headers/tomcrypt.h:73:25: error:
+                tomcrypt_pk.h: No such file or directory
+                libtomcrypt/src/headers/tomcrypt.h:74:27: error:
+                tomcrypt_math.h: No such file or directory
+                libtomcrypt/src/headers/tomcrypt.h:75:27: error:
+                tomcrypt_misc.h: No such file or directory
+                libtomcrypt/src/headers/tomcrypt.h:76:29: error:
+                tomcrypt_argchk.h: No such file or directory
+                libtomcrypt/src/headers/tomcrypt.h:77:27: error:
+                tomcrypt_pkcs.h: No such file or directory
+                In file included from includes.h:124,
+                                 from dbmulti.c:25:
+                libtommath/tommath.h:95: error: expected '=', ',', ';',
+                'asm' or '__attribute__' before 'mp_word'
+                make[1]: *** [dbmulti.o] Error 1
+                make[1]: Leaving directory
+                `/home/amark/development/1.0/buildroot/build_i586/dropbear-0.49'
+                make: ***
+                [/home/amark/development/1.0/buildroot/build_i586/dropbear-0.49/dropbearmulti] Error 2
+                [amark at max buildroot]$
 
-I tried adding:
 
-%.o: %.c
-        $(HOSTCC) $(HOST_EXTRACFLAGS) $(HOSTCFLAGS) $(HOSTCFLAGS_$@) -c $<
--o $@
 
-but this just then fails to link the project.
+Here is a section from y .config
 
-I do not have enough make expertise to try and fix this, as it is a
-complicated piece of make.
-====================================================================== 
+BR2_PACKAGE_DROPBEAR=y
+BR2_PACKAGE_DROPBEAR_URANDOM=y
 
----------------------------------------------------------------------- 
- bjdooks - 07-02-07 04:58  
----------------------------------------------------------------------- 
-URL: svn://uclibc.org/trunk/buildroot
-Repository Root: svn://uclibc.org
-Repository UUID: 69ca8d6d-28ef-0310-b511-8ec308f3f277
-Revision: 18991
-Node Kind: directory
-Schedule: normal
-Last Changed Author: aldot
-Last Changed Rev: 18991
-Last Changed Date: 2007-07-02 10:54:18 +0100 (Mon, 02 Jul 2007) 
+Thanks
 
----------------------------------------------------------------------- 
- bjdooks - 07-02-07 18:05  
----------------------------------------------------------------------- 
-Partially corrected by the fix to write .config.cmd, but menuconfig
-still returns an error even if it correctly writes a config. Updated
-package/config patch to follow 
+Audu
 
----------------------------------------------------------------------- 
- bjdooks - 07-02-07 18:07  
----------------------------------------------------------------------- 
-http://bugs.uclibc.org/file_download.php?file_id=1069&type=bug fixes
-menuconfig error return by ensuring we do not try things like writing the
-split configuration headers and moving the autogenerated configuration
-files .tmpconfig and .tmpconfig.h to a directory which isn't used. 
-
-Issue History 
-Date Modified   Username       Field                    Change               
-====================================================================== 
-07-02-07 04:56  bjdooks        New Issue                                    
-07-02-07 04:56  bjdooks        Status                   new => assigned     
-07-02-07 04:56  bjdooks        Assigned To               => buildroot       
-07-02-07 04:58  bjdooks        Note Added: 0002542                          
-07-02-07 18:05  bjdooks        Note Added: 0002545                          
-07-02-07 18:05  bjdooks        File Added: buildroot-fix-menuconfig.patch       
-            
-07-02-07 18:07  bjdooks        Note Added: 0002546                          
-======================================================================
+_______________________________________________
+buildroot mailing list
+buildroot at uclibc.org
+http://busybox.net/mailman/listinfo/buildroot
+-------------- next part --------------
+A non-text attachment was scrubbed...
+Name: dropbear.mk
+Type: application/octet-stream
+Size: 3388 bytes
+Desc: dropbear.mk
+Url : http://busybox.net/lists/buildroot/attachments/20070703/d911555f/attachment.obj 
