@@ -1,173 +1,72 @@
 From: Julien Letessier <julien.letessier@technosens.fr>
-Date: Wed, 4 Jul 2007 20:12:40 +0200
-Subject: [Buildroot] X11R7 packages available
-In-Reply-To: <1c9a01c7be52$a1631750$2311a8c0@OneWorld.local>
-References: <f0528b5b0707040129j262b9e24i774fd06d8d579a2a@mail.gmail.com>
-	<1c2701c7be1c$3af895c0$2311a8c0@OneWorld.local>
-	<1c5a01c7be32$3adaf9a0$2311a8c0@OneWorld.local>
-	<f0528b5b0707040832j7ae99465hd987b10fc6c85476@mail.gmail.com>
-	<1c9a01c7be52$a1631750$2311a8c0@OneWorld.local>
-Message-ID: <f0528b5b0707041112i5b667118p93d89aef6381de9d@mail.gmail.com>
+Date: Wed, 4 Jul 2007 22:15:53 +0200
+Subject: [Buildroot] ALSA Build Crashes in buildroot
+In-Reply-To: <61c0054e0706281246t1abb96f3xa9687f9c65d2d24f@mail.gmail.com>
+References: <61c0054e0706281246t1abb96f3xa9687f9c65d2d24f@mail.gmail.com>
+Message-ID: <f0528b5b0707041315j2018022bn5e5596a369567913@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Here's an updated autotools patch.
-I just generated it against buildroot r18993 (and tested it).
+Shameless plug: the patches for alsa I submitted some time ago
+allow the alsa libraries to build (and run) without any problem I could
+detect.
 
-http://bazaar.mezis.net/buildroot_autotools-v5.patch
-
-Tell me if this solves your problem.
-
-2007/7/4, Nuno da Costa Ferro <nferro@nfive.com>:
+2007/6/28, Paul Kavan <pkavan@gmail.com>:
 >
-> nferro at n5nferro-linux:/build/firmware/buildroot/package$ patch -p1 <
-> ../buildroot_autotools4.patch
-> patching file Makefile.in
-> Hunk #2 succeeded at 103 (offset -24 lines).
-> patch: **** malformed patch at line 43: @@ -254,3 +263,5 @@
+> Hello all:
 >
-> This is what I got while patching. My error? I'm using the latest
-> buildroot
-> snapshot.
+> Trying to include the alsa libs and utils in buildroot. However, buildroot
+> terminates make with:
 >
+> .
+> .
+> .
+> ../src/.libs/libasound.so: undefined reference to
+> `snd_hwdep_info_get_name'
+> ../src/.libs/libasound.so: undefined reference to
+> `snd_rawmidi_info_get_name'
+> ../src/.libs/libasound.so: undefined reference to
+> `snd_rawmidi_info_sizeof'
+> ../src/.libs/libasound.so: undefined reference to
+> `snd_rawmidi_info_set_device'
+> ../src/.libs/libasound.so: undefined reference to
+> `snd_hwdep_info_set_device'
+> ../src/.libs/libasound.so: undefined reference to `snd_hwdep_info_sizeof'
+> ../src/.libs/libasound.so: undefined reference to
+> `snd_rawmidi_info_set_stream'
+> collect2: ld returned 1 exit status
+> make[2]: *** [aserver] Error 1
+> make[2]: Leaving directory
+> `/home/grhuser/Linux_Builds/buildroot/build_arm/alsa-lib-1.0.14/aserver'
+> make[1]: *** [all-recursive] Error 1
+> make[1]: Leaving directory
+> `/home/grhuser/Linux_Builds/buildroot/build_arm/alsa- lib-1.0.14'
+> make: *** [/home/grhuser/Linux_Builds/buildroot/build_arm/alsa-lib-1.0.14/.compiled]
+> Error 2
 >
-> Kind regards,
+> Any clues as to why it is doing this?
 >
-> Nuno da Costa Ferro
-> ---------------------------
-> Number Five Software, S.A.
-> Development & IT Management
-> Email: nferro at nfive.com
-> DDI: +351 261 860 472
-> ----- Original Message -----
-> From: Julien Letessier
-> To: Nuno da Costa Ferro
-> Cc: Buildroot mailing list
-> Sent: Wednesday, July 04, 2007 4:32 PM
-> Subject: Re: [Buildroot] X11R7 packages available
+> Thanks.
 >
->
-> Did you apply the autotools4 patch (first mail in this thread, also at
-> http://bazaar.mezis.net/buildroot_autotools4.patch.bz2)?
-> All my X11R7 packages use it.
->
-> Else it's hard to diagnose...
-> You can try to "make xlib_libX11" manually, for instance. If this doesn't
-> work you have a make or makefile problem. Are you using GNU make?
->
-> If it works its a different problem. If you have applied my show-var patch
-> ( http://bazaar.mezis.net/buildroot_show-var.patch) you can "make show-var
-> VARNAME=TARGETS" and check if the X packages are in the TARGETS.
->
->
-> 2007/7/4, Nuno da Costa Ferro <nferro@nfive.com>:
-> Maybe I'm doing something wrong, but after selecting some X11R7 packets
-> they
-> are not being compiled when I run make.
->
->
-> Kind regards,
->
-> Nuno da Costa Ferro
-> ---------------------------
-> Number Five Software, S.A.
-> Development & IT Management
-> Email: nferro at nfive.com
-> DDI: +351 261 860 472
-> ----- Original Message -----
-> From: "Nuno da Costa Ferro" < nferro@nfive.com>
-> To: "Julien Letessier" <julien.letessier@technosens.fr>; "Buildroot
-> mailing
-> list" < buildroot@uclibc.org>
-> Sent: Wednesday, July 04, 2007 10:18 AM
-> Subject: Re: [Buildroot] X11R7 packages available
->
->
-> > Hi Julien.
-> >
-> > I'm getting this error when trying to go "make menuconfig":
-> > package/Config.xorg7.in:20: can't open file
-> > "package/pthread-stubs/Config.in"
-> >
-> > Then I comment that line and get:
-> > package/Config.xorg7.in:156: can't open file
-> > "package/openchrome/Config.in"
-> >
-> > After commenting that I am now compiling.
-> >
-> >
-> > Kind regards,
-> >
-> > Nuno da Costa Ferro
-> > ---------------------------
-> > Number Five Software, S.A.
-> > Development & IT Management
-> > Email: nferro at nfive.com
-> > DDI: +351 261 860 472
-> >
-> >
-> > ----- Original Message -----
-> > From: Julien Letessier
-> > To: Buildroot mailing list
-> > Sent: Wednesday, July 04, 2007 9:29 AM
-> > Subject: [Buildroot] X11R7 packages available
-> >
-> >
-> > Hi list,
-> >
-> > As promised, here is
-> > - a full set of X11R7 and support packages (including Mesa3D OpenGL, 2D
-> > and
-> > 3D drivers, Xv support)
-> > - an updated version (release 4) of the autotools patch
-> >
-> > The files are available from:
-> >   http://bazaar.mezis.net/buildroot_autotools4.patch.bz2
-> >   http://bazaar.mezis.net/buildroot_x11r7_v1.tar.bz2
-> > [because mailman won't let me attach them]
-> >
-> > Extract the archive, move packages to your buildroot package directory,
-> > and
-> > remember to add
-> >   source "package/Config.xorg7.in"
-> > to your package/Config.in
-> >
-> > Hopefully I didn't forget a dependancy package.
-> >
-> > Any feedback is welcome... once this is tested I think it would be a
-> good
-> > idea to add the whole thing to Buildroot.
-> >
-> > Cheers,
-> > --
-> > Julien Letessier
-> > <julien.letessier@technosens.fr>
-> >
-> >
-> >
-> > _______________________________________________
-> > buildroot mailing list
-> > buildroot at uclibc.org
-> > http://busybox.net/mailman/listinfo/buildroot
-> >
-> > _______________________________________________
-> > buildroot mailing list
-> > buildroot at uclibc.org
-> > http://busybox.net/mailman/listinfo/buildroot
-> >
->
->
->
->
+> Paul
 >
 > --
-> Julien Letessier
-> <julien.letessier@technosens.fr>
+> ***************************************
+> Paul David Kavan
+> Project Engineer
+> GRH Electronics, Inc.
+> 402-734-4900
+> pkavan at gmail.com
+> ***************************************
+> _______________________________________________
+> buildroot mailing list
+> buildroot at uclibc.org
+> http://busybox.net/mailman/listinfo/buildroot
 >
->
+
 
 
 -- 
@@ -175,4 +74,4 @@ Julien Letessier
 <julien.letessier@technosens.fr>
 -------------- next part --------------
 An HTML attachment was scrubbed...
-URL: http://busybox.net/lists/buildroot/attachments/20070704/3c257ad5/attachment.htm 
+URL: http://busybox.net/lists/buildroot/attachments/20070704/a711e776/attachment.htm 
