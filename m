@@ -1,20 +1,112 @@
-From: BuraphaLinux Server <buraphalinuxserver@gmail.com>
-Date: Fri, 6 Jul 2007 01:59:54 +0700
-Subject: [Buildroot] upgrade coreutils version
-Message-ID: <5d75f4610707051159n375e5bfcwf6dbbd9271719477@mail.gmail.com>
+From: Allan Clark <allanc@chickenandporn.com>
+Date: Thu, 5 Jul 2007 15:09:33 -0400
+Subject: [Buildroot] please check my patch as a resolver for bug 1415
+In-Reply-To: <20070705175854.GA15548@real.realitydiluted.com>
+References: <37c712e0707050748vdb1e9c3nba9e52e6d5564970@mail.gmail.com>
+	<20070705175854.GA15548@real.realitydiluted.com>
+Message-ID: <37c712e0707051209y40040ce9i24f87e55522bfda5@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Attached is a patch (instead of inline where gmail
-mangles the whitespace) to upgrade the coreutils
-version.  This is for subversion version 19003
--------------- next part --------------
-A non-text attachment was scrubbed...
-Name: coreutils.patch
-Type: application/octet-stream
-Size: 965 bytes
-Desc: not available
-Url : http://busybox.net/lists/buildroot/attachments/20070706/728004d3/attachment.obj 
+On 7/5/07, Steven J. Hill <sjhill@realitydiluted.com> wrote:
+> > I posted a patch for bug #1415; file 1071 seems to resolve for me
+> [...]
+> This is too complicated for me to get your changes. Please send an
+> actual patch to the mailing list. Thanks.
+
+OK; I sent what I used to cut-n-paste into a terminal, it did the
+whole pull/patch/build for me.  Instead, this is the content of the
+file attached to the bug report which resolves 001415 for me.  If you
+or anyone can give some feedback, I'd appreciate it.
+
+Allan
+--
+(http://bugs.uclibc.org/file_download.php?file_id=1071&type=bug follows)
+
+Response to bug #1415 (menuconfig fails), I found that the Kconfig
+import is still wanting to create some deep files without creating the
+subdirectories -- I presume because these directories pre-exist in the
+linux kernel, so don't need to be created.  Since we need them, I mved
+code from the conf_split_function to be visible and usable outside the
+function.  The previous version inside conf_split_config can be
+altered to use mkdirhier, but it currently hasn't been.
+
+The code was originally under buildroot's license, so this patch is
+obviously the same license, if there's any question.
+
+Allan Clark <allanc@chickenandporn.com> 2007-07-05
+
+
+Index: package/config/confdata.c
+===================================================================
+--- package/config/confdata.c   (revision 19002)
++++ package/config/confdata.c   (working copy)
+@@ -527,6 +527,44 @@
+        return 0;
+ }
+
++/** This function creates all parts of the pathname except the last
+item, separated by slashes, as subdirectories */
++int mkdirhier(char *path)
++{
++       /* code originally taken from conf_split_config,
+confdata.c at 614 (rev 18992) */
++
++       char *d;
++       struct stat sb;
++
++       /*
++        * Create directory components,
++        * unless they exist already.
++        */
++       d = path;
++       while ((d = strchr(d, '/'))) {
++               *d = 0;
++               if (stat(path, &sb) && mkdir(path, 0755))
++                       return 1;
++               *d++ = '/';
++       }
++
++       return 0;
++}
++
++/** Simply mallocs a copy of the string so that mkdirhier can alter
+it on-the-fly without segfaulting */
++int const_mkdirhier(const char *path)
++{
++       char *p = strdup (path);
++       int ret;
++
++       if (NULL == p)
++               return 1;
++
++       ret = mkdirhier (p);
++       free (p);
++       return ret;
++}
++
++
+ int conf_split_config(void)
+ {
+        char *name, path[128];
+@@ -540,6 +578,8 @@
+                name = "include/config/auto.conf";
+        conf_read_simple(name, S_DEF_AUTO);
+
++       if (0 != const_mkdirhier ("include/config/xxx"))
++               return 1;
+        if (chdir("include/config"))
+                return 1;
+
+@@ -742,6 +782,8 @@
+        name = getenv("KCONFIG_AUTOHEADER");
+        if (!name)
+                name = "include/linux/autoconf.h";
++       if (0 != const_mkdirhier (name))
++               return 1;
+        if (rename(".tmpconfig.h", name))
+                return 1;
+        name = getenv("KCONFIG_AUTOCONFIG");
