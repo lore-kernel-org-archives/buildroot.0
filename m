@@ -1,7 +1,7 @@
 From: sjhill at uclibc.org <sjhill@uclibc.org>
-Date: Wed,  4 Jul 2007 22:13:20 -0700 (PDT)
-Subject: [Buildroot] svn commit: trunk/buildroot/toolchain/uClibc
-Message-ID: <20070705051320.03A63A610D@busybox.net>
+Date: Wed,  4 Jul 2007 22:13:47 -0700 (PDT)
+Subject: [Buildroot] svn commit: trunk/buildroot/toolchain/gcc
+Message-ID: <20070705051347.7B3F4A6134@busybox.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -9,38 +9,31 @@ Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
 Author: sjhill
-Date: 2007-07-04 22:13:20 -0700 (Wed, 04 Jul 2007)
-New Revision: 19000
+Date: 2007-07-04 22:13:46 -0700 (Wed, 04 Jul 2007)
+New Revision: 19001
 
 Log:
-Do not override CFLAGS in uClibc. Instead concatenate with the ARCH_CFLAGS. Also, pass only the TARGET_CONFIGURE options that are necessary for building the utilities so that CFLAGS are not passed.
+Enable the option.
 
 
 Modified:
-   trunk/buildroot/toolchain/uClibc/uclibc.mk
+   trunk/buildroot/toolchain/gcc/Config.in
 
 
 Changeset:
-Modified: trunk/buildroot/toolchain/uClibc/uclibc.mk
+Modified: trunk/buildroot/toolchain/gcc/Config.in
 ===================================================================
---- trunk/buildroot/toolchain/uClibc/uclibc.mk	2007-07-05 00:12:55 UTC (rev 18999)
-+++ trunk/buildroot/toolchain/uClibc/uclibc.mk	2007-07-05 05:13:20 UTC (rev 19000)
-@@ -113,6 +113,8 @@
- 		-e 's,^DEVEL_PREFIX=.*,DEVEL_PREFIX=\"/usr/\",g' \
- 		-e 's,^SHARED_LIB_LOADER_PREFIX=.*,SHARED_LIB_LOADER_PREFIX=\"/lib\",g' \
- 		$(UCLIBC_DIR)/.config
-+	$(SED) 's,^ARCH_CFLAGS=",ARCH_CFLAGS="$(TARGET_CFLAGS) ,g' \
-+		$(UCLIBC_DIR)/.config
- ifeq ($(UCLIBC_TARGET_ARCH),arm)
- 	$(SED) 's/^\(CONFIG_[^_]*[_]*ARM[^=]*\)=.*/# \1 is not set/g' \
- 		 $(UCLIBC_DIR)/.config
-@@ -346,7 +348,8 @@
- 	touch -c $@
+--- trunk/buildroot/toolchain/gcc/Config.in	2007-07-05 05:13:20 UTC (rev 19000)
++++ trunk/buildroot/toolchain/gcc/Config.in	2007-07-05 05:13:46 UTC (rev 19001)
+@@ -111,9 +111,8 @@
+ 	default "4.3"       if BR2_GCC_VERSION_4_3
  
- $(TARGET_DIR)/usr/bin/ldd:
--	$(MAKE1) -C $(UCLIBC_DIR) $(TARGET_CONFIGURE_OPTS) \
-+	$(MAKE1) -C $(UCLIBC_DIR) CC=$(TARGET_CROSS)gcc \
-+		CPP=$(TARGET_CROSS)cpp LD=$(TARGET_CROSS)ld \
- 		PREFIX=$(TARGET_DIR) utils install_utils
- ifeq ($(strip $(BR2_CROSS_TOOLCHAIN_TARGET_UTILS)),y)
- 	mkdir -p $(STAGING_DIR)/$(REAL_GNU_TARGET_NAME)/target_utils
+ config BR2_TOOLCHAIN_SYSROOT
+-#	bool "Enable toolchain with --sysroot support"
+-	bool
+-	depends on !BR2_GCC_VERSION_3_3_5 && !BR2_GCC_VERSION_3_3_6 && !BR2_GCC_VERSION_3_4_2 && !BR2_GCC_VERSION_3_4_3 && !BR2_GCC_VERSION_3_4_4 && !BR2_GCC_VERSION_3_4_5 && !BR2_GCC_VERSION_3_4_6 &&!BR2_GCC_VERSION_4_0_0 && !BR2_GCC_VERSION_4_0_1 && !BR2_GCC_VERSION_4_0_2 && !BR2_GCC_VERSION_4_0_3 && !BR2_GCC_VERSION_4_0_4 && !BR2_GCC_VERSION_4_1_0 && !BR2_GCC_VERSION_4_1_1 && !BR2_GCC_VERSION_4_1_2
++	bool "Enable toolchain with --sysroot support"
++	depends on !BR2_GCC_VERSION_3_3_5 && !BR2_GCC_VERSION_3_3_6 && !BR2_GCC_VERSION_3_4_2 && !BR2_GCC_VERSION_3_4_3 && !BR2_GCC_VERSION_3_4_4 && !BR2_GCC_VERSION_3_4_5 && !BR2_GCC_VERSION_3_4_6
+ 	default y
+ 	help
+ 	  Enables --sysroot=dir for binutils and gcc.
