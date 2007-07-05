@@ -1,22 +1,19 @@
 From: BuraphaLinux Server <buraphalinuxserver@gmail.com>
-Date: Fri, 6 Jul 2007 02:41:45 +0700
-Subject: [Buildroot] util-linux patch
-Message-ID: <5d75f4610707051241o59e47ae5u8f5943840a568556@mail.gmail.com>
+Date: Fri, 6 Jul 2007 02:58:25 +0700
+Subject: [Buildroot] patch to make sfdisk build
+Message-ID: <5d75f4610707051258q3fda6e5aqf48136e4f2c67123@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Attached is a patch to make util-linux build.
-This is against subversion version 19003.
-It adds one patch for dealing with header file changes,
-and then the util-linux.mk has been tweaked to handle the
-case where we do not want NFS (RPC is off).
+Attached is a patch against buildroot subversion version 19006
+that makes sfdisk build.
 -------------- next part --------------
 A non-text attachment was scrubbed...
-Name: util-linux.patch
+Name: sfdisk.patch
 Type: application/octet-stream
-Size: 12131 bytes
+Size: 1693 bytes
 Desc: not available
-Url : http://busybox.net/lists/buildroot/attachments/20070706/1e9c388a/attachment.obj 
+Url : http://busybox.net/lists/buildroot/attachments/20070706/ac00ddc3/attachment-0001.obj 
