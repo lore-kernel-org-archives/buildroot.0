@@ -1,50 +1,26 @@
-From: sjhill at uclibc.org <sjhill@uclibc.org>
-Date: Thu,  5 Jul 2007 10:56:25 -0700 (PDT)
-Subject: [Buildroot] svn commit: trunk/buildroot/package: psmisc tar
-Message-ID: <20070705175625.846DAA6112@busybox.net>
+From: BuraphaLinux Server <buraphalinuxserver@gmail.com>
+Date: Fri, 6 Jul 2007 01:14:23 +0700
+Subject: [Buildroot] trouble with building openssh in svn version 19003
+Message-ID: <5d75f4610707051114n74862bet4ccddac2f35a163b@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Author: sjhill
-Date: 2007-07-05 10:56:24 -0700 (Thu, 05 Jul 2007)
-New Revision: 19006
+Hello,
 
-Log:
-Bump version of tar and add disabling of IPv6 for psmisc if it is not selected. Submitted by <buraphalinuxserver@gmail.com>.
+    While attempting to build openssh in buildroot subversion version 19003
+I get this at the end of the build attempt for openssh:
 
+scp.o: In function `bwlimit':
+scp.c:(.text+0x420): undefined reference to `__fixunsdfdi'
+scp.c:(.text+0x435): undefined reference to `__udivdi3'
+scp.c:(.text+0x44e): undefined reference to `__umoddi3'
+make[1]: *** [scp] Error 1
 
-Modified:
-   trunk/buildroot/package/psmisc/psmisc.mk
-   trunk/buildroot/package/tar/tar.mk
-
-
-Changeset:
-Modified: trunk/buildroot/package/psmisc/psmisc.mk
-===================================================================
---- trunk/buildroot/package/psmisc/psmisc.mk	2007-07-05 17:54:38 UTC (rev 19005)
-+++ trunk/buildroot/package/psmisc/psmisc.mk	2007-07-05 17:56:24 UTC (rev 19006)
-@@ -27,6 +27,7 @@
- 		--build=$(GNU_HOST_NAME) \
- 		--prefix=/ \
- 		$(DISABLE_NLS) \
-+		$(DISABLE_IPV6) \
- 	);
- 	touch $(PSMISC_DIR)/.configured
- 
-
-Modified: trunk/buildroot/package/tar/tar.mk
-===================================================================
---- trunk/buildroot/package/tar/tar.mk	2007-07-05 17:54:38 UTC (rev 19005)
-+++ trunk/buildroot/package/tar/tar.mk	2007-07-05 17:56:24 UTC (rev 19006)
-@@ -3,7 +3,7 @@
- # tar
- #
- #############################################################
--GNUTAR_VER:=1.15.1
-+GNUTAR_VER:=1.18
- GNUTAR_SOURCE:=tar-$(GNUTAR_VER).tar.bz2
- GNUTAR_SITE:=http://ftp.gnu.org/gnu/tar/
- GNUTAR_DIR:=$(BUILD_DIR)/tar-$(GNUTAR_VER)
+Are other people seeing this when they try this on pentium 4 systems?
+Is this a problem with compiler flags, or is it just some functions that
+are not included with uClibc?  Should I make a patch that just avoids
+building scp?  sftp still seems to build and can do the same kinds of
+file transfers, but not as neatly in scripts.
