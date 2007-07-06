@@ -1,37 +1,26 @@
-From: sjhill at uclibc.org <sjhill@uclibc.org>
-Date: Thu,  5 Jul 2007 21:58:02 -0700 (PDT)
-Subject: [Buildroot] svn commit: trunk/buildroot/package/config
-Message-ID: <20070706045802.29DA2A60EF@busybox.net>
+From: Andrew May <acmay@acmay.homeip.net>
+Date: Thu, 5 Jul 2007 21:42:43 -0700
+Subject: [Buildroot] Eric's offline again.
+In-Reply-To: <024c01c7bf54$58e46670$0302a8c0@atmel.com>
+References: <024c01c7bf54$58e46670$0302a8c0@atmel.com>
+Message-ID: <20070705214243.4eb4ea62@localhost.localdomain>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Author: sjhill
-Date: 2007-07-05 21:58:01 -0700 (Thu, 05 Jul 2007)
-New Revision: 19009
+On Fri, 6 Jul 2007 00:31:51 +0200
+"Ulf Samuelsson" <ulf@atmel.com> wrote:
 
-Log:
-Remove more stuff during 'make distclean'.
+> Eric set up an account for me at svn.uclibc.org a few months ago, but
+> all my login attempts fail.
+> 
+> I followed the instructions at
+> http://buildroot.uclibc.org/developer.html to generate a public
+> (id_dsa.pub) and a private key (id_dsa), both stored in
+> <homedir>/.ssh. I generated a key without a passphrase, but now when
+> I understand more I would like to have a new key with a passphrase.
 
-
-Modified:
-   trunk/buildroot/package/config/Makefile
-
-
-Changeset:
-Modified: trunk/buildroot/package/config/Makefile
-===================================================================
---- trunk/buildroot/package/config/Makefile	2007-07-06 04:26:32 UTC (rev 19008)
-+++ trunk/buildroot/package/config/Makefile	2007-07-06 04:58:01 UTC (rev 19009)
-@@ -32,7 +32,8 @@
- 	$(Q)rm -f $(clean-files)
- distclean: clean
- 	$(Q)rm -f $(lxdialog) $(conf-objs) $(mconf-objs) $(kxgettext-objs) \
--		$(hostprogs-y) $(qconf-cxxobjs) $(qconf-objs) $(gconf-objs)
-+		$(hostprogs-y) $(qconf-cxxobjs) $(qconf-objs) $(gconf-objs) \
-+		mconf .depend
- 
- FORCE:
- .PHONY: FORCE clean distclean
+Are you running "ssh-add"? And is your ssh-agent running in the
+background?
