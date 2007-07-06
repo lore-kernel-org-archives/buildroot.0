@@ -1,147 +1,67 @@
-From: Allan Clark <allanc@chickenandporn.com>
-Date: Fri, 6 Jul 2007 10:25:34 -0400
-Subject: [Buildroot] MacOSX-10.4.10 buildroot works, one final issue
-Message-ID: <37c712e0707060725o455c1d8ay8903ff378459e057@mail.gmail.com>
+From: Ulf Samuelsson <ulf@atmel.com>
+Date: Fri, 6 Jul 2007 14:35:32 +0200
+Subject: [Buildroot] What is the proper procedure to commit a patch?
+Message-ID: <006201c7bfd9$de0f46a0$dcc4af0a@atmel.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-with the 5 changes I mentioned in the "please check my patch as a
-resolver for bug 1415" thread, and one other change, I'm able to
-successfully do a relatively simple buildroot (defaults configured) on
-MacOSX-10.4.10 (intel), have not been able to check on PPC 10.4.10.
+Now, when I have access, I would like to understand the proper
+procedure to add patches.
 
-The one remaining issue:  can anyone tell me why rmdir is used below?
+After checking out and applying a patch, I can do:
 
-target/ext2/ext2root.mk rev 19006 (18834) @91:
-$(EXT2_BASE): host-fakeroot makedevs genext2fs
-        - at find $(TARGET_DIR) -type f -perm +111 | xargs $(STRIP)
-2>/dev/null || true;
-        @rm -rf $(TARGET_DIR)/usr/man
-        @rm -rf $(TARGET_DIR)/usr/share/man
-        @rm -rf $(TARGET_DIR)/usr/info
-        @rmdir -p --ignore-fail-on-non-empty $(TARGET_DIR)/usr/share
-        -/sbin/ldconfig -r $(TARGET_DIR) 2>/dev/null
+svn commit -F <file> 
+with <file> containing a log message.
+or 
+svn commit -m "log message" 
 
-This seems to be just trying to remove usr/share if it's empty or only
-has empty directories to reduce unnecessary dirs on the system.
+I tried a real simple patch first and after the commit,
+the svn server automatically sent out a mail with the change,
+adding the log message.
 
-Is it safe to do this?
-        - at rmdir -p --ignore-fail-on-non-empty $(TARGET_DIR)/usr/share
+The patches I'd like to add are mainly:
+* BSP patch ,discussed and approved by Eric.
+* moving package/customize to topdir and rename "local", also discussed before
+* Support for AT91 boot monitors 
+        Dataflashboot
+        AT91-Bootstrap
+        U-boot
+        Generate U-Boot initialization scripts
+* Add AVR32 support.
+* A few extra packages.
+* Update mtdutils (which is really old)
+* Clean up the linux support (move into a separate dir in package)
+* Bump versions on a number of packages which has disappeared from their download location.
+        (dash, rmp, l2tp, mpfr,mrouted, openntpd, portage, pppd,udev)
+* Add TARGET_CFLAGS to all packages not having this
+        Would like to know if they lack TARGET_CFLAGS for a reason.
+        (acpid,berkleydb, hdparm, iostat,ltp-testsuite,memtester,netkitbase,
+         procps, python, sysklogd, tinyx,udhcp)
+* Introduce concept of distributions  (did not do any work there yet though)
+--------------
+        Both the version bump and TARGET_CFLAGS lists are a month old, so 
+        maybe the svn already is updated.
 
-BSD variants don't accept "--ignore-fail-on-non-empty" as a parameter :o(
+        Is it OK to bump version if something disappears from internet, or do we need a review.
+        Sometimes you find new versions of a package, Is it OK to bump the version
+        without previous review by peers?
 
-I appreciate your advice, if anyone knows...
+        Anything else to think about (except golden rule: do not break the build)?
 
-Allan
+Best Regards
+Ulf Samuelsson                ulf at atmel.com
+Atmel Nordic AB
+Mail:  Box 2033, 174 02 Sundbyberg, Sweden
+Visit:  Kavalleriv?gen 24, 174 58 Sundbyberg, Sweden
+Phone +46 (8) 441 54 22     Fax +46 (8) 441 54 29
+GSM    +46 (706) 22 44 57
 
-
-
-On 7/5/07, Allan Clark <allanc@chickenandporn.com> wrote:
-> On 7/5/07, Steven J. Hill <sjhill@realitydiluted.com> wrote:
-> > > I posted a patch for bug #1415; file 1071 seems to resolve for me
-> > [...]
-> > This is too complicated for me to get your changes. Please send an
-> > actual patch to the mailing list. Thanks.
->
-> OK; I sent what I used to cut-n-paste into a terminal, it did the
-> whole pull/patch/build for me.  Instead, this is the content of the
-> file attached to the bug report which resolves 001415 for me.  If you
-> or anyone can give some feedback, I'd appreciate it.
->
-> Allan
-> --
-> (http://bugs.uclibc.org/file_download.php?file_id=1071&type=bug follows)
->
-> Response to bug #1415 (menuconfig fails), I found that the Kconfig
-> import is still wanting to create some deep files without creating the
-> subdirectories -- I presume because these directories pre-exist in the
-> linux kernel, so don't need to be created.  Since we need them, I mved
-> code from the conf_split_function to be visible and usable outside the
-> function.  The previous version inside conf_split_config can be
-> altered to use mkdirhier, but it currently hasn't been.
->
-> The code was originally under buildroot's license, so this patch is
-> obviously the same license, if there's any question.
->
-> Allan Clark <allanc@chickenandporn.com> 2007-07-05
->
->
-> Index: package/config/confdata.c
-> ===================================================================
-> --- package/config/confdata.c   (revision 19002)
-> +++ package/config/confdata.c   (working copy)
-> @@ -527,6 +527,44 @@
->         return 0;
->  }
->
-> +/** This function creates all parts of the pathname except the last
-> item, separated by slashes, as subdirectories */
-> +int mkdirhier(char *path)
-> +{
-> +       /* code originally taken from conf_split_config,
-> confdata.c at 614 (rev 18992) */
-> +
-> +       char *d;
-> +       struct stat sb;
-> +
-> +       /*
-> +        * Create directory components,
-> +        * unless they exist already.
-> +        */
-> +       d = path;
-> +       while ((d = strchr(d, '/'))) {
-> +               *d = 0;
-> +               if (stat(path, &sb) && mkdir(path, 0755))
-> +                       return 1;
-> +               *d++ = '/';
-> +       }
-> +
-> +       return 0;
-> +}
-> +
-> +/** Simply mallocs a copy of the string so that mkdirhier can alter
-> it on-the-fly without segfaulting */
-> +int const_mkdirhier(const char *path)
-> +{
-> +       char *p = strdup (path);
-> +       int ret;
-> +
-> +       if (NULL == p)
-> +               return 1;
-> +
-> +       ret = mkdirhier (p);
-> +       free (p);
-> +       return ret;
-> +}
-> +
-> +
->  int conf_split_config(void)
->  {
->         char *name, path[128];
-> @@ -540,6 +578,8 @@
->                 name = "include/config/auto.conf";
->         conf_read_simple(name, S_DEF_AUTO);
->
-> +       if (0 != const_mkdirhier ("include/config/xxx"))
-> +               return 1;
->         if (chdir("include/config"))
->                 return 1;
->
-> @@ -742,6 +782,8 @@
->         name = getenv("KCONFIG_AUTOHEADER");
->         if (!name)
->                 name = "include/linux/autoconf.h";
-> +       if (0 != const_mkdirhier (name))
-> +               return 1;
->         if (rename(".tmpconfig.h", name))
->                 return 1;
->         name = getenv("KCONFIG_AUTOCONFIG");
->
-
-
--- 
-allanc at chickenandporn.com  "??" http://linkedin.com/in/goldfish
-please, no proprietary attachments (http://tinyurl.com/cbgq)
+Technical support when I am not available:
+AT90 AVR Applications Group: mailto:avr at atmel.com
+AT91 ARM Applications Group: mailto:at91support at atmel.com
+AVR32 Applications Group        mailto:avr32 at atmel.com
+http://www.avrfreaks.net/;            http://avr32linux.org/
+http://www.at91.com/ ;                ftp://at91dist:distrib at 81.80.104.162/
