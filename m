@@ -1,7 +1,8 @@
 From: sjhill at uclibc.org <sjhill@uclibc.org>
-Date: Fri,  6 Jul 2007 04:41:30 -0700 (PDT)
-Subject: [Buildroot] svn commit: trunk/buildroot/package: coreutils file
-Message-ID: <20070706114130.4023EA608B@busybox.net>
+Date: Fri,  6 Jul 2007 04:42:03 -0700 (PDT)
+Subject: [Buildroot] svn commit: trunk/buildroot: package/avahi
+	package/dropbear toolchain
+Message-ID: <20070706114203.053E2A608B@busybox.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -9,56 +10,67 @@ Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
 Author: sjhill
-Date: 2007-07-06 04:41:27 -0700 (Fri, 06 Jul 2007)
-New Revision: 19010
+Date: 2007-07-06 04:42:03 -0700 (Fri, 06 Jul 2007)
+New Revision: 19011
 
 Log:
-Bump versions.
+Get rid of leading whitespace to silence warnings from config system.
 
 
 Modified:
-   trunk/buildroot/package/coreutils/coreutils.mk
-   trunk/buildroot/package/file/file.mk
+   trunk/buildroot/package/avahi/Config.in
+   trunk/buildroot/package/dropbear/Config.in
+   trunk/buildroot/toolchain/Config.in
 
 
 Changeset:
-Modified: trunk/buildroot/package/coreutils/coreutils.mk
+Modified: trunk/buildroot/package/avahi/Config.in
 ===================================================================
---- trunk/buildroot/package/coreutils/coreutils.mk	2007-07-06 04:58:01 UTC (rev 19009)
-+++ trunk/buildroot/package/coreutils/coreutils.mk	2007-07-06 11:41:27 UTC (rev 19010)
-@@ -3,7 +3,7 @@
- # coreutils
- #
- #############################################################
--COREUTILS_VER:=5.96
-+COREUTILS_VER:=6.9
- COREUTILS_SOURCE:=coreutils-$(COREUTILS_VER).tar.bz2
- #COREUTILS_SITE:=ftp://alpha.gnu.org/gnu/coreutils/
- COREUTILS_SITE:=http://ftp.gnu.org/pub/gnu/coreutils
-@@ -102,13 +102,6 @@
- 		--disable-rpath \
- 		--disable-dependency-tracking \
- 	);
--	#Fix up the max number of open files per process, which apparently 
--	# is not set when cross compiling
--	$(SED) 's,.*UTILS_OPEN_MAX.*,#define UTILS_OPEN_MAX 1019,g' \
--		$(COREUTILS_DIR)/config.h
--	# This is undefined when crosscompiling...
--	$(SED) 's,.*HAVE_PROC_UPTIME.*,#define HAVE_PROC_UPTIME 1,g' \
--		$(COREUTILS_DIR)/config.h
- 	touch $@
+--- trunk/buildroot/package/avahi/Config.in	2007-07-06 11:41:27 UTC (rev 19010)
++++ trunk/buildroot/package/avahi/Config.in	2007-07-06 11:42:03 UTC (rev 19011)
+@@ -8,7 +8,7 @@
+ 	  http://www.avahi.org/
  
- $(COREUTILS_DIR)/$(COREUTILS_BINARY): $(COREUTILS_DIR)/.configured
+ config BR2_PACKAGE_AVAHI_AUTOIPD
+-	bool "  IPv4LL network address configuration daemon"
++	bool "IPv4LL network address configuration daemon"
+ 	default y
+ 	depends on BR2_PACKAGE_AVAHI
+ 	help
+@@ -20,7 +20,7 @@
+ 	  lack a DHCP server.
+ 
+ config BR2_PACKAGE_AVAHI_DAEMON
+-	bool "  mDNS/DNS-SD daemon"
++	bool "mDNS/DNS-SD daemon"
+ 	default n
+ 	depends on BR2_PACKAGE_AVAHI
+ 	select BR2_PACKAGE_EXPAT
 
-Modified: trunk/buildroot/package/file/file.mk
+Modified: trunk/buildroot/package/dropbear/Config.in
 ===================================================================
---- trunk/buildroot/package/file/file.mk	2007-07-06 04:58:01 UTC (rev 19009)
-+++ trunk/buildroot/package/file/file.mk	2007-07-06 11:41:27 UTC (rev 19010)
-@@ -94,6 +94,7 @@
- 		$(TARGET_DIR)/usr/man $(TARGET_DIR)/usr/share/doc
- 	mv $(TARGET_DIR)/lib/libmagic.a $(STAGING_DIR)/lib
- 	rm -f $(TARGET_DIR)/lib/libmagic.la
-+	mkdir -p $(STAGING_DIR)/include
- 	mv $(TARGET_DIR)/usr/include/magic.h $(STAGING_DIR)/include
+--- trunk/buildroot/package/dropbear/Config.in	2007-07-06 11:41:27 UTC (rev 19010)
++++ trunk/buildroot/package/dropbear/Config.in	2007-07-06 11:42:03 UTC (rev 19011)
+@@ -7,7 +7,7 @@
+ 	  http://matt.ucc.asn.au/dropbear/dropbear.html
  
- file: zlib uclibc $(TARGET_DIR)/$(FILE_TARGET_BINARY)
+ config BR2_PACKAGE_DROPBEAR_URANDOM
+-	bool "  Use /dev/urandom (low entropy systems only)?"
++	bool "Use /dev/urandom (low entropy systems only)?"
+ 	default n
+ 	depends on BR2_PACKAGE_DROPBEAR
+ 	help
+
+Modified: trunk/buildroot/toolchain/Config.in
+===================================================================
+--- trunk/buildroot/toolchain/Config.in	2007-07-06 11:41:27 UTC (rev 19010)
++++ trunk/buildroot/toolchain/Config.in	2007-07-06 11:42:03 UTC (rev 19011)
+@@ -13,7 +13,7 @@
+ 
+ config BR2_TOOLCHAIN_EXTERNAL
+ 	bool
+-	prompt " External toolchain"
++	prompt "External toolchain"
+ endchoice
+ 
+ source "toolchain/Config.in.2"
