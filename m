@@ -1,23 +1,64 @@
-From: abhiram at ee.iitb.ac.in <abhiram@ee.iitb.ac.in>
-Date: Fri, 6 Jul 2007 14:09:33 +0530 (IST)
-Subject: [Buildroot] missing library files
-Message-ID: <44043.10.107.1.1.1183711173.squirrel@10.107.1.1>
+From: sjhill at uclibc.org <sjhill@uclibc.org>
+Date: Fri,  6 Jul 2007 04:41:30 -0700 (PDT)
+Subject: [Buildroot] svn commit: trunk/buildroot/package: coreutils file
+Message-ID: <20070706114130.4023EA608B@busybox.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Im tryin to build a uclibc+sdl+gtk1.2+tinyx based system using buildroot.
+Author: sjhill
+Date: 2007-07-06 04:41:27 -0700 (Fri, 06 Jul 2007)
+New Revision: 19010
 
-however the compile process stops during the compilation of glib, when it
-tries to copy the files libglib.so, libglib-1.2.so, libglib-1.2.so.0,
-libglib-1.2.so.0.10, libglib-1.2.so.0.0.10 and libgmodule.so from
-staging_dir/lib to root/lib with a 'cannot stat error'. who or what
-creates these files and why are they missing in this case?
+Log:
+Bump versions.
 
-i tried to get around this by using the cross compile toolchain to compile
-glib and then transfer the *.so files to staging_dir/lib. then i get the
-error
-"No rule to make target `tinyx', needed by `libgtk12'" and the compilation
-stops. how do i fix these errors?
+
+Modified:
+   trunk/buildroot/package/coreutils/coreutils.mk
+   trunk/buildroot/package/file/file.mk
+
+
+Changeset:
+Modified: trunk/buildroot/package/coreutils/coreutils.mk
+===================================================================
+--- trunk/buildroot/package/coreutils/coreutils.mk	2007-07-06 04:58:01 UTC (rev 19009)
++++ trunk/buildroot/package/coreutils/coreutils.mk	2007-07-06 11:41:27 UTC (rev 19010)
+@@ -3,7 +3,7 @@
+ # coreutils
+ #
+ #############################################################
+-COREUTILS_VER:=5.96
++COREUTILS_VER:=6.9
+ COREUTILS_SOURCE:=coreutils-$(COREUTILS_VER).tar.bz2
+ #COREUTILS_SITE:=ftp://alpha.gnu.org/gnu/coreutils/
+ COREUTILS_SITE:=http://ftp.gnu.org/pub/gnu/coreutils
+@@ -102,13 +102,6 @@
+ 		--disable-rpath \
+ 		--disable-dependency-tracking \
+ 	);
+-	#Fix up the max number of open files per process, which apparently 
+-	# is not set when cross compiling
+-	$(SED) 's,.*UTILS_OPEN_MAX.*,#define UTILS_OPEN_MAX 1019,g' \
+-		$(COREUTILS_DIR)/config.h
+-	# This is undefined when crosscompiling...
+-	$(SED) 's,.*HAVE_PROC_UPTIME.*,#define HAVE_PROC_UPTIME 1,g' \
+-		$(COREUTILS_DIR)/config.h
+ 	touch $@
+ 
+ $(COREUTILS_DIR)/$(COREUTILS_BINARY): $(COREUTILS_DIR)/.configured
+
+Modified: trunk/buildroot/package/file/file.mk
+===================================================================
+--- trunk/buildroot/package/file/file.mk	2007-07-06 04:58:01 UTC (rev 19009)
++++ trunk/buildroot/package/file/file.mk	2007-07-06 11:41:27 UTC (rev 19010)
+@@ -94,6 +94,7 @@
+ 		$(TARGET_DIR)/usr/man $(TARGET_DIR)/usr/share/doc
+ 	mv $(TARGET_DIR)/lib/libmagic.a $(STAGING_DIR)/lib
+ 	rm -f $(TARGET_DIR)/lib/libmagic.la
++	mkdir -p $(STAGING_DIR)/include
+ 	mv $(TARGET_DIR)/usr/include/magic.h $(STAGING_DIR)/include
+ 
+ file: zlib uclibc $(TARGET_DIR)/$(FILE_TARGET_BINARY)
