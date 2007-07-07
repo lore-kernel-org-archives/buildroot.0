@@ -1,85 +1,49 @@
-From: Ulf Samuelsson <ulf@atmel.com>
-Date: Sat, 7 Jul 2007 12:06:09 +0200
-Subject: [Buildroot] $(TARGET_CONFIGURE_OPTS) $(MAKE) vs $(MAKE)
-	$(TARGET_CONFIGURE_OPTS)
-References: <006201c7bfd9$de0f46a0$dcc4af0a@atmel.com>
-	<20070706155558.GA18954@real.realitydiluted.com>
-Message-ID: <000201c7c087$9e70d0a0$dcc4af0a@atmel.com>
+From: ulf at uclibc.org <ulf@uclibc.org>
+Date: Sat,  7 Jul 2007 05:28:29 -0700 (PDT)
+Subject: [Buildroot] svn commit: trunk/buildroot/toolchain/gcc
+Message-ID: <20070707122829.87266A65CE@busybox.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->> * Update mtdutils (which is really old)
->>
-> Please do not check in changes to this until running the patch by
-> me. This package is critical for a lot of embedded systems and has
-> been working well up to this point and there are no bugs in the
-> bug tracker.
-> 
+Author: ulf
+Date: 2007-07-07 05:28:25 -0700 (Sat, 07 Jul 2007)
+New Revision: 19020
 
-Before looking at introducing my new version (as an option)
-I tried rebuilding the current svn and ran into a problem with mtd.
+Log:
+Avoid stripping scripts
 
-When building for arm, the target mtdutils are built using the *host* compiler 
-and stored in $(TARGET_DIR)/usr/sbin.
+Modified:
+   trunk/buildroot/toolchain/gcc/gcc-uclibc-4.x.mk
 
-When the arm-linux-uclibc-strip is invoked on 
-"$(TARGET_DIR)/usr/sbin/flash_erase" 
-compiled by gcc (not arm-linux-uclibc-gcc), the make fails.
 
-I think someone got it wrong in the "package/mtd/mtd.mk" which says
-
-    $(TARGET_CONFIGURE_OPTS) $(MAKE) ...    - build using gcc
-    
-which should be:
-
-     $(MAKE) $(TARGET_CONFIGURE_OPTS) ...    - build using arm-linux-uclibc-gcc
-
-I am using Gnu Make 3.81 on OpenSuSE 10.2
-
-Looks to be a number of the packages that suffer from this problem.
-* argus
-* distcc
-* flex
-* kexec
-* l2tp
-* libevent
-* libusb
-* microcom
-* nano
-* netcat
-* procps
-* qte
-* qtopia4
-* quagga
-* rsync
-* samba
-* thttpd
-* tinyx
-* usbutils
-* wget
-
-Anyone only using the x86 architecture, maybe would not see this problem.
-Anyone using something else will suffer.
-
-Suggest we apply the patch below to the packages above.
-
-Index: package/mtd/mtd.mk
+Changeset:
+Modified: trunk/buildroot/toolchain/gcc/gcc-uclibc-4.x.mk
 ===================================================================
---- package/mtd/mtd.mk (revision 19014)
-+++ package/mtd/mtd.mk (arbetskopia)
-@@ -115,7 +115,7 @@
- MTD_BUILD_TARGETS := $(addprefix $(MTD_DIR)/util/, $(MTD_TARGETS_y))
- 
- $(MTD_BUILD_TARGETS): $(MTD_DIR)/.unpacked
-- $(TARGET_CONFIGURE_OPTS) $(MAKE) CFLAGS="-I$(MTD_DIR)/include -I$(LINUX_HEADERS_DIR)/include" LINUXDIR=$(LINUX_DIR) -C $(MTD_DIR)/util
-+ $(MAKE) $(TARGET_CONFIGURE_OPTS) CFLAGS="-I$(MTD_DIR)/include -I$(LINUX_HEADERS_DIR)/include" LINUXDIR=$(LINUX_DIR) -C $(MTD_DIR)/util
- 
- MTD_TARGETS := $(addprefix $(TARGET_DIR)/usr/sbin/, $(MTD_TARGETS_y))
- 
-
-
-Best Regards
-Ulf Samuelsson
+--- trunk/buildroot/toolchain/gcc/gcc-uclibc-4.x.mk	2007-07-07 11:06:08 UTC (rev 19019)
++++ trunk/buildroot/toolchain/gcc/gcc-uclibc-4.x.mk	2007-07-07 12:28:25 UTC (rev 19020)
+@@ -247,17 +247,13 @@
+ 		mv "$(STAGING_DIR)/lib64/"* "$(STAGING_DIR)/lib/" ; \
+ 		rmdir "$(STAGING_DIR)/lib64" ; \
+ 	fi
++	# Move gcc bug reporting script out of path of real executables
++	mv -f $(STAGING_DIR)/usr/bin/$(REAL_GNU_TARGET_NAME)-gccbug \
++		$(STAGING_DIR)/usr/bin/$(GNU_TARGET_NAME)-gccbug
+ 	# Strip the host binaries
+ ifeq ($(GCC_STRIP_HOST_BINARIES),true)
+-	if [ -e $(STAGING_DIR)/usr/bin/*-gccbug ] ; then \
+-		mkdir -p "$(STAGING_DIR)/tmp" ; \
+-		mv $(STAGING_DIR)/usr/bin/*-gccbug  $(STAGING_DIR)/tmp ; \
+-		-strip --strip-all -R .note -R .comment $(STAGING_DIR)/usr/bin/* ; \
+-		mv $(STAGING_DIR)/tmp/*-gccbug $(STAGING_DIR)/usr/bin ; \
+-		rmdir "$(STAGING_DIR)/tmp" ; \
+-	else \
+-		-strip --strip-all -R .note -R .comment $(STAGING_DIR)/usr/bin/* ; \
+-	fi
++	-strip --strip-all -R .note -R .comment $(STAGING_DIR)/usr/bin/$(REAL_GNU_TARGET_NAME)-*
++	-strip --strip-all -R .note -R .comment $(STAGING_DIR)/usr/bin/faked
+ endif
+ 	# Make sure we have 'cc'.
+ 	if [ ! -e $(STAGING_DIR)/usr/bin/$(REAL_GNU_TARGET_NAME)-cc ] ; then \
