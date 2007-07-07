@@ -1,8 +1,8 @@
 From: bugs at busybox.net <bugs@busybox.net>
-Date: Sat, 7 Jul 2007 11:51:06 -0700
-Subject: [Buildroot] [buildroot 0000944]: Some portability fixes for running
-	on a MacOSX host
-Message-ID: <baab3cc30283d5201ac30ccce560046f@bugs.uclibc.org>
+Date: Sat, 7 Jul 2007 11:54:38 -0700
+Subject: [Buildroot] [buildroot 0001416]: Busybox compiled but not working
+	on SH3
+Message-ID: <69b6c961f35f23226321c019658c3549@bugs.uclibc.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -10,90 +10,61 @@ Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
 
-A NOTE has been added to this issue. 
+The following issue has been CLOSED 
 ====================================================================== 
-http://busybox.net/bugs/view.php?id=944 
+http://busybox.net/bugs/view.php?id=1416 
 ====================================================================== 
-Reported By:                wiml
+Reported By:                joshash
 Assigned To:                buildroot
 ====================================================================== 
 Project:                    buildroot
-Issue ID:                   944
-Category:                   Other
+Issue ID:                   1416
+Category:                   Architecture Specific
 Reproducibility:            always
-Severity:                   minor
+Severity:                   major
 Priority:                   normal
-Status:                     assigned
+Status:                     closed
+Resolution:                 open
+Fixed in Version:           
 ====================================================================== 
-Date Submitted:             07-12-2006 23:48 PDT
-Last Modified:              07-07-2007 11:51 PDT
+Date Submitted:             07-02-2007 09:09 PDT
+Last Modified:              07-07-2007 11:54 PDT
 ====================================================================== 
-Summary:                    Some portability fixes for running on a MacOSX host
+Summary:                    Busybox compiled but not working on SH3
 Description: 
-This patch addresses a few minor linuxisms or (non-BSD)isms in buildroot's
-shell scripts.
+I am using buildroot-20070615.tar.bz2 with combination of uclibc-0.9.29 ,
+binutils-2.17 , busybox-1.6.0 and gcc-4.2.0.
+I made the following changes :
+1. During compilation, I had to change a line in
+toolchain/gcc/gcc-uclibc-3.x.mk 
+   Patch is attached.
+2. I had to add libgcc_s.so* libraries in the root file system manually.
 
-1. Replaces "cp -a" with "cp -pPR". "-a" is just a conveinence for -pPR,
-and none of the BSD-derived systems I've checked have it.
+The current situation is, the toolchain is built and I can compile and run
+simple "Hello world!" like programs dynamically. But, the busybox does not
+start and give any command prompt on serial console or tty0.
 
-2. My 'sed' reqires an explicit empty string after -i, or else it will use
-the "-e" arg as the extension for backups. Oops.
+It gives the message like "Please press Enter to activate this console".
+After pressing Enter's, same message appears again and again.
+One more problem is, I can get login prompt on tty2 or so, but I cannot
+login. I cannot configure the user and respective passwords coz I dont
+have any command prompt to do so.
 
-3. My 'sed' requires an EOL or semicolon before the closing curly in a
-{foo...} construct.
-
-4. Apple's GCC prints a version string that dependencies.sh can't handle.
-This change removes any parenthesized bits from the version string before
-looking for numbers, so it can handle version strings like
-    powerpc-apple-darwin8-gcc-4.0.1 (GCC) 4.0.1 (Apple Computer, Inc.
-build 5250)
-
-======================================================================
-Relationships       ID      Summary
-----------------------------------------------------------------------
-has duplicate       0001251 Buildroot uses lots of cp commands that...
+One more thing. The simple application has Flags=0x2,sh2 whereas the
+busybox gets built with Flags=0x16.
 ====================================================================== 
 
 ---------------------------------------------------------------------- 
- bernhardf - 12-22-06 04:30  
+ bernhardf - 07-07-07 11:54  
 ---------------------------------------------------------------------- 
-1) I'd rather prefer if you could expand the host-sed check so we build a
-working sed for your system.
-2) That cp -a patch looks ok. For files, we usually (try to) use "cp
--dpf", so please use -dpf resp. -Rdpf
-  Please attach a new split patch with just the cp changes.
-3) I think that the current dependencies.sh should deal with this, please
-verify.
-
-Thanks in advance for attaching updated, separate patches that take the
-comments above into account.
-cheers,
-Bernhard 
-
----------------------------------------------------------------------- 
- bernhardf - 07-07-07 11:51  
----------------------------------------------------------------------- 
-To be flexible, i suggest we add
-ifeq (linux)
-CP_A:=cp -a
-endif
-ifeq (apple or bsd)
-CP_A:=cp ...
-endif
-
-variants for "force" "recurse" should be provided. 
+This was a duplicate of http://busybox.net/bugs/view.php?id=1417 
 
 Issue History 
 Date Modified   Username       Field                    Change               
 ====================================================================== 
-07-12-06 23:48  wiml           New Issue                                    
-07-12-06 23:48  wiml           Status                   new => assigned     
-07-12-06 23:48  wiml           Assigned To               => uClibc          
-07-12-06 23:48  wiml           File Added: buildroot1.patch                    
-12-22-06 04:30  bernhardf      Note Added: 0001914                          
-12-22-06 04:30  bernhardf      Status                   assigned => feedback
-02-12-07 05:34  vapier         Status                   feedback => assigned
-02-12-07 05:34  vapier         Assigned To              uClibc => buildroot 
-07-07-07 11:46  bernhardf      Relationship added       has duplicate 0001251
-07-07-07 11:51  bernhardf      Note Added: 0002559                          
+07-02-07 09:09  joshash        New Issue                                    
+07-02-07 09:09  joshash        Status                   new => assigned     
+07-02-07 09:09  joshash        Assigned To               => buildroot       
+07-07-07 11:54  bernhardf      Status                   assigned => closed  
+07-07-07 11:54  bernhardf      Note Added: 0002560                          
 ======================================================================
