@@ -1,79 +1,23 @@
 From: Ulf Samuelsson <ulf@atmel.com>
-Date: Sat, 7 Jul 2007 15:46:47 +0200
-Subject: [Buildroot] What is the proper procedure to commit a patch?
-References: <006201c7bfd9$de0f46a0$dcc4af0a@atmel.com>
-	<20070706152642.GA13765@aon.at>
-	<012f01c7bfe3$f55fb4c0$dcc4af0a@atmel.com>
-	<20070707101217.GO4096@aon.at>
-	<00c201c7c091$e527cc10$dcc4af0a@atmel.com>
-	<20070707123536.GS4096@aon.at>
-Message-ID: <000801c7c09d$4a4e6a80$dcc4af0a@atmel.com>
+Date: Sat, 7 Jul 2007 16:10:16 +0200
+Subject: [Buildroot] <package>_VER vs <package>_VERSION
+Message-ID: <004201c7c0a2$9420c900$dcc4af0a@atmel.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
------ Original Message ----- 
-From: "Bernhard Fischer" <rep.dot.nop@gmail.com>
-To: "Ulf Samuelsson" <ulf@atmel.com>
-Cc: <buildroot@uclibc.org>
-Sent: Saturday, July 07, 2007 2:35 PM
-Subject: Re: [Buildroot] What is the proper procedure to commit a patch?
+Some packages use <package>_VER  and some use  <package>_VERSION
+and some does not use this at all and hardcodes the version.
 
+Suggest we clean this up so we use a single template.
 
-> On Sat, Jul 07, 2007 at 01:16:13PM +0200, Ulf Samuelsson wrote:
->>>>Now we have package/linux.mk and we have Linux configuration spread out.
->>>>
->>>>What I want to do is to move "package/linux.mk" to "package/linux/linux.mk"
->>> 
->>> What's that good for? Just curious, this is just cosmetics.
->>> 
->>>>and then remove the distributed linux configuration to "package/linux/Config.in"
->>> 
->>> Which "distributed linux configuration" do you mean?
->>>
->>
->>I'd like to have the configuration and makefile in the same directory.
-> 
-> I don't like to have it in the same directory.
-> 
->>Now the configuration is in a different directory.
-> 
-> Yes, and that's a feature. You (or the board) can easily set
-> BR2_PACKAGE_LINUX_KCONFIG to anything you want. It was added for exactly
-> this purpose.
-> 
+Suggest we do it using the following template, allowing user to override.
 
-Again a misunderstading unfortunately.
-I am talking about the way buildroot configures linux in target/device/Config.in etc.
-I am not talking about the file which will be copied to the linux .config.
-
-So I would like to have:
-
-target/linux/Makefile.in
-target/linux/Config.in
-
-instead of
-
-target/linux.mk
-target/device/Config.in (which contains a lot of other stuff)
-
-
->>
->>The current linux.mk is much less flexible than the one I use.
-> 
-> You keep saying this, ISTR.
-> What does not work currently as opposed to "yours"?
-> Did you try to use the currently existing one, recently?
-> 
-
-My current tree is about 5 weeks old, and if improvements
-have been made, then the less the change...
-
->>Once we have the linux in a good place, then I will submit
->>my proposals to the mailing list.
-
+ifeq    ($(<package>_VERSION),)
+<package>_VERSION:=X.Y.Z
+endif
 
 Best Regards
 Ulf Samuelsson
