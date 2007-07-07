@@ -1,20 +1,38 @@
-From: Bernhard Fischer <rep.dot.nop@gmail.com>
-Date: Sat, 7 Jul 2007 12:58:40 +0200
-Subject: [Buildroot] patch for file package
-In-Reply-To: <5d75f4610707052141s1bdcee26r980881e518b23ae9@mail.gmail.com>
-References: <5d75f4610707052141s1bdcee26r980881e518b23ae9@mail.gmail.com>
-Message-ID: <20070707105840.GR4096@aon.at>
+From: aldot at uclibc.org <aldot@uclibc.org>
+Date: Sat,  7 Jul 2007 04:06:08 -0700 (PDT)
+Subject: [Buildroot] svn commit: trunk/buildroot/package/file
+Message-ID: <20070707110608.02492A6837@busybox.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Fri, Jul 06, 2007 at 11:41:30AM +0700, BuraphaLinux Server wrote:
->Attached is a patch for the file package for subversion version 19006
->that creates a missing directory so that packages after file can build.
->File was creating a file for the 'include' instead of a file inside of the
->include because it didn't have the mkdir -p
+Author: aldot
+Date: 2007-07-07 04:06:08 -0700 (Sat, 07 Jul 2007)
+New Revision: 19019
 
-No, this is wrong. There is no $(STAGING_DIR)/include and this is
-expected. The include is in $(STAGING_DIR)/usr/include
+Log:
+- using $(STAGING_DIR)/include is inherently wrong. $(STAGING_DIR)/usr/include
+  is the proper path for includes (check your host)
+
+
+Modified:
+   trunk/buildroot/package/file/file.mk
+
+
+Changeset:
+Modified: trunk/buildroot/package/file/file.mk
+===================================================================
+--- trunk/buildroot/package/file/file.mk	2007-07-07 10:39:13 UTC (rev 19018)
++++ trunk/buildroot/package/file/file.mk	2007-07-07 11:06:08 UTC (rev 19019)
+@@ -94,8 +94,7 @@
+ 		$(TARGET_DIR)/usr/man $(TARGET_DIR)/usr/share/doc
+ 	mv $(TARGET_DIR)/lib/libmagic.a $(STAGING_DIR)/lib
+ 	rm -f $(TARGET_DIR)/lib/libmagic.la
+-	mkdir -p $(STAGING_DIR)/include
+-	mv $(TARGET_DIR)/usr/include/magic.h $(STAGING_DIR)/include
++	mv $(TARGET_DIR)/usr/include/magic.h $(STAGING_DIR)/usr/include
+ 
+ file: zlib uclibc $(TARGET_DIR)/$(FILE_TARGET_BINARY)
+ 
