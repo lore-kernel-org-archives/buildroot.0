@@ -1,34 +1,49 @@
 From: Ulf Samuelsson <ulf@atmel.com>
-Date: Sat, 7 Jul 2007 13:16:13 +0200
-Subject: [Buildroot] What is the proper procedure to commit a patch?
-References: <006201c7bfd9$de0f46a0$dcc4af0a@atmel.com>
-	<20070706152642.GA13765@aon.at>
-	<012f01c7bfe3$f55fb4c0$dcc4af0a@atmel.com>
-	<20070707101217.GO4096@aon.at>
-Message-ID: <00c201c7c091$e527cc10$dcc4af0a@atmel.com>
+Date: Sat, 7 Jul 2007 13:55:24 +0200
+Subject: [Buildroot] svn commit: trunk/buildroot/toolchain/gcc
+References: <20070707073437.22ECBA682B@busybox.net>
+	<20070707093316.GK4096@aon.at>
+Message-ID: <00c301c7c091$e5f925d0$dcc4af0a@atmel.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>Now we have package/linux.mk and we have Linux configuration spread out.
->>
->>What I want to do is to move "package/linux.mk" to "package/linux/linux.mk"
+>> # Strip the host binaries
+>> ifeq ($(GCC_STRIP_HOST_BINARIES),true)
+>>- -strip --strip-all -R .note -R .comment $(STAGING_DIR)/usr/bin/*
+>>+ if [ -e $(STAGING_DIR)/usr/bin/*-gccbug ] ; then \
 > 
-> What's that good for? Just curious, this is just cosmetics.
-> 
->>and then remove the distributed linux configuration to "package/linux/Config.in"
-> 
-> Which "distributed linux configuration" do you mean?
->
+> testing for existance doesn't work on all solaris test(1).
 
-I'd like to have the configuration and makefile in the same directory.
-Now the configuration is in a different directory.
 
-The current linux.mk is much less flexible than the one I use.
-Once we have the linux in a good place, then I will submit
-my proposals to the mailing list.
+What will happen on a Solaris host then if this is found?
+Will [ -a <file> ] work?
+
+> What you really want is perhaps something like ifneq $((..$(wildcard..)),)
+> 
+
+I believe ifneq is read in stage 1 of the Makefile, so this wont work either, right?
+The files will only exist in mid build.
+
+Maybe we should not create "arm-linux-uclibc-gccbug" to begin with...
+If we rename "arm-linux-uclibc-gccbug" to "arm-linux-gccbug" right 
+after the make  and then strip 
+
+* "$(REAL_GNU_TARGET_NAME)-*"
+* "faked"
+
+we should be OK.
+
+>>+ mkdir -p "$(STAGING_DIR)/tmp" ; \
+> 
+> If by now $(STAGING_DIR) could not be created, then something is
+> fundamentally wrong (the -p is superfluous).
+> 
+
+$(STAGING_DIR) is OK, but "$(STAGING_DIR)/tmp" could 
+exist if someone adds this in the future and does not remove it.
 
 Best Regards
-Ulf Samuelsson
+Ulf Samuelsson                
