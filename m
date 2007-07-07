@@ -1,43 +1,36 @@
-From: Bernhard Fischer <rep.dot.nop@gmail.com>
-Date: Sat, 7 Jul 2007 14:39:54 +0200
+From: aldot at uclibc.org <aldot@uclibc.org>
+Date: Sat,  7 Jul 2007 05:58:16 -0700 (PDT)
 Subject: [Buildroot] svn commit: trunk/buildroot/toolchain/gcc
-In-Reply-To: <00c301c7c091$e5f925d0$dcc4af0a@atmel.com>
-References: <20070707073437.22ECBA682B@busybox.net>
-	<20070707093316.GK4096@aon.at>
-	<00c301c7c091$e5f925d0$dcc4af0a@atmel.com>
-Message-ID: <20070707123954.GT4096@aon.at>
+Message-ID: <20070707125816.AFD96A67F7@busybox.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Sat, Jul 07, 2007 at 01:55:24PM +0200, Ulf Samuelsson wrote:
->>> # Strip the host binaries
->>> ifeq ($(GCC_STRIP_HOST_BINARIES),true)
->>>- -strip --strip-all -R .note -R .comment $(STAGING_DIR)/usr/bin/*
->>>+ if [ -e $(STAGING_DIR)/usr/bin/*-gccbug ] ; then \
->> 
->> testing for existance doesn't work on all solaris test(1).
->
->
->What will happen on a Solaris host then if this is found?
->Will [ -a <file> ] work?
+Author: aldot
+Date: 2007-07-07 05:58:15 -0700 (Sat, 07 Jul 2007)
+New Revision: 19021
 
-KISS.
--f FILE
--x FILE
+Log:
+- use correct path to libstdc++
 
-This place doesn't need anything but checking by one of the above.
 
->> What you really want is perhaps something like ifneq $((..$(wildcard..)),)
->> 
->
->I believe ifneq is read in stage 1 of the Makefile, so this wont work either, right?
+Modified:
+   trunk/buildroot/toolchain/gcc/gcc-uclibc-4.x.mk
 
-Could be that it doesn't work, yes. Didn't try since i regard it as
-completely unimportant there.
 
-We don't bail out on failures from strip, and if you are not interrested
-in errors, then redirect stderr to /dev/null instead of needlessly
-stat()ing around, IMO.
+Changeset:
+Modified: trunk/buildroot/toolchain/gcc/gcc-uclibc-4.x.mk
+===================================================================
+--- trunk/buildroot/toolchain/gcc/gcc-uclibc-4.x.mk	2007-07-07 12:28:25 UTC (rev 19020)
++++ trunk/buildroot/toolchain/gcc/gcc-uclibc-4.x.mk	2007-07-07 12:58:15 UTC (rev 19021)
+@@ -303,7 +303,7 @@
+ 	-cp -dpf $(STAGING_DIR)/usr/$(REAL_GNU_TARGET_NAME)/lib/libgcc_s* $(TARGET_DIR)/lib/
+ endif
+ ifeq ($(BR2_INSTALL_LIBSTDCPP),y)
+-	-cp -dpf $(STAGING_DIR)/lib/libstdc++.so* $(TARGET_DIR)/lib/
++	-cp -dpf $(STAGING_DIR)/usr/lib/libstdc++.so* $(TARGET_DIR)/lib/
+ endif
+ ifeq ($(BR2_INSTALL_LIBGCJ),y)
+ 	-cp -dpf $(STAGING_DIR)/lib/libgcj.so* $(TARGET_DIR)/lib/
