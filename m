@@ -1,49 +1,34 @@
-From: ulf at uclibc.org <ulf@uclibc.org>
-Date: Sat,  7 Jul 2007 05:28:29 -0700 (PDT)
-Subject: [Buildroot] svn commit: trunk/buildroot/toolchain/gcc
-Message-ID: <20070707122829.87266A65CE@busybox.net>
+From: Ulf Samuelsson <ulf@atmel.com>
+Date: Sat, 7 Jul 2007 13:16:13 +0200
+Subject: [Buildroot] What is the proper procedure to commit a patch?
+References: <006201c7bfd9$de0f46a0$dcc4af0a@atmel.com>
+	<20070706152642.GA13765@aon.at>
+	<012f01c7bfe3$f55fb4c0$dcc4af0a@atmel.com>
+	<20070707101217.GO4096@aon.at>
+Message-ID: <00c201c7c091$e527cc10$dcc4af0a@atmel.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Author: ulf
-Date: 2007-07-07 05:28:25 -0700 (Sat, 07 Jul 2007)
-New Revision: 19020
+>>Now we have package/linux.mk and we have Linux configuration spread out.
+>>
+>>What I want to do is to move "package/linux.mk" to "package/linux/linux.mk"
+> 
+> What's that good for? Just curious, this is just cosmetics.
+> 
+>>and then remove the distributed linux configuration to "package/linux/Config.in"
+> 
+> Which "distributed linux configuration" do you mean?
+>
 
-Log:
-Avoid stripping scripts
+I'd like to have the configuration and makefile in the same directory.
+Now the configuration is in a different directory.
 
-Modified:
-   trunk/buildroot/toolchain/gcc/gcc-uclibc-4.x.mk
+The current linux.mk is much less flexible than the one I use.
+Once we have the linux in a good place, then I will submit
+my proposals to the mailing list.
 
-
-Changeset:
-Modified: trunk/buildroot/toolchain/gcc/gcc-uclibc-4.x.mk
-===================================================================
---- trunk/buildroot/toolchain/gcc/gcc-uclibc-4.x.mk	2007-07-07 11:06:08 UTC (rev 19019)
-+++ trunk/buildroot/toolchain/gcc/gcc-uclibc-4.x.mk	2007-07-07 12:28:25 UTC (rev 19020)
-@@ -247,17 +247,13 @@
- 		mv "$(STAGING_DIR)/lib64/"* "$(STAGING_DIR)/lib/" ; \
- 		rmdir "$(STAGING_DIR)/lib64" ; \
- 	fi
-+	# Move gcc bug reporting script out of path of real executables
-+	mv -f $(STAGING_DIR)/usr/bin/$(REAL_GNU_TARGET_NAME)-gccbug \
-+		$(STAGING_DIR)/usr/bin/$(GNU_TARGET_NAME)-gccbug
- 	# Strip the host binaries
- ifeq ($(GCC_STRIP_HOST_BINARIES),true)
--	if [ -e $(STAGING_DIR)/usr/bin/*-gccbug ] ; then \
--		mkdir -p "$(STAGING_DIR)/tmp" ; \
--		mv $(STAGING_DIR)/usr/bin/*-gccbug  $(STAGING_DIR)/tmp ; \
--		-strip --strip-all -R .note -R .comment $(STAGING_DIR)/usr/bin/* ; \
--		mv $(STAGING_DIR)/tmp/*-gccbug $(STAGING_DIR)/usr/bin ; \
--		rmdir "$(STAGING_DIR)/tmp" ; \
--	else \
--		-strip --strip-all -R .note -R .comment $(STAGING_DIR)/usr/bin/* ; \
--	fi
-+	-strip --strip-all -R .note -R .comment $(STAGING_DIR)/usr/bin/$(REAL_GNU_TARGET_NAME)-*
-+	-strip --strip-all -R .note -R .comment $(STAGING_DIR)/usr/bin/faked
- endif
- 	# Make sure we have 'cc'.
- 	if [ ! -e $(STAGING_DIR)/usr/bin/$(REAL_GNU_TARGET_NAME)-cc ] ; then \
+Best Regards
+Ulf Samuelsson
