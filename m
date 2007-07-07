@@ -1,37 +1,58 @@
-From: Heikki Lindholm <holindho@cs.helsinki.fi>
-Date: Sat, 07 Jul 2007 21:31:17 +0300
-Subject: [Buildroot] cp -dpR fails on BSD systems -- advice on resolving?
-In-Reply-To: <37c712e0707071110x127595c1nb77f020c16a98a40@mail.gmail.com>
-References: <37c712e0707071110x127595c1nb77f020c16a98a40@mail.gmail.com>
-Message-ID: <468FDBF5.6060807@cs.helsinki.fi>
+From: bugs at busybox.net <bugs@busybox.net>
+Date: Sat, 7 Jul 2007 11:46:40 -0700
+Subject: [Buildroot] [buildroot 0001251]: Buildroot uses lots of cp commands
+	that assume GNU cp
+Message-ID: <893c482ebc6dc46de259ba02a78eae77@bugs.uclibc.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Allan Clark kirjoitti:
-> Hi everyone;
-> 
-> I ran into a problem when I moved from uclibc-snapshot to
-> uclibc-0.9.28 or 0.9.29: the "cp" command is a non-Unix option: "cp
-> -a" or "cp -dpR", or "cp --no-dereference"
-> 
-> I assume it's on Linux, and works, so those of us doing something
-> funky (like BSD or MacOSX) invite a few problems.
-> 
-> I'm wondering if the fix should be:
-> 1) submit compatible patches to the group, using an older
-> syntax/options for all hosts, or
-> 2) detect, and download/build/use a replacement (same way I did for
-> gmake, as was done for sed)
 
-OT: Any particular reason you're using a Chinese charset? Anyway, issues
-of cp have been discussed before on this list. And there are bug reports
-about it in the tracker. I suppose nothing conclusive was ever reached.
-In the case of uClibc, one could imagine replacing the cp with the tar
-trick that's used in the SVN trunk, but the problem, as you surely know
-by now, has much wider manifestation over buildroot, and should be dealt
-with some uniform, generally agreed upon, way everywhere.
+The following issue has been set as DUPLICATE OF issue 0000944. 
+====================================================================== 
+http://busybox.net/bugs/view.php?id=1251 
+====================================================================== 
+Reported By:                holin
+Assigned To:                buildroot
+====================================================================== 
+Project:                    buildroot
+Issue ID:                   1251
+Category:                   Architecture Specific
+Reproducibility:            always
+Severity:                   major
+Priority:                   normal
+Status:                     assigned
+====================================================================== 
+Date Submitted:             03-02-2007 13:26 PST
+Last Modified:              07-07-2007 11:46 PDT
+====================================================================== 
+Summary:                    Buildroot uses lots of cp commands that assume GNU
+cp
+Description: 
+There's some incompatilibity between GNU cp and Mac OS X (probably BSD,
+too) cp commands. GNU cp arguments -d and -a do not exist on OS X. -a can
+be written -pPR on OS X. -d is partly covered by -P and partly by -R. -P
+is the --no-dereference part of -d and -R does what --preserve=links does
+AFAICT. The ugly part is that -R, which is also recursive, has to be used
+to get real as-is copying of symbolic links. Attached a patch for some of
+the cp commands, but there are many more. Maybe, patches could be appended
+to this report.
+======================================================================
+Relationships       ID      Summary
+----------------------------------------------------------------------
+duplicate of        0000944 Some portability fixes for running on a...
+====================================================================== 
 
--- Heikki Lindholm
+Issue History 
+Date Modified   Username       Field                    Change               
+====================================================================== 
+03-02-07 13:26  holin          New Issue                                    
+03-02-07 13:26  holin          Status                   new => assigned     
+03-02-07 13:26  holin          Assigned To               => buildroot       
+03-02-07 13:26  holin          File Added: buildroot-070302-cp-01.patch         
+          
+03-31-07 09:42  bendiken       Issue Monitored: bendiken                    
+07-07-07 11:46  bernhardf      Relationship added       duplicate of 0000944
+======================================================================
