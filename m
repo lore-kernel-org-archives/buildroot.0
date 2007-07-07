@@ -1,57 +1,79 @@
-From: Bernhard Fischer <rep.dot.nop@gmail.com>
-Date: Sat, 7 Jul 2007 15:01:32 +0200
-Subject: [Buildroot] $(TARGET_CONFIGURE_OPTS) $(MAKE) vs $(MAKE)
-	$(TARGET_CONFIGURE_OPTS)
-In-Reply-To: <000201c7c087$9e70d0a0$dcc4af0a@atmel.com>
+From: Ulf Samuelsson <ulf@atmel.com>
+Date: Sat, 7 Jul 2007 15:46:47 +0200
+Subject: [Buildroot] What is the proper procedure to commit a patch?
 References: <006201c7bfd9$de0f46a0$dcc4af0a@atmel.com>
-	<20070706155558.GA18954@real.realitydiluted.com>
-	<000201c7c087$9e70d0a0$dcc4af0a@atmel.com>
-Message-ID: <20070707130132.GU4096@aon.at>
+	<20070706152642.GA13765@aon.at>
+	<012f01c7bfe3$f55fb4c0$dcc4af0a@atmel.com>
+	<20070707101217.GO4096@aon.at>
+	<00c201c7c091$e527cc10$dcc4af0a@atmel.com>
+	<20070707123536.GS4096@aon.at>
+Message-ID: <000801c7c09d$4a4e6a80$dcc4af0a@atmel.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Sat, Jul 07, 2007 at 12:06:09PM +0200, Ulf Samuelsson wrote:
->>> * Update mtdutils (which is really old)
+----- Original Message ----- 
+From: "Bernhard Fischer" <rep.dot.nop@gmail.com>
+To: "Ulf Samuelsson" <ulf@atmel.com>
+Cc: <buildroot@uclibc.org>
+Sent: Saturday, July 07, 2007 2:35 PM
+Subject: Re: [Buildroot] What is the proper procedure to commit a patch?
+
+
+> On Sat, Jul 07, 2007 at 01:16:13PM +0200, Ulf Samuelsson wrote:
+>>>>Now we have package/linux.mk and we have Linux configuration spread out.
+>>>>
+>>>>What I want to do is to move "package/linux.mk" to "package/linux/linux.mk"
+>>> 
+>>> What's that good for? Just curious, this is just cosmetics.
+>>> 
+>>>>and then remove the distributed linux configuration to "package/linux/Config.in"
+>>> 
+>>> Which "distributed linux configuration" do you mean?
 >>>
->> Please do not check in changes to this until running the patch by
->> me. This package is critical for a lot of embedded systems and has
->> been working well up to this point and there are no bugs in the
->> bug tracker.
->> 
->
->Before looking at introducing my new version (as an option)
->I tried rebuilding the current svn and ran into a problem with mtd.
->
->When building for arm, the target mtdutils are built using the *host* compiler 
->and stored in $(TARGET_DIR)/usr/sbin.
->
->When the arm-linux-uclibc-strip is invoked on 
->"$(TARGET_DIR)/usr/sbin/flash_erase" 
->compiled by gcc (not arm-linux-uclibc-gcc), the make fails.
->
->I think someone got it wrong in the "package/mtd/mtd.mk" which says
->
->    $(TARGET_CONFIGURE_OPTS) $(MAKE) ...    - build using gcc
->    
->which should be:
->
->     $(MAKE) $(TARGET_CONFIGURE_OPTS) ...    - build using arm-linux-uclibc-gcc
+>>
+>>I'd like to have the configuration and makefile in the same directory.
+> 
+> I don't like to have it in the same directory.
+> 
+>>Now the configuration is in a different directory.
+> 
+> Yes, and that's a feature. You (or the board) can easily set
+> BR2_PACKAGE_LINUX_KCONFIG to anything you want. It was added for exactly
+> this purpose.
+> 
 
-yes, the latter is correct. Steven, please repair or elaborate.
+Again a misunderstading unfortunately.
+I am talking about the way buildroot configures linux in target/device/Config.in etc.
+I am not talking about the file which will be copied to the linux .config.
 
-Also, not using the user's CFLAGS sound a little bit odd to me, given
-that after your change a package will *not* use the proper flags
-anymore.
-Think about a package that has
-CFLAGS = -O2 -fother-bloat
-in it's makefile. Now you changed it to be compiled as
-myarch-linux-uclibc-gcc -Os $USERFLAGS -O2 -fother-bloat
-which will end using -O2 rather than the correct -Os
+So I would like to have:
 
-Previously we were overriding the package imposed default CFLAGS, which
-is the proper thing to do, IMO.
+target/linux/Makefile.in
+target/linux/Config.in
 
-What was the rational behind your change? TIA for elaborating..
+instead of
+
+target/linux.mk
+target/device/Config.in (which contains a lot of other stuff)
+
+
+>>
+>>The current linux.mk is much less flexible than the one I use.
+> 
+> You keep saying this, ISTR.
+> What does not work currently as opposed to "yours"?
+> Did you try to use the currently existing one, recently?
+> 
+
+My current tree is about 5 weeks old, and if improvements
+have been made, then the less the change...
+
+>>Once we have the linux in a good place, then I will submit
+>>my proposals to the mailing list.
+
+
+Best Regards
+Ulf Samuelsson
