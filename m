@@ -1,8 +1,8 @@
 From: bugs at busybox.net <bugs@busybox.net>
-Date: Sat, 7 Jul 2007 11:56:37 -0700
-Subject: [Buildroot] [buildroot 0001417]: Busybox compiled but not working
-	on SH3
-Message-ID: <823e0a5235ff29a99b30ddac48e2c94e@bugs.uclibc.org>
+Date: Sat, 7 Jul 2007 11:57:30 -0700
+Subject: [Buildroot] [buildroot 0001419]: DEPRECATED: Selecting 2.6.19.2 as
+	kernel header source should pull from www.kernel.org
+Message-ID: <404cac95d4fea7e403899ccfca11abe7@bugs.uclibc.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -10,65 +10,47 @@ Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
 
-The following issue has been CLOSED 
+The following issue has been UPDATED. 
 ====================================================================== 
-http://busybox.net/bugs/view.php?id=1417 
+http://busybox.net/bugs/view.php?id=1419 
 ====================================================================== 
-Reported By:                joshash
+Reported By:                bjdooks
 Assigned To:                buildroot
 ====================================================================== 
 Project:                    buildroot
-Issue ID:                   1417
-Category:                   Architecture Specific
+Issue ID:                   1419
+Category:                   Other
 Reproducibility:            always
-Severity:                   major
+Severity:                   minor
 Priority:                   normal
-Status:                     closed
-Resolution:                 open
-Fixed in Version:           
+Status:                     assigned
 ====================================================================== 
-Date Submitted:             07-02-2007 09:13 PDT
-Last Modified:              07-07-2007 11:56 PDT
+Date Submitted:             07-03-2007 07:02 PDT
+Last Modified:              07-07-2007 11:57 PDT
 ====================================================================== 
-Summary:                    Busybox compiled but not working on SH3
+Summary:                    DEPRECATED: Selecting 2.6.19.2 as kernel header
+source should pull from www.kernel.org
 Description: 
-I am using buildroot-20070615.tar.bz2 with combination of uclibc-0.9.29 ,
-binutils-2.17 , busybox-1.6.0 and gcc-4.2.0.
-I made the following changes :
-1. During compilation, I had to change a line in
-toolchain/gcc/gcc-uclibc-3.x.mk 
-   Patch is attached. This is not the best that can be done, but it works
-for me.
-2. I had to add libgcc_s.so* libraries in the root file system manually.
+If the following options are selected, then the build does not pull from
+kernel.org.
 
-The current situation is, the toolchain is built and I can compile and run
-simple "Hello world!" like programs dynamically. But, the busybox does not
-start and give any command prompt on serial console or tty0.
+BR2_DEPRECATED=y
+BR2_KERNEL_HEADERS_2_6_19_2=y
 
-It gives the message like "Please press Enter to activate this console".
-After pressing Enter's, same message appears again and again.
-One more problem is, I can get login prompt on tty2 or so, but I cannot
-login. I cannot configure the user and respective passwords coz I dont
-have any command prompt to do so.
-
-One more thing. The simple application has Flags=0x2,sh2 whereas the
-busybox gets built with Flags=0x16.
+Attached is a patch to update 2.6.19.2 in the
+toolchain/kernel-headers/kernel-headers-new.makefile to correctly download
+that release for use as headers and a build kernel.
 ====================================================================== 
-
----------------------------------------------------------------------- 
- bernhardf - 07-07-07 11:56  
----------------------------------------------------------------------- 
-> I am using buildroot-20070615.tar.bz2
-I do not see this in current svn (i.e. we strip * here). 
 
 Issue History 
 Date Modified   Username       Field                    Change               
 ====================================================================== 
-07-02-07 09:13  joshash        New Issue                                    
-07-02-07 09:13  joshash        Status                   new => assigned     
-07-02-07 09:13  joshash        Assigned To               => buildroot       
-07-02-07 09:13  joshash        File Added: gcc-uclibc-mk.patch                  
- 
-07-07-07 11:56  bernhardf      Status                   assigned => closed  
-07-07-07 11:56  bernhardf      Note Added: 0002561                          
+07-03-07 07:02  bjdooks        New Issue                                    
+07-03-07 07:02  bjdooks        Status                   new => assigned     
+07-03-07 07:02  bjdooks        Assigned To               => buildroot       
+07-03-07 07:02  bjdooks        File Added: patch-add-2619-2-to-new-headers.patch
+                   
+07-07-07 11:57  bernhardf      Summary                  Selecting 2.6.19.2 as
+kernel header source should pull from www.kernel.org => DEPRECATED: Selecting
+2.6.19.2 as kernel header source should pull from www.kernel.org
 ======================================================================
