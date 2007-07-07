@@ -1,8 +1,8 @@
 From: bugs at busybox.net <bugs@busybox.net>
-Date: Sat, 7 Jul 2007 11:57:30 -0700
-Subject: [Buildroot] [buildroot 0001419]: DEPRECATED: Selecting 2.6.19.2 as
-	kernel header source should pull from www.kernel.org
-Message-ID: <404cac95d4fea7e403899ccfca11abe7@bugs.uclibc.org>
+Date: Sat, 7 Jul 2007 12:00:33 -0700
+Subject: [Buildroot] [buildroot 0001305]: DEPRECATED: target "ARM" does not
+	build
+Message-ID: <c73ddd3a9205dfed45f71646f33ee472@bugs.uclibc.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -12,45 +12,66 @@ To: buildroot@busybox.net
 
 The following issue has been UPDATED. 
 ====================================================================== 
-http://busybox.net/bugs/view.php?id=1419 
+http://busybox.net/bugs/view.php?id=1305 
 ====================================================================== 
-Reported By:                bjdooks
+Reported By:                bell
 Assigned To:                buildroot
 ====================================================================== 
 Project:                    buildroot
-Issue ID:                   1419
-Category:                   Other
+Issue ID:                   1305
+Category:                   Architecture Specific
 Reproducibility:            always
 Severity:                   minor
 Priority:                   normal
 Status:                     assigned
 ====================================================================== 
-Date Submitted:             07-03-2007 07:02 PDT
-Last Modified:              07-07-2007 11:57 PDT
+Date Submitted:             04-08-2007 01:09 PDT
+Last Modified:              07-07-2007 12:00 PDT
 ====================================================================== 
-Summary:                    DEPRECATED: Selecting 2.6.19.2 as kernel header
-source should pull from www.kernel.org
+Summary:                    DEPRECATED: target "ARM" does not build
 Description: 
-If the following options are selected, then the build does not pull from
-kernel.org.
+Target architecture "arm" with no other changes on default config does not
+build:
 
-BR2_DEPRECATED=y
-BR2_KERNEL_HEADERS_2_6_19_2=y
 
-Attached is a patch to update 2.6.19.2 in the
-toolchain/kernel-headers/kernel-headers-new.makefile to correctly download
-that release for use as headers and a build kernel.
+.debug_varnames
+ *(.debug_varnames)
+
+.note.gnu.arm.ident
+ *(.note.gnu.arm.ident)
+
+/DISCARD/
+ *(.note.GNU-stack)
+OUTPUT(busybox_unstripped elf32-littlearm)
+collect2: ld returned 1 exit status
+/home/anwender/embedded/elta8882a/buildroot/buildroot/build_arm/staging_dir/bin/arm-linux-uclibc-strip:
+'busybox_unstripped': No such file
+install: cannot stat `busybox': No such file or directory
+make[1]: *** [install] Fehler 1
+make[1]: Leaving directory
+`/home/anwender/embedded/elta8882a/buildroot/buildroot/build_arm/busybox-1.5.0'
+make: ***
+[/home/anwender/embedded/elta8882a/buildroot/buildroot/build_arm/root/bin/busybox]
+Fehler 2
+
+
+
 ====================================================================== 
+
+---------------------------------------------------------------------- 
+ Matthias Kaehlcke - 04-15-07 07:49  
+---------------------------------------------------------------------- 
+i have the same (or similar) behaviour when trying to build busybox (for
+ARM) with the ELDK-uClibc 4.1 toolchain 
 
 Issue History 
 Date Modified   Username       Field                    Change               
 ====================================================================== 
-07-03-07 07:02  bjdooks        New Issue                                    
-07-03-07 07:02  bjdooks        Status                   new => assigned     
-07-03-07 07:02  bjdooks        Assigned To               => buildroot       
-07-03-07 07:02  bjdooks        File Added: patch-add-2619-2-to-new-headers.patch
-                   
-07-07-07 11:57  bernhardf      Summary                  Selecting 2.6.19.2 as
-kernel header source should pull from www.kernel.org => DEPRECATED: Selecting
-2.6.19.2 as kernel header source should pull from www.kernel.org
+04-08-07 01:09  bell           New Issue                                    
+04-08-07 01:09  bell           Status                   new => assigned     
+04-08-07 01:09  bell           Assigned To               => buildroot       
+04-15-07 07:49  Matthias KaehlckeNote Added: 0002318                          
+04-19-07 00:31  Matthias KaehlckeFile Added: build.log                        
+07-07-07 12:00  bernhardf      Summary                  target "ARM" does not
+build => DEPRECATED: target "ARM" does not build
 ======================================================================
