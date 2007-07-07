@@ -1,50 +1,41 @@
 From: Ulf Samuelsson <ulf@atmel.com>
-Date: Sat, 07 Jul 2007 21:33:26 +0200
-Subject: [Buildroot] <package>_VER vs <package>_VERSION
-In-Reply-To: <468FB5F5.1070205@realitydiluted.com>
-References: <004201c7c0a2$9420c900$dcc4af0a@atmel.com>
-	<468FB5F5.1070205@realitydiluted.com>
-Message-ID: <1183836807.19912.12.camel@elrond.sweden.atmel.com>
+Date: Sat, 07 Jul 2007 21:37:05 +0200
+Subject: [Buildroot] $(TARGET_CONFIGURE_OPTS) $(MAKE)
+	vs	$(MAKE)	$(TARGET_CONFIGURE_OPTS)
+In-Reply-To: <20070707172925.GV4096@aon.at>
+References: <006201c7bfd9$de0f46a0$dcc4af0a@atmel.com>
+	<20070706155558.GA18954@real.realitydiluted.com>
+	<000201c7c087$9e70d0a0$dcc4af0a@atmel.com>
+	<20070707130132.GU4096@aon.at>
+	<1183824383.19912.5.camel@elrond.sweden.atmel.com>
+	<20070707172925.GV4096@aon.at>
+Message-ID: <1183837025.19912.17.camel@elrond.sweden.atmel.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-l?r 2007-07-07 klockan 10:49 -0500 skrev Steven J. Hill:
-> -----BEGIN PGP SIGNED MESSAGE-----
-> Hash: SHA1
-> 
-> Ulf Samuelsson wrote:
-> > Some packages use <package>_VER  and some use  <package>_VERSION
-> > and some does not use this at all and hardcodes the version.
-> > 
-> > Suggest we clean this up so we use a single template.
-> > 
-> > Suggest we do it using the following template, allowing user to override.
-> > 
-> > ifeq    ($(<package>_VERSION),)
-> > <package>_VERSION:=X.Y.Z
-> > endif
-> > 
-> That's an interesting idea. I agree on the _VER and _VERSION clean-up. How
-> about you submit a patch for that first? Thanks.
-> 
-> - -Steve
+l?r 2007-07-07 klockan 19:29 +0200 skrev Bernhard Fischer:
+> On Sat, Jul 07, 2007 at 06:06:23PM +0200, Ulf Samuelsson wrote:
+> >> >I think someone got it wrong in the "package/mtd/mtd.mk" which says
+> >> >
+> >> >    $(TARGET_CONFIGURE_OPTS) $(MAKE) ...    - build using gcc
+> >> >    
+> >> >which should be:
+> >> >
+> >> >     $(MAKE) $(TARGET_CONFIGURE_OPTS) ...    - build using arm-linux-uclibc-gcc
+> >> 
+> >> yes, the latter is correct. Steven, please repair or elaborate.
+> >> 
+> >
+> >Here are a set of patches to change the position of
+> >TARGET_CONFIGURE_OPTS.
+> >Please review and apply if you agree.
+> >
+> >
 
-Some packages do not have a version:
-customize
-gnuconfig
-hostap		Always use a snapshot
-microcom	This is not clean, version = 1.02, 
-		package is m102.tar.gz
-jpeg	   	6b vs v6b
-mtd		Configurable from menuconfig or snapshot
-sfdisk		No version, this is located on www.uclibc.org so we 
-		should change to sfdisk-1.00.tar.bz2
-tinylogin	Makefile force use of snapshot,
-		Configure using menuconfig?
-ttcp		No version
+Here we go again!
 
 Index: package/l2tp/l2tp.mk
 ===================================================================
@@ -381,4 +372,4 @@ Name: TARGET_CONFIGURE_OPTS-2.patch
 Type: text/x-patch
 Size: 12722 bytes
 Desc: not available
-Url : http://busybox.net/lists/buildroot/attachments/20070707/34deedea/attachment-0001.bin 
+Url : http://busybox.net/lists/buildroot/attachments/20070707/53ca13af/attachment-0001.bin 
