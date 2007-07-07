@@ -1,49 +1,48 @@
-From: Ulf Samuelsson <ulf@atmel.com>
-Date: Sat, 7 Jul 2007 13:55:24 +0200
-Subject: [Buildroot] svn commit: trunk/buildroot/toolchain/gcc
-References: <20070707073437.22ECBA682B@busybox.net>
-	<20070707093316.GK4096@aon.at>
-Message-ID: <00c301c7c091$e5f925d0$dcc4af0a@atmel.com>
+From: Bernhard Fischer <rep.dot.nop@gmail.com>
+Date: Sat, 7 Jul 2007 14:35:36 +0200
+Subject: [Buildroot] What is the proper procedure to commit a patch?
+In-Reply-To: <00c201c7c091$e527cc10$dcc4af0a@atmel.com>
+References: <006201c7bfd9$de0f46a0$dcc4af0a@atmel.com>
+	<20070706152642.GA13765@aon.at>
+	<012f01c7bfe3$f55fb4c0$dcc4af0a@atmel.com>
+	<20070707101217.GO4096@aon.at>
+	<00c201c7c091$e527cc10$dcc4af0a@atmel.com>
+Message-ID: <20070707123536.GS4096@aon.at>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->> # Strip the host binaries
->> ifeq ($(GCC_STRIP_HOST_BINARIES),true)
->>- -strip --strip-all -R .note -R .comment $(STAGING_DIR)/usr/bin/*
->>+ if [ -e $(STAGING_DIR)/usr/bin/*-gccbug ] ; then \
-> 
-> testing for existance doesn't work on all solaris test(1).
+On Sat, Jul 07, 2007 at 01:16:13PM +0200, Ulf Samuelsson wrote:
+>>>Now we have package/linux.mk and we have Linux configuration spread out.
+>>>
+>>>What I want to do is to move "package/linux.mk" to "package/linux/linux.mk"
+>> 
+>> What's that good for? Just curious, this is just cosmetics.
+>> 
+>>>and then remove the distributed linux configuration to "package/linux/Config.in"
+>> 
+>> Which "distributed linux configuration" do you mean?
+>>
+>
+>I'd like to have the configuration and makefile in the same directory.
 
+I don't like to have it in the same directory.
 
-What will happen on a Solaris host then if this is found?
-Will [ -a <file> ] work?
+>Now the configuration is in a different directory.
 
-> What you really want is perhaps something like ifneq $((..$(wildcard..)),)
-> 
+Yes, and that's a feature. You (or the board) can easily set
+BR2_PACKAGE_LINUX_KCONFIG to anything you want. It was added for exactly
+this purpose.
 
-I believe ifneq is read in stage 1 of the Makefile, so this wont work either, right?
-The files will only exist in mid build.
+>
+>The current linux.mk is much less flexible than the one I use.
 
-Maybe we should not create "arm-linux-uclibc-gccbug" to begin with...
-If we rename "arm-linux-uclibc-gccbug" to "arm-linux-gccbug" right 
-after the make  and then strip 
+You keep saying this, ISTR.
+What does not work currently as opposed to "yours"?
 
-* "$(REAL_GNU_TARGET_NAME)-*"
-* "faked"
+Did you try to use the currently existing one, recently?
 
-we should be OK.
-
->>+ mkdir -p "$(STAGING_DIR)/tmp" ; \
-> 
-> If by now $(STAGING_DIR) could not be created, then something is
-> fundamentally wrong (the -p is superfluous).
-> 
-
-$(STAGING_DIR) is OK, but "$(STAGING_DIR)/tmp" could 
-exist if someone adds this in the future and does not remove it.
-
-Best Regards
-Ulf Samuelsson                
+>Once we have the linux in a good place, then I will submit
+>my proposals to the mailing list.
