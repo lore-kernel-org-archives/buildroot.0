@@ -1,29 +1,34 @@
-From: Allan Clark <allanc@chickenandporn.com>
-Date: Sat, 7 Jul 2007 14:10:04 -0400
-Subject: [Buildroot] cp -dpR fails on BSD systems -- advice on resolving?
-Message-ID: <37c712e0707071110x127595c1nb77f020c16a98a40@mail.gmail.com>
+From: aldot at uclibc.org <aldot@uclibc.org>
+Date: Sat,  7 Jul 2007 11:17:41 -0700 (PDT)
+Subject: [Buildroot] svn commit: trunk/buildroot/package/config
+Message-ID: <20070707181741.E750EA65A0@busybox.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi everyone;
+Author: aldot
+Date: 2007-07-07 11:17:41 -0700 (Sat, 07 Jul 2007)
+New Revision: 19022
 
-I ran into a problem when I moved from uclibc-snapshot to
-uclibc-0.9.28 or 0.9.29: the "cp" command is a non-Unix option: "cp
--a" or "cp -dpR", or "cp --no-dereference"
+Log:
+- mention from which version this copy of kconfig comes from (redundant since i noted it already in the checkin message, but ok).
 
-I assume it's on Linux, and works, so those of us doing something
-funky (like BSD or MacOSX) invite a few problems.
 
-I'm wondering if the fix should be:
-1) submit compatible patches to the group, using an older
-syntax/options for all hosts, or
-2) detect, and download/build/use a replacement (same way I did for
-gmake, as was done for sed)
+Modified:
+   trunk/buildroot/package/config/README.buildroot2
 
-Allan
 
--- 
-allanc at chickenandporn.com  "??" http://linkedin.com/in/goldfish
+Changeset:
+Modified: trunk/buildroot/package/config/README.buildroot2
+===================================================================
+--- trunk/buildroot/package/config/README.buildroot2	2007-07-07 12:58:15 UTC (rev 19021)
++++ trunk/buildroot/package/config/README.buildroot2	2007-07-07 18:17:41 UTC (rev 19022)
+@@ -1,4 +1,5 @@
+-This is a copy of the kconfig code in the kernel tweaked to suit Buildroot.
++This is a copy of the kconfig code in the kernel (currently 2.6.21.5) tweaked to
++suit Buildroot.
+ 
+ To update:
+ 	cp -r /usr/src/linux/scripts/kconfig package/config.new
