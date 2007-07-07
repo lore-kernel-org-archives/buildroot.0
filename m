@@ -1,58 +1,63 @@
-From: Ulf Samuelsson <ulf@atmel.com>
-Date: Sun, 8 Jul 2007 00:49:20 +0200
-Subject: [Buildroot] $(TARGET_CONFIGURE_OPTS) $(MAKE) vs
-	$(MAKE)	$(TARGET_CONFIGURE_OPTS)
-References: <006201c7bfd9$de0f46a0$dcc4af0a@atmel.com>
-	<20070706155558.GA18954@real.realitydiluted.com>
-	<000201c7c087$9e70d0a0$dcc4af0a@atmel.com>
-	<20070707130132.GU4096@aon.at>
-	<1183824383.19912.5.camel@elrond.sweden.atmel.com>
-	<20070707172925.GV4096@aon.at>
-	<1183837025.19912.17.camel@elrond.sweden.atmel.com>
-	<20070707211606.GZ4096@aon.at>
-Message-ID: <05fb01c7c0e9$275c45a0$dcc4af0a@atmel.com>
+From: aldot at uclibc.org <aldot@uclibc.org>
+Date: Sat,  7 Jul 2007 16:54:33 -0700 (PDT)
+Subject: [Buildroot] svn commit: trunk/buildroot/toolchain/uClibc
+Message-ID: <20070707235433.CB010A67F7@busybox.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-> On Sat, Jul 07, 2007 at 09:37:05PM +0200, Ulf Samuelsson wrote:
->>l?r 2007-07-07 klockan 19:29 +0200 skrev Bernhard Fischer:
->>> On Sat, Jul 07, 2007 at 06:06:23PM +0200, Ulf Samuelsson wrote:
->>> >> >I think someone got it wrong in the "package/mtd/mtd.mk" which says
->>> >> >
->>> >> >    $(TARGET_CONFIGURE_OPTS) $(MAKE) ...    - build using gcc
->>> >> >    
->>> >> >which should be:
->>> >> >
->>> >> >     $(MAKE) $(TARGET_CONFIGURE_OPTS) ...    - build using arm-linux-uclibc-gcc
->>> >> 
->>> >> yes, the latter is correct. Steven, please repair or elaborate.
->>> >> 
->>> >
->>> >Here are a set of patches to change the position of
->>> >TARGET_CONFIGURE_OPTS.
->>> >Please review and apply if you agree.
->>> >
->>> >
->>
+Author: aldot
+Date: 2007-07-07 16:54:33 -0700 (Sat, 07 Jul 2007)
+New Revision: 19023
 
-Stephen, can you pls review the mtd part of this patch ASAP,
-since this breaks the build for ARM (and possibly all non-x86).
-Pls commit (or ack my commit) if OK.
+Log:
+- forgot to adjust the path
 
-Best Regards
-Ulf Samuelsson                ulf at atmel.com
-Atmel Nordic AB
-Mail:  Box 2033, 174 02 Sundbyberg, Sweden
-Visit:  Kavalleriv?gen 24, 174 58 Sundbyberg, Sweden
-Phone +46 (8) 441 54 22     Fax +46 (8) 441 54 29
-GSM    +46 (706) 22 44 57
 
-Technical support when I am not available:
-AT90 AVR Applications Group: mailto:avr at atmel.com
-AT91 ARM Applications Group: mailto:at91support at atmel.com
-AVR32 Applications Group        mailto:avr32 at atmel.com
-http://www.avrfreaks.net/;            http://avr32linux.org/
-http://www.at91.com/ ;                ftp://at91dist:distrib at 81.80.104.162/
+Modified:
+   trunk/buildroot/toolchain/uClibc/uClibc-0.9.29-001-fix-mmap.patch
+
+
+Changeset:
+Modified: trunk/buildroot/toolchain/uClibc/uClibc-0.9.29-001-fix-mmap.patch
+===================================================================
+--- trunk/buildroot/toolchain/uClibc/uClibc-0.9.29-001-fix-mmap.patch	2007-07-07 18:17:41 UTC (rev 19022)
++++ trunk/buildroot/toolchain/uClibc/uClibc-0.9.29-001-fix-mmap.patch	2007-07-07 23:54:33 UTC (rev 19023)
+@@ -1,7 +1,5 @@
+-Index: test/mmap/mmap2.c
+-===================================================================
+---- test/mmap/mmap2.c	(revision 0)
+-+++ test/mmap/mmap2.c	(revision 18616)
++--- uClibc-0.9.29.oorig/test/mmap/mmap2.c	(revision 0)
+++++ uClibc-0.9.29/test/mmap/mmap2.c	(revision 18616)
+ @@ -0,0 +1,41 @@
+ +/* When trying to map /dev/mem with offset 0xFFFFF000 on the ARM platform, mmap
+ + * returns -EOVERFLOW.
+@@ -44,10 +42,8 @@
+ +    close(fd);
+ +    return 0;
+ +}
+-Index: libc/sysdeps/linux/arm/mmap.c
+-===================================================================
+---- libc/sysdeps/linux/arm/mmap.c	(revision 18615)
+-+++ libc/sysdeps/linux/arm/mmap.c	(revision 18616)
++--- uClibc-0.9.29.oorig/libc/sysdeps/linux/arm/mmap.c	(revision 18615)
+++++ uClibc-0.9.29/libc/sysdeps/linux/arm/mmap.c	(revision 18616)
+ @@ -27,7 +27,6 @@ __ptr_t mmap(__ptr_t addr, size_t len, i
+  
+  #elif defined  (__NR_mmap2)
+@@ -75,10 +71,8 @@
+  }
+  #elif defined (__NR_mmap)
+  # define __NR__mmap __NR_mmap
+-Index: libc/sysdeps/linux/common/mmap64.c
+-===================================================================
+---- libc/sysdeps/linux/common/mmap64.c	(revision 18615)
+-+++ libc/sysdeps/linux/common/mmap64.c	(revision 18616)
++--- uClibc-0.9.29.oorig/libc/sysdeps/linux/common/mmap64.c	(revision 18615)
+++++ uClibc-0.9.29/libc/sysdeps/linux/common/mmap64.c	(revision 18616)
+ @@ -58,8 +58,13 @@ __ptr_t mmap64(__ptr_t addr, size_t len,
+  		__set_errno(EINVAL);
+  		return MAP_FAILED;
