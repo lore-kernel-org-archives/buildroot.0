@@ -1,22 +1,36 @@
-From: Bernhard Fischer <rep.dot.nop@gmail.com>
-Date: Sat, 7 Jul 2007 12:08:08 +0200
-Subject: [Buildroot] [PATCH] autoconf and m4 for the host
-In-Reply-To: <f0528b5b0707051040o276a55efoa799f1e50e7bc2f7@mail.gmail.com>
-References: <f0528b5b0707051040o276a55efoa799f1e50e7bc2f7@mail.gmail.com>
-Message-ID: <20070707100808.GM4096@aon.at>
+From: aldot at uclibc.org <aldot@uclibc.org>
+Date: Sat,  7 Jul 2007 03:14:31 -0700 (PDT)
+Subject: [Buildroot] svn commit: trunk/buildroot/package/findutils
+Message-ID: <20070707101431.A6670A6838@busybox.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Thu, Jul 05, 2007 at 07:40:24PM +0200, Julien Letessier wrote:
->Berhard,
->
->When submitting my patch for fontconfig+host-auto*, I forgot part of the
->patch: host-autoconf requires host-m4.
->Patch attached.
->
->Thanks to Nuno da Costa Ferro for pointing this out.
+Author: aldot
+Date: 2007-07-07 03:14:30 -0700 (Sat, 07 Jul 2007)
+New Revision: 19017
 
-Can you rediff this against current trunk, please?
+Log:
+- bump version
+
+
+Modified:
+   trunk/buildroot/package/findutils/findutils.mk
+
+
+Changeset:
+Modified: trunk/buildroot/package/findutils/findutils.mk
+===================================================================
+--- trunk/buildroot/package/findutils/findutils.mk	2007-07-07 10:11:17 UTC (rev 19016)
++++ trunk/buildroot/package/findutils/findutils.mk	2007-07-07 10:14:30 UTC (rev 19017)
+@@ -3,7 +3,7 @@
+ # findutils
+ #
+ #############################################################
+-FINDUTILS_VER:=4.2.27
++FINDUTILS_VER:=4.2.31
+ FINDUTILS_SOURCE:=findutils-$(FINDUTILS_VER).tar.gz
+ #FINDUTILS_SITE:=ftp://alpha.gnu.org/gnu/findutils
+ FINDUTILS_SITE:=http://ftp.gnu.org/pub/gnu/findutils/
