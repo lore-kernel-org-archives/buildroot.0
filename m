@@ -1,48 +1,43 @@
 From: Bernhard Fischer <rep.dot.nop@gmail.com>
-Date: Sat, 7 Jul 2007 14:35:36 +0200
-Subject: [Buildroot] What is the proper procedure to commit a patch?
-In-Reply-To: <00c201c7c091$e527cc10$dcc4af0a@atmel.com>
-References: <006201c7bfd9$de0f46a0$dcc4af0a@atmel.com>
-	<20070706152642.GA13765@aon.at>
-	<012f01c7bfe3$f55fb4c0$dcc4af0a@atmel.com>
-	<20070707101217.GO4096@aon.at>
-	<00c201c7c091$e527cc10$dcc4af0a@atmel.com>
-Message-ID: <20070707123536.GS4096@aon.at>
+Date: Sat, 7 Jul 2007 14:39:54 +0200
+Subject: [Buildroot] svn commit: trunk/buildroot/toolchain/gcc
+In-Reply-To: <00c301c7c091$e5f925d0$dcc4af0a@atmel.com>
+References: <20070707073437.22ECBA682B@busybox.net>
+	<20070707093316.GK4096@aon.at>
+	<00c301c7c091$e5f925d0$dcc4af0a@atmel.com>
+Message-ID: <20070707123954.GT4096@aon.at>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Sat, Jul 07, 2007 at 01:16:13PM +0200, Ulf Samuelsson wrote:
->>>Now we have package/linux.mk and we have Linux configuration spread out.
->>>
->>>What I want to do is to move "package/linux.mk" to "package/linux/linux.mk"
+On Sat, Jul 07, 2007 at 01:55:24PM +0200, Ulf Samuelsson wrote:
+>>> # Strip the host binaries
+>>> ifeq ($(GCC_STRIP_HOST_BINARIES),true)
+>>>- -strip --strip-all -R .note -R .comment $(STAGING_DIR)/usr/bin/*
+>>>+ if [ -e $(STAGING_DIR)/usr/bin/*-gccbug ] ; then \
 >> 
->> What's that good for? Just curious, this is just cosmetics.
->> 
->>>and then remove the distributed linux configuration to "package/linux/Config.in"
->> 
->> Which "distributed linux configuration" do you mean?
->>
+>> testing for existance doesn't work on all solaris test(1).
 >
->I'd like to have the configuration and makefile in the same directory.
-
-I don't like to have it in the same directory.
-
->Now the configuration is in a different directory.
-
-Yes, and that's a feature. You (or the board) can easily set
-BR2_PACKAGE_LINUX_KCONFIG to anything you want. It was added for exactly
-this purpose.
-
 >
->The current linux.mk is much less flexible than the one I use.
+>What will happen on a Solaris host then if this is found?
+>Will [ -a <file> ] work?
 
-You keep saying this, ISTR.
-What does not work currently as opposed to "yours"?
+KISS.
+-f FILE
+-x FILE
 
-Did you try to use the currently existing one, recently?
+This place doesn't need anything but checking by one of the above.
 
->Once we have the linux in a good place, then I will submit
->my proposals to the mailing list.
+>> What you really want is perhaps something like ifneq $((..$(wildcard..)),)
+>> 
+>
+>I believe ifneq is read in stage 1 of the Makefile, so this wont work either, right?
+
+Could be that it doesn't work, yes. Didn't try since i regard it as
+completely unimportant there.
+
+We don't bail out on failures from strip, and if you are not interrested
+in errors, then redirect stderr to /dev/null instead of needlessly
+stat()ing around, IMO.
