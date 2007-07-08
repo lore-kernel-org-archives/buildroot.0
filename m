@@ -1,8 +1,8 @@
 From: bugs at busybox.net <bugs@busybox.net>
-Date: Sat, 7 Jul 2007 17:29:21 -0700
-Subject: [Buildroot] [buildroot 0001415]: SVN buildroot does not build
-	configuration package
-Message-ID: <8327b12d52b72de209819a21bb4fb1a0@bugs.uclibc.org>
+Date: Sat, 7 Jul 2007 17:33:19 -0700
+Subject: [Buildroot] [buildroot 0001410]: uclibc.mk produces .config that
+	confuses uclibc's configuration system
+Message-ID: <fea63a7f285b55f5d7b3f1ba132df6a5@bugs.uclibc.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -12,124 +12,78 @@ To: buildroot@busybox.net
 
 A NOTE has been added to this issue. 
 ====================================================================== 
-http://busybox.net/bugs/view.php?id=1415 
+http://busybox.net/bugs/view.php?id=1410 
 ====================================================================== 
 Reported By:                bjdooks
 Assigned To:                buildroot
 ====================================================================== 
 Project:                    buildroot
-Issue ID:                   1415
-Category:                   Other
+Issue ID:                   1410
+Category:                   Architecture Specific
 Reproducibility:            always
-Severity:                   block
+Severity:                   major
 Priority:                   normal
 Status:                     assigned
 ====================================================================== 
-Date Submitted:             07-02-2007 04:56 PDT
-Last Modified:              07-07-2007 17:29 PDT
+Date Submitted:             06-29-2007 04:18 PDT
+Last Modified:              07-07-2007 17:33 PDT
 ====================================================================== 
-Summary:                    SVN buildroot does not build configuration package
+Summary:                    uclibc.mk produces .config that confuses uclibc's
+configuration system
 Description: 
-The new import of the package/config no longer builds even for the default
-by using 'make'
+If building for ARM, and providing an configuration from a file in a target
+sub-directory, the uclibc.mk file incorrectly re-writes the .config for
+building uclibc, causing warnings and an incorrect .config
 
-The following fails building mconf.c.
+The problem stems from unsetting CONFIG_<x> options, then re-specifying
+them as CONFIG_<x>=y later in the file. The current configuration system
+(make oldconfig) seems to take the first occurence as the proper setting.
+This means that options that should be set end up being unset as 'make
+oldconfig' removes any further refrences to CONFIG_<x> from the file.
 
-/usr/bin/gcc -g -O2   -c -o mconf.o mconf.c
-In file included from mconf.c:27:
-lxdialog/dialog.h:32:10: error: #include expects "FILENAME" or <FILENAME>
-In file included from mconf.c:27:
-lxdialog/dialog.h:97: error: expected specifier-qualifier-list before
-'chtype'
+For example, if you specify the buildroot config as CONFIG_ARM920T=y, then
+the uclibc.mk removes that turning it into # CONFIG_ARM920T is unset and
+then adds CONFIG_ARM920T=y to the end of the file. Then 'make oldconfig'
+is run, and CONFIG_ARM920T=y is deleted, thus causing CONFIG_GENERIC_ARM=y
+to be placed in the config file.
 
-This seems to require the $(HOST_EXTRACFLAGS) to build. 
+The warnings produced by 'make oldconfig' are:
+config:209:warning: trying to reassign symbol CONFIG_ARM920T
+.config:210:warning: trying to reassign symbol CONFIG_ARM_OABI
+.config:211:warning: trying to reassign symbol CONFIG_ARM_EABI
 
-I tried adding:
+Also note, that the EABI/OABI are also being warned about, so are
+also fixed.
 
-%.o: %.c
-        $(HOSTCC) $(HOST_EXTRACFLAGS) $(HOSTCFLAGS) $(HOSTCFLAGS_$@) -c $<
--o $@
-
-but this just then fails to link the project.
-
-I do not have enough make expertise to try and fix this, as it is a
-complicated piece of make.
+The simple fix is to change the sed expressions unsetting these options to
+simply deleting them from the file.
 ====================================================================== 
 
 ---------------------------------------------------------------------- 
- bjdooks - 07-02-07 04:58  
+ bjdooks - 06-29-07 04:20  
 ---------------------------------------------------------------------- 
-URL: svn://uclibc.org/trunk/buildroot
-Repository Root: svn://uclibc.org
-Repository UUID: 69ca8d6d-28ef-0310-b511-8ec308f3f277
-Revision: 18991
-Node Kind: directory
-Schedule: normal
-Last Changed Author: aldot
-Last Changed Rev: 18991
-Last Changed Date: 2007-07-02 10:54:18 +0100 (Mon, 02 Jul 2007) 
+Uploaded the original configuration for uclibc, and the one produced by
+oldconfig.  as well as the overall buildroot config. 
 
 ---------------------------------------------------------------------- 
- bjdooks - 07-02-07 18:05  
+ bernhardf - 07-07-07 17:33  
 ---------------------------------------------------------------------- 
-Partially corrected by the fix to write .config.cmd, but menuconfig
-still returns an error even if it correctly writes a config. Updated
-package/config patch to follow 
-
----------------------------------------------------------------------- 
- bjdooks - 07-02-07 18:07  
----------------------------------------------------------------------- 
-http://bugs.uclibc.org/file_download.php?file_id=1069&type=bug fixes
-menuconfig error return by ensuring we do not try things like writing the
-split configuration headers and moving the autogenerated configuration
-files .tmpconfig and .tmpconfig.h to a directory which isn't used. 
-
----------------------------------------------------------------------- 
- chickenandporn - 07-03-07 12:11  
----------------------------------------------------------------------- 
-The attached patch is a list of instructions, not a patch... it's not
-usable without knowing perhaps a kernel version it comes from and such.
-
-looks like the change in 18991 helped.  (looking at: svn diff -r 18991
-package/config/confdata.c)
-
-I have a patch that will resolve; will try to attach tonight after I clean
-it a bit -- basically copies the mkdir stuff from confdata.c@614 to a
-separate function and re-uses before the rename() calls. 
-
----------------------------------------------------------------------- 
- chickenandporn - 07-05-07 07:03  
----------------------------------------------------------------------- 
-http://bugs.uclibc.org/file_download.php?file_id=1071&type=bug tested on
-clean r19002 checkout from SVN.  Tested on Linux (CentOS-4.4) and (intel)
-MacOSX-10.4.10.  bjdooks, can you check the patch, and see if you can
-alter it to cover what you did as well, in case I missed something from
-your fix?
-
- 
-
----------------------------------------------------------------------- 
- bernhardf - 07-07-07 17:29  
----------------------------------------------------------------------- 
-r19026 is supposed to work, please report back. TIA, 
+i'll bite. Why do you still keep the matched ARM stuff if you will not use
+it but delete it? And why don't you delete ARM_OABI/ARM_EABI once? 
 
 Issue History 
 Date Modified   Username       Field                    Change               
 ====================================================================== 
-07-02-07 04:56  bjdooks        New Issue                                    
-07-02-07 04:56  bjdooks        Status                   new => assigned     
-07-02-07 04:56  bjdooks        Assigned To               => buildroot       
-07-02-07 04:58  bjdooks        Note Added: 0002542                          
-07-02-07 18:05  bjdooks        Note Added: 0002545                          
-07-02-07 18:05  bjdooks        File Added: buildroot-fix-menuconfig.patch       
-            
-07-02-07 18:07  bjdooks        Note Added: 0002546                          
-07-03-07 12:11  chickenandporn Note Added: 0002553                          
-07-05-07 06:57  chickenandporn File Added: buildroot-confdata-mkdirhier.patch   
-                
-07-05-07 07:02  chickenandporn Note Added: 0002556                          
-07-05-07 07:03  chickenandporn Note Edited: 0002556                         
-07-05-07 07:41  chickenandporn Issue Monitored: chickenandporn                  
- 
-07-07-07 17:29  bernhardf      Note Added: 0002563                          
+06-29-07 04:18  bjdooks        New Issue                                    
+06-29-07 04:18  bjdooks        Status                   new => assigned     
+06-29-07 04:18  bjdooks        Assigned To               => buildroot       
+06-29-07 04:18  bjdooks        File Added: uclibc-arm-config.patch              
+     
+06-29-07 04:19  bjdooks        File Added: uClibc-original.config               
+    
+06-29-07 04:19  bjdooks        File Added: uClibc-oldconfiged.config            
+       
+06-29-07 04:19  bjdooks        File Added: buildropt.config                    
+06-29-07 04:20  bjdooks        Note Added: 0002532                          
+07-07-07 17:33  bernhardf      Note Added: 0002564                          
 ======================================================================
