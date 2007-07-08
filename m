@@ -1,8 +1,8 @@
 From: bugs at busybox.net <bugs@busybox.net>
-Date: Sun, 8 Jul 2007 09:40:42 -0700
-Subject: [Buildroot] [buildroot 0001424]: lighttpd: buildroot wants
-	debian/init.d which no longer exists
-Message-ID: <7840cb535fa875ce38407f53bed4c7ca@bugs.uclibc.org>
+Date: Sun, 8 Jul 2007 09:40:43 -0700
+Subject: [Buildroot] [buildroot 0001206]: lighttpd version incorrect in
+	lighttpd.mk
+Message-ID: <fd06d5ede0a332895ad68beeb6eca089@bugs.uclibc.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -10,65 +10,50 @@ Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
 
-The following issue has been set as RELATED TO issue 0001206. 
+The following issue has been set as RELATED TO issue 0001424. 
 ====================================================================== 
-http://busybox.net/bugs/view.php?id=1424 
+http://busybox.net/bugs/view.php?id=1206 
 ====================================================================== 
-Reported By:                vogelchr
+Reported By:                codehero
 Assigned To:                buildroot
 ====================================================================== 
 Project:                    buildroot
-Issue ID:                   1424
+Issue ID:                   1206
 Category:                   Other
 Reproducibility:            always
 Severity:                   minor
 Priority:                   normal
-Status:                     assigned
+Status:                     closed
+Resolution:                 fixed
+Fixed in Version:           
 ====================================================================== 
-Date Submitted:             07-08-2007 09:08 PDT
-Last Modified:              07-08-2007 09:40 PDT
+Date Submitted:             02-11-2007 08:02 PST
+Last Modified:              02-12-2007 05:42 PST
 ====================================================================== 
-Summary:                    lighttpd: buildroot wants debian/init.d which no
-longer exists
+Summary:                    lighttpd version incorrect in lighttpd.mk
 Description: 
-When building the lighttpd package the build script wants to install the
-file $(LIGHTTPD_DIR)/debian/init.d which no longer is in the lighttpd
-tarball.
-
-atrocity buildroot $ tar tzf dl/lighttpd-1.4.13.tar.gz | grep debian
- ---> there is nothing named debian in the tarball
-
-in package/lighttpd/lighttpd.mk:
-
-$(TARGET_DIR)/$(LIGHTTPD_TARGET_BINARY):
-$(LIGHTTPD_DIR)/$(LIGHTTPD_BINARY)
-        $(MAKE) DESTDIR=$(TARGET_DIR) -C $(LIGHTTPD_DIR) install
-        $(INSTALL) -m 0755 -D $(LIGHTTPD_DIR)/debian/init.d
-$(TARGET_DIR)/etc/init.d/S99lighttpd
-
-Make aborts on this rule:
-
-make[1]: Leaving directory
-`/home/chris/buildroot/build_i586/lighttpd-1.4.13'
-/usr/bin/install -m 0755 -D
-/home/chris/buildroot/build_i586/lighttpd-1.4.13/debia
-n/init.d /home/chris/buildroot/build_i586/root/etc/init.d/S99lighttpd
-/usr/bin/install: cannot stat
-/home/chris/buildroot/build_i586/lighttpd-1.4.13/debian/init.d': No such
-file or directory
-
-
+should be updated to 1.4.13 from 1.4.3
 ======================================================================
 Relationships       ID      Summary
 ----------------------------------------------------------------------
-related to          0001206 lighttpd version incorrect in lighttpd.mk
+related to          0001424 lighttpd: buildroot wants debian/init.d...
 ====================================================================== 
+
+---------------------------------------------------------------------- 
+ bernhardf - 02-11-07 10:08  
+---------------------------------------------------------------------- 
+Fixed in r17855. Thanks! 
 
 Issue History 
 Date Modified   Username       Field                    Change               
 ====================================================================== 
-07-08-07 09:08  vogelchr       New Issue                                    
-07-08-07 09:08  vogelchr       Status                   new => assigned     
-07-08-07 09:08  vogelchr       Assigned To               => buildroot       
-07-08-07 09:40  bernhardf      Relationship added       related to 0001206  
+02-11-07 08:02  codehero       New Issue                                    
+02-11-07 08:02  codehero       Status                   new => assigned     
+02-11-07 08:02  codehero       Assigned To               => uClibc          
+02-11-07 10:08  bernhardf      Status                   assigned => closed  
+02-11-07 10:08  bernhardf      Note Added: 0002149                          
+02-11-07 10:08  bernhardf      Resolution               open => fixed       
+02-12-07 05:42  vapier         Status                   closed => assigned  
+02-12-07 05:42  vapier         Assigned To              uClibc => buildroot 
+07-08-07 09:40  bernhardf      Relationship added       related to 0001424  
 ======================================================================
