@@ -1,47 +1,39 @@
-From: Cristian Ionescu-Idbohrn <cristian.ionescu-idbohrn@axis.com>
-Date: Sun, 8 Jul 2007 14:55:12 +0200 (CEST)
-Subject: [Buildroot] dbus: wrong place to lookup libexpat.so
-In-Reply-To: <20070708122308.GI4096@aon.at>
-References: <0707081411270.26961@somehost> <20070708122308.GI4096@aon.at>
-Message-ID: <0707081450570.3987@somehost>
+From: Bernhard Fischer <rep.dot.nop@gmail.com>
+Date: Sun, 8 Jul 2007 14:59:52 +0200
+Subject: [Buildroot] improved deps [was Re: svn commit: trunk/buildroot:
+	package/config]
+In-Reply-To: <20070708001049.GC4096@aon.at>
+References: <20070708000018.9AFEEA686B@busybox.net>
+	<20070708001049.GC4096@aon.at>
+Message-ID: <20070708125948.GK4096@aon.at>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Sun, 8 Jul 2007, Bernhard Fischer wrote:
-
-> On Sun, Jul 08, 2007 at 02:12:53PM +0200, Cristian Ionescu-Idbohrn wrote:
-> >Index: dbus.mk
-> >===================================================================
-> >--- dbus.mk	(revision 19026)
-> >+++ dbus.mk	(working copy)
-> >@@ -51,7 +51,7 @@
-> > 	touch  $(DBUS_DIR)/.configured
-> >
-> > $(DBUS_DIR)/$(DBUS_BINARY): $(DBUS_DIR)/.configured
-> >-	$(MAKE) DBUS_BUS_LIBS="$(STAGING_DIR)/lib/libexpat.so" -C $(DBUS_DIR) all
-> >+	$(MAKE) DBUS_BUS_LIBS="$(STAGING_DIR)/usr/lib/libexpat.so" -C $(DBUS_DIR) all
-> >
-> > $(STAGING_DIR)/usr/lib/libdbus-1.so: $(DBUS_DIR)/$(DBUS_BINARY)
-> > 	$(MAKE) DESTDIR=$(STAGING_DIR) -C $(DBUS_DIR)/dbus install
+On Sun, Jul 08, 2007 at 02:10:49AM +0200, Bernhard Fischer wrote:
+>On Sat, Jul 07, 2007 at 05:00:18PM -0700, aldot at uclibc.org wrote:
+>>Author: aldot
+>>Date: 2007-07-07 17:00:17 -0700 (Sat, 07 Jul 2007)
+>>New Revision: 19025
+>>
+>>Log:
+>>- silence a cosmetic warning (closes several issues in mantis).
+>>  This also provides a nice up-to-date filestamp if something got reconfigured (e.g. c++ support got toggled) that can be used in the future to depend accordingly.
 >
-> ok, but can you try the attached patch instead, please?
+>e.g.:
 
-rm: cannot remove
-`/data/cii/buildroot/buildroot/build_i486/root/usr/lib/dbus-1.0':
-Is a directory
+I have applied this as an example for gcc as r19034.
+A more generic way would be in order, e.g. emit a file that can be
+pulled in that looks like (pseudo pathes):
 
-The attached works better.
+/obj/buildroot/toolchain_build_i386/gcc-4.2.0-final/.configured: \
+	/obj/buildroot/build_i386/include/config/br2/install/fortran.h
 
+/obj/buildroot/toolchain_build_i386/uClibc/.configured: \
+	/obj/buildroot/build_i386/include/config/br2/uclibc/feature1.h \
+	/obj/buildroot/build_i386/include/config/br2/uclibc/feature2.h \
+	/obj/buildroot/build_i386/include/config/br2/uclibc/feature3.h
 
--- 
-Cristian
--------------- next part --------------
-A non-text attachment was scrubbed...
-Name: db.patch
-Type: text/x-diff
-Size: 2225 bytes
-Desc: 
-Url : http://busybox.net/lists/buildroot/attachments/20070708/9babe3fe/attachment.bin 
+I leave the impl of the above to the curious reader :P
