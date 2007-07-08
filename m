@@ -1,37 +1,36 @@
-From: Cristian Ionescu-Idbohrn <cristian.ionescu-idbohrn@axis.com>
-Date: Sun, 8 Jul 2007 13:14:51 +0200 (CEST)
-Subject: [Buildroot] busybox package configuration
-Message-ID: <0707081257070.8395@somehost>
+From: aldot at uclibc.org <aldot@uclibc.org>
+Date: Sun,  8 Jul 2007 04:56:39 -0700 (PDT)
+Subject: [Buildroot] svn commit: trunk/buildroot/package/busybox
+Message-ID: <20070708115639.132EAA4684@busybox.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-I mended the Config.in file:
+Author: aldot
+Date: 2007-07-08 04:56:38 -0700 (Sun, 08 Jul 2007)
+New Revision: 19029
 
-Index: Config.in
+Log:
+- forgot to provide a default config for 1.6.1
+  Thanks to Cristian Ionescu-Idbohrn for noticing this.
+
+
+Modified:
+   trunk/buildroot/package/busybox/Config.in
+
+
+Changeset:
+Modified: trunk/buildroot/package/busybox/Config.in
 ===================================================================
---- Config.in	(revision 19026)
-+++ Config.in	(working copy)
+--- trunk/buildroot/package/busybox/Config.in	2007-07-08 11:25:25 UTC (rev 19028)
++++ trunk/buildroot/package/busybox/Config.in	2007-07-08 11:56:38 UTC (rev 19029)
 @@ -100,6 +100,7 @@
  	default "package/busybox/busybox-1.5.0.config" if BR2_BUSYBOX_VERSION_1_5_0
  	default "package/busybox/busybox-1.5.0.config" if BR2_BUSYBOX_VERSION_1_5_1
  	default "package/busybox/busybox-1.6.0.config" if BR2_BUSYBOX_VERSION_1_6_0
-+	default "package/busybox/busybox-1.6.1.config" if BR2_BUSYBOX_VERSION_1_6_1
++	default "package/busybox/busybox-1.6.0.config" if BR2_BUSYBOX_VERSION_1_6_1
  	help
  	  Some people may wish to use their own modified BusyBox configuration
  	  file, and will specify their config file location with this option.
-
-created a busybox-1.6.1.config file in package/busybox, did a 'make
-menuconfig' in topdir and expected to see the
-package/busybox/busybox-1.6.1.config preselected.  But no joy :(  I still
-needed to manually enter the config file path into the field.
-
-I can also see that the BR2_PACKAGE_BUSYBOX_CONFIG variable in busybox.mk
-is empty when making a busybox-<something> target.  There's some make
-magic I do not possess :(  Any ideas?
-
-
--- 
-Cristian
