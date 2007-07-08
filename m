@@ -1,29 +1,45 @@
-From: Bernhard Fischer <rep.dot.nop@gmail.com>
-Date: Sun, 8 Jul 2007 12:28:17 +0200
-Subject: [Buildroot] [/bin/sh which ar] should be [/bin/sh -c "which ar"]
-In-Reply-To: <1183869339.5714.5.camel@elrond.sweden.atmel.com>
-References: <1183869339.5714.5.camel@elrond.sweden.atmel.com>
-Message-ID: <20070708102817.GE4096@aon.at>
+From: aldot at uclibc.org <aldot@uclibc.org>
+Date: Sun,  8 Jul 2007 04:03:45 -0700 (PDT)
+Subject: [Buildroot] svn commit: trunk/buildroot/package/dmraid
+Message-ID: <20070708110345.6C8EFA4550@busybox.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Sun, Jul 08, 2007 at 06:35:39AM +0200, Ulf Samuelsson wrote:
->When the host tools are determined in the top Makefile
->(every time make us run) 
->this fails 5 times with the error message:
->
->/usr/bin/which: /usr/bin/which: cannot execute binary file
->
->What happens inside the Makefile is that a command is run:
->$ /bin/sh which ar
->and the bash shell does not like this on my OpenSuSE 10.2 system
->$ /bin/sh -c "which ar"
->will do what we want, so I would like to apply the following patch
->Any comments?
+Author: aldot
+Date: 2007-07-08 04:03:43 -0700 (Sun, 08 Jul 2007)
+New Revision: 19027
 
-ok, please apply.
+Log:
+- bump version and uninstall runlevel script. Closes #1366
 
-Thanks,
+
+Modified:
+   trunk/buildroot/package/dmraid/dmraid.mk
+
+
+Changeset:
+Modified: trunk/buildroot/package/dmraid/dmraid.mk
+===================================================================
+--- trunk/buildroot/package/dmraid/dmraid.mk	2007-07-08 00:18:51 UTC (rev 19026)
++++ trunk/buildroot/package/dmraid/dmraid.mk	2007-07-08 11:03:43 UTC (rev 19027)
+@@ -4,7 +4,7 @@
+ #
+ #############################################################
+ 
+-DMRAID_VERSION=1.0.0.rc13
++DMRAID_VERSION=1.0.0.rc14
+ DMRAID_SOURCE:=dmraid-$(DMRAID_VERSION).tar.bz2
+ DMRAID_SITE:=http://people.redhat.com/~heinzm/sw/dmraid/src
+ DMRAID_DIR:=$(BUILD_DIR)/dmraid/$(DMRAID_VERSION)
+@@ -51,7 +51,7 @@
+ dmraid: uclibc dm zlib $(DMRAID_TARGET_BINARY)
+ 
+ dmraid-clean:
+-	rm $(DMRAID_TARGET_BINARY)
++	rm -f $(DMRAID_TARGET_BINARY) $(TARGET_DIR)/etc/init.d/dmraid
+ 	$(MAKE) -C $(DMRAID_DIR) clean
+ 
+ dmraid-dirclean:
