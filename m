@@ -1,36 +1,56 @@
-From: aldot at uclibc.org <aldot@uclibc.org>
-Date: Sun,  8 Jul 2007 04:25:25 -0700 (PDT)
-Subject: [Buildroot] svn commit: trunk/buildroot/target/iso9660
-Message-ID: <20070708112525.EE423A458D@busybox.net>
+From: bugs at busybox.net <bugs@busybox.net>
+Date: Sun, 8 Jul 2007 04:25:40 -0700
+Subject: [Buildroot] [buildroot 0001194]: iso9660 target does not build
+	target kernel
+Message-ID: <cfd8910cec6f1cae554609bda54b42d7@bugs.uclibc.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Author: aldot
-Date: 2007-07-08 04:25:25 -0700 (Sun, 08 Jul 2007)
-New Revision: 19028
 
-Log:
-- iso9660 target does not build target kernel due to missing dependency. Closes #1194
+The following issue has been CLOSED 
+====================================================================== 
+http://busybox.net/bugs/view.php?id=1194 
+====================================================================== 
+Reported By:                janlana
+Assigned To:                buildroot
+====================================================================== 
+Project:                    buildroot
+Issue ID:                   1194
+Category:                   Other
+Reproducibility:            always
+Severity:                   minor
+Priority:                   normal
+Status:                     closed
+Resolution:                 open
+Fixed in Version:           
+====================================================================== 
+Date Submitted:             02-05-2007 02:21 PST
+Last Modified:              07-08-2007 04:25 PDT
+====================================================================== 
+Summary:                    iso9660 target does not build target kernel
+Description: 
+$(LINUX_KERNEL) dependecy is missing in $(ISO9660_TARGET) target. 
 
+Patch is attached.
+====================================================================== 
 
-Modified:
-   trunk/buildroot/target/iso9660/iso9660.mk
+---------------------------------------------------------------------- 
+ bernhardf - 07-08-07 04:25  
+---------------------------------------------------------------------- 
+Merged as r19028. Thanks! 
 
-
-Changeset:
-Modified: trunk/buildroot/target/iso9660/iso9660.mk
-===================================================================
---- trunk/buildroot/target/iso9660/iso9660.mk	2007-07-08 11:03:43 UTC (rev 19027)
-+++ trunk/buildroot/target/iso9660/iso9660.mk	2007-07-08 11:25:25 UTC (rev 19028)
-@@ -54,7 +54,7 @@
- ISO9660_OPTS+=-U
- endif
- 
--$(ISO9660_TARGET): host-fakeroot $(EXT2_TARGET) grub mkisofs
-+$(ISO9660_TARGET): host-fakeroot $(LINUX_KERNEL) $(EXT2_TARGET) grub mkisofs
- 	mkdir -p $(ISO9660_TARGET_DIR)
- 	mkdir -p $(ISO9660_TARGET_DIR)/boot/grub
- 	cp $(GRUB_DIR)/stage2/stage2_eltorito $(ISO9660_TARGET_DIR)/boot/grub/
+Issue History 
+Date Modified   Username       Field                    Change               
+====================================================================== 
+02-05-07 02:21  janlana        New Issue                                    
+02-05-07 02:21  janlana        Status                   new => assigned     
+02-05-07 02:21  janlana        Assigned To               => uClibc          
+02-05-07 02:21  janlana        File Added: target_iso9660_linux.patch           
+        
+02-12-07 05:33  vapier         Assigned To              uClibc => buildroot 
+07-08-07 04:25  bernhardf      Status                   assigned => closed  
+07-08-07 04:25  bernhardf      Note Added: 0002570                          
+======================================================================
