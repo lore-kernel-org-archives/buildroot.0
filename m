@@ -1,92 +1,83 @@
-From: aldot at uclibc.org <aldot@uclibc.org>
-Date: Sun,  8 Jul 2007 11:14:52 -0700 (PDT)
-Subject: [Buildroot] svn commit: trunk/buildroot/package/lighttpd
-Message-ID: <20070708181452.3E963A6AAC@busybox.net>
+From: bugs at busybox.net <bugs@busybox.net>
+Date: Sun, 8 Jul 2007 11:15:34 -0700
+Subject: [Buildroot] [buildroot 0001424]: lighttpd: buildroot wants
+	debian/init.d which no longer exists
+Message-ID: <b926d9a0556f4569585f311f09007f6b@bugs.uclibc.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Author: aldot
-Date: 2007-07-08 11:14:51 -0700 (Sun, 08 Jul 2007)
-New Revision: 19041
 
-Log:
-- bump version and make it compile
+The following issue has been CLOSED 
+====================================================================== 
+http://busybox.net/bugs/view.php?id=1424 
+====================================================================== 
+Reported By:                vogelchr
+Assigned To:                buildroot
+====================================================================== 
+Project:                    buildroot
+Issue ID:                   1424
+Category:                   Other
+Reproducibility:            always
+Severity:                   minor
+Priority:                   normal
+Status:                     closed
+Resolution:                 open
+Fixed in Version:           
+====================================================================== 
+Date Submitted:             07-08-2007 09:08 PDT
+Last Modified:              07-08-2007 11:15 PDT
+====================================================================== 
+Summary:                    lighttpd: buildroot wants debian/init.d which no
+longer exists
+Description: 
+When building the lighttpd package the build script wants to install the
+file $(LIGHTTPD_DIR)/debian/init.d which no longer is in the lighttpd
+tarball.
+
+atrocity buildroot $ tar tzf dl/lighttpd-1.4.13.tar.gz | grep debian
+ ---> there is nothing named debian in the tarball
+
+in package/lighttpd/lighttpd.mk:
+
+$(TARGET_DIR)/$(LIGHTTPD_TARGET_BINARY):
+$(LIGHTTPD_DIR)/$(LIGHTTPD_BINARY)
+        $(MAKE) DESTDIR=$(TARGET_DIR) -C $(LIGHTTPD_DIR) install
+        $(INSTALL) -m 0755 -D $(LIGHTTPD_DIR)/debian/init.d
+$(TARGET_DIR)/etc/init.d/S99lighttpd
+
+Make aborts on this rule:
+
+make[1]: Leaving directory
+`/home/chris/buildroot/build_i586/lighttpd-1.4.13'
+/usr/bin/install -m 0755 -D
+/home/chris/buildroot/build_i586/lighttpd-1.4.13/debia
+n/init.d /home/chris/buildroot/build_i586/root/etc/init.d/S99lighttpd
+/usr/bin/install: cannot stat
+/home/chris/buildroot/build_i586/lighttpd-1.4.13/debian/init.d': No such
+file or directory
 
 
-Modified:
-   trunk/buildroot/package/lighttpd/lighttpd.mk
+======================================================================
+Relationships       ID      Summary
+----------------------------------------------------------------------
+related to          0001206 lighttpd version incorrect in lighttpd.mk
+====================================================================== 
 
+---------------------------------------------------------------------- 
+ bernhardf - 07-08-07 11:15  
+---------------------------------------------------------------------- 
+Should be fixed in r19041. Thanks for mentioning this 
 
-Changeset:
-Modified: trunk/buildroot/package/lighttpd/lighttpd.mk
-===================================================================
---- trunk/buildroot/package/lighttpd/lighttpd.mk	2007-07-08 16:28:54 UTC (rev 19040)
-+++ trunk/buildroot/package/lighttpd/lighttpd.mk	2007-07-08 18:14:51 UTC (rev 19041)
-@@ -3,28 +3,40 @@
- # lighttpd
- #
- #############################################################
--LIGHTTPD_VER:=1.4.13
--LIGHTTPD_SOURCE:=lighttpd-$(LIGHTTPD_VER).tar.gz
--LIGHTTPD_SITE:=http://www.lighttpd.net/download
--LIGHTTPD_DIR:=$(BUILD_DIR)/lighttpd-$(LIGHTTPD_VER)
-+LIGHTTPD_VERSION:=1.4.15
-+LIGHTTPD_SOURCE:=lighttpd_$(LIGHTTPD_VERSION).orig.tar.gz
-+LIGHTTPD_PATCH:=lighttpd_$(LIGHTTPD_VERSION)-1.diff.gz
-+LIGHTTPD_SITE:=http://ftp.debian.org/debian/pool/main/l/lighttpd
-+LIGHTTPD_DIR:=$(BUILD_DIR)/lighttpd-$(LIGHTTPD_VERSION)
- LIGHTTPD_CAT:=$(ZCAT)
- LIGHTTPD_BINARY:=src/lighttpd
- LIGHTTPD_TARGET_BINARY:=usr/sbin/lighttpd
- 
-+ifneq ($(BR2_LARGEFILE),y)
-+LIGHTTPD_LFS:=--disable-lfs
-+endif
-+
- $(DL_DIR)/$(LIGHTTPD_SOURCE):
- 	 $(WGET) -P $(DL_DIR) $(LIGHTTPD_SITE)/$(LIGHTTPD_SOURCE)
-+ifneq ($(LIGHTTPD_PATCH),)
-+LIGHTTPD_PATCH_FILE:=$(DL_DIR)/$(LIGHTTPD_PATCH)
-+$(LIGHTTPD_PATCH_FILE):
-+	 $(WGET) -P $(DL_DIR) $(LIGHTTPD_SITE)/$(LIGHTTPD_PATCH)
-+endif
-+lighttpd-source: $(DL_DIR)/$(LIGHTTPD_SOURCE) $(LIGHTTPD_PATCH_FILE)
- 
--lighttpd-source: $(DL_DIR)/$(LIGHTTPD_SOURCE)
--
--#############################################################
--#
--# build lighttpd for use on the target system
--#
--#############################################################
- $(LIGHTTPD_DIR)/.unpacked: $(DL_DIR)/$(LIGHTTPD_SOURCE)
- 	$(LIGHTTPD_CAT) $(DL_DIR)/$(LIGHTTPD_SOURCE) | tar -C $(BUILD_DIR) $(TAR_OPTIONS) -
- 	toolchain/patch-kernel.sh $(LIGHTTPD_DIR) package/lighttpd/ lighttpd\*.patch
--	touch  $(LIGHTTPD_DIR)/.unpacked
-+ifneq ($(LIGHTTPD_PATCH),)
-+	(cd $(LIGHTTPD_DIR)&&$(LIGHTTPD_CAT) $(LIGHTTPD_PATCH_FILE)|patch -p1)
-+endif
-+	if [ -d $(LIGHTTPD_DIR)/debian/patches ]; then \
-+		toolchain/patch-kernel.sh $(LIGHTTPD_DIR) $(LIGHTTPD_DIR)/debian/patches \*.dpatch ; \
-+	fi
-+	$(CONFIG_UPDATE) $(@D)
-+	$(SED) 's/-lfs/-largefile/g;s/_lfs/_largefile/g' $(LIGHTTPD_DIR)/configure
-+	touch $@
- 
- $(LIGHTTPD_DIR)/.configured: $(LIGHTTPD_DIR)/.unpacked
- 	(cd $(LIGHTTPD_DIR); rm -rf config.cache; \
-@@ -42,8 +54,10 @@
- 		--with-openssl \
- 		--without-pcre \
- 		--program-prefix="" \
-+		$(DISABLE_IPV6) \
-+		$(DISABLE_LARGEFILE) \
- 	);
--	touch  $(LIGHTTPD_DIR)/.configured
-+	touch $@
- 
- $(LIGHTTPD_DIR)/$(LIGHTTPD_BINARY): $(LIGHTTPD_DIR)/.configured
- 	$(MAKE) -C $(LIGHTTPD_DIR)
+Issue History 
+Date Modified   Username       Field                    Change               
+====================================================================== 
+07-08-07 09:08  vogelchr       New Issue                                    
+07-08-07 09:08  vogelchr       Status                   new => assigned     
+07-08-07 09:08  vogelchr       Assigned To               => buildroot       
+07-08-07 09:40  bernhardf      Relationship added       related to 0001206  
+07-08-07 11:15  bernhardf      Status                   assigned => closed  
+07-08-07 11:15  bernhardf      Note Added: 0002577                          
+======================================================================
