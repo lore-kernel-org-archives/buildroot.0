@@ -1,72 +1,43 @@
-From: aldot at uclibc.org <aldot@uclibc.org>
-Date: Sun,  8 Jul 2007 06:55:51 -0700 (PDT)
-Subject: [Buildroot] svn commit: trunk/buildroot/package/expat
-Message-ID: <20070708135551.4522B30043@busybox.net>
+From: Bernhard Fischer <rep.dot.nop@gmail.com>
+Date: Sun, 8 Jul 2007 15:51:36 +0200
+Subject: [Buildroot] missing expat-dirclean target
+In-Reply-To: <0707081519090.3987@somehost>
+References: <0707081407520.26961@somehost> <20070708121822.GH4096@aon.at>
+	<0707081504270.3987@somehost> <20070708131108.GL4096@aon.at>
+	<0707081519090.3987@somehost>
+Message-ID: <20070708135136.GN4096@aon.at>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Author: aldot
-Date: 2007-07-08 06:55:49 -0700 (Sun, 08 Jul 2007)
-New Revision: 19038
+On Sun, Jul 08, 2007 at 03:27:11PM +0200, Cristian Ionescu-Idbohrn wrote:
+>On Sun, 8 Jul 2007, Bernhard Fischer wrote:
+>
+>> On Sun, Jul 08, 2007 at 03:07:18PM +0200, Cristian Ionescu-Idbohrn wrote:
+>> >
+>> > Looks like stuff is removed both from STAGING_DIR and TARGET_DIR.  Is
+>> > this the correct behaviour?
+>>
+>> I think removing stuff from both staging_dir and target_dir is the way
+>> to go, yes.
+>
+>Alright.  I still wish every makefile had a target called called
+><something>-uninstall to do that.
+>
+>> Consider somebody intending to turn off a package. The usual intuitive
+>> way is IMHO to make foo-clean then reconfigure to remove that package.
+>>
+>> I'm open to alternative suggestions, of course.
+>
+>This is how I wish it was done (looks more intuitive to me):
+>
+><something>-clean	does the usual 'make clean' stuff
+><something>-dirclean	wipes out the build directory
+><something>-uninstall	wipes whatever was installed
 
-Log:
-- add missing dirclean target (Cristian Ionescu-Idbohrn)
+sounds ok to me, i'll let others comment. Care to send a patch if noone
+objects withing a couple of days?
 
-
-Modified:
-   trunk/buildroot/package/expat/expat.mk
-
-
-Changeset:
-Modified: trunk/buildroot/package/expat/expat.mk
-===================================================================
---- trunk/buildroot/package/expat/expat.mk	2007-07-08 13:51:15 UTC (rev 19037)
-+++ trunk/buildroot/package/expat/expat.mk	2007-07-08 13:55:49 UTC (rev 19038)
-@@ -19,7 +19,8 @@
- expat-source: $(DL_DIR)/$(EXPAT_SOURCE)
- 
- $(EXPAT_DIR)/.unpacked: $(DL_DIR)/$(EXPAT_SOURCE)
--	$(EXPAT_CAT) $(DL_DIR)/$(EXPAT_SOURCE) | tar -C $(BUILD_DIR) $(TAR_OPTIONS) -
-+	$(EXPAT_CAT) $(DL_DIR)/$(EXPAT_SOURCE) | \
-+		tar -C $(BUILD_DIR) $(TAR_OPTIONS) -
- 	$(CONFIG_UPDATE) $(EXPAT_DIR)
- 	touch $@
- 
-@@ -40,7 +41,7 @@
- 		--sysconfdir=/etc \
- 		--datadir=/usr/share \
- 		--localstatedir=/var \
--		--includedir=/include \
-+		--includedir=/usr/include \
- 		--mandir=/usr/man \
- 		--infodir=/usr/info \
- 		--enable-shared \
-@@ -53,7 +54,8 @@
- 
- $(STAGING_DIR)/$(EXPAT_TARGET_BINARY): $(EXPAT_DIR)/$(EXPAT_BINARY)
- 	$(MAKE) DESTDIR=$(STAGING_DIR)/usr -C $(EXPAT_DIR) install
--	$(SED) "s,^libdir=.*,libdir=\'$(STAGING_DIR)/usr/lib\',g" $(STAGING_DIR)/usr/lib/libexpat.la
-+	$(SED) "s,^libdir=.*,libdir=\'$(STAGING_DIR)/usr/lib\',g" \
-+		$(STAGING_DIR)/usr/lib/libexpat.la
- 	touch -c $@
- 
- $(TARGET_DIR)/$(EXPAT_TARGET_BINARY): $(STAGING_DIR)/$(EXPAT_TARGET_BINARY)
-@@ -66,10 +68,14 @@
- 
- expat-clean:
- 	rm -f $(EXPAT_DIR)/.configured
--	rm -f $(STAGING_DIR)/usr/lib/libexpat.* $(TARGET_DIR)/usr/lib/libexpat.*
-+	rm -f $(STAGING_DIR)/usr/lib/libexpat.* \
-+		$(TARGET_DIR)/usr/lib/libexpat.*
- 	#rm -f $(STAGING_DIR)/usr/bin/xmlwf  $(TARGET_DIR)/usr/bin/xmlwf
- 	-$(MAKE) -C $(EXPAT_DIR) clean
- 
-+expat-dirclean:
-+	rm -rf $(EXPAT_DIR)
-+
- #############################################################
- #
- # Toplevel Makefile options
+cheers,
