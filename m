@@ -1,52 +1,47 @@
-From: aldot at uclibc.org <aldot@uclibc.org>
-Date: Sun,  8 Jul 2007 05:50:07 -0700 (PDT)
-Subject: [Buildroot] svn commit: trunk/buildroot/toolchain/gcc
-Message-ID: <20070708125007.B1814A6839@busybox.net>
+From: Cristian Ionescu-Idbohrn <cristian.ionescu-idbohrn@axis.com>
+Date: Sun, 8 Jul 2007 14:55:12 +0200 (CEST)
+Subject: [Buildroot] dbus: wrong place to lookup libexpat.so
+In-Reply-To: <20070708122308.GI4096@aon.at>
+References: <0707081411270.26961@somehost> <20070708122308.GI4096@aon.at>
+Message-ID: <0707081450570.3987@somehost>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Author: aldot
-Date: 2007-07-08 05:50:06 -0700 (Sun, 08 Jul 2007)
-New Revision: 19034
+On Sun, 8 Jul 2007, Bernhard Fischer wrote:
 
-Log:
-- we have to reconfigure iff some compiler-config was changed.
+> On Sun, Jul 08, 2007 at 02:12:53PM +0200, Cristian Ionescu-Idbohrn wrote:
+> >Index: dbus.mk
+> >===================================================================
+> >--- dbus.mk	(revision 19026)
+> >+++ dbus.mk	(working copy)
+> >@@ -51,7 +51,7 @@
+> > 	touch  $(DBUS_DIR)/.configured
+> >
+> > $(DBUS_DIR)/$(DBUS_BINARY): $(DBUS_DIR)/.configured
+> >-	$(MAKE) DBUS_BUS_LIBS="$(STAGING_DIR)/lib/libexpat.so" -C $(DBUS_DIR) all
+> >+	$(MAKE) DBUS_BUS_LIBS="$(STAGING_DIR)/usr/lib/libexpat.so" -C $(DBUS_DIR) all
+> >
+> > $(STAGING_DIR)/usr/lib/libdbus-1.so: $(DBUS_DIR)/$(DBUS_BINARY)
+> > 	$(MAKE) DESTDIR=$(STAGING_DIR) -C $(DBUS_DIR)/dbus install
+>
+> ok, but can you try the attached patch instead, please?
+
+rm: cannot remove
+`/data/cii/buildroot/buildroot/build_i486/root/usr/lib/dbus-1.0':
+Is a directory
+
+The attached works better.
 
 
-Modified:
-   trunk/buildroot/toolchain/gcc/gcc-uclibc-4.x.mk
-
-
-Changeset:
-Modified: trunk/buildroot/toolchain/gcc/gcc-uclibc-4.x.mk
-===================================================================
---- trunk/buildroot/toolchain/gcc/gcc-uclibc-4.x.mk	2007-07-08 12:20:58 UTC (rev 19033)
-+++ trunk/buildroot/toolchain/gcc/gcc-uclibc-4.x.mk	2007-07-08 12:50:06 UTC (rev 19034)
-@@ -48,8 +48,14 @@
- #
- #############################################################
- 
-+GCC_TARGET_PREREQ =
-+GCC_STAGING_PREREQ= $(STAGING_DIR)/usr/lib/libc.a
-+
- GCC_TARGET_LANGUAGES:=c
- 
-+GCC_TARGET_PREREQ += $(wildcard $(BASE_DIR)/include/config/br2/install/libstdcpp* $(BASE_DIR)/include/config/br2/install/libgcj* $(BASE_DIR)/include/config/br2/install/objc* $(BASE_DIR)/include/config/br2/install/fortran*)
-+GCC_STAGING_PREREQ+= $(wildcard $(BASE_DIR)/include/config/br2/install/libstdcpp* $(BASE_DIR)/include/config/br2/install/libgcj* $(BASE_DIR)/include/config/br2/install/objc* $(BASE_DIR)/include/config/br2/install/fortran*)
-+
- ifeq ($(BR2_INSTALL_LIBSTDCPP),y)
- GCC_TARGET_LANGUAGES:=$(GCC_TARGET_LANGUAGES),c++
- endif
-@@ -62,9 +68,6 @@
- GCC_TARGET_LANGUAGES:=$(GCC_TARGET_LANGUAGES),objc
- endif
- 
--GCC_TARGET_PREREQ =
--GCC_STAGING_PREREQ= $(STAGING_DIR)/usr/lib/libc.a
--
- ifndef GCC_NO_MPFR
- GCC_WITH_HOST_GMP=--with-gmp=$(GMP_HOST_DIR)
- GCC_WITH_HOST_MPFR=--with-mpfr=$(MPFR_HOST_DIR)
+-- 
+Cristian
+-------------- next part --------------
+A non-text attachment was scrubbed...
+Name: db.patch
+Type: text/x-diff
+Size: 2225 bytes
+Desc: 
+Url : http://busybox.net/lists/buildroot/attachments/20070708/9babe3fe/attachment.bin 
