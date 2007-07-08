@@ -1,10 +1,10 @@
 From: Cristian Ionescu-Idbohrn <cristian.ionescu-idbohrn@axis.com>
-Date: Sun, 8 Jul 2007 15:27:11 +0200 (CEST)
+Date: Sun, 8 Jul 2007 15:34:56 +0200 (CEST)
 Subject: [Buildroot] missing expat-dirclean target
 In-Reply-To: <20070708131108.GL4096@aon.at>
 References: <0707081407520.26961@somehost> <20070708121822.GH4096@aon.at>
 	<0707081504270.3987@somehost> <20070708131108.GL4096@aon.at>
-Message-ID: <0707081519090.3987@somehost>
+Message-ID: <0707081531500.3987@somehost>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,28 +13,27 @@ To: buildroot@busybox.net
 
 On Sun, 8 Jul 2007, Bernhard Fischer wrote:
 
-> On Sun, Jul 08, 2007 at 03:07:18PM +0200, Cristian Ionescu-Idbohrn wrote:
+> >> this package uses wrong installation pathes, please fix and test while
+> >> you're at it (i don't use it):
+> >>
+> >>                 --includedir=/include \
+> >> is wrong, whould be /usr/include. Most of these pathes are not needed,
+> >> just --prefix=/usr should be enough.
 > >
-> > Looks like stuff is removed both from STAGING_DIR and TARGET_DIR.  Is
-> > this the correct behaviour?
+> >Will do.
 >
-> I think removing stuff from both staging_dir and target_dir is the way
-> to go, yes.
+> thanks alot in advance!
 
-Alright.  I still wish every makefile had a target called called
-<something>-uninstall to do that.
-
-> Consider somebody intending to turn off a package. The usual intuitive
-> way is IMHO to make foo-clean then reconfigure to remove that package.
->
-> I'm open to alternative suggestions, of course.
-
-This is how I wish it was done (looks more intuitive to me):
-
-<something>-clean	does the usual 'make clean' stuff
-<something>-dirclean	wipes out the build directory
-<something>-uninstall	wipes whatever was installed
+Done this too now.
+Please have a look att the attached (broke some long lines too).
 
 
 -- 
 Cristian
+-------------- next part --------------
+A non-text attachment was scrubbed...
+Name: ex.patch
+Type: text/x-diff
+Size: 1633 bytes
+Desc: 
+Url : http://busybox.net/lists/buildroot/attachments/20070708/7d362ac3/attachment-0001.bin 
