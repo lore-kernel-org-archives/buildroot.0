@@ -1,43 +1,27 @@
 From: Bernhard Fischer <rep.dot.nop@gmail.com>
-Date: Sun, 8 Jul 2007 15:51:36 +0200
-Subject: [Buildroot] missing expat-dirclean target
-In-Reply-To: <0707081519090.3987@somehost>
-References: <0707081407520.26961@somehost> <20070708121822.GH4096@aon.at>
-	<0707081504270.3987@somehost> <20070708131108.GL4096@aon.at>
-	<0707081519090.3987@somehost>
-Message-ID: <20070708135136.GN4096@aon.at>
+Date: Sun, 8 Jul 2007 15:53:03 +0200
+Subject: [Buildroot] package/busybox: copy/paste err
+In-Reply-To: <0707081541120.3987@somehost>
+References: <0707081541120.3987@somehost>
+Message-ID: <20070708135303.GO4096@aon.at>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Sun, Jul 08, 2007 at 03:27:11PM +0200, Cristian Ionescu-Idbohrn wrote:
->On Sun, 8 Jul 2007, Bernhard Fischer wrote:
->
->> On Sun, Jul 08, 2007 at 03:07:18PM +0200, Cristian Ionescu-Idbohrn wrote:
->> >
->> > Looks like stuff is removed both from STAGING_DIR and TARGET_DIR.  Is
->> > this the correct behaviour?
->>
->> I think removing stuff from both staging_dir and target_dir is the way
->> to go, yes.
->
->Alright.  I still wish every makefile had a target called called
-><something>-uninstall to do that.
->
->> Consider somebody intending to turn off a package. The usual intuitive
->> way is IMHO to make foo-clean then reconfigure to remove that package.
->>
->> I'm open to alternative suggestions, of course.
->
->This is how I wish it was done (looks more intuitive to me):
->
-><something>-clean	does the usual 'make clean' stuff
-><something>-dirclean	wipes out the build directory
-><something>-uninstall	wipes whatever was installed
+On Sun, Jul 08, 2007 at 03:42:30PM +0200, Cristian Ionescu-Idbohrn wrote:
+>Index: Config.in
+>===================================================================
+>--- Config.in	(revision 19036)
+>+++ Config.in	(working copy)
+>@@ -100,7 +100,7 @@
+> 	default "package/busybox/busybox-1.5.0.config" if BR2_BUSYBOX_VERSION_1_5_0
+> 	default "package/busybox/busybox-1.5.0.config" if BR2_BUSYBOX_VERSION_1_5_1
+> 	default "package/busybox/busybox-1.6.0.config" if BR2_BUSYBOX_VERSION_1_6_0
+>-	default "package/busybox/busybox-1.6.0.config" if BR2_BUSYBOX_VERSION_1_6_1
+>+	default "package/busybox/busybox-1.6.1.config" if BR2_BUSYBOX_VERSION_1_6_1
 
-sounds ok to me, i'll let others comment. Care to send a patch if noone
-objects withing a couple of days?
-
-cheers,
+no. there is no busybox-1.6.1.config and there is no need for one
+either. 1.6.1 is a pure bugfix release, we can reuse the config that's
+already there.
