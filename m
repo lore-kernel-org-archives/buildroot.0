@@ -1,7 +1,7 @@
 From: aldot at uclibc.org <aldot@uclibc.org>
-Date: Sun,  8 Jul 2007 05:05:03 -0700 (PDT)
-Subject: [Buildroot] svn commit: trunk/buildroot/toolchain/uClibc
-Message-ID: <20070708120503.E8E4BA65F2@busybox.net>
+Date: Sun,  8 Jul 2007 05:10:24 -0700 (PDT)
+Subject: [Buildroot] svn commit: trunk/buildroot/package/busybox
+Message-ID: <20070708121024.5E71AA6805@busybox.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -9,27 +9,31 @@ Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
 Author: aldot
-Date: 2007-07-08 05:05:03 -0700 (Sun, 08 Jul 2007)
-New Revision: 19031
+Date: 2007-07-08 05:10:21 -0700 (Sun, 08 Jul 2007)
+New Revision: 19032
 
 Log:
-- provide default for vfprintf
+- CONFIG_FDISK_SUPPORT_LARGE_DISKS depends on LFS
 
 
 Modified:
-   trunk/buildroot/toolchain/uClibc/uClibc-0.9.29.config
+   trunk/buildroot/package/busybox/busybox.mk
 
 
 Changeset:
-Modified: trunk/buildroot/toolchain/uClibc/uClibc-0.9.29.config
+Modified: trunk/buildroot/package/busybox/busybox.mk
 ===================================================================
---- trunk/buildroot/toolchain/uClibc/uClibc-0.9.29.config	2007-07-08 12:04:34 UTC (rev 19030)
-+++ trunk/buildroot/toolchain/uClibc/uClibc-0.9.29.config	2007-07-08 12:05:03 UTC (rev 19031)
-@@ -117,6 +117,7 @@
- # UCLIBC_HAS_LOCALE is not set
- UCLIBC_HAS_HEXADECIMAL_FLOATS=y
- UCLIBC_HAS_GLIBC_CUSTOM_PRINTF=y
-+# USE_OLD_VFPRINTF is not set
- UCLIBC_PRINTF_SCANF_POSITIONAL_ARGS=9
- UCLIBC_HAS_SCANF_GLIBC_A_FLAG=y
- # UCLIBC_HAS_STDIO_BUFSIZ_NONE is not set
+--- trunk/buildroot/package/busybox/busybox.mk	2007-07-08 12:05:03 UTC (rev 19031)
++++ trunk/buildroot/package/busybox/busybox.mk	2007-07-08 12:10:21 UTC (rev 19032)
+@@ -70,9 +70,10 @@
+ endif
+ ifeq ($(BR2_LARGEFILE),y)
+ 	$(SED) "s/^.*CONFIG_LFS.*/CONFIG_LFS=y/;" $(BUSYBOX_DIR)/.config
++	$(SED) "s/^.*CONFIG_FDISK_SUPPORT_LARGE_DISKS.*/CONFIG_FDISK_SUPPORT_LARGE_DISKS=y/;" $(BUSYBOX_DIR)/.config
+ else
+ 	$(SED) "s/^.*CONFIG_LFS.*/CONFIG_LFS=n/;" $(BUSYBOX_DIR)/.config
+-	$(SED) "s/^.*FDISK_SUPPORT_LARGE_DISKS.*/FDISK_SUPPORT_LARGE_DISKS=n/;" $(BUSYBOX_DIR)/.config
++	$(SED) "s/^.*FDISK_SUPPORT_LARGE_DISKS.*/CONFIG_FDISK_SUPPORT_LARGE_DISKS=n/;" $(BUSYBOX_DIR)/.config
+ endif
+ ifeq ($(BR2_INET_IPV6),y)
+ 	$(SED) "s/^.*CONFIG_FEATURE_IPV6.*/CONFIG_FEATURE_IPV6=y/;" $(BUSYBOX_DIR)/.config
