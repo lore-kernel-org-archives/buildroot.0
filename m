@@ -1,8 +1,8 @@
 From: bugs at busybox.net <bugs@busybox.net>
-Date: Sun, 8 Jul 2007 04:13:38 -0700
-Subject: [Buildroot] [buildroot 0000463]: [New package] lcdproc - interface
-	to a lot of LCD displays
-Message-ID: <183261b39e2f145c4a08ed4217cecfd3@bugs.uclibc.org>
+Date: Sun, 8 Jul 2007 04:19:12 -0700
+Subject: [Buildroot] [buildroot 0001207]: configure script in ed_2.0 does
+	not properly find the the ANSI C headers in gumstix toolchain
+Message-ID: <29d93d2d2c8249f39a38e2f0fae21e59@bugs.uclibc.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -10,62 +10,55 @@ Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
 
-A NOTE has been added to this issue. 
+The following issue has been CLOSED 
 ====================================================================== 
-http://busybox.net/bugs/view.php?id=463 
+http://busybox.net/bugs/view.php?id=1207 
 ====================================================================== 
-Reported By:                dinkel
+Reported By:                codehero
 Assigned To:                buildroot
 ====================================================================== 
 Project:                    buildroot
-Issue ID:                   463
-Category:                   New Features
-Reproducibility:            N/A
-Severity:                   minor
+Issue ID:                   1207
+Category:                   Architecture Specific
+Reproducibility:            always
+Severity:                   block
 Priority:                   normal
-Status:                     assigned
+Status:                     closed
+Resolution:                 open
+Fixed in Version:           
 ====================================================================== 
-Date Submitted:             10-03-2005 16:25 PDT
-Last Modified:              07-08-2007 04:13 PDT
+Date Submitted:             02-11-2007 08:05 PST
+Last Modified:              07-08-2007 04:19 PDT
 ====================================================================== 
-Summary:                    [New package] lcdproc - interface to a lot of LCD
-displays
+Summary:                    configure script in ed_2.0 does not properly find
+the the ANSI C headers in gumstix toolchain
 Description: 
-The attached patch adds the lcdproc package to the buildroot system.
-
-In the configuration menu 'make menuconfig' you can choose what drivers
-should be compiled in LCDd. The 'svgalib' driver is currently not
-supported because of a lack of SVGALib in buildroot. The package is tested
-to compile every other driver. but only the HD44780 driver is tested to
-work correctly.
-
-The diff was done against svn revision 11731!
+It seems that the configure script in ed does not find ANSI C headers when
+I use the gumstix toolchain. Thus it ends up using implicit definitions
+for functions like malloc and not properly linking when the executable is
+built.
 ====================================================================== 
 
 ---------------------------------------------------------------------- 
- bernhardf - 07-08-07 04:13  
+ bernhardf - 02-11-07 10:05  
 ---------------------------------------------------------------------- 
-Hi,
+What's your
+$ grep EXTERN .config 
 
-Can you please rediff against current trunk?
-
-A few notes, though:
-- zcat. This use is buggy, see other packages (the zlib decompressor is
-configurable by the user, nowadays)
-- please rename .source to .unpacked
-- The configuration stage was changed, please update the flags involved
-(see e.g. package/argus)
-- in .installed, please use install -D where possible
-- the clean target has to rm the stuff from the staging_dir 
+---------------------------------------------------------------------- 
+ bernhardf - 07-08-07 04:19  
+---------------------------------------------------------------------- 
+By now we switched to ed-0.6. If there still are some includes missing,
+then please fix upstream. Closing 
 
 Issue History 
 Date Modified   Username       Field                    Change               
 ====================================================================== 
-10-03-05 16:25  dinkel         New Issue                                    
-10-03-05 16:25  dinkel         Status                   new => assigned     
-10-03-05 16:25  dinkel         Assigned To               => uClibc          
-10-03-05 16:25  dinkel         File Added: buildroot-lcdproc.patch              
-     
-02-12-07 05:50  vapier         Assigned To              uClibc => buildroot 
-07-08-07 04:13  bernhardf      Note Added: 0002567                          
+02-11-07 08:05  codehero       New Issue                                    
+02-11-07 08:05  codehero       Status                   new => assigned     
+02-11-07 08:05  codehero       Assigned To               => uClibc          
+02-11-07 10:05  bernhardf      Note Added: 0002148                          
+02-12-07 05:33  vapier         Assigned To              uClibc => buildroot 
+07-08-07 04:19  bernhardf      Status                   assigned => closed  
+07-08-07 04:19  bernhardf      Note Added: 0002569                          
 ======================================================================
