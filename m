@@ -1,20 +1,57 @@
-From: Bernhard Fischer <rep.dot.nop@gmail.com>
-Date: Sun, 8 Jul 2007 02:42:56 +0200
-Subject: [Buildroot] <package>_VER vs <package>_VERSION
-In-Reply-To: <1183837431.19912.20.camel@elrond.sweden.atmel.com>
-References: <004201c7c0a2$9420c900$dcc4af0a@atmel.com>
-	<468FB5F5.1070205@realitydiluted.com>
-	<1183836807.19912.12.camel@elrond.sweden.atmel.com>
-	<1183837431.19912.20.camel@elrond.sweden.atmel.com>
-Message-ID: <20070708004255.GD4096@aon.at>
+From: Ulf Samuelsson <ulf@atmel.com>
+Date: Sun, 08 Jul 2007 06:35:39 +0200
+Subject: [Buildroot] [/bin/sh which ar]  should be [/bin/sh -c "which ar"]
+Message-ID: <1183869339.5714.5.camel@elrond.sweden.atmel.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Sat, Jul 07, 2007 at 09:43:50PM +0200, Ulf Samuelsson wrote:
+When the host tools are determined in the top Makefile
+(every time make us run) 
+this fails 5 times with the error message:
 
->Now with the correct attachment (zipped, to meet list limit)
+/usr/bin/which: /usr/bin/which: cannot execute binary file
 
-ok.
+What happens inside the Makefile is that a command is run:
+$ /bin/sh which ar
+and the bash shell does not like this on my OpenSuSE 10.2 system
+$ /bin/sh -c "which ar"
+will do what we want, so I would like to apply the following patch
+Any comments?
+
+Index: Makefile
+===================================================================
+--- Makefile    (revision 19026)
++++ Makefile    (arbetskopia)
+@@ -78,11 +78,11 @@
+ ifndef HOSTLD
+ HOSTLD:=ld
+ endif
+-HOSTAR:=$(shell $(CONFIG_SHELL) which $(HOSTAR) || type -p $(HOSTAR) ||
+echo ar)
+-HOSTAS:=$(shell $(CONFIG_SHELL) which $(HOSTAS) || type -p $(HOSTAS) ||
+echo as)
+-HOSTCC:=$(shell $(CONFIG_SHELL) which $(HOSTCC) || type -p $(HOSTCC) ||
+echo gcc)
+-HOSTCXX:=$(shell $(CONFIG_SHELL) which $(HOSTCXX) || type -p $(HOSTCXX)
+|| echo g++)
+-HOSTLD:=$(shell $(CONFIG_SHELL) which $(HOSTLD) || type -p $(HOSTLD) ||
+echo ld)
++HOSTAR :=$(shell $(CONFIG_SHELL) -c "which $(HOSTAR)"  || type -p
+$(HOSTAR)  || echo ar)
++HOSTAS :=$(shell $(CONFIG_SHELL) -c "which $(HOSTAS)"  || type -p
+$(HOSTAS)  || echo as)
++HOSTCC :=$(shell $(CONFIG_SHELL) -c "which $(HOSTCC)"  || type -p
+$(HOSTCC)  || echo gcc)
++HOSTCXX:=$(shell $(CONFIG_SHELL) -c "which $(HOSTCXX)" || type -p
+$(HOSTCXX) || echo g++)
++HOSTLD :=$(shell $(CONFIG_SHELL) -c "which $(HOSTLD)"  || type -p
+$(HOSTLD)  || echo ld)
+ ifndef CFLAGS_FOR_BUILD
+ CFLAGS_FOR_BUILD:=-g -O2
+ endif
+
+Best Regards
+Ulf Samuelsson
