@@ -1,48 +1,135 @@
-From: aldot at uclibc.org <aldot@uclibc.org>
-Date: Sat,  7 Jul 2007 17:18:52 -0700 (PDT)
-Subject: [Buildroot] svn commit: trunk/buildroot/package/config
-Message-ID: <20070708001852.A6BADA6837@busybox.net>
+From: bugs at busybox.net <bugs@busybox.net>
+Date: Sat, 7 Jul 2007 17:29:21 -0700
+Subject: [Buildroot] [buildroot 0001415]: SVN buildroot does not build
+	configuration package
+Message-ID: <8327b12d52b72de209819a21bb4fb1a0@bugs.uclibc.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Author: aldot
-Date: 2007-07-07 17:18:51 -0700 (Sat, 07 Jul 2007)
-New Revision: 19026
 
-Log:
-- pretty print path for brevity
+A NOTE has been added to this issue. 
+====================================================================== 
+http://busybox.net/bugs/view.php?id=1415 
+====================================================================== 
+Reported By:                bjdooks
+Assigned To:                buildroot
+====================================================================== 
+Project:                    buildroot
+Issue ID:                   1415
+Category:                   Other
+Reproducibility:            always
+Severity:                   block
+Priority:                   normal
+Status:                     assigned
+====================================================================== 
+Date Submitted:             07-02-2007 04:56 PDT
+Last Modified:              07-07-2007 17:29 PDT
+====================================================================== 
+Summary:                    SVN buildroot does not build configuration package
+Description: 
+The new import of the package/config no longer builds even for the default
+by using 'make'
 
+The following fails building mconf.c.
 
-Modified:
-   trunk/buildroot/package/config/kconfig-to-buildroot2.patch
+/usr/bin/gcc -g -O2   -c -o mconf.o mconf.c
+In file included from mconf.c:27:
+lxdialog/dialog.h:32:10: error: #include expects "FILENAME" or <FILENAME>
+In file included from mconf.c:27:
+lxdialog/dialog.h:97: error: expected specifier-qualifier-list before
+'chtype'
 
+This seems to require the $(HOST_EXTRACFLAGS) to build. 
 
-Changeset:
-Modified: trunk/buildroot/package/config/kconfig-to-buildroot2.patch
-===================================================================
---- trunk/buildroot/package/config/kconfig-to-buildroot2.patch	2007-07-08 00:00:17 UTC (rev 19025)
-+++ trunk/buildroot/package/config/kconfig-to-buildroot2.patch	2007-07-08 00:18:51 UTC (rev 19026)
-@@ -646,7 +646,7 @@
- Index: confdata.c
- ===================================================================
- --- kconfig/confdata.c	(revision 18967)
--+++ /Buildroot/confdata.c	(working copy)
-++++ Buildroot/confdata.c	(working copy)
- @@ -21,7 +21,7 @@ static void conf_warning(const char *fmt
-  static const char *conf_filename;
-  static int conf_lineno, conf_warnings, conf_unsaved;
-@@ -667,9 +667,8 @@
-  
-  	if (conf_split_config())
-  		return 1;
--diff -rdup x/config/confdata.c package/config/confdata.c
----- x/config/confdata.c	2007-07-07 11:13:12.000000000 +0200
--+++ package/config/confdata.c	2007-07-08 01:30:44.000000000 +0200
-+--- kconfig/config/confdata.c	2007-07-07 11:13:12.000000000 +0200
-++++ Buildroot/config/confdata.c	2007-07-08 01:30:44.000000000 +0200
- @@ -11,6 +11,7 @@
-  #include <string.h>
-  #include <time.h>
+I tried adding:
+
+%.o: %.c
+        $(HOSTCC) $(HOST_EXTRACFLAGS) $(HOSTCFLAGS) $(HOSTCFLAGS_$@) -c $<
+-o $@
+
+but this just then fails to link the project.
+
+I do not have enough make expertise to try and fix this, as it is a
+complicated piece of make.
+====================================================================== 
+
+---------------------------------------------------------------------- 
+ bjdooks - 07-02-07 04:58  
+---------------------------------------------------------------------- 
+URL: svn://uclibc.org/trunk/buildroot
+Repository Root: svn://uclibc.org
+Repository UUID: 69ca8d6d-28ef-0310-b511-8ec308f3f277
+Revision: 18991
+Node Kind: directory
+Schedule: normal
+Last Changed Author: aldot
+Last Changed Rev: 18991
+Last Changed Date: 2007-07-02 10:54:18 +0100 (Mon, 02 Jul 2007) 
+
+---------------------------------------------------------------------- 
+ bjdooks - 07-02-07 18:05  
+---------------------------------------------------------------------- 
+Partially corrected by the fix to write .config.cmd, but menuconfig
+still returns an error even if it correctly writes a config. Updated
+package/config patch to follow 
+
+---------------------------------------------------------------------- 
+ bjdooks - 07-02-07 18:07  
+---------------------------------------------------------------------- 
+http://bugs.uclibc.org/file_download.php?file_id=1069&type=bug fixes
+menuconfig error return by ensuring we do not try things like writing the
+split configuration headers and moving the autogenerated configuration
+files .tmpconfig and .tmpconfig.h to a directory which isn't used. 
+
+---------------------------------------------------------------------- 
+ chickenandporn - 07-03-07 12:11  
+---------------------------------------------------------------------- 
+The attached patch is a list of instructions, not a patch... it's not
+usable without knowing perhaps a kernel version it comes from and such.
+
+looks like the change in 18991 helped.  (looking at: svn diff -r 18991
+package/config/confdata.c)
+
+I have a patch that will resolve; will try to attach tonight after I clean
+it a bit -- basically copies the mkdir stuff from confdata.c@614 to a
+separate function and re-uses before the rename() calls. 
+
+---------------------------------------------------------------------- 
+ chickenandporn - 07-05-07 07:03  
+---------------------------------------------------------------------- 
+http://bugs.uclibc.org/file_download.php?file_id=1071&type=bug tested on
+clean r19002 checkout from SVN.  Tested on Linux (CentOS-4.4) and (intel)
+MacOSX-10.4.10.  bjdooks, can you check the patch, and see if you can
+alter it to cover what you did as well, in case I missed something from
+your fix?
+
+ 
+
+---------------------------------------------------------------------- 
+ bernhardf - 07-07-07 17:29  
+---------------------------------------------------------------------- 
+r19026 is supposed to work, please report back. TIA, 
+
+Issue History 
+Date Modified   Username       Field                    Change               
+====================================================================== 
+07-02-07 04:56  bjdooks        New Issue                                    
+07-02-07 04:56  bjdooks        Status                   new => assigned     
+07-02-07 04:56  bjdooks        Assigned To               => buildroot       
+07-02-07 04:58  bjdooks        Note Added: 0002542                          
+07-02-07 18:05  bjdooks        Note Added: 0002545                          
+07-02-07 18:05  bjdooks        File Added: buildroot-fix-menuconfig.patch       
+            
+07-02-07 18:07  bjdooks        Note Added: 0002546                          
+07-03-07 12:11  chickenandporn Note Added: 0002553                          
+07-05-07 06:57  chickenandporn File Added: buildroot-confdata-mkdirhier.patch   
+                
+07-05-07 07:02  chickenandporn Note Added: 0002556                          
+07-05-07 07:03  chickenandporn Note Edited: 0002556                         
+07-05-07 07:41  chickenandporn Issue Monitored: chickenandporn                  
+ 
+07-07-07 17:29  bernhardf      Note Added: 0002563                          
+======================================================================
