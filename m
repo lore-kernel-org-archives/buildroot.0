@@ -1,8 +1,8 @@
 From: bugs at busybox.net <bugs@busybox.net>
-Date: Sun, 8 Jul 2007 04:06:25 -0700
+Date: Sun, 8 Jul 2007 04:07:01 -0700
 Subject: [Buildroot] [buildroot 0001363]: make clean does not rm
 	.compiled/.built
-Message-ID: <bb45301aa9ccfb1f4fd06308d2616f8d@bugs.uclibc.org>
+Message-ID: <92c5e7808d2548775c4f52961e9b463b@bugs.uclibc.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -10,7 +10,7 @@ Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
 
-The following issue has been UPDATED. 
+A NOTE has been added to this issue. 
 ====================================================================== 
 http://busybox.net/bugs/view.php?id=1363 
 ====================================================================== 
@@ -26,7 +26,7 @@ Priority:                   normal
 Status:                     assigned
 ====================================================================== 
 Date Submitted:             05-21-2007 12:52 PDT
-Last Modified:              07-08-2007 04:06 PDT
+Last Modified:              07-08-2007 04:07 PDT
 ====================================================================== 
 Summary:                    make clean does not rm .compiled/.built
 Description: 
@@ -36,6 +36,11 @@ is removed. Removing the .compiled file in the clean target fixes this.
 
 Patch file attached.
 ====================================================================== 
+
+---------------------------------------------------------------------- 
+ bernhardf - 07-08-07 04:07  
+---------------------------------------------------------------------- 
+Yes, i know. This is a generic problem, unfortunately.. 
 
 Issue History 
 Date Modified   Username       Field                    Change               
@@ -47,4 +52,5 @@ Date Modified   Username       Field                    Change
 07-08-07 04:06  bernhardf      Summary                  buildroot pciutils
 pciutils.mk  doesn't clean the .compiled flag => make clean does not rm
 .compiled/.built
+07-08-07 04:07  bernhardf      Note Added: 0002566                          
 ======================================================================
