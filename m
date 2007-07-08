@@ -1,89 +1,20 @@
-From: bugs at busybox.net <bugs@busybox.net>
-Date: Sat, 7 Jul 2007 17:33:19 -0700
-Subject: [Buildroot] [buildroot 0001410]: uclibc.mk produces .config that
-	confuses uclibc's configuration system
-Message-ID: <fea63a7f285b55f5d7b3f1ba132df6a5@bugs.uclibc.org>
+From: Bernhard Fischer <rep.dot.nop@gmail.com>
+Date: Sun, 8 Jul 2007 02:42:56 +0200
+Subject: [Buildroot] <package>_VER vs <package>_VERSION
+In-Reply-To: <1183837431.19912.20.camel@elrond.sweden.atmel.com>
+References: <004201c7c0a2$9420c900$dcc4af0a@atmel.com>
+	<468FB5F5.1070205@realitydiluted.com>
+	<1183836807.19912.12.camel@elrond.sweden.atmel.com>
+	<1183837431.19912.20.camel@elrond.sweden.atmel.com>
+Message-ID: <20070708004255.GD4096@aon.at>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+On Sat, Jul 07, 2007 at 09:43:50PM +0200, Ulf Samuelsson wrote:
 
-A NOTE has been added to this issue. 
-====================================================================== 
-http://busybox.net/bugs/view.php?id=1410 
-====================================================================== 
-Reported By:                bjdooks
-Assigned To:                buildroot
-====================================================================== 
-Project:                    buildroot
-Issue ID:                   1410
-Category:                   Architecture Specific
-Reproducibility:            always
-Severity:                   major
-Priority:                   normal
-Status:                     assigned
-====================================================================== 
-Date Submitted:             06-29-2007 04:18 PDT
-Last Modified:              07-07-2007 17:33 PDT
-====================================================================== 
-Summary:                    uclibc.mk produces .config that confuses uclibc's
-configuration system
-Description: 
-If building for ARM, and providing an configuration from a file in a target
-sub-directory, the uclibc.mk file incorrectly re-writes the .config for
-building uclibc, causing warnings and an incorrect .config
+>Now with the correct attachment (zipped, to meet list limit)
 
-The problem stems from unsetting CONFIG_<x> options, then re-specifying
-them as CONFIG_<x>=y later in the file. The current configuration system
-(make oldconfig) seems to take the first occurence as the proper setting.
-This means that options that should be set end up being unset as 'make
-oldconfig' removes any further refrences to CONFIG_<x> from the file.
-
-For example, if you specify the buildroot config as CONFIG_ARM920T=y, then
-the uclibc.mk removes that turning it into # CONFIG_ARM920T is unset and
-then adds CONFIG_ARM920T=y to the end of the file. Then 'make oldconfig'
-is run, and CONFIG_ARM920T=y is deleted, thus causing CONFIG_GENERIC_ARM=y
-to be placed in the config file.
-
-The warnings produced by 'make oldconfig' are:
-config:209:warning: trying to reassign symbol CONFIG_ARM920T
-.config:210:warning: trying to reassign symbol CONFIG_ARM_OABI
-.config:211:warning: trying to reassign symbol CONFIG_ARM_EABI
-
-Also note, that the EABI/OABI are also being warned about, so are
-also fixed.
-
-The simple fix is to change the sed expressions unsetting these options to
-simply deleting them from the file.
-====================================================================== 
-
----------------------------------------------------------------------- 
- bjdooks - 06-29-07 04:20  
----------------------------------------------------------------------- 
-Uploaded the original configuration for uclibc, and the one produced by
-oldconfig.  as well as the overall buildroot config. 
-
----------------------------------------------------------------------- 
- bernhardf - 07-07-07 17:33  
----------------------------------------------------------------------- 
-i'll bite. Why do you still keep the matched ARM stuff if you will not use
-it but delete it? And why don't you delete ARM_OABI/ARM_EABI once? 
-
-Issue History 
-Date Modified   Username       Field                    Change               
-====================================================================== 
-06-29-07 04:18  bjdooks        New Issue                                    
-06-29-07 04:18  bjdooks        Status                   new => assigned     
-06-29-07 04:18  bjdooks        Assigned To               => buildroot       
-06-29-07 04:18  bjdooks        File Added: uclibc-arm-config.patch              
-     
-06-29-07 04:19  bjdooks        File Added: uClibc-original.config               
-    
-06-29-07 04:19  bjdooks        File Added: uClibc-oldconfiged.config            
-       
-06-29-07 04:19  bjdooks        File Added: buildropt.config                    
-06-29-07 04:20  bjdooks        Note Added: 0002532                          
-07-07-07 17:33  bernhardf      Note Added: 0002564                          
-======================================================================
+ok.
