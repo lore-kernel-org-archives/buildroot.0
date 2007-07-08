@@ -1,7 +1,8 @@
 From: bugs at busybox.net <bugs@busybox.net>
-Date: Sun, 8 Jul 2007 04:04:08 -0700
-Subject: [Buildroot] [buildroot 0001366]: dmraid: new upstream version
-Message-ID: <6acdbdeb9664fab05bdd1f0dd1c27516@bugs.uclibc.org>
+Date: Sun, 8 Jul 2007 04:06:25 -0700
+Subject: [Buildroot] [buildroot 0001363]: make clean does not rm
+	.compiled/.built
+Message-ID: <bb45301aa9ccfb1f4fd06308d2616f8d@bugs.uclibc.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -9,45 +10,41 @@ Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
 
-The following issue has been CLOSED 
+The following issue has been UPDATED. 
 ====================================================================== 
-http://busybox.net/bugs/view.php?id=1366 
+http://busybox.net/bugs/view.php?id=1363 
 ====================================================================== 
-Reported By:                razzor
+Reported By:                bobwired
 Assigned To:                buildroot
 ====================================================================== 
 Project:                    buildroot
-Issue ID:                   1366
+Issue ID:                   1363
 Category:                   Other
 Reproducibility:            always
 Severity:                   minor
 Priority:                   normal
-Status:                     closed
-Resolution:                 open
-Fixed in Version:           
+Status:                     assigned
 ====================================================================== 
-Date Submitted:             05-23-2007 08:21 PDT
-Last Modified:              07-08-2007 04:04 PDT
+Date Submitted:             05-21-2007 12:52 PDT
+Last Modified:              07-08-2007 04:06 PDT
 ====================================================================== 
-Summary:                    dmraid: new upstream version
+Summary:                    make clean does not rm .compiled/.built
 Description: 
-dmraid-1.0.0.rc14.tar.bz2 is newest (and old src moved away)
-Also uninstall left the initscript in TARGET_DIR.
-====================================================================== 
+The pciutils.mk file does not remove the .compiled flag when the pciutls is
+cleaned. Thereafter, the buildroot make will fail, until the .compiled file
+is removed. Removing the .compiled file in the clean target fixes this.
 
----------------------------------------------------------------------- 
- bernhardf - 07-08-07 04:04  
----------------------------------------------------------------------- 
-merged as r19027. Thanks! 
+Patch file attached.
+====================================================================== 
 
 Issue History 
 Date Modified   Username       Field                    Change               
 ====================================================================== 
-05-23-07 08:21  razzor         New Issue                                    
-05-23-07 08:21  razzor         Status                   new => assigned     
-05-23-07 08:21  razzor         Assigned To               => buildroot       
-05-23-07 08:21  razzor         File Added: 0002-dmraid-new-version.txt          
-         
-07-08-07 04:04  bernhardf      Status                   assigned => closed  
-07-08-07 04:04  bernhardf      Note Added: 0002565                          
+05-21-07 12:52  bobwired       New Issue                                    
+05-21-07 12:52  bobwired       Status                   new => assigned     
+05-21-07 12:52  bobwired       Assigned To               => buildroot       
+05-21-07 12:52  bobwired       File Added: mypatch                          
+07-08-07 04:06  bernhardf      Summary                  buildroot pciutils
+pciutils.mk  doesn't clean the .compiled flag => make clean does not rm
+.compiled/.built
 ======================================================================
