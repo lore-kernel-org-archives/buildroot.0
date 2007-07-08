@@ -1,48 +1,92 @@
-From: Cristian Ionescu-Idbohrn <cristian.ionescu-idbohrn@axis.com>
-Date: Sun, 8 Jul 2007 19:58:31 +0200 (CEST)
-Subject: [Buildroot] package/busybox: copy/paste err
-In-Reply-To: <20070708135303.GO4096@aon.at>
-References: <0707081541120.3987@somehost> <20070708135303.GO4096@aon.at>
-Message-ID: <0707081954220.3987@somehost>
+From: aldot at uclibc.org <aldot@uclibc.org>
+Date: Sun,  8 Jul 2007 11:14:52 -0700 (PDT)
+Subject: [Buildroot] svn commit: trunk/buildroot/package/lighttpd
+Message-ID: <20070708181452.3E963A6AAC@busybox.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Sun, 8 Jul 2007, Bernhard Fischer wrote:
+Author: aldot
+Date: 2007-07-08 11:14:51 -0700 (Sun, 08 Jul 2007)
+New Revision: 19041
 
-> On Sun, Jul 08, 2007 at 03:42:30PM +0200, Cristian Ionescu-Idbohrn wrote:
-> >Index: Config.in
-> >===================================================================
-> >--- Config.in	(revision 19036)
-> >+++ Config.in	(working copy)
-> >@@ -100,7 +100,7 @@
-> > 	default "package/busybox/busybox-1.5.0.config" if BR2_BUSYBOX_VERSION_1_5_0
-> > 	default "package/busybox/busybox-1.5.0.config" if BR2_BUSYBOX_VERSION_1_5_1
-> > 	default "package/busybox/busybox-1.6.0.config" if BR2_BUSYBOX_VERSION_1_6_0
-> >-	default "package/busybox/busybox-1.6.0.config" if BR2_BUSYBOX_VERSION_1_6_1
-> >+	default "package/busybox/busybox-1.6.1.config" if BR2_BUSYBOX_VERSION_1_6_1
->
-> no. there is no busybox-1.6.1.config and there is no need for one
-> either. 1.6.1 is a pure bugfix release, we can reuse the config that's
-> already there.
-
-Still, busybox-1.6.0.config is really:
-
-  # Busybox version: 1.5.0
-  # Wed Mar 14 13:42:28 2007
-
-and things have happen since.  See attachment.  It's as near as I could
-get.
+Log:
+- bump version and make it compile
 
 
--- 
-Cristian
--------------- next part --------------
-A non-text attachment was scrubbed...
-Name: bb-conf.patch
-Type: text/x-diff
-Size: 4732 bytes
-Desc: 
-Url : http://busybox.net/lists/buildroot/attachments/20070708/2ece54ba/attachment-0001.bin 
+Modified:
+   trunk/buildroot/package/lighttpd/lighttpd.mk
+
+
+Changeset:
+Modified: trunk/buildroot/package/lighttpd/lighttpd.mk
+===================================================================
+--- trunk/buildroot/package/lighttpd/lighttpd.mk	2007-07-08 16:28:54 UTC (rev 19040)
++++ trunk/buildroot/package/lighttpd/lighttpd.mk	2007-07-08 18:14:51 UTC (rev 19041)
+@@ -3,28 +3,40 @@
+ # lighttpd
+ #
+ #############################################################
+-LIGHTTPD_VER:=1.4.13
+-LIGHTTPD_SOURCE:=lighttpd-$(LIGHTTPD_VER).tar.gz
+-LIGHTTPD_SITE:=http://www.lighttpd.net/download
+-LIGHTTPD_DIR:=$(BUILD_DIR)/lighttpd-$(LIGHTTPD_VER)
++LIGHTTPD_VERSION:=1.4.15
++LIGHTTPD_SOURCE:=lighttpd_$(LIGHTTPD_VERSION).orig.tar.gz
++LIGHTTPD_PATCH:=lighttpd_$(LIGHTTPD_VERSION)-1.diff.gz
++LIGHTTPD_SITE:=http://ftp.debian.org/debian/pool/main/l/lighttpd
++LIGHTTPD_DIR:=$(BUILD_DIR)/lighttpd-$(LIGHTTPD_VERSION)
+ LIGHTTPD_CAT:=$(ZCAT)
+ LIGHTTPD_BINARY:=src/lighttpd
+ LIGHTTPD_TARGET_BINARY:=usr/sbin/lighttpd
+ 
++ifneq ($(BR2_LARGEFILE),y)
++LIGHTTPD_LFS:=--disable-lfs
++endif
++
+ $(DL_DIR)/$(LIGHTTPD_SOURCE):
+ 	 $(WGET) -P $(DL_DIR) $(LIGHTTPD_SITE)/$(LIGHTTPD_SOURCE)
++ifneq ($(LIGHTTPD_PATCH),)
++LIGHTTPD_PATCH_FILE:=$(DL_DIR)/$(LIGHTTPD_PATCH)
++$(LIGHTTPD_PATCH_FILE):
++	 $(WGET) -P $(DL_DIR) $(LIGHTTPD_SITE)/$(LIGHTTPD_PATCH)
++endif
++lighttpd-source: $(DL_DIR)/$(LIGHTTPD_SOURCE) $(LIGHTTPD_PATCH_FILE)
+ 
+-lighttpd-source: $(DL_DIR)/$(LIGHTTPD_SOURCE)
+-
+-#############################################################
+-#
+-# build lighttpd for use on the target system
+-#
+-#############################################################
+ $(LIGHTTPD_DIR)/.unpacked: $(DL_DIR)/$(LIGHTTPD_SOURCE)
+ 	$(LIGHTTPD_CAT) $(DL_DIR)/$(LIGHTTPD_SOURCE) | tar -C $(BUILD_DIR) $(TAR_OPTIONS) -
+ 	toolchain/patch-kernel.sh $(LIGHTTPD_DIR) package/lighttpd/ lighttpd\*.patch
+-	touch  $(LIGHTTPD_DIR)/.unpacked
++ifneq ($(LIGHTTPD_PATCH),)
++	(cd $(LIGHTTPD_DIR)&&$(LIGHTTPD_CAT) $(LIGHTTPD_PATCH_FILE)|patch -p1)
++endif
++	if [ -d $(LIGHTTPD_DIR)/debian/patches ]; then \
++		toolchain/patch-kernel.sh $(LIGHTTPD_DIR) $(LIGHTTPD_DIR)/debian/patches \*.dpatch ; \
++	fi
++	$(CONFIG_UPDATE) $(@D)
++	$(SED) 's/-lfs/-largefile/g;s/_lfs/_largefile/g' $(LIGHTTPD_DIR)/configure
++	touch $@
+ 
+ $(LIGHTTPD_DIR)/.configured: $(LIGHTTPD_DIR)/.unpacked
+ 	(cd $(LIGHTTPD_DIR); rm -rf config.cache; \
+@@ -42,8 +54,10 @@
+ 		--with-openssl \
+ 		--without-pcre \
+ 		--program-prefix="" \
++		$(DISABLE_IPV6) \
++		$(DISABLE_LARGEFILE) \
+ 	);
+-	touch  $(LIGHTTPD_DIR)/.configured
++	touch $@
+ 
+ $(LIGHTTPD_DIR)/$(LIGHTTPD_BINARY): $(LIGHTTPD_DIR)/.configured
+ 	$(MAKE) -C $(LIGHTTPD_DIR)
