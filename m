@@ -1,97 +1,69 @@
-From: BuraphaLinux Server <buraphalinuxserver@gmail.com>
-Date: Sun, 8 Jul 2007 22:07:54 +0700
-Subject: [Buildroot] package/gettext trouble
-In-Reply-To: <0707081654290.3987@somehost>
-References: <0707081654290.3987@somehost>
-Message-ID: <5d75f4610707080807s537e297boa21ea7659cc8c331@mail.gmail.com>
+From: bugs at busybox.net <bugs@busybox.net>
+Date: Sun, 8 Jul 2007 09:08:49 -0700
+Subject: [Buildroot] [buildroot 0001424]: lighttpd: buildroot wants
+	debian/init.d which no longer exists
+Message-ID: <91b448bac36daef2629ace1e6dd4d146@busybox.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-I get this too; is it some environment setting or does everybody get it?
 
-On 7/8/07, Cristian Ionescu-Idbohrn <cristian.ionescu-idbohrn@axis.com> wrote:
-> I'm stuck :(
->
-> gettext fails on me, whatever I try.  It shows me this:
->
-> make[4]: Entering directory
-> `buildroot/build_i486/gettext-0.16.1/gettext-runtime/intl'
-> sed -e '/IN_LIBGLOCALE/d' \
->             -e 's,@''HAVE_POSIX_PRINTF''@,1,g' \
->             -e 's,@''HAVE_ASPRINTF''@,1,g' \
->             -e 's,@''HAVE_SNPRINTF''@,1,g' \
->             -e 's,@''HAVE_WPRINTF''@,0,g' \
->           < ./libgnuintl.h.in \
->         | if test 'no' = yes; then \
->             sed -e 's/extern \([^()]*\);/extern __declspec (dllimport)
-> \1;/'; \
->           else \
->             cat; \
->           fi \
->         | sed -e 's/extern \([^"]\)/extern LIBINTL_DLL_EXPORTED \1/' \
->               -e "/#define _LIBINTL_H/r ./export.h" \
->         | sed -e 's,@''HAVE_VISIBILITY''@,1,g' \
->           > libgnuintl.h
-> sed -e '/IN_LIBGLOCALE/d' \
->             -e 's,@''HAVE_POSIX_PRINTF''@,1,g' \
->             -e 's,@''HAVE_ASPRINTF''@,1,g' \
->             -e 's,@''HAVE_SNPRINTF''@,1,g' \
->             -e 's,@''HAVE_WPRINTF''@,0,g' \
->           < ./libgnuintl.h.in > libintl.h
-> /bin/sh ./config.charset 'i486-pc-linux-gnu' > t-charset.alias
-> sed -e '/^#/d' -e 's/@''PACKAGE''@/gettext-runtime/g' ./ref-add.sin >
-> t-ref-add.sed
-> mv t-ref-add.sed ref-add.sed
-> sed -e '/^#/d' -e 's/@''PACKAGE''@/gettext-runtime/g' ./ref-del.sin >
-> t-ref-del.sed
-> mv t-ref-del.sed ref-del.sed
-> /bin/sh ../libtool --mode=compile
-> buildroot/build_i486/staging_dir/usr/bin/i486-linux-uclibc-gcc -c
-> -DLOCALEDIR=\"/usr/share/locale\" -DLOCALE_ALIAS_PATH=\"/usr/share/locale\"
-> -DLIBDIR=\"/lib\" -DBUILDING_LIBINTL -DBUILDING_DLL -DIN_LIBINTL
-> -DENABLE_RELOCATABLE=1 -DIN_LIBRARY -DINSTALLDIR=\"/lib\" -DNO_XMALLOC
-> -Dset_relocation_prefix=libintl_set_relocation_prefix
-> -Drelocate=libintl_relocate -DDEPENDS_ON_LIBICONV=1 -DHAVE_CONFIG_H -I. -I.
-> -I..  -g -O2 -fvisibility=hidden  ./bindtextdom.c
-> mv t-charset.alias charset.alias
-> /bin/sh ../libtool --mode=compile
-> buildroot/build_i486/staging_dir/usr/bin/i486-linux-uclibc-gcc -c
-> -DLOCALEDIR=\"/usr/share/locale\" -DLOCALE_ALIAS_PATH=\"/usr/share/locale\"
-> -DLIBDIR=\"/lib\" -DBUILDING_LIBINTL -DBUILDING_DLL -DIN_LIBINTL
-> -DENABLE_RELOCATABLE=1 -DIN_LIBRARY -DINSTALLDIR=\"/lib\" -DNO_XMALLOC
-> -Dset_relocation_prefix=libintl_set_relocation_prefix
-> -Drelocate=libintl_relocate -DDEPENDS_ON_LIBICONV=1 -DHAVE_CONFIG_H -I. -I.
-> -I..  -g -O2 -fvisibility=hidden  ./dcgettext.c
-> libtool: compile: unable to infer tagged configuration
-> libtool: compile: specify a tag with `--tag'
-> make[4]: *** [bindtextdom.lo] Error 1
-> make[4]: *** Waiting for unfinished jobs....
-> libtool: compile: unable to infer tagged configuration
-> libtool: compile: specify a tag with `--tag'
-> make[4]: *** [dcgettext.lo] Error 1
-> make[4]: Leaving directory
-> `buildroot/build_i486/gettext-0.16.1/gettext-runtime/intl'
-> make[3]: *** [all-recursive] Error 1
-> make[3]: Leaving directory
-> `buildroot/build_i486/gettext-0.16.1/gettext-runtime'
-> make[2]: *** [all] Error 2
-> make[2]: Leaving directory
-> `buildroot/build_i486/gettext-0.16.1/gettext-runtime'
-> make[1]: *** [all-recursive] Error 1
-> make[1]: Leaving directory `buildroot/build_i486/gettext-0.16.1'
-> make: *** [buildroot/build_i486/gettext-0.16.1/gettext-runtime/src/gettext]
-> Error 2
->
-> Can anyone put me on the right track?
->
->
-> --
-> Cristian
-> _______________________________________________
-> buildroot mailing list
-> buildroot at uclibc.org
-> http://busybox.net/mailman/listinfo/buildroot
->
+The following issue has been SUBMITTED. 
+====================================================================== 
+http://busybox.net/bugs/view.php?id=1424 
+====================================================================== 
+Reported By:                vogelchr
+Assigned To:                buildroot
+====================================================================== 
+Project:                    buildroot
+Issue ID:                   1424
+Category:                   Other
+Reproducibility:            always
+Severity:                   minor
+Priority:                   normal
+Status:                     assigned
+====================================================================== 
+Date Submitted:             07-08-2007 09:08 PDT
+Last Modified:              07-08-2007 09:08 PDT
+====================================================================== 
+Summary:                    lighttpd: buildroot wants debian/init.d which no
+longer exists
+Description: 
+When building the lighttpd package the build script wants to install the
+file $(LIGHTTPD_DIR)/debian/init.d which no longer is in the lighttpd
+tarball.
+
+atrocity buildroot $ tar tzf dl/lighttpd-1.4.13.tar.gz | grep debian
+ ---> there is nothing named debian in the tarball
+
+in package/lighttpd/lighttpd.mk:
+
+$(TARGET_DIR)/$(LIGHTTPD_TARGET_BINARY):
+$(LIGHTTPD_DIR)/$(LIGHTTPD_BINARY)
+        $(MAKE) DESTDIR=$(TARGET_DIR) -C $(LIGHTTPD_DIR) install
+        $(INSTALL) -m 0755 -D $(LIGHTTPD_DIR)/debian/init.d
+$(TARGET_DIR)/etc/init.d/S99lighttpd
+
+Make aborts on this rule:
+
+make[1]: Leaving directory
+`/home/chris/buildroot/build_i586/lighttpd-1.4.13'
+/usr/bin/install -m 0755 -D
+/home/chris/buildroot/build_i586/lighttpd-1.4.13/debia
+n/init.d /home/chris/buildroot/build_i586/root/etc/init.d/S99lighttpd
+/usr/bin/install: cannot stat
+/home/chris/buildroot/build_i586/lighttpd-1.4.13/debian/init.d': No such
+file or directory
+
+
+====================================================================== 
+
+Issue History 
+Date Modified   Username       Field                    Change               
+====================================================================== 
+07-08-07 09:08  vogelchr       New Issue                                    
+07-08-07 09:08  vogelchr       Status                   new => assigned     
+07-08-07 09:08  vogelchr       Assigned To               => buildroot       
+======================================================================
