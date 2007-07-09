@@ -1,49 +1,70 @@
 From: Bernhard Fischer <rep.dot.nop@gmail.com>
-Date: Mon, 9 Jul 2007 10:25:50 +0200
-Subject: [Buildroot] $(TARGET_CONFIGURE_OPTS) $(MAKE) vs
-	$(MAKE)	$(TARGET_CONFIGURE_OPTS)
-In-Reply-To: <05fb01c7c0e9$275c45a0$dcc4af0a@atmel.com>
-References: <006201c7bfd9$de0f46a0$dcc4af0a@atmel.com>
-	<20070706155558.GA18954@real.realitydiluted.com>
-	<000201c7c087$9e70d0a0$dcc4af0a@atmel.com>
-	<20070707130132.GU4096@aon.at>
-	<1183824383.19912.5.camel@elrond.sweden.atmel.com>
-	<20070707172925.GV4096@aon.at>
-	<1183837025.19912.17.camel@elrond.sweden.atmel.com>
-	<20070707211606.GZ4096@aon.at>
-	<05fb01c7c0e9$275c45a0$dcc4af0a@atmel.com>
-Message-ID: <20070709082550.GA19774@aon.at>
+Date: Mon, 9 Jul 2007 11:13:24 +0200
+Subject: [Buildroot] svn commit: trunk/buildroot/package/hostap
+In-Reply-To: <0707091002300.8319@somehost>
+References: <20070709045947.D862330066@busybox.net>
+	<0707091002300.8319@somehost>
+Message-ID: <20070709091324.GB19774@aon.at>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Sun, Jul 08, 2007 at 12:49:20AM +0200, Ulf Samuelsson wrote:
->> On Sat, Jul 07, 2007 at 09:37:05PM +0200, Ulf Samuelsson wrote:
->>>l?r 2007-07-07 klockan 19:29 +0200 skrev Bernhard Fischer:
->>>> On Sat, Jul 07, 2007 at 06:06:23PM +0200, Ulf Samuelsson wrote:
->>>> >> >I think someone got it wrong in the "package/mtd/mtd.mk" which says
->>>> >> >
->>>> >> >    $(TARGET_CONFIGURE_OPTS) $(MAKE) ...    - build using gcc
->>>> >> >    
->>>> >> >which should be:
->>>> >> >
->>>> >> >     $(MAKE) $(TARGET_CONFIGURE_OPTS) ...    - build using arm-linux-uclibc-gcc
->>>> >> 
->>>> >> yes, the latter is correct. Steven, please repair or elaborate.
->>>> >> 
->>>> >
->>>> >Here are a set of patches to change the position of
->>>> >TARGET_CONFIGURE_OPTS.
->>>> >Please review and apply if you agree.
->>>> >
->>>> >
->>>
+On Mon, Jul 09, 2007 at 10:18:21AM +0200, Cristian Ionescu-Idbohrn wrote:
+>On Sun, 8 Jul 2007, ulf at uclibc.org wrote:
 >
->Stephen, can you pls review the mtd part of this patch ASAP,
->since this breaks the build for ARM (and possibly all non-x86).
->Pls commit (or ack my commit) if OK.
+>> Author: ulf
+>> Date: 2007-07-08 21:59:45 -0700 (Sun, 08 Jul 2007)
+>> New Revision: 19051
+>>
+>> Log:
+>> WGET_NOSPIDERS is not defined, use WGET for now
+>>
+>> Modified:
+>>    trunk/buildroot/package/hostap/hostap.mk
+>>
+>>
+>> Changeset:
+>> Modified: trunk/buildroot/package/hostap/hostap.mk
+>> ===================================================================
+>> --- trunk/buildroot/package/hostap/hostap.mk	2007-07-09 04:40:53 UTC (rev 19050)
+>> +++ trunk/buildroot/package/hostap/hostap.mk	2007-07-09 04:59:45 UTC (rev 19051)
+>> @@ -9,7 +9,7 @@
+>>  HOSTAP_DIR=$(BUILD_DIR)/hostapd-$(HOSTAP_VERSION)
+>>
+>>  $(DL_DIR)/$(HOSTAP_SOURCE):
+>> -	$(WGET_NOSPIDERS) -P $(DL_DIR) $(HOSTAP_SITE)/$(HOSTAP_SOURCE)
+>> +	$(WGET) -P $(DL_DIR) $(HOSTAP_SITE)/$(HOSTAP_SOURCE)
+>>
+>>  hostap-source: $(DL_DIR)/$(HOSTAP_SOURCE)
+>
+>Alright.  The problem here is that the wget '--spider' option does just
+>what the man-page says:
+>
+>  --spider
+>      When invoked with this option, Wget will behave as a Web spider,
+>      which means that it will not download the pages, just check that
+>      they are there.
+>
+>and hostap.epitest.fi replies accordingly, saying the file is there and
+>shows its size too.
+>
+>  # make hostap-source
+>  wget --passive-ftp -nd --spider -P /data/cii/buildroot/buildroot/dl
+>  http://hostap.epitest.fi/releases/hostapd-0.5.8.tar.gz
+>  --09:59:41--  http://hostap.epitest.fi/releases/hostapd-0.5.8.tar.gz
+>             => `/data/cii/buildroot/buildroot/dl/hostapd-0.5.8.tar.gz'
+>  Resolving hostap.epitest.fi... 204.152.186.63
+>  Connecting to hostap.epitest.fi|204.152.186.63|:80... connected.
+>  HTTP request sent, awaiting response... 200 OK
+>  Length: 459,253 (448K) [application/x-tar]
+>  200 OK
+>
+>Nothing is downloaded.  Patch attached.
 
-I've applied this now and will fix the other breakage due to not passing
-CFLAGS any longer, thus building with package-imposed incorrect flags.
+No. Fix your BR2_WGET instead:
+BR2_WGET="wget --passive-ftp"
+
+PS: sounds a bit like you did a source-check and forgot to reinstate
+your sane config afterwards.
