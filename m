@@ -1,8 +1,8 @@
 From: bugs at busybox.net <bugs@busybox.net>
-Date: Mon, 9 Jul 2007 09:55:03 -0700
+Date: Mon, 9 Jul 2007 10:28:05 -0700
 Subject: [Buildroot] [buildroot 0001415]: SVN buildroot does not build
 	configuration package
-Message-ID: <3e5b2a11cd4af2a6765b1f733938f19e@busybox.net>
+Message-ID: <db11139c178f22af46adeb45a797bad9@busybox.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -26,7 +26,7 @@ Priority:                   normal
 Status:                     assigned
 ====================================================================== 
 Date Submitted:             07-02-2007 04:56 PDT
-Last Modified:              07-09-2007 09:55 PDT
+Last Modified:              07-09-2007 10:28 PDT
 ====================================================================== 
 Summary:                    SVN buildroot does not build configuration package
 Description: 
@@ -94,7 +94,7 @@ looks like the change in 18991 helped.  (looking at: svn diff -r 18991
 package/config/confdata.c)
 
 I have a patch that will resolve; will try to attach tonight after I clean
-it a bit -- basically copies the mkdir stuff from confdata.c@614 to a
+it a bit -- basically copies the mkdir stuff from confdata.c at 614 to a
 separate function and re-uses before the rename() calls. 
 
 ---------------------------------------------------------------------- 
@@ -136,6 +136,20 @@ Can you do make -C package/config distclean
 and mail me the output of a subsequent 'make menuconfig', please?
 TIA, 
 
+---------------------------------------------------------------------- 
+ chickenandporn - 07-09-07 10:28  
+---------------------------------------------------------------------- 
+Yeah, will do.
+
+I'm currently carrying 6 patches, it'll take a bit of time.
+
+I want to reiterate:
+1) my first fix solved it for me; not sure you looked at that
+2) my second fix solved it for me; not sure you looked@that
+
+Note: second fix is a one-liner, and DOES RESOLVE.  Not sure you looked at
+that. 
+
 Issue History 
 Date Modified   Username       Field                    Change               
 ====================================================================== 
@@ -160,4 +174,5 @@ Date Modified   Username       Field                    Change
                    
 07-09-07 09:20  chickenandporn Note Edited: 0002582                         
 07-09-07 09:55  bernhardf      Note Added: 0002583                          
+07-09-07 10:28  chickenandporn Note Added: 0002584                          
 ======================================================================
