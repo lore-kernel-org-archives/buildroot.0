@@ -1,364 +1,49 @@
-From: aldot at uclibc.org <aldot@uclibc.org>
-Date: Mon,  9 Jul 2007 01:30:39 -0700 (PDT)
-Subject: [Buildroot] svn commit: trunk/buildroot/package: argus distcc flex
-	kexec l2tp libevent li etc...
-Message-ID: <20070709083039.9747930069@busybox.net>
+From: Bernhard Fischer <rep.dot.nop@gmail.com>
+Date: Mon, 9 Jul 2007 10:25:50 +0200
+Subject: [Buildroot] $(TARGET_CONFIGURE_OPTS) $(MAKE) vs
+	$(MAKE)	$(TARGET_CONFIGURE_OPTS)
+In-Reply-To: <05fb01c7c0e9$275c45a0$dcc4af0a@atmel.com>
+References: <006201c7bfd9$de0f46a0$dcc4af0a@atmel.com>
+	<20070706155558.GA18954@real.realitydiluted.com>
+	<000201c7c087$9e70d0a0$dcc4af0a@atmel.com>
+	<20070707130132.GU4096@aon.at>
+	<1183824383.19912.5.camel@elrond.sweden.atmel.com>
+	<20070707172925.GV4096@aon.at>
+	<1183837025.19912.17.camel@elrond.sweden.atmel.com>
+	<20070707211606.GZ4096@aon.at>
+	<05fb01c7c0e9$275c45a0$dcc4af0a@atmel.com>
+Message-ID: <20070709082550.GA19774@aon.at>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Author: aldot
-Date: 2007-07-09 01:30:38 -0700 (Mon, 09 Jul 2007)
-New Revision: 19054
+On Sun, Jul 08, 2007 at 12:49:20AM +0200, Ulf Samuelsson wrote:
+>> On Sat, Jul 07, 2007 at 09:37:05PM +0200, Ulf Samuelsson wrote:
+>>>l?r 2007-07-07 klockan 19:29 +0200 skrev Bernhard Fischer:
+>>>> On Sat, Jul 07, 2007 at 06:06:23PM +0200, Ulf Samuelsson wrote:
+>>>> >> >I think someone got it wrong in the "package/mtd/mtd.mk" which says
+>>>> >> >
+>>>> >> >    $(TARGET_CONFIGURE_OPTS) $(MAKE) ...    - build using gcc
+>>>> >> >    
+>>>> >> >which should be:
+>>>> >> >
+>>>> >> >     $(MAKE) $(TARGET_CONFIGURE_OPTS) ...    - build using arm-linux-uclibc-gcc
+>>>> >> 
+>>>> >> yes, the latter is correct. Steven, please repair or elaborate.
+>>>> >> 
+>>>> >
+>>>> >Here are a set of patches to change the position of
+>>>> >TARGET_CONFIGURE_OPTS.
+>>>> >Please review and apply if you agree.
+>>>> >
+>>>> >
+>>>
+>
+>Stephen, can you pls review the mtd part of this patch ASAP,
+>since this breaks the build for ARM (and possibly all non-x86).
+>Pls commit (or ack my commit) if OK.
 
-Log:
-- the TARGET_CONFIGURE_OPTS have to be passed after $(MAKE).
-  Fixes build breakage as seen by Ulf et al.
-
-
-Modified:
-   trunk/buildroot/package/argus/argus.mk
-   trunk/buildroot/package/distcc/distcc.mk
-   trunk/buildroot/package/flex/flex.mk
-   trunk/buildroot/package/kexec/kexec.mk
-   trunk/buildroot/package/l2tp/l2tp.mk
-   trunk/buildroot/package/libevent/libevent.mk
-   trunk/buildroot/package/libusb/libusb.mk
-   trunk/buildroot/package/microcom/microcom.mk
-   trunk/buildroot/package/mtd/mtd.mk
-   trunk/buildroot/package/nano/nano.mk
-   trunk/buildroot/package/netcat/netcat.mk
-   trunk/buildroot/package/procps/procps.mk
-   trunk/buildroot/package/qte/qte.mk
-   trunk/buildroot/package/qtopia4/qtopia4.mk
-   trunk/buildroot/package/quagga/quagga.mk
-   trunk/buildroot/package/rsync/rsync.mk
-   trunk/buildroot/package/samba/samba.mk
-   trunk/buildroot/package/thttpd/thttpd.mk
-   trunk/buildroot/package/tinyx/tinyx.mk
-   trunk/buildroot/package/usbutils/usbutils.mk
-   trunk/buildroot/package/wget/wget.mk
-
-
-Changeset:
-Modified: trunk/buildroot/package/argus/argus.mk
-===================================================================
---- trunk/buildroot/package/argus/argus.mk	2007-07-09 08:06:27 UTC (rev 19053)
-+++ trunk/buildroot/package/argus/argus.mk	2007-07-09 08:30:38 UTC (rev 19054)
-@@ -45,7 +45,7 @@
- 	touch $@
- 
- $(ARGUS_DIR)/$(ARGUS_BINARY): $(ARGUS_DIR)/.configured
--	$(TARGET_CONFIGURE_OPTS) $(MAKE) CC=$(TARGET_CC) -C $(ARGUS_DIR)
-+	$(MAKE) $(TARGET_CONFIGURE_OPTS) -C $(ARGUS_DIR)
- 
- $(TARGET_DIR)/$(ARGUS_TARGET_BINARY): $(ARGUS_DIR)/$(ARGUS_BINARY)
- 	cp -dpf $(ARGUS_DIR)/$(ARGUS_BINARY) $@
-
-Modified: trunk/buildroot/package/distcc/distcc.mk
-===================================================================
---- trunk/buildroot/package/distcc/distcc.mk	2007-07-09 08:06:27 UTC (rev 19053)
-+++ trunk/buildroot/package/distcc/distcc.mk	2007-07-09 08:30:38 UTC (rev 19054)
-@@ -45,7 +45,7 @@
- 	touch $(DISTCC_DIR)/.configured
- 
- $(DISTCC_DIR)/$(DISTCC_BINARY): $(DISTCC_DIR)/.configured
--	$(TARGET_CONFIGURE_OPTS) $(MAKE) CC=$(TARGET_CC) -C $(DISTCC_DIR)
-+	$(MAKE) $(TARGET_CONFIGURE_OPTS) -C $(DISTCC_DIR)
- 
- $(TARGET_DIR)/$(DISTCC_TARGET_BINARY): $(DISTCC_DIR)/$(DISTCC_BINARY)
- 	install -D $(DISTCC_DIR)/$(DISTCC_BINARY)d $(TARGET_DIR)/$(DISTCC_TARGET_BINARY)d
-
-Modified: trunk/buildroot/package/flex/flex.mk
-===================================================================
---- trunk/buildroot/package/flex/flex.mk	2007-07-09 08:06:27 UTC (rev 19053)
-+++ trunk/buildroot/package/flex/flex.mk	2007-07-09 08:30:38 UTC (rev 19054)
-@@ -58,7 +58,7 @@
- 	touch $@
- 
- $(FLEX_DIR)/$(FLEX_BINARY): $(FLEX_DIR)/.configured
--	$(TARGET_CONFIGURE_OPTS) $(MAKE) -C $(FLEX_DIR)
-+	$(MAKE) $(TARGET_CONFIGURE_OPTS) -C $(FLEX_DIR)
- 
- $(TARGET_DIR)/$(FLEX_TARGET_BINARY): $(FLEX_DIR)/$(FLEX_BINARY)
- 	$(MAKE1) \
-
-Modified: trunk/buildroot/package/kexec/kexec.mk
-===================================================================
---- trunk/buildroot/package/kexec/kexec.mk	2007-07-09 08:06:27 UTC (rev 19053)
-+++ trunk/buildroot/package/kexec/kexec.mk	2007-07-09 08:30:38 UTC (rev 19054)
-@@ -53,7 +53,7 @@
- 	touch $@
- 
- $(KEXEC_DIR)/objdir-$(GNU_TARGET_NAME)/build/sbin/$(KEXEC_BINARY): $(KEXEC_DIR)/.configured
--	$(TARGET_CONFIGURE_OPTS) $(MAKE) CC=$(TARGET_CC) -C $(KEXEC_DIR)
-+	$(MAKE) $(TARGET_CONFIGURE_OPTS) -C $(KEXEC_DIR)
- 	touch -c $@
- 
- $(TARGET_DIR)/$(KEXEC_TARGET_BINARY): $(KEXEC_DIR)/objdir-$(GNU_TARGET_NAME)/build/sbin/$(KEXEC_BINARY)
-
-Modified: trunk/buildroot/package/l2tp/l2tp.mk
-===================================================================
---- trunk/buildroot/package/l2tp/l2tp.mk	2007-07-09 08:06:27 UTC (rev 19053)
-+++ trunk/buildroot/package/l2tp/l2tp.mk	2007-07-09 08:30:38 UTC (rev 19054)
-@@ -33,7 +33,7 @@
- 	touch $(L2TP_DIR)/.unpacked
- 
- $(L2TP_DIR)/$(L2TP_BINARY): $(L2TP_DIR)/.unpacked
--	$(TARGET_CONFIGURE_OPTS) $(MAKE) -C $(L2TP_DIR) CC=$(TARGET_CC) \
-+	$(MAKE) $(TARGET_CONFIGURE_OPTS) -C $(L2TP_DIR) \
- 		DFLAGS= \
- 		OSFLAGS="-DLINUX -UUSE_KERNEL $(TARGET_CFLAGS) -USANITY"
- 
-
-Modified: trunk/buildroot/package/libevent/libevent.mk
-===================================================================
---- trunk/buildroot/package/libevent/libevent.mk	2007-07-09 08:06:27 UTC (rev 19053)
-+++ trunk/buildroot/package/libevent/libevent.mk	2007-07-09 08:30:38 UTC (rev 19054)
-@@ -37,7 +37,7 @@
- 	touch $@
- 
- $(LIBEVENT_DIR)/$(LIBEVENT_BINARY): $(LIBEVENT_DIR)/.configured
--	$(TARGET_CONFIGURE_OPTS) $(MAKE) CC=$(TARGET_CC) -C $(LIBEVENT_DIR)
-+	$(MAKE) $(TARGET_CONFIGURE_OPTS) -C $(LIBEVENT_DIR)
- 
- $(STAGING_DIR)/$(LIBEVENT_TARGET_BINARY): $(LIBEVENT_DIR)/$(LIBEVENT_BINARY)
- 	$(MAKE) -C $(LIBEVENT_DIR) DESTDIR=$(STAGING_DIR) install
-
-Modified: trunk/buildroot/package/libusb/libusb.mk
-===================================================================
---- trunk/buildroot/package/libusb/libusb.mk	2007-07-09 08:06:27 UTC (rev 19053)
-+++ trunk/buildroot/package/libusb/libusb.mk	2007-07-09 08:30:38 UTC (rev 19054)
-@@ -36,7 +36,7 @@
- 	touch $(LIBUSB_DIR)/.configured
- 
- $(STAGING_DIR)/$(LIBUSB_BINARY): $(LIBUSB_DIR)/.configured
--	$(TARGET_CONFIGURE_OPTS) $(MAKE) CC=$(TARGET_CC) -C $(LIBUSB_DIR)
-+	$(MAKE) $(TARGET_CONFIGURE_OPTS) -C $(LIBUSB_DIR)
- 	$(MAKE) -C $(LIBUSB_DIR) DESTDIR=$(STAGING_DIR) install
- 
- $(TARGET_DIR)/$(LIBUSB_BINARY): $(STAGING_DIR)/$(LIBUSB_BINARY)
-
-Modified: trunk/buildroot/package/microcom/microcom.mk
-===================================================================
---- trunk/buildroot/package/microcom/microcom.mk	2007-07-09 08:06:27 UTC (rev 19053)
-+++ trunk/buildroot/package/microcom/microcom.mk	2007-07-09 08:30:38 UTC (rev 19054)
-@@ -51,7 +51,7 @@
- 	 	$(CFLAGS_WHOLE_PROGRAM) -o $@ $(wildcard $(MICROCOM_DIR)/*.c); \
- 	)
- else
--	$(TARGET_CONFIGURE_OPTS) CFLAGS="$(TARGET_CFLAGS)" $(MAKE) -C $(MICROCOM_DIR)
-+	$(MAKE) $(TARGET_CONFIGURE_OPTS) -C $(MICROCOM_DIR)
- endif
- 	$(STRIP) -s $@
- 
-
-Modified: trunk/buildroot/package/mtd/mtd.mk
-===================================================================
---- trunk/buildroot/package/mtd/mtd.mk	2007-07-09 08:06:27 UTC (rev 19053)
-+++ trunk/buildroot/package/mtd/mtd.mk	2007-07-09 08:30:38 UTC (rev 19054)
-@@ -115,7 +115,10 @@
- MTD_BUILD_TARGETS := $(addprefix $(MTD_DIR)/util/, $(MTD_TARGETS_y))
- 
- $(MTD_BUILD_TARGETS): $(MTD_DIR)/.unpacked
--	$(TARGET_CONFIGURE_OPTS) $(MAKE)	CFLAGS="-I$(MTD_DIR)/include -I$(LINUX_HEADERS_DIR)/include" LINUXDIR=$(LINUX_DIR) -C $(MTD_DIR)/util
-+	$(MAKE)	$(TARGET_CONFIGURE_OPTS) \
-+		CFLAGS+="-I$(MTD_DIR)/include" \
-+		CFLAGS+="-I$(LINUX_HEADERS_DIR)/include" \
-+		LINUXDIR=$(LINUX_DIR) -C $(MTD_DIR)/util
- 
- MTD_TARGETS := $(addprefix $(TARGET_DIR)/usr/sbin/, $(MTD_TARGETS_y))
- 
-
-Modified: trunk/buildroot/package/nano/nano.mk
-===================================================================
---- trunk/buildroot/package/nano/nano.mk	2007-07-09 08:06:27 UTC (rev 19053)
-+++ trunk/buildroot/package/nano/nano.mk	2007-07-09 08:30:38 UTC (rev 19054)
-@@ -35,7 +35,7 @@
- 	touch $(NANO_DIR)/.configured
- 
- $(NANO_DIR)/$(NANO_BINARY): $(NANO_DIR)/.configured
--	$(TARGET_CONFIGURE_OPTS) $(MAKE) CC=$(TARGET_CC) -C $(NANO_DIR)
-+	$(MAKE) $(TARGET_CONFIGURE_OPTS) -C $(NANO_DIR)
- 
- $(TARGET_DIR)/$(NANO_TARGET_BINARY): $(NANO_DIR)/$(NANO_BINARY)
- 	install -D $(NANO_DIR)/$(NANO_BINARY) $(TARGET_DIR)/$(NANO_TARGET_BINARY)
-
-Modified: trunk/buildroot/package/netcat/netcat.mk
-===================================================================
---- trunk/buildroot/package/netcat/netcat.mk	2007-07-09 08:06:27 UTC (rev 19053)
-+++ trunk/buildroot/package/netcat/netcat.mk	2007-07-09 08:30:38 UTC (rev 19054)
-@@ -35,7 +35,7 @@
- 
- 
- $(NETCAT_DIR)/$(NETCAT_BINARY): $(NETCAT_DIR)/.configured
--	$(TARGET_CONFIGURE_OPTS) $(MAKE) CC=$(TARGET_CC) -C $(NETCAT_DIR)
-+	$(MAKE) $(TARGET_CONFIGURE_OPTS) -C $(NETCAT_DIR)
- 
- $(TARGET_DIR)/$(NETCAT_TARGET_BINARY): $(NETCAT_DIR)/$(NETCAT_BINARY)
- 	install -D $(NETCAT_DIR)/$(NETCAT_BINARY) $(TARGET_DIR)/$(NETCAT_TARGET_BINARY)
-
-Modified: trunk/buildroot/package/procps/procps.mk
-===================================================================
---- trunk/buildroot/package/procps/procps.mk	2007-07-09 08:06:27 UTC (rev 19053)
-+++ trunk/buildroot/package/procps/procps.mk	2007-07-09 08:30:38 UTC (rev 19054)
-@@ -22,7 +22,7 @@
- 	$(TARGET_CONFIGURE_OPTS) $(MAKE) -C $(PROCPS_DIR)
- 
- $(TARGET_DIR)/$(PROCPS_TARGET_BINARY): $(PROCPS_DIR)/$(PROCPS_BINARY)
--	$(TARGET_CONFIGURE_OPTS) $(MAKE) DESTDIR=$(TARGET_DIR) \
-+	$(MAKE) $(TARGET_CONFIGURE_OPTS) DESTDIR=$(TARGET_DIR) \
- 		install='install -D' -C $(PROCPS_DIR) lib64=/lib \
- 		ldconfig='/bin/true' install
- 	rm -Rf $(TARGET_DIR)/usr/share/man
-
-Modified: trunk/buildroot/package/qte/qte.mk
-===================================================================
---- trunk/buildroot/package/qte/qte.mk	2007-07-09 08:06:27 UTC (rev 19053)
-+++ trunk/buildroot/package/qte/qte.mk	2007-07-09 08:30:38 UTC (rev 19054)
-@@ -222,18 +222,18 @@
- 
- $(QTE_QTE_LIB): $(QTE_QTE_DIR)/src-mt.mk
- 	export QTDIR=$(QTE_QTE_DIR); export QPEDIR=$(QTE_QTOPIA_DIR); export PATH=$(STAGING_DIR)/bin:$$QTDIR/bin:$$PATH; \
--	$(TARGET_CONFIGURE_OPTS) $(MAKE) $(TARGET_CC) -C $(QTE_QTE_DIR) src-mt
--	$(TARGET_CONFIGURE_OPTS) $(MAKE) $(TARGET_CC) DESTDIR=$(TARGET_DIR)/lib -C $(QTE_QTE_DIR) src-mt
-+	$(MAKE) $(TARGET_CONFIGURE_OPTS) $(TARGET_CC) -C $(QTE_QTE_DIR) src-mt
-+	$(MAKE) $(TARGET_CONFIGURE_OPTS) DESTDIR=$(TARGET_DIR)/lib -C $(QTE_QTE_DIR) src-mt
- 	# ... and make sure it actually built... grrr... make deep-deep-deep makefile recursion for this habit
- 	test -f $@
- 
- $(QTE_QTOPIA_FILE): $(QTE_QTOPIA_DIR)/.configured
- 	export QTDIR=$(QTE_QT3_DIR); export QPEDIR=$(QTE_QTOPIA_DIR); export PATH=$(STAGING_DIR)/bin:$$QTDIR/bin:$$PATH; \
--	$(TARGET_CONFIGURE_OPTS) $(MAKE) CC=$(TARGET_CC) -C $(QTE_QTOPIA_DIR)
-+	$(MAKE) $(TARGET_CONFIGURE_OPTS) -C $(QTE_QTOPIA_DIR)
- 
- $(QTE_QTOPIA_IFILE): $(QTE_QTOPIA_FILE)
- 	export QTDIR=$(QTE_QT3_DIR); export QPEDIR=$(QTE_QTOPIA_DIR); export PATH=$(STAGING_DIR)/bin:$$QTDIR/bin:$$PATH; \
--	$(TARGET_CONFIGURE_OPTS) $(MAKE) CC=$(TARGET_CC) -C $(QTE_QTOPIA_DIR) install PREFIX=$(TARGET_DIR)
-+	$(MAKE) $(TARGET_CONFIGURE_OPTS) -C $(QTE_QTOPIA_DIR) install PREFIX=$(TARGET_DIR)
- 
- 
- qte:: $(QTE_QTE_LIB)
-
-Modified: trunk/buildroot/package/qtopia4/qtopia4.mk
-===================================================================
---- trunk/buildroot/package/qtopia4/qtopia4.mk	2007-07-09 08:06:27 UTC (rev 19053)
-+++ trunk/buildroot/package/qtopia4/qtopia4.mk	2007-07-09 08:30:38 UTC (rev 19054)
-@@ -161,7 +161,7 @@
- 	touch $(QTOPIA4_TARGET_DIR)/.configured
- 
- $(QTOPIA4_TARGET_DIR)/lib/libQtCore.so.$(QTOPIA4_VER): $(QTOPIA4_TARGET_DIR)/.configured
--	$(TARGET_CONFIGURE_OPTS) $(MAKE) \
-+	$(MAKE) $(TARGET_CONFIGURE_OPTS) \
- 		-C $(QTOPIA4_TARGET_DIR) sub-src
- 
- $(STAGING_DIR)/usr/lib/libQtCore.so.$(QTOPIA4_VER): $(QTOPIA4_TARGET_DIR)/lib/libQtCore.so.$(QTOPIA4_VER)
-
-Modified: trunk/buildroot/package/quagga/quagga.mk
-===================================================================
---- trunk/buildroot/package/quagga/quagga.mk	2007-07-09 08:06:27 UTC (rev 19053)
-+++ trunk/buildroot/package/quagga/quagga.mk	2007-07-09 08:30:38 UTC (rev 19054)
-@@ -152,7 +152,7 @@
- 	touch $@
- 
- $(QUAGGA_BINARY): $(QUAGGA_DIR)/.configured
--	$(TARGET_CONFIGURE_OPTS) $(MAKE) CC=$(TARGET_CC) -C $(QUAGGA_DIR)
-+	$(MAKE) $(TARGET_CONFIGURE_OPTS) -C $(QUAGGA_DIR)
- 
- $(TARGET_DIR)/usr/sbin/$(QUAGGA_TARGET_BINARY): $(QUAGGA_BINARY)
- 	$(MAKE) DESTDIR=$(TARGET_DIR) -C $(QUAGGA_DIR) install
-
-Modified: trunk/buildroot/package/rsync/rsync.mk
-===================================================================
---- trunk/buildroot/package/rsync/rsync.mk	2007-07-09 08:06:27 UTC (rev 19053)
-+++ trunk/buildroot/package/rsync/rsync.mk	2007-07-09 08:30:38 UTC (rev 19054)
-@@ -35,7 +35,7 @@
- 	touch $(RSYNC_DIR)/.configured
- 
- $(RSYNC_DIR)/$(RSYNC_BINARY): $(RSYNC_DIR)/.configured
--	$(TARGET_CONFIGURE_OPTS) $(MAKE) CC=$(TARGET_CC) -C $(RSYNC_DIR)
-+	$(MAKE) $(TARGET_CONFIGURE_OPTS) -C $(RSYNC_DIR)
- 
- $(TARGET_DIR)/$(RSYNC_TARGET_BINARY): $(RSYNC_DIR)/$(RSYNC_BINARY)
- 	install -D $(RSYNC_DIR)/$(RSYNC_BINARY) $(TARGET_DIR)/$(RSYNC_TARGET_BINARY)
-
-Modified: trunk/buildroot/package/samba/samba.mk
-===================================================================
---- trunk/buildroot/package/samba/samba.mk	2007-07-09 08:06:27 UTC (rev 19053)
-+++ trunk/buildroot/package/samba/samba.mk	2007-07-09 08:30:38 UTC (rev 19054)
-@@ -46,7 +46,7 @@
- 	touch $(SAMBA_DIR)/.configured
- 
- $(SAMBA_DIR)/$(SAMBA_BINARY): $(SAMBA_DIR)/.configured
--	$(TARGET_CONFIGURE_OPTS) $(MAKE) CC=$(TARGET_CC) -C $(SAMBA_DIR)
-+	$(MAKE) $(TARGET_CONFIGURE_OPTS) -C $(SAMBA_DIR)
- 
- SAMBA_TARGETS_ :=
- SAMBA_TARGETS_y :=
-@@ -79,7 +79,7 @@
- SAMBA_TARGETS_$(BR2_PACKAGE_SAMBA_WBINFO)	+= usr/bin/wbinfo
- 
- $(TARGET_DIR)/$(SAMBA_TARGET_BINARY): $(SAMBA_DIR)/$(SAMBA_BINARY)
--	$(TARGET_CONFIGURE_OPTS) $(MAKE) CC=$(TARGET_CC)	\
-+	$(MAKE) $(TARGET_CONFIGURE_OPTS) 	\
- 		prefix="${TARGET_DIR}/usr" \
- 		BASEDIR="${TARGET_DIR}/usr" \
- 		SBINDIR="${TARGET_DIR}/usr/sbin" \
-
-Modified: trunk/buildroot/package/thttpd/thttpd.mk
-===================================================================
---- trunk/buildroot/package/thttpd/thttpd.mk	2007-07-09 08:06:27 UTC (rev 19053)
-+++ trunk/buildroot/package/thttpd/thttpd.mk	2007-07-09 08:30:38 UTC (rev 19054)
-@@ -35,7 +35,7 @@
- 	touch $(THTTPD_DIR)/.configured
- 
- $(THTTPD_DIR)/$(THTTPD_BINARY): $(THTTPD_DIR)/.configured
--	$(TARGET_CONFIGURE_OPTS) $(MAKE) CC=$(TARGET_CC) -C $(THTTPD_DIR)
-+	$(MAKE) $(TARGET_CONFIGURE_OPTS) -C $(THTTPD_DIR)
- 
- $(TARGET_DIR)/$(THTTPD_TARGET_BINARY): $(THTTPD_DIR)/$(THTTPD_BINARY)
- 	install -D $(THTTPD_DIR)/$(THTTPD_BINARY) $(TARGET_DIR)/$(THTTPD_TARGET_BINARY)
-
-Modified: trunk/buildroot/package/tinyx/tinyx.mk
-===================================================================
---- trunk/buildroot/package/tinyx/tinyx.mk	2007-07-09 08:06:27 UTC (rev 19053)
-+++ trunk/buildroot/package/tinyx/tinyx.mk	2007-07-09 08:30:38 UTC (rev 19054)
-@@ -85,7 +85,7 @@
- 	rm -f $(TINYX_BINX)/Xfbdev
- 	#make World CROSSCOMPILEFLAGS="CROSSCOMPILEDIR=<cross compiler dir>";
- 	#( cd $(TINYX_DIR) ; $(MAKE) World CROSSCOMPILEFLAGS="CROSSCOMPILEDIR=$(STAGING_DIR)/bin" )
--	#( cd $(TINYX_DIR) ; $(TARGET_CONFIGURE_OPTS) $(MAKE) World )
-+	#( cd $(TINYX_DIR) ; $(MAKE) $(TARGET_CONFIGURE_OPTS) World )
- 	#
- 	#mv $(TINYX_DIR)/Makefile $(TINYX_DIR)/Makefile.xxxx
- 	#echo "AS=$(TARGET_CROSS)as" > $(TINYX_DIR)/Makefile
-
-Modified: trunk/buildroot/package/usbutils/usbutils.mk
-===================================================================
---- trunk/buildroot/package/usbutils/usbutils.mk	2007-07-09 08:06:27 UTC (rev 19053)
-+++ trunk/buildroot/package/usbutils/usbutils.mk	2007-07-09 08:30:38 UTC (rev 19054)
-@@ -35,7 +35,7 @@
- 	touch $(USBUTILS_DIR)/.configured
- 
- $(USBUTILS_DIR)/$(USBUTILS_BINARY): $(USBUTILS_DIR)/.configured
--	$(TARGET_CONFIGURE_OPTS) $(MAKE) CC=$(TARGET_CC) -C $(USBUTILS_DIR)
-+	$(MAKE) $(TARGET_CONFIGURE_OPTS) -C $(USBUTILS_DIR)
- 
- $(TARGET_DIR)/$(USBUTILS_TARGET_BINARY): $(USBUTILS_DIR)/$(USBUTILS_BINARY)
- 	$(MAKE) -C $(USBUTILS_DIR) DESTDIR=$(TARGET_DIR) install
-
-Modified: trunk/buildroot/package/wget/wget.mk
-===================================================================
---- trunk/buildroot/package/wget/wget.mk	2007-07-09 08:06:27 UTC (rev 19053)
-+++ trunk/buildroot/package/wget/wget.mk	2007-07-09 08:30:38 UTC (rev 19054)
-@@ -36,7 +36,7 @@
- 	touch $(WGET_DIR)/.configured
- 
- $(WGET_DIR)/$(WGET_BINARY): $(WGET_DIR)/.configured
--	$(TARGET_CONFIGURE_OPTS) $(MAKE) CC=$(TARGET_CC) -C $(WGET_DIR)
-+	$(MAKE) $(TARGET_CONFIGURE_OPTS) -C $(WGET_DIR)
- 
- $(TARGET_DIR)/$(WGET_TARGET_BINARY): $(WGET_DIR)/$(WGET_BINARY)
- 	install -D $(WGET_DIR)/$(WGET_BINARY) $(TARGET_DIR)/$(WGET_TARGET_BINARY)
+I've applied this now and will fix the other breakage due to not passing
+CFLAGS any longer, thus building with package-imposed incorrect flags.
