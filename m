@@ -1,55 +1,147 @@
-From: Ulf Samuelsson <ulf@atmel.com>
-Date: Mon, 09 Jul 2007 15:08:55 +0200
-Subject: [Buildroot] $(TARGET_CONFIGURE_OPTS) $(MAKE) vs
-	$(MAKE)	$(TARGET_CONFIGURE_OPTS)
-In-Reply-To: <f0528b5b0707090641j2bd8c39ap101012d7716ba67b@mail.gmail.com>
-References: <20070706155558.GA18954@real.realitydiluted.com>
-	<20070707130132.GU4096@aon.at>
-	<1183824383.19912.5.camel@elrond.sweden.atmel.com>
-	<20070707172925.GV4096@aon.at>
-	<1183837025.19912.17.camel@elrond.sweden.atmel.com>
-	<20070707211606.GZ4096@aon.at>
-	<05fb01c7c0e9$275c45a0$dcc4af0a@atmel.com>
-	<20070709082550.GA19774@aon.at> <20070709092108.GA20627@aon.at>
-	<20070709122041.GA30238@real.realitydiluted.com>
-	<f0528b5b0707090641j2bd8c39ap101012d7716ba67b@mail.gmail.com>
-Message-ID: <1183986535.5278.16.camel@elrond.sweden.atmel.com>
+From: bugs at busybox.net <bugs@busybox.net>
+Date: Mon, 9 Jul 2007 09:18:01 -0700
+Subject: [Buildroot] [buildroot 0001415]: SVN buildroot does not build
+	configuration package
+Message-ID: <a55b38a60f44aad63e3d45d1fe725cb4@busybox.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-m?n 2007-07-09 klockan 15:41 +0200 skrev Julien Letessier:
-> I'm following the discussion and would like to make a point:
-> all of this is irrelevant for packages that use the GNU auto* tools
-> properly (i.e. a whole lot of packages).
-> 
-> Their configure script uses the TARGET_CONFIGURE_OPTS to generate
-> correct makefiles, and no flags should thereafter be passed to $(MAKE)
-> directly (or they'll break). 
-> So IMO, 
->    $(MAKE) -C $(FOO_DIR) $(TARGET_CONFIGURE_OPTS)
-> will almost always break such a package. Even packages that just
->    $(MAKE) -C $(FOO_DIR) CC=$(TARGET_CC)
-> break more often than not.
 
+A NOTE has been added to this issue. 
+====================================================================== 
+http://busybox.net/bugs/view.php?id=1415 
+====================================================================== 
+Reported By:                bjdooks
+Assigned To:                buildroot
+====================================================================== 
+Project:                    buildroot
+Issue ID:                   1415
+Category:                   Other
+Reproducibility:            always
+Severity:                   block
+Priority:                   normal
+Status:                     assigned
+====================================================================== 
+Date Submitted:             07-02-2007 04:56 PDT
+Last Modified:              07-09-2007 09:17 PDT
+====================================================================== 
+Summary:                    SVN buildroot does not build configuration package
+Description: 
+The new import of the package/config no longer builds even for the default
+by using 'make'
 
-The question I asked, where I did not get an answer was:
+The following fails building mconf.c.
 
-Is there any case where
+/usr/bin/gcc -g -O2   -c -o mconf.o mconf.c
+In file included from mconf.c:27:
+lxdialog/dialog.h:32:10: error: #include expects "FILENAME" or <FILENAME>
+In file included from mconf.c:27:
+lxdialog/dialog.h:97: error: expected specifier-qualifier-list before
+'chtype'
 
-    $(TARGET_CONFIGURE_OPTS)  $(MAKE) -C $(FOO_DIR)
+This seems to require the $(HOST_EXTRACFLAGS) to build. 
 
-is correct but
+I tried adding:
 
-    $(MAKE) $(TARGET_CONFIGURE_OPTS)  -C $(FOO_DIR)
+%.o: %.c
+        $(HOSTCC) $(HOST_EXTRACFLAGS) $(HOSTCFLAGS) $(HOSTCFLAGS_$@) -c $<
+-o $@
 
-is not.
+but this just then fails to link the project.
 
-I know that there are cases (mtd) when the other way around
-is definitely incorrect.
+I do not have enough make expertise to try and fix this, as it is a
+complicated piece of make.
+====================================================================== 
 
+---------------------------------------------------------------------- 
+ bjdooks - 07-02-07 04:58  
+---------------------------------------------------------------------- 
+URL: svn://uclibc.org/trunk/buildroot
+Repository Root: svn://uclibc.org
+Repository UUID: 69ca8d6d-28ef-0310-b511-8ec308f3f277
+Revision: 18991
+Node Kind: directory
+Schedule: normal
+Last Changed Author: aldot
+Last Changed Rev: 18991
+Last Changed Date: 2007-07-02 10:54:18 +0100 (Mon, 02 Jul 2007) 
 
-Best Regards
-Ulf Samuelsson
+---------------------------------------------------------------------- 
+ bjdooks - 07-02-07 18:05  
+---------------------------------------------------------------------- 
+Partially corrected by the fix to write .config.cmd, but menuconfig
+still returns an error even if it correctly writes a config. Updated
+package/config patch to follow 
+
+---------------------------------------------------------------------- 
+ bjdooks - 07-02-07 18:07  
+---------------------------------------------------------------------- 
+http://bugs.uclibc.org/file_download.php?file_id=1069&type=bug fixes
+menuconfig error return by ensuring we do not try things like writing the
+split configuration headers and moving the autogenerated configuration
+files .tmpconfig and .tmpconfig.h to a directory which isn't used. 
+
+---------------------------------------------------------------------- 
+ chickenandporn - 07-03-07 12:11  
+---------------------------------------------------------------------- 
+The attached patch is a list of instructions, not a patch... it's not
+usable without knowing perhaps a kernel version it comes from and such.
+
+looks like the change in 18991 helped.  (looking at: svn diff -r 18991
+package/config/confdata.c)
+
+I have a patch that will resolve; will try to attach tonight after I clean
+it a bit -- basically copies the mkdir stuff from confdata.c@614 to a
+separate function and re-uses before the rename() calls. 
+
+---------------------------------------------------------------------- 
+ chickenandporn - 07-05-07 07:03  
+---------------------------------------------------------------------- 
+http://bugs.uclibc.org/file_download.php?file_id=1071&type=bug tested on
+clean r19002 checkout from SVN.  Tested on Linux (CentOS-4.4) and (intel)
+MacOSX-10.4.10.  bjdooks, can you check the patch, and see if you can
+alter it to cover what you did as well, in case I missed something from
+your fix?
+
+ 
+
+---------------------------------------------------------------------- 
+ bernhardf - 07-07-07 17:29  
+---------------------------------------------------------------------- 
+r19026 is supposed to work, please report back. TIA, 
+
+---------------------------------------------------------------------- 
+ chickenandporn - 07-09-07 09:17  
+---------------------------------------------------------------------- 
+per email, the changes to buildroot/Makefile override HOSTCFLAGS on the
+sub-make for conf and mconf; this breaks -DKBUILD_NO_NLS setting derived
+in $(CONFIG)/Makefile.kconfig
+
+Moving that Makefile.kconfig change to HOST_EXTRACFLAGS is a one-line
+workaround, tested OK on MacOSX, but not sure if it's the right path. 
+Will attach the change as a file 
+
+Issue History 
+Date Modified   Username       Field                    Change               
+====================================================================== 
+07-02-07 04:56  bjdooks        New Issue                                    
+07-02-07 04:56  bjdooks        Status                   new => assigned     
+07-02-07 04:56  bjdooks        Assigned To               => buildroot       
+07-02-07 04:58  bjdooks        Note Added: 0002542                          
+07-02-07 18:05  bjdooks        Note Added: 0002545                          
+07-02-07 18:05  bjdooks        File Added: buildroot-fix-menuconfig.patch       
+            
+07-02-07 18:07  bjdooks        Note Added: 0002546                          
+07-03-07 12:11  chickenandporn Note Added: 0002553                          
+07-05-07 06:57  chickenandporn File Added: buildroot-confdata-mkdirhier.patch   
+                
+07-05-07 07:02  chickenandporn Note Added: 0002556                          
+07-05-07 07:03  chickenandporn Note Edited: 0002556                         
+07-05-07 07:41  chickenandporn Issue Monitored: chickenandporn                  
+ 
+07-07-07 17:29  bernhardf      Note Added: 0002563                          
+07-09-07 09:17  chickenandporn Note Added: 0002582                          
+======================================================================
