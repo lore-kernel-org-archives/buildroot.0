@@ -1,59 +1,70 @@
-From: aldot at uclibc.org <aldot@uclibc.org>
-Date: Mon,  9 Jul 2007 11:36:03 -0700 (PDT)
-Subject: [Buildroot] svn commit: trunk/buildroot/package/make
-Message-ID: <20070709183603.96E533007E@busybox.net>
+From: Allan Clark <allanc@chickenandporn.com>
+Date: Mon, 9 Jul 2007 14:50:19 -0400
+Subject: [Buildroot] [buildroot 0001415]: SVN buildroot does not build
+	configuration package
+In-Reply-To: <20070709182752.GB24951@aon.at>
+References: <6b74b6a0ff9392d0dc56e671767727a0@busybox.net>
+	<20070709182752.GB24951@aon.at>
+Message-ID: <37c712e0707091150q216848bqfb06055300b50398@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Author: aldot
-Date: 2007-07-09 11:36:01 -0700 (Mon, 09 Jul 2007)
-New Revision: 19057
+On 7/9/07, Bernhard Fischer <rep.dot.nop@gmail.com> wrote:
+> >----------------------------------------------------------------------
+> > chickenandporn - 07-09-07 11:19
+> >----------------------------------------------------------------------
+> >(over checkout of r19054)
+> >patching file target/device/Soekris/net4521/linux.mk
+> >patching file target/device/Via/epia-mii/linux.mk
+> >patching file target/device/Sharp/LNode80/linux.mk
+>
+> Yes, these should be deleted.
 
-Log:
-- cosmetics: rename _VER to _VERSION and touch at
+They're not deleted in SVN, so I patch them per "cp -fa" -> "cp -fPpR"
+
+> >patching file package/openssl/openssl.mk
+> >patching file Makefile
+> >patching file package/config/foo.h
+>
+> There's no need to touch foo.h
+
+Actually, there is, and I discussed it in the list
 
 
-Modified:
-   trunk/buildroot/package/make/make.mk
+> >patching file toolchain/gcc/4.2.0/500-bsd-no-map_anonymous.patch
+> >patching file toolchain/dependencies/dependencies.sh
+> >patching file toolchain/dependencies/dependencies.mk
+> >patching file package/make/make.mk
+>
+> Is there a newer version of make out there?
 
+I think it was updated in r19056; this change is used with following:
 
-Changeset:
-Modified: trunk/buildroot/package/make/make.mk
-===================================================================
---- trunk/buildroot/package/make/make.mk	2007-07-09 18:23:20 UTC (rev 19056)
-+++ trunk/buildroot/package/make/make.mk	2007-07-09 18:36:01 UTC (rev 19057)
-@@ -3,10 +3,10 @@
- # make
- #
- #############################################################
--GNUMAKE_VER:=3.81
--GNUMAKE_SOURCE:=make-$(GNUMAKE_VER).tar.bz2
-+GNUMAKE_VERSION:=3.81
-+GNUMAKE_SOURCE:=make-$(GNUMAKE_VERSION).tar.bz2
- GNUMAKE_SITE:=http://ftp.gnu.org/pub/gnu/make
--GNUMAKE_DIR:=$(BUILD_DIR)/make-$(GNUMAKE_VER)
-+GNUMAKE_DIR:=$(BUILD_DIR)/make-$(GNUMAKE_VERSION)
- GNUMAKE_CAT:=$(BZCAT)
- GNUMAKE_BINARY:=make
- GNUMAKE_TARGET_BINARY:=usr/bin/make
-@@ -19,7 +19,7 @@
- $(GNUMAKE_DIR)/.unpacked: $(DL_DIR)/$(GNUMAKE_SOURCE)
- 	$(GNUMAKE_CAT) $(DL_DIR)/$(GNUMAKE_SOURCE) | tar -C $(BUILD_DIR) $(TAR_OPTIONS) -
- 	$(CONFIG_UPDATE) $(GNUMAKE_DIR)/config
--	touch $(GNUMAKE_DIR)/.unpacked
-+	touch $@
- 
- $(GNUMAKE_DIR)/.configured: $(GNUMAKE_DIR)/.unpacked
- 	(cd $(GNUMAKE_DIR); rm -rf config.cache; \
-@@ -46,7 +46,7 @@
- 		$(DISABLE_NLS) \
- 		$(DISABLE_LARGEFILE) \
- 	);
--	touch $(GNUMAKE_DIR)/.configured
-+	touch $@
- 
- $(GNUMAKE_DIR)/$(GNUMAKE_BINARY): $(GNUMAKE_DIR)/.configured
- 	$(MAKE) -C $(GNUMAKE_DIR)
+> >patching file toolchain/dependencies/check-host-make.sh
+
+See also bug #1422
+
+> >patching file toolchain/uClibc/uClibc-0.9.28-no-cp-d.patch
+>
+> You should send this to the uClibc list..
+
+yup, it's involved too with the linux.mk changes above, and it's still
+too dirty to share.
+
+> >:~/src/buildroot Allan$ chmod +x
+> >toolchain/dependencies/check-host-make.sh
+>
+> I don't think that you really need this to be executable
+
+Fails if it isn't executable.
+
+I assume if my bug#1422, resolved by file#1072 and 1073 is
+incorporated, then I won't need to make this file executable, it'll
+checkout executable just as check-host-sed.sh does.
+
+Allan
+-- 
+allanc at chickenandporn.com  "??" http://linkedin.com/in/goldfish
