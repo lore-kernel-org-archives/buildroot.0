@@ -1,53 +1,48 @@
-From: Steven J. Hill <sjhill@realitydiluted.com>
-Date: Mon, 9 Jul 2007 07:20:42 -0500
-Subject: [Buildroot] $(TARGET_CONFIGURE_OPTS) $(MAKE) vs
-	$(MAKE)	$(TARGET_CONFIGURE_OPTS)
-In-Reply-To: <20070709092108.GA20627@aon.at>
-References: <20070706155558.GA18954@real.realitydiluted.com>
-	<000201c7c087$9e70d0a0$dcc4af0a@atmel.com>
-	<20070707130132.GU4096@aon.at>
-	<1183824383.19912.5.camel@elrond.sweden.atmel.com>
-	<20070707172925.GV4096@aon.at>
-	<1183837025.19912.17.camel@elrond.sweden.atmel.com>
-	<20070707211606.GZ4096@aon.at>
-	<05fb01c7c0e9$275c45a0$dcc4af0a@atmel.com>
-	<20070709082550.GA19774@aon.at> <20070709092108.GA20627@aon.at>
-Message-ID: <20070709122041.GA30238@real.realitydiluted.com>
+From: Ulf Samuelsson <ulf@atmel.com>
+Date: Mon, 09 Jul 2007 14:01:50 +0200
+Subject: [Buildroot] Global definition of Today's date.
+Message-ID: <1183982510.5278.2.camel@elrond.sweden.atmel.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-> This hunk of yours is really broken:
-> TARGET_CONFIGURE_OPTS=... \
->                 CC="$(TARGET_CROSS)gcc $(TARGET_CFLAGS)" \
->                 GCC="$(TARGET_CROSS)gcc $(TARGET_CFLAGS)" \
->                 CXX="$(TARGET_CROSS)g++ $(TARGET_CFLAGS)" \
->                 CPP="$(TARGET_CROSS)cpp $(TARGET_CFLAGS)" \
-> 
-> 1) These are the compilers and not compiler plus flags.
->
-See comment below about packages breaking.
+Think I am going to need today's date in a few other places.
+The date seems to be defined in mtd/mtd.mk, but
+I think the top Makefile is more appropriate for this.
+Anyone has a problem with me applying this patch?
 
-> 2) CFLAGS are wrong as CXXFLAGS
->
-So when compiling C++ code, and if I want the -Os and other options,
-how do you suggest we pass them.
 
-> 3) since your change we end up using the default flags from the
-> packages, which more often than not default to -O2. Let me refer you to
-> options.c of gcc (or the respective docs for the gory details).
-> 
-Thanks, I am able to read code.
 
-> I am going to revert this change for now. What were you trying to
-> do/solve?
->
-A number of packages break unless the above is done. By overriding
-CFLAGS in the top-level makefile, CFLAGS in packages themselves get
-overridden and fail to build. Essentially if you do not like the
-method above, then a bunch of packages will need to be changed in
-order to work properly with CFLAGS be specified at the very top.
+Index: package/mtd/mtd.mk
+===================================================================
+--- package/mtd/mtd.mk  (revision 19054)
++++ package/mtd/mtd.mk  (arbetskopia)
+@@ -5,8 +5,8 @@
+ #############################################################
+ ifeq ($(strip $(BR2_PACKAGE_MTD_SNAPSHOT)),y)
+ # Be aware that this changes daily....
+-TODAY:=$(shell date -u +%Y%m%d)
+-MTD_DL_SOURCE:=mtd-snapshot-$(TODAY).tar.bz2
++
++MTD_DL_SOURCE:=mtd-snapshot-$(DATE).tar.bz2
+ MTD_CAT:=$(BZCAT)
+ MTD_SOURCE:=mtd-snapshot.tar.bz2
+ MTD_SITE:=ftp://ftp.uk.linux.org/pub/people/dwmw2/mtd/cvs
+Index: Makefile
+===================================================================
+--- Makefile    (revision 19054)
++++ Makefile    (arbetskopia)
+@@ -25,6 +25,7 @@
+ CONFIG_CONFIG_IN = Config.in
+ CONFIG_DEFCONFIG = .defconfig
+ CONFIG = package/config
++DATE:=$(shell date -u +%Y%m%d)
+ 
+ noconfig_targets := menuconfig config oldconfig randconfig \
+        defconfig allyesconfig allnoconfig release tags    \
 
--Steve
+
+Best Regards
+Ulf Samuelsson
