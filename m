@@ -1,8 +1,8 @@
 From: bugs at busybox.net <bugs@busybox.net>
-Date: Mon, 9 Jul 2007 10:28:05 -0700
+Date: Mon, 9 Jul 2007 10:29:48 -0700
 Subject: [Buildroot] [buildroot 0001415]: SVN buildroot does not build
 	configuration package
-Message-ID: <db11139c178f22af46adeb45a797bad9@busybox.net>
+Message-ID: <feb93678ede013b7bf2e1e577ee928c3@busybox.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -26,7 +26,7 @@ Priority:                   normal
 Status:                     assigned
 ====================================================================== 
 Date Submitted:             07-02-2007 04:56 PDT
-Last Modified:              07-09-2007 10:28 PDT
+Last Modified:              07-09-2007 10:29 PDT
 ====================================================================== 
 Summary:                    SVN buildroot does not build configuration package
 Description: 
@@ -150,6 +150,21 @@ I want to reiterate:
 Note: second fix is a one-liner, and DOES RESOLVE.  Not sure you looked at
 that. 
 
+---------------------------------------------------------------------- 
+ chickenandporn - 07-09-07 10:29  
+---------------------------------------------------------------------- 
+See also package/config/Makefile.kconfig:
+
+# Needed for systems without gettext
+KBUILD_HAVE_NLS := $(shell \
+     if echo "\#include <libintl.h>" | $(HOSTCC) $(HOSTCFLAGS) -E - >
+/dev/null 2>&1 ; \
+     then echo yes ; \
+     else echo no ; fi)
+ifeq ($(KBUILD_HAVE_NLS),no)
+HOSTCFLAGS      += -DKBUILD_NO_NLS
+endif 
+
 Issue History 
 Date Modified   Username       Field                    Change               
 ====================================================================== 
@@ -175,4 +190,5 @@ Date Modified   Username       Field                    Change
 07-09-07 09:20  chickenandporn Note Edited: 0002582                         
 07-09-07 09:55  bernhardf      Note Added: 0002583                          
 07-09-07 10:28  chickenandporn Note Added: 0002584                          
+07-09-07 10:29  chickenandporn Note Added: 0002585                          
 ======================================================================
