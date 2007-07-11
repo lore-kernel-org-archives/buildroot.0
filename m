@@ -1,7 +1,7 @@
 From: ulf at uclibc.org <ulf@uclibc.org>
-Date: Wed, 11 Jul 2007 07:20:50 -0700 (PDT)
-Subject: [Buildroot] svn commit: trunk/buildroot/package: dbus tcpdump
-Message-ID: <20070711142050.EE4DAA65BE@busybox.net>
+Date: Wed, 11 Jul 2007 07:34:57 -0700 (PDT)
+Subject: [Buildroot] svn commit: trunk/buildroot/target:  linux
+Message-ID: <20070711143457.B807BA67FD@busybox.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -9,52 +9,375 @@ Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
 Author: ulf
-Date: 2007-07-11 07:20:47 -0700 (Wed, 11 Jul 2007)
-New Revision: 19062
+Date: 2007-07-11 07:34:55 -0700 (Wed, 11 Jul 2007)
+New Revision: 19063
 
 Log:
-Use <package>_VERSION in all <package>.mk instead of <package>_VER
+Build linux within target/linux/Makefile.in instead of within target/linux26.mk
+
+Added:
+   trunk/buildroot/target/linux/
+   trunk/buildroot/target/linux/Makefile.in
+
+Removed:
+   trunk/buildroot/target/linux26.mk
 
 Modified:
-   trunk/buildroot/package/dbus/dbus.mk
-   trunk/buildroot/package/tcpdump/dhcpdump.mk
+   trunk/buildroot/target/Makefile.in
 
 
 Changeset:
-Modified: trunk/buildroot/package/dbus/dbus.mk
+Modified: trunk/buildroot/target/Makefile.in
 ===================================================================
---- trunk/buildroot/package/dbus/dbus.mk	2007-07-11 14:06:06 UTC (rev 19061)
-+++ trunk/buildroot/package/dbus/dbus.mk	2007-07-11 14:20:47 UTC (rev 19062)
-@@ -3,10 +3,10 @@
- # dbus
- #
- #############################################################
--DBUS_VER:=1.1.1
--DBUS_SOURCE:=dbus-$(DBUS_VER).tar.gz
-+DBUS_VERSION:=1.1.1
-+DBUS_SOURCE:=dbus-$(DBUS_VERSION).tar.gz
- DBUS_SITE:=http://dbus.freedesktop.org/releases/dbus/
--DBUS_DIR:=$(BUILD_DIR)/dbus-$(DBUS_VER)
-+DBUS_DIR:=$(BUILD_DIR)/dbus-$(DBUS_VERSION)
- DBUS_CAT:=$(ZCAT)
- DBUS_BINARY:=bus/dbus-daemon
- DBUS_TARGET_BINARY:=usr/bin/dbus-daemon
+--- trunk/buildroot/target/Makefile.in	2007-07-11 14:20:47 UTC (rev 19062)
++++ trunk/buildroot/target/Makefile.in	2007-07-11 14:34:55 UTC (rev 19063)
+@@ -17,4 +17,4 @@
+ # kernel rules
+ # We already did add the kernel target to TARGETS and now just pull in the rules
+ # to actually build this target.
+-include target/linux*.mk
++include target/linux/Makefile.in
 
-Modified: trunk/buildroot/package/tcpdump/dhcpdump.mk
+Copied: trunk/buildroot/target/linux/Makefile.in (from rev 19062, trunk/buildroot/target/linux26.mk)
 ===================================================================
---- trunk/buildroot/package/tcpdump/dhcpdump.mk	2007-07-11 14:06:06 UTC (rev 19061)
-+++ trunk/buildroot/package/tcpdump/dhcpdump.mk	2007-07-11 14:20:47 UTC (rev 19062)
-@@ -6,10 +6,10 @@
- # Copyright (C) 2001-2003 by Erik Andersen <andersen@codepoet.org>
- # Copyright (C) 2002 by Tim Riker <Tim@Rikers.org>
- 
--DHCPDUMP_VER:=1.7
--DHCPDUMP_DIR:=$(BUILD_DIR)/dhcpdump-$(DHCPDUMP_VER)
-+DHCPDUMP_VERSION:=1.7
-+DHCPDUMP_DIR:=$(BUILD_DIR)/dhcpdump-$(DHCPDUMP_VERSION)
- DHCPDUMP_SITE:=http://www.mavetju.org/download/
--DHCPDUMP_SOURCE:=dhcpdump-$(DHCPDUMP_VER).tar.gz
-+DHCPDUMP_SOURCE:=dhcpdump-$(DHCPDUMP_VERSION).tar.gz
- DHCPDUMP_CAT:=$(ZCAT)
- 
- $(DL_DIR)/$(DHCPDUMP_SOURCE):
+--- trunk/buildroot/target/linux/Makefile.in	                        (rev 0)
++++ trunk/buildroot/target/linux/Makefile.in	2007-07-11 14:34:55 UTC (rev 19063)
+@@ -0,0 +1,166 @@
++#############################################################
++#
++# Linux kernel 2.6 target
++#
++#############################################################
++ifneq ($(filter $(TARGETS),linux26),)
++
++
++ifeq ($(LINUX_HEADERS_VERSION),)
++# Version of Linux to download and then apply patches to
++# XXX: andersee, i do not understand why we need this (BF)
++DOWNLOAD_LINUX26_VERSION=2.6.19.2
++# Version of Linux after applying any patches
++LINUX26_VERSION=2.6.19.2
++else
++DOWNLOAD_LINUX26_VERSION=$(LINUX_HEADERS_VERSION)
++LINUX26_VERSION=$(LINUX_HEADERS_VERSION)
++endif
++
++LINUX26_SOURCE=linux-$(DOWNLOAD_LINUX26_VERSION).tar.bz2
++LINUX26_BZCAT:=$(BZCAT)
++LINUX26_SITE=http://ftp.kernel.org/pub/linux/kernel/v2.6
++
++#LINUX26_FORMAT=vmlinux
++#LINUX26_BINLOC=$(LINUX26_FORMAT)
++
++# Linux kernel configuration file
++# Has to be set by the target/device
++# If it is not set by the target/device, then pick the one from .config
++# LINUX26_KCONFIG=$(BR2_BOARD_PATH)/linux26.config
++ifndef LINUX26_KCONFIG
++ifneq ($(strip $(subst ",,$(BR2_PACKAGE_LINUX_KCONFIG))),)
++LINUX26_KCONFIG=$(strip $(subst ",,$(BR2_PACKAGE_LINUX_KCONFIG)))
++#"))
++#"))
++endif
++endif
++ifndef LINUX26_FORMAT
++ifneq ($(strip $(subst ",,$(BR2_PACKAGE_LINUX_FORMAT))),)
++LINUX26_FORMAT=$(strip $(subst ",,$(BR2_PACKAGE_LINUX_FORMAT)))
++#"))
++#"))
++endif
++endif
++
++# Has to be set by the target/device
++# LINUX26_FORMAT=bzImage
++ifndef LINUX26_FORMAT
++LINUX26_FORMAT=zImage
++endif
++# Has to be set by the target/device
++ifndef LINUX26_BINLOC
++# default:
++LINUX26_BINLOC=arch/$(KERNEL_ARCH)/boot/$(LINUX26_FORMAT)
++endif
++
++# File name for the Linux kernel binary
++LINUX26_KERNEL=linux-kernel-$(LINUX26_VERSION)-$(KERNEL_ARCH)
++
++# Version of Linux AFTER patches
++LINUX26_DIR=$(BUILD_DIR)/linux-$(LINUX26_VERSION)
++
++# for packages that need it
++LINUX_VERSION:=$(LINUX_VERSION)
++LINUX_DIR=$(LINUX26_DIR)
++LINUX_KERNEL=$(LINUX26_KERNEL)
++
++# kernel patches
++LINUX26_PATCH_DIR=$(BR2_BOARD_PATH)/kernel-patches/
++__LINUX26_NO_PIC=-fPIC -fpic -DPIC
++LINUX26_MAKE_FLAGS = HOSTCC="$(HOSTCC)" HOSTCFLAGS=$(HOSTCFLAGS) \
++	ARCH=$(KERNEL_ARCH) \
++	CFLAGS_KERNEL="$(filter-out $(__LINUX26_NO_PIC),$(TARGET_CFLAGS))" \
++	INSTALL_MOD_PATH=$(TARGET_DIR) \
++	CROSS_COMPILE=$(KERNEL_CROSS)
++
++$(LINUX26_KCONFIG):
++	@if [ ! -f "$(LINUX26_KCONFIG)" ] ; then \
++		echo ""; \
++		echo "You should create a .config for your kernel"; \
++		echo "and install it as $(LINUX26_KCONFIG)"; \
++		echo ""; \
++		sleep 5; \
++	fi;
++
++ifneq ($(strip $(LINUX26_VERSION)),$(strip $(LINUX_HEADERS_VERSION)))
++$(DL_DIR)/$(LINUX26_SOURCE):
++	 $(WGET) -P $(DL_DIR) $(LINUX26_SITE)/$(LINUX26_SOURCE)
++
++$(LINUX26_DIR)/.unpacked: $(DL_DIR)/$(LINUX26_SOURCE)
++	rm -rf $(LINUX26_DIR)
++	$(LINUX26_BZCAT) $(DL_DIR)/$(LINUX26_SOURCE) | tar -C $(BUILD_DIR) $(TAR_OPTIONS) -
++ifneq ($(DOWNLOAD_LINUX26_VERSION),$(LINUX26_VERSION))
++	# Rename the dir from the downloaded version to the AFTER patch version
++	mv -f $(BUILD_DIR)/linux-$(DOWNLOAD_LINUX26_VERSION) $(LINUX26_DIR)
++endif
++	touch $@
++
++$(LINUX26_DIR)/.patched: $(LINUX26_DIR)/.unpacked
++	toolchain/patch-kernel.sh $(LINUX26_DIR) $(LINUX26_PATCH_DIR)
++	touch $@
++endif # ($(LINUX26_VERSION),$(LINUX_HEADERS_VERSION))
++
++$(LINUX26_DIR)/.configured:  $(LINUX26_DIR)/.patched  $(LINUX26_KCONFIG) $(INITRAMFS_TARGET)
++	cp -dpf $(LINUX26_KCONFIG) $(LINUX26_DIR)/.config
++	$(SED) '/CONFIG_AEABI/d' $(LINUX26_DIR)/.config
++ifeq ($(BR2_ARM_EABI),y)
++	echo "CONFIG_AEABI=y" >> $(LINUX26_DIR)/.config
++	$(SED) '/CONFIG_OABI_COMPAT/d' $(LINUX26_DIR)/.config
++	echo "# CONFIG_OABI_COMPAT is not set" >> $(LINUX26_DIR)/.config
++else
++	echo "# CONFIG_AEABI is not set" >> $(LINUX26_DIR)/.config
++endif
++ifeq ($(BR2_TARGET_ROOTFS_INITRAMFS),y)
++	$(SED) '/CONFIG_INITRAMFS_SOURCE/d' $(LINUX26_DIR)/.config
++	echo "CONFIG_INITRAMFS_SOURCE=\"$(INITRAMFS_TARGET)\"" >> \
++		$(LINUX26_DIR)/.config
++	$(SED) '/INITRAMFS_ROOT_.ID/d' $(LINUX26_DIR)/.config
++	echo "INITRAMFS_ROOT_UID=\"0\"" >> $(LINUX26_DIR)/.config
++	echo "INITRAMFS_ROOT_GID=\"0\"" >> $(LINUX26_DIR)/.config
++endif
++	$(MAKE) $(LINUX26_MAKE_FLAGS) -C $(LINUX26_DIR) oldconfig
++	touch $@
++
++$(LINUX26_DIR)/.depend_done:  $(LINUX26_DIR)/.configured
++	$(MAKE) $(LINUX26_MAKE_FLAGS) -C $(LINUX26_DIR) prepare
++	touch $@
++
++$(LINUX26_KERNEL): $(LINUX26_DIR)/.depend_done
++	$(MAKE) $(LINUX26_MAKE_FLAGS) -C $(LINUX26_DIR) $(LINUX26_FORMAT)
++	$(MAKE) $(LINUX26_MAKE_FLAGS) -C $(LINUX26_DIR) modules
++	cp -dpf $(LINUX26_DIR)/$(LINUX26_BINLOC) $(LINUX26_KERNEL)
++	touch -c $@
++
++$(TARGET_DIR)/boot/$(LINUX26_FORMAT): $(LINUX26_KERNEL)
++	[ -d $(TARGET_DIR)/boot/ ] || mkdir $(TARGET_DIR)/boot
++	cp -dpf $(LINUX26_DIR)/$(LINUX26_BINLOC) $(LINUX26_DIR)/System.map $(TARGET_DIR)/boot/
++	touch -c $@
++
++$(TARGET_DIR)/lib/modules/$(LINUX26_VERSION)/modules.dep: $(LINUX26_KERNEL)
++	rm -rf $(TARGET_DIR)/lib/modules/$(LINUX26_VERSION)
++	rm -f $(TARGET_DIR)/sbin/cardmgr
++	$(MAKE) $(LINUX26_MAKE_FLAGS) -C $(LINUX26_DIR) \
++		DEPMOD=$(STAGING_DIR)/bin/$(GNU_TARGET_NAME)-depmod26 \
++		INSTALL_MOD_PATH=$(TARGET_DIR) modules_install
++	rm -f $(TARGET_DIR)/lib/modules/$(LINUX26_VERSION)/build
++	touch -c $@
++
++linux26-menuconfig: $(LINUX26_DIR)/.patched host-sed
++	[ -f $(LINUX26_DIR)/.config ] || cp $(LINUX26_KCONFIG) $(LINUX26_DIR)/.config
++	$(MAKE) $(LINUX26_MAKE_FLAGS) -C $(LINUX26_DIR) menuconfig
++	-[ -f $(LINUX26_DIR)/.config ] && touch $(LINUX26_DIR)/.configured
++
++linux26: cross-depmod26 $(TARGET_DIR)/lib/modules/$(LINUX26_VERSION)/modules.dep $(TARGET_DIR)/boot/$(LINUX26_FORMAT)
++
++linux26-source: $(DL_DIR)/$(LINUX26_SOURCE)
++
++# This has been renamed so we do _NOT_ by default run this on 'make clean'
++linux26clean:
++	rm -f $(LINUX26_KERNEL) $(LINUX26_DIR)/.configured
++	-$(MAKE) PATH=$(TARGET_PATH) -C $(LINUX26_DIR) clean
++
++linux26-dirclean:
++	rm -rf $(LINUX26_DIR)
++
++endif
+
+Deleted: trunk/buildroot/target/linux26.mk
+===================================================================
+--- trunk/buildroot/target/linux26.mk	2007-07-11 14:20:47 UTC (rev 19062)
++++ trunk/buildroot/target/linux26.mk	2007-07-11 14:34:55 UTC (rev 19063)
+@@ -1,166 +0,0 @@
+-#############################################################
+-#
+-# Linux kernel 2.6 target
+-#
+-#############################################################
+-ifneq ($(filter $(TARGETS),linux26),)
+-
+-
+-ifeq ($(LINUX_HEADERS_VERSION),)
+-# Version of Linux to download and then apply patches to
+-# XXX: andersee, i do not understand why we need this (BF)
+-DOWNLOAD_LINUX26_VERSION=2.6.19.2
+-# Version of Linux after applying any patches
+-LINUX26_VERSION=2.6.19.2
+-else
+-DOWNLOAD_LINUX26_VERSION=$(LINUX_HEADERS_VERSION)
+-LINUX26_VERSION=$(LINUX_HEADERS_VERSION)
+-endif
+-
+-LINUX26_SOURCE=linux-$(DOWNLOAD_LINUX26_VERSION).tar.bz2
+-LINUX26_BZCAT:=$(BZCAT)
+-LINUX26_SITE=http://ftp.kernel.org/pub/linux/kernel/v2.6
+-
+-#LINUX26_FORMAT=vmlinux
+-#LINUX26_BINLOC=$(LINUX26_FORMAT)
+-
+-# Linux kernel configuration file
+-# Has to be set by the target/device
+-# If it is not set by the target/device, then pick the one from .config
+-# LINUX26_KCONFIG=$(BR2_BOARD_PATH)/linux26.config
+-ifndef LINUX26_KCONFIG
+-ifneq ($(strip $(subst ",,$(BR2_PACKAGE_LINUX_KCONFIG))),)
+-LINUX26_KCONFIG=$(strip $(subst ",,$(BR2_PACKAGE_LINUX_KCONFIG)))
+-#"))
+-#"))
+-endif
+-endif
+-ifndef LINUX26_FORMAT
+-ifneq ($(strip $(subst ",,$(BR2_PACKAGE_LINUX_FORMAT))),)
+-LINUX26_FORMAT=$(strip $(subst ",,$(BR2_PACKAGE_LINUX_FORMAT)))
+-#"))
+-#"))
+-endif
+-endif
+-
+-# Has to be set by the target/device
+-# LINUX26_FORMAT=bzImage
+-ifndef LINUX26_FORMAT
+-LINUX26_FORMAT=zImage
+-endif
+-# Has to be set by the target/device
+-ifndef LINUX26_BINLOC
+-# default:
+-LINUX26_BINLOC=arch/$(KERNEL_ARCH)/boot/$(LINUX26_FORMAT)
+-endif
+-
+-# File name for the Linux kernel binary
+-LINUX26_KERNEL=linux-kernel-$(LINUX26_VERSION)-$(KERNEL_ARCH)
+-
+-# Version of Linux AFTER patches
+-LINUX26_DIR=$(BUILD_DIR)/linux-$(LINUX26_VERSION)
+-
+-# for packages that need it
+-LINUX_VERSION:=$(LINUX_VERSION)
+-LINUX_DIR=$(LINUX26_DIR)
+-LINUX_KERNEL=$(LINUX26_KERNEL)
+-
+-# kernel patches
+-LINUX26_PATCH_DIR=$(BR2_BOARD_PATH)/kernel-patches/
+-__LINUX26_NO_PIC=-fPIC -fpic -DPIC
+-LINUX26_MAKE_FLAGS = HOSTCC="$(HOSTCC)" HOSTCFLAGS=$(HOSTCFLAGS) \
+-	ARCH=$(KERNEL_ARCH) \
+-	CFLAGS_KERNEL="$(filter-out $(__LINUX26_NO_PIC),$(TARGET_CFLAGS))" \
+-	INSTALL_MOD_PATH=$(TARGET_DIR) \
+-	CROSS_COMPILE=$(KERNEL_CROSS)
+-
+-$(LINUX26_KCONFIG):
+-	@if [ ! -f "$(LINUX26_KCONFIG)" ] ; then \
+-		echo ""; \
+-		echo "You should create a .config for your kernel"; \
+-		echo "and install it as $(LINUX26_KCONFIG)"; \
+-		echo ""; \
+-		sleep 5; \
+-	fi;
+-
+-ifneq ($(strip $(LINUX26_VERSION)),$(strip $(LINUX_HEADERS_VERSION)))
+-$(DL_DIR)/$(LINUX26_SOURCE):
+-	 $(WGET) -P $(DL_DIR) $(LINUX26_SITE)/$(LINUX26_SOURCE)
+-
+-$(LINUX26_DIR)/.unpacked: $(DL_DIR)/$(LINUX26_SOURCE)
+-	rm -rf $(LINUX26_DIR)
+-	$(LINUX26_BZCAT) $(DL_DIR)/$(LINUX26_SOURCE) | tar -C $(BUILD_DIR) $(TAR_OPTIONS) -
+-ifneq ($(DOWNLOAD_LINUX26_VERSION),$(LINUX26_VERSION))
+-	# Rename the dir from the downloaded version to the AFTER patch version
+-	mv -f $(BUILD_DIR)/linux-$(DOWNLOAD_LINUX26_VERSION) $(LINUX26_DIR)
+-endif
+-	touch $@
+-
+-$(LINUX26_DIR)/.patched: $(LINUX26_DIR)/.unpacked
+-	toolchain/patch-kernel.sh $(LINUX26_DIR) $(LINUX26_PATCH_DIR)
+-	touch $@
+-endif # ($(LINUX26_VERSION),$(LINUX_HEADERS_VERSION))
+-
+-$(LINUX26_DIR)/.configured:  $(LINUX26_DIR)/.patched  $(LINUX26_KCONFIG) $(INITRAMFS_TARGET)
+-	cp -dpf $(LINUX26_KCONFIG) $(LINUX26_DIR)/.config
+-	$(SED) '/CONFIG_AEABI/d' $(LINUX26_DIR)/.config
+-ifeq ($(BR2_ARM_EABI),y)
+-	echo "CONFIG_AEABI=y" >> $(LINUX26_DIR)/.config
+-	$(SED) '/CONFIG_OABI_COMPAT/d' $(LINUX26_DIR)/.config
+-	echo "# CONFIG_OABI_COMPAT is not set" >> $(LINUX26_DIR)/.config
+-else
+-	echo "# CONFIG_AEABI is not set" >> $(LINUX26_DIR)/.config
+-endif
+-ifeq ($(BR2_TARGET_ROOTFS_INITRAMFS),y)
+-	$(SED) '/CONFIG_INITRAMFS_SOURCE/d' $(LINUX26_DIR)/.config
+-	echo "CONFIG_INITRAMFS_SOURCE=\"$(INITRAMFS_TARGET)\"" >> \
+-		$(LINUX26_DIR)/.config
+-	$(SED) '/INITRAMFS_ROOT_.ID/d' $(LINUX26_DIR)/.config
+-	echo "INITRAMFS_ROOT_UID=\"0\"" >> $(LINUX26_DIR)/.config
+-	echo "INITRAMFS_ROOT_GID=\"0\"" >> $(LINUX26_DIR)/.config
+-endif
+-	$(MAKE) $(LINUX26_MAKE_FLAGS) -C $(LINUX26_DIR) oldconfig
+-	touch $@
+-
+-$(LINUX26_DIR)/.depend_done:  $(LINUX26_DIR)/.configured
+-	$(MAKE) $(LINUX26_MAKE_FLAGS) -C $(LINUX26_DIR) prepare
+-	touch $@
+-
+-$(LINUX26_KERNEL): $(LINUX26_DIR)/.depend_done
+-	$(MAKE) $(LINUX26_MAKE_FLAGS) -C $(LINUX26_DIR) $(LINUX26_FORMAT)
+-	$(MAKE) $(LINUX26_MAKE_FLAGS) -C $(LINUX26_DIR) modules
+-	cp -dpf $(LINUX26_DIR)/$(LINUX26_BINLOC) $(LINUX26_KERNEL)
+-	touch -c $@
+-
+-$(TARGET_DIR)/boot/$(LINUX26_FORMAT): $(LINUX26_KERNEL)
+-	[ -d $(TARGET_DIR)/boot/ ] || mkdir $(TARGET_DIR)/boot
+-	cp -dpf $(LINUX26_DIR)/$(LINUX26_BINLOC) $(LINUX26_DIR)/System.map $(TARGET_DIR)/boot/
+-	touch -c $@
+-
+-$(TARGET_DIR)/lib/modules/$(LINUX26_VERSION)/modules.dep: $(LINUX26_KERNEL)
+-	rm -rf $(TARGET_DIR)/lib/modules/$(LINUX26_VERSION)
+-	rm -f $(TARGET_DIR)/sbin/cardmgr
+-	$(MAKE) $(LINUX26_MAKE_FLAGS) -C $(LINUX26_DIR) \
+-		DEPMOD=$(STAGING_DIR)/bin/$(GNU_TARGET_NAME)-depmod26 \
+-		INSTALL_MOD_PATH=$(TARGET_DIR) modules_install
+-	rm -f $(TARGET_DIR)/lib/modules/$(LINUX26_VERSION)/build
+-	touch -c $@
+-
+-linux26-menuconfig: $(LINUX26_DIR)/.patched host-sed
+-	[ -f $(LINUX26_DIR)/.config ] || cp $(LINUX26_KCONFIG) $(LINUX26_DIR)/.config
+-	$(MAKE) $(LINUX26_MAKE_FLAGS) -C $(LINUX26_DIR) menuconfig
+-	-[ -f $(LINUX26_DIR)/.config ] && touch $(LINUX26_DIR)/.configured
+-
+-linux26: cross-depmod26 $(TARGET_DIR)/lib/modules/$(LINUX26_VERSION)/modules.dep $(TARGET_DIR)/boot/$(LINUX26_FORMAT)
+-
+-linux26-source: $(DL_DIR)/$(LINUX26_SOURCE)
+-
+-# This has been renamed so we do _NOT_ by default run this on 'make clean'
+-linux26clean:
+-	rm -f $(LINUX26_KERNEL) $(LINUX26_DIR)/.configured
+-	-$(MAKE) PATH=$(TARGET_PATH) -C $(LINUX26_DIR) clean
+-
+-linux26-dirclean:
+-	rm -rf $(LINUX26_DIR)
+-
+-endif
