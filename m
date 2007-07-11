@@ -1,121 +1,85 @@
-From: bugs at busybox.net <bugs@busybox.net>
-Date: Wed, 11 Jul 2007 07:36:25 -0700
-Subject: [Buildroot] [buildroot 0000944]: Some portability fixes for running
-	on a MacOSX host
-Message-ID: <105139259ac157745e61e08d977bdb25@bugs.uclibc.org>
+From: ulf at uclibc.org <ulf@uclibc.org>
+Date: Wed, 11 Jul 2007 07:40:57 -0700 (PDT)
+Subject: [Buildroot] svn commit: trunk/buildroot/target:  device
+Message-ID: <20070711144057.91878A65A6@busybox.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+Author: ulf
+Date: 2007-07-11 07:40:56 -0700 (Wed, 11 Jul 2007)
+New Revision: 19064
 
-A NOTE has been added to this issue. 
-====================================================================== 
-http://busybox.net/bugs/view.php?id=944 
-====================================================================== 
-Reported By:                wiml
-Assigned To:                buildroot
-====================================================================== 
-Project:                    buildroot
-Issue ID:                   944
-Category:                   Other
-Reproducibility:            always
-Severity:                   minor
-Priority:                   normal
-Status:                     assigned
-====================================================================== 
-Date Submitted:             07-12-2006 23:48 PDT
-Last Modified:              07-11-2007 07:36 PDT
-====================================================================== 
-Summary:                    Some portability fixes for running on a MacOSX host
-Description: 
-This patch addresses a few minor linuxisms or (non-BSD)isms in buildroot's
-shell scripts.
+Log:
+Configure linux within target/linux/Config.in instead of within target/device/Config.in
 
-1. Replaces "cp -a" with "cp -pPR". "-a" is just a conveinence for -pPR,
-and none of the BSD-derived systems I've checked have it.
+Modified:
+   trunk/buildroot/target/Config.in
+   trunk/buildroot/target/device/Config.in
 
-2. My 'sed' reqires an explicit empty string after -i, or else it will use
-the "-e" arg as the extension for backups. Oops.
 
-3. My 'sed' requires an EOL or semicolon before the closing curly in a
-{foo...} construct.
+Changeset:
+Modified: trunk/buildroot/target/Config.in
+===================================================================
+--- trunk/buildroot/target/Config.in	2007-07-11 14:34:55 UTC (rev 19063)
++++ trunk/buildroot/target/Config.in	2007-07-11 14:40:56 UTC (rev 19064)
+@@ -21,4 +21,5 @@
+ 
+ endmenu
+ 
++source "target/linux/Config.in"
+ source "target/device/Config.in"
 
-4. Apple's GCC prints a version string that dependencies.sh can't handle.
-This change removes any parenthesized bits from the version string before
-looking for numbers, so it can handle version strings like
-    powerpc-apple-darwin8-gcc-4.0.1 (GCC) 4.0.1 (Apple Computer, Inc.
-build 5250)
-
-======================================================================
-Relationships       ID      Summary
-----------------------------------------------------------------------
-has duplicate       0001251 Buildroot uses lots of cp commands that...
-====================================================================== 
-
----------------------------------------------------------------------- 
- bernhardf - 12-22-06 04:30  
----------------------------------------------------------------------- 
-1) I'd rather prefer if you could expand the host-sed check so we build a
-working sed for your system.
-2) That cp -a patch looks ok. For files, we usually (try to) use "cp
--dpf", so please use -dpf resp. -Rdpf
-  Please attach a new split patch with just the cp changes.
-3) I think that the current dependencies.sh should deal with this, please
-verify.
-
-Thanks in advance for attaching updated, separate patches that take the
-comments above into account.
-cheers,
-Bernhard 
-
----------------------------------------------------------------------- 
- bernhardf - 07-07-07 11:51  
----------------------------------------------------------------------- 
-To be flexible, i suggest we add
-ifeq (linux)
-CP_A:=cp -a
-endif
-ifeq (apple or bsd)
-CP_A:=cp ...
-endif
-
-variants for "force" "recurse" should be provided. 
-
----------------------------------------------------------------------- 
- chickenandporn - 07-11-07 07:36  
----------------------------------------------------------------------- 
-Is there a platform that "cp -fPpR" doesn't work on?  Most platforms mimick
-the old svr4.2r3.2 behavior, or the 4.0r3.0 that migrated from AT&T to BSD,
-as a bare minimum, right?
-
-I point this out because the following:
-
-xxx: yyyy
-     cp -fPpR dir1 dir2
-
-...is easier to read than:
-
-xxx: yyyy
-     $(SOME_BIG_MACRO) dir1 dir2
-
-OK, it might be easier than I am presenting, but if the base behavior is
-acceptible, and we're used to reading unix commands, it's easier to read
-if the changes are just made to be the most portable form of commands. 
-
-Issue History 
-Date Modified   Username       Field                    Change               
-====================================================================== 
-07-12-06 23:48  wiml           New Issue                                    
-07-12-06 23:48  wiml           Status                   new => assigned     
-07-12-06 23:48  wiml           Assigned To               => uClibc          
-07-12-06 23:48  wiml           File Added: buildroot1.patch                    
-12-22-06 04:30  bernhardf      Note Added: 0001914                          
-12-22-06 04:30  bernhardf      Status                   assigned => feedback
-02-12-07 05:34  vapier         Status                   feedback => assigned
-02-12-07 05:34  vapier         Assigned To              uClibc => buildroot 
-07-07-07 11:46  bernhardf      Relationship added       has duplicate 0001251
-07-07-07 11:51  bernhardf      Note Added: 0002559                          
-07-11-07 07:36  chickenandporn Note Added: 0002589                          
-======================================================================
+Modified: trunk/buildroot/target/device/Config.in
+===================================================================
+--- trunk/buildroot/target/device/Config.in	2007-07-11 14:34:55 UTC (rev 19063)
++++ trunk/buildroot/target/device/Config.in	2007-07-11 14:40:56 UTC (rev 19064)
+@@ -1,46 +1,5 @@
+ menu "Board Support Options"
+ 
+-config BR2_PACKAGE_LINUX
+-	bool "linux kernel"
+-	default n
+-	help
+-	  The Linux kernel.
+-	  http://www.kernel.org/
+-
+-	  Note: Requires kernel-headers >= 2.6.19 since the other
+-	        kernel headers are just that (headers) and not full
+-		kernels. This is a feature.
+-
+-config BR2_PACKAGE_LINUX_KCONFIG
+-	string ".config file"
+-	depends on BR2_PACKAGE_LINUX
+-	default ""
+-	help
+-	  kernel's .config to use to build a kernel for the target.
+-
+-	  If the above setting is empty, you can change the default
+-	  board-imposed value by passing LINUX26_KCONFIG=<path> to
+-	  make.
+-
+-config BR2_PACKAGE_LINUX_FORMAT
+-	string "kernel binary format"
+-	depends on BR2_PACKAGE_LINUX
+-	default ""
+-	help
+-	  kernel binary format.
+-	  Popular values include:
+-	  - bzImage
+-	  - zImage
+-	  and other, architecture dependant formats.
+-
+-	  Note that the default format is supposed to be set by your
+-	  board-description, if any.
+-	  i386 and compatible default to bzImage if nothing was given
+-	  above.
+-	  If the above setting is empty, you can change the default
+-	  board-imposed value by passing LINUX26_FORMAT=<string> to
+-	  make.
+-
+ source "target/device/AMD/Config.in"
+ source "target/device/Arm/Config.in"
+ source "target/device/Atmel/Config.in"
