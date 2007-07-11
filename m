@@ -1,8 +1,8 @@
 From: bugs at busybox.net <bugs@busybox.net>
-Date: Wed, 11 Jul 2007 11:52:27 -0700
+Date: Wed, 11 Jul 2007 12:22:20 -0700
 Subject: [Buildroot] [buildroot 0000944]: Some portability fixes for running
 	on a MacOSX host
-Message-ID: <707bfb87cab2ca74d3b9725ccffbd4b2@busybox.net>
+Message-ID: <6e7e7a78575f859a8354cebd6ed42003@busybox.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -26,7 +26,7 @@ Priority:                   normal
 Status:                     assigned
 ====================================================================== 
 Date Submitted:             07-12-2006 23:48 PDT
-Last Modified:              07-11-2007 11:52 PDT
+Last Modified:              07-11-2007 12:22 PDT
 ====================================================================== 
 Summary:                    Some portability fixes for running on a MacOSX host
 Description: 
@@ -105,15 +105,39 @@ acceptible, and we're used to reading unix commands, it's easier to read
 if the changes are just made to be the most portable form of commands. 
 
 ---------------------------------------------------------------------- 
- holin - 07-11-07 11:52  
+ holin - 07-11-07 11:55  
 ---------------------------------------------------------------------- 
 Try older OS X (10.2), older busybox versions, maybe older BSDs and less
 common Unix flavors, such as IRIX, HP-UX, and wherever cross-gcc may
 build. Technically, the POSIX -R is suboptimal substitute to the GNU -d
 that's used all over to copy symbolic links, but that's about it in the
 gravely missed features section. Anywhoo, I'd be all for changing to POSIX
-syntax, too, because that's at least a larger common denominator than
-GNU... 
+syntax, too, because that's at least a larger common denominator than GNU.
+The biggest problem might be that on some platforms, I hear, the POSIX
+syntax does *something*, but not at all what it's supposed to, i.e. you
+might get no error, but unwanted results, instead.
+
+ 
+
+---------------------------------------------------------------------- 
+ chickenandporn - 07-11-07 12:22  
+---------------------------------------------------------------------- 
+I'm not sure if we can test on older 10.2.x MacOSX, nor Atari-520, nor
+anything else thats below a certain usage unless someone here has one of
+those.
+
+GNU cp supports cp -R
+
+cp -R causes softlinks to remain exactly, not dereferencing to copy the
+linked-to file, nor adjusting any relative softlinks.
+
+If there's no argument against it, I'm going to re-cut the patch to turn
+"cp -a" -type functionality to "cp -PpR", avoiding tar-copying,
+cpio-copying, and $(CP_A)/$(CP_D)/$(CP_XYZ) notation, with the assumption
+that someone with an older system that requires a smaller set of options
+can alter further on another bug.  If the next change is incompatible,
+then we could do a host-coreutils to provide the required compatible
+commands such as "cp", "mkdir", etc. 
 
 Issue History 
 Date Modified   Username       Field                    Change               
@@ -130,4 +154,6 @@ Date Modified   Username       Field                    Change
 07-07-07 11:51  bernhardf      Note Added: 0002559                          
 07-11-07 07:36  chickenandporn Note Added: 0002589                          
 07-11-07 11:52  holin          Note Added: 0002590                          
+07-11-07 11:55  holin          Note Edited: 0002590                         
+07-11-07 12:22  chickenandporn Note Added: 0002591                          
 ======================================================================
