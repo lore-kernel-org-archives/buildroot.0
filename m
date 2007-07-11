@@ -1,37 +1,40 @@
-From: Yann E. MORIN <yann.morin.1998@anciens.enib.fr>
-Date: Tue, 10 Jul 2007 23:58:05 +0200
-Subject: [Buildroot] Problem with GDB in linux 2.6.22-rc1
-In-Reply-To: <61c0054e0707101442g6731159dk4e34c48b8c6c82a@mail.gmail.com>
-References: <61c0054e0707101442g6731159dk4e34c48b8c6c82a@mail.gmail.com>
-Message-ID: <200707102358.05807.yann.morin.1998@anciens.enib.fr>
+From: ulf at uclibc.org <ulf@uclibc.org>
+Date: Wed, 11 Jul 2007 06:55:21 -0700 (PDT)
+Subject: [Buildroot] svn commit: trunk/buildroot/package/proftpd
+Message-ID: <20070711135521.086C6A65C2@busybox.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Paul,
-All,
+Author: ulf
+Date: 2007-07-11 06:55:21 -0700 (Wed, 11 Jul 2007)
+New Revision: 19059
 
-On Tuesday 10 July 2007 23:42, Paul Kavan wrote:
-> dlopen failed on 'libthread_db.so.1' - File not found
-> GDB will not be able to debug pthreads.
-> I have tried to determine how to get libthread_db.so.1 included into my rfs
-> via buildroot, but have been unsuccessful. Does anyone here know how this is
-> accomplished?
+Log:
+Use <package>_VERSION in all <package>.mk instead of <package>_VER
 
-Toolchain Options -->
-  [ ] Thread library debugging
+Modified:
+   trunk/buildroot/package/proftpd/proftpd.mk
 
-should produce it.
 
-Regards,
-Yann E. MORIN.
-
--- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +0/33 662376056 | Software  Designer | \ / CAMPAIGN     |   ^                |
-| --==< ?_? >==-- ?------------.-------:  X  AGAINST      |  /e\  There is no  |
-| http://ymorin.is-a-geek.org/ | (*_*) | / \ HTML MAIL    |  """  conspiracy.  |
-?------------------------------?-------?------------------?--------------------?
+Changeset:
+Modified: trunk/buildroot/package/proftpd/proftpd.mk
+===================================================================
+--- trunk/buildroot/package/proftpd/proftpd.mk	2007-07-10 11:34:22 UTC (rev 19058)
++++ trunk/buildroot/package/proftpd/proftpd.mk	2007-07-11 13:55:21 UTC (rev 19059)
+@@ -3,10 +3,10 @@
+ # proftpd
+ #
+ #############################################################
+-PROFTPD_VER:=1.3.0a
+-PROFTPD_SOURCE:=proftpd-$(PROFTPD_VER).tar.bz2
++PROFTPD_VERSION:=1.3.0a
++PROFTPD_SOURCE:=proftpd-$(PROFTPD_VERSION).tar.bz2
+ PROFTPD_SITE:=ftp://ftp.proftpd.org/distrib/source/
+-PROFTPD_DIR:=$(BUILD_DIR)/proftpd-$(PROFTPD_VER)
++PROFTPD_DIR:=$(BUILD_DIR)/proftpd-$(PROFTPD_VERSION)
+ PROFTPD_CAT:=bzcat
+ PROFTPD_BINARY:=proftpd
+ PROFTPD_TARGET_BINARY:=usr/sbin/proftpd
