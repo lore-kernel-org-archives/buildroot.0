@@ -1,104 +1,137 @@
-From: Joey Oravec <joravec@drewtech.com>
-Date: Wed, 11 Jul 2007 09:54:20 -0400
-Subject: [Buildroot] buildroot with ARM926T and soft float
-Message-ID: <f72nee$rmg$1@sea.gmane.org>
+From: ulf at uclibc.org <ulf@uclibc.org>
+Date: Wed, 11 Jul 2007 07:06:38 -0700 (PDT)
+Subject: [Buildroot] svn commit: trunk/buildroot/package: acpid argus at
+	autoconf automake avahi b etc...
+Message-ID: <20070711140638.848A1A65BF@busybox.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi -
+Author: ulf
+Date: 2007-07-11 07:06:06 -0700 (Wed, 11 Jul 2007)
+New Revision: 19061
 
-Using buildroot (from subversion July 11, 2007) I have trouble building 
-uClibc due to missing items in libgcc. This happens when I select an ARM926T 
-with soft float and gcc 4.1.2 or gcc 4.2.0. There's a bug ID 1405 in the 
-uClibc tracker that looks similar to my issue.
+Log:
+Use <package>_VERSION in all <package>.mk instead of <package>_VER
 
-It's my first time posting to the list so I hope I'm including everything 
-necessary. During the uClibc build I get the following:
+Modified:
+   trunk/buildroot/package/acpid/acpid.mk
+   trunk/buildroot/package/argus/argus.mk
+   trunk/buildroot/package/at/at.mk
+   trunk/buildroot/package/autoconf/autoconf.mk
+   trunk/buildroot/package/automake/automake.mk
+   trunk/buildroot/package/avahi/avahi.mk
+   trunk/buildroot/package/berkeleydb/berkeleydb.mk
+   trunk/buildroot/package/bind/bind.mk
+   trunk/buildroot/package/bison/bison.mk
+   trunk/buildroot/package/bzip2/bzip2.mk
+   trunk/buildroot/package/coreutils/coreutils.mk
+   trunk/buildroot/package/cvs/cvs.mk
+   trunk/buildroot/package/dash/dash.mk
+   trunk/buildroot/package/dbus-glib/dbus-glib.mk
+   trunk/buildroot/package/dhcp/dhcp.mk
+   trunk/buildroot/package/diffutils/diffutils.mk
+   trunk/buildroot/package/distcc/distcc.mk
+   trunk/buildroot/package/dmalloc/dmalloc.mk
+   trunk/buildroot/package/dnsmasq/dnsmasq.mk
+   trunk/buildroot/package/dropbear/dropbear.mk
+   trunk/buildroot/package/e2fsprogs/e2fsprogs.mk
+   trunk/buildroot/package/file/file.mk
+   trunk/buildroot/package/findutils/findutils.mk
+   trunk/buildroot/package/gawk/gawk.mk
+   trunk/buildroot/package/gettext/gettext.mk
+   trunk/buildroot/package/grep/grep.mk
+   trunk/buildroot/package/gzip/gzip.mk
+   trunk/buildroot/package/hal/hal.mk
+   trunk/buildroot/package/hotplug/hotplug.mk
+   trunk/buildroot/package/iostat/iostat.mk
+   trunk/buildroot/package/iproute2/iproute2.mk
+   trunk/buildroot/package/ipsec-tools/ipsec-tools.mk
+   trunk/buildroot/package/jpeg/jpeg.mk
+   trunk/buildroot/package/kexec/kexec.mk
+   trunk/buildroot/package/l2tp/l2tp.mk
+   trunk/buildroot/package/libdaemon/libdaemon.mk
+   trunk/buildroot/package/libelf/libelf.mk
+   trunk/buildroot/package/libevent/libevent.mk
+   trunk/buildroot/package/libglib12/libglib12.mk
+   trunk/buildroot/package/libgtk12/libgtk12.mk
+   trunk/buildroot/package/libpcap/libpcap.mk
+   trunk/buildroot/package/libpng/libpng.mk
+   trunk/buildroot/package/libsndfile/libsndfile.mk
+   trunk/buildroot/package/libsysfs/libsysfs.mk
+   trunk/buildroot/package/libtool/libtool.mk
+   trunk/buildroot/package/libusb/libusb.mk
+   trunk/buildroot/package/links/links.mk
+   trunk/buildroot/package/lrzsz/lrzsz.mk
+   trunk/buildroot/package/ltt/ltt.mk
+   trunk/buildroot/package/lzma/lzma.mk
+   trunk/buildroot/package/m4/m4.mk
+   trunk/buildroot/package/memtester/memtester.mk
+   trunk/buildroot/package/metacity/metacity.mk
+   trunk/buildroot/package/microcom/microcom.mk
+   trunk/buildroot/package/microperl/microperl.mk
+   trunk/buildroot/package/mkdosfs/mkdosfs.mk
+   trunk/buildroot/package/modutils/modutils.mk
+   trunk/buildroot/package/mpatrol/mpatrol.mk
+   trunk/buildroot/package/mrouted/mrouted.mk
+   trunk/buildroot/package/nano/nano.mk
+   trunk/buildroot/package/ncurses/ncurses.mk
+   trunk/buildroot/package/netkitbase/netkitbase.mk
+   trunk/buildroot/package/netkittelnet/netkittelnet.mk
+   trunk/buildroot/package/netplug/netplug.mk
+   trunk/buildroot/package/netsnmp/netsnmp.mk
+   trunk/buildroot/package/nfs-utils/nfs-utils.mk
+   trunk/buildroot/package/openssh/openssh.mk
+   trunk/buildroot/package/openssl/openssl.mk
+   trunk/buildroot/package/patch/patch.mk
+   trunk/buildroot/package/pciutils/pciutils.mk
+   trunk/buildroot/package/pkgconfig/pkgconfig.mk
+   trunk/buildroot/package/portmap/portmap.mk
+   trunk/buildroot/package/procps/procps.mk
+   trunk/buildroot/package/psmisc/psmisc.mk
+   trunk/buildroot/package/qtopia4/qtopia4.mk
+   trunk/buildroot/package/quagga/quagga.mk
+   trunk/buildroot/package/raidtools/raidtools.mk
+   trunk/buildroot/package/readline/readline.mk
+   trunk/buildroot/package/rsync/rsync.mk
+   trunk/buildroot/package/ruby/ruby.mk
+   trunk/buildroot/package/samba/samba.mk
+   trunk/buildroot/package/sed/sed.mk
+   trunk/buildroot/package/sfdisk/sfdisk.mk
+   trunk/buildroot/package/slang/slang.mk
+   trunk/buildroot/package/smartmontools/smartmontools.mk
+   trunk/buildroot/package/strace/strace.mk
+   trunk/buildroot/package/stunnel/stunnel.mk
+   trunk/buildroot/package/sudo/sudo.mk
+   trunk/buildroot/package/sysklogd/sysklogd.mk
+   trunk/buildroot/package/sysvinit/sysvinit.mk
+   trunk/buildroot/package/tar/tar.mk
+   trunk/buildroot/package/tcpdump/tcpdump.mk
+   trunk/buildroot/package/tftpd/tftpd.mk
+   trunk/buildroot/package/thttpd/thttpd.mk
+   trunk/buildroot/package/tiff/tiff.mk
+   trunk/buildroot/package/tinylogin/tinylogin.mk
+   trunk/buildroot/package/tinyx/tinyx.mk
+   trunk/buildroot/package/tn5250/tn5250.mk
+   trunk/buildroot/package/ttcp/ttcp.mk
+   trunk/buildroot/package/udhcp/udhcp.mk
+   trunk/buildroot/package/uemacs/uemacs.mk
+   trunk/buildroot/package/usbutils/usbutils.mk
+   trunk/buildroot/package/util-linux/util-linux.mk
+   trunk/buildroot/package/vtun/vtun.mk
+   trunk/buildroot/package/wget/wget.mk
+   trunk/buildroot/package/which/which.mk
+   trunk/buildroot/package/wipe/wipe.mk
+   trunk/buildroot/package/wireless-tools/wireless-tools.mk
+   trunk/buildroot/package/xfsprogs/xfsprogs.mk
+   trunk/buildroot/package/zlib/zlib.mk
 
-  AR cr libc/libc_so.a
-  LD libuClibc-0.9.29.so
-libc/libc_so.a(difftime.os): In function `difftime':
-difftime.c:(.text+0x8): undefined reference to `__floatsidf'
-difftime.c:(.text+0x2c): undefined reference to `__subdf3'
-libc/libc_so.a(_fpmaxtostr.os): In function `_fpmaxtostr':
-_fpmaxtostr.c:(.text+0xd0): undefined reference to `__nedf2'
-_fpmaxtostr.c:(.text+0xf4): undefined reference to `__eqdf2'
-_fpmaxtostr.c:(.text+0x110): undefined reference to `__divdf3'
-_fpmaxtostr.c:(.text+0x11c): undefined reference to `__ltdf2'
-_fpmaxtostr.c:(.text+0x1d0): undefined reference to `__muldf3'
-_fpmaxtostr.c:(.text+0x384): undefined reference to `__gedf2'
-_fpmaxtostr.c:(.text+0x40c): undefined reference to `__floatunsidf'
-libc/libc_so.a(__psfs_do_numeric.os): In function `__psfs_do_numeric':
-__psfs_do_numeric.c:(.text+0x540): undefined reference to `__truncdfsf2'
-libc/libc_so.a(strtof.os): In function `strtof':
-strtof.c:(.text+0x1c): undefined reference to `__extendsfdf2'
-libc/libc_so.a(__strtofpmax.os): In function `__strtofpmax':
-__strtofpmax.c:(.text+0x154): undefined reference to `__adddf3'
-/home/joey/buildroot/build_arm_nofpu/staging_dir/usr/lib/gcc/arm-linux-uclibc/42.0/libgcc.a(_fixunsdfsi.o): 
-In function `__fixunsdfsi':
-libgcc2.c:(.text+0x34): undefined reference to `__fixdfsi'
-make[2]: *** [lib/libc.so] Error 1
-make[1]: *** [lib/libc.so.0] Error 2
-make[1]: Leaving directory 
-`/home/joey/buildroot/toolchain_build_arm_nofpu/uClic-0.9.29'
-make: *** 
-[/home/joey/buildroot/toolchain_build_arm_nofpu/uClibc-0.9.29/lib/lib.a] 
-Error 2
 
-And my .config file:
+Changeset:
 
-BR2_HAVE_DOT_CONFIG=y
-BR2_arm=y
-BR2_arm926t=y
-BR2_ARM_TYPE="ARM926T"
-BR2_ARM_EABI=y
-BR2_ARCH="arm"
-BR2_ENDIAN="LITTLE"
-BR2_GCC_TARGET_TUNE="arm926ej-s"
-BR2_WGET="wget --passive-ftp -nd"
-BR2_SVN="svn co"
-BR2_ZCAT="gzip -d -c"
-BR2_BZCAT="bzcat"
-BR2_TAR_OPTIONS=""
-BR2_DL_DIR="$(BASE_DIR)/dl"
-BR2_SOURCEFORGE_MIRROR="easynews"
-BR2_STAGING_DIR="$(BUILD_DIR)/staging_dir"
-BR2_TOPDIR_PREFIX=""
-BR2_TOPDIR_SUFFIX=""
-BR2_GNU_BUILD_SUFFIX="pc-linux-gnu"
-BR2_GNU_TARGET_SUFFIX="linux-uclibc"
-BR2_JLEVEL=1
-BR2_TOOLCHAIN_BUILDROOT=y
-BR2_KERNEL_HEADERS_2_6_21=y
-BR2_DEFAULT_KERNEL_HEADERS="2.6.21.5"
-BR2_UCLIBC_VERSION_0_9_29=y
-BR2_UCLIBC_CONFIG="toolchain/uClibc/uClibc-0.9.29.config"
-BR2_PTHREADS_OLD=y
-BR2_BINUTILS_VERSION_2_17=y
-BR2_BINUTILS_VERSION="2.17"
-BR2_EXTRA_BINUTILS_CONFIG_OPTIONS=""
-BR2_GCC_VERSION_4_2_0=y
-BR2_GCC_VERSION="4.2.0"
-BR2_TOOLCHAIN_SYSROOT=y
-BR2_EXTRA_GCC_CONFIG_OPTIONS=""
-BR2_INSTALL_LIBSTDCPP=y
-BR2_GCC_SHARED_LIBGCC=y
-BR2_LARGEFILE=y
-BR2_SOFT_FLOAT=y
-BR2_TARGET_OPTIMIZATION="-Os -pipe"
-BR2_CROSS_TOOLCHAIN_TARGET_UTILS=y
-BR2_PACKAGE_BUSYBOX=y
-BR2_BUSYBOX_VERSION_1_6_1=y
-BR2_BUSYBOX_VERSION="1.6.1"
-BR2_PACKAGE_BUSYBOX_INSTALL_SYMLINKS=y
-BR2_PACKAGE_BUSYBOX_CONFIG="package/busybox/busybox-1.6.0.config"
-BR2_EXTRA_TARGET_GCC_CONFIG_OPTIONS="-march=armv5te -mcpu=arm926ej-s"
-BR2_NETWORK_SUPPORT=y
-BR2_BLOCKDEV_SUPPORT=y
-BR2_AUDIO_SUPPORT=y
-BR2_GRAPHIC_SUPPORT=y
-BR2_COMPRESSOR_SUPPORT=y
-BR2_SCRIPTING_SUPPORT=y
+Sorry, the patch is too large to include (2472 lines).
+Please use ViewCVS to see it!
+
+http://uclibc.org/cgi-bin/viewcvs.cgi?view=rev&root=svn&rev=19061
