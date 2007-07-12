@@ -1,51 +1,81 @@
-From: Ulf Samuelsson <ulf@atmel.com>
-Date: Thu, 12 Jul 2007 18:38:55 +0200
-Subject: [Buildroot] Install to /lib usr /usr/lib ?
-In-Reply-To: <f0528b5b0707120848w682852a7i24137288712a53ae@mail.gmail.com>
-References: <f0528b5b0707120848w682852a7i24137288712a53ae@mail.gmail.com>
-Message-ID: <1184258335.5175.44.camel@elrond.sweden.atmel.com>
+From: ulf at uclibc.org <ulf@uclibc.org>
+Date: Thu, 12 Jul 2007 11:47:55 -0700 (PDT)
+Subject: [Buildroot] svn commit: trunk/buildroot/target/device: Arm Atmel
+	Sharp
+Message-ID: <20070712184755.AE1C8A6827@busybox.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-tor 2007-07-12 klockan 17:48 +0200 skrev Julien Letessier:
-> Dear buildroot maintainers,
-> 
-> For the relative newcomer I am, there seems to be a lot of
-> inconsistency in buildroot for package installation directories.
-> 
-> From what I undrestand, the policy is to install packages:
-> * under $(STAGING_DIR)/{bin,lib,include} and $(STAGING_DIR)/{bin,lib}
-> for the toolchain (e.g. uclibc)
-> * under $(STAGING_DIR)/usr/{bin,lib,include} and
-> $(STAGING_DIR)/usr/{bin,lib} for other packages (e.g. gtk)
-> 
+Author: ulf
+Date: 2007-07-12 11:47:48 -0700 (Thu, 12 Jul 2007)
+New Revision: 19078
 
-As I interpret things,
-Only host tools should be installed in $(STAGING_DIR)
+Log:
+Make Config.in targets for ARM chips look consistent
 
-Target tools gets installed somewhere in $(TARGET_DIR) which
-now is defined to be project_build_ARCH/$(PROJECT)/root
+Modified:
+   trunk/buildroot/target/device/Arm/Config.in
+   trunk/buildroot/target/device/Atmel/Config.in
+   trunk/buildroot/target/device/Sharp/Config.in
 
 
-> Is this correct?
-> 
-> If so, we have a problem.
-> Half the of the package/*/*.mk use one option, half use the other.
-> As I "svn uped" today, the fontconfig package I had a hard time
-> patching broke, because expat decided AGAIN to install directly under
-> /lib.
-> 
-> Please, please establish a clear policy on this, so we can start
-> submiting patches
+Changeset:
+Modified: trunk/buildroot/target/device/Arm/Config.in
+===================================================================
+--- trunk/buildroot/target/device/Arm/Config.in	2007-07-12 17:04:05 UTC (rev 19077)
++++ trunk/buildroot/target/device/Arm/Config.in	2007-07-12 18:47:48 UTC (rev 19078)
+@@ -1,3 +1,9 @@
++menuconfig	BR2_TARGET_ARM
++	bool "ARM Ltd. Device Support"
++	depends BR2_arm
++	default n
++
++if BR2_TARGET_ARM
+ comment "Arm based Device Support"
+ 	depends BR2_arm
+ 
+@@ -14,3 +20,4 @@
+ 	  An ARM integrator 926 board for use with qemu.
+ 	  This one has an MMU.
+ 
++endif
 
-I think that /usr/bin/X11 might be the right directory to
-use, at least for your X11R7 stuff.
+Modified: trunk/buildroot/target/device/Atmel/Config.in
+===================================================================
+--- trunk/buildroot/target/device/Atmel/Config.in	2007-07-12 17:04:05 UTC (rev 19077)
++++ trunk/buildroot/target/device/Atmel/Config.in	2007-07-12 18:47:48 UTC (rev 19078)
+@@ -1,5 +1,5 @@
+ menuconfig BR2_TARGET_ATMEL
+-	bool "Atmel Target"
++	bool "Atmel Device Support"
+ 	depends on BR2_arm || BR2_avr32
+ 	default n
+ 
 
-I would check where the package is located on my normal linux host
-and select the same install dir for the buildroot target.
-
-Best Regards
-Ulf Samuelsson
+Modified: trunk/buildroot/target/device/Sharp/Config.in
+===================================================================
+--- trunk/buildroot/target/device/Sharp/Config.in	2007-07-12 17:04:05 UTC (rev 19077)
++++ trunk/buildroot/target/device/Sharp/Config.in	2007-07-12 18:47:48 UTC (rev 19078)
+@@ -1,9 +1,16 @@
++menuconfig BR2_TARGET_SHARP
++	bool "Sharp Device Support"
++	depends on BR2_arm
++	default n
++
++if BR2_TARGET_SHARP
+ comment "Sharp Specific Device Support"
+ 	depends BR2_arm
+-
++ 
+ config BR2_TARGET_SHARP_LNODE80
+ 	bool "Board support for the LNode80 development board"
+ 	depends BR2_arm
+ 	default n
+ 	help
+-	  Support for the LNode80 LH79520 based device
+\ No newline at end of file
++	  Support for the LNode80 LH79520 based device
++endif
