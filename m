@@ -1,51 +1,66 @@
-From: Ulf Samuelsson <ulf@atmel.com>
-Date: Thu, 12 Jul 2007 17:35:25 +0200
-Subject: [Buildroot] "toolchain/patch-kernel.sh" => $(APPLY)
-In-Reply-To: <20070712135118.GA10707@real.realitydiluted.com>
-References: <1184241425.5175.9.camel@elrond.sweden.atmel.com>
-	<20070712135118.GA10707@real.realitydiluted.com>
-Message-ID: <1184254525.5175.37.camel@elrond.sweden.atmel.com>
+From: Benjamin Tietz <benjamin@micronet24.de>
+Date: Thu, 12 Jul 2007 19:51:59 +0200
+Subject: [Buildroot] svn commit: trunk/buildroot:
+	package?package/busybox project target/ etc...
+In-Reply-To: <20070712162411.GA24660@aon.at>
+References: <20070712131106.1E690A4757@busybox.net>
+	<20070712144244.GB21387@aon.at>
+	<1184248611.5175.31.camel@elrond.sweden.atmel.com>
+	<200707121751.47836.yann.morin.1998@anciens.enib.fr>
+	<20070712162411.GA24660@aon.at>
+Message-ID: <20070712175159.GA4359@firebird.dresden.micronet24.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-tor 2007-07-12 klockan 08:51 -0500 skrev Steven J. Hill:
-> > Today most packages uses the patch-kernel.sh script in toolchain.
-> > Should this really be hardwired.
-> > Is it OK to create a symbolic variable.
-> > 
-> > APPLY:=toolchain/patch-kernel.sh
-> > 
-> Why? Can you explain what is lacking with this script that you are
-> suggesting adding another variable to track through the build system?
+On Thu, Jul 12, 2007 at 06:24:11PM +0200, Bernhard Fischer wrote:
+> On Thu, Jul 12, 2007 at 05:51:47PM +0200, Yann E. MORIN wrote:
+> >Ulf, Bernhard,
+> >All,
+> >
+> >On Thursday 12 July 2007 15:56, Ulf Samuelsson wrote:
+> >> tor 2007-07-12 klockan 16:42 +0200 skrev Bernhard Fischer:
+> >> > On Thu, Jul 12, 2007 at 06:11:06AM -0700, ulf at uclibc.org wrote:
+> >> > >+PROJECT:=$(strip $(subst ",, $(BR2_PROJECT)))
+> >> > >+HOSTNAME:=$(strip $(subst ",, $(BR2_HOSTNAME)))
+> >> > >+BANNER:=$(strip $(subst ",, $(BR2_BANNER)))
+> >> > This breaks vi's syntax highlighing, please fix
+> >> Pls supply a template on what you want me to do.
+> >
+> >I guess something like the following:
+> >
+> >PROJECT:=$(strip $(subst ",, $(BR2_PROJECT)))
+> ># Shut up you stupid vim! "
 > 
+> close.
+> # ")))
+A nother way to get around would be 
+PROJECT:=$(strip $(patsubst "%",%,$(BR2_PROJECT))
 
-Mainly:It hardwires the file to be in the toolchain directory.
+It just catches the first and the last '"' but in most cases this is
+enough.
 
-Also, I think it would be good to be able to select
-how you want the stuff to be patched.
+These characters sometimes come up as values in .config. So it would be
+cleaner to fix it, when this file is included.
+Sometimes even variables in some Makefiles are (incorrect) defined with
+these. Here the Makefile should be updated...
 
-1) Using a "series" file defining patch order.
-2) If the "series" file does not exist, generate a series file.
-
-What would be the drawback of adding a new variable?
-
-
-> > Also, I would like to see a "script" directory.
-> > "patch-kernel.sh" is then moved here and 
-> > "depmod.pl" maybe belongs as well in this instead of in
-> > target/device/x86.
-> > 
-> I suppose a 'toolchain/scripts' directory would be okay. I do
-> question the need for 'depmod.pl' at all. Doesn't the target
-> 'cross-depmod26' create the depmod that does the same thing?
 > 
-Was actually thinking of "trunk/buildroot/scripts".
-There are a few things in OpenWRT I like, and it is better
-to have the same directory structure if I want to minimize
-future work.
-
-
-> -Steve
+> Ulf, just do :syntax on
+> 
+> >HOSTNAME:=$(strip $(subst ",, $(BR2_HOSTNAME)))
+> ># Shut up you stupid vim! "
+> >
+> >And so on... Maybe comments at the end of the line would do as well...
+> >
+> >Regards,
+> >Yann E. MORIN.
+> >
+> >PS. Using vi exclusively here, but no syntax highlighting, which I find
+> >    ultimately annoying. Thank you, I know (or tend to) what I'm doing! :-)
+> 
+> It's handy at times..
+It even can help to find wrong-closed brackets. the difference between )
+and } could be very small after a whole day of work,
