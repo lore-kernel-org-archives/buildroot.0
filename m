@@ -1,7 +1,7 @@
 From: ulf at uclibc.org <ulf@uclibc.org>
-Date: Thu, 12 Jul 2007 08:29:00 -0700 (PDT)
-Subject: [Buildroot] svn commit: trunk/buildroot
-Message-ID: <20070712152900.0116BA680B@busybox.net>
+Date: Thu, 12 Jul 2007 08:32:04 -0700 (PDT)
+Subject: [Buildroot] svn commit: trunk/buildroot/package
+Message-ID: <20070712153204.985C9A685A@busybox.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -9,40 +9,30 @@ Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
 Author: ulf
-Date: 2007-07-12 08:28:58 -0700 (Thu, 12 Jul 2007)
-New Revision: 19073
+Date: 2007-07-12 08:32:04 -0700 (Thu, 12 Jul 2007)
+New Revision: 19074
 
 Log:
-Change HOSTNAME to TARGET_HOSTNAME to avoid superseeding build host HOSTNAME
+Add comment on when to use BUILD_DIR vs PROJECT_BUILD_DIR
 
 Modified:
-   trunk/buildroot/Makefile
+   trunk/buildroot/package/Makefile.in
 
 
 Changeset:
-Modified: trunk/buildroot/Makefile
+Modified: trunk/buildroot/package/Makefile.in
 ===================================================================
---- trunk/buildroot/Makefile	2007-07-12 14:46:03 UTC (rev 19072)
-+++ trunk/buildroot/Makefile	2007-07-12 15:28:58 UTC (rev 19073)
-@@ -156,9 +156,9 @@
- TARGETS:=uclibc
+--- trunk/buildroot/package/Makefile.in	2007-07-12 15:28:58 UTC (rev 19073)
++++ trunk/buildroot/package/Makefile.in	2007-07-12 15:32:04 UTC (rev 19074)
+@@ -68,8 +68,11 @@
+ DL_DIR:=$(BASE_DIR)/dl
  endif
+ #PATCH_DIR=$(BASE_DIR)/sources/patches
++
++# All non-configurable packages should be built in BUILD_DIR
+ BUILD_DIR:=$(BASE_DIR)/$(TOPDIR_PREFIX)build_$(ARCH)$(ARCH_FPU_SUFFIX)$(TOPDIR_SUFFIX)
  
--PROJECT:=$(strip $(subst ",, $(BR2_PROJECT)))
--HOSTNAME:=$(strip $(subst ",, $(BR2_HOSTNAME)))
--BANNER:=$(strip $(subst ",, $(BR2_BANNER)))
-+PROJECT:=$(strip $(subst ",,$(BR2_PROJECT)))
-+TARGET_HOSTNAME:=$(strip $(subst ",,$(BR2_HOSTNAME)))
-+BANNER:=$(strip $(subst ",,$(BR2_BANNER)))
- 
- 
- include toolchain/Makefile.in
-@@ -238,7 +238,7 @@
- 	echo "$(BANNER)"	>> $(TARGET_DIR)/etc/issue
- 
- $(TARGET_DIR)/etc/hostname:	$(TARGET_DIR) .config
--	echo "$(HOSTNAME)" > $(TARGET_DIR)/etc/hostname
-+	echo "$(TARGET_HOSTNAME)" > $(TARGET_DIR)/etc/hostname
- 
- source: $(TARGETS_SOURCE) $(HOST_SOURCE)
- 
++# All configurable packages (like Busybox,Linux etc) should be built in PROJECT_BUILD_DIR
+ PROJECT_BUILD_DIR:=$(BASE_DIR)/$(TOPDIR_PREFIX)project_build_$(ARCH)$(ARCH_FPU_SUFFIX)$(TOPDIR_SUFFIX)/$(PROJECT)
+ BINARIES_DIR:=$(BASE_DIR)/binaries/$(PROJECT)
+ TARGET_DIR:=$(PROJECT_BUILD_DIR)/root
