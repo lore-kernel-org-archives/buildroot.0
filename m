@@ -1,31 +1,31 @@
-From: Steven J. Hill <sjhill@realitydiluted.com>
-Date: Thu, 12 Jul 2007 08:51:19 -0500
-Subject: [Buildroot] "toolchain/patch-kernel.sh" => $(APPLY)
-In-Reply-To: <1184241425.5175.9.camel@elrond.sweden.atmel.com>
-References: <1184241425.5175.9.camel@elrond.sweden.atmel.com>
-Message-ID: <20070712135118.GA10707@real.realitydiluted.com>
+From: Ulf Samuelsson <ulf@atmel.com>
+Date: Thu, 12 Jul 2007 14:15:18 +0200
+Subject: [Buildroot] svn commit: trunk/buildroot:
+	package	package/busybox project target/ etc...
+In-Reply-To: <20070712132517.GA10497@real.realitydiluted.com>
+References: <20070712131106.1E690A4757@busybox.net>
+	<20070712132517.GA10497@real.realitydiluted.com>
+Message-ID: <1184242518.5175.19.camel@elrond.sweden.atmel.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-> Today most packages uses the patch-kernel.sh script in toolchain.
-> Should this really be hardwired.
-> Is it OK to create a symbolic variable.
+tor 2007-07-12 klockan 08:25 -0500 skrev Steven J. Hill:
+> For patches like this and the other ones you are doing, I really feel
+> you should be required to update the on-line documentation at the same
+> time to denote all these changes you are making. It's difficult enough
+> to keep up with all of the changes. Please make sure when you add new
+> features like this in the future to not do so unless you document it.
+> Please also document this BSP patch for the on-line docs. Thanks.
 > 
-> APPLY:=toolchain/patch-kernel.sh
-> 
-Why? Can you explain what is lacking with this script that you are
-suggesting adding another variable to track through the build system?
 
-> Also, I would like to see a "script" directory.
-> "patch-kernel.sh" is then moved here and 
-> "depmod.pl" maybe belongs as well in this instead of in
-> target/device/x86.
-> 
-I suppose a 'toolchain/scripts' directory would be okay. I do
-question the need for 'depmod.pl' at all. Doesn't the target
-'cross-depmod26' create the depmod that does the same thing?
+Is there a recommended tool to edit HTML with CSS?
 
--Steve
+
+> -Steve
+> _______________________________________________
+> buildroot mailing list
+> buildroot at uclibc.org
+> http://busybox.net/mailman/listinfo/buildroot
