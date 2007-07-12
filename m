@@ -1,11 +1,11 @@
 From: Ulf Samuelsson <ulf@atmel.com>
-Date: Thu, 12 Jul 2007 14:15:18 +0200
+Date: Thu, 12 Jul 2007 13:58:44 +0200
 Subject: [Buildroot] svn commit: trunk/buildroot:
 	package	package/busybox project target/ etc...
 In-Reply-To: <20070712132517.GA10497@real.realitydiluted.com>
 References: <20070712131106.1E690A4757@busybox.net>
 	<20070712132517.GA10497@real.realitydiluted.com>
-Message-ID: <1184242518.5175.19.camel@elrond.sweden.atmel.com>
+Message-ID: <1184241524.5175.11.camel@elrond.sweden.atmel.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -21,7 +21,8 @@ tor 2007-07-12 klockan 08:25 -0500 skrev Steven J. Hill:
 > Please also document this BSP patch for the on-line docs. Thanks.
 > 
 
-Is there a recommended tool to edit HTML with CSS?
+OK, didn't think about that.
+Will do this at first convenient time.
 
 
 > -Steve
