@@ -1,21 +1,35 @@
-From: Bernhard Fischer <rep.dot.nop@gmail.com>
-Date: Fri, 13 Jul 2007 14:18:32 +0200
-Subject: [Buildroot] Linux build files.
-In-Reply-To: <1184260756.5175.57.camel@elrond.sweden.atmel.com>
-References: <1184260756.5175.57.camel@elrond.sweden.atmel.com>
-Message-ID: <20070713121832.GC32559@aon.at>
+From: Ralph Siemsen <ralphs@netwinder.org>
+Date: Fri, 13 Jul 2007 08:56:07 -0400
+Subject: [Buildroot] uClibc-0.9.29-001-fix-mmap.patch broken: __ulong_t
+	undefined
+Message-ID: <20070713125440.GA8123@marvin.netwinder.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Thu, Jul 12, 2007 at 07:19:16PM +0200, Ulf Samuelsson wrote:
->Here is the target/linux/Config.in and target/linux/Makefile.in 
->that I use in my local buildroot from 2007-05-31.
->(Did not test it against the latest buildroot, which obviously
->needs to happen)
+Greetings,
 
-Can you show us the diff of linux26.mk, please?
+SVN 19018 appears to have (re-)introduced a bug into the file
+toolchain/uClibc/uClibc-0.9.29-001-fix-mmap.patch
 
-TIA,
+Specifically the issue is use of a cast (__ulong_t) that should
+instead be (__u_long).  This was previously reported here:
+http://www.busybox.net/lists/uclibc-cvs/2007-May/011362.html
+
+The following patch "works for me":
+
+--- uClibc-0.9.29-001-fix-mmap.patch	2007/07/11 14:49:36	1.1
++++ uClibc-0.9.29-001-fix-mmap.patch	2007/07/11 21:44:18	1.2
+@@ -84,7 +84,7 @@
+ +                         fd,((__u_quad_t)offset >> MMAP2_PAGE_SHIFT));
+ +#else
+ +   return __syscall_mmap2(addr, len, prot, flags,
+-+                          fd,((__ulong_t)offset >> MMAP2_PAGE_SHIFT));
+++                          fd,((__u_long)offset >> MMAP2_PAGE_SHIFT));
+ +#endif
+  }
+
+Regards,
+-R
