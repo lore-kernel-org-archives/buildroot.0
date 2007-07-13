@@ -1,39 +1,36 @@
-From: Lee JJ <jengjr@gmail.com>
-Date: Sat, 14 Jul 2007 02:55:55 +0800
-Subject: [Buildroot] md5 error
-Message-ID: <1497cb6d0707131155tee33a22o297853895a02757b@mail.gmail.com>
+From: Frank Kujawski <buildroot@fp8.com>
+Date: Fri, 13 Jul 2007 14:24:59 -0500 (CDT)
+Subject: [Buildroot] make error around modules.dep
+Message-ID: <39689.75.129.164.68.1184354699.squirrel@kujawski.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
- Any one have clue ?
+All,
+I hope this gets formatted correctly.
+I am trying to compile, it worked last month.  I am at svn 19083.  I don't
+know what I was at last month though.
+It is right after wireless tools, and looks like it is putting together module
+dependencies for Linux.  I dont have the directory
+/projects/BuildRoot/buildroot/project_build_armeb/uclibc/linux-2.6.21.5/ which
+is probably why it is failing?
+I tried a pre-built arm, I am rolling my own device, and it failed at the same
+spot.
+Any ideas as to where to look?
+  Frank
 
-# svn update
-At revision 19083.
 
 
-gcc -c -DHAVE_CONFIG_H -g -O2 -I.
--I/root/buildroot/toolchain_build_i386/gcc-4.2.0/libiberty/../include  -W
--Wall -pedantic -Wwrite-strings -Wstrict-prototypes
-/root/buildroot/toolchain_build_i386/gcc-4.2.0/libiberty/md5.c -o md5.o
-/root/buildroot/toolchain_build_i386/gcc-4.2.0/libiberty/md5.c: In function
-`md5_finish_ctx':
-/root/buildroot/toolchain_build_i386/gcc-4.2.0/libiberty/md5.c:110: warning:
-implicit declaration of function `bcopy'
-/root/buildroot/toolchain_build_i386/gcc-4.2.0/libiberty/md5.c: In function
-`md5_process_bytes':
-/root/buildroot/toolchain_build_i386/gcc-4.2.0/libiberty/md5.c:237: error:
-invalid use of void expression
-make[2]: *** [md5.o] Error 1
-make[2]: Leaving directory `/root/buildroot/toolchain_build_i386/gcc-
-4.2.0-initial/libiberty'
-make[1]: *** [all-libiberty] Error 2
-make[1]: Leaving directory `/root/buildroot/toolchain_build_i386/gcc-
-4.2.0-initial'
-make: *** [/root/buildroot/toolchain_build_i386/gcc-4.2.0-initial/.compiled]
-Error 2
--------------- next part --------------
-An HTML attachment was scrubbed...
-URL: http://busybox.net/lists/buildroot/attachments/20070714/2579c6e9/attachment.htm 
+make[1]: Leaving directory
+/projects/BuildRoot/buildroot/build_armeb/wireless_tools.28' /usr/bin/install
+-D
+/projects/BuildRoot/buildroot/toolchain_build_armeb/module-init-tools-3.2.2/depmod
+/projects/BuildRoot/buildroot/build_armeb/staging_dir/bin/armeb-linux-depmod26
+make: *** No rule to make target
+`/projects/BuildRoot/buildroot/project_build_armeb/uclibc/linux-2.6.21.5/.patched',
+needed by
+`/projects/BuildRoot/buildroot/project_build_armeb/uclibc/linux-2.6.21.5/.configured'.
+ Stop.
+bash-3.2$
