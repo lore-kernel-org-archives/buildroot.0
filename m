@@ -1,64 +1,59 @@
-From: Julien Letessier <julien.letessier@technosens.fr>
-Date: Fri, 13 Jul 2007 15:43:55 +0200
-Subject: [Buildroot] svn commit: trunk/buildroot
-In-Reply-To: <20070713122120.4ADB1A6833@busybox.net>
-References: <20070713122120.4ADB1A6833@busybox.net>
-Message-ID: <f0528b5b0707130643r29a39ec9u7a9d087829fc465f@mail.gmail.com>
+From: Ralph Siemsen <ralphs@netwinder.org>
+Date: Fri, 13 Jul 2007 09:53:44 -0400
+Subject: [Buildroot] gcc 4.x and soft-float, -mfloat-abi
+Message-ID: <20070713135344.GB27875@marvin.netwinder.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-I don't want to start the eternal vi-vs-emacs flame war here...
+[ I mistakenly posted this to busybox list first.
+  Apologies for the duplication and/or confusion. ]
 
-But is it really wise to complexify Buildroot just because one
-specific text editor is broken?
+Short:
 
-My .02 euros.
+The gcc -mfloat-abi option should only be passed for ARM builds
+unless I am mis-reading the gcc documentation...
 
-2007/7/13, aldot at uclibc.org <aldot@uclibc.org>:
-> Author: aldot
-> Date: 2007-07-13 05:21:19 -0700 (Fri, 13 Jul 2007)
-> New Revision: 19081
->
-> Log:
-> - use established style
->
->
-> Modified:
->    trunk/buildroot/Makefile
->
->
-> Changeset:
-> Modified: trunk/buildroot/Makefile
-> ===================================================================
-> --- trunk/buildroot/Makefile    2007-07-13 05:03:46 UTC (rev 19080)
-> +++ trunk/buildroot/Makefile    2007-07-13 12:21:19 UTC (rev 19081)
-> @@ -156,9 +156,12 @@
->  TARGETS:=uclibc
->  endif
->
-> -PROJECT:=$(strip $(subst ",,$(BR2_PROJECT)))  # "))
-> -TARGET_HOSTNAME:=$(strip $(subst ",,$(BR2_HOSTNAME))) # " ))
-> -BANNER:=$(strip $(subst ",,$(BR2_BANNER))) # " ))
-> +PROJECT:=$(strip $(subst ",,$(BR2_PROJECT)))
-> +#"))
-> +TARGET_HOSTNAME:=$(strip $(subst ",,$(BR2_HOSTNAME)))
-> +#"))
-> +BANNER:=$(strip $(subst ",,$(BR2_BANNER)))
-> +#"))
->
->
->  include toolchain/Makefile.in
->
-> _______________________________________________
-> buildroot mailing list
-> buildroot at uclibc.org
-> http://busybox.net/mailman/listinfo/buildroot
->
+Long:
 
+When I build a toolchain for powerpc with buildroot (current SVN)
+this results in a compiler that doesn't accept -mfloat-abi option:
 
--- 
-Julien Letessier
-<julien.letessier@technosens.fr>
+# $(STAGING_DIR)/usr/bin/powerpc-linux-uclibc-gcc --version
+powerpc-linux-uclibc-gcc (GCC) 4.2.0
+Copyright (C) 2007 Free Software Foundation, Inc.
+This is free software; see the source for copying conditions.  There is NO
+warranty; not even for MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
+
+# $(STAGING_DIR)/usr/bin/powerpc-linux-uclibc-gcc -mfloat-abi test.c
+cc1: error: unrecognized command line option "-mfloat-abi"
+
+The failure is observed while compiling openssl.  Its makefile does:
+    $(SED) 's,/CFLAG=,/CFLAG= $(TARGET_SOFT_FLOAT) ,g' \
+                $(OPENSSL_DIR)/Configure
+where TARGET_SOFT_FLOAT comes from toolchain/gcc/Makefile.in:
+	ifeq ($(findstring x4.,x$(GCC_VERSION)),x4.)
+	SOFT_FLOAT_CONFIG_OPTION:=--with-float=soft
+	ifeq ($(BR2_SOFT_FLOAT_FP),y)
+	TARGET_SOFT_FLOAT:=-mfloat-abi=softfp
+	else # no fp at all
+	TARGET_SOFT_FLOAT:=-mfloat-abi=soft
+	#endif
+	else # not gcc-4.x
+	TARGET_SOFT_FLOAT:=-msoft-float
+	endif
+
+So if using gcc4x then -mfloat-abi is passed unconditionally.
+(And, because BR2_SOFT_FLOAT_FP is commented out in Config.in,
+ the value "soft" is always chosen, never "softfp", but that's
+ not my issue at the moment).
+
+I believe the gcc4 check in toolchain/gcc/Makefile.in should
+only set the -mfloat-abi for ARM architecture.  I can try cobbling
+together a patch for this, but as I am not entirely sure it is
+the right answer, I thought I'd get some feedback first.
+
+Thanks,
+-R
