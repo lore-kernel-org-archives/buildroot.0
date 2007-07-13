@@ -1,28 +1,39 @@
-From: Steven J. Hill <sjhill@realitydiluted.com>
-Date: Fri, 13 Jul 2007 12:48:44 -0500
-Subject: [Buildroot] Building debug version of kernel
-In-Reply-To: <000601c7c567$2bbcdf10$2c48a8c0@greyhawk.tonecommander.com>
-References: <000601c7c567$2bbcdf10$2c48a8c0@greyhawk.tonecommander.com>
-Message-ID: <20070713174844.GA16025@real.realitydiluted.com>
+From: Lee JJ <jengjr@gmail.com>
+Date: Sat, 14 Jul 2007 02:55:55 +0800
+Subject: [Buildroot] md5 error
+Message-ID: <1497cb6d0707131155tee33a22o297853895a02757b@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-> Is editing the top-level Linux Makefile the standard method for my host
-> machine to build a debug version (i.e. with "-g -O0" CFLAGS) of the Linux
-> 2.6 kernel?  If so, should I make these flag changes to CFLAGS_KERNEL or
-> HOSTCFLAGS or both?
-> 
-There is a configuration option under 'Kernel hacking' in the Linux
-configuration system to turn on debugging symbols. Was there some
-reason this does not work?
+ Any one have clue ?
 
-> The build output only shows the format "CC <object-file-name>" without
-> flags, so I can't see what it's actually doing.
-> 
-If you add 'V=1' to your 'make vmlinux' target area in the makefile, you
-can see the verbose output of the compiling, linking, etc.
+# svn update
+At revision 19083.
 
--Steve
+
+gcc -c -DHAVE_CONFIG_H -g -O2 -I.
+-I/root/buildroot/toolchain_build_i386/gcc-4.2.0/libiberty/../include  -W
+-Wall -pedantic -Wwrite-strings -Wstrict-prototypes
+/root/buildroot/toolchain_build_i386/gcc-4.2.0/libiberty/md5.c -o md5.o
+/root/buildroot/toolchain_build_i386/gcc-4.2.0/libiberty/md5.c: In function
+`md5_finish_ctx':
+/root/buildroot/toolchain_build_i386/gcc-4.2.0/libiberty/md5.c:110: warning:
+implicit declaration of function `bcopy'
+/root/buildroot/toolchain_build_i386/gcc-4.2.0/libiberty/md5.c: In function
+`md5_process_bytes':
+/root/buildroot/toolchain_build_i386/gcc-4.2.0/libiberty/md5.c:237: error:
+invalid use of void expression
+make[2]: *** [md5.o] Error 1
+make[2]: Leaving directory `/root/buildroot/toolchain_build_i386/gcc-
+4.2.0-initial/libiberty'
+make[1]: *** [all-libiberty] Error 2
+make[1]: Leaving directory `/root/buildroot/toolchain_build_i386/gcc-
+4.2.0-initial'
+make: *** [/root/buildroot/toolchain_build_i386/gcc-4.2.0-initial/.compiled]
+Error 2
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: http://busybox.net/lists/buildroot/attachments/20070714/2579c6e9/attachment.htm 
