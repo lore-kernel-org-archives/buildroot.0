@@ -1,31 +1,37 @@
-From: Ulf Samuelsson <ulf@atmel.com>
-Date: Sat, 14 Jul 2007 00:24:31 +0200
-Subject: [Buildroot] Linux build files.
-In-Reply-To: <20070713121832.GC32559@aon.at>
-References: <1184260756.5175.57.camel@elrond.sweden.atmel.com>
-	<20070713121832.GC32559@aon.at>
-Message-ID: <1184365471.22266.14.camel@elrond.sweden.atmel.com>
+From: brm <brm@hyac.in.th>
+Date: Sat, 14 Jul 2007 07:23:24 +0700
+Subject: [Buildroot] error: redifinition of 'msync'
+Message-ID: <a512d1250707131723g62cd3685l4dec17e7934eddd@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-fre 2007-07-13 klockan 14:18 +0200 skrev Bernhard Fischer:
-> On Thu, Jul 12, 2007 at 07:19:16PM +0200, Ulf Samuelsson wrote:
-> >Here is the target/linux/Config.in and target/linux/Makefile.in 
-> >that I use in my local buildroot from 2007-05-31.
-> >(Did not test it against the latest buildroot, which obviously
-> >needs to happen)
-> 
-> Can you show us the diff of linux26.mk, please?
-> 
-IIRC, It was created before linux26.mk, so there is very little common
-things.
-I expect that a diff would mostly delete linux26.mk and create
-the Makefile.in.
-Will do it anyway.
+Hi all,
 
+        I tried to build toolchain for ARM7TDMI using buildroot, and found
+this error message
+        "redefinition of 'msync'" twice.
 
+>  CC libc/sysdeps/linux/common/msync.os
+> libc/sysdeps/linux/common/msync.c:20: error: redefinition of 'msync'
+> ./include/sys/mman.h:97: error: previous definition of 'msync' was here
+> make[1]: *** [libc/sysdeps/linux/common/msync.os] Error 1
 
-> TIA,
+       I try comment out the definition of msync in mman.h but it surely not
+the right solution.
+       So, I have to comment out from msync.c and another place at
+
+       libpthread/linuxthreads.old/wrapsyscall.c
+
+       instead. Still, at the moment, I cannot build the toolchain because
+other problems.
+       But, let solve it one by one, anybody has any suggestion for solving
+this problem?
+       Please.
+
+-- brm --
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: http://busybox.net/lists/buildroot/attachments/20070714/af8233ae/attachment.htm 
