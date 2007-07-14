@@ -1,82 +1,28 @@
-From: Frank Kujawski <buildroot@fp8.com>
-Date: Sat, 14 Jul 2007 10:29:05 -0500 (CDT)
-Subject: [Buildroot] make error around modules.dep
-In-Reply-To: <39689.75.129.164.68.1184354699.squirrel@kujawski.org>
-References: <39689.75.129.164.68.1184354699.squirrel@kujawski.org>
-Message-ID: <53015.75.129.164.68.1184426945.squirrel@kujawski.org>
+From: Thomas Lundquist <lists@zelow.no>
+Date: Sat, 14 Jul 2007 20:46:26 +0200
+Subject: [Buildroot] Adding X11R7 to buildroot
+In-Reply-To: <200707141707.43104.yann.morin.1998@anciens.enib.fr>
+References: <f0528b5b0707120123n67046381k243e42ef36c4ac83@mail.gmail.com>
+	<20070714140411.GA24899@zelow.no>
+	<200707141707.43104.yann.morin.1998@anciens.enib.fr>
+Message-ID: <20070714184626.GB32668@zelow.no>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-This is more details, any one have a hint as to where to look?
+On Sat, Jul 14, 2007 at 05:07:42PM +0200, Yann E. MORIN wrote:
+> 
+> On Saturday 14 July 2007 16:04, Thomas Lundquist wrote:
+> > I am when I have time again. Finally some vacation coming up (France
+> > here I come!
+> 
+> And where will you be staying in our nice country?
+
+A friend has a flat in Vence. The report says it's really good weather
+there which is a good thing, here it's been really bad for weeks so I'm
+really looking forward to this.
 
 
-      :
-      Successfully remade target file `cross-depmod26'.
-      Considering target file
-`/projects/BuildRoot/buildroot/project_build_armeb/uclibc/root/lib/modules/2.6.21.5/modules.dep'.
-       File
-`/projects/BuildRoot/buildroot/project_build_armeb/uclibc/root/lib/modules/2.6.21.5/modules.dep'
-does not exist.
-        Considering target file `linux-kernel-2.6.21.5-arm'.
-         File `linux-kernel-2.6.21.5-arm' does not exist.
-          Considering target file
-`/projects/BuildRoot/buildroot/project_build_armeb/uclibc/linux-2.6.21.5/.depend_done'.
-           File
-`/projects/BuildRoot/buildroot/project_build_armeb/uclibc/linux-2.6.21.5/.depend_done'
-does not exist.
-            Considering target file
-`/projects/BuildRoot/buildroot/project_build_armeb/uclibc/linux-2.6.21.5/.configured'.
-             File
-`/projects/BuildRoot/buildroot/project_build_armeb/uclibc/linux-2.6.21.5/.configured'
-does not exist.
-              Considering target file
-`/projects/BuildRoot/buildroot/project_build_armeb/uclibc/linux-2.6.21.5/.patched'.
-                :
-                :
-                :
-              Must remake target
-`/projects/BuildRoot/buildroot/project_build_armeb/uclibc/linux-2.6.21.5/.patched'.
-make: *** No rule to make target
-`/projects/BuildRoot/buildroot/project_build_armeb/uclibc/linux-2.6.21.5/.patched',
-needed by
-`/projects/BuildRoot/buildroot/project_build_armeb/uclibc/linux-2.6.21.5/.configured'.
- Stop.
-bash-3.2$
-
-
-
-> All,
-> I hope this gets formatted correctly.
-> I am trying to compile, it worked last month.  I am at svn 19083.  I don't
-> know what I was at last month though.
-> It is right after wireless tools, and looks like it is putting together module
-> dependencies for Linux.  I dont have the directory
-> /projects/BuildRoot/buildroot/project_build_armeb/uclibc/linux-2.6.21.5/ which
-> is probably why it is failing?
-> I tried a pre-built arm, I am rolling my own device, and it failed at the same
-> spot.
-> Any ideas as to where to look?
->   Frank
->
->
->
-> make[1]: Leaving directory
-> /projects/BuildRoot/buildroot/build_armeb/wireless_tools.28' /usr/bin/install
-> -D
-> /projects/BuildRoot/buildroot/toolchain_build_armeb/module-init-tools-3.2.2/depmod
-> /projects/BuildRoot/buildroot/build_armeb/staging_dir/bin/armeb-linux-depmod26
-> make: *** No rule to make target
-> `/projects/BuildRoot/buildroot/project_build_armeb/uclibc/linux-2.6.21.5/.patched',
-> needed by
-> `/projects/BuildRoot/buildroot/project_build_armeb/uclibc/linux-2.6.21.5/.configured'.
->  Stop.
-> bash-3.2$
->
-> _______________________________________________
-> buildroot mailing list
-> buildroot at uclibc.org
-> http://busybox.net/mailman/listinfo/buildroot
->
+Thomas.
