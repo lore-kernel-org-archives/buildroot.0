@@ -1,7 +1,7 @@
 From: ulf at uclibc.org <ulf@uclibc.org>
-Date: Sun, 15 Jul 2007 15:01:33 -0700 (PDT)
-Subject: [Buildroot] svn commit: trunk/buildroot/package/pcmcia
-Message-ID: <20070715220133.C9C1B30047@busybox.net>
+Date: Sun, 15 Jul 2007 16:35:32 -0700 (PDT)
+Subject: [Buildroot] svn commit: trunk/buildroot/package/lighttpd
+Message-ID: <20070715233532.93FAFA4583@busybox.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -9,27 +9,27 @@ Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
 Author: ulf
-Date: 2007-07-15 15:01:33 -0700 (Sun, 15 Jul 2007)
-New Revision: 19103
+Date: 2007-07-15 16:35:31 -0700 (Sun, 15 Jul 2007)
+New Revision: 19104
 
 Log:
-Make package/pcmcia depend on 'linux26' (which is defined) instead of 'linux'
+Use correct script to init lighttpd
 
 Modified:
-   trunk/buildroot/package/pcmcia/pcmcia.mk
+   trunk/buildroot/package/lighttpd/lighttpd.mk
 
 
 Changeset:
-Modified: trunk/buildroot/package/pcmcia/pcmcia.mk
+Modified: trunk/buildroot/package/lighttpd/lighttpd.mk
 ===================================================================
---- trunk/buildroot/package/pcmcia/pcmcia.mk	2007-07-15 21:54:11 UTC (rev 19102)
-+++ trunk/buildroot/package/pcmcia/pcmcia.mk	2007-07-15 22:01:33 UTC (rev 19103)
-@@ -95,7 +95,7 @@
- 		> $(TARGET_DIR)/lib/modules/$(LINUX_VERSION)/modules.dep
- 	touch $(PCMCIA_DIR)/.modules.dep
+--- trunk/buildroot/package/lighttpd/lighttpd.mk	2007-07-15 22:01:33 UTC (rev 19103)
++++ trunk/buildroot/package/lighttpd/lighttpd.mk	2007-07-15 23:35:31 UTC (rev 19104)
+@@ -60,7 +60,7 @@
+     
+ $(TARGET_DIR)/$(LIGHTTPD_TARGET_BINARY): $(LIGHTTPD_DIR)/$(LIGHTTPD_BINARY)
+ 	$(MAKE) DESTDIR=$(TARGET_DIR) -C $(LIGHTTPD_DIR) install
+-	$(INSTALL) -m 0755 -D $(LIGHTTPD_DIR)/debian/init.d $(TARGET_DIR)/etc/init.d/S99lighttpd
++	$(INSTALL) -m 0755 -D $(LIGHTTPD_DIR)/openwrt/S51lighttpd  $(TARGET_DIR)/etc/init.d/S99lighttpd
  
--pcmcia: uclibc linux $(TARGET_DIR)/sbin/cardmgr $(PCMCIA_DIR)/.modules.dep
-+pcmcia: uclibc linux26 $(TARGET_DIR)/sbin/cardmgr $(PCMCIA_DIR)/.modules.dep
+ lighttpd: uclibc openssl $(TARGET_DIR)/$(LIGHTTPD_TARGET_BINARY)
  
- pcmcia-clean:
- 	rm -f $(TARGET_DIR)/sbin/cardmgr
