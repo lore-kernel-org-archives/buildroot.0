@@ -1,34 +1,65 @@
-From: Thempra <thempra@ieee.org>
-Date: Sun, 15 Jul 2007 22:12:26 +0200
-Subject: [Buildroot] Error in compilation
-Message-ID: <b98765340707151312t4f998dd7r30417c09861b742e@mail.gmail.com>
+From: ulf at uclibc.org <ulf@uclibc.org>
+Date: Sun, 15 Jul 2007 14:54:12 -0700 (PDT)
+Subject: [Buildroot] svn commit: trunk/buildroot:  package/gzip
+Message-ID: <20070715215412.944DE30047@busybox.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi,
+Author: ulf
+Date: 2007-07-15 14:54:11 -0700 (Sun, 15 Jul 2007)
+New Revision: 19102
 
-  I try to compile the SVN but I get this error:
+Log:
+Define HOSTLN to allow gzip to build for non-x86 target
 
-In file included from libpthread/linuxthreads/sysdeps/pthread/errno-loc.c
-:22:
-./libpthread/linuxthreads/internals.h:538: warning: C99 inline functions are
-not supported; using GNU89
-libpthread/linuxthreads/sysdeps/pthread/errno-loc.c:23:27: error:
-sysdep-cancel.h: No such file or directory
-make[1]: *** [libpthread/linuxthreads/sysdeps/pthread/errno-loc.os] Error 1
-make[1]: se sale del directorio `/home/thempra/Desktop/linwizard-0.1.4
-/buildroot/toolchain_build_arm/uClibc'
-make: *** [/home/thempra/Desktop/linwizard-0.1.4/buildroot/toolchain_build_arm/uClibc/lib/libc.a]
-Error 2
+Modified:
+   trunk/buildroot/Makefile
+   trunk/buildroot/package/gzip/gzip.mk
 
 
-What is my problem?? Thx.
+Changeset:
+Modified: trunk/buildroot/Makefile
+===================================================================
+--- trunk/buildroot/Makefile	2007-07-15 19:29:56 UTC (rev 19101)
++++ trunk/buildroot/Makefile	2007-07-15 21:54:11 UTC (rev 19102)
+@@ -79,11 +79,15 @@
+ ifndef HOSTLD
+ HOSTLD:=ld
+ endif
++ifndef HOSTLN
++HOSTLN:=ln
++endif
+ HOSTAR :=$(shell $(CONFIG_SHELL) -c "which $(HOSTAR)"  || type -p $(HOSTAR)  || echo ar)
+ HOSTAS :=$(shell $(CONFIG_SHELL) -c "which $(HOSTAS)"  || type -p $(HOSTAS)  || echo as)
+ HOSTCC :=$(shell $(CONFIG_SHELL) -c "which $(HOSTCC)"  || type -p $(HOSTCC)  || echo gcc)
+ HOSTCXX:=$(shell $(CONFIG_SHELL) -c "which $(HOSTCXX)" || type -p $(HOSTCXX) || echo g++)
+ HOSTLD :=$(shell $(CONFIG_SHELL) -c "which $(HOSTLD)"  || type -p $(HOSTLD)  || echo ld)
++HOSTLN :=$(shell $(CONFIG_SHELL) -c "which $(HOSTLN)"  || type -p $(HOSTLN)  || echo ln)
+ ifndef CFLAGS_FOR_BUILD
+ CFLAGS_FOR_BUILD:=-g -O2
+ endif
 
-
-Thempra
--------------- next part --------------
-An HTML attachment was scrubbed...
-URL: http://busybox.net/lists/buildroot/attachments/20070715/31fe1ad1/attachment.htm 
+Modified: trunk/buildroot/package/gzip/gzip.mk
+===================================================================
+--- trunk/buildroot/package/gzip/gzip.mk	2007-07-15 19:29:56 UTC (rev 19101)
++++ trunk/buildroot/package/gzip/gzip.mk	2007-07-15 21:54:11 UTC (rev 19102)
+@@ -53,11 +53,11 @@
+ 	rm -rf $(TARGET_DIR)/share/locale $(TARGET_DIR)/usr/info \
+ 		$(TARGET_DIR)/usr/man $(TARGET_DIR)/usr/share/doc
+ 	(cd $(TARGET_DIR)/bin; \
+-	ln -snf gzip gunzip; \
+-	ln -snf gzip zcat; \
+-	ln -snf zdiff zcmp; \
+-	ln -snf zgrep zegrep; \
+-	ln -snf zgrep zfgrep;)
++	$(HOSTLN) -snf gzip gunzip; \
++	$(HOSTLN) -snf gzip zcat; \
++	$(HOSTLN) -snf zdiff zcmp; \
++	$(HOSTLN) -snf zgrep zegrep; \
++	$(HOSTLN) -snf zgrep zfgrep;)
+ 
+ gzip: uclibc $(GZIP_TARGET_BINARY)
+ 
