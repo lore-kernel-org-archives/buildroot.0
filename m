@@ -1,34 +1,52 @@
-From: Paul Kavan <pkavan@gmail.com>
-Date: Mon, 16 Jul 2007 00:37:56 -0500
-Subject: [Buildroot] Macbook Pro Development Environment
-Message-ID: <61c0054e0707152237q6278e321w565fa7b1265d6d27@mail.gmail.com>
+From: ulf at uclibc.org <ulf@uclibc.org>
+Date: Mon, 16 Jul 2007 00:55:51 -0700 (PDT)
+Subject: [Buildroot] svn commit: trunk/buildroot/package/customize
+Message-ID: <20070716075551.44315A65BE@busybox.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello:
+Author: ulf
+Date: 2007-07-16 00:55:50 -0700 (Mon, 16 Jul 2007)
+New Revision: 19105
 
-I have been working with my company on an project with an
-at91sam9260-ek. I am thinking about buying my own 9260-ek to do some
-personal work. I would like to work on fleshing out some good drivers
-for some of the peripherals that do not have them  (e.g. making a full
-formed ADC driver). I would prefer to work from my Macbook pro. I have
-it dual booted into Linux, but do not have a serial port. I know there
-are some usb to serial conversion kits, but want to make sure that
-will work with the 9260. Does anyone have experience working with a
-9260-ek froma computer without a serial port?
+Log:
+Get rid of repeated copy of 'customize'
 
-Thanks.
+Modified:
+   trunk/buildroot/package/customize/customize.mk
 
-Paul
 
--- 
-***************************************
-Paul David Kavan
-Project Engineer
-GRH Electronics, Inc.
-402-734-4900
-pkavan at gmail.com
-***************************************
+Changeset:
+Modified: trunk/buildroot/package/customize/customize.mk
+===================================================================
+--- trunk/buildroot/package/customize/customize.mk	2007-07-15 23:35:31 UTC (rev 19104)
++++ trunk/buildroot/package/customize/customize.mk	2007-07-16 07:55:50 UTC (rev 19105)
+@@ -5,8 +5,23 @@
+ #############################################################
+ CUST_DIR:=package/customize/source
+ 
+-customize:
+-	-cp -af $(CUST_DIR)/* $(TARGET_DIR)/
++$(BUILD_DIR)/.customize:
++	rm -f $(PROJECT_BUILD_DIR)/series
++	(cd $(CUST_DIR) ; \
++	 /bin/ls -d * > $(PROJECT_BUILD_DIR)/series || \
++	 touch $(PROJECT_BUILD_DIR)/series )
++	for f in `cat $(PROJECT_BUILD_DIR)/series` ; do 	\
++		cp -af $(CUST_DIR)/$$f $(TARGET_DIR)/$$f ;	\
++	done
++	rm -f $(PROJECT_BUILD_DIR)/series
++	touch $@
++
++customize: $(BUILD_DIR)/.customize
++
++customize-clean:
++	rm -f $(BUILD_DIR)/.customize
++
++.PHONY:	customize
+ #############################################################
+ #
+ # Toplevel Makefile options
