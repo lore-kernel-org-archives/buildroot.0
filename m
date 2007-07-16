@@ -1,53 +1,59 @@
-From: Allan Clark <allanc@chickenandporn.com>
-Date: Mon, 16 Jul 2007 09:21:18 -0400
-Subject: [Buildroot] error building toolchain with gettext /libintl
-In-Reply-To: <1184576580.18357.4.camel@elrond.sweden.atmel.com>
-References: <C03A3C267DDF184EA523BBAB577BF924C22CF4@blrexsr1.slti.sanyo.co.in>
-	<1184576580.18357.4.camel@elrond.sweden.atmel.com>
-Message-ID: <37c712e0707160621r711f069en12462aa0fd8dadb4@mail.gmail.com>
+From: Jerry Richards <jerryr@tonecommander.com>
+Date: Mon, 16 Jul 2007 09:36:51 -0700
+Subject: [Buildroot] Building debug version of kernel
+In-Reply-To: <20070713174844.GA16025@real.realitydiluted.com>
+Message-ID: <001c01c7c7c7$83f8d2d0$2c48a8c0@greyhawk.tonecommander.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 7/16/07, Ulf Samuelsson <ulf@atmel.com> wrote:
-> m?n 2007-07-16 klockan 09:02 +0530 skrev Gururaja Hebbar K R:
-> >  Hi all,
-> >
-> > I am trying to build a ARM toolchain in buildroot for the 1st time with
-> > below mentioned config. Everything goes fine till gettext building. when
-> > make gettext-target is executed it halts with error saying
-> >
-> > cp -dpf
-> > /home/guru/project/original/toolchains/buildroot/build_arm/staging_dir/u
-> > sr/lib/libgettext*.so* \
->
-> I have noted this as well, and the problem is that
->
-> "staging_dir/usr/lib/libgettext*.so* " was never created.
->
-> Instead "staging_dir/usr/lib/libgettext*.a" was created.
->
-> This problem has been around for a long time.
->
->
-> I have yet to figure out how to make the ARM gcc build the
-> shared library instead of the static library
->
-> Is it possible to supply "--with-shared" or something
-> when configuring?
 
-Same problem happens on MacOSX with libgmp.a building, not libgmp.so,
-but it simply triggers a rebuild of later components.  It's not fatal
-in my case.  I believe --with-shared is being given, but the library
-still doesn't build the .so.  I remember some link issues, but I'm
-still having the problem that uclibc fails to build the first time,
-but seems to on the second try, trying to see why this started.
+I did enable the "make menuconfig" option for
+Kernel_Hacking-->Compile_the_kernel_with_debug_info", but I do not see any
+symbols/source-code in my debugger.  I am using a Lauterbach TRACE32
+in-circuit debugger that operates on the vmlinux ELF file containing
+symbol/source-code information.
 
-The common trend here is that either the build system thinks it should
-have a *.so, and it isnt being built (different logic) or it should
-have it, and there's an error that gets simply ignored.  's why I
-mention this.
+Is there any other options that might cause symbols to be stripped from the
+vmlinux file?
 
-Allan
+Also, could you confirm the following build procedure for a cross-compiled
+platform?
+
+	1) In <>/buildroot, execute "make".
+	2) In <>/buildroot/build_m*/lin*, execute "make".
+	3) In <>/Apps, execute "make".
+	4) Copy application(s) to <>/buildroot/build_m*/root/...
+	5) In <>/buildroot, execute "make" again (to get apps into
+	   compressed CRAMFS/SQUASHFS).
+	6) Done.
+
+Jerry
+
+
+-----Original Message-----
+From: Steven J. Hill [mailto:sjhill at realitydiluted.com]
+Sent: Friday, July 13, 2007 10:49 AM
+To: Jerry Richards
+Cc: buildroot at uclibc.org
+Subject: Re: [Buildroot] Building debug version of kernel
+
+
+> Is editing the top-level Linux Makefile the standard method for my host
+> machine to build a debug version (i.e. with "-g -O0" CFLAGS) of the Linux
+> 2.6 kernel?  If so, should I make these flag changes to CFLAGS_KERNEL or
+> HOSTCFLAGS or both?
+>
+There is a configuration option under 'Kernel hacking' in the Linux
+configuration system to turn on debugging symbols. Was there some
+reason this does not work?
+
+> The build output only shows the format "CC <object-file-name>" without
+> flags, so I can't see what it's actually doing.
+>
+If you add 'V=1' to your 'make vmlinux' target area in the makefile, you
+can see the verbose output of the compiling, linking, etc.
+
+-Steve
