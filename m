@@ -1,7 +1,7 @@
 From: ulf at uclibc.org <ulf@uclibc.org>
-Date: Mon, 16 Jul 2007 02:45:39 -0700 (PDT)
-Subject: [Buildroot] svn commit: trunk/buildroot/package/libusb
-Message-ID: <20070716094539.B5841A685C@busybox.net>
+Date: Mon, 16 Jul 2007 03:00:31 -0700 (PDT)
+Subject: [Buildroot] svn commit: trunk/buildroot/package/gettext
+Message-ID: <20070716100031.90A15A6ABC@busybox.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -9,41 +9,79 @@ Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
 Author: ulf
-Date: 2007-07-16 02:45:39 -0700 (Mon, 16 Jul 2007)
-New Revision: 19108
+Date: 2007-07-16 03:00:29 -0700 (Mon, 16 Jul 2007)
+New Revision: 19109
 
 Log:
-Avoid repeated rebuild of libusb
+Temporarily allow static libgettext library option to ensure build can complete for ARM
 
 Modified:
-   trunk/buildroot/package/libusb/libusb.mk
+   trunk/buildroot/package/gettext/Config.in
+   trunk/buildroot/package/gettext/gettext.mk
 
 
 Changeset:
-Modified: trunk/buildroot/package/libusb/libusb.mk
+Modified: trunk/buildroot/package/gettext/Config.in
 ===================================================================
---- trunk/buildroot/package/libusb/libusb.mk	2007-07-16 09:32:07 UTC (rev 19107)
-+++ trunk/buildroot/package/libusb/libusb.mk	2007-07-16 09:45:39 UTC (rev 19108)
-@@ -35,11 +35,11 @@
- 	);
- 	touch $(LIBUSB_DIR)/.configured
+--- trunk/buildroot/package/gettext/Config.in	2007-07-16 09:45:39 UTC (rev 19108)
++++ trunk/buildroot/package/gettext/Config.in	2007-07-16 10:00:29 UTC (rev 19109)
+@@ -8,6 +8,19 @@
  
--$(STAGING_DIR)/$(LIBUSB_BINARY): $(LIBUSB_DIR)/.configured
-+$(STAGING_DIR)/lib/libusb.so: $(LIBUSB_DIR)/.configured
- 	$(MAKE) $(TARGET_CONFIGURE_OPTS) -C $(LIBUSB_DIR)
- 	$(MAKE) -C $(LIBUSB_DIR) DESTDIR=$(STAGING_DIR) install
+ 	  http://www.gnu.org/software/gettext/
  
--$(TARGET_DIR)/$(LIBUSB_BINARY): $(STAGING_DIR)/$(LIBUSB_BINARY)
-+$(TARGET_DIR)/$(LIBUSB_BINARY): $(STAGING_DIR)/lib/libusb.so
- 	-mkdir -p $(TARGET_DIR)/usr/lib
- 	cp -a $(STAGING_DIR)/lib/libusb* $(TARGET_DIR)/usr/lib
- 	rm -f $(TARGET_DIR)/usr/lib/*.a $(TARGET_DIR)/usr/lib/*.la
-@@ -56,6 +56,9 @@
- 
- libusb-dirclean:
- 	rm -rf $(LIBUSB_DIR)
++config BR2_PACKAGE_GETTEXT_STATIC
++	bool "Use libgettext.a instead of libgettext.so.*"
++	default y
++	depends on BR2_PACKAGE_GETTEXT
++	depends on BR2_arm
++	help
++	  The GNU `gettext' utilities are a set of tools that provide a
++	  framework to help other GNU packages produce multi-lingual
++	  messages.
 +
-+.PHONY:	libusb
++	  http://www.gnu.org/software/gettext/
++
++
+ config BR2_PACKAGE_LIBINTL
+ 	bool "libintl"
+ 	default n
+
+Modified: trunk/buildroot/package/gettext/gettext.mk
+===================================================================
+--- trunk/buildroot/package/gettext/gettext.mk	2007-07-16 09:45:39 UTC (rev 19108)
++++ trunk/buildroot/package/gettext/gettext.mk	2007-07-16 10:00:29 UTC (rev 19109)
+@@ -11,6 +11,12 @@
+ GETTEXT_BINARY:=gettext-runtime/src/gettext
+ GETTEXT_TARGET_BINARY:=usr/bin/gettext
+ 
++ifeq ($(strip $(BR2_PACKAGE_GETTEXT_STATIC)),y)
++LIBINTL_TARGET_BINARY:=usr/lib/libintl.a
++else
++LIBINTL_TARGET_BINARY:=usr/lib/libintl.so
++endif
++
+ $(DL_DIR)/$(GETTEXT_SOURCE):
+ 	 $(WGET) -P $(DL_DIR) $(GETTEXT_SITE)/$(GETTEXT_SOURCE)
+ 
+@@ -91,6 +97,7 @@
+ 		--prefix=/usr \
+ 		--exec-prefix=/usr \
+ 		--disable-libasprintf \
++		--enable-shared \
+ 		$(IGNORE_EXTERNAL_GETTEXT) \
+ 		$(OPENMP) \
+ 	);
+@@ -144,8 +151,13 @@
+ 	rm -f $(TARGET_DIR)/usr/lib/libgettext*.so*.la $(TARGET_DIR)/usr/lib/libintl*.so*.la
+ 	touch -c $@
+ 
+-libintl: $(TARGET_DIR)/usr/lib/libintl.so
++$(TARGET_DIR)/usr/lib/libintl.a: $(STAGING_DIR)/$(GETTEXT_TARGET_BINARY)
++	cp -dpf $(STAGING_DIR)/usr/lib/libgettext*.a $(TARGET_DIR)/usr/lib/
++	cp -dpf $(STAGING_DIR)/usr/lib/libintl*.a 	$(TARGET_DIR)/usr/lib/
++	touch -c $@
+ 
++libintl: $(TARGET_DIR)/$(LIBINTL_TARGET_BINARY)
 +
  #############################################################
  #
