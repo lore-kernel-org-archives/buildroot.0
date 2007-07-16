@@ -1,136 +1,63 @@
-From: ulf at uclibc.org <ulf@uclibc.org>
-Date: Mon, 16 Jul 2007 13:13:25 -0700 (PDT)
-Subject: [Buildroot] svn commit: trunk/buildroot/package:  libxml2
-Message-ID: <20070716201325.607F6A685B@busybox.net>
+From: Yann E. MORIN <yann.morin.1998@anciens.enib.fr>
+Date: Mon, 16 Jul 2007 22:32:43 +0200
+Subject: [Buildroot] [PATCH] make strace buildable
+Message-ID: <200707162232.43774.yann.morin.1998@anciens.enib.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Author: ulf
-Date: 2007-07-16 13:13:22 -0700 (Mon, 16 Jul 2007)
-New Revision: 19113
+Hello all!
 
-Log:
-Add libxml2 package
+The second hunk in package/strace/strace-undef-syscall.patch is incorrect:
 
-Added:
-   trunk/buildroot/package/libxml2/
-   trunk/buildroot/package/libxml2/Config.in
-   trunk/buildroot/package/libxml2/libxml2.mk
+--- strace-4.5.15.orig/linux/syscallent.h       2007-02-04 19:03:48.000000000 +0100
++++ strace-4.5.15/linux/syscallent.h    2007-02-04 19:11:04.000000000 +0100
+@@ -130,7 +130,10 @@
+        { 2,    TF,     sys_statfs,             "statfs"        }, /* 99 */
+        { 2,    TD,     sys_fstatfs,            "fstatfs"       }, /* 100 */
+        { 3,    0,      sys_ioperm,             "ioperm"        }, /* 101 */
+-       { 2,    TD,     sys_socketcall,         "socketcall", SYS_socketcall }, /* 102 */
++       { 2,    TD,     sys_socketcall,         "socketcall",
++#ifdef __NR_socketcall
++       SYS_socketcall }, /* 102 */
++#endif
+        { 3,    0,      sys_syslog,             "syslog"        }, /* 103 */
+        { 3,    0,      sys_setitimer,          "setitimer"     }, /* 104 */
+        { 2,    0,      sys_getitimer,          "getitimer"     }, /* 105 */
+@@ -145,7 +148,10 @@
+        { 4,    TP,     sys_wait4,              "wait4", SYS_wait4 }, /* 114 */
+        { 1,    0,      sys_swapoff,            "swapoff"       }, /* 115 */
+        { 1,    0,      sys_sysinfo,            "sysinfo"       }, /* 116 */
+-       { 6,    0,      sys_ipc,                "ipc", SYS_ipc }, /* 117 */
++       { 6,    0,      sys_ipc,                "ipc",
++#ifdef __NR_ipc
++       SYS_ipc }, /* 117 */
++#endif
+        { 1,    TD,     sys_fsync,              "fsync"         }, /* 118 */
+        { 1,    TS,     sys_sigreturn,          "sigreturn"     }, /* 119 */
+        { 5,    TP,     sys_clone,              "clone", SYS_clone }, /* 120 */
 
-Modified:
-   trunk/buildroot/package/Config.in
+If either or both of __NR_socketcall and __NR_ipc are not defined, then the
+closing curly braces are omitted, thus resulting in incorrect C statements.
 
+The attached patch to r19112 solves the issue.
 
-Changeset:
-Modified: trunk/buildroot/package/Config.in
-===================================================================
---- trunk/buildroot/package/Config.in	2007-07-16 19:03:46 UTC (rev 19112)
-+++ trunk/buildroot/package/Config.in	2007-07-16 20:13:22 UTC (rev 19113)
-@@ -68,6 +68,7 @@
- source "package/libfloat/Config.in"
- source "package/liblockfile/Config.in"
- source "package/libsysfs/Config.in"
-+source "package/libxml2/Config.in"
- source "package/lockfile-progs/Config.in"
- source "package/lsof/Config.in"
- source "package/ltp-testsuite/Config.in"
+Regards,
+Yann E. MORIN.
 
-Added: trunk/buildroot/package/libxml2/Config.in
-===================================================================
---- trunk/buildroot/package/libxml2/Config.in	                        (rev 0)
-+++ trunk/buildroot/package/libxml2/Config.in	2007-07-16 20:13:22 UTC (rev 19113)
-@@ -0,0 +1,8 @@
-+config BR2_PACKAGE_LIBXML2
-+	bool "libxml2"
-+	default n
-+	help
-+	  XML C Parser
-+	  Requires WCHAR
-+
-+	  ftp://xmlsoft.org/libxml2
-
-Added: trunk/buildroot/package/libxml2/libxml2.mk
-===================================================================
---- trunk/buildroot/package/libxml2/libxml2.mk	                        (rev 0)
-+++ trunk/buildroot/package/libxml2/libxml2.mk	2007-07-16 20:13:22 UTC (rev 19113)
-@@ -0,0 +1,77 @@
-+#############################################################
-+#
-+# libxml2
-+#
-+#############################################################
-+
-+LIBXML2_VERSION=2.6.29
-+LIBXML2_SOURCE=libxml2-sources-$(LIBXML2_VERSION).tar.gz
-+LIBXML2_SITE=ftp://xmlsoft.org/libxml2
-+LIBXML2_DIR=$(BUILD_DIR)/libxml2-$(LIBXML2_VERSION)
-+LIBXML2_CAT:=$(ZCAT)
-+
-+$(DL_DIR)/$(LIBXML2_SOURCE):
-+	$(WGET) -P $(DL_DIR) $(LIBXML2_SITE)/$(LIBXML2_SOURCE)
-+
-+$(LIBXML2_DIR)/.unpacked: $(DL_DIR)/$(LIBXML2_SOURCE)
-+	$(LIBXML2_CAT) $(DL_DIR)/$(LIBXML2_SOURCE) | tar -C $(BUILD_DIR) $(TAR_OPTIONS) -
-+	touch $(LIBXML2_DIR)/.unpacked
-+
-+$(LIBXML2_DIR)/.configured: $(LIBXML2_DIR)/.unpacked
-+	(cd $(LIBXML2_DIR); rm -rf config.cache; \
-+		$(TARGET_CONFIGURE_OPTS) \
-+		$(TARGET_CONFIGURE_ARGS) \
-+		./configure \
-+		--target=$(GNU_TARGET_NAME) \
-+		--host=$(GNU_TARGET_NAME) \
-+		--build=$(GNU_HOST_NAME) \
-+		--prefix=/usr \
-+		--sysconfdir=/etc \
-+		--enable-shared \
-+		$(DISABLE_NLS) \
-+	);
-+	touch $(LIBXML2_DIR)/.configured
-+
-+$(LIBXML2_DIR)/libxml2.la: $(LIBXML2_DIR)/.configured
-+	rm -f $@
-+	$(MAKE) CC=$(TARGET_CC) -C $(LIBXML2_DIR)
-+
-+$(STAGING_DIR)/usr/lib/libxml2.so: $(LIBXML2_DIR)/libxml2.la
-+	$(MAKE) DESTDIR=$(STAGING_DIR) -C $(LIBXML2_DIR) install
-+
-+$(TARGET_DIR)/usr/lib/libxml2.so: $(STAGING_DIR)/usr/lib/libxml2.so
-+	cp -dpf $(STAGING_DIR)/usr/lib/libxml2.so* $(TARGET_DIR)/usr/lib/
-+	$(STRIP) --strip-unneeded $(TARGET_DIR)/usr/lib/libxml2.so*
-+
-+$(TARGET_DIR)/usr/lib/libxml2.a: $(STAGING_DIR)/usr/lib/libxml2.so
-+	mkdir -p $(TARGET_DIR)/usr/include
-+	cp -dpf $(STAGING_DIR)/usr/lib/libxml2.*a $(TARGET_DIR)/usr/lib/
-+#	cp -dpf $(STAGING_DIR)/usr/include/mad.h $(TARGET_DIR)/usr/include/
-+
-+libxml2:	uclibc $(TARGET_DIR)/usr/lib/libxml2.so
-+
-+libxml2-headers: $(TARGET_DIR)/usr/lib/libxml2.a
-+
-+libxml2-source: $(DL_DIR)/$(LIBXML2_SOURCE)
-+
-+libxml2-clean:
-+	@if [ -d $(LIBXML2_DIR)/Makefile ] ; then \
-+		$(MAKE) -C $(LIBXML2_DIR) clean ; \
-+	fi;
-+	rm -f $(STAGING_DIR)/usr/lib/libxml2.*
-+	rm -f $(TARGET_DIR)/usr/lib/libxml2.*
-+
-+
-+libxml2-dirclean:
-+	rm -rf $(LIBXML2_DIR)
-+#############################################################
-+#
-+# Toplevel Makefile options
-+#
-+#############################################################
-+ifeq ($(strip $(BR2_PACKAGE_LIBXML2)),y)
-+TARGETS+=libxml2
-+endif
-+ifeq ($(strip $(BR2_PACKAGE_LIBXML2_TARGET_HEADERS)),y)
-+TARGETS+=libxml2-headers
-+endif
+-- 
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +0/33 662376056 | Software  Designer | \ / CAMPAIGN     |   ^                |
+| --==< ?_? >==-- ?------------.-------:  X  AGAINST      |  /e\  There is no  |
+| http://ymorin.is-a-geek.org/ | (*_*) | / \ HTML MAIL    |  """  conspiracy.  |
+?------------------------------?-------?------------------?--------------------?
+-------------- next part --------------
+A non-text attachment was scrubbed...
+Name: strace-syscallent.h-r19112.patch
+Type: text/x-diff
+Size: 1645 bytes
+Desc: not available
+Url : http://busybox.net/lists/buildroot/attachments/20070716/61ad059d/attachment.bin 
