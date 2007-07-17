@@ -1,56 +1,44 @@
-From: Allan Clark <allanc@chickenandporn.com>
-Date: Tue, 17 Jul 2007 08:44:43 -0400
-Subject: [Buildroot] [PATCH] fix packages/config on OS X
-In-Reply-To: <469C8001.6080003@cs.helsinki.fi>
-References: <469C8001.6080003@cs.helsinki.fi>
-Message-ID: <37c712e0707170544s4fbfdd55s8c5213208b88128f@mail.gmail.com>
+From: sjhill at uclibc.org <sjhill@uclibc.org>
+Date: Tue, 17 Jul 2007 06:28:32 -0700 (PDT)
+Subject: [Buildroot] svn commit: trunk/buildroot/target/linux
+Message-ID: <20070717132832.D118AA6AAC@busybox.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 7/17/07, Heikki Lindholm <holindho@cs.helsinki.fi> wrote:
-> Update to linux 2.6.21 config system broke packages/config on OS X. The
-> following patch should allow it to build again. Note that "dylib" is
-> hard-coded in check-lxdialog because HOST_SHREXT, which would be nicer,
-> is not available at that point.
->
-> -- Heikki Lindholm
->
-> Index: package/config/lxdialog/check-lxdialog.sh
-> ===================================================================
-> --- package/config/lxdialog/check-lxdialog.sh   (revision 19125)
-> +++ package/config/lxdialog/check-lxdialog.sh   (working copy)
-> @@ -19,6 +19,11 @@
->                 echo '-lcurses'
->                 exit
->         fi
-> +       $cc -print-file-name=libncurses.dylib | grep -q /
-> +       if [ $? -eq 0 ]; then
-> +               echo '-lncurses'
-> +               exit
-> +       fi
->         exit 1
->  }
->
-> Index: package/config/foo.h
-> ===================================================================
-> --- package/config/foo.h        (revision 19125)
-> +++ package/config/foo.h        (working copy)
-> @@ -1,6 +1,8 @@
->  #ifndef __KCONFIG_FOO_H
->  #define __KCONFIG_FOO_H
-> +#ifndef __APPLE__
->  #include <features.h>
-> +#endif
->  #include <limits.h>
->
->  #ifndef PATH_MAX
+Author: sjhill
+Date: 2007-07-17 06:28:31 -0700 (Tue, 17 Jul 2007)
+New Revision: 19134
 
-This second patch, I posted a while back asking if anyone needed
-features.h.  I didn't get any response.  I noticed in Linux, it's not
-needed.  Not sure what platform actually needs features.h here.
-__APPLE__ is defined by Apple's GCC?  cool.
+Log:
+Add 'linux26-modules' target to allow external drivers to be built with the kernel. Also, remove 'boot' directory before creating INITRAMFS.
 
-Allan
+
+Modified:
+   trunk/buildroot/target/linux/Makefile.in
+
+
+Changeset:
+Modified: trunk/buildroot/target/linux/Makefile.in
+===================================================================
+--- trunk/buildroot/target/linux/Makefile.in	2007-07-17 12:19:56 UTC (rev 19133)
++++ trunk/buildroot/target/linux/Makefile.in	2007-07-17 13:28:31 UTC (rev 19134)
+@@ -136,7 +136,7 @@
+ 	cp -dpf $(LINUX26_DIR)/$(LINUX26_BINLOC) $(LINUX26_DIR)/System.map $(TARGET_DIR)/boot/
+ 	touch -c $@
+ 
+-$(TARGET_DIR)/lib/modules/$(LINUX26_VERSION)/modules.dep: $(LINUX26_DIR)/.depend_done
++linux26-modules $(TARGET_DIR)/lib/modules/$(LINUX26_VERSION)/modules.dep: $(LINUX26_DIR)/.depend_done
+ 	rm -rf $(TARGET_DIR)/lib/modules/$(LINUX26_VERSION)
+ 	rm -f $(TARGET_DIR)/sbin/cardmgr
+ 	$(MAKE) $(LINUX26_MAKE_FLAGS) -C $(LINUX26_DIR) modules
+@@ -144,6 +144,7 @@
+ 		DEPMOD=$(STAGING_DIR)/bin/$(GNU_TARGET_NAME)-depmod26 \
+ 		INSTALL_MOD_PATH=$(TARGET_DIR) modules_install
+ 	rm -f $(TARGET_DIR)/lib/modules/$(LINUX26_VERSION)/build
++	rm -f $(TARGET_DIR)/lib/modules/$(LINUX26_VERSION)/source
+ 	touch -c $@
+ 
+ linux26-menuconfig: $(LINUX26_DIR)/.patched host-sed
