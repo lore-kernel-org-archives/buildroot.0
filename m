@@ -1,53 +1,36 @@
-From: Frank Kujawski <buildroot@fp8.com>
-Date: Wed, 18 Jul 2007 09:29:12 -0500 (CDT)
-Subject: [Buildroot] linux26 compile error
-In-Reply-To: <20070718114550.GA22077@marvin.netwinder.org>
-References: <52010.75.129.164.68.1184752475.squirrel@kujawski.org>
-	<20070718114550.GA22077@marvin.netwinder.org>
-Message-ID: <55400.75.129.164.68.1184768952.squirrel@kujawski.org>
+From: Ulf Samuelsson <ulf@atmel.com>
+Date: Wed, 18 Jul 2007 01:18:02 +0200
+Subject: [Buildroot] ruby won't build :(
+References: <0707172111460.16403@somehost>
+Message-ID: <000201c7c94d$b23b8b60$0e35780a@atmel.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-As it would be, I do need the kernel.  Could I replace this:
-
-$(LINUX26_DIR)/.patched: $(LINUX26_DIR)/.unpacked
-        toolchain/patch-kernel.sh $(LINUX26_DIR) $(LINUX26_PATCH_DIR)
-        touch $@
-endif # ($(LINUX26_VERSION),$(LINUX_HEADERS_VERSION))
-
-with something like
-
-$(LINUX26_DIR)/.patched: $(LINUX26_DIR)/.unpacked
-        toolchain/patch-kernel.sh $(LINUX26_DIR) $(LINUX26_PATCH_DIR)
-        touch $@
-else # ($(LINUX26_VERSION),$(LINUX_HEADERS_VERSION))
-$(LINUX26_DIR)/.patched:
-        touch $@
-endif # ($(LINUX26_VERSION),$(LINUX_HEADERS_VERSION))
+----- Original Message ----- 
+From: "Cristian Ionescu-Idbohrn" <cristian.ionescu-idbohrn@axis.com>
+To: <buildroot@uclibc.org>
+Sent: Tuesday, July 17, 2007 9:14 PM
+Subject: [Buildroot] ruby won't build :(
 
 
-> On Wed, Jul 18, 2007 at 04:54:35AM -0500, Frank Kujawski wrote:
->>
->> I am getting a compile error on:
->> linux26: cross-depmod26
->> $(TARGET_DIR)/lib/modules/$(LINUX26_VERSION)/modules.dep
->> $(TARGET_DIR)/boot/$(LINUX26_FORMAT)
->
-> This is caused by a conditional check in target/linux/Makefile.in:
-> ifneq ($(strip $(LINUX26_VERSION)),$(strip $(LINUX_HEADERS_VERSION)))
-> surrounding the part that defindes the $(LINUX26_DIR)/.patched
-> target.  You have LINUX26_VERSION matching LINUX_HEADERS_VERSION
-> and therefore all the code inside the "ifneq" is skipped.  This
-> results in the make error: "no rule to make target"
->
-> If you do not need to build a kernel, the simplest fix would be
-> to disable the linux26 target entirely (turn off BR2_PACKAGE_LINUX).
->
-> I'm not sure why the ifneq is there in the first place.  It may
-> have made sense prior to the BSP patch that was recently added.
->
-> -R
->
+> /data/cii/buildroot/buildroot/build_i486/staging_dir/usr/bin/i486-linux-uclibc-gcc
+> -Os -pipe
+> -I/data/cii/buildroot/buildroot/build_i486/staging_dir/usr/include
+> --sysroot=/data/cii/buildroot/buildroot/build_i486/staging_dir/ -isysroot
+> /data/cii/buildroot/buildroot/build_i486/staging_dir -g -O2 -rdynamic
+> -Wl,-export-dynamic main.o dmyext.o libruby-static.a -ldl -lcrypt -lm -o
+> miniruby
+> 
+> can't find header files for ruby.
+> make[1]: *** [all] Error 1
+> 
+> 
+
+Seen the same thing here, tried with several versions including svn
+without any progress.
+
+Best Regards
+Ulf Samuelsson  
