@@ -1,7 +1,7 @@
 From: ulf at uclibc.org <ulf@uclibc.org>
-Date: Tue, 17 Jul 2007 11:11:55 -0700 (PDT)
-Subject: [Buildroot] svn commit: trunk/buildroot/package:  libgpg-error
-Message-ID: <20070717181155.77656A6868@busybox.net>
+Date: Tue, 17 Jul 2007 11:14:25 -0700 (PDT)
+Subject: [Buildroot] svn commit: trunk/buildroot/package:  vpnc
+Message-ID: <20070717181425.983EFA688E@busybox.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -9,109 +9,134 @@ Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
 Author: ulf
-Date: 2007-07-17 11:11:55 -0700 (Tue, 17 Jul 2007)
-New Revision: 19141
+Date: 2007-07-17 11:14:25 -0700 (Tue, 17 Jul 2007)
+New Revision: 19142
 
 Log:
-Add gpg-error package
+Add vpnc package
 
 Added:
-   trunk/buildroot/package/libgpg-error/
-   trunk/buildroot/package/libgpg-error/Config.in
-   trunk/buildroot/package/libgpg-error/libgpg-error.mk
+   trunk/buildroot/package/vpnc/
+   trunk/buildroot/package/vpnc/Config.in
+   trunk/buildroot/package/vpnc/vpnc.mk
+
+Modified:
+   trunk/buildroot/package/Config.in
 
 
 Changeset:
-Added: trunk/buildroot/package/libgpg-error/Config.in
+Modified: trunk/buildroot/package/Config.in
 ===================================================================
---- trunk/buildroot/package/libgpg-error/Config.in	                        (rev 0)
-+++ trunk/buildroot/package/libgpg-error/Config.in	2007-07-17 18:11:55 UTC (rev 19141)
-@@ -0,0 +1,8 @@
-+config BR2_PACKAGE_LIBGPG_ERROR
-+	bool "libgpg-error"
+--- trunk/buildroot/package/Config.in	2007-07-17 18:11:55 UTC (rev 19141)
++++ trunk/buildroot/package/Config.in	2007-07-17 18:14:25 UTC (rev 19142)
+@@ -66,6 +66,8 @@
+ source "package/libelf/Config.in"
+ source "package/libevent/Config.in"
+ source "package/libfloat/Config.in"
++source "package/libgcrypt/Config.in"
++source "package/libgpg-error/Config.in"
+ source "package/liblockfile/Config.in"
+ source "package/libsysfs/Config.in"
+ source "package/libxml2/Config.in"
+@@ -181,6 +183,7 @@
+ # ATTENTION! This was merged into busybox!
+ #source "package/udhcp/Config.in"
+ #endif
++source "package/vpnc/Config.in"
+ source "package/vtun/Config.in"
+ if !BR2_PACKAGE_BUSYBOX_HIDE_OTHERS
+ source "package/wget/Config.in"
+
+Added: trunk/buildroot/package/vpnc/Config.in
+===================================================================
+--- trunk/buildroot/package/vpnc/Config.in	                        (rev 0)
++++ trunk/buildroot/package/vpnc/Config.in	2007-07-17 18:14:25 UTC (rev 19142)
+@@ -0,0 +1,14 @@
++config BR2_PACKAGE_VPNC
++	bool "vpnc"
++	select BR2_PACKAGE_LIBGCRYPT
++	select BR2_PACKAGE_LIBGPG_ERROR
 +	default n
 +	help
-+	  Libgpg-error is a small library with error codes and
-+	  descriptions shared by most GnuPG related software.
++	  Client for Cisco VPN concentrator
++	  3000 Series VPN Concentrator
++	  IOS Routers
++	  PIX/ASA Zecurity Appliances
++	  Juniper/Netscreen
 +
-+	  ftp://gd.tuwien.ac.at/privacy/gnupg/libgpg-error
++	  http://www.unix-ag.uni-kl.de/~massar/vpnc
++
 
-Added: trunk/buildroot/package/libgpg-error/libgpg-error.mk
+Added: trunk/buildroot/package/vpnc/vpnc.mk
 ===================================================================
---- trunk/buildroot/package/libgpg-error/libgpg-error.mk	                        (rev 0)
-+++ trunk/buildroot/package/libgpg-error/libgpg-error.mk	2007-07-17 18:11:55 UTC (rev 19141)
-@@ -0,0 +1,74 @@
+--- trunk/buildroot/package/vpnc/vpnc.mk	                        (rev 0)
++++ trunk/buildroot/package/vpnc/vpnc.mk	2007-07-17 18:14:25 UTC (rev 19142)
+@@ -0,0 +1,68 @@
 +#############################################################
 +#
-+# libgpg-error
++# vpnc
 +#
 +#############################################################
-+LIBGPG_ERROR_VERSION:=1.5
-+LIBGPG_ERROR_SOURCE:=libgpg-error-$(LIBGPG_ERROR_VERSION).tar.bz2
-+LIBGPG_ERROR_SITE:=ftp://gd.tuwien.ac.at/privacy/gnupg/libgpg-error
-+LIBGPG_ERROR_DIR:=$(BUILD_DIR)/libgpg-error-$(LIBGPG_ERROR_VERSION)
-+LIBGPG_ERROR_LIBRARY:=src/libgpg-error.la
-+LIBGPG_ERROR_DESTDIR:=lib
-+LIBGPG_ERROR_TARGET_LIBRARY=$(LIBGPG_ERROR_DESTDIR)/libgpg-error.so
 +
-+$(DL_DIR)/$(LIBGPG_ERROR_SOURCE):
-+	$(WGET) -P $(DL_DIR) $(LIBGPG_ERROR_SITE)/$(LIBGPG_ERROR_SOURCE)
++VPNC_VERSION=0.4.0
++VPNC_SOURCE=vpnc-$(VPNC_VERSION).tar.gz
++VPNC_SITE=http://www.unix-ag.uni-kl.de/~massar/vpnc
++VPNC_DIR=$(BUILD_DIR)/vpnc-$(VPNC_VERSION)
++VPNC_CAT:=$(ZCAT)
++VPNC_BINARY:=$(VPNC_DIR)/vpnc
++VPNC_DEST_DIR:=$(TARGET_DIR)/usr/local/sbin
++VPNC_TARGET_BINARY:=$(VPNC_DEST_DIR)/vpnc
++VPNC_TARGET_SCRIPT:=$(TARGET_DIR)/etc/vpnc/default.conf
 +
-+$(LIBGPG_ERROR_DIR)/.source: $(DL_DIR)/$(LIBGPG_ERROR_SOURCE)
-+	$(BZCAT) $(DL_DIR)/$(LIBGPG_ERROR_SOURCE) | tar -C $(BUILD_DIR) $(TAR_OPTIONS) -
-+	toolchain/patch-kernel.sh $(LIBGPG_ERROR_DIR) package/libgpg-error/ libgpg-error\*.patch
-+	touch $(LIBGPG_ERROR_DIR)/.source
++$(DL_DIR)/$(VPNC_SOURCE):
++	$(WGET) -P $(DL_DIR) $(VPNC_SITE)/$(VPNC_SOURCE)
 +
-+$(LIBGPG_ERROR_DIR)/.configured: $(LIBGPG_ERROR_DIR)/.source
-+	(cd $(LIBGPG_ERROR_DIR); \
-+		$(TARGET_CONFIGURE_OPTS) \
-+		$(TARGET_CONFIGURE_ARGS) \
-+		./configure \
-+			--target=$(GNU_TARGET_NAME) \
-+			--host=$(GNU_TARGET_NAME) \
-+			--build=$(GNU_HOST_NAME) \
-+			--prefix=/usr \
-+			--exec-prefix=/usr \
-+			--bindir=/usr/bin \
-+			--sbindir=/usr/sbin \
-+			--libdir=/lib \
-+			--libexecdir=/$(LIBGPG_ERROR_DESTDIR) \
-+			--sysconfdir=/etc \
-+			--datadir=/usr/share \
-+			--localstatedir=/var \
-+			--includedir=/include \
-+			--mandir=/usr/man \
-+			--infodir=/usr/info \
-+	);
-+	touch $(LIBGPG_ERROR_DIR)/.configured;
++$(VPNC_DIR)/.unpacked: $(DL_DIR)/$(VPNC_SOURCE)
++	$(VPNC_CAT) $(DL_DIR)/$(VPNC_SOURCE) | tar -C $(BUILD_DIR) $(TAR_OPTIONS) -
++	toolchain/patch-kernel.sh $(VPNC_DIR) package/vpnc \*.patch
++	touch $(VPNC_DIR)/.unpacked
 +
-+$(LIBGPG_ERROR_DIR)/$(LIBGPG_ERROR_LIBRARY): $(LIBGPG_ERROR_DIR)/.configured
-+	$(MAKE) CC=$(TARGET_CC) -C $(LIBGPG_ERROR_DIR)
++$(VPNC_DIR)/.configured: $(VPNC_DIR)/.unpacked
++	touch $(VPNC_DIR)/.configured
 +
-+$(STAGING_DIR)/$(LIBGPG_ERROR_TARGET_LIBRARY): $(LIBGPG_ERROR_DIR)/$(LIBGPG_ERROR_LIBRARY)
-+	$(MAKE) DESTDIR=$(STAGING_DIR) -C $(LIBGPG_ERROR_DIR) install
++$(VPNC_BINARY): $(VPNC_DIR)/.configured
++	rm -f $@
++	$(MAKE) $(TARGET_CONFIGURE_OPTS) INCLUDE=$(STAGING_DIR)/include	CC=$(TARGET_CC) -C $(VPNC_DIR)
++
++$(VPNC_TARGET_BINARY): $(VPNC_BINARY)
++	$(MAKE) $(TARGET_CONFIGURE_OPTS)	\
++		DESTDIR=$(TARGET_DIR)		\
++		BINDIR=/usr/local/bin		\
++		SBINDIR=/usr/local/sbin		\
++		ETCDIR=/etc/vpnc		\
++		MANDIR=/usr/local/share/man	\
++		VERSION=$(VPNC_VERSION)		\
++		INCLUDE=$(STAGING_DIR)/include		\
++		LDFLAGS="-g -lgcrypt -lgpg-error"	\
++		-C $(VPNC_DIR) install
++	$(STRIP) --strip-unneeded $(VPNC_TARGET_BINARY)
++
++#		CFLAGS+="-W -Wall -O3 -Wmissing-declarations -Wwrite-strings -g -DVERSION=\"$(VPNC_VERSION)\" -c"	\
 +
 +
-+$(TARGET_DIR)/$(LIBGPG_ERROR_TARGET_LIBRARY): $(STAGING_DIR)/$(LIBGPG_ERROR_TARGET_LIBRARY)
-+	cp -dpf $<* $(TARGET_DIR)/$(LIBGPG_ERROR_DESTDIR)	
 +
-+libgpg-error: uclibc $(TARGET_DIR)/$(LIBGPG_ERROR_TARGET_LIBRARY) 
++vpnc:	uclibc $(VPNC_TARGET_BINARY) 
 +
-+libgpg-error-source: $(DL_DIR)/$(LIBGPG_ERROR_SOURCE)
++vpnc-source: $(DL_DIR)/$(VPNC_SOURCE)
 +
-+libgpg-error-clean:
-+	rm -f $(TARGET_DIR)/$(LIBGPG_ERROR_TARGET_LIBRARY)*
-+	-$(MAKE) -C $(LIBGPG_ERROR_DIR) clean
++vpnc-clean:
++	@if [ -d $(VPNC_DIR)/Makefile ] ; then \
++		$(MAKE) -C $(VPNC_DIR) clean ; \
++	fi;
++	rm -f $(STAGING_DIR)/usr/bin/vpnc
 +
-+libgpg-error-dirclean:
-+	rm -rf $(LIBGPG_ERROR_DIR)
-+
-+.PHONY:	libgpg-error
++vpnc-dirclean:
++	rm -rf $(VPNC_DIR)
 +#############################################################
 +#
 +# Toplevel Makefile options
 +#
 +#############################################################
-+ifeq ($(strip $(BR2_PACKAGE_LIBGPG_ERROR)),y)
-+TARGETS+=libgpg-error
++ifeq ($(strip $(BR2_PACKAGE_VPNC)),y)
++TARGETS+=vpnc
 +endif
