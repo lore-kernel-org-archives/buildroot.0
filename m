@@ -1,212 +1,31 @@
-From: ulf at uclibc.org <ulf@uclibc.org>
-Date: Tue, 17 Jul 2007 04:05:31 -0700 (PDT)
-Subject: [Buildroot] svn commit: trunk/buildroot/package/netsnmp
-Message-ID: <20070717110531.BBD15A6866@busybox.net>
+From: Hebbar <gururajakr@sanyo.co.in>
+Date: Tue, 17 Jul 2007 04:37:53 -0700 (PDT)
+Subject: [Buildroot] Fontconfig/freetype build searches for lmxl2 in system
+ /usr/lib b4 searching in staging_dir/usr/lib
+Message-ID: <11647587.post@talk.nabble.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Author: ulf
-Date: 2007-07-17 04:05:31 -0700 (Tue, 17 Jul 2007)
-New Revision: 19126
 
-Log:
-Fix compile bugs caused by undefined preprocessor variables
+Dear all,
 
-Added:
-   trunk/buildroot/package/netsnmp/net-snmp-5.1.2.patch
+   while building fontconfig/freetype, i found that -lxml2 is taken from
+system /usr/lib whereas it is suppose to take from staging_dir/usr/lib. when
+it is checking for -lxml2 it 1st searched from system /usr/lib & gave error
+as invalid file format. i renamed the one in system /usr/lib to
+old_libxml2.so & then "make fontconfig"  went on taking -lxml2 from
+staging_dir/usr/lib. so i doubt many files like this are taken from system
+/usr/lib than from staging_dir/usr/lib. kindly let me know if i need any
+changes/updates. 
 
+sorry for double post. just wanted to split and make subject more clear. 
 
-Changeset:
-Added: trunk/buildroot/package/netsnmp/net-snmp-5.1.2.patch
-===================================================================
---- trunk/buildroot/package/netsnmp/net-snmp-5.1.2.patch	                        (rev 0)
-+++ trunk/buildroot/package/netsnmp/net-snmp-5.1.2.patch	2007-07-17 11:05:31 UTC (rev 19126)
-@@ -0,0 +1,185 @@
-+diff -urN net-snmp-5.1.2-0rig/agent/mibgroup/ucd-snmp/disk.c net-snmp-5.1.2/agent/mibgroup/ucd-snmp/disk.c
-+--- net-snmp-5.1.2-0rig/agent/mibgroup/ucd-snmp/disk.c	2004-07-02 15:12:35.000000000 +0200
-++++ net-snmp-5.1.2/agent/mibgroup/ucd-snmp/disk.c	2007-07-16 03:39:22.000000000 +0200
-+@@ -97,7 +97,7 @@
-+ #if HAVE_STRING_H
-+ #include <string.h>
-+ #endif
-+-#if HAVE_FSTAB_H
-++#if defined(HAVE_FSTAB_H)
-+ #include <fstab.h>
-+ #endif
-+ #if HAVE_MNTENT_H
-+@@ -230,7 +230,7 @@
-+ static void 
-+ disk_parse_config(const char *token, char *cptr)
-+ {
-+-#if HAVE_FSTAB_H || HAVE_GETMNTENT || HAVE_STATFS
-++#if defined(HAVE_FSTAB_H) || defined(HAVE_GETMNTENT) || defined(HAVE_STATFS)
-+   char            tmpbuf[1024];
-+   char            path[STRMAX];
-+   int             minpercent;
-+@@ -272,13 +272,13 @@
-+      */
-+     add_device(path, find_device(path), minspace, minpercent, 1);
-+   }
-+-#endif /* HAVE_FSTAB_H || HAVE_GETMNTENT || HAVE_STATFS */
-++#endif /* defined(HAVE_FSTAB_H) || defined(HAVE_GETMNTENT) || defined(HAVE_STATFS) */
-+ }
-+ 
-+ static void 
-+ disk_parse_config_all(const char *token, char *cptr)
-+ {
-+-#if HAVE_FSTAB_H || HAVE_GETMNTENT || HAVE_STATFS
-++#if defined(HAVE_FSTAB_H) || defined(HAVE_GETMNTENT) || defined(HAVE_STATFS)
-+   char            tmpbuf[1024];
-+   int             minpercent = DISKMINPERCENT;
-+     
-+@@ -311,7 +311,7 @@
-+       find_and_add_allDisks(minpercent);
-+     }
-+   }
-+-#endif /* HAVE_FSTAB_H || HAVE_GETMNTENT || HAVE_STATFS */
-++#endif /* defined(HAVE_FSTAB_H) || defined(HAVE_GETMNTENT) || defined(HAVE_STATFS) */
-+ }
-+ 
-+ 
-+@@ -374,16 +374,16 @@
-+ static void 
-+ find_and_add_allDisks(int minpercent)
-+ {
-+-#if HAVE_GETMNTENT
-++#if defined(HAVE_GETMNTENT)
-+ #if HAVE_SYS_MNTTAB_H
-+   struct mnttab   mnttab;
-+ #else
-+   struct mntent  *mntent;
-+ #endif
-+   FILE           *mntfp;
-+-#elif HAVE_FSTAB_H
-++#elif defined(HAVE_FSTAB_H)
-+   struct fstab   *fstab1;
-+-#elif HAVE_STATFS
-++#elif defined(HAVE_STATFS)
-+   struct statfs   statf;
-+ #endif
-+ #if defined(HAVE_GETMNTENT) && !defined(HAVE_SETMNTENT)
-+@@ -397,8 +397,8 @@
-+    * string declared above and at the end of the routine return it
-+    * to the caller 
-+    */
-+-#if HAVE_FSTAB_H || HAVE_GETMNTENT || HAVE_STATFS   
-+-#if HAVE_GETMNTENT
-++#if defined(HAVE_FSTAB_H) || defined(HAVE_GETMNTENT) || defined(HAVE_STATFS)   
-++#if defined(HAVE_GETMNTENT)
-+ #if HAVE_SETMNTENT
-+   mntfp = setmntent(ETC_MNTTAB, "r");
-+   while (NULL != (mntent = getmntent(mntfp))) {
-+@@ -425,7 +425,7 @@
-+      */
-+   }
-+ #endif /* HAVE_SETMNTENT */
-+-#elif HAVE_FSTAB_H
-++#elif defined(HAVE_FSTAB_H)
-+   setfsent();			/* open /etc/fstab */
-+   while((fstab1 = getfsent()) != NULL) {
-+     add_device(fstab1->fs_file, fstab1->fs_spec, -1, minpercent, 0);
-+@@ -437,7 +437,7 @@
-+      * dummy clause for else below
-+      */
-+   }
-+-#elif HAVE_STATFS
-++#elif defined(HAVE_STATFS)
-+   /*
-+    * since there is no way to get all the mounted systems with just
-+    * statfs we default to the root partition "/"
-+@@ -461,24 +461,24 @@
-+   }
-+ #else
-+   config_perror("'disk' checks not supported on this architecture.");
-+-#endif                   /* HAVE_FSTAB_H || HAVE_GETMNTENT || HAVE_STATFS */  
-++#endif                   /* defined(HAVE_FSTAB_H) || defined(HAVE_GETMNTENT) || defined(HAVE_STATFS) */  
-+  
-+ }
-+ 
-+ static u_char *
-+ find_device(char *path)
-+ {
-+-#if HAVE_GETMNTENT
-++#if defined(HAVE_GETMNTENT)
-+ #if HAVE_SYS_MNTTAB_H
-+   struct mnttab   mnttab;
-+ #else
-+   struct mntent  *mntent;
-+ #endif
-+   FILE           *mntfp;
-+-#elif HAVE_FSTAB_H
-++#elif defined(HAVE_FSTAB_H)
-+   struct fstab   *fstab;
-+   struct stat     stat1;
-+-#elif HAVE_STATFS
-++#elif defined(HAVE_STATFS)
-+   struct statfs   statf;
-+ #endif
-+   char            tmpbuf[1024];
-+@@ -494,8 +494,8 @@
-+    * string declared above and at the end of the routine return it
-+    * to the caller 
-+    */
-+-#if HAVE_FSTAB_H || HAVE_GETMNTENT || HAVE_STATFS   
-+-#if HAVE_GETMNTENT
-++#if defined(HAVE_FSTAB_H) || defined(HAVE_GETMNTENT) || defined(HAVE_STATFS)   
-++#if defined(HAVE_GETMNTENT)
-+ #if HAVE_SETMNTENT
-+   mntfp = setmntent(ETC_MNTTAB, "r");
-+   while (NULL != (mntent = getmntent(mntfp)))
-+@@ -526,14 +526,14 @@
-+ 	       sizeof(device));
-+   }
-+ #endif /* HAVE_SETMNTENT */
-+-#elif HAVE_FSTAB_H
-++#elif defined(HAVE_FSTAB_H)
-+   stat(path, &stat1);
-+   setfsent();
-+   if ((fstab = getfsfile(path))) {
-+     copy_nword(fstab->fs_spec, device,
-+ 	       sizeof(device));
-+   }
-+-#elif HAVE_STATFS
-++#elif defined(HAVE_STATFS)
-+   if (statfs(path, &statf) == 0) {
-+     copy_word(statf.f_mntfromname, device);
-+     DEBUGMSGTL(("ucd-snmp/disk", "Disk:  %s\n",
-+@@ -545,12 +545,12 @@
-+ 	    path);
-+     config_pwarn(tmpbuf);
-+   }
-+-#if HAVE_FSTAB_H
-++#if defined(HAVE_FSTAB_H)
-+   endfsent();
-+ #endif
-+ #else
-+   config_perror("'disk' checks not supported on this architecture.");
-+-#endif                   /* HAVE_FSTAB_H || HAVE_GETMNTENT || HAVE_STATFS */  
-++#endif                   /* defined(HAVE_FSTAB_H) || defined(HAVE_GETMNTENT) || defined(HAVE_STATFS) */  
-+   return device;
-+ }
-+ 
-+@@ -597,7 +597,7 @@
-+     struct statvfs  vfs;
-+ #endif
-+ #else
-+-#if HAVE_FSTAB_H
-++#if defined(HAVE_FSTAB_H)
-+     int             file;
-+     union {
-+         struct fs       iu_fs;
-+@@ -715,7 +715,7 @@
-+         return ((u_char *) (errmsg));
-+     }
-+ #else
-+-#if HAVE_FSTAB_H
-++#if defined(HAVE_FSTAB_H)
-+     /*
-+      * read the disk information 
-+      */
+Regards 
+Gururaja 
+
+-- 
+View this message in context: http://www.nabble.com/Fontconfig-freetype-build-searches-for-lmxl2-in-system--usr-lib-b4-searching-in-staging_dir-usr-lib-tf4096288.html#a11647587
+Sent from the BuildRoot mailing list archive at Nabble.com.
