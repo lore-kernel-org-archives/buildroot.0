@@ -1,31 +1,34 @@
-From: Hebbar <gururajakr@sanyo.co.in>
-Date: Tue, 17 Jul 2007 04:37:53 -0700 (PDT)
-Subject: [Buildroot] Fontconfig/freetype build searches for lmxl2 in system
- /usr/lib b4 searching in staging_dir/usr/lib
-Message-ID: <11647587.post@talk.nabble.com>
+From: ulf at uclibc.org <ulf@uclibc.org>
+Date: Tue, 17 Jul 2007 05:01:10 -0700 (PDT)
+Subject: [Buildroot] svn commit: trunk/buildroot/package/libcgicc
+Message-ID: <20070717120110.C2293A6848@busybox.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+Author: ulf
+Date: 2007-07-17 05:01:09 -0700 (Tue, 17 Jul 2007)
+New Revision: 19127
 
-Dear all,
+Log:
+Fix spelling error
 
-   while building fontconfig/freetype, i found that -lxml2 is taken from
-system /usr/lib whereas it is suppose to take from staging_dir/usr/lib. when
-it is checking for -lxml2 it 1st searched from system /usr/lib & gave error
-as invalid file format. i renamed the one in system /usr/lib to
-old_libxml2.so & then "make fontconfig"  went on taking -lxml2 from
-staging_dir/usr/lib. so i doubt many files like this are taken from system
-/usr/lib than from staging_dir/usr/lib. kindly let me know if i need any
-changes/updates. 
+Modified:
+   trunk/buildroot/package/libcgicc/libcgicc.mk
 
-sorry for double post. just wanted to split and make subject more clear. 
 
-Regards 
-Gururaja 
-
--- 
-View this message in context: http://www.nabble.com/Fontconfig-freetype-build-searches-for-lmxl2-in-system--usr-lib-b4-searching-in-staging_dir-usr-lib-tf4096288.html#a11647587
-Sent from the BuildRoot mailing list archive at Nabble.com.
+Changeset:
+Modified: trunk/buildroot/package/libcgicc/libcgicc.mk
+===================================================================
+--- trunk/buildroot/package/libcgicc/libcgicc.mk	2007-07-17 11:05:31 UTC (rev 19126)
++++ trunk/buildroot/package/libcgicc/libcgicc.mk	2007-07-17 12:01:09 UTC (rev 19127)
+@@ -1,6 +1,6 @@
+ #############################################################
+ #
+-# licgicc
++# libcgicc
+ #
+ #############################################################
+ 
