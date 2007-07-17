@@ -1,7 +1,7 @@
 From: sjhill at uclibc.org <sjhill@uclibc.org>
-Date: Mon, 16 Jul 2007 17:20:33 -0700 (PDT)
-Subject: [Buildroot] svn commit: trunk/buildroot/target/linux
-Message-ID: <20070717002033.8E96D30078@busybox.net>
+Date: Mon, 16 Jul 2007 17:21:16 -0700 (PDT)
+Subject: [Buildroot] svn commit: trunk/buildroot/package/samba
+Message-ID: <20070717002116.037B83007C@busybox.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -9,81 +9,162 @@ Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
 Author: sjhill
-Date: 2007-07-16 17:20:32 -0700 (Mon, 16 Jul 2007)
-New Revision: 19116
+Date: 2007-07-16 17:21:16 -0700 (Mon, 16 Jul 2007)
+New Revision: 19117
 
 Log:
-A number of fixes including placing of the final image into the 'binaries' directory. Moved INITRAMFS_TARGET to the correct location as modules from the built kernel were not being installed until after the INITRAMFS had been built. Fixed config options for INITRAMFS to be correct and cleaned up whitespace/tab issues.
+Bump Samba to latest version and update patches.
 
+
+Added:
+   trunk/buildroot/package/samba/samba-use-unsigned-enums.patch
 
 Modified:
-   trunk/buildroot/target/linux/Makefile.in
+   trunk/buildroot/package/samba/samba-getgrouplist.patch
+   trunk/buildroot/package/samba/samba-remove-legacy-index.patch
+   trunk/buildroot/package/samba/samba.mk
 
 
 Changeset:
-Modified: trunk/buildroot/target/linux/Makefile.in
+Modified: trunk/buildroot/package/samba/samba-getgrouplist.patch
 ===================================================================
---- trunk/buildroot/target/linux/Makefile.in	2007-07-17 00:18:54 UTC (rev 19115)
-+++ trunk/buildroot/target/linux/Makefile.in	2007-07-17 00:20:32 UTC (rev 19116)
-@@ -55,7 +55,7 @@
- endif
- 
- # File name for the Linux kernel binary
--LINUX26_KERNEL=linux-kernel-$(LINUX26_VERSION)-$(KERNEL_ARCH)
-+LINUX26_KERNEL=$(BINARIES_DIR)/linux-kernel-$(LINUX26_VERSION)-$(KERNEL_ARCH)
- 
- # Version of Linux AFTER patches
- LINUX26_DIR=$(PROJECT_BUILD_DIR)/linux-$(LINUX26_VERSION)
-@@ -101,7 +101,7 @@
- 	touch $@
- endif # ($(LINUX26_VERSION),$(LINUX_HEADERS_VERSION))
- 
--$(LINUX26_DIR)/.configured:  $(LINUX26_DIR)/.patched  $(LINUX26_KCONFIG) $(INITRAMFS_TARGET)
-+$(LINUX26_DIR)/.configured: $(LINUX26_DIR)/.patched $(LINUX26_KCONFIG)
- 	cp -dpf $(LINUX26_KCONFIG) $(LINUX26_DIR)/.config
- 	$(SED) '/CONFIG_AEABI/d' $(LINUX26_DIR)/.config
- ifeq ($(BR2_ARM_EABI),y)
-@@ -116,19 +116,18 @@
- 	echo "CONFIG_INITRAMFS_SOURCE=\"$(INITRAMFS_TARGET)\"" >> \
- 		$(LINUX26_DIR)/.config
- 	$(SED) '/INITRAMFS_ROOT_.ID/d' $(LINUX26_DIR)/.config
--	echo "INITRAMFS_ROOT_UID=\"0\"" >> $(LINUX26_DIR)/.config
--	echo "INITRAMFS_ROOT_GID=\"0\"" >> $(LINUX26_DIR)/.config
-+	echo "CONFIG_INITRAMFS_ROOT_UID=0" >> $(LINUX26_DIR)/.config
-+	echo "CONFIG_INITRAMFS_ROOT_GID=0" >> $(LINUX26_DIR)/.config
- endif
- 	$(MAKE) $(LINUX26_MAKE_FLAGS) -C $(LINUX26_DIR) oldconfig
- 	touch $@
- 
--$(LINUX26_DIR)/.depend_done:  $(LINUX26_DIR)/.configured
-+$(LINUX26_DIR)/.depend_done: $(LINUX26_DIR)/.configured
- 	$(MAKE) $(LINUX26_MAKE_FLAGS) -C $(LINUX26_DIR) prepare
- 	touch $@
- 
- $(LINUX26_KERNEL): $(LINUX26_DIR)/.depend_done
- 	$(MAKE) $(LINUX26_MAKE_FLAGS) -C $(LINUX26_DIR) $(LINUX26_FORMAT)
--	$(MAKE) $(LINUX26_MAKE_FLAGS) -C $(LINUX26_DIR) modules
- 	cp -dpf $(LINUX26_DIR)/$(LINUX26_BINLOC) $(LINUX26_KERNEL)
- 	touch -c $@
- 
-@@ -137,9 +136,10 @@
- 	cp -dpf $(LINUX26_DIR)/$(LINUX26_BINLOC) $(LINUX26_DIR)/System.map $(TARGET_DIR)/boot/
- 	touch -c $@
- 
--$(TARGET_DIR)/lib/modules/$(LINUX26_VERSION)/modules.dep: $(LINUX26_KERNEL)
-+$(TARGET_DIR)/lib/modules/$(LINUX26_VERSION)/modules.dep: $(LINUX26_DIR)/.depend_done
- 	rm -rf $(TARGET_DIR)/lib/modules/$(LINUX26_VERSION)
- 	rm -f $(TARGET_DIR)/sbin/cardmgr
-+	$(MAKE) $(LINUX26_MAKE_FLAGS) -C $(LINUX26_DIR) modules
- 	$(MAKE) $(LINUX26_MAKE_FLAGS) -C $(LINUX26_DIR) \
- 		DEPMOD=$(STAGING_DIR)/bin/$(GNU_TARGET_NAME)-depmod26 \
- 		INSTALL_MOD_PATH=$(TARGET_DIR) modules_install
-@@ -151,7 +151,7 @@
- 	$(MAKE) $(LINUX26_MAKE_FLAGS) -C $(LINUX26_DIR) menuconfig
- 	-[ -f $(LINUX26_DIR)/.config ] && touch $(LINUX26_DIR)/.configured
- 
--linux26: cross-depmod26 $(TARGET_DIR)/lib/modules/$(LINUX26_VERSION)/modules.dep $(TARGET_DIR)/boot/$(LINUX26_FORMAT)
-+linux26: cross-depmod26 $(TARGET_DIR)/lib/modules/$(LINUX26_VERSION)/modules.dep $(INITRAMFS_TARGET) $(TARGET_DIR)/boot/$(LINUX26_FORMAT)
- 
- linux26-source: $(DL_DIR)/$(LINUX26_SOURCE)
- 
+--- trunk/buildroot/package/samba/samba-getgrouplist.patch	2007-07-17 00:20:32 UTC (rev 19116)
++++ trunk/buildroot/package/samba/samba-getgrouplist.patch	2007-07-17 00:21:16 UTC (rev 19117)
+@@ -1,12 +1,12 @@
+-diff -ur samba-3.0.23c/source/configure.in samba-3.0.23c-patched/source/configure.in
+---- samba-3.0.23c/source/configure.in	2006-07-21 11:22:57.000000000 -0500
+-+++ samba-3.0.23c-patched/source/configure.in	2006-11-09 10:23:26.000000000 -0600
+-@@ -1399,38 +1399,6 @@
++diff -ur samba-3.0.25a/source/configure.in samba-3.0.25a-patched/source/configure.in
++--- samba-3.0.25a/source/configure.in	2007-05-23 10:29:20.000000000 -0500
+++++ samba-3.0.25a-patched/source/configure.in	2007-06-19 11:38:21.000000000 -0500
++@@ -1370,38 +1370,6 @@
+  AC_DEFINE(HAVE_PRCTL, 1, [Whether prctl is available]),[])
+  
+  #
+--# 
+ -#
++-#
+ -case "$host_os" in
+ -    *linux*)
+ -       # glibc <= 2.3.2 has a broken getgrouplist
+
+Modified: trunk/buildroot/package/samba/samba-remove-legacy-index.patch
+===================================================================
+--- trunk/buildroot/package/samba/samba-remove-legacy-index.patch	2007-07-17 00:20:32 UTC (rev 19116)
++++ trunk/buildroot/package/samba/samba-remove-legacy-index.patch	2007-07-17 00:21:16 UTC (rev 19117)
+@@ -1,7 +1,7 @@
+-diff -ur samba-3.0.23d/source/registry/reg_perfcount.c samba-3.0.23d-patched/source/registry/reg_perfcount.c
+---- samba-3.0.23d/source/registry/reg_perfcount.c	2006-07-10 11:27:54.000000000 -0500
+-+++ samba-3.0.23d-patched/source/registry/reg_perfcount.c	2007-01-20 23:12:23.456180669 -0600
+-@@ -614,15 +614,15 @@
++diff -ur samba-3.0.25a/source/registry/reg_perfcount.c samba-3.0.25a-patched/source/registry/reg_perfcount.c
++--- samba-3.0.25a/source/registry/reg_perfcount.c	2007-02-28 22:55:05.000000000 -0600
+++++ samba-3.0.25a-patched/source/registry/reg_perfcount.c	2007-06-19 11:40:01.000000000 -0500
++@@ -615,14 +615,14 @@
+  	obj = NULL;
+  	memset(buf, 0, PERFCOUNT_MAX_LEN);
+  	memcpy(buf, data.dptr, data.dsize);
+@@ -13,8 +13,7 @@
+  		return False;
+  	start = begin+1;
+  
+- 	while(start < end)
+- 	{
++ 	while(start < end) {
+ -		stop = index(start, ',');
+ +		stop = strchr(start, ',');
+  		if(stop == NULL)
+
+Added: trunk/buildroot/package/samba/samba-use-unsigned-enums.patch
+===================================================================
+--- trunk/buildroot/package/samba/samba-use-unsigned-enums.patch	                        (rev 0)
++++ trunk/buildroot/package/samba/samba-use-unsigned-enums.patch	2007-07-17 00:21:16 UTC (rev 19117)
+@@ -0,0 +1,43 @@
++diff -ur samba-3.0.25a/source/configure.in samba-3.0.25a-patched/source/configure.in
++--- samba-3.0.25a/source/configure.in	2007-06-19 11:40:49.000000000 -0500
+++++ samba-3.0.25a-patched/source/configure.in	2007-06-19 11:45:04.000000000 -0500
++@@ -511,37 +511,8 @@
++    AC_DEFINE(HAVE_VOLATILE, 1, [Whether the C compiler understands volatile])
++ fi
++ 
++-############################################
++-# check if the compiler can handle negative enum values
++-# and don't truncate the values to INT_MAX
++-# a runtime test is needed here
++-AC_SUBST(PIDL_ARGS)
++-AC_CACHE_CHECK([that the C compiler understands negative enum values],SMB_BUILD_CC_NEGATIVE_ENUM_VALUES, [
++-    AC_TRY_RUN(
++-[
++-	#include <stdio.h>
++-	enum negative_values { NEGATIVE_VALUE = 0xFFFFFFFF };
++-	int main(void) {
++-		enum negative_values v1 = NEGATIVE_VALUE;
++-		unsigned v2 = NEGATIVE_VALUE;
++-
++-		if (v1 != 0xFFFFFFFF) {
++-			printf("%u != 0xFFFFFFFF\n", v1);
++-			return 1;
++-		}
++-		if (v2 != 0xFFFFFFFF) {
++-			printf("%u != 0xFFFFFFFF\n", v2);
++-			return 1;
++-		}
++-
++-		return 0;
++-	}
++-],
++-	SMB_BUILD_CC_NEGATIVE_ENUM_VALUES=yes,SMB_BUILD_CC_NEGATIVE_ENUM_VALUES=no)])
++-if test x"$SMB_BUILD_CC_NEGATIVE_ENUM_VALUES" != x"yes"; then
++-	AC_MSG_WARN([using --unit-enums for pidl])
++-	PIDL_ARGS="$PIDL_ARGS --uint-enums"
++-fi
+++# Just hard code this for cross compile cases
+++PIDL_ARGS="$PIDL_ARGS --uint-enums"
++ 
++ dnl Figure out the flags to support named structure initializers
++ 
+
+Modified: trunk/buildroot/package/samba/samba.mk
+===================================================================
+--- trunk/buildroot/package/samba/samba.mk	2007-07-17 00:20:32 UTC (rev 19116)
++++ trunk/buildroot/package/samba/samba.mk	2007-07-17 00:21:16 UTC (rev 19117)
+@@ -3,9 +3,9 @@
+ # samba
+ #
+ #############################################################
+-SAMBA_VERSION:=3.0.23d
++SAMBA_VERSION:=3.0.25b
+ SAMBA_SOURCE:=samba-$(SAMBA_VERSION).tar.gz
+-SAMBA_SITE:=ftp://us4.samba.org/pub/samba/old-versions/
++SAMBA_SITE:=ftp://us4.samba.org/pub/samba/
+ SAMBA_DIR:=$(BUILD_DIR)/samba-$(SAMBA_VERSION)/source
+ SAMBA_CAT:=$(ZCAT)
+ SAMBA_BINARY:=bin/smbd
+@@ -28,6 +28,7 @@
+ 		$(TARGET_CONFIGURE_ARGS) \
+ 		samba_cv_HAVE_GETTIMEOFDAY_TZ=yes \
+ 		samba_cv_USE_SETREUID=yes \
++		samba_cv_HAVE_KERNEL_OPLOCKS_LINUX=yes \
+ 		./configure \
+ 		--target=$(GNU_TARGET_NAME) \
+ 		--host=$(GNU_TARGET_NAME) \
+@@ -38,6 +39,7 @@
+ 		--with-logfilebase=/var/log/samba \
+ 		--with-configdir=/etc/samba \
+ 		--without-ldap \
++		--without-libaddns \
+ 		--with-included-popt \
+ 		--with-included-iniparser \
+ 		--disable-cups \
+@@ -91,6 +93,10 @@
+ 	for file in $(SAMBA_TARGETS_) ; do \
+ 		rm -f $(TARGET_DIR)/$$file; \
+ 	done
++	$(STRIP) --strip-unneeded $(TARGET_DIR)/$(SAMBA_TARGET_BINARY)
++	for file in $(SAMBA_TARGETS_y) ; do \
++		$(STRIP) --strip-unneeded $(TARGET_DIR)/$$file; \
++	done
+ 	$(INSTALL) -m 0755 package/samba/S91smb $(TARGET_DIR)/etc/init.d
+ 	@if [ ! -f $(TARGET_DIR)/etc/samba/smb.conf ] ; then \
+ 		$(INSTALL) -m 0755 -D package/samba/simple.conf $(TARGET_DIR)/etc/samba/smb.conf; \
