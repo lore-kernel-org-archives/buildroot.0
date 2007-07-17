@@ -1,7 +1,7 @@
 From: sjhill at uclibc.org <sjhill@uclibc.org>
-Date: Mon, 16 Jul 2007 17:24:55 -0700 (PDT)
-Subject: [Buildroot] svn commit: trunk/buildroot/package/thttpd
-Message-ID: <20070717002455.7D8F430095@busybox.net>
+Date: Mon, 16 Jul 2007 17:25:32 -0700 (PDT)
+Subject: [Buildroot] svn commit: trunk/buildroot/package/lockfile-progs
+Message-ID: <20070717002532.5AB9030095@busybox.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -9,33 +9,37 @@ Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
 Author: sjhill
-Date: 2007-07-16 17:24:54 -0700 (Mon, 16 Jul 2007)
-New Revision: 19123
+Date: 2007-07-16 17:25:31 -0700 (Mon, 16 Jul 2007)
+New Revision: 19124
 
 Log:
-The clean target should really work.
+Fix build directives and clean target screwed up by me.
 
 
 Modified:
-   trunk/buildroot/package/thttpd/thttpd.mk
+   trunk/buildroot/package/lockfile-progs/lockfile-progs.mk
 
 
 Changeset:
-Modified: trunk/buildroot/package/thttpd/thttpd.mk
+Modified: trunk/buildroot/package/lockfile-progs/lockfile-progs.mk
 ===================================================================
---- trunk/buildroot/package/thttpd/thttpd.mk	2007-07-17 00:24:13 UTC (rev 19122)
-+++ trunk/buildroot/package/thttpd/thttpd.mk	2007-07-17 00:24:54 UTC (rev 19123)
-@@ -61,6 +61,13 @@
+--- trunk/buildroot/package/lockfile-progs/lockfile-progs.mk	2007-07-17 00:24:54 UTC (rev 19123)
++++ trunk/buildroot/package/lockfile-progs/lockfile-progs.mk	2007-07-17 00:25:31 UTC (rev 19124)
+@@ -20,14 +20,15 @@
+ 	touch $(LOCKFILE_PROGS_DIR)/.unpacked
  
- thttpd-clean:
- 	rm -f $(TARGET_DIR)/$(THTTPD_TARGET_BINARY)
-+	rm -f $(TARGET_DIR)/sbin/httpd_wrapper
-+	rm -f $(TARGET_DIR)/sbin/thttpd_wrapper
-+	rm -rf $(TARGET_DIR)/var/www
-+	rm -f $(TARGET_DIR)/etc/init.d/S90thttpd
-+	rm -f $(TARGET_DIR)/bin/htpasswd
-+	rm -f $(TARGET_DIR)/bin/makeweb
-+	rm -f $(TARGET_DIR)/bin/syslogtocern
- 	-$(MAKE) -C $(THTTPD_DIR) clean
+ $(TARGET_DIR)/$(LOCKFILE_PROGS_BINARY): $(LOCKFILE_PROGS_DIR)/.unpacked
+-	$(MAKE) CC="$(TARGET_CC) $(TARGET_CFLAGS)" -C $(LOCKFILE_PROGS_DIR)
++	$(MAKE) $(TARGET_CONFIGURE_OPTS) LDFLAGS="$(TARGET_LDFLAGS)"	\
++		-C $(LOCKFILE_PROGS_DIR)
+ 	cp -a $(LOCKFILE_PROGS_DIR)/bin/lockfile* $(TARGET_DIR)/usr/bin
+ 	$(STRIP) --strip-unneeded $(TARGET_DIR)/$(LOCKFILE_PROGS_BINARY)
  
- thttpd-dirclean:
+ lockfile-progs: uclibc liblockfile $(TARGET_DIR)/$(LOCKFILE_PROGS_BINARY)
+ 
+ lockfile-progs-clean:
+-	rm -f $(TARGET_DIR)/usr/bin/lockfile*Z
++	rm -f $(TARGET_DIR)/usr/bin/lockfile-*
+ 	$(MAKE) -C $(LOCKFILE_PROGS_DIR) clean
+ 
+ lockfile-progs-dirclean:
