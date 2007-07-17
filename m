@@ -1,7 +1,7 @@
 From: ulf at uclibc.org <ulf@uclibc.org>
-Date: Tue, 17 Jul 2007 11:10:36 -0700 (PDT)
-Subject: [Buildroot] svn commit: trunk/buildroot/package:  libgcrypt
-Message-ID: <20070717181036.6B156A65E5@busybox.net>
+Date: Tue, 17 Jul 2007 11:11:55 -0700 (PDT)
+Subject: [Buildroot] svn commit: trunk/buildroot/package:  libgpg-error
+Message-ID: <20070717181155.77656A6868@busybox.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -9,61 +9,61 @@ Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
 Author: ulf
-Date: 2007-07-17 11:10:35 -0700 (Tue, 17 Jul 2007)
-New Revision: 19140
+Date: 2007-07-17 11:11:55 -0700 (Tue, 17 Jul 2007)
+New Revision: 19141
 
 Log:
-Add GNU Crypto library
+Add gpg-error package
 
 Added:
-   trunk/buildroot/package/libgcrypt/
-   trunk/buildroot/package/libgcrypt/Config.in
-   trunk/buildroot/package/libgcrypt/libgcrypt.mk
+   trunk/buildroot/package/libgpg-error/
+   trunk/buildroot/package/libgpg-error/Config.in
+   trunk/buildroot/package/libgpg-error/libgpg-error.mk
 
 
 Changeset:
-Added: trunk/buildroot/package/libgcrypt/Config.in
+Added: trunk/buildroot/package/libgpg-error/Config.in
 ===================================================================
---- trunk/buildroot/package/libgcrypt/Config.in	                        (rev 0)
-+++ trunk/buildroot/package/libgcrypt/Config.in	2007-07-17 18:10:35 UTC (rev 19140)
+--- trunk/buildroot/package/libgpg-error/Config.in	                        (rev 0)
++++ trunk/buildroot/package/libgpg-error/Config.in	2007-07-17 18:11:55 UTC (rev 19141)
 @@ -0,0 +1,8 @@
-+config BR2_PACKAGE_LIBGCRYPT
-+	bool "libgcrypt"
-+	select BR2_PACKAGE_LIBGPG_ERROR
++config BR2_PACKAGE_LIBGPG_ERROR
++	bool "libgpg-error"
 +	default n
 +	help
-+	  LibGCrypt is GNU's basic cryptographic library. 
++	  Libgpg-error is a small library with error codes and
++	  descriptions shared by most GnuPG related software.
 +
-+	  ftp://gd.tuwien.ac.at/privacy/gnupg/libgcrypt/
++	  ftp://gd.tuwien.ac.at/privacy/gnupg/libgpg-error
 
-Added: trunk/buildroot/package/libgcrypt/libgcrypt.mk
+Added: trunk/buildroot/package/libgpg-error/libgpg-error.mk
 ===================================================================
---- trunk/buildroot/package/libgcrypt/libgcrypt.mk	                        (rev 0)
-+++ trunk/buildroot/package/libgcrypt/libgcrypt.mk	2007-07-17 18:10:35 UTC (rev 19140)
-@@ -0,0 +1,75 @@
+--- trunk/buildroot/package/libgpg-error/libgpg-error.mk	                        (rev 0)
++++ trunk/buildroot/package/libgpg-error/libgpg-error.mk	2007-07-17 18:11:55 UTC (rev 19141)
+@@ -0,0 +1,74 @@
 +#############################################################
 +#
-+# libgcrypt
++# libgpg-error
 +#
 +#############################################################
-+LIBGCRYPT_VERSION:=1.2.4
-+LIBGCRYPT_SOURCE:=libgcrypt-$(LIBGCRYPT_VERSION).tar.bz2
-+LIBGCRYPT_SITE:=ftp://gd.tuwien.ac.at/privacy/gnupg/libgcrypt/
-+LIBGCRYPT_DIR:=$(BUILD_DIR)/libgcrypt-$(LIBGCRYPT_VERSION)
-+LIBGCRYPT_LIBRARY:=src/libgcrypt.la
-+LIBGCRYPT_DESTDIR:=lib
-+LIBGCRYPT_TARGET_LIBRARY=$(LIBGCRYPT_DESTDIR)/libgcrypt.so
++LIBGPG_ERROR_VERSION:=1.5
++LIBGPG_ERROR_SOURCE:=libgpg-error-$(LIBGPG_ERROR_VERSION).tar.bz2
++LIBGPG_ERROR_SITE:=ftp://gd.tuwien.ac.at/privacy/gnupg/libgpg-error
++LIBGPG_ERROR_DIR:=$(BUILD_DIR)/libgpg-error-$(LIBGPG_ERROR_VERSION)
++LIBGPG_ERROR_LIBRARY:=src/libgpg-error.la
++LIBGPG_ERROR_DESTDIR:=lib
++LIBGPG_ERROR_TARGET_LIBRARY=$(LIBGPG_ERROR_DESTDIR)/libgpg-error.so
 +
-+$(DL_DIR)/$(LIBGCRYPT_SOURCE):
-+	$(WGET) -P $(DL_DIR) $(LIBGCRYPT_SITE)/$(LIBGCRYPT_SOURCE)
++$(DL_DIR)/$(LIBGPG_ERROR_SOURCE):
++	$(WGET) -P $(DL_DIR) $(LIBGPG_ERROR_SITE)/$(LIBGPG_ERROR_SOURCE)
 +
-+$(LIBGCRYPT_DIR)/.source: $(DL_DIR)/$(LIBGCRYPT_SOURCE)
-+	$(BZCAT) $(DL_DIR)/$(LIBGCRYPT_SOURCE) | tar -C $(BUILD_DIR) $(TAR_OPTIONS) -
-+	toolchain/patch-kernel.sh $(LIBGCRYPT_DIR) package/libgcrypt/ libgcrypt\*.patch
-+	touch $@
++$(LIBGPG_ERROR_DIR)/.source: $(DL_DIR)/$(LIBGPG_ERROR_SOURCE)
++	$(BZCAT) $(DL_DIR)/$(LIBGPG_ERROR_SOURCE) | tar -C $(BUILD_DIR) $(TAR_OPTIONS) -
++	toolchain/patch-kernel.sh $(LIBGPG_ERROR_DIR) package/libgpg-error/ libgpg-error\*.patch
++	touch $(LIBGPG_ERROR_DIR)/.source
 +
-+$(LIBGCRYPT_DIR)/.configured: $(LIBGCRYPT_DIR)/.source
-+	(cd $(LIBGCRYPT_DIR); \
++$(LIBGPG_ERROR_DIR)/.configured: $(LIBGPG_ERROR_DIR)/.source
++	(cd $(LIBGPG_ERROR_DIR); \
 +		$(TARGET_CONFIGURE_OPTS) \
 +		$(TARGET_CONFIGURE_ARGS) \
 +		./configure \
@@ -75,44 +75,43 @@ Added: trunk/buildroot/package/libgcrypt/libgcrypt.mk
 +			--bindir=/usr/bin \
 +			--sbindir=/usr/sbin \
 +			--libdir=/lib \
-+			--libexecdir=/$(LIBGCRYPT_DESTDIR) \
++			--libexecdir=/$(LIBGPG_ERROR_DESTDIR) \
 +			--sysconfdir=/etc \
 +			--datadir=/usr/share \
 +			--localstatedir=/var \
 +			--includedir=/include \
-+			--includedir=/usr/include \
 +			--mandir=/usr/man \
 +			--infodir=/usr/info \
 +	);
-+	touch $@
++	touch $(LIBGPG_ERROR_DIR)/.configured;
 +
-+$(LIBGCRYPT_DIR)/$(LIBGCRYPT_LIBRARY): $(LIBGCRYPT_DIR)/.configured
-+	$(MAKE) $(TARGET_CONFIGURE_OPTS) -C $(LIBGCRYPT_DIR)
++$(LIBGPG_ERROR_DIR)/$(LIBGPG_ERROR_LIBRARY): $(LIBGPG_ERROR_DIR)/.configured
++	$(MAKE) CC=$(TARGET_CC) -C $(LIBGPG_ERROR_DIR)
 +
-+$(STAGING_DIR)/$(LIBGCRYPT_TARGET_LIBRARY): $(LIBGCRYPT_DIR)/$(LIBGCRYPT_LIBRARY)
-+	$(MAKE) $(TARGET_CONFIGURE_OPTS) DESTDIR=$(STAGING_DIR) -C $(LIBGCRYPT_DIR) install
-+	touch -c $@
++$(STAGING_DIR)/$(LIBGPG_ERROR_TARGET_LIBRARY): $(LIBGPG_ERROR_DIR)/$(LIBGPG_ERROR_LIBRARY)
++	$(MAKE) DESTDIR=$(STAGING_DIR) -C $(LIBGPG_ERROR_DIR) install
 +
-+$(TARGET_DIR)/$(LIBGCRYPT_TARGET_LIBRARY): $(STAGING_DIR)/$(LIBGCRYPT_TARGET_LIBRARY)
-+	cp -dpf $<* $(TARGET_DIR)/$(LIBGCRYPT_DESTDIR)
 +
-+libgcrypt: uclibc libgpg-error $(TARGET_DIR)/$(LIBGCRYPT_TARGET_LIBRARY)
++$(TARGET_DIR)/$(LIBGPG_ERROR_TARGET_LIBRARY): $(STAGING_DIR)/$(LIBGPG_ERROR_TARGET_LIBRARY)
++	cp -dpf $<* $(TARGET_DIR)/$(LIBGPG_ERROR_DESTDIR)	
 +
-+libgcrypt-source: $(DL_DIR)/$(LIBGCRYPT_SOURCE)
++libgpg-error: uclibc $(TARGET_DIR)/$(LIBGPG_ERROR_TARGET_LIBRARY) 
 +
-+libgcrypt-clean:
-+	rm -f $(TARGET_DIR)/$(LIBGCRYPT_TARGET_LIBRARY)*
-+	-$(MAKE) -C $(LIBGCRYPT_DIR) clean
++libgpg-error-source: $(DL_DIR)/$(LIBGPG_ERROR_SOURCE)
 +
-+libgcrypt-dirclean:
-+	rm -rf $(LIBGCRYPT_DIR)
++libgpg-error-clean:
++	rm -f $(TARGET_DIR)/$(LIBGPG_ERROR_TARGET_LIBRARY)*
++	-$(MAKE) -C $(LIBGPG_ERROR_DIR) clean
 +
-+.PHONY:	libgcrypt
++libgpg-error-dirclean:
++	rm -rf $(LIBGPG_ERROR_DIR)
++
++.PHONY:	libgpg-error
 +#############################################################
 +#
 +# Toplevel Makefile options
 +#
 +#############################################################
-+ifeq ($(strip $(BR2_PACKAGE_LIBGCRYPT)),y)
-+TARGETS+=libgcrypt
++ifeq ($(strip $(BR2_PACKAGE_LIBGPG_ERROR)),y)
++TARGETS+=libgpg-error
 +endif
