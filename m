@@ -1,39 +1,24 @@
-From: ulf at uclibc.org <ulf@uclibc.org>
-Date: Tue, 17 Jul 2007 12:16:36 -0700 (PDT)
-Subject: [Buildroot] svn commit: trunk/buildroot/package/vpnc
-Message-ID: <20070717191636.16ED6A6825@busybox.net>
+From: Cristian Ionescu-Idbohrn <cristian.ionescu-idbohrn@axis.com>
+Date: Tue, 17 Jul 2007 21:14:34 +0200 (CEST)
+Subject: [Buildroot] ruby won't build :(
+Message-ID: <0707172111460.16403@somehost>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Author: ulf
-Date: 2007-07-17 12:16:32 -0700 (Tue, 17 Jul 2007)
-New Revision: 19143
+/data/cii/buildroot/buildroot/build_i486/staging_dir/usr/bin/i486-linux-uclibc-gcc
+-Os -pipe
+-I/data/cii/buildroot/buildroot/build_i486/staging_dir/usr/include
+ --sysroot=/data/cii/buildroot/buildroot/build_i486/staging_dir/ -isysroot
+/data/cii/buildroot/buildroot/build_i486/staging_dir -g -O2 -rdynamic
+-Wl,-export-dynamic main.o dmyext.o libruby-static.a -ldl -lcrypt -lm -o
+miniruby
 
-Log:
-vpnc needs an include dir
-
-Added:
-   trunk/buildroot/package/vpnc/vpnc-0.4.0.patch
+can't find header files for ruby.
+make[1]: *** [all] Error 1
 
 
-Changeset:
-Added: trunk/buildroot/package/vpnc/vpnc-0.4.0.patch
-===================================================================
---- trunk/buildroot/package/vpnc/vpnc-0.4.0.patch	                        (rev 0)
-+++ trunk/buildroot/package/vpnc/vpnc-0.4.0.patch	2007-07-17 19:16:32 UTC (rev 19143)
-@@ -0,0 +1,12 @@
-+diff -urN vpnc-0.4.0-0rig/Makefile vpnc-0.4.0/Makefile
-+--- vpnc-0.4.0-0rig/Makefile	2007-02-19 21:51:12.000000000 +0100
-++++ vpnc-0.4.0/Makefile	2007-07-17 19:59:53.000000000 +0200
-+@@ -35,7 +35,7 @@
-+ RELEASE_VERSION := $(shell cat VERSION)
-+ 
-+ CC=gcc
-+-CFLAGS += -W -Wall -O3 -Wmissing-declarations -Wwrite-strings -g
-++CFLAGS += -W -Wall -O3 -Wmissing-declarations -Wwrite-strings -g -I$(INCLUDE)
-+ CPPFLAGS = -DVERSION=\"$(VERSION)\"
-+ LDFLAGS = -g $(shell libgcrypt-config --libs)
-+ CFLAGS +=  $(shell libgcrypt-config --cflags)
+-- 
+Cristian
