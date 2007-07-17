@@ -1,75 +1,78 @@
-From: Ulf Samuelsson <ulf@atmel.com>
-Date: Tue, 17 Jul 2007 03:04:30 +0200
-Subject: [Buildroot] Purpose of 'package/customize'.
-In-Reply-To: <469C0837.4040608@realitydiluted.com>
-References: <469C0837.4040608@realitydiluted.com>
-Message-ID: <1184634270.18357.43.camel@elrond.sweden.atmel.com>
+From: Hebbar <gururajakr@sanyo.co.in>
+Date: Mon, 16 Jul 2007 22:09:50 -0700 (PDT)
+Subject: [Buildroot] error building toolchain with gettext /libintl
+In-Reply-To: <1184576580.18357.4.camel@elrond.sweden.atmel.com>
+References: <C03A3C267DDF184EA523BBAB577BF924C22CF4@blrexsr1.slti.sanyo.co.in>
+	<1184576580.18357.4.camel@elrond.sweden.atmel.com>
+Message-ID: <11643166.post@talk.nabble.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-m?n 2007-07-16 klockan 19:07 -0500 skrev Steven J. Hill:
-> -----BEGIN PGP SIGNED MESSAGE-----
-> Hash: SHA1
+
+Dear Ulf Samuelsson,
+
+  Thnkx very much for the suggestion + patch + libxml2 update. i almost
+solved that issue. but also i would like 2 mention 1 more thing that i
+observed now. 
+
+ while building fontconfig/freetype, i found that -lxml2 is taken from
+system /usr/lib whereas it is suppose to take from staging_dir/usr/lib. when
+it is checking for -lxml2 it 1st searched from system /usr/lib & gave error
+as invalid file format. i renamed the one in system /usr/lib to
+old_libxml2.so & then "make fontconfig"  went on taking -lxml2 from
+staging_dir/usr/lib. so i doubt many files like this are taken from system
+/usr/lib than from staging_dir/usr/lib. kindly let me know if i need any
+changes/updates. 
+
+
+Regards
+Gururaja
+
+
+
+Ulf Samuelsson-2 wrote:
 > 
-> I am syncing up my multiple production buildroot environments and noticed
-> that this 'customize' package was added.....why? It seems stupid considering
-> that we have a 'target_skeleton' directory present in a number of BSPs in
-> the 'target/devices' subdirectories. Please give a defense as to why it was
-> checked in. Thanks.
+> m?n 2007-07-16 klockan 09:02 +0530 skrev Gururaja Hebbar K R:
+>>  Hi all,
+>> 
+>> I am trying to build a ARM toolchain in buildroot for the 1st time with
+>> below mentioned config. Everything goes fine till gettext building. when
+>> make gettext-target is executed it halts with error saying
+>> 
+>> cp -dpf
+>> /home/guru/project/original/toolchains/buildroot/build_arm/staging_dir/u
+>> sr/lib/libgettext*.so* \
 > 
-
-You should ask Eric, because he checked it in.
-It has been available for a long, long time...
-
-I only removed the error message which was generated
-by copying from a non existing directory.
-
-The main purpose for such a directory, IMHO
-is to allow you to easily separate things which should be
-in the mainstream buildroot and things which 
-you prefer to have locally.
-
-You are right that the contents of the customize directory
-seems to replicate the target_skeleton function.
-In fact it doesn't since there is nothing in package/customize/source.
-This is just a placeholder and the typical user would just drag and drop
-his/her own Config.in and customize.mk overwriting the current contents.
-
-For example, a typical application in a Semiconductor company
-would be to use this for testing a new MCU.
-You would write test programs which exercised 
-peripherals to find out how well they are working.
-There is really noone interested in this S/W outside
-the company, and thus it does not make sense to propagate
-that to the mainstream buildroot.
-
-Another use for this is if you are experimenting with
-packages which are not yet ready to submit to mainstream.
-It is easier to drag and drop the complete contents
-of a directory to another directory than to edit
-the package/Config.in every time.
-
-We had a discussion 6 months ago about this,
-and I got a lot of positive feedback from other users.
-(Bernhard didn't like it though, because he could see it
-beeing misused)
-Personally I do not use it (at least for now), but I can see
-that such a place holder is desirable for others.
-
-
-> - -Steve
-> -----BEGIN PGP SIGNATURE-----
-> Version: GnuPG v1.4.2.2 (GNU/Linux)
-> Comment: Using GnuPG with Mozilla - http://enigmail.mozdev.org
+> I have noted this as well, and the problem is that 
 > 
-> iD8DBQFGnAg3gyK5H2Ic36cRAhsNAJ98aWaM1Juu/N2UAbMm83poZsgHCQCgh6Nf
-> jhpycjFrwuzL4aUlsIo3SeM=
-> =7GoU
-> -----END PGP SIGNATURE-----
+> "staging_dir/usr/lib/libgettext*.so* " was never created.
+> 
+> Instead "staging_dir/usr/lib/libgettext*.a" was created.
+> 
+> This problem has been around for a long time.
+> 
+> 
+> I have yet to figure out how to make the ARM gcc build the 
+> shared library instead of the static library
+> 
+> Is it possible to supply "--with-shared" or something 
+> when configuring?
+> 
+> 
+> Best Regards,
+> Ulf Samuelsson
+> 
+> 
+> 
 > _______________________________________________
 > buildroot mailing list
 > buildroot at uclibc.org
 > http://busybox.net/mailman/listinfo/buildroot
+> 
+
+-- 
+View this message in context: http://www.nabble.com/error-building-toolchain-with-gettext--libintl-tf4084383.html#a11643166
+Sent from the BuildRoot mailing list archive at Nabble.com.
