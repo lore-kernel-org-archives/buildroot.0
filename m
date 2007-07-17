@@ -1,7 +1,7 @@
 From: ulf at uclibc.org <ulf@uclibc.org>
-Date: Tue, 17 Jul 2007 08:17:45 -0700 (PDT)
-Subject: [Buildroot] svn commit: trunk/buildroot/package/libxml2
-Message-ID: <20070717151745.301A8A65A7@busybox.net>
+Date: Tue, 17 Jul 2007 08:19:18 -0700 (PDT)
+Subject: [Buildroot] svn commit: trunk/buildroot/package/dbus
+Message-ID: <20070717151918.BB042A6873@busybox.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -9,59 +9,50 @@ Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
 Author: ulf
-Date: 2007-07-17 08:17:42 -0700 (Tue, 17 Jul 2007)
-New Revision: 19135
+Date: 2007-07-17 08:19:18 -0700 (Tue, 17 Jul 2007)
+New Revision: 19136
 
 Log:
-Copy libxml2 headers to staging_dir (and possibly target_dir)
+Make dbus depend on libxml2 and link with lib
 
 Modified:
-   trunk/buildroot/package/libxml2/libxml2.mk
+   trunk/buildroot/package/dbus/Config.in
+   trunk/buildroot/package/dbus/dbus.mk
 
 
 Changeset:
-Modified: trunk/buildroot/package/libxml2/libxml2.mk
+Modified: trunk/buildroot/package/dbus/Config.in
 ===================================================================
---- trunk/buildroot/package/libxml2/libxml2.mk	2007-07-17 13:28:31 UTC (rev 19134)
-+++ trunk/buildroot/package/libxml2/libxml2.mk	2007-07-17 15:17:42 UTC (rev 19135)
-@@ -46,12 +46,21 @@
- $(TARGET_DIR)/usr/lib/libxml2.a: $(STAGING_DIR)/usr/lib/libxml2.so
- 	mkdir -p $(TARGET_DIR)/usr/include
- 	cp -dpf $(STAGING_DIR)/usr/lib/libxml2.*a $(TARGET_DIR)/usr/lib/
--#	cp -dpf $(STAGING_DIR)/usr/include/mad.h $(TARGET_DIR)/usr/include/
-+#	cp -dpf $(STAGING_DIR)/usr/include/libxml $(TARGET_DIR)/usr/include/
+--- trunk/buildroot/package/dbus/Config.in	2007-07-17 15:17:42 UTC (rev 19135)
++++ trunk/buildroot/package/dbus/Config.in	2007-07-17 15:19:18 UTC (rev 19136)
+@@ -2,6 +2,7 @@
+ 	bool "dbus"
+ 	default n
+ 	select BR2_PACKAGE_EXPAT
++	select BR2_PACKAGE_LIBXML2
+ 	help
+ 	  The D-Bus message bus system.
  
--libxml2:	uclibc $(TARGET_DIR)/usr/lib/libxml2.so
-+libxml2:	uclibc $(TARGET_DIR)/usr/lib/libxml2.so libxml2-headers
+
+Modified: trunk/buildroot/package/dbus/dbus.mk
+===================================================================
+--- trunk/buildroot/package/dbus/dbus.mk	2007-07-17 15:17:42 UTC (rev 19135)
++++ trunk/buildroot/package/dbus/dbus.mk	2007-07-17 15:19:18 UTC (rev 19136)
+@@ -51,7 +51,7 @@
+ 	touch $@
  
--libxml2-headers: $(TARGET_DIR)/usr/lib/libxml2.a
-+$(STAGING_DIR)/usr/include/libxml:	$(TARGET_DIR)/usr/lib/libxml2.a
-+	cp -af $(LIBXML2_DIR)/include/libxml $(STAGING_DIR)/usr/include/libxml2
+ $(DBUS_DIR)/$(DBUS_BINARY): $(DBUS_DIR)/.configured
+-	$(MAKE) DBUS_BUS_LIBS="$(STAGING_DIR)/usr/lib/libexpat.so" -C $(DBUS_DIR) all
++	$(MAKE) DBUS_BUS_LIBS="$(STAGING_DIR)/usr/lib/libexpat.so $(STAGING_DIR)/usr/lib/libxml2.so" -C $(DBUS_DIR) all
  
-+$(TARGET_DIR)/usr/include:	libxml2-headers
-+	cp -af $(LIBXML2_DIR)/include/libxml $(TARGET_DIR)/usr/include/libxml2
-+
-+
-+libxml2-headers:	$(STAGING_DIR)/usr/include/libxml2
-+
-+libxml2-target-headers: $(TARGET_DIR)/usr/include/libxml2
-+
- libxml2-source: $(DL_DIR)/$(LIBXML2_SOURCE)
+ $(STAGING_DIR)/usr/lib/libdbus-1.so: $(DBUS_DIR)/$(DBUS_BINARY)
+ 	$(MAKE) DESTDIR=$(STAGING_DIR) -C $(DBUS_DIR)/dbus install
+@@ -70,7 +70,7 @@
+ 	-rmdir --ignore-fail-on-non-empty $(TARGET_DIR)/usr/share
+ 	rm -rf $(TARGET_DIR)/etc/rc.d
  
- libxml2-clean:
-@@ -64,6 +73,8 @@
+-dbus: uclibc expat $(TARGET_DIR)/$(DBUS_TARGET_BINARY)
++dbus: uclibc expat libxml2-headers $(TARGET_DIR)/$(DBUS_TARGET_BINARY)
  
- libxml2-dirclean:
- 	rm -rf $(LIBXML2_DIR)
-+
-+.PHONY:	libxml2-headers libxml2-target-headers
- #############################################################
- #
- # Toplevel Makefile options
-@@ -73,5 +84,5 @@
- TARGETS+=libxml2
- endif
- ifeq ($(strip $(BR2_PACKAGE_LIBXML2_TARGET_HEADERS)),y)
--TARGETS+=libxml2-headers
-+TARGETS+=libxml2-target-headers
- endif
+ dbus-clean:
+ 	rm -f $(TARGET_DIR)/etc/dbus-1/session.conf
