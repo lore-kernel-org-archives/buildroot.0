@@ -1,23 +1,33 @@
-From: BuraphaLinux Server <buraphalinuxserver@gmail.com>
-Date: Wed, 18 Jul 2007 18:31:54 +0700
-Subject: [Buildroot] hdparm
-Message-ID: <5d75f4610707180431o54bab270s281655ab7d2d4063@mail.gmail.com>
+From: Ralph Siemsen <ralphs@netwinder.org>
+Date: Wed, 18 Jul 2007 07:45:50 -0400
+Subject: [Buildroot] linux26 compile error
+In-Reply-To: <52010.75.129.164.68.1184752475.squirrel@kujawski.org>
+References: <52010.75.129.164.68.1184752475.squirrel@kujawski.org>
+Message-ID: <20070718114550.GA22077@marvin.netwinder.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-When using the hdparm package, it will install hdparm on top of the
-buildroot symlink for hdparm which erases your buildroot (well, ok,
-replaces buildroot so that every buildroot application is the real
-hdparm).  Attached is a patch to first remove any existing hdparm
-before installing the new one.
-This is with buildroot subversion version 19152.
--------------- next part --------------
-A non-text attachment was scrubbed...
-Name: hdparm.patch
-Type: text/x-diff
-Size: 551 bytes
-Desc: not available
-Url : http://busybox.net/lists/buildroot/attachments/20070718/787504bd/attachment.bin 
+On Wed, Jul 18, 2007 at 04:54:35AM -0500, Frank Kujawski wrote:
+> 
+> I am getting a compile error on:
+> linux26: cross-depmod26
+> $(TARGET_DIR)/lib/modules/$(LINUX26_VERSION)/modules.dep
+> $(TARGET_DIR)/boot/$(LINUX26_FORMAT)
+
+This is caused by a conditional check in target/linux/Makefile.in:
+ifneq ($(strip $(LINUX26_VERSION)),$(strip $(LINUX_HEADERS_VERSION)))
+surrounding the part that defindes the $(LINUX26_DIR)/.patched
+target.  You have LINUX26_VERSION matching LINUX_HEADERS_VERSION
+and therefore all the code inside the "ifneq" is skipped.  This
+results in the make error: "no rule to make target"
+
+If you do not need to build a kernel, the simplest fix would be
+to disable the linux26 target entirely (turn off BR2_PACKAGE_LINUX).
+
+I'm not sure why the ifneq is there in the first place.  It may
+have made sense prior to the BSP patch that was recently added.
+
+-R
