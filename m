@@ -1,16 +1,23 @@
-From: Hebbar <gururajakr@sanyo.co.in>
-Date: Tue, 17 Jul 2007 22:34:02 -0700 (PDT)
+From: Gabbar Singh <gabbar_singh_new@yahoo.com>
+Date: Wed, 18 Jul 2007 02:08:07 -0700 (PDT)
 Subject: [Buildroot] Buildroot compilation errors (libintl) in cygwin.
-In-Reply-To: <358465.84284.qm@web52107.mail.re2.yahoo.com>
-References: <358465.84284.qm@web52107.mail.re2.yahoo.com>
-Message-ID: <11662767.post@talk.nabble.com>
+In-Reply-To: <11662767.post@talk.nabble.com>
+Message-ID: <457674.31485.qm@web52109.mail.re2.yahoo.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+Hi,
+Thanks for the quick reply. But my makefile.in already has that patch. I am using the latest buildroot. In fact I downloaded it on monday, july 16.
+I have libintl_gettext installed on my cygwin but still these errors keep on popping up.
+Any info will be helpful.
 
+Regards,
+Naren
+
+Hebbar <gururajakr@sanyo.co.in> wrote: 
 This is an error due a small bus in a make file. the patch is already been
 set. u can use the latest version to solve it. Also make sure u have gettext
 installed
@@ -85,7 +92,7 @@ Gabbar Singh wrote:
 > rectory
 > make[2]: /home/arm/usr/bin/arm-linux-uclibcgnueabi-gcc: Command not found
 > make[2]: /home/arm/usr/bin/arm-linux-uclibcgnueabi-gcc: Command not found
-> /usr/bin/gcc -I/usr/include/ncurses -DCURSES_LOC="<ncurses.h>" -DLOCALE   
+> /usr/bin/gcc -I/usr/include/ncurses -DCURSES_LOC="" -DLOCALE   
 > conf.
 > o  zconf.tab.o -o conf
 > conf.o:conf.c:(.text+0xb2): undefined reference to `_libintl_gettext'
@@ -121,3 +128,16 @@ Gabbar Singh wrote:
 -- 
 View this message in context: http://www.nabble.com/Buildroot-compilation-errors-%28libintl%29-in-cygwin.-tf4101102.html#a11662767
 Sent from the BuildRoot mailing list archive at Nabble.com.
+
+_______________________________________________
+buildroot mailing list
+buildroot at uclibc.org
+http://busybox.net/mailman/listinfo/buildroot
+
+
+       
+---------------------------------
+Get the Yahoo! toolbar and be alerted to new email wherever you're surfing. 
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: http://busybox.net/lists/buildroot/attachments/20070718/bb2a2e04/attachment.htm 
