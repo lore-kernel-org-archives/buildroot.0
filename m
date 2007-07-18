@@ -1,48 +1,78 @@
-From: Jerry Richards <jerryr@tonecommander.com>
-Date: Wed, 18 Jul 2007 11:19:46 -0700
-Subject: [Buildroot] Buildroot Build Procedure
-Message-ID: <000b01c7c968$39211680$2c48a8c0@greyhawk.tonecommander.com>
+From: Rod Boyce <buildroot@teamboyce.co.uk>
+Date: Wed, 18 Jul 2007 20:45:26 +0100
+Subject: [Buildroot] linux26 compile error
+In-Reply-To: <55400.75.129.164.68.1184768952.squirrel@kujawski.org>
+References: <52010.75.129.164.68.1184752475.squirrel@kujawski.org>	<20070718114550.GA22077@marvin.netwinder.org>
+	<55400.75.129.164.68.1184768952.squirrel@kujawski.org>
+Message-ID: <469E6DD6.2010106@teamboyce.co.uk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello All,
+Frank Kujawski wrote:
+> As it would be, I do need the kernel.  Could I replace this:
+>
+> $(LINUX26_DIR)/.patched: $(LINUX26_DIR)/.unpacked
+>         toolchain/patch-kernel.sh $(LINUX26_DIR) $(LINUX26_PATCH_DIR)
+>         touch $@
+> endif # ($(LINUX26_VERSION),$(LINUX_HEADERS_VERSION))
+>
+> with something like
+>
+> $(LINUX26_DIR)/.patched: $(LINUX26_DIR)/.unpacked
+>         toolchain/patch-kernel.sh $(LINUX26_DIR) $(LINUX26_PATCH_DIR)
+>         touch $@
+> else # ($(LINUX26_VERSION),$(LINUX_HEADERS_VERSION))
+> $(LINUX26_DIR)/.patched:
+>         touch $@
+> endif # ($(LINUX26_VERSION),$(LINUX_HEADERS_VERSION))
+>
+>
+>   
+>> On Wed, Jul 18, 2007 at 04:54:35AM -0500, Frank Kujawski wrote:
+>>     
+>>> I am getting a compile error on:
+>>> linux26: cross-depmod26
+>>> $(TARGET_DIR)/lib/modules/$(LINUX26_VERSION)/modules.dep
+>>> $(TARGET_DIR)/boot/$(LINUX26_FORMAT)
+>>>       
+>> This is caused by a conditional check in target/linux/Makefile.in:
+>> ifneq ($(strip $(LINUX26_VERSION)),$(strip $(LINUX_HEADERS_VERSION)))
+>> surrounding the part that defindes the $(LINUX26_DIR)/.patched
+>> target.  You have LINUX26_VERSION matching LINUX_HEADERS_VERSION
+>> and therefore all the code inside the "ifneq" is skipped.  This
+>> results in the make error: "no rule to make target"
+>>
+>> If you do not need to build a kernel, the simplest fix would be
+>> to disable the linux26 target entirely (turn off BR2_PACKAGE_LINUX).
+>>
+>> I'm not sure why the ifneq is there in the first place.  It may
+>> have made sense prior to the BSP patch that was recently added.
+>>
+>> -R
+>>
+>>     
+>
+> _______________________________________________
+> buildroot mailing list
+> buildroot at uclibc.org
+> http://busybox.net/mailman/listinfo/buildroot
+>   
+All,
 
-My understanding is my buildroot/Makefile will re-build the toolchain and
-the
-buildroot/build_mipsel_nofpu/linux-2.6.10_dev-malta-mips2_fp_len/Makefile
-will re-build my kernel.  This is correct?
+I commented out the ifdef in the makefile until this patch was completed 
+as this looks to me to be an incomplete BSP patch at the moment.  
+Attached is my temporary fix until this is completed.
 
-I also want to write some applications to the root filesystem prior to
-compressing it (i.e. to CRAMFS or SQUASHFS).
+Regards,
+Rod Boyce
 
-Since the buildroot make creates the compressed filesystem, I find I must
-run it twice (steps 2 & 7, below) as shown in the following complete
-re-build:
-
-	1) In <>/buildroot, execute "make clean".
-	2) In <>/buildroot, execute "make".
-	3) In <>/buildroot/build_m*/lin*, execute "make clean".
-	4) In <>/buildroot/build_m*/lin*, execute "make".
-	5) In <>/apps, execute "make clean".
-	6) In <>/apps, execute "make".
-	7) Copy application(s) to <>/buildroot/build_m*/root/...
-	8) In <>/buildroot, execute "make".   <------- TO CREATE COMPRESSED FS
-	9) Done.
-
-Is this the correct procedure?  Is there a shortcut I'm missing?
-
-Then, if I want to just do a build (not re-build) of everything I should do
-the following?
-
-	2) In <>/buildroot, execute "make".
-	4) In <>/buildroot/build_m*/lin*, execute "make".
-	6) In <>/apps, execute "make".
-	7) Copy application(s) to <>/buildroot/build_m*/root/...
-	8) In <>/buildroot, execute "make".   <------- TO CREATE COMPRESSED FS
-	9) Done.
-
-Best Regards,
-Jerry
+-------------- next part --------------
+A non-text attachment was scrubbed...
+Name: linux26-build.patch
+Type: text/x-patch
+Size: 844 bytes
+Desc: not available
+Url : http://busybox.net/lists/buildroot/attachments/20070718/37c6777b/attachment.bin 
