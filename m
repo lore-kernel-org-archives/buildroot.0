@@ -1,41 +1,55 @@
-From: Rick Foos <rick@synchromeshcomputing.com>
-Date: Tue, 17 Jul 2007 16:42:59 -0500
-Subject: [Buildroot] [PATCH] fix make clean for package/dropbear
-Message-ID: <013b01c7c8bb$71f06d10$8200000a@k2>
+From: Hebbar <gururajakr@sanyo.co.in>
+Date: Tue, 17 Jul 2007 19:59:52 -0700 (PDT)
+Subject: [Buildroot] make fontconfig fails due to missing libxml header files
+Message-ID: <11661660.post@talk.nabble.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-make clean fails when dropbear is selected.
 
-# make clean
-# dropbear makefile does not have uninstall target.
-#
-# make[1]: Entering directory 
-`/home/rick/build/mindspeed_build_arm/dropbear-0.49'
-# make[1]: *** No rule to make target `uninstall'.  Stop.
-#make[1]: Leaving directory 
-`/home/rick/build/mindspeed_build_arm/dropbear-0.49'
-#make: *** [dropbear-clean] Error 2
+Hi all,
+While buile Fontconfig with latest buildroot snapsnot i get error as 
 
-In dropbear.mk, the install target was modified in the past, and manually 
-installs the package from dropbear.mk.
+/home/project/toolchains/buildroot/build_arm/staging_dir/usr/bin/arm-linux-uclibcgnueabi-gcc
+-Os -pipe
+-I/home/project/toolchains/buildroot/build_arm/staging_dir/usr/include
+--sysroot=/home/project/toolchains/toolchains/buildroot/build_arm/staging_dir/
+-isysroot
+/home/project/toolchains/toolchains/buildroot/build_arm/staging_dir
+-DHAVE_CONFIG_H -I. -I. -I.. -I.. -I../src
+-I/home/project/toolchains/buildroot/build_arm/staging_dir/include/freetype2
+-I/home/project/toolchains/toolchains/buildroot/build_arm/staging_dir/include
+-Wall -Wpointer-arith -Wstrict-prototypes -Wmissing-prototypes
+-Wmissing-declarations -Wnested-externs -fno-strict-aliasing
+-DFC_CACHEDIR=\"/var/cache/fontconfig\" -DFONTCONFIG_PATH=\"/etc/fonts\" -g
+-O2 -MT fcxml.lo -MD -MP -MF .deps/fcxml.Tpo -c fcxml.c  -fPIC -DPIC -o
+.libs/fcxml.o
+fcxml.c:32:27: error: libxml/parser.h: No such file or directory
 
-The clean method called the dropbear makefile with uninstall. The dropbear 
-makefile no longer contains uninstall, and this uninstall call was now a bug 
-since the install was done in dropbear.mk.
+This is because it searched for libxml header files in
+staging_dir/usr/include/ whereas it should look inside
+staging_dir/usr/include/libxml2 because this is the place where "make
+libxml2" places the libxml folder & respective header files.
 
-This patch comments out the uninstall call, and does the correct uninstall 
-based on the existing commands in dropbear.mk.
+Also i tried to move libxml folder from staging_dir/usr/include/libxml2 to
+staging_dir/usr/include/ and now when i "make fontconfig" i get error as 
 
-Cheers,
-Rick Foos
--------------- next part --------------
-A non-text attachment was scrubbed...
-Name: dropbear-clean.patch
-Type: application/octet-stream
-Size: 1191 bytes
-Desc: not available
-Url : http://busybox.net/lists/buildroot/attachments/20070717/0b06d11a/attachment.obj 
+./src/.libs/libfontconfig.so: undefined reference to
+`xmlCreatePushParserCtxt'
+../src/.libs/libfontconfig.so: undefined reference to `xmlSAX2GetLineNumber'
+../src/.libs/libfontconfig.so: undefined reference to `xmlParseChunk'
+../src/.libs/libfontconfig.so: undefined reference to `xmlCtxtGetLastError'
+../src/.libs/libfontconfig.so: undefined reference to `xmlFreeParserCtxt'
+collect2: ld returned 1 exit status
+
+These variables are defined inside libxml/parser.h
+
+ Kindly help me to fix these. Thankx in advance
+
+Regards
+Gururaja
+-- 
+View this message in context: http://www.nabble.com/make-fontconfig-fails-due-to-missing-libxml-header-files-tf4100770.html#a11661660
+Sent from the BuildRoot mailing list archive at Nabble.com.
