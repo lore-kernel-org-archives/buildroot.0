@@ -1,63 +1,309 @@
-From: Ralph Siemsen <ralphs@netwinder.org>
-Date: Thu, 19 Jul 2007 09:40:24 -0400
-Subject: [Buildroot] Buildroot Build Procedure
-In-Reply-To: <000b01c7c968$39211680$2c48a8c0@greyhawk.tonecommander.com>
-References: <000b01c7c968$39211680$2c48a8c0@greyhawk.tonecommander.com>
-Message-ID: <20070719134024.GA23483@marvin.netwinder.org>
+From: Rex Ashbaugh <rexa@xeratech.com>
+Date: Thu, 19 Jul 2007 06:51:05 -0700
+Subject: [Buildroot] Buildroot compilation errors (libintl) in cygwin.
+In-Reply-To: <469F08C6.4060105@gmail.com>
+References: <33486.24130.qm@web52108.mail.re2.yahoo.com>
+	<469F08C6.4060105@gmail.com>
+Message-ID: <6311fe0b0707190651yc690699ne5f14452b56155ad@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Wed, Jul 18, 2007 at 11:19:46AM -0700, Jerry Richards wrote:
+Just an FYI to all those building a toolchain under cygwin..
+The last time I built buildroot under cygwin, there was a particularly nasty
+bug in which one of the uClibc libraries (*.so) was built incorrectly.
+It was built with a mix of both static and dynamic functions, instead of
+just the dynamic functions.
+This happened because the build process used a filename twice, both with an
+upper case *.S and lower case *.s suffix, but for different purposes. (I
+can't remember which file it was now)
+Because cygwin has case insensitivity, one file overwrote the other,
+corrupting the build.
+The failure was silent. There was no clue it was happening. I came across
+the problem later when trying to build an app with the toolchain that made
+use of the library, causing the app either to fail to build, or to crash at
+runtime. This caused me alot of hair pulling.
+Seeing no easy fix for this, I solved the problem by building the same
+buildroot version under linux and copying the correctly built uClibc library
+over to my cygwin toolchain.
+If you absolutely need to build under cygwin, its not a bad strategy to
+build under linux in parallel to gain understanding.
 
-> My understanding is my buildroot/Makefile will re-build the toolchain and
-> the
-> buildroot/build_mipsel_nofpu/linux-2.6.10_dev-malta-mips2_fp_len/Makefile
-> will re-build my kernel.  This is correct?
+-Rex
 
-Not quite.  The top-level makefile will rebuild any targets that 
-are required.  The first time through, this will include the toolchain,
-but once that is built (in toolchain_build_mipsel_nofpu in your case)
-then running top-level make again will not rebuilt it again.
-
-Similarly for the "packages".  They will get built in subdirectories
-of build_mipsel_nofpu (or more generally, build_<arch> directory).
-Once a package has copied its binary into the root filesystem area,
-then "make" knows it does not have to rebuilt the target anymore.
-
-To force a rebuild of certain packages, you generally need to delete
-the corresponding subdirectory under build_<arch>, or at least run
-"make clean" in that directory.  Note that the top-level make allows
-you to do this conveniently on a per-package basis by running, for example:
-
-   make busybox-clean   (cleans up build_<arch>/busybox-1.x.y)
-
-If you want to rebuild all your applications (but not the toolchain)
-then you can remove the build_<arch> directory completely, this is
-supposed to happen when you run "make dirclean" though that usually has 
-some hiccups.
-
-> I also want to write some applications to the root filesystem prior to
-> compressing it (i.e. to CRAMFS or SQUASHFS).
+On 7/18/07, Tom <fivemiletom@gmail.com> wrote:
 >
-> Since the buildroot make creates the compressed filesystem, I find I must
-> run it twice (steps 2 & 7, below) as shown in the following complete
-> re-build:
->    [...]
-> Is this the correct procedure?  Is there a shortcut I'm missing?
-
-Well you *could* do the very complicated process you described,
-and hope that you get each step right every time you make a change.
-You could even write a little batch file to help you out...
-
-However, I would recommend you instead look at the documentation
-at http://buildroot.uclibc.org/buildroot.html in particular the
-section on Extending Buildroot with more Software.  This will show
-you how to add your own software easily to buildroot, and take part
-in the "normal" build process.  You won't have to run make twice,
-and you won't have to go through any complicated shell commands
-each time you want to change something.
-
--R
+> Gabbar Singh wrote:
+> > Thanks a lot for the input Rex.
+> > I did indeed add -lintl to the makefile and the error stopped. So every
+> > place where there is any configuration happening, I need to change that
+> > makefile.. correct ?
+> > I had to make changes in two places to make it run.
+>
+> As Rex said, there were and are several places, some of which not
+> directly in buildroot but in the extracted archives. Gabbar, if you can
+> give us a list of all the places that you needed to fix for a more
+> recent buildroot than the one I was talking about below, that would be
+> appreciated.
+>
+> Thanks,
+> Tom
+>
+>
+> ---
+> Hi Bernhard, All
+>
+> Enclosed is cygwin-1.patch for buildroot-20050524.tar.bz2.
+>
+> - requires cygwin 1.5.24 with development package
+>
+> - configure buildroot for arm, arm-generic, eabi, "pc-cygwin",
+> uclibc-0.9.29, buildroot toolchain with gcc 4.1.2
+>
+> - FIRST do one build attempt (will fail, just to get and extract uclibc)
+>
+> - apply cygwin-1.patch with p1 (it is at very bottom of this email)
+>
+> - THEN do another build attempt, which will build
+>    gmp, mpfr, newlib and arm-linux-uclibcgnueabi-gcc-4.1.2.exe
+>    before failing (*).
+>
+> Thanks
+> Tom
+>
+> PS: if someone could take care of the apple part, that would be great.
+> Also, the one fix belongs to uclibc and not to buildroot...
+>
+>
+> (*) it fails when cross compiling uclibc, maybe my UCLIBC options? Hints
+> appreciated, need this to test on target.
+>
+> make MAKE="make -j1" -C /tw/buildroot/toolchain_build_arm/uClibc-0.9.29
+> \
+>                  PREFIX= \
+>                  DEVEL_PREFIX=/ \
+>                  RUNTIME_PREFIX=/ \
+>                  HOSTCC="gcc" \
+>                  all
+> arm-linux-uclibcgnueabi-gcc: n: No such file or directory
+> make[1]: Entering directory
+> `/tw/buildroot/toolchain_build_arm/uClibc-0.9.29'
+> arm-linux-uclibcgnueabi-gcc: n: No such file or directory
+> make[2]: `conf' is up to date.
+> arm-linux-uclibcgnueabi-gcc: n: No such file or directory
+>    CC ldso/ldso/ldso.oS
+> arm-linux-uclibcgnueabi-gcc: n: No such file or directory
+> make[1]: *** [ldso/ldso/ldso.oS] Error 1
+> make[1]: Leaving directory
+> `/tw/buildroot/toolchain_build_arm/uClibc-0.9.29'
+> make: *** [/tw/buildroot/toolchain_build_arm/uClibc-0.9.29/lib/libc.a]
+> Error 2
+>
+>
+>
+>
+>
+> > On Fri, May 25, 2007 at 11:52:35PM -0700, Tom wrote:
+> >> Hi Bernhard and all,
+> >>
+> >> sorry if this thread is a little out of sequence, had problems with
+> text attachment.
+> >>
+> >> Bernhard Fischer wrote:
+> >>> Before you report it to the mpfr folks, please paste the error here,
+> >>> since i suspect that it could have to do something with the
+> >>> binary/library name extensions, which (IIRC) we currently do not
+> handle
+> >>> at all (there's a bug somewhere about this, if memory serves me
+> right).
+> >>>
+> >> You were right about extensions, below is the error as produced by
+> >> buildroot-20050516 built, I just added -verbose for ld.
+> >> It can not resolve the depency to libgmp.so, because cygwin ld
+> assumes libs to end in .a, .lib or .dll, and will append them to .so
+> libs, which thus can never be found.
+> >> Can I help to add support for this?
+> >
+> > Yes, you can.
+> >
+> > Depending on the target, set
+> > ifneq $($(findstring linux,$(BR2_GNU_BUILD_SUFFIX)),)
+> > EXEEXT:=
+> > LIBEXT:=.a
+> > SHREXT:=.so
+> > endif
+> > ifneq $($(findstring apple,$(BR2_GNU_BUILD_SUFFIX)),)
+> > EXEEXT:=.pear
+> > LIBEXT:=.dunno
+> > SHREXT:=.dylib
+> > endif
+> > ifneq $($(findstring cygwin,$(BR2_GNU_BUILD_SUFFIX)),)
+> > EXEEXT:=.exe
+> > LIBEXT:=.dunno
+> > SHREXT:=.dll
+> > endif
+> > ifneq $($(findstring mingw,$(BR2_GNU_BUILD_SUFFIX)),)
+> > EXEEXT:=.exe
+> > LIBEXT:=.dunno
+> > SHREXT:=.dll
+> > endif
+> >
+> > in the toplevel Makefile, before the
+> > all: world
+> > target, and use them accordingly.
+> >
+> >
+> > While you're at it, it would be awesome if you could deal with this too:
+> > We want to be able to select which flavour of lib is built (shared or
+> > static) with a single config-option.
+> > So, instead of changing all ".so" blindly to $(SHREXT), change it to
+> > $(LIBTGTEXT) which is set either to
+> >
+> > ifeq $($(BR2_DEFAULT_LIB_TARGET),shared)
+> > LIBTGTEXT=$(SHREXT)
+> > else
+> > LIBTGTEXT=$(LIBEXT)
+> > endif
+> >
+> > below the newly added block i mentioned above.
+> >
+> > TIA and cheers,
+> >
+>
+>
+> cygwin-1.patch:
+>
+> --- buildroot.orig/Makefile    2007-05-29 11:55:38.025317600 -0700
+> +++ buildroot/Makefile    2007-05-29 19:54:26.130869700 -0700
+> @@ -66,7 +66,32 @@
+>   #
+>   #############################################################
+>
+> +ifneq (,$(findstring linux,$(BR2_GNU_BUILD_SUFFIX)))
+> +EXEEXT:=
+> +LIBEXT:=.a
+> +SHREXT:=.so
+> +endif
+> +ifneq (,$(findstring apple,$(BR2_GNU_BUILD_SUFFIX)))
+> +EXEEXT:=.pear
+> +LIBEXT:=.dunno
+> +SHREXT:=.dylib
+> +endif
+> +ifneq (,$(findstring cygwin,$(BR2_GNU_BUILD_SUFFIX)))
+> +EXEEXT:=.exe
+> +LIBEXT:=.lib
+> +SHREXT:=.dll
+> +endif
+> +ifneq (,$(findstring mingw,$(BR2_GNU_BUILD_SUFFIX)))
+> +EXEEXT:=.exe
+> +LIBEXT:=.lib
+> +SHREXT:=.dll
+> +endif
+>
+> +ifeq ($(BR2_PREFER_STATIC_LIB),y)
+> +LIBTGTEXT=$(LIBEXT)
+> +else
+> +LIBTGTEXT=$(SHREXT)
+> +endif
+>
+>   all:   world
+>
+> --- buildroot.orig/Config.in    2007-05-29 11:54:55.651131200 -0700
+> +++ buildroot/Config.in    2007-05-29 19:39:05.976662000 -0700
+> @@ -373,6 +373,19 @@
+>       help
+>         This option hides outdated/obsolete versions of packages.
+>
+> +config BR2_PREFER_STATIC_LIB
+> +    bool "prefer static libraries"
+> +    default n
+> +    help
+> +      Where possible, use static libraries.
+> +      This increases your code size a lot and should only be
+> +      used with a good reason why not use the default, which
+> +      is dynamic libraries.
+> +
+> +      If unsure, say No.
+> +
+> +      WARNING: This is highly experimental at the moment.
+> +
+>   endmenu
+>
+>   source "toolchain/Config.in"
+> --- buildroot.orig/package/gmp/gmp.mk    2007-05-29 11:56:19.118278600-0700
+> +++ buildroot/package/gmp/gmp.mk    2007-05-29 19:34:47.184755900 -0700
+> @@ -18,6 +18,18 @@
+>   GMP_BE:=no
+>   endif
+>
+> +ifeq ($(BR2_PREFER_STATIC_LIB),y)
+> +GMP_LIB_FLAGS:=--enable-static --disable-shared
+> +else
+> +GMP_LIB_FLAGS:=--disable-static --enable-shared
+> +endif
+> +
+> +ifeq ($(EXEEXT),".exe")
+> +GMP_CPP_FLAGS:=-DDLL_EXPORT
+> +else
+> +GMP_CPP_FLAGS:=-DDLL_EXPORT
+> +endif
+> +
+>   $(DL_DIR)/$(GMP_SOURCE):
+>        $(WGET) -P $(DL_DIR) $(GMP_SITE)/$(GMP_SOURCE)
+>
+> @@ -35,6 +47,7 @@
+>           $(TARGET_CONFIGURE_OPTS) \
+>           CFLAGS="$(TARGET_CFLAGS)" \
+>           LDFLAGS="$(TARGET_LDFLAGS)" \
+> +        CPPFLAGS="$(GMP_CPP_FLAGS)" \
+>           ac_cv_c_bigendian=$(GMP_BE) \
+>           $(GMP_DIR)/configure \
+>           --target=$(GNU_TARGET_NAME) \
+> @@ -52,7 +65,7 @@
+>           --includedir=/include \
+>           --mandir=/usr/man \
+>           --infodir=/usr/info \
+> -        --enable-shared \
+> +        $(GMP_LIB_FLAGS) \
+>           $(DISABLE_NLS) \
+>       );
+>       touch $@
+> @@ -105,12 +118,12 @@
+>           CC_FOR_BUILD="$(HOSTCC)" \
+>           CC="$(HOSTCC)" \
+>           CFLAGS="$(HOST_CFLAGS)" \
+> +        CPPFLAGS="$(GMP_CPP_FLAGS)" \
+>           $(GMP_DIR)/configure \
+>           --prefix="$(GMP_HOST_DIR)" \
+>           --build=$(GNU_HOST_NAME) \
+>           --host=$(GNU_HOST_NAME) \
+> -        --enable-shared \
+> -        --enable-static \
+> +        $(GMP_LIB_FLAGS) \
+>           $(DISABLE_NLS) \
+>       );
+>       touch $@
+> ---
+> buildroot.orig/toolchain_build_arm/uClibc-0.9.29/extra/config/Makefile
+> 2007-04-17 04:38:21.000000000 -0700
+> +++ buildroot/toolchain_build_arm/uClibc-0.9.29/extra/config/Makefile
+> 2007-05-29 19:34:47.200380600 -0700
+> @@ -21,7 +21,7 @@
+>       $(HOSTCC) $(HOST_EXTRACFLAGS) $(HOSTCFLAGS) $(HOSTCFLAGS_$@)
+> $(HOST_LOADLIBES) $< -o $@
+>
+>   $(host-cmulti): %: $(host-cobjs) $(host-cshlib)
+> -    $(HOSTCC) $(HOST_EXTRACFLAGS) $(HOSTCFLAGS) $(HOSTCFLAGS_$@)
+> $(HOST_LOADLIBES) $($@-objs) -o $@
+> +    $(HOSTCC) $(HOST_EXTRACFLAGS) $(HOSTCFLAGS) $(HOSTCFLAGS_$@)
+> $(HOST_LOADLIBES) $($@-objs) -lintl -o $@
+>
+>   $(host-cobjs): %.o: %.c
+>       $(HOSTCC) $(HOST_EXTRACFLAGS) $(HOSTCFLAGS) $(HOSTCFLAGS_$@) -c $<
+> -o $@
+>
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: http://busybox.net/lists/buildroot/attachments/20070719/15bede34/attachment.htm 
