@@ -1,52 +1,99 @@
-From: Frank Kujawski <buildroot@fp8.com>
-Date: Wed, 18 Jul 2007 20:41:50 -0500 (CDT)
-Subject: [Buildroot] linux26 compile error
-In-Reply-To: <469E8600.5000802@teamboyce.co.uk>
-References: <52010.75.129.164.68.1184752475.squirrel@kujawski.org>
-	<20070718114550.GA22077@marvin.netwinder.org>
-	<55400.75.129.164.68.1184768952.squirrel@kujawski.org>
-	<469E6DD6.2010106@teamboyce.co.uk>
-	<42345.75.129.164.68.1184788955.squirrel@kujawski.org>
-	<469E8600.5000802@teamboyce.co.uk>
-Message-ID: <47538.75.129.164.68.1184809310.squirrel@kujawski.org>
+From: William Pettersson <enigma@strudel-hound.com>
+Date: Thu, 19 Jul 2007 13:55:55 +1000
+Subject: [Buildroot] ARCH not being sent by make menuconfig - kernel
+ compile fails to start
+In-Reply-To: <469EB5BB.1090506@strudel-hound.com>
+References: <469DE854.6090401@strudel-hound.com>
+	<469EB5BB.1090506@strudel-hound.com>
+Message-ID: <469EE0CB.2090401@strudel-hound.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Rod,
-  Thank you.
-  I did not define BR2_BOARD_PATH, I defined it and made the directory.
-  Now I am consuming cpu cycles.
-  Thanks for just enough help,
-    Frank
 
-LINUX26_PATCH_DIR=$(BR2_BOARD_PATH)/kernel-patches/
 
-[snip]
->>
->>
->>
-> Frank,
->
->  From your output log message it seems that the system is looking in th
-> ewrong place for the kernel-patches directory.  In your case i slooks
-> like it is looking off the root directory for this which looks very odd
-> to me.
->   I cannot tell if this error message is occuring when makeing th
-> ekernel headers target or the actual kernel sorry have a look in
-> tool_chain/kernel-headers (or something like that) and have a read of
-> target/linux as well both these places could be causing you the
-> trouble.  I remember a long time ago I had to create this directory for
-> myself and my x86 target but you are using the ARM target and I have
-> never had trouble building that.
->
-> Sorry I cannot be more help.
-> Regards,
-> Rod Boyce
-> _______________________________________________
-> buildroot mailing list
-> buildroot at uclibc.org
-> http://busybox.net/mailman/listinfo/buildroot
->
+William Pettersson wrote:
+> 
+> 
+> William Pettersson wrote:
+>> First off, sorry for the cross-post.  I posted this to the busybox
+>> mailing list first, instead of the buildroot list.  My bad there, but
+>> since that was completely the wrong mailing list, I'm posting it here.
+> 
+> 
+>> So, I'm trying to set up a buildroot image for a soekris net4801.  I ran
+>> make menuconfig, Target Architecture is set to "i386", Target
+>> Architecture Variant is set to "geode".
+> 
+>> However, when I run "make", I get the following
+>> (cd /home/wpettersson/src/buildroot/build_/linux-2.6.21.5 ; \
+>>          /usr/bin/make -j1 ARCH= CC="/usr/bin/gcc" \
+> 
+>> INSTALL_HDR_PATH=/home/wpettersson/src/buildroot/toolchain_build_/linux
+>> headers_install ; \
+>>         )
+>> make[1]: Entering directory
+>> `/home/wpettersson/src/buildroot/build_/linux-2.6.21.5'
+>> Makefile:491:
+>> /home/wpettersson/src/buildroot/build_/linux-2.6.21.5/arch//Makefile: No
+>> such file or directory
+>> make[1]: *** No rule to make target
+>> `/home/wpettersson/src/buildroot/build_/linux-2.6.21.5/arch//Makefile'.
+>>  Stop.
+>> make[1]: Leaving directory
+>> `/home/wpettersson/src/buildroot/build_/linux-2.6.21.5'
+>> make: ***
+>> [/home/wpettersson/src/buildroot/toolchain_build_/linux/.configured] Error 2
+> 
+>> From the looks of it, "ARCH" isn't being set, which stuffs things up.
+>> I've tested by running the make command manually, with ARCH=i386, and
+>> that seemed to work.
+> 
+>> I wasn't sure which configuration files would be required, so to save
+>> space I didn't include any.  If any are wanted, I'll gladly post them.
+> 
+>> Anyone know where ARCH is meant to be set?
+> 
+> Ok, I've investigated some more.  If the Target Architecture Variant is
+> set to "i386", I get the following
+> 
+> wpettersson ~/buildroot/package/config/buildroot-config $ grep i386 *
+> auto.conf:BR2_i386=y
+> auto.conf:BR2_ARCH="i386"
+> auto.conf:BR2_x86_i386=y
+> auto.conf:BR2_GCC_TARGET_ARCH="i386"
+> auto.conf:BR2_GCC_TARGET_TUNE="i386"
+> autoconf.h:#define BR2_i386 1
+> autoconf.h:#define BR2_ARCH "i386"
+> autoconf.h:#define BR2_x86_i386 1
+> autoconf.h:#define BR2_GCC_TARGET_ARCH "i386"
+> autoconf.h:#define BR2_GCC_TARGET_TUNE "i386"
+> 
+> However, if I set Target Architecture Variant to "geode", I get
+> wpettersson ~/buildroot/package/config/buildroot-config $ grep geode *
+> auto.conf:BR2_x86_geode=y
+> auto.conf:BR2_GCC_TARGET_ARCH="geode"
+> auto.conf:BR2_GCC_TARGET_TUNE="geode"
+> autoconf.h:#define BR2_x86_geode 1
+> autoconf.h:#define BR2_GCC_TARGET_ARCH "geode"
+> autoconf.h:#define BR2_GCC_TARGET_TUNE "geode"
+> 
+> 
+> So selecting "geode" means that BR2_ARCH doesn't get set.  I'm still
+> trying to dig through the code, but am I heading in the right direction
+> with this?
+> 
+> 
+
+Ok, I've attached a patch which might fix this.  Config.in doesn't set
+BR2_ARCH at all for geode, so I patched it to set BR2_ARCH to "i586".
+Now I'm just trying to work out why gcc-4.2.0 has issues with
+./configure and --with-arch=geode.
+
+Will
+-------------- next part --------------
+An embedded and charset-unspecified text was scrubbed...
+Name: Config.in.patch
+Url: http://busybox.net/lists/buildroot/attachments/20070719/5d4cdc25/attachment-0001.diff 
