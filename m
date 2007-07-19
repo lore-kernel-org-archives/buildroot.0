@@ -1,164 +1,95 @@
-From: Rod Boyce <buildroot@teamboyce.co.uk>
-Date: Wed, 18 Jul 2007 22:28:32 +0100
-Subject: [Buildroot] linux26 compile error
-In-Reply-To: <42345.75.129.164.68.1184788955.squirrel@kujawski.org>
-References: <52010.75.129.164.68.1184752475.squirrel@kujawski.org>
-	<20070718114550.GA22077@marvin.netwinder.org>
-	<55400.75.129.164.68.1184768952.squirrel@kujawski.org>
-	<469E6DD6.2010106@teamboyce.co.uk>
-	<42345.75.129.164.68.1184788955.squirrel@kujawski.org>
-Message-ID: <469E8600.5000802@teamboyce.co.uk>
+From: William Pettersson <enigma@strudel-hound.com>
+Date: Thu, 19 Jul 2007 10:52:11 +1000
+Subject: [Buildroot] ARCH not being sent by make menuconfig - kernel
+ compile fails to start
+In-Reply-To: <469DE854.6090401@strudel-hound.com>
+References: <469DE854.6090401@strudel-hound.com>
+Message-ID: <469EB5BB.1090506@strudel-hound.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Frank Kujawski wrote:
-> That gets me one step further, but it is failing trying to apply a patch:
->
-> $(LINUX26_DIR)/.patched: $(LINUX26_DIR)/.unpacked
->         toolchain/patch-kernel.sh $(LINUX26_DIR) $(LINUX26_PATCH_DIR)
->         touch $@
->
->
->       Successfully remade target file `cross-depmod26'.
->       Considering target file
-> `/projects/BuildRoot/buildroot/project_build_armeb/uclibc/linux-2.6.21.5/.modules_installed'.
->        File
-> `/projects/BuildRoot/buildroot/project_build_armeb/uclibc/linux-2.6.21.5/.modules_installed'
-> does not exist.
->         Considering target file
-> `/projects/BuildRoot/buildroot/project_build_armeb/uclibc/root/lib/modules/2.6.21.5/modules.dep'.
->          File
-> `/projects/BuildRoot/buildroot/project_build_armeb/uclibc/root/lib/modules/2.6.21.5/modules.dep'
-> does not exist.
->           Considering target file
-> `/projects/BuildRoot/buildroot/project_build_armeb/uclibc/linux-2.6.21.5/.configured'.
->            File
-> `/projects/BuildRoot/buildroot/project_build_armeb/uclibc/linux-2.6.21.5/.configured'
-> does not exist.
->             Considering target file
-> `/projects/BuildRoot/buildroot/project_build_armeb/uclibc/linux-2.6.21.5/.patched'.
->              File
-> `/projects/BuildRoot/buildroot/project_build_armeb/uclibc/linux-2.6.21.5/.patched'
-> does not exist.
->               Considering target file
-> `/projects/BuildRoot/buildroot/project_build_armeb/uclibc/linux-2.6.21.5/.unpacked'.
->                 Pruning file
-> `/projects/BuildRoot/buildroot/../dl/linux-2.6.21.5.tar.bz2'.
->                Finished prerequisites of target file
-> `/projects/BuildRoot/buildroot/project_build_armeb/uclibc/linux-2.6.21.5/.unpacked'.
->                Prerequisite
-> `/projects/BuildRoot/buildroot/../dl/linux-2.6.21.5.tar.bz2' is
-> older than target
-> `/projects/BuildRoot/buildroot/project_build_armeb/uclibc/linux-2.6.21.5/.unpacked'.
->               No need to remake target
-> `/projects/BuildRoot/buildroot/project_build_armeb/uclibc/linux-2.6.21.5/.unpacked'.
->              Finished prerequisites of target file
-> `/projects/BuildRoot/buildroot/project_build_armeb/uclibc/linux-2.6.21.5/.patched'.
->             Must remake target
-> `/projects/BuildRoot/buildroot/project_build_armeb/uclibc/linux-2.6.21.5/.patched'.
-> toolchain/patch-kernel.sh
-> /projects/BuildRoot/buildroot/project_build_armeb/uclibc/linux-2.6.21.5
-> /kernel-patches/
-> Aborting.  '/kernel-patches/' is not a directory.
+-----BEGIN PGP SIGNED MESSAGE-----
+Hash: SHA1
+
+
+
+William Pettersson wrote:
+> First off, sorry for the cross-post.  I posted this to the busybox
+> mailing list first, instead of the buildroot list.  My bad there, but
+> since that was completely the wrong mailing list, I'm posting it here.
+> 
+> 
+> So, I'm trying to set up a buildroot image for a soekris net4801.  I ran
+> make menuconfig, Target Architecture is set to "i386", Target
+> Architecture Variant is set to "geode".
+> 
+> However, when I run "make", I get the following
+> (cd /home/wpettersson/src/buildroot/build_/linux-2.6.21.5 ; \
+>          /usr/bin/make -j1 ARCH= CC="/usr/bin/gcc" \
+> 
+> INSTALL_HDR_PATH=/home/wpettersson/src/buildroot/toolchain_build_/linux
+> headers_install ; \
+>         )
+> make[1]: Entering directory
+> `/home/wpettersson/src/buildroot/build_/linux-2.6.21.5'
+> Makefile:491:
+> /home/wpettersson/src/buildroot/build_/linux-2.6.21.5/arch//Makefile: No
+> such file or directory
+> make[1]: *** No rule to make target
+> `/home/wpettersson/src/buildroot/build_/linux-2.6.21.5/arch//Makefile'.
+>  Stop.
+> make[1]: Leaving directory
+> `/home/wpettersson/src/buildroot/build_/linux-2.6.21.5'
 > make: ***
-> [/projects/BuildRoot/buildroot/project_build_armeb/uclibc/linux-2.6.21.5/.patched]
-> Error 1
->
->
->
->
->
->
->
->   
->> Frank Kujawski wrote:
->>     
->>> As it would be, I do need the kernel.  Could I replace this:
->>>
->>> $(LINUX26_DIR)/.patched: $(LINUX26_DIR)/.unpacked
->>>         toolchain/patch-kernel.sh $(LINUX26_DIR) $(LINUX26_PATCH_DIR)
->>>         touch $@
->>> endif # ($(LINUX26_VERSION),$(LINUX_HEADERS_VERSION))
->>>
->>> with something like
->>>
->>> $(LINUX26_DIR)/.patched: $(LINUX26_DIR)/.unpacked
->>>         toolchain/patch-kernel.sh $(LINUX26_DIR) $(LINUX26_PATCH_DIR)
->>>         touch $@
->>> else # ($(LINUX26_VERSION),$(LINUX_HEADERS_VERSION))
->>> $(LINUX26_DIR)/.patched:
->>>         touch $@
->>> endif # ($(LINUX26_VERSION),$(LINUX_HEADERS_VERSION))
->>>
->>>
->>>
->>>       
->>>> On Wed, Jul 18, 2007 at 04:54:35AM -0500, Frank Kujawski wrote:
->>>>
->>>>         
->>>>> I am getting a compile error on:
->>>>> linux26: cross-depmod26
->>>>> $(TARGET_DIR)/lib/modules/$(LINUX26_VERSION)/modules.dep
->>>>> $(TARGET_DIR)/boot/$(LINUX26_FORMAT)
->>>>>
->>>>>           
->>>> This is caused by a conditional check in target/linux/Makefile.in:
->>>> ifneq ($(strip $(LINUX26_VERSION)),$(strip $(LINUX_HEADERS_VERSION)))
->>>> surrounding the part that defindes the $(LINUX26_DIR)/.patched
->>>> target.  You have LINUX26_VERSION matching LINUX_HEADERS_VERSION
->>>> and therefore all the code inside the "ifneq" is skipped.  This
->>>> results in the make error: "no rule to make target"
->>>>
->>>> If you do not need to build a kernel, the simplest fix would be
->>>> to disable the linux26 target entirely (turn off BR2_PACKAGE_LINUX).
->>>>
->>>> I'm not sure why the ifneq is there in the first place.  It may
->>>> have made sense prior to the BSP patch that was recently added.
->>>>
->>>> -R
->>>>
->>>>
->>>>         
->>> _______________________________________________
->>> buildroot mailing list
->>> buildroot at uclibc.org
->>> http://busybox.net/mailman/listinfo/buildroot
->>>
->>>       
->> All,
->>
->> I commented out the ifdef in the makefile until this patch was completed
->> as this looks to me to be an incomplete BSP patch at the moment.
->> Attached is my temporary fix until this is completed.
->>
->> Regards,
->> Rod Boyce
->>
->> _______________________________________________
->> buildroot mailing list
->> buildroot at uclibc.org
->> http://busybox.net/mailman/listinfo/buildroot
->>     
->
->
->   
-Frank,
+> [/home/wpettersson/src/buildroot/toolchain_build_/linux/.configured] Error 2
+> 
+> From the looks of it, "ARCH" isn't being set, which stuffs things up.
+> I've tested by running the make command manually, with ARCH=i386, and
+> that seemed to work.
+> 
+> I wasn't sure which configuration files would be required, so to save
+> space I didn't include any.  If any are wanted, I'll gladly post them.
+> 
+> Anyone know where ARCH is meant to be set?
 
- From your output log message it seems that the system is looking in th 
-ewrong place for the kernel-patches directory.  In your case i slooks 
-like it is looking off the root directory for this which looks very odd 
-to me.
-  I cannot tell if this error message is occuring when makeing th 
-ekernel headers target or the actual kernel sorry have a look in 
-tool_chain/kernel-headers (or something like that) and have a read of 
-target/linux as well both these places could be causing you the 
-trouble.  I remember a long time ago I had to create this directory for 
-myself and my x86 target but you are using the ARM target and I have 
-never had trouble building that.
+Ok, I've investigated some more.  If the Target Architecture Variant is
+set to "i386", I get the following
 
-Sorry I cannot be more help.
-Regards,
-Rod Boyce
+wpettersson ~/buildroot/package/config/buildroot-config $ grep i386 *
+auto.conf:BR2_i386=y
+auto.conf:BR2_ARCH="i386"
+auto.conf:BR2_x86_i386=y
+auto.conf:BR2_GCC_TARGET_ARCH="i386"
+auto.conf:BR2_GCC_TARGET_TUNE="i386"
+autoconf.h:#define BR2_i386 1
+autoconf.h:#define BR2_ARCH "i386"
+autoconf.h:#define BR2_x86_i386 1
+autoconf.h:#define BR2_GCC_TARGET_ARCH "i386"
+autoconf.h:#define BR2_GCC_TARGET_TUNE "i386"
+
+However, if I set Target Architecture Variant to "geode", I get
+wpettersson ~/buildroot/package/config/buildroot-config $ grep geode *
+auto.conf:BR2_x86_geode=y
+auto.conf:BR2_GCC_TARGET_ARCH="geode"
+auto.conf:BR2_GCC_TARGET_TUNE="geode"
+autoconf.h:#define BR2_x86_geode 1
+autoconf.h:#define BR2_GCC_TARGET_ARCH "geode"
+autoconf.h:#define BR2_GCC_TARGET_TUNE "geode"
+
+
+So selecting "geode" means that BR2_ARCH doesn't get set.  I'm still
+trying to dig through the code, but am I heading in the right direction
+with this?
+
+
+-----BEGIN PGP SIGNATURE-----
+Version: GnuPG v1.4.7 (GNU/Linux)
+Comment: Using GnuPG with Mozilla - http://enigmail.mozdev.org
+
+iD8DBQFGnrW6NSpXjKoV00kRAgELAJ4hfXcvKXHc34mKkrIczzajeGtLGQCeLnjP
+sRIaHdsUx5D3IQ6H/lciR7o=
+=lkkM
+-----END PGP SIGNATURE-----
