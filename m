@@ -1,7 +1,8 @@
 From: ulf at uclibc.org <ulf@uclibc.org>
-Date: Fri, 20 Jul 2007 01:08:05 -0700 (PDT)
-Subject: [Buildroot] svn commit: trunk/buildroot/package/mtd/20050122
-Message-ID: <20070720080805.4BE7630073@busybox.net>
+Date: Fri, 20 Jul 2007 01:27:50 -0700 (PDT)
+Subject: [Buildroot] svn commit: trunk/buildroot/target/device/Atmel/Linux:
+	kernel-patches-2.6.22.1
+Message-ID: <20070720082750.D5D413008C@busybox.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -9,27 +10,20 @@ Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
 Author: ulf
-Date: 2007-07-20 01:08:04 -0700 (Fri, 20 Jul 2007)
-New Revision: 19171
+Date: 2007-07-20 01:27:49 -0700 (Fri, 20 Jul 2007)
+New Revision: 19172
 
 Log:
-Patch mtd from correct directory
+Add patch for linux 2.6.22.1
 
-Modified:
-   trunk/buildroot/package/mtd/20050122/mtd.mk
+Added:
+   trunk/buildroot/target/device/Atmel/Linux/kernel-patches-2.6.22.1/
+   trunk/buildroot/target/device/Atmel/Linux/kernel-patches-2.6.22.1/2.6.22.1-atmel.patch
 
 
 Changeset:
-Modified: trunk/buildroot/package/mtd/20050122/mtd.mk
-===================================================================
---- trunk/buildroot/package/mtd/20050122/mtd.mk	2007-07-20 08:00:19 UTC (rev 19170)
-+++ trunk/buildroot/package/mtd/20050122/mtd.mk	2007-07-20 08:08:04 UTC (rev 19171)
-@@ -51,7 +51,7 @@
- 	$(MTD_CAT) $(DL_DIR)/$(MTD_SOURCE) | tar -C $(TOOL_BUILD_DIR) $(TAR_OPTIONS) -
- 	mv $(TOOL_BUILD_DIR)/$(shell tar tzf $(DL_DIR)/$(MTD_SOURCE) | head -n 1 \
- 		| xargs basename) $(MTD_HOST_DIR)
--	toolchain/patch-kernel.sh $(MTD_HOST_DIR) package/mtd \*.patch
-+	toolchain/patch-kernel.sh $(MTD_HOST_DIR) package/mtd/20050122 \*.patch
- 	touch $@
- endif
- 
+
+Sorry, the patch is too large to include (9725 lines).
+Please use ViewCVS to see it!
+
+http://uclibc.org/cgi-bin/viewcvs.cgi?view=rev&root=svn&rev=19172
