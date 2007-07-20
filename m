@@ -1,8 +1,7 @@
 From: ulf at uclibc.org <ulf@uclibc.org>
-Date: Fri, 20 Jul 2007 01:00:20 -0700 (PDT)
-Subject: [Buildroot] svn commit: trunk/buildroot/package/mtd: 20050122
-	20061007
-Message-ID: <20070720080020.7AD6E30091@busybox.net>
+Date: Fri, 20 Jul 2007 01:08:05 -0700 (PDT)
+Subject: [Buildroot] svn commit: trunk/buildroot/package/mtd/20050122
+Message-ID: <20070720080805.4BE7630073@busybox.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -10,32 +9,27 @@ Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
 Author: ulf
-Date: 2007-07-20 01:00:19 -0700 (Fri, 20 Jul 2007)
-New Revision: 19170
+Date: 2007-07-20 01:08:04 -0700 (Fri, 20 Jul 2007)
+New Revision: 19171
 
 Log:
-Add optional mtd configuration (experimental - only available for Atmel targets)
+Patch mtd from correct directory
 
-Added:
-   trunk/buildroot/package/mtd/20050122/
+Modified:
    trunk/buildroot/package/mtd/20050122/mtd.mk
-   trunk/buildroot/package/mtd/20050122/mtd.patch
-   trunk/buildroot/package/mtd/20061007/
-   trunk/buildroot/package/mtd/20061007/mtd-20061007-mkfs.jffs2.patch
-   trunk/buildroot/package/mtd/20061007/mtd.mk
-   trunk/buildroot/package/mtd/20061007/mtd_20061007.patch
-   trunk/buildroot/package/mtd/20061007/mtd_acl.patch
-   trunk/buildroot/package/mtd/Config.in
-   trunk/buildroot/package/mtd/mtd.mk
-
-Removed:
-   trunk/buildroot/package/mtd/Config.in
-   trunk/buildroot/package/mtd/mtd.mk
 
 
 Changeset:
-
-Sorry, the patch is too large to include (1030 lines).
-Please use ViewCVS to see it!
-
-http://uclibc.org/cgi-bin/viewcvs.cgi?view=rev&root=svn&rev=19170
+Modified: trunk/buildroot/package/mtd/20050122/mtd.mk
+===================================================================
+--- trunk/buildroot/package/mtd/20050122/mtd.mk	2007-07-20 08:00:19 UTC (rev 19170)
++++ trunk/buildroot/package/mtd/20050122/mtd.mk	2007-07-20 08:08:04 UTC (rev 19171)
+@@ -51,7 +51,7 @@
+ 	$(MTD_CAT) $(DL_DIR)/$(MTD_SOURCE) | tar -C $(TOOL_BUILD_DIR) $(TAR_OPTIONS) -
+ 	mv $(TOOL_BUILD_DIR)/$(shell tar tzf $(DL_DIR)/$(MTD_SOURCE) | head -n 1 \
+ 		| xargs basename) $(MTD_HOST_DIR)
+-	toolchain/patch-kernel.sh $(MTD_HOST_DIR) package/mtd \*.patch
++	toolchain/patch-kernel.sh $(MTD_HOST_DIR) package/mtd/20050122 \*.patch
+ 	touch $@
+ endif
+ 
