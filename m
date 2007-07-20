@@ -1,7 +1,7 @@
 From: sjhill at uclibc.org <sjhill@uclibc.org>
-Date: Fri, 20 Jul 2007 07:37:49 -0700 (PDT)
-Subject: [Buildroot] svn commit: trunk/buildroot/package: hdparm thttpd
-Message-ID: <20070720143749.7A11730069@busybox.net>
+Date: Fri, 20 Jul 2007 07:39:02 -0700 (PDT)
+Subject: [Buildroot] svn commit: trunk/buildroot/target/device/Atmel/u-boot
+Message-ID: <20070720143902.0D57C3006F@busybox.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -9,205 +9,304 @@ Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
 Author: sjhill
-Date: 2007-07-20 07:37:48 -0700 (Fri, 20 Jul 2007)
-New Revision: 19182
+Date: 2007-07-20 07:39:01 -0700 (Fri, 20 Jul 2007)
+New Revision: 19183
 
 Log:
-Fix hdparm to cross build correctly. Also fix thttpd to build and install sanely and add simplified start up.
+Convert DOS to UNIX style.
 
-
-Added:
-   trunk/buildroot/package/hdparm/hdparm.patch
-   trunk/buildroot/package/thttpd/S90thttpd
-   trunk/buildroot/package/thttpd/thttpd.conf
 
 Modified:
-   trunk/buildroot/package/hdparm/hdparm.mk
-   trunk/buildroot/package/thttpd/thttpd.mk
+   trunk/buildroot/target/device/Atmel/u-boot/u-boot.mk
 
 
 Changeset:
-Modified: trunk/buildroot/package/hdparm/hdparm.mk
+Modified: trunk/buildroot/target/device/Atmel/u-boot/u-boot.mk
 ===================================================================
---- trunk/buildroot/package/hdparm/hdparm.mk	2007-07-20 12:03:54 UTC (rev 19181)
-+++ trunk/buildroot/package/hdparm/hdparm.mk	2007-07-20 14:37:48 UTC (rev 19182)
-@@ -19,15 +19,17 @@
- hdparm-unpacked: $(HDPARM_DIR)/.unpacked
- $(HDPARM_DIR)/.unpacked: $(DL_DIR)/$(HDPARM_SOURCE)
- 	$(HDPARM_CAT) $(DL_DIR)/$(HDPARM_SOURCE) | tar -C $(BUILD_DIR) $(TAR_OPTIONS) -
-+	toolchain/patch-kernel.sh $(HDPARM_DIR) package/hdparm hdparm.patch
- 	touch $(HDPARM_DIR)/.unpacked
+--- trunk/buildroot/target/device/Atmel/u-boot/u-boot.mk	2007-07-20 14:37:48 UTC (rev 19182)
++++ trunk/buildroot/target/device/Atmel/u-boot/u-boot.mk	2007-07-20 14:39:01 UTC (rev 19183)
+@@ -1,22 +1,22 @@
+-#############################################################
+-#
+-# u-boot mkimage to build to target u-boot filesystems and
+-# 
+-# u-boot.bin - the boot loader for the target - which needs soft float, so 
+-#              we won't make it.
+-#
+-#
+-#############################################################
+-UBOOT_VERSION:=1.2.0-atmel
++#############################################################
++#
++# u-boot mkimage to build to target u-boot filesystems and
++# 
++# u-boot.bin - the boot loader for the target - which needs soft float, so 
++#              we won't make it.
++#
++#
++#############################################################
++UBOOT_VERSION:=1.2.0-atmel
+ UBOOT_DIR:=$(BUILD_DIR)/u-boot-$(UBOOT_VERSION)
+-UBOOT_BUILD_DIR:=$(PROJECT_BUILD_DIR)/u-boot-$(UBOOT_VERSION)
+-UBOOT_SOURCE:=u-boot-$(UBOOT_VERSION).tar.bz2
++UBOOT_BUILD_DIR:=$(PROJECT_BUILD_DIR)/u-boot-$(UBOOT_VERSION)
++UBOOT_SOURCE:=u-boot-$(UBOOT_VERSION).tar.bz2
+ #UBOOT_SOURCE:=u-boot-1.1.5-atmel.tar.bz2
+-ATMEL_MIRROR:=$(strip  $(subst ",, $(BR2_ATMEL_MIRROR)))
++ATMEL_MIRROR:=$(strip  $(subst ",, $(BR2_ATMEL_MIRROR)))
+ #UBOOT_SITE:=http://$(BR2_SOURCEFORGE_MIRROR).dl.sourceforge.net/sourceforge/u-boot
+ UBOOT_SITE:=$(ATMEL_MIRROR)/Source
+-UBOOT_PATCH_SITE:=$(ATMEL_MIRROR)/Source
+-UBOOT_CAT:=bzcat
++UBOOT_PATCH_SITE:=$(ATMEL_MIRROR)/Source
++UBOOT_CAT:=bzcat
+ UBOOT_PATCH_SOURCE:=u-boot-1.2.0-atmel-patch.tar.bz2
  
- $(HDPARM_DIR)/.configured: $(HDPARM_DIR)/.unpacked
- 	touch $(HDPARM_DIR)/.configured
+ MKIMAGE_BINLOC:=$(UBOOT_BUILD_DIR)/tools/mkimage
+@@ -26,7 +26,7 @@
  
- $(HDPARM_DIR)/$(HDPARM_BINARY): $(HDPARM_DIR)/.configured
--	$(MAKE) CC=$(TARGET_CC) -C $(HDPARM_DIR)
-+	$(MAKE) $(TARGET_CONFIGURE_OPTS) -C $(HDPARM_DIR)
+ UBOOT_PATCHES:=$(PROJECT_BUILD_DIR)/u-boot-patches
  
- $(TARGET_DIR)/$(HDPARM_TARGET_BINARY): $(HDPARM_DIR)/$(HDPARM_BINARY)
-+	rm -f $(TARGET_DIR)/$(HDPARM_TARGET_BINARY)
- 	cp -a $(HDPARM_DIR)/$(HDPARM_BINARY) $(TARGET_DIR)/$(HDPARM_TARGET_BINARY)
+-UBOOT_ATMEL_BMP:=$(UBOOT_PATCHES)/atmel.bmp
++UBOOT_ATMEL_BMP:=$(UBOOT_PATCHES)/atmel.bmp
  
- hdparm: uclibc $(TARGET_DIR)/$(HDPARM_TARGET_BINARY)
-
-Added: trunk/buildroot/package/hdparm/hdparm.patch
-===================================================================
---- trunk/buildroot/package/hdparm/hdparm.patch	                        (rev 0)
-+++ trunk/buildroot/package/hdparm/hdparm.patch	2007-07-20 14:37:48 UTC (rev 19182)
-@@ -0,0 +1,12 @@
-+diff -ur hdparm-7.6/Makefile hdparm-7.6-patched/Makefile
-+--- hdparm-7.6/Makefile	2007-06-07 12:39:24.000000000 -0500
-++++ hdparm-7.6-patched/Makefile	2007-07-19 12:11:03.000000000 -0500
-+@@ -28,7 +28,7 @@
-+ 
-+ hdparm: hdparm.h $(OBJS)
-+ 	$(CC) $(LDFLAGS) -o hdparm $(OBJS)
-+-	strip hdparm
-++	$(STRIP) hdparm
-+  
-+ install: all hdparm.8
-+ 	if [ ! -z $(DESTDIR) ]; then $(INSTALL_DIR) $(DESTDIR) ; fi
-
-Added: trunk/buildroot/package/thttpd/S90thttpd
-===================================================================
---- trunk/buildroot/package/thttpd/S90thttpd	                        (rev 0)
-+++ trunk/buildroot/package/thttpd/S90thttpd	2007-07-20 14:37:48 UTC (rev 19182)
-@@ -0,0 +1,43 @@
-+#!/bin/sh 
+ UBOOT_SCR=$(BINARIES_DIR)/autoscript
+ TARGET_UBOOT_IPADDR:=$(strip  $(subst ",, $(BR2_TARGET_UBOOT_IPADDR)))
+@@ -35,31 +35,31 @@
+ TARGET_UBOOT_NETMASK:=$(strip  $(subst ",, $(BR2_TARGET_UBOOT_NETMASK)))
+ TARGET_UBOOT_ETHADDR:=$(strip  $(subst ",, $(BR2_TARGET_UBOOT_ETHADDR)))
+ UBOOT_CUSTOM:=$(UBOOT_DIR)/include/custom.h
+-
+-$(DL_DIR)/$(UBOOT_SOURCE):
 +
-+DAEMON=/usr/sbin/thttpd
-+test -f $DAEMON || exit 0
-+
-+start() {
-+	echo -n "Starting thttpd: "
-+	$DAEMON -C /etc/thttpd.conf
-+	if [ $? != 0 ]; then
-+		echo "FAILED"
-+		exit 1
-+	else
-+		echo "done"
-+	fi
-+}
-+
-+stop() {
-+	echo -n "Stopping ProFTPD: "
-+	kill -9 `cat /var/run/thttpd.pid`
-+        echo "done"
-+}
-+
-+case "$1" in
-+    start)
-+	start
-+	;;
-+
-+    stop)
-+	stop
-+	;;
-+
-+    restart)
-+    	stop
-+    	start
-+	;;
-+
-+    *)
-+	echo "Usage: /etc/init.d/S90thttpd {start|stop|restart}"
-+	exit 1
-+	;;
-+esac
-+
-+exit 0
-
-
-Property changes on: trunk/buildroot/package/thttpd/S90thttpd
-___________________________________________________________________
-Name: svn:executable
-   + *
-
-Added: trunk/buildroot/package/thttpd/thttpd.conf
-===================================================================
---- trunk/buildroot/package/thttpd/thttpd.conf	                        (rev 0)
-+++ trunk/buildroot/package/thttpd/thttpd.conf	2007-07-20 14:37:48 UTC (rev 19182)
-@@ -0,0 +1,7 @@
-+chroot
-+dir=/var/www
-+pidfile=/var/run/thttpd.pid
-+logfile=/var/log/thttpd
-+host=dtu-7100
-+user=nobody
-+cgipat=**.cgi
-
-Modified: trunk/buildroot/package/thttpd/thttpd.mk
-===================================================================
---- trunk/buildroot/package/thttpd/thttpd.mk	2007-07-20 12:03:54 UTC (rev 19181)
-+++ trunk/buildroot/package/thttpd/thttpd.mk	2007-07-20 14:37:48 UTC (rev 19182)
-@@ -9,9 +9,8 @@
- THTTPD_DIR:=$(BUILD_DIR)/thttpd-$(THTTPD_VERSION)
- THTTPD_CAT:=$(ZCAT)
- THTTPD_BINARY:=thttpd
--THTTPD_TARGET_BINARY:=sbin/thttpd
--THTTPD_ROOT:=/var
--THTTPD_WEB_DIR:=$(THTTPD_ROOT)/www
-+THTTPD_TARGET_BINARY:=usr/sbin/thttpd
-+THTTPD_WEB_DIR:=/var/www
++$(DL_DIR)/$(UBOOT_SOURCE):
+ 	 $(WGET) -P $(DL_DIR) $(UBOOT_SITE)/$(UBOOT_SOURCE)
  
- $(DL_DIR)/$(THTTPD_SOURCE):
- 	$(WGET) -P $(DL_DIR) $(THTTPD_SITE)/$(THTTPD_SOURCE)
-@@ -30,48 +29,31 @@
- 		--target=$(GNU_TARGET_NAME) \
- 		--host=$(GNU_TARGET_NAME) \
- 		--build=$(GNU_HOST_NAME) \
--		--prefix=$(THTTPD_ROOT) \
-+		--prefix=/usr \
- 	);
- 	touch $(THTTPD_DIR)/.configured
- 
- $(THTTPD_DIR)/$(THTTPD_BINARY): $(THTTPD_DIR)/.configured
--	$(MAKE) $(TARGET_CONFIGURE_OPTS) -C $(THTTPD_DIR)
-+	$(MAKE) $(TARGET_CONFIGURE_OPTS) WEBDIR=$(THTTPD_WEB_DIR) -C $(THTTPD_DIR)
- 
- $(TARGET_DIR)/$(THTTPD_TARGET_BINARY): $(THTTPD_DIR)/$(THTTPD_BINARY)
--	install -D $(THTTPD_DIR)/$(THTTPD_BINARY) $(TARGET_DIR)/$(THTTPD_TARGET_BINARY)
--	install -D $(THTTPD_DIR)/extras/htpasswd $(TARGET_DIR)/bin/htpasswd
--	install -D $(THTTPD_DIR)/extras/makeweb $(TARGET_DIR)/bin/makeweb
--	install -D $(THTTPD_DIR)/extras/syslogtocern $(TARGET_DIR)/bin/syslogtocern
--	install -D $(THTTPD_DIR)/scripts/thttpd_wrapper $(TARGET_DIR)/sbin/thttpd_wrapper
--	install -D $(THTTPD_DIR)/scripts/thttpd.sh $(TARGET_DIR)/etc/init.d/S90thttpd
--	cp $(TARGET_DIR)/etc/init.d/S90thttpd $(TARGET_DIR)/etc/init.d/S90thttpd.in
--	cp $(TARGET_DIR)/sbin/thttpd_wrapper $(TARGET_DIR)/sbin/thttpd_wrapper.in
--	sed -e "s:/usr/local/sbin:/sbin:g" -e "s:/usr/local/www:$(THTTPD_WEB_DIR):g" < $(TARGET_DIR)/sbin/thttpd_wrapper.in > $(TARGET_DIR)/sbin/httpd_wrapper
--	sed -e "s:/usr/local/sbin:/sbin:g" < $(TARGET_DIR)/etc/init.d/S90thttpd.in > $(TARGET_DIR)/etc/init.d/S90thttpd
--	rm -f $(TARGET_DIR)/etc/init.d/S90thttpd.in $(TARGET_DIR)/sbin/thttpd_wrapper.in
--	install -d $(TARGET_DIR)$(THTTPD_WEB_DIR)/data
--	install -d $(TARGET_DIR)$(THTTPD_WEB_DIR)/logs
--	echo "dir=$(THTTPD_WEB_DIR)/data" > $(TARGET_DIR)$(THTTPD_WEB_DIR)/thttpd_config
--	echo 'cgipat=**.cgi' >> $(TARGET_DIR)$(THTTPD_WEB_DIR)/thttpd_config
--	echo "logfile=$(THTTPD_WEB_DIR)/logs/thttpd_log" >> $(TARGET_DIR)$(THTTPD_WEB_DIR)/thttpd_config
--	echo "pidfile=/var/run/thttpd.pid" >> $(TARGET_DIR)$(THTTPD_WEB_DIR)/thttpd_config
--	echo "<HTML><BODY>thttpd test page</BODY></HTML>" > $(TARGET_DIR)$(THTTPD_WEB_DIR)/data/index.html
-+	$(MAKE) $(TARGET_CONFIGURE_OPTS) prefix=$(TARGET_DIR)/usr WEBDIR=$(THTTPD_WEB_DIR) -C $(THTTPD_DIR) installthis
-+	$(STRIP) --strip-unneeded $(THTTPD_DIR)/$(THTTPD_BINARY)
-+	$(INSTALL) -d $(TARGET_DIR)$(THTTPD_WEB_DIR)/cgi-bin
-+	$(INSTALL) -m 0755 package/thttpd/S90thttpd $(TARGET_DIR)/etc/init.d
-+	$(INSTALL) -m 0644 package/thttpd/thttpd.conf $(TARGET_DIR)/etc
- 
- thttpd: uclibc $(TARGET_DIR)/$(THTTPD_TARGET_BINARY)
- 
- thttpd-clean:
- 	rm -f $(TARGET_DIR)/$(THTTPD_TARGET_BINARY)
--	rm -f $(TARGET_DIR)/sbin/httpd_wrapper
--	rm -f $(TARGET_DIR)/sbin/thttpd_wrapper
- 	rm -rf $(TARGET_DIR)/var/www
--	rm -f $(TARGET_DIR)/etc/init.d/S90thttpd
--	rm -f $(TARGET_DIR)/bin/htpasswd
--	rm -f $(TARGET_DIR)/bin/makeweb
--	rm -f $(TARGET_DIR)/bin/syslogtocern
-+	rm -f $(TARGET_DIR)/etc/init.d/S90thttpd $(TARGET_DIR)/etc/thttpd.conf
- 	-$(MAKE) -C $(THTTPD_DIR) clean
- 
- thttpd-dirclean:
- 	rm -rf $(THTTPD_DIR)
+-$(DL_DIR)/$(UBOOT_PATCH_SOURCE):
++$(DL_DIR)/$(UBOOT_PATCH_SOURCE):
+ 	 $(WGET) -P $(DL_DIR) $(UBOOT_PATCH_SITE)/$(UBOOT_PATCH_SOURCE)
+-
 +
- #############################################################
- #
- # Toplevel Makefile options
+ $(UBOOT_DIR)/.unpacked: $(DL_DIR)/$(UBOOT_SOURCE)
+-	mkdir -p   $(BUILD_DIR)
+-	$(UBOOT_CAT) $(DL_DIR)/$(UBOOT_SOURCE) | tar -C $(BUILD_DIR) -xvf -
+-	touch	$@
++	mkdir -p   $(BUILD_DIR)
++	$(UBOOT_CAT) $(DL_DIR)/$(UBOOT_SOURCE) | tar -C $(BUILD_DIR) -xvf -
++	touch	$@
+ 
+ $(UBOOT_PATCHES)/.unpacked: $(DL_DIR)/$(UBOOT_PATCH_SOURCE)
+ 	mkdir -p $(UBOOT_PATCHES)
+ 	bzcat 	$(DL_DIR)/$(UBOOT_PATCH_SOURCE) | tar -C $(UBOOT_PATCHES) -xvf -
+-	touch	$@
+-
+-$(UBOOT_DIR)/.patched.$(UBOOT_PATCH_SOURCE): $(UBOOT_DIR)/.unpacked $(UBOOT_PATCHES)/.unpacked
++	touch	$@
++
++$(UBOOT_DIR)/.patched.$(UBOOT_PATCH_SOURCE): $(UBOOT_DIR)/.unpacked $(UBOOT_PATCHES)/.unpacked
+ 	toolchain/patch-kernel.sh $(UBOOT_DIR) $(UBOOT_PATCHES) *.patch
+-	touch $(UBOOT_DIR)/.patched.$(UBOOT_PATCH_SOURCE)
+-#	cp $(UBOOT_CONFIG_FILE) $(UBOOT_DIR)/include/configs/.
++	touch $(UBOOT_DIR)/.patched.$(UBOOT_PATCH_SOURCE)
++#	cp $(UBOOT_CONFIG_FILE) $(UBOOT_DIR)/include/configs/.
+ #	cp $(UBOOT_PATCHES)/cmd_defenv.c $(UBOOT_DIR)/common/.
+-#	cp $(UBOOT_ATMEL_BMP) $(UBOOT_DIR)/tools/logos/.
+-
+-$(UBOOT_BUILD_DIR)/.configured: $(UBOOT_DIR)/.patched.$(UBOOT_PATCH_SOURCE)
++#	cp $(UBOOT_ATMEL_BMP) $(UBOOT_DIR)/tools/logos/.
++
++$(UBOOT_BUILD_DIR)/.configured: $(UBOOT_DIR)/.patched.$(UBOOT_PATCH_SOURCE)
+ ifneq	($(strip $(UBOOT_CONFIG_FILE)),)
+ 	cp $(UBOOT_CONFIG_FILE) $(UBOOT_DIR)/include/configs/.
+ endif
+@@ -67,11 +67,11 @@
+ 		O=$(UBOOT_BUILD_DIR)	\
+ 		CONFIG_NOSOFTFLOAT=1		\
+ 		-C $(UBOOT_DIR) 	\
+-		$(UBOOT_CONFIG)
+-	$(SED) 's/ $$(SREC) $$(BIN)//' $(UBOOT_DIR)/examples/Makefile
+-	touch $(UBOOT_BUILD_DIR)/.configured
+-#	$(MAKE) O=$(UBOOT_BUILD_DIR) -C $(UBOOT_DIR) 
+-
++		$(UBOOT_CONFIG)
++	$(SED) 's/ $$(SREC) $$(BIN)//' $(UBOOT_DIR)/examples/Makefile
++	touch $(UBOOT_BUILD_DIR)/.configured
++#	$(MAKE) O=$(UBOOT_BUILD_DIR) -C $(UBOOT_DIR) 
++
+ $(MKIMAGE_BINLOC): $(UBOOT_BUILD_DIR)/.configured
+ 	$(MAKE) \
+ 		O=$(UBOOT_BUILD_DIR)		\
+@@ -79,11 +79,11 @@
+ 		CONFIG_NOSOFTFLOAT=1		\
+ 		TOPDIR=$(UBOOT_DIR)		\
+ 		SRCTREE=$(UBOOT_DIR)		\
+-		-C $(UBOOT_DIR)	tools
++		-C $(UBOOT_DIR)	tools
+ 	touch $(MKIMAGE_BINLOC)
+-
++
+ $(UBOOT_BUILD_DIR)/u-boot.bin:	$(UBOOT_BUILD_DIR)/.configured $(UBOOT_CUSTOM)
+-	echo TARGET_CROSS=$(TARGET_CROSS)
++	echo TARGET_CROSS=$(TARGET_CROSS)
+ 	$(MAKE) O=$(UBOOT_BUILD_DIR)		\
+ 		CROSS_COMPILE=$(TARGET_CROSS)	\
+ 		CONFIG_NOSOFTFLOAT=1		\
+@@ -93,11 +93,11 @@
+ 		-C $(UBOOT_DIR)
+ 
+ $(BINARIES_DIR)/$(UBOOT_BIN):	$(UBOOT_BUILD_DIR)/u-boot.bin
+-	mkdir -p $(BINARIES_DIR)
++	mkdir -p $(BINARIES_DIR)
+ 	cp $(UBOOT_BUILD_DIR)/u-boot.bin $(BINARIES_DIR)/$(UBOOT_BIN)
+ 
+ /tftpboot/$(UBOOT_BIN):	$(UBOOT_BUILD_DIR)/u-boot.bin
+-	mkdir -p /tftpboot
++	mkdir -p /tftpboot
+ 	cp $(UBOOT_BUILD_DIR)/u-boot.bin /tftpboot/$(UBOOT_BIN)
+ 
+ uboot-bin:	$(BINARIES_DIR)/$(UBOOT_BIN)	/tftpboot/$(UBOOT_BIN)
+@@ -170,25 +170,25 @@
+ 				$(UBOOT_SCR).$(PROJECT)
+ 	cp	$(UBOOT_SCR).$(PROJECT) /tftpboot
+ 
+-$(MKIMAGE):	$(MKIMAGE_BINLOC) 
+-	cp -f $(MKIMAGE_BINLOC)	 $(MKIMAGE)
+-
+-uboot: $(MKIMAGE)	uboot-bin $(UBOOT_SCR).$(PROJECT)
++$(MKIMAGE):	$(MKIMAGE_BINLOC) 
++	cp -f $(MKIMAGE_BINLOC)	 $(MKIMAGE)
+ 
+-uboot-source: $(DL_DIR)/$(UBOOT_SOURCE)
+-
+-uboot-clean:
++uboot: $(MKIMAGE)	uboot-bin $(UBOOT_SCR).$(PROJECT)
++
++uboot-source: $(DL_DIR)/$(UBOOT_SOURCE)
++
++uboot-clean:
+ 	rm -fr	$(UBOOT_BUILD_DIR)
+ 	rm -fr	$(UBOOT_PATCHES)
+ 	rm -f	$(BINARIES_DIR)/$(UBOOT_BIN)
+ 	rm -fr	$(UBOOT_DIR)
+ 	rm -f	$(UBOOT_SCR)
+ 	rm -f	$(UBOOT_SCR).$(PROJECT)
+-#	-$(MAKE) -C $(UBOOT_DIR)/uboot-tools clean
+-
+-uboot-dirclean:	uboot-clean
+-	rm -rf $(UBOOT_DIR)
++#	-$(MAKE) -C $(UBOOT_DIR)/uboot-tools clean
+ 
++uboot-dirclean:	uboot-clean
++	rm -rf $(UBOOT_DIR)
++
+ uboot-new:
+ 	rm -fr	$(UBOOT_BUILD_DIR)/u-boot
+ 	rm -fr	$(UBOOT_BUILD_DIR)/u-boot.gz
+@@ -196,52 +196,52 @@
+ 	rm -fr	/tftpboot/$(UBOOT_BIN)
+ 	rm -fr	$(BINARIES_DIR)/$(UBOOT_BIN)
+ 
+-.PHONY:	uboot-bin
+-#############################################################
+-#
+-# Build the uboot root filesystem image
+-#
+-#############################################################
+-
+-UBOOT_TARGET:=$(IMAGE).uboot
+-
+-ubootroot: host-fakeroot makedevs uboot
+-	- at find $(TARGET_DIR) -type f -perm +111 | xargs $(STRIP) 2>/dev/null || true;
+-	@rm -rf $(TARGET_DIR)/usr/man
+-	@rm -rf $(TARGET_DIR)/usr/info
+-	-/sbin/ldconfig -r $(TARGET_DIR) 2>/dev/null
+-	# Use fakeroot to pretend all target binaries are owned by root
+-	rm -f $(STAGING_DIR)/_fakeroot.$(notdir $(UBOOT_TARGET))
+-	touch $(STAGING_DIR)/.fakeroot.00000
+-	cat $(STAGING_DIR)/.fakeroot* > $(STAGING_DIR)/_fakeroot.$(notdir $(UBOOT_TARGET))
+-	echo "chown -R root:root $(TARGET_DIR)" >> $(STAGING_DIR)/_fakeroot.$(notdir $(UBOOT_TARGET))
+-	# Use fakeroot to pretend to create all needed device nodes
+-	echo "$(STAGING_DIR)/bin/makedevs -d $(TARGET_DEVICE_TABLE) $(TARGET_DIR)" \
+-		>> $(STAGING_DIR)/_fakeroot.$(notdir $(UBOOT_TARGET))
+-	# Use fakeroot so mkuboot believes the previous fakery
+-	echo "$(UBOOT_DIR)/uboot-tools/mkuboot " \
+-		    "$(TARGET_DIR) $(UBOOT_TARGET) " \
+-		    "-noappend $(UBOOT_ENDIANNESS)" \
+-		>> $(STAGING_DIR)/_fakeroot.$(notdir $(UBOOT_TARGET))
+-	chmod a+x $(STAGING_DIR)/_fakeroot.$(notdir $(UBOOT_TARGET))
+-	$(STAGING_DIR)/usr/bin/fakeroot -- $(STAGING_DIR)/_fakeroot.$(notdir $(UBOOT_TARGET))
+-	- at rm -f $(STAGING_DIR)/_fakeroot.$(notdir $(UBOOT_TARGET))
+-
+-ubootroot-source: uboot-source
+-
+-ubootroot-clean:
+-	-$(MAKE) -C $(UBOOT_DIR) clean
+-
+-ubootroot-dirclean:
+-	rm -rf $(UBOOT_DIR)
+-
+-#############################################################
+-#
+-# Toplevel Makefile options
+-#
+-#############################################################
+-ifeq ($(strip $(BR2_TARGET_UBOOT)),y)
+-TARGETS+=uboot
++.PHONY:	uboot-bin
++#############################################################
++#
++# Build the uboot root filesystem image
++#
++#############################################################
++
++UBOOT_TARGET:=$(IMAGE).uboot
++
++ubootroot: host-fakeroot makedevs uboot
++	- at find $(TARGET_DIR) -type f -perm +111 | xargs $(STRIP) 2>/dev/null || true;
++	@rm -rf $(TARGET_DIR)/usr/man
++	@rm -rf $(TARGET_DIR)/usr/info
++	-/sbin/ldconfig -r $(TARGET_DIR) 2>/dev/null
++	# Use fakeroot to pretend all target binaries are owned by root
++	rm -f $(STAGING_DIR)/_fakeroot.$(notdir $(UBOOT_TARGET))
++	touch $(STAGING_DIR)/.fakeroot.00000
++	cat $(STAGING_DIR)/.fakeroot* > $(STAGING_DIR)/_fakeroot.$(notdir $(UBOOT_TARGET))
++	echo "chown -R root:root $(TARGET_DIR)" >> $(STAGING_DIR)/_fakeroot.$(notdir $(UBOOT_TARGET))
++	# Use fakeroot to pretend to create all needed device nodes
++	echo "$(STAGING_DIR)/bin/makedevs -d $(TARGET_DEVICE_TABLE) $(TARGET_DIR)" \
++		>> $(STAGING_DIR)/_fakeroot.$(notdir $(UBOOT_TARGET))
++	# Use fakeroot so mkuboot believes the previous fakery
++	echo "$(UBOOT_DIR)/uboot-tools/mkuboot " \
++		    "$(TARGET_DIR) $(UBOOT_TARGET) " \
++		    "-noappend $(UBOOT_ENDIANNESS)" \
++		>> $(STAGING_DIR)/_fakeroot.$(notdir $(UBOOT_TARGET))
++	chmod a+x $(STAGING_DIR)/_fakeroot.$(notdir $(UBOOT_TARGET))
++	$(STAGING_DIR)/usr/bin/fakeroot -- $(STAGING_DIR)/_fakeroot.$(notdir $(UBOOT_TARGET))
++	- at rm -f $(STAGING_DIR)/_fakeroot.$(notdir $(UBOOT_TARGET))
++
++ubootroot-source: uboot-source
++
++ubootroot-clean:
++	-$(MAKE) -C $(UBOOT_DIR) clean
++
++ubootroot-dirclean:
++	rm -rf $(UBOOT_DIR)
++
++#############################################################
++#
++# Toplevel Makefile options
++#
++#############################################################
++ifeq ($(strip $(BR2_TARGET_UBOOT)),y)
++TARGETS+=uboot
+ endif
+ 
+ uboot-test:
+@@ -267,7 +267,7 @@
+ 	- at ls	/tftpboot/$(UBOOT_BIN)
+ 	- at echo	"mkimage = $(MKIMAGE)"
+ 	- at ls	$(MKIMAGE)
+-	- at echo	"u-boot script=$(UBOOT_SCR).$(PROJECT)"
++	- at echo	"u-boot script=$(UBOOT_SCR).$(PROJECT)"
+ 	- at ls	$(UBOOT_SCR).$(PROJECT)
+ 	- at echo	"u-boot script (ASCII)=$(UBOOT_SCR)"
+ 	- at ls	$(UBOOT_SCR)
