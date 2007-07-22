@@ -1,78 +1,125 @@
-From: Ulf Samuelsson <ulf@atmel.com>
-Date: Sun, 22 Jul 2007 17:03:22 +0200
-Subject: [Buildroot] [RFC] Support for "distributions" in buildroot
-References: <20070721184252.GA2523@zelow.no><002501c7cc4a$65c56530$dcc4af0a@atmel.com>
-	<20070722145155.GA27429@zelow.no>
-Message-ID: <00f201c7cc71$8bf68c30$dcc4af0a@atmel.com>
+From: ulf at uclibc.org <ulf@uclibc.org>
+Date: Sun, 22 Jul 2007 10:04:13 -0700 (PDT)
+Subject: [Buildroot] svn commit: trunk/buildroot/target/device/Atmel:
+	DataFlashBoot at91bootstrap u-boot
+Message-ID: <20070722170413.9879EA455C@busybox.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-> On Sun, Jul 22, 2007 at 09:08:50AM +0200, Ulf Samuelsson wrote:
->> 
->> I see buildroot as a promising tool to allow newbies to get running
->> with embedded linux, and the goal of most of my efforts are to
->> reduce the obstacles for the user.
-> 
-> I also think this is a nice goal.
-> 
->> When the newbie wants to start developing a product
->> then ideally it is good to use the latest version of packages,
->> but if that fails, then having a distribution where at least the
->> packages have been known to cooperate is a good thing.
-> 
-> which is where he'd better use the snapshot anyway.
+Author: ulf
+Date: 2007-07-22 10:04:11 -0700 (Sun, 22 Jul 2007)
+New Revision: 19193
 
-At one stage, it is likely that the user wants to swap from the snapshot
-to the current svn.
+Log:
+Use a single ATMEL_MIRROR declaration + cleanup
 
-> 
-> the downside is that it will be an easier path for the user to fork and
-> work on his own snapshot.
-> 
-According to Stephen, forking is a preferred method...
-Personally, I want to avoid forking!
+Modified:
+   trunk/buildroot/target/device/Atmel/DataFlashBoot/DataflashBoot.mk
+   trunk/buildroot/target/device/Atmel/Makefile.in
+   trunk/buildroot/target/device/Atmel/at91bootstrap/at91bootstrap.mk
+   trunk/buildroot/target/device/Atmel/u-boot/u-boot.mk
 
->> Instead of  just applying "*.patch", I much prefer that the makefile fragment
->> use a file with a list of patches which should be applied to the tarball.
->> 
->> Each supported package version then only needs its list of files ("series"?).
->> If a new version with new patches is added, then that needs 
->> a separate "series" file.
-> 
-> I'd rather have a separate patch directory for each version instead of
-> files. then the user can just drop his own patch in that directory
-> without having to edit a file that is in svn.
-> 
 
-It is not mutually exclusive.  I do like having a separate directory as well.
-Sometime patches has to be applied in a certain order,
-and then you need either to name it in directory order (which I don't like)
-or you have a list of patches in the correct order.
+Changeset:
+Modified: trunk/buildroot/target/device/Atmel/DataFlashBoot/DataflashBoot.mk
+===================================================================
+--- trunk/buildroot/target/device/Atmel/DataFlashBoot/DataflashBoot.mk	2007-07-21 22:29:26 UTC (rev 19192)
++++ trunk/buildroot/target/device/Atmel/DataFlashBoot/DataflashBoot.mk	2007-07-22 17:04:11 UTC (rev 19193)
+@@ -5,7 +5,6 @@
+ #############################################################
+ DATAFLASHBOOT_VERSION:=1.05
+ DATAFLASHBOOT_NAME:=DataflashBoot-$(DATAFLASHBOOT_VERSION)
+-ATMEL_MIRROR:=$(strip  $(subst ",, $(BR2_ATMEL_MIRROR)))
+ DATAFLASHBOOT_SITE:=$(ATMEL_MIRROR)/Source
+ DATAFLASHBOOT_SOURCE:=$(DATAFLASHBOOT_NAME).tar.bz2
+ DATAFLASHBOOT_DIR:=$(PROJECT_BUILD_DIR)/$(DATAFLASHBOOT_NAME)
 
->> Adding a new patch for a new version will then not cause a problem, 
->> since the "series" file for the old version is not updated.
->> Patches can be shared between different versions, something which is not
->> possible if we use the current method "<package>-$(version)-<name>.patch".
-> 
-> svn handles softlinks..
-> 
->> It would also be good if there were a structured way to have some patches
->> downloaded from internet, instead of the ad-hoc methods used today.
-> 
-> as you already have said, downloading from the internet can be annoying
-> because the patches or source tarballs can disappear.
-> 
->> -  What happens if one architecture needs version 'A', 
->>    and another architecture needs version 'B'?
-> 
-> it is a good question indeed.
-> 
-> 
+Modified: trunk/buildroot/target/device/Atmel/Makefile.in
+===================================================================
+--- trunk/buildroot/target/device/Atmel/Makefile.in	2007-07-21 22:29:26 UTC (rev 19192)
++++ trunk/buildroot/target/device/Atmel/Makefile.in	2007-07-22 17:04:11 UTC (rev 19193)
+@@ -1,9 +1,14 @@
+ # *******************************************************************
++ATMEL_MIRROR:=$(strip  $(subst ",, $(BR2_ATMEL_MIRROR)))
++#"))
++
+ ifeq ($(strip $(BR2_TARGET_ATMEL)),y)
+ ATMEL_PATH:=target/device/Atmel
+ 
+ BOARD_NAME:=$(strip  $(subst ",, $(BR2_BOARD_NAME)))
++#"))
+ BOARD_PATH:=$(strip  $(subst ",, $(BR2_BOARD_PATH)))
++#"))
+ 
+ ATMEL_TARGET:=$(ATMEL_PATH)/root
+ TARGET_SKELETON:=$(ATMEL_TARGET)/target_skeleton
+@@ -14,9 +19,13 @@
+ 
+ # These are set by Config.in
+ DOWNLOAD_LINUX26_VERSION:=$(strip  $(subst ",, $(BR2_DOWNLOAD_LINUX26_VERSION)))
++#"))
+ LINUX26_VERSION:=$(strip  $(subst ",, $(BR2_LINUX26_VERSION)))
++#"))
+ LINUX26_RC_PATCH:=$(strip  $(subst ",, $(BR2_LINUX26_RC_PATCH)))
++#"))
+ LINUX_BSP_PATCH:=$(strip  $(subst ",, $(BR2_LINUX_BSP_ATMEL_PATCH)))
++#"))
+ 
+ # These are set by "new" Config.in
+ LINUX26_KCONFIG:=$(BOARD_PATH)/$(BOARD_NAME)-linux-$(LINUX26_VERSION).config
 
-Which needs to be answered by those not ack'ing the distribution patch!
+Modified: trunk/buildroot/target/device/Atmel/at91bootstrap/at91bootstrap.mk
+===================================================================
+--- trunk/buildroot/target/device/Atmel/at91bootstrap/at91bootstrap.mk	2007-07-21 22:29:26 UTC (rev 19192)
++++ trunk/buildroot/target/device/Atmel/at91bootstrap/at91bootstrap.mk	2007-07-22 17:04:11 UTC (rev 19193)
+@@ -5,16 +5,16 @@
+ #############################################################
+ AT91BOOTSTRAP_VERSION:=2.3
+ AT91BOOTSTRAP_NAME:=at91bootstrap-$(AT91BOOTSTRAP_VERSION)
+-ATMEL_MIRROR:=$(strip  $(subst ",, $(BR2_ATMEL_MIRROR)))
+ AT91BOOTSTRAP_SITE:=$(ATMEL_MIRROR)/Source
+ AT91BOOTSTRAP_SOURCE:=$(AT91BOOTSTRAP_NAME).tar.bz2
+ AT91BOOTSTRAP_DIR:=$(PROJECT_BUILD_DIR)/$(AT91BOOTSTRAP_NAME)
+ AT91BOOTSTRAP:=$(strip  $(subst ",, $(BR2_AT91BOOTSTRAP)))
++#"))
+ AT91BOOTSTRAP_ZCAT:=bzcat
+ 
+ AT91BOOTSTRAP_MEMORY:=$(strip  $(subst ",, $(BR2_TARGET_AT91BOOTSTRAP_MEMORY)))
++#"))
+ 
+-
+ AT91BOOTSTRAP_BINARY:=$(BOARD_NAME)-$(AT91BOOTSTRAP_MEMORY)boot-$(AT91BOOTSTRAP_VERSION).bin
+ 
+ AT91BOOTSTRAP_TARGET:=$(AT91BOOTSTRAP_DIR)/binaries/$(AT91BOOTSTRAP_BINARY)
 
-Best Regards
-Ulf Samuelsson
+Modified: trunk/buildroot/target/device/Atmel/u-boot/u-boot.mk
+===================================================================
+--- trunk/buildroot/target/device/Atmel/u-boot/u-boot.mk	2007-07-21 22:29:26 UTC (rev 19192)
++++ trunk/buildroot/target/device/Atmel/u-boot/u-boot.mk	2007-07-22 17:04:11 UTC (rev 19193)
+@@ -12,7 +12,6 @@
+ UBOOT_BUILD_DIR:=$(PROJECT_BUILD_DIR)/u-boot-$(UBOOT_VERSION)
+ UBOOT_SOURCE:=u-boot-$(UBOOT_VERSION).tar.bz2
+ #UBOOT_SOURCE:=u-boot-1.1.5-atmel.tar.bz2
+-ATMEL_MIRROR:=$(strip  $(subst ",, $(BR2_ATMEL_MIRROR)))
+ #UBOOT_SITE:=http://$(BR2_SOURCEFORGE_MIRROR).dl.sourceforge.net/sourceforge/u-boot
+ UBOOT_SITE:=$(ATMEL_MIRROR)/Source
+ UBOOT_PATCH_SITE:=$(ATMEL_MIRROR)/Source
+@@ -30,10 +29,15 @@
+ 
+ UBOOT_SCR=$(BINARIES_DIR)/autoscript
+ TARGET_UBOOT_IPADDR:=$(strip  $(subst ",, $(BR2_TARGET_UBOOT_IPADDR)))
++#"))
+ TARGET_UBOOT_SERVERIP:=$(strip  $(subst ",, $(BR2_TARGET_UBOOT_SERVERIP)))
++#"))
+ TARGET_UBOOT_GATEWAY:=$(strip  $(subst ",, $(BR2_TARGET_UBOOT_GATEWAY)))
++#"))
+ TARGET_UBOOT_NETMASK:=$(strip  $(subst ",, $(BR2_TARGET_UBOOT_NETMASK)))
++#"))
+ TARGET_UBOOT_ETHADDR:=$(strip  $(subst ",, $(BR2_TARGET_UBOOT_ETHADDR)))
++#"))
+ UBOOT_CUSTOM:=$(UBOOT_DIR)/include/custom.h
+ 
+ $(DL_DIR)/$(UBOOT_SOURCE):
