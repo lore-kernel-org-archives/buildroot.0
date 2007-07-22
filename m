@@ -1,57 +1,50 @@
-From: Robin Gilks <robin.gilks@tait.co.nz>
-Date: Mon, 23 Jul 2007 09:47:57 +1200
-Subject: [Buildroot] svn
-	commit:trunk/buildroot/target/device/Atmel/Linux:kernel-patches-2.6.22.1
-In-Reply-To: <20070720082750.D5D413008C@busybox.net>
-References: <20070720082750.D5D413008C@busybox.net>
-Message-ID: <46A3D08D.4070505@tait.co.nz>
+From: Ulf Samuelsson <ulf@atmel.com>
+Date: Mon, 23 Jul 2007 00:49:53 +0200
+Subject: [Buildroot] svn commit: trunk/buildroot:
+	packagetarget/device/Atmel
+References: <20070722171703.79776A4756@busybox.net>
+	<46A3B766.2000808@realitydiluted.com>
+Message-ID: <013701c7ccb3$1a92a960$dcc4af0a@atmel.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-ulf at uclibc.org wrote:
-> Author: ulf
-> Date: 2007-07-20 01:27:49 -0700 (Fri, 20 Jul 2007)
-> New Revision: 19172
-> 
-> Log:
-> Add patch for linux 2.6.22.1
-> 
-> Added:
->    trunk/buildroot/target/device/Atmel/Linux/kernel-patches-2.6.22.1/
->    trunk/buildroot/target/device/Atmel/Linux/kernel-patches-2.6.22.1/2.6.22.1-atmel.patch
-> 
-> 
-> Changeset:
-> 
-> Sorry, the patch is too large to include (9725 lines).
-> Please use ViewCVS to see it!
-> 
-> http://uclibc.org/cgi-bin/viewcvs.cgi?view=rev&root=svn&rev=19172
 
-Is there any differentiation between different families of Atmel CPU in 
-the buildroot tree? i.e. does this patchset only apply to AT91 series or 
-does it include AVR32?
+> ulf at uclibc.org wrote:
+>> Author: ulf
+>> Date: 2007-07-22 10:17:03 -0700 (Sun, 22 Jul 2007)
+>> New Revision: 19194
+>> 
+>> Log:
+>> ATMEL_MIRROR needs to be available before toolchain is built
+>> 
+>> Modified:
+>>    trunk/buildroot/package/Makefile.in
+>>    trunk/buildroot/target/device/Atmel/Makefile.in
+>> 
+> Ulf,
+> 
+> Please do not put any platform dependent code in the 'package/Makefile.in'
+> file. It does not belong there. I will revert your change.
+> 
 
-Many thanks
 
--- 
-Robin Gilks
-Senior Design Engineer          Phone: (+64)(3) 357 1569
-Tait Electronics                Fax  :  (+64)(3) 359 4632
-PO Box 1645 Christchurch        Email : robin.gilks at tait.co.nz
-New Zealand
+While it is used for target/device/Atmel files, it is also needed
+to download binutils/gcc/gdb tarballs for AVR32 architecture support.
+If it is defined in target/device/Atmel, then it is not defined during
+the toolchain build. causing this to fail.
 
-=======================================================================
-This email, including any attachments, is only for the intended
-addressee.  It is subject to copyright, is confidential and may be
-the subject of legal or other privilege, none of which is waived or
-lost by reason of this transmission.
-If the receiver is not the intended addressee, please accept our
-apologies, notify us by return, delete all copies and perform no
-other act on the email.
-Unfortunately, we cannot warrant that the email has not been
- altered or corrupted during transmission.
-=======================================================================
+The alternative is to submit a 7-10 MB patch+ for the buildroot tree
+with all the AVR32 architecture patches, which I thought was a bad idea.
+
+If you don't like that location, you need to come up with a location
+where to put the definition of ATMEL_MIRROR *before*
+"include toolchain/*/*.mk" in the main Makefile
+
+The main Makefile seems to be the only other suitable location.
+
+
+Best Regards
+Ulf Samuelsson
