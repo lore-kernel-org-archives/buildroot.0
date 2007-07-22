@@ -1,44 +1,52 @@
 From: Ulf Samuelsson <ulf@atmel.com>
-Date: Mon, 23 Jul 2007 00:51:40 +0200
-Subject: [Buildroot]
-	svncommit:trunk/buildroot/target/device/Atmel/Linux:kernel-patches-2.6.22.1
-References: <20070720082750.D5D413008C@busybox.net>
-	<46A3D08D.4070505@tait.co.nz>
-Message-ID: <013801c7ccb3$1b627c80$dcc4af0a@atmel.com>
+Date: Mon, 23 Jul 2007 01:00:43 +0200
+Subject: [Buildroot] svn commit: trunk/buildroot/package
+References: <20070722200955.BDC7BA6064@busybox.net>
+Message-ID: <014c01c7ccb4$26edd990$dcc4af0a@atmel.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-> ulf at uclibc.org wrote:
->> Author: ulf
->> Date: 2007-07-20 01:27:49 -0700 (Fri, 20 Jul 2007)
->> New Revision: 19172
->> 
->> Log:
->> Add patch for linux 2.6.22.1
->> 
->> Added:
->>    trunk/buildroot/target/device/Atmel/Linux/kernel-patches-2.6.22.1/
->>    trunk/buildroot/target/device/Atmel/Linux/kernel-patches-2.6.22.1/2.6.22.1-atmel.patch
->> 
->> 
->> Changeset:
->> 
->> Sorry, the patch is too large to include (9725 lines).
->> Please use ViewCVS to see it!
->> 
->> http://uclibc.org/cgi-bin/viewcvs.cgi?view=rev&root=svn&rev=19172
-> 
-> Is there any differentiation between different families of Atmel CPU in 
-> the buildroot tree? i.e. does this patchset only apply to AT91 series or 
-> does it include AVR32?
-> 
-
-So far, only AT91 but I am preparing support for AVR32 as well.
-Please note that a lot of the AVR32 patches are already included in linux-2.6.22.1
-
+As pointed out before, this patch breaks the future AVR32 architecture support.
+Please submit a patch ASAP making ATMEL_MIRROR visible from toolchain/*/*.mk.
 
 Best Regards
 Ulf Samuelsson
+
+
+> Author: sjhill
+> Date: 2007-07-22 13:09:54 -0700 (Sun, 22 Jul 2007)
+> New Revision: 19195
+> 
+> Log:
+> No platform code in this file.
+> 
+> 
+> Modified:
+>   trunk/buildroot/package/Makefile.in
+> 
+> 
+> Changeset:
+> Modified: trunk/buildroot/package/Makefile.in
+> ===================================================================
+> --- trunk/buildroot/package/Makefile.in 2007-07-22 17:17:03 UTC (rev 19194)
+> +++ trunk/buildroot/package/Makefile.in 2007-07-22 20:09:54 UTC (rev 19195)
+> @@ -107,10 +107,6 @@
+> TARGET_PATH="$(STAGING_DIR)/bin:$(TOOL_BUILD_DIR)/bin:$(TOOLCHAIN_EXTERNAL_PATH)/bin:$(PATH)"
+> IMAGE:=$(BINARIES_DIR)/rootfs.$(TOOLCHAIN_EXTERNAL_PREFIX)
+> 
+> -# ATMEL_MIRROR Needs to be available before toolchain is built
+> -ATMEL_MIRROR:=$(strip  $(subst ",, $(BR2_ATMEL_MIRROR)))
+> -#"))
+> -
+> REAL_GNU_TARGET_NAME=$(TOOLCHAIN_EXTERNAL_PREFIX)
+> GNU_TARGET_NAME=$(TOOLCHAIN_EXTERNAL_PREFIX)
+> KERNEL_CROSS=$(TOOLCHAIN_EXTERNAL_PATH)/bin/$(TOOLCHAIN_EXTERNAL_PREFIX)-
+> 
+> _______________________________________________
+> buildroot mailing list
+> buildroot at uclibc.org
+> http://busybox.net/mailman/listinfo/buildroot
+>
