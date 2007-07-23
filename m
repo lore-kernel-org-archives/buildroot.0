@@ -1,92 +1,46 @@
-From: aldot at uclibc.org <aldot@uclibc.org>
-Date: Mon, 23 Jul 2007 04:01:00 -0700 (PDT)
-Subject: [Buildroot] svn commit: trunk/buildroot/package/openssh
-Message-ID: <20070723110100.68581A6863@busybox.net>
+From: Bernhard Fischer <rep.dot.nop@gmail.com>
+Date: Mon, 23 Jul 2007 12:52:07 +0200
+Subject: [Buildroot] svn commit: trunk/buildroot/package:  fbset
+In-Reply-To: <20070723090059.A7303A6816@busybox.net>
+References: <20070723090059.A7303A6816@busybox.net>
+Message-ID: <20070723105207.GD7044@aon.at>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Author: aldot
-Date: 2007-07-23 04:00:59 -0700 (Mon, 23 Jul 2007)
-New Revision: 19215
+On Mon, Jul 23, 2007 at 02:00:59AM -0700, ulf at uclibc.org wrote:
+>Author: ulf
+>Date: 2007-07-23 02:00:58 -0700 (Mon, 23 Jul 2007)
+>New Revision: 19209
+>
+>Log:
+>Add fbset 'frame buffer set' package
+>
+>Added:
+>   trunk/buildroot/package/fbset/
+>   trunk/buildroot/package/fbset/Config.in
+>   trunk/buildroot/package/fbset/fbset-2.1-avr32.patch
+>   trunk/buildroot/package/fbset/fbset.mk
+>
+>Modified:
+>   trunk/buildroot/package/Config.in
+>
+>
+>Changeset:
+>Modified: trunk/buildroot/package/Config.in
+>===================================================================
+>--- trunk/buildroot/package/Config.in	2007-07-23 08:59:10 UTC (rev 19208)
+>+++ trunk/buildroot/package/Config.in	2007-07-23 09:00:58 UTC (rev 19209)
+>@@ -287,6 +287,7 @@
+> source "package/directfb/Config.in"
+> if !BR2_PACKAGE_BUSYBOX_HIDE_OTHERS || BR2_avr32
 
-Log:
-- add runlevel script for later use
+bringing any arch into play here is wrong. Remove this, please.
 
-
-Added:
-   trunk/buildroot/package/openssh/S50sshd
-
-
-Changeset:
-Added: trunk/buildroot/package/openssh/S50sshd
-===================================================================
---- trunk/buildroot/package/openssh/S50sshd	                        (rev 0)
-+++ trunk/buildroot/package/openssh/S50sshd	2007-07-23 11:00:59 UTC (rev 19215)
-@@ -0,0 +1,64 @@
-+#!/bin/sh
-+#
-+# sshd        Starts sshd.
-+#
-+
-+# Make sure the ssh-keygen progam exists
-+[ -f /usr/bin/ssh-keygen ] || exit 0
-+
-+# Check for the SSH1 RSA key
-+if [ ! -f /etc/ssh_host_key ] ; then
-+	echo Generating RSA Key...
-+	/usr/bin/ssh-keygen -t rsa1 -f /etc/ssh_host_key -C '' -N ''
-+fi
-+
-+# Check for the SSH2 RSA key
-+if [ ! -f /etc/ssh_host_rsa_key ] ; then
-+	echo Generating RSA Key...
-+	/usr/bin/ssh-keygen -t rsa -f /etc/ssh_host_rsa_key -C '' -N ''
-+fi
-+
-+# Check for the SSH2 DSA key
-+if [ ! -f /etc/ssh_host_dsa_key ] ; then
-+	echo Generating DSA Key...
-+	echo THIS CAN TAKE A MINUTE OR TWO DEPENDING ON YOUR PROCESSOR!
-+	echo
-+        /usr/bin/ssh-keygen -t dsa -f /etc/ssh_host_dsa_key -C '' -N ''
-+fi
-+                
-+umask 077
-+
-+start() {
-+ 	echo -n "Starting sshd: "
-+	/usr/sbin/sshd
-+	touch /var/lock/sshd
-+	echo "OK"
-+}	
-+stop() {
-+	echo -n "Stopping sshd: "
-+        killall	sshd 
-+	rm -f /var/lock/sshd
-+	echo "OK" 
-+}
-+restart() {
-+	stop
-+	start
-+}	
-+
-+case "$1" in
-+  start)
-+  	start
-+	;;
-+  stop)
-+  	stop
-+	;;
-+  restart|reload)
-+  	restart
-+	;;
-+  *)
-+	echo $"Usage: $0 {start|stop|restart}"
-+	exit 1
-+esac
-+
-+exit $?
-+
+> source "package/fbv/Config.in"
+>+source "package/fbset/Config.in"
+> endif
+> source "package/jpeg/Config.in"
+> source "package/libpng/Config.in"
