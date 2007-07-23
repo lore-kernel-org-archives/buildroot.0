@@ -1,33 +1,38 @@
-From: aldot at uclibc.org <aldot@uclibc.org>
-Date: Mon, 23 Jul 2007 03:29:37 -0700 (PDT)
-Subject: [Buildroot] svn commit: trunk/buildroot/toolchain/kernel-headers
-Message-ID: <20070723102937.4FBFCA6132@busybox.net>
+From: Cristian Ionescu-Idbohrn <cristian.ionescu-idbohrn@axis.com>
+Date: Mon, 23 Jul 2007 12:22:41 +0200 (CEST)
+Subject: [Buildroot] _VER vs. _VERSION breakage
+In-Reply-To: <20070723095243.GC6597@aon.at>
+References: <20070715104024.GB4096@aon.at>
+	<1184615647.18357.27.camel@elrond.sweden.atmel.com>
+	<20070723095243.GC6597@aon.at>
+Message-ID: <0707231218440.1707@somehost>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Author: aldot
-Date: 2007-07-23 03:29:34 -0700 (Mon, 23 Jul 2007)
-New Revision: 19214
+On Mon, 23 Jul 2007, Bernhard Fischer wrote:
 
-Log:
-- update ipmisensors
-- add lzma vmlinuz
+> On Mon, Jul 16, 2007 at 09:54:06PM +0200, Ulf Samuelsson wrote:
+> >s?n 2007-07-15 klockan 12:40 +0200 skrev Bernhard Fischer:
+> >> Ulf,
+> >>
+> >> Your change to use _VERSION broke at least acpid. Please double-check
+> >> that all packages that you touched in this patch still build fine and
+> >> repair.
+> >
+> >Here is the result of trying to build most available packages
+> >in buildroot for ARM. (I build for ARM generic (not using WCHAR)).
+>
+> I will revert that _VERSION vs. _VER patch since it breaks a couple of
+> packages.
+
+Now this is IMO a rather silly :( You made your point.  Can't you just
+fix those "couple of packages" instead and stop this ping-pong game?
 
 
-Added:
-   trunk/buildroot/toolchain/kernel-headers/linux-2.6.21.5-001-lzma-vmlinuz.00.patch
-   trunk/buildroot/toolchain/kernel-headers/linux-2.6.21.5-ipmisensors-20070314-1214.patch
+Cheers,
 
-Modified:
-   trunk/buildroot/toolchain/kernel-headers/linux-2.6.20.4-ipmisensors-20070314-1214.patch
-
-
-Changeset:
-
-Sorry, the patch is too large to include (33143 lines).
-Please use ViewCVS to see it!
-
-http://uclibc.org/cgi-bin/viewcvs.cgi?view=rev&root=svn&rev=19214
+-- 
+Cristian
