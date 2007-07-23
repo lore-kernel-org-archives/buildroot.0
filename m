@@ -1,7 +1,7 @@
 From: ulf at uclibc.org <ulf@uclibc.org>
-Date: Mon, 23 Jul 2007 01:47:33 -0700 (PDT)
+Date: Mon, 23 Jul 2007 01:54:48 -0700 (PDT)
 Subject: [Buildroot] svn commit: trunk/buildroot/package/dnsmasq
-Message-ID: <20070723084733.4D627A65DD@busybox.net>
+Message-ID: <20070723085448.60542A65CB@busybox.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -9,57 +9,68 @@ Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
 Author: ulf
-Date: 2007-07-23 01:47:32 -0700 (Mon, 23 Jul 2007)
-New Revision: 19206
+Date: 2007-07-23 01:54:47 -0700 (Mon, 23 Jul 2007)
+New Revision: 19207
 
 Log:
-Bump version of dnsmasq, with new patches
+Remove unneeded patch from new dnsmasq version
 
-Added:
-   trunk/buildroot/package/dnsmasq/dnsmasq2-100-include-correct-prctl-header.patch
-
-Modified:
-   trunk/buildroot/package/dnsmasq/dnsmasq.mk
+Removed:
+   trunk/buildroot/package/dnsmasq/dnsmasq2-100-config.patch
 
 
 Changeset:
-Modified: trunk/buildroot/package/dnsmasq/dnsmasq.mk
+Deleted: trunk/buildroot/package/dnsmasq/dnsmasq2-100-config.patch
 ===================================================================
---- trunk/buildroot/package/dnsmasq/dnsmasq.mk	2007-07-23 08:35:06 UTC (rev 19205)
-+++ trunk/buildroot/package/dnsmasq/dnsmasq.mk	2007-07-23 08:47:32 UTC (rev 19206)
-@@ -6,7 +6,7 @@
- 
- DNSMASQ_SITE=http://thekelleys.org.uk/dnsmasq
- ifeq ($(filter $(TARGETS),dnsmasq1),)
--DNSMASQ_UPVER=2.22
-+DNSMASQ_UPVER=2.39
- DNSMASQ_VERSION=dnsmasq2
- else
- DNSMASQ_UPVER=1.18
-@@ -34,6 +34,8 @@
- 	$(MAKE) BINDIR=/usr/sbin MANDIR=/usr/man \
- 		DESTDIR=$(TARGET_DIR) -C $(DNSMASQ_DIR) install
- 	$(STRIP) $(TARGET_DIR)/$(DNSMASQ_TARGET_BINARY)
-+	mkdir -p $(TARGET_DIR)/var/lib/misc
-+	ln -sf /tmp/dnsmasq.leases $(TARGET_DIR)/var/lib/misc/dnsmasq.leases
- 	rm -rf $(TARGET_DIR)/usr/man
- 
- dnsmasq: uclibc $(TARGET_DIR)/$(DNSMASQ_TARGET_BINARY)
-
-Added: trunk/buildroot/package/dnsmasq/dnsmasq2-100-include-correct-prctl-header.patch
-===================================================================
---- trunk/buildroot/package/dnsmasq/dnsmasq2-100-include-correct-prctl-header.patch	                        (rev 0)
-+++ trunk/buildroot/package/dnsmasq/dnsmasq2-100-include-correct-prctl-header.patch	2007-07-23 08:47:32 UTC (rev 19206)
-@@ -0,0 +1,12 @@
-+diff -upr dnsmasq-2.39/src/dnsmasq.h dnsmasq-2.39-orig/src/dnsmasq.h
-+--- dnsmasq-2.39/src/dnsmasq.h	2007-04-20 12:53:38.000000000 +0200
-++++ dnsmasq-2.39-orig/src/dnsmasq.h	2007-06-12 11:12:19.000000000 +0200
-+@@ -79,7 +79,7 @@
-+ /* There doesn't seem to be a universally-available 
-+    userpace header for this. */
-+ extern int capset(cap_user_header_t header, cap_user_data_t data);
-+-#include <sys/prctl.h>
-++#include <linux/prctl.h>
-+ #endif
-+ 
-+ /* Min buffer size: we check after adding each record, so there must be 
+--- trunk/buildroot/package/dnsmasq/dnsmasq2-100-config.patch	2007-07-23 08:47:32 UTC (rev 19206)
++++ trunk/buildroot/package/dnsmasq/dnsmasq2-100-config.patch	2007-07-23 08:54:47 UTC (rev 19207)
+@@ -1,49 +0,0 @@
+-diff -ur dnsmasq-2.15.orig/src/config.h dnsmasq-2.15/src/config.h
+---- dnsmasq-2.15.orig/src/config.h	2004-10-08 11:41:34.757371880 -0400
+-+++ dnsmasq-2.15/src/config.h	2004-10-08 11:43:49.074952504 -0400
+-@@ -78,6 +78,11 @@
+- /* We assume that systems which don't have IPv6
+-    headers don't have ntop and pton either */
+- 
+-+#if defined(__UCLIBC__) && !defined(__UCLIBC_HAS_IPV6__)
+-+#  undef NO_IPV6
+-+#  define NO_IPV6
+-+#endif
+-+
+- #if defined(INET6_ADDRSTRLEN) && defined(IPV6_V6ONLY) && !defined(NO_IPV6)
+- #  define HAVE_IPV6
+- #  define ADDRSTRLEN INET6_ADDRSTRLEN
+-@@ -194,7 +199,7 @@
+- /* platform dependent options. */
+- 
+- /* Must preceed __linux__ since uClinux defines __linux__ too. */
+--#if defined(__uClinux__) || defined(__UCLIBC__)
+-+#if defined(__uClinux__)
+- #undef HAVE_LINUX_IPV6_PROC
+- #define HAVE_GETOPT_LONG
+- #undef HAVE_ARC4RANDOM
+-@@ -208,6 +213,24 @@
+- #  define NO_FORK
+- #endif
+- 
+-+#elif defined(__linux__) && defined(__UCLIBC__)
+-+#  define HAVE_LINUX_IPV6_PROC
+-+#  if defined(__UCLIBC_HAS_GNU_GETOPT__) || \
+-+   ((__UCLIBC_MAJOR__==0) && (__UCLIBC_MINOR__==9) && (__UCLIBC_SUBLEVEL__<21))
+-+#    define HAVE_GETOPT_LONG
+-+#  else
+-+#    undef HAVE_GETOPT_LONG
+-+#  endif
+-+#undef HAVE_ARC4RANDOM
+-+#define HAVE_RANDOM
+-+#define HAVE_DEV_URANDOM
+-+#define HAVE_DEV_RANDOM
+-+#undef HAVE_SOCKADDR_SA_LEN
+-+#undef HAVE_PSELECT
+-+#if !defined(__ARCH_HAS_MMU__)
+-+#  define NO_FORK
+-+#endif
+-+
+- /* libc5 - must precede __linux__ too */
+- /* Note to build a libc5 binary on a modern Debian system:
+-    install the packages altgcc libc5 and libc5-altdev 
