@@ -1,44 +1,76 @@
-From: Ulf Samuelsson <ulf@atmel.com>
-Date: Mon, 23 Jul 2007 15:18:05 +0200
-Subject: [Buildroot] svn commit: trunk/buildroot/package:  alsa-lib
-In-Reply-To: <20070723103336.GA7044@aon.at>
-References: <20070723075415.0C7BDA467A@busybox.net>
-	<20070723103336.GA7044@aon.at>
-Message-ID: <1185196685.21840.25.camel@elrond.sweden.atmel.com>
+From: ulf at uclibc.org <ulf@uclibc.org>
+Date: Mon, 23 Jul 2007 05:40:44 -0700 (PDT)
+Subject: [Buildroot] svn commit: trunk/buildroot/package/mplayer
+Message-ID: <20070723124044.664C930041@busybox.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+Author: ulf
+Date: 2007-07-23 05:40:43 -0700 (Mon, 23 Jul 2007)
+New Revision: 19229
 
->+$(ALSA_LIB_DIR)/src/.libs/$(ALSA_LIB_BINARY): $(ALSA_LIB_DIR)/.configured
-> >+	$(MAKE) -C $(ALSA_LIB_DIR)
-> >+	@touch -c $@
-> >+
-> >+$(STAGING_DIR)/$(ALSA_LIB_TARGET_BINARY): $(ALSA_LIB_DIR)/src/.libs/$(ALSA_LIB_BINARY)
-> >+	$(MAKE) DESTDIR=$(STAGING_DIR) -C $(ALSA_LIB_DIR) install
-> >+	@touch -c $@
-> >+
-> >+$(TARGET_DIR)/$(ALSA_LIB_TARGET_BINARY): $(STAGING_DIR)/$(ALSA_LIB_TARGET_BINARY)
-> >+	@mkdir -p $(TARGET_DIR)/usr/share/alsa
-> >+	@mkdir -p $(TARGET_DIR)/usr/lib/alsa-lib
-> >+	cp -dpf  $(STAGING_DIR)/lib/libasound.so*  $(TARGET_DIR)/usr/lib/
-> >+	cp -rdpf $(STAGING_DIR)/usr/share/alsa/*   $(TARGET_DIR)/usr/share/alsa/
-> >+	cp -rdpf $(STAGING_DIR)/usr/lib/alsa-lib/* $(TARGET_DIR)/usr/lib/alsa-lib/
-> 
-> install(1) would be cleaner, especially if you consider that it's a new
-> package.
+Log:
+Cleanup of mplayer package
 
-make install is done on the staging dir.
-I think the reason for not doing make install on the target dir is
-that it will add a lot of other stuff which is not wanted on an embedded
-system.
-It is a matter of taste if you "install and remove", or just copy
-the *needed* stuff. 
-Have to discuss with Someone Else(tm) if you insist.
+Modified:
+   trunk/buildroot/package/mplayer/mplayer.mk
 
-> _______________________________________________
-> buildroot mailing list
-> buildroot at uclibc.org
-> http://busybox.net/mailman/listinfo/buildroot
+
+Changeset:
+Modified: trunk/buildroot/package/mplayer/mplayer.mk
+===================================================================
+--- trunk/buildroot/package/mplayer/mplayer.mk	2007-07-23 12:33:22 UTC (rev 19228)
++++ trunk/buildroot/package/mplayer/mplayer.mk	2007-07-23 12:40:43 UTC (rev 19229)
+@@ -3,10 +3,10 @@
+ # mplayer
+ #
+ #############################################################
+-MPLAYER_VER:=1.0rc1
+-MPLAYER_SOURCE:=MPlayer-$(MPLAYER_VER).tar.bz2
++MPLAYER_VERSION:=1.0rc1
++MPLAYER_SOURCE:=MPlayer-$(MPLAYER_VERSION).tar.bz2
+ MPLAYER_SITE:=http://www7.mplayerhq.hu/MPlayer/releases
+-MPLAYER_DIR:=$(BUILD_DIR)/MPlayer-$(MPLAYER_VER)
++MPLAYER_DIR:=$(BUILD_DIR)/MPlayer-$(MPLAYER_VERSION)
+ MPLAYER_CAT:=$(BZCAT)
+ MPLAYER_BINARY:=mplayer
+ MPLAYER_TARGET_BINARY:=usr/bin/$(MPLAYER_BINARY)
+@@ -22,12 +22,13 @@
+ 
+ $(MPLAYER_DIR)/.unpacked: $(DL_DIR)/$(MPLAYER_SOURCE)
+ 	$(MPLAYER_CAT) $(DL_DIR)/$(MPLAYER_SOURCE) | tar -C $(BUILD_DIR) $(TAR_OPTIONS) -
+-	toolchain/patch-kernel.sh $(MPLAYER_DIR) package/mplayer/ mplayer-$(MPLAYER_VER)\*.patch\*
+-	@touch $@
++	toolchain/patch-kernel.sh $(MPLAYER_DIR) package/mplayer/ mplayer-$(MPLAYER_VERSION)\*.patch\*
++	touch $@
+ 
+ $(MPLAYER_DIR)/.configured: $(MPLAYER_DIR)/.unpacked
+ 	(cd $(MPLAYER_DIR); rm -rf config.cache; \
+ 		$(TARGET_CONFIGURE_OPTS) \
++		$(TARGET_CONFIGURE_ARGS) \
+ 		CFLAGS="$(TARGET_CFLAGS)" \
+ 		LDFLAGS="$(TARGET_LDFLAGS)" \
+ 		./configure \
+@@ -46,16 +47,16 @@
+ 		--disable-tv \
+ 		--enable-dynamic-plugins \
+ 	);
+-	@touch $@
++	touch $@
+ 
+ $(MPLAYER_DIR)/$(MPLAYER_BINARY): $(MPLAYER_DIR)/.configured
+ 	$(MAKE) -C $(MPLAYER_DIR)
+-	@touch -c $@
++	touch -c $@
+ 
+ $(TARGET_DIR)/$(MPLAYER_TARGET_BINARY): $(MPLAYER_DIR)/$(MPLAYER_BINARY)
+ 	$(INSTALL) -m 0755 -D $(MPLAYER_DIR)/$(MPLAYER_BINARY) $(TARGET_DIR)/$(MPLAYER_TARGET_BINARY)
+ 	-$(STRIP) --strip-unneeded $(TARGET_DIR)/$(MPLAYER_TARGET_BINARY)
+-	@touch -c $@
++	touch -c $@
+ 
+ mplayer: uclibc libmad $(TARGET_DIR)/$(MPLAYER_TARGET_BINARY)
+ 
