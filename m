@@ -1,50 +1,38 @@
-From: aldot at uclibc.org <aldot@uclibc.org>
-Date: Mon, 23 Jul 2007 07:43:41 -0700 (PDT)
-Subject: [Buildroot] svn commit: trunk/buildroot/target/linux
-Message-ID: <20070723144341.7D65FA4606@busybox.net>
+From: Bernhard Fischer <rep.dot.nop@gmail.com>
+Date: Mon, 23 Jul 2007 16:43:14 +0200
+Subject: [Buildroot] package/linux/Makefile.in does not include
+	'openswan' patches
+In-Reply-To: <20070723142207.GA9324@aon.at>
+References: <1185196286.21840.18.camel@elrond.sweden.atmel.com>
+	<20070723132936.GB7902@aon.at> <20070723142207.GA9324@aon.at>
+Message-ID: <20070723144314.GC9324@aon.at>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Author: aldot
-Date: 2007-07-23 07:43:40 -0700 (Mon, 23 Jul 2007)
-New Revision: 19233
+On Mon, Jul 23, 2007 at 04:22:07PM +0200, Bernhard Fischer wrote:
+>On Mon, Jul 23, 2007 at 03:29:36PM +0200, Bernhard Fischer wrote:
 
-Log:
-- revert a part that was introduced with the PROJECT changes.
-  fixes unability to build a kernel (failed to find rule .patched)
+>make: *** No rule to make target
+>`/scratch/obj.i686/buildroot.mine/project_build_i386//linux-2.6.21.5/.patched',
+>needed by
+>`/scratch/obj.i686/buildroot.mine/project_build_i386//linux-2.6.21.5/.configured'.
+>Stop.
+>
+>
+>This is due to this PROJECT thing. Please revert immediately or fix ASAP.
 
+By now i have reverted these incorrect hunks in svn.
+>
+>While i understand that it's possible that one thing or another can
+>break in the course of changes, i ask you to be more careful.
 
-Modified:
-   trunk/buildroot/target/linux/Makefile.in
+I suggest you
+ifneq ($(PROJECT_BUILD_DIR),)
+fixup_after_ulf=O=$(PROJECT_BUILD_DIR)
+endif
+LINUX26_MAKE_FLAGS+=$(fixup_after_ulf)
 
-
-Changeset:
-Modified: trunk/buildroot/target/linux/Makefile.in
-===================================================================
---- trunk/buildroot/target/linux/Makefile.in	2007-07-23 14:05:02 UTC (rev 19232)
-+++ trunk/buildroot/target/linux/Makefile.in	2007-07-23 14:43:40 UTC (rev 19233)
-@@ -58,7 +58,7 @@
- LINUX26_KERNEL=$(BINARIES_DIR)/linux-kernel-$(LINUX26_VERSION)-$(KERNEL_ARCH)
- 
- # Version of Linux AFTER patches
--LINUX26_DIR=$(PROJECT_BUILD_DIR)/linux-$(LINUX26_VERSION)
-+LINUX26_DIR=$(BUILD_DIR)/linux-$(LINUX26_VERSION)
- 
- # for packages that need it
- LINUX_VERSION:=$(LINUX_VERSION)
-@@ -89,10 +89,10 @@
- 
- $(LINUX26_DIR)/.unpacked: $(DL_DIR)/$(LINUX26_SOURCE)
- 	rm -rf $(LINUX26_DIR)
--	$(LINUX26_BZCAT) $(DL_DIR)/$(LINUX26_SOURCE) | tar -C $(PROJECT_BUILD_DIR) $(TAR_OPTIONS) -
-+	$(LINUX26_BZCAT) $(DL_DIR)/$(LINUX26_SOURCE) | tar -C $(BUILD_DIR) $(TAR_OPTIONS) -
- ifneq ($(DOWNLOAD_LINUX26_VERSION),$(LINUX26_VERSION))
- 	# Rename the dir from the downloaded version to the AFTER patch version
--	mv -f $(PROJECT_BUILD_DIR)/linux-$(DOWNLOAD_LINUX26_VERSION) $(LINUX26_DIR)
-+	mv -f $(BUILD_DIR)/linux-$(DOWNLOAD_LINUX26_VERSION) $(LINUX26_DIR)
- endif
- 	touch $@
- 
+but you were about to do the same anyway, weren't you..
