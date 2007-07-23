@@ -1,94 +1,33 @@
-From: ulf at uclibc.org <ulf@uclibc.org>
-Date: Mon, 23 Jul 2007 05:03:25 -0700 (PDT)
-Subject: [Buildroot] svn commit: trunk/buildroot/package/alsa-utils
-Message-ID: <20070723120325.43DBFA6ABD@busybox.net>
+From: Giammarco Zacheo <g.zacheo@gmail.com>
+Date: Mon, 23 Jul 2007 13:53:09 +0200
+Subject: [Buildroot] daily snapshot build for nios2 not working
+Message-ID: <b054e88e0707230453x74dda4d8se86da67ae97b5e17@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Author: ulf
-Date: 2007-07-23 05:03:24 -0700 (Mon, 23 Jul 2007)
-New Revision: 19224
+Hi all,
+   I downloaded several of the latest daily snapshots for buildroot.
+When I select the nios2 platform in the configuration menu, the
+"Kernel Header Options" selection in the in the "Toolchain Options"
+menu disappears. After completing configuration, at the "make
+menuconfig" command i get this output:
 
-Log:
-cleanup alsa-utils
+wget --passive-ftp  -P /home/giammarco/buildroot/dl
+127.0.0.1/unspecified-kernel-headers
+--13:45:14--  http://127.0.0.1/unspecified-kernel-headers
+           => `/home/giammarco/buildroot/dl/unspecified-kernel-headers'
+Connecting to 127.0.0.1:80... failed: Connection refused.
+make: *** [/home/giammarco/buildroot/dl/unspecified-kernel-headers] Error 1
 
-Modified:
-   trunk/buildroot/package/alsa-utils/alsa-utils.mk
+i saw in the kconfig that there are links provided for the kernel
+souce for all platforms but nios2.
 
+Can anybody please help? I need a working toolchain and if possible a
+build of uClibc for nios2 in order to use it with uClinux.
 
-Changeset:
-Modified: trunk/buildroot/package/alsa-utils/alsa-utils.mk
-===================================================================
---- trunk/buildroot/package/alsa-utils/alsa-utils.mk	2007-07-23 12:03:17 UTC (rev 19223)
-+++ trunk/buildroot/package/alsa-utils/alsa-utils.mk	2007-07-23 12:03:24 UTC (rev 19224)
-@@ -3,10 +3,10 @@
- # alsa-utils
- #
- #############################################################
--ALSA_UTILS_VER:=1.0.14
--ALSA_UTILS_SOURCE:=alsa-utils-$(ALSA_UTILS_VER).tar.bz2
-+ALSA_UTILS_VERSION:=1.0.14
-+ALSA_UTILS_SOURCE:=alsa-utils-$(ALSA_UTILS_VERSION).tar.bz2
- ALSA_UTILS_SITE:=ftp://ftp.alsa-project.org/pub/utils
--ALSA_UTILS_DIR:=$(BUILD_DIR)/alsa-utils-$(ALSA_UTILS_VER)
-+ALSA_UTILS_DIR:=$(BUILD_DIR)/alsa-utils-$(ALSA_UTILS_VERSION)
- ALSA_UTILS_CAT:=$(BZCAT)
- ALSA_UTILS_BINARY:=alsactl/alsactl
- ALSA_UTILS_TARGET_BINARY:=usr/sbin/alsactl
-@@ -16,13 +16,14 @@
- 
- $(ALSA_UTILS_DIR)/.unpacked: $(DL_DIR)/$(ALSA_UTILS_SOURCE)
- 	$(ALSA_UTILS_CAT) $(DL_DIR)/$(ALSA_UTILS_SOURCE) | tar -C $(BUILD_DIR) $(TAR_OPTIONS) -
--	toolchain/patch-kernel.sh $(ALSA_UTILS_DIR) package/alsa-utils/ alsa-utils-$(ALSA_UTILS_VER)\*.patch\*
-+	toolchain/patch-kernel.sh $(ALSA_UTILS_DIR) package/alsa-utils/ alsa-utils-$(ALSA_UTILS_VERSION)\*.patch\*
- 	$(CONFIG_UPDATE) $(ALSA_UTILS_DIR)
--	@touch $(ALSA_UTILS_DIR)/.unpacked
-+	touch $@
- 
- $(ALSA_UTILS_DIR)/.configured: $(ALSA_UTILS_DIR)/.unpacked
- 	(cd $(ALSA_UTILS_DIR); \
- 		$(TARGET_CONFIGURE_OPTS) \
-+		$(TARGET_CONFIGURE_ARGS) \
- 		CFLAGS="$(TARGET_CFLAGS)" \
- 		LDFLAGS="$(TARGET_LDFLAGS)" \
- 		./configure \
-@@ -31,11 +32,11 @@
- 		--build=$(GNU_HOST_NAME) \
- 		--prefix=/usr \
- 	);
--	@touch $@
-+	touch $@
- 
- $(ALSA_UTILS_DIR)/$(ALSA_UTILS_BINARY): $(ALSA_UTILS_DIR)/.configured
- 	$(MAKE) CC=$(TARGET_CC) -C $(ALSA_UTILS_DIR)
--	@touch -c $@
-+	touch -c $@
- 
- ALSA_UTILS_TARGETS_ :=
- ALSA_UTILS_TARGETS_y :=
-@@ -57,18 +58,18 @@
- 
- $(TARGET_DIR)/$(ALSA_UTILS_TARGET_BINARY): $(ALSA_UTILS_DIR)/$(ALSA_UTILS_BINARY)
- 	$(MAKE) DESTDIR=$(STAGING_DIR) -C $(ALSA_UTILS_DIR) install
--	@mkdir -p $(TARGET_DIR)/usr/bin
--	@mkdir -p $(TARGET_DIR)/usr/sbin
-+	mkdir -p $(TARGET_DIR)/usr/bin
-+	mkdir -p $(TARGET_DIR)/usr/sbin
- 	for file in $(ALSA_UTILS_TARGETS_y) ; do \
- 		cp -dpf $(STAGING_DIR)/$$file $(TARGET_DIR)/$$file; \
- 	done
--	@if [ -x "$(TARGET_DIR)/usr/bin/speaker-test" ] ; then \
-+	if [ -x "$(TARGET_DIR)/usr/bin/speaker-test" ] ; then \
- 		mkdir -p $(TARGET_DIR)/usr/share/alsa/speaker-test; \
- 		mkdir -p $(TARGET_DIR)/usr/share/sounds/alsa; \
- 		cp -rdpf $(STAGING_DIR)/usr/share/alsa/speaker-test/* $(TARGET_DIR)/usr/share/alsa/speaker-test/; \
- 		cp -rdpf $(STAGING_DIR)/usr/share/sounds/alsa/* $(TARGET_DIR)/usr/share/sounds/alsa/; \
- 	fi;
--	@touch -c $@
-+	touch -c $@
- 
- alsa-utils: uclibc alsa-lib ncurses $(TARGET_DIR)/$(ALSA_UTILS_TARGET_BINARY)
- 
+Thanks
+
+Giammarco
