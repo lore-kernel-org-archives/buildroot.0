@@ -1,34 +1,25 @@
-From: Allan Clark <allanc@chickenandporn.com>
-Date: Mon, 23 Jul 2007 09:31:51 -0400
-Subject: [Buildroot] (RFC) closed bugs include revision number?
-Message-ID: <37c712e0707230631v534b02aey2656d282380cde77@mail.gmail.com>
+From: Bernhard Fischer <rep.dot.nop@gmail.com>
+Date: Mon, 23 Jul 2007 15:29:36 +0200
+Subject: [Buildroot] package/linux/Makefile.in does not include
+	'openswan' patches
+In-Reply-To: <1185196286.21840.18.camel@elrond.sweden.atmel.com>
+References: <1185196286.21840.18.camel@elrond.sweden.atmel.com>
+Message-ID: <20070723132936.GB7902@aon.at>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi;
+On Mon, Jul 23, 2007 at 03:11:26PM +0200, Ulf Samuelsson wrote:
+>The Kernel Headers buildscript applies the openswan patches 
+>on top of the kernel headers, but the target/linux/Makefile.in does not.
 
-> The following issue has been CLOSED
-> ======================================================================
-> http://busybox.net/bugs/view.php?id=####
-> ======================================================================
-> [...]
-> Fixed in Version:
-> ======================================================================
+The headers (which used the very same sourcedir, dunno if it still does
+with your toolchain/linux* stuff) have to be patched. To achieve this,
+we patch the source before installing the headers.
+>
+>Isn't this a bug?
 
-A bug I was watching was resolved, but the meta doesn't show what
-version.  Others experiencing a bug might find it useful to know what
-version it was fixed to either know "what version fixes me?" or "what
-repository-diff can show me what needed to be fixed?"
-
-Is there a reason we don't simply provide Fixed-in-Version to be the
-revision # that is returned when the change is checked in ?  Is it a
-difficult thing to do? (valid question, not sarcasm: I've never set
-this meta with this bugtool)
-
-Allan
--- 
-allanc at chickenandporn.com  "??" http://linkedin.com/in/goldfish
-please, no proprietary attachments (http://tinyurl.com/cbgq)
+I don't understand? You can't apply patches twice, if you mean to
+suggests this (you most likely don't, i assume).
