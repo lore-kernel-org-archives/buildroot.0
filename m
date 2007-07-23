@@ -1,62 +1,72 @@
-From: Ulf Samuelsson <ulf@atmel.com>
-Date: Mon, 23 Jul 2007 17:25:33 +0200
-Subject: [Buildroot] package/linux/Makefile.in does not include
-	'openswan' patches
-References: <1185196286.21840.18.camel@elrond.sweden.atmel.com>
-	<20070723132936.GB7902@aon.at> <20070723142207.GA9324@aon.at>
-	<20070723144314.GC9324@aon.at>
-Message-ID: <000501c7cd42$2a1b0d20$dcc4af0a@atmel.com>
+From: Crane, Matthew <mcrane03@harris.com>
+Date: Mon, 23 Jul 2007 12:33:58 -0400
+Subject: [Buildroot] "multiple target patterns" error while building under
+	cygwin
+In-Reply-To: <000501c7cd42$2a1b0d20$dcc4af0a@atmel.com>
+References: <1185196286.21840.18.camel@elrond.sweden.atmel.com><20070723132936.GB7902@aon.at>
+	<20070723142207.GA9324@aon.at><20070723144314.GC9324@aon.at>
+	<000501c7cd42$2a1b0d20$dcc4af0a@atmel.com>
+Message-ID: <E496871456016F4CA8959BE4105D2A890E8B8C@troe2k1.cs.myharris.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
------ Original Message ----- 
-From: "Bernhard Fischer" <rep.dot.nop@gmail.com>
-To: "Ulf Samuelsson" <ulf@atmel.com>
-Cc: "buildroot" <buildroot@uclibc.org>
-Sent: Monday, July 23, 2007 4:43 PM
-Subject: Re: [Buildroot] package/linux/Makefile.in does not include 'openswan' patches
+Hi, 
 
 
-> On Mon, Jul 23, 2007 at 04:22:07PM +0200, Bernhard Fischer wrote:
->>On Mon, Jul 23, 2007 at 03:29:36PM +0200, Bernhard Fischer wrote:
-> 
->>make: *** No rule to make target
->>`/scratch/obj.i686/buildroot.mine/project_build_i386//linux-2.6.21.5/.patched',
->>needed by
->>`/scratch/obj.i686/buildroot.mine/project_build_i386//linux-2.6.21.5/.configured'.
->>Stop.
->>
->>
->>This is due to this PROJECT thing. Please revert immediately or fix ASAP.
-> 
-> By now i have reverted these incorrect hunks in svn.
->>
+I'm trying to build on cygwin, busybox is failing with the error:
 
-You did not fix this, since you assume that the kernel headers and the kernel is the same.
-If they are not, the bug is still there, so it is NOT because of the BSP stuff,
-and you fixed the symptom, not the cause.
-Try setting LINUX26_VERSION to 2.6.22.1 and build with openswan,
-and you see what I mean.
 
->>While i understand that it's possible that one thing or another can
->>break in the course of changes, i ask you to be more careful.
-> 
-> I suggest you
-> ifneq ($(PROJECT_BUILD_DIR),)
-> fixup_after_ulf=O=$(PROJECT_BUILD_DIR)
-> endif
-> LINUX26_MAKE_FLAGS+=$(fixup_after_ulf)
-> 
-> but you were about to do the same anyway, weren't you..
->
+applets/.applets.o.cmd:410: *** multiple target patterns.  Stop.
 
-No, I want to have two ways of building linux, 
-until the BSP stuff is fully tested, and then merge into one.
-Not fill the single linux makefile with a lot of kludges
-which has no long term validity.
+Has anybody come across this?  I'm wondering if it's related to the case
+insensitivity of cygwin.  Any help much apreciated, 
 
-Best Regards
-Ulf Samuelsson
+Matt
+
+
+More complete error log, starts just as the build process has run
+through building busybox once, and starts again, which I think is
+normal??
+
+
+  AR      util-linux/lib.a
+  LINK    busybox_unstripped
+cp busybox_unstripped busybox
+make[1]: Leaving directory
+`/usr/local/src/hd2/buildroot-20070718/project_build_arm_nofpu/uclibc/bu
+sybox-1.6.1'
+/usr/bin/make -j1 CC=/usr/local/arm2007-uc/bin/arm-uclinuxeabi-gcc
+CROSS_COMPILE="/usr/local/arm2007-uc/bin/arm-uclinuxeabi-
+" \
+                CROSS="/usr/local/arm2007-uc/bin/arm-uclinuxeabi-"
+PREFIX="/usr/local/src/hd2/buildroot-20070718/project_bui
+ld_arm_nofpu/uclibc/root" \
+                ARCH=arm \
+                EXTRA_CFLAGS="-Os -pipe
+-I/usr/local/src/hd2/buildroot-20070718/build_arm_nofpu/staging_dir/incl
+ude -I/usr/
+local/src/hd2/buildroot-20070718/build_arm_nofpu/staging_dir/usr/include
+-I/usr/local/arm2007-uc/arm-uclinuxeabi/include" -C
+ 
+/usr/local/src/hd2/buildroot-20070718/project_build_arm_nofpu/uclibc/bus
+ybox-1.6.1 install
+make[1]: Entering directory
+`/usr/local/src/hd2/buildroot-20070718/project_build_arm_nofpu/uclibc/bu
+sybox-1.6.1'
+  HOSTCC  scripts/basic/split-include
+scripts/basic/.split-include.d: done.
+  HOSTCC  scripts/basic/docproc
+scripts/basic/.docproc.d: done.
+  SPLIT   include/autoconf.h -> include/config/*
+  GEN     include/bbconfigopts.h
+applets/.applets.o.cmd:410: *** multiple target patterns.  Stop.
+make[1]: *** [applets] Error 2
+make[1]: Leaving directory
+`/usr/local/src/hd2/buildroot-20070718/project_build_arm_nofpu/uclibc/bu
+sybox-1.6.1'
+make: ***
+[/usr/local/src/hd2/buildroot-20070718/project_build_arm_nofpu/uclibc/ro
+ot/bin/busybox] Error 2
