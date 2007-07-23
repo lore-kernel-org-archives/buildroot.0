@@ -1,80 +1,63 @@
-From: aldot at uclibc.org <aldot@uclibc.org>
-Date: Mon, 23 Jul 2007 04:29:41 -0700 (PDT)
-Subject: [Buildroot] svn commit: trunk/buildroot
-Message-ID: <20070723112941.2BCB1A65E4@busybox.net>
+From: Ulf Samuelsson <ulf@atmel.com>
+Date: Mon, 23 Jul 2007 14:10:26 +0200
+Subject: [Buildroot] svn commit: trunk/buildroot/package:  fbset
+In-Reply-To: <20070723105207.GD7044@aon.at>
+References: <20070723090059.A7303A6816@busybox.net>
+	<20070723105207.GD7044@aon.at>
+Message-ID: <1185192626.21840.6.camel@elrond.sweden.atmel.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Author: aldot
-Date: 2007-07-23 04:29:38 -0700 (Mon, 23 Jul 2007)
-New Revision: 19216
+m?n 2007-07-23 klockan 12:52 +0200 skrev Bernhard Fischer:
+> On Mon, Jul 23, 2007 at 02:00:59AM -0700, ulf at uclibc.org wrote:
+> >Author: ulf
+> >Date: 2007-07-23 02:00:58 -0700 (Mon, 23 Jul 2007)
+> >New Revision: 19209
+> >
+> >Log:
+> >Add fbset 'frame buffer set' package
+> >
+> >Added:
+> >   trunk/buildroot/package/fbset/
+> >   trunk/buildroot/package/fbset/Config.in
+> >   trunk/buildroot/package/fbset/fbset-2.1-avr32.patch
+> >   trunk/buildroot/package/fbset/fbset.mk
+> >
+> >Modified:
+> >   trunk/buildroot/package/Config.in
+> >
+> >
+> >Changeset:
+> >Modified: trunk/buildroot/package/Config.in
+> >===================================================================
+> >--- trunk/buildroot/package/Config.in	2007-07-23 08:59:10 UTC (rev 19208)
+> >+++ trunk/buildroot/package/Config.in	2007-07-23 09:00:58 UTC (rev 19209)
+> >@@ -287,6 +287,7 @@
+> > source "package/directfb/Config.in"
+> > if !BR2_PACKAGE_BUSYBOX_HIDE_OTHERS || BR2_avr32
+> 
+> bringing any arch into play here is wrong. Remove this, please.
+> 
 
-Log:
-- the external-toolchain.mk is not parallel-safe, so ignore it.
-- first step of minor adjustments to allow for a toplevel 'make -j128' (regardless of BR2_JLEVEL)
+OK, I'll fix that, but AFAIK it is broken in busybox so It needs
+to be visible even if it is a busybox package 
+until someone fixes busybox.
+
+I will remove the complete conditional until then.
+I could do:
+if !BR2_PACKAGE_BUSYBOX_HIDE_OTHERS || BR2_ADD_BROKEN_BUSYBOX
+instead.
+
+I dont want that all BUSYBOX packages becomes visible just
+because fbv and fbset needs to be visible.
 
 
-Modified:
-   trunk/buildroot/Makefile
 
-
-Changeset:
-Modified: trunk/buildroot/Makefile
-===================================================================
---- trunk/buildroot/Makefile	2007-07-23 11:00:59 UTC (rev 19215)
-+++ trunk/buildroot/Makefile	2007-07-23 11:29:38 UTC (rev 19216)
-@@ -155,11 +155,13 @@
- #
- ##############################################################
- ifeq ($(BR2_TOOLCHAIN_BUILDROOT),y)
--TARGETS:=uclibc-configured binutils gcc uclibc-target-utils
-+BASE_TARGETS:=uclibc-configured binutils gcc uclibc-target-utils
- else
--TARGETS:=uclibc
-+BASE_TARGETS:=uclibc
- endif
-+TARGETS:=
- 
-+
- PROJECT:=$(strip $(subst ",,$(BR2_PROJECT)))
- #"))
- TARGET_HOSTNAME:=$(strip $(subst ",,$(BR2_HOSTNAME)))
-@@ -167,7 +169,6 @@
- BANNER:=$(strip $(subst ",,$(BR2_BANNER)))
- #"))
- 
--
- include toolchain/Makefile.in
- include package/Makefile.in
- 
-@@ -186,10 +187,17 @@
- # We also need the various per-package makefiles, which also add
- # each selected package to TARGETS if that package was selected
- # in the .config file.
-+ifeq ($(BR2_TOOLCHAIN_BUILDROOT),y)
-+# avoid pulling in external toolchain which is broken for toplvl parallel builds
-+include $(filter-out $(wildcard toolchain/external-toolchain/*),$(wildcard toolchain/*/*.mk))
-+else
- include toolchain/*/*.mk
-+endif
-+
- ifeq ($(BR2_PACKAGE_LINUX),y)
- TARGETS+=linux26-modules
- endif
-+
- include package/*/*.mk
- 
- # target stuff is last so it can override anything else
-@@ -199,6 +207,9 @@
- TARGETS_SOURCE:=$(patsubst %,%-source,$(TARGETS))
- TARGETS_DIRCLEAN:=$(patsubst %,%-dirclean,$(TARGETS))
- 
-+# all targets depend on the crosscompiler and it's prerequisites
-+$(TARGETS): $(BASE_TARGETS)
-+
- world: $(DL_DIR) $(BUILD_DIR) $(PROJECT_BUILD_DIR) \
- 	$(BINARIES_DIR) $(STAGING_DIR) $(TARGET_DIR) bsp $(TARGETS)
- dirs: $(DL_DIR) $(BUILD_DIR) $(PROJECT_BUILD_DIR) $(STAGING_DIR)
+> > source "package/fbv/Config.in"
+> >+source "package/fbset/Config.in"
+> > endif
+> > source "package/jpeg/Config.in"
+> > source "package/libpng/Config.in"
