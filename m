@@ -1,41 +1,34 @@
-From: Ulf Samuelsson <ulf@atmel.com>
-Date: Mon, 23 Jul 2007 11:40:05 +0200
-Subject: [Buildroot] svn commit: trunk/buildroot:
-	packagetarget/device/Atmel
-Message-ID: <00a401c7cd0d$787ff870$dcc4af0a@atmel.com>
+From: ulf at uclibc.org <ulf@uclibc.org>
+Date: Mon, 23 Jul 2007 03:03:15 -0700 (PDT)
+Subject: [Buildroot] svn commit: trunk/buildroot/package/tiff
+Message-ID: <20070723100315.3081CA65CB@busybox.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
------ Original Message ----- 
-From: "Ulf Samuelsson" <ulf@atmel.com>
-To: "Steven J. Hill" <sjhill@realitydiluted.com>
-Cc: <buildroot@uclibc.org>
-Sent: Monday, July 23, 2007 8:25 AM
-Subject: Re: [Buildroot] svn commit: trunk/buildroot: packagetarget/device/Atmel
+Author: ulf
+Date: 2007-07-23 03:03:14 -0700 (Mon, 23 Jul 2007)
+New Revision: 19212
+
+Log:
+Update config for tiff package
+
+Modified:
+   trunk/buildroot/package/tiff/tiff.mk
 
 
-> Ulf Samuelsson wrote:
->> 
->> While it is used for target/device/Atmel files, it is also needed
->> to download binutils/gcc/gdb tarballs for AVR32 architecture support.
->> If it is defined in target/device/Atmel, then it is not defined during
->> the toolchain build. causing this to fail.
->> 
-> Honestly, I would rather see the directives in each of the toolchain/*/*.mk
-> files. The top-level files should be kept clean of architecture/platform
-> directives.
-> 
-
-It is not "architecture/platform directives", it is a *site* on Internet,
-similar to BR2_SOURCEFORGE_MIRROR which
-conceivably also can contain the location of a package.
-
-
-==> Additionaly, ATMEL_MIRROR will (long term) be an alternative site for all packages.
-        I can rename it to SOURCE_MIRROR, if that makes you happier...
-
-Best Regards
-Ulf Samuelsson
+Changeset:
+Modified: trunk/buildroot/package/tiff/tiff.mk
+===================================================================
+--- trunk/buildroot/package/tiff/tiff.mk	2007-07-23 09:45:23 UTC (rev 19211)
++++ trunk/buildroot/package/tiff/tiff.mk	2007-07-23 10:03:14 UTC (rev 19212)
+@@ -18,6 +18,7 @@
+ 	$(TIFF_CAT) $(DL_DIR)/$(TIFF_SOURCE) | tar -C $(BUILD_DIR) $(TAR_OPTIONS) -
+ 	toolchain/patch-kernel.sh $(TIFF_DIR) package/tiff/ tiff\*.patch
+ 	$(CONFIG_UPDATE) $(TIFF_DIR)
++	$(CONFIG_UPDATE) $(TIFF_DIR)/config
+ 	touch $(TIFF_DIR)/.unpacked
+ 
+ $(TIFF_DIR)/.configured: $(TIFF_DIR)/.unpacked
