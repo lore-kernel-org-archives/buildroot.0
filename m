@@ -1,33 +1,65 @@
-From: Giammarco Zacheo <g.zacheo@gmail.com>
-Date: Mon, 23 Jul 2007 13:53:09 +0200
-Subject: [Buildroot] daily snapshot build for nios2 not working
-Message-ID: <b054e88e0707230453x74dda4d8se86da67ae97b5e17@mail.gmail.com>
+From: ulf at uclibc.org <ulf@uclibc.org>
+Date: Mon, 23 Jul 2007 05:20:00 -0700 (PDT)
+Subject: [Buildroot] svn commit: trunk/buildroot/package/fbv
+Message-ID: <20070723122000.87D12A687C@busybox.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi all,
-   I downloaded several of the latest daily snapshots for buildroot.
-When I select the nios2 platform in the configuration menu, the
-"Kernel Header Options" selection in the in the "Toolchain Options"
-menu disappears. After completing configuration, at the "make
-menuconfig" command i get this output:
+Author: ulf
+Date: 2007-07-23 05:19:59 -0700 (Mon, 23 Jul 2007)
+New Revision: 19225
 
-wget --passive-ftp  -P /home/giammarco/buildroot/dl
-127.0.0.1/unspecified-kernel-headers
---13:45:14--  http://127.0.0.1/unspecified-kernel-headers
-           => `/home/giammarco/buildroot/dl/unspecified-kernel-headers'
-Connecting to 127.0.0.1:80... failed: Connection refused.
-make: *** [/home/giammarco/buildroot/dl/unspecified-kernel-headers] Error 1
+Log:
+cleanup fbv package
 
-i saw in the kconfig that there are links provided for the kernel
-souce for all platforms but nios2.
+Modified:
+   trunk/buildroot/package/fbv/fbv.mk
 
-Can anybody please help? I need a working toolchain and if possible a
-build of uClibc for nios2 in order to use it with uClinux.
 
-Thanks
-
-Giammarco
+Changeset:
+Modified: trunk/buildroot/package/fbv/fbv.mk
+===================================================================
+--- trunk/buildroot/package/fbv/fbv.mk	2007-07-23 12:03:24 UTC (rev 19224)
++++ trunk/buildroot/package/fbv/fbv.mk	2007-07-23 12:19:59 UTC (rev 19225)
+@@ -3,10 +3,10 @@
+ # fbv
+ #
+ #############################################################
+-FBV_VER:=1.0b
+-FBV_SOURCE:=fbv-$(FBV_VER).tar.gz
++FBV_VERSION:=1.0b
++FBV_SOURCE:=fbv-$(FBV_VERSION).tar.gz
+ FBV_SITE:=http://s-tech.elsat.net.pl/fbv
+-FBV_DIR:=$(BUILD_DIR)/fbv-$(FBV_VER)
++FBV_DIR:=$(BUILD_DIR)/fbv-$(FBV_VERSION)
+ FBV_CAT:=$(ZCAT)
+ FBV_BINARY:=fbv
+ FBV_TARGET_BINARY:=usr/bin/$(FBV_BINARY)
+@@ -16,19 +16,19 @@
+ 
+ $(FBV_DIR)/.unpacked: $(DL_DIR)/$(FBV_SOURCE)
+ 	$(FBV_CAT) $(DL_DIR)/$(FBV_SOURCE) | tar -C $(BUILD_DIR) $(TAR_OPTIONS) -
+-	toolchain/patch-kernel.sh $(FBV_DIR) package/fbv/ fbv-$(FBV_VER)\*.patch\*
+-	@touch $@
++	toolchain/patch-kernel.sh $(FBV_DIR) package/fbv/ fbv-$(FBV_VERSION)\*.patch\*
++	touch $@
+ 
+ $(FBV_DIR)/.configured: $(FBV_DIR)/.unpacked
+ 	(cd $(FBV_DIR); \
+-		CFLAGS="$(TARGET_CFLAGS)" \
+-		LDFLAGS="$(TARGET_LDFLAGS)" \
++		($(TARGET_CONFIGURE_OPTS) \
++		($(TARGET_CONFIGURE_ARGS) \
+ 		./configure \
+ 		--prefix=/usr \
+ 		--cc=$(TARGET_CC) \
+ 		--libs="-lz -lm" \
+ 	);
+-	@touch $@
++	touch $@
+ 
+ $(FBV_DIR)/$(FBV_BINARY): $(FBV_DIR)/.configured
+ 	$(MAKE) CC=$(TARGET_CC) -C $(FBV_DIR)
