@@ -1,46 +1,39 @@
 From: Bernhard Fischer <rep.dot.nop@gmail.com>
-Date: Mon, 23 Jul 2007 12:52:07 +0200
-Subject: [Buildroot] svn commit: trunk/buildroot/package:  fbset
-In-Reply-To: <20070723090059.A7303A6816@busybox.net>
-References: <20070723090059.A7303A6816@busybox.net>
-Message-ID: <20070723105207.GD7044@aon.at>
+Date: Mon, 23 Jul 2007 13:04:17 +0200
+Subject: [Buildroot] _VER vs. _VERSION breakage
+In-Reply-To: <0707231218440.1707@somehost>
+References: <20070715104024.GB4096@aon.at>
+	<1184615647.18357.27.camel@elrond.sweden.atmel.com>
+	<20070723095243.GC6597@aon.at> <0707231218440.1707@somehost>
+Message-ID: <20070723110417.GE7044@aon.at>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Mon, Jul 23, 2007 at 02:00:59AM -0700, ulf at uclibc.org wrote:
->Author: ulf
->Date: 2007-07-23 02:00:58 -0700 (Mon, 23 Jul 2007)
->New Revision: 19209
+On Mon, Jul 23, 2007 at 12:22:41PM +0200, Cristian Ionescu-Idbohrn wrote:
+>On Mon, 23 Jul 2007, Bernhard Fischer wrote:
 >
->Log:
->Add fbset 'frame buffer set' package
+>> On Mon, Jul 16, 2007 at 09:54:06PM +0200, Ulf Samuelsson wrote:
+>> >s?n 2007-07-15 klockan 12:40 +0200 skrev Bernhard Fischer:
+>> >> Ulf,
+>> >>
+>> >> Your change to use _VERSION broke at least acpid. Please double-check
+>> >> that all packages that you touched in this patch still build fine and
+>> >> repair.
+>> >
+>> >Here is the result of trying to build most available packages
+>> >in buildroot for ARM. (I build for ARM generic (not using WCHAR)).
+>>
+>> I will revert that _VERSION vs. _VER patch since it breaks a couple of
+>> packages.
 >
->Added:
->   trunk/buildroot/package/fbset/
->   trunk/buildroot/package/fbset/Config.in
->   trunk/buildroot/package/fbset/fbset-2.1-avr32.patch
->   trunk/buildroot/package/fbset/fbset.mk
->
->Modified:
->   trunk/buildroot/package/Config.in
->
->
->Changeset:
->Modified: trunk/buildroot/package/Config.in
->===================================================================
->--- trunk/buildroot/package/Config.in	2007-07-23 08:59:10 UTC (rev 19208)
->+++ trunk/buildroot/package/Config.in	2007-07-23 09:00:58 UTC (rev 19209)
->@@ -287,6 +287,7 @@
-> source "package/directfb/Config.in"
-> if !BR2_PACKAGE_BUSYBOX_HIDE_OTHERS || BR2_avr32
+>Now this is IMO a rather silly :( You made your point.  Can't you just
+>fix those "couple of packages" instead and stop this ping-pong game?
 
-bringing any arch into play here is wrong. Remove this, please.
-
-> source "package/fbv/Config.in"
->+source "package/fbset/Config.in"
-> endif
-> source "package/jpeg/Config.in"
-> source "package/libpng/Config.in"
+I don't have time to fix them and since they worked before, reverting it
+is fine. It's not that i didn't wait for 1 week (!) to allow Ulf (or
+anybody else) to fix it up.. Selecting i386 in the config isn't really
+hard, i suppose.
+pong.
