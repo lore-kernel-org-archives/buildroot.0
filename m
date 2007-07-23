@@ -1,38 +1,46 @@
-From: Steven J. Hill <sjhill@realitydiluted.com>
-Date: Sun, 22 Jul 2007 21:55:29 -0500
-Subject: [Buildroot] svn commit: trunk/buildroot:
-	packagetarget/device/Atmel
-In-Reply-To: <013701c7ccb3$1a92a960$dcc4af0a@atmel.com>
-References: <20070722171703.79776A4756@busybox.net>
-	<46A3B766.2000808@realitydiluted.com>
-	<013701c7ccb3$1a92a960$dcc4af0a@atmel.com>
-Message-ID: <46A418A1.30808@realitydiluted.com>
+From: Shai Lifshitz <ShaiL@visonic.com>
+Date: Mon, 23 Jul 2007 09:26:25 +0400
+Subject: [Buildroot] AT91SAM9260 and u-boot
+Message-ID: <OF404E49A3.0AC35139-ONC2257321.001D1668-C3257321.00180A94@visonic.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
------BEGIN PGP SIGNED MESSAGE-----
-Hash: SHA1
+I am trying (without much success...) to configure the buildroot 
+toolchain, 
+to fit the 4K boot memory.
 
-Ulf Samuelsson wrote:
-> 
-> While it is used for target/device/Atmel files, it is also needed
-> to download binutils/gcc/gdb tarballs for AVR32 architecture support.
-> If it is defined in target/device/Atmel, then it is not defined during
-> the toolchain build. causing this to fail.
-> 
-Honestly, I would rather see the directives in each of the toolchain/*/*.mk
-files. The top-level files should be kept clean of architecture/platform
-directives.
+maybe someone did it already and is willing to send me the '.config' file?
+or maybe someone can tell me what to choose in the following options:
 
-- -Steve
------BEGIN PGP SIGNATURE-----
-Version: GnuPG v1.4.2.2 (GNU/Linux)
-Comment: Using GnuPG with Mozilla - http://enigmail.mozdev.org
+- target
+    * arm
+    * armeb    <--- is it big-endian?
 
-iD8DBQFGpBihgyK5H2Ic36cRAhfHAJ0fZeaDN+VRtDPeVDNnQcXAxHU1uQCfcLYc
-+ZR60lZxpiiLQ63kWdLGwo0=
-=o3sy
------END PGP SIGNATURE-----
+-target architecture variant:
+    * arm610
+    * arm710
+    * arm720t
+    * arm920t
+    * arm922t
+    * arm926t
+    * arm1136jf_s
+    * arm1176jz-s
+    * arm1176jzf-s
+    * sa110
+    * sa1100
+    * xscale
+    * iwmmxt
+-target ABI
+    * OABI
+    * EABI     <--- is it with no floating-point HW?
+
+Sincerely
+shai lifshitz
+email: shail@visonic.com
+
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: http://busybox.net/lists/buildroot/attachments/20070723/db1e21dc/attachment.htm 
