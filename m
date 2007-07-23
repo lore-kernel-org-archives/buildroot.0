@@ -1,65 +1,92 @@
-From: Bernhard Fischer <rep.dot.nop@gmail.com>
-Date: Mon, 23 Jul 2007 12:41:31 +0200
-Subject: [Buildroot] svn commit: trunk/buildroot/package:  libungif
-In-Reply-To: <20070723082356.E77ACA6602@busybox.net>
-References: <20070723082356.E77ACA6602@busybox.net>
-Message-ID: <20070723104131.GC7044@aon.at>
+From: aldot at uclibc.org <aldot@uclibc.org>
+Date: Mon, 23 Jul 2007 04:01:00 -0700 (PDT)
+Subject: [Buildroot] svn commit: trunk/buildroot/package/openssh
+Message-ID: <20070723110100.68581A6863@busybox.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Mon, Jul 23, 2007 at 01:23:56AM -0700, ulf at uclibc.org wrote:
->Author: ulf
->Date: 2007-07-23 01:23:54 -0700 (Mon, 23 Jul 2007)
->New Revision: 19203
+Author: aldot
+Date: 2007-07-23 04:00:59 -0700 (Mon, 23 Jul 2007)
+New Revision: 19215
 
->Added: trunk/buildroot/package/libungif/libungif.mk
->===================================================================
->--- trunk/buildroot/package/libungif/libungif.mk	                        (rev 0)
->+++ trunk/buildroot/package/libungif/libungif.mk	2007-07-23 08:23:54 UTC (rev 19203)
->@@ -0,0 +1,69 @@
->+#############################################################
->+#
->+# libungif
->+#
->+#############################################################
->+LIBUNGIF_VER:=4.1.4
+Log:
+- add runlevel script for later use
 
-again..
 
->+LIBUNGIF_SOURCE:=libungif-$(LIBUNGIF_VER).tar.bz2
->+LIBUNGIF_SITE:=http://$(BR2_SOURCEFORGE_MIRROR).dl.sourceforge.net/sourceforge/libungif/$(LIBUNGIF_SOURCE)
->+LIBUNGIF_DIR:=$(BUILD_DIR)/libungif-$(LIBUNGIF_VER)
->+LIBUNGIF_CAT:=$(BZCAT)
->+LIBUNGIF_BINARY:=libungif.so.$(LIBUNGIF_VER)
->+LIBUNGIF_TARGET_BINARY:=usr/lib/libungif.so
->+
->+$(DL_DIR)/$(LIBUNGIF_SOURCE):
->+	$(WGET) -P $(DL_DIR) $(LIBUNGIF_SITE)/$(LIBUNGIF_SOURCE)
->+
->+$(LIBUNGIF_DIR)/.unpacked: $(DL_DIR)/$(LIBUNGIF_SOURCE)
->+	$(LIBUNGIF_CAT) $(DL_DIR)/$(LIBUNGIF_SOURCE) | tar -C $(BUILD_DIR) $(TAR_OPTIONS) -
->+	toolchain/patch-kernel.sh $(LIBUNGIF_DIR) package/libungif/ libungif-$(LIBUNGIF_VER)\*.patch\*
->+	$(CONFIG_UPDATE) $(LIBUNGIF_DIR)
->+	touch $@
->+
->+$(LIBUNGIF_DIR)/.configured: $(LIBUNGIF_DIR)/.unpacked
->+	(cd $(LIBUNGIF_DIR); rm -rf config.cache; \
->+		$(TARGET_CONFIGURE_OPTS) \
->+		CFLAGS="$(TARGET_CFLAGS)" \
->+		LDFLAGS="$(TARGET_LDFLAGS)" \
+Added:
+   trunk/buildroot/package/openssh/S50sshd
 
-.. and again
->+		./configure \
->+		--target=$(GNU_TARGET_NAME) \
->+		--host=$(GNU_TARGET_NAME) \
->+		--build=$(GNU_HOST_NAME) \
->+		--sysconfdir=/etc \
->+		--enable-shared \
->+		--enable-static \
->+		--prefix=/usr \
->+		--without-x \
->+	);
->+	touch $@
+
+Changeset:
+Added: trunk/buildroot/package/openssh/S50sshd
+===================================================================
+--- trunk/buildroot/package/openssh/S50sshd	                        (rev 0)
++++ trunk/buildroot/package/openssh/S50sshd	2007-07-23 11:00:59 UTC (rev 19215)
+@@ -0,0 +1,64 @@
++#!/bin/sh
++#
++# sshd        Starts sshd.
++#
++
++# Make sure the ssh-keygen progam exists
++[ -f /usr/bin/ssh-keygen ] || exit 0
++
++# Check for the SSH1 RSA key
++if [ ! -f /etc/ssh_host_key ] ; then
++	echo Generating RSA Key...
++	/usr/bin/ssh-keygen -t rsa1 -f /etc/ssh_host_key -C '' -N ''
++fi
++
++# Check for the SSH2 RSA key
++if [ ! -f /etc/ssh_host_rsa_key ] ; then
++	echo Generating RSA Key...
++	/usr/bin/ssh-keygen -t rsa -f /etc/ssh_host_rsa_key -C '' -N ''
++fi
++
++# Check for the SSH2 DSA key
++if [ ! -f /etc/ssh_host_dsa_key ] ; then
++	echo Generating DSA Key...
++	echo THIS CAN TAKE A MINUTE OR TWO DEPENDING ON YOUR PROCESSOR!
++	echo
++        /usr/bin/ssh-keygen -t dsa -f /etc/ssh_host_dsa_key -C '' -N ''
++fi
++                
++umask 077
++
++start() {
++ 	echo -n "Starting sshd: "
++	/usr/sbin/sshd
++	touch /var/lock/sshd
++	echo "OK"
++}	
++stop() {
++	echo -n "Stopping sshd: "
++        killall	sshd 
++	rm -f /var/lock/sshd
++	echo "OK" 
++}
++restart() {
++	stop
++	start
++}	
++
++case "$1" in
++  start)
++  	start
++	;;
++  stop)
++  	stop
++	;;
++  restart|reload)
++  	restart
++	;;
++  *)
++	echo $"Usage: $0 {start|stop|restart}"
++	exit 1
++esac
++
++exit $?
++
