@@ -1,54 +1,61 @@
-From: Heikki Lindholm <holindho@cs.helsinki.fi>
-Date: Tue, 24 Jul 2007 20:27:33 +0300
-Subject: [Buildroot] config update
-In-Reply-To: <20070724123433.GA18856@aon.at>
-References: <469C604E.5060703@cs.helsinki.fi> <20070724123433.GA18856@aon.at>
-Message-ID: <46A63685.5060806@cs.helsinki.fi>
+From: Yann E. MORIN <yann.morin.1998@anciens.enib.fr>
+Date: Tue, 24 Jul 2007 19:33:05 +0200
+Subject: [Buildroot] [PATCH] make strace buildable
+In-Reply-To: <200707162232.43774.yann.morin.1998@anciens.enib.fr>
+References: <200707162232.43774.yann.morin.1998@anciens.enib.fr>
+Message-ID: <200707241933.05390.yann.morin.1998@anciens.enib.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Bernhard Fischer kirjoitti:
-> On Tue, Jul 17, 2007 at 09:23:10AM +0300, Heikki Lindholm wrote:
-> 
->>Hello,
->>
->>I just updated my OS X buildroot and, recent changes breaking it, I have 
-> 
-> 
-> Can you please be more specific as to how it broke?
+Hello!
 
-Well, basically, it was easier to fix than thought, and I posted a patch 
-already:
-http://buildroot.uclibc.org/lists/buildroot/2007-July/003659.html
+Any taker?
 
-The two culprits for the breakage are:
-(1) foo.h includes features.h, which doesn't exist on OS X. Referring to 
-my above patch, this could also be fixed in the Makefile by not 
-including foo.h on OS X, but IMHO that's trickier (uname).
-(2) The linking was changed so, that ncurses wasn't linked in on OS X 
-anymore
-
-BUT I also noted another breakage, which I'm clueless about:
-http://buildroot.uclibc.org/lists/buildroot/2007-July/003658.html
-I'm using the same config I was with an older version (for example, rev 
-18688 worked).
-
+On Monday 16 July 2007 22:32, Yann E. MORIN wrote:
+> The second hunk in package/strace/strace-undef-syscall.patch is incorrect:
 > 
+> --- strace-4.5.15.orig/linux/syscallent.h       2007-02-04 19:03:48.000000000 +0100
+> +++ strace-4.5.15/linux/syscallent.h    2007-02-04 19:11:04.000000000 +0100
+> @@ -130,7 +130,10 @@
+>         { 2,    TF,     sys_statfs,             "statfs"        }, /* 99 */
+>         { 2,    TD,     sys_fstatfs,            "fstatfs"       }, /* 100 */
+>         { 3,    0,      sys_ioperm,             "ioperm"        }, /* 101 */
+> -       { 2,    TD,     sys_socketcall,         "socketcall", SYS_socketcall }, /* 102 */
+> +       { 2,    TD,     sys_socketcall,         "socketcall",
+> +#ifdef __NR_socketcall
+> +       SYS_socketcall }, /* 102 */
+> +#endif
+>         { 3,    0,      sys_syslog,             "syslog"        }, /* 103 */
+>         { 3,    0,      sys_setitimer,          "setitimer"     }, /* 104 */
+>         { 2,    0,      sys_getitimer,          "getitimer"     }, /* 105 */
+> @@ -145,7 +148,10 @@
+>         { 4,    TP,     sys_wait4,              "wait4", SYS_wait4 }, /* 114 */
+>         { 1,    0,      sys_swapoff,            "swapoff"       }, /* 115 */
+>         { 1,    0,      sys_sysinfo,            "sysinfo"       }, /* 116 */
+> -       { 6,    0,      sys_ipc,                "ipc", SYS_ipc }, /* 117 */
+> +       { 6,    0,      sys_ipc,                "ipc",
+> +#ifdef __NR_ipc
+> +       SYS_ipc }, /* 117 */
+> +#endif
+>         { 1,    TD,     sys_fsync,              "fsync"         }, /* 118 */
+>         { 1,    TS,     sys_sigreturn,          "sigreturn"     }, /* 119 */
+>         { 5,    TP,     sys_clone,              "clone", SYS_clone }, /* 120 */
 > 
->>to ask, why was packages/config updated? It worked just fine - even on 
->>OS X - before the bump to linux 2.6.21* config system. Were there 
->>features missing from the old version or something?
+> If either or both of __NR_socketcall and __NR_ipc are not defined, then the
+> closing curly braces are omitted, thus resulting in incorrect C statements.
 > 
-> 
-> The i18n support was basically not working right. Apart from better
-> colour-handling (vie the respective env vars, see source) this was about
-> the only reason for the update. As to the libintl breakage, please refer
-> to several bug-reports in the bugtracker.
+> The attached patch to r19112 solves the issue.
 
-Fair enough. I did skim through the libintl reports, but those didn't 
-apply on OS X -- or my installation, at least.
+Regards,
+Yann E. MORIN.
 
--- Heikki Lindholm
+-- 
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +0/33 662376056 | Software  Designer | \ / CAMPAIGN     |   ^                |
+| --==< ?_? >==-- ?------------.-------:  X  AGAINST      |  /e\  There is no  |
+| http://ymorin.is-a-geek.org/ | (*_*) | / \ HTML MAIL    |  """  conspiracy.  |
+?------------------------------?-------?------------------?--------------------?
