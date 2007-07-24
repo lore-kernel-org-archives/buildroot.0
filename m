@@ -1,115 +1,54 @@
-From: aldot at uclibc.org <aldot@uclibc.org>
-Date: Tue, 24 Jul 2007 09:34:29 -0700 (PDT)
-Subject: [Buildroot] svn commit: trunk/buildroot/toolchain/kernel-headers
-Message-ID: <20070724163429.6FAB3A45F6@busybox.net>
+From: Heikki Lindholm <holindho@cs.helsinki.fi>
+Date: Tue, 24 Jul 2007 20:27:33 +0300
+Subject: [Buildroot] config update
+In-Reply-To: <20070724123433.GA18856@aon.at>
+References: <469C604E.5060703@cs.helsinki.fi> <20070724123433.GA18856@aon.at>
+Message-ID: <46A63685.5060806@cs.helsinki.fi>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Author: aldot
-Date: 2007-07-24 09:34:28 -0700 (Tue, 24 Jul 2007)
-New Revision: 19252
+Bernhard Fischer kirjoitti:
+> On Tue, Jul 17, 2007 at 09:23:10AM +0300, Heikki Lindholm wrote:
+> 
+>>Hello,
+>>
+>>I just updated my OS X buildroot and, recent changes breaking it, I have 
+> 
+> 
+> Can you please be more specific as to how it broke?
 
-Log:
-- adjust lzma arguments for current version
+Well, basically, it was easier to fix than thought, and I posted a patch 
+already:
+http://buildroot.uclibc.org/lists/buildroot/2007-July/003659.html
 
+The two culprits for the breakage are:
+(1) foo.h includes features.h, which doesn't exist on OS X. Referring to 
+my above patch, this could also be fixed in the Makefile by not 
+including foo.h on OS X, but IMHO that's trickier (uname).
+(2) The linking was changed so, that ncurses wasn't linked in on OS X 
+anymore
 
-Added:
-   trunk/buildroot/toolchain/kernel-headers/linux-2.6.21.5-002-lzma-vmlinuz.01.patch
+BUT I also noted another breakage, which I'm clueless about:
+http://buildroot.uclibc.org/lists/buildroot/2007-July/003658.html
+I'm using the same config I was with an older version (for example, rev 
+18688 worked).
 
-Modified:
-   trunk/buildroot/toolchain/kernel-headers/linux-2.6.22.1-002-lzma-vmlinuz.01.patch
+> 
+> 
+>>to ask, why was packages/config updated? It worked just fine - even on 
+>>OS X - before the bump to linux 2.6.21* config system. Were there 
+>>features missing from the old version or something?
+> 
+> 
+> The i18n support was basically not working right. Apart from better
+> colour-handling (vie the respective env vars, see source) this was about
+> the only reason for the update. As to the libintl breakage, please refer
+> to several bug-reports in the bugtracker.
 
+Fair enough. I did skim through the libintl reports, but those didn't 
+apply on OS X -- or my installation, at least.
 
-Changeset:
-Copied: trunk/buildroot/toolchain/kernel-headers/linux-2.6.21.5-002-lzma-vmlinuz.01.patch (from rev 19245, trunk/buildroot/toolchain/kernel-headers/linux-2.6.22.1-002-lzma-vmlinuz.01.patch)
-===================================================================
---- trunk/buildroot/toolchain/kernel-headers/linux-2.6.21.5-002-lzma-vmlinuz.01.patch	                        (rev 0)
-+++ trunk/buildroot/toolchain/kernel-headers/linux-2.6.21.5-002-lzma-vmlinuz.01.patch	2007-07-24 16:34:28 UTC (rev 19252)
-@@ -0,0 +1,54 @@
-+diff -rdup linux-2.6.21.5.oorig/arch/i386/boot/compressed/Makefile linux-2.6.21.5/arch/i386/boot/compressed/Makefile
-+--- linux-2.6.21.5.oorig/arch/i386/boot/compressed/Makefile	2007-07-24 13:08:51.000000000 +0200
-++++ linux-2.6.21.5/arch/i386/boot/compressed/Makefile	2007-07-24 14:54:38.000000000 +0200
-+@@ -4,7 +4,7 @@
-+ # create a compressed vmlinux image from the original vmlinux
-+ #
-+ 
-+-tragets		:= head.o lzma_misc.o piggy.o \
-++targets		:= head.o lzma_misc.o piggy.o \
-+ 			vmlinux.bin.all vmlinux.relocs \
-+ 			vmlinux vmlinux.bin vmlinux.bin.gz
-+ EXTRA_AFLAGS	:= -traditional
-+diff -rdup linux-2.6.21.5.oorig/scripts/gen_lzma_initramfs_list.sh linux-2.6.21.5/scripts/gen_lzma_initramfs_list.sh
-+--- linux-2.6.21.5.oorig/scripts/gen_lzma_initramfs_list.sh	2007-07-24 13:08:51.000000000 +0200
-++++ linux-2.6.21.5/scripts/gen_lzma_initramfs_list.sh	2007-07-24 15:12:10.000000000 +0200
-+@@ -253,7 +253,7 @@ while [ $# -gt 0 ]; do
-+ 			shift
-+ 			;;
-+ 		"-s")
-+-			opt="-d16"
-++			#opt="-d16" ? what was that supposed to do?
-+ 			;;
-+ 		"-d")	# display default initramfs list
-+ 			default_list="$arg"
-+@@ -286,7 +286,7 @@ if [ ! -z ${output_file} ]; then
-+ 		cpio_tfile=${cpio_file}
-+ 	fi
-+ 	rm ${cpio_list}
-+-	lzma e ${cpio_tfile} ${output_file} ${opt}
-++	lzma -z ${cpio_tfile} ${opt} -c > ${output_file}
-+ 	[ -z ${cpio_file} ] && rm ${cpio_tfile}
-+ fi
-+ exit 0
-+--- linux-2.6.21.5.oorig/arch/i386/boot/compressed/lzma_misc.c	2007-07-24 15:24:44.000000000 +0200
-++++ linux-2.6.21.5/arch/i386/boot/compressed/lzma_misc.c	2007-07-24 17:09:40.000000000 +0200
-+@@ -241,7 +241,6 @@ static int lzma_unzip(uch* output)
-+ 
-+ static int read_byte(void *object, const unsigned char **buffer, SizeT *bufferSize)
-+ {
-+-	static unsigned int i = 0;
-+ 	static unsigned char val;
-+ 	*bufferSize = 1;
-+ 	val = get_byte();
-+--- linux-2.6.21.5.oorig/scripts/Makefile.lib	2007-07-24 15:24:44.000000000 +0200
-++++ linux-2.6.21.5/scripts/Makefile.lib	2007-07-24 18:03:57.000000000 +0200
-+@@ -165,6 +165,7 @@ cmd_gzip = gzip -f -9 < $< > $@
-+ # LZMA
-+ #
-+ quiet_cmd_lzma = LZMA    $@
-+-cmd_lzma = lzma e $< $@ -lc7 -lp0 -pb0 2>/dev/null
-++#cmd_lzma = lzma e $< $@ -lc7 -lp0 -pb0 2>/dev/null
-++cmd_lzma = lzma -z $< -c > $@
-+ 
-+ 
-
-Modified: trunk/buildroot/toolchain/kernel-headers/linux-2.6.22.1-002-lzma-vmlinuz.01.patch
-===================================================================
---- trunk/buildroot/toolchain/kernel-headers/linux-2.6.22.1-002-lzma-vmlinuz.01.patch	2007-07-24 15:54:42 UTC (rev 19251)
-+++ trunk/buildroot/toolchain/kernel-headers/linux-2.6.22.1-002-lzma-vmlinuz.01.patch	2007-07-24 16:34:28 UTC (rev 19252)
-@@ -31,3 +31,24 @@
-  	[ -z ${cpio_file} ] && rm ${cpio_tfile}
-  fi
-  exit 0
-+--- linux-2.6.21.5.oorig/arch/i386/boot/compressed/lzma_misc.c	2007-07-24 15:24:44.000000000 +0200
-++++ linux-2.6.21.5/arch/i386/boot/compressed/lzma_misc.c	2007-07-24 17:09:40.000000000 +0200
-+@@ -241,7 +241,6 @@ static int lzma_unzip(uch* output)
-+ 
-+ static int read_byte(void *object, const unsigned char **buffer, SizeT *bufferSize)
-+ {
-+-	static unsigned int i = 0;
-+ 	static unsigned char val;
-+ 	*bufferSize = 1;
-+ 	val = get_byte();
-+--- linux-2.6.21.5.oorig/scripts/Makefile.lib	2007-07-24 15:24:44.000000000 +0200
-++++ linux-2.6.21.5/scripts/Makefile.lib	2007-07-24 18:03:57.000000000 +0200
-+@@ -165,6 +165,7 @@ cmd_gzip = gzip -f -9 < $< > $@
-+ # LZMA
-+ #
-+ quiet_cmd_lzma = LZMA    $@
-+-cmd_lzma = lzma e $< $@ -lc7 -lp0 -pb0 2>/dev/null
-++#cmd_lzma = lzma e $< $@ -lc7 -lp0 -pb0 2>/dev/null
-++cmd_lzma = lzma -z $< -c > $@
-+ 
-+ 
+-- Heikki Lindholm
