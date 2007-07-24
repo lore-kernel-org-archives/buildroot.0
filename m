@@ -1,7 +1,7 @@
 From: ulf at uclibc.org <ulf@uclibc.org>
-Date: Tue, 24 Jul 2007 07:10:04 -0700 (PDT)
-Subject: [Buildroot] svn commit: trunk/buildroot/package/pcmcia
-Message-ID: <20070724141004.AA690A6079@busybox.net>
+Date: Tue, 24 Jul 2007 07:12:38 -0700 (PDT)
+Subject: [Buildroot] svn commit: trunk/buildroot/package/libxml2
+Message-ID: <20070724141238.76176A608B@busybox.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -9,43 +9,52 @@ Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
 Author: ulf
-Date: 2007-07-24 07:10:03 -0700 (Tue, 24 Jul 2007)
-New Revision: 19248
+Date: 2007-07-24 07:12:38 -0700 (Tue, 24 Jul 2007)
+New Revision: 19249
 
 Log:
-Use known Buildroot symbols for linux in pcmcia
+Fix some bugs in libxml2 make
 
 Modified:
-   trunk/buildroot/package/pcmcia/pcmcia.mk
+   trunk/buildroot/package/libxml2/Config.in
+   trunk/buildroot/package/libxml2/libxml2.mk
 
 
 Changeset:
-Modified: trunk/buildroot/package/pcmcia/pcmcia.mk
+Modified: trunk/buildroot/package/libxml2/Config.in
 ===================================================================
---- trunk/buildroot/package/pcmcia/pcmcia.mk	2007-07-24 14:08:02 UTC (rev 19247)
-+++ trunk/buildroot/package/pcmcia/pcmcia.mk	2007-07-24 14:10:03 UTC (rev 19248)
-@@ -40,7 +40,7 @@
- 	touch $(PCMCIA_DIR)/.patched
+--- trunk/buildroot/package/libxml2/Config.in	2007-07-24 14:10:03 UTC (rev 19248)
++++ trunk/buildroot/package/libxml2/Config.in	2007-07-24 14:12:38 UTC (rev 19249)
+@@ -6,3 +6,13 @@
+ 	  Requires WCHAR
  
- $(PCMCIA_DIR)/.configured: $(PCMCIA_DIR)/.patched
--	( cd $(PCMCIA_DIR) ; ./Configure --kernel=$(LINUX_SOURCE_DIR) --noprompt \
-+	( cd $(PCMCIA_DIR) ; ./Configure --kernel=$(LINUX26_DIR) --noprompt \
- 		--rcdir=/etc --arch=$(ARCH) --trust --srctree --nocardbus \
- 		--sysv --kcc=$(KERNEL_CROSS)gcc --ucc=$(TARGET_CC) --ld=$(TARGET_CROSS)ld \
- 		--target=$(TARGET_DIR))
-@@ -88,11 +88,11 @@
+ 	  ftp://xmlsoft.org/libxml2
++
++config BR2_PACKAGE_LIBXML2_TARGET_HEADERS
++	bool "libxml2 target headers"
++	default n
++	help
++	  XML C Parser
++	  Requires WCHAR
++
++	  ftp://xmlsoft.org/libxml2
++
+
+Modified: trunk/buildroot/package/libxml2/libxml2.mk
+===================================================================
+--- trunk/buildroot/package/libxml2/libxml2.mk	2007-07-24 14:10:03 UTC (rev 19248)
++++ trunk/buildroot/package/libxml2/libxml2.mk	2007-07-24 14:12:38 UTC (rev 19249)
+@@ -53,11 +53,11 @@
+ $(STAGING_DIR)/usr/include/libxml:	$(TARGET_DIR)/usr/lib/libxml2.a
+ 	cp -af $(LIBXML2_DIR)/include/libxml $(STAGING_DIR)/usr/include/libxml2
  
- # use busybox depmod.pl so we need the sources unpacked
- $(PCMCIA_DIR)/.modules.dep: $(BUSYBOX_DIR)/.configured $(TARGET_DIR)/lib/modules
--	[ -d $(TARGET_DIR)/lib/modules/$(LINUX_VERSION) ] && \
-+	[ -d $(TARGET_DIR)/lib/modules/$(LINUX26_VERSION) ] && \
- 	$(BUSYBOX_DIR)/examples/depmod.pl \
--		-b $(TARGET_DIR)/lib/modules/$(LINUX_VERSION)/ \
--		-F $(LINUX_DIR)/System.map \
--		> $(TARGET_DIR)/lib/modules/$(LINUX_VERSION)/modules.dep
-+		-b $(TARGET_DIR)/lib/modules/$(LINUX26_VERSION)/ \
-+		-F $(LINUX26_DIR)/System.map \
-+		> $(TARGET_DIR)/lib/modules/$(LINUX26_VERSION)/modules.dep
- 	touch $(PCMCIA_DIR)/.modules.dep
+-$(TARGET_DIR)/usr/include:	libxml2-headers
++$(TARGET_DIR)/usr/include/libxml2:	libxml2-headers
+ 	cp -af $(LIBXML2_DIR)/include/libxml $(TARGET_DIR)/usr/include/libxml2
  
- pcmcia: uclibc linux26 $(TARGET_DIR)/sbin/cardmgr $(PCMCIA_DIR)/.modules.dep
+ 
+-libxml2-headers:	$(STAGING_DIR)/usr/include/libxml2
++libxml2-headers:	$(STAGING_DIR)/usr/include/libxml
+ 
+ libxml2-target-headers: $(TARGET_DIR)/usr/include/libxml2
+ 
