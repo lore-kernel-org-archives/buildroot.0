@@ -1,61 +1,88 @@
-From: Yann E. MORIN <yann.morin.1998@anciens.enib.fr>
-Date: Tue, 24 Jul 2007 19:33:05 +0200
-Subject: [Buildroot] [PATCH] make strace buildable
-In-Reply-To: <200707162232.43774.yann.morin.1998@anciens.enib.fr>
-References: <200707162232.43774.yann.morin.1998@anciens.enib.fr>
-Message-ID: <200707241933.05390.yann.morin.1998@anciens.enib.fr>
+From: aldot at uclibc.org <aldot@uclibc.org>
+Date: Tue, 24 Jul 2007 10:48:59 -0700 (PDT)
+Subject: [Buildroot] svn commit: trunk/buildroot/package:  tinyx xorg
+Message-ID: <20070724174859.D4BB1A466D@busybox.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello!
+Author: aldot
+Date: 2007-07-24 10:48:58 -0700 (Tue, 24 Jul 2007)
+New Revision: 19253
 
-Any taker?
+Log:
+- add a choice for Xserver selection.
+  This is ment as a suggestion Re: http://lists.busybox.net/lists/buildroot/2007-July/003835.html
 
-On Monday 16 July 2007 22:32, Yann E. MORIN wrote:
-> The second hunk in package/strace/strace-undef-syscall.patch is incorrect:
-> 
-> --- strace-4.5.15.orig/linux/syscallent.h       2007-02-04 19:03:48.000000000 +0100
-> +++ strace-4.5.15/linux/syscallent.h    2007-02-04 19:11:04.000000000 +0100
-> @@ -130,7 +130,10 @@
->         { 2,    TF,     sys_statfs,             "statfs"        }, /* 99 */
->         { 2,    TD,     sys_fstatfs,            "fstatfs"       }, /* 100 */
->         { 3,    0,      sys_ioperm,             "ioperm"        }, /* 101 */
-> -       { 2,    TD,     sys_socketcall,         "socketcall", SYS_socketcall }, /* 102 */
-> +       { 2,    TD,     sys_socketcall,         "socketcall",
-> +#ifdef __NR_socketcall
-> +       SYS_socketcall }, /* 102 */
-> +#endif
->         { 3,    0,      sys_syslog,             "syslog"        }, /* 103 */
->         { 3,    0,      sys_setitimer,          "setitimer"     }, /* 104 */
->         { 2,    0,      sys_getitimer,          "getitimer"     }, /* 105 */
-> @@ -145,7 +148,10 @@
->         { 4,    TP,     sys_wait4,              "wait4", SYS_wait4 }, /* 114 */
->         { 1,    0,      sys_swapoff,            "swapoff"       }, /* 115 */
->         { 1,    0,      sys_sysinfo,            "sysinfo"       }, /* 116 */
-> -       { 6,    0,      sys_ipc,                "ipc", SYS_ipc }, /* 117 */
-> +       { 6,    0,      sys_ipc,                "ipc",
-> +#ifdef __NR_ipc
-> +       SYS_ipc }, /* 117 */
-> +#endif
->         { 1,    TD,     sys_fsync,              "fsync"         }, /* 118 */
->         { 1,    TS,     sys_sigreturn,          "sigreturn"     }, /* 119 */
->         { 5,    TP,     sys_clone,              "clone", SYS_clone }, /* 120 */
-> 
-> If either or both of __NR_socketcall and __NR_ipc are not defined, then the
-> closing curly braces are omitted, thus resulting in incorrect C statements.
-> 
-> The attached patch to r19112 solves the issue.
 
-Regards,
-Yann E. MORIN.
+Modified:
+   trunk/buildroot/package/Config.in
+   trunk/buildroot/package/tinyx/Config.in
+   trunk/buildroot/package/xorg/Config.in
 
--- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +0/33 662376056 | Software  Designer | \ / CAMPAIGN     |   ^                |
-| --==< ?_? >==-- ?------------.-------:  X  AGAINST      |  /e\  There is no  |
-| http://ymorin.is-a-geek.org/ | (*_*) | / \ HTML MAIL    |  """  conspiracy.  |
-?------------------------------?-------?------------------?--------------------?
+
+Changeset:
+Modified: trunk/buildroot/package/Config.in
+===================================================================
+--- trunk/buildroot/package/Config.in	2007-07-24 16:34:28 UTC (rev 19252)
++++ trunk/buildroot/package/Config.in	2007-07-24 17:48:58 UTC (rev 19253)
+@@ -303,10 +303,30 @@
+ 
+ #source "package/microwin/Config.in"
+ 
+-comment "X Window System server"
++choice
++prompt "X Window System server"
++	default BR2_PACKAGE_XSERVER_none
++	help
++	  Xserver to use.
++	  For more information about the X protocol see
++	  http://www.x.org
++
++config BR2_PACKAGE_XSERVER_none
++	bool "none"
++config BR2_PACKAGE_XSERVER_xorg
++	bool "xorg"
++config BR2_PACKAGE_XSERVER_tinyx
++	bool "tinyx"
++endchoice
++if BR2_PACKAGE_XSERVER_xorg
+ source "package/xorg/Config.in"
++endif
++if BR2_PACKAGE_XSERVER_tinyx
+ source "package/tinyx/Config.in"
++endif
++
+ comment "X libraries and helper libraries"
++#XXX: maybe some of these should depend on !BR2_PACKAGE_XSERVER_none
+ source "package/atk/Config.in"
+ source "package/cairo/Config.in"
+ source "package/pango/Config.in"
+
+Modified: trunk/buildroot/package/tinyx/Config.in
+===================================================================
+--- trunk/buildroot/package/tinyx/Config.in	2007-07-24 16:34:28 UTC (rev 19252)
++++ trunk/buildroot/package/tinyx/Config.in	2007-07-24 17:48:58 UTC (rev 19253)
+@@ -1,5 +1,5 @@
+ config BR2_PACKAGE_TINYX
+ 	bool "tinyx"
+-	default n
++	default y if BR2_PACKAGE_XSERVER_tinyx
+ 	help
+ 	  A tiny X server.  Also known as 'Xfbdev' and 'kdrive'.
+
+Modified: trunk/buildroot/package/xorg/Config.in
+===================================================================
+--- trunk/buildroot/package/xorg/Config.in	2007-07-24 16:34:28 UTC (rev 19252)
++++ trunk/buildroot/package/xorg/Config.in	2007-07-24 17:48:58 UTC (rev 19253)
+@@ -1,7 +1,6 @@
+ config BR2_PACKAGE_XORG
+ 	bool "X.org X Window System"
+-	default n
+-	depends !BR2_PACKAGE_TINYX
++	default y if BR2_PACKAGE_XSERVER_xorg
+ 	select BR2_PACKAGE_ZLIB
+ 	select BR2_PACKAGE_LIBPNG
+ 	select BR2_PACKAGE_EXPAT
