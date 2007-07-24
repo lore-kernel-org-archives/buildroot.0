@@ -1,54 +1,36 @@
-From: Frank Kujawski <buildroot@fp8.com>
-Date: Tue, 24 Jul 2007 14:31:35 -0500 (CDT)
-Subject: [Buildroot] buildroot/toolchain_build_armeb
-In-Reply-To: <44028.75.129.164.68.1185280112.squirrel@kujawski.org>
-References: <37183.75.129.164.68.1185273361.squirrel@kujawski.org>
-	<44028.75.129.164.68.1185280112.squirrel@kujawski.org>
-Message-ID: <6240.75.129.164.68.1185305495.squirrel@kujawski.org>
+From: Kent <kent@zydax.com>
+Date: Tue, 24 Jul 2007 12:48:42 -0700
+Subject: [Buildroot] Error Building Linux - Board Support
+	Options:at91sam9260ek, at91sam9260dfc, etc
+In-Reply-To: <000001c7ce1d$6d9cbb30$6b01a8c0@RANDY>
+Message-ID: <000001c7ce2b$a37f8f30$6b01a8c0@RANDY>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>
->>   Somewhere recently, buildroot/toolchain_build_armeb is nolonger being
->> created.  I get a make error at:
->> bzcat /projects/BuildRoot/buildroot/../dl/module-init-tools-3.2.2.tar.bz2 |
->> tar -C /projects/BuildRoot/buildroot/toolchain_build_armeb -xvf -
->> tar: /projects/BuildRoot/buildroot/toolchain_build_armeb: Cannot chdir: No
->> such file or directory
->>
->> But, build_armeb/ project_build_armeb/ do get created correctly.
->
-> in continuing to compile, I error out at:
-> /projects/BuildRoot/buildroot/toolchain_build_armeb/bin/sed -i -e
-> '/CONFIG_AEABI/d'
-> /projects/BuildRoot/buildroot/build_armeb/linux-2.6.21.5/.config
-> make: /projects/BuildRoot/buildroot/toolchain_build_armeb/bin/sed: Command not
-> found
-> make: ***
-> [/projects/BuildRoot/buildroot/build_armeb/linux-2.6.21.5/.configured] Error
-> 127
->
-> Perhaps there is something here that would help..
->
->   Frank
-Just for fun,
-I ran it using i386, toolchain_build_i386 was auto created
+Hello again,
 
->
->
->>
->>   Frank
->> _______________________________________________
->> buildroot mailing list
->> buildroot at uclibc.org
->> http://busybox.net/mailman/listinfo/buildroot
->>
->
-> _______________________________________________
-> buildroot mailing list
-> buildroot at uclibc.org
-> http://busybox.net/mailman/listinfo/buildroot
->
+> target/device/Atmel/at91sam9260ek/at91sam9260ek-limux-.config
+
+We did a little digging and discovered that the LINUX26_KCONFIG variable
+didn't seem to be setting correctly (target/device/Atmel/Makefile.in). We
+changed  the := to just = and that seemed to help. I have no idea what the
+long-term implications of this change are, but thought I'd mention that it
+worked at least.
+
+> I've checked the contents of 'target/device/Atmel/
+> and I don't find an at91sam9260ek directory.
+
+Still no solution on this though. Don't know if there NEEDS to be an 'ek'
+directory or not, but it's looking for one.
+
+Thanks,
+Kent
+
+No virus found in this outgoing message.
+Checked by AVG Free Edition. 
+Version: 7.5.476 / Virus Database: 269.10.17/915 - Release Date: 7/24/2007
+1:50 PM
+ 
