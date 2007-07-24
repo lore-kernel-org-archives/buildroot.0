@@ -1,49 +1,54 @@
-From: Bernhard Fischer <rep.dot.nop@gmail.com>
-Date: Tue, 24 Jul 2007 20:18:17 +0200
-Subject: [Buildroot] config update
-In-Reply-To: <46A63685.5060806@cs.helsinki.fi>
-References: <469C604E.5060703@cs.helsinki.fi> <20070724123433.GA18856@aon.at>
-	<46A63685.5060806@cs.helsinki.fi>
-Message-ID: <20070724181817.GC20613@aon.at>
+From: Frank Kujawski <buildroot@fp8.com>
+Date: Tue, 24 Jul 2007 14:31:35 -0500 (CDT)
+Subject: [Buildroot] buildroot/toolchain_build_armeb
+In-Reply-To: <44028.75.129.164.68.1185280112.squirrel@kujawski.org>
+References: <37183.75.129.164.68.1185273361.squirrel@kujawski.org>
+	<44028.75.129.164.68.1185280112.squirrel@kujawski.org>
+Message-ID: <6240.75.129.164.68.1185305495.squirrel@kujawski.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Tue, Jul 24, 2007 at 08:27:33PM +0300, Heikki Lindholm wrote:
-> Bernhard Fischer kirjoitti:
->> On Tue, Jul 17, 2007 at 09:23:10AM +0300, Heikki Lindholm wrote:
->>> Hello,
->>>
->>> I just updated my OS X buildroot and, recent changes breaking it, I have 
->> Can you please be more specific as to how it broke?
+>>
+>>   Somewhere recently, buildroot/toolchain_build_armeb is nolonger being
+>> created.  I get a make error at:
+>> bzcat /projects/BuildRoot/buildroot/../dl/module-init-tools-3.2.2.tar.bz2 |
+>> tar -C /projects/BuildRoot/buildroot/toolchain_build_armeb -xvf -
+>> tar: /projects/BuildRoot/buildroot/toolchain_build_armeb: Cannot chdir: No
+>> such file or directory
+>>
+>> But, build_armeb/ project_build_armeb/ do get created correctly.
 >
-> Well, basically, it was easier to fix than thought, and I posted a patch 
-> already:
-> http://buildroot.uclibc.org/lists/buildroot/2007-July/003659.html
-
-I'm curious if you need the same patch if you make menuconfig with e.g.
-linux-2.6.21.5.
-If so, then please fix this upstream first. If not then there must be
-something different going on and we need to track that down.
-
-> The two culprits for the breakage are:
-> (1) foo.h includes features.h, which doesn't exist on OS X. Referring to my 
-> above patch, this could also be fixed in the Makefile by not including 
-> foo.h on OS X, but IMHO that's trickier (uname).
-> (2) The linking was changed so, that ncurses wasn't linked in on OS X 
-> anymore
+> in continuing to compile, I error out at:
+> /projects/BuildRoot/buildroot/toolchain_build_armeb/bin/sed -i -e
+> '/CONFIG_AEABI/d'
+> /projects/BuildRoot/buildroot/build_armeb/linux-2.6.21.5/.config
+> make: /projects/BuildRoot/buildroot/toolchain_build_armeb/bin/sed: Command not
+> found
+> make: ***
+> [/projects/BuildRoot/buildroot/build_armeb/linux-2.6.21.5/.configured] Error
+> 127
 >
-> BUT I also noted another breakage, which I'm clueless about:
-> http://buildroot.uclibc.org/lists/buildroot/2007-July/003658.html
-> I'm using the same config I was with an older version (for example, rev 
-> 18688 worked).
+> Perhaps there is something here that would help..
+>
+>   Frank
+Just for fun,
+I ran it using i386, toolchain_build_i386 was auto created
 
-Do you have SYSROOT set in your .config?
-
-You're using 4.1.2 and there was a reason why i only enabled sysroot for
-gcc >= 4.2.0 (IIRC sjhill changed this, so you're better off to ask him
-why he enabled sysroot support for 4.1.2.. I figure that it worked for
-him else he wouldn't have enabled it. Perhaps it was erroneously enabled,
-i wouldn't know.)
+>
+>
+>>
+>>   Frank
+>> _______________________________________________
+>> buildroot mailing list
+>> buildroot at uclibc.org
+>> http://busybox.net/mailman/listinfo/buildroot
+>>
+>
+> _______________________________________________
+> buildroot mailing list
+> buildroot at uclibc.org
+> http://busybox.net/mailman/listinfo/buildroot
+>
