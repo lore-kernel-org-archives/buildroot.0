@@ -1,37 +1,94 @@
-From: Bernhard Fischer <rep.dot.nop@gmail.com>
-Date: Tue, 24 Jul 2007 15:35:26 +0200
-Subject: [Buildroot] svn commit:	trunk/buildroot/toolchain/kernel-headers
-In-Reply-To: <a512d1250707240533m7d9649eax588a5df1eefd3071@mail.gmail.com>
-References: <20070724123242.85DCAA4645@busybox.net>
-	<a512d1250707240533m7d9649eax588a5df1eefd3071@mail.gmail.com>
-Message-ID: <20070724133526.GB18856@aon.at>
+From: ulf at uclibc.org <ulf@uclibc.org>
+Date: Tue, 24 Jul 2007 07:06:16 -0700 (PDT)
+Subject: [Buildroot] svn commit: trunk/buildroot/package/kexec
+Message-ID: <20070724140616.F0451A4683@busybox.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Tue, Jul 24, 2007 at 07:33:28PM +0700, brm wrote:
->| diff -rduNp linux-2.6.22.1.oorig/arch/i386/boot/compressed/Makefile
->linux-2.6.22.1/arch/i386/boot/compressed/Makefile
->| --- linux-2.6.22.1.oorig/arch/i386/boot/compressed/Makefile	2007-07-10
->20:56:30.000000000 +0200
->| +++ linux-2.6.22.1/arch/i386/boot/compressed/Makefile	2007-07-24
->14:17:46.000000000 +0200
->| @@ -4,15 +4,16 @@
->| # create a compressed vmlinux image from the original vmlinux
->| #
->|
->| -targets		:= vmlinux vmlinux.bin vmlinux.bin.gz head.o misc.o piggy.o \
->| -			vmlinux.bin.all vmlinux.relocs
->| +tragets		:= head.o lzma_misc.o piggy.o \
->
->targets?
+Author: ulf
+Date: 2007-07-24 07:06:13 -0700 (Tue, 24 Jul 2007)
+New Revision: 19246
 
-yes, and my lzma barfs on 'e'. Do
-cp toolchain/kernel-headers/linux-2.6.22.1-002-lzma-vmlinuz.01.patch \
-	toolchain/kernel-headers/linux-2.6.21.5-002-lzma-vmlinuz.01.patch
+Log:
+Patch correctly kexec, make sure utils is built using HOSTCC
 
-to see if that behaves now.
+Added:
+   trunk/buildroot/package/kexec/kexec-patch.sh
+   trunk/buildroot/package/kexec/kexec-tools-003-build-util-using-host-gcc.patch
 
-Thanks for the notice!
+Modified:
+   trunk/buildroot/package/kexec/kexec.mk
+
+
+Changeset:
+Added: trunk/buildroot/package/kexec/kexec-patch.sh
+===================================================================
+--- trunk/buildroot/package/kexec/kexec-patch.sh	                        (rev 0)
++++ trunk/buildroot/package/kexec/kexec-patch.sh	2007-07-24 14:06:13 UTC (rev 19246)
+@@ -0,0 +1,16 @@
++#!/bin/bash
++SRCDIR=$1
++PATCHDIR=$2
++PATCHLIST=${PATCHDIR}/$3
++
++do_patch()
++{
++	cd ${SRCDIR}
++	for f in `cat ${PATCHLIST}` ; do
++		echo ${PATCHDIR}/$f
++		cat ${PATCHDIR}/$f | patch -p2
++	done
++}
++
++do_patch
++
+
+
+Property changes on: trunk/buildroot/package/kexec/kexec-patch.sh
+___________________________________________________________________
+Name: svn:executable
+   + *
+
+Added: trunk/buildroot/package/kexec/kexec-tools-003-build-util-using-host-gcc.patch
+===================================================================
+--- trunk/buildroot/package/kexec/kexec-tools-003-build-util-using-host-gcc.patch	                        (rev 0)
++++ trunk/buildroot/package/kexec/kexec-tools-003-build-util-using-host-gcc.patch	2007-07-24 14:06:13 UTC (rev 19246)
+@@ -0,0 +1,17 @@
++diff -urN kexec-tools-1.101-0rig/util/Makefile kexec-tools-1.101/util/Makefile
++--- kexec-tools-1.101-0rig/util/Makefile	2004-12-16 22:08:21.000000000 +0100
+++++ kexec-tools-1.101/util/Makefile	2007-07-24 16:32:48.000000000 +0200
++@@ -1,4 +1,4 @@
++ BIN_TO_HEX:= $(OBJDIR)/bin/bin-to-hex
++ $(BIN_TO_HEX): util/bin-to-hex.c
++ 	mkdir -p $(@D)
++-	$(BUILD_CC) $(BUILD_CFLAGS) $< -o $@
+++	$(HOSTCC) $(HOST_CFLAGS) $< -o $@
++diff -urN kexec-tools-1.101-0rig/util/Makefile~ kexec-tools-1.101/util/Makefile~
++--- kexec-tools-1.101-0rig/util/Makefile~	1970-01-01 01:00:00.000000000 +0100
+++++ kexec-tools-1.101/util/Makefile~	2004-12-16 22:08:21.000000000 +0100
++@@ -0,0 +1,4 @@
+++BIN_TO_HEX:= $(OBJDIR)/bin/bin-to-hex
+++$(BIN_TO_HEX): util/bin-to-hex.c
+++	mkdir -p $(@D)
+++	$(BUILD_CC) $(BUILD_CFLAGS) $< -o $@
+
+Modified: trunk/buildroot/package/kexec/kexec.mk
+===================================================================
+--- trunk/buildroot/package/kexec/kexec.mk	2007-07-24 13:41:05 UTC (rev 19245)
++++ trunk/buildroot/package/kexec/kexec.mk	2007-07-24 14:06:13 UTC (rev 19246)
+@@ -35,9 +35,10 @@
+ 	$(KEXEC_CAT) $(DL_DIR)/$(KEXEC_SOURCE) | tar -C $(BUILD_DIR) $(TAR_OPTIONS) -
+ ifneq ($(KEXEC_PATCH),)
+ 	(cd $(KEXEC_DIR) && $(KEXEC_CAT) $(DL_DIR)/$(KEXEC_PATCH) | patch -p1)
+-	toolchain/patch-kernel.sh $(KEXEC_DIR) $(KEXEC_DIR)/debian/patches \*.patch
++	package/kexec/kexec-patch.sh $(KEXEC_DIR) $(KEXEC_DIR)/debian/patches 00list
++#	toolchain/patch-kernel.sh $(KEXEC_DIR) $(KEXEC_DIR)/debian/patches \*.patch
+ endif
+-	toolchain/patch-kernel.sh $(KEXEC_DIR) package/kexec/ kexec\*.dpatch
++	toolchain/patch-kernel.sh $(KEXEC_DIR) package/kexec/ kexec\*.patch
+ 	touch $@
+ 
+ $(KEXEC_DIR)/.configured: $(KEXEC_DIR)/.unpacked
