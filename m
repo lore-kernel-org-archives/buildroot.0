@@ -1,21 +1,29 @@
-From: Frank Kujawski <buildroot@fp8.com>
-Date: Tue, 24 Jul 2007 05:36:01 -0500 (CDT)
-Subject: [Buildroot] buildroot/toolchain_build_armeb
-Message-ID: <37183.75.129.164.68.1185273361.squirrel@kujawski.org>
+From: aldot at uclibc.org <aldot@uclibc.org>
+Date: Tue, 24 Jul 2007 05:32:42 -0700 (PDT)
+Subject: [Buildroot] svn commit: trunk/buildroot/toolchain/kernel-headers
+Message-ID: <20070724123242.85DCAA4645@busybox.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+Author: aldot
+Date: 2007-07-24 05:32:40 -0700 (Tue, 24 Jul 2007)
+New Revision: 19244
 
-  Somewhere recently, buildroot/toolchain_build_armeb is nolonger being
-created.  I get a make error at:
-bzcat /projects/BuildRoot/buildroot/../dl/module-init-tools-3.2.2.tar.bz2 |
-tar -C /projects/BuildRoot/buildroot/toolchain_build_armeb -xvf -
-tar: /projects/BuildRoot/buildroot/toolchain_build_armeb: Cannot chdir: No
-such file or directory
+Log:
+- forward port lzma-vmlinux and ipmisensors to 2.6.22.1
 
-But, build_armeb/ project_build_armeb/ do get created correctly.
 
-  Frank
+Added:
+   trunk/buildroot/toolchain/kernel-headers/linux-2.6.22.1-001-lzma-vmlinuz.00.patch
+   trunk/buildroot/toolchain/kernel-headers/linux-2.6.22.1-ipmisensors-20070314-1214.patch
+
+
+Changeset:
+
+Sorry, the patch is too large to include (28781 lines).
+Please use ViewCVS to see it!
+
+http://uclibc.org/cgi-bin/viewcvs.cgi?view=rev&root=svn&rev=19244
