@@ -1,60 +1,78 @@
-From: Bernhard Fischer <rep.dot.nop@gmail.com>
-Date: Mon, 23 Jul 2007 23:13:58 +0200
-Subject: [Buildroot] svn commit: trunk/buildroot
-In-Reply-To: <20070723190427.1D9BFA6868@busybox.net>
-References: <20070723190427.1D9BFA6868@busybox.net>
-Message-ID: <20070723211358.GE4096@aon.at>
+From: Kent <kent@zydax.com>
+Date: Mon, 23 Jul 2007 17:20:39 -0700
+Subject: [Buildroot] Buildroot Exits Before Linux Compilation
+Message-ID: <000001c7cd88$772f1890$6b01a8c0@RANDY>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Mon, Jul 23, 2007 at 12:04:27PM -0700, ulf at uclibc.org wrote:
->Author: ulf
->Date: 2007-07-23 12:04:27 -0700 (Mon, 23 Jul 2007)
->New Revision: 19238
->
->Log:
->Add configuration option allowing hiding packages needing WCHAR
->
->Modified:
->   trunk/buildroot/Config.in
->
->
->Changeset:
->Modified: trunk/buildroot/Config.in
->===================================================================
->--- trunk/buildroot/Config.in	2007-07-23 18:49:16 UTC (rev 19237)
->+++ trunk/buildroot/Config.in	2007-07-23 19:04:27 UTC (rev 19238)
->@@ -687,6 +687,12 @@
-> 	help
-> 	  This option hides outdated/obsolete versions of packages.
-> 
->+config BR2_USE_WCHAR
->+	bool "Show packages that are require WCHAR support"
+Hello,
 
-"that are require" == -ENOPARSE
+ 
 
-bool "wchar support"
-	default n if !BR2_LOCALE_OR_HOWEVER_IT_IS_CALLED
-	default y if BR2_LOCALE_OR_HOWEVER_IT_IS_CALLED
-	help
-	  Enable wchar support. If selected, packages which cannot be
-	  built without wchar support are hidden.
+I?m trying to use Buildroot to compile Linux for use on an Atmel
+AT91SAM9260. I?m running buildroot-20070719 on a Fedora core 6, VmWare
+Player virtual machine over top of Windows XP. I browsed the settings
+available in the menuconfig, chose the arm926t for the target architecture,
+chose a couple of options like gdb, pppd, and ?build Linux kernel?, but as
+far as I can tell/remember left the rest as defaults.
 
-There are a couple of packages which just need minor fixups to work
-properly without wchar support (I think that i added a patch for one
-package recently, don't remember which one that was, though).
+ 
 
-Also, this one depends on locale support, IIRC (i.e. is selected by
-locale).
+I get an error right as it starts in on the Linux kernel:
 
-cheers,
->+	default y
->+	help
->+	  This option hides packages which cannot be built without WCHAR.
->+
-> config BR2_PREFER_STATIC_LIB
-> 	bool "prefer static libraries"
-> 	default n
+ 
+
+Make: *** No rule to make target
+???/buildroot/project_build_arm/uclibc/linux-2.6.21.5/.patched?, needed by
+???/buildroot/project_build_arm/uclibc/linux-2.6.21.5/.configured?. Stop.
+
+ 
+
+I don?t know if this is relevant or not, but I do have a
+
+ 
+
+?linux-2.6.21.5/.patched?
+
+ 
+
+But it?s in:
+
+ 
+
+???/buildroot/build_arm/?
+
+ 
+
+Not:
+
+ 
+
+???/buildroot/project_build_arm/uclibc?
+
+ 
+
+I haven?t seen any other posts about this, so I doubt it?s anything wrong
+with the code, but I?m really newb enough to have no idea what to tinker
+with to get this error to go away. I?m also not sure what other information
+I need to include. If I?ve left out something truly vital, please let me
+know and I?ll send it out as soon as I can.
+
+ 
+
+Thanks a lot for any help anyone can give,
+
+Kent
+
+
+No virus found in this outgoing message.
+Checked by AVG Free Edition. 
+Version: 7.5.476 / Virus Database: 269.10.14/912 - Release Date: 7/22/2007
+7:02 PM
+ 
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: http://busybox.net/lists/buildroot/attachments/20070723/9f6a3bf9/attachment.html 
