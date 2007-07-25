@@ -1,202 +1,204 @@
 From: Ulf Samuelsson <ulf@atmel.com>
-Date: Wed, 25 Jul 2007 20:56:50 +0200
-Subject: [Buildroot] x86 packages
-Message-ID: <1185389810.8043.86.camel@elrond.sweden.atmel.com>
+Date: Thu, 26 Jul 2007 01:15:20 +0200
+Subject: [Buildroot] [RFC] openswan 2.4.9 patch
+Message-ID: <1185405320.5580.13.camel@elrond.sweden.atmel.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-> On Mon, Jul 23, 2007 at 06:41:06PM +0200, Ulf Samuelsson wrote:
-Result so far of full build of x86.
+The package/openswan directory is quite large.
+The way the makefile is designed, each kernel has
+to have its own set of patches.
+If several kernels are to be supported, then 
+there will be multiple copies of the patches.
 
-make allyesconfig
-make menuconfig
-- make generic x86 device
-- do not make any generic System Support
-- do not make Soekris or EPIA MII
+There are two key patches needed, the "klips" and the "natt" patch.
+The "klips" patch is about 1,8 MB and the "natt" patch is a few kB.
+The "natt" patch seems to be broken for new/ipvr/udp.c.
 
+I think that it would be good to be able to select the 
+real openswan version, and download the "klips" patch
+instead of storing it in the buildroot tree.
 
-Packets not buildable, but not due to VERSION patch
+The change would allow all (patchable) kernels to be supported
+and would reduce the buildroot tree by about 5.4MB.
 
-gcc:		for target not functional
-	- Trying to include "gthr-.h" which does not exist.
-	sounds like wrong thread libs. Try linuxthreads.old
-ccache:		for target not functional
-	- Relies on non functional gcc for target.
-elf2float:	not functional
-alsa-libs:	not functional
-mpg123:		not functional	
-	OBJECTS contain "\</n>"
-	asterisk depends on mpg123
-gettext:	not functional
-	- Does not build *shared* libaries (libgettext*.so)
-	BR2_PREFER_STATIC_LIB?
-	libglib2 selects gettext
-	dbus-glib selects libglib2
-	atk selects libglib2
-	pango selects libglib2
-	libgtk2 selects pango
-	gtk2-engines depends on LIBGTK2
-	metacity selects libgtk2
-	hal selects DBUS_GLIB
-	pango depends on gettext
-	===> Looks like fixing gettext should have high priority...
-libdaemon	- not functional
-	LIBTOOL not defined
-	avahi depends on libdaemon
-libintl:	not functional
-	does not build shared libraries
-curl:		not functional
-	no longer available on internet
-cvs		- not functional
-	needs wchar
-libxml2-headers:- not functional
-	bug in makefile.
-	dbus depends on libxml2-headers
-libxml2:	- not functional
-	need wchar
-DirectFB:	- not functional
-	Does not build staging_dir/usr/lib/libdirect*
-dmalloc:	- not functional
-	Requires C++ compiler, not built...
-dmraid:		- not functional
-	needs GLIBC_2.0
-dnsmasq-2.39	- not functional
-	undef ref to in6addr_any
-fontconfig	- not functional
-	Cannot find /lib/libc.so.0
-	xorg depends on fontconfig
-	cairo depends on xorg
-	dillo depends on xorg
-	libgtk12 depends on xorg
-	metacity depends on xorg
-	rdesktop depends on xorg
-pcmcia:		- not functional
-	Using old Buildroot symbols
-	Needs to be configured in the kernel tree
-	hostap depends on pcmcia
-iperf-2.0.2:		- not functional
-	Requires C++ compiler
-kexec			- not functional
-	Builds bin-to-hex with cross compiler
-l2tpd:		- not functional
-	Patch l2tpd_0.70-pre20031121-2.1.diff.gz no longer available
-cgicc:		- not functional
-	Requires C++ compiler
-libgcrypt:	- not functional
-	Undefined reference to `_gcry_mpih_*`in libgcypt.so
-	vpnc depends on libgcrypt
-libglib-1.2:	- not functional
-	staging_dir/lib/libglib.so does not exist
-	dillo selects libglib-1.2
-	libgtk12 selects libglib-1.2
-libid3tag:	- not functional
-	libtool: compile: unable to infer tagged configuration
-	libtool: compile: specify a tag with `--tag'
-	madplay depends on libid3tag
-libmad:	- not functional
-	libtool: compile: unable to infer tagged configuration
-	libtool: compile: specify a tag with `--tag'
-	mplayer depends on libmad
-libraw1394:	- not functional
-	staging_dir/lib/libraw1394.so does not exist
-libungif:	- not functional
-	staging_dir/lib/libungif.la does not exist
-libusb:		- not functional
-	Requires C++ compiler
-ltp-testsuite:	- not functional
-	pmaptst.c:(.text+0x5c): undefined reference to `pmap_set'
-	pmaptst.c:(.text+0xca): undefined reference to `pmap_set'
-	pmaptst.c:(.text+0x128): undefined reference to `pmap_unset'
-ltrace:		- not functional
-	error: ***** gelf.h not found ***** during configure
-LVM2:		- not functional
-	activate/activate.c: In function '_lv_info':
-	activate/activate.c:341: error: storage size of 'dminfo' isn't known
-lzma:		- not functional
-	Requires C++ compiler
-mpatrol:	- not functional
-	../../src/memory.c: In function '__mp_memquery':
-	../../src/memory.c:769: error: lvalue required as left operand of
-assignment
-mrouted:	- not functional
-	In file included from netinet/ip_mroute.h:7,
-                 from defs.h:49,
-                 from igmp.c:15:
-	/home/ulf/projects/Buildroot/20070720/buildroot/build_i386/staging_dir/usr/include/linux/mroute.h:116:
-	error: expected specifier-qualifier-list before '__u32'
-netkit:		- not functional
-	inetd.o: In function `unregister_rpc':
-	inetd.c:(.text+0x6c): undefined reference to `pmap_unset'
-	inetd.o: In function `register_rpc':
-	inetd.c:(.text+0x120): undefined reference to `pmap_unset'
-	inetd.c:(.text+0x138): undefined reference to `pmap_set'
-	servtab.o: In function `loadconfigent':
-netplug:	- not functional
-	netlink.c: In function 'netlink_open':
-	netlink.c:289: warning: pointer targets in passing argument 3 of
-	'getsockname' differ in signedness
-nfs-utils:	- not functional
-	/libnfs.a ../../support/misc/libmisc.a -lnsl
-	mountd-mountd.o: In function `unregister_services':	
-	mountd.c:(.text+0xcb): undefined reference to `pmap_unset'
-	mountd.c:(.text+0xe5): undefined reference to `pmap_unset'
-	mountd.c:(.text+0xff): undefined reference to `pmap_unset'
-ntp:		- not functional
-	Applying ntp-cross-compile.patch using plaintext: 
-	patching file ntpdc/Makefile.in
-	Hunk #1 FAILED at 157.
-	1 out of 1 hunk FAILED -- saving rejects to file 
-	Patch failed!  Please fix ntp-cross-compile.patch!
-openssh:	- not functional
-	In file included from bsd-arc4random.c:17:
-	../includes.h:64:47: error: maillock.h: No such file or directory
-bsdiff:	- not functional
-	bsdiff.c:(.text+0x8d1): undefined reference to `BZ2_bzWriteOpen'
-	bsdiff.c:(.text+0xd7e): undefined reference to `BZ2_bzWrite'
-	...
-pcmcia:	- not functional
-	2.5.0 and later kernels require that PCMCIA be configured in the
-	    kernel source tree.  To fix, reconfigure and rebuild your
-	    kernel with PCMCIA enabled.
-portage:	sandbox source not available
-qte:	Needs commerical license
-qtopia:	Not tested
-quagga:		- not functional
-	configure: error: --enable-snmp given, 
-		but cannot find support for SNMP
-	BR2_ENABLE_SNMP must not be given
-	In file included from /[snip]/sys-include/linux/rtnetlink.h:8,
-                 from ./zebra.h:166,
-                 from network.c:24:
-	/[snip]/sys-include/linux/neighbour.h:92: error: 
-		expected specifier-qualifier-list before '__u64'
-ruby:
-	can't find header files for ruby.
-	error detected by by lib/mkmf.rb
-	Need to have ruby-devel installed in "/lib".
-	On OpenSuse this installs in "/usr/lib" instead of expected /lib
-	srcdir = $(RUBY_DIR)/'.' which is an illegal syntax.
+Comments?
 
-rxvt:
-	X11 headers not available
-	In file included from rxvt.c:2:
-	rxvt.h:95:68: error: X11/Intrinsic.h: Does not exist
-	rxvt.h:96:28: error: X11/cursorfont.h: Does not exist
-SDL		- not functional
-	Depends on directFB
-tn5250:		- not functional - fixed
-	No definition of TRUE/FALSE
-	tn5250 built in $(TN5250_DIR)/src/
-ttcp:		- not functional
-	ttcp.c:(.text+0x10ad): undefined reference to `bcopy'
-syslinux:	- not functional	
-	- no NASM, gas does not accept -O99
-pxelinux:	- not functional
-valgrind:
-	valgrind-3.2.3/none/vgskin_none.so does not exist
+A real patch would also remove the
+"linux-*-openswan-*.kernel-2.6-klips.patch" files from 
+package/openswan/
+
+Other "linux-*-openswan-$(VERSION).kernel-2.6-XXX.patch" would 
+be moved to "$(VERSION)/linux-openswan-$(VERSION).kernel-2.6-XXX.patch"
+
+There are some test targets which maybe should be removed
+
+Index: package/openswan/openswan.mk
+===================================================================
+--- package/openswan/openswan.mk	(revision 19263)
++++ package/openswan/openswan.mk	(arbetskopia)
+@@ -6,14 +6,21 @@
+ # to enable that within busybox
+ #
+ #############################################################
+-OPENSWAN_VERSION:=2.4.8
++OPENSWAN_VERSION:=$(strip $(subst ",,$(BR2_PACKAGE_OPENSWAN_VERSION)))
++#"))
++ifeq ($(OPENSWAN_VERSION),)
++OPENSWAN_VERSION:=2.4.9
++endif
+ OPENSWAN_SOURCE:=openswan-$(OPENSWAN_VERSION).tar.gz
+-OPENSWAN_SITE:=http://www.openswan.org/download/
++OPENSWAN_SITE:=http://www.openswan.org/download
+ OPENSWAN_DIR:=$(BUILD_DIR)/openswan-$(OPENSWAN_VERSION)
+ OPENSWAN_CAT:=$(ZCAT)
+ OPENSWAN_BINARY:=programs/pluto/pluto
+ OPENSWAN_TARGET_BINARY:=usr/sbin/ipsec
+ 
++OPENSWAN_NATT_PATCH:=openswan-$(OPENSWAN_VERSION).kernel-2.6-natt.patch.gz
++OPENSWAN_KLIPS_PATCH:=openswan-$(OPENSWAN_VERSION).kernel-2.6-klips.patch.gz
++
+ ifneq ($(BR2_PACKAGE_OPENSWAN_DEBUGGING),y)
+ OPENSWAN_CFLAGS=-UDEBUG -DNO_DEBUG -ULEAK_DETECTIVE
+ endif
+@@ -21,11 +28,21 @@
+ $(DL_DIR)/$(OPENSWAN_SOURCE):
+ 	 $(WGET) -P $(DL_DIR) $(OPENSWAN_SITE)/$(OPENSWAN_SOURCE)
+ 
+-openswan-source: $(DL_DIR)/$(OPENSWAN_SOURCE)
++$(DL_DIR)/$(OPENSWAN_NATT_PATCH):
++	 $(WGET) -P $(DL_DIR) $(OPENSWAN_SITE)/$(OPENSWAN_NATT_PATCH)
+ 
++$(DL_DIR)/$(OPENSWAN_KLIPS_PATCH):
++	 $(WGET) -P $(DL_DIR) $(OPENSWAN_SITE)/$(OPENSWAN_KLIPS_PATCH)
++
++openswan-source: $(DL_DIR)/$(OPENSWAN_SOURCE)		\
++		$(DL_DIR)/$(OPENSWAN_NATT_PATCH)	\
++		$(DL_DIR)/$(OPENSWAN_KLIPS_PATCH)
++
+ $(OPENSWAN_DIR)/.unpacked: $(DL_DIR)/$(OPENSWAN_SOURCE)
+ 	$(OPENSWAN_CAT) $(DL_DIR)/$(OPENSWAN_SOURCE) | tar -C $(BUILD_DIR)
+$(TAR_OPTIONS) -
+-	toolchain/patch-kernel.sh $(OPENSWAN_DIR) package/openswan/ openswan
+\*.patch
++	toolchain/patch-kernel.sh $(OPENSWAN_DIR) \
++		package/openswan/$(OPENSWAN_VERSION)/ \
++		openswan-$(OPENSWAN_VERSION)\*.patch
+ 	touch $(OPENSWAN_DIR)/.unpacked
+ 
+ $(OPENSWAN_DIR)/$(OPENSWAN_BINARY): $(OPENSWAN_DIR)/.unpacked
+@@ -54,6 +71,11 @@
+ openswan-dirclean:
+ 	rm -rf $(OPENSWAN_DIR)
+ 
++.PHONY:	openswan-test
++
++openswan-test: $(OPENSWAN_DIR)/.unpacked
++
++
+ #############################################################
+ #
+ # Toplevel Makefile options
+Index: package/openswan/Config.in
+===================================================================
+--- package/openswan/Config.in	(revision 19263)
++++ package/openswan/Config.in	(arbetskopia)
+@@ -7,6 +7,35 @@
+ 	  Openswan is an implementation of IPsec for Linux.
+           http://openswan.org/
+ 
++choice
++	prompt "Openswan version"
++	depends on BR2_PACKAGE_OPENSWAN
++	default BR2_PACKAGE_OPENSWAN_2_4_9
++
++config BR2_PACKAGE_OPENSWAN_2_4_9
++	bool "Openswan version 2.4.9"
++	help
++	  Use patch for linux-2.6.21 and later
++
++config BR2_PACKAGE_OPENSWAN_2_4_8
++	bool "Openswan version 2.4.8"
++	help
++	  Use patch for linux-2.6.21 and later
++
++config BR2_PACKAGE_OPENSWAN_2_4_7
++	bool "Openswan version 2.4.7"
++	help
++	  Use patch for linux-2.6.20 and earlier
++
++endchoice
++
++config	BR2_PACKAGE_OPENSWAN_VERSION
++	string
++	default	""		if	!BR2_PACKAGE_OPENSWAN
++	default	"2.4.7"		if	BR2_PACKAGE_OPENSWAN_2_4_7
++	default	"2.4.8"		if	BR2_PACKAGE_OPENSWAN_2_4_8
++	default	"2.4.9"		if	BR2_PACKAGE_OPENSWAN_2_4_9
++
+ config BR2_PACKAGE_OPENSWAN_DEBUGGING
+ 	bool "debugging support"
+ 	default n
+Index: toolchain/kernel-headers/kernel-headers-new.makefile
+===================================================================
+--- toolchain/kernel-headers/kernel-headers-new.makefile	(revision
+19263)
++++ toolchain/kernel-headers/kernel-headers-new.makefile	(arbetskopia)
+@@ -33,6 +33,10 @@
+ LINUX_HEADERS_IS_KERNEL=y
+ endif
+ 
++ifeq ($(BR2_PACKAGE_OPENSWAN),y)
++OPENSWAN_PATCH:=$(LINUX_HEADERS_UNPACK_DIR)/.openswan
++endif
++
+ ifeq ($(LINUX_HEADERS_IS_KERNEL),y)
+ 
+ $(LINUX_HEADERS_UNPACK_DIR)/.unpacked:
+$(DL_DIR)/$(LINUX_HEADERS_SOURCE)
+@@ -44,13 +48,22 @@
+ $(LINUX_HEADERS_UNPACK_DIR)/.patched:
+$(LINUX_HEADERS_UNPACK_DIR)/.unpacked
+ 	toolchain/patch-kernel.sh $(LINUX_HEADERS_UNPACK_DIR)
+toolchain/kernel-headers \
+ 		linux-$(LINUX_HEADERS_VERSION)-\*.patch{,.gz,.bz2}
+-ifeq ($(BR2_PACKAGE_OPENSWAN),y)
+-	toolchain/patch-kernel.sh $(LINUX_HEADERS_UNPACK_DIR) package/openswan
+\
+-		linux-$(LINUX_HEADERS_VERSION)-\*.patch{,.gz,.bz2}
+-endif
+ 	touch $@
+ 
+-$(LINUX_HEADERS_DIR)/.configured: $(LINUX_HEADERS_UNPACK_DIR)/.patched
++$(LINUX_HEADERS_UNPACK_DIR)/.openswan:
+$(LINUX_HEADERS_UNPACK_DIR)/.patched	openswan-source
++	(cd $(LINUX_HEADERS_UNPACK_DIR); \
++	 @echo "*** Patching headers with $(OPENSWAN_KLIPS_PATCH)";		\
++	 $(OPENSWAN_CAT) $(DL_DIR)/$(OPENSWAN_KLIPS_PATCH)	| patch -p1;	\
++	)
++	toolchain/patch-kernel.sh $(LINUX_HEADERS_UNPACK_DIR)
+package/openswan/$(OPENSWAN_VERSION) \
++		linux-openswan-$(OPENSWAN_VERSION)\*.patch{,.gz,.bz2}
++	touch $@
++
++#	 @echo "*** Patching headers with $(OPENSWAN_NATT_PATCH)";		\
++#	 $(OPENSWAN_CAT) $(DL_DIR)/$(OPENSWAN_NATT_PATCH)	| patch -p1;	\
++
++
++$(LINUX_HEADERS_DIR)/.configured: $(LINUX_HEADERS_UNPACK_DIR)/.patched
+$(OPENSWAN_PATCH)
+ 	(cd $(LINUX_HEADERS_UNPACK_DIR) ; \
+ 	 $(MAKE) ARCH=$(KERNEL_ARCH) CC="$(HOSTCC)" \
+ 		INSTALL_HDR_PATH=$(LINUX_HEADERS_DIR) headers_install ; \
+@@ -58,3 +71,5 @@
+ 	touch $@
+ 
+ endif
++
++headers:	$(LINUX_HEADERS_UNPACK_DIR)/.openswan
 
 
 Best Regards
