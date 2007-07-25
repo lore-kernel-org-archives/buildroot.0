@@ -1,69 +1,57 @@
-From: Heikki Lindholm <holindho@cs.helsinki.fi>
-Date: Wed, 25 Jul 2007 08:50:56 +0300
-Subject: [Buildroot] config update
-In-Reply-To: <20070724181817.GC20613@aon.at>
-References: <469C604E.5060703@cs.helsinki.fi> <20070724123433.GA18856@aon.at>
-	<46A63685.5060806@cs.helsinki.fi> <20070724181817.GC20613@aon.at>
-Message-ID: <46A6E4C0.1080201@cs.helsinki.fi>
+From: Hebbar <gururajakr@sanyo.co.in>
+Date: Wed, 25 Jul 2007 01:35:54 -0700 (PDT)
+Subject: [Buildroot] error building arm toolchain with latest snapshot-
+ error says missing system headers
+Message-ID: <11778512.post@talk.nabble.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Bernhard Fischer kirjoitti:
-> On Tue, Jul 24, 2007 at 08:27:33PM +0300, Heikki Lindholm wrote:
-> 
->>Bernhard Fischer kirjoitti:
->>
->>>On Tue, Jul 17, 2007 at 09:23:10AM +0300, Heikki Lindholm wrote:
->>>
->>>>Hello,
->>>>
->>>>I just updated my OS X buildroot and, recent changes breaking it, I have 
->>>
->>>Can you please be more specific as to how it broke?
->>
->>Well, basically, it was easier to fix than thought, and I posted a patch 
->>already:
->>http://buildroot.uclibc.org/lists/buildroot/2007-July/003659.html
-> 
-> 
-> I'm curious if you need the same patch if you make menuconfig with e.g.
-> linux-2.6.21.5.
 
-2.6.21* wont' work, but 2.6.22 has fixed the problem with linking. It 
-also doesn't have the foo.h problem at all.
+Hi All,
 
-> If so, then please fix this upstream first. If not then there must be
-> something different going on and we need to track that down.
-> 
-> 
->>The two culprits for the breakage are:
->>(1) foo.h includes features.h, which doesn't exist on OS X. Referring to my 
->>above patch, this could also be fixed in the Makefile by not including 
->>foo.h on OS X, but IMHO that's trickier (uname).
->>(2) The linking was changed so, that ncurses wasn't linked in on OS X 
->>anymore
->>
->>BUT I also noted another breakage, which I'm clueless about:
->>http://buildroot.uclibc.org/lists/buildroot/2007-July/003658.html
->>I'm using the same config I was with an older version (for example, rev 
->>18688 worked).
-> 
-> 
-> Do you have SYSROOT set in your .config?
+With "make world" i am getting this error. i was not getting this error with
+previous buildroot version.
 
-I think the whole concept was introduced when I wasn't following 
-buildroot development much. The old config file I used doesn't have any 
-symbols containing SYSROOT.
+mv tmp-specs specs
+echo |
+/home/guru/project/original/toolchains/buildroot/toolchain_build_arm/gcc-4.2.0-initi./gcc/xgcc
+-B/home/guru/project/original/toolchains/buildroot/toolchain_build_arm/gcc-4.2.0itial/./gcc/
+-B/home/guru/project/original/toolchains/buildroot/build_arm/staging_dir/usr/alinux-uclibcgnueabi/bin/
+-B/home/guru/project/original/toolchains/buildroot/build_arm/stagidir/usr/arm-linux-uclibcgnueabi/lib/
+-isystem
+/home/guru/project/original/toolchains/buildr/build_arm/staging_dir/usr/arm-linux-uclibcgnueabi/include
+-isystem
+/home/guru/project/origl/toolchains/buildroot/build_arm/staging_dir/usr/arm-linux-uclibcgnueabi/sys-include
+-E -dM| \
+          sed -n -e 's/^#define \([^_][a-zA-Z0-9_]*\).*/\1/p' \
+                 -e 's/^#define \(_[^_A-Z][a-zA-Z0-9_]*\).*/\1/p' | \
+          sort -u > tmp-macro_list
+/bin/sh
+/home/guru/project/original/toolchains/buildroot/toolchain_build_arm/gcc-4.2.0/gcc/move-if-change
+tmp-macro_list macro_list
+echo timestamp > s-macro_list
+The directory that should contain system headers does not exist:
+ 
+/home/guru/project/original/toolchains/buildroot/toolchain_build_arm/uClibc_dev//usr/incl
+make[2]: *** [stmp-fixinc] Error 1
+make[2]: Leaving directory
+`/home/guru/project/original/toolchains/buildroot/toolchain_builrm/gcc-4.2.0-initial/gcc'
+make[1]: *** [all-gcc] Error 2
+make[1]: Leaving directory
+`/home/guru/project/original/toolchains/buildroot/toolchain_builrm/gcc-4.2.0-initial'
+make: ***
+[/home/guru/project/original/toolchains/buildroot/toolchain_build_arm/gcc-4.2.0-iial/.compiled]
+Error 2
 
-> You're using 4.1.2 and there was a reason why i only enabled sysroot for
-> gcc >= 4.2.0 (IIRC sjhill changed this, so you're better off to ask him
-> why he enabled sysroot support for 4.1.2.. I figure that it worked for
-> him else he wouldn't have enabled it. Perhaps it was erroneously enabled,
-> i wouldn't know.)
 
-Maybe I'll just give 4.2.0 a shot, if that's the new standard(?)
+Using latest Buildroot-snapshot version for building arm toolchain with eabi
+feature with buildroot toolchain
 
--- Heikki Lindholm
+Regards
+Gururaja
+-- 
+View this message in context: http://www.nabble.com/error-building-arm-toolchain-with-latest-snapshot--error-says-missing-system-headers-tf4140817.html#a11778512
+Sent from the BuildRoot mailing list archive at Nabble.com.
