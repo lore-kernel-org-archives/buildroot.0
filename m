@@ -1,7 +1,7 @@
 From: ulf at uclibc.org <ulf@uclibc.org>
-Date: Wed, 25 Jul 2007 10:39:27 -0700 (PDT)
-Subject: [Buildroot] svn commit: trunk/buildroot/package/sdl
-Message-ID: <20070725173927.E0BE0A5E25@busybox.net>
+Date: Wed, 25 Jul 2007 10:41:16 -0700 (PDT)
+Subject: [Buildroot] svn commit: trunk/buildroot/package/portage
+Message-ID: <20070725174116.34369A5E31@busybox.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -9,26 +9,28 @@ Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
 Author: ulf
-Date: 2007-07-25 10:39:26 -0700 (Wed, 25 Jul 2007)
-New Revision: 19261
+Date: 2007-07-25 10:41:15 -0700 (Wed, 25 Jul 2007)
+New Revision: 19263
 
 Log:
-Make SDL seled DirectFB
+Use better Sandbox site
 
 Modified:
-   trunk/buildroot/package/sdl/Config.in
+   trunk/buildroot/package/portage/portage.mk
 
 
 Changeset:
-Modified: trunk/buildroot/package/sdl/Config.in
+Modified: trunk/buildroot/package/portage/portage.mk
 ===================================================================
---- trunk/buildroot/package/sdl/Config.in	2007-07-25 17:37:50 UTC (rev 19260)
-+++ trunk/buildroot/package/sdl/Config.in	2007-07-25 17:39:26 UTC (rev 19261)
-@@ -1,6 +1,7 @@
- config BR2_PACKAGE_SDL
- 	bool "SDL"
- 	default n
-+	select BR2_PACKAGE_DIRECTFB
- 	help
+--- trunk/buildroot/package/portage/portage.mk	2007-07-25 17:39:46 UTC (rev 19262)
++++ trunk/buildroot/package/portage/portage.mk	2007-07-25 17:41:15 UTC (rev 19263)
+@@ -17,7 +17,8 @@
  
- 	  http://www.libsdl.org/
+ SANDBOX_VERSION:=1.2.18.1
+ SANDBOX_SOURCE:=sandbox-$(SANDBOX_VERSION).tar.bz2
+-SANDBOX_SITE:=$(PORTAGE_SITE)
++SANDBOX_SITE:=http://dev.gentoo.org/~azarah/sandbox/
++#SANDBOX_SITE:=$(PORTAGE_SITE)
+ SANDBOX_CAT:=$(PORTAGE_CAT)
+ SANDBOX_DIR:=$(BUILD_DIR)/sandbox-$(SANDBOX_VERSION)
+ SANDBOX_TARGET_BINARY:=usr/bin/sandbox
