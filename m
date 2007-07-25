@@ -1,112 +1,93 @@
-From: ulf at uclibc.org <ulf@uclibc.org>
-Date: Wed, 25 Jul 2007 04:40:11 -0700 (PDT)
-Subject: [Buildroot] svn commit: trunk/buildroot/package/portage
-Message-ID: <20070725114011.70573A45F2@busybox.net>
+From: Rex Ashbaugh <rexa@xeratech.com>
+Date: Wed, 25 Jul 2007 07:33:07 -0700
+Subject: [Buildroot] "multiple target patterns" error while building
+	under cygwin
+In-Reply-To: <E496871456016F4CA8959BE4105D2A890E8B8C@troe2k1.cs.myharris.net>
+References: <1185196286.21840.18.camel@elrond.sweden.atmel.com>
+	<20070723132936.GB7902@aon.at> <20070723142207.GA9324@aon.at>
+	<20070723144314.GC9324@aon.at>
+	<000501c7cd42$2a1b0d20$dcc4af0a@atmel.com>
+	<E496871456016F4CA8959BE4105D2A890E8B8C@troe2k1.cs.myharris.net>
+Message-ID: <6311fe0b0707250733o5f311adbq2d44dad71edc2350@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Author: ulf
-Date: 2007-07-25 04:40:09 -0700 (Wed, 25 Jul 2007)
-New Revision: 19257
+It could be a 'make' version issue
+or a 'sh' shell version issue,
+or script  syntax issue,
+or a dos path issue.
 
-Log:
-Bump version of portage/sandbox to allow build
-
-Modified:
-   trunk/buildroot/package/portage/portage.mk
+What text is at line 410 of the file 'applets.o.cmd' ?
 
 
-Changeset:
-Modified: trunk/buildroot/package/portage/portage.mk
-===================================================================
---- trunk/buildroot/package/portage/portage.mk	2007-07-24 18:20:46 UTC (rev 19256)
-+++ trunk/buildroot/package/portage/portage.mk	2007-07-25 11:40:09 UTC (rev 19257)
-@@ -3,15 +3,19 @@
- # portage
- #
- #############################################################
--PORTAGE_VERSION:=2.0.51.22
--PORTAGE_SOURCE:=portage-$(PORTAGE_VERSION).tar.bz2
-+PORTAGE_DOWNLOAD_VERSION:=2.1.2
-+PORTAGE_PATCH_VERSION:=.9
-+PORTAGE_VERSION:=$(PORTAGE_DOWNLOAD_VERSION)$(PORTAGE_PATCH_VERSION)
-+PORTAGE_PATCH:=portage-$(PORTAGE_VERSION).patch.bz2
-+
-+PORTAGE_SOURCE:=portage-$(PORTAGE_DOWNLOAD_VERSION).tar.bz2
- PORTAGE_SITE:=http://gentoo.osuosl.org/distfiles
- PORTAGE_CAT:=$(BZCAT)
- PORTAGE_DIR:=$(BUILD_DIR)/portage-$(PORTAGE_VERSION)
- PORTAGE_TARGET_DIR:=$(TARGET_DIR)/usr/lib/portage
- PORTAGE_TARGET_BINARY:=usr/bin/emerge
- 
--SANDBOX_VERSION:=1.2.13
-+SANDBOX_VERSION:=1.2.18.1
- SANDBOX_SOURCE:=sandbox-$(SANDBOX_VERSION).tar.bz2
- SANDBOX_SITE:=$(PORTAGE_SITE)
- SANDBOX_CAT:=$(PORTAGE_CAT)
-@@ -42,6 +46,8 @@
- 
- $(DL_DIR)/$(PORTAGE_SOURCE):
- 	$(WGET) -P $(DL_DIR) $(PORTAGE_SITE)/$(PORTAGE_SOURCE)
-+$(DL_DIR)/$(PORTAGE_PATCH):
-+	$(WGET) -P $(DL_DIR) $(PORTAGE_SITE)/$(PORTAGE_PATCH)
- $(DL_DIR)/$(SANDBOX_SOURCE):
- 	$(WGET) -P $(DL_DIR) $(SANDBOX_SITE)/$(SANDBOX_SOURCE)
- 
-@@ -50,17 +56,24 @@
- 
- $(PORTAGE_DIR)/.unpacked: $(DL_DIR)/$(PORTAGE_SOURCE)
- 	$(PORTAGE_CAT) $(DL_DIR)/$(PORTAGE_SOURCE) | tar -C $(BUILD_DIR) -xf -
-+	mv -f $(BUILD_DIR)/portage-$(PORTAGE_DOWNLOAD_VERSION) $(PORTAGE_DIR)
- 	rm -f $(PORTAGE_DIR)/bin/tbz2tool
--	touch $(PORTAGE_DIR)/.unpacked
-+	touch $@
-+
-+$(PORTAGE_DIR)/.patched: $(PORTAGE_DIR)/.unpacked $(DL_DIR)/$(PORTAGE_PATCH)
-+	(cd $(PORTAGE_DIR);  $(PORTAGE_CAT) $(DL_DIR)/$(PORTAGE_PATCH) | patch -p0)
-+	touch $@
-+
- $(SANDBOX_DIR)/.unpacked: $(DL_DIR)/$(SANDBOX_SOURCE)
- 	$(SANDBOX_CAT) $(DL_DIR)/$(SANDBOX_SOURCE) | tar -C $(BUILD_DIR) -xf -
--	touch $(SANDBOX_DIR)/.unpacked
-+	touch $@
- 
--$(PORTAGE_DIR)/.compiled: $(PORTAGE_DIR)/.unpacked
-+$(PORTAGE_DIR)/.compiled: $(PORTAGE_DIR)/.patched
- 	$(TARGET_CC) $(TARGET_CFLAGS) $(PORTAGE_DIR)/src/tbz2tool.c -o $(PORTAGE_DIR)/src/tbz2tool
--	touch $(PORTAGE_DIR)/.compiled
-+	touch $@
-+
- $(SANDBOX_DIR)/.compiled: $(SANDBOX_DIR)/.unpacked
--	touch $(SANDBOX_DIR)/.compiled
-+	touch $@
- 
- newins=install -D
- doins=install
-@@ -70,14 +83,20 @@
- $(TARGET_DIR)/$(PORTAGE_TARGET_BINARY): $(PORTAGE_DIR)/.compiled
- 	(cd $(PORTAGE_DIR)/cnf; \
- 		$(newins) make.globals $(TARGET_DIR)/etc/make.globals; \
--		$(newins) make.globals.$(PORTAGE_ARCH) $(TARGET_DIR)/etc/make.globals; \
- 		$(newins) make.conf $(TARGET_DIR)/etc/make.conf; \
--		$(newins) make.conf.$(PORTAGE_ARCH) $(TARGET_DIR)/etc/make.conf; \
-+		cp $(TARGET_DIR)/etc/make.conf $(TARGET_DIR)/etc/make.conf.$(PORTAGE_ARCH); \
-+		patch $(TARGET_DIR)/etc/make.conf.$(PORTAGE_ARCH) $(PORTAGE_DIR)/cnf/make.conf.$(PORTAGE_ARCH).diff; \
- 		$(doins) etc-update.conf dispatch-conf.conf $(TARGET_DIR)/etc; \
- 	)
-+#		$(newins) make.globals.$(PORTAGE_ARCH) $(TARGET_DIR)/etc/make.globals; \
-+#		$(newins) make.conf.$(PORTAGE_ARCH) $(TARGET_DIR)/etc/make.conf; \
- 
- 	$(dodir) $(PORTAGE_TARGET_DIR)/pym
--	$(doins) $(PORTAGE_DIR)/pym/* $(PORTAGE_TARGET_DIR)/pym/
-+	$(doins) $(PORTAGE_DIR)/pym/*.py $(PORTAGE_TARGET_DIR)/pym/
-+	mkdir -p $(PORTAGE_TARGET_DIR)/pym/cache
-+	$(doins) $(PORTAGE_DIR)/pym/cache/*.py $(PORTAGE_TARGET_DIR)/pym
-+	mkdir -p $(PORTAGE_TARGET_DIR)/pym/elog_modules
-+	$(doins) $(PORTAGE_DIR)/pym/elog_modules/*.py $(PORTAGE_TARGET_DIR)/pym/elog_modules
- 
- 	$(dodir) $(PORTAGE_TARGET_DIR)/bin
- 	$(doexe) $(PORTAGE_DIR)/bin/* $(PORTAGE_DIR)/src/tbz2tool $(PORTAGE_TARGET_DIR)/bin/
+
+On 7/23/07, Crane, Matthew <mcrane03@harris.com> wrote:
+>
+> Hi,
+>
+>
+> I'm trying to build on cygwin, busybox is failing with the error:
+>
+>
+> applets/.applets.o.cmd:410: *** multiple target patterns.  Stop.
+>
+> Has anybody come across this?  I'm wondering if it's related to the case
+> insensitivity of cygwin.  Any help much apreciated,
+>
+> Matt
+>
+>
+> More complete error log, starts just as the build process has run
+> through building busybox once, and starts again, which I think is
+> normal??
+>
+>
+>   AR      util-linux/lib.a
+>   LINK    busybox_unstripped
+> cp busybox_unstripped busybox
+> make[1]: Leaving directory
+> `/usr/local/src/hd2/buildroot-20070718/project_build_arm_nofpu/uclibc/bu
+> sybox-1.6.1'
+> /usr/bin/make -j1 CC=/usr/local/arm2007-uc/bin/arm-uclinuxeabi-gcc
+> CROSS_COMPILE="/usr/local/arm2007-uc/bin/arm-uclinuxeabi-
+> " \
+>                 CROSS="/usr/local/arm2007-uc/bin/arm-uclinuxeabi-"
+> PREFIX="/usr/local/src/hd2/buildroot-20070718/project_bui
+> ld_arm_nofpu/uclibc/root" \
+>                 ARCH=arm \
+>                 EXTRA_CFLAGS="-Os -pipe
+> -I/usr/local/src/hd2/buildroot-20070718/build_arm_nofpu/staging_dir/incl
+> ude -I/usr/
+> local/src/hd2/buildroot-20070718/build_arm_nofpu/staging_dir/usr/include
+> -I/usr/local/arm2007-uc/arm-uclinuxeabi/include" -C
+>
+> /usr/local/src/hd2/buildroot-20070718/project_build_arm_nofpu/uclibc/bus
+> ybox-1.6.1 install
+> make[1]: Entering directory
+> `/usr/local/src/hd2/buildroot-20070718/project_build_arm_nofpu/uclibc/bu
+> sybox-1.6.1'
+>   HOSTCC  scripts/basic/split-include
+> scripts/basic/.split-include.d: done.
+>   HOSTCC  scripts/basic/docproc
+> scripts/basic/.docproc.d: done.
+>   SPLIT   include/autoconf.h -> include/config/*
+>   GEN     include/bbconfigopts.h
+> applets/.applets.o.cmd:410: *** multiple target patterns.  Stop.
+> make[1]: *** [applets] Error 2
+> make[1]: Leaving directory
+> `/usr/local/src/hd2/buildroot-20070718/project_build_arm_nofpu/uclibc/bu
+> sybox-1.6.1'
+> make: ***
+> [/usr/local/src/hd2/buildroot-20070718/project_build_arm_nofpu/uclibc/ro
+> ot/bin/busybox] Error 2
+> _______________________________________________
+> buildroot mailing list
+> buildroot at uclibc.org
+> http://busybox.net/mailman/listinfo/buildroot
+>
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: http://busybox.net/lists/buildroot/attachments/20070725/9ce5e45f/attachment.htm 
