@@ -1,39 +1,112 @@
-From: Ulf Samuelsson <ulf@atmel.com>
-Date: Thu, 26 Jul 2007 18:55:54 +0200
-Subject: [Buildroot] svn
-	commit:	trunk/buildroot:packagetarget/device/Atmel
-In-Reply-To: <1185434977.31437.50.camel@localhost.localdomain>
-References: <20070722171703.79776A4756@busybox.net>
-	<46A3B766.2000808@realitydiluted.com>
-	<013701c7ccb3$1a92a960$dcc4af0a@atmel.com>
-	<1185428949.31437.4.camel@localhost.localdomain>
-	<00a301c7cf52$61ac2cd0$dcc4af0a@atmel.com>
-	<1185434977.31437.50.camel@localhost.localdomain>
-Message-ID: <1185468954.5580.112.camel@elrond.sweden.atmel.com>
+From: bugs at busybox.net <bugs@busybox.net>
+Date: Thu, 26 Jul 2007 13:57:04 -0700
+Subject: [Buildroot] [buildroot 0001446]: Buildroot compilation is broken
+	for SH4 architecture
+Message-ID: <4b492ec03fd99fce420f746e00d276af@bugs.uclibc.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-tor 2007-07-26 klockan 09:29 +0200 skrev Hans-Christian Egtvedt:
-> On Thu, 2007-07-26 at 08:03 +0200, Ulf Samuelsson wrote:
-> > > On Mon, 2007-07-23 at 00:49 +0200, Ulf Samuelsson wrote:
-> > >> > ulf at uclibc.org wrote: 
-> 
-> <cut info about AVR32 toolchain patches>
-> 
-> > > Right now they are roughly 8 MB for all the tools (gcc, binutils, gdb,
-> > > strace, uClibc and kernel). But this is in plain text, and they compress
-> > > well.
-> >
 
-The full buildroot is about 6 MB so this is more than doubling
-the download time.
-At home in Stockholm with 100 Mbps Ethernet it is less of a problem,
-but where I am now with 10-20 kB/s Internet access it sucks...
-A prepatched toolchain which is downloaded once is a much
-more attractive alternative, so this is what I am going to submit.
+The following issue has been SUBMITTED. 
+====================================================================== 
+http://busybox.net/bugs/view.php?id=1446 
+====================================================================== 
+Reported By:                fgretief
+Assigned To:                buildroot
+====================================================================== 
+Project:                    buildroot
+Issue ID:                   1446
+Category:                   Architecture Specific
+Reproducibility:            always
+Severity:                   block
+Priority:                   normal
+Status:                     assigned
+====================================================================== 
+Date Submitted:             07-26-2007 13:57 PDT
+Last Modified:              07-26-2007 13:57 PDT
+====================================================================== 
+Summary:                    Buildroot compilation is broken for SH4 architecture
+Description: 
+I am unable to do a build for the SH4 architecture.
 
-Best Regards
-Ulf Samuelsson.
+Steps to reproduce:
+  - do a clean checkout/update (rev 19264)
+      svn://uclibc.org/trunk/buildroot
+  - rm .config*             (just to make sure)
+  - make menuconfig
+      Select superh and SH4 architecture
+      Select uClibc 0.9.29  (instead of the snapshot)
+      Select cramfs as the root fs
+  - make
+
+...
+/bin/sh
+/home/fgretief/src/buildroot/toolchain_build_sh4/gcc-4.2.1/gcc/../move-if-change
+tmp-macro_list macro_list
+echo timestamp > s-macro_list
+The directory that should contain system headers does not exist:
+ 
+/home/fgretief/src/buildroot/toolchain_build_sh4/uClibc_dev//usr/include
+make[2]: *** [stmp-fixinc] Error 1
+make[2]: Leaving directory
+`/home/fgretief/src/buildroot/toolchain_build_sh4/gcc-4.2.1-initial/gcc'
+make[1]: *** [all-gcc] Error 2
+make[1]: Leaving directory
+`/home/fgretief/src/buildroot/toolchain_build_sh4/gcc-4.2.1-initial'
+make: ***
+[/home/fgretief/src/buildroot/toolchain_build_sh4/gcc-4.2.1-initial/.compiled]
+Error 2
+
+
+Note: 
+  The binutils were never build. It started immediately with GCC-4.2.1
+
+Directory listing after build:
+-------------------------------------------------------------
+~/src/buildroot$ ls -l
+total 72
+-rw-rw-r--   1 fgretief fgretief 19191 Jul 24 21:30 Config.in
+-rw-rw-r--   1 fgretief fgretief 12072 Jul 26 22:07 Makefile
+drwxrwxr-x   3 fgretief fgretief  4096 Jul 26 22:13 binaries
+drwxrwxr-x   3 fgretief fgretief  4096 Jul 26 22:13 build_sh4
+drwxrwxr-x   2 fgretief fgretief  4096 Jul 25 22:50 dl
+drwxrwxr-x   4 fgretief fgretief  4096 Jul 22 13:08 docs
+drwxrwxr-x 212 fgretief fgretief  4096 Jul 24 21:30 package
+drwxrwxr-x   4 fgretief fgretief  4096 Jul 22 13:07 project
+drwxrwxr-x   3 fgretief fgretief  4096 Jul 26 22:13 project_build_sh4
+drwxrwxr-x  20 fgretief fgretief  4096 Jul 22 13:07 target
+drwxrwxr-x  14 fgretief fgretief  4096 Jul 22 13:07 toolchain
+drwxrwxr-x   4 fgretief fgretief  4096 Jul 26 22:14 toolchain_build_sh4
+
+~/src/buildroot$ ls -l build_sh4/
+total 4
+drwxrwxr-x 5 fgretief fgretief 4096 Jul 26 22:13 staging_dir
+
+~/src/buildroot$ ls -l project_build_sh4/
+total 4
+drwxrwxr-x 3 fgretief fgretief 4096 Jul 26 22:13 uclibc
+
+~/src/buildroot$ ls -l toolchain_build_sh4/
+total 8
+drwxrwxr-x 25 fgretief fgretief 4096 Jul 26 22:14 gcc-4.2.1
+drwxrwxr-x  9 fgretief fgretief 4096 Jul 26 22:15 gcc-4.2.1-initial
+
+-------------------------------------------------------------
+
+It looks like the error indicates to the fact that the kernel headers
+where
+never compiled/copied to their correct place.  Seems like a dependency is
+missing for kernel-headers and binutils.
+
+====================================================================== 
+
+Issue History 
+Date Modified   Username       Field                    Change               
+====================================================================== 
+07-26-07 13:57  fgretief       New Issue                                    
+07-26-07 13:57  fgretief       Status                   new => assigned     
+07-26-07 13:57  fgretief       Assigned To               => buildroot       
+======================================================================
