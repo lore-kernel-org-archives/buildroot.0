@@ -1,67 +1,77 @@
-From: Hebbar <gururajakr@sanyo.co.in>
-Date: Wed, 25 Jul 2007 16:35:21 -0700 (PDT)
-Subject: [Buildroot] error building arm toolchain with latest snapshot-
- error says missing system headers
-In-Reply-To: <11778512.post@talk.nabble.com>
-References: <11778512.post@talk.nabble.com>
-Message-ID: <11801829.post@talk.nabble.com>
+From: Rex Ashbaugh <rexa@xeratech.com>
+Date: Wed, 25 Jul 2007 18:06:37 -0700
+Subject: [Buildroot] svn commit: trunk/buildroot/package/sdl
+In-Reply-To: <1185407250.5580.17.camel@elrond.sweden.atmel.com>
+References: <20070725173927.E0BE0A5E25@busybox.net>
+	<20070725223934.GB11697@aon.at>
+	<1185407250.5580.17.camel@elrond.sweden.atmel.com>
+Message-ID: <6311fe0b0707251806x6e13d50dpefddd8ab6cc2a646@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-
-Hi All,
-
-few more things to add.
-
-After the 1st error when i try "make gcc" i get below error. Kindly help me
-to solve this. all this started with latest buildroot snapshot
+DirectFB is not required.
+SDL only needs the directfb.h header to build, in case directfb might be
+invoked later at run time.
+directfb is not used by default by SDL
 
 
-/home/guru/project/original/toolchains/buildroot/toolchain_build_arm/gcc-4.2.0-initial/./gcc/xgcc
--B/home/guru/project/original/toolchains/buildroot/toolchain_build_arm/gcc-4.2.0-initial/./gcc/
--B/home/guru/project/original/toolchains/buildroot/build_arm/staging_dir/usr/arm-linux-uclibcgnueabi/bin/
--B/home/guru/project/original/toolchains/buildroot/build_arm/staging_dir/usr/arm-linux-uclibcgnueabi/lib/
--isystem
-/home/guru/project/original/toolchains/buildroot/build_arm/staging_dir/usr/arm-linux-uclibcgnueabi/include
--isystem
-/home/guru/project/original/toolchains/buildroot/build_arm/staging_dir/usr/arm-linux-uclibcgnueabi/sys-include
--O2 -g -Os -DIN_GCC -DCROSS_COMPILE   -W -Wall -Wwrite-strings
--Wstrict-prototypes -Wmissing-prototypes -Wold-style-definition  -isystem
-./include  -I. -I.
--I/home/guru/project/original/toolchains/buildroot/toolchain_build_arm/gcc-4.2.0/gcc
--I/home/guru/project/original/toolchains/buildroot/toolchain_build_arm/gcc-4.2.0/gcc/.
--I/home/guru/project/original/toolchains/buildroot/toolchain_build_arm/gcc-4.2.0/gcc/../include
--I/home/guru/project/original/toolchains/buildroot/toolchain_build_arm/gcc-4.2.0/gcc/../libcpp/include
--I/home/guru/project/original/toolchains/buildroot/toolchain_build_arm/gmp/include
--I/home/guru/project/original/toolchains/buildroot/toolchain_build_arm/mpfr/include
--I/home/guru/project/original/toolchains/buildroot/toolchain_build_arm/gcc-4.2.0/gcc/../libdecnumber
--I../libdecnumber  -g0 -finhibit-size-directive -fno-inline-functions
--fno-exceptions -fno-zero-initialized-in-bss -fno-toplevel-reorder   \
-          -c
-/home/guru/project/original/toolchains/buildroot/toolchain_build_arm/gcc-4.2.0/gcc/crtstuff.c
--DCRT_BEGIN \
-          -o crtbegin.o
-/home/guru/project/original/toolchains/buildroot/toolchain_build_arm/gcc-4.2.0-initial/./gcc/as:
-line 2: exec: -m: invalid option
-exec: usage: exec [-cl] [-a name] file [redirection ...]
-make[2]: *** [crtbegin.o] Error 1
-make[2]: Leaving directory
-`/home/guru/project/original/toolchains/buildroot/toolchain_build_arm/gcc-4.2.0-initial/gcc'
-make[1]: *** [all-gcc] Error 2
-make[1]: Leaving directory
-`/home/guru/project/original/toolchains/buildroot/toolchain_build_arm/gcc-4.2.0-initial'
-make: ***
-[/home/guru/project/original/toolchains/buildroot/toolchain_build_arm/gcc-4.2.0-initial/.compiled]
-Error 2
+-Rex
 
 
-Regards
-Gururaja
-
-
--- 
-View this message in context: http://www.nabble.com/error-building-arm-toolchain-with-latest-snapshot--error-says-missing-system-headers-tf4140817.html#a11801829
-Sent from the BuildRoot mailing list archive at Nabble.com.
+On 7/25/07, Ulf Samuelsson <ulf@atmel.com> wrote:
+>
+> tor 2007-07-26 klockan 00:39 +0200 skrev Bernhard Fischer:
+> > On Wed, Jul 25, 2007 at 10:39:27AM -0700, ulf at uclibc.org wrote:
+> > >Author: ulf
+> > >Date: 2007-07-25 10:39:26 -0700 (Wed, 25 Jul 2007)
+> > >New Revision: 19261
+> > >
+> > >Log:
+> > >Make SDL seled DirectFB
+> > >
+> > >Modified:
+> > >   trunk/buildroot/package/sdl/Config.in
+> > >
+> > >
+> > >Changeset:
+> > >Modified: trunk/buildroot/package/sdl/Config.in
+> > >===================================================================
+> > >--- trunk/buildroot/package/sdl/Config.in    2007-07-25 17:37:50 UTC
+> (rev 19260)
+> > >+++ trunk/buildroot/package/sdl/Config.in    2007-07-25 17:39:26 UTC
+> (rev 19261)
+> > >@@ -1,6 +1,7 @@
+> > > config BR2_PACKAGE_SDL
+> > >     bool "SDL"
+> > >     default n
+> > >+    select BR2_PACKAGE_DIRECTFB
+> >
+> > Why? It's perfectly fine to build SDL without
+> > a) FB support (any FB support)
+> > b) with the stock FB (no directfb)
+> >
+>
+> The SDL compile failed since "directfb.h" could not be found
+> so I made the assumption, that it was neccessary.
+> Maybe I was wrong, but if it is not required, why the error message?
+>
+>
+> > If you want directfb and directfb-support, the you should select it
+> > manually, no?
+>
+> Best Regards
+> Ulf Samuelsson
+>
+>
+>
+> _______________________________________________
+> buildroot mailing list
+> buildroot at uclibc.org
+> http://busybox.net/mailman/listinfo/buildroot
+>
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: http://busybox.net/lists/buildroot/attachments/20070725/24f65d50/attachment.htm 
