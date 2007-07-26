@@ -1,49 +1,38 @@
 From: Hans-Christian Egtvedt <hcegtvedt@norway.atmel.com>
-Date: Thu, 26 Jul 2007 09:01:42 +0200
-Subject: [Buildroot] svn commit: trunk/buildroot/package/mplayer
-In-Reply-To: <37c712e0707230535r4ce29af9t3e39b53037b6fd8d@mail.gmail.com>
-References: <20070723124044.664C930041@busybox.net>
-	<37c712e0707230535r4ce29af9t3e39b53037b6fd8d@mail.gmail.com>
-Message-ID: <1185433302.31437.42.camel@localhost.localdomain>
+Date: Thu, 26 Jul 2007 09:01:21 +0200
+Subject: [Buildroot] svn commit: trunk/buildroot/package:  alsa-lib
+In-Reply-To: <20070723133400.GC7902@aon.at>
+References: <20070723075415.0C7BDA467A@busybox.net>
+	<20070723103336.GA7044@aon.at>
+	<1185196685.21840.25.camel@elrond.sweden.atmel.com>
+	<20070723133400.GC7902@aon.at>
+Message-ID: <1185433281.31437.34.camel@localhost.localdomain>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Mon, 2007-07-23 at 08:35 -0400, Allan Clark wrote:
-> On 7/23/07, ulf at uclibc.org <ulf@uclibc.org> wrote:
-> > Author: ulf
-> > Date: 2007-07-23 05:40:43 -0700 (Mon, 23 Jul 2007)
-> > New Revision: 19229
-> >
-> > Log:
-> > Cleanup of mplayer package
-> >
-> > [...]
-> >
-> >  $(MPLAYER_DIR)/$(MPLAYER_BINARY): $(MPLAYER_DIR)/.configured
-> >         $(MAKE) -C $(MPLAYER_DIR)
-> > -       @touch -c $@
-> > +       touch -c $@
-> >
-> >  $(TARGET_DIR)/$(MPLAYER_TARGET_BINARY): $(MPLAYER_DIR)/$(MPLAYER_BINARY)
-> >         $(INSTALL) -m 0755 -D $(MPLAYER_DIR)/$(MPLAYER_BINARY) $(TARGET_DIR)/$(MPLAYER_TARGET_BINARY)
-> >         -$(STRIP) --strip-unneeded $(TARGET_DIR)/$(MPLAYER_TARGET_BINARY)
-> > -       @touch -c $@
-> > +       touch -c $@
-> 
-> I don't see the logic for these last two touch commands.  Sure "-c"
-> says "do not create", but they seem unnecessary.
+On Mon, 2007-07-23 at 15:34 +0200, Bernhard Fischer wrote:
+> On Mon, Jul 23, 2007 at 03:18:05PM +0200, Ulf Samuelsson wrote:
 
-Agree, all the "touch -c <some binary file given by the Makefile rule>"
-does not do anything useful. Touch will return 0, and Makefile will
-think it was a success.
+<cut alsa-lib patch and use of install instead of cp>
 
- ~ > touch -c doesnotexist
- ~ > echo $?
-0
- ~ >
+> Just using install(1) for new packages -- and eventually gradually
+> fixing old ones -- is sufficient. We can easily either use busybox's
+> install or have our own in buildroot to circumvent eventual buggy
+> incarnations on the host. This would also help the MacOS10 folks, i'd
+> say.
+
+FYI
+
+IIRC the install shipped with buildroot is buggy (they might have fixed
+it). It had a bug when it would not unlink the old file before writing
+the new.
+
+Pretty funny trying to upgrade libc then; Busybox would truncate the
+file to 0 bytes and then try to copy in the new one, never being able to
+complete that job because of missing libc.
 
 -- 
 With kind regards,
