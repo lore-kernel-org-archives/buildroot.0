@@ -1,56 +1,51 @@
-From: Rick Foos <rick@synchromeshcomputing.com>
-Date: Thu, 26 Jul 2007 02:20:50 -0500
-Subject: [Buildroot] BASE_TARGETS aren't build
-References: <20070725200039.GA26294@firebird.dresden.micronet24.de>
-Message-ID: <001401c7cf55$7f2bb890$6404a8c0@shukson>
+From: Hans-Christian Egtvedt <hcegtvedt@norway.atmel.com>
+Date: Thu, 26 Jul 2007 09:30:06 +0200
+Subject: [Buildroot] svn
+	commit:	trunk/buildroot:packagetarget/device/Atmel
+In-Reply-To: <00a301c7cf52$61ac2cd0$dcc4af0a@atmel.com>
+References: <20070722171703.79776A4756@busybox.net>
+	<46A3B766.2000808@realitydiluted.com>
+	<013701c7ccb3$1a92a960$dcc4af0a@atmel.com>
+	<1185428949.31437.4.camel@localhost.localdomain>
+	<00a301c7cf52$61ac2cd0$dcc4af0a@atmel.com>
+Message-ID: <1185435006.31437.52.camel@localhost.localdomain>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-GDB in particular is now broken on a clean build, and stops the build. This 
-recently happened.
+On Thu, 2007-07-26 at 08:03 +0200, Ulf Samuelsson wrote:
+> > On Mon, 2007-07-23 at 00:49 +0200, Ulf Samuelsson wrote:
+> >> > ulf at uclibc.org wrote: 
 
-I agree many others have been trying to build w/o a toolchain for some time.
+<cut info about AVR32 toolchain patches>
 
-Rick Foos
+> > Right now they are roughly 8 MB for all the tools (gcc, binutils, gdb,
+> > strace, uClibc and kernel). But this is in plain text, and they compress
+> > well.
+>
+> I think that until the AVR32 support is fully integrated in the GCC, it is probably 
+> just as well, downloading prepatched source instead of running autotool,
+> unless you can make sure that *any* version of autotools will work.
 
------ Original Message ----- 
-From: "Benjamin Tietz" <benjamin@micronet24.de>
-To: <buildroot@uclibc.org>
-Sent: Wednesday, July 25, 2007 3:00 PM
-Subject: [Buildroot] BASE_TARGETS aren't build
+I do not have any problems to ship Buildroot with these quite large
+patches, the question is if it is appropriate. We can keep the size down
+after unpacking Buildroot by bzip'ing them.
 
+Having AVR32 support integrated in GNU toolchain will take some time.
 
-> Hi,
->
-> some days ago the building of the toolchain and the crosscompiler was
-> moved from TARGETS to BASE_TARGETS, and the second made dependent of the
-> first. It looked nice, but at least for me, it doesn't work.
->
-> Getting a virgin buildroot building all the packages (and the toolchain)
-> doesn't take this dependency in account and starts to compile packages
-> for the target. Without an working gcc this may be difficult...
->
-> There were a rule, some time ago - never break the build - where is it
-> gone. Some time ago the buildroot built, even for avr32, without to much
-> problems. There going discussions on about distributional packages and 
-> BSPs.
-> But as long as the toolchain doesn't built, all these gimmicks aren't
-> usable.
->
-> By the way that problem isn't the only thing broken at the moment; I
-> fixed it by now by reverting the patch and letting the toolchain compile
-> as usual targets.
->
-> regards
->
-> Benjamin
->
-> _______________________________________________
-> buildroot mailing list
-> buildroot at uclibc.org
-> http://busybox.net/mailman/listinfo/buildroot
->
-> 
+> We can't expect a user to have a certain version of autotool, unless we 
+> download and build it as part of buildroot.
+
+Buildroot already depends on different autotools, IIRC I had to install
+automake1.8 to be able to build libdaemon.
+
+-- 
+With kind regards,
+
+Hans-Christian Egtvedt, siv.ing. (M.Sc.)
+Applications Engineer - AVR32 System Solutions - Atmel Norway
+-- 
+Mvh
+Hans-Christian Egtvedt
