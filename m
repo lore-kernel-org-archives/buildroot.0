@@ -1,44 +1,47 @@
 From: Hans-Christian Egtvedt <hcegtvedt@norway.atmel.com>
-Date: Thu, 26 Jul 2007 09:01:35 +0200
-Subject: [Buildroot] svn commit: trunk/buildroot/package/tiff
-In-Reply-To: <20070723100315.3081CA65CB@busybox.net>
-References: <20070723100315.3081CA65CB@busybox.net>
-Message-ID: <1185433295.31437.40.camel@localhost.localdomain>
+Date: Thu, 26 Jul 2007 09:01:16 +0200
+Subject: [Buildroot]
+	svn	commit:trunk/buildroot/target/device/Atmel/Linux:kernel-patches-2.6.22.1
+In-Reply-To: <46A3D08D.4070505@tait.co.nz>
+References: <20070720082750.D5D413008C@busybox.net>
+	<46A3D08D.4070505@tait.co.nz>
+Message-ID: <1185433276.31437.32.camel@localhost.localdomain>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Mon, 2007-07-23 at 03:03 -0700, ulf at uclibc.org wrote:
-> Author: ulf
-> Date: 2007-07-23 03:03:14 -0700 (Mon, 23 Jul 2007)
-> New Revision: 19212
+On Mon, 2007-07-23 at 09:47 +1200, Robin Gilks wrote:
+> ulf at uclibc.org wrote:
+> > Author: ulf
+> > Date: 2007-07-20 01:27:49 -0700 (Fri, 20 Jul 2007)
+> > New Revision: 19172
+> > 
+> > Log:
+> > Add patch for linux 2.6.22.1
+> > 
+> > Added:
+> >    trunk/buildroot/target/device/Atmel/Linux/kernel-patches-2.6.22.1/
+> >    trunk/buildroot/target/device/Atmel/Linux/kernel-patches-2.6.22.1/2.6.22.1-atmel.patch
+> > 
+> > 
+> > Changeset:
+> > 
+> > Sorry, the patch is too large to include (9725 lines).
+> > Please use ViewCVS to see it!
+> > 
+> > http://uclibc.org/cgi-bin/viewcvs.cgi?view=rev&root=svn&rev=19172
 > 
-> Log:
-> Update config for tiff package
-> 
-> Modified:
->    trunk/buildroot/package/tiff/tiff.mk
-> 
-> 
-> Changeset:
-> Modified: trunk/buildroot/package/tiff/tiff.mk
-> ===================================================================
-> --- trunk/buildroot/package/tiff/tiff.mk	2007-07-23 09:45:23 UTC (rev 19211)
-> +++ trunk/buildroot/package/tiff/tiff.mk	2007-07-23 10:03:14 UTC (rev 19212)
-> @@ -18,6 +18,7 @@
->  	$(TIFF_CAT) $(DL_DIR)/$(TIFF_SOURCE) | tar -C $(BUILD_DIR) $(TAR_OPTIONS) -
->  	toolchain/patch-kernel.sh $(TIFF_DIR) package/tiff/ tiff\*.patch
->  	$(CONFIG_UPDATE) $(TIFF_DIR)
+> Is there any differentiation between different families of Atmel CPU in 
+> the buildroot tree? i.e. does this patchset only apply to AT91 series or 
+> does it include AVR32?
 
-Remove the line above, it is was never needed and you have the correct
-CONFIG_UPDATE below.
+Why is these patches not in the kernel-headers directory?
 
-> +	$(CONFIG_UPDATE) $(TIFF_DIR)/config
->  	touch $(TIFF_DIR)/.unpacked
->  
->  $(TIFF_DIR)/.configured: $(TIFF_DIR)/.unpacked
+Speaking for the AVR32 support I do not need a separate directory for
+AVR32 specific patches. I put all the patches in
+toolchain/kernel-headers.
 
 -- 
 With kind regards,
