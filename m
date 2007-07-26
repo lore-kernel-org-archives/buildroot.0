@@ -1,74 +1,31 @@
-From: bugs at busybox.net <bugs@busybox.net>
-Date: Thu, 26 Jul 2007 05:50:28 -0700
-Subject: [Buildroot] [buildroot 0001445]: openssh-3.9p1 fails to compile
-Message-ID: <9df96b4614dcef09d1314e3f7ae09f5a@busybox.net>
+From: Hans-Christian Egtvedt <hcegtvedt@norway.atmel.com>
+Date: Thu, 26 Jul 2007 15:41:36 +0200
+Subject: [Buildroot] bash-3.2 segfaults during init
+Message-ID: <1185457296.1044.30.camel@localhost.localdomain>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+Hello,
 
-The following issue has been SUBMITTED. 
-====================================================================== 
-http://busybox.net/bugs/view.php?id=1445 
-====================================================================== 
-Reported By:                alanszlosek
-Assigned To:                buildroot
-====================================================================== 
-Project:                    buildroot
-Issue ID:                   1445
-Category:                   Architecture Specific
-Reproducibility:            always
-Severity:                   block
-Priority:                   normal
-Status:                     assigned
-====================================================================== 
-Date Submitted:             07-26-2007 05:50 PDT
-Last Modified:              07-26-2007 05:50 PDT
-====================================================================== 
-Summary:                    openssh-3.9p1 fails to compile
-Description: 
-When buildroot tries to compile openssh it fails. I'm using buildroot
-revision 19264, uclibc-0.9.29, busybox-1.6.1, gcc-4.2.0.
+I have a weird issue with bash 3.2 and the buildroot snapshot from
+20070718. When Linux runs init, which in my system points
+to /etc/init.d/rcS it segfaults.
 
-What follows is the output of the compilation:
+Freeing init memory: 60K (90000000 - 9000f000)
+rcS[108]: segfault at 7fc11000 pc 2ab1e6be sp 7fc0fb58 ecr 24
 
-/home/alan/downloads/buildroot/pentium/build_i586/staging_dir/usr/bin/i586-linux-uclibc-gcc
--g -O2 -Wall -Wpointer-arith -Wno-uninitialized -I. -I.  -DSSHDIR=\"/etc\"
--D_PATH_SSH_PROGRAM=\"/usr/bin/ssh\"
--D_PATH_SSH_ASKPASS_DEFAULT=\"/usr/sbin/ssh-askpass\"
--D_PATH_SFTP_SERVER=\"/usr/sbin/sftp-server\"
--D_PATH_SSH_KEY_SIGN=\"/usr/sbin/ssh-keysign\"
--D_PATH_SSH_PIDDIR=\"/var/run\" -D_PATH_PRIVSEP_CHROOT_DIR=\"/var/empty\"
--DSSH_RAND_HELPER=\"/usr/sbin/ssh-rand-helper\" -DHAVE_CONFIG_H -c scp.c
-/home/alan/downloads/buildroot/pentium/build_i586/staging_dir/usr/bin/i586-linux-uclibc-ld
--L/home/alan/downloads/buildroot/pentium/build_i586/staging_dir/lib
--L/home/alan/downloads/buildroot/pentium/build_i586/staging_dir/usr/lib -o
-scp scp.o progressmeter.o -L. -Lopenbsd-compat/  -lssh -lopenbsd-compat
--lcrypto -lutil -lz  -lcrypt -lresolv -lresolv
-/home/alan/downloads/buildroot/pentium/build_i586/staging_dir/usr/bin/i586-linux-uclibc-ld:
-warning: cannot find entry symbol _start; defaulting to 08049170
-scp.o: In function `bwlimit':
-/home/alan/downloads/buildroot/pentium/build_i586/openssh-3.9p1/scp.c:680:
-undefined reference to `__fixunsdfdi'
-/home/alan/downloads/buildroot/pentium/build_i586/openssh-3.9p1/scp.c:682:
-undefined reference to `__udivdi3'
-/home/alan/downloads/buildroot/pentium/build_i586/openssh-3.9p1/scp.c:683:
-undefined reference to `__umoddi3'
-make[1]: *** [scp] Error 1
-make[1]: Leaving directory
-`/home/alan/downloads/buildroot/pentium/build_i586/openssh-3.9p1'
-make: ***
-[/home/alan/downloads/buildroot/pentium/build_i586/openssh-3.9p1/ssh]
-Error 2
+I have narrowed it down to a patch in bash, more specific "bash32-011",
+which can be seen here
+http://ftp.gnu.org/pub/gnu/bash/bash-3.2-patches/bash32-011
 
-====================================================================== 
+Does anybody else see anything similar?
 
-Issue History 
-Date Modified   Username       Field                    Change               
-====================================================================== 
-07-26-07 05:50  alanszlosek    New Issue                                    
-07-26-07 05:50  alanszlosek    Status                   new => assigned     
-07-26-07 05:50  alanszlosek    Assigned To               => buildroot       
-======================================================================
+I build for AVR32 AT32AP7000 and the ATSTK1000 kit, so a bit not
+reproducible, sorry :/
+
+-- 
+Mvh
+Hans-Christian Egtvedt
