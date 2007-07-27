@@ -1,44 +1,37 @@
-From: ulf at uclibc.org <ulf@uclibc.org>
-Date: Fri, 27 Jul 2007 00:38:48 -0700 (PDT)
-Subject: [Buildroot] svn commit: trunk/buildroot/package/at
-Message-ID: <20070727073848.B1A97A4560@busybox.net>
+From: Ulf Samuelsson <ulf@atmel.com>
+Date: Fri, 27 Jul 2007 10:25:42 +0200
+Subject: [Buildroot] Avoiding rebuild of $(TARGET_DIR)/usr/bin/ldd
+Message-ID: <1185524742.12803.13.camel@elrond.sweden.atmel.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Author: ulf
-Date: 2007-07-27 00:38:48 -0700 (Fri, 27 Jul 2007)
-New Revision: 19269
+$(TARGET_DIR)/usr/bin/ldd gets regenerated each load.
+When I study the output of "make -d", it gets rebuilt
+because of 'gcc'.
 
-Log:
-Use correct binary in 'at' to avoid rebuilds
+I did the following to get rid of the rebuild, but I am not
+sure it is correct.
 
-Modified:
-   trunk/buildroot/package/at/at.mk
+Comments?
 
 
-Changeset:
-Modified: trunk/buildroot/package/at/at.mk
+Index: toolchain/uClibc/uclibc.mk
 ===================================================================
---- trunk/buildroot/package/at/at.mk	2007-07-27 07:35:49 UTC (rev 19268)
-+++ trunk/buildroot/package/at/at.mk	2007-07-27 07:38:48 UTC (rev 19269)
-@@ -9,7 +9,7 @@
- AT_DIR:=$(BUILD_DIR)/at-$(AT_VERSION)
- AT_CAT:=$(ZCAT)
- AT_TARGET_SCRIPT:=etc/init.d/S99at
--AT_BINARY:=.at
-+AT_BINARY:=at
+--- toolchain/uClibc/uclibc.mk  (revision 19234)
++++ toolchain/uClibc/uclibc.mk  (arbetskopia)
+@@ -345,7 +345,7 @@
+                install_runtime
+        touch -c $@
  
- $(DL_DIR)/$(AT_SOURCE):
- 	 $(WGET) -P $(DL_DIR) $(AT_SITE)/$(AT_SOURCE)
-@@ -62,6 +62,8 @@
- 
- at-dirclean:
- 	rm -rf $(AT_DIR)
-+
-+.PHONY:	at
- #############################################################
- #
- # Toplevel Makefile options
+-$(TARGET_DIR)/usr/bin/ldd: gcc
++$(TARGET_DIR)/usr/bin/ldd: $(TARGET_CROSS)gcc
+        $(MAKE1) -C $(UCLIBC_DIR) CC=$(TARGET_CROSS)gcc \
+                CPP=$(TARGET_CROSS)cpp LD=$(TARGET_CROSS)ld \
+                PREFIX=$(TARGET_DIR) utils install_utils
+
+
+Best Regards
+Ulf Samuelsson
