@@ -1,130 +1,54 @@
-From: bugs at busybox.net <bugs@busybox.net>
-Date: Fri, 27 Jul 2007 09:18:57 -0700
-Subject: [Buildroot] [buildroot 0001446]: Buildroot compilation is broken
-	for SH4 architecture
-Message-ID: <e3e4cc9d26a77526a3485e473bf5f54a@busybox.net>
+From: Bernhard Fischer <rep.dot.nop@gmail.com>
+Date: Fri, 27 Jul 2007 18:16:20 +0200
+Subject: [Buildroot] SDL directfb dependence [was: Re: svn
+	commit:	trunk/buildroot/package/sdl]
+In-Reply-To: <00a401c7cf52$629f3f60$dcc4af0a@atmel.com>
+References: <20070725173927.E0BE0A5E25@busybox.net>
+	<20070725223934.GB11697@aon.at>
+	<1185407250.5580.17.camel@elrond.sweden.atmel.com>
+	<6311fe0b0707251806x6e13d50dpefddd8ab6cc2a646@mail.gmail.com>
+	<00a401c7cf52$629f3f60$dcc4af0a@atmel.com>
+Message-ID: <20070727161620.GD25147@aon.at>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+On Thu, Jul 26, 2007 at 08:55:57AM +0200, Ulf Samuelsson wrote:
+>>> The SDL compile failed since "directfb.h" could not be found
+>>> so I made the assumption, that it was neccessary.
+>>> Maybe I was wrong, but if it is not required, why the error message?
+>>>
+>>>
+>>> > If you want directfb and directfb-support, the you should select it
+>>> > manually, no?
+>>>
+>>> Best Regards
+>>> Ulf Samuelsson
+>>>
+>
+>> DirectFB is not required.
+>> SDL only needs the directfb.h header to build, in case directfb might be
+>> invoked later at run time.
+>> directfb is not used by default by SDL
+>> 
+>> 
+>> -Rex
+>> 
+>
+>OK, so we need to download the DirectFB and install its headers.
+>SDL won't build in buildroot, unless we do.
 
-A NOTE has been added to this issue. 
-====================================================================== 
-http://busybox.net/bugs/view.php?id=1446 
-====================================================================== 
-Reported By:                fgretief
-Assigned To:                buildroot
-====================================================================== 
-Project:                    buildroot
-Issue ID:                   1446
-Category:                   Architecture Specific
-Reproducibility:            always
-Severity:                   block
-Priority:                   normal
-Status:                     assigned
-====================================================================== 
-Date Submitted:             07-26-2007 13:57 PDT
-Last Modified:              07-27-2007 09:18 PDT
-====================================================================== 
-Summary:                    Buildroot compilation is broken for SH4 architecture
-Description: 
-I am unable to do a build for the SH4 architecture.
+Can you check if a
+ifndef ($(BR2_PACKAGE_DIRECTFB),y)
+	$(SED) "/directfb.h>/d" all/odd/files/*
+endif
 
-Steps to reproduce:
-  - do a clean checkout/update (rev 19264)
-      svn://uclibc.org/trunk/buildroot
-  - rm .config*             (just to make sure)
-  - make menuconfig
-      Select superh and SH4 architecture
-      Select uClibc 0.9.29  (instead of the snapshot)
-      Select cramfs as the root fs
-  - make
+in the configure stage bypasses this odd dependency?
+I.e. if we (or rather the SDL folks) don't need some structs from
+directfb then we can wipe the header just fine.
 
-...
-/bin/sh
-/home/fgretief/src/buildroot/toolchain_build_sh4/gcc-4.2.1/gcc/../move-if-change
-tmp-macro_list macro_list
-echo timestamp > s-macro_list
-The directory that should contain system headers does not exist:
- 
-/home/fgretief/src/buildroot/toolchain_build_sh4/uClibc_dev//usr/include
-make[2]: *** [stmp-fixinc] Error 1
-make[2]: Leaving directory
-`/home/fgretief/src/buildroot/toolchain_build_sh4/gcc-4.2.1-initial/gcc'
-make[1]: *** [all-gcc] Error 2
-make[1]: Leaving directory
-`/home/fgretief/src/buildroot/toolchain_build_sh4/gcc-4.2.1-initial'
-make: ***
-[/home/fgretief/src/buildroot/toolchain_build_sh4/gcc-4.2.1-initial/.compiled]
-Error 2
-
-
-Note: 
-  The binutils were never build. It started immediately with GCC-4.2.1
-
-Directory listing after build:
--------------------------------------------------------------
-~/src/buildroot$ ls -l
-total 72
--rw-rw-r--   1 fgretief fgretief 19191 Jul 24 21:30 Config.in
--rw-rw-r--   1 fgretief fgretief 12072 Jul 26 22:07 Makefile
-drwxrwxr-x   3 fgretief fgretief  4096 Jul 26 22:13 binaries
-drwxrwxr-x   3 fgretief fgretief  4096 Jul 26 22:13 build_sh4
-drwxrwxr-x   2 fgretief fgretief  4096 Jul 25 22:50 dl
-drwxrwxr-x   4 fgretief fgretief  4096 Jul 22 13:08 docs
-drwxrwxr-x 212 fgretief fgretief  4096 Jul 24 21:30 package
-drwxrwxr-x   4 fgretief fgretief  4096 Jul 22 13:07 project
-drwxrwxr-x   3 fgretief fgretief  4096 Jul 26 22:13 project_build_sh4
-drwxrwxr-x  20 fgretief fgretief  4096 Jul 22 13:07 target
-drwxrwxr-x  14 fgretief fgretief  4096 Jul 22 13:07 toolchain
-drwxrwxr-x   4 fgretief fgretief  4096 Jul 26 22:14 toolchain_build_sh4
-
-~/src/buildroot$ ls -l build_sh4/
-total 4
-drwxrwxr-x 5 fgretief fgretief 4096 Jul 26 22:13 staging_dir
-
-~/src/buildroot$ ls -l project_build_sh4/
-total 4
-drwxrwxr-x 3 fgretief fgretief 4096 Jul 26 22:13 uclibc
-
-~/src/buildroot$ ls -l toolchain_build_sh4/
-total 8
-drwxrwxr-x 25 fgretief fgretief 4096 Jul 26 22:14 gcc-4.2.1
-drwxrwxr-x  9 fgretief fgretief 4096 Jul 26 22:15 gcc-4.2.1-initial
-
--------------------------------------------------------------
-
-It looks like the error indicates to the fact that the kernel headers
-where
-never compiled/copied to their correct place.  Seems like a dependency is
-missing for kernel-headers and binutils.
-
-====================================================================== 
-
----------------------------------------------------------------------- 
- gururaj - 07-26-07 17:26  
----------------------------------------------------------------------- 
-This is not just with GCC4.2.1. I am using latest Buildroot snapshot of
-250707 & building arm926 toolchain with uClibc 0.9.29 with GCC-4.2.0 & i
-am facing the same issue. This started for me since Buildroot Snapshot
-240707. At present Buildroot snapshot of 230707 works fine
-
- 
-
----------------------------------------------------------------------- 
- bernhardf - 07-27-07 09:18  
----------------------------------------------------------------------- 
-This should be fixed as of r19285. Please confirm. 
-
-Issue History 
-Date Modified   Username       Field                    Change               
-====================================================================== 
-07-26-07 13:57  fgretief       New Issue                                    
-07-26-07 13:57  fgretief       Status                   new => assigned     
-07-26-07 13:57  fgretief       Assigned To               => buildroot       
-07-26-07 17:22  gururaj        Note Added: 0002641                          
-07-26-07 17:26  gururaj        Note Edited: 0002641                         
-07-27-07 09:18  bernhardf      Note Added: 0002643                          
-======================================================================
+Apart from that, isn't there a --disable-directfb or something like
+that in SDL?
+/me pets GGI
