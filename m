@@ -1,7 +1,7 @@
 From: aldot at uclibc.org <aldot@uclibc.org>
-Date: Fri, 27 Jul 2007 05:47:59 -0700 (PDT)
-Subject: [Buildroot] svn commit: trunk/buildroot/package
-Message-ID: <20070727124759.50141A4602@busybox.net>
+Date: Fri, 27 Jul 2007 06:08:47 -0700 (PDT)
+Subject: [Buildroot] svn commit: trunk/buildroot
+Message-ID: <20070727130847.195ABA47AD@busybox.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -9,45 +9,30 @@ Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
 Author: aldot
-Date: 2007-07-27 05:47:58 -0700 (Fri, 27 Jul 2007)
-New Revision: 19276
+Date: 2007-07-27 06:08:47 -0700 (Fri, 27 Jul 2007)
+New Revision: 19277
 
 Log:
-- a separate Video menu is redundant WRT the Graphic submenu
+- ignore itanium*
 
 
 Modified:
-   trunk/buildroot/package/Config.in
+   trunk/buildroot/Config.in
 
 
 Changeset:
-Modified: trunk/buildroot/package/Config.in
+Modified: trunk/buildroot/Config.in
 ===================================================================
---- trunk/buildroot/package/Config.in	2007-07-27 12:37:30 UTC (rev 19275)
-+++ trunk/buildroot/package/Config.in	2007-07-27 12:47:58 UTC (rev 19276)
-@@ -257,16 +257,6 @@
- source "package/mpg123/Config.in"
- endif
- 
--menuconfig BR2_VIDEO_SUPPORT
--	bool "Video libraries and applications"
--	default y
--	help
--	  Support for video libraries and applications
--
--if BR2_VIDEO_SUPPORT
--source "package/mplayer/Config.in"
--endif
--
- menuconfig BR2_GRAPHIC_SUPPORT
- 	bool "Graphic libraries and applications (graphic/text)"
- 	default y
-@@ -344,6 +334,8 @@
- source "package/rdesktop/Config.in"
- source "package/rxvt/Config.in"
- 
-+comment "Video libraries/codecs and applications"
-+source "package/mplayer/Config.in"
- endif
- 
- menuconfig BR2_COMPRESSOR_SUPPORT
+--- trunk/buildroot/Config.in	2007-07-27 12:47:58 UTC (rev 19276)
++++ trunk/buildroot/Config.in	2007-07-27 13:08:47 UTC (rev 19277)
+@@ -398,8 +398,8 @@
+ 	default pca56		if BR2_alpha_21164pc
+ 	default ev6		if BR2_alpha_21264
+ 	default ev67		if BR2_alpha_21264a
+-	default itanium		if BR2_ia64_itanium1
+-	default itanium2	if BR2_ia64_itanium2
++#	default itanium		if BR2_ia64_itanium1
++#	default itanium2	if BR2_ia64_itanium2
+ 	default 68000		if BR2_m68k_68000
+ 	default 68010		if BR2_m68k_68010
+ 	default 68020		if BR2_m68k_68020
