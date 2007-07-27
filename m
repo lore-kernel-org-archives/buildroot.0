@@ -1,49 +1,34 @@
-From: Hans-Christian Egtvedt <hcegtvedt@norway.atmel.com>
-Date: Fri, 27 Jul 2007 08:07:48 +0200
-Subject: [Buildroot] svn
-	commit:	trunk/buildroot:packagetarget/device/Atmel
-In-Reply-To: <1185468954.5580.112.camel@elrond.sweden.atmel.com>
-References: <20070722171703.79776A4756@busybox.net>
-	<46A3B766.2000808@realitydiluted.com>
-	<013701c7ccb3$1a92a960$dcc4af0a@atmel.com>
-	<1185428949.31437.4.camel@localhost.localdomain>
-	<00a301c7cf52$61ac2cd0$dcc4af0a@atmel.com>
-	<1185434977.31437.50.camel@localhost.localdomain>
-	<1185468954.5580.112.camel@elrond.sweden.atmel.com>
-Message-ID: <1185516468.1044.48.camel@localhost.localdomain>
+From: ulf at uclibc.org <ulf@uclibc.org>
+Date: Fri, 27 Jul 2007 00:29:23 -0700 (PDT)
+Subject: [Buildroot] svn commit: trunk/buildroot/package/gettext
+Message-ID: <20070727072923.4FE6CA4630@busybox.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+Author: ulf
+Date: 2007-07-27 00:29:22 -0700 (Fri, 27 Jul 2007)
+New Revision: 19265
 
-On Thu, 2007-07-26 at 18:55 +0200, Ulf Samuelsson wrote:
-> tor 2007-07-26 klockan 09:29 +0200 skrev Hans-Christian Egtvedt:
-> > On Thu, 2007-07-26 at 08:03 +0200, Ulf Samuelsson wrote:
-> > > > On Mon, 2007-07-23 at 00:49 +0200, Ulf Samuelsson wrote:
-> > > >> > ulf at uclibc.org wrote: 
-> > 
-> > <cut info about AVR32 toolchain patches>
-> > 
-> > > > Right now they are roughly 8 MB for all the tools (gcc, binutils, gdb,
-> > > > strace, uClibc and kernel). But this is in plain text, and they compress
-> > > > well.
-> > >
-> 
-> The full buildroot is about 6 MB so this is more than doubling
-> the download time.
-> At home in Stockholm with 100 Mbps Ethernet it is less of a problem,
-> but where I am now with 10-20 kB/s Internet access it sucks...
-> A prepatched toolchain which is downloaded once is a much
-> more attractive alternative, so this is what I am going to submit.
+Log:
+Remove bad definition of LD to allow building of shared libraries
 
-Only problem is that we do not (yet) have a prepatched toolchain
-available on the net which is IMHO working.
+Modified:
+   trunk/buildroot/package/gettext/gettext.mk
 
-When bzip'ing a 3 MB text file it usually ends up well below 500k, still
-to big though :/
 
--- 
-Mvh
-Hans-Christian Egtvedt
+Changeset:
+Modified: trunk/buildroot/package/gettext/gettext.mk
+===================================================================
+--- trunk/buildroot/package/gettext/gettext.mk	2007-07-26 11:12:51 UTC (rev 19264)
++++ trunk/buildroot/package/gettext/gettext.mk	2007-07-27 07:29:22 UTC (rev 19265)
+@@ -90,7 +90,6 @@
+ 		jm_cv_func_working_re_compile_pattern=yes \
+ 		ac_use_included_regex=no \
+ 		gl_cv_c_restrict=no \
+-		LD=$(TARGET_CROSS)gcc \
+ 		./configure \
+ 		--target=$(GNU_TARGET_NAME) \
+ 		--host=$(GNU_TARGET_NAME) \
