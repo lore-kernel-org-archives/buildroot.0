@@ -1,64 +1,65 @@
-From: Claas Hilbrecht <claas+maillinglists.buildroot@jucs-kramkiste.de>
-Date: Fri, 27 Jul 2007 09:58:25 +0200
-Subject: [Buildroot] SVN Rev 19269 won't build
-Message-ID: <5041A110D5D200EDF64E7756@[192.168.83.121]>
+From: Ulf Samuelsson <ulf@atmel.com>
+Date: Fri, 27 Jul 2007 10:48:25 +0200
+Subject: [Buildroot] svn
+	commit:	trunk/buildroot:packagetarget/device/Atmel
+In-Reply-To: <1185516468.1044.48.camel@localhost.localdomain>
+References: <20070722171703.79776A4756@busybox.net>
+	<46A3B766.2000808@realitydiluted.com>
+	<013701c7ccb3$1a92a960$dcc4af0a@atmel.com>
+	<1185428949.31437.4.camel@localhost.localdomain>
+	<00a301c7cf52$61ac2cd0$dcc4af0a@atmel.com>
+	<1185434977.31437.50.camel@localhost.localdomain>
+	<1185468954.5580.112.camel@elrond.sweden.atmel.com>
+	<1185516468.1044.48.camel@localhost.localdomain>
+Message-ID: <1185526105.12803.18.camel@elrond.sweden.atmel.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+fre 2007-07-27 klockan 08:07 +0200 skrev Hans-Christian Egtvedt:
+> On Thu, 2007-07-26 at 18:55 +0200, Ulf Samuelsson wrote:
+> > tor 2007-07-26 klockan 09:29 +0200 skrev Hans-Christian Egtvedt:
+> > > On Thu, 2007-07-26 at 08:03 +0200, Ulf Samuelsson wrote:
+> > > > > On Mon, 2007-07-23 at 00:49 +0200, Ulf Samuelsson wrote:
+> > > > >> > ulf at uclibc.org wrote: 
+> > > 
+> > > <cut info about AVR32 toolchain patches>
+> > > 
+> > > > > Right now they are roughly 8 MB for all the tools (gcc, binutils, gdb,
+> > > > > strace, uClibc and kernel). But this is in plain text, and they compress
+> > > > > well.
+> > > >
+> > 
+> > The full buildroot is about 6 MB so this is more than doubling
+> > the download time.
+> > At home in Stockholm with 100 Mbps Ethernet it is less of a problem,
+> > but where I am now with 10-20 kB/s Internet access it sucks...
+> > A prepatched toolchain which is downloaded once is a much
+> > more attractive alternative, so this is what I am going to submit.
+> 
+> Only problem is that we do not (yet) have a prepatched toolchain
+> available on the net which is IMHO working.
 
-just a note. The svn version 19269 won't build (on Debian etch). And not 
-somewhere deep inside but at a very early stage.
+Yesterday we didn't, but now there are stuff available at
+$(BR2_ATMEL_MIRROR)/Source
 
-svn co svn://uclibc.org/trunk/buildroot
-cd buildroot
-make
-make CC="/usr/bin/gcc" MAKECMDGOALS="" \
-                -C package/config conf mconf
-make[1]: Entering directory 
-`/home/babel/buildroot/0.9.29/buildroot_org/buildroot/package/config'
-/usr/bin/gcc -DCURSES_LOC="<ncurses.h>" -DLOCALE -g -O2 -Dinline="" 
--include foo.h -MM *.c > .depend 2>/dev/null || :
-make[1]: Leaving directory 
-`/home/babel/buildroot/0.9.29/buildroot_org/buildroot/package/config'
-make[1]: Entering directory 
-`/home/babel/buildroot/0.9.29/buildroot_org/buildroot/package/config'
-/usr/bin/gcc -DCURSES_LOC="<ncurses.h>" -DLOCALE -g -O2 -Dinline="" 
--include foo.h  -c conf.c -o conf.o
-/usr/bin/gcc -DCURSES_LOC="<ncurses.h>" -DLOCALE -g -O2 -Dinline="" 
--include foo.h  -c kxgettext.c -o kxgettext.o
-/usr/bin/gcc -DCURSES_LOC="<ncurses.h>" -DLOCALE -g -O2 -Dinline="" 
--include foo.h -I. -c zconf.tab.c -o zconf.tab.o
-/usr/bin/gcc -DCURSES_LOC="<ncurses.h>" -DLOCALE -g -O2 -Dinline="" 
--include foo.h  -lncurses conf.o  zconf.tab.o -o conf
-/usr/bin/gcc    -c -o mconf.o mconf.c
-In file included from mconf.c:27:
-lxdialog/dialog.h:32:10: error: #include expects "FILENAME" or <FILENAME>
-In file included from mconf.c:27:
-lxdialog/dialog.h:97: error: expected specifier-qualifier-list before 
-'chtype'
-lxdialog/dialog.h:187: error: expected ')' before '*' token
-lxdialog/dialog.h:193: error: expected ')' before '*' token
-lxdialog/dialog.h:195: error: expected ')' before '*' token
-lxdialog/dialog.h:196: error: expected ')' before '*' token
-lxdialog/dialog.h:197: error: expected ')' before '*' token
-lxdialog/dialog.h:198: error: expected ')' before '*' token
-lxdialog/dialog.h:200: error: expected ')' before '*' token
-mconf.c: In function 'conf':
-mconf.c:608: error: 'KEY_MAX' undeclared (first use in this function)
-mconf.c:608: error: (Each undeclared identifier is reported only once
-mconf.c:608: error: for each function it appears in.)
-mconf.c: In function 'conf_choice':
-mconf.c:759: error: 'KEY_MAX' undeclared (first use in this function)
-make[1]: *** [mconf.o] Error 1
-make[1]: Leaving directory 
-`/home/babel/buildroot/0.9.29/buildroot_org/buildroot/package/config'
-make: *** [package/config/mconf] Error 2
+binutils-2.17
+gcc-4.1.2
+gdb-6.4
+uclibc-0.9.28.3
+
+with Atmel and buildroot patches.
+
+Plan to add AVR32 specific directories in buildroot so that new patches
+can be against those prepateched versions.
 
 
--- 
- Claas Hilbrecht
- http://www.jucs-kramkiste.de
+> 
+> When bzip'ing a 3 MB text file it usually ends up well below 500k, still
+> to big though :/
+> 
+
+Best Regards
+Ulf Samuelsson
