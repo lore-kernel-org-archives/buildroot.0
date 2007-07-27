@@ -1,121 +1,86 @@
-From: bugs at busybox.net <bugs@busybox.net>
-Date: Thu, 26 Jul 2007 17:22:24 -0700
-Subject: [Buildroot] [buildroot 0001446]: Buildroot compilation is broken
-	for SH4 architecture
-Message-ID: <1a495f4b01c956470e1b2c99486cd404@busybox.net>
+From: Gururaja Hebbar K R <gururajakr@sanyo.co.in>
+Date: Fri, 27 Jul 2007 05:59:59 +0530
+Subject: [Buildroot] toolchain build failing after using latest buildroot
+	snapshot of 250707
+Message-ID: <C03A3C267DDF184EA523BBAB577BF924C22E5D@blrexsr1.slti.sanyo.co.in>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+Hi All,
 
-A NOTE has been added to this issue. 
-====================================================================== 
-http://busybox.net/bugs/view.php?id=1446 
-====================================================================== 
-Reported By:                fgretief
-Assigned To:                buildroot
-====================================================================== 
-Project:                    buildroot
-Issue ID:                   1446
-Category:                   Architecture Specific
-Reproducibility:            always
-Severity:                   block
-Priority:                   normal
-Status:                     assigned
-====================================================================== 
-Date Submitted:             07-26-2007 13:57 PDT
-Last Modified:              07-26-2007 17:22 PDT
-====================================================================== 
-Summary:                    Buildroot compilation is broken for SH4 architecture
-Description: 
-I am unable to do a build for the SH4 architecture.
+I had no issues building ARM Little Indian Toolchain with earlier
+Snapshots(with little exceptions of gettext & libxml). But after using
+latest buildroot snapshot of 250707 i am getting error as 
 
-Steps to reproduce:
-  - do a clean checkout/update (rev 19264)
-      svn://uclibc.org/trunk/buildroot
-  - rm .config*             (just to make sure)
-  - make menuconfig
-      Select superh and SH4 architecture
-      Select uClibc 0.9.29  (instead of the snapshot)
-      Select cramfs as the root fs
-  - make
+"the directory that should contain system headers does not exist"
+-->detailed error message at the end of mail
 
-...
+when doing make world. I searched the  net & found that its because of
+fixinc problem when building crosscompiler. but i see that the patch is
+already applied & i am not able to solve it.
+
+kindly help me to correct the same.
+
+I am using 
+
+arm & arm926 eabi & buildroot toolchain
+uClibc 0.9.29
+gcc-4.2.0
+gettext,libintl,libxml2,libsys,ncurses,busybox-1.6.1,freetype &
+fontconfig --> all these are selected
+
+
+Regards
+Gururaja
+
+
+<snip>
+
+<snip>
+
+<snip>
+
+mv tmp-specs specs
+echo |
+/home/guru/project/original/toolchains/buildroot/toolchain_build_arm/gcc
+-4.2.0-initi./gcc/xgcc
+-B/home/guru/project/original/toolchains/buildroot/toolchain_build_arm/g
+cc-4.2.0itial/./gcc/
+-B/home/guru/project/original/toolchains/buildroot/build_arm/staging_dir
+/usr/alinux-uclibcgnueabi/bin/
+-B/home/guru/project/original/toolchains/buildroot/build_arm/stagidir/us
+r/arm-linux-uclibcgnueabi/lib/
+-isystem
+/home/guru/project/original/toolchains/buildr/build_arm/staging_dir/usr/
+arm-linux-uclibcgnueabi/include
+-isystem
+/home/guru/project/origl/toolchains/buildroot/build_arm/staging_dir/usr/
+arm-linux-uclibcgnueabi/sys-include
+-E -dM| \
+          sed -n -e 's/^#define \([^_][a-zA-Z0-9_]*\).*/\1/p' \
+                 -e 's/^#define \(_[^_A-Z][a-zA-Z0-9_]*\).*/\1/p' | \
+          sort -u > tmp-macro_list
 /bin/sh
-/home/fgretief/src/buildroot/toolchain_build_sh4/gcc-4.2.1/gcc/../move-if-change
+/home/guru/project/original/toolchains/buildroot/toolchain_build_arm/gcc
+-4.2.0/gcc/move-if-change
 tmp-macro_list macro_list
 echo timestamp > s-macro_list
 The directory that should contain system headers does not exist:
  
-/home/fgretief/src/buildroot/toolchain_build_sh4/uClibc_dev//usr/include
+/home/guru/project/original/toolchains/buildroot/toolchain_build_arm/uCl
+ibc_dev//usr/incl
 make[2]: *** [stmp-fixinc] Error 1
 make[2]: Leaving directory
-`/home/fgretief/src/buildroot/toolchain_build_sh4/gcc-4.2.1-initial/gcc'
+`/home/guru/project/original/toolchains/buildroot/toolchain_builrm/gcc-4
+.2.0-initial/gcc'
 make[1]: *** [all-gcc] Error 2
 make[1]: Leaving directory
-`/home/fgretief/src/buildroot/toolchain_build_sh4/gcc-4.2.1-initial'
+`/home/guru/project/original/toolchains/buildroot/toolchain_builrm/gcc-4
+.2.0-initial'
 make: ***
-[/home/fgretief/src/buildroot/toolchain_build_sh4/gcc-4.2.1-initial/.compiled]
+[/home/guru/project/original/toolchains/buildroot/toolchain_build_arm/gc
+c-4.2.0-iial/.compiled]
 Error 2
-
-
-Note: 
-  The binutils were never build. It started immediately with GCC-4.2.1
-
-Directory listing after build:
--------------------------------------------------------------
-~/src/buildroot$ ls -l
-total 72
--rw-rw-r--   1 fgretief fgretief 19191 Jul 24 21:30 Config.in
--rw-rw-r--   1 fgretief fgretief 12072 Jul 26 22:07 Makefile
-drwxrwxr-x   3 fgretief fgretief  4096 Jul 26 22:13 binaries
-drwxrwxr-x   3 fgretief fgretief  4096 Jul 26 22:13 build_sh4
-drwxrwxr-x   2 fgretief fgretief  4096 Jul 25 22:50 dl
-drwxrwxr-x   4 fgretief fgretief  4096 Jul 22 13:08 docs
-drwxrwxr-x 212 fgretief fgretief  4096 Jul 24 21:30 package
-drwxrwxr-x   4 fgretief fgretief  4096 Jul 22 13:07 project
-drwxrwxr-x   3 fgretief fgretief  4096 Jul 26 22:13 project_build_sh4
-drwxrwxr-x  20 fgretief fgretief  4096 Jul 22 13:07 target
-drwxrwxr-x  14 fgretief fgretief  4096 Jul 22 13:07 toolchain
-drwxrwxr-x   4 fgretief fgretief  4096 Jul 26 22:14 toolchain_build_sh4
-
-~/src/buildroot$ ls -l build_sh4/
-total 4
-drwxrwxr-x 5 fgretief fgretief 4096 Jul 26 22:13 staging_dir
-
-~/src/buildroot$ ls -l project_build_sh4/
-total 4
-drwxrwxr-x 3 fgretief fgretief 4096 Jul 26 22:13 uclibc
-
-~/src/buildroot$ ls -l toolchain_build_sh4/
-total 8
-drwxrwxr-x 25 fgretief fgretief 4096 Jul 26 22:14 gcc-4.2.1
-drwxrwxr-x  9 fgretief fgretief 4096 Jul 26 22:15 gcc-4.2.1-initial
-
--------------------------------------------------------------
-
-It looks like the error indicates to the fact that the kernel headers
-where
-never compiled/copied to their correct place.  Seems like a dependency is
-missing for kernel-headers and binutils.
-
-====================================================================== 
-
----------------------------------------------------------------------- 
- gururaj - 07-26-07 17:22  
----------------------------------------------------------------------- 
-This is not just with GCC4.2.1. I am using latest Buildroot snapshot of
-250707 & building arm926 toolchain with uClibc 0.9.29 & i am facing the
-same issue. This started for me since Buildroot Snapshot 240707. At
-present Buildroot snapshot of 230707 works fine 
-
-Issue History 
-Date Modified   Username       Field                    Change               
-====================================================================== 
-07-26-07 13:57  fgretief       New Issue                                    
-07-26-07 13:57  fgretief       Status                   new => assigned     
-07-26-07 13:57  fgretief       Assigned To               => buildroot       
-07-26-07 17:22  gururaj        Note Added: 0002641                          
-======================================================================
