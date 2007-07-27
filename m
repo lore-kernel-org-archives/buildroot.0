@@ -1,62 +1,71 @@
 From: Bernhard Fischer <rep.dot.nop@gmail.com>
-Date: Fri, 27 Jul 2007 20:00:49 +0200
-Subject: [Buildroot] SDL directfb dependence [was: Re: svn
-	commit:	trunk/buildroot/package/sdl]
-In-Reply-To: <1185557906.12803.24.camel@elrond.sweden.atmel.com>
-References: <20070725173927.E0BE0A5E25@busybox.net>
-	<20070725223934.GB11697@aon.at>
-	<1185407250.5580.17.camel@elrond.sweden.atmel.com>
-	<6311fe0b0707251806x6e13d50dpefddd8ab6cc2a646@mail.gmail.com>
-	<00a401c7cf52$629f3f60$dcc4af0a@atmel.com>
-	<20070727161620.GD25147@aon.at>
-	<1185557906.12803.24.camel@elrond.sweden.atmel.com>
-Message-ID: <20070727180049.GC11697@aon.at>
+Date: Fri, 27 Jul 2007 20:05:40 +0200
+Subject: [Buildroot] "multiple target patterns" error while building
+	under cygwin
+In-Reply-To: <E496871456016F4CA8959BE4105D2A890E8BA7@troe2k1.cs.myharris.net>
+References: <000501c7cd42$2a1b0d20$dcc4af0a@atmel.com>
+	<E496871456016F4CA8959BE4105D2A890E8B8C@troe2k1.cs.myharris.net>
+	<20070727162707.GH25147@aon.at>
+	<E496871456016F4CA8959BE4105D2A890E8BA7@troe2k1.cs.myharris.net>
+Message-ID: <20070727180540.GD11697@aon.at>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Fri, Jul 27, 2007 at 07:38:26PM +0200, Ulf Samuelsson wrote:
->fre 2007-07-27 klockan 18:16 +0200 skrev Bernhard Fischer:
->> On Thu, Jul 26, 2007 at 08:55:57AM +0200, Ulf Samuelsson wrote:
->> >>> The SDL compile failed since "directfb.h" could not be found
->> >>> so I made the assumption, that it was neccessary.
->> >>> Maybe I was wrong, but if it is not required, why the error message?
->> >>>
->> >>>
->> >>> > If you want directfb and directfb-support, the you should select it
->> >>> > manually, no?
->> >>>
->> >>> Best Regards
->> >>> Ulf Samuelsson
->> >>>
->> >
->> >> DirectFB is not required.
->> >> SDL only needs the directfb.h header to build, in case directfb might be
->> >> invoked later at run time.
->> >> directfb is not used by default by SDL
->> >> 
->> >> 
->> >> -Rex
->> >> 
->> >
->> >OK, so we need to download the DirectFB and install its headers.
->> >SDL won't build in buildroot, unless we do.
->> 
->> Can you check if a
->> ifndef ($(BR2_PACKAGE_DIRECTFB),y)
->> 	$(SED) "/directfb.h>/d" all/odd/files/*
->> endif
->> 
+On Fri, Jul 27, 2007 at 01:04:00PM -0400, Crane, Matthew wrote:
+>Hi, 
+> 
+>Thanks for your response.  I think my build error is the result of the
+>dos2unix + unix2dos patch.  My cygwin system was installed with Unix
+>text mode, and I've tried to explicitly set the locale, but fixdep
+>always seems to output the Dos text. 
 >
->Sounds dangerous to me.
->What happens if you build SDL first, and then enables DirectFB?
-
-yea, this wouldn't work out too well.
+>I instead used the dos2unix/unix2dos patch to fix the fixdep output,
+>which I think ending up causing the error below.  Not sure how though,
+>or how to fix it.  Thanks,
 >
->I am thinking more along the line to create a new target
->"directfb-headers" in the package/directfb/directfb.mk.
+>Matt
+>
+> 
+>.applets.o.cmd looks like this:
+> 
+>cmd_applets/applets.o := <snip>
+> 
+>deps_applets/applets.o := \
+>  applets/applets.c \
+>    $(wildcard include/config/static.h) \
+>    $(wildcard include/config/show/usage.h) \
+><snip>
+> 
+>line 410: applets/applets.o: $(deps_applets/applets.o)
+> 
+>$(deps_applets/applets.o):
+><eof>
+> 
+>I had already patched the make process so that it runs fixdep through
+>unix2dos, dos2unix similar to this patch I found online:
+> 
+>define rule_cc_o_c
+>     $(call echo-cmd,checksrc) $(cmd_checksrc)              \
+>     $(call echo-cmd,cc_o_c) $(cmd_cc_o_c);                  \
+>+    dos2unix $(depfile);                                              \
+>     $(cmd_modversions)                          \
+>-    scripts/basic/fixdep $(depfile) $@ '$(call make-cmd,cc_o_c)' >    \
+>
+>+ scripts/basic/fixdep $(depfile) $@ '$(call make-cmd,cc_o_c)' |
+>unix2dos > \ 
+>                                                   $(dot-target).tmp;  \
+>     rm -f $(depfile);                          \
+>     mv -f $(dot-target).tmp $(dot-target).cmd
+>
+>It proceeded to build, but failed with the above error.   Maybe related,
+>not sure.  I'm looking forward to the day when cygwin support is
+>completely transparent in buildroot, soon I'm sure.
 
-Sounds like a good plan.
-thanks,
+This doesn't really sounds like a buildroot issue to me but rather a
+busybox issue, fwiw.
+
+Perhaps somebody else is aware of what's going on with busybox on
+cygwin.
