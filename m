@@ -1,8 +1,8 @@
 From: bugs at busybox.net <bugs@busybox.net>
-Date: Thu, 26 Jul 2007 13:57:04 -0700
+Date: Thu, 26 Jul 2007 17:22:24 -0700
 Subject: [Buildroot] [buildroot 0001446]: Buildroot compilation is broken
 	for SH4 architecture
-Message-ID: <4b492ec03fd99fce420f746e00d276af@bugs.uclibc.org>
+Message-ID: <1a495f4b01c956470e1b2c99486cd404@busybox.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -10,7 +10,7 @@ Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
 
-The following issue has been SUBMITTED. 
+A NOTE has been added to this issue. 
 ====================================================================== 
 http://busybox.net/bugs/view.php?id=1446 
 ====================================================================== 
@@ -26,7 +26,7 @@ Priority:                   normal
 Status:                     assigned
 ====================================================================== 
 Date Submitted:             07-26-2007 13:57 PDT
-Last Modified:              07-26-2007 13:57 PDT
+Last Modified:              07-26-2007 17:22 PDT
 ====================================================================== 
 Summary:                    Buildroot compilation is broken for SH4 architecture
 Description: 
@@ -103,10 +103,19 @@ missing for kernel-headers and binutils.
 
 ====================================================================== 
 
+---------------------------------------------------------------------- 
+ gururaj - 07-26-07 17:22  
+---------------------------------------------------------------------- 
+This is not just with GCC4.2.1. I am using latest Buildroot snapshot of
+250707 & building arm926 toolchain with uClibc 0.9.29 & i am facing the
+same issue. This started for me since Buildroot Snapshot 240707. At
+present Buildroot snapshot of 230707 works fine 
+
 Issue History 
 Date Modified   Username       Field                    Change               
 ====================================================================== 
 07-26-07 13:57  fgretief       New Issue                                    
 07-26-07 13:57  fgretief       Status                   new => assigned     
 07-26-07 13:57  fgretief       Assigned To               => buildroot       
+07-26-07 17:22  gururaj        Note Added: 0002641                          
 ======================================================================
