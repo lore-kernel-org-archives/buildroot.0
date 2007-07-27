@@ -1,68 +1,130 @@
-From: Claas Hilbrecht <claas+maillinglists.buildroot@jucs-kramkiste.de>
-Date: Fri, 27 Jul 2007 18:08:41 +0200
-Subject: [Buildroot] SVN Rev 19269 won't build
-In-Reply-To: <20070727140855.GA24629@aon.at>
-References: <5041A110D5D200EDF64E7756@[192.168.83.121]>
-	<20070727103757.GC22789@aon.at>
-	<09E61CA94D6C4DE241DF8A46@[192.168.83.121]>
-	<20070727123058.GA23901@aon.at>
-	<2BF4F42AD2EC4CBFF0CF3925@[192.168.83.121]>
-	<20070727140855.GA24629@aon.at>
-Message-ID: <1D637BC976FEB2D52024B231@[192.168.83.121]>
+From: bugs at busybox.net <bugs@busybox.net>
+Date: Fri, 27 Jul 2007 09:18:57 -0700
+Subject: [Buildroot] [buildroot 0001446]: Buildroot compilation is broken
+	for SH4 architecture
+Message-ID: <e3e4cc9d26a77526a3485e473bf5f54a@busybox.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
---Am Freitag, 27. Juli 2007 16:08 +0200 Bernhard Fischer 
-<rep.dot.nop@gmail.com> schrieb:
 
-> Alright. Last minute change after testing it.
-> r19278 Works For Me (tm)
+A NOTE has been added to this issue. 
+====================================================================== 
+http://busybox.net/bugs/view.php?id=1446 
+====================================================================== 
+Reported By:                fgretief
+Assigned To:                buildroot
+====================================================================== 
+Project:                    buildroot
+Issue ID:                   1446
+Category:                   Architecture Specific
+Reproducibility:            always
+Severity:                   block
+Priority:                   normal
+Status:                     assigned
+====================================================================== 
+Date Submitted:             07-26-2007 13:57 PDT
+Last Modified:              07-27-2007 09:18 PDT
+====================================================================== 
+Summary:                    Buildroot compilation is broken for SH4 architecture
+Description: 
+I am unable to do a build for the SH4 architecture.
 
-Somewhat better, but not quite right I assume. After entering the 
-menuconfig dialog and exit it without changing anything I just type make. 
-After I while I get these errors:
+Steps to reproduce:
+  - do a clean checkout/update (rev 19264)
+      svn://uclibc.org/trunk/buildroot
+  - rm .config*             (just to make sure)
+  - make menuconfig
+      Select superh and SH4 architecture
+      Select uClibc 0.9.29  (instead of the snapshot)
+      Select cramfs as the root fs
+  - make
 
-mv tmp-specs specs
-echo | 
-/home/babel/buildroot/0.9.29/buildroot_org/buildroot/toolchain_build_i386/gcc-4.2.0-initial/./gcc/xgcc 
--B/home/babel/buildroot/0.9.29/buildroot_org/buildroot/toolchain_build_i386/gcc-4.2.0-initial/./gcc/ 
--B/home/babel/buildroot/0.9.29/buildroot_org/buildroot/build_i386/staging_dir/usr/i386-linux-uclibc/bin/ 
--B/home/babel/buildroot/0.9.29/buildroot_org/buildroot/build_i386/staging_dir/usr/i386-linux-uclibc/lib/ 
--isystem 
-/home/babel/buildroot/0.9.29/buildroot_org/buildroot/build_i386/staging_dir/usr/i386-linux-uclibc/include 
--isystem 
-/home/babel/buildroot/0.9.29/buildroot_org/buildroot/build_i386/staging_dir/usr/i386-linux-uclibc/sys-include 
--E -dM - | \
-          sed -n -e 's/^#define \([^_][a-zA-Z0-9_]*\).*/\1/p' \
-                 -e 's/^#define \(_[^_A-Z][a-zA-Z0-9_]*\).*/\1/p' | \
-          sort -u > tmp-macro_list
-/bin/sh 
-/home/babel/buildroot/0.9.29/buildroot_org/buildroot/toolchain_build_i386/gcc-4.2.0/gcc/../move-if-change 
+...
+/bin/sh
+/home/fgretief/src/buildroot/toolchain_build_sh4/gcc-4.2.1/gcc/../move-if-change
 tmp-macro_list macro_list
 echo timestamp > s-macro_list
 The directory that should contain system headers does not exist:
  
-/home/babel/buildroot/0.9.29/buildroot_org/buildroot/toolchain_build_i386/uClibc_dev//usr/include
+/home/fgretief/src/buildroot/toolchain_build_sh4/uClibc_dev//usr/include
 make[2]: *** [stmp-fixinc] Error 1
-make[2]: Leaving directory 
-`/home/babel/buildroot/0.9.29/buildroot_org/buildroot/toolchain_build_i386/gcc-4.2.0-initial/gcc'
+make[2]: Leaving directory
+`/home/fgretief/src/buildroot/toolchain_build_sh4/gcc-4.2.1-initial/gcc'
 make[1]: *** [all-gcc] Error 2
-make[1]: Leaving directory 
-`/home/babel/buildroot/0.9.29/buildroot_org/buildroot/toolchain_build_i386/gcc-4.2.0-initial'
-make: *** 
-[/home/babel/buildroot/0.9.29/buildroot_org/buildroot/toolchain_build_i386/gcc-4.2.0-initial/.compiled] 
+make[1]: Leaving directory
+`/home/fgretief/src/buildroot/toolchain_build_sh4/gcc-4.2.1-initial'
+make: ***
+[/home/fgretief/src/buildroot/toolchain_build_sh4/gcc-4.2.1-initial/.compiled]
 Error 2
 
-I think if make menuconfig required some user changes I should at least get 
-a warning that I'm trying to shot myself.
 
-PS: Sorry to bother you with these error, but I tried to get a clean build 
-to setup another build system. Getting a svn rev working out of the box is 
-my first goal.
+Note: 
+  The binutils were never build. It started immediately with GCC-4.2.1
 
--- 
- Claas Hilbrecht
- http://www.jucs-kramkiste.de
+Directory listing after build:
+-------------------------------------------------------------
+~/src/buildroot$ ls -l
+total 72
+-rw-rw-r--   1 fgretief fgretief 19191 Jul 24 21:30 Config.in
+-rw-rw-r--   1 fgretief fgretief 12072 Jul 26 22:07 Makefile
+drwxrwxr-x   3 fgretief fgretief  4096 Jul 26 22:13 binaries
+drwxrwxr-x   3 fgretief fgretief  4096 Jul 26 22:13 build_sh4
+drwxrwxr-x   2 fgretief fgretief  4096 Jul 25 22:50 dl
+drwxrwxr-x   4 fgretief fgretief  4096 Jul 22 13:08 docs
+drwxrwxr-x 212 fgretief fgretief  4096 Jul 24 21:30 package
+drwxrwxr-x   4 fgretief fgretief  4096 Jul 22 13:07 project
+drwxrwxr-x   3 fgretief fgretief  4096 Jul 26 22:13 project_build_sh4
+drwxrwxr-x  20 fgretief fgretief  4096 Jul 22 13:07 target
+drwxrwxr-x  14 fgretief fgretief  4096 Jul 22 13:07 toolchain
+drwxrwxr-x   4 fgretief fgretief  4096 Jul 26 22:14 toolchain_build_sh4
+
+~/src/buildroot$ ls -l build_sh4/
+total 4
+drwxrwxr-x 5 fgretief fgretief 4096 Jul 26 22:13 staging_dir
+
+~/src/buildroot$ ls -l project_build_sh4/
+total 4
+drwxrwxr-x 3 fgretief fgretief 4096 Jul 26 22:13 uclibc
+
+~/src/buildroot$ ls -l toolchain_build_sh4/
+total 8
+drwxrwxr-x 25 fgretief fgretief 4096 Jul 26 22:14 gcc-4.2.1
+drwxrwxr-x  9 fgretief fgretief 4096 Jul 26 22:15 gcc-4.2.1-initial
+
+-------------------------------------------------------------
+
+It looks like the error indicates to the fact that the kernel headers
+where
+never compiled/copied to their correct place.  Seems like a dependency is
+missing for kernel-headers and binutils.
+
+====================================================================== 
+
+---------------------------------------------------------------------- 
+ gururaj - 07-26-07 17:26  
+---------------------------------------------------------------------- 
+This is not just with GCC4.2.1. I am using latest Buildroot snapshot of
+250707 & building arm926 toolchain with uClibc 0.9.29 with GCC-4.2.0 & i
+am facing the same issue. This started for me since Buildroot Snapshot
+240707. At present Buildroot snapshot of 230707 works fine
+
+ 
+
+---------------------------------------------------------------------- 
+ bernhardf - 07-27-07 09:18  
+---------------------------------------------------------------------- 
+This should be fixed as of r19285. Please confirm. 
+
+Issue History 
+Date Modified   Username       Field                    Change               
+====================================================================== 
+07-26-07 13:57  fgretief       New Issue                                    
+07-26-07 13:57  fgretief       Status                   new => assigned     
+07-26-07 13:57  fgretief       Assigned To               => buildroot       
+07-26-07 17:22  gururaj        Note Added: 0002641                          
+07-26-07 17:26  gururaj        Note Edited: 0002641                         
+07-27-07 09:18  bernhardf      Note Added: 0002643                          
+======================================================================
