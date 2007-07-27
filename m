@@ -1,58 +1,64 @@
-From: ulf at uclibc.org <ulf@uclibc.org>
-Date: Fri, 27 Jul 2007 00:53:26 -0700 (PDT)
-Subject: [Buildroot] svn commit: trunk/buildroot/target/device/Atmel: Linux
-Message-ID: <20070727075326.DE0D2A495B@busybox.net>
+From: Claas Hilbrecht <claas+maillinglists.buildroot@jucs-kramkiste.de>
+Date: Fri, 27 Jul 2007 09:58:25 +0200
+Subject: [Buildroot] SVN Rev 19269 won't build
+Message-ID: <5041A110D5D200EDF64E7756@[192.168.83.121]>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Author: ulf
-Date: 2007-07-27 00:53:26 -0700 (Fri, 27 Jul 2007)
-New Revision: 19271
+Hello,
 
-Log:
-Use linux headers version, if linux is not defined
+just a note. The svn version 19269 won't build (on Debian etch). And not 
+somewhere deep inside but at a very early stage.
 
-Added:
-   trunk/buildroot/target/device/Atmel/Linux/linux.mk
+svn co svn://uclibc.org/trunk/buildroot
+cd buildroot
+make
+make CC="/usr/bin/gcc" MAKECMDGOALS="" \
+                -C package/config conf mconf
+make[1]: Entering directory 
+`/home/babel/buildroot/0.9.29/buildroot_org/buildroot/package/config'
+/usr/bin/gcc -DCURSES_LOC="<ncurses.h>" -DLOCALE -g -O2 -Dinline="" 
+-include foo.h -MM *.c > .depend 2>/dev/null || :
+make[1]: Leaving directory 
+`/home/babel/buildroot/0.9.29/buildroot_org/buildroot/package/config'
+make[1]: Entering directory 
+`/home/babel/buildroot/0.9.29/buildroot_org/buildroot/package/config'
+/usr/bin/gcc -DCURSES_LOC="<ncurses.h>" -DLOCALE -g -O2 -Dinline="" 
+-include foo.h  -c conf.c -o conf.o
+/usr/bin/gcc -DCURSES_LOC="<ncurses.h>" -DLOCALE -g -O2 -Dinline="" 
+-include foo.h  -c kxgettext.c -o kxgettext.o
+/usr/bin/gcc -DCURSES_LOC="<ncurses.h>" -DLOCALE -g -O2 -Dinline="" 
+-include foo.h -I. -c zconf.tab.c -o zconf.tab.o
+/usr/bin/gcc -DCURSES_LOC="<ncurses.h>" -DLOCALE -g -O2 -Dinline="" 
+-include foo.h  -lncurses conf.o  zconf.tab.o -o conf
+/usr/bin/gcc    -c -o mconf.o mconf.c
+In file included from mconf.c:27:
+lxdialog/dialog.h:32:10: error: #include expects "FILENAME" or <FILENAME>
+In file included from mconf.c:27:
+lxdialog/dialog.h:97: error: expected specifier-qualifier-list before 
+'chtype'
+lxdialog/dialog.h:187: error: expected ')' before '*' token
+lxdialog/dialog.h:193: error: expected ')' before '*' token
+lxdialog/dialog.h:195: error: expected ')' before '*' token
+lxdialog/dialog.h:196: error: expected ')' before '*' token
+lxdialog/dialog.h:197: error: expected ')' before '*' token
+lxdialog/dialog.h:198: error: expected ')' before '*' token
+lxdialog/dialog.h:200: error: expected ')' before '*' token
+mconf.c: In function 'conf':
+mconf.c:608: error: 'KEY_MAX' undeclared (first use in this function)
+mconf.c:608: error: (Each undeclared identifier is reported only once
+mconf.c:608: error: for each function it appears in.)
+mconf.c: In function 'conf_choice':
+mconf.c:759: error: 'KEY_MAX' undeclared (first use in this function)
+make[1]: *** [mconf.o] Error 1
+make[1]: Leaving directory 
+`/home/babel/buildroot/0.9.29/buildroot_org/buildroot/package/config'
+make: *** [package/config/mconf] Error 2
 
-Modified:
-   trunk/buildroot/target/device/Atmel/Makefile.in
 
-
-Changeset:
-Added: trunk/buildroot/target/device/Atmel/Linux/linux.mk
-===================================================================
-
-Modified: trunk/buildroot/target/device/Atmel/Makefile.in
-===================================================================
---- trunk/buildroot/target/device/Atmel/Makefile.in	2007-07-27 07:48:56 UTC (rev 19270)
-+++ trunk/buildroot/target/device/Atmel/Makefile.in	2007-07-27 07:53:26 UTC (rev 19271)
-@@ -18,8 +18,16 @@
- # These are set by Config.in
- DOWNLOAD_LINUX26_VERSION:=$(strip  $(subst ",, $(BR2_DOWNLOAD_LINUX26_VERSION)))
- #"))
-+ifeq ($(DOWNLOAD_LINUX26_VERSION),)
-+DOWNLOAD_LINUX26_VERSION=$(LINUX_HEADERS_VERSION)
-+endif
-+
- LINUX26_VERSION:=$(strip  $(subst ",, $(BR2_LINUX26_VERSION)))
- #"))
-+ifeq ($(LINUX26_VERSION),)
-+LINUX26_VERSION=$(LINUX_HEADERS_VERSION)
-+endif
-+
- LINUX26_RC_PATCH:=$(strip  $(subst ",, $(BR2_LINUX26_RC_PATCH)))
- #"))
- LINUX_BSP_PATCH:=$(strip  $(subst ",, $(BR2_LINUX_BSP_ATMEL_PATCH)))
-@@ -55,7 +63,7 @@
- UBOOT_CONFIG_FILE:=$(BOARD_PATH)/u-boot/$(UBOOT_BOARD_NAME).h
- 
- ifeq ($(strip $(BR2_PACKAGE_LINUX)),y)
--#include $(ATMEL_PATH)/Linux/linux.mk
-+include $(ATMEL_PATH)/Linux/linux.mk
- endif
- 
- ifeq ($(strip $(BR2_TARGET_UBOOT)),y)
+-- 
+ Claas Hilbrecht
+ http://www.jucs-kramkiste.de
