@@ -1,7 +1,7 @@
 From: ulf at uclibc.org <ulf@uclibc.org>
-Date: Sat, 28 Jul 2007 08:38:59 -0700 (PDT)
-Subject: [Buildroot] svn commit: trunk/buildroot/package/argus
-Message-ID: <20070728153859.345AEA47AD@busybox.net>
+Date: Sat, 28 Jul 2007 08:41:27 -0700 (PDT)
+Subject: [Buildroot] svn commit: trunk/buildroot/package/qtopia4
+Message-ID: <20070728154127.442A1A4942@busybox.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -9,27 +9,19 @@ Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
 Author: ulf
-Date: 2007-07-28 08:38:58 -0700 (Sat, 28 Jul 2007)
-New Revision: 19291
+Date: 2007-07-28 08:41:26 -0700 (Sat, 28 Jul 2007)
+New Revision: 19292
 
 Log:
-Build argus with correct options
+Add AVR32 patch for Qtopia
 
-Modified:
-   trunk/buildroot/package/argus/argus.mk
+Added:
+   trunk/buildroot/package/qtopia4/qtopia-4.2.2-add-avr32-arch.patch
 
 
 Changeset:
-Modified: trunk/buildroot/package/argus/argus.mk
-===================================================================
---- trunk/buildroot/package/argus/argus.mk	2007-07-28 15:37:11 UTC (rev 19290)
-+++ trunk/buildroot/package/argus/argus.mk	2007-07-28 15:38:58 UTC (rev 19291)
-@@ -45,7 +45,7 @@
- 	touch $@
- 
- $(ARGUS_DIR)/$(ARGUS_BINARY): $(ARGUS_DIR)/.configured
--	$(MAKE) -C $(ARGUS_DIR)
-+	$(MAKE) $(TARGET_CONFIGURE_OPTS) -C $(ARGUS_DIR)
- 
- $(TARGET_DIR)/$(ARGUS_TARGET_BINARY): $(ARGUS_DIR)/$(ARGUS_BINARY)
- 	cp -dpf $(ARGUS_DIR)/$(ARGUS_BINARY) $@
+
+Sorry, the patch is too large to include (6144 lines).
+Please use ViewCVS to see it!
+
+http://uclibc.org/cgi-bin/viewcvs.cgi?view=rev&root=svn&rev=19292
