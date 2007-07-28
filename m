@@ -1,7 +1,7 @@
 From: ulf at uclibc.org <ulf@uclibc.org>
-Date: Sat, 28 Jul 2007 09:02:08 -0700 (PDT)
-Subject: [Buildroot] svn commit: trunk/buildroot/package/libid3tag
-Message-ID: <20070728160208.65D1BA6044@busybox.net>
+Date: Sat, 28 Jul 2007 09:39:09 -0700 (PDT)
+Subject: [Buildroot] svn commit: trunk/buildroot/package/coreutils
+Message-ID: <20070728163909.73E2AA493A@busybox.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -9,26 +9,27 @@ Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
 Author: ulf
-Date: 2007-07-28 09:02:07 -0700 (Sat, 28 Jul 2007)
-New Revision: 19295
+Date: 2007-07-28 09:39:06 -0700 (Sat, 28 Jul 2007)
+New Revision: 19296
 
 Log:
-Add dependency to libmad for libid3tag
+Be more specific for coreutils patches
 
 Modified:
-   trunk/buildroot/package/libid3tag/Config.in
+   trunk/buildroot/package/coreutils/coreutils.mk
 
 
 Changeset:
-Modified: trunk/buildroot/package/libid3tag/Config.in
+Modified: trunk/buildroot/package/coreutils/coreutils.mk
 ===================================================================
---- trunk/buildroot/package/libid3tag/Config.in	2007-07-28 15:57:09 UTC (rev 19294)
-+++ trunk/buildroot/package/libid3tag/Config.in	2007-07-28 16:02:07 UTC (rev 19295)
-@@ -2,6 +2,7 @@
- 	bool "libid3tag"
- 	default n
- 	select BR2_PACKAGE_ZLIB
-+	depends on BR2_PACKAGE_LIBMAD
- 	help
- 	  ID3 tag reading library from the MAD project.
+--- trunk/buildroot/package/coreutils/coreutils.mk	2007-07-28 16:02:07 UTC (rev 19295)
++++ trunk/buildroot/package/coreutils/coreutils.mk	2007-07-28 16:39:06 UTC (rev 19296)
+@@ -21,7 +21,7 @@
  
+ $(COREUTILS_DIR)/.unpacked: $(DL_DIR)/$(COREUTILS_SOURCE)
+ 	$(COREUTILS_CAT) $(DL_DIR)/$(COREUTILS_SOURCE) | tar -C $(BUILD_DIR) $(TAR_OPTIONS) -
+-	toolchain/patch-kernel.sh $(COREUTILS_DIR) package/coreutils/ \*.patch
++	toolchain/patch-kernel.sh $(COREUTILS_DIR) package/coreutils/ coreutils\*.patch
+ 	touch $@
+ 
+ $(COREUTILS_DIR)/.configured: $(COREUTILS_DIR)/.unpacked
