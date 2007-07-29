@@ -1,7 +1,7 @@
 From: ulf at uclibc.org <ulf@uclibc.org>
-Date: Sun, 29 Jul 2007 10:40:42 -0700 (PDT)
-Subject: [Buildroot] svn commit: trunk/buildroot/toolchain/uClibc
-Message-ID: <20070729174042.E896FA4659@busybox.net>
+Date: Sun, 29 Jul 2007 10:43:50 -0700 (PDT)
+Subject: [Buildroot] svn commit: trunk/buildroot/toolchain/gcc
+Message-ID: <20070729174350.EF22BA4508@busybox.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -9,35 +9,39 @@ Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
 Author: ulf
-Date: 2007-07-29 10:40:42 -0700 (Sun, 29 Jul 2007)
-New Revision: 19331
+Date: 2007-07-29 10:43:50 -0700 (Sun, 29 Jul 2007)
+New Revision: 19332
 
 Log:
-uClibc config for AVR32
+gcc target config for AVR32
 
 Modified:
-   trunk/buildroot/toolchain/uClibc/Config.in
+   trunk/buildroot/toolchain/gcc/Config.in.2
 
 
 Changeset:
-Modified: trunk/buildroot/toolchain/uClibc/Config.in
+Modified: trunk/buildroot/toolchain/gcc/Config.in.2
 ===================================================================
---- trunk/buildroot/toolchain/uClibc/Config.in	2007-07-29 17:36:45 UTC (rev 19330)
-+++ trunk/buildroot/toolchain/uClibc/Config.in	2007-07-29 17:40:42 UTC (rev 19331)
-@@ -14,13 +14,15 @@
- 		bool "uClibc 0.9.28"
+--- trunk/buildroot/toolchain/gcc/Config.in.2	2007-07-29 17:40:42 UTC (rev 19331)
++++ trunk/buildroot/toolchain/gcc/Config.in.2	2007-07-29 17:43:50 UTC (rev 19332)
+@@ -5,9 +5,20 @@
+ 	  If you want the target system to be able to run 
+ 	  binutils/gcc and compile native code, say Y here.
  
- 	config BR2_UCLIBC_VERSION_0_9_28_3
--		depends BR2_DEPRECATED
-+		depends BR2_avr32 || BR2_DEPRECATED
- 		bool "uClibc 0.9.28.3"
- 
- 	config BR2_UCLIBC_VERSION_0_9_29
-+		depends !BR2_avr32
- 		bool "uClibc 0.9.29"
- 
- 	config BR2_UCLIBC_VERSION_SNAPSHOT
-+		depends !BR2_avr32
- 		bool "daily snapshot"
- 
- endchoice
++config BR2_GCC_TARGET_AVR32_CONFIGURATION
++	bool "Enable default AVR32 GCC configuration"
++	default y
++	depends BR2_avr32 && BR2_PACKAGE_GCC_TARGET
++	help
++	  For the AVR32 platform there is some configuration which are not
++	  supported.
++
++	  Currently this will add "--disable-libmudflap" to configure.
++
+ config BR2_EXTRA_TARGET_GCC_CONFIG_OPTIONS
+ 	string "Additional target gcc options"
+ 	default ""
++	depends BR2_PACKAGE_GCC_TARGET
+ 	help
+ 	  Any additional target gcc options you may want to include....
+ 	  Including, but not limited to --disable-checking etc.
