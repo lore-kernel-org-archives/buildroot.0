@@ -1,7 +1,7 @@
 From: ulf at uclibc.org <ulf@uclibc.org>
-Date: Sun, 29 Jul 2007 00:22:12 -0700 (PDT)
+Date: Sun, 29 Jul 2007 00:32:45 -0700 (PDT)
 Subject: [Buildroot] svn commit: trunk/buildroot/target/device/Atmel
-Message-ID: <20070729072212.9FC23A60D9@busybox.net>
+Message-ID: <20070729073245.36FB5A461B@busybox.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -9,89 +9,64 @@ Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
 Author: ulf
-Date: 2007-07-29 00:22:12 -0700 (Sun, 29 Jul 2007)
-New Revision: 19320
+Date: 2007-07-29 00:32:44 -0700 (Sun, 29 Jul 2007)
+New Revision: 19321
 
 Log:
-Update AVR32 target configuration
+Cleanup of Atmel Makefile
 
 Modified:
-   trunk/buildroot/target/device/Atmel/AVR32_Config.in
+   trunk/buildroot/target/device/Atmel/Makefile.in
 
 
 Changeset:
-Modified: trunk/buildroot/target/device/Atmel/AVR32_Config.in
+Modified: trunk/buildroot/target/device/Atmel/Makefile.in
 ===================================================================
---- trunk/buildroot/target/device/Atmel/AVR32_Config.in	2007-07-29 07:19:44 UTC (rev 19319)
-+++ trunk/buildroot/target/device/Atmel/AVR32_Config.in	2007-07-29 07:22:12 UTC (rev 19320)
-@@ -2,7 +2,7 @@
- 	depends BR2_avr32
+--- trunk/buildroot/target/device/Atmel/Makefile.in	2007-07-29 07:22:12 UTC (rev 19320)
++++ trunk/buildroot/target/device/Atmel/Makefile.in	2007-07-29 07:32:44 UTC (rev 19321)
+@@ -39,7 +39,7 @@
+ # This should be part of target/linux/Makefile.in
+ LINUX26_BUILD_DIR:=$(PROJECT_BUILD_DIR)
  
- config BR2_TARGET_AVR32
--	bool "Board support for the Atmel AP7000 range of microprocessors"
-+	bool "Board support for the Atmel AP7 microprocessors"
- 	depends BR2_avr32
- 	default n
- 	help
-@@ -33,24 +33,6 @@
- 	help
- 	  Atmel AT32AP7002 AVR32 based systems
+-LINUX26_BINLOC=$(LINUX26_FORMAT)
++#LINUX26_BINLOC=$(LINUX26_FORMAT)
+ #LINUX26_BINLOC:=$(BINARIES_DIR)/$(LINUX26_KERNEL)
  
--config BR2_TARGET_AT32AP7200
--	bool "Board support for the Atmel AT32AP7200 Microprocessor"
--	depends BR2_TARGET_AVR32
--	help
--	  Atmel AT32AP7200 AVR32 based systems
--
--config BR2_TARGET_AT32AP7010
--	bool "Board support for the Atmel AT32AP7010 Microprocessor"
--	depends BR2_TARGET_AVR32
--	help
--	  Atmel AT32AP7010 AVR32 based systems
--
--config BR2_TARGET_AT32AP7020
--	bool "Board support for the Atmel AT32AP7020 Microprocessor"
--	depends BR2_TARGET_AVR32
--	help
--	  Atmel AT32AP7020 AVR32 based systems
--
- endchoice
+ LINUX26_COPYTO:=/tftpboot
+@@ -51,7 +51,7 @@
+ UBOOT_BOARD_NAME:=$(BOARD_NAME)
+ DFB_BOARD_NAME:=$(BOARD_NAME)
  
- comment "Development Board support"
-@@ -59,31 +41,22 @@
- choice
- 	prompt "Development Board support"
- 	depends BR2_TARGET_AVR32
--	default BR2_TARGET_STK1000
-+	default BR2_TARGET_AVR32_ATSTK1002
- 	help
- 	  Select the specific AVR32 development board you wish to use.
+-BR2_PACKAGE_BUSYBOX_CONFIG:=$(BR2_BOARD_PATH)/busybox-1.6.0.config
++BR2_PACKAGE_BUSYBOX_CONFIG:=$(BR2_BOARD_PATH)/busybox-$(BR2_BUSYBOX_VERSION).config
  
--config BR2_TARGET_STK1002
--	bool "Atmel STK1000/2 AVR32 Development Board Support"
-+config BR2_TARGET_AVR32_ATSTK1002
-+	bool "Atmel ATSTK1000/2 AVR32 Development Board Support"
- 	depends BR2_TARGET_AT32AP7000
- 	select BR2_PACKAGE_LINUX
- 	help
--	  The Atmel STK1000 AVR32 Development Board
-+	  The Atmel ATSTK1000 AVR32 Development Board
  
--config BR2_TARGET_AVR32_GATEWAY
-+config BR2_TARGET_AVR32_ATNGW100
- 	bool "Atmel AVR32 Network Gateway Board Support"
- 	depends BR2_TARGET_AT32AP7000
- 	select BR2_PACKAGE_LINUX
- 	help
- 	  The Atmel AVR32 Network Gateway Board
+ # Update things in board specific makefiles
+@@ -78,17 +78,15 @@
+ include $(ATMEL_PATH)/at91bootstrap/at91bootstrap.mk
+ endif
  
--config BR2_TARGET_AVR32_COM
--	bool "Atmel AVR32 Computer On Module Support"
--	depends BR2_TARGET_AT32AP7200
--	select BR2_PACKAGE_LINUX
--	help
--	  The Atmel AVR32 Computer On Module (Not Yet Implemented)
++atmel_status:
++	@echo PROJECT_BUILD_DIR=$(PROJECT_BUILD_DIR)
++	@echo BOARD_NAME=$(BOARD_NAME)
++	@echo BR2_BOARD_PATH=$(BR2_BOARD_PATH)
++	@echo BR2_MAJOR_MINOR=$(BR2_LINUX_MAJOR_VERSION)$(BR2_LINUX_MINOR_VERSION)
++	@echo MAJOR_MINOR=$(LINUX_MAJOR_VER)$(LINUX_MINOR_VER)
++	@echo DOWNLOAD_LINUX26_VERSION=$(DOWNLOAD_LINUX26_VERSION)
++	@echo LINUX_SOURCE=$(LINUX_SOURCE)
++	@echo TARGETS=$(TARGETS)
+ 
+-testa:
+-	echo	boardname=$(BOARD_NAME)
+-	echo 	boardpath=$(BR2_BOARD_PATH)
+-	echo 	BR2_MAJOR_MINOR=$(BR2_LINUX_MAJOR_VERSION)$(BR2_LINUX_MINOR_VERSION)
+-	echo 	MAJOR_MINOR=$(LINUX_MAJOR_VER)$(LINUX_MINOR_VER)
+-	echo	DOWNLOAD_LINUX_VERSION=$(DOWNLOAD_LINUX26_VERSION)
+-	echo	LINUX_SOURCE=$(LINUX_SOURCE)
+-	echo	$(TESTA)
+-	echo	$(TESTA2)
+-	echo	$(TARGETS)
 -
- endchoice
--
--
+-#TARGETS+=testa
++#TARGETS+=atmel_status
+ endif
