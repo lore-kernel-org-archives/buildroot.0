@@ -1,27 +1,45 @@
-From: Cristian Ionescu-Idbohrn <cristian.ionescu-idbohrn@axis.com>
-Date: Sun, 29 Jul 2007 01:25:18 +0200 (CEST)
-Subject: [Buildroot] something (slang?) creates
-	buildroot/build_i486/staging_dir/include
-In-Reply-To: <0707290103020.8510@somehost>
-References: <0707290103020.8510@somehost>
-Message-ID: <0707290121380.8510@somehost>
+From: ulf at uclibc.org <ulf@uclibc.org>
+Date: Sat, 28 Jul 2007 23:51:36 -0700 (PDT)
+Subject: [Buildroot] svn commit: trunk/buildroot
+Message-ID: <20070729065136.03E16A456C@busybox.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Sun, 29 Jul 2007, Cristian Ionescu-Idbohrn wrote:
+Author: ulf
+Date: 2007-07-28 23:51:35 -0700 (Sat, 28 Jul 2007)
+New Revision: 19311
 
-> See attachment, and that may be screwing up things.
-> See also my previous posts.
+Log:
+Use full AVR32 partname
 
-Moving buildroot/build_i486/staging_dir/include away will allow libpcap,
-tcpdump, wget and which to build. Though I still have troubles building
-gawk and util-linux :(
+Modified:
+   trunk/buildroot/Config.in
 
 
-Cheers,
-
--- 
-Cristian
+Changeset:
+Modified: trunk/buildroot/Config.in
+===================================================================
+--- trunk/buildroot/Config.in	2007-07-28 23:17:27 UTC (rev 19310)
++++ trunk/buildroot/Config.in	2007-07-29 06:51:35 UTC (rev 19311)
+@@ -126,12 +126,12 @@
+ choice
+ 	prompt "Target Architecture Variant"
+ 	depends BR2_avr32
+-config BR2_ap7000
+-	bool "AP7000"
+-config BR2_ap7001
+-	bool "AP7001"
+-config BR2_ap7002
+-	bool "AP7002"
++config BR2_at32ap7000
++	bool "AT32AP7000"
++config BR2_at32ap7001
++	bool "AT32AP7001"
++config BR2_at32ap7002
++	bool "AT32AP7002"
+ endchoice
+ 
+ 
