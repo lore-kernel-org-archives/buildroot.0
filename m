@@ -1,7 +1,7 @@
 From: ulf at uclibc.org <ulf@uclibc.org>
-Date: Sat, 28 Jul 2007 23:51:36 -0700 (PDT)
-Subject: [Buildroot] svn commit: trunk/buildroot
-Message-ID: <20070729065136.03E16A456C@busybox.net>
+Date: Sun, 29 Jul 2007 00:05:16 -0700 (PDT)
+Subject: [Buildroot] svn commit: trunk/buildroot/target/device/Atmel/u-boot
+Message-ID: <20070729070516.A15AEA461B@busybox.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -9,37 +9,40 @@ Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
 Author: ulf
-Date: 2007-07-28 23:51:35 -0700 (Sat, 28 Jul 2007)
-New Revision: 19311
+Date: 2007-07-29 00:05:13 -0700 (Sun, 29 Jul 2007)
+New Revision: 19312
 
 Log:
-Use full AVR32 partname
+Reintroduce ATMEL_MIRROR in u-boot
 
 Modified:
-   trunk/buildroot/Config.in
+   trunk/buildroot/target/device/Atmel/u-boot/u-boot.mk
 
 
 Changeset:
-Modified: trunk/buildroot/Config.in
+Modified: trunk/buildroot/target/device/Atmel/u-boot/u-boot.mk
 ===================================================================
---- trunk/buildroot/Config.in	2007-07-28 23:17:27 UTC (rev 19310)
-+++ trunk/buildroot/Config.in	2007-07-29 06:51:35 UTC (rev 19311)
-@@ -126,12 +126,12 @@
- choice
- 	prompt "Target Architecture Variant"
- 	depends BR2_avr32
--config BR2_ap7000
--	bool "AP7000"
--config BR2_ap7001
--	bool "AP7001"
--config BR2_ap7002
--	bool "AP7002"
-+config BR2_at32ap7000
-+	bool "AT32AP7000"
-+config BR2_at32ap7001
-+	bool "AT32AP7001"
-+config BR2_at32ap7002
-+	bool "AT32AP7002"
- endchoice
+--- trunk/buildroot/target/device/Atmel/u-boot/u-boot.mk	2007-07-29 06:51:35 UTC (rev 19311)
++++ trunk/buildroot/target/device/Atmel/u-boot/u-boot.mk	2007-07-29 07:05:13 UTC (rev 19312)
+@@ -8,6 +8,8 @@
+ #
+ #############################################################
+ UBOOT_VERSION:=1.2.0-atmel
++ATMEL_MIRROR:=$(strip  $(subst ",, $(BR2_ATMEL_MIRROR)))
++#"))
+ UBOOT_DIR:=$(BUILD_DIR)/u-boot-$(UBOOT_VERSION)
+ UBOOT_BUILD_DIR:=$(PROJECT_BUILD_DIR)/u-boot-$(UBOOT_VERSION)
+ UBOOT_SOURCE:=u-boot-$(UBOOT_VERSION).tar.bz2
+@@ -41,10 +43,10 @@
+ UBOOT_CUSTOM:=$(UBOOT_DIR)/include/custom.h
  
+ $(DL_DIR)/$(UBOOT_SOURCE):
+-	 $(WGET) -P $(DL_DIR) $(UBOOT_SITE)/$(UBOOT_SOURCE)
++	$(WGET) -P $(DL_DIR) $(UBOOT_SITE)/$(UBOOT_SOURCE)
  
+ $(DL_DIR)/$(UBOOT_PATCH_SOURCE):
+-	 $(WGET) -P $(DL_DIR) $(UBOOT_PATCH_SITE)/$(UBOOT_PATCH_SOURCE)
++	$(WGET) -P $(DL_DIR) $(UBOOT_PATCH_SITE)/$(UBOOT_PATCH_SOURCE)
+ 
+ $(UBOOT_DIR)/.unpacked: $(DL_DIR)/$(UBOOT_SOURCE)
+ 	mkdir -p   $(BUILD_DIR)
