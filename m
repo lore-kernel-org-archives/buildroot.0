@@ -1,8 +1,9 @@
-From: bugs at busybox.net <bugs@busybox.net>
-Date: Sun, 29 Jul 2007 14:03:02 -0700
-Subject: [Buildroot] [buildroot 0001448]: buildroot cannot build gcc due to
-	wrong option passed to 'exec'
-Message-ID: <5e787b1988a5aef864875092baf11460@bugs.uclibc.org>
+From: Hebbar <gururajakr@sanyo.co.in>
+Date: Sun, 29 Jul 2007 16:00:38 -0700 (PDT)
+Subject: [Buildroot] fail running the 'makeboard.sh' script
+In-Reply-To: <OF3338098B.EEF707AE-ONC2257327.00424FA7-C3257327.003F2BA7@visonic.com>
+References: <OF3338098B.EEF707AE-ONC2257327.00424FA7-C3257327.003F2BA7@visonic.com>
+Message-ID: <11856034.post@talk.nabble.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -10,62 +11,13 @@ Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
 
-A NOTE has been added to this issue. 
-====================================================================== 
-http://busybox.net/bugs/view.php?id=1448 
-====================================================================== 
-Reported By:                pavko
-Assigned To:                buildroot
-====================================================================== 
-Project:                    buildroot
-Issue ID:                   1448
-Category:                   Architecture Specific
-Reproducibility:            always
-Severity:                   major
-Priority:                   normal
-Status:                     assigned
-====================================================================== 
-Date Submitted:             07-28-2007 05:22 PDT
-Last Modified:              07-29-2007 14:03 PDT
-====================================================================== 
-Summary:                    buildroot cannot build gcc due to wrong option
-passed to 'exec'
-Description: 
-probably key point is:
-buildroot_svn/toolchain_build_i686/gcc-4.2.1-initial/./gcc/as: line 2:
-exec: -Q: invalid option
+Hi,
 
-tried with gcc-4.2.0 with the same result.
-====================================================================== 
+I too had the same issue before. after updating to latest snapshot i got it
+resolved. hope it helps.
 
----------------------------------------------------------------------- 
- pavko - 07-29-07 14:03  
----------------------------------------------------------------------- 
-It seems that file:
-/home/pavko/buildroot_svn/toolchain_build_i686/gcc-4.2.1-initial/gcc/as
-during initial stage is incorrectly initialized to:
-
-#!/bin/bash                                                               
-                                                                           
-    
-exec "$@" 
-
-After manual change to:
-
-#!/bin/bash                                                               
-                                                                           
-    
-exec
-/home/pavko/buildroot_svn/build_i686/staging_dir/usr/i686-linux-uclibc/bin/as
-"$@"
-
-compilation was successful 
-
-Issue History 
-Date Modified   Username       Field                    Change               
-====================================================================== 
-07-28-07 05:22  pavko          New Issue                                    
-07-28-07 05:22  pavko          Status                   new => assigned     
-07-28-07 05:22  pavko          Assigned To               => buildroot       
-07-29-07 14:03  pavko          Note Added: 0002644                          
-======================================================================
+Regards
+Gururaja
+-- 
+View this message in context: http://www.nabble.com/fail-running-the-%27makeboard.sh%27-script-tf4165450.html#a11856034
+Sent from the BuildRoot mailing list archive at Nabble.com.
