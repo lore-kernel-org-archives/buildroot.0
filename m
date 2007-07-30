@@ -1,59 +1,56 @@
-From: Bernhard Fischer <rep.dot.nop@gmail.com>
-Date: Mon, 30 Jul 2007 14:43:23 +0200
-Subject: [Buildroot] Qtopia4 fails building - target stage tries to
-	run	target binaries on build machine
-In-Reply-To: <1185796725.27015.7.camel@localhost.localdomain>
-References: <1185796725.27015.7.camel@localhost.localdomain>
-Message-ID: <20070730124323.GA25065@aon.at>
+From: bugs at busybox.net <bugs@busybox.net>
+Date: Mon, 30 Jul 2007 06:54:23 -0700
+Subject: [Buildroot] [buildroot 0001450]: copy of system header files fails
+Message-ID: <cdcda03829651f13ee68e703f66d142f@busybox.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Mon, Jul 30, 2007 at 01:58:45PM +0200, Hans-Christian Egtvedt wrote:
->I am trying to look into how to "fix" Qtopia 4 in Buildroot, at least it
->does not compile for me (snapshot 20070717).
->
->The makefile seems to generate target specific binaries in build_<arch>
->directory, and host specific binaries in toolchain_build_<arch>.
->
->As I understand the toolchain_build_<arch> binaries should be installed
->to $(STAGING_DIR) and the build_<arch> binaries should be installed to
->$(TARGET_ROOT)?
 
-I don't think that this is an accurate description.
+The following issue has been SUBMITTED. 
+====================================================================== 
+http://busybox.net/bugs/view.php?id=1450 
+====================================================================== 
+Reported By:                drm
+Assigned To:                buildroot
+====================================================================== 
+Project:                    buildroot
+Issue ID:                   1450
+Category:                   Architecture Specific
+Reproducibility:            always
+Severity:                   minor
+Priority:                   normal
+Status:                     assigned
+====================================================================== 
+Date Submitted:             07-30-2007 06:54 PDT
+Last Modified:              07-30-2007 06:54 PDT
+====================================================================== 
+Summary:                    copy of system header files fails
+Description: 
+The copying of the system header to the final destination fails to make
+copies of all subdirectories
+Specifically the command:
+cp -pLR /home/../toolchain_build_arm_nofpu/linux/include/asm
+/opt/arm-gcc/3.4.4/usr/include/
 
-<p>
-The staging_dir is holding intermediate files (headers, libraries) that
-are prerequisites of other packages.
-The target_dir is the final root filesystem. The target_dir will usually
-not contain headers nor intermediate libraries (.ar archives or
-intermediate libs) that are not needed on the target.
-</p>
-Helper applications that are ment to be run on the host are compiled in
-&lt;packagename&gt;-host while cross-compiled packages, libraries,
-binaries are compiled in &lt;packagename&gt;.
-<br>
-The host-binaries will either be ran directly in the place they were
-compile or will be installed into toolchain_build_ARCH/bin .
-Applications that are ment to be run on the host but have prerequisites
-that are built in buildroot shall use the &lt;packagename&gt;-host
-directories for the prerequisite libraries, if possible (e.g.
-<code>--with-gettext=/there/toolchain_build_i386/gettext-0.00-host</code>
-)
-If a prerequisite host-library has to be installed before it can be
-used, then it should be installed into target_dir_ARCH/packagename
-(e.g. libgmp which is needed for the cross-compiler:
---with-gmp=/there/toolchain_build_i386/gmp).
->
->Have I understood the build setup correctly?
+gives the error message:
+cp: will not create hard link
+`/opt/arm-gcc/3.4.4/usr/include/asm/proc-armv' to directory
+`/opt/arm-gcc/3.4.4/usr/include/asm/proc'
+cp: will not create hard link `/opt/arm-gcc/3.4.4/usr/include/asm/arch' to
+directory `/opt/arm-gcc/3.4.4/usr/include/asm/arch-ebsa285'
 
-See
-http://buildroot.uclibc.org/buildroot.html
-and look for "staging_dir"
+The errors come from symbolic links to directories which the copy command
+does not want to process.
 
-Perhaps somebody will flesh out the above and add it to the
-abovementioned URL (don't have time ATM).
+====================================================================== 
 
-HTH,
+Issue History 
+Date Modified   Username       Field                    Change               
+====================================================================== 
+07-30-07 06:54  drm            New Issue                                    
+07-30-07 06:54  drm            Status                   new => assigned     
+07-30-07 06:54  drm            Assigned To               => buildroot       
+======================================================================
