@@ -1,56 +1,43 @@
-From: bugs at busybox.net <bugs@busybox.net>
-Date: Mon, 30 Jul 2007 06:54:23 -0700
-Subject: [Buildroot] [buildroot 0001450]: copy of system header files fails
-Message-ID: <cdcda03829651f13ee68e703f66d142f@busybox.net>
+From: aldot at uclibc.org <aldot@uclibc.org>
+Date: Mon, 30 Jul 2007 07:22:27 -0700 (PDT)
+Subject: [Buildroot] svn commit: trunk/buildroot/target/ext2
+Message-ID: <20070730142227.7F94CA4680@busybox.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+Author: aldot
+Date: 2007-07-30 07:22:25 -0700 (Mon, 30 Jul 2007)
+New Revision: 19340
 
-The following issue has been SUBMITTED. 
-====================================================================== 
-http://busybox.net/bugs/view.php?id=1450 
-====================================================================== 
-Reported By:                drm
-Assigned To:                buildroot
-====================================================================== 
-Project:                    buildroot
-Issue ID:                   1450
-Category:                   Architecture Specific
-Reproducibility:            always
-Severity:                   minor
-Priority:                   normal
-Status:                     assigned
-====================================================================== 
-Date Submitted:             07-30-2007 06:54 PDT
-Last Modified:              07-30-2007 06:54 PDT
-====================================================================== 
-Summary:                    copy of system header files fails
-Description: 
-The copying of the system header to the final destination fails to make
-copies of all subdirectories
-Specifically the command:
-cp -pLR /home/../toolchain_build_arm_nofpu/linux/include/asm
-/opt/arm-gcc/3.4.4/usr/include/
+Log:
+- remove stray ';'
 
-gives the error message:
-cp: will not create hard link
-`/opt/arm-gcc/3.4.4/usr/include/asm/proc-armv' to directory
-`/opt/arm-gcc/3.4.4/usr/include/asm/proc'
-cp: will not create hard link `/opt/arm-gcc/3.4.4/usr/include/asm/arch' to
-directory `/opt/arm-gcc/3.4.4/usr/include/asm/arch-ebsa285'
 
-The errors come from symbolic links to directories which the copy command
-does not want to process.
+Modified:
+   trunk/buildroot/target/ext2/ext2root.mk
 
-====================================================================== 
 
-Issue History 
-Date Modified   Username       Field                    Change               
-====================================================================== 
-07-30-07 06:54  drm            New Issue                                    
-07-30-07 06:54  drm            Status                   new => assigned     
-07-30-07 06:54  drm            Assigned To               => buildroot       
-======================================================================
+Changeset:
+Modified: trunk/buildroot/target/ext2/ext2root.mk
+===================================================================
+--- trunk/buildroot/target/ext2/ext2root.mk	2007-07-30 12:37:16 UTC (rev 19339)
++++ trunk/buildroot/target/ext2/ext2root.mk	2007-07-30 14:22:25 UTC (rev 19340)
+@@ -87,12 +87,13 @@
+ endif
+ 
+ $(EXT2_BASE): host-fakeroot makedevs genext2fs
+-	- at find $(TARGET_DIR) -type f -perm +111 | xargs $(STRIP) 2>/dev/null || true;
++	- at find $(TARGET_DIR) -type f -perm +111 | xargs $(STRIP) 2>/dev/null || true
+ 	@rm -rf $(TARGET_DIR)/usr/man
+ 	@rm -rf $(TARGET_DIR)/usr/share/man
+ 	@rm -rf $(TARGET_DIR)/usr/info
+ 	@test -d $(TARGET_DIR)/usr/share && \
+-		rmdir -p --ignore-fail-on-non-empty $(TARGET_DIR)/usr/share
++		rmdir -p --ignore-fail-on-non-empty $(TARGET_DIR)/usr/share || \
++		true
+ 	-/sbin/ldconfig -r $(TARGET_DIR) 2>/dev/null
+ 	# Use fakeroot to pretend all target binaries are owned by root
+ 	rm -f $(STAGING_DIR)/_fakeroot.$(notdir $(EXT2_TARGET))
