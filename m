@@ -1,28 +1,27 @@
-From: ulf at uclibc.org <ulf@uclibc.org>
-Date: Tue, 31 Jul 2007 16:28:24 -0700 (PDT)
-Subject: [Buildroot] svn commit: trunk/buildroot/toolchain/kernel-headers
-Message-ID: <20070731232824.407DEA605E@busybox.net>
+From: Cristian Ionescu-Idbohrn <cristian.ionescu-idbohrn@axis.com>
+Date: Mon, 30 Jul 2007 21:13:03 +0200 (CEST)
+Subject: [Buildroot] [patch] $(STAGING_DIR)/include ->
+	$(STAGING_DIR)/usr/include
+Message-ID: <0707302108520.17391@somehost>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Author: ulf
-Date: 2007-07-31 16:28:22 -0700 (Tue, 31 Jul 2007)
-New Revision: 19373
-
-Log:
-Revert Atmel patches for now
-
-Removed:
-   trunk/buildroot/toolchain/kernel-headers/linux-2.6.21.5-003-atmel.1-avr32-updates.patch
-   trunk/buildroot/toolchain/kernel-headers/linux-2.6.22.1-003-atmel.3-avr32-updates.patch
+Whitespace-cleanup too.
+--includedir=/include -> --includedir=/usr/include and similar with
+$(STAGING_DIR) mixed in there.
 
 
-Changeset:
+Cheers,
 
-Sorry, the patch is too large to include (32603 lines).
-Please use ViewCVS to see it!
-
-http://uclibc.org/cgi-bin/viewcvs.cgi?view=rev&root=svn&rev=19373
+-- 
+Cristian
+-------------- next part --------------
+A non-text attachment was scrubbed...
+Name: br.mk.patch
+Type: text/x-diff
+Size: 31275 bytes
+Desc: 
+Url : http://busybox.net/lists/buildroot/attachments/20070730/7b3246ff/attachment-0001.bin 
