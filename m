@@ -1,44 +1,56 @@
-From: Bernhard Fischer <rep.dot.nop@gmail.com>
-Date: Mon, 30 Jul 2007 11:52:55 +0200
-Subject: [Buildroot] unpopular whitespace in makefile
-In-Reply-To: <0707282137590.8510@somehost>
-References: <0707282137590.8510@somehost>
-Message-ID: <20070730095255.GG23273@aon.at>
+From: aldot at uclibc.org <aldot@uclibc.org>
+Date: Mon, 30 Jul 2007 03:06:25 -0700 (PDT)
+Subject: [Buildroot] svn commit: trunk/buildroot/package/slang
+Message-ID: <20070730100625.824E0A606F@busybox.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Sat, Jul 28, 2007 at 09:39:36PM +0200, Cristian Ionescu-Idbohrn wrote:
->Cheers,
->
->-- 
->Cristian
->Index: package/libid3tag/libid3tag.mk
->===================================================================
->--- package/libid3tag/libid3tag.mk	(revision 19307)
->+++ package/libid3tag/libid3tag.mk	(working copy)
->@@ -36,7 +36,7 @@
-> 	touch $@
-> 
-> $(LIBID3TAG_DIR)/src/.libs/$(LIBID3TAG_BIN): $(LIBID3TAG_DIR)/.configured
->-       $(MAKE) -C $(LIBID3TAG_DIR)
->+	$(MAKE) -C $(LIBID3TAG_DIR)
-> 	$(MAKE) DESTDIR=$(STAGING_DIR) -C $(LIBID3TAG_DIR) install
-> 
-> $(STAGING_DIR)/$(LIBID3TAG_TARGET_BIN): $(LIBID3TAG_DIR)/src/.libs/$(LIBID3TAG_BIN)
->@@ -44,8 +44,8 @@
-> 	$(SED) "s,^libdir=.*,libdir=\'$(STAGING_DIR)/usr/lib\',g" $(STAGING_DIR)/usr/lib/libid3tag.la
-> 
-> $(TARGET_DIR)/$(LIBID3TAG_TARGET_BIN): $(STAGING_DIR)/$(LIBID3TAG_TARGET_BIN)
->-       cp -dpf  $(STAGING_DIR)/usr/lib/libid3tag.so*  $(TARGET_DIR)/usr/lib/
->-       -$(STRIP) --strip-unneeded $(TARGET_DIR)/usr/lib/libid3tag.so*
->+	cp -dpf $(STAGING_DIR)/usr/lib/libid3tag.so* $(TARGET_DIR)/usr/lib/
->+	-$(STRIP) --strip-unneeded $(TARGET_DIR)/usr/lib/libid3tag.so*
-> 
-> libid3tag: uclibc libmad $(TARGET_DIR)/$(LIBID3TAG_TARGET_BIN)
+Author: aldot
+Date: 2007-07-30 03:06:24 -0700 (Mon, 30 Jul 2007)
+New Revision: 19335
 
-Looks like this was already committed but not ACKed on the list.
+Log:
+- use correct dirs for the staging_dir (Cristian Ionescu-Idbohrn)
 
-Thanks for the patch, Christian.
+
+Modified:
+   trunk/buildroot/package/slang/slang.mk
+
+
+Changeset:
+Modified: trunk/buildroot/package/slang/slang.mk
+===================================================================
+--- trunk/buildroot/package/slang/slang.mk	2007-07-29 17:51:32 UTC (rev 19334)
++++ trunk/buildroot/package/slang/slang.mk	2007-07-30 10:06:24 UTC (rev 19335)
+@@ -21,20 +21,19 @@
+ 
+ $(SLANG_DIR)/libslang.so: $(SLANG_DIR)
+ 	$(MAKE1) CFLAGS="-Os -g $(SLANG_CFLAGS)" CC=$(TARGET_CC) -C $(SLANG_DIR)
+-	touch -c $(SLANG_DIR)/libslang.so;
+ 
+ $(STAGING_DIR)/lib/libslang.so.1: $(SLANG_DIR)/libslang.so
+-	cp -a $(SLANG_DIR)/libslang.a $(STAGING_DIR)/lib;
+-	cp -a $(SLANG_DIR)/libslang.so $(STAGING_DIR)/lib;
+-	cp -a $(SLANG_DIR)/slang.h $(STAGING_DIR)/include;
+-	cp -a $(SLANG_DIR)/slcurses.h $(STAGING_DIR)/include;
+-	(cd $(STAGING_DIR)/lib; ln -fs libslang.so libslang.so.1);
+-	touch -c $(STAGING_DIR)/lib/libslang.so.1
++	cp -dpf $(SLANG_DIR)/libslang.a $(STAGING_DIR)/lib
++	cp -dpf $(SLANG_DIR)/libslang.so $(STAGING_DIR)/lib
++	cp -dpf $(SLANG_DIR)/slang.h $(STAGING_DIR)/usr/include
++	cp -dpf $(SLANG_DIR)/slcurses.h $(STAGING_DIR)/usr/include
++	(cd $(STAGING_DIR)/lib; ln -fs libslang.so libslang.so.1)
++	touch -c $@
+ 
+ $(TARGET_DIR)/lib/libslang.so.1: $(STAGING_DIR)/lib/libslang.so.1
+-	cp -a $(STAGING_DIR)/lib/libslang.so* $(TARGET_DIR)/lib;
++	cp -dpf $(STAGING_DIR)/lib/libslang.so* $(TARGET_DIR)/lib/
+ 	-$(STRIP) --strip-unneeded $(TARGET_DIR)/lib/libslang.so*
+-	touch -c $(TARGET_DIR)/lib/libslang.so.1
++	touch -c $@
+ 
+ slang: uclibc $(STAGING_DIR)/lib/libslang.so.1 $(TARGET_DIR)/lib/libslang.so.1
+ 
