@@ -1,61 +1,42 @@
-From: aldot at uclibc.org <aldot@uclibc.org>
-Date: Mon, 30 Jul 2007 03:13:51 -0700 (PDT)
-Subject: [Buildroot] svn commit: trunk/buildroot/package/slang
-Message-ID: <20070730101351.56DB4A6079@busybox.net>
+From: Bernhard Fischer <rep.dot.nop@gmail.com>
+Date: Mon, 30 Jul 2007 12:17:04 +0200
+Subject: [Buildroot] svn
+	commit:	trunk/buildroot/target/device/Atmel/u-boot
+In-Reply-To: <20070729070516.A15AEA461B@busybox.net>
+References: <20070729070516.A15AEA461B@busybox.net>
+Message-ID: <20070730101704.GI23273@aon.at>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Author: aldot
-Date: 2007-07-30 03:13:50 -0700 (Mon, 30 Jul 2007)
-New Revision: 19336
+On Sun, Jul 29, 2007 at 12:05:16AM -0700, ulf at uclibc.org wrote:
+>Author: ulf
+>Date: 2007-07-29 00:05:13 -0700 (Sun, 29 Jul 2007)
+>New Revision: 19312
+>
+>Log:
+>Reintroduce ATMEL_MIRROR in u-boot
+>
+>Modified:
+>   trunk/buildroot/target/device/Atmel/u-boot/u-boot.mk
+>
+>
+>Changeset:
+>Modified: trunk/buildroot/target/device/Atmel/u-boot/u-boot.mk
+>===================================================================
+>--- trunk/buildroot/target/device/Atmel/u-boot/u-boot.mk	2007-07-29 06:51:35 UTC (rev 19311)
+>+++ trunk/buildroot/target/device/Atmel/u-boot/u-boot.mk	2007-07-29 07:05:13 UTC (rev 19312)
+>@@ -8,6 +8,8 @@
+> #
+> #############################################################
+> UBOOT_VERSION:=1.2.0-atmel
+>+ATMEL_MIRROR:=$(strip  $(subst ",, $(BR2_ATMEL_MIRROR)))
+>+#"))
 
-Log:
-- install libslang.a into the correct dir (/usr/lib)
-- remove installed stuff from the staging-dir on -clean
+This is redundant.
+What about doing this once, cleanly?
 
-
-Modified:
-   trunk/buildroot/package/slang/slang.mk
-
-
-Changeset:
-Modified: trunk/buildroot/package/slang/slang.mk
-===================================================================
---- trunk/buildroot/package/slang/slang.mk	2007-07-30 10:06:24 UTC (rev 19335)
-+++ trunk/buildroot/package/slang/slang.mk	2007-07-30 10:13:50 UTC (rev 19336)
-@@ -23,7 +23,7 @@
- 	$(MAKE1) CFLAGS="-Os -g $(SLANG_CFLAGS)" CC=$(TARGET_CC) -C $(SLANG_DIR)
- 
- $(STAGING_DIR)/lib/libslang.so.1: $(SLANG_DIR)/libslang.so
--	cp -dpf $(SLANG_DIR)/libslang.a $(STAGING_DIR)/lib
-+	cp -dpf $(SLANG_DIR)/libslang.a $(STAGING_DIR)/usr/lib
- 	cp -dpf $(SLANG_DIR)/libslang.so $(STAGING_DIR)/lib
- 	cp -dpf $(SLANG_DIR)/slang.h $(STAGING_DIR)/usr/include
- 	cp -dpf $(SLANG_DIR)/slcurses.h $(STAGING_DIR)/usr/include
-@@ -33,20 +33,20 @@
- $(TARGET_DIR)/lib/libslang.so.1: $(STAGING_DIR)/lib/libslang.so.1
- 	cp -dpf $(STAGING_DIR)/lib/libslang.so* $(TARGET_DIR)/lib/
- 	-$(STRIP) --strip-unneeded $(TARGET_DIR)/lib/libslang.so*
--	touch -c $@
- 
- slang: uclibc $(STAGING_DIR)/lib/libslang.so.1 $(TARGET_DIR)/lib/libslang.so.1
- 
- slang-source: $(DL_DIR)/$(SLANG_SOURCE)
- 
- slang-clean:
--	rm -f $(TARGET_DIR)/lib/libslang.so*
-+	rm -f $(TARGET_DIR)/lib/libslang.so* $(STAGING_DIR)/usr/lib/libslang.a \
-+		$(STAGING_DIR)/usr/include/slang.h \
-+		$(STAGING_DIR)/usr/include/slcurses.h
- 	-$(MAKE) -C $(SLANG_DIR) clean
- 
- slang-dirclean:
- 	rm -rf $(SLANG_DIR)
- 
--
- #############################################################
- #
- # Toplevel Makefile options
+target/device/Atmel/Makefile.in would be the obvious place where i'd put
+this once and for all..
