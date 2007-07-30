@@ -1,66 +1,35 @@
 From: Bernhard Fischer <rep.dot.nop@gmail.com>
-Date: Mon, 30 Jul 2007 22:11:07 +0200
-Subject: [Buildroot] --includedir=/usr/include
-	vs	--includedir=(STAGING_DIR)/usr/include
-In-Reply-To: <0707302148220.17391@somehost>
-References: <0707302043450.17391@somehost>
-	<20070730190231.GA5834@real.realitydiluted.com>
-	<0707302103451.17391@somehost> <20070730193608.GB27993@aon.at>
-	<0707302148220.17391@somehost>
-Message-ID: <20070730201107.GD29064@aon.at>
+Date: Mon, 30 Jul 2007 22:39:46 +0200
+Subject: [Buildroot] cross-cxx support
+Message-ID: <20070730203946.GE29064@aon.at>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Mon, Jul 30, 2007 at 09:52:51PM +0200, Cristian Ionescu-Idbohrn wrote:
->On Mon, 30 Jul 2007, Bernhard Fischer wrote:
->
->> >  --includedir=/usr/include vs --includedir=$(STAGING_DIR)/usr/include
->> >                                            ^^^^^^^^^^^^^^
->>
->> depending on the package --prefix=$(STAGING_DIR)/usr is enough
->  ^^^^^^^^^
->
->Could you please be more verbose? How does one identify which is which?
+Hi all,
 
-packages that use autoconf usually have:
+If you want to build lzma for the target, you need a working
+cross-compiler for C++.
 
-Installation directories:
-  --prefix=PREFIX         install architecture-independent files in
-PREFIX
-                          [/usr/local]
+The patch referenced below does add BR2_GCC_CROSS_* compilers, adds a
+variable that points to the auto-generated files that can be used for
+dependency-tracking (somebody, i think it was sjhill broke this by
+moving the former toplevel "include" dir to
+package/config/buildroot-config/*) and adjusts accordingly.
 
-Fine tuning of the installation directories:
-  --bindir=DIR           user executables [EPREFIX/bin]
-  --sbindir=DIR          system admin executables [EPREFIX/sbin]
-  --libexecdir=DIR       program executables [EPREFIX/libexec]
-  --datadir=DIR          read-only architecture-independent data
-[PREFIX/share]
-  --sysconfdir=DIR       read-only single-machine data [PREFIX/etc]
-  --sharedstatedir=DIR   modifiable architecture-independent data
-[PREFIX/com]
-  --localstatedir=DIR    modifiable single-machine data [PREFIX/var]
-  --libdir=DIR           object code libraries [EPREFIX/lib]
-  --includedir=DIR       C header files [PREFIX/include]
-  --oldincludedir=DIR    C header files for non-gcc [/usr/include]
-  --infodir=DIR          info documentation [PREFIX/info]
-  --mandir=DIR           man documentation [PREFIX/man]
+This is just a theory of operation and not yet tested.
+Comments (or testers) welcome..
 
+http://uclibc.org/~aldot/buildroot/br2.gcc_cross_cxx.00.diff
 
-So, for packages that actually install to and use config files from
-sysconfdir, these should live in $(TARGET_DIR)/etc (resp
-$(STAGING_DIR)/etc) and not in $(TARGET_DIR)/usr/etc
+cheers,
+Bernhard
 
-
-libpcap, for example can be configured with
---prefix=/usr
-and installed with
-$(MAKE) DESTDIR=$(STAGING_DIR) -C $(LIBPCAP_DIR) install
-(assuming that it doesn't install anything into /etc).
-
-See?
-
-PS: Of course there is DESTDIR vs. PREFIX. Look at the respective
-Makefile{.am,.in,}
+PS: re: theory. Toggling stuff in (menu)config is supposed to update the
+timestamp of the files in BR2_DEPENDS_DIR, so we transparently can
+recompile if a prerequisite changes. Other examples would be e.g. LFS
+support for both the cross- as well as an eventual target compiler (and
+uClibc et al). If the cross-compiler/libc changed, we have to recompile
+everything, ultimately.
