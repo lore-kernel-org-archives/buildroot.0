@@ -1,10 +1,9 @@
 From: Ulf Samuelsson <ulf@atmel.com>
-Date: Mon, 30 Jul 2007 16:54:59 +0200
-Subject: [Buildroot] svn
-	commit:trunk/buildroot/target/device/Atmel/u-boot
-References: <20070729070516.A15AEA461B@busybox.net>
-	<20070730101704.GI23273@aon.at>
-Message-ID: <026701c7d2c2$c9020670$dcc4af0a@atmel.com>
+Date: Mon, 30 Jul 2007 16:34:00 +0200
+Subject: [Buildroot] svn commit: trunk/buildroot/toolchain/uClibc
+References: <20070729174728.EC106A4508@busybox.net>
+	<20070730073648.GD21479@aon.at>
+Message-ID: <026501c7d2c2$c740ce70$dcc4af0a@atmel.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -15,73 +14,76 @@ To: buildroot@busybox.net
 From: "Bernhard Fischer" <rep.dot.nop@gmail.com>
 To: <buildroot@uclibc.org>
 Cc: <ulf@atmel.com>
-Sent: Monday, July 30, 2007 12:17 PM
-Subject: Re: [Buildroot] svn commit:trunk/buildroot/target/device/Atmel/u-boot
+Sent: Monday, July 30, 2007 9:36 AM
+Subject: Re: [Buildroot] svn commit: trunk/buildroot/toolchain/uClibc
 
 
-> On Sun, Jul 29, 2007 at 12:05:16AM -0700, ulf at uclibc.org wrote:
+> On Sun, Jul 29, 2007 at 10:47:28AM -0700, ulf at uclibc.org wrote:
 >>Author: ulf
->>Date: 2007-07-29 00:05:13 -0700 (Sun, 29 Jul 2007)
->>New Revision: 19312
+>>Date: 2007-07-29 10:47:27 -0700 (Sun, 29 Jul 2007)
+>>New Revision: 19333
 >>
 >>Log:
->>Reintroduce ATMEL_MIRROR in u-boot
+>>Add AVR32 support to uClibc
 >>
 >>Modified:
->>   trunk/buildroot/target/device/Atmel/u-boot/u-boot.mk
+>>   trunk/buildroot/toolchain/uClibc/uclibc.mk
 >>
 >>
 >>Changeset:
->>Modified: trunk/buildroot/target/device/Atmel/u-boot/u-boot.mk
+>>Modified: trunk/buildroot/toolchain/uClibc/uclibc.mk
 >>===================================================================
->>--- trunk/buildroot/target/device/Atmel/u-boot/u-boot.mk 2007-07-29 06:51:35 UTC (rev 19311)
->>+++ trunk/buildroot/target/device/Atmel/u-boot/u-boot.mk 2007-07-29 07:05:13 UTC (rev 19312)
->>@@ -8,6 +8,8 @@
->> #
->> #############################################################
->> UBOOT_VERSION:=1.2.0-atmel
->>+ATMEL_MIRROR:=$(strip  $(subst ",, $(BR2_ATMEL_MIRROR)))
->>+#"))
+>>--- trunk/buildroot/toolchain/uClibc/uclibc.mk 2007-07-29 17:43:50 UTC (rev 19332)
+>>+++ trunk/buildroot/toolchain/uClibc/uclibc.mk 2007-07-29 17:47:27 UTC (rev 19333)
 > 
-> This is redundant.
-> What about doing this once, cleanly?
+> [snip utterly ugly VENDOR specific stuff]
 > 
-> target/device/Atmel/Makefile.in would be the obvious place where i'd put
-> this once and for all..
->
+>>@@ -241,15 +252,19 @@
+>> mkdir -p $(TOOL_BUILD_DIR)/uClibc_dev/usr/include
+>> mkdir -p $(TOOL_BUILD_DIR)/uClibc_dev/usr/lib
+>> mkdir -p $(TOOL_BUILD_DIR)/uClibc_dev/lib
+>>+ 
+>>+ touch $@
+>>+
+> 
+> Please explain the need for the empty line above (and remove it).
+> 
+>>+$(UCLIBC_DIR)/.oldconfig: $(UCLIBC_DIR)/.config
+>> $(MAKE1) -C $(UCLIBC_DIR) \
+>> PREFIX=$(TOOL_BUILD_DIR)/uClibc_dev/ \
+>> DEVEL_PREFIX=/usr/ \
+>> RUNTIME_PREFIX=$(TOOL_BUILD_DIR)/uClibc_dev/ \
+>> HOSTCC="$(HOSTCC)" \
+>> oldconfig
+>>- touch -c $@
+>>+ touch $@
+>> 
+>>-$(UCLIBC_DIR)/.configured: $(UCLIBC_DIR)/.config
+>>+$(UCLIBC_DIR)/.configured: $(UCLIBC_DIR)/.oldconfig
+>> set -x && $(MAKE1) -C $(UCLIBC_DIR) \
+>> PREFIX=$(TOOL_BUILD_DIR)/uClibc_dev/ \
+>> DEVEL_PREFIX=/usr/ \
+>>@@ -359,9 +374,13 @@
+>> UCLIBC_TARGETS=$(TARGET_DIR)/lib/libc.so.0
+>> endif
+>> 
+>>-uclibc-configured: kernel-headers $(UCLIBC_DIR)/.configured
+>>+uclibc-configured: dependencies kernel-headers $(UCLIBC_DIR)/.configured
+> 
+> NO! I removed this "dependencies" on purpose. Ulf, you keep reverting
+> fixes. Please explain in detail why you did this.
+> 
 
-The AVR32 patches for the toolchain is 6-8 MB and I would like to avoid that.
-I am working on a patch that will allow you to download prepatched source
-for the AVR32 (binutils, gcc, uclibc and gdb).
-Therefore, ATMEL_MIRROR needs to be set before the toolchain is built.
+Sorry about that.
+I am trying to migrate an AVR32 specific buildroot to mainstream.
+I did not do that so I am not 100% sure of all the differences.
+Where there are differences, I could sometimes see that this
+is due to old stuff, but some stuff looked to be additions
+by the AVR32 team.
+Obvsiously that has introduced some mistakes which I will remove ASAP.
 
-The first version had ATMEL_MIRROR set in each of the files.
-The I moved to a common definition, which has to be before that,
-so I put it in "package/Makefile.in", and this was reverted.
-Since it needs to be available before the toolchain is built, 
-Stephen suggested to have it in each toolchain Makefile, resulting in the
-"VENDOR" patches, which I agree should be less vendor specific.
-
-I spend some time thinking about  this today (while waiting on the tees of the local golfcourse)
-and I think that the best idea is to have another option in the 
-"Toolchain type" menu so you can select an externally prepatched toolchain.
-(X) Buildroot toolchain
-(  )  Prepatched toolchain source
-(  )  External Toolchain
-
-If you select "Prepatched toolchain source", then you get to select vendor as a choice.
-Otherwise it is hidden.
-Then the 
-VENDOR_SITE
-VENDOR_SUFFIX
-VENDOR_RELEASE
-strings are set.
-
-VENDOR_SITE could be set to $(BR2_ATMEL_MIRROR) if an Atmel 
-prepatched toolchain is selected.
-
-If it is implemented this way, then ATMEL_MIRROR could be set
-once in the "target/device/Atmel/Makefile.in"
+BTW: If  you are still interested in an AVR32 Gateway, I now have one spare.
+Pls resend your address if that is the case.
 
 Best Regards
 Ulf Samuelsson
