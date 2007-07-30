@@ -1,60 +1,44 @@
-From: Ulf Samuelsson <ulf@atmel.com>
-Date: Sun, 29 Jul 2007 19:14:22 +0200
-Subject: [Buildroot] latest svn trunk build saga
-References: <0707282336490.8510@somehost> <0707291433290.8510@somehost>
-Message-ID: <00f701c7d26c$015ef610$dcc4af0a@atmel.com>
+From: Bernhard Fischer <rep.dot.nop@gmail.com>
+Date: Mon, 30 Jul 2007 09:19:52 +0200
+Subject: [Buildroot] svn commit: trunk/buildroot/toolchain/gcc
+In-Reply-To: <20070729173645.72ECCA4577@busybox.net>
+References: <20070729173645.72ECCA4577@busybox.net>
+Message-ID: <20070730071952.GA21479@aon.at>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
------ Original Message ----- 
-From: "Cristian Ionescu-Idbohrn" <cristian.ionescu-idbohrn@axis.com>
-To: <buildroot@uclibc.org>
-Sent: Sunday, July 29, 2007 3:12 PM
-Subject: Re: [Buildroot] latest svn trunk build saga
+On Sun, Jul 29, 2007 at 10:36:45AM -0700, ulf at uclibc.org wrote:
+>Author: ulf
+>Date: 2007-07-29 10:36:45 -0700 (Sun, 29 Jul 2007)
+>New Revision: 19330
+>
+>Log:
+>gcc config for AVR32
+>
+>Modified:
+>   trunk/buildroot/toolchain/gcc/Config.in
+>
+>
+>Changeset:
+>Modified: trunk/buildroot/toolchain/gcc/Config.in
+>===================================================================
+>--- trunk/buildroot/toolchain/gcc/Config.in	2007-07-29 17:34:20 UTC (rev 19329)
+>+++ trunk/buildroot/toolchain/gcc/Config.in	2007-07-29 17:36:45 UTC (rev 19330)
 
+>@@ -147,27 +159,29 @@
+> config BR2_INSTALL_LIBSTDCPP
+> 	bool "Build/install c++ compiler and libstdc++?"
+> 	default n
+>-	# >= 4.2.0 work fine without LARGEFILE
+>-	select BR2_LARGEFILE if BR2_GCC_VERSION_3_3_5 || BR2_GCC_VERSION_3_3_6 || BR2_GCC_VERSION_3_4_2 || BR2_GCC_VERSION_3_4_3 || BR2_GCC_VERSION_3_4_4 || BR2_GCC_VERSION_3_4_5 || BR2_GCC_VERSION_3_4_6 || BR2_GCC_VERSION_4_0_0 || BR2_GCC_VERSION_4_0_1 || BR2_GCC_VERSION_4_0_2 || BR2_GCC_VERSION_4_0_3 || BR2_GCC_VERSION_4_0_4 || BR2_GCC_VERSION_4_1_0 || BR2_GCC_VERSION_4_1_1 || BR2_GCC_VERSION_4_1_2
+>+	# huh? why so? select BR2_LARGEFILE
+>+	select BR2_LARGEFILE if !BR2_GCC_VERSION_4_2_0 && !BR2_GCC_VERSION_4_3
+> 	help
+> 	  Build/install c++ compiler and libstdc++?
 
-> Replying to myself again.
-> 
-> On Sat, 28 Jul 2007, Cristian Ionescu-Idbohrn wrote:
-> 
->> Any of the below will fail when enabled on top of the attached .config :(
->>
->> --------------------------------------------------------------------------
->> touch buildroot/build_i486/gawk-3.1.5/.unpacked
->> ...
->> checking for C compiler default output file name...
->> configure: error: C compiler cannot create executables
->> See `config.log' for more details.
->> make: *** [buildroot/build_i486/gawk-3.1.5/.configured] Error 77
-> 
-> gawk still doesn't build:
-> 
-> ,----
-> | /usr/bin/make -j1 CC=buildroot/build_i486/staging_dir/usr/bin/i486-linux-uclibc-gcc -C buildroot/build_i486/gawk-3.1.5
-> | make[1]: Entering directory `buildroot/build_i486/gawk-3.1.5'
-> | /usr/bin/make 'CFLAGS=-g -O2' 'LDFLAGS=-export-dynamic' all-recursive
-> | make[2]: Entering directory `buildroot/build_i486/gawk-3.1.5'
-> | Making all in .
-> | make[3]: Entering directory `buildroot/build_i486/gawk-3.1.5'
-> | if buildroot/build_i486/staging_dir/usr/bin/i486-linux-uclibc-gcc -DDEFPATH="\".:/usr/share/awk\"" -DHAVE_CONFIG_H -DGAWK -DLOCALEDIR="\"/usr/share/locale\"" -I. -I. -I.     -g -O2 -MT regex.o -MD -MP -MF ".deps/regex.Tpo" -c -o regex.o regex.c; \
-> |        then mv -f ".deps/regex.Tpo" ".deps/regex.Po"; else rm -f ".deps/regex.Tpo"; exit 1; fi
-> | In file included from regex.c:66:
-> | regex_internal.h:744: error: expected specifier-qualifier-list before 'wchar_t'
-> | make[3]: *** [regex.o] Error 1
-> | make[3]: Leaving directory `buildroot/build_i486/gawk-3.1.5'
-> | make[2]: *** [all-recursive] Error 1
-> | make[2]: Leaving directory `buildroot/build_i486/gawk-3.1.5'
-> | make[1]: *** [all] Error 2
-> | make[1]: Leaving directory `buildroot/build_i486/gawk-3.1.5'
-> | make: *** [buildroot/build_i486/gawk-3.1.5/gawk] Error 2
-> `----
+heh! Why did you revert my change ?
 
-You need to build uClibc with WCHAR enabled
-so you need a custom uClibc ".config" file.
-
-
-Best Regards
-Ulf Samuelsson
+Please fix.
