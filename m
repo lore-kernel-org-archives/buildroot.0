@@ -1,70 +1,60 @@
-From: Bernhard Fischer <rep.dot.nop@gmail.com>
-Date: Mon, 30 Jul 2007 10:44:06 +0200
-Subject: [Buildroot] SVN Rev 19269 won't build
-In-Reply-To: <1D637BC976FEB2D52024B231@[192.168.83.121]>
-References: <5041A110D5D200EDF64E7756@[192.168.83.121]>
-	<20070727103757.GC22789@aon.at>
-	<09E61CA94D6C4DE241DF8A46@[192.168.83.121]>
-	<20070727123058.GA23901@aon.at>
-	<2BF4F42AD2EC4CBFF0CF3925@[192.168.83.121]>
-	<20070727140855.GA24629@aon.at>
-	<1D637BC976FEB2D52024B231@[192.168.83.121]>
-Message-ID: <20070730084405.GB22956@aon.at>
+From: Shai Lifshitz <ShaiL@visonic.com>
+Date: Mon, 30 Jul 2007 12:51:31 +0400
+Subject: [Buildroot] failing to build the buildroot
+Message-ID: <OF63068367.6ED17E33-ONC2257328.002FE884-C3257328.002ACB29@visonic.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Fri, Jul 27, 2007 at 06:08:41PM +0200, Claas Hilbrecht wrote:
->--Am Freitag, 27. Juli 2007 16:08 +0200 Bernhard Fischer 
-><rep.dot.nop@gmail.com> schrieb:
->
->> Alright. Last minute change after testing it.
->> r19278 Works For Me (tm)
->
->Somewhat better, but not quite right I assume. After entering the 
->menuconfig dialog and exit it without changing anything I just type make. 
->After I while I get these errors:
->
->mv tmp-specs specs
->echo | 
->/home/babel/buildroot/0.9.29/buildroot_org/buildroot/toolchain_build_i386/gcc-4.2.0-initial/./gcc/xgcc 
->-B/home/babel/buildroot/0.9.29/buildroot_org/buildroot/toolchain_build_i386/gcc-4.2.0-initial/./gcc/ 
->-B/home/babel/buildroot/0.9.29/buildroot_org/buildroot/build_i386/staging_dir/usr/i386-linux-uclibc/bin/ 
->-B/home/babel/buildroot/0.9.29/buildroot_org/buildroot/build_i386/staging_dir/usr/i386-linux-uclibc/lib/ 
->-isystem 
->/home/babel/buildroot/0.9.29/buildroot_org/buildroot/build_i386/staging_dir/usr/i386-linux-uclibc/include 
->-isystem 
->/home/babel/buildroot/0.9.29/buildroot_org/buildroot/build_i386/staging_dir/usr/i386-linux-uclibc/sys-include 
->-E -dM - | \
->          sed -n -e 's/^#define \([^_][a-zA-Z0-9_]*\).*/\1/p' \
->                 -e 's/^#define \(_[^_A-Z][a-zA-Z0-9_]*\).*/\1/p' | \
->          sort -u > tmp-macro_list
->/bin/sh 
->/home/babel/buildroot/0.9.29/buildroot_org/buildroot/toolchain_build_i386/gcc-4.2.0/gcc/../move-if-change 
->tmp-macro_list macro_list
->echo timestamp > s-macro_list
->The directory that should contain system headers does not exist:
-> 
->/home/babel/buildroot/0.9.29/buildroot_org/buildroot/toolchain_build_i386/uClibc_dev//usr/include
->make[2]: *** [stmp-fixinc] Error 1
->make[2]: Leaving directory 
->`/home/babel/buildroot/0.9.29/buildroot_org/buildroot/toolchain_build_i386/gcc-4.2.0-initial/gcc'
->make[1]: *** [all-gcc] Error 2
->make[1]: Leaving directory 
->`/home/babel/buildroot/0.9.29/buildroot_org/buildroot/toolchain_build_i386/gcc-4.2.0-initial'
->make: *** 
->[/home/babel/buildroot/0.9.29/buildroot_org/buildroot/toolchain_build_i386/gcc-4.2.0-initial/.compiled] 
->Error 2
->
->I think if make menuconfig required some user changes I should at least get 
->a warning that I'm trying to shot myself.
->
->PS: Sorry to bother you with these error, but I tried to get a clean build 
->to setup another build system. Getting a svn rev working out of the box is 
->my first goal.
+Dir Sir,
 
-Well, this works for my config and did work before these PROJECT stuff
-went in. Perhaps the author of that "PROJECT" thing (Ulf?) would know..
-sorry
+I downloaded today the buildroot-snapshot.tar.bz2.tar file from the FTP 
+site, opened it and run 'make menuconfig' for the following options:
+BR2_arm=y
+BR2_arm926t=y
+BR2_ARM_EABI=y
+
+after running the 'make' I have got the following error:
+
+10:28:27 (9.77 KB/s) 
+-`/home/shail/downloads/tt3/buildroot/dl/gcc-4.2.0.tar.bz2' 
+saved[44,057,527/44,057,527]
+
+mkdir -p /home/shail/downloads/tt3/buildroot/toolchain_build_arm
+rm -rf /home/shail/downloads/tt3/buildroot/toolchain_build_arm/gcc-4.2.0
+bzcat /home/shail/downloads/tt3/buildroot/dl/gcc-4.2.0.tar.bz2 | tar -C 
+/home/shail/downloads/tt3/buildroot/toolchain_build_arm   -xf -
+
+tar: Skipping to next header
+tar: Archive contains obsolescent base-64 headers
+
+bzcat: Data integrity error when decompressing.
+        Input file = 
+/home/shail/downloads/tt3/buildroot/dl/gcc-4.2.0.tar.bz2, output file = 
+(stdout)
+
+It is possible that the compressed file(s) have become corrupted.
+You can use the -tvv option to test integrity of such files.
+
+You can use the `bzip2recover' program to attempt to recover
+data from undamaged sections of corrupted files.
+
+tar: Read 5480 bytes from -
+tar: Error exit delayed from previous errors
+make: 
+***[/home/shail/downloads/tt3/buildroot/toolchain_build_arm/gcc-4.2.0/.unpacked]Error 
+2
+
+
+can anybody help me with this problem?
+and if I have the solution, is it possible to continue the make from the 
+point it stopped, or do I have to run the 'make' all from the beginning?
+
+sincerely
+Shai Lifshitz
+email: shail at visonic.com
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: http://busybox.net/lists/buildroot/attachments/20070730/5362c3e0/attachment.htm 
