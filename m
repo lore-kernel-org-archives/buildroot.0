@@ -1,30 +1,39 @@
-From: Cristian Ionescu-Idbohrn <cristian.ionescu-idbohrn@axis.com>
-Date: Mon, 30 Jul 2007 21:52:51 +0200 (CEST)
-Subject: [Buildroot] --includedir=/usr/include vs
-	--includedir=(STAGING_DIR)/usr/include
-In-Reply-To: <20070730193608.GB27993@aon.at>
-References: <0707302043450.17391@somehost>
-	<20070730190231.GA5834@real.realitydiluted.com>
-	<0707302103451.17391@somehost> <20070730193608.GB27993@aon.at>
-Message-ID: <0707302148220.17391@somehost>
+From: Bernhard Fischer <rep.dot.nop@gmail.com>
+Date: Mon, 30 Jul 2007 22:02:47 +0200
+Subject: [Buildroot] Redundant kernel patches in the
+	snapshot	from20070718
+In-Reply-To: <20070730192728.GA27993@aon.at>
+References: <1185459798.1044.43.camel@localhost.localdomain>
+	<1185468722.5580.107.camel@elrond.sweden.atmel.com>
+	<20070727113002.GF22789@aon.at>
+	<026b01c7d2c2$cbcd3460$dcc4af0a@atmel.com>
+	<20070730192728.GA27993@aon.at>
+Message-ID: <20070730200247.GC29064@aon.at>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Mon, 30 Jul 2007, Bernhard Fischer wrote:
+On Mon, Jul 30, 2007 at 09:27:28PM +0200, Bernhard Fischer wrote:
+[I deliberately do not correct the gazillions of typos i made]
 
-> >  --includedir=/usr/include vs --includedir=$(STAGING_DIR)/usr/include
-> >                                            ^^^^^^^^^^^^^^
+>>>>* Cannot apply architecture specific patches, since
+>>>>  you may have conflicts between several patch-set's.
+>>>>* Cluttered directory
+>>> 
+>>> hm? Please explain.
+>>> 
+>>
+>>The AVR32 chips and the AT91 ARM chips uses the same peripherals,
+>>and therefore can use the same drivers.
 >
-> depending on the package --prefix=$(STAGING_DIR)/usr is enough
-  ^^^^^^^^^
+>fair enough.
+>
+>So there is _one_ patch which is submitted upstream that is
+>linux-1.2.3.4-add-thisSpecificDevice.patch
 
-Could you please be more verbose? How does one identify which is which?
-
-
-Cheers,
-
--- 
-Cristian
+... where this patch adds _just_ the device. Accompanying
+infrastructure which may be used by a friend class of HW of course has
+to be in a separate patch. This obviously prevents attempts to apply any
+hunk twice, fwiw.
