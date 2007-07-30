@@ -1,66 +1,59 @@
-From: bugs at busybox.net <bugs@busybox.net>
-Date: Mon, 30 Jul 2007 15:15:47 -0700
-Subject: [Buildroot] [buildroot 0001451]: patch to make installation of
-	libpng posible
-Message-ID: <994eda3bcaeaaa305349aeac0b4d9ba4@bugs.uclibc.org>
+From: Ulf Samuelsson <ulf@atmel.com>
+Date: Tue, 31 Jul 2007 01:59:14 +0200
+Subject: [Buildroot] Redundant kernel patches in the
+	snapshot	from20070718
+In-Reply-To: <20070730200247.GC29064@aon.at>
+References: <1185459798.1044.43.camel@localhost.localdomain>
+	<1185468722.5580.107.camel@elrond.sweden.atmel.com>
+	<20070727113002.GF22789@aon.at>
+	<026b01c7d2c2$cbcd3460$dcc4af0a@atmel.com>
+	<20070730192728.GA27993@aon.at>  <20070730200247.GC29064@aon.at>
+Message-ID: <1185839954.30603.36.camel@elrond.sweden.atmel.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+m?n 2007-07-30 klockan 22:02 +0200 skrev Bernhard Fischer:
+> On Mon, Jul 30, 2007 at 09:27:28PM +0200, Bernhard Fischer wrote:
+> [I deliberately do not correct the gazillions of typos i made]
+> 
+> >>>>* Cannot apply architecture specific patches, since
+> >>>>  you may have conflicts between several patch-set's.
+> >>>>* Cluttered directory
+> >>> 
+> >>> hm? Please explain.
+> >>> 
+> >>
+> >>The AVR32 chips and the AT91 ARM chips uses the same peripherals,
+> >>and therefore can use the same drivers.
+> >
+> >fair enough.
+> >
+> >So there is _one_ patch which is submitted upstream that is
+> >linux-1.2.3.4-add-thisSpecificDevice.patch
+> 
+> ... where this patch adds _just_ the device. Accompanying
+> infrastructure which may be used by a friend class of HW of course has
+> to be in a separate patch. This obviously prevents attempts to apply any
+> hunk twice, fwiw.
 
-The following issue has been SUBMITTED. 
-====================================================================== 
-http://busybox.net/bugs/view.php?id=1451 
-====================================================================== 
-Reported By:                pavko
-Assigned To:                buildroot
-====================================================================== 
-Project:                    buildroot
-Issue ID:                   1451
-Category:                   Shared Library Support
-Reproducibility:            always
-Severity:                   minor
-Priority:                   normal
-Status:                     assigned
-====================================================================== 
-Date Submitted:             07-30-2007 15:15 PDT
-Last Modified:              07-30-2007 15:15 PDT
-====================================================================== 
-Summary:                    patch to make installation of libpng posible
-Description: 
-diff -urN libpng.mk.orig libpng.mk
---- libpng.mk.orig      2007-07-29 22:26:39.000000000 +0200
-+++ libpng.mk   2007-07-29 23:27:49.759689111 +0200
-@@ -62,7 +62,7 @@
-        $(MAKE) -C $(LIBPNG_DIR)
-        touch $@
- 
--$(STAGING_DIR)/lib/libpng.so: $(LIBPNG_DIR)/.compiled
-+$(STAGING_DIR)/usr/lib/libpng.so: $(LIBPNG_DIR)/.compiled
-        $(MAKE) DESTDIR=$(STAGING_DIR) -C $(LIBPNG_DIR) install;
-        $(SED) "s,^libdir=.*,libdir=\'$(STAGING_DIR)/usr/lib\',g"
-$(STAGING_DIR)/usr/lib/libpng12.la
-        $(SED) "s,^prefix=.*,prefix=\'$(STAGING_DIR)/usr\',g" \
-@@ -72,8 +72,8 @@
-                $(STAGING_DIR)/usr/bin/libpng12-config
-        touch -c $@
- 
--$(TARGET_DIR)/usr/lib/libpng.so: $(STAGING_DIR)/lib/libpng.so
--       cp -dpf $(STAGING_DIR)/lib/libpng*.so* $(TARGET_DIR)/usr/lib/
-+$(TARGET_DIR)/usr/lib/libpng.so: $(STAGING_DIR)/usr/lib/libpng.so
-+       cp -dpf $(STAGING_DIR)/usr/lib/libpng*.so* $(TARGET_DIR)/usr/lib/
-        -$(STRIP) --strip-unneeded $(TARGET_DIR)/usr/lib/libpng.so
- 
- png libpng: uclibc zlib pkgconfig $(TARGET_DIR)/usr/lib/libpng.so
+You make the assumption that two different groups
+supplying patches actually tests their patches
+against the patches for the other group.
+Please don't.
+Eadch group assumes that their patches are patched
+on top of the kernel-patches.
+It is the person trying to apply both patchsets 
+in the same tree that is causing the error.
+Buildroot of today encourages people to apply
+patches on top of each other.
+If you first build one target and then build another
+target in the same tree, then the error occurs...
 
-====================================================================== 
+Your counter argument is that you should use a new tree,
+but that is not desirable, so pls use other arguments.
 
-Issue History 
-Date Modified   Username       Field                    Change               
-====================================================================== 
-07-30-07 15:15  pavko          New Issue                                    
-07-30-07 15:15  pavko          Status                   new => assigned     
-07-30-07 15:15  pavko          Assigned To               => buildroot       
-======================================================================
+Best Regards
+Ulf Samuelsson.
