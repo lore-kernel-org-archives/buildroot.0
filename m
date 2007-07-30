@@ -1,35 +1,81 @@
-From: Bernhard Fischer <rep.dot.nop@gmail.com>
-Date: Mon, 30 Jul 2007 09:24:31 +0200
-Subject: [Buildroot] latest svn trunk build saga
-In-Reply-To: <0707291433290.8510@somehost>
-References: <0707282336490.8510@somehost> <0707291433290.8510@somehost>
-Message-ID: <20070730072430.GC21479@aon.at>
+From: bugs at busybox.net <bugs@busybox.net>
+Date: Mon, 30 Jul 2007 00:41:11 -0700
+Subject: [Buildroot] [buildroot 0001448]: buildroot cannot build gcc due to
+	wrong option passed to 'exec'
+Message-ID: <b49f0ccc45e542ae38cd40c26b19885e@busybox.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Sun, Jul 29, 2007 at 03:12:08PM +0200, Cristian Ionescu-Idbohrn wrote:
->Replying to myself again.
->
->On Sat, 28 Jul 2007, Cristian Ionescu-Idbohrn wrote:
 
->> --------------------------------------------------------------------------
->> buildroot/build_i486/staging_dir/usr/bin/fakeroot -- buildroot/build_i486/staging_dir/_fakeroot.rootfs.i486.ext2
->> rootdir=buildroot/project_build_i486/uclibc/root
->> table='target/generic/mini_device_table.txt'
->> makedevs: line 53: regular file 'buildroot/project_build_i486/uclibc/root/usr/share/udhcpc/default.script' does not exist: No such file or directory
->
->This occurs because:
->
->	buildroot/build_i486/staging_dir/bin/makedevs \
->		-d target/generic/mini_device_table.txt \
->		buildroot/project_build_i486/uclibc/root
->
->does not find /usr/share/udhcpc/default.script pointed out by
->target/generic/mini_device_table.txt (on line 53); and that is because
->busybox-1.6.1 I use does not include that file.
+The following issue has been CLOSED 
+====================================================================== 
+http://busybox.net/bugs/view.php?id=1448 
+====================================================================== 
+Reported By:                pavko
+Assigned To:                buildroot
+====================================================================== 
+Project:                    buildroot
+Issue ID:                   1448
+Category:                   Architecture Specific
+Reproducibility:            always
+Severity:                   major
+Priority:                   normal
+Status:                     closed
+Resolution:                 open
+Fixed in Version:           
+====================================================================== 
+Date Submitted:             07-28-2007 05:22 PDT
+Last Modified:              07-30-2007 00:41 PDT
+====================================================================== 
+Summary:                    buildroot cannot build gcc due to wrong option
+passed to 'exec'
+Description: 
+probably key point is:
+buildroot_svn/toolchain_build_i686/gcc-4.2.1-initial/./gcc/as: line 2:
+exec: -Q: invalid option
 
-This is perfectly fine and needed for ancient busybox version. Ignore
-this.
+tried with gcc-4.2.0 with the same result.
+====================================================================== 
+
+---------------------------------------------------------------------- 
+ pavko - 07-29-07 14:03  
+---------------------------------------------------------------------- 
+It seems that file:
+/home/pavko/buildroot_svn/toolchain_build_i686/gcc-4.2.1-initial/gcc/as
+during initial stage is incorrectly initialized to:
+
+#!/bin/bash                                                               
+                                                                           
+    
+exec "$@" 
+
+After manual change to:
+
+#!/bin/bash                                                               
+                                                                           
+    
+exec
+/home/pavko/buildroot_svn/build_i686/staging_dir/usr/i686-linux-uclibc/bin/as
+"$@"
+
+compilation was successful 
+
+---------------------------------------------------------------------- 
+ bernhardf - 07-30-07 00:41  
+---------------------------------------------------------------------- 
+This indicates that the build went wrong. This file will be generated
+properly if the build was fine so far. wipe your object-tree and rebuild. 
+
+Issue History 
+Date Modified   Username       Field                    Change               
+====================================================================== 
+07-28-07 05:22  pavko          New Issue                                    
+07-28-07 05:22  pavko          Status                   new => assigned     
+07-28-07 05:22  pavko          Assigned To               => buildroot       
+07-29-07 14:03  pavko          Note Added: 0002644                          
+07-30-07 00:41  bernhardf      Status                   assigned => closed  
+07-30-07 00:41  bernhardf      Note Added: 0002645                          
+======================================================================
