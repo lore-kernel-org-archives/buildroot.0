@@ -1,48 +1,50 @@
-From: Hans-Christian Egtvedt <hcegtvedt@norway.atmel.com>
-Date: Mon, 30 Jul 2007 11:14:41 +0200
-Subject: [Buildroot] svn commit: trunk/buildroot/toolchain/gcc
-In-Reply-To: <20070730083914.GA22956@aon.at>
-References: <20070729174350.EF22BA4508@busybox.net>
-	<20070730072137.GB21479@aon.at>
-	<1185781988.15219.2.camel@localhost.localdomain>
-	<20070730083914.GA22956@aon.at>
-Message-ID: <1185786881.9395.1.camel@localhost.localdomain>
+From: Michael Hunold <hunold@linuxtv.org>
+Date: Mon, 30 Jul 2007 10:40:42 +0200
+Subject: [Buildroot] Why is --disable-gdbmi specified for host GDB build?
+Message-ID: <46ADA40A.3000508@linuxtv.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+Hello all,
 
-On Mon, 2007-07-30 at 10:39 +0200, Bernhard Fischer wrote:
-> On Mon, Jul 30, 2007 at 09:53:08AM +0200, Hans-Christian Egtvedt wrote:
-> >
-> >On Mon, 2007-07-30 at 09:21 +0200, Bernhard Fischer wrote:
-> >> On Sun, Jul 29, 2007 at 10:43:50AM -0700, ulf at uclibc.org wrote:
+I can happily remote debug my MIPS target using the host GDB 6.3 build
+by buildroot and using "ddd" as a GUI.
 
-<cut AVR32 configuration menu option>
+Now I tried to use Visual Slickedit, but this fails. It turns out that
+Slickedit provides the "-interpreter=mi" argument to the host GDB, which
+gives: "Interpreter `mi' unrecognized"
 
-> >> I object to this change.
-> >> Please explain why you don't just add disable-mudflap if the target arch
-> >> is BR2_avr32
-> >
-> >So a little patch to alter the toolchain/gcc/Makefile.in to modify
-> >EXTRA_TARGET_GCC_CONFIG_OPTIONS when ARCH is avr32 is a clean and nice
-> >solution?
-> >
-> >And remove this stuff from Config.in.2?
-> 
-> exactly, yes.
+After some searching it turns out that MI support is disabled via
+--disable-gdbmi in toolchain/gdb/gdb.mk.
 
-Please see the included patch.
+Quote:
+------------------------------schnipp------------------------------
+# NOTE: This option should not be used with gdb versions 6.4 and above.
+ifeq ($(GDB_VERSION),6.2.1)
+DISABLE_GDBMI:=--disable-gdbmi
+endif
 
--- 
-Mvh
-Hans-Christian Egtvedt
--------------- next part --------------
-A non-text attachment was scrubbed...
-Name: simplify-avr32-gcc-configuration.patch
-Type: text/x-patch
-Size: 2185 bytes
-Desc: not available
-Url : http://busybox.net/lists/buildroot/attachments/20070730/f3d7bec5/attachment.bin 
+ifeq ($(GDB_VERSION),6.3)
+DISABLE_GDBMI:=--disable-gdbmi
+endif
+endif
+------------------------------schnipp------------------------------
+
+Then I found this bug report:
+http://busybox.net/bugs/view.php?id=602
+
+"vapier" correctly states that "disabling gdmi ignores the issue
+(whatever that may be)".
+
+For my specific toolchain build, I simply removed the above lines and
+the compilation works fine. Now I have a host GDB 6.3 that includes the
+MI interpreter and works with Slickedit.
+
+Can anyone tell me what the original problem was so that --disable-gdbmi
+was added?
+
+Best regards
+Michael Hunold.
