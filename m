@@ -1,7 +1,7 @@
 From: ulf at uclibc.org <ulf@uclibc.org>
-Date: Tue, 31 Jul 2007 15:57:21 -0700 (PDT)
-Subject: [Buildroot] svn commit: trunk/buildroot/target/device
-Message-ID: <20070731225721.D8D0DA464D@busybox.net>
+Date: Tue, 31 Jul 2007 16:25:13 -0700 (PDT)
+Subject: [Buildroot] svn commit: trunk/buildroot/toolchain: gdb uClibc
+Message-ID: <20070731232513.7BEA2A4640@busybox.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -9,30 +9,40 @@ Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
 Author: ulf
-Date: 2007-07-31 15:57:19 -0700 (Tue, 31 Jul 2007)
-New Revision: 19371
+Date: 2007-07-31 16:25:12 -0700 (Tue, 31 Jul 2007)
+New Revision: 19372
 
 Log:
-Hint taken,  Help text included
+Add PATCH_DIR's for snapshots of uclibc and gdb
 
 Modified:
-   trunk/buildroot/target/device/Toolchain.in
+   trunk/buildroot/toolchain/gdb/gdb.mk
+   trunk/buildroot/toolchain/uClibc/uclibc.mk
 
 
 Changeset:
-Modified: trunk/buildroot/target/device/Toolchain.in
+Modified: trunk/buildroot/toolchain/gdb/gdb.mk
 ===================================================================
---- trunk/buildroot/target/device/Toolchain.in	2007-07-31 22:41:06 UTC (rev 19370)
-+++ trunk/buildroot/target/device/Toolchain.in	2007-07-31 22:57:19 UTC (rev 19371)
-@@ -11,7 +11,10 @@
- 	bool
- 	prompt "Use default sources for toolchain"
- 	help
--	  FIXME: Bug Ulf to provide a helptext
-+	  Download vanilla binutils, gcc, uclibc and gdb from their 
-+	  main download locations, and apply patches from the
-+	  "toolchain/<package>" directores.
-+	  I.E: Do not download a prepatched vendor source suite.
+--- trunk/buildroot/toolchain/gdb/gdb.mk	2007-07-31 22:57:19 UTC (rev 19371)
++++ trunk/buildroot/toolchain/gdb/gdb.mk	2007-07-31 23:25:12 UTC (rev 19372)
+@@ -17,6 +17,7 @@
+ GDB_SOURCE:=gdb.tar.bz2
+ GDB_CAT:=$(BZCAT)
+ GDB_DIR:=$(TOOL_BUILD_DIR)/gdb-$(GDB_VERSION)
++GDB_PATCH_DIR:=toolchain/gdb/$(GDB_VERSION)
+ else
  
- config BR2_TOOLCHAIN_ATMEL_AVR32
- 	bool
+ ifeq	($(BR2_TOOLCHAIN_NORMAL),y)
+
+Modified: trunk/buildroot/toolchain/uClibc/uclibc.mk
+===================================================================
+--- trunk/buildroot/toolchain/uClibc/uclibc.mk	2007-07-31 22:57:19 UTC (rev 19371)
++++ trunk/buildroot/toolchain/uClibc/uclibc.mk	2007-07-31 23:25:12 UTC (rev 19372)
+@@ -20,6 +20,7 @@
+ UCLIBC_SOURCE:=uClibc-$(strip $(subst ",, $(BR2_USE_UCLIBC_SNAPSHOT))).tar.bz2
+ #"))
+ UCLIBC_SITE:=http://www.uclibc.org/downloads/snapshots
++UCLIBC_PATCH_DIR:=toolchain/uClibc/
+ else
+ # releases
+ ifeq ($(BR2_UCLIBC_VERSION_0_9_29),y)
