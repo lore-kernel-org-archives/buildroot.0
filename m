@@ -1,22 +1,38 @@
-From: Jinag Robert <cretaceousstone@yahoo.com.cn>
-Date: Tue, 31 Jul 2007 17:06:03 +0800 (CST)
-Subject: [Buildroot] How to just build one application?
-Message-ID: <522771.76217.qm@web15809.mail.cnb.yahoo.com>
+From: Thomas Lundquist <lists@zelow.no>
+Date: Tue, 31 Jul 2007 11:38:27 +0200
+Subject: [Buildroot] Qtopia4 fails building - target stage tries to run
+	target binaries	on build machine
+In-Reply-To: <1185870123.14026.4.camel@localhost.localdomain>
+References: <1185796725.27015.7.camel@localhost.localdomain>
+	<20070730185416.GA23362@zelow.no>
+	<1185870123.14026.4.camel@localhost.localdomain>
+Message-ID: <20070731093827.GA18869@zelow.no>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello All,
+On Tue, Jul 31, 2007 at 10:22:03AM +0200, Hans-Christian Egtvedt wrote:
+> 
+> As I said, it tries to execute moc, but moc is compiled for the target.
 
-I've installed  arm linux gcc 4.1.1 toolchains and I want to build uclibc samba with buildroot package. How can I skip building toolchains and just build samba package with the pre-installed toolchains ?
+Weird.
 
-Thanks,
+> The problem arises when building the target Qtopia, it tries to use moc
+> et.al compiled for the target architecture. And when running a
+> big-endian AVR32 binary on my little-endian x86 laptop, it fails ;)
+
+But of course.
+
+the weird part is that the makefile was made for compiling qtopia on
+ARM, which means moc & co was compiled for the right platform(s).
+
+> Suggestions are very welcome, I am trying to clean up this package.
+
+I'll start working on fixing this right now.
+(Believe me, you'd like not to find out why it's as messy as it is.)
 
 
 
-
-      ___________________________________________________________ 
-????????3.5G???20M??? 
-http://cn.mail.yahoo.com
+Thomas.
