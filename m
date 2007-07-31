@@ -1,7 +1,7 @@
 From: ulf at uclibc.org <ulf@uclibc.org>
-Date: Tue, 31 Jul 2007 15:41:07 -0700 (PDT)
-Subject: [Buildroot] svn commit: trunk/buildroot/package/module-init-tools
-Message-ID: <20070731224107.40167A4693@busybox.net>
+Date: Tue, 31 Jul 2007 15:57:21 -0700 (PDT)
+Subject: [Buildroot] svn commit: trunk/buildroot/target/device
+Message-ID: <20070731225721.D8D0DA464D@busybox.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -9,34 +9,30 @@ Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
 Author: ulf
-Date: 2007-07-31 15:41:06 -0700 (Tue, 31 Jul 2007)
-New Revision: 19370
+Date: 2007-07-31 15:57:19 -0700 (Tue, 31 Jul 2007)
+New Revision: 19371
 
 Log:
-Update config for module-init-tools
+Hint taken,  Help text included
 
 Modified:
-   trunk/buildroot/package/module-init-tools/module-init-tools.mk
+   trunk/buildroot/target/device/Toolchain.in
 
 
 Changeset:
-Modified: trunk/buildroot/package/module-init-tools/module-init-tools.mk
+Modified: trunk/buildroot/target/device/Toolchain.in
 ===================================================================
---- trunk/buildroot/package/module-init-tools/module-init-tools.mk	2007-07-31 22:40:13 UTC (rev 19369)
-+++ trunk/buildroot/package/module-init-tools/module-init-tools.mk	2007-07-31 22:41:06 UTC (rev 19370)
-@@ -20,6 +20,7 @@
- $(MODULE_INIT_TOOLS_DIR)/.unpacked: $(DL_DIR)/$(MODULE_INIT_TOOLS_SOURCE)
- 	$(MODULE_INIT_TOOLS_CAT) $(DL_DIR)/$(MODULE_INIT_TOOLS_SOURCE) | tar -C $(BUILD_DIR) -xvf -
- 	toolchain/patch-kernel.sh $(MODULE_INIT_TOOLS_DIR) package/module-init-tools \*.patch
-+	$(CONFIG_UPDATE) $(MODULE_INIT_TOOLS_DIR)
- 	touch $(MODULE_INIT_TOOLS_DIR)/.unpacked
+--- trunk/buildroot/target/device/Toolchain.in	2007-07-31 22:41:06 UTC (rev 19370)
++++ trunk/buildroot/target/device/Toolchain.in	2007-07-31 22:57:19 UTC (rev 19371)
+@@ -11,7 +11,10 @@
+ 	bool
+ 	prompt "Use default sources for toolchain"
+ 	help
+-	  FIXME: Bug Ulf to provide a helptext
++	  Download vanilla binutils, gcc, uclibc and gdb from their 
++	  main download locations, and apply patches from the
++	  "toolchain/<package>" directores.
++	  I.E: Do not download a prepatched vendor source suite.
  
- $(MODULE_INIT_TOOLS_DIR)/.configured: $(MODULE_INIT_TOOLS_DIR)/.unpacked
-@@ -76,6 +77,7 @@
- $(MODULE_INIT_TOOLS_DIR2)/.source: $(DL_DIR)/$(MODULE_INIT_TOOLS_SOURCE)
- 	$(MODULE_INIT_TOOLS_CAT) $(DL_DIR)/$(MODULE_INIT_TOOLS_SOURCE) | tar -C $(TOOL_BUILD_DIR) -xvf -
- 	toolchain/patch-kernel.sh $(MODULE_INIT_TOOLS_DIR2) package/module-init-tools \*.patch
-+	$(CONFIG_UPDATE) $(MODULE_INIT_TOOLS_DIR2)
- 	touch $(MODULE_INIT_TOOLS_DIR2)/.source
- 
- $(MODULE_INIT_TOOLS_DIR2)/.configured: $(MODULE_INIT_TOOLS_DIR2)/.source
+ config BR2_TOOLCHAIN_ATMEL_AVR32
+ 	bool
