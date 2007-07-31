@@ -1,58 +1,38 @@
-From: Hans-Christian Egtvedt <hcegtvedt@atmel.com>
-Date: Tue, 31 Jul 2007 10:22:03 +0200
-Subject: [Buildroot] Qtopia4 fails building - target stage tries to
-	run	target binaries	on build machine
-In-Reply-To: <20070730185416.GA23362@zelow.no>
-References: <1185796725.27015.7.camel@localhost.localdomain>
-	<20070730185416.GA23362@zelow.no>
-Message-ID: <1185870123.14026.4.camel@localhost.localdomain>
+From: Bernhard Fischer <rep.dot.nop@gmail.com>
+Date: Tue, 31 Jul 2007 10:38:58 +0200
+Subject: [Buildroot] Redundant kernel patches in the
+	snapshot	from20070718
+In-Reply-To: <1185839954.30603.36.camel@elrond.sweden.atmel.com>
+References: <1185459798.1044.43.camel@localhost.localdomain>
+	<1185468722.5580.107.camel@elrond.sweden.atmel.com>
+	<20070727113002.GF22789@aon.at>
+	<026b01c7d2c2$cbcd3460$dcc4af0a@atmel.com>
+	<20070730192728.GA27993@aon.at> <20070730200247.GC29064@aon.at>
+	<1185839954.30603.36.camel@elrond.sweden.atmel.com>
+Message-ID: <20070731083858.GA3797@aon.at>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+On Tue, Jul 31, 2007 at 01:59:14AM +0200, Ulf Samuelsson wrote:
 
-On Mon, 2007-07-30 at 20:54 +0200, Thomas Lundquist wrote:
-> On Mon, Jul 30, 2007 at 01:58:45PM +0200, Hans-Christian Egtvedt wrote:
-> > 
-> > I am trying to look into how to "fix" Qtopia 4 in Buildroot, at least it
-> > does not compile for me (snapshot 20070717).
-> 
-> what happens? 
+Can we settle on the following procedure:
 
-As I said, it tries to execute moc, but moc is compiled for the target.
+You provide a full patch that does the final migration to unpack and
+patch a kernel for each project, install it's headers into the project
+specific dir (from within target/linux/Makefile.in, if you prefer).
+I'd like to review (and eventually discuss) this patch before it is
+finally committed.
 
-/home/hcegtvedt/gitwork/buildroot/build_avr32/qtopia-core-opensource-src-4.2.2/bin/moc -DQT_SHARED -DQT_BUILD_CORE_LIB -DQT_NO_CAST_TO_ASCII -DQT_ASCII_CAST_WARNINGS -DQT_MOC_COMPAT -DQT_NO_DEBUG -D_LARGEFILE64_SOURCE -D_LARGEFILE_SOURCE -I../../mkspecs/qws/linux-avr32-g++ -I. -I../../include -I../../include/QtCore -Iglobal -I.moc/release-shared-emb-avr32 -I.uic/release-shared-emb-avr32 io/qbuffer.h -o .moc/release-shared-emb-avr32/moc_qbuffer.cpp
-/home/hcegtvedt/gitwork/buildroot/build_avr32/qtopia-core-opensource-src-4.2.2/bin/moc: 1: Syntax error: "(" unexpected
+Whether you rm toolchain/kernel-headers or not (and how you deal with
+kernel-headers-old vs. kernel-header-new) is up to you. I just want to
+do this migration in one (tested) step.
 
-> > The makefile seems to generate target specific binaries in build_<arch>
-> > directory, and host specific binaries in toolchain_build_<arch>.
-> 
-> which is the right thing to do.
+Most of the needed steps do already exist, it's merely a matter of
+unpacking the kernel in the project specific dir and decide how to
+handle patches, i.e. whether to only apply exact patches or try to apply
+them if they _could_ do the right thing.
 
-I actually think the toolchain_build_<arch> must install into
-$(STAGING_DIR) and the build_<arch> install into $(TARGET_DIR). This is
-because the build toolchain needs qmake, moc, etc. built with the host
-compiler to be able to make Qt binaries for the target.
-
-And if you want to compile/use these binaries on the target they need to
-be native binaries of course.
-
-> > As I understand the toolchain_build_<arch> binaries should be installed
-> > to $(STAGING_DIR) and the build_<arch> binaries should be installed to
-> > $(TARGET_ROOT)?
-> 
-> But what is the problem? 
-
-The problem arises when building the target Qtopia, it tries to use moc
-et.al compiled for the target architecture. And when running a
-big-endian AVR32 binary on my little-endian x86 laptop, it fails ;)
-
-Suggestions are very welcome, I am trying to clean up this package.
-
--- 
-With kind regards,
-
-Hans-Christian Egtvedt, siv.ing. (M.Sc.)
-Applications Engineer - AVR32 System Solutions - Atmel Norway
+Ok?
