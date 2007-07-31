@@ -1,37 +1,28 @@
-From: aldot at uclibc.org <aldot@uclibc.org>
-Date: Tue, 31 Jul 2007 08:39:23 -0700 (PDT)
-Subject: [Buildroot] svn commit: trunk/buildroot/target/device
-Message-ID: <20070731153923.7B9BDA4940@busybox.net>
+From: ulf at uclibc.org <ulf@uclibc.org>
+Date: Tue, 31 Jul 2007 08:47:32 -0700 (PDT)
+Subject: [Buildroot] svn commit: trunk/buildroot/toolchain/kernel-headers
+Message-ID: <20070731154732.BE431A5E30@busybox.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Author: aldot
-Date: 2007-07-31 08:39:23 -0700 (Tue, 31 Jul 2007)
-New Revision: 19356
+Author: ulf
+Date: 2007-07-31 08:47:32 -0700 (Tue, 31 Jul 2007)
+New Revision: 19357
 
 Log:
-- fixup whitespace
+Add AVR32 kernel patches for linux 2.6.22.1
 
-
-Modified:
-   trunk/buildroot/target/device/Toolchain.in
+Added:
+   trunk/buildroot/toolchain/kernel-headers/linux-2.6.22.1-003-atmel.3-avr32-updates.patch
+   trunk/buildroot/toolchain/kernel-headers/linux-2.6.22.1-007-ipmisensors-20070314-1214.patch
 
 
 Changeset:
-Modified: trunk/buildroot/target/device/Toolchain.in
-===================================================================
---- trunk/buildroot/target/device/Toolchain.in	2007-07-31 15:37:53 UTC (rev 19355)
-+++ trunk/buildroot/target/device/Toolchain.in	2007-07-31 15:39:23 UTC (rev 19356)
-@@ -1,7 +1,7 @@
- choice
- 	prompt "Source location:"
--	default BR2_TOOLCHAIN_NORMAL		if	!BR2_avr32
--	default BR2_TOOLCHAIN_ATMEL_AVR32	if	 BR2_avr32
-+	default BR2_TOOLCHAIN_NORMAL		if!BR2_avr32
-+	default BR2_TOOLCHAIN_ATMEL_AVR32	if BR2_avr32
- 	depends on BR2_TOOLCHAIN_BUILDROOT
- 	help
- 	  Select whether to use the toolchain built by the buildroot
+
+Sorry, the patch is too large to include (16745 lines).
+Please use ViewCVS to see it!
+
+http://uclibc.org/cgi-bin/viewcvs.cgi?view=rev&root=svn&rev=19357
