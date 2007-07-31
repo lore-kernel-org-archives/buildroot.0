@@ -1,26 +1,36 @@
-From: Shai Lifshitz <ShaiL@visonic.com>
-Date: Tue, 31 Jul 2007 19:00:57 +0400
-Subject: [Buildroot] "undefined reference to 'raise'"
-Message-ID: <OF8DC77ECB.C4CECC1B-ONC2257329.005240A3-C3257329.004C9DFE@visonic.com>
+From: aldot at uclibc.org <aldot@uclibc.org>
+Date: Tue, 31 Jul 2007 08:10:55 -0700 (PDT)
+Subject: [Buildroot] svn commit: trunk/buildroot/package
+Message-ID: <20070731151055.19772A6074@busybox.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-I am using the buildroot to compile the u-boot.
+Author: aldot
+Date: 2007-07-31 08:10:55 -0700 (Tue, 31 Jul 2007)
+New Revision: 19354
 
-the flags I used:
-BR2_arm=y
-BR2_arm926t=y
-BR2_ARM_EABI=y
+Log:
+- nil the CXX env var if we don't have a CXX cross-compiler
 
-and I get the "undefined reference to raise" error.
 
-can someone help me with this issue?
+Modified:
+   trunk/buildroot/package/Makefile.in
 
-Shai Lifshitz
-email: shail at visonic.com
--------------- next part --------------
-An HTML attachment was scrubbed...
-URL: http://busybox.net/lists/buildroot/attachments/20070731/f941ee46/attachment.htm 
+
+Changeset:
+Modified: trunk/buildroot/package/Makefile.in
+===================================================================
+--- trunk/buildroot/package/Makefile.in	2007-07-31 15:07:06 UTC (rev 19353)
++++ trunk/buildroot/package/Makefile.in	2007-07-31 15:10:55 UTC (rev 19354)
+@@ -238,7 +238,7 @@
+ DISABLE_IPV6= --disable-ipv6
+ endif
+ 
+-ifeq ($(BR2_INSTALL_LIBSTDCPP),)
++ifneq ($(BR2_GCC_CROSS_CXX),y)
+ TARGET_CONFIGURE_OPTS+=CXX=""
+ endif
+ 
