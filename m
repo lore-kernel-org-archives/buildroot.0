@@ -1,113 +1,84 @@
-From: aldot at uclibc.org <aldot@uclibc.org>
-Date: Tue, 31 Jul 2007 09:13:01 -0700 (PDT)
-Subject: [Buildroot] svn commit: trunk/buildroot/package/lzma
-Message-ID: <20070731161301.85C94A5E1E@busybox.net>
+From: Bernhard Fischer <rep.dot.nop@gmail.com>
+Date: Tue, 31 Jul 2007 18:15:25 +0200
+Subject: [Buildroot] svn commit: trunk/buildroot:
+	target/device	target/device/Atmel targe etc...
+In-Reply-To: <20070731145959.C5111A4595@busybox.net>
+References: <20070731145959.C5111A4595@busybox.net>
+Message-ID: <20070731161525.GB9378@aon.at>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Author: aldot
-Date: 2007-07-31 09:13:00 -0700 (Tue, 31 Jul 2007)
-New Revision: 19360
+On Tue, Jul 31, 2007 at 07:59:59AM -0700, ulf at uclibc.org wrote:
+>Author: ulf
+>Date: 2007-07-31 07:59:58 -0700 (Tue, 31 Jul 2007)
+>New Revision: 19351
+>
+>Log:
+>Add support for prepatched toolchains
 
-Log:
-- lzma needs a CXX cross-compiler
-- minor cleanups while at it
+>Changeset:
 
+[snip -- see r19355 and r19356 for comments on the snipped parts]
 
-Modified:
-   trunk/buildroot/package/lzma/Config.in
-   trunk/buildroot/package/lzma/lzma.mk
+>Modified: trunk/buildroot/toolchain/uClibc/uclibc.mk
+>===================================================================
+>--- trunk/buildroot/toolchain/uClibc/uclibc.mk	2007-07-30 18:24:53 UTC (rev 19350)
+>+++ trunk/buildroot/toolchain/uClibc/uclibc.mk	2007-07-31 14:59:58 UTC (rev 19351)
+>@@ -33,15 +33,23 @@
+> endif
+> UCLIBC_SITE:=http://www.uclibc.org/downloads
+> 
+>-ifeq	($(BR2_avr32),y)
+>-VENDOR_SUFFIX:=-avr32
+>-UCLIBC_SITE:=$(BR2_ATMEL_MIRROR)/Source
+>+ifeq	($(BR2_TOOLCHAIN_NORMAL),)
+>+UCLIBC_SITE:=$(VENDOR_SITE)
+> endif
+> 
+>-UCLIBC_DIR:=$(TOOL_BUILD_DIR)/uClibc-$(UCLIBC_VER)$(VENDOR_SUFFIX)
+>-UCLIBC_SOURCE:=uClibc-$(UCLIBC_VER)$(VENDOR_SUFFIX).tar.bz2
+>+UCLIBC_OFFICIAL_VERSION:=$(UCLIBC_VER)$(VENDOR_SUFFIX)$(VENDOR_UCLIBC_RELEASE)
+>+
+>+
+>+ifeq	($(BR2_TOOLCHAIN_NORMAL),y)
+>+UCLIBC_PATCH_DIR:=toolchain/uClibc/
+>+else
+>+UCLIBC_PATCH_DIR:=$(VENDOR_PATCH_DIR)/uClibc-$(UCLIBC_OFFICIAL_VERSION)
+> endif
+> 
+>+UCLIBC_DIR:=$(TOOL_BUILD_DIR)/uClibc-$(UCLIBC_OFFICIAL_VERSION)
+>+UCLIBC_SOURCE:=uClibc-$(UCLIBC_OFFICIAL_VERSION).tar.bz2
+>+endif
+>+
+> UCLIBC_CAT:=$(BZCAT)
+> 
+> UCLIBC_TARGET_ARCH:=$(shell $(SHELL) -c "echo $(ARCH) | sed -e s'/-.*//' \
+>@@ -93,13 +101,13 @@
+> 
+> uclibc-unpacked: $(UCLIBC_DIR)/.unpacked
+> $(UCLIBC_DIR)/.unpacked: $(DL_DIR)/$(UCLIBC_SOURCE) $(UCLIBC_LOCALE_DATA)
+>-	[ -d $(TOOL_BUILD_DIR) ] || $(INSTALL) -d $(TOOL_BUILD_DIR)
+>+	mkdir -p $(TOOL_BUILD_DIR)
+> 	rm -rf $(UCLIBC_DIR)
+> 	$(UCLIBC_CAT) $(DL_DIR)/$(UCLIBC_SOURCE) | tar -C $(TOOL_BUILD_DIR) $(TAR_OPTIONS) -
+> ifneq ($(BR2_UCLIBC_VERSION_SNAPSHOT),y)
+>-	toolchain/patch-kernel.sh $(UCLIBC_DIR) toolchain/uClibc/ uClibc-$(UCLIBC_VER)$(VENDOR_SUFFIX)-\*.patch
+>+	toolchain/patch-kernel.sh $(UCLIBC_DIR) $(UCLIBC_PATCH_DIR) uClibc-$(UCLIBC_OFFICIAL_VERSION)-\*.patch
+> else
+>-	toolchain/patch-kernel.sh $(UCLIBC_DIR) toolchain/uClibc/ uClibc.\*.patch
+>+	toolchain/patch-kernel.sh $(UCLIBC_DIR) $(UCLIBC_PATCH_DIR) uClibc.\*.patch
+> endif
+> ifneq ($(BR2_ENABLE_LOCALE),)
+> 	cp -dpf $(DL_DIR)/$(UCLIBC_SOURCE_LOCALE) $(UCLIBC_DIR)/extra/locale/
 
+You broke using snapshots.
 
-Changeset:
-Modified: trunk/buildroot/package/lzma/Config.in
-===================================================================
---- trunk/buildroot/package/lzma/Config.in	2007-07-31 16:02:18 UTC (rev 19359)
-+++ trunk/buildroot/package/lzma/Config.in	2007-07-31 16:13:00 UTC (rev 19360)
-@@ -1,6 +1,7 @@
- config BR2_PACKAGE_LZMA_TARGET
- 	bool "Install lzma for the target system"
- 	default n
-+	select BR2_GCC_CROSS_CXX
- 	help
- 	  lzma utils on the target
- 
+[]
+bzcat /tmp/buildroot_trunk/.down/uClibc-snapshot.tar.bz2 | tar -C /tmp/buildroot_trunk/toolchain_build_i386   -xf -
+toolchain/patch-kernel.sh /tmp/buildroot_trunk/toolchain_build_i386/uClibc  uClibc.\*.patch
+Aborting.  'uClibc.*.patch' is not a directory.
 
-Modified: trunk/buildroot/package/lzma/lzma.mk
-===================================================================
---- trunk/buildroot/package/lzma/lzma.mk	2007-07-31 16:02:18 UTC (rev 19359)
-+++ trunk/buildroot/package/lzma/lzma.mk	2007-07-31 16:13:00 UTC (rev 19360)
-@@ -24,19 +24,19 @@
- #
- ######################################################################
- 
--$(LZMA_HOST_DIR)/.source: $(DL_DIR)/$(LZMA_SOURCE)
-+$(LZMA_HOST_DIR)/.unpacked: $(DL_DIR)/$(LZMA_SOURCE)
- 	$(LZMA_CAT) $(DL_DIR)/$(LZMA_SOURCE) | tar -C $(TOOL_BUILD_DIR) $(TAR_OPTIONS) -
- 	toolchain/patch-kernel.sh $(LZMA_HOST_DIR) package/lzma/ lzma\*.patch
--	touch $(LZMA_HOST_DIR)/.source
-+	touch $@
- 
--$(LZMA_HOST_DIR)/.configured: $(LZMA_HOST_DIR)/.source
-+$(LZMA_HOST_DIR)/.configured: $(LZMA_HOST_DIR)/.unpacked
- 	(cd $(LZMA_HOST_DIR); rm -f config.cache ;\
- 		CC="$(HOSTCC)" \
- 		CXX="$(HOSTCXX)" \
- 		./configure \
- 		--prefix=/ \
- 	);
--	touch $(LZMA_HOST_DIR)/.configured;
-+	touch $@
- 
- $(LZMA_HOST_DIR)/src/lzma/lzma: $(LZMA_HOST_DIR)/.configured
- 	$(MAKE) -C $(LZMA_HOST_DIR) all
-@@ -45,20 +45,24 @@
- $(STAGING_DIR)/bin/lzma: $(LZMA_HOST_DIR)/src/lzma/lzma
- 	$(MAKE) DESTDIR=$(STAGING_DIR) -C $(LZMA_HOST_DIR) install
- 
--lzma-host: uclibc $(STAGING_DIR)/bin/lzma
--
-+lzma-host: $(STAGING_DIR)/bin/lzma
-+lzma-host-clean:
-+	rm -f $(STAGING_DIR)/bin/lzma
-+	-$(MAKE) -C $(LZMA_HOST_DIR) clean
-+lzma-host-dirclean:
-+	rm -rf $(LZMA_HOST_DIR)
- ######################################################################
- #
- # lzma target
- #
- ######################################################################
- 
--$(LZMA_TARGET_DIR)/.source: $(DL_DIR)/$(LZMA_SOURCE)
-+$(LZMA_TARGET_DIR)/.unpacked: $(DL_DIR)/$(LZMA_SOURCE)
- 	$(LZMA_CAT) $(DL_DIR)/$(LZMA_SOURCE) | tar -C $(BUILD_DIR) $(TAR_OPTIONS) -
- 	toolchain/patch-kernel.sh $(LZMA_TARGET_DIR) package/lzma/ lzma\*.patch
--	touch $(LZMA_TARGET_DIR)/.source
-+	touch $@
- 
--$(LZMA_TARGET_DIR)/.configured: $(LZMA_TARGET_DIR)/.source
-+$(LZMA_TARGET_DIR)/.configured: $(LZMA_TARGET_DIR)/.unpacked
- 	(cd $(LZMA_TARGET_DIR); rm -f config.cache ;\
- 		$(TARGET_CONFIGURE_OPTS) \
- 		$(TARGET_CONFIGURE_ARGS) \
-@@ -76,7 +80,7 @@
- 		$(DISABLE_NLS) \
- 		$(DISABLE_LARGEFILE) \
- 	);
--	touch $(LZMA_TARGET_DIR)/.configured;
-+	touch $@
- 
- $(LZMA_TARGET_DIR)/src/lzma/lzma: $(LZMA_TARGET_DIR)/.configured
- 	$(MAKE) -C $(LZMA_TARGET_DIR) all
-@@ -107,6 +111,7 @@
- #############################################################
- ifeq ($(strip $(BR2_PACKAGE_LZMA_HOST)),y)
- TARGETS+=lzma-host
-+HOST_SOURCE+=lzma-source
- endif
- 
- ifeq ($(strip $(BR2_PACKAGE_LZMA_TARGET)),y)
+Please fix.
