@@ -1,7 +1,7 @@
 From: ulf at uclibc.org <ulf@uclibc.org>
-Date: Tue, 31 Jul 2007 16:25:13 -0700 (PDT)
-Subject: [Buildroot] svn commit: trunk/buildroot/toolchain: gdb uClibc
-Message-ID: <20070731232513.7BEA2A4640@busybox.net>
+Date: Tue, 31 Jul 2007 16:28:24 -0700 (PDT)
+Subject: [Buildroot] svn commit: trunk/buildroot/toolchain/kernel-headers
+Message-ID: <20070731232824.407DEA605E@busybox.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -9,40 +9,20 @@ Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
 Author: ulf
-Date: 2007-07-31 16:25:12 -0700 (Tue, 31 Jul 2007)
-New Revision: 19372
+Date: 2007-07-31 16:28:22 -0700 (Tue, 31 Jul 2007)
+New Revision: 19373
 
 Log:
-Add PATCH_DIR's for snapshots of uclibc and gdb
+Revert Atmel patches for now
 
-Modified:
-   trunk/buildroot/toolchain/gdb/gdb.mk
-   trunk/buildroot/toolchain/uClibc/uclibc.mk
+Removed:
+   trunk/buildroot/toolchain/kernel-headers/linux-2.6.21.5-003-atmel.1-avr32-updates.patch
+   trunk/buildroot/toolchain/kernel-headers/linux-2.6.22.1-003-atmel.3-avr32-updates.patch
 
 
 Changeset:
-Modified: trunk/buildroot/toolchain/gdb/gdb.mk
-===================================================================
---- trunk/buildroot/toolchain/gdb/gdb.mk	2007-07-31 22:57:19 UTC (rev 19371)
-+++ trunk/buildroot/toolchain/gdb/gdb.mk	2007-07-31 23:25:12 UTC (rev 19372)
-@@ -17,6 +17,7 @@
- GDB_SOURCE:=gdb.tar.bz2
- GDB_CAT:=$(BZCAT)
- GDB_DIR:=$(TOOL_BUILD_DIR)/gdb-$(GDB_VERSION)
-+GDB_PATCH_DIR:=toolchain/gdb/$(GDB_VERSION)
- else
- 
- ifeq	($(BR2_TOOLCHAIN_NORMAL),y)
 
-Modified: trunk/buildroot/toolchain/uClibc/uclibc.mk
-===================================================================
---- trunk/buildroot/toolchain/uClibc/uclibc.mk	2007-07-31 22:57:19 UTC (rev 19371)
-+++ trunk/buildroot/toolchain/uClibc/uclibc.mk	2007-07-31 23:25:12 UTC (rev 19372)
-@@ -20,6 +20,7 @@
- UCLIBC_SOURCE:=uClibc-$(strip $(subst ",, $(BR2_USE_UCLIBC_SNAPSHOT))).tar.bz2
- #"))
- UCLIBC_SITE:=http://www.uclibc.org/downloads/snapshots
-+UCLIBC_PATCH_DIR:=toolchain/uClibc/
- else
- # releases
- ifeq ($(BR2_UCLIBC_VERSION_0_9_29),y)
+Sorry, the patch is too large to include (32603 lines).
+Please use ViewCVS to see it!
+
+http://uclibc.org/cgi-bin/viewcvs.cgi?view=rev&root=svn&rev=19373
