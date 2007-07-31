@@ -1,38 +1,100 @@
-From: Thomas Lundquist <lists@zelow.no>
-Date: Tue, 31 Jul 2007 11:38:27 +0200
-Subject: [Buildroot] Qtopia4 fails building - target stage tries to run
-	target binaries	on build machine
-In-Reply-To: <1185870123.14026.4.camel@localhost.localdomain>
-References: <1185796725.27015.7.camel@localhost.localdomain>
-	<20070730185416.GA23362@zelow.no>
-	<1185870123.14026.4.camel@localhost.localdomain>
-Message-ID: <20070731093827.GA18869@zelow.no>
+From: Bernhard Fischer <rep.dot.nop@gmail.com>
+Date: Tue, 31 Jul 2007 11:45:07 +0200
+Subject: [Buildroot] --includedir=/usr/include
+	vs	--includedir=(STAGING_DIR)/usr/include
+In-Reply-To: <0707311014040.1707@somehost>
+References: <0707302043450.17391@somehost>
+	<20070730190231.GA5834@real.realitydiluted.com>
+	<0707302103451.17391@somehost> <20070730193608.GB27993@aon.at>
+	<0707302148220.17391@somehost> <20070730201107.GD29064@aon.at>
+	<0707311014040.1707@somehost>
+Message-ID: <20070731094507.GA5280@aon.at>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Tue, Jul 31, 2007 at 10:22:03AM +0200, Hans-Christian Egtvedt wrote:
-> 
-> As I said, it tries to execute moc, but moc is compiled for the target.
+On Tue, Jul 31, 2007 at 10:40:55AM +0200, Cristian Ionescu-Idbohrn wrote:
+>On Mon, 30 Jul 2007, Bernhard Fischer wrote:
+>
+>> On Mon, Jul 30, 2007 at 09:52:51PM +0200, Cristian Ionescu-Idbohrn wrote:
+>> >On Mon, 30 Jul 2007, Bernhard Fischer wrote:
+>> >
+>> >> >  --includedir=/usr/include vs --includedir=$(STAGING_DIR)/usr/include
+>> >> >                                            ^^^^^^^^^^^^^^
+>> >>
+>> >> depending on the package --prefix=$(STAGING_DIR)/usr is enough
+>> >  ^^^^^^^^^
+>> >
+>> >Could you please be more verbose? How does one identify which is which?
+>>
+>> packages that use autoconf usually have:
+>>
+>> Installation directories:
+>>   --prefix=PREFIX         install architecture-independent files in
+>> PREFIX
+>>                           [/usr/local]
+>
+>But of course. Using --prefix=/usr (instead of 10 options) should be
+>enough in most cases. A lot of configure options need removing from
+>the .mk files.
 
-Weird.
+/me nods
 
-> The problem arises when building the target Qtopia, it tries to use moc
-> et.al compiled for the target architecture. And when running a
-> big-endian AVR32 binary on my little-endian x86 laptop, it fails ;)
+[snip overall happy agreement]
+>> libpcap, for example can be configured with
+>> --prefix=/usr
+>> and installed with
+>> $(MAKE) DESTDIR=$(STAGING_DIR) -C $(LIBPCAP_DIR) install
+>> (assuming that it doesn't install anything into /etc).
+>>
+>> See?
+>
+>Quite simple, isn't it :D ?
 
-But of course.
+yep :)
+>
+>> PS: Of course there is DESTDIR vs. PREFIX. Look at the respective
+>> Makefile{.am,.in,}
+>
+>Yes.
+>
+>I was probably not clear enough. Let me try one more time.
+>
+>  --prefix=/usr vs --prefix=$(STAGING_DIR)/usr
+>                            ^^^^^^^^^^^^^^
+>
+>I noticed use of the -isysroot and --sysroot gcc compiler options. My
+>interpretation of these options after reading the info pages:
+>
+>,----
+>| `-isysroot DIR'
+>|      This option is like the `--sysroot' option, but applies only to
+>|      header files.  See the `--sysroot' option for more information.
+>|
+>| `--sysroot=DIR'
+>|      Use DIR as the logical root directory for headers and libraries.
+>|      For example, if the compiler would normally search for headers in
+>|      `/usr/include' and libraries in `/usr/lib', it will instead search
+>|      `DIR/usr/include' and `DIR/usr/lib'.
+>|
+>|      If you use both this option and the `-isysroot' option, then the
+>|      `--sysroot' option will apply to libraries, but the `-isysroot'
+>|      option will apply to header files.
+>|
+>|      The GNU linker (beginning with version 2.16) has the necessary
+>|      support for this option.  If your linker does not support this
+>|      option, the header file aspect of `--sysroot' will still work, but
+>|      the library aspect will not.
+>`----
+>
+>is that $(STAGING_DIR) is not needed if the gcc option
+>--sysroot=$(STAGING_DIR) is used. Does this make sense?
 
-the weird part is that the makefile was made for compiling qtopia on
-ARM, which means moc & co was compiled for the right platform(s).
+yes, it does in my POV. IIRC the old, unsupported (by upstream) gcc
+versions without sysroot support pass the staging_dir via -I and -L, but
+you should double check if a non sysroot-enabled toolchain still builds
+them fine, i guess.
 
-> Suggestions are very welcome, I am trying to clean up this package.
-
-I'll start working on fixing this right now.
-(Believe me, you'd like not to find out why it's as messy as it is.)
-
-
-
-Thomas.
+cheers,
