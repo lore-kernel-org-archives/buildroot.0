@@ -1,58 +1,49 @@
 From: Ulf Samuelsson <ulf@atmel.com>
-Date: Wed, 1 Aug 2007 01:15:11 +0200
-Subject: [Buildroot] svn commit: trunk/buildroot: target/device
-	target/device/Atmel targe etc...
-References: <20070731145959.C5111A4595@busybox.net><20070731161525.GB9378@aon.at>
-	<0707312219520.11633@somehost>
-Message-ID: <00ae01c7d3fa$8fbc1020$dcc4af0a@atmel.com>
+Date: Wed, 1 Aug 2007 00:43:50 +0200
+Subject: [Buildroot] svn commit:trunk/buildroot/toolchain/kernel-headers
+References: <20070731160220.4557AA466A@busybox.net>
+	<20070731160246.GA9378@aon.at>
+Message-ID: <00ac01c7d3fa$8e62c1b0$dcc4af0a@atmel.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
------ Original Message ----- 
-From: "Cristian Ionescu-Idbohrn" <cristian.ionescu-idbohrn@axis.com>
-To: <buildroot@uclibc.org>
-Sent: Tuesday, July 31, 2007 10:24 PM
-Subject: Re: [Buildroot] svn commit: trunk/buildroot: target/device target/device/Atmel targe etc...
 
 
-> On Tue, 31 Jul 2007, Bernhard Fischer wrote:
-> 
->> You broke using snapshots.
+> On Tue, Jul 31, 2007 at 09:02:20AM -0700, ulf at uclibc.org wrote:
+>>Author: ulf
+>>Date: 2007-07-31 09:02:18 -0700 (Tue, 31 Jul 2007)
+>>New Revision: 19359
 >>
->> []
->> bzcat /tmp/buildroot_trunk/.down/uClibc-snapshot.tar.bz2 | tar -C /tmp/buildroot_trunk/toolchain_build_i386   -xf -
->> toolchain/patch-kernel.sh /tmp/buildroot_trunk/toolchain_build_i386/uClibc  uClibc.\*.patch
->> Aborting.  'uClibc.*.patch' is not a directory.
+>>Log:
+>>Remove duplicate patch
+>>
+>>Removed:
+>>   trunk/buildroot/toolchain/kernel-headers/linux-2.6.21.5-ipmisensors-20070314-1214.patch
+>>   trunk/buildroot/toolchain/kernel-headers/linux-2.6.22.1-ipmisensors-20070314-1214.patch
 > 
-> Even non-snapshots are broken :(  This seems to be the place where it
-> happens:
+> Did you even look if those two are identical?
+> They were not and you broke ipmisensor support for 2.6.22.1 :-(
 > 
-> ,----
-> | ifneq ($(BR2_UCLIBC_VERSION_SNAPSHOT),y)
-> | toolchain/patch-kernel.sh $(UCLIBC_DIR) $(UCLIBC_PATCH_DIR) uClibc-$(UCLIBC_OFFICIAL_VERSION)-\*.patch
-> | else
-> | toolchain/patch-kernel.sh $(UCLIBC_DIR) $(UCLIBC_PATCH_DIR) uClibc.\*.patch
-> | endif
-> `----
-> 
-> Reversing $(UCLIBC_PATCH_DIR) to toolchain/uClibc/ unbreaks it.
-> 
-> 
+>
+trunk/buildroot/toolchain/kernel-headers/linux-2.6.21.5-ipmisensors-20070314-1214.patch
+is a duplicate of 
+trunk/buildroot/toolchain/kernel-headers/linux-2.6.21.5-007-ipmisensors-20070314-1214.patch
 
+trunk/buildroot/toolchain/kernel-headers/linux-2.6.22.1-ipmisensors-20070314-1214.patch
+is a duplicate of
+trunk/buildroot/toolchain/kernel-headers/linux-2.6.22.1-007-ipmisensors-20070314-1214.patch
 
-I test built an x86 and avr32 toolchain before submitting, but missed out on the snapshot.
-Do not see that non-snapshots are broken.    make uclibc-unpacked executes normally on my system.
-Pls submit the error message if you really see this.
+They are not duplicate of each other.
 
-The problem is that UCLIBC_PATCH_DIR is empty when there is a snapshot.
-UCLIBC_PATCH_DIR:=toolchain/uClibc/
-will fix that (tested make uclibc-unpacked with and without snapshot right now)
-
-gdb seems to have the same problem.
-gcc snapshot should have the PATCH_DIR set already.
+(I added a sequence number, but somehow the old patch name remained in the trunk)
 
 Best Regards
-Ulf Samuelsson 
+Ulf Samuelsson                ulf at atmel.com
+Atmel Nordic AB
+Mail:  Box 2033, 174 02 Sundbyberg, Sweden
+Visit:  Kavalleriv?gen 24, 174 58 Sundbyberg, Sweden
+Phone +46 (8) 441 54 22     Fax +46 (8) 441 54 29
+GSM    +46 (706) 22 44 57
