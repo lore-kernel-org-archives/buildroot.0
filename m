@@ -1,7 +1,7 @@
 From: ulf at uclibc.org <ulf@uclibc.org>
-Date: Tue, 31 Jul 2007 15:40:14 -0700 (PDT)
-Subject: [Buildroot] svn commit: trunk/buildroot/package: cvs libxml2
-Message-ID: <20070731224014.3B6B7A4659@busybox.net>
+Date: Tue, 31 Jul 2007 15:41:07 -0700 (PDT)
+Subject: [Buildroot] svn commit: trunk/buildroot/package/module-init-tools
+Message-ID: <20070731224107.40167A4693@busybox.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -9,40 +9,34 @@ Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
 Author: ulf
-Date: 2007-07-31 15:40:13 -0700 (Tue, 31 Jul 2007)
-New Revision: 19369
+Date: 2007-07-31 15:41:06 -0700 (Tue, 31 Jul 2007)
+New Revision: 19370
 
 Log:
-Only build cvs and libxml2 if WCHAR is enabled
+Update config for module-init-tools
 
 Modified:
-   trunk/buildroot/package/cvs/Config.in
-   trunk/buildroot/package/libxml2/Config.in
+   trunk/buildroot/package/module-init-tools/module-init-tools.mk
 
 
 Changeset:
-Modified: trunk/buildroot/package/cvs/Config.in
+Modified: trunk/buildroot/package/module-init-tools/module-init-tools.mk
 ===================================================================
---- trunk/buildroot/package/cvs/Config.in	2007-07-31 22:38:52 UTC (rev 19368)
-+++ trunk/buildroot/package/cvs/Config.in	2007-07-31 22:40:13 UTC (rev 19369)
-@@ -1,6 +1,7 @@
- config BR2_PACKAGE_CVS
- 	bool "cvs"
- 	default n
-+	depends on BR2_USE_WCHAR
- 	select BR2_PACKAGE_NCURSES
- 	help
- 	  Concurrent Versions System - source code revision control tools.
-
-Modified: trunk/buildroot/package/libxml2/Config.in
-===================================================================
---- trunk/buildroot/package/libxml2/Config.in	2007-07-31 22:38:52 UTC (rev 19368)
-+++ trunk/buildroot/package/libxml2/Config.in	2007-07-31 22:40:13 UTC (rev 19369)
-@@ -1,6 +1,7 @@
- config BR2_PACKAGE_LIBXML2
- 	bool "libxml2"
- 	default n
-+	depends on BR2_USE_WCHAR
- 	help
- 	  XML C Parser
- 	  Requires WCHAR
+--- trunk/buildroot/package/module-init-tools/module-init-tools.mk	2007-07-31 22:40:13 UTC (rev 19369)
++++ trunk/buildroot/package/module-init-tools/module-init-tools.mk	2007-07-31 22:41:06 UTC (rev 19370)
+@@ -20,6 +20,7 @@
+ $(MODULE_INIT_TOOLS_DIR)/.unpacked: $(DL_DIR)/$(MODULE_INIT_TOOLS_SOURCE)
+ 	$(MODULE_INIT_TOOLS_CAT) $(DL_DIR)/$(MODULE_INIT_TOOLS_SOURCE) | tar -C $(BUILD_DIR) -xvf -
+ 	toolchain/patch-kernel.sh $(MODULE_INIT_TOOLS_DIR) package/module-init-tools \*.patch
++	$(CONFIG_UPDATE) $(MODULE_INIT_TOOLS_DIR)
+ 	touch $(MODULE_INIT_TOOLS_DIR)/.unpacked
+ 
+ $(MODULE_INIT_TOOLS_DIR)/.configured: $(MODULE_INIT_TOOLS_DIR)/.unpacked
+@@ -76,6 +77,7 @@
+ $(MODULE_INIT_TOOLS_DIR2)/.source: $(DL_DIR)/$(MODULE_INIT_TOOLS_SOURCE)
+ 	$(MODULE_INIT_TOOLS_CAT) $(DL_DIR)/$(MODULE_INIT_TOOLS_SOURCE) | tar -C $(TOOL_BUILD_DIR) -xvf -
+ 	toolchain/patch-kernel.sh $(MODULE_INIT_TOOLS_DIR2) package/module-init-tools \*.patch
++	$(CONFIG_UPDATE) $(MODULE_INIT_TOOLS_DIR2)
+ 	touch $(MODULE_INIT_TOOLS_DIR2)/.source
+ 
+ $(MODULE_INIT_TOOLS_DIR2)/.configured: $(MODULE_INIT_TOOLS_DIR2)/.source
