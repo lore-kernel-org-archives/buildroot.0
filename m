@@ -1,7 +1,7 @@
 From: ulf at uclibc.org <ulf@uclibc.org>
-Date: Tue, 31 Jul 2007 11:31:58 -0700 (PDT)
-Subject: [Buildroot] svn commit: trunk/buildroot/package/tinyx
-Message-ID: <20070731183158.CC4C9A60A6@busybox.net>
+Date: Tue, 31 Jul 2007 11:33:19 -0700 (PDT)
+Subject: [Buildroot] svn commit: trunk/buildroot/package/openssh
+Message-ID: <20070731183319.83E94A6117@busybox.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -9,27 +9,27 @@ Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
 Author: ulf
-Date: 2007-07-31 11:31:58 -0700 (Tue, 31 Jul 2007)
-New Revision: 19364
+Date: 2007-07-31 11:33:19 -0700 (Tue, 31 Jul 2007)
+New Revision: 19365
 
 Log:
-Use TARGET_CONFIGURE_OPTS in tinyX
+Use TARGET_CONFIGURE_OPTS in openssh
 
 Modified:
-   trunk/buildroot/package/tinyx/tinyx.mk
+   trunk/buildroot/package/openssh/openssh.mk
 
 
 Changeset:
-Modified: trunk/buildroot/package/tinyx/tinyx.mk
+Modified: trunk/buildroot/package/openssh/openssh.mk
 ===================================================================
---- trunk/buildroot/package/tinyx/tinyx.mk	2007-07-31 18:25:29 UTC (rev 19363)
-+++ trunk/buildroot/package/tinyx/tinyx.mk	2007-07-31 18:31:58 UTC (rev 19364)
-@@ -97,7 +97,7 @@
- 	#echo "RANLIB=$(TARGET_CROSS)ranlib" >> $(TINYX_DIR)/Makefile
- 	#echo "OBJCOPY=$(TARGET_CROSS)objcopy" >> $(TINYX_DIR)/Makefile
- 	#cat $(TINYX_DIR)/Makefile.xxxx >> $(TINYX_DIR)/Makefile
--	( cd $(TINYX_DIR) ; $(MAKE) World )
-+	( cd $(TINYX_DIR) ; $(MAKE) $(TARGET_CONFIGURE_OPTS) World )
+--- trunk/buildroot/package/openssh/openssh.mk	2007-07-31 18:31:58 UTC (rev 19364)
++++ trunk/buildroot/package/openssh/openssh.mk	2007-07-31 18:33:19 UTC (rev 19365)
+@@ -46,7 +46,7 @@
+ 	touch $@
  
- #
- # Install x-includes and x-libraries in $(STAGING_DIR)/usr/X11R6/
+ $(OPENSSH_DIR)/ssh: $(OPENSSH_DIR)/.configured
+-	$(MAKE) CC=$(TARGET_CC) -C $(OPENSSH_DIR)
++	$(MAKE) $(TARGET_CONFIGURE_OPTS) -C $(OPENSSH_DIR)
+ 	-$(STRIP) --strip-unneeded $(OPENSSH_DIR)/scp
+ 	-$(STRIP) --strip-unneeded $(OPENSSH_DIR)/sftp
+ 	-$(STRIP) --strip-unneeded $(OPENSSH_DIR)/sftp-server
