@@ -1,36 +1,35 @@
-From: aldot at uclibc.org <aldot@uclibc.org>
-Date: Tue, 31 Jul 2007 11:25:30 -0700 (PDT)
-Subject: [Buildroot] svn commit: trunk/buildroot
-Message-ID: <20070731182530.7FC0BA5E1E@busybox.net>
+From: ulf at uclibc.org <ulf@uclibc.org>
+Date: Tue, 31 Jul 2007 11:31:58 -0700 (PDT)
+Subject: [Buildroot] svn commit: trunk/buildroot/package/tinyx
+Message-ID: <20070731183158.CC4C9A60A6@busybox.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Author: aldot
-Date: 2007-07-31 11:25:29 -0700 (Tue, 31 Jul 2007)
-New Revision: 19363
+Author: ulf
+Date: 2007-07-31 11:31:58 -0700 (Tue, 31 Jul 2007)
+New Revision: 19364
 
 Log:
-- add a TODO file to record misc possible extensions/improvements
+Use TARGET_CONFIGURE_OPTS in tinyX
 
-
-Added:
-   trunk/buildroot/TODO
+Modified:
+   trunk/buildroot/package/tinyx/tinyx.mk
 
 
 Changeset:
-Added: trunk/buildroot/TODO
+Modified: trunk/buildroot/package/tinyx/tinyx.mk
 ===================================================================
---- trunk/buildroot/TODO	                        (rev 0)
-+++ trunk/buildroot/TODO	2007-07-31 18:25:29 UTC (rev 19363)
-@@ -0,0 +1,8 @@
-+miscellaneous TODO items that may be worth thinking about and that could
-+be discussed on the mailing-list and/or implemented.
-+
-+
-+- think about using a common --config-cache for configure
-+  Should take care of expanding TARGET_CONFIGURE_ARGS for cross compiles
-+  to working presets.
-+
+--- trunk/buildroot/package/tinyx/tinyx.mk	2007-07-31 18:25:29 UTC (rev 19363)
++++ trunk/buildroot/package/tinyx/tinyx.mk	2007-07-31 18:31:58 UTC (rev 19364)
+@@ -97,7 +97,7 @@
+ 	#echo "RANLIB=$(TARGET_CROSS)ranlib" >> $(TINYX_DIR)/Makefile
+ 	#echo "OBJCOPY=$(TARGET_CROSS)objcopy" >> $(TINYX_DIR)/Makefile
+ 	#cat $(TINYX_DIR)/Makefile.xxxx >> $(TINYX_DIR)/Makefile
+-	( cd $(TINYX_DIR) ; $(MAKE) World )
++	( cd $(TINYX_DIR) ; $(MAKE) $(TARGET_CONFIGURE_OPTS) World )
+ 
+ #
+ # Install x-includes and x-libraries in $(STAGING_DIR)/usr/X11R6/
