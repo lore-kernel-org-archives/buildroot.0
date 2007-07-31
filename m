@@ -1,98 +1,54 @@
-From: Cristian Ionescu-Idbohrn <cristian.ionescu-idbohrn@axis.com>
-Date: Tue, 31 Jul 2007 10:40:55 +0200 (CEST)
-Subject: [Buildroot] --includedir=/usr/include vs
-	--includedir=(STAGING_DIR)/usr/include
-In-Reply-To: <20070730201107.GD29064@aon.at>
+From: Bernhard Fischer <rep.dot.nop@gmail.com>
+Date: Tue, 31 Jul 2007 10:43:01 +0200
+Subject: [Buildroot] --includedir=/usr/include
+	vs	--includedir=(STAGING_DIR)/usr/include
+In-Reply-To: <1185862407.17800.1.camel@localhost.localdomain>
 References: <0707302043450.17391@somehost>
 	<20070730190231.GA5834@real.realitydiluted.com>
 	<0707302103451.17391@somehost> <20070730193608.GB27993@aon.at>
-	<0707302148220.17391@somehost> <20070730201107.GD29064@aon.at>
-Message-ID: <0707311014040.1707@somehost>
+	<1185862407.17800.1.camel@localhost.localdomain>
+Message-ID: <20070731084301.GB3797@aon.at>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Mon, 30 Jul 2007, Bernhard Fischer wrote:
-
-> On Mon, Jul 30, 2007 at 09:52:51PM +0200, Cristian Ionescu-Idbohrn wrote:
-> >On Mon, 30 Jul 2007, Bernhard Fischer wrote:
-> >
-> >> >  --includedir=/usr/include vs --includedir=$(STAGING_DIR)/usr/include
-> >> >                                            ^^^^^^^^^^^^^^
-> >>
-> >> depending on the package --prefix=$(STAGING_DIR)/usr is enough
-> >  ^^^^^^^^^
-> >
-> >Could you please be more verbose? How does one identify which is which?
+On Tue, Jul 31, 2007 at 08:13:27AM +0200, Hans-Christian Egtvedt wrote:
 >
-> packages that use autoconf usually have:
+>On Mon, 2007-07-30 at 21:36 +0200, Bernhard Fischer wrote:
+>> On Mon, Jul 30, 2007 at 09:06:34PM +0200, Cristian Ionescu-Idbohrn wrote:
+>> >On Mon, 30 Jul 2007, Steven J. Hill wrote:
+>> >
+>> >> > Noticed that some .mk files use different --includedir= configure options.
+>> >> > Shouldn't --includedir=/usr/include be used everywhere?
+>> >> >
+>> >> With the recent changes that buildroot has undergone, I actually think
+>> >> this is a good idea. Any objections to getting rid of 'include' in the
+>> >> staging directory all together and going to 'usr/include'?
+>> >
+>> >That's fine with me. But my question was:
+>> >
+>> >  --includedir=/usr/include vs --includedir=$(STAGING_DIR)/usr/include
+>> >                                            ^^^^^^^^^^^^^^
+>> 
+>> depending on the package --prefix=$(STAGING_DIR)/usr
+>> is enough and all other (except, perhaps specifying the location of
+>> $(STAGING_DIR)/etc) are not needed anymore.
+>> 
+>> There are indeed quite some packages that are not yet converted. Patches
+>> to clean those up are very welcome.
 >
-> Installation directories:
->   --prefix=PREFIX         install architecture-independent files in
-> PREFIX
->                           [/usr/local]
+>In the same go a cleanup of all libdir variables in lib<name>.la should
+>be done? I see some libraries have /usr/lib there, and it can make some
+>confusing moments if you have the library installed on the build machine
+>as well.
 
-But of course. Using --prefix=/usr (instead of 10 options) should be
-enough in most cases. A lot of configure options need removing from
-the .mk files.
+AFAICS yes.
 
-> So, for packages that actually install to and use config files from
-> sysconfdir, these should live in $(TARGET_DIR)/etc (resp
-> $(STAGING_DIR)/etc) and not in $(TARGET_DIR)/usr/etc
+The target_dir .la should use the absolute target-pathes (e.g. /usr/lib)
+and the staging_dir .la should use absolute cross-pathes
+($(STAGING_DIR)/usr/lib for example), yes.
 
-Yes.
-
-> libpcap, for example can be configured with
-> --prefix=/usr
-> and installed with
-> $(MAKE) DESTDIR=$(STAGING_DIR) -C $(LIBPCAP_DIR) install
-> (assuming that it doesn't install anything into /etc).
->
-> See?
-
-Quite simple, isn't it :D ?
-
-> PS: Of course there is DESTDIR vs. PREFIX. Look at the respective
-> Makefile{.am,.in,}
-
-Yes.
-
-I was probably not clear enough. Let me try one more time.
-
-  --prefix=/usr vs --prefix=$(STAGING_DIR)/usr
-                            ^^^^^^^^^^^^^^
-
-I noticed use of the -isysroot and --sysroot gcc compiler options. My
-interpretation of these options after reading the info pages:
-
-,----
-| `-isysroot DIR'
-|      This option is like the `--sysroot' option, but applies only to
-|      header files.  See the `--sysroot' option for more information.
-|
-| `--sysroot=DIR'
-|      Use DIR as the logical root directory for headers and libraries.
-|      For example, if the compiler would normally search for headers in
-|      `/usr/include' and libraries in `/usr/lib', it will instead search
-|      `DIR/usr/include' and `DIR/usr/lib'.
-|
-|      If you use both this option and the `-isysroot' option, then the
-|      `--sysroot' option will apply to libraries, but the `-isysroot'
-|      option will apply to header files.
-|
-|      The GNU linker (beginning with version 2.16) has the necessary
-|      support for this option.  If your linker does not support this
-|      option, the header file aspect of `--sysroot' will still work, but
-|      the library aspect will not.
-`----
-
-is that $(STAGING_DIR) is not needed if the gcc option
---sysroot=$(STAGING_DIR) is used. Does this make sense?
-
-
-Cheers,
-
--- 
-Cristian
+IIRC some packages -- those that are actually used as prerequisites for
+other packages in build_ARCH -- already fixup their .la via $(SED).
