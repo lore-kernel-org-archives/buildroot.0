@@ -1,35 +1,114 @@
-From: ulf at uclibc.org <ulf@uclibc.org>
-Date: Tue, 31 Jul 2007 11:40:18 -0700 (PDT)
-Subject: [Buildroot] svn commit: trunk/buildroot/package/make
-Message-ID: <20070731184018.3AC4EA60D9@busybox.net>
+From: Christopher Reder <creder@digitalcpt.com>
+Date: Tue, 31 Jul 2007 13:38:00 -0500
+Subject: [Buildroot] staging_dir/usr/lib vs staging_dir/lib
+Message-ID: <07c301c7d3a1$ebb2fdc0$2600a8c0@engineering5>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Author: ulf
-Date: 2007-07-31 11:40:17 -0700 (Tue, 31 Jul 2007)
-New Revision: 19367
+It seems like there may be some confusion over what directories to use when
+installing/hosting/storing libs.
 
-Log:
-Ensure host make is used when building 'make'
-
-Modified:
-   trunk/buildroot/package/make/make.mk
-
-
-Changeset:
-Modified: trunk/buildroot/package/make/make.mk
-===================================================================
---- trunk/buildroot/package/make/make.mk	2007-07-31 18:37:52 UTC (rev 19366)
-+++ trunk/buildroot/package/make/make.mk	2007-07-31 18:40:17 UTC (rev 19367)
-@@ -49,7 +49,7 @@
- 	touch $@
  
- $(GNUMAKE_DIR)/$(GNUMAKE_BINARY): $(GNUMAKE_DIR)/.configured
--	$(MAKE) -C $(GNUMAKE_DIR)
-+	$(MAKE) MAKE=$(HOSTMAKE) -C $(GNUMAKE_DIR)
+
+I just pulled down the latest and enabled fbv which selected libungif.  In
+doing so, it fails when it tries to remove libs from staging_dir/lib because
+the libs are actually in staging_dir/usr/lib.  
+
  
- $(TARGET_DIR)/$(GNUMAKE_TARGET_BINARY): $(GNUMAKE_DIR)/$(GNUMAKE_BINARY)
- 	$(MAKE) DESTDIR=$(TARGET_DIR) -C $(GNUMAKE_DIR) install
+
+Where should those libs be?  Are they being installed in the wrong directory
+or are they trying to remove them from the wrong directory?
+
+ 
+
+Can someone clarify this?  Same thing happened when trying to build libpng
+as well when it was trying to cp libs over and it was copying from a
+directory where they were not installed.
+
+ 
+
+TIA
+
+ 
+
+make[3]: Leaving directory
+`/home/christopher/svn_buildroot/buildroot/build_arm/libungif-4.1.4/util'
+
+make[2]: Leaving directory
+`/home/christopher/svn_buildroot/buildroot/build_arm/libungif-4.1.4/util'
+
+Making install in doc
+
+make[2]: Entering directory
+`/home/christopher/svn_buildroot/buildroot/build_arm/libungif-4.1.4/doc'
+
+make[3]: Entering directory
+`/home/christopher/svn_buildroot/buildroot/build_arm/libungif-4.1.4/doc'
+
+make[3]: Nothing to be done for `install-exec-am'.
+
+make[3]: Nothing to be done for `install-data-am'.
+
+make[3]: Leaving directory
+`/home/christopher/svn_buildroot/buildroot/build_arm/libungif-4.1.4/doc'
+
+make[2]: Leaving directory
+`/home/christopher/svn_buildroot/buildroot/build_arm/libungif-4.1.4/doc'
+
+Making install in pic
+
+make[2]: Entering directory
+`/home/christopher/svn_buildroot/buildroot/build_arm/libungif-4.1.4/pic'
+
+make[3]: Entering directory
+`/home/christopher/svn_buildroot/buildroot/build_arm/libungif-4.1.4/pic'
+
+make[3]: Nothing to be done for `install-exec-am'.
+
+make[3]: Nothing to be done for `install-data-am'.
+
+make[3]: Leaving directory
+`/home/christopher/svn_buildroot/buildroot/build_arm/libungif-4.1.4/pic'
+
+make[2]: Leaving directory
+`/home/christopher/svn_buildroot/buildroot/build_arm/libungif-4.1.4/pic'
+
+make[2]: Entering directory
+`/home/christopher/svn_buildroot/buildroot/build_arm/libungif-4.1.4'
+
+make[3]: Entering directory
+`/home/christopher/svn_buildroot/buildroot/build_arm/libungif-4.1.4'
+
+make[3]: Nothing to be done for `install-exec-am'.
+
+make[3]: Nothing to be done for `install-data-am'.
+
+make[3]: Leaving directory
+`/home/christopher/svn_buildroot/buildroot/build_arm/libungif-4.1.4'
+
+make[2]: Leaving directory
+`/home/christopher/svn_buildroot/buildroot/build_arm/libungif-4.1.4'
+
+make[1]: Leaving directory
+`/home/christopher/svn_buildroot/buildroot/build_arm/libungif-4.1.4'
+
+rm
+/home/christopher/svn_buildroot/buildroot/build_arm/staging_dir/lib/libungif
+.la
+
+rm: cannot remove
+`/home/christopher/svn_buildroot/buildroot/build_arm/staging_dir/lib/libungi
+f.la': No such file or directory
+
+make: ***
+[/home/christopher/svn_buildroot/buildroot/build_arm/staging_dir/lib/libungi
+f.a] Error 1
+
+linuxbox:/home/christopher/svn_buildroot/buildroot#
+
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: http://busybox.net/lists/buildroot/attachments/20070731/579cd6ff/attachment-0001.htm 
