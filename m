@@ -1,41 +1,51 @@
-From: Hans-Christian Egtvedt <hcegtvedt@atmel.com>
-Date: Wed, 01 Aug 2007 07:59:56 +0200
-Subject: [Buildroot] staging_dir/usr/lib vs staging_dir/lib
-In-Reply-To: <07c301c7d3a1$ebb2fdc0$2600a8c0@engineering5>
-References: <07c301c7d3a1$ebb2fdc0$2600a8c0@engineering5>
-Message-ID: <1185947996.20419.8.camel@localhost.localdomain>
+From: Ulf Samuelsson <ulf@atmel.com>
+Date: Wed, 1 Aug 2007 08:20:01 +0200
+Subject: [Buildroot] linux-2.6.21.5-003-atmel.1-avr32-updates.patchfailes
+References: <0707312150570.11633@somehost> <0707312154000.11633@somehost>
+	<0707312209460.11633@somehost>
+Message-ID: <015801c7d404$0f9291d0$dcc4af0a@atmel.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Tue, 2007-07-31 at 13:38 -0500, Christopher Reder wrote:
-> It seems like there may be some confusion over what directories to use
-> when installing/hosting/storing libs.
+>> Conflicts between linux-2.6.21.5-002-lzma-vmlinuz.01.patch and
+>> linux-2.6.21.5-003-atmel.1-avr32-updates.patch?
+> 
+> Questions:
+> 
+> Is it really necessary to apply these patches? Even though .config shows?
+> 
+> # BR2_PACKAGE_LZMA_TARGET is not set
+> # BR2_PACKAGE_LZMA_HOST is not set
+> # BR2_TARGET_ROOTFS_EXT2_LZMA is not set
+> # BR2_avr32 is not set
+> # BR2_TOOLCHAIN_ATMEL_AVR32 is not set
+> 
+> Wouldn't it be a good idea for each successfully applied patch to have a
+> target and a prequisite?
+> 
+> <patch name>: <patch name>.done
+> 
+> so that, if a patch fails and is fixed on the spot, remake skipps the
+> already applied patches?
+> 
 
-Probably my bad (-:
+We are currently discussing the mess with separate patch strategies
+for the kernel headers and the linux build.
+I proposed that both the kernel-headers and the linux should use the same patch directories.
+This is only the case, if the kernel-headers and the linux version are the same today.
 
-> I just pulled down the latest and enabled fbv which selected libungif.
-> In doing so, it fails when it tries to remove libs from
-> staging_dir/lib because the libs are actually in
-> staging_dir/usr/lib.  
+A long term approach could be to keep the kernel-headers for pre 2.6.19 kernels only
+and build the headers in the target/linux directory, with patches
+divided into groups of patches which are or are not applied depending on 
+menu configurations.
 
-Weird, because staging_dir/usr is a symlink to staging_dir/.
+Typically you would have 
+"core" patches              - always applied
+"architecture" patches   - always applied if an architecture is selected
+"board" patches            -  conditionally applied through a choice.
 
-> Where should those libs be?  Are they being installed in the wrong
-> directory or are they trying to remove them from the wrong directory?
-
-Normal libs should (IMHO) be in /usr/lib.
-
-> Can someone clarify this?  Same thing happened when trying to build
-> libpng as well when it was trying to cp libs over and it was copying
-> from a directory where they were not installed.
-
-I will have a look at libungif, libpng and fbv to see if anything is
-wrong. IIRC fbv was my first try at adding a package to buildroot, it
-could have used some reviewing.
-
--- 
-With kind regards,
-Hans-Christian Egtvedt
+Best Regards
+Ulf Samuelsson
