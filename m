@@ -1,48 +1,52 @@
-From: ulf at uclibc.org <ulf@uclibc.org>
-Date: Wed,  1 Aug 2007 01:15:45 -0700 (PDT)
-Subject: [Buildroot] svn commit: trunk/buildroot/toolchain/kernel-headers
-Message-ID: <20070801081545.87294A493C@busybox.net>
+From: Ulf Samuelsson <ulf@atmel.com>
+Date: Wed, 1 Aug 2007 09:03:42 +0200
+Subject: [Buildroot] Redundant kernel patches in the snapshotfrom20070718
+References: <1185459798.1044.43.camel@localhost.localdomain>
+	<1185468722.5580.107.camel@elrond.sweden.atmel.com>
+	<20070727113002.GF22789@aon.at>
+	<026b01c7d2c2$cbcd3460$dcc4af0a@atmel.com>
+	<20070730192728.GA27993@aon.at> <20070730200247.GC29064@aon.at>
+	<1185839954.30603.36.camel@elrond.sweden.atmel.com>
+	<20070731083858.GA3797@aon.at>
+Message-ID: <027f01c7d412$660482e0$dcc4af0a@atmel.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Author: ulf
-Date: 2007-08-01 01:15:44 -0700 (Wed, 01 Aug 2007)
-New Revision: 19376
+> On Tue, Jul 31, 2007 at 01:59:14AM +0200, Ulf Samuelsson wrote:
+> 
+> Can we settle on the following procedure:
+> 
+> You provide a full patch that does the final migration to unpack and
+> patch a kernel for each project, install it's headers into the project
+> specific dir (from within target/linux/Makefile.in, if you prefer).
+> I'd like to review (and eventually discuss) this patch before it is
+> finally committed.
 
-Log:
-linux-2.6.22.1 headers, makefile part
+Sounds OK with me, but I still need to do the stuff in a separate directory
+from target/linux initially, because if I do it inside that directory,
+then there is a high probability that I run into conflicts with other
+patches during the work.
+It is going to take some time obviously.
 
-Modified:
-   trunk/buildroot/toolchain/kernel-headers/kernel-headers-new.makefile
+> Whether you rm toolchain/kernel-headers or not (and how you deal with
+> kernel-headers-old vs. kernel-header-new) is up to you. I just want to
+> do this migration in one (tested) step.
+> 
+I think that kernel-headers need to remain for pre 2.6.19 kernels.
+Noticed that nios2 support will break without that.
+For later kernels, it is better to do it in target/linux/
 
+> Most of the needed steps do already exist, it's merely a matter of
+> unpacking the kernel in the project specific dir and decide how to
+> handle patches, i.e. whether to only apply exact patches or try to apply
+> them if they _could_ do the right thing.
+> 
+> Ok?
 
-Changeset:
-Modified: trunk/buildroot/toolchain/kernel-headers/kernel-headers-new.makefile
-===================================================================
---- trunk/buildroot/toolchain/kernel-headers/kernel-headers-new.makefile	2007-08-01 08:11:48 UTC (rev 19375)
-+++ trunk/buildroot/toolchain/kernel-headers/kernel-headers-new.makefile	2007-08-01 08:15:44 UTC (rev 19376)
-@@ -3,6 +3,21 @@
- # full kernel tarballs >= 2.6.19.1
- #
- #############################################################
-+ifeq ("$(DEFAULT_KERNEL_HEADERS)","2.6.22.1")
-+VERSION:=2
-+PATCHLEVEL:=6
-+SUBLEVEL:=22
-+EXTRAVERSION:=.1
-+LOCALVERSION:=
-+LINUX_HEADERS_VERSION:=$(VERSION).$(PATCHLEVEL).$(SUBLEVEL)$(EXTRAVERSION)
-+LINUX_HEADERS_SITE:=http://www.kernel.org/pub/linux/kernel/v2.6/
-+LINUX_HEADERS_SOURCE:=linux-$(LINUX_HEADERS_VERSION).tar.bz2
-+LINUX_HEADERS_CAT:=$(BZCAT)
-+LINUX_HEADERS_UNPACK_DIR:=$(BUILD_DIR)/linux-$(LINUX_HEADERS_VERSION)
-+LINUX_HEADERS_DIR:=$(TOOL_BUILD_DIR)/linux
-+LINUX_HEADERS_IS_KERNEL=y
-+endif
-+
- ifeq ("$(DEFAULT_KERNEL_HEADERS)","2.6.21.5")
- VERSION:=2
- PATCHLEVEL:=6
+Yes
+
+Best Regards
+Ulf Samuelsson
