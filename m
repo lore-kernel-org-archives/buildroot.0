@@ -1,53 +1,54 @@
-From: Benjamin Tietz <benjamin@micronet24.de>
-Date: Wed, 1 Aug 2007 09:35:55 +0200
-Subject: [Buildroot] touch menuconfig
-In-Reply-To: <28024.24.217.29.51.1185951980.squirrel@kujawski.org>
-References: <016801c7d404$a2834ca0$dcc4af0a@atmel.com>
-	<28024.24.217.29.51.1185951980.squirrel@kujawski.org>
-Message-ID: <20070801073555.GA4550@firebird.dresden.micronet24.de>
+From: Jinag Robert <cretaceousstone@yahoo.com.cn>
+Date: Wed, 1 Aug 2007 15:42:18 +0800 (CST)
+Subject: [Buildroot] How to just build one application?
+Message-ID: <909390.29092.qm@web15810.mail.cnb.yahoo.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Just to have commandline-completion you dont have to put another silly
-file in the directory confusing/annoying anyone.
-See the section "Programmable Completion" in man 1 bash / your favorite
-shell.
+I'm building smaba following your instructions now. 
 
-regards
-Benjamin
+Thanks.
+Robert
 
-On Wed, Aug 01, 2007 at 02:06:20AM -0500, Frank Kujawski wrote:
->   I don't have an objection to the file and command completion, but I wonder
-> what could be put in the file?
->   What hints could be placed in the file that would be of aid?  At first
-> thought it would be hints, but then that is what is in docs, so my next
-> thought is a link to a hint file in docs, perhaps docs/README.
->   My 2c,
->     Frank
+----- Original Message ----
+From: Ulf Samuelsson <ulf@atmel.com>
+To: Jinag Robert <cretaceousstone@yahoo.com.cn>; Philippe Ney <philippe.ney@tizoo.com>; buildroot at uclibc.org
+Sent: Wednesday, August 1, 2007 1:17:56 PM
+Subject: Re: [Buildroot] How to just build one application?
+
+>>> I've installed  arm linux gcc 4.1.1 toolchains and I want to build uclibc samba with buildroot package. 
+>>> How can I skip building toolchains and just build samba package with the pre-installed toolchains ?
+>> 
+>> $ make samba
+>> 
+>> You can build any target that is defined in a *.mk file by passing it
+>> directly to the make call.
+>> 
+>> Philippe
+>
+>I added "sambe" with make menuconfig and then issued "make samba". But the build script still build gcc tool chain first.  
 > 
-> > I find it quite useful to have an empty file "menuconfig" in the top
-> > directory,
-> > so I can get command completion when doing
-> >
-> > $ make menuconfig
-> >
-> > Any objections to adding this?
-> >
-> > Best Regards
-> > Ulf Samuelsson
-> >
-> >
-> > _______________________________________________
-> > buildroot mailing list
-> > buildroot at uclibc.org
-> > http://busybox.net/mailman/listinfo/buildroot
-> >
-> 
-> _______________________________________________
-> buildroot mailing list
-> buildroot at uclibc.org
-> http://busybox.net/mailman/listinfo/buildroot
-> 
+
+There is a menu configuration item:
+    Toolchain type --->
+        Toolchain type (External Toolchain)
+
+Then you need to set the paths in the
+    Toolchain Options --->
+
+
+Best Regards
+Ulf Samuelsson
+
+
+
+
+
+
+      ____________________________________________________________________________________
+Luggage? GPS? Comic books? 
+Check out fitting gifts for grads at Yahoo! Search
+http://search.yahoo.com/search?fr=oni_on_mail&p=graduation+gifts&cs=bz
