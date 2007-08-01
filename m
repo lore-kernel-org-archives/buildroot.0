@@ -1,44 +1,34 @@
-From: Cristian Ionescu-Idbohrn <cristian.ionescu-idbohrn@axis.com>
-Date: Wed, 1 Aug 2007 16:21:37 +0200 (CEST)
-Subject: [Buildroot] touch menuconfig
-In-Reply-To: <028101c7d412$68153a70$dcc4af0a@atmel.com>
-References: <016801c7d404$a2834ca0$dcc4af0a@atmel.com>
-	<28024.24.217.29.51.1185951980.squirrel@kujawski.org>
-	<028101c7d412$68153a70$dcc4af0a@atmel.com>
-Message-ID: <0708011538240.1707@somehost>
+From: ulf at uclibc.org <ulf@uclibc.org>
+Date: Wed,  1 Aug 2007 08:52:58 -0700 (PDT)
+Subject: [Buildroot] svn commit: trunk/buildroot/package/avahi
+Message-ID: <20070801155258.323BEA6039@busybox.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Wed, 1 Aug 2007, Ulf Samuelsson wrote:
+Author: ulf
+Date: 2007-08-01 08:52:57 -0700 (Wed, 01 Aug 2007)
+New Revision: 19391
 
-> "make menuconfig" starts the configuration, but linking it to
-> docs/README obviously improves the usability.
+Log:
+Make avahi select LIBDAEMON instead of depending on it.
 
-In that case it would be more intuitive to symlink:
-
-  README -> docs/README
-
-> Anyone else?
-
-Yes. Please don't do confusing things like that and clutter the name
-space more than necessary.
-
-If it's command completion you're looking for write something about
-that in the docs-directory.
-
-Debian, for example, distributes /etc/bash_completion. And that's
-215907 bytes completion worth :)
-Similar for zsh. For example, the directory:
-
-  /usr/share/zsh/4.3.2/functions/Completion/Unix
-
-has a lot of those.
+Modified:
+   trunk/buildroot/package/avahi/Config.in
 
 
-Cheers,
-
--- 
-Cristian
+Changeset:
+Modified: trunk/buildroot/package/avahi/Config.in
+===================================================================
+--- trunk/buildroot/package/avahi/Config.in	2007-08-01 12:11:44 UTC (rev 19390)
++++ trunk/buildroot/package/avahi/Config.in	2007-08-01 15:52:57 UTC (rev 19391)
+@@ -1,6 +1,6 @@
+ config BR2_PACKAGE_AVAHI
+ 	bool "avahi"
+-	depends on BR2_PACKAGE_LIBDAEMON
++	select BR2_PACKAGE_LIBDAEMON
+ 	default n
+ 	help
+ 	  Avahi is a system which facilitates service
