@@ -1,46 +1,51 @@
-From: Hans-Christian Egtvedt <hcegtvedt@atmel.com>
-Date: Wed, 01 Aug 2007 09:48:35 +0200
-Subject: [Buildroot] [PATCH] staging_dir/usr/lib vs staging_dir/lib
-In-Reply-To: <1185947996.20419.8.camel@localhost.localdomain>
-References: <07c301c7d3a1$ebb2fdc0$2600a8c0@engineering5>
-	<1185947996.20419.8.camel@localhost.localdomain>
-Message-ID: <1185954515.32541.15.camel@localhost.localdomain>
+From: Thomas Lundquist <lists@zelow.no>
+Date: Wed, 1 Aug 2007 09:45:57 +0200
+Subject: [Buildroot] Qtopia4 fails building - target stage tries to
+	run	target binaries on build machine
+In-Reply-To: <1185892878.1675.6.camel@localhost.localdomain>
+References: <1185796725.27015.7.camel@localhost.localdomain>
+	<20070730185416.GA23362@zelow.no>
+	<1185870123.14026.4.camel@localhost.localdomain>
+	<20070731093827.GA18869@zelow.no>
+	<37c712e0707310526n3e3a8c64v33b7717bad6fd464@mail.gmail.com>
+	<1185885318.24720.3.camel@localhost.localdomain>
+	<37c712e0707310727r2870246ei3cdeb275c7e21bb4@mail.gmail.com>
+	<1185892878.1675.6.camel@localhost.localdomain>
+Message-ID: <20070801074557.GB20580@zelow.no>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Wed, 2007-08-01 at 07:59 +0200, Hans-Christian Egtvedt wrote:
-> On Tue, 2007-07-31 at 13:38 -0500, Christopher Reder wrote:
-> > It seems like there may be some confusion over what directories to use
-> > when installing/hosting/storing libs.
+On Tue, Jul 31, 2007 at 04:41:18PM +0200, Hans-Christian Egtvedt wrote:
 > 
-> Probably my bad (-:
+> The Qtopia 4 source is extracted to two different places and compiled
+> almost alike. As I see it, one time should be enough.
 
-I cleaned up libpng, libungif and fbv. Although my upstream snapshot is
-some days old.
+but it isn't. one reason is the hard coding of paths in the qt
+libraries.
 
-> > I just pulled down the latest and enabled fbv which selected libungif.
-> > In doing so, it fails when it tries to remove libs from
-> > staging_dir/lib because the libs are actually in
-> > staging_dir/usr/lib.  
+there was other reasons aswell but I can't remember all of'em just right
+now.
+
+it's been too long time without having to work on it.
+
+> > 2) running qmake and moc for the target
 > 
-> Weird, because staging_dir/usr is a symlink to staging_dir/.
+> Do buildroot need this? Only if they are to be installed on target and
+> the user plans to build QT application on the target.
 
-Actually, removing libungif.la is not something that should have been
-done when installing (I think, anybody know the reason?). I have
-replaced it with a SED fixing the libdir in the included patch.
+you need qmake & friends on the host to compile applications for the
+target.
 
-<snipp>
+if that was the question.
 
--- 
-With kind regards,
-Hans-Christian Egtvedt
--------------- next part --------------
-A non-text attachment was scrubbed...
-Name: br2-clean-libpng-libungif-and-fbv.patch
-Type: text/x-patch
-Size: 3855 bytes
-Desc: not available
-Url : http://busybox.net/lists/buildroot/attachments/20070801/5be1e4ce/attachment.bin 
+> AFAIK Qtopia 4 is somewhat ready for cross compiling, capable of
+> building the tools with HOSTCC and the library with TARGETCC.
+
+somewhat is the word here.
+
+
+
+Thomas.
