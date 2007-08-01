@@ -1,43 +1,44 @@
-From: Chris Malarky <chris@malarky.org>
-Date: Wed, 01 Aug 2007 18:18:29 +0100
-Subject: [Buildroot] [PATCH] gzip cpio
-In-Reply-To: <20070621112152.GA21096@aon.at>
-References: <1182422403.7911.2.camel@venture.bit63.org>
-	<20070621112152.GA21096@aon.at>
-Message-ID: <1185988709.6827.49.camel@shadow.muzakdomain.imagesound.co.uk>
+From: Yann E. MORIN <yann.morin.1998@anciens.enib.fr>
+Date: Wed, 1 Aug 2007 19:39:42 +0200
+Subject: [Buildroot] touch menuconfig
+In-Reply-To: <016801c7d404$a2834ca0$dcc4af0a@atmel.com>
+References: <016801c7d404$a2834ca0$dcc4af0a@atmel.com>
+Message-ID: <200708011939.43078.yann.morin.1998@anciens.enib.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Thu, 2007-06-21 at 13:21 +0200, Bernhard Fischer wrote:
-> On Thu, Jun 21, 2007 at 06:40:03AM -0400, Clark Rawlins wrote:
-> >This patch is useful to me.  It permits gzipping the cpio archive after
-> >creation.  This is my first attempt so if there are better, or more
-> >correct ways to accomplish this I am interested in improving my changes.
-> 
-> Problem is that somebody will show up sooner or later who wants to use
-> another compressor (we've seen this with ext2 rootfs).
-> Let me suggest you look at target/ext2/ext2root.mk
-> and do the same COMPRESSOR fiddling (with cpio and any other target
-> format).
+All,
+Ulf,
 
-Attached is a patch to add the same compression options to the cpio root
-as to the ext2 root.
+On Wednesday 01 August 2007 08:24, Ulf Samuelsson wrote:
+> I find it quite useful to have an empty file "menuconfig" in the top directory,
+> so I can get command completion when doing
+> $ make menuconfig
+> Any objections to adding this?
 
-I'm only using gzipped cpio at the moment, but will gladly do the same
-for other output formats if there is demand for it.
+Yep. I'd prefer having a file somewhere in the tree (e.g. in docs/ or a new
+tools/ directory) that contains some completion functions for somw shells
+(at least bash and zsh come to mind) and that the users could source in theit
+startup scripts.
 
-Cheers,
-Chris
+Having a file which sole purpose is help completion would uselessly clutter
+the directory, IMRHO.
+
+I once had make-completion working in bash: it would scan the makefile in some
+manner and suggest matching options, files or rules depending on the pre-
+existing command line (was that in a Mandriva?). I'll try to dig that up and
+come back to you later this evening (GMT+2).
+
+Regards,
+Yann E. MORIN.
+
 -- 
-Chris Malarky
-chris at malarky dot org
--------------- next part --------------
-A non-text attachment was scrubbed...
-Name: cpioroot-compressor.patch
-Type: text/x-patch
-Size: 4635 bytes
-Desc: 
-Url : http://busybox.net/lists/buildroot/attachments/20070801/78835336/attachment.bin 
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +0/33 662376056 | Software  Designer | \ / CAMPAIGN     |   ^                |
+| --==< ?_? >==-- ?------------.-------:  X  AGAINST      |  /e\  There is no  |
+| http://ymorin.is-a-geek.org/ | (*_*) | / \ HTML MAIL    |  """  conspiracy.  |
+?------------------------------?-------?------------------?--------------------?
