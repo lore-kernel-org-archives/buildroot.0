@@ -1,54 +1,46 @@
-From: Jinag Robert <cretaceousstone@yahoo.com.cn>
-Date: Wed, 1 Aug 2007 15:42:18 +0800 (CST)
-Subject: [Buildroot] How to just build one application?
-Message-ID: <909390.29092.qm@web15810.mail.cnb.yahoo.com>
+From: Hans-Christian Egtvedt <hcegtvedt@atmel.com>
+Date: Wed, 01 Aug 2007 09:48:35 +0200
+Subject: [Buildroot] [PATCH] staging_dir/usr/lib vs staging_dir/lib
+In-Reply-To: <1185947996.20419.8.camel@localhost.localdomain>
+References: <07c301c7d3a1$ebb2fdc0$2600a8c0@engineering5>
+	<1185947996.20419.8.camel@localhost.localdomain>
+Message-ID: <1185954515.32541.15.camel@localhost.localdomain>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-I'm building smaba following your instructions now. 
-
-Thanks.
-Robert
-
------ Original Message ----
-From: Ulf Samuelsson <ulf@atmel.com>
-To: Jinag Robert <cretaceousstone@yahoo.com.cn>; Philippe Ney <philippe.ney@tizoo.com>; buildroot at uclibc.org
-Sent: Wednesday, August 1, 2007 1:17:56 PM
-Subject: Re: [Buildroot] How to just build one application?
-
->>> I've installed  arm linux gcc 4.1.1 toolchains and I want to build uclibc samba with buildroot package. 
->>> How can I skip building toolchains and just build samba package with the pre-installed toolchains ?
->> 
->> $ make samba
->> 
->> You can build any target that is defined in a *.mk file by passing it
->> directly to the make call.
->> 
->> Philippe
->
->I added "sambe" with make menuconfig and then issued "make samba". But the build script still build gcc tool chain first.  
+On Wed, 2007-08-01 at 07:59 +0200, Hans-Christian Egtvedt wrote:
+> On Tue, 2007-07-31 at 13:38 -0500, Christopher Reder wrote:
+> > It seems like there may be some confusion over what directories to use
+> > when installing/hosting/storing libs.
 > 
+> Probably my bad (-:
 
-There is a menu configuration item:
-    Toolchain type --->
-        Toolchain type (External Toolchain)
+I cleaned up libpng, libungif and fbv. Although my upstream snapshot is
+some days old.
 
-Then you need to set the paths in the
-    Toolchain Options --->
+> > I just pulled down the latest and enabled fbv which selected libungif.
+> > In doing so, it fails when it tries to remove libs from
+> > staging_dir/lib because the libs are actually in
+> > staging_dir/usr/lib.  
+> 
+> Weird, because staging_dir/usr is a symlink to staging_dir/.
 
+Actually, removing libungif.la is not something that should have been
+done when installing (I think, anybody know the reason?). I have
+replaced it with a SED fixing the libdir in the included patch.
 
-Best Regards
-Ulf Samuelsson
+<snipp>
 
-
-
-
-
-
-      ____________________________________________________________________________________
-Luggage? GPS? Comic books? 
-Check out fitting gifts for grads at Yahoo! Search
-http://search.yahoo.com/search?fr=oni_on_mail&p=graduation+gifts&cs=bz
+-- 
+With kind regards,
+Hans-Christian Egtvedt
+-------------- next part --------------
+A non-text attachment was scrubbed...
+Name: br2-clean-libpng-libungif-and-fbv.patch
+Type: text/x-patch
+Size: 3855 bytes
+Desc: not available
+Url : http://busybox.net/lists/buildroot/attachments/20070801/5be1e4ce/attachment.bin 
