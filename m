@@ -1,43 +1,33 @@
-From: Jinag Robert <cretaceousstone@yahoo.com.cn>
-Date: Wed, 1 Aug 2007 10:12:08 +0800 (CST)
-Subject: [Buildroot] How to just build one application?
-Message-ID: <419079.4317.qm@web15806.mail.cnb.yahoo.com>
+From: Hans-Christian Egtvedt <hcegtvedt@atmel.com>
+Date: Wed, 01 Aug 2007 07:47:31 +0200
+Subject: [Buildroot] svn commit:	trunk/buildroot/toolchain/kernel-headers
+In-Reply-To: <20070731154926.E3856A466A@busybox.net>
+References: <20070731154926.E3856A466A@busybox.net>
+Message-ID: <1185947251.20419.1.camel@localhost.localdomain>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-I added "sambe" with make menuconfig and then issued "make samba". But the build script still build gcc tool chain first.  
-
------ Original Message ----
-From: Philippe Ney <philippe.ney@tizoo.com>
-To: buildroot at uclibc.org
-Sent: Tuesday, July 31, 2007 5:45:31 PM
-Subject: Re: [Buildroot] How to just build one application?
-
-> Hello All,
+On Tue, 2007-07-31 at 08:49 -0700, ulf at uclibc.org wrote:
+> Author: ulf
+> Date: 2007-07-31 08:49:25 -0700 (Tue, 31 Jul 2007)
+> New Revision: 19358
 > 
-> I've installed  arm linux gcc 4.1.1 toolchains and I want to build uclibc samba with buildroot package. How can I skip building toolchains and just build samba package with the pre-installed toolchains ?
+> Log:
+> Add AVR32 kernel patches for linux-2.6.21.5
 > 
-> Thanks,
+> Added:
+>    trunk/buildroot/toolchain/kernel-headers/linux-2.6.21.5-003-atmel.1-avr32-updates.patch
 
-Hi,
+No, please kick this one out again. Only 2.6.22.atmel.3 patch (AVR32)
+should be present in upstream buildroot.
 
-$ make samba
+<cut two other patches committed>
 
-You can build any target that is defined in a *.mk file by passing it
-directly to the make call.
+-- 
+With kind regards,
 
-Philippe
-_______________________________________________
-buildroot mailing list
-buildroot at uclibc.org
-http://busybox.net/mailman/listinfo/buildroot
-
-
-
-
-
-      ____________________________________________________________________________________
-Shape Yahoo! in your own image.  Join our Network Research Panel today!   http://surveylink.yahoo.com/gmrs/yahoo_panel_invite.asp?a=7 
+Hans-Christian Egtvedt, siv.ing. (M.Sc.)
+Applications Engineer - AVR32 System Solutions - Atmel Norway
