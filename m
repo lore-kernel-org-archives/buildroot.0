@@ -1,50 +1,37 @@
-From: BuraphaLinux Server <buraphalinuxserver@gmail.com>
-Date: Sun, 1 Jul 2007 13:54:37 +0700
-Subject: [Buildroot] top-level Makefile
-Message-ID: <5d75f4610706302354m56c341c4mc9aa045852e2d4cd@mail.gmail.com>
+From: Frank Kujawski <buildroot@fp8.com>
+Date: Wed, 1 Aug 2007 02:06:20 -0500 (CDT)
+Subject: [Buildroot] touch menuconfig
+In-Reply-To: <016801c7d404$a2834ca0$dcc4af0a@atmel.com>
+References: <016801c7d404$a2834ca0$dcc4af0a@atmel.com>
+Message-ID: <28024.24.217.29.51.1185951980.squirrel@kujawski.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+  I don't have an objection to the file and command completion, but I wonder
+what could be put in the file?
+  What hints could be placed in the file that would be of aid?  At first
+thought it would be hints, but then that is what is in docs, so my next
+thought is a link to a hint file in docs, perhaps docs/README.
+  My 2c,
+    Frank
 
-   I used subversion to get the source for buildroot; it says I have
-revision 18980.  There are some lines in the top-level Makefile
-that always give me errors, but this didn't happen before.  These
-lines look like this:
-
-HOSTAR:=$(shell $(CONFIG_SHELL) which $(HOSTAR) || type -p $(HOSTAR) || echo ar)
-
-My /bin/which is not a shell script, it is a normal compiled C program.
-I get these errors when I try to configure:
-
-BLS #make menuconfig
-/bin/which: /bin/which: cannot execute binary file
-/bin/which: /bin/which: cannot execute binary file
-/bin/which: /bin/which: cannot execute binary file
-/bin/which: /bin/which: cannot execute binary file
-/bin/which: /bin/which: cannot execute binary file
-make CC="/usr/bin/gcc" CFLAGS="-g -O2" MAKECMDGOALS="menuconfig" \
-                -C package/config conf mconf
-
-and eventually it does show the menu.  However, the menu will
-not generate the .config.cmd file any more and so I cannot build
-after I configure.
-
-BLS #make
-/bin/which: /bin/which: cannot execute binary file
-/bin/which: /bin/which: cannot execute binary file
-/bin/which: /bin/which: cannot execute binary file
-/bin/which: /bin/which: cannot execute binary file
-/bin/which: /bin/which: cannot execute binary file
-Makefile:170: .config.cmd: No such file or directory
-make: *** No rule to make target `.config.cmd'.  Stop.
-
-My which version:
-BLS #/bin/which --version
-GNU which v2.16, Copyright (C) 1999 - 2003 Carlo Wood.
-GNU which comes with ABSOLUTELY NO WARRANTY;
-This program is free software; your freedom to use, change
-and distribute this program is protected by the GPL.
+> I find it quite useful to have an empty file "menuconfig" in the top
+> directory,
+> so I can get command completion when doing
+>
+> $ make menuconfig
+>
+> Any objections to adding this?
+>
+> Best Regards
+> Ulf Samuelsson
+>
+>
+> _______________________________________________
+> buildroot mailing list
+> buildroot at uclibc.org
+> http://busybox.net/mailman/listinfo/buildroot
+>
