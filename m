@@ -1,25 +1,88 @@
-From: Benjamin Tietz <benjamin@micronet24.de>
-Date: Thu, 2 Aug 2007 11:10:21 +0200
-Subject: [Buildroot] gcc breaks when compiling in final-stage
-Message-ID: <20070802091021.GD4820@firebird.dresden.micronet24.de>
+From: =?UTF-8?B?IlBldHIgXCJRYXhpXCIgS2zDrW1hIg==?= <qaxi@seznam.cz>
+Date: Thu, 02 Aug 2007 13:52:23 +0200
+Subject: [Buildroot] SUDO package is outdated ...
+In-Reply-To: <46B1C119.40401@seznam.cz>
+References: <46B1C119.40401@seznam.cz>
+Message-ID: <46B1C577.5020005@seznam.cz>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi all,
+Petr "Qaxi" Kl?ma napsal(a):
+> Hi
+>
+> (my first post, so sorry ... for all )
+As I wrote .. sorry
+>
+>
+> During compilation I received:
+>
+> cp -af 
+> /home/klima/prg/myos/rootfs-buildroot/build_i586/libxml2-2.6.29/include/libxml 
+> /home/klima/prg/myos/rootfs-buildroot/build_i586/staging_dir/usr/include/libxml2 
+>
+> wget --passive-ftp  -P /home/klima/prg/myos/rootfs-buildroot/dl 
+> http://www.courtesan.com/sudo/dist/sudo-1.6.8p12.tar.gz
+> --13:26:06--  http://www.courtesan.com/sudo/dist/sudo-1.6.8p12.tar.gz
+>           => 
+> `/home/klima/prg/myos/rootfs-buildroot/dl/sudo-1.6.8p12.tar.gz'
+> Resolving www.courtesan.com... 72.36.231.42
+> Connecting to www.courtesan.com|72.36.231.42|:80... connected.
+> HTTP po?adavek odesl?n, program ?ek? na odpov?? ... 404 Not Found
+> 13:26:06 CHYBA 404: Not Found.
+>
+> And
+>
+> it Was true:
+>
+> $ lftp http://www.courtesan.com/sudo/dist/
+> cd ok, cwd=/sudo/dist                                    lftp 
+> www.courtesan.com:/sudo/dist> ls
+> drwxr-xr-x            -  2006-02-23 11:13  ..
+> -rw-r--r--           1k  2007-07-30 09:48  MD5
+> -rw-r--r--           1k  2007-07-30 09:48  MD5.sig
+> drwxr-xr-x            -  2007-07-29 18:49  OLD
+> -rw-r--r--           2k  2002-10-02 19:29  PGPKEYS
+> -rw-r--r--           1k  2007-07-16 22:58  README
+> -rw-r--r--           1k  2007-07-30 09:48  SHA1
+> -rw-r--r--           1k  2007-07-30 09:48  SHA1.sig
+> drwxr-xr-x            -  2007-07-29 18:49  beta
+> drwxr-xr-x            -  1999-02-22 15:18  misc
+> -rw-r--r--           3k  2007-07-30 09:47  sudo-1.6.9p2.patch.gz
+> -rw-r--r--           1k  2007-07-30 09:48  sudo-1.6.9p2.patch.gz.sig
+> -rw-r--r--         545k  2007-07-30 09:46  sudo-1.6.9p2.tar.gz
+> -rw-r--r--           1k  2007-07-30 09:46  sudo-1.6.9p2.tar.gz.sig
+> -rw-r--r--         545k  2007-07-30 09:46  sudo.tar.gz
+> -rw-r--r--           1k  2007-07-30 09:46  sudo.tar.gz.sig
+>
+>
+> What is better solution?
+> 1) patch package/sudo/sudo.mk
+>    to
+>    SUDO_VERSION:=1.6.9p2
+>
+With this, it is still problem with patches ...
 
-when building the internal toolchain with, at least, gcc 4.1.2 it breaks
-in the final stage. Complaining about that there is no rule to build
-/usr/bin/i686-linux-uclibc-as. As you can see, there is the
-$(STAGING_DIR) missing. Looking into the Makefile, it turns out that a
-lot of variables named like ORIGINAL_(TOOL)_FOR_TARGET are defined that
-way; replacing (TOOL) with AS, LD, NM. 
-There where already installed into the correct lcation, under
-$(STAGING_DIR)/usr/bin; just these variables are mistakenly generated.
+> 2) patch package/sudo/sudo.mk
+>    to
+>    SUDO_VERSION:=""
+>    SUDO_SOURCE:=sudo$(SUDO_VERSION).tar.gz             <<< removed "-"
+>    SUDO_DIR:=$(BUILD_DIR)/sudo$(SUDO_VERSION)      <<< removed "-"
 
-What would be the fastest way to fix this?
+This can not be done. In sudo.tar.gz there is still directory named by 
+version ...
 
-regards
-Benjamin
+
+> 3) find other repository with all history releases in one directory
+>
+
+and when you solve this SUDO still doe s not compile in crosscompile 
+environment ...
+
+-- 
+
+   Petr Kl?ma
+
+   e-mail:  qaxi at seznam.cz              
