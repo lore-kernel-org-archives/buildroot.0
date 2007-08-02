@@ -1,41 +1,33 @@
-From: jacmet at uclibc.org <jacmet@uclibc.org>
-Date: Thu,  2 Aug 2007 06:43:05 -0700 (PDT)
-Subject: [Buildroot] svn commit: trunk/buildroot/package/sqlite
-Message-ID: <20070802134305.5CC3CA4668@busybox.net>
+From: Ulf Samuelsson <ulf@atmel.com>
+Date: Thu,  2 Aug 2007 15:37:39 +0200
+Subject: [Buildroot] staging_dir/usr/lib vs staging_dir/lib
+Message-ID: <5LDKl419Lxv1.q7fVdVwY@mailout.dof.se>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Author: jacmet
-Date: 2007-08-02 06:43:04 -0700 (Thu, 02 Aug 2007)
-New Revision: 19397
-
-Log:
-Bumped version
-
-Modified:
-   trunk/buildroot/package/sqlite/sqlite.mk
 
 
-Changeset:
-Modified: trunk/buildroot/package/sqlite/sqlite.mk
-===================================================================
---- trunk/buildroot/package/sqlite/sqlite.mk	2007-08-02 10:14:29 UTC (rev 19396)
-+++ trunk/buildroot/package/sqlite/sqlite.mk	2007-08-02 13:43:04 UTC (rev 19397)
-@@ -4,10 +4,10 @@
- #
- #############################################################
- 
--SQLITE_VERSION=3.3.17
--SQLITE_SOURCE=sqlite-$(SQLITE_VERSION).tar.gz
--SQLITE_SITE=http://www.sqlite.org
--SQLITE_DIR=$(BUILD_DIR)/sqlite-$(SQLITE_VERSION)
-+SQLITE_VERSION:=3.4.1
-+SQLITE_SOURCE:=sqlite-$(SQLITE_VERSION).tar.gz
-+SQLITE_SITE:=http://www.sqlite.org
-+SQLITE_DIR:=$(BUILD_DIR)/sqlite-$(SQLITE_VERSION)
- SQLITE_CAT:=$(ZCAT)
- 
- $(DL_DIR)/$(SQLITE_SOURCE):
+On Wed, Aug 01, 2007 at 07:59:56AM +0200, Hans-Christian Egtvedt wrote:
+
+>Weird, because staging_dir/usr is a symlink to staging_dir/.
+
+This means that you don't use a toolchain that supports sysroot.
+
+For non-sysroot enabled toolchains we currently symlink staging_dir/usr
+to staging_dir because the old, deprecated gcc had quite some trouble
+otherwise and i don't care to fix them up (since the current stable
+series of gcc work fine for me).
+
+Please note that i, personally didn't enable sysroot support for 4.0.x
+ but skhill did (IIRC) so you're better off to use 4.2.1 for this.
+
+=> Will work when we have
+    an AVR32 4.2.x.
+    Highest revision is 4.1.2
+    at the moment.
+
+Best Regards
+Ulf Samuelsson
