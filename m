@@ -1,30 +1,25 @@
-From: Hebbar <gururajakr@sanyo.co.in>
-Date: Thu, 2 Aug 2007 01:59:26 -0700 (PDT)
-Subject: [Buildroot] fontconfig dependency on expat/libxml2
-Message-ID: <11960871.post@talk.nabble.com>
+From: Benjamin Tietz <benjamin@micronet24.de>
+Date: Thu, 2 Aug 2007 11:10:21 +0200
+Subject: [Buildroot] gcc breaks when compiling in final-stage
+Message-ID: <20070802091021.GD4820@firebird.dresden.micronet24.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+Hi all,
 
-Hi All,
+when building the internal toolchain with, at least, gcc 4.1.2 it breaks
+in the final stage. Complaining about that there is no rule to build
+/usr/bin/i686-linux-uclibc-as. As you can see, there is the
+$(STAGING_DIR) missing. Looking into the Makefile, it turns out that a
+lot of variables named like ORIGINAL_(TOOL)_FOR_TARGET are defined that
+way; replacing (TOOL) with AS, LD, NM. 
+There where already installed into the correct lcation, under
+$(STAGING_DIR)/usr/bin; just these variables are mistakenly generated.
 
- In fontconfig.mk file i noticed that "make fontconfig" depends on expat to
-be precompilled. what if user has selected libxml2 instead of expat. So when
-we just give make , fontconfig build 1st & fails asking for xml related
-files. so then user have to build libxml2 manually by giving "make libxml2"
-& then give "make fontconfig". so is it possible to change fontconfig.mk
-file to check for preselected xml parser option(expat/libxml) & build
-accordingly
+What would be the fastest way to fix this?
 
-at present fontconfig.mk -->
- fontconfig: uclibc freetype host-freetype expat
-$(TARGET_DIR)/usr/lib/libfontconfig.so
-
-Regards
-Gururaja
--- 
-View this message in context: http://www.nabble.com/fontconfig-dependency-on-expat-libxml2-tf4204952.html#a11960871
-Sent from the BuildRoot mailing list archive at Nabble.com.
+regards
+Benjamin
