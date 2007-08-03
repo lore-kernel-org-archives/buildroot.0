@@ -1,61 +1,50 @@
-From: Rick Foos <rick@synchromeshcomputing.com>
-Date: Fri, 3 Aug 2007 16:29:41 -0500
+From: Cristian Ionescu-Idbohrn <cristian.ionescu-idbohrn@axis.com>
+Date: Sat, 4 Aug 2007 01:23:20 +0200 (CEST)
 Subject: [Buildroot] [PATCH] undefined symbol BR2_PACKAGE_LIBDAEMON
-References: <0708032117420.13739@somehost>
-Message-ID: <015001c7d615$67ba0510$8200000a@k2>
+In-Reply-To: <015001c7d615$67ba0510$8200000a@k2>
+References: <0708032117420.13739@somehost> <015001c7d615$67ba0510$8200000a@k2>
+Message-ID: <0708040028590.13739@somehost>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Had the same problem here. Attached is a simple patch to fix it preserving 
-the current function.
+On Fri, 3 Aug 2007, Rick Foos wrote:
 
-The libdaemon Config.in was never included in the past, but the libdaemon.mk 
-file was in place.
+> Had the same problem here. Attached is a simple patch to fix it
+> preserving the current function.
 
-Avahi.mk refereces the libdaemon make target.
+Thanks.
 
-Now that the select dependency is in avahi/Config.in, the missing source 
-libdaemon/Config.in is a problem.
+> The libdaemon Config.in was never included in the past, but the
+> libdaemon.mk file was in place.
+>
+> Avahi.mk refereces the libdaemon make target.
+>
+> Now that the select dependency is in avahi/Config.in, the missing source
+> libdaemon/Config.in is a problem.
+
+Right.  That was a miss.
+libdaemon is not "networking" related in any way, AFAIK.  I would think
+a better place is among the "Other stuff", one level above networking
+(next to the other libs).
+
+Index: package/Config.in
+===================================================================
+--- package/Config.in   (revision 19307)
++++ package/Config.in   (working copy)
+@@ -63,6 +63,7 @@
+ if !BR2_PACKAGE_BUSYBOX_HIDE_OTHERS
+ source "package/less/Config.in"
+ endif
++source "package/libdaemon/Config.in"
+ source "package/libelf/Config.in"
+ source "package/libevent/Config.in"
+ source "package/libfloat/Config.in"
+
 
 Cheers,
-Rick
 
------ Original Message ----- 
-From: "Cristian Ionescu-Idbohrn" <cristian.ionescu-idbohrn@axis.com>
-To: <buildroot@uclibc.org>
-Sent: Friday, August 03, 2007 2:20 PM
-Subject: [Buildroot] [bug] undefined symbol BR2_PACKAGE_LIBDAEMON
-
-
-> package/avahi/Config.in:3:warning: 'select' used by config symbol
-> 'BR2_PACKAGE_AVAHI' refer to undefined symbol 'BR2_PACKAGE_LIBDAEMON'
->
->
-> Cheers,
->
-> -- 
-> Cristian
-> _______________________________________________
-> buildroot mailing list
-> buildroot at uclibc.org
-> http://busybox.net/mailman/listinfo/buildroot
->
->
->
-> -- 
-> No virus found in this incoming message.
-> Checked by AVG Free Edition.
-> Version: 7.5.476 / Virus Database: 269.11.2/933 - Release Date: 8/2/2007 
-> 2:22 PM
->
-> 
--------------- next part --------------
-A non-text attachment was scrubbed...
-Name: libdaemon-avahi.patch
-Type: application/octet-stream
-Size: 423 bytes
-Desc: not available
-Url : http://busybox.net/lists/buildroot/attachments/20070803/c4b11665/attachment.obj 
+-- 
+Cristian
