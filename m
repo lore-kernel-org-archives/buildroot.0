@@ -1,44 +1,61 @@
-From: Benjamin Tietz <benjamin@micronet24.de>
-Date: Fri, 3 Aug 2007 21:20:49 +0200
-Subject: [Buildroot] gcc breaks when compiling in final-stage
-In-Reply-To: <20070802180205.GL11697@aon.at>
-References: <20070802091021.GD4820@firebird.dresden.micronet24.de>
-	<20070802180205.GL11697@aon.at>
-Message-ID: <20070803192049.GB4906@firebird.dresden.micronet24.de>
+From: Rick Foos <rick@synchromeshcomputing.com>
+Date: Fri, 3 Aug 2007 16:29:41 -0500
+Subject: [Buildroot] [PATCH] undefined symbol BR2_PACKAGE_LIBDAEMON
+References: <0708032117420.13739@somehost>
+Message-ID: <015001c7d615$67ba0510$8200000a@k2>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Thu, Aug 02, 2007 at 08:02:05PM +0200, Bernhard Fischer wrote:
-> On Thu, Aug 02, 2007 at 11:10:21AM +0200, Benjamin Tietz wrote:
-> >Hi all,
-> >
-> >when building the internal toolchain with, at least, gcc 4.1.2 it breaks
-> >in the final stage. Complaining about that there is no rule to build
-> >/usr/bin/i686-linux-uclibc-as. As you can see, there is the
-> >$(STAGING_DIR) missing. Looking into the Makefile, it turns out that a
-> >lot of variables named like ORIGINAL_(TOOL)_FOR_TARGET are defined that
-> >way; replacing (TOOL) with AS, LD, NM. 
-> >There where already installed into the correct lcation, under
-> >$(STAGING_DIR)/usr/bin; just these variables are mistakenly generated.
-> >
-> >What would be the fastest way to fix this?
-> 
-> revert that ORIGINAL_(TOOL)_FOR_TARGET stuff.
-> 
-> Ulf, until this stuff works, please create yourself a branch to work on.
+Had the same problem here. Attached is a simple patch to fix it preserving 
+the current function.
 
-I'm sorry but on rereading my mail, I have to realize that I wasn't
-clear enough.
-those ORIGINAL_..._FOR_TARGET doesn't appear in the buildroots  Makefile
-but in the Makefile of the gcc; exactly in
-buildroot/toolchain_build_i686/gcc-4.2.1-final/gcc/Makefile.
+The libdaemon Config.in was never included in the past, but the libdaemon.mk 
+file was in place.
 
-I'm sorry for that mistake.
+Avahi.mk refereces the libdaemon make target.
+
+Now that the select dependency is in avahi/Config.in, the missing source 
+libdaemon/Config.in is a problem.
+
+Cheers,
+Rick
+
+----- Original Message ----- 
+From: "Cristian Ionescu-Idbohrn" <cristian.ionescu-idbohrn@axis.com>
+To: <buildroot@uclibc.org>
+Sent: Friday, August 03, 2007 2:20 PM
+Subject: [Buildroot] [bug] undefined symbol BR2_PACKAGE_LIBDAEMON
+
+
+> package/avahi/Config.in:3:warning: 'select' used by config symbol
+> 'BR2_PACKAGE_AVAHI' refer to undefined symbol 'BR2_PACKAGE_LIBDAEMON'
+>
+>
+> Cheers,
+>
+> -- 
+> Cristian
 > _______________________________________________
 > buildroot mailing list
 > buildroot at uclibc.org
 > http://busybox.net/mailman/listinfo/buildroot
+>
+>
+>
+> -- 
+> No virus found in this incoming message.
+> Checked by AVG Free Edition.
+> Version: 7.5.476 / Virus Database: 269.11.2/933 - Release Date: 8/2/2007 
+> 2:22 PM
+>
 > 
+-------------- next part --------------
+A non-text attachment was scrubbed...
+Name: libdaemon-avahi.patch
+Type: application/octet-stream
+Size: 423 bytes
+Desc: not available
+Url : http://busybox.net/lists/buildroot/attachments/20070803/c4b11665/attachment.obj 
