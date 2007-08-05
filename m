@@ -1,69 +1,38 @@
-From: Rick Foos <rick@synchromeshcomputing.com>
-Date: Sat, 4 Aug 2007 10:27:28 -0500
-Subject: [Buildroot] [PATCH] undefined symbol BR2_PACKAGE_LIBDAEMON
-References: <0708032117420.13739@somehost> <015001c7d615$67ba0510$8200000a@k2>
-	<0708040028590.13739@somehost>
-Message-ID: <003e01c7d6ab$f8f5d2c0$6404a8c0@shukson>
+From: aldot at uclibc.org <aldot@uclibc.org>
+Date: Sun,  5 Aug 2007 05:10:36 -0700 (PDT)
+Subject: [Buildroot] svn commit: trunk/buildroot/package/file
+Message-ID: <20070805121036.90099A45E7@busybox.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-> On Fri, 3 Aug 2007, Rick Foos wrote:
->
->> Had the same problem here. Attached is a simple patch to fix it
->> preserving the current function.
->
-> Thanks.
->
->> The libdaemon Config.in was never included in the past, but the
->> libdaemon.mk file was in place.
->>
->> Avahi.mk refereces the libdaemon make target.
->>
->> Now that the select dependency is in avahi/Config.in, the missing source
->> libdaemon/Config.in is a problem.
->
-> Right.  That was a miss.
-> libdaemon is not "networking" related in any way, AFAIK.  I would think
-> a better place is among the "Other stuff", one level above networking
-> (next to the other libs).
+Author: aldot
+Date: 2007-08-05 05:10:35 -0700 (Sun, 05 Aug 2007)
+New Revision: 19404
 
-I knew that either place I put it would be wrong:)
+Log:
+- download disappeared, use debian instead
 
-avahi appears to be the only package that depends on libdaemon. A minimalist 
-approach, only allowing libdaemon if it was required would place it with 
-avahi.
 
-As a general service, it should go in a general category like other, but to 
-the minimalist it then can take up space when it is not really required.
+Modified:
+   trunk/buildroot/package/file/file.mk
 
-I chose the minimalist approach. Whomever commits this to the tree can 
-decide.
 
->
-> Index: package/Config.in
-> ===================================================================
-> --- package/Config.in   (revision 19307)
-> +++ package/Config.in   (working copy)
-> @@ -63,6 +63,7 @@
-> if !BR2_PACKAGE_BUSYBOX_HIDE_OTHERS
-> source "package/less/Config.in"
-> endif
-> +source "package/libdaemon/Config.in"
-> source "package/libelf/Config.in"
-> source "package/libevent/Config.in"
-> source "package/libfloat/Config.in"
->
->
-> Cheers,
->
-> -- 
-> Cristian
-> _______________________________________________
-> buildroot mailing list
-> buildroot at uclibc.org
-> http://busybox.net/mailman/listinfo/buildroot
->
-> 
+Changeset:
+Modified: trunk/buildroot/package/file/file.mk
+===================================================================
+--- trunk/buildroot/package/file/file.mk	2007-08-03 14:17:21 UTC (rev 19403)
++++ trunk/buildroot/package/file/file.mk	2007-08-05 12:10:35 UTC (rev 19404)
+@@ -4,8 +4,8 @@
+ #
+ #############################################################
+ FILE_VERSION:=4.21
+-FILE_SOURCE:=file-$(FILE_VERSION).tar.gz
+-FILE_SITE:=ftp://ftp.astron.com/pub/file
++FILE_SOURCE:=file_$(FILE_VERSION).orig.tar.gz
++FILE_SITE:=http://ftp.debian.org/debian/pool/main/f/file
+ FILE_SOURCE_DIR:=$(BUILD_DIR)/file-$(FILE_VERSION)
+ FILE_DIR1:=$(TOOL_BUILD_DIR)/file-$(FILE_VERSION)-host
+ FILE_DIR2:=$(BUILD_DIR)/file-$(FILE_VERSION)-target
