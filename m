@@ -1,27 +1,20 @@
-From: Alan Carvalho de Assis <acassis@gmail.com>
-Date: Sun, 5 Aug 2007 17:51:39 +0000
-Subject: [Buildroot] Problems compiling tinyx package
-Message-ID: <37367b3a0708051051t6a4bc568r13b9f990e2e33127@mail.gmail.com>
+From: Brad House <brad@mainstreetsoftworks.com>
+Date: Sun, 05 Aug 2007 16:35:17 -0400
+Subject: [Buildroot] [patch] php-5.2.3 package addition
+Message-ID: <46B63485.8090609@mainstreetsoftworks.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Guys,
-some months ago I compiled the tinyx package from buildroot (selecting
-gcc 3.4.2), but in recent buildroot versions it is not comping tinyx.
+Attached is a patch to add php support.  I first submitted
+it to Gumstix's buildroot fork, where it has been committed
+for about a week and works...  Only a few minor changes were
+needed (building it for a Soekris box).
 
-I have tested buildroot selecting gcc 3.4.6 and 4.x.x with no success.
-If tinyx package is not selected the buildroot compilation goes fine.
-
-The error just appear when buildroot try to copy Xvfb binary because
-it is no there.
-
-My host system is Debian sid. Also tested on Ubuntu 7.04 with same results.
-
-Can someone here test this package to verify if the same error occur?
-
-Cheers,
-
-Alan
+-Brad
+-------------- next part --------------
+An embedded and charset-unspecified text was scrubbed...
+Name: php-5.2.3.patch
+Url: http://busybox.net/lists/buildroot/attachments/20070805/2a530577/attachment.diff 
