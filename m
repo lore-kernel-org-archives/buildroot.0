@@ -1,7 +1,7 @@
 From: aldot at uclibc.org <aldot@uclibc.org>
-Date: Sun,  5 Aug 2007 05:21:12 -0700 (PDT)
-Subject: [Buildroot] svn commit: trunk/buildroot/package/tiff
-Message-ID: <20070805122112.6A9FEA610E@busybox.net>
+Date: Sun,  5 Aug 2007 07:00:09 -0700 (PDT)
+Subject: [Buildroot] svn commit: trunk/buildroot/package/libpng
+Message-ID: <20070805140009.56D14A48D9@busybox.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -9,31 +9,28 @@ Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
 Author: aldot
-Date: 2007-08-05 05:21:11 -0700 (Sun, 05 Aug 2007)
-New Revision: 19405
+Date: 2007-08-05 07:00:05 -0700 (Sun, 05 Aug 2007)
+New Revision: 19406
 
 Log:
-- download times out; use debian instead
+- fix bug introduced by ulf in r19378.
 
 
 Modified:
-   trunk/buildroot/package/tiff/tiff.mk
+   trunk/buildroot/package/libpng/libpng.mk
 
 
 Changeset:
-Modified: trunk/buildroot/package/tiff/tiff.mk
+Modified: trunk/buildroot/package/libpng/libpng.mk
 ===================================================================
---- trunk/buildroot/package/tiff/tiff.mk	2007-08-05 12:10:35 UTC (rev 19404)
-+++ trunk/buildroot/package/tiff/tiff.mk	2007-08-05 12:21:11 UTC (rev 19405)
-@@ -4,9 +4,9 @@
- #
- #############################################################
- TIFF_VERSION:=3.8.2
-+TIFF_SOURCE:=tiff_$(TIFF_VERSION).orig.tar.gz
-+TIFF_SITE:=http://ftp.debian.org/pool/main/t/tiff/
- TIFF_DIR:=$(BUILD_DIR)/tiff-$(TIFF_VERSION)
--TIFF_SITE:=ftp://ftp.remotesensing.org/libtiff
--TIFF_SOURCE:=tiff-$(TIFF_VERSION).tar.gz
- TIFF_CAT:=$(ZCAT)
+--- trunk/buildroot/package/libpng/libpng.mk	2007-08-05 12:21:11 UTC (rev 19405)
++++ trunk/buildroot/package/libpng/libpng.mk	2007-08-05 14:00:05 UTC (rev 19406)
+@@ -73,7 +73,7 @@
+ 	touch -c $@
  
- $(DL_DIR)/$(TIFF_SOURCE):
+ $(TARGET_DIR)/usr/lib/libpng.so: $(STAGING_DIR)/usr/lib/libpng.so
+-	cp -dpf $(STAGING_DIR)/lib/libpng*.so* $(TARGET_DIR)/usr/lib/
++	cp -dpf $(STAGING_DIR)/usr/lib/libpng*.so* $(TARGET_DIR)/usr/lib/
+ 	-$(STRIP) --strip-unneeded $(TARGET_DIR)/usr/lib/libpng*
+ 
+ png libpng: uclibc zlib pkgconfig $(TARGET_DIR)/usr/lib/libpng.so
