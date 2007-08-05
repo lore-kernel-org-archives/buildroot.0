@@ -1,36 +1,27 @@
-From: aldot at uclibc.org <aldot@uclibc.org>
-Date: Sun,  5 Aug 2007 07:00:09 -0700 (PDT)
-Subject: [Buildroot] svn commit: trunk/buildroot/package/libpng
-Message-ID: <20070805140009.56D14A48D9@busybox.net>
+From: Alan Carvalho de Assis <acassis@gmail.com>
+Date: Sun, 5 Aug 2007 17:51:39 +0000
+Subject: [Buildroot] Problems compiling tinyx package
+Message-ID: <37367b3a0708051051t6a4bc568r13b9f990e2e33127@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Author: aldot
-Date: 2007-08-05 07:00:05 -0700 (Sun, 05 Aug 2007)
-New Revision: 19406
+Hi Guys,
+some months ago I compiled the tinyx package from buildroot (selecting
+gcc 3.4.2), but in recent buildroot versions it is not comping tinyx.
 
-Log:
-- fix bug introduced by ulf in r19378.
+I have tested buildroot selecting gcc 3.4.6 and 4.x.x with no success.
+If tinyx package is not selected the buildroot compilation goes fine.
 
+The error just appear when buildroot try to copy Xvfb binary because
+it is no there.
 
-Modified:
-   trunk/buildroot/package/libpng/libpng.mk
+My host system is Debian sid. Also tested on Ubuntu 7.04 with same results.
 
+Can someone here test this package to verify if the same error occur?
 
-Changeset:
-Modified: trunk/buildroot/package/libpng/libpng.mk
-===================================================================
---- trunk/buildroot/package/libpng/libpng.mk	2007-08-05 12:21:11 UTC (rev 19405)
-+++ trunk/buildroot/package/libpng/libpng.mk	2007-08-05 14:00:05 UTC (rev 19406)
-@@ -73,7 +73,7 @@
- 	touch -c $@
- 
- $(TARGET_DIR)/usr/lib/libpng.so: $(STAGING_DIR)/usr/lib/libpng.so
--	cp -dpf $(STAGING_DIR)/lib/libpng*.so* $(TARGET_DIR)/usr/lib/
-+	cp -dpf $(STAGING_DIR)/usr/lib/libpng*.so* $(TARGET_DIR)/usr/lib/
- 	-$(STRIP) --strip-unneeded $(TARGET_DIR)/usr/lib/libpng*
- 
- png libpng: uclibc zlib pkgconfig $(TARGET_DIR)/usr/lib/libpng.so
+Cheers,
+
+Alan
