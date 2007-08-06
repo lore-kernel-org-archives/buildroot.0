@@ -1,36 +1,22 @@
-From: Ulf Samuelsson <ulf@atmel.com>
-Date: Mon, 6 Aug 2007 22:38:42 +0200
+From: Brad House <brad@mainstreetsoftworks.com>
+Date: Mon, 06 Aug 2007 16:57:31 -0400
 Subject: [Buildroot] [patch] libxml2 fixes
+In-Reply-To: <02f001c7d869$de70f960$dcc4af0a@atmel.com>
 References: <46B739FF.5020507@mainstreetsoftworks.com>
-Message-ID: <02f001c7d869$de70f960$dcc4af0a@atmel.com>
+	<02f001c7d869$de70f960$dcc4af0a@atmel.com>
+Message-ID: <46B78B3B.1070002@mainstreetsoftworks.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
------ Original Message ----- 
-From: "Brad House" <brad@mainstreetsoftworks.com>
-To: <buildroot@uclibc.org>
-Sent: Monday, August 06, 2007 5:10 PM
-Subject: [Buildroot] [patch] libxml2 fixes
+> When I tried to build libxml2 using a toolchain without wchar support
+> it failed, when it is built with a toolchain supporting wchar, it completes the build.
 
+When was this and with what version of libxml2, and on what architecture?
+On x86 and arm, that is not the case from my experience.
+Can you also provide some more information on the actual error message?
 
-> There are a few issues with libxml2.
->  - It depends on BR2_USE_WCHAR (which in reality, it doesn't)
->  - xml2-config exports the wrong paths
->  - it tries to build everything, python modules, etc
->  - libxml2.la is installed, which has a wrong path, causes issues
->    when linking using libtool, just remove it.
-> 
-> Here's a patch to clean that up...
-> 
-> 
-> -Brad
->
-
-When I tried to build libxml2 using a toolchain without wchar support
-it failed, when it is built with a toolchain supporting wchar, it completes the build.
-
-Best Regards
-Ulf Samuelsson
+Thanks.
+-Brad
