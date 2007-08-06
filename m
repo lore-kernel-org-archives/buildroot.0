@@ -1,33 +1,25 @@
-From: Chris Malarky <chris@malarky.org>
-Date: Mon, 06 Aug 2007 13:39:10 +0100
-Subject: [Buildroot] [Patch] newt.mk
-Message-ID: <1186403950.5741.42.camel@shadow.muzakdomain.imagesound.co.uk>
+From: Brad House <brad@mainstreetsoftworks.com>
+Date: Mon, 06 Aug 2007 11:10:55 -0400
+Subject: [Buildroot] [patch] libxml2 fixes
+Message-ID: <46B739FF.5020507@mainstreetsoftworks.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi,
+There are a few issues with libxml2.
+  - It depends on BR2_USE_WCHAR (which in reality, it doesn't)
+  - xml2-config exports the wrong paths
+  - it tries to build everything, python modules, etc
+  - libxml2.la is installed, which has a wrong path, causes issues
+    when linking using libtool, just remove it.
 
-Attached is a patch to update newt.mk to bring it in to line with the
-latest STAGING_DIR layout.
+Here's a patch to clean that up...
 
-It was creating STAGING_DIR/include (and breaking other compilations)
-similar to slang.mk was last week.
 
-Also adjusted all libs to be /usr/lib rather than /lib, and use the more
-compact 'touch $@' syntax.
-
-Cheers,
-Chris
--- 
-Chris Malarky
-chris at malarky dot org
+-Brad
 -------------- next part --------------
-A non-text attachment was scrubbed...
-Name: newt.patch
-Type: text/x-patch
-Size: 2059 bytes
-Desc: not available
-Url : http://busybox.net/lists/buildroot/attachments/20070806/bd980b6a/attachment.bin 
+An embedded and charset-unspecified text was scrubbed...
+Name: libxml2-fixes.patch
+Url: http://busybox.net/lists/buildroot/attachments/20070806/c8e1dbac/attachment.diff 
