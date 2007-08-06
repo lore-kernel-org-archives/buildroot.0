@@ -1,30 +1,34 @@
-From: Brad House <brad@mainstreetsoftworks.com>
-Date: Mon, 06 Aug 2007 11:14:39 -0400
-Subject: [Buildroot] [patch] php-5.2.3 package addition
-In-Reply-To: <46B63485.8090609@mainstreetsoftworks.com>
-References: <46B63485.8090609@mainstreetsoftworks.com>
-Message-ID: <46B73ADF.3030104@mainstreetsoftworks.com>
+From: ulf at uclibc.org <ulf@uclibc.org>
+Date: Mon,  6 Aug 2007 12:41:44 -0700 (PDT)
+Subject: [Buildroot] svn commit: trunk/buildroot/package
+Message-ID: <20070806194144.8CF5FA6074@busybox.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-> Attached is a patch to add php support.  I first submitted
-> it to Gumstix's buildroot fork, where it has been committed
-> for about a week and works...  Only a few minor changes were
-> needed (building it for a Soekris box).
+Author: ulf
+Date: 2007-08-06 12:41:40 -0700 (Mon, 06 Aug 2007)
+New Revision: 19415
 
-Slight modification to this patchset.  Libxml2 is known
-as XML2 in Gumstix's buildroot fork, not 'libxml2'. I've
-updated that reference here for this official buildroot
-repository.
+Log:
+Allo configuration of libdaemon
 
-Also, this depends on the just-submitted libxml2 patchset.
+Modified:
+   trunk/buildroot/package/Config.in
 
-Thanks.
--Brad
--------------- next part --------------
-An embedded and charset-unspecified text was scrubbed...
-Name: php-5.2.3-libxml2.patch
-Url: http://busybox.net/lists/buildroot/attachments/20070806/7cb87e28/attachment.diff 
+
+Changeset:
+Modified: trunk/buildroot/package/Config.in
+===================================================================
+--- trunk/buildroot/package/Config.in	2007-08-06 15:49:12 UTC (rev 19414)
++++ trunk/buildroot/package/Config.in	2007-08-06 19:41:40 UTC (rev 19415)
+@@ -63,6 +63,7 @@
+ if !BR2_PACKAGE_BUSYBOX_HIDE_OTHERS
+ source "package/less/Config.in"
+ endif
++source "package/libdaemon/Config.in"
+ source "package/libelf/Config.in"
+ source "package/libevent/Config.in"
+ source "package/libfloat/Config.in"
