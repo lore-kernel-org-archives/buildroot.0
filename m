@@ -1,63 +1,46 @@
-From: Hans-Christian Egtvedt <hcegtvedt@atmel.com>
-Date: Tue, 07 Aug 2007 07:47:06 +0200
-Subject: [Buildroot] [Patch] internal toolchain for avr32
-In-Reply-To: <03aa01c7d86f$41c7c890$dcc4af0a@atmel.com>
-References: <20070806083229.GB4699@firebird.dresden.micronet24.de>
-	<20070806201256.GA7043@firebird.dresden.micronet24.de>
-	<03aa01c7d86f$41c7c890$dcc4af0a@atmel.com>
-Message-ID: <1186465626.17687.8.camel@localhost.localdomain>
+From: Brad House <brad@mainstreetsoftworks.com>
+Date: Tue, 07 Aug 2007 08:08:21 -0400
+Subject: [Buildroot] [patch] libxml2 fixes
+In-Reply-To: <12028348.post@talk.nabble.com>
+References: <46B739FF.5020507@mainstreetsoftworks.com>
+	<12028348.post@talk.nabble.com>
+Message-ID: <46B860B5.8050205@mainstreetsoftworks.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Mon, 2007-08-06 at 22:58 +0200, Ulf Samuelsson wrote:
-> > Since my revision wasn't the latest, I didn't got the nice mud ulf
-> > created with his vendor-supplied toolchain. I'm sorry.
-> > 
-> > attached a patch that revert that misconfiguration.
-> > 
-> > @Ulf: Not everybody is happy about a vendor-supplied toolchain! So at
-> > least give everybody the chance to decide whether to use it or not.
+>      After i applied ur patch, i am getting an error when compilling libxml2
+> as missing xml-config file
 > 
-> I am not happy about doubling the size of buildroot just because
-> the "configure" files are patched by the avr32 patches.
-> That is why I did it this way.
-> I believe that the buildroot stuff will be downloaded many times
-> and the toolchain only once.
-> If there are modifications later, then they will most likely be patches
-> against the prepatched toolset.
+> <snip>
+> <snip>
 
-You do not double the size of buildroot, you add roughly 600 kB to the
-compressed size.
-
-> > It would help even more, if Atmel would give external developers access
-> > to their patches; those from avr32linux.org becoming older more and more
-> > whilest pointing to download everything in ONE packet from Atmel. Thats
-> > a really big download...
+> /home/guru/project/original/toolchains/buildroot/build_arm/staging_dir/usr/bin/xml2-config:
+> No such file or directory
+> make: ***
+> [/home/guru/project/original/toolchains/buildroot/build_arm/libxml2-2.6.29/libxml2.la]
+> Error 
 > 
-> Download the stuff from buildroot and diff against vanilla + buildroot patches and you have it.
-> If you have a slow line, then you can probably get access to a fast line somewhere else
-> to download it once.
+>    But i see that xml-config is in my buildroot/build_arm/libxml2-2.6.29
+> directory. i think its not copied to build_arm/staging_dir/usr/bin/. kindly
+> let me know if i can manually copy the same or i should add/make  any
+> changes.
 
-I do not really understand the crisis if buildroot grows a bit (until
-patches are upstream, etc). My download folder is 350 MB, which is some
-magnitudes larger than buildroot. The user will have to wait for all the
-other source files to download anyway.
+Well, the 'make install' inside the libxml2.mk is responsible for
+copying over the xml2-config to your staging_dir's usr/bin directory.
 
-> While I work for Atmel, I am not in the AVR32 product line.
-> The product line guys makes decisions what to publish, - I don't.
+Can you run:
+make libxml2-clean
+rm -rf build_arm/libxml2-2.6.29
 
-The patches on avr32linux.org for the toolchain should be the latest,
-but they are actually quite some off. I will prod to see what the
-intention about the patch pages are.
+then run 'make' and see if libxml2 builds and installs?  Perhaps it
+didn't re-run the configuration step after the patch...
 
-The problem with GCC and binutils is that the configure scripts have to
-be regenerated, and thus producing an enormous diff :/
+If that doesn't work, I'll go ahead and probably get rid of the
+'make install', and just copy the files over directly (that's what
+Gumstix's fork of buildroot does, and they may have had an actual
+reason for it).  Odd I can't reproduce your situation though.
 
-<cut>
-
--- 
-With kind regards,
-Hans-Christian Egtvedt, Applications Engineer
+-Brad
