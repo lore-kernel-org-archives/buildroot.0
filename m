@@ -1,30 +1,52 @@
-From: Brad House <brad@mainstreetsoftworks.com>
-Date: Mon, 06 Aug 2007 20:35:45 -0400
-Subject: [Buildroot] [patch] udev broken, update and fix
-Message-ID: <46B7BE61.5060107@mainstreetsoftworks.com>
+From: Hebbar <gururajakr@sanyo.co.in>
+Date: Mon, 6 Aug 2007 21:38:37 -0700 (PDT)
+Subject: [Buildroot] [patch] libxml2 fixes
+In-Reply-To: <46B739FF.5020507@mainstreetsoftworks.com>
+References: <46B739FF.5020507@mainstreetsoftworks.com>
+Message-ID: <12028348.post@talk.nabble.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-/etc/udev/rules.d/ is empty with the current udev.  It should be
-populated by default with one of the examples provided with udev.
-Also, /dev/pts should be mounted by default from the udev (S10udev)
-start script, otherwise 'dropbear' won't allow logins as it requires
-/dev/pts...  (and this shouldn't be done automatically in fstab since
-udev creates a tmpfs which would mount over it).
 
-Also, udev_root isn't configured by default in /etc/udev/udev.conf as
-the start script requires.
+Hi Brad,
 
-I've attached a patch which fixes those and goes ahead and bumps the
-version to 114 (from 101).  Also, you can remove the
-'udev-install.patch', as I've modified the makefile to do the same
-thing...
+     After i applied ur patch, i am getting an error when compilling libxml2
+as missing xml-config file
 
--Brad
--------------- next part --------------
-An embedded and charset-unspecified text was scrubbed...
-Name: udev-114.patch
-Url: http://busybox.net/lists/buildroot/attachments/20070806/bbc9d7b2/attachment.diff 
+<snip>
+<snip>
+
+rm -f
+/home/guru/project/original/toolchains/buildroot/build_arm/staging_dir/usr/lib/libxml2.la
+/home/guru/project/original/toolchains/buildroot/toolchain_build_arm/bin/sed
+-i -e
+'s:prefix=/usr:prefix=/home/guru/project/original/toolchains/buildroot/build_arm/staging_dir/usr:'
+\
+        -e
+'s:includedir=/usr/include:includedir=/home/guru/project/original/toolchains/buildroot/build_arm/staging_dir/usr/include:'
+\
+       
+/home/guru/project/original/toolchains/buildroot/build_arm/staging_dir/usr/bin/xml2-config
+/home/guru/project/original/toolchains/buildroot/toolchain_build_arm/bin/sed:
+can't read
+/home/guru/project/original/toolchains/buildroot/build_arm/staging_dir/usr/bin/xml2-config:
+No such file or directory
+make: ***
+[/home/guru/project/original/toolchains/buildroot/build_arm/libxml2-2.6.29/libxml2.la]
+Error 
+
+
+
+   But i see that xml-config is in my buildroot/build_arm/libxml2-2.6.29
+directory. i think its not copied to build_arm/staging_dir/usr/bin/. kindly
+let me know if i can manually copy the same or i should add/make  any
+changes.
+
+Regards
+Gururaja
+-- 
+View this message in context: http://www.nabble.com/-patch--libxml2-fixes-tf4224762.html#a12028348
+Sent from the BuildRoot mailing list archive at Nabble.com.
