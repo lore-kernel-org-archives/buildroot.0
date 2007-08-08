@@ -1,8 +1,8 @@
 From: bugs at busybox.net <bugs@busybox.net>
-Date: Tue, 7 Aug 2007 20:51:29 -0700
-Subject: [Buildroot] [buildroot 0001455]: failed to download lsof from site
-	ftp://lsof.itap.purdue.edu/pub/tools/unix/lsof/
-Message-ID: <9c1aec5376aa8c2a8683273ce93e6916@bugs.uclibc.org>
+Date: Tue, 7 Aug 2007 20:58:53 -0700
+Subject: [Buildroot] [buildroot 0001456]: failed to configure "ed" package:
+	Unrecognized option: "--disable-nls"
+Message-ID: <21876fb437cbfc418b6254eaf4cbffe7@bugs.uclibc.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -12,35 +12,36 @@ To: buildroot@busybox.net
 
 The following issue has been SUBMITTED. 
 ====================================================================== 
-http://busybox.net/bugs/view.php?id=1455 
+http://busybox.net/bugs/view.php?id=1456 
 ====================================================================== 
 Reported By:                nawawi
 Assigned To:                buildroot
 ====================================================================== 
 Project:                    buildroot
-Issue ID:                   1455
+Issue ID:                   1456
 Category:                   Other
 Reproducibility:            unable to reproduce
-Severity:                   tweak
+Severity:                   minor
 Priority:                   normal
 Status:                     assigned
 ====================================================================== 
-Date Submitted:             08-07-2007 20:51 PDT
-Last Modified:              08-07-2007 20:51 PDT
+Date Submitted:             08-07-2007 20:58 PDT
+Last Modified:              08-07-2007 20:58 PDT
 ====================================================================== 
-Summary:                    failed to download lsof from site
-ftp://lsof.itap.purdue.edu/pub/tools/unix/lsof/
+Summary:                    failed to configure "ed" package: Unrecognized
+option: "--disable-nls"
 Description: 
-tried to "make source" and failed when to download lsof, replace with other
-mirror:
+ERROR: configure: Unrecognized option: "--disable-nls"; use --help for
+usage.
+make: *** [/home/dev/buildroot/build_i386/ed-0.6/.configured] Error 1
 
-http://www.mirrorservice.org/sites/vic.cc.purdue.edu/pub/tools/unix/lsof/
+juts remove "$(DISABLE_NLS)" in package/ed/ed.mk
 ====================================================================== 
 
 Issue History 
 Date Modified   Username       Field                    Change               
 ====================================================================== 
-08-07-07 20:51  nawawi         New Issue                                    
-08-07-07 20:51  nawawi         Status                   new => assigned     
-08-07-07 20:51  nawawi         Assigned To               => buildroot       
+08-07-07 20:58  nawawi         New Issue                                    
+08-07-07 20:58  nawawi         Status                   new => assigned     
+08-07-07 20:58  nawawi         Assigned To               => buildroot       
 ======================================================================
