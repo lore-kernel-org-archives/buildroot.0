@@ -1,35 +1,46 @@
-From: Brad House <brad@mainstreetsoftworks.com>
-Date: Tue, 07 Aug 2007 20:10:51 -0400
-Subject: [Buildroot] [patch] libxml2 fixes
-In-Reply-To: <12044831.post@talk.nabble.com>
-References: <46B739FF.5020507@mainstreetsoftworks.com>	<12028348.post@talk.nabble.com>	<46B860B5.8050205@mainstreetsoftworks.com>	<20070807122139.GA6430@real.realitydiluted.com>
-	<12044831.post@talk.nabble.com>
-Message-ID: <46B90A0B.60409@mainstreetsoftworks.com>
+From: bugs at busybox.net <bugs@busybox.net>
+Date: Tue, 7 Aug 2007 20:51:29 -0700
+Subject: [Buildroot] [buildroot 0001455]: failed to download lsof from site
+	ftp://lsof.itap.purdue.edu/pub/tools/unix/lsof/
+Message-ID: <9c1aec5376aa8c2a8683273ce93e6916@bugs.uclibc.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->  I tried Make libxml2-clean, make libxml2-dirclean & then make libxml2 but
-> still xml-config was not copied. but when tried make libxml2-headers it
-> copied xml-config properly. dont know why. anyway thanks for all your help. 
-> 
->   Hope someone can help me like this with glib libintl issue .
 
-Odd, still can't reproduce...
-It looks like Ulf committed the libxml2 patch, so you might try to
-update your svn and see if it works there...
+The following issue has been SUBMITTED. 
+====================================================================== 
+http://busybox.net/bugs/view.php?id=1455 
+====================================================================== 
+Reported By:                nawawi
+Assigned To:                buildroot
+====================================================================== 
+Project:                    buildroot
+Issue ID:                   1455
+Category:                   Other
+Reproducibility:            unable to reproduce
+Severity:                   tweak
+Priority:                   normal
+Status:                     assigned
+====================================================================== 
+Date Submitted:             08-07-2007 20:51 PDT
+Last Modified:              08-07-2007 20:51 PDT
+====================================================================== 
+Summary:                    failed to download lsof from site
+ftp://lsof.itap.purdue.edu/pub/tools/unix/lsof/
+Description: 
+tried to "make source" and failed when to download lsof, replace with other
+mirror:
 
-I just did
+http://www.mirrorservice.org/sites/vic.cc.purdue.edu/pub/tools/unix/lsof/
+====================================================================== 
 
-make libxml2-clean
-make libxml2-dirclean
-make libxml2
-
-Tried it with both the headers option on and off ...
-Maybe you're svn is out of sync somehow, not really sure...
-I'd probably need to see more of your debug output (where your <snip>'s
-were in the original e-mail).
-
--Brad
+Issue History 
+Date Modified   Username       Field                    Change               
+====================================================================== 
+08-07-07 20:51  nawawi         New Issue                                    
+08-07-07 20:51  nawawi         Status                   new => assigned     
+08-07-07 20:51  nawawi         Assigned To               => buildroot       
+======================================================================
