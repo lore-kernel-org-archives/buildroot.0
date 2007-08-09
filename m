@@ -1,47 +1,31 @@
-From: bugs at busybox.net <bugs@busybox.net>
-Date: Wed, 8 Aug 2007 17:54:58 -0700
-Subject: [Buildroot] [buildroot 0001457]: Sed commands in Qtopia build fail
-	because of / delimiter and slash in strings
-Message-ID: <9200c24d50f62e2bd338df5f7ffbf951@busybox.net>
+From: Brad House <brad@mainstreetsoftworks.com>
+Date: Wed, 08 Aug 2007 20:59:15 -0400
+Subject: [Buildroot] [patch] add mdnsresponder package
+Message-ID: <46BA66E3.7010407@mainstreetsoftworks.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+mDNSResponder is a component of Bonjour, Apple's initiative for
+zero-configuration networking.  More information is available
+here:
 
-The following issue has been SUBMITTED. 
-====================================================================== 
-http://busybox.net/bugs/view.php?id=1457 
-====================================================================== 
-Reported By:                adamhawes
-Assigned To:                buildroot
-====================================================================== 
-Project:                    buildroot
-Issue ID:                   1457
-Category:                   Other
-Reproducibility:            always
-Severity:                   minor
-Priority:                   normal
-Status:                     assigned
-====================================================================== 
-Date Submitted:             08-08-2007 17:54 PDT
-Last Modified:              08-08-2007 17:54 PDT
-====================================================================== 
-Summary:                    Sed commands in Qtopia build fail because of /
-delimiter and slash in strings
-Description: 
-The qtopia4 makefile uses a number of substitute commands with slash
-delimiters in sed to fix the build process.  Some of the commands include
-pathnames with slash characters that break sed.  I have build a patch that
-repalces the slash delimiters with pipe characters that resolves the
-problem.
-====================================================================== 
+http://developer.apple.com/networking/bonjour/index.html
 
-Issue History 
-Date Modified   Username       Field                    Change               
-====================================================================== 
-08-08-07 17:54  adamhawes      New Issue                                    
-08-08-07 17:54  adamhawes      Status                   new => assigned     
-08-08-07 17:54  adamhawes      Assigned To               => buildroot       
-======================================================================
+This appears to be lighter-weight than avahi and has basically
+no dependencies other than uclibc itself.  The avahi package
+needed some patches to even compile then crashed when I tried
+to run it.  I'd prefer to use something smaller anyhow, and
+this appears to fit the bill quite well...
+
+The patch below adds support to buildroot for mdnsresponder,
+including the config file template and initialization script.
+
+-Brad
+
+-------------- next part --------------
+An embedded and charset-unspecified text was scrubbed...
+Name: mdnsresponder.diff
+Url: http://busybox.net/lists/buildroot/attachments/20070808/d1049972/attachment.diff 
