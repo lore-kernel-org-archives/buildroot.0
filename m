@@ -1,50 +1,50 @@
 From: Ivan Kuten <ivan.kuten@promwad.com>
-Date: Fri, 10 Aug 2007 02:37:08 +0300
-Subject: [Buildroot] fontconfig patches are broken in r19202
-Message-ID: <46BBA524.2090408@promwad.com>
+Date: Fri, 10 Aug 2007 03:08:57 +0300
+Subject: [Buildroot] xorg compilation for arm fails
+Message-ID: <46BBAC99.6060908@promwad.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-
 Hello,
 
-Got error when applying patches:
+Now got errors for xorg compilation (arm target):
 
-Applying fc-lang.patch using plaintext:
-patching file fc-lang/fc-lang.c
 
-Applying host-tools.patch using plaintext:
-patching file fc-lang/Makefile.am
-Hunk #1 FAILED at 23.
-1 out of 1 hunk FAILED -- saving rejects to file fc-lang/Makefile.am.rej
-patching file fc-case/Makefile.am
-Hunk #1 FAILED at 23.
-1 out of 1 hunk FAILED -- saving rejects to file fc-case/Makefile.am.rej
-patching file fc-glyphname/Makefile.am
-Hunk #1 FAILED at 23.
-1 out of 1 hunk FAILED -- saving rejects to file fc-glyphname/Makefile.am.rej
-patching file configure.in
-Hunk #1 succeeded at 105 (offset 4 lines).
-patching file fc-arch/Makefile.am
-Hunk #1 FAILED at 23.
-1 out of 1 hunk FAILED -- saving rejects to file fc-arch/Makefile.am.rej
-Patch failed!  Please fix host-tools.patch!
+making all in programs/Xserver/hw/xfree86/os-support/linux/int10...
+make[9]: Entering directory `/root/buildroot/build_arm/xc/programs/Xserver/hw/xfree86/os-support/linux/int10'
+making all in programs/Xserver/hw/xfree86/os-support/linux/int10/vm86...
+make[10]: Entering directory `/root/buildroot/build_arm/xc/programs/Xserver/hw/xfree86/os-support/linux/int10/vm86'
+rm -f linux_vm86.o
+/root/buildroot/build_arm/staging_dir/usr/bin/arm-linux-uclibc-gcc -Os -ansi -pedantic -Wall -Wpointer-arith -Wundef     -I. -I../../../../../../../../programs/Xserver/hw/xfree86/common 
+-I../../../../../../../../programs/Xserver/hw/xfree86/int10            -I../../../../../../../../programs/Xserver/hw/xfree86/os-support            -I../../../../../../../../programs/Xserver/include 
+-I../../../../../../../../exports/include/X11 -I  -I../../../../../../../.. -I../../../../../../../../exports/include   -Dlinux -D__arm__ -D_POSIX_SOURCE                           -D_BSD_SOURCE 
+-D_GNU_SOURCE -DX_LOCALE -DSHAPE -DXINPUT -DXKB  -DXAPPGROUP  -DXCSECURITY -DTOGCUP   -DXF86BIGFONT -DDPMSExtension    -DPIXPRIV -DPANORAMIX   -DRENDER -DRANDR       -DXFIXES -DDAMAGE -DCOMPOSITE 
+-DXEVIE        -DGCCUSESGAS -DAVOID_GLYPHBLT -DPIXPRIV -DSINGLEDEPTH                          -DXFreeXDGA -DXvExtension                               -DXFree86LOADER  -DXFree86Server 
+           -DXF86VIDMODE                           -DXvMCExtension                                 -DSMART_SCHEDULE   -DBUILDDEBUG -DXResExtension 
+-DX_BYTE_ORDER=X_LITTLE_ENDIAN                          -DXORG_VERSION_CURRENT="(((6) * 10000000) + ((8) * 100000) + ((2) * 1000) + 0)" -DNDEBUG   -DFUNCPROTO=15 -DNARROWPROTO  -DIN_MODULE 
+-DXFree86Module -DHAVE_SYSV_IPC     -D_VM86_LINUX -c linux_vm86.c
+In file included from linux_vm86.c:14:
+../../../../../../../../programs/Xserver/hw/xfree86/os-support/int10Defines.h:34:22: error: asm/vm86.h: No such file or directory
+linux_vm86.c:16: warning: ?struct vm86_struct? declared inside parameter list
+linux_vm86.c:16: warning: its scope is only this definition or declaration, which is probably not what you want
+linux_vm86.c: In function ?xf86Int10ExecSetup?:
+linux_vm86.c:25: error: dereferencing pointer to incomplete type
+linux_vm86.c:26: error: dereferencing pointer to incomplete type
+linux_vm86.c:27: error: dereferencing pointer to incomplete type
+linux_vm86.c:27: error: ?CPU_586? undeclared (first use in this function)
+linux_vm86.c:27: error: (Each undeclared identifier is reported only once
+linux_vm86.c:27: error: for each function it appears in.)
+linux_vm86.c:28: error: dereferencing pointer to incomplete type
+linux_vm86.c:28: error: dereferencing pointer to incomplete type
+linux_vm86.c:29: error: dereferencing pointer to incomplete type
+linux_vm86.c:29: error: dereferencing pointer to incomplete type
 
--------------
-fontconfig]# svn log
-------------------------------------------------------------------------
-r19202 | ulf | 2007-07-23 11:18:45 +0300 (Mon, 23 Jul 2007) | 1 line
+-----------------
 
-Add fontconfig patches for cross-compile
-------------------------------------------------------------------------
-r18963 | aldot | 2007-06-28 17:03:04 +0300 (Thu, 28 Jun 2007) | 2 lines
-
-- fix building the utilities that are ment to be run on the _HOST_ (Julien Letessier)
-
-patches apply correctly only at r18963 but not at r19202.
+build_arm/xc/config/cf/cross.def has #define Arm32Architecture
 
 Best regards,
 Ivan
