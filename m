@@ -1,7 +1,7 @@
 From: ulf at uclibc.org <ulf@uclibc.org>
-Date: Sat, 11 Aug 2007 14:58:54 -0700 (PDT)
-Subject: [Buildroot] svn commit: trunk/buildroot/docs
-Message-ID: <20070811215854.D1D86A5E18@busybox.net>
+Date: Sat, 11 Aug 2007 15:01:14 -0700 (PDT)
+Subject: [Buildroot] svn commit: trunk/buildroot/target/cpio
+Message-ID: <20070811220114.5E082A6132@busybox.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -9,52 +9,141 @@ Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
 Author: ulf
-Date: 2007-08-11 14:58:53 -0700 (Sat, 11 Aug 2007)
-New Revision: 19441
+Date: 2007-08-11 15:01:13 -0700 (Sat, 11 Aug 2007)
+New Revision: 19442
 
 Log:
-Update documentation with advice on completion
+Allow compression of cpio targets
 
 Modified:
-   trunk/buildroot/docs/buildroot.html
+   trunk/buildroot/target/cpio/Config.in
+   trunk/buildroot/target/cpio/cpioroot.mk
 
 
 Changeset:
-Modified: trunk/buildroot/docs/buildroot.html
+Modified: trunk/buildroot/target/cpio/Config.in
 ===================================================================
---- trunk/buildroot/docs/buildroot.html	2007-08-11 21:53:18 UTC (rev 19440)
-+++ trunk/buildroot/docs/buildroot.html	2007-08-11 21:58:53 UTC (rev 19441)
-@@ -202,6 +202,33 @@
- $ make HOSTCXX=g++-4.3-HEAD HOSTCC=gcc-4.3-HEAD
- </pre>
+--- trunk/buildroot/target/cpio/Config.in	2007-08-11 21:58:53 UTC (rev 19441)
++++ trunk/buildroot/target/cpio/Config.in	2007-08-11 22:01:13 UTC (rev 19442)
+@@ -5,3 +5,38 @@
+ 	help
+ 	  Build a cpio archive of the root filesystem
  
-+    <h3><a name="helper_completion" id="helper_completion"></a>
-+    Using auto-completion</h3>
++choice
++        prompt "Compression method"
++        default BR2_TARGET_ROOTFS_CPIO_NONE
++        depends on BR2_TARGET_ROOTFS_CPIO
++        help
++          Select compressor for cpio filesystem of the root filesystem
 +
-+    <p>If you are lazy enough that you don't want to type the entire <i>make
-+    menuconfig</i> command line, you can enable auto-completion in your shell.
-+    Here is how you can do that using <i>bash</i>:</p>
-+<pre>
-+$ complete -W menuconfig make
-+</pre>
++config BR2_TARGET_ROOTFS_CPIO_NONE
++        bool "no compression"
++        help
++         Do not compress the cpio filesystem.
 +
-+    <p>Then just enter the begining of the line, and ask <i>bash</i> to
-+    complete it for you by pressing the <i>TAB</i> key:</p>
-+<pre>
-+$ make me&lt;TAB&gt;
-+</pre>
++config BR2_TARGET_ROOTFS_CPIO_GZIP
++        bool "gzip"
++        help
++         Do compress the cpio filesystem with gzip.
++         Note that you either have to have gzip installed on your host
++         or select to build a gzip for your host. See the packages submenu.
 +
-+    <p>will result in <i>bash</i> to append <i>nuconfig</i> for you!</p>
++config BR2_TARGET_ROOTFS_CPIO_BZIP2
++        bool "bzip2"
++        help
++         Do compress the cpio filesystem with bzip2.
++         Note that you either have to have bzip2 installed on your host
++         or select to build a bzip2 for your host. See the packages submenu.
 +
-+    <p>Alternatively, some distributions (of which Debian and Mandriva are but
-+    an example) have more powerful make completion. Depending on you
-+    distribution, you may have to install a package to enable completion. Under
-+    Mandriva, this is <i>bash-completion</i>, while Debian ships it as part of
-+    the <i>bash</i> package.</p>
++config BR2_TARGET_ROOTFS_CPIO_LZMA
++        bool "lzma"
++        help
++         Do compress the cpio filesystem with lzma.
++         Note that you either have to have lzma installed on your host
++         or select to build a lzma for your host. See the packages submenu.
 +
-+    <p>Other shells, such as <i>zsh</i>, also have completion facilities. See
-+    the documentation for your shell.</p>
++endchoice
 +
-     <h2><a name="custom_targetfs" id="custom_targetfs"></a>Customizing the
-     target filesystem</h2>
+
+Modified: trunk/buildroot/target/cpio/cpioroot.mk
+===================================================================
+--- trunk/buildroot/target/cpio/cpioroot.mk	2007-08-11 21:58:53 UTC (rev 19441)
++++ trunk/buildroot/target/cpio/cpioroot.mk	2007-08-11 22:01:13 UTC (rev 19442)
+@@ -4,13 +4,39 @@
+ #
+ #############################################################
  
+-CPIO_TARGET:=$(IMAGE).cpio
++CPIO_BASE:=$(IMAGE).cpio
+ 
++CPIO_ROOTFS_COMPRESSOR:=
++CPIO_ROOTFS_COMPRESSOR_EXT:=
++CPIO_ROOTFS_COMPRESSOR_PREREQ:=
++ifeq ($(BR2_TARGET_ROOTFS_CPIO_GZIP),y)
++CPIO_ROOTFS_COMPRESSOR:=gzip -9 -c
++CPIO_ROOTFS_COMPRESSOR_EXT:=gz
++#CPIO_ROOTFS_COMPRESSOR_PREREQ:= gzip-host
++endif
++ifeq ($(BR2_TARGET_ROOTFS_CPIO_BZIP2),y)
++CPIO_ROOTFS_COMPRESSOR:=bzip2 -9 -c
++CPIO_ROOTFS_COMPRESSOR_EXT:=bz2
++#CPIO_ROOTFS_COMPRESSOR_PREREQ:= bzip2-host
++endif
++ifeq ($(BR2_TARGET_ROOTFS_CPIO_LZMA),y)
++CPIO_ROOTFS_COMPRESSOR:=lzma -9 -c
++CPIO_ROOTFS_COMPRESSOR_EXT:=lzma
++CPIO_ROOTFS_COMPRESSOR_PREREQ:= lzma-host
++endif
++
++ifneq ($(CPIO_ROOTFS_COMPRESSOR),)
++CPIO_TARGET := $(CPIO_BASE).$(CPIO_ROOTFS_COMPRESSOR_EXT)
++else
++CPIO_TARGET := $(CPIO_BASE)
++endif
++
++
+ cpioroot-init:
+ 	rm -f $(TARGET_DIR)/init
+ 	ln -s sbin/init $(TARGET_DIR)/init
+ 
+-cpioroot: host-fakeroot makedevs cpioroot-init
++$(CPIO_BASE): host-fakeroot makedevs cpioroot-init
+ 	- at find $(TARGET_DIR) -type f -perm +111 | xargs $(STRIP) 2>/dev/null || true;
+ 	@rm -rf $(TARGET_DIR)/usr/man
+ 	@rm -rf $(TARGET_DIR)/usr/info
+@@ -18,20 +44,27 @@
+ 	# Use fakeroot to pretend all target binaries are owned by root
+ 	rm -f $(STAGING_DIR)/_fakeroot.$(notdir $(TAR_TARGET))
+ 	touch $(STAGING_DIR)/.fakeroot.00000
+-	cat $(STAGING_DIR)/.fakeroot* > $(STAGING_DIR)/_fakeroot.$(notdir $(CPIO_TARGET))
+-	echo "chown -R 0:0 $(TARGET_DIR)" >> $(STAGING_DIR)/_fakeroot.$(notdir $(CPIO_TARGET))
++	cat $(STAGING_DIR)/.fakeroot* > $(STAGING_DIR)/_fakeroot.$(notdir $(CPIO_BASE))
++	echo "chown -R 0:0 $(TARGET_DIR)" >> $(STAGING_DIR)/_fakeroot.$(notdir $(CPIO_BASE))
+ ifneq ($(TARGET_DEVICE_TABLE),)
+ 	# Use fakeroot to pretend to create all needed device nodes
+ 	echo "$(STAGING_DIR)/bin/makedevs -d $(TARGET_DEVICE_TABLE) $(TARGET_DIR)" \
+-		>> $(STAGING_DIR)/_fakeroot.$(notdir $(CPIO_TARGET))
++		>> $(STAGING_DIR)/_fakeroot.$(notdir $(CPIO_BASE))
+ endif
+ 	# Use fakeroot so tar believes the previous fakery
+-	echo "cd $(TARGET_DIR) && find . | cpio --quiet -o -H newc > $(CPIO_TARGET)" \
+-		>> $(STAGING_DIR)/_fakeroot.$(notdir $(CPIO_TARGET))
+-	chmod a+x $(STAGING_DIR)/_fakeroot.$(notdir $(CPIO_TARGET))
+-	$(STAGING_DIR)/usr/bin/fakeroot -- $(STAGING_DIR)/_fakeroot.$(notdir $(CPIO_TARGET))
+-	#- at rm -f $(STAGING_DIR)/_fakeroot.$(notdir $(CPIO_TARGET))
++	echo "cd $(TARGET_DIR) && find . | cpio --quiet -o -H newc > $(CPIO_BASE)" \
++		>> $(STAGING_DIR)/_fakeroot.$(notdir $(CPIO_BASE))
++	chmod a+x $(STAGING_DIR)/_fakeroot.$(notdir $(CPIO_BASE))
++	$(STAGING_DIR)/usr/bin/fakeroot -- $(STAGING_DIR)/_fakeroot.$(notdir $(CPIO_BASE))
++	#- at rm -f $(STAGING_DIR)/_fakeroot.$(notdir $(CPIO_BASE))
+ 
++ifneq ($(CPIO_ROOTFS_COMPRESSOR),)
++$(CPIO_BASE).$(CPIO_ROOTFS_COMPRESSOR_EXT): $(CPIO_ROOTFS_COMPRESSOR_PREREQ) $(CPIO_BASE)
++	$(CPIO_ROOTFS_COMPRESSOR) $(CPIO_BASE) > $(CPIO_TARGET)
++endif
++
++cpioroot: $(CPIO_TARGET)
++
+ cpioroot-source:
+ 
+ cpioroot-clean:
