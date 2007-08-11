@@ -1,7 +1,7 @@
 From: ulf at uclibc.org <ulf@uclibc.org>
-Date: Sat, 11 Aug 2007 15:01:14 -0700 (PDT)
-Subject: [Buildroot] svn commit: trunk/buildroot/target/cpio
-Message-ID: <20070811220114.5E082A6132@busybox.net>
+Date: Sat, 11 Aug 2007 15:09:10 -0700 (PDT)
+Subject: [Buildroot] svn commit: trunk/buildroot/package/sdl
+Message-ID: <20070811220910.5985FA659C@busybox.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -9,141 +9,146 @@ Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
 Author: ulf
-Date: 2007-08-11 15:01:13 -0700 (Sat, 11 Aug 2007)
-New Revision: 19442
+Date: 2007-08-11 15:09:09 -0700 (Sat, 11 Aug 2007)
+New Revision: 19443
 
 Log:
-Allow compression of cpio targets
+Fix mismatch in SDL patch naming convention
 
-Modified:
-   trunk/buildroot/target/cpio/Config.in
-   trunk/buildroot/target/cpio/cpioroot.mk
+Added:
+   trunk/buildroot/package/sdl/sdl-1.2.11-patch_PAGE_SIZE.patch
+
+Removed:
+   trunk/buildroot/package/sdl/SDL-1.2.11-patch_PAGE_SIZE.patch
 
 
 Changeset:
-Modified: trunk/buildroot/target/cpio/Config.in
+Deleted: trunk/buildroot/package/sdl/SDL-1.2.11-patch_PAGE_SIZE.patch
 ===================================================================
---- trunk/buildroot/target/cpio/Config.in	2007-08-11 21:58:53 UTC (rev 19441)
-+++ trunk/buildroot/target/cpio/Config.in	2007-08-11 22:01:13 UTC (rev 19442)
-@@ -5,3 +5,38 @@
- 	help
- 	  Build a cpio archive of the root filesystem
- 
-+choice
-+        prompt "Compression method"
-+        default BR2_TARGET_ROOTFS_CPIO_NONE
-+        depends on BR2_TARGET_ROOTFS_CPIO
-+        help
-+          Select compressor for cpio filesystem of the root filesystem
-+
-+config BR2_TARGET_ROOTFS_CPIO_NONE
-+        bool "no compression"
-+        help
-+         Do not compress the cpio filesystem.
-+
-+config BR2_TARGET_ROOTFS_CPIO_GZIP
-+        bool "gzip"
-+        help
-+         Do compress the cpio filesystem with gzip.
-+         Note that you either have to have gzip installed on your host
-+         or select to build a gzip for your host. See the packages submenu.
-+
-+config BR2_TARGET_ROOTFS_CPIO_BZIP2
-+        bool "bzip2"
-+        help
-+         Do compress the cpio filesystem with bzip2.
-+         Note that you either have to have bzip2 installed on your host
-+         or select to build a bzip2 for your host. See the packages submenu.
-+
-+config BR2_TARGET_ROOTFS_CPIO_LZMA
-+        bool "lzma"
-+        help
-+         Do compress the cpio filesystem with lzma.
-+         Note that you either have to have lzma installed on your host
-+         or select to build a lzma for your host. See the packages submenu.
-+
-+endchoice
-+
+--- trunk/buildroot/package/sdl/SDL-1.2.11-patch_PAGE_SIZE.patch	2007-08-11 22:01:13 UTC (rev 19442)
++++ trunk/buildroot/package/sdl/SDL-1.2.11-patch_PAGE_SIZE.patch	2007-08-11 22:09:09 UTC (rev 19443)
+@@ -1,59 +0,0 @@
+-diff -urN SDL-1.2.11.orig/src/video/fbcon/SDL_fbvideo.c SDL-1.2.11/src/video/fbcon/SDL_fbvideo.c
+---- SDL-1.2.11.orig/src/video/fbcon/SDL_fbvideo.c	2006-05-17 06:16:06.000000000 +0300
+-+++ SDL-1.2.11/src/video/fbcon/SDL_fbvideo.c	2007-06-24 22:19:41.000000000 +0300
+-@@ -29,9 +29,17 @@
+- #include <unistd.h>
+- #include <sys/ioctl.h>
+- #include <sys/mman.h>
+--#include <asm/page.h>		/* For definition of PAGE_SIZE */
+- #include <linux/vt.h>
+- 
+-+#if defined(linux)
+-+#define HAS_MMAP_ANON
+-+#include <sys/types.h>
+-+#include <sys/mman.h>
+-+#include <asm/page.h>   /* PAGE_SIZE */
+-+#define HAS_SC_PAGESIZE /* _SC_PAGESIZE may be an enum for Linux */
+-+#define HAS_GETPAGESIZE
+-+#endif /* linux */
+-+
+- #include "SDL_video.h"
+- #include "SDL_mouse.h"
+- #include "../SDL_sysvideo.h"
+-@@ -474,6 +482,7 @@
+- 	unsigned int current_h;
+- 	const char *SDL_fbdev;
+- 	FILE *modesdb;
+-+	int pagesize = -1;
+- 
+- 	/* Initialize the library */
+- 	SDL_fbdev = SDL_getenv("SDL_FBDEV");
+-@@ -545,9 +554,27 @@
+- 		}
+- 	}
+- 
+-+#if defined(_SC_PAGESIZE) && defined(HAS_SC_PAGESIZE)
+-+	pagesize = sysconf(_SC_PAGESIZE);
+-+#endif
+-+#ifdef _SC_PAGE_SIZE
+-+	if (pagesize == -1)
+-+		pagesize = sysconf(_SC_PAGE_SIZE);
+-+#endif
+-+#ifdef HAS_GETPAGESIZE
+-+	if (pagesize == -1)
+-+		pagesize = getpagesize();
+-+#endif
+-+#ifdef PAGE_SIZE
+-+	if (pagesize == -1)
+-+		pagesize = PAGE_SIZE;
+-+#endif
+-+	if (pagesize == -1)
+-+		pagesize = 4096;
+-+
+- 	/* Memory map the device, compensating for buggy PPC mmap() */
+- 	mapped_offset = (((long)finfo.smem_start) -
+--	                (((long)finfo.smem_start)&~(PAGE_SIZE-1)));
+-+	                (((long)finfo.smem_start)&~(pagesize-1)));
+- 	mapped_memlen = finfo.smem_len+mapped_offset;
+- 	mapped_mem = do_mmap(NULL, mapped_memlen,
+- 	                  PROT_READ|PROT_WRITE, MAP_SHARED, console_fd, 0);
 
-Modified: trunk/buildroot/target/cpio/cpioroot.mk
+Copied: trunk/buildroot/package/sdl/sdl-1.2.11-patch_PAGE_SIZE.patch (from rev 19425, trunk/buildroot/package/sdl/SDL-1.2.11-patch_PAGE_SIZE.patch)
 ===================================================================
---- trunk/buildroot/target/cpio/cpioroot.mk	2007-08-11 21:58:53 UTC (rev 19441)
-+++ trunk/buildroot/target/cpio/cpioroot.mk	2007-08-11 22:01:13 UTC (rev 19442)
-@@ -4,13 +4,39 @@
- #
- #############################################################
- 
--CPIO_TARGET:=$(IMAGE).cpio
-+CPIO_BASE:=$(IMAGE).cpio
- 
-+CPIO_ROOTFS_COMPRESSOR:=
-+CPIO_ROOTFS_COMPRESSOR_EXT:=
-+CPIO_ROOTFS_COMPRESSOR_PREREQ:=
-+ifeq ($(BR2_TARGET_ROOTFS_CPIO_GZIP),y)
-+CPIO_ROOTFS_COMPRESSOR:=gzip -9 -c
-+CPIO_ROOTFS_COMPRESSOR_EXT:=gz
-+#CPIO_ROOTFS_COMPRESSOR_PREREQ:= gzip-host
-+endif
-+ifeq ($(BR2_TARGET_ROOTFS_CPIO_BZIP2),y)
-+CPIO_ROOTFS_COMPRESSOR:=bzip2 -9 -c
-+CPIO_ROOTFS_COMPRESSOR_EXT:=bz2
-+#CPIO_ROOTFS_COMPRESSOR_PREREQ:= bzip2-host
-+endif
-+ifeq ($(BR2_TARGET_ROOTFS_CPIO_LZMA),y)
-+CPIO_ROOTFS_COMPRESSOR:=lzma -9 -c
-+CPIO_ROOTFS_COMPRESSOR_EXT:=lzma
-+CPIO_ROOTFS_COMPRESSOR_PREREQ:= lzma-host
-+endif
-+
-+ifneq ($(CPIO_ROOTFS_COMPRESSOR),)
-+CPIO_TARGET := $(CPIO_BASE).$(CPIO_ROOTFS_COMPRESSOR_EXT)
-+else
-+CPIO_TARGET := $(CPIO_BASE)
-+endif
-+
-+
- cpioroot-init:
- 	rm -f $(TARGET_DIR)/init
- 	ln -s sbin/init $(TARGET_DIR)/init
- 
--cpioroot: host-fakeroot makedevs cpioroot-init
-+$(CPIO_BASE): host-fakeroot makedevs cpioroot-init
- 	- at find $(TARGET_DIR) -type f -perm +111 | xargs $(STRIP) 2>/dev/null || true;
- 	@rm -rf $(TARGET_DIR)/usr/man
- 	@rm -rf $(TARGET_DIR)/usr/info
-@@ -18,20 +44,27 @@
- 	# Use fakeroot to pretend all target binaries are owned by root
- 	rm -f $(STAGING_DIR)/_fakeroot.$(notdir $(TAR_TARGET))
- 	touch $(STAGING_DIR)/.fakeroot.00000
--	cat $(STAGING_DIR)/.fakeroot* > $(STAGING_DIR)/_fakeroot.$(notdir $(CPIO_TARGET))
--	echo "chown -R 0:0 $(TARGET_DIR)" >> $(STAGING_DIR)/_fakeroot.$(notdir $(CPIO_TARGET))
-+	cat $(STAGING_DIR)/.fakeroot* > $(STAGING_DIR)/_fakeroot.$(notdir $(CPIO_BASE))
-+	echo "chown -R 0:0 $(TARGET_DIR)" >> $(STAGING_DIR)/_fakeroot.$(notdir $(CPIO_BASE))
- ifneq ($(TARGET_DEVICE_TABLE),)
- 	# Use fakeroot to pretend to create all needed device nodes
- 	echo "$(STAGING_DIR)/bin/makedevs -d $(TARGET_DEVICE_TABLE) $(TARGET_DIR)" \
--		>> $(STAGING_DIR)/_fakeroot.$(notdir $(CPIO_TARGET))
-+		>> $(STAGING_DIR)/_fakeroot.$(notdir $(CPIO_BASE))
- endif
- 	# Use fakeroot so tar believes the previous fakery
--	echo "cd $(TARGET_DIR) && find . | cpio --quiet -o -H newc > $(CPIO_TARGET)" \
--		>> $(STAGING_DIR)/_fakeroot.$(notdir $(CPIO_TARGET))
--	chmod a+x $(STAGING_DIR)/_fakeroot.$(notdir $(CPIO_TARGET))
--	$(STAGING_DIR)/usr/bin/fakeroot -- $(STAGING_DIR)/_fakeroot.$(notdir $(CPIO_TARGET))
--	#- at rm -f $(STAGING_DIR)/_fakeroot.$(notdir $(CPIO_TARGET))
-+	echo "cd $(TARGET_DIR) && find . | cpio --quiet -o -H newc > $(CPIO_BASE)" \
-+		>> $(STAGING_DIR)/_fakeroot.$(notdir $(CPIO_BASE))
-+	chmod a+x $(STAGING_DIR)/_fakeroot.$(notdir $(CPIO_BASE))
-+	$(STAGING_DIR)/usr/bin/fakeroot -- $(STAGING_DIR)/_fakeroot.$(notdir $(CPIO_BASE))
-+	#- at rm -f $(STAGING_DIR)/_fakeroot.$(notdir $(CPIO_BASE))
- 
-+ifneq ($(CPIO_ROOTFS_COMPRESSOR),)
-+$(CPIO_BASE).$(CPIO_ROOTFS_COMPRESSOR_EXT): $(CPIO_ROOTFS_COMPRESSOR_PREREQ) $(CPIO_BASE)
-+	$(CPIO_ROOTFS_COMPRESSOR) $(CPIO_BASE) > $(CPIO_TARGET)
-+endif
-+
-+cpioroot: $(CPIO_TARGET)
-+
- cpioroot-source:
- 
- cpioroot-clean:
+--- trunk/buildroot/package/sdl/sdl-1.2.11-patch_PAGE_SIZE.patch	                        (rev 0)
++++ trunk/buildroot/package/sdl/sdl-1.2.11-patch_PAGE_SIZE.patch	2007-08-11 22:09:09 UTC (rev 19443)
+@@ -0,0 +1,59 @@
++diff -urN SDL-1.2.11.orig/src/video/fbcon/SDL_fbvideo.c SDL-1.2.11/src/video/fbcon/SDL_fbvideo.c
++--- SDL-1.2.11.orig/src/video/fbcon/SDL_fbvideo.c	2006-05-17 06:16:06.000000000 +0300
+++++ SDL-1.2.11/src/video/fbcon/SDL_fbvideo.c	2007-06-24 22:19:41.000000000 +0300
++@@ -29,9 +29,17 @@
++ #include <unistd.h>
++ #include <sys/ioctl.h>
++ #include <sys/mman.h>
++-#include <asm/page.h>		/* For definition of PAGE_SIZE */
++ #include <linux/vt.h>
++ 
+++#if defined(linux)
+++#define HAS_MMAP_ANON
+++#include <sys/types.h>
+++#include <sys/mman.h>
+++#include <asm/page.h>   /* PAGE_SIZE */
+++#define HAS_SC_PAGESIZE /* _SC_PAGESIZE may be an enum for Linux */
+++#define HAS_GETPAGESIZE
+++#endif /* linux */
+++
++ #include "SDL_video.h"
++ #include "SDL_mouse.h"
++ #include "../SDL_sysvideo.h"
++@@ -474,6 +482,7 @@
++ 	unsigned int current_h;
++ 	const char *SDL_fbdev;
++ 	FILE *modesdb;
+++	int pagesize = -1;
++ 
++ 	/* Initialize the library */
++ 	SDL_fbdev = SDL_getenv("SDL_FBDEV");
++@@ -545,9 +554,27 @@
++ 		}
++ 	}
++ 
+++#if defined(_SC_PAGESIZE) && defined(HAS_SC_PAGESIZE)
+++	pagesize = sysconf(_SC_PAGESIZE);
+++#endif
+++#ifdef _SC_PAGE_SIZE
+++	if (pagesize == -1)
+++		pagesize = sysconf(_SC_PAGE_SIZE);
+++#endif
+++#ifdef HAS_GETPAGESIZE
+++	if (pagesize == -1)
+++		pagesize = getpagesize();
+++#endif
+++#ifdef PAGE_SIZE
+++	if (pagesize == -1)
+++		pagesize = PAGE_SIZE;
+++#endif
+++	if (pagesize == -1)
+++		pagesize = 4096;
+++
++ 	/* Memory map the device, compensating for buggy PPC mmap() */
++ 	mapped_offset = (((long)finfo.smem_start) -
++-	                (((long)finfo.smem_start)&~(PAGE_SIZE-1)));
+++	                (((long)finfo.smem_start)&~(pagesize-1)));
++ 	mapped_memlen = finfo.smem_len+mapped_offset;
++ 	mapped_mem = do_mmap(NULL, mapped_memlen,
++ 	                  PROT_READ|PROT_WRITE, MAP_SHARED, console_fd, 0);
