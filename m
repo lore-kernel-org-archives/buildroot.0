@@ -1,7 +1,7 @@
 From: ulf at uclibc.org <ulf@uclibc.org>
-Date: Sat, 11 Aug 2007 14:47:51 -0700 (PDT)
-Subject: [Buildroot] svn commit: trunk/buildroot/package/sdl
-Message-ID: <20070811214751.1B202A606F@busybox.net>
+Date: Sat, 11 Aug 2007 14:53:18 -0700 (PDT)
+Subject: [Buildroot] svn commit: trunk/buildroot/package/directfb
+Message-ID: <20070811215318.C66EBA6132@busybox.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -9,35 +9,29 @@ Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
 Author: ulf
-Date: 2007-08-11 14:47:51 -0700 (Sat, 11 Aug 2007)
-New Revision: 19439
+Date: 2007-08-11 14:53:18 -0700 (Sat, 11 Aug 2007)
+New Revision: 19440
 
 Log:
-Run $\(CONFIG_UPDATE\) in the unpack rules for sdl, Use $\(MAKE1\)
+Use /usr/lib instead of /lib for directfb
 
 Modified:
-   trunk/buildroot/package/sdl/sdl.mk
+   trunk/buildroot/package/directfb/directfb.mk
 
 
 Changeset:
-Modified: trunk/buildroot/package/sdl/sdl.mk
+Modified: trunk/buildroot/package/directfb/directfb.mk
 ===================================================================
---- trunk/buildroot/package/sdl/sdl.mk	2007-08-11 21:47:28 UTC (rev 19438)
-+++ trunk/buildroot/package/sdl/sdl.mk	2007-08-11 21:47:51 UTC (rev 19439)
-@@ -17,6 +17,7 @@
- $(SDL_DIR)/.unpacked: $(DL_DIR)/$(SDL_SOURCE)
- 	$(SDL_CAT) $(DL_DIR)/$(SDL_SOURCE) | tar -C $(BUILD_DIR) $(TAR_OPTIONS) -
- 	toolchain/patch-kernel.sh $(SDL_DIR) package/sdl sdl\*.patch
-+	$(CONFIG_UPDATE) $(SDL_DIR)/build-scripts
- 	touch $@
+--- trunk/buildroot/package/directfb/directfb.mk	2007-08-11 21:47:51 UTC (rev 19439)
++++ trunk/buildroot/package/directfb/directfb.mk	2007-08-11 21:53:18 UTC (rev 19440)
+@@ -60,8 +60,8 @@
+ 	touch $(DIRECTFB_DIR)/.compiled
  
- $(SDL_DIR)/.configured: $(SDL_DIR)/.unpacked
-@@ -46,7 +47,7 @@
- 	touch $@
+ $(STAGING_DIR)/usr/lib/libdirectfb.so: $(DIRECTFB_DIR)/.compiled
+-	$(MAKE) DESTDIR=$(STAGING_DIR) -C $(DIRECTFB_DIR) install
+-	touch -c $(STAGING_DIR)/lib/libdirectfb.so
++	$(MAKE) DESTDIR=$(STAGING_DIR)/usr -C $(DIRECTFB_DIR) install
++	touch -c $@
  
- $(SDL_DIR)/.compiled: $(SDL_DIR)/.configured
--	$(MAKE) -C $(SDL_DIR) 
-+	$(MAKE1) -C $(SDL_DIR) 
- 	touch $@
- 
- $(STAGING_DIR)/usr/lib/libSDL.so: $(SDL_DIR)/.compiled
+ $(TARGET_DIR)/usr/lib/libdirectfb.so: $(STAGING_DIR)/usr/lib/libdirectfb.so
+ 	cp -dpf $(STAGING_DIR)/usr/lib/libdirect* $(STAGING_DIR)/usr/lib/libfusion* $(TARGET_DIR)/usr/lib/
