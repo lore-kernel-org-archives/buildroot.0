@@ -1,68 +1,44 @@
-From: ulf at uclibc.org <ulf@uclibc.org>
-Date: Sat, 11 Aug 2007 12:01:13 -0700 (PDT)
-Subject: [Buildroot] svn commit: trunk/buildroot/package/newt
-Message-ID: <20070811190113.8B75BA5D3F@busybox.net>
+From: Ivan Kuten <ivan.kuten@promwad.com>
+Date: Sat, 11 Aug 2007 23:30:14 +0300
+Subject: [Buildroot] AUTOTARGETS is not working correctly when applying
+ x11r7 patches, was (  X11R7 packages available )
+In-Reply-To: <20070810185512.GA4186@codepoet.org>
+References: <f0528b5b0707040129j262b9e24i774fd06d8d579a2a@mail.gmail.com>
+	<20070810185512.GA4186@codepoet.org>
+Message-ID: <46BE1C56.60508@promwad.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Author: ulf
-Date: 2007-08-11 12:01:12 -0700 (Sat, 11 Aug 2007)
-New Revision: 19434
+>> Any feedback is welcome... once this is tested I think it would be a good
+>> idea to add the whole thing to Buildroot.
+> 
+> Fantastic.  I've merged your patches with very minor changes.
+> It doesnt quite build for me, but hopefully we can get that
+> sorted out soon.  This was clearly a huge undertaking and a
+> true labor of love.  Thanks!
+> 
 
-Log:
-Move newt files from /lib to /usr/lib etc.
+Hello,
 
-Modified:
-   trunk/buildroot/package/newt/newt.mk
+$(eval $(call AUTOTARGETS,xlib_liblbxutil)) is not working correctly when applying patches:
 
+ >>> xlib_liblbxutil 1.0.1 Patching
 
-Changeset:
-Modified: trunk/buildroot/package/newt/newt.mk
-===================================================================
---- trunk/buildroot/package/newt/newt.mk	2007-08-11 18:43:58 UTC (rev 19433)
-+++ trunk/buildroot/package/newt/newt.mk	2007-08-11 19:01:12 UTC (rev 19434)
-@@ -48,27 +48,27 @@
- 
- $(NEWT_DIR)/libnewt.so.$(NEWT_VERSION): $(NEWT_DIR)/.configured
- 	$(MAKE) CFLAGS="$(TARGET_CFLAGS) $(NEWT_CFLAGS)" CC=$(TARGET_CC) -C  $(NEWT_DIR)
--	touch -c $(NEWT_DIR)/libnewt.so.$(NEWT_VERSION)
-+	touch -c $@
- 
--$(STAGING_DIR)/lib/libnewt.a: $(NEWT_DIR)/libnewt.so.$(NEWT_VERSION)
--	cp -a $(NEWT_DIR)/libnewt.a $(STAGING_DIR)/lib;
--	cp -a $(NEWT_DIR)/newt.h $(STAGING_DIR)/include;
--	cp -a $(NEWT_DIR)/libnewt.so* $(STAGING_DIR)/lib;
--	(cd $(STAGING_DIR)/lib; ln -fs libnewt.so.$(NEWT_VERSION) libnewt.so);
--	(cd $(STAGING_DIR)/lib; ln -fs libnewt.so.$(NEWT_VERSION) libnewt.so.0.51);
--	touch -c $(STAGING_DIR)/lib/libnewt.a
-+$(STAGING_DIR)/usr/lib/libnewt.a: $(NEWT_DIR)/libnewt.so.$(NEWT_VERSION)
-+	cp -a $(NEWT_DIR)/libnewt.a $(STAGING_DIR)/usr/lib/;
-+	cp -a $(NEWT_DIR)/newt.h $(STAGING_DIR)/usr/include/;
-+	cp -a $(NEWT_DIR)/libnewt.so* $(STAGING_DIR)/usr/lib/;
-+	(cd $(STAGING_DIR)/usr/lib; ln -fs libnewt.so.$(NEWT_VERSION) libnewt.so);
-+	(cd $(STAGING_DIR)/usr/lib; ln -fs libnewt.so.$(NEWT_VERSION) libnewt.so.0.51);
-+	touch -c $@
- 
--$(TARGET_DIR)/lib/libnewt.so.$(NEWT_VERSION): $(STAGING_DIR)/lib/libnewt.a
--	cp -a $(STAGING_DIR)/lib/libnewt.so* $(TARGET_DIR)/lib;
--	-$(STRIP) --strip-unneeded $(TARGET_DIR)/lib/libnewt.so*
--	touch -c $(TARGET_DIR)/lib/libnewt.so.$(NEWT_VERSION)
-+$(TARGET_DIR)/usr/lib/libnewt.so.$(NEWT_VERSION): $(STAGING_DIR)/usr/lib/libnewt.a
-+	cp -a $(STAGING_DIR)/usr/lib/libnewt.so* $(TARGET_DIR)/usr/lib/;
-+	-$(STRIP) --strip-unneeded $(TARGET_DIR)/usr/lib/libnewt.so*
-+	touch -c $@
- 
--newt: uclibc slang $(TARGET_DIR)/lib/libnewt.so.$(NEWT_VERSION)
-+newt: uclibc slang $(TARGET_DIR)/usr/lib/libnewt.so.$(NEWT_VERSION)
- 
- newt-source: $(DL_DIR)/$(NEWT_SOURCE)
- 
- newt-clean:
--	rm -f $(TARGET_DIR)/lib/libnewt.so*
-+	rm -f $(TARGET_DIR)/usr/lib/libnewt.so*
- 	-$(MAKE) -C $(NEWT_DIR) clean
- 
- newt-dirclean: slang-dirclean
+(if test -d package/xlib_liblbxutil ; then \
+   if test "" ; then \
+     toolchain/patch-kernel.sh /root/buildroot/build_arm/xlib_liblbxutil-1.0.1 package/xlib_liblbxutil xlib_liblbxutil-1.0.1\*.patch || exit 1 ; \
+   else \
+     toolchain/patch-kernel.sh /root/buildroot/build_arm/xlib_liblbxutil-1.0.1 package/xlib_liblbxutil xlib_liblbxutil\*.patch || exit 1 ; \
+     if test -d package/xlib_liblbxutil/xlib_liblbxutil-1.0.1 ; then \
+       toolchain/patch-kernel.sh /root/buildroot/build_arm/xlib_liblbxutil-1.0.1 package/xlib_liblbxutil/xlib_liblbxutil-1.0.1 \*.patch || exit 1 ; \
+     fi; \
+   fi; \
+fi)
+
+should be package/x11r7/xlib_liblbxutil
+
+Best regards,
+Ivan
