@@ -1,78 +1,51 @@
-From: Ulf Samuelsson <ulf@atmel.com>
-Date: Sat, 11 Aug 2007 22:29:31 +0200
-Subject: [Buildroot] x11r7 created
-	$(BUILD_DIR)/<package-dir>/.stamp_downloaded
-Message-ID: <1186864171.4742.15.camel@elrond.sweden.atmel.com>
+From: Ivan Kuten <ivan.kuten@promwad.com>
+Date: Sat, 11 Aug 2007 23:46:14 +0300
+Subject: [Buildroot] *FLAWED* Re:  PATCH: correct expat DESTDIR ,
+ was ( expat is not correctly installed)
+In-Reply-To: <0708111950160.10468@somehost>
+References: <46BB94BC.5070904@promwad.com>
+	<46BDC2BA.4020001@promwad.com>	<1186854238.4742.1.camel@elrond.sweden.atmel.com>	<46BDFAEB.3070401@promwad.com>
+	<0708111950160.10468@somehost>
+Message-ID: <46BE2016.40408@promwad.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-The Makefile seems to create this file to indicate that it 
-had downloaded the source code.
-The $(BUILD_DIR) becomes really crowded this way.
+Cristian Ionescu-Idbohrn ?????:
+> On Sat, 11 Aug 2007, Ivan Kuten wrote:
+> 
+>> Ulf Samuelsson : l?r 2007-08-11 klockan 17:07 +0300 skrev Ivan Kuten:
+>>> Your patches fail miserably, since your email client replaces tabs
+>>> with spaces. This means that patches have to be applied manually :-(
+>> Hm, strange, i'm using thunderbird-2.0 with plain text messaging.
+> 
+> Not strange at all.  Here is the problem:
+> 
+>   User-Agent: Thunderbird 2.0.0.6 (X11/20070728)
+>   Content-Type: text/plain; charset=UTF-8; format=flowed
+>                             ^^^^^^^^^^^^^  ^^^^^^^^^^^^^
+> 
+> Biggest problem is 'format=flowed'; that screws up _all_ inlined text.
+> This is a PITA with most mailers :(
+> You should really consider reconfiguring that:
+> 
+> ,----[ user.js ]
+> | pref("mailnews.send_plaintext_flowed", false); // RFC 2646
+> | pref("mailnews.display.disable_format_flowed_support", true);
+> `----
+> 
+> so you avoid both sending and receiving flawed^H^H^H^Howed email.
+> utf-8 is also known to cause paines.
+> 
+> 
+> Cheers,
+> 
 
-I Think we should modify this so that the Makefile
-checks for the existance of the source file in $(DL_DIR)
-like most other packages.
-Tried, (see patch below), but the rule:
+Cristian,
 
-+$(DL_DIR)/$$($(PKG)_SOURCE):
-        $(call MESSAGE,"Downloading")
-        test -e $(DL_DIR)/$($(PKG)_SOURCE) || $(WGET) -P $(DL_DIR)
-$($(PKG)_SITE)/$($(PKG)_SOURCE)
-        mkdir -p $(@D)
+Thanks for hints, hope my next patch will be applied cleanly :-)
 
-fails (is not found) so I had to add 
-
-+$$($(2)_TARGET_SOURCE):
-+       $(WGET) -P $(DL_DIR) $$($(2)_SITE)/$$($(2)_SOURCE)
-+
-
-to make it work.
-Anyone got a clue why the first rule fails?
-
-
-Maybe we should also consider building x11r7 in $(BUILD_DIR)/x11r7
-due to crowding.
-
-
-Index: package/Makefile.autotools.in
-===================================================================
---- package/Makefile.autotools.in       (revision 19425)
-+++ package/Makefile.autotools.in       (arbetskopia)
-@@ -127,7 +127,7 @@
-
-################################################################################
- 
- # Retrieve and unpack the archive
--$(BUILD_DIR)/%/.stamp_downloaded:
-+$(DL_DIR)/$$($(PKG)_SOURCE):
-        $(call MESSAGE,"Downloading")
-        test -e $(DL_DIR)/$($(PKG)_SOURCE) || $(WGET) -P $(DL_DIR)
-$($(PKG)_SITE)/$($(PKG)_SOURCE)
-        mkdir -p $(@D)
-@@ -279,7 +279,7 @@
- $(2)_TARGET_AUTORECONF =       $$($(2)_DIR)/.stamp_autoconfigured
- $(2)_TARGET_PATCH =            $$($(2)_DIR)/.stamp_patched
- $(2)_TARGET_EXTRACT =          $$($(2)_DIR)/.stamp_extracted
--$(2)_TARGET_SOURCE =           $$($(2)_DIR)/.stamp_downloaded
-+$(2)_TARGET_SOURCE =           $$(DL_DIR)/$$($(2)_SOURCE)
- $(2)_TARGET_UNINSTALL =                $$($(2)_DIR)/.stamp_uninstalled
- $(2)_TARGET_CLEAN =            $$($(2)_DIR)/.stamp_cleaned
- $(2)_TARGET_DIRCLEAN =         $$($(2)_DIR)/.stamp_dircleaned
-@@ -322,6 +322,9 @@
- 
- $(1)-depends:          $(1)-source $$($(2)_DEPENDANCIES)
- 
-+$$($(2)_TARGET_SOURCE):
-+       $(WGET) -P $(DL_DIR) $$($(2)_SITE)/$$($(2)_SOURCE)
-+
- $(1)-source:           $$($(2)_TARGET_SOURCE)
- 
- # non-build targets
-
-
-Best Regards
-Ulf Samuelsson
+BR,
+Ivan
