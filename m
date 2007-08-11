@@ -1,37 +1,68 @@
-From: ulf at uclibc.org <ulf@uclibc.org>
-Date: Sat, 11 Aug 2007 14:53:18 -0700 (PDT)
-Subject: [Buildroot] svn commit: trunk/buildroot/package/directfb
-Message-ID: <20070811215318.C66EBA6132@busybox.net>
+From: Ivan Kuten <ivan.kuten@promwad.com>
+Date: Sun, 12 Aug 2007 01:46:08 +0300
+Subject: [Buildroot] svn commit: trunk/buildroot/package/sdl
+In-Reply-To: <20070811214751.1B202A606F@busybox.net>
+References: <20070811214751.1B202A606F@busybox.net>
+Message-ID: <46BE3C30.1090803@promwad.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Author: ulf
-Date: 2007-08-11 14:53:18 -0700 (Sat, 11 Aug 2007)
-New Revision: 19440
+ulf at uclibc.org ?????:
+> Author: ulf
+> Date: 2007-08-11 14:47:51 -0700 (Sat, 11 Aug 2007)
+> New Revision: 19439
+> 
+> Log:
+> Run $\(CONFIG_UPDATE\) in the unpack rules for sdl, Use $\(MAKE1\)
+> 
+> Modified:
+>    trunk/buildroot/package/sdl/sdl.mk
+> 
+> 
+> Changeset:
+> Modified: trunk/buildroot/package/sdl/sdl.mk
+> ===================================================================
+> --- trunk/buildroot/package/sdl/sdl.mk	2007-08-11 21:47:28 UTC (rev 19438)
+> +++ trunk/buildroot/package/sdl/sdl.mk	2007-08-11 21:47:51 UTC (rev 19439)
+> @@ -17,6 +17,7 @@
+>  $(SDL_DIR)/.unpacked: $(DL_DIR)/$(SDL_SOURCE)
+>  	$(SDL_CAT) $(DL_DIR)/$(SDL_SOURCE) | tar -C $(BUILD_DIR) $(TAR_OPTIONS) -
+>  	toolchain/patch-kernel.sh $(SDL_DIR) package/sdl sdl\*.patch
+> +	$(CONFIG_UPDATE) $(SDL_DIR)/build-scripts
+>  	touch $@
+>  
+>  $(SDL_DIR)/.configured: $(SDL_DIR)/.unpacked
+> @@ -46,7 +47,7 @@
+>  	touch $@
+>  
+>  $(SDL_DIR)/.compiled: $(SDL_DIR)/.configured
+> -	$(MAKE) -C $(SDL_DIR) 
+> +	$(MAKE1) -C $(SDL_DIR) 
+>  	touch $@
+>  
+>  $(STAGING_DIR)/usr/lib/libSDL.so: $(SDL_DIR)/.compiled
+> 
+> _______________________________________________
+> buildroot mailing list
+> buildroot at uclibc.org
+> http://busybox.net/mailman/listinfo/buildroot
 
-Log:
-Use /usr/lib instead of /lib for directfb
+Ulf,
 
-Modified:
-   trunk/buildroot/package/directfb/directfb.mk
+please correct
 
+toolchain/patch-kernel.sh $(SDL_DIR) package/sdl sdl\*.patch
 
-Changeset:
-Modified: trunk/buildroot/package/directfb/directfb.mk
-===================================================================
---- trunk/buildroot/package/directfb/directfb.mk	2007-08-11 21:47:51 UTC (rev 19439)
-+++ trunk/buildroot/package/directfb/directfb.mk	2007-08-11 21:53:18 UTC (rev 19440)
-@@ -60,8 +60,8 @@
- 	touch $(DIRECTFB_DIR)/.compiled
- 
- $(STAGING_DIR)/usr/lib/libdirectfb.so: $(DIRECTFB_DIR)/.compiled
--	$(MAKE) DESTDIR=$(STAGING_DIR) -C $(DIRECTFB_DIR) install
--	touch -c $(STAGING_DIR)/lib/libdirectfb.so
-+	$(MAKE) DESTDIR=$(STAGING_DIR)/usr -C $(DIRECTFB_DIR) install
-+	touch -c $@
- 
- $(TARGET_DIR)/usr/lib/libdirectfb.so: $(STAGING_DIR)/usr/lib/libdirectfb.so
- 	cp -dpf $(STAGING_DIR)/usr/lib/libdirect* $(STAGING_DIR)/usr/lib/libfusion* $(TARGET_DIR)/usr/lib/
+to
+
+toolchain/patch-kernel.sh $(SDL_DIR) package/sdl SDL\*.patch
+
+or rename
+
+SDL-1.2.11-patch_PAGE_SIZE.patch to lowercase sdl-1.2.11-patch_PAGE_SIZE.patch
+
+BR,
+Ivan
