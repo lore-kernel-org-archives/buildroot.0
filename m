@@ -1,84 +1,77 @@
-From: Ulf Samuelsson <ulf@atmel.com>
-Date: Sun, 12 Aug 2007 00:01:12 +0200
-Subject: [Buildroot] AUTOTARGETS is not working correctly when
-	applying	x11r7 patches, was (  X11R7 packages available )
-In-Reply-To: <46BE1C56.60508@promwad.com>
-References: <f0528b5b0707040129j262b9e24i774fd06d8d579a2a@mail.gmail.com>
-	<20070810185512.GA4186@codepoet.org>  <46BE1C56.60508@promwad.com>
-Message-ID: <1186869672.4742.19.camel@elrond.sweden.atmel.com>
+From: ulf at uclibc.org <ulf@uclibc.org>
+Date: Sat, 11 Aug 2007 14:47:31 -0700 (PDT)
+Subject: [Buildroot] svn commit: trunk/buildroot/package: iperf libgcrypt
+	libgpg-error lzo
+Message-ID: <20070811214731.8BF54A5E18@busybox.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-l?r 2007-08-11 klockan 23:30 +0300 skrev Ivan Kuten:
-> >> Any feedback is welcome... once this is tested I think it would be a good
-> >> idea to add the whole thing to Buildroot.
-> > 
-> > Fantastic.  I've merged your patches with very minor changes.
-> > It doesnt quite build for me, but hopefully we can get that
-> > sorted out soon.  This was clearly a huge undertaking and a
-> > true labor of love.  Thanks!
-> > 
-> 
-> Hello,
-> 
-> $(eval $(call AUTOTARGETS,xlib_liblbxutil)) is not working correctly when applying patches:
-> 
->  >>> xlib_liblbxutil 1.0.1 Patching
-> 
-> (if test -d package/xlib_liblbxutil ; then \
->    if test "" ; then \
->      toolchain/patch-kernel.sh /root/buildroot/build_arm/xlib_liblbxutil-1.0.1 package/xlib_liblbxutil xlib_liblbxutil-1.0.1\*.patch || exit 1 ; \
->    else \
->      toolchain/patch-kernel.sh /root/buildroot/build_arm/xlib_liblbxutil-1.0.1 package/xlib_liblbxutil xlib_liblbxutil\*.patch || exit 1 ; \
->      if test -d package/xlib_liblbxutil/xlib_liblbxutil-1.0.1 ; then \
->        toolchain/patch-kernel.sh /root/buildroot/build_arm/xlib_liblbxutil-1.0.1 package/xlib_liblbxutil/xlib_liblbxutil-1.0.1 \*.patch || exit 1 ; \
->      fi; \
->    fi; \
-> fi)
-> 
-> should be package/x11r7/xlib_liblbxutil
-> 
-This will help, but will make the "package/Makefile.autotools.in" file
-x11r7 specific.
+Author: ulf
+Date: 2007-08-11 14:47:28 -0700 (Sat, 11 Aug 2007)
+New Revision: 19438
+
+Log:
+Run $\(CONFIG_UPDATE\) in the unpack rules for iperf, libgcrypt,libgpg-error, lzo
+
+Modified:
+   trunk/buildroot/package/iperf/iperf.mk
+   trunk/buildroot/package/libgcrypt/libgcrypt.mk
+   trunk/buildroot/package/libgpg-error/libgpg-error.mk
+   trunk/buildroot/package/lzo/lzo.mk
 
 
-
-
-Index: package/Makefile.autotools.in
+Changeset:
+Modified: trunk/buildroot/package/iperf/iperf.mk
 ===================================================================
---- package/Makefile.autotools.in       (revision 19425)
-+++ package/Makefile.autotools.in       (arbetskopia)
-@@ -145,13 +145,13 @@
- $(BUILD_DIR)/%/.stamp_patched: NAMEVER =
-$($(PKG)_NAME)-$($(PKG)_VERSION)
- $(BUILD_DIR)/%/.stamp_patched:
-        $(call MESSAGE,"Patching")
--       (if test -d package/$($(PKG)_NAME) ; then \
--         if test "$(wildcard
-package/$($(PKG)_NAME)/$(NAMEVER)*.patch)" ; then \
--           toolchain/patch-kernel.sh $(@D) package/$($(PKG)_NAME)
-$(NAMEVER)\*.patch || exit 1 ; \
-+       (if test -d package/x11r7/$($(PKG)_NAME) ; then \
-+         if test "$(wildcard
-package/x11r7/$($(PKG)_NAME)/$(NAMEVER)*.patch)" ; then \
-+           toolchain/patch-kernel.sh $(@D) package/x11r7/$($(PKG)_NAME)
-$(NAMEVER)\*.patch || exit 1 ; \
-          else \
--           toolchain/patch-kernel.sh $(@D) package/$($(PKG)_NAME)
-$($(PKG)_NAME)\*.patch || exit 1 ; \
-+           toolchain/patch-kernel.sh $(@D) package/x11r7/$($(PKG)_NAME)
-$($(PKG)_NAME)\*.patch || exit 1 ; \
-            if test -d package/$($(PKG)_NAME)/$(NAMEVER) ; then \
--             toolchain/patch-kernel.sh $(@D)
-package/$($(PKG)_NAME)/$(NAMEVER) \*.patch || exit 1 ; \
-+             toolchain/patch-kernel.sh $(@D)
-package/x11r7/$($(PKG)_NAME)/$(NAMEVER) \*.patch || exit 1 ; \
-            fi; \
-          fi; \
-        fi)
+--- trunk/buildroot/package/iperf/iperf.mk	2007-08-11 20:26:02 UTC (rev 19437)
++++ trunk/buildroot/package/iperf/iperf.mk	2007-08-11 21:47:28 UTC (rev 19438)
+@@ -16,6 +16,7 @@
+ $(IPERF_DIR)/.unpacked: $(DL_DIR)/$(IPERF_SOURCE)
+ 	$(IPERF_CAT) $(DL_DIR)/$(IPERF_SOURCE) | tar -C $(BUILD_DIR) $(TAR_OPTIONS) -
+ 	toolchain/patch-kernel.sh $(IPERF_DIR) package/iperf/ iperf\*.patch
++	$(CONFIG_UPDATE) $(IPERF_DIR)
+ 	touch $(IPERF_DIR)/.unpacked
+ 
+ $(IPERF_DIR)/.configured: $(IPERF_DIR)/.unpacked
 
-Best Regards
-Ulf Samuelsson
+Modified: trunk/buildroot/package/libgcrypt/libgcrypt.mk
+===================================================================
+--- trunk/buildroot/package/libgcrypt/libgcrypt.mk	2007-08-11 20:26:02 UTC (rev 19437)
++++ trunk/buildroot/package/libgcrypt/libgcrypt.mk	2007-08-11 21:47:28 UTC (rev 19438)
+@@ -17,6 +17,7 @@
+ $(LIBGCRYPT_DIR)/.source: $(DL_DIR)/$(LIBGCRYPT_SOURCE)
+ 	$(BZCAT) $(DL_DIR)/$(LIBGCRYPT_SOURCE) | tar -C $(BUILD_DIR) $(TAR_OPTIONS) -
+ 	toolchain/patch-kernel.sh $(LIBGCRYPT_DIR) package/libgcrypt/ libgcrypt\*.patch
++	$(CONFIG_UPDATE) $(LIBGCRYPT_DIR)
+ 	touch $@
+ 
+ $(LIBGCRYPT_DIR)/.configured: $(LIBGCRYPT_DIR)/.source
+
+Modified: trunk/buildroot/package/libgpg-error/libgpg-error.mk
+===================================================================
+--- trunk/buildroot/package/libgpg-error/libgpg-error.mk	2007-08-11 20:26:02 UTC (rev 19437)
++++ trunk/buildroot/package/libgpg-error/libgpg-error.mk	2007-08-11 21:47:28 UTC (rev 19438)
+@@ -17,6 +17,7 @@
+ $(LIBGPG_ERROR_DIR)/.source: $(DL_DIR)/$(LIBGPG_ERROR_SOURCE)
+ 	$(BZCAT) $(DL_DIR)/$(LIBGPG_ERROR_SOURCE) | tar -C $(BUILD_DIR) $(TAR_OPTIONS) -
+ 	toolchain/patch-kernel.sh $(LIBGPG_ERROR_DIR) package/libgpg-error/ libgpg-error\*.patch
++	$(CONFIG_UPDATE) $(LIBGPG_ERROR_DIR)
+ 	touch $(LIBGPG_ERROR_DIR)/.source
+ 
+ $(LIBGPG_ERROR_DIR)/.configured: $(LIBGPG_ERROR_DIR)/.source
+
+Modified: trunk/buildroot/package/lzo/lzo.mk
+===================================================================
+--- trunk/buildroot/package/lzo/lzo.mk	2007-08-11 20:26:02 UTC (rev 19437)
++++ trunk/buildroot/package/lzo/lzo.mk	2007-08-11 21:47:28 UTC (rev 19438)
+@@ -22,6 +22,7 @@
+ $(LZO_DIR)/.unpacked: $(DL_DIR)/$(LZO_SOURCE)
+ 	$(LZO_CAT) $(DL_DIR)/$(LZO_SOURCE) | tar -C $(BUILD_DIR) $(TAR_OPTIONS) -
+ 	toolchain/patch-kernel.sh $(LZO_DIR) package/lzo/ lzo\*.patch
++	$(CONFIG_UPDATE) $(LZO_DIR)/acconfig
+ 	touch $@
+ 
+ LZO_CONFIG_SHARED:=--disable-shared
