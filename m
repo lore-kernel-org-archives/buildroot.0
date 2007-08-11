@@ -1,31 +1,44 @@
-From: Ivan Kuten <ivan.kuten@promwad.com>
-Date: Sat, 11 Aug 2007 13:50:30 +0300
-Subject: [Buildroot] Toolchain keeps rebuilding, SVN 19422
-In-Reply-To: <20070810191711.GA6034@marvin.netwinder.org>
-References: <20070810191711.GA6034@marvin.netwinder.org>
-Message-ID: <46BD9476.1040208@promwad.com>
+From: ulf at uclibc.org <ulf@uclibc.org>
+Date: Sat, 11 Aug 2007 03:08:15 -0700 (PDT)
+Subject: [Buildroot] svn commit: trunk/buildroot/package/x11r7/mesa3d
+Message-ID: <20070811100815.32D0CA605C@busybox.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Ralph Siemsen ?????:
-> Just wondering if anyone else has noticed this, before I go and
-> spend time trying to figure out why.  It seems on every "make"
-> that substantial parts of gcc are getting rebuilt.  I'm fully
-> up-to-date except for the x7 commit that just went through.
-> 
-> Anyone else experiencing this?
-> -R
+Author: ulf
+Date: 2007-08-11 03:08:13 -0700 (Sat, 11 Aug 2007)
+New Revision: 19426
 
-No, i have all ok, it seems timestamp problem of some Makefiles in your setup
-  - may be your PC clock are screwed up.
+Log:
+Correct mesa3d-source, use correct patch directory
 
-BR,
-Ivan
+Modified:
+   trunk/buildroot/package/x11r7/mesa3d/mesa3d.mk
 
-> _______________________________________________
-> buildroot mailing list
-> buildroot at uclibc.org
-> http://busybox.net/mailman/listinfo/buildroot
+
+Changeset:
+Modified: trunk/buildroot/package/x11r7/mesa3d/mesa3d.mk
+===================================================================
+--- trunk/buildroot/package/x11r7/mesa3d/mesa3d.mk	2007-08-11 00:12:33 UTC (rev 19425)
++++ trunk/buildroot/package/x11r7/mesa3d/mesa3d.mk	2007-08-11 10:08:13 UTC (rev 19426)
+@@ -19,7 +19,7 @@
+ 
+ $(MESA3D_DIR)/.extracted: $(DL_DIR)/$(MESA3D_SOURCE)
+ 	$(ZCAT) $(DL_DIR)/$(MESA3D_SOURCE) | tar -C $(BUILD_DIR) $(TAR_OPTIONS) -
+-	toolchain/patch-kernel.sh $(MESA3D_DIR) package/mesa3d/ mesa3d\*.patch
++	toolchain/patch-kernel.sh $(MESA3D_DIR) package/x11r7/mesa3d/ mesa3d\*.patch
+ 	touch $@
+ 
+ $(MESA3D_DIR)/.configured: $(MESA3D_DIR)/.extracted
+@@ -60,7 +60,7 @@
+ 	touch $@
+ 
+ mesa3d-depends:   xproto_glproto xproto_xf86vidmodeproto xlib_libXxf86vm xlib_libXmu xlib_libXdamage libdrm
+-mesa3d-source:    $(MESA3D_DIR)/.extracted
++mesa3d-source:    $(DL_DIR)/$(MESA3D_SOURCE)
+ mesa3d-configure: $(MESA3D_DIR)/.configured
+ mesa3d-build:     $(MESA3D_DIR)/.built
+ mesa3d:           mesa3d-depends $(MESA3D_DIR)/.installed	
