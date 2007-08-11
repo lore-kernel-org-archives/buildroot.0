@@ -1,34 +1,35 @@
 From: Brad House <brad@mainstreetsoftworks.com>
-Date: Sat, 11 Aug 2007 09:19:04 -0400
-Subject: [Buildroot] [patch] add mdnsresponder package
-In-Reply-To: <46BA66E3.7010407@mainstreetsoftworks.com>
-References: <46BA66E3.7010407@mainstreetsoftworks.com>
-Message-ID: <46BDB748.9060602@mainstreetsoftworks.com>
+Date: Sat, 11 Aug 2007 09:22:43 -0400
+Subject: [Buildroot] [patch] openssl-0.9.7l (security)
+In-Reply-To: <46B632FD.60607@mainstreetsoftworks.com>
+References: <46B632FD.60607@mainstreetsoftworks.com>
+Message-ID: <46BDB823.7000207@mainstreetsoftworks.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Any word on getting this patch committed?  Thanks.
-
+Any word on getting this committed?
+Thanks.
 -Brad
 
 Brad House wrote:
-> mDNSResponder is a component of Bonjour, Apple's initiative for
-> zero-configuration networking.  More information is available
-> here:
+> 0.9.7e has a few advisories against it.
+> Here's a patch to bring it up to a more 'secure' version,
+> should maintain binary compatibility as well.
 > 
-> http://developer.apple.com/networking/bonjour/index.html
+> I've also switched the option 'no-threads' to 'threads'.  It
+> doesn't actually add any link dependencies to openssl,
+> it simply enables some callbacks where a programmer can
+> 'register' thread-safe callbacks for mutexes, etc.  If the
+> programmer doesn't implement them, the library behaves the
+> same as a no-threads build, so there is no impact here.
+> Programs which use threads and OpenSSL _will_ crash randomly
+> if openssl is not compiled with thread support.
 > 
-> This appears to be lighter-weight than avahi and has basically
-> no dependencies other than uclibc itself.  The avahi package
-> needed some patches to even compile then crashed when I tried
-> to run it.  I'd prefer to use something smaller anyhow, and
-> this appears to fit the bill quite well...
-> 
-> The patch below adds support to buildroot for mdnsresponder,
-> including the config file template and initialization script.
+> Please apply the attached patch, and also remove the
+> openssl-0.9.7e-no-fips.patch
 > 
 > -Brad
 > 
