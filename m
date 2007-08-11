@@ -1,66 +1,58 @@
-From: ulf at uclibc.org <ulf@uclibc.org>
-Date: Sat, 11 Aug 2007 10:03:05 -0700 (PDT)
-Subject: [Buildroot] svn commit: trunk/buildroot/package: cairo libgtk12
-	libgtk2
-Message-ID: <20070811170305.3CE0BA5D44@busybox.net>
+From: Ivan Kuten <ivan.kuten@promwad.com>
+Date: Sat, 11 Aug 2007 21:07:39 +0300
+Subject: [Buildroot] PATCH: correct expat DESTDIR ,
+ was ( expat is not correctly installed)
+In-Reply-To: <1186854238.4742.1.camel@elrond.sweden.atmel.com>
+References: <46BB94BC.5070904@promwad.com> <46BDC2BA.4020001@promwad.com>
+	<1186854238.4742.1.camel@elrond.sweden.atmel.com>
+Message-ID: <46BDFAEB.3070401@promwad.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Author: ulf
-Date: 2007-08-11 10:03:04 -0700 (Sat, 11 Aug 2007)
-New Revision: 19431
+Ulf Samuelsson ?????:
+> l?r 2007-08-11 klockan 17:07 +0300 skrev Ivan Kuten:
+>> Correct expat DESTDIR, otherwise it installed in staging_dir/usr/usr/include:
+>>
+>>
+>> Index: package/expat/expat.mk
+>> ===================================================================
+>> --- package/expat/expat.mk      (revision 19426)
+>> +++ package/expat/expat.mk      (working copy)
+>> @@ -53,7 +53,7 @@
+>>          touch -c $@
+>>
+>>   $(STAGING_DIR)/$(EXPAT_TARGET_BINARY): $(EXPAT_DIR)/$(EXPAT_BINARY)
+>> -       $(MAKE) DESTDIR=$(STAGING_DIR)/usr -C $(EXPAT_DIR) install
+>> +       $(MAKE) DESTDIR=$(STAGING_DIR) -C $(EXPAT_DIR) install
+>>          $(SED) "s,^libdir=.*,libdir=\'$(STAGING_DIR)/usr/lib\',g" \
+>>                  $(STAGING_DIR)/usr/lib/libexpat.la
+>>          touch -c $@
+>>
+>>
+>> Best regards,
+>> Ivan
+> 
+> Your patches fail miserably, since your email client replaces tabs with
+> spaces. This means that patches have to be applied manually :-(
+> 
+> Best Regards
+> Ulf Samuelsson
+> 
+> 
 
-Log:
-Reintroduce dependencies on tinyx for libgtk[1]2 and cairo
+Hm, strange, i'm using thunderbird-2.0 with plain text messaging.
+Anyway here is the same patch in the attachment.
 
-Modified:
-   trunk/buildroot/package/cairo/Config.in
-   trunk/buildroot/package/libgtk12/Config.in
-   trunk/buildroot/package/libgtk2/Config.in
+BR,
+Ivan
 
 
-Changeset:
-Modified: trunk/buildroot/package/cairo/Config.in
-===================================================================
---- trunk/buildroot/package/cairo/Config.in	2007-08-11 16:55:52 UTC (rev 19430)
-+++ trunk/buildroot/package/cairo/Config.in	2007-08-11 17:03:04 UTC (rev 19431)
-@@ -3,7 +3,7 @@
- 	default n
- 	select BR2_PACKAGE_PKGCONFIG
- 	select BR2_PACKAGE_LIBPNG
--	depends on BR2_PACKAGE_XORG||BR2_PACKAGE_XORG7
-+	depends on BR2_PACKAGE_XORG||BR2_PACKAGE_XORG7||BR2_PACKAGE_TINYX
- 	help
- 	  Cairo is a 2D graphics library with support for multiple
- 	  output devices. Currently supported output targets include
 
-Modified: trunk/buildroot/package/libgtk12/Config.in
-===================================================================
---- trunk/buildroot/package/libgtk12/Config.in	2007-08-11 16:55:52 UTC (rev 19430)
-+++ trunk/buildroot/package/libgtk12/Config.in	2007-08-11 17:03:04 UTC (rev 19431)
-@@ -2,7 +2,7 @@
- 	bool "libgtk12"
- 	default n
- 	select BR2_PACKAGE_LIBGLIB12
--	depends on BR2_PACKAGE_XORG||BR2_PACKAGE_XORG7
-+	depends on BR2_PACKAGE_XORG||BR2_PACKAGE_XORG7||BR2_PACKAGE_TINYX
- 	help
- 	  The GTK+ graphical user interface library
- 
 
-Modified: trunk/buildroot/package/libgtk2/Config.in
-===================================================================
---- trunk/buildroot/package/libgtk2/Config.in	2007-08-11 16:55:52 UTC (rev 19430)
-+++ trunk/buildroot/package/libgtk2/Config.in	2007-08-11 17:03:04 UTC (rev 19431)
-@@ -7,7 +7,7 @@
- 	select BR2_PACKAGE_JPEG
- 	select BR2_PACKAGE_TIFF
- 	select BR2_PACKAGE_LIBPNG
--	depends on BR2_PACKAGE_XORG||BR2_PACKAGE_XORG7
-+	depends on BR2_PACKAGE_XORG||BR2_PACKAGE_XORG7||BR2_PACKAGE_TINYX
- 	help
- 	  The GTK+ version 2 graphical user interface library
- 
+-------------- next part --------------
+An embedded and charset-unspecified text was scrubbed...
+Name: expat_DESTDIR.patch
+Url: http://busybox.net/lists/buildroot/attachments/20070811/dda2350d/attachment.diff 
