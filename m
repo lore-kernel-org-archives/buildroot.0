@@ -1,30 +1,30 @@
-From: andersen at uclibc.org <andersen@uclibc.org>
-Date: Fri, 10 Aug 2007 17:12:35 -0700 (PDT)
-Subject: [Buildroot] svn commit: trunk/buildroot/package/x11r7
-Message-ID: <20070811001235.DFC1EA5D30@busybox.net>
+From: Ulf Samuelsson <ulf@atmel.com>
+Date: Sat, 11 Aug 2007 10:08:49 +0200
+Subject: [Buildroot] make source for x11r7 will extract and patch ???
+Message-ID: <003b01c7dbee$e49703b0$dcc4af0a@atmel.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Author: andersen
-Date: 2007-08-10 17:12:33 -0700 (Fri, 10 Aug 2007)
-New Revision: 19425
+Shouldn't 
 
-Log:
-doh, missed a spot
+$ make source
 
+just download the stuff to $(DL_DIR)...
 
-Added:
-   trunk/buildroot/package/x11r7/x11r7.mk
+Best Regards
+Ulf Samuelsson                ulf at atmel.com
+Atmel Nordic AB
+Mail:  Box 2033, 174 02 Sundbyberg, Sweden
+Visit:  Kavalleriv?gen 24, 174 58 Sundbyberg, Sweden
+Phone +46 (8) 441 54 22     Fax +46 (8) 441 54 29
+GSM    +46 (706) 22 44 57
 
-
-Changeset:
-Added: trunk/buildroot/package/x11r7/x11r7.mk
-===================================================================
---- trunk/buildroot/package/x11r7/x11r7.mk	                        (rev 0)
-+++ trunk/buildroot/package/x11r7/x11r7.mk	2007-08-11 00:12:33 UTC (rev 19425)
-@@ -0,0 +1,2 @@
-+include package/x11r7/*/*.mk
-+
+Technical support when I am not available:
+AT90 AVR Applications Group: mailto:avr at atmel.com
+AT91 ARM Applications Group: mailto:at91support at atmel.com
+AVR32 Applications Group        mailto:avr32 at atmel.com
+http://www.avrfreaks.net/;            http://avr32linux.org/
+http://www.at91.com/ ;                ftp://at91dist:distrib at 81.80.104.162/
