@@ -1,44 +1,47 @@
-From: Ivan Kuten <ivan.kuten@promwad.com>
-Date: Sat, 11 Aug 2007 23:30:14 +0300
-Subject: [Buildroot] AUTOTARGETS is not working correctly when applying
- x11r7 patches, was (  X11R7 packages available )
-In-Reply-To: <20070810185512.GA4186@codepoet.org>
-References: <f0528b5b0707040129j262b9e24i774fd06d8d579a2a@mail.gmail.com>
-	<20070810185512.GA4186@codepoet.org>
-Message-ID: <46BE1C56.60508@promwad.com>
+From: Cristian Ionescu-Idbohrn <cristian.ionescu-idbohrn@axis.com>
+Date: Sat, 11 Aug 2007 21:38:40 +0200 (CEST)
+Subject: [Buildroot] *FLAWED* Re:  PATCH: correct expat DESTDIR ,
+ was ( expat is not correctly installed)
+In-Reply-To: <46BDFAEB.3070401@promwad.com>
+References: <46BB94BC.5070904@promwad.com> <46BDC2BA.4020001@promwad.com>
+	<1186854238.4742.1.camel@elrond.sweden.atmel.com>
+	<46BDFAEB.3070401@promwad.com>
+Message-ID: <0708111950160.10468@somehost>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->> Any feedback is welcome... once this is tested I think it would be a good
->> idea to add the whole thing to Buildroot.
-> 
-> Fantastic.  I've merged your patches with very minor changes.
-> It doesnt quite build for me, but hopefully we can get that
-> sorted out soon.  This was clearly a huge undertaking and a
-> true labor of love.  Thanks!
-> 
+On Sat, 11 Aug 2007, Ivan Kuten wrote:
 
-Hello,
+> Ulf Samuelsson : l?r 2007-08-11 klockan 17:07 +0300 skrev Ivan Kuten:
+> >
+> > Your patches fail miserably, since your email client replaces tabs
+> > with spaces. This means that patches have to be applied manually :-(
+>
+> Hm, strange, i'm using thunderbird-2.0 with plain text messaging.
 
-$(eval $(call AUTOTARGETS,xlib_liblbxutil)) is not working correctly when applying patches:
+Not strange at all.  Here is the problem:
 
- >>> xlib_liblbxutil 1.0.1 Patching
+  User-Agent: Thunderbird 2.0.0.6 (X11/20070728)
+  Content-Type: text/plain; charset=UTF-8; format=flowed
+                            ^^^^^^^^^^^^^  ^^^^^^^^^^^^^
 
-(if test -d package/xlib_liblbxutil ; then \
-   if test "" ; then \
-     toolchain/patch-kernel.sh /root/buildroot/build_arm/xlib_liblbxutil-1.0.1 package/xlib_liblbxutil xlib_liblbxutil-1.0.1\*.patch || exit 1 ; \
-   else \
-     toolchain/patch-kernel.sh /root/buildroot/build_arm/xlib_liblbxutil-1.0.1 package/xlib_liblbxutil xlib_liblbxutil\*.patch || exit 1 ; \
-     if test -d package/xlib_liblbxutil/xlib_liblbxutil-1.0.1 ; then \
-       toolchain/patch-kernel.sh /root/buildroot/build_arm/xlib_liblbxutil-1.0.1 package/xlib_liblbxutil/xlib_liblbxutil-1.0.1 \*.patch || exit 1 ; \
-     fi; \
-   fi; \
-fi)
+Biggest problem is 'format=flowed'; that screws up _all_ inlined text.
+This is a PITA with most mailers :(
+You should really consider reconfiguring that:
 
-should be package/x11r7/xlib_liblbxutil
+,----[ user.js ]
+| pref("mailnews.send_plaintext_flowed", false); // RFC 2646
+| pref("mailnews.display.disable_format_flowed_support", true);
+`----
 
-Best regards,
-Ivan
+so you avoid both sending and receiving flawed^H^H^H^Howed email.
+utf-8 is also known to cause paines.
+
+
+Cheers,
+
+-- 
+Cristian
