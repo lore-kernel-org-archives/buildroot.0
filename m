@@ -1,7 +1,7 @@
 From: ulf at uclibc.org <ulf@uclibc.org>
-Date: Sun, 12 Aug 2007 04:31:08 -0700 (PDT)
-Subject: [Buildroot] svn commit: trunk/buildroot/package:  matchbox
-Message-ID: <20070812113108.097E3A659E@busybox.net>
+Date: Sun, 12 Aug 2007 04:34:04 -0700 (PDT)
+Subject: [Buildroot] svn commit: trunk/buildroot/package:  tslib
+Message-ID: <20070812113404.4807CA65DE@busybox.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -9,18 +9,18 @@ Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
 Author: ulf
-Date: 2007-08-12 04:31:06 -0700 (Sun, 12 Aug 2007)
-New Revision: 19456
+Date: 2007-08-12 04:34:03 -0700 (Sun, 12 Aug 2007)
+New Revision: 19457
 
 Log:
-Add matchbox package
+Add tslib package
 
 Added:
-   trunk/buildroot/package/matchbox/
-   trunk/buildroot/package/matchbox/Config.in
-   trunk/buildroot/package/matchbox/matchbox.mk
-   trunk/buildroot/package/matchbox/mb-applet-kbd-wrapper.sh
-   trunk/buildroot/package/matchbox/mbdesktop_modules
+   trunk/buildroot/package/tslib/
+   trunk/buildroot/package/tslib/Config.in
+   trunk/buildroot/package/tslib/ts.conf
+   trunk/buildroot/package/tslib/tslib.mk
+   trunk/buildroot/package/tslib/tslib_add_finddef_and_inputattach_utils.patch
 
 Modified:
    trunk/buildroot/package/Config.in
@@ -29,791 +29,895 @@ Modified:
 Changeset:
 Modified: trunk/buildroot/package/Config.in
 ===================================================================
---- trunk/buildroot/package/Config.in	2007-08-12 00:37:01 UTC (rev 19455)
-+++ trunk/buildroot/package/Config.in	2007-08-12 11:31:06 UTC (rev 19456)
-@@ -338,6 +338,7 @@
+--- trunk/buildroot/package/Config.in	2007-08-12 11:31:06 UTC (rev 19456)
++++ trunk/buildroot/package/Config.in	2007-08-12 11:34:03 UTC (rev 19457)
+@@ -337,6 +337,7 @@
+ source "package/gtk2-engines/Config.in"
  source "package/fontconfig/Config.in"
  source "package/freetype/Config.in"
++source "package/tslib/Config.in"
  comment "X Window managers"
-+source "package/matchbox/Config.in"
+ source "package/matchbox/Config.in"
  source "package/metacity/Config.in"
- comment "X applications"
- source "package/dillo/Config.in"
 
-Added: trunk/buildroot/package/matchbox/Config.in
+Added: trunk/buildroot/package/tslib/Config.in
 ===================================================================
---- trunk/buildroot/package/matchbox/Config.in	                        (rev 0)
-+++ trunk/buildroot/package/matchbox/Config.in	2007-08-12 11:31:06 UTC (rev 19456)
-@@ -0,0 +1,44 @@
-+config BR2_PACKAGE_MATCHBOX
-+	bool "MatchBox Window Manager"
-+	default n
-+	select BR2_PACKAGE_X11SERVER
-+	select BR2_PACKAGE_FONTCONFIG
-+	select BR2_PACKAGE_X11R7_LIBXDAMAGE
-+	select BR2_PACKAGE_X11R7_LIBXCURSOR
-+	help
-+
-+	  http://projects.o-hand.com/matchbox
-+
-+config BR2_PACKAGE_MATCHBOX_SNOTIFY
-+	bool "Enable Matchbox Startup Notification"
-+	depends BR2_PACKAGE_MATCHBOX
-+	select BR2_PACKAGE_X11R7_LIBXSM
+--- trunk/buildroot/package/tslib/Config.in	                        (rev 0)
++++ trunk/buildroot/package/tslib/Config.in	2007-08-12 11:34:03 UTC (rev 19457)
+@@ -0,0 +1,8 @@
++config BR2_PACKAGE_TSLIB
++	bool "libts - The Touchscreen tslib Library"
 +	default n
 +	help
 +
-+	  Compiles http://www.freedesktop.org/Software/startup-notification and its support in MatchBox
++	    http://tslib.berlios.de/
 +
-+config BR2_PACKAGE_MATCHBOX_PANEL
-+	bool "Matchbox Panel"
-+	depends BR2_PACKAGE_MATCHBOX
-+	default n
-+	help
-+
-+	  A flexible always present 'window bar' for holding application launchers"
-+
-+config BR2_PACKAGE_MATCHBOX_DESKTOP
-+	bool "Matchbox Desktop"
-+	depends BR2_PACKAGE_MATCHBOX
-+	default n
-+	help
-+
-+	  A PDA style application launcher or 'item browser'.
-+
-+config BR2_PACKAGE_MATCHBOX_KEYBOARD
-+	bool "Metchbox Virtual Keyboard"
-+	depends BR2_PACKAGE_MATCHBOX
-+	select BR2_PACKAGE_X11R7_LIBXTST
-+	default n
-+	help
-+
-+	  Virtual Keyboard (developement version from CVS)
++	    Tslib is an abstraction layer for touchscreen panel events.
 
-Added: trunk/buildroot/package/matchbox/matchbox.mk
+Added: trunk/buildroot/package/tslib/ts.conf
 ===================================================================
---- trunk/buildroot/package/matchbox/matchbox.mk	                        (rev 0)
-+++ trunk/buildroot/package/matchbox/matchbox.mk	2007-08-12 11:31:06 UTC (rev 19456)
-@@ -0,0 +1,693 @@
+--- trunk/buildroot/package/tslib/ts.conf	                        (rev 0)
++++ trunk/buildroot/package/tslib/ts.conf	2007-08-12 11:34:03 UTC (rev 19457)
+@@ -0,0 +1,25 @@
++# Uncomment if you wish to use the linux input layer event interface
++module_raw input
++
++# Uncomment if you're using a Sharp Zaurus SL-5500/SL-5000d
++# module_raw collie
++
++# Uncomment if you're using a Sharp Zaurus SL-C700/C750/C760/C860
++# module_raw corgi
++
++# Uncomment if you're using a device with a UCB1200/1300/1400 TS interface
++# module_raw ucb1x00
++
++# Uncomment if you're using an HP iPaq h3600 or similar
++# module_raw h3600
++
++# Uncomment if you're using a Hitachi Webpad
++# module_raw mk712
++
++# Uncomment if you're using an IBM Arctic II
++# module_raw arctic2
++
++module pthres pmin=1
++module variance delta=30
++module dejitter delta=100
++module linear
+
+Added: trunk/buildroot/package/tslib/tslib.mk
+===================================================================
+--- trunk/buildroot/package/tslib/tslib.mk	                        (rev 0)
++++ trunk/buildroot/package/tslib/tslib.mk	2007-08-12 11:34:03 UTC (rev 19457)
+@@ -0,0 +1,107 @@
 +#############################################################
 +#
-+# MatchBox WM
++# libts
 +#
 +#############################################################
-+MATCHBOX_SITE:=http://matchbox-project.org/sources/
-+MATCHBOX_CAT:=$(BZCAT)
++TSLIB_VERSION:=1.0
++TSLIB_SOURCE:=tslib-$(TSLIB_VERSION).tar.bz2
++TSLIB_SITE:=http://download.berlios.de/tslib
++TSLIB_CAT:=$(BZCAT)
++TSLIB_DIR:=$(BUILD_DIR)/tslib-$(TSLIB_VERSION)
 +
-+MATCHBOX_LIB_VERSION:=1.9
-+MATCHBOX_LIB_SOURCE:=libmatchbox-$(MATCHBOX_LIB_VERSION).tar.bz2
-+MATCHBOX_LIB_DIR:=$(BUILD_DIR)/libmatchbox-$(MATCHBOX_LIB_VERSION)
++$(DL_DIR)/$(TSLIB_SOURCE):
++	$(WGET) -P $(DL_DIR) $(TSLIB_SITE)/$(TSLIB_SOURCE)
 +
-+MATCHBOX_SNOTIFY_VERSION:=0.9
-+MATCHBOX_SNOTIFY_SOURCE:=startup-notification-$(MATCHBOX_SNOTIFY_VERSION).tar.bz2
-+MATCHBOX_SNOTIFY_DIR:=$(BUILD_DIR)/startup-notification-$(MATCHBOX_SNOTIFY_VERSION)
-+#MATCHBOX_SNOTIFY_SITE:=http://www.freedesktop.org/software/startup-notification/releases
-+MATCHBOX_SNOTIFY_SITE:=http://ftp.gnome.org/pub/GNOME/sources/startup-notification/$(MATCHBOX_SNOTIFY_VERSION)
-+MATCHBOX_SNOTIFY_CAT:=$(BZCAT)
-+MATCHBOX_SNOTIFY_BIN:=libstartup-notification-1.so
++tslib-source: $(DL_DIR)/$(TSLIB_SOURCE)
 +
-+MATCHBOX_WM_MAJORVER:=1.2
-+MATCHBOX_WM_MINORVER:=
-+#MATCHBOX_WM_VERSION:=$(MATCHBOX_WM_MAJORVER).$(MATCHBOX_WM_MINORVER)
-+MATCHBOX_WM_VERSION:=$(MATCHBOX_WM_MAJORVER)
-+MATCHBOX_WM_BIN:=matchbox-window-manager
-+MATCHBOX_WM_SOURCE:=$(MATCHBOX_WM_BIN)-$(MATCHBOX_WM_VERSION).tar.bz2
-+MATCHBOX_WM_DIR:=$(BUILD_DIR)/$(MATCHBOX_WM_BIN)-$(MATCHBOX_WM_VERSION)
++$(TSLIB_DIR)/.patched: $(DL_DIR)/$(TSLIB_SOURCE)
++	$(TSLIB_CAT) $(DL_DIR)/$(TSLIB_SOURCE) | tar -C $(BUILD_DIR) $(TAR_OPTIONS) -
++	toolchain/patch-kernel.sh $(TSLIB_DIR) package/tslib/ tslib\*.patch
++	touch $(TSLIB_DIR)/.patched
 +
-+MATCHBOX_CN_MAJORVER:=0.9
-+MATCHBOX_CN_MINORVER:=1
-+MATCHBOX_CN_VERSION:=$(MATCHBOX_CN_MAJORVER).$(MATCHBOX_CN_MINORVER)
-+MATCHBOX_CN_BIN:=matchbox-common
-+MATCHBOX_CN_SOURCE:=$(MATCHBOX_CN_BIN)-$(MATCHBOX_CN_VERSION).tar.bz2
-+MATCHBOX_CN_DIR:=$(BUILD_DIR)/$(MATCHBOX_CN_BIN)-$(MATCHBOX_CN_VERSION)
-+
-+MATCHBOX_PL_MAJORVER:=0.9
-+MATCHBOX_PL_MINORVER:=3
-+MATCHBOX_PL_VERSION:=$(MATCHBOX_PL_MAJORVER).$(MATCHBOX_PL_MINORVER)
-+MATCHBOX_PL_BIN:=matchbox-panel
-+MATCHBOX_PL_SOURCE:=$(MATCHBOX_PL_BIN)-$(MATCHBOX_PL_VERSION).tar.bz2
-+MATCHBOX_PL_DIR:=$(BUILD_DIR)/$(MATCHBOX_PL_BIN)-$(MATCHBOX_PL_VERSION)
-+
-+MATCHBOX_SM_MAJORVER:=0.1
-+MATCHBOX_SM_MINORVER:=
-+MATCHBOX_SM_VERSION:=$(MATCHBOX_SM_MAJORVER)$(MATCHBOX_SM_MINORVER)
-+MATCHBOX_SM_BIN:=mb-applet-startup-monitor
-+MATCHBOX_SM_SOURCE:=$(MATCHBOX_SM_BIN)-$(MATCHBOX_SM_VERSION).tar.bz2
-+MATCHBOX_SM_DIR:=$(BUILD_DIR)/$(MATCHBOX_SM_BIN)-$(MATCHBOX_SM_VERSION)
-+
-+MATCHBOX_DP_MAJORVER:=0.9
-+MATCHBOX_DP_MINORVER:=1
-+MATCHBOX_DP_VERSION:=$(MATCHBOX_DP_MAJORVER).$(MATCHBOX_DP_MINORVER)
-+MATCHBOX_DP_BIN:=matchbox-desktop
-+MATCHBOX_DP_SOURCE:=$(MATCHBOX_DP_BIN)-$(MATCHBOX_DP_VERSION).tar.bz2
-+MATCHBOX_DP_DIR:=$(BUILD_DIR)/$(MATCHBOX_DP_BIN)-$(MATCHBOX_DP_VERSION)
-+
-+MATCHBOX_FK_MAJORVER:=0.1
-+MATCHBOX_FK_MINORVER:=
-+#MATCHBOX_FK_VERSION:=$(MATCHBOX_FK_MAJORVER).$(MATCHBOX_FK_MINORVER)
-+MATCHBOX_FK_VERSION:=$(MATCHBOX_FK_MAJORVER)
-+MATCHBOX_FK_BIN:=libfakekey
-+MATCHBOX_FK_SOURCE:=$(MATCHBOX_FK_BIN)-$(MATCHBOX_FK_VERSION).tar.bz2
-+MATCHBOX_FK_DIR:=$(BUILD_DIR)/$(MATCHBOX_FK_BIN)-$(MATCHBOX_FK_VERSION)
-+
-+MATCHBOX_KB_MAJORVER:=0.1
-+MATCHBOX_KB_MINORVER:=
-+#MATCHBOX_KB_VERSION:=$(MATCHBOX_KB_MAJORVER).$(MATCHBOX_KB_MINORVER)
-+MATCHBOX_KB_VERSION:=$(MATCHBOX_KB_MAJORVER)
-+MATCHBOX_KB_BIN:=matchbox-keyboard
-+MATCHBOX_KB_SOURCE:=$(MATCHBOX_KB_BIN)-$(MATCHBOX_KB_VERSION).tar.bz2
-+MATCHBOX_KB_DIR:=$(BUILD_DIR)/$(MATCHBOX_KB_BIN)-$(MATCHBOX_KB_VERSION)
-+
-+#############################################################
-+
-+$(DL_DIR)/$(MATCHBOX_LIB_SOURCE):
-+	$(WGET) -P $(DL_DIR) $(MATCHBOX_SITE)/libmatchbox/$(MATCHBOX_LIB_VERSION)/$(MATCHBOX_LIB_SOURCE)
-+
-+$(DL_DIR)/$(MATCHBOX_SNOTIFY_SOURCE):
-+	$(WGET) -P $(DL_DIR) $(MATCHBOX_SNOTIFY_SITE)/$(MATCHBOX_SNOTIFY_SOURCE)
-+
-+$(DL_DIR)/$(MATCHBOX_WM_SOURCE):
-+	$(WGET) -P $(DL_DIR) $(MATCHBOX_SITE)/$(MATCHBOX_WM_BIN)/$(MATCHBOX_WM_MAJORVER)/$(MATCHBOX_WM_SOURCE)
-+
-+$(DL_DIR)/$(MATCHBOX_SM_SOURCE):
-+	$(WGET) -P $(DL_DIR) $(MATCHBOX_SITE)/$(MATCHBOX_SM_BIN)/$(MATCHBOX_SM_MAJORVER)/$(MATCHBOX_SM_SOURCE)
-+
-+$(DL_DIR)/$(MATCHBOX_DM_SOURCE):
-+	$(WGET) -P $(DL_DIR) $(MATCHBOX_SITE)/$(MATCHBOX_SM_BIN)/$(MATCHBOX_SM_MAJORVER)/$(MATCHBOX_SM_SOURCE)
-+
-+$(DL_DIR)/$(MATCHBOX_CN_SOURCE):
-+	$(WGET) -P $(DL_DIR) $(MATCHBOX_SITE)/$(MATCHBOX_CN_BIN)/$(MATCHBOX_CN_MAJORVER)/$(MATCHBOX_CN_SOURCE)
-+
-+$(DL_DIR)/$(MATCHBOX_PL_SOURCE):
-+	$(WGET) -P $(DL_DIR) $(MATCHBOX_SITE)/$(MATCHBOX_PL_BIN)/$(MATCHBOX_PL_MAJORVER)/$(MATCHBOX_PL_SOURCE)
-+
-+$(DL_DIR)/$(MATCHBOX_DP_SOURCE):
-+	$(WGET) -P $(DL_DIR) $(MATCHBOX_SITE)/$(MATCHBOX_DP_BIN)/$(MATCHBOX_DP_MAJORVER)/$(MATCHBOX_DP_SOURCE)
-+
-+$(DL_DIR)/$(MATCHBOX_FK_SOURCE):
-+	$(WGET) -P $(DL_DIR) $(MATCHBOX_SITE)/$(MATCHBOX_FK_BIN)/$(MATCHBOX_FK_MAJORVER)/$(MATCHBOX_FK_SOURCE)
-+
-+$(DL_DIR)/$(MATCHBOX_KB_SOURCE):
-+	$(WGET) -P $(DL_DIR) $(MATCHBOX_SITE)/$(MATCHBOX_KB_BIN)/$(MATCHBOX_KB_MAJORVER)/$(MATCHBOX_KB_SOURCE)
-+
-+
-+matchbox-source: $(DL_DIR)/$(MATCHBOX_LIB_SOURCE) $(DL_DIR)/$(MATCHBOX_WM_SOURCE)
-+
-+matchbox-panel-source: $(DL_DIR)/$(MATCHBOX_CN_SOURCE) $(DL_DIR)/$(MATCHBOX_PL_SOURCE)
-+
-+matchbox-desktop-source: $(DL_DIR)/$(MATCHBOX_DP_SOURCE)
-+
-+matchbox-keyboard-source: $(DL_DIR)/$(MATCHBOX_FK_SOURCE) $(DL_DIR)/$(MATCHBOX_KB_SOURCE)
-+
-+$(MATCHBOX_LIB_DIR)/.unpacked: $(DL_DIR)/$(MATCHBOX_LIB_SOURCE)
-+	$(MATCHBOX_CAT) $(DL_DIR)/$(MATCHBOX_LIB_SOURCE) | tar -C $(BUILD_DIR) $(TAR_OPTIONS) -
-+	touch $(MATCHBOX_LIB_DIR)/.unpacked
-+
-+$(MATCHBOX_SNOTIFY_DIR)/.unpacked: $(DL_DIR)/$(MATCHBOX_SNOTIFY_SOURCE)
-+	$(MATCHBOX_SNOTIFY_CAT) $(DL_DIR)/$(MATCHBOX_SNOTIFY_SOURCE) | tar -C $(BUILD_DIR) $(TAR_OPTIONS) -
-+	touch $(MATCHBOX_SNOTIFY_DIR)/.unpacked
-+
-+$(MATCHBOX_WM_DIR)/.unpacked: $(DL_DIR)/$(MATCHBOX_WM_SOURCE)
-+	$(MATCHBOX_CAT) $(DL_DIR)/$(MATCHBOX_WM_SOURCE) | tar -C $(BUILD_DIR) $(TAR_OPTIONS) -
-+	touch $(MATCHBOX_WM_DIR)/.unpacked
-+
-+$(MATCHBOX_SM_DIR)/.unpacked: $(DL_DIR)/$(MATCHBOX_SM_SOURCE)
-+	$(MATCHBOX_CAT) $(DL_DIR)/$(MATCHBOX_SM_SOURCE) | tar -C $(BUILD_DIR) $(TAR_OPTIONS) -
-+	touch $(MATCHBOX_SM_DIR)/.unpacked
-+
-+$(MATCHBOX_CN_DIR)/.unpacked: $(DL_DIR)/$(MATCHBOX_CN_SOURCE)
-+	$(MATCHBOX_CAT) $(DL_DIR)/$(MATCHBOX_CN_SOURCE) | tar -C $(BUILD_DIR) $(TAR_OPTIONS) -
-+	touch $(MATCHBOX_CN_DIR)/.unpacked
-+
-+$(MATCHBOX_PL_DIR)/.unpacked: $(DL_DIR)/$(MATCHBOX_PL_SOURCE)
-+	$(MATCHBOX_CAT) $(DL_DIR)/$(MATCHBOX_PL_SOURCE) | tar -C $(BUILD_DIR) $(TAR_OPTIONS) -
-+	touch $(MATCHBOX_PL_DIR)/.unpacked
-+
-+$(MATCHBOX_DP_DIR)/.unpacked: $(DL_DIR)/$(MATCHBOX_DP_SOURCE)
-+	$(MATCHBOX_CAT) $(DL_DIR)/$(MATCHBOX_DP_SOURCE) | tar -C $(BUILD_DIR) $(TAR_OPTIONS) -
-+	$(SED) 's:mbfolder\.png:mbtasks\.png:g' $(MATCHBOX_DP_DIR)/modules/tasks.c
-+	touch $(MATCHBOX_DP_DIR)/.unpacked
-+
-+$(MATCHBOX_FK_DIR)/.unpacked: $(DL_DIR)/$(MATCHBOX_FK_SOURCE)
-+	$(MATCHBOX_CAT) $(DL_DIR)/$(MATCHBOX_FK_SOURCE) | tar -C $(BUILD_DIR) $(TAR_OPTIONS) -
-+	touch $(MATCHBOX_FK_DIR)/.unpacked
-+
-+$(MATCHBOX_KB_DIR)/.unpacked: $(DL_DIR)/$(MATCHBOX_KB_SOURCE)
-+	$(MATCHBOX_CAT) $(DL_DIR)/$(MATCHBOX_KB_SOURCE) | tar -C $(BUILD_DIR) $(TAR_OPTIONS) -
-+	touch $(MATCHBOX_KB_DIR)/.unpacked
-+
-+#############################################################
-+
-+MATCHBOX_LIB_OPTS:=
-+MATCHBOX_LIB_DEPS:=
-+
-+MATCHBOX_WM_OPTS:=
-+MATCHBOX_WM_DEPS:=x11r7-libxdamage
-+MATCHBOX_WM_DEPS+=x11r7-libxcursor
-+
-+ifeq ($(strip $(BR2_PACKAGE_X11R7_LIBXCOMPOSITE)),y)
-+ifeq ($(strip $(BR2_PACKAGE_X11R7_LIBXPM)),y)
-+  MATCHBOX_WM_OPTS+=--enable-composite
-+  MATCHBOX_WM_DEPS+=x11r7-libxcomposite
-+  MATCHBOX_WM_DEPS+=x11r7-libxpm
-+  MATCHBOX_LIB_DEPS+=x11r7-libxpm
-+endif
-+endif
-+
-+MATCHBOX_SNOTIFY_OPTS:=
-+MATCHBOX_SNOTIFY_DEPS:=
-+MATCHBOX_PANEL_DEPS:=
-+
-+ifeq ($(strip $(BR2_PACKAGE_MATCHBOX_SNOTIFY)),y)
-+  MATCHBOX_SNOTIFY_OPTS+=--enable-startup-notification
-+  MATCHBOX_SNOTIFY_DEPS+=x11r7-libxsm
-+  MATCHBOX_SNOTIFY_DEPS+=$(TARGET_DIR)/usr/lib/$(MATCHBOX_SNOTIFY_BIN)
-+  MATCHBOX_PANEL_DEPS+=$(TARGET_DIR)/usr/bin/$(MATCHBOX_SM_BIN)
-+else
-+  MATCHBOX_SNOTIFY_OPTS+=--disable-startup-notification
-+endif
-+
-+ifeq ($(strip $(BR2_PACKAGE_JPEG)),y)
-+  MATCHBOX_LIB_OPTS+=--enable-jpeg
-+  MATCHBOX_LIB_DEPS+=jpeg
-+else
-+  MATCHBOX_LIB_OPTS+=--disable-jpeg
-+endif
-+
-+ifeq ($(strip $(BR2_PACKAGE_LIBPNG)),y)
-+  MATCHBOX_LIB_OPTS+=--enable-png
-+  MATCHBOX_LIB_DEPS+=libpng
-+else
-+  MATCHBOX_LIB_OPTS+=--disable-png
-+endif
-+
-+ifeq ($(strip $(BR2_PACKAGE_PANGO)),y)
-+  MATCHBOX_LIB_OPTS+=--enable-pango
-+  MATCHBOX_LIB_DEPS+=pango
-+else
-+  MATCHBOX_LIB_OPTS+=--disable-pango
-+endif
-+
-+ifeq ($(strip $(BR2_PACKAGE_X11R7_LIBXFT2)),y)
-+  MATCHBOX_LIB_OPTS+=--enable-xft
-+  MATCHBOX_LIB_DEPS+=x11r7-libxft2
-+  #MATCHBOX_WM_OPTS+=--enable-standalone-xft
-+  MATCHBOX_WM_DEPS+=x11r7-libxft2
-+else
-+  MATCHBOX_LIB_OPTS+=--disable-xft
-+  #MATCHBOX_WM_OPTS+=--disable-standalone-xft
-+endif
-+
-+
-+$(MATCHBOX_LIB_DIR)/.configured: $(MATCHBOX_LIB_DIR)/.unpacked
-+	(cd $(MATCHBOX_LIB_DIR); \
++$(TSLIB_DIR)/.configured: $(TSLIB_DIR)/.patched
++	(cd $(TSLIB_DIR); rm -rf config.cache; \
++	./autogen.sh; \
 +	$(TARGET_CONFIGURE_OPTS) \
-+	CFLAGS="$(TARGET_CFLAGS) -I$(STAGING_DIR)/usr/include" PKG_CONFIG_PATH="$(STAGING_DIR)/usr/lib/pkgconfig" \
-+	LDFLAGS="-L$(STAGING_DIR)/usr/lib" \
++	CFLAGS="$(TARGET_CFLAGS) " \
 +	./configure \
 +	--target=$(GNU_TARGET_NAME) \
 +	--host=$(GNU_TARGET_NAME) \
 +	--build=$(GNU_HOST_NAME) \
-+	--disable-static \
 +	--prefix=$(STAGING_DIR)/usr \
++	--exec_prefix=$(STAGING_DIR)/usr \
 +	--sysconfdir=/etc \
-+	--localstatedir=/var \
-+	--datadir=/usr/share/matchbox \
-+	--libdir=$(STAGING_DIR)/usr/lib \
-+	--includedir=$(STAGING_DIR)/usr/include \
-+	--enable-expat \
-+	--disable-doxygen-docs \
-+	--with-expat-includes=$(STAGING_DIR)/usr/include \
-+	--with-expat-lib=$(STAGING_DIR)/usr/lib \
-+	--with-x \
-+	--x-includes=$(STAGING_DIR)/usr/include \
-+	--x-libraries=$(STAGING_DIR)/usr/lib \
-+	$(MATCHBOX_LIB_OPTS) \
-+	);
-+	touch $(MATCHBOX_LIB_DIR)/.configured
-+
-+$(MATCHBOX_SNOTIFY_DIR)/.configured: $(MATCHBOX_SNOTIFY_DIR)/.unpacked
-+	(cd $(MATCHBOX_SNOTIFY_DIR); \
-+	$(TARGET_CONFIGURE_OPTS) \
-+	CFLAGS="$(TARGET_CFLAGS) -I$(STAGING_DIR)/usr/include" PKG_CONFIG_PATH="$(STAGING_DIR)/usr/lib/pkgconfig" \
-+	LDFLAGS="-L$(STAGING_DIR)/usr/lib" \
-+	lf_cv_sane_realloc=no \
-+	./configure \
-+	--target=$(GNU_TARGET_NAME) \
-+	--host=$(GNU_TARGET_NAME) \
-+	--build=$(GNU_HOST_NAME) \
-+	--disable-static \
-+	--prefix=$(STAGING_DIR)/usr \
-+	--sysconfdir=/etc \
-+	--localstatedir=/var \
 +	--datadir=/usr/share \
-+	--libdir=$(STAGING_DIR)/usr/lib \
-+	--includedir=$(STAGING_DIR)/usr/include \
-+	--with-x \
-+	--x-includes=$(STAGING_DIR)/usr/include \
-+	--x-libraries=$(STAGING_DIR)/usr/lib \
-+	);
-+	touch $(MATCHBOX_SNOTIFY_DIR)/.configured
-+
-+$(MATCHBOX_WM_DIR)/.configured: $(MATCHBOX_WM_DIR)/.unpacked
-+	(cd $(MATCHBOX_WM_DIR); \
-+	$(TARGET_CONFIGURE_OPTS) \
-+	CFLAGS="$(TARGET_CFLAGS) -I$(STAGING_DIR)/usr/include" PKG_CONFIG_PATH="$(STAGING_DIR)/usr/lib/pkgconfig" \
-+	LDFLAGS="-L$(STAGING_DIR)/usr/lib" \
-+	./configure \
-+	--target=$(GNU_TARGET_NAME) \
-+	--host=$(GNU_TARGET_NAME) \
-+	--build=$(GNU_HOST_NAME) \
-+	--disable-static \
-+	--prefix=$(STAGING_DIR)/usr \
-+	--sysconfdir=/etc \
 +	--localstatedir=/var \
-+	--datadir=/usr/share/matchbox \
-+	--libdir=$(STAGING_DIR)/usr/lib \
 +	--includedir=$(STAGING_DIR)/usr/include \
-+	--enable-expat \
-+	--with-expat-includes=$(STAGING_DIR)/usr/include \
-+	--with-expat-lib=$(STAGING_DIR)/usr/lib \
-+	--with-x \
-+	--x-includes=$(STAGING_DIR)/usr/include \
-+	--x-libraries=$(STAGING_DIR)/usr/lib \
-+	$(MATCHBOX_WM_OPTS) \
-+	$(MATCHBOX_SNOTIFY_OPTS) \
-+	);
-+	touch $(MATCHBOX_WM_DIR)/.configured
-+
-+$(MATCHBOX_SM_DIR)/.configured: $(MATCHBOX_SM_DIR)/.unpacked
-+	(cd $(MATCHBOX_SM_DIR); \
-+	$(TARGET_CONFIGURE_OPTS) \
-+	CFLAGS="$(TARGET_CFLAGS) -I$(STAGING_DIR)/usr/include" PKG_CONFIG_PATH="$(STAGING_DIR)/usr/lib/pkgconfig" \
-+	LDFLAGS="-L$(STAGING_DIR)/usr/lib" \
-+	./configure \
-+	--target=$(GNU_TARGET_NAME) \
-+	--host=$(GNU_TARGET_NAME) \
-+	--build=$(GNU_HOST_NAME) \
++	--libdir=$(STAGING_DIR)/usr/lib \
 +	--disable-static \
-+	--prefix=$(STAGING_DIR)/usr \
-+	--sysconfdir=/etc \
-+	--localstatedir=/var \
-+	--datadir=/usr/share/matchbox \
-+	--libdir=$(STAGING_DIR)/usr/lib \
-+	--includedir=$(STAGING_DIR)/usr/include \
-+	--enable-expat \
-+	--with-expat-includes=$(STAGING_DIR)/usr/include \
-+	--with-expat-lib=$(STAGING_DIR)/usr/lib \
-+	--with-x \
-+	--x-includes=$(STAGING_DIR)/usr/include \
-+	--x-libraries=$(STAGING_DIR)/usr/lib \
-+	$(MATCHBOX_SNOTIFY_OPTS) \
++	--disable-linear-h2200 \
++	--disable-ucb1x00 \
++	--disable-corgi \
++	--disable-collie \
++	--disable-h3600 \
++	--disable-mk712 \
++	--disable-arctic2 \
++	--enable-input \
 +	);
-+	touch $(MATCHBOX_SM_DIR)/.configured
++	$(SED) 's:rpl\_malloc:malloc:g' $(TSLIB_DIR)/config.h
++	touch  $(TSLIB_DIR)/.configured
 +
-+$(MATCHBOX_CN_DIR)/.configured: $(MATCHBOX_CN_DIR)/.unpacked
-+	(cd $(MATCHBOX_CN_DIR); \
-+	$(TARGET_CONFIGURE_OPTS) \
-+	CFLAGS="$(TARGET_CFLAGS) -I$(STAGING_DIR)/usr/include" PKG_CONFIG_PATH="$(STAGING_DIR)/usr/lib/pkgconfig" \
-+	LDFLAGS="-L$(STAGING_DIR)/usr/lib" \
-+	./configure \
-+	--target=$(GNU_TARGET_NAME) \
-+	--host=$(GNU_TARGET_NAME) \
-+	--build=$(GNU_HOST_NAME) \
-+	--disable-static \
-+	--prefix=$(STAGING_DIR)/usr \
-+	--sysconfdir=/etc \
-+	--localstatedir=/var \
-+	--datadir=/usr/share/matchbox \
-+	--libdir=$(STAGING_DIR)/usr/lib \
-+	--includedir=$(STAGING_DIR)/usr/include \
-+	--enable-expat \
-+	--with-expat-includes=$(STAGING_DIR)/usr/include \
-+	--with-expat-lib=$(STAGING_DIR)/usr/lib \
-+	--with-x \
-+	--x-includes=$(STAGING_DIR)/usr/include \
-+	--x-libraries=$(STAGING_DIR)/usr/lib \
-+	);
-+	touch $(MATCHBOX_CN_DIR)/.configured
++$(TSLIB_DIR)/.compiled: $(TSLIB_DIR)/.configured
++	$(MAKE) -C $(TSLIB_DIR) 
++	touch $(TSLIB_DIR)/.compiled
 +
-+$(MATCHBOX_PL_DIR)/.configured: $(MATCHBOX_PL_DIR)/.unpacked
-+	(cd $(MATCHBOX_PL_DIR); \
-+	$(TARGET_CONFIGURE_OPTS) \
-+	CFLAGS="$(TARGET_CFLAGS) -I$(STAGING_DIR)/usr/include" PKG_CONFIG_PATH="$(STAGING_DIR)/usr/lib/pkgconfig" \
-+	LDFLAGS="-L$(STAGING_DIR)/usr/lib" \
-+	./configure \
-+	--target=$(GNU_TARGET_NAME) \
-+	--host=$(GNU_TARGET_NAME) \
-+	--build=$(GNU_HOST_NAME) \
-+	--disable-static \
-+	--prefix=$(STAGING_DIR)/usr \
-+	--sysconfdir=/etc \
-+	--localstatedir=/var \
-+	--datadir=/usr/share/matchbox \
-+	--libdir=$(STAGING_DIR)/usr/lib \
-+	--includedir=$(STAGING_DIR)/usr/include \
-+	--enable-expat \
-+	--with-expat-includes=$(STAGING_DIR)/usr/include \
-+	--with-expat-lib=$(STAGING_DIR)/usr/lib \
-+	--with-x \
-+	--x-includes=$(STAGING_DIR)/usr/include \
-+	--x-libraries=$(STAGING_DIR)/usr/lib \
-+	$(MATCHBOX_SNOTIFY_OPTS) \
-+	);
-+	touch $(MATCHBOX_PL_DIR)/.configured
++$(STAGING_DIR)/usr/lib/libts.so: $(TSLIB_DIR)/.compiled
++	$(MAKE) -C $(TSLIB_DIR) \
++	    prefix=$(STAGING_DIR)/usr \
++	    exec_prefix=$(STAGING_DIR)/usr \
++	    bindir=$(STAGING_DIR)/usr/bin \
++	    sbindir=$(STAGING_DIR)/usr/sbin \
++	    libexecdir=$(STAGING_DIR)/usr/libexec \
++	    datadir=$(STAGING_DIR)/usr/share \
++	    sysconfdir=$(STAGING_DIR)/etc \
++	    localstatedir=$(STAGING_DIR)/var \
++	    libdir=$(STAGING_DIR)/usr/lib \
++	    includedir=$(STAGING_DIR)/usr/include \
++	    infodir=$(STAGING_DIR)/info \
++	    mandir=$(STAGING_DIR)/man \
++	    install
 +
-+$(MATCHBOX_DP_DIR)/.configured: $(MATCHBOX_DP_DIR)/.unpacked
-+	(cd $(MATCHBOX_DP_DIR); \
-+	$(TARGET_CONFIGURE_OPTS) \
-+	CFLAGS="$(TARGET_CFLAGS) -I$(STAGING_DIR)/usr/include" PKG_CONFIG_PATH="$(STAGING_DIR)/usr/lib/pkgconfig" \
-+	LDFLAGS="-L$(STAGING_DIR)/usr/lib" \
-+	./configure \
-+	--target=$(GNU_TARGET_NAME) \
-+	--host=$(GNU_TARGET_NAME) \
-+	--build=$(GNU_HOST_NAME) \
-+	--disable-static \
-+	--prefix=$(STAGING_DIR)/usr \
-+	--sysconfdir=/etc \
-+	--localstatedir=/var \
-+	--datadir=/usr/share/matchbox \
-+	--libdir=$(STAGING_DIR)/usr/lib \
-+	--includedir=$(STAGING_DIR)/usr/include \
-+	--enable-expat \
-+	--with-expat-includes=$(STAGING_DIR)/usr/include \
-+	--with-expat-lib=$(STAGING_DIR)/usr/lib \
-+	--with-x \
-+	--x-includes=$(STAGING_DIR)/usr/include \
-+	--x-libraries=$(STAGING_DIR)/usr/lib \
-+	$(MATCHBOX_SNOTIFY_OPTS) \
-+	);
-+	touch $(MATCHBOX_DP_DIR)/.configured
++$(TARGET_DIR)/usr/lib/libts.so: $(STAGING_DIR)/usr/lib/libts.so
++	cp -dpf $(STAGING_DIR)/usr/lib/libts*.so* $(TARGET_DIR)/usr/lib/
++	-$(STRIP) --strip-unneeded $(TARGET_DIR)/usr/lib/libts.so*
++	-$(STRIP) --strip-unneeded $(STAGING_DIR)/usr/lib/ts/*.so
++	cp -dpf $(STAGING_DIR)/usr/lib/ts/*.so $(TARGET_DIR)/usr/lib/
++	cp -dpf $(STAGING_DIR)/usr/bin/ts_calibrate $(TARGET_DIR)/usr/bin/
++	-$(STRIP) --strip-unneeded $(TARGET_DIR)/usr/bin/ts_calibrate
++	cp -dpf $(STAGING_DIR)/usr/bin/ts_finddev $(TARGET_DIR)/usr/bin/
++	-$(STRIP) --strip-unneeded $(TARGET_DIR)/usr/bin/ts_finddev
++	cp -dpf $(STAGING_DIR)/usr/bin/inputattach $(TARGET_DIR)/usr/bin/
++	-$(STRIP) --strip-unneeded $(TARGET_DIR)/usr/bin/inputattach
++	cp -dpf package/tslib/ts.conf $(TARGET_DIR)/etc/
 +
-+$(MATCHBOX_FK_DIR)/.configured: $(MATCHBOX_FK_DIR)/.unpacked
-+	(cd $(MATCHBOX_FK_DIR); \
-+	$(TARGET_CONFIGURE_OPTS) \
-+	CFLAGS="$(TARGET_CFLAGS) -I$(STAGING_DIR)/usr/include" PKG_CONFIG_PATH="$(STAGING_DIR)/usr/lib/pkgconfig" \
-+	LDFLAGS="-L$(STAGING_DIR)/usr/lib" \
-+	./configure \
-+	--target=$(GNU_TARGET_NAME) \
-+	--host=$(GNU_TARGET_NAME) \
-+	--build=$(GNU_HOST_NAME) \
-+	--disable-static \
-+	--prefix=$(STAGING_DIR)/usr \
-+	--sysconfdir=/etc \
-+	--localstatedir=/var \
-+	--datadir=/usr/share/matchbox \
-+	--libdir=$(STAGING_DIR)/usr/lib \
-+	--includedir=$(STAGING_DIR)/usr/include \
-+	--enable-expat \
-+	--with-expat-includes=$(STAGING_DIR)/usr/include \
-+	--with-expat-lib=$(STAGING_DIR)/usr/lib \
-+	--with-x \
-+	--x-includes=$(STAGING_DIR)/usr/include \
-+	--x-libraries=$(STAGING_DIR)/usr/lib \
-+	);
-+	$(SED) 's:^SUBDIRS = fakekey src tests.*:SUBDIRS = fakekey src:g' $(MATCHBOX_FK_DIR)/Makefile
-+	touch $(MATCHBOX_FK_DIR)/.configured
++tslib: uclibc $(TARGET_DIR)/usr/lib/libts.so
 +
-+$(MATCHBOX_KB_DIR)/.configured: $(MATCHBOX_KB_DIR)/.unpacked
-+	(cd $(MATCHBOX_KB_DIR); \
-+	$(TARGET_CONFIGURE_OPTS) \
-+	CFLAGS="$(TARGET_CFLAGS) -I$(STAGING_DIR)/usr/include" PKG_CONFIG_PATH="$(STAGING_DIR)/usr/lib/pkgconfig" \
-+	LDFLAGS="-L$(STAGING_DIR)/usr/lib" \
-+	./configure \
-+	--target=$(GNU_TARGET_NAME) \
-+	--host=$(GNU_TARGET_NAME) \
-+	--build=$(GNU_HOST_NAME) \
-+	--disable-static \
-+	--prefix=$(STAGING_DIR)/usr \
-+	--sysconfdir=/etc \
-+	--localstatedir=/var \
-+	--datadir=/usr/share/matchbox \
-+	--libdir=$(STAGING_DIR)/usr/lib \
-+	--includedir=$(STAGING_DIR)/usr/include \
-+	--enable-expat \
-+	--with-expat-includes=$(STAGING_DIR)/usr/include \
-+	--with-expat-lib=$(STAGING_DIR)/usr/lib \
-+	--with-x \
-+	--x-includes=$(STAGING_DIR)/usr/include \
-+	--x-libraries=$(STAGING_DIR)/usr/lib \
-+	);
-+	touch $(MATCHBOX_KB_DIR)/.configured
++tslib-build: uclibc $(TSLIB_DIR)/.configured
++	rm -f $(TSLIB_DIR)/.compiled
++	$(MAKE) -C $(TSLIB_DIR) 
++	touch $(TSLIB_DIR)/.compiled
 +
-+$(MATCHBOX_LIB_DIR)/.compiled: $(MATCHBOX_LIB_DIR)/.configured
-+	$(MAKE) -C $(MATCHBOX_LIB_DIR)
-+	touch $(MATCHBOX_LIB_DIR)/.compiled
++tslib-clean:
++	$(MAKE) DESTDIR=$(TARGET_DIR) CC=$(TARGET_CC) -C $(TSLIB_DIR) uninstall
++	rm -f $(STAGING_DIR)/lib/libts.*
++	rm -f $(STAGING_DIR)/usr/lib/libts.*
++	-$(MAKE) -C $(TSLIB_DIR) clean
 +
-+$(MATCHBOX_SNOTIFY_DIR)/.compiled: $(MATCHBOX_SNOTIFY_DIR)/.configured
-+	$(MAKE) -C $(MATCHBOX_SNOTIFY_DIR)
-+	touch $(MATCHBOX_SNOTIFY_DIR)/.compiled
-+
-+$(MATCHBOX_WM_DIR)/.compiled: $(MATCHBOX_WM_DIR)/.configured
-+	$(MAKE) -C $(MATCHBOX_WM_DIR)
-+	touch $(MATCHBOX_WM_DIR)/.compiled
-+
-+$(MATCHBOX_SM_DIR)/.compiled: $(MATCHBOX_SM_DIR)/.configured
-+	$(MAKE) -C $(MATCHBOX_SM_DIR)
-+	touch $(MATCHBOX_SM_DIR)/.compiled
-+
-+$(MATCHBOX_CN_DIR)/.compiled: $(MATCHBOX_CN_DIR)/.configured
-+	$(MAKE) -C $(MATCHBOX_CN_DIR)
-+	touch $(MATCHBOX_CN_DIR)/.compiled
-+
-+$(MATCHBOX_PL_DIR)/.compiled: $(MATCHBOX_PL_DIR)/.configured
-+	$(MAKE) -C $(MATCHBOX_PL_DIR)
-+	touch $(MATCHBOX_PL_DIR)/.compiled
-+
-+$(MATCHBOX_DP_DIR)/.compiled: $(MATCHBOX_DP_DIR)/.configured
-+	$(MAKE) -C $(MATCHBOX_DP_DIR)
-+	touch $(MATCHBOX_DP_DIR)/.compiled
-+
-+$(MATCHBOX_FK_DIR)/.compiled: $(MATCHBOX_FK_DIR)/.configured
-+	$(MAKE) -C $(MATCHBOX_FK_DIR)
-+	touch $(MATCHBOX_FK_DIR)/.compiled
-+
-+$(MATCHBOX_KB_DIR)/.compiled: $(MATCHBOX_KB_DIR)/.configured
-+	$(MAKE) -C $(MATCHBOX_KB_DIR)
-+	touch $(MATCHBOX_KB_DIR)/.compiled
-+
-+$(STAGING_DIR)/usr/lib/libmb.so: $(MATCHBOX_LIB_DIR)/.compiled
-+	$(MAKE) -C $(MATCHBOX_LIB_DIR) DESTDIR=$(STAGING_DIR) \
-+	prefix=/usr \
-+	localstatedir=/var \
-+	datadir=/usr/share/matchbox \
-+	libdir=/usr/lib \
-+	includedir=/usr/include \
-+	install
-+
-+$(STAGING_DIR)/usr/lib/$(MATCHBOX_SNOTIFY_BIN): $(MATCHBOX_SNOTIFY_DIR)/.compiled
-+	$(MAKE) -C $(MATCHBOX_SNOTIFY_DIR) DESTDIR=$(STAGING_DIR) \
-+	prefix=/usr \
-+	localstatedir=/var \
-+	datadir=/usr/share \
-+	libdir=/usr/lib \
-+	includedir=/usr/include \
-+	install
-+
-+$(STAGING_DIR)/usr/bin/$(MATCHBOX_WM_BIN): $(MATCHBOX_WM_DIR)/.compiled
-+	$(MAKE) -C $(MATCHBOX_WM_DIR) DESTDIR=$(STAGING_DIR) \
-+	prefix=/usr \
-+	localstatedir=/var \
-+	datadir=/usr/share/matchbox \
-+	libdir=/usr/lib \
-+	includedir=/usr/include \
-+	install
-+
-+$(STAGING_DIR)/usr/bin/$(MATCHBOX_SM_BIN): $(MATCHBOX_SM_DIR)/.compiled
-+	$(MAKE) -C $(MATCHBOX_SM_DIR) DESTDIR=$(STAGING_DIR) \
-+	prefix=/usr \
-+	localstatedir=/var \
-+	datadir=/usr/share/matchbox \
-+	libdir=/usr/lib \
-+	includedir=/usr/include \
-+	install
-+
-+$(STAGING_DIR)/usr/bin/matchbox-session: $(MATCHBOX_CN_DIR)/.compiled
-+	$(MAKE) -C $(MATCHBOX_CN_DIR) DESTDIR=$(STAGING_DIR) \
-+	prefix=/usr \
-+	localstatedir=/var \
-+	datadir=/usr/share/matchbox \
-+	libdir=/usr/lib \
-+	includedir=/usr/include \
-+	install
-+
-+$(STAGING_DIR)/usr/bin/$(MATCHBOX_PL_BIN): $(MATCHBOX_PL_DIR)/.compiled
-+	$(MAKE) -C $(MATCHBOX_PL_DIR) DESTDIR=$(STAGING_DIR) \
-+	prefix=/usr \
-+	localstatedir=/var \
-+	datadir=/usr/share/matchbox \
-+	libdir=/usr/lib \
-+	includedir=/usr/include \
-+	install
-+
-+$(STAGING_DIR)/usr/bin/$(MATCHBOX_DP_BIN): $(MATCHBOX_DP_DIR)/.compiled
-+	$(MAKE) -C $(MATCHBOX_DP_DIR) DESTDIR=$(STAGING_DIR) \
-+	prefix=/usr \
-+	localstatedir=/var \
-+	datadir=/usr/share/matchbox \
-+	libdir=/usr/lib \
-+	includedir=/usr/include \
-+	install
-+
-+$(STAGING_DIR)/usr/lib/$(MATCHBOX_FK_BIN).so: $(MATCHBOX_FK_DIR)/.compiled
-+	$(MAKE) -C $(MATCHBOX_FK_DIR) DESTDIR=$(STAGING_DIR) \
-+	prefix=/usr \
-+	localstatedir=/var \
-+	datadir=/usr/share/matchbox \
-+	libdir=/usr/lib \
-+	includedir=/usr/include \
-+	install
-+
-+$(STAGING_DIR)/usr/bin/$(MATCHBOX_KB_BIN): $(MATCHBOX_KB_DIR)/.compiled
-+	$(MAKE) -C $(MATCHBOX_KB_DIR) DESTDIR=$(STAGING_DIR) \
-+	prefix=/usr \
-+	localstatedir=/var \
-+	datadir=/usr/share/matchbox \
-+	libdir=/usr/lib \
-+	includedir=/usr/include \
-+	install
-+
-+$(TARGET_DIR)/usr/lib/libmb.so: $(STAGING_DIR)/usr/lib/libmb.so
-+	cp -dpf $(STAGING_DIR)/usr/lib/libmb.so* $(TARGET_DIR)/usr/lib/
-+	-$(STRIP) --strip-unneeded $(TARGET_DIR)/usr/lib/libmb.so
-+
-+$(TARGET_DIR)/usr/lib/$(MATCHBOX_SNOTIFY_BIN): $(STAGING_DIR)/usr/lib/$(MATCHBOX_SNOTIFY_BIN)
-+	cp -dpf $(STAGING_DIR)/usr/lib/$(MATCHBOX_SNOTIFY_BIN)* $(TARGET_DIR)/usr/lib/
-+	-$(STRIP) --strip-unneeded $(TARGET_DIR)/usr/lib/$(MATCHBOX_SNOTIFY_BIN)
-+
-+$(TARGET_DIR)/usr/bin/$(MATCHBOX_WM_BIN): $(STAGING_DIR)/usr/bin/$(MATCHBOX_WM_BIN)
-+	cp -dpf $(STAGING_DIR)/usr/bin/$(MATCHBOX_WM_BIN) $(TARGET_DIR)/usr/bin/
-+	-$(STRIP) --strip-unneeded $(TARGET_DIR)/usr/bin/$(MATCHBOX_WM_BIN)
-+	cp -dpf $(STAGING_DIR)/usr/bin/matchbox-remote $(TARGET_DIR)/usr/bin/
-+	-$(STRIP) --strip-unneeded $(TARGET_DIR)/usr/bin/matchbox-remote
-+	cp -af $(STAGING_DIR)/etc/matchbox/ $(TARGET_DIR)/etc/
-+	cp -af $(STAGING_DIR)/usr/share/matchbox $(TARGET_DIR)/usr/share/
-+
-+$(TARGET_DIR)/usr/bin/$(MATCHBOX_SM_BIN): $(STAGING_DIR)/usr/bin/$(MATCHBOX_SM_BIN)
-+	cp -dpf $(STAGING_DIR)/usr/bin/$(MATCHBOX_SM_BIN) $(TARGET_DIR)/usr/bin/
-+	-$(STRIP) --strip-unneeded $(TARGET_DIR)/usr/bin/$(MATCHBOX_SM_BIN)
-+	mkdir -p $(TARGET_DIR)/usr/share/matchbox/pixmaps/
-+	cp -af $(STAGING_DIR)/usr/share/matchbox/pixmaps/hourglass-*.png $(TARGET_DIR)/usr/share/matchbox/pixmaps/
-+
-+$(TARGET_DIR)/usr/bin/matchbox-session: $(STAGING_DIR)/usr/bin/matchbox-session
-+	cp -dpf $(STAGING_DIR)/usr/bin/matchbox-session $(TARGET_DIR)/usr/bin/
-+	-$(STRIP) --strip-unneeded $(TARGET_DIR)/usr/bin/matchbox-session
-+	cp -af $(STAGING_DIR)/etc/matchbox/ $(TARGET_DIR)/etc/
-+	cp -af $(STAGING_DIR)/usr/share/matchbox $(TARGET_DIR)/usr/share/
-+
-+$(TARGET_DIR)/usr/bin/$(MATCHBOX_PL_BIN): $(STAGING_DIR)/usr/bin/$(MATCHBOX_PL_BIN)
-+	cp -dpf $(STAGING_DIR)/usr/bin/$(MATCHBOX_PL_BIN) $(TARGET_DIR)/usr/bin/
-+	-$(STRIP) --strip-unneeded $(TARGET_DIR)/usr/bin/$(MATCHBOX_PL_BIN)
-+	cp -dpf $(STAGING_DIR)/usr/bin/mb-applet-* $(TARGET_DIR)/usr/bin/
-+	-$(STRIP) --strip-unneeded $(TARGET_DIR)/usr/bin/mb-applet-*
-+	cp -af $(STAGING_DIR)/usr/share/matchbox/* $(TARGET_DIR)/usr/share/matchbox/
-+
-+$(TARGET_DIR)/usr/bin/$(MATCHBOX_DP_BIN): $(STAGING_DIR)/usr/bin/$(MATCHBOX_DP_BIN)
-+	cp -dpf $(STAGING_DIR)/usr/bin/$(MATCHBOX_DP_BIN) $(TARGET_DIR)/usr/bin/
-+	-$(STRIP) --strip-unneeded $(TARGET_DIR)/usr/bin/$(MATCHBOX_DP_BIN)
-+	cp -dpf $(STAGING_DIR)/usr/lib/dotdesktop.so $(TARGET_DIR)/usr/lib/
-+	-$(STRIP) --strip-unneeded $(TARGET_DIR)/usr/lib/dotdesktop.so
-+	cp -dpf $(STAGING_DIR)/usr/lib/simplefilebrowser.so $(TARGET_DIR)/usr/lib/
-+	-$(STRIP) --strip-unneeded $(TARGET_DIR)/usr/lib/simplefilebrowser.so
-+	cp -dpf $(STAGING_DIR)/usr/lib/tasks.so $(TARGET_DIR)/usr/lib/
-+	-$(STRIP) --strip-unneeded $(TARGET_DIR)/usr/lib/tasks.so
-+	cp -af $(STAGING_DIR)/usr/share/matchbox/* $(TARGET_DIR)/usr/share/matchbox/
-+	cp -f ./package/matchbox/mbdesktop_modules $(TARGET_DIR)/etc/matchbox/
-+
-+$(TARGET_DIR)/usr/lib/$(MATCHBOX_FK_BIN).so: $(STAGING_DIR)/usr/lib/$(MATCHBOX_FK_BIN).so
-+	cp -dpf $(STAGING_DIR)/usr/lib/$(MATCHBOX_FK_BIN).so* $(TARGET_DIR)/usr/lib/
-+	-$(STRIP) --strip-unneeded $(TARGET_DIR)/usr/lib/$(MATCHBOX_FK_BIN).so
-+
-+$(TARGET_DIR)/usr/bin/$(MATCHBOX_KB_BIN): $(STAGING_DIR)/usr/bin/$(MATCHBOX_KB_BIN)
-+	cp -dpf $(STAGING_DIR)/usr/bin/$(MATCHBOX_KB_BIN) $(TARGET_DIR)/usr/bin/
-+	-$(STRIP) --strip-unneeded $(TARGET_DIR)/usr/bin/$(MATCHBOX_KB_BIN)
-+	mkdir -p $(TARGET_DIR)/usr/share/matchbox/pixmaps/
-+	cp -dpf $(STAGING_DIR)/usr/share/matchbox/pixmaps/matchbox-keyboard.png $(TARGET_DIR)/usr/share/matchbox/pixmaps/
-+	cp -af $(STAGING_DIR)/usr/share/matchbox/matchbox-keyboard $(TARGET_DIR)/usr/share/matchbox/
-+	cp -dpf ./package/matchbox/mb-applet-kbd-wrapper.sh $(TARGET_DIR)/usr/bin/
-+
-+matchbox: uclibc expat $(MATCHBOX_WM_DEPS) $(MATCHBOX_SNOTIFY_DEPS) $(MATCHBOX_LIB_DEPS) $(TARGET_DIR)/usr/lib/libmb.so $(TARGET_DIR)/usr/bin/$(MATCHBOX_WM_BIN)
-+
-+matchbox-panel: uclibc matchbox $(TARGET_DIR)/usr/bin/$(MATCHBOX_PL_BIN) $(TARGET_DIR)/usr/bin/matchbox-session $(MATCHBOX_PANEL_DEPS)
-+
-+matchbox-desktop: uclibc matchbox $(TARGET_DIR)/usr/bin/$(MATCHBOX_DP_BIN)
-+
-+matchbox-keyboard: uclibc matchbox x11r7-libxtst $(TARGET_DIR)/usr/lib/$(MATCHBOX_FK_BIN).so $(TARGET_DIR)/usr/bin/$(MATCHBOX_KB_BIN)
-+
-+matchbox-clean:
-+	rm -f $(TARGET_DIR)/usr/lib/libmb.*
-+	rm -f $(TARGET_DIR)/usr/bin/$(MATCHBOX_WM_BIN)
-+	$(MAKE) DESTDIR=$(STAGING_DIR) CC=$(TARGET_CC) -C $(MATCHBOX_WM_DIR) uninstall
-+	-$(MAKE) -C $(MATCHBOX_WM_DIR) clean
-+	$(MAKE) DESTDIR=$(STAGING_DIR) CC=$(TARGET_CC) -C $(MATCHBOX_LIB_DIR) uninstall
-+	-$(MAKE) -C $(MATCHBOX_LIB_DIR) clean
-+
-+matchbox-panel-clean:
-+	rm -f $(TARGET_DIR)/usr/bin/$(MATCHBOX_PL_BIN)
-+	rm -f $(TARGET_DIR)/usr/bin/matchbox-session
-+	$(MAKE) DESTDIR=$(STAGING_DIR) CC=$(TARGET_CC) -C $(MATCHBOX_PL_DIR) uninstall
-+	-$(MAKE) -C $(MATCHBOX_PL_DIR) clean
-+	$(MAKE) DESTDIR=$(STAGING_DIR) CC=$(TARGET_CC) -C $(MATCHBOX_CN_DIR) uninstall
-+	-$(MAKE) -C $(MATCHBOX_CN_DIR) clean
-+
-+matchbox-desktop-clean:
-+	rm -f $(TARGET_DIR)/usr/bin/$(MATCHBOX_DP_BIN)
-+	$(MAKE) DESTDIR=$(STAGING_DIR) CC=$(TARGET_CC) -C $(MATCHBOX_DP_DIR) uninstall
-+	-$(MAKE) -C $(MATCHBOX_DP_DIR) clean
-+
-+matchbox-keyboard-clean:
-+	rm -f $(TARGET_DIR)/usr/bin/$(MATCHBOX_KB_BIN)
-+	rm -f $(TARGET_DIR)/usr/lib/$(MATCHBOX_FK_BIN).*
-+	$(MAKE) DESTDIR=$(STAGING_DIR) CC=$(TARGET_CC) -C $(MATCHBOX_KB_DIR) uninstall
-+	-$(MAKE) -C $(MATCHBOX_KB_DIR) clean
-+	$(MAKE) DESTDIR=$(STAGING_DIR) CC=$(TARGET_CC) -C $(MATCHBOX_FK_DIR) uninstall
-+	-$(MAKE) -C $(MATCHBOX_FK_DIR) clean
-+
-+matchbox-dirclean:
-+	rm -rf $(MATCHBOX_WM_DIR)
-+	rm -rf $(MATCHBOX_LIB_DIR)
-+	rm -rf $(MATCHBOX_SNOTIFY_DIR)
-+
-+matchbox-panel-dirclean:
-+	rm -rf $(MATCHBOX_PL_DIR)
-+	rm -rf $(MATCHBOX_CN_DIR)
-+
-+matchbox-desktop-dirclean:
-+	rm -rf $(MATCHBOX_DP_DIR)
-+
-+matchbox-keyboard-dirclean:
-+	rm -rf $(MATCHBOX_KB_DIR)
-+	rm -rf $(MATCHBOX_FK_DIR)
++tslib-dirclean:
++	rm -rf $(TSLIB_DIR)
 +
 +#############################################################
 +#
 +# Toplevel Makefile options
 +#
 +#############################################################
-+ifeq ($(strip $(BR2_PACKAGE_MATCHBOX)),y)
-+TARGETS+=matchbox
-+endif
-+
-+ifeq ($(strip $(BR2_PACKAGE_MATCHBOX_PANEL)),y)
-+TARGETS+=matchbox-panel
-+endif
-+
-+ifeq ($(strip $(BR2_PACKAGE_MATCHBOX_DESKTOP)),y)
-+TARGETS+=matchbox-desktop
-+endif
-+
-+ifeq ($(strip $(BR2_PACKAGE_MATCHBOX_KEYBOARD)),y)
-+TARGETS+=matchbox-keyboard
++ifeq ($(strip $(BR2_PACKAGE_TSLIB)),y)
++TARGETS+=tslib
 +endif
 
-Added: trunk/buildroot/package/matchbox/mb-applet-kbd-wrapper.sh
+Added: trunk/buildroot/package/tslib/tslib_add_finddef_and_inputattach_utils.patch
 ===================================================================
---- trunk/buildroot/package/matchbox/mb-applet-kbd-wrapper.sh	                        (rev 0)
-+++ trunk/buildroot/package/matchbox/mb-applet-kbd-wrapper.sh	2007-08-12 11:31:06 UTC (rev 19456)
-@@ -0,0 +1,8 @@
-+#!/bin/sh
-+#
-+
-+killall matchbox-keyboard
-+if [ ! $? -eq 0 ] 
-+then
-+    matchbox-keyboard &
-+fi
-
-Added: trunk/buildroot/package/matchbox/mbdesktop_modules
-===================================================================
---- trunk/buildroot/package/matchbox/mbdesktop_modules	                        (rev 0)
-+++ trunk/buildroot/package/matchbox/mbdesktop_modules	2007-08-12 11:31:06 UTC (rev 19456)
-@@ -0,0 +1,9 @@
-+# This file lists the 'plug-ins' with any arguments to be loaded by
-+# matchbox-desktop. 
-+#
-+# It can be overridden on a per-user basis by copying this file to ~/.matchbox/
-+# and editing. 
-+
-+/usr/lib/tasks.so
-+/usr/lib/dotdesktop.so
-+# /usr/lib/simplefilebrowser.so /
+--- trunk/buildroot/package/tslib/tslib_add_finddef_and_inputattach_utils.patch	                        (rev 0)
++++ trunk/buildroot/package/tslib/tslib_add_finddef_and_inputattach_utils.patch	2007-08-12 11:34:03 UTC (rev 19457)
+@@ -0,0 +1,718 @@
++diff -Naur tslib-org/tests/Makefile.am tslib-1.0/tests/Makefile.am
++--- tslib-org/tests/Makefile.am	2006-08-25 00:02:55.000000000 +0300
+++++ tslib-1.0/tests/Makefile.am	2007-05-07 17:39:54.000000000 +0300
++@@ -12,7 +12,7 @@
++ AM_CFLAGS               = $(DEBUGFLAGS)
++ INCLUDES		= -I$(top_srcdir)/src
++ 
++-bin_PROGRAMS		= ts_test ts_calibrate ts_print ts_print_raw ts_harvest
+++bin_PROGRAMS		= ts_test ts_calibrate ts_print ts_print_raw ts_harvest ts_finddev inputattach
++ 
++ ts_test_SOURCES		= ts_test.c fbutils.c fbutils.h font_8x8.c font_8x16.c font.h
++ ts_test_LDADD		= $(top_builddir)/src/libts.la
++@@ -27,4 +27,10 @@
++ ts_calibrate_LDADD	= $(top_builddir)/src/libts.la
++ 
++ ts_harvest_SOURCES	= ts_harvest.c fbutils.c fbutils.h testutils.c testutils.h font_8x8.c font_8x16.c font.h
++-ts_harvest_LDADD		= $(top_builddir)/src/libts.la
+++ts_harvest_LDADD	= $(top_builddir)/src/libts.la
+++
+++ts_finddev_SOURCES      = ts_finddev.c
+++ts_finddev_LDADD        = $(top_builddir)/src/libts.la
+++
+++inputattach_SOURCES     = inputattach.c
+++inputattach_LDADD       =
++diff -Naur tslib-org/tests/inputattach.c tslib-1.0/tests/inputattach.c
++--- tslib-org/tests/inputattach.c	1970-01-01 02:00:00.000000000 +0200
+++++ tslib-1.0/tests/inputattach.c	2007-05-07 17:36:37.000000000 +0300
++@@ -0,0 +1,611 @@
+++/*
+++ * $Id: inputattach.c,v 1.24 2006/02/08 12:19:31 vojtech Exp $
+++ *
+++ *  Copyright (c) 1999-2000 Vojtech Pavlik
+++ *
+++ *  Sponsored by SuSE
+++ *
+++ *  Twiddler support Copyright (c) 2001 Arndt Schoenewald
+++ *  Sponsored by Quelltext AG (http://www.quelltext-ag.de), Dortmund, Germany
+++ */
+++
+++/*
+++ * Input line discipline attach program
+++ */
+++
+++/*
+++ * This program is free software; you can redistribute it and/or modify
+++ * it under the terms of the GNU General Public License as published by
+++ * the Free Software Foundation; either version 2 of the License, or 
+++ * (at your option) any later version.
+++ * 
+++ * This program is distributed in the hope that it will be useful,
+++ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+++ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+++ * GNU General Public License for more details.
+++ * 
+++ * You should have received a copy of the GNU General Public License
+++ * along with this program; if not, write to the Free Software
+++ * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
+++ * 
+++ * Should you need to contact me, the author, you can do so either by
+++ * e-mail - mail your message to <vojtech@ucw.cz>, or by paper mail:
+++ * Vojtech Pavlik, Simunkova 1594, Prague 8, 182 00 Czech Republic
+++ */
+++ 
+++/* softa note: 
+++cvs version is here:
+++http://cvs.sourceforge.net/viewcvs.py/ *checkout* /linuxconsole/ruby/utils/inputattach.c
+++*/
+++
+++#include <linux/serio.h>
+++
+++#include <sys/types.h>
+++#include <sys/stat.h>
+++#include <sys/ioctl.h>
+++#include <sys/time.h>
+++
+++#include <stdio.h>
+++#include <stdlib.h>
+++#include <unistd.h>
+++#include <fcntl.h>
+++#include <termios.h>
+++#include <string.h>
+++#include <assert.h>
+++#include <ctype.h>
+++
+++// softa patch!
+++/*
+++ * Serio types
+++ */
+++#ifndef SERIO_UNKNOWN
+++  #define SERIO_UNKNOWN   0x00
+++#endif
+++#ifndef SERIO_MSC
+++  #define SERIO_MSC       0x01
+++#endif
+++#ifndef SERIO_SUN
+++  #define SERIO_SUN       0x02
+++#endif
+++#ifndef SERIO_MS
+++  #define SERIO_MS        0x03
+++#endif
+++#ifndef SERIO_MP
+++  #define SERIO_MP        0x04
+++#endif
+++#ifndef SERIO_MZ
+++  #define SERIO_MZ        0x05
+++#endif
+++#ifndef SERIO_MZP
+++  #define SERIO_MZP       0x06
+++#endif
+++#ifndef SERIO_MZPP
+++  #define SERIO_MZPP      0x07
+++#endif
+++#ifndef SERIO_VSXXXAA
+++  #define SERIO_VSXXXAA   0x08
+++#endif
+++#ifndef SERIO_SUNKBD
+++  #define SERIO_SUNKBD    0x10
+++#endif SERIO_SUNKBD
+++#ifndef SERIO_WARRIOR
+++  #define SERIO_WARRIOR   0x18
+++#endif
+++#ifndef SERIO_WARRIOR
+++  #define SERIO_SPACEORB  0x19
+++#endif
+++#ifndef SERIO_MAGELLAN
+++  #define SERIO_MAGELLAN  0x1a
+++#endif
+++#ifndef SERIO_SPACEBALL
+++  #define SERIO_SPACEBALL 0x1b
+++#endif
+++#ifndef SERIO_GUNZE
+++  #define SERIO_GUNZE     0x1c
+++#endif
+++#ifndef SERIO_IFORCE
+++  #define SERIO_IFORCE    0x1d
+++#endif
+++#ifndef SERIO_STINGER
+++  #define SERIO_STINGER   0x1e
+++#endif
+++#ifndef SERIO_NEWTON
+++  #define SERIO_NEWTON    0x1f
+++#endif
+++#ifndef SERIO_STOWAWAY
+++  #define SERIO_STOWAWAY  0x20
+++#endif
+++#ifndef SERIO_H3600
+++  #define SERIO_H3600     0x21
+++#endif 
+++#ifndef SERIO_PS2SER
+++  #define SERIO_PS2SER    0x22
+++#endif
+++#ifndef SERIO_TWIDKBD
+++  #define SERIO_TWIDKBD   0x23
+++#endif
+++#ifndef SERIO_TWIDJOY
+++  #define SERIO_TWIDJOY   0x24
+++#endif
+++#ifndef SERIO_HIL
+++  #define SERIO_HIL       0x25
+++#endif
+++#ifndef SERIO_SNES232
+++  #define SERIO_SNES232   0x26
+++#endif
+++#ifndef SERIO_SEMTECH
+++  #define SERIO_SEMTECH   0x27
+++#endif
+++#ifndef SERIO_LKKBD
+++  #define SERIO_LKKBD     0x28
+++#endif
+++#ifndef SERIO_ELO
+++  #define SERIO_ELO       0x29
+++#endif
+++#ifndef SERIO_MICROTOUCH
+++  #define SERIO_MICROTOUCH        0x30
+++#endif
+++#ifndef SERIO_PENMOUNT
+++  #define SERIO_PENMOUNT  0x31
+++#endif
+++#ifndef SERIO_TOUCHRIGHT
+++  #define SERIO_TOUCHRIGHT        0x32
+++#endif
+++#ifndef SERIO_TOUCHWIN
+++  #define SERIO_TOUCHWIN  0x33
+++#endif
+++// end softa patch!
+++
+++int readchar(int fd, unsigned char *c, int timeout)
+++{
+++	struct timeval tv;
+++	fd_set set;
+++	
+++	tv.tv_sec = 0;
+++	tv.tv_usec = timeout * 1000;
+++
+++	FD_ZERO(&set);
+++	FD_SET(fd, &set);
+++
+++	if (!select(fd+1, &set, NULL, NULL, &tv)) return -1;
+++	if (read(fd, c, 1) != 1) return -1;
+++
+++	return 0;
+++}
+++
+++
+++
+++void setline(int fd, int flags, int speed)
+++{
+++	struct termios t;
+++
+++	tcgetattr(fd, &t);
+++
+++	t.c_cflag = flags | CREAD | HUPCL | CLOCAL;
+++	t.c_iflag = IGNBRK | IGNPAR;
+++	t.c_oflag = 0;
+++	t.c_lflag = 0;
+++	t.c_cc[VMIN ] = 1;
+++	t.c_cc[VTIME] = 0;
+++
+++	cfsetispeed(&t, speed);
+++	cfsetospeed(&t, speed);
+++
+++	tcsetattr(fd, TCSANOW, &t);
+++}
+++
+++int logitech_command(int fd, char *c)
+++{
+++	int i;
+++	unsigned char d;
+++	for (i = 0; c[i]; i++) {
+++		write(fd, c + i, 1);
+++		if (readchar(fd, &d, 1000))
+++			return -1;
+++		if (c[i] != d)
+++			return -1;
+++	}
+++	return 0;
+++}
+++
+++int magellan_init(int fd, long *id, long *extra)
+++{
+++	write(fd, "m3\rpBB\rz\r", 9);
+++	return 0;
+++}
+++
+++int warrior_init(int fd, long *id, long *extra)
+++{
+++	if (logitech_command(fd, "*S")) return -1;
+++	setline(fd, CS8, B4800);
+++	return 0;
+++}
+++
+++int spaceball_waitchar(int fd, unsigned char c, unsigned char *d, int timeout)
+++{
+++	unsigned char b = 0;
+++
+++	while (!readchar(fd, &b, timeout)) {
+++		if (b == 0x0a) continue;
+++		*d++ = b;
+++		if (b == c) break;
+++	}
+++
+++	*d = 0;
+++
+++	return -(b != c);
+++}
+++
+++int spaceball_waitcmd(int fd, char c, char *d)
+++{
+++	int i;
+++
+++	for (i = 0; i < 8; i++) {
+++		if (spaceball_waitchar(fd, 0x0d, d, 1000))
+++			return -1;
+++		if (d[0] == c)
+++			return 0;
+++	}
+++
+++	return -1;
+++}
+++
+++int spaceball_cmd(int fd, char *c, char *d)
+++{
+++	int i;
+++
+++	for (i = 0; c[i]; i++)
+++		write(fd, c + i, 1);
+++	write(fd, "\r", 1);
+++
+++	i = spaceball_waitcmd(fd, toupper(c[0]), d);
+++
+++	return i;
+++}
+++
+++#define SPACEBALL_1003		1
+++#define SPACEBALL_2003B		3
+++#define SPACEBALL_2003C		4
+++#define SPACEBALL_3003C		7
+++#define SPACEBALL_4000FLX	8
+++#define SPACEBALL_4000FLX_L 	9
+++
+++int spaceball_init(int fd, long *id, long *extra)
+++{
+++	char r[64];
+++
+++	if (spaceball_waitchar(fd, 0x11, r, 4000) ||
+++	    spaceball_waitchar(fd, 0x0d, r, 1000))
+++		return -1;
+++
+++	if (spaceball_waitcmd(fd, '@', r))
+++		return -1; 
+++
+++	if (strncmp("@1 Spaceball alive", r, 18))
+++		return -1;
+++
+++	if (spaceball_waitcmd(fd, '@', r))
+++		return -1; 
+++
+++	if (spaceball_cmd(fd, "hm", r))
+++		return -1;
+++
+++	if (!strncmp("Hm2003B", r, 7))
+++		*id = SPACEBALL_2003B;
+++	if (!strncmp("Hm2003C", r, 7))
+++		*id = SPACEBALL_2003C;
+++	if (!strncmp("Hm3003C", r, 7))
+++		*id = SPACEBALL_3003C;
+++
+++	if (!strncmp("HvFirmware", r, 10)) {
+++
+++		if (spaceball_cmd(fd, "\"", r))
+++			return -1;
+++
+++		if (strncmp("\"1 Spaceball 4000 FLX", r, 21))
+++			return -1;
+++
+++		if (spaceball_waitcmd(fd, '"', r))
+++			return -1; 
+++
+++		if (strstr(r, " L "))
+++			*id = SPACEBALL_4000FLX_L;
+++		else
+++			*id = SPACEBALL_4000FLX;
+++
+++		if (spaceball_waitcmd(fd, '"', r))
+++			return -1; 
+++
+++		if (spaceball_cmd(fd, "YS", r))
+++        	        return -1;
+++
+++		if (spaceball_cmd(fd, "M", r))
+++        	        return -1;
+++
+++		return 0;
+++	}
+++
+++	if (spaceball_cmd(fd, "P at A@A", r) ||
+++	    spaceball_cmd(fd, "FT@", r)   ||
+++	    spaceball_cmd(fd, "MSS", r))
+++		return -1;
+++
+++	return 0;
+++}
+++
+++int stinger_init(int fd, long *id, long *extra)
+++{
+++	int i;
+++	unsigned char c;
+++	unsigned char *response = "\r\n0600520058C272";
+++
+++	if (write(fd, " E5E5", 5) != 5)		/* Enable command */
+++		return -1; 
+++
+++	for (i = 0; i < 16; i++)		/* Check for Stinger */
+++		if (readchar(fd, &c, 200) || (c != response[i])) 
+++			return -1;
+++
+++	return 0;
+++}
+++
+++int mzp_init(int fd, long *id, long *extra)
+++{
+++	if (logitech_command(fd, "*X*q")) return -1;
+++	setline(fd, CS8, B9600);
+++	return 0;
+++}
+++
+++int newton_init(int fd, long *id, long *extra)
+++{
+++  int i;
+++  unsigned char c;
+++  unsigned char response[35] =
+++  { 0x16, 0x10, 0x02, 0x64, 0x5f, 0x69, 0x64, 0x00,
+++    0x00, 0x00, 0x0c, 0x6b, 0x79, 0x62, 0x64, 0x61,
+++    0x70, 0x70, 0x6c, 0x00, 0x00, 0x00, 0x01, 0x6e,
+++    0x6f, 0x66, 0x6d, 0x00, 0x00, 0x00, 0x00, 0x10,
+++    0x03, 0xdd, 0xe7 };
+++
+++  for (i = 0; i < 35; i++)
+++    if (readchar(fd, &c, 400) || (c != response[i]))
+++      return -1;
+++
+++  return 0;
+++}
+++
+++int twiddler_init(int fd, long *id, long *extra)
+++{
+++	unsigned char c[10];
+++	int count, line;
+++
+++	/* Turn DTR off, otherwise the Twiddler won't send any data. */
+++	if (ioctl(fd, TIOCMGET, &line)) return -1;
+++	line &= ~TIOCM_DTR;
+++	if (ioctl(fd, TIOCMSET, &line)) return -1;
+++
+++	/* Check whether the device on the serial line is the Twiddler.
+++	 *
+++	 * The Twiddler sends data packets of 5 bytes which have the following
+++	 * properties: the MSB is 0 on the first and 1 on all other bytes, and
+++	 * the high order nibble of the last byte is always 0x8.
+++	 *
+++	 * We read and check two of those 5 byte packets to be sure that we
+++	 * are indeed talking to a Twiddler. */
+++
+++	/* Read@most 5 bytes until we find one with the MSB set to 0 */
+++	for (count = 0; count < 5; count++) {
+++		if (readchar(fd, c+0, 500)) return -1;
+++		if ((c[0] & 0x80) == 0) break;
+++	}
+++
+++	if (count == 5) {
+++		/* Could not find header byte in data stream */
+++		return -1;
+++	}
+++
+++	/* Read remaining 4 bytes plus the full next data packet */
+++	for (count = 1; count < 10; count++) {
+++		if (readchar(fd, c+count, 500)) return -1;
+++	}
+++
+++	/* Check whether the bytes of both data packets obey the rules */
+++	for (count = 1; count < 10; count++) {
+++		if ((count % 5 == 0 && (c[count] & 0x80) != 0)
+++		    || (count % 5 == 4 && (c[count] & 0xF0) != 0x80)
+++		    || (count % 5 != 0 && (c[count] & 0x80) != 0x80)) {
+++		    	/* Invalid byte in data packet */
+++			return -1;
+++		}
+++	}
+++
+++	return 0;
+++}
+++
+++int penmount_init(int fd, long *id, long *extra)
+++{
+++	unsigned char init_cmd[5] = { 0xF2, 0x00, 0x00, 0x00, 0x00 };
+++	unsigned char start_cmd[5] = { 0xF1, 0x00, 0x00, 0x00, 0x00 };
+++	unsigned char c[10];
+++	int count;
+++	
+++	/* try to initialize device */
+++	if (write( fd, init_cmd, 5 ) != 5)
+++		return -1;
+++		
+++	/* read the responce */
+++	for (count = 0; count < 5; count ++) {
+++		if (readchar(fd, c+0, 500)) return -1;
+++		if (c[0] == 0xf2) break;
+++	}
+++	
+++	if (readchar(fd, c+1, 500)) return -1;
+++	if (c[1] != 0xd9) return -1;
+++	
+++	if (readchar(fd, c+2, 500)) return -1;
+++	if (c[2] != 0x0a) return -1;
+++	
+++	/* the device is present! start it! */
+++	if (write( fd, start_cmd, 5 ) != 5)
+++		return -1;
+++		
+++	return 0;
+++}
+++
+++int dump_init(int fd, long *id, long *extra)
+++{
+++	unsigned char c, o = 0;
+++
+++	c = 0x80;
+++
+++	if (write(fd, &c, 1) != 1)         /* Enable command */
+++                return -1;
+++
+++	while (1)
+++		if (!readchar(fd, &c, 1)) {
+++			printf("%02x (%c) ", c, ((c > 32) && (c < 127)) ? c : 'x');
+++			o = 1;
+++		} else {
+++			if (o) {
+++				printf("\n");
+++				o = 0;
+++			}
+++		}
+++}
+++
+++struct input_types {
+++	char name[16];
+++	char name2[16];
+++	int speed;
+++	int flags;
+++	unsigned long type;
+++	unsigned long id;
+++	unsigned long extra;
+++	int flush;
+++	int (*init)(int fd, long *id, long *extra);
+++};
+++
+++struct input_types input_types[] = {
+++
+++{ "--sunkbd",		"-skb",		B1200, CS8,			SERIO_SUNKBD,	0,	0,	1,	NULL },
+++{ "--lkkbd",		"-lk",		B4800, CS8|CSTOPB,		SERIO_LKKBD,	0,	0,	1,	NULL },
+++{ "--vsxxx-aa",		"-vs",		B4800, CS8|CSTOPB|PARENB|PARODD,SERIO_VSXXXAA,	0,	0,	1,	NULL },
+++{ "--spaceorb",		"-orb",		B9600, CS8,			SERIO_SPACEORB,	0,	0,	1,	NULL },
+++{ "--spaceball",	"-sbl",		B9600, CS8,			SERIO_SPACEBALL,0,	0,	0,	spaceball_init },
+++{ "--magellan",		"-mag",		B9600, CS8 | CSTOPB | CRTSCTS,	SERIO_MAGELLAN,	0,	0,	1,	magellan_init },
+++{ "--warrior",		"-war",		B1200, CS7 | CSTOPB,		SERIO_WARRIOR,	0,	0,	1,	warrior_init },
+++{ "--stinger",		"-sting",	B1200, CS8,			SERIO_STINGER,	0,	0,	1,	stinger_init },
+++{ "--mousesystems",	"-msc",		B1200, CS8,			SERIO_MSC,	0,	0x01,	1,	NULL },
+++{ "--sunmouse",		"-sun",		B1200, CS8,			SERIO_SUN,	0,	0x01,	1,	NULL },
+++{ "--microsoft",	"-bare",	B1200, CS7,			SERIO_MS,	0,	0,	1,	NULL },
+++{ "--mshack",		"-ms",		B1200, CS7,			SERIO_MS,	0,	0x01,	1,	NULL },
+++{ "--mouseman",		"-mman",	B1200, CS7,			SERIO_MP,	0,	0x01,	1,	NULL },
+++{ "--intellimouse",	"-ms3",		B1200, CS7,			SERIO_MZ,	0,	0x11,	1,	NULL },
+++{ "--mmwheel",		"-mmw",		B1200, CS7 | CSTOPB,		SERIO_MZP,	0,	0x13,	1,	mzp_init },
+++{ "--iforce",		"-ifor",	B38400, CS8,			SERIO_IFORCE,	0,	0,	0,	NULL },
+++{ "--newtonkbd",        "-newt",        B9600, CS8,                     SERIO_NEWTON,	0,	0,	0,      newton_init },
+++{ "--h3600ts",          "-ipaq",     	B115200, CS8,                   SERIO_H3600,	0,	0,	0,      NULL },
+++{ "--stowawaykbd",      "-ipaqkbd",     B115200, CS8,                   SERIO_STOWAWAY, 0,	0,	0,      NULL },
+++{ "--ps2serkbd",	"-ps2ser",	B1200, CS8,			SERIO_PS2SER,	0,	0,	1,	NULL },
+++{ "--twiddler",		"-twid",	B2400, CS8,			SERIO_TWIDKBD,	0,	0,	0,	twiddler_init },
+++{ "--twiddler-joy",	"-twidjoy",	B2400, CS8,			SERIO_TWIDJOY,	0,	0,	0,	twiddler_init },
+++{ "--elotouch",		"-elo",		B9600, CS8 | CRTSCTS,		SERIO_ELO,	0,	0,	0,	NULL },
+++{ "--elo4002",		"-elo6b",	B9600, CS8 | CRTSCTS,		SERIO_ELO,	1,	0,	0,	NULL },
+++{ "--elo271-140",	"-elo4b",	B9600, CS8 | CRTSCTS,		SERIO_ELO,	2,	0,	0,	NULL },
+++{ "--elo261-280",	"-elo3b",	B9600, CS8 | CRTSCTS,		SERIO_ELO,	3,	0,	0,	NULL },
+++{ "--dump",		"-dump",	B2400, CS8, 			0,		0,	0,	0,	dump_init },
+++{ "--dmc9000",          "-dmc",         B19200, CS8,			SERIO_PENMOUNT, 0,      0,      0,      penmount_init },
+++{ "", "", 0, 0 }
+++
+++};
+++
+++int main(int argc, char **argv)
+++{
+++	unsigned long devt;
+++	int ldisc;
+++        int type;
+++	long id, extra;
+++        int fd;
+++	char c;
+++
+++        if (argc < 2 || argc > 3 || !strcmp("--help", argv[1])) {
+++                puts("");
+++                puts("Usage: inputttach <mode> <device>");
+++                puts("");
+++                puts("Modes:");
+++                puts("  --sunkbd        -skb   Sun Type 4 and Type 5 keyboards");
+++		puts("  --lkkbd         -lk    DEC LK201 / LK401 keyboards");
+++		puts("  --vsxxx-aa      -vs    DEC VSXXX-AA / VSXXX-GA mouse and VSXXX-AB tablet");
+++                puts("  --spaceorb      -orb   SpaceOrb 360 / SpaceBall Avenger");
+++		puts("  --spaceball     -sbl   SpaceBall 2003 / 3003 / 4000 FLX");
+++                puts("  --magellan      -mag   Magellan / SpaceMouse");
+++                puts("  --warrior       -war   WingMan Warrior");
+++		puts("  --stinger       -stng  Gravis Stinger");
+++		puts("  --mousesystems  -msc   3-button Mouse Systems mice");
+++		puts("  --sunmouse      -sun   3-button Sun mice");
+++		puts("  --microsoft     -bare  2-button Microsoft mice");
+++		puts("  --mshack        -ms    3-button mice in Microsoft mode");
+++		puts("  --mouseman      -mman  3-button Logitech and Genius mice");
+++		puts("  --intellimouse  -ms3   Microsoft IntelliMouse");
+++		puts("  --mmwheel       -mmw   Logitech mice with 4-5 buttons or wheel");
+++		puts("  --iforce        -ifor  I-Force joysticks and wheels");
+++                puts("  --h3600ts       -ipaq  Ipaq h3600 touchscreen");
+++		puts("  --stowawaykbd   -ipaqkbd  Stowaway keyboard");
+++		puts("  --ps2serkbd     -ps2ser PS/2 via serial keyboard");
+++		puts("  --twiddler      -twid   Handykey Twiddler chording keyboard");
+++		puts("  --twiddler-joy  -twidjoy  Handykey Twiddler used as a joystick");
+++		puts("  --dmc9000       -dmc   DMC9000/Penpount touchscreen");
+++		puts("");
+++                return 1;
+++        }
+++
+++        for (type = 0; input_types[type].speed; type++) {
+++                if (!strncasecmp(argv[1], input_types[type].name, 16) ||
+++			!strncasecmp(argv[1], input_types[type].name2, 16))
+++                        break;
+++        }
+++
+++	if (!input_types[type].speed) {
+++		fprintf(stderr, "inputattach: invalid mode\n");
+++		return 1;
+++	}
+++
+++	if ((fd = open(argv[2], O_RDWR | O_NOCTTY | O_NONBLOCK)) < 0) {
+++		perror("inputattach");
+++		return 1;
+++	}
+++
+++	setline(fd, input_types[type].flags, input_types[type].speed);
+++
+++	if (input_types[type].flush)
+++		while (!readchar(fd, &c, 100));
+++
+++	id = input_types[type].id;
+++	extra = input_types[type].extra;
+++
+++	if (input_types[type].init && input_types[type].init(fd, &id, &extra)) {
+++		fprintf(stderr, "inputattach: device initialization failed\n");
+++		return 1;
+++	}
+++
+++	ldisc = N_MOUSE;
+++	if(ioctl(fd, TIOCSETD, &ldisc)) {
+++		fprintf(stderr, "inputattach: can't set line discipline\n"); 
+++		return 1;
+++	}
+++
+++	devt = input_types[type].type | (id << 8) | (extra << 16);
+++
+++	if(ioctl(fd, SPIOCSTYPE, &devt)) {
+++		fprintf(stderr, "inputattach: can't set device type\n");
+++		return 1;
+++	}
+++
+++	read(fd, NULL, 0);
+++
+++	ldisc = 0;
+++	ioctl(fd, TIOCSETD, &ldisc);
+++	close(fd);
+++
+++	return 0;
+++}
++diff -Naur tslib-org/tests/ts_finddev.c tslib-1.0/tests/ts_finddev.c
++--- tslib-org/tests/ts_finddev.c	1970-01-01 02:00:00.000000000 +0200
+++++ tslib-1.0/tests/ts_finddev.c	2007-05-07 17:36:37.000000000 +0300
++@@ -0,0 +1,75 @@
+++/*
+++ *  tslib/src/ts_print.c
+++ *
+++ *  Derived from tslib/src/ts_test.c by Douglas Lowder
+++ *  Just prints touchscreen events -- does not paint them on framebuffer
+++ *
+++ * This file is placed under the GPL.  Please see the file
+++ * COPYING for more details.
+++ *
+++ * Basic test program for touchscreen library.
+++ */
+++#include <stdio.h>
+++#include <stdlib.h>
+++#include <signal.h>
+++#include <sys/fcntl.h>
+++#include <sys/ioctl.h>
+++#include <sys/mman.h>
+++#include <sys/time.h>
+++#include <sys/types.h>
+++#include <unistd.h>
+++
+++#include "tslib.h"
+++
+++void usage( int argc, char** argv ) {
+++	printf( "Usage: %s device_name wait_for_sec\n", argv[0] );
+++	printf( "\tdevice_name  - tdevice to probe, example /dev/input/event0\n" );
+++	printf( "\twait_for_sec - wait seconds for touch event, if 0 - dont wait!\n" );
+++	printf( "\tReturn codes:\n" );
+++	printf( "\t  0          - timeout expired without receiving event.\n" );
+++	printf( "\t               But this maybe is TouchScreen.\n" );
+++	printf( "\t -1          - this is NOT TouchScreen device!\n" );
+++	printf( "\t  1          - this is TouchScreen for shure!\n" );  
+++	exit(-1);
+++}
+++
+++void alarm_handler( int sig ) {
+++	// time is expired!
+++	exit(0);
+++}
+++
+++int main( int argc, char** argv )
+++{
+++	struct tsdev *ts;
+++	struct ts_sample samp;
+++	char *tsdevice=NULL;
+++	int waitsec;
+++	int ret;
+++	
+++	if (argc != 3)
+++		usage( argc, argv );
+++		
+++	tsdevice = argv[1];
+++	waitsec = atoi( argv[2] );
+++	if (waitsec < 0)
+++		usage( argc, argv );
+++		
+++	ts = ts_open( tsdevice, 0 );
+++	if (!ts)
+++		return -1;
+++	if (ts_config(ts))
+++		return -1;
+++		
+++	if (!waitsec) {
+++		return 0;
+++	}
+++		
+++	printf( "Probe device %s, Please Touch Screen Anywhere in %i seconds! ... \n", tsdevice, waitsec );
+++	signal( SIGALRM, alarm_handler );
+++	alarm( waitsec );
+++	ret = ts_read_raw(ts, &samp, 1 );
+++	if (ret)
+++		return 1;
+++		
+++	return -1;
+++}
