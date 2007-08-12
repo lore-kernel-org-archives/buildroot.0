@@ -1,35 +1,25 @@
-From: ulf at uclibc.org <ulf@uclibc.org>
-Date: Sat, 11 Aug 2007 17:37:01 -0700 (PDT)
-Subject: [Buildroot] svn commit: trunk/buildroot/package/mpatrol
-Message-ID: <20070812003701.7068CA65F2@busybox.net>
+From: Cristian Ionescu-Idbohrn <cristian.ionescu-idbohrn@axis.com>
+Date: Sun, 12 Aug 2007 02:24:53 +0200 (CEST)
+Subject: [Buildroot] [patch] typo in toolchain/uClibc/uclibc.mk?
+Message-ID: <0708120223040.10468@somehost>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Author: ulf
-Date: 2007-08-11 17:37:01 -0700 (Sat, 11 Aug 2007)
-New Revision: 19455
-
-Log:
-Highlight dependencies for mpatrol
-
-Modified:
-   trunk/buildroot/package/mpatrol/Config.in
+Looks like that to me.
+whitespace-cleanup included.
 
 
-Changeset:
-Modified: trunk/buildroot/package/mpatrol/Config.in
-===================================================================
---- trunk/buildroot/package/mpatrol/Config.in	2007-08-12 00:21:22 UTC (rev 19454)
-+++ trunk/buildroot/package/mpatrol/Config.in	2007-08-12 00:37:01 UTC (rev 19455)
-@@ -1,6 +1,8 @@
- config BR2_PACKAGE_MPATROL
- 	bool "mpatrol"
- 	default n
-+	depends on BR2_PACKAGE_GDB || BR2_PACKAGE_GCC_TARGET || BR2_PACKAGE_LIBELF
-+
- 	help
- 	  A debugging tool that attempts to diagnose run-time errors that are
- 	  caused by the wrong use of dynamically allocated memory. It acts as
+Cheers,
+
+-- 
+Cristian
+-------------- next part --------------
+A non-text attachment was scrubbed...
+Name: uclibc.mk.patch
+Type: text/x-diff
+Size: 949 bytes
+Desc: 
+Url : http://busybox.net/lists/buildroot/attachments/20070812/59415a92/attachment.bin 
