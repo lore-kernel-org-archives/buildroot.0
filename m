@@ -1,7 +1,7 @@
 From: ulf at uclibc.org <ulf@uclibc.org>
-Date: Sun, 12 Aug 2007 16:33:45 -0700 (PDT)
-Subject: [Buildroot] svn commit: trunk/buildroot/package/hal
-Message-ID: <20070812233345.ABB39A684A@busybox.net>
+Date: Sun, 12 Aug 2007 16:35:20 -0700 (PDT)
+Subject: [Buildroot] svn commit: trunk/buildroot/package/grep
+Message-ID: <20070812233520.84CBBA6853@busybox.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -9,27 +9,27 @@ Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
 Author: ulf
-Date: 2007-08-12 16:33:44 -0700 (Sun, 12 Aug 2007)
-New Revision: 19476
+Date: 2007-08-12 16:35:20 -0700 (Sun, 12 Aug 2007)
+New Revision: 19477
 
 Log:
-Avoid killing /usr/include when cleaning 'hal'
+grep depends on gettext
 
 Modified:
-   trunk/buildroot/package/hal/hal.mk
+   trunk/buildroot/package/grep/grep.mk
 
 
 Changeset:
-Modified: trunk/buildroot/package/hal/hal.mk
+Modified: trunk/buildroot/package/grep/grep.mk
 ===================================================================
---- trunk/buildroot/package/hal/hal.mk	2007-08-12 23:31:36 UTC (rev 19475)
-+++ trunk/buildroot/package/hal/hal.mk	2007-08-12 23:33:44 UTC (rev 19476)
-@@ -70,7 +70,7 @@
- 	rm -rf $(TARGET_DIR)/usr/share/hal/device-manager
- 	rm -rf $(TARGET_DIR)/usr/lib/pkgconfig
- 	# remove _everything_ in $(TARGET_DIR)/usr/include?
--	rm -rf $(TARGET_DIR)/usr/include
-+	# rm -rf $(TARGET_DIR)/usr/include
- 	rm -rf $(TARGET_DIR)/usr/lib/libhal*.so
- 	rm -rf $(TARGET_DIR)/usr/lib/libhal*.la
- 	rm -rf $(TARGET_DIR)/usr/lib/hal
+--- trunk/buildroot/package/grep/grep.mk	2007-08-12 23:33:44 UTC (rev 19476)
++++ trunk/buildroot/package/grep/grep.mk	2007-08-12 23:35:20 UTC (rev 19477)
+@@ -64,7 +64,7 @@
+ 	    cp -a $(GNUGREP_DIR)/src/grep $(GNUGREP_DIR)/src/egrep \
+ 		$(GNUGREP_DIR)/src/fgrep $(TARGET_DIR)/bin/; fi
+ 
+-grep: uclibc grep-target_binary
++grep: uclibc gettext libintl grep-target_binary
+ 
+ grep-clean:
+ 	$(MAKE) DESTDIR=$(TARGET_DIR) -C $(GNUGREP_DIR) uninstall
