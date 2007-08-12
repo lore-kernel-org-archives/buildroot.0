@@ -1,7 +1,7 @@
 From: ulf at uclibc.org <ulf@uclibc.org>
-Date: Sun, 12 Aug 2007 07:40:17 -0700 (PDT)
-Subject: [Buildroot] svn commit: trunk/buildroot/package/directfb
-Message-ID: <20070812144017.D6BC4A659D@busybox.net>
+Date: Sun, 12 Aug 2007 11:14:51 -0700 (PDT)
+Subject: [Buildroot] svn commit: trunk/buildroot/package/sed
+Message-ID: <20070812181451.7E7A4A612F@busybox.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -9,43 +9,32 @@ Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
 Author: ulf
-Date: 2007-08-12 07:40:16 -0700 (Sun, 12 Aug 2007)
-New Revision: 19463
+Date: 2007-08-12 11:14:49 -0700 (Sun, 12 Aug 2007)
+New Revision: 19464
 
 Log:
-Make DirectFB buildable by removing sysfs, enabling sdl
+Move .PHONY to front in sed
 
 Modified:
-   trunk/buildroot/package/directfb/directfb.mk
+   trunk/buildroot/package/sed/sed.mk
 
 
 Changeset:
-Modified: trunk/buildroot/package/directfb/directfb.mk
+Modified: trunk/buildroot/package/sed/sed.mk
 ===================================================================
---- trunk/buildroot/package/directfb/directfb.mk	2007-08-12 14:13:39 UTC (rev 19462)
-+++ trunk/buildroot/package/directfb/directfb.mk	2007-08-12 14:40:16 UTC (rev 19463)
-@@ -43,20 +43,21 @@
- 		--mandir=/usr/man \
- 		--infodir=/usr/info \
- 		--with-gfxdrivers=cle266,unichrome \
-+		--enable-shared \
- 		--enable-jpeg \
- 		--enable-png \
- 		--enable-linux-input \
- 		--enable-zlib \
- 		--enable-freetype \
--		--enable-sysfs \
--		--disable-sdl \
-+		--disable-sysfs \
-+		--enable-sdl \
- 		--disable-video4linux \
- 		--disable-video4linux2 \
- 		--disable-fusion );
- 	touch $(DIRECTFB_DIR)/.configured
+--- trunk/buildroot/package/sed/sed.mk	2007-08-12 14:40:16 UTC (rev 19463)
++++ trunk/buildroot/package/sed/sed.mk	2007-08-12 18:14:49 UTC (rev 19464)
+@@ -69,6 +69,7 @@
+ 		ln -sf "$(HOST_SED_IF_ANY)" "$(HOST_SED_DIR)/$(SED_TARGET_BINARY)"; \
+ 	fi
  
- $(DIRECTFB_DIR)/.compiled: $(DIRECTFB_DIR)/.configured
--	$(MAKE) -C $(DIRECTFB_DIR)
-+	$(MAKE) $(TARGET_CONFIGURE_OPTS) -C $(DIRECTFB_DIR)
- 	touch $(DIRECTFB_DIR)/.compiled
++.PHONY: sed host-sed use-sed-host-binary
  
- $(STAGING_DIR)/usr/lib/libdirectfb.so: $(DIRECTFB_DIR)/.compiled
+ use-sed-host-binary:	$(HOST_SED_DIR)/$(SED_TARGET_BINARY)
+ 
+@@ -155,4 +156,4 @@
+ ifeq ($(strip $(BR2_PACKAGE_SED)),y)
+ TARGETS+=sed
+ endif
+-.PHONY: sed host-sed use-sed-host-binary
++
