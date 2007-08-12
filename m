@@ -1,41 +1,43 @@
-From: Ulf Samuelsson <ulf@atmel.com>
-Date: Sun, 12 Aug 2007 02:54:36 +0200
-Subject: [Buildroot] AUTOTARGETS is not working correctly when applying
-In-Reply-To: <40546.127.0.0.1.1186870249.squirrel@localhost>
-References: <f0528b5b0707040129j262b9e24i774fd06d8d579a2a@mail.gmail.com>
-	<20070810185512.GA4186@codepoet.org> <46BE1C56.60508@promwad.com>
-	<1186869672.4742.19.camel@elrond.sweden.atmel.com>
-	<40546.127.0.0.1.1186870249.squirrel@localhost>
-Message-ID: <1186880076.4742.21.camel@elrond.sweden.atmel.com>
+From: Cristian Ionescu-Idbohrn <cristian.ionescu-idbohrn@axis.com>
+Date: Sun, 12 Aug 2007 02:21:06 +0200 (CEST)
+Subject: [Buildroot] svn commit: trunk/buildroot: package/asterisk
+ package/aumix package/a etc...
+In-Reply-To: <20070811222657.30C61A613D@busybox.net>
+References: <20070811222657.30C61A613D@busybox.net>
+Message-ID: <0708120159130.10468@somehost>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-s?n 2007-08-12 klockan 01:10 +0300 skrev Ivan Kuten:
-> > l?r 2007-08-11 klockan 23:30 +0300 skrev Ivan Kuten:
-> >>
-> > This will help, but will make the "package/Makefile.autotools.in" file
-> > x11r7 specific.
-> >
-> >
-> 
-> May be it makes sense not to introduce x11r7 specific into "package/Makefile.autotools.in"
->  but instead add 2nd param to AUTOTARGETS - package parent. Nobody knows how many packages like
->  x11r7 are going to be introduced.
-> 
-> $(eval $(call AUTOTARGETS,libxcb,x11r6))
-> 
-> What do you think?
-> 
+Thanks for applying that patch.
 
-This requires modifications of all the x11r7 packages
-so it is a ton of work.
-Good idea - for someone with time...
+On Sat, 11 Aug 2007, ulf at uclibc.org wrote:
+
+> Author: ulf
+> Date: 2007-08-11 15:26:56 -0700 (Sat, 11 Aug 2007)
+> New Revision: 19444
+>
+> Log:
+> Use STAGING_DIR/usr/lib instead of STAGING_DIR/lib
+...
+> Modified: trunk/buildroot/package/hal/hal.mk
+> ===================================================================
+> --- trunk/buildroot/package/hal/hal.mk	2007-08-11 22:09:09 UTC (rev 19443)
+> +++ trunk/buildroot/package/hal/hal.mk	2007-08-11 22:26:56 UTC (rev 19444)
+...
+> +	# remove _everything_ in $(TARGET_DIR)/usr/include?
+>  	rm -rf $(TARGET_DIR)/usr/include
+
+As you see the note here above, I'm not so sure removing _everything_ in
+$(TARGET_DIR)/usr/include is TRT to do, or is it?
+
+toolchain/uClibc/uclibc.mk wipes out $(TARGET_DIR)/usr/include too.  Is
+that the intended behaviour?
 
 
-> BR,
-> Ivan
-> 
-> 
+Cheers,
+
+-- 
+Cristian
