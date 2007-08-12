@@ -1,45 +1,58 @@
-From: Ivan Kuten <ivan.kuten@promwad.com>
-Date: Sun, 12 Aug 2007 16:45:00 +0300
-Subject: [Buildroot] configure fails on xserver_xorg-server-1.2.0 -
-	X11/defs.ent
-Message-ID: <46BF0EDC.8040104@promwad.com>
+From: ulf at uclibc.org <ulf@uclibc.org>
+Date: Sun, 12 Aug 2007 07:11:03 -0700 (PDT)
+Subject: [Buildroot] svn commit: trunk/buildroot/package/matchbox
+Message-ID: <20070812141103.129AEA611A@busybox.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+Author: ulf
+Date: 2007-08-12 07:11:02 -0700 (Sun, 12 Aug 2007)
+New Revision: 19461
 
-Error when configuring xserver_xorg-server-1.2.0:
+Log:
+Use new x11r7 configs
 
-cd /root/buildroot/build_arm/xserver_xorg-server-1.2.0/
-...
-./configure \
-        --target=arm-linux \
-        --host=arm-linux \
-        --build=i386-pc-linux-gnu \
-        --prefix=/usr \
-        --exec-prefix=/usr \
-        --sysconfdir=/etc \
-        --disable-xprint --disable-xinerama --disable-xnest --disable-xvfb --disable-dmx --enable-dri --disable-xdmcp --disable-screensaver
-...
-checking to see if we can install the Xorg server as root... yes
-checking if Xtrans should support UNIX socket connections... yes
-checking if Xtrans should support TCP socket connections... yes
-checking for library containing socket... none required
-checking for library containing gethostbyname... none required
-checking for getaddrinfo... yes
-checking if IPv6 support should be built... yes
-checking for struct sockaddr_in.sin_len... no
-checking if Xtrans should support os-specific local connections... no
-checking for authdes_seccreate... no
-checking for authdes_create... no
-checking if Secure RPC authentication ("SUN-DES-1") should be supported... no
-checking for /usr/share/sgml/X11/defs.ent... configure: error: cannot check for file existence when cross compiling
-make: *** [/root/buildroot/build_arm/xserver_xorg-server-1.2.0/.stamp_configured] Error 1
+Modified:
+   trunk/buildroot/package/matchbox/Config.in
 
-Some modification to configure.ac is needed to disable this check.
 
-BR,
-Ivan
+Changeset:
+Modified: trunk/buildroot/package/matchbox/Config.in
+===================================================================
+--- trunk/buildroot/package/matchbox/Config.in	2007-08-12 12:37:51 UTC (rev 19460)
++++ trunk/buildroot/package/matchbox/Config.in	2007-08-12 14:11:02 UTC (rev 19461)
+@@ -1,10 +1,10 @@
+ config BR2_PACKAGE_MATCHBOX
+ 	bool "MatchBox Window Manager"
+ 	default n
+-	select BR2_PACKAGE_X11SERVER
++	select BR2_PACKAGE_XSERVER_XORG_SERVER
+ 	select BR2_PACKAGE_FONTCONFIG
+-	select BR2_PACKAGE_X11R7_LIBXDAMAGE
+-	select BR2_PACKAGE_X11R7_LIBXCURSOR
++	select BR2_PACKAGE_XLIB_LIBXDAMAGE
++	select BR2_PACKAGE_XLIB_LIBXCURSOR
+ 	help
+ 
+ 	  http://projects.o-hand.com/matchbox
+@@ -12,7 +12,7 @@
+ config BR2_PACKAGE_MATCHBOX_SNOTIFY
+ 	bool "Enable Matchbox Startup Notification"
+ 	depends BR2_PACKAGE_MATCHBOX
+-	select BR2_PACKAGE_X11R7_LIBXSM
++	select BR2_PACKAGE_XAPP_XSM
+ 	default n
+ 	help
+ 
+@@ -37,7 +37,7 @@
+ config BR2_PACKAGE_MATCHBOX_KEYBOARD
+ 	bool "Metchbox Virtual Keyboard"
+ 	depends BR2_PACKAGE_MATCHBOX
+-	select BR2_PACKAGE_X11R7_LIBXTST
++	select BR2_PACKAGE_XLIB_LIBXTST
+ 	default n
+ 	help
+ 
