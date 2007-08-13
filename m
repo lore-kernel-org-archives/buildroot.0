@@ -1,7 +1,7 @@
 From: ulf at uclibc.org <ulf@uclibc.org>
-Date: Sun, 12 Aug 2007 23:14:16 -0700 (PDT)
-Subject: [Buildroot] svn commit: trunk/buildroot/package/directfb
-Message-ID: <20070813061416.A3D5AA65E0@busybox.net>
+Date: Mon, 13 Aug 2007 01:12:21 -0700 (PDT)
+Subject: [Buildroot] svn commit: trunk/buildroot/package/fakeroot
+Message-ID: <20070813081221.6A016A4647@busybox.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -9,39 +9,27 @@ Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
 Author: ulf
-Date: 2007-08-12 23:14:15 -0700 (Sun, 12 Aug 2007)
-New Revision: 19482
+Date: 2007-08-13 01:12:20 -0700 (Mon, 13 Aug 2007)
+New Revision: 19483
 
 Log:
-Add dependency to linux-fusion, if DirectFB is built with multi
+Fix libdir path for libfakeroot.la
 
 Modified:
-   trunk/buildroot/package/directfb/directfb.mk
+   trunk/buildroot/package/fakeroot/fakeroot.mk
 
 
 Changeset:
-Modified: trunk/buildroot/package/directfb/directfb.mk
+Modified: trunk/buildroot/package/fakeroot/fakeroot.mk
 ===================================================================
---- trunk/buildroot/package/directfb/directfb.mk	2007-08-13 00:12:49 UTC (rev 19481)
-+++ trunk/buildroot/package/directfb/directfb.mk	2007-08-13 06:14:15 UTC (rev 19482)
-@@ -13,8 +13,10 @@
+--- trunk/buildroot/package/fakeroot/fakeroot.mk	2007-08-13 06:14:15 UTC (rev 19482)
++++ trunk/buildroot/package/fakeroot/fakeroot.mk	2007-08-13 08:12:20 UTC (rev 19483)
+@@ -51,6 +51,8 @@
+ 	$(SED) 's,^PREFIX=.*,PREFIX=$(STAGING_DIR)/usr,g' $(STAGING_DIR)/usr/bin/fakeroot
+ 	$(SED) 's,^BINDIR=.*,BINDIR=$(STAGING_DIR)/usr/bin,g' $(STAGING_DIR)/usr/bin/fakeroot
+ 	$(SED) 's,^PATHS=.*,PATHS=$(FAKEROOT_DIR1)/.libs:/lib:/usr/lib,g' $(STAGING_DIR)/usr/bin/fakeroot
++	$(SED) "s,^libdir=.*,libdir=\'$(STAGING_DIR)/usr/lib\',g" \
++		$(STAGING_DIR)/usr/lib/libfakeroot.la
+ 	touch -c $@
  
- ifeq ($(BR2_PACKAGE_DIRECTFB_MULTI),y)
- DIRECTFB_MULTI:=--enable-multi
-+DIRECTFB_FUSION:=linux-fusion
- else
- DIRECTFB_MULTI:=
-+DIRECTFB_FUSION:=
- endif
- 
- $(DL_DIR)/$(DIRECTFB_SOURCE):
-@@ -95,7 +97,8 @@
- 		$(TARGET_DIR)/usr/lib/libdirect.so \
- 		$(TARGET_DIR)/usr/lib/libfusion.so
- 
--directfb: uclibc jpeg libpng freetype libsysfs tslib $(TARGET_DIR)/usr/lib/libdirectfb.so
-+directfb: uclibc jpeg libpng freetype libsysfs tslib $(DIRECTFB_FUSION) \
-+		$(TARGET_DIR)/usr/lib/libdirectfb.so
- 
- directfb-clean:
- 	$(MAKE) DESTDIR=$(TARGET_DIR) CC=$(TARGET_CC) -C $(DIRECTFB_DIR) uninstall
+ host-fakeroot: uclibc $(STAGING_DIR)/usr/bin/fakeroot
