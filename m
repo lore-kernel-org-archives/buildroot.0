@@ -1,37 +1,31 @@
 From: Ulf Samuelsson <ulf@atmel.com>
-Date: Mon, 13 Aug 2007 22:29:34 +0200
-Subject: [Buildroot] TinyX woes...
-Message-ID: <1187036974.6223.17.camel@elrond.sweden.atmel.com>
+Date: Mon, 13 Aug 2007 22:30:03 +0200
+Subject: [Buildroot] Adding __UCLIBC__ to build
+Message-ID: <1187037003.6223.18.camel@elrond.sweden.atmel.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-TinyX currently is built using
-make $(TARGET_CONFIGURE_OPTS) World
-but this fails miserably for ARM.
+I am looking at TinyX at the moment and there are tons of warnings due
+to "bcopy", "bzero" and similar routines are beeing redefined.
+They are defined in a header file, included by TinyX.
 
-Some utilities are then built using the cross compiler
-and when executed on the host, they obviously fail on non-X-86 targets.
+TinyX will test some flags to check the environment
+and if no flag is found, it will default to 
+defining such calls as macros.
 
-I tried a patch which forces the use of HOSTCC for make,
-but there are some temp files ("/tmp/xxxx") which are executed
-and fails since they are built using the cross compiler.
+I am thinking of adding a flag in package/Makefile.in
+to cover such situations:
 
-TinyX seems to rely on WCHAR support, since it uses
-MB_CHAR_MAX (The largest size of a character)
-which only seems to be visible in the headers if 
-UCLIBC_USE_WCHAR is set.
+TARGET_CFLAGS+=-D__UCLIBC__
 
-Some files seems to include header files, only present on X86.
-"asm/mtrr.h" and "asm/io.h".
+This would allow future situations like this to be easily handled.
 
-The cross.def file defining the environment for X Cross compilation
-is updated by tinyx.mk but there seems to be things lacking.
+FOr TinyX it can be added to the cross.def file instead.
 
-Is there ANYONE which manages to build tinyx for x86 at the moment?
-Is there ANYONE which manages to build it for another target (I.E: ARM)?
+Any comments?
 
 Best Regards
 Ulf Samuelsson
