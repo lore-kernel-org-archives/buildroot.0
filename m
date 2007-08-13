@@ -1,31 +1,31 @@
 From: Ulf Samuelsson <ulf@atmel.com>
-Date: Mon, 13 Aug 2007 22:30:03 +0200
-Subject: [Buildroot] Adding __UCLIBC__ to build
-Message-ID: <1187037003.6223.18.camel@elrond.sweden.atmel.com>
+Date: Mon, 13 Aug 2007 22:37:00 +0200
+Subject: [Buildroot] TinyX woes...
+In-Reply-To: <1187036974.6223.17.camel@elrond.sweden.atmel.com>
+References: <1187036974.6223.17.camel@elrond.sweden.atmel.com>
+Message-ID: <1187037420.6223.20.camel@elrond.sweden.atmel.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-I am looking at TinyX at the moment and there are tons of warnings due
-to "bcopy", "bzero" and similar routines are beeing redefined.
-They are defined in a header file, included by TinyX.
+m?n 2007-08-13 klockan 22:29 +0200 skrev Ulf Samuelsson:
+> TinyX currently is built using
+> make $(TARGET_CONFIGURE_OPTS) World
+> but this fails miserably for ARM.
+> 
+> Some utilities are then built using the cross compiler
+> and when executed on the host, they obviously fail on non-X-86 targets.
+> 
+> I tried a patch which forces the use of HOSTCC for make,
+> but there are some temp files ("/tmp/xxxx") which are executed
+> and fails since they are built using the cross compiler.
+> 
+> TinyX seems to rely on WCHAR support, since it uses
+> MB_CHAR_MAX (The largest size of a character)
 
-TinyX will test some flags to check the environment
-and if no flag is found, it will default to 
-defining such calls as macros.
+Sorry, that was MB_CUR_MAX
 
-I am thinking of adding a flag in package/Makefile.in
-to cover such situations:
-
-TARGET_CFLAGS+=-D__UCLIBC__
-
-This would allow future situations like this to be easily handled.
-
-FOr TinyX it can be added to the cross.def file instead.
-
-Any comments?
-
-Best Regards
-Ulf Samuelsson
+BR
+Ulf
