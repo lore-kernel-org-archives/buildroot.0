@@ -1,31 +1,40 @@
-From: Ulf Samuelsson <ulf@atmel.com>
-Date: Mon, 13 Aug 2007 22:37:00 +0200
-Subject: [Buildroot] TinyX woes...
-In-Reply-To: <1187036974.6223.17.camel@elrond.sweden.atmel.com>
-References: <1187036974.6223.17.camel@elrond.sweden.atmel.com>
-Message-ID: <1187037420.6223.20.camel@elrond.sweden.atmel.com>
+From: ulf at uclibc.org <ulf@uclibc.org>
+Date: Mon, 13 Aug 2007 13:07:33 -0700 (PDT)
+Subject: [Buildroot] svn commit: trunk/buildroot/package/tinyx
+Message-ID: <20070813200733.E01DCA682F@busybox.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-m?n 2007-08-13 klockan 22:29 +0200 skrev Ulf Samuelsson:
-> TinyX currently is built using
-> make $(TARGET_CONFIGURE_OPTS) World
-> but this fails miserably for ARM.
-> 
-> Some utilities are then built using the cross compiler
-> and when executed on the host, they obviously fail on non-X-86 targets.
-> 
-> I tried a patch which forces the use of HOSTCC for make,
-> but there are some temp files ("/tmp/xxxx") which are executed
-> and fails since they are built using the cross compiler.
-> 
-> TinyX seems to rely on WCHAR support, since it uses
-> MB_CHAR_MAX (The largest size of a character)
+Author: ulf
+Date: 2007-08-13 13:07:31 -0700 (Mon, 13 Aug 2007)
+New Revision: 19491
 
-Sorry, that was MB_CUR_MAX
+Log:
+Allow use of uclibc string routines in TinyX
 
-BR
-Ulf
+Added:
+   trunk/buildroot/package/tinyx/tinyx-011010-strings.patch
+
+
+Changeset:
+Added: trunk/buildroot/package/tinyx/tinyx-011010-strings.patch
+===================================================================
+--- trunk/buildroot/package/tinyx/tinyx-011010-strings.patch	                        (rev 0)
++++ trunk/buildroot/package/tinyx/tinyx-011010-strings.patch	2007-08-13 20:07:31 UTC (rev 19491)
+@@ -0,0 +1,13 @@
++diff -urN xc-011010-0rig/include/Xfuncs.h xc-011010/include/Xfuncs.h
++--- xc-011010-0rig/include/Xfuncs.h	2001-07-25 17:04:42.000000000 +0200
+++++ xc-011010/include/Xfuncs.h	2007-08-13 13:08:39.000000000 +0200
++@@ -45,6 +45,9 @@
++ #include <strings.h>
++ /* bcopy, bcmp, bzero declared */
++ #define _XFUNCS_H_INCLUDED_STRING_H
+++#elif defined(__UCLIBC__)
+++#include <string.h>
+++#define _XFUNCS_H_INCLUDED_STRING_H
++ #else
++ #include <string.h>
++ #define _XFUNCS_H_INCLUDED_STRING_H
