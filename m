@@ -1,37 +1,35 @@
-From: ulf at uclibc.org <ulf@uclibc.org>
-Date: Mon, 13 Aug 2007 14:30:03 -0700 (PDT)
-Subject: [Buildroot] svn commit: trunk/buildroot/package/tinyx
-Message-ID: <20070813213003.BFA87A6837@busybox.net>
+From: kevint <kevint@lanl.gov>
+Date: Mon, 13 Aug 2007 15:41:45 -0700
+Subject: [Buildroot] multilib on x86_64 target
+Message-ID: <BFA49114-30AE-4B0C-B5DD-B4FA27ED3F3D@lanl.gov>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Author: ulf
-Date: 2007-08-13 14:30:02 -0700 (Mon, 13 Aug 2007)
-New Revision: 19496
+Hello,
 
-Log:
-Avoid circular dependency
+I am building a package that requires 32 and 64 bit libraries (-m32  
+and -m64 options).  As far as I know, this requires gcc to be built  
+with multilib support.
 
-Modified:
-   trunk/buildroot/package/tinyx/Config.in
+I noticed on the bug tracker that ticket IDs 909 and 1045 identify  
+the same problem, but they are closed because multilib is not  
+supported.  Are there any updates to this, and is there a reason why  
+multilib is not supported?  Can you suggest a workaround?
+
+Thanks,
+
+********************************************
+Kevin Tegtmeier
+HPC-3 Scientific Computing Resources
+Los Alamos National Laboratory
+email:  kevint at lanl.gov
+********************************************
 
 
-Changeset:
-Modified: trunk/buildroot/package/tinyx/Config.in
-===================================================================
---- trunk/buildroot/package/tinyx/Config.in	2007-08-13 20:49:58 UTC (rev 19495)
-+++ trunk/buildroot/package/tinyx/Config.in	2007-08-13 21:30:02 UTC (rev 19496)
-@@ -1,8 +1,8 @@
- config BR2_PACKAGE_TINYX
- 	bool "tinyx"
- 	default y if BR2_PACKAGE_XSERVER_tinyx
--	depends on BR2_USE_WCHAR
--	depends on BR2_ENABLE_LOCALE
-+	select BR2_USE_WCHAR
-+	select BR2_ENABLE_LOCALE
- 	help
- 	  A tiny X server.  Also known as 'Xfbdev' and 'kdrive'.
- 
+
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: http://busybox.net/lists/buildroot/attachments/20070813/e8df2db6/attachment.htm 
