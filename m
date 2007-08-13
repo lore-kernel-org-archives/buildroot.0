@@ -1,35 +1,50 @@
-From: ulf at uclibc.org <ulf@uclibc.org>
-Date: Mon, 13 Aug 2007 01:12:21 -0700 (PDT)
-Subject: [Buildroot] svn commit: trunk/buildroot/package/fakeroot
-Message-ID: <20070813081221.6A016A4647@busybox.net>
+From: bugs at busybox.net <bugs@busybox.net>
+Date: Mon, 13 Aug 2007 06:01:53 -0700
+Subject: [Buildroot] [buildroot 0001462]: X11R7 fails to build due to error
+	in libxcb
+Message-ID: <7688cae30d6d94cc13dc45fb9477acf4@bugs.busybox.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Author: ulf
-Date: 2007-08-13 01:12:20 -0700 (Mon, 13 Aug 2007)
-New Revision: 19483
 
-Log:
-Fix libdir path for libfakeroot.la
+The following issue has been SUBMITTED. 
+====================================================================== 
+http://busybox.net/bugs/view.php?id=1462 
+====================================================================== 
+Reported By:                simpa
+Assigned To:                buildroot
+====================================================================== 
+Project:                    buildroot
+Issue ID:                   1462
+Category:                   Other
+Reproducibility:            always
+Severity:                   major
+Priority:                   normal
+Status:                     assigned
+====================================================================== 
+Date Submitted:             08-13-2007 06:01 PDT
+Last Modified:              08-13-2007 06:01 PDT
+====================================================================== 
+Summary:                    X11R7 fails to build due to error in libxcb
+Description: 
+Building X11R7 fails while building libxcb with:
 
-Modified:
-   trunk/buildroot/package/fakeroot/fakeroot.mk
+xv.c: In function 'xcb_xv_put_image_checked':
+xv.c:2870: error: 'data_size' undeclared (first use in this function)
+xv.c:2870: error: (Each undeclared identifier is reported only once
+xv.c:2870: error: for each function it appears in.)
+xv.c: In function 'xcb_xv_put_image':
+xv.c:2951: error: 'data_size' undeclared (first use in this function)
 
+====================================================================== 
 
-Changeset:
-Modified: trunk/buildroot/package/fakeroot/fakeroot.mk
-===================================================================
---- trunk/buildroot/package/fakeroot/fakeroot.mk	2007-08-13 06:14:15 UTC (rev 19482)
-+++ trunk/buildroot/package/fakeroot/fakeroot.mk	2007-08-13 08:12:20 UTC (rev 19483)
-@@ -51,6 +51,8 @@
- 	$(SED) 's,^PREFIX=.*,PREFIX=$(STAGING_DIR)/usr,g' $(STAGING_DIR)/usr/bin/fakeroot
- 	$(SED) 's,^BINDIR=.*,BINDIR=$(STAGING_DIR)/usr/bin,g' $(STAGING_DIR)/usr/bin/fakeroot
- 	$(SED) 's,^PATHS=.*,PATHS=$(FAKEROOT_DIR1)/.libs:/lib:/usr/lib,g' $(STAGING_DIR)/usr/bin/fakeroot
-+	$(SED) "s,^libdir=.*,libdir=\'$(STAGING_DIR)/usr/lib\',g" \
-+		$(STAGING_DIR)/usr/lib/libfakeroot.la
- 	touch -c $@
- 
- host-fakeroot: uclibc $(STAGING_DIR)/usr/bin/fakeroot
+Issue History 
+Date Modified   Username       Field                    Change               
+====================================================================== 
+08-13-07 06:01  simpa          New Issue                                    
+08-13-07 06:01  simpa          Status                   new => assigned     
+08-13-07 06:01  simpa          Assigned To               => buildroot       
+======================================================================
