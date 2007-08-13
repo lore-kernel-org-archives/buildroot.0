@@ -1,23 +1,29 @@
-From: Steven J. Hill <sjhill@realitydiluted.com>
-Date: Mon, 13 Aug 2007 13:19:56 -0500
-Subject: [Buildroot] fontconfig fails using latest snapshot
-In-Reply-To: <009a01c7ddd5$779933d0$2600a8c0@engineering5>
-References: <021c01c7ddcc$a7a9f9f0$dcc4af0a@atmel.com>
-	<009a01c7ddd5$779933d0$2600a8c0@engineering5>
-Message-ID: <20070813181956.GA17878@real.realitydiluted.com>
+From: Cristian Ionescu-Idbohrn <cristian.ionescu-idbohrn@axis.com>
+Date: Mon, 13 Aug 2007 20:45:22 +0200 (CEST)
+Subject: [Buildroot] .Position of ".PHONY" directive
+In-Reply-To: <1186964471.25003.2.camel@elrond.sweden.atmel.com>
+References: <1186964471.25003.2.camel@elrond.sweden.atmel.com>
+Message-ID: <0708132043540.31104@somehost>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Mon, Aug 13, 2007 at 01:12:10PM -0500, Christopher Reder wrote:
-> > /usr/include/ft2build.h:56:38: error: freetype/config/ftheader.h: No such
-> file or directory
-> 
-> You need to build freetype2 before fontconfig.
-> 
-If that is the case, then someone should patch the 'fontconfig' make
-file to satisfy the dependency.
+On Mon, 13 Aug 2007, Ulf Samuelsson wrote:
 
--Steve
+> The "make" info says that ".PHONY" should precede its arguments,
+> but it most, if not all Makefiles, they are at the bottom.
+>
+> When I do "make -d" for debug, it looks like the PHONY targets
+> are continously recalculated.
+>
+> Should we move the .PHONY statements?
+
+Me thinks that is a good idea.
+
+
+Cheers,
+
+-- 
+Cristian
