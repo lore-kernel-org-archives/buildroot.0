@@ -1,7 +1,8 @@
 From: ulf at uclibc.org <ulf@uclibc.org>
-Date: Mon, 13 Aug 2007 13:10:38 -0700 (PDT)
-Subject: [Buildroot] svn commit: trunk/buildroot/package/tinyx
-Message-ID: <20070813201038.DAA7CA6853@busybox.net>
+Date: Mon, 13 Aug 2007 13:18:25 -0700 (PDT)
+Subject: [Buildroot] svn commit: trunk/buildroot:
+	target/device/Atmel/toolchain/avr32/uCli etc...
+Message-ID: <20070813201825.E1800A6827@busybox.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -9,30 +10,291 @@ Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
 Author: ulf
-Date: 2007-08-13 13:10:36 -0700 (Mon, 13 Aug 2007)
-New Revision: 19492
+Date: 2007-08-13 13:18:25 -0700 (Mon, 13 Aug 2007)
+New Revision: 19493
 
 Log:
-Include header file defining MB_CUR_MAX to TinyX
+Workaround bug in TinyX makedepend by removing some whitespace
 
 Added:
-   trunk/buildroot/package/tinyx/tinyx-011010-MB_CUR_MAX.patch
+   trunk/buildroot/target/device/Atmel/toolchain/avr32/uClibc-0.9.28.3-avr32-2.0/uClibc-0.9.28.3-rm-whitespace.patch
+   trunk/buildroot/toolchain/uClibc/uClibc-0.9.28-rm-whitespace.patch
+   trunk/buildroot/toolchain/uClibc/uClibc-0.9.29-rm-whitespace.patch
 
 
 Changeset:
-Added: trunk/buildroot/package/tinyx/tinyx-011010-MB_CUR_MAX.patch
+Added: trunk/buildroot/target/device/Atmel/toolchain/avr32/uClibc-0.9.28.3-avr32-2.0/uClibc-0.9.28.3-rm-whitespace.patch
 ===================================================================
---- trunk/buildroot/package/tinyx/tinyx-011010-MB_CUR_MAX.patch	                        (rev 0)
-+++ trunk/buildroot/package/tinyx/tinyx-011010-MB_CUR_MAX.patch	2007-08-13 20:10:36 UTC (rev 19492)
-@@ -0,0 +1,11 @@
-+diff -urN xc-011010-0rig/lib/X11/lcGenConv.c xc-011010/lib/X11/lcGenConv.c
-+--- xc-011010-0rig/lib/X11/lcGenConv.c	2001-08-15 13:54:21.000000000 +0200
-++++ xc-011010/lib/X11/lcGenConv.c	2007-08-13 12:55:18.000000000 +0200
-+@@ -48,6 +48,7 @@
-+  * Platforms: all systems.
-+  */
+--- trunk/buildroot/target/device/Atmel/toolchain/avr32/uClibc-0.9.28.3-avr32-2.0/uClibc-0.9.28.3-rm-whitespace.patch	                        (rev 0)
++++ trunk/buildroot/target/device/Atmel/toolchain/avr32/uClibc-0.9.28.3-avr32-2.0/uClibc-0.9.28.3-rm-whitespace.patch	2007-08-13 20:18:25 UTC (rev 19493)
+@@ -0,0 +1,86 @@
++diff -urN uClibc-0.9.29-0rig/include/assert.h uClibc-0.9.29/include/assert.h
++--- uClibc-0.9.29-0rig/include/assert.h	2005-11-03 23:42:46.000000000 +0100
+++++ uClibc-0.9.29/include/assert.h	2007-08-13 19:10:57.000000000 +0200
++@@ -31,7 +31,7 @@
++ #define	_ASSERT_H	1
++ #include <features.h>
 + 
-++#include <stdlib.h>
-+ #include "Xlibint.h"
-+ #include "XlcGeneric.h"
-+ #include <stdio.h>
++-#if defined __cplusplus && __GNUC_PREREQ (2,95)
+++#if defined __cplusplus && __GNUC_PREREQ(2,95)
++ # define __ASSERT_VOID_CAST static_cast<void>
++ #else
++ # define __ASSERT_VOID_CAST (void)
++@@ -59,13 +59,17 @@
++   (__ASSERT_VOID_CAST ((expr) ? 0 :					      \
++ 		       (__assert (__STRING(expr), __FILE__, __LINE__,    \
++ 				       __ASSERT_FUNCTION), 0)))
++-  
+++
+++/* Define some temporaries to workaround tinyx makedepend bug */
+++#define	__GNUC_PREREQ_2_6	__GNUC_PREREQ(2, 6)
+++#define	__GNUC_PREREQ_2_4	__GNUC_PREREQ(2, 4)
++ /* Version 2.4 and later of GCC define a magical variable `__PRETTY_FUNCTION__'
++    which contains the name of the function currently being defined.
++    This is broken in G++ before version 2.6.
++    C9x has a similar variable called __func__, but prefer the GCC one since
++    it demangles C++ function names.  */
++-# if defined __cplusplus ? __GNUC_PREREQ (2, 6) : __GNUC_PREREQ (2, 4)
+++
+++# if defined __cplusplus ? __GNUC_PREREQ_2_6 : __GNUC_PREREQ_2_4
++ #   define __ASSERT_FUNCTION	__PRETTY_FUNCTION__
++ # else
++ #  if defined __STDC_VERSION__ && __STDC_VERSION__ >= 199901L
++diff -urN uClibc-0.9.29-0rig/include/complex.h uClibc-0.9.29/include/complex.h
++--- uClibc-0.9.29-0rig/include/complex.h	2002-05-09 10:15:21.000000000 +0200
+++++ uClibc-0.9.29/include/complex.h	2007-08-13 17:55:29.000000000 +0200
++@@ -33,7 +33,7 @@
++ /* We might need to add support for more compilers here.  But since ISO
++    C99 is out hopefully all maintained compilers will soon provide the data
++    types `float complex' and `double complex'.  */
++-#if __GNUC_PREREQ (2, 7) && !__GNUC_PREREQ (2, 97)
+++#if __GNUC_PREREQ(2, 7) && !__GNUC_PREREQ(2, 97)
++ # define _Complex __complex__
++ #endif
++ 
++diff -urN uClibc-0.9.29-0rig/include/features.h uClibc-0.9.29/include/features.h
++--- uClibc-0.9.29-0rig/include/features.h	2006-11-29 22:10:04.000000000 +0100
+++++ uClibc-0.9.29/include/features.h	2007-08-13 17:55:51.000000000 +0200
++@@ -143,7 +143,7 @@
++ 
++ /* Convenience macros to test the versions of glibc and gcc.
++    Use them like this:
++-   #if __GNUC_PREREQ (2,8)
+++   #if __GNUC_PREREQ(2,8)
++    ... code requiring gcc 2.8 or later ...
++    #endif
++    Note - they won't work for gcc1 or glibc1, since the _MINOR macros
++@@ -297,7 +297,7 @@
++ /* uClibc does not support _FORTIFY_SOURCE */
++ #undef _FORTIFY_SOURCE
++ #if defined _FORTIFY_SOURCE && _FORTIFY_SOURCE > 0 \
++-    && __GNUC_PREREQ (4, 1) && defined __OPTIMIZE__ && __OPTIMIZE__ > 0
+++    && __GNUC_PREREQ(4, 1) && defined __OPTIMIZE__ && __OPTIMIZE__ > 0
++ # if _FORTIFY_SOURCE > 1
++ #  define __USE_FORTIFY_LEVEL 2
++ # else
++@@ -366,7 +366,7 @@
++ #endif	/* !ASSEMBLER */
++ 
++ /* Decide whether we can define 'extern inline' functions in headers.  */
++-#if __GNUC_PREREQ (2, 7) && defined __OPTIMIZE__ \
+++#if __GNUC_PREREQ(2, 7) && defined __OPTIMIZE__ \
++     && !defined __OPTIMIZE_SIZE__ && !defined __NO_INLINE__
++ # define __USE_EXTERN_INLINES	1
++ #endif
++diff -urN uClibc-0.9.29-0rig/include/tgmath.h uClibc-0.9.29/include/tgmath.h
++--- uClibc-0.9.29-0rig/include/tgmath.h	2002-05-09 10:15:21.000000000 +0200
+++++ uClibc-0.9.29/include/tgmath.h	2007-08-13 17:56:17.000000000 +0200
++@@ -34,7 +34,7 @@
++    do not try this for now and instead concentrate only on GNU CC.  Once
++    we have more information support for other compilers might follow.  */
++ 
++-#if __GNUC_PREREQ (2, 7)
+++#if __GNUC_PREREQ(2, 7)
++ 
++ # ifdef __NO_LONG_DOUBLE_MATH
++ #  define __tgml(fct) fct
+
+Added: trunk/buildroot/toolchain/uClibc/uClibc-0.9.28-rm-whitespace.patch
+===================================================================
+--- trunk/buildroot/toolchain/uClibc/uClibc-0.9.28-rm-whitespace.patch	                        (rev 0)
++++ trunk/buildroot/toolchain/uClibc/uClibc-0.9.28-rm-whitespace.patch	2007-08-13 20:18:25 UTC (rev 19493)
+@@ -0,0 +1,86 @@
++diff -urN uClibc-0.9.29-0rig/include/assert.h uClibc-0.9.29/include/assert.h
++--- uClibc-0.9.29-0rig/include/assert.h	2005-11-03 23:42:46.000000000 +0100
+++++ uClibc-0.9.29/include/assert.h	2007-08-13 19:10:57.000000000 +0200
++@@ -31,7 +31,7 @@
++ #define	_ASSERT_H	1
++ #include <features.h>
++ 
++-#if defined __cplusplus && __GNUC_PREREQ (2,95)
+++#if defined __cplusplus && __GNUC_PREREQ(2,95)
++ # define __ASSERT_VOID_CAST static_cast<void>
++ #else
++ # define __ASSERT_VOID_CAST (void)
++@@ -59,13 +59,17 @@
++   (__ASSERT_VOID_CAST ((expr) ? 0 :					      \
++ 		       (__assert (__STRING(expr), __FILE__, __LINE__,    \
++ 				       __ASSERT_FUNCTION), 0)))
++-  
+++
+++/* Define some temporaries to workaround tinyx makedepend bug */
+++#define	__GNUC_PREREQ_2_6	__GNUC_PREREQ(2, 6)
+++#define	__GNUC_PREREQ_2_4	__GNUC_PREREQ(2, 4)
++ /* Version 2.4 and later of GCC define a magical variable `__PRETTY_FUNCTION__'
++    which contains the name of the function currently being defined.
++    This is broken in G++ before version 2.6.
++    C9x has a similar variable called __func__, but prefer the GCC one since
++    it demangles C++ function names.  */
++-# if defined __cplusplus ? __GNUC_PREREQ (2, 6) : __GNUC_PREREQ (2, 4)
+++
+++# if defined __cplusplus ? __GNUC_PREREQ_2_6 : __GNUC_PREREQ_2_4
++ #   define __ASSERT_FUNCTION	__PRETTY_FUNCTION__
++ # else
++ #  if defined __STDC_VERSION__ && __STDC_VERSION__ >= 199901L
++diff -urN uClibc-0.9.29-0rig/include/complex.h uClibc-0.9.29/include/complex.h
++--- uClibc-0.9.29-0rig/include/complex.h	2002-05-09 10:15:21.000000000 +0200
+++++ uClibc-0.9.29/include/complex.h	2007-08-13 17:55:29.000000000 +0200
++@@ -33,7 +33,7 @@
++ /* We might need to add support for more compilers here.  But since ISO
++    C99 is out hopefully all maintained compilers will soon provide the data
++    types `float complex' and `double complex'.  */
++-#if __GNUC_PREREQ (2, 7) && !__GNUC_PREREQ (2, 97)
+++#if __GNUC_PREREQ(2, 7) && !__GNUC_PREREQ(2, 97)
++ # define _Complex __complex__
++ #endif
++ 
++diff -urN uClibc-0.9.29-0rig/include/features.h uClibc-0.9.29/include/features.h
++--- uClibc-0.9.29-0rig/include/features.h	2006-11-29 22:10:04.000000000 +0100
+++++ uClibc-0.9.29/include/features.h	2007-08-13 17:55:51.000000000 +0200
++@@ -143,7 +143,7 @@
++ 
++ /* Convenience macros to test the versions of glibc and gcc.
++    Use them like this:
++-   #if __GNUC_PREREQ (2,8)
+++   #if __GNUC_PREREQ(2,8)
++    ... code requiring gcc 2.8 or later ...
++    #endif
++    Note - they won't work for gcc1 or glibc1, since the _MINOR macros
++@@ -297,7 +297,7 @@
++ /* uClibc does not support _FORTIFY_SOURCE */
++ #undef _FORTIFY_SOURCE
++ #if defined _FORTIFY_SOURCE && _FORTIFY_SOURCE > 0 \
++-    && __GNUC_PREREQ (4, 1) && defined __OPTIMIZE__ && __OPTIMIZE__ > 0
+++    && __GNUC_PREREQ(4, 1) && defined __OPTIMIZE__ && __OPTIMIZE__ > 0
++ # if _FORTIFY_SOURCE > 1
++ #  define __USE_FORTIFY_LEVEL 2
++ # else
++@@ -366,7 +366,7 @@
++ #endif	/* !ASSEMBLER */
++ 
++ /* Decide whether we can define 'extern inline' functions in headers.  */
++-#if __GNUC_PREREQ (2, 7) && defined __OPTIMIZE__ \
+++#if __GNUC_PREREQ(2, 7) && defined __OPTIMIZE__ \
++     && !defined __OPTIMIZE_SIZE__ && !defined __NO_INLINE__
++ # define __USE_EXTERN_INLINES	1
++ #endif
++diff -urN uClibc-0.9.29-0rig/include/tgmath.h uClibc-0.9.29/include/tgmath.h
++--- uClibc-0.9.29-0rig/include/tgmath.h	2002-05-09 10:15:21.000000000 +0200
+++++ uClibc-0.9.29/include/tgmath.h	2007-08-13 17:56:17.000000000 +0200
++@@ -34,7 +34,7 @@
++    do not try this for now and instead concentrate only on GNU CC.  Once
++    we have more information support for other compilers might follow.  */
++ 
++-#if __GNUC_PREREQ (2, 7)
+++#if __GNUC_PREREQ(2, 7)
++ 
++ # ifdef __NO_LONG_DOUBLE_MATH
++ #  define __tgml(fct) fct
+
+Added: trunk/buildroot/toolchain/uClibc/uClibc-0.9.29-rm-whitespace.patch
+===================================================================
+--- trunk/buildroot/toolchain/uClibc/uClibc-0.9.29-rm-whitespace.patch	                        (rev 0)
++++ trunk/buildroot/toolchain/uClibc/uClibc-0.9.29-rm-whitespace.patch	2007-08-13 20:18:25 UTC (rev 19493)
+@@ -0,0 +1,86 @@
++diff -urN uClibc-0.9.29-0rig/include/assert.h uClibc-0.9.29/include/assert.h
++--- uClibc-0.9.29-0rig/include/assert.h	2005-11-03 23:42:46.000000000 +0100
+++++ uClibc-0.9.29/include/assert.h	2007-08-13 19:10:57.000000000 +0200
++@@ -31,7 +31,7 @@
++ #define	_ASSERT_H	1
++ #include <features.h>
++ 
++-#if defined __cplusplus && __GNUC_PREREQ (2,95)
+++#if defined __cplusplus && __GNUC_PREREQ(2,95)
++ # define __ASSERT_VOID_CAST static_cast<void>
++ #else
++ # define __ASSERT_VOID_CAST (void)
++@@ -59,13 +59,17 @@
++   (__ASSERT_VOID_CAST ((expr) ? 0 :					      \
++ 		       (__assert (__STRING(expr), __FILE__, __LINE__,    \
++ 				       __ASSERT_FUNCTION), 0)))
++-  
+++
+++/* Define some temporaries to workaround tinyx makedepend bug */
+++#define	__GNUC_PREREQ_2_6	__GNUC_PREREQ(2, 6)
+++#define	__GNUC_PREREQ_2_4	__GNUC_PREREQ(2, 4)
++ /* Version 2.4 and later of GCC define a magical variable `__PRETTY_FUNCTION__'
++    which contains the name of the function currently being defined.
++    This is broken in G++ before version 2.6.
++    C9x has a similar variable called __func__, but prefer the GCC one since
++    it demangles C++ function names.  */
++-# if defined __cplusplus ? __GNUC_PREREQ (2, 6) : __GNUC_PREREQ (2, 4)
+++
+++# if defined __cplusplus ? __GNUC_PREREQ_2_6 : __GNUC_PREREQ_2_4
++ #   define __ASSERT_FUNCTION	__PRETTY_FUNCTION__
++ # else
++ #  if defined __STDC_VERSION__ && __STDC_VERSION__ >= 199901L
++diff -urN uClibc-0.9.29-0rig/include/complex.h uClibc-0.9.29/include/complex.h
++--- uClibc-0.9.29-0rig/include/complex.h	2002-05-09 10:15:21.000000000 +0200
+++++ uClibc-0.9.29/include/complex.h	2007-08-13 17:55:29.000000000 +0200
++@@ -33,7 +33,7 @@
++ /* We might need to add support for more compilers here.  But since ISO
++    C99 is out hopefully all maintained compilers will soon provide the data
++    types `float complex' and `double complex'.  */
++-#if __GNUC_PREREQ (2, 7) && !__GNUC_PREREQ (2, 97)
+++#if __GNUC_PREREQ(2, 7) && !__GNUC_PREREQ(2, 97)
++ # define _Complex __complex__
++ #endif
++ 
++diff -urN uClibc-0.9.29-0rig/include/features.h uClibc-0.9.29/include/features.h
++--- uClibc-0.9.29-0rig/include/features.h	2006-11-29 22:10:04.000000000 +0100
+++++ uClibc-0.9.29/include/features.h	2007-08-13 17:55:51.000000000 +0200
++@@ -143,7 +143,7 @@
++ 
++ /* Convenience macros to test the versions of glibc and gcc.
++    Use them like this:
++-   #if __GNUC_PREREQ (2,8)
+++   #if __GNUC_PREREQ(2,8)
++    ... code requiring gcc 2.8 or later ...
++    #endif
++    Note - they won't work for gcc1 or glibc1, since the _MINOR macros
++@@ -297,7 +297,7 @@
++ /* uClibc does not support _FORTIFY_SOURCE */
++ #undef _FORTIFY_SOURCE
++ #if defined _FORTIFY_SOURCE && _FORTIFY_SOURCE > 0 \
++-    && __GNUC_PREREQ (4, 1) && defined __OPTIMIZE__ && __OPTIMIZE__ > 0
+++    && __GNUC_PREREQ(4, 1) && defined __OPTIMIZE__ && __OPTIMIZE__ > 0
++ # if _FORTIFY_SOURCE > 1
++ #  define __USE_FORTIFY_LEVEL 2
++ # else
++@@ -366,7 +366,7 @@
++ #endif	/* !ASSEMBLER */
++ 
++ /* Decide whether we can define 'extern inline' functions in headers.  */
++-#if __GNUC_PREREQ (2, 7) && defined __OPTIMIZE__ \
+++#if __GNUC_PREREQ(2, 7) && defined __OPTIMIZE__ \
++     && !defined __OPTIMIZE_SIZE__ && !defined __NO_INLINE__
++ # define __USE_EXTERN_INLINES	1
++ #endif
++diff -urN uClibc-0.9.29-0rig/include/tgmath.h uClibc-0.9.29/include/tgmath.h
++--- uClibc-0.9.29-0rig/include/tgmath.h	2002-05-09 10:15:21.000000000 +0200
+++++ uClibc-0.9.29/include/tgmath.h	2007-08-13 17:56:17.000000000 +0200
++@@ -34,7 +34,7 @@
++    do not try this for now and instead concentrate only on GNU CC.  Once
++    we have more information support for other compilers might follow.  */
++ 
++-#if __GNUC_PREREQ (2, 7)
+++#if __GNUC_PREREQ(2, 7)
++ 
++ # ifdef __NO_LONG_DOUBLE_MATH
++ #  define __tgml(fct) fct
