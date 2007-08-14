@@ -1,72 +1,19 @@
-From: bugs at busybox.net <bugs@busybox.net>
-Date: Tue, 14 Aug 2007 12:02:09 -0700
-Subject: [Buildroot] [buildroot 0001451]: patch to make installation of
-	libpng posible
-Message-ID: <09965dbe7e3ccd2632894f1a1732076e@bugs.uclibc.org>
+From: Florian Strunk <mailinglist_buildroot_uclibc.org@florian-strunk.de>
+Date: Tue, 14 Aug 2007 20:53:06 +0200
+Subject: [Buildroot] Searching for Buildroot Version without Bugs and Kernel
+ 2.6.20.x support for ARM 9
+Message-ID: <46C1FA12.2070201@florian-strunk.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+Searching for Buildroot version without bugs and kernel 2.6.20.x support
+for ARM 9 (*AT91SAM9260-EK*).
 
-A NOTE has been added to this issue. 
-====================================================================== 
-http://busybox.net/bugs/view.php?id=1451 
-====================================================================== 
-Reported By:                pavko
-Assigned To:                buildroot
-====================================================================== 
-Project:                    buildroot
-Issue ID:                   1451
-Category:                   Shared Library Support
-Reproducibility:            always
-Severity:                   minor
-Priority:                   normal
-Status:                     assigned
-====================================================================== 
-Date Submitted:             07-30-2007 15:15 PDT
-Last Modified:              08-14-2007 12:02 PDT
-====================================================================== 
-Summary:                    patch to make installation of libpng posible
-Description: 
-diff -urN libpng.mk.orig libpng.mk
---- libpng.mk.orig      2007-07-29 22:26:39.000000000 +0200
-+++ libpng.mk   2007-07-29 23:27:49.759689111 +0200
-@@ -62,7 +62,7 @@
-        $(MAKE) -C $(LIBPNG_DIR)
-        touch $@
- 
--$(STAGING_DIR)/lib/libpng.so: $(LIBPNG_DIR)/.compiled
-+$(STAGING_DIR)/usr/lib/libpng.so: $(LIBPNG_DIR)/.compiled
-        $(MAKE) DESTDIR=$(STAGING_DIR) -C $(LIBPNG_DIR) install;
-        $(SED) "s,^libdir=.*,libdir=\'$(STAGING_DIR)/usr/lib\',g"
-$(STAGING_DIR)/usr/lib/libpng12.la
-        $(SED) "s,^prefix=.*,prefix=\'$(STAGING_DIR)/usr\',g" \
-@@ -72,8 +72,8 @@
-                $(STAGING_DIR)/usr/bin/libpng12-config
-        touch -c $@
- 
--$(TARGET_DIR)/usr/lib/libpng.so: $(STAGING_DIR)/lib/libpng.so
--       cp -dpf $(STAGING_DIR)/lib/libpng*.so* $(TARGET_DIR)/usr/lib/
-+$(TARGET_DIR)/usr/lib/libpng.so: $(STAGING_DIR)/usr/lib/libpng.so
-+       cp -dpf $(STAGING_DIR)/usr/lib/libpng*.so* $(TARGET_DIR)/usr/lib/
-        -$(STRIP) --strip-unneeded $(TARGET_DIR)/usr/lib/libpng.so
- 
- png libpng: uclibc zlib pkgconfig $(TARGET_DIR)/usr/lib/libpng.so
+Witch version of BuildRoot should I use?
 
-====================================================================== 
+Thanks.
 
----------------------------------------------------------------------- 
- pavko - 08-14-07 12:02  
----------------------------------------------------------------------- 
-should be closed as it's been fixed with similar patch from maillist 
-
-Issue History 
-Date Modified   Username       Field                    Change               
-====================================================================== 
-07-30-07 15:15  pavko          New Issue                                    
-07-30-07 15:15  pavko          Status                   new => assigned     
-07-30-07 15:15  pavko          Assigned To               => buildroot       
-08-14-07 12:02  pavko          Note Added: 0002663                          
-======================================================================
+Florian
