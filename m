@@ -1,35 +1,33 @@
-From: kevint <kevint@lanl.gov>
-Date: Mon, 13 Aug 2007 15:41:45 -0700
-Subject: [Buildroot] multilib on x86_64 target
-Message-ID: <BFA49114-30AE-4B0C-B5DD-B4FA27ED3F3D@lanl.gov>
+From: Hebbar <gururajakr@sanyo.co.in>
+Date: Mon, 13 Aug 2007 22:34:55 -0700 (PDT)
+Subject: [Buildroot] TinyX woes...
+In-Reply-To: <46C0C586.9060406@promwad.com>
+References: <1187036974.6223.17.camel@elrond.sweden.atmel.com>
+	<46C0C586.9060406@promwad.com>
+Message-ID: <12138977.post@talk.nabble.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
 
-I am building a package that requires 32 and 64 bit libraries (-m32  
-and -m64 options).  As far as I know, this requires gcc to be built  
-with multilib support.
+Hi Ivan 
 
-I noticed on the bug tracker that ticket IDs 909 and 1045 identify  
-the same problem, but they are closed because multilib is not  
-supported.  Are there any updates to this, and is there a reason why  
-multilib is not supported?  Can you suggest a workaround?
+ I am also working on ARM on arm926ejs. Since 3 weeks i am finding it too
+difficult to get ahead of building libglib2. it stops with error on
+libintl.h which is deleted by uclibc. I really want to build a gtk with
+buildroot but its to going ahead. i enabled locale & wchar and used
+uclinc-9.29.0-wchar.config but it still failed at libglib2 stage. so can u
+share ur buildroot config file & uclinc config files and details of any
+changes u have done with buildroot. this will really be a gr8 help to me.
+also what buildroot version or snapshot did u try.
 
-Thanks,
+Regards
+Gururaja
 
-********************************************
-Kevin Tegtmeier
-HPC-3 Scientific Computing Resources
-Los Alamos National Laboratory
-email:  kevint at lanl.gov
-********************************************
-
-
-
--------------- next part --------------
-An HTML attachment was scrubbed...
-URL: http://busybox.net/lists/buildroot/attachments/20070813/e8df2db6/attachment.htm 
+Regards
+Gururaja
+-- 
+View this message in context: http://www.nabble.com/TinyX-woes...-tf4263243.html#a12138977
+Sent from the BuildRoot mailing list archive at Nabble.com.
