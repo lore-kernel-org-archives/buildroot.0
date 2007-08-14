@@ -1,86 +1,94 @@
-From: Ulf Samuelsson <ulf@atmel.com>
-Date: Tue, 14 Aug 2007 13:07:59 +0200
-Subject: [Buildroot] fakeroot reinstalling 'at' (and others) everytime make
-	is run.
-Message-ID: <1187089679.27205.18.camel@elrond.sweden.atmel.com>
+From: jacmet at uclibc.org <jacmet@uclibc.org>
+Date: Tue, 14 Aug 2007 04:59:47 -0700 (PDT)
+Subject: [Buildroot] svn commit: trunk/buildroot
+Message-ID: <20070814115947.729A7A6816@busybox.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Some packages (like 'at') install themselves as owned by root 
-through "fakeroot".
+Author: jacmet
+Date: 2007-08-14 04:59:46 -0700 (Tue, 14 Aug 2007)
+New Revision: 19505
 
-AFAIK; the procedure is that:
+Log:
+Added powerpc variant selection
 
-"at.mk" creates "$(STAGING_DIR)/.fakeroot.at" containing the commands
-fakeroot needs to run during the installation.
-
-The makefiles for a file system (ext2, jffs2 etc.) will each do the
-installation by copying "$(STAGING_DIR)/.fakeroot.*" to 
-"$(STAGING_DIR)/.fakeroot.$(notdir $(<FILESYSTEM>)"
-and will then add some stuff they need.
+Modified:
+   trunk/buildroot/Config.in
 
 
-PROBLEM:
-There seems to be nothing that removes the "$(STAGING_DIR)/.fakeroot.at"
-
-SYMPTOM:
-After 'at' has been built once, each time a file system is created, its
-makefile will find "$(STAGING_DIR)/.fakeroot.at"
-and 'at' will be reinstalled by 'fakeroot'.
-
-SIMPLE FIX?:
-A simple fix would be to delete all ".fakeroot.*' files after all file
-systems have been generated (See below).
-
-If a package like 'at' is built from fresh,then every file system which
-is built will reinstall 'at', but at the end of the build, the
-"$(STAGING_DIR)/.fakeroot.at" is removed so the next time 'make' is run,
-there will be no reinstallation of 'at'.
-
-ADVANCED FIX:
-
-A more advanced fix would let each file system delete all the fakeroot
-files under the assumption, that they only need to be run once.
-
-*******************************************************************
-
-
-Will there be any problems if the ".fakeroot.*" files are deleted?
-
-Thoughts?
-
-
-+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-
-DIFF FOR SIMPLE FIX:
-
-Index: Makefile
+Changeset:
+Modified: trunk/buildroot/Config.in
 ===================================================================
---- Makefile	(revision 19502)
-+++ Makefile	(arbetskopia)
-@@ -199,6 +199,8 @@
- # target stuff is last so it can override anything else
- include target/Makefile.in
+--- trunk/buildroot/Config.in	2007-08-14 10:27:56 UTC (rev 19504)
++++ trunk/buildroot/Config.in	2007-08-14 11:59:46 UTC (rev 19505)
+@@ -295,8 +295,66 @@
+ 	bool "itanium 2"
+ endchoice
  
-+TARGETS+=erase-fakeroots
-+
- TARGETS_CLEAN:=$(patsubst %,%-clean,$(TARGETS))
- TARGETS_SOURCE:=$(patsubst %,%-source,$(TARGETS))
- TARGETS_DIRCLEAN:=$(patsubst %,%-dirclean,$(TARGETS))
-@@ -255,6 +257,8 @@
- 	fi;
- 	touch	$@
++choice
++	prompt "Target Architecture Variant"
++	depends BR2_powerpc
++	default BR2_generic_powerpc
++	help
++	  Specific CPU variant to use
++config BR2_generic_powerpc
++	bool "generic"
++config BR2_powerpc_401
++	bool "401"
++config BR2_powerpc_403
++	bool "403"
++config BR2_powerpc_405
++	bool "405"
++config BR2_powerpc_405fp
++	bool "405 with FPU"
++config BR2_powerpc_440
++	bool "440"
++config BR2_powerpc_440fp
++	bool "440 with FPU"
++config BR2_powerpc_505
++	bool "505"
++config BR2_powerpc_601
++	bool "601"
++config BR2_powerpc_602
++	bool "602"
++config BR2_powerpc_603
++	bool "603"
++config BR2_powerpc_603e
++	bool "603e"
++config BR2_powerpc_604
++	bool "604"
++config BR2_powerpc_604e
++	bool "604e"
++config BR2_powerpc_620
++	bool "620"
++config BR2_powerpc_630
++	bool "630"
++config BR2_powerpc_740
++	bool "740"
++config BR2_powerpc_7400
++	bool "7400"
++config BR2_powerpc_7450
++	bool "7450"
++config BR2_powerpc_750
++	bool "750"
++config BR2_powerpc_801
++	bool "801"
++config BR2_powerpc_821
++	bool "821"
++config BR2_powerpc_823
++	bool "823"
++config BR2_powerpc_860
++	bool "860"
++config BR2_powerpc_970
++	bool "970"
++config BR2_powerpc_8540
++	bool "8540"
++endchoice
  
-+erase-fakeroots:
-+	rm -f $(STAGING_DIR)/.fakeroot*
- 
- source: $(TARGETS_SOURCE) $(HOST_SOURCE)
- 
----------------------------------------------------------------------
-
-
-Best Regards
-Ulf Samuelsson
+-
+ config BR2_ARCH
+ 	string
+ 	default "alpha"		if BR2_alpha
