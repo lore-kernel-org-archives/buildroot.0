@@ -1,37 +1,86 @@
-From: ulf at uclibc.org <ulf@uclibc.org>
-Date: Tue, 14 Aug 2007 01:44:30 -0700 (PDT)
-Subject: [Buildroot] svn commit: trunk/buildroot/package/rxvt
-Message-ID: <20070814084430.0F332A65D2@busybox.net>
+From: Ulf Samuelsson <ulf@atmel.com>
+Date: Tue, 14 Aug 2007 13:07:59 +0200
+Subject: [Buildroot] fakeroot reinstalling 'at' (and others) everytime make
+	is run.
+Message-ID: <1187089679.27205.18.camel@elrond.sweden.atmel.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Author: ulf
-Date: 2007-08-14 01:44:28 -0700 (Tue, 14 Aug 2007)
-New Revision: 19503
+Some packages (like 'at') install themselves as owned by root 
+through "fakeroot".
 
-Log:
-rxvt hardwired for X11R6, so ensure dependency is OK
+AFAIK; the procedure is that:
 
-Modified:
-   trunk/buildroot/package/rxvt/Config.in
+"at.mk" creates "$(STAGING_DIR)/.fakeroot.at" containing the commands
+fakeroot needs to run during the installation.
+
+The makefiles for a file system (ext2, jffs2 etc.) will each do the
+installation by copying "$(STAGING_DIR)/.fakeroot.*" to 
+"$(STAGING_DIR)/.fakeroot.$(notdir $(<FILESYSTEM>)"
+and will then add some stuff they need.
 
 
-Changeset:
-Modified: trunk/buildroot/package/rxvt/Config.in
+PROBLEM:
+There seems to be nothing that removes the "$(STAGING_DIR)/.fakeroot.at"
+
+SYMPTOM:
+After 'at' has been built once, each time a file system is created, its
+makefile will find "$(STAGING_DIR)/.fakeroot.at"
+and 'at' will be reinstalled by 'fakeroot'.
+
+SIMPLE FIX?:
+A simple fix would be to delete all ".fakeroot.*' files after all file
+systems have been generated (See below).
+
+If a package like 'at' is built from fresh,then every file system which
+is built will reinstall 'at', but at the end of the build, the
+"$(STAGING_DIR)/.fakeroot.at" is removed so the next time 'make' is run,
+there will be no reinstallation of 'at'.
+
+ADVANCED FIX:
+
+A more advanced fix would let each file system delete all the fakeroot
+files under the assumption, that they only need to be run once.
+
+*******************************************************************
+
+
+Will there be any problems if the ".fakeroot.*" files are deleted?
+
+Thoughts?
+
+
++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
+DIFF FOR SIMPLE FIX:
+
+Index: Makefile
 ===================================================================
---- trunk/buildroot/package/rxvt/Config.in	2007-08-14 07:45:01 UTC (rev 19502)
-+++ trunk/buildroot/package/rxvt/Config.in	2007-08-14 08:44:28 UTC (rev 19503)
-@@ -1,7 +1,10 @@
- config BR2_PACKAGE_RXVT
- 	bool "rxvt"
- 	default n
-+	depends BR2_PACKAGE_XSERVER_xorg || BR2_PACKAGE_XSERVER_tinyx
-+
- 	help
- 	  A nice small colour vt102 X terminal emulator.
-+	  Does not build for X11R7 yet.
+--- Makefile	(revision 19502)
++++ Makefile	(arbetskopia)
+@@ -199,6 +199,8 @@
+ # target stuff is last so it can override anything else
+ include target/Makefile.in
  
- 	  http://www.rxvt.org/
++TARGETS+=erase-fakeroots
++
+ TARGETS_CLEAN:=$(patsubst %,%-clean,$(TARGETS))
+ TARGETS_SOURCE:=$(patsubst %,%-source,$(TARGETS))
+ TARGETS_DIRCLEAN:=$(patsubst %,%-dirclean,$(TARGETS))
+@@ -255,6 +257,8 @@
+ 	fi;
+ 	touch	$@
+ 
++erase-fakeroots:
++	rm -f $(STAGING_DIR)/.fakeroot*
+ 
+ source: $(TARGETS_SOURCE) $(HOST_SOURCE)
+ 
+---------------------------------------------------------------------
+
+
+Best Regards
+Ulf Samuelsson
