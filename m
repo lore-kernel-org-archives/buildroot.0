@@ -1,40 +1,44 @@
-From: Ulf Samuelsson <ulf@atmel.com>
-Date: Wed, 15 Aug 2007 09:42:30 +0200
-Subject: [Buildroot] [patch] mdnsresponder doesn't do parallel makes
-In-Reply-To: <46C21224.9020505@mainstreetsoftworks.com>
-References: <46C21224.9020505@mainstreetsoftworks.com>
-Message-ID: <1187163750.4942.1.camel@elrond.sweden.atmel.com>
+From: ulf at uclibc.org <ulf@uclibc.org>
+Date: Wed, 15 Aug 2007 00:31:12 -0700 (PDT)
+Subject: [Buildroot] svn commit: trunk/buildroot/package/mdnsresponder
+Message-ID: <20070815073112.CB94DA4711@busybox.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-tis 2007-08-14 klockan 16:35 -0400 skrev Brad House:
-> Apparently mdnsresponder will fail to build with parallel makes.
-> This patch just adds a -j1 to the $(MAKE) to force it to not
-> build in parallel.
-> 
+Author: ulf
+Date: 2007-08-15 00:31:12 -0700 (Wed, 15 Aug 2007)
+New Revision: 19510
 
-Buildroot defines $(MAKE1) for this purpose, but
-I will fix that, so no need to send a new patch.
+Log:
+No parallel make of mdnsresponder
+
+Modified:
+   trunk/buildroot/package/mdnsresponder/mdnsresponder.mk
 
 
-> -Brad
-> vanligt textdokument-bilaga (mdnsresponder-parallelmake.diff)
-> Index: package/mdnsresponder/mdnsresponder.mk
-> ===================================================================
-> --- package/mdnsresponder/mdnsresponder.mk	(revision 19509)
-> +++ package/mdnsresponder/mdnsresponder.mk	(working copy)
-> @@ -26,7 +26,7 @@
->  	touch $(MDNSRESPONDER_DIR)/.configured
->  
->  $(MDNSRESPONDER_DIR)/.built: $(MDNSRESPONDER_DIR)/.configured
-> -	$(MAKE) CC=$(TARGET_CC) os="linux" LD="$(TARGET_CC) -shared" LOCALBASE="/usr" -C $(MDNSRESPONDER_DIR)/mDNSPosix
-> +	$(MAKE) -j1 CC=$(TARGET_CC) os="linux" LD="$(TARGET_CC) -shared" LOCALBASE="/usr" -C $(MDNSRESPONDER_DIR)/mDNSPosix
->  	touch $(MDNSRESPONDER_DIR)/.built
->  
->  $(STAGING_DIR)/usr/lib/libdns_sd.so: $(MDNSRESPONDER_DIR)/.built
-
-BR
-Ulf Samuelsson
+Changeset:
+Modified: trunk/buildroot/package/mdnsresponder/mdnsresponder.mk
+===================================================================
+--- trunk/buildroot/package/mdnsresponder/mdnsresponder.mk	2007-08-14 16:55:01 UTC (rev 19509)
++++ trunk/buildroot/package/mdnsresponder/mdnsresponder.mk	2007-08-15 07:31:12 UTC (rev 19510)
+@@ -26,7 +26,7 @@
+ 	touch $(MDNSRESPONDER_DIR)/.configured
+ 
+ $(MDNSRESPONDER_DIR)/.built: $(MDNSRESPONDER_DIR)/.configured
+-	$(MAKE) CC=$(TARGET_CC) os="linux" LD="$(TARGET_CC) -shared" LOCALBASE="/usr" -C $(MDNSRESPONDER_DIR)/mDNSPosix
++	$(MAKE1) CC=$(TARGET_CC) os="linux" LD="$(TARGET_CC) -shared" LOCALBASE="/usr" -C $(MDNSRESPONDER_DIR)/mDNSPosix
+ 	touch $(MDNSRESPONDER_DIR)/.built
+ 
+ $(STAGING_DIR)/usr/lib/libdns_sd.so: $(MDNSRESPONDER_DIR)/.built
+@@ -64,7 +64,7 @@
+ 
+ mdnsresponder-clean:
+ 	rm -f $(MDNSRESPONDER_DIR)/.configured $(MDNSRESPONDER_DIR)/.built $(MDNSRESPONDER_DIR)/.staged
+-	-$(MAKE) os=linux -C $(MDNSRESPONDER_DIR)/mDNSPosix clean
++	-$(MAKE1) os=linux -C $(MDNSRESPONDER_DIR)/mDNSPosix clean
+ 	rm -f $(TARGET_DIR)/usr/sbin/dnsextd
+ 	rm -f $(TARGET_DIR)/usr/sbin/mDNSResponderPosix
+ 	rm -f $(TARGET_DIR)/usr/sbin/mDNSNetMonitor
