@@ -1,44 +1,25 @@
-From: ulf at uclibc.org <ulf@uclibc.org>
-Date: Wed, 15 Aug 2007 02:47:49 -0700 (PDT)
-Subject: [Buildroot] svn commit: trunk/buildroot
-Message-ID: <20070815094749.A4F76A4758@busybox.net>
+From: Brad House <brad@mainstreetsoftworks.com>
+Date: Wed, 15 Aug 2007 07:44:39 -0400
+Subject: [Buildroot] [patch] mdnsresponder doesn't do parallel makes
+In-Reply-To: <1187163750.4942.1.camel@elrond.sweden.atmel.com>
+References: <46C21224.9020505@mainstreetsoftworks.com>
+	<1187163750.4942.1.camel@elrond.sweden.atmel.com>
+Message-ID: <46C2E727.2030408@mainstreetsoftworks.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Author: ulf
-Date: 2007-08-15 02:47:49 -0700 (Wed, 15 Aug 2007)
-New Revision: 19514
+>> Apparently mdnsresponder will fail to build with parallel makes.
+>> This patch just adds a -j1 to the $(MAKE) to force it to not
+>> build in parallel.
+>>
+> 
+> Buildroot defines $(MAKE1) for this purpose, but
+> I will fix that, so no need to send a new patch.
 
-Log:
-Remove fakeroot files after use to avoid rerun
+Ah, I didn't realize that.  I just grepped through other
+packages and saw some had -j1 flags for that purpose...
 
-Modified:
-   trunk/buildroot/Makefile
-
-
-Changeset:
-Modified: trunk/buildroot/Makefile
-===================================================================
---- trunk/buildroot/Makefile	2007-08-15 09:46:29 UTC (rev 19513)
-+++ trunk/buildroot/Makefile	2007-08-15 09:47:49 UTC (rev 19514)
-@@ -199,6 +199,8 @@
- # target stuff is last so it can override anything else
- include target/Makefile.in
- 
-+TARGETS+=erase-fakeroots
-+
- TARGETS_CLEAN:=$(patsubst %,%-clean,$(TARGETS))
- TARGETS_SOURCE:=$(patsubst %,%-source,$(TARGETS))
- TARGETS_DIRCLEAN:=$(patsubst %,%-dirclean,$(TARGETS))
-@@ -255,6 +257,8 @@
- 	fi;
- 	touch	$@
- 
-+erase-fakeroots:
-+	rm -f $(STAGING_DIR)/.fakeroot*
- 
- source: $(TARGETS_SOURCE) $(HOST_SOURCE)
- 
+-Brad
