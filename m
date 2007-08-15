@@ -1,33 +1,40 @@
-From: Brad House <brad@mainstreetsoftworks.com>
-Date: Tue, 14 Aug 2007 20:57:35 -0400
-Subject: [Buildroot] [patch] kernel-headers: lzma causing issues
-Message-ID: <46C24F7F.1020203@mainstreetsoftworks.com>
+From: Ulf Samuelsson <ulf@atmel.com>
+Date: Wed, 15 Aug 2007 09:42:30 +0200
+Subject: [Buildroot] [patch] mdnsresponder doesn't do parallel makes
+In-Reply-To: <46C21224.9020505@mainstreetsoftworks.com>
+References: <46C21224.9020505@mainstreetsoftworks.com>
+Message-ID: <1187163750.4942.1.camel@elrond.sweden.atmel.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-The lzma patches really should be optional, so I've attached a patch
-which does exactly that.
+tis 2007-08-14 klockan 16:35 -0400 skrev Brad House:
+> Apparently mdnsresponder will fail to build with parallel makes.
+> This patch just adds a -j1 to the $(MAKE) to force it to not
+> build in parallel.
+> 
 
-I find myself having to remove the lzma patches because my build system
-doesn't natively have lzma.  I tried to compensate for this by
-installing the latest lzma from gentoo's package tree, and apparently,
-it accepts different flags than the one these patches expect, so my
-kernel build still fails.  Finally, I used the lzma from this buildroot
-and compiled it by hand, and it _mostly_ worked.  Regardless, it seems
-silly to make this a requirement.  Personally, I gzip my initramfs,
-and that's enough compression for me...
+Buildroot defines $(MAKE1) for this purpose, but
+I will fix that, so no need to send a new patch.
 
-Please apply this patch and create a toolchain/kernel-headers/lzma
-directory and move the linux-*lzma*.patch files to that directory.
-I'm sure I can't be the only person who's had to simply delete those
-patches from my tree.
 
-Thanks.
--Brad
--------------- next part --------------
-An embedded and charset-unspecified text was scrubbed...
-Name: kernel-headers-lzma-optional.diff
-Url: http://busybox.net/lists/buildroot/attachments/20070814/3c555d82/attachment.diff 
+> -Brad
+> vanligt textdokument-bilaga (mdnsresponder-parallelmake.diff)
+> Index: package/mdnsresponder/mdnsresponder.mk
+> ===================================================================
+> --- package/mdnsresponder/mdnsresponder.mk	(revision 19509)
+> +++ package/mdnsresponder/mdnsresponder.mk	(working copy)
+> @@ -26,7 +26,7 @@
+>  	touch $(MDNSRESPONDER_DIR)/.configured
+>  
+>  $(MDNSRESPONDER_DIR)/.built: $(MDNSRESPONDER_DIR)/.configured
+> -	$(MAKE) CC=$(TARGET_CC) os="linux" LD="$(TARGET_CC) -shared" LOCALBASE="/usr" -C $(MDNSRESPONDER_DIR)/mDNSPosix
+> +	$(MAKE) -j1 CC=$(TARGET_CC) os="linux" LD="$(TARGET_CC) -shared" LOCALBASE="/usr" -C $(MDNSRESPONDER_DIR)/mDNSPosix
+>  	touch $(MDNSRESPONDER_DIR)/.built
+>  
+>  $(STAGING_DIR)/usr/lib/libdns_sd.so: $(MDNSRESPONDER_DIR)/.built
+
+BR
+Ulf Samuelsson
