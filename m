@@ -1,31 +1,96 @@
-From: Julien Letessier <julien.letessier@gmail.com>
-Date: Wed, 15 Aug 2007 18:20:13 +0200
-Subject: [Buildroot] X11R7 packages
-Message-ID: <9da975400708150920i6382b5a3y2763fc8cf60a4133@mail.gmail.com>
+From: Jonathan Dumaresq <jdumaresq@cimeq.qc.ca>
+Date: Wed, 15 Aug 2007 14:52:04 -0400
+Subject: [Buildroot] problem with the build process
+Message-ID: <002b01c7df6d$5f065bb0$6e00a8c0@JONATHAN>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi list,
+hi all,
 
-I've just noticed that my X11R7 packages have been included into buildroot
---- many thanks to those who spent time to fix them.
+I have a problem with the building process. I have snapped the info et put it here as reference. I don't know why this deosn't work. It have something bad with makeinfo.
 
-I'm sorry that I don't have much time to spend on Buildroot, as I've just
-changed jobs...
-and I'am not paid to tinker with embedded linux systems anymore :'(
-I'll still be using Buildroot as a hobbyist, though; and I'll be glad to
-provide the help I can related to X11R7.
+jonathan
 
-Keep up the good work!
--- 
-Julien T. Letessier
-http://www.mezis.net/
+Checking build system dependencies:
+CC clean:     Ok
+CXX clean:     Ok
+CPP clean:     Ok
+CFLAGS clean:     Ok
+INCLUDES clean:     Ok
+CXXFLAGS clean:     Ok
+which installed:    Ok
+sed works:     Ok (/bin/sed)
+GNU make version '3.81':   Ok
+C compiler '/usr/bin/gcc'
+C compiler version '4.1.2':   Ok
+[: 227: 3: unexpected operator
+C++ compiler 'Usage: /usr/bin/which [-a] args'
+C++ compiler version './/toolchain/dependencies/dependencies.sh:':   Ok
+bison installed:    Ok
+flex installed:     Ok
+gettext installed:    Ok
+makeinfo installed:    Ok
+Build system dependencies:   Ok
 
-"Those that would give a little liberty for security get none and deserve
-neither." (Benjamin Franklin)
+/usr/bin/make -j1 -C /home/dumarjo/buildroot/toolchain_build_arm/binutils-2.17-build all
+make[1]: Entering directory `/home/dumarjo/buildroot/toolchain_build_arm/binutils-2.17-build'
+make[2]: Entering directory `/home/dumarjo/buildroot/toolchain_build_arm/binutils-2.17-build'
+make[3]: Entering directory `/home/dumarjo/buildroot/toolchain_build_arm/binutils-2.17-build/libiberty'
+make[4]: Entering directory `/home/dumarjo/buildroot/toolchain_build_arm/binutils-2.17-build/libiberty/testsuite'
+make[4]: Nothing to be done for `all'.
+make[4]: Leaving directory `/home/dumarjo/buildroot/toolchain_build_arm/binutils-2.17-build/libiberty/testsuite'
+make[3]: Leaving directory `/home/dumarjo/buildroot/toolchain_build_arm/binutils-2.17-build/libiberty'
+make[3]: Entering directory `/home/dumarjo/buildroot/toolchain_build_arm/binutils-2.17-build/intl'
+make[3]: Nothing to be done for `all'.
+make[3]: Leaving directory `/home/dumarjo/buildroot/toolchain_build_arm/binutils-2.17-build/intl'
+make[3]: Entering directory `/home/dumarjo/buildroot/toolchain_build_arm/binutils-2.17-build/bfd'
+Making info in doc
+make[4]: Entering directory `/home/dumarjo/buildroot/toolchain_build_arm/binutils-2.17-build/bfd/doc'
+restore=: && backupdir=".am$$" && \
+ am__cwd=`pwd` && cd /home/dumarjo/buildroot/toolchain_build_arm/binutils-2.17/bfd/doc && \
+ rm -rf $backupdir && mkdir $backupdir && \
+ for f in /home/dumarjo/buildroot/toolchain_build_arm/binutils-2.17/bfd/doc/bfd.info /home/dumarjo/buildroot/toolchain_build_arm/binutils-2.17/bfd/doc/bfd.info-[0-9] /home/dumarjo/buildroot/toolchain_build_arm/binutils-2.17/bfd/doc/bfd.info-[0-9][0-9] /home/dumarjo/buildroot/toolchain_build_arm/binutils-2.17/bfd/doc/bfd.i[0-9] /home/dumarjo/buildroot/toolchain_build_arm/binutils-2.17/bfd/doc/bfd.i[0-9][0-9]; do \
+   if test -f $f; then mv $f $backupdir; restore=mv; else :; fi; \
+ done; \
+ cd "$am__cwd"; \
+ if /home/dumarjo/buildroot/toolchain_build_arm/binutils-2.17/missing makeinfo --split-size=5000000 --split-size=5000000   -I /home/dumarjo/buildroot/toolchain_build_arm/binutils-2.17/bfd/doc \
+  -o /home/dumarjo/buildroot/toolchain_build_arm/binutils-2.17/bfd/doc/bfd.info /home/dumarjo/buildroot/toolchain_build_arm/binutils-2.17/bfd/doc/bfd.texinfo; \
+ then \
+   rc=0; \
+   cd /home/dumarjo/buildroot/toolchain_build_arm/binutils-2.17/bfd/doc; \
+ else \
+   rc=$?; \
+   cd /home/dumarjo/buildroot/toolchain_build_arm/binutils-2.17/bfd/doc && \
+   $restore $backupdir/* `echo ".//home/dumarjo/buildroot/toolchain_build_arm/binutils-2.17/bfd/doc/bfd.info" | sed 's|[^/]*$||'`; \
+ fi; \
+ rm -rf $backupdir; exit $rc
+WARNING: `makeinfo' is missing on your system.  You should only need it if
+         you modified a `.texi' or `.texinfo' file, or any other file
+         indirectly affecting the aspect of the manual.  The spurious
+         call might also be the consequence of using a buggy `make' (AIX,
+         DU, IRIX).  You might want to install the `Texinfo' package or
+         the `GNU make' package.  Grab either from any GNU archive site.
+make[4]: *** [/home/dumarjo/buildroot/toolchain_build_arm/binutils-2.17/bfd/doc/bfd.info] Error 1
+make[4]: Leaving directory `/home/dumarjo/buildroot/toolchain_build_arm/binutils-2.17-build/bfd/doc'
+Making info in po
+make[4]: Entering directory `/home/dumarjo/buildroot/toolchain_build_arm/binutils-2.17-build/bfd/po'
+make[4]: Nothing to be done for `info'.
+make[4]: Leaving directory `/home/dumarjo/buildroot/toolchain_build_arm/binutils-2.17-build/bfd/po'
+make[4]: Entering directory `/home/dumarjo/buildroot/toolchain_build_arm/binutils-2.17-build/bfd'
+make[4]: Nothing to be done for `info-am'.
+make[4]: Leaving directory `/home/dumarjo/buildroot/toolchain_build_arm/binutils-2.17-build/bfd'
+make[3]: *** [info-recursive] Error 1
+make[3]: Leaving directory `/home/dumarjo/buildroot/toolchain_build_arm/binutils-2.17-build/bfd'
+make[2]: *** [all-bfd] Error 2
+make[2]: Leaving directory `/home/dumarjo/buildroot/toolchain_build_arm/binutils-2.17-build'
+make[1]: *** [all] Error 2
+make[1]: Leaving directory `/home/dumarjo/buildroot/toolchain_build_arm/binutils-2.17-build'
+make: *** [/home/dumarjo/buildroot/toolchain_build_arm/binutils-2.17-build/binutils/objdump] Error 2
+
+
 -------------- next part --------------
 An HTML attachment was scrubbed...
-URL: http://busybox.net/lists/buildroot/attachments/20070815/eba77950/attachment.htm 
+URL: http://busybox.net/lists/buildroot/attachments/20070815/91195f68/attachment.htm 
