@@ -1,152 +1,198 @@
-From: Rex Ashbaugh <rexa@xeratech.com>
-Date: Wed, 15 Aug 2007 12:24:57 -0700
-Subject: [Buildroot] problem with the build process
-In-Reply-To: <002b01c7df6d$5f065bb0$6e00a8c0@JONATHAN>
-References: <002b01c7df6d$5f065bb0$6e00a8c0@JONATHAN>
-Message-ID: <6311fe0b0708151224x72810121w23f468dddcc63d3b@mail.gmail.com>
+From: ulf at uclibc.org <ulf@uclibc.org>
+Date: Wed, 15 Aug 2007 15:31:25 -0700 (PDT)
+Subject: [Buildroot] svn commit: trunk/buildroot/package/udev
+Message-ID: <20070815223125.2FA59A45D6@busybox.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-it means just what it says.
-makeinfo is missing, not installed on your system.
-you should install texinfo to fix it.
+Author: ulf
+Date: 2007-08-15 15:31:25 -0700 (Wed, 15 Aug 2007)
+New Revision: 19520
 
--Rex
+Log:
+Cleanup of udev, build libvolume_id.la
 
-On 8/15/07, Jonathan Dumaresq <jdumaresq@cimeq.qc.ca> wrote:
->
->  hi all,
->
-> I have a problem with the building process. I have snapped the info et put
-> it here as reference. I don't know why this deosn't work. It have something
-> bad with makeinfo.
->
-> jonathan
->
-> Checking build system dependencies:
-> CC clean:     Ok
-> CXX clean:     Ok
-> CPP clean:     Ok
-> CFLAGS clean:     Ok
-> INCLUDES clean:     Ok
-> CXXFLAGS clean:     Ok
-> which installed:    Ok
-> sed works:     Ok (/bin/sed)
-> GNU make version '3.81':   Ok
-> C compiler '/usr/bin/gcc'
-> C compiler version '4.1.2':   Ok
-> [: 227: 3: unexpected operator
-> C++ compiler 'Usage: /usr/bin/which [-a] args'
-> C++ compiler version './/toolchain/dependencies/dependencies.sh:':   Ok
-> bison installed:    Ok
-> flex installed:     Ok
-> gettext installed:    Ok
-> makeinfo installed:    Ok
-> Build system dependencies:   Ok
->
-> /usr/bin/make -j1 -C /home/dumarjo/buildroot/toolchain_build_arm/binutils-
-> 2.17-build all
-> make[1]: Entering directory
-> `/home/dumarjo/buildroot/toolchain_build_arm/binutils-2.17-build'
-> make[2]: Entering directory
-> `/home/dumarjo/buildroot/toolchain_build_arm/binutils-2.17-build'
-> make[3]: Entering directory
-> `/home/dumarjo/buildroot/toolchain_build_arm/binutils-2.17-build
-> /libiberty'
-> make[4]: Entering directory
-> `/home/dumarjo/buildroot/toolchain_build_arm/binutils-2.17-build
-> /libiberty/testsuite'
-> make[4]: Nothing to be done for `all'.
-> make[4]: Leaving directory
-> `/home/dumarjo/buildroot/toolchain_build_arm/binutils-2.17-build
-> /libiberty/testsuite'
-> make[3]: Leaving directory
-> `/home/dumarjo/buildroot/toolchain_build_arm/binutils-2.17-build
-> /libiberty'
-> make[3]: Entering directory
-> `/home/dumarjo/buildroot/toolchain_build_arm/binutils-2.17-build/intl'
-> make[3]: Nothing to be done for `all'.
-> make[3]: Leaving directory
-> `/home/dumarjo/buildroot/toolchain_build_arm/binutils-2.17-build/intl'
-> make[3]: Entering directory
-> `/home/dumarjo/buildroot/toolchain_build_arm/binutils-2.17-build/bfd'
-> Making info in doc
-> make[4]: Entering directory
-> `/home/dumarjo/buildroot/toolchain_build_arm/binutils-2.17-build/bfd/doc'
-> restore=: && backupdir=".am$$" && \
->  am__cwd=`pwd` && cd /home/dumarjo/buildroot/toolchain_build_arm/binutils-
-> 2.17/bfd/doc && \
->  rm -rf $backupdir && mkdir $backupdir && \
->  for f in /home/dumarjo/buildroot/toolchain_build_arm/binutils-2.17/bfd/doc/bfd.info
-> /home/dumarjo/buildroot/toolchain_build_arm/binutils-2.17/bfd/doc/bfd.info-[0-9]
-> /home/dumarjo/buildroot/toolchain_build_arm/binutils-2.17/bfd/doc/bfd.info-[0-9][0-9]
-> /home/dumarjo/buildroot/toolchain_build_arm/binutils-2.17/bfd/doc/bfd.i[0-9]
-> /home/dumarjo/buildroot/toolchain_build_arm/binutils-2.17/bfd/doc/bfd.i[0-9][0-9];
-> do \
->    if test -f $f; then mv $f $backupdir; restore=mv; else :; fi; \
->  done; \
->  cd "$am__cwd"; \
->  if /home/dumarjo/buildroot/toolchain_build_arm/binutils-2.17/missing
-> makeinfo --split-size=5000000 --split-size=5000000   -I
-> /home/dumarjo/buildroot/toolchain_build_arm/binutils-2.17/bfd/doc \
->   -o /home/dumarjo/buildroot/toolchain_build_arm/binutils-2.17/bfd/doc/bfd.info
-> /home/dumarjo/buildroot/toolchain_build_arm/binutils-2.17/bfd/doc/bfd.texinfo;
-> \
->  then \
->    rc=0; \
->    cd /home/dumarjo/buildroot/toolchain_build_arm/binutils-2.17/bfd/doc; \
->  else \
->    rc=$?; \
->    cd /home/dumarjo/buildroot/toolchain_build_arm/binutils-2.17/bfd/doc &&
-> \
->    $restore $backupdir/* `echo
-> ".//home/dumarjo/buildroot/toolchain_build_arm/binutils-2.17/bfd/doc/bfd.info"
-> | sed 's|[^/]*$||'`; \
->  fi; \
->  rm -rf $backupdir; exit $rc
-> WARNING: `makeinfo' is missing on your system.  You should only need it if
->          you modified a `.texi' or `.texinfo' file, or any other file
->          indirectly affecting the aspect of the manual.  The spurious
->          call might also be the consequence of using a buggy `make' (AIX,
->          DU, IRIX).  You might want to install the `Texinfo' package or
->          the `GNU make' package.  Grab either from any GNU archive site.
-> make[4]: *** [/home/dumarjo/buildroot/toolchain_build_arm/binutils-2.17/bfd/doc/bfd.info]
-> Error 1
-> make[4]: Leaving directory
-> `/home/dumarjo/buildroot/toolchain_build_arm/binutils-2.17-build/bfd/doc'
-> Making info in po
-> make[4]: Entering directory
-> `/home/dumarjo/buildroot/toolchain_build_arm/binutils-2.17-build/bfd/po'
-> make[4]: Nothing to be done for `info'.
-> make[4]: Leaving directory
-> `/home/dumarjo/buildroot/toolchain_build_arm/binutils-2.17-build/bfd/po'
-> make[4]: Entering directory
-> `/home/dumarjo/buildroot/toolchain_build_arm/binutils-2.17-build/bfd'
-> make[4]: Nothing to be done for `info-am'.
-> make[4]: Leaving directory
-> `/home/dumarjo/buildroot/toolchain_build_arm/binutils-2.17-build/bfd'
-> make[3]: *** [info-recursive] Error 1
-> make[3]: Leaving directory
-> `/home/dumarjo/buildroot/toolchain_build_arm/binutils-2.17-build/bfd'
-> make[2]: *** [all-bfd] Error 2
-> make[2]: Leaving directory
-> `/home/dumarjo/buildroot/toolchain_build_arm/binutils-2.17-build'
-> make[1]: *** [all] Error 2
-> make[1]: Leaving directory
-> `/home/dumarjo/buildroot/toolchain_build_arm/binutils-2.17-build'
-> make: *** [/home/dumarjo/buildroot/toolchain_build_arm/binutils-2.17-build/binutils/objdump]
-> Error 2
->
->
->
-> _______________________________________________
-> buildroot mailing list
-> buildroot at uclibc.org
-> http://busybox.net/mailman/listinfo/buildroot
->
--------------- next part --------------
-An HTML attachment was scrubbed...
-URL: http://busybox.net/lists/buildroot/attachments/20070815/4d6941fc/attachment.htm 
+Added:
+   trunk/buildroot/package/udev/libvolume_id.la.tmpl
+
+Modified:
+   trunk/buildroot/package/udev/udev.mk
+
+
+Changeset:
+Added: trunk/buildroot/package/udev/libvolume_id.la.tmpl
+===================================================================
+--- trunk/buildroot/package/udev/libvolume_id.la.tmpl	                        (rev 0)
++++ trunk/buildroot/package/udev/libvolume_id.la.tmpl	2007-08-15 22:31:25 UTC (rev 19520)
+@@ -0,0 +1,35 @@
++# libvolume_id.la - a libtool library file
++# Generated by ltmain.sh - GNU libtool 1.5.22 (1.1220.2.365 2005/12/18 22:14:06)
++#
++# Please DO NOT delete this file!
++# It is necessary for linking the library.
++
++# The name that we can dlopen(3).
++dlname='libvolume_id.so.REPLACE_CURRENT'
++
++# Names of this library.
++library_names='libvolume_id.so.REPLACE_CURRENT.REPLACE_AGE.REPLACE_REVISION libvolume_id.so.REPLACE_CURRENT libvolume_id.so'
++
++# The name of the static archive.
++old_library='libvolume_id.a'
++
++# Libraries that this one depends upon.
++dependency_libs=' -lc'
++
++# Version information for libvolume_id.
++current=REPLACE_CURRENT
++age=REPLACE_AGE
++revision=REPLACE_REVISION
++
++# Is this an already installed library?
++installed=yes
++
++# Should we warn about portability when linking against -modules?
++shouldnotlink=no
++
++# Files to dlopen/dlpreopen
++dlopen=''
++dlpreopen=''
++
++# Directory that this library needs to be installed in:
++libdir='REPLACE_LIB_DIR'
+
+Modified: trunk/buildroot/package/udev/udev.mk
+===================================================================
+--- trunk/buildroot/package/udev/udev.mk	2007-08-15 20:42:52 UTC (rev 19519)
++++ trunk/buildroot/package/udev/udev.mk	2007-08-15 22:31:25 UTC (rev 19520)
+@@ -4,8 +4,10 @@
+ #
+ #############################################################
+ UDEV_VERSION:=114
+-UDEV_VOLUME_ID_VERSION:=0.79.0
+-
++UDEV_VOLUME_ID_CURRENT:=0
++UDEV_VOLUME_ID_AGE:=79
++UDEV_VOLUME_ID_REVISION:=0
++UDEV_VOLUME_ID_VERSION:=$(UDEV_VOLUME_ID_CURRENT).$(UDEV_VOLUME_ID_AGE).$(UDEV_VOLUME_ID_REVISION)
+ UDEV_SOURCE:=udev-$(UDEV_VERSION).tar.bz2
+ UDEV_SITE:=ftp://ftp.kernel.org/pub/linux/utils/kernel/hotplug/
+ UDEV_CAT:=$(BZCAT)
+@@ -39,11 +41,14 @@
+ 
+ $(TARGET_DIR)/$(UDEV_TARGET_BINARY): $(UDEV_DIR)/$(UDEV_BINARY)
+ 	-mkdir -p $(TARGET_DIR)/sys
+-	$(MAKE) CROSS_COMPILE=$(TARGET_CROSS) DESTDIR=$(TARGET_DIR) \
++	$(MAKE) $(TARGET_CONFIGURE_OPTS) \
++		DESTDIR=$(TARGET_DIR) \
+ 		CFLAGS="$(BR2_UDEV_CFLAGS)" \
+ 		LDFLAGS="-warn-common" \
+ 		USE_LOG=false USE_SELINUX=false \
+ 		udevdir=$(UDEV_ROOT) -C $(UDEV_DIR) install
++
++$(UDEV_DIR)/.target_install:	$(UDEV_DIR)/$(UDEV_BINARY)
+ 	$(INSTALL) -m 0755 package/udev/S10udev $(TARGET_DIR)/etc/init.d
+ 	$(INSTALL) -m 0644 $(UDEV_DIR)/etc/udev/frugalware/* $(TARGET_DIR)/etc/udev/rules.d
+ 	( grep udev_root $(TARGET_DIR)/etc/udev/udev.conf > /dev/null 2>&1 || echo 'udev_root=/dev' >> $(TARGET_DIR)/etc/udev/udev.conf )
+@@ -54,27 +59,29 @@
+ 	rm -f $(TARGET_DIR)/usr/bin/udevinfo
+ 	rm -f $(TARGET_DIR)/usr/bin/udevtest
+ endif
++	touch $@
+ 
+ #####################################################################
+ .PHONY:	udev-source udev udev-clean udev-dirclean
+ 
+-udev: uclibc $(TARGET_DIR)/$(UDEV_TARGET_BINARY)
++udev: uclibc $(TARGET_DIR)/$(UDEV_TARGET_BINARY) $(UDEV_DIR)/.target_install
+ 
+ udev-source: $(DL_DIR)/$(UDEV_SOURCE)
+ 
+ udev-clean: $(UDEV_CLEAN_DEPS)
+ 	rm -f $(TARGET_DIR)/etc/init.d/S10udev $(TARGET_DIR)/sbin/udev*
+ 	rm -f $(TARGET_DIR)/usr/sbin/udevmonitor $(TARGET_DIR)/usr/bin/udev*
+-	rmdir $(TARGET_DIR)/sys
++	rm -fr $(TARGET_DIR)/sys
+ 	-$(MAKE) -C $(UDEV_DIR) clean
+ 
++
+ udev-dirclean: $(UDEV_DIRCLEAN_DEPS)
+ 	rm -rf $(UDEV_DIR)
+ 
+ #####################################################################
+-.PHONY:	 udev-volume_id udev-volume_id-clean
++ifeq ($(strip $(BR2_PACKAGE_UDEV_VOLUME_ID)),y)
++.PHONY:	 udev-volume_id udev-volume_id-clean udev-volume_id-dirclean
+ 
+-ifeq ($(strip $(BR2_PACKAGE_UDEV_VOLUME_ID)),y)
+ $(STAGING_DIR)/usr/lib/libvolume_id.so.$(UDEV_VOLUME_ID_VERSION):
+ 	$(MAKE) CROSS_COMPILE=$(TARGET_CROSS) \
+ 		USE_LOG=false USE_SELINUX=false \
+@@ -82,19 +89,28 @@
+ 	$(INSTALL) -m 0644 -D $(UDEV_DIR)/extras/volume_id/lib/libvolume_id.h $(STAGING_DIR)/usr/include/libvolume_id.h
+ 	$(INSTALL) -m 0755 -D $(UDEV_DIR)/extras/volume_id/lib/libvolume_id.so.$(UDEV_VOLUME_ID_VERSION) $(STAGING_DIR)/usr/lib/libvolume_id.so.$(UDEV_VOLUME_ID_VERSION)
+ 	-ln -sf libvolume_id.so.$(UDEV_VOLUME_ID_VERSION) $(STAGING_DIR)/usr/lib/libvolume_id.so.0
+-	-ln -sf libvolume_id.so.0 $(STAGING_DIR)/usr/lib/libvolume_id.so
++	-ln -sf libvolume_id.so.$(UDEV_VOLUME_ID_VERSION) $(STAGING_DIR)/usr/lib/libvolume_id.so
+ 
+-$(TARGET_DIR)/lib/udev/vol_id: $(STAGING_DIR)/usr/lib/libvolume_id.so.$(UDEV_VOLUME_ID_VERSION)
+-	$(INSTALL) -m 0755 -D $(UDEV_DIR)/extras/volume_id/vol_id $(TARGET_DIR)/lib/udev/vol_id
++$(STAGING_DIR)/usr/lib/libvolume_id.la:	$(STAGING_DIR)/usr/lib/libvolume_id.so.$(UDEV_VOLUME_ID_VERSION)
++	$(INSTALL) -m 0755 -D package/udev/libvolume_id.la.tmpl		$(STAGING_DIR)/usr/lib/libvolume_id.la
++	$(SED) 's/REPLACE_CURRENT/$(UDEV_VOLUME_ID_CURRENT)/g'		$(STAGING_DIR)/usr/lib/libvolume_id.la
++	$(SED) 's/REPLACE_AGE/$(UDEV_VOLUME_ID_AGE)/g'			$(STAGING_DIR)/usr/lib/libvolume_id.la
++	$(SED) 's/REPLACE_REVISION/$(UDEV_VOLUME_ID_REVISION)/g'	$(STAGING_DIR)/usr/lib/libvolume_id.la
++	$(SED) 's,REPLACE_LIB_DIR,$(STAGING_DIR)/usr/lib,g'		$(STAGING_DIR)/usr/lib/libvolume_id.la
++
++$(TARGET_DIR)/lib/udev/vol_id: $(STAGING_DIR)/usr/lib/libvolume_id.la
+ 	$(INSTALL) -m 0755 -D $(UDEV_DIR)/extras/volume_id/lib/libvolume_id.so.$(UDEV_VOLUME_ID_VERSION) $(TARGET_DIR)/usr/lib/libvolume_id.so.$(UDEV_VOLUME_ID_VERSION)
+ 	-ln -sf libvolume_id.so.$(UDEV_VOLUME_ID_VERSION) $(TARGET_DIR)/usr/lib/libvolume_id.so.0
++	-ln -sf libvolume_id.so.$(UDEV_VOLUME_ID_VERSION) $(TARGET_DIR)/usr/lib/libvolume_id.so
+ 	$(STRIP) --strip-unneeded $(TARGET_DIR)/usr/lib/libvolume_id.so.$(UDEV_VOLUME_ID_VERSION)
++	$(INSTALL) -m 0755 -D $(UDEV_DIR)/extras/volume_id/vol_id $(TARGET_DIR)/lib/udev/vol_id
+ 
+-udev-volume_id: udev $(TARGET_DIR)/lib/udev/vol_id udev-volume_id-dirclean
++udev-volume_id: udev $(TARGET_DIR)/lib/udev/vol_id
+ 
+ udev-volume_id-clean:
+ 	rm -f $(STAGING_DIR)/usr/include/libvolume_id.h
+ 	rm -f $(STAGING_DIR)/usr/lib/libvolume_id.so*
++	rm -f $(STAGING_DIR)/usr/lib/libvolume_id.la
+ 	rm -f $(TARGET_DIR)/usr/lib/libvolume_id.so.0*
+ 	rm -f $(TARGET_DIR)/lib/udev/vol_id
+ 	rmdir --ignore-fail-on-non-empty $(TARGET_DIR)/lib/udev
+@@ -107,25 +123,29 @@
+ endif
+ 
+ #####################################################################
++ifeq ($(strip $(BR2_PACKAGE_UDEV_SCSI_ID)),y)
+ .PHONY:	udev-scsi_id udev-scsi_id-clean udev-scsi_id-dirclean
+ 
+-ifeq ($(strip $(BR2_PACKAGE_UDEV_SCSI_ID)),y)
+ $(TARGET_DIR)/lib/udev/scsi_id: $(STAGING_DIR)/usr/lib/libvolume_id.so.$(UDEV_VOLUME_ID_VERSION)
+ 	$(MAKE) CROSS_COMPILE=$(TARGET_CROSS) \
+ 		USE_LOG=false USE_SELINUX=false \
+ 		udevdir=$(UDEV_ROOT) EXTRAS="extras/scsi_id" -C $(UDEV_DIR)
+ 	$(INSTALL) -m 0755 -D $(UDEV_DIR)/extras/scsi_id/scsi_id $(TARGET_DIR)/lib/udev/scsi_id
+ 	$(STRIP) --strip-unneeded $(TARGET_DIR)/lib/udev/scsi_id
++
++$(TARGET_DIR)/lib/udev/usb_id: $(STAGING_DIR)/usr/lib/libvolume_id.so.$(UDEV_VOLUME_ID_VERSION)
+ 	$(MAKE) CROSS_COMPILE=$(TARGET_CROSS) \
+ 		USE_LOG=false USE_SELINUX=false \
+ 		udevdir=$(UDEV_ROOT) EXTRAS="extras/usb_id" -C $(UDEV_DIR)
+ 	$(INSTALL) -m 0755 -D $(UDEV_DIR)/extras/usb_id/usb_id $(TARGET_DIR)/lib/udev/usb_id
+ 	$(STRIP) --strip-unneeded $(TARGET_DIR)/lib/udev/usb_id
+ 
+-udev-scsi_id: udev $(TARGET_DIR)/lib/udev/scsi_id
++udev-scsi_id: udev $(TARGET_DIR)/lib/udev/scsi_id $(TARGET_DIR)/lib/udev/usb_id
+ 
+ udev-scsi_id-clean:
+ 	rm -f $(TARGET_DIR)/lib/udev/scsi_id
++	rm -f $(TARGET_DIR)/lib/udev/usb_id
++	rmdir --ignore-fail-on-non-empty $(TARGET_DIR)/lib/udev
+ 
+ udev-scsi_id-dirclean:
+ 	-$(MAKE) EXTRAS="extras/scsi_id" -C $(UDEV_DIR) clean
