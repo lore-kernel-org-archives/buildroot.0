@@ -1,25 +1,41 @@
 From: Brad House <brad@mainstreetsoftworks.com>
-Date: Wed, 15 Aug 2007 07:44:39 -0400
-Subject: [Buildroot] [patch] mdnsresponder doesn't do parallel makes
-In-Reply-To: <1187163750.4942.1.camel@elrond.sweden.atmel.com>
-References: <46C21224.9020505@mainstreetsoftworks.com>
-	<1187163750.4942.1.camel@elrond.sweden.atmel.com>
-Message-ID: <46C2E727.2030408@mainstreetsoftworks.com>
+Date: Wed, 15 Aug 2007 07:51:55 -0400
+Subject: [Buildroot] [patch] kernel-headers: lzma causing issues
+In-Reply-To: <1187165518.4942.6.camel@elrond.sweden.atmel.com>
+References: <46C24F7F.1020203@mainstreetsoftworks.com>
+	<1187165518.4942.6.camel@elrond.sweden.atmel.com>
+Message-ID: <46C2E8DB.5020309@mainstreetsoftworks.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->> Apparently mdnsresponder will fail to build with parallel makes.
->> This patch just adds a -j1 to the $(MAKE) to force it to not
->> build in parallel.
->>
+>> +config BR2_KERNEL_HEADERS_LZMA
+>> +	bool "use lzma initramfs kernel patches"
+>> +	default y
+>> +	help
+>> +	  Apply patches which allow for lzma compressed
+>> +	  initramfs filesystems.  This requires the lzma
+>> +	  program in your development environment.	
+>> +
 > 
-> Buildroot defines $(MAKE1) for this purpose, but
-> I will fix that, so no need to send a new patch.
+> Since it also breaks unless you have lzma causing headache, 
+> I think the default should be to not use the lzma patch...
 
-Ah, I didn't realize that.  I just grepped through other
-packages and saw some had -j1 flags for that purpose...
+ok, yeah, I'd agree with that ... I was just maintaining
+compatibility for those who are using it by defaulting to y.
 
+> I am working on a new scheme where the target/linux and
+> toolchain/kernel-headers are integrated, but this
+> needs a lot more testing and will (as agreed with Bernhard
+> be reviewed before applied, but it seems reasonable
+> to do this as an intermediate fix.
+
+Ah, yeah, it would definitely make sense for those to be
+integrated. It took me a minute to realize the kernel
+headers version is what determined which release of the
+kernel got built ;)
+
+Thanks.
 -Brad
