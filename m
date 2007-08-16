@@ -1,35 +1,56 @@
-From: ulf at uclibc.org <ulf@uclibc.org>
-Date: Thu, 16 Aug 2007 04:18:33 -0700 (PDT)
-Subject: [Buildroot] svn commit: trunk/buildroot
-Message-ID: <20070816111833.548F4A4563@busybox.net>
+From: Brad House <brad@mainstreetsoftworks.com>
+Date: Thu, 16 Aug 2007 09:03:09 -0400
+Subject: [Buildroot] Allowing hotplug and udev in the same root fs???
+In-Reply-To: <1187220251.2429.2.camel@elrond.sweden.atmel.com>
+References: <1187220251.2429.2.camel@elrond.sweden.atmel.com>
+Message-ID: <46C44B0D.7040507@mainstreetsoftworks.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Author: ulf
-Date: 2007-08-16 04:18:29 -0700 (Thu, 16 Aug 2007)
-New Revision: 19529
+Hmm, I thought udev and hotplug worked together.  Thought it
+was something along the lines that hotplug would do the triggering
+of driver module loading based on what new pci/usb ids showed up
+on the system, since udev doesn't actually perform module loading
+afaik.  Hotplug is/was also responsible for firmware loading, but
+I'm not sure if that is true anymore ...
 
-Log:
-Dont create TARGET_DIR if it exists
+Truthfully, I can't provide much to this discussion as I haven't
+really bothered to look into it for a while...
 
-Modified:
-   trunk/buildroot/Makefile
+-Brad
 
-
-Changeset:
-Modified: trunk/buildroot/Makefile
-===================================================================
---- trunk/buildroot/Makefile	2007-08-16 10:41:24 UTC (rev 19528)
-+++ trunk/buildroot/Makefile	2007-08-16 11:18:29 UTC (rev 19529)
-@@ -246,7 +246,7 @@
- 	@mkdir -p $(STAGING_DIR)/usr/include
- 
- $(PROJECT_BUILD_DIR)/.root:
--	mkdir	$(TARGET_DIR)
-+	mkdir	-p $(TARGET_DIR)
- 	if ! [ -d "$(TARGET_DIR)/bin" ] ; then \
- 		if [ -d "$(TARGET_SKELETON)" ] ; then \
- 			cp -fa $(TARGET_SKELETON)/* $(TARGET_DIR)/; \
+Ulf Samuelsson wrote:
+> Does it make sense to allow both Hotplug and udev?
+> Is it not so that you either have hotplug (real old...) or udev?
+> 
+> The following then would make sense.
+> 
+> +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+> Index: package/hotplug/Config.in
+> ===================================================================
+> --- package/hotplug/Config.in   (revision 19502)
+> +++ package/hotplug/Config.in   (arbetskopia)
+> @@ -1,6 +1,7 @@
+>  config BR2_PACKAGE_HOTPLUG
+>         bool "hotplug"
+>         default n
+> +       depends on !BR2_PACKAGE_UDEV
+>         help
+>           Plug in new devices and use them immediately.
+>  
+> -------------------------------------------------------------------
+> 
+> Comments ?
+> 
+> BR
+> Ulf Samuelsson
+> 
+> 
+> _______________________________________________
+> buildroot mailing list
+> buildroot at uclibc.org
+> http://busybox.net/mailman/listinfo/buildroot
+> 
