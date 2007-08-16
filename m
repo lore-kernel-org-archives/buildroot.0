@@ -1,66 +1,87 @@
-From: ulf at uclibc.org <ulf@uclibc.org>
-Date: Wed, 15 Aug 2007 23:26:48 -0700 (PDT)
-Subject: [Buildroot] svn commit: trunk/buildroot/toolchain/kernel-headers:
-	lzma
-Message-ID: <20070816062648.B8584A4007@busybox.net>
+From: Ulf Samuelsson <ulf@atmel.com>
+Date: Thu, 16 Aug 2007 10:03:21 +0200
+Subject: [Buildroot] How to cross compile openssh for arm
+In-Reply-To: <452620.55884.qm@web15811.mail.cnb.yahoo.com>
+References: <452620.55884.qm@web15811.mail.cnb.yahoo.com>
+Message-ID: <1187251401.2429.17.camel@elrond.sweden.atmel.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Author: ulf
-Date: 2007-08-15 23:26:25 -0700 (Wed, 15 Aug 2007)
-New Revision: 19524
+tor 2007-08-16 klockan 11:55 +0800 skrev Jinag Robert:
+> Hello  All,
+> 
+> I'm trying  to  build  openssh  for  arm  platform, but failed. 
+> 
+> [root at armqa buildroot]#make openssh
+> 
+> ......
+>       ./configure \
+>         --target=arm-linux \
+>         --host=arm-linux \
+>         --build=i386-pc-linux-gnu \
+>         --prefix=/usr \
+>         --exec-prefix=/usr \
+>         --bindir=/usr/bin \
+>         --sbindir=/usr/sbin \
+>         --libdir=/lib \
+>         --libexecdir=/usr/sbin \
+>         --sysconfdir=/etc \
+>         --datadir=/usr/share \
+>         --localstatedir=/var \
+>         --mandir=/usr/man \
+>         --infodir=/usr/info \
+>         --includedir=/opt/926t/buildroot/build_arm/staging_dir/usr/include \
+>         --disable-lastlog --disable-utmp \
+>         --disable-utmpx --disable-wtmp --disable-wtmpx \
+>         --without-x \
+>         --disable-nls \
+>          \
+> );
+> checking for arm-linux-gcc... /usr/local/arm/4.1.1-920t/bin/arm-linux-gcc -Os -pipe  -I/opt/926t/buildroot/build_arm/staging_dir/include -I/opt/926t/buildroot/build_arm/staging_dir/usr/include -I/usr/local/arm/4.1.1-920t/arm-linux/include
+> checking for C compiler default output file name... configure: error: C compiler cannot create executables
+> See `config.log' for more details.
+> make: *** [/opt/926t/buildroot/build_arm/openssh-3.9p1/.configured] Error 77
+> 
+> Any help?
 
-Log:
+That is a configuration problem, but when you solve that you will end up
+in another problem: openssh uses 64 bit math + float conversions which
+is currently not supported by the uClibc / buildroot combination.
 
-Move lzma patches to toolchain/kernel-headers/lzma
+This is in a single file "scp.c" so this can probably be fixed 
+either by taking the missing soft_fp files from glibc and 
+patching openssh or by removing the need for 64 bit math in openssh.
 
-They will be applied ONLY if BR2_KERNEL_HEADERS_LZMA is set.
+Error message below:
 
-BR2_KERNEL_HEADERS_LZMA defaults to NO, so the user
-has to actively set this config flag if lzma is needed.
+openssh-3.9p1/scp.c:680: undefined reference to `__floatdidf'
+openssh-3.9p1/scp.c:680: undefined reference to `__fixunsdfdi'
+openssh-3.9p1/scp.c:682: undefined reference to `__udivdi3'
+openssh-3.9p1/scp.c:683: undefined reference to `__umoddi3'
+scp.o: In function `main':
+openssh-3.9p1/scp.c:256: undefined reference to `__fixdfdi'
+progressmeter.o: In function `refresh_progress_meter':
+openssh-3.9p1/progressmeter.c:132: undefined reference to `__floatdidf'
+openssh-3.9p1/progressmeter.c:157: undefined reference to `__floatdisf'
+openssh-3.9p1/progressmeter.c:157: undefined reference to `__floatdisf'
 
-This means that the default behaviour of buildroot will work
-for most users.
-
-Comment from author:
-
-[Brad House]
-I find myself having to remove the lzma patches because my build system
-doesn't natively have lzma.  I tried to compensate for this by
-installing the latest lzma from gentoo's package tree, and apparently,
-it accepts different flags than the one these patches expect, so my
-kernel build still fails.  Finally, I used the lzma from this buildroot
-and compiled it by hand, and it _mostly_ worked.  Regardless, it seems
-silly to make this a requirement.  Personally, I gzip my initramfs,
-and that's enough compression for me...
-
+make[1]: *** [scp] Error 1
 
 
-
-Added:
-   trunk/buildroot/toolchain/kernel-headers/lzma/
-   trunk/buildroot/toolchain/kernel-headers/lzma/linux-2.6.21.5-001-lzma-vmlinuz.00.patch
-   trunk/buildroot/toolchain/kernel-headers/lzma/linux-2.6.21.5-002-lzma-vmlinuz.01.patch
-   trunk/buildroot/toolchain/kernel-headers/lzma/linux-2.6.22.1-001-lzma-vmlinuz.00.patch
-   trunk/buildroot/toolchain/kernel-headers/lzma/linux-2.6.22.1-002-lzma-vmlinuz.01.patch
-
-Removed:
-   trunk/buildroot/toolchain/kernel-headers/linux-2.6.21.5-001-lzma-vmlinuz.00.patch
-   trunk/buildroot/toolchain/kernel-headers/linux-2.6.21.5-002-lzma-vmlinuz.01.patch
-   trunk/buildroot/toolchain/kernel-headers/linux-2.6.22.1-001-lzma-vmlinuz.00.patch
-   trunk/buildroot/toolchain/kernel-headers/linux-2.6.22.1-002-lzma-vmlinuz.01.patch
-
-Modified:
-   trunk/buildroot/toolchain/kernel-headers/Config.in
-   trunk/buildroot/toolchain/kernel-headers/kernel-headers-new.makefile
-
-
-Changeset:
-
-Sorry, the patch is too large to include (108045 lines).
-Please use ViewCVS to see it!
-
-http://uclibc.org/cgi-bin/viewcvs.cgi?view=rev&root=svn&rev=19524
+> 
+> Thanks,
+> Robert
+> 
+> 
+> 
+>        
+> ____________________________________________________________________________________
+> Choose the right car based on your needs.  Check out Yahoo! Autos new Car Finder tool.
+> http://autos.yahoo.com/carfinder/
+> _______________________________________________
+> buildroot mailing list
+> buildroot at uclibc.org
+> http://busybox.net/mailman/listinfo/buildroot
