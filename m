@@ -1,9 +1,9 @@
 From: ulf at uclibc.org <ulf@uclibc.org>
-Date: Fri, 17 Aug 2007 06:01:49 -0700 (PDT)
+Date: Fri, 17 Aug 2007 06:02:52 -0700 (PDT)
 Subject: [Buildroot] svn commit:
-	trunk/buildroot/target/device/Atmel/atngw100/target_skeleton/etc:
+	trunk/buildroot/target/device/Atmel/atstk1002/target_skeleton/etc:
 	init.d
-Message-ID: <20070817130149.EE4B9A4692@busybox.net>
+Message-ID: <20070817130252.CE227A45E4@busybox.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -11,51 +11,69 @@ Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
 Author: ulf
-Date: 2007-08-17 06:01:49 -0700 (Fri, 17 Aug 2007)
-New Revision: 19539
+Date: 2007-08-17 06:02:52 -0700 (Fri, 17 Aug 2007)
+New Revision: 19540
 
 Log:
-Update atngw100 target skeleton
+Update atstk1002 target skeleton
 
 Modified:
-   trunk/buildroot/target/device/Atmel/atngw100/target_skeleton/etc/hosts
-   trunk/buildroot/target/device/Atmel/atngw100/target_skeleton/etc/inetd.conf
-   trunk/buildroot/target/device/Atmel/atngw100/target_skeleton/etc/init.d/K70sendsig
-   trunk/buildroot/target/device/Atmel/atngw100/target_skeleton/etc/init.d/K80netfs
-   trunk/buildroot/target/device/Atmel/atngw100/target_skeleton/etc/init.d/K85network
-   trunk/buildroot/target/device/Atmel/atngw100/target_skeleton/etc/init.d/K90localfs
-   trunk/buildroot/target/device/Atmel/atngw100/target_skeleton/etc/init.d/S01hotplug
-   trunk/buildroot/target/device/Atmel/atngw100/target_skeleton/etc/init.d/S02hostname
-   trunk/buildroot/target/device/Atmel/atngw100/target_skeleton/etc/init.d/S08syslog
-   trunk/buildroot/target/device/Atmel/atngw100/target_skeleton/etc/init.d/S09klog
-   trunk/buildroot/target/device/Atmel/atngw100/target_skeleton/etc/init.d/S10modules-init
-   trunk/buildroot/target/device/Atmel/atngw100/target_skeleton/etc/init.d/S15localfs
-   trunk/buildroot/target/device/Atmel/atngw100/target_skeleton/etc/init.d/S20network
-   trunk/buildroot/target/device/Atmel/atngw100/target_skeleton/etc/init.d/S22iptables
-   trunk/buildroot/target/device/Atmel/atngw100/target_skeleton/etc/init.d/S40telnetd
-   trunk/buildroot/target/device/Atmel/atngw100/target_skeleton/etc/init.d/S41inetd
-   trunk/buildroot/target/device/Atmel/atngw100/target_skeleton/etc/init.d/S42httpd
-   trunk/buildroot/target/device/Atmel/atngw100/target_skeleton/etc/init.d/S43ntp
-   trunk/buildroot/target/device/Atmel/atngw100/target_skeleton/etc/init.d/S49netfs
-   trunk/buildroot/target/device/Atmel/atngw100/target_skeleton/etc/passwd
+   trunk/buildroot/target/device/Atmel/atstk1002/target_skeleton/etc/asound.state
+   trunk/buildroot/target/device/Atmel/atstk1002/target_skeleton/etc/hosts
+   trunk/buildroot/target/device/Atmel/atstk1002/target_skeleton/etc/inetd.conf
+   trunk/buildroot/target/device/Atmel/atstk1002/target_skeleton/etc/init.d/K20alsa-utils
+   trunk/buildroot/target/device/Atmel/atstk1002/target_skeleton/etc/init.d/K70sendsig
+   trunk/buildroot/target/device/Atmel/atstk1002/target_skeleton/etc/init.d/K80netfs
+   trunk/buildroot/target/device/Atmel/atstk1002/target_skeleton/etc/init.d/K85network
+   trunk/buildroot/target/device/Atmel/atstk1002/target_skeleton/etc/init.d/K90localfs
+   trunk/buildroot/target/device/Atmel/atstk1002/target_skeleton/etc/init.d/S01hotplug
+   trunk/buildroot/target/device/Atmel/atstk1002/target_skeleton/etc/init.d/S02hostname
+   trunk/buildroot/target/device/Atmel/atstk1002/target_skeleton/etc/init.d/S03bootsplash
+   trunk/buildroot/target/device/Atmel/atstk1002/target_skeleton/etc/init.d/S08syslog
+   trunk/buildroot/target/device/Atmel/atstk1002/target_skeleton/etc/init.d/S09klog
+   trunk/buildroot/target/device/Atmel/atstk1002/target_skeleton/etc/init.d/S10modules-init
+   trunk/buildroot/target/device/Atmel/atstk1002/target_skeleton/etc/init.d/S15localfs
+   trunk/buildroot/target/device/Atmel/atstk1002/target_skeleton/etc/init.d/S20network
+   trunk/buildroot/target/device/Atmel/atstk1002/target_skeleton/etc/init.d/S40telnetd
+   trunk/buildroot/target/device/Atmel/atstk1002/target_skeleton/etc/init.d/S41inetd
+   trunk/buildroot/target/device/Atmel/atstk1002/target_skeleton/etc/init.d/S42httpd
+   trunk/buildroot/target/device/Atmel/atstk1002/target_skeleton/etc/init.d/S43ntp
+   trunk/buildroot/target/device/Atmel/atstk1002/target_skeleton/etc/init.d/S49netfs
+   trunk/buildroot/target/device/Atmel/atstk1002/target_skeleton/etc/init.d/S50alsa-utils
+   trunk/buildroot/target/device/Atmel/atstk1002/target_skeleton/etc/init.d/S99splash
+   trunk/buildroot/target/device/Atmel/atstk1002/target_skeleton/etc/passwd
 
 
 Changeset:
-Modified: trunk/buildroot/target/device/Atmel/atngw100/target_skeleton/etc/hosts
+Modified: trunk/buildroot/target/device/Atmel/atstk1002/target_skeleton/etc/asound.state
 ===================================================================
---- trunk/buildroot/target/device/Atmel/atngw100/target_skeleton/etc/hosts	2007-08-17 08:45:58 UTC (rev 19538)
-+++ trunk/buildroot/target/device/Atmel/atngw100/target_skeleton/etc/hosts	2007-08-17 13:01:49 UTC (rev 19539)
+--- trunk/buildroot/target/device/Atmel/atstk1002/target_skeleton/etc/asound.state	2007-08-17 13:01:49 UTC (rev 19539)
++++ trunk/buildroot/target/device/Atmel/atstk1002/target_skeleton/etc/asound.state	2007-08-17 13:02:52 UTC (rev 19540)
+@@ -7,7 +7,7 @@
+ 		iface MIXER
+ 		name 'Master Playback Volume'
+ 		value.0 21
+-		value.1 20
++		value.1 21
+ 	}
+ 	control.2 {
+ 		comment.access 'read write'
+
+Modified: trunk/buildroot/target/device/Atmel/atstk1002/target_skeleton/etc/hosts
+===================================================================
+--- trunk/buildroot/target/device/Atmel/atstk1002/target_skeleton/etc/hosts	2007-08-17 13:01:49 UTC (rev 19539)
++++ trunk/buildroot/target/device/Atmel/atstk1002/target_skeleton/etc/hosts	2007-08-17 13:02:52 UTC (rev 19540)
 @@ -1,11 +1,12 @@
 -127.0.0.1	localhost.localdomain localhost
--127.0.1.1	ngw.example.net ngw
+-127.0.1.1	stk1000.example.net stk1000
 +127.0.0.1   localhost.localdomain localhost
-+127.0.1.1   ngw.example.net ngw
++127.0.1.1   stk1000.example.net stk1000
  
  # The following lines are desirable for IPv6 capable hosts
 -::1 ip6-localhost ip6-loopback
 +::1     localhost
 +::1     ip6-localhost ip6-loopback
-+::1     ngw.example.net ngw
++::1     stk1000.example.net stk1000
  fe00::0 ip6-localnet
  ff00::0 ip6-mcastprefix
  ff02::1 ip6-allnodes
@@ -63,34 +81,55 @@ Modified: trunk/buildroot/target/device/Atmel/atngw100/target_skeleton/etc/hosts
  ff02::3 ip6-allhosts
 -
 
-Modified: trunk/buildroot/target/device/Atmel/atngw100/target_skeleton/etc/inetd.conf
+Modified: trunk/buildroot/target/device/Atmel/atstk1002/target_skeleton/etc/inetd.conf
 ===================================================================
---- trunk/buildroot/target/device/Atmel/atngw100/target_skeleton/etc/inetd.conf	2007-08-17 08:45:58 UTC (rev 19538)
-+++ trunk/buildroot/target/device/Atmel/atngw100/target_skeleton/etc/inetd.conf	2007-08-17 13:01:49 UTC (rev 19539)
+--- trunk/buildroot/target/device/Atmel/atstk1002/target_skeleton/etc/inetd.conf	2007-08-17 13:01:49 UTC (rev 19539)
++++ trunk/buildroot/target/device/Atmel/atstk1002/target_skeleton/etc/inetd.conf	2007-08-17 13:02:52 UTC (rev 19540)
 @@ -1,4 +1,3 @@
 -ftp		stream	tcp nowait	root.root /usr/sbin/ftpd ftpd -a
  #netbios-ssn	stream	tcp nowait	root.root /usr/sbin/smbd smbd
  #netbios-ns	dgram	udp wait	root.root /usr/sbin/nmbd nmbd
- swat		stream	tcp nowait.400	root.root /usr/sbin/swat swat
+-swat		stream	tcp nowait.400	root.root /usr/sbin/swat swat
++#swat		stream	tcp nowait.400	root.root /usr/sbin/swat swat
 
-Modified: trunk/buildroot/target/device/Atmel/atngw100/target_skeleton/etc/init.d/K70sendsig
+Modified: trunk/buildroot/target/device/Atmel/atstk1002/target_skeleton/etc/init.d/K20alsa-utils
 ===================================================================
---- trunk/buildroot/target/device/Atmel/atngw100/target_skeleton/etc/init.d/K70sendsig	2007-08-17 08:45:58 UTC (rev 19538)
-+++ trunk/buildroot/target/device/Atmel/atngw100/target_skeleton/etc/init.d/K70sendsig	2007-08-17 13:01:49 UTC (rev 19539)
+--- trunk/buildroot/target/device/Atmel/atstk1002/target_skeleton/etc/init.d/K20alsa-utils	2007-08-17 13:01:49 UTC (rev 19539)
++++ trunk/buildroot/target/device/Atmel/atstk1002/target_skeleton/etc/init.d/K20alsa-utils	2007-08-17 13:02:52 UTC (rev 19540)
+@@ -5,10 +5,10 @@
+ # Exit silently if alsa-utils isn't installed
+ [ -x ${PROGRAM} ] || exit 0
+ 
+-echo -n "Saving mixer state:"
+-if ${PROGRAM} store > /dev/null 2> /dev/null; then
+-	echo " done"
++echo -n "Saving mixer state: "
++if ${PROGRAM} store; then
++	echo "done"
+ else
+-	echo " failed"
++	echo "failed"
+ 	exit 1
+ fi
+
+Modified: trunk/buildroot/target/device/Atmel/atstk1002/target_skeleton/etc/init.d/K70sendsig
+===================================================================
+--- trunk/buildroot/target/device/Atmel/atstk1002/target_skeleton/etc/init.d/K70sendsig	2007-08-17 13:01:49 UTC (rev 19539)
++++ trunk/buildroot/target/device/Atmel/atstk1002/target_skeleton/etc/init.d/K70sendsig	2007-08-17 13:02:52 UTC (rev 19540)
 @@ -0,0 +1 @@
 +#!/bin/sh
 
-Modified: trunk/buildroot/target/device/Atmel/atngw100/target_skeleton/etc/init.d/K80netfs
+Modified: trunk/buildroot/target/device/Atmel/atstk1002/target_skeleton/etc/init.d/K80netfs
 ===================================================================
---- trunk/buildroot/target/device/Atmel/atngw100/target_skeleton/etc/init.d/K80netfs	2007-08-17 08:45:58 UTC (rev 19538)
-+++ trunk/buildroot/target/device/Atmel/atngw100/target_skeleton/etc/init.d/K80netfs	2007-08-17 13:01:49 UTC (rev 19539)
+--- trunk/buildroot/target/device/Atmel/atstk1002/target_skeleton/etc/init.d/K80netfs	2007-08-17 13:01:49 UTC (rev 19539)
++++ trunk/buildroot/target/device/Atmel/atstk1002/target_skeleton/etc/init.d/K80netfs	2007-08-17 13:02:52 UTC (rev 19540)
 @@ -0,0 +1 @@
 +#!/bin/sh
 
-Modified: trunk/buildroot/target/device/Atmel/atngw100/target_skeleton/etc/init.d/K85network
+Modified: trunk/buildroot/target/device/Atmel/atstk1002/target_skeleton/etc/init.d/K85network
 ===================================================================
---- trunk/buildroot/target/device/Atmel/atngw100/target_skeleton/etc/init.d/K85network	2007-08-17 08:45:58 UTC (rev 19538)
-+++ trunk/buildroot/target/device/Atmel/atngw100/target_skeleton/etc/init.d/K85network	2007-08-17 13:01:49 UTC (rev 19539)
+--- trunk/buildroot/target/device/Atmel/atstk1002/target_skeleton/etc/init.d/K85network	2007-08-17 13:01:49 UTC (rev 19539)
++++ trunk/buildroot/target/device/Atmel/atstk1002/target_skeleton/etc/init.d/K85network	2007-08-17 13:02:52 UTC (rev 19540)
 @@ -2,10 +2,10 @@
  
  IFDOWN=/sbin/ifdown
@@ -106,19 +145,20 @@ Modified: trunk/buildroot/target/device/Atmel/atngw100/target_skeleton/etc/init.
  	exit 1
  fi
 
-Modified: trunk/buildroot/target/device/Atmel/atngw100/target_skeleton/etc/init.d/K90localfs
+Modified: trunk/buildroot/target/device/Atmel/atstk1002/target_skeleton/etc/init.d/K90localfs
 ===================================================================
---- trunk/buildroot/target/device/Atmel/atngw100/target_skeleton/etc/init.d/K90localfs	2007-08-17 08:45:58 UTC (rev 19538)
-+++ trunk/buildroot/target/device/Atmel/atngw100/target_skeleton/etc/init.d/K90localfs	2007-08-17 13:01:49 UTC (rev 19539)
+--- trunk/buildroot/target/device/Atmel/atstk1002/target_skeleton/etc/init.d/K90localfs	2007-08-17 13:01:49 UTC (rev 19539)
++++ trunk/buildroot/target/device/Atmel/atstk1002/target_skeleton/etc/init.d/K90localfs	2007-08-17 13:02:52 UTC (rev 19540)
 @@ -0,0 +1 @@
 +#!/bin/sh
 
-Modified: trunk/buildroot/target/device/Atmel/atngw100/target_skeleton/etc/init.d/S01hotplug
+Modified: trunk/buildroot/target/device/Atmel/atstk1002/target_skeleton/etc/init.d/S01hotplug
 ===================================================================
---- trunk/buildroot/target/device/Atmel/atngw100/target_skeleton/etc/init.d/S01hotplug	2007-08-17 08:45:58 UTC (rev 19538)
-+++ trunk/buildroot/target/device/Atmel/atngw100/target_skeleton/etc/init.d/S01hotplug	2007-08-17 13:01:49 UTC (rev 19539)
+--- trunk/buildroot/target/device/Atmel/atstk1002/target_skeleton/etc/init.d/S01hotplug	2007-08-17 13:01:49 UTC (rev 19539)
++++ trunk/buildroot/target/device/Atmel/atstk1002/target_skeleton/etc/init.d/S01hotplug	2007-08-17 13:02:52 UTC (rev 19540)
 @@ -1,8 +1,8 @@
- #! /bin/sh
+-#! /bin/sh
++#!/bin/sh
  
 -echo -n "Setting up mdev:"
 +echo -n "Setting up mdev: "
@@ -135,21 +175,19 @@ Modified: trunk/buildroot/target/device/Atmel/atngw100/target_skeleton/etc/init.
 -echo " done"
 +echo "done"
 
-Modified: trunk/buildroot/target/device/Atmel/atngw100/target_skeleton/etc/init.d/S02hostname
+Modified: trunk/buildroot/target/device/Atmel/atstk1002/target_skeleton/etc/init.d/S02hostname
 ===================================================================
---- trunk/buildroot/target/device/Atmel/atngw100/target_skeleton/etc/init.d/S02hostname	2007-08-17 08:45:58 UTC (rev 19538)
-+++ trunk/buildroot/target/device/Atmel/atngw100/target_skeleton/etc/init.d/S02hostname	2007-08-17 13:01:49 UTC (rev 19539)
-@@ -2,8 +2,8 @@
+--- trunk/buildroot/target/device/Atmel/atstk1002/target_skeleton/etc/init.d/S02hostname	2007-08-17 13:01:49 UTC (rev 19539)
++++ trunk/buildroot/target/device/Atmel/atstk1002/target_skeleton/etc/init.d/S02hostname	2007-08-17 13:02:52 UTC (rev 19540)
+@@ -2,7 +2,7 @@
  
  PROGRAM=/bin/hostname
  
 -echo -n "Setting hostname:"
--[ -x ${PROGRAM} ] || (echo " missing"; exit 0)
 +echo -n "Setting hostname: "
-+[ -x ${PROGRAM} ] || (echo "missing"; exit 0)
+ [ -x ${PROGRAM} ] || (echo " missing"; exit 0)
  
  if [ -f /etc/hostname ]; then
- 	HOST="$(cat /etc/hostname)"
 @@ -12,10 +12,10 @@
  fi
  
@@ -165,10 +203,45 @@ Modified: trunk/buildroot/target/device/Atmel/atngw100/target_skeleton/etc/init.
  	fi
  }
 
-Modified: trunk/buildroot/target/device/Atmel/atngw100/target_skeleton/etc/init.d/S08syslog
+Modified: trunk/buildroot/target/device/Atmel/atstk1002/target_skeleton/etc/init.d/S03bootsplash
 ===================================================================
---- trunk/buildroot/target/device/Atmel/atngw100/target_skeleton/etc/init.d/S08syslog	2007-08-17 08:45:58 UTC (rev 19538)
-+++ trunk/buildroot/target/device/Atmel/atngw100/target_skeleton/etc/init.d/S08syslog	2007-08-17 13:01:49 UTC (rev 19539)
+--- trunk/buildroot/target/device/Atmel/atstk1002/target_skeleton/etc/init.d/S03bootsplash	2007-08-17 13:01:49 UTC (rev 19539)
++++ trunk/buildroot/target/device/Atmel/atstk1002/target_skeleton/etc/init.d/S03bootsplash	2007-08-17 13:02:52 UTC (rev 19540)
+@@ -5,22 +5,21 @@
+ FBMODEFILE="/etc/fb.modes"
+ SPLASHFILE="/etc/stk1000bootsplash.jpg"
+ 
+-echo -n "Bootsplash image:"
++echo -n "Bootsplash image: "
+ if [ ! -x "${FBV}" -o ! -x "${FBSET}" -o \
+ 		! -f "${SPLASHFILE}" -o ! -f "${FBMODEFILE}" ]; then
+-	echo " missing"
++	echo "missing"
+ 	exit 1
+ fi
+ 
+-if ! ${FBSET} 320x240-68 > /dev/null 2> /dev/null; then
+-	echo " failed"
++if ! ${FBSET} 320x240-68; then
++	echo "failed"
+ 	exit 1
+ fi
+ 
+-${FBV} ${SPLASHFILE} < /dev/null > /dev/null 2> /dev/null &
++${FBV} ${SPLASHFILE} > /dev/null &
+ if [ $? -eq 0 ]; then
+-	echo " loaded"
+-	kill `pidof ${FBV}` > /dev/null 2> /dev/null
++	echo "loaded"
+ else
+-	echo " failed"
++	echo "failed"
+ fi
+
+Modified: trunk/buildroot/target/device/Atmel/atstk1002/target_skeleton/etc/init.d/S08syslog
+===================================================================
+--- trunk/buildroot/target/device/Atmel/atstk1002/target_skeleton/etc/init.d/S08syslog	2007-08-17 13:01:49 UTC (rev 19539)
++++ trunk/buildroot/target/device/Atmel/atstk1002/target_skeleton/etc/init.d/S08syslog	2007-08-17 13:02:52 UTC (rev 19540)
 @@ -2,23 +2,23 @@
  
  SYSLOGD=/sbin/syslogd
@@ -203,10 +276,10 @@ Modified: trunk/buildroot/target/device/Atmel/atngw100/target_skeleton/etc/init.
  	exit 1
  fi
 
-Modified: trunk/buildroot/target/device/Atmel/atngw100/target_skeleton/etc/init.d/S09klog
+Modified: trunk/buildroot/target/device/Atmel/atstk1002/target_skeleton/etc/init.d/S09klog
 ===================================================================
---- trunk/buildroot/target/device/Atmel/atngw100/target_skeleton/etc/init.d/S09klog	2007-08-17 08:45:58 UTC (rev 19538)
-+++ trunk/buildroot/target/device/Atmel/atngw100/target_skeleton/etc/init.d/S09klog	2007-08-17 13:01:49 UTC (rev 19539)
+--- trunk/buildroot/target/device/Atmel/atstk1002/target_skeleton/etc/init.d/S09klog	2007-08-17 13:01:49 UTC (rev 19539)
++++ trunk/buildroot/target/device/Atmel/atstk1002/target_skeleton/etc/init.d/S09klog	2007-08-17 13:02:52 UTC (rev 19540)
 @@ -2,15 +2,15 @@
  
  KLOGD=/sbin/klogd
@@ -229,10 +302,10 @@ Modified: trunk/buildroot/target/device/Atmel/atngw100/target_skeleton/etc/init.
  	exit 1
  fi
 
-Modified: trunk/buildroot/target/device/Atmel/atngw100/target_skeleton/etc/init.d/S10modules-init
+Modified: trunk/buildroot/target/device/Atmel/atstk1002/target_skeleton/etc/init.d/S10modules-init
 ===================================================================
---- trunk/buildroot/target/device/Atmel/atngw100/target_skeleton/etc/init.d/S10modules-init	2007-08-17 08:45:58 UTC (rev 19538)
-+++ trunk/buildroot/target/device/Atmel/atngw100/target_skeleton/etc/init.d/S10modules-init	2007-08-17 13:01:49 UTC (rev 19539)
+--- trunk/buildroot/target/device/Atmel/atstk1002/target_skeleton/etc/init.d/S10modules-init	2007-08-17 13:01:49 UTC (rev 19539)
++++ trunk/buildroot/target/device/Atmel/atstk1002/target_skeleton/etc/init.d/S10modules-init	2007-08-17 13:02:52 UTC (rev 19540)
 @@ -2,9 +2,9 @@
  
  MODPROBE=/sbin/modprobe
@@ -255,10 +328,10 @@ Modified: trunk/buildroot/target/device/Atmel/atngw100/target_skeleton/etc/init.
  	else
  		echo "  $module failed"
 
-Modified: trunk/buildroot/target/device/Atmel/atngw100/target_skeleton/etc/init.d/S15localfs
+Modified: trunk/buildroot/target/device/Atmel/atstk1002/target_skeleton/etc/init.d/S15localfs
 ===================================================================
---- trunk/buildroot/target/device/Atmel/atngw100/target_skeleton/etc/init.d/S15localfs	2007-08-17 08:45:58 UTC (rev 19538)
-+++ trunk/buildroot/target/device/Atmel/atngw100/target_skeleton/etc/init.d/S15localfs	2007-08-17 13:01:49 UTC (rev 19539)
+--- trunk/buildroot/target/device/Atmel/atstk1002/target_skeleton/etc/init.d/S15localfs	2007-08-17 13:01:49 UTC (rev 19539)
++++ trunk/buildroot/target/device/Atmel/atstk1002/target_skeleton/etc/init.d/S15localfs	2007-08-17 13:02:52 UTC (rev 19540)
 @@ -2,10 +2,10 @@
  
  MOUNT=/bin/mount
@@ -275,10 +348,10 @@ Modified: trunk/buildroot/target/device/Atmel/atngw100/target_skeleton/etc/init.
  	exit 1
  fi
 
-Modified: trunk/buildroot/target/device/Atmel/atngw100/target_skeleton/etc/init.d/S20network
+Modified: trunk/buildroot/target/device/Atmel/atstk1002/target_skeleton/etc/init.d/S20network
 ===================================================================
---- trunk/buildroot/target/device/Atmel/atngw100/target_skeleton/etc/init.d/S20network	2007-08-17 08:45:58 UTC (rev 19538)
-+++ trunk/buildroot/target/device/Atmel/atngw100/target_skeleton/etc/init.d/S20network	2007-08-17 13:01:49 UTC (rev 19539)
+--- trunk/buildroot/target/device/Atmel/atstk1002/target_skeleton/etc/init.d/S20network	2007-08-17 13:01:49 UTC (rev 19539)
++++ trunk/buildroot/target/device/Atmel/atstk1002/target_skeleton/etc/init.d/S20network	2007-08-17 13:02:52 UTC (rev 19540)
 @@ -2,10 +2,10 @@
  
  IFUP=/sbin/ifup
@@ -295,51 +368,10 @@ Modified: trunk/buildroot/target/device/Atmel/atngw100/target_skeleton/etc/init.
  	exit 1
  fi
 
-Modified: trunk/buildroot/target/device/Atmel/atngw100/target_skeleton/etc/init.d/S22iptables
+Modified: trunk/buildroot/target/device/Atmel/atstk1002/target_skeleton/etc/init.d/S40telnetd
 ===================================================================
---- trunk/buildroot/target/device/Atmel/atngw100/target_skeleton/etc/init.d/S22iptables	2007-08-17 08:45:58 UTC (rev 19538)
-+++ trunk/buildroot/target/device/Atmel/atngw100/target_skeleton/etc/init.d/S22iptables	2007-08-17 13:01:49 UTC (rev 19539)
-@@ -2,7 +2,7 @@
- 
- IPTABLES=`which iptables`
- 
--echo "Enable NAT: "
-+echo "Enable NAT:"
- echo -n "  IPv4 forwarding: "
- if echo 1 > /proc/sys/net/ipv4/ip_forward; then
- 	echo "done"
-@@ -17,7 +17,7 @@
- 	exit 1
- fi
- 
--if ${IPTABLES} -t nat -A POSTROUTING -o eth0 -j MASQUERADE > /dev/null 2> /dev/null; then
-+if ${IPTABLES} -t nat -A POSTROUTING -o eth0 -j MASQUERADE; then
- 	echo "done"
- else
- 	echo "failed"
-@@ -25,7 +25,7 @@
- fi
- 
- echo -n "  iptables incoming trafic: "
--if ${IPTABLES} -A FORWARD -i eth0 -o eth1 -m state --state RELATED,ESTABLISHED -j ACCEPT > /dev/null 2> /dev/null; then
-+if ${IPTABLES} -A FORWARD -i eth0 -o eth1 -m state --state RELATED,ESTABLISHED -j ACCEPT; then
- 	echo "done"
- else
- 	echo "failed"
-@@ -33,7 +33,7 @@
- fi
- 
- echo -n "  iptables outgoung trafic: "
--if ${IPTABLES} -A FORWARD -i eth1 -o eth0 -j ACCEPT > /dev/null 2> /dev/null; then
-+if ${IPTABLES} -A FORWARD -i eth1 -o eth0 -j ACCEPT; then
- 	echo "done"
- else
- 	echo "failed"
-
-Modified: trunk/buildroot/target/device/Atmel/atngw100/target_skeleton/etc/init.d/S40telnetd
-===================================================================
---- trunk/buildroot/target/device/Atmel/atngw100/target_skeleton/etc/init.d/S40telnetd	2007-08-17 08:45:58 UTC (rev 19538)
-+++ trunk/buildroot/target/device/Atmel/atngw100/target_skeleton/etc/init.d/S40telnetd	2007-08-17 13:01:49 UTC (rev 19539)
+--- trunk/buildroot/target/device/Atmel/atstk1002/target_skeleton/etc/init.d/S40telnetd	2007-08-17 13:01:49 UTC (rev 19539)
++++ trunk/buildroot/target/device/Atmel/atstk1002/target_skeleton/etc/init.d/S40telnetd	2007-08-17 13:02:52 UTC (rev 19540)
 @@ -2,15 +2,15 @@
  
  TELNETD=/usr/sbin/telnetd
@@ -362,10 +394,10 @@ Modified: trunk/buildroot/target/device/Atmel/atngw100/target_skeleton/etc/init.
  	exit 1
  fi
 
-Modified: trunk/buildroot/target/device/Atmel/atngw100/target_skeleton/etc/init.d/S41inetd
+Modified: trunk/buildroot/target/device/Atmel/atstk1002/target_skeleton/etc/init.d/S41inetd
 ===================================================================
---- trunk/buildroot/target/device/Atmel/atngw100/target_skeleton/etc/init.d/S41inetd	2007-08-17 08:45:58 UTC (rev 19538)
-+++ trunk/buildroot/target/device/Atmel/atngw100/target_skeleton/etc/init.d/S41inetd	2007-08-17 13:01:49 UTC (rev 19539)
+--- trunk/buildroot/target/device/Atmel/atstk1002/target_skeleton/etc/init.d/S41inetd	2007-08-17 13:01:49 UTC (rev 19539)
++++ trunk/buildroot/target/device/Atmel/atstk1002/target_skeleton/etc/init.d/S41inetd	2007-08-17 13:02:52 UTC (rev 19540)
 @@ -2,15 +2,15 @@
  
  INETD=/usr/sbin/inetd
@@ -388,10 +420,10 @@ Modified: trunk/buildroot/target/device/Atmel/atngw100/target_skeleton/etc/init.
  	exit 1
  fi
 
-Modified: trunk/buildroot/target/device/Atmel/atngw100/target_skeleton/etc/init.d/S42httpd
+Modified: trunk/buildroot/target/device/Atmel/atstk1002/target_skeleton/etc/init.d/S42httpd
 ===================================================================
---- trunk/buildroot/target/device/Atmel/atngw100/target_skeleton/etc/init.d/S42httpd	2007-08-17 08:45:58 UTC (rev 19538)
-+++ trunk/buildroot/target/device/Atmel/atngw100/target_skeleton/etc/init.d/S42httpd	2007-08-17 13:01:49 UTC (rev 19539)
+--- trunk/buildroot/target/device/Atmel/atstk1002/target_skeleton/etc/init.d/S42httpd	2007-08-17 13:01:49 UTC (rev 19539)
++++ trunk/buildroot/target/device/Atmel/atstk1002/target_skeleton/etc/init.d/S42httpd	2007-08-17 13:02:52 UTC (rev 19540)
 @@ -2,15 +2,15 @@
  
  HTTPD=/usr/sbin/httpd
@@ -414,10 +446,10 @@ Modified: trunk/buildroot/target/device/Atmel/atngw100/target_skeleton/etc/init.
  	exit 1
  fi
 
-Modified: trunk/buildroot/target/device/Atmel/atngw100/target_skeleton/etc/init.d/S43ntp
+Modified: trunk/buildroot/target/device/Atmel/atstk1002/target_skeleton/etc/init.d/S43ntp
 ===================================================================
---- trunk/buildroot/target/device/Atmel/atngw100/target_skeleton/etc/init.d/S43ntp	2007-08-17 08:45:58 UTC (rev 19538)
-+++ trunk/buildroot/target/device/Atmel/atngw100/target_skeleton/etc/init.d/S43ntp	2007-08-17 13:01:49 UTC (rev 19539)
+--- trunk/buildroot/target/device/Atmel/atstk1002/target_skeleton/etc/init.d/S43ntp	2007-08-17 13:01:49 UTC (rev 19539)
++++ trunk/buildroot/target/device/Atmel/atstk1002/target_skeleton/etc/init.d/S43ntp	2007-08-17 13:02:52 UTC (rev 19540)
 @@ -5,22 +5,22 @@
  if [ -f /etc/default/ntpdate ]; then
      . /etc/default/ntpdate
@@ -448,10 +480,10 @@ Modified: trunk/buildroot/target/device/Atmel/atngw100/target_skeleton/etc/init.
  	echo "edit NTPSERVERS in /etc/default/ntpdate."
  	exit 1
 
-Modified: trunk/buildroot/target/device/Atmel/atngw100/target_skeleton/etc/init.d/S49netfs
+Modified: trunk/buildroot/target/device/Atmel/atstk1002/target_skeleton/etc/init.d/S49netfs
 ===================================================================
---- trunk/buildroot/target/device/Atmel/atngw100/target_skeleton/etc/init.d/S49netfs	2007-08-17 08:45:58 UTC (rev 19538)
-+++ trunk/buildroot/target/device/Atmel/atngw100/target_skeleton/etc/init.d/S49netfs	2007-08-17 13:01:49 UTC (rev 19539)
+--- trunk/buildroot/target/device/Atmel/atstk1002/target_skeleton/etc/init.d/S49netfs	2007-08-17 13:01:49 UTC (rev 19539)
++++ trunk/buildroot/target/device/Atmel/atstk1002/target_skeleton/etc/init.d/S49netfs	2007-08-17 13:02:52 UTC (rev 19540)
 @@ -2,10 +2,10 @@
  
  MOUNT=/bin/mount
@@ -468,10 +500,63 @@ Modified: trunk/buildroot/target/device/Atmel/atngw100/target_skeleton/etc/init.
  	exit 1
  fi
 
-Modified: trunk/buildroot/target/device/Atmel/atngw100/target_skeleton/etc/passwd
+Modified: trunk/buildroot/target/device/Atmel/atstk1002/target_skeleton/etc/init.d/S50alsa-utils
 ===================================================================
---- trunk/buildroot/target/device/Atmel/atngw100/target_skeleton/etc/passwd	2007-08-17 08:45:58 UTC (rev 19538)
-+++ trunk/buildroot/target/device/Atmel/atngw100/target_skeleton/etc/passwd	2007-08-17 13:01:49 UTC (rev 19539)
+--- trunk/buildroot/target/device/Atmel/atstk1002/target_skeleton/etc/init.d/S50alsa-utils	2007-08-17 13:01:49 UTC (rev 19539)
++++ trunk/buildroot/target/device/Atmel/atstk1002/target_skeleton/etc/init.d/S50alsa-utils	2007-08-17 13:02:52 UTC (rev 19540)
+@@ -5,15 +5,15 @@
+ # Exit silently if alsa-utils isn't installed
+ [ -x ${PROGRAM} ] || exit 0
+ 
+-echo -n "Restoring mixer state:"
++echo -n "Restoring mixer state: "
+ if [ ! -f /etc/asound.state ]; then
+-	echo " missing"
++	echo "missing"
+ 	exit 1
+ fi
+ 
+-if ${PROGRAM} restore > /dev/null 2> /dev/null; then
+-	echo " done"
++if ${PROGRAM} restore; then
++	echo "done"
+ else
+-	echo " failed"
++	echo "failed"
+ 	exit 1
+ fi
+
+Modified: trunk/buildroot/target/device/Atmel/atstk1002/target_skeleton/etc/init.d/S99splash
+===================================================================
+--- trunk/buildroot/target/device/Atmel/atstk1002/target_skeleton/etc/init.d/S99splash	2007-08-17 13:01:49 UTC (rev 19539)
++++ trunk/buildroot/target/device/Atmel/atstk1002/target_skeleton/etc/init.d/S99splash	2007-08-17 13:02:52 UTC (rev 19540)
+@@ -3,16 +3,15 @@
+ PROGRAM=/usr/bin/fbv
+ SPLASHFILE="/etc/stk1000splash.jpg"
+ 
+-echo -n "Splash image:"
++echo -n "Splash image: "
+ if [ ! -x "${PROGRAM}" -o ! -f "${SPLASHFILE}" ]; then
+-	echo " missing"
++	echo "missing"
+ 	exit 1
+ fi
+ 
+-${PROGRAM} ${SPLASHFILE} < /dev/null > /dev/null 2>/dev/null &
++${PROGRAM} ${SPLASHFILE} > /dev/null &
+ if [ $? -eq 0 ]; then
+-	echo " loaded"
+-	kill `pidof ${PROGRAM}` > /dev/null 2> /dev/null
++	echo "loaded"
+ else
+-	echo " failed"
++	echo "failed"
+ fi
+
+Modified: trunk/buildroot/target/device/Atmel/atstk1002/target_skeleton/etc/passwd
+===================================================================
+--- trunk/buildroot/target/device/Atmel/atstk1002/target_skeleton/etc/passwd	2007-08-17 13:01:49 UTC (rev 19539)
++++ trunk/buildroot/target/device/Atmel/atstk1002/target_skeleton/etc/passwd	2007-08-17 13:02:52 UTC (rev 19540)
 @@ -1,4 +1,4 @@
 -root:$1$rsjkLsTU$zdulfnYQgyKmN3e0Fiw7C1:0:0:root:/:/bin/ash
 +root:$1$rsjkLsTU$zdulfnYQgyKmN3e0Fiw7C1:0:0:root:/:/bin/sh
