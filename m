@@ -1,66 +1,157 @@
-From: Ulf Samuelsson <ulf@atmel.com>
-Date: Fri, 17 Aug 2007 15:23:06 +0200
-Subject: [Buildroot] svn commit: trunk/buildroot:
-	package/lzmatarget/linux toolchain/kern etc...
-References: <20070816181741.AD51FA5E18@busybox.net>
-	<20070817112226.GD29258@zelow.no>
-Message-ID: <016201c7e0d8$5415c8a0$dcc4af0a@atmel.com>
+From: ulf at uclibc.org <ulf@uclibc.org>
+Date: Fri, 17 Aug 2007 07:53:03 -0700 (PDT)
+Subject: [Buildroot] svn commit:
+	trunk/buildroot/target/device/Atmel/atstk1002/target_skeleton/etc
+Message-ID: <20070817145303.6A865A45BB@busybox.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
------ Original Message ----- 
-From: "Thomas Lundquist" <lists@zelow.no>
-To: <buildroot@uclibc.org>
-Sent: Friday, August 17, 2007 1:22 PM
-Subject: Re: [Buildroot] svn commit: trunk/buildroot: package/lzmatarget/linux toolchain/kern etc...
+Author: ulf
+Date: 2007-08-17 07:53:01 -0700 (Fri, 17 Aug 2007)
+New Revision: 19543
+
+Log:
+Add mplayer to atstk1002 target_skeleton
+
+Added:
+   trunk/buildroot/target/device/Atmel/atstk1002/target_skeleton/etc/mplayer.conf
 
 
-> On Thu, Aug 16, 2007 at 11:17:41AM -0700, ulf at uclibc.org wrote:
->> 
->> Log:
->> Ensure lzma is built *before* linux, allow system installation in /usr/local/bin
-> 
-> I don't agree with this one. I want host tools put in
-> STAGING_DIR/bin or usr/bin, not outside the toolchain/buildroot.
-> 
-
-It *will* always be put in "STAGING_DIR/usr/bin".
-The new configuration item allows you to put it in /usr/local/bin as well, an extra feature.
-STAGING_DIR/usr/bin/lzma will still be available.
-
-Buildroot won't find "STAGING_DIR/usr/bin/lzma" so you have to do
-PATH:=$(STAGING_DIR)/usr/bin:$(PATH) outside buildroot.
-
-This is not obvious, so the linux compile will fail for all newbies.
-
-> It's alot cleaner and feels right.
-> 
-
-Except that it will break the build.
-
-> And it's not given that the user are allowed to put the binary there
-> anyway.
-
-It is noted in the configuration that you need 'sudo' access.
-If you don't you have to setup the PATH.
-
-A long term solution would be for the persons needing lzma
-to fix it so that it is used from STAGING_DIR.
-
-Maybe the Linux compile should do:
-
-make LZMA=$(STAGING_DIR)/usr/bin/lzma -C $(LINUX26_DIR)
-
-
-> 
-> 
-> Thomas.
-
-
-
-
-Best Regards
-Ulf Samuelsson
+Changeset:
+Added: trunk/buildroot/target/device/Atmel/atstk1002/target_skeleton/etc/mplayer.conf
+===================================================================
+--- trunk/buildroot/target/device/Atmel/atstk1002/target_skeleton/etc/mplayer.conf	                        (rev 0)
++++ trunk/buildroot/target/device/Atmel/atstk1002/target_skeleton/etc/mplayer.conf	2007-08-17 14:53:01 UTC (rev 19543)
+@@ -0,0 +1,129 @@
++#
++# MPlayer configuration file
++#
++# Configuration files are read system-wide from /usr/local/etc/mplayer.conf
++# and per user from ~/.mplayer/config, where per-user settings override
++# system-wide settings, all of which are overrriden by the command line.
++#
++# The configuration file settings are the same as the command line
++# options without the preceding '-'.
++#
++# See the CONFIGURATION FILES section in the man page
++# for a detailed description of the syntax.
++
++
++##################
++# video settings #
++##################
++
++# Specify default video driver (see -vo help for a list).
++vo=fbdev2
++
++# Direct rendring, skip double buffering for framebuffer device
++dr=yes
++
++# Use SDL video with the aalib subdriver by default.
++#vo = sdl:aalib
++
++# FBdev driver:
++#
++# mode to use (read from fb.modes)
++#fbmode = 640x480-120
++#
++# location of the fb.modes file
++#fbmodeconfig = /etc/fb.modes
++
++# Specify your monitor timings for the vesa and fbdev video output drivers.
++# See /etc/X11/XF86Config for timings. Be careful; if you specify settings
++# that exceed the capabilities of your monitor, you may damage it.
++#
++# horizontal frequency range (k stands for 1000)
++#monitor-hfreq = 31.5k-50k,70k
++#
++# vertical frequency range
++#monitor-vfreq = 50-90
++#
++# dotclock (or pixelclock) range (m stands for 1000000)
++#monitor-dotclock = 30M-300M
++
++# Start in fullscreen mode by default.
++#fs=yes
++
++# Change to a different videomode when going fullscreen.
++#vm=yes
++
++# Override the autodetected color depth, may need 'vm=yes' as well.
++#bpp=0
++
++# Enable software scaling (powerful CPU needed) for video output
++# drivers that do not support hardware scaling.
++#zoom=yes
++
++# standard monitor size, with square pixels
++#monitoraspect=4:3
++
++# Use this for a widescreen monitor, non-square pixels.
++#monitoraspect=16:9
++
++# Keep the player window on top of all other windows.
++#ontop=yes
++
++
++##################
++# audio settings #
++##################
++
++# Specify default audio driver (see -ao help for a list).
++ao=oss,
++
++# Use SDL audio driver with the esd subdriver by default.
++#ao = sdl:esd
++
++# Specify the mixer device.
++#mixer = /dev/mixer
++
++# Resample the sound to 44100Hz with the lavcresample audio filter.
++#af=lavcresample=44100
++
++# Specify default audio codec (see -ac help for a list).
++ac=mad,
++
++
++##################
++# other settings #
++##################
++
++# Drop frames to preserve audio/video sync.
++#framedrop = yes
++
++# Specify your preferred skin here (skins are searched for in
++# /usr/local/share/mplayer/skins/<name> and ~/.mplayer/skins/<name>).
++#skin = Abyss
++
++# Resample the font alphamap.
++# 0     plain white fonts
++# 0.75  very narrow black outline (default)
++# 1     narrow black outline
++# 10    bold black outline
++#ffactor = 0.75
++
++# cache settings
++#
++# Use 8MB input cache by default.
++#cache = 8192
++#
++# Prefill 20% of the cache before starting playback.
++#cache-min = 20.0
++#
++# Prefill 50% of the cache before restarting playback after the cache emptied.
++#cache-seek-min = 50
++
++# DVD: Display English subtitles if available.
++#slang = en
++
++# DVD: Play English audio tracks if available.
++#alang = en
++
++
++# You can also include other configuration files.
++#include = /path/to/the/file/you/want/to/include
