@@ -1,95 +1,67 @@
-From: ulf at uclibc.org <ulf@uclibc.org>
-Date: Fri, 17 Aug 2007 06:17:25 -0700 (PDT)
-Subject: [Buildroot] svn commit: trunk/buildroot/target/device/Atmel/atngw100
-Message-ID: <20070817131725.E1BB9A4711@busybox.net>
+From: Daniel Frey <dmfrey+linux@gmail.com>
+Date: Fri, 17 Aug 2007 09:47:40 -0400
+Subject: [Buildroot] Adding new package to BuildRoot
+Message-ID: <b6838d3a0708170647l1ed812c5v7627a7bb58735e6f@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Author: ulf
-Date: 2007-08-17 06:17:25 -0700 (Fri, 17 Aug 2007)
-New Revision: 19542
+All,
 
-Log:
-Update atngw100 device table
+I am attempting to add libxslt to the packages under buildroot.  It fails
+with the following errors:
 
-Modified:
-   trunk/buildroot/target/device/Atmel/atngw100/device_table.txt
+/home/dmfrey/dev/embedded/gumstix-buildroot/build_arm_nofpu/staging_dir/bin/arm-linux-uclibcgnueabi-gcc
+-shared  .libs/attrvt.o .libs/xslt.o .libs/xsltutils.o .libs/pattern.o
+.libs/templates.o .libs/variables.o .libs/keys.o .libs/numbers.o
+.libs/extensions.o .libs/extra.o .libs/functions.o .libs/namespaces.o
+.libs/imports.o .libs/attributes.o .libs/documents.o .libs/preproc.o
+.libs/transform.o .libs/security.o  -L/usr/lib /usr/lib/libxml2.so -lm
+-march=armv5te -mtune=xscale -Wl,-soname -Wl, libxslt.so.1 -o
+.libs/libxslt.so.1.1.21
+/usr/lib/libxml2.so: could not read symbols: File in wrong format
+collect2: ld returned 1 exit status
+make[3]: *** [ libxslt.la] Error 1
+make[3]: Leaving directory
+`/home/dmfrey/dev/embedded/gumstix-buildroot/build_arm_nofpu/libxslt- 1.1.21
+/libxslt'
+make[2]: *** [all-recursive] Error 1
+make[2]: Leaving directory
+`/home/dmfrey/dev/embedded/gumstix-buildroot/build_arm_nofpu/libxslt-1.1.21'
+make[1]: *** [all] Error 2
+make[1]: Leaving directory
+`/home/dmfrey/dev/embedded/gumstix-buildroot/build_arm_nofpu/libxslt- 1.1.21
+'
+make: ***
+[/home/dmfrey/dev/embedded/gumstix-buildroot/build_arm_nofpu/libxslt-1.1.21/libxslt.so]
+Error 2
 
 
-Changeset:
-Modified: trunk/buildroot/target/device/Atmel/atngw100/device_table.txt
-===================================================================
---- trunk/buildroot/target/device/Atmel/atngw100/device_table.txt	2007-08-17 13:16:36 UTC (rev 19541)
-+++ trunk/buildroot/target/device/Atmel/atngw100/device_table.txt	2007-08-17 13:17:25 UTC (rev 19542)
-@@ -1,31 +1,31 @@
--# When building a target filesystem, it is desirable to not have to
--# become root and then run 'mknod' a thousand times.  Using a device 
--# table you can create device nodes and directories "on the fly".
-+# When building a target filesystem, it is desirable to not have to become
-+# root and then run 'mknod' a thousand times.  Using a device table you can
-+# create device nodes and directories "on the fly".
- #
--# This is a sample device table file for use with genext2fs.  You can
--# do all sorts of interesting things with a device table file.  For
--# example, if you want to adjust the permissions on a particular file
--# you can just add an entry like:
-+# This is a sample device table file for use with genext2fs.  You can do all
-+# sorts of interesting things with a device table file.  For example, if you
-+# want to adjust the permissions on a particular file you can just add an
-+# entry like:
- #   /sbin/foobar        f       2755    0       0       -       -       -       -       -
--# and (assuming the file /sbin/foobar exists) it will be made setuid
--# root (regardless of what its permissions are on the host filesystem.
-+# and (assuming the file /sbin/foobar exists) it will be made setuid root
-+# (regardless of what its permissions are on the host filesystem.
- # Furthermore, you can use a single table entry to create a many device
--# minors.  For example, if I wanted to create /dev/hda and /dev/hda[0-15]
--# I could just use the following two table entries:
-+# minors.  For example, if I wanted to create /dev/hda and /dev/hda[0-15] I
-+# could just use the following two table entries:
- #   /dev/hda    b       640     0       0       3       0       0       0       -
- #   /dev/hda    b       640     0       0       3       1       1       1       15
--# 
-+#
- # Device table entries take the form of:
- # <name>    <type>      <mode>  <uid>   <gid>   <major> <minor> <start> <inc>   <count>
--# where name is the file name,  type can be one of: 
-+# where name is the file name,  type can be one of:
- #       f       A regular file
- #       d       Directory
- #       c       Character special device file
- #       b       Block special device file
- #       p       Fifo (named pipe)
--# uid is the user id for the target file, gid is the group id for the
--# target file.  The rest of the entries (major, minor, etc) apply only 
--# to device special files.
-+# uid is the user id for the target file, gid is the group id for the target
-+# file.  The rest of the entries (major, minor, etc) apply only to device
-+# special files.
- 
- # Have fun
- # -Erik Andersen <andersen@codepoet.org>
-@@ -41,9 +41,10 @@
- /config		d	755	0	0	-	-	-	-	-
- /proc		d	755	0	0	-	-	-	-	-
- /lost+found	d	700	0	0	-	-	-	-	-
--/var/tmp	d	1777	0	0	-	-	-	-	-
- /var/lock	d	1777	0	0	-	-	-	-	-
-+/var/log	d	755	0	0	-	-	-	-	-
- /var/run	d	1777	0	0	-	-	-	-	-
-+/var/tmp	d	1777	0	0	-	-	-	-	-
- /home/avr32	d	2755	500	500	-	-	-	-	-
- /home/default	d	2755	1000	1000	-	-	-	-	-
- /www		d	755	0	0	-	-	-	-	-
-@@ -61,7 +62,7 @@
- # Normal system devices
- #/dev/mem	c	640	0	0	1	1	0	0	-
- #/dev/kmem	c	640	0	0	1	2	0	0	-
--#/dev/null	c	666	0	0	1	3	0	0	-
-+/dev/null	c	666	0	0	1	3	0	0	-
- #/dev/zero	c	666	0	0	1	5	0	0	-
- #/dev/random	c	666	0	0	1	8	0	0	-
- #/dev/urandom	c	666	0	0	1	9	0	0	-
+I used the xml2 Config.in <http://config.in/> and xml2.mk as a model for
+setting up libxslt.  I am building on ubuntu feisty.  If there is any other
+info required, please let me know; I have attached my two files in the xslt
+directory under package.  I am not totally sure as to what is going on here,
+but I think it has something to do with the fact that libxml2 was compiled
+for my host architecture.  When I see the ouput fly by, it is finding the
+local systems libxml2.27, versus the libxml2.29 in the buildroot.
+
+Thanks for any help.
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: http://busybox.net/lists/buildroot/attachments/20070817/f5c27b6e/attachment.htm 
+-------------- next part --------------
+A non-text attachment was scrubbed...
+Name: Config.in
+Type: application/octet-stream
+Size: 113 bytes
+Desc: not available
+Url : http://busybox.net/lists/buildroot/attachments/20070817/f5c27b6e/attachment.obj 
+-------------- next part --------------
+A non-text attachment was scrubbed...
+Name: xslt.mk
+Type: application/octet-stream
+Size: 2454 bytes
+Desc: not available
+Url : http://busybox.net/lists/buildroot/attachments/20070817/f5c27b6e/attachment-0001.obj 
