@@ -1,8 +1,7 @@
 From: ulf at uclibc.org <ulf@uclibc.org>
-Date: Fri, 17 Aug 2007 06:16:36 -0700 (PDT)
-Subject: [Buildroot] svn commit:
-	trunk/buildroot/target/device/Atmel/atstk1002
-Message-ID: <20070817131636.AA616A45BB@busybox.net>
+Date: Fri, 17 Aug 2007 06:17:25 -0700 (PDT)
+Subject: [Buildroot] svn commit: trunk/buildroot/target/device/Atmel/atngw100
+Message-ID: <20070817131725.E1BB9A4711@busybox.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -10,21 +9,21 @@ Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
 Author: ulf
-Date: 2007-08-17 06:16:36 -0700 (Fri, 17 Aug 2007)
-New Revision: 19541
+Date: 2007-08-17 06:17:25 -0700 (Fri, 17 Aug 2007)
+New Revision: 19542
 
 Log:
-Update atstk1002 device table
+Update atngw100 device table
 
 Modified:
-   trunk/buildroot/target/device/Atmel/atstk1002/device_table.txt
+   trunk/buildroot/target/device/Atmel/atngw100/device_table.txt
 
 
 Changeset:
-Modified: trunk/buildroot/target/device/Atmel/atstk1002/device_table.txt
+Modified: trunk/buildroot/target/device/Atmel/atngw100/device_table.txt
 ===================================================================
---- trunk/buildroot/target/device/Atmel/atstk1002/device_table.txt	2007-08-17 13:02:52 UTC (rev 19540)
-+++ trunk/buildroot/target/device/Atmel/atstk1002/device_table.txt	2007-08-17 13:16:36 UTC (rev 19541)
+--- trunk/buildroot/target/device/Atmel/atngw100/device_table.txt	2007-08-17 13:16:36 UTC (rev 19541)
++++ trunk/buildroot/target/device/Atmel/atngw100/device_table.txt	2007-08-17 13:17:25 UTC (rev 19542)
 @@ -1,31 +1,31 @@
 -# When building a target filesystem, it is desirable to not have to
 -# become root and then run 'mknod' a thousand times.  Using a device 
@@ -85,3 +84,12 @@ Modified: trunk/buildroot/target/device/Atmel/atstk1002/device_table.txt
  /home/avr32	d	2755	500	500	-	-	-	-	-
  /home/default	d	2755	1000	1000	-	-	-	-	-
  /www		d	755	0	0	-	-	-	-	-
+@@ -61,7 +62,7 @@
+ # Normal system devices
+ #/dev/mem	c	640	0	0	1	1	0	0	-
+ #/dev/kmem	c	640	0	0	1	2	0	0	-
+-#/dev/null	c	666	0	0	1	3	0	0	-
++/dev/null	c	666	0	0	1	3	0	0	-
+ #/dev/zero	c	666	0	0	1	5	0	0	-
+ #/dev/random	c	666	0	0	1	8	0	0	-
+ #/dev/urandom	c	666	0	0	1	9	0	0	-
