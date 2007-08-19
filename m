@@ -1,7 +1,7 @@
 From: ulf at uclibc.org <ulf@uclibc.org>
-Date: Sun, 19 Aug 2007 14:11:16 -0700 (PDT)
-Subject: [Buildroot] svn commit: trunk/buildroot/package/libpcap
-Message-ID: <20070819211116.24FBDA610C@busybox.net>
+Date: Sun, 19 Aug 2007 14:13:09 -0700 (PDT)
+Subject: [Buildroot] svn commit: trunk/buildroot/package/openntpd
+Message-ID: <20070819211309.2F199A60E8@busybox.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -9,74 +9,61 @@ Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
 Author: ulf
-Date: 2007-08-19 14:11:15 -0700 (Sun, 19 Aug 2007)
-New Revision: 19568
+Date: 2007-08-19 14:13:08 -0700 (Sun, 19 Aug 2007)
+New Revision: 19569
 
 Log:
-libpcap cleanup
+openntpd cleanup
 
 Modified:
-   trunk/buildroot/package/libpcap/Config.in
-   trunk/buildroot/package/libpcap/libpcap.mk
+   trunk/buildroot/package/openntpd/openntpd.mk
 
 
 Changeset:
-Modified: trunk/buildroot/package/libpcap/Config.in
+Modified: trunk/buildroot/package/openntpd/openntpd.mk
 ===================================================================
---- trunk/buildroot/package/libpcap/Config.in	2007-08-19 21:09:28 UTC (rev 19567)
-+++ trunk/buildroot/package/libpcap/Config.in	2007-08-19 21:11:15 UTC (rev 19568)
-@@ -1,5 +1,6 @@
- config BR2_PACKAGE_LIBPCAP
- 	bool "libpcap"
-+	select BR2_PACKAGE_ZLIB
- 	default n
- 	help
- 	  A system-independent library for user-level network packet capture.
-
-Modified: trunk/buildroot/package/libpcap/libpcap.mk
-===================================================================
---- trunk/buildroot/package/libpcap/libpcap.mk	2007-08-19 21:09:28 UTC (rev 19567)
-+++ trunk/buildroot/package/libpcap/libpcap.mk	2007-08-19 21:11:15 UTC (rev 19568)
-@@ -1,6 +1,6 @@
- #############################################################
- #
--# libpcap 
-+# libpcap
- #
- #############################################################
- # Copyright (C) 2001-2003 by Erik Andersen <andersen@codepoet.org>
-@@ -48,20 +48,10 @@
- 		--host=$(GNU_TARGET_NAME) \
+--- trunk/buildroot/package/openntpd/openntpd.mk	2007-08-19 21:11:15 UTC (rev 19568)
++++ trunk/buildroot/package/openntpd/openntpd.mk	2007-08-19 21:13:08 UTC (rev 19569)
+@@ -29,9 +29,11 @@
  		--build=$(GNU_HOST_NAME) \
  		--prefix=/usr \
--		--exec-prefix=/usr \
--		--bindir=/usr/bin \
--		--sbindir=/usr/sbin \
--		--libdir=/usr/lib \
--		--libexecdir=/usr/lib \
--		--sysconfdir=/etc \
--		--datadir=/usr/share \
- 		--localstatedir=/var \
--		--includedir=/usr/include \
--		--mandir=/usr/man \
--		--infodir=/usr/info \
--		--with-build-cc="$(HOSTCC)" \
+ 		--sysconfdir=/etc \
++		--datadir=/usr/share \
 +		--mandir=/usr/share/man \
-+		--infodir=/usr/share/info \
- 		--disable-yydebug \
--		--prefix=/usr \
- 		--with-pcap=linux \
- 		$(DISABLE_IPV6) \
- 	)
-@@ -76,8 +66,9 @@
- libpcap: uclibc zlib $(STAGING_DIR)/usr/lib/libpcap.a
+ 		--with-builtin-arc4random \
+-	);
+-	touch $(OPENNTPD_DIR)/.configured;
++	)
++	touch $@
  
- libpcap-clean:
--	rm -f $(STAGING_DIR)/usr/include/pcap*.h \
--		$(STAGING_DIR)/usr/lib/libpcap.a
-+	rm -f $(addprefix $(STAGING_DIR)/usr/,include/pcap*.h \
-+					      lib/libpcap.a \
-+					      share/man/man?/pcap.*)
- 	-$(MAKE) -C $(LIBPCAP_DIR) clean
+ $(OPENNTPD_DIR)/$(OPENNTPD_BINARY): $(OPENNTPD_DIR)/.configured
+ 	$(MAKE) CC=$(TARGET_CC) -C $(OPENNTPD_DIR)
+@@ -45,22 +47,24 @@
+ 	#	ntpd.c buffer.c log.c imsg.c ntp.c ntp_msg.c y.tab.c config.c \
+ 	#	server.c client.c sensors.c util.c ; \
+ 	#)
+-	$(STRIP) -s $@
++	$(STRIP) $@
  
- libpcap-dirclean:
+ $(TARGET_DIR)/$(OPENNTPD_TARGET_BINARY): $(OPENNTPD_DIR)/$(OPENNTPD_BINARY)
+ 	rm -f $(TARGET_DIR)/etc/ntpd.conf
+ 	$(MAKE) DESTDIR=$(TARGET_DIR) STRIP_OPT="" -C $(OPENNTPD_DIR) install
+ 	-$(STRIP) $(TARGET_DIR)/$(OPENNTPD_TARGET_BINARY)
+ 	cp -af $(OPENNTPD_DIR)/ntpd.conf $(TARGET_DIR)/etc/ntpd.conf
+-	rm -Rf $(TARGET_DIR)/usr/man
++	# Why in earth do we wipe the whole man directory here?
++	#rm -Rf $(TARGET_DIR)/usr/man
+ 
+ ntpd: uclibc $(TARGET_DIR)/$(OPENNTPD_TARGET_BINARY)
+ 
+ ntpd-source: $(DL_DIR)/$(OPENNTPD_SOURCE)
+ 
+ ntpd-clean:
+-	-$(MAKE) DESTDIR=$(TARGET_DIR) -C $(OPENNTPD_DIR) uninstall
+-	rm -f $(TARGET_DIR)/etc/ntpd.conf $(TARGET_DIR)/$(OPENNTPD_TARGET_BINARY)
++	rm -f $(addprefix $(TARGET_DIR)/,etc/ntpd.conf \
++					 usr/share/man/man?/ntpd.conf* \
++					 $(OPENNTPD_TARGET_BINARY))
+ 	-$(MAKE) -C $(OPENNTPD_DIR) clean
+ 
+ ntpd-dirclean:
