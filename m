@@ -1,31 +1,35 @@
-From: Brad House <brad@mainstreetsoftworks.com>
-Date: Sun, 19 Aug 2007 13:29:54 -0400
-Subject: [Buildroot] [patch] soekris net4801 config updates
-Message-ID: <46C87E12.1000101@mainstreetsoftworks.com>
+From: ulf at uclibc.org <ulf@uclibc.org>
+Date: Sun, 19 Aug 2007 11:26:33 -0700 (PDT)
+Subject: [Buildroot] svn commit: trunk/buildroot/target/device
+Message-ID: <20070819182633.110C4A4596@busybox.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-We don't need a specific busybox config or a specific
-uClibc config for net4801, the standard buildroot configs
-for these work great, so remove:
+Author: ulf
+Date: 2007-08-19 11:26:31 -0700 (Sun, 19 Aug 2007)
+New Revision: 19560
 
-target/device/Soekris/uClibc.config
-target/device/Soekris/busybox.config
+Log:
+Update AVR32 tools download location
 
-Also, I've updated the kernel config to 2.6.22.1 ...
+Modified:
+   trunk/buildroot/target/device/Toolchain.in
 
-Please apply the attached patch (gzipped for size)
-and remove the afore-mentioned files.
 
-Thanks.
--Brad
--------------- next part --------------
-A non-text attachment was scrubbed...
-Name: net4801.patch.gz
-Type: application/gzip
-Size: 7762 bytes
-Desc: not available
-Url : http://busybox.net/lists/buildroot/attachments/20070819/c04cf7b8/attachment.bin 
+Changeset:
+Modified: trunk/buildroot/target/device/Toolchain.in
+===================================================================
+--- trunk/buildroot/target/device/Toolchain.in	2007-08-19 13:42:08 UTC (rev 19559)
++++ trunk/buildroot/target/device/Toolchain.in	2007-08-19 18:26:31 UTC (rev 19560)
+@@ -30,7 +30,7 @@
+ 
+ config BR2_VENDOR_SITE
+ 	string
+-	default $(BR2_ATMEL_MIRROR) if BR2_TOOLCHAIN_ATMEL_AVR32
++	default "$(BR2_ATMEL_MIRROR)/Source" if BR2_TOOLCHAIN_ATMEL_AVR32
+ 
+ config BR2_VENDOR_SUFFIX
+ 	string
