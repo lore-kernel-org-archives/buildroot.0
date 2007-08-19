@@ -1,38 +1,19 @@
-From: Cristian Ionescu-Idbohrn <cristian.ionescu-idbohrn@axis.com>
-Date: Sun, 19 Aug 2007 12:38:13 +0200 (CEST)
-Subject: [Buildroot] [patch] libpcap, tcpdump and openntpd cleanup
-Message-ID: <0708191235210.12216@somehost>
+From: =?ISO-8859-1?Q?Thiago_A._Corr=EAa?= <thiago.correa@gmail.com>
+Date: Sun, 19 Aug 2007 14:08:39 +0100
+Subject: [Buildroot] How to change kernel version
+Message-ID: <d6cda7730708190608i1b754e71r25dac548fd1c922@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Please consider applying these patches.
+Hi,
 
+  I searched over the archives but I couldn't find anything about how
+one could change the kernel version. The only available option for
+AVR32, 2.6.22, is unable to boot on an STK1000 due to a bug in the MMC
+drivers, so I would like to change it to 2.6.18 which actually works.
 
-Cheers,
-
--- 
-Cristian
--------------- next part --------------
-A non-text attachment was scrubbed...
-Name: libpcap.patch
-Type: text/x-diff
-Size: 1772 bytes
-Desc: 
-Url : http://busybox.net/lists/buildroot/attachments/20070819/8737debe/attachment-0003.bin 
--------------- next part --------------
-A non-text attachment was scrubbed...
-Name: tcpdump.patch
-Type: text/x-diff
-Size: 3564 bytes
-Desc: 
-Url : http://busybox.net/lists/buildroot/attachments/20070819/8737debe/attachment-0004.bin 
--------------- next part --------------
-A non-text attachment was scrubbed...
-Name: openntpd.patch
-Type: text/x-diff
-Size: 1617 bytes
-Desc: 
-Url : http://busybox.net/lists/buildroot/attachments/20070819/8737debe/attachment-0005.bin 
+Kind Regards,
+   Thiago A. Correa
