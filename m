@@ -1,143 +1,191 @@
-From: ulf at uclibc.org <ulf@uclibc.org>
-Date: Sun, 19 Aug 2007 15:57:26 -0700 (PDT)
-Subject: [Buildroot] svn commit: trunk/buildroot/target/device/Atmel:
-	at91sam9260dfc at91sam9260pf at91sam9261 etc...
-Message-ID: <20070819225726.0ABDDA611A@busybox.net>
+From: bugs at busybox.net <bugs@busybox.net>
+Date: Sun, 19 Aug 2007 16:07:07 -0700
+Subject: [Buildroot] [buildroot 0001467]: fontconfig-2.4.2 refuses to
+	configure due to autoreconfig problems
+Message-ID: <6c62fa563f45126722cf919a6f5f0b50@bugs.uclibc.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Author: ulf
-Date: 2007-08-19 15:57:25 -0700 (Sun, 19 Aug 2007)
-New Revision: 19581
 
-Log:
-Update linux-2.6.22.1 config for sam9261ek, sam9260pf and sam9260dfc
+The following issue has been SUBMITTED. 
+====================================================================== 
+http://busybox.net/bugs/view.php?id=1467 
+====================================================================== 
+Reported By:                mastag
+Assigned To:                buildroot
+====================================================================== 
+Project:                    buildroot
+Issue ID:                   1467
+Category:                   Architecture Specific
+Reproducibility:            always
+Severity:                   major
+Priority:                   normal
+Status:                     assigned
+====================================================================== 
+Date Submitted:             08-19-2007 16:07 PDT
+Last Modified:              08-19-2007 16:07 PDT
+====================================================================== 
+Summary:                    fontconfig-2.4.2 refuses to configure due to
+autoreconfig problems
+Description: 
+I'm trying to build fontconfig for sh4 using gcc 3.4.6.
+It unpacks and gets patched but when trying to configure it will fail.
+Here is the full log:
 
-Modified:
-   trunk/buildroot/target/device/Atmel/at91sam9260dfc/at91sam9260dfc-linux-2.6.22.1.config
-   trunk/buildroot/target/device/Atmel/at91sam9260pf/at91sam9260pf-linux-2.6.22.1.config
-   trunk/buildroot/target/device/Atmel/at91sam9261ek/at91sam9261ek-linux-2.6.22.1.config
+gzip -d -c /home/mastag/buildroot/dl/fontconfig-2.4.2.tar.gz | tar -C
+/home/mastag/buildroot/build_sh4   -xf -
+toolchain/patch-kernel.sh
+/home/mastag/buildroot/build_sh4/fontconfig-2.4.2 package/fontconfig/
+\*.patch*
 
+Applying fc-lang.patch using plaintext: 
+patching file fc-lang/fc-lang.c
 
-Changeset:
-Modified: trunk/buildroot/target/device/Atmel/at91sam9260dfc/at91sam9260dfc-linux-2.6.22.1.config
-===================================================================
---- trunk/buildroot/target/device/Atmel/at91sam9260dfc/at91sam9260dfc-linux-2.6.22.1.config	2007-08-19 22:43:50 UTC (rev 19580)
-+++ trunk/buildroot/target/device/Atmel/at91sam9260dfc/at91sam9260dfc-linux-2.6.22.1.config	2007-08-19 22:57:25 UTC (rev 19581)
-@@ -1,7 +1,7 @@
- #
- # Automatically generated make config: don't edit
- # Linux kernel version: 2.6.22.1
--# Sun Aug 12 02:16:19 2007
-+# Sun Aug 19 01:11:28 2007
- #
- CONFIG_ARM=y
- CONFIG_SYS_SUPPORTS_APM_EMULATION=y
-@@ -51,7 +51,9 @@
- CONFIG_SYSFS_DEPRECATED=y
- # CONFIG_RELAY is not set
- CONFIG_BLK_DEV_INITRD=y
--CONFIG_INITRAMFS_SOURCE=""
-+CONFIG_INITRAMFS_SOURCE="/home/ulf/projects/Buildroot/20070817/buildroot-arm/binaries/at91sam9261ek/rootfs.arm.initramfs_list"
-+CONFIG_INITRAMFS_ROOT_UID=0
-+CONFIG_INITRAMFS_ROOT_GID=0
- CONFIG_CC_OPTIMIZE_FOR_SIZE=y
- CONFIG_SYSCTL=y
- # CONFIG_EMBEDDED is not set
-@@ -165,6 +167,7 @@
- # AT91SAM9260 / AT91SAM9XE Board Type
- #
- CONFIG_MACH_AT91SAM9260EK=y
-+# CONFIG_MACH_CAM60 is not set
- 
- #
- # AT91 Board Options
-@@ -176,6 +179,8 @@
- # AT91 Feature Selections
- #
- CONFIG_AT91_PROGRAMMABLE_CLOCKS=y
-+CONFIG_ATMEL_TCLIB=y
-+# CONFIG_AT91_FIQ is not set
- 
- #
- # Processor Type
-@@ -478,8 +483,6 @@
- CONFIG_BLK_DEV_RAM_COUNT=16
- CONFIG_BLK_DEV_RAM_SIZE=15360
- CONFIG_BLK_DEV_RAM_BLOCKSIZE=1024
--# CONFIG_LZMA_INITRD is not set
--# CONFIG_LZMA_INITRAM_FS is not set
- # CONFIG_CDROM_PKTCDVD is not set
- # CONFIG_ATA_OVER_ETH is not set
- 
-@@ -716,12 +719,14 @@
- CONFIG_I2C_ATMELTWI=y
- CONFIG_I2C_ATMELTWI_BAUDRATE=100000
- CONFIG_I2C_AT91=y
-+CONFIG_I2C_AT91_CLOCKRATE=100000
- # CONFIG_I2C_GPIO is not set
- # CONFIG_I2C_OCORES is not set
- # CONFIG_I2C_PARPORT_LIGHT is not set
- # CONFIG_I2C_SIMTEC is not set
- # CONFIG_I2C_STUB is not set
- # CONFIG_I2C_TINY_USB is not set
-+# CONFIG_I2C_PCA is not set
- 
- #
- # Miscellaneous I2C Chip support
-@@ -1152,6 +1157,7 @@
- #
- # on-CPU RTC drivers
- #
-+CONFIG_RTC_DRV_AT91SAM926X=y
- 
- #
- # File systems
-@@ -1225,7 +1231,6 @@
- CONFIG_JFFS2_RTIME=y
- # CONFIG_JFFS2_RUBIN is not set
- CONFIG_CRAMFS=y
--# CONFIG_SQUASHFS is not set
- # CONFIG_VXFS_FS is not set
- # CONFIG_HPFS_FS is not set
- # CONFIG_QNX4FS_FS is not set
-@@ -1327,7 +1332,6 @@
- #
- CONFIG_DLM=y
- # CONFIG_DLM_DEBUG is not set
--# CONFIG_AUFS is not set
- 
- #
- # Profiling support
+Applying host-tools.patch using plaintext: 
+patching file fc-lang/Makefile.am
+patching file fc-case/Makefile.am
+patching file fc-glyphname/Makefile.am
+patching file configure.in
+patching file fc-arch/Makefile.am
 
-Modified: trunk/buildroot/target/device/Atmel/at91sam9260pf/at91sam9260pf-linux-2.6.22.1.config
-===================================================================
---- trunk/buildroot/target/device/Atmel/at91sam9260pf/at91sam9260pf-linux-2.6.22.1.config	2007-08-19 22:43:50 UTC (rev 19580)
-+++ trunk/buildroot/target/device/Atmel/at91sam9260pf/at91sam9260pf-linux-2.6.22.1.config	2007-08-19 22:57:25 UTC (rev 19581)
-@@ -176,6 +176,8 @@
- # AT91 Feature Selections
- #
- CONFIG_AT91_PROGRAMMABLE_CLOCKS=y
-+CONFIG_ATMEL_TCLIB=y
-+# CONFIG_AT91_FIQ is not set
- 
- #
- # Processor Type
+Applying libdir-la.patch using plaintext: 
+patching file ltmain.sh
+Hunk http://busybox.net/bugs/view.php?id=2 succeeded at 2408 (offset 3 lines).
+Hunk http://busybox.net/bugs/view.php?id=4 succeeded at 5623 (offset 8 lines).
+FREETYPE_CFLAGS="-I/home/mastag/buildroot/toolchain_build_sh4/freetype-2.2.1-host/include/freetype2
+-I/home/mastag/buildroot/toolchain_build_sh4/freetype-2.2.1-host/include";
+\
+       
+FREETYPE_LIBS="-L/home/mastag/buildroot/toolchain_build_sh4/freetype-2.2.1-host/lib
+-Wl,--rpath
+-Wl,/home/mastag/buildroot/toolchain_build_sh4/freetype-2.2.1-host/lib
+-lfreetype -lz"; \
+        for dir in fc-case fc-glyphname fc-lang fc-arch; \
+        do \
+                /home/mastag/buildroot/toolchain_build_sh4/bin/sed -i -e
+"s~^FREETYPE_CFLAGS =.*~FREETYPE_CFLAGS = $FREETYPE_CFLAGS~" \
+                    -e "s~^FREETYPE_LIBS =.*~FREETYPE_LIBS =
+$FREETYPE_LIBS~" \
+                       
+/home/mastag/buildroot/build_sh4/fontconfig-2.4.2/$dir/Makefile.in; \
+        done
+cp -f package/gnuconfig/config.sub package/gnuconfig/config.guess 
+/home/mastag/buildroot/build_sh4/fontconfig-2.4.2
+touch /home/mastag/buildroot/build_sh4/fontconfig-2.4.2/.unpacked
+(cd /home/mastag/buildroot/build_sh4/fontconfig-2.4.2; rm -rf config.cache
+; \
+               
+PATH="/home/mastag/buildroot/toolchain_build_sh4/bin:/home/mastag/buildroot/build_sh4/staging_dir/bin:/home/mastag/buildroot/build_sh4/staging_dir/usr/bin:/usr/kerberos/bin:/usr/lib/ccache:/usr/local/bin:/usr/bin:/bin:/home/mastag/bin:/home/mastag/buildroot/build_sh4/staging_dir/bin"
+AR_FOR_BUILD="/usr/bin/ar" AS_FOR_BUILD="/usr/bin/as"
+CC_FOR_BUILD="/usr/lib/ccache/gcc" GCC_FOR_BUILD="/usr/lib/ccache/gcc"
+CXX_FOR_BUILD="/usr/lib/ccache/g++" LD_FOR_BUILD="/usr/bin/ld"
+CFLAGS_FOR_BUILD="" CXXFLAGS_FOR_BUILD="" LDFLAGS_FOR_BUILD=""
+AR_FOR_TARGET=/home/mastag/buildroot/build_sh4/staging_dir/usr/bin/sh4-linux-uclibc-ar
+AS_FOR_TARGET=/home/mastag/buildroot/build_sh4/staging_dir/usr/bin/sh4-linux-uclibc-as
+LD_FOR_TARGET=/home/mastag/buildroot/build_sh4/staging_dir/usr/bin/sh4-linux-uclibc-ld
+NM_FOR_TARGET=/home/mastag/buildroot/build_sh4/staging_dir/usr/bin/sh4-linux-uclibc-nm
+RANLIB_FOR_TARGET=/home/mastag/buildroot/build_sh4/staging_dir/usr/bin/sh4-linux-uclibc-ranlib
+STRIP_FOR_TARGET=/home/mastag/buildroot/build_sh4/staging_dir/usr/bin/sh4-linux-uclibc-strip
+OBJCOPY_FOR_TARGET=/home/mastag/buildroot/build_sh4/staging_dir/usr/bin/sh4-linux-uclibc-objcopy
+ACLOCAL="aclocal -I
+/home/mastag/buildroot/build_sh4/staging_dir/usr/share/aclocal" autoreconf
+-v -f -i -I
+"/home/mastag/buildroot/build_sh4/staging_dir/usr/share/aclocal" && \
+               
+PATH="/home/mastag/buildroot/toolchain_build_sh4/bin:/home/mastag/buildroot/build_sh4/staging_dir/bin:/home/mastag/buildroot/build_sh4/staging_dir/usr/bin:/usr/kerberos/bin:/usr/lib/ccache:/usr/local/bin:/usr/bin:/bin:/home/mastag/bin:/home/mastag/buildroot/build_sh4/staging_dir/bin"
+AR=/home/mastag/buildroot/build_sh4/staging_dir/usr/bin/sh4-linux-uclibc-ar
+AS=/home/mastag/buildroot/build_sh4/staging_dir/usr/bin/sh4-linux-uclibc-as
+LD="/home/mastag/buildroot/build_sh4/staging_dir/usr/bin/sh4-linux-uclibc-ld
+-L/home/mastag/buildroot/build_sh4/staging_dir/lib
+-L/home/mastag/buildroot/build_sh4/staging_dir/usr/lib"
+NM=/home/mastag/buildroot/build_sh4/staging_dir/usr/bin/sh4-linux-uclibc-nm
+CC="/home/mastag/buildroot/build_sh4/staging_dir/usr/bin/sh4-linux-uclibc-gcc
+-Os -pipe  -I/home/mastag/buildroot/build_sh4/staging_dir/usr/include
+-I/home/mastag/buildroot/build_sh4/staging_dir/include"
+GCC="/home/mastag/buildroot/build_sh4/staging_dir/usr/bin/sh4-linux-uclibc-gcc
+-Os -pipe  -I/home/mastag/buildroot/build_sh4/staging_dir/usr/include
+-I/home/mastag/buildroot/build_sh4/staging_dir/include"
+CXX="/home/mastag/buildroot/build_sh4/staging_dir/usr/bin/sh4-linux-uclibc-g++
+-Os -pipe  -I/home/mastag/buildroot/build_sh4/staging_dir/usr/include
+-I/home/mastag/buildroot/build_sh4/staging_dir/include"
+CPP="/home/mastag/buildroot/build_sh4/staging_dir/usr/bin/sh4-linux-uclibc-cpp
+-Os -pipe  -I/home/mastag/buildroot/build_sh4/staging_dir/usr/include
+-I/home/mastag/buildroot/build_sh4/staging_dir/include"
+RANLIB=/home/mastag/buildroot/build_sh4/staging_dir/usr/bin/sh4-linux-uclibc-ranlib
+STRIP=/home/mastag/buildroot/build_sh4/staging_dir/usr/bin/sh4-linux-uclibc-strip
+OBJCOPY=/home/mastag/buildroot/build_sh4/staging_dir/usr/bin/sh4-linux-uclibc-objcopy
+AR_FOR_BUILD="/usr/bin/ar" AS_FOR_BUILD="/usr/bin/as"
+CC_FOR_BUILD="/usr/lib/ccache/gcc" CXX_FOR_BUILD="/usr/lib/ccache/g++"
+LD_FOR_BUILD="/usr/bin/ld" CFLAGS_FOR_BUILD="" CXXFLAGS_FOR_BUILD=""
+LDFLAGS_FOR_BUILD=""
+PKG_CONFIG_SYSROOT="/home/mastag/buildroot/build_sh4/staging_dir"
+PKG_CONFIG="/home/mastag/buildroot/build_sh4/staging_dir/usr/bin/pkg-config"
+PKG_CONFIG_PATH="/home/mastag/buildroot/build_sh4/staging_dir/usr/lib/pkgconfig:"
+PKG_CONFIG_ALLOW_SYSTEM_CFLAGS=1 PKG_CONFIG_ALLOW_SYSTEM_LIBS=1
+STAGING_DIR="/home/mastag/buildroot/build_sh4/staging_dir" \
+                ac_cv_lbl_unaligned_fail=yes
+ac_cv_func_mmap_fixed_mapped=yes ac_cv_func_memcmp_working=yes
+ac_cv_c_bigendian=no \
+               
+CFLAGS_FOR_BUILD="-I/home/mastag/buildroot/toolchain_build_sh4/freetype-2.2.1-host/include/freetype2
+-I/home/mastag/buildroot/toolchain_build_sh4/freetype-2.2.1-host/include"
+\
+                ./configure \
+                --target=sh4-linux \
+                --host=sh4-linux \
+                --build=i386-pc-linux-gnu \
+                --with-arch=sh4-linux \
+                --prefix=/usr \
+                --exec-prefix=/usr \
+                --bindir=/usr/bin \
+                --sbindir=/usr/sbin \
+                --libdir=/usr/lib \
+                --libexecdir=/usr/lib \
+                --sysconfdir=/etc \
+                --datadir=/usr/share \
+                --localstatedir=/var \
+                --includedir=/usr/include \
+                --mandir=/usr/man \
+                --infodir=/usr/info \
+               
+--with-freetype-config="/home/mastag/buildroot/build_sh4/staging_dir/usr/bin/freetype-config"
+\
+               
+--with-expat="/home/mastag/buildroot/build_sh4/staging_dir/usr/lib" \
+               
+--with-expat-lib=/home/mastag/buildroot/build_sh4/staging_dir/usr/lib \
+               
+--with-expat-includes=/home/mastag/buildroot/build_sh4/staging_dir/usr/include
+\
+                --disable-docs \
+        )
+autoreconf: Entering directory `.'
+autoreconf: configure.in: not using Gettext
+autoreconf: running: aclocal -I
+/home/mastag/buildroot/build_sh4/staging_dir/usr/share/aclocal --force 
+configure.in:64: warning: macro `AM_PROG_LIBTOOL' not found in library
+autoreconf: configure.in: tracing
+autoreconf: configure.in: not using Libtool
+autoreconf: running: /usr/bin/autoconf
+--include=/home/mastag/buildroot/build_sh4/staging_dir/usr/share/aclocal
+--force
+configure.in:63: error: possibly undefined macro: AC_LIBTOOL_WIN32_DLL
+      If this token and others are legitimate, please use
+m4_pattern_allow.
+      See the Autoconf documentation.
+configure.in:64: error: possibly undefined macro: AM_PROG_LIBTOOL
+autoreconf: /usr/bin/autoconf failed with exit status: 1
+make: *** [/home/mastag/buildroot/build_sh4/fontconfig-2.4.2/.configured]
+Fout 1
+====================================================================== 
 
-Modified: trunk/buildroot/target/device/Atmel/at91sam9261ek/at91sam9261ek-linux-2.6.22.1.config
-===================================================================
---- trunk/buildroot/target/device/Atmel/at91sam9261ek/at91sam9261ek-linux-2.6.22.1.config	2007-08-19 22:43:50 UTC (rev 19580)
-+++ trunk/buildroot/target/device/Atmel/at91sam9261ek/at91sam9261ek-linux-2.6.22.1.config	2007-08-19 22:57:25 UTC (rev 19581)
-@@ -172,7 +172,9 @@
- #
- CONFIG_AT91_PROGRAMMABLE_CLOCKS=y
- CONFIG_ATMEL_TCLIB=y
-+# CONFIG_AT91_FIQ is not set
- 
-+
- #
- # Processor Type
- #
+Issue History 
+Date Modified   Username       Field                    Change               
+====================================================================== 
+08-19-07 16:07  mastag         New Issue                                    
+08-19-07 16:07  mastag         Status                   new => assigned     
+08-19-07 16:07  mastag         Assigned To               => buildroot       
+======================================================================
