@@ -1,58 +1,33 @@
-From: Ulf Samuelsson <ulf@atmel.com>
-Date: Sun, 19 Aug 2007 20:56:41 +0200
-Subject: [Buildroot] How to change kernel version
-In-Reply-To: <d6cda7730708190756y64362d58x28fffa6d014b182c@mail.gmail.com>
-References: <d6cda7730708190608i1b754e71r25dac548fd1c922@mail.gmail.com>
-	<20070819152845.a2be6def.philippe.ney@tizoo.com>
-	<1187535085.31921.5.camel@elrond.sweden.atmel.com>
-	<d6cda7730708190756y64362d58x28fffa6d014b182c@mail.gmail.com>
-Message-ID: <1187549801.31921.22.camel@elrond.sweden.atmel.com>
+From: Cristian Ionescu-Idbohrn <cristian.ionescu-idbohrn@axis.com>
+Date: Sun, 19 Aug 2007 21:02:25 +0200 (CEST)
+Subject: [Buildroot] make clean in topdir tries to remove host
+	/usr/bin/patch :(
+Message-ID: <0708192057530.12216@somehost>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-s?n 2007-08-19 klockan 15:56 +0100 skrev Thiago A. Corr?a:
-> Hi Ulf,
-> 
->    Not yet, I'm still unable to find the right place.
->     In target/device/Atmel/Makefile.in there is a
-> LINUX26_VERSION=$(LINUX_HEADERS_VERSION)  but my grep for that
-> variable doesn't seam to reveal anything usable *g*.
-> 
->    I was planning on adding the patches from avr32linux.org into the
-> buildroot patches folder.
-> 
+Odd...
 
-Don't bother, they are old...
-The predefined toolchain in the buildroot trunk contains newer stuff.
+make[1]: Entering directory `buildroot/build_i486/openntpd-3.9p1'
+rm -f ntpd.o buffer.o log.o imsg.o ntp.o ntp_msg.o config.o server.o
+client.o util.o y.tab.o ntpd openbsd-compat/*.o openbsd-compat/*.a \
+            configure.lineno config.h.in~ ntpd.8.out ntpd.conf.5.out
+make[1]: Leaving directory `buildroot/build_i486/openntpd-3.9p1'
 
-
->   There is also another problem with the vanilla buildroot, it tries
-> to download a version of uClibc from atmel ftp that doesn't exist
-> according to wget error, so I was about to try this on the atmel
-> snapshot of buildroot.
-> 
-
-Checked, and I now know the problem.
-It is in the "target/device/Toolchain.in" file.
+/usr/bin/make -j1 DESTDIR=buildroot/project_build_i486/uclibc/root
+CC=buildroot/build_i486/staging_dir/usr/bin/i486-linux-uclibc-gcc
+-C buildroot/build_i486/patch-2.5.9 uninstall
+make[1]: Entering directory `buildroot/build_i486/patch-2.5.9'
+rm -f /usr/bin/`echo patch | sed 's,x,x,'`
+rm: cannot remove `/usr/bin/patch': Permission denied
+make[1]: *** [uninstall] Error 1
 
 
-  BR2_VENDOR_SITE is wrong...
 
-replace 
-$(BR2_ATMEL_MIRROR)
-with
-"$(BR2_ATMEL_MIRROR)/Source"
+Cheers,
 
-so it reads:
-
-config BR2_VENDOR_SITE
-	string
-	default "$(BR2_ATMEL_MIRROR)/Source" if 
-
-Will fix this ASAP.
-
-BR
-Ulf Samuelsson
+-- 
+Cristian
