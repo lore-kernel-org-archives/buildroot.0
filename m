@@ -1,27 +1,31 @@
 From: Brad House <brad@mainstreetsoftworks.com>
-Date: Sun, 19 Aug 2007 13:22:28 -0400
-Subject: [Buildroot] [patch] libxml2 install fails because of missing
- directory
-In-Reply-To: <46C211DA.1090201@mainstreetsoftworks.com>
-References: <46C211DA.1090201@mainstreetsoftworks.com>
-Message-ID: <46C87C54.3080005@mainstreetsoftworks.com>
+Date: Sun, 19 Aug 2007 13:29:54 -0400
+Subject: [Buildroot] [patch] soekris net4801 config updates
+Message-ID: <46C87E12.1000101@mainstreetsoftworks.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-> If libxml2 is installed before $(TARGET_DIR)/usr/lib is created,
-> it fails because it can't copy the library over.
-> 
-> Also, the dependency tree is a bit messed up.  libxml2.a should
-> only be installed if target-headers is specified, it's 4MB
-> on my system and the only .a file I found in my TARGET_DIR
-> (target-headers was not specified).
-> 
-> The attached patch fixes the above problems.
+We don't need a specific busybox config or a specific
+uClibc config for net4801, the standard buildroot configs
+for these work great, so remove:
 
-Any word on getting this patch committed?
+target/device/Soekris/uClibc.config
+target/device/Soekris/busybox.config
+
+Also, I've updated the kernel config to 2.6.22.1 ...
+
+Please apply the attached patch (gzipped for size)
+and remove the afore-mentioned files.
 
 Thanks.
 -Brad
+-------------- next part --------------
+A non-text attachment was scrubbed...
+Name: net4801.patch.gz
+Type: application/gzip
+Size: 7762 bytes
+Desc: not available
+Url : http://busybox.net/lists/buildroot/attachments/20070819/c04cf7b8/attachment.bin 
