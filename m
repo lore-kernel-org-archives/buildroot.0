@@ -1,7 +1,7 @@
 From: ulf at uclibc.org <ulf@uclibc.org>
-Date: Sun, 19 Aug 2007 13:59:40 -0700 (PDT)
-Subject: [Buildroot] svn commit: trunk/buildroot/package/libxml2
-Message-ID: <20070819205940.D0E38A4710@busybox.net>
+Date: Sun, 19 Aug 2007 14:02:47 -0700 (PDT)
+Subject: [Buildroot] svn commit: trunk/buildroot/package/php
+Message-ID: <20070819210247.6532AA5D20@busybox.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -9,76 +9,107 @@ Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
 Author: ulf
-Date: 2007-08-19 13:59:37 -0700 (Sun, 19 Aug 2007)
-New Revision: 19565
+Date: 2007-08-19 14:02:46 -0700 (Sun, 19 Aug 2007)
+New Revision: 19566
 
 Log:
 Fr?\195?\165n: 	Brad House <brad@mainstreetsoftworks.com>
 Till: 	buildroot at uclibc.org
-?\195?\132mne: 	[Buildroot] [patch] libxml2 install fails because of missing directory
-Datum: 	Tue, 14 Aug 2007 16:34:34 -0400  (22.34 CEST)
-
-If libxml2 is installed before $(TARGET_DIR)/usr/lib is created,
-it fails because it can't copy the library over.
-
-Also, the dependency tree is a bit messed up.  libxml2.a should
-only be installed if target-headers is specified, it's 4MB
-on my system and the only .a file I found in my TARGET_DIR
-(target-headers was not specified).
-
-The attached patch fixes the above problems.
+?\195?\132mne: 	[Buildroot] [patch] php fixes and updates
+Datum: 	Tue, 14 Aug 2007 16:39:03 -0400  (22.39 CEST)
+Changes:
+        - fastcgi config option
+        - force php to find the php.ini in /etc (it seems to default
+          to /lib for some reason)
+        - build with posix support, a lot of php scripts require
+          this apparently
+        - strip the php binary when installing to TARGET_DIR
+        - actually 'uninstall' php on a php-clean
 
 -Brad
 
 
 Modified:
-   trunk/buildroot/package/libxml2/libxml2.mk
+   trunk/buildroot/package/php/Config.in
+   trunk/buildroot/package/php/php.mk
 
 
 Changeset:
-Modified: trunk/buildroot/package/libxml2/libxml2.mk
+Modified: trunk/buildroot/package/php/Config.in
 ===================================================================
---- trunk/buildroot/package/libxml2/libxml2.mk	2007-08-19 19:28:09 UTC (rev 19564)
-+++ trunk/buildroot/package/libxml2/libxml2.mk	2007-08-19 20:59:37 UTC (rev 19565)
-@@ -47,11 +47,8 @@
- 	);
- 	touch $(LIBXML2_DIR)/.configured
+--- trunk/buildroot/package/php/Config.in	2007-08-19 20:59:37 UTC (rev 19565)
++++ trunk/buildroot/package/php/Config.in	2007-08-19 21:02:46 UTC (rev 19566)
+@@ -24,6 +24,13 @@
+           cgi interface for php
+           you must have at least cli or cgi selected.
  
--$(LIBXML2_DIR)/libxml2.la: $(LIBXML2_DIR)/.configured
--	rm -f $@
-+$(STAGING_DIR)/usr/lib/libxml2.so: $(LIBXML2_DIR)/.configured
- 	$(MAKE) CC=$(TARGET_CC) -C $(LIBXML2_DIR)
--
--$(STAGING_DIR)/usr/lib/libxml2.so: $(LIBXML2_DIR)/libxml2.la
- 	$(MAKE) DESTDIR=$(STAGING_DIR) -C $(LIBXML2_DIR) install
- 	rm -f $(STAGING_DIR)/usr/lib/libxml2.la
- 	$(SED) 's:prefix=/usr:prefix=$(STAGING_DIR)/usr:' \
-@@ -59,17 +56,16 @@
- 		$(STAGING_DIR)/usr/bin/xml2-config
++config BR2_PACKAGE_PHP_FASTCGI
++        bool "fastcgi"
++        depends on BR2_PACKAGE_PHP_CGI
++        default y
++        help
++          fast cgi interface for php
++
+ config BR2_PACKAGE_PHP_OPENSSL
+         bool "openssl support"
+         depends on BR2_PACKAGE_PHP && BR2_PACKAGE_OPENSSL
+
+Modified: trunk/buildroot/package/php/php.mk
+===================================================================
+--- trunk/buildroot/package/php/php.mk	2007-08-19 20:59:37 UTC (rev 19565)
++++ trunk/buildroot/package/php/php.mk	2007-08-19 21:02:46 UTC (rev 19566)
+@@ -19,10 +19,13 @@
+ endif
  
- $(TARGET_DIR)/usr/lib/libxml2.so: $(STAGING_DIR)/usr/lib/libxml2.so
-+	mkdir -p $(TARGET_DIR)/usr/include $(TARGET_DIR)/usr/lib
- 	cp -dpf $(STAGING_DIR)/usr/lib/libxml2.so* $(TARGET_DIR)/usr/lib/
- 	$(STRIP) --strip-unneeded $(TARGET_DIR)/usr/lib/libxml2.so*
+ ifneq ($(BR2_PACKAGE_PHP_CGI),y)
+-	PHP_CGI="--disable-cgi"
++	PHP_CGI=--disable-cgi
+ else
+-	PHP_CGI="--enable-cgi"
++	PHP_CGI=--enable-cgi
+ 	PHP_TARGET_DEPS+=$(TARGET_DIR)/usr/bin/php-cgi
++	ifeq ($(BR2_PACKAGE_PHP_FASTCGI),y)
++		PHP_CGI+=--enable-fastcgi
++	endif
+ endif
  
- $(TARGET_DIR)/usr/lib/libxml2.a: $(STAGING_DIR)/usr/lib/libxml2.so
--	mkdir -p $(TARGET_DIR)/usr/include
- 	cp -dpf $(STAGING_DIR)/usr/lib/libxml2.*a $(TARGET_DIR)/usr/lib/
--#	cp -dpf $(STAGING_DIR)/usr/include/libxml $(TARGET_DIR)/usr/include/
+ ifeq ($(BR2_PACKAGE_PHP_OPENSSL),y)
+@@ -69,6 +72,7 @@
+ 		--sbindir=/usr/sbin \
+ 		--libexecdir=/usr/lib \
+ 		--sysconfdir=/etc \
++		--with-config-file-path=/etc \
+ 		--datadir=/usr/share/misc \
+ 		--localstatedir=/var \
+ 		--mandir=/usr/man \
+@@ -77,6 +81,7 @@
+ 		--enable-spl \
+ 		--enable-session \
+ 		--enable-sockets \
++		--enable-posix \
+ 		--with-pcre-regex \
+ 		--without-pear \
+ 		--disable-ipv6 \
+@@ -100,10 +105,12 @@
+ $(TARGET_DIR)/usr/bin/php: $(PHP_DIR)/.staged
+ 	cp -dpf $(STAGING_DIR)/usr/bin/php $(TARGET_DIR)/usr/bin/php
+ 	chmod 755 $(TARGET_DIR)/usr/bin/php
++	$(STRIP) --strip-unneeded $(TARGET_DIR)/usr/bin/php
  
- libxml2:	uclibc $(TARGET_DIR)/usr/lib/libxml2.so libxml2-headers
+ $(TARGET_DIR)/usr/bin/php-cgi: $(PHP_DIR)/.staged
+ 	cp -dpf $(STAGING_DIR)/usr/bin/php-cgi $(TARGET_DIR)/usr/bin/php-cgi
+ 	chmod 755 $(TARGET_DIR)/usr/bin/php-cgi
++	$(STRIP) --strip-unneeded $(TARGET_DIR)/usr/bin/php-cgi
  
--$(STAGING_DIR)/usr/include/libxml:	$(TARGET_DIR)/usr/lib/libxml2.a
-+$(STAGING_DIR)/usr/include/libxml:	$(TARGET_DIR)/usr/lib/libxml2.so
- 	cp -af $(LIBXML2_DIR)/include/libxml $(STAGING_DIR)/usr/include/libxml2
+ $(TARGET_DIR)/etc/php.ini: $(PHP_DIR)/.staged
+ 	cp $(PHP_DIR)/php.ini-dist $(TARGET_DIR)/etc/php.ini
+@@ -112,6 +119,9 @@
  
- $(TARGET_DIR)/usr/include/libxml2:	libxml2-headers
-@@ -78,7 +74,7 @@
+ php-clean:
+ 	rm -f $(PHP_DIR)/.configured $(PHP_DIR)/.built $(PHP_DIR)/.staged
++	rm -f $(TARGET_DIR)/usr/bin/php $(TARGET_DIR)/usr/bin/php-cgi
++	rm -f $(STAGING_DIR)/usr/bin/php* $(STAGING_DIR)/usr/man/man1/php*
++	rm -rf $(STAGING_DIR)/usr/include/php
+ 	-$(MAKE) -C $(PHP_DIR) clean
  
- libxml2-headers:	$(STAGING_DIR)/usr/include/libxml
- 
--libxml2-target-headers: $(TARGET_DIR)/usr/include/libxml2
-+libxml2-target-headers: $(TARGET_DIR)/usr/include/libxml2 $(TARGET_DIR)/usr/lib/libxml2.a
- 
- libxml2-source: $(DL_DIR)/$(LIBXML2_SOURCE)
- 
+ php-dirclean:
