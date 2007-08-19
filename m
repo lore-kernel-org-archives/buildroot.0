@@ -1,26 +1,19 @@
-From: Cristian Ionescu-Idbohrn <cristian.ionescu-idbohrn@axis.com>
-Date: Sun, 19 Aug 2007 03:32:57 +0200 (CEST)
-Subject: [Buildroot] [patch] toolchain/gcc/gcc-uclibc-4.x.mk
-Message-ID: <0708190327420.14301@somehost>
+From: =?ISO-8859-1?Q?Thiago_A._Corr=EAa?= <thiago.correa@gmail.com>
+Date: Sun, 19 Aug 2007 03:40:56 +0100
+Subject: [Buildroot] How to change kernel version
+Message-ID: <d6cda7730708181940u51f1e3d6ya6e701104d6dc5c7@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Please consider this patch.
-Corrects the cp SOURCE path to libstdc++.so* and cleanups some
-whitespace.
+Hi,
 
+   I searched over the archives but I couldn't find anything about how
+one could change the kernel version. The only available option for
+AVR32, 2.6.22, is unable to boot on an STK1000 due to a bug in the MMC
+drivers, so I would like to change it to 2.6.18 which actually works.
 
-Cheers,
-
--- 
-Cristian
--------------- next part --------------
-A non-text attachment was scrubbed...
-Name: gcc-uclibc-4.x.mk.patch
-Type: text/x-diff
-Size: 884 bytes
-Desc: 
-Url : http://busybox.net/lists/buildroot/attachments/20070819/e082008c/attachment.bin 
+Kind Regards,
+    Thiago A. Correa
