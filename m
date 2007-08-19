@@ -1,7 +1,7 @@
 From: ulf at uclibc.org <ulf@uclibc.org>
-Date: Sun, 19 Aug 2007 15:28:54 -0700 (PDT)
+Date: Sun, 19 Aug 2007 15:30:47 -0700 (PDT)
 Subject: [Buildroot] svn commit: trunk/buildroot/target/linux
-Message-ID: <20070819222854.B6600A5D3A@busybox.net>
+Message-ID: <20070819223047.8BDD0A6110@busybox.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -9,27 +9,34 @@ Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
 Author: ulf
-Date: 2007-08-19 15:28:51 -0700 (Sun, 19 Aug 2007)
-New Revision: 19577
+Date: 2007-08-19 15:30:47 -0700 (Sun, 19 Aug 2007)
+New Revision: 19578
 
 Log:
-Fix bad parameter list for patching linux kernel
+Remove target specific things from Linux config
 
 Modified:
-   trunk/buildroot/target/linux/Makefile.in
+   trunk/buildroot/target/linux/Config.in
 
 
 Changeset:
-Modified: trunk/buildroot/target/linux/Makefile.in
+Modified: trunk/buildroot/target/linux/Config.in
 ===================================================================
---- trunk/buildroot/target/linux/Makefile.in	2007-08-19 22:01:27 UTC (rev 19576)
-+++ trunk/buildroot/target/linux/Makefile.in	2007-08-19 22:28:51 UTC (rev 19577)
-@@ -107,7 +107,7 @@
- 	touch $@
+--- trunk/buildroot/target/linux/Config.in	2007-08-19 22:28:51 UTC (rev 19577)
++++ trunk/buildroot/target/linux/Config.in	2007-08-19 22:30:47 UTC (rev 19578)
+@@ -191,14 +191,7 @@
+ 	depends on BR2_PACKAGE_LINUX
  
- $(LINUX26_DIR)/.patched: $(LINUX26_DIR)/.unpacked
--	toolchain/patch-kernel.sh $(LINUX26_DIR) $(LINUX26_PATCH_DIR)
-+	toolchain/patch-kernel.sh $(LINUX26_DIR) $(LINUX26_PATCH_DIR) \*.patch
- 	touch $@
- endif # ($(LINUX26_VERSION),$(LINUX_HEADERS_VERSION))
+ config BR2_LINUX_BSP_PATCH
+-	string	"Additional Atmel patch to apply"
+-	default "linux-2.6.20.4-atmel.patch.bz2"	if	BR2_TARGET_AVR32 
+-	default "linux-2.6.20.4-atmel.patch.bz2"	if	BR2_TARGET_AT91
+-	
+-
+-config BR2_LINUX_BSP_PATCH
+-	string	"Additional patch to apply"
+-	depends on ! (BR2_TARGET_AVR32 || BR2_TARGET_AT91)
++	string	"Additional patch to apply (supply full path)"
+ 	default ""
  
+ endmenu
