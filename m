@@ -1,12 +1,16 @@
 From: Gururaja Hebbar K R <gururajakr@sanyo.co.in>
-Date: Sun, 19 Aug 2007 13:43:12 +0530
-Subject: [Buildroot] (no subject)
-Message-ID: <C03A3C267DDF184EA523BBAB577BF924C2301F@blrexsr1.slti.sanyo.co.in>
+Date: Sun, 19 Aug 2007 14:04:51 +0530
+Subject: [Buildroot] unable to fix Arm EABI in UClibc Menuconfig
+Message-ID: <C03A3C267DDF184EA523BBAB577BF924C23020@blrexsr1.slti.sanyo.co.in>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
+
+ Sorry, I know this is a repost. Last mail went without any subject. so
+i thought that would be rejected. so corrected the subject line &
+resending
 
 Hi All,
  
@@ -96,11 +100,11 @@ Name: uClibc-0.9.29-wchar.config
 Type: application/octet-stream
 Size: 5513 bytes
 Desc: uClibc-0.9.29-wchar.config
-Url : http://busybox.net/lists/buildroot/attachments/20070819/cc613b02/attachment-0002.obj 
+Url : http://busybox.net/lists/buildroot/attachments/20070819/38801b36/attachment.obj 
 -------------- next part --------------
 A non-text attachment was scrubbed...
 Name: buildroot.config
 Type: application/octet-stream
 Size: 11554 bytes
 Desc: buildroot.config
-Url : http://busybox.net/lists/buildroot/attachments/20070819/cc613b02/attachment-0003.obj 
+Url : http://busybox.net/lists/buildroot/attachments/20070819/38801b36/attachment-0001.obj 
