@@ -1,47 +1,36 @@
 From: Bernhard Fischer <rep.dot.nop@gmail.com>
-Date: Mon, 20 Aug 2007 18:05:17 +0200
-Subject: [Buildroot] svn commit: trunk/buildroot/package:
-	diffutils	distcc freetype
-In-Reply-To: <20070819231647.5601AA60F9@busybox.net>
-References: <20070819231647.5601AA60F9@busybox.net>
-Message-ID: <20070820160517.GF23522@aon.at>
+Date: Mon, 20 Aug 2007 18:05:56 +0200
+Subject: [Buildroot] svn commit: trunk/buildroot/target/device/Atmel
+In-Reply-To: <20070819231307.E3573A5D35@busybox.net>
+References: <20070819231307.E3573A5D35@busybox.net>
+Message-ID: <20070820160556.GG23522@aon.at>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Sun, Aug 19, 2007 at 04:16:47PM -0700, ulf at uclibc.org wrote:
+On Sun, Aug 19, 2007 at 04:13:07PM -0700, ulf at uclibc.org wrote:
 >Author: ulf
->Date: 2007-08-19 16:16:47 -0700 (Sun, 19 Aug 2007)
->New Revision: 19583
+>Date: 2007-08-19 16:13:06 -0700 (Sun, 19 Aug 2007)
+>New Revision: 19582
 >
 >Log:
->Update configs for distcc, diffutils and freetype
+>Add kernel patches, if at91 or avr32 is selected
 >
 >Modified:
->   trunk/buildroot/package/diffutils/diffutils.mk
->   trunk/buildroot/package/distcc/distcc.mk
->   trunk/buildroot/package/freetype/freetype.mk
+>   trunk/buildroot/target/device/Atmel/Makefile.in
 >
 >
 >Changeset:
->Modified: trunk/buildroot/package/diffutils/diffutils.mk
+>Modified: trunk/buildroot/target/device/Atmel/Makefile.in
 >===================================================================
->--- trunk/buildroot/package/diffutils/diffutils.mk	2007-08-19 23:13:06 UTC (rev 19582)
->+++ trunk/buildroot/package/diffutils/diffutils.mk	2007-08-19 23:16:47 UTC (rev 19583)
->@@ -19,6 +19,7 @@
+>--- trunk/buildroot/target/device/Atmel/Makefile.in	2007-08-19 22:57:25 UTC (rev 19581)
+>+++ trunk/buildroot/target/device/Atmel/Makefile.in	2007-08-19 23:13:06 UTC (rev 19582)
+>@@ -44,18 +44,20 @@
 > 
-> $(DIFFUTILS_DIR)/.unpacked: $(DL_DIR)/$(DIFFUTILS_SOURCE)
-> 	$(DIFFUTILS_CAT) $(DL_DIR)/$(DIFFUTILS_SOURCE) | tar -C $(BUILD_DIR) $(TAR_OPTIONS) -
->+	$(CONFIG_UPDATE) $(DIFFUTILS_DIR)/config
-> 	touch $(DIFFUTILS_DIR)/.unpacked
+> LINUX26_COPYTO:=/tftpboot
 > 
-> $(DIFFUTILS_DIR)/.configured: $(DIFFUTILS_DIR)/.unpacked
->@@ -108,6 +109,8 @@
-> 
-> diffutils: uclibc $(TARGET_DIR)/$(DIFFUTILS_TARGET_BINARY)
-> 
->+diff-utils-unpacked:	$(DIFFUTILS_DIR)/.unpacked
+>+ifeq	($(DEFAULT_KERNEL_HEADERS),2.6.22.1)
 
 whitespace damaged..
