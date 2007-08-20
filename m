@@ -1,51 +1,63 @@
-From: =?ISO-8859-1?Q?Thiago_A._Corr=EAa?= <thiago.correa@gmail.com>
-Date: Mon, 20 Aug 2007 15:59:08 +0100
-Subject: [Buildroot] AVR32 now requires setting the kernel binary format
-In-Reply-To: <d6cda7730708200757g18983a3clf5833aba059aee9e@mail.gmail.com>
-References: <d6cda7730708200757g18983a3clf5833aba059aee9e@mail.gmail.com>
-Message-ID: <d6cda7730708200759s71a623e6m61e414a11fc2c56a@mail.gmail.com>
+From: ulf at uclibc.org <ulf@uclibc.org>
+Date: Mon, 20 Aug 2007 08:47:43 -0700 (PDT)
+Subject: [Buildroot] svn commit: trunk/buildroot:  toolchain/dependencies
+Message-ID: <20070820154743.7DF17A45E7@busybox.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Also, the build stops after the kernel is compiled, as it's looking it
-at the wrong place:
+Author: ulf
+Date: 2007-08-20 08:47:42 -0700 (Mon, 20 Aug 2007)
+New Revision: 19591
 
-  OBJCOPY arch/avr32/boot/images/vmlinux.bin
-  GZIP    arch/avr32/boot/images/vmlinux.gz
-  UIMAGE arch/avr32/boot/images/uImage
-Image Name:   Linux-2.6.22.1
-Created:      Mon Aug 20 08:57:18 2007
-Image Type:   AVR32 Linux Kernel Image (gzip compressed)
-Data Size:    932780 Bytes = 910.92 kB = 0.89 MB
-Load Address: 0x10000000
-Entry Point:  0x90000000
-  Image arch/avr32/boot/images/uImage is ready
-make[1]: Leaving directory
-`/root/novacomm/buildroot/buildroot/build_avr32/linux-2.6.22.1'
-cp -dpf /root/novacomm/buildroot/buildroot/build_avr32/linux-2.6.22.1/uImage
-/root/novacomm/buildroot/buildroot/binaries/pppserver/pppserver-linux-2.6.22.1
-cp: cannot stat
-`/root/novacomm/buildroot/buildroot/build_avr32/linux-2.6.22.1/uImage':
-No such file or directory
-make: *** [/root/novacomm/buildroot/buildroot/binaries/pppserver/pppserver-linux-2.6.22.1]
-Error 1
+Log:
+Add BUILDROOT_DL_DIR to dependencies.sh and fix whitespace damage (sorry)
+
+Modified:
+   trunk/buildroot/Makefile
+   trunk/buildroot/toolchain/dependencies/dependencies.sh
 
 
-This one I don't know where to fix :(
+Changeset:
+Modified: trunk/buildroot/Makefile
+===================================================================
+--- trunk/buildroot/Makefile	2007-08-20 13:00:14 UTC (rev 19590)
++++ trunk/buildroot/Makefile	2007-08-20 15:47:42 UTC (rev 19591)
+@@ -37,7 +37,7 @@
+ ifeq ($(filter $(noconfig_targets),$(MAKECMDGOALS)),)
+ -include $(TOPDIR).config
+ endif
+-ifneq	($(BUILDROOT_DL_DIR),)
++ifneq ($(BUILDROOT_DL_DIR),)
+ BR2_DL_DIR:=$(BUILDROOT_DL_DIR)
+ endif
+ 
 
-On 8/20/07, Thiago A. Corr?a <thiago.correa@gmail.com> wrote:
-> Hi,
->
->   Not sure if this is intended, but now to build the AVR32 one has to
-> set the kernel format in menuconfig, since the default changed from
-> uImage to zImage and the AVR32 linux fails to build zImage with
-> unknown target.
->
->   Perhaps some variable missing in target/devices/Atmel
->
-> Cheers,
->    Thiago A. Correa
->
+Modified: trunk/buildroot/toolchain/dependencies/dependencies.sh
+===================================================================
+--- trunk/buildroot/toolchain/dependencies/dependencies.sh	2007-08-20 13:00:14 UTC (rev 19590)
++++ trunk/buildroot/toolchain/dependencies/dependencies.sh	2007-08-20 15:47:42 UTC (rev 19591)
+@@ -11,6 +11,13 @@
+ # check build system 'environment'
+ #
+ #############################################################
++if test -n "$BUILDROOT_DL_DIR" ; then
++	/bin/echo -e "Overriding \$(DL_DIR) in '.config'.		Ok"
++	/bin/echo -e "External download directory:			Ok ($BUILDROOT_DL_DIR)"
++else
++	echo "BUILDROOT_DL_DIR clean:				Ok"
++fi
++
+ if test -n "$CC" ; then
+ 	echo "CC clean:						FALSE"
+ 	/bin/echo -e "\n\nYou must run 'unset CC' so buildroot can run with";
+@@ -19,7 +26,6 @@
+ fi;
+ echo "CC clean:					Ok"
+ 
+-
+ if test -n "$CXX" ; then
+ 	echo "CXX clean:					FALSE"
+ 	/bin/echo -e "\n\nYou must run 'unset CXX' so buildroot can run with";
