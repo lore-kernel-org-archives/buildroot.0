@@ -1,64 +1,63 @@
-From: Ulf Samuelsson <ulf@atmel.com>
-Date: Mon, 20 Aug 2007 11:56:44 +0200
-Subject: [Buildroot] sstrip vs. strip
-In-Reply-To: <0708192347500.12216@somehost>
-References: <0708192347500.12216@somehost>
-Message-ID: <1187603804.29832.38.camel@elrond.sweden.atmel.com>
+From: ulf at uclibc.org <ulf@uclibc.org>
+Date: Mon, 20 Aug 2007 02:25:47 -0700 (PDT)
+Subject: [Buildroot] svn commit: trunk/buildroot/package/dnsmasq
+Message-ID: <20070820092547.D34AFA459C@busybox.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-s?n 2007-08-19 klockan 23:58 +0200 skrev Cristian Ionescu-Idbohrn:
-> If sstrip is selected (instead of the default strip) it needs to be built
-> early, else things like this:
-> 
-> ,----
-> | make[1]: Leaving directory `buildroot/build_i486/gmp-4.2.1'
-> | buildroot/build_i486/staging_dir/usr/bin/i486-linux-uclibc-sstrip
-> | --strip-unneeded buildroot/build_i486/staging_dir/usr/lib/libgmp.so*
-> | /bin/sh: buildroot/build_i486/staging_dir/usr/bin/i486-linux-uclibc-sstrip:
-> | No such file or directory
-> | make: *** [buildroot/build_i486/staging_dir/usr/lib/libgmp.so]
-> | Error 127
-> `----
-> 
+Author: ulf
+Date: 2007-08-20 02:25:47 -0700 (Mon, 20 Aug 2007)
+New Revision: 19589
 
-> may occur.
-> 
-> Moreover, sstrip does not have any options, so that options like
-> s-/--strip-all, --strip-unneeded, --remove-section and so on need to be
-> hidden behind $(STRIP).
-> 
-> 
-> Cheers,
-> 
+Log:
+Cleanup dnsmasq
+
+Modified:
+   trunk/buildroot/package/dnsmasq/dnsmasq.mk
 
 
-I generated a patch to fix this:
-
-It makes sstrip-host a prerequisite of building binutils
-and defines some symbolics for all the flags
-
-
-I sed'ed package/*/*.mk to replace
---strip-unneeded with $(STRIP_STRIP_UNNEEDED) etc.
-and defined STRIP_STRIP_UNNEEDED etc. as empty when sstrip is
-to be used and "--strip-unneeded" etc. otherwise.
-
-The patch was too large so I am resending it here zipped.
-
-Pls try it out.
-
-BR
-Ulf Samuelsson
-
-
--------------- next part --------------
-A non-text attachment was scrubbed...
-Name: sstrip.patch.bz2
-Type: application/x-bzip
-Size: 7519 bytes
-Desc: not available
-Url : http://busybox.net/lists/buildroot/attachments/20070820/47927d87/attachment.bin 
+Changeset:
+Modified: trunk/buildroot/package/dnsmasq/dnsmasq.mk
+===================================================================
+--- trunk/buildroot/package/dnsmasq/dnsmasq.mk	2007-08-20 07:24:10 UTC (rev 19588)
++++ trunk/buildroot/package/dnsmasq/dnsmasq.mk	2007-08-20 09:25:47 UTC (rev 19589)
+@@ -24,19 +24,20 @@
+ 	$(ZCAT) $(DL_DIR)/$(DNSMASQ_SOURCE) | tar -C $(BUILD_DIR) $(TAR_OPTIONS) -
+ 	toolchain/patch-kernel.sh $(DNSMASQ_DIR) package/dnsmasq/ \
+ 		$(DNSMASQ_VERSION)\*.patch
+-	touch $(DNSMASQ_DIR)/.source
++	touch $@
+ 
+ $(DNSMASQ_DIR)/src/$(DNSMASQ_BINARY): $(DNSMASQ_DIR)/.source
+ 	$(MAKE) CC=$(TARGET_CC) CFLAGS="$(TARGET_CFLAGS)" \
+-		BINDIR=/usr/sbin MANDIR=/usr/man -C $(DNSMASQ_DIR)
++		PREFIX=/usr -C $(DNSMASQ_DIR)
+ 
+ $(TARGET_DIR)/$(DNSMASQ_TARGET_BINARY): $(DNSMASQ_DIR)/src/$(DNSMASQ_BINARY)
+-	$(MAKE) BINDIR=/usr/sbin MANDIR=/usr/man \
+-		DESTDIR=$(TARGET_DIR) -C $(DNSMASQ_DIR) install
++	$(MAKE) DESTDIR=$(TARGET_DIR) PREFIX=/usr -C $(DNSMASQ_DIR) install
+ 	$(STRIP) $(TARGET_DIR)/$(DNSMASQ_TARGET_BINARY)
+ 	mkdir -p $(TARGET_DIR)/var/lib/misc
++	# Isn't this vulverable to symlink attacks?
+ 	ln -sf /tmp/dnsmasq.leases $(TARGET_DIR)/var/lib/misc/dnsmasq.leases
+-	rm -rf $(TARGET_DIR)/usr/man
++	# Another questionable wipe out :(
++	#rm -rf $(TARGET_DIR)/usr/share/man
+ 
+ dnsmasq: uclibc $(TARGET_DIR)/$(DNSMASQ_TARGET_BINARY)
+ 
+@@ -45,7 +46,9 @@
+ dnsmasq-source: $(DL_DIR)/$(DNSMASQ_SOURCE)
+ 
+ dnsmasq-clean:
+-	#$(MAKE) prefix=$(TARGET_DIR)/usr -C $(DNSMASQ_DIR) uninstall
++	rm -f $(addprefix $(TARGET_DIR)/,var/lib/misc/dnsmasq.leases \
++					 usr/share/man/man?/dnsmasq.* \
++					 $(DNSMASQ_TARGET_BINARY))
+ 	-$(MAKE) -C $(DNSMASQ_DIR) clean
+ 
+ dnsmasq-dirclean:
