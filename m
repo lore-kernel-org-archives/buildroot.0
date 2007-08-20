@@ -1,213 +1,47 @@
 From: Bernhard Fischer <rep.dot.nop@gmail.com>
-Date: Mon, 20 Aug 2007 17:56:07 +0200
-Subject: [Buildroot] [RFC] Building linux kernel in $(PROJECT_BUILD_DIR)
-In-Reply-To: <1187598890.29832.19.camel@elrond.sweden.atmel.com>
-References: <20070723075415.0C7BDA467A@busybox.net>
-	<20070723103336.GA7044@aon.at>
-	<1185196685.21840.25.camel@elrond.sweden.atmel.com>
-	<20070723133400.GC7902@aon.at>
-	<1185429498.31437.11.camel@localhost.localdomain>
-	<20070727155915.GB25147@aon.at>
-	<1187598890.29832.19.camel@elrond.sweden.atmel.com>
-Message-ID: <20070820155607.GE23522@aon.at>
+Date: Mon, 20 Aug 2007 18:05:17 +0200
+Subject: [Buildroot] svn commit: trunk/buildroot/package:
+	diffutils	distcc freetype
+In-Reply-To: <20070819231647.5601AA60F9@busybox.net>
+References: <20070819231647.5601AA60F9@busybox.net>
+Message-ID: <20070820160517.GF23522@aon.at>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Mon, Aug 20, 2007 at 10:34:50AM +0200, Ulf Samuelsson wrote:
->Proposed fix to allow each project to build its own linux kernel
->in $(PROJECT_BUILD_DIR)  == project_build_dir/<project>
+On Sun, Aug 19, 2007 at 04:16:47PM -0700, ulf at uclibc.org wrote:
+>Author: ulf
+>Date: 2007-08-19 16:16:47 -0700 (Sun, 19 Aug 2007)
+>New Revision: 19583
 >
->Basic approach is to unpack the linux header source in 
->"$(TOOL_BUILD_DIR)" instead of in "$(BUILD_DIR)"
->Patches are applied (some depending on BR2_<xxx>) as in current trunk,
+>Log:
+>Update configs for distcc, diffutils and freetype
 >
->Each board can add additional patches by defining
->KERNEL_HEADERS_PATCH_DIR to point at the directory with additional
->patches (That patch just applied to get rid of AVR32 patches in 
->toolchain/kernel-headers).
->
->Headers are still installed in "$(TOOL_BUILD_DIR)/linux"
->The kernel-headers source tree is unpacked once per toolchain.
->
->The target/linux build (modules and kernel) will unpack a 
->second linux source tree in "$(PROJECT_BUILD_DIR)".
->This source tree is generated once per *project*.
->
->Since this is a fresh unpack, the same patches as were applied
->to the kernel-headers are applied to "$(PROJECT_BUILD_DIR)/linux-*".
->
->A common linux source tree for all projects is not possible, since
->different boards can require different patches to be applied.
->There is a significant risk that the linux build breaks if patches for
->one project are applied on top of patches for another project
->in the same source tree.
->
->With a single source, you therefore will have to remove the linux source
->tree each time you work on a new project.
->With a separate source, you can move between projects without removing
->the linux source directory.
+>Modified:
+>   trunk/buildroot/package/diffutils/diffutils.mk
+>   trunk/buildroot/package/distcc/distcc.mk
+>   trunk/buildroot/package/freetype/freetype.mk
 >
 >
->The patch is also include it as an attachement, due to linewrap.
->
->Tested this on x86/Atmel targets.
->
->Comments?
->
->
->Index: toolchain/kernel-headers/kernel-headers-new.makefile
+>Changeset:
+>Modified: trunk/buildroot/package/diffutils/diffutils.mk
 >===================================================================
->--- toolchain/kernel-headers/kernel-headers-new.makefile	(revision
->19588)
->+++ toolchain/kernel-headers/kernel-headers-new.makefile	(arbetskopia)
->@@ -13,7 +13,7 @@
-> LINUX_HEADERS_SITE:=http://www.kernel.org/pub/linux/kernel/v2.6/
-> LINUX_HEADERS_SOURCE:=linux-$(LINUX_HEADERS_VERSION).tar.bz2
-> LINUX_HEADERS_CAT:=$(BZCAT)
->-LINUX_HEADERS_UNPACK_DIR:=$(BUILD_DIR)/linux-$(LINUX_HEADERS_VERSION)
->+LINUX_HEADERS_UNPACK_DIR:=
->$(TOOL_BUILD_DIR)/linux-$(LINUX_HEADERS_VERSION)
-> LINUX_HEADERS_DIR:=$(TOOL_BUILD_DIR)/linux
-> LINUX_HEADERS_IS_KERNEL=y
-> endif
->@@ -28,7 +28,7 @@
-> LINUX_HEADERS_SITE:=http://www.kernel.org/pub/linux/kernel/v2.6/
-> LINUX_HEADERS_SOURCE:=linux-$(LINUX_HEADERS_VERSION).tar.bz2
-> LINUX_HEADERS_CAT:=$(BZCAT)
->-LINUX_HEADERS_UNPACK_DIR:=$(BUILD_DIR)/linux-$(LINUX_HEADERS_VERSION)
->+LINUX_HEADERS_UNPACK_DIR:=
->$(TOOL_BUILD_DIR)/linux-$(LINUX_HEADERS_VERSION)
-> LINUX_HEADERS_DIR:=$(TOOL_BUILD_DIR)/linux
-> LINUX_HEADERS_IS_KERNEL=y
-> endif
->@@ -43,7 +43,7 @@
-> LINUX_HEADERS_SITE:=http://www.kernel.org/pub/linux/kernel/v2.6/
-> LINUX_HEADERS_SOURCE:=linux-$(LINUX_HEADERS_VERSION).tar.bz2
-> LINUX_HEADERS_CAT:=$(BZCAT)
->-LINUX_HEADERS_UNPACK_DIR:=$(BUILD_DIR)/linux-$(LINUX_HEADERS_VERSION)
->+LINUX_HEADERS_UNPACK_DIR:=
->$(TOOL_BUILD_DIR)/linux-$(LINUX_HEADERS_VERSION)
-> LINUX_HEADERS_DIR:=$(TOOL_BUILD_DIR)/linux
-> LINUX_HEADERS_IS_KERNEL=y
-> endif
->@@ -56,8 +56,8 @@
-> $(LINUX_HEADERS_UNPACK_DIR)/.unpacked:
->$(DL_DIR)/$(LINUX_HEADERS_SOURCE)
-> 	@echo "*** Using kernel-headers generated from kernel source"
-> 	rm -rf $(LINUX_HEADERS_DIR)
->-	[ -d $(BUILD_DIR) ] || $(INSTALL) -d $(BUILD_DIR)
->-	$(LINUX_HEADERS_CAT) $(DL_DIR)/$(LINUX_HEADERS_SOURCE) | tar -C
->$(BUILD_DIR) $(TAR_OPTIONS) -
->+	[ -d $(TOOL_BUILD_DIR) ] || $(INSTALL) -d $(TOOL_BUILD_DIR)
+>--- trunk/buildroot/package/diffutils/diffutils.mk	2007-08-19 23:13:06 UTC (rev 19582)
+>+++ trunk/buildroot/package/diffutils/diffutils.mk	2007-08-19 23:16:47 UTC (rev 19583)
+>@@ -19,6 +19,7 @@
+> 
+> $(DIFFUTILS_DIR)/.unpacked: $(DL_DIR)/$(DIFFUTILS_SOURCE)
+> 	$(DIFFUTILS_CAT) $(DL_DIR)/$(DIFFUTILS_SOURCE) | tar -C $(BUILD_DIR) $(TAR_OPTIONS) -
+>+	$(CONFIG_UPDATE) $(DIFFUTILS_DIR)/config
+> 	touch $(DIFFUTILS_DIR)/.unpacked
+> 
+> $(DIFFUTILS_DIR)/.configured: $(DIFFUTILS_DIR)/.unpacked
+>@@ -108,6 +109,8 @@
+> 
+> diffutils: uclibc $(TARGET_DIR)/$(DIFFUTILS_TARGET_BINARY)
+> 
+>+diff-utils-unpacked:	$(DIFFUTILS_DIR)/.unpacked
 
-I think that the TOOL_BUILD_DIR will already exist now.
-To verify, set BR2_JLEVEL=1 and execute a toplevel
-make -j 64
-If it is not yet created at this stage, just adding a dependency to that
-dir should be sufficient (we already have a rule for it, IIRC).
-
->+	$(LINUX_HEADERS_CAT) $(DL_DIR)/$(LINUX_HEADERS_SOURCE) | tar -C
->$(TOOL_BUILD_DIR) $(TAR_OPTIONS) -
-> 	touch $@
-> 
-> $(LINUX_HEADERS_UNPACK_DIR)/.patched:
->$(LINUX_HEADERS_UNPACK_DIR)/.unpacked
->Index: toolchain/kernel-headers/kernel-headers.mk
->===================================================================
->--- toolchain/kernel-headers/kernel-headers.mk	(revision 19588)
->+++ toolchain/kernel-headers/kernel-headers.mk	(arbetskopia)
->@@ -37,5 +37,6 @@
-> 
-> kernel-headers-dirclean:
-> 	rm -rf $(LINUX_HEADERS_DIR)
->+	rm -rf $(LINUX_HEADERS_UNPACK_DIR)
-> 
-> .PHONY: kernel-headers
->Index: target/linux/Makefile.in
->===================================================================
->--- target/linux/Makefile.in	(revision 19588)
->+++ target/linux/Makefile.in	(arbetskopia)
->@@ -68,7 +68,7 @@
-> endif
-> 
-> # Version of Linux AFTER patches
->-LINUX26_DIR=$(BUILD_DIR)/linux-$(LINUX26_VERSION)
->+LINUX26_DIR=$(PROJECT_BUILD_DIR)/linux-$(LINUX26_VERSION)
-> 
-> # for packages that need it
-> LINUX_VERSION:=$(LINUX_VERSION)
->@@ -76,7 +76,9 @@
-> LINUX_KERNEL=$(LINUX26_KERNEL)
-> 
-> # kernel patches
->+ifeq ($(strip $(LINUX26_PATCH_DIR)),)
-> LINUX26_PATCH_DIR=$(BR2_BOARD_PATH)/kernel-patches/
->+endif
-> __LINUX26_NO_PIC=-fPIC -fpic -DPIC
-> LINUX26_MAKE_FLAGS = HOSTCC="$(HOSTCC)" HOSTCFLAGS=$(HOSTCFLAGS) \
-> 	ARCH=$(KERNEL_ARCH) \
->@@ -96,20 +98,38 @@
-> ifneq ($(strip $(LINUX26_VERSION)),$(strip $(LINUX_HEADERS_VERSION)))
-> $(DL_DIR)/$(LINUX26_SOURCE):
-> 	 $(WGET) -P $(DL_DIR) $(LINUX26_SITE)/$(LINUX26_SOURCE)
->+endif # ($(LINUX26_VERSION),$(LINUX_HEADERS_VERSION))
-> 
-> $(LINUX26_DIR)/.unpacked: $(DL_DIR)/$(LINUX26_SOURCE)
-> 	rm -rf $(LINUX26_DIR)
->-	$(LINUX26_BZCAT) $(DL_DIR)/$(LINUX26_SOURCE) | tar -C $(BUILD_DIR)
->$(TAR_OPTIONS) -
->+	$(LINUX26_BZCAT) $(DL_DIR)/$(LINUX26_SOURCE) | tar -C
->$(PROJECT_BUILD_DIR) $(TAR_OPTIONS) -
-> ifneq ($(DOWNLOAD_LINUX26_VERSION),$(LINUX26_VERSION))
-> 	# Rename the dir from the downloaded version to the AFTER patch
->version
->-	mv -f $(BUILD_DIR)/linux-$(DOWNLOAD_LINUX26_VERSION) $(LINUX26_DIR)
->+	mv -f $(PROJECT_BUILD_DIR)/linux-$(DOWNLOAD_LINUX26_VERSION)
->$(LINUX26_DIR)
-> endif
-> 	touch $@
-> 
-> $(LINUX26_DIR)/.patched: $(LINUX26_DIR)/.unpacked
->-	toolchain/patch-kernel.sh $(LINUX26_DIR) $(LINUX26_PATCH_DIR) \*.patch
->+	toolchain/patch-kernel.sh $(LINUX26_DIR) toolchain/kernel-headers \
->+		linux-$(LINUX26_VERSION)-\*.patch{,.gz,.bz2}
->+ifeq ($(BR2_KERNEL_HEADERS_IPMI),y)
->+	toolchain/patch-kernel.sh $(LINUX26_DIR) toolchain/kernel-headers/ipmi
->\
->+		linux-$(LINUX26_VERSION)-\*.patch{,.gz,.bz2}
->+endif
->+ifeq ($(BR2_KERNEL_HEADERS_LZMA),y)
->+	toolchain/patch-kernel.sh $(LINUX26_DIR) toolchain/kernel-headers/lzma
->\
->+		linux-$(LINUX26_VERSION)-\*.patch{,.gz,.bz2}
->+endif
->+ifeq ($(BR2_KERNEL_HEADERS_PATCH_DIR),y)
->+	toolchain/patch-kernel.sh $(LINUX26_DIR) $(KERNEL_HEADERS_PATCH_DIR) \
->+		linux-$(LINUX26_VERSION)-\*.patch{,.gz,.bz2}
->+endif
->+ifeq ($(BR2_PACKAGE_OPENSWAN),y)
->+	toolchain/patch-kernel.sh $(LINUX_HEADERS_UNPACK_DIR) package/openswan
->\
->+		linux-$(LINUX26_VERSION)-\*.patch{,.gz,.bz2}
->+endif
->+	toolchain/patch-kernel.sh $(LINUX26_DIR) $(LINUX26_PATCH_DIR)
-
-Hardcoding these is very, very ugly.
-
->linux-$(LINUX26_VERSION)\*.patch
-> 	touch $@
->-endif # ($(LINUX26_VERSION),$(LINUX_HEADERS_VERSION))
-> 
-> $(LINUX26_DIR)/.configured: $(LINUX26_DIR)/.patched $(LINUX26_KCONFIG)
-> 	cp -dpf $(LINUX26_KCONFIG) $(LINUX26_DIR)/.config
->
-
-Did you test this with the old, deprecated headers, with new headers ==
-src and new-headers != src ?
-
-If so, then please apply with abovementioned fix for the mkdir.
-
-thanks,
+whitespace damaged..
