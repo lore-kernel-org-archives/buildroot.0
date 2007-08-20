@@ -1,43 +1,25 @@
-From: Ulf Samuelsson <ulf@atmel.com>
-Date: Mon, 20 Aug 2007 16:52:47 +0200
-Subject: [Buildroot] svn commit: trunk/buildroot/toolchain/binutils
-References: <20070820130014.12B6AA466E@busybox.net>
-Message-ID: <00c801c7e345$cb1db9c0$dcc4af0a@atmel.com>
+From: =?ISO-8859-1?Q?Thiago_A._Corr=EAa?= <thiago.correa@gmail.com>
+Date: Mon, 20 Aug 2007 17:22:18 +0100
+Subject: [Buildroot] [PATCH] Fix AVR32 bug where it tries to copy kernel
+	image from the wrong place.
+Message-ID: <d6cda7730708200922t51933e01m93855c264f355fb8@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
------ Original Message ----- 
-From: <aldot@uclibc.org>
-To: <buildroot@uclibc.org>
-Sent: Monday, August 20, 2007 3:00 PM
-Subject: [Buildroot] svn commit: trunk/buildroot/toolchain/binutils
+Hi there,
 
+   This small one line patch fix the avr32 build, were it fails during
+cp of the kernel image.
 
-> Author: aldot
-> Date: 2007-08-20 06:00:14 -0700 (Mon, 20 Aug 2007)
-> New Revision: 19590
-> 
-> Log:
-> - whitespace fixes
-> 
-> 
-> Modified:
->   trunk/buildroot/toolchain/binutils/binutils.mk
-> 
-> 
-> Changeset:
-> Modified: trunk/buildroot/toolchain/binutils/binutils.mk
-...
-> 
-> _______________________________________________
-
-
-Thanks, maybe we should have a script which is periodically run to find
-the white space stuff and remove it.
-
-
-Best Regards
-Ulf Samuelsson
+Chears,
+    Thiago A. Correa
+-------------- next part --------------
+A non-text attachment was scrubbed...
+Name: patch
+Type: application/octet-stream
+Size: 494 bytes
+Desc: not available
+Url : http://busybox.net/lists/buildroot/attachments/20070820/bbad3007/attachment.obj 
