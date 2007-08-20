@@ -1,8 +1,7 @@
 From: ulf at uclibc.org <ulf@uclibc.org>
-Date: Sun, 19 Aug 2007 23:23:01 -0700 (PDT)
-Subject: [Buildroot] svn commit:
-	trunk/buildroot/target/device/Atmel/toolchain/avr32/uClibc-0.9.28.3-avr32-2.0
-Message-ID: <20070820062301.E3852A459C@busybox.net>
+Date: Sun, 19 Aug 2007 23:24:28 -0700 (PDT)
+Subject: [Buildroot] svn commit: trunk/buildroot/toolchain/kernel-headers
+Message-ID: <20070820062428.0916FA45E7@busybox.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -10,32 +9,29 @@ Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
 Author: ulf
-Date: 2007-08-19 23:23:00 -0700 (Sun, 19 Aug 2007)
-New Revision: 19586
+Date: 2007-08-19 23:24:28 -0700 (Sun, 19 Aug 2007)
+New Revision: 19587
 
 Log:
-install uClibc libraries correctly
+Ensure ipmi conditional patch is applied
 
-Added:
-   trunk/buildroot/target/device/Atmel/toolchain/avr32/uClibc-0.9.28.3-avr32-2.0/uClibc-0.9.28.3-001-libext.patch
+Modified:
+   trunk/buildroot/toolchain/kernel-headers/kernel-headers-new.makefile
 
 
 Changeset:
-Added: trunk/buildroot/target/device/Atmel/toolchain/avr32/uClibc-0.9.28.3-avr32-2.0/uClibc-0.9.28.3-001-libext.patch
+Modified: trunk/buildroot/toolchain/kernel-headers/kernel-headers-new.makefile
 ===================================================================
---- trunk/buildroot/target/device/Atmel/toolchain/avr32/uClibc-0.9.28.3-avr32-2.0/uClibc-0.9.28.3-001-libext.patch	                        (rev 0)
-+++ trunk/buildroot/target/device/Atmel/toolchain/avr32/uClibc-0.9.28.3-avr32-2.0/uClibc-0.9.28.3-001-libext.patch	2007-08-20 06:23:00 UTC (rev 19586)
-@@ -0,0 +1,13 @@
-+diff -urN uClibc-0.9.28.3-0rig/Makefile uClibc-0.9.28.3/Makefile
-+--- uClibc-0.9.28.3-0rig/Makefile	2007-07-29 08:20:33.000000000 +0200
-++++ uClibc-0.9.28.3/Makefile	2007-08-20 07:02:53.000000000 +0200
-+@@ -157,7 +157,8 @@
-+ install_dev:
-+ 	$(INSTALL) -d $(PREFIX)$(DEVEL_PREFIX)lib
-+ 	$(INSTALL) -d $(PREFIX)$(DEVEL_PREFIX)include
-+-	-$(INSTALL) -m 644 lib/*.[ao] $(PREFIX)$(DEVEL_PREFIX)lib/
-++	-$(INSTALL) -m 644 lib/*.a $(PREFIX)$(DEVEL_PREFIX)lib/
-++	-$(INSTALL) -m 644 lib/*.so* $(PREFIX)$(DEVEL_PREFIX)lib/
-+ 	if [ "$(KERNEL_SOURCE)" = "$(DEVEL_PREFIX)" ] ; then \
-+ 		extra_exclude="--exclude include/linux --exclude include/asm'*'" ; \
-+ 	else \
+--- trunk/buildroot/toolchain/kernel-headers/kernel-headers-new.makefile	2007-08-20 06:23:00 UTC (rev 19586)
++++ trunk/buildroot/toolchain/kernel-headers/kernel-headers-new.makefile	2007-08-20 06:24:28 UTC (rev 19587)
+@@ -60,6 +60,10 @@
+ $(LINUX_HEADERS_UNPACK_DIR)/.patched: $(LINUX_HEADERS_UNPACK_DIR)/.unpacked
+ 	toolchain/patch-kernel.sh $(LINUX_HEADERS_UNPACK_DIR) toolchain/kernel-headers \
+ 		linux-$(LINUX_HEADERS_VERSION)-\*.patch{,.gz,.bz2}
++ifeq ($(BR2_KERNEL_HEADERS_IPMI),y)
++	toolchain/patch-kernel.sh $(LINUX_HEADERS_UNPACK_DIR) toolchain/kernel-headers/ipmi \
++		linux-$(LINUX_HEADERS_VERSION)-\*.patch{,.gz,.bz2}
++endif
+ ifeq ($(BR2_KERNEL_HEADERS_LZMA),y)
+ 	toolchain/patch-kernel.sh $(LINUX_HEADERS_UNPACK_DIR) toolchain/kernel-headers/lzma \
+ 		linux-$(LINUX_HEADERS_VERSION)-\*.patch{,.gz,.bz2}
