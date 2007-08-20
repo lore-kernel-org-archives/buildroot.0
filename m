@@ -1,57 +1,44 @@
-From: ulf at uclibc.org <ulf@uclibc.org>
-Date: Sun, 19 Aug 2007 22:03:21 -0700 (PDT)
-Subject: [Buildroot] svn commit: trunk/buildroot/package/dhcp
-Message-ID: <20070820050321.D078BA459C@busybox.net>
+From: Ulf Samuelsson <ulf@atmel.com>
+Date: Mon, 20 Aug 2007 07:34:49 +0200
+Subject: [Buildroot]
+	svn	commit:	trunk/buildroot/target/device/Soekris/net4801
+In-Reply-To: <46C8F332.2000001@mainstreetsoftworks.com>
+References: <20070819210930.1D668A60EF@busybox.net>
+	<46C8F332.2000001@mainstreetsoftworks.com>
+Message-ID: <1187588089.31921.67.camel@elrond.sweden.atmel.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Author: ulf
-Date: 2007-08-19 22:03:21 -0700 (Sun, 19 Aug 2007)
-New Revision: 19585
+s?n 2007-08-19 klockan 21:49 -0400 skrev Brad House:
+> > Log:
+> > UPdate Soekris Linux config to 2.6.22.1
+> > 
+> > Modified:
+> >    trunk/buildroot/target/device/Soekris/net4801/linux26.config
+> > 
+> 
+> Thanks for committing that update... Any reason the other part of
+> my patch didn't make it (mainly the removal of the busybox and uclibc
+> configs)?
+> 
 
-Log:
-Make sure directories are available before install of dhcp targets
+Yes, I can't judge the consequences of that action.
+That does not mean that the proposed patch is rejected.
+Just that I will not do it.
 
-Modified:
-   trunk/buildroot/package/dhcp/dhcp.mk
+Are you related to the manufacturer of the H/W?
+
+I will leave that decision to Someone Else(tm)
+
+What I can do, is to add another x86 target, without those files...
 
 
-Changeset:
-Modified: trunk/buildroot/package/dhcp/dhcp.mk
-===================================================================
---- trunk/buildroot/package/dhcp/dhcp.mk	2007-08-19 23:32:33 UTC (rev 19584)
-+++ trunk/buildroot/package/dhcp/dhcp.mk	2007-08-20 05:03:21 UTC (rev 19585)
-@@ -44,23 +44,30 @@
- 	$(STRIP) $(DHCP_DIR)/$(DHCP_RELAY_BINARY)
- 
- $(TARGET_DIR)/$(DHCP_SERVER_TARGET_BINARY): $(DHCP_DIR)/$(DHCP_RELAY_BINARY)
-+	mkdir -p $(TARGET_DIR)/var/lib
- 	(cd $(TARGET_DIR)/var/lib; ln -snf /tmp dhcp)
- 	$(INSTALL) -m 0755 -D $(DHCP_DIR)/$(DHCP_SERVER_BINARY) $(TARGET_DIR)/$(DHCP_SERVER_TARGET_BINARY)
-+	mkdir -p $(TARGET_DIR)/etc/init.d
- 	$(INSTALL) -m 0755 -D package/dhcp/S80dhcp-server $(TARGET_DIR)/etc/init.d
-+	mkdir -p $(TARGET_DIR)/etc/dhcp
- 	$(INSTALL) -m 0644 -D package/dhcp/dhcpd.conf $(TARGET_DIR)/etc/dhcp/dhcpd.conf
- 	rm -rf $(TARGET_DIR)/share/locale $(TARGET_DIR)/usr/info \
- 		$(TARGET_DIR)/usr/man $(TARGET_DIR)/usr/share/doc
- 
- $(TARGET_DIR)/$(DHCP_RELAY_TARGET_BINARY): $(DHCP_DIR)/$(DHCP_RELAY_BINARY)
-+	mkdir -p $(TARGET_DIR)/var/lib
- 	(cd $(TARGET_DIR)/var/lib; ln -snf /tmp dhcp)
- 	$(INSTALL) -m 0755 -D $(DHCP_DIR)/$(DHCP_RELAY_BINARY) $(TARGET_DIR)/$(DHCP_RELAY_TARGET_BINARY)
-+	mkdir -p $(TARGET_DIR)/etc/init.d
- 	$(INSTALL) -m 0755 -D package/dhcp/S80dhcp-relay $(TARGET_DIR)/etc/init.d
- 	rm -rf $(TARGET_DIR)/share/locale $(TARGET_DIR)/usr/info \
- 		$(TARGET_DIR)/usr/man $(TARGET_DIR)/usr/share/doc
- 
- $(TARGET_DIR)/$(DHCP_CLIENT_TARGET_BINARY): $(DHCP_DIR)/$(DHCP_RELAY_BINARY)
-+	mkdir -p $(TARGET_DIR)/var/lib
- 	(cd $(TARGET_DIR)/var/lib; ln -snf /tmp dhcp)
- 	$(INSTALL) -m 0755 -D $(DHCP_DIR)/$(DHCP_CLIENT_BINARY) $(TARGET_DIR)/$(DHCP_CLIENT_TARGET_BINARY)
-+	mkdir -p $(TARGET_DIR)/etc/dhcp
- 	$(INSTALL) -m 0644 -D package/dhcp/dhclient.conf $(TARGET_DIR)/etc/dhcp/dhclient.conf
- 	$(INSTALL) -m 0755 -D package/dhcp/dhclient-script $(TARGET_DIR)/sbin/dhclient-script
- 	rm -rf $(TARGET_DIR)/share/locale $(TARGET_DIR)/usr/info \
+
+> -Brad
+> _______________________________________________
+> buildroot mailing list
+> buildroot at uclibc.org
+> http://busybox.net/mailman/listinfo/buildroot
