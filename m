@@ -1,63 +1,58 @@
-From: ulf at uclibc.org <ulf@uclibc.org>
-Date: Mon, 20 Aug 2007 02:25:47 -0700 (PDT)
-Subject: [Buildroot] svn commit: trunk/buildroot/package/dnsmasq
-Message-ID: <20070820092547.D34AFA459C@busybox.net>
+From: Brad House <brad@mainstreetsoftworks.com>
+Date: Mon, 20 Aug 2007 08:09:42 -0400
+Subject: [Buildroot]
+	svn	commit:	trunk/buildroot/target/device/Soekris/net4801
+In-Reply-To: <1187588089.31921.67.camel@elrond.sweden.atmel.com>
+References: <20070819210930.1D668A60EF@busybox.net>	
+	<46C8F332.2000001@mainstreetsoftworks.com>
+	<1187588089.31921.67.camel@elrond.sweden.atmel.com>
+Message-ID: <46C98486.3070105@mainstreetsoftworks.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Author: ulf
-Date: 2007-08-20 02:25:47 -0700 (Mon, 20 Aug 2007)
-New Revision: 19589
+>>> Log:
+>>> UPdate Soekris Linux config to 2.6.22.1
+>>>
+>>> Modified:
+>>>    trunk/buildroot/target/device/Soekris/net4801/linux26.config
+>>>
+>> Thanks for committing that update... Any reason the other part of
+>> my patch didn't make it (mainly the removal of the busybox and uclibc
+>> configs)?
+>>
+> 
+> Yes, I can't judge the consequences of that action.
+> That does not mean that the proposed patch is rejected.
+> Just that I will not do it.
+> 
+> Are you related to the manufacturer of the H/W?
+> 
+> I will leave that decision to Someone Else(tm)
+> 
+> What I can do, is to add another x86 target, without those files...
 
-Log:
-Cleanup dnsmasq
+No, I have no affiliation with soekris. My company is just looking at
+them as a possible hardware vendor for our embedded application, and
+I've been just submitting patches which fixed problems I've
+encountered.  I guess my main motivation for having all the patches
+committed is purely selfish as it's easier for them to be upstream
+than maintaining an overlay patchset.  That said, I think others
+could benefit.
 
-Modified:
-   trunk/buildroot/package/dnsmasq/dnsmasq.mk
+Truthfully though, I can find no reason why they had a custom uclibc
+or busybox config.  My system is up and running fine.  Perhaps whoever
+submitted them to begin with wanted to slim down the system a bit, etc.
+I doubt though that someone from Soekris was responsible for submitting
+the patches, their website clearly states that they are only a hardware
+company and not to ask for basically anything software related. That
+combined with the fact I can't even get them to answer a few simple
+questions about making a volume purchase [2-5k units] of _their_
+hardware ... well, I don't know what to say about that, maybe it's
+for the best though as I'd rather go ARM-based, just means we'd need
+some custom hardware designed, which would slow our time-to-market
+a bit...
 
-
-Changeset:
-Modified: trunk/buildroot/package/dnsmasq/dnsmasq.mk
-===================================================================
---- trunk/buildroot/package/dnsmasq/dnsmasq.mk	2007-08-20 07:24:10 UTC (rev 19588)
-+++ trunk/buildroot/package/dnsmasq/dnsmasq.mk	2007-08-20 09:25:47 UTC (rev 19589)
-@@ -24,19 +24,20 @@
- 	$(ZCAT) $(DL_DIR)/$(DNSMASQ_SOURCE) | tar -C $(BUILD_DIR) $(TAR_OPTIONS) -
- 	toolchain/patch-kernel.sh $(DNSMASQ_DIR) package/dnsmasq/ \
- 		$(DNSMASQ_VERSION)\*.patch
--	touch $(DNSMASQ_DIR)/.source
-+	touch $@
- 
- $(DNSMASQ_DIR)/src/$(DNSMASQ_BINARY): $(DNSMASQ_DIR)/.source
- 	$(MAKE) CC=$(TARGET_CC) CFLAGS="$(TARGET_CFLAGS)" \
--		BINDIR=/usr/sbin MANDIR=/usr/man -C $(DNSMASQ_DIR)
-+		PREFIX=/usr -C $(DNSMASQ_DIR)
- 
- $(TARGET_DIR)/$(DNSMASQ_TARGET_BINARY): $(DNSMASQ_DIR)/src/$(DNSMASQ_BINARY)
--	$(MAKE) BINDIR=/usr/sbin MANDIR=/usr/man \
--		DESTDIR=$(TARGET_DIR) -C $(DNSMASQ_DIR) install
-+	$(MAKE) DESTDIR=$(TARGET_DIR) PREFIX=/usr -C $(DNSMASQ_DIR) install
- 	$(STRIP) $(TARGET_DIR)/$(DNSMASQ_TARGET_BINARY)
- 	mkdir -p $(TARGET_DIR)/var/lib/misc
-+	# Isn't this vulverable to symlink attacks?
- 	ln -sf /tmp/dnsmasq.leases $(TARGET_DIR)/var/lib/misc/dnsmasq.leases
--	rm -rf $(TARGET_DIR)/usr/man
-+	# Another questionable wipe out :(
-+	#rm -rf $(TARGET_DIR)/usr/share/man
- 
- dnsmasq: uclibc $(TARGET_DIR)/$(DNSMASQ_TARGET_BINARY)
- 
-@@ -45,7 +46,9 @@
- dnsmasq-source: $(DL_DIR)/$(DNSMASQ_SOURCE)
- 
- dnsmasq-clean:
--	#$(MAKE) prefix=$(TARGET_DIR)/usr -C $(DNSMASQ_DIR) uninstall
-+	rm -f $(addprefix $(TARGET_DIR)/,var/lib/misc/dnsmasq.leases \
-+					 usr/share/man/man?/dnsmasq.* \
-+					 $(DNSMASQ_TARGET_BINARY))
- 	-$(MAKE) -C $(DNSMASQ_DIR) clean
- 
- dnsmasq-dirclean:
+-Brad
