@@ -1,42 +1,28 @@
 From: Bernhard Fischer <rep.dot.nop@gmail.com>
-Date: Mon, 20 Aug 2007 20:08:46 +0200
-Subject: [Buildroot] stdarg.h error
-In-Reply-To: <50f131690708201051j5092cb63u83bc0b27d488b9c@mail.gmail.com>
-References: <50f131690708200938t13f4ae3dn12d12933ba6b6f24@mail.gmail.com>
-	<20070820173938.GP11697@aon.at>
-	<50f131690708201051j5092cb63u83bc0b27d488b9c@mail.gmail.com>
-Message-ID: <20070820180846.GQ11697@aon.at>
+Date: Mon, 20 Aug 2007 20:11:51 +0200
+Subject: [Buildroot] [PATCH] Fix sed fail when building qtopia
+In-Reply-To: <d6cda7730708201100l732f3131hc0eb086da6cb5ee2@mail.gmail.com>
+References: <d6cda7730708201100l732f3131hc0eb086da6cb5ee2@mail.gmail.com>
+Message-ID: <20070820181151.GR11697@aon.at>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Mon, Aug 20, 2007 at 02:51:12PM -0300, Emiliano Lopez wrote:
->No, I didn't test with current versions because I need 2.4.31 kernel
->support for the routerboard 532.
+On Mon, Aug 20, 2007 at 07:00:17PM +0100, Thiago A. Corr?a wrote:
+>Hi there,
+>
+>   This patch should fix the error:
+>   sed: -e expression #1, char 21: unknown option to `s'
+>
+>   I am sure there is a better way to do this, but I'm not comfortable
+>with shell scripts enough, so, if someone has a better solution, by
+>all means :)
 
-It's a mips board and linux-2.6 has mips support.
-I'd give it a try with a current, stable linux and if that fails, go to
-the linux-mips folks and seek help there, fwiw.
->
->Thanks.
+ergh, that's rather ugly.
+Please try to use this instead and let me know if that works for you:
+$(SED) 's,-O2,$(TARGET_CFLAGS),' \
+$(QTOPIA4_TARGET_DIR)/mkspecs/qws/linux-$(BR2_PACKAGE_QTOPIA4_EMB_PLATFORM)-g++/qmake.conf
 
-you're welcome and i hope that helps..
->
->Emiliano.-
->
->On 20/08/07, Bernhard Fischer <rep.dot.nop@gmail.com> wrote:
->> On Mon, Aug 20, 2007 at 01:38:08PM -0300, Emiliano Lopez wrote:
->> >Hi to all.
->> >I am trying to port linux on a routerboard 532 [1].
->> >Actually I am having problems to compile the kernel.
->> >
->> >I am using buildroot-20050818 download from [2] because y need to
->> >compile a kernel version 2.4.30 or 2.4.31.
->>
->> Does a current buildroot with a current toolchain, current uclibc-0.9.29
->> and a current kernel work? If it does not, what error do you get (please
->> provide your br2.config and your uClibc.config in this case)
->>
->
+(i.e. use ',' instead if '/'.
