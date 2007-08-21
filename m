@@ -1,76 +1,35 @@
-From: aldot at uclibc.org <aldot@uclibc.org>
-Date: Tue, 21 Aug 2007 07:21:00 -0700 (PDT)
-Subject: [Buildroot] svn commit: trunk/buildroot:  package/gnuconfig
-Message-ID: <20070821142100.13029A463F@busybox.net>
+From: ulf at uclibc.org <ulf@uclibc.org>
+Date: Tue, 21 Aug 2007 07:27:59 -0700 (PDT)
+Subject: [Buildroot] svn commit: trunk/buildroot/package/libdaemon
+Message-ID: <20070821142759.744EBA60E7@busybox.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Author: aldot
-Date: 2007-08-21 07:20:59 -0700 (Tue, 21 Aug 2007)
-New Revision: 19616
+Author: ulf
+Date: 2007-08-21 07:27:57 -0700 (Tue, 21 Aug 2007)
+New Revision: 19617
 
 Log:
-- add BR2_HAVE_MANPAGE and BR2_HAVE_INFOPAGE. Selecting these will keep the
-  respective documentation on your target filesystem.
-
+Use $(BZCAT) instead of bzcat
 
 Modified:
-   trunk/buildroot/Config.in
-   trunk/buildroot/package/gnuconfig/Config.in
+   trunk/buildroot/package/libdaemon/libdaemon.mk
 
 
 Changeset:
-Modified: trunk/buildroot/Config.in
+Modified: trunk/buildroot/package/libdaemon/libdaemon.mk
 ===================================================================
---- trunk/buildroot/Config.in	2007-08-21 13:23:13 UTC (rev 19615)
-+++ trunk/buildroot/Config.in	2007-08-21 14:20:59 UTC (rev 19616)
-@@ -586,8 +586,6 @@
- 
- menu "Build options"
- 
--source package/gnuconfig/Config.in
--
- config BR2_WGET
- 	string "Wget command"
- 	default "wget --passive-ftp -nd"
-@@ -756,6 +754,24 @@
- 
- 	  WARNING: This is highly experimental at the moment.
- 
-+config BR2_HAVE_MANPAGES
-+	bool "manpages on the target"
-+	default n
-+	help
-+	  Leave the manpages on the target.
-+	  If you say n here, your target will not contain any
-+	  manpage.
-+
-+config BR2_HAVE_INFOPAGES
-+	bool "infopages on the target"
-+	default n
-+	help
-+	  Leave the infopages on the target.
-+	  If you say n here, your target will not contain any
-+	  infopage.
-+
-+source package/gnuconfig/Config.in
-+
- endmenu
- 
- source "toolchain/Config.in"
-
-Modified: trunk/buildroot/package/gnuconfig/Config.in
-===================================================================
---- trunk/buildroot/package/gnuconfig/Config.in	2007-08-21 13:23:13 UTC (rev 19615)
-+++ trunk/buildroot/package/gnuconfig/Config.in	2007-08-21 14:20:59 UTC (rev 19616)
-@@ -1,6 +1,6 @@
- config BR2_UPDATE_CONFIG
- 	bool "update config.sub and config.guess"
--	default n
-+	default y
- 	help
- 		This just exists to easily update the config.sub / config.guess
- 		files in packages to the latest version (since many bundled ones
+--- trunk/buildroot/package/libdaemon/libdaemon.mk	2007-08-21 14:20:59 UTC (rev 19616)
++++ trunk/buildroot/package/libdaemon/libdaemon.mk	2007-08-21 14:27:57 UTC (rev 19617)
+@@ -27,7 +27,7 @@
+ 	$(LIBDAEMON_CAT) $(DL_DIR)/$(LIBDAEMON_SOURCE) | tar -C $(BUILD_DIR) $(TAR_OPTIONS) -
+ 	toolchain/patch-kernel.sh $(LIBDAEMON_DIR) package/libdaemon/ \*.patch
+ 	mkdir	-p $(PROJECT_BUILD_DIR)/patches
+-	bzcat package/libdaemon/$(LIBDAEMON_NAME).patch.bz2 \
++	$(BZCAT) package/libdaemon/$(LIBDAEMON_NAME).patch.bz2 \
+ 		> $(PROJECT_BUILD_DIR)/patches/$(LIBDAEMON_NAME).patch
+ 	toolchain/patch-kernel.sh $(LIBDAEMON_DIR) $(PROJECT_BUILD_DIR)/patches/ $(LIBDAEMON_NAME)\*.patch
+ 	$(CONFIG_UPDATE) $(LIBDAEMON_DIR)
