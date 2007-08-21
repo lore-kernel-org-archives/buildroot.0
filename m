@@ -1,16 +1,35 @@
-From: Bernhard Fischer <rep.dot.nop@gmail.com>
-Date: Tue, 21 Aug 2007 21:24:08 +0200
-Subject: [Buildroot] [patch] cleanup whitespace damage
-In-Reply-To: <0708212101070.11646@somehost>
-References: <0708212101070.11646@somehost>
-Message-ID: <20070821192408.GB20225@aon.at>
+From: aldot at uclibc.org <aldot@uclibc.org>
+Date: Tue, 21 Aug 2007 12:45:18 -0700 (PDT)
+Subject: [Buildroot] svn commit: trunk/buildroot/toolchain
+Message-ID: <20070821194518.0DA2BA6038@busybox.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Tue, Aug 21, 2007 at 09:03:30PM +0200, Cristian Ionescu-Idbohrn wrote:
->Cheers,
+Author: aldot
+Date: 2007-08-21 12:45:17 -0700 (Tue, 21 Aug 2007)
+New Revision: 19630
 
-I think i did already catch this as part of r19628, but thanks anyway
+Log:
+- add question for Ulf
+
+
+Modified:
+   trunk/buildroot/toolchain/Makefile.in
+
+
+Changeset:
+Modified: trunk/buildroot/toolchain/Makefile.in
+===================================================================
+--- trunk/buildroot/toolchain/Makefile.in	2007-08-21 19:35:08 UTC (rev 19629)
++++ trunk/buildroot/toolchain/Makefile.in	2007-08-21 19:45:17 UTC (rev 19630)
+@@ -46,6 +46,7 @@
+ CFLAGS_COMBINE = $(call cc-option,--combine,)
+ 
+ # define values for prepatched source trees for toolchains
++#XXX: ulf, what about moving this to project/* ? (BF)
+ VENDOR_SITE:=$(strip $(subst ",,$(BR2_VENDOR_SITE)))
+ #"))
+ VENDOR_SUFFIX:=$(strip $(subst ",,$(BR2_VENDOR_SUFFIX)))
