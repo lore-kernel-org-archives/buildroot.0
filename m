@@ -1,40 +1,42 @@
-From: aldot at uclibc.org <aldot@uclibc.org>
-Date: Tue, 21 Aug 2007 13:14:24 -0700 (PDT)
-Subject: [Buildroot] svn commit: trunk/buildroot/toolchain/dependencies
-Message-ID: <20070821201424.A0BC1A5D3C@busybox.net>
+From: Ulf Samuelsson <ulf@atmel.com>
+Date: Tue, 21 Aug 2007 15:29:02 +0200
+Subject: [Buildroot] svn commit: trunk/buildroot/target/linux
+In-Reply-To: <20070821132145.C758DA48D8@busybox.net>
+References: <20070821132145.C758DA48D8@busybox.net>
+Message-ID: <1187702942.6145.2.camel@86-115-11-152>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Author: aldot
-Date: 2007-08-21 13:14:23 -0700 (Tue, 21 Aug 2007)
-New Revision: 19631
 
-Log:
-- make sure that sstrip is available early enough
+> 
+> Changeset:
+> Modified: trunk/buildroot/target/linux/Makefile.in
+> ===================================================================
+> --- trunk/buildroot/target/linux/Makefile.in	2007-08-21 12:09:53 UTC (rev 19613)
+> +++ trunk/buildroot/target/linux/Makefile.in	2007-08-21 13:21:44 UTC (rev 19614)
+> @@ -121,6 +121,12 @@
+>  else
+>  	echo "# CONFIG_AEABI is not set" >> $(LINUX26_DIR)/.config
+>  endif
+> +	$(SED) '/CONFIG_IPV6/d' $(LINUX26_DIR)/.config
+> +ifeq ($(BR2_INET_IPV6),y)
+> +	echo "CONFIG_IPV6=y" >> $(LINUX26_DIR)/.config
+> +else
+> +	echo "# CONFIG_IPV6 is not set" >> $(LINUX26_DIR)/.config
+> +endif
+>  ifeq ($(BR2_TARGET_ROOTFS_INITRAMFS),y)
+>  	$(SED) '/CONFIG_INITRAMFS_SOURCE/d' $(LINUX26_DIR)/.config
+>  	echo "CONFIG_INITRAMFS_SOURCE=\"$(INITRAMFS_TARGET)\"" >> \
+
+I think this is dangerous.
+What happens if someone introduces 
+CONFIG_IPV6_EXTRA_CONFIG in the kernel.
+It is better to 'sed' the .config for the full string.
 
 
-Modified:
-   trunk/buildroot/toolchain/dependencies/dependencies.mk
-
-
-Changeset:
-Modified: trunk/buildroot/toolchain/dependencies/dependencies.mk
-===================================================================
---- trunk/buildroot/toolchain/dependencies/dependencies.mk	2007-08-21 19:45:17 UTC (rev 19630)
-+++ trunk/buildroot/toolchain/dependencies/dependencies.mk	2007-08-21 20:14:23 UTC (rev 19631)
-@@ -5,7 +5,11 @@
- #
- ######################################################################
- 
--dependencies: host-sed host-lzma
-+ifeq ($(BR2_STRIP_sstrip),y)
-+# XXX: this is a little bit ugly, yep.
-+MAYBE_SSTRIP_HOST:=sstrip_host
-+endif
-+dependencies: host-sed host-lzma $(MAYBE_SSTRIP_HOST)
- 	@HOSTCC="$(firstword $(HOSTCC))" MAKE="$(MAKE)" \
- 		HOST_SED_DIR="$(HOST_SED_DIR)" \
- 		$(TOPDIR)/toolchain/dependencies/dependencies.sh
+-- 
+Best Regards,
+Ulf Samuelsson
