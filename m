@@ -1,7 +1,7 @@
 From: Cristian Ionescu-Idbohrn <cristian.ionescu-idbohrn@axis.com>
-Date: Wed, 22 Aug 2007 00:42:44 +0200 (CEST)
-Subject: [Buildroot] [patch] whitespace-cleanup
-Message-ID: <0708220042150.11646@somehost>
+Date: Wed, 22 Aug 2007 00:46:57 +0200 (CEST)
+Subject: [Buildroot] [patch] cleanup
+Message-ID: <0708220046350.11646@somehost>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -14,8 +14,8 @@ Cheers,
 Cristian
 -------------- next part --------------
 A non-text attachment was scrubbed...
-Name: socat.mk.diff
+Name: modutils.mk.patch
 Type: text/x-diff
-Size: 707 bytes
+Size: 1376 bytes
 Desc: 
-Url : http://busybox.net/lists/buildroot/attachments/20070822/fc541dd1/attachment.bin 
+Url : http://busybox.net/lists/buildroot/attachments/20070822/ab259ec8/attachment.bin 
