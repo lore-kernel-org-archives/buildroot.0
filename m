@@ -1,62 +1,36 @@
 From: Ulf Samuelsson <ulf@atmel.com>
-Date: Tue, 21 Aug 2007 20:57:17 +0200
-Subject: [Buildroot] improved per-project dependencies
-In-Reply-To: <20070821174604.GA19089@aon.at>
-References: <20070821175648.CE549A610A@busybox.net>
-	<20070821174604.GA19089@aon.at>
-Message-ID: <1187722638.6145.19.camel@86-115-11-152>
+Date: Tue, 21 Aug 2007 16:15:56 +0200
+Subject: [Buildroot] svn commit: trunk/buildroot/package/libdaemon
+In-Reply-To: <20070821082316.GC14397@aon.at>
+References: <20070821013237.256CCA470E@busybox.net>
+	<20070821082316.GC14397@aon.at>
+Message-ID: <1187705756.6145.8.camel@86-115-11-152>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-tis 2007-08-21 klockan 19:46 +0200 skrev Bernhard Fischer:
-> On Tue, Aug 21, 2007 at 10:56:48AM -0700, aldot at uclibc.org wrote:
-> >Author: aldot
-> >Date: 2007-08-21 10:56:47 -0700 (Tue, 21 Aug 2007)
-> >New Revision: 19624
-> >
-> >Log:
-> >- our dependencies are project specific. First (untested) attempt to take this fact into account.
-> >  Will need to try to copy eventual pre-existing project-specific deps back
-> >  to package/config in order not to mess up the corresponding timestamps (to avoid superfluous rebuilds)..
+
+> > $(DL_DIR)/$(LIBDAEMON_SOURCE):
+> >@@ -25,6 +26,10 @@
+> > $(LIBDAEMON_DIR)/.unpacked: $(DL_DIR)/$(LIBDAEMON_SOURCE)
+> > 	$(LIBDAEMON_CAT) $(DL_DIR)/$(LIBDAEMON_SOURCE) | tar -C $(BUILD_DIR) $(TAR_OPTIONS) -
+> > 	toolchain/patch-kernel.sh $(LIBDAEMON_DIR) package/libdaemon/ \*.patch
+> >+	mkdir	-p $(PROJECT_BUILD_DIR)/patches
+> >+	bzcat package/libdaemon/$(LIBDAEMON_NAME).patch.bz2 \
 > 
-> I hope that this didn't break too much, if so please holler.
-> This will need some further massage. Help (patches) welcome
+> This will break on a variety of hosts. Use BR2_BZCAT instead (i.e.
+> honour what the user told us).
 
-I have been thinking about this.
-The idea of the BSP patch is to share a common toolchain
-and to share the build of packages
+Fixed in r19617.
+
+It is a bit irritating to load the tarball with a lot of stuff
+just because autotools versions differ in distribution.
+
+What about generating host-autotools in STAGING_DIR?
 
 
-If you have two different toolchains, then you effectively lose the
-purpose of the toolchain, and could as well build the project in a 
-different directory.
-
-A possible approach would be to separate the configs of the 
-packages from that of the toolchain
-
-"make toolconfig" would create the .config'uration of the toolchain
-"make menuconfig" would create the .config'uration for the rest.
-
-Then you can add a dependency on the toolconfig ".config" file
-which deletes 
-* build_<ARCH>
-* binaries
-* toolchain_build_<ARCH>
-* project_build_<ARCH>
-because they are really not valid.
-
-A more difficult approach is to have the old .config available and
-compare that against the new ".config".  Only changes affecting the
-builds of package should call for the battle-axe.
-Cosmetic changes should not be dramatic.
-
-> _______________________________________________
-> buildroot mailing list
-> buildroot at uclibc.org
-> http://busybox.net/mailman/listinfo/buildroot
 -- 
 Best Regards,
 Ulf Samuelsson
