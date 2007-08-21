@@ -1,66 +1,79 @@
-From: Ulf Samuelsson <ulf@atmel.com>
-Date: Tue, 21 Aug 2007 00:30:00 +0200
-Subject: [Buildroot] building tiny-x or x11R7 with latest snapshot
-References: <022b01c7e35f$9df9f1b0$2600a8c0@engineering5>
-Message-ID: <0ad801c7e382$8bb6dfe0$dcc4af0a@atmel.com>
+From: Phillip Liang <liangcw94086@yahoo.com>
+Date: Mon, 20 Aug 2007 17:31:34 -0700 (PDT)
+Subject: [Buildroot] llseek errors in e2fsprogs
+In-Reply-To: <20070820143821.GB23522@aon.at>
+Message-ID: <114799.94938.qm@web54207.mail.re2.yahoo.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->I receive errors if I want to build either tiny-x or the full X11R7.  has
-> anyone else had these?  Is this something in the environment?
-> 
-> 
-> 
-> I have a snapshot from a couple of months ago and I can build tiny-x without
-> a problem on it.
-> 
-> 
-> 
-> X11R7:
-[snip]
+Thanks.
+It works now.
 
+--- Bernhard Fischer <rep.dot.nop@gmail.com> wrote:
+
+> On Fri, Aug 17, 2007 at 05:24:25PM -0700, Phillip
+> Liang wrote:
+> >Hello,
+> >I am compiling buildroot 2007-06-07 for at91sam9263
+> >and stuck with this problem.
+> >linux-kernel 2.6.20.4
+> >gcc-4.1.2-uclibc
+> >Your help is appreciated.
+> >
+> >
+> >making all in lib/ext2fs
+> >make[3]: Entering directory
+>
+>`/scratch/buildroot-atmel/build_arm_small/e2fsprogs-1.39/lib/ext2fs'
+> >        CC llseek.c
+> >llseek.c:65: error: expected declaration specifiers
+> or
+> >'...' before '_llseek'
+> >llseek.c:65: error: expected declaration specifiers
+> or
+> >'...' before 'fd'
+> >llseek.c:65: error: expected declaration specifiers
+> or
+> >'...' before 'offset_high'
+> >llseek.c:66: error: expected declaration specifiers
+> or
+> >'...' before 'offset_low'
+> >llseek.c:66: error: expected declaration specifiers
+> or
+> >'...' before 'result'
+> >llseek.c:67: error: expected declaration specifiers
+> or
+> >'...' before 'origin'
+> >llseek.c: In function '_syscall5':
+> >llseek.c:71: error: expected '=', ',', ';', 'asm'
+> or
+> >'__attribute__' before '{' token
+> >llseek.c:91: error: expected '=', ',', ';', 'asm'
+> or
+> >'__attribute__' before '{' token
+> >llseek.c:65: error: parameter name omitted
+> >llseek.c:65: error: parameter name omitted
+> >llseek.c:65: error: parameter name omitted
+> >llseek.c:66: error: parameter name omitted
+> >llseek.c:66: error: parameter name omitted
+> >llseek.c:67: error: parameter name omitted
+> >llseek.c:114: error: expected '{' at end of input
+> >make[3]: *** [llseek.o] Error 1
 > 
+> Didn't look but it sounds like you should select
+> BR2_LARGEFILE (i.e.
+> LFS).
 > 
-> tiny-x: 
-> 
-> making imake with BOOTSTRAPCFLAGS= in config/imake
-> 
-> /home/christopher/sb/buildroot/build_arm/staging_dir/usr/bin/arm-linux-uclib
-> c-gcc -Os -pipe
-> -I/home/christopher/sb/buildroot/build_arm/staging_dir/usr/include
-> -I/home/christopher/sb/buildroot/build_arm/staging_dir/include
-> -mtune=arm920t -o ccimake  -O -I../../include
-> -I../../imports/x11/include/X11 ccimake.c
+> hth,
 > 
 
-As you can see from above, you are compiling ccimage.c using the ARM cross compiler.
-
-> /home/christopher/sb/buildroot/build_arm/staging_dir/usr/bin/arm-linux-uclib
-> c-gcc -Os -pipe
-> -I/home/christopher/sb/buildroot/build_arm/staging_dir/usr/include
-> -I/home/christopher/sb/buildroot/build_arm/staging_dir/include
-> -mtune=arm920t -c  -O -I../../include -I../../imports/x11/include/X11
-> `./ccimake` imake.c
-> 
-> /bin/sh: ./ccimake: cannot execute binary file
-
-And now you try to run the ARM binary on your PC.
-
-> 
-[snip]
-> ./config/imake/imake -I./config/cf  -s ./config/makedepend/Makefile.proto -f
-> ./config/makedepend/Imakefile -DTOPDIR=../.. -DCURDIR=./config/makedepend
-> 
-> ./config/imake/imake: ./config/imake/imake: cannot execute binary file
-> 
-
-I have seen the same problem, tinyx simply does not build.
-Xorg does not build either, and x11r7 is still work in progress.
 
 
-
-Best Regards
-Ulf Samuelsson 
+       
+____________________________________________________________________________________
+Sick sense of humor? Visit Yahoo! TV's 
+Comedy with an Edge to see what's on, when. 
+http://tv.yahoo.com/collections/222
