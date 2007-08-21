@@ -1,79 +1,214 @@
-From: Benjamin Tietz <benjamin@micronet24.de>
-Date: Tue, 21 Aug 2007 19:18:10 +0200
-Subject: [Buildroot] How to change kernel version
-In-Reply-To: <d6cda7730708201113q266f0ce4o37e25d073d9047ba@mail.gmail.com>
-References: <d6cda7730708181940u51f1e3d6ya6e701104d6dc5c7@mail.gmail.com>
-	<001201c7e291$2b8f5ee0$dcc4af0a@atmel.com>
-	<20070820172641.GA4276@firebird.dresden.micronet24.de>
-	<d6cda7730708201113q266f0ce4o37e25d073d9047ba@mail.gmail.com>
-Message-ID: <20070821171810.GA4205@firebird.dresden.micronet24.de>
+From: aldot at uclibc.org <aldot@uclibc.org>
+Date: Tue, 21 Aug 2007 10:56:48 -0700 (PDT)
+Subject: [Buildroot] svn commit: trunk/buildroot:  package project
+Message-ID: <20070821175648.CE549A610A@busybox.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Mon, Aug 20, 2007 at 07:13:11PM +0100, Thiago A. Corr?a wrote:
-> Thanks Benjamin. I tried with .20 but had build errors for some weird
-> reason. Didn't try .18 that I know is working since I was told the
-> minimum would be .19, but will give this a shot.
-> 
-> Right now I am trying to build the whole thing with .22, so I would
-> only have to find a way to fix the kernel.
+Author: aldot
+Date: 2007-08-21 10:56:47 -0700 (Tue, 21 Aug 2007)
+New Revision: 19624
 
-Another thing would be to use the git-repository of H. Skinnemoen
-git://git.kernel.org/pub/scm/linux/kernel/git/hskinnemoen/avr32-2.6.git
-making a (soft-)link from your build_avr32/linux-2.6.22 to the directory
-you fetched this in, you only have to "touch .unpacked; touch .patched"
-int that dir and you can use it via the buildroot-environment.
+Log:
+- our dependencies are project specific. First (untested) attempt to take this fact into account.
+  Will need to try to copy eventual pre-existing project-specific deps back
+  to package/config in order not to mess up the corresponding timestamps (to avoid superfluous rebuilds)..
 
-> 
-> On 8/20/07, Benjamin Tietz <benjamin@micronet24.de> wrote:
-> > On Sun, Aug 19, 2007 at 02:47:35PM +0200, Ulf Samuelsson wrote:
-> > > ----- Original Message -----
-> > > From: "Thiago A. Corr?a" <thiago.correa@gmail.com>
-> > > To: <buildroot@uclibc.org>
-> > > Sent: Sunday, August 19, 2007 4:40 AM
-> > > Subject: [Buildroot] How to change kernel version
-> > >
-> > >
-> > > > Hi,
-> > > >
-> > > >   I searched over the archives but I couldn't find anything about how
-> > > > one could change the kernel version. The only available option for
-> > > > AVR32, 2.6.22, is unable to boot on an STK1000 due to a bug in the MMC
-> > > > drivers, so I would like to change it to 2.6.18 which actually works.
-> > > >
-> > > > Kind Regards,
-> > > >    Thiago A. Correa
-> > > > _______________________________________________
-> > > > buildroot mailing list
-> > > > buildroot at uclibc.org
-> > > > http://busybox.net/mailman/listinfo/buildroot
-> > >
-> > > That is simple, you can't do it within buildroot!!!
-> > Nope, it is possible, but thanks to ulf more difficult than necessary.
-> >
-> > First you should edit buildroot/toolchain/kernel-headers/Config.in and
-> > remove that "!BR2_avr32 &&" on the kernelversion you want to build.
-> >
-> > Afterwards fetch the correct patchfile from www.avr32linux.org and save
-> > it in the same dir buildroot/toolchain/kernel-headers under a name
-> > like linux-2.6.18-avr32.patch
-> >
-> > afterwards it should do, what you expect. I hope I didn't forget
-> > anything.
-> >
-> > best regards
-> > Benjamin
-> >
-> > _______________________________________________
-> > buildroot mailing list
-> > buildroot at uclibc.org
-> > http://busybox.net/mailman/listinfo/buildroot
-> >
-> _______________________________________________
-> buildroot mailing list
-> buildroot at uclibc.org
-> http://busybox.net/mailman/listinfo/buildroot
-> 
+
+Modified:
+   trunk/buildroot/Makefile
+   trunk/buildroot/package/Makefile.in
+   trunk/buildroot/project/Makefile.in
+
+
+Changeset:
+Modified: trunk/buildroot/Makefile
+===================================================================
+--- trunk/buildroot/Makefile	2007-08-21 17:14:56 UTC (rev 19623)
++++ trunk/buildroot/Makefile	2007-08-21 17:56:47 UTC (rev 19624)
+@@ -150,8 +150,6 @@
+ endif
+ PREFERRED_LIB_FLAGS:=--enable-static --enable-shared
+ 
+-BR2_DEPENDS_DIR=$(BASE_DIR)/package/config/buildroot-config/
+-
+ ##############################################################
+ #
+ # The list of stuff to build for the target toolchain
+@@ -165,7 +163,11 @@
+ endif
+ TARGETS:=
+ 
++# setup uor pathes
+ include project/Makefile.in
++
++BR2_DEPENDS_DIR=$(PROJECT_BUILD_DIR)/buildroot-config
++
+ include toolchain/Makefile.in
+ include package/Makefile.in
+ 
+@@ -211,7 +213,12 @@
+ # all targets depend on the crosscompiler and it's prerequisites
+ $(TARGETS): $(BASE_TARGETS)
+ 
++$(BR2_DEPENDS_DIR): .config
++	rm -rf $@
++	cp -dpRf $(CONFIG)/buildroot-config $@
++
+ dirs: $(DL_DIR) $(TOOL_BUILD_DIR) $(BUILD_DIR) $(STAGING_DIR) $(TARGET_DIR) \
++	$(BR2_DEPENDS_DIR) \
+ 	$(BINARIES_DIR) $(PROJECT_BUILD_DIR)
+ 
+ $(BASE_TARGETS): dirs
+@@ -223,6 +230,7 @@
+ 	$(BASE_TARGETS) $(TARGETS) \
+ 	$(TARGETS_CLEAN) $(TARGETS_DIRCLEAN) $(TARGETS_SOURCE) \
+ 	$(DL_DIR) $(TOOL_BUILD_DIR) $(BUILD_DIR) $(STAGING_DIR) $(TARGET_DIR) \
++	$(BR2_DEPENDS_DIR) \
+ 	$(BINARIES_DIR) $(PROJECT_BUILD_DIR)
+ 
+ #############################################################
+@@ -260,7 +268,7 @@
+ 	-find $(TARGET_DIR) -type d -name .svn | xargs rm -rf
+ 	touch $@
+ 
+-$(TARGET_DIR):	$(PROJECT_BUILD_DIR)/.root
++$(TARGET_DIR): $(PROJECT_BUILD_DIR)/.root
+ 
+ erase-fakeroots:
+ 	rm -f $(PROJECT_BUILD_DIR)/.fakeroot*
+@@ -310,11 +318,13 @@
+ export HOSTCFLAGS
+ 
+ $(CONFIG)/conf:
++	@mkdir -p $(CONFIG)/buildroot-config
+ 	$(MAKE) CC="$(HOSTCC)" -C $(CONFIG) conf
+ 	- at if [ ! -f .config ] ; then \
+ 		cp $(CONFIG_DEFCONFIG) .config; \
+ 	fi
+ $(CONFIG)/mconf:
++	@mkdir -p $(CONFIG)/buildroot-config
+ 	$(MAKE) CC="$(HOSTCC)" -C $(CONFIG) conf mconf
+ 	- at if [ ! -f .config ] ; then \
+ 		cp $(CONFIG_DEFCONFIG) .config; \
+
+Modified: trunk/buildroot/package/Makefile.in
+===================================================================
+--- trunk/buildroot/package/Makefile.in	2007-08-21 17:14:56 UTC (rev 19623)
++++ trunk/buildroot/package/Makefile.in	2007-08-21 17:56:47 UTC (rev 19624)
+@@ -9,21 +9,7 @@
+ MAKE1:=$(HOSTMAKE) MAKE="$(firstword $(HOSTMAKE)) -j1"
+ MAKE:=$(HOSTMAKE) -j$(BR2_JLEVEL)
+ 
+-# Strip off the annoying quoting
+-ARCH:=$(strip $(subst ",, $(BR2_ARCH)))
+-#"))
+-WGET:=$(strip $(subst ",, $(BR2_WGET))) $(SPIDER)
+-#"))
+-SVN:=$(strip $(subst ",, $(BR2_SVN)))
+-#"))
+-ZCAT:=$(strip $(subst ",, $(BR2_ZCAT)))
+-#"))
+-BZCAT:=$(strip $(subst ",, $(BR2_BZCAT)))
+-#"))
+-TAR_OPTIONS=$(subst ",, $(BR2_TAR_OPTIONS)) -xf
+-#")
+ 
+-
+ ifeq ($(BR2_TOOLCHAIN_BUILDROOT),y)
+ TARGET_CFLAGS=$(TARGET_OPTIMIZATION) $(TARGET_DEBUGGING) \
+ 	-I$(STAGING_DIR)/usr/include -I$(STAGING_DIR)/include
+@@ -72,34 +58,6 @@
+ #########################################################################
+ 
+ 
+-BASE_DIR:=$(shell pwd)
+-
+-TOPDIR_PREFIX:=$(strip $(subst ",, $(BR2_TOPDIR_PREFIX)))_
+-#"))
+-TOPDIR_SUFFIX:=_$(strip $(subst ",, $(BR2_TOPDIR_SUFFIX)))
+-#"))
+-ifeq ($(TOPDIR_PREFIX),_)
+-TOPDIR_PREFIX:=
+-endif
+-ifeq ($(TOPDIR_SUFFIX),_)
+-TOPDIR_SUFFIX:=
+-endif
+-
+-DL_DIR=$(strip $(subst ",, $(BR2_DL_DIR)))
+-#"))
+-ifeq ($(DL_DIR),)
+-DL_DIR:=$(BASE_DIR)/dl
+-endif
+-#PATCH_DIR=$(BASE_DIR)/sources/patches
+-
+-# All non-configurable packages should be built in BUILD_DIR
+-BUILD_DIR:=$(BASE_DIR)/$(TOPDIR_PREFIX)build_$(ARCH)$(ARCH_FPU_SUFFIX)$(TOPDIR_SUFFIX)
+-
+-GNU_TARGET_SUFFIX:=-$(strip $(subst ",, $(BR2_GNU_TARGET_SUFFIX)))
+-#"))
+-
+-STAGING_DIR:=$(strip $(subst ",, $(BR2_STAGING_DIR)))
+-#"))
+ ifeq ($(BR2_TOOLCHAIN_BUILDROOT),y)
+ TOOL_BUILD_DIR=$(BASE_DIR)/$(TOPDIR_PREFIX)toolchain_build_$(ARCH)$(ARCH_FPU_SUFFIX)$(TOPDIR_SUFFIX)
+ 
+
+Modified: trunk/buildroot/project/Makefile.in
+===================================================================
+--- trunk/buildroot/project/Makefile.in	2007-08-21 17:14:56 UTC (rev 19623)
++++ trunk/buildroot/project/Makefile.in	2007-08-21 17:56:47 UTC (rev 19624)
+@@ -5,6 +5,50 @@
+ BANNER:=$(strip $(subst ",,$(BR2_BANNER)))
+ #"))
+ 
++
++# Strip off the annoying quoting
++ARCH:=$(strip $(subst ",, $(BR2_ARCH)))
++#"))
++WGET:=$(strip $(subst ",, $(BR2_WGET))) $(SPIDER)
++#"))
++SVN:=$(strip $(subst ",, $(BR2_SVN)))
++#"))
++ZCAT:=$(strip $(subst ",, $(BR2_ZCAT)))
++#"))
++BZCAT:=$(strip $(subst ",, $(BR2_BZCAT)))
++#"))
++TAR_OPTIONS=$(subst ",, $(BR2_TAR_OPTIONS)) -xf
++#")
++
++
++BASE_DIR:=$(shell pwd)
++
++TOPDIR_PREFIX:=$(strip $(subst ",, $(BR2_TOPDIR_PREFIX)))_
++#"))
++TOPDIR_SUFFIX:=_$(strip $(subst ",, $(BR2_TOPDIR_SUFFIX)))
++#"))
++ifeq ($(TOPDIR_PREFIX),_)
++TOPDIR_PREFIX:=
++endif
++ifeq ($(TOPDIR_SUFFIX),_)
++TOPDIR_SUFFIX:=
++endif
++
++DL_DIR=$(strip $(subst ",, $(BR2_DL_DIR)))
++#"))
++ifeq ($(DL_DIR),)
++DL_DIR:=$(BASE_DIR)/dl
++endif
++
++# All non-configurable packages should be built in BUILD_DIR
++BUILD_DIR:=$(BASE_DIR)/$(TOPDIR_PREFIX)build_$(ARCH)$(ARCH_FPU_SUFFIX)$(TOPDIR_SUFFIX)
++
++GNU_TARGET_SUFFIX:=-$(strip $(subst ",, $(BR2_GNU_TARGET_SUFFIX)))
++#"))
++
++STAGING_DIR:=$(strip $(subst ",, $(BR2_STAGING_DIR)))
++#"))
++
+ # All configurable packages (like Busybox,Linux etc) should be built
+ # in PROJECT_BUILD_DIR
+ PROJECT_BUILD_DIR:=$(BASE_DIR)/$(TOPDIR_PREFIX)project_build_$(ARCH)$(ARCH_FPU_SUFFIX)$(TOPDIR_SUFFIX)/$(PROJECT)
