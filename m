@@ -1,44 +1,76 @@
-From: =?ISO-8859-1?Q?Thiago_A._Corr=EAa?= <thiago.correa@gmail.com>
-Date: Tue, 21 Aug 2007 14:48:35 +0100
-Subject: [Buildroot] svn commit: trunk/buildroot/toolchain/binutils
-In-Reply-To: <20070821133208.GA17177@aon.at>
-References: <20070820130014.12B6AA466E@busybox.net>
-	<00c801c7e345$cb1db9c0$dcc4af0a@atmel.com>
-	<0708202018120.9013@somehost> <20070821133208.GA17177@aon.at>
-Message-ID: <d6cda7730708210648x16b6c532g34996c2e184a83a7@mail.gmail.com>
+From: aldot at uclibc.org <aldot@uclibc.org>
+Date: Tue, 21 Aug 2007 07:21:00 -0700 (PDT)
+Subject: [Buildroot] svn commit: trunk/buildroot:  package/gnuconfig
+Message-ID: <20070821142100.13029A463F@busybox.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi,
+Author: aldot
+Date: 2007-08-21 07:20:59 -0700 (Tue, 21 Aug 2007)
+New Revision: 19616
 
-   Well, if someone is willing to do a quick script to check the
-whitespace stuff, I would say let him. It's not like one is loosing
-anything, and it makes it easier to make sure. Though one can be
-careful enough to avoid the whitespace issue, automated checks (and
-checks alone, not fixups! ) is A Good Thing (tm) imho. It could even
-be used in SVN hooks to deny commits that are invalid, but I'm not
-quite sure if it's possible to apply it just to Makefiles and *.mk.
+Log:
+- add BR2_HAVE_MANPAGE and BR2_HAVE_INFOPAGE. Selecting these will keep the
+  respective documentation on your target filesystem.
 
-   Just my 2 euro cents :)
 
-On 8/21/07, Bernhard Fischer <rep.dot.nop@gmail.com> wrote:
-> On Mon, Aug 20, 2007 at 08:18:46PM +0200, Cristian Ionescu-Idbohrn wrote:
-> >On Mon, 20 Aug 2007, Ulf Samuelsson wrote:
-> >
-> >> Thanks, maybe we should have a script which is periodically run to find
-> >> the white space stuff and remove it.
-> >
-> >Easiest is to avoid putting it there, IMHO.
->
-> Agree. Not adding code that breaks the established style is the proper
-> thing to do. Automated fixup is not a solution nor desirable. It's not
-> that avoiding silly whitespace damage should be _that_ hard (modulo in
-> an X11 impl or the like ;).
-> _______________________________________________
-> buildroot mailing list
-> buildroot at uclibc.org
-> http://busybox.net/mailman/listinfo/buildroot
->
+Modified:
+   trunk/buildroot/Config.in
+   trunk/buildroot/package/gnuconfig/Config.in
+
+
+Changeset:
+Modified: trunk/buildroot/Config.in
+===================================================================
+--- trunk/buildroot/Config.in	2007-08-21 13:23:13 UTC (rev 19615)
++++ trunk/buildroot/Config.in	2007-08-21 14:20:59 UTC (rev 19616)
+@@ -586,8 +586,6 @@
+ 
+ menu "Build options"
+ 
+-source package/gnuconfig/Config.in
+-
+ config BR2_WGET
+ 	string "Wget command"
+ 	default "wget --passive-ftp -nd"
+@@ -756,6 +754,24 @@
+ 
+ 	  WARNING: This is highly experimental at the moment.
+ 
++config BR2_HAVE_MANPAGES
++	bool "manpages on the target"
++	default n
++	help
++	  Leave the manpages on the target.
++	  If you say n here, your target will not contain any
++	  manpage.
++
++config BR2_HAVE_INFOPAGES
++	bool "infopages on the target"
++	default n
++	help
++	  Leave the infopages on the target.
++	  If you say n here, your target will not contain any
++	  infopage.
++
++source package/gnuconfig/Config.in
++
+ endmenu
+ 
+ source "toolchain/Config.in"
+
+Modified: trunk/buildroot/package/gnuconfig/Config.in
+===================================================================
+--- trunk/buildroot/package/gnuconfig/Config.in	2007-08-21 13:23:13 UTC (rev 19615)
++++ trunk/buildroot/package/gnuconfig/Config.in	2007-08-21 14:20:59 UTC (rev 19616)
+@@ -1,6 +1,6 @@
+ config BR2_UPDATE_CONFIG
+ 	bool "update config.sub and config.guess"
+-	default n
++	default y
+ 	help
+ 		This just exists to easily update the config.sub / config.guess
+ 		files in packages to the latest version (since many bundled ones
