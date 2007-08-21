@@ -1,7 +1,7 @@
 From: aldot at uclibc.org <aldot@uclibc.org>
-Date: Tue, 21 Aug 2007 10:00:18 -0700 (PDT)
-Subject: [Buildroot] svn commit: trunk/buildroot/package/at
-Message-ID: <20070821170018.8E5EAA470F@busybox.net>
+Date: Tue, 21 Aug 2007 10:14:57 -0700 (PDT)
+Subject: [Buildroot] svn commit: trunk/buildroot: package project
+Message-ID: <20070821171457.D8483A5D41@busybox.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -9,34 +9,48 @@ Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
 Author: aldot
-Date: 2007-08-21 10:00:18 -0700 (Tue, 21 Aug 2007)
-New Revision: 19622
+Date: 2007-08-21 10:14:56 -0700 (Tue, 21 Aug 2007)
+New Revision: 19623
 
 Log:
-- honour BR2_HAVE_MANPAGES
+- move the PROJECT variable setting to a more sensible place
 
 
 Modified:
-   trunk/buildroot/package/at/at.mk
+   trunk/buildroot/package/Makefile.in
+   trunk/buildroot/project/Makefile.in
 
 
 Changeset:
-Modified: trunk/buildroot/package/at/at.mk
+Modified: trunk/buildroot/package/Makefile.in
 ===================================================================
---- trunk/buildroot/package/at/at.mk	2007-08-21 16:51:46 UTC (rev 19621)
-+++ trunk/buildroot/package/at/at.mk	2007-08-21 17:00:18 UTC (rev 19622)
-@@ -48,9 +48,12 @@
- $(TARGET_DIR)/$(AT_TARGET_SCRIPT): $(AT_DIR)/$(AT_BINARY)
- 	# Use fakeroot to pretend to do 'make install' as root
- 	echo '$(MAKE) DAEMON_USERNAME=root DAEMON_GROUPNAME=root ' \
--		'$(TARGET_CONFIGURE_OPTS) DESTDIR=$(TARGET_DIR) -C $(AT_DIR) install' \
-+	 '$(TARGET_CONFIGURE_OPTS) DESTDIR=$(TARGET_DIR) -C $(AT_DIR) install' \
- 		> $(PROJECT_BUILD_DIR)/.fakeroot.at
--	echo 'rm -rf $(TARGET_DIR)/usr/man $(TARGET_DIR)/usr/doc/at' >> $(PROJECT_BUILD_DIR)/.fakeroot.at
-+ifneq ($(BR2_HAVE_MANPAGES),y)
-+	echo 'rm -rf $(TARGET_DIR)/usr/man' >> $(PROJECT_BUILD_DIR)/.fakeroot.at
-+endif
-+	echo 'rm -rf $(TARGET_DIR)/usr/doc/at' >> $(PROJECT_BUILD_DIR)/.fakeroot.at
- 	$(INSTALL) -m 0755 -D $(AT_DIR)/debian/rc $(TARGET_DIR)/$(AT_TARGET_SCRIPT)
+--- trunk/buildroot/package/Makefile.in	2007-08-21 17:00:18 UTC (rev 19622)
++++ trunk/buildroot/package/Makefile.in	2007-08-21 17:14:56 UTC (rev 19623)
+@@ -95,12 +95,6 @@
+ # All non-configurable packages should be built in BUILD_DIR
+ BUILD_DIR:=$(BASE_DIR)/$(TOPDIR_PREFIX)build_$(ARCH)$(ARCH_FPU_SUFFIX)$(TOPDIR_SUFFIX)
  
- at: uclibc host-fakeroot $(TARGET_DIR)/$(AT_TARGET_SCRIPT)
+-# All configurable packages (like Busybox,Linux etc) should be built in PROJECT_BUILD_DIR
+-PROJECT_BUILD_DIR:=$(BASE_DIR)/$(TOPDIR_PREFIX)project_build_$(ARCH)$(ARCH_FPU_SUFFIX)$(TOPDIR_SUFFIX)/$(PROJECT)
+-BINARIES_DIR:=$(BASE_DIR)/binaries/$(PROJECT)
+-TARGET_DIR:=$(PROJECT_BUILD_DIR)/root
+-
+-
+ GNU_TARGET_SUFFIX:=-$(strip $(subst ",, $(BR2_GNU_TARGET_SUFFIX)))
+ #"))
+ 
+
+Modified: trunk/buildroot/project/Makefile.in
+===================================================================
+--- trunk/buildroot/project/Makefile.in	2007-08-21 17:00:18 UTC (rev 19622)
++++ trunk/buildroot/project/Makefile.in	2007-08-21 17:14:56 UTC (rev 19623)
+@@ -4,3 +4,9 @@
+ #"))
+ BANNER:=$(strip $(subst ",,$(BR2_BANNER)))
+ #"))
++
++# All configurable packages (like Busybox,Linux etc) should be built
++# in PROJECT_BUILD_DIR
++PROJECT_BUILD_DIR:=$(BASE_DIR)/$(TOPDIR_PREFIX)project_build_$(ARCH)$(ARCH_FPU_SUFFIX)$(TOPDIR_SUFFIX)/$(PROJECT)
++BINARIES_DIR:=$(BASE_DIR)/binaries/$(PROJECT)
++TARGET_DIR:=$(PROJECT_BUILD_DIR)/root
