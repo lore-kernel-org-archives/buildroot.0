@@ -1,7 +1,7 @@
 From: aldot at uclibc.org <aldot@uclibc.org>
-Date: Tue, 21 Aug 2007 09:51:47 -0700 (PDT)
-Subject: [Buildroot] svn commit: trunk/buildroot/package/pciutils
-Message-ID: <20070821165147.7CD5EA470E@busybox.net>
+Date: Tue, 21 Aug 2007 10:00:18 -0700 (PDT)
+Subject: [Buildroot] svn commit: trunk/buildroot/package/at
+Message-ID: <20070821170018.8E5EAA470F@busybox.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -9,112 +9,34 @@ Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
 Author: aldot
-Date: 2007-08-21 09:51:46 -0700 (Tue, 21 Aug 2007)
-New Revision: 19621
+Date: 2007-08-21 10:00:18 -0700 (Tue, 21 Aug 2007)
+New Revision: 19622
 
 Log:
-- bump version to 2.2.6
+- honour BR2_HAVE_MANPAGES
 
 
 Modified:
-   trunk/buildroot/package/pciutils/pciutils.mk
-   trunk/buildroot/package/pciutils/pciutils.patch
+   trunk/buildroot/package/at/at.mk
 
 
 Changeset:
-Modified: trunk/buildroot/package/pciutils/pciutils.mk
+Modified: trunk/buildroot/package/at/at.mk
 ===================================================================
---- trunk/buildroot/package/pciutils/pciutils.mk	2007-08-21 16:48:47 UTC (rev 19620)
-+++ trunk/buildroot/package/pciutils/pciutils.mk	2007-08-21 16:51:46 UTC (rev 19621)
-@@ -3,7 +3,7 @@
- # pciutils
- #
- #############################################################
--PCIUTILS_VERSION:=2.1.11
-+PCIUTILS_VERSION:=2.2.6
- PCIUTILS_SOURCE:=pciutils-$(PCIUTILS_VERSION).tar.gz
- PCIUTILS_CAT:=$(ZCAT)
- PCIUTILS_SITE:=ftp://atrey.karlin.mff.cuni.cz/pub/linux/pci
-
-Modified: trunk/buildroot/package/pciutils/pciutils.patch
-===================================================================
---- trunk/buildroot/package/pciutils/pciutils.patch	2007-08-21 16:48:47 UTC (rev 19620)
-+++ trunk/buildroot/package/pciutils/pciutils.patch	2007-08-21 16:51:46 UTC (rev 19621)
-@@ -1,5 +1,5 @@
----- pciutils-2.1.11/lib/configure
--+++ pciutils-2.1.11/lib/configure
-+--- pciutils-2.2.6/lib/configure
-++++ pciutils-2.2.6/lib/configure
- @@ -12,7 +12,7 @@
-  echo_n "Configuring libpci for your system..."
-  sharedir=${1:-/usr/share}
-@@ -9,68 +9,4 @@
-  rel=`uname -r`
-  if [ "$sys" = "AIX" -a -x /usr/bin/oslevel -a -x /usr/sbin/lsattr ]
-  then
--@@ -25,7 +25,6 @@
-- echo " $sys/$cpu $rel"
-- 
-- c=config.h
---echo >$c "#define ARCH_`echo $cpu | tr 'a-z' 'A-Z'`"
-- echo >>$c "#define OS_`echo $sys | tr 'a-z' 'A-Z'`"
-- 
-- echo_n "Looking for access methods..."
--@@ -40,17 +39,6 @@
-- 						ok=1
-- 						;;
-- 		esac
---		case $cpu in
---				i386)		echo_n " i386-ports"
---						echo >>$c '#define HAVE_PM_INTEL_CONF'
---						ok=1
---						;;
---				alpha|ia64)	echo >>$c '#define HAVE_64BIT_ADDRESS'
---						;;
---				sparc|sparc64)	echo >>$c '#define HAVE_64BIT_ADDRESS'
---						echo >>$c '#define HAVE_LONG_ADDRESS'
---						;;
---		esac
-- 		;;
-- 	FreeBSD)
-- 		echo_n " fbsd-device"
----- pciutils-2.1.11/Makefile
--+++ pciutils-2.1.11/Makefile
--@@ -18,16 +18,6 @@
-- DIRINSTALL=install -d
-- PCILIB=libpci.a
-- 
---ifeq ($(shell uname),NetBSD)
---PCILIB=libpciutils.a
---LDFLAGS+=-lpci
---else
---ifeq ($(shell uname),AIX)
---CFLAGS=-g
---INSTALL=installbsd
---DIRINSTALL=mkdir -p
---endif
---endif
-- 
-- export
-- 
----- pciutils-2.1.11/lspci.c
--+++ pciutils-2.1.11/lspci.c
--@@ -51,7 +51,7 @@
-- 
-- /* Format strings used for IRQ numbers and memory addresses */
-- 
---#ifdef ARCH_SPARC64
--+#ifdef __sparc64__
-- #define IRQ_FORMAT "%08x"
-- #else
-- #define IRQ_FORMAT "%d"
--@@ -67,7 +67,7 @@
-- #define ADDR_FORMAT "%08lx"
-- #endif
-- 
---#ifdef ARCH_SPARC64
--+#ifdef __sparc64__
-- #define IO_FORMAT "%016Lx"
-- #elif defined(HAVE_LONG_ADDRESS)
-- #define IO_FORMAT "%04Lx"
-+
+--- trunk/buildroot/package/at/at.mk	2007-08-21 16:51:46 UTC (rev 19621)
++++ trunk/buildroot/package/at/at.mk	2007-08-21 17:00:18 UTC (rev 19622)
+@@ -48,9 +48,12 @@
+ $(TARGET_DIR)/$(AT_TARGET_SCRIPT): $(AT_DIR)/$(AT_BINARY)
+ 	# Use fakeroot to pretend to do 'make install' as root
+ 	echo '$(MAKE) DAEMON_USERNAME=root DAEMON_GROUPNAME=root ' \
+-		'$(TARGET_CONFIGURE_OPTS) DESTDIR=$(TARGET_DIR) -C $(AT_DIR) install' \
++	 '$(TARGET_CONFIGURE_OPTS) DESTDIR=$(TARGET_DIR) -C $(AT_DIR) install' \
+ 		> $(PROJECT_BUILD_DIR)/.fakeroot.at
+-	echo 'rm -rf $(TARGET_DIR)/usr/man $(TARGET_DIR)/usr/doc/at' >> $(PROJECT_BUILD_DIR)/.fakeroot.at
++ifneq ($(BR2_HAVE_MANPAGES),y)
++	echo 'rm -rf $(TARGET_DIR)/usr/man' >> $(PROJECT_BUILD_DIR)/.fakeroot.at
++endif
++	echo 'rm -rf $(TARGET_DIR)/usr/doc/at' >> $(PROJECT_BUILD_DIR)/.fakeroot.at
+ 	$(INSTALL) -m 0755 -D $(AT_DIR)/debian/rc $(TARGET_DIR)/$(AT_TARGET_SCRIPT)
+ 
+ at: uclibc host-fakeroot $(TARGET_DIR)/$(AT_TARGET_SCRIPT)
