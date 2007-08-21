@@ -1,45 +1,22 @@
-From: aldot at uclibc.org <aldot@uclibc.org>
-Date: Tue, 21 Aug 2007 01:31:21 -0700 (PDT)
-Subject: [Buildroot] svn commit: trunk/buildroot/package/qtopia4
-Message-ID: <20070821083121.9132BA4044@busybox.net>
+From: Bernhard Fischer <rep.dot.nop@gmail.com>
+Date: Tue, 21 Aug 2007 10:18:42 +0200
+Subject: [Buildroot] [PATCH] Fix sed fail when building qtopia
+In-Reply-To: <d6cda7730708201136t24339015u271d512ccdc864a5@mail.gmail.com>
+References: <d6cda7730708201100l732f3131hc0eb086da6cb5ee2@mail.gmail.com>
+	<20070820181151.GR11697@aon.at>
+	<d6cda7730708201136t24339015u271d512ccdc864a5@mail.gmail.com>
+Message-ID: <20070821081842.GB14397@aon.at>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Author: aldot
-Date: 2007-08-21 01:31:19 -0700 (Tue, 21 Aug 2007)
-New Revision: 19600
+On Mon, Aug 20, 2007 at 07:36:16PM +0100, Thiago A. Corr?a wrote:
+>Yes, much better indeed. And it works fine now. At least that part so far :)
+>
+>After that, I get a link error building moc, haven't figured that one yet.
+>
+>I have attached the patch updated, thanks.
 
-Log:
-- fix patching in the correct target cflags (Thiago A. Corr^ea)
-
-
-Modified:
-   trunk/buildroot/package/qtopia4/qtopia4.mk
-
-
-Changeset:
-Modified: trunk/buildroot/package/qtopia4/qtopia4.mk
-===================================================================
---- trunk/buildroot/package/qtopia4/qtopia4.mk	2007-08-21 08:05:40 UTC (rev 19599)
-+++ trunk/buildroot/package/qtopia4/qtopia4.mk	2007-08-21 08:31:19 UTC (rev 19600)
-@@ -129,7 +129,7 @@
- 	$(SED) 's/^CFG_IPV6IFNAME=auto/CFG_IPV6IFNAME=no/' $(QTOPIA4_TARGET_DIR)/configure
- endif
- 	$(SED) 's/^CFG_XINERAMA=auto/CFG_XINERAMA=no/' $(QTOPIA4_TARGET_DIR)/configure
--	$(SED) 's/-O2/$(TARGET_CFLAGS)/' $(QTOPIA4_TARGET_DIR)/mkspecs/qws/linux-$(BR2_PACKAGE_QTOPIA4_EMB_PLATFORM)-g++/qmake.conf
-+	$(SED) 's,-O2,$(TARGET_CFLAGS),' $(QTOPIA4_TARGET_DIR)/mkspecs/qws/linux-$(BR2_PACKAGE_QTOPIA4_EMB_PLATFORM)-g++/qmake.conf
- 	-[ -f $(QTOPIA4_QCONFIG_FILE) ] && cp $(QTOPIA4_QCONFIG_FILE) \
- 		$(QTOPIA4_TARGET_DIR)/$(QTOPIA4_QCONFIG_FILE_LOCATION)
- 	(cd $(QTOPIA4_TARGET_DIR); rm -rf config.cache; \
-@@ -217,7 +217,7 @@
- 	$(SED) 's/^CFG_IPV6IFNAME=auto/CFG_IPV6IFNAME=no/' $(QTOPIA4_HOST_DIR)/configure
- endif
- 	$(SED) 's/^CFG_XINERAMA=auto/CFG_XINERAMA=no/' $(QTOPIA4_HOST_DIR)/configure
--	$(SED) 's/-O2/$(TARGET_CFLAGS)/' $(QTOPIA4_HOST_DIR)/mkspecs/qws/linux-$(BR2_PACKAGE_QTOPIA4_EMB_PLATFORM)-g++/qmake.conf
-+	$(SED) 's,-O2,$(TARGET_CFLAGS),' $(QTOPIA4_HOST_DIR)/mkspecs/qws/linux-$(BR2_PACKAGE_QTOPIA4_EMB_PLATFORM)-g++/qmake.conf
- 	-[ -f $(QTOPIA4_QCONFIG_FILE) ] && cp $(QTOPIA4_QCONFIG_FILE) \
- 		$(QTOPIA4_HOST_DIR)/$(QTOPIA4_QCONFIG_FILE_LOCATION)
- 	(cd $(QTOPIA4_HOST_DIR); rm -rf config.cache; \
+Applied. Thanks!
