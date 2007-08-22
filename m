@@ -1,52 +1,51 @@
 From: Ulf Samuelsson <ulf@atmel.com>
-Date: Wed, 22 Aug 2007 05:46:32 +0200
-Subject: [Buildroot] svn commit: trunk/buildroot/toolchain/dependencies
-In-Reply-To: <20070821231340.GT11697@aon.at>
-References: <20070821201424.A0BC1A5D3C@busybox.net>
-	<1187727179.6145.34.camel@86-115-11-152>
-	<20070821202512.GA21092@aon.at>
-	<1187729920.15882.4.camel@86-115-11-152>
-	<20070821231340.GT11697@aon.at>
-Message-ID: <1187754393.4494.9.camel@86-115-11-152>
+Date: Wed, 22 Aug 2007 05:47:57 +0200
+Subject: [Buildroot] buildroot-20070720
+In-Reply-To: <20070821230818.GS11697@aon.at>
+References: <1187730489.15882.7.camel@86-115-11-152>
+	<20070821230818.GS11697@aon.at>
+Message-ID: <1187754477.4494.11.camel@86-115-11-152>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+ons 2007-08-22 klockan 01:08 +0200 skrev Bernhard Fischer:
+> On Tue, Aug 21, 2007 at 11:08:09PM +0200, Ulf Samuelsson wrote:
+> >Since the buildroot ftp site only maintains one month old tarball,
+> >this package has already disappeared.
+> >It would be good if that tarball could be downloadable as well
+> >so that the diff can be computed.
+> 
+> To me this doesn't make any sense at all.
+> svn co -r'{2007-07-20 00:00}' svn://uclibc.org/trunk/buildroot buildroot
+> 
+> What do you want to achieve with a tarball? Doesn't svn diff work just
+> fine? And, what's special about that 20070720 snapshot in the first
+> place?
 
-> >
-> >Oh, Oh... Yes!
-> >
-> >It would be nice to have a 64-128 CPU build server making the problem
-> > dead obvious :-)
-> 
-> Since you're most likely I/O bound anyway (you most likely don't build
-> in a ramdisk or something that is vaguely fast for IO) there's no point
-> in letting your one to eight cores be idle. No need for a 512 CPU box to
-> make that obvious.
-> >
-> >Whatabout:
-> >
-> >HOSTTOOLS:=host-sed host-lzma
-> >ifeq ($(BR2_STRIP_sstrip),y)
-> >HOSTTOOLS+=sstrip_host
-> >endif
-> 
-> Except that "HOSTTOOLS" is a too generic name, yes.
-> 
-> MAYBE_HOST_PREREQ is what i would have used (since lzma should also be
-> conditional). Care to do this?
-> 
+Sorry, wrong mailing list.
+Was intended for an Atmel internal mailing list.
+The "Evolution" Mail program does not easily show how
+it completes a mail address.
 
-Sure, but skip the "MAYBE_" since the variable contains
-the dependencies.
-If no BR2_* is set it is emtpy.
+http://www.atmel.no/buildroot/ is based on 20070718.
+Would like to move this stuff to the main trunk
+
+I got an earlier version in the summertime, and did not have
+the original source so I diffed against the current,
+and tried to figure out what was added.
+That was the time, when I reverted some of your patches.
+
+Would like to avoid that, so I want the original source.
 
 
-> >dependencies:  $(HOSTTOOLS)
-> 
-> TIA,
 -- 
 Best Regards,
-Ulf Samuelsson
+Ulf Samuelsson          mail:   ulf at atmel.com
+Atmel Nordic AB
+Box 2033, 174 52 Sundbyberg
+Kavalleriv?gen 24, 174 58 Sundbyberg
+Sweden
+Tel:    +46 8 441 54 22 GSM:    +46 706 224457
