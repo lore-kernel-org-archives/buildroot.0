@@ -1,18 +1,113 @@
-From: Conke Hu <conke.hu@gmail.com>
-Date: Thu, 23 Aug 2007 09:26:02 +0800
-Subject: [Buildroot]  [Help] How to build uClibc-nptl for ARM platform?
-Message-ID: <1187832362.8975.8.camel@ConkeWorkstation>
+From: softa at ttechgroup.com <softa@ttechgroup.com>
+Date: Wed, 22 Aug 2007 03:18:53 +0300
+Subject: [Buildroot] Error with libusb-0.1.12
+References: <24472173.108651187730897827.JavaMail.servlet@kundenserver>
+Message-ID: <000201c7e54f$4cb8b920$6614a8c0@softalap>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi all,
-    I am eager to know the current status of nptl support for ARM.
-    I've just checked out the uClibc-nptl branch and built, but failed
-with error saying "'__NR_rt_sigwaitinfo' undeclare".
-    Any suggestion? 
+This is very old problem ... libusb contains 2 libraries, one in pure C, and 
+other in CPP .... if you enable the CPP compiler in toolchain everyting will 
+be ok, but in the other case you must modify libusb makefiles ....
 
-Thanks! 
-Conke
+for example: at least add CXX=""
+
+...
+$(LIBUSB_DIR)/.configured: $(LIBUSB_DIR)/.unpacked
+        (cd $(LIBUSB_DIR); rm -rf config.cache; \
+                $(AUTORECONF) && \
+                $(TARGET_CONFIGURE_OPTS) \
+                $(TARGET_CONFIGURE_ARGS) \
+                ac_cv_header_regex_h=no \
+                CXX="" \
+                ./configure \
+                --target=$(GNU_TARGET_NAME) \
+                --host=$(GNU_TARGET_NAME) \
+                --build=$(GNU_HOST_NAME) \
+                --prefix=/usr \
+                --disable-debug \
+                --disable-build-docs \
+        );
+        touch $(LIBUSB_DIR)/.configured
+...
+
+BR,
+Assen Stoyanov
+
+----- Original Message ----- 
+From: <e.krueper@solcon-systemtechnik.de>
+To: <buildroot@uclibc.org>
+Sent: Wednesday, August 22, 2007 12:14 AM
+Subject: [Buildroot] Error with libusb-0.1.12
+
+
+>I am at home now and have tried the r19625 and r19630 revisions. Both 
+>compile and break again at libusb. But this time it's another error. At 
+>work I use debian etch x86 with default packages and here at home I am 
+>running a x86_64 gentoo system. So back at work I'll get the same revisions 
+>once again and test it running in debian.
+> Nevertheless, here's the error I got now:
+>
+>
+> config.status: executing default commands
+> touch 
+> /home/emil/buldroot/root/buildroot/build_i386/libusb-0.1.12/.configured
+> /usr/bin/make -j1 -C 
+> /home/emil/buldroot/root/buildroot/build_i386/libusb-0.1.12
+> make[1]: Entering directory 
+> `/home/emil/buldroot/root/buildroot/build_i386/libusb-0.1.12'
+> cd . && /bin/sh 
+> /home/emil/buldroot/root/buildroot/build_i386/libusb-0.1.12/missing --run 
+> autoheader
+> rm -f stamp-h1
+> touch config.h.in
+> cd . && /bin/sh ./config.status config.h
+> config.status: creating config.h
+> config.status: config.h is unchanged
+> /usr/bin/make  all-recursive
+> make[2]: Entering directory 
+> `/home/emil/buldroot/root/buildroot/build_i386/libusb-0.1.12'
+> Making all in .
+> make[3]: Entering directory 
+> `/home/emil/buldroot/root/buildroot/build_i386/libusb-0.1.12'
+> if /bin/sh ./libtool --mode=compile 
+> /home/emil/buldroot/root/buildroot/build_i386/libusb-0.1.12/compile 
+> /home/emil/buldroot/root/buildroot/build_i386/staging_dir/usr/bin/i386-linux-uclibc-gcc 
+>  -Os -pipe  -I/home/emil/buldroot/root/buildroot/build_i386/staging_dir/usr/include 
+>  -I/home/emil/buldroot/root/buildroot/build_i386/staging_dir/include --sysroot=/home/emil/buldroot/root/buildroot/build_i386/staging_dir/ 
+>  -isysroot 
+> /home/emil/buldroot/root/buildroot/build_i386/staging_dir -mtune=i386 -march=i386 
+>  -DHAVE_CONFIG_H   -I.  -Werror  -g -O2 -Wall -MT usb.lo -MD -MP -MF 
+> ".deps/usb.Tpo" -c -o usb.lo usb.c; \
+>        then mv -f ".deps/usb.Tpo" ".deps/usb.Plo"; else rm -f 
+> ".deps/usb.Tpo"; exit 1; fi
+> libtool: compile: unable to infer tagged configuration
+> libtool: compile: specify a tag with `--tag'
+> make[3]: *** [usb.lo] Error 1
+> make[3]: Leaving directory 
+> `/home/emil/buldroot/root/buildroot/build_i386/libusb-0.1.12'
+> make[2]: *** [all-recursive] Error 1
+> make[2]: Leaving directory 
+> `/home/emil/buldroot/root/buildroot/build_i386/libusb-0.1.12'
+> make[1]: *** [all] Error 2
+> make[1]: Leaving directory 
+> `/home/emil/buldroot/root/buildroot/build_i386/libusb-0.1.12'
+> make: *** 
+> [/home/emil/buldroot/root/buildroot/build_i386/staging_dir/lib/libusb.so] 
+> Error 2
+>
+> emil buildroot #
+> _______________________________________________
+> buildroot mailing list
+> buildroot at uclibc.org
+> http://busybox.net/mailman/listinfo/buildroot 
+-------------- next part --------------
+A non-text attachment was scrubbed...
+Name: libusb.mk.diff
+Type: application/octet-stream
+Size: 1675 bytes
+Desc: not available
+Url : http://busybox.net/lists/buildroot/attachments/20070822/0eb7df6a/attachment-0001.obj 
