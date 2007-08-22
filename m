@@ -1,33 +1,28 @@
-From: Ulf Samuelsson <ulf@atmel.com>
-Date: Wed, 22 Aug 2007 18:43:45 +0200
-Subject: [Buildroot] buildroot-20070720
-References: <1187730489.15882.7.camel@86-115-11-152>
-	<20070821230818.GS11697@aon.at>
-	<1187754477.4494.11.camel@86-115-11-152>
-	<20070822080818.GA7523@aon.at>
-	<00e901c7e4b6$d77a8460$070514ac@atmel.com>
-	<20070822124029.GA9846@aon.at>
-Message-ID: <032a01c7e4e2$b5fb0fe0$980b7356@atmel.com>
+From: Bernhard Fischer <rep.dot.nop@gmail.com>
+Date: Wed, 22 Aug 2007 21:13:20 +0200
+Subject: [Buildroot] Hiding non-buildable packages
+In-Reply-To: <1187728137.6145.48.camel@86-115-11-152>
+References: <1187728137.6145.48.camel@86-115-11-152>
+Message-ID: <20070822191320.GU11697@aon.at>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>
->>Is there any chance that buildroot is moving over to "git"?.
-> 
-> given that there is a svn backend for git, this doesn't make much sense
-> to me. They should just pull upstream, git should be able to take care
-> for (most of) the rest, but i'll not mandate how atmel does their
-> busyness here ;)
-> 
+On Tue, Aug 21, 2007 at 10:28:57PM +0200, Ulf Samuelsson wrote:
+>A lot of the packages does not build.
 
-Personally, I have never used git except just cloning a tree.
+Fixing them is the right thing to do.
 
-If I understand you correctly, I can pull stuff using git from the svn server
-and then add the stuff I get from my friends and do a merge
-and put back the end result using git talking to the svn server, right?
+>Some only build for some targets.
 
-Best Regards
-Ulf Samuelsson
+Certain packages (think specific HW support) should depend on a specific
+arch. Which are these?
+
+>I think it would be nice to have the possibility
+>to set a config item, which resulted in that only
+>packages which seems to build are really visible.
+
+I object to this if you just want to avoid helping to provide patches to
+upstream that do fix the respective packages that are ment to work fine.
