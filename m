@@ -1,8 +1,8 @@
 From: aldot at uclibc.org <aldot@uclibc.org>
-Date: Wed, 22 Aug 2007 02:56:45 -0700 (PDT)
-Subject: [Buildroot] svn commit: trunk/buildroot: package/alsa-utils
-	package/argus package etc...
-Message-ID: <20070822095645.8F638A60E7@busybox.net>
+Date: Wed, 22 Aug 2007 03:06:25 -0700 (PDT)
+Subject: [Buildroot] svn commit: trunk/buildroot: package/mtd/20061007
+	target/device/AMD/D etc...
+Message-ID: <20070822100625.02507A4600@busybox.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -10,111 +10,61 @@ Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
 Author: aldot
-Date: 2007-08-22 02:56:41 -0700 (Wed, 22 Aug 2007)
-New Revision: 19639
+Date: 2007-08-22 03:06:25 -0700 (Wed, 22 Aug 2007)
+New Revision: 19640
 
 Log:
-- semicolon touchup. No other changes
+- use the BZCAT/ZCAT as configured by the user
 
 
 Modified:
-   trunk/buildroot/package/alsa-utils/alsa-utils.mk
-   trunk/buildroot/package/argus/argus.mk
-   trunk/buildroot/package/boa/boa.mk
-   trunk/buildroot/package/bsdiff/bsdiff.mk
-   trunk/buildroot/package/bzip2/bzip2.mk
-   trunk/buildroot/package/customize/customize.mk
-   trunk/buildroot/package/cvs/cvs.mk
-   trunk/buildroot/package/dbus-glib/dbus-glib.mk
-   trunk/buildroot/package/dillo/dillo.mk
-   trunk/buildroot/package/e2fsprogs/e2fsprogs.mk
-   trunk/buildroot/package/findutils/findutils.mk
-   trunk/buildroot/package/flex/flex.mk
-   trunk/buildroot/package/fontconfig/fontconfig.mk
-   trunk/buildroot/package/gmp/gmp.mk
-   trunk/buildroot/package/grep/grep.mk
-   trunk/buildroot/package/iperf/iperf.mk
-   trunk/buildroot/package/ipsec-tools/ipsec-tools.mk
-   trunk/buildroot/package/kexec/kexec.mk
-   trunk/buildroot/package/l2tp/l2tp.mk
-   trunk/buildroot/package/libfloat/libfloat.mk
-   trunk/buildroot/package/libid3tag/libid3tag.mk
-   trunk/buildroot/package/libmad/libmad.mk
-   trunk/buildroot/package/libpcap/libpcap.mk
-   trunk/buildroot/package/libraw1394/libraw1394.mk
-   trunk/buildroot/package/libsysfs/libsysfs.mk
-   trunk/buildroot/package/libxml2/libxml2.mk
-   trunk/buildroot/package/lighttpd/lighttpd.mk
-   trunk/buildroot/package/ltrace/ltrace.mk
-   trunk/buildroot/package/lzma/lzma.mk
-   trunk/buildroot/package/mdadm/mdadm.mk
-   trunk/buildroot/package/microcom/microcom.mk
-   trunk/buildroot/package/microperl/microperl.mk
-   trunk/buildroot/package/mpatrol/mpatrol.mk
-   trunk/buildroot/package/mpfr/mpfr.mk
-   trunk/buildroot/package/nbd/nbd.mk
-   trunk/buildroot/package/ncurses/ncurses.mk
-   trunk/buildroot/package/netkitbase/netkitbase.mk
-   trunk/buildroot/package/nfs-utils/nfs-utils.mk
-   trunk/buildroot/package/openntpd/openntpd.mk
-   trunk/buildroot/package/openssh/openssh.mk
-   trunk/buildroot/package/openssl/openssl.mk
-   trunk/buildroot/package/pcmcia/pcmcia.mk
-   trunk/buildroot/package/portage/portage.mk
-   trunk/buildroot/package/procps/procps.mk
-   trunk/buildroot/package/proftpd/proftpd.mk
-   trunk/buildroot/package/psmisc/psmisc.mk
-   trunk/buildroot/package/quagga/quagga.mk
-   trunk/buildroot/package/rdesktop/rdesktop.mk
-   trunk/buildroot/package/samba/samba.mk
-   trunk/buildroot/package/sdl/sdl.mk
-   trunk/buildroot/package/setserial/setserial.mk
-   trunk/buildroot/package/socat/socat.mk
-   trunk/buildroot/package/sqlite/sqlite.mk
-   trunk/buildroot/package/sysvinit/sysvinit.mk
-   trunk/buildroot/package/tar/tar.mk
-   trunk/buildroot/package/tcpdump/dhcpdump.mk
-   trunk/buildroot/package/tcpdump/tcpdump.mk
-   trunk/buildroot/package/tftpd/tftpd.mk
-   trunk/buildroot/package/tinyx-old/tinyx.mk
-   trunk/buildroot/package/tinyx/tinyx.mk
-   trunk/buildroot/package/usbmount/usbmount.mk
-   trunk/buildroot/package/vpnc/vpnc.mk
-   trunk/buildroot/package/x11r7/mesa3d/mesa3d.mk
-   trunk/buildroot/package/x11r7/xapp_xman/xapp_xman.mk
-   trunk/buildroot/package/x11r7/xdata_xcursor-themes/xdata_xcursor-themes.mk
-   trunk/buildroot/package/xfsprogs/xfsprogs.mk
-   trunk/buildroot/package/xorg/xorg.mk
-   trunk/buildroot/package/zlib/zlib.mk
-   trunk/buildroot/target/cloop/cloop.mk
-   trunk/buildroot/target/cpio/cpioroot.mk
-   trunk/buildroot/target/cramfs/cramfs.mk
+   trunk/buildroot/package/mtd/20061007/mtd.mk
    trunk/buildroot/target/device/AMD/DBAu1500/linux26.mk
-   trunk/buildroot/target/device/Atmel/u-boot/u-boot.mk
-   trunk/buildroot/target/device/Sharp/LNode80/linux.mk
-   trunk/buildroot/target/device/Soekris/net4521/linux.mk
-   trunk/buildroot/target/device/Via/epia-mii/linux.mk
-   trunk/buildroot/target/device/jp/q5/linux.mk
-   trunk/buildroot/target/ext2/ext2root.mk
-   trunk/buildroot/target/initramfs/initramfs.mk
-   trunk/buildroot/target/iso9660/iso9660.mk
-   trunk/buildroot/target/jffs2/jffs2root.mk
-   trunk/buildroot/target/squashfs/squashfsroot.mk
-   trunk/buildroot/target/tar/tarroot.mk
-   trunk/buildroot/target/x86/grub/grub.mk
-   trunk/buildroot/target/x86/grub2/grub2.mk
-   trunk/buildroot/toolchain/binutils/binutils.mk
-   trunk/buildroot/toolchain/ccache/ccache.mk
-   trunk/buildroot/toolchain/external-toolchain/ext-tool.mk
-   trunk/buildroot/toolchain/gcc/gcc-uclibc-3.x.mk
-   trunk/buildroot/toolchain/gcc/gcc-uclibc-4.x.mk
-   trunk/buildroot/toolchain/gdb/gdb.mk
-   trunk/buildroot/toolchain/uClibc/uclibc.mk
 
 
 Changeset:
+Modified: trunk/buildroot/package/mtd/20061007/mtd.mk
+===================================================================
+--- trunk/buildroot/package/mtd/20061007/mtd.mk	2007-08-22 09:56:41 UTC (rev 19639)
++++ trunk/buildroot/package/mtd/20061007/mtd.mk	2007-08-22 10:06:25 UTC (rev 19640)
+@@ -7,7 +7,7 @@
+ MTD_SITE=http://ftp.debian.org/debian/pool/main/m/mtd
+ MTD_HOST_DIR := $(TOOL_BUILD_DIR)/mtd_orig
+ MTD_DIR:=$(BUILD_DIR)/mtd_orig
+-MTD_CAT:=zcat
++MTD_CAT:=$(ZCAT)
+ MTD_DATE:=20061007
+ 
+ #############################################################
+@@ -22,7 +22,7 @@
+ 	$(WGET) -P $(DL_DIR) $(MTD_SITE)/$(MTD_SOURCE)
+ 
+ $(MTD_HOST_DIR)/.unpacked: $(DL_DIR)/$(MTD_SOURCE)
+-	$(ZCAT) $(DL_DIR)/$(MTD_SOURCE) | tar -C $(TOOL_BUILD_DIR) $(TAR_OPTIONS) -
++	$(MTD_CAT) $(DL_DIR)/$(MTD_SOURCE) | tar -C $(TOOL_BUILD_DIR) $(TAR_OPTIONS) -
+ 	mv $(TOOL_BUILD_DIR)/$(shell tar tzf $(DL_DIR)/$(MTD_SOURCE) | head -n 1 \
+ 		| xargs basename) $(MTD_HOST_DIR)
+ 	toolchain/patch-kernel.sh $(MTD_HOST_DIR) \
+@@ -49,7 +49,7 @@
+ #
+ #############################################################
+ $(MTD_DIR)/.unpacked: $(DL_DIR)/$(MTD_SOURCE)
+-	$(ZCAT) $(DL_DIR)/$(MTD_SOURCE) | tar -C $(BUILD_DIR) $(TAR_OPTIONS) -
++	$(MTD_CAT) $(DL_DIR)/$(MTD_SOURCE) | tar -C $(BUILD_DIR) $(TAR_OPTIONS) -
+ 	mv $(BUILD_DIR)/$(shell tar tzf $(DL_DIR)/$(MTD_SOURCE) \
+ 		| head -n 1 | xargs basename) $(MTD_DIR)
+ 	toolchain/patch-kernel.sh $(MTD_DIR) \
 
-Sorry, the patch is too large to include (2135 lines).
-Please use ViewCVS to see it!
-
-http://uclibc.org/cgi-bin/viewcvs.cgi?view=rev&root=svn&rev=19639
+Modified: trunk/buildroot/target/device/AMD/DBAu1500/linux26.mk
+===================================================================
+--- trunk/buildroot/target/device/AMD/DBAu1500/linux26.mk	2007-08-22 09:56:41 UTC (rev 19639)
++++ trunk/buildroot/target/device/AMD/DBAu1500/linux26.mk	2007-08-22 10:06:25 UTC (rev 19640)
+@@ -43,7 +43,7 @@
+ 
+ $(LINUX26_DIR)/.unpacked: $(DL_DIR)/$(LINUX26_SOURCE)
+ 	rm -rf $(LINUX26_DIR)
+-	bzcat $(DL_DIR)/$(LINUX26_SOURCE) | tar -C $(BUILD_DIR) -xvf -
++	$(BZCAT) $(DL_DIR)/$(LINUX26_SOURCE) | tar -C $(BUILD_DIR) -xvf -
+ ifneq ($(DOWNLOAD_LINUX26_VERSION),$(LINUX26_VERSION))
+ 	# Rename the dir from the downloaded version to the AFTER patch version
+ 	mv -f $(BUILD_DIR)/linux-$(DOWNLOAD_LINUX26_VERSION) $(BUILD_DIR)/linux-$(LINUX26_VERSION)
