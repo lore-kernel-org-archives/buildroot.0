@@ -1,25 +1,32 @@
-From: Bernhard Fischer <rep.dot.nop@gmail.com>
-Date: Wed, 22 Aug 2007 23:27:39 +0200
-Subject: [Buildroot] Hiding non-buildable packages
-In-Reply-To: <20070822210523.GA11697@aon.at>
-References: <1187728137.6145.48.camel@86-115-11-152>
-	<20070822191320.GU11697@aon.at>
-	<1187814296.4321.37.camel@86-115-11-28>
-	<200708222244.38319.yann.morin.1998@anciens.enib.fr>
-	<20070822210523.GA11697@aon.at>
-Message-ID: <20070822212739.GE11697@aon.at>
+From: ulf at uclibc.org <ulf@uclibc.org>
+Date: Wed, 22 Aug 2007 14:47:57 -0700 (PDT)
+Subject: [Buildroot] svn commit: trunk/buildroot/target/device/Atmel
+Message-ID: <20070822214757.01786A48D7@busybox.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Wed, Aug 22, 2007 at 11:05:23PM +0200, Bernhard Fischer wrote:
+Author: ulf
+Date: 2007-08-22 14:47:56 -0700 (Wed, 22 Aug 2007)
+New Revision: 19661
 
->It's not that we have a feature-rich and demanding default
->configuration.. The default (including about all of busybox since that's
->what's supposed to be tested alone uclibc by br) should build and of
+Log:
+Remove whitespace damage
 
-s/alone/along/;# even. BAH!
+Modified:
+   trunk/buildroot/target/device/Atmel/Mirrors.in
 
->course work correctly just fine, from my POV. Y(not Yann's)MMV
+
+Changeset:
+Modified: trunk/buildroot/target/device/Atmel/Mirrors.in
+===================================================================
+--- trunk/buildroot/target/device/Atmel/Mirrors.in	2007-08-22 19:31:43 UTC (rev 19660)
++++ trunk/buildroot/target/device/Atmel/Mirrors.in	2007-08-22 21:47:56 UTC (rev 19661)
+@@ -1,4 +1,4 @@
+-menu	"Atmel Mirrors"
++menu "Atmel Mirrors"
+ 
+ config BR2_ATMEL_MIRROR
+ 	string "Atmel AVR32/AT91 download site"
