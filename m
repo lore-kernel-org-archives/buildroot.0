@@ -1,36 +1,35 @@
-From: aldot at uclibc.org <aldot@uclibc.org>
-Date: Wed, 22 Aug 2007 02:22:33 -0700 (PDT)
-Subject: [Buildroot] svn commit: trunk/buildroot/toolchain/binutils
-Message-ID: <20070822092233.31F74A6110@busybox.net>
+From: ulf at uclibc.org <ulf@uclibc.org>
+Date: Wed, 22 Aug 2007 02:29:50 -0700 (PDT)
+Subject: [Buildroot] svn commit: trunk/buildroot/package/bash
+Message-ID: <20070822092950.5BEE8A65AD@busybox.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Author: aldot
-Date: 2007-08-22 02:22:32 -0700 (Wed, 22 Aug 2007)
-New Revision: 19635
+Author: ulf
+Date: 2007-08-22 02:29:49 -0700 (Wed, 22 Aug 2007)
+New Revision: 19636
 
 Log:
-- drop circular dependency
-
+Fix bad patch naming scheme
 
 Modified:
-   trunk/buildroot/toolchain/binutils/binutils.mk
+   trunk/buildroot/package/bash/bash.mk
 
 
 Changeset:
-Modified: trunk/buildroot/toolchain/binutils/binutils.mk
+Modified: trunk/buildroot/package/bash/bash.mk
 ===================================================================
---- trunk/buildroot/toolchain/binutils/binutils.mk	2007-08-22 09:22:07 UTC (rev 19634)
-+++ trunk/buildroot/toolchain/binutils/binutils.mk	2007-08-22 09:22:32 UTC (rev 19635)
-@@ -125,7 +125,7 @@
- 	#	tooldir=/usr build_tooldir=/usr install
- 	#rm -f $(STAGING_DIR)/usr/bin/{ar,as,ld,nm,objdump,ranlib,strip}
- 
--binutils: dependencies uclibc-configured $(BINUTILS_HOST_PREREQ) $(STAGING_DIR)/usr/bin/$(REAL_GNU_TARGET_NAME)-ld
-+binutils: uclibc-configured $(BINUTILS_HOST_PREREQ) $(STAGING_DIR)/usr/bin/$(REAL_GNU_TARGET_NAME)-ld
- 
- binutils-source: $(DL_DIR)/$(BINUTILS_SOURCE)
- 
+--- trunk/buildroot/package/bash/bash.mk	2007-08-22 09:22:32 UTC (rev 19635)
++++ trunk/buildroot/package/bash/bash.mk	2007-08-22 09:29:49 UTC (rev 19636)
+@@ -19,7 +19,7 @@
+ bash-unpacked: $(BASH_DIR)/.unpacked
+ $(BASH_DIR)/.unpacked: $(DL_DIR)/$(BASH_SOURCE)
+ 	$(BASH_CAT) $(DL_DIR)/$(BASH_SOURCE) | tar -C $(BUILD_DIR) $(TAR_OPTIONS) -
+-	toolchain/patch-kernel.sh $(BASH_DIR) package/bash/ bash??-*
++	toolchain/patch-kernel.sh $(BASH_DIR) package/bash/ bash??-\*
+ 	# This is broken when -lintl is added to LIBS
+ 	$(SED) 's,LIBS_FOR_BUILD =.*,LIBS_FOR_BUILD =,g' \
+ 		$(BASH_DIR)/builtins/Makefile.in
