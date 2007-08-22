@@ -1,30 +1,55 @@
-From: =?ISO-8859-1?Q?Thiago_A._Corr=EAa?= <thiago.correa@gmail.com>
-Date: Wed, 22 Aug 2007 15:42:11 +0100
-Subject: [Buildroot] [PATCH] Qtopia4 improvements (resubmit)
-Message-ID: <d6cda7730708220742j3d931627wd6e160071b5f9476@mail.gmail.com>
+From: bugs at busybox.net <bugs@busybox.net>
+Date: Wed, 22 Aug 2007 08:12:50 -0700
+Subject: [Buildroot] [buildroot 0001469]: Add fuse and ntfs package for
+	buildroot
+Message-ID: <24fcf939a109753603d3fada340892fa@busybox.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+
+The following issue has been SUBMITTED. 
+====================================================================== 
+http://busybox.net/bugs/view.php?id=1469 
+====================================================================== 
+Reported By:                alextud
+Assigned To:                buildroot
+====================================================================== 
+Project:                    buildroot
+Issue ID:                   1469
+Category:                   New Features
+Reproducibility:            N/A
+Severity:                   feature
+Priority:                   normal
+Status:                     assigned
+====================================================================== 
+Date Submitted:             08-22-2007 08:12 PDT
+Last Modified:              08-22-2007 08:12 PDT
+====================================================================== 
+Summary:                    Add fuse and ntfs package for buildroot
+Description: 
 Hi,
+I made some makefile for fuse and ntfs-3g and I'll be happy if you can add
+them to  buildroot package.
+Ntfs-3g mount always fail with default busybox mount command, only work
+with mount from util-linux package, I think that its related with fuse and
+mount from busybox, fix me if I wrong.
+Also I disabled in fuse symvers related to version 2.2 because on runtime
+fusermount show: unknown '" option. 
+I'm just started with buildroot and my files maybe contains some error,
+feel free to modify them.
 
-    I have attached a patch sent earlier by Hans-Christian Egtvedt
-(http://buildroot.uclibc.org/lists/buildroot/2007-August/004197.html)
-using unified diff (easier to apply) and with a little improvement of
-my own.
+Thanks, Alex.
+====================================================================== 
 
-   Basically, this adds GIF and MMG support, fix comments a little
-bit, small cleanups, and avoid building Qtopia examples (that's my
-little improvement over the original). Thus, it builds a lot faster.
-
-Cheers,
-    Thiago A. Correa
--------------- next part --------------
-A non-text attachment was scrubbed...
-Name: qtopia4.patch
-Type: application/octet-stream
-Size: 10402 bytes
-Desc: not available
-Url : http://busybox.net/lists/buildroot/attachments/20070822/f7a9ca40/attachment-0001.obj 
+Issue History 
+Date Modified   Username       Field                    Change               
+====================================================================== 
+08-22-07 08:12  alextud        New Issue                                    
+08-22-07 08:12  alextud        Status                   new => assigned     
+08-22-07 08:12  alextud        Assigned To               => buildroot       
+08-22-07 08:12  alextud        File Added: fuse&ntfs_mk.tar.gz                  
+ 
+======================================================================
