@@ -1,68 +1,32 @@
-From: aldot at uclibc.org <aldot@uclibc.org>
-Date: Wed, 22 Aug 2007 08:18:03 -0700 (PDT)
-Subject: [Buildroot] svn commit: trunk/buildroot/package/e2fsprogs
-Message-ID: <20070822151803.7ACBDA4656@busybox.net>
+From: =?ISO-8859-1?Q?Thiago_A._Corr=EAa?= <thiago.correa@gmail.com>
+Date: Wed, 22 Aug 2007 16:14:44 +0100
+Subject: [Buildroot] [PATCH] Qtopia4 improvements (resubmit)
+In-Reply-To: <d6cda7730708220742j3d931627wd6e160071b5f9476@mail.gmail.com>
+References: <d6cda7730708220742j3d931627wd6e160071b5f9476@mail.gmail.com>
+Message-ID: <d6cda7730708220814p19be8433w3d97a252fae5ab10@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Author: aldot
-Date: 2007-08-22 08:18:02 -0700 (Wed, 22 Aug 2007)
-New Revision: 19647
+Btw, we should also consider updating to Qtopia 4.2.3 or 4.3.1.
 
-Log:
-- was broken by the patch omitting the CFLAGS for configure
-- misc cleanup while at it
+The 4.2.3 fixes memory leaks and data corruption bugs.
 
-
-Modified:
-   trunk/buildroot/package/e2fsprogs/e2fsprogs.mk
-
-
-Changeset:
-Modified: trunk/buildroot/package/e2fsprogs/e2fsprogs.mk
-===================================================================
---- trunk/buildroot/package/e2fsprogs/e2fsprogs.mk	2007-08-22 13:30:49 UTC (rev 19646)
-+++ trunk/buildroot/package/e2fsprogs/e2fsprogs.mk	2007-08-22 15:18:02 UTC (rev 19647)
-@@ -30,6 +30,7 @@
- 	(cd $(E2FSPROGS_DIR); rm -rf config.cache; \
- 		$(TARGET_CONFIGURE_OPTS) \
- 		$(TARGET_CONFIGURE_ARGS) \
-+		CFLAGS="$(TARGET_CFLAGS)" \
- 		./configure \
- 		--target=$(GNU_TARGET_NAME) \
- 		--host=$(GNU_TARGET_NAME) \
-@@ -54,16 +55,19 @@
- 		--without-catgets $(DISABLE_NLS) \
- 		$(DISABLE_LARGEFILE) \
- 	)
-+	# do away with hiding the commands
-+	find $(E2FSPROGS_DIR) -name Makefile \
-+		| xargs $(SED) '/^[[:space:]]*@/s/@/$$\(Q\)/'
- 	touch $@
- 
- $(E2FSPROGS_DIR)/$(E2FSPROGS_BINARY): $(E2FSPROGS_DIR)/.configured
--	$(MAKE1) PATH=$(TARGET_PATH) -C $(E2FSPROGS_DIR)
-+	$(MAKE1) -C $(E2FSPROGS_DIR)
- 	( \
- 		cd $(E2FSPROGS_DIR)/misc; \
- 		$(STRIP) $(E2FSPROGS_MISC_STRIP); \
- 	)
--	$(STRIP) $(E2FSPROGS_DIR)/lib/lib*.so.*.*
--	touch -c $(E2FSPROGS_DIR)/$(E2FSPROGS_BINARY)
-+	#$(STRIP) $(E2FSPROGS_DIR)/lib/lib*.so.*.*
-+	touch -c $@
- 
- $(TARGET_DIR)/$(E2FSPROGS_TARGET_BINARY): $(E2FSPROGS_DIR)/$(E2FSPROGS_BINARY)
- 	$(MAKE1) PATH=$(TARGET_PATH) DESTDIR=$(TARGET_DIR) -C $(E2FSPROGS_DIR) install
-@@ -77,7 +81,7 @@
- 	ln -sf e2label ${TARGET_DIR}/sbin/findfs
- 	rm -rf $(TARGET_DIR)/share/locale $(TARGET_DIR)/usr/info \
- 		$(TARGET_DIR)/usr/man $(TARGET_DIR)/usr/share/doc
--	touch -c $(TARGET_DIR)/$(E2FSPROGS_TARGET_BINARY)
-+	touch -c $@
- 
- e2fsprogs: uclibc $(TARGET_DIR)/$(E2FSPROGS_TARGET_BINARY)
- 
+On 8/22/07, Thiago A. Corr?a <thiago.correa@gmail.com> wrote:
+> Hi,
+>
+>     I have attached a patch sent earlier by Hans-Christian Egtvedt
+> (http://buildroot.uclibc.org/lists/buildroot/2007-August/004197.html)
+> using unified diff (easier to apply) and with a little improvement of
+> my own.
+>
+>    Basically, this adds GIF and MMG support, fix comments a little
+> bit, small cleanups, and avoid building Qtopia examples (that's my
+> little improvement over the original). Thus, it builds a lot faster.
+>
+> Cheers,
+>     Thiago A. Correa
+>
+>
