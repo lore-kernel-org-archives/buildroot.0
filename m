@@ -1,7 +1,7 @@
 From: aldot at uclibc.org <aldot@uclibc.org>
-Date: Wed, 22 Aug 2007 09:02:22 -0700 (PDT)
+Date: Wed, 22 Aug 2007 09:08:38 -0700 (PDT)
 Subject: [Buildroot] svn commit: trunk/buildroot/package
-Message-ID: <20070822160222.89AF8A5D2D@busybox.net>
+Message-ID: <20070822160838.D2AF8A45E7@busybox.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -9,32 +9,27 @@ Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
 Author: aldot
-Date: 2007-08-22 09:02:22 -0700 (Wed, 22 Aug 2007)
-New Revision: 19651
+Date: 2007-08-22 09:08:38 -0700 (Wed, 22 Aug 2007)
+New Revision: 19652
 
 Log:
-- pass TARGET_CONFIGURE_ARGS
+- forgot to include the Config.in
 
 
 Modified:
-   trunk/buildroot/package/Makefile.autotools.in
+   trunk/buildroot/package/Config.in
 
 
 Changeset:
-Modified: trunk/buildroot/package/Makefile.autotools.in
+Modified: trunk/buildroot/package/Config.in
 ===================================================================
---- trunk/buildroot/package/Makefile.autotools.in	2007-08-22 15:59:56 UTC (rev 19650)
-+++ trunk/buildroot/package/Makefile.autotools.in	2007-08-22 16:02:22 UTC (rev 19651)
-@@ -181,10 +181,8 @@
- 	cd $(@D)/$($(PKG)_SUBDIR) && \
- 	rm -f config.cache && \
- 	$(TARGET_CONFIGURE_OPTS) \
--		CFLAGS="$(TARGET_CFLAGS)" \
--		CXXFLAGS="$(TARGET_CXXFLAGS)" \
--		LDFLAGS="$(TARGET_LDFLAGS)" \
--		$($(PKG)_CONF_ENV) \
-+	$(TARGET_CONFIGURE_ARGS) \
-+	$($(PKG)_CONF_ENV) \
- 		./configure \
- 		--target=$(GNU_TARGET_NAME) \
- 		--host=$(GNU_TARGET_NAME) \
+--- trunk/buildroot/package/Config.in	2007-08-22 16:02:22 UTC (rev 19651)
++++ trunk/buildroot/package/Config.in	2007-08-22 16:08:38 UTC (rev 19652)
+@@ -166,6 +166,7 @@
+ source "package/openswan/Config.in"
+ source "package/portmap/Config.in"
+ source "package/pppd/Config.in"
++source "package/pptp-linux/Config.in"
+ source "package/proftpd/Config.in"
+ source "package/quagga/Config.in"
+ source "package/rsync/Config.in"
