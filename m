@@ -1,38 +1,51 @@
-From: Bernhard Fischer <rep.dot.nop@gmail.com>
-Date: Wed, 22 Aug 2007 23:20:34 +0200
+From: Yann E. MORIN <yann.morin.1998@anciens.enib.fr>
+Date: Wed, 22 Aug 2007 23:21:23 +0200
 Subject: [Buildroot] Hiding non-buildable packages
-In-Reply-To: <1187816364.4321.63.camel@86-115-11-28>
+In-Reply-To: <20070822210523.GA11697@aon.at>
 References: <1187728137.6145.48.camel@86-115-11-152>
-	<20070822191320.GU11697@aon.at>
-	<1187814296.4321.37.camel@86-115-11-28>
 	<200708222244.38319.yann.morin.1998@anciens.enib.fr>
-	<1187816364.4321.63.camel@86-115-11-28>
-Message-ID: <20070822212034.GC11697@aon.at>
+	<20070822210523.GA11697@aon.at>
+Message-ID: <200708222321.23559.yann.morin.1998@anciens.enib.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Wed, Aug 22, 2007 at 10:59:24PM +0200, Ulf Samuelsson wrote:
+Brnhard, Ulf and All,
 
->Granted, but do we need it to be perfect?, I think not!
->
->I know that openssh does not work due to lack of 64 bit math.
+On Wednesday 22 August 2007 23:05, Bernhard Fischer wrote:
+> divide et impera, nod.
 
-You are - for the second time today - tempting me to just apply my
-openssh update which i know may have trouble in some odd places, just
-FYI..
->I do not think it works for any architecture.
->Why should every newbie try this out for themseleves,
->only to find that it does not build...
+I couldn't remember the latin words. Thank you!
 
-Since the default works fine, if somebody tries hard to shoot themselves
-in the foot, why prevent them from doing so?
->
->Much better to hide it from the build, and then let the guy
->which really wants it to reenable and debug it.
+> Normal dependencies that are hardware dependant are ok to add. Anything
 
-No. That's not my approach.
-Let defaults work, if you change anything, be prepared to keep all
-parts.
+Granted.
+
+> else is not, since it just tried to work around bugs, which is
+> inacceptable.
+
+What about what I just posted back, should we want it?
+
+> It's not that we have a feature-rich and demanding default
+> configuration.. The default (including about all of busybox since that's
+> what's supposed to be tested alone uclibc by br) should build and of
+> course work correctly just fine, from my POV.
+
+That's fine by me.
+
+> Y(not Yann's)MMV 
+
+Hehe! ;-)
+
+Regards,
+Yann E. MORIN.
+
+-- 
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +0/33 662376056 | Software  Designer | \ / CAMPAIGN     |   ^                |
+| --==< ?_? >==-- ?------------.-------:  X  AGAINST      |  /e\  There is no  |
+| http://ymorin.is-a-geek.org/ | (*_*) | / \ HTML MAIL    |  """  conspiracy.  |
+?------------------------------?-------?------------------?--------------------?
