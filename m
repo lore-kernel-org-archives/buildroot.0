@@ -1,17 +1,30 @@
-From: Bernhard Fischer <rep.dot.nop@gmail.com>
-Date: Wed, 22 Aug 2007 15:16:14 +0200
-Subject: [Buildroot] libdrm with wrong include-dir
-In-Reply-To: <f90898420708220536h695f49bcy3c227fd36784b5d5@mail.gmail.com>
-References: <f90898420708220536h695f49bcy3c227fd36784b5d5@mail.gmail.com>
-Message-ID: <20070822131614.GA10015@aon.at>
+From: =?ISO-8859-1?Q?Thiago_A._Corr=EAa?= <thiago.correa@gmail.com>
+Date: Wed, 22 Aug 2007 15:42:11 +0100
+Subject: [Buildroot] [PATCH] Qtopia4 improvements (resubmit)
+Message-ID: <d6cda7730708220742j3d931627wd6e160071b5f9476@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Wed, Aug 22, 2007 at 02:36:00PM +0200, Simon Pasch wrote:
->Shouldn't libdrm-package use staging_dir/usr/include instead of
->staging_dir/include?!
+Hi,
 
-indeed, see r19646. Thanks!
+    I have attached a patch sent earlier by Hans-Christian Egtvedt
+(http://buildroot.uclibc.org/lists/buildroot/2007-August/004197.html)
+using unified diff (easier to apply) and with a little improvement of
+my own.
+
+   Basically, this adds GIF and MMG support, fix comments a little
+bit, small cleanups, and avoid building Qtopia examples (that's my
+little improvement over the original). Thus, it builds a lot faster.
+
+Cheers,
+    Thiago A. Correa
+-------------- next part --------------
+A non-text attachment was scrubbed...
+Name: qtopia4.patch
+Type: application/octet-stream
+Size: 10402 bytes
+Desc: not available
+Url : http://busybox.net/lists/buildroot/attachments/20070822/f7a9ca40/attachment-0001.obj 
