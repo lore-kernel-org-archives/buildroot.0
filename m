@@ -1,72 +1,38 @@
-From: Yann E. MORIN <yann.morin.1998@anciens.enib.fr>
-Date: Wed, 22 Aug 2007 23:17:35 +0200
+From: Bernhard Fischer <rep.dot.nop@gmail.com>
+Date: Wed, 22 Aug 2007 23:20:34 +0200
 Subject: [Buildroot] Hiding non-buildable packages
 In-Reply-To: <1187816364.4321.63.camel@86-115-11-28>
 References: <1187728137.6145.48.camel@86-115-11-152>
+	<20070822191320.GU11697@aon.at>
+	<1187814296.4321.37.camel@86-115-11-28>
 	<200708222244.38319.yann.morin.1998@anciens.enib.fr>
 	<1187816364.4321.63.camel@86-115-11-28>
-Message-ID: <200708222317.35411.yann.morin.1998@anciens.enib.fr>
+Message-ID: <20070822212034.GC11697@aon.at>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Wednesday 22 August 2007 22:59, Ulf Samuelsson wrote:
-> Granted, but do we need it to be perfect?, I think not!
-> I know that openssh does not work due to lack of 64 bit math.
-> I do not think it works for any architecture.
-> Why should every newbie try this out for themseleves,
-> only to find that it does not build...
-> Much better to hide it from the build, and then let the guy
-> which really wants it to reenable and debug it.
+On Wed, Aug 22, 2007 at 10:59:24PM +0200, Ulf Samuelsson wrote:
 
-The problem with your suggestion, if I may, is that it becomes quite complex
-to maintain.
+>Granted, but do we need it to be perfect?, I think not!
+>
+>I know that openssh does not work due to lack of 64 bit math.
 
-I'd rather have something much simpler, should we do want to add such options:
+You are - for the second time today - tempting me to just apply my
+openssh update which i know may have trouble in some odd places, just
+FYI..
+>I do not think it works for any architecture.
+>Why should every newbie try this out for themseleves,
+>only to find that it does not build...
 
-config MAYBE_BROKEN
-    bool
-    prompt "Show packages that might not build"
-    default y
-    help
-      Show packages that, for a reason or another, might not build
-      for some architecture(s).
-      If you're lucky, it will build for yours. If not, you can try to
-      fix it, and post your fix. :-)
+Since the default works fine, if somebody tries hard to shoot themselves
+in the foot, why prevent them from doing so?
+>
+>Much better to hide it from the build, and then let the guy
+>which really wants it to reenable and debug it.
 
-config REALLY_BROKEN
-    bool
-    prompt "Show packages that won't build"
-    default n
-    help
-      Some packages are so deeply broken that your help would be
-      greatly appreciated should you post a patch solving the issue! :-)
-      Warning: this option is not for the faint-hearted!
-
-...
-
-config BR2_PACKAGE_FOO
-    bool
-    prompt "foo (MAYBE BROKEN)"
-    depends on MAYBE_BROKEN
-    default n
-
-config BR2_PACKAGE_BAR
-    bool
-    prompt "bar (BROKEN)"
-    depends on REALLY_BROKEN
-    default n
-
-
-Regards,
-Yann E. MORIN.
-
--- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +0/33 662376056 | Software  Designer | \ / CAMPAIGN     |   ^                |
-| --==< ?_? >==-- ?------------.-------:  X  AGAINST      |  /e\  There is no  |
-| http://ymorin.is-a-geek.org/ | (*_*) | / \ HTML MAIL    |  """  conspiracy.  |
-?------------------------------?-------?------------------?--------------------?
+No. That's not my approach.
+Let defaults work, if you change anything, be prepared to keep all
+parts.
