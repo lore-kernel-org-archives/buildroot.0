@@ -1,40 +1,47 @@
-From: aldot at uclibc.org <aldot@uclibc.org>
-Date: Wed, 22 Aug 2007 00:53:20 -0700 (PDT)
-Subject: [Buildroot] svn commit: trunk/buildroot/toolchain/kernel-headers
-Message-ID: <20070822075320.77B06A45EE@busybox.net>
+From: Bernhard Fischer <rep.dot.nop@gmail.com>
+Date: Wed, 22 Aug 2007 10:08:18 +0200
+Subject: [Buildroot] buildroot-20070720
+In-Reply-To: <1187754477.4494.11.camel@86-115-11-152>
+References: <1187730489.15882.7.camel@86-115-11-152>
+	<20070821230818.GS11697@aon.at>
+	<1187754477.4494.11.camel@86-115-11-152>
+Message-ID: <20070822080818.GA7523@aon.at>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Author: aldot
-Date: 2007-08-22 00:53:18 -0700 (Wed, 22 Aug 2007)
-New Revision: 19632
+On Wed, Aug 22, 2007 at 05:47:57AM +0200, Ulf Samuelsson wrote:
+>ons 2007-08-22 klockan 01:08 +0200 skrev Bernhard Fischer:
+>> On Tue, Aug 21, 2007 at 11:08:09PM +0200, Ulf Samuelsson wrote:
+>> >Since the buildroot ftp site only maintains one month old tarball,
+>> >this package has already disappeared.
+>> >It would be good if that tarball could be downloadable as well
+>> >so that the diff can be computed.
+>> 
+>> To me this doesn't make any sense at all.
+>> svn co -r'{2007-07-20 00:00}' svn://uclibc.org/trunk/buildroot buildroot
+>> 
+>> What do you want to achieve with a tarball? Doesn't svn diff work just
+>> fine? And, what's special about that 20070720 snapshot in the first
+>> place?
+>
+>Sorry, wrong mailing list.
+>Was intended for an Atmel internal mailing list.
+>The "Evolution" Mail program does not easily show how
+>it completes a mail address.
+>
+>http://www.atmel.no/buildroot/ is based on 20070718.
+>Would like to move this stuff to the main trunk
+>
+>I got an earlier version in the summertime, and did not have
+>the original source so I diffed against the current,
+>and tried to figure out what was added.
+>That was the time, when I reverted some of your patches.
+>
+>Would like to avoid that, so I want the original source.
 
-Log:
-- fix wrong help-text
-
-
-Modified:
-   trunk/buildroot/toolchain/kernel-headers/Config.in
-
-
-Changeset:
-Modified: trunk/buildroot/toolchain/kernel-headers/Config.in
-===================================================================
---- trunk/buildroot/toolchain/kernel-headers/Config.in	2007-08-21 20:14:23 UTC (rev 19631)
-+++ trunk/buildroot/toolchain/kernel-headers/Config.in	2007-08-22 07:53:18 UTC (rev 19632)
-@@ -63,11 +63,8 @@
- 	default n
- 	depends BR2_KERNEL_HEADERS_2_6_20 || BR2_KERNEL_HEADERS_2_6_21 || BR2_KERNEL_HEADERS_2_6_22
- 	help
--	  Apply patches which allow for lzma compressed
--	  initramfs filesystems.  This requires the lzma
--	  program in your development environment.
-+	  Apply patches which add IPMI sensor support.
- 
--
- config BR2_KERNEL_HEADERS_LZMA
- 	bool "use lzma initramfs kernel patches"
- 	default n
+Perhaps it would be a good idea if you (atmel) would use an SCM instead
+of tarballs. Would make your life way easier, i imagine. Just a
+thought..
