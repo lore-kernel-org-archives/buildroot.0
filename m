@@ -1,55 +1,17 @@
-From: aldot at uclibc.org <aldot@uclibc.org>
-Date: Wed, 22 Aug 2007 06:30:51 -0700 (PDT)
-Subject: [Buildroot] svn commit: trunk/buildroot/package/libdrm
-Message-ID: <20070822133051.32E0EA4965@busybox.net>
+From: Bernhard Fischer <rep.dot.nop@gmail.com>
+Date: Wed, 22 Aug 2007 15:16:14 +0200
+Subject: [Buildroot] libdrm with wrong include-dir
+In-Reply-To: <f90898420708220536h695f49bcy3c227fd36784b5d5@mail.gmail.com>
+References: <f90898420708220536h695f49bcy3c227fd36784b5d5@mail.gmail.com>
+Message-ID: <20070822131614.GA10015@aon.at>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Author: aldot
-Date: 2007-08-22 06:30:49 -0700 (Wed, 22 Aug 2007)
-New Revision: 19646
+On Wed, Aug 22, 2007 at 02:36:00PM +0200, Simon Pasch wrote:
+>Shouldn't libdrm-package use staging_dir/usr/include instead of
+>staging_dir/include?!
 
-Log:
-- use proper include dir (Simon Pasch)
-- cleanup a little while at it
-
-
-Modified:
-   trunk/buildroot/package/libdrm/libdrm.mk
-
-
-Changeset:
-Modified: trunk/buildroot/package/libdrm/libdrm.mk
-===================================================================
---- trunk/buildroot/package/libdrm/libdrm.mk	2007-08-22 12:35:41 UTC (rev 19645)
-+++ trunk/buildroot/package/libdrm/libdrm.mk	2007-08-22 13:30:49 UTC (rev 19646)
-@@ -16,10 +16,10 @@
- 
- $(LIBDRM_DIR)/.unpacked: $(DL_DIR)/$(LIBDRM_SOURCE)
- 	$(LIBDRM_CAT) $(DL_DIR)/$(LIBDRM_SOURCE) | tar -C $(BUILD_DIR) $(TAR_OPTIONS) -
--	touch $(LIBDRM_DIR)/.unpacked
-+	touch $@
- 
- $(LIBDRM_DIR)/.configured: $(LIBDRM_DIR)/.unpacked
--	(cd $(LIBDRM_DIR); \
-+	(cd $(LIBDRM_DIR); rm -f config.cache; \
- 	$(TARGET_CONFIGURE_OPTS) \
- 	CFLAGS="$(TARGET_CFLAGS) " \
- 	LDFLAGS="$(TARGET_LDFLAGS)" \
-@@ -36,11 +36,11 @@
- 		--sysconfdir=/etc \
- 		--datadir=/usr/share \
- 		--localstatedir=/var \
--		--includedir=/include \
-+		--includedir=/usr/include \
- 		--mandir=/usr/man \
- 		--infodir=/usr/info \
- 	)
--	touch $(LIBDRM_DIR)/.configured
-+	touch $@
- 
- $(LIBDRM_DIR)/.compiled: $(LIBDRM_DIR)/.configured
- 	$(MAKE) CCexe="$(HOSTCC)" -C $(LIBDRM_DIR)
+indeed, see r19646. Thanks!
