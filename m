@@ -1,36 +1,33 @@
-From: aldot at uclibc.org <aldot@uclibc.org>
-Date: Wed, 22 Aug 2007 09:57:32 -0700 (PDT)
-Subject: [Buildroot] svn commit: trunk/buildroot/package/pptp-linux
-Message-ID: <20070822165732.9FE25A5D3C@busybox.net>
+From: Ulf Samuelsson <ulf@atmel.com>
+Date: Wed, 22 Aug 2007 18:43:45 +0200
+Subject: [Buildroot] buildroot-20070720
+References: <1187730489.15882.7.camel@86-115-11-152>
+	<20070821230818.GS11697@aon.at>
+	<1187754477.4494.11.camel@86-115-11-152>
+	<20070822080818.GA7523@aon.at>
+	<00e901c7e4b6$d77a8460$070514ac@atmel.com>
+	<20070822124029.GA9846@aon.at>
+Message-ID: <032a01c7e4e2$b5fb0fe0$980b7356@atmel.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Author: aldot
-Date: 2007-08-22 09:57:32 -0700 (Wed, 22 Aug 2007)
-New Revision: 19658
+>>
+>>Is there any chance that buildroot is moving over to "git"?.
+> 
+> given that there is a svn backend for git, this doesn't make much sense
+> to me. They should just pull upstream, git should be able to take care
+> for (most of) the rest, but i'll not mandate how atmel does their
+> busyness here ;)
+> 
 
-Log:
-- set _SKIP_CONFIGURE since we can just make it
+Personally, I have never used git except just cloning a tree.
 
+If I understand you correctly, I can pull stuff using git from the svn server
+and then add the stuff I get from my friends and do a merge
+and put back the end result using git talking to the svn server, right?
 
-Modified:
-   trunk/buildroot/package/pptp-linux/pptp-linux.mk
-
-
-Changeset:
-Modified: trunk/buildroot/package/pptp-linux/pptp-linux.mk
-===================================================================
---- trunk/buildroot/package/pptp-linux/pptp-linux.mk	2007-08-22 16:56:36 UTC (rev 19657)
-+++ trunk/buildroot/package/pptp-linux/pptp-linux.mk	2007-08-22 16:57:32 UTC (rev 19658)
-@@ -7,6 +7,7 @@
- PPTP_LINUX_VERSION=1.7.0
- PPTP_LINUX_SOURCE=pptp-linux_$(PPTP_LINUX_VERSION).orig.tar.gz
- PPTP_LINUX_PATCH=pptp-linux_$(PPTP_LINUX_VERSION)-2.diff.gz
--PPTP_LINUX_SITE=http://ftp.debian.org/debian/pool/main/p/pptp-linux/
-+PPTP_LINUX_SITE=http://ftp.debian.org/debian/pool/main/p/pptp-linux
-+PPTP_LINUX_SKIP_CONFIGURE=true
- 
- $(eval $(call AUTOTARGETS,pptp-linux))
+Best Regards
+Ulf Samuelsson
