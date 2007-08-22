@@ -1,7 +1,7 @@
 From: ulf at uclibc.org <ulf@uclibc.org>
-Date: Wed, 22 Aug 2007 02:29:50 -0700 (PDT)
+Date: Wed, 22 Aug 2007 02:41:38 -0700 (PDT)
 Subject: [Buildroot] svn commit: trunk/buildroot/package/bash
-Message-ID: <20070822092950.5BEE8A65AD@busybox.net>
+Message-ID: <20070822094138.E0955A4710@busybox.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -9,27 +9,83 @@ Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
 Author: ulf
-Date: 2007-08-22 02:29:49 -0700 (Wed, 22 Aug 2007)
-New Revision: 19636
+Date: 2007-08-22 02:41:37 -0700 (Wed, 22 Aug 2007)
+New Revision: 19637
 
 Log:
-Fix bad patch naming scheme
+Remove bzero  dependencies in bash
 
-Modified:
-   trunk/buildroot/package/bash/bash.mk
+Added:
+   trunk/buildroot/package/bash/bash32-remove-bzero-dependancy.patch
 
 
 Changeset:
-Modified: trunk/buildroot/package/bash/bash.mk
+Added: trunk/buildroot/package/bash/bash32-remove-bzero-dependancy.patch
 ===================================================================
---- trunk/buildroot/package/bash/bash.mk	2007-08-22 09:22:32 UTC (rev 19635)
-+++ trunk/buildroot/package/bash/bash.mk	2007-08-22 09:29:49 UTC (rev 19636)
-@@ -19,7 +19,7 @@
- bash-unpacked: $(BASH_DIR)/.unpacked
- $(BASH_DIR)/.unpacked: $(DL_DIR)/$(BASH_SOURCE)
- 	$(BASH_CAT) $(DL_DIR)/$(BASH_SOURCE) | tar -C $(BUILD_DIR) $(TAR_OPTIONS) -
--	toolchain/patch-kernel.sh $(BASH_DIR) package/bash/ bash??-*
-+	toolchain/patch-kernel.sh $(BASH_DIR) package/bash/ bash??-\*
- 	# This is broken when -lintl is added to LIBS
- 	$(SED) 's,LIBS_FOR_BUILD =.*,LIBS_FOR_BUILD =,g' \
- 		$(BASH_DIR)/builtins/Makefile.in
+--- trunk/buildroot/package/bash/bash32-remove-bzero-dependancy.patch	                        (rev 0)
++++ trunk/buildroot/package/bash/bash32-remove-bzero-dependancy.patch	2007-08-22 09:41:37 UTC (rev 19637)
+@@ -0,0 +1,64 @@
++diff -upr bash-3.2.orig/config.h.in bash-3.2/config.h.in
++--- bash-3.2.orig/config.h.in	2006-09-12 22:00:54.000000000 +0200
+++++ bash-3.2/config.h.in	2007-08-08 14:15:12.000000000 +0200
++@@ -504,9 +504,6 @@
++ /* Define if you have the bcopy function.  */
++ #undef HAVE_BCOPY
++ 
++-/* Define if you have the bzero function.  */
++-#undef HAVE_BZERO
++-
++ /* Define if you have the confstr function.  */
++ #undef HAVE_CONFSTR
++ 
++diff -upr bash-3.2.orig/configure.in bash-3.2/configure.in
++--- bash-3.2.orig/configure.in	2006-09-26 17:05:45.000000000 +0200
+++++ bash-3.2/configure.in	2007-08-08 14:14:36.000000000 +0200
++@@ -702,7 +702,7 @@ AC_CHECK_FUNCS(dup2 eaccess fcntl getdta
++ AC_REPLACE_FUNCS(rename)
++ 
++ dnl checks for c library functions
++-AC_CHECK_FUNCS(bcopy bzero confstr fnmatch \
+++AC_CHECK_FUNCS(bcopy confstr fnmatch \
++ 		getaddrinfo gethostbyname getservbyname getservent inet_aton \
++ 		memmove pathconf putenv raise regcomp regexec \
++ 		setenv setlinebuf setlocale setvbuf siginterrupt strchr \
++diff -upr bash-3.2.orig/CWRU/misc/sigstat.c bash-3.2/CWRU/misc/sigstat.c
++--- bash-3.2.orig/CWRU/misc/sigstat.c	2002-04-17 19:41:40.000000000 +0200
+++++ bash-3.2/CWRU/misc/sigstat.c	2007-08-08 14:11:36.000000000 +0200
++@@ -86,7 +86,7 @@ int	sig;
++ init_signames()
++ {
++ 	register int i;
++-	bzero(signames, sizeof(signames));
+++	memset(signames, 0, sizeof(signames));
++ 
++ #if defined (SIGHUP)		/* hangup */
++   	signames[SIGHUP] = "SIGHUP";
++diff -upr bash-3.2.orig/lib/sh/oslib.c bash-3.2/lib/sh/oslib.c
++--- bash-3.2.orig/lib/sh/oslib.c	2001-12-06 19:26:21.000000000 +0100
+++++ bash-3.2/lib/sh/oslib.c	2007-08-08 14:11:44.000000000 +0200
++@@ -170,23 +170,6 @@ bcopy (s,d,n)
++ }
++ #endif /* !HAVE_BCOPY */
++ 
++-#if !defined (HAVE_BZERO)
++-#  if defined (bzero)
++-#    undef bzero
++-#  endif
++-void
++-bzero (s, n)
++-     char *s;
++-     int n;
++-{
++-  register int i;
++-  register char *r;
++-
++-  for (i = 0, r = s; i < n; i++)
++-    *r++ = '\0';
++-}
++-#endif
++-
++ #if !defined (HAVE_GETHOSTNAME)
++ #  if defined (HAVE_UNAME)
++ #    include <sys/utsname.h>
