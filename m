@@ -1,31 +1,233 @@
-From: Bernhard Fischer <rep.dot.nop@gmail.com>
-Date: Thu, 23 Aug 2007 13:26:39 +0200
-Subject: [Buildroot] User-space packages - Staging_Dir or Target_Dir
-In-Reply-To: <b6838d3a0708221647x723c470eq6d9ba50858b3e4eb@mail.gmail.com>
-References: <b6838d3a0708221647x723c470eq6d9ba50858b3e4eb@mail.gmail.com>
-Message-ID: <20070823112639.GK11697@aon.at>
+From: aldot at uclibc.org <aldot@uclibc.org>
+Date: Thu, 23 Aug 2007 04:49:59 -0700 (PDT)
+Subject: [Buildroot] svn commit: trunk/buildroot/package: x11r7/libxcb
+	x11r7/openchrome x11r7/pth etc...
+Message-ID: <20070823114959.47874A5D27@busybox.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Wed, Aug 22, 2007 at 07:47:59PM -0400, Daniel Frey wrote:
->When constructing my make files for my packages in the package/, what is the
->suggested installation directory, TARGET_DIR or STAGING_DIR?
->
->Some of the included packages install them to STAGING_DIR.  The
->Documentation on the buildroot website has them installed in the TARGET_DIR.
->
->Is there a correct way, or preferred way?
+Author: aldot
+Date: 2007-08-23 04:49:50 -0700 (Thu, 23 Aug 2007)
+New Revision: 19666
 
-Depends :)
+Log:
+- fix misplaced @
+- fix typos in x11r7 packages
 
-Files that go straight to the target have to me installed to the
-TARGET_DIR. Intermediate files (prerequisites of stuff that will be on
-the target like helper libraries, headers, etc) have to live in
-STAGING_DIR. Sometimes only a small fraction of files in the staging_dir
-is needed in the real target, so they are copied selectively.
 
-HTH,
-Bernhard
+Modified:
+   trunk/buildroot/package/Makefile.autotools.in
+   trunk/buildroot/package/x11r7/libxcb/libxcb.mk
+   trunk/buildroot/package/x11r7/openchrome/openchrome.mk
+   trunk/buildroot/package/x11r7/pthread-stubs/pthread-stubs.mk
+   trunk/buildroot/package/x11r7/xapp_appres/xapp_appres.mk
+   trunk/buildroot/package/x11r7/xapp_bdftopcf/xapp_bdftopcf.mk
+   trunk/buildroot/package/x11r7/xapp_beforelight/xapp_beforelight.mk
+   trunk/buildroot/package/x11r7/xapp_bitmap/xapp_bitmap.mk
+   trunk/buildroot/package/x11r7/xapp_editres/xapp_editres.mk
+   trunk/buildroot/package/x11r7/xapp_fonttosfnt/xapp_fonttosfnt.mk
+   trunk/buildroot/package/x11r7/xapp_fslsfonts/xapp_fslsfonts.mk
+   trunk/buildroot/package/x11r7/xapp_fstobdf/xapp_fstobdf.mk
+   trunk/buildroot/package/x11r7/xapp_iceauth/xapp_iceauth.mk
+   trunk/buildroot/package/x11r7/xapp_ico/xapp_ico.mk
+   trunk/buildroot/package/x11r7/xapp_lbxproxy/xapp_lbxproxy.mk
+   trunk/buildroot/package/x11r7/xapp_listres/xapp_listres.mk
+   trunk/buildroot/package/x11r7/xapp_luit/xapp_luit.mk
+   trunk/buildroot/package/x11r7/xapp_mkfontdir/xapp_mkfontdir.mk
+   trunk/buildroot/package/x11r7/xapp_mkfontscale/xapp_mkfontscale.mk
+   trunk/buildroot/package/x11r7/xapp_oclock/xapp_oclock.mk
+   trunk/buildroot/package/x11r7/xapp_proxymngr/xapp_proxymngr.mk
+   trunk/buildroot/package/x11r7/xapp_rgb/xapp_rgb.mk
+   trunk/buildroot/package/x11r7/xapp_rstart/xapp_rstart.mk
+   trunk/buildroot/package/x11r7/xapp_scripts/xapp_scripts.mk
+   trunk/buildroot/package/x11r7/xapp_sessreg/xapp_sessreg.mk
+   trunk/buildroot/package/x11r7/xapp_setxkbmap/xapp_setxkbmap.mk
+   trunk/buildroot/package/x11r7/xapp_showfont/xapp_showfont.mk
+   trunk/buildroot/package/x11r7/xapp_smproxy/xapp_smproxy.mk
+   trunk/buildroot/package/x11r7/xapp_viewres/xapp_viewres.mk
+   trunk/buildroot/package/x11r7/xapp_x11perf/xapp_x11perf.mk
+   trunk/buildroot/package/x11r7/xapp_xauth/xapp_xauth.mk
+   trunk/buildroot/package/x11r7/xapp_xbiff/xapp_xbiff.mk
+   trunk/buildroot/package/x11r7/xapp_xcalc/xapp_xcalc.mk
+   trunk/buildroot/package/x11r7/xapp_xclipboard/xapp_xclipboard.mk
+   trunk/buildroot/package/x11r7/xapp_xclock/xapp_xclock.mk
+   trunk/buildroot/package/x11r7/xapp_xcmsdb/xapp_xcmsdb.mk
+   trunk/buildroot/package/x11r7/xapp_xcursorgen/xapp_xcursorgen.mk
+   trunk/buildroot/package/x11r7/xapp_xdbedizzy/xapp_xdbedizzy.mk
+   trunk/buildroot/package/x11r7/xapp_xditview/xapp_xditview.mk
+   trunk/buildroot/package/x11r7/xapp_xdm/xapp_xdm.mk
+   trunk/buildroot/package/x11r7/xapp_xdpyinfo/xapp_xdpyinfo.mk
+   trunk/buildroot/package/x11r7/xapp_xdriinfo/xapp_xdriinfo.mk
+   trunk/buildroot/package/x11r7/xapp_xedit/xapp_xedit.mk
+   trunk/buildroot/package/x11r7/xapp_xev/xapp_xev.mk
+   trunk/buildroot/package/x11r7/xapp_xeyes/xapp_xeyes.mk
+   trunk/buildroot/package/x11r7/xapp_xf86dga/xapp_xf86dga.mk
+   trunk/buildroot/package/x11r7/xapp_xfd/xapp_xfd.mk
+   trunk/buildroot/package/x11r7/xapp_xfindproxy/xapp_xfindproxy.mk
+   trunk/buildroot/package/x11r7/xapp_xfontsel/xapp_xfontsel.mk
+   trunk/buildroot/package/x11r7/xapp_xfs/xapp_xfs.mk
+   trunk/buildroot/package/x11r7/xapp_xfsinfo/xapp_xfsinfo.mk
+   trunk/buildroot/package/x11r7/xapp_xfwp/xapp_xfwp.mk
+   trunk/buildroot/package/x11r7/xapp_xgamma/xapp_xgamma.mk
+   trunk/buildroot/package/x11r7/xapp_xgc/xapp_xgc.mk
+   trunk/buildroot/package/x11r7/xapp_xhost/xapp_xhost.mk
+   trunk/buildroot/package/x11r7/xapp_xinit/xapp_xinit.mk
+   trunk/buildroot/package/x11r7/xapp_xkbcomp/xapp_xkbcomp.mk
+   trunk/buildroot/package/x11r7/xapp_xkbevd/xapp_xkbevd.mk
+   trunk/buildroot/package/x11r7/xapp_xkbprint/xapp_xkbprint.mk
+   trunk/buildroot/package/x11r7/xapp_xkbutils/xapp_xkbutils.mk
+   trunk/buildroot/package/x11r7/xapp_xkill/xapp_xkill.mk
+   trunk/buildroot/package/x11r7/xapp_xload/xapp_xload.mk
+   trunk/buildroot/package/x11r7/xapp_xlogo/xapp_xlogo.mk
+   trunk/buildroot/package/x11r7/xapp_xlsatoms/xapp_xlsatoms.mk
+   trunk/buildroot/package/x11r7/xapp_xlsclients/xapp_xlsclients.mk
+   trunk/buildroot/package/x11r7/xapp_xlsfonts/xapp_xlsfonts.mk
+   trunk/buildroot/package/x11r7/xapp_xmag/xapp_xmag.mk
+   trunk/buildroot/package/x11r7/xapp_xmessage/xapp_xmessage.mk
+   trunk/buildroot/package/x11r7/xapp_xmh/xapp_xmh.mk
+   trunk/buildroot/package/x11r7/xapp_xmodmap/xapp_xmodmap.mk
+   trunk/buildroot/package/x11r7/xapp_xmore/xapp_xmore.mk
+   trunk/buildroot/package/x11r7/xapp_xphelloworld/xapp_xphelloworld.mk
+   trunk/buildroot/package/x11r7/xapp_xplsprinters/xapp_xplsprinters.mk
+   trunk/buildroot/package/x11r7/xapp_xpr/xapp_xpr.mk
+   trunk/buildroot/package/x11r7/xapp_xprehashprinterlist/xapp_xprehashprinterlist.mk
+   trunk/buildroot/package/x11r7/xapp_xprop/xapp_xprop.mk
+   trunk/buildroot/package/x11r7/xapp_xrandr/xapp_xrandr.mk
+   trunk/buildroot/package/x11r7/xapp_xrdb/xapp_xrdb.mk
+   trunk/buildroot/package/x11r7/xapp_xrefresh/xapp_xrefresh.mk
+   trunk/buildroot/package/x11r7/xapp_xrx/xapp_xrx.mk
+   trunk/buildroot/package/x11r7/xapp_xset/xapp_xset.mk
+   trunk/buildroot/package/x11r7/xapp_xsetmode/xapp_xsetmode.mk
+   trunk/buildroot/package/x11r7/xapp_xsetpointer/xapp_xsetpointer.mk
+   trunk/buildroot/package/x11r7/xapp_xsetroot/xapp_xsetroot.mk
+   trunk/buildroot/package/x11r7/xapp_xsm/xapp_xsm.mk
+   trunk/buildroot/package/x11r7/xapp_xstdcmap/xapp_xstdcmap.mk
+   trunk/buildroot/package/x11r7/xapp_xtrap/xapp_xtrap.mk
+   trunk/buildroot/package/x11r7/xapp_xvidtune/xapp_xvidtune.mk
+   trunk/buildroot/package/x11r7/xapp_xvinfo/xapp_xvinfo.mk
+   trunk/buildroot/package/x11r7/xapp_xwd/xapp_xwd.mk
+   trunk/buildroot/package/x11r7/xapp_xwininfo/xapp_xwininfo.mk
+   trunk/buildroot/package/x11r7/xapp_xwud/xapp_xwud.mk
+   trunk/buildroot/package/x11r7/xdriver_xf86-input-acecad/xdriver_xf86-input-acecad.mk
+   trunk/buildroot/package/x11r7/xdriver_xf86-input-aiptek/xdriver_xf86-input-aiptek.mk
+   trunk/buildroot/package/x11r7/xdriver_xf86-input-calcomp/xdriver_xf86-input-calcomp.mk
+   trunk/buildroot/package/x11r7/xdriver_xf86-input-citron/xdriver_xf86-input-citron.mk
+   trunk/buildroot/package/x11r7/xdriver_xf86-input-digitaledge/xdriver_xf86-input-digitaledge.mk
+   trunk/buildroot/package/x11r7/xdriver_xf86-input-dmc/xdriver_xf86-input-dmc.mk
+   trunk/buildroot/package/x11r7/xdriver_xf86-input-dynapro/xdriver_xf86-input-dynapro.mk
+   trunk/buildroot/package/x11r7/xdriver_xf86-input-elo2300/xdriver_xf86-input-elo2300.mk
+   trunk/buildroot/package/x11r7/xdriver_xf86-input-elographics/xdriver_xf86-input-elographics.mk
+   trunk/buildroot/package/x11r7/xdriver_xf86-input-evdev/xdriver_xf86-input-evdev.mk
+   trunk/buildroot/package/x11r7/xdriver_xf86-input-fpit/xdriver_xf86-input-fpit.mk
+   trunk/buildroot/package/x11r7/xdriver_xf86-input-hyperpen/xdriver_xf86-input-hyperpen.mk
+   trunk/buildroot/package/x11r7/xdriver_xf86-input-jamstudio/xdriver_xf86-input-jamstudio.mk
+   trunk/buildroot/package/x11r7/xdriver_xf86-input-joystick/xdriver_xf86-input-joystick.mk
+   trunk/buildroot/package/x11r7/xdriver_xf86-input-keyboard/xdriver_xf86-input-keyboard.mk
+   trunk/buildroot/package/x11r7/xdriver_xf86-input-magellan/xdriver_xf86-input-magellan.mk
+   trunk/buildroot/package/x11r7/xdriver_xf86-input-magictouch/xdriver_xf86-input-magictouch.mk
+   trunk/buildroot/package/x11r7/xdriver_xf86-input-microtouch/xdriver_xf86-input-microtouch.mk
+   trunk/buildroot/package/x11r7/xdriver_xf86-input-mouse/xdriver_xf86-input-mouse.mk
+   trunk/buildroot/package/x11r7/xdriver_xf86-input-mutouch/xdriver_xf86-input-mutouch.mk
+   trunk/buildroot/package/x11r7/xdriver_xf86-input-palmax/xdriver_xf86-input-palmax.mk
+   trunk/buildroot/package/x11r7/xdriver_xf86-input-penmount/xdriver_xf86-input-penmount.mk
+   trunk/buildroot/package/x11r7/xdriver_xf86-input-spaceorb/xdriver_xf86-input-spaceorb.mk
+   trunk/buildroot/package/x11r7/xdriver_xf86-input-summa/xdriver_xf86-input-summa.mk
+   trunk/buildroot/package/x11r7/xdriver_xf86-input-tek4957/xdriver_xf86-input-tek4957.mk
+   trunk/buildroot/package/x11r7/xdriver_xf86-input-ur98/xdriver_xf86-input-ur98.mk
+   trunk/buildroot/package/x11r7/xdriver_xf86-input-vmmouse/xdriver_xf86-input-vmmouse.mk
+   trunk/buildroot/package/x11r7/xdriver_xf86-input-void/xdriver_xf86-input-void.mk
+   trunk/buildroot/package/x11r7/xdriver_xf86-video-apm/xdriver_xf86-video-apm.mk
+   trunk/buildroot/package/x11r7/xdriver_xf86-video-ark/xdriver_xf86-video-ark.mk
+   trunk/buildroot/package/x11r7/xdriver_xf86-video-ati/xdriver_xf86-video-ati.mk
+   trunk/buildroot/package/x11r7/xdriver_xf86-video-chips/xdriver_xf86-video-chips.mk
+   trunk/buildroot/package/x11r7/xdriver_xf86-video-cirrus/xdriver_xf86-video-cirrus.mk
+   trunk/buildroot/package/x11r7/xdriver_xf86-video-cyrix/xdriver_xf86-video-cyrix.mk
+   trunk/buildroot/package/x11r7/xdriver_xf86-video-dummy/xdriver_xf86-video-dummy.mk
+   trunk/buildroot/package/x11r7/xdriver_xf86-video-fbdev/xdriver_xf86-video-fbdev.mk
+   trunk/buildroot/package/x11r7/xdriver_xf86-video-glint/xdriver_xf86-video-glint.mk
+   trunk/buildroot/package/x11r7/xdriver_xf86-video-i128/xdriver_xf86-video-i128.mk
+   trunk/buildroot/package/x11r7/xdriver_xf86-video-i740/xdriver_xf86-video-i740.mk
+   trunk/buildroot/package/x11r7/xdriver_xf86-video-i810/xdriver_xf86-video-i810.mk
+   trunk/buildroot/package/x11r7/xdriver_xf86-video-imstt/xdriver_xf86-video-imstt.mk
+   trunk/buildroot/package/x11r7/xdriver_xf86-video-mga/xdriver_xf86-video-mga.mk
+   trunk/buildroot/package/x11r7/xdriver_xf86-video-neomagic/xdriver_xf86-video-neomagic.mk
+   trunk/buildroot/package/x11r7/xdriver_xf86-video-newport/xdriver_xf86-video-newport.mk
+   trunk/buildroot/package/x11r7/xdriver_xf86-video-nsc/xdriver_xf86-video-nsc.mk
+   trunk/buildroot/package/x11r7/xdriver_xf86-video-nv/xdriver_xf86-video-nv.mk
+   trunk/buildroot/package/x11r7/xdriver_xf86-video-rendition/xdriver_xf86-video-rendition.mk
+   trunk/buildroot/package/x11r7/xdriver_xf86-video-s3/xdriver_xf86-video-s3.mk
+   trunk/buildroot/package/x11r7/xdriver_xf86-video-s3virge/xdriver_xf86-video-s3virge.mk
+   trunk/buildroot/package/x11r7/xdriver_xf86-video-savage/xdriver_xf86-video-savage.mk
+   trunk/buildroot/package/x11r7/xdriver_xf86-video-siliconmotion/xdriver_xf86-video-siliconmotion.mk
+   trunk/buildroot/package/x11r7/xdriver_xf86-video-sis/xdriver_xf86-video-sis.mk
+   trunk/buildroot/package/x11r7/xdriver_xf86-video-sisusb/xdriver_xf86-video-sisusb.mk
+   trunk/buildroot/package/x11r7/xdriver_xf86-video-sunbw2/xdriver_xf86-video-sunbw2.mk
+   trunk/buildroot/package/x11r7/xdriver_xf86-video-suncg14/xdriver_xf86-video-suncg14.mk
+   trunk/buildroot/package/x11r7/xdriver_xf86-video-suncg3/xdriver_xf86-video-suncg3.mk
+   trunk/buildroot/package/x11r7/xdriver_xf86-video-suncg6/xdriver_xf86-video-suncg6.mk
+   trunk/buildroot/package/x11r7/xdriver_xf86-video-sunffb/xdriver_xf86-video-sunffb.mk
+   trunk/buildroot/package/x11r7/xdriver_xf86-video-sunleo/xdriver_xf86-video-sunleo.mk
+   trunk/buildroot/package/x11r7/xdriver_xf86-video-suntcx/xdriver_xf86-video-suntcx.mk
+   trunk/buildroot/package/x11r7/xdriver_xf86-video-tdfx/xdriver_xf86-video-tdfx.mk
+   trunk/buildroot/package/x11r7/xdriver_xf86-video-tga/xdriver_xf86-video-tga.mk
+   trunk/buildroot/package/x11r7/xdriver_xf86-video-trident/xdriver_xf86-video-trident.mk
+   trunk/buildroot/package/x11r7/xdriver_xf86-video-tseng/xdriver_xf86-video-tseng.mk
+   trunk/buildroot/package/x11r7/xdriver_xf86-video-v4l/xdriver_xf86-video-v4l.mk
+   trunk/buildroot/package/x11r7/xdriver_xf86-video-vesa/xdriver_xf86-video-vesa.mk
+   trunk/buildroot/package/x11r7/xdriver_xf86-video-vga/xdriver_xf86-video-vga.mk
+   trunk/buildroot/package/x11r7/xdriver_xf86-video-via/xdriver_xf86-video-via.mk
+   trunk/buildroot/package/x11r7/xdriver_xf86-video-vmware/xdriver_xf86-video-vmware.mk
+   trunk/buildroot/package/x11r7/xdriver_xf86-video-voodoo/xdriver_xf86-video-voodoo.mk
+   trunk/buildroot/package/x11r7/xlib_libFS/xlib_libFS.mk
+   trunk/buildroot/package/x11r7/xlib_libICE/xlib_libICE.mk
+   trunk/buildroot/package/x11r7/xlib_libSM/xlib_libSM.mk
+   trunk/buildroot/package/x11r7/xlib_libX11/xlib_libX11.mk
+   trunk/buildroot/package/x11r7/xlib_libXScrnSaver/xlib_libXScrnSaver.mk
+   trunk/buildroot/package/x11r7/xlib_libXTrap/xlib_libXTrap.mk
+   trunk/buildroot/package/x11r7/xlib_libXau/xlib_libXau.mk
+   trunk/buildroot/package/x11r7/xlib_libXaw/xlib_libXaw.mk
+   trunk/buildroot/package/x11r7/xlib_libXcomposite/xlib_libXcomposite.mk
+   trunk/buildroot/package/x11r7/xlib_libXcursor/xlib_libXcursor.mk
+   trunk/buildroot/package/x11r7/xlib_libXdamage/xlib_libXdamage.mk
+   trunk/buildroot/package/x11r7/xlib_libXdmcp/xlib_libXdmcp.mk
+   trunk/buildroot/package/x11r7/xlib_libXevie/xlib_libXevie.mk
+   trunk/buildroot/package/x11r7/xlib_libXext/xlib_libXext.mk
+   trunk/buildroot/package/x11r7/xlib_libXfixes/xlib_libXfixes.mk
+   trunk/buildroot/package/x11r7/xlib_libXfont/xlib_libXfont.mk
+   trunk/buildroot/package/x11r7/xlib_libXfontcache/xlib_libXfontcache.mk
+   trunk/buildroot/package/x11r7/xlib_libXft/xlib_libXft.mk
+   trunk/buildroot/package/x11r7/xlib_libXi/xlib_libXi.mk
+   trunk/buildroot/package/x11r7/xlib_libXinerama/xlib_libXinerama.mk
+   trunk/buildroot/package/x11r7/xlib_libXmu/xlib_libXmu.mk
+   trunk/buildroot/package/x11r7/xlib_libXp/xlib_libXp.mk
+   trunk/buildroot/package/x11r7/xlib_libXpm/xlib_libXpm.mk
+   trunk/buildroot/package/x11r7/xlib_libXprintAppUtil/xlib_libXprintAppUtil.mk
+   trunk/buildroot/package/x11r7/xlib_libXprintUtil/xlib_libXprintUtil.mk
+   trunk/buildroot/package/x11r7/xlib_libXrandr/xlib_libXrandr.mk
+   trunk/buildroot/package/x11r7/xlib_libXrender/xlib_libXrender.mk
+   trunk/buildroot/package/x11r7/xlib_libXres/xlib_libXres.mk
+   trunk/buildroot/package/x11r7/xlib_libXt/xlib_libXt.mk
+   trunk/buildroot/package/x11r7/xlib_libXtst/xlib_libXtst.mk
+   trunk/buildroot/package/x11r7/xlib_libXv/xlib_libXv.mk
+   trunk/buildroot/package/x11r7/xlib_libXvMC/xlib_libXvMC.mk
+   trunk/buildroot/package/x11r7/xlib_libXxf86dga/xlib_libXxf86dga.mk
+   trunk/buildroot/package/x11r7/xlib_libXxf86misc/xlib_libXxf86misc.mk
+   trunk/buildroot/package/x11r7/xlib_libXxf86vm/xlib_libXxf86vm.mk
+   trunk/buildroot/package/x11r7/xlib_libdmx/xlib_libdmx.mk
+   trunk/buildroot/package/x11r7/xlib_libfontenc/xlib_libfontenc.mk
+   trunk/buildroot/package/x11r7/xlib_liblbxutil/xlib_liblbxutil.mk
+   trunk/buildroot/package/x11r7/xlib_liboldX/xlib_liboldX.mk
+   trunk/buildroot/package/x11r7/xlib_libxkbfile/xlib_libxkbfile.mk
+   trunk/buildroot/package/x11r7/xlib_libxkbui/xlib_libxkbui.mk
+   trunk/buildroot/package/x11r7/xserver_xorg-server/xserver_xorg-server.mk
+
+
+Changeset:
+
+Sorry, the patch is too large to include (2698 lines).
+Please use ViewCVS to see it!
+
+http://uclibc.org/cgi-bin/viewcvs.cgi?view=rev&root=svn&rev=19666
