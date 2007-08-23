@@ -1,116 +1,122 @@
-From: =?ISO-8859-1?Q?Thiago_A._Corr=EAa?= <thiago.correa@gmail.com>
-Date: Thu, 23 Aug 2007 18:25:59 +0100
-Subject: [Buildroot] [Fwd: Re: Struggling with undefined reference to
-	`__fgetc_unlocked']
-In-Reply-To: <46CDBC95.7040803@st.com>
-References: <46CDB91F.80307@st.com>
-	<d6cda7730708230953y52b03167t55d124cb50b67603@mail.gmail.com>
-	<46CDBC95.7040803@st.com>
-Message-ID: <d6cda7730708231025t391a2263xed883aa16e1a8e84@mail.gmail.com>
+From: Terry Bolinger <tbolinger@webmtn.com>
+Date: Thu, 23 Aug 2007 13:16:11 -0600
+Subject: [Buildroot] Make error
+Message-ID: <20070823193650.3F628A65C9@busybox.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Thanks for the help. It was indeed using the uClibc includes with the
-CXXFLAGS/CFLAGS being set at the qtopia4.mk. I will send a patch as
-soon as I confirm this is working. But at least so far compilation got
-past rcc.
+We are attempting to run Buildroot and create an image for an Atmel 9263-EK
+development board.  As we run buildroot, we have run into several errors,
+and have been able to work past them. However, we are now running into this
+error and so far, we've been unable to determine what our problem is. Here
+is the text of the error.  Notice that it does not like garray.o - could not
+read symbols:  File in wrong format.
 
-On 8/23/07, Carmelo AMOROSO <carmelo.amoroso@st.com> wrote:
-> Thiago A. Corr?a wrote:
-> > That file actually calls fgetc, so I guess it's a dreadfull define :P
-> >
-> > I suppose it is using uClibc headers instead of the native compiler ones.
-> >
-> Run the compiler with -v to see which -I directives it is using... where
-> it is looking for C headers.
-> If you are using a plain g++ from the host, I don't think it's using
-> uClibc headers.
-> > On 8/23/07, Carmelo AMOROSO <carmelo.amoroso@st.com> wrote:
-> >
-> >> my reply below
-> >>
-> >> -------- Original Message --------
-> >> Subject:        Re: [Buildroot] Struggling with undefined reference to
-> >> `__fgetc_unlocked'
-> >> Date:   Thu, 23 Aug 2007 18:42:31 +0200
-> >> From:   Carmelo Amoroso <carmelo.amoroso@st.com>
-> >> Organization:   STMicroelectronics
-> >> To:     "Thiago A. Corr?a" <thiago.correa@gmail.com>
-> >> References:
-> >> <d6cda7730708230925x19bc0901v9a6dd1f18ee325ec@mail.gmail.com>
-> >> <46CDB759.709@st.com>
-> >> <d6cda7730708230939p7b126fe1mbe28768aa4413bb4@mail.gmail.com>
-> >>
-> >>
-> >>
-> >> Thiago A. Corr?a wrote:
-> >>
-> >>> Hi Carmelo,
-> >>>
-> >>>    That command returned
-> >>> gentoo-vm buildroot # readelf -s /lib/libc.so.6 | grep fgetc_unlocked
-> >>>   1868: 0005e040    40 FUNC    WEAK   DEFAULT   11 fgetc_unlocked@@GLIBC_2.1
-> >>> gentoo-vm buildroot #
-> >>>
-> >>>    I'm guessing the prepended underscores are due to mangling, but
-> >>> could be wrong.
-> >>>
-> >>>
-> >> Not, they are part of the symbol's name... you need to fix qtopia to
-> >> call the fgetc_unlocked.
-> >>
-> >> Cheers
-> >>
-> >>> On 8/23/07, Carmelo AMOROSO <carmelo.amoroso@st.com> wrote:
-> >>>
-> >>>
-> >>>> Thiago A. Corr?a wrote:
-> >>>>
-> >>>>
-> >>>>> Hi,
-> >>>>>
-> >>>>>    I'm struggling with qtopia. During the link of rcc (which is a host
-> >>>>> tool, natively compiled) I get:
-> >>>>>
-> >>>>> I googled for the error, but could only find ppl complaining about
-> >>>>> this when linking against uClibc, when this should be linking against
-> >>>>> the system glibc. Does anyone has an idea of what I could try?
-> >>>>>
-> >>>>> Regards,
-> >>>>>     Thiago A. Correa
-> >>>>>
-> >>>>>
-> >>>>>
-> >>>> Which glibc version have you installed on your host?
-> >>>> For example, on my RHEL 3 there is glibc-2.3.4 which doesn't contain the
-> >>>> __fgetc_unlocked
-> >>>> symbol, while fgetc_unlocked (no underscore prepending)...
-> >>>> so just check your glibc by running 'readelf -s /lib/libc.so.6 | grep
-> >>>> fgetc_unlocked'
-> >>>> and see what it returns.
-> >>>>
-> >>>> Regards,
-> >>>> Carmelo
-> >>>>
-> >>>>
-> >>>>
-> >>>>> _______________________________________________
-> >>>>> buildroot mailing list
-> >>>>> buildroot at uclibc.org
-> >>>>> http://busybox.net/mailman/listinfo/buildroot
-> >>>>>
-> >>>>>
-> >>>>>
-> >>>>>
-> >>
-> >> _______________________________________________
-> >> buildroot mailing list
-> >> buildroot at uclibc.org
-> >> http://busybox.net/mailman/listinfo/buildroot
-> >>
-> >>
->
->
+ 
+
+echo "{ global:" > .libs/libglib-2.0.ver
+
+cat .libs/libglib-2.0.exp | sed -e "s/\(.*\)/\1;/" >> .libs/libglib-2.0.ver
+
+echo "local: *; };" >> .libs/libglib-2.0.ver
+
+g77 -shared  .libs/garray.o .libs/gasyncqueue.o .libs/gatomic.o
+.libs/gbacktrace.o .libs/gbase64.o .libs/gbookmarkfile.o .libs/gcache.o
+.libs/gcompletion.o .libs/gconvert.o .libs/gdataset.o .libs/gdate.o
+.libs/gdir.o .libs/gerror.o .libs/gfileutils.o .libs/ghash.o .libs/ghook.o
+.libs/giochannel.o .libs/gkeyfile.o .libs/glist.o .libs/gmain.o
+.libs/gmappedfile.o .libs/gmarkup.o .libs/gmem.o .libs/gmessages.o
+.libs/gnode.o .libs/goption.o .libs/gpattern.o .libs/gprimes.o
+.libs/gqsort.o .libs/gqueue.o .libs/grel.o .libs/grand.o .libs/gscanner.o
+.libs/gshell.o .libs/gslice.o .libs/gslist.o .libs/gstdio.o
+.libs/gstrfuncs.o .libs/gstring.o .libs/gthread.o .libs/gthreadpool.o
+.libs/gtimer.o .libs/gtree.o .libs/guniprop.o .libs/gutf8.o
+.libs/gunibreak.o .libs/gunicollate.o .libs/gunidecomp.o .libs/gutils.o
+.libs/gprintf.o .libs/giounix.o .libs/gspawn.o -Wl,--whole-archive
+libcharset/.libs/libcharset.a gnulib/.libs/libgnulib.a
+-Wl,--no-whole-archive  -lintl  -Wl,-soname -Wl,libglib-2.0.so.0
+-Wl,-version-script -Wl,.libs/libglib-2.0.ver -o
+.libs/libglib-2.0.so.0.1200.9
+
+/usr/bin/ld: .libs/garray.o: Relocations in generic ELF (EM: 40)
+
+/usr/bin/ld: .libs/garray.o: Relocations in generic ELF (EM: 40)
+
+/usr/bin/ld: .libs/garray.o: Relocations in generic ELF (EM: 40)
+
+/usr/bin/ld: .libs/garray.o: Relocations in generic ELF (EM: 40)
+
+/usr/bin/ld: .libs/garray.o: Relocations in generic ELF (EM: 40)
+
+/usr/bin/ld: .libs/garray.o: Relocations in generic ELF (EM: 40)
+
+.libs/garray.o: could not read symbols: File in wrong format
+
+collect2: ld returned 1 exit status
+
+make[5]: *** [libglib-2.0.la] Error 1
+
+make[5]: Leaving directory
+`/home/terry/Desktop/buildroot/build_arm/glib-2.12.9/glib'
+
+make[4]: *** [all-recursive] Error 1
+
+make[4]: Leaving directory
+`/home/terry/Desktop/buildroot/build_arm/glib-2.12.9/glib'
+
+make[3]: *** [all] Error 2
+
+make[3]: Leaving directory
+`/home/terry/Desktop/buildroot/build_arm/glib-2.12.9/glib'
+
+make[2]: *** [all-recursive] Error 1
+
+make[2]: Leaving directory
+`/home/terry/Desktop/buildroot/build_arm/glib-2.12.9'
+
+make[1]: *** [all] Error 2
+
+make[1]: Leaving directory
+`/home/terry/Desktop/buildroot/build_arm/glib-2.12.9'
+
+make: ***
+[/home/terry/Desktop/buildroot/build_arm/glib-2.12.9/glib/.libs/libglib-2.0.
+a] Error 2
+
+ 
+
+We've searched through the mailing list archives and have not found what we
+think is a match to this error.  We are very new to embedded development, so
+we're struggling through this. I've attached our config file, in case it
+might be helpful.  Many of the configuration options we didn't understand,
+so we just left them as the defaults. Our development PC is running Ubuntu
+7.04.
+
+ 
+
+Any assistance would be greatly appreciated.
+
+ 
+
+Terry Bolinger
+
+Web Mountain Technologies
+
+www.webmtn.com
+
+tbolinger at webmtn.com
+
+303-627-1856
+
+ 
+
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: http://busybox.net/lists/buildroot/attachments/20070823/2730b85e/attachment-0001.htm 
+-------------- next part --------------
+An embedded and charset-unspecified text was scrubbed...
+Name: config.txt
+Url: http://busybox.net/lists/buildroot/attachments/20070823/2730b85e/attachment-0001.txt 
