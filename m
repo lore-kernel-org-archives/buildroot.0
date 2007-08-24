@@ -1,24 +1,28 @@
-From: Bernhard Fischer <rep.dot.nop@gmail.com>
-Date: Thu, 23 Aug 2007 22:18:07 +0200
-Subject: [Buildroot] [Fwd: Re: Struggling with undefined reference
-	to	`__fgetc_unlocked']
-In-Reply-To: <d6cda7730708231025t391a2263xed883aa16e1a8e84@mail.gmail.com>
-References: <46CDB91F.80307@st.com>
-	<d6cda7730708230953y52b03167t55d124cb50b67603@mail.gmail.com>
-	<46CDBC95.7040803@st.com>
-	<d6cda7730708231025t391a2263xed883aa16e1a8e84@mail.gmail.com>
-Message-ID: <20070823201759.GO11697@aon.at>
+From: Todd Valentic <todd.valentic@sri.com>
+Date: Thu, 23 Aug 2007 17:12:59 -0700
+Subject: [Buildroot] Problem calling ldconfig in ext2root.mk
+Message-ID: <46CE228B.2040907@sri.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Thu, Aug 23, 2007 at 06:25:59PM +0100, Thiago A. Corr?a wrote:
->Thanks for the help. It was indeed using the uClibc includes with the
->CXXFLAGS/CFLAGS being set at the qtopia4.mk. I will send a patch as
->soon as I confirm this is working. But at least so far compilation got
->past rcc.
+Hi -
 
-There was talks about qtopia before. IIRC there is no need to compile it
-for the host in the first place.
+I'm having a problem with a recent change in ext2root.mk (showed up in 
+r19618):
+
+http://buildroot.uclibc.org/cgi-bin/viewcvs.cgi/trunk/buildroot/target/ext2/ext2root.mk?rev=19618&r1=19604&r2=19618
+
+-	-$(TARGET_LDCONFIG) -r $(TARGET_DIR) 2>/dev/null
++	$(TARGET_LDCONFIG) -r $(TARGET_DIR) 2>/dev/null
+
+
+I'm using an external toolchain that doesn't have an ldconfig, so the 
+make bombs out at this
+point. The makefile used to ignore this, which was OK for my system. 
+Should there be a check
+to see if $(TARGET_LDCONFIG) exists?
+
+Todd
