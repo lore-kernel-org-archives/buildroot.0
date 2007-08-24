@@ -1,16 +1,23 @@
-From: Bernhard Fischer <rep.dot.nop@gmail.com>
-Date: Fri, 24 Aug 2007 11:11:36 +0200
-Subject: [Buildroot] wrong path in alsa-lib.mk
-In-Reply-To: <f90898420708240132l42eff6cds6b59d76bb4733380@mail.gmail.com>
-References: <f90898420708240132l42eff6cds6b59d76bb4733380@mail.gmail.com>
-Message-ID: <20070824091136.GB13098@aon.at>
+From: Carmelo AMOROSO <carmelo.amoroso@st.com>
+Date: Fri, 24 Aug 2007 11:21:31 +0200
+Subject: [Buildroot] [PATCH] gcc-4.2.1/libstdc++  patch for locale_facets
+Message-ID: <46CEA31B.9030006@st.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Fri, Aug 24, 2007 at 10:32:20AM +0200, Simon Pasch wrote:
->Building of alsa-lib fails because of a wrong library-path in the makefile.
+While doing test with C++ on uCLibc system, I found a bug into libstdc++
+libraries in displaying floating pointer values by using 
+ostream::operator<<(double)
+method.
+The problem is into locale_facet.tcc, and the attached patch solves it.
+It affects only libstdc++ configured for uClibc.
 
-Applied. Thanks!
+Regards,
+Carmelo
+-------------- next part --------------
+An embedded and charset-unspecified text was scrubbed...
+Name: gcc-4.2.1-uclibc-locale_facets.patch
+Url: http://busybox.net/lists/buildroot/attachments/20070824/06c3308b/attachment.diff 
