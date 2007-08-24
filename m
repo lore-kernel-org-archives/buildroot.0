@@ -1,35 +1,56 @@
-From: Todd Valentic <todd.valentic@sri.com>
-Date: Fri, 24 Aug 2007 11:43:52 -0700
-Subject: [Buildroot] Problem calling ldconfig in ext2root.mk
-In-Reply-To: <20070824085448.GA13098@aon.at>
-References: <46CE228B.2040907@sri.com> <20070824085448.GA13098@aon.at>
-Message-ID: <46CF26E8.50507@sri.com>
+From: bugs at busybox.net <bugs@busybox.net>
+Date: Fri, 24 Aug 2007 14:28:27 -0700
+Subject: [Buildroot] [buildroot 0001472]: r19050 should be reverted or
+	reworked
+Message-ID: <ea5899336b303af729d341b180546ca2@busybox.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Bernhard -
 
-Thanks for taking a look at this problem.
->
-> Does the attached is any better?
-Just tried it and unfortunately it didn't work.
+The following issue has been SUBMITTED. 
+====================================================================== 
+http://busybox.net/bugs/view.php?id=1472 
+====================================================================== 
+Reported By:                tharvey
+Assigned To:                buildroot
+====================================================================== 
+Project:                    buildroot
+Issue ID:                   1472
+Category:                   Other
+Reproducibility:            always
+Severity:                   major
+Priority:                   normal
+Status:                     assigned
+====================================================================== 
+Date Submitted:             08-24-2007 14:28 PDT
+Last Modified:              08-24-2007 14:28 PDT
+====================================================================== 
+Summary:                    r19050 should be reverted or reworked
+Description: 
+hostap and hostapd are not the same thing.  hostap is the PRISM driver
+whereas hostapd is a AP configuration daemon that supports many WiFi
+drivers.
 
-$(if $(TARGET_LDCONFIG),$(TARGET_LDCONFIG) -r $(TARGET_DIR) 2>/dev/null)
+r19050 lists the hostapd tarball as the source for the driver which is
+incorrect
 
-I think the problem here is that the "if" is evaluating as
-true because the string $(TARGET_LDCONFIG) is set. What it isn't 
-checking is if the actual file exists.
+perhaps http://hostap.epitest.fi/releases/hostap-driver-0.4.9.tar.gz
+should be used instead although I really don't use the 'hostap' driver so
+I wouldn't know if thats the latest.
 
-Would a test like this work:
+I ran into this while I was creating a package for 'hostapd' which
+conflicted with hostap as it was incorrectly referring to the same source
+package
 
-   @test -x $(TARGET_LDCONFIG) && \
-     $(TARGET_LDCONFIG) -r $(TARGET_DIR) 2>/dev/null
+====================================================================== 
 
-
-or should TARGET_LDCONFIG be unset early on if it doesn't exist
-(in which case your original patch would work fine)?
-
-Todd
+Issue History 
+Date Modified   Username       Field                    Change               
+====================================================================== 
+08-24-07 14:28  tharvey        New Issue                                    
+08-24-07 14:28  tharvey        Status                   new => assigned     
+08-24-07 14:28  tharvey        Assigned To               => buildroot       
+======================================================================
