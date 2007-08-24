@@ -1,35 +1,60 @@
-From: aldot at uclibc.org <aldot@uclibc.org>
-Date: Fri, 24 Aug 2007 03:43:46 -0700 (PDT)
-Subject: [Buildroot] svn commit: trunk/buildroot/package:  rp-pppoe
-Message-ID: <20070824104346.BBD14A65B3@busybox.net>
+From: Ulf Samuelsson <ulf@atmel.com>
+Date: Fri, 24 Aug 2007 15:29:22 +0200
+Subject: [Buildroot] libmad-0.15.1b fails on build
+References: <f90898420708240326v49be5083g287fbf4ffb961c8b@mail.gmail.com>
+Message-ID: <008301c7e653$84c251f0$4b04c63e@atmel.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Author: aldot
-Date: 2007-08-24 03:43:45 -0700 (Fri, 24 Aug 2007)
-New Revision: 19678
-
-Log:
-- add rp-pppoe
-
-
-Added:
-   trunk/buildroot/package/rp-pppoe/
-   trunk/buildroot/package/rp-pppoe/Config.in
-   trunk/buildroot/package/rp-pppoe/rp-pppoe-3.8-001-configure-bitfield.patch
-   trunk/buildroot/package/rp-pppoe/rp-pppoe-3.8-002-autoreconf.patch
-   trunk/buildroot/package/rp-pppoe/rp-pppoe.mk
-
-Modified:
-   trunk/buildroot/package/Config.in
+----- Original Message ----- 
+From: "Simon Pasch" <fpasch@googlemail.com>
+To: <buildroot@uclibc.org>
+Sent: Friday, August 24, 2007 12:26 PM
+Subject: [Buildroot] libmad-0.15.1b fails on build
 
 
-Changeset:
+> Libmad fails to build for x86 (likely for other architectures too)
+> because of the avr32-optimization-patch.
+> 
+> If you don't intend to build libmad for avr32, simply removing the patch helps.
+> 
+> 
+> Perhaps it would make sense to make the patch depend on the chosen
+> architecture. Don't know how this is solved in other packages. I tried
+> it with the folowing patch. (To keep the patch simple I manually
+> renamed the file "libmad-0.15.1b-avr32-optimization.patch" to
+> "libmad-0.15.1b-avr32-optimization.avr32_patch")
+> 
+> 
+> --- buildroot.old/package/libmad/libmad.mk 2007-08-24 09:15:35.000000000 +0200
+> +++ buildroot/package/libmad/libmad.mk 2007-08-24 12:10:43.000000000 +0200
+> @@ -16,6 +16,9 @@
+> $(LIBMAD_DIR)/.unpacked: $(DL_DIR)/$(LIBMAD_SOURCE)
+>  $(LIBMAD_CAT) $(DL_DIR)/$(LIBMAD_SOURCE) | tar -C $(BUILD_DIR)
+> $(TAR_OPTIONS) -
+>  $(CONFIG_UPDATE) $(LIBMAD_DIR)
+> +ifeq ($(strip $(BR2_avr32)),y)
+> + toolchain/patch-kernel.sh $(LIBMAD_DIR) package/libmad/
+> libmad-$(LIBMAD_VERSION)\*.avr32_patch\*
+> +endif
+>  toolchain/patch-kernel.sh $(LIBMAD_DIR) package/libmad/
+> libmad-$(LIBMAD_VERSION)\*.patch\*
+>  touch $@
+> 
+> Didn't have the time...but it seems, that the mplayer-package has some
+> avr32-only optimizations too
 
-Sorry, the patch is too large to include (8844 lines).
-Please use ViewCVS to see it!
+I think it would be better to generalize and do the following:
 
-http://uclibc.org/cgi-bin/viewcvs.cgi?view=rev&root=svn&rev=19678
+toolchain/patch-kernel.sh $(LIBMAD_DIR) package/libmad/ libmad-$(LIBMAD_VERSION)\*.patch
+as usual, followed by:
+toolchain/patch-kernel.sh $(LIBMAD_DIR) package/libmad/ libmad-$(LIBMAD_VERSION)\*.patch.$(ARCH)
+
+
+
+
+Best Regards
+Ulf Samuelsson
