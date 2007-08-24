@@ -1,39 +1,16 @@
-From: aldot at uclibc.org <aldot@uclibc.org>
-Date: Fri, 24 Aug 2007 02:26:51 -0700 (PDT)
-Subject: [Buildroot] svn commit: trunk/buildroot/package/alsa-lib
-Message-ID: <20070824092651.5378BA4656@busybox.net>
+From: Bernhard Fischer <rep.dot.nop@gmail.com>
+Date: Fri, 24 Aug 2007 11:11:36 +0200
+Subject: [Buildroot] wrong path in alsa-lib.mk
+In-Reply-To: <f90898420708240132l42eff6cds6b59d76bb4733380@mail.gmail.com>
+References: <f90898420708240132l42eff6cds6b59d76bb4733380@mail.gmail.com>
+Message-ID: <20070824091136.GB13098@aon.at>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Author: aldot
-Date: 2007-08-24 02:26:50 -0700 (Fri, 24 Aug 2007)
-New Revision: 19673
+On Fri, Aug 24, 2007 at 10:32:20AM +0200, Simon Pasch wrote:
+>Building of alsa-lib fails because of a wrong library-path in the makefile.
 
-Log:
-- fix wrong src-path of libasound (Simon Pasch)
-
-
-Modified:
-   trunk/buildroot/package/alsa-lib/alsa-lib.mk
-
-
-Changeset:
-Modified: trunk/buildroot/package/alsa-lib/alsa-lib.mk
-===================================================================
---- trunk/buildroot/package/alsa-lib/alsa-lib.mk	2007-08-24 08:11:17 UTC (rev 19672)
-+++ trunk/buildroot/package/alsa-lib/alsa-lib.mk	2007-08-24 09:26:50 UTC (rev 19673)
-@@ -48,9 +48,8 @@
- 	$(SED) "s,^libdir=.*,libdir=\'$(STAGING_DIR)/usr/lib\',g" $(STAGING_DIR)/usr/lib/libasound.la
- 
- $(TARGET_DIR)/$(ALSA_LIB_TARGET_BINARY): $(STAGING_DIR)/$(ALSA_LIB_TARGET_BINARY)
--	mkdir -p $(TARGET_DIR)/usr/share/alsa
--	mkdir -p $(TARGET_DIR)/usr/lib/alsa-lib
--	cp -dpf $(STAGING_DIR)/lib/libasound.so* $(TARGET_DIR)/usr/lib/
-+	mkdir -p $(TARGET_DIR)/usr/share/alsa $(TARGET_DIR)/usr/lib/alsa-lib
-+	cp -dpf $(STAGING_DIR)/usr/lib/libasound.so* $(TARGET_DIR)/usr/lib/
- 	cp -rdpf $(STAGING_DIR)/usr/share/alsa/* $(TARGET_DIR)/usr/share/alsa/
- 	cp -rdpf $(STAGING_DIR)/usr/lib/alsa-lib/* $(TARGET_DIR)/usr/lib/alsa-lib/
- 	-$(STRIP) $(STRIP_STRIP_UNNEEDED) $(TARGET_DIR)/usr/lib/libasound.so*
+Applied. Thanks!
