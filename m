@@ -1,23 +1,40 @@
-From: Carmelo AMOROSO <carmelo.amoroso@st.com>
-Date: Fri, 24 Aug 2007 11:21:31 +0200
-Subject: [Buildroot] [PATCH] gcc-4.2.1/libstdc++  patch for locale_facets
-Message-ID: <46CEA31B.9030006@st.com>
+From: Simon Pasch <fpasch@googlemail.com>
+Date: Fri, 24 Aug 2007 12:26:24 +0200
+Subject: [Buildroot]  libmad-0.15.1b fails on build
+Message-ID: <f90898420708240326v49be5083g287fbf4ffb961c8b@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-While doing test with C++ on uCLibc system, I found a bug into libstdc++
-libraries in displaying floating pointer values by using 
-ostream::operator<<(double)
-method.
-The problem is into locale_facet.tcc, and the attached patch solves it.
-It affects only libstdc++ configured for uClibc.
+Libmad fails to build for x86 (likely for other architectures too)
+because of the avr32-optimization-patch.
 
-Regards,
-Carmelo
--------------- next part --------------
-An embedded and charset-unspecified text was scrubbed...
-Name: gcc-4.2.1-uclibc-locale_facets.patch
-Url: http://busybox.net/lists/buildroot/attachments/20070824/06c3308b/attachment.diff 
+If you don't intend to build libmad for avr32, simply removing the patch helps.
+
+
+Perhaps it would make sense to make the patch depend on the chosen
+architecture. Don't know how this is solved in other packages. I tried
+it with the folowing patch. (To keep the patch simple I manually
+renamed the file "libmad-0.15.1b-avr32-optimization.patch" to
+"libmad-0.15.1b-avr32-optimization.avr32_patch")
+
+
+--- buildroot.old/package/libmad/libmad.mk	2007-08-24 09:15:35.000000000 +0200
++++ buildroot/package/libmad/libmad.mk	2007-08-24 12:10:43.000000000 +0200
+@@ -16,6 +16,9 @@
+ $(LIBMAD_DIR)/.unpacked: $(DL_DIR)/$(LIBMAD_SOURCE)
+ 	$(LIBMAD_CAT) $(DL_DIR)/$(LIBMAD_SOURCE) | tar -C $(BUILD_DIR)
+$(TAR_OPTIONS) -
+ 	$(CONFIG_UPDATE) $(LIBMAD_DIR)
++ifeq ($(strip $(BR2_avr32)),y)
++	toolchain/patch-kernel.sh $(LIBMAD_DIR) package/libmad/
+libmad-$(LIBMAD_VERSION)\*.avr32_patch\*
++endif
+ 	toolchain/patch-kernel.sh $(LIBMAD_DIR) package/libmad/
+libmad-$(LIBMAD_VERSION)\*.patch\*
+ 	touch $@
+
+Didn't have the time...but it seems, that the mplayer-package has some
+avr32-only optimizations too
