@@ -1,52 +1,46 @@
-From: =?ISO-8859-1?Q?Thiago_A._Corr=EAa?= <thiago.correa@gmail.com>
-Date: Fri, 24 Aug 2007 14:59:45 +0100
-Subject: [Buildroot] buildroot for avr32
-In-Reply-To: <00d401c7e655$5d036260$6e00a8c0@JONATHAN>
-References: <00d401c7e655$5d036260$6e00a8c0@JONATHAN>
-Message-ID: <d6cda7730708240659q612e813l134c00d238ca6590@mail.gmail.com>
+From: Bernhard Fischer <rep.dot.nop@gmail.com>
+Date: Fri, 24 Aug 2007 16:01:45 +0200
+Subject: [Buildroot] configure is never called from	Makefile.autotools.in
+In-Reply-To: <f90898420708240638w6f3ed01bld3aee41bacf00374@mail.gmail.com>
+References: <f90898420708240638w6f3ed01bld3aee41bacf00374@mail.gmail.com>
+Message-ID: <20070824140145.GA13635@aon.at>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Jonathan,
+On Fri, Aug 24, 2007 at 03:38:01PM +0200, Simon Pasch wrote:
+>x11r7-building fails with current snapshot because of commit 19657
+>(Makefile.autotools.in)
+>
+>"if $(PKG)_SKIP_CONFIGURE is non-empty then ./configure is skipped"
+>doesn't seem to work.
+>
+>Instead ./configure is never called...Although I tried playing around
+>with the variable LIBXCB_SKIP_CONFIGURE, etc.
 
-   I'm using the svn buildroot with avr32, and I'm running into my
-fair share of issues, so I guess the Atmel snapshot might be a safer
-bet. But I really don't like that they have removed the .svn folders
-from the package, making it a lot harder to get updates from the
-buildroot guys. Well, svn is catching up quite rapidly, and I have
-been able to build what I needed so far. I have never built GTK+
-thought.
+Could be. I'll back it out since autotools packages always have a
+configure (as opposed to the package i tried to build with the
+autotools.in file).
 
-   I have recently managed to merge the Atmel snapshot with svn to
-some extent. But I haven't gone thru the resulting patch to sort out
-what should be submitted and what should be discarded.
+Sorry for the inconvenience..
 
-Cheers,
-    Thiago A. Correa
+I'm not 100% happy with Makefile.autotools.in, btw:
+rp-pppoe, for example, has it's configure not in the toplevel dir but in
+src/. From the looks, the autotools.in can't cope with such a layout,
+currently.
 
+Furthermore, for all autotools packages, it is easily possible to build
+outside of the sourcetree, so stepping into an empty build_dir and
+calling $(PKG)_CONFIGURE_DIR/configure ... (where this would default to
+just the $(PKG)_DIR) would be nice, mid-term (think project_build
+stuff).
 
-On 8/24/07, Jonathan Dumaresq <jdumaresq@cimeq.qc.ca> wrote:
 >
->
-> Hi all,
->
-> I just try to get buildroot (from atmel site) build for the avr32. I would
-> like to know if i should the latest (from the svn) or use the one from
-> atmel. ?
->
-> I have also another question. On my rootfs, i will need (if possible) to
-> have a graphics web browser on a NGW100 board connected to an lcd. I have
-> seen some browser build on top of gtk+ library. I would like to know if this
-> is include in the avr32 port of buildroot ?
->
-> regards
->
-> Jonathan Dumaresq
-> _______________________________________________
-> buildroot mailing list
-> buildroot at uclibc.org
-> http://busybox.net/mailman/listinfo/buildroot
->
+>Just by the way...You do a great job here...Fast and reliable. It is a
+>pleasure to work with buildroot, uclibc, busybox!
+
+nice to hear. Thanks for your kind words :)
+
+cheers,
