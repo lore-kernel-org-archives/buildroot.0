@@ -1,101 +1,148 @@
-From: Hebbar <gururajakr@sanyo.co.in>
-Date: Thu, 23 Aug 2007 22:55:00 -0700 (PDT)
-Subject: [Buildroot] building tiny-x or x11R7 with latest snapshot
-In-Reply-To: <0ad801c7e382$8bb6dfe0$dcc4af0a@atmel.com>
-References: <022b01c7e35f$9df9f1b0$2600a8c0@engineering5>
-	<0ad801c7e382$8bb6dfe0$dcc4af0a@atmel.com>
-Message-ID: <12306984.post@talk.nabble.com>
+From: aldot at uclibc.org <aldot@uclibc.org>
+Date: Fri, 24 Aug 2007 01:11:18 -0700 (PDT)
+Subject: [Buildroot] svn commit: trunk/buildroot/package/pptp-linux
+Message-ID: <20070824081118.BB926A4965@busybox.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+Author: aldot
+Date: 2007-08-24 01:11:17 -0700 (Fri, 24 Aug 2007)
+New Revision: 19672
 
-Hi Ulf,
-
-  If we cant build either Tinyx or Xorg or X11 then how else can we build
-cairo,pango,gtk and other stuff. i am trying to build a decent toolchain
-with all library for arm926ejs but i see that most of these are not
-supported for am926ejs
-
-  Is there any possibilities that i can build just cairo pango gtk2 without
-the need for x softwares. Once i build all this later can we integrate these
-with x softwares.
-
-Regards
-Gururaja
+Log:
+- add pptp client
 
 
+Added:
+   trunk/buildroot/package/pptp-linux/pptp-linux-1.7.0-001-susv3-legacy.patch
 
-Ulf Samuelsson-2 wrote:
-> 
->>I receive errors if I want to build either tiny-x or the full X11R7.  has
->> anyone else had these?  Is this something in the environment?
->> 
->> 
->> 
->> I have a snapshot from a couple of months ago and I can build tiny-x
->> without
->> a problem on it.
->> 
->> 
->> 
->> X11R7:
-> [snip]
-> 
->> 
->> 
->> tiny-x: 
->> 
->> making imake with BOOTSTRAPCFLAGS= in config/imake
->> 
->> /home/christopher/sb/buildroot/build_arm/staging_dir/usr/bin/arm-linux-uclib
->> c-gcc -Os -pipe
->> -I/home/christopher/sb/buildroot/build_arm/staging_dir/usr/include
->> -I/home/christopher/sb/buildroot/build_arm/staging_dir/include
->> -mtune=arm920t -o ccimake  -O -I../../include
->> -I../../imports/x11/include/X11 ccimake.c
->> 
-> 
-> As you can see from above, you are compiling ccimage.c using the ARM cross
-> compiler.
-> 
->> /home/christopher/sb/buildroot/build_arm/staging_dir/usr/bin/arm-linux-uclib
->> c-gcc -Os -pipe
->> -I/home/christopher/sb/buildroot/build_arm/staging_dir/usr/include
->> -I/home/christopher/sb/buildroot/build_arm/staging_dir/include
->> -mtune=arm920t -c  -O -I../../include -I../../imports/x11/include/X11
->> `./ccimake` imake.c
->> 
->> /bin/sh: ./ccimake: cannot execute binary file
-> 
-> And now you try to run the ARM binary on your PC.
-> 
->> 
-> [snip]
->> ./config/imake/imake -I./config/cf  -s ./config/makedepend/Makefile.proto
->> -f
->> ./config/makedepend/Imakefile -DTOPDIR=../.. -DCURDIR=./config/makedepend
->> 
->> ./config/imake/imake: ./config/imake/imake: cannot execute binary file
->> 
-> 
-> I have seen the same problem, tinyx simply does not build.
-> Xorg does not build either, and x11r7 is still work in progress.
-> 
-> 
-> 
-> Best Regards
-> Ulf Samuelsson 
-> 
-> _______________________________________________
-> buildroot mailing list
-> buildroot at uclibc.org
-> http://busybox.net/mailman/listinfo/buildroot
-> 
-> 
+Modified:
+   trunk/buildroot/package/pptp-linux/pptp-linux.mk
 
--- 
-View this message in context: http://www.nabble.com/building-tiny-x-or-x11R7-with-latest-snapshot-tf4301002.html#a12306984
-Sent from the BuildRoot mailing list archive at Nabble.com.
+
+Changeset:
+Added: trunk/buildroot/package/pptp-linux/pptp-linux-1.7.0-001-susv3-legacy.patch
+===================================================================
+--- trunk/buildroot/package/pptp-linux/pptp-linux-1.7.0-001-susv3-legacy.patch	                        (rev 0)
++++ trunk/buildroot/package/pptp-linux/pptp-linux-1.7.0-001-susv3-legacy.patch	2007-08-24 08:11:17 UTC (rev 19672)
+@@ -0,0 +1,24 @@
++diff -rdup pptp-linux-1.7.0/pptp_callmgr.c pptp-linux-1.7.0.orig/pptp_callmgr.c
++--- pptp-linux-1.7.0/pptp_callmgr.c	2005-07-28 03:15:11.000000000 +0200
+++++ pptp-linux-1.7.0.orig/pptp_callmgr.c	2007-08-24 09:20:39.000000000 +0200
++@@ -314,7 +314,7 @@ int open_inetsock(struct in_addr inetadd
++         return s;
++     }
++     if (localbind.s_addr != INADDR_NONE) {
++-        bzero(&src, sizeof(src));
+++        memset(&src, 0, sizeof(src));
++         src.sin_family = AF_INET;
++         src.sin_addr   = localbind;
++         if (bind(s, (struct sockaddr *) &src, sizeof(src)) != 0) {
++diff -rdup pptp-linux-1.7.0/pptp_gre.c pptp-linux-1.7.0.orig/pptp_gre.c
++--- pptp-linux-1.7.0/pptp_gre.c	2005-07-28 03:15:11.000000000 +0200
+++++ pptp-linux-1.7.0.orig/pptp_gre.c	2007-08-24 09:20:56.000000000 +0200
++@@ -81,7 +81,7 @@ int pptp_gre_bind(struct in_addr inetadd
++     int s = socket(AF_INET, SOCK_RAW, PPTP_PROTO);
++     if (s < 0) { warn("socket: %s", strerror(errno)); return -1; }
++     if (localbind.s_addr != INADDR_NONE) {
++-        bzero(&loc_addr, sizeof(loc_addr));
+++        memset(&loc_addr, 0, sizeof(loc_addr));
++         loc_addr.sin_family = AF_INET;
++         loc_addr.sin_addr   = localbind;
++         if (bind(s, (struct sockaddr *) &loc_addr, sizeof(loc_addr)) != 0) {
+
+Modified: trunk/buildroot/package/pptp-linux/pptp-linux.mk
+===================================================================
+--- trunk/buildroot/package/pptp-linux/pptp-linux.mk	2007-08-24 05:36:46 UTC (rev 19671)
++++ trunk/buildroot/package/pptp-linux/pptp-linux.mk	2007-08-24 08:11:17 UTC (rev 19672)
+@@ -1,13 +1,78 @@
+-################################################################################
++#############################################################
+ #
+-# a PPTP client
++# pptp-linux
+ #
+-################################################################################
++#############################################################
++PPTP_LINUX_VERSION:=1.7.0
++PPTP_LINUX_SOURCE:=pptp-linux_$(PPTP_LINUX_VERSION).orig.tar.gz
++#PPTP_LINUX_PATCH:=pptp-linux_$(PPTP_LINUX_VERSION)-2.diff.gz
++PPTP_LINUX_SITE:=ftp://ftp.debian.org/debian/pool/main/a/pptp-linux
++PPTP_LINUX_DIR:=$(BUILD_DIR)/pptp-linux-$(PPTP_LINUX_VERSION).orig
++PPTP_LINUX_CAT:=$(ZCAT)
++PPTP_LINUX_BINARY:=pptp
++PPTP_LINUX_TARGET_BINARY:=usr/sbin/pptp
+ 
+-PPTP_LINUX_VERSION=1.7.0
+-PPTP_LINUX_SOURCE=pptp-linux_$(PPTP_LINUX_VERSION).orig.tar.gz
+-PPTP_LINUX_PATCH=pptp-linux_$(PPTP_LINUX_VERSION)-2.diff.gz
+-PPTP_LINUX_SITE=http://ftp.debian.org/debian/pool/main/p/pptp-linux
+-PPTP_LINUX_SKIP_CONFIGURE=true
++$(DL_DIR)/$(PPTP_LINUX_SOURCE):
++	$(WGET) -P $(DL_DIR) $(PPTP_LINUX_SITE)/$(PPTP_LINUX_SOURCE)
+ 
+-$(eval $(call AUTOTARGETS,pptp-linux))
++ifneq ($(PPTP_LINUX_PATCH),)
++PPTP_LINUX_PATCH_FILE:=$(DL_DIR)/$(PPTP_LINUX_PATCH)
++$(PPTP_LINUX_PATCH_FILE):
++	$(WGET) -P $(DL_DIR) $(PPTP_LINUX_SITE)/$(PPTP_LINUX_PATCH)
++endif
++
++$(PPTP_LINUX_DIR)/.unpacked: $(DL_DIR)/$(PPTP_LINUX_SOURCE) $(PPTP_LINUX_PATCH_FILE)
++	$(PPTP_LINUX_CAT) $(DL_DIR)/$(PPTP_LINUX_SOURCE) | tar -C $(BUILD_DIR) $(TAR_OPTIONS) -
++ifneq ($(PPTP_LINUX_PATCH),)
++	(cd $(PPTP_LINUX_DIR) && $(PPTP_LINUX_CAT) $(DL_DIR)/$(PPTP_LINUX_PATCH) | patch -p1)
++	if [ -d $(PPTP_LINUX_DIR)/debian/patches ]; then \
++		toolchain/patch-kernel.sh $(PPTP_LINUX_DIR) $(PPTP_LINUX_DIR)/debian/patches \*.patch; \
++	fi
++endif
++	toolchain/patch-kernel.sh $(PPTP_LINUX_DIR) package/pptp-linux/ pptp-linux\*.patch
++	touch $@
++
++$(PPTP_LINUX_DIR)/.configured: $(PPTP_LINUX_DIR)/.unpacked
++	(cd $(PPTP_LINUX_DIR); rm -rf config.cache; \
++		$(TARGET_CONFIGURE_OPTS) \
++		$(TARGET_CONFIGURE_ARGS) \
++		./configure \
++		--target=$(GNU_TARGET_NAME) \
++		--host=$(GNU_TARGET_NAME) \
++		--build=$(GNU_HOST_NAME) \
++		--prefix=/usr \
++		$(DISABLE_LARGEFILE) \
++	)
++	touch $@
++
++$(PPTP_LINUX_DIR)/$(PPTP_LINUX_BINARY): $(PPTP_LINUX_DIR)/.unpacked
++	$(MAKE) $(TARGET_CONFIGURE_OPTS) OPTIMIZE="$(TARGET_CFLAGS)" \
++		-C $(PPTP_LINUX_DIR)
++
++$(TARGET_DIR)/$(PPTP_LINUX_TARGET_BINARY): $(PPTP_LINUX_DIR)/$(PPTP_LINUX_BINARY)
++	cp -dpf $(PPTP_LINUX_DIR)/$(PPTP_LINUX_BINARY) $@
++ifeq ($(BR2_HAVE_MANPAGES),y)
++	mkdir -p $(TARGET_DIR)/usr/share/man/man8
++	$(INSTALL) -m 644 $(PPTP_LINUX_DIR)/pptp.8 $(TARGET_DIR)/usr/share/man/man8/pptp.8
++endif
++	$(STRIP) $(STRIP_STRIP_ALL) $@
++
++pptp-linux: uclibc $(TARGET_DIR)/$(PPTP_LINUX_TARGET_BINARY)
++
++pptp-linux-source: $(DL_DIR)/$(PPTP_LINUX_SOURCE) $(PPTP_LINUX_PATCH_FILE)
++
++pptp-linux-clean:
++	-$(MAKE) -C $(PPTP_LINUX_DIR) distclean
++	rm -f $(TARGET_DIR)/$(PPTP_LINUX_TARGET_BINARY) \
++		$(TARGET_DIR)/usr/share/man/man8/pptp.8*
++
++pptp-linux-dirclean:
++	rm -rf $(PPTP_LINUX_DIR)
++#############################################################
++#
++# Toplevel Makefile options
++#
++#############################################################
++ifeq ($(strip $(BR2_PACKAGE_PPTP_LINUX)),y)
++TARGETS+=pptp-linux
++endif
