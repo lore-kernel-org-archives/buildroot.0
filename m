@@ -1,46 +1,36 @@
-From: Bernhard Fischer <rep.dot.nop@gmail.com>
-Date: Fri, 24 Aug 2007 16:01:45 +0200
-Subject: [Buildroot] configure is never called from	Makefile.autotools.in
-In-Reply-To: <f90898420708240638w6f3ed01bld3aee41bacf00374@mail.gmail.com>
-References: <f90898420708240638w6f3ed01bld3aee41bacf00374@mail.gmail.com>
-Message-ID: <20070824140145.GA13635@aon.at>
+From: aldot at uclibc.org <aldot@uclibc.org>
+Date: Fri, 24 Aug 2007 07:18:49 -0700 (PDT)
+Subject: [Buildroot] svn commit: trunk/buildroot/package
+Message-ID: <20070824141849.E4530A65EB@busybox.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Fri, Aug 24, 2007 at 03:38:01PM +0200, Simon Pasch wrote:
->x11r7-building fails with current snapshot because of commit 19657
->(Makefile.autotools.in)
->
->"if $(PKG)_SKIP_CONFIGURE is non-empty then ./configure is skipped"
->doesn't seem to work.
->
->Instead ./configure is never called...Although I tried playing around
->with the variable LIBXCB_SKIP_CONFIGURE, etc.
+Author: aldot
+Date: 2007-08-24 07:18:47 -0700 (Fri, 24 Aug 2007)
+New Revision: 19685
 
-Could be. I'll back it out since autotools packages always have a
-configure (as opposed to the package i tried to build with the
-autotools.in file).
+Log:
+ remove _SKIP_CONFIGURE since it's pointless to try to run it on non-autotool'ed packages anyway (for now)
 
-Sorry for the inconvenience..
 
-I'm not 100% happy with Makefile.autotools.in, btw:
-rp-pppoe, for example, has it's configure not in the toplevel dir but in
-src/. From the looks, the autotools.in can't cope with such a layout,
-currently.
+Modified:
+   trunk/buildroot/package/Makefile.autotools.in
 
-Furthermore, for all autotools packages, it is easily possible to build
-outside of the sourcetree, so stepping into an empty build_dir and
-calling $(PKG)_CONFIGURE_DIR/configure ... (where this would default to
-just the $(PKG)_DIR) would be nice, mid-term (think project_build
-stuff).
 
->
->Just by the way...You do a great job here...Fast and reliable. It is a
->pleasure to work with buildroot, uclibc, busybox!
-
-nice to hear. Thanks for your kind words :)
-
-cheers,
+Changeset:
+Modified: trunk/buildroot/package/Makefile.autotools.in
+===================================================================
+--- trunk/buildroot/package/Makefile.autotools.in	2007-08-24 12:52:04 UTC (rev 19684)
++++ trunk/buildroot/package/Makefile.autotools.in	2007-08-24 14:18:47 UTC (rev 19685)
+@@ -310,7 +310,7 @@
+ $(1)-install-staging:
+ endif
+ 
+-$(1)-build:		$(if $$($(2)_SKIP_CONFIGURE),$(1)-patch,$(1)-configure)\
++$(1)-build:		$(1)-configure \
+ 			$$($(2)_TARGET_BUILD) \
+ 			$$($(2)_HOOK_POST_BUILD)
+ 
