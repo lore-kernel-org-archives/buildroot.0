@@ -1,7 +1,7 @@
 From: ulf at uclibc.org <ulf@uclibc.org>
-Date: Thu, 23 Aug 2007 22:28:18 -0700 (PDT)
-Subject: [Buildroot] svn commit: trunk/buildroot/docs
-Message-ID: <20070824052818.CE204A4711@busybox.net>
+Date: Thu, 23 Aug 2007 22:31:07 -0700 (PDT)
+Subject: [Buildroot] svn commit: trunk/buildroot
+Message-ID: <20070824053107.11E6FA469B@busybox.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -9,27 +9,47 @@ Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
 Author: ulf
-Date: 2007-08-23 22:28:18 -0700 (Thu, 23 Aug 2007)
-New Revision: 19669
+Date: 2007-08-23 22:31:07 -0700 (Thu, 23 Aug 2007)
+New Revision: 19670
 
 Log:
-Fix spelling error in docs
+Add git command
 
 Modified:
-   trunk/buildroot/docs/buildroot.html
+   trunk/buildroot/Config.in
 
 
 Changeset:
-Modified: trunk/buildroot/docs/buildroot.html
+Modified: trunk/buildroot/Config.in
 ===================================================================
---- trunk/buildroot/docs/buildroot.html	2007-08-24 05:27:17 UTC (rev 19668)
-+++ trunk/buildroot/docs/buildroot.html	2007-08-24 05:28:18 UTC (rev 19669)
-@@ -213,7 +213,7 @@
- $ complete -W menuconfig make
- </pre>
+--- trunk/buildroot/Config.in	2007-08-24 05:28:18 UTC (rev 19669)
++++ trunk/buildroot/Config.in	2007-08-24 05:31:07 UTC (rev 19670)
+@@ -591,9 +591,13 @@
+ 	default "wget --passive-ftp -nd"
  
--    <p>Then just enter the begining of the line, and ask <i>bash</i> to
-+    <p>Then just enter the beginning of the line, and ask <i>bash</i> to
-     complete it for you by pressing the <i>TAB</i> key:</p>
- <pre>
- $ make me&lt;TAB&gt;
+ config BR2_SVN
+-	string "Subversion (svn) checkout command"
++	string "Subversion (svn) command to download source tree"
+ 	default "svn co"
+ 
++config BR2_GIT
++	string "Git command to download source tree"
++	default "git clone"
++
+ config BR2_ZCAT
+ 	string "zcat command"
+ 	default "gzip -d -c"
+@@ -731,11 +735,13 @@
+ 	bool "strip"
+ 	help
+ 	  strip   is the normal strip command
++
+ config BR2_STRIP_sstrip
+ 	bool "sstrip"
+ 	select BR2_PACKAGE_SSTRIP_HOST
+ 	help
+ 	  sstrip  is a strip that discards more than the normal strip
++
+ config BR2_STRIP_none
+ 	bool "none"
+ 	help
