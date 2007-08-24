@@ -1,8 +1,8 @@
 From: bugs at busybox.net <bugs@busybox.net>
-Date: Fri, 24 Aug 2007 14:28:27 -0700
-Subject: [Buildroot] [buildroot 0001472]: r19050 should be reverted or
-	reworked
-Message-ID: <ea5899336b303af729d341b180546ca2@busybox.net>
+Date: Fri, 24 Aug 2007 14:31:36 -0700
+Subject: [Buildroot] [buildroot 0001473]: curl site is not up to date and
+	libcurl is not installed as expected
+Message-ID: <27c9eb5e8b833982fd13c7e233f748c2@busybox.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -12,45 +12,39 @@ To: buildroot@busybox.net
 
 The following issue has been SUBMITTED. 
 ====================================================================== 
-http://busybox.net/bugs/view.php?id=1472 
+http://busybox.net/bugs/view.php?id=1473 
 ====================================================================== 
 Reported By:                tharvey
 Assigned To:                buildroot
 ====================================================================== 
 Project:                    buildroot
-Issue ID:                   1472
+Issue ID:                   1473
 Category:                   Other
 Reproducibility:            always
 Severity:                   major
 Priority:                   normal
 Status:                     assigned
 ====================================================================== 
-Date Submitted:             08-24-2007 14:28 PDT
-Last Modified:              08-24-2007 14:28 PDT
+Date Submitted:             08-24-2007 14:31 PDT
+Last Modified:              08-24-2007 14:31 PDT
 ====================================================================== 
-Summary:                    r19050 should be reverted or reworked
+Summary:                    curl site is not up to date and libcurl is not
+installed as expected
 Description: 
-hostap and hostapd are not the same thing.  hostap is the PRISM driver
-whereas hostapd is a AP configuration daemon that supports many WiFi
-drivers.
+the CURL_SITE is no longer active and needs to be updated
 
-r19050 lists the hostapd tarball as the source for the driver which is
-incorrect
+additionally, BR2_PACKAGE_LIBCURL should build and install libcurl to the
+target filesystem, instead it only builds it into STAGING_DIR
 
-perhaps http://hostap.epitest.fi/releases/hostap-driver-0.4.9.tar.gz
-should be used instead although I really don't use the 'hostap' driver so
-I wouldn't know if thats the latest.
-
-I ran into this while I was creating a package for 'hostapd' which
-conflicted with hostap as it was incorrectly referring to the same source
-package
 
 ====================================================================== 
 
 Issue History 
 Date Modified   Username       Field                    Change               
 ====================================================================== 
-08-24-07 14:28  tharvey        New Issue                                    
-08-24-07 14:28  tharvey        Status                   new => assigned     
-08-24-07 14:28  tharvey        Assigned To               => buildroot       
+08-24-07 14:31  tharvey        New Issue                                    
+08-24-07 14:31  tharvey        Status                   new => assigned     
+08-24-07 14:31  tharvey        Assigned To               => buildroot       
+08-24-07 14:31  tharvey        File Added: buildroot-curl.patch                 
+  
 ======================================================================
