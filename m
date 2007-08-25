@@ -1,7 +1,7 @@
 From: aldot at uclibc.org <aldot@uclibc.org>
-Date: Sat, 25 Aug 2007 04:20:32 -0700 (PDT)
-Subject: [Buildroot] svn commit: trunk/buildroot/target/device/x86/i386
-Message-ID: <20070825112032.35188A685A@busybox.net>
+Date: Sat, 25 Aug 2007 04:22:52 -0700 (PDT)
+Subject: [Buildroot] svn commit: trunk/buildroot/toolchain/gcc/4.2.1
+Message-ID: <20070825112252.B8532A684A@busybox.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -9,96 +9,50 @@ Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
 Author: aldot
-Date: 2007-08-25 04:20:31 -0700 (Sat, 25 Aug 2007)
-New Revision: 19693
+Date: 2007-08-25 04:22:51 -0700 (Sat, 25 Aug 2007)
+New Revision: 19694
 
 Log:
-- adjust config
+This patch fixes a bug into ostream::operator<<(double) due to the wrong size
+passed into the __convert_from_v method. The wrong size is then passed to
+std::snprintf function, that, on uClibc, doens't handle sized 0 buffer.
+
+Signed-off-by: Carmelo Amoroso <carmelo.amoroso@st.com>
 
 
-Modified:
-   trunk/buildroot/target/device/x86/i386/linux26.config
+Added:
+   trunk/buildroot/toolchain/gcc/4.2.1/307-locale_facets.patch
 
 
 Changeset:
-Modified: trunk/buildroot/target/device/x86/i386/linux26.config
+Added: trunk/buildroot/toolchain/gcc/4.2.1/307-locale_facets.patch
 ===================================================================
---- trunk/buildroot/target/device/x86/i386/linux26.config	2007-08-25 11:16:18 UTC (rev 19692)
-+++ trunk/buildroot/target/device/x86/i386/linux26.config	2007-08-25 11:20:31 UTC (rev 19693)
-@@ -43,7 +43,7 @@
- # CONFIG_UTS_NS is not set
- # CONFIG_AUDIT is not set
- # CONFIG_IKCONFIG is not set
--# CONFIG_SYSFS_DEPRECATED is not set
-+CONFIG_SYSFS_DEPRECATED=y
- # CONFIG_RELAY is not set
- CONFIG_BLK_DEV_INITRD=y
- CONFIG_INITRAMFS_SOURCE=""
-@@ -52,9 +52,9 @@
- CONFIG_EMBEDDED=y
- CONFIG_UID16=y
- CONFIG_SYSCTL_SYSCALL=y
--CONFIG_KALLSYMS=y
-+# CONFIG_KALLSYMS is not set
- # CONFIG_KALLSYMS_EXTRA_PASS is not set
--# CONFIG_HOTPLUG is not set
-+CONFIG_HOTPLUG=y
- CONFIG_PRINTK=y
- CONFIG_BUG=y
- # CONFIG_ELF_CORE is not set
-@@ -322,10 +322,12 @@
- #
- # PCCARD (PCMCIA/CardBus) support
- #
-+# CONFIG_PCCARD is not set
- 
- #
- # PCI Hotplug Support
- #
-+# CONFIG_HOTPLUG_PCI is not set
- 
- #
- # Executable file formats
-@@ -780,6 +782,8 @@
- CONFIG_BLK_DEV_RAM_COUNT=4
- CONFIG_BLK_DEV_RAM_SIZE=16384
- CONFIG_BLK_DEV_RAM_BLOCKSIZE=1024
-+CONFIG_LZMA_INITRD=y
-+CONFIG_LZMA_INITRD_KMALLOC_ONLY=y
- # CONFIG_CDROM_PKTCDVD is not set
- # CONFIG_ATA_OVER_ETH is not set
- 
-@@ -1323,7 +1327,7 @@
- CONFIG_SENSORS_FSCPOS=m
- CONFIG_SENSORS_GL518SM=m
- CONFIG_SENSORS_GL520SM=m
--# CONFIG_SENSORS_IPMI is not set
-+CONFIG_SENSORS_IPMI=m
- CONFIG_SENSORS_IT87=m
- CONFIG_SENSORS_LM63=m
- CONFIG_SENSORS_LM75=m
-@@ -1615,6 +1619,7 @@
- CONFIG_EDAC_MM_EDAC=m
- CONFIG_EDAC_AMD76X=m
- CONFIG_EDAC_E7XXX=m
-+CONFIG_EDAC_E752X=m
- # CONFIG_EDAC_I82875P is not set
- CONFIG_EDAC_I82860=m
- CONFIG_EDAC_R82600=m
-@@ -1765,6 +1770,7 @@
- CONFIG_JFFS2_RTIME=y
- # CONFIG_JFFS2_RUBIN is not set
- CONFIG_CRAMFS=y
-+# CONFIG_SQUASHFS is not set
- # CONFIG_VXFS_FS is not set
- # CONFIG_HPFS_FS is not set
- # CONFIG_QNX4FS_FS is not set
-@@ -1853,7 +1859,7 @@
- # Distributed Lock Manager
- #
- # CONFIG_DLM is not set
--
-+# CONFIG_AUFS is not set
- #
- # Instrumentation Support
- #
+--- trunk/buildroot/toolchain/gcc/4.2.1/307-locale_facets.patch	                        (rev 0)
++++ trunk/buildroot/toolchain/gcc/4.2.1/307-locale_facets.patch	2007-08-25 11:22:51 UTC (rev 19694)
+@@ -0,0 +1,26 @@
++This patch fixes a bug into ostream::operator<<(double) due to the wrong size
++passed into the __convert_from_v method. The wrong size is then passed to
++std::snprintf function, that, on uClibc, doens't handle sized 0 buffer.
++
++Signed-off-by: Carmelo Amoroso <carmelo.amoroso@st.com>
++
++--- gcc-4.2.1/libstdc++-v3/include/bits/locale_facets.tcc	2006-10-17 18:43:47.000000000 +0200
+++++ gcc-4.2.1-st/libstdc++-v3/include/bits/locale_facets.tcc	2007-08-22 18:54:23.000000000 +0200
++@@ -1143,7 +1143,7 @@ _GLIBCXX_BEGIN_LDBL_NAMESPACE
++ 	const int __cs_size = __fixed ? __max_exp + __prec + 4
++ 	                              : __max_digits * 2 + __prec;
++ 	char* __cs = static_cast<char*>(__builtin_alloca(__cs_size));
++-	__len = std::__convert_from_v(_S_get_c_locale(), __cs, 0, __fbuf, 
+++	__len = std::__convert_from_v(_S_get_c_locale(), __cs, __cs_size, __fbuf, 
++ 				      __prec, __v);
++ #endif
++ 
++@@ -1777,7 +1777,7 @@ _GLIBCXX_BEGIN_LDBL_NAMESPACE
++       // max_exponent10 + 1 for the integer part, + 2 for sign and '\0'.
++       const int __cs_size = numeric_limits<long double>::max_exponent10 + 3;
++       char* __cs = static_cast<char*>(__builtin_alloca(__cs_size));
++-      int __len = std::__convert_from_v(_S_get_c_locale(), __cs, 0, "%.*Lf", 
+++      int __len = std::__convert_from_v(_S_get_c_locale(), __cs, __cs_size, "%.*Lf", 
++ 					0, __units);
++ #endif
++       string_type __digits(__len, char_type());
