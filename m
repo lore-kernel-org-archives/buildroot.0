@@ -1,8 +1,7 @@
 From: aldot at uclibc.org <aldot@uclibc.org>
-Date: Sat, 25 Aug 2007 04:13:22 -0700 (PDT)
-Subject: [Buildroot] svn commit: trunk/buildroot/target: cpio cramfs ext2
-	initramfs jffs2 squashf etc...
-Message-ID: <20070825111322.34FB4A682B@busybox.net>
+Date: Sat, 25 Aug 2007 04:20:32 -0700 (PDT)
+Subject: [Buildroot] svn commit: trunk/buildroot/target/device/x86/i386
+Message-ID: <20070825112032.35188A685A@busybox.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -10,118 +9,96 @@ Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
 Author: aldot
-Date: 2007-08-25 04:13:20 -0700 (Sat, 25 Aug 2007)
-New Revision: 19691
+Date: 2007-08-25 04:20:31 -0700 (Sat, 25 Aug 2007)
+New Revision: 19693
 
 Log:
-- workaround for broken external toolchains
+- adjust config
 
 
 Modified:
-   trunk/buildroot/target/cpio/cpioroot.mk
-   trunk/buildroot/target/cramfs/cramfs.mk
-   trunk/buildroot/target/ext2/ext2root.mk
-   trunk/buildroot/target/initramfs/initramfs.mk
-   trunk/buildroot/target/jffs2/jffs2root.mk
-   trunk/buildroot/target/squashfs/squashfsroot.mk
-   trunk/buildroot/target/tar/tarroot.mk
+   trunk/buildroot/target/device/x86/i386/linux26.config
 
 
 Changeset:
-Modified: trunk/buildroot/target/cpio/cpioroot.mk
+Modified: trunk/buildroot/target/device/x86/i386/linux26.config
 ===================================================================
---- trunk/buildroot/target/cpio/cpioroot.mk	2007-08-24 21:46:24 UTC (rev 19690)
-+++ trunk/buildroot/target/cpio/cpioroot.mk	2007-08-25 11:13:20 UTC (rev 19691)
-@@ -44,7 +44,7 @@
- ifneq ($(BR2_HAVE_INFOPAGES),y)
- 	@rm -rf $(TARGET_DIR)/usr/info
- endif
--	$(TARGET_LDCONFIG) -r $(TARGET_DIR) 2>/dev/null
-+	$(if $(TARGET_LDCONFIG),test -x $(TARGET_LDCONFIG) && $(TARGET_LDCONFIG) -r $(TARGET_DIR) 2>/dev/null)
- 	# Use fakeroot to pretend all target binaries are owned by root
- 	rm -f $(PROJECT_BUILD_DIR)/_fakeroot.$(notdir $(TAR_TARGET))
- 	touch $(PROJECT_BUILD_DIR)/.fakeroot.00000
-
-Modified: trunk/buildroot/target/cramfs/cramfs.mk
-===================================================================
---- trunk/buildroot/target/cramfs/cramfs.mk	2007-08-24 21:46:24 UTC (rev 19690)
-+++ trunk/buildroot/target/cramfs/cramfs.mk	2007-08-25 11:13:20 UTC (rev 19691)
-@@ -56,7 +56,7 @@
- ifneq ($(BR2_HAVE_INFOPAGES),y)
- 	@rm -rf $(TARGET_DIR)/usr/info
- endif
--	$(TARGET_LDCONFIG) -r $(TARGET_DIR) 2>/dev/null
-+	$(if $(TARGET_LDCONFIG),test -x $(TARGET_LDCONFIG) && $(TARGET_LDCONFIG) -r $(TARGET_DIR) 2>/dev/null)
- 	# Use fakeroot to pretend all target binaries are owned by root
- 	rm -f $(PROJECT_BUILD_DIR)/_fakeroot.$(notdir $(CRAMFS_TARGET))
- 	touch $(PROJECT_BUILD_DIR)/.fakeroot.00000
-
-Modified: trunk/buildroot/target/ext2/ext2root.mk
-===================================================================
---- trunk/buildroot/target/ext2/ext2root.mk	2007-08-24 21:46:24 UTC (rev 19690)
-+++ trunk/buildroot/target/ext2/ext2root.mk	2007-08-25 11:13:20 UTC (rev 19691)
-@@ -98,7 +98,7 @@
- 	@test -d $(TARGET_DIR)/usr/share && \
- 		rmdir -p --ignore-fail-on-non-empty $(TARGET_DIR)/usr/share || \
- 		true
--	$(TARGET_LDCONFIG) -r $(TARGET_DIR) 2>/dev/null
-+	$(if $(TARGET_LDCONFIG),test -x $(TARGET_LDCONFIG) && $(TARGET_LDCONFIG) -r $(TARGET_DIR) 2>/dev/null)
- 	# Use fakeroot to pretend all target binaries are owned by root
- 	rm -f $(PROJECT_BUILD_DIR)/_fakeroot.$(notdir $(EXT2_TARGET))
- 	touch $(PROJECT_BUILD_DIR)/.fakeroot.00000
-
-Modified: trunk/buildroot/target/initramfs/initramfs.mk
-===================================================================
---- trunk/buildroot/target/initramfs/initramfs.mk	2007-08-24 21:46:24 UTC (rev 19690)
-+++ trunk/buildroot/target/initramfs/initramfs.mk	2007-08-25 11:13:20 UTC (rev 19691)
-@@ -22,7 +22,7 @@
- ifneq ($(BR2_HAVE_INFOPAGES),y)
- 	rm -rf $(TARGET_DIR)/usr/info
- endif
--	$(TARGET_LDCONFIG) -r $(TARGET_DIR) 2>/dev/null
-+	$(if $(TARGET_LDCONFIG),test -x $(TARGET_LDCONFIG) && $(TARGET_LDCONFIG) -r $(TARGET_DIR) 2>/dev/null)
- 	# Use fakeroot to pretend all target binaries are owned by root
- 	rm -f $(PROJECT_BUILD_DIR)/_fakeroot.$(notdir $(TAR_TARGET))
- 	touch $(PROJECT_BUILD_DIR)/.fakeroot.00000
-
-Modified: trunk/buildroot/target/jffs2/jffs2root.mk
-===================================================================
---- trunk/buildroot/target/jffs2/jffs2root.mk	2007-08-24 21:46:24 UTC (rev 19690)
-+++ trunk/buildroot/target/jffs2/jffs2root.mk	2007-08-25 11:13:20 UTC (rev 19691)
-@@ -58,7 +58,7 @@
- 	@rm -rf $(TARGET_DIR)/usr/info
- endif
- 	@rmdir -p --ignore-fail-on-non-empty $(TARGET_DIR)/usr/share
--	$(TARGET_LDCONFIG) -r $(TARGET_DIR) 2>/dev/null
-+	$(if $(TARGET_LDCONFIG),test -x $(TARGET_LDCONFIG) && $(TARGET_LDCONFIG) -r $(TARGET_DIR) 2>/dev/null)
- 	# Use fakeroot to pretend all target binaries are owned by root
- 	rm -f $(PROJECT_BUILD_DIR)/_fakeroot.$(notdir $(JFFS2_TARGET))
- 	touch $(PROJECT_BUILD_DIR)/.fakeroot.00000
-
-Modified: trunk/buildroot/target/squashfs/squashfsroot.mk
-===================================================================
---- trunk/buildroot/target/squashfs/squashfsroot.mk	2007-08-24 21:46:24 UTC (rev 19690)
-+++ trunk/buildroot/target/squashfs/squashfsroot.mk	2007-08-25 11:13:20 UTC (rev 19691)
-@@ -51,7 +51,7 @@
- ifneq ($(BR2_HAVE_INFOPAGES),y)
- 	@rm -rf $(TARGET_DIR)/usr/info
- endif
--	$(TARGET_LDCONFIG) -r $(TARGET_DIR) 2>/dev/null
-+	$(if $(TARGET_LDCONFIG),test -x $(TARGET_LDCONFIG) && $(TARGET_LDCONFIG) -r $(TARGET_DIR) 2>/dev/null)
- 	# Use fakeroot to pretend all target binaries are owned by root
- 	rm -f $(PROJECT_BUILD_DIR)/_fakeroot.$(notdir $(SQUASHFS_TARGET))
- 	touch $(PROJECT_BUILD_DIR)/.fakeroot.00000
-
-Modified: trunk/buildroot/target/tar/tarroot.mk
-===================================================================
---- trunk/buildroot/target/tar/tarroot.mk	2007-08-24 21:46:24 UTC (rev 19690)
-+++ trunk/buildroot/target/tar/tarroot.mk	2007-08-25 11:13:20 UTC (rev 19691)
-@@ -30,7 +30,7 @@
- ifneq ($(BR2_HAVE_INFOPAGES),y)
- 	@rm -rf $(TARGET_DIR)/usr/info
- endif
--	$(TARGET_LDCONFIG) -r $(TARGET_DIR) 2>/dev/null
-+	$(if $(TARGET_LDCONFIG),test -x $(TARGET_LDCONFIG) && $(TARGET_LDCONFIG) -r $(TARGET_DIR) 2>/dev/null)
- 	# Use fakeroot to pretend all target binaries are owned by root
- 	rm -f $(PROJECT_BUILD_DIR)/_fakeroot.$(notdir $(TAR_TARGET))
- 	touch $(PROJECT_BUILD_DIR)/.fakeroot.00000
+--- trunk/buildroot/target/device/x86/i386/linux26.config	2007-08-25 11:16:18 UTC (rev 19692)
++++ trunk/buildroot/target/device/x86/i386/linux26.config	2007-08-25 11:20:31 UTC (rev 19693)
+@@ -43,7 +43,7 @@
+ # CONFIG_UTS_NS is not set
+ # CONFIG_AUDIT is not set
+ # CONFIG_IKCONFIG is not set
+-# CONFIG_SYSFS_DEPRECATED is not set
++CONFIG_SYSFS_DEPRECATED=y
+ # CONFIG_RELAY is not set
+ CONFIG_BLK_DEV_INITRD=y
+ CONFIG_INITRAMFS_SOURCE=""
+@@ -52,9 +52,9 @@
+ CONFIG_EMBEDDED=y
+ CONFIG_UID16=y
+ CONFIG_SYSCTL_SYSCALL=y
+-CONFIG_KALLSYMS=y
++# CONFIG_KALLSYMS is not set
+ # CONFIG_KALLSYMS_EXTRA_PASS is not set
+-# CONFIG_HOTPLUG is not set
++CONFIG_HOTPLUG=y
+ CONFIG_PRINTK=y
+ CONFIG_BUG=y
+ # CONFIG_ELF_CORE is not set
+@@ -322,10 +322,12 @@
+ #
+ # PCCARD (PCMCIA/CardBus) support
+ #
++# CONFIG_PCCARD is not set
+ 
+ #
+ # PCI Hotplug Support
+ #
++# CONFIG_HOTPLUG_PCI is not set
+ 
+ #
+ # Executable file formats
+@@ -780,6 +782,8 @@
+ CONFIG_BLK_DEV_RAM_COUNT=4
+ CONFIG_BLK_DEV_RAM_SIZE=16384
+ CONFIG_BLK_DEV_RAM_BLOCKSIZE=1024
++CONFIG_LZMA_INITRD=y
++CONFIG_LZMA_INITRD_KMALLOC_ONLY=y
+ # CONFIG_CDROM_PKTCDVD is not set
+ # CONFIG_ATA_OVER_ETH is not set
+ 
+@@ -1323,7 +1327,7 @@
+ CONFIG_SENSORS_FSCPOS=m
+ CONFIG_SENSORS_GL518SM=m
+ CONFIG_SENSORS_GL520SM=m
+-# CONFIG_SENSORS_IPMI is not set
++CONFIG_SENSORS_IPMI=m
+ CONFIG_SENSORS_IT87=m
+ CONFIG_SENSORS_LM63=m
+ CONFIG_SENSORS_LM75=m
+@@ -1615,6 +1619,7 @@
+ CONFIG_EDAC_MM_EDAC=m
+ CONFIG_EDAC_AMD76X=m
+ CONFIG_EDAC_E7XXX=m
++CONFIG_EDAC_E752X=m
+ # CONFIG_EDAC_I82875P is not set
+ CONFIG_EDAC_I82860=m
+ CONFIG_EDAC_R82600=m
+@@ -1765,6 +1770,7 @@
+ CONFIG_JFFS2_RTIME=y
+ # CONFIG_JFFS2_RUBIN is not set
+ CONFIG_CRAMFS=y
++# CONFIG_SQUASHFS is not set
+ # CONFIG_VXFS_FS is not set
+ # CONFIG_HPFS_FS is not set
+ # CONFIG_QNX4FS_FS is not set
+@@ -1853,7 +1859,7 @@
+ # Distributed Lock Manager
+ #
+ # CONFIG_DLM is not set
+-
++# CONFIG_AUFS is not set
+ #
+ # Instrumentation Support
+ #
