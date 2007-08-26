@@ -1,7 +1,7 @@
 From: aldot at uclibc.org <aldot@uclibc.org>
-Date: Sun, 26 Aug 2007 13:55:02 -0700 (PDT)
-Subject: [Buildroot] svn commit: trunk/buildroot/toolchain/uClibc
-Message-ID: <20070826205502.AEC4CA6AC2@busybox.net>
+Date: Sun, 26 Aug 2007 14:00:57 -0700 (PDT)
+Subject: [Buildroot] svn commit: trunk/buildroot/toolchain/gcc
+Message-ID: <20070826210057.34C5FA6AB7@busybox.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -9,67 +9,49 @@ Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
 Author: aldot
-Date: 2007-08-26 13:55:02 -0700 (Sun, 26 Aug 2007)
-New Revision: 19703
+Date: 2007-08-26 14:00:56 -0700 (Sun, 26 Aug 2007)
+New Revision: 19704
 
 Log:
-- improve handling of sh (fgretief) for bug #1446
+- make sure to honour user flags
 
 
 Modified:
-   trunk/buildroot/toolchain/uClibc/uclibc.mk
+   trunk/buildroot/toolchain/gcc/Makefile.in
 
 
 Changeset:
-Modified: trunk/buildroot/toolchain/uClibc/uclibc.mk
+Modified: trunk/buildroot/toolchain/gcc/Makefile.in
 ===================================================================
---- trunk/buildroot/toolchain/uClibc/uclibc.mk	2007-08-26 20:47:18 UTC (rev 19702)
-+++ trunk/buildroot/toolchain/uClibc/uclibc.mk	2007-08-26 20:55:02 UTC (rev 19703)
-@@ -73,7 +73,7 @@
- 		-e 's/arm/LITTLE/' \
- 		-e 's/mipsel/LITTLE/' \
- 		-e 's/mips/BIG/' \
--		-e 's/sh[234]eb/BIG/' \
-+		-e 's/sh[234].*eb/BIG/' \
- 		-e 's/sh[234]/LITTLE/' \
- ")
+--- trunk/buildroot/toolchain/gcc/Makefile.in	2007-08-26 20:55:02 UTC (rev 19703)
++++ trunk/buildroot/toolchain/gcc/Makefile.in	2007-08-26 21:00:56 UTC (rev 19704)
+@@ -74,8 +74,16 @@
+ 	BOOT_CFLAGS="$(TARGET_CFLAGS) $(TARGET_SOFT_FLOAT)"
  
-@@ -146,6 +146,38 @@
- 	/bin/echo "# CONFIG_ARM_EABI is not set" >> $(UCLIBC_DIR)/.oldconfig
+ ifeq ($(strip $(BR2_PACKAGE_GCC_TARGET)),y)
+-# pull in config opts from the user
+-EXTRA_TARGET_GCC_CONFIG_OPTIONS:=$(strip $(subst ",, $(BR2_EXTRA_TARGET_GCC_CONFIG_OPTIONS)))
++EXTRA_TARGET_GCC_CONFIG_OPTIONS:=
++
++# AVR32 target GCC configuration
++ifeq ($(strip $(BR2_avr32)),y)
++EXTRA_TARGET_GCC_CONFIG_OPTIONS+=--disable-libmudflap
++endif
++
++
++# and finally pull in config opts from the user
++EXTRA_TARGET_GCC_CONFIG_OPTIONS+=$(strip $(subst ",, $(BR2_EXTRA_TARGET_GCC_CONFIG_OPTIONS)))
+ #"))
+ 
+ ifeq ($(BR2_PREFER_IMA),y)
+@@ -85,10 +93,5 @@
  endif
+ endif # BR2_PREFER_IMA=y
+ 
+-# AVR32 target GCC configuration
+-ifeq ($(strip $(BR2_avr32)),y)
+-EXTRA_TARGET_GCC_CONFIG_OPTIONS+=--disable-libmudflap
+-endif
+-
+ TARGETS+=gcc_target
  endif
-+ifeq ($(UCLIBC_TARGET_ARCH),sh)
-+	/bin/echo "# CONFIG_SH2A is not set" >> $(UCLIBC_DIR)/.oldconfig
-+	/bin/echo "# CONFIG_SH2 is not set" >> $(UCLIBC_DIR)/.oldconfig
-+	/bin/echo "# CONFIG_SH3 is not set" >> $(UCLIBC_DIR)/.oldconfig
-+	/bin/echo "# CONFIG_SH4 is not set" >> $(UCLIBC_DIR)/.oldconfig
-+ifeq ($(BR2_sh2a_nofpueb),y)
-+	$(SED) 's,# CONFIG_SH2A is not set,CONFIG_SH2A=y,g' $(UCLIBC_DIR)/.oldconfig
-+	/bin/echo "# UCLIBC_FORMAT_FDPIC_ELF is not set" >> $(UCLIBC_DIR)/.oldconfig
-+	/bin/echo "# UCLIBC_FORMAT_FLAT is not set" >> $(UCLIBC_DIR)/.oldconfig
-+	/bin/echo "# UCLIBC_FORMAT_FLAT_SEP_DATA is not set" >> $(UCLIBC_DIR)/.oldconfig
-+	/bin/echo "# UCLIBC_FORMAT_SHARED_FLAT is not set" >> $(UCLIBC_DIR)/.oldconfig
-+endif
-+ifeq ($(BR2_sh2eb),y)
-+	$(SED) 's,# CONFIG_SH2 is not set,CONFIG_SH2=y,g' $(UCLIBC_DIR)/.oldconfig
-+	/bin/echo "# UCLIBC_FORMAT_FDPIC_ELF is not set" >> $(UCLIBC_DIR)/.oldconfig
-+	/bin/echo "# UCLIBC_FORMAT_FLAT is not set" >> $(UCLIBC_DIR)/.oldconfig
-+	/bin/echo "# UCLIBC_FORMAT_FLAT_SEP_DATA is not set" >> $(UCLIBC_DIR)/.oldconfig
-+	/bin/echo "# UCLIBC_FORMAT_SHARED_FLAT is not set" >> $(UCLIBC_DIR)/.oldconfig
-+endif
-+ifeq ($(BR2_sh3eb),y)
-+	$(SED) 's,# CONFIG_SH3 is not set,CONFIG_SH3=y,g' $(UCLIBC_DIR)/.oldconfig
-+endif
-+ifeq ($(BR2_sh3),y)
-+	$(SED) 's,# CONFIG_SH3 is not set,CONFIG_SH3=y,g' $(UCLIBC_DIR)/.oldconfig
-+endif
-+ifeq ($(BR2_sh4eb),y)
-+	$(SED) 's,# CONFIG_SH4 is not set,CONFIG_SH4=y,g' $(UCLIBC_DIR)/.oldconfig
-+endif
-+ifeq ($(BR2_sh4),y)
-+	$(SED) 's,# CONFIG_SH4 is not set,CONFIG_SH4=y,g' $(UCLIBC_DIR)/.oldconfig
-+endif
-+endif
- ifneq ($(UCLIBC_TARGET_ENDIAN),)
- 	# The above doesn't work for me, so redo
- 	$(SED) 's/.*\(ARCH_$(UCLIBC_NOT_TARGET_ENDIAN)_ENDIAN\).*/# \1 is not set/g' \
