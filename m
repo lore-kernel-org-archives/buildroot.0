@@ -1,8 +1,8 @@
 From: bugs at busybox.net <bugs@busybox.net>
-Date: Sat, 25 Aug 2007 13:06:08 -0700
+Date: Sun, 26 Aug 2007 11:57:11 -0700
 Subject: [Buildroot] [buildroot 0001446]: Buildroot compilation is broken
 	for SH4 architecture
-Message-ID: <092449d553630d78e8c78e6f8df2b75c@bugs.uclibc.org>
+Message-ID: <176dc4553b07e6c17587cd530e00c57a@busybox.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -26,7 +26,7 @@ Priority:                   normal
 Status:                     assigned
 ====================================================================== 
 Date Submitted:             07-26-2007 13:57 PDT
-Last Modified:              08-25-2007 13:06 PDT
+Last Modified:              08-26-2007 11:57 PDT
 ====================================================================== 
 Summary:                    Buildroot compilation is broken for SH4 architecture
 Description: 
@@ -536,6 +536,16 @@ $(UCLIBC_DIR)/.oldconfig
  	$(SED) 's/.*\(ARCH_$(UCLIBC_NOT_TARGET_ENDIAN)_ENDIAN\).*/# \1 is not
 set/g' \ 
 
+---------------------------------------------------------------------- 
+ Masta-G - 08-26-07 11:57  
+---------------------------------------------------------------------- 
+Yeah! :)
+Tested the full patch against latest svn and it's working fine.
+Running uClinux and busybox on the Sega Dreamcast.
+
+Now it would be nice if it got applied to the trunk so it works out of the
+box. 
+
 Issue History 
 Date Modified   Username       Field                    Change               
 ====================================================================== 
@@ -550,4 +560,5 @@ Date Modified   Username       Field                    Change
 08-20-07 16:12  zx80user       Note Added: 0002672                          
 08-23-07 06:56  mastag         Note Added: 0002677                          
 08-25-07 13:06  fgretief       Note Added: 0002688                          
+08-26-07 11:57  Masta-G        Note Added: 0002690                          
 ======================================================================
