@@ -1,7 +1,7 @@
 From: aldot at uclibc.org <aldot@uclibc.org>
-Date: Sun, 26 Aug 2007 13:47:19 -0700 (PDT)
-Subject: [Buildroot] svn commit: trunk/buildroot/toolchain/gcc
-Message-ID: <20070826204719.53187A6ABE@busybox.net>
+Date: Sun, 26 Aug 2007 13:55:02 -0700 (PDT)
+Subject: [Buildroot] svn commit: trunk/buildroot/toolchain/uClibc
+Message-ID: <20070826205502.AEC4CA6AC2@busybox.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -9,82 +9,67 @@ Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
 Author: aldot
-Date: 2007-08-26 13:47:18 -0700 (Sun, 26 Aug 2007)
-New Revision: 19702
+Date: 2007-08-26 13:55:02 -0700 (Sun, 26 Aug 2007)
+New Revision: 19703
 
 Log:
-- If we are to build some libs then require them to exist.
-- Strip host files with host strip (untested, will likely need a HOSTSTRIP)
+- improve handling of sh (fgretief) for bug #1446
 
 
 Modified:
-   trunk/buildroot/toolchain/gcc/gcc-uclibc-3.x.mk
-   trunk/buildroot/toolchain/gcc/gcc-uclibc-4.x.mk
+   trunk/buildroot/toolchain/uClibc/uclibc.mk
 
 
 Changeset:
-Modified: trunk/buildroot/toolchain/gcc/gcc-uclibc-3.x.mk
+Modified: trunk/buildroot/toolchain/uClibc/uclibc.mk
 ===================================================================
---- trunk/buildroot/toolchain/gcc/gcc-uclibc-3.x.mk	2007-08-26 20:40:31 UTC (rev 19701)
-+++ trunk/buildroot/toolchain/gcc/gcc-uclibc-3.x.mk	2007-08-26 20:47:18 UTC (rev 19702)
-@@ -316,20 +316,20 @@
- ifeq ($(BR2_GCC_SHARED_LIBGCC),y)
- 	# These are in /lib, so...
- 	rm -rf $(TARGET_DIR)/usr/lib/libgcc_s*.so*
--	-cp -dpf $(STAGING_DIR)/usr/$(REAL_GNU_TARGET_NAME)/lib/libgcc_s* $(TARGET_DIR)/lib/
--	$(STRIP) --strip-unneeded $(TARGET_DIR)/lib/libgcc_s*
-+	cp -dpf $(STAGING_DIR)/usr/$(REAL_GNU_TARGET_NAME)/lib/libgcc_s* $(TARGET_DIR)/lib/
-+	-strip --strip-unneeded $(TARGET_DIR)/lib/libgcc_s*
- endif
- ifeq ($(BR2_INSTALL_LIBSTDCPP),y)
--	-cp -dpf $(STAGING_DIR)/lib/libstdc++.so* $(TARGET_DIR)/usr/lib/
--	$(STRIP) --strip-unneeded $(TARGET_DIR)/usr/lib/libstdc++.so*
-+	cp -dpf $(STAGING_DIR)/lib/libstdc++.so* $(TARGET_DIR)/usr/lib/
-+	-strip --strip-unneeded $(TARGET_DIR)/usr/lib/libstdc++.so*
- endif
- ifeq ($(BR2_INSTALL_LIBGCJ),y)
--	-cp -dpf $(STAGING_DIR)/lib/libgcj.so* $(TARGET_DIR)/usr/lib/
--	-cp -dpf $(STAGING_DIR)/lib/lib-org-w3c-dom.so* $(TARGET_DIR)/usr/lib/
--	-cp -dpf $(STAGING_DIR)/lib/lib-org-xml-sax.so* $(TARGET_DIR)/usr/lib/
-+	cp -dpf $(STAGING_DIR)/lib/libgcj.so* $(TARGET_DIR)/usr/lib/
-+	cp -dpf $(STAGING_DIR)/lib/lib-org-w3c-dom.so* $(TARGET_DIR)/usr/lib/
-+	cp -dpf $(STAGING_DIR)/lib/lib-org-xml-sax.so* $(TARGET_DIR)/usr/lib/
- 	mkdir -p $(TARGET_DIR)/usr/lib/security
--	-cp -dpf $(STAGING_DIR)/usr/lib/security/libgcj.security $(TARGET_DIR)/usr/lib/security/
--	-cp -dpf $(STAGING_DIR)/usr/lib/security/classpath.security $(TARGET_DIR)/usr/lib/security/
-+	cp -dpf $(STAGING_DIR)/usr/lib/security/libgcj.security $(TARGET_DIR)/usr/lib/security/
-+	cp -dpf $(STAGING_DIR)/usr/lib/security/classpath.security $(TARGET_DIR)/usr/lib/security/
- endif
- 	touch $@
+--- trunk/buildroot/toolchain/uClibc/uclibc.mk	2007-08-26 20:47:18 UTC (rev 19702)
++++ trunk/buildroot/toolchain/uClibc/uclibc.mk	2007-08-26 20:55:02 UTC (rev 19703)
+@@ -73,7 +73,7 @@
+ 		-e 's/arm/LITTLE/' \
+ 		-e 's/mipsel/LITTLE/' \
+ 		-e 's/mips/BIG/' \
+-		-e 's/sh[234]eb/BIG/' \
++		-e 's/sh[234].*eb/BIG/' \
+ 		-e 's/sh[234]/LITTLE/' \
+ ")
  
-
-Modified: trunk/buildroot/toolchain/gcc/gcc-uclibc-4.x.mk
-===================================================================
---- trunk/buildroot/toolchain/gcc/gcc-uclibc-4.x.mk	2007-08-26 20:40:31 UTC (rev 19701)
-+++ trunk/buildroot/toolchain/gcc/gcc-uclibc-4.x.mk	2007-08-26 20:47:18 UTC (rev 19702)
-@@ -340,18 +340,18 @@
- ifeq ($(BR2_GCC_SHARED_LIBGCC),y)
- 	# These are in /lib, so...
- 	rm -rf $(TARGET_DIR)/usr/lib/libgcc_s*.so*
--	-cp -dpf $(STAGING_DIR)/usr/$(REAL_GNU_TARGET_NAME)/lib/libgcc_s* $(TARGET_DIR)/lib/
-+	cp -dpf $(STAGING_DIR)/usr/$(REAL_GNU_TARGET_NAME)/lib/libgcc_s* $(TARGET_DIR)/lib/
+@@ -146,6 +146,38 @@
+ 	/bin/echo "# CONFIG_ARM_EABI is not set" >> $(UCLIBC_DIR)/.oldconfig
  endif
- ifeq ($(BR2_INSTALL_LIBSTDCPP),y)
--	-cp -dpf $(STAGING_DIR)/usr/$(REAL_GNU_TARGET_NAME)/lib/libstdc++.so* $(TARGET_DIR)/usr/lib/
-+	cp -dpf $(STAGING_DIR)/usr/$(REAL_GNU_TARGET_NAME)/lib/libstdc++.so* $(TARGET_DIR)/usr/lib/
  endif
- ifeq ($(BR2_INSTALL_LIBGCJ),y)
--	-cp -dpf $(STAGING_DIR)/lib/libgcj.so* $(TARGET_DIR)/lib/
--	-cp -dpf $(STAGING_DIR)/lib/lib-org-w3c-dom.so* $(TARGET_DIR)/lib/
--	-cp -dpf $(STAGING_DIR)/lib/lib-org-xml-sax.so* $(TARGET_DIR)/lib/
-+	cp -dpf $(STAGING_DIR)/lib/libgcj.so* $(TARGET_DIR)/lib/
-+	cp -dpf $(STAGING_DIR)/lib/lib-org-w3c-dom.so* $(TARGET_DIR)/lib/
-+	cp -dpf $(STAGING_DIR)/lib/lib-org-xml-sax.so* $(TARGET_DIR)/lib/
- 	mkdir -p $(TARGET_DIR)/usr/lib/security
--	-cp -dpf $(STAGING_DIR)/usr/lib/security/libgcj.security $(TARGET_DIR)/usr/lib/security/
--	-cp -dpf $(STAGING_DIR)/usr/lib/security/classpath.security $(TARGET_DIR)/usr/lib/security/
-+	cp -dpf $(STAGING_DIR)/usr/lib/security/libgcj.security $(TARGET_DIR)/usr/lib/security/
-+	cp -dpf $(STAGING_DIR)/usr/lib/security/classpath.security $(TARGET_DIR)/usr/lib/security/
- endif
- 	touch $@
- 
++ifeq ($(UCLIBC_TARGET_ARCH),sh)
++	/bin/echo "# CONFIG_SH2A is not set" >> $(UCLIBC_DIR)/.oldconfig
++	/bin/echo "# CONFIG_SH2 is not set" >> $(UCLIBC_DIR)/.oldconfig
++	/bin/echo "# CONFIG_SH3 is not set" >> $(UCLIBC_DIR)/.oldconfig
++	/bin/echo "# CONFIG_SH4 is not set" >> $(UCLIBC_DIR)/.oldconfig
++ifeq ($(BR2_sh2a_nofpueb),y)
++	$(SED) 's,# CONFIG_SH2A is not set,CONFIG_SH2A=y,g' $(UCLIBC_DIR)/.oldconfig
++	/bin/echo "# UCLIBC_FORMAT_FDPIC_ELF is not set" >> $(UCLIBC_DIR)/.oldconfig
++	/bin/echo "# UCLIBC_FORMAT_FLAT is not set" >> $(UCLIBC_DIR)/.oldconfig
++	/bin/echo "# UCLIBC_FORMAT_FLAT_SEP_DATA is not set" >> $(UCLIBC_DIR)/.oldconfig
++	/bin/echo "# UCLIBC_FORMAT_SHARED_FLAT is not set" >> $(UCLIBC_DIR)/.oldconfig
++endif
++ifeq ($(BR2_sh2eb),y)
++	$(SED) 's,# CONFIG_SH2 is not set,CONFIG_SH2=y,g' $(UCLIBC_DIR)/.oldconfig
++	/bin/echo "# UCLIBC_FORMAT_FDPIC_ELF is not set" >> $(UCLIBC_DIR)/.oldconfig
++	/bin/echo "# UCLIBC_FORMAT_FLAT is not set" >> $(UCLIBC_DIR)/.oldconfig
++	/bin/echo "# UCLIBC_FORMAT_FLAT_SEP_DATA is not set" >> $(UCLIBC_DIR)/.oldconfig
++	/bin/echo "# UCLIBC_FORMAT_SHARED_FLAT is not set" >> $(UCLIBC_DIR)/.oldconfig
++endif
++ifeq ($(BR2_sh3eb),y)
++	$(SED) 's,# CONFIG_SH3 is not set,CONFIG_SH3=y,g' $(UCLIBC_DIR)/.oldconfig
++endif
++ifeq ($(BR2_sh3),y)
++	$(SED) 's,# CONFIG_SH3 is not set,CONFIG_SH3=y,g' $(UCLIBC_DIR)/.oldconfig
++endif
++ifeq ($(BR2_sh4eb),y)
++	$(SED) 's,# CONFIG_SH4 is not set,CONFIG_SH4=y,g' $(UCLIBC_DIR)/.oldconfig
++endif
++ifeq ($(BR2_sh4),y)
++	$(SED) 's,# CONFIG_SH4 is not set,CONFIG_SH4=y,g' $(UCLIBC_DIR)/.oldconfig
++endif
++endif
+ ifneq ($(UCLIBC_TARGET_ENDIAN),)
+ 	# The above doesn't work for me, so redo
+ 	$(SED) 's/.*\(ARCH_$(UCLIBC_NOT_TARGET_ENDIAN)_ENDIAN\).*/# \1 is not set/g' \
