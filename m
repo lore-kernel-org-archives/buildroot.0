@@ -1,71 +1,49 @@
 From: =?ISO-8859-1?Q?Thiago_A._Corr=EAa?= <thiago.correa@gmail.com>
-Date: Mon, 27 Aug 2007 15:18:42 +0100
-Subject: [Buildroot] Anyone have *working* ARM(9) toolchain/cross compi
-	ler with buildroot?
-In-Reply-To: <DcJYsnhV0KHd.0vPY6rqB@mailout.dof.se>
-References: <DcJYsnhV0KHd.0vPY6rqB@mailout.dof.se>
-Message-ID: <d6cda7730708270718t6e31bcf1t7dd974978fb929ce@mail.gmail.com>
+Date: Mon, 27 Aug 2007 16:50:48 +0100
+Subject: [Buildroot] [Fwd: Re: Struggling with undefined reference to
+	`__fgetc_unlocked']
+In-Reply-To: <1188222485.7840.44.camel@localhost.localdomain>
+References: <46CDB91F.80307@st.com>
+	<d6cda7730708230953y52b03167t55d124cb50b67603@mail.gmail.com>
+	<46CDBC95.7040803@st.com>
+	<d6cda7730708231025t391a2263xed883aa16e1a8e84@mail.gmail.com>
+	<20070823201759.GO11697@aon.at>
+	<1188211076.7840.5.camel@localhost.localdomain>
+	<d6cda7730708270633g41662ec3h345cd0fb256756c1@mail.gmail.com>
+	<1188222485.7840.44.camel@localhost.localdomain>
+Message-ID: <d6cda7730708270850v17f51748lf0a6ade2e0a10b53@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-This seams to be different, as one can't opt not to have a toolchain :)
+> I have a patch for the missing qatomic_avr32.h file, I think I posted it
+> to this list.
+>
+> Anyway, I have attached it to this email as well.
 
+I can't belive I neglected that, I guess sleep deprivation does this :P
+I haven't seen it on the list (I have joined about a week ago anyway),
+but I did see it in the Atmel snapshot. I suppose it would be best to
+append it to the patch file that adds avr32 support to qtopia.
 
+Wonder if patch can patch a patch file :P
 
-On 8/27/07, Ulf Samuelsson <ulf@atmel.com> wrote:
+I will resubmit the qtopia patch I sent earlier.
+
 >
+> >     Still on the Qtopia subject, one has to do LIBS -= -ldl in a
+> > qtopia project to be able to link. Linker complains about undefined
+> > symbols. This I have been trying to fix since friday with no success,
+> > so I took the easy path in my project for now, not linking against
+> > libdl.so
 >
-> Hello all,
+> Weird, I did not have to supply that on my workstation and test server.
+> (From a completely clean Ubuntu installation (without any AVR32 stuff)).
 >
-> In my desperation, this is my first message to the buildroot community - I
-> don't have too much experience with cross compiling, but enough to get
-> around. I'm having a terrible time getting buildroot to finish *anything* I
-> give it. It always fails on one thing or another, and I'm beginning to get
-> very frustrated after days of trying.
+> --
+> With kind regards,
+> Hans-Christian Egtvedt, Applications Engineer
 >
-> At first, I used a Debian build, which failed miserably at every turn,
-> despite installing package after package. So, I turned to a Fedora Core 7
-> install, and things looked up. In fact, buildroot completed if:
->
-> I selected my correct ARM --> arm920t, soft float, and ONLY C library
-> support, no C++/GCJ, and gcc 3.4.6. This worked well enough, I was able to
-> compile JamVM, and even Jikes to compile the classpath. But of course, as
-> would be expected, while JamVM runs well enough to give me a proper "usage
-> information" screen, it won't run anything.
->
-> This leads me to need gcj, because there exists no competent JVM for ARM
-> that will compile properly, apparently. but whenever I try to run buildroot
-> with c++/gcj enabled, it just won't work. Can anyone tell me if/how they got
-> an ARM implementation to run? I've tried all the gcc versions possible (each
-> one comes up with different errors), and I've tried snapshot vs. 0.9.29 of
-> uclibc, etc., all to no avail. Any help is appreciated. Thanks,
->
-> -Adrian
->
-> => There is plenty of things
-> that doesn't work for
-> ARM.
-> I proposed that packages
-> which does not build for
-> a certain architecture
-> can conditionally be
-> disabled so people do
-> not end up in continuous
-> failures.
-> There are opinions against
-> this.
-> They like people to repeat
-> the failures and spend
-> time on fixing bugs.
->
-> Best Regards
-> Ulf Samuelsson
->
-> _______________________________________________
-> buildroot mailing list
-> buildroot at uclibc.org
-> http://busybox.net/mailman/listinfo/buildroot
 >
