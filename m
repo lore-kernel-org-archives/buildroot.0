@@ -1,39 +1,40 @@
-From: =?ISO-8859-1?Q?Thiago_A._Corr=EAa?= <thiago.correa@gmail.com>
-Date: Mon, 27 Aug 2007 00:38:31 +0100
-Subject: [Buildroot] [PATCH] Fix qtopia4 compile
-In-Reply-To: <d6cda7730708261637u5d62af28ofa3050c8526ca827@mail.gmail.com>
-References: <d6cda7730708261637u5d62af28ofa3050c8526ca827@mail.gmail.com>
-Message-ID: <d6cda7730708261638n9d8411dn17866dca9fd28271@mail.gmail.com>
+From: Adrian Lauf <me@adrianlauf.com>
+Date: Mon, 27 Aug 2007 01:45:44 -0500
+Subject: [Buildroot] Anyone have *working* ARM(9) toolchain/cross compiler
+	with buildroot?
+Message-ID: <f1fcaefd0708262345y5ec49bd2m100db92c1c80ab72@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Ops, forgot attachment, sorry.
+Hello all,
 
+In my desperation, this is my first message to the buildroot community - I
+don't have too much experience with cross compiling, but enough to get
+around. I'm having a terrible time getting buildroot to finish *anything* I
+give it. It always fails on one thing or another, and I'm beginning to get
+very frustrated after days of trying.
 
-On 8/27/07, Thiago A. Corr?a <thiago.correa@gmail.com> wrote:
-> Hi,
->
->     This patch fixes qtopia4 compile issues. It failed to build host
-> tools due to wrong include paths from CFLAGS/CXXFLAGS. It now builds
-> correctly.
->     Also, on AVR32, for some reason make install doesn't copy over
-> qatomic_avr32.h which makes projects using qtopia to fail. Added a
-> rule at the makefile level. There might be a solution for this by
-> patching qtopia, althought as of yet unknown.
->     Btw, this bumps up Qtopia version to 4.3.1 (currently latest) The
-> 4.2.2 according to changelogs contains data corruption bug in
-> QDatastreams and some memory leaks.
->
-> Cheers,
->     Thiago A. Correa
->
+At first, I used a Debian build, which failed miserably at every turn,
+despite installing package after package. So, I turned to a Fedora Core 7
+install, and things looked up. In fact, buildroot completed if:
+
+I selected my correct ARM --> arm920t, soft float, and ONLY C library
+support, no C++/GCJ, and gcc 3.4.6. This worked well enough, I was able to
+compile JamVM, and even Jikes to compile the classpath. But of course, as
+would be expected, while JamVM runs well enough to give me a proper "usage
+information" screen, it won't run anything.
+
+This leads me to need gcj, because there exists no competent JVM for ARM
+that will compile properly, apparently. but whenever I try to run buildroot
+with c++/gcj enabled, it just won't work. Can anyone tell me if/how they got
+an ARM implementation to run? I've tried all the gcc versions possible (each
+one comes up with different errors), and I've tried snapshot vs. 0.9.29 of
+uclibc, etc., all to no avail. Any help is appreciated. Thanks,
+
+-Adrian
 -------------- next part --------------
-A non-text attachment was scrubbed...
-Name: qtopia4.patch
-Type: application/octet-stream
-Size: 3048 bytes
-Desc: not available
-Url : http://busybox.net/lists/buildroot/attachments/20070827/e1f9050e/attachment.obj 
+An HTML attachment was scrubbed...
+URL: http://busybox.net/lists/buildroot/attachments/20070827/e6439cc4/attachment.htm 
