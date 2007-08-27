@@ -1,35 +1,79 @@
-From: Hans-Christian Egtvedt <hcegtvedt@atmel.com>
-Date: Mon, 27 Aug 2007 12:53:58 +0200
-Subject: [Buildroot] How to change kernel version
-In-Reply-To: <d6cda7730708181940u51f1e3d6ya6e701104d6dc5c7@mail.gmail.com>
-References: <d6cda7730708181940u51f1e3d6ya6e701104d6dc5c7@mail.gmail.com>
-Message-ID: <1188212038.7840.14.camel@localhost.localdomain>
+From: bugs at busybox.net <bugs@busybox.net>
+Date: Mon, 27 Aug 2007 05:02:10 -0700
+Subject: [Buildroot] [buildroot 0001090]: stdlibc++ fails putting a double
+	in a stream.
+Message-ID: <3c3596969dd3dba61c138604419aa344@bugs.busybox.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Sun, 2007-08-19 at 03:40 +0100, Thiago A. Corr?a wrote:
-> Hi,
-> 
->    I searched over the archives but I couldn't find anything about how
-> one could change the kernel version. The only available option for
-> AVR32, 2.6.22, is unable to boot on an STK1000 due to a bug in the MMC
-> drivers, so I would like to change it to 2.6.18 which actually works.
 
-You could also attack the problem with the 2.6.22 kernel. AFAIK the bug
-is not in the MMC driver, but the MMC core. A small change seems to
-correct the problem for AVR32.
+A NOTE has been added to this issue. 
+====================================================================== 
+http://busybox.net/bugs/view.php?id=1090 
+====================================================================== 
+Reported By:                GJanak
+Assigned To:                buildroot
+====================================================================== 
+Project:                    buildroot
+Issue ID:                   1090
+Category:                   Architecture Specific
+Reproducibility:            always
+Severity:                   major
+Priority:                   normal
+Status:                     assigned
+====================================================================== 
+Date Submitted:             11-14-2006 00:01 PST
+Last Modified:              08-27-2007 05:02 PDT
+====================================================================== 
+Summary:                    stdlibc++ fails putting a double in a stream.
+Description: 
+The problem was:
+putting a double in a stream:
+cout << 10.5 ;
 
-See this thread for patch and information:
+Produce an empty string, or some garbage characters.
 
-http://avr32linux.org/archives/kernel/2007-August/000240.html
+I could resolve the error down to some wired Code combination between
+uclibc and libstdc++
+====================================================================== 
 
-Also, if your kernel is just booting too fast for the MMC layer to
-detect the partitions, adding "rootwait=1" to the bootargs in u-boot
-will let the kernel wait for the root partition to pop up.
+---------------------------------------------------------------------- 
+ GJanak - 02-12-07 05:50  
+---------------------------------------------------------------------- 
+I don't think it's an buildroot Problem.
 
--- 
-With kind regards,
-Hans-Christian Egtvedt, Applications Engineer
+Its an uclibc c++ error... 
+
+---------------------------------------------------------------------- 
+ GJanak - 08-27-07 05:02  
+---------------------------------------------------------------------- 
+New info.
+
+The Problem is: very old files are patched into current gcc releases.
+I mean the toolchain/gcc/4.2.1/200-uclibc-locale.patch
+which creates 
+gcc/libstdc++-v3/config/locale/uclibc/c_locale.cc
+
+The file created by the patch is based on the generic Config and than
+patched for uclibc. But the generic is changed with 4.x.x.
+
+Best solution would be to copy the gcc/libstdc++-v3/config/locale/generic
+Dir and than add a patch on this Dir.
+
+The Differences needed would be smaller. And perhaps the Patch would work
+for multiple gcc versions. 
+
+Issue History 
+Date Modified   Username       Field                    Change               
+====================================================================== 
+11-14-06 00:01  GJanak         New Issue                                    
+11-14-06 00:01  GJanak         Status                   new => assigned     
+11-14-06 00:01  GJanak         Assigned To               => uClibc          
+11-14-06 00:05  GJanak         Issue Monitored: GJanak                      
+02-12-07 05:34  vapier         Assigned To              uClibc => buildroot 
+02-12-07 05:50  GJanak         Note Added: 0002152                          
+08-27-07 05:02  GJanak         Note Added: 0002698                          
+======================================================================
