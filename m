@@ -1,8 +1,8 @@
 From: bugs at busybox.net <bugs@busybox.net>
-Date: Mon, 27 Aug 2007 05:02:10 -0700
+Date: Mon, 27 Aug 2007 05:03:11 -0700
 Subject: [Buildroot] [buildroot 0001090]: stdlibc++ fails putting a double
 	in a stream.
-Message-ID: <3c3596969dd3dba61c138604419aa344@bugs.busybox.net>
+Message-ID: <21cbbd9fb426d6d6789a1a3b1ec384e8@bugs.busybox.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -26,7 +26,7 @@ Priority:                   normal
 Status:                     assigned
 ====================================================================== 
 Date Submitted:             11-14-2006 00:01 PST
-Last Modified:              08-27-2007 05:02 PDT
+Last Modified:              08-27-2007 05:03 PDT
 ====================================================================== 
 Summary:                    stdlibc++ fails putting a double in a stream.
 Description: 
@@ -66,6 +66,12 @@ Dir and than add a patch on this Dir.
 The Differences needed would be smaller. And perhaps the Patch would work
 for multiple gcc versions. 
 
+---------------------------------------------------------------------- 
+ GJanak - 08-27-07 05:03  
+---------------------------------------------------------------------- 
+The Patch gcc_snprintf_double_cssize.patch is a workaround, hacking the
+change in gcc. But it isnt a good solution. 
+
 Issue History 
 Date Modified   Username       Field                    Change               
 ====================================================================== 
@@ -76,4 +82,7 @@ Date Modified   Username       Field                    Change
 02-12-07 05:34  vapier         Assigned To              uClibc => buildroot 
 02-12-07 05:50  GJanak         Note Added: 0002152                          
 08-27-07 05:02  GJanak         Note Added: 0002698                          
+08-27-07 05:02  GJanak         File Added: gcc_snprintf_double_cssize.patch     
+              
+08-27-07 05:03  GJanak         Note Added: 0002699                          
 ======================================================================
