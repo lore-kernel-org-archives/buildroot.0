@@ -1,24 +1,36 @@
-From: Bernhard Fischer <rep.dot.nop@gmail.com>
-Date: Mon, 27 Aug 2007 23:17:51 +0200
-Subject: [Buildroot] buildroot for avr32
-In-Reply-To: <001001c7e8dd$5b177970$6e00a8c0@JONATHAN>
-References: <00d401c7e655$5d036260$6e00a8c0@JONATHAN>
-	<d6cda7730708240659q612e813l134c00d238ca6590@mail.gmail.com>
-	<1188204128.7890.5.camel@localhost.localdomain>
-	<001001c7e8dd$5b177970$6e00a8c0@JONATHAN>
-Message-ID: <20070827211751.GY11697@aon.at>
+From: aldot at uclibc.org <aldot@uclibc.org>
+Date: Mon, 27 Aug 2007 14:40:44 -0700 (PDT)
+Subject: [Buildroot] svn commit: trunk/buildroot
+Message-ID: <20070827214044.6E3F9A65BE@busybox.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Mon, Aug 27, 2007 at 03:06:21PM -0400, Jonathan Dumaresq wrote:
->Hi all,
->
->I would like to know how to customize the kernel when i build the buildroot
->for avr32 ?
->
-> make ARCH=avr32 CROSS_COMPILE=avr32-linux- menuconfig
+Author: aldot
+Date: 2007-08-27 14:40:42 -0700 (Mon, 27 Aug 2007)
+New Revision: 19707
 
-Did you see and read docs/README ?
+Log:
+- allow me to point people at 'make help'
+
+
+Modified:
+   trunk/buildroot/Makefile
+
+
+Changeset:
+Modified: trunk/buildroot/Makefile
+===================================================================
+--- trunk/buildroot/Makefile	2007-08-27 17:02:19 UTC (rev 19706)
++++ trunk/buildroot/Makefile	2007-08-27 21:40:42 UTC (rev 19707)
+@@ -414,6 +414,8 @@
+ 	@echo '  source                 - download all sources needed for offline-build'
+ 	@echo '  source-check           - check all packages for valid download URLs'
+ 	@echo
++	@echo 'See docs/REAME and docs/buildroot.html for further details'
++	@echo
+ 
+ .PHONY: dummy subdirs release distclean clean config oldconfig \
+ 	menuconfig tags check test depend defconfig help
