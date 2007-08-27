@@ -1,94 +1,50 @@
-From: Hans-Christian Egtvedt <hcegtvedt@atmel.com>
-Date: Mon, 27 Aug 2007 14:38:51 +0200
-Subject: [Buildroot] svn commit:
-	trunk/buildroot/target/device/Atmel:	atngw100/target_skeleton
-	atngw100/target etc...
-In-Reply-To: <20070821013441.98D34A610B@busybox.net>
-References: <20070821013441.98D34A610B@busybox.net>
-Message-ID: <1188218331.7840.26.camel@localhost.localdomain>
+From: Ivan Kuten <ivan.kuten@promwad.com>
+Date: Mon, 27 Aug 2007 16:24:27 +0300
+Subject: [Buildroot] building tiny-x or x11R7 with latest snapshot
+In-Reply-To: <01cc01c7e757$3e1bf8a0$7201820a@atmel.com>
+References: <022b01c7e35f$9df9f1b0$2600a8c0@engineering5>
+	<0ad801c7e382$8bb6dfe0$dcc4af0a@atmel.com>
+	<12306984.post@talk.nabble.com>
+	<39814.127.0.0.1.1188045975.squirrel@localhost>
+	<01cc01c7e757$3e1bf8a0$7201820a@atmel.com>
+Message-ID: <20070827162427.2c3bb806@newbox>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Mon, 2007-08-20 at 18:34 -0700, ulf at uclibc.org wrote:
-> Author: ulf
-> Date: 2007-08-20 18:34:40 -0700 (Mon, 20 Aug 2007)
-> New Revision: 19596
+On Sat, 25 Aug 2007 21:55:10 +0200
+Ulf Samuelsson wrote:
+
+> >>
+> >> Hi Ulf,
+> >>
+> >>   If we cant build either Tinyx or Xorg or X11 then how else can we build
+> >> cairo,pango,gtk and other stuff. i am trying to build a decent toolchain
+> >> with all library for arm926ejs but i see that most of these are not
+> >> supported for am926ejs
+> >>
+> >>   Is there any possibilities that i can build just cairo pango gtk2 without
+> >> the need for x softwares. Once i build all this later can we integrate these
+> >> with x softwares.
+> >>
 > 
-> Log:
-> additional skeleton for AVR32
+> > Hello all,
+> > 
+> > I managed to build cairo, pango and gtk2 but with dependency on DirectFB - I need
+> > to modify flags to configure and dependencies. TinyX is buildable but seems only
+> > gtk-1.2 run on top of it. Xorg-7.2 and X11-R6 are not buildable and require a lot of hands work.
+> >
 > 
-> Added:
->    trunk/buildroot/target/device/Atmel/atngw100/target_skeleton/bin/
+> Pls send your modifications so they can be integrated, then.
+> 
+> Best Regards
+> Ulf Samuelsson
 
-What is up with all the directories? Is not defining them
-in .../<board>/device_table.txt enough? I find it far better defining
-them there since the access permissions can be defined as well.
+Hi, unfortunately it was an ugly hack not suitable to be released as patch and I 
+ deleted/rebuilded buildroot many times since then. I try in upcoming week or next week to arrive with something
+ suitable to be applied.
 
-Same for all the directories below.
-
->    trunk/buildroot/target/device/Atmel/atngw100/target_skeleton/boot/
->    trunk/buildroot/target/device/Atmel/atngw100/target_skeleton/config/
->    trunk/buildroot/target/device/Atmel/atngw100/target_skeleton/dev/
->    trunk/buildroot/target/device/Atmel/atngw100/target_skeleton/home/
->    trunk/buildroot/target/device/Atmel/atngw100/target_skeleton/lib/
->    trunk/buildroot/target/device/Atmel/atngw100/target_skeleton/mnt/
->    trunk/buildroot/target/device/Atmel/atngw100/target_skeleton/opt/
->    trunk/buildroot/target/device/Atmel/atngw100/target_skeleton/root/
->    trunk/buildroot/target/device/Atmel/atngw100/target_skeleton/root/.bash_history
->    trunk/buildroot/target/device/Atmel/atngw100/target_skeleton/root/.bash_logout
->    trunk/buildroot/target/device/Atmel/atngw100/target_skeleton/root/.bash_profile
->    trunk/buildroot/target/device/Atmel/atngw100/target_skeleton/root/.bashrc
-
-What are the needs for these bash-files? I find the default bash
-behavior to be ok.
-
->    trunk/buildroot/target/device/Atmel/atngw100/target_skeleton/sbin/
->    trunk/buildroot/target/device/Atmel/atngw100/target_skeleton/tmp/
->    trunk/buildroot/target/device/Atmel/atngw100/target_skeleton/var/
->    trunk/buildroot/target/device/Atmel/atngw100/target_skeleton/var/cache/
->    trunk/buildroot/target/device/Atmel/atngw100/target_skeleton/var/lib/
->    trunk/buildroot/target/device/Atmel/atngw100/target_skeleton/var/lib/pcmcia/
->    trunk/buildroot/target/device/Atmel/atngw100/target_skeleton/var/lock/
->    trunk/buildroot/target/device/Atmel/atngw100/target_skeleton/var/log/
->    trunk/buildroot/target/device/Atmel/atngw100/target_skeleton/var/pcmcia/
->    trunk/buildroot/target/device/Atmel/atngw100/target_skeleton/var/run/
->    trunk/buildroot/target/device/Atmel/atngw100/target_skeleton/var/spool/
->    trunk/buildroot/target/device/Atmel/atngw100/target_skeleton/var/tmp/
->    trunk/buildroot/target/device/Atmel/atstk1002/target_skeleton/bin/
->    trunk/buildroot/target/device/Atmel/atstk1002/target_skeleton/boot/
->    trunk/buildroot/target/device/Atmel/atstk1002/target_skeleton/config/
->    trunk/buildroot/target/device/Atmel/atstk1002/target_skeleton/dev/
->    trunk/buildroot/target/device/Atmel/atstk1002/target_skeleton/home/
->    trunk/buildroot/target/device/Atmel/atstk1002/target_skeleton/lib/
->    trunk/buildroot/target/device/Atmel/atstk1002/target_skeleton/mnt/
->    trunk/buildroot/target/device/Atmel/atstk1002/target_skeleton/opt/
->    trunk/buildroot/target/device/Atmel/atstk1002/target_skeleton/proc/
->    trunk/buildroot/target/device/Atmel/atstk1002/target_skeleton/root/
->    trunk/buildroot/target/device/Atmel/atstk1002/target_skeleton/root/.bash_history
->    trunk/buildroot/target/device/Atmel/atstk1002/target_skeleton/root/.bash_logout
->    trunk/buildroot/target/device/Atmel/atstk1002/target_skeleton/root/.bash_profile
->    trunk/buildroot/target/device/Atmel/atstk1002/target_skeleton/root/.bashrc
-
-Same as previous .bash-files.
-
->    trunk/buildroot/target/device/Atmel/atstk1002/target_skeleton/sbin/
->    trunk/buildroot/target/device/Atmel/atstk1002/target_skeleton/tmp/
->    trunk/buildroot/target/device/Atmel/atstk1002/target_skeleton/var/
->    trunk/buildroot/target/device/Atmel/atstk1002/target_skeleton/var/cache/
->    trunk/buildroot/target/device/Atmel/atstk1002/target_skeleton/var/lib/
->    trunk/buildroot/target/device/Atmel/atstk1002/target_skeleton/var/lib/pcmcia/
->    trunk/buildroot/target/device/Atmel/atstk1002/target_skeleton/var/lock/
->    trunk/buildroot/target/device/Atmel/atstk1002/target_skeleton/var/log/
->    trunk/buildroot/target/device/Atmel/atstk1002/target_skeleton/var/pcmcia/
->    trunk/buildroot/target/device/Atmel/atstk1002/target_skeleton/var/run/
->    trunk/buildroot/target/device/Atmel/atstk1002/target_skeleton/var/spool/
->    trunk/buildroot/target/device/Atmel/atstk1002/target_skeleton/var/tmp/
-
-<cut diff>
-
--- 
-With kind regards,
-Hans-Christian Egtvedt, Applications Engineer
+Best regards,
+Ivan
