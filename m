@@ -1,40 +1,40 @@
-From: Adrian Lauf <me@adrianlauf.com>
-Date: Mon, 27 Aug 2007 01:45:44 -0500
-Subject: [Buildroot] Anyone have *working* ARM(9) toolchain/cross compiler
-	with buildroot?
-Message-ID: <f1fcaefd0708262345y5ec49bd2m100db92c1c80ab72@mail.gmail.com>
+From: Hans-Christian Egtvedt <hcegtvedt@atmel.com>
+Date: Mon, 27 Aug 2007 10:42:08 +0200
+Subject: [Buildroot] buildroot for avr32
+In-Reply-To: <d6cda7730708240659q612e813l134c00d238ca6590@mail.gmail.com>
+References: <00d401c7e655$5d036260$6e00a8c0@JONATHAN>
+	<d6cda7730708240659q612e813l134c00d238ca6590@mail.gmail.com>
+Message-ID: <1188204128.7890.5.camel@localhost.localdomain>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello all,
+On Fri, 2007-08-24 at 14:59 +0100, Thiago A. Corr?a wrote:
+>    I'm using the svn buildroot with avr32, and I'm running into my
+> fair share of issues, so I guess the Atmel snapshot might be a safer
+> bet. But I really don't like that they have removed the .svn folders
+> from the package, making it a lot harder to get updates from the
+> buildroot guys. Well, svn is catching up quite rapidly, and I have
+> been able to build what I needed so far. I have never built GTK+
+> thought.
 
-In my desperation, this is my first message to the buildroot community - I
-don't have too much experience with cross compiling, but enough to get
-around. I'm having a terrible time getting buildroot to finish *anything* I
-give it. It always fails on one thing or another, and I'm beginning to get
-very frustrated after days of trying.
+I plan to put out a GIT-repository somewhere soon. There will be an
+upstream branch with the snapshots from Buildroot and a master branch
+which will hold whatever extra changes that are done for AVR32. Very
+similar to how the Linux kernel for AVR32 is available.
 
-At first, I used a Debian build, which failed miserably at every turn,
-despite installing package after package. So, I turned to a Fedora Core 7
-install, and things looked up. In fact, buildroot completed if:
+Making diffs should be very simple if you are custom with GIT.
 
-I selected my correct ARM --> arm920t, soft float, and ONLY C library
-support, no C++/GCJ, and gcc 3.4.6. This worked well enough, I was able to
-compile JamVM, and even Jikes to compile the classpath. But of course, as
-would be expected, while JamVM runs well enough to give me a proper "usage
-information" screen, it won't run anything.
+>    I have recently managed to merge the Atmel snapshot with svn to
+> some extent. But I haven't gone thru the resulting patch to sort out
+> what should be submitted and what should be discarded.
 
-This leads me to need gcj, because there exists no competent JVM for ARM
-that will compile properly, apparently. but whenever I try to run buildroot
-with c++/gcj enabled, it just won't work. Can anyone tell me if/how they got
-an ARM implementation to run? I've tried all the gcc versions possible (each
-one comes up with different errors), and I've tried snapshot vs. 0.9.29 of
-uclibc, etc., all to no avail. Any help is appreciated. Thanks,
+The current Atmel snapshot is held at the current stage to get a stable
+base for the initial release. We try to put back the general changes
+upstream, and fiddle as little as possible away from upstream.
 
--Adrian
--------------- next part --------------
-An HTML attachment was scrubbed...
-URL: http://busybox.net/lists/buildroot/attachments/20070827/e6439cc4/attachment.htm 
+-- 
+With kind regards,
+Hans-Christian Egtvedt, Applications Engineer
