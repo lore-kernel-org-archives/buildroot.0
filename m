@@ -1,8 +1,14 @@
-From: bugs at busybox.net <bugs@busybox.net>
-Date: Mon, 27 Aug 2007 02:04:22 -0700
-Subject: [Buildroot] [buildroot 0001474]: toolchain build, arch x86_64 ,
-	variant core2 does not build
-Message-ID: <8b02a216b22bbab2480799b99a7c154c@bugs.uclibc.org>
+From: Hans-Christian Egtvedt <hcegtvedt@atmel.com>
+Date: Mon, 27 Aug 2007 12:37:56 +0200
+Subject: [Buildroot] [Fwd: Re: Struggling with undefined
+	reference	to	`__fgetc_unlocked']
+In-Reply-To: <20070823201759.GO11697@aon.at>
+References: <46CDB91F.80307@st.com>
+	<d6cda7730708230953y52b03167t55d124cb50b67603@mail.gmail.com>
+	<46CDBC95.7040803@st.com>
+	<d6cda7730708231025t391a2263xed883aa16e1a8e84@mail.gmail.com>
+	<20070823201759.GO11697@aon.at>
+Message-ID: <1188211076.7840.5.camel@localhost.localdomain>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -10,44 +16,25 @@ Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
 
-The following issue has been SUBMITTED. 
-====================================================================== 
-http://busybox.net/bugs/view.php?id=1474 
-====================================================================== 
-Reported By:                myopiate
-Assigned To:                buildroot
-====================================================================== 
-Project:                    buildroot
-Issue ID:                   1474
-Category:                   Architecture Specific
-Reproducibility:            always
-Severity:                   block
-Priority:                   normal
-Status:                     assigned
-====================================================================== 
-Date Submitted:             08-27-2007 02:04 PDT
-Last Modified:              08-27-2007 02:04 PDT
-====================================================================== 
-Summary:                    toolchain build, arch x86_64 , variant core2 does
-not build
-Description: 
-Problem:
-Configuration for the x86_64 architecture with core2 variant stops on
-build.
+On Thu, 2007-08-23 at 22:18 +0200, Bernhard Fischer wrote:
+> On Thu, Aug 23, 2007 at 06:25:59PM +0100, Thiago A. Corr?a wrote:
+> >Thanks for the help. It was indeed using the uClibc includes with the
+> >CXXFLAGS/CFLAGS being set at the qtopia4.mk. I will send a patch as
+> >soon as I confirm this is working. But at least so far compilation got
+> >past rcc.
+> 
+> There was talks about qtopia before. IIRC there is no need to compile it
+> for the host in the first place.
 
-Cause:
-gcc-4.2.1 does not accept --with-tune=core2.  Toolchain build dies.
+Correct, only a two-stage build for the target is necessary. But Qtopia
+compiles some tools with the host compiler (qmake, moc, rcc and uic). 
 
-Workaround:
-Attached patch works around the problem by using --with-tune=generic.
-====================================================================== 
+Before the late fixes in Qtopia in Buildroot, some bad CFLAGS and
+CXXFLAGS was set when configuring, causing the Qtopia build system to
+use wrong headers (i.e. target headers when compiling the host tools).
 
-Issue History 
-Date Modified   Username       Field                    Change               
-====================================================================== 
-08-27-07 02:04  myopiate       New Issue                                    
-08-27-07 02:04  myopiate       Status                   new => assigned     
-08-27-07 02:04  myopiate       Assigned To               => buildroot       
-08-27-07 02:04  myopiate       File Added: core2-generic.patch                  
- 
-======================================================================
+AFAIK everything should be in order in latest SVN.
+
+-- 
+With kind regards,
+Hans-Christian Egtvedt, Applications Engineer
