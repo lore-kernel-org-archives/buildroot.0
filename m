@@ -1,53 +1,23 @@
-From: Ulf Samuelsson <ulf@atmel.com>
-Date: Mon, 27 Aug 2007 22:13:29 +0200
-Subject: [Buildroot] Anyone have *working* ARM(9) toolchain/cross compi
-	ler with buildroot?
-References: <DcJYsnhV0KHd.0vPY6rqB@mailout.dof.se>
-	<d6cda7730708270718t6e31bcf1t7dd974978fb929ce@mail.gmail.com>
-Message-ID: <013001c7e8e6$c493a140$e603420a@atmel.com>
+From: Bernhard Fischer <rep.dot.nop@gmail.com>
+Date: Mon, 27 Aug 2007 23:01:43 +0200
+Subject: [Buildroot] [PATCH] Fix pppd make clean and small cleanup
+In-Reply-To: <d6cda7730708261631y44e4c353p15a94212bee372da@mail.gmail.com>
+References: <d6cda7730708261631y44e4c353p15a94212bee372da@mail.gmail.com>
+Message-ID: <20070827210143.GV11697@aon.at>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+On Mon, Aug 27, 2007 at 12:31:28AM +0100, Thiago A. Corr?a wrote:
+>Hi,
+>
+>   As subject sayd, this fixes make clean on pppd package (there is no
+>rule uninstall in pppd's makefile) and does some small bits of clean
+>up.
 
->>
->> Hello all,
->>
->> In my desperation, this is my first message to the buildroot community - I
->> don't have too much experience with cross compiling, but enough to get
->> around. I'm having a terrible time getting buildroot to finish *anything* I
->> give it. It always fails on one thing or another, and I'm beginning to get
->> very frustrated after days of trying.
->>
->> At first, I used a Debian build, which failed miserably at every turn,
->> despite installing package after package. So, I turned to a Fedora Core 7
->> install, and things looked up. In fact, buildroot completed if:
->>
->> I selected my correct ARM --> arm920t, soft float, and ONLY C library
->> support, no C++/GCJ, and gcc 3.4.6. This worked well enough, I was able to
->> compile JamVM, and even Jikes to compile the classpath. But of course, as
->> would be expected, while JamVM runs well enough to give me a proper "usage
->> information" screen, it won't run anything.
->>
->> This leads me to need gcj, because there exists no competent JVM for ARM
->> that will compile properly, apparently. but whenever I try to run buildroot
->> with c++/gcj enabled, it just won't work. Can anyone tell me if/how they got
->> an ARM implementation to run? I've tried all the gcc versions possible (each
->> one comes up with different errors), and I've tried snapshot vs. 0.9.29 of
->> uclibc, etc., all to no avail. Any help is appreciated. Thanks,
->>
->> -Adrian
->>
+I don't remember off-hand, are the listed files all that was installed
+by pppd? Please verify/double-check and let me know.
 
-
-I use generic arm, OABI, gcc-4.2.1, binutils-2.17 and uclibc 0.9.29 with NWFPE instead of softfloat
-and this compiles OK, 
-
-
-Soft float which is notoriously bad for ARM.
-I mostly avoid compiling anything but gcc and g++, since compiling java is *VERY* time consuming.
-
-Best Regards
-Ulf Samuelsson
+Thanks for the cleanup anyway!
