@@ -1,49 +1,59 @@
-From: =?ISO-8859-1?Q?Thiago_A._Corr=EAa?= <thiago.correa@gmail.com>
-Date: Mon, 27 Aug 2007 16:50:48 +0100
-Subject: [Buildroot] [Fwd: Re: Struggling with undefined reference to
-	`__fgetc_unlocked']
-In-Reply-To: <1188222485.7840.44.camel@localhost.localdomain>
-References: <46CDB91F.80307@st.com>
-	<d6cda7730708230953y52b03167t55d124cb50b67603@mail.gmail.com>
-	<46CDBC95.7040803@st.com>
-	<d6cda7730708231025t391a2263xed883aa16e1a8e84@mail.gmail.com>
-	<20070823201759.GO11697@aon.at>
-	<1188211076.7840.5.camel@localhost.localdomain>
-	<d6cda7730708270633g41662ec3h345cd0fb256756c1@mail.gmail.com>
-	<1188222485.7840.44.camel@localhost.localdomain>
-Message-ID: <d6cda7730708270850v17f51748lf0a6ade2e0a10b53@mail.gmail.com>
+From: Jonathan Dumaresq <jdumaresq@cimeq.qc.ca>
+Date: Mon, 27 Aug 2007 15:06:21 -0400
+Subject: [Buildroot] buildroot for avr32
+References: <00d401c7e655$5d036260$6e00a8c0@JONATHAN>
+	<d6cda7730708240659q612e813l134c00d238ca6590@mail.gmail.com>
+	<1188204128.7890.5.camel@localhost.localdomain>
+Message-ID: <001001c7e8dd$5b177970$6e00a8c0@JONATHAN>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-> I have a patch for the missing qatomic_avr32.h file, I think I posted it
-> to this list.
->
-> Anyway, I have attached it to this email as well.
+Hi all,
 
-I can't belive I neglected that, I guess sleep deprivation does this :P
-I haven't seen it on the list (I have joined about a week ago anyway),
-but I did see it in the Atmel snapshot. I suppose it would be best to
-append it to the patch file that adds avr32 support to qtopia.
+I would like to know how to customize the kernel when i build the buildroot
+for avr32 ?
 
-Wonder if patch can patch a patch file :P
+ make ARCH=avr32 CROSS_COMPILE=avr32-linux- menuconfig
 
-I will resubmit the qtopia patch I sent earlier.
+under the linux folder don't seam to work.
 
+Jonathan
+----- Original Message ----- 
+From: "Hans-Christian Egtvedt" <hcegtvedt@atmel.com>
+To: "Thiago A. Corr?a" <thiago.correa@gmail.com>
+Cc: "Jonathan Dumaresq" <jdumaresq@cimeq.qc.ca>; <buildroot@uclibc.org>
+Sent: Monday, August 27, 2007 4:42 AM
+Subject: Re: [Buildroot] buildroot for avr32
+
+
+> On Fri, 2007-08-24 at 14:59 +0100, Thiago A. Corr?a wrote:
+>>    I'm using the svn buildroot with avr32, and I'm running into my
+>> fair share of issues, so I guess the Atmel snapshot might be a safer
+>> bet. But I really don't like that they have removed the .svn folders
+>> from the package, making it a lot harder to get updates from the
+>> buildroot guys. Well, svn is catching up quite rapidly, and I have
+>> been able to build what I needed so far. I have never built GTK+
+>> thought.
 >
-> >     Still on the Qtopia subject, one has to do LIBS -= -ldl in a
-> > qtopia project to be able to link. Linker complains about undefined
-> > symbols. This I have been trying to fix since friday with no success,
-> > so I took the easy path in my project for now, not linking against
-> > libdl.so
+> I plan to put out a GIT-repository somewhere soon. There will be an
+> upstream branch with the snapshots from Buildroot and a master branch
+> which will hold whatever extra changes that are done for AVR32. Very
+> similar to how the Linux kernel for AVR32 is available.
 >
-> Weird, I did not have to supply that on my workstation and test server.
-> (From a completely clean Ubuntu installation (without any AVR32 stuff)).
+> Making diffs should be very simple if you are custom with GIT.
 >
-> --
+>>    I have recently managed to merge the Atmel snapshot with svn to
+>> some extent. But I haven't gone thru the resulting patch to sort out
+>> what should be submitted and what should be discarded.
+>
+> The current Atmel snapshot is held at the current stage to get a stable
+> base for the initial release. We try to put back the general changes
+> upstream, and fiddle as little as possible away from upstream.
+>
+> -- 
 > With kind regards,
 > Hans-Christian Egtvedt, Applications Engineer
->
->
+> 
