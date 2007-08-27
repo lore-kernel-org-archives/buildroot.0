@@ -1,59 +1,58 @@
-From: Hans-Christian Egtvedt <hcegtvedt@atmel.com>
-Date: Mon, 27 Aug 2007 15:48:05 +0200
-Subject: [Buildroot] [Fwd: Re: Struggling with undefined reference
-	to	`__fgetc_unlocked']
-In-Reply-To: <d6cda7730708270633g41662ec3h345cd0fb256756c1@mail.gmail.com>
-References: <46CDB91F.80307@st.com>
-	<d6cda7730708230953y52b03167t55d124cb50b67603@mail.gmail.com>
-	<46CDBC95.7040803@st.com>
-	<d6cda7730708231025t391a2263xed883aa16e1a8e84@mail.gmail.com>
-	<20070823201759.GO11697@aon.at>
-	<1188211076.7840.5.camel@localhost.localdomain>
-	<d6cda7730708270633g41662ec3h345cd0fb256756c1@mail.gmail.com>
-Message-ID: <1188222485.7840.44.camel@localhost.localdomain>
+From: Ulf Samuelsson <ulf@atmel.com>
+Date: Mon, 27 Aug 2007 16:09:45 +0200
+Subject: [Buildroot] Anyone have *working* ARM(9) toolchain/cross compi
+ ler	with buildroot?
+Message-ID: <DcJYsnhV0KHd.0vPY6rqB@mailout.dof.se>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Mon, 2007-08-27 at 14:33 +0100, Thiago A. Corr?a wrote:
-> Hi,
-> 
->     Good to see you around, hopefully we will see some patches closing
-> the gap between the svn and atmel buildroot :)
->     Actually current SVN is still unable to build qtopia. To be more
-> precise, current SVN fails building the toolchain now *sigh*. But
-> -r19700 (4 revisions ago) has the exact same problem, and qtopia4.mk
-> haven't been touched in the between. The patch I sent last night to
-> the list fixes the build. Also, on the AVR32, for some reason make
-> install doesn't copy over qatomic_avr32.h. The patch I sent also
-> addresses this, perhaps not in the best way possible, but I can't
-> figure out how to do it in a qtopia patch as there is no differences
-> between the avr32 and the arm as far as qt build system is concerned.
-> They are both in the appropriate folder names and .pri files.
 
-I have a patch for the missing qatomic_avr32.h file, I think I posted it
-to this list.
 
-Anyway, I have attached it to this email as well.
+Hello all,
 
->     Still on the Qtopia subject, one has to do LIBS -= -ldl in a
-> qtopia project to be able to link. Linker complains about undefined
-> symbols. This I have been trying to fix since friday with no success,
-> so I took the easy path in my project for now, not linking against
-> libdl.so
+In my desperation, this is my first message to the buildroot community - I
+don't have too much experience with cross compiling, but enough to get
+around. I'm having a terrible time getting buildroot to finish *anything* I
+give it. It always fails on one thing or another, and I'm beginning to get
+very frustrated after days of trying.
 
-Weird, I did not have to supply that on my workstation and test server.
-(From a completely clean Ubuntu installation (without any AVR32 stuff)).
+At first, I used a Debian build, which failed miserably at every turn,
+despite installing package after package. So, I turned to a Fedora Core 7
+install, and things looked up. In fact, buildroot completed if:
 
--- 
-With kind regards,
-Hans-Christian Egtvedt, Applications Engineer
--------------- next part --------------
-A non-text attachment was scrubbed...
-Name: qtopia-4.2.2-add-avr32-qatomic-header-to-header-list.patch
-Type: text/x-patch
-Size: 13026 bytes
-Desc: not available
-Url : http://busybox.net/lists/buildroot/attachments/20070827/4730c7d0/attachment-0001.bin 
+I selected my correct ARM --> arm920t, soft float, and ONLY C library
+support, no C++/GCJ, and gcc 3.4.6. This worked well enough, I was able to
+compile JamVM, and even Jikes to compile the classpath. But of course, as
+would be expected, while JamVM runs well enough to give me a proper "usage
+information" screen, it won't run anything.
+
+This leads me to need gcj, because there exists no competent JVM for ARM
+that will compile properly, apparently. but whenever I try to run buildroot
+with c++/gcj enabled, it just won't work. Can anyone tell me if/how they got
+an ARM implementation to run? I've tried all the gcc versions possible (each
+one comes up with different errors), and I've tried snapshot vs. 0.9.29 of
+uclibc, etc., all to no avail. Any help is appreciated. Thanks,
+
+-Adrian
+
+=> There is plenty of things
+that doesn't work for
+ARM.
+I proposed that packages
+which does not build for
+a certain architecture
+can conditionally be
+disabled so people do
+not end up in continuous
+failures.
+There are opinions against
+this.
+They like people to repeat
+the failures and spend
+time on fixing bugs.
+
+Best Regards
+Ulf Samuelsson
