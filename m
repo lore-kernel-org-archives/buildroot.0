@@ -1,25 +1,32 @@
-From: Simon Pasch <fpasch@googlemail.com>
-Date: Tue, 28 Aug 2007 10:09:49 +0200
-Subject: [Buildroot] jpeg-package with wrong include-dir
-Message-ID: <f90898420708280109x64309671h96426a22b52b5eaf@mail.gmail.com>
+From: Ulf Samuelsson <ulf@atmel.com>
+Date: Tue, 28 Aug 2007 10:10:15 +0200
+Subject: [Buildroot] svn commit:	trunk/buildroot/target/device/Atme
+ l:	atngw100/target_skeleton	atngw100/target etc...
+Message-ID: <N6xhSnyYKJlG.yp1Ms24M@mailout.dof.se>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Shouldn't jpeg-package use staging_dir/usr/include instead of
-staging_dir/include?! (gtk2-package wants the header files to be there...)
+> Added:
+>    trunk/buildroot/target/device/Atmel/atngw100/target_skeleton/bin/
+
+What is up with all the directories? Is not defining them
+in .../<board>/device_table.txt enough? I find it far better defining
+them there since the access permissions can be defined as well.
 
 
---- buildroot.old/package/jpeg.mk	2007-08-28 09:59:45.000000000 +0200
-+++ buildroot/package/jpeg.mk	2007-08-28 10:00:28.000000000 +0200
-@@ -54,7 +54,7 @@
- 		--sysconfdir=/etc \
- 		--datadir=/usr/share \
- 		--localstatedir=/var \
--		--includedir=/include \
-+		--includedir=/usr/include \
- 		--mandir=/usr/man \
- 		--infodir=/usr/info \
- 		--enable-shared \
+Some stuff are needed
+during the build and
+the device table is only
+used when you convert
+$(TARGET-DIR) to
+rootfs-avr32.$(fs) which
+is too late.
+
+It can probably be done
+better
+
+Best Regards
+Ulf Samuelsson
