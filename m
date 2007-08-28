@@ -1,101 +1,249 @@
-From: Cristian Ionescu-Idbohrn <cristian.ionescu-idbohrn@axis.com>
-Date: Tue, 28 Aug 2007 23:59:09 +0200 (CEST)
-Subject: [Buildroot] svn commit: trunk/buildroot/package/pppd
-In-Reply-To: <20070828211012.GA31002@aon.at>
-References: <20070828182238.96B68A67F9@busybox.net>
-	<20070828211012.GA31002@aon.at>
-Message-ID: <0708282353420.9733@somehost>
+From: ulf at uclibc.org <ulf@uclibc.org>
+Date: Tue, 28 Aug 2007 15:21:36 -0700 (PDT)
+Subject: [Buildroot] svn commit:
+	trunk/buildroot/target/device/Atmel/toolchain/avr32/uClibc-0.9.28.3-avr32-2.0
+Message-ID: <20070828222136.65839A65B4@busybox.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Tue, 28 Aug 2007, Bernhard Fischer wrote:
->
-> > This fixes make clean on pppd package (there is no rule uninstall in
-> > pppd's makefile) and does some small bits of cleanup.
->
-> Heck, no!
-> http://lists.uclibc.org/lists/buildroot/2007-August/004742.html
->
-> Ulf, please fix that..
+Author: ulf
+Date: 2007-08-28 15:21:35 -0700 (Tue, 28 Aug 2007)
+New Revision: 19724
 
-uninstall targets are not that common, AFAIK, but I'd love to be proven
-wrong :) A quick search shows these might need to be checked:
+Log:
+Update avr32 uclibc patch name
 
-package/at/at.mk
-package/autoconf/autoconf.mk
-package/automake/automake.mk
-package/bash/bash.mk
-package/bison/bison.mk
-package/bridge/bridge.mk
-package/bzip2/bzip2.mk
-package/coreutils/coreutils.mk
-package/dhcp/dhcp.mk
-package/dialog/dialog.mk
-package/diffutils/diffutils.mk
-package/directfb/directfb.mk
-package/e2fsprogs/e2fsprogs.mk
-package/ed/ed.mk
-package/file/file.mk
-package/findutils/findutils.mk
-package/fontconfig/fontconfig.mk
-package/freetype/freetype.mk
-package/gawk/gawk.mk
-package/gettext/gettext.mk
-package/grep/grep.mk
-package/gtk2-engines/gtk2-engines.mk
-package/gzip/gzip.mk
-package/hostap/hostap.mk
-package/ipsec-tools/ipsec-tools.mk
-package/less/less.mk
-package/libdrm/libdrm.mk
-package/libelf/libelf.mk
-package/libsndfile/libsndfile.mk
-package/libsysfs/libsysfs.mk
-package/libtool/libtool.mk
-package/lighttpd/lighttpd.mk
-package/ltrace/ltrace.mk
-package/ltt/ltt.mk
-package/lvm2/lvm2.mk
-package/lzo/lzo.mk
-package/m4/m4.mk
-package/make/make.mk
-package/matchbox/matchbox.mk
-package/mdadm/mdadm.mk
-package/mkdosfs/mkdosfs.mk
-package/module-init-tools/module-init-tools.mk
-package/modutils/modutils.mk
-package/netkitbase/netkitbase.mk
-package/netkittelnet/netkittelnet.mk
-package/netsnmp/netsnmp.mk
-package/openssh/openssh.mk
-package/openswan/openswan.mk
-package/openvpn/openvpn.mk
-package/pkgconfig/pkgconfig.mk
-package/quagga/quagga.mk
-package/raidtools/raidtools.mk
-package/readline/readline.mk
-package/ruby/ruby.mk
-package/sdl/sdl.mk
-package/sed/sed.mk
-package/smartmontools/smartmontools.mk
-package/tar/tar.mk
-package/tcl/tcl.mk
-package/tslib/tslib.mk
-package/util-linux/util-linux.mk
-package/vtun/vtun.mk
-package/wipe/wipe.mk
-package/wireless-tools/wireless-tools.mk
-package/x11r7/mesa3d/mesa3d.mk
-package/x11r7/xapp_xman/xapp_xman.mk
-package/x11r7/xdata_xcursor-themes/xdata_xcursor-themes.mk
-target/x86/grub/grub.mk
-target/x86/grub2/grub2.mk
+Added:
+   trunk/buildroot/target/device/Atmel/toolchain/avr32/uClibc-0.9.28.3-avr32-2.0/uClibc-0.9.28.3-avr32-2.0-001-libext.patch
+   trunk/buildroot/target/device/Atmel/toolchain/avr32/uClibc-0.9.28.3-avr32-2.0/uClibc-0.9.28.3-avr32-2.0-002-rm-whitespace.patch
+
+Removed:
+   trunk/buildroot/target/device/Atmel/toolchain/avr32/uClibc-0.9.28.3-avr32-2.0/uClibc-0.9.28.3-001-libext.patch
+   trunk/buildroot/target/device/Atmel/toolchain/avr32/uClibc-0.9.28.3-avr32-2.0/uClibc-0.9.28.3-rm-whitespace.patch
 
 
-Cheers,
+Changeset:
+Deleted: trunk/buildroot/target/device/Atmel/toolchain/avr32/uClibc-0.9.28.3-avr32-2.0/uClibc-0.9.28.3-001-libext.patch
+===================================================================
+--- trunk/buildroot/target/device/Atmel/toolchain/avr32/uClibc-0.9.28.3-avr32-2.0/uClibc-0.9.28.3-001-libext.patch	2007-08-28 21:42:44 UTC (rev 19723)
++++ trunk/buildroot/target/device/Atmel/toolchain/avr32/uClibc-0.9.28.3-avr32-2.0/uClibc-0.9.28.3-001-libext.patch	2007-08-28 22:21:35 UTC (rev 19724)
+@@ -1,13 +0,0 @@
+-diff -urN uClibc-0.9.28.3-0rig/Makefile uClibc-0.9.28.3/Makefile
+---- uClibc-0.9.28.3-0rig/Makefile	2007-07-29 08:20:33.000000000 +0200
+-+++ uClibc-0.9.28.3/Makefile	2007-08-20 07:02:53.000000000 +0200
+-@@ -157,7 +157,8 @@
+- install_dev:
+- 	$(INSTALL) -d $(PREFIX)$(DEVEL_PREFIX)lib
+- 	$(INSTALL) -d $(PREFIX)$(DEVEL_PREFIX)include
+--	-$(INSTALL) -m 644 lib/*.[ao] $(PREFIX)$(DEVEL_PREFIX)lib/
+-+	-$(INSTALL) -m 644 lib/*.a $(PREFIX)$(DEVEL_PREFIX)lib/
+-+	-$(INSTALL) -m 644 lib/*.so* $(PREFIX)$(DEVEL_PREFIX)lib/
+- 	if [ "$(KERNEL_SOURCE)" = "$(DEVEL_PREFIX)" ] ; then \
+- 		extra_exclude="--exclude include/linux --exclude include/asm'*'" ; \
+- 	else \
 
--- 
-Cristian
+Copied: trunk/buildroot/target/device/Atmel/toolchain/avr32/uClibc-0.9.28.3-avr32-2.0/uClibc-0.9.28.3-avr32-2.0-001-libext.patch (from rev 19712, trunk/buildroot/target/device/Atmel/toolchain/avr32/uClibc-0.9.28.3-avr32-2.0/uClibc-0.9.28.3-001-libext.patch)
+===================================================================
+--- trunk/buildroot/target/device/Atmel/toolchain/avr32/uClibc-0.9.28.3-avr32-2.0/uClibc-0.9.28.3-avr32-2.0-001-libext.patch	                        (rev 0)
++++ trunk/buildroot/target/device/Atmel/toolchain/avr32/uClibc-0.9.28.3-avr32-2.0/uClibc-0.9.28.3-avr32-2.0-001-libext.patch	2007-08-28 22:21:35 UTC (rev 19724)
+@@ -0,0 +1,13 @@
++diff -urN uClibc-0.9.28.3-0rig/Makefile uClibc-0.9.28.3/Makefile
++--- uClibc-0.9.28.3-0rig/Makefile	2007-07-29 08:20:33.000000000 +0200
+++++ uClibc-0.9.28.3/Makefile	2007-08-20 07:02:53.000000000 +0200
++@@ -157,7 +157,8 @@
++ install_dev:
++ 	$(INSTALL) -d $(PREFIX)$(DEVEL_PREFIX)lib
++ 	$(INSTALL) -d $(PREFIX)$(DEVEL_PREFIX)include
++-	-$(INSTALL) -m 644 lib/*.[ao] $(PREFIX)$(DEVEL_PREFIX)lib/
+++	-$(INSTALL) -m 644 lib/*.a $(PREFIX)$(DEVEL_PREFIX)lib/
+++	-$(INSTALL) -m 644 lib/*.so* $(PREFIX)$(DEVEL_PREFIX)lib/
++ 	if [ "$(KERNEL_SOURCE)" = "$(DEVEL_PREFIX)" ] ; then \
++ 		extra_exclude="--exclude include/linux --exclude include/asm'*'" ; \
++ 	else \
+
+Copied: trunk/buildroot/target/device/Atmel/toolchain/avr32/uClibc-0.9.28.3-avr32-2.0/uClibc-0.9.28.3-avr32-2.0-002-rm-whitespace.patch (from rev 19712, trunk/buildroot/target/device/Atmel/toolchain/avr32/uClibc-0.9.28.3-avr32-2.0/uClibc-0.9.28.3-rm-whitespace.patch)
+===================================================================
+--- trunk/buildroot/target/device/Atmel/toolchain/avr32/uClibc-0.9.28.3-avr32-2.0/uClibc-0.9.28.3-avr32-2.0-002-rm-whitespace.patch	                        (rev 0)
++++ trunk/buildroot/target/device/Atmel/toolchain/avr32/uClibc-0.9.28.3-avr32-2.0/uClibc-0.9.28.3-avr32-2.0-002-rm-whitespace.patch	2007-08-28 22:21:35 UTC (rev 19724)
+@@ -0,0 +1,86 @@
++diff -urN uClibc-0.9.29-0rig/include/assert.h uClibc-0.9.29/include/assert.h
++--- uClibc-0.9.29-0rig/include/assert.h	2005-11-03 23:42:46.000000000 +0100
+++++ uClibc-0.9.29/include/assert.h	2007-08-13 19:10:57.000000000 +0200
++@@ -31,7 +31,7 @@
++ #define	_ASSERT_H	1
++ #include <features.h>
++ 
++-#if defined __cplusplus && __GNUC_PREREQ (2,95)
+++#if defined __cplusplus && __GNUC_PREREQ(2,95)
++ # define __ASSERT_VOID_CAST static_cast<void>
++ #else
++ # define __ASSERT_VOID_CAST (void)
++@@ -59,13 +59,17 @@
++   (__ASSERT_VOID_CAST ((expr) ? 0 :					      \
++ 		       (__assert (__STRING(expr), __FILE__, __LINE__,    \
++ 				       __ASSERT_FUNCTION), 0)))
++-  
+++
+++/* Define some temporaries to workaround tinyx makedepend bug */
+++#define	__GNUC_PREREQ_2_6	__GNUC_PREREQ(2, 6)
+++#define	__GNUC_PREREQ_2_4	__GNUC_PREREQ(2, 4)
++ /* Version 2.4 and later of GCC define a magical variable `__PRETTY_FUNCTION__'
++    which contains the name of the function currently being defined.
++    This is broken in G++ before version 2.6.
++    C9x has a similar variable called __func__, but prefer the GCC one since
++    it demangles C++ function names.  */
++-# if defined __cplusplus ? __GNUC_PREREQ (2, 6) : __GNUC_PREREQ (2, 4)
+++
+++# if defined __cplusplus ? __GNUC_PREREQ_2_6 : __GNUC_PREREQ_2_4
++ #   define __ASSERT_FUNCTION	__PRETTY_FUNCTION__
++ # else
++ #  if defined __STDC_VERSION__ && __STDC_VERSION__ >= 199901L
++diff -urN uClibc-0.9.29-0rig/include/complex.h uClibc-0.9.29/include/complex.h
++--- uClibc-0.9.29-0rig/include/complex.h	2002-05-09 10:15:21.000000000 +0200
+++++ uClibc-0.9.29/include/complex.h	2007-08-13 17:55:29.000000000 +0200
++@@ -33,7 +33,7 @@
++ /* We might need to add support for more compilers here.  But since ISO
++    C99 is out hopefully all maintained compilers will soon provide the data
++    types `float complex' and `double complex'.  */
++-#if __GNUC_PREREQ (2, 7) && !__GNUC_PREREQ (2, 97)
+++#if __GNUC_PREREQ(2, 7) && !__GNUC_PREREQ(2, 97)
++ # define _Complex __complex__
++ #endif
++ 
++diff -urN uClibc-0.9.29-0rig/include/features.h uClibc-0.9.29/include/features.h
++--- uClibc-0.9.29-0rig/include/features.h	2006-11-29 22:10:04.000000000 +0100
+++++ uClibc-0.9.29/include/features.h	2007-08-13 17:55:51.000000000 +0200
++@@ -143,7 +143,7 @@
++ 
++ /* Convenience macros to test the versions of glibc and gcc.
++    Use them like this:
++-   #if __GNUC_PREREQ (2,8)
+++   #if __GNUC_PREREQ(2,8)
++    ... code requiring gcc 2.8 or later ...
++    #endif
++    Note - they won't work for gcc1 or glibc1, since the _MINOR macros
++@@ -297,7 +297,7 @@
++ /* uClibc does not support _FORTIFY_SOURCE */
++ #undef _FORTIFY_SOURCE
++ #if defined _FORTIFY_SOURCE && _FORTIFY_SOURCE > 0 \
++-    && __GNUC_PREREQ (4, 1) && defined __OPTIMIZE__ && __OPTIMIZE__ > 0
+++    && __GNUC_PREREQ(4, 1) && defined __OPTIMIZE__ && __OPTIMIZE__ > 0
++ # if _FORTIFY_SOURCE > 1
++ #  define __USE_FORTIFY_LEVEL 2
++ # else
++@@ -366,7 +366,7 @@
++ #endif	/* !ASSEMBLER */
++ 
++ /* Decide whether we can define 'extern inline' functions in headers.  */
++-#if __GNUC_PREREQ (2, 7) && defined __OPTIMIZE__ \
+++#if __GNUC_PREREQ(2, 7) && defined __OPTIMIZE__ \
++     && !defined __OPTIMIZE_SIZE__ && !defined __NO_INLINE__
++ # define __USE_EXTERN_INLINES	1
++ #endif
++diff -urN uClibc-0.9.29-0rig/include/tgmath.h uClibc-0.9.29/include/tgmath.h
++--- uClibc-0.9.29-0rig/include/tgmath.h	2002-05-09 10:15:21.000000000 +0200
+++++ uClibc-0.9.29/include/tgmath.h	2007-08-13 17:56:17.000000000 +0200
++@@ -34,7 +34,7 @@
++    do not try this for now and instead concentrate only on GNU CC.  Once
++    we have more information support for other compilers might follow.  */
++ 
++-#if __GNUC_PREREQ (2, 7)
+++#if __GNUC_PREREQ(2, 7)
++ 
++ # ifdef __NO_LONG_DOUBLE_MATH
++ #  define __tgml(fct) fct
+
+Deleted: trunk/buildroot/target/device/Atmel/toolchain/avr32/uClibc-0.9.28.3-avr32-2.0/uClibc-0.9.28.3-rm-whitespace.patch
+===================================================================
+--- trunk/buildroot/target/device/Atmel/toolchain/avr32/uClibc-0.9.28.3-avr32-2.0/uClibc-0.9.28.3-rm-whitespace.patch	2007-08-28 21:42:44 UTC (rev 19723)
++++ trunk/buildroot/target/device/Atmel/toolchain/avr32/uClibc-0.9.28.3-avr32-2.0/uClibc-0.9.28.3-rm-whitespace.patch	2007-08-28 22:21:35 UTC (rev 19724)
+@@ -1,86 +0,0 @@
+-diff -urN uClibc-0.9.29-0rig/include/assert.h uClibc-0.9.29/include/assert.h
+---- uClibc-0.9.29-0rig/include/assert.h	2005-11-03 23:42:46.000000000 +0100
+-+++ uClibc-0.9.29/include/assert.h	2007-08-13 19:10:57.000000000 +0200
+-@@ -31,7 +31,7 @@
+- #define	_ASSERT_H	1
+- #include <features.h>
+- 
+--#if defined __cplusplus && __GNUC_PREREQ (2,95)
+-+#if defined __cplusplus && __GNUC_PREREQ(2,95)
+- # define __ASSERT_VOID_CAST static_cast<void>
+- #else
+- # define __ASSERT_VOID_CAST (void)
+-@@ -59,13 +59,17 @@
+-   (__ASSERT_VOID_CAST ((expr) ? 0 :					      \
+- 		       (__assert (__STRING(expr), __FILE__, __LINE__,    \
+- 				       __ASSERT_FUNCTION), 0)))
+--  
+-+
+-+/* Define some temporaries to workaround tinyx makedepend bug */
+-+#define	__GNUC_PREREQ_2_6	__GNUC_PREREQ(2, 6)
+-+#define	__GNUC_PREREQ_2_4	__GNUC_PREREQ(2, 4)
+- /* Version 2.4 and later of GCC define a magical variable `__PRETTY_FUNCTION__'
+-    which contains the name of the function currently being defined.
+-    This is broken in G++ before version 2.6.
+-    C9x has a similar variable called __func__, but prefer the GCC one since
+-    it demangles C++ function names.  */
+--# if defined __cplusplus ? __GNUC_PREREQ (2, 6) : __GNUC_PREREQ (2, 4)
+-+
+-+# if defined __cplusplus ? __GNUC_PREREQ_2_6 : __GNUC_PREREQ_2_4
+- #   define __ASSERT_FUNCTION	__PRETTY_FUNCTION__
+- # else
+- #  if defined __STDC_VERSION__ && __STDC_VERSION__ >= 199901L
+-diff -urN uClibc-0.9.29-0rig/include/complex.h uClibc-0.9.29/include/complex.h
+---- uClibc-0.9.29-0rig/include/complex.h	2002-05-09 10:15:21.000000000 +0200
+-+++ uClibc-0.9.29/include/complex.h	2007-08-13 17:55:29.000000000 +0200
+-@@ -33,7 +33,7 @@
+- /* We might need to add support for more compilers here.  But since ISO
+-    C99 is out hopefully all maintained compilers will soon provide the data
+-    types `float complex' and `double complex'.  */
+--#if __GNUC_PREREQ (2, 7) && !__GNUC_PREREQ (2, 97)
+-+#if __GNUC_PREREQ(2, 7) && !__GNUC_PREREQ(2, 97)
+- # define _Complex __complex__
+- #endif
+- 
+-diff -urN uClibc-0.9.29-0rig/include/features.h uClibc-0.9.29/include/features.h
+---- uClibc-0.9.29-0rig/include/features.h	2006-11-29 22:10:04.000000000 +0100
+-+++ uClibc-0.9.29/include/features.h	2007-08-13 17:55:51.000000000 +0200
+-@@ -143,7 +143,7 @@
+- 
+- /* Convenience macros to test the versions of glibc and gcc.
+-    Use them like this:
+--   #if __GNUC_PREREQ (2,8)
+-+   #if __GNUC_PREREQ(2,8)
+-    ... code requiring gcc 2.8 or later ...
+-    #endif
+-    Note - they won't work for gcc1 or glibc1, since the _MINOR macros
+-@@ -297,7 +297,7 @@
+- /* uClibc does not support _FORTIFY_SOURCE */
+- #undef _FORTIFY_SOURCE
+- #if defined _FORTIFY_SOURCE && _FORTIFY_SOURCE > 0 \
+--    && __GNUC_PREREQ (4, 1) && defined __OPTIMIZE__ && __OPTIMIZE__ > 0
+-+    && __GNUC_PREREQ(4, 1) && defined __OPTIMIZE__ && __OPTIMIZE__ > 0
+- # if _FORTIFY_SOURCE > 1
+- #  define __USE_FORTIFY_LEVEL 2
+- # else
+-@@ -366,7 +366,7 @@
+- #endif	/* !ASSEMBLER */
+- 
+- /* Decide whether we can define 'extern inline' functions in headers.  */
+--#if __GNUC_PREREQ (2, 7) && defined __OPTIMIZE__ \
+-+#if __GNUC_PREREQ(2, 7) && defined __OPTIMIZE__ \
+-     && !defined __OPTIMIZE_SIZE__ && !defined __NO_INLINE__
+- # define __USE_EXTERN_INLINES	1
+- #endif
+-diff -urN uClibc-0.9.29-0rig/include/tgmath.h uClibc-0.9.29/include/tgmath.h
+---- uClibc-0.9.29-0rig/include/tgmath.h	2002-05-09 10:15:21.000000000 +0200
+-+++ uClibc-0.9.29/include/tgmath.h	2007-08-13 17:56:17.000000000 +0200
+-@@ -34,7 +34,7 @@
+-    do not try this for now and instead concentrate only on GNU CC.  Once
+-    we have more information support for other compilers might follow.  */
+- 
+--#if __GNUC_PREREQ (2, 7)
+-+#if __GNUC_PREREQ(2, 7)
+- 
+- # ifdef __NO_LONG_DOUBLE_MATH
+- #  define __tgml(fct) fct
