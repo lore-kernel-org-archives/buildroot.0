@@ -1,8 +1,7 @@
 From: ulf at uclibc.org <ulf@uclibc.org>
-Date: Tue, 28 Aug 2007 15:21:36 -0700 (PDT)
-Subject: [Buildroot] svn commit:
-	trunk/buildroot/target/device/Atmel/toolchain/avr32/uClibc-0.9.28.3-avr32-2.0
-Message-ID: <20070828222136.65839A65B4@busybox.net>
+Date: Tue, 28 Aug 2007 15:23:08 -0700 (PDT)
+Subject: [Buildroot] svn commit: trunk/buildroot/package/rxvt
+Message-ID: <20070828222308.2D99FA65C5@busybox.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -10,240 +9,97 @@ Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
 Author: ulf
-Date: 2007-08-28 15:21:35 -0700 (Tue, 28 Aug 2007)
-New Revision: 19724
+Date: 2007-08-28 15:23:08 -0700 (Tue, 28 Aug 2007)
+New Revision: 19725
 
 Log:
-Update avr32 uclibc patch name
+This is my attempt to realize a rxvt-version for xorg, tinyx and the new x11r7.
+I tested it with xorg and x11r7. (Don't know if it works with tinyx,
+because the tinyx-build fails)
 
-Added:
-   trunk/buildroot/target/device/Atmel/toolchain/avr32/uClibc-0.9.28.3-avr32-2.0/uClibc-0.9.28.3-avr32-2.0-001-libext.patch
-   trunk/buildroot/target/device/Atmel/toolchain/avr32/uClibc-0.9.28.3-avr32-2.0/uClibc-0.9.28.3-avr32-2.0-002-rm-whitespace.patch
 
-Removed:
-   trunk/buildroot/target/device/Atmel/toolchain/avr32/uClibc-0.9.28.3-avr32-2.0/uClibc-0.9.28.3-001-libext.patch
-   trunk/buildroot/target/device/Atmel/toolchain/avr32/uClibc-0.9.28.3-avr32-2.0/uClibc-0.9.28.3-rm-whitespace.patch
+Signed-off-by: Simon Pasch <fpasch@googlemail.com>
+
+
+
+Modified:
+   trunk/buildroot/package/rxvt/Config.in
+   trunk/buildroot/package/rxvt/rxvt.mk
 
 
 Changeset:
-Deleted: trunk/buildroot/target/device/Atmel/toolchain/avr32/uClibc-0.9.28.3-avr32-2.0/uClibc-0.9.28.3-001-libext.patch
+Modified: trunk/buildroot/package/rxvt/Config.in
 ===================================================================
---- trunk/buildroot/target/device/Atmel/toolchain/avr32/uClibc-0.9.28.3-avr32-2.0/uClibc-0.9.28.3-001-libext.patch	2007-08-28 21:42:44 UTC (rev 19723)
-+++ trunk/buildroot/target/device/Atmel/toolchain/avr32/uClibc-0.9.28.3-avr32-2.0/uClibc-0.9.28.3-001-libext.patch	2007-08-28 22:21:35 UTC (rev 19724)
-@@ -1,13 +0,0 @@
--diff -urN uClibc-0.9.28.3-0rig/Makefile uClibc-0.9.28.3/Makefile
----- uClibc-0.9.28.3-0rig/Makefile	2007-07-29 08:20:33.000000000 +0200
--+++ uClibc-0.9.28.3/Makefile	2007-08-20 07:02:53.000000000 +0200
--@@ -157,7 +157,8 @@
-- install_dev:
-- 	$(INSTALL) -d $(PREFIX)$(DEVEL_PREFIX)lib
-- 	$(INSTALL) -d $(PREFIX)$(DEVEL_PREFIX)include
---	-$(INSTALL) -m 644 lib/*.[ao] $(PREFIX)$(DEVEL_PREFIX)lib/
--+	-$(INSTALL) -m 644 lib/*.a $(PREFIX)$(DEVEL_PREFIX)lib/
--+	-$(INSTALL) -m 644 lib/*.so* $(PREFIX)$(DEVEL_PREFIX)lib/
-- 	if [ "$(KERNEL_SOURCE)" = "$(DEVEL_PREFIX)" ] ; then \
-- 		extra_exclude="--exclude include/linux --exclude include/asm'*'" ; \
-- 	else \
+--- trunk/buildroot/package/rxvt/Config.in	2007-08-28 22:21:35 UTC (rev 19724)
++++ trunk/buildroot/package/rxvt/Config.in	2007-08-28 22:23:08 UTC (rev 19725)
+@@ -1,10 +1,8 @@
+ config BR2_PACKAGE_RXVT
+ 	bool "rxvt"
+ 	default n
+-	depends BR2_PACKAGE_XSERVER_xorg || BR2_PACKAGE_XSERVER_tinyx
+-
++	depends BR2_PACKAGE_XSERVER_xorg || BR2_PACKAGE_XSERVER_tinyx || BR2_PACKAGE_XSERVER_x11r7
+ 	help
+ 	  A nice small colour vt102 X terminal emulator.
+-	  Does not build for X11R7 yet.
+ 
+ 	  http://www.rxvt.org/
 
-Copied: trunk/buildroot/target/device/Atmel/toolchain/avr32/uClibc-0.9.28.3-avr32-2.0/uClibc-0.9.28.3-avr32-2.0-001-libext.patch (from rev 19712, trunk/buildroot/target/device/Atmel/toolchain/avr32/uClibc-0.9.28.3-avr32-2.0/uClibc-0.9.28.3-001-libext.patch)
+Modified: trunk/buildroot/package/rxvt/rxvt.mk
 ===================================================================
---- trunk/buildroot/target/device/Atmel/toolchain/avr32/uClibc-0.9.28.3-avr32-2.0/uClibc-0.9.28.3-avr32-2.0-001-libext.patch	                        (rev 0)
-+++ trunk/buildroot/target/device/Atmel/toolchain/avr32/uClibc-0.9.28.3-avr32-2.0/uClibc-0.9.28.3-avr32-2.0-001-libext.patch	2007-08-28 22:21:35 UTC (rev 19724)
-@@ -0,0 +1,13 @@
-+diff -urN uClibc-0.9.28.3-0rig/Makefile uClibc-0.9.28.3/Makefile
-+--- uClibc-0.9.28.3-0rig/Makefile	2007-07-29 08:20:33.000000000 +0200
-++++ uClibc-0.9.28.3/Makefile	2007-08-20 07:02:53.000000000 +0200
-+@@ -157,7 +157,8 @@
-+ install_dev:
-+ 	$(INSTALL) -d $(PREFIX)$(DEVEL_PREFIX)lib
-+ 	$(INSTALL) -d $(PREFIX)$(DEVEL_PREFIX)include
-+-	-$(INSTALL) -m 644 lib/*.[ao] $(PREFIX)$(DEVEL_PREFIX)lib/
-++	-$(INSTALL) -m 644 lib/*.a $(PREFIX)$(DEVEL_PREFIX)lib/
-++	-$(INSTALL) -m 644 lib/*.so* $(PREFIX)$(DEVEL_PREFIX)lib/
-+ 	if [ "$(KERNEL_SOURCE)" = "$(DEVEL_PREFIX)" ] ; then \
-+ 		extra_exclude="--exclude include/linux --exclude include/asm'*'" ; \
-+ 	else \
-
-Copied: trunk/buildroot/target/device/Atmel/toolchain/avr32/uClibc-0.9.28.3-avr32-2.0/uClibc-0.9.28.3-avr32-2.0-002-rm-whitespace.patch (from rev 19712, trunk/buildroot/target/device/Atmel/toolchain/avr32/uClibc-0.9.28.3-avr32-2.0/uClibc-0.9.28.3-rm-whitespace.patch)
-===================================================================
---- trunk/buildroot/target/device/Atmel/toolchain/avr32/uClibc-0.9.28.3-avr32-2.0/uClibc-0.9.28.3-avr32-2.0-002-rm-whitespace.patch	                        (rev 0)
-+++ trunk/buildroot/target/device/Atmel/toolchain/avr32/uClibc-0.9.28.3-avr32-2.0/uClibc-0.9.28.3-avr32-2.0-002-rm-whitespace.patch	2007-08-28 22:21:35 UTC (rev 19724)
-@@ -0,0 +1,86 @@
-+diff -urN uClibc-0.9.29-0rig/include/assert.h uClibc-0.9.29/include/assert.h
-+--- uClibc-0.9.29-0rig/include/assert.h	2005-11-03 23:42:46.000000000 +0100
-++++ uClibc-0.9.29/include/assert.h	2007-08-13 19:10:57.000000000 +0200
-+@@ -31,7 +31,7 @@
-+ #define	_ASSERT_H	1
-+ #include <features.h>
-+ 
-+-#if defined __cplusplus && __GNUC_PREREQ (2,95)
-++#if defined __cplusplus && __GNUC_PREREQ(2,95)
-+ # define __ASSERT_VOID_CAST static_cast<void>
-+ #else
-+ # define __ASSERT_VOID_CAST (void)
-+@@ -59,13 +59,17 @@
-+   (__ASSERT_VOID_CAST ((expr) ? 0 :					      \
-+ 		       (__assert (__STRING(expr), __FILE__, __LINE__,    \
-+ 				       __ASSERT_FUNCTION), 0)))
-+-  
-++
-++/* Define some temporaries to workaround tinyx makedepend bug */
-++#define	__GNUC_PREREQ_2_6	__GNUC_PREREQ(2, 6)
-++#define	__GNUC_PREREQ_2_4	__GNUC_PREREQ(2, 4)
-+ /* Version 2.4 and later of GCC define a magical variable `__PRETTY_FUNCTION__'
-+    which contains the name of the function currently being defined.
-+    This is broken in G++ before version 2.6.
-+    C9x has a similar variable called __func__, but prefer the GCC one since
-+    it demangles C++ function names.  */
-+-# if defined __cplusplus ? __GNUC_PREREQ (2, 6) : __GNUC_PREREQ (2, 4)
-++
-++# if defined __cplusplus ? __GNUC_PREREQ_2_6 : __GNUC_PREREQ_2_4
-+ #   define __ASSERT_FUNCTION	__PRETTY_FUNCTION__
-+ # else
-+ #  if defined __STDC_VERSION__ && __STDC_VERSION__ >= 199901L
-+diff -urN uClibc-0.9.29-0rig/include/complex.h uClibc-0.9.29/include/complex.h
-+--- uClibc-0.9.29-0rig/include/complex.h	2002-05-09 10:15:21.000000000 +0200
-++++ uClibc-0.9.29/include/complex.h	2007-08-13 17:55:29.000000000 +0200
-+@@ -33,7 +33,7 @@
-+ /* We might need to add support for more compilers here.  But since ISO
-+    C99 is out hopefully all maintained compilers will soon provide the data
-+    types `float complex' and `double complex'.  */
-+-#if __GNUC_PREREQ (2, 7) && !__GNUC_PREREQ (2, 97)
-++#if __GNUC_PREREQ(2, 7) && !__GNUC_PREREQ(2, 97)
-+ # define _Complex __complex__
-+ #endif
-+ 
-+diff -urN uClibc-0.9.29-0rig/include/features.h uClibc-0.9.29/include/features.h
-+--- uClibc-0.9.29-0rig/include/features.h	2006-11-29 22:10:04.000000000 +0100
-++++ uClibc-0.9.29/include/features.h	2007-08-13 17:55:51.000000000 +0200
-+@@ -143,7 +143,7 @@
-+ 
-+ /* Convenience macros to test the versions of glibc and gcc.
-+    Use them like this:
-+-   #if __GNUC_PREREQ (2,8)
-++   #if __GNUC_PREREQ(2,8)
-+    ... code requiring gcc 2.8 or later ...
-+    #endif
-+    Note - they won't work for gcc1 or glibc1, since the _MINOR macros
-+@@ -297,7 +297,7 @@
-+ /* uClibc does not support _FORTIFY_SOURCE */
-+ #undef _FORTIFY_SOURCE
-+ #if defined _FORTIFY_SOURCE && _FORTIFY_SOURCE > 0 \
-+-    && __GNUC_PREREQ (4, 1) && defined __OPTIMIZE__ && __OPTIMIZE__ > 0
-++    && __GNUC_PREREQ(4, 1) && defined __OPTIMIZE__ && __OPTIMIZE__ > 0
-+ # if _FORTIFY_SOURCE > 1
-+ #  define __USE_FORTIFY_LEVEL 2
-+ # else
-+@@ -366,7 +366,7 @@
-+ #endif	/* !ASSEMBLER */
-+ 
-+ /* Decide whether we can define 'extern inline' functions in headers.  */
-+-#if __GNUC_PREREQ (2, 7) && defined __OPTIMIZE__ \
-++#if __GNUC_PREREQ(2, 7) && defined __OPTIMIZE__ \
-+     && !defined __OPTIMIZE_SIZE__ && !defined __NO_INLINE__
-+ # define __USE_EXTERN_INLINES	1
-+ #endif
-+diff -urN uClibc-0.9.29-0rig/include/tgmath.h uClibc-0.9.29/include/tgmath.h
-+--- uClibc-0.9.29-0rig/include/tgmath.h	2002-05-09 10:15:21.000000000 +0200
-++++ uClibc-0.9.29/include/tgmath.h	2007-08-13 17:56:17.000000000 +0200
-+@@ -34,7 +34,7 @@
-+    do not try this for now and instead concentrate only on GNU CC.  Once
-+    we have more information support for other compilers might follow.  */
-+ 
-+-#if __GNUC_PREREQ (2, 7)
-++#if __GNUC_PREREQ(2, 7)
-+ 
-+ # ifdef __NO_LONG_DOUBLE_MATH
-+ #  define __tgml(fct) fct
-
-Deleted: trunk/buildroot/target/device/Atmel/toolchain/avr32/uClibc-0.9.28.3-avr32-2.0/uClibc-0.9.28.3-rm-whitespace.patch
-===================================================================
---- trunk/buildroot/target/device/Atmel/toolchain/avr32/uClibc-0.9.28.3-avr32-2.0/uClibc-0.9.28.3-rm-whitespace.patch	2007-08-28 21:42:44 UTC (rev 19723)
-+++ trunk/buildroot/target/device/Atmel/toolchain/avr32/uClibc-0.9.28.3-avr32-2.0/uClibc-0.9.28.3-rm-whitespace.patch	2007-08-28 22:21:35 UTC (rev 19724)
-@@ -1,86 +0,0 @@
--diff -urN uClibc-0.9.29-0rig/include/assert.h uClibc-0.9.29/include/assert.h
----- uClibc-0.9.29-0rig/include/assert.h	2005-11-03 23:42:46.000000000 +0100
--+++ uClibc-0.9.29/include/assert.h	2007-08-13 19:10:57.000000000 +0200
--@@ -31,7 +31,7 @@
-- #define	_ASSERT_H	1
-- #include <features.h>
-- 
---#if defined __cplusplus && __GNUC_PREREQ (2,95)
--+#if defined __cplusplus && __GNUC_PREREQ(2,95)
-- # define __ASSERT_VOID_CAST static_cast<void>
-- #else
-- # define __ASSERT_VOID_CAST (void)
--@@ -59,13 +59,17 @@
--   (__ASSERT_VOID_CAST ((expr) ? 0 :					      \
-- 		       (__assert (__STRING(expr), __FILE__, __LINE__,    \
-- 				       __ASSERT_FUNCTION), 0)))
---  
--+
--+/* Define some temporaries to workaround tinyx makedepend bug */
--+#define	__GNUC_PREREQ_2_6	__GNUC_PREREQ(2, 6)
--+#define	__GNUC_PREREQ_2_4	__GNUC_PREREQ(2, 4)
-- /* Version 2.4 and later of GCC define a magical variable `__PRETTY_FUNCTION__'
--    which contains the name of the function currently being defined.
--    This is broken in G++ before version 2.6.
--    C9x has a similar variable called __func__, but prefer the GCC one since
--    it demangles C++ function names.  */
---# if defined __cplusplus ? __GNUC_PREREQ (2, 6) : __GNUC_PREREQ (2, 4)
--+
--+# if defined __cplusplus ? __GNUC_PREREQ_2_6 : __GNUC_PREREQ_2_4
-- #   define __ASSERT_FUNCTION	__PRETTY_FUNCTION__
-- # else
-- #  if defined __STDC_VERSION__ && __STDC_VERSION__ >= 199901L
--diff -urN uClibc-0.9.29-0rig/include/complex.h uClibc-0.9.29/include/complex.h
----- uClibc-0.9.29-0rig/include/complex.h	2002-05-09 10:15:21.000000000 +0200
--+++ uClibc-0.9.29/include/complex.h	2007-08-13 17:55:29.000000000 +0200
--@@ -33,7 +33,7 @@
-- /* We might need to add support for more compilers here.  But since ISO
--    C99 is out hopefully all maintained compilers will soon provide the data
--    types `float complex' and `double complex'.  */
---#if __GNUC_PREREQ (2, 7) && !__GNUC_PREREQ (2, 97)
--+#if __GNUC_PREREQ(2, 7) && !__GNUC_PREREQ(2, 97)
-- # define _Complex __complex__
-- #endif
-- 
--diff -urN uClibc-0.9.29-0rig/include/features.h uClibc-0.9.29/include/features.h
----- uClibc-0.9.29-0rig/include/features.h	2006-11-29 22:10:04.000000000 +0100
--+++ uClibc-0.9.29/include/features.h	2007-08-13 17:55:51.000000000 +0200
--@@ -143,7 +143,7 @@
-- 
-- /* Convenience macros to test the versions of glibc and gcc.
--    Use them like this:
---   #if __GNUC_PREREQ (2,8)
--+   #if __GNUC_PREREQ(2,8)
--    ... code requiring gcc 2.8 or later ...
--    #endif
--    Note - they won't work for gcc1 or glibc1, since the _MINOR macros
--@@ -297,7 +297,7 @@
-- /* uClibc does not support _FORTIFY_SOURCE */
-- #undef _FORTIFY_SOURCE
-- #if defined _FORTIFY_SOURCE && _FORTIFY_SOURCE > 0 \
---    && __GNUC_PREREQ (4, 1) && defined __OPTIMIZE__ && __OPTIMIZE__ > 0
--+    && __GNUC_PREREQ(4, 1) && defined __OPTIMIZE__ && __OPTIMIZE__ > 0
-- # if _FORTIFY_SOURCE > 1
-- #  define __USE_FORTIFY_LEVEL 2
-- # else
--@@ -366,7 +366,7 @@
-- #endif	/* !ASSEMBLER */
-- 
-- /* Decide whether we can define 'extern inline' functions in headers.  */
---#if __GNUC_PREREQ (2, 7) && defined __OPTIMIZE__ \
--+#if __GNUC_PREREQ(2, 7) && defined __OPTIMIZE__ \
--     && !defined __OPTIMIZE_SIZE__ && !defined __NO_INLINE__
-- # define __USE_EXTERN_INLINES	1
-- #endif
--diff -urN uClibc-0.9.29-0rig/include/tgmath.h uClibc-0.9.29/include/tgmath.h
----- uClibc-0.9.29-0rig/include/tgmath.h	2002-05-09 10:15:21.000000000 +0200
--+++ uClibc-0.9.29/include/tgmath.h	2007-08-13 17:56:17.000000000 +0200
--@@ -34,7 +34,7 @@
--    do not try this for now and instead concentrate only on GNU CC.  Once
--    we have more information support for other compilers might follow.  */
-- 
---#if __GNUC_PREREQ (2, 7)
--+#if __GNUC_PREREQ(2, 7)
-- 
-- # ifdef __NO_LONG_DOUBLE_MATH
-- #  define __tgml(fct) fct
+--- trunk/buildroot/package/rxvt/rxvt.mk	2007-08-28 22:21:35 UTC (rev 19724)
++++ trunk/buildroot/package/rxvt/rxvt.mk	2007-08-28 22:23:08 UTC (rev 19725)
+@@ -27,6 +27,18 @@
+ RXVT_DIR:=$(BUILD_DIR)/rxvt-$(RXVT_VERSION)
+ RXVT_BINARY:=$(RXVT_DIR)/src/rxvt
+ 
++ifeq ($(strip $(BR2_PACKAGE_XSERVER_xorg)),y)
++RXVT_PREFIX:=/usr/X11R6
++endif
++
++ifeq ($(strip $(BR2_PACKAGE_XSERVER_tinyx)),y)
++RXVT_PREFIX:=/usr/X11R6
++endif
++
++ifeq ($(strip $(BR2_PACKAGE_XSERVER_x11r7)),y)
++RXVT_PREFIX:=/usr
++endif
++
+ $(DL_DIR)/$(RXVT_SOURCE):
+ 	 $(WGET) -P $(DL_DIR) $(RXVT_SITE)/$(RXVT_SOURCE)
+ 
+@@ -46,11 +58,11 @@
+ 		--target=$(GNU_TARGET_NAME) \
+ 		--host=$(GNU_TARGET_NAME) \
+ 		--build=$(GNU_HOST_NAME) \
+-		--prefix=/usr/X11R6 \
++		--prefix=$(RXVT_PREFIX) \
+ 		--mandir=/usr/man \
+ 		--infodir=/usr/info \
+-		--x-includes=$(STAGING_DIR)/usr/X11R6/include \
+-		--x-libraries=$(STAGING_DIR)/usr/X11R6/lib \
++		--x-includes=$(STAGING_DIR)$(RXVT_PREFIX)/include \
++		--x-libraries=$(STAGING_DIR)$(RXVT_PREFIX)/lib \
+ 		--disable-resources \
+ 		--disable-memset \
+ 	)
+@@ -60,14 +72,14 @@
+ 	$(MAKE) CC=$(TARGET_CC) -C $(RXVT_DIR)
+ 	$(STRIP) $(STRIP_DISCARD_ALL) $(RXVT_BINARY)
+ 
+-$(TARGET_DIR)/usr/X11R6/bin/rxvt: $(RXVT_BINARY)
+-	cp -f $(RXVT_BINARY) $(TARGET_DIR)/usr/X11R6/bin
+-	(cd $(TARGET_DIR)/usr/X11R6/bin; ln -fs rxvt xterm)
++$(TARGET_DIR)$(RXVT_PREFIX)/bin/rxvt: $(RXVT_BINARY)
++	cp -f $(RXVT_BINARY) $(TARGET_DIR)$(RXVT_PREFIX)/bin
++	(cd $(TARGET_DIR)$(RXVT_PREFIX)/bin; ln -fs rxvt xterm)
+ 
+-rxvt: $(XSERVER) $(TARGET_DIR)/usr/X11R6/bin/rxvt
++rxvt: $(XSERVER) $(TARGET_DIR)$(RXVT_PREFIX)/bin/rxvt
+ 
+ rxvt-clean:
+-	rm -f $(TARGET_DIR)/usr/X11R6/bin/rxvt
++	rm -f $(TARGET_DIR)$(RXVT_PREFIX)/bin/rxvt
+ 	-$(MAKE) -C $(RXVT_DIR) clean
+ 
+ rxvt-dirclean:
