@@ -1,41 +1,34 @@
 From: Bernhard Fischer <rep.dot.nop@gmail.com>
-Date: Tue, 28 Aug 2007 14:26:48 +0200
-Subject: [Buildroot] svn commit: trunk/buildroot/target/device/Atme
-	l:	atngw100/target_skeleton atngw100/target etc...
-In-Reply-To: <1188289279.7412.1.camel@localhost.localdomain>
-References: <N6xhSnyYKJlG.yp1Ms24M@mailout.dof.se>
-	<1188289279.7412.1.camel@localhost.localdomain>
-Message-ID: <20070828122648.GB24891@aon.at>
+Date: Tue, 28 Aug 2007 14:30:26 +0200
+Subject: [Buildroot] User-space packages - Staging_Dir or Target_Dir
+In-Reply-To: <b6838d3a0708280435tc49ecfbs563b3aedf3d5b57c@mail.gmail.com>
+References: <b6838d3a0708280435tc49ecfbs563b3aedf3d5b57c@mail.gmail.com>
+Message-ID: <20070828123026.GC24891@aon.at>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Tue, Aug 28, 2007 at 10:21:19AM +0200, Hans-Christian Egtvedt wrote:
->
->On Tue, 2007-08-28 at 10:10 +0200, Ulf Samuelsson wrote:
->> > Added:
->> >    trunk/buildroot/target/device/Atmel/atngw100/target_skeleton/bin/
->> 
->> What is up with all the directories? Is not defining them
->> in .../<board>/device_table.txt enough? I find it far better defining
->> them there since the access permissions can be defined as well.
->> 
->> 
->> Some stuff are needed
->> during the build and
->> the device table is only
->> used when you convert
->> $(TARGET-DIR) to
->> rootfs-avr32.$(fs) which
->> is too late.
->> 
->> It can probably be done
->> better
->
->Indeed, the packages failing with an "empty" skeleton should have some
->mkdir -p actions in them IMHO. That way not all targets needs to be
->fixed, but just one package.
+On Tue, Aug 28, 2007 at 07:35:03AM -0400, Daniel Frey wrote:
+>Do I need to explicitly copy what I install into the staging dir into the
+>root dir in order for the new libraries to be included in the resulting
+>image?
 
-Yes, that's the proper thing to do, agree.
+I handle it like this:
+staging_dir contains non-stripped stuff.
+If a file is needed on the target, it has to be copied to the target.
+That copy (in target_dir) is then (eventually) stripped.
+This provides for easy debugging in the staging_dir since those contain
+debug-info.
+>
+>I have seen this done in the xml2 makefile and I wasn't sure if it was
+>needed for every package.
+
+It is not needed for every package.
+Think about tcpdump/libpcap. Consider how you don't want libpcap on your
+target if the only app that is using it is tcpdump anyway. You would
+rather link tcpdump against libpcap.a and only install tcpdump to the
+target.
+
+See?
