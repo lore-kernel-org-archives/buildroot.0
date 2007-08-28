@@ -1,7 +1,7 @@
 From: ulf at uclibc.org <ulf@uclibc.org>
-Date: Tue, 28 Aug 2007 12:36:40 -0700 (PDT)
-Subject: [Buildroot] svn commit: trunk/buildroot/package/mpg123
-Message-ID: <20070828193640.A003FA6825@busybox.net>
+Date: Tue, 28 Aug 2007 14:07:33 -0700 (PDT)
+Subject: [Buildroot] svn commit: trunk/buildroot/target/device/Atmel/u-boot
+Message-ID: <20070828210733.7B8DBA4668@busybox.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -9,63 +9,27 @@ Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
 Author: ulf
-Date: 2007-08-28 12:36:40 -0700 (Tue, 28 Aug 2007)
-New Revision: 19719
+Date: 2007-08-28 14:07:32 -0700 (Tue, 28 Aug 2007)
+New Revision: 19721
 
 Log:
-Remove renamed mpg123 patch
+Fix bad regexp in u-boot.mk
 
-Removed:
-   trunk/buildroot/package/mpg123/mpg123-cross.patch
+Modified:
+   trunk/buildroot/target/device/Atmel/u-boot/u-boot.mk
 
 
 Changeset:
-Deleted: trunk/buildroot/package/mpg123/mpg123-cross.patch
+Modified: trunk/buildroot/target/device/Atmel/u-boot/u-boot.mk
 ===================================================================
---- trunk/buildroot/package/mpg123/mpg123-cross.patch	2007-08-28 19:35:54 UTC (rev 19718)
-+++ trunk/buildroot/package/mpg123/mpg123-cross.patch	2007-08-28 19:36:40 UTC (rev 19719)
-@@ -1,44 +0,0 @@
--diff -ruN mpg123-0.59r.orig/Makefile mpg123-0.59r/Makefile
----- mpg123-0.59r.orig/Makefile	1999-06-15 22:39:06.000000000 +0200
--+++ mpg123-0.59r/Makefile	2006-12-14 15:52:44.000000000 +0100
--@@ -103,14 +103,14 @@
--         mpg123-make
-- 
-- linux:
---	$(MAKE) CC=gcc LDFLAGS= \
--+	$(MAKE) LDFLAGS= \
-- 		OBJECTS='decode_i386.o dct64_i386.o decode_i586.o \
-- 			audio_oss.o term.o' \
-- 		CFLAGS='-DI386_ASSEM -DPENTIUM_OPT -DREAL_IS_FLOAT -DLINUX \
-- 			-DREAD_MMAP -DOSS -DTERM_CONTROL\
---			-Wall -O2 -m486 \
--+			-Wall \
-- 			-fomit-frame-pointer -funroll-all-loops \
---			-finline-functions -ffast-math' \
--+			-finline-functions -ffast-math $(CFLAGS)' \
-- 		mpg123-make
-- 
-- linux-3dnow:
--@@ -246,6 +246,22 @@
-- 			-finline-functions -ffast-math' \
-- 		mpg123-make
-- 
--+linux-bigend:
--+	$(MAKE) LDFLAGS= OBJECTS='decode.o dct64.o audio_oss.o' \
--+		CFLAGS+='-DREAL_IS_FLOAT -DLINUX -DREAD_MMAP \
--+			-DOSS -DOSS_BIG_ENDIAN -Wall \
--+			-fomit-frame-pointer -funroll-loops \
--+			-finline-functions -ffast-math $(CFLAGS)' \
--+		mpg123-make
--+
--+linux-littleend:
--+	$(MAKE) LDFLAGS= OBJECTS='decode.o dct64.o audio_oss.o' \
--+		CFLAGS='-DREAL_IS_FLOAT -DLINUX -DREAD_MMAP \
--+			-DOSS -Wall \
--+			-fomit-frame-pointer -funroll-loops \
--+			-finline-functions -ffast-math $(CFLAGS)' \
--+		mpg123-make
--+
-- linux-sajber:
-- 	@ $(MAKE) FRONTEND=sajberplay-make linux-frontend
-- 
+--- trunk/buildroot/target/device/Atmel/u-boot/u-boot.mk	2007-08-28 20:04:15 UTC (rev 19720)
++++ trunk/buildroot/target/device/Atmel/u-boot/u-boot.mk	2007-08-28 21:07:32 UTC (rev 19721)
+@@ -59,7 +59,7 @@
+ 	touch $@
+ 
+ $(UBOOT_DIR)/.patched.$(UBOOT_PATCH_SOURCE): $(UBOOT_DIR)/.unpacked $(UBOOT_PATCHES)/.unpacked
+-	toolchain/patch-kernel.sh $(UBOOT_DIR) $(UBOOT_PATCHES) *.patch
++	toolchain/patch-kernel.sh $(UBOOT_DIR) $(UBOOT_PATCHES) \*.patch
+ 	touch $(UBOOT_DIR)/.patched.$(UBOOT_PATCH_SOURCE)
+ # cp $(UBOOT_CONFIG_FILE) $(UBOOT_DIR)/include/configs/.
+ # cp $(UBOOT_PATCHES)/cmd_defenv.c $(UBOOT_DIR)/common/.
