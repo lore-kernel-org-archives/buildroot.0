@@ -1,32 +1,35 @@
-From: Nathanael D. Noblet <nathanael@gnat.ca>
-Date: Tue, 28 Aug 2007 16:19:37 -0600
-Subject: [Buildroot] Can't resolve symbol '__cxa_atexit'
-In-Reply-To: <46D48E9F.4000101@gnat.ca>
-References: <46D48E9F.4000101@gnat.ca>
-Message-ID: <46D49F79.5000700@gnat.ca>
+From: ulf at uclibc.org <ulf@uclibc.org>
+Date: Tue, 28 Aug 2007 15:46:54 -0700 (PDT)
+Subject: [Buildroot] svn commit: trunk/buildroot/package/pppd
+Message-ID: <20070828224654.E977BA5D2D@busybox.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Nathanael D. Noblet wrote:
-> Hello,
->    I am trying to re-create an environment that I created in Oct 2005, 
-> so that I can make some changes to a program I wrote way back then. I 
-> was using uClibc 0.9.28 at the time. I've used a current buildroot to 
-> get me what I thought was that environment. I think I have the same 
-> gcc/binutils versions 3.4.6 and binutils 2.16.1. When I compile my 
-> program against this new environment it seems to work, until I move it 
-> to the target device, where it runs for a bit then outputs
-> 
-> /a.out: Can't resolve symbol '__cxa_atexit'
-> 
-> So I'm assuming that something changed in the uClibc config I originally 
-> used and this one that I tried to get to match. Any ideas how to go 
-> about re-creating this environment or how to solve the above error?
-> 
+Author: ulf
+Date: 2007-08-28 15:46:54 -0700 (Tue, 28 Aug 2007)
+New Revision: 19726
 
-Well as usually moments afterwards, checking the uClibc .config I found 
-an option for the dynamic atexit functions. Disabled, rebuilt, and now 
-I'm moving along... Thanks anyway ;)
+Log:
+Remove some more file during pppd-clean
+
+Modified:
+   trunk/buildroot/package/pppd/pppd.mk
+
+
+Changeset:
+Modified: trunk/buildroot/package/pppd/pppd.mk
+===================================================================
+--- trunk/buildroot/package/pppd/pppd.mk	2007-08-28 22:23:08 UTC (rev 19725)
++++ trunk/buildroot/package/pppd/pppd.mk	2007-08-28 22:46:54 UTC (rev 19726)
+@@ -64,6 +64,8 @@
+ pppd-clean:
+ 	rm -f $(TARGET_DIR)/usr/sbin/pppd
+ 	rm -f $(TARGET_DIR)/usr/sbin/chat
++	rm -f $(TARGET_DIR)/usr/sbin/pppstatus
++	rm -f $(TARGET_DIR)/usr/sbin/pppdump
+ 	rm -rf $(TARGET_DIR)/etc/ppp
+ 	-$(MAKE) -C $(PPPD_DIR) clean
+ 
