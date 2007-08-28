@@ -1,8 +1,7 @@
 From: ulf at uclibc.org <ulf@uclibc.org>
-Date: Tue, 28 Aug 2007 16:05:11 -0700 (PDT)
-Subject: [Buildroot] svn commit:
-	trunk/buildroot/target/device/Atmel/toolchain/avr32/uClibc-0.9.28.3-avr32-2.0
-Message-ID: <20070828230511.6087BA657A@busybox.net>
+Date: Tue, 28 Aug 2007 16:06:34 -0700 (PDT)
+Subject: [Buildroot] svn commit: trunk/buildroot/package/qtopia4
+Message-ID: <20070828230634.1F3B3A65C2@busybox.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -10,34 +9,122 @@ Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
 Author: ulf
-Date: 2007-08-28 16:05:10 -0700 (Tue, 28 Aug 2007)
-New Revision: 19728
+Date: 2007-08-28 16:06:33 -0700 (Tue, 28 Aug 2007)
+New Revision: 19729
 
 Log:
-Fix bug in avr32 uClibc patch
+Fix some qtopia quirks, bump version
+
+Added:
+   trunk/buildroot/package/qtopia4/qtopia-4.2.2-add-avr32-qatomic-header-to-header-list.patch
 
 Modified:
-   trunk/buildroot/target/device/Atmel/toolchain/avr32/uClibc-0.9.28.3-avr32-2.0/uClibc-0.9.28.3-avr32-2.0-002-rm-whitespace.patch
+   trunk/buildroot/package/qtopia4/qtopia4.mk
 
 
 Changeset:
-Modified: trunk/buildroot/target/device/Atmel/toolchain/avr32/uClibc-0.9.28.3-avr32-2.0/uClibc-0.9.28.3-avr32-2.0-002-rm-whitespace.patch
+Added: trunk/buildroot/package/qtopia4/qtopia-4.2.2-add-avr32-qatomic-header-to-header-list.patch
 ===================================================================
---- trunk/buildroot/target/device/Atmel/toolchain/avr32/uClibc-0.9.28.3-avr32-2.0/uClibc-0.9.28.3-avr32-2.0-002-rm-whitespace.patch	2007-08-28 23:02:52 UTC (rev 19727)
-+++ trunk/buildroot/target/device/Atmel/toolchain/avr32/uClibc-0.9.28.3-avr32-2.0/uClibc-0.9.28.3-avr32-2.0-002-rm-whitespace.patch	2007-08-28 23:05:10 UTC (rev 19728)
-@@ -54,15 +54,6 @@
-     ... code requiring gcc 2.8 or later ...
-     #endif
-     Note - they won't work for gcc1 or glibc1, since the _MINOR macros
--@@ -297,7 +297,7 @@
-- /* uClibc does not support _FORTIFY_SOURCE */
-- #undef _FORTIFY_SOURCE
-- #if defined _FORTIFY_SOURCE && _FORTIFY_SOURCE > 0 \
---    && __GNUC_PREREQ (4, 1) && defined __OPTIMIZE__ && __OPTIMIZE__ > 0
--+    && __GNUC_PREREQ(4, 1) && defined __OPTIMIZE__ && __OPTIMIZE__ > 0
-- # if _FORTIFY_SOURCE > 1
-- #  define __USE_FORTIFY_LEVEL 2
-- # else
- @@ -366,7 +366,7 @@
-  #endif	/* !ASSEMBLER */
-  
+--- trunk/buildroot/package/qtopia4/qtopia-4.2.2-add-avr32-qatomic-header-to-header-list.patch	                        (rev 0)
++++ trunk/buildroot/package/qtopia4/qtopia-4.2.2-add-avr32-qatomic-header-to-header-list.patch	2007-08-28 23:06:33 UTC (rev 19729)
+@@ -0,0 +1,6 @@
++--- a/include/QtCore/headers.pri	2007-08-02 15:03:31.000000000 +0200
+++++ b/include/QtCore/headers.pri	2007-08-02 15:03:44.000000000 +0200
++@@ -1,2 +1,2 @@
++-SYNCQT.HEADER_FILES = ../corelib/io/qdatastream.h ../corelib/io/qdebug.h ../corelib/io/qtextstream.h ../corelib/io/qtemporaryfile.h ../corelib/io/qfsfileengine.h ../corelib/io/qiodevice.h ../corelib/io/qprocess.h ../corelib/io/qresource.h ../corelib/io/qbuffer.h ../corelib/io/qfilesystemwatcher.h ../corelib/io/qdir.h ../corelib/io/qurl.h ../corelib/io/qabstractfileengine.h ../corelib/io/qfileinfo.h ../corelib/io/qsettings.h ../corelib/io/qfile.h ../corelib/arch/qatomic_arch.h ../corelib/arch/qatomic_i386.h ../corelib/arch/qatomic_sparc.h ../corelib/arch/qatomic_x86_64.h ../corelib/arch/qatomic_ia64.h ../corelib/arch/qatomic_parisc.h ../corelib/arch/qatomic_mips.h ../corelib/arch/qatomic_s390.h ../corelib/arch/qatomic_arm.h ../corelib/arch/qatomic_powerpc.h ../corelib/arch/qatomic_alpha.h ../corelib/arch/qatomic_boundschecker.h ../corelib/arch/qatomic_generic.h ../corelib/tools/qcache.h ../corelib/tools/qline.h ../corelib/tools/qlist.h ../corelib/tools/qpair.h ../corelib/tools/qpoint.h ../corelib/tools/qrect.h ../corelib/tools/qsize.h ../corelib/tools/qstringlist.h ../corelib/tools/qstringmatcher.h ../corelib/tools/qlinkedlist.h ../corelib/tools/qbitarray.h ../corelib/tools/qvector.h ../corelib/tools/qbytearraymatcher.h ../corelib/tools/qqueue.h ../corelib/tools/qbytearray.h ../corelib/tools/qalgorithms.h ../corelib/tools/qvarlengtharray.h ../corelib/tools/qshareddata.h ../corelib/tools/qiterator.h ../corelib/tools/qlocale.h ../corelib/tools/qstack.h ../corelib/tools/qmap.h ../corelib/tools/qset.h ../corelib/tools/qdatetime.h ../corelib/tools/qstring.h ../corelib/tools/qcontainerfwd.h ../corelib/tools/qregexp.h ../corelib/tools/qchar.h ../corelib/tools/qhash.h ../corelib/tools/qtimeline.h ../corelib/codecs/qtextcodecplugin.h ../corelib/codecs/qtextcodec.h ../corelib/global/qconfig-large.h ../corelib/global/qconfig-dist.h ../corelib/global/qconfig-small.h ../corelib/global/qlibraryinfo.h ../corelib/global/qendian.h ../corelib/global/qfeatures.h ../corelib/global/qglobal.h ../corelib/global/qconfig-minimal.h ../corelib/global/qnamespace.h ../corelib/global/qconfig-medium.h ../corelib/kernel/qtranslator.h ../corelib/kernel/qvariant.h ../corelib/kernel/qmimedata.h ../corelib/kernel/qeventloop.h ../corelib/kernel/qcoreapplication.h ../corelib/kernel/qabstractitemmodel.h ../corelib/kernel/qsignalmapper.h ../corelib/kernel/qobjectcleanuphandler.h ../corelib/kernel/qbasictimer.h ../corelib/kernel/qsocketnotifier.h ../corelib/kernel/qobject.h ../corelib/kernel/qtimer.h ../corelib/kernel/qmetatype.h ../corelib/kernel/qabstracteventdispatcher.h ../corelib/kernel/qpointer.h ../corelib/kernel/qmetaobject.h ../corelib/kernel/qcoreevent.h ../corelib/kernel/qobjectdefs.h ../corelib/plugin/qpluginloader.h ../corelib/plugin/quuid.h ../corelib/plugin/qlibrary.h ../corelib/plugin/qplugin.h ../corelib/plugin/qfactoryinterface.h ../corelib/thread/qsemaphore.h ../corelib/thread/qthreadstorage.h ../corelib/thread/qwaitcondition.h ../corelib/thread/qthread.h ../corelib/thread/qmutex.h ../corelib/thread/qreadwritelock.h ../corelib/thread/qatomic.h ../../include/QtCore/QtCore 
+++SYNCQT.HEADER_FILES = ../corelib/io/qdatastream.h ../corelib/io/qdebug.h ../corelib/io/qtextstream.h ../corelib/io/qtemporaryfile.h ../corelib/io/qfsfileengine.h ../corelib/io/qiodevice.h ../corelib/io/qprocess.h ../corelib/io/qresource.h ../corelib/io/qbuffer.h ../corelib/io/qfilesystemwatcher.h ../corelib/io/qdir.h ../corelib/io/qurl.h ../corelib/io/qabstractfileengine.h ../corelib/io/qfileinfo.h ../corelib/io/qsettings.h ../corelib/io/qfile.h ../corelib/arch/qatomic_arch.h ../corelib/arch/qatomic_i386.h ../corelib/arch/qatomic_sparc.h ../corelib/arch/qatomic_x86_64.h ../corelib/arch/qatomic_ia64.h ../corelib/arch/qatomic_parisc.h ../corelib/arch/qatomic_mips.h ../corelib/arch/qatomic_s390.h ../corelib/arch/qatomic_arm.h ../corelib/arch/qatomic_avr32.h ../corelib/arch/qatomic_powerpc.h ../corelib/arch/qatomic_alpha.h ../corelib/arch/qatomic_boundschecker.h ../corelib/arch/qatomic_generic.h ../corelib/tools/qcache.h ../corelib/tools/qline.h ../corelib/tools/qlist.h ../corelib/tools/qpair.h ../corelib/tools/qpoint.h ../corelib/tools/qrect.h ../corelib/tools/qsize.h ../corelib/tools/qstringlist.h ../corelib/tools/qstringmatcher.h ../corelib/tools/qlinkedlist.h ../corelib/tools/qbitarray.h ../corelib/tools/qvector.h ../corelib/tools/qbytearraymatcher.h ../corelib/tools/qqueue.h ../corelib/tools/qbytearray.h ../corelib/tools/qalgorithms.h ../corelib/tools/qvarlengtharray.h ../corelib/tools/qshareddata.h ../corelib/tools/qiterator.h ../corelib/tools/qlocale.h ../corelib/tools/qstack.h ../corelib/tools/qmap.h ../corelib/tools/qset.h ../corelib/tools/qdatetime.h ../corelib/tools/qstring.h ../corelib/tools/qcontainerfwd.h ../corelib/tools/qregexp.h ../corelib/tools/qchar.h ../corelib/tools/qhash.h ../corelib/tools/qtimeline.h ../corelib/codecs/qtextcodecplugin.h ../corelib/codecs/qtextcodec.h ../corelib/global/qconfig-large.h ../corelib/global/qconfig-dist.h ../corelib/global/qconfig-small.h ../corelib/global/qlibraryinfo.h ../corelib/global/qendian.h ../corelib/global/qfeatures.h ../corelib/global/qglobal.h ../corelib/global/qconfig-minimal.h ../corelib/global/qnamespace.h ../corelib/global/qconfig-medium.h ../corelib/kernel/qtranslator.h ../corelib/kernel/qvariant.h ../corelib/kernel/qmimedata.h ../corelib/kernel/qeventloop.h ../corelib/kernel/qcoreapplication.h ../corelib/kernel/qabstractitemmodel.h ../corelib/kernel/qsignalmapper.h ../corelib/kernel/qobjectcleanuphandler.h ../corelib/kernel/qbasictimer.h ../corelib/kernel/qsocketnotifier.h ../corelib/kernel/qobject.h ../corelib/kernel/qtimer.h ../corelib/kernel/qmetatype.h ../corelib/kernel/qabstracteventdispatcher.h ../corelib/kernel/qpointer.h ../corelib/kernel/qmetaobject.h ../corelib/kernel/qcoreevent.h ../corelib/kernel/qobjectdefs.h ../corelib/plugin/qpluginloader.h ../corelib/plugin/quuid.h ../corelib/plugin/qlibrary.h ../corelib/plugin/qplugin.h ../corelib/plugin/qfactoryinterface.h ../corelib/thread/qsemaphore.h ../corelib/thread/qthreadstorage.h ../corelib/thread/qwaitcondition.h ../corelib/thread/qthread.h ../corelib/thread/qmutex.h ../corelib/thread/qreadwritelock.h ../corelib/thread/qatomic.h ../../include/QtCore/QtCore 
++ SYNCQT.HEADER_CLASSES = ../../include/QtCore/QDataStream ../../include/QtCore/QtDebug ../../include/QtCore/QDebug ../../include/QtCore/QNoDebug ../../include/QtCore/QTextStream ../../include/QtCore/QTextStreamFunction ../../include/QtCore/QTextStreamManipulator ../../include/QtCore/QTS ../../include/QtCore/QTextIStream ../../include/QtCore/QTextOStream ../../include/QtCore/QTemporaryFile ../../include/QtCore/QFSFileEngine ../../include/QtCore/QIODevice ../../include/QtCore/Q_PID ../../include/QtCore/QProcess ../../include/QtCore/QResource ../../include/QtCore/QBuffer ../../include/QtCore/QFileSystemWatcher ../../include/QtCore/QDir ../../include/QtCore/QUrl ../../include/QtCore/QAbstractFileEngine ../../include/QtCore/QAbstractFileEngineHandler ../../include/QtCore/QFileInfo ../../include/QtCore/QFileInfoList ../../include/QtCore/QFileInfoListIterator ../../include/QtCore/QSettings ../../include/QtCore/QFile ../../include/QtCore/QBasicAtomic ../../include/QtCore/QBasicAtomicPointer ../../include/QtCore/QCache ../../include/QtCore/QLine ../../include/QtCore/QLineF ../../include/QtCore/QListData ../../include/QtCore/QList ../../include/QtCore/QListIterator ../../include/QtCore/QMutableListIterator ../../include/QtCore/QPair ../../include/QtCore/QPoint ../../include/QtCore/QPointF ../../include/QtCore/QRect ../../include/QtCore/QRectF ../../include/QtCore/QSize ../../include/QtCore/QSizeF ../../include/QtCore/QStringListIterator ../../include/QtCore/QMutableStringListIterator ../../include/QtCore/QStringList ../../include/QtCore/QStringMatcher ../../include/QtCore/QLinkedListData ../../include/QtCore/QLinkedListNode ../../include/QtCore/QLinkedList ../../include/QtCore/QLinkedListIterator ../../include/QtCore/QMutableLinkedListIterator ../../include/QtCore/QBitArray ../../include/QtCore/QBitRef ../../include/QtCore/QVectorData ../../include/QtCore/QVectorTypedData ../../include/QtCore/QVector ../../include/QtCore/QVectorIterator ../../include/QtCore/QMutableVectorIterator ../../include/QtCore/QByteArrayMatcher ../../include/QtCore/QQueue ../../include/QtCore/QByteArray ../../include/QtCore/QByteRef ../../include/QtCore/QtAlgorithms ../../include/QtCore/QVarLengthArray ../../include/QtCore/QSharedData ../../include/QtCore/QSharedDataPointer ../../include/QtCore/QLocale ../../include/QtCore/QSystemLocale ../../include/QtCore/QStack ../../include/QtCore/QMapData ../../include/QtCore/QMap ../../include/QtCore/QMultiMap ../../include/QtCore/QMapIterator ../../include/QtCore/QMutableMapIterator ../../include/QtCore/QSet ../../include/QtCore/QSetIterator ../../include/QtCore/QMutableSetIterator ../../include/QtCore/QDate ../../include/QtCore/QTime ../../include/QtCore/QDateTime ../../include/QtCore/QStdWString ../../include/QtCore/QString ../../include/QtCore/QLatin1String ../../include/QtCore/QCharRef ../../include/QtCore/QConstString ../../include/QtCore/QtContainerFwd ../../include/QtCore/QRegExp ../../include/QtCore/QLatin1Char ../../include/QtCore/QChar ../../include/QtCore/QHashData ../../include/QtCore/QHashDummyValue ../../include/QtCore/QHashDummyNode ../../include/QtCore/QHashNode ../../include/QtCore/QHash ../../include/QtCore/QMultiHash ../../include/QtCore/QHashIterator ../../include/QtCore/QMutableHashIterator ../../include/QtCore/QTimeLine ../../include/QtCore/QTextCodecFactoryInterface ../../include/QtCore/QTextCodecPlugin ../../include/QtCore/QTextCodec ../../include/QtCore/QTextEncoder ../../include/QtCore/QTextDecoder ../../include/QtCore/QLibraryInfo ../../include/QtCore/QtEndian ../../include/QtCore/QtGlobal ../../include/QtCore/QUintForSize ../../include/QtCore/QUintForType ../../include/QtCore/QIntForSize ../../include/QtCore/QIntForType ../../include/QtCore/QNoImplicitBoolCast ../../include/QtCore/Q_INT8 ../../include/QtCore/Q_UINT8 ../../include/QtCore/Q_INT16 ../../include/QtCore/Q_UINT16 ../../include/QtCore/Q_INT32 ../../include/QtCore/Q_UINT32 ../../include/QtCore/Q_INT64 ../../include/QtCore/Q_UINT64 ../../include/QtCore/Q_LLONG ../../include/QtCore/Q_ULLONG ../../include/QtCore/Q_LONG ../../include/QtCore/Q_ULONG ../../include/QtCore/QSysInfo ../../include/QtCore/QtMsgHandler ../../include/QtCore/QGlobalStatic ../../include/QtCore/QBool ../../include/QtCore/QTypeInfo ../../include/QtCore/QFlag ../../include/QtCore/QFlags ../../include/QtCore/QForeachContainer ../../include/QtCore/QForeachContainerBase ../../include/QtCore/Qt ../../include/QtCore/QInternal ../../include/QtCore/QCOORD ../../include/QtCore/QTranslator ../../include/QtCore/QVariant ../../include/QtCore/QVariantList ../../include/QtCore/QVariantMap ../../include/QtCore/QVariantComparisonHelper ../../include/QtCore/QMimeData ../../include/QtCore/QEventLoop ../../include/QtCore/QCoreApplication ../../include/QtCore/QtCleanUpFunction ../../include/QtCore/QModelIndex ../../include/QtCore/QPersistentModelIndex ../../include/QtCore/QModelIndexList ../../include/QtCore/QAbstractItemModel ../../include/QtCore/QAbstractTableModel ../../include/QtCore/QAbstractListModel ../../include/QtCore/QSignalMapper ../../include/QtCore/QObjectCleanupHandler ../../include/QtCore/QBasicTimer ../../include/QtCore/QSocketNotifier ../../include/QtCore/QObjectList ../../include/QtCore/QObjectData ../../include/QtCore/QObject ../../include/QtCore/QObjectUserData ../../include/QtCore/QTimer ../../include/QtCore/QMetaType ../../include/QtCore/QMetaTypeId ../../include/QtCore/QMetaTypeId2 ../../include/QtCore/QAbstractEventDispatcher ../../include/QtCore/QPointer ../../include/QtCore/QMetaMethod ../../include/QtCore/QMetaEnum ../../include/QtCore/QMetaProperty ../../include/QtCore/QMetaClassInfo ../../include/QtCore/QEvent ../../include/QtCore/QTimerEvent ../../include/QtCore/QChildEvent ../../include/QtCore/QCustomEvent ../../include/QtCore/QDynamicPropertyChangeEvent ../../include/QtCore/QGenericArgument ../../include/QtCore/QGenericReturnArgument ../../include/QtCore/QArgument ../../include/QtCore/QReturnArgument ../../include/QtCore/QMetaObject ../../include/QtCore/QPluginLoader ../../include/QtCore/QUuid ../../include/QtCore/QLibrary ../../include/QtCore/QtPlugin ../../include/QtCore/QtPluginInstanceFunction ../../include/QtCore/QFactoryInterface ../../include/QtCore/QSemaphore ../../include/QtCore/QThreadStorageData ../../include/QtCore/QThreadStorage ../../include/QtCore/QWaitCondition ../../include/QtCore/QThread ../../include/QtCore/QMutex ../../include/QtCore/QMutexLocker ../../include/QtCore/QReadWriteLock ../../include/QtCore/QReadLocker ../../include/QtCore/QWriteLocker ../../include/QtCore/QAtomic ../../include/QtCore/QAtomicPointer 
+
+Modified: trunk/buildroot/package/qtopia4/qtopia4.mk
+===================================================================
+--- trunk/buildroot/package/qtopia4/qtopia4.mk	2007-08-28 23:05:10 UTC (rev 19728)
++++ trunk/buildroot/package/qtopia4/qtopia4.mk	2007-08-28 23:06:33 UTC (rev 19729)
+@@ -15,7 +15,7 @@
+ #
+ ######################################################################
+ 
+-QTOPIA4_VERSION:=4.2.2
++QTOPIA4_VERSION:=4.3.1
+ QTOPIA4_CAT:=$(ZCAT)
+ 
+ BR2_PACKAGE_QTOPIA4_COMMERCIAL_USERNAME:=$(strip $(subst ",, $(BR2_PACKAGE_QTOPIA4_COMMERCIAL_USERNAME)))
+@@ -169,8 +169,6 @@
+ 		$(QTOPIA4_TARGET_DIR)/$(QTOPIA4_QCONFIG_FILE_LOCATION)
+ 	(cd $(QTOPIA4_TARGET_DIR); rm -rf config.cache; \
+ 		PATH=$(TARGET_PATH) \
+-		CFLAGS="$(TARGET_CFLAGS)" \
+-		CXXFLAGS="$(TARGET_CXXFLAGS)" \
+ 		QPEHOME=/usr \
+ 		QPEDIR=/usr \
+ 		./configure \
+@@ -181,6 +179,7 @@
+ 		$(QTOPIA4_QCONFIG_COMMAND) \
+ 		$(QTOPIA4_DEBUG) \
+ 		$(QTOPIA4_DEPTHS) \
++		-no-stl \
+ 		-no-cups \
+ 		-no-nis \
+ 		-no-freetype \
+@@ -205,8 +204,8 @@
+ 		-sysconfdir /etc/qt4 \
+ 		-examplesdir /usr/share/qt4/examples \
+ 		-demosdir /usr/share/qt4/demos \
++		-fast \
+ 		-nomake examples \
+-		-fast \
+ 		-no-rpath \
+ 		$(QTOPIA4_QT3SUPPORT) \
+ 		$(QTOPIA4_TSLIB) \
+@@ -230,13 +229,13 @@
+ 	if [ -d $(QTOPIA4_TARGET_DIR)/plugins/imageformats ]; then \
+ 		mkdir -p $(TARGET_DIR)/usr/lib/qt4/plugins; \
+ 		cp -dpfr $(QTOPIA4_TARGET_DIR)/plugins/imageformats $(TARGET_DIR)/usr/lib/qt4/plugins; \
+-		$(STRIP) --strip-unneeded $(TARGET_DIR)/usr/lib/qt4/plugins/imageformats/*; \
++		$(STRIP) $(STRIP_STRIP_UNNEEDED) $(TARGET_DIR)/usr/lib/qt4/plugins/imageformats/*; \
+ 	fi
+ 	# Remove Sql libraries, not needed
+ 	-rm $(TARGET_DIR)/usr/lib/libQtSql*
+ 	# Remove Svg libraries, not needed
+ 	-rm $(TARGET_DIR)/usr/lib/libQtSvg*
+-	-$(STRIP) --strip-unneeded $(TARGET_DIR)/usr/lib/libQt*.so.$(QTOPIA4_VERSION)
++	-$(STRIP) $(STRIP_STRIP_UNNEEDED) $(TARGET_DIR)/usr/lib/libQt*.so.$(QTOPIA4_VERSION)
+ 
+ #################################
+ #
+@@ -265,8 +264,6 @@
+ 		$(QTOPIA4_HOST_DIR)/$(QTOPIA4_QCONFIG_FILE_LOCATION)
+ 	(cd $(QTOPIA4_HOST_DIR); rm -rf config.cache; \
+ 		PATH=$(TARGET_PATH) \
+-		CFLAGS="$(TARGET_CFLAGS)" \
+-		CXXFLAGS="$(TARGET_CXXFLAGS)" \
+ 		QPEHOME=/usr \
+ 		QPEDIR=/usr \
+ 		./configure \
+@@ -277,6 +274,7 @@
+ 		$(QTOPIA4_QCONFIG_COMMAND) \
+ 		$(QTOPIA4_DEBUG) \
+ 		$(QTOPIA4_DEPTHS) \
++		-no-stl \
+ 		-no-cups \
+ 		-no-nis \
+ 		-no-freetype \
+@@ -301,8 +299,8 @@
+ 		-sysconfdir $(STAGING_DIR)/etc/qt4 \
+ 		-examplesdir $(STAGING_DIR)/usr/share/qt4/examples \
+ 		-demosdir $(STAGING_DIR)/usr/share/qt4/demos \
++		-fast \
+ 		-nomake examples \
+-		-fast \
+ 		-no-rpath \
+ 		$(QTOPIA4_QT3SUPPORT) \
+ 		$(QTOPIA4_TSLIB) \
+@@ -317,6 +315,9 @@
+ 
+ $(STAGING_DIR)/usr/lib/libQtCore.so.$(QTOPIA4_VERSION): $(QTOPIA4_HOST_DIR)/lib/libQtCore.so.$(QTOPIA4_VERSION)
+ 	$(TARGET_CONFIGURE_OPTS) $(MAKE) -C $(QTOPIA4_HOST_DIR) install
++	# For some reason make install misses copying this file.
++	# cp -dpf $(QTOPIA4_HOST_DIR)/src/corelib/arch/qatomic_avr32.h $(STAGING_DIR)/include/qt4/QtCore/
++	# Try other patch first.
+ 
+ qtopia4: uclibc zlib $(QTOPIA4_DEP_LIBS) \
+ 		$(STAGING_DIR)/usr/lib/libQtCore.so.$(QTOPIA4_VERSION) \
