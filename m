@@ -1,91 +1,48 @@
-From: Hebbar <gururajakr@sanyo.co.in>
-Date: Mon, 27 Aug 2007 18:51:05 -0700 (PDT)
-Subject: [Buildroot] Unable to Build mpg123 because of wrong patch file
-Message-ID: <12360819.post@talk.nabble.com>
+From: Ulf Samuelsson <ulf@atmel.com>
+Date: Tue, 28 Aug 2007 06:37:39 +0200
+Subject: [Buildroot] Make wants to read local libraries instead
+	of	buildroot libraries
+In-Reply-To: <b6838d3a0708271748k6a7757b4u79c1beb62022fa6e@mail.gmail.com>
+References: <b6838d3a0708271748k6a7757b4u79c1beb62022fa6e@mail.gmail.com>
+Message-ID: <1188275859.4056.22.camel@aeglos.sweden.atmel.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+m?n 2007-08-27 klockan 20:48 -0400 skrev Daniel Frey:
+> All,
+> 
+> I have been struggling with resolving dependencies in my buildroot
+> project.  For libraries that have already been pre-configured in the
+> package directory, I have no issue with.  For something new, libvorbis
+> (requires libogg), i have modified libogg or xml2 make files, but the
+> linker still wants to look on the local filesystem version of libogg
+> (usr/lib/libogg.a), instead of $(TARGET_DIR)/usr/lib, even when
+> $(TARGET_DIR)/usr/lib appears ahead of /usr/lib/libogg.a.
+> ($(TARGET_DIR) is expanded out).  My quess is that libogg.explicitly
+> defines a file, whereas the $(TARGET_DIR) only specifies a path, but I
+> could be wrong.
+> 
+> I guess what I am looking for is the best way to construct my
+> makefiles so that they are always working out of the relative
+> buildroot directories instead of looking to my local filesystem.  I am
+> including my libvorbis.mk
+> 
+Check the STAGING_DIR   ./lib or./usr/lib for '*.la'
+files which needs to be edited so that they point at
+STAGING_DIR libraries instead of at system libraries
 
-Hi All,
+Check what is done in the makefile fragments which do
+fix this problems.
 
- I am trying to build mpg123 for arm arm926ejs toolchain. Today i tried
-building mpg123 and failed because of wrong patch. Error message is attached
-below. The Cause is that the Patch file tries to correct a non existent file
-Makefile inside mpg123 folder just after uncompressing the mpg123 tar file.
-It should patch the same after it has compiled. 
-
-
-error message ---->
-bzcat /home/guru/project/original/bldrt/buildroot/dl/mpg123-0.66.tar.bz2 |
-tar -C /home/guru/project/original/bldrt/buildroot/build_arm   -xf -
-toolchain/patch-kernel.sh
-/home/guru/project/original/bldrt/buildroot/build_arm/mpg123-0.66
-package/mpg123/ mpg123\*.patch
-
-Applying mpg123-cross.patch using plaintext: 
-can't find file to patch at input line 4
-Perhaps you used the wrong -p or --strip option?
-The text leading up to this was:
---------------------------
-|diff -ruN mpg123-0.59r.orig/Makefile mpg123-0.59r/Makefile
-|--- mpg123-0.59r.orig/Makefile 1999-06-15 22:39:06.000000000 +0200
-|+++ mpg123-0.59r/Makefile      2006-12-14 15:52:44.000000000 +0100
---------------------------
-File to patch: Makefile
-Makefile: No such file or directory
-Skip this patch? [y] y
-Skipping patch.
-2 out of 2 hunks ignored
-Patch failed!  Please fix mpg123-cross.patch!
-make: ***
-[/home/guru/project/original/bldrt/buildroot/build_arm/mpg123-0.66/.unpacked]
-Error 1
-
-mpg123 folder contents.
-
-root at box124:~/project/original/bldrt/buildroot# ls -la
-build_arm/mpg123-0.66/Make*
--rwxr-xr-- 1 500 users  1112 Jun  3 19:43
-build_arm/mpg123-0.66/MakeLegacy.sh
--rw-r--r-- 1 500 users   524 Jun  3 19:43 build_arm/mpg123-0.66/Makefile.am
--rw-r--r-- 1 500 users 20890 Jun  3 19:43 build_arm/mpg123-0.66/Makefile.in
-
-mpg123.mk file contents
-
-$(MPG123_DIR)/.unpacked: $(DL_DIR)/$(MPG123_SOURCE)
-	$(MPG123_CAT) $(DL_DIR)/$(MPG123_SOURCE) | tar -C $(BUILD_DIR)
-$(TAR_OPTIONS) -
-	toolchain/patch-kernel.sh $(MPG123_DIR) package/mpg123/ mpg123\*.patch
-	$(CONFIG_UPDATE) $(MPG123_DIR)/build
-	touch $@
-
-$(MPG123_DIR)/.configured: $(MPG123_DIR)/.unpacked
-	(cd $(MPG123_DIR); rm -rf config.cache; \
-		$(TARGET_CONFIGURE_ARGS) \
-		$(TARGET_CONFIGURE_OPTS) \
-		CFLAGS="$(TARGET_CFLAGS)" \
-		LDFLAGS="$(TARGET_LDFLAGS)" \
-		./configure \
-		--target=$(REAL_GNU_TARGET_NAME) \
-		--host=$(REAL_GNU_TARGET_NAME) \
-		--build=$(GNU_HOST_NAME) \
-		--prefix=/usr \
-		--sysconfdir=/etc \
-		--with-cpu=generic_nofpu \
-		$(MPG123_USE_ALSA) \
-		$(DISABLE_NLS) \
-		$(DISABLE_LARGEFILE) \
-	)
-	touch $@
-
-
-Any help is appreciated.
-
-Regards
-Gururaja
+> Thanks for any help.
+> Dan 
+> _______________________________________________
+> buildroot mailing list
+> buildroot at uclibc.org
+> http://busybox.net/mailman/listinfo/buildroot
 -- 
-View this message in context: http://www.nabble.com/Unable-to-Build-mpg123-because-of-wrong-patch-file-tf4339318.html#a12360819
-Sent from the BuildRoot mailing list archive at Nabble.com.
+Best Regards,
+Ulf Samuelsson
