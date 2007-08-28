@@ -1,11 +1,12 @@
-From: Hans-Christian Egtvedt <hcegtvedt@atmel.com>
-Date: Tue, 28 Aug 2007 15:08:40 +0200
-Subject: [Buildroot] svn
-	commit:	trunk/buildroot/target/device/Atme	l:	atngw100/target_skeleton	atngw100/target
-	etc...
-In-Reply-To: <zjt0WVFMP7Qj.yZGl7kFD@mailout.dof.se>
-References: <zjt0WVFMP7Qj.yZGl7kFD@mailout.dof.se>
-Message-ID: <1188306520.7412.42.camel@localhost.localdomain>
+From: Jonathan Dumaresq <jdumaresq@cimeq.qc.ca>
+Date: Tue, 28 Aug 2007 09:17:48 -0400
+Subject: [Buildroot] buildroot for avr32
+References: <00d401c7e655$5d036260$6e00a8c0@JONATHAN>
+	<d6cda7730708240659q612e813l134c00d238ca6590@mail.gmail.com>
+	<1188204128.7890.5.camel@localhost.localdomain>
+	<001001c7e8dd$5b177970$6e00a8c0@JONATHAN>
+	<20070827211751.GY11697@aon.at>
+Message-ID: <005401c7e975$d43ecf40$6e00a8c0@JONATHAN>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,30 +14,34 @@ Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
 
-On Tue, 2007-08-28 at 14:55 +0200, Ulf Samuelsson wrote:
-> > Some stuff are needed
-> > during the build and
-> > the device table is only
-> > used when you convert
-> > $(TARGET-DIR) to
-> > rootfs-avr32.$(fs) which
-> > is too late.
-> > 
-> > It can probably be done
-> > better
-> 
-> Indeed, the packages failing with an "empty" skeleton should have some
-> mkdir -p actions in them IMHO. That way not all targets needs to be
-> fixed, but just one package.
-> 
-> => Feel free to provide
->    those patches.
+----- Original Message ----- 
+From: "Bernhard Fischer" <rep.dot.nop@gmail.com>
+To: "Jonathan Dumaresq" <jdumaresq@cimeq.qc.ca>
+Cc: <buildroot@uclibc.org>
+Sent: Monday, August 27, 2007 5:17 PM
+Subject: Re: [Buildroot] buildroot for avr32
 
-I do whenever I come across them (-:
 
-Are there any specific packages which fails today because of missing
-directories?
+> On Mon, Aug 27, 2007 at 03:06:21PM -0400, Jonathan Dumaresq wrote:
+>>Hi all,
+>>
+>>I would like to know how to customize the kernel when i build the 
+>>buildroot
+>>for avr32 ?
+>>
+>> make ARCH=avr32 CROSS_COMPILE=avr32-linux- menuconfig
+>
+> Did you see and read docs/README ?
+>
 
--- 
-With kind regards,
-Hans-Christian Egtvedt, Applications Engineer
+Yeah i have read it. But they have reference about busybox and uclibc
+customisation. I have found a way a doing it. I just do
+
+make ARCH=avr32 menuconfig
+
+and it work.
+
+i juste have to manualy copy the .config to save it before doing a make
+clean etc...
+
+Jonathan 
