@@ -1,11 +1,7 @@
-From: Hans-Christian Egtvedt <hcegtvedt@atmel.com>
-Date: Tue, 28 Aug 2007 10:21:19 +0200
-Subject: [Buildroot] svn
-	commit:	trunk/buildroot/target/device/Atme	l:	atngw100/target_skeleton	atngw100/target
-	etc...
-In-Reply-To: <N6xhSnyYKJlG.yp1Ms24M@mailout.dof.se>
-References: <N6xhSnyYKJlG.yp1Ms24M@mailout.dof.se>
-Message-ID: <1188289279.7412.1.camel@localhost.localdomain>
+From: Ulf Samuelsson <ulf@atmel.com>
+Date: Tue, 28 Aug 2007 11:00:33 +0200
+Subject: [Buildroot] BR fails to build native Toolchain for ARM
+Message-ID: <vlg4M3cg8kYs.WS9Jk0yD@mailout.dof.se>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,30 +9,26 @@ Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
 
-On Tue, 2007-08-28 at 10:10 +0200, Ulf Samuelsson wrote:
-> > Added:
-> >    trunk/buildroot/target/device/Atmel/atngw100/target_skeleton/bin/
-> 
-> What is up with all the directories? Is not defining them
-> in .../<board>/device_table.txt enough? I find it far better defining
-> them there since the access permissions can be defined as well.
-> 
-> 
-> Some stuff are needed
-> during the build and
-> the device table is only
-> used when you convert
-> $(TARGET-DIR) to
-> rootfs-avr32.$(fs) which
-> is too late.
-> 
-> It can probably be done
-> better
 
-Indeed, the packages failing with an "empty" skeleton should have some
-mkdir -p actions in them IMHO. That way not all targets needs to be
-fixed, but just one package.
+Hi all!
 
--- 
-With kind regards,
-Hans-Christian Egtvedt, Applications Engineer
+When using buildroot for arm, it fails to build a native toolchain with 
+the following error:
+
+/usr/lib/libgmp.so: could not read symbols: File in wrong format
+collect2: ld returned 1 exit status
+
+Config is gcc 4.2.1, binutils 2.17, uclibc 0.9.29
+Build system is centos 5.
+
+I tried various gcc versions in br, but every time got the same result.
+
+=> I manage to build a
+ toolchain with this settings.
+ There are other settings 
+ which can be configured.
+ OABI, generic-arm, NWFPE
+  is what I use.
+
+Best Regards
+Ulf Samuelsson
