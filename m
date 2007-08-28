@@ -1,48 +1,60 @@
-From: Ulf Samuelsson <ulf@atmel.com>
-Date: Tue, 28 Aug 2007 06:37:39 +0200
-Subject: [Buildroot] Make wants to read local libraries instead
-	of	buildroot libraries
-In-Reply-To: <b6838d3a0708271748k6a7757b4u79c1beb62022fa6e@mail.gmail.com>
-References: <b6838d3a0708271748k6a7757b4u79c1beb62022fa6e@mail.gmail.com>
-Message-ID: <1188275859.4056.22.camel@aeglos.sweden.atmel.com>
+From: Hans-Christian Egtvedt <hcegtvedt@atmel.com>
+Date: Tue, 28 Aug 2007 07:36:34 +0200
+Subject: [Buildroot] Unable to Build mpg123 because of wrong patch file
+In-Reply-To: <12360819.post@talk.nabble.com>
+References: <12360819.post@talk.nabble.com>
+Message-ID: <1188279394.31623.6.camel@localhost.localdomain>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-m?n 2007-08-27 klockan 20:48 -0400 skrev Daniel Frey:
-> All,
+On Mon, 2007-08-27 at 18:51 -0700, Hebbar wrote:
+> Hi All,
 > 
-> I have been struggling with resolving dependencies in my buildroot
-> project.  For libraries that have already been pre-configured in the
-> package directory, I have no issue with.  For something new, libvorbis
-> (requires libogg), i have modified libogg or xml2 make files, but the
-> linker still wants to look on the local filesystem version of libogg
-> (usr/lib/libogg.a), instead of $(TARGET_DIR)/usr/lib, even when
-> $(TARGET_DIR)/usr/lib appears ahead of /usr/lib/libogg.a.
-> ($(TARGET_DIR) is expanded out).  My quess is that libogg.explicitly
-> defines a file, whereas the $(TARGET_DIR) only specifies a path, but I
-> could be wrong.
-> 
-> I guess what I am looking for is the best way to construct my
-> makefiles so that they are always working out of the relative
-> buildroot directories instead of looking to my local filesystem.  I am
-> including my libvorbis.mk
-> 
-Check the STAGING_DIR   ./lib or./usr/lib for '*.la'
-files which needs to be edited so that they point at
-STAGING_DIR libraries instead of at system libraries
+>  I am trying to build mpg123 for arm arm926ejs toolchain. Today i tried
+> building mpg123 and failed because of wrong patch. Error message is attached
+> below. The Cause is that the Patch file tries to correct a non existent file
+> Makefile inside mpg123 folder just after uncompressing the mpg123 tar file.
+> It should patch the same after it has compiled. 
 
-Check what is done in the makefile fragments which do
-fix this problems.
+Mpg123 version was bumped, and it now uses a proper autoconf script, so
+the patch is no longer needed.
 
-> Thanks for any help.
-> Dan 
-> _______________________________________________
-> buildroot mailing list
-> buildroot at uclibc.org
-> http://busybox.net/mailman/listinfo/buildroot
+> error message ---->
+> bzcat /home/guru/project/original/bldrt/buildroot/dl/mpg123-0.66.tar.bz2 |
+> tar -C /home/guru/project/original/bldrt/buildroot/build_arm   -xf -
+> toolchain/patch-kernel.sh
+> /home/guru/project/original/bldrt/buildroot/build_arm/mpg123-0.66
+> package/mpg123/ mpg123\*.patch
+> 
+> Applying mpg123-cross.patch using plaintext: 
+
+Nuke this patch from the repo (-:
+
+> can't find file to patch at input line 4
+> Perhaps you used the wrong -p or --strip option?
+> The text leading up to this was:
+> --------------------------
+> |diff -ruN mpg123-0.59r.orig/Makefile mpg123-0.59r/Makefile
+> |--- mpg123-0.59r.orig/Makefile 1999-06-15 22:39:06.000000000 +0200
+> |+++ mpg123-0.59r/Makefile      2006-12-14 15:52:44.000000000 +0100
+> --------------------------
+> File to patch: Makefile
+> Makefile: No such file or directory
+> Skip this patch? [y] y
+> Skipping patch.
+> 2 out of 2 hunks ignored
+> Patch failed!  Please fix mpg123-cross.patch!
+> make: ***
+> [/home/guru/project/original/bldrt/buildroot/build_arm/mpg123-0.66/.unpacked]
+> Error 1
+
+<cut mpg123 directory contents>
+
+<cut mpg123.mk>
+
 -- 
-Best Regards,
-Ulf Samuelsson
+With kind regards,
+Hans-Christian Egtvedt, Applications Engineer
