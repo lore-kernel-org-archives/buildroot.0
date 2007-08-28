@@ -1,39 +1,43 @@
-From: Daniel Frey <dmfrey+linux@gmail.com>
-Date: Mon, 27 Aug 2007 20:48:57 -0400
-Subject: [Buildroot] Make wants to read local libraries instead of buildroot
-	libraries
-Message-ID: <b6838d3a0708271748k6a7757b4u79c1beb62022fa6e@mail.gmail.com>
+From: =?ISO-8859-1?Q?Thiago_A._Corr=EAa?= <thiago.correa@gmail.com>
+Date: Tue, 28 Aug 2007 02:29:20 +0100
+Subject: [Buildroot] How to change kernel version
+In-Reply-To: <1188212038.7840.14.camel@localhost.localdomain>
+References: <d6cda7730708181940u51f1e3d6ya6e701104d6dc5c7@mail.gmail.com>
+	<1188212038.7840.14.camel@localhost.localdomain>
+Message-ID: <d6cda7730708271829t4385308ew5e2a08330ea9c73b@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-All,
+Hi,
 
-I have been struggling with resolving dependencies in my buildroot project.
-For libraries that have already been pre-configured in the package
-directory, I have no issue with.  For something new, libvorbis (requires
-libogg), i have modified libogg or xml2 make files, but the linker still
-wants to look on the local filesystem version of libogg (usr/lib/libogg.a),
-instead of $(TARGET_DIR)/usr/lib, even when $(TARGET_DIR)/usr/lib appears
-ahead of /usr/lib/libogg.a.  ($(TARGET_DIR) is expanded out).  My quess is
-that libogg.explicitly defines a file, whereas the $(TARGET_DIR) only
-specifies a path, but I could be wrong.
+> >    I searched over the archives but I couldn't find anything about how
+> > one could change the kernel version. The only available option for
+> > AVR32, 2.6.22, is unable to boot on an STK1000 due to a bug in the MMC
+> > drivers, so I would like to change it to 2.6.18 which actually works.
+>
+> You could also attack the problem with the 2.6.22 kernel. AFAIK the bug
+> is not in the MMC driver, but the MMC core. A small change seems to
+> correct the problem for AVR32.
+>
+> See this thread for patch and information:
+>
+> http://avr32linux.org/archives/kernel/2007-August/000240.html
 
-I guess what I am looking for is the best way to construct my makefiles so
-that they are always working out of the relative buildroot directories
-instead of looking to my local filesystem.  I am including my libvorbis.mk
+Nope, this patch doesn't work on either of my sdcards, and have been
+reported on avrfreaks as working just sometimes. One of them being the
+one that came with the STK1000.
 
-Thanks for any help.
-Dan
--------------- next part --------------
-An HTML attachment was scrubbed...
-URL: http://busybox.net/lists/buildroot/attachments/20070827/f8b97902/attachment.htm 
--------------- next part --------------
-A non-text attachment was scrubbed...
-Name: libvorbis.mk
-Type: application/octet-stream
-Size: 2421 bytes
-Desc: not available
-Url : http://busybox.net/lists/buildroot/attachments/20070827/f8b97902/attachment.obj 
+>
+> Also, if your kernel is just booting too fast for the MMC layer to
+> detect the partitions, adding "rootwait=1" to the bootargs in u-boot
+> will let the kernel wait for the root partition to pop up.
+>
+
+There already :(
+
+I'm hoping that 2.6.23-rc3 changes to MMC has fixed it. But
+unfortunally using make menuconfig in buildroot and changing options
+at the "Linux Experimental" does nothing at all (at least in AVR32)
