@@ -1,30 +1,41 @@
-From: Johnnie Peters <johnnie123@verizon.net>
-Date: Wed, 29 Aug 2007 12:54:29 -0700
-Subject: [Buildroot] Serial port loging
-Message-ID: <46D5CEF5.8070605@verizon.net>
+From: Brad House <brad@mainstreetsoftworks.com>
+Date: Wed, 29 Aug 2007 17:46:46 -0400
+Subject: [Buildroot] [patch] modem driver packages
+Message-ID: <46D5E946.4060907@mainstreetsoftworks.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi All,
+I'm not sure how useful this is to anyone else, but we have
+a need for cheap modem support on Soekris net4801/net5501
+systems, so we've tested Conexant HCF and HSF based modems
+and Lucent/Agere based modems with these drivers, and they
+appear to work as expected.
 
-I am building a buildroot environment for the CM-X270 board.  I have it 
-defined to use "arm" "xscale" and "EABI".  I have added a getty for 
-ttySA0 into the inittab and now I get a login prompt on the serial 
-port.  I see that the "root" login has a blank password field int he 
-/etc/shadow file so I expected it to just login in when I enter root.
+The HCF driver works on i386 and ppc.
+The HSF driver works on i386 and x86_64.
+The ltmodem driver only works on i386 (the next-gen
+martian driver which works on i386 and x86_64
+crashes immediately with uclibc, so I patched
+the ltmodem driver to work with 2.6.22.1).
 
-Instead it pauses for a few seconds and displays the login prompt 
-again.  I then set up the shutdown login to run reboot.  When I tried 
-this I got an error that indicated it was not being ran as root so I set 
-the owner ID of shutdown in the /etc/passwd file to be 0.  Now when I 
-try to login as shutdown it also pauses for a few seconds and then 
-displays the login prompt again.
+I've attached the patch which adds these directories:
+package/hcfpcimodem
+package/hsfmodem
+package/ltmodem
 
-Any ideas?
+And modifies the package/Config.in by adding a new
+drivers/kernel modules section.
 
-Thanks for any info,
+Note: The HCF and HSF drivers require a license key
+from Linuxant (www.linuxant.com) to operate at speeds
+greater than 14.4.
 
-Johnnie
+-Brad
+
+-------------- next part --------------
+An embedded and charset-unspecified text was scrubbed...
+Name: modem_drivers.diff
+Url: http://busybox.net/lists/buildroot/attachments/20070829/8a5ea796/attachment.diff 
