@@ -1,41 +1,96 @@
 From: Brad House <brad@mainstreetsoftworks.com>
-Date: Wed, 29 Aug 2007 17:46:46 -0400
-Subject: [Buildroot] [patch] modem driver packages
-Message-ID: <46D5E946.4060907@mainstreetsoftworks.com>
+Date: Wed, 29 Aug 2007 22:41:15 -0400
+Subject: [Buildroot] [patch] OCF cryptodev patchset
+Message-ID: <46D62E4B.8080702@mainstreetsoftworks.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-I'm not sure how useful this is to anyone else, but we have
-a need for cheap modem support on Soekris net4801/net5501
-systems, so we've tested Conexant HCF and HSF based modems
-and Lucent/Agere based modems with these drivers, and they
-appear to work as expected.
+Patch: http://www.monetra.com/~brad/buildroot/ocf-linux.patch.bz2
 
-The HCF driver works on i386 and ppc.
-The HSF driver works on i386 and x86_64.
-The ltmodem driver only works on i386 (the next-gen
-martian driver which works on i386 and x86_64
-crashes immediately with uclibc, so I patched
-the ltmodem driver to work with 2.6.22.1).
+This is a patchset to provide userland access to kernel
+cryptographic interfaces.  This means that hardware crypto
+accelerators supported by the kernel can now be utilized by
+userland applications and libraries such as OpenSSL, OpenSwan,
+and OpenSSH.
 
-I've attached the patch which adds these directories:
-package/hcfpcimodem
-package/hsfmodem
-package/ltmodem
+Reference: http://ocf-linux.sourceforge.net
 
-And modifies the package/Config.in by adding a new
-drivers/kernel modules section.
+The patchset also provides support for these additional
+hardware crypto devices (which are not currently part
+of the linux kernel):
+	Hifn 7951
+	Hifn 7956
+	SafeNet SafeXcel 1741
+	SafeNet SafeXcel 1142
+	Intel IXP465
+	Intel IXP425
+	Intel IXP422
+	Freescale SEC
 
-Note: The HCF and HSF drivers require a license key
-from Linuxant (www.linuxant.com) to operate at speeds
-greater than 14.4.
+Note: to take advantage of hardware crypto accelerators
+already in the kernel (such as GeodeLX AES, or Via Padlock)
+you must, counter-intuitively, enable the 'cryptosoft' feature
+of OCF.  Also, don't forget to enable 'cryptodev' for userland
+support.
 
+The kernel patchset is from the 20070727 release, but had
+to be re-diffed to apply cleanly to 2.6.22.1.
+
+The openssl patchset included here is from the 20051110
+release, which is the last release supporting the 0.9.7
+series of OpenSSL which is what buildroot currently
+provides.  Some minor manual patching was needed to make
+this apply cleanly to 0.9.7m.
+
+Since hardware cryptographic acceleration is becoming
+common in embedded devices, it makes sense for buildroot
+to support this natively.
+
+On a Soekris net5501-60 (433MHz GeodeLX), with the built-in
+GeodeLX AES accelerator, using openssl's speed test with and
+without cryptodev, here are some statistics:
+
+software, single-threaded:
+openssl speed -evp aes128 -elapsed
+ type             16 bytes     64 bytes    256 bytes   1024 bytes   8192
+bytes
+aes-128-cbc       3823.26k     4329.37k     4467.63k     4510.92k
+4527.16k
+
+hardware, single-threaded:
+openssl speed -evp aes128 -engine cryptodev -elapsed
+ type             16 bytes     64 bytes    256 bytes   1024 bytes   8192
+bytes
+aes-128-cbc       1359.10k     4837.19k    13548.04k    25759.01k
+34166.10k
+
+software, multi-threaded:
+openssl speed -evp aes128 -elapsed -multi 10
+ type             16 bytes     64 bytes    256 bytes   1024 bytes   8192
+bytes
+aes-128-cbc       3921.08k     4247.58k     4483.26k     4539.02k
+5722.35k
+
+hardware, multi-threaded:
+openssl speed -evp aes128 -engine cryptodev -elapsed -multi 10
+ type             16 bytes     64 bytes    256 bytes   1024 bytes   8192
+bytes
+aes-128-cbc       4058.10k    16153.17k    26851.91k    74207.78k
+123592.85k
+
+Obviously the hardware acceleration is a huge win for large block sizes.
+
+I've bzip2'd the entire patch for size.
+Please make sure the  toolchain/kernel-headers/ocf and
+package/openssl/ocf  directory and contents get committed.
+
+My first attempt to send this sent it as an attachment, I've uploaded
+it now to my webserver so it can be downloaded since it was rejected
+by the mailinglist for size:
+http://www.monetra.com/~brad/buildroot/ocf-linux.patch.bz2
+
+Thanks.
 -Brad
-
--------------- next part --------------
-An embedded and charset-unspecified text was scrubbed...
-Name: modem_drivers.diff
-Url: http://busybox.net/lists/buildroot/attachments/20070829/8a5ea796/attachment.diff 
