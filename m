@@ -1,35 +1,80 @@
-From: Ulf Samuelsson <ulf@atmel.com>
-Date: Thu, 30 Aug 2007 07:07:31 +0200
-Subject: [Buildroot] Revision 19714 breaks build of gcc 4.2.1
-References: <f90898420708290617j1f87a539yf1bedcd060005dd7@mail.gmail.com>
-	<46D57A3A.2060708@st.com>
-Message-ID: <025301c7eac4$f2a09bd0$db03440a@atmel.com>
+From: ulf at uclibc.org <ulf@uclibc.org>
+Date: Wed, 29 Aug 2007 23:00:37 -0700 (PDT)
+Subject: [Buildroot] svn commit: trunk/buildroot/toolchain/gcc/4.2.1
+Message-ID: <20070830060037.3D54DA462D@busybox.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-> The today's snapshot doesn't build because of the changes in
-> 200-uclibc-locale.patch and 205-uclibc-locale-update.patch.
->
-> Error-Log is attached.
->   
->
-> In file included from /home/sp/buildroot/toolchain_build_i686/gcc-4.2.1-final/i686-linux-uclibc/libstdc++-v3/include/iosfwd:45,
->                  from /home/sp/buildroot/toolchain_build_i686/gcc-4.2.1-final/i686-linux-uclibc/libstdc++-v3/include/bits/stl_algobase.h:70,
->                  from /home/sp/buildroot/toolchain_build_i686/gcc-4.2.1-final/i686-linux-uclibc/libstdc++-v3/include/algorithm:65,
->                  from /home/sp/buildroot/toolchain_build_i686/gcc-4.2.1/libstdc++-v3/include/precompiled/stdc++.h:55:
-> /home/sp/buildroot/toolchain_build_i686/gcc-4.2.1-final/i686-linux-uclibc/libstdc++-v3/include/i686-linux-uclibc/bits/c++locale.h: In function ?int std::__convert_from_v(__uclibc_locale_struct* const&, char*, int, const char*, ...)?:
-> /home/sp/buildroot/toolchain_build_i686/gcc-4.2.1-final/i686-linux-uclibc/libstdc++-v3/include/i686-linux-uclibc/bits/c++locale.h:100: error: ?uselocale? is not a member of ?__gnu_cxx?
-> /home/sp/buildroot/toolchain_build_i686/gcc-4.2.1-final/i686-linux-uclibc/libstdc++-v3/include/i686-linux-uclibc/bits/c++locale.h:100: error: ?__cloc? was not declared in this scope
-> /home/sp/buildroot/toolchain_build_i686/gcc-4.2.1-final/i686-linux-uclibc/libstdc++-v3/include/i686-linux-uclibc/bits/c++locale.h:115: error: ?uselocale? is not a member of ?__gnu_cxx?
-> In file included from /home/sp/buildroot/toolchain_build_i686/gcc-4.2.1-final/i686-linux-uclibc/libstdc++-v3/include/iosfwd:45,
->                  from /home/sp/buildroot/toolchain_build_i686/gcc-4.2.1-final/i686-linux-uclibc/libstdc++-v3/include/bits/stl_algobase.h:70,
+Author: ulf
+Date: 2007-08-29 23:00:36 -0700 (Wed, 29 Aug 2007)
+New Revision: 19737
+
+Log:
+Revert patch causing g++-4.2.1 build to fail
+
+Modified:
+   trunk/buildroot/toolchain/gcc/4.2.1/200-uclibc-locale.patch
+   trunk/buildroot/toolchain/gcc/4.2.1/205-uclibc-locale-update.patch
 
 
-It seems to break the C++ build, so if you don't need C++ disable that.
-Will look at this tonight.
+Changeset:
+Modified: trunk/buildroot/toolchain/gcc/4.2.1/200-uclibc-locale.patch
+===================================================================
+--- trunk/buildroot/toolchain/gcc/4.2.1/200-uclibc-locale.patch	2007-08-29 18:34:26 UTC (rev 19736)
++++ trunk/buildroot/toolchain/gcc/4.2.1/200-uclibc-locale.patch	2007-08-30 06:00:36 UTC (rev 19737)
+@@ -381,7 +381,7 @@
+ +    __convert_from_v(char* __out, 
+ +		     const int __size __attribute__ ((__unused__)),
+ +		     const char* __fmt,
+-+#ifdef __UCLIBC_HAS_XLOCALE__
+++#ifdef __UCLIBC_HAS_XCLOCALE__
+ +		     _Tv __v, const __c_locale& __cloc, int __prec)
+ +    {
+ +      __c_locale __old = __gnu_cxx::__uselocale(__cloc);
+@@ -398,7 +398,7 @@
+ +
+ +      const int __ret = std::snprintf(__out, __size, __fmt, __prec, __v);
+ +
+-+#ifdef __UCLIBC_HAS_XLOCALE__
+++#ifdef __UCLIBC_HAS_XCLOCALE__
+ +      __gnu_cxx::__uselocale(__old);
+ +#elif defined __UCLIBC_HAS_LOCALE__
+ +      std::setlocale(LC_ALL, __sav);
 
-Best Regards
-Ulf Samuelsson
+Modified: trunk/buildroot/toolchain/gcc/4.2.1/205-uclibc-locale-update.patch
+===================================================================
+--- trunk/buildroot/toolchain/gcc/4.2.1/205-uclibc-locale-update.patch	2007-08-29 18:34:26 UTC (rev 19736)
++++ trunk/buildroot/toolchain/gcc/4.2.1/205-uclibc-locale-update.patch	2007-08-30 06:00:36 UTC (rev 19737)
+@@ -313,11 +313,11 @@
+ -    __convert_from_v(char* __out, 
+ -		     const int __size __attribute__ ((__unused__)),
+ -		     const char* __fmt,
+--#ifdef __UCLIBC_HAS_XLOCALE__
++-#ifdef __UCLIBC_HAS_XCLOCALE__
+ -		     _Tv __v, const __c_locale& __cloc, int __prec)
+ +    inline int
+ +    __convert_from_v(const __c_locale&
+-+#ifndef __UCLIBC_HAS_XLOCALE__
+++#ifndef __UCLIBC_HAS_XCLOCALE__
+ +					__cloc __attribute__ ((__unused__))
+ +#endif
+ +		     ,
+@@ -326,7 +326,7 @@
+ +		     const char* __fmt, ...)
+      {
+ +      va_list __args;
+-+#ifdef __UCLIBC_HAS_XLOCALE__
+++#ifdef __UCLIBC_HAS_XCLOCALE__
+        __c_locale __old = __gnu_cxx::__uselocale(__cloc);
+  #else
+ -		     _Tv __v, const __c_locale&, int __prec)
+@@ -343,5 +343,5 @@
+ +      const int __ret = std::vsnprintf(__out, __size, __fmt, __args);
+ +      va_end(__args);
+  
+- #ifdef __UCLIBC_HAS_XLOCALE__
++ #ifdef __UCLIBC_HAS_XCLOCALE__
+        __gnu_cxx::__uselocale(__old);
