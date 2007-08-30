@@ -1,50 +1,68 @@
-From: Bernhard Fischer <rep.dot.nop@gmail.com>
-Date: Fri, 31 Aug 2007 00:28:16 +0200
-Subject: [Buildroot] X11R7 new compilation error
-In-Reply-To: <2TCPffdv4D2q.vF6vgtPv@mailout.dof.se>
-References: <2TCPffdv4D2q.vF6vgtPv@mailout.dof.se>
-Message-ID: <20070830222815.GH11697@aon.at>
+From: Ulf Samuelsson <ulf@atmel.com>
+Date: Fri, 31 Aug 2007 00:30:28 +0200
+Subject: [Buildroot] mplayer-package doesn't build for
+	otherarchitectures than avr32
+References: <f90898420708290133i7ac1f31dkbdd53649945091b3@mail.gmail.com>
+	<20070830221454.GG11697@aon.at>
+Message-ID: <014601c7eb5a$138e37e0$36f2780a@atmel.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Thu, Aug 30, 2007 at 11:18:48AM +0200, Ulf Samuelsson wrote:
->A good idea would be to
->stop sending html mail...
->
->Best Regards
->Ulf Samuelsson
-> ________________ ?rende:	[Buildroot] X11R7 new compilation error F?rfattare:	"pasteur agbanle" <agbanle@gmail.com> Datum:		2007 augusti 30:e 08:16 
->Hello,
->
->i have following error, while compiling x11R7 with fresh copy of buildroot :
->
-> /uclinux/buildroot/build_i586/staging_dir/usr/bin/i586-linux-uclibc-gcc -Os
->-pipe -I/uclinux/buildroot/build_i586/staging_dir/usr/include
->-I/uclinux/buildroot/build_i586/staging_dir/include
->--sysroot=/uclinux/buildroot/build_i586/staging_dir/ -isysroot
->/uclinux/buildroot/build_i586/staging_dir -mtune=i586 -march=i586
->-DHAVE_CONFIG_H -I. -I../include -I../Xprint -DHAVE_DIX_CONFIG_H
->"-DVENDOR_STRING=\"The X.Org Foundation\"" "-DVENDOR_RELEASE=(((7) *
->10000000) + ((2) * 100000) + ((0) * 1000) + 0)" -Wall -Wpointer-arith
->-Wstrict-prototypes -Wmissing-prototypes -Wmissing-declarations
->-Wnested-externs -fno-strict-aliasing -I../include -I../include -I../Xext
->-I../composite -I../damageext -I../xfixes -I../Xi -I../mi -I../miext/shadow
->-I../miext/damage -I../render -I../randr -I../fb -g -O2 -MT atom.lo -MD -MP
->-MF .deps/atom.Tpo -c atom.c  -fPIC -DPIC -o .libs/atom.o
->atom.c:77: error: expected '=', ',', ';', 'asm' or '__attribute__' before
->'Atom'
+----- Original Message ----- 
+From: "Bernhard Fischer" <rep.dot.nop@gmail.com>
+To: "Simon Pasch" <fpasch@googlemail.com>
+Cc: <buildroot@uclibc.org>; <ulf@atmel.com>
+Sent: Friday, August 31, 2007 12:14 AM
+Subject: Re: [Buildroot] mplayer-package doesn't build for otherarchitectures than avr32
 
-and another good idea would be to see what atom.c, line 77 tries to do
-and where this (probably type or missing include or the like) piece
-should come from.
 
-HTH,
+> On Wed, Aug 29, 2007 at 10:33:04AM +0200, Simon Pasch wrote:
+>>It's the same issues as in libmad-package:
+>>There are architecture-specific patches. (by the way...one should be
+>>removed, as they can't be used both at the same time.
+>>AVR32-Users...tell us which one is the good one!)
+>>
+>>I added an extra command to the Makefile, because the build fails on
+>>my x86. Don't know if this breaks the build on other architectures.
+>>So either a sed-command can be used inside the Makefile or an extra
+>>architecture-specific patch (but it's not that simple with $(ARCH),
+>>because then you need patches for i386, i686, etc).
+>>
+>>This is my sed-command approach. (you have to manually rename the avr-patches):
+>>
+>>--- buildroot/package/mplayer/mplayer.mk.old 2007-08-28 09:15:43.000000000 +0200
+>>+++ buildroot/package/mplayer/mplayer.mk 2007-08-29 10:02:07.000000000 +0200
+>>@@ -22,7 +22,9 @@
+>>
+>> $(MPLAYER_DIR)/.unpacked: $(DL_DIR)/$(MPLAYER_SOURCE)
+>> $(MPLAYER_CAT) $(DL_DIR)/$(MPLAYER_SOURCE) | tar -C $(BUILD_DIR)
+>>$(TAR_OPTIONS) -
+>>- toolchain/patch-kernel.sh $(MPLAYER_DIR) package/mplayer/
+>>mplayer-$(MPLAYER_VERSION)\*.patch\*
+>>+ toolchain/patch-kernel.sh $(MPLAYER_DIR) package/mplayer/
+>>mplayer-$(MPLAYER_VERSION)\*.patch
+>>+ toolchain/patch-kernel.sh $(MPLAYER_DIR) package/mplayer/
+>>mplayer-$(MPLAYER_VERSION)\*.patch.$(ARCH)
+>>+ $(SED) '/^CFLAGS/s/$$/ -fomit-frame-pointer/'
+>>$(MPLAYER_DIR)/libavcodec/Makefile
+>> touch $@
+>>
+>> $(MPLAYER_DIR)/.configured: $(MPLAYER_DIR)/.unpacked
+> 
+> Ulf, can you fix this up in a sane manner, i.e. not add ...$(ARCH).patch
+> stuff but arch agnostic, universally working fixes, if any?
+> 
+> TIA,
+>
 
->atom.c:153: error: expected '=', ',', ';', 'asm' or '__attribute__' before
->'Bool'
->atom.c:158: error: expected '=', ',', ';', 'asm' or '__attribute__' before
->'char'
->make[2]: *** [atom.lo] Error 1
+Got it from Hans Christian, which in his turn, got it from a colleague,
+so they need to update it if that is to happen.
+A lot of the stuff seems to be AVR32 specific in-line assembly code 
+using the AVR32 DSP features to optimize the mplayer algorithms, 
+so it seems utterly useless to apply for other architectures.
+
+Best Regards
+Ulf Samuelsson
