@@ -1,51 +1,50 @@
-From: Ulf Samuelsson <ulf@atmel.com>
-Date: Thu, 30 Aug 2007 11:18:48 +0200
-Subject: [Buildroot] X11R7 new compilation error
-Message-ID: <2TCPffdv4D2q.vF6vgtPv@mailout.dof.se>
+From: Brad House <brad@mainstreetsoftworks.com>
+Date: Thu, 30 Aug 2007 15:17:06 -0400
+Subject: [Buildroot] [patch] modem driver packages
+In-Reply-To: <46D5E946.4060907@mainstreetsoftworks.com>
+References: <46D5E946.4060907@mainstreetsoftworks.com>
+Message-ID: <46D717B2.2090304@mainstreetsoftworks.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-A good idea would be to
-stop sending html mail...
+I've attached an updated patch which also adds
+package/agrsm
+for Agere softmodems (different chipset from the
+ltmodem package)...
 
-Best Regards
-Ulf Samuelsson
- ________________ ?rende:	[Buildroot] X11R7 new compilation error F?rfattare:	"pasteur agbanle" <agbanle@gmail.com> Datum:		2007 augusti 30:e 08:16 
-Hello,
+-Brad
 
-i have following error, while compiling x11R7 with fresh copy of buildroot :
-
- /uclinux/buildroot/build_i586/staging_dir/usr/bin/i586-linux-uclibc-gcc -Os
--pipe -I/uclinux/buildroot/build_i586/staging_dir/usr/include
--I/uclinux/buildroot/build_i586/staging_dir/include
---sysroot=/uclinux/buildroot/build_i586/staging_dir/ -isysroot
-/uclinux/buildroot/build_i586/staging_dir -mtune=i586 -march=i586
--DHAVE_CONFIG_H -I. -I../include -I../Xprint -DHAVE_DIX_CONFIG_H
-"-DVENDOR_STRING=\"The X.Org Foundation\"" "-DVENDOR_RELEASE=(((7) *
-10000000) + ((2) * 100000) + ((0) * 1000) + 0)" -Wall -Wpointer-arith
--Wstrict-prototypes -Wmissing-prototypes -Wmissing-declarations
--Wnested-externs -fno-strict-aliasing -I../include -I../include -I../Xext
--I../composite -I../damageext -I../xfixes -I../Xi -I../mi -I../miext/shadow
--I../miext/damage -I../render -I../randr -I../fb -g -O2 -MT atom.lo -MD -MP
--MF .deps/atom.Tpo -c atom.c  -fPIC -DPIC -o .libs/atom.o
-atom.c:77: error: expected '=', ',', ';', 'asm' or '__attribute__' before
-'Atom'
-atom.c:153: error: expected '=', ',', ';', 'asm' or '__attribute__' before
-'Bool'
-atom.c:158: error: expected '=', ',', ';', 'asm' or '__attribute__' before
-'char'
-make[2]: *** [atom.lo] Error 1
-
-Any idea ?
-
-Best regards,
-
-Pasteur
-
-_______________________________________________
-buildroot mailing list
-buildroot at uclibc.org
-http://busybox.net/mailman/listinfo/buildroot
+Brad House wrote:
+> I'm not sure how useful this is to anyone else, but we have
+> a need for cheap modem support on Soekris net4801/net5501
+> systems, so we've tested Conexant HCF and HSF based modems
+> and Lucent/Agere based modems with these drivers, and they
+> appear to work as expected.
+> 
+> The HCF driver works on i386 and ppc.
+> The HSF driver works on i386 and x86_64.
+> The ltmodem driver only works on i386 (the next-gen
+> martian driver which works on i386 and x86_64
+> crashes immediately with uclibc, so I patched
+> the ltmodem driver to work with 2.6.22.1).
+> 
+> I've attached the patch which adds these directories:
+> package/hcfpcimodem
+> package/hsfmodem
+> package/ltmodem
+> 
+> And modifies the package/Config.in by adding a new
+> drivers/kernel modules section.
+> 
+> Note: The HCF and HSF drivers require a license key
+> from Linuxant (www.linuxant.com) to operate at speeds
+> greater than 14.4.
+> 
+> -Brad
+-------------- next part --------------
+An embedded and charset-unspecified text was scrubbed...
+Name: modem_drivers.diff
+Url: http://busybox.net/lists/buildroot/attachments/20070830/8366902a/attachment.diff 
