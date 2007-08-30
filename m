@@ -1,50 +1,85 @@
-From: Brad House <brad@mainstreetsoftworks.com>
-Date: Thu, 30 Aug 2007 15:17:06 -0400
-Subject: [Buildroot] [patch] modem driver packages
-In-Reply-To: <46D5E946.4060907@mainstreetsoftworks.com>
-References: <46D5E946.4060907@mainstreetsoftworks.com>
-Message-ID: <46D717B2.2090304@mainstreetsoftworks.com>
+From: Bernhard Fischer <rep.dot.nop@gmail.com>
+Date: Thu, 30 Aug 2007 23:56:46 +0200
+Subject: [Buildroot] Problems with some x86-Target Architecture Variants
+In-Reply-To: <f90898420708290412h83ed442x4bd7e61e048b629d@mail.gmail.com>
+References: <f90898420708290412h83ed442x4bd7e61e048b629d@mail.gmail.com>
+Message-ID: <20070830215646.GD11697@aon.at>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-I've attached an updated patch which also adds
-package/agrsm
-for Agere softmodems (different chipset from the
-ltmodem package)...
+On Wed, Aug 29, 2007 at 01:12:11PM +0200, Simon Pasch wrote:
+>There are missing some x86-architecture-variants in Config.in. Without
+>them it isn't possible to build the toolchain with build-optimization.
+>
+>Perhaps someone could look over the instruction-set versions...I tried
+>my best to find the correct ones.
 
--Brad
+gcc-4.3 supports these:
+generic
+native
+i386
+i486
+i586, pentium
+pentium-mmx
+pentiumpro
+i686
+pentium2
+pentium3, pentium3m
+pentium-m
+pentium4, pentium4m
+prescott
+nocona
+core2
+k6
+k6-2, k6-3
+athlon, athlon-tbird
+athlon-4, athlon-xp, athlon-mp
+k8, opteron, athlon64, athlon-fx
+k8-sse3, opteron-sse3, athlon64-sse3
+amdfam10, barcelona
+winchip-c6
+winchip2
+c3
+c3-2
+geode
 
-Brad House wrote:
-> I'm not sure how useful this is to anyone else, but we have
-> a need for cheap modem support on Soekris net4801/net5501
-> systems, so we've tested Conexant HCF and HSF based modems
-> and Lucent/Agere based modems with these drivers, and they
-> appear to work as expected.
-> 
-> The HCF driver works on i386 and ppc.
-> The HSF driver works on i386 and x86_64.
-> The ltmodem driver only works on i386 (the next-gen
-> martian driver which works on i386 and x86_64
-> crashes immediately with uclibc, so I patched
-> the ltmodem driver to work with 2.6.22.1).
-> 
-> I've attached the patch which adds these directories:
-> package/hcfpcimodem
-> package/hsfmodem
-> package/ltmodem
-> 
-> And modifies the package/Config.in by adding a new
-> drivers/kernel modules section.
-> 
-> Note: The HCF and HSF drivers require a license key
-> from Linuxant (www.linuxant.com) to operate at speeds
-> greater than 14.4.
-> 
-> -Brad
--------------- next part --------------
-An embedded and charset-unspecified text was scrubbed...
-Name: modem_drivers.diff
-Url: http://busybox.net/lists/buildroot/attachments/20070830/8366902a/attachment.diff 
+
+See the archives for a suggestion on how to please older versions of gcc
+http://www.nabble.com/GCC---march%3Dgeode-doesn't-exist--t4108131.html
+(or set your BR2_EXTRA_GCC_CONFIG_OPTIONS, BR2_TARGET_OPTIMIZATION
+accordingly).
+
+The hunk below is not really appropriate.
+>
+>--- buildroot/Config.in.old	2007-08-29 09:15:47.000000000 +0200
+>+++ buildroot/Config.in	2007-08-29 12:06:04.000000000 +0200
+>@@ -366,9 +366,26 @@
+> 	default "i486"		if BR2_x86_i486
+> 	default "i586"		if BR2_x86_i586
+> 	default "i686"		if BR2_x86_i686
+>+	default "i686"		if BR2_x86_pentiumpro
+>+	default "i586"		if BR2_x86_pentium_mmx
+>+	default "i686"		if BR2_x86_pentium_m
+>+	default "i686"		if BR2_x86_pentium2
+>+	default "i686"		if BR2_x86_pentium3
+> 	default "i686"		if BR2_x86_pentium4
+>+	default "i686"		if BR2_x86_prescott
+> 	default "i686"		if BR2_x86_nocona
+> 	default "i686"		if BR2_x86_core2
+>+	default "i686"		if BR2_x86_opteron
+>+	default "i686"		if BR2_x86_opteron_sse3
+>+	default "i686"		if BR2_x86_barcelona
+>+	default "i586"		if BR2_x86_k6
+>+	default "i586"		if BR2_x86_k6_2
+>+	default "i686"		if BR2_x86_athlon
+>+	default "i686"		if BR2_x86_athlon_4
+>+	default "i486"		if BR2_x86_winchip_c6
+>+	default "i586"		if BR2_x86_winchip2
+>+	default "i586"		if BR2_x86_c3
+>+	default "i686"		if BR2_x86_geode
+> 	default "ia64"		if BR2_ia64
+> 	default "m68k"		if BR2_m68k
+> 	default "mips"		if BR2_mips
