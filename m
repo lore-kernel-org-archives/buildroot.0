@@ -1,74 +1,67 @@
 From: Bernhard Fischer <rep.dot.nop@gmail.com>
-Date: Fri, 31 Aug 2007 09:31:56 +0200
-Subject: [Buildroot] mplayer-package doesn't build
-	for	otherarchitectures than avr32
-In-Reply-To: <014601c7eb5a$138e37e0$36f2780a@atmel.com>
-References: <f90898420708290133i7ac1f31dkbdd53649945091b3@mail.gmail.com>
-	<20070830221454.GG11697@aon.at>
-	<014601c7eb5a$138e37e0$36f2780a@atmel.com>
-Message-ID: <20070831073156.GA29704@aon.at>
+Date: Fri, 31 Aug 2007 09:35:51 +0200
+Subject: [Buildroot] [PATCH] quagga
+In-Reply-To: <864997.9050.qm@web35603.mail.mud.yahoo.com>
+References: <864997.9050.qm@web35603.mail.mud.yahoo.com>
+Message-ID: <20070831073551.GB29704@aon.at>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Fri, Aug 31, 2007 at 12:30:28AM +0200, Ulf Samuelsson wrote:
->----- Original Message ----- 
->From: "Bernhard Fischer" <rep.dot.nop@gmail.com>
->To: "Simon Pasch" <fpasch@googlemail.com>
->Cc: <buildroot@uclibc.org>; <ulf@atmel.com>
->Sent: Friday, August 31, 2007 12:14 AM
->Subject: Re: [Buildroot] mplayer-package doesn't build for otherarchitectures than avr32
+On Thu, Aug 30, 2007 at 10:32:14PM -0700, Tim Harvey wrote:
+>Greetings,
 >
+>I'm pretty new to buildroot but I've found that a great number of packages
+>don't build (at least for my armeb platform).  I'm happy to submit patches for
+>those I fix, so let me know if I'm not using the correct format.
 >
->> On Wed, Aug 29, 2007 at 10:33:04AM +0200, Simon Pasch wrote:
->>>It's the same issues as in libmad-package:
->>>There are architecture-specific patches. (by the way...one should be
->>>removed, as they can't be used both at the same time.
->>>AVR32-Users...tell us which one is the good one!)
->>>
->>>I added an extra command to the Makefile, because the build fails on
->>>my x86. Don't know if this breaks the build on other architectures.
->>>So either a sed-command can be used inside the Makefile or an extra
->>>architecture-specific patch (but it's not that simple with $(ARCH),
->>>because then you need patches for i386, i686, etc).
->>>
->>>This is my sed-command approach. (you have to manually rename the avr-patches):
->>>
->>>--- buildroot/package/mplayer/mplayer.mk.old 2007-08-28 09:15:43.000000000 +0200
->>>+++ buildroot/package/mplayer/mplayer.mk 2007-08-29 10:02:07.000000000 +0200
->>>@@ -22,7 +22,9 @@
->>>
->>> $(MPLAYER_DIR)/.unpacked: $(DL_DIR)/$(MPLAYER_SOURCE)
->>> $(MPLAYER_CAT) $(DL_DIR)/$(MPLAYER_SOURCE) | tar -C $(BUILD_DIR)
->>>$(TAR_OPTIONS) -
->>>- toolchain/patch-kernel.sh $(MPLAYER_DIR) package/mplayer/
->>>mplayer-$(MPLAYER_VERSION)\*.patch\*
->>>+ toolchain/patch-kernel.sh $(MPLAYER_DIR) package/mplayer/
->>>mplayer-$(MPLAYER_VERSION)\*.patch
->>>+ toolchain/patch-kernel.sh $(MPLAYER_DIR) package/mplayer/
->>>mplayer-$(MPLAYER_VERSION)\*.patch.$(ARCH)
->>>+ $(SED) '/^CFLAGS/s/$$/ -fomit-frame-pointer/'
->>>$(MPLAYER_DIR)/libavcodec/Makefile
->>> touch $@
->>>
->>> $(MPLAYER_DIR)/.configured: $(MPLAYER_DIR)/.unpacked
->> 
->> Ulf, can you fix this up in a sane manner, i.e. not add ...$(ARCH).patch
->> stuff but arch agnostic, universally working fixes, if any?
->> 
->> TIA,
->>
+>Attached is a patch for quagga that addresses the following issues:
+> - bumps version to 0.99.8 
+>   which fixes the 'error: expected specifier-qualifier-list before '__u64' 
+>   build issue
+> - fixes link issue of not using MALLOC_GLIBC_COMPAT
+> - removes static libs from target after install
 >
->Got it from Hans Christian, which in his turn, got it from a colleague,
->so they need to update it if that is to happen.
->A lot of the stuff seems to be AVR32 specific in-line assembly code 
->using the AVR32 DSP features to optimize the mplayer algorithms, 
->so it seems utterly useless to apply for other architectures.
+>Hope this is useful,
+>
+>Tim
+Content-Description: 2255237146-06-quagga.patch
+>--- buildroot-svn/package/quagga/quagga.mk	2007-08-30 20:38:18.000000000 -0700
+>+++ buildroot-patched/package/quagga/quagga.mk	2007-08-30 22:18:40.000000000 -0700
+>@@ -3,7 +3,7 @@
+> # quagga suite
+> #
+> #############################################################
+>-QUAGGA_VERSION:=0.99.7
+>+QUAGGA_VERSION:=0.99.8
+> QUAGGA_SOURCE:=quagga-$(QUAGGA_VERSION).tar.gz
+> QUAGGA_SITE:=http://www.quagga.net/download
+> QUAGGA_DIR:=$(BUILD_DIR)/quagga-$(QUAGGA_VERSION)
+>@@ -138,6 +138,8 @@
+> 	(cd $(QUAGGA_DIR); rm -rf config.cache; \
+> 		$(TARGET_CONFIGURE_OPTS) \
+> 		$(TARGET_CONFIGURE_ARGS) \
+>+		ac_cv_func_malloc_0_nonnull=yes \
+>+		ac_cv_func_realloc_0_nonnull=yes \
 
-Given that mplayer currently is at 1.0-rc1 (i.e. not released), what
-about fixing this in the proper place, i.e. upstream?
-$ svn ls svn://svn.mplayerhq.hu/ffmpeg/trunk/libavcodec/ | grep -i avr
-$
-Turns up nothing..
+These have to depend on a uClibc setting, IIRC, and should be set to
+sensible values in TARGET_CONFIGURE_ARGS for use in all packages.
+> 		./configure \
+> 		--target=$(GNU_TARGET_NAME) \
+> 		--host=$(GNU_TARGET_NAME) \
+>@@ -156,6 +158,8 @@
+> 
+> $(TARGET_DIR)/usr/sbin/$(QUAGGA_TARGET_BINARY): $(QUAGGA_BINARY)
+> 	$(MAKE) DESTDIR=$(TARGET_DIR) -C $(QUAGGA_DIR) install
+>+	rm -rf $(TARGET_DIR)/usr/lib/libzebra.a
+>+	rm -rf $(TARGET_DIR)/usr/lib/libzebra.la
+
+And I'd like this to depend on a knob that only erases static libs and
+headers if an option like BR2_HAVE_STATIC_LIBS (to be introduced) is not
+set.
+
+> ifneq ($(BR2_PACKAGE_QUAGGA_HEADERS),y)
+> 	rm -rf $(TARGET_DIR)/usr/include/quagga
+> endif
