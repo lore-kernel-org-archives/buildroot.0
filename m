@@ -1,7 +1,7 @@
 From: bugs at busybox.net <bugs@busybox.net>
-Date: Fri, 31 Aug 2007 07:55:26 -0700
+Date: Fri, 31 Aug 2007 08:07:31 -0700
 Subject: [Buildroot] [buildroot 0001480]: mpfr site path changed
-Message-ID: <879b7389de82deb2c13cbdc7248c0378@bugs.uclibc.org>
+Message-ID: <8e1b2f8540b63b8784b571488b1b0cd2@busybox.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -9,7 +9,7 @@ Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
 
-A NOTE has been added to this issue. 
+The following issue has been CLOSED 
 ====================================================================== 
 http://busybox.net/bugs/view.php?id=1480 
 ====================================================================== 
@@ -22,10 +22,12 @@ Category:                   Website
 Reproducibility:            always
 Severity:                   tweak
 Priority:                   normal
-Status:                     assigned
+Status:                     closed
+Resolution:                 open
+Fixed in Version:           
 ====================================================================== 
 Date Submitted:             08-31-2007 07:03 PDT
-Last Modified:              08-31-2007 07:55 PDT
+Last Modified:              08-31-2007 08:07 PDT
 ====================================================================== 
 Summary:                    mpfr site path changed
 Description: 
@@ -48,6 +50,15 @@ http://buildroot.uclibc.org/lists/buildroot/2007-August/004826.html
 ---------------------------------------------------------------------- 
 Thank you for the quick fix! 
 
+---------------------------------------------------------------------- 
+ bernhardf - 08-31-07 08:07  
+---------------------------------------------------------------------- 
+The suggested quickfix is not the proper thing to do.
+We really want the current, stable gmp and mpfr and not an old, stale
+one.
+
+Do a svn up 
+
 Issue History 
 Date Modified   Username       Field                    Change               
 ====================================================================== 
@@ -56,4 +67,6 @@ Date Modified   Username       Field                    Change
 08-31-07 07:03  erikv          Assigned To               => buildroot       
 08-31-07 07:07  hcegtvedt      Note Added: 0002703                          
 08-31-07 07:55  erikv          Note Added: 0002704                          
+08-31-07 08:07  bernhardf      Status                   assigned => closed  
+08-31-07 08:07  bernhardf      Note Added: 0002705                          
 ======================================================================
