@@ -1,53 +1,36 @@
-From: bugs at busybox.net <bugs@busybox.net>
-Date: Fri, 31 Aug 2007 07:07:42 -0700
-Subject: [Buildroot] [buildroot 0001480]: mpfr site path changed
-Message-ID: <b6205c632b5d7ae7c33714068c2b35d7@busybox.net>
+From: aldot at uclibc.org <aldot@uclibc.org>
+Date: Fri, 31 Aug 2007 07:27:08 -0700 (PDT)
+Subject: [Buildroot] svn commit: trunk/buildroot/package/lzma
+Message-ID: <20070831142708.5770BA4656@busybox.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+Author: aldot
+Date: 2007-08-31 07:27:07 -0700 (Fri, 31 Aug 2007)
+New Revision: 19740
 
-A NOTE has been added to this issue. 
-====================================================================== 
-http://busybox.net/bugs/view.php?id=1480 
-====================================================================== 
-Reported By:                erikv
-Assigned To:                buildroot
-====================================================================== 
-Project:                    buildroot
-Issue ID:                   1480
-Category:                   Website
-Reproducibility:            always
-Severity:                   tweak
-Priority:                   normal
-Status:                     assigned
-====================================================================== 
-Date Submitted:             08-31-2007 07:03 PDT
-Last Modified:              08-31-2007 07:07 PDT
-====================================================================== 
-Summary:                    mpfr site path changed
-Description: 
-mpfr-2.2.1 is no longer found in
-MPFR_SITE:=http://www.mpfr.org/mpfr-current, it is in
-http://www.mpfr.org/mpfr-2.2.1
+Log:
+- make sure that the path for the lzma-host-binary exist
 
-simple temporary solution is to change MPFR_SITE in packages/mpfr/mpfr.mk
-to the right path by hand
-====================================================================== 
 
----------------------------------------------------------------------- 
- hcegtvedt - 08-31-07 07:07  
----------------------------------------------------------------------- 
-I have submitted a patch for this, please see
-http://buildroot.uclibc.org/lists/buildroot/2007-August/004826.html 
+Modified:
+   trunk/buildroot/package/lzma/lzma.mk
 
-Issue History 
-Date Modified   Username       Field                    Change               
-====================================================================== 
-08-31-07 07:03  erikv          New Issue                                    
-08-31-07 07:03  erikv          Status                   new => assigned     
-08-31-07 07:03  erikv          Assigned To               => buildroot       
-08-31-07 07:07  hcegtvedt      Note Added: 0002703                          
-======================================================================
+
+Changeset:
+Modified: trunk/buildroot/package/lzma/lzma.mk
+===================================================================
+--- trunk/buildroot/package/lzma/lzma.mk	2007-08-31 12:04:00 UTC (rev 19739)
++++ trunk/buildroot/package/lzma/lzma.mk	2007-08-31 14:27:07 UTC (rev 19740)
+@@ -56,7 +56,7 @@
+ .PHONY: lzma-host use-lzma-host-binary
+ use-lzma-host-binary:
+ 	if [ ! -f "$(TOOL_BUILD_DIR)/bin/lzma" ]; then \
+-		[ -d $(TOOL_BUILD_DIR)/bin ] || mkdir $(TOOL_BUILD_DIR)/bin; \
++		[ -d $(TOOL_BUILD_DIR)/bin ] || mkdir -p $(TOOL_BUILD_DIR)/bin; \
+ 		ln -sf "$(HOST_LZMA_IF_ANY)" "$(TOOL_BUILD_DIR)/bin/lzma"; \
+ 	fi
+ 
