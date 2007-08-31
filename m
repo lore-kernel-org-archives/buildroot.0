@@ -1,35 +1,93 @@
-From: Hans-Christian Egtvedt <hcegtvedt@atmel.com>
-Date: Fri, 31 Aug 2007 17:05:19 +0200
-Subject: [Buildroot] [buildroot 0001480]: mpfr site path changed
-In-Reply-To: <8e1b2f8540b63b8784b571488b1b0cd2@busybox.net>
-References: <8e1b2f8540b63b8784b571488b1b0cd2@busybox.net>
-Message-ID: <46D82E2F.2050701@atmel.com>
+From: Tim Harvey <tim_harvey@yahoo.com>
+Date: Fri, 31 Aug 2007 08:39:23 -0700 (PDT)
+Subject: [Buildroot] [PATCH] quagga
+In-Reply-To: <20070831073551.GB29704@aon.at>
+Message-ID: <402141.46836.qm@web35609.mail.mud.yahoo.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-bugs at busybox.net wrote:
 
-<cut bug notes>
+--- Bernhard Fischer <rep.dot.nop@gmail.com> wrote:
 
-> ---------------------------------------------------------------------- 
->  bernhardf - 08-31-07 08:07  
-> ---------------------------------------------------------------------- 
-> The suggested quickfix is not the proper thing to do.
-> We really want the current, stable gmp and mpfr and not an old, stale
-> one.
+> On Thu, Aug 30, 2007 at 10:32:14PM -0700, Tim Harvey wrote:
+> >Greetings,
+> >
+> >I'm pretty new to buildroot but I've found that a great number of packages
+> >don't build (at least for my armeb platform).  I'm happy to submit patches
+> for
+> >those I fix, so let me know if I'm not using the correct format.
+> >
+> >Attached is a patch for quagga that addresses the following issues:
+> > - bumps version to 0.99.8 
+> >   which fixes the 'error: expected specifier-qualifier-list before '__u64' 
+> >   build issue
+> > - fixes link issue of not using MALLOC_GLIBC_COMPAT
+> > - removes static libs from target after install
+> >
+> >Hope this is useful,
+> >
+> >Tim
+> Content-Description: 2255237146-06-quagga.patch
+> >--- buildroot-svn/package/quagga/quagga.mk	2007-08-30 20:38:18.000000000
+> -0700
+> >+++ buildroot-patched/package/quagga/quagga.mk	2007-08-30 22:18:40.000000000
+> -0700
+> >@@ -3,7 +3,7 @@
+> > # quagga suite
+> > #
+> > #############################################################
+> >-QUAGGA_VERSION:=0.99.7
+> >+QUAGGA_VERSION:=0.99.8
+> > QUAGGA_SOURCE:=quagga-$(QUAGGA_VERSION).tar.gz
+> > QUAGGA_SITE:=http://www.quagga.net/download
+> > QUAGGA_DIR:=$(BUILD_DIR)/quagga-$(QUAGGA_VERSION)
+> >@@ -138,6 +138,8 @@
+> > 	(cd $(QUAGGA_DIR); rm -rf config.cache; \
+> > 		$(TARGET_CONFIGURE_OPTS) \
+> > 		$(TARGET_CONFIGURE_ARGS) \
+> >+		ac_cv_func_malloc_0_nonnull=yes \
+> >+		ac_cv_func_realloc_0_nonnull=yes \
+> 
+> These have to depend on a uClibc setting, IIRC, and should be set to
+> sensible values in TARGET_CONFIGURE_ARGS for use in all packages.
 
-I agree bumping the version is correct, but if the patch I sent is also 
-committed the user will not experience a missing mpfr when building. 
-Makes buildroot a bit more robust against "sudden" changes in version 
-numbers.
+Agreed, however I did not see that done for other packages that do this (grep
+-ri ac_cv_func_malloc_0_nonnull package/*/*.mk).  
 
-The package maintainer should bump the version number when there is a 
-new release IMHO.
+Do you have a suggestion?  As far as I know (see busybox FAQ
+http://www.busybox.net/cgi-bin/viewcvs.cgi/trunk/uClibc/docs/uclibc.org/FAQ.html?rev=11976#gnu_malloc)
+ this depends on MALLOC_GLIBC_COMPAT defined in the uclibc.config file which is
+defined in my setup yet the undefined rpl_malloc and rpl_realloc occu
 
-<cut history>
+> > 		./configure \
+> > 		--target=$(GNU_TARGET_NAME) \
+> > 		--host=$(GNU_TARGET_NAME) \
+> >@@ -156,6 +158,8 @@
+> > 
+> > $(TARGET_DIR)/usr/sbin/$(QUAGGA_TARGET_BINARY): $(QUAGGA_BINARY)
+> > 	$(MAKE) DESTDIR=$(TARGET_DIR) -C $(QUAGGA_DIR) install
+> >+	rm -rf $(TARGET_DIR)/usr/lib/libzebra.a
+> >+	rm -rf $(TARGET_DIR)/usr/lib/libzebra.la
+> 
+> And I'd like this to depend on a knob that only erases static libs and
+> headers if an option like BR2_HAVE_STATIC_LIBS (to be introduced) is not
+> set.
 
--- 
-HC
+Agreed as well - I see a lot of packages that install static libs, headers, man
+pages and info pages to the target which seems silly.  
+
+Are you suggesting that I also supply a patch to introduce
+BR2_HAVE_STATIC_LIBS?  That might be a bit much to ask someone like myself who
+is very new to buildroot - I certainly wouldn't be able to implement the use of
+it in all the packages.
+
+Tim
+
+> 
+> > ifneq ($(BR2_PACKAGE_QUAGGA_HEADERS),y)
+> > 	rm -rf $(TARGET_DIR)/usr/include/quagga
+> > endif
+> 
