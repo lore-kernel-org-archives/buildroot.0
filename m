@@ -1,38 +1,35 @@
-From: Hans-Christian Egtvedt <hcegtvedt@atmel.com>
-Date: Fri, 31 Aug 2007 10:58:16 +0200
-Subject: [Buildroot] [PATCH] mpfr: Download from versioned directory on
-	server
-Message-ID: <46D7D828.8020208@atmel.com>
+From: aldot at uclibc.org <aldot@uclibc.org>
+Date: Fri, 31 Aug 2007 05:04:00 -0700 (PDT)
+Subject: [Buildroot] svn commit: trunk/buildroot/package/libusb
+Message-ID: <20070831120400.E5360A60C5@busybox.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Currently, mpfr is downloaded from /mpfr-current/ on the official
-server. This directory contains only the latest version of mpfr, so
-the download will fail each time a new version is released.
+Author: aldot
+Date: 2007-08-31 05:04:00 -0700 (Fri, 31 Aug 2007)
+New Revision: 19739
 
-Instead, download it from /mpfr-$(MPFR_VERSION)/ which will always
-contain the specified version.
+Log:
+- need to touch the tarball
 
-Signed-off-by: Haavard Skinnemoen <hskinnemoen@atmel.com>
----
-  package/mpfr/mpfr.mk |    2 +-
-  1 files changed, 1 insertions(+), 1 deletions(-)
 
-diff --git a/package/mpfr/mpfr.mk b/package/mpfr/mpfr.mk
-index 0c5f07f..2a2f89c 100644
---- a/package/mpfr/mpfr.mk
-+++ b/package/mpfr/mpfr.mk
-@@ -8,7 +8,7 @@ MPFR_PATCH:=patches
-  MPFR_PATCH_FILE:=mpfr-$(MPFR_VERSION).patch
-  MPFR_SOURCE:=mpfr-$(MPFR_VERSION).tar.bz2
-  MPFR_CAT:=$(BZCAT)
--MPFR_SITE:=http://www.mpfr.org/mpfr-current/
-+MPFR_SITE:=http://www.mpfr.org/mpfr-$(MPFR_VERSION)/
-  MPFR_DIR:=$(TOOL_BUILD_DIR)/mpfr-$(MPFR_VERSION)
-  MPFR_TARGET_DIR:=$(BUILD_DIR)/mpfr-$(MPFR_VERSION)
-  MPFR_BINARY:=libmpfr$(LIBTGTEXT)
--- 
-1.5.2.4
+Modified:
+   trunk/buildroot/package/libusb/libusb.mk
+
+
+Changeset:
+Modified: trunk/buildroot/package/libusb/libusb.mk
+===================================================================
+--- trunk/buildroot/package/libusb/libusb.mk	2007-08-30 22:40:22 UTC (rev 19738)
++++ trunk/buildroot/package/libusb/libusb.mk	2007-08-31 12:04:00 UTC (rev 19739)
+@@ -19,6 +19,7 @@
+ endif
+ $(DL_DIR)/$(LIBUSB_SOURCE): $(LIBUSB_PATCH)
+ 	$(WGET) -P $(DL_DIR) $(LIBUSB_SITE)/$(LIBUSB_SOURCE)
++	touch -c $@
+ 
+ libusb-source: $(DL_DIR)/$(LIBUSB_SOURCE) $(LIBUSB_PATCH)
+ 
