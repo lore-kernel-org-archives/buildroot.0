@@ -1,74 +1,46 @@
-From: brm <brm@hyac.in.th>
-Date: Fri, 31 Aug 2007 19:29:43 +0700
-Subject: [Buildroot] White space problem in
-	target/device/Atmel/u-boot/u-boot.mk
-Message-ID: <a512d1250708310529w5311ec48haf12635551fa51da@mail.gmail.com>
+From: bugs at busybox.net <bugs@busybox.net>
+Date: Fri, 31 Aug 2007 07:03:36 -0700
+Subject: [Buildroot] [buildroot 0001480]: mpfr site path changed
+Message-ID: <62df81265b7ede3b824d776b2a5ab74b@bugs.uclibc.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi,
-      Today when I try to build buildroot for some old ARM board using
-AT914xxx.
-I got this error:
 
-| echo setenv linux /opt/buildroot/binaries/ev40/ev40-linux-2.6.22.1>>
-/opt/buildroot/binaries/ev40/autoscript
-| echo setenv kernel-version 2.6.22.1>> /opt/buildroot/binaries/ev40/autoscript
-| echo setenv kernel-date 20070831>> /opt/buildroot/binaries/ev40/autoscript
-| /bin/sh: 20070831: Bad file descriptor
-| make: *** [/opt/buildroot/binaries/ev40/autoscript] Error 1
+The following issue has been SUBMITTED. 
+====================================================================== 
+http://busybox.net/bugs/view.php?id=1480 
+====================================================================== 
+Reported By:                erikv
+Assigned To:                buildroot
+====================================================================== 
+Project:                    buildroot
+Issue ID:                   1480
+Category:                   Website
+Reproducibility:            always
+Severity:                   tweak
+Priority:                   normal
+Status:                     assigned
+====================================================================== 
+Date Submitted:             08-31-2007 07:03 PDT
+Last Modified:              08-31-2007 07:03 PDT
+====================================================================== 
+Summary:                    mpfr site path changed
+Description: 
+mpfr-2.2.1 is no longer found in
+MPFR_SITE:=http://www.mpfr.org/mpfr-current, it is in
+http://www.mpfr.org/mpfr-2.2.1
 
-       After spend sometime track down the problem, I found that "u-boot.mk"
-in target/device/Atmel/u-boot/ directory contains that portion of shell script.
-       I'm using bash on debian etch. Bach will interpret number in
-front of ">" or ">>" as file descriptor. So that cause the problem.
-Checking using svn diff, I think that the patch revision 19644 that
-update this file from 19639 cause this, especially the part
+simple temporary solution is to change MPFR_SITE in packages/mpfr/mpfr.mk
+to the right path by hand
+====================================================================== 
 
-| -       echo setenv linux               $(LINUX26_KERNEL)
-           >> $(UBOOT_SCR)
-| -       echo setenv kernel-version      $(LINUX26_VERSION)
-           >> $(UBOOT_SCR)
-| -       echo setenv kernel-date         $(DATE)
-           >> $(UBOOT_SCR)
-| -       echo setenv hostname            $(TARGET_HOSTNAME)
-           >> $(UBOOT_SCR)
-| -       echo setenv fs-date             $(DATE)
-           >> $(UBOOT_SCR)
-| -       echo setenv rd-1
-rootfs.$(BR2_ARCH)-$(DATE).ext2         >> $(UBOOT_SCR)
-| -       echo setenv rd-2
-rootfs.$(BR2_ARCH)-$(DATE).jffs2        >> $(UBOOT_SCR)
-| -       echo setenv rd
-rootfs.$(BR2_ARCH)-$(DATE).ext2         >> $(UBOOT_SCR)
-| -       echo setenv ver                 1
-           >> $(UBOOT_SCR)
-| -ifneq  ($(TARGET_UBOOT_ETHADDR),)
-| -       echo setenv ethaddr             $(TARGET_UBOOT_ETHADDR)
-           >> $(UBOOT_SCR)
-| +       echo setenv linux $(LINUX26_KERNEL)>> $(UBOOT_SCR)
-| +       echo setenv kernel-version $(LINUX26_VERSION)>> $(UBOOT_SCR)
-| +       echo setenv kernel-date $(DATE)>> $(UBOOT_SCR)
-| +       echo setenv hostname $(TARGET_HOSTNAME) >> $(UBOOT_SCR)
-| +       echo setenv fs-date $(DATE)>> $(UBOOT_SCR)
-| +       echo setenv rd-1 rootfs.$(BR2_ARCH)-$(DATE).ext2>> $(UBOOT_SCR)
-| +       echo setenv rd-2 rootfs.$(BR2_ARCH)-$(DATE).jffs2>> $(UBOOT_SCR)
-| +       echo setenv rd rootfs.$(BR2_ARCH)-$(DATE).ext2>> $(UBOOT_SCR)
-| +       echo setenv ver 1>> $(UBOOT_SCR)
-| +ifneq ($(TARGET_UBOOT_ETHADDR),)
-| +       echo setenv ethaddr $(TARGET_UBOOT_ETHADDR)>> $(UBOOT_SCR)
-
-        At least these lines
-
-|   echo setenv kernel-date $(DATE)>> $(UBOOT_SCR)
-|   echo setenv fs-date $(DATE)>> $(UBOOT_SCR)
-|   echo setenv ver 1>> $(UBOOT_SCR)
-
-        need to be fixed to allow script built correctly, if bash is
-used on the host computer, that is.
-
-Cheers,
-cj
+Issue History 
+Date Modified   Username       Field                    Change               
+====================================================================== 
+08-31-07 07:03  erikv          New Issue                                    
+08-31-07 07:03  erikv          Status                   new => assigned     
+08-31-07 07:03  erikv          Assigned To               => buildroot       
+======================================================================
