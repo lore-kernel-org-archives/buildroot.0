@@ -1,7 +1,7 @@
 From: bugs at busybox.net <bugs@busybox.net>
-Date: Fri, 31 Aug 2007 07:03:36 -0700
+Date: Fri, 31 Aug 2007 07:07:42 -0700
 Subject: [Buildroot] [buildroot 0001480]: mpfr site path changed
-Message-ID: <62df81265b7ede3b824d776b2a5ab74b@bugs.uclibc.org>
+Message-ID: <b6205c632b5d7ae7c33714068c2b35d7@busybox.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -9,7 +9,7 @@ Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
 
-The following issue has been SUBMITTED. 
+A NOTE has been added to this issue. 
 ====================================================================== 
 http://busybox.net/bugs/view.php?id=1480 
 ====================================================================== 
@@ -25,7 +25,7 @@ Priority:                   normal
 Status:                     assigned
 ====================================================================== 
 Date Submitted:             08-31-2007 07:03 PDT
-Last Modified:              08-31-2007 07:03 PDT
+Last Modified:              08-31-2007 07:07 PDT
 ====================================================================== 
 Summary:                    mpfr site path changed
 Description: 
@@ -37,10 +37,17 @@ simple temporary solution is to change MPFR_SITE in packages/mpfr/mpfr.mk
 to the right path by hand
 ====================================================================== 
 
+---------------------------------------------------------------------- 
+ hcegtvedt - 08-31-07 07:07  
+---------------------------------------------------------------------- 
+I have submitted a patch for this, please see
+http://buildroot.uclibc.org/lists/buildroot/2007-August/004826.html 
+
 Issue History 
 Date Modified   Username       Field                    Change               
 ====================================================================== 
 08-31-07 07:03  erikv          New Issue                                    
 08-31-07 07:03  erikv          Status                   new => assigned     
 08-31-07 07:03  erikv          Assigned To               => buildroot       
+08-31-07 07:07  hcegtvedt      Note Added: 0002703                          
 ======================================================================
