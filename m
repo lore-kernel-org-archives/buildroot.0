@@ -1,67 +1,38 @@
-From: Bernhard Fischer <rep.dot.nop@gmail.com>
-Date: Fri, 31 Aug 2007 09:35:51 +0200
-Subject: [Buildroot] [PATCH] quagga
-In-Reply-To: <864997.9050.qm@web35603.mail.mud.yahoo.com>
-References: <864997.9050.qm@web35603.mail.mud.yahoo.com>
-Message-ID: <20070831073551.GB29704@aon.at>
+From: Hans-Christian Egtvedt <hcegtvedt@atmel.com>
+Date: Fri, 31 Aug 2007 10:58:16 +0200
+Subject: [Buildroot] [PATCH] mpfr: Download from versioned directory on
+	server
+Message-ID: <46D7D828.8020208@atmel.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Thu, Aug 30, 2007 at 10:32:14PM -0700, Tim Harvey wrote:
->Greetings,
->
->I'm pretty new to buildroot but I've found that a great number of packages
->don't build (at least for my armeb platform).  I'm happy to submit patches for
->those I fix, so let me know if I'm not using the correct format.
->
->Attached is a patch for quagga that addresses the following issues:
-> - bumps version to 0.99.8 
->   which fixes the 'error: expected specifier-qualifier-list before '__u64' 
->   build issue
-> - fixes link issue of not using MALLOC_GLIBC_COMPAT
-> - removes static libs from target after install
->
->Hope this is useful,
->
->Tim
-Content-Description: 2255237146-06-quagga.patch
->--- buildroot-svn/package/quagga/quagga.mk	2007-08-30 20:38:18.000000000 -0700
->+++ buildroot-patched/package/quagga/quagga.mk	2007-08-30 22:18:40.000000000 -0700
->@@ -3,7 +3,7 @@
-> # quagga suite
-> #
-> #############################################################
->-QUAGGA_VERSION:=0.99.7
->+QUAGGA_VERSION:=0.99.8
-> QUAGGA_SOURCE:=quagga-$(QUAGGA_VERSION).tar.gz
-> QUAGGA_SITE:=http://www.quagga.net/download
-> QUAGGA_DIR:=$(BUILD_DIR)/quagga-$(QUAGGA_VERSION)
->@@ -138,6 +138,8 @@
-> 	(cd $(QUAGGA_DIR); rm -rf config.cache; \
-> 		$(TARGET_CONFIGURE_OPTS) \
-> 		$(TARGET_CONFIGURE_ARGS) \
->+		ac_cv_func_malloc_0_nonnull=yes \
->+		ac_cv_func_realloc_0_nonnull=yes \
+Currently, mpfr is downloaded from /mpfr-current/ on the official
+server. This directory contains only the latest version of mpfr, so
+the download will fail each time a new version is released.
 
-These have to depend on a uClibc setting, IIRC, and should be set to
-sensible values in TARGET_CONFIGURE_ARGS for use in all packages.
-> 		./configure \
-> 		--target=$(GNU_TARGET_NAME) \
-> 		--host=$(GNU_TARGET_NAME) \
->@@ -156,6 +158,8 @@
-> 
-> $(TARGET_DIR)/usr/sbin/$(QUAGGA_TARGET_BINARY): $(QUAGGA_BINARY)
-> 	$(MAKE) DESTDIR=$(TARGET_DIR) -C $(QUAGGA_DIR) install
->+	rm -rf $(TARGET_DIR)/usr/lib/libzebra.a
->+	rm -rf $(TARGET_DIR)/usr/lib/libzebra.la
+Instead, download it from /mpfr-$(MPFR_VERSION)/ which will always
+contain the specified version.
 
-And I'd like this to depend on a knob that only erases static libs and
-headers if an option like BR2_HAVE_STATIC_LIBS (to be introduced) is not
-set.
+Signed-off-by: Haavard Skinnemoen <hskinnemoen@atmel.com>
+---
+  package/mpfr/mpfr.mk |    2 +-
+  1 files changed, 1 insertions(+), 1 deletions(-)
 
-> ifneq ($(BR2_PACKAGE_QUAGGA_HEADERS),y)
-> 	rm -rf $(TARGET_DIR)/usr/include/quagga
-> endif
+diff --git a/package/mpfr/mpfr.mk b/package/mpfr/mpfr.mk
+index 0c5f07f..2a2f89c 100644
+--- a/package/mpfr/mpfr.mk
++++ b/package/mpfr/mpfr.mk
+@@ -8,7 +8,7 @@ MPFR_PATCH:=patches
+  MPFR_PATCH_FILE:=mpfr-$(MPFR_VERSION).patch
+  MPFR_SOURCE:=mpfr-$(MPFR_VERSION).tar.bz2
+  MPFR_CAT:=$(BZCAT)
+-MPFR_SITE:=http://www.mpfr.org/mpfr-current/
++MPFR_SITE:=http://www.mpfr.org/mpfr-$(MPFR_VERSION)/
+  MPFR_DIR:=$(TOOL_BUILD_DIR)/mpfr-$(MPFR_VERSION)
+  MPFR_TARGET_DIR:=$(BUILD_DIR)/mpfr-$(MPFR_VERSION)
+  MPFR_BINARY:=libmpfr$(LIBTGTEXT)
+-- 
+1.5.2.4
