@@ -1,49 +1,92 @@
-From: Ulf Samuelsson <ulf@atmel.com>
-Date: Wed, 1 Aug 2007 00:43:50 +0200
-Subject: [Buildroot] svn commit:trunk/buildroot/toolchain/kernel-headers
-References: <20070731160220.4557AA466A@busybox.net>
-	<20070731160246.GA9378@aon.at>
-Message-ID: <00ac01c7d3fa$8e62c1b0$dcc4af0a@atmel.com>
+From: aldot at uclibc.org <aldot@uclibc.org>
+Date: Sat,  1 Sep 2007 03:54:51 -0700 (PDT)
+Subject: [Buildroot] svn commit: trunk/buildroot/target/device/Atmel/u-boot
+Message-ID: <20070901105451.44E93A60CF@busybox.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+Author: aldot
+Date: 2007-09-01 03:54:50 -0700 (Sat, 01 Sep 2007)
+New Revision: 19743
+
+Log:
+- fix glitch introduced in my whitespace removal (brm)
 
 
-> On Tue, Jul 31, 2007 at 09:02:20AM -0700, ulf at uclibc.org wrote:
->>Author: ulf
->>Date: 2007-07-31 09:02:18 -0700 (Tue, 31 Jul 2007)
->>New Revision: 19359
->>
->>Log:
->>Remove duplicate patch
->>
->>Removed:
->>   trunk/buildroot/toolchain/kernel-headers/linux-2.6.21.5-ipmisensors-20070314-1214.patch
->>   trunk/buildroot/toolchain/kernel-headers/linux-2.6.22.1-ipmisensors-20070314-1214.patch
-> 
-> Did you even look if those two are identical?
-> They were not and you broke ipmisensor support for 2.6.22.1 :-(
-> 
->
-trunk/buildroot/toolchain/kernel-headers/linux-2.6.21.5-ipmisensors-20070314-1214.patch
-is a duplicate of 
-trunk/buildroot/toolchain/kernel-headers/linux-2.6.21.5-007-ipmisensors-20070314-1214.patch
+Modified:
+   trunk/buildroot/target/device/Atmel/u-boot/u-boot.mk
 
-trunk/buildroot/toolchain/kernel-headers/linux-2.6.22.1-ipmisensors-20070314-1214.patch
-is a duplicate of
-trunk/buildroot/toolchain/kernel-headers/linux-2.6.22.1-007-ipmisensors-20070314-1214.patch
 
-They are not duplicate of each other.
-
-(I added a sequence number, but somehow the old patch name remained in the trunk)
-
-Best Regards
-Ulf Samuelsson                ulf at atmel.com
-Atmel Nordic AB
-Mail:  Box 2033, 174 02 Sundbyberg, Sweden
-Visit:  Kavalleriv?gen 24, 174 58 Sundbyberg, Sweden
-Phone +46 (8) 441 54 22     Fax +46 (8) 441 54 29
-GSM    +46 (706) 22 44 57
+Changeset:
+Modified: trunk/buildroot/target/device/Atmel/u-boot/u-boot.mk
+===================================================================
+--- trunk/buildroot/target/device/Atmel/u-boot/u-boot.mk	2007-08-31 21:45:52 UTC (rev 19742)
++++ trunk/buildroot/target/device/Atmel/u-boot/u-boot.mk	2007-09-01 10:54:50 UTC (rev 19743)
+@@ -112,10 +112,10 @@
+ 	echo "/* Automatically generated file, do not edit */" \
+ 	> $(UBOOT_CUSTOM).test
+ ifneq ($(TARGET_HOSTNAME),)
+-	echo "#if defined(CONFIG_HOSTNAME)">> $(UBOOT_CUSTOM).test
+-	echo "#undef CONFIG_HOSTNAME">> $(UBOOT_CUSTOM).test
++	echo "#if defined(CONFIG_HOSTNAME)" >> $(UBOOT_CUSTOM).test
++	echo "#undef CONFIG_HOSTNAME" >> $(UBOOT_CUSTOM).test
+ 	echo "#define CONFIG_HOSTNAME $(TARGET_HOSTNAME)">> $(UBOOT_CUSTOM).test
+-	echo "#endif">> $(UBOOT_CUSTOM).test
++	echo "#endif" >> $(UBOOT_CUSTOM).test
+ endif
+ ifneq ($(TARGET_UBOOT_IPADDR),)
+ 	echo "#define CONFIG_IPADDR $(TARGET_UBOOT_IPADDR)">> $(UBOOT_CUSTOM).test
+@@ -136,34 +136,34 @@
+ 
+ $(UBOOT_SCR): .config
+ ifneq ($(TARGET_UBOOT_IPADDR),)
+-	echo setenv ipaddr $(TARGET_UBOOT_IPADDR)> $(UBOOT_SCR)
++	echo setenv ipaddr $(TARGET_UBOOT_IPADDR) > $(UBOOT_SCR)
+ endif
+ ifneq ($(TARGET_UBOOT_SERVERIP),)
+-	echo setenv serverip $(TARGET_UBOOT_SERVERIP)>> $(UBOOT_SCR)
++	echo setenv serverip $(TARGET_UBOOT_SERVERIP) >> $(UBOOT_SCR)
+ endif
+ ifneq ($(TARGET_UBOOT_GATEWAY),)
+-	echo setenv gatewayip $(TARGET_UBOOT_GATEWAY)>> $(UBOOT_SCR)
++	echo setenv gatewayip $(TARGET_UBOOT_GATEWAY) >> $(UBOOT_SCR)
+ endif
+ ifneq ($(TARGET_UBOOT_NETMASK),)
+-	echo setenv netmask $(TARGET_UBOOT_NETMASK)>> $(UBOOT_SCR)
++	echo setenv netmask $(TARGET_UBOOT_NETMASK) >> $(UBOOT_SCR)
+ endif
+-	echo setenv linux $(LINUX26_KERNEL)>> $(UBOOT_SCR)
+-	echo setenv kernel-version $(LINUX26_VERSION)>> $(UBOOT_SCR)
+-	echo setenv kernel-date $(DATE)>> $(UBOOT_SCR)
++	echo setenv linux $(LINUX26_KERNEL) >> $(UBOOT_SCR)
++	echo setenv kernel-version $(LINUX26_VERSION) >> $(UBOOT_SCR)
++	echo setenv kernel-date $(DATE) >> $(UBOOT_SCR)
+ 	echo setenv hostname $(TARGET_HOSTNAME) >> $(UBOOT_SCR)
+-	echo setenv fs-date $(DATE)>> $(UBOOT_SCR)
+-	echo setenv rd-1 rootfs.$(BR2_ARCH)-$(DATE).ext2>> $(UBOOT_SCR)
+-	echo setenv rd-2 rootfs.$(BR2_ARCH)-$(DATE).jffs2>> $(UBOOT_SCR)
+-	echo setenv rd rootfs.$(BR2_ARCH)-$(DATE).ext2>> $(UBOOT_SCR)
+-	echo setenv ver 1>> $(UBOOT_SCR)
++	echo setenv fs-date $(DATE) >> $(UBOOT_SCR)
++	echo setenv rd-1 rootfs.$(BR2_ARCH)-$(DATE).ext2 >> $(UBOOT_SCR)
++	echo setenv rd-2 rootfs.$(BR2_ARCH)-$(DATE).jffs2 >> $(UBOOT_SCR)
++	echo setenv rd rootfs.$(BR2_ARCH)-$(DATE).ext2 >> $(UBOOT_SCR)
++	echo setenv ver 1 >> $(UBOOT_SCR)
+ ifneq ($(TARGET_UBOOT_ETHADDR),)
+-	echo setenv ethaddr $(TARGET_UBOOT_ETHADDR)>> $(UBOOT_SCR)
++	echo setenv ethaddr $(TARGET_UBOOT_ETHADDR) >> $(UBOOT_SCR)
+ endif
+-	echo setenv fstype ram>> $(UBOOT_SCR)
++	echo setenv fstype ram >> $(UBOOT_SCR)
+ 	echo fs >> $(UBOOT_SCR)
+ 	echo os >> $(UBOOT_SCR)
+-	echo setargs>> $(UBOOT_SCR)
+-	echo saveenv>> $(UBOOT_SCR)
++	echo setargs >> $(UBOOT_SCR)
++	echo saveenv >> $(UBOOT_SCR)
+ 
+ $(UBOOT_SCR).$(PROJECT): $(UBOOT_SCR) $(MKIMAGE)
+ 	$(MKIMAGE) -A arm \
