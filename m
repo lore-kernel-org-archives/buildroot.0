@@ -1,7 +1,7 @@
 From: aldot at uclibc.org <aldot@uclibc.org>
-Date: Sat,  1 Sep 2007 10:33:19 -0700 (PDT)
-Subject: [Buildroot] svn commit: trunk/buildroot/package/busybox
-Message-ID: <20070901173319.E090AA67FF@busybox.net>
+Date: Sat,  1 Sep 2007 11:01:09 -0700 (PDT)
+Subject: [Buildroot] svn commit: trunk/buildroot/package:  lm-sensors
+Message-ID: <20070901180109.C927EA5D29@busybox.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -9,116 +9,115 @@ Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
 Author: aldot
-Date: 2007-09-01 10:33:19 -0700 (Sat, 01 Sep 2007)
-New Revision: 19755
+Date: 2007-09-01 11:01:08 -0700 (Sat, 01 Sep 2007)
+New Revision: 19756
 
 Log:
-- add my working draft for busybox-initramfs (not yet finished, so still commented out in Config.in)
+- add lm-sensors package
 
 
 Added:
-   trunk/buildroot/package/busybox/initramfs.mk
+   trunk/buildroot/package/lm-sensors/
+   trunk/buildroot/package/lm-sensors/Config.in
+   trunk/buildroot/package/lm-sensors/lm-sensors.mk
+
+Modified:
+   trunk/buildroot/package/Config.in
 
 
 Changeset:
-Added: trunk/buildroot/package/busybox/initramfs.mk
+Modified: trunk/buildroot/package/Config.in
 ===================================================================
---- trunk/buildroot/package/busybox/initramfs.mk	                        (rev 0)
-+++ trunk/buildroot/package/busybox/initramfs.mk	2007-09-01 17:33:19 UTC (rev 19755)
-@@ -0,0 +1,96 @@
+--- trunk/buildroot/package/Config.in	2007-09-01 17:33:19 UTC (rev 19755)
++++ trunk/buildroot/package/Config.in	2007-09-01 18:01:08 UTC (rev 19756)
+@@ -221,6 +221,7 @@
+ source "package/libaio/Config.in"
+ source "package/libraw1394/Config.in"
+ source "package/libusb/Config.in"
++source "package/lm-sensors/Config.in"
+ source "package/lvm2/Config.in"
+ source "package/mdadm/Config.in"
+ source "package/memtester/Config.in"
+
+Added: trunk/buildroot/package/lm-sensors/Config.in
+===================================================================
+--- trunk/buildroot/package/lm-sensors/Config.in	                        (rev 0)
++++ trunk/buildroot/package/lm-sensors/Config.in	2007-09-01 18:01:08 UTC (rev 19756)
+@@ -0,0 +1,12 @@
++config BR2_PACKAGE_LM_SENSORS
++	bool "lm-sensors"
++	select BR2_PACKAGE_LIBSYSFS
++	default n
++	help
++	  Lm-sensors is a hardware health monitoring package for
++	  Linux. It allows you to access information from
++	  temperature, voltage, and fan speed sensors. It
++	  works with most newer systems.
++
++	  http://www.lm-sensors.org/
++
+
+Added: trunk/buildroot/package/lm-sensors/lm-sensors.mk
+===================================================================
+--- trunk/buildroot/package/lm-sensors/lm-sensors.mk	                        (rev 0)
++++ trunk/buildroot/package/lm-sensors/lm-sensors.mk	2007-09-01 18:01:08 UTC (rev 19756)
+@@ -0,0 +1,59 @@
 +#############################################################
 +#
-+# busybox image for initramfs
++# lm-sensors
 +#
 +#############################################################
++LM_SENSORS_VERSION:=2.10.4
++LM_SENSORS_SOURCE:=lm-sensors_$(LM_SENSORS_VERSION).orig.tar.gz
++LM_SENSORS_PATCH:=lm-sensors_$(LM_SENSORS_VERSION)-1.diff.gz
++LM_SENSORS_SITE:=ftp://ftp.debian.org/debian/pool/main/l/lm-sensors/
++LM_SENSORS_DIR:=$(BUILD_DIR)/lm_sensors-$(LM_SENSORS_VERSION)
++LM_SENSORS_CAT:=$(ZCAT)
++LM_SENSORS_BINARY:=prog/sensors/sensors
++LM_SENSORS_TARGET_BINARY:=usr/bin/sensors
 +
-+BUSYBOX_INITRAMFS_DIR:=$(BUSYBOX_DIR)-initramfs
++$(DL_DIR)/$(LM_SENSORS_SOURCE):
++	$(WGET) -P $(DL_DIR) $(LM_SENSORS_SITE)/$(LM_SENSORS_SOURCE)
 +
-+$(BUSYBOX_INITRAMFS_DIR)/.unpacked: $(DL_DIR)/$(BUSYBOX_SOURCE)
-+	rm -rf $(BUILD_DIR)/tmp $(BUSYBOX_INITRAMFS_DIR)
-+	-mkdir $(BUILD_DIR)/tmp
-+	$(BUSYBOX_UNZIP) $(DL_DIR)/$(BUSYBOX_SOURCE) | tar -C $(BUILD_DIR)/tmp $(TAR_OPTIONS) -
-+ifeq ($(strip $(BR2_PACKAGE_BUSYBOX_SNAPSHOT)),y)
-+	mv $(BUILD_DIR)/tmp/busybox $(BUSYBOX_INITRAMFS_DIR)
-+else
-+	mv $(BUILD_DIR)/tmp/busybox-$(BUSYBOX_VERSION) $(BUSYBOX_INITRAMFS_DIR)
++$(DL_DIR)/$(LM_SENSORS_PATCH):
++	$(WGET) -P $(DL_DIR) $(LM_SENSORS_SITE)/$(LM_SENSORS_PATCH)
++
++lm-sensors-source: $(DL_DIR)/$(LM_SENSORS_SOURCE) $(DL_DIR)/$(LM_SENSORS_PATCH)
++
++$(LM_SENSORS_DIR)/.unpacked: $(DL_DIR)/$(LM_SENSORS_SOURCE) $(DL_DIR)/$(LM_SENSORS_PATCH)
++	$(LM_SENSORS_CAT) $(DL_DIR)/$(LM_SENSORS_SOURCE) | tar -C $(BUILD_DIR) $(TAR_OPTIONS) -
++	toolchain/patch-kernel.sh $(LM_SENSORS_DIR) package/lm-sensors/ lm-sensors\*.patch
++ifneq ($(LM_SENSORS_PATCH),)
++	(cd $(LM_SENSORS_DIR) && $(LM_SENSORS_CAT) $(DL_DIR)/$(LM_SENSORS_PATCH) | patch -p1)
++	if [ -d $(LM_SENSORS_DIR)/debian/patches ]; then \
++		toolchain/patch-kernel.sh $(LM_SENSORS_DIR) $(LM_SENSORS_DIR)/debian/patches \*.patch; \
++	fi
 +endif
 +	touch $@
 +
-+$(BUSYBOX_INITRAMFS_DIR)/.configured: $(BUSYBOX_INITRAMFS_DIR)/.unpacked
-+	(echo CONFIG_CAT=y; \
-+	 echo CONFIG_CHROOT=y; \
-+	 echo CONFIG_DD=y; \
-+	 echo CONFIG_FEATURE_DD_IBS_OBS=y; \
-+	 echo CONFIG_FALSE=y; \
-+	 echo CONFIG_GUNZIP=y; \
-+	 echo CONFIG_HALT=y; \
-+	 echo CONFIG_INSMOD=y; \
-+	 echo CONFIG_KILL=y; \
-+	 echo CONFIG_LN=y; \
-+	 echo CONFIG_PS=y; \
-+	 echo CONFIG_MDEV=y; \
-+	 echo CONFIG_MKDIR=y; \
-+	 echo CONFIG_MKFIFO=y; \
-+	 echo CONFIG_MKNOD=y; \
-+	 echo CONFIG_MODPROBE=y; \
-+	 echo CONFIG_FEATURE_MODPROBE_MULTIPLE_OPTIONS=y; \
-+	 echo CONFIG_FEATURE_MODPROBE_FANCY_ALIAS=y; \
-+	 echo CONFIG_FEATURE_CHECK_TAINTED_MODULE=n; \
-+	 echo CONFIG_FEATURE_2_4_MODULES=n; \
-+	 echo CONFIG_MOUNT=y; \
-+	 echo CONFIG_SWITCH_ROOT=y; \
-+	 echo CONFIG_READLINK=y; \
-+	 echo CONFIG_RMMOD=y; \
-+	 echo CONFIG_MSH=y; \
-+	 echo CONFIG_FEATURE_SH_IS_MSH=y; \
-+	 echo CONFIG_SLEEP=y; \
-+	 echo CONFIG_STATIC=y; \
-+	 echo CONFIG_TRUE=y; \
-+	 echo CONFIG_UMOUNT=y; \
-+	 echo CONFIG_FEATURE_UMOUNT_ALL=y; \
-+	 echo CONFIG_UNAME=y; \
-+	) > $(BUSYBOX_INITRAMFS_DIR)/.config 
-+	yes "" | $(MAKE) CC=$(TARGET_CC) CROSS_COMPILE="$(TARGET_CROSS)" \
-+		CROSS="$(TARGET_CROSS)" -C $(BUSYBOX_INITRAMFS_DIR) oldconfig
-+	touch $@
++$(LM_SENSORS_DIR)/$(LM_SENSORS_BINARY): $(LM_SENSORS_DIR)/.unpacked
++	$(MAKE) $(TARGET_CONFIGURE_OPTS) -C $(LM_SENSORS_DIR) \
++		LINUX="$(LINUX_DIR)" KERNELVERSION=$(LINUX_HEADERS_VERSION) \
++		I2C_HEADERS=$(LINUX_DIR)/include \
++		DESTDIR=$(TARGET_DIR) user
 +
-+
-+$(BUSYBOX_INITRAMFS_DIR)/inst/busybox: $(BUSYBOX_INITRAMFS_DIR)/.configured
-+	-mkdir $(@D)
-+	$(MAKE) CC=$(TARGET_CC) CROSS_COMPILE="$(TARGET_CROSS)" \
-+		CROSS="$(TARGET_CROSS)" PREFIX="$(TARGET_DIR)" \
-+		ARCH=$(KERNEL_ARCH) \
-+		EXTRA_CFLAGS="$(TARGET_CFLAGS)" -C $(BUSYBOX_INITRAMFS_DIR) \
-+		busybox.links busybox
-+ifeq ($(BR2_PREFER_IMA)$(BR2_PACKAGE_BUSYBOX_SNAPSHOT),yy)
-+	rm -f $@
-+	$(MAKE) CC=$(TARGET_CC) CROSS_COMPILE="$(TARGET_CROSS)" \
-+		CROSS="$(TARGET_CROSS)" PREFIX="$(TARGET_DIR)" \
-+		ARCH=$(KERNEL_ARCH) STRIP="$(STRIP)" \
-+		EXTRA_CFLAGS="$(TARGET_CFLAGS)" -C $(BUSYBOX_INITRAMFS_DIR) \
-+		-f scripts/Makefile.IMA
-+endif
-+	cp -f $(BUSYBOX_INITRAMFS_DIR)/busybox $@
++$(TARGET_DIR)/$(LM_SENSORS_TARGET_BINARY): $(LM_SENSORS_DIR)/$(LM_SENSORS_BINARY)
++	cp -dpf $(LM_SENSORS_DIR)/$(LM_SENSORS_BINARY) $@
 +	$(STRIP) $(STRIP_STRIP_ALL) $@
 +
-+busybox-initramfs: uclibc $(BUSYBOX_INITRAMFS_DIR)/inst/busybox
++lm-sensors: uclibc libsysfs $(TARGET_DIR)/$(LM_SENSORS_TARGET_BINARY)
 +
-+busybox-initramfs-menuconfig: host-sed $(BUILD_DIR) busybox-source $(BUSYBOX_INITRAMFS_DIR)/.configured
-+	$(MAKE) __TARGET_ARCH=$(ARCH) -C $(BUSYBOX_INITRAMFS_DIR) menuconfig
++lm-sensors-clean:
++	-$(MAKE) -C $(LM_SENSORS_DIR) clean
++	rm -f $(TARGET_DIR)/$(LM_SENSORS_TARGET_BINARY)
 +
-+busybox-initramfs-clean:
-+	rm -f $(BUSYBOX_INITRAMFS_DIR)/busybox \
-+		$(BUSYBOX_INITRAMFS_DIR)/inst/busybox
-+	-$(MAKE) -C $(BUSYBOX_INITRAMFS_DIR) clean
-+
-+busybox-initramfs-dirclean:
-+	rm -rf $(BUSYBOX_INITRAMFS_DIR)
++lm-sensors-dirclean:
++	rm -rf $(LM_SENSORS_DIR)
 +#############################################################
 +#
 +# Toplevel Makefile options
 +#
 +#############################################################
-+ifeq ($(strip $(BR2_PACKAGE_BUSYBOX_INITRAMFS)),y)
-+TARGETS+=busybox-initramfs
++ifeq ($(strip $(BR2_PACKAGE_LM_SENSORS)),y)
++TARGETS+=lm-sensors
 +endif
