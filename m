@@ -1,27 +1,40 @@
-From: Will Wagner <will_wagner@carallon.com>
-Date: Sat, 01 Sep 2007 15:55:13 +0100
-Subject: [Buildroot] lm_sensors package
-Message-ID: <46D97D51.3070507@carallon.com>
+From: aldot at uclibc.org <aldot@uclibc.org>
+Date: Sat,  1 Sep 2007 09:37:56 -0700 (PDT)
+Subject: [Buildroot] svn commit: trunk/buildroot/toolchain/binutils
+Message-ID: <20070901163756.62202A6076@busybox.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi All,
+Author: aldot
+Date: 2007-09-01 09:37:55 -0700 (Sat, 01 Sep 2007)
+New Revision: 19746
 
-Was just wondering if there is a lm_sensors package for 
-buildroot/busybox. Have looked around for it and not found anything yet.
+Log:
+- precaution when looking at GCC_VERSION
 
-Can anyone suggest a package to copy from when trying to write a package 
-for lm_sensors?
 
-Thanks,
+Modified:
+   trunk/buildroot/toolchain/binutils/binutils.mk
 
-Will.
--- 
-------------------------------------------------------------------------
-Will Wagner                                     will_wagner at carallon.com
-Senior Project Engineer                  Office Tel: +44 (0)20 7371 2032
-Carallon Ltd, Studio G20, Shepherds Building, Rockley Rd, London W14 0DA
-------------------------------------------------------------------------
+
+Changeset:
+Modified: trunk/buildroot/toolchain/binutils/binutils.mk
+===================================================================
+--- trunk/buildroot/toolchain/binutils/binutils.mk	2007-09-01 12:21:42 UTC (rev 19745)
++++ trunk/buildroot/toolchain/binutils/binutils.mk	2007-09-01 16:37:55 UTC (rev 19746)
+@@ -41,10 +41,10 @@
+ BINUTILS_HOST_PREREQ:=
+ BINUTILS_TARGET_PREREQ:=
+ 
+-ifeq ($(findstring 3.,$(GCC_VERSION)),3.)
++ifeq ($(findstring x3.,x$(GCC_VERSION)),x3.)
+ BINUTILS_NO_MPFR:=y
+ endif
+-ifeq ($(findstring 4.0,$(GCC_VERSION)),4.0)
++ifeq ($(findstring x4.0,x$(GCC_VERSION)),x4.0)
+ BINUTILS_NO_MPFR:=y
+ endif
+ 
