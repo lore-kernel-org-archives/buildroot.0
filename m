@@ -1,26 +1,34 @@
 From: Bernhard Fischer <rep.dot.nop@gmail.com>
-Date: Sat, 1 Sep 2007 18:27:51 +0200
-Subject: [Buildroot] AVR32 defconfig
-In-Reply-To: <1188456153.30555.4.camel@localhost.localdomain>
-References: <00ca01c7ea3f$e32af130$6e00a8c0@JONATHAN>
-	<1188456153.30555.4.camel@localhost.localdomain>
-Message-ID: <20070901162750.GL11697@aon.at>
+Date: Sat, 1 Sep 2007 18:31:15 +0200
+Subject: [Buildroot] mplayer-package doesn't build	forotherarchitectures
+	than avr32
+In-Reply-To: <00cb01c7ec06$cf9c3bb0$c6dc780a@atmel.com>
+References: <f90898420708290133i7ac1f31dkbdd53649945091b3@mail.gmail.com>
+	<20070830221454.GG11697@aon.at>
+	<014601c7eb5a$138e37e0$36f2780a@atmel.com>
+	<20070831073156.GA29704@aon.at>
+	<00cb01c7ec06$cf9c3bb0$c6dc780a@atmel.com>
+Message-ID: <20070901163115.GM11697@aon.at>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Thu, Aug 30, 2007 at 08:42:33AM +0200, Hans-Christian Egtvedt wrote:
->On Wed, 2007-08-29 at 09:24 -0400, Jonathan Dumaresq wrote:
->
-><cut Atmel snapshot of Buildroot>
- 
->> i probably have setting in the config file that is not correct.
->
->Check what architecture is chosen in uClibc configuration:
->cd toolchain_build_avr32/uClibc-0.9.28.3
->make menuconfig
+On Fri, Aug 31, 2007 at 06:05:07PM +0200, Ulf Samuelsson wrote:
 
-Generally you should not do this in order not to risk mis-configuration.
-See docs/README
+>> Given that mplayer currently is at 1.0-rc1 (i.e. not released), what
+>> about fixing this in the proper place, i.e. upstream?
+>> $ svn ls svn://svn.mplayerhq.hu/ffmpeg/trunk/libavcodec/ | grep -i avr
+>> $
+>> Turns up nothing..
+>>
+>
+>I think it is the intention of the AVR32 team to ensure that all additions
+
+yep.
+
+>they do are fed upstream, but I do not control their activities.
+
+Of course not. But now would be a good time to make sure that your avr
+patches are applied for the 1.0 release, fwiw..
