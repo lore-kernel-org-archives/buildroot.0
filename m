@@ -1,34 +1,37 @@
 From: Bernhard Fischer <rep.dot.nop@gmail.com>
-Date: Sat, 1 Sep 2007 18:31:15 +0200
-Subject: [Buildroot] mplayer-package doesn't build	forotherarchitectures
-	than avr32
-In-Reply-To: <00cb01c7ec06$cf9c3bb0$c6dc780a@atmel.com>
-References: <f90898420708290133i7ac1f31dkbdd53649945091b3@mail.gmail.com>
-	<20070830221454.GG11697@aon.at>
-	<014601c7eb5a$138e37e0$36f2780a@atmel.com>
-	<20070831073156.GA29704@aon.at>
-	<00cb01c7ec06$cf9c3bb0$c6dc780a@atmel.com>
-Message-ID: <20070901163115.GM11697@aon.at>
+Date: Sat, 1 Sep 2007 18:34:35 +0200
+Subject: [Buildroot] Problem #including <string>
+In-Reply-To: <46D57790.1040204@st.com>
+References: <46D54452.7080204@carallon.com> <46D5467E.5010802@st.com>
+	<46D573C8.7060701@carallon.com> <46D57790.1040204@st.com>
+Message-ID: <20070901163435.GN11697@aon.at>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Fri, Aug 31, 2007 at 06:05:07PM +0200, Ulf Samuelsson wrote:
-
->> Given that mplayer currently is at 1.0-rc1 (i.e. not released), what
->> about fixing this in the proper place, i.e. upstream?
->> $ svn ls svn://svn.mplayerhq.hu/ffmpeg/trunk/libavcodec/ | grep -i avr
->> $
->> Turns up nothing..
+On Wed, Aug 29, 2007 at 03:41:36PM +0200, Carmelo AMOROSO wrote:
+>Will Wagner wrote:
+>> Carmelo AMOROSO wrote:
+>>> Probably you have uClibc built with SUSv3_MACRO defined (among these 
+>>> there is index )
+>>>
+>>> Cheers,
+>>> Carmelo
+>>>> ------------------------------------------------------------------------ 
+>>>>
 >>
+>> Thank you that fixed it. Why would you want the SUSv3_MACRO defined?
+
+You don't want UCLIBC_SUSV3_LEGACY_MACROS nor UCLIBC_SUSV3_LEGACY, as a
+general rule of thumb.
+>>
+>If some applications still call the legacy SUSv3 api, you may need
+>to enable this option within uClibc, anyway, just to avoid name clashing
+>when building some application (in your case), it's better to use
+>the function version of the SUSv3 api and not macros... (if cannot patch 
+>the application)
 >
->I think it is the intention of the AVR32 team to ensure that all additions
-
-yep.
-
->they do are fed upstream, but I do not control their activities.
-
-Of course not. But now would be a good time to make sure that your avr
-patches are applied for the 1.0 release, fwiw..
+>but if you doesn't needs this interfaces, safely remove this support 
+>from uClibc.
