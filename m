@@ -1,40 +1,26 @@
-From: aldot at uclibc.org <aldot@uclibc.org>
-Date: Sat,  1 Sep 2007 09:37:56 -0700 (PDT)
-Subject: [Buildroot] svn commit: trunk/buildroot/toolchain/binutils
-Message-ID: <20070901163756.62202A6076@busybox.net>
+From: Bernhard Fischer <rep.dot.nop@gmail.com>
+Date: Sat, 1 Sep 2007 18:27:51 +0200
+Subject: [Buildroot] AVR32 defconfig
+In-Reply-To: <1188456153.30555.4.camel@localhost.localdomain>
+References: <00ca01c7ea3f$e32af130$6e00a8c0@JONATHAN>
+	<1188456153.30555.4.camel@localhost.localdomain>
+Message-ID: <20070901162750.GL11697@aon.at>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Author: aldot
-Date: 2007-09-01 09:37:55 -0700 (Sat, 01 Sep 2007)
-New Revision: 19746
-
-Log:
-- precaution when looking at GCC_VERSION
-
-
-Modified:
-   trunk/buildroot/toolchain/binutils/binutils.mk
-
-
-Changeset:
-Modified: trunk/buildroot/toolchain/binutils/binutils.mk
-===================================================================
---- trunk/buildroot/toolchain/binutils/binutils.mk	2007-09-01 12:21:42 UTC (rev 19745)
-+++ trunk/buildroot/toolchain/binutils/binutils.mk	2007-09-01 16:37:55 UTC (rev 19746)
-@@ -41,10 +41,10 @@
- BINUTILS_HOST_PREREQ:=
- BINUTILS_TARGET_PREREQ:=
+On Thu, Aug 30, 2007 at 08:42:33AM +0200, Hans-Christian Egtvedt wrote:
+>On Wed, 2007-08-29 at 09:24 -0400, Jonathan Dumaresq wrote:
+>
+><cut Atmel snapshot of Buildroot>
  
--ifeq ($(findstring 3.,$(GCC_VERSION)),3.)
-+ifeq ($(findstring x3.,x$(GCC_VERSION)),x3.)
- BINUTILS_NO_MPFR:=y
- endif
--ifeq ($(findstring 4.0,$(GCC_VERSION)),4.0)
-+ifeq ($(findstring x4.0,x$(GCC_VERSION)),x4.0)
- BINUTILS_NO_MPFR:=y
- endif
- 
+>> i probably have setting in the config file that is not correct.
+>
+>Check what architecture is chosen in uClibc configuration:
+>cd toolchain_build_avr32/uClibc-0.9.28.3
+>make menuconfig
+
+Generally you should not do this in order not to risk mis-configuration.
+See docs/README
