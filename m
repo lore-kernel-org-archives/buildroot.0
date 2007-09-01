@@ -1,92 +1,33 @@
-From: aldot at uclibc.org <aldot@uclibc.org>
-Date: Sat,  1 Sep 2007 03:54:51 -0700 (PDT)
-Subject: [Buildroot] svn commit: trunk/buildroot/target/device/Atmel/u-boot
-Message-ID: <20070901105451.44E93A60CF@busybox.net>
+From: Bernhard Fischer <rep.dot.nop@gmail.com>
+Date: Sat, 1 Sep 2007 12:38:09 +0200
+Subject: [Buildroot] White space problem
+	in	target/device/Atmel/u-boot/u-boot.mk
+In-Reply-To: <a512d1250708310529w5311ec48haf12635551fa51da@mail.gmail.com>
+References: <a512d1250708310529w5311ec48haf12635551fa51da@mail.gmail.com>
+Message-ID: <20070901103809.GJ11697@aon.at>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Author: aldot
-Date: 2007-09-01 03:54:50 -0700 (Sat, 01 Sep 2007)
-New Revision: 19743
+On Fri, Aug 31, 2007 at 07:29:43PM +0700, brm wrote:
+>Hi,
+>      Today when I try to build buildroot for some old ARM board using
+>AT914xxx.
+>I got this error:
+>
+>| echo setenv linux /opt/buildroot/binaries/ev40/ev40-linux-2.6.22.1>>
+>/opt/buildroot/binaries/ev40/autoscript
+>| echo setenv kernel-version 2.6.22.1>> /opt/buildroot/binaries/ev40/autoscript
+>| echo setenv kernel-date 20070831>> /opt/buildroot/binaries/ev40/autoscript
+>| /bin/sh: 20070831: Bad file descriptor
+>| make: *** [/opt/buildroot/binaries/ev40/autoscript] Error 1
+>
+>       After spend sometime track down the problem, I found that "u-boot.mk"
+>in target/device/Atmel/u-boot/ directory contains that portion of shell script.
+>       I'm using bash on debian etch. Bach will interpret number in
+>front of ">" or ">>" as file descriptor. So that cause the problem.
 
-Log:
-- fix glitch introduced in my whitespace removal (brm)
-
-
-Modified:
-   trunk/buildroot/target/device/Atmel/u-boot/u-boot.mk
-
-
-Changeset:
-Modified: trunk/buildroot/target/device/Atmel/u-boot/u-boot.mk
-===================================================================
---- trunk/buildroot/target/device/Atmel/u-boot/u-boot.mk	2007-08-31 21:45:52 UTC (rev 19742)
-+++ trunk/buildroot/target/device/Atmel/u-boot/u-boot.mk	2007-09-01 10:54:50 UTC (rev 19743)
-@@ -112,10 +112,10 @@
- 	echo "/* Automatically generated file, do not edit */" \
- 	> $(UBOOT_CUSTOM).test
- ifneq ($(TARGET_HOSTNAME),)
--	echo "#if defined(CONFIG_HOSTNAME)">> $(UBOOT_CUSTOM).test
--	echo "#undef CONFIG_HOSTNAME">> $(UBOOT_CUSTOM).test
-+	echo "#if defined(CONFIG_HOSTNAME)" >> $(UBOOT_CUSTOM).test
-+	echo "#undef CONFIG_HOSTNAME" >> $(UBOOT_CUSTOM).test
- 	echo "#define CONFIG_HOSTNAME $(TARGET_HOSTNAME)">> $(UBOOT_CUSTOM).test
--	echo "#endif">> $(UBOOT_CUSTOM).test
-+	echo "#endif" >> $(UBOOT_CUSTOM).test
- endif
- ifneq ($(TARGET_UBOOT_IPADDR),)
- 	echo "#define CONFIG_IPADDR $(TARGET_UBOOT_IPADDR)">> $(UBOOT_CUSTOM).test
-@@ -136,34 +136,34 @@
- 
- $(UBOOT_SCR): .config
- ifneq ($(TARGET_UBOOT_IPADDR),)
--	echo setenv ipaddr $(TARGET_UBOOT_IPADDR)> $(UBOOT_SCR)
-+	echo setenv ipaddr $(TARGET_UBOOT_IPADDR) > $(UBOOT_SCR)
- endif
- ifneq ($(TARGET_UBOOT_SERVERIP),)
--	echo setenv serverip $(TARGET_UBOOT_SERVERIP)>> $(UBOOT_SCR)
-+	echo setenv serverip $(TARGET_UBOOT_SERVERIP) >> $(UBOOT_SCR)
- endif
- ifneq ($(TARGET_UBOOT_GATEWAY),)
--	echo setenv gatewayip $(TARGET_UBOOT_GATEWAY)>> $(UBOOT_SCR)
-+	echo setenv gatewayip $(TARGET_UBOOT_GATEWAY) >> $(UBOOT_SCR)
- endif
- ifneq ($(TARGET_UBOOT_NETMASK),)
--	echo setenv netmask $(TARGET_UBOOT_NETMASK)>> $(UBOOT_SCR)
-+	echo setenv netmask $(TARGET_UBOOT_NETMASK) >> $(UBOOT_SCR)
- endif
--	echo setenv linux $(LINUX26_KERNEL)>> $(UBOOT_SCR)
--	echo setenv kernel-version $(LINUX26_VERSION)>> $(UBOOT_SCR)
--	echo setenv kernel-date $(DATE)>> $(UBOOT_SCR)
-+	echo setenv linux $(LINUX26_KERNEL) >> $(UBOOT_SCR)
-+	echo setenv kernel-version $(LINUX26_VERSION) >> $(UBOOT_SCR)
-+	echo setenv kernel-date $(DATE) >> $(UBOOT_SCR)
- 	echo setenv hostname $(TARGET_HOSTNAME) >> $(UBOOT_SCR)
--	echo setenv fs-date $(DATE)>> $(UBOOT_SCR)
--	echo setenv rd-1 rootfs.$(BR2_ARCH)-$(DATE).ext2>> $(UBOOT_SCR)
--	echo setenv rd-2 rootfs.$(BR2_ARCH)-$(DATE).jffs2>> $(UBOOT_SCR)
--	echo setenv rd rootfs.$(BR2_ARCH)-$(DATE).ext2>> $(UBOOT_SCR)
--	echo setenv ver 1>> $(UBOOT_SCR)
-+	echo setenv fs-date $(DATE) >> $(UBOOT_SCR)
-+	echo setenv rd-1 rootfs.$(BR2_ARCH)-$(DATE).ext2 >> $(UBOOT_SCR)
-+	echo setenv rd-2 rootfs.$(BR2_ARCH)-$(DATE).jffs2 >> $(UBOOT_SCR)
-+	echo setenv rd rootfs.$(BR2_ARCH)-$(DATE).ext2 >> $(UBOOT_SCR)
-+	echo setenv ver 1 >> $(UBOOT_SCR)
- ifneq ($(TARGET_UBOOT_ETHADDR),)
--	echo setenv ethaddr $(TARGET_UBOOT_ETHADDR)>> $(UBOOT_SCR)
-+	echo setenv ethaddr $(TARGET_UBOOT_ETHADDR) >> $(UBOOT_SCR)
- endif
--	echo setenv fstype ram>> $(UBOOT_SCR)
-+	echo setenv fstype ram >> $(UBOOT_SCR)
- 	echo fs >> $(UBOOT_SCR)
- 	echo os >> $(UBOOT_SCR)
--	echo setargs>> $(UBOOT_SCR)
--	echo saveenv>> $(UBOOT_SCR)
-+	echo setargs >> $(UBOOT_SCR)
-+	echo saveenv >> $(UBOOT_SCR)
- 
- $(UBOOT_SCR).$(PROJECT): $(UBOOT_SCR) $(MKIMAGE)
- 	$(MKIMAGE) -A arm \
+Yea, that was me. Should be fixed in r19743. Please holler if i missed
+an occurance.
