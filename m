@@ -1,36 +1,27 @@
-From: aldot at uclibc.org <aldot@uclibc.org>
-Date: Sat,  1 Sep 2007 05:21:42 -0700 (PDT)
-Subject: [Buildroot] svn commit: trunk/buildroot/package/quagga
-Message-ID: <20070901122142.0160DA65B4@busybox.net>
+From: Will Wagner <will_wagner@carallon.com>
+Date: Sat, 01 Sep 2007 15:55:13 +0100
+Subject: [Buildroot] lm_sensors package
+Message-ID: <46D97D51.3070507@carallon.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Author: aldot
-Date: 2007-09-01 05:21:42 -0700 (Sat, 01 Sep 2007)
-New Revision: 19745
+Hi All,
 
-Log:
-- bump version
+Was just wondering if there is a lm_sensors package for 
+buildroot/busybox. Have looked around for it and not found anything yet.
 
+Can anyone suggest a package to copy from when trying to write a package 
+for lm_sensors?
 
-Modified:
-   trunk/buildroot/package/quagga/quagga.mk
+Thanks,
 
-
-Changeset:
-Modified: trunk/buildroot/package/quagga/quagga.mk
-===================================================================
---- trunk/buildroot/package/quagga/quagga.mk	2007-09-01 12:21:07 UTC (rev 19744)
-+++ trunk/buildroot/package/quagga/quagga.mk	2007-09-01 12:21:42 UTC (rev 19745)
-@@ -3,7 +3,7 @@
- # quagga suite
- #
- #############################################################
--QUAGGA_VERSION:=0.99.7
-+QUAGGA_VERSION:=0.99.8
- QUAGGA_SOURCE:=quagga-$(QUAGGA_VERSION).tar.gz
- QUAGGA_SITE:=http://www.quagga.net/download
- QUAGGA_DIR:=$(BUILD_DIR)/quagga-$(QUAGGA_VERSION)
+Will.
+-- 
+------------------------------------------------------------------------
+Will Wagner                                     will_wagner at carallon.com
+Senior Project Engineer                  Office Tel: +44 (0)20 7371 2032
+Carallon Ltd, Studio G20, Shepherds Building, Rockley Rd, London W14 0DA
+------------------------------------------------------------------------
