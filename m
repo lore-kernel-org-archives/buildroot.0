@@ -1,71 +1,56 @@
-From: aldot at uclibc.org <aldot@uclibc.org>
-Date: Sat,  1 Sep 2007 12:42:12 -0700 (PDT)
-Subject: [Buildroot] svn commit: trunk/buildroot/package/tcpdump
-Message-ID: <20070901194212.5D734A4CE8@busybox.net>
+From: Bernhard Fischer <rep.dot.nop@gmail.com>
+Date: Sat, 1 Sep 2007 21:32:43 +0200
+Subject: [Buildroot] [RFC] config cache
+Message-ID: <20070901193243.GQ11697@aon.at>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Author: aldot
-Date: 2007-09-01 12:42:11 -0700 (Sat, 01 Sep 2007)
-New Revision: 19759
+Hi,
 
-Log:
-- add option to turn on SMB dump routines
-- honour BR2_INET_IPV6
+read ./TODO
 
+Now i'd like to think loud about how to "implement" this.
 
-Modified:
-   trunk/buildroot/package/tcpdump/Config.in
-   trunk/buildroot/package/tcpdump/tcpdump.mk
+preface:
+========
+First, i'm not too happy (any more) with the naming of the variables
+TARGET_CONFIGURE_OPTS and TARGET_CONFIGURE_ARGS -- same for HOST.
+Both are variables and not really OPTS, as opposed to the cache
+option/argument.
 
+Let me suggest that the CC= CFLAGS= settings live in (the respective
+CONFIGURE_ENV) variables.
 
-Changeset:
-Modified: trunk/buildroot/package/tcpdump/Config.in
-===================================================================
---- trunk/buildroot/package/tcpdump/Config.in	2007-09-01 18:46:46 UTC (rev 19758)
-+++ trunk/buildroot/package/tcpdump/Config.in	2007-09-01 19:42:11 UTC (rev 19759)
-@@ -7,6 +7,13 @@
- 
- 	  http://www.tcpdump.org/
- 
-+config BR2_PACKAGE_TCPDUMP_SMB
-+	bool "smb dump support"
-+	default n
-+	depends on BR2_PACKAGE_TCPDUMP
-+	help
-+	  enable possibly-buggy SMB printer
-+
- config BR2_PACKAGE_DHCPDUMP
- 	bool "dhcpdump"
- 	default n
+Suggestions for the known cv_* vars? CONFIGURE_SETTINGS come to mind,
+but that's a bit long to type.. TARGET_CONFIGURE_PARAMS ?
 
-Modified: trunk/buildroot/package/tcpdump/tcpdump.mk
-===================================================================
---- trunk/buildroot/package/tcpdump/tcpdump.mk	2007-09-01 18:46:46 UTC (rev 19758)
-+++ trunk/buildroot/package/tcpdump/tcpdump.mk	2007-09-01 19:42:11 UTC (rev 19759)
-@@ -12,6 +12,12 @@
- TCPDUMP_SOURCE:=tcpdump-$(TCPDUMP_VERSION).tar.gz
- TCPDUMP_CAT:=$(ZCAT)
- 
-+ifneq ($(BR2_PACKAGE_TCPDUMP_SMB),y)
-+TCPDUMP_ENABLE_SMB:=--disable-smb
-+else
-+TCPDUMP_ENABLE_SMB:=--enable-smb
-+endif
-+
- $(DL_DIR)/$(TCPDUMP_SOURCE):
- 	 $(WGET) -P $(DL_DIR) $(TCPDUMP_SITE)/$(TCPDUMP_SOURCE)
- 
-@@ -37,7 +43,8 @@
- 		--mandir=/usr/share/man \
- 		--infodir=/usr/share/info \
- 		--without-crypto \
--		--disable-smb \
-+		$(TCPDUMP_ENABLE_SMB) \
-+		$(DISABLE_IPV6) \
- 	)
- 	$(SED) '/HAVE_PCAP_DEBUG/d' $(TCPDUMP_DIR)/config.h
- 	touch $@
+cache:
+======
+
+Per PROJECT, we use (resp. i suggest to use a) *central* config.cache,
+via --config-cache=$(PROJECT_BUILD_DIR)/target_config.cache which is put
+into a TARGET_CONFIGURE_OPTS variable (we renamed the formerly _OPTS to
+something like PARAM that is passed *before* the
+$(PACKAGE_DIR)/configure script).
+
+Since the advent of PROJECT one may even consider to build the
+autoconf'ed packages out-of-tree, i.e. unpack them in build_dir, step
+into project_dir/package/ and there do a
+$(PACKAGE_DIR)/configure $(TARGET_CONFIGURE_OTPS) && make
+
+We would end up with a stanza like (modulo naming of the variables):
+
+	(cd $(PROJECT_DIR)/$(PACKAGE_NAME) && \
+	 $(TARGET_CONFIGURE_ENV) \
+	 $(TARGET_CONFIGURE_PARAMS) \
+	 $(PACKAGE_DIR)/configure \
+	 $(TARGET_CONFIGURE_OPTS) \
+	 --prefix=/usr \
+	 etc...
+	)
+
+What do you think?
+Suggestions? Comments?
