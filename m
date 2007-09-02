@@ -1,34 +1,77 @@
-From: aldot at uclibc.org <aldot@uclibc.org>
-Date: Sun,  2 Sep 2007 13:58:52 -0700 (PDT)
-Subject: [Buildroot] svn commit: trunk/buildroot/package/mutt
-Message-ID: <20070902205852.8C4ACA681A@busybox.net>
+From: Ulf Samuelsson <ulf@atmel.com>
+Date: Sun, 2 Sep 2007 17:58:02 +0200
+Subject: [Buildroot] [RFC] config cache
+References: <20070901193243.GQ11697@aon.at>
+Message-ID: <000301c7ed9d$c08b9510$54b0780a@atmel.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Author: aldot
-Date: 2007-09-02 13:58:51 -0700 (Sun, 02 Sep 2007)
-New Revision: 19765
+> Hi,
+> 
+> read ./TODO
+> 
+> Now i'd like to think loud about how to "implement" this.
+> 
+> preface:
+> ========
+> First, i'm not too happy (any more) with the naming of the variables
+> TARGET_CONFIGURE_OPTS and TARGET_CONFIGURE_ARGS -- same for HOST.
+> Both are variables and not really OPTS, as opposed to the cache
+> option/argument.
+> 
+> Let me suggest that the CC= CFLAGS= settings live in (the respective
+> CONFIGURE_ENV) variables.
+> 
+> Suggestions for the known cv_* vars? CONFIGURE_SETTINGS come to mind,
+> but that's a bit long to type.. TARGET_CONFIGURE_PARAMS ?
+> 
+> cache:
+> ======
+> 
+> Per PROJECT, we use (resp. i suggest to use a) *central* config.cache,
+> via --config-cache=$(PROJECT_BUILD_DIR)/target_config.cache which is put
+> into a TARGET_CONFIGURE_OPTS variable (we renamed the formerly _OPTS to
+> something like PARAM that is passed *before* the
+> $(PACKAGE_DIR)/configure script).
+> 
+> Since the advent of PROJECT one may even consider to build the
+> autoconf'ed packages out-of-tree, i.e. unpack them in build_dir, step
+> into project_dir/package/ and there do a
+> $(PACKAGE_DIR)/configure $(TARGET_CONFIGURE_OTPS) && make
+> 
 
-Log:
-- it's a stub, add prominent note on it's brokenness
+One of the advantages of the PROJECT thing, is that you can share
+the result of the build between projects.
+Only packages which can be configured in different ways should be
+built in the project_build_dir.
 
 
-Modified:
-   trunk/buildroot/package/mutt/Config.in
+> We would end up with a stanza like (modulo naming of the variables):
+> 
+> (cd $(PROJECT_DIR)/$(PACKAGE_NAME) && \
+> $(TARGET_CONFIGURE_ENV) \
+> $(TARGET_CONFIGURE_PARAMS) \
+> $(PACKAGE_DIR)/configure \
+> $(TARGET_CONFIGURE_OPTS) \
+
+Are you not using $(TARGET_CONFIGURE_OPTS) in a new meaning then.
+I think in that case you should come up with a new name
+to avoid bugs.
 
 
-Changeset:
-Modified: trunk/buildroot/package/mutt/Config.in
-===================================================================
---- trunk/buildroot/package/mutt/Config.in	2007-09-02 20:53:38 UTC (rev 19764)
-+++ trunk/buildroot/package/mutt/Config.in	2007-09-02 20:58:51 UTC (rev 19765)
-@@ -1,5 +1,5 @@
- config BR2_PACKAGE_MUTT
--	bool "mutt"
-+	bool "mutt (BROKEN for wchar; FIXME!)"
- 	default n
- 	select BR2_PACKAGE_NCURSES
- 	help
+> --prefix=/usr \
+> etc...
+> )
+> 
+
+
+Best Regards
+Ulf Samuelsson                ulf at atmel.com
+Atmel Nordic AB
+Mail:  Box 2033, 174 02 Sundbyberg, Sweden
+Visit:  Kavalleriv?gen 24, 174 58 Sundbyberg, Sweden
+Phone +46 (8) 441 54 22     Fax +46 (8) 441 54 29
+GSM    +46 (706) 22 44 57
