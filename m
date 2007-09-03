@@ -1,35 +1,65 @@
-From: jacmet at uclibc.org <jacmet@uclibc.org>
-Date: Mon,  3 Sep 2007 02:02:10 -0700 (PDT)
-Subject: [Buildroot] svn commit: trunk/buildroot/package/avahi
-Message-ID: <20070903090210.10AEDA659E@busybox.net>
+From: Ulf Samuelsson <ulf@atmel.com>
+Date: Mon, 03 Sep 2007 10:54:24 +0200
+Subject: [Buildroot] svn commit: trunk/buildroot/package/libdaemon
+In-Reply-To: <20070903085610.67BDDA616F@busybox.net>
+References: <20070903085610.67BDDA616F@busybox.net>
+Message-ID: <1188809664.4069.62.camel@aeglos.sweden.atmel.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Author: jacmet
-Date: 2007-09-03 02:02:10 -0700 (Mon, 03 Sep 2007)
-New Revision: 19773
+m?n 2007-09-03 klockan 01:56 -0700 skrev jacmet at uclibc.org:
+> Author: jacmet
+> Date: 2007-09-03 01:56:06 -0700 (Mon, 03 Sep 2007)
+> New Revision: 19771
+> 
+> Log:
+> Don't apply broken patch from r19595 with hardcoded path names.
+> Ulf, what was this supposed to fix?
+> 
+> 
+> Modified:
+>    trunk/buildroot/package/libdaemon/libdaemon.mk
+> 
 
-Log:
-Bumped version
+OK I see the problem.
 
-Modified:
-   trunk/buildroot/package/avahi/avahi.mk
+It does not build for ARM as is, 
+so I ran autotools, after which it builds.
+How run autotools to generate an address relative to the buildroot tree?
 
-
-Changeset:
-Modified: trunk/buildroot/package/avahi/avahi.mk
-===================================================================
---- trunk/buildroot/package/avahi/avahi.mk	2007-09-03 09:00:18 UTC (rev 19772)
-+++ trunk/buildroot/package/avahi/avahi.mk	2007-09-03 09:02:10 UTC (rev 19773)
-@@ -10,7 +10,7 @@
- # either version 2.1 of the License, or (at your option) any
- # later version.
- 
--AVAHI_VERSION:=0.6.19
-+AVAHI_VERSION:=0.6.21
- AVAHI_DIR:=$(BUILD_DIR)/avahi-$(AVAHI_VERSION)
- AVAHI_SITE:=http://www.avahi.org/download/
- AVAHI_SOURCE:=avahi-$(AVAHI_VERSION).tar.gz
+> 
+> Changeset:
+> Modified: trunk/buildroot/package/libdaemon/libdaemon.mk
+> ===================================================================
+> --- trunk/buildroot/package/libdaemon/libdaemon.mk	2007-09-03 06:26:06 UTC (rev 19770)
+> +++ trunk/buildroot/package/libdaemon/libdaemon.mk	2007-09-03 08:56:06 UTC (rev 19771)
+> @@ -26,11 +26,13 @@
+>  $(LIBDAEMON_DIR)/.unpacked: $(DL_DIR)/$(LIBDAEMON_SOURCE)
+>  	$(LIBDAEMON_CAT) $(DL_DIR)/$(LIBDAEMON_SOURCE) | tar -C $(BUILD_DIR) $(TAR_OPTIONS) -
+>  	toolchain/patch-kernel.sh $(LIBDAEMON_DIR) package/libdaemon/ \*.patch
+> -	mkdir -p $(PROJECT_BUILD_DIR)/patches
+> -	$(BZCAT) package/libdaemon/$(LIBDAEMON_NAME).patch.bz2 \
+> -		> $(PROJECT_BUILD_DIR)/patches/$(LIBDAEMON_NAME).patch
+> -	toolchain/patch-kernel.sh $(LIBDAEMON_DIR) $(PROJECT_BUILD_DIR)/patches/ $(LIBDAEMON_NAME)\*.patch
+> -	$(CONFIG_UPDATE) $(LIBDAEMON_DIR)
+> +# Ulf, what was this supposed to fix? Your patch is broken
+> +# (hardcoded for /home/ulf/..)
+> +#	mkdir -p $(PROJECT_BUILD_DIR)/patches
+> +#	$(BZCAT) package/libdaemon/$(LIBDAEMON_NAME).patch.bz2 \
+> +#		> $(PROJECT_BUILD_DIR)/patches/$(LIBDAEMON_NAME).patch
+> +#	toolchain/patch-kernel.sh $(LIBDAEMON_DIR) $(PROJECT_BUILD_DIR)/patches/ $(LIBDAEMON_NAME)\*.patch
+> +#	$(CONFIG_UPDATE) $(LIBDAEMON_DIR)
+>  	touch $(LIBDAEMON_DIR)/.unpacked
+>  
+>  $(LIBDAEMON_DIR)/.configured: $(LIBDAEMON_DIR)/.unpacked
+> 
+> _______________________________________________
+> buildroot mailing list
+> buildroot at uclibc.org
+> http://busybox.net/mailman/listinfo/buildroot
+-- 
+Best Regards,
+Ulf Samuelsson
