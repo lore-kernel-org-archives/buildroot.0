@@ -1,29 +1,27 @@
-From: Kyku <kyku@os.pl>
-Date: Mon, 03 Sep 2007 17:38:02 +0200
-Subject: [Buildroot] Cannot select architecture variant.
-Message-ID: <46DC2A5A.7080001@os.pl>
+From: Rouslan Solomakhin <rouslan@solomakhin.net>
+Date: Mon, 3 Sep 2007 11:22:58 -0500 (CDT)
+Subject: [Buildroot] svn commit: trunk/buildroot/toolchain/gcc
+In-Reply-To: <002d01c7ee36$f93df3a0$0402a8c0@atmel.com>
+References: <20070903062608.3D391A65E5@busybox.net>
+	<20070903140903.GA4518@aon.at>
+	<002d01c7ee36$f93df3a0$0402a8c0@atmel.com>
+Message-ID: <60171.24.207.255.59.1188836578.squirrel@box240.bluehost.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
-I'm pretty new to buildroot so please be patient with me :-)
-I have the following problem with svn version of buildroot:
-Whenever I select other target architecture variant than i386 in the 
-menuconfig I get the following error after typing make:
+>> On Sun, Sep 02, 2007 at 11:26:08PM -0700, ulf at uclibc.org wrote:
+> Have been pondering on the larger question for some time.
+> How do we decide when to trust patches like this?
 
-ln: `/tmp/buildroot/build_i686/staging_dir/usr/.': cannot overwrite 
-directory
-make: *** [/tmp/buildroot/build_i686/staging_dir] Error 1
+Sorry the patch didn't work for you. It solved the problem in my case, for
+whatever reason.
 
-Can I do anything with this?
+Regarding trusting patches: maybe apply them in a temporary copy of the
+tree and try to compile it? That would show any patches that break
+anything.
 
-
--------------------------------
-Radio internetowe Radioparty.pl
-   http://www.radioparty.pl
- Techno House Trance Hardstyle
-  Drum 'n' Bass Vocal Trance
--------------------------------
+Regards,
+Rouslan
