@@ -1,79 +1,68 @@
 From: Ulf Samuelsson <ulf@atmel.com>
-Date: Mon, 3 Sep 2007 16:29:55 +0200
-Subject: [Buildroot] svn commit: trunk/buildroot/toolchain/gcc
-References: <20070903062608.3D391A65E5@busybox.net>
-	<20070903140903.GA4518@aon.at>
-Message-ID: <002d01c7ee36$f93df3a0$0402a8c0@atmel.com>
+Date: Mon, 3 Sep 2007 16:20:49 +0200
+Subject: [Buildroot] Error while making buildroot for an i386
+	architecture
+References: <1188828402.6167.8.camel@PcNacho>
+Message-ID: <002c01c7ee36$f90ea640$0402a8c0@atmel.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-> On Sun, Sep 02, 2007 at 11:26:08PM -0700, ulf at uclibc.org wrote:
->>Author: ulf
->>Date: 2007-09-02 23:26:06 -0700 (Sun, 02 Sep 2007)
->>New Revision: 19770
->>
->>Log:
->>Cleanup handling of gccbug script
->>
->>Modified:
->>   trunk/buildroot/toolchain/gcc/gcc-uclibc-3.x.mk
->>   trunk/buildroot/toolchain/gcc/gcc-uclibc-4.x.mk
->>
->>
->>Changeset:
->>Modified: trunk/buildroot/toolchain/gcc/gcc-uclibc-3.x.mk
->>===================================================================
->>--- trunk/buildroot/toolchain/gcc/gcc-uclibc-3.x.mk 2007-09-03 06:10:01 UTC (rev 19769)
->>+++ trunk/buildroot/toolchain/gcc/gcc-uclibc-3.x.mk 2007-09-03 06:26:06 UTC (rev 19770)
->>@@ -282,7 +282,7 @@
->> fi
->> # Strip the host binaries
->> ifeq ($(GCC_STRIP_HOST_BINARIES),true)
->>- strip --strip-all -R .note -R .comment $(filter-out -gccbug,$(wildcard $(STAGING_DIR)/usr/bin/$(REAL_GNU_TARGET_NAME)-*))
->>+ strip --strip-all -R .note -R .comment $(filter-out gccbug,$(wildcard $(STAGING_DIR)/usr/bin/$(REAL_GNU_TARGET_NAME)-*))
->> endif
->> # Make sure we have 'cc'.
->> if [ ! -e $(STAGING_DIR)/usr/bin/$(REAL_GNU_TARGET_NAME)-cc ]; then \
->>
->>Modified: trunk/buildroot/toolchain/gcc/gcc-uclibc-4.x.mk
->>===================================================================
->>--- trunk/buildroot/toolchain/gcc/gcc-uclibc-4.x.mk 2007-09-03 06:10:01 UTC (rev 19769)
->>+++ trunk/buildroot/toolchain/gcc/gcc-uclibc-4.x.mk 2007-09-03 06:26:06 UTC (rev 19770)
->>@@ -290,7 +290,7 @@
->> fi
->> # Strip the host binaries
->> ifeq ($(GCC_STRIP_HOST_BINARIES),true)
->>- strip --strip-all -R .note -R .comment $(filter-out -gccbug,$(wildcard $(STAGING_DIR)/usr/bin/$(REAL_GNU_TARGET_NAME)-*))
->>+ strip --strip-all -R .note -R .comment $(filter-out gccbug,$(wildcard $(STAGING_DIR)/usr/bin/$(REAL_GNU_TARGET_NAME)-*))
+Subject: [Buildroot] Error while making buildroot for an i386 architecture
+
+
+> Hi! my name is Nacho and this is my first e-mail to the list, 
+>        I'm trying to create a filesystem with buildroot and my target
+>        is an ATX
+>        board.
+>        I follow the instructions for producing the filesystem in the
+>        documentation:
+>        make menuconfig and later on make.
+>        I chose the default toolchain and no packages on the busybox
+>        part of the
+>        menuconfig just to check if the output is what I need.
+>        I get the following error during the make command:
+>        
+>        # Strip the host binaries
+>        strip --strip-all -R .note
+>        -R .comment /home/nacho/Desktop/buildroot/build_i386/staging_dir/usr/bin/i386-linux-uclibc-addr2line /home/nacho/Desktop/buildroot/build_i386/staging_dir/usr/bin/i386-linux-uclibc-ar /home/nacho/Desktop/buildroot/build_i386/staging_dir/usr/bin/i386-linux-uclibc-as /home/nacho/Desktop/buildroot/build_i386/staging_dir/usr/bin/i386-linux-uclibc-c++filt /home/nacho/Desktop/buildroot/build_i386/staging_dir/usr/bin/i386-linux-uclibc-cpp /home/nacho/Desktop/buildroot/build_i386/staging_dir/usr/bin/i386-linux-uclibc-gcc /home/nacho/Desktop/buildroot/build_i386/staging_dir/usr/bin/i386-linux-uclibc-gcc-4.2.1 /home/nacho/Desktop/buildroot/build_i386/staging_dir/usr/bin/i386-linux-uclibc-gccbug /home/nacho/Desktop/buildroot/build_i386/staging_dir/usr/bin/i386-linux-uclibc-gcov /home/nacho/Desktop/buildroot/build_i386/staging_dir/usr/bin/i386-linux-uclibc-ld /home/nacho/Desktop/buildroot/build_i386/staging_dir/usr/bin/i386-linux-uclibc-ldconfig /home/nacho/Desktop/buildroot/buil!
+> d_i386/staging_dir/usr/bin/i386-linux-uclibc-ldd /home/nacho/Desktop/buildroot/build_i386/staging_dir/usr/bin/i386-linux-uclibc-nm /home/nacho/Desktop/buildroot/build_i386/staging_dir/usr/bin/i386-linux-uclibc-objcopy /home/nacho/Desktop/buildroot/build_i386/staging_dir/usr/bin/i386-linux-uclibc-objdump /home/nacho/Desktop/buildroot/build_i386/staging_dir/usr/bin/i386-linux-uclibc-ranlib /home/nacho/Desktop/buildroot/build_i386/staging_dir/usr/bin/i386-linux-uclibc-readelf /home/nacho/Desktop/buildroot/build_i386/staging_dir/usr/bin/i386-linux-uclibc-size /home/nacho/Desktop/buildroot/build_i386/staging_dir/usr/bin/i386-linux-uclibc-strings /home/nacho/Desktop/buildroot/build_i386/staging_dir/usr/bin/i386-linux-uclibc-strip
+>        strip: /home/nacho/Desktop/buildroot/build_i386/staging_dir/usr/bin/i386-linux-uclibc-gccbug: File format not recognized
+>        make: ***
+>        [/home/nacho/Desktop/buildroot/toolchain_build_i386/gcc-4.2.1-final/.installed] Error 1
+>        
+>        
+>        I have no idea of what's the problem because the toolchain is in
+>        it's
+>        directory so it means that it's been succesfully downloaded and
+>        compiled, isn't it?.
+>        
+>        I'd thank some help from anybody in the list.
+>        
+>        Best Regards, 
+>        
+>        Nacho
+>        
 > 
-> No, this is wrong. Ulf, did you try this at all?
-> *grumble*
-> 
+> _______________________________________________
+> buildroot mailing list
+> buildroot at uclibc.org
+> http://busybox.net/mailman/listinfo/buildroot
+>
 
-No, there was someone else (dont remember who) reporting "-gccbug" as a problem 
-and provided a patch using "gccbug"  which I applied.
+It is a bug in buildroot, which we are tryuing to fix right now.
+/home/nacho/Desktop/buildroot/build_i386/staging_dir/usr/bin/i386-linux-uclibc-gccbug
+is not an executable binary, it is a script file and thus cannot be "stripped"
 
-Reading the documentation for "filter-out" ,makes me believe that both the
-original and the fix are incorrect.
+rename manually 
+/home/nacho/Desktop/buildroot/build_i386/staging_dir/usr/bin/i386-linux-uclibc-gccbug
 
-filter-out will only remove the white space separated word in the first parameter,
-so AFAIK, there is nothing removed by the original rule.
+to
+/home/nacho/Desktop/buildroot/build_i386/staging_dir/usr/bin/gccbug
 
-- strip --strip-all -R .note -R .comment $(filter-out -gccbug,$(wildcard $(STAGING_DIR)/usr/bin/$(REAL_GNU_TARGET_NAME)-*))
-
-should be replaced by:
-- strip --strip-all -R .note -R .comment $(filter-out $(REAL_GNU_TARGET_NAME)-gccbug,$(wildcard $(STAGING_DIR)/usr/bin/$(REAL_GNU_TARGET_NAME)-*
-
-
-
-
-
-Have been pondering on the larger question for some time.
-How do we decide when to trust patches like this?
-
+and retry
 
 Best Regards
 Ulf Samuelsson
