@@ -1,8 +1,8 @@
 From: bugs at busybox.net <bugs@busybox.net>
-Date: Tue, 4 Sep 2007 13:50:01 -0700
+Date: Tue, 4 Sep 2007 13:51:18 -0700
 Subject: [Buildroot] [buildroot 0001483]: toolchain compilation fails with
 	libstdc++ in gcc version 3.4.6
-Message-ID: <5ace84fb2325086a6f88fd66210e079b@busybox.net>
+Message-ID: <7fba3e163343da41850c8bbb6b870a21@busybox.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -26,7 +26,7 @@ Priority:                   normal
 Status:                     assigned
 ====================================================================== 
 Date Submitted:             09-04-2007 06:42 PDT
-Last Modified:              09-04-2007 13:50 PDT
+Last Modified:              09-04-2007 13:51 PDT
 ====================================================================== 
 Summary:                    toolchain compilation fails with libstdc++ in gcc
 version 3.4.6
@@ -119,6 +119,11 @@ $ uname -a
 $ /lib/libc.so.6
 $ gcc --version 
 
+---------------------------------------------------------------------- 
+ bernhardf - 09-04-07 13:51  
+---------------------------------------------------------------------- 
+(PS: this sounds much like PR30915) 
+
 Issue History 
 Date Modified   Username       Field                    Change               
 ====================================================================== 
@@ -127,4 +132,5 @@ Date Modified   Username       Field                    Change
 09-04-07 06:42  HappyCactus    Assigned To               => buildroot       
 09-04-07 06:42  HappyCactus    File Added: .config                          
 09-04-07 13:50  bernhardf      Note Added: 0002708                          
+09-04-07 13:51  bernhardf      Note Added: 0002709                          
 ======================================================================
