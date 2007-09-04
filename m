@@ -1,62 +1,85 @@
-From: Micha Nelissen <micha@neli.hopto.org>
-Date: Tue, 04 Sep 2007 23:40:15 +0200
-Subject: [Buildroot] Uclibc 0.9.29 compiler error
-Message-ID: <fbkjea$tfd$1@sea.gmane.org>
+From: Bernhard Fischer <rep.dot.nop@gmail.com>
+Date: Wed, 5 Sep 2007 00:11:47 +0200
+Subject: [Buildroot] [RFC] config cache
+In-Reply-To: <000301c7ed9d$c08b9510$54b0780a@atmel.com>
+References: <20070901193243.GQ11697@aon.at>
+	<000301c7ed9d$c08b9510$54b0780a@atmel.com>
+Message-ID: <20070904221147.GZ11697@aon.at>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi,
+On Sun, Sep 02, 2007 at 05:58:02PM +0200, Ulf Samuelsson wrote:
+>> Hi,
+>> 
+>> read ./TODO
+>> 
+>> Now i'd like to think loud about how to "implement" this.
+>> 
+>> preface:
+>> ========
+>> First, i'm not too happy (any more) with the naming of the variables
+>> TARGET_CONFIGURE_OPTS and TARGET_CONFIGURE_ARGS -- same for HOST.
+>> Both are variables and not really OPTS, as opposed to the cache
+>> option/argument.
+>> 
+>> Let me suggest that the CC= CFLAGS= settings live in (the respective
+>> CONFIGURE_ENV) variables.
+>> 
+>> Suggestions for the known cv_* vars? CONFIGURE_SETTINGS come to mind,
+>> but that's a bit long to type.. TARGET_CONFIGURE_PARAMS ?
+>> 
+>> cache:
+>> ======
+>> 
+>> Per PROJECT, we use (resp. i suggest to use a) *central* config.cache,
+>> via --config-cache=$(PROJECT_BUILD_DIR)/target_config.cache which is put
+>> into a TARGET_CONFIGURE_OPTS variable (we renamed the formerly _OPTS to
+>> something like PARAM that is passed *before* the
+>> $(PACKAGE_DIR)/configure script).
+>> 
+>> Since the advent of PROJECT one may even consider to build the
+>> autoconf'ed packages out-of-tree, i.e. unpack them in build_dir, step
+>> into project_dir/package/ and there do a
+>> $(PACKAGE_DIR)/configure $(TARGET_CONFIGURE_OTPS) && make
+>> 
+>
+>One of the advantages of the PROJECT thing, is that you can share
+>the result of the build between projects.
+>Only packages which can be configured in different ways should be
+>built in the project_build_dir.
 
-I am using buildroot SVN, gcc 4.2.1, uclibc 0.9.29, armeb-linux for
-xscale. I've configured to use software floating point. Linking of
-uclibc fails, it cannot find some functions which seem software floating
-point related e.g. __floatsidf. Objdump'ing the libgcc.a file, this
-function is present, but section *UND* is listed instead of .text.
+Every network app, everything dealing with files/disks and perhaps some
+of the apps with optional X11 support are project specific, by that
+definition (and every app with optional locale support too, of course).
 
-<quote>
-  LD libuClibc-0.9.29.so
-libc/libc_so.a(difftime.os): In function `difftime':
-difftime.c:(.text+0x8): undefined reference to `__floatsidf'
-difftime.c:(.text+0x2c): undefined reference to `__subdf3'
-libc/libc_so.a(_fpmaxtostr.os): In function `_fpmaxtostr':
-_fpmaxtostr.c:(.text+0xd0): undefined reference to `__nedf2'
-_fpmaxtostr.c:(.text+0xf4): undefined reference to `__eqdf2'
-_fpmaxtostr.c:(.text+0x110): undefined reference to `__divdf3'
-_fpmaxtostr.c:(.text+0x11c): undefined reference to `__ltdf2'
-_fpmaxtostr.c:(.text+0x1c8): undefined reference to `__muldf3'
-_fpmaxtostr.c:(.text+0x38c): undefined reference to `__gedf2'
-_fpmaxtostr.c:(.text+0x444): undefined reference to `__adddf3'
-libc/libc_so.a(__psfs_do_numeric.os): In function `__psfs_do_numeric':
-__psfs_do_numeric.c:(.text+0x520): undefined reference to `__truncdfsf2'
-libc/libc_so.a(strtof.os): In function `strtof':
-strtof.c:(.text+0x1c): undefined reference to `__extendsfdf2'
-/home/micha/netbox/buildroot/build_armeb/staging_dir/bin/../lib/gcc/armeb-linux-uclibc/4.1.2/libgcc.a(_fixunsdfsi.o):
-In function `__fixunsdfsi':
-libgcc2.c:(.text+0x34): undefined reference to `__fixdfsi'
-make[2]: *** [lib/libc.so] Error 1
-make[1]: *** [lib/libc.so.0] Fout 2
-</quote>
+This leaves only a handful of packages that live in build_dir
+legitimately. That's the reason why i was not too fond of the project
+thing in the first place, but ok (digressing, the project thing is
+just a detail wrt the config.cache idea).
 
-<quote>
-SYMBOL TABLE:
-00000000 l    df *ABS*  00000000 libgcc2.c
-00000000 l    d  .text  00000000 .text
-00000000 l    d  .data  00000000 .data
-00000000 l    d  .bss   00000000 .bss
-00000000 l    d  .comment       00000000 .comment
-00000000         *UND*  00000000 __extendsfdf2
-00000000         *UND*  00000000 __muldf3
-00000000         *UND*  00000000 __fixunsdfsi
-00000000         *UND*  00000000 __floatsidf
-00000000         *UND*  00000000 __adddf3
-00000000 g     F .text  000000a8 __fixunssfdi
-</quote>
+>> We would end up with a stanza like (modulo naming of the variables):
+>> 
+>> (cd $(PROJECT_DIR)/$(PACKAGE_NAME) && \
+>> $(TARGET_CONFIGURE_ENV) \
+>> $(TARGET_CONFIGURE_PARAMS) \
+>> $(PACKAGE_DIR)/configure \
+>> $(TARGET_CONFIGURE_OPTS) \
+>
+>Are you not using $(TARGET_CONFIGURE_OPTS) in a new meaning then.
+>I think in that case you should come up with a new name
+>to avoid bugs.
 
-Any idea how to solve this?
+I'd replace them globally in one sweep, so the _OPTS should be no
+problem.
 
-Thanks,
+What do you all think about this proposal of a central config-cache
+in general?
 
-Micha
+One possible issue that i could think of was that i don't know how this
+would work out for toplevel parallel builds (that never worked anyway,
+which is something i'd like to fix). Could be that updating the central
+cache by multiple instances of configure would go up in flames in a
+spectacular manner. Does somebody know off-hand if that works or not?
