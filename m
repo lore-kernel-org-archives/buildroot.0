@@ -1,66 +1,114 @@
-From: bugs at busybox.net <bugs@busybox.net>
-Date: Tue, 4 Sep 2007 13:59:54 -0700
-Subject: [Buildroot] [buildroot 0001485]: DirectFB: Download site moved and
-	x11 always required
-Message-ID: <17ac266d02db25430f714153df726c4e@busybox.net>
+From: Bernhard Fischer <rep.dot.nop@gmail.com>
+Date: Tue, 4 Sep 2007 22:56:25 +0200
+Subject: [Buildroot] Tar problems
+In-Reply-To: <46DD5C95.3060907@asist.si>
+References: <46DD5C95.3060907@asist.si>
+Message-ID: <20070904205625.GV11697@aon.at>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+On Tue, Sep 04, 2007 at 03:24:37PM +0200, Babarovic Ivica wrote:
+>Since this is my first post to this list I'd like to say hello first and
+>express my appreciation
+>for this wonderful tool.
+>
+>This is the problem I'm getting while building my target.
+>I specifically uncheck the tar option for compressing rootfs. It seems
+>though build process
+>ignores this.
+>Last lines:
+>-------------------------------------------------------------------
+>...
+># Use fakeroot to pretend all target binaries are owned by root
+>rm -f
+>/home/ivo/src/mpc5200_binar/build-tools/buildroot/project_build_powerpc/uclibc/_fakeroot.rootfs.powerpc.ext2
+>touch
+>/home/ivo/src/mpc5200_binar/build-tools/buildroot/project_build_powerpc/uclibc/.fakeroot.00000
+>cat
+>/home/ivo/src/mpc5200_binar/build-tools/buildroot/project_build_powerpc/uclibc/.fakeroot*
+>>
+>/home/ivo/src/mpc5200_binar/build-tools/buildroot/project_build_powerpc/uclibc/_fakeroot.rootfs.powerpc.ext2
+>echo "chown -R 0:0
+>/home/ivo/src/mpc5200_binar/build-tools/buildroot/project_build_powerpc/uclibc/root"
+>>>
+>/home/ivo/src/mpc5200_binar/build-tools/buildroot/project_build_powerpc/uclibc/_fakeroot.rootfs.powerpc.ext2
+># Use fakeroot to pretend to create all needed device nodes
+>echo
+>"/home/ivo/src/mpc5200_binar/build-tools/buildroot/build_powerpc/staging_dir/bin/makedevs
+>-d target/generic/device_table.txt
+>/home/ivo/src/mpc5200_binar/build-tools/buildroot/project_build_powerpc/uclibc/root"
+>\
+>                >>
+>/home/ivo/src/mpc5200_binar/build-tools/buildroot/project_build_powerpc/uclibc/_fakeroot.rootfs.powerpc.ext2
+># Use fakeroot so genext2fs believes the previous fakery
+>GENEXT2_REALSIZE=`LC_ALL=C du -s -c -k
+>/home/ivo/src/mpc5200_binar/build-tools/buildroot/project_build_powerpc/uclibc/root
+>| grep total | sed -e "s/total//"`; \
+>        GENEXT2_ADDTOROOTSIZE=`if [ $GENEXT2_REALSIZE -ge 20000 ]; then
+>echo 16384; else echo 2400; fi`; \
+>        GENEXT2_SIZE=`expr $GENEXT2_REALSIZE + $GENEXT2_ADDTOROOTSIZE`; \
+>        GENEXT2_ADDTOINODESIZE=`find
+>/home/ivo/src/mpc5200_binar/build-tools/buildroot/project_build_powerpc/uclibc/root
+>| wc -l`; \
+>        GENEXT2_INODES=`expr $GENEXT2_ADDTOINODESIZE + 400`; \
+>        set -x; \
+>        echo
+>"/home/ivo/src/mpc5200_binar/build-tools/buildroot/build_powerpc/genext2fs-1.4/genext2fs
+>-b $GENEXT2_SIZE " \
+>                "-N $GENEXT2_INODES -d
+>/home/ivo/src/mpc5200_binar/build-tools/buildroot/project_build_powerpc/uclibc/root
+>" \
+>                " -U -m 0
+>/home/ivo/src/mpc5200_binar/build-tools/buildroot/binaries/uclibc/rootfs.powerpc.ext2"
+>>>
+>/home/ivo/src/mpc5200_binar/build-tools/buildroot/project_build_powerpc/uclibc/_fakeroot.rootfs.powerpc.ext2
+>+ echo
+>'/home/ivo/src/mpc5200_binar/build-tools/buildroot/build_powerpc/genext2fs-1.4/genext2fs
+>-b 5576 ' '-N 728 -d
+>/home/ivo/src/mpc5200_binar/build-tools/buildroot/project_build_powerpc/uclibc/root
+>' ' -U -m 0
+>/home/ivo/src/mpc5200_binar/build-tools/buildroot/binaries/uclibc/rootfs.powerpc.ext2'
+>chmod a+x
+>/home/ivo/src/mpc5200_binar/build-tools/buildroot/project_build_powerpc/uclibc/_fakeroot.rootfs.powerpc.ext2
+>/home/ivo/src/mpc5200_binar/build-tools/buildroot/build_powerpc/staging_dir/usr/bin/fakeroot
+>--
+>/home/ivo/src/mpc5200_binar/build-tools/buildroot/project_build_powerpc/uclibc/_fakeroot.rootfs.powerpc.ext2
+>chown: changing ownership of
+>`/home/ivo/src/mpc5200_binar/build-tools/buildroot/project_build_powerpc/uclibc/root/dev/log':
+>No such file or directory
+>chown: changing ownership of
+>`/home/ivo/src/mpc5200_binar/build-tools/buildroot/project_build_powerpc/uclibc/root/etc/mtab':
+>No such file or directory
+>chown: changing ownership of
+>`/home/ivo/src/mpc5200_binar/build-tools/buildroot/project_build_powerpc/uclibc/root/etc/resolv.conf':
+>No such file or directory
+>rootdir=/home/ivo/src/mpc5200_binar/build-tools/buildroot/project_build_powerpc/uclibc/root
+>table='target/generic/device_table.txt'
+>-rw-r--r-- 1 ivo users 5709824 Sep  4 14:49
+>/home/ivo/src/mpc5200_binar/build-tools/buildroot/binaries/uclibc/rootfs.powerpc.ext2
+>tar: /home/ivo/src/mpc5200_binar/build-tools/buildroot/dl/: Cannot read:
+>Is a directory
+>tar: At beginning of tape, quitting now
+>tar: Error is not recoverable: exiting now
+>
+>gzip: stdin: unexpected end of file
+>tar: Child returned status 2
+>tar: Error exit delayed from previous errors
+>basename: missing operand
 
-A NOTE has been added to this issue. 
-====================================================================== 
-http://busybox.net/bugs/view.php?id=1485 
-====================================================================== 
-Reported By:                HappyCactus
-Assigned To:                buildroot
-====================================================================== 
-Project:                    buildroot
-Issue ID:                   1485
-Category:                   Architecture Specific
-Reproducibility:            always
-Severity:                   minor
-Priority:                   normal
-Status:                     assigned
-====================================================================== 
-Date Submitted:             09-04-2007 08:03 PDT
-Last Modified:              09-04-2007 13:59 PDT
-====================================================================== 
-Summary:                    DirectFB: Download site moved and x11 always
-required
-Description: 
-The directFB main site has removed the 1.0.0 version.
-Now 1.0.1 is the current stable version.
-Also, configure do not specify either --enable-x11 or --disable-x11, so
-that x11 is always required to compile the package.
-Working patch attached.
-====================================================================== 
+eh.
+There is something really going wrong. How are you calling make?
 
----------------------------------------------------------------------- 
- bernhardf - 09-04-07 13:59  
----------------------------------------------------------------------- 
-+ifeq ($(BR2_PACKAGE_XORG7),y)
-+DIRECTFB_X := --enable-x11
-+else
-+DIRECTFB_X := --disable-x11
-+endif
-+
-This is not really accurate:
-If BR2_PACKAGE_XSERVER_none is y, then disable-x11, else --enable-x11.
+$ svngrep basename target/ -r 2> /dev/null
+target/makedevs/makedevs.c:	bb_applet_name = basename(argv[0]);
+target/device/Atmel/at91bootstrap/at91bootstrap-2.3.1.patch: #	cd .. ; tar -cvf `basename $$(TOPDIR)`.tar `basename $$(TOPDIR)` ; bzip2 `basename $$(TOPDIR)`.tar )
+target/device/Atmel/at91bootstrap/at91bootstrap-2.3.1.patch:-PACKAGE=`basename ${TOPDIR}`
+target/device/Sharp/LNode80/kernel-patches/001-patch-2.4.26-vrs1:+int-y := $(sort $(foreach m, $(multi-y), $($(basename $(m))-objs)))
+target/device/Sharp/LNode80/kernel-patches/001-patch-2.4.26-vrs1:+int-m := $(sort $(foreach m, $(multi-m), $($(basename $(m))-objs)))
 
-Please send patches to the mailing list and only add them to the
-bugtracker if it is not applied (or explicitely rejected) within a
-reasonable amount of time, TIA 
-
-Issue History 
-Date Modified   Username       Field                    Change               
-====================================================================== 
-09-04-07 08:03  HappyCactus    New Issue                                    
-09-04-07 08:03  HappyCactus    Status                   new => assigned     
-09-04-07 08:03  HappyCactus    Assigned To               => buildroot       
-09-04-07 08:03  HappyCactus    File Added: buildroot-directfb-x11.patch         
-          
-09-04-07 13:59  bernhardf      Note Added: 0002711                          
-======================================================================
+I'd rule out makedevs.c and probably the Sharp stuff. I'd just recommend
+to glance at 'info make' to the one who wrote the other hunks.
+Where does that basename call you show above come from?
