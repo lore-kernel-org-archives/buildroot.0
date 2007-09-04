@@ -1,44 +1,120 @@
-From: Jonathan Dumaresq <jdumaresq@cimeq.qc.ca>
-Date: Tue, 4 Sep 2007 09:00:17 -0400
-Subject: [Buildroot] AVR32 defconfig
-References: <00ca01c7ea3f$e32af130$6e00a8c0@JONATHAN>
-	<1188456153.30555.4.camel@localhost.localdomain>
-	<20070901162750.GL11697@aon.at>
-Message-ID: <003101c7eef3$8a8fec20$6e00a8c0@JONATHAN>
+From: bugs at busybox.net <bugs@busybox.net>
+Date: Tue, 4 Sep 2007 06:42:12 -0700
+Subject: [Buildroot] [buildroot 0001483]: toolchain compilation fails with
+	libstdc++ in gcc version 3.4.6
+Message-ID: <a22748853547b2411b2aad1bce8f1ba0@busybox.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-I have done a make disclean and redo the make atngw100_defconfig from 
-scratch.
 
-At the uclibc question i answered avr32 instead of i386. Wi this i have a 
-better compiling, but get some issue. I have started a new thread with it
+The following issue has been SUBMITTED. 
+====================================================================== 
+http://busybox.net/bugs/view.php?id=1483 
+====================================================================== 
+Reported By:                HappyCactus
+Assigned To:                buildroot
+====================================================================== 
+Project:                    buildroot
+Issue ID:                   1483
+Category:                   Other
+Reproducibility:            always
+Severity:                   block
+Priority:                   normal
+Status:                     assigned
+====================================================================== 
+Date Submitted:             09-04-2007 06:42 PDT
+Last Modified:              09-04-2007 06:42 PDT
+====================================================================== 
+Summary:                    toolchain compilation fails with libstdc++ in gcc
+version 3.4.6
+Description: 
+When compiling gcc 3.4.6 with libstdc++ enabled, many errors make the
+compilation fail.
 
-thanx for this info.
+/home/happycactus/buildroot/toolchain_build_i386/gcc-3.4.6-final/gcc/xgcc
+-shared-libgcc
+-B/home/happycactus/buildroot/toolchain_build_i386/gcc-3.4.6-final/gcc/
+-nostdinc++
+-L/home/happycactus/buildroot/toolchain_build_i386/gcc-3.4.6-final/i386-linux-uclibc/libstdc++-v3/src
+-L/home/happycactus/buildroot/toolchain_build_i386/gcc-3.4.6-final/i386-linux-uclibc/libstdc++-v3/src/.libs
+-B/home/happycactus/buildroot/build_i386/staging_dir/i386-linux-uclibc/bin/
+-B/home/happycactus/buildroot/build_i386/staging_dir/i386-linux-uclibc/lib/
+-isystem
+/home/happycactus/buildroot/build_i386/staging_dir/i386-linux-uclibc/include
+-isystem
+/home/happycactus/buildroot/build_i386/staging_dir/i386-linux-uclibc/sys-include
+-I/home/happycactus/buildroot/toolchain_build_i386/gcc-3.4.6-final/i386-linux-uclibc/libstdc++-v3/include/i386-linux-uclibc
+-I/home/happycactus/buildroot/toolchain_build_i386/gcc-3.4.6-final/i386-linux-uclibc/libstdc++-v3/include
+-I/home/happycactus/buildroot/toolchain_build_i386/gcc-3.4.6/libstdc++-v3/libsupc++
+-g -Os -g -Os -fno-implicit-templates -Wall -W -Wwrite-strings -Wcast-qual
+-fdiagnostics-show-location=once -ffunction-sections -fdata-sections -c
+/home/happycactus/buildroot/toolchain_build_i386/gcc-3.4.6/libstdc++-v3/src/allocator.cc
+ -fPIC -DPIC -o .libs/allocator.o
+In file included from
+/home/happycactus/buildroot/toolchain_build_i386/gcc-3.4.6-final/i386-linux-uclibc/libstdc++-v3/include/iosfwd:46,
+                 from
+/home/happycactus/buildroot/toolchain_build_i386/gcc-3.4.6-final/i386-linux-uclibc/libstdc++-v3/include/bits/stl_algobase.h:70,
+                 from
+/home/happycactus/buildroot/toolchain_build_i386/gcc-3.4.6-final/i386-linux-uclibc/libstdc++-v3/include/memory:54,
+                 from
+/home/happycactus/buildroot/toolchain_build_i386/gcc-3.4.6/libstdc++-v3/src/allocator.cc:35:
+/home/happycactus/buildroot/toolchain_build_i386/gcc-3.4.6-final/i386-linux-uclibc/libstdc++-v3/include/i386-linux-uclibc/bits/c++locale.h:
+In function `int std::__convert_from_v(char*, int, const char*, _Tv, int*
+const&, int)':
+/home/happycactus/buildroot/toolchain_build_i386/gcc-3.4.6-final/i386-linux-uclibc/libstdc++-v3/include/i386-linux-uclibc/bits/c++locale.h:103:
+error: `snprintf' is not a member of `std'
+make[4]: *** [allocator.lo] Error 1
+make[4]: Leaving directory
+`/home/happycactus/buildroot/toolchain_build_i386/gcc-3.4.6-final/i386-linux-uclibc/libstdc++-v3/src'
+make[3]: *** [all-recursive] Error 1
+make[3]: Leaving directory
+`/home/happycactus/buildroot/toolchain_build_i386/gcc-3.4.6-final/i386-linux-uclibc/libstdc++-v3'
+make[2]: *** [all] Error 2
+make[2]: Leaving directory
+`/home/happycactus/buildroot/toolchain_build_i386/gcc-3.4.6-final/i386-linux-uclibc/libstdc++-v3'
+make[1]: *** [all-target-libstdc++-v3] Error 2
+make[1]: Leaving directory
+`/home/happycactus/buildroot/toolchain_build_i386/gcc-3.4.6-final'
+make: ***
+[/home/happycactus/buildroot/toolchain_build_i386/gcc-3.4.6-final/.compiled]
+Error 2
 
-Jonathan
------ Original Message ----- 
-From: "Bernhard Fischer" <rep.dot.nop@gmail.com>
-To: "Hans-Christian Egtvedt" <hcegtvedt@atmel.com>
-Cc: "Jonathan Dumaresq" <jdumaresq@cimeq.qc.ca>; <buildroot@uclibc.org>
-Sent: Saturday, September 01, 2007 12:27 PM
-Subject: Re: [Buildroot] AVR32 defconfig
+changing the c++locale.h file by removeing the std:: namespace from the
+function call doesn't solve the issue completely:
+
+for file in ./i386-linux-uclibc/bits/stdc++.h.gch/*; do \
+          /usr/bin/install -c -m 644 $file
+/home/happycactus/buildroot/build_i386/staging_dir/include/c++/3.4.6/./i386-linux-uclibc/bits/stdc++.h.gch;
+done
+/usr/bin/install: impossibile fare stat di
+`./i386-linux-uclibc/bits/stdc++.h.gch/*': No such file or directory
+make[4]: *** [install-pch] Error 1
+make[4]: Leaving directory
+`/home/happycactus/buildroot/toolchain_build_i386/gcc-3.4.6-final/i386-linux-uclibc/libstdc++-v3/include'
+make[3]: *** [install-am] Error 2
+make[3]: Leaving directory
+`/home/happycactus/buildroot/toolchain_build_i386/gcc-3.4.6-final/i386-linux-uclibc/libstdc++-v3/include'
+make[2]: *** [install-recursive] Error 1
+make[2]: Leaving directory
+`/home/happycactus/buildroot/toolchain_build_i386/gcc-3.4.6-final/i386-linux-uclibc/libstdc++-v3'
+make[1]: *** [install-target-libstdc++-v3] Error 2
+make[1]: Leaving directory
+`/home/happycactus/buildroot/toolchain_build_i386/gcc-3.4.6-final'
+make: ***
+[/home/happycactus/buildroot/toolchain_build_i386/gcc-3.4.6-final/.installed]
+Error 2
 
 
-> On Thu, Aug 30, 2007 at 08:42:33AM +0200, Hans-Christian Egtvedt wrote:
->>On Wed, 2007-08-29 at 09:24 -0400, Jonathan Dumaresq wrote:
->>
->><cut Atmel snapshot of Buildroot>
->
->>> i probably have setting in the config file that is not correct.
->>
->>Check what architecture is chosen in uClibc configuration:
->>cd toolchain_build_avr32/uClibc-0.9.28.3
->>make menuconfig
->
-> Generally you should not do this in order not to risk mis-configuration.
-> See docs/README
-> 
+====================================================================== 
+
+Issue History 
+Date Modified   Username       Field                    Change               
+====================================================================== 
+09-04-07 06:42  HappyCactus    New Issue                                    
+09-04-07 06:42  HappyCactus    Status                   new => assigned     
+09-04-07 06:42  HappyCactus    Assigned To               => buildroot       
+09-04-07 06:42  HappyCactus    File Added: .config                          
+======================================================================
