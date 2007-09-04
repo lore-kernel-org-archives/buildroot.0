@@ -1,120 +1,117 @@
-From: bugs at busybox.net <bugs@busybox.net>
-Date: Tue, 4 Sep 2007 06:42:12 -0700
-Subject: [Buildroot] [buildroot 0001483]: toolchain compilation fails with
-	libstdc++ in gcc version 3.4.6
-Message-ID: <a22748853547b2411b2aad1bce8f1ba0@busybox.net>
+From: Babarovic Ivica <ivica.babarovic@asist.si>
+Date: Tue, 04 Sep 2007 15:24:37 +0200
+Subject: [Buildroot] Tar problems
+Message-ID: <46DD5C95.3060907@asist.si>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+Since this is my first post to this list I'd like to say hello first and
+express my appreciation
+for this wonderful tool.
 
-The following issue has been SUBMITTED. 
-====================================================================== 
-http://busybox.net/bugs/view.php?id=1483 
-====================================================================== 
-Reported By:                HappyCactus
-Assigned To:                buildroot
-====================================================================== 
-Project:                    buildroot
-Issue ID:                   1483
-Category:                   Other
-Reproducibility:            always
-Severity:                   block
-Priority:                   normal
-Status:                     assigned
-====================================================================== 
-Date Submitted:             09-04-2007 06:42 PDT
-Last Modified:              09-04-2007 06:42 PDT
-====================================================================== 
-Summary:                    toolchain compilation fails with libstdc++ in gcc
-version 3.4.6
-Description: 
-When compiling gcc 3.4.6 with libstdc++ enabled, many errors make the
-compilation fail.
+This is the problem I'm getting while building my target.
+I specifically uncheck the tar option for compressing rootfs. It seems
+though build process
+ignores this.
+Last lines:
+-------------------------------------------------------------------
+...
+# Use fakeroot to pretend all target binaries are owned by root
+rm -f
+/home/ivo/src/mpc5200_binar/build-tools/buildroot/project_build_powerpc/uclibc/_fakeroot.rootfs.powerpc.ext2
+touch
+/home/ivo/src/mpc5200_binar/build-tools/buildroot/project_build_powerpc/uclibc/.fakeroot.00000
+cat
+/home/ivo/src/mpc5200_binar/build-tools/buildroot/project_build_powerpc/uclibc/.fakeroot*
+>
+/home/ivo/src/mpc5200_binar/build-tools/buildroot/project_build_powerpc/uclibc/_fakeroot.rootfs.powerpc.ext2
+echo "chown -R 0:0
+/home/ivo/src/mpc5200_binar/build-tools/buildroot/project_build_powerpc/uclibc/root"
+>>
+/home/ivo/src/mpc5200_binar/build-tools/buildroot/project_build_powerpc/uclibc/_fakeroot.rootfs.powerpc.ext2
+# Use fakeroot to pretend to create all needed device nodes
+echo
+"/home/ivo/src/mpc5200_binar/build-tools/buildroot/build_powerpc/staging_dir/bin/makedevs
+-d target/generic/device_table.txt
+/home/ivo/src/mpc5200_binar/build-tools/buildroot/project_build_powerpc/uclibc/root"
+\
+                >>
+/home/ivo/src/mpc5200_binar/build-tools/buildroot/project_build_powerpc/uclibc/_fakeroot.rootfs.powerpc.ext2
+# Use fakeroot so genext2fs believes the previous fakery
+GENEXT2_REALSIZE=`LC_ALL=C du -s -c -k
+/home/ivo/src/mpc5200_binar/build-tools/buildroot/project_build_powerpc/uclibc/root
+| grep total | sed -e "s/total//"`; \
+        GENEXT2_ADDTOROOTSIZE=`if [ $GENEXT2_REALSIZE -ge 20000 ]; then
+echo 16384; else echo 2400; fi`; \
+        GENEXT2_SIZE=`expr $GENEXT2_REALSIZE + $GENEXT2_ADDTOROOTSIZE`; \
+        GENEXT2_ADDTOINODESIZE=`find
+/home/ivo/src/mpc5200_binar/build-tools/buildroot/project_build_powerpc/uclibc/root
+| wc -l`; \
+        GENEXT2_INODES=`expr $GENEXT2_ADDTOINODESIZE + 400`; \
+        set -x; \
+        echo
+"/home/ivo/src/mpc5200_binar/build-tools/buildroot/build_powerpc/genext2fs-1.4/genext2fs
+-b $GENEXT2_SIZE " \
+                "-N $GENEXT2_INODES -d
+/home/ivo/src/mpc5200_binar/build-tools/buildroot/project_build_powerpc/uclibc/root
+" \
+                " -U -m 0
+/home/ivo/src/mpc5200_binar/build-tools/buildroot/binaries/uclibc/rootfs.powerpc.ext2"
+>>
+/home/ivo/src/mpc5200_binar/build-tools/buildroot/project_build_powerpc/uclibc/_fakeroot.rootfs.powerpc.ext2
++ echo
+'/home/ivo/src/mpc5200_binar/build-tools/buildroot/build_powerpc/genext2fs-1.4/genext2fs
+-b 5576 ' '-N 728 -d
+/home/ivo/src/mpc5200_binar/build-tools/buildroot/project_build_powerpc/uclibc/root
+' ' -U -m 0
+/home/ivo/src/mpc5200_binar/build-tools/buildroot/binaries/uclibc/rootfs.powerpc.ext2'
+chmod a+x
+/home/ivo/src/mpc5200_binar/build-tools/buildroot/project_build_powerpc/uclibc/_fakeroot.rootfs.powerpc.ext2
+/home/ivo/src/mpc5200_binar/build-tools/buildroot/build_powerpc/staging_dir/usr/bin/fakeroot
+--
+/home/ivo/src/mpc5200_binar/build-tools/buildroot/project_build_powerpc/uclibc/_fakeroot.rootfs.powerpc.ext2
+chown: changing ownership of
+`/home/ivo/src/mpc5200_binar/build-tools/buildroot/project_build_powerpc/uclibc/root/dev/log':
+No such file or directory
+chown: changing ownership of
+`/home/ivo/src/mpc5200_binar/build-tools/buildroot/project_build_powerpc/uclibc/root/etc/mtab':
+No such file or directory
+chown: changing ownership of
+`/home/ivo/src/mpc5200_binar/build-tools/buildroot/project_build_powerpc/uclibc/root/etc/resolv.conf':
+No such file or directory
+rootdir=/home/ivo/src/mpc5200_binar/build-tools/buildroot/project_build_powerpc/uclibc/root
+table='target/generic/device_table.txt'
+-rw-r--r-- 1 ivo users 5709824 Sep  4 14:49
+/home/ivo/src/mpc5200_binar/build-tools/buildroot/binaries/uclibc/rootfs.powerpc.ext2
+tar: /home/ivo/src/mpc5200_binar/build-tools/buildroot/dl/: Cannot read:
+Is a directory
+tar: At beginning of tape, quitting now
+tar: Error is not recoverable: exiting now
 
-/home/happycactus/buildroot/toolchain_build_i386/gcc-3.4.6-final/gcc/xgcc
--shared-libgcc
--B/home/happycactus/buildroot/toolchain_build_i386/gcc-3.4.6-final/gcc/
--nostdinc++
--L/home/happycactus/buildroot/toolchain_build_i386/gcc-3.4.6-final/i386-linux-uclibc/libstdc++-v3/src
--L/home/happycactus/buildroot/toolchain_build_i386/gcc-3.4.6-final/i386-linux-uclibc/libstdc++-v3/src/.libs
--B/home/happycactus/buildroot/build_i386/staging_dir/i386-linux-uclibc/bin/
--B/home/happycactus/buildroot/build_i386/staging_dir/i386-linux-uclibc/lib/
--isystem
-/home/happycactus/buildroot/build_i386/staging_dir/i386-linux-uclibc/include
--isystem
-/home/happycactus/buildroot/build_i386/staging_dir/i386-linux-uclibc/sys-include
--I/home/happycactus/buildroot/toolchain_build_i386/gcc-3.4.6-final/i386-linux-uclibc/libstdc++-v3/include/i386-linux-uclibc
--I/home/happycactus/buildroot/toolchain_build_i386/gcc-3.4.6-final/i386-linux-uclibc/libstdc++-v3/include
--I/home/happycactus/buildroot/toolchain_build_i386/gcc-3.4.6/libstdc++-v3/libsupc++
--g -Os -g -Os -fno-implicit-templates -Wall -W -Wwrite-strings -Wcast-qual
--fdiagnostics-show-location=once -ffunction-sections -fdata-sections -c
-/home/happycactus/buildroot/toolchain_build_i386/gcc-3.4.6/libstdc++-v3/src/allocator.cc
- -fPIC -DPIC -o .libs/allocator.o
-In file included from
-/home/happycactus/buildroot/toolchain_build_i386/gcc-3.4.6-final/i386-linux-uclibc/libstdc++-v3/include/iosfwd:46,
-                 from
-/home/happycactus/buildroot/toolchain_build_i386/gcc-3.4.6-final/i386-linux-uclibc/libstdc++-v3/include/bits/stl_algobase.h:70,
-                 from
-/home/happycactus/buildroot/toolchain_build_i386/gcc-3.4.6-final/i386-linux-uclibc/libstdc++-v3/include/memory:54,
-                 from
-/home/happycactus/buildroot/toolchain_build_i386/gcc-3.4.6/libstdc++-v3/src/allocator.cc:35:
-/home/happycactus/buildroot/toolchain_build_i386/gcc-3.4.6-final/i386-linux-uclibc/libstdc++-v3/include/i386-linux-uclibc/bits/c++locale.h:
-In function `int std::__convert_from_v(char*, int, const char*, _Tv, int*
-const&, int)':
-/home/happycactus/buildroot/toolchain_build_i386/gcc-3.4.6-final/i386-linux-uclibc/libstdc++-v3/include/i386-linux-uclibc/bits/c++locale.h:103:
-error: `snprintf' is not a member of `std'
-make[4]: *** [allocator.lo] Error 1
-make[4]: Leaving directory
-`/home/happycactus/buildroot/toolchain_build_i386/gcc-3.4.6-final/i386-linux-uclibc/libstdc++-v3/src'
-make[3]: *** [all-recursive] Error 1
-make[3]: Leaving directory
-`/home/happycactus/buildroot/toolchain_build_i386/gcc-3.4.6-final/i386-linux-uclibc/libstdc++-v3'
-make[2]: *** [all] Error 2
-make[2]: Leaving directory
-`/home/happycactus/buildroot/toolchain_build_i386/gcc-3.4.6-final/i386-linux-uclibc/libstdc++-v3'
-make[1]: *** [all-target-libstdc++-v3] Error 2
-make[1]: Leaving directory
-`/home/happycactus/buildroot/toolchain_build_i386/gcc-3.4.6-final'
+gzip: stdin: unexpected end of file
+tar: Child returned status 2
+tar: Error exit delayed from previous errors
+basename: missing operand
+Try `basename --help' for more information.
+gzip -d -c /home/ivo/src/mpc5200_binar/build-tools/buildroot/dl/ | tar
+-C
+/home/ivo/src/mpc5200_binar/build-tools/buildroot/toolchain_build_powerpc  
+-xf -
+gzip: /home/ivo/src/mpc5200_binar/build-tools/buildroot/dl/ is a
+directory -- ignored
+mv
+/home/ivo/src/mpc5200_binar/build-tools/buildroot/toolchain_build_powerpc/
+/home/ivo/src/mpc5200_binar/build-tools/buildroot/toolchain_build_powerpc/mtd_orig
+mv: cannot move
+`/home/ivo/src/mpc5200_binar/build-tools/buildroot/toolchain_build_powerpc/'
+to a subdirectory of itself,
+`/home/ivo/src/mpc5200_binar/build-tools/buildroot/toolchain_build_powerpc/mtd_orig'
 make: ***
-[/home/happycactus/buildroot/toolchain_build_i386/gcc-3.4.6-final/.compiled]
-Error 2
+[/home/ivo/src/mpc5200_binar/build-tools/buildroot/toolchain_build_powerpc/mtd_orig/.unpacked]
+Error 1
 
-changing the c++locale.h file by removeing the std:: namespace from the
-function call doesn't solve the issue completely:
-
-for file in ./i386-linux-uclibc/bits/stdc++.h.gch/*; do \
-          /usr/bin/install -c -m 644 $file
-/home/happycactus/buildroot/build_i386/staging_dir/include/c++/3.4.6/./i386-linux-uclibc/bits/stdc++.h.gch;
-done
-/usr/bin/install: impossibile fare stat di
-`./i386-linux-uclibc/bits/stdc++.h.gch/*': No such file or directory
-make[4]: *** [install-pch] Error 1
-make[4]: Leaving directory
-`/home/happycactus/buildroot/toolchain_build_i386/gcc-3.4.6-final/i386-linux-uclibc/libstdc++-v3/include'
-make[3]: *** [install-am] Error 2
-make[3]: Leaving directory
-`/home/happycactus/buildroot/toolchain_build_i386/gcc-3.4.6-final/i386-linux-uclibc/libstdc++-v3/include'
-make[2]: *** [install-recursive] Error 1
-make[2]: Leaving directory
-`/home/happycactus/buildroot/toolchain_build_i386/gcc-3.4.6-final/i386-linux-uclibc/libstdc++-v3'
-make[1]: *** [install-target-libstdc++-v3] Error 2
-make[1]: Leaving directory
-`/home/happycactus/buildroot/toolchain_build_i386/gcc-3.4.6-final'
-make: ***
-[/home/happycactus/buildroot/toolchain_build_i386/gcc-3.4.6-final/.installed]
-Error 2
-
-
-====================================================================== 
-
-Issue History 
-Date Modified   Username       Field                    Change               
-====================================================================== 
-09-04-07 06:42  HappyCactus    New Issue                                    
-09-04-07 06:42  HappyCactus    Status                   new => assigned     
-09-04-07 06:42  HappyCactus    Assigned To               => buildroot       
-09-04-07 06:42  HappyCactus    File Added: .config                          
-======================================================================
+Best regards,
+Ivo
