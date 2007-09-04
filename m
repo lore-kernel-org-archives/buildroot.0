@@ -1,84 +1,72 @@
-From: Will Wagner <will_wagner@carallon.com>
-Date: Tue, 04 Sep 2007 11:55:03 +0100
-Subject: [Buildroot] debugging threads
-In-Reply-To: <46DC165D.3000407@carallon.com>
-References: <46DC165D.3000407@carallon.com>
-Message-ID: <46DD3987.6090300@carallon.com>
+From: W <wildan.m@gmail.com>
+Date: Tue, 4 Sep 2007 18:05:55 +0700
+Subject: [Buildroot] cryptsetup, e2fsprogs plus selinux
+Message-ID: <4a93f8270709040405w6d394908o969aa04dcdf5d0ab@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-I solved this, it was a problem with gdb & gdbserver not being rebuilt 
-when you change the uClibc option to allow thread debugging. A rebuild 
-from scratch fixed the problem.
+Dear All,
 
-Will.
+i already successfully build
+cryptsetup, device mapper and related libraries using this patch
+(http://busybox.net/bugs/view.php?id=838).., but i still cannot
+create luks partition with this, i thinks this is because e2fsprogs do
+not compile with devmapper support (am i right ?)
 
-Will Wagner wrote:
-> Hello,
-> 
-> I am trying to debug a multithreaded app and am having some problems. 
-> I've hunted around how to do this and have done the following:
-> 
-> Built uClibc with debug threads on so have a libthread_db.so
-> Built gdbserver for target
-> 
-> I then execute gdbserver with:
-> gdbserver 192.168.42.15:2345 /usr/sbin/threaded_test
-> 
-> On the host machine I run:
-> ~/buildroot/build_i686/staging_dir/usr/bin/i686-linux-gdb ~/threaded_test
-> 
-> Once gdb starts I point it to the shared libs with:
-> set solib-absolute-prefix ~/buildroot/project_build_i686/uclibc/root
-> 
-> Then connect to gdbserver with
-> target remote 192.168.42.101:2345
-> 
-> I am able to debug the application until a call to create a thread 
-> (pthread_create) when I get the following error:
-> 
-> Program received signal SIG32, Real-time event 32.
-> 0xb7ef0175 in sigsuspend ()
->     from
-> /home/willw/buildroot/project_build_i686/uclibc/root/lib/libc.so.0
-> (gdb) bt
-> #0  0xb7ef0175 in sigsuspend ()
->     from
-> /home/willw/buildroot/project_build_i686/uclibc/root/lib/libc.so.0
-> #1  0xb7faf6a4 in __pthread_wait_for_restart_signal ()
->     from
-> /home/willw/buildroot/project_build_i686/uclibc/root/lib/libpthread.so.0
-> #2  0xb7faf6cc in ?? ()
->     from
-> /home/willw/buildroot/project_build_i686/uclibc/root/lib/libpthread.so.0
-> #3  0xb7fb6040 in ?? ()
->     from
-> /home/willw/buildroot/project_build_i686/uclibc/root/lib/libpthread.so.0
-> #4  0xb7fb1de8 in ?? ()
->     from
-> /home/willw/buildroot/project_build_i686/uclibc/root/lib/libpthread.so.0
-> #5  0xbf871718 in ?? ()
-> #6  0xb7fafda8 in pthread_create ()
->     from
-> /home/willw/buildroot/project_build_i686/uclibc/root/lib/libpthread.so.0
-> Backtrace stopped: frame did not save the PC
-> 
-> 
-> Can anyone tell me what step I am missing to get thread debugging 
-> working? From searching on the net it seems the libthread_db is needed 
-> but it doesn't seem to be loaded by gdb.
-> 
-> Many thanks,
-> 
-> Will.
-> 
+The following are the shared libraries use by mke2fs on ubuntu and
+avr32 (ngw100) :
+
+on ubuntu:
+===================
+ ldd /sbin/mke2fs
+       linux-gate.so.1 =>  (0xffffe000)
+       libext2fs.so.2 => /lib/libext2fs.so.2 (0xb7f87000)
+       libcom_err.so.2 => /lib/libcom_err.so.2 (0xb7f84000)
+       libblkid.so.1 => /lib/libblkid.so.1 (0xb7f7c000)
+       libuuid.so.1 => /lib/libuuid.so.1 (0xb7f78000)
+       libe2p.so.2 => /lib/libe2p.so.2 (0xb7f72000)
+       libc.so.6 => /lib/tls/i686/cmov/libc.so.6 (0xb7e31000)
+       libdevmapper.so.1.02 => /lib/libdevmapper.so.1.02 (0xb7e1f000)
+       libselinux.so.1 => /lib/libselinux.so.1 (0xb7e09000)
+       libsepol.so.1 => /lib/libsepol.so.1 (0xb7dc8000)
+       libpthread.so.0 => /lib/tls/i686/cmov/libpthread.so.0 (0xb7db0000)
+       /lib/ld-linux.so.2 (0xb7fb1000)
+       libdl.so.2 => /lib/tls/i686/cmov/libdl.so.2 (0xb7dac000)
+
+
+on avr32 :
+===========
+bash-3.2# ldd /sbin/mke2fs
+       libext2fs.so.2 => /lib/libext2fs.so.2 (0x2aab3000)
+       libcom_err.so.2 => /lib/libcom_err.so.2 (0x2aac5000)
+       libblkid.so.1 => /lib/libblkid.so.1 (0x2aac7000)
+       libuuid.so.1 => /lib/libuuid.so.1 (0x2aace000)
+       libe2p.so.2 => /lib/libe2p.so.2 (0x2aad1000)
+       libc.so.0 => /lib/libc.so.0 (0x2aad6000)
+       ld-uClibc.so.0 => /lib/ld-uClibc.so.0 (0x2aaab000)
+-------------------------cut ----------------------------------
+
+if i compile e2fsprogs with devmapper support
+(--enable-blkid-devmapper). e2fsprogs with link to the libselinux and
+libsepol, i can cross compile libsepol to avr32, but the libselinux
+one do not yet support avr32 arch ...
+
+The point of my question is, how can i cross compile e2fsprogs with
+devmapper support but without selinux support ? it's possible ? Can
+any one here give me a hint ?
+
+Regards
+Wildan
 
 -- 
-------------------------------------------------------------------------
-Will Wagner                                     will_wagner at carallon.com
-Senior Project Engineer                  Office Tel: +44 (0)20 7371 2032
-Carallon Ltd, Studio G20, Shepherds Building, Rockley Rd, London W14 0DA
-------------------------------------------------------------------------
+---
+Person who say it cannot be done should not interrupt person doing it.
+Coz.....
+Miracles are closer than you think ...
+------------
+http://wildanm.fisika.ui.edu
+HP: 08888378594
+Y! : hawking_123
