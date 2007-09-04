@@ -1,35 +1,22 @@
-From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Tue, 04 Sep 2007 10:43:15 +0200
-Subject: [Buildroot] svn commit: trunk/buildroot/toolchain/gcc
-In-Reply-To: <0709041003590.9921@somehost> (Cristian Ionescu-Idbohrn's message
-	of "Tue\, 4 Sep 2007 10\:22\:43 +0200 \(CEST\)")
-References: <20070903062608.3D391A65E5@busybox.net>
-	<20070903140903.GA4518@aon.at>
-	<002d01c7ee36$f93df3a0$0402a8c0@atmel.com>
-	<60171.24.207.255.59.1188836578.squirrel@box240.bluehost.com>
-	<002e01c7ee70$035c31b0$acc3780a@atmel.com>
-	<0709041003590.9921@somehost>
-Message-ID: <87hcmag6sc.fsf@macbook.be.48ers.dk>
+From: Johan De Wit <johan.dewit@external.thalesaleniaspace.com>
+Date: Tue, 04 Sep 2007 12:07:37 +0200
+Subject: [Buildroot] Adding new package to toolchain, target or both ?
+Message-ID: <1188900457.4793.13.camel@localhost.hobsite.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Cristian" == Cristian Ionescu-Idbohrn <cristian.ionescu-idbohrn@axis.com> writes:
-
 Hi,
 
- Cristian> On Mon, 3 Sep 2007, Ulf Samuelsson wrote:
- >> I think it would be better if we had a MAKEALL script
- >> which needs to be run before a patch is accepted.
- >> 
- >> This should at least build a minimal rootfs for x86 and ARM.
+I'm trying to build an embedded system using buildroot to be used in an
+arcade cabinet, using svgalib and advancemame.  
 
- Cristian> Excellent idea.
+Since svgalib is not only needed at 'runtime' in the target as dynamic
+library adn/or utility programs, I also need the some files to compile
+eg. advmame.  I suspect i have to add these to the toolchain to keep the
+target clean.  I'm still in doubt if my 'logic' is correct and would be
+glad if someone could give some advice on this issue.
 
-Alternatively we can setup a buildbot (http://buildbot.net) instance
-for buildroot for continous checks.
-
--- 
-Bye, Peter Korsgaard
+Thanks
