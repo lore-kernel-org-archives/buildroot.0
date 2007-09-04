@@ -1,85 +1,144 @@
-From: Bernhard Fischer <rep.dot.nop@gmail.com>
-Date: Wed, 5 Sep 2007 00:11:47 +0200
-Subject: [Buildroot] [RFC] config cache
-In-Reply-To: <000301c7ed9d$c08b9510$54b0780a@atmel.com>
-References: <20070901193243.GQ11697@aon.at>
-	<000301c7ed9d$c08b9510$54b0780a@atmel.com>
-Message-ID: <20070904221147.GZ11697@aon.at>
+From: Ulf Samuelsson <ulf@atmel.com>
+Date: Wed, 05 Sep 2007 00:14:56 +0200
+Subject: [Buildroot] [Fwd: Re:  Tar problems]
+Message-ID: <1188944096.11158.22.camel@aeglos.sweden.atmel.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Sun, Sep 02, 2007 at 05:58:02PM +0200, Ulf Samuelsson wrote:
->> Hi,
->> 
->> read ./TODO
->> 
->> Now i'd like to think loud about how to "implement" this.
->> 
->> preface:
->> ========
->> First, i'm not too happy (any more) with the naming of the variables
->> TARGET_CONFIGURE_OPTS and TARGET_CONFIGURE_ARGS -- same for HOST.
->> Both are variables and not really OPTS, as opposed to the cache
->> option/argument.
->> 
->> Let me suggest that the CC= CFLAGS= settings live in (the respective
->> CONFIGURE_ENV) variables.
->> 
->> Suggestions for the known cv_* vars? CONFIGURE_SETTINGS come to mind,
->> but that's a bit long to type.. TARGET_CONFIGURE_PARAMS ?
->> 
->> cache:
->> ======
->> 
->> Per PROJECT, we use (resp. i suggest to use a) *central* config.cache,
->> via --config-cache=$(PROJECT_BUILD_DIR)/target_config.cache which is put
->> into a TARGET_CONFIGURE_OPTS variable (we renamed the formerly _OPTS to
->> something like PARAM that is passed *before* the
->> $(PACKAGE_DIR)/configure script).
->> 
->> Since the advent of PROJECT one may even consider to build the
->> autoconf'ed packages out-of-tree, i.e. unpack them in build_dir, step
->> into project_dir/package/ and there do a
->> $(PACKAGE_DIR)/configure $(TARGET_CONFIGURE_OTPS) && make
->> 
->
->One of the advantages of the PROJECT thing, is that you can share
->the result of the build between projects.
->Only packages which can be configured in different ways should be
->built in the project_build_dir.
+-------- Vidarebefordrat meddelande --------
+> Fr?n: Bernhard Fischer <rep.dot.nop@gmail.com>
+> Till: Babarovic Ivica <ivica.babarovic@asist.si>
+> Kopia: buildroot at uclibc.org
+> ?mne: Re: [Buildroot] Tar problems
+> Datum: Tue, 4 Sep 2007 22:56:25 +0200
+> 
+> On Tue, Sep 04, 2007 at 03:24:37PM +0200, Babarovic Ivica wrote:
+> >Since this is my first post to this list I'd like to say hello first and
+> >express my appreciation
+> >for this wonderful tool.
+> >
+> >This is the problem I'm getting while building my target.
+> >I specifically uncheck the tar option for compressing rootfs. It seems
+> >though build process
+> >ignores this.
+> >Last lines:
+> >-------------------------------------------------------------------
+> >...
+> ># Use fakeroot to pretend all target binaries are owned by root
+> >rm -f
+> >/home/ivo/src/mpc5200_binar/build-tools/buildroot/project_build_powerpc/uclibc/_fakeroot.rootfs.powerpc.ext2
+> >touch
+> >/home/ivo/src/mpc5200_binar/build-tools/buildroot/project_build_powerpc/uclibc/.fakeroot.00000
+> >cat
+> >/home/ivo/src/mpc5200_binar/build-tools/buildroot/project_build_powerpc/uclibc/.fakeroot*
+> >>
+> >/home/ivo/src/mpc5200_binar/build-tools/buildroot/project_build_powerpc/uclibc/_fakeroot.rootfs.powerpc.ext2
+> >echo "chown -R 0:0
+> >/home/ivo/src/mpc5200_binar/build-tools/buildroot/project_build_powerpc/uclibc/root"
+> >>>
+> >/home/ivo/src/mpc5200_binar/build-tools/buildroot/project_build_powerpc/uclibc/_fakeroot.rootfs.powerpc.ext2
+> ># Use fakeroot to pretend to create all needed device nodes
+> >echo
+> >"/home/ivo/src/mpc5200_binar/build-tools/buildroot/build_powerpc/staging_dir/bin/makedevs
+> >-d target/generic/device_table.txt
+> >/home/ivo/src/mpc5200_binar/build-tools/buildroot/project_build_powerpc/uclibc/root"
+> >\
+> >                >>
+> >/home/ivo/src/mpc5200_binar/build-tools/buildroot/project_build_powerpc/uclibc/_fakeroot.rootfs.powerpc.ext2
+> ># Use fakeroot so genext2fs believes the previous fakery
+> >GENEXT2_REALSIZE=`LC_ALL=C du -s -c -k
+> >/home/ivo/src/mpc5200_binar/build-tools/buildroot/project_build_powerpc/uclibc/root
+> >| grep total | sed -e "s/total//"`; \
+> >        GENEXT2_ADDTOROOTSIZE=`if [ $GENEXT2_REALSIZE -ge 20000 ]; then
+> >echo 16384; else echo 2400; fi`; \
+> >        GENEXT2_SIZE=`expr $GENEXT2_REALSIZE + $GENEXT2_ADDTOROOTSIZE`; \
+> >        GENEXT2_ADDTOINODESIZE=`find
+> >/home/ivo/src/mpc5200_binar/build-tools/buildroot/project_build_powerpc/uclibc/root
+> >| wc -l`; \
+> >        GENEXT2_INODES=`expr $GENEXT2_ADDTOINODESIZE + 400`; \
+> >        set -x; \
+> >        echo
+> >"/home/ivo/src/mpc5200_binar/build-tools/buildroot/build_powerpc/genext2fs-1.4/genext2fs
+> >-b $GENEXT2_SIZE " \
+> >                "-N $GENEXT2_INODES -d
+> >/home/ivo/src/mpc5200_binar/build-tools/buildroot/project_build_powerpc/uclibc/root
+> >" \
+> >                " -U -m 0
+> >/home/ivo/src/mpc5200_binar/build-tools/buildroot/binaries/uclibc/rootfs.powerpc.ext2"
+> >>>
+> >/home/ivo/src/mpc5200_binar/build-tools/buildroot/project_build_powerpc/uclibc/_fakeroot.rootfs.powerpc.ext2
+> >+ echo
+> >'/home/ivo/src/mpc5200_binar/build-tools/buildroot/build_powerpc/genext2fs-1.4/genext2fs
+> >-b 5576 ' '-N 728 -d
+> >/home/ivo/src/mpc5200_binar/build-tools/buildroot/project_build_powerpc/uclibc/root
+> >' ' -U -m 0
+> >/home/ivo/src/mpc5200_binar/build-tools/buildroot/binaries/uclibc/rootfs.powerpc.ext2'
+> >chmod a+x
+> >/home/ivo/src/mpc5200_binar/build-tools/buildroot/project_build_powerpc/uclibc/_fakeroot.rootfs.powerpc.ext2
+> >/home/ivo/src/mpc5200_binar/build-tools/buildroot/build_powerpc/staging_dir/usr/bin/fakeroot
+> >--
+> >/home/ivo/src/mpc5200_binar/build-tools/buildroot/project_build_powerpc/uclibc/_fakeroot.rootfs.powerpc.ext2
+> >chown: changing ownership of
+> >`/home/ivo/src/mpc5200_binar/build-tools/buildroot/project_build_powerpc/uclibc/root/dev/log':
+> >No such file or directory
+> >chown: changing ownership of
+> >`/home/ivo/src/mpc5200_binar/build-tools/buildroot/project_build_powerpc/uclibc/root/etc/mtab':
+> >No such file or directory
+> >chown: changing ownership of
+> >`/home/ivo/src/mpc5200_binar/build-tools/buildroot/project_build_powerpc/uclibc/root/etc/resolv.conf':
+> >No such file or directory
+> >rootdir=/home/ivo/src/mpc5200_binar/build-tools/buildroot/project_build_powerpc/uclibc/root
+> >table='target/generic/device_table.txt'
+> >-rw-r--r-- 1 ivo users 5709824 Sep  4 14:49
+> >/home/ivo/src/mpc5200_binar/build-tools/buildroot/binaries/uclibc/rootfs.powerpc.ext2
+> >tar: /home/ivo/src/mpc5200_binar/build-tools/buildroot/dl/: Cannot read:
+> >Is a directory
+> >tar: At beginning of tape, quitting now
+> >tar: Error is not recoverable: exiting now
+> >
+> >gzip: stdin: unexpected end of file
+> >tar: Child returned status 2
+> >tar: Error exit delayed from previous errors
+> >basename: missing operand
+> 
+> eh.
+> There is something really going wrong. How are you calling make?
+> 
+> $ svngrep basename target/ -r 2> /dev/null
+> target/makedevs/makedevs.c:	bb_applet_name = basename(argv[0]);
+> target/device/Atmel/at91bootstrap/at91bootstrap-2.3.1.patch: #	cd .. ; tar -cvf `basename $$(TOPDIR)`.tar `basename $$(TOPDIR)` ; bzip2 `basename $$(TOPDIR)`.tar )
+> target/device/Atmel/at91bootstrap/at91bootstrap-2.3.1.patch:-PACKAGE=`basename ${TOPDIR}`
+> target/device/Sharp/LNode80/kernel-patches/001-patch-2.4.26-vrs1:+int-y := $(sort $(foreach m, $(multi-y), $($(basename $(m))-objs)))
+> target/device/Sharp/LNode80/kernel-patches/001-patch-2.4.26-vrs1:+int-m := $(sort $(foreach m, $(multi-m), $($(basename $(m))-objs)))
+> 
+> I'd rule out makedevs.c and probably the Sharp stuff. I'd just recommend
+> to glance at 'info make' to the one who wrote the other hunks.
+> Where does that basename call you show above come from?
 
-Every network app, everything dealing with files/disks and perhaps some
-of the apps with optional X11 support are project specific, by that
-definition (and every app with optional locale support too, of course).
+I doubt that AT91 bootstrap is the culprit.
+You can only build that for ARM targets, and this is clearly a Power PC
+target.
 
-This leaves only a handful of packages that live in build_dir
-legitimately. That's the reason why i was not too fond of the project
-thing in the first place, but ok (digressing, the project thing is
-just a detail wrt the config.cache idea).
+config BR2_TARGET_AT91BOOTSTRAP
+	depends on BR2_TARGET_AT91SAM9260EK || BR2_TARGET_AT91SAM9260DFC ||
+BR2_TARGET_AT91SAM9260PF || \
+	BR2_TARGET_AT91SAM9261EK || BR2_TARGET_AT91SAM9263EK ||
+BR2_TARGET_AT91SAM9XEEK
+	bool "Build AT91 Bootstrap for selected chip"
 
->> We would end up with a stanza like (modulo naming of the variables):
->> 
->> (cd $(PROJECT_DIR)/$(PACKAGE_NAME) && \
->> $(TARGET_CONFIGURE_ENV) \
->> $(TARGET_CONFIGURE_PARAMS) \
->> $(PACKAGE_DIR)/configure \
->> $(TARGET_CONFIGURE_OPTS) \
->
->Are you not using $(TARGET_CONFIGURE_OPTS) in a new meaning then.
->I think in that case you should come up with a new name
->to avoid bugs.
 
-I'd replace them globally in one sweep, so the _OPTS should be no
-problem.
+The "basename" could be in a $(BUILD_<arch>)/<package>
+My guess is the mtd package. I believe I have seen this before...
 
-What do you all think about this proposal of a central config-cache
-in general?
 
-One possible issue that i could think of was that i don't know how this
-would work out for toplevel parallel builds (that never worked anyway,
-which is something i'd like to fix). Could be that updating the central
-cache by multiple instances of configure would go up in flames in a
-spectacular manner. Does somebody know off-hand if that works or not?
+
+> _______________________________________________
+> buildroot mailing list
+> buildroot at uclibc.org
+> http://busybox.net/mailman/listinfo/buildroot
+-- 
+Best Regards,
+Ulf Samuelsson
