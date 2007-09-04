@@ -1,65 +1,84 @@
-From: bugs at busybox.net <bugs@busybox.net>
-Date: Tue, 4 Sep 2007 04:07:07 -0700
-Subject: [Buildroot] [buildroot 0000838]: New package: cryptsetup and
-	suppporting library popt
-Message-ID: <6de529ab319ea1f1c7b81a3c80ba1362@busybox.net>
+From: Will Wagner <will_wagner@carallon.com>
+Date: Tue, 04 Sep 2007 11:55:03 +0100
+Subject: [Buildroot] debugging threads
+In-Reply-To: <46DC165D.3000407@carallon.com>
+References: <46DC165D.3000407@carallon.com>
+Message-ID: <46DD3987.6090300@carallon.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+I solved this, it was a problem with gdb & gdbserver not being rebuilt 
+when you change the uClibc option to allow thread debugging. A rebuild 
+from scratch fixed the problem.
 
-A NOTE has been added to this issue. 
-====================================================================== 
-http://busybox.net/bugs/view.php?id=838 
-====================================================================== 
-Reported By:                toidinamai
-Assigned To:                buildroot
-====================================================================== 
-Project:                    buildroot
-Issue ID:                   838
-Category:                   New Features
-Reproducibility:            always
-Severity:                   feature
-Priority:                   normal
-Status:                     assigned
-====================================================================== 
-Date Submitted:             04-14-2006 14:02 PDT
-Last Modified:              09-04-2007 04:07 PDT
-====================================================================== 
-Summary:                    New package: cryptsetup and suppporting library popt
-Description: 
-cryptsetup is a tool for creating dm-crypt mappings. dm-crypt provides
-transparent encryption of block devices using the new Linux 2.6 cryptoapi.
-====================================================================== 
+Will.
 
----------------------------------------------------------------------- 
- toidinamai - 04-15-06 06:23  
----------------------------------------------------------------------- 
-New patch, former one resulted in an unusable cryptsetup binary because
-libdevmapper was missing. 
+Will Wagner wrote:
+> Hello,
+> 
+> I am trying to debug a multithreaded app and am having some problems. 
+> I've hunted around how to do this and have done the following:
+> 
+> Built uClibc with debug threads on so have a libthread_db.so
+> Built gdbserver for target
+> 
+> I then execute gdbserver with:
+> gdbserver 192.168.42.15:2345 /usr/sbin/threaded_test
+> 
+> On the host machine I run:
+> ~/buildroot/build_i686/staging_dir/usr/bin/i686-linux-gdb ~/threaded_test
+> 
+> Once gdb starts I point it to the shared libs with:
+> set solib-absolute-prefix ~/buildroot/project_build_i686/uclibc/root
+> 
+> Then connect to gdbserver with
+> target remote 192.168.42.101:2345
+> 
+> I am able to debug the application until a call to create a thread 
+> (pthread_create) when I get the following error:
+> 
+> Program received signal SIG32, Real-time event 32.
+> 0xb7ef0175 in sigsuspend ()
+>     from
+> /home/willw/buildroot/project_build_i686/uclibc/root/lib/libc.so.0
+> (gdb) bt
+> #0  0xb7ef0175 in sigsuspend ()
+>     from
+> /home/willw/buildroot/project_build_i686/uclibc/root/lib/libc.so.0
+> #1  0xb7faf6a4 in __pthread_wait_for_restart_signal ()
+>     from
+> /home/willw/buildroot/project_build_i686/uclibc/root/lib/libpthread.so.0
+> #2  0xb7faf6cc in ?? ()
+>     from
+> /home/willw/buildroot/project_build_i686/uclibc/root/lib/libpthread.so.0
+> #3  0xb7fb6040 in ?? ()
+>     from
+> /home/willw/buildroot/project_build_i686/uclibc/root/lib/libpthread.so.0
+> #4  0xb7fb1de8 in ?? ()
+>     from
+> /home/willw/buildroot/project_build_i686/uclibc/root/lib/libpthread.so.0
+> #5  0xbf871718 in ?? ()
+> #6  0xb7fafda8 in pthread_create ()
+>     from
+> /home/willw/buildroot/project_build_i686/uclibc/root/lib/libpthread.so.0
+> Backtrace stopped: frame did not save the PC
+> 
+> 
+> Can anyone tell me what step I am missing to get thread debugging 
+> working? From searching on the net it seems the libthread_db is needed 
+> but it doesn't seem to be loaded by gdb.
+> 
+> Many thanks,
+> 
+> Will.
+> 
 
----------------------------------------------------------------------- 
- wildanm - 09-04-07 04:07  
----------------------------------------------------------------------- 
-I already try this patch, and it's not work .. )-: 
-I cannot create luks partition on my sdcard ...
-
-i'm using .., ngw100 board .... (avr32) 
-
-Issue History 
-Date Modified   Username       Field                    Change               
-====================================================================== 
-04-14-06 14:02  toidinamai     New Issue                                    
-04-14-06 14:02  toidinamai     Status                   new => assigned     
-04-14-06 14:02  toidinamai     Assigned To               => uClibc          
-04-14-06 14:02  toidinamai     File Added: buildroot-cryptsetup.patch           
-        
-04-15-06 06:22  toidinamai     Issue Monitored: toidinamai                    
-04-15-06 06:23  toidinamai     File Added: buildroot-cryptsetup-2.patch         
-          
-04-15-06 06:23  toidinamai     Note Added: 0001298                          
-02-12-07 05:45  vapier         Assigned To              uClibc => buildroot 
-09-04-07 04:07  wildanm        Note Added: 0002706                          
-======================================================================
+-- 
+------------------------------------------------------------------------
+Will Wagner                                     will_wagner at carallon.com
+Senior Project Engineer                  Office Tel: +44 (0)20 7371 2032
+Carallon Ltd, Studio G20, Shepherds Building, Rockley Rd, London W14 0DA
+------------------------------------------------------------------------
