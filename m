@@ -1,51 +1,25 @@
-From: aldot at uclibc.org <aldot@uclibc.org>
-Date: Tue,  4 Sep 2007 00:35:20 -0700 (PDT)
+From: Bernhard Fischer <rep.dot.nop@gmail.com>
+Date: Tue, 4 Sep 2007 09:39:54 +0200
 Subject: [Buildroot] svn commit: trunk/buildroot/toolchain/gcc
-Message-ID: <20070904073520.79B8EA614C@busybox.net>
+In-Reply-To: <002d01c7ee36$f93df3a0$0402a8c0@atmel.com>
+References: <20070903062608.3D391A65E5@busybox.net>
+	<20070903140903.GA4518@aon.at>
+	<002d01c7ee36$f93df3a0$0402a8c0@atmel.com>
+Message-ID: <20070904073954.GA11701@aon.at>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Author: aldot
-Date: 2007-09-04 00:35:19 -0700 (Tue, 04 Sep 2007)
-New Revision: 19777
+On Mon, Sep 03, 2007 at 04:29:55PM +0200, Ulf Samuelsson wrote:
 
-Log:
-- correctly filter out the script
+>Have been pondering on the larger question for some time.
+>How do we decide when to trust patches like this?
 
-
-Modified:
-   trunk/buildroot/toolchain/gcc/gcc-uclibc-3.x.mk
-   trunk/buildroot/toolchain/gcc/gcc-uclibc-4.x.mk
-
-
-Changeset:
-Modified: trunk/buildroot/toolchain/gcc/gcc-uclibc-3.x.mk
-===================================================================
---- trunk/buildroot/toolchain/gcc/gcc-uclibc-3.x.mk	2007-09-03 20:05:58 UTC (rev 19776)
-+++ trunk/buildroot/toolchain/gcc/gcc-uclibc-3.x.mk	2007-09-04 07:35:19 UTC (rev 19777)
-@@ -282,7 +282,7 @@
- 	fi
- 	# Strip the host binaries
- ifeq ($(GCC_STRIP_HOST_BINARIES),true)
--	strip --strip-all -R .note -R .comment $(filter-out gccbug,$(wildcard $(STAGING_DIR)/usr/bin/$(REAL_GNU_TARGET_NAME)-*))
-+	strip --strip-all -R .note -R .comment $(filter-out %-gccbug,$(wildcard $(STAGING_DIR)/usr/bin/$(REAL_GNU_TARGET_NAME)-*))
- endif
- 	# Make sure we have 'cc'.
- 	if [ ! -e $(STAGING_DIR)/usr/bin/$(REAL_GNU_TARGET_NAME)-cc ]; then \
-
-Modified: trunk/buildroot/toolchain/gcc/gcc-uclibc-4.x.mk
-===================================================================
---- trunk/buildroot/toolchain/gcc/gcc-uclibc-4.x.mk	2007-09-03 20:05:58 UTC (rev 19776)
-+++ trunk/buildroot/toolchain/gcc/gcc-uclibc-4.x.mk	2007-09-04 07:35:19 UTC (rev 19777)
-@@ -290,7 +290,7 @@
- 	fi
- 	# Strip the host binaries
- ifeq ($(GCC_STRIP_HOST_BINARIES),true)
--	strip --strip-all -R .note -R .comment $(filter-out gccbug,$(wildcard $(STAGING_DIR)/usr/bin/$(REAL_GNU_TARGET_NAME)-*))
-+	strip --strip-all -R .note -R .comment $(filter-out %-gccbug,$(wildcard $(STAGING_DIR)/usr/bin/$(REAL_GNU_TARGET_NAME)-*))
- endif
- 	# Make sure we have 'cc'.
- 	if [ ! -e $(STAGING_DIR)/usr/bin/$(REAL_GNU_TARGET_NAME)-cc ]; then \
+This one was obviously incorrect. Please don't apply patches that are
+not 100% clean, especially not if somebody else is still talking about
+it with the submitter (or if the patch is obviously incorrect).
+There are only a very few exceptions like big patches (xorg for one) or
+being nice and to provide stubs for somebody else to base on (like
+mutt).
