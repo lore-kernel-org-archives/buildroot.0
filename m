@@ -1,40 +1,66 @@
-From: ulf at uclibc.org <ulf@uclibc.org>
-Date: Tue,  4 Sep 2007 09:22:41 -0700 (PDT)
-Subject: [Buildroot] svn commit:
-	trunk/buildroot/target/device/Atmel/linux/kernel-patches-2.6.22.1
-Message-ID: <20070904162241.DD294A6AA9@busybox.net>
+From: Will Wagner <will_wagner@carallon.com>
+Date: Tue, 04 Sep 2007 17:32:37 +0100
+Subject: [Buildroot] libusb compile error
+Message-ID: <46DD88A5.5070708@carallon.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Author: ulf
-Date: 2007-09-04 09:22:41 -0700 (Tue, 04 Sep 2007)
-New Revision: 19781
+Hello,
 
-Log:
-Add include file to define at91 lcd struct
+I am trying to get libusb to compile with my i686 buildroot target.
 
-Added:
-   trunk/buildroot/target/device/Atmel/linux/kernel-patches-2.6.22.1/linux-2.6.22.1-006-lcd.patch
+When I run the compile it fails with this error:
+
+/bin/sh ../libtool --mode=link
+/home/willw/buildroot/build_i686/staging_dir/usr/bin/i686-linux-uclibc-g++
+-Os -pipe  -I/home/willw/buildroot/build_i686/staging_dir/usr/include
+-I/home/willw/buildroot/build_i686/staging_dir/include
+--sysroot=/home/willw/buildroot/build_i686/staging_dir/ -isysroot
+/home/willw/buildroot/build_i686/staging_dir -mtune=i686 -march=i686  -g
+-O2   -o descriptor_test  descriptor_test.o ../libusbpp.la
+libtool: link: warning: library
+`/home/willw/buildroot/build_i686/staging_dir/usr/bin/../lib/gcc/i686-linux-uclibc/4.2.1/../../../../i686-linux-uclibc/lib/libstdc++.la' 
+
+was moved.
+/home/willw/buildroot/build_i686/staging_dir/usr/bin/i686-linux-uclibc-g++
+-Os -pipe -I/home/willw/buildroot/build_i686/staging_dir/usr/include
+-I/home/willw/buildroot/build_i686/staging_dir/include
+--sysroot=/home/willw/buildroot/build_i686/staging_dir/ -isysroot
+/home/willw/buildroot/build_i686/staging_dir -mtune=i686 -march=i686 -g
+-O2 -o .libs/descriptor_test descriptor_test.o  ../.libs/libusbpp.so
+-L/home/willw/buildroot/toolchain_build_i686/gcc-4.2.1-final/i686-linux-uclibc/libstdc++-v3/src 
+
+-L/home/willw/buildroot/toolchain_build_i686/gcc-4.2.1-final/i686-linux-uclibc/libstdc++-v3/src/.libs 
+
+-L/home/willw/buildroot/toolchain_build_i686/gcc-4.2.1-final/./gcc
+-L/home/willw/buildroot/build_i686/staging_dir/lib
+-L/home/willw/buildroot/build_i686/staging_dir/usr/lib -Wl,--rpath
+-Wl,//lib -Wl,--rpath
+-Wl,/home/willw/buildroot/build_i686/staging_dir/usr/bin/../lib/gcc/i686-linux-uclibc/4.2.1/../../../../i686-linux-uclibc/lib
+/home/willw/buildroot/build_i686/staging_dir/usr/bin/../lib/gcc/i686-linux-uclibc/4.2.1/../../../../i686-linux-uclibc/bin/ld: 
+
+warning: libc.so.6, needed by //lib/libusb-0.1.so.4, may conflict with
+libc.so.0
+/home/willw/buildroot/build_i686/staging_dir/usr/bin/../lib/gcc/i686-linux-uclibc/4.2.1/../../../../i686-linux-uclibc/bin/ld: 
+
+errno: TLS definition in //lib/libc.so.6 section .tbss mismatches
+non-TLS definition in
+/home/willw/buildroot/build_i686/staging_dir//lib/libc.so.0 section .bss
+//lib/libc.so.6: could not read symbols: Bad value
+collect2: ld returned 1 exit status
 
 
-Changeset:
-Added: trunk/buildroot/target/device/Atmel/linux/kernel-patches-2.6.22.1/linux-2.6.22.1-006-lcd.patch
-===================================================================
---- trunk/buildroot/target/device/Atmel/linux/kernel-patches-2.6.22.1/linux-2.6.22.1-006-lcd.patch	                        (rev 0)
-+++ trunk/buildroot/target/device/Atmel/linux/kernel-patches-2.6.22.1/linux-2.6.22.1-006-lcd.patch	2007-09-04 16:22:41 UTC (rev 19781)
-@@ -0,0 +1,12 @@
-+diff -urN linux-2.6.22.1-atmel-0rig/arch/arm/mach-at91/at91sam9261_devices.c linux-2.6.22.1-atmel/arch/arm/mach-at91/at91sam9261_devices.c
-+--- linux-2.6.22.1-atmel-0rig/arch/arm/mach-at91/at91sam9261_devices.c	2007-07-10 20:56:30.000000000 +0200
-++++ linux-2.6.22.1-atmel/arch/arm/mach-at91/at91sam9261_devices.c	2007-09-04 16:09:54.000000000 +0200
-+@@ -20,7 +20,7 @@
-+ #include <asm/arch/at91sam9261.h>
-+ #include <asm/arch/at91sam9261_matrix.h>
-+ #include <asm/arch/at91sam926x_mc.h>
-+-
-++#include <video/atmel_lcdc.h>
-+ #include "generic.h"
-+ 
-+ 
+Can anyone suggest what is wrong?
+
+Thanks,
+
+Will.
+-- 
+------------------------------------------------------------------------
+Will Wagner                                     will_wagner at carallon.com
+Senior Project Engineer                  Office Tel: +44 (0)20 7371 2032
+Carallon Ltd, Studio G20, Shepherds Building, Rockley Rd, London W14 0DA
+------------------------------------------------------------------------
