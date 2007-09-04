@@ -1,46 +1,35 @@
-From: Johnnie Peters <johnnie123@verizon.net>
-Date: Tue, 04 Sep 2007 08:51:03 -0700
-Subject: [Buildroot] Serial port loging
-In-Reply-To: <46D5CEF5.8070605@verizon.net>
-References: <46D5CEF5.8070605@verizon.net>
-Message-ID: <46DD7EE7.8060000@verizon.net>
+From: ulf at uclibc.org <ulf@uclibc.org>
+Date: Tue,  4 Sep 2007 09:20:31 -0700 (PDT)
+Subject: [Buildroot] svn commit: trunk/buildroot/target/device/Atmel/u-boot
+Message-ID: <20070904162031.49A62A688D@busybox.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi All,
+Author: ulf
+Date: 2007-09-04 09:20:28 -0700 (Tue, 04 Sep 2007)
+New Revision: 19778
 
-The problem was /dev/ttySA0 was not in the /etc/securetty file.
+Log:
+Update u-boot autoscript
 
-Johnnie
+Modified:
+   trunk/buildroot/target/device/Atmel/u-boot/u-boot.mk
 
-Johnnie Peters wrote:
-> Hi All,
->
-> I am building a buildroot environment for the CM-X270 board.  I have it 
-> defined to use "arm" "xscale" and "EABI".  I have added a getty for 
-> ttySA0 into the inittab and now I get a login prompt on the serial 
-> port.  I see that the "root" login has a blank password field int he 
-> /etc/shadow file so I expected it to just login in when I enter root.
->
-> Instead it pauses for a few seconds and displays the login prompt 
-> again.  I then set up the shutdown login to run reboot.  When I tried 
-> this I got an error that indicated it was not being ran as root so I set 
-> the owner ID of shutdown in the /etc/passwd file to be 0.  Now when I 
-> try to login as shutdown it also pauses for a few seconds and then 
-> displays the login prompt again.
->
-> Any ideas?
->
-> Thanks for any info,
->
-> Johnnie
->
-> _______________________________________________
-> buildroot mailing list
-> buildroot at uclibc.org
-> http://busybox.net/mailman/listinfo/buildroot
->
->   
+
+Changeset:
+Modified: trunk/buildroot/target/device/Atmel/u-boot/u-boot.mk
+===================================================================
+--- trunk/buildroot/target/device/Atmel/u-boot/u-boot.mk	2007-09-04 07:35:19 UTC (rev 19777)
++++ trunk/buildroot/target/device/Atmel/u-boot/u-boot.mk	2007-09-04 16:20:28 UTC (rev 19778)
+@@ -147,7 +147,7 @@
+ ifneq ($(TARGET_UBOOT_NETMASK),)
+ 	echo setenv netmask $(TARGET_UBOOT_NETMASK) >> $(UBOOT_SCR)
+ endif
+-	echo setenv linux $(LINUX26_KERNEL) >> $(UBOOT_SCR)
++	echo setenv linux $(BOARD_NAME)-linux-$(LINUX26_VERSION)-$(DATE).gz >> $(UBOOT_SCR)
+ 	echo setenv kernel-version $(LINUX26_VERSION) >> $(UBOOT_SCR)
+ 	echo setenv kernel-date $(DATE) >> $(UBOOT_SCR)
+ 	echo setenv hostname $(TARGET_HOSTNAME) >> $(UBOOT_SCR)
