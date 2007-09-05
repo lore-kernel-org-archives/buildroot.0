@@ -1,7 +1,7 @@
 From: ulf at uclibc.org <ulf@uclibc.org>
-Date: Tue,  4 Sep 2007 23:48:39 -0700 (PDT)
-Subject: [Buildroot] svn commit: trunk/buildroot/target/linux
-Message-ID: <20070905064839.E37E5A681F@busybox.net>
+Date: Tue,  4 Sep 2007 23:49:57 -0700 (PDT)
+Subject: [Buildroot] svn commit: trunk/buildroot/package/directfb
+Message-ID: <20070905064957.C5DC4A682F@busybox.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -9,27 +9,47 @@ Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
 Author: ulf
-Date: 2007-09-04 23:48:38 -0700 (Tue, 04 Sep 2007)
-New Revision: 19786
+Date: 2007-09-04 23:49:57 -0700 (Tue, 04 Sep 2007)
+New Revision: 19787
 
 Log:
-Add unpacking + patching of linux source tree to simplify creating a new patch
+Bump DirectFB version, and enable/disable X11
 
 Modified:
-   trunk/buildroot/target/linux/Makefile.in
+   trunk/buildroot/package/directfb/directfb.mk
 
 
 Changeset:
-Modified: trunk/buildroot/target/linux/Makefile.in
+Modified: trunk/buildroot/package/directfb/directfb.mk
 ===================================================================
---- trunk/buildroot/target/linux/Makefile.in	2007-09-05 03:40:47 UTC (rev 19785)
-+++ trunk/buildroot/target/linux/Makefile.in	2007-09-05 06:48:38 UTC (rev 19786)
-@@ -209,6 +209,8 @@
+--- trunk/buildroot/package/directfb/directfb.mk	2007-09-05 06:48:38 UTC (rev 19786)
++++ trunk/buildroot/package/directfb/directfb.mk	2007-09-05 06:49:57 UTC (rev 19787)
+@@ -5,7 +5,7 @@
+ #############################################################
+ #DIRECTFB_VERSION:=0.9.25.1
+ #DIRECTFB_SITE:=http://www.directfb.org/downloads/Old
+-DIRECTFB_VERSION:=1.0.0
++DIRECTFB_VERSION:=1.0.1
+ DIRECTFB_SITE:=http://www.directfb.org/downloads/Core
+ DIRECTFB_SOURCE:=DirectFB-$(DIRECTFB_VERSION).tar.gz
+ DIRECTFB_CAT:=$(ZCAT)
+@@ -18,6 +18,11 @@
+ DIRECTFB_MULTI:=
+ DIRECTFB_FUSION:=
+ endif
++ifeq ($(BR2_PACKAGE_XSERVER_none),y)
++DIRECTFB_X:= --disable-x11
++else
++DIRECTFB_X:= --enable-x11
++endif
  
- linux26-source: $(DL_DIR)/$(LINUX26_SOURCE)
- 
-+linux26-patched: $(LINUX26_DIR)/.patched
-+
- # This has been renamed so we do _NOT_ by default run this on 'make clean'
- linux26clean:
- 	rm -f $(LINUX26_KERNEL) $(LINUX26_DIR)/.configured
+ $(DL_DIR)/$(DIRECTFB_SOURCE):
+ 	$(WGET) -P $(DL_DIR) $(DIRECTFB_SITE)/$(DIRECTFB_SOURCE)
+@@ -55,6 +60,7 @@
+ 		--with-gfxdrivers=cle266,unichrome \
+ 		--enable-shared \
+ 		$(DIRECTFB_MULTI) \
++		$(DIRECTFB_X) \
+ 		--enable-jpeg \
+ 		--enable-png \
+ 		--enable-linux-input \
