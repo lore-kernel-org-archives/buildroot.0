@@ -1,37 +1,110 @@
-From: ulf at uclibc.org <ulf@uclibc.org>
-Date: Tue,  4 Sep 2007 23:52:09 -0700 (PDT)
-Subject: [Buildroot] svn commit:
-	trunk/buildroot/target/device/Atmel/at91sam9260dfc
-Message-ID: <20070905065209.A8716A688F@busybox.net>
+From: Ulf Samuelsson <ulf@atmel.com>
+Date: Wed, 05 Sep 2007 08:39:24 +0200
+Subject: [Buildroot] Runtime generation of board support version 2
+Message-ID: <1188974365.19258.9.camel@aeglos.sweden.atmel.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Author: ulf
-Date: 2007-09-04 23:52:09 -0700 (Tue, 04 Sep 2007)
-New Revision: 19790
+Add runtime generation of board support version 2
 
-Log:
-Update defconfig for AT91SAM9260
+$ make saveconfig
+will save the current configuration to project/$(PROJECT)
 
-Modified:
-   trunk/buildroot/target/device/Atmel/at91sam9260dfc/at91sam9260dfc-linux-2.6.22.1.config
+$ make getconfig
+will copy the saved config to .config
+
+$ make BOARD=<myproject>
+will use project/<myproject>/<myproject>.config
+instead of .config
+
+(There is a doc update as well, not included here)
+
+Moved the saveconfig to project/project.mk and added getconfig
+Now, the .config file will be updated so that the stuff in 
+project/$(PROJECT) will be used for Linux, UCLIBC and busybox.
+
+Comments?
 
 
-Changeset:
-Modified: trunk/buildroot/target/device/Atmel/at91sam9260dfc/at91sam9260dfc-linux-2.6.22.1.config
+Index: Makefile
 ===================================================================
---- trunk/buildroot/target/device/Atmel/at91sam9260dfc/at91sam9260dfc-linux-2.6.22.1.config	2007-09-05 06:51:38 UTC (rev 19789)
-+++ trunk/buildroot/target/device/Atmel/at91sam9260dfc/at91sam9260dfc-linux-2.6.22.1.config	2007-09-05 06:52:09 UTC (rev 19790)
-@@ -51,9 +51,6 @@
- CONFIG_SYSFS_DEPRECATED=y
- # CONFIG_RELAY is not set
- CONFIG_BLK_DEV_INITRD=y
--CONFIG_INITRAMFS_SOURCE="/home/ulf/projects/Buildroot/20070817/buildroot-arm/binaries/at91sam9261ek/rootfs.arm.initramfs_list"
--CONFIG_INITRAMFS_ROOT_UID=0
--CONFIG_INITRAMFS_ROOT_GID=0
- CONFIG_CC_OPTIMIZE_FOR_SIZE=y
- CONFIG_SYSCTL=y
- # CONFIG_EMBEDDED is not set
+--- Makefile	(revision 19784)
++++ Makefile	(arbetskopia)
+@@ -35,8 +35,12 @@
+ 
+ # Pull in the user's configuration file
+ ifeq ($(filter $(noconfig_targets),$(MAKECMDGOALS)),)
++ifeq ($(BOARD),)
+ -include $(TOPDIR).config
++else
++-include $(TOPDIR)/project/$(BOARD)/$(BOARD).config
+ endif
++endif
+ ifneq ($(BUILDROOT_DL_DIR),)
+ BR2_DL_DIR:=$(BUILDROOT_DL_DIR)
+ endif
+Index: project/project.mk
+===================================================================
+--- project/project.mk	(revision 19784)
++++ project/project.mk	(arbetskopia)
+@@ -1,6 +1,8 @@
++PROJECT_FILE:=project/$(PROJECT)/$(PROJECT).config
+ 
+-.PHONY: target-host-info
+ 
++.PHONY: target-host-info  saveconfig getconfig
++
+ target-host-info: $(TARGET_DIR)/etc/issue $(TARGET_DIR)/etc/hostname
+ 
+ $(TARGET_DIR)/etc/issue: .config
+@@ -12,3 +14,28 @@
+ $(TARGET_DIR)/etc/hostname: .config
+ 	mkdir -p $(TARGET_DIR)/etc
+ 	echo "$(TARGET_HOSTNAME)" > $(TARGET_DIR)/etc/hostname
++
++saveconfig: $(CONFIG)/conf
++	mkdir -p project/$(PROJECT)
++	-cp .config $(PROJECT_FILE)
++	if [ -f $(LINUX26_DIR)/.config ] ; then \
++		cp $(LINUX26_DIR)/.config
+project/$(PROJECT)/linux-$(LINUX26_VERSION).config ; \
++		$(SED) '/BR2_PACKAGE_LINUX_KCONFIG/d' $(PROJECT_FILE) ; \
++		echo
+"BR2_PACKAGE_LINUX_KCONFIG:=project/$(PROJECT)/linux-$(LINUX26_VERSION).config" >> $(PROJECT_FILE)	; \
++	fi
++	if [ -f $(BUSYBOX_DIR)/.config ] ; then \
++		cp $(BUSYBOX_DIR)/.config
+project/$(PROJECT)/busybox-$(BUSYBOX_VERSION).config ; \
++		$(SED) '/BR2_PACKAGE_BUSYBOX_CONFIG/d' $(PROJECT_FILE) ; \
++		echo
+"BR2_PACKAGE_BUSYBOX_CONFIG:=project/$(PROJECT)/busybox-$(BUSYBOX_VERSION).config" >> $(PROJECT_FILE) ; \
++	fi
++	if [ -f $(UCLIBC_DIR)/.config ] ; then \
++		cp $(UCLIBC_DIR)/.config
+project/$(PROJECT)/uclibc-$(UCLIBC_VER).config ; \
++		$(SED) '/BR2_UCLIBC_CONFIG/d' $(PROJECT_FILE) ; \
++		echo
+"BR2_UCLIBC_CONFIG:=project/$(PROJECT)/uclibc-$(UCLIBC_VER).config" >>
+$(PROJECT_FILE) ; \
++	fi
++	if [ -f $(UBOOT_DIR)/include/configs/$(PROJECT).h ] ; then \
++		cp $(UBOOT_DIR)/include/configs/$(PROJECT).h
+project/$(PROJECT)/u-boot/$(PROJECT).h ; \
++	fi
++
++getconfig: $(CONFIG)/conf
++	-cp project/$(PROJECT)/$(PROJECT).config .config 
+
+
+
+-- 
+Best Regards,
+Ulf Samuelsson          mail:   ulf at atmel.com
+Atmel Nordic AB
+Box 2033, 174 52 Sundbyberg
+Kavalleriv?gen 24, 174 58 Sundbyberg
+Sweden
+Tel:    +46 8 441 54 22 GSM:    +46 706 224457
