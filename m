@@ -1,45 +1,49 @@
-From: Will Wagner <will_wagner@carallon.com>
-Date: Thu, 06 Sep 2007 08:46:57 +0100
-Subject: [Buildroot] Qtopia 4.3.1 on X86
-In-Reply-To: <1189062690.13373.11.camel@cyclops.infocab.com.au>
-References: <1189062690.13373.11.camel@cyclops.infocab.com.au>
-Message-ID: <46DFB071.105@carallon.com>
+From: bugs at busybox.net <bugs@busybox.net>
+Date: Thu, 6 Sep 2007 05:46:44 -0700
+Subject: [Buildroot] [buildroot 0001490]: kernel-headers 2.6.12 unsuitable
+	for ARM EABI
+Message-ID: <6cd93578192d6d5c8dfc1cbc8df11595@busybox.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-This sounds a lot like the problem I had here:
 
-http://buildroot.uclibc.org/lists/buildroot/2007-August/004797.html
+The following issue has been SUBMITTED. 
+====================================================================== 
+http://busybox.net/bugs/view.php?id=1490 
+====================================================================== 
+Reported By:                ikonst
+Assigned To:                buildroot
+====================================================================== 
+Project:                    buildroot
+Issue ID:                   1490
+Category:                   Architecture Specific
+Reproducibility:            always
+Severity:                   major
+Priority:                   normal
+Status:                     assigned
+====================================================================== 
+Date Submitted:             09-06-2007 05:46 PDT
+Last Modified:              09-06-2007 05:46 PDT
+====================================================================== 
+Summary:                    kernel-headers 2.6.12 unsuitable for ARM EABI
+Description: 
+When trying to compile uClibc with kernel-headers 2.6.12 on ARM EABI
+platform, an error occurs when building libc/misc/sysvipc/msgget.os (from
+libc/misc/sysvipc/msgq.c), since the kernel headers undefines the __NR_ipc
+syscall on ARM EABI and also doesn't define __NR_msgctl (claiming that
+there's a multiplexer syscall which should be used instead). In any case,
+it's a mess which is not present in modern (e.g. 2.6.21) kernel headers.
+====================================================================== 
 
-Hope that helps,
-
-Will.
-
-Adam Hawes wrote:
-> Hi,
-> 
-> I'm trying to build Qtopia in Buildroot for X86.  I've had a lot of
-> issues with "macro index requires 2 arguments...".  The only solution
-> I've found is to undefine that macro in all the files where it
-> complains.
-> 
-> Has anyone else found a more elegant solution to this problem? Is there
-> a patch available or should I submit my patch to Qtopia to the list?
-> 
-> Cheers,
-> A
-> 
-> _______________________________________________
-> buildroot mailing list
-> buildroot at uclibc.org
-> http://busybox.net/mailman/listinfo/buildroot
-
--- 
-------------------------------------------------------------------------
-Will Wagner                                     will_wagner at carallon.com
-Senior Project Engineer                  Office Tel: +44 (0)20 7371 2032
-Carallon Ltd, Studio G20, Shepherds Building, Rockley Rd, London W14 0DA
-------------------------------------------------------------------------
+Issue History 
+Date Modified   Username       Field                    Change               
+====================================================================== 
+09-06-07 05:46  ikonst         New Issue                                    
+09-06-07 05:46  ikonst         Status                   new => assigned     
+09-06-07 05:46  ikonst         Assigned To               => buildroot       
+09-06-07 05:46  ikonst         File Added:
+buildroot-arm-eabi-kernel-headers.patch                    
+======================================================================
