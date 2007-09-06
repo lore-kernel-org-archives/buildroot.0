@@ -1,39 +1,30 @@
-From: Yann E. MORIN <yann.morin.1998@anciens.enib.fr>
-Date: Thu, 6 Sep 2007 18:50:22 +0200
-Subject: [Buildroot] Uclibc 0.9.29 compiler error
-In-Reply-To: <fbkjea$tfd$1@sea.gmane.org>
-References: <fbkjea$tfd$1@sea.gmane.org>
-Message-ID: <200709061850.22829.yann.morin.1998@anciens.enib.fr>
+From: Crane, Matthew <mcrane03@harris.com>
+Date: Thu, 6 Sep 2007 13:51:33 -0400
+Subject: [Buildroot] elf2flt integration
+Message-ID: <E496871456016F4CA8959BE4105D2A890E8C98@troe2k1.cs.myharris.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Micha, All,
+Hi, 
 
-On Tuesday 04 September 2007 23:40, Micha Nelissen wrote:
-> I am using buildroot SVN, gcc 4.2.1, uclibc 0.9.29, armeb-linux for
-> xscale. I've configured to use software floating point. Linking of
-> uclibc fails, it cannot find some functions which seem software floating
-> point related e.g. __floatsidf.
+I would like to be able to use -elf2flt, so that busybox can be built
+from buildroot as a flat binary. 
 
-Try attached patch.
+The elf2flt goes to staging_dir/bin
+The toolchain goes to staging_dir/usr/bin and usr/<target>/bin
+The toolchain gcc does not use the elf2flt flag, it instead thinks it is
+a flag for the entry symbol.
 
-Regards,
-Yann E. MORIN.
+How can I locate and sym link the elf2flt tools and ld.real script
+installed to staging_dir/bin to the toolchain so that busybox and others
+can build as a FLT binary?   Does elf2flt in buildroot work to generate
+flat binaries the way it is setup now?  Assuming the linker flags are
+passed properly.
 
--- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +0/33 662376056 | Software  Designer | \ / CAMPAIGN     |   ^                |
-| --==< ?_? >==-- ?------------.-------:  X  AGAINST      |  /e\  There is no  |
-| http://ymorin.is-a-geek.org/ | (*_*) | / \ HTML MAIL    |  """  conspiracy.  |
-?------------------------------?-------?------------------?--------------------?
+Matt
 -------------- next part --------------
-A non-text attachment was scrubbed...
-Name: 801-softfloat-fix.patch
-Type: text/x-diff
-Size: 2762 bytes
-Desc: not available
-Url : http://busybox.net/lists/buildroot/attachments/20070906/cd724734/attachment-0001.bin 
+An HTML attachment was scrubbed...
+URL: http://busybox.net/lists/buildroot/attachments/20070906/2ecb5b22/attachment.htm 
