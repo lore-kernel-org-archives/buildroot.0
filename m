@@ -1,30 +1,47 @@
-From: Crane, Matthew <mcrane03@harris.com>
-Date: Thu, 6 Sep 2007 13:51:33 -0400
-Subject: [Buildroot] elf2flt integration
-Message-ID: <E496871456016F4CA8959BE4105D2A890E8C98@troe2k1.cs.myharris.net>
+From: bugs at busybox.net <bugs@busybox.net>
+Date: Thu, 6 Sep 2007 11:28:04 -0700
+Subject: [Buildroot] [buildroot 0001492]: filter-out does not work when
+	making buildroot
+Message-ID: <e5b74636a6a849f5f3f2f0f0cb14fa45@busybox.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi, 
 
-I would like to be able to use -elf2flt, so that busybox can be built
-from buildroot as a flat binary. 
+The following issue has been SUBMITTED. 
+====================================================================== 
+http://busybox.net/bugs/view.php?id=1492 
+====================================================================== 
+Reported By:                alisonken1
+Assigned To:                buildroot
+====================================================================== 
+Project:                    buildroot
+Issue ID:                   1492
+Category:                   Other
+Reproducibility:            always
+Severity:                   block
+Priority:                   normal
+Status:                     assigned
+====================================================================== 
+Date Submitted:             09-06-2007 11:28 PDT
+Last Modified:              09-06-2007 11:28 PDT
+====================================================================== 
+Summary:                    filter-out does not work when making buildroot
+Description: 
+When making buildroot, compiling dies when strip is called on gccbug.
+gccbug is a shell script and strip dies with 'file format unrecognized'.
 
-The elf2flt goes to staging_dir/bin
-The toolchain goes to staging_dir/usr/bin and usr/<target>/bin
-The toolchain gcc does not use the elf2flt flag, it instead thinks it is
-a flag for the entry symbol.
+Looking at makefile, strip is called with $(filter-out gccbug ...). but
+gccbug is not filtered out of the strip process.
 
-How can I locate and sym link the elf2flt tools and ld.real script
-installed to staging_dir/bin to the toolchain so that busybox and others
-can build as a FLT binary?   Does elf2flt in buildroot work to generate
-flat binaries the way it is setup now?  Assuming the linker flags are
-passed properly.
+====================================================================== 
 
-Matt
--------------- next part --------------
-An HTML attachment was scrubbed...
-URL: http://busybox.net/lists/buildroot/attachments/20070906/2ecb5b22/attachment.htm 
+Issue History 
+Date Modified   Username       Field                    Change               
+====================================================================== 
+09-06-07 11:28  alisonken1     New Issue                                    
+09-06-07 11:28  alisonken1     Status                   new => assigned     
+09-06-07 11:28  alisonken1     Assigned To               => buildroot       
+======================================================================
