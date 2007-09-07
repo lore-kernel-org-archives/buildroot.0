@@ -1,7 +1,7 @@
 From: bugs at busybox.net <bugs@busybox.net>
-Date: Fri, 7 Sep 2007 11:58:44 -0700
-Subject: [Buildroot] [buildroot 0001450]: copy of system header files fails
-Message-ID: <261b80383df14198ca88f418a81e3efa@busybox.net>
+Date: Fri, 7 Sep 2007 12:02:01 -0700
+Subject: [Buildroot] [buildroot 0001463]: build for i386/Geode fails
+Message-ID: <5259c5eebdd049a14d686a09883b9f48@busybox.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -11,58 +11,38 @@ To: buildroot@busybox.net
 
 A NOTE has been added to this issue. 
 ====================================================================== 
-http://busybox.net/bugs/view.php?id=1450 
+http://busybox.net/bugs/view.php?id=1463 
 ====================================================================== 
-Reported By:                drm
+Reported By:                Bob Keyes
 Assigned To:                buildroot
 ====================================================================== 
 Project:                    buildroot
-Issue ID:                   1450
+Issue ID:                   1463
 Category:                   Architecture Specific
 Reproducibility:            always
-Severity:                   minor
+Severity:                   major
 Priority:                   normal
 Status:                     assigned
 ====================================================================== 
-Date Submitted:             07-30-2007 06:54 PDT
-Last Modified:              09-07-2007 11:58 PDT
+Date Submitted:             08-13-2007 11:04 PDT
+Last Modified:              09-07-2007 12:02 PDT
 ====================================================================== 
-Summary:                    copy of system header files fails
+Summary:                    build for i386/Geode fails
 Description: 
-The copying of the system header to the final destination fails to make
-copies of all subdirectories
-Specifically the command:
-cp -pLR /home/../toolchain_build_arm_nofpu/linux/include/asm
-/opt/arm-gcc/3.4.4/usr/include/
-
-gives the error message:
-cp: will not create hard link
-`/opt/arm-gcc/3.4.4/usr/include/asm/proc-armv' to directory
-`/opt/arm-gcc/3.4.4/usr/include/asm/proc'
-cp: will not create hard link `/opt/arm-gcc/3.4.4/usr/include/asm/arch' to
-directory `/opt/arm-gcc/3.4.4/usr/include/asm/arch-ebsa285'
-
-The errors come from symbolic links to directories which the copy command
-does not want to process.
-
+Buildroot tries to build Linx kernel, but the architecture isn't set, so it
+can't find the Makefile.
 ====================================================================== 
 
 ---------------------------------------------------------------------- 
- bernhardf - 09-07-07 11:58  
+ bernhardf - 09-07-07 12:02  
 ---------------------------------------------------------------------- 
-This works for me with gcc-4.2.1, 4.1.2, and even 3.4.6.
-
-I shall close this bug unless you can reproduce this with one of the
-versions mentioned above (the other versions are deprecated; TBH even
-3.4.6 is from my POV).
-
-thanks, 
+Please attach your br2.config and kernel.config for me to reproduce. 
 
 Issue History 
 Date Modified   Username       Field                    Change               
 ====================================================================== 
-07-30-07 06:54  drm            New Issue                                    
-07-30-07 06:54  drm            Status                   new => assigned     
-07-30-07 06:54  drm            Assigned To               => buildroot       
-09-07-07 11:58  bernhardf      Note Added: 0002732                          
+08-13-07 11:04  Bob Keyes      New Issue                                    
+08-13-07 11:04  Bob Keyes      Status                   new => assigned     
+08-13-07 11:04  Bob Keyes      Assigned To               => buildroot       
+09-07-07 12:02  bernhardf      Note Added: 0002733                          
 ======================================================================
