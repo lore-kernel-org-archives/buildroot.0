@@ -1,52 +1,37 @@
-From: Adam Hawes <adam@infocab.com.au>
-Date: Fri, 07 Sep 2007 11:30:56 +0930
-Subject: [Buildroot] Qtopia 4.3.1 on X86
-In-Reply-To: <46DFB041.1030509@st.com>
-References: <1189062690.13373.11.camel@cyclops.infocab.com.au>
-	<46DFB041.1030509@st.com>
-Message-ID: <1189130456.18603.32.camel@cyclops.infocab.com.au>
+From: Konstantin Kletschke <kletschke@synertronixx.de>
+Date: Fri, 7 Sep 2007 08:35:27 +0200
+Subject: [Buildroot] Uclibc 0.9.29 compiler error
+In-Reply-To: <fbp8l4$rtg$1@sea.gmane.org>
+References: <fbkjea$tfd$1@sea.gmane.org>
+	<20070906071019.GA2168@z1.synertronixx>
+	<fbp8l4$rtg$1@sea.gmane.org>
+Message-ID: <20070907063527.GA2160@z1.synertronixx>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi,
+Am 2007-09-06 18:06 +0200 schrieb Micha Nelissen:
 
-Thanks for the pointers.  I've changed the uClibc configuration to
-remove SUSv3 macros and Qtopia builds.  I have only found one breakage
-so far and that's in mplayer.  I'll work toward fixing that if I can
-find a little bit of time.
+> armeb = arm big endian. I'm using OABI btw; does that matter? Would
 
-Cheers,
-A
+Ooops, sorry. Thought the issue was about softfloat+EABI.
+
+Konsti
 
 
-On Thu, 2007-09-06 at 09:46 +0200, Carmelo AMOROSO wrote:
-> Adam Hawes wrote:
-> > Hi,
-> >
-> > I'm trying to build Qtopia in Buildroot for X86.  I've had a lot of
-> > issues with "macro index requires 2 arguments...".  The only solution
-> > I've found is to undefine that macro in all the files where it
-> > complains.
-> >
-> > Has anyone else found a more elegant solution to this problem? Is there
-> > a patch available or should I submit my patch to Qtopia to the list?
-> >
-> > Cheers,
-> > A
-> >
-> >   
-> The problem is that you have uClibc configure with SUSv3_LEGACY_MACRO on 
-> that define index.
-> 
-> Carmelo
-> > _______________________________________________
-> > buildroot mailing list
-> > buildroot at uclibc.org
-> > http://busybox.net/mailman/listinfo/buildroot
-> >
-> >   
-> 
-> 
+-- 
+synertronixx GmbH
+Dipl.-Ing. (FH) Konstantin Kletschke
+Vahrenwalder Str. 7
+30165 Hannover
+Tel.    : 0511 / 3574 - 661
+Fax     : 0511 / 93 57 - 679
+E-mail  : kletschke at synertronixx.de
+Internet: http://www.synertronixx.de
+Vertretungsberechtigte Gesch?ftsf?hrer:
+Marc-Oliver Borck, Dr. Matthias Blaschke
+Registergericht: Amtsgericht Hannover
+Registernummer: HRB 59670
+USt-ID: DE 216 559 901
