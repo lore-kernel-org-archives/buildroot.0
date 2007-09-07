@@ -1,8 +1,7 @@
 From: bugs at busybox.net <bugs@busybox.net>
-Date: Fri, 7 Sep 2007 11:55:54 -0700
-Subject: [Buildroot] [buildroot 0001474]: toolchain build, arch x86_64 ,
-	variant core2 does not build
-Message-ID: <6a159fc7ac57e67bc6483273eb8d8d2d@busybox.net>
+Date: Fri, 7 Sep 2007 11:58:44 -0700
+Subject: [Buildroot] [buildroot 0001450]: copy of system header files fails
+Message-ID: <261b80383df14198ca88f418a81e3efa@busybox.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -10,55 +9,60 @@ Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
 
-The following issue has been CLOSED 
+A NOTE has been added to this issue. 
 ====================================================================== 
-http://busybox.net/bugs/view.php?id=1474 
+http://busybox.net/bugs/view.php?id=1450 
 ====================================================================== 
-Reported By:                myopiate
+Reported By:                drm
 Assigned To:                buildroot
 ====================================================================== 
 Project:                    buildroot
-Issue ID:                   1474
+Issue ID:                   1450
 Category:                   Architecture Specific
 Reproducibility:            always
-Severity:                   block
+Severity:                   minor
 Priority:                   normal
-Status:                     closed
-Resolution:                 open
-Fixed in Version:           
+Status:                     assigned
 ====================================================================== 
-Date Submitted:             08-27-2007 02:04 PDT
-Last Modified:              09-07-2007 11:55 PDT
+Date Submitted:             07-30-2007 06:54 PDT
+Last Modified:              09-07-2007 11:58 PDT
 ====================================================================== 
-Summary:                    toolchain build, arch x86_64 , variant core2 does
-not build
+Summary:                    copy of system header files fails
 Description: 
-Problem:
-Configuration for the x86_64 architecture with core2 variant stops on
-build.
+The copying of the system header to the final destination fails to make
+copies of all subdirectories
+Specifically the command:
+cp -pLR /home/../toolchain_build_arm_nofpu/linux/include/asm
+/opt/arm-gcc/3.4.4/usr/include/
 
-Cause:
-gcc-4.2.1 does not accept --with-tune=core2.  Toolchain build dies.
+gives the error message:
+cp: will not create hard link
+`/opt/arm-gcc/3.4.4/usr/include/asm/proc-armv' to directory
+`/opt/arm-gcc/3.4.4/usr/include/asm/proc'
+cp: will not create hard link `/opt/arm-gcc/3.4.4/usr/include/asm/arch' to
+directory `/opt/arm-gcc/3.4.4/usr/include/asm/arch-ebsa285'
 
-Workaround:
-Attached patch works around the problem by using --with-tune=generic.
+The errors come from symbolic links to directories which the copy command
+does not want to process.
+
 ====================================================================== 
 
 ---------------------------------------------------------------------- 
- bernhardf - 09-07-07 11:55  
+ bernhardf - 09-07-07 11:58  
 ---------------------------------------------------------------------- 
-See ML archives for the correct solution (default core2 if
-!GCC_VERSION_THIS && !GCC_VERSION_THAT; gcc-4.3 does support -mtune=core2
-just fine, so the proposed solution is not correct). 
+This works for me with gcc-4.2.1, 4.1.2, and even 3.4.6.
+
+I shall close this bug unless you can reproduce this with one of the
+versions mentioned above (the other versions are deprecated; TBH even
+3.4.6 is from my POV).
+
+thanks, 
 
 Issue History 
 Date Modified   Username       Field                    Change               
 ====================================================================== 
-08-27-07 02:04  myopiate       New Issue                                    
-08-27-07 02:04  myopiate       Status                   new => assigned     
-08-27-07 02:04  myopiate       Assigned To               => buildroot       
-08-27-07 02:04  myopiate       File Added: core2-generic.patch                  
- 
-09-07-07 11:55  bernhardf      Status                   assigned => closed  
-09-07-07 11:55  bernhardf      Note Added: 0002731                          
+07-30-07 06:54  drm            New Issue                                    
+07-30-07 06:54  drm            Status                   new => assigned     
+07-30-07 06:54  drm            Assigned To               => buildroot       
+09-07-07 11:58  bernhardf      Note Added: 0002732                          
 ======================================================================
