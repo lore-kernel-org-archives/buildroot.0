@@ -1,8 +1,8 @@
 From: bugs at busybox.net <bugs@busybox.net>
-Date: Fri, 7 Sep 2007 11:53:12 -0700
+Date: Fri, 7 Sep 2007 11:53:46 -0700
 Subject: [Buildroot] [buildroot 0001483]: toolchain compilation fails with
 	libstdc++ in gcc version 3.4.6
-Message-ID: <4fc6711613d036f9c2daf9f94e8a60a2@busybox.net>
+Message-ID: <805608edcbcf556faa9b8228eaa967e5@busybox.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -10,7 +10,7 @@ Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
 
-A NOTE has been added to this issue. 
+The following issue has been CLOSED 
 ====================================================================== 
 http://busybox.net/bugs/view.php?id=1483 
 ====================================================================== 
@@ -23,7 +23,9 @@ Category:                   Other
 Reproducibility:            always
 Severity:                   block
 Priority:                   normal
-Status:                     assigned
+Status:                     closed
+Resolution:                 open
+Fixed in Version:           
 ====================================================================== 
 Date Submitted:             09-04-2007 06:42 PDT
 Last Modified:              09-07-2007 11:53 PDT
@@ -168,6 +170,11 @@ happycactus at cammello:~/buildroot>
 Bug in your distro. Urge SUSE to fix their headers as gentoo did (or use
 debian which works fine for me). 
 
+---------------------------------------------------------------------- 
+ bernhardf - 09-07-07 11:53  
+---------------------------------------------------------------------- 
+Bug in SUSE-10.2. Fix your host instead. 
+
 Issue History 
 Date Modified   Username       Field                    Change               
 ====================================================================== 
@@ -179,4 +186,6 @@ Date Modified   Username       Field                    Change
 09-04-07 13:51  bernhardf      Note Added: 0002709                          
 09-04-07 13:58  HappyCactus    Note Added: 0002710                          
 09-07-07 11:53  bernhardf      Note Added: 0002729                          
+09-07-07 11:53  bernhardf      Status                   assigned => closed  
+09-07-07 11:53  bernhardf      Note Added: 0002730                          
 ======================================================================
