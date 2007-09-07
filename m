@@ -1,37 +1,21 @@
-From: Konstantin Kletschke <kletschke@synertronixx.de>
-Date: Fri, 7 Sep 2007 08:35:27 +0200
-Subject: [Buildroot] Uclibc 0.9.29 compiler error
-In-Reply-To: <fbp8l4$rtg$1@sea.gmane.org>
-References: <fbkjea$tfd$1@sea.gmane.org>
-	<20070906071019.GA2168@z1.synertronixx>
-	<fbp8l4$rtg$1@sea.gmane.org>
-Message-ID: <20070907063527.GA2160@z1.synertronixx>
+From: Bernhard Fischer <rep.dot.nop@gmail.com>
+Date: Fri, 7 Sep 2007 15:14:47 +0200
+Subject: [Buildroot] this commit breaks x86_64 toolchain builds
+In-Reply-To: <e83232070709060559u27a12f78u1ddb96d7c4d7bc20@mail.gmail.com>
+References: <e83232070709060559u27a12f78u1ddb96d7c4d7bc20@mail.gmail.com>
+Message-ID: <20070907131447.GD17733@aon.at>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Am 2007-09-06 18:06 +0200 schrieb Micha Nelissen:
+On Thu, Sep 06, 2007 at 10:59:56PM +1000, Roderick Taylor wrote:
+>x86_64, by default uses the lib64 directory to hold 64-bit libraries.
+>not the lib directory as assumed by this commit.
 
-> armeb = arm big endian. I'm using OABI btw; does that matter? Would
+I don't see how the patch mentioned below is the culprit?
+>
+>http://buildroot.busybox.net/cgi-bin/viewcvs.cgi?rev=19702&view=rev
 
-Ooops, sorry. Thought the issue was about softfloat+EABI.
-
-Konsti
-
-
--- 
-synertronixx GmbH
-Dipl.-Ing. (FH) Konstantin Kletschke
-Vahrenwalder Str. 7
-30165 Hannover
-Tel.    : 0511 / 3574 - 661
-Fax     : 0511 / 93 57 - 679
-E-mail  : kletschke at synertronixx.de
-Internet: http://www.synertronixx.de
-Vertretungsberechtigte Gesch?ftsf?hrer:
-Marc-Oliver Borck, Dr. Matthias Blaschke
-Registergericht: Amtsgericht Hannover
-Registernummer: HRB 59670
-USt-ID: DE 216 559 901
+Isn't there a target_gcc_lib_dir we should rather use?
