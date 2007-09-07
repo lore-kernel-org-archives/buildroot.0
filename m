@@ -1,21 +1,43 @@
-From: Bernhard Fischer <rep.dot.nop@gmail.com>
-Date: Fri, 7 Sep 2007 15:14:47 +0200
-Subject: [Buildroot] this commit breaks x86_64 toolchain builds
-In-Reply-To: <e83232070709060559u27a12f78u1ddb96d7c4d7bc20@mail.gmail.com>
-References: <e83232070709060559u27a12f78u1ddb96d7c4d7bc20@mail.gmail.com>
-Message-ID: <20070907131447.GD17733@aon.at>
+From: bugs at busybox.net <bugs@busybox.net>
+Date: Fri, 7 Sep 2007 10:33:24 -0700
+Subject: [Buildroot] [buildroot 0001494]: Build for ARM 926T fails if option
+	software floating point is enabled
+Message-ID: <4271b2cb184f15a3c99769caf82da1e7@busybox.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Thu, Sep 06, 2007 at 10:59:56PM +1000, Roderick Taylor wrote:
->x86_64, by default uses the lib64 directory to hold 64-bit libraries.
->not the lib directory as assumed by this commit.
 
-I don't see how the patch mentioned below is the culprit?
->
->http://buildroot.busybox.net/cgi-bin/viewcvs.cgi?rev=19702&view=rev
+The following issue has been SUBMITTED. 
+====================================================================== 
+http://busybox.net/bugs/view.php?id=1494 
+====================================================================== 
+Reported By:                spranav
+Assigned To:                buildroot
+====================================================================== 
+Project:                    buildroot
+Issue ID:                   1494
+Category:                   Architecture Specific
+Reproducibility:            always
+Severity:                   minor
+Priority:                   normal
+Status:                     assigned
+====================================================================== 
+Date Submitted:             09-07-2007 10:33 PDT
+Last Modified:              09-07-2007 10:33 PDT
+====================================================================== 
+Summary:                    Build for ARM 926T fails if option software floating
+point is enabled
+Description: 
+This issue was reproted two times beore but I don't see the real solution.
+====================================================================== 
 
-Isn't there a target_gcc_lib_dir we should rather use?
+Issue History 
+Date Modified   Username       Field                    Change               
+====================================================================== 
+09-07-07 10:33  spranav        New Issue                                    
+09-07-07 10:33  spranav        Status                   new => assigned     
+09-07-07 10:33  spranav        Assigned To               => buildroot       
+======================================================================
