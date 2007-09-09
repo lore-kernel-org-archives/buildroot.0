@@ -1,8 +1,8 @@
 From: bugs at busybox.net <bugs@busybox.net>
-Date: Sun, 9 Sep 2007 07:47:13 -0700
-Subject: [Buildroot] [buildroot 0001478]: libglib12 is only built as a
-	static library
-Message-ID: <8f794ae83b143c8b24f904bcb78ec5c3@bugs.busybox.net>
+Date: Sun, 9 Sep 2007 08:25:13 -0700
+Subject: [Buildroot] [buildroot 0001495]: libgtk1.2 is built before xlibs,
+	resulting in "libX11 not found" error
+Message-ID: <2d82a9616a161bdca36dfab22b644d24@bugs.busybox.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -10,112 +10,42 @@ Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
 
-A NOTE has been added to this issue. 
+The following issue has been SUBMITTED. 
 ====================================================================== 
-http://busybox.net/bugs/view.php?id=1478 
+http://busybox.net/bugs/view.php?id=1495 
 ====================================================================== 
-Reported By:                gururaj
+Reported By:                johndoe1
 Assigned To:                buildroot
 ====================================================================== 
 Project:                    buildroot
-Issue ID:                   1478
-Category:                   Other
+Issue ID:                   1495
+Category:                   Architecture Specific
 Reproducibility:            always
 Severity:                   minor
 Priority:                   normal
 Status:                     assigned
 ====================================================================== 
-Date Submitted:             08-28-2007 17:43 PDT
-Last Modified:              09-09-2007 07:47 PDT
+Date Submitted:             09-09-2007 08:25 PDT
+Last Modified:              09-09-2007 08:25 PDT
 ====================================================================== 
-Summary:                    libglib12 is only built as a static library
+Summary:                    libgtk1.2 is built before xlibs, resulting in
+"libX11 not found" error
 Description: 
-trying to make libglib12 and it ends with error about missing libglib.so in
-buildroot/build_arm/staging_dir/lib/. 
+Because the X11 libraries have not been built yet, configuration of
+libgtk1.2 gives the following error:
+...
+checking for XOpenDisplay in -lX11... no
+configure: error: *** libX11 not found. Check 'config.log' for more
+details.
 
-cp -dpf
-/home/guru/project/original/bldrt/buildroot/build_arm/staging_dir/lib/libglib.so
-/home/guru/project/original/bldrt/buildroot/project_build_arm/uclibc/root/lib/
-
-cp: cannot stat
-`/home/guru/project/original/bldrt/buildroot/build_arm/staging_dir/lib/libglib.so':
-No such file or directory 
-make: ***
-[/home/guru/project/original/bldrt/buildroot/project_build_arm/uclibc/root/lib/libglib-1.2.so.0.0.10]
-Error 1 
-
-
-When i searched in this Directory i had 
-root at box124:~/project/original/bldrt/buildroot# ls -la
-build_arm/staging_dir/lib/libglib.* 
--rw-r--r-- 1 root root 596464 Aug 22 11:58
-build_arm/staging_dir/lib/libglib.a 
--rwxr-xr-x 1 root root    593 Aug 22 11:58
-build_arm/staging_dir/lib/libglib.la
+I had to temporarily turn off libgtk12 in menuconfig to allow X11 to build
+first.
 ====================================================================== 
-
----------------------------------------------------------------------- 
- johndoe1 - 09-09-07 07:47  
----------------------------------------------------------------------- 
-In file build_i386/glib-1.2.10/ltconfig, there is a test which starts at
-line 1793:
-echo $ac_n "checking dynamic linker characteristics... $ac_c" 1>&6
-case "$host_os" in
-...
-
-Because our $host_os is 'i386-pc-linux-gnu', I gather that the script
-matches our $host_os to this:
-[line 1902]
-gnu*)
-  version_type=linux
-  need_lib_prefix=no
-  need_version=no
-  library_names_spec='${libname}${release}.so$versuffix
-${libname}${release}.so$
-  soname_spec='${libname}${release}.so$major'
-  shlibpath_var=LD_LIBRARY_PATH
-  ;;
-
-I think the correct choice is further below:
-[line 1987]
-linux-uclibc*)
-  version_type=linux
-  need_lib_prefix=no
-  need_version=no
-  library_names_spec='${libname}${release}.so$versuffix
-${libname}${release}.so$
-  soname_spec='${libname}${release}.so$major'
-  finish_cmds='PATH="\$PATH:/sbin" ldconfig -n $libdir'
-  shlibpath_var=LD_LIBRARY_PATH
-  shlibpath_overrides_runpath=no
-  # deplibs_check_method=pass_all
-  deplibs_check_method='file_magic ELF [0-9][0-9]*-bit [LM]SB (shared
-object|dy$
-  file_magic_cmd=/usr/bin/file
-  file_magic_test_file=`echo /lib/libuClibc-*.so`
-  # This implies no fast_install, which is unacceptable.
-  # Some rework will be needed to allow for fast_install
-  # before this can be enabled.
-  # Note: copied from linux-gnu, and may not be appropriate.
-  hardcode_into_libs=yes
-  # Assume using the uClibc dynamic linker.
-  dynamic_linker="uClibc ld.so"
-  ;;
-
-I inserted a line right after the start of the test:
-[line 1793]
-echo $ac_n "checking dynamic linker characteristics... $ac_c" 1>&6
-host_os=linux-uclibc
-case "$host_os" in
-...
-
-After that, the package built normally. 
 
 Issue History 
 Date Modified   Username       Field                    Change               
 ====================================================================== 
-08-28-07 17:43  gururaj        New Issue                                    
-08-28-07 17:43  gururaj        Status                   new => assigned     
-08-28-07 17:43  gururaj        Assigned To               => buildroot       
-09-09-07 07:47  johndoe1       Note Added: 0002735                          
+09-09-07 08:25  johndoe1       New Issue                                    
+09-09-07 08:25  johndoe1       Status                   new => assigned     
+09-09-07 08:25  johndoe1       Assigned To               => buildroot       
 ======================================================================
