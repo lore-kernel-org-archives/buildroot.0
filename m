@@ -1,8 +1,8 @@
 From: bugs at busybox.net <bugs@busybox.net>
-Date: Sun, 9 Sep 2007 10:00:21 -0700
+Date: Sun, 9 Sep 2007 10:26:57 -0700
 Subject: [Buildroot] [buildroot 0001408]: Fail to build glib 2.12.9 (No
 	iconv() implementation found in C library or libiconv)
-Message-ID: <83af3a9bb9bc7cff55fccbc9511a580d@busybox.net>
+Message-ID: <44cc9055888862756ed41cd75c26f5b6@busybox.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -26,7 +26,7 @@ Priority:                   normal
 Status:                     assigned
 ====================================================================== 
 Date Submitted:             06-28-2007 12:55 PDT
-Last Modified:              09-09-2007 10:00 PDT
+Last Modified:              09-09-2007 10:26 PDT
 ====================================================================== 
 Summary:                    Fail to build glib 2.12.9 (No iconv() implementation
 found in C library or libiconv)
@@ -353,12 +353,43 @@ grep ^CC= libtool
 CC="/buildroot.orig/build_arm/staging_dir/usr/bin/arm-linux-uclibc-gcc -Os
 -pipe  -I/buildroot.orig/build_arm/staging_dir/usr/include
 -I/buildroot.orig/build_arm/staging_dir/include
---sysroot=/konectel/buildroot.orig/build_arm/staging_dir/ -isysroot
-/konectel/buildroot.orig/build_arm/staging_dir -mtune=arm920t"
+--sysroot=/buildroot.orig/build_arm/staging_dir/ -isysroot
+/buildroot.orig/build_arm/staging_dir -mtune=arm920t"
 
 and now glib is correctly built.
 
-Thanks for attention! 
+Thanks for attention!
+
+ 
+
+---------------------------------------------------------------------- 
+ vanokuten - 09-09-07 10:26  
+---------------------------------------------------------------------- 
+The same problem with atk:
+ atk-1.9.1]# grep ^CC= libtool
+CC="/buildroot.orig/build_arm/staging_dir/usr/bin/arm-linux-uclibc-gcc -Os
+-pipe  -I/buildroot.orig/build_arm/staging_dir/usr/include
+-I/buildroot.orig/build_arm/staging_dir/include
+--sysroot=/buildroot.orig/build_arm/staging_dir/ -isysroot
+/buildroot.orig/build_arm/staging_dir -mtune=arm920t"
+CC="g++"
+CC="f95"
+
+-----------
+f95 -shared  .libs/atkaction.o .libs/atkcomponent.o .libs/atkdocument.o
+.libs/atkeditabletext.o .libs/atkgobjectaccessible.o .libs/atkhyperlink.o
+.libs/atkhypertext.o .libs/atkimage.o .libs/atknoopobject.o
+.libs/atknoopobjectfactory.o .libs/atkobject.o .libs/atkobjectfactory.o
+.libs/atkregistry.o .libs/atkrelation.o .libs/atkrelationset.o
+.libs/atkselection.o .libs/atkstate.o .libs/atkstateset.o
+.libs/atkstreamablecontent.o .libs/atktable.o .libs/atktext.o
+
+...
+
+/usr/bin/ld: .libs/atkaction.o: Relocations in generic ELF (EM: 40)
+.libs/atkaction.o: could not read symbols: File in wrong format
+collect2: ld returned 1 exit status
+make[4]: *** [libatk-1.0.la] Error 1 
 
 Issue History 
 Date Modified   Username       Field                    Change               
@@ -371,4 +402,8 @@ Date Modified   Username       Field                    Change
 08-06-07 16:24  gururaj        Note Added: 0002650                          
 08-14-07 11:59  pavko          Note Added: 0002662                          
 09-09-07 10:00  vanokuten      Note Added: 0002736                          
+09-09-07 10:00  vanokuten      Note Edited: 0002736                         
+09-09-07 10:05  vanokuten      File Added: glib2-tagged-configuration-fix.patch 
+                  
+09-09-07 10:26  vanokuten      Note Added: 0002737                          
 ======================================================================
