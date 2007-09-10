@@ -1,409 +1,621 @@
-From: bugs at busybox.net <bugs@busybox.net>
-Date: Sun, 9 Sep 2007 10:26:57 -0700
-Subject: [Buildroot] [buildroot 0001408]: Fail to build glib 2.12.9 (No
-	iconv() implementation found in C library or libiconv)
-Message-ID: <44cc9055888862756ed41cd75c26f5b6@busybox.net>
+From: jacmet at uclibc.org <jacmet@uclibc.org>
+Date: Mon, 10 Sep 2007 00:38:04 -0700 (PDT)
+Subject: [Buildroot] svn commit: trunk/buildroot/package/busybox
+Message-ID: <20070910073804.A687630050@busybox.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+Author: jacmet
+Date: 2007-09-10 00:38:03 -0700 (Mon, 10 Sep 2007)
+New Revision: 19808
 
-A NOTE has been added to this issue. 
-====================================================================== 
-http://busybox.net/bugs/view.php?id=1408 
-====================================================================== 
-Reported By:                pavko
-Assigned To:                buildroot
-====================================================================== 
-Project:                    buildroot
-Issue ID:                   1408
-Category:                   Architecture Specific
-Reproducibility:            always
-Severity:                   major
-Priority:                   normal
-Status:                     assigned
-====================================================================== 
-Date Submitted:             06-28-2007 12:55 PDT
-Last Modified:              09-09-2007 10:26 PDT
-====================================================================== 
-Summary:                    Fail to build glib 2.12.9 (No iconv() implementation
-found in C library or libiconv)
-Description: 
-uClibc has been build with locale suport, gcc 4.2.0, arch i686
-also tried to compile newest 2.12.12 glib but without success
-(error dump is for 2.12.12 but 2.12.9 is behaving exactly the same)
-====================================================================== 
+Log:
+Busybox 1.7.0 patches
 
----------------------------------------------------------------------- 
- pavko - 07-22-07 10:25  
----------------------------------------------------------------------- 
-Solution on maillist:
-Hello,
+Added:
+   trunk/buildroot/package/busybox/busybox-1.7.0-gettimeofday_ns.patch
+   trunk/buildroot/package/busybox/busybox-1.7.0-readlink.patch
+   trunk/buildroot/package/busybox/busybox-1.7.0-targz_nommu.patch
+   trunk/buildroot/package/busybox/busybox-1.7.0-trylink.patch
 
-This patch disables building of iconv binary in uclibc ( it's failed when
-locale support is enabled).
-In turn correct building of uclibc with locale support gives correct build
-for glibc 2.12.9 - a bug was recently opened: 
- [buildroot 0001408]: Fail to build glib 2.12.9 (No iconv() implementation
-found in C library or libiconv)
 
-Actually it's just Assen Stoyanov's patch but made from root of buildroot
-for suitable applying in svn for maintainer.
-
-Without this patch glib build fails.
-
-Best regards, Ivan
-
----
-
-diff -urN buildroot.orig/toolchain/uClibc/uClibc.iconv.patch
-buildroot.new/toolchain/uClibc/uClibc.iconv.patch
---- buildroot.orig/toolchain/uClibc/uClibc.iconv.patch	1970-01-01 03:00:00
-+0300
-+++ buildroot.new/toolchain/uClibc/uClibc.iconv.patch	2007-06-29 16:15:24
-+0300
-@@ -0,0 +1,22 @@
-+--- uClibc-0.9.29-orig/utils/Makefile.in	2007-06-29 11:34:47.000000000
-+0300
-++++ uClibc-0.9.29/utils/Makefile.in	2007-06-29 11:33:03.000000000 +0300
-+@@ -52,7 +52,8 @@
-+ 
-+ utils_ICONV_OBJ =
-+ ifeq ($(UCLIBC_HAS_LOCALE),y)
-+-utils_ICONV_OBJ := $(utils_OUT)/iconv
-++# temporary disabled - compilation is broken!
-++#utils_ICONV_OBJ := $(utils_OUT)/iconv
-+ endif
-+ 
-+ utils_OBJ := $(patsubst %,$(utils_OUT)/%,$(utils_OBJ))
-+@@ -85,7 +86,8 @@
-+ 	$(INSTALL) -m 755 $(utils_OUT)/ldconfig
-$(PREFIX)$(RUNTIME_PREFIX)sbin/ldconfig
-+ endif
-+ ifeq ($(UCLIBC_HAS_LOCALE),y)
-+-	$(INSTALL) -m 755 $(utils_OUT)/iconv
-$(PREFIX)$(RUNTIME_PREFIX)usr/bin/iconv
-++	# temporary disabled - compilation is broken!
-++	#$(INSTALL) -m 755 $(utils_OUT)/iconv
-$(PREFIX)$(RUNTIME_PREFIX)usr/bin/iconv
-+ endif
-+ 
-+ objclean-y += utils_clean
-
-Works OK with iconv problem. But:
-
-checking for perl... /usr/bin/perl
-checking for iconv_open... yes
-checking how to run the C preprocessor...
-/home/pavko/buildroot/build_i686/staging_dir/bin/i686-linux-uclibc-cpp
-checking for grep that handles long lines and -e... /bin/grep
-checking for egrep... /bin/grep -E
-checking whether we are using the GNU C Library 2.1 or newer... yes
-checking Whether to cache iconv descriptors... no
-checking for ANSI C header files... yes
-checking for sys/types.h... yes
-checking for sys/stat.h... yes
-checking for stdlib.h... yes
-checking for string.h... yes
-checking for memory.h... yes
-checking for strings.h... yes
-checking for inttypes.h... yes
-checking for stdint.h... yes
-checking for unistd.h... yes
-checking locale.h usability... yes
-checking locale.h presence... yes
-checking for locale.h... yes
-checking for LC_MESSAGES... yes
-checking libintl.h usability... no
-checking libintl.h presence... no
-checking for libintl.h... no
-configure: error:
-*** You must have either have gettext support in your C library, or use
-the
-*** GNU gettext library.
-(http://www.gnu.org/software/gettext/gettext.html
-
-gettext library has been built without any problems - but glib does not
-see it. Header problem? 
-
----------------------------------------------------------------------- 
- gururaj - 08-02-07 21:27  
----------------------------------------------------------------------- 
-@pavko 
-
-  What i observed just now is that "make gettext" builds & installs
-libintl.h in correct $(BUILD_DIR)/staging_dir/usr/include directory but
-when making libglib2 it checks for uclibc build whcih removes libintl.h
-from $(BUILD_DIR)/staging_dir/usr/include directory. Also if i just again
-try make gettext for the 2nd time, the same happens as gettext also looks
-for uclibc build & this removes the libintl.h
-
-  In my Buiuldroot config i have enabled Support for WCHAR
-
- kindly, anyone help us resolve this.
-
-Regards
-Gururaja 
-
----------------------------------------------------------------------- 
- gururaj - 08-06-07 16:24  
----------------------------------------------------------------------- 
-Hi All,  
-
- I have explained in detail abt this error @
-http://www.nabble.com/Kindly-help-me-to-build-glib2-on-arm926-platform-tf4222891.html
-but still seems no one is there to help/sove this. 
-
-Regards
-Gururaja 
-
----------------------------------------------------------------------- 
- pavko - 08-14-07 11:59  
----------------------------------------------------------------------- 
-it's getting better but still there are some bugs in ?makefile?
-
-make[5]: Entering directory
-`/home/pavko/buildroot_svn/build_i686/glib-2.12.9/glib'
-/bin/bash ../libtool --mode=link
-/home/pavko/buildroot_svn/build_i686/staging_dir/usr/bin/i686-linux-uclibc-gcc
- -g -O2 -Wall   -o libglib-2.0.la -rpath /lib  -version-info 1200:9:1200
--export-dynamic  -export-symbols-regex "^[^_].*" garray.lo gasyncqueue.lo
-gatomic.lo gbacktrace.lo gbase64.lo gbookmarkfile.lo gcache.lo
-gcompletion.lo gconvert.lo gdataset.lo gdate.lo gdir.lo gerror.lo
-gfileutils.lo ghash.lo ghook.lo giochannel.lo gkeyfile.lo glist.lo
-gmain.lo gmappedfile.lo gmarkup.lo gmem.lo gmessages.lo gnode.lo
-goption.lo gpattern.lo gprimes.lo gqsort.lo gqueue.lo grel.lo grand.lo
-gscanner.lo gshell.lo gslice.lo gslist.lo gstdio.lo gstrfuncs.lo
-gstring.lo gthread.lo gthreadpool.lo gtimer.lo gtree.lo guniprop.lo
-gutf8.lo gunibreak.lo gunicollate.lo gunidecomp.lo gutils.lo gprintf.lo
-libcharset/libcharset.la gnulib/libgnulib.la giounix.lo gspawn.lo    
--lintl  
-libtool: link: unable to infer tagged configuration
-libtool: link: defaulting to `CC'
-libtool: link: if this is not correct, specify a tag with `--tag'
-rm -fr  .libs/libglib-2.0.exp
-generating symbol list for `libglib-2.0.la'
-/home/pavko/buildroot_svn/build_i686/staging_dir/usr/bin/i686-linux-uclibc-nm
- .libs/garray.o .libs/gasyncqueue.o .libs/gatomic.o .libs/gbacktrace.o
-.libs/gbase64.o .libs/gbookmarkfile.o .libs/gcache.o .libs/gcompletion.o
-.libs/gconvert.o .libs/gdataset.o .libs/gdate.o .libs/gdir.o
-.libs/gerror.o .libs/gfileutils.o .libs/ghash.o .libs/ghook.o
-.libs/giochannel.o .libs/gkeyfile.o .libs/glist.o .libs/gmain.o
-.libs/gmappedfile.o .libs/gmarkup.o .libs/gmem.o .libs/gmessages.o
-.libs/gnode.o .libs/goption.o .libs/gpattern.o .libs/gprimes.o
-.libs/gqsort.o .libs/gqueue.o .libs/grel.o .libs/grand.o .libs/gscanner.o
-.libs/gshell.o .libs/gslice.o .libs/gslist.o .libs/gstdio.o
-.libs/gstrfuncs.o .libs/gstring.o .libs/gthread.o .libs/gthreadpool.o
-.libs/gtimer.o .libs/gtree.o .libs/guniprop.o .libs/gutf8.o
-.libs/gunibreak.o .libs/gunicollate.o .libs/gunidecomp.o .libs/gutils.o
-.libs/gprintf.o .libs/giounix.o .libs/gspawn.o 
-libcharset/.libs/libcharset.a gnulib/.libs/libgnulib.a | sed -n -e 's/^.*[
-    ]\([ABCDGIRSTW][ABCDGIRSTW]*\)[         ][     
-]*\([_A-Za-z][_A-Za-z0-9]*\)$/\1 \2 \2/p' |
-/home/pavko/buildroot_svn/toolchain_build_i686/bin/sed 's/.* //' | sort |
-uniq > .libs/libglib-2.0.exp
-/bin/grep -E -e "^[^_].*" ".libs/libglib-2.0.exp" >
-".libs/libglib-2.0.expT"
-mv -f ".libs/libglib-2.0.expT" ".libs/libglib-2.0.exp"
-c++ -shared -nostdlib
-/usr/lib/gcc/i486-linux-gnu/4.1.2/../../../../lib/crti.o
-/usr/lib/gcc/i486-linux-gnu/4.1.2/crtbeginS.o  .libs/garray.o
-.libs/gasyncqueue.o .libs/gatomic.o .libs/gbacktrace.o .libs/gbase64.o
-.libs/gbookmarkfile.o .libs/gcache.o .libs/gcompletion.o .libs/gconvert.o
-.libs/gdataset.o .libs/gdate.o .libs/gdir.o .libs/gerror.o
-.libs/gfileutils.o .libs/ghash.o .libs/ghook.o .libs/giochannel.o
-.libs/gkeyfile.o .libs/glist.o .libs/gmain.o .libs/gmappedfile.o
-.libs/gmarkup.o .libs/gmem.o .libs/gmessages.o .libs/gnode.o
-.libs/goption.o .libs/gpattern.o .libs/gprimes.o .libs/gqsort.o
-.libs/gqueue.o .libs/grel.o .libs/grand.o .libs/gscanner.o .libs/gshell.o
-.libs/gslice.o .libs/gslist.o .libs/gstdio.o .libs/gstrfuncs.o
-.libs/gstring.o .libs/gthread.o .libs/gthreadpool.o .libs/gtimer.o
-.libs/gtree.o .libs/guniprop.o .libs/gutf8.o .libs/gunibreak.o
-.libs/gunicollate.o .libs/gunidecomp.o .libs/gutils.o .libs/gprintf.o
-.libs/giounix.o .libs/gspawn.o -Wl,--whole-archive
-libcharset/.libs/libcharset.a gnulib/.libs/libgnulib.a
--Wl,--no-whole-archive  -lintl -L/usr/lib/gcc/i486-linux-gnu/4.1.2
--L/usr/lib/gcc/i486-linux-gnu/4.1.2/../../../../lib -L/lib/../lib
--L/usr/lib/../lib -lstdc++ -lm -lc -lgcc_s
-/usr/lib/gcc/i486-linux-gnu/4.1.2/crtendS.o
-/usr/lib/gcc/i486-linux-gnu/4.1.2/../../../../lib/crtn.o  -Wl,-soname
--Wl,libglib-2.0.so.0 -Wl,-retain-symbols-file -Wl,.libs/libglib-2.0.exp -o
-.libs/libglib-2.0.so.0.1200.9
-/usr/bin/ld: cannot find -lintl
-collect2: ld returned 1 exit status
-make[5]: *** [libglib-2.0.la] Error 1
-make[5]: Leaving directory
-`/home/pavko/buildroot_svn/build_i686/glib-2.12.9/glib'
-make[4]: *** [all-recursive] Error 1
-make[4]: Leaving directory
-`/home/pavko/buildroot_svn/build_i686/glib-2.12.9/glib'
-make[3]: *** [all] Error 2
-make[3]: Leaving directory
-`/home/pavko/buildroot_svn/build_i686/glib-2.12.9/glib'
-make[2]: *** [all-recursive] Error 1
-make[2]: Leaving directory
-`/home/pavko/buildroot_svn/build_i686/glib-2.12.9'
-make[1]: *** [all] Error 2
-make[1]: Leaving directory
-`/home/pavko/buildroot_svn/build_i686/glib-2.12.9'
-make: ***
-[/home/pavko/buildroot_svn/build_i686/glib-2.12.9/glib/.libs/libglib-2.0.a]
-Error 2 
-
----------------------------------------------------------------------- 
- vanokuten - 09-09-07 10:00  
----------------------------------------------------------------------- 
-Some summary r19807:
-
-1) 
-
-checking for iconv_open... no
-checking for libiconv_open in -liconv... no
-checking for iconv_open in -liconv... no
-configure: error: *** No iconv() implementation found in C library or
-libiconv
-
-This error happens when using default uclibc config, also it's reproduced
-when
-using BR2_UCLIBC_CONFIG="toolchain/uClibc/uClibc-0.9.29-wchar.config" with
- not clean toolchain and build directories. If remove, for example,
-build_arm and toolchain_build_arm and rebuild - this error is gone.
-
-2) From pavko's log:
-...
-
-libtool: link: unable to infer tagged configuration
-libtool: link: defaulting to `CC'
-libtool: link: if this is not correct, specify a tag with `--tag'
-
-...
-
-/usr/bin/ld: cannot find -lintl
-collect2: ld returned 1 exit status
-make[5]: *** [libglib-2.0.la] Error 1
-
------------
-
-I have similar error but for arm arch:
-...
-libtool: compile: unable to infer tagged configuration
-libtool: compile: defaulting to `CC'
-libtool: compile: if this is not correct, specify a tag with `--tag'
-...
- gfortran -shared  .libs/garray.o .libs/gasyncqueue.o .libs/gatomic.o
-.libs/gbacktrace.o .libs/gbase64.o .libs/gbookmarkfile.o .libs/gcache.o
-.libs/gcompletion.o .libs/gconvert.o .libs/gdataset.o .libs/gdate.o
-.libs/gdir.o .libs/gerror.o .libs/gfileutils.o .libs/ghash.o .libs/ghook.o
-.libs/giochannel.o .libs/gkeyfile.o .libs/glist.o .libs/gmain.o
-.libs/gmappedfile.o .libs/gmarkup.o .libs/gmem.o .libs/gmessages.o
-.libs/gnode.o .libs/goption.o .libs/gpattern.o .libs/gprimes.o
-.libs/gqsort.o .libs/gqueue.o .libs/grel.o .libs/grand.o .libs/gscanner.o
-.libs/gshell.o .libs/gslice.o .libs/gslist.o .libs/gstdio.o
-.libs/gstrfuncs.o .libs/gstring.o .libs/gthread.o .libs/gthreadpool.o
-.libs/gtimer.o .libs/gtree.o .libs/guniprop.o .libs/gutf8.o
-.libs/gunibreak.o .libs/gunicollate.o .libs/gunidecomp.o .libs/gutils.o
-.libs/gprintf.o .libs/giounix.o .libs/gspawn.o -Wl,--whole-archive
-libcharset/.libs/libcharset.a gnulib/.libs/libgnulib.a
--Wl,--no-whole-archive  -lintl  -Wl,-soname -Wl,libglib-2.0.so.0
--Wl,-version-script -Wl,.libs/libglib-2.0.ver -o
-.libs/libglib-2.0.so.0.1200.9
-/usr/bin/ld: .libs/garray.o: Relocations in generic ELF (EM: 40)
-.libs/garray.o: could not read symbols: File in wrong format
-collect2: ld returned 1 exit status
-
--------
-
-Buildroot trying to use system-wide compiler&linker - thus resulting in
-"File in wrong format" or "/usr/bin/ld: cannot find -lintl" for x86 arch.
-
-Reassuring this via:
-
-grep ^CC= libtool
-CC="/buildroot.orig/build_arm/staging_dir/usr/bin/arm-linux-uclibc-gcc -Os
--pipe  -I/buildroot.orig/build_arm/staging_dir/usr/include
--I/buildroot.orig/build_arm/staging_dir/include
---sysroot=/buildroot.orig/build_arm/staging_dir/ -isysroot
-/buildroot.orig/build_arm/staging_dir -mtune=arm920t"
-CC="c++"
-CC="gfortran"
-
-So it catched my system-wide c++ and gfortran. Let's prevent this:
-
-Index: package/libglib2/libglib2.mk
+Changeset:
+Added: trunk/buildroot/package/busybox/busybox-1.7.0-gettimeofday_ns.patch
 ===================================================================
---- package/libglib2/libglib2.mk        (revision 19807)
-+++ package/libglib2/libglib2.mk        (working copy)
-@@ -83,6 +83,8 @@
-                ac_use_included_regex=no \
-                gl_cv_c_restrict=no \
-                ac_cv_path_GLIB_GENMARSHAL=/usr/bin/glib-genmarshal \
-+               ac_cv_prog_F77=no \
-+               ac_cv_prog_CXX=no \
-                ./configure \
-                --target=$(GNU_TARGET_NAME) \
-                --host=$(GNU_TARGET_NAME) \
+--- trunk/buildroot/package/busybox/busybox-1.7.0-gettimeofday_ns.patch	                        (rev 0)
++++ trunk/buildroot/package/busybox/busybox-1.7.0-gettimeofday_ns.patch	2007-09-10 07:38:03 UTC (rev 19808)
+@@ -0,0 +1,95 @@
++diff -urN busybox-1.7.0/networking/isrv.c busybox-1.7.0-gettimeofday_ns/networking/isrv.c
++--- busybox-1.7.0/networking/isrv.c	2007-08-24 11:49:41.000000000 +0100
+++++ busybox-1.7.0-gettimeofday_ns/networking/isrv.c	2007-09-06 17:39:55.000000000 +0100
++@@ -21,20 +21,6 @@
++ 
++ /* Helpers */
++ 
++-/* Even if _POSIX_MONOTONIC_CLOCK is defined, this
++- * may require librt */
++-#if 0 /*def _POSIX_MONOTONIC_CLOCK*/
++-static time_t monotonic_time(void)
++-{
++-	struct timespec ts;
++-	if (clock_gettime(CLOCK_MONOTONIC, &ts) != 0)
++-		time(&ts.tv_sec);
++-	return ts.tv_sec;
++-}
++-#else
++-#define monotonic_time() (time(NULL))
++-#endif
++-
++ /* Opaque structure */
++ 
++ struct isrv_state_t {
++@@ -258,7 +244,7 @@
++ 			/* this peer is gone */
++ 			remove_peer(state, peer);
++ 		} else if (TIMEOUT) {
++-			TIMEO_TBL[peer] = monotonic_time();
+++			TIMEO_TBL[peer] = monotonic_sec();
++ 		}
++ 	}
++ }
++@@ -335,7 +321,7 @@
++ 			break;
++ 
++ 		if (timeout) {
++-			time_t t = monotonic_time();
+++			time_t t = monotonic_sec();
++ 			if (t != CURTIME) {
++ 				CURTIME = t;
++ 				handle_timeout(state, do_timeout);
++diff -urN busybox-1.7.0/runit/runsv.c busybox-1.7.0-gettimeofday_ns/runit/runsv.c
++--- busybox-1.7.0/runit/runsv.c	2007-08-24 11:50:01.000000000 +0100
+++++ busybox-1.7.0-gettimeofday_ns/runit/runsv.c	2007-09-06 17:39:55.000000000 +0100
++@@ -33,6 +33,34 @@
++ #include "libbb.h"
++ #include "runit_lib.h"
++ 
+++#if ENABLE_MONOTONIC_SYSCALL
+++#include <sys/syscall.h>
+++
+++/* libc has incredibly messy way of doing this,
+++ * typically requiring -lrt. We just skip all this mess */
+++static void gettimeofday_ns(struct timespec *ts)
+++{
+++	syscall(__NR_clock_gettime, CLOCK_REALTIME, ts);
+++}
+++#else
+++static void gettimeofday_ns(struct timespec *ts)
+++{
+++	if (sizeof(struct timeval) == sizeof(struct timespec)
+++	 && sizeof(((struct timeval*)ts)->tv_usec) == sizeof(ts->tv_nsec)
+++	) {
+++		/* Cheat */
+++		gettimeofday((void*)ts, NULL);
+++		ts->tv_nsec *= 1000;
+++	} else {
+++		extern void BUG_need_to_implement_gettimeofday_ns(void);
+++		BUG_need_to_implement_gettimeofday_ns();
+++	}
+++}
+++#endif
+++
+++/* Compare possibly overflowing unsigned counters */
+++#define LESS(a,b) ((int)((unsigned)(b) - (unsigned)(a)) > 0)
+++
++ static int selfpipe[2];
++ 
++ /* state */
++@@ -126,14 +154,6 @@
++ 	return 0;
++ }
++ 
++-#define LESS(a,b) ((int)((unsigned)(b) - (unsigned)(a)) > 0)
++-
++-#include <sys/syscall.h>
++-static void gettimeofday_ns(struct timespec *ts)
++-{
++-	syscall(__NR_clock_gettime, CLOCK_REALTIME, ts);
++-}
++-
++ static void update_status(struct svdir *s)
++ {
++ 	ssize_t sz;
 
---------
+Added: trunk/buildroot/package/busybox/busybox-1.7.0-readlink.patch
+===================================================================
+--- trunk/buildroot/package/busybox/busybox-1.7.0-readlink.patch	                        (rev 0)
++++ trunk/buildroot/package/busybox/busybox-1.7.0-readlink.patch	2007-09-10 07:38:03 UTC (rev 19808)
+@@ -0,0 +1,107 @@
++diff -urN busybox-1.7.0/applets/applets.c busybox-1.7.0-readlink/applets/applets.c
++--- busybox-1.7.0/applets/applets.c	2007-08-24 11:50:02.000000000 +0100
+++++ busybox-1.7.0-readlink/applets/applets.c	2007-09-06 17:41:38.000000000 +0100
++@@ -546,7 +546,7 @@
++  help:
++ 		output_width = 80;
++ 		if (ENABLE_FEATURE_AUTOWIDTH) {
++-			/* Obtain the terminal width.  */
+++			/* Obtain the terminal width */
++ 			get_terminal_width_height(0, &output_width, NULL);
++ 		}
++ 		/* leading tab and room to wrap */
++@@ -580,12 +580,11 @@
++ 
++ 	if (ENABLE_FEATURE_INSTALLER && strcmp(argv[1], "--install") == 0) {
++ 		const char *busybox;
++-		busybox = xmalloc_readlink_or_warn(bb_busybox_exec_path);
+++		busybox = xmalloc_readlink(bb_busybox_exec_path);
++ 		if (!busybox)
++ 			busybox = bb_busybox_exec_path;
++ 		/* -s makes symlinks */
++-		install_links(busybox,
++-				 argv[2] && strcmp(argv[2], "-s") == 0);
+++		install_links(busybox, argv[2] && strcmp(argv[2], "-s") == 0);
++ 		return 0;
++ 	}
++ 
++diff -urN busybox-1.7.0/include/libbb.h busybox-1.7.0-readlink/include/libbb.h
++--- busybox-1.7.0/include/libbb.h	2007-08-24 11:49:55.000000000 +0100
+++++ busybox-1.7.0-readlink/include/libbb.h	2007-09-06 17:41:38.000000000 +0100
++@@ -248,9 +248,10 @@
++ DIR *xopendir(const char *path);
++ DIR *warn_opendir(const char *path);
++ 
++-char *xrealloc_getcwd_or_warn(char *cwd);
+++/* UNUSED: char *xmalloc_realpath(const char *path); */
+++char *xmalloc_readlink(const char *path);
++ char *xmalloc_readlink_or_warn(const char *path);
++-char *xmalloc_realpath(const char *path);
+++char *xrealloc_getcwd_or_warn(char *cwd);
++ 
++ 
++ //TODO: signal(sid, f) is the same? then why?
++@@ -316,8 +317,8 @@
++ };
++ /* Create stream socket, and allocate suitable lsa.
++  * (lsa of correct size and lsa->sa.sa_family (AF_INET/AF_INET6))
++- * af == AF_UNSPEC will result in trying to create IPv6, and
++- * if kernel doesn't support it, IPv4.
+++ * af == AF_UNSPEC will result in trying to create IPv6 socket,
+++ * and if kernel doesn't support it, IPv4.
++  */
++ int xsocket_type(len_and_sockaddr **lsap, USE_FEATURE_IPV6(int af,) int sock_type);
++ int xsocket_stream(len_and_sockaddr **lsap);
++diff -urN busybox-1.7.0/libbb/xreadlink.c busybox-1.7.0-readlink/libbb/xreadlink.c
++--- busybox-1.7.0/libbb/xreadlink.c	2007-08-24 11:49:51.000000000 +0100
+++++ busybox-1.7.0-readlink/libbb/xreadlink.c	2007-09-06 17:41:38.000000000 +0100
++@@ -10,8 +10,7 @@
++  * NOTE: This function returns a malloced char* that you will have to free
++  * yourself. You have been warned.
++  */
++-
++-char *xmalloc_readlink_or_warn(const char *path)
+++char *xmalloc_readlink(const char *path)
++ {
++ 	enum { GROWBY = 80 }; /* how large we will grow strings by */
++ 
++@@ -20,20 +19,30 @@
++ 
++ 	do {
++ 		buf = xrealloc(buf, bufsize += GROWBY);
++-		readsize = readlink(path, buf, bufsize); /* 1st try */
+++		readsize = readlink(path, buf, bufsize);
++ 		if (readsize == -1) {
++-			bb_perror_msg("%s", path);
++ 			free(buf);
++ 			return NULL;
++ 		}
++-	}
++-	while (bufsize < readsize + 1);
+++	} while (bufsize < readsize + 1);
++ 
++ 	buf[readsize] = '\0';
++ 
++ 	return buf;
++ }
++ 
+++char *xmalloc_readlink_or_warn(const char *path)
+++{
+++	char *buf = xmalloc_readlink(path);
+++	if (!buf) {
+++		/* EINVAL => "file: Invalid argument" => puzzled user */
+++		bb_error_msg("%s: cannot read link (not a symlink?)", path);
+++	}
+++	return buf;
+++}
+++
+++/* UNUSED */
+++#if 0
++ char *xmalloc_realpath(const char *path)
++ {
++ #if defined(__GLIBC__) && !defined(__UCLIBC__)
++@@ -46,3 +55,4 @@
++ 	return xstrdup(realpath(path, buf));
++ #endif
++ }
+++#endif
 
-rebuild and check configuration tags:
+Added: trunk/buildroot/package/busybox/busybox-1.7.0-targz_nommu.patch
+===================================================================
+--- trunk/buildroot/package/busybox/busybox-1.7.0-targz_nommu.patch	                        (rev 0)
++++ trunk/buildroot/package/busybox/busybox-1.7.0-targz_nommu.patch	2007-09-10 07:38:03 UTC (rev 19808)
+@@ -0,0 +1,282 @@
++diff -urN busybox-1.7.0/archival/bbunzip.c busybox-1.7.0-targz_nommu/archival/bbunzip.c
++--- busybox-1.7.0/archival/bbunzip.c	2007-08-24 11:49:45.000000000 +0100
+++++ busybox-1.7.0-targz_nommu/archival/bbunzip.c	2007-09-06 17:42:02.000000000 +0100
++@@ -298,7 +298,7 @@
++ int unlzma_main(int argc, char **argv);
++ int unlzma_main(int argc, char **argv)
++ {
++-	getopt32(argv, "c");
+++	getopt32(argv, "cf");
++ 	argv += optind;
++ 	/* lzmacat? */
++ 	if (applet_name[4] == 'c')
++diff -urN busybox-1.7.0/archival/libunarchive/Kbuild busybox-1.7.0-targz_nommu/archival/libunarchive/Kbuild
++--- busybox-1.7.0/archival/libunarchive/Kbuild	2007-08-24 11:49:45.000000000 +0100
+++++ busybox-1.7.0-targz_nommu/archival/libunarchive/Kbuild	2007-09-06 17:42:02.000000000 +0100
++@@ -35,36 +35,34 @@
++ 	get_header_tar.o \
++ 	filter_accept_list_reassign.o
++ 
++-# open_transformer uses fork(). Compile it only if absolutely necessary
++ lib-$(CONFIG_RPM)                       += open_transformer.o
++-lib-$(CONFIG_FEATURE_TAR_BZIP2)	        += open_transformer.o
++-lib-$(CONFIG_FEATURE_TAR_LZMA)	        += open_transformer.o
++-lib-$(CONFIG_FEATURE_TAR_GZIP)		+= open_transformer.o
++-lib-$(CONFIG_FEATURE_TAR_COMPRESS)	+= open_transformer.o
++-lib-$(CONFIG_FEATURE_DEB_TAR_GZ)	+= open_transformer.o
++-lib-$(CONFIG_FEATURE_DEB_TAR_BZ2)	+= open_transformer.o
++-lib-$(CONFIG_FEATURE_DEB_TAR_LZMA)	+= open_transformer.o
++-
++-lib-$(CONFIG_AR)			+= get_header_ar.o unpack_ar_archive.o
++-lib-$(CONFIG_BUNZIP2)			+= decompress_bunzip2.o
++-lib-$(CONFIG_UNLZMA)			+= decompress_unlzma.o
++-lib-$(CONFIG_CPIO)			+= get_header_cpio.o
++-lib-$(CONFIG_DPKG)			+= $(DPKG_FILES)
++-lib-$(CONFIG_DPKG_DEB)			+= $(DPKG_FILES)
++-lib-$(CONFIG_FEATURE_DEB_TAR_GZ)	+= $(GUNZIP_FILES) get_header_tar_gz.o
++-lib-$(CONFIG_FEATURE_DEB_TAR_BZ2)	+= decompress_bunzip2.o get_header_tar_bz2.o
++-lib-$(CONFIG_FEATURE_DEB_TAR_LZMA)	+= decompress_unlzma.o get_header_tar_lzma.o
++-lib-$(CONFIG_GUNZIP)			+= $(GUNZIP_FILES)
++-lib-$(CONFIG_FEATURE_GUNZIP_UNCOMPRESS)	+= decompress_uncompress.o
++-lib-$(CONFIG_RPM2CPIO)			+= $(GUNZIP_FILES) get_header_cpio.o
++-lib-$(CONFIG_RPM)			+= $(GUNZIP_FILES) get_header_cpio.o
++-lib-$(CONFIG_FEATURE_RPM_BZ2)		+= decompress_bunzip2.o
++-lib-$(CONFIG_TAR)			+= get_header_tar.o
++-lib-$(CONFIG_FEATURE_TAR_BZIP2)		+= decompress_bunzip2.o get_header_tar_bz2.o
++-lib-$(CONFIG_FEATURE_TAR_LZMA)		+= decompress_unlzma.o get_header_tar_lzma.o
++-lib-$(CONFIG_FEATURE_TAR_GZIP)		+= $(GUNZIP_FILES) get_header_tar_gz.o
++-lib-$(CONFIG_FEATURE_TAR_COMPRESS)	+= decompress_uncompress.o
++-lib-$(CONFIG_UNCOMPRESS)		+= decompress_uncompress.o
++-lib-$(CONFIG_UNZIP)			+= $(GUNZIP_FILES)
++-lib-$(CONFIG_FEATURE_COMPRESS_USAGE)	+= decompress_bunzip2.o
+++lib-$(CONFIG_FEATURE_TAR_BZIP2)         += open_transformer.o
+++lib-$(CONFIG_FEATURE_TAR_LZMA)          += open_transformer.o
+++lib-$(CONFIG_FEATURE_TAR_GZIP)          += open_transformer.o
+++lib-$(CONFIG_FEATURE_TAR_COMPRESS)      += open_transformer.o
+++lib-$(CONFIG_FEATURE_DEB_TAR_GZ)        += open_transformer.o
+++lib-$(CONFIG_FEATURE_DEB_TAR_BZ2)       += open_transformer.o
+++lib-$(CONFIG_FEATURE_DEB_TAR_LZMA)      += open_transformer.o
++ 
+++lib-$(CONFIG_AR)                        += get_header_ar.o unpack_ar_archive.o
+++lib-$(CONFIG_BUNZIP2)                   += decompress_bunzip2.o
+++lib-$(CONFIG_UNLZMA)                    += decompress_unlzma.o
+++lib-$(CONFIG_CPIO)                      += get_header_cpio.o
+++lib-$(CONFIG_DPKG)                      += $(DPKG_FILES)
+++lib-$(CONFIG_DPKG_DEB)                  += $(DPKG_FILES)
+++lib-$(CONFIG_FEATURE_DEB_TAR_GZ)        += $(GUNZIP_FILES) get_header_tar_gz.o
+++lib-$(CONFIG_FEATURE_DEB_TAR_BZ2)       += decompress_bunzip2.o get_header_tar_bz2.o
+++lib-$(CONFIG_FEATURE_DEB_TAR_LZMA)      += decompress_unlzma.o get_header_tar_lzma.o
+++lib-$(CONFIG_GUNZIP)                    += $(GUNZIP_FILES)
+++lib-$(CONFIG_FEATURE_GUNZIP_UNCOMPRESS) += decompress_uncompress.o
+++lib-$(CONFIG_RPM2CPIO)                  += $(GUNZIP_FILES) get_header_cpio.o
+++lib-$(CONFIG_RPM)                       += $(GUNZIP_FILES) get_header_cpio.o
+++lib-$(CONFIG_FEATURE_RPM_BZ2)           += decompress_bunzip2.o
+++lib-$(CONFIG_TAR)                       += get_header_tar.o
+++lib-$(CONFIG_FEATURE_TAR_BZIP2)         += decompress_bunzip2.o get_header_tar_bz2.o
+++lib-$(CONFIG_FEATURE_TAR_LZMA)          += decompress_unlzma.o get_header_tar_lzma.o
+++lib-$(CONFIG_FEATURE_TAR_GZIP)          += $(GUNZIP_FILES) get_header_tar_gz.o
+++lib-$(CONFIG_FEATURE_TAR_COMPRESS)      += decompress_uncompress.o
+++lib-$(CONFIG_UNCOMPRESS)                += decompress_uncompress.o
+++lib-$(CONFIG_UNZIP)                     += $(GUNZIP_FILES)
+++lib-$(CONFIG_FEATURE_COMPRESS_USAGE)    += decompress_bunzip2.o
++diff -urN busybox-1.7.0/archival/libunarchive/get_header_tar_bz2.c busybox-1.7.0-targz_nommu/archival/libunarchive/get_header_tar_bz2.c
++--- busybox-1.7.0/archival/libunarchive/get_header_tar_bz2.c	2007-08-24 11:49:45.000000000 +0100
+++++ busybox-1.7.0-targz_nommu/archival/libunarchive/get_header_tar_bz2.c	2007-09-06 17:42:02.000000000 +0100
++@@ -11,7 +11,7 @@
++ 	/* Can't lseek over pipes */
++ 	archive_handle->seek = seek_by_read;
++ 
++-	archive_handle->src_fd = open_transformer(archive_handle->src_fd, unpack_bz2_stream);
+++	archive_handle->src_fd = open_transformer(archive_handle->src_fd, unpack_bz2_stream, "bunzip2", "bunzip2", "-cf", "-", NULL);
++ 	archive_handle->offset = 0;
++ 	while (get_header_tar(archive_handle) == EXIT_SUCCESS) /**/;
++ 
++diff -urN busybox-1.7.0/archival/libunarchive/get_header_tar_gz.c busybox-1.7.0-targz_nommu/archival/libunarchive/get_header_tar_gz.c
++--- busybox-1.7.0/archival/libunarchive/get_header_tar_gz.c	2007-08-24 11:49:45.000000000 +0100
+++++ busybox-1.7.0-targz_nommu/archival/libunarchive/get_header_tar_gz.c	2007-09-06 17:42:02.000000000 +0100
++@@ -8,19 +8,26 @@
++ 
++ char get_header_tar_gz(archive_handle_t *archive_handle)
++ {
+++#if BB_MMU
++ 	unsigned char magic[2];
+++#endif
++ 
++ 	/* Can't lseek over pipes */
++ 	archive_handle->seek = seek_by_read;
++ 
+++	/* Check gzip magic only if open_transformer will invoke unpack_gz_stream (MMU case).
+++	 * Otherwise, it will invoke an external helper "gunzip -cf" (NOMMU case) which will
+++	 * need the header. */
+++#if BB_MMU
++ 	xread(archive_handle->src_fd, &magic, 2);
++ 	if ((magic[0] != 0x1f) || (magic[1] != 0x8b)) {
++ 		bb_error_msg_and_die("invalid gzip magic");
++ 	}
++ 
++ 	check_header_gzip_or_die(archive_handle->src_fd);
+++#endif
++ 
++-	archive_handle->src_fd = open_transformer(archive_handle->src_fd, unpack_gz_stream);
+++	archive_handle->src_fd = open_transformer(archive_handle->src_fd, unpack_gz_stream, "gunzip", "gunzip", "-cf", "-", NULL);
++ 	archive_handle->offset = 0;
++ 	while (get_header_tar(archive_handle) == EXIT_SUCCESS) /**/;
++ 
++diff -urN busybox-1.7.0/archival/libunarchive/get_header_tar_lzma.c busybox-1.7.0-targz_nommu/archival/libunarchive/get_header_tar_lzma.c
++--- busybox-1.7.0/archival/libunarchive/get_header_tar_lzma.c	2007-08-24 11:49:45.000000000 +0100
+++++ busybox-1.7.0-targz_nommu/archival/libunarchive/get_header_tar_lzma.c	2007-09-06 17:42:02.000000000 +0100
++@@ -14,7 +14,7 @@
++ 	/* Can't lseek over pipes */
++ 	archive_handle->seek = seek_by_read;
++ 
++-	archive_handle->src_fd = open_transformer(archive_handle->src_fd, unpack_lzma_stream);
+++	archive_handle->src_fd = open_transformer(archive_handle->src_fd, unpack_lzma_stream, "unlzma", "unlzma", "-cf", "-", NULL);
++ 	archive_handle->offset = 0;
++ 	while (get_header_tar(archive_handle) == EXIT_SUCCESS) /**/;
++ 
++diff -urN busybox-1.7.0/archival/libunarchive/open_transformer.c busybox-1.7.0-targz_nommu/archival/libunarchive/open_transformer.c
++--- busybox-1.7.0/archival/libunarchive/open_transformer.c	2007-08-24 11:49:45.000000000 +0100
+++++ busybox-1.7.0-targz_nommu/archival/libunarchive/open_transformer.c	2007-09-05 12:28:55.000000000 +0100
++@@ -7,27 +7,48 @@
++ #include "unarchive.h"
++ 
++ /* transformer(), more than meets the eye */
+++/*
+++ * On MMU machine, the transform_prog and ... are stripped
+++ * by a macro in include/unarchive.h. On NOMMU, transformer is stripped.
+++ */
++ int open_transformer(int src_fd,
++-	USE_DESKTOP(long long) int (*transformer)(int src_fd, int dst_fd))
+++	USE_DESKTOP(long long) int (*transformer)(int src_fd, int dst_fd),
+++	const char *transform_prog, ...)
++ {
++ 	int fd_pipe[2];
++ 	int pid;
++ 
++ 	xpipe(fd_pipe);
++ 
+++#if BB_MMU
++ 	pid = fork();
++-	if (pid == -1) {
+++#else
+++	pid = vfork();
+++#endif
+++	if (pid == -1)
++ 		bb_perror_msg_and_die("fork failed");
++-	}
++ 
++ 	if (pid == 0) {
+++#if !BB_MMU
+++		va_list ap;
+++#endif
++ 		/* child process */
++ 		close(fd_pipe[0]); /* We don't wan't to read from the parent */
++ 		// FIXME: error check?
+++#if BB_MMU
++ 		transformer(src_fd, fd_pipe[1]);
++-		close(fd_pipe[1]); /* Send EOF */
++-		close(src_fd);
+++		if (ENABLE_FEATURE_CLEAN_UP) {
+++			close(fd_pipe[1]); /* Send EOF */
+++			close(src_fd);
+++		}
++ 		exit(0);
+++#else
+++		xmove_fd(src_fd, 0);
+++		xmove_fd(fd_pipe[1], 1);
+++		va_start(ap, transform_prog);
+++		BB_EXECVP(transform_prog, ap);
+++		bb_perror_and_die("exec failed");
+++#endif
++ 		/* notreached */
++ 	}
++ 
++diff -urN busybox-1.7.0/archival/rpm.c busybox-1.7.0-targz_nommu/archival/rpm.c
++--- busybox-1.7.0/archival/rpm.c	2007-08-24 11:49:45.000000000 +0100
+++++ busybox-1.7.0-targz_nommu/archival/rpm.c	2007-09-06 17:42:02.000000000 +0100
++@@ -187,9 +187,15 @@
++ 
++ static void extract_cpio_gz(int fd)
++ {
++-	USE_DESKTOP(long long) int (*xformer)(int src_fd, int dst_fd);
++ 	archive_handle_t *archive_handle;
++ 	unsigned char magic[2];
+++#if BB_MMU
+++	USE_DESKTOP(long long) int (*xformer)(int src_fd, int dst_fd);
+++	enum { xformer_prog = 0 };
+++#else
+++	enum { xformer = 0 };
+++	const char *xformer_prog;
+++#endif
++ 
++ 	/* Initialize */
++ 	archive_handle = init_handle();
++@@ -202,11 +208,19 @@
++ 	archive_handle->offset = 0;
++ 
++ 	xread(archive_handle->src_fd, &magic, 2);
+++#if BB_MMU
++ 	xformer = unpack_gz_stream;
+++#else
+++	xformer_prog = "gunzip";
+++#endif
++ 	if ((magic[0] != 0x1f) || (magic[1] != 0x8b)) {
++ 		if (ENABLE_FEATURE_RPM_BZ2
++ 		 && (magic[0] == 0x42) && (magic[1] == 0x5a)) {
+++#if BB_MMU
++ 			xformer = unpack_bz2_stream;
+++#else
+++			xformer_prog = "bunzip2";
+++#endif
++ 	/* We can do better, need modifying unpack_bz2_stream to not require
++ 	 * first 2 bytes. Not very hard to do... I mean, TODO :) */
++ 			xlseek(archive_handle->src_fd, -2, SEEK_CUR);
++@@ -214,11 +228,17 @@
++ 			bb_error_msg_and_die("no gzip"
++ 				USE_FEATURE_RPM_BZ2("/bzip")
++ 				" magic");
++-	} else
+++	} else {
++ 		check_header_gzip_or_die(archive_handle->src_fd);
+++#if !BB_MMU
+++		/* NOMMU version of open_transformer execs an external unzipper that should
+++		 * have the file position at the start of the file */
+++		xlseek(archive_handle->src_fd, 0, SEEK_SET);
+++#endif
+++	}
++ 
++ 	xchdir("/"); /* Install RPM's to root */
++-	archive_handle->src_fd = open_transformer(archive_handle->src_fd, xformer);
+++	archive_handle->src_fd = open_transformer(archive_handle->src_fd, xformer, xformer_prog, xformer_prog, "-cf", "-", NULL);
++ 	archive_handle->offset = 0;
++ 	while (get_header_cpio(archive_handle) == EXIT_SUCCESS)
++ 		continue;
++diff -urN busybox-1.7.0/archival/tar.c busybox-1.7.0-targz_nommu/archival/tar.c
++--- busybox-1.7.0/archival/tar.c	2007-08-24 11:49:45.000000000 +0100
+++++ busybox-1.7.0-targz_nommu/archival/tar.c	2007-09-06 17:42:02.000000000 +0100
++@@ -648,7 +648,7 @@
++ 		bb_error_msg_and_die("invalid magic");
++ 	}
++ 
++-	archive_handle->src_fd = open_transformer(archive_handle->src_fd, uncompress);
+++	archive_handle->src_fd = open_transformer(archive_handle->src_fd, uncompress, "uncompress", "uncompress", "-cf", "-", NULL);
++ 	archive_handle->offset = 0;
++ 	while (get_header_tar(archive_handle) == EXIT_SUCCESS)
++ 		/* nothing */;
++diff -urN busybox-1.7.0/include/unarchive.h busybox-1.7.0-targz_nommu/include/unarchive.h
++--- busybox-1.7.0/include/unarchive.h	2007-08-24 11:49:55.000000000 +0100
+++++ busybox-1.7.0-targz_nommu/include/unarchive.h	2007-09-06 17:42:02.000000000 +0100
++@@ -115,7 +115,13 @@
++ extern USE_DESKTOP(long long) int unpack_gz_stream(int src_fd, int dst_fd);
++ extern USE_DESKTOP(long long) int unpack_lzma_stream(int src_fd, int dst_fd);
++ 
+++#if BB_MMU
++ extern int open_transformer(int src_fd,
++ 	USE_DESKTOP(long long) int (*transformer)(int src_fd, int dst_fd));
+++#define open_transformer(src_fd, transformer, transform_prog, ...) open_transformer(src_fd, transformer)
+++#else
+++extern int open_transformer(int src_fd, const char *transform_prog, ...);
+++#define open_transformer(src_fd, transformer, transform_prog, ...) open_transformer(src_fd, transform_prog, __VA_ARGS__)
+++#endif
++ 
++ #endif
 
-grep ^CC= libtool
-CC="/buildroot.orig/build_arm/staging_dir/usr/bin/arm-linux-uclibc-gcc -Os
--pipe  -I/buildroot.orig/build_arm/staging_dir/usr/include
--I/buildroot.orig/build_arm/staging_dir/include
---sysroot=/buildroot.orig/build_arm/staging_dir/ -isysroot
-/buildroot.orig/build_arm/staging_dir -mtune=arm920t"
-
-and now glib is correctly built.
-
-Thanks for attention!
-
- 
-
----------------------------------------------------------------------- 
- vanokuten - 09-09-07 10:26  
----------------------------------------------------------------------- 
-The same problem with atk:
- atk-1.9.1]# grep ^CC= libtool
-CC="/buildroot.orig/build_arm/staging_dir/usr/bin/arm-linux-uclibc-gcc -Os
--pipe  -I/buildroot.orig/build_arm/staging_dir/usr/include
--I/buildroot.orig/build_arm/staging_dir/include
---sysroot=/buildroot.orig/build_arm/staging_dir/ -isysroot
-/buildroot.orig/build_arm/staging_dir -mtune=arm920t"
-CC="g++"
-CC="f95"
-
------------
-f95 -shared  .libs/atkaction.o .libs/atkcomponent.o .libs/atkdocument.o
-.libs/atkeditabletext.o .libs/atkgobjectaccessible.o .libs/atkhyperlink.o
-.libs/atkhypertext.o .libs/atkimage.o .libs/atknoopobject.o
-.libs/atknoopobjectfactory.o .libs/atkobject.o .libs/atkobjectfactory.o
-.libs/atkregistry.o .libs/atkrelation.o .libs/atkrelationset.o
-.libs/atkselection.o .libs/atkstate.o .libs/atkstateset.o
-.libs/atkstreamablecontent.o .libs/atktable.o .libs/atktext.o
-
-...
-
-/usr/bin/ld: .libs/atkaction.o: Relocations in generic ELF (EM: 40)
-.libs/atkaction.o: could not read symbols: File in wrong format
-collect2: ld returned 1 exit status
-make[4]: *** [libatk-1.0.la] Error 1 
-
-Issue History 
-Date Modified   Username       Field                    Change               
-====================================================================== 
-06-28-07 12:55  pavko          New Issue                                    
-06-28-07 12:55  pavko          Status                   new => assigned     
-06-28-07 12:55  pavko          Assigned To               => buildroot       
-07-22-07 10:25  pavko          Note Added: 0002626                          
-08-02-07 21:27  gururaj        Note Added: 0002649                          
-08-06-07 16:24  gururaj        Note Added: 0002650                          
-08-14-07 11:59  pavko          Note Added: 0002662                          
-09-09-07 10:00  vanokuten      Note Added: 0002736                          
-09-09-07 10:00  vanokuten      Note Edited: 0002736                         
-09-09-07 10:05  vanokuten      File Added: glib2-tagged-configuration-fix.patch 
-                  
-09-09-07 10:26  vanokuten      Note Added: 0002737                          
-======================================================================
+Added: trunk/buildroot/package/busybox/busybox-1.7.0-trylink.patch
+===================================================================
+--- trunk/buildroot/package/busybox/busybox-1.7.0-trylink.patch	                        (rev 0)
++++ trunk/buildroot/package/busybox/busybox-1.7.0-trylink.patch	2007-09-10 07:38:03 UTC (rev 19808)
+@@ -0,0 +1,89 @@
++diff -urN busybox-1.7.0/scripts/trylink busybox-1.7.0-trylink/scripts/trylink
++--- busybox-1.7.0/scripts/trylink	2007-08-24 11:49:43.000000000 +0100
+++++ busybox-1.7.0-trylink/scripts/trylink	2007-09-03 12:08:18.000000000 +0100
++@@ -14,37 +14,30 @@
++ BBOX_LIB_LIST=`echo "$BBOX_LIB_LIST" | xargs -n1 | sort | uniq | xargs`
++ 
++ # First link with all libs. If it fails, bail out
++-l_list=`echo "$BBOX_LIB_LIST" | sed -e 's/ / -l/g' -e 's/^/-l/'`
++ echo "Trying libraries: $BBOX_LIB_LIST"
++-try "-Wl,--start-group $l_list -Wl,--end-group" "$@" \
+++l_list=`echo "$BBOX_LIB_LIST" | sed -e 's/ / -l/g' -e 's/^/-l/' -e 's/^-l$//'`
+++test "x$l_list" != "x" && l_list="-Wl,--start-group $l_list -Wl,--end-group"
+++try "$l_list" "$@" \
++ || {
++     echo "Failed: $* -Wl,--start-group $l_list -Wl,--end-group"
++     cat busybox_ld.err
++     exit 1
++ }
++ 
++-#### Hack disabled: conflicts with ld --verbose flag in last link phase
++-
++-##### Hack: we are not supposed to know executable name,
++-##### but this hack cuts down link time
++-####mv busybox_unstripped busybox_unstripped.tmp
++-####mv busybox.map        busybox.map.tmp
++-
++ # Now try to remove each lib and build without it.
++ # Stop when no lib can be removed.
++-####ever_discarded=false
++ while test "$BBOX_LIB_LIST"; do
++     $debug && echo "Trying libraries: $BBOX_LIB_LIST"
++     all_needed=true
++     for one in $BBOX_LIB_LIST; do
++ 	without_one=`echo " $BBOX_LIB_LIST " | sed "s/ $one / /g" | xargs`
++-	l_list=`echo "$without_one" | sed -e 's/ / -l/g' -e 's/^/-l/'`
++-	$debug && echo "Trying -l options: $l_list"
++-	if try "-Wl,--start-group $l_list -Wl,--end-group" "$@"; then
+++	l_list=`echo "$without_one" | sed -e 's/ / -l/g' -e 's/^/-l/' -e 's/^-l$//'`
+++	test "x$l_list" != "x" && l_list="-Wl,--start-group $l_list -Wl,--end-group"
+++	$debug && echo "Trying -l options: '$l_list'"
+++	if try "$l_list" "$@"; then
++ 		echo "Library $one is not needed"
++ 		BBOX_LIB_LIST="$without_one"
++ 		all_needed=false
++-####		ever_discarded=true
++ 	else
++ 		echo "Library $one is needed"
++ 	fi
++@@ -57,24 +50,19 @@
++     #{ echo "$BBOX_LIB_LIST" | grep -q ' '; } || break
++ done
++ 
++-####mv busybox_unstripped.tmp busybox_unstripped
++-####mv busybox.map.tmp        busybox.map
++-####$ever_discarded && {
++-    # Make the binary with final, minimal list of libs
++-    echo "Final link with: $BBOX_LIB_LIST"
++-    l_list=`echo "$BBOX_LIB_LIST" | sed -e 's/ / -l/g' -e 's/^/-l/'`
++-    # --verbose gives us gobs of info to stdout (e.g. linker script used)
++-    if ! test -f busybox_ldscript; then
++-	try "-Wl,--start-group $l_list -Wl,--end-group -Wl,--verbose" "$@" >busybox_ld.out ####|| exit 1
++-    else
++-	echo "Custom linker script 'busybox_ldscript' found, using it"
++-	# Add SORT_BY_ALIGNMENT to linker script (found in busybox_ld.out):
++-	#  .rodata         : { *(.rodata SORT_BY_ALIGNMENT(.rodata.*) .gnu.linkonce.r.*) }
++-	#  *(.data SORT_BY_ALIGNMENT(.data.*) .gnu.linkonce.d.*)
++-	#  *(.bss SORT_BY_ALIGNMENT(.bss.*) .gnu.linkonce.b.*)
++-	# This will eliminate most of the data padding (~3kb).
++-	try "-Wl,--start-group $l_list -Wl,--end-group -Wl,--verbose -Wl,-T -Wl,busybox_ldscript" "$@" >busybox_ld.out
++-    fi
++-####}
++-####rm busybox_ld.err
++-####exit 0  # Ensure "success" exit code
+++# Make the binary with final, minimal list of libs
+++echo "Final link with: $BBOX_LIB_LIST"
+++l_list=`echo "$BBOX_LIB_LIST" | sed -e 's/ / -l/g' -e 's/^/-l/' -e 's/^-l$//'`
+++test "x$l_list" != "x" && l_list="-Wl,--start-group $l_list -Wl,--end-group -Wl,--verbose"
+++# --verbose gives us gobs of info to stdout (e.g. linker script used)
+++if ! test -f busybox_ldscript; then
+++    try "$l_list -Wl,--verbose" "$@" >busybox_ld.out
+++else
+++    echo "Custom linker script 'busybox_ldscript' found, using it"
+++    # Add SORT_BY_ALIGNMENT to linker script (found in busybox_ld.out):
+++    #  .rodata         : { *(.rodata SORT_BY_ALIGNMENT(.rodata.*) .gnu.linkonce.r.*) }
+++    #  *(.data SORT_BY_ALIGNMENT(.data.*) .gnu.linkonce.d.*)
+++    #  *(.bss SORT_BY_ALIGNMENT(.bss.*) .gnu.linkonce.b.*)
+++    # This will eliminate most of the data padding (~3kb).
+++    try "$l_list -Wl,--verbose -Wl,-T -Wl,busybox_ldscript" "$@" >busybox_ld.out
+++fi
