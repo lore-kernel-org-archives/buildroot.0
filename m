@@ -1,43 +1,114 @@
-From: Bernhard Fischer <rep.dot.nop@gmail.com>
-Date: Tue, 11 Sep 2007 20:35:33 +0200
-Subject: [Buildroot] this commit breaks x86_64 toolchain builds
-In-Reply-To: <e83232070709101445l7db6927dx8a166ef8e9db8572@mail.gmail.com>
-References: <e83232070709060559u27a12f78u1ddb96d7c4d7bc20@mail.gmail.com>
-	<20070907131447.GD17733@aon.at>
-	<e83232070709101445l7db6927dx8a166ef8e9db8572@mail.gmail.com>
-Message-ID: <20070911183533.GD20058@aon.at>
+From: andersen at uclibc.org <andersen@uclibc.org>
+Date: Tue, 11 Sep 2007 12:07:13 -0700 (PDT)
+Subject: [Buildroot] svn commit: trunk/buildroot/toolchain/kernel-headers
+Message-ID: <20070911190713.A0773A614E@busybox.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Tue, Sep 11, 2007 at 07:45:09AM +1000, Roderick Taylor wrote:
->On 07/09/2007, Bernhard Fischer <rep.dot.nop@gmail.com> wrote:
->> On Thu, Sep 06, 2007 at 10:59:56PM +1000, Roderick Taylor wrote:
->> >x86_64, by default uses the lib64 directory to hold 64-bit libraries.
->> >not the lib directory as assumed by this commit.
->>
->> I don't see how the patch mentioned below is the culprit?
->
->the "-" infront of the cp means ignore errors.  When you build for
->x86_64, buildroot puts libgcc_s* etc. in $(REAL_GNU_TARGET_NAME)/lib64
->not in lib.  so this line will produce an error, and because the patch
->stops make from ignoring this, the build stops.
->
->-	-cp -dpf $(STAGING_DIR)/usr/$(REAL_GNU_TARGET_NAME)/lib/libgcc_s*
->$(TARGET_DIR)/lib/
->+	cp -dpf $(STAGING_DIR)/usr/$(REAL_GNU_TARGET_NAME)/lib/libgcc_s*
->
->
->> Isn't there a target_gcc_lib_dir we should rather use?
->>
->
->I don't know.   I know we can either modify the gcc build to install
->into lib instead of lib64 but I haven't tried it.
+Author: andersen
+Date: 2007-09-11 12:07:12 -0700 (Tue, 11 Sep 2007)
+New Revision: 19817
 
-If the cp errors are ignored, you'd have no libgcc on the target, is
-that assumption correct? If so, the we have to handle lib64 in a better
-way. Please verify and let me know..
+Log:
+bump up a few version numbers.  kill dead 2.6.19 option.
+accomodate powerpc64
 
-TIA,
+
+Modified:
+   trunk/buildroot/toolchain/kernel-headers/Config.in
+   trunk/buildroot/toolchain/kernel-headers/kernel-headers-new.makefile
+   trunk/buildroot/toolchain/kernel-headers/kernel-headers.mk
+
+
+Changeset:
+Modified: trunk/buildroot/toolchain/kernel-headers/Config.in
+===================================================================
+--- trunk/buildroot/toolchain/kernel-headers/Config.in	2007-09-11 16:28:14 UTC (rev 19816)
++++ trunk/buildroot/toolchain/kernel-headers/Config.in	2007-09-11 19:07:12 UTC (rev 19817)
+@@ -40,10 +40,6 @@
+ 		depends !BR2_avr32 && !BR2_nios2 && BR2_DEPRECATED
+ 		bool "Linux 2.6.12 kernel headers"
+ 
+-	config BR2_KERNEL_HEADERS_2_6_19_2
+-		depends !BR2_avr32 && !BR2_nios2 && BR2_DEPRECATED
+-		bool "Linux 2.6.19.2 kernel headers"
+-
+ 	config BR2_KERNEL_HEADERS_2_6_20
+ 		depends !BR2_avr32 && !BR2_nios2 && BR2_DEPRECATED
+ 		bool "Linux 2.6.20 kernel headers"
+@@ -91,9 +87,8 @@
+ 	default "2.6.9"     if BR2_KERNEL_HEADERS_2_6_9
+ 	default "2.6.11"    if BR2_KERNEL_HEADERS_2_6_11
+ 	default "2.6.12"    if BR2_KERNEL_HEADERS_2_6_12
+-	default "2.6.19.2"  if BR2_KERNEL_HEADERS_2_6_19_2
+-	default "2.6.20.4"  if BR2_KERNEL_HEADERS_2_6_20
+-	default "2.6.21.5"  if BR2_KERNEL_HEADERS_2_6_21
+-	default "2.6.22.1"  if BR2_KERNEL_HEADERS_2_6_22
++	default "2.6.20.19"  if BR2_KERNEL_HEADERS_2_6_20
++	default "2.6.21.7"  if BR2_KERNEL_HEADERS_2_6_21
++	default "2.6.22.6"  if BR2_KERNEL_HEADERS_2_6_22
+ 
+ endmenu
+
+Modified: trunk/buildroot/toolchain/kernel-headers/kernel-headers-new.makefile
+===================================================================
+--- trunk/buildroot/toolchain/kernel-headers/kernel-headers-new.makefile	2007-09-11 16:28:14 UTC (rev 19816)
++++ trunk/buildroot/toolchain/kernel-headers/kernel-headers-new.makefile	2007-09-11 19:07:12 UTC (rev 19817)
+@@ -3,11 +3,11 @@
+ # full kernel tarballs >= 2.6.19.1
+ #
+ #############################################################
+-ifeq ("$(DEFAULT_KERNEL_HEADERS)","2.6.22.1")
++ifeq ("$(DEFAULT_KERNEL_HEADERS)","2.6.22.6")
+ VERSION:=2
+ PATCHLEVEL:=6
+ SUBLEVEL:=22
+-EXTRAVERSION:=.1
++EXTRAVERSION:=.6
+ LOCALVERSION:=
+ LINUX_HEADERS_VERSION:=$(VERSION).$(PATCHLEVEL).$(SUBLEVEL)$(EXTRAVERSION)
+ LINUX_HEADERS_SITE:=http://www.kernel.org/pub/linux/kernel/v2.6/
+@@ -18,11 +18,11 @@
+ LINUX_HEADERS_IS_KERNEL=y
+ endif
+ 
+-ifeq ("$(DEFAULT_KERNEL_HEADERS)","2.6.21.5")
++ifeq ("$(DEFAULT_KERNEL_HEADERS)","2.6.21.7")
+ VERSION:=2
+ PATCHLEVEL:=6
+ SUBLEVEL:=21
+-EXTRAVERSION:=.5
++EXTRAVERSION:=.7
+ LOCALVERSION:=
+ LINUX_HEADERS_VERSION:=$(VERSION).$(PATCHLEVEL).$(SUBLEVEL)$(EXTRAVERSION)
+ LINUX_HEADERS_SITE:=http://www.kernel.org/pub/linux/kernel/v2.6/
+@@ -33,11 +33,11 @@
+ LINUX_HEADERS_IS_KERNEL=y
+ endif
+ 
+-ifeq ("$(DEFAULT_KERNEL_HEADERS)","2.6.20.4")
++ifeq ("$(DEFAULT_KERNEL_HEADERS)","2.6.20.19")
+ VERSION:=2
+ PATCHLEVEL:=6
+ SUBLEVEL:=20
+-EXTRAVERSION:=.4
++EXTRAVERSION:=.19
+ LOCALVERSION:=
+ LINUX_HEADERS_VERSION:=$(VERSION).$(PATCHLEVEL).$(SUBLEVEL)$(EXTRAVERSION)
+ LINUX_HEADERS_SITE:=http://www.kernel.org/pub/linux/kernel/v2.6/
+
+Modified: trunk/buildroot/toolchain/kernel-headers/kernel-headers.mk
+===================================================================
+--- trunk/buildroot/toolchain/kernel-headers/kernel-headers.mk	2007-09-11 16:28:14 UTC (rev 19816)
++++ trunk/buildroot/toolchain/kernel-headers/kernel-headers.mk	2007-09-11 19:07:12 UTC (rev 19817)
+@@ -16,6 +16,7 @@
+ 	-e s/i.86/i386/ -e s/sun4u/sparc64/ \
+ 	-e s/arm.*/arm/ -e s/sa110/arm/ \
+ 	-e s/s390x/s390/ -e s/parisc64/parisc/ \
++	-e s/powerpc64/powerpc/ \
+ 	-e s/ppc.*/powerpc/ -e s/mips.*/mips/ \
+ 	-e s/sh2.*/sh/ -e s/sh3.*/sh/ -e s/sh4.*/sh/")
+ 
