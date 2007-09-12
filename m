@@ -1,61 +1,47 @@
-From: bugs at busybox.net <bugs@busybox.net>
-Date: Wed, 12 Sep 2007 08:54:55 -0700
-Subject: [Buildroot] [buildroot 0001499]: 0.9.29 fails to compile: sysdep.h:
-	No such file or directory
-Message-ID: <2d10dd83b264c36a748f9b2c13fbe62c@busybox.net>
+From: andersen at uclibc.org <andersen@uclibc.org>
+Date: Wed, 12 Sep 2007 10:33:11 -0700 (PDT)
+Subject: [Buildroot] svn commit: trunk/buildroot/package/dm
+Message-ID: <20070912173311.670CFA685D@busybox.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+Author: andersen
+Date: 2007-09-12 10:33:10 -0700 (Wed, 12 Sep 2007)
+New Revision: 19828
 
-The following issue has been SUBMITTED. 
-====================================================================== 
-http://busybox.net/bugs/view.php?id=1499 
-====================================================================== 
-Reported By:                bgs
-Assigned To:                buildroot
-====================================================================== 
-Project:                    buildroot
-Issue ID:                   1499
-Category:                   Architecture Specific
-Reproducibility:            always
-Severity:                   block
-Priority:                   normal
-Status:                     assigned
-====================================================================== 
-Date Submitted:             09-12-2007 08:54 PDT
-Last Modified:              09-12-2007 08:54 PDT
-====================================================================== 
-Summary:                    0.9.29 fails to compile: sysdep.h: No such file or
-directory
-Description: 
-Compilation fails with the following error:
+Log:
+revert this bit, use usr/include
 
-In file included from
-./libpthread/linuxthreads/sysdeps/i386/i686/pt-machine.h:73,
-                 from
-./libpthread/linuxthreads/sysdeps/i386/pt-machine.h:24,
-                 from ./libpthread/linuxthreads/sysdeps/i386/tls.h:23,
-                 from ./include/bits/uClibc_errno.h:35,
-                 from ./include/errno.h:62,
-                 from ./include/bits/syscalls.h:14,
-                 from ./include/sys/syscall.h:34,
-                 from ./ldso/ldso/i386/dl-syscalls.h:3,
-                 from ./ldso/include/dl-syscall.h:12,
-                 from ./ldso/include/ldso.h:36,
-                 from ldso/ldso/ldso.c:33:
-./libpthread/linuxthreads/sysdeps/i386/i686/../useldt.h:25:20: error:
-sysdep.h: No such file or directory
-make[1]: *** [ldso/ldso/ldso.oS] Error 1
 
-====================================================================== 
+Modified:
+   trunk/buildroot/package/dm/dm.mk
 
-Issue History 
-Date Modified   Username       Field                    Change               
-====================================================================== 
-09-12-07 08:54  bgs            New Issue                                    
-09-12-07 08:54  bgs            Status                   new => assigned     
-09-12-07 08:54  bgs            Assigned To               => buildroot       
-======================================================================
+
+Changeset:
+Modified: trunk/buildroot/package/dm/dm.mk
+===================================================================
+--- trunk/buildroot/package/dm/dm.mk	2007-09-12 08:52:44 UTC (rev 19827)
++++ trunk/buildroot/package/dm/dm.mk	2007-09-12 17:33:10 UTC (rev 19828)
+@@ -35,7 +35,7 @@
+ DM_TARGET_BINARY:=$(TARGET_DIR)/usr/sbin/dmsetup
+ DM_STAGING_LIBRARY:=$(STAGING_DIR)/lib/libdevmapper.so
+ DM_TARGET_LIBRARY:=$(TARGET_DIR)/usr/lib/libdevmapper.so
+-DM_TARGET_HEADER:=$(TARGET_DIR)/include/libdevmapper.h
++DM_TARGET_HEADER:=$(TARGET_DIR)/usr/include/libdevmapper.h
+ 
+ $(DL_DIR)/$(DM_SOURCE):
+ 	$(WGET) -P $(DL_DIR) $(DM_SITE)/$(DM_SOURCE) || \
+@@ -108,8 +108,8 @@
+ # Install header file
+ $(DM_TARGET_HEADER): $(DM_TARGET_LIBRARY)
+ 	rm -f $@
+-	mkdir -p $(STAGING_DIR)/include
+-	$(INSTALL) -m 0644 $(STAGING_DIR)/include/libdevmapper.h $@
++	mkdir -p $(STAGING_DIR)/usr/include
++	$(INSTALL) -m 0644 $(STAGING_DIR)/usr/include/libdevmapper.h $@
+ 
+ dm: uclibc $(DM_TARGET_BINARY) $(DM_TARGET_LIBRARY) #$(DM_TARGET_HEADER)
+ 
