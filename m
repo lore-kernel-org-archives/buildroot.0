@@ -1,47 +1,40 @@
-From: andersen at uclibc.org <andersen@uclibc.org>
-Date: Wed, 12 Sep 2007 10:33:11 -0700 (PDT)
-Subject: [Buildroot] svn commit: trunk/buildroot/package/dm
-Message-ID: <20070912173311.670CFA685D@busybox.net>
+From: Darcy Watkins <DWatkins@tranzeo.com>
+Date: Wed, 12 Sep 2007 10:53:17 -0700
+Subject: [Buildroot] pciutils-2.2.6 fails to build for powerpc  405
+Message-ID: <D61182AC8012EA4EBC531B3AF23BE1093F1374@tranzeo-mail2.12stewart.tranzeo.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Author: andersen
-Date: 2007-09-12 10:33:10 -0700 (Wed, 12 Sep 2007)
-New Revision: 19828
+Hello,
 
-Log:
-revert this bit, use usr/include
+I tried to build the pciutils package for my powerpc 405 system, but it
+broke.
+
+i386-ports.c includes i386-io-linux.h which includes sys/io.h
+
+The error is: sys/io.h: No such file or directory.
+
+But the whole thing appears suspicious because I am building for powerpc
+405 not for i386 so I think that the package must really be broken in
+the make scripts since it shouldn't be building 1386 dependent files
+when cross compiling for powerpc.
+
+The problem appears to be line #23 of the pciutils-2.2.6/lib/configure
+script in the pciutils source.  Line #15 was patched to not have the
+"sys" variable be derived from the build host, but line #23 has:
+
+   cpu=`uname -m | sed ' ... black magic stuff ...'`
+
+The result is that pciutils is configured for i386 (my build host cpu
+type) and then it attempts to cross compile it for powerpc.
+
+I think that the short solution is to patch line #23 so that it derives
+cpu from architecture variables instead of the output of uname.
 
 
-Modified:
-   trunk/buildroot/package/dm/dm.mk
+Regards,
 
-
-Changeset:
-Modified: trunk/buildroot/package/dm/dm.mk
-===================================================================
---- trunk/buildroot/package/dm/dm.mk	2007-09-12 08:52:44 UTC (rev 19827)
-+++ trunk/buildroot/package/dm/dm.mk	2007-09-12 17:33:10 UTC (rev 19828)
-@@ -35,7 +35,7 @@
- DM_TARGET_BINARY:=$(TARGET_DIR)/usr/sbin/dmsetup
- DM_STAGING_LIBRARY:=$(STAGING_DIR)/lib/libdevmapper.so
- DM_TARGET_LIBRARY:=$(TARGET_DIR)/usr/lib/libdevmapper.so
--DM_TARGET_HEADER:=$(TARGET_DIR)/include/libdevmapper.h
-+DM_TARGET_HEADER:=$(TARGET_DIR)/usr/include/libdevmapper.h
- 
- $(DL_DIR)/$(DM_SOURCE):
- 	$(WGET) -P $(DL_DIR) $(DM_SITE)/$(DM_SOURCE) || \
-@@ -108,8 +108,8 @@
- # Install header file
- $(DM_TARGET_HEADER): $(DM_TARGET_LIBRARY)
- 	rm -f $@
--	mkdir -p $(STAGING_DIR)/include
--	$(INSTALL) -m 0644 $(STAGING_DIR)/include/libdevmapper.h $@
-+	mkdir -p $(STAGING_DIR)/usr/include
-+	$(INSTALL) -m 0644 $(STAGING_DIR)/usr/include/libdevmapper.h $@
- 
- dm: uclibc $(DM_TARGET_BINARY) $(DM_TARGET_LIBRARY) #$(DM_TARGET_HEADER)
- 
+Darcy
