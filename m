@@ -1,66 +1,30 @@
-From: andersen at uclibc.org <andersen@uclibc.org>
-Date: Wed, 12 Sep 2007 01:52:46 -0700 (PDT)
-Subject: [Buildroot] svn commit: trunk/buildroot/package/dm
-Message-ID: <20070912085246.67D3BA6811@busybox.net>
+From: Roderick Taylor <myopiate@gmail.com>
+Date: Wed, 12 Sep 2007 21:40:54 +1000
+Subject: [Buildroot] [buildroot 0001474]: toolchain build, arch x86_64 ,
+	variant core2 does not build
+In-Reply-To: <6a159fc7ac57e67bc6483273eb8d8d2d@busybox.net>
+References: <6a159fc7ac57e67bc6483273eb8d8d2d@busybox.net>
+Message-ID: <e83232070709120440s27c1df9ai606b5b64626d8f66@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Author: andersen
-Date: 2007-09-12 01:52:44 -0700 (Wed, 12 Sep 2007)
-New Revision: 19827
+On 08/09/2007, bugs at busybox.net <bugs@busybox.net> wrote:
+> ----------------------------------------------------------------------
+>  bernhardf - 09-07-07 11:55
+> ----------------------------------------------------------------------
+> See ML archives for the correct solution (default core2 if
+> !GCC_VERSION_THIS && !GCC_VERSION_THAT; gcc-4.3 does support -mtune=core2
+> just fine, so the proposed solution is not correct).
+>
 
-Log:
-bump version, fixup some brokenness
-
-
-Modified:
-   trunk/buildroot/package/dm/dm.mk
-
-
-Changeset:
-Modified: trunk/buildroot/package/dm/dm.mk
-===================================================================
---- trunk/buildroot/package/dm/dm.mk	2007-09-12 07:05:52 UTC (rev 19826)
-+++ trunk/buildroot/package/dm/dm.mk	2007-09-12 08:52:44 UTC (rev 19827)
-@@ -24,7 +24,7 @@
- # USA
- 
- DM_BASEVER=1.02
--DM_PATCH=20
-+DM_PATCH=22
- DM_VERSION=$(DM_BASEVER).$(DM_PATCH)
- DM_SOURCE:=device-mapper.$(DM_VERSION).tgz
- DM_SITE:=ftp://sources.redhat.com/pub/dm
-@@ -35,7 +35,7 @@
- DM_TARGET_BINARY:=$(TARGET_DIR)/usr/sbin/dmsetup
- DM_STAGING_LIBRARY:=$(STAGING_DIR)/lib/libdevmapper.so
- DM_TARGET_LIBRARY:=$(TARGET_DIR)/usr/lib/libdevmapper.so
--DM_TARGET_HEADER:=$(TARGET_DIR)/usr/include/libdevmapper.h
-+DM_TARGET_HEADER:=$(TARGET_DIR)/include/libdevmapper.h
- 
- $(DL_DIR)/$(DM_SOURCE):
- 	$(WGET) -P $(DL_DIR) $(DM_SITE)/$(DM_SOURCE) || \
-@@ -86,7 +86,6 @@
- $(DM_STAGING_BINARY) $(DM_STAGING_LIBRARY): $(DM_DIR)/.configured
- 	$(MAKE) CC=$(TARGET_CC) -C $(DM_DIR)
- 	$(MAKE) DESTDIR=$(STAGING_DIR) -C $(DM_DIR) install
--	mv $(STAGING_DIR)/include/libdevmapper.h $(STAGING_DIR)/usr/include/libdevmapper.h
- 
- # Install dmsetup from staging to target
- $(DM_TARGET_BINARY): $(DM_STAGING_BINARY)
-@@ -109,9 +108,10 @@
- # Install header file
- $(DM_TARGET_HEADER): $(DM_TARGET_LIBRARY)
- 	rm -f $@
--	$(INSTALL) -m 0644 $(STAGING_DIR)/usr/include/libdevmapper.h $@
-+	mkdir -p $(STAGING_DIR)/include
-+	$(INSTALL) -m 0644 $(STAGING_DIR)/include/libdevmapper.h $@
- 
--dm: uclibc $(DM_TARGET_BINARY) $(DM_TARGET_LIBRARY) $(DM_TARGET_HEADER)
-+dm: uclibc $(DM_TARGET_BINARY) $(DM_TARGET_LIBRARY) #$(DM_TARGET_HEADER)
- 
- dm-clean:
- 	rm $(DM_TARGET_BINARY) $(DM_TARGET_LIBRARY) $(DM_TARGET_LIBRARY).$(DM_BASEVER) $(DM_TARGET_HEADER)
+Is this patch close to what you had in mind?
+-------------- next part --------------
+A non-text attachment was scrubbed...
+Name: core2-generic.patch
+Type: text/x-patch
+Size: 1356 bytes
+Desc: not available
+Url : http://busybox.net/lists/buildroot/attachments/20070912/c35e79d6/attachment-0001.bin 
