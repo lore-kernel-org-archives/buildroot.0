@@ -1,211 +1,66 @@
-From: aldot at uclibc.org <aldot@uclibc.org>
-Date: Wed, 12 Sep 2007 00:05:53 -0700 (PDT)
-Subject: [Buildroot] svn commit: trunk/buildroot/package/config:  lxdialog
-Message-ID: <20070912070553.41B0BA6598@busybox.net>
+From: andersen at uclibc.org <andersen@uclibc.org>
+Date: Wed, 12 Sep 2007 01:52:46 -0700 (PDT)
+Subject: [Buildroot] svn commit: trunk/buildroot/package/dm
+Message-ID: <20070912085246.67D3BA6811@busybox.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Author: aldot
-Date: 2007-09-12 00:05:52 -0700 (Wed, 12 Sep 2007)
-New Revision: 19826
+Author: andersen
+Date: 2007-09-12 01:52:44 -0700 (Wed, 12 Sep 2007)
+New Revision: 19827
 
 Log:
-- revert r19825. Fix this in the kernel instead and read README.buildroot2
+bump version, fixup some brokenness
 
 
 Modified:
-   trunk/buildroot/package/config/conf.c
-   trunk/buildroot/package/config/confdata.c
-   trunk/buildroot/package/config/lxdialog/inputbox.c
-   trunk/buildroot/package/config/mconf.c
+   trunk/buildroot/package/dm/dm.mk
 
 
 Changeset:
-Modified: trunk/buildroot/package/config/conf.c
+Modified: trunk/buildroot/package/dm/dm.mk
 ===================================================================
---- trunk/buildroot/package/config/conf.c	2007-09-12 05:56:42 UTC (rev 19825)
-+++ trunk/buildroot/package/config/conf.c	2007-09-12 07:05:52 UTC (rev 19826)
-@@ -44,7 +44,7 @@
+--- trunk/buildroot/package/dm/dm.mk	2007-09-12 07:05:52 UTC (rev 19826)
++++ trunk/buildroot/package/dm/dm.mk	2007-09-12 08:52:44 UTC (rev 19827)
+@@ -24,7 +24,7 @@
+ # USA
  
- 	while ((isspace(*p)))
- 		p++;
--	l = strlen((char *)p);
-+	l = strlen(p);
- 	if (p != str)
- 		memmove(str, p, l + 1);
- 	if (!l)
-@@ -101,7 +101,7 @@
- 		check_stdin();
- 	case ask_all:
- 		fflush(stdout);
--		fgets((char *)line, 128, stdin);
-+		fgets(line, 128, stdin);
- 		return;
- 	case set_default:
- 		printf("%s\n", def);
-@@ -194,8 +194,8 @@
- 				break;
- 			}
- 		default:
--			line[strlen((char *)line)-1] = 0;
--			def = (char *)line;
-+			line[strlen(line)-1] = 0;
-+			def = line;
- 		}
- 		if (def && sym_set_string_value(sym, def))
- 			return 0;
-@@ -243,7 +243,7 @@
- 		case 'n':
- 		case 'N':
- 			newval = no;
--			if (!line[1] || !strcmp((char *)&line[1], "o"))
-+			if (!line[1] || !strcmp(&line[1], "o"))
- 				break;
- 			continue;
- 		case 'm':
-@@ -255,7 +255,7 @@
- 		case 'y':
- 		case 'Y':
- 			newval = yes;
--			if (!line[1] || !strcmp((char *)&line[1], "es"))
-+			if (!line[1] || !strcmp(&line[1], "es"))
- 				break;
- 			continue;
- 		case 0:
-@@ -356,7 +356,7 @@
- 			check_stdin();
- 		case ask_all:
- 			fflush(stdout);
--			fgets((char *)line, 128, stdin);
-+			fgets(line, 128, stdin);
- 			strip(line);
- 			if (line[0] == '?') {
- 				printf("\n%s\n", menu->sym->help ?
-@@ -366,7 +366,7 @@
- 			if (!line[0])
- 				cnt = def;
- 			else if (isdigit(line[0]))
--				cnt = atoi((char *)line);
-+				cnt = atoi(line);
- 			else
- 				continue;
- 			break;
-@@ -390,7 +390,7 @@
- 		}
- 		if (!child)
- 			continue;
--		if (line[strlen((char *)line) - 1] == '?') {
-+		if (line[strlen(line) - 1] == '?') {
- 			printf("\n%s\n", child->sym->help ?
- 				child->sym->help : nohelp_text);
- 			continue;
-
-Modified: trunk/buildroot/package/config/confdata.c
-===================================================================
---- trunk/buildroot/package/config/confdata.c	2007-09-12 05:56:42 UTC (rev 19825)
-+++ trunk/buildroot/package/config/confdata.c	2007-09-12 07:05:52 UTC (rev 19826)
-@@ -51,8 +51,8 @@
+ DM_BASEVER=1.02
+-DM_PATCH=20
++DM_PATCH=22
+ DM_VERSION=$(DM_BASEVER).$(DM_PATCH)
+ DM_SOURCE:=device-mapper.$(DM_VERSION).tgz
+ DM_SITE:=ftp://sources.redhat.com/pub/dm
+@@ -35,7 +35,7 @@
+ DM_TARGET_BINARY:=$(TARGET_DIR)/usr/sbin/dmsetup
+ DM_STAGING_LIBRARY:=$(STAGING_DIR)/lib/libdevmapper.so
+ DM_TARGET_LIBRARY:=$(TARGET_DIR)/usr/lib/libdevmapper.so
+-DM_TARGET_HEADER:=$(TARGET_DIR)/usr/include/libdevmapper.h
++DM_TARGET_HEADER:=$(TARGET_DIR)/include/libdevmapper.h
  
- 	res_value[0] = 0;
- 	dst = name;
--	while ((src = (signed char *) strchr((const char *)in, '$'))) {
--		strncat(res_value, (char *)in, src - in);
-+	while ((src = strchr(in, '$'))) {
-+		strncat(res_value, in, src - in);
- 		src++;
- 		dst = name;
- 		while (isalnum(*src) || *src == '_')
-@@ -63,7 +63,7 @@
- 		strcat(res_value, sym_get_string_value(sym));
- 		in = src;
- 	}
--	strcat(res_value, (const char *)in);
-+	strcat(res_value, in);
+ $(DL_DIR)/$(DM_SOURCE):
+ 	$(WGET) -P $(DL_DIR) $(DM_SITE)/$(DM_SOURCE) || \
+@@ -86,7 +86,6 @@
+ $(DM_STAGING_BINARY) $(DM_STAGING_LIBRARY): $(DM_DIR)/.configured
+ 	$(MAKE) CC=$(TARGET_CC) -C $(DM_DIR)
+ 	$(MAKE) DESTDIR=$(STAGING_DIR) -C $(DM_DIR) install
+-	mv $(STAGING_DIR)/include/libdevmapper.h $(STAGING_DIR)/usr/include/libdevmapper.h
  
- 	return res_value;
- }
-@@ -74,7 +74,7 @@
- 	static char fullname[PATH_MAX+1];
- 	char *env, *name;
+ # Install dmsetup from staging to target
+ $(DM_TARGET_BINARY): $(DM_STAGING_BINARY)
+@@ -109,9 +108,10 @@
+ # Install header file
+ $(DM_TARGET_HEADER): $(DM_TARGET_LIBRARY)
+ 	rm -f $@
+-	$(INSTALL) -m 0644 $(STAGING_DIR)/usr/include/libdevmapper.h $@
++	mkdir -p $(STAGING_DIR)/include
++	$(INSTALL) -m 0644 $(STAGING_DIR)/include/libdevmapper.h $@
  
--	name = conf_expand_value((const signed char *)conf_defname);
-+	name = conf_expand_value(conf_defname);
- 	env = getenv(SRCTREE);
- 	if (env) {
- 		sprintf(fullname, "%s/%s", env, name);
-
-Modified: trunk/buildroot/package/config/lxdialog/inputbox.c
-===================================================================
---- trunk/buildroot/package/config/lxdialog/inputbox.c	2007-09-12 05:56:42 UTC (rev 19825)
-+++ trunk/buildroot/package/config/lxdialog/inputbox.c	2007-09-12 07:05:52 UTC (rev 19826)
-@@ -52,7 +52,7 @@
- 	if (!init)
- 		instr[0] = '\0';
- 	else
--		strcpy((char *)instr, init);
-+		strcpy(instr, init);
+-dm: uclibc $(DM_TARGET_BINARY) $(DM_TARGET_LIBRARY) $(DM_TARGET_HEADER)
++dm: uclibc $(DM_TARGET_BINARY) $(DM_TARGET_LIBRARY) #$(DM_TARGET_HEADER)
  
- do_resize:
- 	if (getmaxy(stdscr) <= (height - 2))
-@@ -105,7 +105,7 @@
- 		for (i = 0; i < box_width - 1; i++)
- 			waddch(dialog, instr[scroll + i]);
- 	} else {
--		waddstr(dialog, (char *)instr);
-+		waddstr(dialog, instr);
- 	}
- 
- 	wmove(dialog, box_y, box_x + input_x);
-@@ -136,7 +136,7 @@
- 							waddch(dialog,
- 							       instr[scroll + input_x + i] ?
- 							       instr[scroll + input_x + i] : ' ');
--						input_x = strlen((char *)instr) - scroll;
-+						input_x = strlen(instr) - scroll;
- 					} else
- 						input_x--;
- 					instr[scroll + input_x] = '\0';
-
-Modified: trunk/buildroot/package/config/mconf.c
-===================================================================
---- trunk/buildroot/package/config/mconf.c	2007-09-12 05:56:42 UTC (rev 19825)
-+++ trunk/buildroot/package/config/mconf.c	2007-09-12 07:05:52 UTC (rev 19826)
-@@ -413,7 +413,7 @@
- 		return;
- 	}
- 
--	sym_arr = sym_re_search((char *)dialog_input_result);
-+	sym_arr = sym_re_search(dialog_input_result);
- 	res = get_relations_str(sym_arr);
- 	free(sym_arr);
- 	show_textbox(_("Search Results"), str_get(&res), 0, 0);
-@@ -789,7 +789,7 @@
- 				      sym_get_string_value(menu->sym));
- 		switch (res) {
- 		case 0:
--			if (sym_set_string_value(menu->sym, (char *)dialog_input_result))
-+			if (sym_set_string_value(menu->sym, dialog_input_result))
- 				return;
- 			show_textbox(NULL, _("You have made an invalid entry."), 5, 43);
- 			break;
-@@ -814,7 +814,7 @@
- 		case 0:
- 			if (!dialog_input_result[0])
- 				return;
--			if (!conf_read((char *)dialog_input_result))
-+			if (!conf_read(dialog_input_result))
- 				return;
- 			show_textbox(NULL, _("File does not exist!"), 5, 38);
- 			break;
-@@ -838,7 +838,7 @@
- 		case 0:
- 			if (!dialog_input_result[0])
- 				return;
--			if (!conf_write((char *)dialog_input_result))
-+			if (!conf_write(dialog_input_result))
- 				return;
- 			show_textbox(NULL, _("Can't create file!  Probably a nonexistent directory."), 5, 60);
- 			break;
+ dm-clean:
+ 	rm $(DM_TARGET_BINARY) $(DM_TARGET_LIBRARY) $(DM_TARGET_LIBRARY).$(DM_BASEVER) $(DM_TARGET_HEADER)
