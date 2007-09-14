@@ -1,80 +1,31 @@
-From: Darcy Watkins <DWatkins@tranzeo.com>
-Date: Fri, 14 Sep 2007 08:01:54 -0700
-Subject: [Buildroot] pciutils-2.2.6 fails to build for powerpc  405
-In-Reply-To: <20070913092615.GA15641@aon.at>
-References: <D61182AC8012EA4EBC531B3AF23BE1093F1374@tranzeo-mail2.12stewart.tranzeo.com>
-	<20070913092615.GA15641@aon.at>
-Message-ID: <D61182AC8012EA4EBC531B3AF23BE1093F1421@tranzeo-mail2.12stewart.tranzeo.com>
+From: Bernhard Fischer <rep.dot.nop@gmail.com>
+Date: Fri, 14 Sep 2007 20:06:27 +0200
+Subject: [Buildroot] svn commit: trunk/buildroot/package:  lm-sensors
+In-Reply-To: <46EA70E4.9090803@carallon.com>
+References: <20070901180109.C927EA5D29@busybox.net>
+	<12670634.post@talk.nabble.com> <20070914092913.GA26234@aon.at>
+	<46EA589C.3060407@carallon.com> <20070914112618.GA28176@aon.at>
+	<46EA70E4.9090803@carallon.com>
+Message-ID: <20070914180627.GH20058@aon.at>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello Bernhard et al,
-
-I checked into this.  Extracted from email response from Martin who owns
-/ maintains PCI utils...
-
->> I believe that in order to properly support cross compiling, the 
->> configure scripts need to check the variables normally associated
-with 
->> cross compiling and target architecture rather than using the "uname"
->> utility of the machine running the build (otherwise it will configure
-
->> for the build machine and then attempt to cross compile it for the 
->> target).
+On Fri, Sep 14, 2007 at 12:30:44PM +0100, Will Wagner wrote:
+> Bernhard,
 >
->Which variables do you have in mind?
+> The only other thing is that the sensors executable needs the 
+> /etc/sensors.conf file otherwise it will fail to run. The default file is 
+> enormous but it does work.
 
-I looked at the "configure" script and put in a few "echo"'s to spit out
-typical cross compile variables that are set.  I notice that $ARCH and
-$CROSS_COMPILE are not set when using buildroot.  It appears that the
-only one reliable (I know of) is $CC.  When using buildroot to compile
-for powerpc, I see something like:
-
-  <path to my toolchain>/powerpc-linux-uclibc-gcc
-
-So I could suggest to Martin a check of $CC for a prefix in front of the
-gcc (after any path).  If so then extract contents as follows:
-
-  Cpu <== from the prefix up to the first "-"
-  Sys <== from the prefix after the first "-" to the "-" before the gcc
-  Host <== I believe that this should still be derived from "uname"
-since it
-           describes the build machine not the target machine
-
-If there is no prefix in front of the "gcc" then assume not cross
-compiling (native compile) and use "uname" as is done at present.
-
-I think that "linux-uclibc" will work out OK.
-
-Ultimately, at this point, it appears that we only need sufficient logic
-to ensure that $cpu takes on a value other than "i386" when cross
-compiling for other architectures, because that is all the configure
-script checks for now.
-
-I don't know how this will behave for native compiling on all the other
-operating systems (BSD, cygwin, etc).  Is there a better variable to use
-than $CC?
-
-Regards,
-
-Darcy
-
-
------Original Message-----
-From: Bernhard Fischer [mailto:rep.dot.nop at gmail.com] 
-Sent: Thursday, September 13, 2007 2:26 AM
-To: Darcy Watkins
-Cc: buildroot@uclibc.org
-Subject: Re: [Buildroot] pciutils-2.2.6 fails to build for powerpc 405
-
---snip!--
-
->I think that the short solution is to patch line #23 so that it derives
->cpu from architecture variables instead of the output of uname.
-
-Sounds ok. Is this already fixed updstream? If not it would be nice if
-you could make sure that we can inherit a working version from
-upstream..
+Since i never built it, can you tell me where the .conf lives?
+Something like this could perhaps strip it a bit (iff there defaults, of
+course..)
+	cp -dpf $(LM_SENSORS_DIR)/the.conf $(TARGET_DIR)/the.conf
+	$(SED) '/^#/d' -e "s/#.*//g" -e "/^$/d" $(TARGET_DIR)/the.conf
+	# or something like this, perhaps. Manually customize it
+	# otherwise, or provide your own, i'd say.
+HTH,
+Bernhard
