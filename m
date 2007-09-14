@@ -1,8 +1,7 @@
 From: Hebbar <gururajakr@sanyo.co.in>
-Date: Thu, 13 Sep 2007 19:11:38 -0700 (PDT)
-Subject: [Buildroot] Busybox does not work with Buildroot toolchain for
-	arm926ejs
-Message-ID: <12667270.post@talk.nabble.com>
+Date: Thu, 13 Sep 2007 20:03:24 -0700 (PDT)
+Subject: [Buildroot] libusb fails to build with recent buildroot snapshot
+Message-ID: <12667665.post@talk.nabble.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -10,42 +9,56 @@ Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
 
-Hi All, 
+Hi,
 
- Here is the issue. 
-1. I have used busybox utilities built inside
-buildroot/project_build_arm/uclibc-prj/root. I am using Linux kernel version
-2.6.20.6. when i boot, the busybox does not start and give any command
-prompt on serial console or tty0.
+I am trying to build libusb with latest buildroot snapshot for arm926ejs
+with uclibc languages=c,c++, I get below mentioned error when building
+libusb
 
-It gives the message like "Please press Enter to activate this console".
+<snip>
+<snip>
+libtool: link: warning: library
+`/home/guru/project/original/bldrt/buildroot/build_arm/staging_dir/usr/bin/../lib/gcc/arm-linux-uclibcgnueabi/4.2.1/../../../../arm-linux-uclibcgnueabi/lib/libstdc++.la'
+was moved.
+<snip>
+<snip>
+<snip>
+/home/guru/project/original/bldrt/buildroot/build_arm/staging_dir/usr/bin/../lib/gcc/arm-linux-uclibcgnueabi/4.2.1/../../../../arm-linux-uclibcgnueabi/bin/ld:
+warning: libusb-0.1.so.4, needed by ../.libs/libusbpp.so, not found (try
+using -rpath or -rpath-link)
+../.libs/libusbpp.so: undefined reference to `usb_find_busses'
+../.libs/libusbpp.so: undefined reference to `usb_init'
+../.libs/libusbpp.so: undefined reference to `usb_find_devices'
+../.libs/libusbpp.so: undefined reference to `usb_open'
+../.libs/libusbpp.so: undefined reference to `usb_get_busses'
+../.libs/libusbpp.so: undefined reference to `usb_control_msg'
+../.libs/libusbpp.so: undefined reference to `usb_get_driver_np'
+../.libs/libusbpp.so: undefined reference to `usb_get_string'
+../.libs/libusbpp.so: undefined reference to `usb_close'
+collect2: ld returned 1 exit status
+make[3]: *** [descriptor_test] Error 1
+make[3]: Leaving directory
+`/home/guru/project/original/bldrt/buildroot/build_arm/libusb-0.1.12/tests'
+make[2]: *** [all-recursive] Error 1
+make[2]: Leaving directory
+`/home/guru/project/original/bldrt/buildroot/build_arm/libusb-0.1.12'
+make[1]: *** [all] Error 2
+make[1]: Leaving directory
+`/home/guru/project/original/bldrt/buildroot/build_arm/libusb-0.1.12'
+make: ***
+[/home/guru/project/original/bldrt/buildroot/build_arm/staging_dir/lib/libusb.so]
+Error 2
 
-2. Also i have compilled the above Linux kernel with the same buildroot
-toolchain for arm926ejs and it works fine. 
 
-3. I tried using the same toolchain and compilled an externally downloaded
-busybox and when used this, i get the same error.
-
-4. Also if i use Linux Kernel compilled with this Buildroot Toolchain for
-arm926ejs and Busybox built with other vendor toolchain( from Codesourcery)
-it works fine. 
-
-5. Also i have Linux MTD Utilities that i have compilled using Buildroot
-Toolchain & this works fine. 
-
-So i want to know what exactly is the issue with busybox thats been built by
-this Buildroot toolchain.
-
-Attahced is the Busybox config, uclibc config & my Buildroot config.
-
-Waiting for an early reply/help to solve this issue.
+Kindly let me know how to solve this
 
 Regards
-Guruaja
-http://www.nabble.com/file/p12667270/busybox.config busybox.config 
-http://www.nabble.com/file/p12667270/uclibc.config uclibc.config 
-http://www.nabble.com/file/p12667270/buildroot_snapshot.config
+Gururaja
+
+My Buildroot config is attahced
+
+http://www.nabble.com/file/p12667665/buildroot_snapshot.config
 buildroot_snapshot.config 
 -- 
-View this message in context: http://www.nabble.com/Busybox-does-not-work-with-Buildroot-toolchain-for-arm926ejs-tf4439704.html#a12667270
+View this message in context: http://www.nabble.com/libusb-fails-to-build-with-recent-buildroot-snapshot-tf4439859.html#a12667665
 Sent from the BuildRoot mailing list archive at Nabble.com.
