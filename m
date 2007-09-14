@@ -1,7 +1,9 @@
 From: Hebbar <gururajakr@sanyo.co.in>
-Date: Thu, 13 Sep 2007 20:03:24 -0700 (PDT)
-Subject: [Buildroot] libusb fails to build with recent buildroot snapshot
-Message-ID: <12667665.post@talk.nabble.com>
+Date: Fri, 14 Sep 2007 01:15:13 -0700 (PDT)
+Subject: [Buildroot] svn commit: trunk/buildroot/package:  lm-sensors
+In-Reply-To: <20070901180109.C927EA5D29@busybox.net>
+References: <20070901180109.C927EA5D29@busybox.net>
+Message-ID: <12670634.post@talk.nabble.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -9,56 +11,152 @@ Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
 
-Hi,
+Hi aldot,
 
-I am trying to build libusb with latest buildroot snapshot for arm926ejs
-with uclibc languages=c,c++, I get below mentioned error when building
-libusb
-
-<snip>
-<snip>
-libtool: link: warning: library
-`/home/guru/project/original/bldrt/buildroot/build_arm/staging_dir/usr/bin/../lib/gcc/arm-linux-uclibcgnueabi/4.2.1/../../../../arm-linux-uclibcgnueabi/lib/libstdc++.la'
-was moved.
-<snip>
-<snip>
-<snip>
-/home/guru/project/original/bldrt/buildroot/build_arm/staging_dir/usr/bin/../lib/gcc/arm-linux-uclibcgnueabi/4.2.1/../../../../arm-linux-uclibcgnueabi/bin/ld:
-warning: libusb-0.1.so.4, needed by ../.libs/libusbpp.so, not found (try
-using -rpath or -rpath-link)
-../.libs/libusbpp.so: undefined reference to `usb_find_busses'
-../.libs/libusbpp.so: undefined reference to `usb_init'
-../.libs/libusbpp.so: undefined reference to `usb_find_devices'
-../.libs/libusbpp.so: undefined reference to `usb_open'
-../.libs/libusbpp.so: undefined reference to `usb_get_busses'
-../.libs/libusbpp.so: undefined reference to `usb_control_msg'
-../.libs/libusbpp.so: undefined reference to `usb_get_driver_np'
-../.libs/libusbpp.so: undefined reference to `usb_get_string'
-../.libs/libusbpp.so: undefined reference to `usb_close'
-collect2: ld returned 1 exit status
-make[3]: *** [descriptor_test] Error 1
-make[3]: Leaving directory
-`/home/guru/project/original/bldrt/buildroot/build_arm/libusb-0.1.12/tests'
-make[2]: *** [all-recursive] Error 1
-make[2]: Leaving directory
-`/home/guru/project/original/bldrt/buildroot/build_arm/libusb-0.1.12'
-make[1]: *** [all] Error 2
-make[1]: Leaving directory
-`/home/guru/project/original/bldrt/buildroot/build_arm/libusb-0.1.12'
-make: ***
-[/home/guru/project/original/bldrt/buildroot/build_arm/staging_dir/lib/libusb.so]
-Error 2
-
-
-Kindly let me know how to solve this
+  make mklibs fails for lm-sensors because of missing lib libsensors.so.3.
+When i searched i actually found it in $(LM_SENSORS_DIR)/lib/ folder
+symbolically linked to libsensors.so.3.1.4. so i think we need to copy it
+from here to root/usr/lib directory as the sensors binary is placed there.
 
 Regards
 Gururaja
 
-My Buildroot config is attahced
 
-http://www.nabble.com/file/p12667665/buildroot_snapshot.config
-buildroot_snapshot.config 
+
+aldot wrote:
+> 
+> Author: aldot
+> Date: 2007-09-01 11:01:08 -0700 (Sat, 01 Sep 2007)
+> New Revision: 19756
+> 
+> Log:
+> - add lm-sensors package
+> 
+> 
+> Added:
+>    trunk/buildroot/package/lm-sensors/
+>    trunk/buildroot/package/lm-sensors/Config.in
+>    trunk/buildroot/package/lm-sensors/lm-sensors.mk
+> 
+> Modified:
+>    trunk/buildroot/package/Config.in
+> 
+> 
+> Changeset:
+> Modified: trunk/buildroot/package/Config.in
+> ===================================================================
+> --- trunk/buildroot/package/Config.in	2007-09-01 17:33:19 UTC (rev 19755)
+> +++ trunk/buildroot/package/Config.in	2007-09-01 18:01:08 UTC (rev 19756)
+> @@ -221,6 +221,7 @@
+>  source "package/libaio/Config.in"
+>  source "package/libraw1394/Config.in"
+>  source "package/libusb/Config.in"
+> +source "package/lm-sensors/Config.in"
+>  source "package/lvm2/Config.in"
+>  source "package/mdadm/Config.in"
+>  source "package/memtester/Config.in"
+> 
+> Added: trunk/buildroot/package/lm-sensors/Config.in
+> ===================================================================
+> --- trunk/buildroot/package/lm-sensors/Config.in	                       
+> (rev 0)
+> +++ trunk/buildroot/package/lm-sensors/Config.in	2007-09-01 18:01:08 UTC
+> (rev 19756)
+> @@ -0,0 +1,12 @@
+> +config BR2_PACKAGE_LM_SENSORS
+> +	bool "lm-sensors"
+> +	select BR2_PACKAGE_LIBSYSFS
+> +	default n
+> +	help
+> +	  Lm-sensors is a hardware health monitoring package for
+> +	  Linux. It allows you to access information from
+> +	  temperature, voltage, and fan speed sensors. It
+> +	  works with most newer systems.
+> +
+> +	  http://www.lm-sensors.org/
+> +
+> 
+> Added: trunk/buildroot/package/lm-sensors/lm-sensors.mk
+> ===================================================================
+> --- trunk/buildroot/package/lm-sensors/lm-sensors.mk	                       
+> (rev 0)
+> +++ trunk/buildroot/package/lm-sensors/lm-sensors.mk	2007-09-01 18:01:08
+> UTC (rev 19756)
+> @@ -0,0 +1,59 @@
+> +#############################################################
+> +#
+> +# lm-sensors
+> +#
+> +#############################################################
+> +LM_SENSORS_VERSION:=2.10.4
+> +LM_SENSORS_SOURCE:=lm-sensors_$(LM_SENSORS_VERSION).orig.tar.gz
+> +LM_SENSORS_PATCH:=lm-sensors_$(LM_SENSORS_VERSION)-1.diff.gz
+> +LM_SENSORS_SITE:=ftp://ftp.debian.org/debian/pool/main/l/lm-sensors/
+> +LM_SENSORS_DIR:=$(BUILD_DIR)/lm_sensors-$(LM_SENSORS_VERSION)
+> +LM_SENSORS_CAT:=$(ZCAT)
+> +LM_SENSORS_BINARY:=prog/sensors/sensors
+> +LM_SENSORS_TARGET_BINARY:=usr/bin/sensors
+> +
+> +$(DL_DIR)/$(LM_SENSORS_SOURCE):
+> +	$(WGET) -P $(DL_DIR) $(LM_SENSORS_SITE)/$(LM_SENSORS_SOURCE)
+> +
+> +$(DL_DIR)/$(LM_SENSORS_PATCH):
+> +	$(WGET) -P $(DL_DIR) $(LM_SENSORS_SITE)/$(LM_SENSORS_PATCH)
+> +
+> +lm-sensors-source: $(DL_DIR)/$(LM_SENSORS_SOURCE)
+> $(DL_DIR)/$(LM_SENSORS_PATCH)
+> +
+> +$(LM_SENSORS_DIR)/.unpacked: $(DL_DIR)/$(LM_SENSORS_SOURCE)
+> $(DL_DIR)/$(LM_SENSORS_PATCH)
+> +	$(LM_SENSORS_CAT) $(DL_DIR)/$(LM_SENSORS_SOURCE) | tar -C $(BUILD_DIR)
+> $(TAR_OPTIONS) -
+> +	toolchain/patch-kernel.sh $(LM_SENSORS_DIR) package/lm-sensors/
+> lm-sensors\*.patch
+> +ifneq ($(LM_SENSORS_PATCH),)
+> +	(cd $(LM_SENSORS_DIR) && $(LM_SENSORS_CAT) $(DL_DIR)/$(LM_SENSORS_PATCH)
+> | patch -p1)
+> +	if [ -d $(LM_SENSORS_DIR)/debian/patches ]; then \
+> +		toolchain/patch-kernel.sh $(LM_SENSORS_DIR)
+> $(LM_SENSORS_DIR)/debian/patches \*.patch; \
+> +	fi
+> +endif
+> +	touch $@
+> +
+> +$(LM_SENSORS_DIR)/$(LM_SENSORS_BINARY): $(LM_SENSORS_DIR)/.unpacked
+> +	$(MAKE) $(TARGET_CONFIGURE_OPTS) -C $(LM_SENSORS_DIR) \
+> +		LINUX="$(LINUX_DIR)" KERNELVERSION=$(LINUX_HEADERS_VERSION) \
+> +		I2C_HEADERS=$(LINUX_DIR)/include \
+> +		DESTDIR=$(TARGET_DIR) user
+> +
+> +$(TARGET_DIR)/$(LM_SENSORS_TARGET_BINARY):
+> $(LM_SENSORS_DIR)/$(LM_SENSORS_BINARY)
+> +	cp -dpf $(LM_SENSORS_DIR)/$(LM_SENSORS_BINARY) $@
+> +	$(STRIP) $(STRIP_STRIP_ALL) $@
+> +
+> +lm-sensors: uclibc libsysfs $(TARGET_DIR)/$(LM_SENSORS_TARGET_BINARY)
+> +
+> +lm-sensors-clean:
+> +	-$(MAKE) -C $(LM_SENSORS_DIR) clean
+> +	rm -f $(TARGET_DIR)/$(LM_SENSORS_TARGET_BINARY)
+> +
+> +lm-sensors-dirclean:
+> +	rm -rf $(LM_SENSORS_DIR)
+> +#############################################################
+> +#
+> +# Toplevel Makefile options
+> +#
+> +#############################################################
+> +ifeq ($(strip $(BR2_PACKAGE_LM_SENSORS)),y)
+> +TARGETS+=lm-sensors
+> +endif
+> 
+> _______________________________________________
+> buildroot mailing list
+> buildroot at uclibc.org
+> http://busybox.net/mailman/listinfo/buildroot
+> 
+> 
+
 -- 
-View this message in context: http://www.nabble.com/libusb-fails-to-build-with-recent-buildroot-snapshot-tf4439859.html#a12667665
+View this message in context: http://www.nabble.com/svn-commit%3A-trunk-buildroot-package%3A--lm-sensors-tf4365242.html#a12670634
 Sent from the BuildRoot mailing list archive at Nabble.com.
