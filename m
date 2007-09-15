@@ -1,36 +1,62 @@
-From: aldot at uclibc.org <aldot@uclibc.org>
-Date: Sat, 15 Sep 2007 11:14:54 -0700 (PDT)
-Subject: [Buildroot] svn commit: trunk/buildroot/package/busybox
-Message-ID: <20070915181454.A660BA5D3C@busybox.net>
+From: Bernhard Fischer <rep.dot.nop@gmail.com>
+Date: Sat, 15 Sep 2007 21:21:54 +0200
+Subject: [Buildroot] svn commit: trunk/uClibc: ldso/include
+	ldso/ldso/sparc	libc/string etc...
+In-Reply-To: <f43fc5580709150607t4e51b73by878a54e35da00750@mail.gmail.com>
+References: <20070915075059.68EC4A6056@busybox.net>
+	<20070915121916.GK20058@aon.at>
+	<f43fc5580709150607t4e51b73by878a54e35da00750@mail.gmail.com>
+Message-ID: <20070915192154.GL20058@aon.at>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Author: aldot
-Date: 2007-09-15 11:14:53 -0700 (Sat, 15 Sep 2007)
-New Revision: 19855
+On Sat, Sep 15, 2007 at 04:07:12PM +0300, Blue Swirl wrote:
+>On 9/15/07, Bernhard Fischer <rep.dot.nop@gmail.com> wrote:
+>> On Sat, Sep 15, 2007 at 12:50:59AM -0700, vapier at uclibc.org wrote:
+>> >Author: vapier
+>> >Date: 2007-09-15 00:50:58 -0700 (Sat, 15 Sep 2007)
+>> >New Revision: 19840
+>> >
+>> >Log:
+>> >Blue Swirl writes:
+>> >I got the library to compile with the attached patches, though dynamic
+>> >loader crashes early.
+>> >
+>> >In buildroot I changed the architecture name by hand from sparc to
+>> >sparc64, otherwise the compiler produced 32-bit files with V9 (64-bit)
+>> >instructions. This configuration is not supported by QEMU, so I aimed
+>> >for pure 64-bit. I think Sparc64 option needs to be added to
+>> >buildroot.
+>>
+>> http://buildroot.uclibc.org/cgi-bin/viewcvs.cgi?rev=19853&view=rev
+>>
+>> Blue Swirl, please let me know if that's correct and useable now.
+>
+>The CPU selection could be improved so that for Sparc64, only the
+>following are valid:
+>config BR2_sparc_v9
+>config BR2_sparc_ultrasparc
+>config BR2_sparc_ultrasparc3
+>config BR2_sparc_niagara
 
-Log:
-- depends on host-fakeroot
+Ok, will do.
 
+>I'm not so sure about removing those from Sparc(32) options, because
+>then we could not build a 32-bit environment for V9 CPU.
 
-Modified:
-   trunk/buildroot/package/busybox/initramfs.mk
+In uClibc, we have v7, v8, v9, v9b (?).
+What is the relation between insn-set/insn scheduler for these:
+sparclite:      f930, f934, sparclite86x
+sparclet:       tsc701
+Are these all v8 (for uClibc)?
 
+And what is v9b? An extended insn set or just v9 with a different
+scheduling?
 
-Changeset:
-Modified: trunk/buildroot/package/busybox/initramfs.mk
-===================================================================
---- trunk/buildroot/package/busybox/initramfs.mk	2007-09-15 13:28:30 UTC (rev 19854)
-+++ trunk/buildroot/package/busybox/initramfs.mk	2007-09-15 18:14:53 UTC (rev 19855)
-@@ -104,7 +104,7 @@
- 	$(STRIP) $(STRIP_STRIP_ALL) $@
- 
- 
--$(BB_INITRAMFS_TARGET): $(BR2_INITRAMFS_DIR)/bin/busybox
-+$(BB_INITRAMFS_TARGET): host-fakeroot $(BR2_INITRAMFS_DIR)/bin/busybox
- 	ln -fs bin/busybox $(PROJECT_BUILD_DIR)/initramfs/init
- 	mkdir -p $(PROJECT_BUILD_DIR)/initramfs/etc
- 	cat target/generic/target_busybox_skeleton/etc/inittab > \
+>I'm just trying a native build, looks like the compiler options build
+>are not correct, there is -mcpu=v7 flag even though I selected v9.
+
+Sounds odd, i'll look into this.
