@@ -1,7 +1,7 @@
 From: ulf at uclibc.org <ulf@uclibc.org>
-Date: Mon, 17 Sep 2007 05:42:56 -0700 (PDT)
-Subject: [Buildroot] svn commit: trunk/buildroot/toolchain/binutils
-Message-ID: <20070917124256.F254C30064@busybox.net>
+Date: Mon, 17 Sep 2007 05:43:40 -0700 (PDT)
+Subject: [Buildroot] svn commit: trunk/buildroot/project
+Message-ID: <20070917124340.9C82530067@busybox.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -9,27 +9,30 @@ Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
 Author: ulf
-Date: 2007-09-17 05:42:56 -0700 (Mon, 17 Sep 2007)
-New Revision: 19869
+Date: 2007-09-17 05:43:40 -0700 (Mon, 17 Sep 2007)
+New Revision: 19870
 
 Log:
-Don't break AVR32 toolchain by hiding binutils-2.17
+Add debug info
 
 Modified:
-   trunk/buildroot/toolchain/binutils/Config.in
+   trunk/buildroot/project/Makefile.in
 
 
 Changeset:
-Modified: trunk/buildroot/toolchain/binutils/Config.in
+Modified: trunk/buildroot/project/Makefile.in
 ===================================================================
---- trunk/buildroot/toolchain/binutils/Config.in	2007-09-17 12:40:42 UTC (rev 19868)
-+++ trunk/buildroot/toolchain/binutils/Config.in	2007-09-17 12:42:56 UTC (rev 19869)
-@@ -41,7 +41,7 @@
- 		bool "binutils 2.16.91.0.7"
+--- trunk/buildroot/project/Makefile.in	2007-09-17 12:42:56 UTC (rev 19869)
++++ trunk/buildroot/project/Makefile.in	2007-09-17 12:43:40 UTC (rev 19870)
+@@ -73,3 +73,11 @@
+ VENDOR_PATCH_DIR:=$(strip $(subst ",,$(BR2_VENDOR_PATCH_DIR)))
+ #"))
  
- 	config BR2_BINUTILS_VERSION_2_17
--		depends !BR2_nios2 && BR2_DEPRECATED
-+		depends BR2_avr32 || !BR2_nios2 && BR2_DEPRECATED
- 		bool "binutils 2.17"
- 
- 	config BR2_BINUTILS_VERSION_2_17_50_0_2
++vendor-dbg:
++	@echo VENDOR_SITE=$(BR2_VENDOR_SITE)
++	@echo VENDOR_SUFFIX=$(BR2_VENDOR_SUFFIX)
++	@echo VENDOR_BINUTILS_RELEASE=$(BR2_VENDOR_BINUTILS_RELEASE)
++	@echo VENDOR_GCC_RELEASE=$(BR2_VENDOR_GCC_RELEASE)
++	@echo VENDOR_UCLIBC_RELEASE=$(BR2_VENDOR_UCLIBC_RELEASE)
++	@echo VENDOR_GDB_RELEASE=$(BR2_VENDOR_GDB_RELEASE)
++	@echo VENDOR_PATCH_DIR=$(BR2_VENDOR_PATCH_DIR)
