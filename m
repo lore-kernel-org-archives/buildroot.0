@@ -1,52 +1,36 @@
-From: Bernhard Fischer <rep.dot.nop@gmail.com>
-Date: Mon, 17 Sep 2007 15:10:18 +0200
-Subject: [Buildroot] svn commit: trunk/buildroot/project
-In-Reply-To: <20070917124340.9C82530067@busybox.net>
-References: <20070917124340.9C82530067@busybox.net>
-Message-ID: <20070917131018.GB24993@aon.at>
+From: aldot at uclibc.org <aldot@uclibc.org>
+Date: Mon, 17 Sep 2007 06:12:38 -0700 (PDT)
+Subject: [Buildroot] svn commit: trunk/buildroot/package/gmp
+Message-ID: <20070917131238.B652330059@busybox.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Mon, Sep 17, 2007 at 05:43:40AM -0700, ulf at uclibc.org wrote:
->Author: ulf
->Date: 2007-09-17 05:43:40 -0700 (Mon, 17 Sep 2007)
->New Revision: 19870
->
->Log:
->Add debug info
+Author: aldot
+Date: 2007-09-17 06:12:38 -0700 (Mon, 17 Sep 2007)
+New Revision: 19872
 
-Congratulations, you completely broke the build.
+Log:
+- libversion was changed
 
-Get yourself a branch if you want to do stuff like that, please,
-*please*.
->
->Modified:
->   trunk/buildroot/project/Makefile.in
->
->
->Changeset:
->Modified: trunk/buildroot/project/Makefile.in
->===================================================================
->--- trunk/buildroot/project/Makefile.in	2007-09-17 12:42:56 UTC (rev 19869)
->+++ trunk/buildroot/project/Makefile.in	2007-09-17 12:43:40 UTC (rev 19870)
->@@ -73,3 +73,11 @@
-> VENDOR_PATCH_DIR:=$(strip $(subst ",,$(BR2_VENDOR_PATCH_DIR)))
-> #"))
-> 
->+vendor-dbg:
->+	@echo VENDOR_SITE=$(BR2_VENDOR_SITE)
->+	@echo VENDOR_SUFFIX=$(BR2_VENDOR_SUFFIX)
->+	@echo VENDOR_BINUTILS_RELEASE=$(BR2_VENDOR_BINUTILS_RELEASE)
->+	@echo VENDOR_GCC_RELEASE=$(BR2_VENDOR_GCC_RELEASE)
->+	@echo VENDOR_UCLIBC_RELEASE=$(BR2_VENDOR_UCLIBC_RELEASE)
->+	@echo VENDOR_GDB_RELEASE=$(BR2_VENDOR_GDB_RELEASE)
->+	@echo VENDOR_PATCH_DIR=$(BR2_VENDOR_PATCH_DIR)
->
->_______________________________________________
->buildroot mailing list
->buildroot at uclibc.org
->http://busybox.net/mailman/listinfo/buildroot
->
+
+Modified:
+   trunk/buildroot/package/gmp/gmp.mk
+
+
+Changeset:
+Modified: trunk/buildroot/package/gmp/gmp.mk
+===================================================================
+--- trunk/buildroot/package/gmp/gmp.mk	2007-09-17 12:49:46 UTC (rev 19871)
++++ trunk/buildroot/package/gmp/gmp.mk	2007-09-17 13:12:38 UTC (rev 19872)
+@@ -11,7 +11,7 @@
+ GMP_TARGET_DIR:=$(BUILD_DIR)/gmp-$(GMP_VERSION)
+ GMP_BINARY:=libgmp$(LIBTGTEXT)
+ GMP_HOST_BINARY:=libgmp$(HOST_SHREXT)
+-GMP_LIBVERSION:=3.4.1
++GMP_LIBVERSION:=3.4.2
+ 
+ # this is a workaround for a bug in GMP, please see
+ # http://gmplib.org/list-archives/gmp-devel/2006-April/000618.html
