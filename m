@@ -1,9 +1,9 @@
 From: Ulf Samuelsson <ulf@atmel.com>
-Date: Mon, 17 Sep 2007 12:41:38 +0200
+Date: Mon, 17 Sep 2007 12:43:22 +0200
 Subject: [Buildroot] svn commit: trunk/buildroot/target/device
 In-Reply-To: <20070917075500.052F2A4692@busybox.net>
 References: <20070917075500.052F2A4692@busybox.net>
-Message-ID: <1190025698.8052.1.camel@elrond.sweden.atmel.com>
+Message-ID: <1190025802.8052.4.camel@elrond.sweden.atmel.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -19,15 +19,16 @@ m?n 2007-09-17 klockan 00:55 -0700 skrev aldot at uclibc.org:
 > - Atmel mirrors are only of interrest for atmel
 > 
 > 
-You just broke AT91 ARM support.
-Please revert!
-
-
-
 > Modified:
 >    trunk/buildroot/target/device/Mirrors.in
 > 
 > 
+
+And making it depending on BR2_ATMEL or similar makes it impossible to 
+put package support on that ftp site, so don't create any dependency
+at all.
+
+
 > Changeset:
 > Modified: trunk/buildroot/target/device/Mirrors.in
 > ===================================================================
