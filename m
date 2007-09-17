@@ -1,41 +1,55 @@
 From: Bernhard Fischer <rep.dot.nop@gmail.com>
-Date: Mon, 17 Sep 2007 13:01:36 +0200
-Subject: [Buildroot] r19351 broke make source [was: Re: svn
-	commit:	trunk/buildroot: target/device target/device/Atmel
-	targe etc...]
-In-Reply-To: <1190031709.8052.11.camel@elrond.sweden.atmel.com>
-References: <20070731145959.C5111A4595@busybox.net>
-	<20070917092015.GA18644@aon.at>
-	<1190031709.8052.11.camel@elrond.sweden.atmel.com>
-Message-ID: <20070917110136.GA22104@aon.at>
+Date: Mon, 17 Sep 2007 13:10:24 +0200
+Subject: [Buildroot] svn commit: trunk/buildroot/target/device
+In-Reply-To: <1190031404.8052.9.camel@elrond.sweden.atmel.com>
+References: <20070917075500.052F2A4692@busybox.net>
+	<1190025802.8052.4.camel@elrond.sweden.atmel.com>
+	<20070917092735.GA18888@aon.at>
+	<1190031404.8052.9.camel@elrond.sweden.atmel.com>
+Message-ID: <20070917111024.GB22104@aon.at>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Mon, Sep 17, 2007 at 02:21:49PM +0200, Ulf Samuelsson wrote:
->m?n 2007-09-17 klockan 11:20 +0200 skrev Bernhard Fischer:
->> On Tue, Jul 31, 2007 at 07:59:59AM -0700, ulf at uclibc.org wrote:
->> >Author: ulf
->> >Date: 2007-07-31 07:59:58 -0700 (Tue, 31 Jul 2007)
->> >New Revision: 19351
+On Mon, Sep 17, 2007 at 02:16:44PM +0200, Ulf Samuelsson wrote:
+>m?n 2007-09-17 klockan 11:27 +0200 skrev Bernhard Fischer:
+>> On Mon, Sep 17, 2007 at 12:43:22PM +0200, Ulf Samuelsson wrote:
+>> >m?n 2007-09-17 klockan 00:55 -0700 skrev aldot at uclibc.org:
+>> >> Author: aldot
+>> >> Date: 2007-09-17 00:54:52 -0700 (Mon, 17 Sep 2007)
+>> >> New Revision: 19862
+>> >> 
+>> >> Log:
+>> >> - Atmel mirrors are only of interrest for atmel
+>> >> 
+>> >> 
+>> >> Modified:
+>> >>    trunk/buildroot/target/device/Mirrors.in
+>> >> 
+>> >> 
 >> >
->> >Log:
->> >Add support for prepatched toolchains
+>> >And making it depending on BR2_ATMEL or similar makes it impossible to 
+>> >put package support on that ftp site, so don't create any dependency
+>> >at all.
 >> 
->> This apparently broke 'make source'. Please fix ASAP or revert.
->> >
->
->Please supply the error message.
+>> This can depend on BR2_TARGET_ATMEL or some at91 config symbol.
+>> Depending on BR2_arm is wrong since i want to build arm toolchains but
+>> use upstream sources, not some vendor supplied tarballs.
+>> 
+>You asssume that there is never going to be something on the ftp site
+>which is interesting to x86/ppc etc. users.
+>That assumption is wrong, so therefore the dependency is wrong
 
-make source does not download the binutils tarball. After
-$ rm -rf dl
-$ make source
-, unplug the serial cable of your modem and execute
-$ make
+You seem to be assuming that there is or will be something on that ftp
+site that is interresting. What would that be? I don't miss alot of
+stuff and if so, I somehow doubt that the missing bits would live on
+an atmel tfp-server.
 
-This fails since binutils...tar.bz2 was not downloaded.
+I ask you to fix the mirror-selection to reflect that a vendor may
+provide additional patches on their site for their specific products for
+a short period of time -- i.e. until the fixes are applied to upstream
+sources -- but _not_ to pollute the rest.
 
-PS: If you don't have a modem, setting BR2_WGET="/bin/false " after
-"make source" should have about the same effect.
+Thank you.
