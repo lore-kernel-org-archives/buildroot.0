@@ -1,25 +1,49 @@
-From: Blue Swirl <blauwirbel@gmail.com>
-Date: Mon, 17 Sep 2007 20:21:31 +0300
-Subject: [Buildroot] sparc64 v9 VIS toolchain bug with fzeros?
-In-Reply-To: <20070916212533.GO20058@aon.at>
-References: <20070915075059.68EC4A6056@busybox.net>
-	<20070915121916.GK20058@aon.at>
-	<f43fc5580709150607t4e51b73by878a54e35da00750@mail.gmail.com>
-	<20070915192154.GL20058@aon.at>
-	<f43fc5580709151241g578c4ce8i85d956039a747958@mail.gmail.com>
-	<20070915222726.GN20058@aon.at> <20070916212533.GO20058@aon.at>
-Message-ID: <f43fc5580709171021s3efbb445ma65672c454ab823b@mail.gmail.com>
+From: Ulf Samuelsson <ulf@atmel.com>
+Date: Mon, 17 Sep 2007 22:12:14 +0200
+Subject: [Buildroot] r19351 broke make source [was: Re: svn
+	commit:trunk/buildroot: target/device target/device/Atmel
+	targe etc...]
+References: <20070731145959.C5111A4595@busybox.net>
+	<20070917092015.GA18644@aon.at> <20070917095034.GB19167@aon.at>
+Message-ID: <002c01c7f967$0ec70460$e9c4af0a@atmel.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 9/17/07, Bernhard Fischer <rep.dot.nop@gmail.com> wrote:
-> Configuring gcc with --with-tune=v9 and -mvis in cflags, how can there
-> be a call to fzeros (a v9a instruction, from the looks)?
+----- Original Message ----- 
+From: "Bernhard Fischer" <rep.dot.nop@gmail.com>
+To: <buildroot@uclibc.org>
+Cc: <ulf@atmel.com>
+Sent: Monday, September 17, 2007 11:50 AM
+Subject: Re: [Buildroot] r19351 broke make source [was: Re: svn commit:trunk/buildroot: target/device target/device/Atmel targe etc...]
 
-You specified -mvis. The instruction set is like this:
-v9 = no vis
-v9a = v9 + vis 1
-v9b = v9a + vis 2
+
+> On Mon, Sep 17, 2007 at 11:20:15AM +0200, Bernhard Fischer wrote:
+>>On Tue, Jul 31, 2007 at 07:59:59AM -0700, ulf at uclibc.org wrote:
+>>>Author: ulf
+>>>Date: 2007-07-31 07:59:58 -0700 (Tue, 31 Jul 2007)
+>>>New Revision: 19351
+>>>
+>>>Log:
+>>>Add support for prepatched toolchains
+>>
+>>This apparently broke 'make source'. Please fix ASAP or revert.
+> 
+
+That is good, because the culprit is the creation of BASE_TARGETS 
+for the toolchain, which removes the toolchain source from TARGETS 
+Thus "make source" fails to work, since there is no dependency on the
+toolchain tarballs.
+
+The log shows that this patch was submitted by one aldot at uclibc.org...
+
+
+> I'll resist to do a funny immediate revert of this bad patch for now,
+> although this seems to be a common attitude today..
+> 
+
+
+Best Regards
+Ulf Samuelsson
