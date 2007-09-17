@@ -1,7 +1,7 @@
 From: ulf at uclibc.org <ulf@uclibc.org>
-Date: Mon, 17 Sep 2007 05:43:40 -0700 (PDT)
-Subject: [Buildroot] svn commit: trunk/buildroot/project
-Message-ID: <20070917124340.9C82530067@busybox.net>
+Date: Mon, 17 Sep 2007 05:49:46 -0700 (PDT)
+Subject: [Buildroot] svn commit: trunk/buildroot:  toolchain/uClibc
+Message-ID: <20070917124946.D992830062@busybox.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -9,30 +9,47 @@ Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
 Author: ulf
-Date: 2007-09-17 05:43:40 -0700 (Mon, 17 Sep 2007)
-New Revision: 19870
+Date: 2007-09-17 05:49:46 -0700 (Mon, 17 Sep 2007)
+New Revision: 19871
 
 Log:
-Add debug info
+Remove some debug info + add uclibc-target-utils-source target
 
 Modified:
-   trunk/buildroot/project/Makefile.in
+   trunk/buildroot/Makefile
+   trunk/buildroot/toolchain/uClibc/uclibc.mk
 
 
 Changeset:
-Modified: trunk/buildroot/project/Makefile.in
+Modified: trunk/buildroot/Makefile
 ===================================================================
---- trunk/buildroot/project/Makefile.in	2007-09-17 12:42:56 UTC (rev 19869)
-+++ trunk/buildroot/project/Makefile.in	2007-09-17 12:43:40 UTC (rev 19870)
-@@ -73,3 +73,11 @@
- VENDOR_PATCH_DIR:=$(strip $(subst ",,$(BR2_VENDOR_PATCH_DIR)))
- #"))
+--- trunk/buildroot/Makefile	2007-09-17 12:43:40 UTC (rev 19870)
++++ trunk/buildroot/Makefile	2007-09-17 12:49:46 UTC (rev 19871)
+@@ -430,12 +430,4 @@
  
-+vendor-dbg:
-+	@echo VENDOR_SITE=$(BR2_VENDOR_SITE)
-+	@echo VENDOR_SUFFIX=$(BR2_VENDOR_SUFFIX)
-+	@echo VENDOR_BINUTILS_RELEASE=$(BR2_VENDOR_BINUTILS_RELEASE)
-+	@echo VENDOR_GCC_RELEASE=$(BR2_VENDOR_GCC_RELEASE)
-+	@echo VENDOR_UCLIBC_RELEASE=$(BR2_VENDOR_UCLIBC_RELEASE)
-+	@echo VENDOR_GDB_RELEASE=$(BR2_VENDOR_GDB_RELEASE)
-+	@echo VENDOR_PATCH_DIR=$(BR2_VENDOR_PATCH_DIR)
+ .PHONY: dummy subdirs release distclean clean config oldconfig \
+ 	menuconfig tags check test depend defconfig help
+-
+-
+-dbg:
+-	echo BASE_TARGETS_SOURCE=$(BASE_TARGETS_SOURCE)
+-	echo BASE_TARGETS=$(BASE_TARGETS)
+-	echo TARGETS_SOURCE=$(TARGETS_SOURCE)
+-	echo TARGETS=$(TARGETS)
+-
+-bsource:	
++	
+
+Modified: trunk/buildroot/toolchain/uClibc/uclibc.mk
+===================================================================
+--- trunk/buildroot/toolchain/uClibc/uclibc.mk	2007-09-17 12:43:40 UTC (rev 19870)
++++ trunk/buildroot/toolchain/uClibc/uclibc.mk	2007-09-17 12:49:46 UTC (rev 19871)
+@@ -459,6 +459,8 @@
+ 
+ uclibc-target-utils: $(TARGET_DIR)/usr/bin/ldd
+ 
++uclibc-target-utils-source: $(DL_DIR)/$(UCLIBC_SOURCE)
++
+ #############################################################
+ #
+ # uClibc for the target just needs its header files
