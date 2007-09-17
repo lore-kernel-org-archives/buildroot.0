@@ -1,15 +1,56 @@
-From: pasteur <agbanle@gmail.com>
-Date: Mon, 17 Sep 2007 14:09:09 +0200
-Subject: [Buildroot] buildroot with ipkg
-Message-ID: <7fc538d30709170509s4898cc55keb14ebb718d30090@mail.gmail.com>
+From: ulf at uclibc.org <ulf@uclibc.org>
+Date: Mon, 17 Sep 2007 05:40:42 -0700 (PDT)
+Subject: [Buildroot] svn commit: trunk/buildroot
+Message-ID: <20070917124042.9B1523005D@busybox.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+Author: ulf
+Date: 2007-09-17 05:40:42 -0700 (Mon, 17 Sep 2007)
+New Revision: 19868
 
-any idea about ipkg integration with buildroot ? Like openwrt...
+Log:
+make source should include BASE_TARGETS
 
-Best regards
+Modified:
+   trunk/buildroot/Makefile
+
+
+Changeset:
+Modified: trunk/buildroot/Makefile
+===================================================================
+--- trunk/buildroot/Makefile	2007-09-17 12:30:31 UTC (rev 19867)
++++ trunk/buildroot/Makefile	2007-09-17 12:40:42 UTC (rev 19868)
+@@ -217,6 +217,7 @@
+ 
+ TARGETS_CLEAN:=$(patsubst %,%-clean,$(TARGETS))
+ TARGETS_SOURCE:=$(patsubst %,%-source,$(TARGETS))
++BASE_TARGETS_SOURCE:=$(patsubst %,%-source,$(BASE_TARGETS))
+ TARGETS_DIRCLEAN:=$(patsubst %,%-dirclean,$(TARGETS))
+ TARGETS_ALL:=$(patsubst %,__real_tgt_%,$(TARGETS))
+ # all targets depend on the crosscompiler and it's prerequisites
+@@ -283,7 +284,7 @@
+ erase-fakeroots:
+ 	rm -f $(PROJECT_BUILD_DIR)/.fakeroot*
+ 
+-source: $(TARGETS_SOURCE) $(HOST_SOURCE)
++source: $(BASE_TARGETS_SOURCE) $(TARGETS_SOURCE) $(HOST_SOURCE)
+ 
+ _source-check:
+ 	$(MAKE) SPIDER=--spider source
+@@ -429,3 +430,12 @@
+ 
+ .PHONY: dummy subdirs release distclean clean config oldconfig \
+ 	menuconfig tags check test depend defconfig help
++
++
++dbg:
++	echo BASE_TARGETS_SOURCE=$(BASE_TARGETS_SOURCE)
++	echo BASE_TARGETS=$(BASE_TARGETS)
++	echo TARGETS_SOURCE=$(TARGETS_SOURCE)
++	echo TARGETS=$(TARGETS)
++
++bsource:	
