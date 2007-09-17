@@ -1,49 +1,26 @@
-From: Ulf Samuelsson <ulf@atmel.com>
-Date: Mon, 17 Sep 2007 22:12:14 +0200
-Subject: [Buildroot] r19351 broke make source [was: Re: svn
-	commit:trunk/buildroot: target/device target/device/Atmel
-	targe etc...]
-References: <20070731145959.C5111A4595@busybox.net>
-	<20070917092015.GA18644@aon.at> <20070917095034.GB19167@aon.at>
-Message-ID: <002c01c7f967$0ec70460$e9c4af0a@atmel.com>
+From: Julien Boibessot <julien.boibessot@free.fr>
+Date: Mon, 17 Sep 2007 21:44:18 +0200
+Subject: [Buildroot] buildroot with ipkg
+In-Reply-To: <7fc538d30709170509s4898cc55keb14ebb718d30090@mail.gmail.com>
+References: <7fc538d30709170509s4898cc55keb14ebb718d30090@mail.gmail.com>
+Message-ID: <46EED912.2070902@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
------ Original Message ----- 
-From: "Bernhard Fischer" <rep.dot.nop@gmail.com>
-To: <buildroot@uclibc.org>
-Cc: <ulf@atmel.com>
-Sent: Monday, September 17, 2007 11:50 AM
-Subject: Re: [Buildroot] r19351 broke make source [was: Re: svn commit:trunk/buildroot: target/device target/device/Atmel targe etc...]
+Hi,
 
+pasteur a ?crit :
+> any idea about ipkg integration with buildroot ? Like openwrt...
+>   
+I have started to integrate it for a project I'm co-driving but from my 
+understanding it will require to modify each package's makefile to 
+explicitly call "ipkg stuff" after having installed the package's files 
+in TARGET_DIR.
 
-> On Mon, Sep 17, 2007 at 11:20:15AM +0200, Bernhard Fischer wrote:
->>On Tue, Jul 31, 2007 at 07:59:59AM -0700, ulf at uclibc.org wrote:
->>>Author: ulf
->>>Date: 2007-07-31 07:59:58 -0700 (Tue, 31 Jul 2007)
->>>New Revision: 19351
->>>
->>>Log:
->>>Add support for prepatched toolchains
->>
->>This apparently broke 'make source'. Please fix ASAP or revert.
-> 
+Do you have a better idea ?
 
-That is good, because the culprit is the creation of BASE_TARGETS 
-for the toolchain, which removes the toolchain source from TARGETS 
-Thus "make source" fails to work, since there is no dependency on the
-toolchain tarballs.
-
-The log shows that this patch was submitted by one aldot at uclibc.org...
-
-
-> I'll resist to do a funny immediate revert of this bad patch for now,
-> although this seems to be a common attitude today..
-> 
-
-
-Best Regards
-Ulf Samuelsson
+Regards,
+Julien
