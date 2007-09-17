@@ -1,17 +1,15 @@
-From: Bernhard Fischer <rep.dot.nop@gmail.com>
-Date: Mon, 17 Sep 2007 14:31:19 +0200
-Subject: [Buildroot] [patch] cleanup
-In-Reply-To: <0709162000520.16501@somehost>
-References: <0709162000520.16501@somehost>
-Message-ID: <20070917123119.GA24993@aon.at>
+From: pasteur <agbanle@gmail.com>
+Date: Mon, 17 Sep 2007 14:09:09 +0200
+Subject: [Buildroot] buildroot with ipkg
+Message-ID: <7fc538d30709170509s4898cc55keb14ebb718d30090@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Sun, Sep 16, 2007 at 08:01:47PM +0200, Cristian Ionescu-Idbohrn wrote:
->Cheers,
+Hello,
 
-Merged.
-Cheers,
+any idea about ipkg integration with buildroot ? Like openwrt...
+
+Best regards
