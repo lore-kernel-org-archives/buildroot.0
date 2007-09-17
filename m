@@ -1,62 +1,550 @@
-From: Ulf Samuelsson <ulf@atmel.com>
-Date: Mon, 17 Sep 2007 12:43:22 +0200
-Subject: [Buildroot] svn commit: trunk/buildroot/target/device
-In-Reply-To: <20070917075500.052F2A4692@busybox.net>
-References: <20070917075500.052F2A4692@busybox.net>
-Message-ID: <1190025802.8052.4.camel@elrond.sweden.atmel.com>
+From: Bernhard Fischer <rep.dot.nop@gmail.com>
+Date: Mon, 17 Sep 2007 11:20:15 +0200
+Subject: [Buildroot] r19351 broke make source [was: Re: svn
+	commit:	trunk/buildroot: target/device target/device/Atmel
+	targe etc...]
+In-Reply-To: <20070731145959.C5111A4595@busybox.net>
+References: <20070731145959.C5111A4595@busybox.net>
+Message-ID: <20070917092015.GA18644@aon.at>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-m?n 2007-09-17 klockan 00:55 -0700 skrev aldot at uclibc.org:
-> Author: aldot
-> Date: 2007-09-17 00:54:52 -0700 (Mon, 17 Sep 2007)
-> New Revision: 19862
-> 
-> Log:
-> - Atmel mirrors are only of interrest for atmel
-> 
-> 
-> Modified:
->    trunk/buildroot/target/device/Mirrors.in
-> 
-> 
+On Tue, Jul 31, 2007 at 07:59:59AM -0700, ulf at uclibc.org wrote:
+>Author: ulf
+>Date: 2007-07-31 07:59:58 -0700 (Tue, 31 Jul 2007)
+>New Revision: 19351
+>
+>Log:
+>Add support for prepatched toolchains
 
-And making it depending on BR2_ATMEL or similar makes it impossible to 
-put package support on that ftp site, so don't create any dependency
-at all.
-
-
-> Changeset:
-> Modified: trunk/buildroot/target/device/Mirrors.in
-> ===================================================================
-> --- trunk/buildroot/target/device/Mirrors.in	2007-09-16 19:41:40 UTC (rev 19861)
-> +++ trunk/buildroot/target/device/Mirrors.in	2007-09-17 07:54:52 UTC (rev 19862)
-> @@ -4,14 +4,16 @@
->  	string "Sourceforge mirror site"
->  	default "easynews"
->  	help
-> -	  Sourceforge has a system of mirror sites.  Some sites may be closer
-> -	  to your location, and sometimes mirror sites go down and are no longer
-> -	  available.  This option allows you to select your preferred Sourceforge
-> -	  mirror site.
-> +	  Sourceforge has a system of mirror sites.  Some sites may be
-> +	  closer to your location, and sometimes mirror sites go down
-> +	  and are no longer available.  This option allows you to select
-> +	  your preferred Sourceforge mirror site.
->  
->  	  The list of mirrors is available here:
->  	  http://prdownloads.sourceforge.net/index-sf.html?download
->  
-> +if BR2_avr32
->  source	"target/device/Atmel/Mirrors.in"
-> +endif
->  
->  endmenu
+This apparently broke 'make source'. Please fix ASAP or revert.
+>
+>Added:
+>   trunk/buildroot/target/device/Atmel/Mirrors.in
+>   trunk/buildroot/target/device/Atmel/toolchain/
+>   trunk/buildroot/target/device/Atmel/toolchain/avr32/
+>   trunk/buildroot/target/device/Atmel/toolchain/avr32/binutils-2.17-avr32-2.0/
+>   trunk/buildroot/target/device/Atmel/toolchain/avr32/gcc-4.1.2-avr32-2.0/
+>   trunk/buildroot/target/device/Atmel/toolchain/avr32/gdb-6.4-avr32-2.0/
+>   trunk/buildroot/target/device/Atmel/toolchain/avr32/uClibc-0.9.28.3-avr32-2.0/
+>   trunk/buildroot/target/device/Mirrors.in
+>   trunk/buildroot/target/device/Toolchain.in
+>
+>Modified:
+>   trunk/buildroot/Config.in
+>   trunk/buildroot/toolchain/Config.in
+>   trunk/buildroot/toolchain/Makefile.in
+>   trunk/buildroot/toolchain/binutils/binutils.mk
+>   trunk/buildroot/toolchain/gcc/Config.in
+>   trunk/buildroot/toolchain/gcc/gcc-uclibc-3.x.mk
+>   trunk/buildroot/toolchain/gcc/gcc-uclibc-4.x.mk
+>   trunk/buildroot/toolchain/gdb/gdb.mk
+>   trunk/buildroot/toolchain/uClibc/uclibc.mk
+>
+>
+>Changeset:
+>Modified: trunk/buildroot/Config.in
+>===================================================================
+>--- trunk/buildroot/Config.in	2007-07-30 18:24:53 UTC (rev 19350)
+>+++ trunk/buildroot/Config.in	2007-07-31 14:59:58 UTC (rev 19351)
+>@@ -564,43 +564,7 @@
+> 	help
+> 	  Directory to store all the source files that we need to fetch.
 > 
-> _______________________________________________
-> buildroot mailing list
-> buildroot at uclibc.org
-> http://busybox.net/mailman/listinfo/buildroot
+>-config BR2_SOURCEFORGE_MIRROR
+>-	string "Sourceforge mirror site"
+>-	default "easynews"
+>-	help
+>-	  Sourceforge has a system of mirror sites.  Some sites may be closer
+>-	  to your location, and sometimes mirror sites go down and are no longer
+>-	  available.  This option allows you to select your preferred Sourceforge
+>-	  mirror site.
+>-
+>-	  The list of mirrors is available here:
+>-	  http://prdownloads.sourceforge.net/index-sf.html?download
+>-
+>-config BR2_ATMEL_MIRROR
+>-	depends BR2_TARGET_ATMEL && (BR2_avr32 || BR2_arm)
+>-	string "Atmel AVR32/AT91 download site"
+>-	default "ftp://at91dist:distrib at 81.80.104.162/AT91_Third_Party_Design_Flow/Linux_Host/"
+>-	help
+>-	  Unofficial site for AVR32/AT91 Buildroot patches, or your local mirror.
+>-	  Atmel does not currently support buildroot, but this site makes
+>-	  available neccessary patches and prepatched packages useful
+>-	  to extend a buildroot for AVR32 or AT91 ARM based boards.
+>-	  Issues with contents of this server needs to be highlighted
+>-	  on the buildroot mailing list and
+>-	  should not be addressed directly to Atmel
+>-	  Atmel provides support for their AVR32 chips on 
+>-	  http://avr32linux.org/ or http://www.avrfreaks.net/
+>-	  Atmel provides support for AT91 chips on www.at91.com.
+>-	  Commercial AT91 Linux support is through www.timesys.com
+>-	  Community  AT91 Linux support is through http://maxim.org.za/AT91_26.html
+>-
+>-config BR2_AT91_PATCH_MIRROR
+>-	depends BR2_TARGET_ATMEL && BR2_arm
+>-	string "Atmel AT91 Linux Patch download site"
+>-	default "http://maxim.org.za/AT91RM9200/2.6/"
+>-	help
+>-	  Patches for the AT91 generated by the Linux community
+>-	  usually ends up here, courtesy of Andrew Victor
+>+source	"target/device/Mirrors.in"
+> 	  
+> config BR2_STAGING_DIR
+> 	string "Toolchain and header file location?"
+>
+>Added: trunk/buildroot/target/device/Atmel/Mirrors.in
+>===================================================================
+>--- trunk/buildroot/target/device/Atmel/Mirrors.in	                        (rev 0)
+>+++ trunk/buildroot/target/device/Atmel/Mirrors.in	2007-07-31 14:59:58 UTC (rev 19351)
+>@@ -0,0 +1,27 @@
+>+menu	"Atmel Mirrors"
+>+
+>+config BR2_ATMEL_MIRROR
+>+	string "Atmel AVR32/AT91 download site"
+>+	default "ftp://at91dist:distrib at 81.80.104.162/AT91_Third_Party_Design_Flow/Linux_Host/"
+>+	help
+>+	  Unofficial site for AVR32/AT91 Buildroot patches, or your local mirror.
+>+	  Atmel does not currently support buildroot, but this site makes
+>+	  available neccessary patches and prepatched packages useful
+>+	  to extend a buildroot for AVR32 or AT91 ARM based boards.
+>+	  Issues with contents of this server needs to be highlighted
+>+	  on the buildroot mailing list and
+>+	  should not be addressed directly to Atmel
+>+	  Atmel provides support for their AVR32 chips on 
+>+	  http://avr32linux.org/ or http://www.avrfreaks.net/
+>+	  Atmel provides support for AT91 chips on www.at91.com.
+>+	  Commercial AT91 Linux support is through www.timesys.com
+>+	  Community  AT91 Linux support is through http://maxim.org.za/AT91_26.html
+>+
+>+config BR2_AT91_PATCH_MIRROR
+>+	string "Atmel AT91 Linux Patch download site"
+>+	default "http://maxim.org.za/AT91RM9200/2.6/"
+>+	help
+>+	  Patches for the AT91 generated by the Linux community
+>+	  usually ends up here, courtesy of Andrew Victor
+>+
+>+endmenu
+>
+>Added: trunk/buildroot/target/device/Mirrors.in
+>===================================================================
+>--- trunk/buildroot/target/device/Mirrors.in	                        (rev 0)
+>+++ trunk/buildroot/target/device/Mirrors.in	2007-07-31 14:59:58 UTC (rev 19351)
+>@@ -0,0 +1,17 @@
+>+menu "Mirrors and Download locations"
+>+
+>+config BR2_SOURCEFORGE_MIRROR
+>+	string "Sourceforge mirror site"
+>+	default "easynews"
+>+	help
+>+	  Sourceforge has a system of mirror sites.  Some sites may be closer
+>+	  to your location, and sometimes mirror sites go down and are no longer
+>+	  available.  This option allows you to select your preferred Sourceforge
+>+	  mirror site.
+>+
+>+	  The list of mirrors is available here:
+>+	  http://prdownloads.sourceforge.net/index-sf.html?download
+>+
+>+source	"target/device/Atmel/Mirrors.in"
+>+
+>+endmenu
+>
+>Added: trunk/buildroot/target/device/Toolchain.in
+>===================================================================
+>--- trunk/buildroot/target/device/Toolchain.in	                        (rev 0)
+>+++ trunk/buildroot/target/device/Toolchain.in	2007-07-31 14:59:58 UTC (rev 19351)
+>@@ -0,0 +1,51 @@
+>+choice
+>+	prompt "Source location:"
+>+	default BR2_TOOLCHAIN_NORMAL		if	!BR2_avr32
+>+	default BR2_TOOLCHAIN_ATMEL_AVR32	if	 BR2_avr32
+>+	depends on BR2_TOOLCHAIN_BUILDROOT
+>+	help
+>+	  Select whether to use the toolchain built by the buildroot
+>+	  system or an external pre-built toolchain.
+>+
+>+config BR2_TOOLCHAIN_NORMAL
+>+	bool
+>+	prompt "Use default sources for toolchain"
+>+
+>+config BR2_TOOLCHAIN_ATMEL_AVR32
+>+	bool
+>+	prompt "Use prepatched source for AVR32 toolchain"
+>+	depends on BR2_avr32
+>+	depends on BR2_GCC_VERSION_4_1_2
+>+	depends on BR2_GDB_VERSION_6_4 || !BR2_PACKAGE_GDB
+>+	depends on BR2_BINUTILS_VERSION_2_17
+>+	depends on BR2_UCLIBC_VERSION_0_9_28_3
+>+
+>+endchoice
+>+
+>+config BR2_VENDOR_SITE
+>+	string
+>+	default $(BR2_ATMEL_MIRROR)			if BR2_TOOLCHAIN_ATMEL_AVR32
+>+
+>+config BR2_VENDOR_SUFFIX
+>+	string
+>+	default "-avr32"				if BR2_TOOLCHAIN_ATMEL_AVR32
+>+
+>+config BR2_VENDOR_BINUTILS_RELEASE
+>+	string
+>+	default "-2.0"					if BR2_TOOLCHAIN_ATMEL_AVR32
+>+
+>+config BR2_VENDOR_GCC_RELEASE
+>+	string
+>+	default "-2.0"					if BR2_TOOLCHAIN_ATMEL_AVR32
+>+
+>+config BR2_VENDOR_UCLIBC_RELEASE
+>+	string
+>+	default "-2.0"					if BR2_TOOLCHAIN_ATMEL_AVR32
+>+
+>+config BR2_VENDOR_GDB_RELEASE
+>+	string
+>+	default "-2.0"					if BR2_TOOLCHAIN_ATMEL_AVR32
+>+
+>+config BR2_VENDOR_PATCH_DIR
+>+	string
+>+	default "target/device/Atmel/toolchain/avr32"	if BR2_TOOLCHAIN_ATMEL_AVR32
+>
+>Modified: trunk/buildroot/toolchain/Config.in
+>===================================================================
+>--- trunk/buildroot/toolchain/Config.in	2007-07-30 18:24:53 UTC (rev 19350)
+>+++ trunk/buildroot/toolchain/Config.in	2007-07-31 14:59:58 UTC (rev 19351)
+>@@ -1,5 +1,4 @@
+>-#
+>-
+>+menu	"Toolchain type"
+> choice
+> 	prompt "Toolchain type"
+> 	default BR2_TOOLCHAIN_BUILDROOT
+>@@ -16,5 +15,9 @@
+> 	prompt "External toolchain"
+> endchoice
+> 
+>+source "target/device/Toolchain.in"
+>+
+>+endmenu
+>+
+> source "toolchain/Config.in.2"
+> source "toolchain/external-toolchain/Config.in"
+>
+>Modified: trunk/buildroot/toolchain/Makefile.in
+>===================================================================
+>--- trunk/buildroot/toolchain/Makefile.in	2007-07-30 18:24:53 UTC (rev 19350)
+>+++ trunk/buildroot/toolchain/Makefile.in	2007-07-31 14:59:58 UTC (rev 19351)
+>@@ -45,5 +45,21 @@
+> # gcc-3.4 would need -combine, I only support 4.2, which correctly uses '--'
+> CFLAGS_COMBINE = $(call cc-option,--combine,)
+> 
+>+# define values for prepatched source trees for toolchains
+>+VENDOR_SITE:=$(strip $(subst ",,$(BR2_VENDOR_SITE)))
+>+#"))
+>+VENDOR_SUFFIX:=$(strip $(subst ",,$(BR2_VENDOR_SUFFIX)))
+>+#"))
+>+VENDOR_BINUTILS_RELEASE:=$(strip $(subst ",,$(BR2_VENDOR_BINUTILS_RELEASE)))
+>+#"))
+>+VENDOR_GCC_RELEASE:=$(strip $(subst ",,$(BR2_VENDOR_GCC_RELEASE)))
+>+#"))
+>+VENDOR_UCLIBC_RELEASE:=$(strip $(subst ",,$(BR2_VENDOR_UCLIBC_RELEASE)))
+>+#"))
+>+VENDOR_GDB_RELEASE:=$(strip $(subst ",,$(BR2_VENDOR_GDB_RELEASE)))
+>+#"))
+>+VENDOR_PATCH_DIR:=$(strip $(subst ",,$(BR2_VENDOR_PATCH_DIR)))
+>+#"))
+>+
+> # gcc has a bunch of needed stuff....
+> include toolchain/gcc/Makefile.in
+>
+>Modified: trunk/buildroot/toolchain/binutils/binutils.mk
+>===================================================================
+>--- trunk/buildroot/toolchain/binutils/binutils.mk	2007-07-30 18:24:53 UTC (rev 19350)
+>+++ trunk/buildroot/toolchain/binutils/binutils.mk	2007-07-31 14:59:58 UTC (rev 19351)
+>@@ -62,8 +62,20 @@
+> BINUTILS_TARGET_CONFIG_OPTIONS+=--with-mpfr="$(MPFR_TARGET_DIR)"
+> endif
+> 
+>-BINUTILS_SOURCE:=binutils-$(BINUTILS_VERSION).tar.bz2
+>-BINUTILS_DIR:=$(TOOL_BUILD_DIR)/binutils-$(BINUTILS_VERSION)
+>+ifeq	($(BR2_TOOLCHAIN_NORMAL),)
+>+BINUTILS_SITE:=$(VENDOR_SITE)
+>+endif
+>+
+>+BINUTILS_OFFICIAL_VERSION:=$(BINUTILS_VERSION)$(VENDOR_SUFFIX)$(VENDOR_BINUTILS_RELEASE)
+>+
+>+ifeq	($(BR2_TOOLCHAIN_NORMAL),y)
+>+BINUTILS_PATCH_DIR:=toolchain/binutils/$(BINUTILS_VERSION)
+>+else
+>+BINUTILS_PATCH_DIR:=$(VENDOR_PATCH_DIR)/binutils-$(BINUTILS_OFFICIAL_VERSION)
+>+endif
+>+
+>+BINUTILS_SOURCE:=binutils-$(BINUTILS_OFFICIAL_VERSION).tar.bz2
+>+BINUTILS_DIR:=$(TOOL_BUILD_DIR)/binutils-$(BINUTILS_OFFICIAL_VERSION)
+> BINUTILS_CAT:=$(BZCAT)
+> 
+> BINUTILS_DIR1:=$(TOOL_BUILD_DIR)/binutils-$(BINUTILS_VERSION)-build
+>@@ -72,7 +84,7 @@
+> 	mkdir -p $(DL_DIR)
+> 	$(WGET) -P $(DL_DIR) $(BINUTILS_SITE)/$(BINUTILS_SOURCE)
+> 
+>-binutils-unpacked: $(BINUTILS_DIR)/.unpacked
+>+binutils-unpacked: $(BINUTILS_DIR)/.patched
+> $(BINUTILS_DIR)/.unpacked: $(DL_DIR)/$(BINUTILS_SOURCE)
+> 	mkdir -p $(TOOL_BUILD_DIR)
+> 	rm -rf $(BINUTILS_DIR)
+>@@ -82,7 +94,7 @@
+> 
+> $(BINUTILS_DIR)/.patched: $(BINUTILS_DIR)/.unpacked
+> 	# Apply appropriate binutils patches.
+>-	toolchain/patch-kernel.sh $(BINUTILS_DIR) toolchain/binutils/$(BINUTILS_VERSION) \*.patch
+>+	toolchain/patch-kernel.sh $(BINUTILS_DIR) $(BINUTILS_PATCH_DIR) \*.patch
+> 	touch $@
+> 
+> $(BINUTILS_DIR1)/.configured: $(BINUTILS_DIR)/.patched
+>
+>Modified: trunk/buildroot/toolchain/gcc/Config.in
+>===================================================================
+>--- trunk/buildroot/toolchain/gcc/Config.in	2007-07-30 18:24:53 UTC (rev 19350)
+>+++ trunk/buildroot/toolchain/gcc/Config.in	2007-07-31 14:59:58 UTC (rev 19351)
+>@@ -119,7 +119,7 @@
+> 
+> config BR2_TOOLCHAIN_SYSROOT
+> 	bool "Enable toolchain with --sysroot support"
+>-	depends on !BR2_GCC_VERSION_3_3_5 && !BR2_GCC_VERSION_3_3_6 && !BR2_GCC_VERSION_3_4_2 && !BR2_GCC_VERSION_3_4_3 && !BR2_GCC_VERSION_3_4_4 && !BR2_GCC_VERSION_3_4_5 && !BR2_GCC_VERSION_3_4_6
+>+	depends on !BR2_GCC_VERSION_3_3_5 && !BR2_GCC_VERSION_3_3_6 && !BR2_GCC_VERSION_3_4_2 && !BR2_GCC_VERSION_3_4_3 && !BR2_GCC_VERSION_3_4_4 && !BR2_GCC_VERSION_3_4_5 && !BR2_GCC_VERSION_3_4_6 && !BR2_GCC_VERSION_4_1_2
+> 	default y
+> 	help
+> 	  Enables --sysroot=dir for binutils and gcc.
+>
+>Modified: trunk/buildroot/toolchain/gcc/gcc-uclibc-3.x.mk
+>===================================================================
+>--- trunk/buildroot/toolchain/gcc/gcc-uclibc-3.x.mk	2007-07-30 18:24:53 UTC (rev 19350)
+>+++ trunk/buildroot/toolchain/gcc/gcc-uclibc-3.x.mk	2007-07-31 14:59:58 UTC (rev 19351)
+>@@ -31,8 +31,31 @@
+> GCC_SITE:=ftp://sources.redhat.com/pub/gcc/snapshots/$(GCC_OFFICIAL_VER)
+> endif
+> 
+>+
+>+# redefine if using an external prepatched gcc source
+>+ifeq	($(BR2_TOOLCHAIN_NORMAL),)
+>+GCC_SITE:=$(VENDOR_SITE)
+>+GCC_OFFICIAL_VER:=$(GCC_VERSION)$(VENDOR_SUFFIX)$(VENDOR_GCC_RELEASE)
+>+endif
+>+
+> GCC_SOURCE:=gcc-$(GCC_OFFICIAL_VER).tar.bz2
+> GCC_DIR:=$(TOOL_BUILD_DIR)/gcc-$(GCC_OFFICIAL_VER)
+>+
+>+ifeq	($(BR2_TOOLCHAIN_NORMAL),y)
+>+ifeq ($(GCC_SNAP_DATE),)
+>+GCC_PATCH_DIR:=toolchain/gcc/$(GCC_VERSION)
+>+else
+>+ifneq ($(wildcard toolchain/gcc/$(GCC_OFFICIAL_VER)),)
+>+GCC_PATCH_DIR:=toolchain/gcc/$(GCC_OFFICIAL_VER)
+>+else
+>+GCC_PATCH_DIR:=toolchain/gcc/$(GCC_VERSION)
+>+endif
+>+endif
+>+else
+>+GCC_PATCH_DIR:=$(VENDOR_PATCH_DIR)/gcc-$(GCC_OFFICIAL_VER)
+>+endif
+>+
+>+
+> GCC_CAT:=$(BZCAT)
+> GCC_STRIP_HOST_BINARIES:=true
+> 
+>@@ -109,7 +132,7 @@
+> 	mkdir -p $(DL_DIR)
+> 	$(WGET) -P $(DL_DIR) $(GCC_SITE)/$(GCC_SOURCE)
+> 
+>-gcc-unpacked: $(GCC_DIR)/.unpacked
+>+gcc-unpacked: $(GCC_DIR)/.patched
+> $(GCC_DIR)/.unpacked: $(DL_DIR)/$(GCC_SOURCE)
+> 	mkdir -p $(TOOL_BUILD_DIR)
+> 	$(GCC_CAT) $(DL_DIR)/$(GCC_SOURCE) | tar -C $(TOOL_BUILD_DIR) $(TAR_OPTIONS) -
+>@@ -119,16 +142,7 @@
+> gcc-patched: $(GCC_DIR)/.patched
+> $(GCC_DIR)/.patched: $(GCC_DIR)/.unpacked
+> 	# Apply any files named gcc-*.patch from the source directory to gcc
+>-ifeq ($(GCC_SNAP_DATE),)
+>-	toolchain/patch-kernel.sh $(GCC_DIR) toolchain/gcc/$(GCC_VERSION) \*.patch
+>-else
+>-ifneq ($(wildcard toolchain/gcc/$(GCC_OFFICIAL_VER)),)
+>-	toolchain/patch-kernel.sh $(GCC_DIR) toolchain/gcc/$(GCC_OFFICIAL_VER) \*.patch
+>-else
+>-	toolchain/patch-kernel.sh $(GCC_DIR) toolchain/gcc/$(GCC_VERSION) \*.patch
+>-endif
+>-endif
+>-
+>+	toolchain/patch-kernel.sh $(GCC_DIR) $(GCC_PATCH_DIR) \*.patch
+> 	# Note: The soft float situation has improved considerably with gcc 3.4.x.
+> 	# We can dispense with the custom spec files, as well as libfloat for the arm case.
+> 	# However, we still need a patch for arm.  There's a similar patch for gcc 3.3.x
+>
+>Modified: trunk/buildroot/toolchain/gcc/gcc-uclibc-4.x.mk
+>===================================================================
+>--- trunk/buildroot/toolchain/gcc/gcc-uclibc-4.x.mk	2007-07-30 18:24:53 UTC (rev 19350)
+>+++ trunk/buildroot/toolchain/gcc/gcc-uclibc-4.x.mk	2007-07-31 14:59:58 UTC (rev 19351)
+>@@ -29,6 +29,28 @@
+> GCC_SITE:=ftp://sources.redhat.com/pub/gcc/snapshots/$(GCC_OFFICIAL_VER)
+> endif
+> 
+>+# redefine if using an external prepatched gcc source
+>+ifeq	($(BR2_TOOLCHAIN_NORMAL),)
+>+GCC_SITE:=$(VENDOR_SITE)
+>+GCC_OFFICIAL_VER:=$(GCC_VERSION)$(VENDOR_SUFFIX)$(VENDOR_GCC_RELEASE)
+>+endif
+>+
+>+# define patch location
+>+ifeq	($(BR2_TOOLCHAIN_NORMAL),y)	# Normal toolchain
+>+ifeq ($(GCC_SNAP_DATE),)		# Not a snapshot
+>+GCC_PATCH_DIR:=toolchain/gcc/$(GCC_VERSION)
+>+else					# Is a snapshot
+>+ifneq ($(wildcard toolchain/gcc/$(GCC_OFFICIAL_VER)),)	# Snapshot patch?
+>+GCC_PATCH_DIR:=toolchain/gcc/$(GCC_OFFICIAL_VER)
+>+else					# Normal patch to snapshot
+>+# Use the normal location, if the dedicated location does not exist
+>+GCC_PATCH_DIR:=toolchain/gcc/$(GCC_VERSION)
+>+endif					# Snapshot patch
+>+endif					# Not a snapshot
+>+else					# Prepatched toolchain
+>+GCC_PATCH_DIR:=$(VENDOR_PATCH_DIR)/gcc-$(GCC_OFFICIAL_VER)
+>+endif					# Normal toolchain
+>+
+> GCC_SOURCE:=gcc-$(GCC_OFFICIAL_VER).tar.bz2
+> GCC_DIR:=$(TOOL_BUILD_DIR)/gcc-$(GCC_OFFICIAL_VER)
+> GCC_CAT:=$(BZCAT)
+>@@ -97,7 +119,7 @@
+> 	mkdir -p $(DL_DIR)
+> 	$(WGET) -P $(DL_DIR) $(GCC_SITE)/$(GCC_SOURCE)
+> 
+>-gcc-unpacked: $(GCC_DIR)/.unpacked
+>+gcc-unpacked: $(GCC_DIR)/.patched
+> $(GCC_DIR)/.unpacked: $(DL_DIR)/$(GCC_SOURCE)
+> 	mkdir -p $(TOOL_BUILD_DIR)
+> 	rm -rf $(GCC_DIR)
+>@@ -108,15 +130,7 @@
+> gcc-patched: $(GCC_DIR)/.patched
+> $(GCC_DIR)/.patched: $(GCC_DIR)/.unpacked
+> 	# Apply any files named gcc-*.patch from the source directory to gcc
+>-ifeq ($(GCC_SNAP_DATE),)
+>-	toolchain/patch-kernel.sh $(GCC_DIR) toolchain/gcc/$(GCC_VERSION) \*.patch
+>-else
+>-ifneq ($(wildcard toolchain/gcc/$(GCC_OFFICIAL_VER)),)
+>-	toolchain/patch-kernel.sh $(GCC_DIR) toolchain/gcc/$(GCC_OFFICIAL_VER) \*.patch
+>-else
+>-	toolchain/patch-kernel.sh $(GCC_DIR) toolchain/gcc/$(GCC_VERSION) \*.patch
+>-endif
+>-endif
+>+	toolchain/patch-kernel.sh $(GCC_DIR) $(GCC_PATCH_DIR) \*.patch
+> 
+> 	# Note: The soft float situation has improved considerably with gcc 3.4.x.
+> 	# We can dispense with the custom spec files, as well as libfloat for the arm case.
+>
+>Modified: trunk/buildroot/toolchain/gdb/gdb.mk
+>===================================================================
+>--- trunk/buildroot/toolchain/gdb/gdb.mk	2007-07-30 18:24:53 UTC (rev 19350)
+>+++ trunk/buildroot/toolchain/gdb/gdb.mk	2007-07-31 14:59:58 UTC (rev 19351)
+>@@ -18,12 +18,26 @@
+> GDB_CAT:=$(BZCAT)
+> GDB_DIR:=$(TOOL_BUILD_DIR)/gdb-$(GDB_VERSION)
+> else
+>+
+>+ifeq	($(BR2_TOOLCHAIN_NORMAL),y)
+> GDB_SITE:=http://ftp.gnu.org/gnu/gdb
+>-GDB_SOURCE:=gdb-$(GDB_VERSION).tar.bz2
+>+else
+>+GDB_SITE:=$(VENDOR_SITE)
+>+endif
+>+
+>+GDB_OFFICIAL_VERSION:=$(GDB_VERSION)$(VENDOR_SUFFIX)$(VENDOR_GDB_RELEASE)
+>+
+>+GDB_SOURCE:=gdb-$(GDB_OFFICIAL_VERSION).tar.bz2
+> GDB_CAT:=$(BZCAT)
+> 
+>-GDB_DIR:=$(TOOL_BUILD_DIR)/gdb-$(GDB_VERSION)
+>+ifeq	($(BR2_TOOLCHAIN_NORMAL),y)
+>+GDB_PATCH_DIR:=toolchain/gdb/$(GDB_OFFICIAL_VERSION)
+>+else
+>+GDB_PATCH_DIR:=$(VENDOR_PATCH_DIR)/gdb-$(GDB_OFFICIAL_VERSION)
+>+endif
+> 
+>+GDB_DIR:=$(TOOL_BUILD_DIR)/gdb-$(GDB_OFFICIAL_VERSION)
+>+
+> # NOTE: This option should not be used with gdb versions 6.4 and above.
+> ifeq ($(GDB_VERSION),6.2.1)
+> DISABLE_GDBMI:=--disable-gdbmi
+>@@ -39,13 +53,14 @@
+> 
+> gdb-unpacked: $(GDB_DIR)/.unpacked
+> $(GDB_DIR)/.unpacked: $(DL_DIR)/$(GDB_SOURCE)
+>+	mkdir -p $(TOOL_BUILD_DIR)
+> 	$(GDB_CAT) $(DL_DIR)/$(GDB_SOURCE) | tar -C $(TOOL_BUILD_DIR) $(TAR_OPTIONS) -
+> ifeq ($(GDB_VERSION),snapshot)
+> 	GDB_REAL_DIR=$(shell \
+> 		tar jtf $(DL_DIR)/$(GDB_SOURCE) | head -1 | cut -d"/" -f1)
+> 	ln -sf $(TOOL_BUILD_DIR)/$(shell tar jtf $(DL_DIR)/$(GDB_SOURCE) | head -1 | cut -d"/" -f1) $(GDB_DIR)
+> endif
+>-	toolchain/patch-kernel.sh $(GDB_DIR) toolchain/gdb/$(GDB_VERSION) \*.patch
+>+	toolchain/patch-kernel.sh $(GDB_DIR) $(GDB_PATCH_DIR) \*.patch
+> 	$(CONFIG_UPDATE) $(GDB_DIR)
+> 	touch $@
+> 
+>
+>Modified: trunk/buildroot/toolchain/uClibc/uclibc.mk
+>===================================================================
+>--- trunk/buildroot/toolchain/uClibc/uclibc.mk	2007-07-30 18:24:53 UTC (rev 19350)
+>+++ trunk/buildroot/toolchain/uClibc/uclibc.mk	2007-07-31 14:59:58 UTC (rev 19351)
+>@@ -33,15 +33,23 @@
+> endif
+> UCLIBC_SITE:=http://www.uclibc.org/downloads
+> 
+>-ifeq	($(BR2_avr32),y)
+>-VENDOR_SUFFIX:=-avr32
+>-UCLIBC_SITE:=$(BR2_ATMEL_MIRROR)/Source
+>+ifeq	($(BR2_TOOLCHAIN_NORMAL),)
+>+UCLIBC_SITE:=$(VENDOR_SITE)
+> endif
+> 
+>-UCLIBC_DIR:=$(TOOL_BUILD_DIR)/uClibc-$(UCLIBC_VER)$(VENDOR_SUFFIX)
+>-UCLIBC_SOURCE:=uClibc-$(UCLIBC_VER)$(VENDOR_SUFFIX).tar.bz2
+>+UCLIBC_OFFICIAL_VERSION:=$(UCLIBC_VER)$(VENDOR_SUFFIX)$(VENDOR_UCLIBC_RELEASE)
+>+
+>+
+>+ifeq	($(BR2_TOOLCHAIN_NORMAL),y)
+>+UCLIBC_PATCH_DIR:=toolchain/uClibc/
+>+else
+>+UCLIBC_PATCH_DIR:=$(VENDOR_PATCH_DIR)/uClibc-$(UCLIBC_OFFICIAL_VERSION)
+> endif
+> 
+>+UCLIBC_DIR:=$(TOOL_BUILD_DIR)/uClibc-$(UCLIBC_OFFICIAL_VERSION)
+>+UCLIBC_SOURCE:=uClibc-$(UCLIBC_OFFICIAL_VERSION).tar.bz2
+>+endif
+>+
+> UCLIBC_CAT:=$(BZCAT)
+> 
+> UCLIBC_TARGET_ARCH:=$(shell $(SHELL) -c "echo $(ARCH) | sed -e s'/-.*//' \
+>@@ -93,13 +101,13 @@
+> 
+> uclibc-unpacked: $(UCLIBC_DIR)/.unpacked
+> $(UCLIBC_DIR)/.unpacked: $(DL_DIR)/$(UCLIBC_SOURCE) $(UCLIBC_LOCALE_DATA)
+>-	[ -d $(TOOL_BUILD_DIR) ] || $(INSTALL) -d $(TOOL_BUILD_DIR)
+>+	mkdir -p $(TOOL_BUILD_DIR)
+> 	rm -rf $(UCLIBC_DIR)
+> 	$(UCLIBC_CAT) $(DL_DIR)/$(UCLIBC_SOURCE) | tar -C $(TOOL_BUILD_DIR) $(TAR_OPTIONS) -
+> ifneq ($(BR2_UCLIBC_VERSION_SNAPSHOT),y)
+>-	toolchain/patch-kernel.sh $(UCLIBC_DIR) toolchain/uClibc/ uClibc-$(UCLIBC_VER)$(VENDOR_SUFFIX)-\*.patch
+>+	toolchain/patch-kernel.sh $(UCLIBC_DIR) $(UCLIBC_PATCH_DIR) uClibc-$(UCLIBC_OFFICIAL_VERSION)-\*.patch
+> else
+>-	toolchain/patch-kernel.sh $(UCLIBC_DIR) toolchain/uClibc/ uClibc.\*.patch
+>+	toolchain/patch-kernel.sh $(UCLIBC_DIR) $(UCLIBC_PATCH_DIR) uClibc.\*.patch
+> endif
+> ifneq ($(BR2_ENABLE_LOCALE),)
+> 	cp -dpf $(DL_DIR)/$(UCLIBC_SOURCE_LOCALE) $(UCLIBC_DIR)/extra/locale/
+>
+>_______________________________________________
+>buildroot mailing list
+>buildroot at uclibc.org
+>http://busybox.net/mailman/listinfo/buildroot
+>
