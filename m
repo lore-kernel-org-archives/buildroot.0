@@ -1,55 +1,115 @@
-From: Bernhard Fischer <rep.dot.nop@gmail.com>
-Date: Mon, 17 Sep 2007 13:10:24 +0200
-Subject: [Buildroot] svn commit: trunk/buildroot/target/device
-In-Reply-To: <1190031404.8052.9.camel@elrond.sweden.atmel.com>
-References: <20070917075500.052F2A4692@busybox.net>
-	<1190025802.8052.4.camel@elrond.sweden.atmel.com>
-	<20070917092735.GA18888@aon.at>
-	<1190031404.8052.9.camel@elrond.sweden.atmel.com>
-Message-ID: <20070917111024.GB22104@aon.at>
+From: aldot at uclibc.org <aldot@uclibc.org>
+Date: Mon, 17 Sep 2007 04:19:04 -0700 (PDT)
+Subject: [Buildroot] svn commit: trunk/buildroot/toolchain/binutils
+Message-ID: <20070917111904.07F7E3004C@busybox.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Mon, Sep 17, 2007 at 02:16:44PM +0200, Ulf Samuelsson wrote:
->m?n 2007-09-17 klockan 11:27 +0200 skrev Bernhard Fischer:
->> On Mon, Sep 17, 2007 at 12:43:22PM +0200, Ulf Samuelsson wrote:
->> >m?n 2007-09-17 klockan 00:55 -0700 skrev aldot at uclibc.org:
->> >> Author: aldot
->> >> Date: 2007-09-17 00:54:52 -0700 (Mon, 17 Sep 2007)
->> >> New Revision: 19862
->> >> 
->> >> Log:
->> >> - Atmel mirrors are only of interrest for atmel
->> >> 
->> >> 
->> >> Modified:
->> >>    trunk/buildroot/target/device/Mirrors.in
->> >> 
->> >> 
->> >
->> >And making it depending on BR2_ATMEL or similar makes it impossible to 
->> >put package support on that ftp site, so don't create any dependency
->> >at all.
->> 
->> This can depend on BR2_TARGET_ATMEL or some at91 config symbol.
->> Depending on BR2_arm is wrong since i want to build arm toolchains but
->> use upstream sources, not some vendor supplied tarballs.
->> 
->You asssume that there is never going to be something on the ftp site
->which is interesting to x86/ppc etc. users.
->That assumption is wrong, so therefore the dependency is wrong
+Author: aldot
+Date: 2007-09-17 04:19:04 -0700 (Mon, 17 Sep 2007)
+New Revision: 19864
 
-You seem to be assuming that there is or will be something on that ftp
-site that is interresting. What would that be? I don't miss alot of
-stuff and if so, I somehow doubt that the missing bits would live on
-an atmel tfp-server.
+Log:
+- add binutils-2.18 and binutils-2.18.50.0.1
 
-I ask you to fix the mirror-selection to reflect that a vendor may
-provide additional patches on their site for their specific products for
-a short period of time -- i.e. until the fixes are applied to upstream
-sources -- but _not_ to pollute the rest.
 
-Thank you.
+Added:
+   trunk/buildroot/toolchain/binutils/2.18.50.0.1/
+   trunk/buildroot/toolchain/binutils/2.18/
+
+Modified:
+   trunk/buildroot/toolchain/binutils/Config.in
+   trunk/buildroot/toolchain/binutils/binutils.mk
+
+
+Changeset:
+Copied: trunk/buildroot/toolchain/binutils/2.18 (from rev 19861, trunk/buildroot/toolchain/binutils/2.17.50.0.17)
+
+Copied: trunk/buildroot/toolchain/binutils/2.18.50.0.1 (from rev 19861, trunk/buildroot/toolchain/binutils/2.17.50.0.17)
+
+Modified: trunk/buildroot/toolchain/binutils/Config.in
+===================================================================
+--- trunk/buildroot/toolchain/binutils/Config.in	2007-09-17 09:26:47 UTC (rev 19863)
++++ trunk/buildroot/toolchain/binutils/Config.in	2007-09-17 11:19:04 UTC (rev 19864)
+@@ -21,7 +21,7 @@
+ 		bool "binutils 2.15.94.0.2.2"
+ 
+ 	config BR2_BINUTILS_VERSION_2_16_1
+-		depends !BR2_avr32 && !BR2_nios2
++		depends !BR2_avr32 && !BR2_nios2 && BR2_DEPRECATED
+ 		bool "binutils 2.16.1"
+ 
+ 	config BR2_BINUTILS_VERSION_2_16_90_0_3
+@@ -37,11 +37,11 @@
+ 		bool "binutils 2.16.91.0.6"
+ 
+ 	config BR2_BINUTILS_VERSION_2_16_91_0_7
+-		depends !BR2_avr32 && !BR2_nios2
++		depends !BR2_avr32 && !BR2_nios2 && BR2_DEPRECATED
+ 		bool "binutils 2.16.91.0.7"
+ 
+ 	config BR2_BINUTILS_VERSION_2_17
+-		depends !BR2_nios2
++		depends !BR2_nios2 && BR2_DEPRECATED
+ 		bool "binutils 2.17"
+ 
+ 	config BR2_BINUTILS_VERSION_2_17_50_0_2
+@@ -81,7 +81,7 @@
+ 		bool "binutils 2.17.50.0.10"
+ 
+ 	config BR2_BINUTILS_VERSION_2_17_50_0_12
+-		depends !BR2_avr32 && !BR2_nios2
++		depends !BR2_avr32 && !BR2_nios2 && BR2_DEPRECATED
+ 		bool "binutils 2.17.50.0.12"
+ 
+ 	config BR2_BINUTILS_VERSION_2_17_50_0_14
+@@ -93,8 +93,16 @@
+ 		bool "binutils 2.17.50.0.16"
+ 
+ 	config BR2_BINUTILS_VERSION_2_17_50_0_17
++		depends !BR2_avr32 && !BR2_nios2 && BR2_DEPRECATED
++		bool "binutils 2.17.50.0.17"
++
++	config BR2_BINUTILS_VERSION_2_18
+ 		depends !BR2_avr32 && !BR2_nios2
+-		bool "binutils 2.17.50.0.17"
++		bool "binutils 2.18"
++
++	config BR2_BINUTILS_VERSION_2_18_50_0_1
++		depends !BR2_avr32 && !BR2_nios2
++		bool "binutils 2.18.50.0.1"
+ endchoice
+ 
+ config BR2_BINUTILS_VERSION
+@@ -121,9 +129,12 @@
+ 	default "2.17.50.0.14"    if BR2_BINUTILS_VERSION_2_17_50_0_14
+ 	default "2.17.50.0.16"    if BR2_BINUTILS_VERSION_2_17_50_0_16
+ 	default "2.17.50.0.17"    if BR2_BINUTILS_VERSION_2_17_50_0_17
++	default "2.18"            if BR2_BINUTILS_VERSION_2_18
++	default "2.18.50.0.1"     if BR2_BINUTILS_VERSION_2_18_50_0_1
+ 
+ config BR2_EXTRA_BINUTILS_CONFIG_OPTIONS
+ 	string "Additional binutils options"
+ 	default ""
+ 	help
+-	  Any additional binutils options you may want to include ...
++	  Any additional binutils options you may want to include.
++
+
+Modified: trunk/buildroot/toolchain/binutils/binutils.mk
+===================================================================
+--- trunk/buildroot/toolchain/binutils/binutils.mk	2007-09-17 09:26:47 UTC (rev 19863)
++++ trunk/buildroot/toolchain/binutils/binutils.mk	2007-09-17 11:19:04 UTC (rev 19864)
+@@ -9,6 +9,9 @@
+ EXTRA_BINUTILS_CONFIG_OPTIONS=$(strip $(subst ",, $(BR2_EXTRA_BINUTILS_CONFIG_OPTIONS)))
+ #"))
+ BINUTILS_SITE:=ftp://ftp.kernel.org/pub/linux/devel/binutils
++ifeq ($(BINUTILS_VERSION),2.18)
++BINUTILS_SITE:=ftp://ftp.gnu.org/gnu/binutils/
++endif
+ ifeq ($(BINUTILS_VERSION),2.17)
+ BINUTILS_SITE:=ftp://ftp.gnu.org/gnu/binutils/
+ endif
