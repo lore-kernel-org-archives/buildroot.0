@@ -1,31 +1,31 @@
-From: Ulf Samuelsson <ulf@atmel.com>
-Date: Tue, 18 Sep 2007 08:37:34 +0200
+From: Hebbar <gururajakr@sanyo.co.in>
+Date: Mon, 17 Sep 2007 21:53:33 -0700 (PDT)
 Subject: [Buildroot] Buildroot svn http access
-In-Reply-To: <12748047.post@talk.nabble.com>
+In-Reply-To: <1190097454.4064.4.camel@elrond.sweden.atmel.com>
 References: <12748047.post@talk.nabble.com>
-Message-ID: <1190097454.4064.4.camel@elrond.sweden.atmel.com>
+	<1190097454.4064.4.camel@elrond.sweden.atmel.com>
+Message-ID: <12749997.post@talk.nabble.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-m?n 2007-09-17 klockan 17:57 -0700 skrev Hebbar:
-> Hi all,
-> 
->  Is there any quick way to download/access Buildroot src through svn Http
-> access. My proxy servers only allow to access resources through http access.
-> svn:// protocols are not allowed here. Other than requesting  system
-> administrators(sorry i cant) is there any other possible way to get
-> buildroot src through http protocol.
-> 
 
-* Download the snapshot
-* Work at home (Thats what I do)
-* Switch Employer :-)
+Hi Ulf,
 
-/BR
-Ulf Samuelsson
+* Download the snapshot                         ---> Thats what i am doing
+Now
+* Work at home (Thats what I do)             ---> Thats what i want to avoid
+* Switch Employer :-)                             ---> Definitely not a
+professional answer/solution/suggestion
 
-> Regards
-> Guruaja
+>/BR
+>Ulf Samuelsson
+
+Regards
+Guruaja
+
+-- 
+View this message in context: http://www.nabble.com/Buildroot-svn-http-access-tf4470962.html#a12749997
+Sent from the BuildRoot mailing list archive at Nabble.com.
