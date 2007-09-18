@@ -1,10 +1,15 @@
-From: Hebbar <gururajakr@sanyo.co.in>
-Date: Mon, 17 Sep 2007 21:53:33 -0700 (PDT)
-Subject: [Buildroot] Buildroot svn http access
-In-Reply-To: <1190097454.4064.4.camel@elrond.sweden.atmel.com>
-References: <12748047.post@talk.nabble.com>
-	<1190097454.4064.4.camel@elrond.sweden.atmel.com>
-Message-ID: <12749997.post@talk.nabble.com>
+From: Ulf Samuelsson <ulf@atmel.com>
+Date: Tue, 18 Sep 2007 08:54:49 +0200
+Subject: [Buildroot] svn commit: trunk/buildroot/target/device
+In-Reply-To: <20070917134117.GC24993@aon.at>
+References: <20070917075500.052F2A4692@busybox.net>
+	<1190025802.8052.4.camel@elrond.sweden.atmel.com>
+	<20070917092735.GA18888@aon.at>
+	<1190031404.8052.9.camel@elrond.sweden.atmel.com>
+	<20070917111024.GB22104@aon.at>
+	<1190040978.8052.20.camel@elrond.sweden.atmel.com>
+	<20070917134117.GC24993@aon.at>
+Message-ID: <1190098489.4064.7.camel@elrond.sweden.atmel.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -12,20 +17,15 @@ Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
 
-Hi Ulf,
+> >Exactly what problem are you trying to resolve?
+> 
+> There is no point in having any atmel mirror in my .config unless i
+> build for at91 or avr32 and choose to use an atmel toolchain or atmel
+> patches.
 
-* Download the snapshot                         ---> Thats what i am doing
-Now
-* Work at home (Thats what I do)             ---> Thats what i want to avoid
-* Switch Employer :-)                             ---> Definitely not a
-professional answer/solution/suggestion
+if/when it will mirror all the tarballs used by Buildroot
+it will be useful to everyone.
+I am lobbying for this to happen.
 
->/BR
->Ulf Samuelsson
-
-Regards
-Guruaja
-
--- 
-View this message in context: http://www.nabble.com/Buildroot-svn-http-access-tf4470962.html#a12749997
-Sent from the BuildRoot mailing list archive at Nabble.com.
+/BR
+Ulf Samuelsson
