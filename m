@@ -1,74 +1,144 @@
 From: Bernhard Fischer <rep.dot.nop@gmail.com>
-Date: Wed, 19 Sep 2007 21:36:00 +0200
-Subject: [Buildroot] [patch] here are some more cleanup patches
-In-Reply-To: <0709192052250.18886@somehost>
-References: <0709192052250.18886@somehost>
-Message-ID: <20070919193600.GD817@aon.at>
+Date: Wed, 19 Sep 2007 21:44:09 +0200
+Subject: [Buildroot] OLSR in buildroot - patch 04
+In-Reply-To: <a63ecaf0709191224j2de0f3ci9529f83482434ea7@mail.gmail.com>
+References: <a63ecaf0709191224j2de0f3ci9529f83482434ea7@mail.gmail.com>
+Message-ID: <20070919194409.GE817@aon.at>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Wed, Sep 19, 2007 at 09:06:54PM +0200, Cristian Ionescu-Idbohrn wrote:
->but libvorbis fails to build:
->
->  In file included from mdct.c:44:
->  ../include/vorbis/codec.h:26:21: error: ogg/ogg.h: No such file or
->  directory
->
->Can't seem to be able to build ltrace; something to do with configure not
->being able to locate gelf.h, but it's there:
->staging_dir/usr/include/libelf, as libelf build ok; I get a configure
->error:
->
->  checking gelf.h usability... no
->  checking gelf.h presence... no
->  checking for gelf.h... no
->  configure: error: ***** gelf.h not found *****
->
->config.log says in more than one place:
->
->  /usr/include/libelf/gelf.h:49:2: error: #error "GElf is not supported on
->    this sysystem."
->
->and bails out further down with:
->
->  configure:3629: checking for gelf.h
->  configure:3636: result: no
->  configure:3643: error: ***** gelf.h not found *****
->
->ac_cv_header_gelf_h=no may have something to do with it.
->
->Any ideas?
+On Wed, Sep 19, 2007 at 04:24:33PM -0300, Sushi Sensei wrote:
 
-I've updated ltrace some months ago, but i admit that i have no idea
-which box this big patches are on :-/
-...
-$ ls -ltrn buildroot.mine.OLD.OLD/package/ltrace/
-total 804
--rw-r--r-- 1 1000 1000 627890 Apr  6 14:58 ltrace-svn-20070406.00.patch
--rw-r--r-- 1 1000 1000 173414 Apr  6 15:04 ltrace-svn-20070406.01.autoreconf.patch
--rw-r--r-- 1 1000 1000   2298 Apr  6 15:07 ltrace.mk
--rw-r--r-- 1 1000   40    241 Apr  6 15:25 Config.in
 
-I.e. Not too good.
+>Index: package/Config.in
+>===================================================================
+>--- package/Config.in	(revisi??n: 19893)
+>+++ package/Config.in	(copia de trabajo)
+>@@ -122,6 +122,7 @@
+> 	  Support for networking and related packages
+> 
+> if BR2_NETWORK_SUPPORT
+>+source "package/olsr/Config.in"
+> source "package/argus/Config.in"
+> source "package/avahi/Config.in"
+> source "package/boa/Config.in"
+>Index: package/olsr/files/S50olsr
+>===================================================================
+>--- package/olsr/files/S50olsr	(revisi??n: 0)
+>+++ package/olsr/files/S50olsr	(revisi??n: 0)
+>@@ -0,0 +1,21 @@
+>+#!/bin/sh
+>+#
+>+# Starts OLSRD daemon
+>+#
+>+
+>+case "$1" in
+>+  start)
+>+  	echo -n "Starting OLSRd daemon: "
+>+	/usr/sbin/olsrd -d 0 -nofork & 
 
-Perhaps try this updated version?
+Better, but it just _looks_ like you will then get a prompt like this:
+Starting OLSRd daemon: me at there: >
 
-Index: package/ltrace/ltrace.mk
-===================================================================
---- package/ltrace/ltrace.mk    (revision 19878)
-+++ package/ltrace/ltrace.mk    (working copy)
-@@ -3,9 +3,9 @@
- # ltrace
- #
- #############################################################
--LTRACE_VERSION=0.4
-+LTRACE_VERSION=0.5
- LTRACE_SOURCE=ltrace_$(LTRACE_VERSION).orig.tar.gz
--#LTRACE_PATCH=ltrace_$(LTRACE_VERSION)-1.diff.gz
-+LTRACE_PATCH=ltrace_$(LTRACE_VERSION)-3.diff.gz
- LTRACE_SITE=http://ftp.debian.org/debian/pool/main/l/ltrace
- LTRACE_DIR=$(BUILD_DIR)/ltrace-$(LTRACE_VERSION)
- LTRACE_BINARY=ltrace
+So i ask you to carefully reread what i wrote in the previous mail :)
+>+	;;
+>+  stop)
+>+  	echo -n "Stopping OLSRd daemon: "
+>+	killall olsrd
+>+	;;
+>+  *)
+>+	echo $"Usage: $0 {start|stop}"
+>+	exit 1
+>+esac
+>+
+>+exit $?
+>+
+>
+>Cambios de propiedades en package/olsr/files/S50olsr
+>___________________________________________________________________
+>Nombre: svn:executable
+>   + *
+>
+>Index: package/olsr/olsr.mk
+>===================================================================
+>--- package/olsr/olsr.mk	(revisi??n: 0)
+>+++ package/olsr/olsr.mk	(revisi??n: 0)
+>@@ -0,0 +1,59 @@
+>+#############################################################
+>+#
+>+# olsr
+>+#
+>+#############################################################
+>+
+>+OLSR_VERSION_MAJOR=0.5
+>+OLSR_VERSION_MINOR=3
+>+OLSR_VERSION:=$(OLSR_VERSION_MAJOR).$(OLSR_VERSION_MINOR)
+>+OLSR_SOURCE:=olsrd-$(OLSR_VERSION).tar.bz2
+>+OLSR_SITE:=http://www.olsr.org/releases/$(OLSR_VERSION_MAJOR)
+>+OLSR_DIR:=$(BUILD_DIR)/olsrd-$(OLSR_VERSION)
+>+OLSR_CAT:=$(BZCAT)
+>+OLSR_BINARY:=olsrd
+>+OLSR_TARGET_BINARY:=usr/bin/olsrd
+>+#OLSR_PLUGINS=httpinfo tas dot_draw nameservice dyn_gw dyn_gw_plain pgraph bmf quagga secure
+>+OLSR_PLUGINS=dot_draw dyn_gw secure
+>+OLSR_TARGET_PLUGIN=usr/lib/
+>+
+>+$(DL_DIR)/$(OLSR_SOURCE):
+>+	 $(WGET) -P $(DL_DIR) $(OLSR_SITE)/$(OLSR_SOURCE)
+>+
+>+olsr-source: $(DL_DIR)/$(OLSR_SOURCE)
+>+
+>+olsr-unpacked: $(OLSR_DIR)/.unpacked
+>+$(OLSR_DIR)/.unpacked: $(DL_DIR)/$(OLSR_SOURCE)
+>+	$(OLSR_CAT) $(DL_DIR)/$(OLSR_SOURCE) | tar -C $(BUILD_DIR) $(TAR_OPTIONS) -
+>+	touch $@
+>+
+>+$(OLSR_DIR)/$(OLSR_BINARY): $(OLSR_DIR)/.unpacked
+>+	$(MAKE) $(TARGET_CONFIGURE_OPTS) -C $(OLSR_DIR) olsrd $(OLSR_PLUGINS)
+>+
+>+$(TARGET_DIR)/$(OLSR_TARGET_BINARY): $(OLSR_DIR)/$(OLSR_BINARY)
+>+	rm -f $(TARGET_DIR)/$(OLSR_TARGET_BINARY)
+>+	cp -dpf $(OLSR_DIR)/$(OLSR_BINARY) $(TARGET_DIR)/$(OLSR_TARGET_BINARY)
+>+	cp -R $(OLSR_DIR)/lib/*/olsrd_*.so.* $(TARGET_DIR)/$(OLSR_TARGET_PLUGIN)
+>+	mkdir -p $(TARGET_DIR)/etc/init.d
+>+	cp package/olsr/files/S50olsr $(TARGET_DIR)/etc/init.d/
+>+	cp -u $(OLSR_DIR)/files/olsrd.conf.default.lq $(TARGET_DIR)/etc/olsrd.conf
+
+That's nearly ok. Now think about those pure Apple customers, that have
+an odd cp(1) command. Will cp -u work there and on other systems that
+don't use coreutils? I doubt it.
+	test -r $(TARGET_DIR)/etc/olsrd.conf || \
+		cp -dpf $(OLSR_DIR)/files/olsrd.conf.default.lq $(TARGET_DIR)/etc/olsrd.conf
+
+will do the trick in a portable manner.
+>+
+>+olsr: uclibc $(TARGET_DIR)/$(OLSR_TARGET_BINARY)
+>+
+>+olsr-clean:
+>+	rm -f $(TARGET_DIR)/$(OLSR_TARGET_BINARY)
+>+	rm -f $(TARGET_DIR)/$(OLSR_TARGET_PLUGIN)/olsrd_*.so.*
+>+	rm -f $(TARGET_DIR)/etc/init.d/S50olsr
+>+	-$(MAKE) -C $(OLSR_DIR) clean
+
+I think that I already asked you to rm the .config file, didn't I? ;)
+Please rm the .config file.
+>+
+>+olsr-dirclean:
+>+	rm -rf $(OLSR_DIR)
+>+
+>+#############################################################
+>+#
+>+# Toplevel Makefile options
+>+#
+>+#############################################################
+>+ifeq ($(strip $(BR2_PACKAGE_OLSR)),y)
+>+TARGETS+=olsrd $(OLSR_PLUGINS)
+
+please name this olsr, without the trailing 'd', for consistency with
+most of the other packages.
+
+Please send a version #06 of this patch (not #05) if you read this
+message until this line, thanks and cheers,
