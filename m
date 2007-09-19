@@ -1,8 +1,8 @@
 From: bugs at busybox.net <bugs@busybox.net>
-Date: Wed, 19 Sep 2007 07:05:15 -0700
-Subject: [Buildroot] [buildroot 0001450]: DEPRECATED: copy of system header
-	files fails
-Message-ID: <c562cc9fb2cc667110d1d22164d2cb9d@busybox.net>
+Date: Wed, 19 Sep 2007 07:06:20 -0700
+Subject: [Buildroot] [buildroot 0001499]: 0.9.29 fails to compile: sysdep.h:
+	No such file or directory
+Message-ID: <d29d90da0ef2d915f4909320ddbfcbea@busybox.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -10,65 +10,58 @@ Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
 
-The following issue has been CLOSED 
+A NOTE has been added to this issue. 
 ====================================================================== 
-http://busybox.net/bugs/view.php?id=1450 
+http://busybox.net/bugs/view.php?id=1499 
 ====================================================================== 
-Reported By:                drm
+Reported By:                bgs
 Assigned To:                buildroot
 ====================================================================== 
 Project:                    buildroot
-Issue ID:                   1450
+Issue ID:                   1499
 Category:                   Architecture Specific
 Reproducibility:            always
-Severity:                   minor
+Severity:                   block
 Priority:                   normal
-Status:                     closed
-Resolution:                 open
-Fixed in Version:           
+Status:                     assigned
 ====================================================================== 
-Date Submitted:             07-30-2007 06:54 PDT
-Last Modified:              09-19-2007 07:05 PDT
+Date Submitted:             09-12-2007 08:54 PDT
+Last Modified:              09-19-2007 07:06 PDT
 ====================================================================== 
-Summary:                    DEPRECATED: copy of system header files fails
+Summary:                    0.9.29 fails to compile: sysdep.h: No such file or
+directory
 Description: 
-The copying of the system header to the final destination fails to make
-copies of all subdirectories
-Specifically the command:
-cp -pLR /home/../toolchain_build_arm_nofpu/linux/include/asm
-/opt/arm-gcc/3.4.4/usr/include/
+Compilation fails with the following error:
 
-gives the error message:
-cp: will not create hard link
-`/opt/arm-gcc/3.4.4/usr/include/asm/proc-armv' to directory
-`/opt/arm-gcc/3.4.4/usr/include/asm/proc'
-cp: will not create hard link `/opt/arm-gcc/3.4.4/usr/include/asm/arch' to
-directory `/opt/arm-gcc/3.4.4/usr/include/asm/arch-ebsa285'
-
-The errors come from symbolic links to directories which the copy command
-does not want to process.
+In file included from
+./libpthread/linuxthreads/sysdeps/i386/i686/pt-machine.h:73,
+                 from
+./libpthread/linuxthreads/sysdeps/i386/pt-machine.h:24,
+                 from ./libpthread/linuxthreads/sysdeps/i386/tls.h:23,
+                 from ./include/bits/uClibc_errno.h:35,
+                 from ./include/errno.h:62,
+                 from ./include/bits/syscalls.h:14,
+                 from ./include/sys/syscall.h:34,
+                 from ./ldso/ldso/i386/dl-syscalls.h:3,
+                 from ./ldso/include/dl-syscall.h:12,
+                 from ./ldso/include/ldso.h:36,
+                 from ldso/ldso/ldso.c:33:
+./libpthread/linuxthreads/sysdeps/i386/i686/../useldt.h:25:20: error:
+sysdep.h: No such file or directory
+make[1]: *** [ldso/ldso/ldso.oS] Error 1
 
 ====================================================================== 
 
 ---------------------------------------------------------------------- 
- bernhardf - 09-07-07 11:58  
+ bernhardf - 09-19-07 07:06  
 ---------------------------------------------------------------------- 
-This works for me with gcc-4.2.1, 4.1.2, and even 3.4.6.
-
-I shall close this bug unless you can reproduce this with one of the
-versions mentioned above (the other versions are deprecated; TBH even
-3.4.6 is from my POV).
-
-thanks, 
+I supposed that this works with linuxthreads.old. Please confirm 
 
 Issue History 
 Date Modified   Username       Field                    Change               
 ====================================================================== 
-07-30-07 06:54  drm            New Issue                                    
-07-30-07 06:54  drm            Status                   new => assigned     
-07-30-07 06:54  drm            Assigned To               => buildroot       
-09-07-07 11:58  bernhardf      Note Added: 0002732                          
-09-19-07 07:04  bernhardf      Summary                  copy of system header
-files fails => DEPRECATED: copy of system header files fails
-09-19-07 07:05  bernhardf      Status                   assigned => closed  
+09-12-07 08:54  bgs            New Issue                                    
+09-12-07 08:54  bgs            Status                   new => assigned     
+09-12-07 08:54  bgs            Assigned To               => buildroot       
+09-19-07 07:06  bernhardf      Note Added: 0002754                          
 ======================================================================
