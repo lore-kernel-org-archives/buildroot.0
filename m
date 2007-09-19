@@ -1,67 +1,60 @@
 From: Ulf Samuelsson <ulf@atmel.com>
-Date: Wed, 19 Sep 2007 23:46:58 +0200
-Subject: [Buildroot] svn commit: trunk/buildroot/target/linux
-In-Reply-To: <20070919080338.GB11856@aon.at>
-References: <20070918171058.7CCA9A495E@busybox.net>
-	<1190149731.4516.15.camel@aeglos.sweden.atmel.com>
-	<20070919080338.GB11856@aon.at>
-Message-ID: <1190238418.7740.2.camel@elrond.sweden.atmel.com>
+Date: Wed, 19 Sep 2007 23:53:39 +0200
+Subject: [Buildroot] local mirror management (bug #572)
+In-Reply-To: <20070919082107.GC11856@aon.at>
+References: <20070917075500.052F2A4692@busybox.net>
+	<1190025802.8052.4.camel@elrond.sweden.atmel.com>
+	<20070917092735.GA18888@aon.at>
+	<1190031404.8052.9.camel@elrond.sweden.atmel.com>
+	<20070917111024.GB22104@aon.at>
+	<1190040978.8052.20.camel@elrond.sweden.atmel.com>
+	<20070917134117.GC24993@aon.at>
+	<1190098489.4064.7.camel@elrond.sweden.atmel.com>
+	<20070919082107.GC11856@aon.at>
+Message-ID: <1190238819.7740.8.camel@elrond.sweden.atmel.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-ons 2007-09-19 klockan 10:03 +0200 skrev Bernhard Fischer:
-> On Tue, Sep 18, 2007 at 11:08:51PM +0200, Ulf Samuelsson wrote:
-> >tis 2007-09-18 klockan 10:10 -0700 skrev aldot at uclibc.org:
-> >> Author: aldot
-> >> Date: 2007-09-18 10:10:56 -0700 (Tue, 18 Sep 2007)
-> >> New Revision: 19878
-> >> 
-> >> Log:
-> >> - patch the correct dir
-> >> 
-> >> 
-> >> Modified:
-> >>    trunk/buildroot/target/linux/Makefile.in
-> >> 
-> >> 
-> >> Changeset:
-> >> Modified: trunk/buildroot/target/linux/Makefile.in
-> >> ===================================================================
-> >> --- trunk/buildroot/target/linux/Makefile.in	2007-09-18 13:12:25 UTC (rev 19877)
-> >> +++ trunk/buildroot/target/linux/Makefile.in	2007-09-18 17:10:56 UTC (rev 19878)
-> >> @@ -129,7 +129,7 @@
-> >>  		linux-$(LINUX26_VERSION)-\*.patch{,.gz,.bz2}
-> >>  endif
-> >>  ifeq ($(BR2_PACKAGE_OPENSWAN),y)
-> >> -	toolchain/patch-kernel.sh $(LINUX_HEADERS_UNPACK_DIR) package/openswan \
-> >> +	toolchain/patch-kernel.sh $(LINUX26_DIR) package/openswan \
-> >>  		linux-$(LINUX26_VERSION)-\*.patch{,.gz,.bz2}
-> >>  endif
-> >>  ifneq ($(LINUX26_PATCH_DIR),)
+ons 2007-09-19 klockan 10:21 +0200 skrev Bernhard Fischer:
+> On Tue, Sep 18, 2007 at 08:54:49AM +0200, Ulf Samuelsson wrote:
 > >
-> >Thanks,
-> >Openswan is a mess at the moment, with *large* duplicate patches
-> >(adding 6-8 MBytes to the trunk).
+> >> >Exactly what problem are you trying to resolve?
+> >> 
+> >> There is no point in having any atmel mirror in my .config unless i
+> >> build for at91 or avr32 and choose to use an atmel toolchain or atmel
+> >> patches.
+> >
+> >if/when it will mirror all the tarballs used by Buildroot
+> >it will be useful to everyone.
+> >I am lobbying for this to happen.
 > 
-> I don't need the old patches anymore, but it was you who wanted to
-> retain deprecated stuff.. Feel free to wipe the old ones.
+> No, this is unacceptable. If you want to do stuff like that, look at the
+> "local mirror" patch in mantis (or the ML archives). See 1).
 > 
-> >I think we should download the klips/natt patches from the website
-> >instead, and patches should be based on a user selected version.
+> With the patch mentioned above, you (i.e. the user) is free to setup and
+> use any mirror she likes, be it the
+> http://buildroot.uclibc.org/downloads/buildroot-sources/
+> or another, potentially local directory (i.e. nothing you can talk to
+> via http or ftp).
 > 
-> The patches for 2.4.9 need fixes to apply and work cleanly, so this is
-> not an option.
+> We will not accept to rely on a random vendor's ftp collection, this is
+> conceptually broken since we have no influence on their ftp server and
+> the packages they may choose to have there or not.
+> 
+> 1) http://bugs.busybox.net/view.php?id=572
+> has a rough draft that IIRC needs some cleanup and that should be
+> discussed in it's cleaned up version on this list.
 
-I tried, and noticed that there were proplems, 
-but it seems to me that only the "natt" patches have
-problem, and they are pretty small.
-"klips" patches seems to apply without problem.
-This is good since the "klips" patches are the big un's.
+Don't be so negative.
+Any patch regarding mirrors will need to maintain a list of mirror
+locations.
 
-Are you aware of any changes needed to klips?
+All packages should normally be downloaded from their current location
+and the mirrors should only be used if the packet is not available
+at the current location for some reason.
 
-BR
+Best Regards
 Ulf Samuelsson
