@@ -1,53 +1,42 @@
-From: aldot at uclibc.org <aldot@uclibc.org>
-Date: Wed, 19 Sep 2007 05:28:49 -0700 (PDT)
-Subject: [Buildroot] svn commit: trunk/buildroot/package/vpnc
-Message-ID: <20070919122849.3C0F030056@busybox.net>
+From: Bernhard Fischer <rep.dot.nop@gmail.com>
+Date: Wed, 19 Sep 2007 14:35:27 +0200
+Subject: [Buildroot] svn commit: trunk/buildroot/package/libgcrypt
+In-Reply-To: <20070919122053.4675CA4D19@busybox.net>
+References: <20070919122053.4675CA4D19@busybox.net>
+Message-ID: <20070919123527.GB14507@aon.at>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Author: aldot
-Date: 2007-09-19 05:28:48 -0700 (Wed, 19 Sep 2007)
-New Revision: 19890
+On Wed, Sep 19, 2007 at 05:20:53AM -0700, aldot at uclibc.org wrote:
+>Author: aldot
+>Date: 2007-09-19 05:20:52 -0700 (Wed, 19 Sep 2007)
+>New Revision: 19888
+>
+>Log:
+>- fix incorrect setting of $ac_cv_sys_symbol_underscore.
+>  There is no reason not to AC_COMPILE and use the set cross-nm to look for
+>  the symbol mangling scheme. Thus it is incorrect to check for cross compilation
+>  in the GNUPG_SYS_SYMBOL_UNDERSCORE check.
+>- fix bug when configuring (has to wipe config.cache !)
 
-Log:
-- bump version.
-  Someone will have to fix the install thing (involves a file with .pl where my sh says 'line 18: use: command not found', which is a good thing).
+Ulf,
 
+I'm curious how that did ever work for you?
 
-Modified:
-   trunk/buildroot/package/vpnc/vpnc.mk
+I assume that if all was setup correctly, you would have ended up with:
+  ../src/.libs/libgcrypt.so -lnsl
+../src/.libs/libgcrypt.so: undefined reference to `_gcry_mpih_addmul_1'
+../src/.libs/libgcrypt.so: undefined reference to `_gcry_mpih_rshift'
+../src/.libs/libgcrypt.so: undefined reference to `_gcry_mpih_add_n'
+../src/.libs/libgcrypt.so: undefined reference to `_gcry_mpih_mul_1'
+../src/.libs/libgcrypt.so: undefined reference to `_gcry_mpih_submul_1'
+../src/.libs/libgcrypt.so: undefined reference to `_gcry_mpih_lshift'
+../src/.libs/libgcrypt.so: undefined reference to `_gcry_mpih_sub_n'
 
+Same for vpnc that didn't even have libgcrypt as prerequisite, but that
+doesn't matter much anyway since gcrypt was completely broken anyway.
 
-Changeset:
-Modified: trunk/buildroot/package/vpnc/vpnc.mk
-===================================================================
---- trunk/buildroot/package/vpnc/vpnc.mk	2007-09-19 12:24:07 UTC (rev 19889)
-+++ trunk/buildroot/package/vpnc/vpnc.mk	2007-09-19 12:28:48 UTC (rev 19890)
-@@ -4,7 +4,7 @@
- #
- #############################################################
- 
--VPNC_VERSION=0.4.0
-+VPNC_VERSION=0.5.1
- VPNC_SOURCE=vpnc-$(VPNC_VERSION).tar.gz
- VPNC_SITE=http://www.unix-ag.uni-kl.de/~massar/vpnc
- VPNC_DIR=$(BUILD_DIR)/vpnc-$(VPNC_VERSION)
-@@ -19,12 +19,14 @@
- 
- $(VPNC_DIR)/.unpacked: $(DL_DIR)/$(VPNC_SOURCE)
- 	$(VPNC_CAT) $(DL_DIR)/$(VPNC_SOURCE) | tar -C $(BUILD_DIR) $(TAR_OPTIONS) -
--	toolchain/patch-kernel.sh $(VPNC_DIR) package/vpnc \*.patch
-+	toolchain/patch-kernel.sh $(VPNC_DIR) package/vpnc \*$(VPNC_VERSION).patch
- 	touch $@
- 
- $(VPNC_BINARY): $(VPNC_DIR)/.unpacked
- 	rm -f $@
- 	$(MAKE) $(TARGET_CONFIGURE_OPTS) INCLUDE=$(STAGING_DIR)/usr/include \
-+		CFLAGS="$(TARGET_CFLAGS)" \
-+		LDFLAGS+=-lgcrypt LDFLAGS+=-lgpg-error \
- 		CC="$(TARGET_CC)" -C $(VPNC_DIR)
- 
- $(VPNC_TARGET_BINARY): $(VPNC_BINARY)
+Please audit your packages, as said in my previous mail..
