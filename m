@@ -1,25 +1,24 @@
-From: Bernhard Fischer <rep.dot.nop@gmail.com>
-Date: Wed, 19 Sep 2007 21:13:41 +0200
-Subject: [Buildroot] openswan 2.4.9 "natt" patch breaks linux build
-In-Reply-To: <1190178221.4516.59.camel@aeglos.sweden.atmel.com>
-References: <1190178221.4516.59.camel@aeglos.sweden.atmel.com>
-Message-ID: <20070919191341.GB817@aon.at>
+From: Sushi Sensei <sinestado@gmail.com>
+Date: Wed, 19 Sep 2007 16:24:33 -0300
+Subject: [Buildroot] OLSR in buildroot - patch 04
+Message-ID: <a63ecaf0709191224j2de0f3ci9529f83482434ea7@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Wed, Sep 19, 2007 at 07:03:41AM +0200, Ulf Samuelsson wrote:
->Get the following error when I build for x86.
-
->Clearly up->pcflag should not be removed.
-
-Yes. The patches from openswan.org look like they are against some
-ancient version, i don't know. I've fixed the _BH accounting and a few
-other bits.
-
->I will fix this when I update openswan
-
-Sounds great. TIA,
-Bernhard
+-- 
+------------------------------------------------------
+--- Timeo Danaos et dona ferentes ---
+------------------------------------------------------
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: http://busybox.net/lists/buildroot/attachments/20070919/284b6f90/attachment.htm 
+-------------- next part --------------
+A non-text attachment was scrubbed...
+Name: br2-add-olsr.04.patch
+Type: text/x-patch
+Size: 3903 bytes
+Desc: not available
+Url : http://busybox.net/lists/buildroot/attachments/20070919/284b6f90/attachment.bin 
