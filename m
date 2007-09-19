@@ -1,82 +1,164 @@
-From: bugs at busybox.net <bugs@busybox.net>
-Date: Wed, 19 Sep 2007 10:33:26 -0700
-Subject: [Buildroot] [buildroot 0001502]: BR2_TOOLCHAIN_SYSROOT should
-	depend on BR2_GCC_VERSION_4_2_0 or higher
-Message-ID: <710c64023f5a0286908255bc04dcdfca@busybox.net>
+From: Bernhard Fischer <rep.dot.nop@gmail.com>
+Date: Wed, 19 Sep 2007 19:38:24 +0200
+Subject: [Buildroot] OLSR in buildroot - patch 03
+In-Reply-To: <a63ecaf0709190726n5caa5817m7aab911b9490a6d6@mail.gmail.com>
+References: <a63ecaf0709190726n5caa5817m7aab911b9490a6d6@mail.gmail.com>
+Message-ID: <20070919173824.GA30560@aon.at>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+On Wed, Sep 19, 2007 at 11:26:45AM -0300, Sushi Sensei wrote:
+>Some minor changes in S50olsr
+>
+>-- 
+>------------------------------------------------------
+>--- Timeo Danaos et dona ferentes ---
+>------------------------------------------------------
 
-The following issue has been CLOSED 
-====================================================================== 
-http://busybox.net/bugs/view.php?id=1502 
-====================================================================== 
-Reported By:                ikonst
-Assigned To:                buildroot
-====================================================================== 
-Project:                    buildroot
-Issue ID:                   1502
-Category:                   Other
-Reproducibility:            always
-Severity:                   major
-Priority:                   normal
-Status:                     closed
-Resolution:                 open
-Fixed in Version:           
-====================================================================== 
-Date Submitted:             09-19-2007 06:32 PDT
-Last Modified:              09-19-2007 10:33 PDT
-====================================================================== 
-Summary:                    BR2_TOOLCHAIN_SYSROOT should depend on
-BR2_GCC_VERSION_4_2_0 or higher
-Description: 
-The sysroot feature is only available on gcc 4.2.0 and higher. Building it
-with gcc 4.1.x will cause an error (as sysroot's help string already
-specifies).
+>Index: package/Config.in
+>===================================================================
+>--- package/Config.in	(revisi??n: 19874)
+>+++ package/Config.in	(copia de trabajo)
+>@@ -122,6 +122,7 @@
+> 	  Support for networking and related packages
+> 
+> if BR2_NETWORK_SUPPORT
+>+source "package/olsr/Config.in"
+> source "package/argus/Config.in"
+> source "package/avahi/Config.in"
+> source "package/boa/Config.in"
+>Index: package/olsr/files/S50olsr
+>===================================================================
+>--- package/olsr/files/S50olsr	(revisi??n: 0)
+>+++ package/olsr/files/S50olsr	(revisi??n: 0)
+>@@ -0,0 +1,23 @@
+>+#!/bin/sh
+>+#
+>+# Starts OLSRD daemon
+>+#
+>+
+>+case "$1" in
+>+  start)
+>+  	echo -n "Starting OLSRd daemon: "
+>+	/usr/sbin/olsrd -d 0 -nofork & 
+>+	echo "OK"
 
-toolchain/gcc/Config.in should be changed. Preferably, the rule should be
-changed from exclusive:
-depends on !BR2_GCC_VERSION_3_3_5 ...
-to inclusive:
-depends on BR2_GCC_VERSION_4_2_0 || BR2_GCC_VERSION_4_2_1 ||
-BR2_GCC_VERSION_4_3
-====================================================================== 
+These "OK" are superfluous since they are printed even if starting olsrd
+fails. Either just echo "" or remove all echoing or echo the correct
+thing like OK or FAILED.
+>+	;;
+>+  stop)
+>+  	echo -n "Stopping OLSRd daemon: "
+>+	killall olsrd
+>+	echo "OK"
+Ditto.
+>+	;;
+>+  *)
+>+	echo $"Usage: $0 {start|stop}"
+>+	exit 1
+>+esac
+>+
+>+exit $?
+>+
+>Index: package/olsr/olsr.mk
+>===================================================================
+>--- package/olsr/olsr.mk	(revisi??n: 0)
+>+++ package/olsr/olsr.mk	(revisi??n: 0)
+>@@ -0,0 +1,61 @@
+>+#############################################################
+>+#
+>+# olsr
+>+#
+>+#############################################################
+>+
+>+OLSR_VERSION_MAJOR=0.5
+>+OLSR_VERSION_MINOR=3
+>+OLSR_VERSION:=$(OLSR_VERSION_MAJOR).$(OLSR_VERSION_MINOR)
+>+OLSR_SOURCE:=olsrd-$(OLSR_VERSION).tar.bz2
+>+OLSR_SITE:=http://www.olsr.org/releases/$(OLSR_VERSION_MAJOR)
+>+OLSR_DIR:=$(BUILD_DIR)/olsrd-$(OLSR_VERSION)
+>+OLSR_CAT:=$(BZCAT)
+>+OLSR_BINARY:=olsrd
+>+OLSR_TARGET_BINARY:=usr/bin/olsrd
+>+#OLSR_PLUGINS=httpinfo tas dot_draw nameservice dyn_gw dyn_gw_plain pgraph bmf quagga secure
+>+OLSR_PLUGINS=dot_draw dyn_gw secure
+>+OLSR_TARGET_PLUGIN=usr/lib/
+>+
+>+$(DL_DIR)/$(OLSR_SOURCE):
+>+	 $(WGET) -P $(DL_DIR) $(OLSR_SITE)/$(OLSR_SOURCE)
+>+
+>+olsr-source: $(DL_DIR)/$(OLSR_SOURCE)
+>+
+>+olsr-unpacked: $(OLSR_DIR)/.unpacked
+>+$(OLSR_DIR)/.unpacked: $(DL_DIR)/$(OLSR_SOURCE)
+>+	$(OLSR_CAT) $(DL_DIR)/$(OLSR_SOURCE) | tar -C $(BUILD_DIR) $(TAR_OPTIONS) -
+>+	touch $@
+>+
+>+$(OLSR_DIR)/.configured: $(OLSR_DIR)/.unpacked
+>+	touch $@
 
----------------------------------------------------------------------- 
- bernhardf - 09-19-07 07:00  
----------------------------------------------------------------------- 
-No, the !ancient is fine. I don't want to special-case working version but
-special case deprecat, ancient, unsupported stuff, if anything.
+This .unpacked is useless, please remove it..
 
-If you select BR2_DEPRECATED, you're on your own anyway, at least in my
-POV. 
+>+
+>+$(OLSR_DIR)/$(OLSR_BINARY): $(OLSR_DIR)/.configured
 
----------------------------------------------------------------------- 
- ikonst - 09-19-07 07:23  
----------------------------------------------------------------------- 
-I'm okay with either way: we should just make sure than when a new 4.1.x
-version comes out, it's also excluded.
+.. and adjust this prerequisite.
 
-(Personally, I've lost considerable time trying to figure out the problem
-which occurs when you try to build gcc 4.1.x with sysroot, so I deem it
-important to disallow it within the configuration.) 
+>+	$(MAKE) $(TARGET_CONFIGURE_OPTS) -C $(OLSR_DIR) olsrd $(OLSR_PLUGINS)
+>+
+>+$(TARGET_DIR)/$(OLSR_TARGET_BINARY): $(OLSR_DIR)/$(OLSR_BINARY)
+>+	rm -f $(TARGET_DIR)/$(OLSR_TARGET_BINARY)
+>+	cp -dpf $(OLSR_DIR)/$(OLSR_BINARY) $(TARGET_DIR)/$(OLSR_TARGET_BINARY)
+>+	cp -R $(OLSR_DIR)/lib/*/olsrd_*.so.* $(TARGET_DIR)/$(OLSR_TARGET_PLUGIN)
+>+	mkdir -p $(TARGET_DIR)/etc/init.d
+>+	cp package/olsr/files/S50olsr $(TARGET_DIR)/etc/init.d/
+>+	cp -u $(OLSR_DIR)/files/olsrd.conf.default.lq $(TARGET_DIR)/etc/olsrd.conf
+>+
+>+olsr: uclibc $(TARGET_DIR)/$(OLSR_TARGET_BINARY)
+>+
+>+olsr-clean:
+>+	rm -f $(TARGET_DIR)/$(OLSR_TARGET_BINARY)
+>+	rm -f $(TARGET_DIR)/$(OLSR_TARGET_PLUGIN)/olsrd_*.so.*
+>+	-$(MAKE) -C $(OLSR_DIR) clean
 
----------------------------------------------------------------------- 
- bernhardf - 09-19-07 10:33  
----------------------------------------------------------------------- 
-fixed in r19894 
+I already said this, IIRC. So lemme repeat:
+Please rm _all files_ that you copied. This includes but is not limited
+to the runlevel script and the .conf
 
-Issue History 
-Date Modified   Username       Field                    Change               
-====================================================================== 
-09-19-07 06:32  ikonst         New Issue                                    
-09-19-07 06:32  ikonst         Status                   new => assigned     
-09-19-07 06:32  ikonst         Assigned To               => buildroot       
-09-19-07 07:00  bernhardf      Note Added: 0002752                          
-09-19-07 07:23  ikonst         Note Added: 0002762                          
-09-19-07 10:33  bernhardf      Status                   assigned => closed  
-09-19-07 10:33  bernhardf      Note Added: 0002763                          
-======================================================================
+>+
+>+olsr-dirclean:
+>+	rm -rf $(OLSR_DIR)
+>+
+>+#############################################################
+>+#
+>+# Toplevel Makefile options
+>+#
+>+#############################################################
+>+ifeq ($(strip $(BR2_PACKAGE_OLSR)),y)
+>+TARGETS+=olsrd $(OLSR_PLUGINS)
+>+endif
+>Index: package/olsr/Config.in
+>===================================================================
+>--- package/olsr/Config.in	(revisi??n: 0)
+>+++ package/olsr/Config.in	(revisi??n: 0)
+>@@ -0,0 +1,12 @@
+>+config BR2_PACKAGE_OLSR
+>+	bool "OLSR mesh networking Daemon"
+>+	default n
+>+	help
+>+	  olsr
+>+	  
+>+	  The Optimized Link State Routing protocol (OLSR) is a routing protocol that is optimised
+>+	  for mobile ad-hoc networks, sometimes called wireless mesh networks. It is a proactive
+>+	  link-state routing protocol that floods a full topology table to all nodes in the network
+>+	  which then compute optimal forwarding paths locally.
+>+
+>+	  http://www.olsr.org/
+
+Much better otherwise :)
+Please fix the stuff i pointed out above and resend.
+TIA and cheers,
+Bernhard
