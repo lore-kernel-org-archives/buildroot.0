@@ -1,36 +1,82 @@
-From: aldot at uclibc.org <aldot@uclibc.org>
-Date: Wed, 19 Sep 2007 10:32:22 -0700 (PDT)
-Subject: [Buildroot] svn commit: trunk/buildroot/toolchain/gcc
-Message-ID: <20070919173222.56A79A6824@busybox.net>
+From: bugs at busybox.net <bugs@busybox.net>
+Date: Wed, 19 Sep 2007 10:33:26 -0700
+Subject: [Buildroot] [buildroot 0001502]: BR2_TOOLCHAIN_SYSROOT should
+	depend on BR2_GCC_VERSION_4_2_0 or higher
+Message-ID: <710c64023f5a0286908255bc04dcdfca@busybox.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Author: aldot
-Date: 2007-09-19 10:32:21 -0700 (Wed, 19 Sep 2007)
-New Revision: 19894
 
-Log:
-- exclude other old, deprecated and unsupported versions of gcc
+The following issue has been CLOSED 
+====================================================================== 
+http://busybox.net/bugs/view.php?id=1502 
+====================================================================== 
+Reported By:                ikonst
+Assigned To:                buildroot
+====================================================================== 
+Project:                    buildroot
+Issue ID:                   1502
+Category:                   Other
+Reproducibility:            always
+Severity:                   major
+Priority:                   normal
+Status:                     closed
+Resolution:                 open
+Fixed in Version:           
+====================================================================== 
+Date Submitted:             09-19-2007 06:32 PDT
+Last Modified:              09-19-2007 10:33 PDT
+====================================================================== 
+Summary:                    BR2_TOOLCHAIN_SYSROOT should depend on
+BR2_GCC_VERSION_4_2_0 or higher
+Description: 
+The sysroot feature is only available on gcc 4.2.0 and higher. Building it
+with gcc 4.1.x will cause an error (as sysroot's help string already
+specifies).
 
+toolchain/gcc/Config.in should be changed. Preferably, the rule should be
+changed from exclusive:
+depends on !BR2_GCC_VERSION_3_3_5 ...
+to inclusive:
+depends on BR2_GCC_VERSION_4_2_0 || BR2_GCC_VERSION_4_2_1 ||
+BR2_GCC_VERSION_4_3
+====================================================================== 
 
-Modified:
-   trunk/buildroot/toolchain/gcc/Config.in
+---------------------------------------------------------------------- 
+ bernhardf - 09-19-07 07:00  
+---------------------------------------------------------------------- 
+No, the !ancient is fine. I don't want to special-case working version but
+special case deprecat, ancient, unsupported stuff, if anything.
 
+If you select BR2_DEPRECATED, you're on your own anyway, at least in my
+POV. 
 
-Changeset:
-Modified: trunk/buildroot/toolchain/gcc/Config.in
-===================================================================
---- trunk/buildroot/toolchain/gcc/Config.in	2007-09-19 14:15:46 UTC (rev 19893)
-+++ trunk/buildroot/toolchain/gcc/Config.in	2007-09-19 17:32:21 UTC (rev 19894)
-@@ -119,7 +119,7 @@
- 
- config BR2_TOOLCHAIN_SYSROOT
- 	bool "Enable toolchain with --sysroot support"
--	depends on !BR2_GCC_VERSION_3_3_5 && !BR2_GCC_VERSION_3_3_6 && !BR2_GCC_VERSION_3_4_2 && !BR2_GCC_VERSION_3_4_3 && !BR2_GCC_VERSION_3_4_4 && !BR2_GCC_VERSION_3_4_5 && !BR2_GCC_VERSION_3_4_6 && !BR2_GCC_VERSION_4_1_2
-+	depends on !BR2_GCC_VERSION_3_3_5 && !BR2_GCC_VERSION_3_3_6 && !BR2_GCC_VERSION_3_4_2 && !BR2_GCC_VERSION_3_4_3 && !BR2_GCC_VERSION_3_4_4 && !BR2_GCC_VERSION_3_4_5 && !BR2_GCC_VERSION_3_4_6 && !BR2_GCC_VERSION_4_0_0 && !BR2_GCC_VERSION_4_0_1 && !BR2_GCC_VERSION_4_0_2 && !BR2_GCC_VERSION_4_0_3 && !BR2_GCC_VERSION_4_0_4 && !BR2_GCC_VERSION_4_1_0 && !BR2_GCC_VERSION_4_1_1 && !!BR2_GCC_VERSION_4_1_2
- 	default y
- 	help
- 	  Enables --sysroot=dir for binutils and gcc.
+---------------------------------------------------------------------- 
+ ikonst - 09-19-07 07:23  
+---------------------------------------------------------------------- 
+I'm okay with either way: we should just make sure than when a new 4.1.x
+version comes out, it's also excluded.
+
+(Personally, I've lost considerable time trying to figure out the problem
+which occurs when you try to build gcc 4.1.x with sysroot, so I deem it
+important to disallow it within the configuration.) 
+
+---------------------------------------------------------------------- 
+ bernhardf - 09-19-07 10:33  
+---------------------------------------------------------------------- 
+fixed in r19894 
+
+Issue History 
+Date Modified   Username       Field                    Change               
+====================================================================== 
+09-19-07 06:32  ikonst         New Issue                                    
+09-19-07 06:32  ikonst         Status                   new => assigned     
+09-19-07 06:32  ikonst         Assigned To               => buildroot       
+09-19-07 07:00  bernhardf      Note Added: 0002752                          
+09-19-07 07:23  ikonst         Note Added: 0002762                          
+09-19-07 10:33  bernhardf      Status                   assigned => closed  
+09-19-07 10:33  bernhardf      Note Added: 0002763                          
+======================================================================
