@@ -1,8 +1,8 @@
 From: bugs at busybox.net <bugs@busybox.net>
-Date: Wed, 19 Sep 2007 07:04:48 -0700
+Date: Wed, 19 Sep 2007 07:05:15 -0700
 Subject: [Buildroot] [buildroot 0001450]: DEPRECATED: copy of system header
 	files fails
-Message-ID: <acf1fcd1840cbe75f90f767e49ee2593@busybox.net>
+Message-ID: <c562cc9fb2cc667110d1d22164d2cb9d@busybox.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -10,7 +10,7 @@ Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
 
-The following issue has been UPDATED. 
+The following issue has been CLOSED 
 ====================================================================== 
 http://busybox.net/bugs/view.php?id=1450 
 ====================================================================== 
@@ -23,10 +23,12 @@ Category:                   Architecture Specific
 Reproducibility:            always
 Severity:                   minor
 Priority:                   normal
-Status:                     assigned
+Status:                     closed
+Resolution:                 open
+Fixed in Version:           
 ====================================================================== 
 Date Submitted:             07-30-2007 06:54 PDT
-Last Modified:              09-19-2007 07:04 PDT
+Last Modified:              09-19-2007 07:05 PDT
 ====================================================================== 
 Summary:                    DEPRECATED: copy of system header files fails
 Description: 
@@ -68,4 +70,5 @@ Date Modified   Username       Field                    Change
 09-07-07 11:58  bernhardf      Note Added: 0002732                          
 09-19-07 07:04  bernhardf      Summary                  copy of system header
 files fails => DEPRECATED: copy of system header files fails
+09-19-07 07:05  bernhardf      Status                   assigned => closed  
 ======================================================================
