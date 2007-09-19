@@ -1,73 +1,26 @@
-From: bugs at busybox.net <bugs@busybox.net>
-Date: Wed, 19 Sep 2007 07:23:33 -0700
-Subject: [Buildroot] [buildroot 0001502]: BR2_TOOLCHAIN_SYSROOT should
-	depend on BR2_GCC_VERSION_4_2_0 or higher
-Message-ID: <586321c5455ca00d1c6a9c509c1e0286@busybox.net>
+From: Sushi Sensei <sinestado@gmail.com>
+Date: Wed, 19 Sep 2007 11:26:45 -0300
+Subject: [Buildroot] OLSR in buildroot - patch 03
+Message-ID: <a63ecaf0709190726n5caa5817m7aab911b9490a6d6@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+Some minor changes in S50olsr
 
-A NOTE has been added to this issue. 
-====================================================================== 
-http://busybox.net/bugs/view.php?id=1502 
-====================================================================== 
-Reported By:                ikonst
-Assigned To:                buildroot
-====================================================================== 
-Project:                    buildroot
-Issue ID:                   1502
-Category:                   Other
-Reproducibility:            always
-Severity:                   major
-Priority:                   normal
-Status:                     assigned
-====================================================================== 
-Date Submitted:             09-19-2007 06:32 PDT
-Last Modified:              09-19-2007 07:23 PDT
-====================================================================== 
-Summary:                    BR2_TOOLCHAIN_SYSROOT should depend on
-BR2_GCC_VERSION_4_2_0 or higher
-Description: 
-The sysroot feature is only available on gcc 4.2.0 and higher. Building it
-with gcc 4.1.x will cause an error (as sysroot's help string already
-specifies).
-
-toolchain/gcc/Config.in should be changed. Preferably, the rule should be
-changed from exclusive:
-depends on !BR2_GCC_VERSION_3_3_5 ...
-to inclusive:
-depends on BR2_GCC_VERSION_4_2_0 || BR2_GCC_VERSION_4_2_1 ||
-BR2_GCC_VERSION_4_3
-====================================================================== 
-
----------------------------------------------------------------------- 
- bernhardf - 09-19-07 07:00  
----------------------------------------------------------------------- 
-No, the !ancient is fine. I don't want to special-case working version but
-special case deprecat, ancient, unsupported stuff, if anything.
-
-If you select BR2_DEPRECATED, you're on your own anyway, at least in my
-POV. 
-
----------------------------------------------------------------------- 
- ikonst - 09-19-07 07:23  
----------------------------------------------------------------------- 
-I'm okay with either way: we should just make sure than when a new 4.1.x
-version comes out, it's also excluded.
-
-(Personally, I've lost considerable time trying to figure out the problem
-which occurs when you try to build gcc 4.1.x with sysroot, so I deem it
-important to disallow it within the configuration.) 
-
-Issue History 
-Date Modified   Username       Field                    Change               
-====================================================================== 
-09-19-07 06:32  ikonst         New Issue                                    
-09-19-07 06:32  ikonst         Status                   new => assigned     
-09-19-07 06:32  ikonst         Assigned To               => buildroot       
-09-19-07 07:00  bernhardf      Note Added: 0002752                          
-09-19-07 07:23  ikonst         Note Added: 0002762                          
-======================================================================
+-- 
+------------------------------------------------------
+--- Timeo Danaos et dona ferentes ---
+------------------------------------------------------
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: http://busybox.net/lists/buildroot/attachments/20070919/b986b9a5/attachment-0001.htm 
+-------------- next part --------------
+A non-text attachment was scrubbed...
+Name: br2-add-olsr.03.patch
+Type: text/x-patch
+Size: 3796 bytes
+Desc: not available
+Url : http://busybox.net/lists/buildroot/attachments/20070919/b986b9a5/attachment-0001.bin 
