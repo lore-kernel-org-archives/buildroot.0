@@ -1,105 +1,74 @@
 From: Bernhard Fischer <rep.dot.nop@gmail.com>
-Date: Wed, 19 Sep 2007 21:27:40 +0200
-Subject: [Buildroot] buildroot with ipkg
-In-Reply-To: <20070919064200.GA29317@zelow.no>
-References: <7fc538d30709170509s4898cc55keb14ebb718d30090@mail.gmail.com>
-	<46EED912.2070902@free.fr> <20070917201401.GA28671@codepoet.org>
-	<46EEEEE2.7060705@free.fr> <20070919064200.GA29317@zelow.no>
-Message-ID: <20070919192740.GC817@aon.at>
+Date: Wed, 19 Sep 2007 21:36:00 +0200
+Subject: [Buildroot] [patch] here are some more cleanup patches
+In-Reply-To: <0709192052250.18886@somehost>
+References: <0709192052250.18886@somehost>
+Message-ID: <20070919193600.GD817@aon.at>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Wed, Sep 19, 2007 at 08:42:00AM +0200, Thomas Lundquist wrote:
->On Mon, Sep 17, 2007 at 11:17:22PM +0200, Julien Boibessot wrote:
+On Wed, Sep 19, 2007 at 09:06:54PM +0200, Cristian Ionescu-Idbohrn wrote:
+>but libvorbis fails to build:
 >
->> Do you think it's possible to do that without modifying all the 
->> Buildroot packages makefiles ?
+>  In file included from mdct.c:44:
+>  ../include/vorbis/codec.h:26:21: error: ogg/ogg.h: No such file or
+>  directory
 >
->No, it need that work.
+>Can't seem to be able to build ltrace; something to do with configure not
+>being able to locate gelf.h, but it's there:
+>staging_dir/usr/include/libelf, as libelf build ok; I get a configure
+>error:
 >
->I've attatched the last svn diff I made, which is kinda outdated. This
->makes tarballs and very simple .debs. I was about to do ipkg when work
->caught up with me.
+>  checking gelf.h usability... no
+>  checking gelf.h presence... no
+>  checking for gelf.h... no
+>  configure: error: ***** gelf.h not found *****
 >
->It will not apply cleanly to the newest svn but I feel I should at least
->show that I have something. It should be fairly easy to hack in but I
->have to finish the project I work on now before I can play with this.
+>config.log says in more than one place:
 >
->The concept is that you can choose what kind of packages you want and
->then choose between package or "base" for every package in packages/
->(the only package that you can do with it right now is Dropbear, as a
->proof of concept.)
+>  /usr/include/libelf/gelf.h:49:2: error: #error "GElf is not supported on
+>    this sysystem."
 >
->If you are in a hurry, feel free to fix and add, if not I'll try to
->finish up a new patch in a week or two (I've said that before but if I
->know I can add it to buildroot I'm more motivated for it.)
+>and bails out further down with:
 >
+>  configure:3629: checking for gelf.h
+>  configure:3636: result: no
+>  configure:3643: error: ***** gelf.h not found *****
 >
+>ac_cv_header_gelf_h=no may have something to do with it.
 >
->Thomas.
+>Any ideas?
 
->Index: target/ext2/ext2root.mk
->===================================================================
->--- target/ext2/ext2root.mk	(revision 18947)
->+++ target/ext2/ext2root.mk	(working copy)
->@@ -75,7 +75,7 @@
-> #EXT2_ROOTFS_COMPRESSOR_PREREQ:= bzip2-host
-> endif
-> ifeq ($(BR2_TARGET_ROOTFS_EXT2_LZMA),y)
->-EXT2_ROOTFS_COMPRESSOR:=lzma -9 -c
->+EXT2_ROOTFS_COMPRESSOR:=$(STAGING_DIR)/bin/lzma -9 -c
+I've updated ltrace some months ago, but i admit that i have no idea
+which box this big patches are on :-/
+...
+$ ls -ltrn buildroot.mine.OLD.OLD/package/ltrace/
+total 804
+-rw-r--r-- 1 1000 1000 627890 Apr  6 14:58 ltrace-svn-20070406.00.patch
+-rw-r--r-- 1 1000 1000 173414 Apr  6 15:04 ltrace-svn-20070406.01.autoreconf.patch
+-rw-r--r-- 1 1000 1000   2298 Apr  6 15:07 ltrace.mk
+-rw-r--r-- 1 1000   40    241 Apr  6 15:25 Config.in
 
-This shouldn't be needed anymore, we build our own version there, if
-need be. If you have one of these "lzma e" flavour binaries, please
-flesh out toolchain/dependencies/check-host-lzma.sh
-instead (See TODO in there). TIA.
+I.e. Not too good.
 
-> EXT2_ROOTFS_COMPRESSOR_EXT:=lzma
-> EXT2_ROOTFS_COMPRESSOR_PREREQ:= lzma-host
-> endif
+Perhaps try this updated version?
 
->Index: package/config/mconf.c
->===================================================================
->--- package/config/mconf.c	(revision 18947)
->+++ package/config/mconf.c	(working copy)
->@@ -165,7 +165,8 @@
-> 	"Arrow keys navigate the menu.  "
-> 	"<Enter> selects submenus --->.  "
-> 	"Highlighted letters are hotkeys.  "
->-	"Pressing <Y> selectes a feature, while <N> will exclude a feature.  "
->+	"Pressing <Y> selectes a feature, while <N> will exclude a feature, "
->+	"<M> will build a separate package. "
-> 	"Press <Esc><Esc> to exit, <?> for Help, </> for Search.  "
-> 	"Legend: [*] feature is selected  [ ] feature is excluded",
-> radiolist_instructions[] =
-
-I'm not sure if that is a good idea. You'd generally want to build all
-packages as ipkg, i'd say.
-
->Index: package/dropbear/dropbear.mk
->===================================================================
->--- package/dropbear/dropbear.mk	(revision 18947)
->+++ package/dropbear/dropbear.mk	(working copy)
->@@ -11,6 +11,13 @@
-> DROPBEAR_BINARY:=dropbearmulti
-> DROPBEAR_TARGET_BINARY:=usr/sbin/dropbear
-> 
->+ifeq ($(strip $(BR2_PACKAGE_DROPBEAR)),m)
->+DROPBEAR_DESTDIR=$(TARGET_PACKAGES_DIR)/dropbear
->+else
->+DROPBEAR_DESTDIR=$(TARGET_DIR)
->+endif
-
-wow. This would be very intrusive. We should be able to use one central
-TARGET_PACKAGES_DIR that may or may not be empty that we stick into the
-individual FOO_DIR's via TARGET_DIR
-
-But first  we have to fix the lib vs. lib64 dir glitch with gcc, that's
-more important. And then it would be nice if somebody would look into
-multilib support, which is apparently broken since several years (way
-before i joined).
-
-Still, creating ipkg would be a nice thing to have.
+Index: package/ltrace/ltrace.mk
+===================================================================
+--- package/ltrace/ltrace.mk    (revision 19878)
++++ package/ltrace/ltrace.mk    (working copy)
+@@ -3,9 +3,9 @@
+ # ltrace
+ #
+ #############################################################
+-LTRACE_VERSION=0.4
++LTRACE_VERSION=0.5
+ LTRACE_SOURCE=ltrace_$(LTRACE_VERSION).orig.tar.gz
+-#LTRACE_PATCH=ltrace_$(LTRACE_VERSION)-1.diff.gz
++LTRACE_PATCH=ltrace_$(LTRACE_VERSION)-3.diff.gz
+ LTRACE_SITE=http://ftp.debian.org/debian/pool/main/l/ltrace
+ LTRACE_DIR=$(BUILD_DIR)/ltrace-$(LTRACE_VERSION)
+ LTRACE_BINARY=ltrace
