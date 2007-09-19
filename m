@@ -1,45 +1,56 @@
-From: aldot at uclibc.org <aldot@uclibc.org>
-Date: Wed, 19 Sep 2007 07:15:48 -0700 (PDT)
-Subject: [Buildroot] svn commit: trunk/buildroot/package/ed
-Message-ID: <20070919141548.4CC3630069@busybox.net>
+From: bugs at busybox.net <bugs@busybox.net>
+Date: Wed, 19 Sep 2007 07:16:06 -0700
+Subject: [Buildroot] [buildroot 0001456]: failed to configure "ed" package:
+	Unrecognized option: "--disable-nls"
+Message-ID: <b94e231b0aba88deb965851deab64330@busybox.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Author: aldot
-Date: 2007-09-19 07:15:46 -0700 (Wed, 19 Sep 2007)
-New Revision: 19893
 
-Log:
-- bump version
+The following issue has been CLOSED 
+====================================================================== 
+http://busybox.net/bugs/view.php?id=1456 
+====================================================================== 
+Reported By:                nawawi
+Assigned To:                buildroot
+====================================================================== 
+Project:                    buildroot
+Issue ID:                   1456
+Category:                   Other
+Reproducibility:            unable to reproduce
+Severity:                   minor
+Priority:                   normal
+Status:                     closed
+Resolution:                 open
+Fixed in Version:           
+====================================================================== 
+Date Submitted:             08-07-2007 20:58 PDT
+Last Modified:              09-19-2007 07:16 PDT
+====================================================================== 
+Summary:                    failed to configure "ed" package: Unrecognized
+option: "--disable-nls"
+Description: 
+ERROR: configure: Unrecognized option: "--disable-nls"; use --help for
+usage.
+make: *** [/home/dev/buildroot/build_i386/ed-0.6/.configured] Error 1
 
+juts remove "$(DISABLE_NLS)" in package/ed/ed.mk
+====================================================================== 
 
-Modified:
-   trunk/buildroot/package/ed/ed.mk
+---------------------------------------------------------------------- 
+ bernhardf - 09-19-07 07:16  
+---------------------------------------------------------------------- 
+This was fixed quite some time ago. Thanks for the report. 
 
-
-Changeset:
-Modified: trunk/buildroot/package/ed/ed.mk
-===================================================================
---- trunk/buildroot/package/ed/ed.mk	2007-09-19 14:11:28 UTC (rev 19892)
-+++ trunk/buildroot/package/ed/ed.mk	2007-09-19 14:15:46 UTC (rev 19893)
-@@ -3,7 +3,7 @@
- # ed
- #
- #############################################################
--ED_VERSION:=0.6
-+ED_VERSION:=0.8
- ED_SOURCE:=ed-$(ED_VERSION).tar.bz2
- ED_SITE:=http://ftp.gnu.org/gnu/ed/
- ED_CAT:=$(BZCAT)
-@@ -36,7 +36,7 @@
- 	$(MAKE) CC=$(TARGET_CC) -C $(ED_DIR)
- 
- $(TARGET_DIR)/$(ED_TARGET_BINARY): $(ED_DIR)/$(ED_BINARY)
--	cp -dpf $(ED_DIR)/$(ED_BINARY) $(TARGET_DIR)/$(ED_TARGET_BINARY)
-+	$(INSTALL) -D $(ED_DIR)/$(ED_BINARY) $(TARGET_DIR)/$(ED_TARGET_BINARY)
- 
- ed: uclibc $(TARGET_DIR)/$(ED_TARGET_BINARY)
- 
+Issue History 
+Date Modified   Username       Field                    Change               
+====================================================================== 
+08-07-07 20:58  nawawi         New Issue                                    
+08-07-07 20:58  nawawi         Status                   new => assigned     
+08-07-07 20:58  nawawi         Assigned To               => buildroot       
+09-19-07 07:16  bernhardf      Status                   assigned => closed  
+09-19-07 07:16  bernhardf      Note Added: 0002759                          
+======================================================================
