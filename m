@@ -1,7 +1,7 @@
 From: aldot at uclibc.org <aldot@uclibc.org>
-Date: Wed, 19 Sep 2007 03:26:12 -0700 (PDT)
-Subject: [Buildroot] svn commit: trunk/buildroot/package/libgpg-error
-Message-ID: <20070919102612.55F80A67FF@busybox.net>
+Date: Wed, 19 Sep 2007 03:26:39 -0700 (PDT)
+Subject: [Buildroot] svn commit: trunk/buildroot/package/libgcrypt
+Message-ID: <20070919102639.047D6A6881@busybox.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -9,23 +9,23 @@ Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
 Author: aldot
-Date: 2007-09-19 03:26:11 -0700 (Wed, 19 Sep 2007)
-New Revision: 19884
+Date: 2007-09-19 03:26:39 -0700 (Wed, 19 Sep 2007)
+New Revision: 19885
 
 Log:
-- fix includedir
+- remove duplicate includedir
 
 
 Modified:
-   trunk/buildroot/package/libgpg-error/libgpg-error.mk
+   trunk/buildroot/package/libgcrypt/libgcrypt.mk
 
 
 Changeset:
-Modified: trunk/buildroot/package/libgpg-error/libgpg-error.mk
+Modified: trunk/buildroot/package/libgcrypt/libgcrypt.mk
 ===================================================================
---- trunk/buildroot/package/libgpg-error/libgpg-error.mk	2007-09-19 09:20:04 UTC (rev 19883)
-+++ trunk/buildroot/package/libgpg-error/libgpg-error.mk	2007-09-19 10:26:11 UTC (rev 19884)
-@@ -25,21 +25,22 @@
+--- trunk/buildroot/package/libgcrypt/libgcrypt.mk	2007-09-19 10:26:11 UTC (rev 19884)
++++ trunk/buildroot/package/libgcrypt/libgcrypt.mk	2007-09-19 10:26:39 UTC (rev 19885)
+@@ -25,22 +25,23 @@
  		$(TARGET_CONFIGURE_OPTS) \
  		$(TARGET_CONFIGURE_ARGS) \
  		./configure \
@@ -37,11 +37,12 @@ Modified: trunk/buildroot/package/libgpg-error/libgpg-error.mk
 -			--bindir=/usr/bin \
 -			--sbindir=/usr/sbin \
 -			--libdir=/lib \
--			--libexecdir=/$(LIBGPG_ERROR_DESTDIR) \
+-			--libexecdir=/$(LIBGCRYPT_DESTDIR) \
 -			--sysconfdir=/etc \
 -			--datadir=/usr/share \
 -			--localstatedir=/var \
 -			--includedir=/include \
+-			--includedir=/usr/include \
 -			--mandir=/usr/man \
 -			--infodir=/usr/info \
 +		--target=$(GNU_TARGET_NAME) \
@@ -52,22 +53,23 @@ Modified: trunk/buildroot/package/libgpg-error/libgpg-error.mk
 +		--bindir=/usr/bin \
 +		--sbindir=/usr/sbin \
 +		--libdir=/lib \
-+		--libexecdir=/$(LIBGPG_ERROR_DESTDIR) \
++		--libexecdir=/$(LIBGCRYPT_DESTDIR) \
 +		--sysconfdir=/etc \
 +		--datadir=/usr/share \
 +		--localstatedir=/var \
 +		--includedir=/usr/include \
 +		--mandir=/usr/man \
 +		--infodir=/usr/info \
-+		$(DISABLE_NLS) \
++		--disable-optimization \
++		--with-capabilities \
  	)
- 	touch $(LIBGPG_ERROR_DIR)/.configured
+ 	touch $@
  
-@@ -64,7 +65,6 @@
- libgpg-error-dirclean:
- 	rm -rf $(LIBGPG_ERROR_DIR)
+@@ -65,7 +66,6 @@
+ libgcrypt-dirclean:
+ 	rm -rf $(LIBGCRYPT_DIR)
  
--.PHONY: libgpg-error
+-.PHONY: libgcrypt
  #############################################################
  #
  # Toplevel Makefile options
