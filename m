@@ -1,8 +1,7 @@
 From: bugs at busybox.net <bugs@busybox.net>
-Date: Wed, 19 Sep 2007 07:16:58 -0700
-Subject: [Buildroot] [buildroot 0001449]: Buildroot doesn't "make
-	menuconfig" in CyGWIN
-Message-ID: <f77a0d9d5595ee9b0053016bfd611899@busybox.net>
+Date: Wed, 19 Sep 2007 07:18:02 -0700
+Subject: [Buildroot] [buildroot 0001445]: openssh-3.9p1 fails to compile
+Message-ID: <dd6b7a5a12920c6d5ffd19a255582575@busybox.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -10,90 +9,81 @@ Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
 
-A NOTE has been added to this issue. 
+The following issue has been CLOSED 
 ====================================================================== 
-http://busybox.net/bugs/view.php?id=1449 
+http://busybox.net/bugs/view.php?id=1445 
 ====================================================================== 
-Reported By:                dtech
+Reported By:                alanszlosek
 Assigned To:                buildroot
 ====================================================================== 
 Project:                    buildroot
-Issue ID:                   1449
+Issue ID:                   1445
 Category:                   Architecture Specific
 Reproducibility:            always
-Severity:                   major
+Severity:                   block
 Priority:                   normal
-Status:                     assigned
+Status:                     closed
+Resolution:                 open
+Fixed in Version:           
 ====================================================================== 
-Date Submitted:             07-29-2007 11:49 PDT
-Last Modified:              09-19-2007 07:16 PDT
+Date Submitted:             07-26-2007 05:50 PDT
+Last Modified:              09-19-2007 07:18 PDT
 ====================================================================== 
-Summary:                    Buildroot doesn't "make menuconfig" in CyGWIN
+Summary:                    openssh-3.9p1 fails to compile
 Description: 
-While using a fresh install of CyGWIN and the latest buildroot build, I
-cannot "make menuconfig" builroot. I get the following output:
-make CC="/usr/bin/gcc" -C package/config conf mconf
-make[1]: Entering directory `/home/David/buildroot/package/config'
-/usr/bin/gcc -I/usr/include/ncurses -DCURSES_LOC="<ncurses.h>" -DLOCALE -g
--O2 -MM *.c > .depend 2>/dev/null || :
-make[1]: Leaving directory `/home/David/buildroot/package/config'
-make[1]: Entering directory `/home/David/buildroot/package/config'
-/usr/bin/gcc -I/usr/include/ncurses -DCURSES_LOC="<ncurses.h>" -DLOCALE -g
--O2  -c conf.c -o conf.o
-/usr/bin/gcc -I/usr/include/ncurses -DCURSES_LOC="<ncurses.h>" -DLOCALE -g
--O2  -c kxgettext.c -o kxgettext.o
-/usr/bin/gcc -I/usr/include/ncurses -DCURSES_LOC="<ncurses.h>" -DLOCALE -g
--O2  -c lxdialog/checklist.c -o lxdialog/checklist.o
-/usr/bin/gcc -I/usr/include/ncurses -DCURSES_LOC="<ncurses.h>" -DLOCALE -g
--O2  -c lxdialog/inputbox.c -o lxdialog/inputbox.o
-/usr/bin/gcc -I/usr/include/ncurses -DCURSES_LOC="<ncurses.h>" -DLOCALE -g
--O2  -c lxdialog/menubox.c -o lxdialog/menubox.o
-/usr/bin/gcc -I/usr/include/ncurses -DCURSES_LOC="<ncurses.h>" -DLOCALE -g
--O2  -c lxdialog/textbox.c -o lxdialog/textbox.o
-/usr/bin/gcc -I/usr/include/ncurses -DCURSES_LOC="<ncurses.h>" -DLOCALE -g
--O2  -c lxdialog/util.c -o lxdialog/util.o
-/usr/bin/gcc -I/usr/include/ncurses -DCURSES_LOC="<ncurses.h>" -DLOCALE -g
--O2  -c lxdialog/yesno.c -o lxdialog/yesno.o
-/usr/bin/gcc -I/usr/include/ncurses -DCURSES_LOC="<ncurses.h>" -DLOCALE -g
--O2  -c mconf.c -o mconf.o
-/usr/bin/gcc -I/usr/include/ncurses -DCURSES_LOC="<ncurses.h>" -DLOCALE -g
--O2 -I. -c zconf.tab.c -o zconf.tab.o
-/usr/bin/gcc -I/usr/include/ncurses -DCURSES_LOC="<ncurses.h>" -DLOCALE -g
--O2   conf.o  zconf.tab.o -o conf
-make[1]: Leaving directory `/home/David/buildroot/package/config'
-conf.o: In function `check_stdin':
-/home/David/buildroot/package/config/conf.c:60: undefined reference to
-`_libintl_gettext'
-/home/David/buildroot/package/config/conf.c:61: undefined reference to
-`_libintl_gettext'
-/home/David/buildroot/package/config/conf.c:62: undefined reference to
-`_libintl_gettext'
-conf.o: In function `check_conf':
-/home/David/buildroot/package/config/conf.c:483: undefined reference to
-`_libintl_gettext'
-conf.o: In function `main':
-/home/David/buildroot/package/config/conf.c:622: undefined reference to
-`_libintl_gettext'
-conf.o:/home/David/buildroot/package/config/conf.c:541: more undefined
-references to `_libintl_gettext' follow
-collect2: ld returned 1 exit status
-make[1]: *** [conf] Error 1
-make: *** [package/config/mconf] Error 2
+When buildroot tries to compile openssh it fails. I'm using buildroot
+revision 19264, uclibc-0.9.29, busybox-1.6.1, gcc-4.2.0.
+
+What follows is the output of the compilation:
+
+/home/alan/downloads/buildroot/pentium/build_i586/staging_dir/usr/bin/i586-linux-uclibc-gcc
+-g -O2 -Wall -Wpointer-arith -Wno-uninitialized -I. -I.  -DSSHDIR=\"/etc\"
+-D_PATH_SSH_PROGRAM=\"/usr/bin/ssh\"
+-D_PATH_SSH_ASKPASS_DEFAULT=\"/usr/sbin/ssh-askpass\"
+-D_PATH_SFTP_SERVER=\"/usr/sbin/sftp-server\"
+-D_PATH_SSH_KEY_SIGN=\"/usr/sbin/ssh-keysign\"
+-D_PATH_SSH_PIDDIR=\"/var/run\" -D_PATH_PRIVSEP_CHROOT_DIR=\"/var/empty\"
+-DSSH_RAND_HELPER=\"/usr/sbin/ssh-rand-helper\" -DHAVE_CONFIG_H -c scp.c
+/home/alan/downloads/buildroot/pentium/build_i586/staging_dir/usr/bin/i586-linux-uclibc-ld
+-L/home/alan/downloads/buildroot/pentium/build_i586/staging_dir/lib
+-L/home/alan/downloads/buildroot/pentium/build_i586/staging_dir/usr/lib -o
+scp scp.o progressmeter.o -L. -Lopenbsd-compat/  -lssh -lopenbsd-compat
+-lcrypto -lutil -lz  -lcrypt -lresolv -lresolv
+/home/alan/downloads/buildroot/pentium/build_i586/staging_dir/usr/bin/i586-linux-uclibc-ld:
+warning: cannot find entry symbol _start; defaulting to 08049170
+scp.o: In function `bwlimit':
+/home/alan/downloads/buildroot/pentium/build_i586/openssh-3.9p1/scp.c:680:
+undefined reference to `__fixunsdfdi'
+/home/alan/downloads/buildroot/pentium/build_i586/openssh-3.9p1/scp.c:682:
+undefined reference to `__udivdi3'
+/home/alan/downloads/buildroot/pentium/build_i586/openssh-3.9p1/scp.c:683:
+undefined reference to `__umoddi3'
+make[1]: *** [scp] Error 1
+make[1]: Leaving directory
+`/home/alan/downloads/buildroot/pentium/build_i586/openssh-3.9p1'
+make: ***
+[/home/alan/downloads/buildroot/pentium/build_i586/openssh-3.9p1/ssh]
+Error 2
+
 ====================================================================== 
 
 ---------------------------------------------------------------------- 
- bernhardf - 09-19-07 07:16  
+ bernhardf - 07-27-07 06:16  
 ---------------------------------------------------------------------- 
-This is supposed to work fine with revision 19893.
-Please confirm 
+http://lists.busybox.net/lists/buildroot/2007-July/003351.html 
+
+---------------------------------------------------------------------- 
+ bernhardf - 09-19-07 07:18  
+---------------------------------------------------------------------- 
+ssh was updated in the meantime. 
 
 Issue History 
 Date Modified   Username       Field                    Change               
 ====================================================================== 
-07-29-07 11:49  dtech          New Issue                                    
-07-29-07 11:49  dtech          Status                   new => assigned     
-07-29-07 11:49  dtech          Assigned To               => buildroot       
-07-29-07 11:49  dtech          Issue Monitored: dtech                       
-08-08-07 01:32  nl515291       Issue Monitored: nl515291                    
-09-19-07 07:16  bernhardf      Note Added: 0002760                          
+07-26-07 05:50  alanszlosek    New Issue                                    
+07-26-07 05:50  alanszlosek    Status                   new => assigned     
+07-26-07 05:50  alanszlosek    Assigned To               => buildroot       
+07-27-07 06:16  bernhardf      Note Added: 0002642                          
+09-19-07 07:18  bernhardf      Status                   assigned => closed  
+09-19-07 07:18  bernhardf      Note Added: 0002761                          
 ======================================================================
