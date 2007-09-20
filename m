@@ -1,33 +1,135 @@
-From: Elizabeth Oldham <beth@mips.com>
-Date: Thu, 20 Sep 2007 22:38:52 +0100
-Subject: [Buildroot] local mirror management (bug #572)
-In-Reply-To: <20070919082107.GC11856@aon.at>
-References: <20070917075500.052F2A4692@busybox.net>	<1190025802.8052.4.camel@elrond.sweden.atmel.com>	<20070917092735.GA18888@aon.at>	<1190031404.8052.9.camel@elrond.sweden.atmel.com>	<20070917111024.GB22104@aon.at>	<1190040978.8052.20.camel@elrond.sweden.atmel.com>	<20070917134117.GC24993@aon.at>	<1190098489.4064.7.camel@elrond.sweden.atmel.com>
-	<20070919082107.GC11856@aon.at>
-Message-ID: <46F2E86C.7050705@mips.com>
+From: Gururaja Hebbar K R <gururajakr@sanyo.co.in>
+Date: Fri, 21 Sep 2007 05:08:36 +0530
+Subject: [Buildroot] sysroot not anabled even when BR2_GCC_VERSION_4_2_1
+	isselected
+Message-ID: <C03A3C267DDF184EA523BBAB577BF924F03FA2@blrexsr1.slti.sanyo.co.in>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Bernhard Fischer wrote:
+Hi  samant,
 
-> "local mirror" patch in mantis (or the ML archives). See 1).
-> With the patch mentioned above, you (i.e. the user) is free to setup and
-> use any mirror she likes, be it the
-> http://buildroot.uclibc.org/downloads/buildroot-sources/
-> or another, potentially local directory (i.e. nothing you can talk to
-> via http or ftp).
-> 
-> 1) http://bugs.busybox.net/view.php?id=572
+   I normally use arm gnu toolchain provided by cosesourcery to work on
+arm926ejs. The gcc version they use is 4.2.0 . Also now a days i am
+using toolchain built using buildroot uclibc which uses gcc 4.2.1. Both
+are working absolutely fine for me except that the Busy box built using
+Buildroot Toolchain (with gcc 4.2.1) doesnt work. I use buildroot
+toolchain only to compile Linux kernel and use codesourcery toolchain to
+build Busybox.
 
-I'll bite, this is exactly what I need... I tweaked the patch in that 
-bug and attach my version for comment. I dont know what clean up you had 
-in mind but I'm happy to make further attempts.
+Regards
+Gururaja
 
-Beth
--------------- next part --------------
-An embedded and charset-unspecified text was scrubbed...
-Name: local-mirror.patch
-Url: http://busybox.net/lists/buildroot/attachments/20070920/fd87a513/attachment.diff 
+
+
+-----Original Message-----
+From: Rae_Samant@emc.com [mailto:Rae_Samant at emc.com] 
+Sent: Thursday, September 20, 2007 6:56 AM
+To: Gururaja Hebbar K R
+Subject: RE: sysroot not anabled even when BR2_GCC_VERSION_4_2_1
+isselected
+
+Hi Gururaj,
+ I have a question : Are you able to boot Arm 926 with GCC 4.2.1 ?
+ 
+ Which kernel are you using ? And what patches are you using ?
+
+ Are you also using initrd / ramdisk ?
+ 
+ I ask this because I have been unable to compile Arm 926 based kernel
+(provided by marvell) with GCC 4.2.1 .
+
+ When I am able to compile the kernel with Gcc 3.4.6, then the shell
+seems to be not working (buildroot snapshot/busybox 1.2.0).
+
+ Hey, Please help me if possible with the information. I am stuck for
+past one and half weeks.
+
+Thanks and Regards,
+samant
+
+
+-----Original Message-----
+From: buildroot-bounces@uclibc.org [mailto:buildroot-bounces at uclibc.org]
+On Behalf Of Hebbar
+Sent: Thursday, September 20, 2007 4:28 AM
+To: buildroot at uclibc.org
+Subject: [Buildroot] sysroot not anabled even when BR2_GCC_VERSION_4_2_1
+isselected
+
+
+Hi All,
+
+ I just tried latest buildroot snapshot and below is my buildroot
+config.
+What i observed is that BR2_TOOLCHAIN_SYSROOT i snot selected even
+though i have enabled gcc 4.2.1. Let me know if any one has a quickest
+solution.
+LEt
+me know if anyone needs more info.
+
+Regards
+Gururaja
+
+BR2_arm=y
+BR2_arm926t=y
+BR2_ARM_TYPE="ARM926T"
+BR2_ARM_EABI=y
+BR2_ARCH="arm"
+BR2_ENDIAN="LITTLE"
+BR2_GCC_TARGET_TUNE="arm9tdmi"
+
+
+BR2_PREFER_STATIC_LIB=y
+
+
+#
+
+#
+# Toolchain type
+#
+BR2_TOOLCHAIN_BUILDROOT=y
+# BR2_TOOLCHAIN_EXTERNAL is not set
+BR2_TOOLCHAIN_NORMAL=y
+# BR2_TOOLCHAIN_ATMEL_AVR32 is not set
+
+
+
+#
+# Gcc Options
+#
+# BR2_GCC_VERSION_3_3_5 is not set
+# BR2_GCC_VERSION_3_3_6 is not set
+# BR2_GCC_VERSION_3_4_2 is not set
+# BR2_GCC_VERSION_3_4_3 is not set
+# BR2_GCC_VERSION_3_4_4 is not set
+# BR2_GCC_VERSION_3_4_5 is not set
+# BR2_GCC_VERSION_3_4_6 is not set
+# BR2_GCC_VERSION_4_0_0 is not set
+# BR2_GCC_VERSION_4_0_1 is not set
+# BR2_GCC_VERSION_4_0_2 is not set
+# BR2_GCC_VERSION_4_0_3 is not set
+# BR2_GCC_VERSION_4_0_4 is not set
+# BR2_GCC_VERSION_4_1_0 is not set
+# BR2_GCC_VERSION_4_1_1 is not set
+# BR2_GCC_VERSION_4_1_2 is not set
+# BR2_GCC_VERSION_4_2_0 is not set
+BR2_GCC_VERSION_4_2_1=y
+# BR2_GCC_IS_SNAP is not set
+BR2_GCC_VERSION="4.2.1"
+# BR2_GCC_USE_SJLJ_EXCEPTIONS is not set
+
+
+
+--
+View this message in context:
+http://www.nabble.com/sysroot-not-anabled-even-when-BR2_GCC_VERSION_4_2_
+1-is-selected-tf4486096.html#a12792950
+Sent from the BuildRoot mailing list archive at Nabble.com.
+
+_______________________________________________
+buildroot mailing list
+buildroot at uclibc.org
+http://busybox.net/mailman/listinfo/buildroot
