@@ -1,125 +1,110 @@
-From: aldot at uclibc.org <aldot@uclibc.org>
-Date: Thu, 20 Sep 2007 04:38:21 -0700 (PDT)
-Subject: [Buildroot] svn commit: trunk/buildroot/package/lm-sensors
-Message-ID: <20070920113821.E6D1630065@busybox.net>
+From: Bernhard Fischer <rep.dot.nop@gmail.com>
+Date: Thu, 20 Sep 2007 16:45:27 +0200
+Subject: [Buildroot] [PATCH] make strace buildable
+In-Reply-To: <200707162232.43774.yann.morin.1998@anciens.enib.fr>
+References: <200707162232.43774.yann.morin.1998@anciens.enib.fr>
+Message-ID: <20070920144527.GA6384@aon.at>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Author: aldot
-Date: 2007-09-20 04:38:19 -0700 (Thu, 20 Sep 2007)
-New Revision: 19908
+Yann,
 
-Log:
-- don't use functions that are marked LEGACY in SUSv3
+On Mon, Jul 16, 2007 at 10:32:43PM +0200, Yann E. MORIN wrote:
+>Hello all!
+>
+>The second hunk in package/strace/strace-undef-syscall.patch is incorrect:
+>
+>--- strace-4.5.15.orig/linux/syscallent.h       2007-02-04 19:03:48.000000000 +0100
+>+++ strace-4.5.15/linux/syscallent.h    2007-02-04 19:11:04.000000000 +0100
+>@@ -130,7 +130,10 @@
+>        { 2,    TF,     sys_statfs,             "statfs"        }, /* 99 */
+>        { 2,    TD,     sys_fstatfs,            "fstatfs"       }, /* 100 */
+>        { 3,    0,      sys_ioperm,             "ioperm"        }, /* 101 */
+>-       { 2,    TD,     sys_socketcall,         "socketcall", SYS_socketcall }, /* 102 */
+>+       { 2,    TD,     sys_socketcall,         "socketcall",
+>+#ifdef __NR_socketcall
+>+       SYS_socketcall }, /* 102 */
+>+#endif
+>        { 3,    0,      sys_syslog,             "syslog"        }, /* 103 */
+>        { 3,    0,      sys_setitimer,          "setitimer"     }, /* 104 */
+>        { 2,    0,      sys_getitimer,          "getitimer"     }, /* 105 */
+>@@ -145,7 +148,10 @@
+>        { 4,    TP,     sys_wait4,              "wait4", SYS_wait4 }, /* 114 */
+>        { 1,    0,      sys_swapoff,            "swapoff"       }, /* 115 */
+>        { 1,    0,      sys_sysinfo,            "sysinfo"       }, /* 116 */
+>-       { 6,    0,      sys_ipc,                "ipc", SYS_ipc }, /* 117 */
+>+       { 6,    0,      sys_ipc,                "ipc",
+>+#ifdef __NR_ipc
+>+       SYS_ipc }, /* 117 */
+>+#endif
+>        { 1,    TD,     sys_fsync,              "fsync"         }, /* 118 */
+>        { 1,    TS,     sys_sigreturn,          "sigreturn"     }, /* 119 */
+>        { 5,    TP,     sys_clone,              "clone", SYS_clone }, /* 120 */
+>
+>If either or both of __NR_socketcall and __NR_ipc are not defined, then the
+>closing curly braces are omitted, thus resulting in incorrect C statements.
+>
+>The attached patch to r19112 solves the issue.
+>
+>Regards,
+>Yann E. MORIN.
+>
+>-- 
+>.-----------------.--------------------.------------------.--------------------.
+>|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+>| +0/33 662376056 | Software  Designer | \ / CAMPAIGN     |   ^                |
+>| --==< ?_? >==-- ?------------.-------:  X  AGAINST      |  /e\  There is no  |
+>| http://ymorin.is-a-geek.org/ | (*_*) | / \ HTML MAIL    |  """  conspiracy.  |
+>?------------------------------?-------?------------------?--------------------?
 
+>Index: buildroot/package/strace/strace-undef-syscall.patch
+>===================================================================
+>--- buildroot/package/strace/strace-undef-syscall.patch	(revision 19112)
+>+++ buildroot/package/strace/strace-undef-syscall.patch	(working copy)
+>@@ -15,27 +15,29 @@
+>  	{ 4,	0,	sys_epoll_ctl,		"epoll_ctl"	}, /* 255 */
+> --- strace-4.5.15.orig/linux/syscallent.h	2007-02-04 19:03:48.000000000 +0100
+> +++ strace-4.5.15/linux/syscallent.h	2007-02-04 19:11:04.000000000 +0100
+>-@@ -130,7 +130,10 @@
+>+@@ -130,7 +130,11 @@
+>  	{ 2,	TF,	sys_statfs,		"statfs"	}, /* 99 */
+>  	{ 2,	TD,	sys_fstatfs,		"fstatfs"	}, /* 100 */
+>  	{ 3,	0,	sys_ioperm,		"ioperm"	}, /* 101 */
+> -	{ 2,	TD,	sys_socketcall,		"socketcall", SYS_socketcall }, /* 102 */
+>-+	{ 2,	TD,	sys_socketcall,		"socketcall",
+>++	{ 2,	TD,	sys_socketcall,		"socketcall"
+> +#ifdef __NR_socketcall
+>-+	SYS_socketcall }, /* 102 */
+>++	    , SYS_socketcall
+> +#endif
+>++								}, /* 102 */
 
-Added:
-   trunk/buildroot/package/lm-sensors/lm-sensors.01.susv3-legacy.patch
+Hm. I just ment to push this change upstream but..
+Now if there is no socketcall, where does that closing curly bracket
+come from, again?
+I think it should be right here, but i can't see it?
 
-Modified:
-   trunk/buildroot/package/lm-sensors/lm-sensors.mk
+>  	{ 3,	0,	sys_syslog,		"syslog"	}, /* 103 */
+>  	{ 3,	0,	sys_setitimer,		"setitimer"	}, /* 104 */
+>  	{ 2,	0,	sys_getitimer,		"getitimer"	}, /* 105 */
+>-@@ -145,7 +148,10 @@
+>+@@ -145,7 +149,11 @@
+>  	{ 4,	TP,	sys_wait4,		"wait4", SYS_wait4 }, /* 114 */
+>  	{ 1,	0,	sys_swapoff,		"swapoff"	}, /* 115 */
+>  	{ 1,	0,	sys_sysinfo,		"sysinfo"	}, /* 116 */
+> -	{ 6,	0,	sys_ipc,		"ipc", SYS_ipc }, /* 117 */
+>-+	{ 6,	0,	sys_ipc,		"ipc",
+>++	{ 6,	0,	sys_ipc,		"ipc"
+> +#ifdef __NR_ipc
+>-+	SYS_ipc }, /* 117 */
+>++	    , SYS_ipc
+> +#endif
+>++								}, /* 117 */
 
-
-Changeset:
-Added: trunk/buildroot/package/lm-sensors/lm-sensors.01.susv3-legacy.patch
-===================================================================
---- trunk/buildroot/package/lm-sensors/lm-sensors.01.susv3-legacy.patch	                        (rev 0)
-+++ trunk/buildroot/package/lm-sensors/lm-sensors.01.susv3-legacy.patch	2007-09-20 11:38:19 UTC (rev 19908)
-@@ -0,0 +1,57 @@
-+diff -rdup lm_sensors-2.10.4.oorig/lib/proc.c lm_sensors-2.10.4/lib/proc.c
-+--- lm_sensors-2.10.4.oorig/lib/proc.c	2007-07-17 06:53:06.000000000 +0200
-++++ lm_sensors-2.10.4/lib/proc.c	2007-09-20 13:30:39.000000000 +0200
-+@@ -93,16 +93,16 @@ int sensors_read_proc_bus(void)
-+   while (fgets(line,255,f)) {
-+     if (strlen(line) > 0)
-+       line[strlen(line)-1] = '\0';
-+-    if (! (border = rindex(line,'\t')))
-++    if (! (border = strrchr(line,'\t')))
-+       goto ERROR;
-+     /* Skip algorithm name */
-+     *border='\0';
-+-    if (! (border = rindex(line,'\t')))
-++    if (! (border = strrchr(line,'\t')))
-+       goto ERROR;
-+     if (! (entry.adapter = strdup(border + 1)))
-+       goto FAT_ERROR;
-+     *border='\0';
-+-    if (! (border = rindex(line,'\t')))
-++    if (! (border = strrchr(line,'\t')))
-+       goto ERROR;
-+     *border='\0';
-+     if (strncmp(line,"i2c-",4))
-+@@ -155,8 +155,8 @@ int sensors_read_proc(sensors_chip_name 
-+ 		strcpy(n, name.busname);
-+ 		strcat(n, "/");
-+ 		strcpy(altn, n);
-+-		/* use rindex to append sysname to n */
-+-		getsysname(the_feature, rindex(n, '\0'), &mag, rindex(altn, '\0'));
-++		/* use strrchr to append sysname to n */
-++		getsysname(the_feature, strrchr(n, '\0'), &mag, strrchr(altn, '\0'));
-+ 		if ((f = fopen(n, "r")) != NULL
-+ 		 || (f = fopen(altn, "r")) != NULL) {
-+ 			int res = fscanf(f, "%lf", value);
-+@@ -198,8 +198,8 @@ int sensors_write_proc(sensors_chip_name
-+ 		strcpy(n, name.busname);
-+ 		strcat(n, "/");
-+ 		strcpy(altn, n);
-+-		/* use rindex to append sysname to n */
-+-		getsysname(the_feature, rindex(n, '\0'), &mag, rindex(altn, '\0'));
-++		/* use strrchr to append sysname to n */
-++		getsysname(the_feature, strrchr(n, '\0'), &mag, strrchr(altn, '\0'));
-+ 		if ((f = fopen(n, "w")) != NULL
-+ 		 || (f = fopen(altn, "w")) != NULL) {
-+ 			for (; mag > 0; mag --)
-+diff -rdup lm_sensors-2.10.4.oorig/prog/dump/i2cbusses.c lm_sensors-2.10.4/prog/dump/i2cbusses.c
-+--- lm_sensors-2.10.4.oorig/prog/dump/i2cbusses.c	2007-07-17 06:53:10.000000000 +0200
-++++ lm_sensors-2.10.4/prog/dump/i2cbusses.c	2007-09-20 13:29:19.000000000 +0200
-+@@ -185,7 +185,7 @@ found:
-+ 				fprintf(stderr, "%s: read error\n", n);
-+ 				continue;
-+ 			}
-+-			if((border = index(x, '\n')) != NULL)
-++			if((border = strchr(x, '\n')) != NULL)
-+ 				*border = 0;
-+ 			if(count++ == 0 && !procfmt)
-+ 				fprintf(stderr,"  Installed I2C busses:\n");
-
-Modified: trunk/buildroot/package/lm-sensors/lm-sensors.mk
-===================================================================
---- trunk/buildroot/package/lm-sensors/lm-sensors.mk	2007-09-20 11:14:47 UTC (rev 19907)
-+++ trunk/buildroot/package/lm-sensors/lm-sensors.mk	2007-09-20 11:38:19 UTC (rev 19908)
-@@ -6,7 +6,7 @@
- LM_SENSORS_VERSION:=2.10.4
- LM_SENSORS_SOURCE:=lm-sensors_$(LM_SENSORS_VERSION).orig.tar.gz
- LM_SENSORS_PATCH:=lm-sensors_$(LM_SENSORS_VERSION)-1.diff.gz
--LM_SENSORS_SITE:=ftp://ftp.debian.org/debian/pool/main/l/lm-sensors/
-+LM_SENSORS_SITE:=http://ftp.debian.org/debian/pool/main/l/lm-sensors/
- LM_SENSORS_DIR:=$(BUILD_DIR)/lm_sensors-$(LM_SENSORS_VERSION)
- LM_SENSORS_CAT:=$(ZCAT)
- LM_SENSORS_BINARY:=prog/sensors/sensors
-@@ -15,16 +15,20 @@
- $(DL_DIR)/$(LM_SENSORS_SOURCE):
- 	$(WGET) -P $(DL_DIR) $(LM_SENSORS_SITE)/$(LM_SENSORS_SOURCE)
- 
-+ifneq ($(LM_SENSORS_PATCH),)
-+LM_SENSORS_PATCH_FILE:=$(DL_DIR)/$(LM_SENSORS_PATCH)
- $(DL_DIR)/$(LM_SENSORS_PATCH):
- 	$(WGET) -P $(DL_DIR) $(LM_SENSORS_SITE)/$(LM_SENSORS_PATCH)
-+endif
- 
--lm-sensors-source: $(DL_DIR)/$(LM_SENSORS_SOURCE) $(DL_DIR)/$(LM_SENSORS_PATCH)
-+lm-sensors-source: $(DL_DIR)/$(LM_SENSORS_SOURCE) $(LM_SENSORS_PATCH_FILE)
- 
- $(LM_SENSORS_DIR)/.unpacked: $(DL_DIR)/$(LM_SENSORS_SOURCE) $(DL_DIR)/$(LM_SENSORS_PATCH)
- 	$(LM_SENSORS_CAT) $(DL_DIR)/$(LM_SENSORS_SOURCE) | tar -C $(BUILD_DIR) $(TAR_OPTIONS) -
- 	toolchain/patch-kernel.sh $(LM_SENSORS_DIR) package/lm-sensors/ lm-sensors\*.patch
- ifneq ($(LM_SENSORS_PATCH),)
--	(cd $(LM_SENSORS_DIR) && $(LM_SENSORS_CAT) $(DL_DIR)/$(LM_SENSORS_PATCH) | patch -p1)
-+	(cd $(LM_SENSORS_DIR) && \
-+	 $(LM_SENSORS_CAT) $(LM_SENSORS_PATCH_FILE) | patch -p1)
- 	if [ -d $(LM_SENSORS_DIR)/debian/patches ]; then \
- 		toolchain/patch-kernel.sh $(LM_SENSORS_DIR) $(LM_SENSORS_DIR)/debian/patches \*.patch; \
- 	fi
+ditto. +}, is missing, no?
+>  	{ 1,	TD,	sys_fsync,		"fsync"		}, /* 118 */
+>  	{ 1,	TS,	sys_sigreturn,		"sigreturn"	}, /* 119 */
+>  	{ 5,	TP,	sys_clone,		"clone", SYS_clone }, /* 120 */
