@@ -1,69 +1,34 @@
-From: =?big5?B?V2VpY2hlbiBMZWUgKKf1q8K+XyAtIEFza2V5IC0gVFcp?= <weichen.lee@askey.com.tw>
-Date: Thu, 20 Sep 2007 18:10:46 +0800
-Subject: [Buildroot] Segmentation fault of running sudo
-In-Reply-To: <867C0BFD0536F44B8184AD511C263A5222E76156F1@KFAEXMIPV1.sdcorp.global.sandisk.com>
-References: <9C1F4801E7902C4DB99BD17E121A0092024C3463B8@tpex07.askey.com.tw>
-	<867C0BFD0536F44B8184AD511C263A5222E76156F1@KFAEXMIPV1.sdcorp.global.sandisk.com>
-Message-ID: <9C1F4801E7902C4DB99BD17E121A0092024C34641C@tpex07.askey.com.tw>
+From: Thomas Lundquist <lists@zelow.no>
+Date: Thu, 20 Sep 2007 12:52:42 +0200
+Subject: [Buildroot] buildroot with ipkg
+In-Reply-To: <18114.192.168.2.100.1190279179.squirrel@home.the-hug.net>
+References: <7fc538d30709170509s4898cc55keb14ebb718d30090@mail.gmail.com>
+	<46EED912.2070902@free.fr> <20070917201401.GA28671@codepoet.org>
+	<46EEEEE2.7060705@free.fr> <20070919064200.GA29317@zelow.no>
+	<20070919192740.GC817@aon.at> <20070919205603.GA16408@zelow.no>
+	<18114.192.168.2.100.1190279179.squirrel@home.the-hug.net>
+Message-ID: <20070920105242.GB17954@zelow.no>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
- Yehuda,
+On Thu, Sep 20, 2007 at 10:06:19AM +0100, Elizabeth Oldham wrote:
+> 
+> Ummm, what about both, would that be too intrusive? In a project I'm
+> looking at doing being able to select an individual package or all in the
+> build and have ipkg capability, would be very useful.
 
-Thanks.
-I downgrade uClibc to 0.9.28.3.
-It solved this problem.
+There used to be an ALLYESCONFIG in the kernel and also Busybox if I
+remember correctly but both seems to be history.
 
-Weichen
+We could add "ALLPACKAGES" (or something) somewhere wich would just set 
+all packages which has tristate, to "m".
 
------Original Message-----
-From: Yehuda Hahn [mailto:Yehuda.Hahn at sandisk.com]
-Sent: Thursday, September 20, 2007 5:51 PM
-To: Weichen Lee (??? - Askey - TW)
-Subject: RE: [Buildroot] Segmentation fault of running sudo
-
-Weichen,
-
-I had a similar problem with a number of packages, and solved it by downgrading uClibc to 0.9.28.3.
-
-Cheers,
-
-Yehuda
+But you'd like to be able to choose what to compile and then choose
+between base or module? well, that's just as easy to do when you are
+choosing anyway. or have I misunderstood something?
 
 
------Original Message-----
-From: buildroot-bounces@uclibc.org [mailto:buildroot-bounces at uclibc.org] On Behalf Of Weichen Lee (??? - Askey - TW)
-Sent: Thursday, September 20, 2007 11:07 AM
-To: buildroot at uclibc.org
-Subject: [Buildroot] Segmentation fault of running sudo
-
-Hi,
-I use buildroot (svn r19828) to make the toolchain with the version below
-
-kernel-headers 2.6.11
-binutils 2.17
-gcc 4.1.2
-uClibc 0.9.29
-
-There is no error during compiled time.
-The sudo package is also compiled successfully.
-The rootfs with program like busybox is work fine on the target board.
-But when I run sudo, the output message is only show "Segmentation fault".
- Does anybodyelse encounter the same issue?
-
-
-Best Regards
-====================================
-??????????
-
-???? ?????
-
-??? (Weichen Lee)
-
-TEL:03-4759460  EXT:872
-FAX:03-4759414
-E-mail:weichen.lee at askey.com.tw
-====================================
+Thomas.
