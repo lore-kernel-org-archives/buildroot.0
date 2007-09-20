@@ -1,35 +1,93 @@
-From: ulf at uclibc.org <ulf@uclibc.org>
-Date: Thu, 20 Sep 2007 09:44:16 -0700 (PDT)
-Subject: [Buildroot] svn commit: trunk/buildroot/target/device/Atmel/atngw100
-Message-ID: <20070920164416.41018A658C@busybox.net>
+From: Luis R. Rodriguez <mcgrof@gmail.com>
+Date: Thu, 20 Sep 2007 12:38:25 -0400
+Subject: [Buildroot] udhcp.script using only ip
+Message-ID: <43e72e890709200938h6bedcfd0s646435a985e4f99e@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Author: ulf
-Date: 2007-09-20 09:44:15 -0700 (Thu, 20 Sep 2007)
-New Revision: 19912
+Sorry for the cross-post, was just not sure which one to send this to.
+Had it for a while but realized I should have sent it in. For those
+who want to ditch the now legacy and defunct 'ifconfig' and 'route'
+over for the new iproute2 utilities here is a udhcp.script which works
+with /sbin/ip.
 
-Log:
-Enable CONFIG_SEQ in busybox for ngw100
+http://www.winlab.rutgers.edu/~mcgrof/buildroot/udhcp.script.txt
 
-Modified:
-   trunk/buildroot/target/device/Atmel/atngw100/busybox-1.6.1.config
+  Luis
+
+--
 
 
-Changeset:
-Modified: trunk/buildroot/target/device/Atmel/atngw100/busybox-1.6.1.config
-===================================================================
---- trunk/buildroot/target/device/Atmel/atngw100/busybox-1.6.1.config	2007-09-20 16:43:16 UTC (rev 19911)
-+++ trunk/buildroot/target/device/Atmel/atngw100/busybox-1.6.1.config	2007-09-20 16:44:15 UTC (rev 19912)
-@@ -193,7 +193,7 @@
- # CONFIG_REALPATH is not set
- CONFIG_RM=y
- CONFIG_RMDIR=y
--# CONFIG_SEQ is not set
-+CONFIG_SEQ=y
- CONFIG_SHA1SUM=y
- CONFIG_SLEEP=y
- # CONFIG_FEATURE_FANCY_SLEEP is not set
+#!/bin/sh
+#
+# Copyright (C) 2007 Luis R. Rodriguez <mcgrof@winlab.rutgers.edu>
+#
+# This program is free software; you can redistribute it and/or modify
+# it under the terms of the GNU General Public License as published by
+# the Free Software Foundation; either version 2 of the License
+#
+# This program is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+# GNU General Public License for more details.
+#
+# You should have received a copy of the GNU General Public License
+# along with this program; if not, write to the Free Software
+# Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
+#
+# ---
+# This has been tested with busybox-1.4.1 using /bin/ip. This script can
+# be called by udhcp when run as:
+#
+# /usr/sbin/udhcpc -i eth1 -s $SCRIPT
+#
+# udhcpc passes the retrieved results from the DHCP request through local
+# environment variables.
+
+SCRIPT="udhcp.script"
+IP_CONFIG="/bin/ip"
+RESOLV_CONF="/etc/resolv.conf"
+bcast="+"
+
+if [ ! -n "$ip" ]; then
+	echo "$SCRIPT: No answer to our DHCP broadcast... trying again"
+	exit
+fi
+
+echo "$SCRIPT: setting /etc/hostname to $hostname"
+echo $hostname > /etc/hostname
+echo "$SCRIPT: setting system hostname to $hostname"
+hostname $hostname
+
+if [ -n "$broadcast" ]; then
+	bcast=$broadcast
+fi
+
+echo "$SCRIPT: $IP_CONFIG addr add $ip/$mask dev $interface broadcast $bcast"
+$IP_CONFIG addr add $ip/$mask dev $interface broadcast $bcast
+
+if [ -n "$router" ]; then
+#        echo "$SCRIPT: deleting default route"
+#	$IP_CONFIG route del default
+        for i in $router; do
+		echo "$SCRIPT: $IP_CONFIG route add default via $i"
+		$IP_CONFIG route add default via $i
+        done
+fi
+
+if [ -n "$dns" ]; then
+	> $RESOLV_CONF
+	if [ -n "$domain" ]; then
+		echo "$SCRIPT: Adding search $domain to $RESOLV_CONF"
+		echo domain $domain >> $RESOLV_CONF
+		echo "$SCRIPT: Adding domain $domain to $RESOLV_CONF"
+		echo search $domain >> $RESOLV_CONF
+	fi
+	for i in $dns; do
+		echo "$SCRIPT: adding dns $i to $RESOLV_CONF"
+		echo nameserver $i >> $RESOLV_CONF
+	done
+fi
