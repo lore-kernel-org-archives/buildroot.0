@@ -1,60 +1,87 @@
 From: Ulf Samuelsson <ulf@atmel.com>
-Date: Thu, 20 Sep 2007 19:28:00 +0200
-Subject: [Buildroot] RFC: Should not use of locale force build of gettext,
-	libintl?
-Message-ID: <1190309280.15810.7.camel@elrond.sweden.atmel.com>
+Date: Thu, 20 Sep 2007 19:33:17 +0200
+Subject: [Buildroot] svn commit: trunk/buildroot/target/linux
+In-Reply-To: <20070919211843.GT20058@aon.at>
+References: <20070918171058.7CCA9A495E@busybox.net>
+	<1190149731.4516.15.camel@aeglos.sweden.atmel.com>
+	<20070919080338.GB11856@aon.at>
+	<1190238418.7740.2.camel@elrond.sweden.atmel.com>
+	<20070919211843.GT20058@aon.at>
+Message-ID: <1190309597.15810.13.camel@elrond.sweden.atmel.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Geeting some errors when I enable LOCALE.
-This fixes it for me, but I am still not sure if this is
-the right thing to do.
-Comments? 
+ons 2007-09-19 klockan 23:18 +0200 skrev Bernhard Fischer:
+> On Wed, Sep 19, 2007 at 11:46:58PM +0200, Ulf Samuelsson wrote:
+> >ons 2007-09-19 klockan 10:03 +0200 skrev Bernhard Fischer:
+> >> On Tue, Sep 18, 2007 at 11:08:51PM +0200, Ulf Samuelsson wrote:
+> >> >tis 2007-09-18 klockan 10:10 -0700 skrev aldot at uclibc.org:
+> >> >> Author: aldot
+> >> >> Date: 2007-09-18 10:10:56 -0700 (Tue, 18 Sep 2007)
+> >> >> New Revision: 19878
+> >> >> 
+> >> >> Log:
+> >> >> - patch the correct dir
+> >> >> 
+> >> >> 
+> >> >> Modified:
+> >> >>    trunk/buildroot/target/linux/Makefile.in
+> >> >> 
+> >> >> 
+> >> >> Changeset:
+> >> >> Modified: trunk/buildroot/target/linux/Makefile.in
+> >> >> ===================================================================
+> >> >> --- trunk/buildroot/target/linux/Makefile.in	2007-09-18 13:12:25 UTC (rev 19877)
+> >> >> +++ trunk/buildroot/target/linux/Makefile.in	2007-09-18 17:10:56 UTC (rev 19878)
+> >> >> @@ -129,7 +129,7 @@
+> >> >>  		linux-$(LINUX26_VERSION)-\*.patch{,.gz,.bz2}
+> >> >>  endif
+> >> >>  ifeq ($(BR2_PACKAGE_OPENSWAN),y)
+> >> >> -	toolchain/patch-kernel.sh $(LINUX_HEADERS_UNPACK_DIR) package/openswan \
+> >> >> +	toolchain/patch-kernel.sh $(LINUX26_DIR) package/openswan \
+> >> >>  		linux-$(LINUX26_VERSION)-\*.patch{,.gz,.bz2}
+> >> >>  endif
+> >> >>  ifneq ($(LINUX26_PATCH_DIR),)
+> >> >
+> >> >Thanks,
+> >> >Openswan is a mess at the moment, with *large* duplicate patches
+> >> >(adding 6-8 MBytes to the trunk).
+> >> 
+> >> I don't need the old patches anymore, but it was you who wanted to
+> >> retain deprecated stuff.. Feel free to wipe the old ones.
+> >> 
+> >> >I think we should download the klips/natt patches from the website
+> >> >instead, and patches should be based on a user selected version.
+> >> 
+> >> The patches for 2.4.9 need fixes to apply and work cleanly, so this is
+> >> not an option.
+> >
+> >I tried, and noticed that there were proplems, 
+> >but it seems to me that only the "natt" patches have
+> >problem, and they are pretty small.
+> >"klips" patches seems to apply without problem.
+> >This is good since the "klips" patches are the big un's.
+> >
+> >Are you aware of any changes needed to klips?
+> 
+> Unfortunately a couple of adjustments are needed, some are a bit
+> fragile at runtime, from the looks, i.e. need testing (and i don't
+> have time to do that ATM anyway).
+
+How about a patch which puts the "klips" patches on the
+buildroot.uclibc.org server?
+(http://buildroot.uclibc.org/downloads/buildroot-sources/)
 
 
-Index: toolchain/uClibc/uclibc.mk
-===================================================================
---- toolchain/uClibc/uclibc.mk  (revision 19903)
-+++ toolchain/uClibc/uclibc.mk  (arbetskopia)
-@@ -264,9 +264,11 @@
- ifeq ($(BR2_ENABLE_LOCALE),y)
-        $(SED) 's,^.*UCLIBC_HAS_LOCALE.*,UCLIBC_HAS_LOCALE=y
-\nUCLIBC_PREGENERATED_LOCALE_DATA=y
-\nUCLIBC_DOWNLOAD_PREGENERATED_LOCALE_DATA=y\nUCLIBC_HAS_XLOCALE=y
-\nUCLIBC_HAS_GLIBC_DIGIT_GROUPING=n\n,g' $(UCLIBC_DIR)/.oldconfig
-        $(SED) 's,.*UCLIBC_HAS_WCHAR.*,UCLIBC_HAS_WCHAR=y,g'
-$(UCLIBC_DIR)/.oldconfig
-+       $(SED)
-'s,.*UCLIBC_HAS_GETTEXT_AWARENESS.*,UCLIBC_HAS_GETTEXT_AWARENESS=y,g'
-$(UCLIBC_DIR)/.oldconfig
- else
-        $(SED) 's,^.*UCLIBC_HAS_LOCALE.*,UCLIBC_HAS_LOCALE=n,g'
-$(UCLIBC_DIR)/.oldconfig
-        $(SED) 's,.*UCLIBC_HAS_WCHAR.*,UCLIBC_HAS_WCHAR=n,g'
-$(UCLIBC_DIR)/.oldconfig
-+       $(SED)
-'s,.*UCLIBC_HAS_GETTEXT_AWARENESS.*,UCLIBC_HAS_GETTEXT_AWARENESS=n,g'
-$(UCLIBC_DIR)/.oldconfig
- endif
- ifeq ($(BR2_USE_WCHAR),y)
-        $(SED) 's,^.*UCLIBC_HAS_WCHAR.*,UCLIBC_HAS_WCHAR=y,g'
-$(UCLIBC_DIR)/.oldconfig
-Index: toolchain/uClibc/Config.in
-===================================================================
---- toolchain/uClibc/Config.in  (revision 19903)
-+++ toolchain/uClibc/Config.in  (arbetskopia)
-@@ -51,6 +51,8 @@
- config BR2_ENABLE_LOCALE
-        bool "Enable locale/gettext/i18n support?"
-        default n
-+       select BR2_PACKAGE_GETTEXT
-+       select BR2_PACKAGE_LIBINTL
-        help
-            Enable locale/gettext/i18n support?
+Then we can get rid of it in the trunk.
+Every single BSP for a linux kernel version will otherwise
+add 1,8 MB openswan patch to the trunk.
+Even one of them is too much IMO.
 
+The other patches are really minimal.
 
-Best Regards
+BR
 Ulf Samuelsson
