@@ -1,26 +1,69 @@
-From: Bernhard Fischer <rep.dot.nop@gmail.com>
-Date: Thu, 20 Sep 2007 11:45:22 +0200
-Subject: [Buildroot] libid3tag build broken: Please add zlib
-	to	dependency list
-In-Reply-To: <1190269727.9021.23.camel@localhost.localdomain>
-References: <145594.52785.qm@web62014.mail.re1.yahoo.com>
-	<1190269727.9021.23.camel@localhost.localdomain>
-Message-ID: <20070920094522.GE27699@aon.at>
+From: =?big5?B?V2VpY2hlbiBMZWUgKKf1q8K+XyAtIEFza2V5IC0gVFcp?= <weichen.lee@askey.com.tw>
+Date: Thu, 20 Sep 2007 18:10:46 +0800
+Subject: [Buildroot] Segmentation fault of running sudo
+In-Reply-To: <867C0BFD0536F44B8184AD511C263A5222E76156F1@KFAEXMIPV1.sdcorp.global.sandisk.com>
+References: <9C1F4801E7902C4DB99BD17E121A0092024C3463B8@tpex07.askey.com.tw>
+	<867C0BFD0536F44B8184AD511C263A5222E76156F1@KFAEXMIPV1.sdcorp.global.sandisk.com>
+Message-ID: <9C1F4801E7902C4DB99BD17E121A0092024C34641C@tpex07.askey.com.tw>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Thu, Sep 20, 2007 at 08:28:47AM +0200, Hans-Christian Egtvedt wrote:
->
->On Wed, 2007-09-19 at 22:50 -0700, Doug the RockRat wrote:
->> The package/libid3tag/libid3tag.mk file needs zlib
->> added to the dependency.
->> 
->> Do you want a patch or is this good enough?
->
->Attached a patch, I also cleaned up some rules and typos, so the library
->is not rebuilt every time you build.
+ Yehuda,
 
-merged. Thanks!
+Thanks.
+I downgrade uClibc to 0.9.28.3.
+It solved this problem.
+
+Weichen
+
+-----Original Message-----
+From: Yehuda Hahn [mailto:Yehuda.Hahn at sandisk.com]
+Sent: Thursday, September 20, 2007 5:51 PM
+To: Weichen Lee (??? - Askey - TW)
+Subject: RE: [Buildroot] Segmentation fault of running sudo
+
+Weichen,
+
+I had a similar problem with a number of packages, and solved it by downgrading uClibc to 0.9.28.3.
+
+Cheers,
+
+Yehuda
+
+
+-----Original Message-----
+From: buildroot-bounces@uclibc.org [mailto:buildroot-bounces at uclibc.org] On Behalf Of Weichen Lee (??? - Askey - TW)
+Sent: Thursday, September 20, 2007 11:07 AM
+To: buildroot at uclibc.org
+Subject: [Buildroot] Segmentation fault of running sudo
+
+Hi,
+I use buildroot (svn r19828) to make the toolchain with the version below
+
+kernel-headers 2.6.11
+binutils 2.17
+gcc 4.1.2
+uClibc 0.9.29
+
+There is no error during compiled time.
+The sudo package is also compiled successfully.
+The rootfs with program like busybox is work fine on the target board.
+But when I run sudo, the output message is only show "Segmentation fault".
+ Does anybodyelse encounter the same issue?
+
+
+Best Regards
+====================================
+??????????
+
+???? ?????
+
+??? (Weichen Lee)
+
+TEL:03-4759460  EXT:872
+FAX:03-4759414
+E-mail:weichen.lee at askey.com.tw
+====================================
