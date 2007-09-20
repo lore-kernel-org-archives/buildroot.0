@@ -1,35 +1,38 @@
-From: aldot at uclibc.org <aldot@uclibc.org>
-Date: Thu, 20 Sep 2007 11:28:54 -0700 (PDT)
-Subject: [Buildroot] svn commit: trunk/buildroot/package
-Message-ID: <20070920182854.175B9A685D@busybox.net>
+From: Sushi Sensei <sinestado@gmail.com>
+Date: Thu, 20 Sep 2007 15:45:55 -0300
+Subject: [Buildroot] squashfs 2.6.20 patch not work in 2.6.22
+Message-ID: <a63ecaf0709201145j7897c16an796e02ea506da39c@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Author: aldot
-Date: 2007-09-20 11:28:53 -0700 (Thu, 20 Sep 2007)
-New Revision: 19921
+to make work squashfs in 2.6.22 use 2.6.20 patch and modifiy
+fs/sqashfs/inode.c :
 
-Log:
-- revert r19918 for now
-
-
-Modified:
-   trunk/buildroot/package/Makefile.in
+1) add #include <linux/interrupt.h>
+2) near to the end comment the refference to SLAB_CTOR_VERIFY and
+SLAB_CTOR_CONSTRUCTOR
 
 
-Changeset:
-Modified: trunk/buildroot/package/Makefile.in
-===================================================================
---- trunk/buildroot/package/Makefile.in	2007-09-20 17:47:30 UTC (rev 19920)
-+++ trunk/buildroot/package/Makefile.in	2007-09-20 18:28:53 UTC (rev 19921)
-@@ -136,7 +136,6 @@
- 		GCC="$(TARGET_CROSS)gcc $(TARGET_CFLAGS)" \
- 		CXX="$(TARGET_CROSS)g++ $(TARGET_CFLAGS)" \
- 		CPP="$(TARGET_CROSS)cpp $(TARGET_CFLAGS)" \
--		CFLAGS="" CXXFLAGS="" FFLAGS="" \
- 		RANLIB=$(TARGET_CROSS)ranlib \
- 		STRIP=$(TARGET_CROSS)strip \
- 		OBJCOPY=$(TARGET_CROSS)objcopy \
+static void init_once(void * foo, struct kmem_cache * cachep, unsigned long
+flags)
+{
+        struct squashfs_inode_info *ei = foo;
+
+//      if ((flags & (SLAB_CTOR_VERIFY|SLAB_CTOR_CONSTRUCTOR)) ==
+//
+SLAB_CTOR_CONSTRUCTOR)
+                inode_init_once(&ei->vfs_inode);
+}
+
+
+this may work in the future 2.6.23
+-- 
+------------------------------------------------------
+--- Timeo Danaos et dona ferentes ---
+------------------------------------------------------
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: http://busybox.net/lists/buildroot/attachments/20070920/4e4e4000/attachment.htm 
