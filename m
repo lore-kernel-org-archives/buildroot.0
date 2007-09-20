@@ -1,8 +1,7 @@
 From: ulf at uclibc.org <ulf@uclibc.org>
-Date: Thu, 20 Sep 2007 09:43:16 -0700 (PDT)
-Subject: [Buildroot] svn commit:
-	trunk/buildroot/target/device/Atmel/atngw100/target_skeleton/etc/init.d
-Message-ID: <20070920164316.10BD9A65C2@busybox.net>
+Date: Thu, 20 Sep 2007 09:44:16 -0700 (PDT)
+Subject: [Buildroot] svn commit: trunk/buildroot/target/device/Atmel/atngw100
+Message-ID: <20070920164416.41018A658C@busybox.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -10,32 +9,27 @@ Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
 Author: ulf
-Date: 2007-09-20 09:43:16 -0700 (Thu, 20 Sep 2007)
-New Revision: 19911
+Date: 2007-09-20 09:44:15 -0700 (Thu, 20 Sep 2007)
+New Revision: 19912
 
 Log:
-Use correct board name for ngw100
+Enable CONFIG_SEQ in busybox for ngw100
 
 Modified:
-   trunk/buildroot/target/device/Atmel/atngw100/target_skeleton/etc/init.d/rcS
+   trunk/buildroot/target/device/Atmel/atngw100/busybox-1.6.1.config
 
 
 Changeset:
-Modified: trunk/buildroot/target/device/Atmel/atngw100/target_skeleton/etc/init.d/rcS
+Modified: trunk/buildroot/target/device/Atmel/atngw100/busybox-1.6.1.config
 ===================================================================
---- trunk/buildroot/target/device/Atmel/atngw100/target_skeleton/etc/init.d/rcS	2007-09-20 15:35:26 UTC (rev 19910)
-+++ trunk/buildroot/target/device/Atmel/atngw100/target_skeleton/etc/init.d/rcS	2007-09-20 16:43:16 UTC (rev 19911)
-@@ -1,9 +1,11 @@
- #!/bin/sh
- 
- for s in /etc/init.d/S*; do
--	$s start
-+	if [ -x $s ]; then
-+		$s start
-+	fi
- done
- 
- echo
--echo "STK1000 ready"
-+echo "NGW100 ready"
- echo
+--- trunk/buildroot/target/device/Atmel/atngw100/busybox-1.6.1.config	2007-09-20 16:43:16 UTC (rev 19911)
++++ trunk/buildroot/target/device/Atmel/atngw100/busybox-1.6.1.config	2007-09-20 16:44:15 UTC (rev 19912)
+@@ -193,7 +193,7 @@
+ # CONFIG_REALPATH is not set
+ CONFIG_RM=y
+ CONFIG_RMDIR=y
+-# CONFIG_SEQ is not set
++CONFIG_SEQ=y
+ CONFIG_SHA1SUM=y
+ CONFIG_SLEEP=y
+ # CONFIG_FEATURE_FANCY_SLEEP is not set
