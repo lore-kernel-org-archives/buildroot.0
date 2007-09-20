@@ -1,53 +1,60 @@
-From: ulf at uclibc.org <ulf@uclibc.org>
-Date: Thu, 20 Sep 2007 08:35:27 -0700 (PDT)
-Subject: [Buildroot] svn commit: trunk/buildroot/package/libdaemon
-Message-ID: <20070920153527.553303004A@busybox.net>
+From: Ulf Samuelsson <ulf@atmel.com>
+Date: Thu, 20 Sep 2007 19:28:00 +0200
+Subject: [Buildroot] RFC: Should not use of locale force build of gettext,
+	libintl?
+Message-ID: <1190309280.15810.7.camel@elrond.sweden.atmel.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Author: ulf
-Date: 2007-09-20 08:35:26 -0700 (Thu, 20 Sep 2007)
-New Revision: 19910
-
-Log:
-Make sure libdaemon finds AC_PROG_LIBTOOL
-
-Removed:
-   trunk/buildroot/package/libdaemon/libdaemon-0.10.patch.bz2
-
-Modified:
-   trunk/buildroot/package/libdaemon/libdaemon.mk
+Geeting some errors when I enable LOCALE.
+This fixes it for me, but I am still not sure if this is
+the right thing to do.
+Comments? 
 
 
-Changeset:
-Deleted: trunk/buildroot/package/libdaemon/libdaemon-0.10.patch.bz2
+Index: toolchain/uClibc/uclibc.mk
 ===================================================================
-(Binary files differ)
-
-Modified: trunk/buildroot/package/libdaemon/libdaemon.mk
+--- toolchain/uClibc/uclibc.mk  (revision 19903)
++++ toolchain/uClibc/uclibc.mk  (arbetskopia)
+@@ -264,9 +264,11 @@
+ ifeq ($(BR2_ENABLE_LOCALE),y)
+        $(SED) 's,^.*UCLIBC_HAS_LOCALE.*,UCLIBC_HAS_LOCALE=y
+\nUCLIBC_PREGENERATED_LOCALE_DATA=y
+\nUCLIBC_DOWNLOAD_PREGENERATED_LOCALE_DATA=y\nUCLIBC_HAS_XLOCALE=y
+\nUCLIBC_HAS_GLIBC_DIGIT_GROUPING=n\n,g' $(UCLIBC_DIR)/.oldconfig
+        $(SED) 's,.*UCLIBC_HAS_WCHAR.*,UCLIBC_HAS_WCHAR=y,g'
+$(UCLIBC_DIR)/.oldconfig
++       $(SED)
+'s,.*UCLIBC_HAS_GETTEXT_AWARENESS.*,UCLIBC_HAS_GETTEXT_AWARENESS=y,g'
+$(UCLIBC_DIR)/.oldconfig
+ else
+        $(SED) 's,^.*UCLIBC_HAS_LOCALE.*,UCLIBC_HAS_LOCALE=n,g'
+$(UCLIBC_DIR)/.oldconfig
+        $(SED) 's,.*UCLIBC_HAS_WCHAR.*,UCLIBC_HAS_WCHAR=n,g'
+$(UCLIBC_DIR)/.oldconfig
++       $(SED)
+'s,.*UCLIBC_HAS_GETTEXT_AWARENESS.*,UCLIBC_HAS_GETTEXT_AWARENESS=n,g'
+$(UCLIBC_DIR)/.oldconfig
+ endif
+ ifeq ($(BR2_USE_WCHAR),y)
+        $(SED) 's,^.*UCLIBC_HAS_WCHAR.*,UCLIBC_HAS_WCHAR=y,g'
+$(UCLIBC_DIR)/.oldconfig
+Index: toolchain/uClibc/Config.in
 ===================================================================
---- trunk/buildroot/package/libdaemon/libdaemon.mk	2007-09-20 12:07:10 UTC (rev 19909)
-+++ trunk/buildroot/package/libdaemon/libdaemon.mk	2007-09-20 15:35:26 UTC (rev 19910)
-@@ -26,17 +26,11 @@
- $(LIBDAEMON_DIR)/.unpacked: $(DL_DIR)/$(LIBDAEMON_SOURCE)
- 	$(LIBDAEMON_CAT) $(DL_DIR)/$(LIBDAEMON_SOURCE) | tar -C $(BUILD_DIR) $(TAR_OPTIONS) -
- 	toolchain/patch-kernel.sh $(LIBDAEMON_DIR) package/libdaemon/ \*.patch
--# Ulf, what was this supposed to fix? Your patch is broken
--# (hardcoded for /home/ulf/..)
--#	mkdir -p $(PROJECT_BUILD_DIR)/patches
--#	$(BZCAT) package/libdaemon/$(LIBDAEMON_NAME).patch.bz2 \
--#		> $(PROJECT_BUILD_DIR)/patches/$(LIBDAEMON_NAME).patch
--#	toolchain/patch-kernel.sh $(LIBDAEMON_DIR) $(PROJECT_BUILD_DIR)/patches/ $(LIBDAEMON_NAME)\*.patch
--#	$(CONFIG_UPDATE) $(LIBDAEMON_DIR)
-+	$(CONFIG_UPDATE) $(LIBDAEMON_DIR)
- 	touch $@
- 
- $(LIBDAEMON_DIR)/.configured: $(LIBDAEMON_DIR)/.unpacked
--	(cd $(LIBDAEMON_DIR) && rm -rf config.cache && autoconf)
-+	(cd $(LIBDAEMON_DIR) && rm -rf config.cache && autoreconf)
- 	(cd $(LIBDAEMON_DIR) && \
- 		$(TARGET_CONFIGURE_OPTS) \
- 		$(TARGET_CONFIGURE_ARGS) \
+--- toolchain/uClibc/Config.in  (revision 19903)
++++ toolchain/uClibc/Config.in  (arbetskopia)
+@@ -51,6 +51,8 @@
+ config BR2_ENABLE_LOCALE
+        bool "Enable locale/gettext/i18n support?"
+        default n
++       select BR2_PACKAGE_GETTEXT
++       select BR2_PACKAGE_LIBINTL
+        help
+            Enable locale/gettext/i18n support?
+
+
+Best Regards
+Ulf Samuelsson
