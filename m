@@ -1,30 +1,44 @@
-From: Bernhard Fischer <rep.dot.nop@gmail.com>
-Date: Thu, 20 Sep 2007 11:38:58 +0200
-Subject: [Buildroot] libusb now compile - patch 02
-In-Reply-To: <46F1DD57.5090403@gmail.com>
-References: <a63ecaf0709190929h6296331epf5388fc46e0922a1@mail.gmail.com>
-	<12788591.post@talk.nabble.com>
-	<37c712e0709191721r6eb18b51l5c4e9cf53e523ba@mail.gmail.com>
-	<12789032.post@talk.nabble.com> <46F1DD57.5090403@gmail.com>
-Message-ID: <20070920093858.GD27699@aon.at>
+From: =?big5?B?V2VpY2hlbiBMZWUgKKf1q8K+XyAtIEFza2V5IC0gVFcp?= <weichen.lee@askey.com.tw>
+Date: Thu, 20 Sep 2007 17:07:23 +0800
+Subject: [Buildroot] Segmentation fault of running sudo
+Message-ID: <9C1F4801E7902C4DB99BD17E121A0092024C3463B8@tpex07.askey.com.tw>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Wed, Sep 19, 2007 at 11:39:19PM -0300, Rex Luscus wrote:
-> Thanks to Hebbar and Allan. This is the final patch
-> Hebbar escribi?:
->> libusb library.
->> 4. So i manually added below code after (Sushi  + Allan) Patch 
->>        cp -dpf $(LIBUSB_DIR)/.libs/libusb*.so* $(STAGING_DIR)/usr/lib
+Hi,
+I use buildroot (svn r19828) to make the toolchain with the version below
 
-Can you try if r19905 works for you? I don't remember offhand if this
-works as expected:
+kernel-headers 2.6.11
+binutils 2.17
+gcc 4.1.2
+uClibc 0.9.29
 
-cd /tmp
-mdkir one
-rm -rf two
-echo bar | tee one/file1 > one/file2
-install -D one/file* /tmp/two
+There is no error during compiled time.
+The sudo package is also compiled successfully.
+The rootfs with program like busybox is work fine on the target board.
+But when I run sudo, the output message is only show "Segmentation fault".
+ Does anybodyelse encounter the same issue?
+
+
+Best Regards
+====================================
+??????????
+
+???? ?????
+
+??? (Weichen Lee)
+
+TEL:03-4759460  EXT:872
+FAX:03-4759414
+E-mail:weichen.lee at askey.com.tw
+====================================
+-------------- next part --------------
+A non-text attachment was scrubbed...
+Name: buildroot.config
+Type: application/octet-stream
+Size: 14522 bytes
+Desc: buildroot.config
+Url : http://busybox.net/lists/buildroot/attachments/20070920/e4bf0490/attachment-0001.obj 
