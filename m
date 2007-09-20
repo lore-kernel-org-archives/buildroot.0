@@ -1,48 +1,54 @@
-From: Rex Luscus <sinestado@gmail.com>
-Date: Wed, 19 Sep 2007 23:39:19 -0300
-Subject: [Buildroot] libusb now compile - patch 02
-In-Reply-To: <12789032.post@talk.nabble.com>
-References: <a63ecaf0709190929h6296331epf5388fc46e0922a1@mail.gmail.com>	<12788591.post@talk.nabble.com>	<37c712e0709191721r6eb18b51l5c4e9cf53e523ba@mail.gmail.com>
-	<12789032.post@talk.nabble.com>
-Message-ID: <46F1DD57.5090403@gmail.com>
+From: Ulf Samuelsson <ulf@atmel.com>
+Date: Thu, 20 Sep 2007 08:40:02 +0200
+Subject: [Buildroot] local mirror management (bug #572)
+In-Reply-To: <20070919212027.GU20058@aon.at>
+References: <20070917075500.052F2A4692@busybox.net>
+	<1190025802.8052.4.camel@elrond.sweden.atmel.com>
+	<20070917092735.GA18888@aon.at>
+	<1190031404.8052.9.camel@elrond.sweden.atmel.com>
+	<20070917111024.GB22104@aon.at>
+	<1190040978.8052.20.camel@elrond.sweden.atmel.com>
+	<20070917134117.GC24993@aon.at>
+	<1190098489.4064.7.camel@elrond.sweden.atmel.com>
+	<20070919082107.GC11856@aon.at>
+	<1190238819.7740.8.camel@elrond.sweden.atmel.com>
+	<20070919212027.GU20058@aon.at>
+Message-ID: <1190270402.7740.18.camel@elrond.sweden.atmel.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Thanks to Hebbar and Allan. This is the final patch
+ons 2007-09-19 klockan 23:20 +0200 skrev Bernhard Fischer:
+> On Wed, Sep 19, 2007 at 11:53:39PM +0200, Ulf Samuelsson wrote:
+> >ons 2007-09-19 klockan 10:21 +0200 skrev Bernhard Fischer:
+> 
+> >> With the patch mentioned above, you (i.e. the user) is free to setup and
+> >> use any mirror she likes, be it the
+> >> http://buildroot.uclibc.org/downloads/buildroot-sources/
+> 
+> I've dropped a couple of "our" package-sources there, fyi.
+> 
+> >> or another, potentially local directory (i.e. nothing you can talk to
+> >> via http or ftp).
+> 
+> >> 1) http://bugs.busybox.net/view.php?id=572
+> >> has a rough draft that IIRC needs some cleanup and that should be
+> >> discussed in it's cleaned up version on this list.
+> >
+> >Don't be so negative.
+> 
+> I'm not negative (just look at the patch to see what i mean).
 
-Hebbar escribi?:
-> Hi Sushi Sensei & Allan,
->
->  Thanks for the support. Here is how i finally was able to build both libusb
-> & usbutils. 
->
-> 1. Libusb used to build and copy its lib to $(TARGET_DIR)/usr/lib as per
-> Sushi patch.
-> 2. Allan's pAtch Corrected it for proper Lib file copy
-> 3. But i think usbutils was searching for lib in $(STAGING_DIR)/usr/lib for
-> libusb library.
-> 4. So i manually added below code after (Sushi  + Allan) Patch 
->
->        cp -dpf $(LIBUSB_DIR)/.libs/libusb*.so* $(STAGING_DIR)/usr/lib
->
-> and it worked 
->
->
-> Thanks for all your support
->
-> Regards
-> Gururaja
->
->
->   
 
--------------- next part --------------
-A non-text attachment was scrubbed...
-Name: br2-libusb.patch
-Type: text/x-patch
-Size: 612 bytes
-Desc: not available
-Url : http://busybox.net/lists/buildroot/attachments/20070919/6f847dd7/attachment.bin 
+
+
+I don't see any conflict in these patches.
+It is similar to what I had in mind.
+
+You would define BR2_LOCAL_MIRROR_SITE as $(ATMEL_MIRROR)
+It is not good to define it as the current value of ATMEL_MIRROR
+since the site will eventually change.
+
+Best Regards
