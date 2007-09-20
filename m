@@ -1,24 +1,29 @@
-From: Bernhard Fischer <rep.dot.nop@gmail.com>
-Date: Thu, 20 Sep 2007 11:11:36 +0200
-Subject: [Buildroot] sysroot not anabled even when	BR2_GCC_VERSION_4_2_1
-	is selected
-In-Reply-To: <12792950.post@talk.nabble.com>
-References: <12792950.post@talk.nabble.com>
-Message-ID: <20070920091136.GA27699@aon.at>
+From: Elizabeth Oldham <beth@the-hug.org>
+Date: Thu, 20 Sep 2007 10:06:19 +0100 (BST)
+Subject: [Buildroot] buildroot with ipkg
+In-Reply-To: <20070919205603.GA16408@zelow.no>
+References: <7fc538d30709170509s4898cc55keb14ebb718d30090@mail.gmail.com>
+	<46EED912.2070902@free.fr> <20070917201401.GA28671@codepoet.org>
+	<46EEEEE2.7060705@free.fr> <20070919064200.GA29317@zelow.no>
+	<20070919192740.GC817@aon.at> <20070919205603.GA16408@zelow.no>
+Message-ID: <18114.192.168.2.100.1190279179.squirrel@home.the-hug.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Thu, Sep 20, 2007 at 01:28:04AM -0700, Hebbar wrote:
->
->Hi All,
->
-> I just tried latest buildroot snapshot and below is my buildroot config.
->What i observed is that BR2_TOOLCHAIN_SYSROOT i snot selected even though i
->have enabled gcc 4.2.1. Let me know if any one has a quickest solution. LEt
->me know if anyone needs more info.
+> On Wed, Sep 19, 2007 at 09:27:40PM +0200, Bernhard Fischer wrote:
 
-I just noticed that too. Sounds like i broke that yesterday, will fix
-ASAP.
+>> I'm not sure if that is a good idea. You'd generally want to build all
+>> packages as ipkg, i'd say.
+>
+> I want the users to be able to choose. This is a very simple way for
+> them to do so. I know I probably should find that bloody "m" and change
+> it to a "p" and might do it.
+
+Ummm, what about both, would that be too intrusive? In a project I'm
+looking at doing being able to select an individual package or all in the
+build and have ipkg capability, would be very useful.
+
+Beth
