@@ -1,93 +1,38 @@
-From: Luis R. Rodriguez <mcgrof@gmail.com>
-Date: Thu, 20 Sep 2007 12:38:25 -0400
-Subject: [Buildroot] udhcp.script using only ip
-Message-ID: <43e72e890709200938h6bedcfd0s646435a985e4f99e@mail.gmail.com>
+From: ulf at uclibc.org <ulf@uclibc.org>
+Date: Thu, 20 Sep 2007 09:46:32 -0700 (PDT)
+Subject: [Buildroot] svn commit:
+	trunk/buildroot/target/device/Atmel/atstk1002/target_skeleton/etc/init.d
+Message-ID: <20070920164632.A891BA6881@busybox.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Sorry for the cross-post, was just not sure which one to send this to.
-Had it for a while but realized I should have sent it in. For those
-who want to ditch the now legacy and defunct 'ifconfig' and 'route'
-over for the new iproute2 utilities here is a udhcp.script which works
-with /sbin/ip.
+Author: ulf
+Date: 2007-09-20 09:46:31 -0700 (Thu, 20 Sep 2007)
+New Revision: 19913
 
-http://www.winlab.rutgers.edu/~mcgrof/buildroot/udhcp.script.txt
+Log:
+Check if STK1002 init scripts are executable before running
 
-  Luis
-
---
+Modified:
+   trunk/buildroot/target/device/Atmel/atstk1002/target_skeleton/etc/init.d/rcS
 
 
-#!/bin/sh
-#
-# Copyright (C) 2007 Luis R. Rodriguez <mcgrof@winlab.rutgers.edu>
-#
-# This program is free software; you can redistribute it and/or modify
-# it under the terms of the GNU General Public License as published by
-# the Free Software Foundation; either version 2 of the License
-#
-# This program is distributed in the hope that it will be useful,
-# but WITHOUT ANY WARRANTY; without even the implied warranty of
-# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-# GNU General Public License for more details.
-#
-# You should have received a copy of the GNU General Public License
-# along with this program; if not, write to the Free Software
-# Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
-#
-# ---
-# This has been tested with busybox-1.4.1 using /bin/ip. This script can
-# be called by udhcp when run as:
-#
-# /usr/sbin/udhcpc -i eth1 -s $SCRIPT
-#
-# udhcpc passes the retrieved results from the DHCP request through local
-# environment variables.
-
-SCRIPT="udhcp.script"
-IP_CONFIG="/bin/ip"
-RESOLV_CONF="/etc/resolv.conf"
-bcast="+"
-
-if [ ! -n "$ip" ]; then
-	echo "$SCRIPT: No answer to our DHCP broadcast... trying again"
-	exit
-fi
-
-echo "$SCRIPT: setting /etc/hostname to $hostname"
-echo $hostname > /etc/hostname
-echo "$SCRIPT: setting system hostname to $hostname"
-hostname $hostname
-
-if [ -n "$broadcast" ]; then
-	bcast=$broadcast
-fi
-
-echo "$SCRIPT: $IP_CONFIG addr add $ip/$mask dev $interface broadcast $bcast"
-$IP_CONFIG addr add $ip/$mask dev $interface broadcast $bcast
-
-if [ -n "$router" ]; then
-#        echo "$SCRIPT: deleting default route"
-#	$IP_CONFIG route del default
-        for i in $router; do
-		echo "$SCRIPT: $IP_CONFIG route add default via $i"
-		$IP_CONFIG route add default via $i
-        done
-fi
-
-if [ -n "$dns" ]; then
-	> $RESOLV_CONF
-	if [ -n "$domain" ]; then
-		echo "$SCRIPT: Adding search $domain to $RESOLV_CONF"
-		echo domain $domain >> $RESOLV_CONF
-		echo "$SCRIPT: Adding domain $domain to $RESOLV_CONF"
-		echo search $domain >> $RESOLV_CONF
-	fi
-	for i in $dns; do
-		echo "$SCRIPT: adding dns $i to $RESOLV_CONF"
-		echo nameserver $i >> $RESOLV_CONF
-	done
-fi
+Changeset:
+Modified: trunk/buildroot/target/device/Atmel/atstk1002/target_skeleton/etc/init.d/rcS
+===================================================================
+--- trunk/buildroot/target/device/Atmel/atstk1002/target_skeleton/etc/init.d/rcS	2007-09-20 16:44:15 UTC (rev 19912)
++++ trunk/buildroot/target/device/Atmel/atstk1002/target_skeleton/etc/init.d/rcS	2007-09-20 16:46:31 UTC (rev 19913)
+@@ -1,7 +1,9 @@
+ #!/bin/sh
+ 
+ for s in /etc/init.d/S*; do
+-	$s start
++	if [ -x $s ]; then
++		$s start
++	fi
+ done
+ 
+ echo
