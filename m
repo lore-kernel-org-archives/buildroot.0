@@ -1,40 +1,30 @@
-From: aldot at uclibc.org <aldot@uclibc.org>
-Date: Thu, 20 Sep 2007 02:35:33 -0700 (PDT)
-Subject: [Buildroot] svn commit: trunk/buildroot/package/libusb
-Message-ID: <20070920093533.7DBDA3005A@busybox.net>
+From: Bernhard Fischer <rep.dot.nop@gmail.com>
+Date: Thu, 20 Sep 2007 11:38:58 +0200
+Subject: [Buildroot] libusb now compile - patch 02
+In-Reply-To: <46F1DD57.5090403@gmail.com>
+References: <a63ecaf0709190929h6296331epf5388fc46e0922a1@mail.gmail.com>
+	<12788591.post@talk.nabble.com>
+	<37c712e0709191721r6eb18b51l5c4e9cf53e523ba@mail.gmail.com>
+	<12789032.post@talk.nabble.com> <46F1DD57.5090403@gmail.com>
+Message-ID: <20070920093858.GD27699@aon.at>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Author: aldot
-Date: 2007-09-20 02:35:33 -0700 (Thu, 20 Sep 2007)
-New Revision: 19905
+On Wed, Sep 19, 2007 at 11:39:19PM -0300, Rex Luscus wrote:
+> Thanks to Hebbar and Allan. This is the final patch
+> Hebbar escribi?:
+>> libusb library.
+>> 4. So i manually added below code after (Sushi  + Allan) Patch 
+>>        cp -dpf $(LIBUSB_DIR)/.libs/libusb*.so* $(STAGING_DIR)/usr/lib
 
-Log:
-- fix source location of libusb libs
+Can you try if r19905 works for you? I don't remember offhand if this
+works as expected:
 
-
-Modified:
-   trunk/buildroot/package/libusb/libusb.mk
-
-
-Changeset:
-Modified: trunk/buildroot/package/libusb/libusb.mk
-===================================================================
---- trunk/buildroot/package/libusb/libusb.mk	2007-09-20 09:25:57 UTC (rev 19904)
-+++ trunk/buildroot/package/libusb/libusb.mk	2007-09-20 09:35:33 UTC (rev 19905)
-@@ -51,9 +51,9 @@
- 	$(MAKE) -C $(LIBUSB_DIR) DESTDIR=$(STAGING_DIR) install
- 
- $(TARGET_DIR)/$(LIBUSB_BINARY): $(STAGING_DIR)/lib/libusb.so
--	mkdir -p $(TARGET_DIR)/usr/lib
--	cp -dpf $(STAGING_DIR)/lib/libusb* $(TARGET_DIR)/usr/lib
--	rm -f $(TARGET_DIR)/usr/lib/*.a $(TARGET_DIR)/usr/lib/*.la
-+	$(INSTALL) -D $(LIBUSB_DIR)/.libs/libusb*.so* $(STAGING_DIR)/usr/lib/
-+	$(INSTALL) -D $(LIBUSB_DIR)/.libs/libusb*.so* $(TARGET_DIR)/usr/lib/
-+	$(STRIP) $(STRIP_STRIP_UNNEEDED) $(TARGET_DIR)/usr/lib/libusb*.so*
- 
- libusb: uclibc $(TARGET_DIR)/$(LIBUSB_BINARY)
- 
+cd /tmp
+mdkir one
+rm -rf two
+echo bar | tee one/file1 > one/file2
+install -D one/file* /tmp/two
