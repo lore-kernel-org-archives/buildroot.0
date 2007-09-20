@@ -1,18 +1,14 @@
 From: Sushi Sensei <sinestado@gmail.com>
-Date: Thu, 20 Sep 2007 15:53:23 -0300
-Subject: [Buildroot] Squashfs LZMA...are somebody interesting?
-Message-ID: <a63ecaf0709201153r56dc04bi35280bdd93e72218@mail.gmail.com>
+Date: Thu, 20 Sep 2007 15:59:23 -0300
+Subject: [Buildroot] OLSR startup script patch
+Message-ID: <a63ecaf0709201159q60684e3fhb9248042145e7672@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-With LZMA patch the squash FS can be reduced 10-30%
-
-May be usefull in a very limited enviroment!
-
-http://www.squashfs-lzma.org/
+A little error in the startup script
 
 -- 
 ------------------------------------------------------
@@ -20,4 +16,11 @@ http://www.squashfs-lzma.org/
 ------------------------------------------------------
 -------------- next part --------------
 An HTML attachment was scrubbed...
-URL: http://busybox.net/lists/buildroot/attachments/20070920/c828beb8/attachment.htm 
+URL: http://busybox.net/lists/buildroot/attachments/20070920/5114c8a8/attachment.htm 
+-------------- next part --------------
+A non-text attachment was scrubbed...
+Name: br2-olsr.S50olsr.patch
+Type: text/x-patch
+Size: 374 bytes
+Desc: not available
+Url : http://busybox.net/lists/buildroot/attachments/20070920/5114c8a8/attachment.bin 
