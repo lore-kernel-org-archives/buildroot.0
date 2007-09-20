@@ -1,34 +1,46 @@
-From: Bernhard Fischer <rep.dot.nop@gmail.com>
-Date: Thu, 20 Sep 2007 19:43:46 +0200
-Subject: [Buildroot] fakeroot fails to build
-In-Reply-To: <20070920172540.GC8635@aon.at>
-References: <46F29042.30908@asist.si> <20070920155047.GA8635@aon.at>
-	<20070920172540.GC8635@aon.at>
-Message-ID: <20070920174346.GD8635@aon.at>
+From: aldot at uclibc.org <aldot@uclibc.org>
+Date: Thu, 20 Sep 2007 10:47:32 -0700 (PDT)
+Subject: [Buildroot] svn commit: trunk/buildroot/package/fakeroot
+Message-ID: <20070920174732.1E8D0A45EE@busybox.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Thu, Sep 20, 2007 at 07:25:40PM +0200, Bernhard Fischer wrote:
->On Thu, Sep 20, 2007 at 05:50:47PM +0200, Bernhard Fischer wrote:
->>On Thu, Sep 20, 2007 at 05:22:42PM +0200, Babarovic Ivica wrote:
->>> Hi!
->>>
->>> It seem fakeroot fails to build for my powerpc target.
->>
->>Please show me your
->>$ egrep "^[^#]*(_GCC|LARGE|UCLIBC)" .config
->
->fakeroot is broken if LFS is off. Enable largefile support and/or fix
->fakeroot upstream.
+Author: aldot
+Date: 2007-09-20 10:47:30 -0700 (Thu, 20 Sep 2007)
+New Revision: 19920
 
-Alright. Please do a
-$ svn up
-$ mv package/fakeroot/fakeroot-uclibc-LFS.diff \
-package/fakeroot/fakeroot-uclibc-LFS.patch
-$ make fakeroot-clean fakeroot-dirclean host-fakeroot-dirclean
-$ make fakeroot
+Log:
+- of course we also define glibc. argh!
 
-Any better?
+
+Modified:
+   trunk/buildroot/package/fakeroot/fakeroot-uclibc-LFS.diff
+
+
+Changeset:
+Modified: trunk/buildroot/package/fakeroot/fakeroot-uclibc-LFS.diff
+===================================================================
+--- trunk/buildroot/package/fakeroot/fakeroot-uclibc-LFS.diff	2007-09-20 17:41:21 UTC (rev 19919)
++++ trunk/buildroot/package/fakeroot/fakeroot-uclibc-LFS.diff	2007-09-20 17:47:30 UTC (rev 19920)
+@@ -1,13 +1,14 @@
+ diff -u fakeroot-1.7.1.orig/communicate.h fakeroot-1.7.1/communicate.h
+ --- fakeroot-1.7.1.orig/communicate.h	2005-10-02 17:35:36.000000000 +0200
+-+++ fakeroot-1.7.1/communicate.h	2007-09-20 19:36:52.000000000 +0200
+-@@ -35,7 +35,8 @@
+++++ fakeroot-1.7.1/communicate.h	2007-09-20 19:43:38.000000000 +0200
++@@ -35,7 +35,9 @@
+  #endif
+  
+  /* Then decide whether we do or do not use the stat64 support */
+ -#if defined(sun) || __GLIBC__ > 2 || (__GLIBC__ == 2 && __GLIBC_MINOR__ >= 1)
+-+#if defined(sun) || __GLIBC__ > 2 || (__GLIBC__ == 2 && __GLIBC_MINOR__ >= 1) \
+-+ || (defined __UCLIBC__ && defined UCLIBC_HAS_LFS)
+++#if defined(sun) \
+++	|| (!defined __UCLIBC__ && (__GLIBC__ > 2 || (__GLIBC__ == 2 && __GLIBC_MINOR__ >= 1))) \
+++	|| (defined __UCLIBC__ && defined UCLIBC_HAS_LFS)
+  # define STAT64_SUPPORT
+  #else
+  # warning Not using stat64 support
