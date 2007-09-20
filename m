@@ -1,36 +1,40 @@
-From: Bernhard Fischer <rep.dot.nop@gmail.com>
-Date: Thu, 20 Sep 2007 11:29:35 +0200
-Subject: [Buildroot] sysroot not anabled even when	BR2_GCC_VERSION_4_2_1
-	is selected
-In-Reply-To: <20070920091136.GA27699@aon.at>
-References: <12792950.post@talk.nabble.com> <20070920091136.GA27699@aon.at>
-Message-ID: <20070920092935.GC27699@aon.at>
+From: aldot at uclibc.org <aldot@uclibc.org>
+Date: Thu, 20 Sep 2007 02:35:33 -0700 (PDT)
+Subject: [Buildroot] svn commit: trunk/buildroot/package/libusb
+Message-ID: <20070920093533.7DBDA3005A@busybox.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Thu, Sep 20, 2007 at 11:11:36AM +0200, Bernhard Fischer wrote:
->On Thu, Sep 20, 2007 at 01:28:04AM -0700, Hebbar wrote:
->>
->>Hi All,
->>
->> I just tried latest buildroot snapshot and below is my buildroot config.
->>What i observed is that BR2_TOOLCHAIN_SYSROOT i snot selected even though i
->>have enabled gcc 4.2.1. Let me know if any one has a quickest solution. LEt
->>me know if anyone needs more info.
->
->I just noticed that too. Sounds like i broke that yesterday, will fix
->ASAP.
+Author: aldot
+Date: 2007-09-20 02:35:33 -0700 (Thu, 20 Sep 2007)
+New Revision: 19905
 
-It sounds like there is a bug in lxdialog:
-config FOO
-   bool "foo"
-config BAR
-   depends on !!FOO
+Log:
+- fix source location of libusb libs
 
-The double negation seems to lead to an error and this error doesn't
-show up anywhere, from the looks. Would be nice if somebody would have a
-look if that's really the case and talk to Sam Ravnborg and or Roman
-Zippel
+
+Modified:
+   trunk/buildroot/package/libusb/libusb.mk
+
+
+Changeset:
+Modified: trunk/buildroot/package/libusb/libusb.mk
+===================================================================
+--- trunk/buildroot/package/libusb/libusb.mk	2007-09-20 09:25:57 UTC (rev 19904)
++++ trunk/buildroot/package/libusb/libusb.mk	2007-09-20 09:35:33 UTC (rev 19905)
+@@ -51,9 +51,9 @@
+ 	$(MAKE) -C $(LIBUSB_DIR) DESTDIR=$(STAGING_DIR) install
+ 
+ $(TARGET_DIR)/$(LIBUSB_BINARY): $(STAGING_DIR)/lib/libusb.so
+-	mkdir -p $(TARGET_DIR)/usr/lib
+-	cp -dpf $(STAGING_DIR)/lib/libusb* $(TARGET_DIR)/usr/lib
+-	rm -f $(TARGET_DIR)/usr/lib/*.a $(TARGET_DIR)/usr/lib/*.la
++	$(INSTALL) -D $(LIBUSB_DIR)/.libs/libusb*.so* $(STAGING_DIR)/usr/lib/
++	$(INSTALL) -D $(LIBUSB_DIR)/.libs/libusb*.so* $(TARGET_DIR)/usr/lib/
++	$(STRIP) $(STRIP_STRIP_UNNEEDED) $(TARGET_DIR)/usr/lib/libusb*.so*
+ 
+ libusb: uclibc $(TARGET_DIR)/$(LIBUSB_BINARY)
+ 
