@@ -1,135 +1,241 @@
-From: Gururaja Hebbar K R <gururajakr@sanyo.co.in>
-Date: Fri, 21 Sep 2007 05:08:36 +0530
-Subject: [Buildroot] sysroot not anabled even when BR2_GCC_VERSION_4_2_1
-	isselected
-Message-ID: <C03A3C267DDF184EA523BBAB577BF924F03FA2@blrexsr1.slti.sanyo.co.in>
+From: Leonid <Leonid@a-k-a.net>
+Date: Fri, 21 Sep 2007 00:22:33 -0700
+Subject: [Buildroot] Buildroot and perforce.
+Message-ID: <406A31B117F2734987636D6CCC93EE3CB05B69@ehost011-3.exch011.intermedia.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi  samant,
+Hi, All:
 
-   I normally use arm gnu toolchain provided by cosesourcery to work on
-arm926ejs. The gcc version they use is 4.2.0 . Also now a days i am
-using toolchain built using buildroot uclibc which uses gcc 4.2.1. Both
-are working absolutely fine for me except that the Busy box built using
-Buildroot Toolchain (with gcc 4.2.1) doesnt work. I use buildroot
-toolchain only to compile Linux kernel and use codesourcery toolchain to
-build Busybox.
-
-Regards
-Gururaja
-
-
-
------Original Message-----
-From: Rae_Samant@emc.com [mailto:Rae_Samant at emc.com] 
-Sent: Thursday, September 20, 2007 6:56 AM
-To: Gururaja Hebbar K R
-Subject: RE: sysroot not anabled even when BR2_GCC_VERSION_4_2_1
-isselected
-
-Hi Gururaj,
- I have a question : Are you able to boot Arm 926 with GCC 4.2.1 ?
  
- Which kernel are you using ? And what patches are you using ?
 
- Are you also using initrd / ramdisk ?
+I have asked questions below but did it on linux-arm forum which was not
+exactly the place though I got answer from Tom. I would appreciate other
+feedbacks from buildroot experts.
+
  
- I ask this because I have been unable to compile Arm 926 based kernel
-(provided by marvell) with GCC 4.2.1 .
 
- When I am able to compile the kernel with Gcc 3.4.6, then the shell
-seems to be not working (buildroot snapshot/busybox 1.2.0).
+On Thursday, September 20, 2007 7:29 PM Tom wrote:
 
- Hey, Please help me if possible with the information. I am stuck for
-past one and half weeks.
+ 
 
-Thanks and Regards,
-samant
+> Leonid wrote:
 
+> > I am new to buildroot and I'm trying to use it to create filesystem
+for
 
------Original Message-----
-From: buildroot-bounces@uclibc.org [mailto:buildroot-bounces at uclibc.org]
-On Behalf Of Hebbar
-Sent: Thursday, September 20, 2007 4:28 AM
-To: buildroot at uclibc.org
-Subject: [Buildroot] sysroot not anabled even when BR2_GCC_VERSION_4_2_1
-isselected
+> > my at91rm9200 based board. I downloaded
+buildroot-20070116-RC2.tar.bz2
 
+> > from at91 web site (latest relevant image I could find) and have
+built
 
-Hi All,
+> > filesystem images. 
 
- I just tried latest buildroot snapshot and below is my buildroot
-config.
-What i observed is that BR2_TOOLCHAIN_SYSROOT i snot selected even
-though i have enabled gcc 4.2.1. Let me know if any one has a quickest
-solution.
-LEt
-me know if anyone needs more info.
+> > 
 
-Regards
-Gururaja
+> > It basically works, though I couldn't build some packages.
 
-BR2_arm=y
-BR2_arm926t=y
-BR2_ARM_TYPE="ARM926T"
-BR2_ARM_EABI=y
-BR2_ARCH="arm"
-BR2_ENDIAN="LITTLE"
-BR2_GCC_TARGET_TUNE="arm9tdmi"
+> > 
 
+> > Now I want to put my filesystem to version manager (we use perforce,
+but
 
-BR2_PREFER_STATIC_LIB=y
+> > this is not important). I don't want to put buildroot itself since
+it
 
+> > doesn't have all necessary files - they get downloaded from network
 
-#
+> > during configuration process - and I cannot risk that approach -
+what if
 
-#
-# Toolchain type
-#
-BR2_TOOLCHAIN_BUILDROOT=y
-# BR2_TOOLCHAIN_EXTERNAL is not set
-BR2_TOOLCHAIN_NORMAL=y
-# BR2_TOOLCHAIN_ATMEL_AVR32 is not set
+> > some package changed or is not there?
 
+ 
 
+> First, your request should have gone to the buildroot list, this is
 
-#
-# Gcc Options
-#
-# BR2_GCC_VERSION_3_3_5 is not set
-# BR2_GCC_VERSION_3_3_6 is not set
-# BR2_GCC_VERSION_3_4_2 is not set
-# BR2_GCC_VERSION_3_4_3 is not set
-# BR2_GCC_VERSION_3_4_4 is not set
-# BR2_GCC_VERSION_3_4_5 is not set
-# BR2_GCC_VERSION_3_4_6 is not set
-# BR2_GCC_VERSION_4_0_0 is not set
-# BR2_GCC_VERSION_4_0_1 is not set
-# BR2_GCC_VERSION_4_0_2 is not set
-# BR2_GCC_VERSION_4_0_3 is not set
-# BR2_GCC_VERSION_4_0_4 is not set
-# BR2_GCC_VERSION_4_1_0 is not set
-# BR2_GCC_VERSION_4_1_1 is not set
-# BR2_GCC_VERSION_4_1_2 is not set
-# BR2_GCC_VERSION_4_2_0 is not set
-BR2_GCC_VERSION_4_2_1=y
-# BR2_GCC_IS_SNAP is not set
-BR2_GCC_VERSION="4.2.1"
-# BR2_GCC_USE_SJLJ_EXCEPTIONS is not set
+not 
+
+> an ARM/linux question. For any replies, please use this one.
+
+> 
+
+ 
+
+Understood, I'll subscribe there first thing in the morning. Can you
+also recommend some buildroot tutorial, different from
+http://buildroot.uclibc.org/buildroot.html which omits certain details? 
+
+ 
+
+> > to find which files got changed/delete? Or I should use some
+
+external
+
+> > tools (diff) to compare my existing tree with the new one?
+
+> > 
+
+> > Certainly people dealing with such problems a lot and I'll
+
+appreciate
+
+> > any suggestions or framework to accomplish the task. If somebody can
 
 
+> > share scripts to add/delete/modify packages in previously created by
 
---
-View this message in context:
-http://www.nabble.com/sysroot-not-anabled-even-when-BR2_GCC_VERSION_4_2_
-1-is-selected-tf4486096.html#a12792950
-Sent from the BuildRoot mailing list archive at Nabble.com.
 
-_______________________________________________
-buildroot mailing list
-buildroot at uclibc.org
-http://busybox.net/mailman/listinfo/buildroot
+> > buildroot filesystem that will be really nice.
+
+> 
+
+> You can certainly use whatever tools you want. 
+
+ 
+
+Does it mean buildroot doesn't have intrinsic option for incremental
+update?
+
+ 
+
+> Assuming your buildroot
+
+> is installed in [br] and uses the folder [br]/dl for download and your
+
+ 
+
+> managed to build everything as you want it into your staging dir [sd],
+
+ 
+
+ 
+
+The staging directory is where toolchain will be installed, right?
+
+ 
+
+> you would add to your revision control after a successful build:
+
+> 
+
+> [br]/.config
+
+> [br]/dl
+
+> [br]/docs
+
+> [br]/package
+
+> [br]/target
+
+> [br]/toolchain
+
+> 
+
+That doesn't include packages' source files but only their tarballs,
+right? In general, from example foo.mk file which is presented online I
+can conclude that only standard way of adding packages is the following:
+
+- download package from FOO_SITE.
+
+- save tarball in dl directory.
+
+- unpack and build.
+
+ 
+
+But I may have my package in the form of local source files which I
+don't want to pack since I'm modifying them. Same goes for standard
+packages I wish to patch/hack. While I can write makefile for such case
+myself, I would like to see standard buildroot's way to include such an
+application if possible.
+
+ 
+
+Now looks like I need to unpack tarball, modify sources and pack it
+back.
+
+ 
+
+> + any config files your builroot uses which are easiest kept in a
+
+> sperate folder, [cfg].
+
+> 
+
+ 
+
+What files do you mean? Pre-configured stuff for certain boards?
+
+ 
+
+> 
+
+> On a checkout, just make sure that buildroot really uses all the right
+
+ 
+
+> config files, and buildroot will produce the corresponding output dirs
+
+ 
+
+> [br]/build_arm_ as and [sd] as you had it before. (This is also true
+
+for 
+
+> any changes to the template filesystem located in
+
+> [br]/target.../..._skeleton.)
+
+> 
+
+ 
+
+So, ...skeleton plays a role of "static" files which will be simply
+
+copied into filesystem tree, right?
+
+ 
+
+> You can certainly also put your [sd] into revision control; just keep
+
+in 
+
+> mind that buildroot will try to write there whenever executed.
+
+> 
+
+ 
+
+Staging dir will hold toolchain itself (binaries/libraries) as far as I
+
+know. Normally people won't modify toolchain. I even don't want
+
+buildroot will create toolchain each and every time - is there an
+
+"official" way to disable toolchain creation?
+
+ 
+
+I'd rather save on perforce BUILD_DIR (minus object/binary files) but it
+
+will be rewritten each time anyway...
+
+ 
+
+Thanks a lot,
+
+ 
+
+Leonid.
+
+ 
+
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: http://busybox.net/lists/buildroot/attachments/20070921/0b8fc9a4/attachment-0001.htm 
