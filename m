@@ -1,73 +1,78 @@
 From: Bernhard Fischer <rep.dot.nop@gmail.com>
-Date: Fri, 21 Sep 2007 17:02:44 +0200
-Subject: [Buildroot] [CFT, PATCH] libelf 64bit problems vs. ltrace
-In-Reply-To: <20070920092033.GB27699@aon.at>
-References: <0709192052250.18886@somehost> <20070919193600.GD817@aon.at>
-	<20070920092033.GB27699@aon.at>
-Message-ID: <20070921150244.GE5788@aon.at>
+Date: Fri, 21 Sep 2007 17:33:40 +0200
+Subject: [Buildroot] using PROJECTs with buildroot
+In-Reply-To: <20070918171028.GB14096@aon.at>
+References: <20070918163008.GA14096@aon.at> <20070918171028.GB14096@aon.at>
+Message-ID: <20070921153339.GG5788@aon.at>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+Hi,
 
-ping!
-I'll happily keep this fixes local if noone cares to double-check that
-they help others, too..
+I'd like to ask how that project thing is supposed to be used and how it
+could be fixed (assuming that i'm not doing something wrong, which could
+easily be).
 
-On Thu, Sep 20, 2007 at 11:20:33AM +0200, Bernhard Fischer wrote:
->On Wed, Sep 19, 2007 at 09:36:00PM +0200, Bernhard Fischer wrote:
->>On Wed, Sep 19, 2007 at 09:06:54PM +0200, Cristian Ionescu-Idbohrn wrote:
->>>but libvorbis fails to build:
->>>
->>>  In file included from mdct.c:44:
->>>  ../include/vorbis/codec.h:26:21: error: ogg/ogg.h: No such file or
->>>  directory
->>>
->>>Can't seem to be able to build ltrace; something to do with configure not
->>>being able to locate gelf.h, but it's there:
->>>staging_dir/usr/include/libelf, as libelf build ok; I get a configure
->>>error:
->>>
->>>  checking gelf.h usability... no
->>>  checking gelf.h presence... no
->>>  checking for gelf.h... no
->>>  configure: error: ***** gelf.h not found *****
->>>
->>>config.log says in more than one place:
->>>
->>>  /usr/include/libelf/gelf.h:49:2: error: #error "GElf is not supported on
->>>    this sysystem."
->>>
->>>and bails out further down with:
->>>
->>>  configure:3629: checking for gelf.h
->>>  configure:3636: result: no
->>>  configure:3643: error: ***** gelf.h not found *****
->>>
->>>ac_cv_header_gelf_h=no may have something to do with it.
->>>
->>>Any ideas?
->>
->>I've updated ltrace some months ago, but i admit that i have no idea
->>which box this big patches are on :-/
->>...
->>$ ls -ltrn buildroot.mine.OLD.OLD/package/ltrace/
->>total 804
->>-rw-r--r-- 1 1000 1000 627890 Apr  6 14:58 ltrace-svn-20070406.00.patch
->>-rw-r--r-- 1 1000 1000 173414 Apr  6 15:04 ltrace-svn-20070406.01.autoreconf.patch
->>-rw-r--r-- 1 1000 1000   2298 Apr  6 15:07 ltrace.mk
->>-rw-r--r-- 1 1000   40    241 Apr  6 15:25 Config.in
->>
->>I.e. Not too good.
->>
->>Perhaps try this updated version?
->
->The attached builds at least (with largefile enabled for a start).
->Can you confirm that this works for you so i can apply it?
->
->Too big for the list, so it's here:
->http://uclibc.org:/~aldot/buildroot/br2.libelf64-cluebait+ltrace-update.00.diff.bz2
->
->TIA for testing it..
+Suppose i want to create two images (or BSP's like some call those).
+
+To keep things simple, let's assume that i'm using the same version of
+binutils and gcc for all.
+
+
+BR2_PROJECT=imageA: kernel 2.6.22.6 with LFS support on
+BR2_PROJECT=imageB: kernel 2.6.22.1 without LFS
+
+0) I 'rm -rf *_i386 binar*'
+1) I configure and build imageA. So far so good.
+2) I configure and build imageB. The resulting image looks like this:
+$ tar -tvf binaries/imageB/rootfs.i386-20070919.tar | grep "2.6.22../$"
+drwxr-xr-x root/root         0 2007-09-19 19:05 ./lib/modules/2.6.22.6/
+$ egrep "(2_6_22|PROJECT)" .config
+BR2_PROJECT="imageB"
+BR2_KERNEL_HEADERS_2_6_22_1=y
+# BR2_KERNEL_HEADERS_2_6_22 is not set
+
+Not exactly what i'd have expected.
+Perhaps i made a mistake? If so please explain how that would work
+properly?
+
+
+
+A more general question that i already raised is what the
+project_build_arch dir is supposed to be good for. I didn't get an
+answer on this question, i think.
+
+I'm questioning it's usefulness because if done properly, nearly all
+packages would have to be built there, leaving the "good old" build_arch
+directory completely empty.
+
+Your reasoning seems to be along the lines of:
+"A package that is customized on a per project basis has to be built in
+project_build_arch".
+
+While this may be true, customization that qualifies for building in
+project_build_arch dir includes these toggles:
+
+1) LFS on/off
+2a) locale on/off
+2b) wchar on/off
+3) IPv6 on/off
+
+These alone would lead to the build_arch dir to be nearly empty, but
+let's assume that it would still contain 25% of the packages since those
+would be locale+wchar+IPv6+LFS agnostic, fine.
+
+If you now take into account that there is a potential
+4) TARGET_CFLAGS
+then suddenly project_build_arch dir would be the exact same thing
+build_arch was before, leaving build_arch empty (the exact same thing we
+had before that project thing, just back then the project_dir was the
+empty -- non-existing one -- and build_arch was populated).
+
+It would be very kind if you would share your thoughts on these issues.
+
+regards,
+Bernhard
