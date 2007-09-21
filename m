@@ -1,66 +1,73 @@
-From: aldot at uclibc.org <aldot@uclibc.org>
-Date: Fri, 21 Sep 2007 07:22:33 -0700 (PDT)
-Subject: [Buildroot] svn commit: trunk/buildroot/package/fakeroot
-Message-ID: <20070921142233.2E34FA60EA@busybox.net>
+From: Bernhard Fischer <rep.dot.nop@gmail.com>
+Date: Fri, 21 Sep 2007 17:02:44 +0200
+Subject: [Buildroot] [CFT, PATCH] libelf 64bit problems vs. ltrace
+In-Reply-To: <20070920092033.GB27699@aon.at>
+References: <0709192052250.18886@somehost> <20070919193600.GD817@aon.at>
+	<20070920092033.GB27699@aon.at>
+Message-ID: <20070921150244.GE5788@aon.at>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Author: aldot
-Date: 2007-09-21 07:22:29 -0700 (Fri, 21 Sep 2007)
-New Revision: 19928
 
-Log:
-- add check for UCLIBC_HAS_LFS.
-  Fixes compilation error if LARGEFLE support is off
+ping!
+I'll happily keep this fixes local if noone cares to double-check that
+they help others, too..
 
-
-Added:
-   trunk/buildroot/package/fakeroot/fakeroot-uclibc-LFS.patch
-
-Removed:
-   trunk/buildroot/package/fakeroot/fakeroot-uclibc-LFS.diff
-
-
-Changeset:
-Deleted: trunk/buildroot/package/fakeroot/fakeroot-uclibc-LFS.diff
-===================================================================
---- trunk/buildroot/package/fakeroot/fakeroot-uclibc-LFS.diff	2007-09-21 13:43:28 UTC (rev 19927)
-+++ trunk/buildroot/package/fakeroot/fakeroot-uclibc-LFS.diff	2007-09-21 14:22:29 UTC (rev 19928)
-@@ -1,14 +0,0 @@
--diff -u fakeroot-1.7.1.orig/communicate.h fakeroot-1.7.1/communicate.h
----- fakeroot-1.7.1.orig/communicate.h	2005-10-02 17:35:36.000000000 +0200
--+++ fakeroot-1.7.1/communicate.h	2007-09-20 19:43:38.000000000 +0200
--@@ -35,7 +35,9 @@
-- #endif
-- 
-- /* Then decide whether we do or do not use the stat64 support */
---#if defined(sun) || __GLIBC__ > 2 || (__GLIBC__ == 2 && __GLIBC_MINOR__ >= 1)
--+#if defined(sun) \
--+	|| (!defined __UCLIBC__ && (__GLIBC__ > 2 || (__GLIBC__ == 2 && __GLIBC_MINOR__ >= 1))) \
--+	|| (defined __UCLIBC__ && defined UCLIBC_HAS_LFS)
-- # define STAT64_SUPPORT
-- #else
-- # warning Not using stat64 support
-
-Copied: trunk/buildroot/package/fakeroot/fakeroot-uclibc-LFS.patch (from rev 19927, trunk/buildroot/package/fakeroot/fakeroot-uclibc-LFS.diff)
-===================================================================
---- trunk/buildroot/package/fakeroot/fakeroot-uclibc-LFS.patch	                        (rev 0)
-+++ trunk/buildroot/package/fakeroot/fakeroot-uclibc-LFS.patch	2007-09-21 14:22:29 UTC (rev 19928)
-@@ -0,0 +1,14 @@
-+diff -u fakeroot-1.7.1.orig/communicate.h fakeroot-1.7.1/communicate.h
-+--- fakeroot-1.7.1.orig/communicate.h	2005-10-02 17:35:36.000000000 +0200
-++++ fakeroot-1.7.1/communicate.h	2007-09-20 19:43:38.000000000 +0200
-+@@ -35,7 +35,9 @@
-+ #endif
-+ 
-+ /* Then decide whether we do or do not use the stat64 support */
-+-#if defined(sun) || __GLIBC__ > 2 || (__GLIBC__ == 2 && __GLIBC_MINOR__ >= 1)
-++#if defined(sun) \
-++	|| (!defined __UCLIBC__ && (__GLIBC__ > 2 || (__GLIBC__ == 2 && __GLIBC_MINOR__ >= 1))) \
-++	|| (defined __UCLIBC__ && defined UCLIBC_HAS_LFS)
-+ # define STAT64_SUPPORT
-+ #else
-+ # warning Not using stat64 support
+On Thu, Sep 20, 2007 at 11:20:33AM +0200, Bernhard Fischer wrote:
+>On Wed, Sep 19, 2007 at 09:36:00PM +0200, Bernhard Fischer wrote:
+>>On Wed, Sep 19, 2007 at 09:06:54PM +0200, Cristian Ionescu-Idbohrn wrote:
+>>>but libvorbis fails to build:
+>>>
+>>>  In file included from mdct.c:44:
+>>>  ../include/vorbis/codec.h:26:21: error: ogg/ogg.h: No such file or
+>>>  directory
+>>>
+>>>Can't seem to be able to build ltrace; something to do with configure not
+>>>being able to locate gelf.h, but it's there:
+>>>staging_dir/usr/include/libelf, as libelf build ok; I get a configure
+>>>error:
+>>>
+>>>  checking gelf.h usability... no
+>>>  checking gelf.h presence... no
+>>>  checking for gelf.h... no
+>>>  configure: error: ***** gelf.h not found *****
+>>>
+>>>config.log says in more than one place:
+>>>
+>>>  /usr/include/libelf/gelf.h:49:2: error: #error "GElf is not supported on
+>>>    this sysystem."
+>>>
+>>>and bails out further down with:
+>>>
+>>>  configure:3629: checking for gelf.h
+>>>  configure:3636: result: no
+>>>  configure:3643: error: ***** gelf.h not found *****
+>>>
+>>>ac_cv_header_gelf_h=no may have something to do with it.
+>>>
+>>>Any ideas?
+>>
+>>I've updated ltrace some months ago, but i admit that i have no idea
+>>which box this big patches are on :-/
+>>...
+>>$ ls -ltrn buildroot.mine.OLD.OLD/package/ltrace/
+>>total 804
+>>-rw-r--r-- 1 1000 1000 627890 Apr  6 14:58 ltrace-svn-20070406.00.patch
+>>-rw-r--r-- 1 1000 1000 173414 Apr  6 15:04 ltrace-svn-20070406.01.autoreconf.patch
+>>-rw-r--r-- 1 1000 1000   2298 Apr  6 15:07 ltrace.mk
+>>-rw-r--r-- 1 1000   40    241 Apr  6 15:25 Config.in
+>>
+>>I.e. Not too good.
+>>
+>>Perhaps try this updated version?
+>
+>The attached builds at least (with largefile enabled for a start).
+>Can you confirm that this works for you so i can apply it?
+>
+>Too big for the list, so it's here:
+>http://uclibc.org:/~aldot/buildroot/br2.libelf64-cluebait+ltrace-update.00.diff.bz2
+>
+>TIA for testing it..
