@@ -1,241 +1,217 @@
-From: Leonid <Leonid@a-k-a.net>
-Date: Fri, 21 Sep 2007 00:22:33 -0700
-Subject: [Buildroot] Buildroot and perforce.
-Message-ID: <406A31B117F2734987636D6CCC93EE3CB05B69@ehost011-3.exch011.intermedia.net>
+From: Bernhard Fischer <rep.dot.nop@gmail.com>
+Date: Fri, 21 Sep 2007 09:44:06 +0200
+Subject: [Buildroot] local mirror management (bug #572)
+In-Reply-To: <46F2E86C.7050705@mips.com>
+References: <20070917075500.052F2A4692@busybox.net>
+	<1190025802.8052.4.camel@elrond.sweden.atmel.com>
+	<20070917092735.GA18888@aon.at>
+	<1190031404.8052.9.camel@elrond.sweden.atmel.com>
+	<20070917111024.GB22104@aon.at>
+	<1190040978.8052.20.camel@elrond.sweden.atmel.com>
+	<20070917134117.GC24993@aon.at>
+	<1190098489.4064.7.camel@elrond.sweden.atmel.com>
+	<20070919082107.GC11856@aon.at> <46F2E86C.7050705@mips.com>
+Message-ID: <20070921074406.GB24467@aon.at>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi, All:
+On Thu, Sep 20, 2007 at 10:38:52PM +0100, Elizabeth Oldham wrote:
+> Bernhard Fischer wrote:
+>
+>> "local mirror" patch in mantis (or the ML archives). See 1).
+>> With the patch mentioned above, you (i.e. the user) is free to setup and
+>> use any mirror she likes, be it the
+>> http://buildroot.uclibc.org/downloads/buildroot-sources/
+>> or another, potentially local directory (i.e. nothing you can talk to
+>> via http or ftp).
+>> 1) http://bugs.busybox.net/view.php?id=572
+>
+> I'll bite, this is exactly what I need... I tweaked the patch in that bug 
+> and attach my version for comment. I dont know what clean up you had in 
+> mind but I'm happy to make further attempts.
+>
+> Beth
 
- 
-
-I have asked questions below but did it on linux-arm forum which was not
-exactly the place though I got answer from Tom. I would appreciate other
-feedbacks from buildroot experts.
-
- 
-
-On Thursday, September 20, 2007 7:29 PM Tom wrote:
-
- 
-
-> Leonid wrote:
-
-> > I am new to buildroot and I'm trying to use it to create filesystem
-for
-
-> > my at91rm9200 based board. I downloaded
-buildroot-20070116-RC2.tar.bz2
-
-> > from at91 web site (latest relevant image I could find) and have
-built
-
-> > filesystem images. 
-
-> > 
-
-> > It basically works, though I couldn't build some packages.
-
-> > 
-
-> > Now I want to put my filesystem to version manager (we use perforce,
-but
-
-> > this is not important). I don't want to put buildroot itself since
-it
-
-> > doesn't have all necessary files - they get downloaded from network
-
-> > during configuration process - and I cannot risk that approach -
-what if
-
-> > some package changed or is not there?
-
- 
-
-> First, your request should have gone to the buildroot list, this is
-
-not 
-
-> an ARM/linux question. For any replies, please use this one.
-
+>Index: Config.in
+>===================================================================
+>--- Config.in	(revision 19922)
+>+++ Config.in	(working copy)
+>@@ -672,6 +672,39 @@
+> 	string "Wget command"
+> 	default "wget --passive-ftp -nd"
 > 
+>+config BR2_LOCAL_MIRROR
+>+	bool "Use a local mirror"
+>+      	default n
 
- 
-
-Understood, I'll subscribe there first thing in the morning. Can you
-also recommend some buildroot tutorial, different from
-http://buildroot.uclibc.org/buildroot.html which omits certain details? 
-
- 
-
-> > to find which files got changed/delete? Or I should use some
-
-external
-
-> > tools (diff) to compare my existing tree with the new one?
-
-> > 
-
-> > Certainly people dealing with such problems a lot and I'll
-
-appreciate
-
-> > any suggestions or framework to accomplish the task. If somebody can
-
-
-> > share scripts to add/delete/modify packages in previously created by
-
-
-> > buildroot filesystem that will be really nice.
-
+Please use just one leading tab. The help-text is usually like this:
+<tab>help
+<tab><space><space>description that fits in about 70 columns
+Same for the majority below.
+>+
+>+config BR2_LOCAL_MIRROR_STRICT
+>+	bool "Only download from mirror"
+>+	default n
+>+
+>+config BR2_LOCAL_MIRROR_SITE
+>+	string "Local mirror site:"
+>+       	default "http://localhost/"
+>+       	depends on BR2_LOCAL_MIRROR
+>+
+>+config BR2_LOCAL_MIRROR_LOCALHOSTS
+>+      	string "Local hosts"
+>+      	default ""
+>+      	depends on BR2_LOCAL_MIRROR
+>+      	help
+>+          Do not change URL of specified hosts. Useful if you maintain
+>+          your own packages.
+>+
+>+config BR2_LOCAL_MIRROR_GEN
+>+      	bool "Update mirror build directory"
+>+      	depends on !BR2_LOCAL_MIRROR_STRICT
+>+      	help
+>+          Update your mirror build directory with the packages that 
+>+	  cannot be fetched from the mirror.
+>+
+>+config BR2_LOCAL_MIRROR_GENDIR
+>+	string "mirror build directory"
+>+      	depends on BR2_LOCAL_MIRROR_GEN
+>+      	default "$(BASE_DIR)/mirror"
+>+
+> config BR2_SVN_CO
+> 	string "Subversion (svn) command to download source tree"
+> 	default "svn co"
+>Index: package/Makefile.in
+>===================================================================
+>--- package/Makefile.in	(revision 19922)
+>+++ package/Makefile.in	(working copy)
+>@@ -62,6 +62,17 @@
+> endif
+> #########################################################################
 > 
+>+ifeq ($(BR2_LOCAL_MIRROR),y)
+>+WGET:=MIRROR_WGET="$(strip $(subst ",, $(BR2_WGET)))" \
+>+       MIRROR_SITE="$(strip $(subst ",, $(BR2_LOCAL_MIRROR_SITE)))" \
+>+       MIRROR_LOCALHOSTS="$(strip $(subst ",, $(BR2_LOCAL_MIRROR_LOCALHOSTS)))" \
+>+       MIRROR_STRICT="$(strip $(subst ",, $(BR2_LOCAL_MIRROR_STRICT)))" \
+>+       MIRROR_GEN="$(strip $(subst ",, $(BR2_LOCAL_MIRROR_GEN)))" \
+>+       MIRROR_GENDIR="$(strip $(subst ",, $(BR2_LOCAL_MIRROR_GENDIR)))" \
+>+       $(BASE_DIR)/misc/mirror.sh
 
-> You can certainly use whatever tools you want. 
-
- 
-
-Does it mean buildroot doesn't have intrinsic option for incremental
-update?
-
- 
-
-> Assuming your buildroot
-
-> is installed in [br] and uses the folder [br]/dl for download and your
-
- 
-
-> managed to build everything as you want it into your staging dir [sd],
-
- 
-
- 
-
-The staging directory is where toolchain will be installed, right?
-
- 
-
-> you would add to your revision control after a successful build:
-
+This will break vim's syntax highlighting, unfortunately. It needs
+#"))
+here. Fire up vim and :syntax on
+>+else
+>+WGET:=$(strip $(subst ",, $(BR2_WGET)))
+#"))
+>+endif
 > 
+> ifeq ($(BR2_TOOLCHAIN_BUILDROOT),y)
+> TOOL_BUILD_DIR=$(BASE_DIR)/$(TOPDIR_PREFIX)toolchain_build_$(ARCH)$(ARCH_FPU_SUFFIX)$(TOPDIR_SUFFIX)
+>Index: misc/mirror.sh
 
-> [br]/.config
+Please move that somewhere to toolchain/.
 
-> [br]/dl
+>===================================================================
+>--- misc/mirror.sh	(revision 0)
+>+++ misc/mirror.sh	(revision 0)
+>@@ -0,0 +1,61 @@
+>+#!/bin/bash
 
-> [br]/docs
+bash is not acceptable. It has to run on a POSIX shell if it can't be
+done in make (which is clearly to be preferred).
 
-> [br]/package
+>+
+>+IFS=" "
+>+
+>+OPTIONS=""
+>+USE_LOCAL=0
+>+
+>+for i in "$@"
+>+do
+>+  echo $i | grep '://' > /dev/null;
+>+
+>+  if [ "$?" = 0 ]
+>+  then
+>+    EXT_URL=$i
+>+    HOST=`echo $i |sed 's+^.*://++' |sed 's+/.*++'`
 
-> [br]/target
+You'll have to pass SED=$(XSED) down to that script (which shouldn't
+exist in the first place, if possible) since
+a) The host may not have sed installed
+b) The host sed may be buggy
+c) if one of a) b), we built a proper version for our own use.
+>+    
+>+    for j in $MIRROR_LOCAL_HOSTS
+>+    do
+>+      if [ "$j" = "$HOST" ]
 
-> [br]/toolchain
+Several test(1) impls will get this wrong if one of them is empty.
+Prefix that with a char, like [ "x$j" = "x$HOST" ]
 
-> 
+>+      then
+>+        USE_LOCAL=1;
+>+      fi
 
-That doesn't include packages' source files but only their tarballs,
-right? In general, from example foo.mk file which is presented online I
-can conclude that only standard way of adding packages is the following:
+These four lines try to say
+	[ "x$j" = "x$HOST" ] && USE_LOCAL=1
 
-- download package from FOO_SITE.
+>+    done
+>+    
+>+    if [ "$USE_LOCAL" -eq 1 ]
 
-- save tarball in dl directory.
+You shall not compare a string to an int
 
-- unpack and build.
+>+    then
+>+      URL=$i
+>+    else
+>+      URL="$MIRROR_SITE/`basename $i`"
+>+    fi
+>+  else
+>+    OPTIONS="$OPTIONS $i"
+>+  fi
+>+done;
+>+
+>+$MIRROR_WGET $OPTIONS $URL
+>+URL_RES=$?
+>+
+>+if [ "$URL_RES" = 0 ]
 
- 
+nah. If you're comparing an int, you're supposed to use the integer
+comparison funcs.
 
-But I may have my package in the form of local source files which I
-don't want to pack since I'm modifying them. Same goes for standard
-packages I wish to patch/hack. While I can write makefile for such case
-myself, I would like to see standard buildroot's way to include such an
-application if possible.
+>+then
+>+  exit 0
+>+fi
+>+
+>+# first download failed
+>+if [ "$USE_LOCAL" = 1 ]
 
- 
+ditto.
 
-Now looks like I need to unpack tarball, modify sources and pack it
-back.
+>+then
+>+  exit 1
+>+fi
+>+
+>+if [ "$MIRROR_STRICT" = "y" ]
 
- 
+may barf with some test(1) impls if the var is empty. See prefixing
+above
 
-> + any config files your builroot uses which are easiest kept in a
+>+then
+>+  exit 1;
+>+fi
+>+  
+>+$MIRROR_WGET $OPTIONS $EXT_URL
+>+
+>+if [ "$?" = 0 -a "$MIRROR_GEN" = "y" ]
 
-> sperate folder, [cfg].
+See last two comments.
 
-> 
-
- 
-
-What files do you mean? Pre-configured stuff for certain boards?
-
- 
-
-> 
-
-> On a checkout, just make sure that buildroot really uses all the right
-
- 
-
-> config files, and buildroot will produce the corresponding output dirs
-
- 
-
-> [br]/build_arm_ as and [sd] as you had it before. (This is also true
-
-for 
-
-> any changes to the template filesystem located in
-
-> [br]/target.../..._skeleton.)
-
-> 
-
- 
-
-So, ...skeleton plays a role of "static" files which will be simply
-
-copied into filesystem tree, right?
-
- 
-
-> You can certainly also put your [sd] into revision control; just keep
-
-in 
-
-> mind that buildroot will try to write there whenever executed.
-
-> 
-
- 
-
-Staging dir will hold toolchain itself (binaries/libraries) as far as I
-
-know. Normally people won't modify toolchain. I even don't want
-
-buildroot will create toolchain each and every time - is there an
-
-"official" way to disable toolchain creation?
-
- 
-
-I'd rather save on perforce BUILD_DIR (minus object/binary files) but it
-
-will be rewritten each time anyway...
-
- 
-
-Thanks a lot,
-
- 
-
-Leonid.
-
- 
-
--------------- next part --------------
-An HTML attachment was scrubbed...
-URL: http://busybox.net/lists/buildroot/attachments/20070921/0b8fc9a4/attachment-0001.htm 
+>+then
+>+  mkdir -p $MIRROR_GENDIR
+>+  $MIRROR_WGET $OPTIONS -P $MIRROR_GENDIR/ $EXT_URL
+>+fi
