@@ -1,48 +1,36 @@
-From: Tom <fivemiletom@gmail.com>
-Date: Sat, 22 Sep 2007 02:09:50 -0700
-Subject: [Buildroot] Buildroot and perforce.
-In-Reply-To: <406A31B117F2734987636D6CCC93EE3CB05B69@ehost011-3.exch011.intermedia.net>
-References: <406A31B117F2734987636D6CCC93EE3CB05B69@ehost011-3.exch011.intermedia.net>
-Message-ID: <46F4DBDE.4010309@gmail.com>
+From: aldot at uclibc.org <aldot@uclibc.org>
+Date: Sat, 22 Sep 2007 03:20:40 -0700 (PDT)
+Subject: [Buildroot] svn commit: trunk/buildroot/package/module-init-tools
+Message-ID: <20070922102040.A0312A610F@busybox.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Leonid wrote:
->>  + any config files your builroot uses which are easiest kept in a
-> 
->>  sperate folder, [cfg].
-> 
->>
-> 
->  
-> 
-> What files do you mean? Pre-configured stuff for certain boards?
+Author: aldot
+Date: 2007-09-22 03:20:35 -0700 (Sat, 22 Sep 2007)
+New Revision: 19935
 
-First, there is [br]/.config for the main buildroot configuration. This 
-might in turn reference two more files *.config, one for uclibc and one 
-for busybox, look in the main .config file.
+Log:
+- remove duplicate module-init-tools-source rule
 
->>  [br]/target.../..._skeleton.)
-> 
->>
-> 
->  
-> 
-> So, ...skeleton plays a role of "static" files which will be simply
-> 
-> copied into filesystem tree, right?
 
-Right.
+Modified:
+   trunk/buildroot/package/module-init-tools/module-init-tools.mk
 
-> Staging dir will hold toolchain itself (binaries/libraries) as far as I
-> 
-> know. Normally people won't modify toolchain. I even don't want
-> 
-> buildroot will create toolchain each and every time - is there an
-> 
-> "official" way to disable toolchain creation?
 
-There is the "use external toolchain" option.
+Changeset:
+Modified: trunk/buildroot/package/module-init-tools/module-init-tools.mk
+===================================================================
+--- trunk/buildroot/package/module-init-tools/module-init-tools.mk	2007-09-21 22:48:02 UTC (rev 19934)
++++ trunk/buildroot/package/module-init-tools/module-init-tools.mk	2007-09-22 10:20:35 UTC (rev 19935)
+@@ -62,8 +62,6 @@
+ 
+ module-init-tools: uclibc $(MODULE_INIT_TOOLS_TARGET_BINARY)
+ 
+-module-init-tools-source: $(DL_DIR)/$(MODULE_INIT_TOOLS_SOURCE)
+-
+ module-init-tools-clean:
+ 	$(MAKE) prefix=$(TARGET_DIR)/usr -C $(MODULE_INIT_TOOLS_DIR) uninstall
+ 	-$(MAKE) -C $(MODULE_INIT_TOOLS_DIR) clean
