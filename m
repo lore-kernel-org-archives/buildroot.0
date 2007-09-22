@@ -1,43 +1,59 @@
-From: aldot at uclibc.org <aldot@uclibc.org>
-Date: Sat, 22 Sep 2007 11:19:36 -0700 (PDT)
-Subject: [Buildroot] svn commit: trunk/buildroot/target/device/x86/i386
-Message-ID: <20070922181936.CD49BA65E7@busybox.net>
+From: julien.boibessot at free.fr <julien.boibessot@free.fr>
+Date: Sat, 22 Sep 2007 23:28:52 +0200
+Subject: [Buildroot] buildroot with ipkg
+In-Reply-To: <20070920213724.GA18637@zelow.no>
+References: <7fc538d30709170509s4898cc55keb14ebb718d30090@mail.gmail.com>
+	<46EED912.2070902@free.fr> <20070917201401.GA28671@codepoet.org>
+	<46EEEEE2.7060705@free.fr> <20070919064200.GA29317@zelow.no>
+	<20070919192740.GC817@aon.at> <20070919205603.GA16408@zelow.no>
+	<20070919215043.GX20058@aon.at> <46F2E33A.1070307@free.fr>
+	<20070920213724.GA18637@zelow.no>
+Message-ID: <1190496532.46f58914948c8@imp.free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Author: aldot
-Date: 2007-09-22 11:19:35 -0700 (Sat, 22 Sep 2007)
-New Revision: 19946
+Selon Thomas Lundquist <lists@zelow.no>:
 
-Log:
-- update i386 sample config a little bit
+>
+> Why bother then? if all that will be done is putting it where everything
+> is today? Then it's no need to make packages at all.
+>
 
+With the "OpenWrt" method you have:
+* the packages (.ipkg) built for all the Buildroot software you selected with
+menuconfig
+* AND a rootfs with all these packages pre-installed (ready to test your
+configuration)
 
-Modified:
-   trunk/buildroot/target/device/x86/i386/linux26.config
+After that you can upload your packages to your (web)server and share/use them,
+or directly flash the rootfs.
+What I was pointing in my email is that you probably don't need to add your
+"<m>" entry in Buildroot menuconfig. Your option to choose the package type
+should be
+enough: if the user choose to build packages, then you can build them for all
+the selected software.
 
+>
+> This is where I lost it. it's up to the end user to do this step. This
+> is why I do autonomous packages.
+>
 
-Changeset:
-Modified: trunk/buildroot/target/device/x86/i386/linux26.config
-===================================================================
---- trunk/buildroot/target/device/x86/i386/linux26.config	2007-09-22 17:30:38 UTC (rev 19945)
-+++ trunk/buildroot/target/device/x86/i386/linux26.config	2007-09-22 18:19:35 UTC (rev 19946)
-@@ -1327,6 +1327,7 @@
- CONFIG_SENSORS_FSCPOS=m
- CONFIG_SENSORS_GL518SM=m
- CONFIG_SENSORS_GL520SM=m
-+CONFIG_SENSORS_CORETEMP=m
- CONFIG_SENSORS_IPMI=m
- CONFIG_SENSORS_IT87=m
- CONFIG_SENSORS_LM63=m
-@@ -1340,6 +1341,7 @@
- CONFIG_SENSORS_LM90=m
- CONFIG_SENSORS_LM92=m
- CONFIG_SENSORS_MAX1619=m
-+CONFIG_SENSORS_MAX6650=m
- CONFIG_SENSORS_PC87360=m
- CONFIG_SENSORS_PC87427=m
- CONFIG_SENSORS_SIS5595=m
+Sorry, I probably failed to explain my thoughts clearly...
+Why not build all software as packages when the user want it and as "builtin" in
+the other case ?
+
+>
+> Feel free to to this and I'd be happy if there was a patch to choose
+> this method but no way am I going to make this the only one. The builder
+> should be able to choose what to put where.
+>
+
+Don't forget package dependencies...
+
+If you need help to integrate ipkg, I have already some modifications of
+Buildroot to share with you, before publishing them.
+
+Julien
