@@ -1,31 +1,43 @@
-From: Bernhard Fischer <rep.dot.nop@gmail.com>
-Date: Sat, 22 Sep 2007 20:03:05 +0200
-Subject: [Buildroot] Creating x86 bootable ISO
-In-Reply-To: <2D30722FBBDE6749973243F4F01BE984C6599A@dotexchange.dotcorporation.com>
-References: <2D30722FBBDE6749973243F4F01BE984C6599A@dotexchange.dotcorporation.com>
-Message-ID: <20070922180305.GZ20058@aon.at>
+From: aldot at uclibc.org <aldot@uclibc.org>
+Date: Sat, 22 Sep 2007 11:19:36 -0700 (PDT)
+Subject: [Buildroot] svn commit: trunk/buildroot/target/device/x86/i386
+Message-ID: <20070922181936.CD49BA65E7@busybox.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Thu, Sep 20, 2007 at 12:16:50PM -0700, Kay McCormick wrote:
->Hi everyone,
->
-> 
->
->I've attempted to create a bootable linux ISO containing my buildroot
->environment.
->
->Thus far I have been unable to do so.  It seems to build and boot from
->the ISO, but it can't find the root.  Any tips for this?  I know I'm not
->providing a lot of information, I will try it again to see if I can be
->more detailed.  Right now I'm just hoping for some generalized "tips"
->from someone who has been through this experience.
+Author: aldot
+Date: 2007-09-22 11:19:35 -0700 (Sat, 22 Sep 2007)
+New Revision: 19946
 
-see docs/README
-and configure your kernel accordingly to include the proper filesystems
-(or build an initramfs that loads the desired filesystems).
+Log:
+- update i386 sample config a little bit
 
-HTH,
+
+Modified:
+   trunk/buildroot/target/device/x86/i386/linux26.config
+
+
+Changeset:
+Modified: trunk/buildroot/target/device/x86/i386/linux26.config
+===================================================================
+--- trunk/buildroot/target/device/x86/i386/linux26.config	2007-09-22 17:30:38 UTC (rev 19945)
++++ trunk/buildroot/target/device/x86/i386/linux26.config	2007-09-22 18:19:35 UTC (rev 19946)
+@@ -1327,6 +1327,7 @@
+ CONFIG_SENSORS_FSCPOS=m
+ CONFIG_SENSORS_GL518SM=m
+ CONFIG_SENSORS_GL520SM=m
++CONFIG_SENSORS_CORETEMP=m
+ CONFIG_SENSORS_IPMI=m
+ CONFIG_SENSORS_IT87=m
+ CONFIG_SENSORS_LM63=m
+@@ -1340,6 +1341,7 @@
+ CONFIG_SENSORS_LM90=m
+ CONFIG_SENSORS_LM92=m
+ CONFIG_SENSORS_MAX1619=m
++CONFIG_SENSORS_MAX6650=m
+ CONFIG_SENSORS_PC87360=m
+ CONFIG_SENSORS_PC87427=m
+ CONFIG_SENSORS_SIS5595=m
