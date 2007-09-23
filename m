@@ -1,7 +1,7 @@
 From: ulf at uclibc.org <ulf@uclibc.org>
-Date: Sat, 22 Sep 2007 21:11:00 -0700 (PDT)
-Subject: [Buildroot] svn commit: trunk/buildroot/package/diffutils
-Message-ID: <20070923041100.39038A688A@busybox.net>
+Date: Sun, 23 Sep 2007 02:52:04 -0700 (PDT)
+Subject: [Buildroot] svn commit: trunk/buildroot/package/lzo
+Message-ID: <20070923095204.4D3BAA6819@busybox.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -9,27 +9,26 @@ Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
 Author: ulf
-Date: 2007-09-22 21:10:59 -0700 (Sat, 22 Sep 2007)
-New Revision: 19954
+Date: 2007-09-23 02:52:03 -0700 (Sun, 23 Sep 2007)
+New Revision: 19955
 
 Log:
-Remove bad 'w' flag from rm in diffutils
+Fix library path in lzo
 
 Modified:
-   trunk/buildroot/package/diffutils/diffutils.mk
+   trunk/buildroot/package/lzo/lzo.mk
 
 
 Changeset:
-Modified: trunk/buildroot/package/diffutils/diffutils.mk
+Modified: trunk/buildroot/package/lzo/lzo.mk
 ===================================================================
---- trunk/buildroot/package/diffutils/diffutils.mk	2007-09-22 21:38:15 UTC (rev 19953)
-+++ trunk/buildroot/package/diffutils/diffutils.mk	2007-09-23 04:10:59 UTC (rev 19954)
-@@ -110,7 +110,7 @@
- ifneq ($(BR2_HAVE_MANPAGES),y)
- 	rm -rf $(TARGET_DIR)/usr/share/man
- endif
--	rm -rfw $(TARGET_DIR)/share/locale
-+	rm -rf $(TARGET_DIR)/share/locale
- 	rm -rf $(TARGET_DIR)/usr/share/doc
+--- trunk/buildroot/package/lzo/lzo.mk	2007-09-23 04:10:59 UTC (rev 19954)
++++ trunk/buildroot/package/lzo/lzo.mk	2007-09-23 09:52:03 UTC (rev 19955)
+@@ -48,6 +48,7 @@
  
- diffutils: uclibc $(TARGET_DIR)/$(DIFFUTILS_TARGET_BINARY)
+ $(STAGING_DIR)/usr/lib/liblzo.a: $(LZO_DIR)/src/liblzo.la
+ 	$(MAKE) CC="$(TARGET_CC)" DESTDIR=$(STAGING_DIR) -C $(LZO_DIR) install
++	$(SED) "s,^libdir=.*,libdir=\'$(STAGING_DIR)/usr/lib\',g" $(STAGING_DIR)/usr/lib/liblzo.la
+ 	touch -c $@
+ 
+ lzo: uclibc $(STAGING_DIR)/usr/lib/liblzo.a
