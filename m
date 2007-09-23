@@ -1,8 +1,8 @@
 From: bugs at busybox.net <bugs@busybox.net>
-Date: Sun, 23 Sep 2007 11:39:01 -0700
+Date: Sun, 23 Sep 2007 12:58:33 -0700
 Subject: [Buildroot] [buildroot 0001507]: Build fails for ARM920T,
 	c++ compiler/gcj build
-Message-ID: <64e13532d80a73121724619c68b8bf78@busybox.net>
+Message-ID: <78437bbe8fa73ff2d8a4bab5873091bb@bugs.uclibc.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -26,7 +26,7 @@ Priority:                   normal
 Status:                     assigned
 ====================================================================== 
 Date Submitted:             09-23-2007 09:56 PDT
-Last Modified:              09-23-2007 11:39 PDT
+Last Modified:              09-23-2007 12:58 PDT
 ====================================================================== 
 Summary:                    Build fails for ARM920T, c++ compiler/gcj build
 Description: 
@@ -89,6 +89,14 @@ I find this strange, since there is no crt1.asm in gcc
 except for the SH architecture.
 Did not have time to investigate further. 
 
+---------------------------------------------------------------------- 
+ APOLAUF - 09-23-07 12:58  
+---------------------------------------------------------------------- 
+So what can I do to get this to compile? I need gcj support or a JVM to run
+on my busybox build. And I don't have room to statically link GCJ with
+glibc (47MB for a  hello world app). Is there any toolchain that I can use
+to build gcj cross-compiling support with static linking against uClibc? 
+
 Issue History 
 Date Modified   Username       Field                    Change               
 ====================================================================== 
@@ -97,4 +105,5 @@ Date Modified   Username       Field                    Change
 09-23-07 09:56  APOLAUF        Assigned To               => buildroot       
 09-23-07 09:58  APOLAUF        Note Added: 0002766                          
 09-23-07 11:39  UlfSamuelsson  Note Added: 0002767                          
+09-23-07 12:58  APOLAUF        Note Added: 0002769                          
 ======================================================================
