@@ -1,37 +1,35 @@
-From: Roderick Taylor <myopiate@gmail.com>
-Date: Sun, 23 Sep 2007 13:30:43 +1000
-Subject: [Buildroot] this commit breaks x86_64 toolchain builds
-In-Reply-To: <20070921093101.GD24467@aon.at>
-References: <e83232070709060559u27a12f78u1ddb96d7c4d7bc20@mail.gmail.com>
-	<20070907131447.GD17733@aon.at>
-	<e83232070709101445l7db6927dx8a166ef8e9db8572@mail.gmail.com>
-	<20070911183533.GD20058@aon.at>
-	<e83232070709120554h3d995dfdwbc055e701b271f80@mail.gmail.com>
-	<20070921093101.GD24467@aon.at>
-Message-ID: <e83232070709222030v4f3a63bbp682ce0a711745730@mail.gmail.com>
+From: ulf at uclibc.org <ulf@uclibc.org>
+Date: Sat, 22 Sep 2007 21:11:00 -0700 (PDT)
+Subject: [Buildroot] svn commit: trunk/buildroot/package/diffutils
+Message-ID: <20070923041100.39038A688A@busybox.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-> We will have to retain the lib/ vs. lib64/ layout for multilib anyway.
+Author: ulf
+Date: 2007-09-22 21:10:59 -0700 (Sat, 22 Sep 2007)
+New Revision: 19954
 
-I dont' use Debian but from what I've read when investigating the
-original problem, it doesn't use this directory scheme, it uses lib
-and lib32. Thats how I come across this patch.  I'm not sure how
-changing multilib directories will break support for it.  I'd say it
-would only be broken if something that is built later on in buildroot
-was hardcoded to use the lib64 directory, or you wanted to use a
-32-bit proprietary program that expects libraries are in lib.  But
-which is broken?  The directory structure or the thing that depends
-upon it?
+Log:
+Remove bad 'w' flag from rm in diffutils
 
-http://www.redhat.com/magazine/009jul05/features/multilib/
+Modified:
+   trunk/buildroot/package/diffutils/diffutils.mk
 
-> to). Look at BR2_MULTILIB.
 
-You mean BR2_ENABLE_MULTILIB.
-
-x86_64 builds of GCC-4.2.1 puts the 64-bit libraries into /lib64 even
-if you disable multilib.
+Changeset:
+Modified: trunk/buildroot/package/diffutils/diffutils.mk
+===================================================================
+--- trunk/buildroot/package/diffutils/diffutils.mk	2007-09-22 21:38:15 UTC (rev 19953)
++++ trunk/buildroot/package/diffutils/diffutils.mk	2007-09-23 04:10:59 UTC (rev 19954)
+@@ -110,7 +110,7 @@
+ ifneq ($(BR2_HAVE_MANPAGES),y)
+ 	rm -rf $(TARGET_DIR)/usr/share/man
+ endif
+-	rm -rfw $(TARGET_DIR)/share/locale
++	rm -rf $(TARGET_DIR)/share/locale
+ 	rm -rf $(TARGET_DIR)/usr/share/doc
+ 
+ diffutils: uclibc $(TARGET_DIR)/$(DIFFUTILS_TARGET_BINARY)
