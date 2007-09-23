@@ -1,118 +1,289 @@
-From: bugs at busybox.net <bugs@busybox.net>
-Date: Sun, 23 Sep 2007 13:21:31 -0700
-Subject: [Buildroot] [buildroot 0001507]: Build fails for ARM920T,
-	c++ compiler/gcj build
-Message-ID: <25f37245b015c4714761437acb9bd204@busybox.net>
+From: aldot at uclibc.org <aldot@uclibc.org>
+Date: Sun, 23 Sep 2007 13:28:54 -0700 (PDT)
+Subject: [Buildroot] svn commit: trunk/buildroot/package/config
+Message-ID: <20070923202854.3B44530046@busybox.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+Author: aldot
+Date: 2007-09-23 13:28:53 -0700 (Sun, 23 Sep 2007)
+New Revision: 19978
 
-A NOTE has been added to this issue. 
-====================================================================== 
-http://busybox.net/bugs/view.php?id=1507 
-====================================================================== 
-Reported By:                APOLAUF
-Assigned To:                buildroot
-====================================================================== 
-Project:                    buildroot
-Issue ID:                   1507
-Category:                   Architecture Specific
-Reproducibility:            always
-Severity:                   major
-Priority:                   normal
-Status:                     assigned
-====================================================================== 
-Date Submitted:             09-23-2007 09:56 PDT
-Last Modified:              09-23-2007 13:21 PDT
-====================================================================== 
-Summary:                    Build fails for ARM920T, c++ compiler/gcj build
-Description: 
-When attempting to build toolchain for ARM920t, with "Build/install c++
-compiler and libsdc++" option and "build/install java compiler and
-libgcj", the following error shows up no matter what distro I use (Fedora,
-Debian, Gentoo, etc.):
+Log:
+- thinking loud about auto-generating dependencies for make(1)
+  Don't use this, it doesn't work yet. Thoughs welcome.
+  Like: We should probably use the sym->text and not fiddle with the name since
+  the name looses information ('_' != '-' in host-fakeroot). This would not
+  be too robust, i fear, since the name can contain additional, arbitrary info.
+  Also, the real 'depends' are a little bit ugly in kconfig. There doesn't seem
+  to be a nice property that holds reverse deps that are only contain selected
+  symbols.
+  Thoughts?
 
 
-)
-# Now for the ugly 3.3.x soft float hack... 
-#
-#
-# Ok... that's enough of that. ft
-mkdir -p /root/buildroot/project_build_arm/uclibc/root/usr/lib
-/root/buildroot/pro ject_build_arm/uclibc/root/usr/sbin
-touch /root/buildroot/toolchain_build_arm/gcc-4.2.1-final/.installed 
-# These are in /lib, so ...
-rm -rf /root/bui
-Idroot/project_build_arm/uclibc/root/usr/lib/libgcc_s*.so* 
-cp -dpf
-/root/buildroot/build_arm/staging_dir/usr/arm-linux-uclibc/lib/libgcc_s*
-\
-/root/buildroot/project_build_arm/uclibc/root/lib/ 
-cp -dpf
-/root/buildroot/build_arm/staging_dir/usr/arm-linux-uclibc/lib/libstdc++
-/root/buildroot/project_build_arm/uclibc/root/usr/lib/
-cp : cannot stat
-?/root/buildroot/build_arm/staging_dir/usr/arm-linux-uclibc/lib/l
-ibstdc++.so*? : Mo such file or directory
-make : ***
-[/root/buildroot/toolchain_build_arm/gcc-4.2.1-final/.libs_installed]
-Error 1
+Modified:
+   trunk/buildroot/package/config/kconfig-to-buildroot2.patch
+   trunk/buildroot/package/config/util.c
 
-I must have Java support on my toolchain, and this failure to compile
-makes things very frustrating.  I saw something similar on these boards,
-with the response being ~"fix your headers.", and stating that Gentoo had
-correct headers. I'm using Gentoo, and it's apparently not helping. Please
-help. Thanks,
--Adrian
-====================================================================== 
 
----------------------------------------------------------------------- 
- APOLAUF - 09-23-07 09:58  
----------------------------------------------------------------------- 
-the "ft" after "#Ok... that's enough of that" is my OCR software
-incorrectly identifying the # symbol. I'm running this in a VM, and didn't
-feel like piping the output over, so there may be a recognition error or
-two. I took care to correct the rest of the output. 
+Changeset:
+Modified: trunk/buildroot/package/config/kconfig-to-buildroot2.patch
+===================================================================
+--- trunk/buildroot/package/config/kconfig-to-buildroot2.patch	2007-09-23 18:34:49 UTC (rev 19977)
++++ trunk/buildroot/package/config/kconfig-to-buildroot2.patch	2007-09-23 20:28:53 UTC (rev 19978)
+@@ -1303,3 +1303,127 @@
+  
+  	return name ? name : ".config";
+  }
++Index: util.c
++===================================================================
++--- kernel-config/util.c	(revision 19969)
+++++ config/util.c	(working copy)
++@@ -26,6 +26,109 @@ struct file *file_lookup(const char *nam
++ 	return file;
++ }
++ 
+++static char* br2_symbol_printer(const char * const in)
+++{
+++	ssize_t i, j, len = strlen(in);
+++	char *ret;
+++	if (len < 1)
+++		return NULL;
+++	ret = malloc(len);
+++	if (!ret) {
+++		printf("Out of memory!");
+++		exit(1);
+++	}
+++	memset(ret, 0, len);
+++	i = j = 0;
+++	if (strncmp("BR2_", in, 4) == 0)
+++		i += 4;
+++	if (strncmp("PACKAGE_", in + i, 8) == 0)
+++		i += 8;
+++	else if (strncmp("TARGET_", in + i, 7) == 0)
+++		i += 7;
+++	while (i <= len)
+++		ret[j++] = tolower(in[i++]);
+++	return ret;
+++}
+++
+++/* write dependencies of the infividual config-symbols */
+++static int write_make_deps(const char *name)
+++{
+++	struct menu *menu;
+++	struct symbol *sym;
+++	struct property *prop, *p;
+++	unsigned done;
+++	const char * const name_tmp = "..make.deps.tmp";
+++	FILE *out;
+++	if (!name)
+++		name = ".auto.deps";
+++	out = fopen(name_tmp, "w");
+++	if (!out)
+++		return 1;
+++	fprintf(out, "# ATTENTION! This does not handle 'depends', just 'select'! \n"
+++		"# See package/config/util.c write_make_deps()\n#\n");
+++	menu = &rootmenu;//rootmenu.list;
+++	while (menu) {
+++		sym = menu->sym;
+++		if (!sym) {
+++			if (!menu_is_visible(menu))
+++				goto next;
+++		} else if (!(sym->flags & SYMBOL_CHOICE)) {
+++			sym_calc_value(sym);
+++			if (sym->type == S_BOOLEAN
+++			    && sym_get_tristate_value(sym) != no) {
+++			    done = 0;
+++			    for_all_prompts(sym, prop) {
+++			        struct expr *e;
+++//printf("\nname=%s\n", sym->name);
+++			        for_all_properties(sym, p, P_SELECT) {
+++				    e = p->expr;
+++				    if (e && e->left.sym->name) {
+++				        if (!done) {
+++					    fprintf(out, "%s:", br2_symbol_printer(sym->name));
+++					    done = 1;
+++					}
+++//printf("SELECTS %s\n",e->left.sym->name);
+++					fprintf(out, " %s",br2_symbol_printer(e->left.sym->name));
+++				    }
+++				}
+++				if (done)
+++				    fprintf(out, "\n");
+++#if 0
+++				e = sym->rev_dep.expr;
+++				if (e && e->type == E_SYMBOL
+++					&& e->left.sym->name) {
+++				    fprintf(out, "%s: %s", br2_symbol_printer(e->left.sym->name),
+++						br2_symbol_printer(sym->name));
+++printf("%s is Selected BY: %s", sym->name, e->left.sym->name);
+++				}
+++#endif
+++			    }
+++			}
+++		}
+++next:
+++		if (menu->list) {
+++			menu = menu->list;
+++			continue;
+++		}
+++		if (menu->next)
+++			menu = menu->next;
+++		else while ((menu = menu->parent)) {
+++			if (menu->next) {
+++				menu = menu->next;
+++				break;
+++			}
+++		}
+++	}
+++	fclose(out);
+++	rename(name_tmp, name);
+++	printf(_("#\n"
+++		 "# make dependencies written to %s\n"
+++		 "# ATTENTION buildroot devels!\n"
+++		 "# See top of this file before playing with this auto-preprequisites!\n"
+++		 "#\n"), name);
+++	return 0;
+++}
+++
++ /* write a dependency file as used by kbuild to track dependencies */
++ int file_write_dep(const char *name)
++ {
++@@ -49,7 +152,8 @@ int file_write_dep(const char *name)
++ 		     "$(deps_config): ;\n");
++ 	fclose(out);
++ 	rename("..config.tmp", name);
++-	return 0;
+++
+++	return write_make_deps(NULL);
++ }
++ 
++ 
 
----------------------------------------------------------------------- 
- UlfSamuelsson - 09-23-07 11:39  
----------------------------------------------------------------------- 
-I have seen the same thing for the AVR32 build.
-I traced it back to "configure" not beeing able to link.
-This was because "crt1.o" was not found, when linking.
-That disabled creating the *.so files.
-
-I find this strange, since there is no crt1.asm in gcc
-except for the SH architecture.
-Did not have time to investigate further. 
-
----------------------------------------------------------------------- 
- APOLAUF - 09-23-07 12:58  
----------------------------------------------------------------------- 
-So what can I do to get this to compile? I need gcj support or a JVM to run
-on my busybox build. And I don't have room to statically link GCJ with
-glibc (47MB for a  hello world app). Is there any toolchain that I can use
-to build gcj cross-compiling support with static linking against uClibc? 
-
----------------------------------------------------------------------- 
- bernhardf - 09-23-07 13:21  
----------------------------------------------------------------------- 
-I only tested C, fortran, c++ and those work as expected as far as i'm
-concerned.
-I don't do java (never did and will most likely never do), so please feel
-free to send in patches. 
-
-Issue History 
-Date Modified   Username       Field                    Change               
-====================================================================== 
-09-23-07 09:56  APOLAUF        New Issue                                    
-09-23-07 09:56  APOLAUF        Status                   new => assigned     
-09-23-07 09:56  APOLAUF        Assigned To               => buildroot       
-09-23-07 09:58  APOLAUF        Note Added: 0002766                          
-09-23-07 11:39  UlfSamuelsson  Note Added: 0002767                          
-09-23-07 12:58  APOLAUF        Note Added: 0002769                          
-09-23-07 13:21  bernhardf      Note Added: 0002770                          
-======================================================================
+Modified: trunk/buildroot/package/config/util.c
+===================================================================
+--- trunk/buildroot/package/config/util.c	2007-09-23 18:34:49 UTC (rev 19977)
++++ trunk/buildroot/package/config/util.c	2007-09-23 20:28:53 UTC (rev 19978)
+@@ -26,6 +26,109 @@
+ 	return file;
+ }
+ 
++static char* br2_symbol_printer(const char * const in)
++{
++	ssize_t i, j, len = strlen(in);
++	char *ret;
++	if (len < 1)
++		return NULL;
++	ret = malloc(len);
++	if (!ret) {
++		printf("Out of memory!");
++		exit(1);
++	}
++	memset(ret, 0, len);
++	i = j = 0;
++	if (strncmp("BR2_", in, 4) == 0)
++		i += 4;
++	if (strncmp("PACKAGE_", in + i, 8) == 0)
++		i += 8;
++	else if (strncmp("TARGET_", in + i, 7) == 0)
++		i += 7;
++	while (i <= len)
++		ret[j++] = tolower(in[i++]);
++	return ret;
++}
++
++/* write dependencies of the infividual config-symbols */
++static int write_make_deps(const char *name)
++{
++	struct menu *menu;
++	struct symbol *sym;
++	struct property *prop, *p;
++	unsigned done;
++	const char * const name_tmp = "..make.deps.tmp";
++	FILE *out;
++	if (!name)
++		name = ".auto.deps";
++	out = fopen(name_tmp, "w");
++	if (!out)
++		return 1;
++	fprintf(out, "# ATTENTION! This does not handle 'depends', just 'select'! \n"
++		"# See package/config/util.c write_make_deps()\n#\n");
++	menu = &rootmenu;//rootmenu.list;
++	while (menu) {
++		sym = menu->sym;
++		if (!sym) {
++			if (!menu_is_visible(menu))
++				goto next;
++		} else if (!(sym->flags & SYMBOL_CHOICE)) {
++			sym_calc_value(sym);
++			if (sym->type == S_BOOLEAN
++			    && sym_get_tristate_value(sym) != no) {
++			    done = 0;
++			    for_all_prompts(sym, prop) {
++			        struct expr *e;
++//printf("\nname=%s\n", sym->name);
++			        for_all_properties(sym, p, P_SELECT) {
++				    e = p->expr;
++				    if (e && e->left.sym->name) {
++				        if (!done) {
++					    fprintf(out, "%s:", br2_symbol_printer(sym->name));
++					    done = 1;
++					}
++//printf("SELECTS %s\n",e->left.sym->name);
++					fprintf(out, " %s",br2_symbol_printer(e->left.sym->name));
++				    }
++				}
++				if (done)
++				    fprintf(out, "\n");
++#if 0
++				e = sym->rev_dep.expr;
++				if (e && e->type == E_SYMBOL
++					&& e->left.sym->name) {
++				    fprintf(out, "%s: %s", br2_symbol_printer(e->left.sym->name),
++						br2_symbol_printer(sym->name));
++printf("%s is Selected BY: %s", sym->name, e->left.sym->name);
++				}
++#endif
++			    }
++			}
++		}
++next:
++		if (menu->list) {
++			menu = menu->list;
++			continue;
++		}
++		if (menu->next)
++			menu = menu->next;
++		else while ((menu = menu->parent)) {
++			if (menu->next) {
++				menu = menu->next;
++				break;
++			}
++		}
++	}
++	fclose(out);
++	rename(name_tmp, name);
++	printf(_("#\n"
++		 "# make dependencies written to %s\n"
++		 "# ATTENTION buildroot devels!\n"
++		 "# See top of this file before playing with this auto-preprequisites!\n"
++		 "#\n"), name);
++	return 0;
++}
++
+ /* write a dependency file as used by kbuild to track dependencies */
+ int file_write_dep(const char *name)
+ {
+@@ -49,7 +152,8 @@
+ 		     "$(deps_config): ;\n");
+ 	fclose(out);
+ 	rename("..config.tmp", name);
+-	return 0;
++
++	return write_make_deps(NULL);
+ }
+ 
+ 
