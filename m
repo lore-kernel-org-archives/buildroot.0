@@ -1,8 +1,8 @@
 From: bugs at busybox.net <bugs@busybox.net>
-Date: Sun, 23 Sep 2007 12:58:33 -0700
+Date: Sun, 23 Sep 2007 13:21:31 -0700
 Subject: [Buildroot] [buildroot 0001507]: Build fails for ARM920T,
 	c++ compiler/gcj build
-Message-ID: <78437bbe8fa73ff2d8a4bab5873091bb@bugs.uclibc.org>
+Message-ID: <25f37245b015c4714761437acb9bd204@busybox.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -26,7 +26,7 @@ Priority:                   normal
 Status:                     assigned
 ====================================================================== 
 Date Submitted:             09-23-2007 09:56 PDT
-Last Modified:              09-23-2007 12:58 PDT
+Last Modified:              09-23-2007 13:21 PDT
 ====================================================================== 
 Summary:                    Build fails for ARM920T, c++ compiler/gcj build
 Description: 
@@ -97,6 +97,14 @@ on my busybox build. And I don't have room to statically link GCJ with
 glibc (47MB for a  hello world app). Is there any toolchain that I can use
 to build gcj cross-compiling support with static linking against uClibc? 
 
+---------------------------------------------------------------------- 
+ bernhardf - 09-23-07 13:21  
+---------------------------------------------------------------------- 
+I only tested C, fortran, c++ and those work as expected as far as i'm
+concerned.
+I don't do java (never did and will most likely never do), so please feel
+free to send in patches. 
+
 Issue History 
 Date Modified   Username       Field                    Change               
 ====================================================================== 
@@ -106,4 +114,5 @@ Date Modified   Username       Field                    Change
 09-23-07 09:58  APOLAUF        Note Added: 0002766                          
 09-23-07 11:39  UlfSamuelsson  Note Added: 0002767                          
 09-23-07 12:58  APOLAUF        Note Added: 0002769                          
+09-23-07 13:21  bernhardf      Note Added: 0002770                          
 ======================================================================
