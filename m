@@ -1,7 +1,7 @@
 From: ulf at uclibc.org <ulf@uclibc.org>
-Date: Sun, 23 Sep 2007 07:21:40 -0700 (PDT)
-Subject: [Buildroot] svn commit: trunk/buildroot/package/dialog
-Message-ID: <20070923142140.D1DCB30059@busybox.net>
+Date: Sun, 23 Sep 2007 07:23:16 -0700 (PDT)
+Subject: [Buildroot] svn commit: trunk/buildroot/package/libxml2
+Message-ID: <20070923142316.263313009D@busybox.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -9,35 +9,46 @@ Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
 Author: ulf
-Date: 2007-09-23 07:21:39 -0700 (Sun, 23 Sep 2007)
-New Revision: 19971
+Date: 2007-09-23 07:23:16 -0700 (Sun, 23 Sep 2007)
+New Revision: 19972
 
 Log:
-Avoid repeated remake of dialog
+Cleanup libxml2 directory structure
 
 Modified:
-   trunk/buildroot/package/dialog/dialog.mk
+   trunk/buildroot/package/libxml2/libxml2.mk
 
 
 Changeset:
-Modified: trunk/buildroot/package/dialog/dialog.mk
+Modified: trunk/buildroot/package/libxml2/libxml2.mk
 ===================================================================
---- trunk/buildroot/package/dialog/dialog.mk	2007-09-23 14:12:58 UTC (rev 19970)
-+++ trunk/buildroot/package/dialog/dialog.mk	2007-09-23 14:21:39 UTC (rev 19971)
-@@ -13,7 +13,7 @@
- $(DL_DIR)/$(DIALOG_SOURCE):
- 	$(WGET) -P $(DL_DIR) $(DIALOG_SITE)/$(DIALOG_SOURCE)
+--- trunk/buildroot/package/libxml2/libxml2.mk	2007-09-23 14:21:39 UTC (rev 19971)
++++ trunk/buildroot/package/libxml2/libxml2.mk	2007-09-23 14:23:16 UTC (rev 19972)
+@@ -65,16 +65,23 @@
  
--$(DIALOG_DIR)/.source: $(DL_DIR)/$(DIALOG_SOURCE) $(DL_DIR)/$(DIALOG_PATCH1)
-+$(DIALOG_DIR)/.source: $(DL_DIR)/$(DIALOG_SOURCE)
- 	$(ZCAT) $(DL_DIR)/$(DIALOG_SOURCE) | tar -C $(BUILD_DIR) $(TAR_OPTIONS) -
- 	touch $@
+ libxml2: uclibc $(TARGET_DIR)/usr/lib/libxml2.so libxml2-headers
  
-@@ -32,6 +32,7 @@
- 
- $(DIALOG_DIR)/$(DIALOG_BINARY): $(DIALOG_DIR)/.configured
- 	$(MAKE) $(TARGET_CONFIGURE_OPTS) -C $(DIALOG_DIR)
+-$(STAGING_DIR)/usr/include/libxml: $(TARGET_DIR)/usr/lib/libxml2.so
++$(STAGING_DIR)/usr/include/libxml2: $(TARGET_DIR)/usr/lib/libxml2.so
+ 	cp -af $(LIBXML2_DIR)/include/libxml $(STAGING_DIR)/usr/include/libxml2
 +	touch -c $@
  
- $(TARGET_DIR)/$(DIALOG_TARGET_BINARY): $(DIALOG_DIR)/$(DIALOG_BINARY)
- 	$(MAKE) prefix=$(TARGET_DIR)/usr \
+ $(TARGET_DIR)/usr/include/libxml2: libxml2-headers
+-	cp -af $(LIBXML2_DIR)/include/libxml $(TARGET_DIR)/usr/include/libxml2
++	cp -af $(LIBXML2_DIR)/usr/include/libxml2 $(TARGET_DIR)/usr/include/libxml2
++	touch -c $@
+ 
++$(TARGET_DIR)/usr/include/libxml: libxml2-headers
++	ln -s libxml2/libxml $(LIBXML2_DIR)/usr/include/libxml
++	touch -c $@
+ 
+-libxml2-headers: $(STAGING_DIR)/usr/include/libxml
++libxml2-headers: $(STAGING_DIR)/usr/include/libxml2
+ 
+-libxml2-target-headers: $(TARGET_DIR)/usr/include/libxml2 $(TARGET_DIR)/usr/lib/libxml2.a
++libxml2-target-headers: $(TARGET_DIR)/usr/include/libxml2 \
++	$(TARGET_DIR)/usr/include/libxml2 \
++	$(TARGET_DIR)/usr/lib/libxml2.a
+ 
+ libxml2-source: $(DL_DIR)/$(LIBXML2_SOURCE)
+ 
