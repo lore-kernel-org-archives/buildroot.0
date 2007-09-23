@@ -1,60 +1,55 @@
-From: Adam Hawes <adam@infocab.com.au>
-Date: Mon, 24 Sep 2007 08:29:04 +0930
-Subject: [Buildroot] Buildroot and perforce.
-In-Reply-To: <406A31B117F2734987636D6CCC93EE3CB05B69@ehost011-3.exch011.intermedia.net>
-References: <406A31B117F2734987636D6CCC93EE3CB05B69@ehost011-3.exch011.intermedia.net>
-Message-ID: <1190588344.4299.12.camel@cyclops.infocab.com.au>
+From: ulf at uclibc.org <ulf@uclibc.org>
+Date: Sun, 23 Sep 2007 16:23:54 -0700 (PDT)
+Subject: [Buildroot] svn commit: trunk/buildroot/package/samba
+Message-ID: <20070923232354.4B73F30046@busybox.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+Author: ulf
+Date: 2007-09-23 16:23:52 -0700 (Sun, 23 Sep 2007)
+New Revision: 19982
 
-> 
-> > > this is not important). I don't want to put buildroot itself since
-> it
-> 
-> > > doesn't have all necessary files - they get downloaded from
-> network
-> 
-> > > during configuration process - and I cannot risk that approach -
-> what if
-> 
-> > > some package changed or is not there?
+Log:
+Bump SAMBA version to 3.0.26a, 3.0.25b has moved
 
-I keep a tarball of the buildroot revisions that I want in my SVN
-repository.  I also keep the dl/ directory that buildroot downloads in
-the svn separately from the tarball.  It's a messy approach but at the
-end of the day it works OK for me and allows me to easily redistribute
-the source to the OSS components by just pointing at my SVN and saying
-"grab revision 12345".  You just have to remember to check the dl/
-directory for new files as you change or upgrade Buildroot (I use svn
-status for that).
+Modified:
+   trunk/buildroot/package/samba/samba.mk
 
-My directory tree in svn looks something like:
 
-+ /
-|
-+---+ /buildroot_dl
-|   |--- /buildroot_dl/*
-|
-+---+ /buildroot_tar
-|   |--- /buildroot_tar/buildroot_19797.tar.bz2
-|
-+---- /Makefile
-
-My makefile handles creating a temporary build directory, untarring
-the .bz2 file into the build directory, linking $BUILD_DIR/buildroot/dl
-to /buildroot_dl, tweaking a few things (default skeleton, Qtopia
-config, Linux config, etc) and then building everything.  We're using a
-smallish CF on an X86 target so my Makefile even builds down to a full
-CF image that contains a /boot partition, kernel, initramfs and grub.
-
-Again, it's not neat but it gives me heaps of control of the stuff
-outside of Buildroot's jurisdiction without having to patch the vanilla
-buildroot to do it all.  It even lets me have buildroot as part of my
-SVN so I can keep it all tied neatly together.
-
-Cheers,
-A
+Changeset:
+Modified: trunk/buildroot/package/samba/samba.mk
+===================================================================
+--- trunk/buildroot/package/samba/samba.mk	2007-09-23 22:08:51 UTC (rev 19981)
++++ trunk/buildroot/package/samba/samba.mk	2007-09-23 23:23:52 UTC (rev 19982)
+@@ -3,7 +3,7 @@
+ # samba
+ #
+ #############################################################
+-SAMBA_VERSION:=3.0.25b
++SAMBA_VERSION:=3.0.26a
+ SAMBA_SOURCE:=samba-$(SAMBA_VERSION).tar.gz
+ SAMBA_SITE:=ftp://us4.samba.org/pub/samba/
+ SAMBA_DIR:=$(BUILD_DIR)/samba-$(SAMBA_VERSION)/source
+@@ -14,8 +14,6 @@
+ $(DL_DIR)/$(SAMBA_SOURCE):
+ 	$(WGET) -P $(DL_DIR) $(SAMBA_SITE)/$(SAMBA_SOURCE)
+ 
+-samba-source: $(DL_DIR)/$(SAMBA_SOURCE)
+-
+ $(SAMBA_DIR)/.unpacked: $(DL_DIR)/$(SAMBA_SOURCE)
+ 	$(SAMBA_CAT) $(DL_DIR)/$(SAMBA_SOURCE) | tar -C $(BUILD_DIR) $(TAR_OPTIONS) -
+ 	toolchain/patch-kernel.sh `dirname $(SAMBA_DIR)` package/samba/ samba\*.patch
+@@ -107,6 +105,10 @@
+ 
+ samba: uclibc $(TARGET_DIR)/$(SAMBA_TARGET_BINARY)
+ 
++samba-source: $(DL_DIR)/$(SAMBA_SOURCE)
++
++samba-unpacked: $(SAMBA_DIR)/.unpacked
++
+ samba-clean:
+ 	rm -f $(TARGET_DIR)/$(SAMBA_TARGET_BINARY)
+ 	for file in $(SAMBA_TARGETS_y); do \
