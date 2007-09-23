@@ -1,7 +1,7 @@
 From: ulf at uclibc.org <ulf@uclibc.org>
-Date: Sun, 23 Sep 2007 02:55:17 -0700 (PDT)
-Subject: [Buildroot] svn commit: trunk/buildroot/package/freetype
-Message-ID: <20070923095517.D4BD83007D@busybox.net>
+Date: Sun, 23 Sep 2007 02:56:22 -0700 (PDT)
+Subject: [Buildroot] svn commit: trunk/buildroot/package/ipsec-tools
+Message-ID: <20070923095622.B34E530075@busybox.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -9,39 +9,35 @@ Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
 Author: ulf
-Date: 2007-09-23 02:55:17 -0700 (Sun, 23 Sep 2007)
-New Revision: 19958
+Date: 2007-09-23 02:56:21 -0700 (Sun, 23 Sep 2007)
+New Revision: 19959
 
 Log:
-Do not use $(STAGING_DIR)/include for freetype, for now
+Fix syntax error when using addprefix in ipsec-tools.mk
 
 Modified:
-   trunk/buildroot/package/freetype/freetype.mk
+   trunk/buildroot/package/ipsec-tools/ipsec-tools.mk
 
 
 Changeset:
-Modified: trunk/buildroot/package/freetype/freetype.mk
+Modified: trunk/buildroot/package/ipsec-tools/ipsec-tools.mk
 ===================================================================
---- trunk/buildroot/package/freetype/freetype.mk	2007-09-23 09:53:43 UTC (rev 19957)
-+++ trunk/buildroot/package/freetype/freetype.mk	2007-09-23 09:55:17 UTC (rev 19958)
-@@ -50,8 +50,9 @@
- $(STAGING_DIR)/usr/include/freetype:
- 	ln -sf ./freetype2/freetype $(STAGING_DIR)/usr/include/freetype
- 
--$(STAGING_DIR)/include/freetype:
--	ln -sf ../usr/include/freetype2/freetype $(STAGING_DIR)/include/freetype
-+#$(STAGING_DIR)/include/freetype:
-+#	mkdir -p $(STAGING_DIR)/include
-+#	ln -sf ../usr/include/freetype2/freetype $(STAGING_DIR)/include/freetype
- 
- $(STAGING_DIR)/lib/libfreetype.so: $(FREETYPE_DIR)/.compiled
- 	$(MAKE) DESTDIR=$(STAGING_DIR) -C $(FREETYPE_DIR) install
-@@ -96,7 +97,7 @@
- 
- freetype-source: $(DL_DIR)/$(FREETYPE_SOURCE)
- 
--freetype-links: $(STAGING_DIR)/usr/include/freetype $(STAGING_DIR)/include/freetype
-+freetype-links: $(STAGING_DIR)/usr/include/freetype # $(STAGING_DIR)/include/freetype
- 
- freetype-clean:
- 	$(MAKE) DESTDIR=$(TARGET_DIR) CC=$(TARGET_CC) -C $(FREETYPE_DIR) uninstall
+--- trunk/buildroot/package/ipsec-tools/ipsec-tools.mk	2007-09-23 09:55:17 UTC (rev 19958)
++++ trunk/buildroot/package/ipsec-tools/ipsec-tools.mk	2007-09-23 09:56:21 UTC (rev 19959)
+@@ -112,14 +112,14 @@
+ 	  $(TARGET_DIR)/$(IPSEC_TOOLS_TARGET_BINARY_RACOON) \
+ 	  $(TARGET_DIR)/$(IPSEC_TOOLS_TARGET_BINARY_RACOONCTL)
+ ifneq ($(BR2_HAVE_MANPAGES),y)
+-	rm -f $(addprefix $(TARGET_DIR)/usr/man/,
++	rm -f $(addprefix $(TARGET_DIR)/usr/man/, \
+ 		man3/ipsec_strerror.3 man3/ipsec_set_policy.3 \
+ 		man5/racoon.conf.5 \
+ 		man8/racoonctl.8 man8/racoon.8 \
+ 		man8/plainrsa-gen.8 man8/setkey.8)
+ endif
+ ifeq ($(strip $(BR2_PACKAGE_IPSEC_TOOLS_LIBS)), y)
+-	install -D $(addprefix $(IPSEC_TOOLS_DIR)/src/,
++	install -D $(addprefix $(IPSEC_TOOLS_DIR)/src/, \
+ 		libipsec/.libs/libipsec.a libipsec/.libs/libipsec.la \
+ 		racoon/.libs/libracoon.a racoon/.libs/libracoon.la) \
+ 		$(STAGING_DIR)/lib
