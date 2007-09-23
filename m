@@ -1,55 +1,54 @@
-From: ulf at uclibc.org <ulf@uclibc.org>
-Date: Sun, 23 Sep 2007 16:23:54 -0700 (PDT)
-Subject: [Buildroot] svn commit: trunk/buildroot/package/samba
-Message-ID: <20070923232354.4B73F30046@busybox.net>
+From: Adam Hawes <adam@infocab.com.au>
+Date: Mon, 24 Sep 2007 09:25:11 +0930
+Subject: [Buildroot] Qtopia4 Failure
+In-Reply-To: <1190563965.7015.21.camel@elrond.atmel.sweden>
+References: <1190563965.7015.21.camel@elrond.atmel.sweden>
+Message-ID: <1190591711.4299.17.camel@cyclops.infocab.com.au>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Author: ulf
-Date: 2007-09-23 16:23:52 -0700 (Sun, 23 Sep 2007)
-New Revision: 19982
+On Sun, 2007-09-23 at 18:12 +0200, Ulf Samuelsson wrote:
+> Anyone building qtopia?
+> I get (when compiling with gcc-4.2.1/binutils-2.18/uclibc-0.9.29):
+> 
+> 
+> arm-linux-g++ -c -pipe -g -g -fvisibility=hidden
+> -fvisibility-inlines-hidden -Wall -W -D_REENTRANT -fPIC -DQT_SHARED
+> -DTSLIBMOUSEHANDLER_DEBUG -DQT_BUILD_CORE_LIB -DQT_NO_CAST_TO_ASCII
+> -DQT_ASCII_CAST_WARNINGS -DQT3_SUPPORT -DQT_MOC_COMPAT
+> -D_LARGEFILE64_SOURCE -D_LARGEFILE_SOURCE
+> -I../../mkspecs/qws/linux-arm-g++ -I. -I../../include
+> -I../../include/QtCore -Iglobal -I.moc/debug-shared-emb-arm
+> -I.uic/debug-shared-emb-arm
+> -o .obj/debug-shared-emb-arm/qresource_iterator.o
+> io/qresource_iterator.cpp
+> io/qresource_iterator.cpp:46:66: error: macro "index" requires 2
+> arguments, but only 1 given
+> io/qresource_iterator.cpp: In constructor
+> ?QResourceFileEngineIterator::QResourceFileEngineIterator(QFlags<QDir::Filter>, const QStringList&)?:
+> io/qresource_iterator.cpp:47: error: expected `(' before ?{? token
+> make[2]: *** [.obj/debug-shared-emb-arm/qresource_iterator.o] Fel 1
+> 
 
-Log:
-Bump SAMBA version to 3.0.26a, 3.0.25b has moved
+Yup.  To quote Carmelo Amoroso (search the archives in the last month):
 
-Modified:
-   trunk/buildroot/package/samba/samba.mk
+"The problem is that you have uClibc configure with SUSv3_LEGACY_MACRO
+on that define index."
 
+I have attached a patch that fixes the problem in all the places that
+needs to be fixed (#undef index).  I need SUSv3 macros to build some
+other things so I didn't want to turn them off and fix other things.
 
-Changeset:
-Modified: trunk/buildroot/package/samba/samba.mk
-===================================================================
---- trunk/buildroot/package/samba/samba.mk	2007-09-23 22:08:51 UTC (rev 19981)
-+++ trunk/buildroot/package/samba/samba.mk	2007-09-23 23:23:52 UTC (rev 19982)
-@@ -3,7 +3,7 @@
- # samba
- #
- #############################################################
--SAMBA_VERSION:=3.0.25b
-+SAMBA_VERSION:=3.0.26a
- SAMBA_SOURCE:=samba-$(SAMBA_VERSION).tar.gz
- SAMBA_SITE:=ftp://us4.samba.org/pub/samba/
- SAMBA_DIR:=$(BUILD_DIR)/samba-$(SAMBA_VERSION)/source
-@@ -14,8 +14,6 @@
- $(DL_DIR)/$(SAMBA_SOURCE):
- 	$(WGET) -P $(DL_DIR) $(SAMBA_SITE)/$(SAMBA_SOURCE)
- 
--samba-source: $(DL_DIR)/$(SAMBA_SOURCE)
--
- $(SAMBA_DIR)/.unpacked: $(DL_DIR)/$(SAMBA_SOURCE)
- 	$(SAMBA_CAT) $(DL_DIR)/$(SAMBA_SOURCE) | tar -C $(BUILD_DIR) $(TAR_OPTIONS) -
- 	toolchain/patch-kernel.sh `dirname $(SAMBA_DIR)` package/samba/ samba\*.patch
-@@ -107,6 +105,10 @@
- 
- samba: uclibc $(TARGET_DIR)/$(SAMBA_TARGET_BINARY)
- 
-+samba-source: $(DL_DIR)/$(SAMBA_SOURCE)
-+
-+samba-unpacked: $(SAMBA_DIR)/.unpacked
-+
- samba-clean:
- 	rm -f $(TARGET_DIR)/$(SAMBA_TARGET_BINARY)
- 	for file in $(SAMBA_TARGETS_y); do \
+Cheers,
+A
+
+-------------- next part --------------
+A non-text attachment was scrubbed...
+Name: qtopia-4.3.1-buildroot_index.patch
+Type: text/x-patch
+Size: 7903 bytes
+Desc: not available
+Url : http://busybox.net/lists/buildroot/attachments/20070924/7e45ba53/attachment.bin 
