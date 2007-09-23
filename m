@@ -1,7 +1,7 @@
 From: ulf at uclibc.org <ulf@uclibc.org>
-Date: Sun, 23 Sep 2007 02:52:04 -0700 (PDT)
-Subject: [Buildroot] svn commit: trunk/buildroot/package/lzo
-Message-ID: <20070923095204.4D3BAA6819@busybox.net>
+Date: Sun, 23 Sep 2007 02:53:16 -0700 (PDT)
+Subject: [Buildroot] svn commit: trunk/buildroot/package/readline
+Message-ID: <20070923095316.924F330074@busybox.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -9,26 +9,26 @@ Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
 Author: ulf
-Date: 2007-09-23 02:52:03 -0700 (Sun, 23 Sep 2007)
-New Revision: 19955
+Date: 2007-09-23 02:53:12 -0700 (Sun, 23 Sep 2007)
+New Revision: 19956
 
 Log:
-Fix library path in lzo
+Build readline as shared lib
 
 Modified:
-   trunk/buildroot/package/lzo/lzo.mk
+   trunk/buildroot/package/readline/readline.mk
 
 
 Changeset:
-Modified: trunk/buildroot/package/lzo/lzo.mk
+Modified: trunk/buildroot/package/readline/readline.mk
 ===================================================================
---- trunk/buildroot/package/lzo/lzo.mk	2007-09-23 04:10:59 UTC (rev 19954)
-+++ trunk/buildroot/package/lzo/lzo.mk	2007-09-23 09:52:03 UTC (rev 19955)
-@@ -48,6 +48,7 @@
- 
- $(STAGING_DIR)/usr/lib/liblzo.a: $(LZO_DIR)/src/liblzo.la
- 	$(MAKE) CC="$(TARGET_CC)" DESTDIR=$(STAGING_DIR) -C $(LZO_DIR) install
-+	$(SED) "s,^libdir=.*,libdir=\'$(STAGING_DIR)/usr/lib\',g" $(STAGING_DIR)/usr/lib/liblzo.la
- 	touch -c $@
- 
- lzo: uclibc $(STAGING_DIR)/usr/lib/liblzo.a
+--- trunk/buildroot/package/readline/readline.mk	2007-09-23 09:52:03 UTC (rev 19955)
++++ trunk/buildroot/package/readline/readline.mk	2007-09-23 09:53:12 UTC (rev 19956)
+@@ -42,6 +42,7 @@
+ 		--sysconfdir=/etc \
+ 		--datadir=/usr/share \
+ 		--localstatedir=/var \
++		--with-shared \
+ 		--includedir=/usr/include \
+ 		--mandir=/usr/man \
+ 		--infodir=/usr/info \
