@@ -1,48 +1,38 @@
-From: Bernhard Fischer <rep.dot.nop@gmail.com>
-Date: Sun, 23 Sep 2007 13:19:10 +0200
-Subject: [Buildroot] svn commit: trunk/buildroot
-In-Reply-To: <20070923105715.49DFF30087@busybox.net>
-References: <20070923105715.49DFF30087@busybox.net>
-Message-ID: <20070923111910.GE20058@aon.at>
+From: ulf at uclibc.org <ulf@uclibc.org>
+Date: Sun, 23 Sep 2007 05:09:56 -0700 (PDT)
+Subject: [Buildroot] svn commit: trunk/buildroot/package/fbset
+Message-ID: <20070923120956.C34CFA688A@busybox.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Sun, Sep 23, 2007 at 03:57:15AM -0700, ulf at uclibc.org wrote:
->Author: ulf
->Date: 2007-09-23 03:57:15 -0700 (Sun, 23 Sep 2007)
->New Revision: 19964
->
->Log:
->fix error when doing 'make %_defconfig
->
->Modified:
->   trunk/buildroot/Makefile
->
->
->Changeset:
->Modified: trunk/buildroot/Makefile
->===================================================================
->--- trunk/buildroot/Makefile	2007-09-23 10:56:16 UTC (rev 19963)
->+++ trunk/buildroot/Makefile	2007-09-23 10:57:15 UTC (rev 19964)
->@@ -409,7 +409,7 @@
-> 
-> %_defconfig: $(CONFIG)/conf
-> 	cp $(shell find ./target/ -name $@) .config
->-	@$(CONFIG)/conf -o $(CONFIG_CONFIG_IN)
->+	- $(MAKE) oldconfig
+Author: ulf
+Date: 2007-09-23 05:09:54 -0700 (Sun, 23 Sep 2007)
+New Revision: 19965
 
-1) whitespace damaged
-2) erroneously removes '@'
-3) what error were you seeing?
+Log:
+Send correct args to fbset
 
-> 
-> help:
-> 	@echo 'Cleaning:'
+Modified:
+   trunk/buildroot/package/fbset/fbset.mk
 
-Please document the config copying in the help or remove it (I supposed
-folks should be able to call 'cp' themself).
-Oh and why do those live in project/* and not near the other
-config-related targets?
+
+Changeset:
+Modified: trunk/buildroot/package/fbset/fbset.mk
+===================================================================
+--- trunk/buildroot/package/fbset/fbset.mk	2007-09-23 10:57:15 UTC (rev 19964)
++++ trunk/buildroot/package/fbset/fbset.mk	2007-09-23 12:09:54 UTC (rev 19965)
+@@ -20,10 +20,7 @@
+ 	touch $@
+ 
+ $(FBSET_DIR)/$(FBSET_BINARY): $(FBSET_DIR)/.unpacked
+-	($(TARGET_CONFIGURE_OPTS) \
+-	 $(TARGET_CONFIGURE_ARGS) \
+-		$(MAKE) -C $(FBSET_DIR) CC=$(TARGET_CC) \
+-	)
++	$(MAKE) $(TARGET_CONFIGURE_OPTS) -C $(FBSET_DIR)
+ 	touch -c $@
+ 
+ $(TARGET_DIR)/$(FBSET_TARGET_BINARY): $(FBSET_DIR)/$(FBSET_BINARY)
