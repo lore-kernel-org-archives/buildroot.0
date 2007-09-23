@@ -1,8 +1,8 @@
 From: bugs at busybox.net <bugs@busybox.net>
-Date: Sun, 23 Sep 2007 09:56:52 -0700
+Date: Sun, 23 Sep 2007 09:58:21 -0700
 Subject: [Buildroot] [buildroot 0001507]: Build fails for ARM920T,
 	c++ compiler/gcj build
-Message-ID: <fdf0ec5be06bc4e21d8d0c5c80174230@busybox.net>
+Message-ID: <1c04a338f9b742c833f117ad7f34d50e@busybox.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -10,7 +10,7 @@ Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
 
-The following issue has been SUBMITTED. 
+A NOTE has been added to this issue. 
 ====================================================================== 
 http://busybox.net/bugs/view.php?id=1507 
 ====================================================================== 
@@ -26,7 +26,7 @@ Priority:                   normal
 Status:                     assigned
 ====================================================================== 
 Date Submitted:             09-23-2007 09:56 PDT
-Last Modified:              09-23-2007 09:56 PDT
+Last Modified:              09-23-2007 09:58 PDT
 ====================================================================== 
 Summary:                    Build fails for ARM920T, c++ compiler/gcj build
 Description: 
@@ -69,10 +69,19 @@ help. Thanks,
 -Adrian
 ====================================================================== 
 
+---------------------------------------------------------------------- 
+ APOLAUF - 09-23-07 09:58  
+---------------------------------------------------------------------- 
+the "ft" after "#Ok... that's enough of that" is my OCR software
+incorrectly identifying the # symbol. I'm running this in a VM, and didn't
+feel like piping the output over, so there may be a recognition error or
+two. I took care to correct the rest of the output. 
+
 Issue History 
 Date Modified   Username       Field                    Change               
 ====================================================================== 
 09-23-07 09:56  APOLAUF        New Issue                                    
 09-23-07 09:56  APOLAUF        Status                   new => assigned     
 09-23-07 09:56  APOLAUF        Assigned To               => buildroot       
+09-23-07 09:58  APOLAUF        Note Added: 0002766                          
 ======================================================================
