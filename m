@@ -1,7 +1,7 @@
 From: ulf at uclibc.org <ulf@uclibc.org>
-Date: Sun, 23 Sep 2007 05:09:56 -0700 (PDT)
-Subject: [Buildroot] svn commit: trunk/buildroot/package/fbset
-Message-ID: <20070923120956.C34CFA688A@busybox.net>
+Date: Sun, 23 Sep 2007 05:12:23 -0700 (PDT)
+Subject: [Buildroot] svn commit: trunk/buildroot/package/alsa-lib
+Message-ID: <20070923121223.5499030091@busybox.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -9,30 +9,27 @@ Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
 Author: ulf
-Date: 2007-09-23 05:09:54 -0700 (Sun, 23 Sep 2007)
-New Revision: 19965
+Date: 2007-09-23 05:12:22 -0700 (Sun, 23 Sep 2007)
+New Revision: 19966
 
 Log:
-Send correct args to fbset
+Strip files the correct alsa-lib subdirectory
 
 Modified:
-   trunk/buildroot/package/fbset/fbset.mk
+   trunk/buildroot/package/alsa-lib/alsa-lib.mk
 
 
 Changeset:
-Modified: trunk/buildroot/package/fbset/fbset.mk
+Modified: trunk/buildroot/package/alsa-lib/alsa-lib.mk
 ===================================================================
---- trunk/buildroot/package/fbset/fbset.mk	2007-09-23 10:57:15 UTC (rev 19964)
-+++ trunk/buildroot/package/fbset/fbset.mk	2007-09-23 12:09:54 UTC (rev 19965)
-@@ -20,10 +20,7 @@
- 	touch $@
- 
- $(FBSET_DIR)/$(FBSET_BINARY): $(FBSET_DIR)/.unpacked
--	($(TARGET_CONFIGURE_OPTS) \
--	 $(TARGET_CONFIGURE_ARGS) \
--		$(MAKE) -C $(FBSET_DIR) CC=$(TARGET_CC) \
--	)
-+	$(MAKE) $(TARGET_CONFIGURE_OPTS) -C $(FBSET_DIR)
+--- trunk/buildroot/package/alsa-lib/alsa-lib.mk	2007-09-23 12:09:54 UTC (rev 19965)
++++ trunk/buildroot/package/alsa-lib/alsa-lib.mk	2007-09-23 12:12:22 UTC (rev 19966)
+@@ -53,7 +53,7 @@
+ 	cp -rdpf $(STAGING_DIR)/usr/share/alsa/* $(TARGET_DIR)/usr/share/alsa/
+ 	cp -rdpf $(STAGING_DIR)/usr/lib/alsa-lib/* $(TARGET_DIR)/usr/lib/alsa-lib/
+ 	-$(STRIP) $(STRIP_STRIP_UNNEEDED) $(TARGET_DIR)/usr/lib/libasound.so*
+-	-$(STRIP) $(STRIP_STRIP_UNNEEDED) $(TARGET_DIR)/usr/lib/alsa-lib/*.so
++	-$(STRIP) $(STRIP_STRIP_UNNEEDED) $(TARGET_DIR)/usr/lib/alsa-lib/smixer/*.so
  	touch -c $@
  
- $(TARGET_DIR)/$(FBSET_TARGET_BINARY): $(FBSET_DIR)/$(FBSET_BINARY)
+ alsa-lib: uclibc $(TARGET_DIR)/$(ALSA_LIB_TARGET_BINARY)
