@@ -1,57 +1,43 @@
-From: aldot at uclibc.org <aldot@uclibc.org>
-Date: Sun, 23 Sep 2007 07:12:59 -0700 (PDT)
-Subject: [Buildroot] svn commit: trunk/buildroot/package/config
-Message-ID: <20070923141259.2E51730092@busybox.net>
+From: ulf at uclibc.org <ulf@uclibc.org>
+Date: Sun, 23 Sep 2007 07:21:40 -0700 (PDT)
+Subject: [Buildroot] svn commit: trunk/buildroot/package/dialog
+Message-ID: <20070923142140.D1DCB30059@busybox.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Author: aldot
-Date: 2007-09-23 07:12:58 -0700 (Sun, 23 Sep 2007)
-New Revision: 19970
+Author: ulf
+Date: 2007-09-23 07:21:39 -0700 (Sun, 23 Sep 2007)
+New Revision: 19971
 
 Log:
-- search env for BUILDROOT_CONFIG for use as a config file; defaults to .config
-
+Avoid repeated remake of dialog
 
 Modified:
-   trunk/buildroot/package/config/confdata.c
-   trunk/buildroot/package/config/kconfig-to-buildroot2.patch
+   trunk/buildroot/package/dialog/dialog.mk
 
 
 Changeset:
-Modified: trunk/buildroot/package/config/confdata.c
+Modified: trunk/buildroot/package/dialog/dialog.mk
 ===================================================================
---- trunk/buildroot/package/config/confdata.c	2007-09-23 14:06:59 UTC (rev 19969)
-+++ trunk/buildroot/package/config/confdata.c	2007-09-23 14:12:58 UTC (rev 19970)
-@@ -37,7 +37,7 @@
+--- trunk/buildroot/package/dialog/dialog.mk	2007-09-23 14:12:58 UTC (rev 19970)
++++ trunk/buildroot/package/dialog/dialog.mk	2007-09-23 14:21:39 UTC (rev 19971)
+@@ -13,7 +13,7 @@
+ $(DL_DIR)/$(DIALOG_SOURCE):
+ 	$(WGET) -P $(DL_DIR) $(DIALOG_SITE)/$(DIALOG_SOURCE)
  
- const char *conf_get_configname(void)
- {
--	char *name = getenv("KCONFIG_CONFIG");
-+	char *name = getenv("BUILDROOT_CONFIG");
+-$(DIALOG_DIR)/.source: $(DL_DIR)/$(DIALOG_SOURCE) $(DL_DIR)/$(DIALOG_PATCH1)
++$(DIALOG_DIR)/.source: $(DL_DIR)/$(DIALOG_SOURCE)
+ 	$(ZCAT) $(DL_DIR)/$(DIALOG_SOURCE) | tar -C $(BUILD_DIR) $(TAR_OPTIONS) -
+ 	touch $@
  
- 	return name ? name : ".config";
- }
-
-Modified: trunk/buildroot/package/config/kconfig-to-buildroot2.patch
-===================================================================
---- trunk/buildroot/package/config/kconfig-to-buildroot2.patch	2007-09-23 14:06:59 UTC (rev 19969)
-+++ trunk/buildroot/package/config/kconfig-to-buildroot2.patch	2007-09-23 14:12:58 UTC (rev 19970)
-@@ -1292,3 +1292,14 @@
-  		     "\t$(deps_config)\n\n"
-  		     "$(deps_config): ;\n");
-  	fclose(out);
-+--- kernel-config/confdata.c	2007-09-23 15:33:26.000000000 +0200
-++++ config/confdata.c	2007-09-23 16:10:52.000000000 +0200
-+@@ -37,7 +37,7 @@
-+ 
-+ const char *conf_get_configname(void)
-+ {
-+-	char *name = getenv("KCONFIG_CONFIG");
-++	char *name = getenv("BUILDROOT_CONFIG");
-+ 
-+ 	return name ? name : ".config";
-+ }
+@@ -32,6 +32,7 @@
+ 
+ $(DIALOG_DIR)/$(DIALOG_BINARY): $(DIALOG_DIR)/.configured
+ 	$(MAKE) $(TARGET_CONFIGURE_OPTS) -C $(DIALOG_DIR)
++	touch -c $@
+ 
+ $(TARGET_DIR)/$(DIALOG_TARGET_BINARY): $(DIALOG_DIR)/$(DIALOG_BINARY)
+ 	$(MAKE) prefix=$(TARGET_DIR)/usr \
