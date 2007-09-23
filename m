@@ -1,7 +1,7 @@
 From: ulf at uclibc.org <ulf@uclibc.org>
-Date: Sun, 23 Sep 2007 07:24:13 -0700 (PDT)
-Subject: [Buildroot] svn commit: trunk/buildroot/package/mpg123
-Message-ID: <20070923142413.056BB3009F@busybox.net>
+Date: Sun, 23 Sep 2007 07:26:20 -0700 (PDT)
+Subject: [Buildroot] svn commit: trunk/buildroot/package/mtd/20061007
+Message-ID: <20070923142620.72BBA3009F@busybox.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -9,38 +9,27 @@ Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
 Author: ulf
-Date: 2007-09-23 07:24:13 -0700 (Sun, 23 Sep 2007)
-New Revision: 19973
+Date: 2007-09-23 07:26:19 -0700 (Sun, 23 Sep 2007)
+New Revision: 19974
 
 Log:
-Use correct location of mpg123 binary
+Late mtd does not support linux-2.4
 
 Modified:
-   trunk/buildroot/package/mpg123/mpg123.mk
+   trunk/buildroot/package/mtd/20061007/mtd.mk
 
 
 Changeset:
-Modified: trunk/buildroot/package/mpg123/mpg123.mk
+Modified: trunk/buildroot/package/mtd/20061007/mtd.mk
 ===================================================================
---- trunk/buildroot/package/mpg123/mpg123.mk	2007-09-23 14:23:16 UTC (rev 19972)
-+++ trunk/buildroot/package/mpg123/mpg123.mk	2007-09-23 14:24:13 UTC (rev 19973)
-@@ -8,8 +8,8 @@
- MPG123_CAT:=$(BZCAT)
- MPG123_SITE:=http://$(BR2_SOURCEFORGE_MIRROR).dl.sourceforge.net/sourceforge/mpg123
- MPG123_DIR:=$(BUILD_DIR)/mpg123-$(MPG123_VERSION)
--MPG123_BIN:=mpg123
--MPG123_TARGET_BIN:=usr/bin/$(MPG123_BIN)
-+MPG123_BIN:=src/mpg123
-+MPG123_TARGET_BIN:=usr/bin/mpg123
+--- trunk/buildroot/package/mtd/20061007/mtd.mk	2007-09-23 14:24:13 UTC (rev 19973)
++++ trunk/buildroot/package/mtd/20061007/mtd.mk	2007-09-23 14:26:19 UTC (rev 19974)
+@@ -85,7 +85,7 @@
+ $(MTD_BUILD_TARGETS): $(MTD_DIR)/.unpacked
+ 	mkdir -p $(TARGET_DIR)/usr/sbin
+ 	$(MAKE) CFLAGS="-I. -I./include -I$(LINUX_HEADERS_DIR)/include -I$(STAGING_DIR)/usr/include $(TARGET_CFLAGS)" \
+-		CROSS= CC=$(TARGET_CC) LINUXDIR=$(LINUX_DIR) WITHOUT_XATTR=1 -C $(MTD_DIR)
++		CROSS= CC=$(TARGET_CC) LINUXDIR=$(LINUX26_DIR) WITHOUT_XATTR=1 -C $(MTD_DIR)
  
- # Check if ALSA is built, then we should configure after alsa-lib so
- # ./configure can find alsa-lib.
-@@ -50,7 +50,7 @@
- 	$(MAKE) -C $(MPG123_DIR)
+ MTD_TARGETS := $(addprefix $(TARGET_DIR)/usr/sbin/, $(MTD_TARGETS_y))
  
- $(TARGET_DIR)/$(MPG123_TARGET_BIN): $(MPG123_DIR)/$(MPG123_BIN)
--	$(INSTALL) -D $(MPG123_DIR)/src/$(MPG123_BIN) $(TARGET_DIR)/$(MPG123_TARGET_BIN)
-+	$(INSTALL) -D $(MPG123_DIR)/$(MPG123_BIN) $(TARGET_DIR)/$(MPG123_TARGET_BIN)
- 	$(STRIP) $(STRIP_STRIP_UNNEEDED) $(TARGET_DIR)/$(MPG123_TARGET_BIN)
- 
- mpg123: uclibc $(MPG123_ALSA_DEP) $(TARGET_DIR)/$(MPG123_TARGET_BIN)
