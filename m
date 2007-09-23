@@ -1,7 +1,7 @@
 From: ulf at uclibc.org <ulf@uclibc.org>
-Date: Sun, 23 Sep 2007 02:56:22 -0700 (PDT)
-Subject: [Buildroot] svn commit: trunk/buildroot/package/ipsec-tools
-Message-ID: <20070923095622.B34E530075@busybox.net>
+Date: Sun, 23 Sep 2007 02:58:47 -0700 (PDT)
+Subject: [Buildroot] svn commit: trunk/buildroot/target/linux
+Message-ID: <20070923095847.0E10030058@busybox.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -9,35 +9,49 @@ Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
 Author: ulf
-Date: 2007-09-23 02:56:21 -0700 (Sun, 23 Sep 2007)
-New Revision: 19959
+Date: 2007-09-23 02:58:47 -0700 (Sun, 23 Sep 2007)
+New Revision: 19960
 
 Log:
-Fix syntax error when using addprefix in ipsec-tools.mk
+Use correct path to vmlinux, Fix bad SED of config
 
 Modified:
-   trunk/buildroot/package/ipsec-tools/ipsec-tools.mk
+   trunk/buildroot/target/linux/Makefile.in
 
 
 Changeset:
-Modified: trunk/buildroot/package/ipsec-tools/ipsec-tools.mk
+Modified: trunk/buildroot/target/linux/Makefile.in
 ===================================================================
---- trunk/buildroot/package/ipsec-tools/ipsec-tools.mk	2007-09-23 09:55:17 UTC (rev 19958)
-+++ trunk/buildroot/package/ipsec-tools/ipsec-tools.mk	2007-09-23 09:56:21 UTC (rev 19959)
-@@ -112,14 +112,14 @@
- 	  $(TARGET_DIR)/$(IPSEC_TOOLS_TARGET_BINARY_RACOON) \
- 	  $(TARGET_DIR)/$(IPSEC_TOOLS_TARGET_BINARY_RACOONCTL)
- ifneq ($(BR2_HAVE_MANPAGES),y)
--	rm -f $(addprefix $(TARGET_DIR)/usr/man/,
-+	rm -f $(addprefix $(TARGET_DIR)/usr/man/, \
- 		man3/ipsec_strerror.3 man3/ipsec_set_policy.3 \
- 		man5/racoon.conf.5 \
- 		man8/racoonctl.8 man8/racoon.8 \
- 		man8/plainrsa-gen.8 man8/setkey.8)
+--- trunk/buildroot/target/linux/Makefile.in	2007-09-23 09:56:21 UTC (rev 19959)
++++ trunk/buildroot/target/linux/Makefile.in	2007-09-23 09:58:47 UTC (rev 19960)
+@@ -56,8 +56,12 @@
+ # Has to be set by the target/device
+ ifndef LINUX26_BINLOC
+ # default:
++ifeq ($(LINUX26_FORMAT),vmlinux)
++LINUX26_BINLOC=$(LINUX26_FORMAT)
++else
+ LINUX26_BINLOC=arch/$(KERNEL_ARCH)/boot/$(LINUX26_FORMAT)
  endif
- ifeq ($(strip $(BR2_PACKAGE_IPSEC_TOOLS_LIBS)), y)
--	install -D $(addprefix $(IPSEC_TOOLS_DIR)/src/,
-+	install -D $(addprefix $(IPSEC_TOOLS_DIR)/src/, \
- 		libipsec/.libs/libipsec.a libipsec/.libs/libipsec.la \
- 		racoon/.libs/libracoon.a racoon/.libs/libracoon.la) \
- 		$(STAGING_DIR)/lib
++endif
+ 
+ # File name for the Linux kernel binary
+ ifndef LINUX26_KERNEL
+@@ -143,7 +147,7 @@
+ 
+ $(LINUX26_DIR)/.configured: $(LINUX26_DIR)/.patched $(LINUX26_KCONFIG)
+ 	cp -dpf $(LINUX26_KCONFIG) $(LINUX26_DIR)/.config
+-	$(SED) '/CONFIG_AEABI/d' $(LINUX26_DIR)/.config
++	$(SED) '/CONFIG_AEABI=y/d' $(LINUX26_DIR)/.config
+ ifeq ($(BR2_ARM_EABI),y)
+ 	echo "CONFIG_AEABI=y" >> $(LINUX26_DIR)/.config
+ 	$(SED) '/CONFIG_OABI_COMPAT/d' $(LINUX26_DIR)/.config
+@@ -151,7 +155,7 @@
+ else
+ 	echo "# CONFIG_AEABI is not set" >> $(LINUX26_DIR)/.config
+ endif
+-	$(SED) '/CONFIG_IPV6/d' $(LINUX26_DIR)/.config
++	$(SED) '/CONFIG_IPV6=y/d' $(LINUX26_DIR)/.config
+ ifeq ($(BR2_INET_IPV6),y)
+ 	echo "CONFIG_IPV6=y" >> $(LINUX26_DIR)/.config
+ else
