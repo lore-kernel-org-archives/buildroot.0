@@ -1,28 +1,78 @@
-From: ulf at uclibc.org <ulf@uclibc.org>
-Date: Sun, 23 Sep 2007 09:29:20 -0700 (PDT)
-Subject: [Buildroot] svn commit: trunk/buildroot/package/qtopia4
-Message-ID: <20070923162920.2E304A6824@busybox.net>
+From: bugs at busybox.net <bugs@busybox.net>
+Date: Sun, 23 Sep 2007 09:56:52 -0700
+Subject: [Buildroot] [buildroot 0001507]: Build fails for ARM920T,
+	c++ compiler/gcj build
+Message-ID: <fdf0ec5be06bc4e21d8d0c5c80174230@busybox.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Author: ulf
-Date: 2007-09-23 09:29:10 -0700 (Sun, 23 Sep 2007)
-New Revision: 19976
 
-Log:
-Update qtopia4 AVR32 patch to 4.3.1 (makes ARM work as well)
+The following issue has been SUBMITTED. 
+====================================================================== 
+http://busybox.net/bugs/view.php?id=1507 
+====================================================================== 
+Reported By:                APOLAUF
+Assigned To:                buildroot
+====================================================================== 
+Project:                    buildroot
+Issue ID:                   1507
+Category:                   Architecture Specific
+Reproducibility:            always
+Severity:                   major
+Priority:                   normal
+Status:                     assigned
+====================================================================== 
+Date Submitted:             09-23-2007 09:56 PDT
+Last Modified:              09-23-2007 09:56 PDT
+====================================================================== 
+Summary:                    Build fails for ARM920T, c++ compiler/gcj build
+Description: 
+When attempting to build toolchain for ARM920t, with "Build/install c++
+compiler and libsdc++" option and "build/install java compiler and
+libgcj", the following error shows up no matter what distro I use (Fedora,
+Debian, Gentoo, etc.):
 
-Added:
-   trunk/buildroot/package/qtopia4/qtopia-4.3.1-add-avr32-arch.patch
-   trunk/buildroot/package/qtopia4/qtopia-4.3.1-add-avr32-qatomic-header-to-header-list.patch
 
+)
+# Now for the ugly 3.3.x soft float hack... 
+#
+#
+# Ok... that's enough of that. ft
+mkdir -p /root/buildroot/project_build_arm/uclibc/root/usr/lib
+/root/buildroot/pro ject_build_arm/uclibc/root/usr/sbin
+touch /root/buildroot/toolchain_build_arm/gcc-4.2.1-final/.installed 
+# These are in /lib, so ...
+rm -rf /root/bui
+Idroot/project_build_arm/uclibc/root/usr/lib/libgcc_s*.so* 
+cp -dpf
+/root/buildroot/build_arm/staging_dir/usr/arm-linux-uclibc/lib/libgcc_s*
+\
+/root/buildroot/project_build_arm/uclibc/root/lib/ 
+cp -dpf
+/root/buildroot/build_arm/staging_dir/usr/arm-linux-uclibc/lib/libstdc++
+/root/buildroot/project_build_arm/uclibc/root/usr/lib/
+cp : cannot stat
+?/root/buildroot/build_arm/staging_dir/usr/arm-linux-uclibc/lib/l
+ibstdc++.so*? : Mo such file or directory
+make : ***
+[/root/buildroot/toolchain_build_arm/gcc-4.2.1-final/.libs_installed]
+Error 1
 
-Changeset:
+I must have Java support on my toolchain, and this failure to compile
+makes things very frustrating.  I saw something similar on these boards,
+with the response being ~"fix your headers.", and stating that Gentoo had
+correct headers. I'm using Gentoo, and it's apparently not helping. Please
+help. Thanks,
+-Adrian
+====================================================================== 
 
-Sorry, the patch is too large to include (6157 lines).
-Please use ViewCVS to see it!
-
-http://uclibc.org/cgi-bin/viewcvs.cgi?view=rev&root=svn&rev=19976
+Issue History 
+Date Modified   Username       Field                    Change               
+====================================================================== 
+09-23-07 09:56  APOLAUF        New Issue                                    
+09-23-07 09:56  APOLAUF        Status                   new => assigned     
+09-23-07 09:56  APOLAUF        Assigned To               => buildroot       
+======================================================================
