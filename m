@@ -1,8 +1,9 @@
 From: bugs at busybox.net <bugs@busybox.net>
-Date: Mon, 24 Sep 2007 00:26:44 -0700
-Subject: [Buildroot] [buildroot 0001449]: Buildroot doesn't "make
-	menuconfig" in CyGWIN
-Message-ID: <112c748102717baa257e895a7eea0f73@busybox.net>
+Date: Mon, 24 Sep 2007 00:28:35 -0700
+Subject: [Buildroot] [buildroot 0000881]: Buildroot new feature: Generate
+	initramfs description file of root filesystem for initial
+	kernel ramdisk
+Message-ID: <eef1e0cbc773386e220a16b4852abb7c@busybox.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -12,97 +13,146 @@ To: buildroot@busybox.net
 
 The following issue has been CLOSED 
 ====================================================================== 
-http://busybox.net/bugs/view.php?id=1449 
+http://busybox.net/bugs/view.php?id=881 
 ====================================================================== 
-Reported By:                dtech
+Reported By:                fred
 Assigned To:                buildroot
 ====================================================================== 
 Project:                    buildroot
-Issue ID:                   1449
-Category:                   Architecture Specific
-Reproducibility:            always
-Severity:                   major
+Issue ID:                   881
+Category:                   New Features
+Reproducibility:            N/A
+Severity:                   feature
 Priority:                   normal
 Status:                     closed
 Resolution:                 open
 Fixed in Version:           
 ====================================================================== 
-Date Submitted:             07-29-2007 11:49 PDT
-Last Modified:              09-24-2007 00:26 PDT
+Date Submitted:             05-24-2006 16:27 PDT
+Last Modified:              09-24-2007 00:28 PDT
 ====================================================================== 
-Summary:                    Buildroot doesn't "make menuconfig" in CyGWIN
+Summary:                    Buildroot new feature: Generate initramfs
+description file of root filesystem for initial kernel ramdisk
 Description: 
-While using a fresh install of CyGWIN and the latest buildroot build, I
-cannot "make menuconfig" builroot. I get the following output:
-make CC="/usr/bin/gcc" -C package/config conf mconf
-make[1]: Entering directory `/home/David/buildroot/package/config'
-/usr/bin/gcc -I/usr/include/ncurses -DCURSES_LOC="<ncurses.h>" -DLOCALE -g
--O2 -MM *.c > .depend 2>/dev/null || :
-make[1]: Leaving directory `/home/David/buildroot/package/config'
-make[1]: Entering directory `/home/David/buildroot/package/config'
-/usr/bin/gcc -I/usr/include/ncurses -DCURSES_LOC="<ncurses.h>" -DLOCALE -g
--O2  -c conf.c -o conf.o
-/usr/bin/gcc -I/usr/include/ncurses -DCURSES_LOC="<ncurses.h>" -DLOCALE -g
--O2  -c kxgettext.c -o kxgettext.o
-/usr/bin/gcc -I/usr/include/ncurses -DCURSES_LOC="<ncurses.h>" -DLOCALE -g
--O2  -c lxdialog/checklist.c -o lxdialog/checklist.o
-/usr/bin/gcc -I/usr/include/ncurses -DCURSES_LOC="<ncurses.h>" -DLOCALE -g
--O2  -c lxdialog/inputbox.c -o lxdialog/inputbox.o
-/usr/bin/gcc -I/usr/include/ncurses -DCURSES_LOC="<ncurses.h>" -DLOCALE -g
--O2  -c lxdialog/menubox.c -o lxdialog/menubox.o
-/usr/bin/gcc -I/usr/include/ncurses -DCURSES_LOC="<ncurses.h>" -DLOCALE -g
--O2  -c lxdialog/textbox.c -o lxdialog/textbox.o
-/usr/bin/gcc -I/usr/include/ncurses -DCURSES_LOC="<ncurses.h>" -DLOCALE -g
--O2  -c lxdialog/util.c -o lxdialog/util.o
-/usr/bin/gcc -I/usr/include/ncurses -DCURSES_LOC="<ncurses.h>" -DLOCALE -g
--O2  -c lxdialog/yesno.c -o lxdialog/yesno.o
-/usr/bin/gcc -I/usr/include/ncurses -DCURSES_LOC="<ncurses.h>" -DLOCALE -g
--O2  -c mconf.c -o mconf.o
-/usr/bin/gcc -I/usr/include/ncurses -DCURSES_LOC="<ncurses.h>" -DLOCALE -g
--O2 -I. -c zconf.tab.c -o zconf.tab.o
-/usr/bin/gcc -I/usr/include/ncurses -DCURSES_LOC="<ncurses.h>" -DLOCALE -g
--O2   conf.o  zconf.tab.o -o conf
-make[1]: Leaving directory `/home/David/buildroot/package/config'
-conf.o: In function `check_stdin':
-/home/David/buildroot/package/config/conf.c:60: undefined reference to
-`_libintl_gettext'
-/home/David/buildroot/package/config/conf.c:61: undefined reference to
-`_libintl_gettext'
-/home/David/buildroot/package/config/conf.c:62: undefined reference to
-`_libintl_gettext'
-conf.o: In function `check_conf':
-/home/David/buildroot/package/config/conf.c:483: undefined reference to
-`_libintl_gettext'
-conf.o: In function `main':
-/home/David/buildroot/package/config/conf.c:622: undefined reference to
-`_libintl_gettext'
-conf.o:/home/David/buildroot/package/config/conf.c:541: more undefined
-references to `_libintl_gettext' follow
-collect2: ld returned 1 exit status
-make[1]: *** [conf] Error 1
-make: *** [package/config/mconf] Error 2
+This patch contains a new target "initramfs" which builds a description
+file for the initial kernel ramdisk. I use this together with kernel
+2.6.12. The mechanism is based on a shell script "gen_initramfs_list.sh"
+which is provided together with the kernel. The description file is then
+used to build a cpio filesystem via the gen_init_cpio tool during the
+kernel build.
+
+This is inspired by the procedure described here: 
+
+http://www.student.tue.nl/Q/t.f.a.wilms/adm5120/
+
+That procedure produces an ext2 filesystem with buildroot. Then this
+filesystem is mounted in the kernel build directory where
+"gen_initramfs_list.sh" produces a filesystem description file which is
+used then by gen_init_cpio to produce the cpio filesystem. This procedure
+requires root rights to mount the filesystem. The idea is to produce the
+filesystem description file directly from buildroot. Then the complete
+kernel including rootfilesystem as ramdisk can be build as normal user.
+
+The patch adds a new target and modifies the config.in file in the target
+directory.
 ====================================================================== 
 
 ---------------------------------------------------------------------- 
- bernhardf - 09-19-07 07:16  
+ bernhardf - 12-01-06 10:12  
 ---------------------------------------------------------------------- 
-This is supposed to work fine with revision 19893.
-Please confirm 
+That's an excellent idea except for the mount.
+
+Please be so kind and update the patch to
+     select tarroot # or however the creation of a tarball is named
+
+or just ln -s the build_$()/root to the dir gen_initramfs expects.
+Also, it's easier for me if you could (also) send the patch with a copy'n
+paste of the adjusted description above to the mailing-list.
+
+TIA! 
 
 ---------------------------------------------------------------------- 
- bernhardf - 09-24-07 00:26  
+ fred - 02-12-07 06:05  
 ---------------------------------------------------------------------- 
-fixed on trunk as of yesterday 
+Hi,
+
+thanks for the reply to the patch! Unfortunatly I do not get the
+suggestion you made below. Just to make sure: Is it clear that you do not
+need to mount any filesystem with this proposed procedure? 
+
+Regards
+
+Friedrich 
+
+---------------------------------------------------------------------- 
+ bernhardf - 07-07-07 10:40  
+---------------------------------------------------------------------- 
+No it was not clear, but you're right: There is no mount involved.
+
+The patch as-is is not terribly useful, though:
+We most likely do not want the full root/ in the initramfs (since it
+consists of compilers, applications like libtool, perl, etc, eventually).
+
+What we would need is a way to auto-generate a list of files that are
+supposed to be in the initramfs, like busybox stuff to load modules/spawn
+a shell and so on.
+
+Perhaps the shell script should optionally take a list of files that
+should be put in the initramfs_list and only use the full content of
+staging_dir/root/ if such a file was not specified?
+
+What do you think? Care to implement this?
+cheers, 
+
+---------------------------------------------------------------------- 
+ fred - 07-09-07 00:38  
+---------------------------------------------------------------------- 
+Hi Bernhard,
+
+with this patch I wanted to do the build process of the root filesystem
+exactly the same way as it is done before, except that I do not need a
+mount. My understanding is that all files which are assigned to go to the
+root filesystem by buildroot should go. Introducing an additional file
+selection mechanism in this patch would from my point of view not be too
+smart, because this is just one way to produce the actual root, i.e. it
+would only work for this method. As it is now, everything in the
+staging_dir should go to the root filesystem. If you think that should be
+different, then maybe you could do something that is applicable to all
+methods to produce the root filesystem, no? So this patch works as
+follows: 
+
+1. Buildroot defines the system including the files that should go
+   to the root filesystem. 
+2. This patch is just an intermediate step to take that definition from 
+   buildroot and convert it to file suitable for the cpio filesystem
+build.
+3. The actual filesystem is then produced inside the kernel build
+process.
+
+Regards
+
+Friedrich 
+
+---------------------------------------------------------------------- 
+ bernhardf - 09-24-07 00:28  
+---------------------------------------------------------------------- 
+I did apply this several weeks ago. Thanks! 
 
 Issue History 
 Date Modified   Username       Field                    Change               
 ====================================================================== 
-07-29-07 11:49  dtech          New Issue                                    
-07-29-07 11:49  dtech          Status                   new => assigned     
-07-29-07 11:49  dtech          Assigned To               => buildroot       
-07-29-07 11:49  dtech          Issue Monitored: dtech                       
-08-08-07 01:32  nl515291       Issue Monitored: nl515291                    
-09-19-07 07:16  bernhardf      Note Added: 0002760                          
-09-24-07 00:26  bernhardf      Status                   assigned => closed  
-09-24-07 00:26  bernhardf      Note Added: 0002775                          
+05-24-06 16:27  fred           New Issue                                    
+05-24-06 16:27  fred           Status                   new => assigned     
+05-24-06 16:27  fred           Assigned To               => uClibc          
+05-24-06 16:27  fred           File Added: buildroot_initramfs_target.patch     
+              
+12-01-06 10:12  bernhardf      Note Added: 0001850                          
+02-12-07 05:34  vapier         Assigned To              uClibc => buildroot 
+02-12-07 06:05  fred           Note Added: 0002153                          
+07-07-07 10:36  bernhardf      File Added: br2.bug-881.01.diff                  
+ 
+07-07-07 10:40  bernhardf      Note Added: 0002558                          
+07-09-07 00:38  fred           Note Added: 0002581                          
+09-24-07 00:28  bernhardf      Status                   assigned => closed  
+09-24-07 00:28  bernhardf      Note Added: 0002776                          
 ======================================================================
