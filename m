@@ -1,84 +1,124 @@
 From: Ulf Samuelsson <ulf@atmel.com>
-Date: Mon, 24 Sep 2007 16:25:50 +0200
-Subject: [Buildroot] Qtopia4 Failure
-In-Reply-To: <20070924122751.GB32094@aon.at>
-References: <1190563965.7015.21.camel@elrond.atmel.sweden>
-	<1190591711.4299.17.camel@cyclops.infocab.com.au>
-	<d6cda7730709231756k273d449axed0357049468a113@mail.gmail.com>
-	<1190595992.4299.27.camel@cyclops.infocab.com.au>
-	<d6cda7730709231841v7ce7eec2qa801e54b049763b7@mail.gmail.com>
-	<1190600185.4299.44.camel@cyclops.infocab.com.au>
-	<d6cda7730709232043k2d85bb2bi8318ef6f652a1eff@mail.gmail.com>
-	<1190621530.7015.45.camel@elrond.atmel.sweden>
-	<20070924091242.GA32094@aon.at>
-	<005301c7fe8e$0ec437e0$dcc4af0a@atmel.com>
-	<20070924122751.GB32094@aon.at>
-Message-ID: <1190643950.7015.113.camel@elrond.atmel.sweden>
+Date: Mon, 24 Sep 2007 16:43:29 +0200
+Subject: [Buildroot] using PROJECTs with buildroot
+In-Reply-To: <20070924123117.GA1010@aon.at>
+References: <20070918163008.GA14096@aon.at> <20070918171028.GB14096@aon.at>
+	<20070921153339.GG5788@aon.at>  <20070924123117.GA1010@aon.at>
+Message-ID: <1190645009.7015.130.camel@elrond.atmel.sweden>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-m?n 2007-09-24 klockan 14:27 +0200 skrev Bernhard Fischer:
-> On Mon, Sep 24, 2007 at 11:34:02AM +0200, Ulf Samuelsson wrote:
-> >> On Mon, Sep 24, 2007 at 10:12:10AM +0200, Ulf Samuelsson wrote:
-> >> 
-> >>>I will submit a patch that allows UCLIBC_SUSV3_LEGACY
-> >>>to be SED'ed into the uclibc configuration based on
-> >>>BR2_UCLIBC_SUSV3_LEGACY (a new makeconfig choice).
-> >> 
-> >> Please don't. This is way too fine-grained.
-> >> That's exactly the reason why we have
-> >> $ make uclibc-menuconfig
-> >> 
-> >> This is easy enough.
-> >>
+m?n 2007-09-24 klockan 14:31 +0200 skrev Bernhard Fischer:
+> Ulf?
+> 
+> Did you receive this mail?
+> 
+> On Fri, Sep 21, 2007 at 05:33:40PM +0200, Bernhard Fischer wrote:
+> >Hi,
 > >
-> >I can do that, but then I have to enable UCLIBC_SUSV3_LEGACY as default
-> >and not the UCLIBC_SUSV3_LEGACY_MACROS as it is today.
-> 
-> This is a *sample* config. You are supposed to configure this yourself.
-> 
+> >I'd like to ask how that project thing is supposed to be used and how it
+> >could be fixed (assuming that i'm not doing something wrong, which could
+> >easily be).
+> >
+> >Suppose i want to create two images (or BSP's like some call those).
+> >
+> >To keep things simple, let's assume that i'm using the same version of
+> >binutils and gcc for all.
+> >
+> >
+> >BR2_PROJECT=imageA: kernel 2.6.22.6 with LFS support on
+> >BR2_PROJECT=imageB: kernel 2.6.22.1 without LFS
+> >
+> >0) I 'rm -rf *_i386 binar*'
+> >1) I configure and build imageA. So far so good.
+> >2) I configure and build imageB. The resulting image looks like this:
+> >$ tar -tvf binaries/imageB/rootfs.i386-20070919.tar | grep "2.6.22../$"
+> >drwxr-xr-x root/root         0 2007-09-19 19:05 ./lib/modules/2.6.22.6/
+> >$ egrep "(2_6_22|PROJECT)" .config
+> >BR2_PROJECT="imageB"
+> >BR2_KERNEL_HEADERS_2_6_22_1=y
+> ># BR2_KERNEL_HEADERS_2_6_22 is not set
+> >
+> >Not exactly what i'd have expected.
+> >Perhaps i made a mistake? If so please explain how that would work
+> >properly?
+> >
 
-If you know how...
-It is not documented anywhere that SUSV3 affects Qtopia.
+The project thingy will allow you to share a toolchain
+with one set of kernel headers.
+You can't have two set of kernel headers.
+Then you need to build a separate toolchain.
 
-> This sample config is definately *not* ment to be used without
-> configuring it according to your special needs. If you want a libc
-> that's easy to use (because it is not configurable), then go use glibc.
+It looks to me that the user has changed the kernel headers version
+between imageA and imageB.
+That is illegal, then he needs to rebuild the toolset.
+
+Instead, he should change LINUX26_VERSION
+which needs to be done outside menuconfig
 
 > >
-> >The current situation is not acceptable.
-> 
-> It is unacceptable to shield the user from any configuration, especially
-> if he did change the default config anyway (since he selected qtopia
-> which was not on per default, last time i looked).
+> >
+> >A more general question that i already raised is what the
+> >project_build_arch dir is supposed to be good for. I didn't get an
+> >answer on this question, i think.
+> >
+> >I'm questioning it's usefulness because if done properly, nearly all
+> >packages would have to be built there, leaving the "good old" build_arch
+> >directory completely empty.
+> >
+> >Your reasoning seems to be along the lines of:
+> >"A package that is customized on a per project basis has to be built in
+> >project_build_arch".
+> >
+> >While this may be true, customization that qualifies for building in
+> >project_build_arch dir includes these toggles:
+> >
+> >1) LFS on/off
+> >2a) locale on/off
+> >2b) wchar on/off
+> >3) IPv6 on/off
 
-Certain packages requires that the library is configured in a certain
-way. You want people to find out for themselves what works and what
-does not work. This is a timeconsuiming and frustrating exercise.
+No, these are global stuff which affects the toolchain.
+If you have several versions of these, then you need
+to have several toolchains.
 
-I am of the opinion, that if someone has figured out how to build
-those packages, this needs to formalized by introducing rules in
-buildroot, to avoid people wasting time in the future.
+I keep these constant, and have only a couple of packages in
+project_build_arch, like linux, busybox, u-boot and at91-bootstrap.
+I build up to 7 boards from the same build_arch and it is much much
+faster.
 
-
-> >There needs to be either a dependency on UCLIBC_SUSV3_LEGACY
-> >when enabling Qtopia, (and I do not see how that can be accomplished)
-> >or the default operation should allow Qtopia to build without problems.
-> 
-> Whatever. I disabled the LEGACY stuff in the provided *example* config.
-> Still, the user is responsible for configuring his desired buildroot
-> config as well as his desired uClibc-, busybox- and kernel config.
-> 
-> If a user is not willing to configure for his needs, he'd be better off
-> to either use the default, without changing anything (which will result
-> in a very minimal i386 uClibc rootfs) or use some pre-built distro like
-> redhat, suse, debian etc are providing.
-
-You live in an x86 universe, a lot of other people (like me) are not.
+The "old" way would require you to have 7 different trees.
 
 
+> >These alone would lead to the build_arch dir to be nearly empty, but
+> >let's assume that it would still contain 25% of the packages since those
+> >would be locale+wchar+IPv6+LFS agnostic, fine.
+> >
+
+It is more like 95% in practice.
+I have a feeling you don't use the feature, so why argue.
+
+
+> >If you now take into account that there is a potential
+> >4) TARGET_CFLAGS
+> >then suddenly project_build_arch dir would be the exact same thing
+> >build_arch was before, leaving build_arch empty (the exact same thing we
+> >had before that project thing, just back then the project_dir was the
+> >empty -- non-existing one -- and build_arch was populated).
+> >
+> >It would be very kind if you would share your thoughts on these issues.
+> >
 BR
 Ulf Samuelsson
+
+
+> >regards,
+> >Bernhard
+> >_______________________________________________
+> >buildroot mailing list
+> >buildroot at uclibc.org
+> >http://busybox.net/mailman/listinfo/buildroot
+> >
