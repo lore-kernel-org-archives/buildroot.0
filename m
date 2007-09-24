@@ -1,35 +1,65 @@
 From: Bernhard Fischer <rep.dot.nop@gmail.com>
-Date: Mon, 24 Sep 2007 20:41:49 +0200
-Subject: [Buildroot] Qtopia4 Failure
-In-Reply-To: <1190645473.7015.137.camel@elrond.atmel.sweden>
-References: <d6cda7730709231756k273d449axed0357049468a113@mail.gmail.com>
-	<1190595992.4299.27.camel@cyclops.infocab.com.au>
-	<d6cda7730709231841v7ce7eec2qa801e54b049763b7@mail.gmail.com>
-	<1190600185.4299.44.camel@cyclops.infocab.com.au>
-	<d6cda7730709232043k2d85bb2bi8318ef6f652a1eff@mail.gmail.com>
-	<1190621530.7015.45.camel@elrond.atmel.sweden>
-	<20070924091242.GA32094@aon.at>
-	<005301c7fe8e$0ec437e0$dcc4af0a@atmel.com>
-	<20070924122751.GB32094@aon.at>
-	<1190645473.7015.137.camel@elrond.atmel.sweden>
-Message-ID: <20070924184149.GH20058@aon.at>
+Date: Mon, 24 Sep 2007 20:48:30 +0200
+Subject: [Buildroot] using PROJECTs with buildroot
+In-Reply-To: <1190645009.7015.130.camel@elrond.atmel.sweden>
+References: <20070918163008.GA14096@aon.at> <20070918171028.GB14096@aon.at>
+	<20070921153339.GG5788@aon.at> <20070924123117.GA1010@aon.at>
+	<1190645009.7015.130.camel@elrond.atmel.sweden>
+Message-ID: <20070924184830.GI20058@aon.at>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Mon, Sep 24, 2007 at 04:51:13PM +0200, Ulf Samuelsson wrote:
->
->> >The current situation is not acceptable.
->> 
->> It is unacceptable to shield the user from any configuration, especially
->> if he did change the default config anyway (since he selected qtopia
->> which was not on per default, last time i looked).
->> 
->
->If I would take you on youre word, then I would remove all
->"depends on" lines in Config.in files.
->This definitely shields the user from configurations.
+On Mon, Sep 24, 2007 at 04:43:29PM +0200, Ulf Samuelsson wrote:
+>m?n 2007-09-24 klockan 14:31 +0200 skrev Bernhard Fischer:
 
-The select is much worse, imho. oh well.
+>> On Fri, Sep 21, 2007 at 05:33:40PM +0200, Bernhard Fischer wrote:
+>> >Hi,
+>> >
+>> >I'd like to ask how that project thing is supposed to be used and how it
+>> >could be fixed (assuming that i'm not doing something wrong, which could
+>> >easily be).
+>> >
+>> >Suppose i want to create two images (or BSP's like some call those).
+>> >
+>> >To keep things simple, let's assume that i'm using the same version of
+>> >binutils and gcc for all.
+>> >
+>> >
+>> >BR2_PROJECT=imageA: kernel 2.6.22.6 with LFS support on
+>> >BR2_PROJECT=imageB: kernel 2.6.22.1 without LFS
+>> >
+>> >0) I 'rm -rf *_i386 binar*'
+>> >1) I configure and build imageA. So far so good.
+>> >2) I configure and build imageB. The resulting image looks like this:
+>> >$ tar -tvf binaries/imageB/rootfs.i386-20070919.tar | grep "2.6.22../$"
+>> >drwxr-xr-x root/root         0 2007-09-19 19:05 ./lib/modules/2.6.22.6/
+>> >$ egrep "(2_6_22|PROJECT)" .config
+>> >BR2_PROJECT="imageB"
+>> >BR2_KERNEL_HEADERS_2_6_22_1=y
+>> ># BR2_KERNEL_HEADERS_2_6_22 is not set
+>> >
+>> >Not exactly what i'd have expected.
+>> >Perhaps i made a mistake? If so please explain how that would work
+>> >properly?
+>> >
+>
+>The project thingy will allow you to share a toolchain
+>with one set of kernel headers.
+>You can't have two set of kernel headers.
+
+Ah. Can you think of a non-intrusive way to prevent this (or is that in
+the docs already? I admit that i didn't look, but this should be
+mentioned in a very prominent place).
+
+>Then you need to build a separate toolchain.
+>
+>It looks to me that the user has changed the kernel headers version
+>between imageA and imageB.
+>That is illegal, then he needs to rebuild the toolset.
+
+Ok. I was under the impression that the project was ment to build
+distinct projects (as in very distinct, not just differing in the
+package-selection). Thanks for the explanation.
