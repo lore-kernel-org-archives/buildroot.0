@@ -1,59 +1,59 @@
-From: bugs at busybox.net <bugs@busybox.net>
-Date: Mon, 24 Sep 2007 00:58:16 -0700
-Subject: [Buildroot] [buildroot 0001133]: build fails if 'UCLIBC_BUILD_SSP'
-	is enabled
-Message-ID: <27e8432c74b50188190072812fe5711f@busybox.net>
+From: Ulf Samuelsson <ulf@atmel.com>
+Date: Mon, 24 Sep 2007 10:02:41 +0200
+Subject: [Buildroot] Qtopia4 Failure
+In-Reply-To: <1190591711.4299.17.camel@cyclops.infocab.com.au>
+References: <1190563965.7015.21.camel@elrond.atmel.sweden>
+	<1190591711.4299.17.camel@cyclops.infocab.com.au>
+Message-ID: <1190620961.7015.36.camel@elrond.atmel.sweden>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+m?n 2007-09-24 klockan 09:25 +0930 skrev Adam Hawes:
+> On Sun, 2007-09-23 at 18:12 +0200, Ulf Samuelsson wrote:
+> > Anyone building qtopia?
+> > I get (when compiling with gcc-4.2.1/binutils-2.18/uclibc-0.9.29):
+> > 
+> > 
+> > arm-linux-g++ -c -pipe -g -g -fvisibility=hidden
+> > -fvisibility-inlines-hidden -Wall -W -D_REENTRANT -fPIC -DQT_SHARED
+> > -DTSLIBMOUSEHANDLER_DEBUG -DQT_BUILD_CORE_LIB -DQT_NO_CAST_TO_ASCII
+> > -DQT_ASCII_CAST_WARNINGS -DQT3_SUPPORT -DQT_MOC_COMPAT
+> > -D_LARGEFILE64_SOURCE -D_LARGEFILE_SOURCE
+> > -I../../mkspecs/qws/linux-arm-g++ -I. -I../../include
+> > -I../../include/QtCore -Iglobal -I.moc/debug-shared-emb-arm
+> > -I.uic/debug-shared-emb-arm
+> > -o .obj/debug-shared-emb-arm/qresource_iterator.o
+> > io/qresource_iterator.cpp
+> > io/qresource_iterator.cpp:46:66: error: macro "index" requires 2
+> > arguments, but only 1 given
+> > io/qresource_iterator.cpp: In constructor
+> > ?QResourceFileEngineIterator::QResourceFileEngineIterator(QFlags<QDir::Filter>, const QStringList&)?:
+> > io/qresource_iterator.cpp:47: error: expected `(' before ?{? token
+> > make[2]: *** [.obj/debug-shared-emb-arm/qresource_iterator.o] Fel 1
+> > 
+> 
+> Yup.  To quote Carmelo Amoroso (search the archives in the last month):
+> 
+> "The problem is that you have uClibc configure with SUSv3_LEGACY_MACRO
+> on that define index."
 
-A NOTE has been added to this issue. 
-====================================================================== 
-http://busybox.net/bugs/view.php?id=1133 
-====================================================================== 
-Reported By:                frank sabella
-Assigned To:                buildroot
-====================================================================== 
-Project:                    buildroot
-Issue ID:                   1133
-Category:                   Security
-Reproducibility:            always
-Severity:                   major
-Priority:                   normal
-Status:                     assigned
-====================================================================== 
-Date Submitted:             12-26-2006 15:06 PST
-Last Modified:              09-24-2007 00:58 PDT
-====================================================================== 
-Summary:                    build fails if 'UCLIBC_BUILD_SSP' is enabled
-Description: 
-Host: x86
-Target: x86
-buildroot svn: 17052
-uClibc svn: 17064
-gcc-4.1.1
-binutils-2.17
+I have tried another alternative, and that is to enable
+UCLIBC_SUSV3_LEGACY instead of UCLIBC_SUSV3_LEGACY_MACROS
+Then the Macros do not get defined, and you instead gets the 
+real bcopy/bzero etc. routines.
 
-Buildroot fails when compiling uClibc with 'UCLIBC_BUILD_SSP' enabled.
-====================================================================== 
+With this, qtopia-4.3.1 compiles.
 
----------------------------------------------------------------------- 
- bernhardf - 09-24-07 00:58  
----------------------------------------------------------------------- 
-This is supposed to work with uclibc-0.9.29 and current buildroot (with a
-current toolchain). Please retest. 
+qtopia will depend on UCLIBC_SUSV3_LEGACY.
 
-Issue History 
-Date Modified   Username       Field                    Change               
-====================================================================== 
-12-26-06 15:06  frank sabella  New Issue                                    
-12-26-06 15:06  frank sabella  Status                   new => assigned     
-12-26-06 15:06  frank sabella  Assigned To               => uClibc          
-12-26-06 15:07  frank sabella  Issue Monitored: frank sabella                   
-
-02-12-07 05:33  vapier         Assigned To              uClibc => buildroot 
-09-24-07 00:58  bernhardf      Note Added: 0002781                          
-======================================================================
+> 
+> I have attached a patch that fixes the problem in all the places that
+> needs to be fixed (#undef index).  I need SUSv3 macros to build some
+> other things so I didn't want to turn them off and fix other things.
+> 
+> Cheers,
+> A
+> 
