@@ -1,41 +1,44 @@
-From: Adam Hawes <adam@infocab.com.au>
-Date: Mon, 24 Sep 2007 13:25:13 +0930
-Subject: [Buildroot] Qtopia4 Failure
-In-Reply-To: <d6cda7730709232043k2d85bb2bi8318ef6f652a1eff@mail.gmail.com>
-References: <1190563965.7015.21.camel@elrond.atmel.sweden>
-	<1190591711.4299.17.camel@cyclops.infocab.com.au>
-	<d6cda7730709231756k273d449axed0357049468a113@mail.gmail.com>
-	<1190595992.4299.27.camel@cyclops.infocab.com.au>
-	<d6cda7730709231841v7ce7eec2qa801e54b049763b7@mail.gmail.com>
-	<1190600185.4299.44.camel@cyclops.infocab.com.au>
-	<d6cda7730709232043k2d85bb2bi8318ef6f652a1eff@mail.gmail.com>
-Message-ID: <1190606113.22869.5.camel@cyclops.infocab.com.au>
+From: Hans-Christian Egtvedt <hcegtvedt@atmel.com>
+Date: Mon, 24 Sep 2007 08:05:49 +0200
+Subject: [Buildroot] svn commit: trunk/buildroot
+In-Reply-To: <1190557416.7015.10.camel@elrond.atmel.sweden>
+References: <20070923105715.49DFF30087@busybox.net>
+	<20070923111910.GE20058@aon.at>
+	<1190557416.7015.10.camel@elrond.atmel.sweden>
+Message-ID: <1190613949.20002.1.camel@localhost.localdomain>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+On Sun, 2007-09-23 at 16:23 +0200, Ulf Samuelsson wrote:
+> s?n 2007-09-23 klockan 13:19 +0200 skrev Bernhard Fischer:
+> > On Sun, Sep 23, 2007 at 03:57:15AM -0700, ulf at uclibc.org wrote:
 
->    You are fixing newer, valid and good code in the name of legacy
-> compatibility with a flawed work around for legacy API. The simple
-> fact that there are more than one way around it doesn't make the patch
-> the better way. And I think we should strive for the better way to fix
-> things ;)
+<cut _defconfig commit>
 
-"Better" is such a subjective word.  Who defines what is better in their
-particular instance?
+> > 3) what error were you seeing?
+> Don't remember exactly,
+> Reported this two weeks ago. 
+> This was fixed by Hans Christian in his trunk.
+> 
+> It looks like conf does not complete.
+> The fix handles that, and the error message is gone.
 
-> I'm not proposing to drop the workaround, but keeping the macro does
-> break code as we are well aware. The above has no drawbacks that I can
-> think of, and beats patching good code ;)
+Running oldconfig after copying in a _defconfig resulted in this error
+message:
 
-I agree that improving the legacy code which relies on index() is the
-way to go, but there is a lot of it.  I don't have the time to patch
-everything I come across.
+Generic firewall (BR2_TARGET_GENERIC_FIREWALL) [N/y/?] n
+Generic development system (BR2_TARGET_GENERIC_DEV_SYSTEM) [N/y/?] n
+#
+# configuration written to .config
+#
 
-At the moment the best solution for me and probably others is to fix the
-one thing that doesn't work (qtopia) and move on, improving other things
-as I get around to them.
+*** Error during writing of the Buildroot configuration.
 
-A
+<cut>
+
+-- 
+With kind regards,
+Hans-Christian Egtvedt, Applications Engineer
