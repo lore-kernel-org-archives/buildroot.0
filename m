@@ -1,91 +1,147 @@
-From: aldot at uclibc.org <aldot@uclibc.org>
-Date: Mon, 24 Sep 2007 00:34:50 -0700 (PDT)
-Subject: [Buildroot] svn commit: trunk/buildroot/package/ltrace
-Message-ID: <20070924073450.5314A30046@busybox.net>
+From: bugs at busybox.net <bugs@busybox.net>
+Date: Mon, 24 Sep 2007 00:43:12 -0700
+Subject: [Buildroot] [buildroot 0001257]: Some build targets use hard-coded
+	library names, which causes forced rebuild on Mac OS X
+Message-ID: <613f0fec7a9a0ce6a59492a9e448c426@busybox.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Author: aldot
-Date: 2007-09-24 00:34:48 -0700 (Mon, 24 Sep 2007)
-New Revision: 19984
 
-Log:
-- bump version; some cleanups while at it
+The following issue has been CLOSED 
+====================================================================== 
+http://busybox.net/bugs/view.php?id=1257 
+====================================================================== 
+Reported By:                holin
+Assigned To:                buildroot
+====================================================================== 
+Project:                    buildroot
+Issue ID:                   1257
+Category:                   Architecture Specific
+Reproducibility:            always
+Severity:                   minor
+Priority:                   normal
+Status:                     closed
+Resolution:                 open
+Fixed in Version:           
+====================================================================== 
+Date Submitted:             03-04-2007 05:38 PST
+Last Modified:              09-24-2007 00:43 PDT
+====================================================================== 
+Summary:                    Some build targets use hard-coded library names,
+which causes forced rebuild on Mac OS X
+Description: 
+Library names ending with .so should have .dylib in makefile targets on OS
+X. Otherwise, the build system always thinks that the library isn't built
+and tries to (re-)build it on every make invocation. Attached a patch that
+adds a config option for library filename extension and fixes the packages
+that seemed to suffer from this. 
+====================================================================== 
 
+---------------------------------------------------------------------- 
+ holin - 06-02-07 00:14  
+---------------------------------------------------------------------- 
+Attached an updated patch for current SVN. Some EXEEXTs would probably be
+needed in binutils.mk makerules for Windows hosts. 
 
-Modified:
-   trunk/buildroot/package/ltrace/ltrace.mk
+---------------------------------------------------------------------- 
+ bernhardf - 06-02-07 01:46  
+---------------------------------------------------------------------- 
+You have to use LIBTGTEXT where possible (i.e. in packages that can be
+built as static or dynamic library). See the toplevel Makefile for
+LIBTGTEXT.
 
+Please update the patch accordingly.
+thanks, 
 
-Changeset:
-Modified: trunk/buildroot/package/ltrace/ltrace.mk
-===================================================================
---- trunk/buildroot/package/ltrace/ltrace.mk	2007-09-24 07:34:02 UTC (rev 19983)
-+++ trunk/buildroot/package/ltrace/ltrace.mk	2007-09-24 07:34:48 UTC (rev 19984)
-@@ -3,9 +3,9 @@
- # ltrace
- #
- #############################################################
--LTRACE_VERSION=0.4
-+LTRACE_VERSION=0.5
- LTRACE_SOURCE=ltrace_$(LTRACE_VERSION).orig.tar.gz
--#LTRACE_PATCH=ltrace_$(LTRACE_VERSION)-1.diff.gz
-+LTRACE_PATCH=ltrace_$(LTRACE_VERSION)-3.diff.gz
- LTRACE_SITE=http://ftp.debian.org/debian/pool/main/l/ltrace
- LTRACE_DIR=$(BUILD_DIR)/ltrace-$(LTRACE_VERSION)
- LTRACE_BINARY=ltrace
-@@ -20,18 +20,18 @@
- 	$(WGET) -P $(DL_DIR) $(LTRACE_SITE)/$(LTRACE_SOURCE)
- 
- ifneq ($(LTRACE_PATCH),)
--LTRACE_SOURCE2:=$(DL_DIR)/$(LTRACE_PATCH)
--$(LTRACE_SOURCE2):
-+LTRACE_PATCH_FILE:=$(DL_DIR)/$(LTRACE_PATCH)
-+$(LTRACE_PATCH_FILE):
- 	$(WGET) -P $(DL_DIR) $(LTRACE_SITE)/$(LTRACE_PATCH)
- 
- else
--LTRACE_SOURCE2:=
-+LTRACE_PATCH_FILE:=
- endif
- 
--$(LTRACE_DIR)/.patched: $(DL_DIR)/$(LTRACE_SOURCE) $(LTRACE_SOURCE2)
-+$(LTRACE_DIR)/.patched: $(DL_DIR)/$(LTRACE_SOURCE) $(LTRACE_PATCH_FILE)
- 	$(ZCAT) $(DL_DIR)/$(LTRACE_SOURCE) | tar -C $(BUILD_DIR) $(TAR_OPTIONS) -
- ifneq ($(LTRACE_PATCH),)
--	$(ZCAT) $(LTRACE_SOURCE2) | patch -p1 -d $(LTRACE_DIR)
-+	$(ZCAT) $(LTRACE_PATCH_FILE) | patch -p1 -d $(LTRACE_DIR)
- endif
- 	toolchain/patch-kernel.sh $(LTRACE_DIR) package/ltrace ltrace\*.patch
- 	$(CONFIG_UPDATE) $(@D)
-@@ -57,17 +57,22 @@
- 		-C $(LTRACE_DIR)
- 
- $(TARGET_DIR)/$(LTRACE_TARGET_BINARY): $(LTRACE_DIR)/$(LTRACE_BINARY)
--	$(MAKE) DESTDIR=$(TARGET_DIR) ARCH=$(LTRACE_ARCH) \
--		-C $(LTRACE_DIR) install
--	rm -Rf $(TARGET_DIR)/usr/man
-+	#$(MAKE) DESTDIR=$(TARGET_DIR) ARCH=$(LTRACE_ARCH)  -C $(LTRACE_DIR) install
-+	$(INSTALL) -D $(LTRACE_DIR)/$(LTRACE_BINARY) $@
-+ifeq ($(BR2_HAVE_MANPAGES),y)
-+	$(INSTALL) -D $(LTRACE_DIR)/ltrace.1 \
-+		$(TARGET_DIR)/usr/share/man/man1/ltrace.1
-+endif
-+	$(STRIP) $(STRIP_STRIP_ALL) $@
- 
- ltrace: uclibc libelf $(TARGET_DIR)/$(LTRACE_TARGET_BINARY)
- 
--ltrace-source: $(DL_DIR)/$(LTRACE_SOURCE) $(LTRACE_SOURCE2)
-+ltrace-source: $(DL_DIR)/$(LTRACE_SOURCE) $(LTRACE_PATCH_FILE)
- 
- ltrace-clean:
--	$(MAKE) prefix=$(TARGET_DIR)/usr -C $(LTRACE_DIR) uninstall
- 	-$(MAKE) -C $(LTRACE_DIR) clean
-+	rm -f $(LTRACE_DIR)/$(LTRACE_BINARY) \
-+		$(TARGET_DIR)/usr/share/man/man1/ltrace.1*
- 
- ltrace-dirclean:
- 	rm -rf $(LTRACE_DIR)
+---------------------------------------------------------------------- 
+ bernhardf - 06-02-07 02:01  
+---------------------------------------------------------------------- 
+erm. You're concerned about the host extensions, right?
+
+If so, then you'll have to add HOST_EXEEXT et al and use them where
+needed. 
+
+---------------------------------------------------------------------- 
+ holin - 06-02-07 02:07  
+---------------------------------------------------------------------- 
+What?!? No way! Buildroot target is always linux, isn't it? And Linux
+always uses the same extensions. What other use would EXEEXT, et al. have?
+They are derived from the (BR2_GNU_BUILD_SUFFIX) build toolchain suffix,
+which comes from the host system. (host=build system, target="run" target) 
+
+---------------------------------------------------------------------- 
+ holin - 06-02-07 02:25  
+---------------------------------------------------------------------- 
+Updated the patch to use LIBTGTEXT. 
+
+---------------------------------------------------------------------- 
+ bernhardf - 06-02-07 03:16  
+---------------------------------------------------------------------- 
+ugh! Let me wake up and get some coffee.. 
+
+---------------------------------------------------------------------- 
+ bernhardf - 06-02-07 03:18  
+---------------------------------------------------------------------- 
+Turns out that of course LIBTGTEXT should rather be HOST_LIBEXT. Not sure
+what i was thinking about :-/
+
+May i ask you to fix that too?
+Many thanks in advance. 
+
+---------------------------------------------------------------------- 
+ holin - 06-02-07 03:35  
+---------------------------------------------------------------------- 
+Updated patch with LIBTGTEXT -> HOST_LIBEXT. 
+
+---------------------------------------------------------------------- 
+ bernhardf - 06-02-07 04:23  
+---------------------------------------------------------------------- 
+Applied, thanks. Please let me know when you think i can close this bug. 
+
+---------------------------------------------------------------------- 
+ holin - 06-03-07 00:41  
+---------------------------------------------------------------------- 
+Oops. I need my coffee, too. I misunderstood what TGTEXT was for (didn't
+follow the corresponding mailing list thread, actually.) Host builds need
+to use shared libs as makefile targets, because static ones aren't always
+built. Uploaded dlext-fix.patch, which fixes that. Apply the patch and
+this report can be closed. 
+
+---------------------------------------------------------------------- 
+ bernhardf - 09-24-07 00:43  
+---------------------------------------------------------------------- 
+This was applied some time ago. Thanks! 
+
+Issue History 
+Date Modified   Username       Field                    Change               
+====================================================================== 
+03-04-07 05:38  holin          New Issue                                    
+03-04-07 05:38  holin          Status                   new => assigned     
+03-04-07 05:38  holin          Assigned To               => buildroot       
+03-04-07 05:38  holin          File Added: buildroot-070304-dlext.patch         
+          
+03-31-07 09:43  bendiken       Issue Monitored: bendiken                    
+06-02-07 00:13  holin          File Added: buildroot-070602-dlext-v2.patch      
+             
+06-02-07 00:14  holin          Note Added: 0002427                          
+06-02-07 01:46  bernhardf      Note Added: 0002428                          
+06-02-07 02:01  bernhardf      Note Added: 0002429                          
+06-02-07 02:07  holin          Note Added: 0002430                          
+06-02-07 02:24  holin          File Added: buildroot-070602-dlext-v3.patch      
+             
+06-02-07 02:25  holin          Note Added: 0002431                          
+06-02-07 03:16  bernhardf      Note Added: 0002432                          
+06-02-07 03:18  bernhardf      Note Added: 0002433                          
+06-02-07 03:34  holin          File Added: buildroot-070602-dlext-v4.patch      
+             
+06-02-07 03:35  holin          Note Added: 0002434                          
+06-02-07 04:23  bernhardf      Note Added: 0002435                          
+06-03-07 00:38  holin          File Added: buildroot-070603-dlext-fix.patch     
+              
+06-03-07 00:41  holin          Note Added: 0002440                          
+09-24-07 00:43  bernhardf      Status                   assigned => closed  
+09-24-07 00:43  bernhardf      Note Added: 0002777                          
+======================================================================
