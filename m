@@ -1,10 +1,8 @@
-From: Ulf Samuelsson <ulf@atmel.com>
-Date: Mon, 24 Sep 2007 17:13:25 +0200
+From: =?ISO-8859-1?Q?Thiago_A._Corr=EAa?= <thiago.correa@gmail.com>
+Date: Mon, 24 Sep 2007 16:34:34 +0100
 Subject: [Buildroot] Qtopia4 Failure
-In-Reply-To: <20070924132226.GC1335@aon.at>
+In-Reply-To: <1190646805.7015.149.camel@elrond.atmel.sweden>
 References: <1190563965.7015.21.camel@elrond.atmel.sweden>
-	<1190591711.4299.17.camel@cyclops.infocab.com.au>
-	<d6cda7730709231756k273d449axed0357049468a113@mail.gmail.com>
 	<1190595992.4299.27.camel@cyclops.infocab.com.au>
 	<d6cda7730709231841v7ce7eec2qa801e54b049763b7@mail.gmail.com>
 	<1190600185.4299.44.camel@cyclops.infocab.com.au>
@@ -13,47 +11,35 @@ References: <1190563965.7015.21.camel@elrond.atmel.sweden>
 	<20070924081339.GA31515@aon.at>
 	<d6cda7730709240559nb93d524wcab63f2ee4e6c13a@mail.gmail.com>
 	<20070924132226.GC1335@aon.at>
-Message-ID: <1190646805.7015.149.camel@elrond.atmel.sweden>
+	<1190646805.7015.149.camel@elrond.atmel.sweden>
+Message-ID: <d6cda7730709240834j5ced5e54tc3bec656c406858e@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-m?n 2007-09-24 klockan 15:22 +0200 skrev Bernhard Fischer:
-> On Mon, Sep 24, 2007 at 01:59:32PM +0100, Thiago A. Corr?a wrote:
-> >Bernhard,
-> >
-> >   The implementation doesn't seam fine. Is there any good reason not
-> >to wrap strchr in a function instead of a macro? It can be stripped
-> 
-> I don't understand this.
-> 
-> >off by the SUS3 switch just as easily.
-> 
-> $ grep LEGACY toolchain/uClibc/uClibc-0.9.29.config 
-> # UCLIBC_SUSV3_LEGACY is not set
-> # UCLIBC_SUSV3_LEGACY_MACROS is not set
-> 
-> >   According to Adam, this is required by mplayer (yeah, they are
-> >broken, shame on them). I don't see why mplayer and qtopia and
-> >possibly other packages should be mutually exclusive. Unless one
-> 
-> There is no issue for me. I don't have these LEGACY functions, nor the
-> macros. Packages that have bugs (i.e. use DEPRECATED or LEGACY as in the
-> SUSv3 ) should be fixed. IIRC, 'index' is not a reserved name and can be
-> used applications, be they written in C or C++.
+On 9/24/07, Ulf Samuelsson <ulf@atmel.com> wrote:
+>
+> Maybe it is a good idea to fix things in a controlled manner.
+> Have you tested your patch against anything, to see what
+> it actually breaks, was it just a whim?
 
-Maybe it is a good idea to fix things in a controlled manner.
-Have you tested your patch against anything, to see what
-it actually breaks, was it just a whim?
+Ulf, do you mean my proposed change? Not really. Right now I was
+trying to grep for mplayer sources to find the index or rindex, but
+could only find it in win32 code. Next step would be to try to
+reproduce Adam's build of mplayer.
 
-Why not turn off everything in uclibc.config as well?
+I can give it a shot in uClib, surely would make it more robust. But
+Bernard is right that using that API is just plain wrong, so if I can
+find it in mplayer, I'm reporting or sending a patch their way.
 
-> For reserved keywords, let me refer you to the spec of your favourite
-> language, SUSv, POSIX and those IEEE specs that are relevant for your
-> system.
-> _______________________________________________
-> buildroot mailing list
-> buildroot at uclibc.org
-> http://busybox.net/mailman/listinfo/buildroot
+> Why not turn off everything in uclibc.config as well?
+
+I was considering toying with buildbot to do automated build tests of
+buildroot. But then I realised that I have screwed my system more than
+once installing uClib into the /lib rather than the target folder
+*smile*.
+
+Regards,
+   Thiago A. Correa
