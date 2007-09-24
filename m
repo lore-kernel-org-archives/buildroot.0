@@ -1,42 +1,51 @@
-From: Ulf Samuelsson <ulf@atmel.com>
-Date: Mon, 24 Sep 2007 11:34:02 +0200
-Subject: [Buildroot] Qtopia4 Failure
-References: <1190563965.7015.21.camel@elrond.atmel.sweden>
-	<1190591711.4299.17.camel@cyclops.infocab.com.au>
-	<d6cda7730709231756k273d449axed0357049468a113@mail.gmail.com>
-	<1190595992.4299.27.camel@cyclops.infocab.com.au>
-	<d6cda7730709231841v7ce7eec2qa801e54b049763b7@mail.gmail.com>
-	<1190600185.4299.44.camel@cyclops.infocab.com.au>
-	<d6cda7730709232043k2d85bb2bi8318ef6f652a1eff@mail.gmail.com>
-	<1190621530.7015.45.camel@elrond.atmel.sweden>
-	<20070924091242.GA32094@aon.at>
-Message-ID: <005301c7fe8e$0ec437e0$dcc4af0a@atmel.com>
+From: aldot at uclibc.org <aldot@uclibc.org>
+Date: Mon, 24 Sep 2007 05:19:41 -0700 (PDT)
+Subject: [Buildroot] svn commit: trunk/buildroot/toolchain/uClibc
+Message-ID: <20070924121941.F421B30043@busybox.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-> On Mon, Sep 24, 2007 at 10:12:10AM +0200, Ulf Samuelsson wrote:
-> 
->>I will submit a patch that allows UCLIBC_SUSV3_LEGACY
->>to be SED'ed into the uclibc configuration based on
->>BR2_UCLIBC_SUSV3_LEGACY (a new makeconfig choice).
-> 
-> Please don't. This is way too fine-grained.
-> That's exactly the reason why we have
-> $ make uclibc-menuconfig
-> 
-> This is easy enough.
->
+Author: aldot
+Date: 2007-09-24 05:19:41 -0700 (Mon, 24 Sep 2007)
+New Revision: 19987
 
-I can do that, but then I have to enable UCLIBC_SUSV3_LEGACY as default
-and not the UCLIBC_SUSV3_LEGACY_MACROS as it is today.
+Log:
+- do not enable LEGACY stuff in the *sample* config
 
-The current situation is not acceptable.
-There needs to be either a dependency on UCLIBC_SUSV3_LEGACY
-when enabling Qtopia, (and I do not see how that can be accomplished)
-or the default operation should allow Qtopia to build without problems.
 
-Best Regards
-Ulf Samuelsson
+Modified:
+   trunk/buildroot/toolchain/uClibc/uClibc-0.9.29-wchar.config
+   trunk/buildroot/toolchain/uClibc/uClibc-0.9.29.config
+
+
+Changeset:
+Modified: trunk/buildroot/toolchain/uClibc/uClibc-0.9.29-wchar.config
+===================================================================
+--- trunk/buildroot/toolchain/uClibc/uClibc-0.9.29-wchar.config	2007-09-24 10:41:30 UTC (rev 19986)
++++ trunk/buildroot/toolchain/uClibc/uClibc-0.9.29-wchar.config	2007-09-24 12:19:41 UTC (rev 19987)
+@@ -94,7 +94,7 @@
+ UCLIBC_DYNAMIC_ATEXIT=y
+ # COMPAT_ATEXIT is not set
+ # UCLIBC_SUSV3_LEGACY is not set
+-UCLIBC_SUSV3_LEGACY_MACROS=y
++# UCLIBC_SUSV3_LEGACY_MACROS is not set
+ UCLIBC_HAS_SHADOW=y
+ # UCLIBC_HAS_PROGRAM_INVOCATION_NAME is not set
+ UCLIBC_HAS___PROGNAME=y
+
+Modified: trunk/buildroot/toolchain/uClibc/uClibc-0.9.29.config
+===================================================================
+--- trunk/buildroot/toolchain/uClibc/uClibc-0.9.29.config	2007-09-24 10:41:30 UTC (rev 19986)
++++ trunk/buildroot/toolchain/uClibc/uClibc-0.9.29.config	2007-09-24 12:19:41 UTC (rev 19987)
+@@ -80,7 +80,7 @@
+ # COMPAT_ATEXIT is not set
+ HAS_SHADOW=y
+ # UCLIBC_SUSV3_LEGACY is not set
+-UCLIBC_SUSV3_LEGACY_MACROS=y
++# UCLIBC_SUSV3_LEGACY_MACROS is not set
+ UCLIBC_HAS_SHADOW=y
+ # UCLIBC_HAS_PROGRAM_INVOCATION_NAME is not set
+ UCLIBC_HAS___PROGNAME=y
