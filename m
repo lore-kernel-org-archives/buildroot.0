@@ -1,7 +1,7 @@
-From: =?ISO-8859-1?Q?Thiago_A._Corr=EAa?= <thiago.correa@gmail.com>
-Date: Mon, 24 Sep 2007 13:59:32 +0100
+From: Bernhard Fischer <rep.dot.nop@gmail.com>
+Date: Mon, 24 Sep 2007 15:22:26 +0200
 Subject: [Buildroot] Qtopia4 Failure
-In-Reply-To: <20070924081339.GA31515@aon.at>
+In-Reply-To: <d6cda7730709240559nb93d524wcab63f2ee4e6c13a@mail.gmail.com>
 References: <1190563965.7015.21.camel@elrond.atmel.sweden>
 	<1190591711.4299.17.camel@cyclops.infocab.com.au>
 	<d6cda7730709231756k273d449axed0357049468a113@mail.gmail.com>
@@ -11,36 +11,37 @@ References: <1190563965.7015.21.camel@elrond.atmel.sweden>
 	<d6cda7730709232043k2d85bb2bi8318ef6f652a1eff@mail.gmail.com>
 	<1190606113.22869.5.camel@cyclops.infocab.com.au>
 	<20070924081339.GA31515@aon.at>
-Message-ID: <d6cda7730709240559nb93d524wcab63f2ee4e6c13a@mail.gmail.com>
+	<d6cda7730709240559nb93d524wcab63f2ee4e6c13a@mail.gmail.com>
+Message-ID: <20070924132226.GC1335@aon.at>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Bernhard,
-
-   The implementation doesn't seam fine. Is there any good reason not
-to wrap strchr in a function instead of a macro? It can be stripped
-off by the SUS3 switch just as easily.
-
-   According to Adam, this is required by mplayer (yeah, they are
-broken, shame on them). I don't see why mplayer and qtopia and
-possibly other packages should be mutually exclusive. Unless one
-builds uClib twice.
-
-On 9/24/07, Bernhard Fischer <rep.dot.nop@gmail.com> wrote:
-> On Mon, Sep 24, 2007 at 01:25:13PM +0930, Adam Hawes wrote:
-> >
-> >>    You are fixing newer, valid and good code in the name of legacy
-> >> compatibility with a flawed work around for legacy API. The simple
-> >> fact that there are more than one way around it doesn't make the patch
-> >> the better way. And I think we should strive for the better way to fix
-> >> things ;)
-> >
-> >"Better" is such a subjective word.  Who defines what is better in their
-> >particular instance?
+On Mon, Sep 24, 2007 at 01:59:32PM +0100, Thiago A. Corr?a wrote:
+>Bernhard,
 >
-> The current impl in uClibc is fine. You're broken if you rely on those
-> legacy stuff anyway, just turn it off to safe you some headache.
->
+>   The implementation doesn't seam fine. Is there any good reason not
+>to wrap strchr in a function instead of a macro? It can be stripped
+
+I don't understand this.
+
+>off by the SUS3 switch just as easily.
+
+$ grep LEGACY toolchain/uClibc/uClibc-0.9.29.config 
+# UCLIBC_SUSV3_LEGACY is not set
+# UCLIBC_SUSV3_LEGACY_MACROS is not set
+
+>   According to Adam, this is required by mplayer (yeah, they are
+>broken, shame on them). I don't see why mplayer and qtopia and
+>possibly other packages should be mutually exclusive. Unless one
+
+There is no issue for me. I don't have these LEGACY functions, nor the
+macros. Packages that have bugs (i.e. use DEPRECATED or LEGACY as in the
+SUSv3 ) should be fixed. IIRC, 'index' is not a reserved name and can be
+used applications, be they written in C or C++.
+
+For reserved keywords, let me refer you to the spec of your favourite
+language, SUSv, POSIX and those IEEE specs that are relevant for your
+system.
