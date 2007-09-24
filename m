@@ -1,7 +1,8 @@
 From: bugs at busybox.net <bugs@busybox.net>
-Date: Mon, 24 Sep 2007 00:49:54 -0700
-Subject: [Buildroot] [buildroot 0001282]: ccache
-Message-ID: <e9b139f26bf5ddc5f7918d319ab4e491@busybox.net>
+Date: Mon, 24 Sep 2007 00:53:46 -0700
+Subject: [Buildroot] [buildroot 0001258]: Packages with "self-written"
+	configure scripts fail with non-Linux hosts
+Message-ID: <c98ad37fcb4478e04d590843ecbbd89f@busybox.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -9,122 +10,55 @@ Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
 
-A NOTE has been added to this issue. 
+The following issue has been CLOSED 
 ====================================================================== 
-http://busybox.net/bugs/view.php?id=1282 
+http://busybox.net/bugs/view.php?id=1258 
 ====================================================================== 
-Reported By:                Franck78
+Reported By:                holin
 Assigned To:                buildroot
 ====================================================================== 
 Project:                    buildroot
-Issue ID:                   1282
+Issue ID:                   1258
 Category:                   Architecture Specific
 Reproducibility:            always
-Severity:                   feature
+Severity:                   major
 Priority:                   normal
-Status:                     assigned
+Status:                     closed
+Resolution:                 open
+Fixed in Version:           
 ====================================================================== 
-Date Submitted:             03-21-2007 11:56 PDT
-Last Modified:              09-24-2007 00:49 PDT
+Date Submitted:             03-04-2007 07:29 PST
+Last Modified:              09-24-2007 00:53 PDT
 ====================================================================== 
-Summary:                    ccache
+Summary:                    Packages with "self-written" configure scripts fail
+with non-Linux hosts
 Description: 
-Hello,
-
-1) ccache is built at the end of the toolchain (gcc/uclibc/binutils). It
-serves for nothing (ok I except if you slected other package it may...).
-
-2) the ccache_dir is fixed inside 'toolchain_build_i486' It would be
-better if the  CCACHE_DIR could be setup somewhere else outside
-'buildroot'.
-Why? In automated procedure constructing distro, buildroot.tar.gz is
-expanded then configured then built as all other packages making the
-distro.
-It means everytime, buildroot dir is like a virgin.. ;-) No ccache_dir
-inside.
-
-but if ccache_dir is outside....ok, it will be preserved accross rebuilds
-and the final touch would have ccache used for ALL the toolchain
-construction...!
+Non-autoconf packages seem to be unfriendly towards cross-building. Few
+examples are zlib and jpeg. On Mac OS X host, they cannot link shared
+libraries correctly, because they identify the host system as the target
+system and try to pass OS X linker flags to, for example,
+i686-linux-uclibc-gcc. Autoconfed packages, such as gmp, seem to work
+fine.
 
 
-Adding a new option in 'make menuconfig' is beyond my knowledge of
-buildroot for now.
-
-Franck
 ====================================================================== 
 
 ---------------------------------------------------------------------- 
- bernhardf - 06-25-07 11:02  
+ bernhardf - 09-24-07 00:53  
 ---------------------------------------------------------------------- 
-Although i don't understand a word, i think that this sounds like "Doctor,
-it hurts when i do.."
+Please report this to the affected upstream-packages. Such packages are
+supposed to be fixed upstream, we will add new upstream releases that
+contain such fixes ASAP (upon notice).
 
-Please describe the problem you are facing and suggest what should be done
-why and how, i shall close this bug otherwise. 
-
----------------------------------------------------------------------- 
- Franck78 - 06-25-07 11:38  
----------------------------------------------------------------------- 
-Ok,
-A distro is something more complete than buildroot alone. The buildroot
-package is only 'one step among others'. The full build can follow some
-method like lfs (linux from scratch). 
-Having ccache dir outside of the tree build avoid loosing what have been
-already compiled when some kind of full rebuild of the distro is
-performed. In other words, the cachedir is in a safe configurable place. 
-
-tchuss. 
-
----------------------------------------------------------------------- 
- chickenandporn - 06-25-07 21:13  
----------------------------------------------------------------------- 
-It seems the request is:
-
-Add a Config.in/Kconfig option for user-specified CCACHE_DIR defaulting to
-current value
-
-This is within my ability, but I don't have a ccache build working (I'm
-broken with MacOSX right now).  I will contact submitter. 
-
----------------------------------------------------------------------- 
- UlfSamuelsson - 09-23-07 16:15  
----------------------------------------------------------------------- 
-ccache will do by default, what you need, but buildroot does:
-
-$(SED) "s,getenv(\"CCACHE_PATH\"),\"$(STAGING_DIR)/usr/bin-ccache\",g" \
-	$(CCACHE_DIR1)/execute.c
-$(SED) "s,getenv(\"CCACHE_DIR\"),\"$(CCACHE_DIR1)/cache\",g" \
-	$(CCACHE_DIR1)/ccache.c
-
-If it did not do that replacement, or replaced with
-getenv("BUILDROOT_CCACHE_PATH") and 
-getenv("BUILDROOT_CCACHE_DIR") you would be OK.
-
-Then the user has to set up these variables outside Buildroot,
-so Buildroot needs to set up these to a default. 
-
----------------------------------------------------------------------- 
- bernhardf - 09-24-07 00:49  
----------------------------------------------------------------------- 
-Using the established CCACHE_PATH and CCACHE_DIR (i.e. dropping our
-patching those out) and providing menuconfig-entries depending on ccache
-would IMO be the proper thing to do.
-
-Is anybody willing to attach such a patch (that is tested and works for
-him/her)?
-
-thanks, 
+thanks. 
 
 Issue History 
 Date Modified   Username       Field                    Change               
 ====================================================================== 
-03-21-07 11:56  Franck78       New Issue                                    
-03-21-07 11:56  Franck78       Status                   new => assigned     
-03-21-07 11:56  Franck78       Assigned To               => buildroot       
-06-25-07 11:02  bernhardf      Note Added: 0002507                          
-06-25-07 11:38  Franck78       Note Added: 0002513                          
-06-25-07 21:13  chickenandporn Note Added: 0002515                          
-09-23-07 16:15  UlfSamuelsson  Note Added: 0002773                          
-09-24-07 00:49  bernhardf      Note Added: 0002778                          
+03-04-07 07:29  holin          New Issue                                    
+03-04-07 07:29  holin          Status                   new => assigned     
+03-04-07 07:29  holin          Assigned To               => buildroot       
+03-31-07 09:42  bendiken       Issue Monitored: bendiken                    
+09-24-07 00:53  bernhardf      Status                   assigned => closed  
+09-24-07 00:53  bernhardf      Note Added: 0002779                          
 ======================================================================
