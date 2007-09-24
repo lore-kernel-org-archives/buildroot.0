@@ -1,7 +1,7 @@
-From: Bernhard Fischer <rep.dot.nop@gmail.com>
-Date: Mon, 24 Sep 2007 14:27:51 +0200
+From: =?ISO-8859-1?Q?Thiago_A._Corr=EAa?= <thiago.correa@gmail.com>
+Date: Mon, 24 Sep 2007 13:59:32 +0100
 Subject: [Buildroot] Qtopia4 Failure
-In-Reply-To: <005301c7fe8e$0ec437e0$dcc4af0a@atmel.com>
+In-Reply-To: <20070924081339.GA31515@aon.at>
 References: <1190563965.7015.21.camel@elrond.atmel.sweden>
 	<1190591711.4299.17.camel@cyclops.infocab.com.au>
 	<d6cda7730709231756k273d449axed0357049468a113@mail.gmail.com>
@@ -9,55 +9,38 @@ References: <1190563965.7015.21.camel@elrond.atmel.sweden>
 	<d6cda7730709231841v7ce7eec2qa801e54b049763b7@mail.gmail.com>
 	<1190600185.4299.44.camel@cyclops.infocab.com.au>
 	<d6cda7730709232043k2d85bb2bi8318ef6f652a1eff@mail.gmail.com>
-	<1190621530.7015.45.camel@elrond.atmel.sweden>
-	<20070924091242.GA32094@aon.at>
-	<005301c7fe8e$0ec437e0$dcc4af0a@atmel.com>
-Message-ID: <20070924122751.GB32094@aon.at>
+	<1190606113.22869.5.camel@cyclops.infocab.com.au>
+	<20070924081339.GA31515@aon.at>
+Message-ID: <d6cda7730709240559nb93d524wcab63f2ee4e6c13a@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Mon, Sep 24, 2007 at 11:34:02AM +0200, Ulf Samuelsson wrote:
->> On Mon, Sep 24, 2007 at 10:12:10AM +0200, Ulf Samuelsson wrote:
->> 
->>>I will submit a patch that allows UCLIBC_SUSV3_LEGACY
->>>to be SED'ed into the uclibc configuration based on
->>>BR2_UCLIBC_SUSV3_LEGACY (a new makeconfig choice).
->> 
->> Please don't. This is way too fine-grained.
->> That's exactly the reason why we have
->> $ make uclibc-menuconfig
->> 
->> This is easy enough.
->>
+Bernhard,
+
+   The implementation doesn't seam fine. Is there any good reason not
+to wrap strchr in a function instead of a macro? It can be stripped
+off by the SUS3 switch just as easily.
+
+   According to Adam, this is required by mplayer (yeah, they are
+broken, shame on them). I don't see why mplayer and qtopia and
+possibly other packages should be mutually exclusive. Unless one
+builds uClib twice.
+
+On 9/24/07, Bernhard Fischer <rep.dot.nop@gmail.com> wrote:
+> On Mon, Sep 24, 2007 at 01:25:13PM +0930, Adam Hawes wrote:
+> >
+> >>    You are fixing newer, valid and good code in the name of legacy
+> >> compatibility with a flawed work around for legacy API. The simple
+> >> fact that there are more than one way around it doesn't make the patch
+> >> the better way. And I think we should strive for the better way to fix
+> >> things ;)
+> >
+> >"Better" is such a subjective word.  Who defines what is better in their
+> >particular instance?
 >
->I can do that, but then I have to enable UCLIBC_SUSV3_LEGACY as default
->and not the UCLIBC_SUSV3_LEGACY_MACROS as it is today.
-
-This is a *sample* config. You are supposed to configure this yourself.
-
-This sample config is definately *not* ment to be used without
-configuring it according to your special needs. If you want a libc
-that's easy to use (because it is not configurable), then go use glibc.
-
+> The current impl in uClibc is fine. You're broken if you rely on those
+> legacy stuff anyway, just turn it off to safe you some headache.
 >
->The current situation is not acceptable.
-
-It is unacceptable to shield the user from any configuration, especially
-if he did change the default config anyway (since he selected qtopia
-which was not on per default, last time i looked).
-
->There needs to be either a dependency on UCLIBC_SUSV3_LEGACY
->when enabling Qtopia, (and I do not see how that can be accomplished)
->or the default operation should allow Qtopia to build without problems.
-
-Whatever. I disabled the LEGACY stuff in the provided *example* config.
-Still, the user is responsible for configuring his desired buildroot
-config as well as his desired uClibc-, busybox- and kernel config.
-
-If a user is not willing to configure for his needs, he'd be better off
-to either use the default, without changing anything (which will result
-in a very minimal i386 uClibc rootfs) or use some pre-built distro like
-redhat, suse, debian etc are providing.
