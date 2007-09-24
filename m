@@ -1,118 +1,30 @@
-From: bugs at busybox.net <bugs@busybox.net>
-Date: Mon, 24 Sep 2007 02:08:36 -0700
-Subject: [Buildroot] [buildroot 0000878]: Update xorg to 6.9.0 and make it
-	compile
-Message-ID: <da1139fe28e05c86c7d4fcafad7678a1@busybox.net>
+From: Bernhard Fischer <rep.dot.nop@gmail.com>
+Date: Mon, 24 Sep 2007 11:12:42 +0200
+Subject: [Buildroot] Qtopia4 Failure
+In-Reply-To: <1190621530.7015.45.camel@elrond.atmel.sweden>
+References: <1190563965.7015.21.camel@elrond.atmel.sweden>
+	<1190591711.4299.17.camel@cyclops.infocab.com.au>
+	<d6cda7730709231756k273d449axed0357049468a113@mail.gmail.com>
+	<1190595992.4299.27.camel@cyclops.infocab.com.au>
+	<d6cda7730709231841v7ce7eec2qa801e54b049763b7@mail.gmail.com>
+	<1190600185.4299.44.camel@cyclops.infocab.com.au>
+	<d6cda7730709232043k2d85bb2bi8318ef6f652a1eff@mail.gmail.com>
+	<1190621530.7015.45.camel@elrond.atmel.sweden>
+Message-ID: <20070924091242.GA32094@aon.at>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+On Mon, Sep 24, 2007 at 10:12:10AM +0200, Ulf Samuelsson wrote:
 
-The following issue has been CLOSED 
-====================================================================== 
-http://busybox.net/bugs/view.php?id=878 
-====================================================================== 
-Reported By:                mastag
-Assigned To:                buildroot
-====================================================================== 
-Project:                    buildroot
-Issue ID:                   878
-Category:                   New Features
-Reproducibility:            always
-Severity:                   tweak
-Priority:                   normal
-Status:                     closed
-Resolution:                 open
-Fixed in Version:           
-====================================================================== 
-Date Submitted:             05-23-2006 19:25 PDT
-Last Modified:              09-24-2007 02:08 PDT
-====================================================================== 
-Summary:                    Update xorg to 6.9.0 and make it compile
-Description: 
-I updated xorg to 6.9.0.
-the xorg.mk file has been altered to setup a correct host.def and
-cross.def envoriment.
-It should pass the correct ByteOrder, HasMMXSuppoer, hasMTRRSupport and
-XF86INT10_BUILD depending on what Arch you are compiling for.
+>I will submit a patch that allows UCLIBC_SUSV3_LEGACY
+>to be SED'ed into the uclibc configuration based on
+>BR2_UCLIBC_SUSV3_LEGACY (a new makeconfig choice).
 
-I also added some patches to make it build against uclibc.
+Please don't. This is way too fine-grained.
+That's exactly the reason why we have
+$ make uclibc-menuconfig
 
-Tested it with SH4 and it works.
-
-Sorry for my bad english.
-====================================================================== 
-
----------------------------------------------------------------------- 
- vapier - 05-25-06 19:15  
----------------------------------------------------------------------- 
-you might as well just update to the latest version instead of a version
-that is already outdated 
-
----------------------------------------------------------------------- 
- mastag - 05-26-06 06:10  
----------------------------------------------------------------------- 
-Allright,
-
-I'll try to build xorg 7.1 then.
-Then I'll post a new patch. 
-
----------------------------------------------------------------------- 
- deadcow - 07-06-06 07:40  
----------------------------------------------------------------------- 
-I'm using Xorg 7.0 on Gentoo (so it's self-compiled) with uclibc-0.9.28 
-(USE="userlocales minimal -pregen savedconfig -uclibc-compat wordexp). It
-works fine as far as I can tell, but XvMC-acceleration is not working.
-
-The kernel-drm loads, and drm as well as XvMC appears correctly in the
-Xorg.log, but xine doesn't use it.
-
-Can I do anything to help getting it to work? You need any logfiles, want
-me to try anything?
-
-BTW:
-kernel 2.6.16, and kernel-drm for via chipsets.
-
-Cheers,
-  Mario
-
- 
-
----------------------------------------------------------------------- 
- deadcow - 07-06-06 07:44  
----------------------------------------------------------------------- 
-As of 07/06/06, using Gentoos xorg-7.1 and xine-lib-1.1.2_pre20060630-r1,
-everything seems to work fine now. I haven't done much testing yet, but it
-all looks ok (X starts without errors, drm gets loaded, xine detects XvMC
-and plays MPEG1/2 w/ HW-acceleration). 
-
----------------------------------------------------------------------- 
- bernhardf - 09-24-07 02:08  
----------------------------------------------------------------------- 
-an x11r7 package (with many flaws) was added to buildroot recently.
-Please help fixing the problems (mainly the patch handling in
-package/Makefile.autotools.in is an ugly hack) and send patches and
-feedback to the mailing list.
-
-thanks, 
-
-Issue History 
-Date Modified   Username       Field                    Change               
-====================================================================== 
-05-23-06 19:25  mastag         New Issue                                    
-05-23-06 19:25  mastag         Status                   new => assigned     
-05-23-06 19:25  mastag         Assigned To               => uClibc          
-05-23-06 19:25  mastag         File Added: buildroot_xorg-6.9.0.patch           
-        
-05-25-06 19:15  vapier         Note Added: 0001384                          
-05-26-06 06:10  mastag         Note Added: 0001386                          
-06-28-06 12:46  deadcow        Issue Monitored: deadcow                     
-07-05-06 11:27  deadcow        Note Added: 0001497                          
-07-06-06 07:40  deadcow        Note Edited: 0001497                         
-07-06-06 07:44  deadcow        Note Added: 0001499                          
-02-12-07 05:34  vapier         Assigned To              uClibc => buildroot 
-09-24-07 02:08  bernhardf      Status                   assigned => closed  
-09-24-07 02:08  bernhardf      Note Added: 0002786                          
-======================================================================
+This is easy enough.
