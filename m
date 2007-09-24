@@ -1,7 +1,8 @@
 From: bugs at busybox.net <bugs@busybox.net>
-Date: Mon, 24 Sep 2007 02:04:20 -0700
-Subject: [Buildroot] [buildroot 0000967]: SEGV when running openssh
-Message-ID: <4be9d595decf1902b8c3d2a262d13824@busybox.net>
+Date: Mon, 24 Sep 2007 02:06:21 -0700
+Subject: [Buildroot] [buildroot 0001103]: Ruby compile breaks on the
+	"socket" routine
+Message-ID: <e091900952a3fb6232e155593d64ac06@busybox.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -9,113 +10,65 @@ Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
 
-The following issue has been CLOSED 
+A NOTE has been added to this issue. 
 ====================================================================== 
-http://busybox.net/bugs/view.php?id=967 
+http://busybox.net/bugs/view.php?id=1103 
 ====================================================================== 
-Reported By:                lerichi
+Reported By:                znmeb
 Assigned To:                buildroot
 ====================================================================== 
 Project:                    buildroot
-Issue ID:                   967
+Issue ID:                   1103
 Category:                   Architecture Specific
 Reproducibility:            always
-Severity:                   major
+Severity:                   minor
 Priority:                   normal
-Status:                     closed
-Resolution:                 open
-Fixed in Version:           
+Status:                     assigned
 ====================================================================== 
-Date Submitted:             07-23-2006 14:59 PDT
-Last Modified:              09-24-2007 02:04 PDT
+Date Submitted:             11-25-2006 22:08 PST
+Last Modified:              09-24-2007 02:06 PDT
 ====================================================================== 
-Summary:                    SEGV when running openssh
+Summary:                    Ruby compile breaks on the "socket" routine
 Description: 
-I downloaded and did a standard build of the latest buildroot. Busybox
-works just fine, but openssh and all its helpers just SEGV. Apart from
-that, the other non-busybox proggies also die. So there must be a problem
-with some library. 
+When compiling on an IPV6 aware system, Ruby's configure step enables use
+of IPV6 in compiling "socket.c". However, on the Buildroot system, this
+compile fails:
 
-Just make a standard build (gcc-3.4.2), chroot into build_ARCH/root and
-call sshd. It should die :-(
+make[2]: Leaving directory
+`/data1/GenericBuildroot/buildroot/build_i386/ruby-1.8.5/ext/sdbm'
+compiling socket
 
-Any ideas? I have a suspicion that xstrdup() might be the cause.
+Fatal: --enable-ipv6 is specified, and your OS seems to support IPv6
+feature.
+But your getaddrinfo() and getnameinfo() are appeared to be broken. 
+Sorry,
+you cannot compile IPv6 socket classes with broken these functions.
+You can try --enable-wide-getaddrinfo.
+compiling stringio
+make[2]: Entering directory
+`/data1/GenericBuildroot/buildroot/build_i386/ruby-1.8.5/ext/stringio'
 
-Regards-
-Richard
+
+Adding the line
+
+    --disable-ipv6 \
+
+in the configure step of buildroot/package/ruby/ruby.mk fixes this.
 ====================================================================== 
 
 ---------------------------------------------------------------------- 
- bernhardf - 01-24-07 13:04  
+ bernhardf - 09-24-07 02:06  
 ---------------------------------------------------------------------- 
-Try to strace this and perpahs provide a simple testcase for us to
-reproduce. 
-
----------------------------------------------------------------------- 
- gheeres - 02-01-07 13:53  
----------------------------------------------------------------------- 
-Attached strace output.
-
-Build / configuration:
-
-uClibc-snapshost (01/26/2007)
-gcc-v4.1.1
-openssh-v3.9p1
-
-Same results attempting to use openssh-v4.5p1
-
-If strace needs to be in different format, please provide instructions for
-generating. 
-
----------------------------------------------------------------------- 
- gheeres - 02-01-07 14:10  
----------------------------------------------------------------------- 
-Older buildroot using:
-
-uClibc-0.9.28 (non-snapshot)
-gcc-v3.4.6
-openssh-v3.9p1 or openssh-v4.5p1
-
-Works correctly. 
-
----------------------------------------------------------------------- 
- gheeres - 02-03-07 17:31  
----------------------------------------------------------------------- 
-Checked out newest uClibc build (http://busybox.net/bugs/view.php?id=#02012007),
-completely rebuilt entire
-toolchain and build files. SSH is no longer SEGV. 
-
----------------------------------------------------------------------- 
- bernhardf - 02-04-07 03:24  
----------------------------------------------------------------------- 
-I consider this fixed now and shall close this issue within two weeks from
-now on, unless somebody comes up to let us know that 0.9.28.1 and current
-svn still has problems.
-
-Thanks, all, for your help with testing. 
-
----------------------------------------------------------------------- 
- bernhardf - 09-24-07 02:04  
----------------------------------------------------------------------- 
-ssh was updated and works fine for me. 
+Does this work fine with uClibc-0.9.29 (the current release) and a current
+ruby? 
 
 Issue History 
 Date Modified   Username       Field                    Change               
 ====================================================================== 
-07-23-06 14:59  lerichi        New Issue                                    
-07-23-06 14:59  lerichi        Status                   new => assigned     
-07-23-06 14:59  lerichi        Assigned To               => uClibc          
-07-27-06 04:58  thrakhath      Issue Monitored: thrakhath                    
-01-24-07 13:04  bernhardf      Note Added: 0002041                          
-02-01-07 13:50  gheeres        File Added: uClibc-snapshot-openssh-v3.9p1.strace
-                   
-02-01-07 13:53  gheeres        Note Added: 0002081                          
-02-01-07 14:10  gheeres        Note Added: 0002082                          
-02-03-07 17:31  gheeres        Note Added: 0002092                          
-02-04-07 03:24  bernhardf      Note Added: 0002094                          
-02-04-07 03:24  bernhardf      Status                   assigned => feedback
-02-12-07 05:33  vapier         Status                   feedback => assigned
-02-12-07 05:33  vapier         Assigned To              uClibc => buildroot 
-09-24-07 02:04  bernhardf      Status                   assigned => closed  
-09-24-07 02:04  bernhardf      Note Added: 0002784                          
+11-25-06 22:08  znmeb          New Issue                                    
+11-25-06 22:08  znmeb          Status                   new => assigned     
+11-25-06 22:08  znmeb          Assigned To               => uClibc          
+11-25-06 22:08  znmeb          Issue Monitored: znmeb                       
+02-12-07 05:34  vapier         Assigned To              uClibc => buildroot 
+09-24-07 02:06  bernhardf      Note Added: 0002785                          
 ======================================================================
