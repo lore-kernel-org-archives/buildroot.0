@@ -1,70 +1,58 @@
-From: =?ISO-8859-1?Q?Thiago_A._Corr=EAa?= <thiago.correa@gmail.com>
-Date: Mon, 24 Sep 2007 02:41:24 +0100
+From: Adam Hawes <adam@infocab.com.au>
+Date: Mon, 24 Sep 2007 11:46:25 +0930
 Subject: [Buildroot] Qtopia4 Failure
-In-Reply-To: <1190595992.4299.27.camel@cyclops.infocab.com.au>
+In-Reply-To: <d6cda7730709231841v7ce7eec2qa801e54b049763b7@mail.gmail.com>
 References: <1190563965.7015.21.camel@elrond.atmel.sweden>
 	<1190591711.4299.17.camel@cyclops.infocab.com.au>
 	<d6cda7730709231756k273d449axed0357049468a113@mail.gmail.com>
 	<1190595992.4299.27.camel@cyclops.infocab.com.au>
-Message-ID: <d6cda7730709231841v7ce7eec2qa801e54b049763b7@mail.gmail.com>
+	<d6cda7730709231841v7ce7eec2qa801e54b049763b7@mail.gmail.com>
+Message-ID: <1190600185.4299.44.camel@cyclops.infocab.com.au>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Sure. There are all sort of valid code that a define breaks:
+> A define claims the name index as if it were a keyword. It is a well
+> known issue.
 
-class MyClass
-{
-    MyClass() : index( 0 )
-    {}
-};
+Yes, I am well aware of that.
 
-class MyOtherClass
-{
-    int index() const { return 0; }
-}
+> How about change it to a function that wrapps the strchr()?
+> According to this:
+> http://www.opengroup.org/onlinepubs/000095399/functions/index.html
+> it used to be a function anyway.
 
+It's LEGACY.  To quote the open Group page you linked:
 
-A define claims the name index as if it were a keyword. It is a well
-known issue.
+"For maximum portability, it is recommended to replace the function call
+to index() as follows:
 
-How about change it to a function that wrapps the strchr()?
-According to this:
-http://www.opengroup.org/onlinepubs/000095399/functions/index.html
-it used to be a function anyway.
+#define index(a,b) strchr((a),(b))"
 
-At least it would give the compiler a chance to figure out by the scope.
+The recommendation is to #define index when you need it in legacy code
+because it no longer exists in the standard library.  uClibc does this
+globally with a configuration option.
 
-One other good solution would be to patch mplayer not to use this define.
+> One other good solution would be to patch mplayer not to use this define.
 
+A good solution: yes.
 
-On 9/24/07, Adam Hawes <adam@infocab.com.au> wrote:
-> On Mon, 2007-09-24 at 01:56 +0100, Thiago A. Corr?a wrote:
-> > shouldn't you patch uClib instead? Claiming index with a define is
-> > really stupid on the part of the library. Others, including myself use
-> > index as variable names quite often.
->
-> Do you use index()?  The macro accepts 2 arguments and the pre-processor
-> only seems to baulk when you use a function or method called index(...).
-> Variable names appear unproblematic.
->
-> Fixing uClibc would be the sensible thing to do, and uClibc actually has
-> a configuration option to turn off the legacy macros.  Turning them off,
-> however, breaks compatibility with a few things (mplayer was the most
-> recent one I found that wouldn't build with SUSv3 macros disabled).
->
-> I found it easier to patch Qtopia because it was the only thing that
-> didn't like the macros that I have found thus far.
->
-> So please keep in mind that there is not one universal solution - there
-> are a few options depending on the needs.  My patch fixes Qtopia for
-> those people who need the SUSv3 legacy macros in other places.  For
-> everyone else there's the configuration option of the library!
->
-> Regards,
-> A
->
->
->
+The only solution: no.  There is all sorts of other code that still uses
+legacy function calls.  It's not ideal but it's the way it is.  See my
+quote below.  
+
+Quoting me:
+> > Fixing uClibc would be the sensible thing to do, and uClibc actually has
+> > a configuration option to turn off the legacy macros.  Turning them off,
+> > however, breaks compatibility with a few things (mplayer was the most
+> > recent one I found that wouldn't build with SUSv3 macros disabled).
+
+It is already possible to remove the macros from uClibc by turning off
+SUSv3_LEGACY_MACROS in the configuration file before you build it.  You
+don't need to patch uClibc.   Removing the macros may break more than
+just mplayer though.
+
+Regards,
+Adam
