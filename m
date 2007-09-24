@@ -1,59 +1,32 @@
-From: Ulf Samuelsson <ulf@atmel.com>
-Date: Mon, 24 Sep 2007 10:02:41 +0200
+From: Bernhard Fischer <rep.dot.nop@gmail.com>
+Date: Mon, 24 Sep 2007 10:13:39 +0200
 Subject: [Buildroot] Qtopia4 Failure
-In-Reply-To: <1190591711.4299.17.camel@cyclops.infocab.com.au>
+In-Reply-To: <1190606113.22869.5.camel@cyclops.infocab.com.au>
 References: <1190563965.7015.21.camel@elrond.atmel.sweden>
 	<1190591711.4299.17.camel@cyclops.infocab.com.au>
-Message-ID: <1190620961.7015.36.camel@elrond.atmel.sweden>
+	<d6cda7730709231756k273d449axed0357049468a113@mail.gmail.com>
+	<1190595992.4299.27.camel@cyclops.infocab.com.au>
+	<d6cda7730709231841v7ce7eec2qa801e54b049763b7@mail.gmail.com>
+	<1190600185.4299.44.camel@cyclops.infocab.com.au>
+	<d6cda7730709232043k2d85bb2bi8318ef6f652a1eff@mail.gmail.com>
+	<1190606113.22869.5.camel@cyclops.infocab.com.au>
+Message-ID: <20070924081339.GA31515@aon.at>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-m?n 2007-09-24 klockan 09:25 +0930 skrev Adam Hawes:
-> On Sun, 2007-09-23 at 18:12 +0200, Ulf Samuelsson wrote:
-> > Anyone building qtopia?
-> > I get (when compiling with gcc-4.2.1/binutils-2.18/uclibc-0.9.29):
-> > 
-> > 
-> > arm-linux-g++ -c -pipe -g -g -fvisibility=hidden
-> > -fvisibility-inlines-hidden -Wall -W -D_REENTRANT -fPIC -DQT_SHARED
-> > -DTSLIBMOUSEHANDLER_DEBUG -DQT_BUILD_CORE_LIB -DQT_NO_CAST_TO_ASCII
-> > -DQT_ASCII_CAST_WARNINGS -DQT3_SUPPORT -DQT_MOC_COMPAT
-> > -D_LARGEFILE64_SOURCE -D_LARGEFILE_SOURCE
-> > -I../../mkspecs/qws/linux-arm-g++ -I. -I../../include
-> > -I../../include/QtCore -Iglobal -I.moc/debug-shared-emb-arm
-> > -I.uic/debug-shared-emb-arm
-> > -o .obj/debug-shared-emb-arm/qresource_iterator.o
-> > io/qresource_iterator.cpp
-> > io/qresource_iterator.cpp:46:66: error: macro "index" requires 2
-> > arguments, but only 1 given
-> > io/qresource_iterator.cpp: In constructor
-> > ?QResourceFileEngineIterator::QResourceFileEngineIterator(QFlags<QDir::Filter>, const QStringList&)?:
-> > io/qresource_iterator.cpp:47: error: expected `(' before ?{? token
-> > make[2]: *** [.obj/debug-shared-emb-arm/qresource_iterator.o] Fel 1
-> > 
-> 
-> Yup.  To quote Carmelo Amoroso (search the archives in the last month):
-> 
-> "The problem is that you have uClibc configure with SUSv3_LEGACY_MACRO
-> on that define index."
+On Mon, Sep 24, 2007 at 01:25:13PM +0930, Adam Hawes wrote:
+>
+>>    You are fixing newer, valid and good code in the name of legacy
+>> compatibility with a flawed work around for legacy API. The simple
+>> fact that there are more than one way around it doesn't make the patch
+>> the better way. And I think we should strive for the better way to fix
+>> things ;)
+>
+>"Better" is such a subjective word.  Who defines what is better in their
+>particular instance?
 
-I have tried another alternative, and that is to enable
-UCLIBC_SUSV3_LEGACY instead of UCLIBC_SUSV3_LEGACY_MACROS
-Then the Macros do not get defined, and you instead gets the 
-real bcopy/bzero etc. routines.
-
-With this, qtopia-4.3.1 compiles.
-
-qtopia will depend on UCLIBC_SUSV3_LEGACY.
-
-> 
-> I have attached a patch that fixes the problem in all the places that
-> needs to be fixed (#undef index).  I need SUSv3 macros to build some
-> other things so I didn't want to turn them off and fix other things.
-> 
-> Cheers,
-> A
-> 
+The current impl in uClibc is fine. You're broken if you rely on those
+legacy stuff anyway, just turn it off to safe you some headache.
