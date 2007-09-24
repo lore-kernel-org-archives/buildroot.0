@@ -1,45 +1,44 @@
-From: =?ISO-8859-1?Q?Thiago_A._Corr=EAa?= <thiago.correa@gmail.com>
-Date: Mon, 24 Sep 2007 16:34:34 +0100
-Subject: [Buildroot] Qtopia4 Failure
-In-Reply-To: <1190646805.7015.149.camel@elrond.atmel.sweden>
-References: <1190563965.7015.21.camel@elrond.atmel.sweden>
-	<1190595992.4299.27.camel@cyclops.infocab.com.au>
-	<d6cda7730709231841v7ce7eec2qa801e54b049763b7@mail.gmail.com>
-	<1190600185.4299.44.camel@cyclops.infocab.com.au>
-	<d6cda7730709232043k2d85bb2bi8318ef6f652a1eff@mail.gmail.com>
-	<1190606113.22869.5.camel@cyclops.infocab.com.au>
-	<20070924081339.GA31515@aon.at>
-	<d6cda7730709240559nb93d524wcab63f2ee4e6c13a@mail.gmail.com>
-	<20070924132226.GC1335@aon.at>
-	<1190646805.7015.149.camel@elrond.atmel.sweden>
-Message-ID: <d6cda7730709240834j5ced5e54tc3bec656c406858e@mail.gmail.com>
+From: Ivan Kuten <ivan.kuten@promwad.com>
+Date: Mon, 24 Sep 2007 20:31:00 +0300
+Subject: [Buildroot] some tips for x11r7
+In-Reply-To: <46F7CBF7.8040103@apexar.com.ar>
+References: <46F6BBA4.80002@promwad.com> <46F7CBF7.8040103@apexar.com.ar>
+Message-ID: <46F7F454.9060603@promwad.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 9/24/07, Ulf Samuelsson <ulf@atmel.com> wrote:
->
-> Maybe it is a good idea to fix things in a controlled manner.
-> Have you tested your patch against anything, to see what
-> it actually breaks, was it just a whim?
+>>   
+> Hi Ivan,
+> 
+> I was trying to solve the same problem as you: make X working in ARM, 
+> but i'm getting this error when compiling FontConfig (the X server i 
+> choose was x11r7):
+> 
+> configure.in:63: error: possibly undefined macro: AC_LIBTOOL_WIN32_DLL
+>       If this token and others are legitimate, please use m4_pattern_allow.
+>       See the Autoconf documentation.
+> configure.in:64: error: possibly undefined macro: AM_PROG_LIBTOOL
+> autoreconf: /usr/bin/autoconf failed with exit status: 1
+> make: *** 
+> [/home/dfons/buildroot_19987/build_arm/fontconfig-2.4.2/.configured] Error 1
+> 
+> Did you get this error? What can i do to solve it?
+> 
+> Regards,
+> Diego A. Fons.
 
-Ulf, do you mean my proposed change? Not really. Right now I was
-trying to grep for mplayer sources to find the index or rindex, but
-could only find it in win32 code. Next step would be to try to
-reproduce Adam's build of mplayer.
+Hello,
 
-I can give it a shot in uClib, surely would make it more robust. But
-Bernard is right that using that API is just plain wrong, so if I can
-find it in mplayer, I'm reporting or sending a patch their way.
+No, do not have such an error. But I have fontconfig and fontconfig-devel rpms installed on my host PC -
+may be this could be a reason why I do not see such errors. Are you using latest buildroot svn revision?
 
-> Why not turn off everything in uclibc.config as well?
-
-I was considering toying with buildbot to do automated build tests of
-buildroot. But then I realised that I have screwed my system more than
-once installing uClib into the /lib rather than the target folder
-*smile*.
-
-Regards,
-   Thiago A. Correa
+Best regards,
+Ivan
+--------------------------------
+Embedded Linux engineer,
+Promwad Company: http://www.promwad.com/
+Homepage : http://www.ivankuten.com/
+--------------------------------
