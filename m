@@ -1,32 +1,49 @@
-From: Bernhard Fischer <rep.dot.nop@gmail.com>
-Date: Mon, 24 Sep 2007 10:13:39 +0200
+From: Ulf Samuelsson <ulf@atmel.com>
+Date: Mon, 24 Sep 2007 10:06:26 +0200
 Subject: [Buildroot] Qtopia4 Failure
-In-Reply-To: <1190606113.22869.5.camel@cyclops.infocab.com.au>
+In-Reply-To: <1190595992.4299.27.camel@cyclops.infocab.com.au>
 References: <1190563965.7015.21.camel@elrond.atmel.sweden>
 	<1190591711.4299.17.camel@cyclops.infocab.com.au>
 	<d6cda7730709231756k273d449axed0357049468a113@mail.gmail.com>
 	<1190595992.4299.27.camel@cyclops.infocab.com.au>
-	<d6cda7730709231841v7ce7eec2qa801e54b049763b7@mail.gmail.com>
-	<1190600185.4299.44.camel@cyclops.infocab.com.au>
-	<d6cda7730709232043k2d85bb2bi8318ef6f652a1eff@mail.gmail.com>
-	<1190606113.22869.5.camel@cyclops.infocab.com.au>
-Message-ID: <20070924081339.GA31515@aon.at>
+Message-ID: <1190621186.7015.38.camel@elrond.atmel.sweden>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Mon, Sep 24, 2007 at 01:25:13PM +0930, Adam Hawes wrote:
->
->>    You are fixing newer, valid and good code in the name of legacy
->> compatibility with a flawed work around for legacy API. The simple
->> fact that there are more than one way around it doesn't make the patch
->> the better way. And I think we should strive for the better way to fix
->> things ;)
->
->"Better" is such a subjective word.  Who defines what is better in their
->particular instance?
+m?n 2007-09-24 klockan 10:36 +0930 skrev Adam Hawes:
+> On Mon, 2007-09-24 at 01:56 +0100, Thiago A. Corr?a wrote:
+> > shouldn't you patch uClib instead? Claiming index with a define is
+> > really stupid on the part of the library. Others, including myself use
+> > index as variable names quite often.
+> 
+> Do you use index()?  The macro accepts 2 arguments and the pre-processor
+> only seems to baulk when you use a function or method called index(...).
+> Variable names appear unproblematic.
+> 
+> Fixing uClibc would be the sensible thing to do, and uClibc actually has
+> a configuration option to turn off the legacy macros.  Turning them off,
+> however, breaks compatibility with a few things (mplayer was the most
+> recent one I found that wouldn't build with SUSv3 macros disabled).
+> 
 
-The current impl in uClibc is fine. You're broken if you rely on those
-legacy stuff anyway, just turn it off to safe you some headache.
+Did you try with UCLIBC_SUSV3_LEGACY enabled?
+
+> I found it easier to patch Qtopia because it was the only thing that
+> didn't like the macros that I have found thus far.
+> 
+> So please keep in mind that there is not one universal solution - there
+> are a few options depending on the needs.  My patch fixes Qtopia for
+> those people who need the SUSv3 legacy macros in other places.  For
+> everyone else there's the configuration option of the library!
+> 
+> Regards,
+> A
+> 
+> 
+> _______________________________________________
+> buildroot mailing list
+> buildroot at uclibc.org
+> http://busybox.net/mailman/listinfo/buildroot
