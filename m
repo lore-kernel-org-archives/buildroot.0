@@ -1,80 +1,41 @@
-From: Ulf Samuelsson <ulf@atmel.com>
-Date: Wed, 26 Sep 2007 01:39:14 +0200
-Subject: [Buildroot] native GCC not found in HEAD
-In-Reply-To: <1190759932.19731.103.camel@elrond.atmel.sweden>
-References: <d6cda7730709250656u4b67c688q4f4e5fe83ce32571@mail.gmail.com>
-	<02ca01c7ff9f$46e23020$dcc4af0a@atmel.com>
-	<d6cda7730709251133u591f038rf80cdb0bdd6d8614@mail.gmail.com>
-	<1190747162.19731.100.camel@elrond.atmel.sweden>
-	<20070925220541.GM20058@aon.at>
-	<1190759932.19731.103.camel@elrond.atmel.sweden>
-Message-ID: <1190763554.19731.112.camel@elrond.atmel.sweden>
+From: Leonid <Leonid@a-k-a.net>
+Date: Tue, 25 Sep 2007 16:53:18 -0700
+Subject: [Buildroot] Buildroot for at91rm9200df
+In-Reply-To: <1190759987.19731.105.camel@elrond.atmel.sweden>
+References: <20070925220441.CE64FA681D@busybox.net>
+	<1190759987.19731.105.camel@elrond.atmel.sweden>
+Message-ID: <406A31B117F2734987636D6CCC93EE3C023DCAF3@ehost011-3.exch011.intermedia.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-ons 2007-09-26 klockan 00:38 +0200 skrev Ulf Samuelsson:
-> ons 2007-09-26 klockan 00:05 +0200 skrev Bernhard Fischer:
-> > On Tue, Sep 25, 2007 at 09:06:02PM +0200, Ulf Samuelsson wrote:
-> > >tis 2007-09-25 klockan 19:33 +0100 skrev Thiago A. Corr?a:
-> > >> I have also noticed that the folder names don't have the avr32 suffix
-> > >> anymore, so I guess it's a variable that is not right.
-> > >> 
-> > >
-> > >
-> > >> Also, there is no more Buildroot toolchain, only external toolchain in
-> > >> the options. Is this really expected? Something wrong with using
-> > >> buildroot toolchain? or part of the problem? There is some 300
-> > >> revisions between what used to work and HEAD *sigh*
-> > >> 
-> > >
-> > >Yes, all the version info for gcc,binutils,uclibc etc. are gone
-> > >with Bernhards changes.
-> > 
-> > The logic in your target/device/Toolchain.in looks a bit flawed to my
-> > untrained eyes.
-> > 
-> Not if you assume that  there will eventually be several versions.
-> You are making things worse from my point of view.
-> 
-As an additional item.
-When you remove the Toolchain Build options ,you lose all capability to
-configure the externally downloaded toolchain.
+Hi, Ulf:
 
+Your buildroot from at91 site is working nice, but I couldn't build for
+this target when I checked out yesterday daily snapshot. I tried to use
+your at91rm9200df.config as a reference, had to add some defines (like
+BR2_STRIP_strip) but looks like it still lacks something (I have
+attached it) - builds stops without visible failures yet filesystem is
+not completely built. For example, there are no all these system
+utilites (like ls, rm, cd, etc... Which are actually busybox applets).
+Busybox executable gets created but is not copied into root
+filesystem... Some misconfiguration I guess.
 
-All toolchain *.mk depends on GCC_VERSION / BINUTILS_VERSION etc.
-having a value and there is no way you can complete
-a build without them.
+Do you have config file for this target which will work with latest
+buildroot or config file is not enough and some additional "massaging"
+is required (you run project/config/conf for example in your buildroot)?
+Or this target is not supported by simple way by latest buildroot?
 
-The only reasonable thing is to go back to how it was before.
+Thanks,
 
-After this, I would appreciate if you did not commit
-things which is AVR32 related unless you do some testing before.
-It is unavoidable that failures will occur from time to time, 
-as a result of commits but you clearly did not see the implications of
-your change and has not done *any* testing selecting AVR32 as a target.
+Leonid.
 
-BR
-Ulf Samuelsson
-
-
-
-> Please ensure that the GCC/BINUTILS/GDB/UCLIBC Versions are
-> again visible when you are selecting an external toolchain.
-> 
-> 
-> BR
-> Ulf Samuelsson
-> 
-> 
-> 
-> > >That is why you have a problem.
-> > 
-> > Exactly. r20029 removes this problem.
-> 
-> _______________________________________________
-> buildroot mailing list
-> buildroot at uclibc.org
-> http://busybox.net/mailman/listinfo/buildroot
+-------------- next part --------------
+A non-text attachment was scrubbed...
+Name: at91rm9200df.config
+Type: application/octet-stream
+Size: 17318 bytes
+Desc: at91rm9200df.config
+Url : http://busybox.net/lists/buildroot/attachments/20070925/6d2b2a90/attachment.obj 
