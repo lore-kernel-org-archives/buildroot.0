@@ -1,17 +1,36 @@
-From: Bernhard Fischer <rep.dot.nop@gmail.com>
-Date: Tue, 25 Sep 2007 23:45:31 +0200
-Subject: [Buildroot] Error in uClibc-0.9.29 revision 20025
-In-Reply-To: <a63ecaf0709251239p4a44717brfcbae02d3bae4147@mail.gmail.com>
-References: <a63ecaf0709251239p4a44717brfcbae02d3bae4147@mail.gmail.com>
-Message-ID: <20070925214531.GK20058@aon.at>
+From: aldot at uclibc.org <aldot@uclibc.org>
+Date: Tue, 25 Sep 2007 14:49:37 -0700 (PDT)
+Subject: [Buildroot] svn commit: trunk/buildroot/toolchain
+Message-ID: <20070925214937.C42B3A65B8@busybox.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Tue, Sep 25, 2007 at 04:39:45PM -0300, Sushi Sensei wrote:
->the compilation breaks with this errors:
+Author: aldot
+Date: 2007-09-25 14:49:37 -0700 (Tue, 25 Sep 2007)
+New Revision: 20027
 
-atmel imposed feature (rm that wrong soft-fp patch from
-toolchain/uClibc/)
+Log:
+- fix copy'n paste error
+
+
+Modified:
+   trunk/buildroot/toolchain/Config.in
+
+
+Changeset:
+Modified: trunk/buildroot/toolchain/Config.in
+===================================================================
+--- trunk/buildroot/toolchain/Config.in	2007-09-25 21:40:04 UTC (rev 20026)
++++ trunk/buildroot/toolchain/Config.in	2007-09-25 21:49:37 UTC (rev 20027)
+@@ -19,7 +19,7 @@
+ 
+ config BR2_TOOLCHAIN_SOURCE
+ 	bool
+-	default y if !BR2_TOOLCHAIN_EXTERNAL
++	default y if BR2_TOOLCHAIN_BUILDROOT || BR2_TOOLCHAIN_EXTERNAL_SOURCE
+ 	default n if BR2_TOOLCHAIN_EXTERNAL
+ 
+ source "target/device/Toolchain.in"
