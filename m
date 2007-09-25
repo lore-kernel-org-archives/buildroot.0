@@ -1,37 +1,37 @@
 From: Bernhard Fischer <rep.dot.nop@gmail.com>
-Date: Wed, 26 Sep 2007 00:05:41 +0200
-Subject: [Buildroot] native GCC not found in HEAD
-In-Reply-To: <1190747162.19731.100.camel@elrond.atmel.sweden>
-References: <d6cda7730709250656u4b67c688q4f4e5fe83ce32571@mail.gmail.com>
-	<02ca01c7ff9f$46e23020$dcc4af0a@atmel.com>
-	<d6cda7730709251133u591f038rf80cdb0bdd6d8614@mail.gmail.com>
-	<1190747162.19731.100.camel@elrond.atmel.sweden>
-Message-ID: <20070925220541.GM20058@aon.at>
+Date: Wed, 26 Sep 2007 00:12:09 +0200
+Subject: [Buildroot] svn commit: trunk/buildroot/package/mtd
+In-Reply-To: <87tzpimsng.fsf@macbook.be.48ers.dk>
+References: <20070925144527.1DC94A4D18@busybox.net>
+	<1190737019.19731.80.camel@elrond.atmel.sweden>
+	<87tzpimsng.fsf@macbook.be.48ers.dk>
+Message-ID: <20070925221209.GA20599@aon.at>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Tue, Sep 25, 2007 at 09:06:02PM +0200, Ulf Samuelsson wrote:
->tis 2007-09-25 klockan 19:33 +0100 skrev Thiago A. Corr?a:
->> I have also noticed that the folder names don't have the avr32 suffix
->> anymore, so I guess it's a variable that is not right.
->> 
+On Tue, Sep 25, 2007 at 09:50:11PM +0200, Peter Korsgaard wrote:
+>>>>>> "Ulf" == Ulf Samuelsson <ulf@atmel.com> writes:
 >
+>Hi,
 >
->> Also, there is no more Buildroot toolchain, only external toolchain in
->> the options. Is this really expected? Something wrong with using
->> buildroot toolchain? or part of the problem? There is some 300
->> revisions between what used to work and HEAD *sigh*
->> 
+> >> Log:
+> >> Don't limit 2006 version to Atmel targets (why?)
 >
->Yes, all the version info for gcc,binutils,uclibc etc. are gone
->with Bernhards changes.
+> Ulf> Just tried to be non-intrusive...
+> Ulf> The "normal" version is buggy, and this works for me,
+> Ulf> but I have no targets for other architectures.
+>
+>Ok, but with the dependency noone else could test it. I only
+>discovered by chance that there actually was a never version.
+>
+> Ulf> It may make sense to make it the default,
+> Ulf> but someone else needs to test that.
+>
+>I think we should actually use
+>ftp://ftp.infradead.org/pub/mtd-utils/mtd-utils-1.1.0.tar.bz2 instead
+>- That seems to be the latest release instead of some random snapshot.
 
-The logic in your target/device/Toolchain.in looks a bit flawed to my
-untrained eyes.
-
->That is why you have a problem.
-
-Exactly. r20029 removes this problem.
+Sounds fine. If you can test that it works then please go ahead.
