@@ -1,39 +1,57 @@
-From: aldot at uclibc.org <aldot@uclibc.org>
-Date: Tue, 25 Sep 2007 01:28:10 -0700 (PDT)
-Subject: [Buildroot] svn commit: trunk/buildroot
-Message-ID: <20070925082810.880353004D@busybox.net>
+From: Ulf Samuelsson <ulf@atmel.com>
+Date: Tue, 25 Sep 2007 11:30:23 +0200
+Subject: [Buildroot] svn commit: trunk/buildroot: package
+	package/busyboxproject target etc...
+References: <20070925075548.85ACD30044@busybox.net>
+Message-ID: <01bd01c7ff59$2b8ea790$dcc4af0a@atmel.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Author: aldot
-Date: 2007-09-25 01:28:09 -0700 (Tue, 25 Sep 2007)
-New Revision: 20005
-
-Log:
-- flesh out
-
-
-Modified:
-   trunk/buildroot/TODO
+----- Original Message ----- 
+From: <aldot@uclibc.org>
+To: <buildroot@uclibc.org>
+Sent: Tuesday, September 25, 2007 9:55 AM
+Subject: [Buildroot] svn commit: trunk/buildroot: package package/busyboxproject target etc...
 
 
-Changeset:
-Modified: trunk/buildroot/TODO
-===================================================================
---- trunk/buildroot/TODO	2007-09-25 08:24:27 UTC (rev 20004)
-+++ trunk/buildroot/TODO	2007-09-25 08:28:09 UTC (rev 20005)
-@@ -1,6 +1,9 @@
--miscellaneous TODO items that may be worth thinking about and that could
--be discussed on the mailing-list and/or implemented.
-+Buildroot3 TODOs
- 
-+- fix packages/Makefile.autotools.in to use a package-imposed patchdir
-+- convert all packages that use autoconf to use the infrastructure of
-+  packages/Makefile.autotools.in
-+- fix setting of flags for packages
- 
- - think about using a common --config-cache for configure
-   Should take care of expanding TARGET_CONFIGURE_ARGS for cross compiles
+> Author: aldot
+> Date: 2007-09-25 00:55:45 -0700 (Tue, 25 Sep 2007)
+> New Revision: 20001
+> 
+> Log:
+> - revert patch that obfuscates the config UI and doesn't reflect the order of config steps
+> 
+> 
+> Modified:
+>   trunk/buildroot/Config.in
+>   trunk/buildroot/package/Config.in
+>   trunk/buildroot/package/busybox/Config.in
+>   trunk/buildroot/project/Config.in
+>   trunk/buildroot/target/Config.in
+>   trunk/buildroot/target/device/Config.in
+>   trunk/buildroot/target/device/Target.in
+>   trunk/buildroot/toolchain/Config.in.2
+>   trunk/buildroot/toolchain/gcc/Config.in
+>   trunk/buildroot/toolchain/kernel-headers/Config.in
+> 
+> 
+> Changeset:
+> 
+
+I do think that the order of configuration is important for chip /board selection
+and that is why it is the first choice.
+I also think it is good that it becomes more obvious which boards
+you can select in the *same* menu as where you select the chip, chip-variant, board.
+
+For the rest, the intention is to make the configuration more user-friendly.
+This means lower priority to configuration which is done *once*,
+like build and toolchain parameters.
+
+If you work with buildroot, then you are going to change packages most often
+and therefore, they deserve to be close to the top.
+
+Best Regards
+Ulf Samuelsson
