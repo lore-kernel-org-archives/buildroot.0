@@ -1,12 +1,24 @@
 From: Leonid <Leonid@a-k-a.net>
-Date: Tue, 25 Sep 2007 13:03:23 -0700
+Date: Tue, 25 Sep 2007 13:46:55 -0700
 Subject: [Buildroot] cannot execute binary file
-Message-ID: <406A31B117F2734987636D6CCC93EE3C023DCA36@ehost011-3.exch011.intermedia.net>
+In-Reply-To: <406A31B117F2734987636D6CCC93EE3C023DCA36@ehost011-3.exch011.intermedia.net>
+References: <406A31B117F2734987636D6CCC93EE3C023DCA36@ehost011-3.exch011.intermedia.net>
+Message-ID: <406A31B117F2734987636D6CCC93EE3C023DCA58@ehost011-3.exch011.intermedia.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
+
+I have found the problem - BR2_STRIP_strip was not defined and $(STRIP)
+<file> reduced to simple <file>... 
+
+-----Original Message-----
+From: buildroot-bounces@uclibc.org [mailto:buildroot-bounces at uclibc.org]
+On Behalf Of Leonid
+Sent: Tuesday, September 25, 2007 1:03 PM
+To: buildroot at uclibc.org
+Subject: [Buildroot] cannot execute binary file
 
 Hi:
 
@@ -104,3 +116,7 @@ This is happening again and again for each utility. What is wrong?
 Thanks,
 
 Leonid.
+_______________________________________________
+buildroot mailing list
+buildroot at uclibc.org
+http://busybox.net/mailman/listinfo/buildroot
