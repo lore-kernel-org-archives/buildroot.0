@@ -1,47 +1,82 @@
-From: Crane, Matthew <mcrane03@harris.com>
-Date: Tue, 25 Sep 2007 10:37:49 -0400
-Subject: [Buildroot] Linux kernel 2.4
-In-Reply-To: <34563.69.65.92.71.1190725767.squirrel@webmail.learningsoft.net>
-References: <34563.69.65.92.71.1190725767.squirrel@webmail.learningsoft.net>
-Message-ID: <E496871456016F4CA8959BE4105D2A890E8D06@troe2k1.cs.myharris.net>
+From: Ulf Samuelsson <ulf@atmel.com>
+Date: Tue, 25 Sep 2007 16:30:22 +0200
+Subject: [Buildroot] svn commit: trunk/buildroot/toolchain/uClibc
+In-Reply-To: <46F93214.7030702@promwad.com>
+References: <20070925133721.8555F30055@busybox.net>
+	<46F93214.7030702@promwad.com>
+Message-ID: <1190730622.19731.64.camel@elrond.atmel.sweden>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+tis 2007-09-25 klockan 15:06 -0100 skrev vano:
+> 
+> ulf at uclibc.org wrote:
+> > Author: ulf
+> > Date: 2007-09-25 06:37:20 -0700 (Tue, 25 Sep 2007)
+> > New Revision: 20019
+> > 
+> > Log:
+> > Add soft-fp part of gcclib to uClibc to allow ARM softfloat to complete
+> > 
+> 
+> Ulf, after svn up:
+> 
+> make[2]: Leaving directory
+> `/home/buildroot/toolchain_build_arm_nofpu/gcc-4.2.1-initial/gcc'
+> make[1]: Leaving directory
+> `/home/buildroot/toolchain_build_arm_nofpu/gcc-4.2.1-initial'
+> #rm -f /home/buildroot/build_arm/staging_dir/usr/bin/gccbug
+> /home/buildroot/build_arm/staging_dir/usr/bin/gcov
+> #rm -rf /home/buildroot/build_arm/staging_dir/usr/info
+> /home/buildroot/build_arm/staging_dir/usr/man
+> /home/buildroot/build_arm/staging_dir/usr/share/doc
+> /home/buildroot/build_arm/staging_dir/usr/share/locale
+> touch /home/buildroot/toolchain_build_arm_nofpu/gcc-4.2.1-initial/.installed
+> /usr/bin/make MAKE="/usr/bin/make -j1" -C
+> /home/buildroot/toolchain_build_arm_nofpu/uClibc-0.9.29 \
+>                 PREFIX= \
+>                 DEVEL_PREFIX=/ \
+>                 RUNTIME_PREFIX=/ \
+>                 HOSTCC="/usr/bin/gcc" \
+>                 all
+> make[1]: Entering directory
+> `/home/buildroot/toolchain_build_arm_nofpu/uClibc-0.9.29'
+> make[2]: `conf' is up to date.
+> /usr/bin/make -j1 locale_headers
+> make[3]: `conf' is up to date.
+>   CC ldso/ldso/ldso.oS
+>   AS ldso/ldso/arm/resolve.oS
+>   STRIP -x -R .note -R .comment ldso/ldso/ld-uClibc_so.a
+>   AR cr ldso/ldso/ld-uClibc_so.a
+>   LD ld-uClibc-0.9.29.so
+> /home/buildroot/build_arm/staging_dir/usr/bin/arm-linux-uclibc-ld:
+> cannot find -lgcc
+> make[1]: *** [lib/ld-uClibc.so] Error 1
+> make[1]: Leaving directory
+> `/home/buildroot/toolchain_build_arm_nofpu/uClibc-0.9.29'
+> make: ***
+> [/home/buildroot/toolchain_build_arm_nofpu/uClibc-0.9.29/lib/libc.a] Error 2
+> 
 
-Hi, 
+It worked for me since I manually copied libgcc.a to another location.
+I reran the build again after submitting, and discovered this
+so I have already removed the part causing the problem from the patch
+svn update to fix.
 
-I haven't tried it, but I expect you need to modify
-target/linux/Config.in and target/linux/Makefile.in to add a option to
-build and patch your specific kernel.    I used my own 2.6 kernel and it
-seemed to pick it up correctly for the kernel headers, but I used an
-existing version.  If the kernel headers don't make properly then you
-might need to modify the config and makefile in
-toolchain/kernel-headers.
+I still have a problem which pop up from time to time with libstdc++v3.
+which fails, but at least the build goes a lot further.
 
-But I think it's fair to say if you have a 2.4 configuartion of sources
-that you know builds and works outside of buildroot, you can modify
-buildroot to use them.
 
-Matt
- 
-
------Original Message-----
-From: buildroot-bounces@uclibc.org [mailto:buildroot-bounces at uclibc.org]
-On Behalf Of Sunil Gupta
-Sent: Tuesday, September 25, 2007 9:09 AM
-To: buildroot at uclibc.org
-Subject: [Buildroot] Linux kernel 2.4
-
-My project uses a 2.4 kernel (2.4.21, specifically). For many reasons,
-we are tied to this version. However, I see that the current buildroot
-only supports 2.6. Is is possible to add 2.4 support back in?
-
--- sg
-
-_______________________________________________
-buildroot mailing list
-buildroot at uclibc.org
-http://busybox.net/mailman/listinfo/buildroot
+> 
+> --------
+> 
+> please confirm that your arm softfloat build with patch is successful.
+> 
+> Best regards,
+> Ivan
+> 
+> 
+> 
