@@ -1,36 +1,38 @@
-From: aldot at uclibc.org <aldot@uclibc.org>
-Date: Tue, 25 Sep 2007 10:21:33 -0700 (PDT)
-Subject: [Buildroot] svn commit: trunk/buildroot/toolchain/gcc
-Message-ID: <20070925172133.BD853A60A6@busybox.net>
+From: Ulf Samuelsson <ulf@atmel.com>
+Date: Tue, 25 Sep 2007 20:09:48 +0200
+Subject: [Buildroot] native GCC not found in HEAD
+References: <d6cda7730709250656u4b67c688q4f4e5fe83ce32571@mail.gmail.com>
+Message-ID: <02ca01c7ff9f$46e23020$dcc4af0a@atmel.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Author: aldot
-Date: 2007-09-25 10:21:33 -0700 (Tue, 25 Sep 2007)
-New Revision: 20023
+> Hi,
+> 
+>   I've done an svn up today, and something has been broken since the
+> last time I tried a full build:
+> 
+> /bin/sh: /bin/-gcc: No such file or directory
+> copy_toolchain_lib_root: lib=libc.so.6 not found
+> make: *** [/root/novacomm/buildroot/buildroot-original/project_build_avr32/pppserver/root/lib/libc.so.6]
+> Error 255
+> gentoo-vm buildroot-original # which gcc
+> /usr/bin/gcc
+> gentoo-vm buildroot-original #
+> 
+> Been greping here and there, tried some hints from
+> http://www.oreilly.com.cn/samplechap/gnumake/ch12.pdf but can't find
+> where this is broken :(
+> 
 
-Log:
-- fix typo
+Bernard Fisher, is the last one to touch the AVR32 and he broke it severely.
+I am pretty sure that he did not test building the AVR32 toolset
+before submitting...
 
+He should fix the problem!
 
-Modified:
-   trunk/buildroot/toolchain/gcc/Config.in
-
-
-Changeset:
-Modified: trunk/buildroot/toolchain/gcc/Config.in
-===================================================================
---- trunk/buildroot/toolchain/gcc/Config.in	2007-09-25 16:39:22 UTC (rev 20022)
-+++ trunk/buildroot/toolchain/gcc/Config.in	2007-09-25 17:21:33 UTC (rev 20023)
-@@ -115,7 +115,7 @@
- 	bool "Build/install c++ compiler and libstdc++?"
- 	default n
- 	# >= 4.2.0 work fine without LARGEFILE
--	select BR2_LARGEFILE if BR2_GCC_SUPPORTS_SYSROOT
-+	select BR2_LARGEFILE if !BR2_GCC_SUPPORTS_SYSROOT
- 	select BR2_GCC_CROSS_CXX
- 	help
- 	  Build/install c++ compiler and libstdc++?
+Best Regards
+Ulf Samuelsson
+>
