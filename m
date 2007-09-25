@@ -1,41 +1,46 @@
-From: Bernhard Fischer <rep.dot.nop@gmail.com>
-Date: Tue, 25 Sep 2007 14:16:53 +0200
-Subject: [Buildroot] svn commit: trunk/buildroot/package/mplayer
-In-Reply-To: <20070925120128.9F46230108@busybox.net>
-References: <20070925120128.9F46230108@busybox.net>
-Message-ID: <20070925121653.GA15542@aon.at>
+From: aldot at uclibc.org <aldot@uclibc.org>
+Date: Tue, 25 Sep 2007 05:20:39 -0700 (PDT)
+Subject: [Buildroot] svn commit: trunk/buildroot/package: busybox gnuconfig
+Message-ID: <20070925122039.655443006B@busybox.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Tue, Sep 25, 2007 at 05:01:28AM -0700, ulf at uclibc.org wrote:
->Author: ulf
->Date: 2007-09-25 05:01:27 -0700 (Tue, 25 Sep 2007)
->New Revision: 20013
->
->Log:
->Add source and unpacked targets to mplayer
+Author: aldot
+Date: 2007-09-25 05:20:37 -0700 (Tue, 25 Sep 2007)
+New Revision: 20015
 
-$ find package/ -name "*.mk" -exec grep --exclude='*.svn*' -L
-"\-source:" {} \; | grep -v x11r7
-package/alsa-utils/alsa-utils.mk
-package/busybox/initramfs.mk
-package/gnuconfig/gnuconfig.mk
-package/fbset/fbset.mk
-package/alsa-lib/alsa-lib.mk
-package/irda-utils/irda.mk
-package/qte/qte.mk
-package/customize/customize.mk
-package/fusion/fusion.mk
-package/ed/ed.mk
-package/mtd/mtd.mk
-package/imagemagick/imagemagick.mk
+Log:
+- add dummy -source targets.
 
 
-initramfs.mk is ok
-gnuconfig.mk is ok
+Modified:
+   trunk/buildroot/package/busybox/initramfs.mk
+   trunk/buildroot/package/gnuconfig/gnuconfig.mk
 
-I'll take care of ed (done by now), the rest look like bugs introduced
-by others..
+
+Changeset:
+Modified: trunk/buildroot/package/busybox/initramfs.mk
+===================================================================
+--- trunk/buildroot/package/busybox/initramfs.mk	2007-09-25 12:16:39 UTC (rev 20014)
++++ trunk/buildroot/package/busybox/initramfs.mk	2007-09-25 12:20:37 UTC (rev 20015)
+@@ -124,6 +124,7 @@
+ 					$(BB_INITRAMFS_TARGET)
+ 	touch $@
+ 
++busybox-initramfs-source:
+ busybox-initramfs: uclibc $(PROJECT_BUILD_DIR)/.initramfs_done
+ 
+ busybox-initramfs-menuconfig: host-sed $(BUILD_DIR) busybox-source $(BUSYBOX_INITRAMFS_DIR)/.configured
+
+Modified: trunk/buildroot/package/gnuconfig/gnuconfig.mk
+===================================================================
+--- trunk/buildroot/package/gnuconfig/gnuconfig.mk	2007-09-25 12:16:39 UTC (rev 20014)
++++ trunk/buildroot/package/gnuconfig/gnuconfig.mk	2007-09-25 12:20:37 UTC (rev 20015)
+@@ -1,3 +1,3 @@
+ # See README.buildroot
+-
++gnuconfig-source:
+ CONFIG_UPDATE = cp -f package/gnuconfig/config.sub package/gnuconfig/config.guess
