@@ -1,33 +1,37 @@
-From: Bernhard Fischer <rep.dot.nop@gmail.com>
-Date: Tue, 25 Sep 2007 23:52:33 +0200
-Subject: [Buildroot] [patch] fix copy'n paste error in toolchain/Config.in
-Message-ID: <20070925215233.GL20058@aon.at>
+From: aldot at uclibc.org <aldot@uclibc.org>
+Date: Tue, 25 Sep 2007 15:03:18 -0700 (PDT)
+Subject: [Buildroot] svn commit: trunk/buildroot/toolchain
+Message-ID: <20070925220318.BB0ECA60CE@busybox.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi,
+Author: aldot
+Date: 2007-09-25 15:03:18 -0700 (Tue, 25 Sep 2007)
+New Revision: 20028
 
-Currently i cannot apply this hunk.
-Please feel free to checkin (or i will do it tomorrow):
-
-$ cat '/tmp/buildroot_trunk/toolchain/svn-commit.tmp'
-- fix copy'n paste error
---This line, and those below, will be ignored--
-
-M    Config.in
+Log:
+- add more help text
 
 
-Index: toolchain/Config.in
+Modified:
+   trunk/buildroot/toolchain/Config.in
+
+
+Changeset:
+Modified: trunk/buildroot/toolchain/Config.in
 ===================================================================
---- toolchain/Config.in	(revision 20026)
-+++ toolchain/Config.in	(working copy)
-@@ -19,7 +19,7 @@ endchoice
+--- trunk/buildroot/toolchain/Config.in	2007-09-25 21:49:37 UTC (rev 20027)
++++ trunk/buildroot/toolchain/Config.in	2007-09-25 22:03:18 UTC (rev 20028)
+@@ -6,6 +6,9 @@
+ 	  Select whether to use the toolchain provided by buildroot
+ 	  or an external toolchain.
  
- config BR2_TOOLCHAIN_SOURCE
- 	bool
--	default y if !BR2_TOOLCHAIN_EXTERNAL
-+	default y if BR2_TOOLCHAIN_BUILDROOT || BR2_TOOLCHAIN_EXTERNAL_SOURCE
- 	default n if BR2_TOOLCHAIN_EXTERNAL
++	  Some vendors provide toolchains in binary form, some in
++	  source form.
++
+ config BR2_TOOLCHAIN_BUILDROOT
+ 	bool "Buildroot toolchain"
+ 	depends on !BR2_avr32
