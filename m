@@ -1,110 +1,37 @@
-From: Sushi Sensei <sinestado@gmail.com>
-Date: Tue, 25 Sep 2007 16:39:45 -0300
-Subject: [Buildroot] Error in uClibc-0.9.29 revision 20025
-Message-ID: <a63ecaf0709251239p4a44717brfcbae02d3bae4147@mail.gmail.com>
+From: Peter Korsgaard <jacmet@uclibc.org>
+Date: Tue, 25 Sep 2007 21:50:11 +0200
+Subject: [Buildroot] svn commit: trunk/buildroot/package/mtd
+In-Reply-To: <1190737019.19731.80.camel@elrond.atmel.sweden> (Ulf Samuelsson's
+	message of "Tue\, 25 Sep 2007 18\:16\:59 +0200")
+References: <20070925144527.1DC94A4D18@busybox.net>
+	<1190737019.19731.80.camel@elrond.atmel.sweden>
+Message-ID: <87tzpimsng.fsf@macbook.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-the compilation breaks with this errors:
+>>>>> "Ulf" == Ulf Samuelsson <ulf@atmel.com> writes:
 
+Hi,
 
+ >> Log:
+ >> Don't limit 2006 version to Atmel targets (why?)
 
-make[1]: se ingresa al directorio
-`/tmp/BUILDROOT/buildroot/toolchain_build_i586/uClibc-0.9.29'
-make[2]: `conf' is up to date.
-make[3]: `conf' is up to date.
-  STRIP -x -R .note -R .comment lib/libc.a
-/tmp/BUILDROOT/buildroot/build_i586/staging_dir/usr/bin/i586-linux-uclibc-strip:
-'libc/soft-fp/__parsegrent.os': No such file
-/tmp/BUILDROOT/buildroot/build_i586/staging_dir/usr/bin/i586-linux-uclibc-strip:
-'libc/soft-fp/__parsepwent.os': No such file
-/tmp/BUILDROOT/buildroot/build_i586/staging_dir/usr/bin/i586-linux-uclibc-strip:
-'libc/soft-fp/__parsespent.os': No such file
-/tmp/BUILDROOT/buildroot/build_i586/staging_dir/usr/bin/i586-linux-uclibc-strip:
-'libc/soft-fp/__pgsreader.os': No such file
-/tmp/BUILDROOT/buildroot/build_i586/staging_dir/usr/bin/i586-linux-uclibc-strip:
-'libc/soft-fp/fgetgrent.os': No such file
-/tmp/BUILDROOT/buildroot/build_i586/staging_dir/usr/bin/i586-linux-uclibc-strip:
-'libc/soft-fp/fgetgrent_r.os': No such file
-/tmp/BUILDROOT/buildroot/build_i586/staging_dir/usr/bin/i586-linux-uclibc-strip:
-'libc/soft-fp/fgetpwent.os': No such file
-/tmp/BUILDROOT/buildroot/build_i586/staging_dir/usr/bin/i586-linux-uclibc-strip:
-'libc/soft-fp/fgetpwent_r.os': No such file
-/tmp/BUILDROOT/buildroot/build_i586/staging_dir/usr/bin/i586-linux-uclibc-strip:
-'libc/soft-fp/fgetspent.os': No such file
-/tmp/BUILDROOT/buildroot/build_i586/staging_dir/usr/bin/i586-linux-uclibc-strip:
-'libc/soft-fp/fgetspent_r.os': No such file
-/tmp/BUILDROOT/buildroot/build_i586/staging_dir/usr/bin/i586-linux-uclibc-strip:
-'libc/soft-fp/getgrent.os': No such file
-/tmp/BUILDROOT/buildroot/build_i586/staging_dir/usr/bin/i586-linux-uclibc-strip:
-'libc/soft-fp/getgrent_r.os': No such file
-/tmp/BUILDROOT/buildroot/build_i586/staging_dir/usr/bin/i586-linux-uclibc-strip:
-'libc/soft-fp/getgrgid.os': No such file
-/tmp/BUILDROOT/buildroot/build_i586/staging_dir/usr/bin/i586-linux-uclibc-strip:
-'libc/soft-fp/getgrgid_r.os': No such file
-/tmp/BUILDROOT/buildroot/build_i586/staging_dir/usr/bin/i586-linux-uclibc-strip:
-'libc/soft-fp/getgrnam.os': No such file
-/tmp/BUILDROOT/buildroot/build_i586/staging_dir/usr/bin/i586-linux-uclibc-strip:
-'libc/soft-fp/getgrnam_r.os': No such file
-/tmp/BUILDROOT/buildroot/build_i586/staging_dir/usr/bin/i586-linux-uclibc-strip:
-'libc/soft-fp/getpw.os': No such file
-/tmp/BUILDROOT/buildroot/build_i586/staging_dir/usr/bin/i586-linux-uclibc-strip:
-'libc/soft-fp/getpwent.os': No such file
-/tmp/BUILDROOT/buildroot/build_i586/staging_dir/usr/bin/i586-linux-uclibc-strip:
-'libc/soft-fp/getpwent_r.os': No such file
-/tmp/BUILDROOT/buildroot/build_i586/staging_dir/usr/bin/i586-linux-uclibc-strip:
-'libc/soft-fp/getpwnam.os': No such file
-/tmp/BUILDROOT/buildroot/build_i586/staging_dir/usr/bin/i586-linux-uclibc-strip:
-'libc/soft-fp/getpwnam_r.os': No such file
-/tmp/BUILDROOT/buildroot/build_i586/staging_dir/usr/bin/i586-linux-uclibc-strip:
-'libc/soft-fp/getpwuid.os': No such file
-/tmp/BUILDROOT/buildroot/build_i586/staging_dir/usr/bin/i586-linux-uclibc-strip:
-'libc/soft-fp/getpwuid_r.os': No such file
-/tmp/BUILDROOT/buildroot/build_i586/staging_dir/usr/bin/i586-linux-uclibc-strip:
-'libc/soft-fp/getspent.os': No such file
-/tmp/BUILDROOT/buildroot/build_i586/staging_dir/usr/bin/i586-linux-uclibc-strip:
-'libc/soft-fp/getspent_r.os': No such file
-/tmp/BUILDROOT/buildroot/build_i586/staging_dir/usr/bin/i586-linux-uclibc-strip:
-'libc/soft-fp/getspnam.os': No such file
-/tmp/BUILDROOT/buildroot/build_i586/staging_dir/usr/bin/i586-linux-uclibc-strip:
-'libc/soft-fp/getspnam_r.os': No such file
-/tmp/BUILDROOT/buildroot/build_i586/staging_dir/usr/bin/i586-linux-uclibc-strip:
-'libc/soft-fp/initgroups.os': No such file
-/tmp/BUILDROOT/buildroot/build_i586/staging_dir/usr/bin/i586-linux-uclibc-strip:
-'libc/soft-fp/lckpwdf.os': No such file
-/tmp/BUILDROOT/buildroot/build_i586/staging_dir/usr/bin/i586-linux-uclibc-strip:
-'libc/soft-fp/putgrent.os': No such file
-/tmp/BUILDROOT/buildroot/build_i586/staging_dir/usr/bin/i586-linux-uclibc-strip:
-'libc/soft-fp/putpwent.os': No such file
-/tmp/BUILDROOT/buildroot/build_i586/staging_dir/usr/bin/i586-linux-uclibc-strip:
-'libc/soft-fp/putspent.os': No such file
-/tmp/BUILDROOT/buildroot/build_i586/staging_dir/usr/bin/i586-linux-uclibc-strip:
-'libc/soft-fp/sgetspent.os': No such file
-/tmp/BUILDROOT/buildroot/build_i586/staging_dir/usr/bin/i586-linux-uclibc-strip:
-'libc/soft-fp/sgetspent_r.os': No such file
-make[2]: *** [lib/libc.a] Error 1
-make[1]: *** [lib/libc.so.0] Error 2
-make[1]: se sale del directorio
-`/tmp/BUILDROOT/buildroot/toolchain_build_i586/uClibc-0.9.29'
-make: *** [/tmp/BUILDROOT/buildroot/toolchain_build_i586/uClibc-0.9.29/lib/libc.a]
-Error 2
+ Ulf> Just tried to be non-intrusive...
+ Ulf> The "normal" version is buggy, and this works for me,
+ Ulf> but I have no targets for other architectures.
 
+Ok, but with the dependency noone else could test it. I only
+discovered by chance that there actually was a never version.
 
+ Ulf> It may make sense to make it the default,
+ Ulf> but someone else needs to test that.
 
-
-
-
-
-
-
+I think we should actually use
+ftp://ftp.infradead.org/pub/mtd-utils/mtd-utils-1.1.0.tar.bz2 instead
+- That seems to be the latest release instead of some random snapshot.
 
 -- 
-------------------------------------------------------
---- Timeo Danaos et dona ferentes ---
-------------------------------------------------------
--------------- next part --------------
-An HTML attachment was scrubbed...
-URL: http://busybox.net/lists/buildroot/attachments/20070925/d08eff6c/attachment.htm 
+Bye, Peter Korsgaard
