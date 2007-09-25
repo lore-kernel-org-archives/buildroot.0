@@ -1,36 +1,41 @@
-From: aldot at uclibc.org <aldot@uclibc.org>
-Date: Tue, 25 Sep 2007 05:16:40 -0700 (PDT)
-Subject: [Buildroot] svn commit: trunk/buildroot/package/ed
-Message-ID: <20070925121640.25C103006B@busybox.net>
+From: Bernhard Fischer <rep.dot.nop@gmail.com>
+Date: Tue, 25 Sep 2007 14:16:53 +0200
+Subject: [Buildroot] svn commit: trunk/buildroot/package/mplayer
+In-Reply-To: <20070925120128.9F46230108@busybox.net>
+References: <20070925120128.9F46230108@busybox.net>
+Message-ID: <20070925121653.GA15542@aon.at>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Author: aldot
-Date: 2007-09-25 05:16:39 -0700 (Tue, 25 Sep 2007)
-New Revision: 20014
+On Tue, Sep 25, 2007 at 05:01:28AM -0700, ulf at uclibc.org wrote:
+>Author: ulf
+>Date: 2007-09-25 05:01:27 -0700 (Tue, 25 Sep 2007)
+>New Revision: 20013
+>
+>Log:
+>Add source and unpacked targets to mplayer
 
-Log:
-- add missing ed-source target.
+$ find package/ -name "*.mk" -exec grep --exclude='*.svn*' -L
+"\-source:" {} \; | grep -v x11r7
+package/alsa-utils/alsa-utils.mk
+package/busybox/initramfs.mk
+package/gnuconfig/gnuconfig.mk
+package/fbset/fbset.mk
+package/alsa-lib/alsa-lib.mk
+package/irda-utils/irda.mk
+package/qte/qte.mk
+package/customize/customize.mk
+package/fusion/fusion.mk
+package/ed/ed.mk
+package/mtd/mtd.mk
+package/imagemagick/imagemagick.mk
 
 
-Modified:
-   trunk/buildroot/package/ed/ed.mk
+initramfs.mk is ok
+gnuconfig.mk is ok
 
-
-Changeset:
-Modified: trunk/buildroot/package/ed/ed.mk
-===================================================================
---- trunk/buildroot/package/ed/ed.mk	2007-09-25 12:01:27 UTC (rev 20013)
-+++ trunk/buildroot/package/ed/ed.mk	2007-09-25 12:16:39 UTC (rev 20014)
-@@ -40,6 +40,8 @@
- 
- ed: uclibc $(TARGET_DIR)/$(ED_TARGET_BINARY)
- 
-+ed-source: $(DL_DIR)/$(ED_SOURCE)
-+
- ed-clean:
- 	$(MAKE) DESTDIR=$(TARGET_DIR) CC=$(TARGET_CC) -C $(ED_DIR) uninstall
- 	-$(MAKE) -C $(ED_DIR) clean
+I'll take care of ed (done by now), the rest look like bugs introduced
+by others..
