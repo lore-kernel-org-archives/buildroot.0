@@ -1,7 +1,8 @@
 From: Adam Hawes <adam@infocab.com.au>
-Date: Tue, 25 Sep 2007 09:01:04 +0930
-Subject: [Buildroot] Qtopia4 Failure
-In-Reply-To: <20070924132226.GC1335@aon.at>
+Date: Tue, 25 Sep 2007 09:39:43 +0930
+Subject: [Buildroot] MPlayer using LEGACY Functions (was:
+	Qtopia4	Failure)
+In-Reply-To: <1190676664.22869.8.camel@cyclops.infocab.com.au>
 References: <1190563965.7015.21.camel@elrond.atmel.sweden>
 	<1190591711.4299.17.camel@cyclops.infocab.com.au>
 	<d6cda7730709231756k273d449axed0357049468a113@mail.gmail.com>
@@ -13,7 +14,8 @@ References: <1190563965.7015.21.camel@elrond.atmel.sweden>
 	<20070924081339.GA31515@aon.at>
 	<d6cda7730709240559nb93d524wcab63f2ee4e6c13a@mail.gmail.com>
 	<20070924132226.GC1335@aon.at>
-Message-ID: <1190676664.22869.8.camel@cyclops.infocab.com.au>
+	<1190676664.22869.8.camel@cyclops.infocab.com.au>
+Message-ID: <1190678983.22869.20.camel@cyclops.infocab.com.au>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -21,20 +23,18 @@ Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
 
-> >   According to Adam, this is required by mplayer (yeah, they are
-> >broken, shame on them). I don't see why mplayer and qtopia and
-> >possibly other packages should be mutually exclusive. Unless one\
+> I will submit a patch later to BR and MPlayer.
 
-I spent some time last night looking into mplayer.  It seems that it's
-only broken in one place.  I made a quick hack to fix it (#define
-index(a,b) ... in the file that was broken and tried compiling it
-against a uClibc without the legacy macros.  It builds and runs fine on
-my target.
+After searching the archives it seems someone else already patched the
+same place and submitted it nearly a year ago.
 
-I will submit a patch later to BR and MPlayer.
+http://article.gmane.org/gmane.comp.video.mplayer.devel/39313/match=stream%5fdvb+c
 
-I haven't gone any further finding other packages that are broken - i
-only built mplayer last night.
+It appeared in the mplayer svn at 21480 (dec, 06).  RC1 was released at
+Oct 06.
 
-Regards,
+Thus far with the patch in the link I have no trouble - mplayer and
+qtopia both build without SUSV3 stuff.  Now to find out if the rest
+builds as well.
+
 A
