@@ -1,37 +1,106 @@
-From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Tue, 25 Sep 2007 21:50:11 +0200
-Subject: [Buildroot] svn commit: trunk/buildroot/package/mtd
-In-Reply-To: <1190737019.19731.80.camel@elrond.atmel.sweden> (Ulf Samuelsson's
-	message of "Tue\, 25 Sep 2007 18\:16\:59 +0200")
-References: <20070925144527.1DC94A4D18@busybox.net>
-	<1190737019.19731.80.camel@elrond.atmel.sweden>
-Message-ID: <87tzpimsng.fsf@macbook.be.48ers.dk>
+From: Leonid <Leonid@a-k-a.net>
+Date: Tue, 25 Sep 2007 13:03:23 -0700
+Subject: [Buildroot] cannot execute binary file
+Message-ID: <406A31B117F2734987636D6CCC93EE3C023DCA36@ehost011-3.exch011.intermedia.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Ulf" == Ulf Samuelsson <ulf@atmel.com> writes:
+Hi:
 
-Hi,
+I'm trying to build buildroot for at91rm9200df board, I'm using snapshot
+of yesterday, 9/24/2007, 6 p.m.
 
- >> Log:
- >> Don't limit 2006 version to Atmel targets (why?)
+I have already passed through several stages and it is building MTD
+utilities for target now. However for some reason after creating each
+MTD utility, it tries to run it (on the host) and naturally fails
+(jffs2dump in this example):
 
- Ulf> Just tried to be non-intrusive...
- Ulf> The "normal" version is buggy, and this works for me,
- Ulf> but I have no targets for other architectures.
+[leonid at jaipur buildroot]$ make
 
-Ok, but with the dependency noone else could test it. I only
-discovered by chance that there actually was a never version.
+Checking build system dependencies:
+BUILDROOT_DL_DIR clean:                         Ok
+CC clean:                                       Ok
+CXX clean:                                      Ok
+CPP clean:                                      Ok
+CFLAGS clean:                                   Ok
+INCLUDES clean:                                 Ok
+CXXFLAGS clean:                                 Ok
+which installed:                                Ok
+sed works:                                      Ok (/bin/sed)
+GNU make version '3.81':                        Ok
+C compiler '/usr/lib/ccache/gcc'
+C compiler version '4.1.2':                     Ok
+C++ compiler '/usr/lib/ccache/g++'
+C++ compiler version '4.1.2':                   Ok
+bison installed:                                Ok
+flex installed:                                 Ok
+gettext installed:                              Ok
+makeinfo installed:                             Ok
+Build system dependencies:                      Ok
 
- Ulf> It may make sense to make it the default,
- Ulf> but someone else needs to test that.
+rm -rf
+/home/leonid/LM150/software/linux/rootfs/buildroot/project_build_arm_sma
+ll//buildroot-config
+mkdir -p
+/home/leonid/LM150/software/linux/rootfs/buildroot/project_build_arm_sma
+ll/
+cp -dpRf package/config/buildroot-config
+/home/leonid/LM150/software/linux/rootfs/buildroot/project_build_arm_sma
+ll//buildroot-config
+/usr/bin/make -j2
+CC=/home/leonid/LM150/software/linux/rootfs/gcc-4.1.2-uclibc/usr/bin/arm
+-linux-uclibc-gcc
+CROSS_COMPILE="/home/leonid/LM150/software/linux/rootfs/gcc-4.1.2-uclibc
+/usr/bin/arm-linux-uclibc-" \
+ 
+CROSS="/home/leonid/LM150/software/linux/rootfs/gcc-4.1.2-uclibc/usr/bin
+/arm-linux-uclibc-"
+PREFIX="/home/leonid/LM150/software/linux/rootfs/buildroot/project_build
+_arm_small//root" \
+                ARCH=arm \
+                EXTRA_CFLAGS="-Os -pipe
+-I/home/leonid/LM150/software/linux/rootfs/gcc-4.1.2-uclibc/usr/include
+-I/home/leonid/LM150/software/linux/rootfs/gcc-4.1.2-uclibc/include" -C
+/home/leonid/LM150/software/linux/rootfs/buildroot/project_build_arm_sma
+ll//busybox-1.5.0 install
+make[1]: Entering directory
+`/home/leonid/LM150/software/linux/rootfs/buildroot/project_build_arm_sm
+all/busybox-1.5.0'
+  ./_install/sbin/halt -> ../bin/busybox
+  ./_install/sbin/poweroff -> ../bin/busybox
+  ./_install/sbin/reboot -> ../bin/busybox
+  ./_install/sbin/start-stop-daemon -> ../bin/busybox
+  ./_install/usr/bin/mesg -> ../../bin/busybox
+make[1]: Leaving directory
+`/home/leonid/LM150/software/linux/rootfs/buildroot/project_build_arm_sm
+all/busybox-1.5.0'
+# Just in case
+chmod a+x
+/home/leonid/LM150/software/linux/rootfs/buildroot/project_build_arm_sma
+ll//root/usr/share/udhcpc/default.script
+mkdir -p
+/home/leonid/LM150/software/linux/rootfs/buildroot/project_build_arm_sma
+ll//root/usr/sbin
+cp -f
+/home/leonid/LM150/software/linux/rootfs/buildroot/build_arm_small/mtd_o
+rig/util/jffs2dump
+/home/leonid/LM150/software/linux/rootfs/buildroot/project_build_arm_sma
+ll//root/usr/sbin/jffs2dump
+/home/leonid/LM150/software/linux/rootfs/buildroot/project_build_arm_sma
+ll//root/usr/sbin/jffs2dump
+/home/leonid/LM150/software/linux/rootfs/buildroot/project_build_arm_sma
+ll//root/usr/sbin/jffs2dump:
+/home/leonid/LM150/software/linux/rootfs/buildroot/project_build_arm_sma
+ll//root/usr/sbin/jffs2dump: cannot execute binary file
+make: ***
+[/home/leonid/LM150/software/linux/rootfs/buildroot/project_build_arm_sm
+all//root/usr/sbin/jffs2dump] Error 126
 
-I think we should actually use
-ftp://ftp.infradead.org/pub/mtd-utils/mtd-utils-1.1.0.tar.bz2 instead
-- That seems to be the latest release instead of some random snapshot.
+This is happening again and again for each utility. What is wrong?
 
--- 
-Bye, Peter Korsgaard
+Thanks,
+
+Leonid.
