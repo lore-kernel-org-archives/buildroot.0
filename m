@@ -1,68 +1,42 @@
-From: vano <ivan.kuten@promwad.com>
-Date: Tue, 25 Sep 2007 15:06:44 -0100
+From: ulf at uclibc.org <ulf@uclibc.org>
+Date: Tue, 25 Sep 2007 07:13:22 -0700 (PDT)
 Subject: [Buildroot] svn commit: trunk/buildroot/toolchain/uClibc
-In-Reply-To: <20070925133721.8555F30055@busybox.net>
-References: <20070925133721.8555F30055@busybox.net>
-Message-ID: <46F93214.7030702@promwad.com>
+Message-ID: <20070925141322.8180130055@busybox.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+Author: ulf
+Date: 2007-09-25 07:13:21 -0700 (Tue, 25 Sep 2007)
+New Revision: 20020
+
+Log:
+Remove -lgcc, did no good anyway
+
+Modified:
+   trunk/buildroot/toolchain/uClibc/uClibc-0.9.29-soft-fp.patch
 
 
-ulf at uclibc.org wrote:
-> Author: ulf
-> Date: 2007-09-25 06:37:20 -0700 (Tue, 25 Sep 2007)
-> New Revision: 20019
-> 
-> Log:
-> Add soft-fp part of gcclib to uClibc to allow ARM softfloat to complete
-> 
-
-Ulf, after svn up:
-
-make[2]: Leaving directory
-`/home/buildroot/toolchain_build_arm_nofpu/gcc-4.2.1-initial/gcc'
-make[1]: Leaving directory
-`/home/buildroot/toolchain_build_arm_nofpu/gcc-4.2.1-initial'
-#rm -f /home/buildroot/build_arm/staging_dir/usr/bin/gccbug
-/home/buildroot/build_arm/staging_dir/usr/bin/gcov
-#rm -rf /home/buildroot/build_arm/staging_dir/usr/info
-/home/buildroot/build_arm/staging_dir/usr/man
-/home/buildroot/build_arm/staging_dir/usr/share/doc
-/home/buildroot/build_arm/staging_dir/usr/share/locale
-touch /home/buildroot/toolchain_build_arm_nofpu/gcc-4.2.1-initial/.installed
-/usr/bin/make MAKE="/usr/bin/make -j1" -C
-/home/buildroot/toolchain_build_arm_nofpu/uClibc-0.9.29 \
-                PREFIX= \
-                DEVEL_PREFIX=/ \
-                RUNTIME_PREFIX=/ \
-                HOSTCC="/usr/bin/gcc" \
-                all
-make[1]: Entering directory
-`/home/buildroot/toolchain_build_arm_nofpu/uClibc-0.9.29'
-make[2]: `conf' is up to date.
-/usr/bin/make -j1 locale_headers
-make[3]: `conf' is up to date.
-  CC ldso/ldso/ldso.oS
-  AS ldso/ldso/arm/resolve.oS
-  STRIP -x -R .note -R .comment ldso/ldso/ld-uClibc_so.a
-  AR cr ldso/ldso/ld-uClibc_so.a
-  LD ld-uClibc-0.9.29.so
-/home/buildroot/build_arm/staging_dir/usr/bin/arm-linux-uclibc-ld:
-cannot find -lgcc
-make[1]: *** [lib/ld-uClibc.so] Error 1
-make[1]: Leaving directory
-`/home/buildroot/toolchain_build_arm_nofpu/uClibc-0.9.29'
-make: ***
-[/home/buildroot/toolchain_build_arm_nofpu/uClibc-0.9.29/lib/libc.a] Error 2
-
-
---------
-
-please confirm that your arm softfloat build with patch is successful.
-
-Best regards,
-Ivan
+Changeset:
+Modified: trunk/buildroot/toolchain/uClibc/uClibc-0.9.29-soft-fp.patch
+===================================================================
+--- trunk/buildroot/toolchain/uClibc/uClibc-0.9.29-soft-fp.patch	2007-09-25 13:37:20 UTC (rev 20019)
++++ trunk/buildroot/toolchain/uClibc/uClibc-0.9.29-soft-fp.patch	2007-09-25 14:13:21 UTC (rev 20020)
+@@ -9145,14 +9145,5 @@
+ +
+ +  return r;
+ +}
+-diff -urN uClibc-0.9.29-0rig/Rules.mak uClibc-0.9.29/Rules.mak
+---- uClibc-0.9.29-0rig/Rules.mak	2007-04-17 15:34:11.000000000 +0200
+-+++ uClibc-0.9.29/Rules.mak	2007-09-25 07:26:39.000000000 +0200
+-@@ -385,6 +385,7 @@
+- # No longer needed with current toolchains, but leave it here for now.
+- # If anyone is actually still using gcc 2.95 (say), they can uncomment it.
+- #    LDADD_LIBFLOAT=-lfloat
+-+CPU_LDFLAGS-y+=-lgcc 
+- endif
+- endif
++
+  
