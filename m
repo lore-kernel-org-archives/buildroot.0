@@ -1,25 +1,41 @@
-From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Wed, 26 Sep 2007 13:07:02 +0200
-Subject: [Buildroot] svn commit: trunk/buildroot/package/qtopia4
-In-Reply-To: <20070926102333.E52393004A@busybox.net> (ulf@uclibc.org's message
-	of "Wed\, 26 Sep 2007 03\:23\:33 -0700 \(PDT\)")
-References: <20070926102333.E52393004A@busybox.net>
-Message-ID: <87d4w5n0rt.fsf@macbook.be.48ers.dk>
+From: Ulf Samuelsson <ulf@atmel.com>
+Date: Wed, 26 Sep 2007 13:08:21 +0200
+Subject: [Buildroot] svn commit: trunk/buildroot/package/mtd
+In-Reply-To: <87tzpimsng.fsf@macbook.be.48ers.dk>
+References: <20070925144527.1DC94A4D18@busybox.net>
+	<1190737019.19731.80.camel@elrond.atmel.sweden>
+	<87tzpimsng.fsf@macbook.be.48ers.dk>
+Message-ID: <1190804901.4933.21.camel@elrond.atmel.sweden>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "ulf" == ulf  <ulf@uclibc.org> writes:
+tis 2007-09-25 klockan 21:50 +0200 skrev Peter Korsgaard:
+> >>>>> "Ulf" == Ulf Samuelsson <ulf@atmel.com> writes:
+> 
+> Hi,
+> 
+>  >> Log:
+>  >> Don't limit 2006 version to Atmel targets (why?)
+> 
+>  Ulf> Just tried to be non-intrusive...
+>  Ulf> The "normal" version is buggy, and this works for me,
+>  Ulf> but I have no targets for other architectures.
+> 
+> Ok, but with the dependency noone else could test it. I only
+> discovered by chance that there actually was a never version.
+> 
+>  Ulf> It may make sense to make it the default,
+>  Ulf> but someone else needs to test that.
+> 
+> I think we should actually use
+> ftp://ftp.infradead.org/pub/mtd-utils/mtd-utils-1.1.0.tar.bz2 instead
+> - That seems to be the latest release instead of some random snapshot.
+> 
 
-Hi,
+I will add that as a choice, to allow testing.
 
- ulf> +# BUG: In "OpenSuSE 10.2", dbus.h is at dbus-1.0/dbus/dbus.h
- ulf> +# instead of at "dbus/dbus.h"
- ulf> +# (cd /usr/include; sudo ln -s dbus-1.0/dbus dbus) 
-
-Huh, on the build host? Why would qtopia mess around with that?
-
--- 
-Bye, Peter Korsgaard
+BR
+Ulf Samuelsson
