@@ -1,46 +1,45 @@
-From: ulf at uclibc.org <ulf@uclibc.org>
-Date: Wed, 26 Sep 2007 02:09:58 -0700 (PDT)
-Subject: [Buildroot] svn commit: trunk/buildroot/toolchain/uClibc
-Message-ID: <20070926090958.596C1A6884@busybox.net>
+From: Kuten Ivan <ivan.kuten@promwad.com>
+Date: Wed, 26 Sep 2007 11:15:43 -0100
+Subject: [Buildroot] some tips for x11r7
+In-Reply-To: <46F8FB49.8050808@apexar.com.ar>
+References: <46F6BBA4.80002@promwad.com> <46F7CBF7.8040103@apexar.com.ar>
+	<46F7F454.9060603@promwad.com> <46F8FB49.8050808@apexar.com.ar>
+Message-ID: <46FA4D6F.2030308@promwad.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Author: ulf
-Date: 2007-09-26 02:09:55 -0700 (Wed, 26 Sep 2007)
-New Revision: 20033
+>>> configure.in:63: error: possibly undefined macro: AC_LIBTOOL_WIN32_DLL
+>>>       If this token and others are legitimate, please use m4_pattern_allow.
+>>>       See the Autoconf documentation.
+>>> configure.in:64: error: possibly undefined macro: AM_PROG_LIBTOOL
+>>> autoreconf: /usr/bin/autoconf failed with exit status: 1
+>>> make: *** 
+>>> [/home/dfons/buildroot_19987/build_arm/fontconfig-2.4.2/.configured] Error 1
+>>>
 
-Log:
-Ensure soft-fp patch is truly local
+...
 
-Modified:
-   trunk/buildroot/toolchain/uClibc/uClibc-0.9.29-soft-fp.patch
+> Yes, i have fntcongif and fontconfig-dev installe in the host system...
+> I think it's a problem of autoconf and friends, do you know what are the 
+> recommended versions of these tools?
+> 
+> Regards,
+> Diego A. Fons.
 
+Hello, there no official recommended versions.
+As for me I'm using
+automake-1.9.6
+libtool-1.5.22
+autoconf-2.60
 
-Changeset:
-Modified: trunk/buildroot/toolchain/uClibc/uClibc-0.9.29-soft-fp.patch
-===================================================================
---- trunk/buildroot/toolchain/uClibc/uClibc-0.9.29-soft-fp.patch	2007-09-26 06:32:42 UTC (rev 20032)
-+++ trunk/buildroot/toolchain/uClibc/uClibc-0.9.29-soft-fp.patch	2007-09-26 09:09:55 UTC (rev 20033)
-@@ -4388,7 +4388,7 @@
- +
- +# SOFT_FLOAT functions
- +ifeq ($(UCLIBC_HAS_SOFT_FLOAT),y)
--+CSRC := \
-++SOFT_FP_SRC := \
- +	adddf3.c addsf3.c addtf3.c \
- +	divdf3.c divsf3.c divtf3.c \
- +	eqdf2.c eqsf2.c eqtf2.c \
-@@ -4410,8 +4410,8 @@
- +SOFT_FP_DIR := $(top_srcdir)libc/soft-fp
- +SOFT_FP_OUT := $(top_builddir)libc/soft-fp
- +
--+SOFT_FP_SRC := $(patsubst %.c,$(SOFT_FP_DIR)/%.c,$(CSRC))
--+SOFT_FP_OBJ := $(patsubst %.c,$(SOFT_FP_OUT)/%.o,$(CSRC))
-++SOFT_FP_SRC := $(patsubst %.c,$(SOFT_FP_DIR)/%.c,$(SOFT_FP_SRC))
-++SOFT_FP_OBJ := $(patsubst %.c,$(SOFT_FP_OUT)/%.o,$(SOFT_FP_SRC))
- +
- +libc-y += $(SOFT_FP_OBJ)
- +
+May be try to upgrade.
+
+-- 
+--------------------------------
+> Embedded Linux engineer,
+> Promwad Company: http://www.promwad.com/
+> Homepage : http://www.ivankuten.com/
+> --------------------------------
