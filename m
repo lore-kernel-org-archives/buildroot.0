@@ -1,7 +1,7 @@
 From: ulf at uclibc.org <ulf@uclibc.org>
-Date: Wed, 26 Sep 2007 03:18:17 -0700 (PDT)
-Subject: [Buildroot] svn commit: trunk/buildroot/package/mdnsresponder
-Message-ID: <20070926101817.99CD1A686F@busybox.net>
+Date: Wed, 26 Sep 2007 03:21:19 -0700 (PDT)
+Subject: [Buildroot] svn commit: trunk/buildroot/package/proftpd
+Message-ID: <20070926102119.57984A687C@busybox.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -9,219 +9,192 @@ Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
 Author: ulf
-Date: 2007-09-26 03:18:17 -0700 (Wed, 26 Sep 2007)
-New Revision: 20034
+Date: 2007-09-26 03:21:18 -0700 (Wed, 26 Sep 2007)
+New Revision: 20035
 
 Log:
-remove LEGACY string routines from mDNSResponder
+Remove LEGACY routines from proftpd
 
 Added:
-   trunk/buildroot/package/mdnsresponder/mDNSResponder-107.6-bcopy.patch
-
-Modified:
-   trunk/buildroot/package/mdnsresponder/mdnsresponder.mk
+   trunk/buildroot/package/proftpd/proftpd-1.3.0a-bcopy.patch
 
 
 Changeset:
-Added: trunk/buildroot/package/mdnsresponder/mDNSResponder-107.6-bcopy.patch
+Added: trunk/buildroot/package/proftpd/proftpd-1.3.0a-bcopy.patch
 ===================================================================
---- trunk/buildroot/package/mdnsresponder/mDNSResponder-107.6-bcopy.patch	                        (rev 0)
-+++ trunk/buildroot/package/mdnsresponder/mDNSResponder-107.6-bcopy.patch	2007-09-26 10:18:17 UTC (rev 20034)
-@@ -0,0 +1,174 @@
-+diff -urN mDNSResponder-107.6-0rig/mDNSPosix/NetMonitor.c mDNSResponder-107.6/mDNSPosix/NetMonitor.c
-+--- mDNSResponder-107.6-0rig/mDNSPosix/NetMonitor.c	2006-08-15 01:24:46.000000000 +0200
-++++ mDNSResponder-107.6/mDNSPosix/NetMonitor.c	2007-09-26 11:56:22.000000000 +0200
-+@@ -30,6 +30,9 @@
-+     Change History (most recent first):
-+ 
-+ $Log: NetMonitor.c,v $
-++Revision 1.82-buildroot  2007/09/26 ulfs
-++Replace deprecated bcopy with memmove
+--- trunk/buildroot/package/proftpd/proftpd-1.3.0a-bcopy.patch	                        (rev 0)
++++ trunk/buildroot/package/proftpd/proftpd-1.3.0a-bcopy.patch	2007-09-26 10:21:18 UTC (rev 20035)
+@@ -0,0 +1,173 @@
++diff -urN proftpd-1.3.0a-0rig/ChangeLog proftpd-1.3.0a/ChangeLog
++--- proftpd-1.3.0a-0rig/ChangeLog	2006-04-16 23:39:01.000000000 +0200
+++++ proftpd-1.3.0a/ChangeLog	2007-09-24 08:18:14.000000000 +0200
++@@ -1,3 +1,11 @@
+++2007-09-24 08:00  ulfs
 ++
-+ Revision 1.82  2006/08/14 23:24:46  cheshire
-+ Re-licensed mDNSResponder daemon source code under Apache License, Version 2.0
+++	* contrib/mod_load/mod_load.c.in
+++	* include/conf.h
+++	* lib/glibc-glob.c
+++	
+++	Replace bzero/bcopy with memset/memcpy
+++
++ 2006-04-16 14:36  castaglia
 + 
-+@@ -308,7 +311,7 @@
++ 	* contrib/dist/rpm/proftpd.spec, include/version.h, NEWS: 
++diff -urN proftpd-1.3.0a-0rig/config.h.in proftpd-1.3.0a/config.h.in
++--- proftpd-1.3.0a-0rig/config.h.in	2005-10-20 01:28:30.000000000 +0200
+++++ proftpd-1.3.0a/config.h.in	2007-09-24 08:24:38.000000000 +0200
++@@ -190,7 +190,7 @@
++ #undef STACK_DIRECTION
 + 
-+ #include <stdio.h>			// For printf()
-+ #include <stdlib.h>			// For malloc()
-+-#include <string.h>			// For bcopy()
-++#include <string.h>			// For memmove()
-+ #include <time.h>			// For "struct tm" etc.
-+ #include <signal.h>			// For SIGINT, SIGTERM
-+ #include <netdb.h>			// For gethostbyname()
-+@@ -1155,7 +1158,7 @@
-+ 			else if (inet_pton(AF_INET6, argv[i], &s6) == 1)
-+ 				{
-+ 				a.type = mDNSAddrType_IPv6;
-+-				bcopy(&s6, &a.ip.v6, sizeof(a.ip.v6));
-++				memmove(&a.ip.v6, &s6, sizeof(a.ip.v6));
-+ 				}
-+ 			else
-+ 				{
-+diff -urN mDNSResponder-107.6-0rig/mDNSPosix/PosixDaemon.c mDNSResponder-107.6/mDNSPosix/PosixDaemon.c
-+--- mDNSResponder-107.6-0rig/mDNSPosix/PosixDaemon.c	2006-08-29 08:24:34.000000000 +0200
-++++ mDNSResponder-107.6/mDNSPosix/PosixDaemon.c	2007-09-26 12:02:01.000000000 +0200
-+@@ -231,8 +231,8 @@
-+ 	mDNS_PlatformSupport	platformStorage;
-+ 	mStatus					err;
++ /* Define if you have the ANSI C header files.  */
++-#undef STDC_HEADERS
+++#define STDC_HEADERS	1
 + 
-+-	bzero(&mDNSRecord, sizeof mDNSRecord);
-+-	bzero(&platformStorage, sizeof platformStorage);
-++	memset(&mDNSRecord, '\0', sizeof mDNSRecord);
-++	memset(&platformStorage, '\0', sizeof platformStorage);
++ /* Define if you can safely include both <sys/time.h> and <time.h>.  */
++ #undef TIME_WITH_SYS_TIME
++@@ -202,10 +202,10 @@
++ #undef uid_t
 + 
-+ 	ParseCmdLinArgs(argc, argv);
++ /* The number of bytes in a short.  */
++-#undef SIZEOF_SHORT
+++#define SIZEOF_SHORT	2
 + 
-+@@ -317,7 +317,6 @@
-+ 		LogMalloc("malloc( %s : %lu ) = %p", msg, size, &mem[2]);
-+ 		mem[0] = 0xDEAD1234;
-+ 		mem[1] = size;
-+-		//bzero(&mem[2], size);
-+ 		memset(&mem[2], 0xFF, size);
-+ //		validatelists(&mDNSStorage);
-+ 		return(&mem[2]);
-+@@ -336,7 +335,6 @@
-+ 		if (mem[1] > 8000)
-+ 			{ LogMsg("free( %s : %ld @ %p) too big!", msg, mem[1], &mem[2]); return; }
-+ 		LogMalloc("free( %s : %ld @ %p)", msg, mem[1], &mem[2]);
-+-		//bzero(mem, mem[1]+8);
-+ 		memset(mem, 0xDD, mem[1]+8);
-+ //		validatelists(&mDNSStorage);
-+ 		free(mem);
-+diff -urN mDNSResponder-107.6-0rig/mDNSShared/dnssd_clientstub.c mDNSResponder-107.6/mDNSShared/dnssd_clientstub.c
-+--- mDNSResponder-107.6-0rig/mDNSShared/dnssd_clientstub.c	2006-09-07 06:43:12.000000000 +0200
-++++ mDNSResponder-107.6/mDNSShared/dnssd_clientstub.c	2007-09-26 12:05:10.000000000 +0200
-+@@ -325,7 +325,7 @@
-+     msg = malloc(*len);
-+     if (!msg) return NULL;
++ /* The number of bytes in an int.  */
++-#undef SIZEOF_INT
+++#define SIZEOF_INT	4
 + 
-+-    bzero(msg, *len);
-++    memset(msg, '\0', *len);
-+     hdr = (void *)msg;
-+     hdr->datalen = datalen;
-+     hdr->version = VERSION;
-+@@ -425,7 +425,7 @@
-+         // setup temporary error socket
-+         if ((listenfd = socket(AF_DNSSD, SOCK_STREAM, 0)) < 0)
-+             goto cleanup;
-+-        bzero(&caddr, sizeof(caddr));
-++        memset(&caddr, '\0', sizeof(caddr));
++ /* The number of bytes in a long.  */
++ #undef SIZEOF_LONG
++@@ -222,9 +222,6 @@
++ /* The number of bytes in a time_t.  */
++ #undef SIZEOF_TIME_T
 + 
-+ #if defined(USE_TCP_LOOPBACK)
-+ 			{
-+diff -urN mDNSResponder-107.6-0rig/mDNSShared/uds_daemon.c mDNSResponder-107.6/mDNSShared/uds_daemon.c
-+--- mDNSResponder-107.6-0rig/mDNSShared/uds_daemon.c	2006-08-29 08:24:36.000000000 +0200
-++++ mDNSResponder-107.6/mDNSShared/uds_daemon.c	2007-09-26 12:04:21.000000000 +0200
-+@@ -990,7 +990,7 @@
-+ 		goto error;
-+ 		}
++-/* Define if you have the bcopy function.  */
++-#undef HAVE_BCOPY
++-
++ /* Define if you have the crypt function.  */
++ #undef HAVE_CRYPT
 + 
-+-    bzero(&laddr, sizeof(laddr));
-++    memset(&laddr,'\0', sizeof(laddr));
++@@ -307,7 +304,7 @@
++ #undef HAVE_INET_PTON
 + 
-+ 	#if defined(USE_TCP_LOOPBACK)
-+ 		{
-+@@ -1291,7 +1291,7 @@
-+ 	// allocate a request_state struct that will live with the socket
-+     rstate = mallocL("connect_callback", sizeof(request_state));
-+     if (!rstate) FatalError("ERROR: malloc");
-+-    bzero(rstate, sizeof(request_state));
-++    memset(rstate, '\0', sizeof(request_state));
-+     rstate->ts = t_morecoming;
-+     rstate->sd = sd;
-+     
-+@@ -1389,7 +1389,7 @@
-+ 			{
-+ 			char ctrl_path[MAX_CTLPATH];
-+ 			get_string(&rstate->msgdata, ctrl_path, 256);	// path is first element in message buffer
-+-			bzero(&cliaddr, sizeof(cliaddr));
-++			memset(&cliaddr, '\0', sizeof(cliaddr));
-+ 			cliaddr.sun_family = AF_LOCAL;
-+ 			strcpy(cliaddr.sun_path, ctrl_path);
-+ 			}
-+@@ -1495,7 +1495,7 @@
++ /* Define if you have the memcpy function.  */
++-#undef HAVE_MEMCPY
+++#define HAVE_MEMCPY	1
 + 
-+     q = mallocL("DNSQuestion", sizeof(DNSQuestion));
-+     if (!q) FatalError("ERROR: handle_query - malloc");
-+-    bzero(q, sizeof(DNSQuestion));
-++    memset(q, '\0', sizeof(DNSQuestion));
++ /* Define if you have the mempcpy function.  */
++ #undef HAVE_MEMPCPY
++diff -urN proftpd-1.3.0a-0rig/contrib/mod_load/mod_load.c.in proftpd-1.3.0a/contrib/mod_load/mod_load.c.in
++--- proftpd-1.3.0a-0rig/contrib/mod_load/mod_load.c.in	2005-01-07 00:39:59.000000000 +0100
+++++ proftpd-1.3.0a/contrib/mod_load/mod_load.c.in	2007-09-24 08:02:01.000000000 +0200
++@@ -651,7 +651,7 @@
++       for (i = 0; i < conf.config_maxclass; ++i)
++         {
++           struct class_stats stats;
++-          bzero ((char *) &stats, sizeof stats);
+++          memset ((char *) &stats, 0, sizeof stats);
 + 
-+     q->InterfaceID      = InterfaceID;
-+     q->Target           = zeroAddr;
-+@@ -1576,7 +1576,7 @@
++           desc.sd_type = CPUTYPE_CLASS;
++           desc.sd_objid = i;
++diff -urN proftpd-1.3.0a-0rig/include/conf.h proftpd-1.3.0a/include/conf.h
++--- proftpd-1.3.0a-0rig/include/conf.h	2005-06-30 02:39:16.000000000 +0200
+++++ proftpd-1.3.0a/include/conf.h	2007-09-24 08:20:26.000000000 +0200
++@@ -118,10 +118,6 @@
++ #  define strrchr rindex
++ # endif
++ char *strchr(),*strrchr();
++-# ifndef HAVE_MEMCPY
++-#  define memcpy(d,s,n) bcopy((s),(d),(n))
++-#  define memmove(d,s,n) bcopy((s),(d),(n))
++-# endif
++ #endif
 + 
-+     // set up termination info
-+     term = mallocL("handle_resolve_request", sizeof(resolve_termination_t));
-+-    bzero(term, sizeof(*term));
-++    memset(term, '\0', sizeof(*term));
-+     if (!term) FatalError("ERROR: malloc");
++ #ifdef HAVE_BSTRING_H
++@@ -264,13 +260,6 @@
++ off_t lseek(int, off_t, int);
++ #endif
 + 
-+     // format questions
-+@@ -2635,7 +2635,7 @@
-+ 		return mStatus_NoMemoryErr;
-+         }
-+         
-+-    bzero(extra, sizeof(ExtraResourceRecord));  // OK if oversized rdata not zero'd
-++    memset(extra, '\0', sizeof(ExtraResourceRecord));  // OK if oversized rdata not zero'd
-+     extra->r.resrec.rrtype = rrtype;
-+     extra->r.rdatastorage.MaxRDLength = (mDNSu16) size;
-+     extra->r.resrec.rdlength = rdlen;
-+@@ -3208,7 +3208,7 @@
-+     
-+     rr = mallocL("read_rr_from_ipc_msg", sizeof(AuthRecord) - sizeof(RDataBody) + storage_size);
-+     if (!rr) FatalError("ERROR: malloc");
-+-    bzero(rr, sizeof(AuthRecord));  // ok if oversized rdata not zero'd
-++    memset(rr, '\0', sizeof(AuthRecord));  // ok if oversized rdata not zero'd
-+     
-+     mDNS_SetupResourceRecord(rr, mDNSNULL, mDNSPlatformInterfaceIDfromInterfaceIndex(gmDNS, interfaceIndex),
-+ 		type, 0, (mDNSu8) ((flags & kDNSServiceFlagsShared) ? kDNSRecordTypeShared : kDNSRecordTypeUnique), mDNSNULL, mDNSNULL);
-+@@ -3337,7 +3337,7 @@
-+                 return t_error;
-+             	}
-+             rs->msgdata = rs->msgbuf;
-+-            bzero(rs->msgbuf, rs->hdr.datalen + MSG_PAD_BYTES);
-++            memset(rs->msgbuf, '\0', rs->hdr.datalen + MSG_PAD_BYTES);
-+             }
-+         nleft = rs->hdr.datalen - rs->data_bytes;
-+         nread = recv(rs->sd, rs->msgbuf + rs->data_bytes, nleft, 0);
-+@@ -3431,14 +3431,14 @@
-+     totallen = (int) (datalen + sizeof(ipc_msg_hdr));
-+     reply = mallocL("create_reply", sizeof(reply_state));
-+     if (!reply) FatalError("ERROR: malloc");
-+-    bzero(reply, sizeof(reply_state));
-++    memset(reply, '\0', sizeof(reply_state));
-+     reply->ts = t_morecoming;
-+     reply->sd = request->sd;
-+     reply->request = request;
-+     reply->len = totallen;
-+     reply->msgbuf = mallocL("create_reply", totallen);
-+     if (!reply->msgbuf) FatalError("ERROR: malloc");
-+-    bzero(reply->msgbuf, totallen);
-++    memset(reply->msgbuf, '\0', totallen);
-+     reply->mhdr = (ipc_msg_hdr *)reply->msgbuf;
-+     reply->rhdr = (reply_hdr *)(reply->msgbuf + sizeof(ipc_msg_hdr));
-+     reply->sdata = reply->msgbuf + sizeof(ipc_msg_hdr) + sizeof(reply_hdr);
-
-Modified: trunk/buildroot/package/mdnsresponder/mdnsresponder.mk
-===================================================================
---- trunk/buildroot/package/mdnsresponder/mdnsresponder.mk	2007-09-26 09:09:55 UTC (rev 20033)
-+++ trunk/buildroot/package/mdnsresponder/mdnsresponder.mk	2007-09-26 10:18:17 UTC (rev 20034)
-@@ -19,6 +19,8 @@
- 
- $(MDNSRESPONDER_DIR)/.unpacked: $(DL_DIR)/$(MDNSRESPONDER_SOURCE)
- 	$(MDNSRESPONDER_CAT) $(DL_DIR)/$(MDNSRESPONDER_SOURCE) | tar -C $(BUILD_DIR) $(TAR_OPTIONS) -
-+	toolchain/patch-kernel.sh $(MDNSRESPONDER_DIR) package/mdnsresponder/ \
-+		mDNSResponder-$(MDNSRESPONDER_VERSION)\*.patch
- 	touch $@
- 
- $(MDNSRESPONDER_DIR)/.configured: $(MDNSRESPONDER_DIR)/.unpacked
-@@ -62,6 +64,8 @@
- 
- mdnsresponder-source: $(DL_DIR)/$(MDNSRESPONDER_SOURCE)
- 
-+mdnsresponder-unpacked: $(MDNSRESPONDER_DIR)/.unpacked
-+
- mdnsresponder-clean:
- 	rm -f $(MDNSRESPONDER_DIR)/.configured $(MDNSRESPONDER_DIR)/.built $(MDNSRESPONDER_DIR)/.staged
- 	-$(MAKE1) os=linux -C $(MDNSRESPONDER_DIR)/mDNSPosix clean
++-/* See if we have bcopy, if not define them to use the memcpy functions */
++-
++-#ifndef HAVE_BCOPY
++-# define bcopy(s,d,n)	memcpy((d),(s),(n))
++-# define bzero(d,n)	memset((d),0,(n))
++-#endif
++-
++ /* Solaris has __vsnprintf, but no vsnprintf */
++ #if ! defined(HAVE_VSNPRINTF) && defined(HAVE___VSNPRINTF)
++ # undef vsnprintf
++diff -urN proftpd-1.3.0a-0rig/lib/glibc-glob.c proftpd-1.3.0a/lib/glibc-glob.c
++--- proftpd-1.3.0a-0rig/lib/glibc-glob.c	2006-03-22 23:10:34.000000000 +0100
+++++ proftpd-1.3.0a/lib/glibc-glob.c	2007-09-24 08:07:48.000000000 +0200
++@@ -215,18 +215,8 @@
++ 
++ #ifndef	ANSI_STRING
++ 
++-# ifndef bzero
++-extern void bzero ();
++-# endif
++-# ifndef bcopy
++-extern void bcopy ();
++-# endif
++-
++-# define memcpy(d, s, n)	bcopy ((s), (d), (n))
++ # define strrchr	rindex
++ /* memset is only used for zero here, but let's be paranoid.  */
++-# define memset(s, better_be_zero, n) \
++-  ((void) ((better_be_zero) == 0 ? (bzero((s), (n)), 0) : (abort(), 0)))
++ #endif	/* Not ANSI_STRING.  */
++ 
++ #if !defined HAVE_STRCOLL && !defined _LIBC
++diff -urN proftpd-1.3.0a-0rig/lib/libltdl/config-h.in proftpd-1.3.0a/lib/libltdl/config-h.in
++--- proftpd-1.3.0a-0rig/lib/libltdl/config-h.in	2004-10-29 07:17:55.000000000 +0200
+++++ proftpd-1.3.0a/lib/libltdl/config-h.in	2007-09-24 08:25:40.000000000 +0200
++@@ -21,9 +21,6 @@
++ /* Define to 1 if you have the <assert.h> header file. */
++ #undef HAVE_ASSERT_H
++ 
++-/* Define to 1 if you have the `bcopy' function. */
++-#undef HAVE_BCOPY
++-
++ /* Define to 1 if you have the `closedir' function. */
++ #undef HAVE_CLOSEDIR
++ 
++@@ -74,7 +71,7 @@
++ #undef HAVE_MALLOC_H
++ 
++ /* Define to 1 if you have the `memcpy' function. */
++-#undef HAVE_MEMCPY
+++#define HAVE_MEMCPY	1
++ 
++ /* Define to 1 if you have the `memmove' function. */
++ #undef HAVE_MEMMOVE
++@@ -180,7 +177,7 @@
++ #undef PACKAGE_VERSION
++ 
++ /* Define to 1 if you have the ANSI C header files. */
++-#undef STDC_HEADERS
+++#define STDC_HEADERS	1
++ 
++ /* Define to empty if `const' does not conform to ANSI C. */
++ #undef const
++diff -urN proftpd-1.3.0a-0rig/lib/libltdl/ltdl.c proftpd-1.3.0a/lib/libltdl/ltdl.c
++--- proftpd-1.3.0a-0rig/lib/libltdl/ltdl.c	2004-10-29 07:17:55.000000000 +0200
+++++ proftpd-1.3.0a/lib/libltdl/ltdl.c	2007-09-24 08:13:51.000000000 +0200
++@@ -372,9 +372,6 @@
++ 	  if you need that behaviour.  */
++ #if ! HAVE_MEMCPY
++ 
++-#  if HAVE_BCOPY
++-#    define memcpy(dest, src, size)	bcopy (src, dest, size)
++-#  else
++ #    define memcpy rpl_memcpy
++ 
++ static lt_ptr memcpy LT_PARAMS((lt_ptr dest, const lt_ptr src, size_t size));
++@@ -395,7 +392,6 @@
++   return dest;
++ }
++ 
++-#  endif /* !HAVE_BCOPY */
++ #endif   /* !HAVE_MEMCPY */
++ 
++ #if ! HAVE_MEMMOVE
