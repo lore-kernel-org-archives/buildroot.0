@@ -1,45 +1,227 @@
-From: Kuten Ivan <ivan.kuten@promwad.com>
-Date: Wed, 26 Sep 2007 11:15:43 -0100
-Subject: [Buildroot] some tips for x11r7
-In-Reply-To: <46F8FB49.8050808@apexar.com.ar>
-References: <46F6BBA4.80002@promwad.com> <46F7CBF7.8040103@apexar.com.ar>
-	<46F7F454.9060603@promwad.com> <46F8FB49.8050808@apexar.com.ar>
-Message-ID: <46FA4D6F.2030308@promwad.com>
+From: ulf at uclibc.org <ulf@uclibc.org>
+Date: Wed, 26 Sep 2007 03:18:17 -0700 (PDT)
+Subject: [Buildroot] svn commit: trunk/buildroot/package/mdnsresponder
+Message-ID: <20070926101817.99CD1A686F@busybox.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>> configure.in:63: error: possibly undefined macro: AC_LIBTOOL_WIN32_DLL
->>>       If this token and others are legitimate, please use m4_pattern_allow.
->>>       See the Autoconf documentation.
->>> configure.in:64: error: possibly undefined macro: AM_PROG_LIBTOOL
->>> autoreconf: /usr/bin/autoconf failed with exit status: 1
->>> make: *** 
->>> [/home/dfons/buildroot_19987/build_arm/fontconfig-2.4.2/.configured] Error 1
->>>
+Author: ulf
+Date: 2007-09-26 03:18:17 -0700 (Wed, 26 Sep 2007)
+New Revision: 20034
 
-...
+Log:
+remove LEGACY string routines from mDNSResponder
 
-> Yes, i have fntcongif and fontconfig-dev installe in the host system...
-> I think it's a problem of autoconf and friends, do you know what are the 
-> recommended versions of these tools?
-> 
-> Regards,
-> Diego A. Fons.
+Added:
+   trunk/buildroot/package/mdnsresponder/mDNSResponder-107.6-bcopy.patch
 
-Hello, there no official recommended versions.
-As for me I'm using
-automake-1.9.6
-libtool-1.5.22
-autoconf-2.60
+Modified:
+   trunk/buildroot/package/mdnsresponder/mdnsresponder.mk
 
-May be try to upgrade.
 
--- 
---------------------------------
-> Embedded Linux engineer,
-> Promwad Company: http://www.promwad.com/
-> Homepage : http://www.ivankuten.com/
-> --------------------------------
+Changeset:
+Added: trunk/buildroot/package/mdnsresponder/mDNSResponder-107.6-bcopy.patch
+===================================================================
+--- trunk/buildroot/package/mdnsresponder/mDNSResponder-107.6-bcopy.patch	                        (rev 0)
++++ trunk/buildroot/package/mdnsresponder/mDNSResponder-107.6-bcopy.patch	2007-09-26 10:18:17 UTC (rev 20034)
+@@ -0,0 +1,174 @@
++diff -urN mDNSResponder-107.6-0rig/mDNSPosix/NetMonitor.c mDNSResponder-107.6/mDNSPosix/NetMonitor.c
++--- mDNSResponder-107.6-0rig/mDNSPosix/NetMonitor.c	2006-08-15 01:24:46.000000000 +0200
+++++ mDNSResponder-107.6/mDNSPosix/NetMonitor.c	2007-09-26 11:56:22.000000000 +0200
++@@ -30,6 +30,9 @@
++     Change History (most recent first):
++ 
++ $Log: NetMonitor.c,v $
+++Revision 1.82-buildroot  2007/09/26 ulfs
+++Replace deprecated bcopy with memmove
+++
++ Revision 1.82  2006/08/14 23:24:46  cheshire
++ Re-licensed mDNSResponder daemon source code under Apache License, Version 2.0
++ 
++@@ -308,7 +311,7 @@
++ 
++ #include <stdio.h>			// For printf()
++ #include <stdlib.h>			// For malloc()
++-#include <string.h>			// For bcopy()
+++#include <string.h>			// For memmove()
++ #include <time.h>			// For "struct tm" etc.
++ #include <signal.h>			// For SIGINT, SIGTERM
++ #include <netdb.h>			// For gethostbyname()
++@@ -1155,7 +1158,7 @@
++ 			else if (inet_pton(AF_INET6, argv[i], &s6) == 1)
++ 				{
++ 				a.type = mDNSAddrType_IPv6;
++-				bcopy(&s6, &a.ip.v6, sizeof(a.ip.v6));
+++				memmove(&a.ip.v6, &s6, sizeof(a.ip.v6));
++ 				}
++ 			else
++ 				{
++diff -urN mDNSResponder-107.6-0rig/mDNSPosix/PosixDaemon.c mDNSResponder-107.6/mDNSPosix/PosixDaemon.c
++--- mDNSResponder-107.6-0rig/mDNSPosix/PosixDaemon.c	2006-08-29 08:24:34.000000000 +0200
+++++ mDNSResponder-107.6/mDNSPosix/PosixDaemon.c	2007-09-26 12:02:01.000000000 +0200
++@@ -231,8 +231,8 @@
++ 	mDNS_PlatformSupport	platformStorage;
++ 	mStatus					err;
++ 
++-	bzero(&mDNSRecord, sizeof mDNSRecord);
++-	bzero(&platformStorage, sizeof platformStorage);
+++	memset(&mDNSRecord, '\0', sizeof mDNSRecord);
+++	memset(&platformStorage, '\0', sizeof platformStorage);
++ 
++ 	ParseCmdLinArgs(argc, argv);
++ 
++@@ -317,7 +317,6 @@
++ 		LogMalloc("malloc( %s : %lu ) = %p", msg, size, &mem[2]);
++ 		mem[0] = 0xDEAD1234;
++ 		mem[1] = size;
++-		//bzero(&mem[2], size);
++ 		memset(&mem[2], 0xFF, size);
++ //		validatelists(&mDNSStorage);
++ 		return(&mem[2]);
++@@ -336,7 +335,6 @@
++ 		if (mem[1] > 8000)
++ 			{ LogMsg("free( %s : %ld @ %p) too big!", msg, mem[1], &mem[2]); return; }
++ 		LogMalloc("free( %s : %ld @ %p)", msg, mem[1], &mem[2]);
++-		//bzero(mem, mem[1]+8);
++ 		memset(mem, 0xDD, mem[1]+8);
++ //		validatelists(&mDNSStorage);
++ 		free(mem);
++diff -urN mDNSResponder-107.6-0rig/mDNSShared/dnssd_clientstub.c mDNSResponder-107.6/mDNSShared/dnssd_clientstub.c
++--- mDNSResponder-107.6-0rig/mDNSShared/dnssd_clientstub.c	2006-09-07 06:43:12.000000000 +0200
+++++ mDNSResponder-107.6/mDNSShared/dnssd_clientstub.c	2007-09-26 12:05:10.000000000 +0200
++@@ -325,7 +325,7 @@
++     msg = malloc(*len);
++     if (!msg) return NULL;
++ 
++-    bzero(msg, *len);
+++    memset(msg, '\0', *len);
++     hdr = (void *)msg;
++     hdr->datalen = datalen;
++     hdr->version = VERSION;
++@@ -425,7 +425,7 @@
++         // setup temporary error socket
++         if ((listenfd = socket(AF_DNSSD, SOCK_STREAM, 0)) < 0)
++             goto cleanup;
++-        bzero(&caddr, sizeof(caddr));
+++        memset(&caddr, '\0', sizeof(caddr));
++ 
++ #if defined(USE_TCP_LOOPBACK)
++ 			{
++diff -urN mDNSResponder-107.6-0rig/mDNSShared/uds_daemon.c mDNSResponder-107.6/mDNSShared/uds_daemon.c
++--- mDNSResponder-107.6-0rig/mDNSShared/uds_daemon.c	2006-08-29 08:24:36.000000000 +0200
+++++ mDNSResponder-107.6/mDNSShared/uds_daemon.c	2007-09-26 12:04:21.000000000 +0200
++@@ -990,7 +990,7 @@
++ 		goto error;
++ 		}
++ 
++-    bzero(&laddr, sizeof(laddr));
+++    memset(&laddr,'\0', sizeof(laddr));
++ 
++ 	#if defined(USE_TCP_LOOPBACK)
++ 		{
++@@ -1291,7 +1291,7 @@
++ 	// allocate a request_state struct that will live with the socket
++     rstate = mallocL("connect_callback", sizeof(request_state));
++     if (!rstate) FatalError("ERROR: malloc");
++-    bzero(rstate, sizeof(request_state));
+++    memset(rstate, '\0', sizeof(request_state));
++     rstate->ts = t_morecoming;
++     rstate->sd = sd;
++     
++@@ -1389,7 +1389,7 @@
++ 			{
++ 			char ctrl_path[MAX_CTLPATH];
++ 			get_string(&rstate->msgdata, ctrl_path, 256);	// path is first element in message buffer
++-			bzero(&cliaddr, sizeof(cliaddr));
+++			memset(&cliaddr, '\0', sizeof(cliaddr));
++ 			cliaddr.sun_family = AF_LOCAL;
++ 			strcpy(cliaddr.sun_path, ctrl_path);
++ 			}
++@@ -1495,7 +1495,7 @@
++ 
++     q = mallocL("DNSQuestion", sizeof(DNSQuestion));
++     if (!q) FatalError("ERROR: handle_query - malloc");
++-    bzero(q, sizeof(DNSQuestion));
+++    memset(q, '\0', sizeof(DNSQuestion));
++ 
++     q->InterfaceID      = InterfaceID;
++     q->Target           = zeroAddr;
++@@ -1576,7 +1576,7 @@
++ 
++     // set up termination info
++     term = mallocL("handle_resolve_request", sizeof(resolve_termination_t));
++-    bzero(term, sizeof(*term));
+++    memset(term, '\0', sizeof(*term));
++     if (!term) FatalError("ERROR: malloc");
++ 
++     // format questions
++@@ -2635,7 +2635,7 @@
++ 		return mStatus_NoMemoryErr;
++         }
++         
++-    bzero(extra, sizeof(ExtraResourceRecord));  // OK if oversized rdata not zero'd
+++    memset(extra, '\0', sizeof(ExtraResourceRecord));  // OK if oversized rdata not zero'd
++     extra->r.resrec.rrtype = rrtype;
++     extra->r.rdatastorage.MaxRDLength = (mDNSu16) size;
++     extra->r.resrec.rdlength = rdlen;
++@@ -3208,7 +3208,7 @@
++     
++     rr = mallocL("read_rr_from_ipc_msg", sizeof(AuthRecord) - sizeof(RDataBody) + storage_size);
++     if (!rr) FatalError("ERROR: malloc");
++-    bzero(rr, sizeof(AuthRecord));  // ok if oversized rdata not zero'd
+++    memset(rr, '\0', sizeof(AuthRecord));  // ok if oversized rdata not zero'd
++     
++     mDNS_SetupResourceRecord(rr, mDNSNULL, mDNSPlatformInterfaceIDfromInterfaceIndex(gmDNS, interfaceIndex),
++ 		type, 0, (mDNSu8) ((flags & kDNSServiceFlagsShared) ? kDNSRecordTypeShared : kDNSRecordTypeUnique), mDNSNULL, mDNSNULL);
++@@ -3337,7 +3337,7 @@
++                 return t_error;
++             	}
++             rs->msgdata = rs->msgbuf;
++-            bzero(rs->msgbuf, rs->hdr.datalen + MSG_PAD_BYTES);
+++            memset(rs->msgbuf, '\0', rs->hdr.datalen + MSG_PAD_BYTES);
++             }
++         nleft = rs->hdr.datalen - rs->data_bytes;
++         nread = recv(rs->sd, rs->msgbuf + rs->data_bytes, nleft, 0);
++@@ -3431,14 +3431,14 @@
++     totallen = (int) (datalen + sizeof(ipc_msg_hdr));
++     reply = mallocL("create_reply", sizeof(reply_state));
++     if (!reply) FatalError("ERROR: malloc");
++-    bzero(reply, sizeof(reply_state));
+++    memset(reply, '\0', sizeof(reply_state));
++     reply->ts = t_morecoming;
++     reply->sd = request->sd;
++     reply->request = request;
++     reply->len = totallen;
++     reply->msgbuf = mallocL("create_reply", totallen);
++     if (!reply->msgbuf) FatalError("ERROR: malloc");
++-    bzero(reply->msgbuf, totallen);
+++    memset(reply->msgbuf, '\0', totallen);
++     reply->mhdr = (ipc_msg_hdr *)reply->msgbuf;
++     reply->rhdr = (reply_hdr *)(reply->msgbuf + sizeof(ipc_msg_hdr));
++     reply->sdata = reply->msgbuf + sizeof(ipc_msg_hdr) + sizeof(reply_hdr);
+
+Modified: trunk/buildroot/package/mdnsresponder/mdnsresponder.mk
+===================================================================
+--- trunk/buildroot/package/mdnsresponder/mdnsresponder.mk	2007-09-26 09:09:55 UTC (rev 20033)
++++ trunk/buildroot/package/mdnsresponder/mdnsresponder.mk	2007-09-26 10:18:17 UTC (rev 20034)
+@@ -19,6 +19,8 @@
+ 
+ $(MDNSRESPONDER_DIR)/.unpacked: $(DL_DIR)/$(MDNSRESPONDER_SOURCE)
+ 	$(MDNSRESPONDER_CAT) $(DL_DIR)/$(MDNSRESPONDER_SOURCE) | tar -C $(BUILD_DIR) $(TAR_OPTIONS) -
++	toolchain/patch-kernel.sh $(MDNSRESPONDER_DIR) package/mdnsresponder/ \
++		mDNSResponder-$(MDNSRESPONDER_VERSION)\*.patch
+ 	touch $@
+ 
+ $(MDNSRESPONDER_DIR)/.configured: $(MDNSRESPONDER_DIR)/.unpacked
+@@ -62,6 +64,8 @@
+ 
+ mdnsresponder-source: $(DL_DIR)/$(MDNSRESPONDER_SOURCE)
+ 
++mdnsresponder-unpacked: $(MDNSRESPONDER_DIR)/.unpacked
++
+ mdnsresponder-clean:
+ 	rm -f $(MDNSRESPONDER_DIR)/.configured $(MDNSRESPONDER_DIR)/.built $(MDNSRESPONDER_DIR)/.staged
+ 	-$(MAKE1) os=linux -C $(MDNSRESPONDER_DIR)/mDNSPosix clean
