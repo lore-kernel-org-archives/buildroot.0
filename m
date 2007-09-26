@@ -1,8 +1,8 @@
 From: ulf at uclibc.org <ulf@uclibc.org>
-Date: Wed, 26 Sep 2007 15:12:52 -0700 (PDT)
-Subject: [Buildroot] svn commit: trunk/buildroot: package/busybox
-	target/linux
-Message-ID: <20070926221252.25B1DA5D36@busybox.net>
+Date: Wed, 26 Sep 2007 15:22:56 -0700 (PDT)
+Subject: [Buildroot] svn commit:
+	trunk/buildroot/target/device/Atmel/at91rm9200df
+Message-ID: <20070926222256.84564A5D37@busybox.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -10,74 +10,87 @@ Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
 Author: ulf
-Date: 2007-09-26 15:12:51 -0700 (Wed, 26 Sep 2007)
-New Revision: 20047
+Date: 2007-09-26 15:22:55 -0700 (Wed, 26 Sep 2007)
+New Revision: 20048
 
 Log:
-Add more management to linux and buysbox packages
+Use Makefile def of busybox config
 
 Modified:
-   trunk/buildroot/package/busybox/busybox.mk
-   trunk/buildroot/target/linux/Makefile.in
+   trunk/buildroot/target/device/Atmel/at91rm9200df/Makefile.in
+   trunk/buildroot/target/device/Atmel/at91rm9200df/at91rm9200df_defconfig
 
 
 Changeset:
-Modified: trunk/buildroot/package/busybox/busybox.mk
+Modified: trunk/buildroot/target/device/Atmel/at91rm9200df/Makefile.in
 ===================================================================
---- trunk/buildroot/package/busybox/busybox.mk	2007-09-26 22:11:25 UTC (rev 20046)
-+++ trunk/buildroot/package/busybox/busybox.mk	2007-09-26 22:12:51 UTC (rev 20047)
-@@ -28,8 +28,6 @@
- $(DL_DIR)/$(BUSYBOX_SOURCE):
- 	 $(WGET) -P $(DL_DIR) $(BUSYBOX_SITE)/$(BUSYBOX_SOURCE)
+--- trunk/buildroot/target/device/Atmel/at91rm9200df/Makefile.in	2007-09-26 22:12:51 UTC (rev 20047)
++++ trunk/buildroot/target/device/Atmel/at91rm9200df/Makefile.in	2007-09-26 22:22:55 UTC (rev 20048)
+@@ -1,10 +1,10 @@
+ ifeq ($(BOARD_NAME),at91rm9200df)
+ LINUX_BOARD_NAME=at91rm9200ek
+-BR2_PACKAGE_BUSYBOX_CONFIG:=$(BR2_BOARD_PATH)/busybox-1.7.1.config
++BR2_PACKAGE_BUSYBOX_CONFIG:=$(BOARD_PATH)/busybox-1.7.1.config
+ endif
  
--busybox-source: $(DL_DIR)/$(BUSYBOX_SOURCE) $(BUSYBOX_CONFIG_FILE)
--
- $(BUSYBOX_DIR)/.unpacked: $(DL_DIR)/$(BUSYBOX_SOURCE)
- 	$(BUSYBOX_UNZIP) $(DL_DIR)/$(BUSYBOX_SOURCE) | tar -C $(PROJECT_BUILD_DIR) $(TAR_OPTIONS) -
- ifeq ($(BR2_PACKAGE_SYSKLOGD),y)
-@@ -127,8 +125,16 @@
  
- busybox: uclibc $(TARGET_DIR)/bin/busybox
+ ifeq ($(BOARD_NAME),at91rm9200ek)
+-BR2_PACKAGE_BUSYBOX_CONFIG:=$(BR2_BOARD_PATH)/busybox-1.7.1.config
++BR2_PACKAGE_BUSYBOX_CONFIG:=$(BOARD_PATH)/busybox-1.7.1.config
+ endif
  
-+busybox-source: $(DL_DIR)/$(BUSYBOX_SOURCE) $(BUSYBOX_CONFIG_FILE)
-+
-+busybox-unpacked: $(BUSYBOX_DIR)/.unpacked
-+
-+busybox-config: $(BUSYBOX_DIR)/.configured
-+
- busybox-menuconfig: host-sed $(PROJECT_BUILD_DIR) busybox-source $(BUSYBOX_DIR)/.configured
- 	$(MAKE) __TARGET_ARCH=$(ARCH) -C $(BUSYBOX_DIR) menuconfig
-+
-+busybox-update:
- 	cp -f $(BUSYBOX_DIR)/.config $(BUSYBOX_CONFIG_FILE)
- 
- busybox-clean:
 
-Modified: trunk/buildroot/target/linux/Makefile.in
+Modified: trunk/buildroot/target/device/Atmel/at91rm9200df/at91rm9200df_defconfig
 ===================================================================
---- trunk/buildroot/target/linux/Makefile.in	2007-09-26 22:11:25 UTC (rev 20046)
-+++ trunk/buildroot/target/linux/Makefile.in	2007-09-26 22:12:51 UTC (rev 20047)
-@@ -209,6 +209,11 @@
- 	$(MAKE) $(LINUX26_MAKE_FLAGS) -C $(LINUX26_DIR) menuconfig
- 	-[ -f $(LINUX26_DIR)/.config ] && touch $(LINUX26_DIR)/.configured
+--- trunk/buildroot/target/device/Atmel/at91rm9200df/at91rm9200df_defconfig	2007-09-26 22:12:51 UTC (rev 20047)
++++ trunk/buildroot/target/device/Atmel/at91rm9200df/at91rm9200df_defconfig	2007-09-26 22:22:55 UTC (rev 20048)
+@@ -1,6 +1,6 @@
+ #
+ # Automatically generated make config: don't edit
+-# Wed Sep 26 23:17:39 2007
++# Thu Sep 27 00:11:05 2007
+ #
+ BR2_HAVE_DOT_CONFIG=y
+ BR2_VERSION="0.10.0-svn"
+@@ -218,15 +218,15 @@
+ # BR2_PACKAGE_BUSYBOX_SNAPSHOT is not set
+ BR2_BUSYBOX_VERSION="1.7.1"
+ BR2_PACKAGE_BUSYBOX_INSTALL_SYMLINKS=y
+-BR2_PACKAGE_BUSYBOX_CONFIG="package/busybox/busybox-1.6.0.config"
++BR2_PACKAGE_BUSYBOX_CONFIG=""
+ # BR2_PACKAGE_BUSYBOX_HIDE_OTHERS is not set
  
-+linux26-xconfig: $(LINUX26_DIR)/.patched host-sed
-+	[ -f $(LINUX26_DIR)/.config ] || cp $(LINUX26_KCONFIG) $(LINUX26_DIR)/.config
-+	$(MAKE) $(LINUX26_MAKE_FLAGS) -C $(LINUX26_DIR) xconfig
-+	-[ -f $(LINUX26_DIR)/.config ] && touch $(LINUX26_DIR)/.configured
-+
- linux26: $(LINUX26_KERNEL)
+ #
+ # Skeleton configuration
+ #
+ # BR2_PACKAGE_BUSYBOX_SKELETON is not set
+-BR2_HOSTNAME="AT91SAM9261EK"
+-BR2_BANNER="Welcome to the AT91SAM9261EK"
++BR2_HOSTNAME="AT91RM9200DF"
++BR2_BANNER="Welcome to the AT91RM9200DF"
  
- $(LINUX26_DIR)/.modules_installed: $(TARGET_DIR)/lib/modules/$(LINUX26_VERSION)/modules.dep
-@@ -218,8 +223,10 @@
+ #
+ # The minimum needed to build a uClibc development system ---
+@@ -753,8 +753,6 @@
+ # BR2_TARGET_AT91SAM9262EK is not set
+ # BR2_TARGET_AT91SAM9263EK is not set
+ # BR2_TARGET_AT91SAM9XEEK is not set
+-# BR2_TARGET_AT91SAM9261EK_SPIMODE0 is not set
+-# BR2_TARGET_AT91SAM9261EK_SPIMODE3 is not set
+ BR2_BOARD_NAME="at91rm9200df"
+ BR2_TARGET_AT91_ADVANCED_INFO=y
  
- linux26-source: $(DL_DIR)/$(LINUX26_SOURCE)
+@@ -778,13 +776,6 @@
+ BR2_TARGET_DATAFLASHBOOT_AT91RM9200=y
+ # BR2_TARGET_DATAFLASHBOOT_AT91SAM9261 is not set
+ # BR2_TARGET_DATAFLASHBOOT_AT91SAM9261S is not set
+-# BR2_TARGET_AT91BOOT_DATAFLASH is not set
+-# BR2_TARGET_AT91BOOT_DATAFLASHCARD is not set
+-# BR2_TARGET_AT91BOOT_NANDFLASH is not set
+-# BR2_TARGET_AT91BOOT_FLASH is not set
+-# BR2_AT91BOOTSTRAP_JUMP_TO_DEFAULT is not set
+-# BR2_AT91BOOTSTRAP_JUMP_TO_HIGH_SDRAM is not set
+-# BR2_AT91BOOTSTRAP_JUMP_TO_START_OF_SDRAM is not set
  
--linux26-patched: $(LINUX26_DIR)/.patched
-+linux26-unpacked: $(LINUX26_DIR)/.patched
- 
-+linux26-config:	$(LINUX26_DIR)/.configured
-+
- # This has been renamed so we do _NOT_ by default run this on 'make clean'
- linux26clean:
- 	rm -f $(LINUX26_KERNEL) $(LINUX26_DIR)/.configured
+ #
+ # It will be copied to $(BR2_AT91BOOTSTRAP_JUMP_ADDR)
