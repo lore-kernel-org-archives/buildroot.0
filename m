@@ -1,9 +1,9 @@
 From: Ulf Samuelsson <ulf@atmel.com>
-Date: Wed, 26 Sep 2007 13:18:20 +0200
+Date: Wed, 26 Sep 2007 13:25:36 +0200
 Subject: [Buildroot] cannot execute binary file
 In-Reply-To: <406A31B117F2734987636D6CCC93EE3C023DCA36@ehost011-3.exch011.intermedia.net>
 References: <406A31B117F2734987636D6CCC93EE3C023DCA36@ehost011-3.exch011.intermedia.net>
-Message-ID: <1190805500.4933.28.camel@elrond.atmel.sweden>
+Message-ID: <1190805936.4933.34.camel@elrond.atmel.sweden>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -134,25 +134,38 @@ MTD_TARGETS_$(BR2_PACKAGE_MTD_DOC_LOADBIOS) += doc_loadbios
 MTD_BUILD_TARGETS := $(addprefix $(MTD_DIR)/, $(MTD_TARGETS_y))
 
 $(MTD_BUILD_TARGETS): $(MTD_DIR)/.unpacked
-	mkdir -p $(TARGET_DIR)/usr/sbin
-	$(MAKE) CFLAGS="-I. -I./include -I$(LINUX_HEADERS_DIR)/include -I
+        mkdir -p $(TARGET_DIR)/usr/sbin
+        $(MAKE) CFLAGS="-I. -I./include -I$(LINUX_HEADERS_DIR)/include
+-I
 $(STAGING_DIR)/usr/include $(TARGET_CFLAGS)" \
-		CROSS= CC=$(TARGET_CC) LINUXDIR=$(LINUX26_DIR) WITHOUT_XATTR=1 -C
+                CROSS= CC=$(TARGET_CC) LINUXDIR=$(LINUX26_DIR)
+WITHOUT_XATTR=1 -C
 $(MTD_DIR)
 
 MTD_TARGETS := $(addprefix $(TARGET_DIR)/usr/sbin/, $(MTD_TARGETS_y))
 
 $(MTD_TARGETS): $(TARGET_DIR)/usr/sbin/% : $(MTD_DIR)/%
-	cp -f $< $@
-	$(STRIP) $@
+        cp -f $< $@
+        $(STRIP) $@
 
 
 --------------
 I am not sure what happens but this is what I think.
-MTD_TARGETS is a list of "$(TARGET_DIR)/usr/sbin/"
-$(TARGET_DIR)/usr/sbin/% where % is $(TARGET_DIR)/usr/sbin/ is then a
-list of $(TARGET_DIR)/usr/sbin/
-	cp -f $< $@
+
+In:
+        cp -f $< $@
+"$<" is empty.
+
+Question is Why?
+
+
+MTD_TARGETS is a list of "$(TARGET_DIR)/usr/sbin/*"
+
+If I understand the rule correctly,
+$(TARGET_DIR)/usr/sbin/% 
+	(where %=$(TARGET_DIR)/usr/sbin/)
+is a list of "$(TARGET_DIR)/usr/sbin/$(TARGET_DIR)/usr/sbin/*" 
+which is clearly wrong.
 
 
 > Thanks,
