@@ -1,37 +1,42 @@
-From: Bernhard Fischer <rep.dot.nop@gmail.com>
-Date: Thu, 27 Sep 2007 19:07:06 +0200
-Subject: [Buildroot] Problem with building ARM cross toolchain
-	using	buildroot
-In-Reply-To: <1190902100.7430.126.camel@localhost.localdomain>
-References: <140561.37392.qm@web7910.mail.in.yahoo.com>
-	<1190902100.7430.126.camel@localhost.localdomain>
-Message-ID: <20070927170706.GD20951@aon.at>
+From: don <don_reid@comcast.net>
+Date: Thu, 27 Sep 2007 11:17:57 -0700
+Subject: [Buildroot] Libtool error with AVR32
+Message-ID: <20070927181757.GA8519@reid1.localdomain>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Thu, Sep 27, 2007 at 09:08:20AM -0500, Brian Austin wrote:
->You should not use the toolchain buildroot package provided by cirrus to
->build a buildroot toolchain.
->
->please download one from the buildroot website.
->
->http://buildroot.uclibc.org/downloads/snapshots/buildroot-snapshot.tar.bz2
->
->
->The buildroot package from arm.cirrus.com is a binary one packaged with
->the sources.
+I tried to use the latest AVR32 release from ATmel and got an error.
+Is there somewhere else to post that other than this list?
 
-Well, to be fair, you can of course use an external toolchain from a
-vendor, be it distributed in binary or in source-form.
+The error is in build_avr32_nofpu/libdaemon-0.12 and is:
 
-See the "Toolchain" menu, "External binary toolchain".
+...
+configure: WARNING: In the future, Autoconf will not detect cross-tools
+whose name does not start with the host triplet.  If you think this
+configuration is useful to you, please write to autoconf at gnu.org.
+checking whether we are using the GNU Fortran 77 compiler... yes
+checking whether gfortran accepts -g... yes
+checking the maximum length of command line arguments... 98304
+checking command to parse /home/dev/AVR32/Buildroot/buildroot-avr32-2.1.0-rc5/build_avr32_nofpu/staging_dir/usr/bin/avr32-linux-uclibc-nm output from /home/dev/AVR32/Buildroot/buildroot-avr32-2.1.0-rc5/build_avr32_nofpu/staging_dir/usr/bin/avr32-linux-uclibc-gcc -Os -pipe  -I/home/dev/AVR32/Buildroot/buildroot-avr32-2.1.0-rc5/build_avr32_nofpu/staging_dir/usr/include -msoft-float object... ok
+checking for objdir... .libs
+checking for avr32-linux-ar... /home/dev/AVR32/Buildroot/buildroot-avr32-2.1.0-rc5/build_avr32_nofpu/staging_dir/usr/bin/avr32-linux-uclibc-ar
+checking for avr32-linux-ranlib... /home/dev/AVR32/Buildroot/buildroot-avr32-2.1.0-rc5/build_avr32_nofpu/staging_dir/usr/bin/avr32-linux-uclibc-ranlib
+checking for avr32-linux-strip... (cached) /home/dev/AVR32/Buildroot/buildroot-avr32-2.1.0-rc5/build_avr32_nofpu/staging_dir/usr/bin/avr32-linux-uclibc-strip
+checking for correct ltmain.sh version... no
+configure: error:
 
-If you run into problems with such toolchains, your best bet is to talk
-to the one who provided that external toolchain.
-That said, it sounds like this is just a normal ARM target, so there
-should be no real need to use such an old compiler, from my POV.
+*** [Gentoo] sanity check failed! ***
+*** libtool.m4 and ltmain.sh have a version mismatch! ***
+*** (libtool.m4 = 1.5.24, ltmain.sh = "1.5.22 Debian 1.5.22-4") ***
 
-HTH,
+Please run:
+
+  libtoolize --copy --force
+
+if appropriate, please contact the maintainer of this
+package (or your distribution) for help.
+
+make: *** [/home/dev/AVR32/Buildroot/buildroot-avr32-2.1.0-rc5/build_avr32_nofpu/libdaemon-0.12/.configured] Error 1
