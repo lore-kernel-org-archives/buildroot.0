@@ -1,36 +1,47 @@
-From: aldot at uclibc.org <aldot@uclibc.org>
-Date: Thu, 27 Sep 2007 15:04:29 -0700 (PDT)
-Subject: [Buildroot] svn commit: trunk/buildroot/target/device/Arm
-Message-ID: <20070927220429.4C803A603D@busybox.net>
+From: Bernhard Fischer <rep.dot.nop@gmail.com>
+Date: Fri, 28 Sep 2007 00:12:16 +0200
+Subject: [Buildroot] AVR32  build broken.
+In-Reply-To: <1190854406.4933.78.camel@elrond.atmel.sweden>
+References: <1190854406.4933.78.camel@elrond.atmel.sweden>
+Message-ID: <20070927221216.GF20951@aon.at>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Author: aldot
-Date: 2007-09-27 15:04:28 -0700 (Thu, 27 Sep 2007)
-New Revision: 20076
+On Thu, Sep 27, 2007 at 02:53:26AM +0200, Ulf Samuelsson wrote:
+>The atngw100small also fails with the following error:
+>
+>configure: error: Link tests are not allowed after GCC_NO_EXECUTABLES.
+>make[2]: *** [configure-target-libiberty] Fel 1
+>make[2]: *** Inv?ntar oavslutade jobb...
+>make[1]: *** [all] Fel 2
+>
+>This is the same error you get when you try to build the ARM with
+>softfloat.
 
-Log:
-- toggle default back to soft-float
+I cannot reproduce this. I've double-checked that the sample arm926t
+(integrator CP, IIRC) builds and works fine with and without softfloat
+(after deleting that wrong uClibc-0.9.29-soft-fp.patch, of course).
 
+Can you reproduce this error with the provided defconfig in
+target/device/ARM/integrator_whatever ?
 
-Modified:
-   trunk/buildroot/target/device/Arm/integrator926_defconfig
+>Since the AVR32 does not have an FPU, this is always softfloat.
+>
+>There is something screwed up with the linking process
+>when using the current trunk.
 
+We'll track it down.
+>
+>Not all libraries are found, so gcc configure
+>cannot link and this sets some flags resulting in the error above.
+>
+>The ARM softfloat patch was trying to overcome the fact
+>that libgcc.a is not used/found by the uClibc build.
 
-Changeset:
-Modified: trunk/buildroot/target/device/Arm/integrator926_defconfig
-===================================================================
---- trunk/buildroot/target/device/Arm/integrator926_defconfig	2007-09-27 21:58:46 UTC (rev 20075)
-+++ trunk/buildroot/target/device/Arm/integrator926_defconfig	2007-09-27 22:04:28 UTC (rev 20076)
-@@ -240,7 +240,7 @@
- # BR2_INET_IPV6 is not set
- # BR2_INET_RPC is not set
- # BR2_USE_WCHAR is not set
--# BR2_SOFT_FLOAT is not set
-+BR2_SOFT_FLOAT=y
- BR2_TARGET_OPTIMIZATION="-Os -pipe -fwrapv"
- BR2_CROSS_TOOLCHAIN_TARGET_UTILS=y
- 
+This is not really an accurate approach i'd say (but i didn't look
+closely), but i take it that you're aware of this.
+
+Thanks,
