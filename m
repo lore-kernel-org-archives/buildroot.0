@@ -1,35 +1,61 @@
-From: Bernhard Fischer <rep.dot.nop@gmail.com>
-Date: Fri, 28 Sep 2007 00:34:20 +0200
-Subject: [Buildroot] Libtool error with AVR32
-In-Reply-To: <20070927221919.GA8983@reid1.localdomain>
-References: <20070927181757.GA8519@reid1.localdomain>
-	<1190926438.5322.16.camel@elrond.atmel.sweden>
-	<20070927221919.GA8983@reid1.localdomain>
-Message-ID: <20070927223420.GG20951@aon.at>
+From: Ulf Samuelsson <ulf@atmel.com>
+Date: Fri, 28 Sep 2007 01:29:09 +0200
+Subject: [Buildroot] AVR32  build broken.
+In-Reply-To: <20070927221216.GF20951@aon.at>
+References: <1190854406.4933.78.camel@elrond.atmel.sweden>
+	<20070927221216.GF20951@aon.at>
+Message-ID: <1190935749.5322.38.camel@elrond.atmel.sweden>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Thu, Sep 27, 2007 at 03:19:19PM -0700, don wrote:
->On Thu, Sep 27, 2007 at 10:53:58PM +0200, Ulf Samuelsson wrote:
->> tor 2007-09-27 klockan 11:17 -0700 skrev don:
->> > I tried to use the latest AVR32 release from ATmel and got an error.
->> > Is there somewhere else to post that other than this list?
->> > 
->> > The error is in build_avr32_nofpu/libdaemon-0.12 and is:
+fre 2007-09-28 klockan 00:12 +0200 skrev Bernhard Fischer:
+> On Thu, Sep 27, 2007 at 02:53:26AM +0200, Ulf Samuelsson wrote:
+> >The atngw100small also fails with the following error:
+> >
+> >configure: error: Link tests are not allowed after GCC_NO_EXECUTABLES.
+> >make[2]: *** [configure-target-libiberty] Fel 1
+> >make[2]: *** Inv?ntar oavslutade jobb...
+> >make[1]: *** [all] Fel 2
+> >
+> >This is the same error you get when you try to build the ARM with
+> >softfloat.
+> 
+> I cannot reproduce this. I've double-checked that the sample arm926t
+> (integrator CP, IIRC) builds and works fine with and without softfloat
+> (after deleting that wrong uClibc-0.9.29-soft-fp.patch, of course).
+> 
+> Can you reproduce this error with the provided defconfig in
+> target/device/ARM/integrator_whatever ?
+> 
+> >Since the AVR32 does not have an FPU, this is always softfloat.
+> >
+> >There is something screwed up with the linking process
+> >when using the current trunk.
+> 
+> We'll track it down.
+> >
+> >Not all libraries are found, so gcc configure
+> >cannot link and this sets some flags resulting in the error above.
+> >
+> >The ARM softfloat patch was trying to overcome the fact
+> >that libgcc.a is not used/found by the uClibc build.
+> 
+> This is not really an accurate approach i'd say (but i didn't look
+> closely), but i take it that you're aware of this.
 
->I did not select any packages, just copied the ntgw100_defconfig to
->.config.
+uCLibc compiles with this, but not without this.
+The compile does not complete so it does not make 
+any sense to keep it.
 
-Ulf, can you point me to a known good revision (of buildroot) that built
-that ntgw100 successfully, please? Modulo libdaemon, or other such
-packages. This would help alot to pinpoint any possible problems.
+I will try the integrator and see what is the difference.
+Maybe it is related to the host?
 
-Don, I'm still under the impression that you're using something
-provided by atmel and not http://buildroot.uclibc.org/
-This is not the appropriate place for the "latest AVR32 release from
-ATmel" but for buildroot.
+BR
+Ulf Samuelsson
 
-thanks,
+
+
+> Thanks,
