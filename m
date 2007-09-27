@@ -1,41 +1,33 @@
-From: ulf at uclibc.org <ulf@uclibc.org>
-Date: Thu, 27 Sep 2007 14:18:00 -0700 (PDT)
-Subject: [Buildroot] svn commit: trunk/buildroot/package/mtd
-Message-ID: <20070927211800.D6D12A603D@busybox.net>
+From: aldot at uclibc.org <aldot@uclibc.org>
+Date: Thu, 27 Sep 2007 14:23:26 -0700 (PDT)
+Subject: [Buildroot] svn commit: trunk/buildroot/target/device/Arm
+Message-ID: <20070927212326.A23DFA603D@busybox.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Author: ulf
-Date: 2007-09-27 14:17:58 -0700 (Thu, 27 Sep 2007)
-New Revision: 20070
+Author: aldot
+Date: 2007-09-27 14:23:25 -0700 (Thu, 27 Sep 2007)
+New Revision: 20071
 
 Log:
-Remove superfluose defaults
+- update my sample arm926t qemu image
+
+
+Added:
+   trunk/buildroot/target/device/Arm/integrator926_defconfig
 
 Modified:
-   trunk/buildroot/package/mtd/Config.in
+   trunk/buildroot/target/device/Arm/Makefile.in
+   trunk/buildroot/target/device/Arm/linux26.integrator926.config
+   trunk/buildroot/target/device/Arm/uClibc.integrator926.config
 
 
 Changeset:
-Modified: trunk/buildroot/package/mtd/Config.in
-===================================================================
---- trunk/buildroot/package/mtd/Config.in	2007-09-27 20:49:57 UTC (rev 20069)
-+++ trunk/buildroot/package/mtd/Config.in	2007-09-27 21:17:58 UTC (rev 20070)
-@@ -15,14 +15,12 @@
- 	bool "Use MTD-utils"
- 	depends on BR2_PACKAGE_MTD
- 	select BR2_PACKAGE_LZO
--	default n
- 	help
- 	  Build mtd/jffs utilities with Dataflash support
- 
- config BR2_PACKAGE_MTD_20061007
- 	bool "Use MTD from (20061007)"
- 	depends on BR2_PACKAGE_MTD
--	default n
- 	help
- 	  Build mtd/jffs utilities with Dataflash support
- 
+
+Sorry, the patch is too large to include (1248 lines).
+Please use ViewCVS to see it!
+
+http://uclibc.org/cgi-bin/viewcvs.cgi?view=rev&root=svn&rev=20071
