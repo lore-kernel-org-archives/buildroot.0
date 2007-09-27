@@ -1,89 +1,54 @@
-From: bugs at busybox.net <bugs@busybox.net>
-Date: Thu, 27 Sep 2007 07:33:33 -0700
-Subject: [Buildroot] [buildroot 0001514]: building with soft-float enabled
-	fails
-Message-ID: <41bd4c2ca77905414e3d260ceca1ba93@busybox.net>
+From: Brian Austin <brian.austin@cirrus.com>
+Date: Thu, 27 Sep 2007 09:08:20 -0500
+Subject: [Buildroot] Problem with building ARM cross toolchain
+	using	buildroot
+In-Reply-To: <140561.37392.qm@web7910.mail.in.yahoo.com>
+References: <140561.37392.qm@web7910.mail.in.yahoo.com>
+Message-ID: <1190902100.7430.126.camel@localhost.localdomain>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+You should not use the toolchain buildroot package provided by cirrus to
+build a buildroot toolchain.
 
-A NOTE has been added to this issue. 
-====================================================================== 
-http://busybox.net/bugs/view.php?id=1514 
-====================================================================== 
-Reported By:                mjancar
-Assigned To:                buildroot
-====================================================================== 
-Project:                    buildroot
-Issue ID:                   1514
-Category:                   Architecture Specific
-Reproducibility:            always
-Severity:                   trivial
-Priority:                   normal
-Status:                     assigned
-====================================================================== 
-Date Submitted:             09-27-2007 05:47 PDT
-Last Modified:              09-27-2007 07:33 PDT
-====================================================================== 
-Summary:                    building with soft-float enabled fails
-Description: 
-Enabling soft-float causes the build process fail with the following error.
-After manualy changing to
-toolchain_build_mips_nofpu/uClibc-0.9.29/libc/soft-fp, running make, and
-symlinking the ../../libc directory, the build was able to continue. I
-have reproduced the problem also with powerpc architecture selected, so it
-doesnt seem to be architecture specific.
+please download one from the buildroot website.
 
-make[1]: Entering directory
-`/home/marian/c/br/buildroot/toolchain_build_mips_nofpu/uClibc-0.9.29'
-make[2]: `conf' is up to date.
-ln -fs sgidefs.h ./include/
-make[3]: `conf' is up to date.
-ln -fs sgidefs.h ./include/
-  STRIP -x -R .note -R .comment lib/libc.a
-/home/marian/c/br/buildroot/build_mips/staging_dir/usr/bin/mips-linux-uclibc-strip:
-'libc/soft-fp/./libc/soft-fp/adddf3.os': No such file
-/home/marian/c/br/buildroot/build_mips/staging_dir/usr/bin/mips-linux-uclibc-strip:
-'libc/soft-fp/./libc/soft-fp/addsf3.os': No such file
-/home/marian/c/br/buildroot/build_mips/staging_dir/usr/bin/mips-linux-uclibc-strip:
-'libc/soft-fp/./libc/soft-fp/addtf3.os': No such file
-/home/marian/c/br/buildroot/build_mips/staging_dir/usr/bin/mips-linux-uclibc-strip:
-'libc/soft-fp/./libc/soft-fp/divdf3.os': No such file
-/home/marian/c/br/buildroot/build_mips/staging_dir/usr/bin/mips-linux-uclibc-strip:
-'libc/soft-fp/./libc/soft-fp/divsf3.os': No such file
+http://buildroot.uclibc.org/downloads/snapshots/buildroot-snapshot.tar.bz2
 
-[snip]
 
-/home/marian/c/br/buildroot/build_mips/staging_dir/usr/bin/mips-linux-uclibc-strip:
-'libc/soft-fp/./libc/soft-fp/unorddf2.os': No such file
-/home/marian/c/br/buildroot/build_mips/staging_dir/usr/bin/mips-linux-uclibc-strip:
-'libc/soft-fp/./libc/soft-fp/unordsf2.os': No such file
-/home/marian/c/br/buildroot/build_mips/staging_dir/usr/bin/mips-linux-uclibc-strip:
-'libc/soft-fp/./libc/soft-fp/unordtf2.os': No such file
-make[2]: *** [lib/libc.a] Error 1
-make[1]: *** [lib/libc.so.0] Error 2
-make[1]: Leaving directory
-`/home/marian/c/br/buildroot/toolchain_build_mips_nofpu/uClibc-0.9.29'
-make: ***
-[/home/marian/c/br/buildroot/toolchain_build_mips_nofpu/uClibc-0.9.29/lib/libc.a]
-Error 2
+The buildroot package from arm.cirrus.com is a binary one packaged with
+the sources.
 
-====================================================================== 
 
----------------------------------------------------------------------- 
- UlfSamuelsson - 09-27-07 07:33  
----------------------------------------------------------------------- 
-PLs remove the soft-fp patch from toolchain/uClibc and see if that helps.
-I am going to do that anyway in the main trunk. 
 
-Issue History 
-Date Modified   Username       Field                    Change               
-====================================================================== 
-09-27-07 05:47  mjancar        New Issue                                    
-09-27-07 05:47  mjancar        Status                   new => assigned     
-09-27-07 05:47  mjancar        Assigned To               => buildroot       
-09-27-07 07:33  UlfSamuelsson  Note Added: 0002801                          
-======================================================================
+
+
+On Thu, 2007-09-27 at 10:03 +0100, ashok vardhan wrote:
+> Hi Sir/Madam,
+>          We are building a toolchain for ARM9 EDB9315A board using "
+> arm-linux-gcc-3.4.3 tar file " provided by " www.arm.cirrus.com ". 
+> After extracting the tar file, we got two directories " opt " and "
+> usr ".
+> In that opt directory another directory buildroot is present .
+> We started the steps to build the buildroot...........
+> The steps are 1. make menuconfig 
+>                      2. make
+> After doing the second step i.e make , we are getting errors. 
+> 
+> Please provide us some solution regarding the building cross-toolchain
+> using buildroot.
+> 
+> Regards,
+> Ashok. 
+> 
+> 
+> ______________________________________________________________________
+> Now you can chat without downloading messenger. Click here to know
+> how.
+> _______________________________________________
+> buildroot mailing list
+> buildroot at uclibc.org
+> http://busybox.net/mailman/listinfo/buildroot
