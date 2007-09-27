@@ -1,53 +1,29 @@
-From: Hebbar <gururajakr@sanyo.co.in>
-Date: Thu, 27 Sep 2007 04:15:49 -0700 (PDT)
-Subject: [Buildroot] unable to build arm926ejs toolchain with latest
- snapshot cp error during kernel unpack
-In-Reply-To: <12918929.post@talk.nabble.com>
-References: <12918929.post@talk.nabble.com>
-Message-ID: <12919161.post@talk.nabble.com>
+From: Alexander Kriegisch <Alexander@Kriegisch.name>
+Date: Thu, 27 Sep 2007 13:23:52 +0200
+Subject: [Buildroot] C Compiler cannot create executables
+In-Reply-To: <1190888809.6244.7.camel@PcNacho>
+References: <1190888809.6244.7.camel@PcNacho>
+Message-ID: <46FB92C8.6090300@Kriegisch.name>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-
-Hi all,
-i found the location of problem but yet to find the solution. In
-buildroot\target\linux\makefile.in at 
-
-$(LINUX26_DIR)/.configured: $(LINUX26_DIR)/.patched $(LINUX26_KCONFIG)
-	cp -dpf $(LINUX26_KCONFIG) $(LINUX26_DIR)/.config          --------->
-bug/error for me
-	$(SED) '/CONFIG_AEABI=y/d' $(LINUX26_DIR)/.config
-ifeq ($(BR2_ARM_EABI),y)
-
-$(LINUX26_KCONFIG) ---> is not getting set/defined.
-
-
-# Linux kernel configuration file
-# Has to be set by the target/device
-# If it is not set by the target/device, then pick the one from .config
-ifndef LINUX26_KCONFIG
-ifneq ($(strip $(subst ",,$(BR2_PACKAGE_LINUX_KCONFIG))),)
-LINUX26_KCONFIG=$(strip $(subst ",,$(BR2_PACKAGE_LINUX_KCONFIG)))
-#"))
-#"))
-else
-# LINUX26_KCONFIG=$(BOARD_PATH)/linux26.config
-endif
-endif
-
-
-Kindly let me know how to set. 
-
-also when i tries make linux26-
+Posting a bit of log output would be helpful, so here is just an
+educated guess: I sometimes get errors like this if there is something
+wrong with my build prerequisites or with ccache. Usually it helps to
+issue a manual recompile of your build prerequisites (e.g. libs your
+package depends on) in order for the "compiler cannot create
+executables" thing to disappear.
 
 Regards
-Gururaja
+--
+Alexander Kriegisch
 
 
-
--- 
-View this message in context: http://www.nabble.com/unable-to-build-arm926ejs-toolchain-with-latest-snapshot-cp-error-during-kernel-unpack-tf4527671.html#a12919161
-Sent from the BuildRoot mailing list archive at Nabble.com.
+Ignacio Lorenzo Subir? Otal:
+> Hi!, I'm having this error while making a make in buildroot and I don't
+> know why because I have been using gcc to compile several other programs
+> and works fine for me.
+> What can I do to avoid this error?.
