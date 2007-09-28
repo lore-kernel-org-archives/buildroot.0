@@ -1,40 +1,68 @@
-From: Ivan Kuten <ivan.kuten@promwad.com>
-Date: Fri, 28 Sep 2007 22:42:48 +0300
+From: don <don_reid@comcast.net>
+Date: Fri, 28 Sep 2007 11:34:03 -0700
 Subject: [Buildroot] Libtool error with AVR32
-In-Reply-To: <20070928165114.GM20951@aon.at>
-References: <20070927181757.GA8519@reid1.localdomain>	<1190926438.5322.16.camel@elrond.atmel.sweden>	<20070927221919.GA8983@reid1.localdomain>	<20070927223420.GG20951@aon.at>	<20070928160919.GA10853@reid1.localdomain>
-	<20070928165114.GM20951@aon.at>
-Message-ID: <46FD5938.303@promwad.com>
+In-Reply-To: <1190997482.5322.208.camel@elrond.atmel.sweden>
+References: <20070927181757.GA8519@reid1.localdomain>
+	<1190926438.5322.16.camel@elrond.atmel.sweden>
+	<20070927221919.GA8983@reid1.localdomain>
+	<20070927223420.GG20951@aon.at>
+	<20070928160919.GA10853@reid1.localdomain>
+	<1190997482.5322.208.camel@elrond.atmel.sweden>
+Message-ID: <20070928183403.GA11186@reid1.localdomain>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+On Fri, Sep 28, 2007 at 06:38:02PM +0200, Ulf Samuelsson wrote:
+> fre 2007-09-28 klockan 09:09 -0700 skrev don:
+> > On Fri, Sep 28, 2007 at 12:34:20AM +0200, Bernhard Fischer wrote:
+> > > On Thu, Sep 27, 2007 at 03:19:19PM -0700, don wrote:
+> > > >On Thu, Sep 27, 2007 at 10:53:58PM +0200, Ulf Samuelsson wrote:
+> > > >> tor 2007-09-27 klockan 11:17 -0700 skrev don:
+> > > >> > I tried to use the latest AVR32 release from ATmel and got an error.
+> > > >> > Is there somewhere else to post that other than this list?
+> > > >> > 
+> > > >> > The error is in build_avr32_nofpu/libdaemon-0.12 and is:
+> > > 
+> > > >I did not select any packages, just copied the ntgw100_defconfig to
+> > > >.config.
+> > > 
+> > > Ulf, can you point me to a known good revision (of buildroot) that built
+> > > that ntgw100 successfully, please? Modulo libdaemon, or other such
+> > > packages. This would help alot to pinpoint any possible problems.
+> > > 
+> > > Don, I'm still under the impression that you're using something
+> > > provided by atmel and not http://buildroot.uclibc.org/
+> > > This is not the appropriate place for the "latest AVR32 release from
+> > > ATmel" but for buildroot.
+> > 
+> > I'm using an archive of buildroot that Atmel provides on their website.
+> > I have tried to use the "current" svn buildroot many many times over
+> > months, and it has never worked.  From the list I can see that buildroot
+> > is highly unstable.
+> > 
+> > I had hoped that Atmel had a frozen version that works.  I'm sure it
+> > does under some conditions.
 > 
-> Well, I'm thinking about doing this, yes. The problem with a project
-> like buildroot (or any distribution) is that it's a moving target per
-> definition. Software receives bug-fixes (upstream) or fancy features
-> that you may want to use, so you have to update packages sometimes.
+> Do you do:
+> $ make atstk1000_defconfig or make atngw100_defconfig
+
+Yes, the later.
+
+> This should work. Works for me.
 > 
-> We don't add much new "features", really. Except for huge experimental
-> bundles like xorg only a small number of packages are added (which is a
-> good thing since they cost time to keep uptodate).
-> 
+> Please note that this is what this is what the Atmel buildroot does.
+> It does not support that you enable any other application 
+> than what is supported by these two configs.
 
-I think it would be good to create a -testing branch and to push in this
-branch fixes and additions. And main branch keep stable as possible.
+I did not do anything else like enable any other packages.
 
-Also it would be useful to create something like this "http://kegel.com/crosstool/crosstool-0.43/buildlogs/"
-but for package/target status.
+> I have made considerable progress today with the main trunk.
 
-I can help if we decide to do something in that direction.
+Thanks for all your work.  I will try the main trunk again an a few
+days.
 
-Best regards,
-Ivan
-
---------------------------------
-Embedded Linux engineer,
-Promwad Company: http://www.promwad.com/
-Homepage : http://www.ivankuten.com/
---------------------------------
+-- 
+Don
