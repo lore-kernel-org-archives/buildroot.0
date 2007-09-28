@@ -1,47 +1,39 @@
-From: Ivan Kuten <ivan.kuten@promwad.com>
-Date: Sat, 29 Sep 2007 02:51:28 +0300
-Subject: [Buildroot] PATCH [1/2] try2: make Makefile.autotools.in not to
- use hardcoded x11r7 name when patching
-In-Reply-To: <20070928224019.GG20951@aon.at>
-References: <46FD70EC.2010104@promwad.com> <20070928203604.GW20951@aon.at>
-	<46FD8D6A.40605@promwad.com> <20070928224019.GG20951@aon.at>
-Message-ID: <46FD9380.9090905@promwad.com>
+From: Leonid <Leonid@a-k-a.net>
+Date: Fri, 28 Sep 2007 16:24:40 -0700
+Subject: [Buildroot] Buildroot filesystem files' ownership
+In-Reply-To: <1191013693.5322.252.camel@elrond.atmel.sweden>
+References: <1190969812.5322.96.camel@elrond.atmel.sweden><1190996888.5322.198.camel@elrond.atmel.sweden><20070928170109.GO20951@aon.at>
+	<1191013693.5322.252.camel@elrond.atmel.sweden>
+Message-ID: <406A31B117F2734987636D6CCC93EE3C023DD3FE@ehost011-3.exch011.intermedia.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Bernhard Fischer ?????:
-> 
-> One nice example that, if it is handled properly by the autotools.in is
-> package/gmp or mpfr for that matter.
-> 
-> This package shows nicely what the autotools.in should provide in the
-> long run:
-> - downloading a PATCH_FILE to the dl/
-> - patching package/$name/$name$version
->   or 
->   patching package/$name/$version
->   or 
->   patching package/$name/$($(name)_patch_regex)
->   or the like
-> - in configure, honor PREFERRED_LIB_FLAGS et al
-> - $(STRIP) the target, perhaps. Distinguish between binaries and libs
-> - optionally install headers if BR2_HAVE_HEADERS
-> - package-specific additional {C,LD,CPP,...}FLAGS
-> - package-specific additional configure-opts
-> - knowledge if both staging and target or only one of these should be
->   populated with libs/binaries
-> 
+Hi:
 
-I'll try to follow this but a bit later, now my priority is  directfb/x11r7/gtk+ running on ARM.
-I'll post a bunch of patches related to selecting gtk+ depends on directfb or on x11r7.
+Buildroot documentation claims that entire filesystem can be created
+without root priviliges and this is true. However as a result all files
+in filesystem, residing in TARGET_DIR (even device nodes) belongs to
+USER, not to root. While trying to NFS into such filesystem, it doesn't
+work (no console output). I have expected that files which must belong
+to root will be "massaged" by fakeroot but this doesn't happen at least
+for TARGET_DIR.
 
-Best regards,
-Ivan
---------------------------------
-Embedded Linux engineer,
-Promwad Company: http://www.promwad.com/
-Homepage : http://www.ivankuten.com/
---------------------------------
+When I change ownership of all files in the filesystem to root
+
+sudo chown -Rf root.root .
+
+NFS is working fine. Questions:
+
+1) May be filesystem in the TARGET_DIR is not supposed to be used as
+real target FS - one must use .ext, .jffs2,... images? Where I get
+filesystem for NFS then?
+
+2) What files in the filesystem MUST belong to root - I suspect my
+changing all of them to root is overkill.
+
+Thanks,
+
+Leonid. 
