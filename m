@@ -1,48 +1,41 @@
-From: Ulf Samuelsson <ulf@atmel.com>
-Date: Fri, 28 Sep 2007 21:01:57 +0200
-Subject: [Buildroot] Kernel Download Error with external toolchain
-In-Reply-To: <20070928180849.GQ20951@aon.at>
-References: <1190985506.17683.6.camel@venture.bit63.org>
-	<20070928180849.GQ20951@aon.at>
-Message-ID: <1191006117.5322.225.camel@elrond.atmel.sweden>
+From: Bernhard Fischer <rep.dot.nop@gmail.com>
+Date: Fri, 28 Sep 2007 21:14:40 +0200
+Subject: [Buildroot] AVR32 misery
+In-Reply-To: <1191005626.5322.216.camel@elrond.atmel.sweden>
+References: <1190938123.5322.54.camel@elrond.atmel.sweden>
+	<1190956802.18129.2.camel@localhost.localdomain>
+	<1190961727.5322.70.camel@elrond.atmel.sweden>
+	<20070928162433.GI20951@aon.at>
+	<1191005626.5322.216.camel@elrond.atmel.sweden>
+Message-ID: <20070928191440.GS20951@aon.at>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-fre 2007-09-28 klockan 20:08 +0200 skrev Bernhard Fischer:
-> On Fri, Sep 28, 2007 at 09:18:26AM -0400, Clark Rawlins wrote:
-> >When attempting to build a fairly simple config including a kernel using
-> >an external toolchain I am getting the following error:
-> >
-> >http://www.kernel.org/pub/linux/kernel/v2.6//linux-...tar.bz2
-> 
-> Index: target/linux/Config.in
-> ===================================================================
-> --- target/linux/Config.in	(revision 20084)
-> +++ target/linux/Config.in	(working copy)
-> @@ -15,7 +15,6 @@ config BR2_PACKAGE_LINUX
->  config BR2_PACKAGE_LINUX_EXPERIMENTAL_CONFIG
->  	bool "linux kernel experimental configuration"
->  	depends on BR2_PACKAGE_LINUX
-> -	depends on BR2_TARGET_ATMEL
->  	default n
->  	help
->  	  More advanced configuration (in development)
+On Fri, Sep 28, 2007 at 08:53:46PM +0200, Ulf Samuelsson wrote:
+ 
+>> We don't need to pass --with-gnu-ld nor --with-gnu-as. If sombody finds
+>> a different assembler or linker, then this is a consequence of something
+>> going wrong previously. The target is linux and not irix or something
+>> like that.
+>
+>Well gcc-4.1.2 doesn't find anything apparently 
+>unless you bombard it with information during configure.
+>-with-as=$(CROSS_COMPILE)as seems absolutely neccessary.
+>or ORIGINAL_AS_FOR_TARGET will be empty.
+>
+>Empty ORIGINAL_AS_FOR_TARGET is why sysroot fails.
 
-Give time to do development, without beeing to intrusive.
+Yea, I know. This and the fact that gcc-4.1.x is not the current release
+series, so i decided to leave it alone.
 
-Been tied down with other stuff so It has not gotten
-the attention it deserved.
+>Still gcc-4.1.2 has problems with libtool.
 
-Ulf
+4.1 has lots of problems, and lots of problems were thusly fixed in the
+current (and upcoming) release(s). Trying to fix 4.1 it doesn't make
+sense to me, there's enough to do in current stuff that is way more
+interresting, at least IMO.
 
-
-> 
-> Another thing that is hidden behind some odd ATMEL symbol. What was the
-> reasoning for hiding this one, too?
-> _______________________________________________
-> buildroot mailing list
-> buildroot at uclibc.org
-> http://busybox.net/mailman/listinfo/buildroot
+But i'm digressing..
