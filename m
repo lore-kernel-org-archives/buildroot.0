@@ -1,60 +1,95 @@
-From: Ulf Samuelsson <ulf@atmel.com>
-Date: Fri, 28 Sep 2007 09:37:53 +0200
-Subject: [Buildroot] AVR32  build broken.
-In-Reply-To: <1190962428.5322.75.camel@elrond.atmel.sweden>
-References: <1190854406.4933.78.camel@elrond.atmel.sweden>
-	<20070927221216.GF20951@aon.at>
-	<1190962428.5322.75.camel@elrond.atmel.sweden>
-Message-ID: <1190965073.5322.89.camel@elrond.atmel.sweden>
+From: bugs at busybox.net <bugs@busybox.net>
+Date: Fri, 28 Sep 2007 01:03:52 -0700
+Subject: [Buildroot] [buildroot 0001514]: building with soft-float enabled
+	fails
+Message-ID: <668921dbf5019313af9cbc4cd0fdac08@bugs.uclibc.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-fre 2007-09-28 klockan 08:53 +0200 skrev Ulf Samuelsson:
-> fre 2007-09-28 klockan 00:12 +0200 skrev Bernhard Fischer:
-> > On Thu, Sep 27, 2007 at 02:53:26AM +0200, Ulf Samuelsson wrote:
-> > >The atngw100small also fails with the following error:
-> > >
-> > >configure: error: Link tests are not allowed after GCC_NO_EXECUTABLES.
-> > >make[2]: *** [configure-target-libiberty] Fel 1
-> > >make[2]: *** Inv?ntar oavslutade jobb...
-> > >make[1]: *** [all] Fel 2
-> > >
-> > >This is the same error you get when you try to build the ARM with
-> > >softfloat.
-> > 
-> > I cannot reproduce this. I've double-checked that the sample arm926t
-> > (integrator CP, IIRC) builds and works fine with and without softfloat
-> > (after deleting that wrong uClibc-0.9.29-soft-fp.patch, of course).
-> > 
-> 
-> soft-float patch now removed from trunk
-> 
-> > Can you reproduce this error with the provided defconfig in
-> > target/device/ARM/integrator_whatever ?
-> > 
-> 
-> 
-> OK, Now I have built the integrator stuff as well,
-> and it builds well with soft-float!
-> Thanks for the tip.
-> 
-> The immediate difference I could see was
-> that the integrator is built using "arm926ejs"
-> instead of using "generic-arm" which I have used so far.
-> I will try to rebuild the integrator modified for "generic-arm"
-> and see how it goes.
 
-Integrator still works with "generic-arm" instead of "arm926ejs"
-Next thing to try is EABI instead of OABI.
+A NOTE has been added to this issue. 
+====================================================================== 
+http://busybox.net/bugs/view.php?id=1514 
+====================================================================== 
+Reported By:                mjancar
+Assigned To:                buildroot
+====================================================================== 
+Project:                    buildroot
+Issue ID:                   1514
+Category:                   Architecture Specific
+Reproducibility:            always
+Severity:                   trivial
+Priority:                   normal
+Status:                     assigned
+====================================================================== 
+Date Submitted:             09-27-2007 05:47 PDT
+Last Modified:              09-28-2007 01:03 PDT
+====================================================================== 
+Summary:                    building with soft-float enabled fails
+Description: 
+Enabling soft-float causes the build process fail with the following error.
+After manualy changing to
+toolchain_build_mips_nofpu/uClibc-0.9.29/libc/soft-fp, running make, and
+symlinking the ../../libc directory, the build was able to continue. I
+have reproduced the problem also with powerpc architecture selected, so it
+doesnt seem to be architecture specific.
 
-Best Regards
-Ulf Samuelsson
+make[1]: Entering directory
+`/home/marian/c/br/buildroot/toolchain_build_mips_nofpu/uClibc-0.9.29'
+make[2]: `conf' is up to date.
+ln -fs sgidefs.h ./include/
+make[3]: `conf' is up to date.
+ln -fs sgidefs.h ./include/
+  STRIP -x -R .note -R .comment lib/libc.a
+/home/marian/c/br/buildroot/build_mips/staging_dir/usr/bin/mips-linux-uclibc-strip:
+'libc/soft-fp/./libc/soft-fp/adddf3.os': No such file
+/home/marian/c/br/buildroot/build_mips/staging_dir/usr/bin/mips-linux-uclibc-strip:
+'libc/soft-fp/./libc/soft-fp/addsf3.os': No such file
+/home/marian/c/br/buildroot/build_mips/staging_dir/usr/bin/mips-linux-uclibc-strip:
+'libc/soft-fp/./libc/soft-fp/addtf3.os': No such file
+/home/marian/c/br/buildroot/build_mips/staging_dir/usr/bin/mips-linux-uclibc-strip:
+'libc/soft-fp/./libc/soft-fp/divdf3.os': No such file
+/home/marian/c/br/buildroot/build_mips/staging_dir/usr/bin/mips-linux-uclibc-strip:
+'libc/soft-fp/./libc/soft-fp/divsf3.os': No such file
 
-> 
-> _______________________________________________
-> buildroot mailing list
-> buildroot at uclibc.org
-> http://busybox.net/mailman/listinfo/buildroot
+[snip]
+
+/home/marian/c/br/buildroot/build_mips/staging_dir/usr/bin/mips-linux-uclibc-strip:
+'libc/soft-fp/./libc/soft-fp/unorddf2.os': No such file
+/home/marian/c/br/buildroot/build_mips/staging_dir/usr/bin/mips-linux-uclibc-strip:
+'libc/soft-fp/./libc/soft-fp/unordsf2.os': No such file
+/home/marian/c/br/buildroot/build_mips/staging_dir/usr/bin/mips-linux-uclibc-strip:
+'libc/soft-fp/./libc/soft-fp/unordtf2.os': No such file
+make[2]: *** [lib/libc.a] Error 1
+make[1]: *** [lib/libc.so.0] Error 2
+make[1]: Leaving directory
+`/home/marian/c/br/buildroot/toolchain_build_mips_nofpu/uClibc-0.9.29'
+make: ***
+[/home/marian/c/br/buildroot/toolchain_build_mips_nofpu/uClibc-0.9.29/lib/libc.a]
+Error 2
+
+====================================================================== 
+
+---------------------------------------------------------------------- 
+ UlfSamuelsson - 09-27-07 07:33  
+---------------------------------------------------------------------- 
+PLs remove the soft-fp patch from toolchain/uClibc and see if that helps.
+I am going to do that anyway in the main trunk. 
+
+---------------------------------------------------------------------- 
+ mjancar - 09-28-07 01:03  
+---------------------------------------------------------------------- 
+Removing that patch helps. 
+
+Issue History 
+Date Modified   Username       Field                    Change               
+====================================================================== 
+09-27-07 05:47  mjancar        New Issue                                    
+09-27-07 05:47  mjancar        Status                   new => assigned     
+09-27-07 05:47  mjancar        Assigned To               => buildroot       
+09-27-07 07:33  UlfSamuelsson  Note Added: 0002801                          
+09-28-07 01:03  mjancar        Note Added: 0002802                          
+======================================================================
