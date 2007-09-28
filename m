@@ -1,65 +1,24 @@
-From: Ulf Samuelsson <ulf@atmel.com>
-Date: Fri, 28 Sep 2007 23:08:13 +0200
-Subject: [Buildroot] Building ARM with Soft-float
-In-Reply-To: <20070928170109.GO20951@aon.at>
-References: <1190969812.5322.96.camel@elrond.atmel.sweden>
-	<1190996888.5322.198.camel@elrond.atmel.sweden>
-	<20070928170109.GO20951@aon.at>
-Message-ID: <1191013693.5322.252.camel@elrond.atmel.sweden>
+From: Luis Machi <lmachi@latinmail.com>
+Date: Fri, 28 Sep 2007 23:20:32 +0200 (CEST)
+Subject: [Buildroot] unionfs - kernel patching
+Message-ID: <20070928212032.6D845E3571B@smtp.latinmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-fre 2007-09-28 klockan 19:01 +0200 skrev Bernhard Fischer:
-> On Fri, Sep 28, 2007 at 06:28:08PM +0200, Ulf Samuelsson wrote:
-> >fre 2007-09-28 klockan 10:56 +0200 skrev Ulf Samuelsson:
-> >> Tried the Integrator-926ejs default.
-> >> =>	This works:
-> >> 
-> >
-> >Beeing trying the ARM integrator softfloat the whole day.
-> >
-> >Vanilla configuration works.
-> >generic-arm, instead of arm926ejs works
-> >
-> >oabi, instead of eabi, generates a new problem
-> >which was not present a week ago.
-> >The C compiler seems to be built with EABI...
-> 
-> double-check, triple-check your BR2_GNU_TARGET_SUFFIX
-> 
-> And i'm not doing OABI ;)
-> >
-> >My configuration is as follows
-> >> grep ABI .config
-> >BR2_ARM_OABI=y
-> ># BR2_ARM_EABI is not set
-> >> grep ABI toolchain_build_arm_nofpu/uClibc-0.9.29/.config
-> >CONFIG_ARM_OABI=y
-> ># CONFIG_ARM_EABI is not set
-> >> grep abi .config
-> >BR2_GNU_TARGET_SUFFIX="uclibc-linux-gnueabi"
-> 
-> yea, that'd be it. Everything is fine.
-> >
+Hello.
+
+How do I integrate the following patch to Linux 2.6.x (x86 target)?
+
+unionfs-2.1.5_for_2.6.22.6  at  http://www.filesystems.org/project-unionfs.html
+
+I read http://buildroot.uclibc.org/buildroot.html , but didn't quite understand how to do it.
+
+I tried putting it both un&compressed forms to ./target/device/x86/i386/kernel-patches/ , and setting LINUX26_PATCH_DIR:=$(BR2_BOARD_PATH)/kernel-patches in ./target/device/x86/i386/Makefile.in
+
+Thanks!
 
 
-You mean the gcc look at its invocation name to determine
-what it should do.
-Seems stupid to me.
-What happens if you just call it arm-linux-gcc or even gcc?
-
-BTW; there are a lot of warning messages about
-calling the tools
-
-<arch>-linux-uclibc-<tool>.
-
-Should they not be called <arch>-uclibc-linux-<tool>?
-
-BR
-Ulf Samuelsson
-
-
- 
+La temporada de huracanes y el terremoto de Peru, a un click http://wwwstarmedia.com/noticias/especiales/desastresnaturales.html
