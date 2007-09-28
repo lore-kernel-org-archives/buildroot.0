@@ -1,58 +1,25 @@
 From: Bernhard Fischer <rep.dot.nop@gmail.com>
-Date: Fri, 28 Sep 2007 23:23:45 +0200
-Subject: [Buildroot] Building ARM with Soft-float
-In-Reply-To: <1191013693.5322.252.camel@elrond.atmel.sweden>
-References: <1190969812.5322.96.camel@elrond.atmel.sweden>
-	<1190996888.5322.198.camel@elrond.atmel.sweden>
-	<20070928170109.GO20951@aon.at>
-	<1191013693.5322.252.camel@elrond.atmel.sweden>
-Message-ID: <20070928212345.GB20951@aon.at>
+Date: Fri, 28 Sep 2007 23:27:54 +0200
+Subject: [Buildroot] AVR32 misery
+In-Reply-To: <1191013411.5322.248.camel@elrond.atmel.sweden>
+References: <1190938123.5322.54.camel@elrond.atmel.sweden>
+	<1190956802.18129.2.camel@localhost.localdomain>
+	<1190961727.5322.70.camel@elrond.atmel.sweden>
+	<20070928162433.GI20951@aon.at>
+	<1191005626.5322.216.camel@elrond.atmel.sweden>
+	<20070928191440.GS20951@aon.at>
+	<1191013411.5322.248.camel@elrond.atmel.sweden>
+Message-ID: <20070928212753.GC20951@aon.at>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Fri, Sep 28, 2007 at 11:08:13PM +0200, Ulf Samuelsson wrote:
->fre 2007-09-28 klockan 19:01 +0200 skrev Bernhard Fischer:
->> On Fri, Sep 28, 2007 at 06:28:08PM +0200, Ulf Samuelsson wrote:
->> >fre 2007-09-28 klockan 10:56 +0200 skrev Ulf Samuelsson:
->> >> Tried the Integrator-926ejs default.
->> >> =>	This works:
->> >> 
->> >
->> >Beeing trying the ARM integrator softfloat the whole day.
+On Fri, Sep 28, 2007 at 11:03:31PM +0200, Ulf Samuelsson wrote:
 
->> >oabi, instead of eabi, generates a new problem
->> >which was not present a week ago.
->> >The C compiler seems to be built with EABI...
+>Maybe, but I do not have time to port AVR32 to gcc.
+>Someone else will do that in due time.
+>I think I should be able to get the current release to build though...
 
->> >BR2_GNU_TARGET_SUFFIX="uclibc-linux-gnueabi"
-
->You mean the gcc look at its invocation name to determine
->what it should do.
-
-No notion of the invocation name there.
-
-http://gcc.gnu.org/install/
-
->Seems stupid to me.
-
-Well, it isn't :P
-If you disagree, http://gcc.gnu.org/bugs.html
-
->What happens if you just call it arm-linux-gcc or even gcc?
-
-You can call it however you like. The drivers follow a somewhat stricter
-layout but are hidden from users anyway.
->
->BTW; there are a lot of warning messages about
->calling the tools
-
-I don't understand this.
-
-><arch>-linux-uclibc-<tool>.
->
->Should they not be called <arch>-uclibc-linux-<tool>?
-
-I don't think so. Look at your staging_dir/usr/bin/*
+At the moment, the current release *is* 4.2.1 ;)
