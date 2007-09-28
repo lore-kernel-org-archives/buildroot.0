@@ -1,99 +1,34 @@
-From: Dimitry Golubovsky <golubovsky@gmail.com>
-Date: Fri, 28 Sep 2007 00:36:22 -0400
-Subject: [Buildroot] GNU BInutils and TeXinfo v. 4.11 - patch proposed
-Message-ID: <bcba51a0709272136j6848589br9ecb928773c63e7c@mail.gmail.com>
+From: Hans-Christian Egtvedt <hcegtvedt@atmel.com>
+Date: Fri, 28 Sep 2007 07:20:02 +0200
+Subject: [Buildroot] AVR32 misery
+In-Reply-To: <1190938123.5322.54.camel@elrond.atmel.sweden>
+References: <1190938123.5322.54.camel@elrond.atmel.sweden>
+Message-ID: <1190956802.18129.2.camel@localhost.localdomain>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi,
+On Fri, 2007-09-28 at 02:08 +0200, Ulf Samuelsson wrote:
+> I think I have found one problem
+> "toolchain_build_avr32/gcc-4.1.2-initial/gcc/as" is a script file
+> which should call the assembler.
+> 
+> It contains
+> 
+> #!/bin/sh
+> exec "$@"
+> 
+> and should contain:
+> #!/bin/sh
+> exec <buildroot>/build_avr32/staging_dir/bin/avr32-linux-uclibc-ld "$@"
 
-Here is a patch that was tested with binutils 2.18 (also attached):
+This should really not mather, because the PATH variable should be set
+before starting to compile the cross-compiler.
 
-============= 100-makeinfo-version.patch ===============
+Perhaps this is as easy as a missing TARGET_CONFIGURE_OPTS?
 
-diff -u binutils-2.18-orig/configure binutils-2.18/configure
---- binutils-2.18-orig/configure        2007-08-06 16:29:40.000000000 -0400
-+++ binutils-2.18/configure     2007-09-27 22:41:51.000000000 -0400
-@@ -6125,10 +6125,10 @@
-   *" texinfo "*) MAKEINFO='$$r/$(BUILD_SUBDIR)/texinfo/makeinfo/makeinfo' ;;
-   *)
-
--    # For an installed makeinfo, we require it to be from texinfo 4.4 or
-+    # For an installed makeinfo, we require it to be from texinfo 4.6 or
-     # higher, else we use the "missing" dummy.
-     if ${MAKEINFO} --version \
--       | egrep 'texinfo[^0-9]*([1-3][0-9]|4\.[4-9]|[5-9])' >/dev/null
-2>&1; then
-+       | egrep
-'texinfo[^0-9]*(4\.([6-9]|[1-9][0-9])|[5-9]|[1-9][0-9])' >/dev/null
-2>&1; then
-       :
-     else
-       MAKEINFO="$MISSING makeinfo"
-diff -u binutils-2.18-orig/configure.ac binutils-2.18/configure.ac
---- binutils-2.18-orig/configure.ac     2007-08-28 16:24:26.000000000 -0400
-+++ binutils-2.18/configure.ac  2007-09-27 22:41:00.000000000 -0400
-@@ -2400,10 +2400,10 @@
-   *" texinfo "*) MAKEINFO='$$r/$(BUILD_SUBDIR)/texinfo/makeinfo/makeinfo' ;;
-   *)
- changequote(,)
--    # For an installed makeinfo, we require it to be from texinfo 4.4 or
-+    # For an installed makeinfo, we require it to be from texinfo 4.6 or
-     # higher, else we use the "missing" dummy.
-     if ${MAKEINFO} --version \
--       | egrep 'texinfo[^0-9]*([1-3][0-9]|4\.[4-9]|[5-9])' >/dev/null
-2>&1; then
-+       | egrep
-'texinfo[^0-9]*(4\.([6-9]|[1-9][0-9])|[5-9]|[1-9][0-9])' >/dev/null
-2>&1; then
-       :
-     else
-       MAKEINFO="$MISSING makeinfo"
-
-
-============= /100-makeinfo-version.patch===============
-
-Relevant portion of build log:
-
-=================================================
-# Apply appropriate binutils patches.
-toolchain/patch-kernel.sh
-/home/dima/buildroot/toolchain_build_i686/binutils-2.18
-toolchain/binutils/2.18 \*.patch
-
-Applying 100-makeinfo-version.patch using plaintext:
-patching file configure
-patching file configure.ac
-
-Applying 110-arm-eabi-conf.patch using plaintext:
-patching file configure
-Hunk #1 succeeded at 2235 with fuzz 1 (offset 11 lines).
-patching file configure.ac
-Hunk #1 succeeded at 513 with fuzz 1.
-
-Applying 300-001_ld_makefile_patch.patch using plaintext:
-patching file ld/Makefile.am
-patching file ld/Makefile.in
-
-Applying 300-012_check_ldrunpath_length.patch using plaintext:
-patching file ld/emultempl/elf32.em
-Hunk #1 succeeded at 1216 (offset 209 lines).
-
-=================================================
-
-I haven't done anything for 2.18.50 yet - it is believed that the same
-patch would apply.
-
-Thanks.
-
-Dimitry
--------------- next part --------------
-A non-text attachment was scrubbed...
-Name: 100-makeinfo-version.patch
-Type: application/octet-stream
-Size: 1553 bytes
-Desc: not available
-Url : http://busybox.net/lists/buildroot/attachments/20070928/9ae4d4c4/attachment.obj 
+-- 
+With kind regards,
+Hans-Christian Egtvedt, Applications Engineer
