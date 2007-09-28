@@ -1,95 +1,14 @@
-From: bugs at busybox.net <bugs@busybox.net>
-Date: Fri, 28 Sep 2007 01:03:52 -0700
-Subject: [Buildroot] [buildroot 0001514]: building with soft-float enabled
-	fails
-Message-ID: <668921dbf5019313af9cbc4cd0fdac08@bugs.uclibc.org>
+From: Ulf Samuelsson <ulf@atmel.com>
+Date: Fri, 28 Sep 2007 10:56:52 +0200
+Subject: [Buildroot] Building ARM with Soft-float
+Message-ID: <1190969812.5322.96.camel@elrond.atmel.sweden>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+Tried the Integrator-926ejs default.
+=>	This works:
 
-A NOTE has been added to this issue. 
-====================================================================== 
-http://busybox.net/bugs/view.php?id=1514 
-====================================================================== 
-Reported By:                mjancar
-Assigned To:                buildroot
-====================================================================== 
-Project:                    buildroot
-Issue ID:                   1514
-Category:                   Architecture Specific
-Reproducibility:            always
-Severity:                   trivial
-Priority:                   normal
-Status:                     assigned
-====================================================================== 
-Date Submitted:             09-27-2007 05:47 PDT
-Last Modified:              09-28-2007 01:03 PDT
-====================================================================== 
-Summary:                    building with soft-float enabled fails
-Description: 
-Enabling soft-float causes the build process fail with the following error.
-After manualy changing to
-toolchain_build_mips_nofpu/uClibc-0.9.29/libc/soft-fp, running make, and
-symlinking the ../../libc directory, the build was able to continue. I
-have reproduced the problem also with powerpc architecture selected, so it
-doesnt seem to be architecture specific.
-
-make[1]: Entering directory
-`/home/marian/c/br/buildroot/toolchain_build_mips_nofpu/uClibc-0.9.29'
-make[2]: `conf' is up to date.
-ln -fs sgidefs.h ./include/
-make[3]: `conf' is up to date.
-ln -fs sgidefs.h ./include/
-  STRIP -x -R .note -R .comment lib/libc.a
-/home/marian/c/br/buildroot/build_mips/staging_dir/usr/bin/mips-linux-uclibc-strip:
-'libc/soft-fp/./libc/soft-fp/adddf3.os': No such file
-/home/marian/c/br/buildroot/build_mips/staging_dir/usr/bin/mips-linux-uclibc-strip:
-'libc/soft-fp/./libc/soft-fp/addsf3.os': No such file
-/home/marian/c/br/buildroot/build_mips/staging_dir/usr/bin/mips-linux-uclibc-strip:
-'libc/soft-fp/./libc/soft-fp/addtf3.os': No such file
-/home/marian/c/br/buildroot/build_mips/staging_dir/usr/bin/mips-linux-uclibc-strip:
-'libc/soft-fp/./libc/soft-fp/divdf3.os': No such file
-/home/marian/c/br/buildroot/build_mips/staging_dir/usr/bin/mips-linux-uclibc-strip:
-'libc/soft-fp/./libc/soft-fp/divsf3.os': No such file
-
-[snip]
-
-/home/marian/c/br/buildroot/build_mips/staging_dir/usr/bin/mips-linux-uclibc-strip:
-'libc/soft-fp/./libc/soft-fp/unorddf2.os': No such file
-/home/marian/c/br/buildroot/build_mips/staging_dir/usr/bin/mips-linux-uclibc-strip:
-'libc/soft-fp/./libc/soft-fp/unordsf2.os': No such file
-/home/marian/c/br/buildroot/build_mips/staging_dir/usr/bin/mips-linux-uclibc-strip:
-'libc/soft-fp/./libc/soft-fp/unordtf2.os': No such file
-make[2]: *** [lib/libc.a] Error 1
-make[1]: *** [lib/libc.so.0] Error 2
-make[1]: Leaving directory
-`/home/marian/c/br/buildroot/toolchain_build_mips_nofpu/uClibc-0.9.29'
-make: ***
-[/home/marian/c/br/buildroot/toolchain_build_mips_nofpu/uClibc-0.9.29/lib/libc.a]
-Error 2
-
-====================================================================== 
-
----------------------------------------------------------------------- 
- UlfSamuelsson - 09-27-07 07:33  
----------------------------------------------------------------------- 
-PLs remove the soft-fp patch from toolchain/uClibc and see if that helps.
-I am going to do that anyway in the main trunk. 
-
----------------------------------------------------------------------- 
- mjancar - 09-28-07 01:03  
----------------------------------------------------------------------- 
-Removing that patch helps. 
-
-Issue History 
-Date Modified   Username       Field                    Change               
-====================================================================== 
-09-27-07 05:47  mjancar        New Issue                                    
-09-27-07 05:47  mjancar        Status                   new => assigned     
-09-27-07 05:47  mjancar        Assigned To               => buildroot       
-09-27-07 07:33  UlfSamuelsson  Note Added: 0002801                          
-09-28-07 01:03  mjancar        Note Added: 0002802                          
-======================================================================
+Modify to use: "generic-arm" instead of "arm926ejs".
