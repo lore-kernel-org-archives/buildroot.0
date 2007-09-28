@@ -1,23 +1,33 @@
 From: Bernhard Fischer <rep.dot.nop@gmail.com>
-Date: Fri, 28 Sep 2007 19:23:50 +0200
-Subject: [Buildroot] problem with kernel-headers*makefile
-Message-ID: <20070928172350.GP20951@aon.at>
+Date: Fri, 28 Sep 2007 20:08:50 +0200
+Subject: [Buildroot] Kernel Download Error with external toolchain
+In-Reply-To: <1190985506.17683.6.camel@venture.bit63.org>
+References: <1190985506.17683.6.camel@venture.bit63.org>
+Message-ID: <20070928180849.GQ20951@aon.at>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Ulf,
+On Fri, Sep 28, 2007 at 09:18:26AM -0400, Clark Rawlins wrote:
+>When attempting to build a fairly simple config including a kernel using
+>an external toolchain I am getting the following error:
+>
+>http://www.kernel.org/pub/linux/kernel/v2.6//linux-...tar.bz2
 
-Re: kernel-headers-new.makefile
-1)
-I ask you to fix this so that there is no empty "empty" directory
-required (patching patch-kernel.sh to gracefully exit if the dir exists
-is not an option).
+Index: target/linux/Config.in
+===================================================================
+--- target/linux/Config.in	(revision 20084)
++++ target/linux/Config.in	(working copy)
+@@ -15,7 +15,6 @@ config BR2_PACKAGE_LINUX
+ config BR2_PACKAGE_LINUX_EXPERIMENTAL_CONFIG
+ 	bool "linux kernel experimental configuration"
+ 	depends on BR2_PACKAGE_LINUX
+-	depends on BR2_TARGET_ATMEL
+ 	default n
+ 	help
+ 	  More advanced configuration (in development)
 
-2)
-LINUX_RT_VERSION
-Please move this out of the makefile and to the config-system instead.
-
-Both are not immediately urgent for now, but please keep them in mind.
+Another thing that is hidden behind some odd ATMEL symbol. What was the
+reasoning for hiding this one, too?
