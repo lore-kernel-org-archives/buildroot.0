@@ -1,54 +1,99 @@
-From: don <don_reid@comcast.net>
-Date: Fri, 28 Sep 2007 09:09:19 -0700
-Subject: [Buildroot] Libtool error with AVR32
-In-Reply-To: <20070927223420.GG20951@aon.at>
-References: <20070927181757.GA8519@reid1.localdomain>
-	<1190926438.5322.16.camel@elrond.atmel.sweden>
-	<20070927221919.GA8983@reid1.localdomain>
-	<20070927223420.GG20951@aon.at>
-Message-ID: <20070928160919.GA10853@reid1.localdomain>
+From: ulf at uclibc.org <ulf@uclibc.org>
+Date: Fri, 28 Sep 2007 09:18:16 -0700 (PDT)
+Subject: [Buildroot] svn commit: trunk/buildroot: target/linux
+	toolchain/uClibc
+Message-ID: <20070928161816.E75B7A6889@busybox.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Fri, Sep 28, 2007 at 12:34:20AM +0200, Bernhard Fischer wrote:
-> On Thu, Sep 27, 2007 at 03:19:19PM -0700, don wrote:
-> >On Thu, Sep 27, 2007 at 10:53:58PM +0200, Ulf Samuelsson wrote:
-> >> tor 2007-09-27 klockan 11:17 -0700 skrev don:
-> >> > I tried to use the latest AVR32 release from ATmel and got an error.
-> >> > Is there somewhere else to post that other than this list?
-> >> > 
-> >> > The error is in build_avr32_nofpu/libdaemon-0.12 and is:
-> 
-> >I did not select any packages, just copied the ntgw100_defconfig to
-> >.config.
-> 
-> Ulf, can you point me to a known good revision (of buildroot) that built
-> that ntgw100 successfully, please? Modulo libdaemon, or other such
-> packages. This would help alot to pinpoint any possible problems.
-> 
-> Don, I'm still under the impression that you're using something
-> provided by atmel and not http://buildroot.uclibc.org/
-> This is not the appropriate place for the "latest AVR32 release from
-> ATmel" but for buildroot.
+Author: ulf
+Date: 2007-09-28 09:18:16 -0700 (Fri, 28 Sep 2007)
+New Revision: 20085
 
-I'm using an archive of buildroot that Atmel provides on their website.
-I have tried to use the "current" svn buildroot many many times over
-months, and it has never worked.  From the list I can see that buildroot
-is highly unstable.
+Log:
+Add administration for linux,uclibc and main
 
-I had hoped that Atmel had a frozen version that works.  I'm sure it
-does under some conditions.  
+Modified:
+   trunk/buildroot/Makefile
+   trunk/buildroot/target/linux/Makefile.in
+   trunk/buildroot/toolchain/uClibc/uclibc.mk
 
-In this case I suspect that my up to date Gentoo host has a new version of
-autoconf that is doing some new check.  I thought you might want to know
-about this as it will probably come up again.
 
-Have you considered creating buildroot releases, which are frozen
-excerpt for simple bug fixes?  It seems that the rate of new "features"
-is such that the trunk version is in constant flux.
+Changeset:
+Modified: trunk/buildroot/Makefile
+===================================================================
+--- trunk/buildroot/Makefile	2007-09-28 13:41:41 UTC (rev 20084)
++++ trunk/buildroot/Makefile	2007-09-28 16:18:16 UTC (rev 20085)
+@@ -422,6 +422,10 @@
+ 	cp $(shell find ./target/ -name $@) .config
+ 	-@$(MAKE) oldconfig
+ 
++configured: dirs host-sed kernel-headers uclibc-configured busybox-config linux26-config
++
++cross: $(BASE_TARGETS)
++
+ help:
+ 	@echo 'Cleaning:'
+ 	@echo '  clean                  - delete temporary files created by build'
 
-Thank you
-Don
+Modified: trunk/buildroot/target/linux/Makefile.in
+===================================================================
+--- trunk/buildroot/target/linux/Makefile.in	2007-09-28 13:41:41 UTC (rev 20084)
++++ trunk/buildroot/target/linux/Makefile.in	2007-09-28 16:18:16 UTC (rev 20085)
+@@ -168,6 +168,8 @@
+ 		$(LINUX26_DIR)/.config
+ 	echo "CONFIG_INITRAMFS_ROOT_UID=0" >> $(LINUX26_DIR)/.config
+ 	echo "CONFIG_INITRAMFS_ROOT_GID=0" >> $(LINUX26_DIR)/.config
++else
++	echo "CONFIG_INITRAMFS_SOURCE=\"\"" >> $(LINUX26_DIR)/.config
+ endif
+ ifeq ($(BR2_PACKAGE_BUSYBOX_INITRAMFS),y)
+ 	# precedence for a small initramfs
+@@ -225,7 +227,7 @@
+ 
+ linux26-unpacked: $(LINUX26_DIR)/.patched
+ 
+-linux26-config:	$(LINUX26_DIR)/.configured
++linux26-config:	host-sed $(LINUX26_DIR)/.configured
+ 
+ linux26-update:
+ 	cp -dpf $(LINUX26_DIR)/.config $(LINUX26_KCONFIG)
+
+Modified: trunk/buildroot/toolchain/uClibc/uclibc.mk
+===================================================================
+--- trunk/buildroot/toolchain/uClibc/uclibc.mk	2007-09-28 13:41:41 UTC (rev 20084)
++++ trunk/buildroot/toolchain/uClibc/uclibc.mk	2007-09-28 16:18:16 UTC (rev 20085)
+@@ -108,8 +108,7 @@
+ UCLIBC_LOCALE_DATA=
+ endif
+ 
+-uclibc-unpacked: $(UCLIBC_DIR)/.unpacked
+-$(UCLIBC_DIR)/.unpacked: $(DL_DIR)/$(UCLIBC_SOURCE) $(UCLIBC_LOCALE_DATA)
++$(UCLIBC_DIR)/.unpacked: dirs kernel-headers host-sed $(DL_DIR)/$(UCLIBC_SOURCE) $(UCLIBC_LOCALE_DATA)
+ 	mkdir -p $(TOOL_BUILD_DIR)
+ 	rm -rf $(UCLIBC_DIR)
+ 	$(UCLIBC_CAT) $(DL_DIR)/$(UCLIBC_SOURCE) | tar -C $(TOOL_BUILD_DIR) $(TAR_OPTIONS) -
+@@ -442,14 +441,16 @@
+ 
+ uclibc-source: $(DL_DIR)/$(UCLIBC_SOURCE)
+ 
+-uclibc-config: host-sed $(UCLIBC_DIR)/.config
++uclibc-unpacked: $(UCLIBC_DIR)/.unpacked
+ 
+-uclibc-oldconfig: host-sed $(UCLIBC_DIR)/.oldconfig
++uclibc-config: $(UCLIBC_DIR)/.config
+ 
+-uclibc-update:
++uclibc-oldconfig: $(UCLIBC_DIR)/.oldconfig
++
++uclibc-update: uclibc-config
+ 	cp -f $(UCLIBC_DIR)/.config $(UCLIBC_CONFIG_FILE)
+ 
+-uclibc-configured: kernel-headers $(UCLIBC_DIR)/.configured
++uclibc-configured: $(UCLIBC_DIR)/.configured
+ 
+ uclibc-configured-source: uclibc-source
+ 
