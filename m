@@ -1,58 +1,38 @@
-From: Ulf Samuelsson <ulf@atmel.com>
-Date: Fri, 28 Sep 2007 08:42:07 +0200
-Subject: [Buildroot] AVR32 misery
-In-Reply-To: <1190956802.18129.2.camel@localhost.localdomain>
-References: <1190938123.5322.54.camel@elrond.atmel.sweden>
-	<1190956802.18129.2.camel@localhost.localdomain>
-Message-ID: <1190961727.5322.70.camel@elrond.atmel.sweden>
+From: Adam Hawes <adam@infocab.com.au>
+Date: Fri, 28 Sep 2007 16:05:42 +0930
+Subject: [Buildroot] Cant get mplayer to build on x86 unless CFLAGS
+	has	-fomit-frame-pointer
+In-Reply-To: <183560612499095@lycos-europe.com>
+References: <183560612499095@lycos-europe.com>
+Message-ID: <1190961342.22869.122.camel@cyclops.infocab.com.au>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-fre 2007-09-28 klockan 07:20 +0200 skrev Hans-Christian Egtvedt:
-> On Fri, 2007-09-28 at 02:08 +0200, Ulf Samuelsson wrote:
-> > I think I have found one problem
-> > "toolchain_build_avr32/gcc-4.1.2-initial/gcc/as" is a script file
-> > which should call the assembler.
-> > 
-> > It contains
-> > 
-> > #!/bin/sh
-> > exec "$@"
-> > 
-> > and should contain:
-> > #!/bin/sh
-> > exec <buildroot>/build_avr32/staging_dir/bin/avr32-linux-uclibc-ld "$@"
+> Has anyone had success getting mplayer to build on an x86. I had to
+>  modify the .mk file to include -fomit-frame-pointer in the CFLAGS.
 > 
-> This should really not mather, because the PATH variable should be set
-> before starting to compile the cross-compiler.
+> CFLAGS="$(TARGET_CFLAGS) -fomit-frame-pointer" \
 > 
-> Perhaps this is as easy as a missing TARGET_CONFIGURE_OPTS?
-> 
+> Is this required because of something else going on with uclibc I can look into?
+> Is there a better way to include this CFLAG?
 
-I have added ORIGINAL_*_FOR_TARGET /DEFAULT_*/*_FOR_TARGET to
-HOST_CONFIGURE_OPTS 
-(it fails during gcc-4.1.2-final) 
-And now use HOST_CONFIGURE_OPTS for configure and make.
+This just arrived at my inbox but it's dated 23/9; you might try
+checking your clock :)
 
-As a result, it seems that ld/nm/objcopy now has the right path,
-but the assembler doesn't.
+Ulf (I think) submitted a patch to do this already; you must be using an
+older revision of buildroot.  Search the mailing list.  It's nothing to
+do with uClibc - it was something in uClibc.  There is a lengthy
+discussion of it.
 
-	     echo '#!$(SHELL)' > as; \
-	     echo 'exec $(ORIGINAL_AS_FOR_TARGET) "$$@"' >> as ; \
+> Would it interfere with other builds and make them break?
 
-results in as containing
-+++++++++++++++
-#!/bin/bash
-exec "$@"
----------------
+Omitting the frame pointer makes debugging nigh-on impossible.
 
-I suspect, I have to configure with "-with-gnu-as" or with 
-"-with-as=$(STAGING_DIR)/../*-as"as well,
-(It is already configured with "-with-gnu-ld")
-and the machine is working overtime, testing that at the moment.
+> Buildroot is a great product, well impressed, keep up the good work! :)
 
-Best Regards
-Ulf Samuelsson
+
+
+A
