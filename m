@@ -1,36 +1,48 @@
-From: Bernhard Fischer <rep.dot.nop@gmail.com>
-Date: Fri, 28 Sep 2007 22:47:57 +0200
-Subject: [Buildroot] PATCH [2/2] update x11r7 packages to
-	use	NAME_PREFIX when calling AUTOTARGETS
-In-Reply-To: <46FD7663.3010205@promwad.com>
-References: <46FD7109.6000500@promwad.com> <20070928203734.GX20951@aon.at>
-	<46FD7663.3010205@promwad.com>
-Message-ID: <20070928204755.GZ20951@aon.at>
+From: Clark Rawlins <clark.rawlins@escient.com>
+Date: Fri, 28 Sep 2007 16:49:06 -0400
+Subject: [Buildroot] Kernel Download Error with external toolchain
+In-Reply-To: <20070928191632.GT20951@aon.at>
+References: <1190985506.17683.6.camel@venture.bit63.org>
+	<20070928180849.GQ20951@aon.at>
+	<1191006117.5322.225.camel@elrond.atmel.sweden>
+	<20070928191632.GT20951@aon.at>
+Message-ID: <1191012546.6616.15.camel@venture.bit63.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Sat, Sep 29, 2007 at 12:47:15AM +0300, Ivan Kuten wrote:
->
->> Oh, and it would be more intuitive -- at least for me -- if you would
->> prepend the DIR_PREFIX, as in 
->> 
->>> -$(eval $(call AUTOTARGETS,xdriver_xf86-video-via))
->>> +$(eval $(call AUTOTARGETS,x11r7,xdriver_xf86-video-via))
->> 
->> , please.
->
->Hm, 3rd parameter is treated as optional in AUTOTARGETS.
->Can we force for other packages not x11r7 ones but which use AUTOTARGETS to use the following syntax:
->
->$(eval $(call AUTOTARGETS,,mypackage))            - if package/mypackage
->
->and
->
->$(eval $(call AUTOTARGETS,x11r7,mypackage))            - if package/x11r7/mypackage
+On Fri, 2007-09-28 at 21:16 +0200, Bernhard Fischer wrote:
+> On Fri, Sep 28, 2007 at 09:01:57PM +0200, Ulf Samuelsson wrote:
+> >fre 2007-09-28 klockan 20:08 +0200 skrev Bernhard Fischer:
+> >> On Fri, Sep 28, 2007 at 09:18:26AM -0400, Clark Rawlins wrote:
+> >> >When attempting to build a fairly simple config including a kernel using
+> >> >an external toolchain I am getting the following error:
+> >> >
+> >> >http://www.kernel.org/pub/linux/kernel/v2.6//linux-...tar.bz2
+> 
+> >Give time to do development, without beeing to intrusive.
+> >
+> >Been tied down with other stuff so It has not gotten
+> >the attention it deserved.
+> 
+> np. It wouldn't have really helped either way without a little love..
+> Compiling a kernel with his external toolchain and setting the
+> INST_MOD_PATH properly shouldn't be that hard.
 
-That is bypassed since we don't have "package/" in there, so the
-DIR_PREFIX for non-x11 would be plain "package". See the mail i just
-sent.
+True, It is easy enough, I just hopped (based on the configuration
+options) that this was supported.
+
+Here is the patch I am using to accomplish this.  It seems like it may
+be a bit of a hack, but I couldn't see a better way to do it without
+really diving in, so I am open to suggestions.
+
+
+-------------- next part --------------
+A non-text attachment was scrubbed...
+Name: external-kernel.patch
+Type: text/x-patch
+Size: 1387 bytes
+Desc: not available
+Url : http://busybox.net/lists/buildroot/attachments/20070928/676fe752/attachment.bin 
