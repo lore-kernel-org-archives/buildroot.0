@@ -1,43 +1,36 @@
 From: Bernhard Fischer <rep.dot.nop@gmail.com>
-Date: Fri, 28 Sep 2007 22:45:35 +0200
+Date: Fri, 28 Sep 2007 22:47:57 +0200
 Subject: [Buildroot] PATCH [2/2] update x11r7 packages to
 	use	NAME_PREFIX when calling AUTOTARGETS
-In-Reply-To: <20070928203734.GX20951@aon.at>
+In-Reply-To: <46FD7663.3010205@promwad.com>
 References: <46FD7109.6000500@promwad.com> <20070928203734.GX20951@aon.at>
-Message-ID: <20070928204535.GY20951@aon.at>
+	<46FD7663.3010205@promwad.com>
+Message-ID: <20070928204755.GZ20951@aon.at>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Fri, Sep 28, 2007 at 10:37:34PM +0200, Bernhard Fischer wrote:
->On Sat, Sep 29, 2007 at 12:24:25AM +0300, Ivan Kuten wrote:
->>Hello,
->>
->>The second patch updates x11r7 packages to use NAME_PREFIX when calling AUTOTARGETS:
->>
->>----------------------------------
->>
->>Index: package/x11r7/xdriver_xf86-video-via/xdriver_xf86-video-via.mk
->>===================================================================
->>--- package/x11r7/xdriver_xf86-video-via/xdriver_xf86-video-via.mk	(revision 20086)
->>+++ package/x11r7/xdriver_xf86-video-via/xdriver_xf86-video-via.mk	(working copy)
->>@@ -10,4 +10,4 @@
->> XDRIVER_XF86_VIDEO_VIA_AUTORECONF = YES
->> XDRIVER_XF86_VIDEO_VIA_DEPENDENCIES = xserver_xorg-server libdrm xlib_libX11 xlib_libXvMC xproto_fontsproto xproto_glproto xproto_randrproto xproto_renderproto xproto_xextproto xproto_xf86driproto
->>xproto_xproto
->>
->>-$(eval $(call AUTOTARGETS,xdriver_xf86-video-via))
->>+$(eval $(call AUTOTARGETS,xdriver_xf86-video-via,x11r7))
+On Sat, Sep 29, 2007 at 12:47:15AM +0300, Ivan Kuten wrote:
 >
->Oh, and it would be more intuitive -- at least for me -- if you would
->prepend the DIR_PREFIX, as in 
+>> Oh, and it would be more intuitive -- at least for me -- if you would
+>> prepend the DIR_PREFIX, as in 
+>> 
+>>> -$(eval $(call AUTOTARGETS,xdriver_xf86-video-via))
+>>> +$(eval $(call AUTOTARGETS,x11r7,xdriver_xf86-video-via))
+>> 
+>> , please.
 >
->>-$(eval $(call AUTOTARGETS,xdriver_xf86-video-via))
-->>+$(eval $(call AUTOTARGETS,x11r7,xdriver_xf86-video-via))
-+>>+$(eval $(call AUTOTARGETS,package/x11r7,xdriver_xf86-video-via))
+>Hm, 3rd parameter is treated as optional in AUTOTARGETS.
+>Can we force for other packages not x11r7 ones but which use AUTOTARGETS to use the following syntax:
 >
->, please.
+>$(eval $(call AUTOTARGETS,,mypackage))            - if package/mypackage
+>
+>and
+>
+>$(eval $(call AUTOTARGETS,x11r7,mypackage))            - if package/x11r7/mypackage
 
-and strip the "package/" part off the macro.
+That is bypassed since we don't have "package/" in there, so the
+DIR_PREFIX for non-x11 would be plain "package". See the mail i just
+sent.
