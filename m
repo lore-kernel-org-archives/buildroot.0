@@ -1,8 +1,7 @@
 From: aldot at uclibc.org <aldot@uclibc.org>
-Date: Fri, 28 Sep 2007 14:54:38 -0700 (PDT)
-Subject: [Buildroot] svn commit: trunk/buildroot: target target/device
-	target/device/Atme etc...
-Message-ID: <20070928215438.12EF1A6889@busybox.net>
+Date: Fri, 28 Sep 2007 15:15:19 -0700 (PDT)
+Subject: [Buildroot] svn commit: trunk/buildroot/package
+Message-ID: <20070928221519.D0AC4300B0@busybox.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -10,36 +9,155 @@ Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
 Author: aldot
-Date: 2007-09-28 14:54:36 -0700 (Fri, 28 Sep 2007)
-New Revision: 20101
+Date: 2007-09-28 15:15:19 -0700 (Fri, 28 Sep 2007)
+New Revision: 20105
 
 Log:
-- naming convention is Config.in resp. Config.in.foo
-  Adjust some accordingly
+- cleanup configure options
 
-
-Added:
-   trunk/buildroot/target/Config.in.arch
-   trunk/buildroot/target/device/Atmel/Config.in.mirrors
-   trunk/buildroot/target/device/Config.in.mirrors
-   trunk/buildroot/target/device/Config.in.target
-   trunk/buildroot/target/device/Config.in.toolchain
-
-Removed:
-   trunk/buildroot/target/arch.in
-   trunk/buildroot/target/device/Atmel/Mirrors.in
-   trunk/buildroot/target/device/Mirrors.in
-   trunk/buildroot/target/device/Target.in
-   trunk/buildroot/target/device/Toolchain.in
 
 Modified:
-   trunk/buildroot/Config.in
-   trunk/buildroot/toolchain/Config.in
+   trunk/buildroot/package/Makefile.in
 
 
 Changeset:
-
-Sorry, the patch is too large to include (1656 lines).
-Please use ViewCVS to see it!
-
-http://uclibc.org/cgi-bin/viewcvs.cgi?view=rev&root=svn&rev=20101
+Modified: trunk/buildroot/package/Makefile.in
+===================================================================
+--- trunk/buildroot/package/Makefile.in	2007-09-28 22:13:55 UTC (rev 20104)
++++ trunk/buildroot/package/Makefile.in	2007-09-28 22:15:19 UTC (rev 20105)
+@@ -90,31 +90,42 @@
+ TARGET_AR=$(TARGET_CROSS)ar
+ TARGET_AS=$(TARGET_CROSS)as
+ TARGET_CC=$(TARGET_CROSS)gcc
++TARGET_CPP=$(TARGET_CROSS)cpp
+ TARGET_CXX=$(TARGET_CROSS)g++
++ifeq ($(BR2_GCC_VERSION_3_4_6),y)
++TARGET_FC=$(TARGET_CROSS)g77
++else
++TARGET_FC=$(TARGET_CROSS)gfortran
++endif
+ TARGET_LD=$(TARGET_CROSS)ld
++TARGET_NM=$(TARGET_CROSS)nm
+ TARGET_RANLIB=$(TARGET_CROSS)ranlib
+ TARGET_OBJCOPY=$(TARGET_CROSS)objcopy
++TARGET_OBJDUMP=$(TARGET_CROSS)objdump
+ TARGET_LDCONFIG=$(TARGET_CROSS)ldconfig
+-INSTALL=/usr/bin/install
+ ifeq ($(BR2_STRIP_strip),y)
+ STRIP_DISCARD_ALL:=--discard-all
+ STRIP_STRIP_UNNEEDED:=--strip-unneeded
+ STRIP_STRIP_ALL:=--strip-all
+ REMOVE_SECTION_COMMENT:=--remove-section=.comment
+ REMOVE_SECTION_NOTE:=--remove-section=.note
+-STRIP=$(TARGET_CROSS)strip $(REMOVE_SECTION_COMMENT) $(REMOVE_SECTION_NOTE)
++TARGET_STRIP=$(TARGET_CROSS)strip $(REMOVE_SECTION_COMMENT) $(REMOVE_SECTION_NOTE)
++STRIP=$(TARGET_STRIP)
+ endif
+ ifeq ($(BR2_STRIP_sstrip),y)
+-STRIP=$(STAGING_DIR)/usr/bin/$(REAL_GNU_TARGET_NAME)-sstrip
+ STRIP_DISCARD_ALL:=
+ STRIP_STRIP_UNNEEDED:=
+ STRIP_STRIP_ALL:=
+ REMOVE_SECTION_COMMENT:=
+ REMOVE_SECTION_NOTE:=
++TARGET_STRIP=$(STAGING_DIR)/usr/bin/$(REAL_GNU_TARGET_NAME)-sstrip
++STRIP=$(TARGET_STRIP)
+ endif
+ ifeq ($(BR2_STRIP_none),y)
+-STRIP=true -Not_stripping
++TARGET_STRIP=true -Not_stripping
++STRIP=$(TARGET_STRIP)
+ endif
++INSTALL=/usr/bin/install
+ 
+ HOST_ARCH:=$(shell $(HOSTCC) -dumpmachine | sed -e s'/-.*//' \
+ 	-e 's/sparc.*/sparc/' \
+@@ -131,18 +142,18 @@
+ GNU_HOST_NAME:=$(HOST_ARCH)-$(subst ",,$(BR2_GNU_BUILD_SUFFIX))
+ #")
+ TARGET_CONFIGURE_OPTS=PATH=$(TARGET_PATH) \
+-		AR=$(TARGET_CROSS)ar \
+-		AS=$(TARGET_CROSS)as \
+-		LD="$(TARGET_CROSS)ld $(TARGET_LDFLAGS)" \
+-		NM=$(TARGET_CROSS)nm \
+-		CC="$(TARGET_CROSS)gcc $(TARGET_CFLAGS)" \
+-		GCC="$(TARGET_CROSS)gcc $(TARGET_CFLAGS)" \
+-		CPP="$(TARGET_CROSS)cpp $(TARGET_CFLAGS)" \
+-		CXX="$(TARGET_CROSS)g++ $(TARGET_CXXFLAGS)" \
+-		FC="$(TARGET_CROSS)gfortran $(TARGET_FCFLAGS)" \
+-		RANLIB=$(TARGET_CROSS)ranlib \
+-		STRIP=$(TARGET_CROSS)strip \
+-		OBJCOPY=$(TARGET_CROSS)objcopy \
++		AR=$(TARGET_AR) \
++		AS=$(TARGET_AS) \
++		LD="$(TARGET_LD) $(TARGET_LDFLAGS)" \
++		NM=$(TARGET_NM) \
++		CC="$(TARGET_CC) $(TARGET_CFLAGS)" \
++		GCC="$(TARGET_CC) $(TARGET_CFLAGS)" \
++		CPP="$(TARGET_CPP) $(TARGET_CFLAGS)" \
++		CXX="$(TARGET_CXX) $(TARGET_CXXFLAGS)" \
++		FC="$(TARGET_FC) $(TARGET_FCFLAGS)" \
++		RANLIB=$(TARGET_RANLIB) \
++		STRIP=$(TARGET_STRIP) \
++		OBJCOPY=$(TARGET_OBJCOPY) \
+ 		AR_FOR_BUILD="$(HOSTAR)" \
+ 		AS_FOR_BUILD="$(HOSTAS)" \
+ 		CC_FOR_BUILD="$(HOSTCC)" \
+@@ -154,13 +165,13 @@
+ 		CXXFLAGS_FOR_BUILD="$(HOST_CXXFLAGS)" \
+ 		LDFLAGS_FOR_BUILD="$(HOST_LDFLAGS)" \
+ 		FCFLAGS_FOR_BUILD="$(HOST_FCFLAGS)" \
+-		AR_FOR_TARGET=$(TARGET_CROSS)ar \
+-		AS_FOR_TARGET=$(TARGET_CROSS)as \
+-		CC_FOR_TARGET=$(TARGET_CROSS)gcc \
+-		LD_FOR_TARGET=$(TARGET_CROSS)ld \
+-		NM_FOR_TARGET=$(TARGET_CROSS)nm \
+-		DEFAULT_ASSEMBLER=$(TARGET_CROSS)as \
+-		DEFAULT_LINKER=$(TARGET_CROSS)ld \
++		AR_FOR_TARGET=$(TARGET_AR) \
++		AS_FOR_TARGET=$(TARGET_AS) \
++		CC_FOR_TARGET=$(TARGET_CC) \
++		LD_FOR_TARGET=$(TARGET_LD) \
++		NM_FOR_TARGET=$(TARGET_NM) \
++		DEFAULT_ASSEMBLER=$(TARGET_AS) \
++		DEFAULT_LINKER=$(TARGET_LD) \
+ 		PKG_CONFIG_SYSROOT="$(STAGING_DIR)" \
+ 		PKG_CONFIG="$(STAGING_DIR)/usr/bin/pkg-config" \
+ 		PKG_CONFIG_PATH="$(STAGING_DIR)/usr/lib/pkgconfig:$(PKG_CONFIG_PATH)" \
+@@ -188,21 +199,21 @@
+ 		CXXFLAGS_FOR_BUILD="$(HOST_CXXFLAGS)" \
+ 		LDFLAGS_FOR_BUILD="$(HOST_LDFLAGS)" \
+ 		FCFLAGS_FOR_BUILD="$(HOST_FCFLAGS)" \
+-		AR_FOR_TARGET=$(TARGET_CROSS)ar \
+-		AS_FOR_TARGET=$(TARGET_CROSS)as \
+-		CC_FOR_TARGET=$(TARGET_CROSS)gcc \
+-		LD_FOR_TARGET=$(TARGET_CROSS)ld \
+-		NM_FOR_TARGET=$(TARGET_CROSS)nm \
+-		RANLIB_FOR_TARGET=$(TARGET_CROSS)ranlib \
+-		STRIP_FOR_TARGET=$(TARGET_CROSS)strip \
+-		OBJCOPY_FOR_TARGET=$(TARGET_CROSS)objcopy \
+-		OBJDUMP_FOR_TARGET=$(TARGET_CROSS)objdump \
+-		DEFAULT_ASSEMBLER=$(TARGET_CROSS)as \
+-		DEFAULT_LINKER=$(TARGET_CROSS)ld \
+-		ORIGINAL_AS_FOR_TARGET=$(TARGET_CROSS)as \
+-		ORIGINAL_LD_FOR_TARGET=$(TARGET_CROSS)ld \
+-		ORIGINAL_NM_FOR_TARGET=$(TARGET_CROSS)nm \
+-		ORIGINAL_OBJDUMP_FOR_TARGET=$(TARGET_CROSS)objdump
++		AR_FOR_TARGET=$(TARGET_AR) \
++		AS_FOR_TARGET=$(TARGET_AS) \
++		CC_FOR_TARGET=$(TARGET_CC) \
++		LD_FOR_TARGET=$(TARGET_LD) \
++		NM_FOR_TARGET=$(TARGET_NM) \
++		RANLIB_FOR_TARGET=$(TARGET_RANLIB) \
++		STRIP_FOR_TARGET=$(TARGET_STRIP) \
++		OBJCOPY_FOR_TARGET=$(TARGET_OBJCOPY) \
++		OBJDUMP_FOR_TARGET=$(TARGET_OBJDUMP) \
++		DEFAULT_ASSEMBLER=$(TARGET_AS) \
++		DEFAULT_LINKER=$(TARGET_LD) \
++		ORIGINAL_AS_FOR_TARGET=$(TARGET_AS) \
++		ORIGINAL_LD_FOR_TARGET=$(TARGET_LD) \
++		ORIGINAL_NM_FOR_TARGET=$(TARGET_NM) \
++		ORIGINAL_OBJDUMP_FOR_TARGET=$(TARGET_OBJDUMP)
+ 
+ #######################################################################
+ # settings we need to pass to configure
