@@ -1,58 +1,58 @@
 From: Ulf Samuelsson <ulf@atmel.com>
-Date: Fri, 28 Sep 2007 09:35:45 +0200
-Subject: [Buildroot] AVR32 misery
-In-Reply-To: <1190938123.5322.54.camel@elrond.atmel.sweden>
-References: <1190938123.5322.54.camel@elrond.atmel.sweden>
-Message-ID: <1190964945.5322.87.camel@elrond.atmel.sweden>
+Date: Fri, 28 Sep 2007 09:37:53 +0200
+Subject: [Buildroot] AVR32  build broken.
+In-Reply-To: <1190962428.5322.75.camel@elrond.atmel.sweden>
+References: <1190854406.4933.78.camel@elrond.atmel.sweden>
+	<20070927221216.GF20951@aon.at>
+	<1190962428.5322.75.camel@elrond.atmel.sweden>
+Message-ID: <1190965073.5322.89.camel@elrond.atmel.sweden>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-fre 2007-09-28 klockan 02:08 +0200 skrev Ulf Samuelsson:
-> I think I have found one problem
-> "toolchain_build_avr32/gcc-4.1.2-initial/gcc/as" is a script file
-> which should call the assembler.
+fre 2007-09-28 klockan 08:53 +0200 skrev Ulf Samuelsson:
+> fre 2007-09-28 klockan 00:12 +0200 skrev Bernhard Fischer:
+> > On Thu, Sep 27, 2007 at 02:53:26AM +0200, Ulf Samuelsson wrote:
+> > >The atngw100small also fails with the following error:
+> > >
+> > >configure: error: Link tests are not allowed after GCC_NO_EXECUTABLES.
+> > >make[2]: *** [configure-target-libiberty] Fel 1
+> > >make[2]: *** Inv?ntar oavslutade jobb...
+> > >make[1]: *** [all] Fel 2
+> > >
+> > >This is the same error you get when you try to build the ARM with
+> > >softfloat.
+> > 
+> > I cannot reproduce this. I've double-checked that the sample arm926t
+> > (integrator CP, IIRC) builds and works fine with and without softfloat
+> > (after deleting that wrong uClibc-0.9.29-soft-fp.patch, of course).
+> > 
 > 
-> It contains
+> soft-float patch now removed from trunk
 > 
-> #!/bin/sh
-> exec "$@"
+> > Can you reproduce this error with the provided defconfig in
+> > target/device/ARM/integrator_whatever ?
+> > 
 > 
-> and should contain:
-> #!/bin/sh
-> exec <buildroot>/build_avr32/staging_dir/bin/avr32-linux-uclibc-ld "$@"
 > 
-> I modified this by hand, and now it seems to continue further.
-> Off to bed...
+> OK, Now I have built the integrator stuff as well,
+> and it builds well with soft-float!
+> Thanks for the tip.
 > 
+> The immediate difference I could see was
+> that the integrator is built using "arm926ejs"
+> instead of using "generic-arm" which I have used so far.
+> I will try to rebuild the integrator modified for "generic-arm"
+> and see how it goes.
 
-When gcc-4.1.2 is build
-"toolchain_build_avr32/gcc-4.1.2-initial/gcc/<app>" contains
+Integrator still works with "generic-arm" instead of "arm926ejs"
+Next thing to try is EABI instead of OABI.
 
-app=as
-#!/bin/sh
-exec  "$@"
+Best Regards
+Ulf Samuelsson
 
-app=collect-ld
-#!/bin/sh
-exec <buildroot>/build_avr32/staging_dir/avr32-linux-uclibc/bin/ld "$@"
-
-app=nm
-#!/bin/sh
-exec /usr/bin/nm "$@"
-
-------
-I am changing all to:
-
-#!/bin/sh
-exec <buildroot>/build_avr32/staging_dir/avr32-linux-uclibc/bin/<app>
-"$@"
-
-> BR
-> Ulf Samuelsson
-> 
 > 
 > _______________________________________________
 > buildroot mailing list
