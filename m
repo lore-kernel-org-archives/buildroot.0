@@ -1,18 +1,23 @@
 From: Bernhard Fischer <rep.dot.nop@gmail.com>
-Date: Fri, 28 Sep 2007 18:26:55 +0200
-Subject: [Buildroot] GNU BInutils and TeXinfo v. 4.11 - patch proposed
-In-Reply-To: <bcba51a0709272136j6848589br9ecb928773c63e7c@mail.gmail.com>
-References: <bcba51a0709272136j6848589br9ecb928773c63e7c@mail.gmail.com>
-Message-ID: <20070928162655.GJ20951@aon.at>
+Date: Fri, 28 Sep 2007 18:29:25 +0200
+Subject: [Buildroot] Building ARM with Soft-float
+In-Reply-To: <1190969812.5322.96.camel@elrond.atmel.sweden>
+References: <1190969812.5322.96.camel@elrond.atmel.sweden>
+Message-ID: <20070928162925.GK20951@aon.at>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Fri, Sep 28, 2007 at 12:36:22AM -0400, Dimitry Golubovsky wrote:
->Hi,
+On Fri, Sep 28, 2007 at 10:56:52AM +0200, Ulf Samuelsson wrote:
+>Tried the Integrator-926ejs default.
+>=>	This works:
 >
->Here is a patch that was tested with binutils 2.18 (also attached):
+>Modify to use: "generic-arm" instead of "arm926ejs".
 
-Merged. Thanks!
+Ulf, what are you referring to (you didn't follow-up on another mail)?
+My sample integrator926t_defconfig or something else?
+
+I'm certainly not using generic-arm with the 926t.. look at the
+abovementioned config file in target/device/ARM/
