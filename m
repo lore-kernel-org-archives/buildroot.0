@@ -1,8 +1,7 @@
 From: aldot at uclibc.org <aldot@uclibc.org>
-Date: Sat, 29 Sep 2007 12:52:03 -0700 (PDT)
-Subject: [Buildroot] svn commit: trunk/buildroot/target/device: AMD Arm
-	Atmel Soekris Via jp
-Message-ID: <20070929195203.C7C8C300DC@busybox.net>
+Date: Sat, 29 Sep 2007 13:08:22 -0700 (PDT)
+Subject: [Buildroot] svn commit: trunk/buildroot/package/config
+Message-ID: <20070929200822.9C6DA30043@busybox.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -10,110 +9,302 @@ Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
 Author: aldot
-Date: 2007-09-29 12:52:03 -0700 (Sat, 29 Sep 2007)
-New Revision: 20123
+Date: 2007-09-29 13:08:22 -0700 (Sat, 29 Sep 2007)
+New Revision: 20124
 
 Log:
-- remove some duplicate entries
+- forgot to svn add kconfig-language.txt
 
 
-Modified:
-   trunk/buildroot/target/device/AMD/Config.in
-   trunk/buildroot/target/device/Arm/Config.in
-   trunk/buildroot/target/device/Atmel/Config.in
-   trunk/buildroot/target/device/Soekris/Config.in
-   trunk/buildroot/target/device/Via/Config.in
-   trunk/buildroot/target/device/jp/Config.in
+Added:
+   trunk/buildroot/package/config/kconfig-language.txt
 
 
 Changeset:
-Modified: trunk/buildroot/target/device/AMD/Config.in
+Added: trunk/buildroot/package/config/kconfig-language.txt
 ===================================================================
---- trunk/buildroot/target/device/AMD/Config.in	2007-09-29 19:47:04 UTC (rev 20122)
-+++ trunk/buildroot/target/device/AMD/Config.in	2007-09-29 19:52:03 UTC (rev 20123)
-@@ -19,10 +19,3 @@
- comment "Package support"
- 	depends BR2_TARGET_AMD_ALCHEMY
- 
--config BR2_PACKAGE_LINUX
--	bool "linux"
--	default n
--	depends BR2_TARGET_AMD_ALCHEMY
--	help
--	    The Linux kernel.
--	    http://www.kernel.org/
-
-Modified: trunk/buildroot/target/device/Arm/Config.in
-===================================================================
---- trunk/buildroot/target/device/Arm/Config.in	2007-09-29 19:47:04 UTC (rev 20122)
-+++ trunk/buildroot/target/device/Arm/Config.in	2007-09-29 19:52:03 UTC (rev 20123)
-@@ -1,4 +1,4 @@
--menuconfig	BR2_TARGET_ARM
-+menuconfig BR2_TARGET_ARM
- 	bool "ARM Ltd. Device Support"
- 	depends BR2_arm
- 	default n
-
-Modified: trunk/buildroot/target/device/Atmel/Config.in
-===================================================================
---- trunk/buildroot/target/device/Atmel/Config.in	2007-09-29 19:47:04 UTC (rev 20122)
-+++ trunk/buildroot/target/device/Atmel/Config.in	2007-09-29 19:52:03 UTC (rev 20123)
-@@ -42,7 +42,7 @@
- 	depends on BR2_TARGET_AT91
- 	default "http://maxim.org.za/AT91RM9200/2.6"
- 	help
--	    Main download location for AT91 Linux stuff
-+	  Main download location for AT91 Linux stuff
- 
- config BR2_TARGET_ATMEL_COPYTO
- 	string "also copy the image to..."
-
-Modified: trunk/buildroot/target/device/Soekris/Config.in
-===================================================================
---- trunk/buildroot/target/device/Soekris/Config.in	2007-09-29 19:47:04 UTC (rev 20122)
-+++ trunk/buildroot/target/device/Soekris/Config.in	2007-09-29 19:52:03 UTC (rev 20123)
-@@ -17,11 +17,3 @@
- comment "Package support"
- 	depends on BR2_TARGET_SOEKRIS_NET4521 || BR2_TARGET_SOEKRIS_NET4801
- 
--config BR2_PACKAGE_LINUX
--	bool "linux"
--	depends on BR2_TARGET_SOEKRIS_NET4521 || BR2_TARGET_SOEKRIS_NET4801
--	default n
--	help
--	    The Linux kernel.
--
--	    http://www.kernel.org/
-
-Modified: trunk/buildroot/target/device/Via/Config.in
-===================================================================
---- trunk/buildroot/target/device/Via/Config.in	2007-09-29 19:47:04 UTC (rev 20122)
-+++ trunk/buildroot/target/device/Via/Config.in	2007-09-29 19:52:03 UTC (rev 20123)
-@@ -6,11 +6,3 @@
- 	help
- 	  The Via EPIA MII board
- 
--config BR2_PACKAGE_LINUX
--	bool "linux"
--	default n
--	depends BR2_TARGET_VIA_EPIA_MII
--	help
--	    The Linux kernel.
--
--	    http://www.kernel.org/
-
-Modified: trunk/buildroot/target/device/jp/Config.in
-===================================================================
---- trunk/buildroot/target/device/jp/Config.in	2007-09-29 19:47:04 UTC (rev 20122)
-+++ trunk/buildroot/target/device/jp/Config.in	2007-09-29 19:52:03 UTC (rev 20123)
-@@ -9,10 +9,3 @@
- comment "Package support"
- 	depends BR2_TARGET_Q5
- 
--config BR2_PACKAGE_LINUX
--	bool "linux"
--	default n
--	depends BR2_TARGET_Q5
--	help
--	    The Linux kernel.
--	    http://www.kernel.org/
+--- trunk/buildroot/package/config/kconfig-language.txt	                        (rev 0)
++++ trunk/buildroot/package/config/kconfig-language.txt	2007-09-29 20:08:22 UTC (rev 20124)
+@@ -0,0 +1,282 @@
++Introduction
++------------
++
++The configuration database is a collection of configuration options
++organized in a tree structure:
++
++	+- Code maturity level options
++	|  +- Prompt for development and/or incomplete code/drivers
++	+- General setup
++	|  +- Networking support
++	|  +- System V IPC
++	|  +- BSD Process Accounting
++	|  +- Sysctl support
++	+- Loadable module support
++	|  +- Enable loadable module support
++	|     +- Set version information on all module symbols
++	|     +- Kernel module loader
++	+- ...
++
++Every entry has its own dependencies. These dependencies are used
++to determine the visibility of an entry. Any child entry is only
++visible if its parent entry is also visible.
++
++Menu entries
++------------
++
++Most entries define a config option, all other entries help to organize
++them. A single configuration option is defined like this:
++
++config MODVERSIONS
++	bool "Set version information on all module symbols"
++	depends on MODULES
++	help
++	  Usually, modules have to be recompiled whenever you switch to a new
++	  kernel.  ...
++
++Every line starts with a key word and can be followed by multiple
++arguments.  "config" starts a new config entry. The following lines
++define attributes for this config option. Attributes can be the type of
++the config option, input prompt, dependencies, help text and default
++values. A config option can be defined multiple times with the same
++name, but every definition can have only a single input prompt and the
++type must not conflict.
++
++Menu attributes
++---------------
++
++A menu entry can have a number of attributes. Not all of them are
++applicable everywhere (see syntax).
++
++- type definition: "bool"/"tristate"/"string"/"hex"/"int"
++  Every config option must have a type. There are only two basic types:
++  tristate and string, the other types are based on these two. The type
++  definition optionally accepts an input prompt, so these two examples
++  are equivalent:
++
++	bool "Networking support"
++  and
++	bool
++	prompt "Networking support"
++
++- input prompt: "prompt" <prompt> ["if" <expr>]
++  Every menu entry can have at most one prompt, which is used to display
++  to the user. Optionally dependencies only for this prompt can be added
++  with "if".
++
++- default value: "default" <expr> ["if" <expr>]
++  A config option can have any number of default values. If multiple
++  default values are visible, only the first defined one is active.
++  Default values are not limited to the menu entry where they are
++  defined. This means the default can be defined somewhere else or be
++  overridden by an earlier definition.
++  The default value is only assigned to the config symbol if no other
++  value was set by the user (via the input prompt above). If an input
++  prompt is visible the default value is presented to the user and can
++  be overridden by him.
++  Optionally, dependencies only for this default value can be added with
++  "if".
++
++- dependencies: "depends on"/"requires" <expr>
++  This defines a dependency for this menu entry. If multiple
++  dependencies are defined, they are connected with '&&'. Dependencies
++  are applied to all other options within this menu entry (which also
++  accept an "if" expression), so these two examples are equivalent:
++
++	bool "foo" if BAR
++	default y if BAR
++  and
++	depends on BAR
++	bool "foo"
++	default y
++
++- reverse dependencies: "select" <symbol> ["if" <expr>]
++  While normal dependencies reduce the upper limit of a symbol (see
++  below), reverse dependencies can be used to force a lower limit of
++  another symbol. The value of the current menu symbol is used as the
++  minimal value <symbol> can be set to. If <symbol> is selected multiple
++  times, the limit is set to the largest selection.
++  Reverse dependencies can only be used with boolean or tristate
++  symbols.
++
++- numerical ranges: "range" <symbol> <symbol> ["if" <expr>]
++  This allows to limit the range of possible input values for int
++  and hex symbols. The user can only input a value which is larger than
++  or equal to the first symbol and smaller than or equal to the second
++  symbol.
++
++- help text: "help" or "---help---"
++  This defines a help text. The end of the help text is determined by
++  the indentation level, this means it ends at the first line which has
++  a smaller indentation than the first line of the help text.
++  "---help---" and "help" do not differ in behaviour, "---help---" is
++  used to help visually separate configuration logic from help within
++  the file as an aid to developers.
++
++
++Menu dependencies
++-----------------
++
++Dependencies define the visibility of a menu entry and can also reduce
++the input range of tristate symbols. The tristate logic used in the
++expressions uses one more state than normal boolean logic to express the
++module state. Dependency expressions have the following syntax:
++
++<expr> ::= <symbol>                             (1)
++           <symbol> '=' <symbol>                (2)
++           <symbol> '!=' <symbol>               (3)
++           '(' <expr> ')'                       (4)
++           '!' <expr>                           (5)
++           <expr> '&&' <expr>                   (6)
++           <expr> '||' <expr>                   (7)
++
++Expressions are listed in decreasing order of precedence. 
++
++(1) Convert the symbol into an expression. Boolean and tristate symbols
++    are simply converted into the respective expression values. All
++    other symbol types result in 'n'.
++(2) If the values of both symbols are equal, it returns 'y',
++    otherwise 'n'.
++(3) If the values of both symbols are equal, it returns 'n',
++    otherwise 'y'.
++(4) Returns the value of the expression. Used to override precedence.
++(5) Returns the result of (2-/expr/).
++(6) Returns the result of min(/expr/, /expr/).
++(7) Returns the result of max(/expr/, /expr/).
++
++An expression can have a value of 'n', 'm' or 'y' (or 0, 1, 2
++respectively for calculations). A menu entry becomes visible when it's
++expression evaluates to 'm' or 'y'.
++
++There are two types of symbols: constant and nonconstant symbols.
++Nonconstant symbols are the most common ones and are defined with the
++'config' statement. Nonconstant symbols consist entirely of alphanumeric
++characters or underscores.
++Constant symbols are only part of expressions. Constant symbols are
++always surrounded by single or double quotes. Within the quote, any
++other character is allowed and the quotes can be escaped using '\'.
++
++Menu structure
++--------------
++
++The position of a menu entry in the tree is determined in two ways. First
++it can be specified explicitly:
++
++menu "Network device support"
++	depends on NET
++
++config NETDEVICES
++	...
++
++endmenu
++
++All entries within the "menu" ... "endmenu" block become a submenu of
++"Network device support". All subentries inherit the dependencies from
++the menu entry, e.g. this means the dependency "NET" is added to the
++dependency list of the config option NETDEVICES.
++
++The other way to generate the menu structure is done by analyzing the
++dependencies. If a menu entry somehow depends on the previous entry, it
++can be made a submenu of it. First, the previous (parent) symbol must
++be part of the dependency list and then one of these two conditions
++must be true:
++- the child entry must become invisible, if the parent is set to 'n'
++- the child entry must only be visible, if the parent is visible
++
++config MODULES
++	bool "Enable loadable module support"
++
++config MODVERSIONS
++	bool "Set version information on all module symbols"
++	depends on MODULES
++
++comment "module support disabled"
++	depends on !MODULES
++
++MODVERSIONS directly depends on MODULES, this means it's only visible if
++MODULES is different from 'n'. The comment on the other hand is always
++visible when MODULES is visible (the (empty) dependency of MODULES is
++also part of the comment dependencies).
++
++
++Kconfig syntax
++--------------
++
++The configuration file describes a series of menu entries, where every
++line starts with a keyword (except help texts). The following keywords
++end a menu entry:
++- config
++- menuconfig
++- choice/endchoice
++- comment
++- menu/endmenu
++- if/endif
++- source
++The first five also start the definition of a menu entry.
++
++config:
++
++	"config" <symbol>
++	<config options>
++
++This defines a config symbol <symbol> and accepts any of above
++attributes as options.
++
++menuconfig:
++	"menuconfig" <symbol>
++	<config options>
++
++This is similar to the simple config entry above, but it also gives a
++hint to front ends, that all suboptions should be displayed as a
++separate list of options.
++
++choices:
++
++	"choice"
++	<choice options>
++	<choice block>
++	"endchoice"
++
++This defines a choice group and accepts any of the above attributes as
++options. A choice can only be of type bool or tristate, while a boolean
++choice only allows a single config entry to be selected, a tristate
++choice also allows any number of config entries to be set to 'm'. This
++can be used if multiple drivers for a single hardware exists and only a
++single driver can be compiled/loaded into the kernel, but all drivers
++can be compiled as modules.
++A choice accepts another option "optional", which allows to set the
++choice to 'n' and no entry needs to be selected.
++
++comment:
++
++	"comment" <prompt>
++	<comment options>
++
++This defines a comment which is displayed to the user during the
++configuration process and is also echoed to the output files. The only
++possible options are dependencies.
++
++menu:
++
++	"menu" <prompt>
++	<menu options>
++	<menu block>
++	"endmenu"
++
++This defines a menu block, see "Menu structure" above for more
++information. The only possible options are dependencies.
++
++if:
++
++	"if" <expr>
++	<if block>
++	"endif"
++
++This defines an if block. The dependency expression <expr> is appended
++to all enclosed menu entries.
++
++source:
++
++	"source" <prompt>
++
++This reads the specified configuration file. This file is always parsed.
