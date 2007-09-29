@@ -1,74 +1,44 @@
-From: Clark Rawlins <clark.rawlins@escient.com>
-Date: Sat, 29 Sep 2007 12:50:20 -0400
+From: Bernhard Fischer <rep.dot.nop@gmail.com>
+Date: Sat, 29 Sep 2007 19:10:31 +0200
 Subject: [Buildroot] Kernel Download Error with external toolchain
-In-Reply-To: <20070928205833.GA20951@aon.at>
+In-Reply-To: <1191084620.7864.16.camel@venture.bit63.org>
 References: <1190985506.17683.6.camel@venture.bit63.org>
 	<20070928180849.GQ20951@aon.at>
 	<1191006117.5322.225.camel@elrond.atmel.sweden>
 	<20070928191632.GT20951@aon.at>
 	<1191012546.6616.15.camel@venture.bit63.org>
 	<20070928205833.GA20951@aon.at>
-Message-ID: <1191084620.7864.16.camel@venture.bit63.org>
+	<1191084620.7864.16.camel@venture.bit63.org>
+Message-ID: <20070929171031.GQ20951@aon.at>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Fri, 2007-09-28 at 22:58 +0200, Bernhard Fischer wrote:
-> On Fri, Sep 28, 2007 at 04:49:06PM -0400, Clark Rawlins wrote:
-> >On Fri, 2007-09-28 at 21:16 +0200, Bernhard Fischer wrote:
-> >> On Fri, Sep 28, 2007 at 09:01:57PM +0200, Ulf Samuelsson wrote:
-> >> >fre 2007-09-28 klockan 20:08 +0200 skrev Bernhard Fischer:
-> >> >> On Fri, Sep 28, 2007 at 09:18:26AM -0400, Clark Rawlins wrote:
-> >> >> >When attempting to build a fairly simple config including a kernel using
-> >> >> >an external toolchain I am getting the following error:
-> >> >> >
-> >> >> >http://www.kernel.org/pub/linux/kernel/v2.6//linux-...tar.bz2
-> >> 
-> >> >Give time to do development, without beeing to intrusive.
-> >> >
-> >> >Been tied down with other stuff so It has not gotten
-> >> >the attention it deserved.
-> >> 
-> >> np. It wouldn't have really helped either way without a little love..
-> >> Compiling a kernel with his external toolchain and setting the
-> >> INST_MOD_PATH properly shouldn't be that hard.
-> >
-> >True, It is easy enough, I just hopped (based on the configuration
-> >options) that this was supported.
-> >
-> >Here is the patch I am using to accomplish this.  It seems like it may
-> >be a bit of a hack, but I couldn't see a better way to do it without
-> >really diving in, so I am open to suggestions.
-> 
-Let me rephrase to make sure I understand what you are saying.
+On Sat, Sep 29, 2007 at 12:50:20PM -0400, Clark Rawlins wrote:
 
-> Well, it shouldn't be depending on the external stuff.
-> There should be a knob that is settable in Config to set if
-> kernel-headers-version == kernel-src-version (for TOOLCHAIN_SOURCE)
-> or not. 
-You want a bool Config.in setting (BR2_BUILT_KERNEL_IS_HEADER_VERSION?)
-dependent on BR2_PACKAGE_LINUX and !BR2_TOOLCHAIN_EXTERNAL that lets the
-user choose if the kernel they build is the same as the kernel headers
-version they chose and ...
+>Let me rephrase to make sure I understand what you are saying.
 
-> If not or if TOOLCHAIN_EXTERNAL then use the given kernel-src-version
-> for building the kernel, keep using the kernel-headers-version for
-> headers-install (including unpacking, patching, etc. Both will need
-> this if kernel-headers-version != kernel-src-version, of course).
-Expose a choice for BR2_LINUX26_VERSION dependent on either
-BR2_TOOLCHAIN_EXTERNAL or !BR2_BUILT_KERNEL_IS_HEADER_VERSION that
-allows the user to choose which version of the kernel to build.
+>How close am I? :)
 
-Then the makefiles need to setup LINUX26_VERSION and LINUX26_SOURCE when
-BR2_LINUX26_VERSION is set so that the download target/linux/linux.mk
-will get used to download the kernel source.  
+Yes, that'd be it.
+For the dependency stuff (project_/$PROJ/buildroot-config), i'd prefer
+to keep the names in the BR2_KERNEL_* hierarchy. A bit clumsy,
+but nicer for the wildcards.
 
-How close am I? :)
+config BR2_KERNEL_SRC_IS_HEADERS
+	bool "Use kernel tarball for both headers and kernel-binary"
+	default y
+	help
+	  selfexplanatory but could need a more elaborate text
 
-> 
-> I'm just using the == case, so help with the other case is welcome
-> (including non-2.6 kernel-src, as some will most likely demand..)
-> 
-> cheers and TIA,
+BR2_PACKAGE_LINUX_SRC_VERSION
+	string "linux kernel version"
+	default ""
+	depends on !BR2_KERNEL_SRC_IS_HEADERS
+	help
+	  Specify the version of the linux kernel to use to
+	  build the kernel binary.
+
+or something like this
