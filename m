@@ -1,55 +1,82 @@
-From: ulf at uclibc.org <ulf@uclibc.org>
-Date: Sat, 29 Sep 2007 10:32:59 -0700 (PDT)
-Subject: [Buildroot] svn commit: trunk/buildroot/toolchain/gcc
-Message-ID: <20070929173259.431383003F@busybox.net>
+From: Ulf Samuelsson <ulf@atmel.com>
+Date: Sat, 29 Sep 2007 19:38:50 +0200
+Subject: [Buildroot] --with-abi=<empty> ... during gcc build
+Message-ID: <1191087530.5322.275.camel@elrond.atmel.sweden>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Author: ulf
-Date: 2007-09-29 10:32:58 -0700 (Sat, 29 Sep 2007)
-New Revision: 20117
+gcc configure is passed $(GCC_WITH_ABI)
+which is defined as:
+toolchain/gcc/Makefile.in:GCC_WITH_ABI:=--with-abi=$(BR2_GCC_TARGET_ABI)
 
-Log:
-Use linke to build-time-tools, disable libssp which does not work for cross-compile
+target/Config.in.arch defines BR2_GCC_TARGET_ABI
+config BR2_GCC_TARGET_ABI
+        string
+        default apcs-gnu        if BR2_arm_dunno
+        default aapcs-linux     if BR2_arm_dunno
+        default iwmmxt          if BR2_iwmmxt
+        default 32              if BR2_mipsel && BR2_OABI
+        default n32             if BR2_mipsel && BR2_EABI
+        default o64             if BR2_mips && BR2_OABI
+        default 64              if BR2_mips && BR2_ABI64
+        default eabi            if BR2_mips && BR2_EABI
+        default mmixware        if BR2_mmix && BR2_ABI_native
+        default gnu             if BR2_mmix && !BR2_ABI_native
+        default altivec         if BR2_powerpc && BR2_ABI_altivec
 
-Modified:
-   trunk/buildroot/toolchain/gcc/gcc-uclibc-3.x.mk
 
+but there is no definition of BR2_OABI or BR2_EABI.
 
-Changeset:
-Modified: trunk/buildroot/toolchain/gcc/gcc-uclibc-3.x.mk
+Suggest the following patch
+Index: target/Config.in.arch
 ===================================================================
---- trunk/buildroot/toolchain/gcc/gcc-uclibc-3.x.mk	2007-09-29 16:38:58 UTC (rev 20116)
-+++ trunk/buildroot/toolchain/gcc/gcc-uclibc-3.x.mk	2007-09-29 17:32:58 UTC (rev 20117)
-@@ -252,8 +252,8 @@
- 		--enable-languages=$(GCC_CROSS_LANGUAGES) \
- 		--disable-__cxa_atexit \
- 		--enable-target-optspace \
--		--with-gnu-ld \
--		--with-as=$(TARGET_CROSS)as \
-+		--with-build-time-tools=$(STAGING_DIR)/$(REAL_GNU_TARGET_NAME)/bin \
-+		--disable-libssp \
- 		$(GCC_WITH_HOST_GMP) \
- 		$(GCC_WITH_HOST_MPFR) \
- 		$(GCC_SHARED_LIBGCC) \
-@@ -355,13 +355,14 @@
- 	touch $@
+--- target/Config.in.arch       (revision 20117)
++++ target/Config.in.arch       (arbetskopia)
+@@ -117,8 +117,10 @@
  
- cross_compiler:=$(STAGING_DIR)/usr/bin/$(REAL_GNU_TARGET_NAME)-gcc
--cross_compiler gcc: uclibc-configured binutils gcc_initial \
--	$(LIBFLOAT_TARGET) uclibc \
--	$(GCC_BUILD_DIR2)/.installed $(GCC_BUILD_DIR2)/.libs_installed \
-+cross_compiler gcc: gcc-config $(GCC_BUILD_DIR2)/.installed $(GCC_BUILD_DIR2)/.libs_installed \
- 	$(GCC_TARGETS)
+ config BR2_ARM_OABI
+        bool "OABI"
++       select BR2_OABI
+ config BR2_ARM_EABI
+        bool "EABI"
++       select BR2_EABI
+ endchoice
  
- gcc-source: $(DL_DIR)/$(GCC_SOURCE)
+ choice
+@@ -635,6 +637,12 @@
+        default z990            if BR2_s390_z990
+        default z9-109          if BR2_s390_z9_109
  
-+gcc-config:uclibc-configured binutils gcc_initial $(LIBFLOAT_TARGET) \
-+	uclibc $(GCC_BUILD_DIR2)/.configured
++config BR2_EABI
++       bool
 +
- gcc-clean:
- 	rm -rf $(GCC_BUILD_DIR2)
- 	for prog in cpp gcc gcc-[0-9]* protoize unprotoize gcov gccbug cc; do \
++config BR2_OABI
++       bool
++
+ config BR2_GCC_TARGET_ABI
+        string
+        default apcs-gnu        if BR2_arm_dunno
+@@ -643,10 +651,12 @@
+        default aapcs-linux     if BR2_arm_dunno
+        default iwmmxt          if BR2_iwmmxt
+        default 32              if BR2_mipsel && BR2_OABI
++       default 32              if BR2_arm && BR2_OABI
+        default n32             if BR2_mipsel && BR2_EABI
+        default o64             if BR2_mips && BR2_OABI
+        default 64              if BR2_mips && BR2_ABI64
+        default eabi            if BR2_mips && BR2_EABI
++       default eabi            if BR2_arm && BR2_EABI
+        default mmixware        if BR2_mmix && BR2_ABI_native
+        default gnu             if BR2_mmix && !BR2_ABI_native
+        default altivec         if BR2_powerpc && BR2_ABI_altivec
+
+
+-----------
+It is not complete, since the other ABIs are not defined as well...
+
+
+Best Regards
+Ulf Samuelsson
