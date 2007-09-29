@@ -1,34 +1,50 @@
-From: Bernhard Fischer <rep.dot.nop@gmail.com>
-Date: Sat, 29 Sep 2007 15:53:02 +0200
+From: Ivan Kuten <ivan.kuten@promwad.com>
+Date: Sat, 29 Sep 2007 18:01:12 +0300
 Subject: [Buildroot] Quotes needed in package/Makefile.in
-In-Reply-To: <46FE467B.9040804@promwad.com>
+In-Reply-To: <20070929135302.GM20951@aon.at>
 References: <bcba51a0709282048v34a4ce24y4a984468955d54cb@mail.gmail.com>
 	<20070929100540.GK20951@aon.at> <46FE467B.9040804@promwad.com>
-Message-ID: <20070929135302.GM20951@aon.at>
+	<20070929135302.GM20951@aon.at>
+Message-ID: <46FE68B8.8000709@promwad.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Sat, Sep 29, 2007 at 03:35:07PM +0300, Ivan Kuten wrote:
->Bernhard Fischer ??????????:
->> On Fri, Sep 28, 2007 at 11:48:28PM -0400, Dimitry Golubovsky wrote:
->> 
->>> Please add quotes in package/Makefile.in, like this:
->> 
->> Yes, sorry. Fixed now.
->> _______________________________________________
->> buildroot mailing list
->> buildroot at uclibc.org
->> http://busybox.net/mailman/listinfo/buildroot
->
->Seems it's not final fix cause I get such error on some packeges such as dropbear, strace:
->
->make[1]: Leaving directory `/opt/buildroot/build_arm/strace-4.5.15'
->install -c /opt/buildroot/build_arm/strace-4.5.15/strace /opt/buildroot/project_build_arm/uclibc/root/usr/bin/strace
->"/opt/buildroot/build_arm/staging_dir/usr/bin/arm-linux-uclibc-strip --remove-section=.comment --remove-section=.note" /opt/buildroot/project_build_arm/uclibc/root/usr/bin/strace > /dev/null 2>&1
->make: *** [/opt/buildroot/project_build_arm/uclibc/root/usr/bin/strace] Error 127
+Bernhard Fischer ?????:
+> On Sat, Sep 29, 2007 at 03:35:07PM +0300, Ivan Kuten wrote:
+>> Bernhard Fischer ??????????:
+>>> On Fri, Sep 28, 2007 at 11:48:28PM -0400, Dimitry Golubovsky wrote:
+>>>
+>>>> Please add quotes in package/Makefile.in, like this:
+>>> Yes, sorry. Fixed now.
+>>> _______________________________________________
+>>> buildroot mailing list
+>>> buildroot at uclibc.org
+>>> http://busybox.net/mailman/listinfo/buildroot
+>> Seems it's not final fix cause I get such error on some packeges such as dropbear, strace:
+>>
+>> make[1]: Leaving directory `/opt/buildroot/build_arm/strace-4.5.15'
+>> install -c /opt/buildroot/build_arm/strace-4.5.15/strace /opt/buildroot/project_build_arm/uclibc/root/usr/bin/strace
+>> "/opt/buildroot/build_arm/staging_dir/usr/bin/arm-linux-uclibc-strip --remove-section=.comment --remove-section=.note" /opt/buildroot/project_build_arm/uclibc/root/usr/bin/strace > /dev/null 2>&1
+>> make: *** [/opt/buildroot/project_build_arm/uclibc/root/usr/bin/strace] Error 127
+> 
+> Do you have
+> /opt/buildroot/build_arm/staging_dir/usr/bin/arm-linux-uclibc-strip ?
 
-Do you have
-/opt/buildroot/build_arm/staging_dir/usr/bin/arm-linux-uclibc-strip ?
+Yes,
+ls -l /opt/buildroot/build_arm/staging_dir/usr/bin/arm-linux-uclibc-strip
+-rwxr-xr-x  2 root root 2643719 Sep 29 14:35 /opt/buildroot/build_arm/staging_dir/usr/bin/arm-linux-uclibc-strip
+
+But that problem is that "/opt/buildroot/build_arm/staging_dir/usr/bin/arm-linux-uclibc-strip --remove-section=.comment --remove-section=.note"
+trying to execute by shell as a single binary and not as arm-linux-uclibc-strip with parameters.
+
+
+BR,
+Ivan
+--------------------------------
+Embedded Linux engineer,
+Promwad Company: http://www.promwad.com/
+Homepage : http://www.ivankuten.com/
+--------------------------------
