@@ -1,39 +1,134 @@
-From: Ivan Kuten <ivan.kuten@promwad.com>
-Date: Sat, 29 Sep 2007 18:15:56 +0300
-Subject: [Buildroot] Quotes needed in package/Makefile.in
-In-Reply-To: <20070929140537.GN20951@aon.at>
-References: <bcba51a0709282048v34a4ce24y4a984468955d54cb@mail.gmail.com>
-	<20070929100540.GK20951@aon.at> <46FE467B.9040804@promwad.com>
-	<20070929135302.GM20951@aon.at> <46FE68B8.8000709@promwad.com>
-	<20070929140537.GN20951@aon.at>
-Message-ID: <46FE6C2C.30006@promwad.com>
+From: aldot at uclibc.org <aldot@uclibc.org>
+Date: Sat, 29 Sep 2007 07:27:40 -0700 (PDT)
+Subject: [Buildroot] svn commit: trunk/buildroot/package
+Message-ID: <20070929142740.841EEA5D24@busybox.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Bernhard Fischer ?????:
-> On Sat, Sep 29, 2007 at 06:01:12PM +0300, Ivan Kuten wrote:
->> Bernhard Fischer ??????????:
-> 
->>> Do you have
->>> /opt/buildroot/build_arm/staging_dir/usr/bin/arm-linux-uclibc-strip ?
->> Yes,
->> ls -l /opt/buildroot/build_arm/staging_dir/usr/bin/arm-linux-uclibc-strip
->> -rwxr-xr-x  2 root root 2643719 Sep 29 14:35 /opt/buildroot/build_arm/staging_dir/usr/bin/arm-linux-uclibc-strip
->>
->> But that problem is that "/opt/buildroot/build_arm/staging_dir/usr/bin/arm-linux-uclibc-strip --remove-section=.comment --remove-section=.note"
->> trying to execute by shell as a single binary and not as arm-linux-uclibc-strip with parameters.
-> 
-> Please try the attached patchlet.
+Author: aldot
+Date: 2007-09-29 07:27:39 -0700 (Sat, 29 Sep 2007)
+New Revision: 20113
 
-At least strace and dropbear get fixed by this patch. Thanks!
+Log:
+- fix quotes for STRIP.
+  Sorry for any inconvenience this may have caused..
 
-BR,
-Ivan
---------------------------------
-Embedded Linux engineer,
-Promwad Company: http://www.promwad.com/
-Homepage : http://www.ivankuten.com/
---------------------------------
+
+Modified:
+   trunk/buildroot/package/Makefile.in
+
+
+Changeset:
+Modified: trunk/buildroot/package/Makefile.in
+===================================================================
+--- trunk/buildroot/package/Makefile.in	2007-09-29 13:58:30 UTC (rev 20112)
++++ trunk/buildroot/package/Makefile.in	2007-09-29 14:27:39 UTC (rev 20113)
+@@ -109,7 +109,7 @@
+ STRIP_STRIP_ALL:=--strip-all
+ REMOVE_SECTION_COMMENT:=--remove-section=.comment
+ REMOVE_SECTION_NOTE:=--remove-section=.note
+-TARGET_STRIP="$(TARGET_CROSS)strip $(REMOVE_SECTION_COMMENT) $(REMOVE_SECTION_NOTE)"
++TARGET_STRIP=$(TARGET_CROSS)strip $(REMOVE_SECTION_COMMENT) $(REMOVE_SECTION_NOTE)
+ STRIP=$(TARGET_STRIP)
+ endif
+ ifeq ($(BR2_STRIP_sstrip),y)
+@@ -118,11 +118,11 @@
+ STRIP_STRIP_ALL:=
+ REMOVE_SECTION_COMMENT:=
+ REMOVE_SECTION_NOTE:=
+-TARGET_STRIP="$(STAGING_DIR)/usr/bin/$(REAL_GNU_TARGET_NAME)-sstrip"
++TARGET_STRIP=$(STAGING_DIR)/usr/bin/$(REAL_GNU_TARGET_NAME)-sstrip
+ STRIP=$(TARGET_STRIP)
+ endif
+ ifeq ($(BR2_STRIP_none),y)
+-TARGET_STRIP="true -Not_stripping"
++TARGET_STRIP=true -Not_stripping
+ STRIP=$(TARGET_STRIP)
+ endif
+ INSTALL=/usr/bin/install
+@@ -142,18 +142,18 @@
+ GNU_HOST_NAME:=$(HOST_ARCH)-$(subst ",,$(BR2_GNU_BUILD_SUFFIX))
+ #")
+ TARGET_CONFIGURE_OPTS=PATH=$(TARGET_PATH) \
+-		AR=$(TARGET_AR) \
+-		AS=$(TARGET_AS) \
++		AR="$(TARGET_AR)" \
++		AS="$(TARGET_AS)" \
+ 		LD="$(TARGET_LD) $(TARGET_LDFLAGS)" \
+-		NM=$(TARGET_NM) \
++		NM="$(TARGET_NM)" \
+ 		CC="$(TARGET_CC) $(TARGET_CFLAGS)" \
+ 		GCC="$(TARGET_CC) $(TARGET_CFLAGS)" \
+ 		CPP="$(TARGET_CPP) $(TARGET_CFLAGS)" \
+ 		CXX="$(TARGET_CXX) $(TARGET_CXXFLAGS)" \
+ 		FC="$(TARGET_FC) $(TARGET_FCFLAGS)" \
+-		RANLIB=$(TARGET_RANLIB) \
+-		STRIP=$(TARGET_STRIP) \
+-		OBJCOPY=$(TARGET_OBJCOPY) \
++		RANLIB="$(TARGET_RANLIB)" \
++		STRIP="$(TARGET_STRIP)" \
++		OBJCOPY="$(TARGET_OBJCOPY)" \
+ 		AR_FOR_BUILD="$(HOSTAR)" \
+ 		AS_FOR_BUILD="$(HOSTAS)" \
+ 		CC_FOR_BUILD="$(HOSTCC)" \
+@@ -165,13 +165,13 @@
+ 		CXXFLAGS_FOR_BUILD="$(HOST_CXXFLAGS)" \
+ 		LDFLAGS_FOR_BUILD="$(HOST_LDFLAGS)" \
+ 		FCFLAGS_FOR_BUILD="$(HOST_FCFLAGS)" \
+-		AR_FOR_TARGET=$(TARGET_AR) \
+-		AS_FOR_TARGET=$(TARGET_AS) \
+-		CC_FOR_TARGET=$(TARGET_CC) \
+-		LD_FOR_TARGET=$(TARGET_LD) \
+-		NM_FOR_TARGET=$(TARGET_NM) \
+-		DEFAULT_ASSEMBLER=$(TARGET_AS) \
+-		DEFAULT_LINKER=$(TARGET_LD) \
++		AR_FOR_TARGET="$(TARGET_AR)" \
++		AS_FOR_TARGET="$(TARGET_AS)" \
++		CC_FOR_TARGET="$(TARGET_CC)" \
++		LD_FOR_TARGET="$(TARGET_LD)" \
++		NM_FOR_TARGET="$(TARGET_NM)" \
++		DEFAULT_ASSEMBLER="$(TARGET_AS)" \
++		DEFAULT_LINKER="$(TARGET_LD)" \
+ 		PKG_CONFIG_SYSROOT="$(STAGING_DIR)" \
+ 		PKG_CONFIG="$(STAGING_DIR)/usr/bin/pkg-config" \
+ 		PKG_CONFIG_PATH="$(STAGING_DIR)/usr/lib/pkgconfig:$(PKG_CONFIG_PATH)" \
+@@ -199,21 +199,21 @@
+ 		CXXFLAGS_FOR_BUILD="$(HOST_CXXFLAGS)" \
+ 		LDFLAGS_FOR_BUILD="$(HOST_LDFLAGS)" \
+ 		FCFLAGS_FOR_BUILD="$(HOST_FCFLAGS)" \
+-		AR_FOR_TARGET=$(TARGET_AR) \
+-		AS_FOR_TARGET=$(TARGET_AS) \
+-		CC_FOR_TARGET=$(TARGET_CC) \
+-		LD_FOR_TARGET=$(TARGET_LD) \
+-		NM_FOR_TARGET=$(TARGET_NM) \
+-		RANLIB_FOR_TARGET=$(TARGET_RANLIB) \
+-		STRIP_FOR_TARGET=$(TARGET_STRIP) \
+-		OBJCOPY_FOR_TARGET=$(TARGET_OBJCOPY) \
+-		OBJDUMP_FOR_TARGET=$(TARGET_OBJDUMP) \
+-		DEFAULT_ASSEMBLER=$(TARGET_AS) \
+-		DEFAULT_LINKER=$(TARGET_LD) \
+-		ORIGINAL_AS_FOR_TARGET=$(TARGET_AS) \
+-		ORIGINAL_LD_FOR_TARGET=$(TARGET_LD) \
+-		ORIGINAL_NM_FOR_TARGET=$(TARGET_NM) \
+-		ORIGINAL_OBJDUMP_FOR_TARGET=$(TARGET_OBJDUMP)
++		AR_FOR_TARGET="$(TARGET_AR)" \
++		AS_FOR_TARGET="$(TARGET_AS)" \
++		CC_FOR_TARGET="$(TARGET_CC)" \
++		LD_FOR_TARGET="$(TARGET_LD)" \
++		NM_FOR_TARGET="$(TARGET_NM)" \
++		RANLIB_FOR_TARGET="$(TARGET_RANLIB)" \
++		STRIP_FOR_TARGET="$(TARGET_STRIP)" \
++		OBJCOPY_FOR_TARGET="$(TARGET_OBJCOPY)" \
++		OBJDUMP_FOR_TARGET="$(TARGET_OBJDUMP)" \
++		DEFAULT_ASSEMBLER="$(TARGET_AS)" \
++		DEFAULT_LINKER="$(TARGET_LD)" \
++		ORIGINAL_AS_FOR_TARGET="$(TARGET_AS)" \
++		ORIGINAL_LD_FOR_TARGET="$(TARGET_LD)" \
++		ORIGINAL_NM_FOR_TARGET="$(TARGET_NM)" \
++		ORIGINAL_OBJDUMP_FOR_TARGET="$(TARGET_OBJDUMP)"
+ 
+ #######################################################################
+ # settings we need to pass to configure
