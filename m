@@ -1,42 +1,48 @@
-From: Bernhard Fischer <rep.dot.nop@gmail.com>
-Date: Sat, 29 Sep 2007 22:49:14 +0200
-Subject: [Buildroot] --with-abi=<empty> ... during gcc build
-In-Reply-To: <1191097947.5322.282.camel@elrond.atmel.sweden>
-References: <1191087530.5322.275.camel@elrond.atmel.sweden>
-	<20070929182857.GS20951@aon.at>
-	<1191097947.5322.282.camel@elrond.atmel.sweden>
-Message-ID: <20070929204914.GU20951@aon.at>
+From: Ivan Kuten <ivan.kuten@promwad.com>
+Date: Sun, 30 Sep 2007 01:04:26 +0300
+Subject: [Buildroot] undefined reference to `bcopy' - what's changed?
+In-Reply-To: <20070929162659.GP20951@aon.at>
+References: <46FE7D34.6090703@promwad.com> <20070929162659.GP20951@aon.at>
+Message-ID: <46FECBEA.6060005@promwad.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Sat, Sep 29, 2007 at 10:32:26PM +0200, Ulf Samuelsson wrote:
->l?r 2007-09-29 klockan 20:28 +0200 skrev Bernhard Fischer:
->> On Sat, Sep 29, 2007 at 07:38:50PM +0200, Ulf Samuelsson wrote:
->> >gcc configure is passed $(GCC_WITH_ABI)
->> >which is defined as:
->> >toolchain/gcc/Makefile.in:GCC_WITH_ABI:=--with-abi=$(BR2_GCC_TARGET_ABI)
->> 
->> Well, if it is empty it will not be set, so there is something wrong at
->> your end, really.
->> ifneq ($(strip $(subst ",,$(BR2_GCC_TARGET_ABI))),)
->> # ")))
->> GCC_WITH_ABI:=--with-abi=$(BR2_GCC_TARGET_ABI)
->> endif
+Bernhard Fischer ?????:
+> On Sat, Sep 29, 2007 at 07:28:36PM +0300, Ivan Kuten wrote:
+>> Hi,
+>>
+>> I started getting this error. The same config for ARM920T, just doing svn ups and rebuilding buildroot.
+>> Day ago it wasn't there.
+> 
+> You're trying to use a SUSv3 LEGACY function. I'd fix the package, but
+> if you're not converned about bloating your build with LEGACY stuff then
+> you can of course turn on support for legacy in uClibc.
 
-Note that this has nothing to do with that. I have a suspicion (comment
-the EABI selection of the device/Arm/Config.in locally for now.
-Locally!)
+Please apply fix:
+package/x11r7/xlib_libXfont/xlib_libXfont-1.2.7-bcopy-replacement.patch
 
->I think this is why I get an EABI compiler
->even when OABI is selected in buildroot.
- 
-grep -i abi .config
-once again, please.
->
->I fo not know if --with-abi=32 is the right thing to do for ARM
->when OABI is wanted, so if you know it is different, pls change.
+diff -urN xlib_libXfont-1.2.7.orig/src/builtins/file.c xlib_libXfont-1.2.7/src/builtins/file.c
+--- xlib_libXfont-1.2.7.orig/src/builtins/file.c        2007-01-17 23:49:10.000000000 +0200
++++ xlib_libXfont-1.2.7/src/builtins/file.c     2007-09-30 00:52:55.000000000 +0300
+@@ -50,7 +50,7 @@
+     len = BUFFILESIZE;
+     if (len > left)
+        len = left;
+-    bcopy (io->file->bits + io->offset, f->buffer, len);
++    memmove (f->buffer, io->file->bits + io->offset, len);
+     io->offset += len;
+     f->left = len - 1;
+     f->bufp = f->buffer + 1;
 
-I took that unreflected and applied it. Oh well..
+
+Best regards,
+Ivan
+
+--------------------------------
+Embedded Linux engineer,
+Promwad Company: http://www.promwad.com/
+Homepage : http://www.ivankuten.com/
+--------------------------------
