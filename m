@@ -1,23 +1,52 @@
-From: Bernhard Fischer <rep.dot.nop@gmail.com>
-Date: Sat, 29 Sep 2007 11:58:35 +0200
-Subject: [Buildroot] PATCH [2/2] try2: update x11r7 packages to
-	use	NAME_PREFIX when calling AUTOTARGETS
-In-Reply-To: <46FD8ECF.6040802@promwad.com>
-References: <46FD7109.6000500@promwad.com> <20070928203734.GX20951@aon.at>
-	<20070928204535.GY20951@aon.at> <46FD8ECF.6040802@promwad.com>
-Message-ID: <20070929095835.GJ20951@aon.at>
+From: aldot at uclibc.org <aldot@uclibc.org>
+Date: Sat, 29 Sep 2007 03:05:08 -0700 (PDT)
+Subject: [Buildroot] svn commit: trunk/buildroot/package
+Message-ID: <20070929100508.C2CC330073@busybox.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Sat, Sep 29, 2007 at 02:31:27AM +0300, Ivan Kuten wrote:
->> ->>+$(eval $(call AUTOTARGETS,x11r7,xdriver_xf86-video-via))
->> +>>+$(eval $(call AUTOTARGETS,package/x11r7,xdriver_xf86-video-via))
->
->Updated all bulk x11r7/*/*.mk which use AUTOTARGETS.
->Patch is 130KB - it's gzipped to 11KB in the attachement
+Author: aldot
+Date: 2007-09-29 03:05:08 -0700 (Sat, 29 Sep 2007)
+New Revision: 20111
 
-I've merged both as r20110.
-Thanks!
+Log:
+- make sure that strip and all it's arguments are passed if used via
+  STRIP=$(TARGET_STRIP) (i.e. without quoting). Thanks to Dimitry Golubovsky
+  for mentioning this.
+
+
+Modified:
+   trunk/buildroot/package/Makefile.in
+
+
+Changeset:
+Modified: trunk/buildroot/package/Makefile.in
+===================================================================
+--- trunk/buildroot/package/Makefile.in	2007-09-29 09:58:13 UTC (rev 20110)
++++ trunk/buildroot/package/Makefile.in	2007-09-29 10:05:08 UTC (rev 20111)
+@@ -109,7 +109,7 @@
+ STRIP_STRIP_ALL:=--strip-all
+ REMOVE_SECTION_COMMENT:=--remove-section=.comment
+ REMOVE_SECTION_NOTE:=--remove-section=.note
+-TARGET_STRIP=$(TARGET_CROSS)strip $(REMOVE_SECTION_COMMENT) $(REMOVE_SECTION_NOTE)
++TARGET_STRIP="$(TARGET_CROSS)strip $(REMOVE_SECTION_COMMENT) $(REMOVE_SECTION_NOTE)"
+ STRIP=$(TARGET_STRIP)
+ endif
+ ifeq ($(BR2_STRIP_sstrip),y)
+@@ -118,11 +118,11 @@
+ STRIP_STRIP_ALL:=
+ REMOVE_SECTION_COMMENT:=
+ REMOVE_SECTION_NOTE:=
+-TARGET_STRIP=$(STAGING_DIR)/usr/bin/$(REAL_GNU_TARGET_NAME)-sstrip
++TARGET_STRIP="$(STAGING_DIR)/usr/bin/$(REAL_GNU_TARGET_NAME)-sstrip"
+ STRIP=$(TARGET_STRIP)
+ endif
+ ifeq ($(BR2_STRIP_none),y)
+-TARGET_STRIP=true -Not_stripping
++TARGET_STRIP="true -Not_stripping"
+ STRIP=$(TARGET_STRIP)
+ endif
+ INSTALL=/usr/bin/install
