@@ -1,82 +1,28 @@
-From: Ulf Samuelsson <ulf@atmel.com>
-Date: Sat, 29 Sep 2007 19:38:50 +0200
-Subject: [Buildroot] --with-abi=<empty> ... during gcc build
-Message-ID: <1191087530.5322.275.camel@elrond.atmel.sweden>
+From: Bernhard Fischer <rep.dot.nop@gmail.com>
+Date: Sat, 29 Sep 2007 20:24:07 +0200
+Subject: [Buildroot] Recent touch of gcc-uclibc-3.mk [was: Re: svn
+	commit:	trunk/buildroot/toolchain/gcc]
+In-Reply-To: <20070929173259.431383003F@busybox.net>
+References: <20070929173259.431383003F@busybox.net>
+Message-ID: <20070929182407.GR20951@aon.at>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-gcc configure is passed $(GCC_WITH_ABI)
-which is defined as:
-toolchain/gcc/Makefile.in:GCC_WITH_ABI:=--with-abi=$(BR2_GCC_TARGET_ABI)
+On Sat, Sep 29, 2007 at 10:32:59AM -0700, ulf at uclibc.org wrote:
+>Author: ulf
+>Date: 2007-09-29 10:32:58 -0700 (Sat, 29 Sep 2007)
+>New Revision: 20117
+>
+>Log:
+>Use linke to build-time-tools, disable libssp which does not work for cross-compile
 
-target/Config.in.arch defines BR2_GCC_TARGET_ABI
-config BR2_GCC_TARGET_ABI
-        string
-        default apcs-gnu        if BR2_arm_dunno
-        default aapcs-linux     if BR2_arm_dunno
-        default iwmmxt          if BR2_iwmmxt
-        default 32              if BR2_mipsel && BR2_OABI
-        default n32             if BR2_mipsel && BR2_EABI
-        default o64             if BR2_mips && BR2_OABI
-        default 64              if BR2_mips && BR2_ABI64
-        default eabi            if BR2_mips && BR2_EABI
-        default mmixware        if BR2_mmix && BR2_ABI_native
-        default gnu             if BR2_mmix && !BR2_ABI_native
-        default altivec         if BR2_powerpc && BR2_ABI_altivec
+What do you mean by "Use linke"?
 
+Also, generally disabling libssp doesn't sound like a bright idea; I
+don't remember any trouble when cross-compiling from i686->i386-uclibc
+so i'm not too excited by you hardcoding that.
 
-but there is no definition of BR2_OABI or BR2_EABI.
-
-Suggest the following patch
-Index: target/Config.in.arch
-===================================================================
---- target/Config.in.arch       (revision 20117)
-+++ target/Config.in.arch       (arbetskopia)
-@@ -117,8 +117,10 @@
- 
- config BR2_ARM_OABI
-        bool "OABI"
-+       select BR2_OABI
- config BR2_ARM_EABI
-        bool "EABI"
-+       select BR2_EABI
- endchoice
- 
- choice
-@@ -635,6 +637,12 @@
-        default z990            if BR2_s390_z990
-        default z9-109          if BR2_s390_z9_109
- 
-+config BR2_EABI
-+       bool
-+
-+config BR2_OABI
-+       bool
-+
- config BR2_GCC_TARGET_ABI
-        string
-        default apcs-gnu        if BR2_arm_dunno
-@@ -643,10 +651,12 @@
-        default aapcs-linux     if BR2_arm_dunno
-        default iwmmxt          if BR2_iwmmxt
-        default 32              if BR2_mipsel && BR2_OABI
-+       default 32              if BR2_arm && BR2_OABI
-        default n32             if BR2_mipsel && BR2_EABI
-        default o64             if BR2_mips && BR2_OABI
-        default 64              if BR2_mips && BR2_ABI64
-        default eabi            if BR2_mips && BR2_EABI
-+       default eabi            if BR2_arm && BR2_EABI
-        default mmixware        if BR2_mmix && BR2_ABI_native
-        default gnu             if BR2_mmix && !BR2_ABI_native
-        default altivec         if BR2_powerpc && BR2_ABI_altivec
-
-
------------
-It is not complete, since the other ABIs are not defined as well...
-
-
-Best Regards
-Ulf Samuelsson
+Oh, and you checked *thoroughly* not to break gcc-3.4.6, did you?
