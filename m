@@ -1,39 +1,39 @@
-From: Leonid <Leonid@a-k-a.net>
-Date: Fri, 28 Sep 2007 16:24:40 -0700
-Subject: [Buildroot] Buildroot filesystem files' ownership
-In-Reply-To: <1191013693.5322.252.camel@elrond.atmel.sweden>
-References: <1190969812.5322.96.camel@elrond.atmel.sweden><1190996888.5322.198.camel@elrond.atmel.sweden><20070928170109.GO20951@aon.at>
-	<1191013693.5322.252.camel@elrond.atmel.sweden>
-Message-ID: <406A31B117F2734987636D6CCC93EE3C023DD3FE@ehost011-3.exch011.intermedia.net>
+From: Dimitry Golubovsky <golubovsky@gmail.com>
+Date: Fri, 28 Sep 2007 23:48:28 -0400
+Subject: [Buildroot] Quotes needed in package/Makefile.in
+Message-ID: <bcba51a0709282048v34a4ce24y4a984468955d54cb@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi:
+Hi,
 
-Buildroot documentation claims that entire filesystem can be created
-without root priviliges and this is true. However as a result all files
-in filesystem, residing in TARGET_DIR (even device nodes) belongs to
-USER, not to root. While trying to NFS into such filesystem, it doesn't
-work (no console output). I have expected that files which must belong
-to root will be "massaged" by fakeroot but this doesn't happen at least
-for TARGET_DIR.
+Please add quotes in package/Makefile.in, like this:
 
-When I change ownership of all files in the filesystem to root
+=====================================
+--- package/Makefile.in.orig    2007-09-28 23:46:36.000000000 -0400
++++ package/Makefile.in 2007-09-28 23:45:23.000000000 -0400
+@@ -109,7 +109,7 @@
+ STRIP_STRIP_ALL:=--strip-all
+ REMOVE_SECTION_COMMENT:=--remove-section=.comment
+ REMOVE_SECTION_NOTE:=--remove-section=.note
+-TARGET_STRIP=$(TARGET_CROSS)strip $(REMOVE_SECTION_COMMENT)
+$(REMOVE_SECTION_NOTE)
++TARGET_STRIP="$(TARGET_CROSS)strip $(REMOVE_SECTION_COMMENT)
+$(REMOVE_SECTION_NOTE)"
+ STRIP=$(TARGET_STRIP)
+ endif
+ ifeq ($(BR2_STRIP_sstrip),y)
 
-sudo chown -Rf root.root .
+=====================================
 
-NFS is working fine. Questions:
+otherwise --remove-section=.note is treated as a separate command due
+to preceding whitespace.
 
-1) May be filesystem in the TARGET_DIR is not supposed to be used as
-real target FS - one must use .ext, .jffs2,... images? Where I get
-filesystem for NFS then?
+Thank you.
+-- 
+Dimitry Golubovsky
 
-2) What files in the filesystem MUST belong to root - I suspect my
-changing all of them to root is overkill.
-
-Thanks,
-
-Leonid. 
+Anywhere on the Web
