@@ -1,61 +1,36 @@
-From: bugs at busybox.net <bugs@busybox.net>
-Date: Sun, 30 Sep 2007 05:09:30 -0700
-Subject: [Buildroot] [buildroot 0001515]: Buildroot: Build of gmp fails
-Message-ID: <5decea7a933c09640f4debf5d9065c0a@busybox.net>
+From: aldot at uclibc.org <aldot@uclibc.org>
+Date: Sun, 30 Sep 2007 05:42:12 -0700 (PDT)
+Subject: [Buildroot] svn commit: trunk/buildroot/target
+Message-ID: <20070930124212.2B4763004D@busybox.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+Author: aldot
+Date: 2007-09-30 05:42:11 -0700 (Sun, 30 Sep 2007)
+New Revision: 20139
 
-A NOTE has been added to this issue. 
-====================================================================== 
-http://busybox.net/bugs/view.php?id=1515 
-====================================================================== 
-Reported By:                hwstar
-Assigned To:                buildroot
-====================================================================== 
-Project:                    buildroot
-Issue ID:                   1515
-Category:                   Architecture Specific
-Reproducibility:            always
-Severity:                   minor
-Priority:                   normal
-Status:                     assigned
-====================================================================== 
-Date Submitted:             09-29-2007 17:18 PDT
-Last Modified:              09-30-2007 05:09 PDT
-====================================================================== 
-Summary:                    Buildroot: Build of gmp fails
-Description: 
-When building with all options at default except for processor type =i386
-and sub architecture type =i586, gmp refuses to make, and the build
-process aborts with the following error:
+Log:
+- fix typo
 
-/bin/sh: line 1: --remove-section=.comment: command not found
 
-Config file attached.
-====================================================================== 
+Modified:
+   trunk/buildroot/target/Config.in.arch
 
----------------------------------------------------------------------- 
- hwstar - 09-29-07 19:07  
----------------------------------------------------------------------- 
-Buildroot snapshot 9/29/07.
-Host: Ubuntu 7.04 Feisty Fawn 
 
----------------------------------------------------------------------- 
- bernhardf - 09-30-07 05:09  
----------------------------------------------------------------------- 
-Please try with current svn 
-
-Issue History 
-Date Modified   Username       Field                    Change               
-====================================================================== 
-09-29-07 17:18  hwstar         New Issue                                    
-09-29-07 17:18  hwstar         Status                   new => assigned     
-09-29-07 17:18  hwstar         Assigned To               => buildroot       
-09-29-07 17:18  hwstar         File Added: theconfig                        
-09-29-07 19:07  hwstar         Note Added: 0002803                          
-09-30-07 05:09  bernhardf      Note Added: 0002804                          
-======================================================================
+Changeset:
+Modified: trunk/buildroot/target/Config.in.arch
+===================================================================
+--- trunk/buildroot/target/Config.in.arch	2007-09-30 00:08:58 UTC (rev 20138)
++++ trunk/buildroot/target/Config.in.arch	2007-09-30 12:42:11 UTC (rev 20139)
+@@ -142,7 +142,7 @@
+ 	bool "mips 32r2"
+ config BR2_mips_64
+ 	bool "mips 64"
+-config BR2_mips16_
++config BR2_mips_16
+ 	bool "mips 16"
+ endchoice
+ 
