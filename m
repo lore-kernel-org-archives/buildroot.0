@@ -1,51 +1,39 @@
-From: Ulf Samuelsson <ulf@atmel.com>
-Date: Sun, 30 Sep 2007 17:43:26 +0200
-Subject: [Buildroot] --with-abi=<empty> ... during gcc build
-In-Reply-To: <20070929204914.GU20951@aon.at>
-References: <1191087530.5322.275.camel@elrond.atmel.sweden>
-	<20070929182857.GS20951@aon.at>
-	<1191097947.5322.282.camel@elrond.atmel.sweden>
-	<20070929204914.GU20951@aon.at>
-Message-ID: <1191167006.4620.1.camel@elrond.atmel.sweden>
+From: aldot at uclibc.org <aldot@uclibc.org>
+Date: Sun, 30 Sep 2007 11:06:35 -0700 (PDT)
+Subject: [Buildroot] svn commit: trunk/buildroot/target/x86/grub
+Message-ID: <20070930180635.2FE6B300D4@busybox.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-l?r 2007-09-29 klockan 22:49 +0200 skrev Bernhard Fischer:
-> On Sat, Sep 29, 2007 at 10:32:26PM +0200, Ulf Samuelsson wrote:
-> >l?r 2007-09-29 klockan 20:28 +0200 skrev Bernhard Fischer:
-> >> On Sat, Sep 29, 2007 at 07:38:50PM +0200, Ulf Samuelsson wrote:
-> >> >gcc configure is passed $(GCC_WITH_ABI)
-> >> >which is defined as:
-> >> >toolchain/gcc/Makefile.in:GCC_WITH_ABI:=--with-abi=$(BR2_GCC_TARGET_ABI)
-> >> 
-> >> Well, if it is empty it will not be set, so there is something wrong at
-> >> your end, really.
-> >> ifneq ($(strip $(subst ",,$(BR2_GCC_TARGET_ABI))),)
-> >> # ")))
-> >> GCC_WITH_ABI:=--with-abi=$(BR2_GCC_TARGET_ABI)
-> >> endif
-> 
-> Note that this has nothing to do with that. I have a suspicion (comment
-> the EABI selection of the device/Arm/Config.in locally for now.
-> Locally!)
-> 
-> >I think this is why I get an EABI compiler
-> >even when OABI is selected in buildroot.
->  
-> grep -i abi .config
-> once again, please.
-> >
+Author: aldot
+Date: 2007-09-30 11:06:32 -0700 (Sun, 30 Sep 2007)
+New Revision: 20150
 
-Only OABI set, not EABI.
+Log:
+- put a static grub into the staging dir
 
 
-> >I fo not know if --with-abi=32 is the right thing to do for ARM
-> >when OABI is wanted, so if you know it is different, pls change.
-> 
-> I took that unreflected and applied it. Oh well..
+Modified:
+   trunk/buildroot/target/x86/grub/grub.mk
 
-BR
-Ulf Samuelsson
+
+Changeset:
+Modified: trunk/buildroot/target/x86/grub/grub.mk
+===================================================================
+--- trunk/buildroot/target/x86/grub/grub.mk	2007-09-30 17:55:43 UTC (rev 20149)
++++ trunk/buildroot/target/x86/grub/grub.mk	2007-09-30 18:06:32 UTC (rev 20150)
+@@ -97,6 +97,11 @@
+ 
+ $(GRUB_DIR)/$(GRUB_BINARY): $(GRUB_DIR)/.configured
+ 	$(MAKE) CC=$(TARGET_CC) -C $(GRUB_DIR)
++	rm -f $(GRUB_DIR)/$(GRUB_BINARY)
++	$(MAKE) CC=$(TARGET_CC) CFLAGS+=-static -C $(GRUB_DIR)/grub grub
++	mkdir -p $(dir $(STAGING_DIR)/$(GRUB_TARGET_BINARY))
++	mv $(GRUB_DIR)/$(GRUB_BINARY) $(STAGING_DIR)/$(GRUB_TARGET_BINARY).static
++	$(MAKE) CC=$(TARGET_CC) -C $(GRUB_DIR)/grub
+ 
+ $(GRUB_DIR)/.installed: $(GRUB_DIR)/$(GRUB_BINARY)
+ 	cp $(GRUB_DIR)/$(GRUB_BINARY) $(TARGET_DIR)/$(GRUB_TARGET_BINARY)
