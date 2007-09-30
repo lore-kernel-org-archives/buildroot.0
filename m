@@ -1,30 +1,46 @@
-From: Bernhard Fischer <rep.dot.nop@gmail.com>
-Date: Sun, 30 Sep 2007 00:12:03 +0200
-Subject: [Buildroot] --with-abi=<empty> ... during gcc build
-In-Reply-To: <20070929204914.GU20951@aon.at>
-References: <1191087530.5322.275.camel@elrond.atmel.sweden>
-	<20070929182857.GS20951@aon.at>
-	<1191097947.5322.282.camel@elrond.atmel.sweden>
-	<20070929204914.GU20951@aon.at>
-Message-ID: <20070929221203.GY20951@aon.at>
+From: Ivan Kuten <ivan.kuten@promwad.com>
+Date: Sun, 30 Sep 2007 03:17:04 +0300
+Subject: [Buildroot] undefined reference to `bcopy' - what's changed?
+In-Reply-To: <46FED376.9050804@promwad.com>
+References: <46FE7D34.6090703@promwad.com> <20070929162659.GP20951@aon.at>
+	<46FECBEA.6060005@promwad.com> <20070929213129.GV20951@aon.at>
+	<46FED376.9050804@promwad.com>
+Message-ID: <46FEEB00.9090603@promwad.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Sat, Sep 29, 2007 at 10:49:14PM +0200, Bernhard Fischer wrote:
->On Sat, Sep 29, 2007 at 10:32:26PM +0200, Ulf Samuelsson wrote:
-
->>I think this is why I get an EABI compiler
->>even when OABI is selected in buildroot.
+Ivan Kuten ?????:
+> Bernhard Fischer ?????:
+>> On Sun, Sep 30, 2007 at 01:04:26AM +0300, Ivan Kuten wrote:
+>>> Bernhard Fischer ??????????:
+>>> Please apply fix:
+>>> package/x11r7/xlib_libXfont/xlib_libXfont-1.2.7-bcopy-replacement.patch
+>> Merged. Please also push this to the "x11r7/xlib_libXfont" people
+>> upstream..
 > 
->grep -i abi .config
->once again, please.
->>
->>I fo not know if --with-abi=32 is the right thing to do for ARM
->>when OABI is wanted, so if you know it is different, pls change.
+> OK, Thanks!
+> 
 
-I've reverted this and the renaming by now, and for arm and mips the abi
-is fine again (talking about r20130). Please show me your abi settings
-like above.
+Bernhard,
+
+Either mine or your mailer corrupted patch (spaces instead of tab) - and it does not apply.
+In the attachment a correct one.
+
+Best regards,
+Ivan
+
+--------------------------------
+Embedded Linux engineer,
+Promwad Company: http://www.promwad.com/
+Homepage : http://www.ivankuten.com/
+--------------------------------
+-------------- next part --------------
+A non-text attachment was scrubbed...
+Name: xlib_libXfont-1.2.7-bcopy-replacement.patch
+Type: text/x-diff
+Size: 533 bytes
+Desc: not available
+Url : http://busybox.net/lists/buildroot/attachments/20070930/9cb9aca6/attachment.bin 
