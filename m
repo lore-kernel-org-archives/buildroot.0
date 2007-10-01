@@ -1,36 +1,48 @@
-From: aldot at uclibc.org <aldot@uclibc.org>
-Date: Mon,  1 Oct 2007 14:06:53 -0700 (PDT)
+From: ulf at uclibc.org <ulf@uclibc.org>
+Date: Mon,  1 Oct 2007 14:12:54 -0700 (PDT)
 Subject: [Buildroot] svn commit: trunk/buildroot/toolchain/gcc
-Message-ID: <20071001210653.94143A65C4@busybox.net>
+Message-ID: <20071001211254.B1D12A680F@busybox.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Author: aldot
-Date: 2007-10-01 14:06:50 -0700 (Mon, 01 Oct 2007)
-New Revision: 20165
+Author: ulf
+Date: 2007-10-01 14:12:54 -0700 (Mon, 01 Oct 2007)
+New Revision: 20166
 
 Log:
-- remove misplaced comment
-
+Use the right Config for AVR32 gcc build
 
 Modified:
-   trunk/buildroot/toolchain/gcc/gcc-uclibc-4.x.mk
+   trunk/buildroot/toolchain/gcc/Makefile.in
 
 
 Changeset:
-Modified: trunk/buildroot/toolchain/gcc/gcc-uclibc-4.x.mk
+Modified: trunk/buildroot/toolchain/gcc/Makefile.in
 ===================================================================
---- trunk/buildroot/toolchain/gcc/gcc-uclibc-4.x.mk	2007-10-01 18:04:42 UTC (rev 20164)
-+++ trunk/buildroot/toolchain/gcc/gcc-uclibc-4.x.mk	2007-10-01 21:06:50 UTC (rev 20165)
-@@ -54,7 +54,7 @@
- GCC_DIR:=$(TOOL_BUILD_DIR)/gcc-$(GCC_OFFICIAL_VER)
- GCC_CAT:=$(BZCAT)
- GCC_STRIP_HOST_BINARIES:=nope
--GCC_SRC_DIR=$(GCC_DIR) # for stage2 and stage3 compilers. Usually same as stage1
-+GCC_SRC_DIR:=$(GCC_DIR)
+--- trunk/buildroot/toolchain/gcc/Makefile.in	2007-10-01 21:06:50 UTC (rev 20165)
++++ trunk/buildroot/toolchain/gcc/Makefile.in	2007-10-01 21:12:54 UTC (rev 20166)
+@@ -14,9 +14,9 @@
+ # AVR32 GCC configuration
+ ifeq ($(strip $(BR2_avr32)),y)
+ EXTRA_GCC_CONFIG_OPTIONS+=--disable-libmudflap
+-EXTRA_TARGET_GCC_CONFIG_OPTIONS+=--disable-libssp
+-EXTRA_TARGET_GCC_CONFIG_OPTIONS+=--with-build-time-tools=$(STAGING_DIR)/$(REAL_GNU_TARGET_NAME)/bin \
+-#EXTRA_TARGET_GCC_CONFIG_OPTIONS+=--with-as=$(TARGET_CROSS)as
++EXTRA_GCC_CONFIG_OPTIONS+=--disable-libssp
++EXTRA_GCC_CONFIG_OPTIONS+=--with-build-time-tools=$(STAGING_DIR)/$(REAL_GNU_TARGET_NAME)/bin \
++#EXTRA_GCC_CONFIG_OPTIONS+=--with-as=$(TARGET_CROSS)as
+ endif
  
- ifeq ($(findstring x3.,x$(GCC_VERSION)),x3.)
- GCC_NO_MPFR:=y
+ ifeq ($(strip $(subst ",, $(BR2_GCC_IS_SNAP))),y)
+@@ -84,7 +84,7 @@
+ EXTRA_TARGET_GCC_CONFIG_OPTIONS+=--disable-libmudflap
+ EXTRA_TARGET_GCC_CONFIG_OPTIONS+=--disable-libssp
+ EXTRA_TARGET_GCC_CONFIG_OPTIONS+=--with-build-time-tools=$(STAGING_DIR)/$(REAL_GNU_TARGET_NAME)/bin \
+-#EXTRA_TARGET_GCC_CONFIG_OPTIONS+=--with-as=$(TARGET_CROSS)as
++EXTRA_TARGET_GCC_CONFIG_OPTIONS+=--with-as=$(TARGET_CROSS)as
+ endif
+ 
+ 
