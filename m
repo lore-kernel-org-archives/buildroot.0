@@ -1,54 +1,36 @@
-From: rafael2k <rafael@riseup.net>
-Date: Mon, 1 Oct 2007 17:40:00 -0300
-Subject: [Buildroot] x11r7 build error
-In-Reply-To: <47016354.9000203@promwad.com>
-References: <200710011537.03174.rafael@riseup.net>
-	<47016354.9000203@promwad.com>
-Message-ID: <200710011740.03055.rafael@riseup.net>
+From: aldot at uclibc.org <aldot@uclibc.org>
+Date: Mon,  1 Oct 2007 14:06:53 -0700 (PDT)
+Subject: [Buildroot] svn commit: trunk/buildroot/toolchain/gcc
+Message-ID: <20071001210653.94143A65C4@busybox.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi all,
+Author: aldot
+Date: 2007-10-01 14:06:50 -0700 (Mon, 01 Oct 2007)
+New Revision: 20165
 
-Em Seg 01 Out 2007, Ivan Kuten escreveu:
-> rafael2k ?????:
-> > I'm triyng to compile x11r7 in a i386 host to a i386 target.
-> >
-> > the following error appears to me:
->
-> > /home/rafael2k/programs/gnuden/buildroot/build_i386/staging_dir/usr/bin/.
-> >./lib/gcc/i386-linux-uclibc/4.2.1/../../../../i386-linux-uclibc/bin/ld:
-> > cannot find /lib/libc.so.0
-> > collect2: ld returned 1 exit status
-> > libtool: install: error: relink `libxcb-xvmc.la' with the above command
-> > before installing it
->
-> This is what I get for arm arch: when relinking it looks in wrong location
-> /usr/lib for libc library, however I do not get error because linker
-> recognizes incompatible format and skips library:
-
-is this re-linking step really necessary?
-i really don't have experience w/ the xorg compilation.
-anyone has any advice to me?
+Log:
+- remove misplaced comment
 
 
-thx,
-rafael diniz
+Modified:
+   trunk/buildroot/toolchain/gcc/gcc-uclibc-4.x.mk
 
--- 
-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-
-Ci?ncia da Computa??o @  Unicamp
-R?dio Muda, radiolivre.org, TV Piolho, tvlivre.org, www.midiaindependente.org
-Chave PGP: http://pgp.mit.edu:11371/pks/lookup?op=get&search=0x2FF86098
-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-
 
--------------- next part --------------
-A non-text attachment was scrubbed...
-Name: not available
-Type: application/pgp-signature
-Size: 189 bytes
-Desc: This is a digitally signed message part.
-Url : http://busybox.net/lists/buildroot/attachments/20071001/849bcbb1/attachment.pgp 
+Changeset:
+Modified: trunk/buildroot/toolchain/gcc/gcc-uclibc-4.x.mk
+===================================================================
+--- trunk/buildroot/toolchain/gcc/gcc-uclibc-4.x.mk	2007-10-01 18:04:42 UTC (rev 20164)
++++ trunk/buildroot/toolchain/gcc/gcc-uclibc-4.x.mk	2007-10-01 21:06:50 UTC (rev 20165)
+@@ -54,7 +54,7 @@
+ GCC_DIR:=$(TOOL_BUILD_DIR)/gcc-$(GCC_OFFICIAL_VER)
+ GCC_CAT:=$(BZCAT)
+ GCC_STRIP_HOST_BINARIES:=nope
+-GCC_SRC_DIR=$(GCC_DIR) # for stage2 and stage3 compilers. Usually same as stage1
++GCC_SRC_DIR:=$(GCC_DIR)
+ 
+ ifeq ($(findstring x3.,x$(GCC_VERSION)),x3.)
+ GCC_NO_MPFR:=y
