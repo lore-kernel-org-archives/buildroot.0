@@ -1,53 +1,38 @@
-From: bugs at busybox.net <bugs@busybox.net>
-Date: Wed, 31 Oct 2007 22:52:33 -0700
-Subject: [Buildroot] [buildroot 0001568]: "make BOARD=xyz menuconfig" /
-	oldconfig etc does not work
-Message-ID: <7e2c6439e3f37477e47880a753fc585b@bugs.uclibc.org>
+From: aldot at uclibc.org <aldot@uclibc.org>
+Date: Mon,  1 Oct 2007 01:05:28 -0700 (PDT)
+Subject: [Buildroot] svn commit: trunk/buildroot/package/matchbox
+Message-ID: <20071001080528.BA0CEA4D16@busybox.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+Author: aldot
+Date: 2007-10-01 01:05:26 -0700 (Mon, 01 Oct 2007)
+New Revision: 20154
 
-The following issue has been SUBMITTED. 
-====================================================================== 
-http://busybox.net/bugs/view.php?id=1568 
-====================================================================== 
-Reported By:                hmoffatt
-Assigned To:                buildroot
-====================================================================== 
-Project:                    buildroot
-Issue ID:                   1568
-Category:                   Other
-Reproducibility:            always
-Severity:                   minor
-Priority:                   normal
-Status:                     assigned
-====================================================================== 
-Date Submitted:             10-31-2007 22:52 PDT
-Last Modified:              10-31-2007 22:52 PDT
-====================================================================== 
-Summary:                    "make BOARD=xyz menuconfig" / oldconfig etc does not
-work
-Description: 
-buildroot allows you to do "make BOARD=xyz world" to compile using the
-configuration file in local/xyz/xyz.config, but you can't call menuconfig,
-oldconfig etc in this way.
+Log:
+- comment out non-existing source
 
-The problem is that the name of the configuration file isn't being passed
-to the kconfig tool (package/config/conf). kconfig uses $BUILDROOT_CONFIG,
-so all that is needed is to set that environment variable.
 
-Patch attached fixes this so that "make BOARD=xyz oldconfig" works.
-====================================================================== 
+Modified:
+   trunk/buildroot/package/matchbox/matchbox.mk
 
-Issue History 
-Date Modified   Username       Field                    Change               
-====================================================================== 
-10-31-07 22:52  hmoffatt       New Issue                                    
-10-31-07 22:52  hmoffatt       Status                   new => assigned     
-10-31-07 22:52  hmoffatt       Assigned To               => buildroot       
-10-31-07 22:52  hmoffatt       File Added: br-board-config.diff                 
-  
-======================================================================
+
+Changeset:
+Modified: trunk/buildroot/package/matchbox/matchbox.mk
+===================================================================
+--- trunk/buildroot/package/matchbox/matchbox.mk	2007-09-30 23:50:48 UTC (rev 20153)
++++ trunk/buildroot/package/matchbox/matchbox.mk	2007-10-01 08:05:26 UTC (rev 20154)
+@@ -84,8 +84,8 @@
+ $(DL_DIR)/$(MATCHBOX_SM_SOURCE):
+ 	$(WGET) -P $(DL_DIR) $(MATCHBOX_SITE)/$(MATCHBOX_SM_BIN)/$(MATCHBOX_SM_MAJORVER)/$(MATCHBOX_SM_SOURCE)
+ 
+-$(DL_DIR)/$(MATCHBOX_DM_SOURCE):
+-	$(WGET) -P $(DL_DIR) $(MATCHBOX_SITE)/$(MATCHBOX_SM_BIN)/$(MATCHBOX_SM_MAJORVER)/$(MATCHBOX_SM_SOURCE)
++#$(DL_DIR)/$(MATCHBOX_DM_SOURCE):
++#	$(WGET) -P $(DL_DIR) $(MATCHBOX_SITE)/$(MATCHBOX_SM_BIN)/$(MATCHBOX_SM_MAJORVER)/$(MATCHBOX_SM_SOURCE)
+ 
+ $(DL_DIR)/$(MATCHBOX_CN_SOURCE):
+ 	$(WGET) -P $(DL_DIR) $(MATCHBOX_SITE)/$(MATCHBOX_CN_BIN)/$(MATCHBOX_CN_MAJORVER)/$(MATCHBOX_CN_SOURCE)
