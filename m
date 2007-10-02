@@ -1,43 +1,70 @@
-From: Brian Austin <brian.austin@cirrus.com>
-Date: Tue, 02 Oct 2007 16:51:40 -0500
+From: Ivan Kuten <ivan.kuten@promwad.com>
+Date: Wed, 03 Oct 2007 02:42:24 +0300
 Subject: [Buildroot] Adding Cirrus  EP93XX  ARM to buildroot
-Message-ID: <1191361900.4187.48.camel@localhost.localdomain>
+In-Reply-To: <1191361900.4187.48.camel@localhost.localdomain>
+References: <1191361900.4187.48.camel@localhost.localdomain>
+Message-ID: <4702D760.4020707@promwad.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-All,
+Brian Austin ?????:
+> All,
+> 
+> I would like to start the process of adding the Cirrus Logic EP93XX ARM9
+> family to buildroot.
+> 
+> couple things about the 93xx.
+> 
+> 1.  Maverick Crunch  FPU.  I have patches for GCC/uClibc to enable
+> Crunch FPU.
+> 
+> 2. Linux Kernel.  We have a patch for several current kernel versions up
+> to 2.6.21.5.
+> 
+> I also have patches for DirectFB which I submitted last week and QT,
+> TSLIB, and other BSP software which have not been submitted.
+> 
+> I also think there is a section for bootloaders as well?
+> 
+> Qustion is,  where to start?
+> 
+> Right now we give out a modified version of buildroot for the prebuilt
+> toolchain and a buildroot system for building the kernel, u-boot,
+> redboot (ecos), and BSP software.  But I want it to go into ya'lls to
+> make things more consistent.  it's hard for me to do everything here.
+> We use DirectFB/GTK now for our graphics and I had to change alot to get
+> it to build and install correctly to pass SQA testing, so hopefully that
+> can be of use as well.
+> 
+> anyway comments and suggestions on where to start would be great.
+> 
+> Regards,
+> Brian Austin
+> Cirrus Logic Inc. 
+> 
+> 
 
-I would like to start the process of adding the Cirrus Logic EP93XX ARM9
-family to buildroot.
+Hi Brian,
 
-couple things about the 93xx.
+That's great that Cirrus decided to merge its verion of buildroot with mainline.
+I was thinking to start adding Cirrus stuff to buildroot by myself, because we use EP93xx
+ but need packages present in mainline buildroot.
 
-1.  Maverick Crunch  FPU.  I have patches for GCC/uClibc to enable
-Crunch FPU.
+Now that's a good chance to join efforts so that Cirrus EP93xx integration into buildroot go quickly.
 
-2. Linux Kernel.  We have a patch for several current kernel versions up
-to 2.6.21.5.
+I'd suggest you to take a look into target/device dir
+and create layout for target/device/Cirrus
 
-I also have patches for DirectFB which I submitted last week and QT,
-TSLIB, and other BSP software which have not been submitted.
+And start posting your patches. I think patches for packages are not very Cirrus CPU specific.
 
-I also think there is a section for bootloaders as well?
+Best regards,
+Ivan
 
-Qustion is,  where to start?
-
-Right now we give out a modified version of buildroot for the prebuilt
-toolchain and a buildroot system for building the kernel, u-boot,
-redboot (ecos), and BSP software.  But I want it to go into ya'lls to
-make things more consistent.  it's hard for me to do everything here.
-We use DirectFB/GTK now for our graphics and I had to change alot to get
-it to build and install correctly to pass SQA testing, so hopefully that
-can be of use as well.
-
-anyway comments and suggestions on where to start would be great.
-
-Regards,
-Brian Austin
-Cirrus Logic Inc. 
+--------------------------------
+Embedded Linux engineer,
+Promwad Company: http://www.promwad.com/
+Homepage : http://www.ivankuten.com/
+--------------------------------
