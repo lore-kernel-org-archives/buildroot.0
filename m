@@ -1,8 +1,8 @@
 From: bugs at busybox.net <bugs@busybox.net>
-Date: Mon, 1 Oct 2007 21:28:45 -0700
-Subject: [Buildroot] [buildroot 0001516]: Buildroot: fakeroot 1.7.1 no
-	longer available from Debian
-Message-ID: <4d39f598ac684a2cbfac657a40d9c517@bugs.uclibc.org>
+Date: Tue, 2 Oct 2007 00:05:58 -0700
+Subject: [Buildroot] [buildroot 0001517]: some packages didn't honor
+	TARGET_CFLAGS and TARGET_LDFLAGS
+Message-ID: <2e424a1c02c9e03b7b08280f1e895d5c@bugs.uclibc.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -12,37 +12,36 @@ To: buildroot@busybox.net
 
 The following issue has been SUBMITTED. 
 ====================================================================== 
-http://busybox.net/bugs/view.php?id=1516 
+http://busybox.net/bugs/view.php?id=1517 
 ====================================================================== 
-Reported By:                hwstar
+Reported By:                shuhao_chang
 Assigned To:                buildroot
 ====================================================================== 
 Project:                    buildroot
-Issue ID:                   1516
+Issue ID:                   1517
 Category:                   Architecture Specific
 Reproducibility:            always
-Severity:                   minor
+Severity:                   major
 Priority:                   normal
 Status:                     assigned
 ====================================================================== 
-Date Submitted:             10-01-2007 21:28 PDT
-Last Modified:              10-01-2007 21:28 PDT
+Date Submitted:             10-02-2007 00:05 PDT
+Last Modified:              10-02-2007 00:05 PDT
 ====================================================================== 
-Summary:                    Buildroot:  fakeroot 1.7.1 no longer available from
-Debian
+Summary:                    some packages didn't honor TARGET_CFLAGS and
+TARGET_LDFLAGS
 Description: 
-Fakeroot 1.7.1 is no longer available for download Debian and has been
-replaced the version 1.8. 
-
-I changed fakeroot.mk to use version 1.8, and it compiles correctly, and
-the patches did not fail. 
+When using prebuild external toolchain, some packages build failed due to
+not honor TARGET_CFLAGS and TARGET_LDFLAGS.
 
 ====================================================================== 
 
 Issue History 
 Date Modified   Username       Field                    Change               
 ====================================================================== 
-10-01-07 21:28  hwstar         New Issue                                    
-10-01-07 21:28  hwstar         Status                   new => assigned     
-10-01-07 21:28  hwstar         Assigned To               => buildroot       
+10-02-07 00:05  shuhao_chang   New Issue                                    
+10-02-07 00:05  shuhao_chang   Status                   new => assigned     
+10-02-07 00:05  shuhao_chang   Assigned To               => buildroot       
+10-02-07 00:05  shuhao_chang   File Added: cflags_ldflags.diff                  
+ 
 ======================================================================
