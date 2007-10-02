@@ -1,47 +1,40 @@
-From: ashok vardhan <rashokvardhan@yahoo.co.in>
-Date: Mon, 1 Oct 2007 11:50:58 +0100 (BST)
-Subject: [Buildroot] Error with building ARM cross toolchain using buildroot
-Message-ID: <543018.86390.qm@web7906.mail.in.yahoo.com>
+From: aldot at uclibc.org <aldot@uclibc.org>
+Date: Tue,  2 Oct 2007 08:38:28 -0700 (PDT)
+Subject: [Buildroot] svn commit: trunk/buildroot/package/libelf
+Message-ID: <20071002153828.CD59EA493F@busybox.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Sir/Madam,
- I did the things as suggested by Sir/Madam Brian Austin. I successfully downloaded and  I extracted the tar file. I shown a brief things regarding this below.............
+Author: aldot
+Date: 2007-10-02 08:38:27 -0700 (Tue, 02 Oct 2007)
+New Revision: 20174
+
+Log:
+- make sure that the target's usr/include dir exists when installing the headers
+  It would make sense to provide a $(PREREQ_TARGETDIR_USR_INCLUDE) prerequisite that expands to $(TARGET_DIR)/usr/include
+  if installing any headers was requested to fix this in a generic manner..
+
+
+Modified:
+   trunk/buildroot/package/libelf/libelf.mk
+
+
+Changeset:
+Modified: trunk/buildroot/package/libelf/libelf.mk
+===================================================================
+--- trunk/buildroot/package/libelf/libelf.mk	2007-10-02 11:25:37 UTC (rev 20173)
++++ trunk/buildroot/package/libelf/libelf.mk	2007-10-02 15:38:27 UTC (rev 20174)
+@@ -57,7 +57,9 @@
  
- http://buildroot.uclibc.org/downloads/snapshots/buildroot-snapshot.tar.bz2, buildroot  buildroot-snapshot.tar.bz2
+ ifeq ($(BR2_PACKAGE_LIBELF_HEADERS),y)
+ $(TARGET_DIR)/usr/lib/libelf.so.$(LIBELF_VERSION): $(STAGING_DIR)/usr/lib/libelf.a
+-	$(INSTALL) $(STAGING_DIR)/usr/lib/libelf* $(@D)
++	mkdir -p $(@D)
++	cp -dpf $(STAGING_DIR)/usr/lib/libelf* $(@D)
++	mkdir -p $(TARGET_DIR)/usr/include
+ 	cp -dpR $(STAGING_DIR)/usr/include/{gelf.h,libelf*} $(TARGET_DIR)/usr/include/
+ 	$(STRIPCMD) $(STRIP_STRIP_UNNEEDED) $@
  
- [root at knowx4 buildroot]# make menuconfig
- 
- [root at knowx4 buildroot]# make
- ALL tar files related to the configuration done by me are downloaded.
- 
- rm -rf /root/porting/tools/buildroot/project_build_arm/uclibc/buildroot-config
- mkdir -p /root/porting/tools/buildroot/project_build_arm/uclibc
- cp -dpRf package/config/buildroot-config /root/porting/tools/buildroot/project_build_arm/uclibc/buildroot-config
- cp -dpf  /root/porting/tools/buildroot/project_build_arm/uclibc/linux-2.6.22.1/.config
- cp: missing destination file
- Try `cp --help' for more information.
- make: *** [/root/porting/tools/buildroot/project_build_arm/uclibc/linux-2.6.22.1/.configured] Error 1
- 
- [root at knowx4 buildroot]# ls
- binaries   Config.in  docs      package  project_build_arm  TODO       toolchain_build_arm
- build_arm  dl         Makefile  project  target             toolchain
- 
- Please give some suggestive solutions regarding this error............
- Thanking You Sir/Madam.
- 
- Regards,
- Ashok   
- 
- 
- 
- 
-       
----------------------------------
- Now you can chat without downloading messenger. Click here to know how.
--------------- next part --------------
-An HTML attachment was scrubbed...
-URL: http://busybox.net/lists/buildroot/attachments/20071001/dc731e99/attachment.htm 
