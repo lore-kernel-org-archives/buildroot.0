@@ -1,36 +1,57 @@
-From: aldot at uclibc.org <aldot@uclibc.org>
-Date: Tue,  2 Oct 2007 04:06:44 -0700 (PDT)
-Subject: [Buildroot] svn commit: trunk/buildroot/package/fakeroot
-Message-ID: <20071002110644.0A44FA60CE@busybox.net>
+From: bugs at busybox.net <bugs@busybox.net>
+Date: Tue, 2 Oct 2007 04:06:56 -0700
+Subject: [Buildroot] [buildroot 0001516]: Buildroot: fakeroot 1.7.1 no
+	longer available from Debian
+Message-ID: <f0f7907f781e16a3b1d7dbf14d2e00d8@busybox.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Author: aldot
-Date: 2007-10-02 04:06:43 -0700 (Tue, 02 Oct 2007)
-New Revision: 20171
 
-Log:
-- bump version
+The following issue has been CLOSED 
+====================================================================== 
+http://busybox.net/bugs/view.php?id=1516 
+====================================================================== 
+Reported By:                hwstar
+Assigned To:                buildroot
+====================================================================== 
+Project:                    buildroot
+Issue ID:                   1516
+Category:                   Architecture Specific
+Reproducibility:            always
+Severity:                   minor
+Priority:                   normal
+Status:                     closed
+Resolution:                 open
+Fixed in Version:           
+====================================================================== 
+Date Submitted:             10-01-2007 21:28 PDT
+Last Modified:              10-02-2007 04:06 PDT
+====================================================================== 
+Summary:                    Buildroot:  fakeroot 1.7.1 no longer available from
+Debian
+Description: 
+Fakeroot 1.7.1 is no longer available for download Debian and has been
+replaced the version 1.8. 
 
+I changed fakeroot.mk to use version 1.8, and it compiles correctly, and
+the patches did not fail. 
 
-Modified:
-   trunk/buildroot/package/fakeroot/fakeroot.mk
+====================================================================== 
 
+---------------------------------------------------------------------- 
+ bernhardf - 10-02-07 04:06  
+---------------------------------------------------------------------- 
+fixed in svn. Thanks 
 
-Changeset:
-Modified: trunk/buildroot/package/fakeroot/fakeroot.mk
-===================================================================
---- trunk/buildroot/package/fakeroot/fakeroot.mk	2007-10-02 10:17:56 UTC (rev 20170)
-+++ trunk/buildroot/package/fakeroot/fakeroot.mk	2007-10-02 11:06:43 UTC (rev 20171)
-@@ -3,7 +3,7 @@
- # fakeroot
- #
- #############################################################
--FAKEROOT_VERSION:=1.7.1
-+FAKEROOT_VERSION:=1.8
- FAKEROOT_SOURCE:=fakeroot_$(FAKEROOT_VERSION).tar.gz
- FAKEROOT_SITE:=http://ftp.debian.org/debian/pool/main/f/fakeroot
- FAKEROOT_CAT:=$(ZCAT)
+Issue History 
+Date Modified   Username       Field                    Change               
+====================================================================== 
+10-01-07 21:28  hwstar         New Issue                                    
+10-01-07 21:28  hwstar         Status                   new => assigned     
+10-01-07 21:28  hwstar         Assigned To               => buildroot       
+10-02-07 04:06  bernhardf      Status                   assigned => closed  
+10-02-07 04:06  bernhardf      Note Added: 0002806                          
+======================================================================
