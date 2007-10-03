@@ -1,47 +1,50 @@
-From: Karl Auerbach <karl@cavebear.com>
-Date: Wed, 03 Oct 2007 15:32:13 -0700
-Subject: [Buildroot] Several issues by a buildroot newbie...
-Message-ID: <4704186D.6070303@cavebear.com>
+From: Leonid <Leonid@a-k-a.net>
+Date: Wed, 3 Oct 2007 16:55:54 -0700
+Subject: [Buildroot] GDB for threads.
+In-Reply-To: <4704186D.6070303@cavebear.com>
+References: <4704186D.6070303@cavebear.com>
+Message-ID: <406A31B117F2734987636D6CCC93EE3C0246F090@ehost011-3.exch011.intermedia.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-I'm fairly new to buildroot so please excuse me if I inadvertently touch 
-something that has been raised previously:
+Hi:
 
-1. Undefined reference in uClibc:
-    In function `__libc_pthread_init':
-    libc_pthread_init.c:(.text+0xf): undefined reference to
-    `__libc_multiple_threads'
+GDB on my target says it cannot debug threads:
 
-    I dug through the code and it appears that the missing variable is 
-used as a return value for __libc_pthread_init() but that that return 
-value appears to be squirreled away and perhaps never used.
+dlopen failed on 'libthread_db.so.1' - File not found
+GDB will not be able to debug pthreads.
 
-   In any event, this is, I suspect the cause of the next item, below.
+GNU gdb 6.3
+Copyright 2004 Free Software Foundation, Inc.
+GDB is free software, covered by the GNU General Public License, and you
+are
+welcome to change it and/or distribute copies of it under certain
+conditions.
+Type "show copying" to see the conditions.
+There is absolutely no warranty for GDB.  Type "show warranty" for
+details.
+This GDB was configured as "arm-linux".
+(gdb)
 
-2. Python segfaults when being loaded.  For various reasons I'm very 
-suspicions that the uClibc dynamic library loader is segfaulting.  I've 
-tried to build a static image of Python but I can't because of the 
-unresolved in the prior item.
+I have chosen thread library debugging option and have re-built
+toolchain:
 
-I had a similar problem with sudo and all the openssh tools with the 
-stable version of uClibc.  The segfaulting of those, but not of Python, 
-went away with the snapshot version of uClibc.
+Toolchain Options -->
+  [x] Thread library debugging
+ 
+The build went through but as a result I see broken link in the lib
+directory of my toolchain and no real library:
 
-   Python did compile and run quite nicely on my year old snapshot of 
-buildroot, but it's effectively dead now.
+rwxr-xr-x  1 leonid leonid   26330 2007-10-03 14:27 libssp.so.0.0.0
+lrwxrwxrwx  1 leonid leonid      17 2007-10-03 14:24 libthread_db.so ->
+libthread_db.so.1
+-rw-r--r--  1 leonid leonid  309856 2007-10-03 14:24 libuClibc-0.9.29.so
+-rw-r--r--  1 leonid leonid    4656 2007-10-03 14:24 libutil-0.9.29.so
+-
 
-3. The sudo sources aren't available via the URL given in the 
-package/sudo/sudo.mk.  The site, http://www.courtesan.com/sudo/dist, has 
-upgraded to a newer version and the older one to be downloaded appears 
-no longer on that site.
+Thanks,
 
-4. The lockfile-progs.c (in package lockfile-progs) uses rindex() but 
-does not include the correct header file that defines it.  This can be 
-repaired by a patch that either changes rindex() to strrchr() or 
-including the correct header.  (I did the former.)
-
-		--karl--
+Leonid.
