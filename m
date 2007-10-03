@@ -1,99 +1,82 @@
-From: bugs at busybox.net <bugs@busybox.net>
-Date: Tue, 2 Oct 2007 18:13:39 -0700
-Subject: [Buildroot] [buildroot 0001479]: enabling coreutils in revision
-	19733 results in fatal build errors
-Message-ID: <b8998e7f40808e1b851d1e7f960349a1@bugs.uclibc.org>
+From: Leonid <Leonid@a-k-a.net>
+Date: Wed, 3 Oct 2007 00:45:47 -0700
+Subject: [Buildroot] Using pre-built BUILDROOT toolchain as external
+	toolchain.
+In-Reply-To: <491152.8985.qm@web72412.mail.tp2.yahoo.com>
+References: <491152.8985.qm@web72412.mail.tp2.yahoo.com>
+Message-ID: <406A31B117F2734987636D6CCC93EE3CB05B9E@ehost011-3.exch011.intermedia.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+Hi:
 
-A NOTE has been added to this issue. 
-====================================================================== 
-http://busybox.net/bugs/view.php?id=1479 
-====================================================================== 
-Reported By:                spditner
-Assigned To:                buildroot
-====================================================================== 
-Project:                    buildroot
-Issue ID:                   1479
-Category:                   Architecture Specific
-Reproducibility:            always
-Severity:                   major
-Priority:                   normal
-Status:                     assigned
-====================================================================== 
-Date Submitted:             08-29-2007 12:05 PDT
-Last Modified:              10-02-2007 18:13 PDT
-====================================================================== 
-Summary:                    enabling coreutils in revision 19733 results in
-fatal build errors
-Description: 
-with BR2_PACKAGE_COREUTILS=y,
-make fails with the following:
+Thank you very much for your advice, I'll try. Could you please explain this little trick of yours? You replace bin by usr/bin (bin becomes soft link, pointing to usr/bin). However (at least in my build) usr/bin is almost empty all binaries being in bin:
 
-In file included from mbchar.h:157,
-                 from mbchar.c:22:
-./wchar.h:41:12: error: empty filename in #include
-In file included from mbchar.c:22:
-mbchar.h:242: error: expected ')' before 'wc'
-make[3]: *** [mbchar.o] Error 1
-make[3]: Leaving directory
-`/home/simon/buildroot/build_i386/coreutils-6.9/lib'
-make[2]: *** [all] Error 2
-make[2]: Leaving directory
-`/home/simon/buildroot/build_i386/coreutils-6.9/lib'
-make[1]: *** [all-recursive] Error 1
-make[1]: Leaving directory
-`/home/simon/buildroot/build_i386/coreutils-6.9'
-make: *** [/home/simon/buildroot/build_i386/coreutils-6.9/src/vdir] Error
-2
+[leonid at jaipur buildroot]$ ls ../../../arm-gcc-uclibc/usr/bin/
+faked  fakeroot
+[leonid at jaipur buildroot]$ ls ../../../arm-gcc-uclibc/bin/
+arm-linux-addr2line  arm-linux-ldconfig          arm-linux-uclibc-ar         arm-linux-uclibc-ldd
+arm-linux-ar         arm-linux-ldd               arm-linux-uclibc-as         arm-linux-uclibc-nm
+arm-linux-as         arm-linux-nm                arm-linux-uclibc-cc         arm-linux-uclibc-objcopy
+arm-linux-cc         arm-linux-objcopy           arm-linux-uclibc-c++filt    arm-linux-uclibc-objdump
+arm-linux-c++filt    arm-linux-objdump           arm-linux-uclibc-cpp        arm-linux-uclibc-ranlib
+arm-linux-cpp        arm-linux-ranlib            arm-linux-uclibc-gcc        arm-linux-uclibc-readelf
+arm-linux-gcc        arm-linux-readelf           arm-linux-uclibc-gcc-4.1.2  arm-linux-uclibc-size
+arm-linux-gcc-4.1.2  arm-linux-size              arm-linux-uclibc-gccbug     arm-linux-uclibc-strings
+arm-linux-gccbug     arm-linux-strings           arm-linux-uclibc-gcov       arm-linux-uclibc-strip
+arm-linux-gcov       arm-linux-strip             arm-linux-uclibc-ld         makedevs
+arm-linux-ld         arm-linux-uclibc-addr2line  arm-linux-uclibc-ldconfig
+
+How this is supposed to work?
+
+Thanks,
+
+Leonid.
+
+________________________________________
+From: Shuhao Chang [mailto:shuhao_chang at yahoo.com] 
+Sent: Wednesday, October 03, 2007 12:31 AM
+To: buildroot at uclibc.org
+Cc: Leonid
+Subject: Re: Using pre-built BUILDROOT toolchain as external toolchain.
+
+The following steps works for me.
+
+Assume your buildroot toolchain is located in /opt/toolchain
+
+Set External Toolchain Options
+BR2_TOOLCHAIN_EXTERNAL_LIB_C="libc.so.0"
+BR2_TOOLCHAIN_EXTERNAL_LIBS="ld-uClibc.so.0 libcrypt.so.0 libdl.so.0 libm.so.0 libnsl.so.0 libpthread.so.0 libresolv.so.0 librt.so.0 libutil.so.0"
+
+Set External Toolchain Path to /opt/toolchain
+And do a little trick
+# cd /opt/toolchain
+# rm -f /opt/toolchain/bin
+# ln -sf usr/bin bin
 
 
-Ubuntu 7.04, kernel 2.6.20-16-generic, gcc version 4.1.2 (Ubuntu
-4.1.2-0ubuntu4)
+> Hi:
+> 
+> I want to build toolchain only once and then use it as external
+> toolchain (well, last is not important, I just don't want make re-build
+> all toolchain binaries again every time). I have compiled buildroot and
+> have got both toolchain
+ and working filesystem (I'm using ext2
+> filesystem, running in ramdisk).
+> 
+> Then I have copied created toolchain to another directory and using
+> "make menuconfig" switched to external toolchain and specified the
+> toolchain path/prefix and have rebuilt buildroot. It builds all right
+> but resulting file system lacks certain libraries which is to be
+> expected since I didn't define what libraries shall be copied from
+> external toolchain. Where I can get list of libraries, buildroot
+> toolchain copies? What else should be defined to make whole scheme work?
+> 
+> Thanks,
+> 
+> Leonid.
 
-====================================================================== 
-
----------------------------------------------------------------------- 
- hwstar - 10-02-07 18:13  
----------------------------------------------------------------------- 
-I'm having the same exact problem. Here's the output from the failed
-build:
-
-/home/srodgers/projects/limey-linux/limey-linux-test/buildroot/build_i586/staging_dir/usr/bin/i586-linux-uclibc-gcc
--Os -pipe 
--I/home/srodgers/projects/limey-linux/limey-linux-test/buildroot/build_i586/staging_dir/usr/include
--I/home/srodgers/projects/limey-linux/limey-linux-test/buildroot/build_i586/staging_dir/include
---sysroot=/home/srodgers/projects/limey-linux/limey-linux-test/buildroot/build_i586/staging_dir/
--isysroot
-/home/srodgers/projects/limey-linux/limey-linux-test/buildroot/build_i586/staging_dir
--mtune=i586 -march=i586  -I.      -g -O2 -c mbchar.c
-In file included from mbchar.h:157,
-                 from mbchar.c:22:
-./wchar.h:41:12: error: empty filename in #include
-In file included from mbchar.c:22:
-mbchar.h:242: error: expected ')' before 'wc'
-make[3]: *** [mbchar.o] Error 1
-make[3]: Leaving directory
-`/home/srodgers/projects/limey-linux/limey-linux-test/buildroot/build_i586/coreutils-6.9/lib'
-make[2]: *** [all] Error 2
-make[2]: Leaving directory
-`/home/srodgers/projects/limey-linux/limey-linux-test/buildroot/build_i586/coreutils-6.9/lib'
-make[1]: *** [all-recursive] Error 1
-make[1]: Leaving directory
-`/home/srodgers/projects/limey-linux/limey-linux-test/buildroot/build_i586/coreutils-6.9'
-make: ***
-[/home/srodgers/projects/limey-linux/limey-linux-test/buildroot/build_i586/coreutils-6.9/src/vdir]
-Error 2 
-
-Issue History 
-Date Modified   Username       Field                    Change               
-====================================================================== 
-08-29-07 12:05  spditner       New Issue                                    
-08-29-07 12:05  spditner       Status                   new => assigned     
-08-29-07 12:05  spditner       Assigned To               => buildroot       
-10-02-07 18:13  hwstar         Note Added: 0002808                          
-======================================================================
+?O???????D???????o???? Yahoo!?????????????????I????
