@@ -1,143 +1,36 @@
-From: bugs at busybox.net <bugs@busybox.net>
-Date: Wed, 3 Oct 2007 09:03:11 -0700
-Subject: [Buildroot] [buildroot 0001512]: Cannot build on Cygwin (as in
-	closed issue 0001449)
-Message-ID: <ca26553e43165e6b7056e8cb5384f3ce@bugs.uclibc.org>
+From: sathesh babu <sathesh_edara2003@yahoo.co.in>
+Date: Wed, 3 Oct 2007 18:09:26 +0100 (BST)
+Subject: [Buildroot] Building libgcc with -G 0 options
+Message-ID: <557489.49105.qm@web7903.mail.in.yahoo.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+Hi,
+    I am using buildroot to build toolchain( GCC ver 3.4.3, binutil-1.15 and ucLibc-0.9.28, linux-2.6.18 kernel)  for MIPS processor.
+  While building the toolchain i enabled soft float option.
+  I have written a loadble module ( which gets complie along with kernel) which does some floating point operation.
+   
+  When i try to load the module i get the following error
+  "unresoved symbol _gp_disp".
+   
+  In fact i tried with -mno-abicalls -fno-pic  compiler options still i see the same problem.
+   
+  Could you please give me some pointers on this issue.
+  BTW, How to compile libgcc.a with "-G 0" options.
+  In which file of buildroot i shoul added these options to get effective.
+   
+  Thanks in advance.
+   
+  Regards,
+  Sathesh
+   
 
-A NOTE has been added to this issue. 
-====================================================================== 
-http://busybox.net/bugs/view.php?id=1512 
-====================================================================== 
-Reported By:                mgall
-Assigned To:                buildroot
-====================================================================== 
-Project:                    buildroot
-Issue ID:                   1512
-Category:                   Architecture Specific
-Reproducibility:            always
-Severity:                   major
-Priority:                   normal
-Status:                     assigned
-====================================================================== 
-Date Submitted:             09-26-2007 16:38 PDT
-Last Modified:              10-03-2007 09:03 PDT
-====================================================================== 
-Summary:                    Cannot build on Cygwin (as in closed issue 0001449)
-Description: 
-Same problem as reported in ID0001449, "make menuconfig" fails:
-
-$ make menuconfig
-make CC="/usr/bin/gcc" -C package/config conf mconf
-make[1]: Entering directory `/managed/buildroot/package/config'
-/usr/bin/gcc -I/usr/include/ncurses -DCURSES_LOC="<ncurses.h>" -DLOCALE -g
--O2 -
-MM *.c > .depend 2>/dev/null || :
-make[1]: Leaving directory `/managed/buildroot/package/config'
-make[1]: Entering directory `/managed/buildroot/package/config'
-/usr/bin/gcc -I/usr/include/ncurses -DCURSES_LOC="<ncurses.h>" -DLOCALE -g
--O2
--c conf.c -o conf.o
-/usr/bin/gcc -I/usr/include/ncurses -DCURSES_LOC="<ncurses.h>" -DLOCALE -g
--O2
--c kxgettext.c -o kxgettext.o
-/usr/bin/gcc -I/usr/include/ncurses -DCURSES_LOC="<ncurses.h>" -DLOCALE -g
--O2
--c lxdialog/checklist.c -o lxdialog/checklist.o
-/usr/bin/gcc -I/usr/include/ncurses -DCURSES_LOC="<ncurses.h>" -DLOCALE -g
--O2
--c lxdialog/inputbox.c -o lxdialog/inputbox.o
-/usr/bin/gcc -I/usr/include/ncurses -DCURSES_LOC="<ncurses.h>" -DLOCALE -g
--O2
--c lxdialog/menubox.c -o lxdialog/menubox.o
-/usr/bin/gcc -I/usr/include/ncurses -DCURSES_LOC="<ncurses.h>" -DLOCALE -g
--O2
--c lxdialog/textbox.c -o lxdialog/textbox.o
-/usr/bin/gcc -I/usr/include/ncurses -DCURSES_LOC="<ncurses.h>" -DLOCALE -g
--O2
--c lxdialog/util.c -o lxdialog/util.o
-/usr/bin/gcc -I/usr/include/ncurses -DCURSES_LOC="<ncurses.h>" -DLOCALE -g
--O2
--c lxdialog/yesno.c -o lxdialog/yesno.o
-/usr/bin/gcc -I/usr/include/ncurses -DCURSES_LOC="<ncurses.h>" -DLOCALE -g
--O2
--c mconf.c -o mconf.o
-/usr/bin/gcc -I/usr/include/ncurses -DCURSES_LOC="<ncurses.h>" -DLOCALE -g
--O2 -
-I. -c zconf.tab.c -o zconf.tab.o
-/usr/bin/gcc -I/usr/include/ncurses -DCURSES_LOC="<ncurses.h>" -DLOCALE -g
--O2
--lncurses conf.o  zconf.tab.o -o conf
-conf.o: In function `check_stdin':
-/managed/buildroot/package/config/conf.c:60: undefined reference to
-`_libintl_ge
-ttext'
-/managed/buildroot/package/config/conf.c:61: undefined reference to
-`_libintl_ge
-ttext'
-/managed/buildroot/package/config/conf.c:62: undefined reference to
-`_libintl_ge
-ttext'
-conf.o: In function `check_conf':
-/managed/buildroot/package/config/conf.c:483: undefined reference to
-`_libintl_g
-ettext'
-conf.o: In function `main':
-/managed/buildroot/package/config/conf.c:623: undefined reference to
-`_libintl_g
-ettext'
-conf.o:/managed/buildroot/package/config/conf.c:541: more undefined
-references t
-o `_libintl_gettext' follow
-collect2: ld returned 1 exit status
-make[1]: *** [conf] Error 1
-make[1]: Leaving directory `/managed/buildroot/package/config'
-make: *** [package/config/mconf] Error 2
-
-====================================================================== 
-
----------------------------------------------------------------------- 
- bernhardf - 10-02-07 04:08  
----------------------------------------------------------------------- 
-try
-make HOST_LIBES=-lintl -C packages/config mconf
-or something to that effect (look for LIBES, i don't remember the name
-offhand). 
-
----------------------------------------------------------------------- 
- mgall - 10-03-07 09:03  
----------------------------------------------------------------------- 
-Here's the result:
-$ make HOST_LOADLIBES=-lintl -C package/config mconf
-make: Entering directory `/managed/buildroot/package/config'
-cat zconf.tab.c_shipped > zconf.tab.c
-cat lex.zconf.c_shipped > lex.zconf.c
-cat zconf.hash.c_shipped > zconf.hash.c
-I/usr/include/ncurses -DCURSES_LOC="<ncurses.h>" -DLOCALE -DKBUILD_NO_NLS
--I. -c
- zconf.tab.c -o zconf.tab.o
-/bin/sh: I/usr/include/ncurses: No such file or directory
-make: [zconf.tab.o] Error 127 (ignored)
-I/usr/include/ncurses -DCURSES_LOC="<ncurses.h>" -DLOCALE -DKBUILD_NO_NLS 
--lint
-l mconf.o zconf.tab.o lxdialog/checklist.o lxdialog/util.o
-lxdialog/inputbox.o l
-xdialog/textbox.o lxdialog/yesno.o lxdialog/menubox.o -o mconf
-/bin/sh: I/usr/include/ncurses: No such file or directory
-make: [mconf] Error 127 (ignored)
-make: Leaving directory `/managed/buildroot/package/config' 
-
-Issue History 
-Date Modified   Username       Field                    Change               
-====================================================================== 
-09-26-07 16:38  mgall          New Issue                                    
-09-26-07 16:38  mgall          Status                   new => assigned     
-09-26-07 16:38  mgall          Assigned To               => buildroot       
-10-02-07 04:08  bernhardf      Note Added: 0002807                          
-10-03-07 09:03  mgall          Note Added: 0002810                          
-======================================================================
+       
+---------------------------------
+ Now you can chat without downloading messenger. Click here to know how.
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: http://busybox.net/lists/buildroot/attachments/20071003/5483823c/attachment.htm 
