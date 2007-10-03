@@ -1,46 +1,47 @@
-From: Ivan Kuten <ivan.kuten@promwad.com>
-Date: Thu, 04 Oct 2007 01:54:57 +0300
-Subject: [Buildroot] Adding Cirrus  EP93XX  ARM to buildroot
-In-Reply-To: <20071003204012.GE20951@aon.at>
-References: <1191361900.4187.48.camel@localhost.localdomain>
-	<4702D760.4020707@promwad.com> <20071003204012.GE20951@aon.at>
-Message-ID: <47041DC1.8020301@promwad.com>
+From: Karl Auerbach <karl@cavebear.com>
+Date: Wed, 03 Oct 2007 15:32:13 -0700
+Subject: [Buildroot] Several issues by a buildroot newbie...
+Message-ID: <4704186D.6070303@cavebear.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+I'm fairly new to buildroot so please excuse me if I inadvertently touch 
+something that has been raised previously:
 
-> Depends a bit.. From the sounds, all but the configs should reside in
-> generic parts.
-> That said, I'm not too keen on building up a shadow of kernel.org, so
-> please
-> 1) update your patches against current linus tree (or -mm, however you
-> see fit)
-> 2) submit your patches upstream
+1. Undefined reference in uClibc:
+    In function `__libc_pthread_init':
+    libc_pthread_init.c:(.text+0xf): undefined reference to
+    `__libc_multiple_threads'
 
-Bernhard,
+    I dug through the code and it appears that the missing variable is 
+used as a return value for __libc_pthread_init() but that that return 
+value appears to be squirreled away and perhaps never used.
 
-Let me not argee here. You are forcing "keep up-to-date" policy instead of
-"stable release" policy.
+   In any event, this is, I suspect the cause of the next item, below.
 
-Cirrus Patches may be not a part of buildroot but refer as URL on Cirrus web site.
+2. Python segfaults when being loaded.  For various reasons I'm very 
+suspicions that the uClibc dynamic library loader is segfaulting.  I've 
+tried to build a static image of Python but I can't because of the 
+unresolved in the prior item.
 
-In embedded world is it often that you have to stick to some old kernel version because
-of dependency on 3rd components specific to that particular kernel version.
+I had a similar problem with sudo and all the openssh tools with the 
+stable version of uClibc.  The segfaulting of those, but not of Python, 
+went away with the snapshot version of uClibc.
 
-Take into account reasoning of usual linux developer - I do not want to update my kernel
-patches for every (month,week) -mm released. I want to have a stable base - which remains stable
-after half-of-year.
+   Python did compile and run quite nicely on my year old snapshot of 
+buildroot, but it's effectively dead now.
 
-And submitting patches to mainstream takes long time. And we want Cirrus support now.
+3. The sudo sources aren't available via the URL given in the 
+package/sudo/sudo.mk.  The site, http://www.courtesan.com/sudo/dist, has 
+upgraded to a newer version and the older one to be downloaded appears 
+no longer on that site.
 
-Best regards,
-Ivan
+4. The lockfile-progs.c (in package lockfile-progs) uses rindex() but 
+does not include the correct header file that defines it.  This can be 
+repaired by a patch that either changes rindex() to strrchr() or 
+including the correct header.  (I did the former.)
 
---------------------------------
-Embedded Linux engineer,
-Promwad Company: http://www.promwad.com/
-Homepage : http://www.ivankuten.com/
---------------------------------
+		--karl--
