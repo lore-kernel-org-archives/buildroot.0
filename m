@@ -1,36 +1,130 @@
-From: sathesh babu <sathesh_edara2003@yahoo.co.in>
-Date: Wed, 3 Oct 2007 18:09:26 +0100 (BST)
-Subject: [Buildroot] Building libgcc with -G 0 options
-Message-ID: <557489.49105.qm@web7903.mail.in.yahoo.com>
+From: Leonid <Leonid@a-k-a.net>
+Date: Wed, 3 Oct 2007 12:08:34 -0700
+Subject: [Buildroot] Using pre-built BUILDROOT toolchain as external
+	toolchain.
+In-Reply-To: <528831.86871.qm@web72415.mail.tp2.yahoo.com>
+References: <528831.86871.qm@web72415.mail.tp2.yahoo.com>
+Message-ID: <406A31B117F2734987636D6CCC93EE3C0246EF6F@ehost011-3.exch011.intermedia.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi,
-    I am using buildroot to build toolchain( GCC ver 3.4.3, binutil-1.15 and ucLibc-0.9.28, linux-2.6.18 kernel)  for MIPS processor.
-  While building the toolchain i enabled soft float option.
-  I have written a loadble module ( which gets complie along with kernel) which does some floating point operation.
-   
-  When i try to load the module i get the following error
-  "unresoved symbol _gp_disp".
-   
-  In fact i tried with -mno-abicalls -fno-pic  compiler options still i see the same problem.
-   
-  Could you please give me some pointers on this issue.
-  BTW, How to compile libgcc.a with "-G 0" options.
-  In which file of buildroot i shoul added these options to get effective.
-   
-  Thanks in advance.
-   
-  Regards,
-  Sathesh
-   
+Thank you very much, it worked for me.
 
-       
----------------------------------
- Now you can chat without downloading messenger. Click here to know how.
--------------- next part --------------
-An HTML attachment was scrubbed...
-URL: http://busybox.net/lists/buildroot/attachments/20071003/5483823c/attachment.htm 
+However in resulting filesystem ldconfig and ldd are not present. Do you know where they are copied from toolchain?
+
+Also GDB I added to my filesystem is complaining for not having particular library:
+
+dlopen failed on 'libthread_db.so.1' - File not found
+GDB will not be able to debug pthreads.
+
+GNU gdb 6.3
+Copyright 2004 Free Software Foundation, Inc.
+GDB is free software, covered by the GNU General Public License, and you are
+welcome to change it and/or distribute copies of it under certain conditions.
+Type "show copying" to see the conditions.
+There is absolutely no warranty for GDB.  Type "show warranty" for details.
+This GDB was configured as "arm-linux".
+(gdb)
+
+Which is not in my toolchain. What is the easiest way to get it there?
+
+Thanks,
+
+Leonid.
+
+________________________________
+
+From: Shuhao Chang [mailto:shuhao_chang at yahoo.com] 
+Sent: Wednesday, October 03, 2007 1:03 AM
+To: Leonid
+Subject: Re: Using pre-built BUILDROOT toolchain as external toolchain.
+
+
+Hi,
+
+My toolchain is i386-linux-uclibc. All toolchain binaries are located at usr/bin.
+Reference TARGET_CROSS at package/Makefile.in
+When using external toolchain, it invokes $(BR2_TOOLCHAIN_EXTERNAL_PATH)/bin/*
+So I need this little trick.
+You don't need it.
+
+
+--------
+
+
+Hi:
+
+Thank you very much for your advice, I'll try. Could you please explain this little trick of yours? You replace bin by usr/bin (bin becomes soft link, pointing to usr/bin). However (at least in my build) usr/bin is almost empty all binaries being in bin:
+
+[leonid at jaipur buildroot]$ ls ../../../arm-gcc-uclibc/usr/bin/
+faked  fakeroot
+[leonid at jaipur buildroot]$ ls ../../../arm-gcc-uclibc/bin/
+arm-linux-addr2line  arm-linux-ldconfig          arm-linux-uclibc-ar         arm-linux-uclibc-ldd
+arm-linux-ar         arm-linux-ldd               arm-linux-uclibc-as         arm-linux-uclibc-nm
+arm-linux-as         arm-linux-nm                arm-linux-uclibc-cc         arm-linux-uclibc-objcopy
+arm-linux-cc         arm-linux-objcopy           arm-linux-uclibc-c++filt    arm-linux-uclibc-objdump
+arm-linux-c++filt    arm-linux-objdump           arm-linux-uclibc-cpp        arm-linux-uclibc-ranlib
+arm-linux-cpp        arm-linux-ranlib            arm-linux-uclibc-gcc        arm-linux-uclibc-readelf
+arm-linux-gcc        arm-linux-readelf           arm-linux-uclibc-gcc-4.1.2  arm-linux-uclibc-size
+arm-linux-gcc-4.1.2  arm-linux-size              arm-linux-uclibc-gccbug     arm-linux-uclibc-strings
+arm-linux-gccbug     arm-linux-strings           arm-linux-uclibc-gcov       arm-linux-uclibc-strip
+arm-linux-gcov       arm-linux-strip             arm-linux-uclibc-ld         makedevs
+arm-linux-ld         arm-linux-uclibc-addr2line  arm-linux-uclibc-ldconfig
+
+How this is supposed to work?
+
+Thanks,
+
+Leonid.
+
+________________________________________
+From: Shuhao Chang [mailto:shuhao_chang at yahoo.com] 
+Sent: Wednesday, October 03, 2007 12:31 AM
+To: buildroot at uclibc.org
+Cc: Leonid
+Subject: Re: Using pre-built BUILDROOT toolchain as external toolchain.
+
+The following steps works for me.
+
+Assume your buildroot toolchain is located in /opt/toolchain
+
+Set External Toolchain Options
+BR2_TOOLCHAIN_EXTERNAL_LIB_C="libc.so.0"
+BR2_TOOLCHAIN_EXTERNAL_LIBS="ld-uClibc.so.0 libcrypt.so.0 libdl.so.0 libm.so.0 libnsl.so.0 libpthread.so.0 libresolv.so.0 librt.so.0 libutil.so.0"
+
+Set External Toolchain Path to /opt/toolchain
+And do a little trick
+# cd /opt/toolchain
+# rm -f /opt/toolchain/bin
+# ln -sf usr/bin bin
+
+
+> Hi:
+> 
+> I want to build toolchain only once and then use it as external
+> toolchain (well, last is not important, I just don't want make re-build
+> all toolchain binaries again every time). I have compiled buildroot and
+> have got both toolchain
+and working filesystem (I'm using ext2
+> filesystem, running in ramdisk).
+> 
+> Then I have copied created toolchain to another directory and using
+> "make menuconfig" switched to external toolchain and specified the
+> toolchain path/prefix and have rebuilt buildroot. It builds all right
+> but resulting file system lacks certain libraries which is to be
+> expected since I didn't define what libraries shall be copied from
+> external toolchain. Where I can get list of libraries, buildroot
+> toolchain copies? What else should be defined to make whole scheme work?
+> 
+> Thanks,
+> 
+> Leonid.
+
+?O???????D???????o???? Yahoo!?????????????????I????
+
+
+
+???^?W???????????????????? - ?R???O?? Yahoo!?????????D?? <http://tw.info.yahoo.com/seal/index.html> ??
