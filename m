@@ -1,82 +1,143 @@
-From: Leonid <Leonid@a-k-a.net>
-Date: Wed, 3 Oct 2007 00:45:47 -0700
-Subject: [Buildroot] Using pre-built BUILDROOT toolchain as external
-	toolchain.
-In-Reply-To: <491152.8985.qm@web72412.mail.tp2.yahoo.com>
-References: <491152.8985.qm@web72412.mail.tp2.yahoo.com>
-Message-ID: <406A31B117F2734987636D6CCC93EE3CB05B9E@ehost011-3.exch011.intermedia.net>
+From: bugs at busybox.net <bugs@busybox.net>
+Date: Wed, 3 Oct 2007 09:03:11 -0700
+Subject: [Buildroot] [buildroot 0001512]: Cannot build on Cygwin (as in
+	closed issue 0001449)
+Message-ID: <ca26553e43165e6b7056e8cb5384f3ce@bugs.uclibc.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi:
 
-Thank you very much for your advice, I'll try. Could you please explain this little trick of yours? You replace bin by usr/bin (bin becomes soft link, pointing to usr/bin). However (at least in my build) usr/bin is almost empty all binaries being in bin:
+A NOTE has been added to this issue. 
+====================================================================== 
+http://busybox.net/bugs/view.php?id=1512 
+====================================================================== 
+Reported By:                mgall
+Assigned To:                buildroot
+====================================================================== 
+Project:                    buildroot
+Issue ID:                   1512
+Category:                   Architecture Specific
+Reproducibility:            always
+Severity:                   major
+Priority:                   normal
+Status:                     assigned
+====================================================================== 
+Date Submitted:             09-26-2007 16:38 PDT
+Last Modified:              10-03-2007 09:03 PDT
+====================================================================== 
+Summary:                    Cannot build on Cygwin (as in closed issue 0001449)
+Description: 
+Same problem as reported in ID0001449, "make menuconfig" fails:
 
-[leonid at jaipur buildroot]$ ls ../../../arm-gcc-uclibc/usr/bin/
-faked  fakeroot
-[leonid at jaipur buildroot]$ ls ../../../arm-gcc-uclibc/bin/
-arm-linux-addr2line  arm-linux-ldconfig          arm-linux-uclibc-ar         arm-linux-uclibc-ldd
-arm-linux-ar         arm-linux-ldd               arm-linux-uclibc-as         arm-linux-uclibc-nm
-arm-linux-as         arm-linux-nm                arm-linux-uclibc-cc         arm-linux-uclibc-objcopy
-arm-linux-cc         arm-linux-objcopy           arm-linux-uclibc-c++filt    arm-linux-uclibc-objdump
-arm-linux-c++filt    arm-linux-objdump           arm-linux-uclibc-cpp        arm-linux-uclibc-ranlib
-arm-linux-cpp        arm-linux-ranlib            arm-linux-uclibc-gcc        arm-linux-uclibc-readelf
-arm-linux-gcc        arm-linux-readelf           arm-linux-uclibc-gcc-4.1.2  arm-linux-uclibc-size
-arm-linux-gcc-4.1.2  arm-linux-size              arm-linux-uclibc-gccbug     arm-linux-uclibc-strings
-arm-linux-gccbug     arm-linux-strings           arm-linux-uclibc-gcov       arm-linux-uclibc-strip
-arm-linux-gcov       arm-linux-strip             arm-linux-uclibc-ld         makedevs
-arm-linux-ld         arm-linux-uclibc-addr2line  arm-linux-uclibc-ldconfig
+$ make menuconfig
+make CC="/usr/bin/gcc" -C package/config conf mconf
+make[1]: Entering directory `/managed/buildroot/package/config'
+/usr/bin/gcc -I/usr/include/ncurses -DCURSES_LOC="<ncurses.h>" -DLOCALE -g
+-O2 -
+MM *.c > .depend 2>/dev/null || :
+make[1]: Leaving directory `/managed/buildroot/package/config'
+make[1]: Entering directory `/managed/buildroot/package/config'
+/usr/bin/gcc -I/usr/include/ncurses -DCURSES_LOC="<ncurses.h>" -DLOCALE -g
+-O2
+-c conf.c -o conf.o
+/usr/bin/gcc -I/usr/include/ncurses -DCURSES_LOC="<ncurses.h>" -DLOCALE -g
+-O2
+-c kxgettext.c -o kxgettext.o
+/usr/bin/gcc -I/usr/include/ncurses -DCURSES_LOC="<ncurses.h>" -DLOCALE -g
+-O2
+-c lxdialog/checklist.c -o lxdialog/checklist.o
+/usr/bin/gcc -I/usr/include/ncurses -DCURSES_LOC="<ncurses.h>" -DLOCALE -g
+-O2
+-c lxdialog/inputbox.c -o lxdialog/inputbox.o
+/usr/bin/gcc -I/usr/include/ncurses -DCURSES_LOC="<ncurses.h>" -DLOCALE -g
+-O2
+-c lxdialog/menubox.c -o lxdialog/menubox.o
+/usr/bin/gcc -I/usr/include/ncurses -DCURSES_LOC="<ncurses.h>" -DLOCALE -g
+-O2
+-c lxdialog/textbox.c -o lxdialog/textbox.o
+/usr/bin/gcc -I/usr/include/ncurses -DCURSES_LOC="<ncurses.h>" -DLOCALE -g
+-O2
+-c lxdialog/util.c -o lxdialog/util.o
+/usr/bin/gcc -I/usr/include/ncurses -DCURSES_LOC="<ncurses.h>" -DLOCALE -g
+-O2
+-c lxdialog/yesno.c -o lxdialog/yesno.o
+/usr/bin/gcc -I/usr/include/ncurses -DCURSES_LOC="<ncurses.h>" -DLOCALE -g
+-O2
+-c mconf.c -o mconf.o
+/usr/bin/gcc -I/usr/include/ncurses -DCURSES_LOC="<ncurses.h>" -DLOCALE -g
+-O2 -
+I. -c zconf.tab.c -o zconf.tab.o
+/usr/bin/gcc -I/usr/include/ncurses -DCURSES_LOC="<ncurses.h>" -DLOCALE -g
+-O2
+-lncurses conf.o  zconf.tab.o -o conf
+conf.o: In function `check_stdin':
+/managed/buildroot/package/config/conf.c:60: undefined reference to
+`_libintl_ge
+ttext'
+/managed/buildroot/package/config/conf.c:61: undefined reference to
+`_libintl_ge
+ttext'
+/managed/buildroot/package/config/conf.c:62: undefined reference to
+`_libintl_ge
+ttext'
+conf.o: In function `check_conf':
+/managed/buildroot/package/config/conf.c:483: undefined reference to
+`_libintl_g
+ettext'
+conf.o: In function `main':
+/managed/buildroot/package/config/conf.c:623: undefined reference to
+`_libintl_g
+ettext'
+conf.o:/managed/buildroot/package/config/conf.c:541: more undefined
+references t
+o `_libintl_gettext' follow
+collect2: ld returned 1 exit status
+make[1]: *** [conf] Error 1
+make[1]: Leaving directory `/managed/buildroot/package/config'
+make: *** [package/config/mconf] Error 2
 
-How this is supposed to work?
+====================================================================== 
 
-Thanks,
+---------------------------------------------------------------------- 
+ bernhardf - 10-02-07 04:08  
+---------------------------------------------------------------------- 
+try
+make HOST_LIBES=-lintl -C packages/config mconf
+or something to that effect (look for LIBES, i don't remember the name
+offhand). 
 
-Leonid.
+---------------------------------------------------------------------- 
+ mgall - 10-03-07 09:03  
+---------------------------------------------------------------------- 
+Here's the result:
+$ make HOST_LOADLIBES=-lintl -C package/config mconf
+make: Entering directory `/managed/buildroot/package/config'
+cat zconf.tab.c_shipped > zconf.tab.c
+cat lex.zconf.c_shipped > lex.zconf.c
+cat zconf.hash.c_shipped > zconf.hash.c
+I/usr/include/ncurses -DCURSES_LOC="<ncurses.h>" -DLOCALE -DKBUILD_NO_NLS
+-I. -c
+ zconf.tab.c -o zconf.tab.o
+/bin/sh: I/usr/include/ncurses: No such file or directory
+make: [zconf.tab.o] Error 127 (ignored)
+I/usr/include/ncurses -DCURSES_LOC="<ncurses.h>" -DLOCALE -DKBUILD_NO_NLS 
+-lint
+l mconf.o zconf.tab.o lxdialog/checklist.o lxdialog/util.o
+lxdialog/inputbox.o l
+xdialog/textbox.o lxdialog/yesno.o lxdialog/menubox.o -o mconf
+/bin/sh: I/usr/include/ncurses: No such file or directory
+make: [mconf] Error 127 (ignored)
+make: Leaving directory `/managed/buildroot/package/config' 
 
-________________________________________
-From: Shuhao Chang [mailto:shuhao_chang at yahoo.com] 
-Sent: Wednesday, October 03, 2007 12:31 AM
-To: buildroot at uclibc.org
-Cc: Leonid
-Subject: Re: Using pre-built BUILDROOT toolchain as external toolchain.
-
-The following steps works for me.
-
-Assume your buildroot toolchain is located in /opt/toolchain
-
-Set External Toolchain Options
-BR2_TOOLCHAIN_EXTERNAL_LIB_C="libc.so.0"
-BR2_TOOLCHAIN_EXTERNAL_LIBS="ld-uClibc.so.0 libcrypt.so.0 libdl.so.0 libm.so.0 libnsl.so.0 libpthread.so.0 libresolv.so.0 librt.so.0 libutil.so.0"
-
-Set External Toolchain Path to /opt/toolchain
-And do a little trick
-# cd /opt/toolchain
-# rm -f /opt/toolchain/bin
-# ln -sf usr/bin bin
-
-
-> Hi:
-> 
-> I want to build toolchain only once and then use it as external
-> toolchain (well, last is not important, I just don't want make re-build
-> all toolchain binaries again every time). I have compiled buildroot and
-> have got both toolchain
- and working filesystem (I'm using ext2
-> filesystem, running in ramdisk).
-> 
-> Then I have copied created toolchain to another directory and using
-> "make menuconfig" switched to external toolchain and specified the
-> toolchain path/prefix and have rebuilt buildroot. It builds all right
-> but resulting file system lacks certain libraries which is to be
-> expected since I didn't define what libraries shall be copied from
-> external toolchain. Where I can get list of libraries, buildroot
-> toolchain copies? What else should be defined to make whole scheme work?
-> 
-> Thanks,
-> 
-> Leonid.
-
-?O???????D???????o???? Yahoo!?????????????????I????
+Issue History 
+Date Modified   Username       Field                    Change               
+====================================================================== 
+09-26-07 16:38  mgall          New Issue                                    
+09-26-07 16:38  mgall          Status                   new => assigned     
+09-26-07 16:38  mgall          Assigned To               => buildroot       
+10-02-07 04:08  bernhardf      Note Added: 0002807                          
+10-03-07 09:03  mgall          Note Added: 0002810                          
+======================================================================
