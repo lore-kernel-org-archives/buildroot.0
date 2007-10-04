@@ -1,62 +1,69 @@
 From: Ulf Samuelsson <ulf@atmel.com>
-Date: Thu, 4 Oct 2007 06:08:55 +0200
-Subject: [Buildroot] Adding Cirrus  EP93XX  ARM to buildroot
-References: <1191361900.4187.48.camel@localhost.localdomain><4702D760.4020707@promwad.com>
-	<20071003204012.GE20951@aon.at> <47041DC1.8020301@promwad.com>
-Message-ID: <003c01c8063e$26e48a70$b07ee255@atmel.com>
+Date: Thu, 4 Oct 2007 06:14:47 +0200
+Subject: [Buildroot] Several issues by a buildroot newbie...
+References: <4704186D.6070303@cavebear.com>
+Message-ID: <003d01c8063e$26edb230$b07ee255@atmel.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-> 
->> Depends a bit.. From the sounds, all but the configs should reside in
->> generic parts.
->> That said, I'm not too keen on building up a shadow of kernel.org, so
->> please
->> 1) update your patches against current linus tree (or -mm, however you
->> see fit)
->> 2) submit your patches upstream
-> 
-> Bernhard,
-> 
-> Let me not argee here. You are forcing "keep up-to-date" policy instead of
-> "stable release" policy.
-> 
-> Cirrus Patches may be not a part of buildroot but refer as URL on Cirrus web site.
-> 
-> In embedded world is it often that you have to stick to some old kernel version because
-> of dependency on 3rd components specific to that particular kernel version.
-> 
-> Take into account reasoning of usual linux developer - I do not want to update my kernel
-> patches for every (month,week) -mm released. I want to have a stable base - which remains stable
-> after half-of-year.
-> 
-> And submitting patches to mainstream takes long time. And we want Cirrus support now.
-> 
-> Best regards,
-> Ivan
-> 
-
-It is a significant problem, which is can be be resolved easily, 
-as long as packages can be rebuilt without changing the makefile fragment.
-If the Makefile fragment for a package is ifdef'ed, then you can supply your own
-file which contains the desired  package version numbers.
-
-ifeq ($(<PACKAGE>_VERSION),)
-<PACKAGE>_VERSION:=X.Y.Z
-endif
-
-If the introduction of a new package, require that the Makefile fragment
-changes, then the problem becomes worse.
-
-Bernard wants you to freeze the buildroot source code for a specific customer.
-Assume you have 50 customers, then you have 50 source trees to maintain.
-If you want to add a single package for each customer, you have to edit 50 source trees.
-Clearly not acceptable.
+----- Original Message ----- 
+From: "Karl Auerbach" <karl@cavebear.com>
+To: <buildroot@uclibc.org>
+Sent: Thursday, October 04, 2007 12:32 AM
+Subject: [Buildroot] Several issues by a buildroot newbie...
 
 
+> I'm fairly new to buildroot so please excuse me if I inadvertently touch 
+> something that has been raised previously:
+> 
+> 1. Undefined reference in uClibc:
+>    In function `__libc_pthread_init':
+>    libc_pthread_init.c:(.text+0xf): undefined reference to
+>    `__libc_multiple_threads'
+> 
+>    I dug through the code and it appears that the missing variable is 
+> used as a return value for __libc_pthread_init() but that that return 
+> value appears to be squirreled away and perhaps never used.
+> 
+>   In any event, this is, I suspect the cause of the next item, below.
+> 
+> 2. Python segfaults when being loaded.  For various reasons I'm very 
+> suspicions that the uClibc dynamic library loader is segfaulting.  I've 
+> tried to build a static image of Python but I can't because of the 
+> unresolved in the prior item.
+> 
+> I had a similar problem with sudo and all the openssh tools with the 
+> stable version of uClibc.  The segfaulting of those, but not of Python, 
+> went away with the snapshot version of uClibc.
+> 
+>   Python did compile and run quite nicely on my year old snapshot of 
+> buildroot, but it's effectively dead now.
+> 
+> 3. The sudo sources aren't available via the URL given in the 
+> package/sudo/sudo.mk.  The site, http://www.courtesan.com/sudo/dist, has 
+> upgraded to a newer version and the older one to be downloaded appears 
+> no longer on that site.
+> 
+> 4. The lockfile-progs.c (in package lockfile-progs) uses rindex() but 
+> does not include the correct header file that defines it.  This can be 
+> repaired by a patch that either changes rindex() to strrchr() or 
+> including the correct header.  (I did the former.)
+> 
 
-Best Regards
+uClibc supports rindex if either of 
+* UCLIBC_SUSV3_LEGACY or 
+* UCLIBC_SYSV3_LEGACY MACROS 
+is defined. 
+Previously UCLIBC_SUSV3_LEGACY_MACROS was defined,
+but Bernhard wants to get rid of all legacy stuff, and his idea to achieve
+this it is by intentionally breaking the build if you enable a package 
+containing SUSV3_LEGACY stuff.
+
+> --karl--
+> 
+> 
+BR
 Ulf Samuelsson
