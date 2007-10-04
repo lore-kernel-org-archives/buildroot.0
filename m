@@ -1,69 +1,42 @@
-From: Ulf Samuelsson <ulf@atmel.com>
-Date: Thu, 4 Oct 2007 06:14:47 +0200
-Subject: [Buildroot] Several issues by a buildroot newbie...
-References: <4704186D.6070303@cavebear.com>
-Message-ID: <003d01c8063e$26edb230$b07ee255@atmel.com>
+From: saravanan <sar_van81@yahoo.co.in>
+Date: Thu, 4 Oct 2007 10:32:01 +0100 (BST)
+Subject: [Buildroot] tinyx in buildroot
+Message-ID: <488259.57014.qm@web94307.mail.in2.yahoo.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
------ Original Message ----- 
-From: "Karl Auerbach" <karl@cavebear.com>
-To: <buildroot@uclibc.org>
-Sent: Thursday, October 04, 2007 12:32 AM
-Subject: [Buildroot] Several issues by a buildroot newbie...
+hi,
+
+    i had  cross compiled buildroot with tinyX support for my MIPS developement board.now i need a windows manager to be ported. i tried compiling matchbox with tinyX,but i was not successfull. the following is the error i got:
+
+/home/linuxau1200/oldbuildroot/buildingnew/buildroot/build_mipsel/xc-011010/exports/lib  -lX11 -lXext      -L/usr/local/lib -L/usr/X11R6/lib -lXcursor -lXrender -lX11
+/home/linuxau1200/oldbuildroot/buildingnew/buildroot/build_mipsel/staging_dir/lib/gcc/mipsel-linux-uclibc/3.4.2/../../../../mipsel-linux-uclibc/bin/ld: skipping incompatible /usr/X11R6/lib/libXcursor.so when searching for -lXcursor
+/home/linuxau1200/oldbuildroot/buildingnew/buildroot/build_mipsel/staging_dir/lib/gcc/mipsel-linux-uclibc/3.4.2/../../../../mipsel-linux-uclibc/bin/ld: skipping incompatible /usr/X11R6/lib/libXcursor.a when searching for -lXcursor
+/home/linuxau1200/oldbuildroot/buildingnew/buildroot/build_mipsel/staging_dir/lib/gcc/mipsel-linux-uclibc/3.4.2/../../../../mipsel-linux-uclibc/bin/ld: cannot find -lXcursor
+collect2: ld returned 1 exit status
+make[2]: *** [matchbox-window-manager] Error 1
+make[2]: Leaving directory `/home/linuxau1200/matchbox/matchbox-window-manager-1.2/src'
+make[1]: *** [all-recursive] Error 1
+make[1]: Leaving directory `/home/linuxau1200/matchbox/matchbox-window-manager-1.2'
+make: *** [all] Error 2
+linux:/home/linuxau1200/matchbox/matchbox-window-manager-1.2 #                 .
+
+it links to the libXcursor library of the host system(x86 processor). i searched in the tinyX compiled package and could not find any library like this.
+
+can anyone provide me any solutions or suggestions for this ?
+
+thanks in advance,
+
+saravanan.
 
 
-> I'm fairly new to buildroot so please excuse me if I inadvertently touch 
-> something that has been raised previously:
-> 
-> 1. Undefined reference in uClibc:
->    In function `__libc_pthread_init':
->    libc_pthread_init.c:(.text+0xf): undefined reference to
->    `__libc_multiple_threads'
-> 
->    I dug through the code and it appears that the missing variable is 
-> used as a return value for __libc_pthread_init() but that that return 
-> value appears to be squirreled away and perhaps never used.
-> 
->   In any event, this is, I suspect the cause of the next item, below.
-> 
-> 2. Python segfaults when being loaded.  For various reasons I'm very 
-> suspicions that the uClibc dynamic library loader is segfaulting.  I've 
-> tried to build a static image of Python but I can't because of the 
-> unresolved in the prior item.
-> 
-> I had a similar problem with sudo and all the openssh tools with the 
-> stable version of uClibc.  The segfaulting of those, but not of Python, 
-> went away with the snapshot version of uClibc.
-> 
->   Python did compile and run quite nicely on my year old snapshot of 
-> buildroot, but it's effectively dead now.
-> 
-> 3. The sudo sources aren't available via the URL given in the 
-> package/sudo/sudo.mk.  The site, http://www.courtesan.com/sudo/dist, has 
-> upgraded to a newer version and the older one to be downloaded appears 
-> no longer on that site.
-> 
-> 4. The lockfile-progs.c (in package lockfile-progs) uses rindex() but 
-> does not include the correct header file that defines it.  This can be 
-> repaired by a patch that either changes rindex() to strrchr() or 
-> including the correct header.  (I did the former.)
-> 
 
-uClibc supports rindex if either of 
-* UCLIBC_SUSV3_LEGACY or 
-* UCLIBC_SYSV3_LEGACY MACROS 
-is defined. 
-Previously UCLIBC_SUSV3_LEGACY_MACROS was defined,
-but Bernhard wants to get rid of all legacy stuff, and his idea to achieve
-this it is by intentionally breaking the build if you enable a package 
-containing SUSV3_LEGACY stuff.
-
-> --karl--
-> 
-> 
-BR
-Ulf Samuelsson
+       
+---------------------------------
+ Now you can chat without downloading messenger. Click here to know how.
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: http://busybox.net/lists/buildroot/attachments/20071004/c1d7bded/attachment.htm 
