@@ -1,18 +1,24 @@
-From: Ivan Kuten <ivan.kuten@promwad.com>
-Date: Sun, 14 Oct 2007 04:08:35 +0300
-Subject: [Buildroot] svn commit: trunk/buildroot/toolchain/gcc
-In-Reply-To: <0710132305350.9729@somehost>
-References: <20071012210141.1DF69A5E1B@busybox.net>	<0710131046500.9729@somehost>	<1192269439.26495.4.camel@elrond.atmel.sweden>	<0710131212520.9729@somehost>	<1192300638.26495.13.camel@elrond.atmel.sweden>	<0710132115250.9729@somehost>	<1192307460.26495.27.camel@elrond.atmel.sweden>
-	<0710132305350.9729@somehost>
-Message-ID: <47116C13.9020701@promwad.com>
+From: <bogus@does.not.exist.com>
+Date: Sat, 06 Oct 2007 20:13:59 -0000
+Subject: No subject
+Message-ID: <mailman.0.1192320623.1105.buildroot@uclibc.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-> 
-> Can we try getting some stability in this project?
-> Can we get a 'make allconfig' that just builds?
-> Sooner rather than later?
-> 
+I assume make allconfig will give tons of errors.
+Today I just tried to make all packages except "Graphic libraries and applications"
+and it gave me about 40 errors related with wrong URLs and versions! I'm not talking
+about even correctness of installing into staging dir and rootfs packaging.
+
+
+
+Best regards,
+Ivan
+--------------------------------
+Embedded Linux engineer,
+Promwad Company: http://www.promwad.com/
+Homepage : http://www.ivankuten.com/
+--------------------------------
