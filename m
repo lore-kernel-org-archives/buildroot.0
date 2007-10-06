@@ -1,47 +1,60 @@
-From: Ulf Samuelsson <ulf@atmel.com>
-Date: Wed, 31 Oct 2007 21:46:02 +0100
-Subject: [Buildroot] make error with Kismet even if not selected
-In-Reply-To: <13504645.post@talk.nabble.com>
-References: <20071030091652.2D272A67F9@busybox.net>
-	<47273782.1000900@linuxtv.org>  <13504645.post@talk.nabble.com>
-Message-ID: <1193863562.4728.0.camel@aeglos.sweden.atmel.com>
+From: <bogus@does.not.exist.com>
+Date: Sat, 06 Oct 2007 20:13:59 -0000
+Subject: No subject
+Message-ID: <mailman.1.1195232520.1105.buildroot@uclibc.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-ons 2007-10-31 klockan 01:21 -0700 skrev Hebbar:
-> Hi,
+May be strace does not provide correct output?
+
+Regards,
+Ivan
+
+ing. Federico Fuga wrote:
+> Hi Ivan,
 > 
->  i get an error as below when "make world" is given. This is with todays
-> buildroot snapshot i havent selected kismet in network utilities section.
-> still kismet tries to download and build.
+> which kernel version and kernel headers are you using? Mine are 2.6.23.1
+> and 2.6.23, but now I am trying to move the kernel headers to 2.6.21
+> (Angstrom  linux works without problems, but are based on different
+> kernel headers).
+> uclibc I am using are 0.9.29, alsa 1.0.14.
+> The failing ioctl is identical both in the working (Angstrom) and not
+> working versions, and since the kernel is the same (really the same!) I
+> am thinking that is only a problem between the "glue" of uclibc and
+> kernel...
+> I'll keep you informed.
 > 
-> Regards
-> Gururaja
+> Regards,
+> 
+> ing. Federico Fuga
+> 
+> Ivan Kuten ha scritto:
+>> Hi Federico!
+>>
+>> I'm observing the same problem with ALSA as you.
+>>
+>>   
+>>> ioctl(4, USBDEVFS_CONTROL, 0xbef809cc)  = 0
+>>> ioctl(4, UI_DEV_CREATE, 0xbef80ab0)     = 0
+>>> ioctl(4, USBDEVFS_CONNECTINFO, 0xbef80634) = 0
+>>> ioctl(4, USBDEVFS_HUB_PORTINFO, 0xbef80748) = -1 ENOTTY (Inappropriate
+>>> ioctl for device)
+>>>     
+>> Think these lines are key to understanding what the problem is.
+>>
+>> Regards,
+>> Ivan
+>>
+>>
+>>   
 > 
 
-This is a known bug, and fixed in the svn, but not in the snapshot.
-Download todays snapshot and try again.
 
-
-> checking build system type... i386-pc-linux-gnu
-> checking host system type... arm-unknown-linux-gnu
-> checking for arm-linux-gcc...
-> /home/guru/project/toolchain/uclibc/usr/bin/arm-linux-uclibcgnueabi-gcc -Os
-> -pipe  -I/home/guru/project/toolchain/uclibc/usr/include
-> -I/home/guru/project/toolchain/uclibc/include
-> --sysroot=/home/guru/project/toolchain/uclibc/ -isysroot
-> /home/guru/project/toolchain/uclibc -mtune=arm9tdmi
-> checking for C compiler default output file name... 
-> configure: error: C compiler cannot create executables
-> See `config.log' for more details.
-> make: ***
-> [/home/guru/project/original/bldrt/buildroot/build_arm/kismet-2007-10-R1/.configured]
-> Error 77
-> 
-> 
--- 
-Best Regards,
-Ulf Samuelsson
+--------------------------------
+Embedded Linux engineer,
+Promwad Company: http://www.promwad.com/
+Homepage : http://www.ivankuten.com/
+--------------------------------
