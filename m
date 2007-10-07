@@ -1,53 +1,87 @@
-From: Ulf Samuelsson <ulf@atmel.com>
-Date: Sun, 07 Oct 2007 20:04:26 +0200
-Subject: [Buildroot] Several issues by a buildroot newbie...
-In-Reply-To: <20071007163056.GJ20951@aon.at>
-References: <4704186D.6070303@cavebear.com>
-	<003d01c8063e$26edb230$b07ee255@atmel.com>
-	<20071007163056.GJ20951@aon.at>
-Message-ID: <1191780266.29084.23.camel@elrond.atmel.sweden>
+From: ulf at uclibc.org <ulf@uclibc.org>
+Date: Sun,  7 Oct 2007 11:23:01 -0700 (PDT)
+Subject: [Buildroot] svn commit: trunk/buildroot:  package
+Message-ID: <20071007182301.E9647A6AAE@busybox.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-s?n 2007-10-07 klockan 18:30 +0200 skrev Bernhard Fischer:
-> On Thu, Oct 04, 2007 at 06:14:47AM +0200, Ulf Samuelsson wrote:
-> 
-> >uClibc supports rindex if either of 
-> >* UCLIBC_SUSV3_LEGACY or 
-> >* UCLIBC_SYSV3_LEGACY MACROS 
-> >is defined. 
-> >Previously UCLIBC_SUSV3_LEGACY_MACROS was defined,
-> >but Bernhard wants to get rid of all legacy stuff, and his idea to achieve
-> 
-> Ulf, go read docs/README and read the helptext of BR2_UCLIBC_CONFIG
-> 
-> Heck, do
-> $ make help
-> and read the helptext there (and document your make-targets while you're
-> at it. Undocumented targets will be removed).
-> 
-> >this it is by intentionally breaking the build if you enable a package 
-> >containing SUSV3_LEGACY stuff.
-> 
-> "Mum, XYZ is intentionally broken because it's not on per default".
-> Yeah, right. Whatever.
+Author: ulf
+Date: 2007-10-07 11:23:01 -0700 (Sun, 07 Oct 2007)
+New Revision: 20196
 
-I am well aware that you can create your own configuration.
+Log:
+Allow date to be added to Image
 
-It was on before, allowing packages to build.
-You changed that to off.
-You did that change to make sure something happen.
-I cannot think of any other think, than you *INTENTIONALLY*
-wanted the *default* operation of buildroot was to break all 
-the build of all packages which contained LEGACY stuff.
+Modified:
+   trunk/buildroot/Config.in
+   trunk/buildroot/package/Makefile.in
 
-The fact that it is possible to configure buildroot
-to fix this, does not change the default operation.
 
-If that was not your intention, then what ?
+Changeset:
+Modified: trunk/buildroot/Config.in
+===================================================================
+--- trunk/buildroot/Config.in	2007-10-07 18:10:44 UTC (rev 20195)
++++ trunk/buildroot/Config.in	2007-10-07 18:23:01 UTC (rev 20196)
+@@ -102,6 +102,19 @@
+ 	  build_ARCH -> build_ARCH_[SUFFIX]
+ 	  toolchain_build_ARCH -> toolchain_build_ARCH_[SUFFIX]
+ 
++config BR2_ROOTFS_PREFIX
++	string "Custom root fs prefix"
++	default "rootfs"
++	help
++	  Add a custom string to the beginning of the root file system name.
++
++config BR2_ROOTFS_SUFFIX
++	string "Custom root fs suffix"
++	default "$(DATE)" if BR2_TARGET_ATMEL
++	default "" if !BR2_TARGET_ATMEL
++	help
++	  Add a custom string to the end of the root file system name.
++
+ config BR2_GNU_BUILD_SUFFIX
+ 	string "GNU build hostname suffix"
+ 	default "pc-linux-gnu"
 
-BR
-Ulf
+Modified: trunk/buildroot/package/Makefile.in
+===================================================================
+--- trunk/buildroot/package/Makefile.in	2007-10-07 18:10:44 UTC (rev 20195)
++++ trunk/buildroot/package/Makefile.in	2007-10-07 18:23:01 UTC (rev 20196)
+@@ -65,14 +65,18 @@
+ TARGET_LDFLAGS=-L$(STAGING_DIR)/lib -L$(STAGING_DIR)/usr/lib
+ endif
+ #########################################################################
++ifeq ($(BR2_ROOTFS_SUFFIX),)
++ROOTFS_SUFFIX:=
++else
++ROOTFS_SUFFIX:=-$(BR2_ROOTFS_SUFFIX)
++endif
+ 
+-
+ ifeq ($(BR2_TOOLCHAIN_SOURCE),y)
+ TOOL_BUILD_DIR=$(BASE_DIR)/$(TOPDIR_PREFIX)toolchain_build_$(ARCH)$(ARCH_FPU_SUFFIX)$(TOPDIR_SUFFIX)
+ 
+ # Quotes are needed for spaces et al in path components.
+ TARGET_PATH="$(TOOL_BUILD_DIR)/bin:$(STAGING_DIR)/bin:$(STAGING_DIR)/usr/bin:$(PATH)"
+-IMAGE:=$(BINARIES_DIR)/rootfs.$(ARCH)$(ARCH_FPU_SUFFIX)
++IMAGE:=$(BINARIES_DIR)/$(BR2_ROOTFS_PREFIX).$(ARCH)$(ARCH_FPU_SUFFIX)$(ROOTFS_SUFFIX)
+ GNU_TARGET_NAME=$(OPTIMIZE_FOR_CPU)-linux
+ REAL_GNU_TARGET_NAME=$(OPTIMIZE_FOR_CPU)$(GNU_TARGET_SUFFIX)
+ TARGET_CROSS=$(STAGING_DIR)/usr/bin/$(REAL_GNU_TARGET_NAME)-
+@@ -82,9 +86,11 @@
+ #"))
+ TOOLCHAIN_EXTERNAL_PATH:=$(strip $(subst ",, $(BR2_TOOLCHAIN_EXTERNAL_PATH)))
+ #"))
+-TOOL_BUILD_DIR=$(BASE_DIR)/$(TOPDIR_PREFIX)toolchain_build_$(TOOLCHAIN_EXTERNAL_PREFIX)
++#TOOL_BUILD_DIR=$(BASE_DIR)/$(TOPDIR_PREFIX)toolchain_build_$(TOOLCHAIN_EXTERNAL_PREFIX)
++TOOL_BUILD_DIR=$(BASE_DIR)/$(TOPDIR_PREFIX)toolchain_build_$(ARCH)$(ARCH_FPU_SUFFIX)$(TOPDIR_SUFFIX)
+ TARGET_PATH="$(STAGING_DIR)/bin:$(TOOL_BUILD_DIR)/bin:$(TOOLCHAIN_EXTERNAL_PATH)/bin:$(PATH)"
+-IMAGE:=$(BINARIES_DIR)/rootfs.$(TOOLCHAIN_EXTERNAL_PREFIX)-$(DATE)
++#IMAGE:=$(BINARIES_DIR)/$(BR2_ROOTFS_PREFIX).$(TOOLCHAIN_EXTERNAL_PREFIX)$(ROOTFS_SUFFIX)
++IMAGE:=$(BINARIES_DIR)/$(BR2_ROOTFS_PREFIX).$(ARCH)$(ARCH_FPU_SUFFIX)$(ROOTFS_SUFFIX)
+ 
+ REAL_GNU_TARGET_NAME=$(TOOLCHAIN_EXTERNAL_PREFIX)
+ GNU_TARGET_NAME=$(TOOLCHAIN_EXTERNAL_PREFIX)
