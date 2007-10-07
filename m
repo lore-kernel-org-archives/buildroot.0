@@ -1,21 +1,50 @@
-From: Bernhard Fischer <rep.dot.nop@gmail.com>
-Date: Sun, 7 Oct 2007 19:00:40 +0200
-Subject: [Buildroot] Adding Cirrus  EP93XX  ARM to buildroot
-In-Reply-To: <47091B4C.8090205@promwad.com>
-References: <20071003204012.GE20951@aon.at> <47041DC1.8020301@promwad.com>
-	<003c01c8063e$26e48a70$b07ee255@atmel.com>
-	<20071006201536.GH20951@aon.at> <47091B4C.8090205@promwad.com>
-Message-ID: <20071007170039.GL20951@aon.at>
+From: ulf at uclibc.org <ulf@uclibc.org>
+Date: Sun,  7 Oct 2007 10:22:56 -0700 (PDT)
+Subject: [Buildroot] svn commit: trunk/buildroot/toolchain/gcc
+Message-ID: <20071007172256.F0C54A685A@busybox.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Sun, Oct 07, 2007 at 08:45:48PM +0300, Ivan Kuten wrote:
+Author: ulf
+Date: 2007-10-07 10:22:56 -0700 (Sun, 07 Oct 2007)
+New Revision: 20193
 
->Bernhard, I only wanted to notice that having Cirrus support in buildroot can be
->-before- then some of Cirrus patches go in mainline kernel. I'm aware about Cirrus patches
->to 2.6.20.4 and 2.6.17.14, and some of our customers still use 2.6.17.14 kernel version.
+Log:
+Do not create directories, if they exist
 
-Sure. Please submit them for review and inclusion.
+Modified:
+   trunk/buildroot/toolchain/gcc/gcc-uclibc-3.x.mk
+   trunk/buildroot/toolchain/gcc/gcc-uclibc-4.x.mk
+
+
+Changeset:
+Modified: trunk/buildroot/toolchain/gcc/gcc-uclibc-3.x.mk
+===================================================================
+--- trunk/buildroot/toolchain/gcc/gcc-uclibc-3.x.mk	2007-10-07 17:06:26 UTC (rev 20192)
++++ trunk/buildroot/toolchain/gcc/gcc-uclibc-3.x.mk	2007-10-07 17:22:56 UTC (rev 20193)
+@@ -277,7 +277,7 @@
+ 	-C $(GCC_BUILD_DIR2) install
+ 	if [ -d "$(STAGING_DIR)/usr/lib64" ]; then \
+ 		if [ ! -e "$(STAGING_DIR)/usr/lib" ]; then \
+-			mkdir "$(STAGING_DIR)/usr/lib"; \
++			mkdir -p "$(STAGING_DIR)/usr/lib"; \
+ 		fi; \
+ 		mv "$(STAGING_DIR)/usr/lib64/"* "$(STAGING_DIR)/usr/lib/"; \
+ 		rmdir "$(STAGING_DIR)/usr/lib64"; \
+
+Modified: trunk/buildroot/toolchain/gcc/gcc-uclibc-4.x.mk
+===================================================================
+--- trunk/buildroot/toolchain/gcc/gcc-uclibc-4.x.mk	2007-10-07 17:06:26 UTC (rev 20192)
++++ trunk/buildroot/toolchain/gcc/gcc-uclibc-4.x.mk	2007-10-07 17:22:56 UTC (rev 20193)
+@@ -290,7 +290,7 @@
+ 		-C $(GCC_BUILD_DIR2) install
+ 	if [ -d "$(STAGING_DIR)/lib64" ]; then \
+ 		if [ ! -e "$(STAGING_DIR)/lib" ]; then \
+-			mkdir "$(STAGING_DIR)/lib"; \
++			mkdir -p "$(STAGING_DIR)/lib"; \
+ 		fi; \
+ 		mv "$(STAGING_DIR)/lib64/"* "$(STAGING_DIR)/lib/"; \
+ 		rmdir "$(STAGING_DIR)/lib64"; \
