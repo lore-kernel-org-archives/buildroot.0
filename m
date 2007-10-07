@@ -1,50 +1,53 @@
-From: ulf at uclibc.org <ulf@uclibc.org>
-Date: Sun,  7 Oct 2007 10:22:56 -0700 (PDT)
-Subject: [Buildroot] svn commit: trunk/buildroot/toolchain/gcc
-Message-ID: <20071007172256.F0C54A685A@busybox.net>
+From: Ulf Samuelsson <ulf@atmel.com>
+Date: Sun, 07 Oct 2007 20:04:26 +0200
+Subject: [Buildroot] Several issues by a buildroot newbie...
+In-Reply-To: <20071007163056.GJ20951@aon.at>
+References: <4704186D.6070303@cavebear.com>
+	<003d01c8063e$26edb230$b07ee255@atmel.com>
+	<20071007163056.GJ20951@aon.at>
+Message-ID: <1191780266.29084.23.camel@elrond.atmel.sweden>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Author: ulf
-Date: 2007-10-07 10:22:56 -0700 (Sun, 07 Oct 2007)
-New Revision: 20193
+s?n 2007-10-07 klockan 18:30 +0200 skrev Bernhard Fischer:
+> On Thu, Oct 04, 2007 at 06:14:47AM +0200, Ulf Samuelsson wrote:
+> 
+> >uClibc supports rindex if either of 
+> >* UCLIBC_SUSV3_LEGACY or 
+> >* UCLIBC_SYSV3_LEGACY MACROS 
+> >is defined. 
+> >Previously UCLIBC_SUSV3_LEGACY_MACROS was defined,
+> >but Bernhard wants to get rid of all legacy stuff, and his idea to achieve
+> 
+> Ulf, go read docs/README and read the helptext of BR2_UCLIBC_CONFIG
+> 
+> Heck, do
+> $ make help
+> and read the helptext there (and document your make-targets while you're
+> at it. Undocumented targets will be removed).
+> 
+> >this it is by intentionally breaking the build if you enable a package 
+> >containing SUSV3_LEGACY stuff.
+> 
+> "Mum, XYZ is intentionally broken because it's not on per default".
+> Yeah, right. Whatever.
 
-Log:
-Do not create directories, if they exist
+I am well aware that you can create your own configuration.
 
-Modified:
-   trunk/buildroot/toolchain/gcc/gcc-uclibc-3.x.mk
-   trunk/buildroot/toolchain/gcc/gcc-uclibc-4.x.mk
+It was on before, allowing packages to build.
+You changed that to off.
+You did that change to make sure something happen.
+I cannot think of any other think, than you *INTENTIONALLY*
+wanted the *default* operation of buildroot was to break all 
+the build of all packages which contained LEGACY stuff.
 
+The fact that it is possible to configure buildroot
+to fix this, does not change the default operation.
 
-Changeset:
-Modified: trunk/buildroot/toolchain/gcc/gcc-uclibc-3.x.mk
-===================================================================
---- trunk/buildroot/toolchain/gcc/gcc-uclibc-3.x.mk	2007-10-07 17:06:26 UTC (rev 20192)
-+++ trunk/buildroot/toolchain/gcc/gcc-uclibc-3.x.mk	2007-10-07 17:22:56 UTC (rev 20193)
-@@ -277,7 +277,7 @@
- 	-C $(GCC_BUILD_DIR2) install
- 	if [ -d "$(STAGING_DIR)/usr/lib64" ]; then \
- 		if [ ! -e "$(STAGING_DIR)/usr/lib" ]; then \
--			mkdir "$(STAGING_DIR)/usr/lib"; \
-+			mkdir -p "$(STAGING_DIR)/usr/lib"; \
- 		fi; \
- 		mv "$(STAGING_DIR)/usr/lib64/"* "$(STAGING_DIR)/usr/lib/"; \
- 		rmdir "$(STAGING_DIR)/usr/lib64"; \
+If that was not your intention, then what ?
 
-Modified: trunk/buildroot/toolchain/gcc/gcc-uclibc-4.x.mk
-===================================================================
---- trunk/buildroot/toolchain/gcc/gcc-uclibc-4.x.mk	2007-10-07 17:06:26 UTC (rev 20192)
-+++ trunk/buildroot/toolchain/gcc/gcc-uclibc-4.x.mk	2007-10-07 17:22:56 UTC (rev 20193)
-@@ -290,7 +290,7 @@
- 		-C $(GCC_BUILD_DIR2) install
- 	if [ -d "$(STAGING_DIR)/lib64" ]; then \
- 		if [ ! -e "$(STAGING_DIR)/lib" ]; then \
--			mkdir "$(STAGING_DIR)/lib"; \
-+			mkdir -p "$(STAGING_DIR)/lib"; \
- 		fi; \
- 		mv "$(STAGING_DIR)/lib64/"* "$(STAGING_DIR)/lib/"; \
- 		rmdir "$(STAGING_DIR)/lib64"; \
+BR
+Ulf
