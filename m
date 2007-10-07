@@ -1,67 +1,543 @@
-From: Karl Auerbach <karl@cavebear.com>
-Date: Sun, 07 Oct 2007 12:19:41 -0700
-Subject: [Buildroot] Several issues by a buildroot newbie...
-In-Reply-To: <20071007163500.GK20951@aon.at>
-References: <4704186D.6070303@cavebear.com> <20071007163500.GK20951@aon.at>
-Message-ID: <4709314D.1080000@cavebear.com>
+From: aldot at uclibc.org <aldot@uclibc.org>
+Date: Sun,  7 Oct 2007 14:06:58 -0700 (PDT)
+Subject: [Buildroot] svn commit: branches/buildroot2: docs package
+	package/acpid package/alsa etc...
+Message-ID: <20071007210658.E8B60A6AAD@busybox.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Bernhard Fischer wrote:
-> On Wed, Oct 03, 2007 at 03:32:13PM -0700, Karl Auerbach wrote:
->> I'm fairly new to buildroot so please excuse me if I inadvertently touch 
->> something that has been raised previously:
->>
->> 1. Undefined reference in uClibc:
->>    In function `__libc_pthread_init':
->>    libc_pthread_init.c:(.text+0xf): undefined reference to
->>    `__libc_multiple_threads'
-> 
-> Which version of pthreads do you use?
+Author: aldot
+Date: 2007-10-07 14:06:51 -0700 (Sun, 07 Oct 2007)
+New Revision: 20203
 
-I've used uClibc-0.9.29.tar.bz2 and also the uClibc snapshot (from Oct 
-2.)  Is that what you are asking for?
+Log:
+- merge from trunk
 
-Both versions gave the same problem with Python, but the snapshot 
-version fixed similar problems with sudo and the ssh family of executables.
 
->> 3. The sudo sources aren't available via the URL given in the 
->> package/sudo/sudo.mk.  The site, http://www.courtesan.com/sudo/dist, has 
->> upgraded to a newer version and the older one to be downloaded appears 
->> no longer on that site.
-> 
-> It should be updated, yes. Please submit a tested patch. TIA.
+Added:
+   branches/buildroot2/docs/README.diskimage
+   branches/buildroot2/package/bash/bash32-018
+   branches/buildroot2/package/bash/bash32-019
+   branches/buildroot2/package/bash/bash32-020
+   branches/buildroot2/package/bash/bash32-021
+   branches/buildroot2/package/bash/bash32-022
+   branches/buildroot2/package/bash/bash32-023
+   branches/buildroot2/package/bash/bash32-024
+   branches/buildroot2/package/config/kconfig-language.txt
+   branches/buildroot2/package/gnuconfig/patches/config.sub.gnuhurd-uclibc.patch
+   branches/buildroot2/package/ltrace/ltrace-0.5-00-susv3-legacy.patch
+   branches/buildroot2/package/mdnsresponder/mDNSResponder-107.6-bcopy.patch
+   branches/buildroot2/package/mplayer/mplayer-1.0rc1-index.patch
+   branches/buildroot2/package/mtd/mtd-utils/
+   branches/buildroot2/package/proftpd/proftpd-1.3.0a-bcopy.patch
+   branches/buildroot2/package/x11r7/xlib_libXfont/xlib_libXfont-1.2.7-susv3-legacy.patch
+   branches/buildroot2/target/Config.in.arch
+   branches/buildroot2/target/device/Arm/integrator926_defconfig
+   branches/buildroot2/target/device/Arm/integrator926_huge_defconfig
+   branches/buildroot2/target/device/Arm/linux26.integrator926_huge.config
+   branches/buildroot2/target/device/Atmel/Config.in.at91
+   branches/buildroot2/target/device/Atmel/Config.in.avr32
+   branches/buildroot2/target/device/Atmel/Config.in.mirrors
+   branches/buildroot2/target/device/Atmel/at91rm9200df/at91rm9200df_defconfig
+   branches/buildroot2/target/device/Atmel/atngw100/atngw100small_defconfig
+   branches/buildroot2/target/device/Atmel/atngw100/busybox-1.7.1.config
+   branches/buildroot2/target/device/Atmel/toolchain/avr32/gcc-4.1.2-avr32-2.2/
+   branches/buildroot2/target/device/Config.in.mirrors
+   branches/buildroot2/target/device/Config.in.toolchain
+   branches/buildroot2/target/hurd/Makefile.in
+   branches/buildroot2/toolchain/binutils/2.18.50.0.1/100-makeinfo-version.patch
+   branches/buildroot2/toolchain/binutils/2.18/100-makeinfo-version.patch
+   branches/buildroot2/toolchain/br2_autoreconf
+   branches/buildroot2/toolchain/gcc/4.2.1/104-gnuhurd-uclibc-conf.patch
+   branches/buildroot2/toolchain/kernel-headers/ipmi/linux-2.6.22.9-007-ipmisensors-20070314-1214.patch
 
-Hmmm, I just scrounged around and manually downloaded the old version 
-from somewhere.
+Removed:
+   branches/buildroot2/target/arch.in
+   branches/buildroot2/target/device/Atmel/AT91_Config.in
+   branches/buildroot2/target/device/Atmel/AVR32_Config.in
+   branches/buildroot2/target/device/Atmel/Mirrors.in
+   branches/buildroot2/target/device/Mirrors.in
+   branches/buildroot2/target/device/Target.in
+   branches/buildroot2/target/device/Toolchain.in
 
-I'm not at all sure that I'm ready, much less sufficiently experienced 
-in the buildroot world, to advance the patches and stuff for sudo to the 
-current version from the www.courtesan.com site.
+Modified:
+   branches/buildroot2/.defconfig
+   branches/buildroot2/Config.in
+   branches/buildroot2/Makefile
+   branches/buildroot2/TODO
+   branches/buildroot2/package/Config.in
+   branches/buildroot2/package/Makefile.autotools.in
+   branches/buildroot2/package/Makefile.in
+   branches/buildroot2/package/acpid/acpid.mk
+   branches/buildroot2/package/alsa-lib/alsa-lib.mk
+   branches/buildroot2/package/alsa-utils/alsa-utils.mk
+   branches/buildroot2/package/argus/argus.mk
+   branches/buildroot2/package/asterisk/asterisk.mk
+   branches/buildroot2/package/atk/atk.mk
+   branches/buildroot2/package/avahi/avahi.mk
+   branches/buildroot2/package/berkeleydb/berkeleydb.mk
+   branches/buildroot2/package/boa/boa.mk
+   branches/buildroot2/package/bridge/bridge.mk
+   branches/buildroot2/package/busybox/Config.in
+   branches/buildroot2/package/busybox/busybox.mk
+   branches/buildroot2/package/busybox/initramfs.mk
+   branches/buildroot2/package/bzip2/bzip2.mk
+   branches/buildroot2/package/cairo/cairo.mk
+   branches/buildroot2/package/config/conf.c
+   branches/buildroot2/package/config/confdata.c
+   branches/buildroot2/package/config/gconf.c
+   branches/buildroot2/package/config/kconfig-to-buildroot2.patch
+   branches/buildroot2/package/config/mconf.c
+   branches/buildroot2/package/config/symbol.c
+   branches/buildroot2/package/coreutils/coreutils.mk
+   branches/buildroot2/package/curl/curl.mk
+   branches/buildroot2/package/cvs/cvs.mk
+   branches/buildroot2/package/dbus-glib/dbus-glib.mk
+   branches/buildroot2/package/dbus/dbus.mk
+   branches/buildroot2/package/dhcp/dhcp.mk
+   branches/buildroot2/package/dialog/dialog.mk
+   branches/buildroot2/package/directfb/directfb.mk
+   branches/buildroot2/package/dm/dm.mk
+   branches/buildroot2/package/dmalloc/dmalloc.mk
+   branches/buildroot2/package/dmraid/dmraid.mk
+   branches/buildroot2/package/dnsmasq/dnsmasq.mk
+   branches/buildroot2/package/dropbear/dropbear.mk
+   branches/buildroot2/package/e2fsprogs/e2fsprogs.mk
+   branches/buildroot2/package/ed/ed.mk
+   branches/buildroot2/package/expat/expat.mk
+   branches/buildroot2/package/fakeroot/fakeroot.mk
+   branches/buildroot2/package/fbset/fbset.mk
+   branches/buildroot2/package/fbv/fbv.mk
+   branches/buildroot2/package/file/file.mk
+   branches/buildroot2/package/findutils/findutils.mk
+   branches/buildroot2/package/fontconfig/fontconfig.mk
+   branches/buildroot2/package/freetype/freetype.mk
+   branches/buildroot2/package/gawk/gawk.mk
+   branches/buildroot2/package/gmp/gmp.mk
+   branches/buildroot2/package/gnuconfig/config.sub
+   branches/buildroot2/package/gnuconfig/gnuconfig.mk
+   branches/buildroot2/package/hal/hal.mk
+   branches/buildroot2/package/hdparm/hdparm.mk
+   branches/buildroot2/package/hotplug/hotplug.mk
+   branches/buildroot2/package/imagemagick/imagemagick.mk
+   branches/buildroot2/package/iostat/iostat.mk
+   branches/buildroot2/package/iperf/iperf.mk
+   branches/buildroot2/package/ipsec-tools/ipsec-tools.mk
+   branches/buildroot2/package/iptables/iptables.mk
+   branches/buildroot2/package/jpeg/jpeg.mk
+   branches/buildroot2/package/kexec/kexec.mk
+   branches/buildroot2/package/l2tp/l2tp.mk
+   branches/buildroot2/package/less/less.mk
+   branches/buildroot2/package/libaio/libaio.mk
+   branches/buildroot2/package/libcgi/libcgi.mk
+   branches/buildroot2/package/libcgicc/libcgicc.mk
+   branches/buildroot2/package/libdaemon/libdaemon.mk
+   branches/buildroot2/package/libdrm/libdrm.mk
+   branches/buildroot2/package/libelf/libelf.mk
+   branches/buildroot2/package/libfloat/libfloat.mk
+   branches/buildroot2/package/libglib12/libglib12.mk
+   branches/buildroot2/package/libglib2/libglib2.mk
+   branches/buildroot2/package/libgpg-error/libgpg-error.mk
+   branches/buildroot2/package/libgtk12/libgtk12.mk
+   branches/buildroot2/package/libgtk2/libgtk2.mk
+   branches/buildroot2/package/libid3tag/libid3tag.mk
+   branches/buildroot2/package/liblockfile/liblockfile.mk
+   branches/buildroot2/package/libmad/libmad.mk
+   branches/buildroot2/package/libpng/libpng.mk
+   branches/buildroot2/package/libsndfile/libsndfile.mk
+   branches/buildroot2/package/libsysfs/libsysfs.mk
+   branches/buildroot2/package/libtool/libtool.mk
+   branches/buildroot2/package/libungif/libungif.mk
+   branches/buildroot2/package/libusb/libusb.mk
+   branches/buildroot2/package/libxml2/libxml2.mk
+   branches/buildroot2/package/lighttpd/lighttpd.mk
+   branches/buildroot2/package/links/links.mk
+   branches/buildroot2/package/lm-sensors/lm-sensors.mk
+   branches/buildroot2/package/lockfile-progs/lockfile-progs.mk
+   branches/buildroot2/package/lrzsz/lrzsz.mk
+   branches/buildroot2/package/lsof/lsof.mk
+   branches/buildroot2/package/ltrace/Config.in
+   branches/buildroot2/package/ltrace/ltrace.mk
+   branches/buildroot2/package/ltt/ltt.mk
+   branches/buildroot2/package/lzma/lzma.mk
+   branches/buildroot2/package/m4/m4.mk
+   branches/buildroot2/package/madplay/madplay.mk
+   branches/buildroot2/package/matchbox/matchbox.mk
+   branches/buildroot2/package/mdadm/mdadm.mk
+   branches/buildroot2/package/mdnsresponder/mdnsresponder.mk
+   branches/buildroot2/package/memtester/memtester.mk
+   branches/buildroot2/package/metacity/metacity.mk
+   branches/buildroot2/package/microcom/microcom.mk
+   branches/buildroot2/package/mkdosfs/mkdosfs.mk
+   branches/buildroot2/package/module-init-tools/module-init-tools.mk
+   branches/buildroot2/package/modutils/modutils.mk
+   branches/buildroot2/package/mpfr/mpfr.mk
+   branches/buildroot2/package/mpg123/mpg123.mk
+   branches/buildroot2/package/mplayer/mplayer.mk
+   branches/buildroot2/package/mtd/20050122/mtd.mk
+   branches/buildroot2/package/mtd/20061007/mtd.mk
+   branches/buildroot2/package/mtd/Config.in
+   branches/buildroot2/package/mtd/mtd.mk
+   branches/buildroot2/package/mutt/mutt.mk
+   branches/buildroot2/package/nbd/nbd.mk
+   branches/buildroot2/package/ncftp/ncftp.mk
+   branches/buildroot2/package/ncurses/ncurses.mk
+   branches/buildroot2/package/netcat/netcat.mk
+   branches/buildroot2/package/netkitbase/netkitbase.mk
+   branches/buildroot2/package/netkittelnet/netkittelnet.mk
+   branches/buildroot2/package/netplug/netplug.mk
+   branches/buildroot2/package/netsnmp/netsnmp.mk
+   branches/buildroot2/package/newt/newt.mk
+   branches/buildroot2/package/olsr/olsr.mk
+   branches/buildroot2/package/openntpd/openntpd.mk
+   branches/buildroot2/package/openssh/openssh.mk
+   branches/buildroot2/package/openssl/openssl.mk
+   branches/buildroot2/package/pango/pango.mk
+   branches/buildroot2/package/pcmcia/pcmcia.mk
+   branches/buildroot2/package/php/php.mk
+   branches/buildroot2/package/pptp-linux/pptp-linux.mk
+   branches/buildroot2/package/qte/qte.mk
+   branches/buildroot2/package/qtopia4/qtopia4.mk
+   branches/buildroot2/package/rp-pppoe/rp-pppoe.mk
+   branches/buildroot2/package/rxvt/rxvt.mk
+   branches/buildroot2/package/samba/samba.mk
+   branches/buildroot2/package/sdl/sdl.mk
+   branches/buildroot2/package/setserial/setserial.mk
+   branches/buildroot2/package/sfdisk/sfdisk.mk
+   branches/buildroot2/package/slang/slang.mk
+   branches/buildroot2/package/smartmontools/smartmontools.mk
+   branches/buildroot2/package/sqlite/sqlite.mk
+   branches/buildroot2/package/strace/strace.mk
+   branches/buildroot2/package/stunnel/stunnel.mk
+   branches/buildroot2/package/sudo/sudo.mk
+   branches/buildroot2/package/sysklogd/sysklogd.mk
+   branches/buildroot2/package/tcl/tcl.mk
+   branches/buildroot2/package/tcpdump/dhcpdump.mk
+   branches/buildroot2/package/tcpdump/tcpdump.mk
+   branches/buildroot2/package/tiff/tiff.mk
+   branches/buildroot2/package/tinyhttpd/tinyhttpd.mk
+   branches/buildroot2/package/tinyx-old/tinyx.mk
+   branches/buildroot2/package/tinyx/tinyx.mk
+   branches/buildroot2/package/tslib/tslib.mk
+   branches/buildroot2/package/udev/udev.mk
+   branches/buildroot2/package/uemacs/uemacs.mk
+   branches/buildroot2/package/valgrind/valgrind.mk
+   branches/buildroot2/package/vpnc/vpnc.mk
+   branches/buildroot2/package/wireless-tools/wireless-tools.mk
+   branches/buildroot2/package/x11r7/libxcb/libxcb.mk
+   branches/buildroot2/package/x11r7/openchrome/openchrome.mk
+   branches/buildroot2/package/x11r7/pthread-stubs/pthread-stubs.mk
+   branches/buildroot2/package/x11r7/xapp_appres/xapp_appres.mk
+   branches/buildroot2/package/x11r7/xapp_bdftopcf/xapp_bdftopcf.mk
+   branches/buildroot2/package/x11r7/xapp_beforelight/xapp_beforelight.mk
+   branches/buildroot2/package/x11r7/xapp_bitmap/xapp_bitmap.mk
+   branches/buildroot2/package/x11r7/xapp_editres/xapp_editres.mk
+   branches/buildroot2/package/x11r7/xapp_fonttosfnt/xapp_fonttosfnt.mk
+   branches/buildroot2/package/x11r7/xapp_fslsfonts/xapp_fslsfonts.mk
+   branches/buildroot2/package/x11r7/xapp_fstobdf/xapp_fstobdf.mk
+   branches/buildroot2/package/x11r7/xapp_iceauth/xapp_iceauth.mk
+   branches/buildroot2/package/x11r7/xapp_ico/xapp_ico.mk
+   branches/buildroot2/package/x11r7/xapp_lbxproxy/xapp_lbxproxy.mk
+   branches/buildroot2/package/x11r7/xapp_listres/xapp_listres.mk
+   branches/buildroot2/package/x11r7/xapp_luit/xapp_luit.mk
+   branches/buildroot2/package/x11r7/xapp_mkfontdir/xapp_mkfontdir.mk
+   branches/buildroot2/package/x11r7/xapp_mkfontscale/xapp_mkfontscale.mk
+   branches/buildroot2/package/x11r7/xapp_oclock/xapp_oclock.mk
+   branches/buildroot2/package/x11r7/xapp_proxymngr/xapp_proxymngr.mk
+   branches/buildroot2/package/x11r7/xapp_rgb/xapp_rgb.mk
+   branches/buildroot2/package/x11r7/xapp_rstart/xapp_rstart.mk
+   branches/buildroot2/package/x11r7/xapp_scripts/xapp_scripts.mk
+   branches/buildroot2/package/x11r7/xapp_sessreg/xapp_sessreg.mk
+   branches/buildroot2/package/x11r7/xapp_setxkbmap/xapp_setxkbmap.mk
+   branches/buildroot2/package/x11r7/xapp_showfont/xapp_showfont.mk
+   branches/buildroot2/package/x11r7/xapp_smproxy/xapp_smproxy.mk
+   branches/buildroot2/package/x11r7/xapp_twm/xapp_twm.mk
+   branches/buildroot2/package/x11r7/xapp_viewres/xapp_viewres.mk
+   branches/buildroot2/package/x11r7/xapp_x11perf/xapp_x11perf.mk
+   branches/buildroot2/package/x11r7/xapp_xauth/xapp_xauth.mk
+   branches/buildroot2/package/x11r7/xapp_xbiff/xapp_xbiff.mk
+   branches/buildroot2/package/x11r7/xapp_xcalc/xapp_xcalc.mk
+   branches/buildroot2/package/x11r7/xapp_xclipboard/xapp_xclipboard.mk
+   branches/buildroot2/package/x11r7/xapp_xclock/xapp_xclock.mk
+   branches/buildroot2/package/x11r7/xapp_xcmsdb/xapp_xcmsdb.mk
+   branches/buildroot2/package/x11r7/xapp_xcursorgen/xapp_xcursorgen.mk
+   branches/buildroot2/package/x11r7/xapp_xdbedizzy/xapp_xdbedizzy.mk
+   branches/buildroot2/package/x11r7/xapp_xditview/xapp_xditview.mk
+   branches/buildroot2/package/x11r7/xapp_xdm/xapp_xdm.mk
+   branches/buildroot2/package/x11r7/xapp_xdpyinfo/xapp_xdpyinfo.mk
+   branches/buildroot2/package/x11r7/xapp_xdriinfo/xapp_xdriinfo.mk
+   branches/buildroot2/package/x11r7/xapp_xedit/xapp_xedit.mk
+   branches/buildroot2/package/x11r7/xapp_xev/xapp_xev.mk
+   branches/buildroot2/package/x11r7/xapp_xeyes/xapp_xeyes.mk
+   branches/buildroot2/package/x11r7/xapp_xf86dga/xapp_xf86dga.mk
+   branches/buildroot2/package/x11r7/xapp_xfd/xapp_xfd.mk
+   branches/buildroot2/package/x11r7/xapp_xfindproxy/xapp_xfindproxy.mk
+   branches/buildroot2/package/x11r7/xapp_xfontsel/xapp_xfontsel.mk
+   branches/buildroot2/package/x11r7/xapp_xfs/xapp_xfs.mk
+   branches/buildroot2/package/x11r7/xapp_xfsinfo/xapp_xfsinfo.mk
+   branches/buildroot2/package/x11r7/xapp_xfwp/xapp_xfwp.mk
+   branches/buildroot2/package/x11r7/xapp_xgamma/xapp_xgamma.mk
+   branches/buildroot2/package/x11r7/xapp_xgc/xapp_xgc.mk
+   branches/buildroot2/package/x11r7/xapp_xhost/xapp_xhost.mk
+   branches/buildroot2/package/x11r7/xapp_xinit/xapp_xinit.mk
+   branches/buildroot2/package/x11r7/xapp_xkbcomp/xapp_xkbcomp.mk
+   branches/buildroot2/package/x11r7/xapp_xkbevd/xapp_xkbevd.mk
+   branches/buildroot2/package/x11r7/xapp_xkbprint/xapp_xkbprint.mk
+   branches/buildroot2/package/x11r7/xapp_xkbutils/xapp_xkbutils.mk
+   branches/buildroot2/package/x11r7/xapp_xkill/xapp_xkill.mk
+   branches/buildroot2/package/x11r7/xapp_xload/xapp_xload.mk
+   branches/buildroot2/package/x11r7/xapp_xlogo/xapp_xlogo.mk
+   branches/buildroot2/package/x11r7/xapp_xlsatoms/xapp_xlsatoms.mk
+   branches/buildroot2/package/x11r7/xapp_xlsclients/xapp_xlsclients.mk
+   branches/buildroot2/package/x11r7/xapp_xlsfonts/xapp_xlsfonts.mk
+   branches/buildroot2/package/x11r7/xapp_xmag/xapp_xmag.mk
+   branches/buildroot2/package/x11r7/xapp_xmessage/xapp_xmessage.mk
+   branches/buildroot2/package/x11r7/xapp_xmh/xapp_xmh.mk
+   branches/buildroot2/package/x11r7/xapp_xmodmap/xapp_xmodmap.mk
+   branches/buildroot2/package/x11r7/xapp_xmore/xapp_xmore.mk
+   branches/buildroot2/package/x11r7/xapp_xphelloworld/xapp_xphelloworld.mk
+   branches/buildroot2/package/x11r7/xapp_xplsprinters/xapp_xplsprinters.mk
+   branches/buildroot2/package/x11r7/xapp_xpr/xapp_xpr.mk
+   branches/buildroot2/package/x11r7/xapp_xprehashprinterlist/xapp_xprehashprinterlist.mk
+   branches/buildroot2/package/x11r7/xapp_xprop/xapp_xprop.mk
+   branches/buildroot2/package/x11r7/xapp_xrandr/xapp_xrandr.mk
+   branches/buildroot2/package/x11r7/xapp_xrdb/xapp_xrdb.mk
+   branches/buildroot2/package/x11r7/xapp_xrefresh/xapp_xrefresh.mk
+   branches/buildroot2/package/x11r7/xapp_xrx/xapp_xrx.mk
+   branches/buildroot2/package/x11r7/xapp_xset/xapp_xset.mk
+   branches/buildroot2/package/x11r7/xapp_xsetmode/xapp_xsetmode.mk
+   branches/buildroot2/package/x11r7/xapp_xsetpointer/xapp_xsetpointer.mk
+   branches/buildroot2/package/x11r7/xapp_xsetroot/xapp_xsetroot.mk
+   branches/buildroot2/package/x11r7/xapp_xsm/xapp_xsm.mk
+   branches/buildroot2/package/x11r7/xapp_xstdcmap/xapp_xstdcmap.mk
+   branches/buildroot2/package/x11r7/xapp_xtrap/xapp_xtrap.mk
+   branches/buildroot2/package/x11r7/xapp_xvidtune/xapp_xvidtune.mk
+   branches/buildroot2/package/x11r7/xapp_xvinfo/xapp_xvinfo.mk
+   branches/buildroot2/package/x11r7/xapp_xwd/xapp_xwd.mk
+   branches/buildroot2/package/x11r7/xapp_xwininfo/xapp_xwininfo.mk
+   branches/buildroot2/package/x11r7/xapp_xwud/xapp_xwud.mk
+   branches/buildroot2/package/x11r7/xcb-proto/xcb-proto.mk
+   branches/buildroot2/package/x11r7/xcb-util/xcb-util.mk
+   branches/buildroot2/package/x11r7/xdata_xbitmaps/xdata_xbitmaps.mk
+   branches/buildroot2/package/x11r7/xdriver_xf86-input-acecad/xdriver_xf86-input-acecad.mk
+   branches/buildroot2/package/x11r7/xdriver_xf86-input-aiptek/xdriver_xf86-input-aiptek.mk
+   branches/buildroot2/package/x11r7/xdriver_xf86-input-calcomp/xdriver_xf86-input-calcomp.mk
+   branches/buildroot2/package/x11r7/xdriver_xf86-input-citron/xdriver_xf86-input-citron.mk
+   branches/buildroot2/package/x11r7/xdriver_xf86-input-digitaledge/xdriver_xf86-input-digitaledge.mk
+   branches/buildroot2/package/x11r7/xdriver_xf86-input-dmc/xdriver_xf86-input-dmc.mk
+   branches/buildroot2/package/x11r7/xdriver_xf86-input-dynapro/xdriver_xf86-input-dynapro.mk
+   branches/buildroot2/package/x11r7/xdriver_xf86-input-elo2300/xdriver_xf86-input-elo2300.mk
+   branches/buildroot2/package/x11r7/xdriver_xf86-input-elographics/xdriver_xf86-input-elographics.mk
+   branches/buildroot2/package/x11r7/xdriver_xf86-input-evdev/xdriver_xf86-input-evdev.mk
+   branches/buildroot2/package/x11r7/xdriver_xf86-input-fpit/xdriver_xf86-input-fpit.mk
+   branches/buildroot2/package/x11r7/xdriver_xf86-input-hyperpen/xdriver_xf86-input-hyperpen.mk
+   branches/buildroot2/package/x11r7/xdriver_xf86-input-jamstudio/xdriver_xf86-input-jamstudio.mk
+   branches/buildroot2/package/x11r7/xdriver_xf86-input-joystick/xdriver_xf86-input-joystick.mk
+   branches/buildroot2/package/x11r7/xdriver_xf86-input-keyboard/xdriver_xf86-input-keyboard.mk
+   branches/buildroot2/package/x11r7/xdriver_xf86-input-magellan/xdriver_xf86-input-magellan.mk
+   branches/buildroot2/package/x11r7/xdriver_xf86-input-magictouch/xdriver_xf86-input-magictouch.mk
+   branches/buildroot2/package/x11r7/xdriver_xf86-input-microtouch/xdriver_xf86-input-microtouch.mk
+   branches/buildroot2/package/x11r7/xdriver_xf86-input-mouse/xdriver_xf86-input-mouse.mk
+   branches/buildroot2/package/x11r7/xdriver_xf86-input-mutouch/xdriver_xf86-input-mutouch.mk
+   branches/buildroot2/package/x11r7/xdriver_xf86-input-palmax/xdriver_xf86-input-palmax.mk
+   branches/buildroot2/package/x11r7/xdriver_xf86-input-penmount/xdriver_xf86-input-penmount.mk
+   branches/buildroot2/package/x11r7/xdriver_xf86-input-spaceorb/xdriver_xf86-input-spaceorb.mk
+   branches/buildroot2/package/x11r7/xdriver_xf86-input-summa/xdriver_xf86-input-summa.mk
+   branches/buildroot2/package/x11r7/xdriver_xf86-input-tek4957/xdriver_xf86-input-tek4957.mk
+   branches/buildroot2/package/x11r7/xdriver_xf86-input-ur98/xdriver_xf86-input-ur98.mk
+   branches/buildroot2/package/x11r7/xdriver_xf86-input-vmmouse/xdriver_xf86-input-vmmouse.mk
+   branches/buildroot2/package/x11r7/xdriver_xf86-input-void/xdriver_xf86-input-void.mk
+   branches/buildroot2/package/x11r7/xdriver_xf86-video-apm/xdriver_xf86-video-apm.mk
+   branches/buildroot2/package/x11r7/xdriver_xf86-video-ark/xdriver_xf86-video-ark.mk
+   branches/buildroot2/package/x11r7/xdriver_xf86-video-ast/xdriver_xf86-video-ast.mk
+   branches/buildroot2/package/x11r7/xdriver_xf86-video-ati/xdriver_xf86-video-ati.mk
+   branches/buildroot2/package/x11r7/xdriver_xf86-video-chips/xdriver_xf86-video-chips.mk
+   branches/buildroot2/package/x11r7/xdriver_xf86-video-cirrus/xdriver_xf86-video-cirrus.mk
+   branches/buildroot2/package/x11r7/xdriver_xf86-video-cyrix/xdriver_xf86-video-cyrix.mk
+   branches/buildroot2/package/x11r7/xdriver_xf86-video-dummy/xdriver_xf86-video-dummy.mk
+   branches/buildroot2/package/x11r7/xdriver_xf86-video-fbdev/xdriver_xf86-video-fbdev.mk
+   branches/buildroot2/package/x11r7/xdriver_xf86-video-glint/xdriver_xf86-video-glint.mk
+   branches/buildroot2/package/x11r7/xdriver_xf86-video-i128/xdriver_xf86-video-i128.mk
+   branches/buildroot2/package/x11r7/xdriver_xf86-video-i740/xdriver_xf86-video-i740.mk
+   branches/buildroot2/package/x11r7/xdriver_xf86-video-i810/xdriver_xf86-video-i810.mk
+   branches/buildroot2/package/x11r7/xdriver_xf86-video-imstt/xdriver_xf86-video-imstt.mk
+   branches/buildroot2/package/x11r7/xdriver_xf86-video-mga/xdriver_xf86-video-mga.mk
+   branches/buildroot2/package/x11r7/xdriver_xf86-video-neomagic/xdriver_xf86-video-neomagic.mk
+   branches/buildroot2/package/x11r7/xdriver_xf86-video-newport/xdriver_xf86-video-newport.mk
+   branches/buildroot2/package/x11r7/xdriver_xf86-video-nsc/xdriver_xf86-video-nsc.mk
+   branches/buildroot2/package/x11r7/xdriver_xf86-video-nv/xdriver_xf86-video-nv.mk
+   branches/buildroot2/package/x11r7/xdriver_xf86-video-rendition/xdriver_xf86-video-rendition.mk
+   branches/buildroot2/package/x11r7/xdriver_xf86-video-s3/xdriver_xf86-video-s3.mk
+   branches/buildroot2/package/x11r7/xdriver_xf86-video-s3virge/xdriver_xf86-video-s3virge.mk
+   branches/buildroot2/package/x11r7/xdriver_xf86-video-savage/xdriver_xf86-video-savage.mk
+   branches/buildroot2/package/x11r7/xdriver_xf86-video-siliconmotion/xdriver_xf86-video-siliconmotion.mk
+   branches/buildroot2/package/x11r7/xdriver_xf86-video-sis/xdriver_xf86-video-sis.mk
+   branches/buildroot2/package/x11r7/xdriver_xf86-video-sisusb/xdriver_xf86-video-sisusb.mk
+   branches/buildroot2/package/x11r7/xdriver_xf86-video-sunbw2/xdriver_xf86-video-sunbw2.mk
+   branches/buildroot2/package/x11r7/xdriver_xf86-video-suncg14/xdriver_xf86-video-suncg14.mk
+   branches/buildroot2/package/x11r7/xdriver_xf86-video-suncg3/xdriver_xf86-video-suncg3.mk
+   branches/buildroot2/package/x11r7/xdriver_xf86-video-suncg6/xdriver_xf86-video-suncg6.mk
+   branches/buildroot2/package/x11r7/xdriver_xf86-video-sunffb/xdriver_xf86-video-sunffb.mk
+   branches/buildroot2/package/x11r7/xdriver_xf86-video-sunleo/xdriver_xf86-video-sunleo.mk
+   branches/buildroot2/package/x11r7/xdriver_xf86-video-suntcx/xdriver_xf86-video-suntcx.mk
+   branches/buildroot2/package/x11r7/xdriver_xf86-video-tdfx/xdriver_xf86-video-tdfx.mk
+   branches/buildroot2/package/x11r7/xdriver_xf86-video-tga/xdriver_xf86-video-tga.mk
+   branches/buildroot2/package/x11r7/xdriver_xf86-video-trident/xdriver_xf86-video-trident.mk
+   branches/buildroot2/package/x11r7/xdriver_xf86-video-tseng/xdriver_xf86-video-tseng.mk
+   branches/buildroot2/package/x11r7/xdriver_xf86-video-v4l/xdriver_xf86-video-v4l.mk
+   branches/buildroot2/package/x11r7/xdriver_xf86-video-vesa/xdriver_xf86-video-vesa.mk
+   branches/buildroot2/package/x11r7/xdriver_xf86-video-vga/xdriver_xf86-video-vga.mk
+   branches/buildroot2/package/x11r7/xdriver_xf86-video-via/xdriver_xf86-video-via.mk
+   branches/buildroot2/package/x11r7/xdriver_xf86-video-vmware/xdriver_xf86-video-vmware.mk
+   branches/buildroot2/package/x11r7/xdriver_xf86-video-voodoo/xdriver_xf86-video-voodoo.mk
+   branches/buildroot2/package/x11r7/xfont_encodings/xfont_encodings.mk
+   branches/buildroot2/package/x11r7/xfont_font-adobe-utopia-type1/xfont_font-adobe-utopia-type1.mk
+   branches/buildroot2/package/x11r7/xfont_font-bitstream-type1/xfont_font-bitstream-type1.mk
+   branches/buildroot2/package/x11r7/xfont_font-ibm-type1/xfont_font-ibm-type1.mk
+   branches/buildroot2/package/x11r7/xfont_font-xfree86-type1/xfont_font-xfree86-type1.mk
+   branches/buildroot2/package/x11r7/xlib_libFS/xlib_libFS.mk
+   branches/buildroot2/package/x11r7/xlib_libICE/xlib_libICE.mk
+   branches/buildroot2/package/x11r7/xlib_libSM/xlib_libSM.mk
+   branches/buildroot2/package/x11r7/xlib_libX11/xlib_libX11.mk
+   branches/buildroot2/package/x11r7/xlib_libXScrnSaver/xlib_libXScrnSaver.mk
+   branches/buildroot2/package/x11r7/xlib_libXTrap/xlib_libXTrap.mk
+   branches/buildroot2/package/x11r7/xlib_libXau/xlib_libXau.mk
+   branches/buildroot2/package/x11r7/xlib_libXaw/xlib_libXaw.mk
+   branches/buildroot2/package/x11r7/xlib_libXcomposite/xlib_libXcomposite.mk
+   branches/buildroot2/package/x11r7/xlib_libXcursor/xlib_libXcursor.mk
+   branches/buildroot2/package/x11r7/xlib_libXdamage/xlib_libXdamage.mk
+   branches/buildroot2/package/x11r7/xlib_libXdmcp/xlib_libXdmcp.mk
+   branches/buildroot2/package/x11r7/xlib_libXevie/xlib_libXevie.mk
+   branches/buildroot2/package/x11r7/xlib_libXext/xlib_libXext.mk
+   branches/buildroot2/package/x11r7/xlib_libXfixes/xlib_libXfixes.mk
+   branches/buildroot2/package/x11r7/xlib_libXfont/xlib_libXfont.mk
+   branches/buildroot2/package/x11r7/xlib_libXfontcache/xlib_libXfontcache.mk
+   branches/buildroot2/package/x11r7/xlib_libXft/xlib_libXft.mk
+   branches/buildroot2/package/x11r7/xlib_libXi/xlib_libXi.mk
+   branches/buildroot2/package/x11r7/xlib_libXinerama/xlib_libXinerama.mk
+   branches/buildroot2/package/x11r7/xlib_libXmu/xlib_libXmu.mk
+   branches/buildroot2/package/x11r7/xlib_libXp/xlib_libXp.mk
+   branches/buildroot2/package/x11r7/xlib_libXpm/xlib_libXpm.mk
+   branches/buildroot2/package/x11r7/xlib_libXprintAppUtil/xlib_libXprintAppUtil.mk
+   branches/buildroot2/package/x11r7/xlib_libXprintUtil/xlib_libXprintUtil.mk
+   branches/buildroot2/package/x11r7/xlib_libXrandr/xlib_libXrandr.mk
+   branches/buildroot2/package/x11r7/xlib_libXrender/xlib_libXrender.mk
+   branches/buildroot2/package/x11r7/xlib_libXres/xlib_libXres.mk
+   branches/buildroot2/package/x11r7/xlib_libXt/xlib_libXt.mk
+   branches/buildroot2/package/x11r7/xlib_libXtst/xlib_libXtst.mk
+   branches/buildroot2/package/x11r7/xlib_libXv/xlib_libXv.mk
+   branches/buildroot2/package/x11r7/xlib_libXvMC/xlib_libXvMC.mk
+   branches/buildroot2/package/x11r7/xlib_libXxf86dga/xlib_libXxf86dga.mk
+   branches/buildroot2/package/x11r7/xlib_libXxf86misc/xlib_libXxf86misc.mk
+   branches/buildroot2/package/x11r7/xlib_libXxf86vm/xlib_libXxf86vm.mk
+   branches/buildroot2/package/x11r7/xlib_libdmx/xlib_libdmx.mk
+   branches/buildroot2/package/x11r7/xlib_libfontenc/xlib_libfontenc.mk
+   branches/buildroot2/package/x11r7/xlib_liblbxutil/xlib_liblbxutil.mk
+   branches/buildroot2/package/x11r7/xlib_liboldX/xlib_liboldX.mk
+   branches/buildroot2/package/x11r7/xlib_libxkbfile/xlib_libxkbfile.mk
+   branches/buildroot2/package/x11r7/xlib_libxkbui/xlib_libxkbui.mk
+   branches/buildroot2/package/x11r7/xlib_xtrans/xlib_xtrans.mk
+   branches/buildroot2/package/x11r7/xproto_applewmproto/xproto_applewmproto.mk
+   branches/buildroot2/package/x11r7/xproto_bigreqsproto/xproto_bigreqsproto.mk
+   branches/buildroot2/package/x11r7/xproto_compositeproto/xproto_compositeproto.mk
+   branches/buildroot2/package/x11r7/xproto_damageproto/xproto_damageproto.mk
+   branches/buildroot2/package/x11r7/xproto_dmxproto/xproto_dmxproto.mk
+   branches/buildroot2/package/x11r7/xproto_evieext/xproto_evieext.mk
+   branches/buildroot2/package/x11r7/xproto_fixesproto/xproto_fixesproto.mk
+   branches/buildroot2/package/x11r7/xproto_fontcacheproto/xproto_fontcacheproto.mk
+   branches/buildroot2/package/x11r7/xproto_fontsproto/xproto_fontsproto.mk
+   branches/buildroot2/package/x11r7/xproto_glproto/xproto_glproto.mk
+   branches/buildroot2/package/x11r7/xproto_inputproto/xproto_inputproto.mk
+   branches/buildroot2/package/x11r7/xproto_kbproto/xproto_kbproto.mk
+   branches/buildroot2/package/x11r7/xproto_printproto/xproto_printproto.mk
+   branches/buildroot2/package/x11r7/xproto_randrproto/xproto_randrproto.mk
+   branches/buildroot2/package/x11r7/xproto_recordproto/xproto_recordproto.mk
+   branches/buildroot2/package/x11r7/xproto_renderproto/xproto_renderproto.mk
+   branches/buildroot2/package/x11r7/xproto_resourceproto/xproto_resourceproto.mk
+   branches/buildroot2/package/x11r7/xproto_scrnsaverproto/xproto_scrnsaverproto.mk
+   branches/buildroot2/package/x11r7/xproto_trapproto/xproto_trapproto.mk
+   branches/buildroot2/package/x11r7/xproto_videoproto/xproto_videoproto.mk
+   branches/buildroot2/package/x11r7/xproto_windowswmproto/xproto_windowswmproto.mk
+   branches/buildroot2/package/x11r7/xproto_xcmiscproto/xproto_xcmiscproto.mk
+   branches/buildroot2/package/x11r7/xproto_xextproto/xproto_xextproto.mk
+   branches/buildroot2/package/x11r7/xproto_xf86bigfontproto/xproto_xf86bigfontproto.mk
+   branches/buildroot2/package/x11r7/xproto_xf86dgaproto/xproto_xf86dgaproto.mk
+   branches/buildroot2/package/x11r7/xproto_xf86driproto/xproto_xf86driproto.mk
+   branches/buildroot2/package/x11r7/xproto_xf86miscproto/xproto_xf86miscproto.mk
+   branches/buildroot2/package/x11r7/xproto_xf86rushproto/xproto_xf86rushproto.mk
+   branches/buildroot2/package/x11r7/xproto_xf86vidmodeproto/xproto_xf86vidmodeproto.mk
+   branches/buildroot2/package/x11r7/xproto_xineramaproto/xproto_xineramaproto.mk
+   branches/buildroot2/package/x11r7/xproto_xproto/xproto_xproto.mk
+   branches/buildroot2/package/x11r7/xproto_xproxymanagementprotocol/xproto_xproxymanagementprotocol.mk
+   branches/buildroot2/package/x11r7/xserver_xorg-server/xserver_xorg-server.mk
+   branches/buildroot2/package/x11r7/xutil_makedepend/xutil_makedepend.mk
+   branches/buildroot2/package/x11r7/xutil_util-macros/xutil_util-macros.mk
+   branches/buildroot2/package/xerces/xerces.mk
+   branches/buildroot2/package/xfsprogs/xfsprogs.mk
+   branches/buildroot2/package/xorg/xorg.mk
+   branches/buildroot2/package/zlib/zlib.mk
+   branches/buildroot2/project/project.mk
+   branches/buildroot2/target/Config.in
+   branches/buildroot2/target/Makefile.in
+   branches/buildroot2/target/cloop/cloop.mk
+   branches/buildroot2/target/cpio/Config.in
+   branches/buildroot2/target/cpio/cpioroot.mk
+   branches/buildroot2/target/cramfs/cramfs.mk
+   branches/buildroot2/target/device/AMD/Config.in
+   branches/buildroot2/target/device/Arm/Config.in
+   branches/buildroot2/target/device/Arm/Makefile.in
+   branches/buildroot2/target/device/Arm/linux26.integrator926.config
+   branches/buildroot2/target/device/Arm/uClibc.integrator926.config
+   branches/buildroot2/target/device/Atmel/Config.in
+   branches/buildroot2/target/device/Atmel/at91rm9200df/Makefile.in
+   branches/buildroot2/target/device/Atmel/at91rm9200df/at91rm9200df-linux-2.6.22.1.config
+   branches/buildroot2/target/device/Atmel/at91rm9200df/busybox-1.6.0.config
+   branches/buildroot2/target/device/Atmel/at91rm9200df/busybox-1.7.1.config
+   branches/buildroot2/target/device/Atmel/atngw100/atngw100_defconfig
+   branches/buildroot2/target/device/Atmel/u-boot/u-boot.mk
+   branches/buildroot2/target/device/Atmel/uClibc.config.avr32
+   branches/buildroot2/target/device/Config.in
+   branches/buildroot2/target/device/Soekris/Config.in
+   branches/buildroot2/target/device/Via/Config.in
+   branches/buildroot2/target/device/jp/Config.in
+   branches/buildroot2/target/ext2/Config.in
+   branches/buildroot2/target/ext2/ext2root.mk
+   branches/buildroot2/target/generic/mini_device_table.txt
+   branches/buildroot2/target/generic/target_busybox_skeleton/etc/inittab
+   branches/buildroot2/target/hurd/Config.in
+   branches/buildroot2/target/initramfs/initramfs.mk
+   branches/buildroot2/target/jffs2/Config.in
+   branches/buildroot2/target/jffs2/jffs2root.mk
+   branches/buildroot2/target/linux/Config.in
+   branches/buildroot2/target/linux/Makefile.in
+   branches/buildroot2/target/squashfs/squashfsroot.mk
+   branches/buildroot2/target/tar/Config.in
+   branches/buildroot2/target/tar/tarroot.mk
+   branches/buildroot2/target/x86/grub/grub.mk
+   branches/buildroot2/toolchain/Config.in
+   branches/buildroot2/toolchain/Config.in.2
+   branches/buildroot2/toolchain/Makefile.in
+   branches/buildroot2/toolchain/binutils/Config.in
+   branches/buildroot2/toolchain/binutils/binutils.mk
+   branches/buildroot2/toolchain/gcc/Config.in
+   branches/buildroot2/toolchain/gcc/Makefile.in
+   branches/buildroot2/toolchain/gcc/gcc-uclibc-3.x.mk
+   branches/buildroot2/toolchain/gcc/gcc-uclibc-4.x.mk
+   branches/buildroot2/toolchain/gdb/Config.in
+   branches/buildroot2/toolchain/gdb/Config.in.2
+   branches/buildroot2/toolchain/gdb/gdb.mk
+   branches/buildroot2/toolchain/kernel-headers/Config.in
+   branches/buildroot2/toolchain/kernel-headers/kernel-headers-new.makefile
+   branches/buildroot2/toolchain/uClibc/Config.in
+   branches/buildroot2/toolchain/uClibc/uclibc.mk
 
->> 4. The lockfile-progs.c (in package lockfile-progs) uses rindex() but 
->> does not include the correct header file that defines it.  This can be 
->> repaired by a patch that either changes rindex() to strrchr() or 
->> including the correct header.  (I did the former.)
-> 
-> Please submit a patch to use strrchr.
 
-Here's what I've been using, assuming that email doesn't word wrap it 
-into oblivion:
+Changeset:
 
-karl at klack(24): cat lockfile-progs-iwl-alix.patch
---- lockfile-progs-0.1.10/lockfile-progs.c      2001-07-17 
-10:40:06.000000000 -0700
-+++ lfp/lockfile-progs.c     2007-09-25 14:41:22.000000000 -0700
-@@ -70,7 +70,7 @@
-      { NULL, 0, NULL, 0 }
-    };
+Sorry, the patch is too large to include (23670 lines).
+Please use ViewCVS to see it!
 
--  char *cmd_name = rindex(argv[0], '/');
-+  char *cmd_name = strrchr(argv[0], '/');
-    int mail_cmd_p = 0;
-
-    if(cmd_name != NULL) {
+http://uclibc.org/cgi-bin/viewcvs.cgi?view=rev&root=svn&rev=20203
