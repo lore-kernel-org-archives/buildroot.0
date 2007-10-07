@@ -1,75 +1,67 @@
-From: ulf at uclibc.org <ulf@uclibc.org>
-Date: Sun,  7 Oct 2007 11:29:17 -0700 (PDT)
-Subject: [Buildroot] svn commit: trunk/buildroot: package/busybox
-	toolchain/gcc
-Message-ID: <20071007182917.0C89E30042@busybox.net>
+From: Karl Auerbach <karl@cavebear.com>
+Date: Sun, 07 Oct 2007 12:19:41 -0700
+Subject: [Buildroot] Several issues by a buildroot newbie...
+In-Reply-To: <20071007163500.GK20951@aon.at>
+References: <4704186D.6070303@cavebear.com> <20071007163500.GK20951@aon.at>
+Message-ID: <4709314D.1080000@cavebear.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Author: ulf
-Date: 2007-10-07 11:29:17 -0700 (Sun, 07 Oct 2007)
-New Revision: 20199
+Bernhard Fischer wrote:
+> On Wed, Oct 03, 2007 at 03:32:13PM -0700, Karl Auerbach wrote:
+>> I'm fairly new to buildroot so please excuse me if I inadvertently touch 
+>> something that has been raised previously:
+>>
+>> 1. Undefined reference in uClibc:
+>>    In function `__libc_pthread_init':
+>>    libc_pthread_init.c:(.text+0xf): undefined reference to
+>>    `__libc_multiple_threads'
+> 
+> Which version of pthreads do you use?
 
-Log:
-Allow longer history for package versions
+I've used uClibc-0.9.29.tar.bz2 and also the uClibc snapshot (from Oct 
+2.)  Is that what you are asking for?
 
-Modified:
-   trunk/buildroot/Config.in
-   trunk/buildroot/package/busybox/Config.in
-   trunk/buildroot/toolchain/gcc/Config.in
+Both versions gave the same problem with Python, but the snapshot 
+version fixed similar problems with sudo and the ssh family of executables.
 
+>> 3. The sudo sources aren't available via the URL given in the 
+>> package/sudo/sudo.mk.  The site, http://www.courtesan.com/sudo/dist, has 
+>> upgraded to a newer version and the older one to be downloaded appears 
+>> no longer on that site.
+> 
+> It should be updated, yes. Please submit a tested patch. TIA.
 
-Changeset:
-Modified: trunk/buildroot/Config.in
-===================================================================
---- trunk/buildroot/Config.in	2007-10-07 18:23:43 UTC (rev 20198)
-+++ trunk/buildroot/Config.in	2007-10-07 18:29:17 UTC (rev 20199)
-@@ -170,6 +170,12 @@
- 	help
- 	  This option hides outdated/obsolete versions of packages.
- 
-+config BR2_RECENT
-+	bool "Show packages that are of the latest major version"
-+	default y
-+	help
-+	  This option show recent versions of packages.
-+
- choice
- 	prompt "strip"
- 	default BR2_STRIP_strip
+Hmmm, I just scrounged around and manually downloaded the old version 
+from somewhere.
 
-Modified: trunk/buildroot/package/busybox/Config.in
-===================================================================
---- trunk/buildroot/package/busybox/Config.in	2007-10-07 18:23:43 UTC (rev 20198)
-+++ trunk/buildroot/package/busybox/Config.in	2007-10-07 18:29:17 UTC (rev 20199)
-@@ -26,11 +26,11 @@
- 
- 	config BR2_BUSYBOX_VERSION_1_7_0
- 		bool "BusyBox 1.7.0"
--		depends on BR2_DEPRECATED
-+		depends on BR2_DEPRECATED || BR2_RECENT
- 
- 	config BR2_BUSYBOX_VERSION_1_7_1
- 		bool "BusyBox 1.7.1"
--		depends on BR2_DEPRECATED
-+		depends on BR2_DEPRECATED || BR2_RECENT
- 
- 	config BR2_BUSYBOX_VERSION_1_7_2
- 		bool "BusyBox 1.7.2"
+I'm not at all sure that I'm ready, much less sufficiently experienced 
+in the buildroot world, to advance the patches and stuff for sudo to the 
+current version from the www.courtesan.com site.
 
-Modified: trunk/buildroot/toolchain/gcc/Config.in
-===================================================================
---- trunk/buildroot/toolchain/gcc/Config.in	2007-10-07 18:23:43 UTC (rev 20198)
-+++ trunk/buildroot/toolchain/gcc/Config.in	2007-10-07 18:29:17 UTC (rev 20199)
-@@ -23,7 +23,7 @@
- 
- 	config BR2_GCC_VERSION_4_2_0
- 		depends !BR2_avr32 && !BR2_nios2
--		depends BR2_DEPRECATED
-+		depends BR2_DEPRECATED || BR2_RECENT
- 		bool "gcc 4.2.0"
- 
- 	config BR2_GCC_VERSION_4_2_1
+>> 4. The lockfile-progs.c (in package lockfile-progs) uses rindex() but 
+>> does not include the correct header file that defines it.  This can be 
+>> repaired by a patch that either changes rindex() to strrchr() or 
+>> including the correct header.  (I did the former.)
+> 
+> Please submit a patch to use strrchr.
+
+Here's what I've been using, assuming that email doesn't word wrap it 
+into oblivion:
+
+karl at klack(24): cat lockfile-progs-iwl-alix.patch
+--- lockfile-progs-0.1.10/lockfile-progs.c      2001-07-17 
+10:40:06.000000000 -0700
++++ lfp/lockfile-progs.c     2007-09-25 14:41:22.000000000 -0700
+@@ -70,7 +70,7 @@
+      { NULL, 0, NULL, 0 }
+    };
+
+-  char *cmd_name = rindex(argv[0], '/');
++  char *cmd_name = strrchr(argv[0], '/');
+    int mail_cmd_p = 0;
+
+    if(cmd_name != NULL) {
