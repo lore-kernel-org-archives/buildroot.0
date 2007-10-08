@@ -1,91 +1,43 @@
-From: bugs at busybox.net <bugs@busybox.net>
-Date: Mon, 8 Oct 2007 07:32:48 -0700
-Subject: [Buildroot] [buildroot 0001523]: Failed to compile native target
-	gcc ( using host header files? )
-Message-ID: <18f1474fdb693bce58845c4985aca186@busybox.net>
+From: Jorge S. <jorgesolla@gmail.com>
+Date: Mon, 8 Oct 2007 17:04:30 +0200
+Subject: [Buildroot] Best buildroot options for a custom AT91RM9200 board?
+Message-ID: <6090c5eb0710080804n3f6d4f0bj42b0d31d24d01e9@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+ Hi,
 
-The following issue has been SUBMITTED. 
-====================================================================== 
-http://busybox.net/bugs/view.php?id=1523 
-====================================================================== 
-Reported By:                ndsal
-Assigned To:                buildroot
-====================================================================== 
-Project:                    buildroot
-Issue ID:                   1523
-Category:                   Architecture Specific
-Reproducibility:            always
-Severity:                   block
-Priority:                   normal
-Status:                     assigned
-====================================================================== 
-Date Submitted:             10-08-2007 07:32 PDT
-Last Modified:              10-08-2007 07:32 PDT
-====================================================================== 
-Summary:                    Failed to compile native target gcc ( using host
-header files? )
-Description: 
+ I'm trying to create a root fs for a custom board wich is AT91rm9200 based.
+So i have several newbie (maybe dumb) questions.
 
-Using X86_64 host to build a i386 target - the log below shows an error
-which stops the building/installing of a native compiler in the target.
+I've started with the svn version of buildroot and after dealing with lots
+of "soft-float"/uCLibc problems i finally discovered that
+there's a prebuilt setup from the Atmel people that seems to work.
 
-I suspect the fact that the compile is using the hosts header files is a
-problem.
+Since the AT91.com buildroot project section is broken, im unable to find
+further documentation regarding this matter appart from some posts from Ulf
+Samuelsson on this list.
 
-buildroot .config also attached.
+Can somebody tell me wich version is best for the AT91RM9200? I only see 2
+options:
 
--- Error/Log below --
+1) Last buildroot svn version
+2)
+ftp://at91dist:distrib at 81.80.104.162/AT91_Third_Party_Design_Flow/Linux_Host/Buildroot/buildroot-20070116-RC2.tar.bz2
 
-i386-linux-uclibc-gcc  -O2 -O2 -Os -pipe 
--I/home/harry/nds/buildroot/build_i386/staging_dir/usr/include
--I/home/harry/nds/buildroot/build_i386/staging_dir/include
---sysroot=/home/harry/nds/buildroot/build_i386/staging_dir/ -isysroot
-/home/harry/nds/buildroot/build_i386/staging_dir -mtune=i386 -march=i386  
--DIN_GCC    -W -Wall -Wwrite-strings -Wstrict-prototypes
--Wmissing-prototypes -Wold-style-definition  -isystem ./include  -I. -I.
--I/home/harry/nds/buildroot/toolchain_build_i386/gcc-4.2.1/gcc
--I/home/harry/nds/buildroot/toolchain_build_i386/gcc-4.2.1/gcc/.
--I/home/harry/nds/buildroot/toolchain_build_i386/gcc-4.2.1/gcc/../include
--I./../intl
--I/home/harry/nds/buildroot/toolchain_build_i386/gcc-4.2.1/gcc/../libcpp/include
- -I/home/harry/nds/buildroot/toolchain_build_i386/gcc-4.2.1/gcc/../libdecnumber
--I../libdecnumber  -g0 -finhibit-size-directive -fno-inline-functions
--fno-exceptions -fno-zero-initialized-in-bss -fno-toplevel-reorder 
--fno-omit-frame-pointer \
-	  -c
-/home/harry/nds/buildroot/toolchain_build_i386/gcc-4.2.1/gcc/crtstuff.c
--DCRT_BEGIN \
-	  -o crtbegin.o
-make[3]: Leaving directory
-`/home/harry/nds/buildroot/build_i386/gcc-4.2.1-target/gcc'
-make[2]: Leaving directory
-`/home/harry/nds/buildroot/build_i386/gcc-4.2.1-target'
-make[1]: Leaving directory
-`/home/harry/nds/buildroot/build_i386/gcc-4.2.1-target'
-In file included from
-/home/harry/nds/buildroot/toolchain_build_i386/gcc-4.2.1/gcc/tsystem.h:90,
-                 from
-/home/harry/nds/buildroot/toolchain_build_i386/gcc-4.2.1/gcc/crtstuff.c:68:
-./include/stdio.h:18:40: error: gentoo-multilib/x86/stdio.h: No such file
-or directory
-make[3]: *** [crtbegin.o] Error 1
-make[2]: *** [all-gcc] Error 2
-make[1]: *** [all] Error 2
-make: ***
-[/home/harry/nds/buildroot/build_i386/gcc-4.2.1-target/.compiled] Error 2
-====================================================================== 
+Are there any other options?
 
-Issue History 
-Date Modified   Username       Field                    Change               
-====================================================================== 
-10-08-07 07:32  ndsal          New Issue                                    
-10-08-07 07:32  ndsal          Status                   new => assigned     
-10-08-07 07:32  ndsal          Assigned To               => buildroot       
-10-08-07 07:32  ndsal          File Added: .config                          
-======================================================================
+And the last question, I'm using a 8MB Spi DataFlash for storage, so my
+rootFS cannot grow more than 6 MB (since i use at least 2MB for bootloader,
+kernel and other stuff) is there any "must have" minimal configuration
+recommended?
+
+
+
+Thanks all for your time and sorry about my poor english.
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: http://busybox.net/lists/buildroot/attachments/20071008/e8c09e2a/attachment.htm 
