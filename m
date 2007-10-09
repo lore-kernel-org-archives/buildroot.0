@@ -1,23 +1,46 @@
-From: Leonid <Leonid@a-k-a.net>
-Date: Mon, 8 Oct 2007 22:03:51 -0700
-Subject: [Buildroot] uclibc/buildroot performance problems.
-In-Reply-To: <470AE375.8010200@ruby.dti.ne.jp>
-References: <470AE375.8010200@ruby.dti.ne.jp>
-Message-ID: <406A31B117F2734987636D6CCC93EE3CB05BBC@ehost011-3.exch011.intermedia.net>
+From: Bernhard Fischer <rep.dot.nop@gmail.com>
+Date: Tue, 9 Oct 2007 09:08:16 +0200
+Subject: [Buildroot] [MIPS] toolchain/gcc/Config.in broken
+In-Reply-To: <470ADDA8.3080105@ruby.dti.ne.jp>
+References: <470ADDA8.3080105@ruby.dti.ne.jp>
+Message-ID: <20071009070816.GP20951@aon.at>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi:
+On Tue, Oct 09, 2007 at 10:47:20AM +0900, Shinya Kuribayashi wrote:
 
-I used to compile code for my at91rm9200 based board using kegel
-crosstool with msoft-float option. I have switched to buildroot trying
-to decrease filesystem footprint. I see significant performance
-degradation comparing to previous toolchain. Did anybody encounter
-similar problems?
+> Although I specified O32 and mips32r2 in menuconfig, gcc-4.2.1-initial/
 
-Thanks,
+You probably mean OABI and not O32.
 
-Leonid.
+> config.status says --with-abi=o64.
+>
+> # /home/skuribay/devel/buildroot/toolchain_build_mips/gcc-4.2.1/configure   
+> --prefix=/home/skuribay/devel/buildroot/build_mips/staging_dir/usr 
+> --build=i386-pc-linux-gnu --host=i386-pc-linux-gnu 
+> --target=mips-linux-uclibc 
+> --with-sysroot=/home/skuribay/devel/buildroot/toolchain_build_mips/uClibc_dev/ 
+> --disable-__cxa_atexit --enable-target-optspace --with-gnu-ld 
+> --disable-shared 
+> --with-gmp=/home/skuribay/devel/buildroot/toolchain_build_mips/gmp 
+> --with-mpfr=/home/skuribay/devel/buildroot/toolchain_build_mips/mpfr 
+> --disable-nls --enable-threads --disable-multilib --with-abi=o64 
+> --with-tune=mips32r2 --enable-languages=c
+>
+> Is this right? I thought --with-abi=32 expected.
+
+Look at target/Config.in.arch
+I was under the impression that OABI was 32 for mipsel and o64 for mips,
+no?
+
+> I'm not familiar with buildroot so much. I might miss something.
+
+I'm not too familiar with the mips matrix.. I will take a look how
+mips32r2 should be configured (mips vs. mips64 vs. mipsel vs. ??; i.e.
+both the endianess and the bit-depth have to be settable, AFAICS).
+
+Thanks for the heads up.
+cheers,
