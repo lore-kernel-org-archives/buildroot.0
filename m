@@ -1,59 +1,31 @@
-From: =?ISO-8859-15?Q?Kim_Str=F8ger?= <ks@sfktech.com>
-Date: Tue, 09 Oct 2007 17:18:03 +0200
-Subject: [Buildroot] Problems building toolchain
-Message-ID: <470B9BAB.3050407@sfktech.com>
+From: Bernhard Fischer <rep.dot.nop@gmail.com>
+Date: Tue, 9 Oct 2007 18:30:49 +0200
+Subject: [Buildroot] [MIPS] toolchain/gcc/Config.in broken
+In-Reply-To: <470B88CC.9040705@ruby.dti.ne.jp>
+References: <470ADDA8.3080105@ruby.dti.ne.jp> <20071009070816.GP20951@aon.at>
+	<470B5043.5010606@ruby.dti.ne.jp> <20071009122700.GB15786@aon.at>
+	<470B88CC.9040705@ruby.dti.ne.jp>
+Message-ID: <20071009163049.GA16889@aon.at>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi
+On Tue, Oct 09, 2007 at 10:57:32PM +0900, Shinya Kuribayashi wrote:
+> Bernhard Fischer wrote:
+>>> [1] mips: Before recently toolchain config rework (2007-09-19 build)
+> <snip>
+>> I don't know offhand what abi that defaults to. Can you check this,
+>> perhaps?
+>
+> Yes, confirmed with r19885 (2007-09-18).
+> At that time, we used to configure ABI and ISA as a uClibc config,
+> right? I always configured O32 ABI and MIPS32, no doubt:
 
-I am trying to build just the toolchain, using svn revision 20210.
-following the instruction from here:
-http://www.uclibc.org/toolchains.html
+> But it seems these configs were not directly passed to GCC configs
+> according to mips-linux-gcc -v, or GCC config.status.
 
-# Point your web browser here <http://buildroot.uclibc.org/>,
-# Download of copy of buildroot
-# Unpack the tarball on your Linux system somewhere
-# Edit the Makefile as needed if you wish to change anything.
-# run 'unset CC'. Then run 'unset CXX'. Some Linux systems (i.e. Gentoo)
-set variables such as 'CC' in the system environment which really messes
-things up when cross compiling.
-# run 'make menuconfig'
-# Select the things you want to build. If you /only/ want a toolchain,
-leave everything except the toolchain disabled.
-# save your buildroot configuration.
-# run 'make'
+Yes, that's what my recent changes in this area are ment to pin.
 
-and I end up with this error msg. every time I try to build it.
-
-
-
-make[1]: Leaving directory
-`/home/cz2/Crossdev/buildroot/toolchain_build_arm/gcc-4.2.1-initial'
-touch
-/home/cz2/Crossdev/buildroot/toolchain_build_arm/gcc-4.2.1-initial/.installed
-/usr/bin/make MAKE="/usr/bin/make -j1" -C
-/home/cz2/Crossdev/buildroot/toolchain_build_arm/uClibc \
-                PREFIX= \
-                DEVEL_PREFIX=/ \
-                RUNTIME_PREFIX=/ \
-                HOSTCC="/usr/lib/distcc/bin/gcc" \
-                all
-make[1]: Entering directory
-`/home/cz2/Crossdev/buildroot/toolchain_build_arm/uClibc'
-make[2]: `conf' is up to date.
-  CC ldso/ldso/ldso.oS
-cc1: error: unrecognized command line option "-mfdpic"
-make[1]: *** [ldso/ldso/ldso.oS] Error 1
-make[1]: Leaving directory
-`/home/cz2/Crossdev/buildroot/toolchain_build_arm/uClibc'
-make: ***
-[/home/cz2/Crossdev/buildroot/toolchain_build_arm/uClibc/lib/libc.a] Error 2
-
-
-How do I get passed this point ?
-
-Thanks, Kim S.
+Please use 32 manually for now. I'll look at it ASAP.
