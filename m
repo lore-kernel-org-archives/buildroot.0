@@ -1,22 +1,65 @@
-From: Bernhard Fischer <rep.dot.nop@gmail.com>
-Date: Tue, 9 Oct 2007 18:34:51 +0200
-Subject: [Buildroot] Problems building toolchain
-In-Reply-To: <470B9BAB.3050407@sfktech.com>
-References: <470B9BAB.3050407@sfktech.com>
-Message-ID: <20071009163451.GB16889@aon.at>
+From: Rex Ashbaugh <rexa@xeratech.com>
+Date: Tue, 9 Oct 2007 10:51:59 -0700
+Subject: [Buildroot] GDB for threads.
+In-Reply-To: <406A31B117F2734987636D6CCC93EE3C0246F090@ehost011-3.exch011.intermedia.net>
+References: <4704186D.6070303@cavebear.com>
+	<406A31B117F2734987636D6CCC93EE3C0246F090@ehost011-3.exch011.intermedia.net>
+Message-ID: <6311fe0b0710091051y592cc943q936bcd6c102a51ac@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Tue, Oct 09, 2007 at 05:18:03PM +0200, Kim Str?ger wrote:
+You need to enable in your buildroot config the feature for building the
+thread library.
+-Rex
 
->How do I get passed this point ?
-
-What did you specify as your target CPU and other settings? If in doubt
-attach your toplevel .config, please.
-
-Also please do
-$ make V=1
-and show me the arguments used for the command that fails.
+On 10/3/07, Leonid <Leonid@a-k-a.net> wrote:
+>
+> Hi:
+>
+> GDB on my target says it cannot debug threads:
+>
+> dlopen failed on 'libthread_db.so.1' - File not found
+> GDB will not be able to debug pthreads.
+>
+> GNU gdb 6.3
+> Copyright 2004 Free Software Foundation, Inc.
+> GDB is free software, covered by the GNU General Public License, and you
+> are
+> welcome to change it and/or distribute copies of it under certain
+> conditions.
+> Type "show copying" to see the conditions.
+> There is absolutely no warranty for GDB.  Type "show warranty" for
+> details.
+> This GDB was configured as "arm-linux".
+> (gdb)
+>
+> I have chosen thread library debugging option and have re-built
+> toolchain:
+>
+> Toolchain Options -->
+>   [x] Thread library debugging
+>
+> The build went through but as a result I see broken link in the lib
+> directory of my toolchain and no real library:
+>
+> rwxr-xr-x  1 leonid leonid   26330 2007-10-03 14:27 libssp.so.0.0.0
+> lrwxrwxrwx  1 leonid leonid      17 2007-10-03 14:24 libthread_db.so ->
+> libthread_db.so.1
+> -rw-r--r--  1 leonid leonid  309856 2007-10-03 14:24 libuClibc-0.9.29.so
+> -rw-r--r--  1 leonid leonid    4656 2007-10-03 14:24 libutil-0.9.29.so
+> -
+>
+> Thanks,
+>
+> Leonid.
+> _______________________________________________
+> buildroot mailing list
+> buildroot at uclibc.org
+> http://busybox.net/mailman/listinfo/buildroot
+>
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: http://busybox.net/lists/buildroot/attachments/20071009/7220f71b/attachment.htm 
