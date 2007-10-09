@@ -1,37 +1,47 @@
-From: Alexander Kriegisch <Alexander@Kriegisch.name>
-Date: Tue, 09 Oct 2007 02:03:17 +0200
-Subject: [Buildroot] usage of '-rm -f ...' in .mk files
-In-Reply-To: <0710090011020.20512@somehost>
-References: <0710090011020.20512@somehost>
-Message-ID: <470AC545.5070605@Kriegisch.name>
+From: Shinya Kuribayashi <skuribay@ruby.dti.ne.jp>
+Date: Tue, 09 Oct 2007 11:12:05 +0900
+Subject: [Buildroot] [MIPS] toolchain/gcc/Config.in broken?
+Message-ID: <470AE375.8010200@ruby.dti.ne.jp>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-> Isn't it so that we want to know if an attempt to remove unremovable
-> files occurs, instead of ignoring errors by using '-rm -f'?
+Hello,
 
-I would say it depends on the situation. Normally the inability to
-remove files during a cleanup might not be considered worthy of turining
-into a show-stopper for the whole make process. In other cases that
-might well be so, and I guess it should be up to the developer writing
-the makefile to decide if she wants a possible error printed, but
-continue with whatever target is being built, or if she regards a failed
-unlink severe enough to yield an error.
+It seems that commits r20031 and r20045 or around those have broken
+MIPS cross toolchain build:
+---
+/usr/bin/make MAKE="/usr/bin/make -j1" -C /home/skuribay/devel/buildroot/toolchain_build_mips/uClibc-0.9.29 \
+               PREFIX= \
+               DEVEL_PREFIX=/ \
+               RUNTIME_PREFIX=/ \
+               HOSTCC="/usr/bin/gcc" \
+               all
+make[1]: Entering directory `/home/skuribay/devel/buildroot/toolchain_build_mips/uClibc-0.9.29'
+make[2]: `conf' is up to date.
+ln -fs sgidefs.h ./include/
+make[3]: `conf' is up to date.
+ln -fs sgidefs.h ./include/
+ LD libuClibc-0.9.29.so
+libc/libc_so.a(lldiv.os): In function `imaxdiv':
+lldiv.c:(.text+0x3c): undefined reference to `__divdi3'
+lldiv.c:(.text+0x68): undefined reference to `__moddi3'
+make[2]: *** [lib/libc.so] Error 1
+make[1]: *** [lib/libc.so.0] Error 2
+make[1]: Leaving directory `/home/skuribay/devel/buildroot/toolchain_build_mips/uClibc-0.9.29'
+make: *** [/home/skuribay/devel/buildroot/toolchain_build_mips/uClibc-0.9.29/lib/libc.a] Error 2
+---
 
-Having said that, I concede that "rm -f" usually does not exit with an
-error anyway, thus rendering "-rm -f" kind of useless. But on the other
-hand, double safety never hurts, and explicit coding helps understand
-what the author intends with a certain line of code. The leading dash is
-a clear statement saying "whatever happens, go on". Furthermore, there
-might be improbable cases in which a certain "rm" implementation might
-yield an error anyway. Given the fact that Busybox sometimes is very
-terse in error handling, leaving out improbable error conditions in
-order to save space, I would not say that an error during "rm -f" is
-absolutely impossible. I have not looked into the source code, though.
+Although I specified O32 and mips32r2 in menuconfig, gcc-4.2.1-initial/
+config.status says --with-abi=o64.
 
-Regards
---
-Alexander Kriegisch
+# /home/skuribay/devel/buildroot/toolchain_build_mips/gcc-4.2.1/configure   --prefix=/home/skuribay/devel/buildroot/build_mips/staging_dir/usr --build=i386-pc-linux-gnu --host=i386-pc-linux-gnu --target=mips-linux-uclibc --with-sysroot=/home/skuribay/devel/buildroot/toolchain_build_mips/uClibc_dev/ --disable-__cxa_atexit --enable-target-optspace --with-gnu-ld --disable-shared --with-gmp=/home/skuribay/devel/buildroot/toolchain_build_mips/gmp --with-mpfr=/home/skuribay/devel/buildroot/toolchain_build_mips/mpfr --disable-nls --enable-threads --disable-multilib --with-abi=o64 --with-tune=mips32r2 --enable-languages=c
+
+Is this right? I thought --with-abi=32 expected.
+I'm not familiar with buildroot, so I might miss something.
+
+thanks,
+
+   Shinya Kuribayashi
