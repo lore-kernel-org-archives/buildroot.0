@@ -1,65 +1,57 @@
-From: Rex Ashbaugh <rexa@xeratech.com>
-Date: Tue, 9 Oct 2007 10:51:59 -0700
-Subject: [Buildroot] GDB for threads.
-In-Reply-To: <406A31B117F2734987636D6CCC93EE3C0246F090@ehost011-3.exch011.intermedia.net>
-References: <4704186D.6070303@cavebear.com>
-	<406A31B117F2734987636D6CCC93EE3C0246F090@ehost011-3.exch011.intermedia.net>
-Message-ID: <6311fe0b0710091051y592cc943q936bcd6c102a51ac@mail.gmail.com>
+From: Elizabeth Oldham <beth@the-hug.org>
+Date: Tue, 09 Oct 2007 20:16:19 +0100
+Subject: [Buildroot] [MIPS] toolchain/gcc/Config.in broken
+In-Reply-To: <470B88CC.9040705@ruby.dti.ne.jp>
+References: <470ADDA8.3080105@ruby.dti.ne.jp>
+	<20071009070816.GP20951@aon.at>	<470B5043.5010606@ruby.dti.ne.jp>
+	<20071009122700.GB15786@aon.at> <470B88CC.9040705@ruby.dti.ne.jp>
+Message-ID: <470BD383.4060504@the-hug.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-You need to enable in your buildroot config the feature for building the
-thread library.
--Rex
+Shinya Kuribayashi wrote:
 
-On 10/3/07, Leonid <Leonid@a-k-a.net> wrote:
->
-> Hi:
->
-> GDB on my target says it cannot debug threads:
->
-> dlopen failed on 'libthread_db.so.1' - File not found
-> GDB will not be able to debug pthreads.
->
-> GNU gdb 6.3
-> Copyright 2004 Free Software Foundation, Inc.
-> GDB is free software, covered by the GNU General Public License, and you
-> are
-> welcome to change it and/or distribute copies of it under certain
-> conditions.
-> Type "show copying" to see the conditions.
-> There is absolutely no warranty for GDB.  Type "show warranty" for
-> details.
-> This GDB was configured as "arm-linux".
-> (gdb)
->
-> I have chosen thread library debugging option and have re-built
-> toolchain:
->
-> Toolchain Options -->
->   [x] Thread library debugging
->
-> The build went through but as a result I see broken link in the lib
-> directory of my toolchain and no real library:
->
-> rwxr-xr-x  1 leonid leonid   26330 2007-10-03 14:27 libssp.so.0.0.0
-> lrwxrwxrwx  1 leonid leonid      17 2007-10-03 14:24 libthread_db.so ->
-> libthread_db.so.1
-> -rw-r--r--  1 leonid leonid  309856 2007-10-03 14:24 libuClibc-0.9.29.so
-> -rw-r--r--  1 leonid leonid    4656 2007-10-03 14:24 libutil-0.9.29.so
-> -
->
-> Thanks,
->
-> Leonid.
-> _______________________________________________
-> buildroot mailing list
-> buildroot at uclibc.org
-> http://busybox.net/mailman/listinfo/buildroot
->
--------------- next part --------------
-An HTML attachment was scrubbed...
-URL: http://busybox.net/lists/buildroot/attachments/20071009/7220f71b/attachment.htm 
+>>1. O32 ABI (CONFIG_MIPS_O32_ABI) (NEW)
+> 
+>   2. N32 ABI (CONFIG_MIPS_N32_ABI) (NEW)
+>   3. N64 ABI (CONFIG_MIPS_N64_ABI) (NEW)
+> choice[1-3?]: 1
+> Target Processor Architecture
+> 
+>>1. Generic (MIPS I) (CONFIG_MIPS_ISA_1) (NEW)
+> 
+>   2. MIPS II (CONFIG_MIPS_ISA_2) (NEW)
+>   3. MIPS III (CONFIG_MIPS_ISA_3) (NEW)
+>   4. MIPS IV (CONFIG_MIPS_ISA_4) (NEW)
+>   5. MIPS32 (CONFIG_MIPS_ISA_MIPS32) (NEW)
+>   6. MIPS64 (CONFIG_MIPS_ISA_MIPS64) (NEW)
+> choice[1-6?]: 5
+> 
+> But it seems these configs were not directly passed to GCC configs
+> according to mips-linux-gcc -v, or GCC config.status.
+...
+> Ditto, it's hard for me to answer. I should learn more about GCC config.
+> Anyone MIPS guys?
+
+
+The matrix of MIPS ISA and ABIs supported on Linux is:
+(fixed pitch font time)
+
+               o32    n32    n64
+MIPS I         o
+MIPS II        o
+MIPS III       o      o       o
+MIPS IV        o      o       o
+MIPS32(r1)     o
+MIPS32R2       o
+MIPS64(r1)     o      o       o
+MIPS64R2       o      o       o
+
+(blank is not supported)
+
+MIPS16 is a bare-iron thing, along with other tweaks like using a 64bit 
+FPU inside a 32bit world.
+Beth
