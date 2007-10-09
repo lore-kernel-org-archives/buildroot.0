@@ -1,43 +1,47 @@
-From: Robert P. J. Day <rpjday@mindspring.com>
-Date: Tue, 9 Oct 2007 16:38:53 -0400 (EDT)
-Subject: [Buildroot] build error for nios2, based on kernel headers selection
-Message-ID: <Pine.LNX.4.64.0710091632500.6683@localhost.localdomain>
+From: Elizabeth Oldham <beth@the-hug.org>
+Date: Tue, 09 Oct 2007 21:56:40 +0100
+Subject: [Buildroot] [MIPS] toolchain/gcc/Config.in broken
+In-Reply-To: <470BD9AB.2020909@the-hug.org>
+References: <470ADDA8.3080105@ruby.dti.ne.jp>
+	<20071009070816.GP20951@aon.at>	<470B5043.5010606@ruby.dti.ne.jp>
+	<20071009122700.GB15786@aon.at>	<470B88CC.9040705@ruby.dti.ne.jp>	<470BD383.4060504@the-hug.org>
+	<20071009193325.GR20951@aon.at> <470BD9AB.2020909@the-hug.org>
+Message-ID: <470BEB08.3060209@the-hug.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+Elizabeth Oldham wrote:
+> Bernhard Fischer wrote:
+>>>             o32    n32    n64
+>>>MIPS I         o
+>>>MIPS II        o
+>>>MIPS III       o      o       o
+>>>MIPS IV        o      o       o
+>>>MIPS32(r1)     o
+>>>MIPS32R2       o
+>>>MIPS64(r1)     o      o       o
+>>>MIPS64R2       o      o       o
+>>>(blank is not supported)
+> I'm not familar with eabi, I've not heard of it with reference to MIPS. 
+> I'd have to ask my more learned colleagues :)
 
-  first time taking a crack at buildroot, selected "nios2", at which
-point "toolchain/kernel_headers/Config.in" forced me into the only
-legal selection of "Linux 2.6 snapshot" as the choice for kernel
-headers.
+gcc supports it, but AFAIK it isn't used on MIPS/Linux, so I assume 
+buildroot/uclibc wont be interested in it?
 
-  but this caused the build to then break almost immediately with:
+> Once you have a supported ISA/ABI you can choose your endian with impunity.
 
-echo "uclibc" > /home/rpjday/buildroot/buildroot/project_build_nios2/uclibc/root/etc/hostname
-wget --passive-ftp  -P /home/rpjday/buildroot/buildroot/dl http://www.kernel.org/pub/linux/kernel/v2.6//linux-2.6..tar.bz2
---16:28:26--  http://www.kernel.org/pub/linux/kernel/v2.6//linux-2.6..tar.bz2
-           => `/home/rpjday/buildroot/buildroot/dl/linux-2.6..tar.bz2'
-Resolving www.kernel.org... 204.152.191.5, 204.152.191.37
-Connecting to www.kernel.org|204.152.191.5|:80... connected.
-HTTP request sent, awaiting response... 404 Not Found
-16:28:26 ERROR 404: Not Found.
+Or vice-versa.
 
-  note how the kernel tarball name is generated as
-"linux-2.6..tar.bz2" which, not surprisingly, doesn't exist.  i
-haven't looked more closely but i'm guessing that, somewhere in the
-build, it's not acceptable to just have "2.6" as the version of the
-kernel headers.
+I've hacked target/Config.in.arch to what I _think_ it should perhaps 
+look like, and attached it.
 
-rday
+Beth
 
--- 
-========================================================================
-Robert P. J. Day
-Linux Consulting, Training and Annoying Kernel Pedantry
-Waterloo, Ontario, CANADA
 
-http://crashcourse.ca
-========================================================================
+-------------- next part --------------
+An embedded and charset-unspecified text was scrubbed...
+Name: Config.in.arch.patch
+Url: http://busybox.net/lists/buildroot/attachments/20071009/423c9a47/attachment.diff 
