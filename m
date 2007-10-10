@@ -1,37 +1,29 @@
 From: Bernhard Fischer <rep.dot.nop@gmail.com>
-Date: Wed, 10 Oct 2007 22:06:06 +0200
-Subject: [Buildroot] build error for nios2,
-	based on kernel headers	selection
-In-Reply-To: <Pine.LNX.4.64.0710091920470.14102@localhost.localdomain>
-References: <Pine.LNX.4.64.0710091632500.6683@localhost.localdomain>
-	<20071009213425.GV20951@aon.at>
-	<Pine.LNX.4.64.0710091920470.14102@localhost.localdomain>
-Message-ID: <20071010200559.GB20951@aon.at>
+Date: Wed, 10 Oct 2007 23:00:10 +0200
+Subject: [Buildroot] GNU BInutils and TeXinfo v. 4.11 - patch proposed
+In-Reply-To: <027401c80b50$522b0760$7901a8c0@shukson>
+References: <bcba51a0709272136j6848589br9ecb928773c63e7c@mail.gmail.com>
+	<027401c80b50$522b0760$7901a8c0@shukson>
+Message-ID: <20071010210010.GC20951@aon.at>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Tue, Oct 09, 2007 at 07:21:23PM -0400, Robert P. J. Day wrote:
->On Tue, 9 Oct 2007, Bernhard Fischer wrote:
+On Wed, Oct 10, 2007 at 10:14:56AM -0500, Rick Foos wrote:
+> Hi,
 >
->> On Tue, Oct 09, 2007 at 04:38:53PM -0400, Robert P. J. Day wrote:
->> >
->> >  first time taking a crack at buildroot, selected "nios2", at which
->>
->> Select BR2_DEPRECATED.
->> nios2 looks like not too well supported in various upstream packages.
+> I started having the makeinfo problem on Fedora 7 x86_64 after the update 
+> to texinfo and texinfo-tex to 4.11-1.fc7
 >
->that doesn't appear to change anything,
+> Dimitry's patch resolved the problem.
+>
+> I am using binutils 2.18.50.0.1, and built with the patch file placed in 
+> toolchain/binutils-2.18.50.0.1
+>
+> So I guess I'm seconding the motion that it be included.
 
-Sure it does. Look carefully.
->                                        and i wouldn't have expected
->it to.
+Somebody is confused here. It went already in. svn up
 
-I expect it to show you some waaay outdated kernel headers.
-
->        what was the rationale in doing that?
-
-The rational was that you're presented some very outdated kernel-headers
-that you can select for nios2.
+cheers,
