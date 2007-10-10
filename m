@@ -1,44 +1,39 @@
-From: Robert P. J. Day <rpjday@mindspring.com>
-Date: Wed, 10 Oct 2007 04:59:14 -0400 (EDT)
-Subject: [Buildroot] "make distclean" doesn't do a full clean
-Message-ID: <Pine.LNX.4.64.0710100447510.10223@localhost.localdomain>
+From: saravanan <sar_van81@yahoo.co.in>
+Date: Wed, 10 Oct 2007 11:00:48 +0100 (BST)
+Subject: [Buildroot] Error in compiling X window in buildroot
+Message-ID: <43561.48882.qm@web94307.mail.in2.yahoo.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+hi,
 
-  probably just the first in a series of beginner-level questions and
-observations, but is there a reason that "make distclean" leaves a
-fair bit of generated content lying around?
+i have compilied buildroot(buildroot-20050807-ext2rootfix.tar.bz2) for MIPS based development board(DBAU1200). Now i need to port graphics on to it. i enabled X window system in the package selection window of buildroot.but i could not compile successfully . the following is the error:
 
-Only in br-svn: .auto.deps
-Only in br-svn: .config
-Only in br-svn/package/config: buildroot-config
-Only in br-svn/package/config: conf
-Only in br-svn/package/config: conf.o
-Only in br-svn/package/config: .depend
-Only in br-svn/package/config: kxgettext.o
-Only in br-svn/package/config/lxdialog: checklist.o
-Only in br-svn/package/config/lxdialog: inputbox.o
-Only in br-svn/package/config/lxdialog: menubox.o
-Only in br-svn/package/config/lxdialog: textbox.o
-Only in br-svn/package/config/lxdialog: util.o
-Only in br-svn/package/config/lxdialog: yesno.o
-Only in br-svn/package/config: mconf.o
-Only in br-svn/package/config: zconf.tab.o
+linux_vm86.c:302:7: warning: no newline at end of file
+linux_vm86.c: In function `xf86ExecX86int10':
+linux_vm86.c:277: error: impossible constraint in `asm'
+linux_vm86.c:272: warning: '__res' might be used uninitialized in this function
+make[3]: *** [linux_vm86.o] Error 1
+make[3]: Leaving directory `/home/linuxau1200/oldbuildroot/Xbuildroot/buildroot/build_mipsel/xc/programs/Xserver/hw/xfree86/os-support/linux/int10/vm86'
+make[2]: *** [all] Error 2
+make[2]: Leaving directory `/home/linuxau1200/oldbuildroot/Xbuildroot/buildroot/build_mipsel/xc/programs/Xserver/hw/xfree86/os-support/linux/int10'
+make[1]: *** [all] Error 2
+make[1]: Leaving directory `/home/linuxau1200/oldbuildroot/Xbuildroot/buildroot/build_mipsel/xc/programs/Xserver/hw/xfree86/os-support/linux'
+make: *** [linux] Error 2
+linux:/home/linuxau1200/oldbuildroot/Xbuildroot/buildroot/build_mipsel/xc/programs/Xserver/hw/xfree86/os-support # .
 
-  shouldn't "make distclean" theoretically clean back to the level of
-pristine distribution?
+can anyone provide me any suggestions or solutions for this ?
 
-rday
+thanks in advance,
 
--- 
-========================================================================
-Robert P. J. Day
-Linux Consulting, Training and Annoying Kernel Pedantry
-Waterloo, Ontario, CANADA
+saravanan.
 
-http://crashcourse.ca
-========================================================================
+       
+---------------------------------
+ Unlimited freedom, unlimited storage. Get it now
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: http://busybox.net/lists/buildroot/attachments/20071010/436754cf/attachment.htm 
