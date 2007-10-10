@@ -1,103 +1,75 @@
-From: =?ISO-8859-1?Q?Kim_Str=F8ger?= <ks@sfktech.com>
-Date: Wed, 10 Oct 2007 09:17:57 +0200
-Subject: [Buildroot] Problems building toolchain
-In-Reply-To: <20071009163451.GB16889@aon.at>
-References: <470B9BAB.3050407@sfktech.com> <20071009163451.GB16889@aon.at>
-Message-ID: <470C7CA5.9000103@sfktech.com>
+From: Robert P. J. Day <rpjday@mindspring.com>
+Date: Wed, 10 Oct 2007 04:14:06 -0400 (EDT)
+Subject: [Buildroot] build error for nios2,
+ based on kernel headers selection
+In-Reply-To: <20071009213425.GV20951@aon.at>
+References: <Pine.LNX.4.64.0710091632500.6683@localhost.localdomain>
+	<20071009213425.GV20951@aon.at>
+Message-ID: <Pine.LNX.4.64.0710100409590.5869@localhost.localdomain>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+On Tue, 9 Oct 2007, Bernhard Fischer wrote:
 
-
-
-Bernhard Fischer wrote:
-> On Tue, Oct 09, 2007 at 05:18:03PM +0200, Kim Str?ger wrote:
+> On Tue, Oct 09, 2007 at 04:38:53PM -0400, Robert P. J. Day wrote:
+> >
+> >  first time taking a crack at buildroot, selected "nios2", at which
 >
->   
->> How do I get passed this point ?
->>     
->
-> What did you specify as your target CPU and other settings? If in doubt
-> attach your toplevel .config, please.
->
-> Also please do
-> $ make V=1
-> and show me the arguments used for the command that fails.
->   
+> Select BR2_DEPRECATED.
+> nios2 looks like not too well supported in various upstream packages.
 
+i took a closer look at this and this has nothing to do with nios2
+support.  recall the snippet i posted from
+toolchain/kernel-headers/Config.in:
 
-The .config
+...
+config BR2_DEFAULT_KERNEL_HEADERS
+        string
+        default "2.4.25"    if BR2_KERNEL_HEADERS_2_4_25
+        default "2.4.27"    if BR2_KERNEL_HEADERS_2_4_27
+        default "2.4.29"    if BR2_KERNEL_HEADERS_2_4_29
+        default "2.4.31"    if BR2_KERNEL_HEADERS_2_4_31
+        default "2.6.9"     if BR2_KERNEL_HEADERS_2_6_9
+        default "2.6.11"    if BR2_KERNEL_HEADERS_2_6_11
+        default "2.6.12"    if BR2_KERNEL_HEADERS_2_6_12
+        default "2.6.20.4"  if BR2_KERNEL_HEADERS_2_6_20_4
+        default "2.6.20.20" if BR2_KERNEL_HEADERS_2_6_20
+        default "2.6.21.5"  if BR2_KERNEL_HEADERS_2_6_21_5
+        default "2.6.21.7"  if BR2_KERNEL_HEADERS_2_6_21
+        default "2.6.22.1"  if BR2_KERNEL_HEADERS_2_6_22_1
+        default "2.6.22.9"  if BR2_KERNEL_HEADERS_2_6_22
+        default "2.6"       if BR2_KERNEL_HEADERS_SNAP
+...
 
-BR2_HAVE_DOT_CONFIG=y
-BR2_VERSION="0.10.0-svn"
-# BR2_alpha is not set
-BR2_arm=y
-# BR2_armeb is not set
-# BR2_avr32 is not set
-# BR2_cris is not set
-# BR2_ia64 is not set
-# BR2_i386 is not set
-# BR2_m68k is not set
-# BR2_mips is not set
-# BR2_mipsel is not set
-# BR2_nios2 is not set
-# BR2_powerpc is not set
-# BR2_s390 is not set
-# BR2_sh is not set
-# BR2_sh64 is not set
-# BR2_sparc is not set
-# BR2_sparc64 is not set
-# BR2_x86_64 is not set
-# BR2_generic_arm is not set
-BR2_arm7tdmi=y
-# BR2_arm610 is not set
-# BR2_arm710 is not set
-# BR2_arm720t is not set
-# BR2_arm920t is not set
-# BR2_arm922t is not set
-# BR2_arm926t is not set
-# BR2_arm10t is not set
-# BR2_arm1136jf_s is not set
-# BR2_arm1176jz_s is not set
-# BR2_arm1176jzf_s is not set
-# BR2_sa110 is not set
-# BR2_sa1100 is not set
-# BR2_xscale is not set
-# BR2_iwmmxt is not set
-BR2_ARM_TYPE="ARM7TDMI"
-BR2_ARM_OABI=y
-# BR2_ARM_EABI is not set
-BR2_ARCH="arm"
-BR2_ENDIAN="LITTLE"
-BR2_GCC_TARGET_TUNE="arm7tdmi"
+  note how, if you choose nios2, you're *forced" to take the default
+kernel headers version of "2.6", which has no sublevel value.  this
+causes immediate problems later on in .../kernel-headers-new.makefile,
+here:
 
+...
+ifeq ($(LINUX_HEADERS_VERSION),)
+# parse linux version string
+LNXVER:=$(subst ., , $(strip $(DEFAULT_KERNEL_HEADERS)))
+VERSION:=$(word 1, $(LNXVER))
+PATCHLEVEL:=$(word 2, $(LNXVER))
+SUBLEVEL:=$(word 3, $(LNXVER))        <---- whoops
+EXTRAVERSION:=$(word 4, $(LNXVER))
+LOCALVERSION:=
+...
 
+  that snippet of makefile *clearly* assumes that there is a SUBLEVEL
+value, which in this case isn't true.  just as clearly, something has
+to be adjusted.  i'm surprised no one has stumbled over this before.
 
-  $make V=1
+rday
+--
+========================================================================
+Robert P. J. Day
+Linux Consulting, Training and Annoying Kernel Pedantry
+Waterloo, Ontario, CANADA
 
-Checking build system dependencies:
-BUILDROOT_DL_DIR clean:                         Ok
-CC clean:                                       Ok
-CXX clean:                                      Ok
-CPP clean:                                      Ok
-CFLAGS clean:                                   Ok
-INCLUDES clean:                                 Ok
-CXXFLAGS clean:                                 Ok
-which installed:                                Ok
-sed works:                                      Ok (/bin/sed)
-GNU make version '3.81':                        Ok
-C compiler '/usr/lib/distcc/bin/gcc'
-C compiler version '4.1.2':                     Ok
-C++ compiler '/usr/lib/distcc/bin/g++'
-C++ compiler version '4.1.2':                   Ok
-bison installed:                                Ok
-flex installed:                                 Ok
-gettext installed:                              Ok
-makeinfo installed:                             Ok
-Build system dependencies:                      Ok
-
-
-and it is when I do the make that I get the error.
+http://crashcourse.ca
+========================================================================
