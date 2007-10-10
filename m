@@ -1,7 +1,7 @@
 From: bugs at busybox.net <bugs@busybox.net>
-Date: Tue, 9 Oct 2007 23:48:54 -0700
+Date: Wed, 10 Oct 2007 00:07:21 -0700
 Subject: [Buildroot] [buildroot 0001463]: build for i386/Geode fails
-Message-ID: <ad8ef583cb761a00e733fe3434ad4b85@busybox.net>
+Message-ID: <f1ef1b8306e3a1bf912180327ae820fe@busybox.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -25,7 +25,7 @@ Priority:                   normal
 Status:                     assigned
 ====================================================================== 
 Date Submitted:             08-13-2007 11:04 PDT
-Last Modified:              10-09-2007 23:48 PDT
+Last Modified:              10-10-2007 00:07 PDT
 ====================================================================== 
 Summary:                    build for i386/Geode fails
 Description: 
@@ -48,19 +48,20 @@ http://www.nabble.com/Problems-with-some-x86-Target-Architecture-Variants-p12385
 http://www.nabble.com/GCC---march%3Dgeode-doesn't-exist--t4108131.html 
 
 ---------------------------------------------------------------------- 
- alejandro_liu - 10-09-07 23:48  
+ alejandro_liu - 10-10-07 00:07  
 ---------------------------------------------------------------------- 
-I am also experiencing the same problem.  I am using snapshot: 2007-10-09
-(latest at the time of this writing)
+Hi,
 
-I have tested using Target Arch i386, if I change the arch variants to:
-pentium pro, pentium MMX, pentium mobile, pentium2, pentium3, etc... they
-all seem to fail to set the ARCH macro correctly.
+I was having the same problems with snapshot 2007-10-09 (latest at the
+time of this writing).
 
-Arch variants i386, i486, i586, i686 seem to work OK.
+I can confirm that the patch
+(http://www.nabble.com/Problems-with-some-x86-Target-Architecture-Variants-p12385010.html)
+mentioned by bradmssw did solve my problem.
 
-This is unrelated to the note that bradmssw mentions as this is even
-before buildroot tries to compile anything at all. 
+The issue can be recreated consistently by selecting the i386 architecture
+and then selecting one of the un-supported architecture variants.  (i.e.
+geode or pentium2) 
 
 Issue History 
 Date Modified   Username       Field                    Change               
@@ -71,4 +72,6 @@ Date Modified   Username       Field                    Change
 09-07-07 12:02  bernhardf      Note Added: 0002733                          
 09-07-07 12:11  bradmssw       Note Added: 0002734                          
 10-09-07 23:48  alejandro_liu  Note Added: 0002815                          
+10-10-07 00:03  alejandro_liu  Note Deleted: 0002815                        
+10-10-07 00:07  alejandro_liu  Note Added: 0002816                          
 ======================================================================
