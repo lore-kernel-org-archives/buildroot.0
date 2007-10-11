@@ -1,43 +1,29 @@
-From: Robert P. J. Day <rpjday@mindspring.com>
-Date: Wed, 10 Oct 2007 17:37:00 -0400 (EDT)
-Subject: [Buildroot] build error for nios2,
- based on kernel headers selection
-In-Reply-To: <20071010200559.GB20951@aon.at>
-References: <Pine.LNX.4.64.0710091632500.6683@localhost.localdomain>
-	<20071009213425.GV20951@aon.at>
-	<Pine.LNX.4.64.0710091920470.14102@localhost.localdomain>
-	<20071010200559.GB20951@aon.at>
-Message-ID: <Pine.LNX.4.64.0710101736340.17716@localhost.localdomain>
+From: Leonid <Leonid@a-k-a.net>
+Date: Thu, 11 Oct 2007 00:14:07 -0700
+Subject: [Buildroot] Mmap failure: Value too large for defined data type
+In-Reply-To: <Pine.LNX.4.64.0710100447510.10223@localhost.localdomain>
+References: <Pine.LNX.4.64.0710100447510.10223@localhost.localdomain>
+Message-ID: <406A31B117F2734987636D6CCC93EE3C02528F57@ehost011-3.exch011.intermedia.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Wed, 10 Oct 2007, Bernhard Fischer wrote:
+Hi:
 
-> On Tue, Oct 09, 2007 at 07:21:23PM -0400, Robert P. J. Day wrote:
-> >On Tue, 9 Oct 2007, Bernhard Fischer wrote:
-> >
-> >> On Tue, Oct 09, 2007 at 04:38:53PM -0400, Robert P. J. Day wrote:
-> >> >
-> >> >  first time taking a crack at buildroot, selected "nios2", at which
-> >>
-> >> Select BR2_DEPRECATED.
-> >> nios2 looks like not too well supported in various upstream packages.
-> >
-> >that doesn't appear to change anything,
->
-> Sure it does. Look carefully.
+I'm working on at91rm9200 (Linux 2.6.16) and I'm trying to map last 64K
+of memory (CPU registers). I get an error:
 
-ok, i'll go back and pay more careful attention.  thanks.
+mmap() error in xio_linux.c: Value too large for defined data type
+xio_linux.c:134 Ifc mmap_entry_2 start 0xFFFF0000 size 0x00010000
 
-rday
--- 
-========================================================================
-Robert P. J. Day
-Linux Consulting, Training and Annoying Kernel Pedantry
-Waterloo, Ontario, CANADA
+Frankly, I don't see any overflow here and besides it used to work when
+I have compiled using glibc based toolchain. Now I started to use uClibc
+toolchain from buildroot - and here I am.
 
-http://crashcourse.ca
-========================================================================
+Any suggestions?
+
+Thanks,
+
+Leonid.
