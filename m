@@ -1,74 +1,84 @@
-From: Michael Trimarchi <trimarchimichael@yahoo.it>
-Date: Thu, 11 Oct 2007 16:17:31 +0000 (GMT)
-Subject: [Buildroot] python on embedded system
-Message-ID: <931048.37830.qm@web26215.mail.ukl.yahoo.com>
+From: Gregory Borges <gregory.borges@gmail.com>
+Date: Thu, 11 Oct 2007 13:30:52 -0700
+Subject: [Buildroot] fakeroot link error building for ARM
+Message-ID: <800803a60710111330m4075fe24l2c6428fd9d0e3d95@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-hi,
+Using Ubuntu 7.04, Buildroot snapshot 10/10/2007, building for ARM/Xscale
+(same for ARM/generic) I get the following error (sorry if I have included
+irrelevent stuff):
 
-
-
-I'd like to reduce python and just compile this modules:
-
-Modulo 59 Nota Tecnica Rev.2 Data 01/03   	  	 	 	 	 	 	 	 <!--  _filtered {margin:0.79in;} P {margin-bottom:0.08in;} -->   _main_
-
-    _buildin_
-
-    marshal
-
- 	    imp
-
- 	    sys
-
- 	    os
-
- 	    float
-
-    md5
-
- 	    socket
-
- 	    asyncore
-
- 	    select
-
- 	    thread
-
- 	    threading
-
- 	    time
-
- 	    termios
- 
-I set up the PYTHON_DISABLE_MODULES with _PYTHON_DISABLED_MODULES=readline pyexpat dbm gdbm bsddb \
-
-        _curses _curses_panel _tkinter nis zipfile _codecsmodule \
-
-        cryptmodule _randommodule grpmodule regexmodule parsermodule \
-
-        dbmodule glmodule pwdmodule gcmodule rgbimgmodule _heapqmodule \
-
-        imageop cPickle audioop multybytecodec
-
-
-
-and using the buildroot patch that disable modules. At the and I having a 12 Mb of stuff. I don't understand how to avoid the installation of a lot
-
-of not useful py file. It is possible to reduce the size of python enviroment?
-
-
-
-Regards Michael
-
-
-
-
-
-
-
-      ___________________________________ 
-L'email della prossima generazione? Puoi averla con la nuova Yahoo! Mail: http://it.docs.yahoo.com/nowyoucan.html
+# Just in case
+chmod a+x
+/home/gborges/buildroot/project_build_arm/mstone/root/usr/share/udhcpc/default.script
+chmod: cannot access
+`/home/gborges/buildroot/project_build_arm/mstone/root/usr/share/udhcpc/default.script':
+No such file or directory
+make: [/home/gborges/buildroot/project_build_arm/mstone/root/bin/busybox]
+Error 1 (ignored)
+/usr/bin/make -j1 -C /home/gborges/buildroot/toolchain_build_arm/fakeroot-
+1.8-host
+make[1]: Entering directory
+`/home/gborges/buildroot/toolchain_build_arm/fakeroot-1.8-host'
+/usr/bin/make  all-recursive
+make[2]: Entering directory
+`/home/gborges/buildroot/toolchain_build_arm/fakeroot-1.8-host'
+Making all in scripts
+make[3]: Entering directory
+`/home/gborges/buildroot/toolchain_build_arm/fakeroot-1.8-host/scripts'
+make[3]: Nothing to be done for `all'.
+make[3]: Leaving directory
+`/home/gborges/buildroot/toolchain_build_arm/fakeroot-1.8-host/scripts'
+Making all in test
+make[3]: Entering directory
+`/home/gborges/buildroot/toolchain_build_arm/fakeroot-1.8-host/test'
+make[3]: Nothing to be done for `all'.
+make[3]: Leaving directory
+`/home/gborges/buildroot/toolchain_build_arm/fakeroot-1.8-host/test'
+make[3]: Entering directory
+`/home/gborges/buildroot/toolchain_build_arm/fakeroot-1.8-host'
+CONFIG_FILES= CONFIG_HEADERS= /bin/sh ./config.status
+config.status: executing depfiles commands
+config.status: executing libtool commands
+/bin/sh ./libtool --tag=CC   --mode=link /usr/bin/gcc  -g -O2   -o faked
+faked.o libcommunicate.la -ldl
+eval: 1: libtool_args+=: not found
+eval: 1: compile_command+=: not found
+eval: 1: finalize_command+=: not found
+eval: 1: libtool_args+=: not found
+eval: 1: compile_command+=: not found
+eval: 1: finalize_command+=: not found
+eval: 1: libtool_args+=: not found
+eval: 1: compile_command+=: not found
+eval: 1: finalize_command+=: not found
+eval: 1: libtool_args+=: not found
+eval: 1: compile_command+=: not found
+eval: 1: finalize_command+=: not found
+eval: 1: libtool_args+=: not found
+eval: 1: compile_command+=: not found
+eval: 1: finalize_command+=: not found
+eval: 1: libtool_args+=: not found
+eval: 1: libtool_args+=: not found
+libtool: link: /usr/bin/gcc  ./.libs/libcommunicate.a -ldl
+/usr/lib/gcc/i486-linux-gnu/4.1.2/../../../../lib/crt1.o: In function
+`_start':
+(.text+0x18): undefined reference to `main'
+collect2: ld returned 1 exit status
+make[3]: *** [faked] Error 1
+make[3]: Leaving directory
+`/home/gborges/buildroot/toolchain_build_arm/fakeroot-1.8-host'
+make[2]: *** [all-recursive] Error 1
+make[2]: Leaving directory
+`/home/gborges/buildroot/toolchain_build_arm/fakeroot-1.8-host'
+make[1]: *** [all] Error 2
+make[1]: Leaving directory
+`/home/gborges/buildroot/toolchain_build_arm/fakeroot-1.8-host'
+make: *** [/home/gborges/buildroot/toolchain_build_arm/fakeroot-1.8-host/faked]
+Error 2
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: http://busybox.net/lists/buildroot/attachments/20071011/a4876795/attachment.htm 
