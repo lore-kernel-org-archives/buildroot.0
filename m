@@ -1,29 +1,35 @@
-From: Leonid <Leonid@a-k-a.net>
-Date: Thu, 11 Oct 2007 00:14:07 -0700
-Subject: [Buildroot] Mmap failure: Value too large for defined data type
-In-Reply-To: <Pine.LNX.4.64.0710100447510.10223@localhost.localdomain>
-References: <Pine.LNX.4.64.0710100447510.10223@localhost.localdomain>
-Message-ID: <406A31B117F2734987636D6CCC93EE3C02528F57@ehost011-3.exch011.intermedia.net>
+From: Sushi Sensei <sinestado@gmail.com>
+Date: Thu, 11 Oct 2007 10:59:41 -0300
+Subject: [Buildroot] lockfile-progs update and patch
+Message-ID: <a63ecaf0710110659l4acf370rd12bb151257f4a96@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi:
+lockfile-progs 0.1.10 breaks with this error:
 
-I'm working on at91rm9200 (Linux 2.6.16) and I'm trying to map last 64K
-of memory (CPU registers). I get an error:
+undefined reference to `*rindex*'
 
-mmap() error in xio_linux.c: Value too large for defined data type
-xio_linux.c:134 Ifc mmap_entry_2 start 0xFFFF0000 size 0x00010000
+This patch update the package to 0.1.11 and add this patch.
 
-Frankly, I don't see any overflow here and besides it used to work when
-I have compiled using glibc based toolchain. Now I started to use uClibc
-toolchain from buildroot - and here I am.
+The lockfile-progs-0.1.11.patch must be in package/lockfile-progs/
 
-Any suggestions?
+I'dont know how to make only one patch to add the two things.
 
-Thanks,
 
-Leonid.
+-- 
+------------------------------------------------------
+--- Timeo Danaos et dona ferentes ---
+------------------------------------------------------
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: http://busybox.net/lists/buildroot/attachments/20071011/c8fe99f1/attachment.htm 
+-------------- next part --------------
+A non-text attachment was scrubbed...
+Name: br2-lockfile-progs.patch
+Type: text/x-patch
+Size: 1252 bytes
+Desc: not available
+Url : http://busybox.net/lists/buildroot/attachments/20071011/c8fe99f1/attachment.bin 
