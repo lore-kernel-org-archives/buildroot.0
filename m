@@ -1,9 +1,9 @@
 From: ulf at uclibc.org <ulf@uclibc.org>
-Date: Fri, 12 Oct 2007 05:33:00 -0700 (PDT)
+Date: Fri, 12 Oct 2007 05:34:04 -0700 (PDT)
 Subject: [Buildroot] svn commit:
-	trunk/buildroot/target/device/Atmel/atstk1002/target_skeleton/etc:
+	trunk/buildroot/target/device/Atmel/atngw100/target_skeleton/etc:
 	init.d
-Message-ID: <20071012123300.3B763A6817@busybox.net>
+Message-ID: <20071012123404.0D5E7A681D@busybox.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -11,28 +11,39 @@ Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
 Author: ulf
-Date: 2007-10-12 05:32:59 -0700 (Fri, 12 Oct 2007)
-New Revision: 20227
+Date: 2007-10-12 05:34:04 -0700 (Fri, 12 Oct 2007)
+New Revision: 20228
 
 Log:
-Update NWG100 skeleton
+Update NGW100 skeleton
 
 Added:
-   trunk/buildroot/target/device/Atmel/atstk1002/target_skeleton/etc/mdev.conf
-   trunk/buildroot/target/device/Atmel/atstk1002/target_skeleton/etc/shadow
+   trunk/buildroot/target/device/Atmel/atngw100/target_skeleton/etc/mdev.conf
+   trunk/buildroot/target/device/Atmel/atngw100/target_skeleton/etc/shadow
 
 Modified:
-   trunk/buildroot/target/device/Atmel/atstk1002/target_skeleton/etc/group
-   trunk/buildroot/target/device/Atmel/atstk1002/target_skeleton/etc/init.d/S00mountvirtfs
-   trunk/buildroot/target/device/Atmel/atstk1002/target_skeleton/etc/init.d/S41inetd
-   trunk/buildroot/target/device/Atmel/atstk1002/target_skeleton/etc/passwd
+   trunk/buildroot/target/device/Atmel/atngw100/target_skeleton/etc/fstab
+   trunk/buildroot/target/device/Atmel/atngw100/target_skeleton/etc/group
+   trunk/buildroot/target/device/Atmel/atngw100/target_skeleton/etc/init.d/S00mountvirtfs
+   trunk/buildroot/target/device/Atmel/atngw100/target_skeleton/etc/init.d/S41inetd
+   trunk/buildroot/target/device/Atmel/atngw100/target_skeleton/etc/passwd
 
 
 Changeset:
-Modified: trunk/buildroot/target/device/Atmel/atstk1002/target_skeleton/etc/group
+Modified: trunk/buildroot/target/device/Atmel/atngw100/target_skeleton/etc/fstab
 ===================================================================
---- trunk/buildroot/target/device/Atmel/atstk1002/target_skeleton/etc/group	2007-10-12 12:30:14 UTC (rev 20226)
-+++ trunk/buildroot/target/device/Atmel/atstk1002/target_skeleton/etc/group	2007-10-12 12:32:59 UTC (rev 20227)
+--- trunk/buildroot/target/device/Atmel/atngw100/target_skeleton/etc/fstab	2007-10-12 12:32:59 UTC (rev 20227)
++++ trunk/buildroot/target/device/Atmel/atngw100/target_skeleton/etc/fstab	2007-10-12 12:34:04 UTC (rev 20228)
+@@ -1,3 +1,4 @@
+ # /etc/fstab: static file system information.
+ #
+ # <file system>	<mount pt>	<type>		<options>	<dump>	<pass>
++/dev/mtdblock3	/usr		jffs2		defaults	0	0
+
+Modified: trunk/buildroot/target/device/Atmel/atngw100/target_skeleton/etc/group
+===================================================================
+--- trunk/buildroot/target/device/Atmel/atngw100/target_skeleton/etc/group	2007-10-12 12:32:59 UTC (rev 20227)
++++ trunk/buildroot/target/device/Atmel/atngw100/target_skeleton/etc/group	2007-10-12 12:34:04 UTC (rev 20228)
 @@ -5,7 +5,9 @@
  adm:x:4:
  tty:x:5:
@@ -44,10 +55,10 @@ Modified: trunk/buildroot/target/device/Atmel/atstk1002/target_skeleton/etc/grou
  staff:x:50:
  www-data::51:
 
-Modified: trunk/buildroot/target/device/Atmel/atstk1002/target_skeleton/etc/init.d/S00mountvirtfs
+Modified: trunk/buildroot/target/device/Atmel/atngw100/target_skeleton/etc/init.d/S00mountvirtfs
 ===================================================================
---- trunk/buildroot/target/device/Atmel/atstk1002/target_skeleton/etc/init.d/S00mountvirtfs	2007-10-12 12:30:14 UTC (rev 20226)
-+++ trunk/buildroot/target/device/Atmel/atstk1002/target_skeleton/etc/init.d/S00mountvirtfs	2007-10-12 12:32:59 UTC (rev 20227)
+--- trunk/buildroot/target/device/Atmel/atngw100/target_skeleton/etc/init.d/S00mountvirtfs	2007-10-12 12:32:59 UTC (rev 20227)
++++ trunk/buildroot/target/device/Atmel/atngw100/target_skeleton/etc/init.d/S00mountvirtfs	2007-10-12 12:34:04 UTC (rev 20228)
 @@ -58,9 +58,6 @@
  	mkdir_fs /dev/pts
  	mount_fs pts /dev/pts devpts
@@ -59,10 +70,10 @@ Modified: trunk/buildroot/target/device/Atmel/atstk1002/target_skeleton/etc/init
  
  mount_fs config /config configfs
 
-Modified: trunk/buildroot/target/device/Atmel/atstk1002/target_skeleton/etc/init.d/S41inetd
+Modified: trunk/buildroot/target/device/Atmel/atngw100/target_skeleton/etc/init.d/S41inetd
 ===================================================================
---- trunk/buildroot/target/device/Atmel/atstk1002/target_skeleton/etc/init.d/S41inetd	2007-10-12 12:30:14 UTC (rev 20226)
-+++ trunk/buildroot/target/device/Atmel/atstk1002/target_skeleton/etc/init.d/S41inetd	2007-10-12 12:32:59 UTC (rev 20227)
+--- trunk/buildroot/target/device/Atmel/atngw100/target_skeleton/etc/init.d/S41inetd	2007-10-12 12:32:59 UTC (rev 20227)
++++ trunk/buildroot/target/device/Atmel/atngw100/target_skeleton/etc/init.d/S41inetd	2007-10-12 12:34:04 UTC (rev 20228)
 @@ -2,7 +2,7 @@
  
  INETD=/usr/sbin/inetd
@@ -73,12 +84,12 @@ Modified: trunk/buildroot/target/device/Atmel/atstk1002/target_skeleton/etc/init
  	echo "missing"
  	exit 1
 
-Added: trunk/buildroot/target/device/Atmel/atstk1002/target_skeleton/etc/mdev.conf
+Added: trunk/buildroot/target/device/Atmel/atngw100/target_skeleton/etc/mdev.conf
 ===================================================================
---- trunk/buildroot/target/device/Atmel/atstk1002/target_skeleton/etc/mdev.conf	                        (rev 0)
-+++ trunk/buildroot/target/device/Atmel/atstk1002/target_skeleton/etc/mdev.conf	2007-10-12 12:32:59 UTC (rev 20227)
+--- trunk/buildroot/target/device/Atmel/atngw100/target_skeleton/etc/mdev.conf	                        (rev 0)
++++ trunk/buildroot/target/device/Atmel/atngw100/target_skeleton/etc/mdev.conf	2007-10-12 12:34:04 UTC (rev 20228)
 @@ -0,0 +1,49 @@
-+# mdev.conf for ATSTK1000
++# mdev.conf for ATNGW100
 +#
 +# Syntax:
 +#  <regexp> <UID>:<GID> <PERM> [{@,$,*} <CMD>]
@@ -128,10 +139,10 @@ Added: trunk/buildroot/target/device/Atmel/atstk1002/target_skeleton/etc/mdev.co
 +
 +ttyS.*	0:20	640
 
-Modified: trunk/buildroot/target/device/Atmel/atstk1002/target_skeleton/etc/passwd
+Modified: trunk/buildroot/target/device/Atmel/atngw100/target_skeleton/etc/passwd
 ===================================================================
---- trunk/buildroot/target/device/Atmel/atstk1002/target_skeleton/etc/passwd	2007-10-12 12:30:14 UTC (rev 20226)
-+++ trunk/buildroot/target/device/Atmel/atstk1002/target_skeleton/etc/passwd	2007-10-12 12:32:59 UTC (rev 20227)
+--- trunk/buildroot/target/device/Atmel/atngw100/target_skeleton/etc/passwd	2007-10-12 12:32:59 UTC (rev 20227)
++++ trunk/buildroot/target/device/Atmel/atngw100/target_skeleton/etc/passwd	2007-10-12 12:34:04 UTC (rev 20228)
 @@ -1,4 +1,4 @@
 -root:$1$rsjkLsTU$zdulfnYQgyKmN3e0Fiw7C1:0:0:root:/:/bin/sh
 +root:x:0:0:root:/:/bin/sh
@@ -151,10 +162,10 @@ Modified: trunk/buildroot/target/device/Atmel/atstk1002/target_skeleton/etc/pass
 +avr32:x:500:500:Linux User,,,:/home/avr32:/bin/sh
  default:x:1000:1000:Default non-root user:/home/default:/bin/sh
 
-Added: trunk/buildroot/target/device/Atmel/atstk1002/target_skeleton/etc/shadow
+Added: trunk/buildroot/target/device/Atmel/atngw100/target_skeleton/etc/shadow
 ===================================================================
---- trunk/buildroot/target/device/Atmel/atstk1002/target_skeleton/etc/shadow	                        (rev 0)
-+++ trunk/buildroot/target/device/Atmel/atstk1002/target_skeleton/etc/shadow	2007-10-12 12:32:59 UTC (rev 20227)
+--- trunk/buildroot/target/device/Atmel/atngw100/target_skeleton/etc/shadow	                        (rev 0)
++++ trunk/buildroot/target/device/Atmel/atngw100/target_skeleton/etc/shadow	2007-10-12 12:34:04 UTC (rev 20228)
 @@ -0,0 +1,18 @@
 +root:$1$OJeedGT3$uG0eWkNhkeq0WO6Wldk1Y.:13200:0:99999:7:::
 +daemon:!:13200:0:99999:7:::
