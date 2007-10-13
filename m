@@ -1,32 +1,40 @@
-From: =?ISO-8859-1?Q?Thiago_A._Corr=EAa?= <thiago.correa@gmail.com>
-Date: Sat, 13 Oct 2007 17:54:52 +0100
-Subject: [Buildroot] svn commit: trunk/buildroot: target/device
-	target/device/Atmel target etc...
-In-Reply-To: <20071013101502.7A6EDA6151@busybox.net>
-References: <20071013101502.7A6EDA6151@busybox.net>
-Message-ID: <d6cda7730710130954u34f6158an4a924bef423239ac@mail.gmail.com>
+From: ulf at uclibc.org <ulf@uclibc.org>
+Date: Sat, 13 Oct 2007 11:30:28 -0700 (PDT)
+Subject: [Buildroot] svn commit: trunk/buildroot/target: device/Atmel
+	device/Atmel/at91sam9260df etc...
+Message-ID: <20071013183028.098E9A459B@busybox.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Yay! Finally HEAD works for me :)
+Author: ulf
+Date: 2007-10-13 11:30:28 -0700 (Sat, 13 Oct 2007)
+New Revision: 20242
 
-At least the toolchain build does :)
+Log:
+Create Advanced Linux Configuration option/Remove experimental
 
-it has broken packages though.... just now I've got internal compiler
-errors while compiling qtopia which has templates.
+Added:
+   trunk/buildroot/target/linux/Config.in.advanced
+   trunk/buildroot/target/linux/Config.in.experimental
+   trunk/buildroot/target/linux/Makefile.in.advanced
 
-I for one welcome our new 4.2.x compiler overlords, but shouldn't we
-keep 4.1.2 which is supposedly more stable, at least just as an
-option?
+Removed:
+   trunk/buildroot/target/linux-experimental/
 
-On 10/13/07, ulf at uclibc.org <ulf@uclibc.org> wrote:
-> Author: ulf
-> Date: 2007-10-13 03:15:01 -0700 (Sat, 13 Oct 2007)
-> New Revision: 20239
->
-> Log:
-> Update AVR32 toolchain with new binutils and uClibc, This time it works (cross-fingers)
->
+Modified:
+   trunk/buildroot/target/Config.in
+   trunk/buildroot/target/Makefile.in
+   trunk/buildroot/target/device/Atmel/Makefile.in
+   trunk/buildroot/target/device/Atmel/at91sam9260dfc/at91sam9260dfc_defconfig
+   trunk/buildroot/target/linux/Config.in
+
+
+Changeset:
+
+Sorry, the patch is too large to include (2542 lines).
+Please use ViewCVS to see it!
+
+http://uclibc.org/cgi-bin/viewcvs.cgi?view=rev&root=svn&rev=20242
