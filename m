@@ -1,49 +1,34 @@
-From: Ulf Samuelsson <ulf@atmel.com>
-Date: Sat, 13 Oct 2007 22:33:19 +0200
-Subject: [Buildroot] svn commit: trunk/buildroot:
-	target/device	target/device/Atmel target etc...
-In-Reply-To: <d6cda7730710130954u34f6158an4a924bef423239ac@mail.gmail.com>
-References: <20071013101502.7A6EDA6151@busybox.net>
-	<d6cda7730710130954u34f6158an4a924bef423239ac@mail.gmail.com>
-Message-ID: <1192307599.26495.29.camel@elrond.atmel.sweden>
+From: Ivan Kuten <ivan.kuten@promwad.com>
+Date: Sun, 14 Oct 2007 00:51:42 +0300
+Subject: [Buildroot] PATCH: lvm2 - correct patch version
+Message-ID: <47113DEE.1070700@promwad.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-l?r 2007-10-13 klockan 17:54 +0100 skrev Thiago A. Corr?a:
-> Yay! Finally HEAD works for me :)
-> 
-> At least the toolchain build does :)
-> 
-> it has broken packages though.... just now I've got internal compiler
-> errors while compiling qtopia which has templates.
-> 
-> I for one welcome our new 4.2.x compiler overlords, but shouldn't we
-> keep 4.1.2 which is supposedly more stable, at least just as an
-> option?
-> 
+Make lvm2 download&compile correctly:
 
-It should be an option.
-- Actually the default.
-  The AVR32 gcc-4.2.1 will crash if Qtopia is built,
+Index: package/lvm2/lvm2.mk
+===================================================================
+--- package/lvm2/lvm2.mk        (revision 20237)
++++ package/lvm2/lvm2.mk        (working copy)
+@@ -24,7 +24,7 @@
+ # USA
 
-You cannot select 4.1.2?
+ LVM2_BASEVER=2.02
+-LVM2_PATCH=26
++LVM2_PATCH=28
+ LVM2_VERSION=$(LVM2_BASEVER).$(LVM2_PATCH)
+ LVM2_SOURCE:=LVM2.$(LVM2_VERSION).tgz
+ LVM2_SITE:=ftp://sources.redhat.com/pub/lvm2
 
 
-> On 10/13/07, ulf at uclibc.org <ulf@uclibc.org> wrote:
-> > Author: ulf
-> > Date: 2007-10-13 03:15:01 -0700 (Sat, 13 Oct 2007)
-> > New Revision: 20239
-> >
-> > Log:
-> > Update AVR32 toolchain with new binutils and uClibc, This time it works (cross-fingers)
-> >
-> _______________________________________________
-> buildroot mailing list
-> buildroot at uclibc.org
-> http://busybox.net/mailman/listinfo/buildroot
--- 
-Best Regards
-Ulf Samuelsson
+Best regards,
+Ivan
+--------------------------------
+Embedded Linux engineer,
+Promwad Company: http://www.promwad.com/
+Homepage : http://www.ivankuten.com/
+--------------------------------
