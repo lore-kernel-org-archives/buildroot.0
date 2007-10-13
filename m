@@ -1,34 +1,30 @@
-From: Ivan Kuten <ivan.kuten@promwad.com>
-Date: Sun, 14 Oct 2007 01:28:54 +0300
-Subject: [Buildroot] PATCH: quagga - correct version
-Message-ID: <471146A6.4090906@promwad.com>
+From: =?ISO-8859-1?Q?Thiago_A._Corr=EAa?= <thiago.correa@gmail.com>
+Date: Sat, 13 Oct 2007 22:50:19 +0100
+Subject: [Buildroot] svn commit: trunk/buildroot: target/device
+	target/device/Atmel target etc...
+In-Reply-To: <1192307599.26495.29.camel@elrond.atmel.sweden>
+References: <20071013101502.7A6EDA6151@busybox.net>
+	<d6cda7730710130954u34f6158an4a924bef423239ac@mail.gmail.com>
+	<1192307599.26495.29.camel@elrond.atmel.sweden>
+Message-ID: <d6cda7730710131450q781063fcl3f9dcdcac808289c@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Correct quagga version:
+On 10/13/07, Ulf Samuelsson <ulf@atmel.com> wrote:
+> > I for one welcome our new 4.2.x compiler overlords, but shouldn't we
+> > keep 4.1.2 which is supposedly more stable, at least just as an
+> > option?
+> >
+>
+> It should be an option.
+> - Actually the default.
+>   The AVR32 gcc-4.2.1 will crash if Qtopia is built,
+>
+> You cannot select 4.1.2?
 
-Index: package/quagga/quagga.mk
-===================================================================
---- package/quagga/quagga.mk    (revision 20237)
-+++ package/quagga/quagga.mk    (working copy)
-@@ -3,7 +3,7 @@
- # quagga suite
- #
- #############################################################
--QUAGGA_VERSION:=0.99.8
-+QUAGGA_VERSION:=0.99.9
- QUAGGA_SOURCE:=quagga-$(QUAGGA_VERSION).tar.gz
- QUAGGA_SITE:=http://www.quagga.net/download
- QUAGGA_DIR:=$(BUILD_DIR)/quagga-$(QUAGGA_VERSION)
-
-
-Best regards,
-Ivan
---------------------------------
-Embedded Linux engineer,
-Promwad Company: http://www.promwad.com/
-Homepage : http://www.ivankuten.com/
---------------------------------
+Ah, I see now... it's a bit confusing. I can select the compiler on
+the Toolchain -> Source Locations, instead of --GCC Options/GCC
+Compiler Version.
