@@ -1,28 +1,28 @@
 From: Ivan Kuten <ivan.kuten@promwad.com>
-Date: Sun, 14 Oct 2007 00:55:04 +0300
-Subject: [Buildroot] PATCH: mdadm - correct patch version
-Message-ID: <47113EB8.4040608@promwad.com>
+Date: Sun, 14 Oct 2007 01:09:49 +0300
+Subject: [Buildroot] PATCH: correct ncftp version
+Message-ID: <4711422D.4070008@promwad.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-mdadm - correct patch version, download&compile - ok:
+Correct ncftp version to download&compile ok:
 
-Index: package/mdadm/mdadm.mk
+Index: package/ncftp/ncftp.mk
 ===================================================================
---- package/mdadm/mdadm.mk      (revision 20237)
-+++ package/mdadm/mdadm.mk      (working copy)
-@@ -5,7 +5,7 @@
+--- package/ncftp/ncftp.mk      (revision 20237)
++++ package/ncftp/ncftp.mk      (working copy)
+@@ -3,7 +3,7 @@
+ # ncftp client
+ #
  #############################################################
- MDADM_VERSION:=2.6.2
- MDADM_SOURCE:=mdadm_$(MDADM_VERSION).orig.tar.gz
--MDADM_PATCH:=mdadm_$(MDADM_VERSION)-1.diff.gz
-+MDADM_PATCH:=mdadm_$(MDADM_VERSION)-2.diff.gz
- MDADM_CAT:=$(ZCAT)
- MDADM_SITE:=http://ftp.debian.org/debian/pool/main/m/mdadm
- MDADM_DIR:=$(BUILD_DIR)/mdadm-$(MDADM_VERSION)
+-NCFTP_VERSION:=3.2.0
++NCFTP_VERSION:=3.2.1
+ NCFTP_SOURCE:=ncftp-$(NCFTP_VERSION)-src.tar.bz2
+ NCFTP_SITE:=ftp://ftp.ncftp.com/ncftp
+ NCFTP_DIR:=$(BUILD_DIR)/ncftp-$(NCFTP_VERSION)
 
 
 Best regards,
