@@ -1,8 +1,7 @@
 From: ulf at uclibc.org <ulf@uclibc.org>
-Date: Sat, 13 Oct 2007 11:30:28 -0700 (PDT)
-Subject: [Buildroot] svn commit: trunk/buildroot/target: device/Atmel
-	device/Atmel/at91sam9260df etc...
-Message-ID: <20071013183028.098E9A459B@busybox.net>
+Date: Sat, 13 Oct 2007 11:37:25 -0700 (PDT)
+Subject: [Buildroot] svn commit: trunk/buildroot/target/linux
+Message-ID: <20071013183725.4E5DFA45E1@busybox.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -10,31 +9,34 @@ Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
 Author: ulf
-Date: 2007-10-13 11:30:28 -0700 (Sat, 13 Oct 2007)
-New Revision: 20242
+Date: 2007-10-13 11:37:24 -0700 (Sat, 13 Oct 2007)
+New Revision: 20243
 
 Log:
-Create Advanced Linux Configuration option/Remove experimental
-
-Added:
-   trunk/buildroot/target/linux/Config.in.advanced
-   trunk/buildroot/target/linux/Config.in.experimental
-   trunk/buildroot/target/linux/Makefile.in.advanced
-
-Removed:
-   trunk/buildroot/target/linux-experimental/
+Move config item deeper into menu system
 
 Modified:
-   trunk/buildroot/target/Config.in
-   trunk/buildroot/target/Makefile.in
-   trunk/buildroot/target/device/Atmel/Makefile.in
-   trunk/buildroot/target/device/Atmel/at91sam9260dfc/at91sam9260dfc_defconfig
-   trunk/buildroot/target/linux/Config.in
+   trunk/buildroot/target/linux/Config.in.advanced
 
 
 Changeset:
-
-Sorry, the patch is too large to include (2542 lines).
-Please use ViewCVS to see it!
-
-http://uclibc.org/cgi-bin/viewcvs.cgi?view=rev&root=svn&rev=20242
+Modified: trunk/buildroot/target/linux/Config.in.advanced
+===================================================================
+--- trunk/buildroot/target/linux/Config.in.advanced	2007-10-13 18:30:28 UTC (rev 20242)
++++ trunk/buildroot/target/linux/Config.in.advanced	2007-10-13 18:37:24 UTC (rev 20243)
+@@ -487,8 +487,6 @@
+ 	help
+ 	  Copy kernel to secondary location
+ 
+-endmenu
+-
+ config BR2_LINUX_COPY_CONFIGURATION
+ 	bool "Copy buildroot configuration to Linux file system"
+ 	default y if BR2_TARGET_ATMEL
+@@ -497,5 +495,6 @@
+ 	  The configuration files for buildroot, uclibc, busybox and linux
+ 	  are copied to the "<root>/boot" directory.
+ 
++endmenu
+ endif
+ 
