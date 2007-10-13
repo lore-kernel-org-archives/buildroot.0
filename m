@@ -1,28 +1,28 @@
 From: Ivan Kuten <ivan.kuten@promwad.com>
-Date: Sun, 14 Oct 2007 00:51:42 +0300
-Subject: [Buildroot] PATCH: lvm2 - correct patch version
-Message-ID: <47113DEE.1070700@promwad.com>
+Date: Sun, 14 Oct 2007 00:55:04 +0300
+Subject: [Buildroot] PATCH: mdadm - correct patch version
+Message-ID: <47113EB8.4040608@promwad.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Make lvm2 download&compile correctly:
+mdadm - correct patch version, download&compile - ok:
 
-Index: package/lvm2/lvm2.mk
+Index: package/mdadm/mdadm.mk
 ===================================================================
---- package/lvm2/lvm2.mk        (revision 20237)
-+++ package/lvm2/lvm2.mk        (working copy)
-@@ -24,7 +24,7 @@
- # USA
-
- LVM2_BASEVER=2.02
--LVM2_PATCH=26
-+LVM2_PATCH=28
- LVM2_VERSION=$(LVM2_BASEVER).$(LVM2_PATCH)
- LVM2_SOURCE:=LVM2.$(LVM2_VERSION).tgz
- LVM2_SITE:=ftp://sources.redhat.com/pub/lvm2
+--- package/mdadm/mdadm.mk      (revision 20237)
++++ package/mdadm/mdadm.mk      (working copy)
+@@ -5,7 +5,7 @@
+ #############################################################
+ MDADM_VERSION:=2.6.2
+ MDADM_SOURCE:=mdadm_$(MDADM_VERSION).orig.tar.gz
+-MDADM_PATCH:=mdadm_$(MDADM_VERSION)-1.diff.gz
++MDADM_PATCH:=mdadm_$(MDADM_VERSION)-2.diff.gz
+ MDADM_CAT:=$(ZCAT)
+ MDADM_SITE:=http://ftp.debian.org/debian/pool/main/m/mdadm
+ MDADM_DIR:=$(BUILD_DIR)/mdadm-$(MDADM_VERSION)
 
 
 Best regards,
