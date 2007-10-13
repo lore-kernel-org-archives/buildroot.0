@@ -1,28 +1,28 @@
 From: Ivan Kuten <ivan.kuten@promwad.com>
-Date: Sun, 14 Oct 2007 01:09:49 +0300
-Subject: [Buildroot] PATCH: correct ncftp version
-Message-ID: <4711422D.4070008@promwad.com>
+Date: Sun, 14 Oct 2007 01:28:54 +0300
+Subject: [Buildroot] PATCH: quagga - correct version
+Message-ID: <471146A6.4090906@promwad.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Correct ncftp version to download&compile ok:
+Correct quagga version:
 
-Index: package/ncftp/ncftp.mk
+Index: package/quagga/quagga.mk
 ===================================================================
---- package/ncftp/ncftp.mk      (revision 20237)
-+++ package/ncftp/ncftp.mk      (working copy)
+--- package/quagga/quagga.mk    (revision 20237)
++++ package/quagga/quagga.mk    (working copy)
 @@ -3,7 +3,7 @@
- # ncftp client
+ # quagga suite
  #
  #############################################################
--NCFTP_VERSION:=3.2.0
-+NCFTP_VERSION:=3.2.1
- NCFTP_SOURCE:=ncftp-$(NCFTP_VERSION)-src.tar.bz2
- NCFTP_SITE:=ftp://ftp.ncftp.com/ncftp
- NCFTP_DIR:=$(BUILD_DIR)/ncftp-$(NCFTP_VERSION)
+-QUAGGA_VERSION:=0.99.8
++QUAGGA_VERSION:=0.99.9
+ QUAGGA_SOURCE:=quagga-$(QUAGGA_VERSION).tar.gz
+ QUAGGA_SITE:=http://www.quagga.net/download
+ QUAGGA_DIR:=$(BUILD_DIR)/quagga-$(QUAGGA_VERSION)
 
 
 Best regards,
