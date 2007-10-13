@@ -1,28 +1,28 @@
 From: Ivan Kuten <ivan.kuten@promwad.com>
-Date: Sun, 14 Oct 2007 00:33:01 +0300
-Subject: [Buildroot] PATCH: libcgicc correct URL
-Message-ID: <4711398D.2040009@promwad.com>
+Date: Sun, 14 Oct 2007 00:39:03 +0300
+Subject: [Buildroot] PATCH: lm-sensors - correct patch version
+Message-ID: <47113AF7.1050704@promwad.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Provide correct URL for libcgicc:
+lm-sensors - correct patch version, now download&build successful:
 
-Index: package/libcgicc/libcgicc.mk
+Index: package/lm-sensors/lm-sensors.mk
 ===================================================================
---- package/libcgicc/libcgicc.mk        (revision 20237)
-+++ package/libcgicc/libcgicc.mk        (working copy)
-@@ -6,7 +6,7 @@
-
- LIBCGICC_VERSION=3.2.3
- LIBCGICC_DIR=$(BUILD_DIR)/cgicc-$(LIBCGICC_VERSION)
--LIBCGICC_SITE=http://www.cgicc.org/files
-+LIBCGICC_SITE=http://ftp.gnu.org/gnu/cgicc/
- LIBCGICC_SOURCE=cgicc-$(LIBCGICC_VERSION).tar.bz2
- LIBCGICC_CAT:=$(BZCAT)
-
+--- package/lm-sensors/lm-sensors.mk    (revision 20237)
++++ package/lm-sensors/lm-sensors.mk    (working copy)
+@@ -5,7 +5,7 @@
+ #############################################################
+ LM_SENSORS_VERSION:=2.10.4
+ LM_SENSORS_SOURCE:=lm-sensors_$(LM_SENSORS_VERSION).orig.tar.gz
+-LM_SENSORS_PATCH:=lm-sensors_$(LM_SENSORS_VERSION)-1.diff.gz
++LM_SENSORS_PATCH:=lm-sensors_$(LM_SENSORS_VERSION)-3.diff.gz
+ LM_SENSORS_SITE:=http://ftp.debian.org/debian/pool/main/l/lm-sensors/
+ LM_SENSORS_DIR:=$(BUILD_DIR)/lm_sensors-$(LM_SENSORS_VERSION)
+ LM_SENSORS_CAT:=$(ZCAT)
 
 
 Best regards,
