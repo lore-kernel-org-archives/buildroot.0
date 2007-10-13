@@ -1,54 +1,32 @@
-From: Ivan Kuten <ivan.kuten@promwad.com>
-Date: Sat, 13 Oct 2007 19:42:11 +0300
-Subject: [Buildroot] sysv-legacy patch for lockfile-progs, wireless-tools,
-	ttcp
-Message-ID: <4710F563.5000305@promwad.com>
+From: =?ISO-8859-1?Q?Thiago_A._Corr=EAa?= <thiago.correa@gmail.com>
+Date: Sat, 13 Oct 2007 17:54:52 +0100
+Subject: [Buildroot] svn commit: trunk/buildroot: target/device
+	target/device/Atmel target etc...
+In-Reply-To: <20071013101502.7A6EDA6151@busybox.net>
+References: <20071013101502.7A6EDA6151@busybox.net>
+Message-ID: <d6cda7730710130954u34f6158an4a924bef423239ac@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi
+Yay! Finally HEAD works for me :)
 
-these are sysv legacy fixes for
-- lockfile-progs
-- wireless-tools
-- ttcp
+At least the toolchain build does :)
 
+it has broken packages though.... just now I've got internal compiler
+errors while compiling qtopia which has templates.
 
-Best regards,
-Ivan
---------------------------------
-Embedded Linux engineer,
-Promwad Company: http://www.promwad.com/
-Homepage : http://www.ivankuten.com/
---------------------------------
--------------- next part --------------
-A non-text attachment was scrubbed...
-Name: lockfile-progs-sysv-legacy.patch
-Type: text/x-diff
-Size: 448 bytes
-Desc: not available
-Url : http://busybox.net/lists/buildroot/attachments/20071013/27cdd430/attachment.bin 
--------------- next part --------------
-A non-text attachment was scrubbed...
-Name: wireless-tools.28-sysv-legacy.patch
-Type: text/x-diff
-Size: 3404 bytes
-Desc: not available
-Url : http://busybox.net/lists/buildroot/attachments/20071013/27cdd430/attachment-0001.bin 
--------------- next part --------------
-A non-text attachment was scrubbed...
-Name: ttcp-sysv-legacy.patch
-Type: text/x-diff
-Size: 456 bytes
-Desc: not available
-Url : http://busybox.net/lists/buildroot/attachments/20071013/27cdd430/attachment-0002.bin 
--------------- next part --------------
-A non-text attachment was scrubbed...
-Name: sysv-legacy.diff
-Type: text/x-patch
-Size: 1757 bytes
-Desc: not available
-Url : http://busybox.net/lists/buildroot/attachments/20071013/27cdd430/attachment-0003.bin 
+I for one welcome our new 4.2.x compiler overlords, but shouldn't we
+keep 4.1.2 which is supposedly more stable, at least just as an
+option?
+
+On 10/13/07, ulf at uclibc.org <ulf@uclibc.org> wrote:
+> Author: ulf
+> Date: 2007-10-13 03:15:01 -0700 (Sat, 13 Oct 2007)
+> New Revision: 20239
+>
+> Log:
+> Update AVR32 toolchain with new binutils and uClibc, This time it works (cross-fingers)
+>
