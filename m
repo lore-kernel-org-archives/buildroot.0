@@ -1,59 +1,49 @@
-From: Ivan Kuten <ivan.kuten@promwad.com>
-Date: Sun, 14 Oct 2007 00:46:31 +0300
-Subject: [Buildroot] PATCH: lsof - correct URL
-Message-ID: <47113CB7.1030104@promwad.com>
+From: Ulf Samuelsson <ulf@atmel.com>
+Date: Sat, 13 Oct 2007 22:33:19 +0200
+Subject: [Buildroot] svn commit: trunk/buildroot:
+	target/device	target/device/Atmel target etc...
+In-Reply-To: <d6cda7730710130954u34f6158an4a924bef423239ac@mail.gmail.com>
+References: <20071013101502.7A6EDA6151@busybox.net>
+	<d6cda7730710130954u34f6158an4a924bef423239ac@mail.gmail.com>
+Message-ID: <1192307599.26495.29.camel@elrond.atmel.sweden>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-This what I get when trying to get lsof:
+l?r 2007-10-13 klockan 17:54 +0100 skrev Thiago A. Corr?a:
+> Yay! Finally HEAD works for me :)
+> 
+> At least the toolchain build does :)
+> 
+> it has broken packages though.... just now I've got internal compiler
+> errors while compiling qtopia which has templates.
+> 
+> I for one welcome our new 4.2.x compiler overlords, but shouldn't we
+> keep 4.1.2 which is supposedly more stable, at least just as an
+> option?
+> 
 
-ftp lsof.itap.purdue.edu
-Connected to lsof.itap.purdue.edu.
-530-The name server used by lsof.itap.purdue.edu cannot convert your network
-530-address to a host name and back to your network address.  Therefore,
-530-lsof.itap.purdue.edu will not accept the connection.  Consult with your
-530-DNS provider to determine why DNS lookups do not match correctly for
-530-your network address and host name.
-530-
-530-Even without having proper DNS reverse lookup, you may be able to get
-530-lsof from one of these mirror sites:
-530-
-530- ftp://ftp.cerias.purdue.edu/pub/tools/unix/sysutils/lsof
-530- ftp://ftp.tau.ac.il/pub/unix/admin
-530- ftp://ftp.cert.dfn.de/pub/tools/admin/lsof
-530- ftp://ftp.fu-berlin.de/pub/unix/tools/lsof
-530- ftp://ftp.kaizo.org/pub/lsof/
-530- ftp://ftp.tu-darmstadt.de/pub/sysadmin/lsof
-530- ftp://ftp.tux.org/pub/sites/vic.cc.purdue.edu/tools/unix/lsof
-530- ftp://gd.tuwien.ac.at/utils/admin-tools/lsof
-530- ftp://sunsite.ualberta.ca/pub/Mirror/lsof
-530- ftp://the.wiretapped.net/pub/security/host-security/lsof/
+It should be an option.
+- Actually the default.
+  The AVR32 gcc-4.2.1 will crash if Qtopia is built,
 
-Patch to use mirror for lsof:
-
-Index: package/lsof/lsof.mk
-===================================================================
---- package/lsof/lsof.mk        (revision 20237)
-+++ package/lsof/lsof.mk        (working copy)
-@@ -5,7 +5,8 @@
- #############################################################
- LSOF_VERSION:=4.78
- LSOF_SOURCE:=lsof_$(LSOF_VERSION).tar.bz2
--LSOF_SITE:=ftp://lsof.itap.purdue.edu/pub/tools/unix/lsof/
-+#LSOF_SITE:=ftp://lsof.itap.purdue.edu/pub/tools/unix/lsof/
-+LSOF_SITE:=ftp://ftp.fu-berlin.de/pub/unix/tools/lsof/
- LSOF_CAT:=$(BZCAT)
- LSOF_DIR:=$(BUILD_DIR)/lsof_$(LSOF_VERSION)
- LSOF_BINARY:=lsof
+You cannot select 4.1.2?
 
 
-Best regards,
-Ivan
---------------------------------
-Embedded Linux engineer,
-Promwad Company: http://www.promwad.com/
-Homepage : http://www.ivankuten.com/
---------------------------------
+> On 10/13/07, ulf at uclibc.org <ulf@uclibc.org> wrote:
+> > Author: ulf
+> > Date: 2007-10-13 03:15:01 -0700 (Sat, 13 Oct 2007)
+> > New Revision: 20239
+> >
+> > Log:
+> > Update AVR32 toolchain with new binutils and uClibc, This time it works (cross-fingers)
+> >
+> _______________________________________________
+> buildroot mailing list
+> buildroot at uclibc.org
+> http://busybox.net/mailman/listinfo/buildroot
+-- 
+Best Regards
+Ulf Samuelsson
