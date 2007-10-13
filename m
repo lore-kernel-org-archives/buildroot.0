@@ -1,147 +1,59 @@
-From: Ulf Samuelsson <ulf@atmel.com>
-Date: Sat, 13 Oct 2007 22:31:00 +0200
-Subject: [Buildroot] svn commit: trunk/buildroot/toolchain/gcc
-In-Reply-To: <0710132115250.9729@somehost>
-References: <20071012210141.1DF69A5E1B@busybox.net>
-	<0710131046500.9729@somehost>
-	<1192269439.26495.4.camel@elrond.atmel.sweden>
-	<0710131212520.9729@somehost>
-	<1192300638.26495.13.camel@elrond.atmel.sweden>
-	<0710132115250.9729@somehost>
-Message-ID: <1192307460.26495.27.camel@elrond.atmel.sweden>
+From: Ivan Kuten <ivan.kuten@promwad.com>
+Date: Sun, 14 Oct 2007 00:46:31 +0300
+Subject: [Buildroot] PATCH: lsof - correct URL
+Message-ID: <47113CB7.1030104@promwad.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-l?r 2007-10-13 klockan 21:58 +0200 skrev Cristian Ionescu-Idbohrn:
-> On Sat, 13 Oct 2007, Ulf Samuelsson wrote:
-> 
-> > l?r 2007-10-13 klockan 12:19 +0200 skrev Cristian Ionescu-Idbohrn:
-> > > On Sat, 13 Oct 2007, Ulf Samuelsson wrote:
-> > >
-> > > > l?r 2007-10-13 klockan 10:49 +0200 skrev Cristian Ionescu-Idbohrn:
-> > > > > On Fri, 12 Oct 2007, ulf at uclibc.org wrote:
-> > > > >
-> > > > > > Author: ulf
-> > > > > > Date: 2007-10-12 14:01:41 -0700 (Fri, 12 Oct 2007)
-> > > > > > New Revision: 20237
-> > > > > >
-> > > > > > Log:
-> > > > > > Allow library copy to fail
-> > > > >
-> > > > > As it's not obvious to me, may I ask why?
-> > > > > Why not making sure it doesn't fail, instead?
-> > > >
-> > > > That is the long term approach, but I have no control over that part.
-> > >
-> > > Who has the "control over that part"?
-> > >
-> > The guys at Atmel responsible for supporting the AVR32 gcc port...
-> > They have started to take an interest, but I have no clue
-> > when a fix will appear.
-> 
-> Sorry if I missed something, but what's the involvement the guys at Atmel
-> have in this project?  Do they have some sort of maintenance
-> responsabilities in this project?  Do they sponsor this project in some
-> way?  Are you working for the guys at Atmel?
+This what I get when trying to get lsof:
 
-The guys at Atmel do the gcc ports for AVR32.
-I am trying to make it easier for other people to build it.
+ftp lsof.itap.purdue.edu
+Connected to lsof.itap.purdue.edu.
+530-The name server used by lsof.itap.purdue.edu cannot convert your network
+530-address to a host name and back to your network address.  Therefore,
+530-lsof.itap.purdue.edu will not accept the connection.  Consult with your
+530-DNS provider to determine why DNS lookups do not match correctly for
+530-your network address and host name.
+530-
+530-Even without having proper DNS reverse lookup, you may be able to get
+530-lsof from one of these mirror sites:
+530-
+530- ftp://ftp.cerias.purdue.edu/pub/tools/unix/sysutils/lsof
+530- ftp://ftp.tau.ac.il/pub/unix/admin
+530- ftp://ftp.cert.dfn.de/pub/tools/admin/lsof
+530- ftp://ftp.fu-berlin.de/pub/unix/tools/lsof
+530- ftp://ftp.kaizo.org/pub/lsof/
+530- ftp://ftp.tu-darmstadt.de/pub/sysadmin/lsof
+530- ftp://ftp.tux.org/pub/sites/vic.cc.purdue.edu/tools/unix/lsof
+530- ftp://gd.tuwien.ac.at/utils/admin-tools/lsof
+530- ftp://sunsite.ualberta.ca/pub/Mirror/lsof
+530- ftp://the.wiretapped.net/pub/security/host-security/lsof/
 
-> > I do not have the bandwidth to dig into this.
-> 
-> I'm realy sorry for you (and for the rest of us using other archs), but
-> the way you treat the buildroot project is not really acceptable.
+Patch to use mirror for lsof:
 
-> If you don't have the bandwidth to do things right, maybe the guys at
-> Atmel can buy you some more bandwidth so you can do dig and make proper
-> changes that don't break other archs.
-
-This change does not break any other arch.
-It used to be "-cp", and the change to "cp" broke the AVR32 arch.
-
-> > > > If copying fails,
-> > >
-> > > Why should it?
-> > > Have you seen it failing?
-> > > Can you reproduce that?
-> >
-> > Yes, this is the cause of the failure of the AVR32 tool build.
-> 
-> But doesn't that mean that the AVR32 tool is broken?
-> What am I missing here?
-
-Yes and No.
-By reverting the patch, which broke the AVR32 build,
-it is possible to create an AVR32 gcc compiler which
-uses an non-shared libgcc.a to create a uClibc based root gfs.
-
-> > It built during the summer, and then suddenly stopped building.
-> 
-> And that means that all other archs that _do build_ must be broken?
-> Sorry, doesn't make much sense to me :(
-> 
-
-Can you explain why all other archs are broken?
-If the build works for all other archs, then the cp will work.
+Index: package/lsof/lsof.mk
+===================================================================
+--- package/lsof/lsof.mk        (revision 20237)
++++ package/lsof/lsof.mk        (working copy)
+@@ -5,7 +5,8 @@
+ #############################################################
+ LSOF_VERSION:=4.78
+ LSOF_SOURCE:=lsof_$(LSOF_VERSION).tar.bz2
+-LSOF_SITE:=ftp://lsof.itap.purdue.edu/pub/tools/unix/lsof/
++#LSOF_SITE:=ftp://lsof.itap.purdue.edu/pub/tools/unix/lsof/
++LSOF_SITE:=ftp://ftp.fu-berlin.de/pub/unix/tools/lsof/
+ LSOF_CAT:=$(BZCAT)
+ LSOF_DIR:=$(BUILD_DIR)/lsof_$(LSOF_VERSION)
+ LSOF_BINARY:=lsof
 
 
-> > > Is there a use case you can share with us?
-> > >
-> >
-> > Take an older snapshot and try to build AVR32 toolchain.
-> > The libgcc_s.so.1 does not get built.
-> 
-> Not interested to build any AVR32 toolchain myself.  I'm quite happy if
-> the other toolchains do build.
-> 
-
-> > > > then libgcc.a is available,
-> > > > and the end application can be linked with this instead
-> > >
-> > > I see.
-> > >
-> > > > It is better than aborting the build.
-> > >
-> > > But doesn't cure the disease :(
-> > > In other words, you prefer aspirine :)
-> >
-> > If this ensures that I can run the code on the AVR32
-> > then it is good enough for me at this point.
-> 
-> What about the rest of us?
-> 
-
-You have not explained in what way you suffer.
-
-> > Obviously it is better to ensure that the AVR32 toolchain
-> > build generates a shared library,
-> 
-> Obviously it is better to ensure that _all_ toolchains build, I'd say.
-> 
-> > and anyone complaining
-> > are open to develop a patch which fixes the real problem
-> > instead of the symptom.
-> 
-> So, all other toolchains that occasionally build (until you you break
-> them) must be broken, and that's not your problem?
-> 
-> All you talk about is AVR32.
-> You seem to only care about AVR32.
-> You couldn't care less if you break all other archs with your patches?
-> Is this fare play?
-
-No, I care about other archs as well, but I do not belive that they
-are broken by the patch.
-I regularily build ARM and i386 as well.
-Can you show why this breaks anything?
-Remember: It used to be this way until this summer.
-
-> 
-> Cheers,
-> 
--- 
-Best Regards
-Ulf Samuelsson
+Best regards,
+Ivan
+--------------------------------
+Embedded Linux engineer,
+Promwad Company: http://www.promwad.com/
+Homepage : http://www.ivankuten.com/
+--------------------------------
