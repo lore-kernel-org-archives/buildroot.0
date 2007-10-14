@@ -1,94 +1,40 @@
-From: don <don_reid@comcast.net>
-Date: Sun, 14 Oct 2007 13:09:47 -0700
-Subject: [Buildroot] Libtool error with AVR32
-Message-ID: <20071014200947.GA27861@reid1.localdomain>
+From: Ivan Kuten <ivan.kuten@promwad.com>
+Date: Mon, 15 Oct 2007 00:33:02 +0300
+Subject: [Buildroot] Some devices are not created in the ext2 filesystem.
+In-Reply-To: <406A31B117F2734987636D6CCC93EE3C02528F79@ehost011-3.exch011.intermedia.net>
+References: <20071012210141.1DF69A5E1B@busybox.net>	<0710131046500.9729@somehost>	<1192269439.26495.4.camel@elrond.atmel.sweden>	<0710131212520.9729@somehost>	<1192300638.26495.13.camel@elrond.atmel.sweden>	<0710132115250.9729@somehost>	<1192307460.26495.27.camel@elrond.atmel.sweden><0710132305350.9729@somehost>	<47116C13.9020701@promwad.com><406A31B117F2734987636D6CCC93EE3C02528F70@ehost011-3.exch011.intermedia.net>
+	<47120EE5.9040508@promwad.com>
+	<406A31B117F2734987636D6CCC93EE3C02528F79@ehost011-3.exch011.intermedia.net>
+Message-ID: <47128B0E.5040501@promwad.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-I posted this error some time ago.  With all the recent AVR32 changes, I
-decided to try again.  It is still happening.
+> I also see some error from udev:
+> 
+> Populating /dev using udev: cannot open /dev/null
+> done
+> 
+> /dev/null is certainly present:
+> 
+> # ls -al /dev/null
+> crw-rw----    1 root     root       1,   3 Dec 31 17:00 /dev/null
+> 
+> What this error is about?
+> 
 
-The libdaemon configure script is saying
+I think it can not just open /dev/null. If udev is run as udev user,
+crw-rw----    1 root     root       1,   3 Dec 31 17:00 /dev/null
 
-   "*** libtool.m4 and ltmain.sh have a version mismatch! ***"
+/dev/null could not be opened because rw-rw--- but not rw-rw-rw
 
-I had thought that this was related to my host files.  However examining
-the "configure" for for libdaemin-0.12 shows that this check and these
-message are in that file.  Why doesn't everyone get this error?
+BR,
+Ivan
 
-The libdaemon-0.12 directory has the 1.5.22 version.
-The requirement for 1.5.24 is hard coded into that "configure" script.
-
-...
-gentoo_lt_version="1.5.24"
-gentoo_ltmain_version=`sed -n '/^[ 	]*VERSION=/{s/^[ 	]*VERSION=//;p;q;}' "$ltmain"`
-if test "x$gentoo_lt_version" != "x$gentoo_ltmain_version" ; then
-...
-
-Interestingly, there are different versions of ltmain.sh in my build
-tree, and this is a totally clean tree pulled from svn yesterday.
-
-VERSION="1.5.22 Debian 1.5.22-2"
-./build_avr32/pkg-config-0.21/ltmain.sh
-VERSION="1.5.22 Debian 1.5.22-2"
-./build_avr32/pkg-config-0.21/glib-1.2.8/ltmain.sh
-VERSION="1.5.22 Debian 1.5.22-4"
-./build_avr32/libdaemon-0.12/ltmain.sh
-VERSION=1.4a-GCC3.0
-./toolchain_build_avr32/gcc-4.1.2-avr32-2.0/ltmain.sh
-VERSION=1.5.0a
-./toolchain_build_avr32/gcc-4.1.2-avr32-2.0/libjava/libltdl/ltmain.sh
-VERSION=1.4a-GCC3.0
-./toolchain_build_avr32/gcc-4.1.2-avr32-2.0/libjava/classpath/ltmain.sh
-VERSION=1.4a-GCC3.0
-./toolchain_build_avr32/binutils-2.17-avr32-2.1.3/ltmain.sh
-VERSION=1.5.24
-./toolchain_build_avr32/gmp-4.2.2/ltmain.sh
-VERSION="1.5.24 Debian 1.5.24-1"
-./toolchain_build_avr32/mpfr-2.3.0/ltmain.sh
-
-
-
------ Forwarded message from don <don_reid@comcast.net> -----
-Date: Thu, 27 Sep 2007 11:17:57 -0700
-From: don <don_reid@comcast.net>
-To: buildroot at uclibc.org
-Subject: Libtool error with AVR32
-
-I tried to use the latest AVR32 release from ATmel and got an error.
-Is there somewhere else to post that other than this list?
-
-The error is in build_avr32_nofpu/libdaemon-0.12 and is:
-
-...
-configure: WARNING: In the future, Autoconf will not detect cross-tools
-whose name does not start with the host triplet.  If you think this
-configuration is useful to you, please write to autoconf at gnu.org.
-checking whether we are using the GNU Fortran 77 compiler... yes
-checking whether gfortran accepts -g... yes
-checking the maximum length of command line arguments... 98304
-checking command to parse /home/dev/AVR32/Buildroot/buildroot-avr32-2.1.0-rc5/build_avr32_nofpu/staging_dir/usr/bin/avr32-linux-uclibc-nm output from /home/dev/AVR32/Buildroot/buildroot-avr32-2.1.0-rc5/build_avr32_nofpu/staging_dir/usr/bin/avr32-linux-uclibc-gcc -Os -pipe  -I/home/dev/AVR32/Buildroot/buildroot-avr32-2.1.0-rc5/build_avr32_nofpu/staging_dir/usr/include -msoft-float object... ok
-checking for objdir... .libs
-checking for avr32-linux-ar... /home/dev/AVR32/Buildroot/buildroot-avr32-2.1.0-rc5/build_avr32_nofpu/staging_dir/usr/bin/avr32-linux-uclibc-ar
-checking for avr32-linux-ranlib... /home/dev/AVR32/Buildroot/buildroot-avr32-2.1.0-rc5/build_avr32_nofpu/staging_dir/usr/bin/avr32-linux-uclibc-ranlib
-checking for avr32-linux-strip... (cached) /home/dev/AVR32/Buildroot/buildroot-avr32-2.1.0-rc5/build_avr32_nofpu/staging_dir/usr/bin/avr32-linux-uclibc-strip
-checking for correct ltmain.sh version... no
-configure: error:
-
-*** [Gentoo] sanity check failed! ***
-*** libtool.m4 and ltmain.sh have a version mismatch! ***
-*** (libtool.m4 = 1.5.24, ltmain.sh = "1.5.22 Debian 1.5.22-4") ***
-
-Please run:
-
-  libtoolize --copy --force
-
-if appropriate, please contact the maintainer of this
-package (or your distribution) for help.
-
-make: *** [/home/dev/AVR32/Buildroot/buildroot-avr32-2.1.0-rc5/build_avr32_nofpu/libdaemon-0.12/.configured] Error 1
-
------ End forwarded message -----
+--------------------------------
+Embedded Linux engineer,
+Promwad Company: http://www.promwad.com/
+Homepage : http://www.ivankuten.com/
+--------------------------------
