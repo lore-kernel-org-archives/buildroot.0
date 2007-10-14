@@ -1,74 +1,54 @@
-From: Leonid <Leonid@a-k-a.net>
-Date: Sun, 14 Oct 2007 10:31:55 -0700
-Subject: [Buildroot] Some devices are not created in the ext2 filesystem.
-In-Reply-To: <47120EE5.9040508@promwad.com>
-References: <20071012210141.1DF69A5E1B@busybox.net>	<0710131046500.9729@somehost>	<1192269439.26495.4.camel@elrond.atmel.sweden>	<0710131212520.9729@somehost>	<1192300638.26495.13.camel@elrond.atmel.sweden>	<0710132115250.9729@somehost>	<1192307460.26495.27.camel@elrond.atmel.sweden><0710132305350.9729@somehost>	<47116C13.9020701@promwad.com><406A31B117F2734987636D6CCC93EE3C02528F70@ehost011-3.exch011.intermedia.net>
-	<47120EE5.9040508@promwad.com>
-Message-ID: <406A31B117F2734987636D6CCC93EE3C02528F79@ehost011-3.exch011.intermedia.net>
+From: bugs at busybox.net <bugs@busybox.net>
+Date: Sun, 14 Oct 2007 12:13:27 -0700
+Subject: [Buildroot] [buildroot 0001527]: enabling findutils in svn revision
+	20239 results in fatal build errors
+Message-ID: <9157625dcdec9f3d2e94c7b515021770@bugs.uclibc.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi, Ivan:
 
-Your guess was right: I have learnt that udev is used in my build indeed
-and my (proprietary) driver doesn't bother to register its nodes with
-sysfs filesystem. Now everything is clear thank you. 
+The following issue has been SUBMITTED. 
+====================================================================== 
+http://busybox.net/bugs/view.php?id=1527 
+====================================================================== 
+Reported By:                hwstar
+Assigned To:                buildroot
+====================================================================== 
+Project:                    buildroot
+Issue ID:                   1527
+Category:                   Architecture Specific
+Reproducibility:            always
+Severity:                   minor
+Priority:                   normal
+Status:                     assigned
+====================================================================== 
+Date Submitted:             10-14-2007 12:13 PDT
+Last Modified:              10-14-2007 12:13 PDT
+====================================================================== 
+Summary:                    enabling findutils in svn revision 20239 results in
+fatal build errors
+Description: 
+Findutils aborts with an error during the make process. 
 
-For the time being (I didn't want to change code just yet) I added mknod
-commands to rcS file, so necessary nodes are created upon restart. 
+May be related to bug 1479 (Coreutils fails to build) as it fails for one
+of the same reasons:
 
-I also see some error from udev:
+./wchar.h:41:12: error: empty filename in #include
 
-Populating /dev using udev: cannot open /dev/null
-done
+Host: Ubuntu 7.04, kernel 2.6.20-16-generic, gcc version 4.1.2 (Ubuntu
+4.1.2-0ubuntu4)
 
-/dev/null is certainly present:
+SVN revision 20239
 
-# ls -al /dev/null
-crw-rw----    1 root     root       1,   3 Dec 31 17:00 /dev/null
+====================================================================== 
 
-What this error is about?
-
-Thanks,
-
-Leonid.
-
------Original Message-----
-From: buildroot-bounces@uclibc.org [mailto:buildroot-bounces at uclibc.org]
-On Behalf Of Ivan Kuten
-Sent: Sunday, October 14, 2007 5:43 AM
-To: Leonid
-Cc: buildroot at uclibc.org
-Subject: Re: [Buildroot] Some devices are not created in the ext2
-filesystem.
-
-> I see that correspondent files are indeed created in the root
-filesystem
-> tree:
-> 
-> [leonid at jaipur buildroot]$ ls -al root/dev/mc*
-> -rw-r----- 1 root root 0 2007-10-13 21:56 root/dev/mcfp-0
-> -rw-r----- 1 root root 0 2007-10-13 21:56 root/dev/mcfp-1
-> 
-> However when I load my ext2 root filesystem, I don't see these device
-> nodes in /dev directory. What is wrong?
-> 
-
-Check that you are not using udev, because udev is mounted over /dev
-thus hiding your entries.
-
-BR,
-Ivan
-
---------------------------------
-Embedded Linux engineer,
-Promwad Company: http://www.promwad.com/
-Homepage : http://www.ivankuten.com/
---------------------------------
-_______________________________________________
-buildroot mailing list
-buildroot at uclibc.org
-http://busybox.net/mailman/listinfo/buildroot
+Issue History 
+Date Modified   Username       Field                    Change               
+====================================================================== 
+10-14-07 12:13  hwstar         New Issue                                    
+10-14-07 12:13  hwstar         Status                   new => assigned     
+10-14-07 12:13  hwstar         Assigned To               => buildroot       
+======================================================================
