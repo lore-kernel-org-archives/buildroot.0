@@ -1,41 +1,74 @@
-From: Jorge S. <jorgesolla@gmail.com>
-Date: Sun, 14 Oct 2007 19:24:39 +0200
-Subject: [Buildroot] Writable EXT2 fs on dataflash (using MTD)
-Message-ID: <6090c5eb0710141024k3eb26ccp39c7a87845719abb@mail.gmail.com>
+From: Leonid <Leonid@a-k-a.net>
+Date: Sun, 14 Oct 2007 10:31:55 -0700
+Subject: [Buildroot] Some devices are not created in the ext2 filesystem.
+In-Reply-To: <47120EE5.9040508@promwad.com>
+References: <20071012210141.1DF69A5E1B@busybox.net>	<0710131046500.9729@somehost>	<1192269439.26495.4.camel@elrond.atmel.sweden>	<0710131212520.9729@somehost>	<1192300638.26495.13.camel@elrond.atmel.sweden>	<0710132115250.9729@somehost>	<1192307460.26495.27.camel@elrond.atmel.sweden><0710132305350.9729@somehost>	<47116C13.9020701@promwad.com><406A31B117F2734987636D6CCC93EE3C02528F70@ehost011-3.exch011.intermedia.net>
+	<47120EE5.9040508@promwad.com>
+Message-ID: <406A31B117F2734987636D6CCC93EE3C02528F79@ehost011-3.exch011.intermedia.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi all,
+Hi, Ivan:
 
-I've created a rootfs for my AT91RM9200 based custom board and i'm unable to
-mount the ext2 fs on a writable way.
+Your guess was right: I have learnt that udev is used in my build indeed
+and my (proprietary) driver doesn't bother to register its nodes with
+sysfs filesystem. Now everything is clear thank you. 
 
-I'm using an AT45DB64 spi dataflash as an MTD device and i've defined 3
-partitions using this kernel bootargs:
+For the time being (I didn't want to change code just yet) I added mknod
+commands to rcS file, so necessary nodes are created upon restart. 
 
-console=/dev/ttyS0,115200 root=/dev/mtdblock2
-mtdparts=AT45DB642.spi0:168960(boot)ro,2162688(kernel),-(rootfs)rw
-rootfstype=ext2 mem=32M
+I also see some error from udev:
 
-After booting the kernel always says:
+Populating /dev using udev: cannot open /dev/null
+done
 
-VFS: Mounted root (ext2 filesystem) readonly.
+/dev/null is certainly present:
 
-Even if i try a "mount -o remount,rw /" from the busybox shell, i get this
-message:
+# ls -al /dev/null
+crw-rw----    1 root     root       1,   3 Dec 31 17:00 /dev/null
 
-mount: /dev/root is write-protected, mounting read-only
+What this error is about?
 
-The "rootfs" partition is defined "writable" at the u-boot code, so i think
-i can assume the flash is Unlocked.
+Thanks,
 
+Leonid.
 
-Any ideas? Did i miss something when building the Rootfs? any option?
+-----Original Message-----
+From: buildroot-bounces@uclibc.org [mailto:buildroot-bounces at uclibc.org]
+On Behalf Of Ivan Kuten
+Sent: Sunday, October 14, 2007 5:43 AM
+To: Leonid
+Cc: buildroot at uclibc.org
+Subject: Re: [Buildroot] Some devices are not created in the ext2
+filesystem.
 
-Thanks in advance.
--------------- next part --------------
-An HTML attachment was scrubbed...
-URL: http://busybox.net/lists/buildroot/attachments/20071014/52f07f49/attachment.htm 
+> I see that correspondent files are indeed created in the root
+filesystem
+> tree:
+> 
+> [leonid at jaipur buildroot]$ ls -al root/dev/mc*
+> -rw-r----- 1 root root 0 2007-10-13 21:56 root/dev/mcfp-0
+> -rw-r----- 1 root root 0 2007-10-13 21:56 root/dev/mcfp-1
+> 
+> However when I load my ext2 root filesystem, I don't see these device
+> nodes in /dev directory. What is wrong?
+> 
+
+Check that you are not using udev, because udev is mounted over /dev
+thus hiding your entries.
+
+BR,
+Ivan
+
+--------------------------------
+Embedded Linux engineer,
+Promwad Company: http://www.promwad.com/
+Homepage : http://www.ivankuten.com/
+--------------------------------
+_______________________________________________
+buildroot mailing list
+buildroot at uclibc.org
+http://busybox.net/mailman/listinfo/buildroot
