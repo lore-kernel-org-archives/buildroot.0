@@ -1,40 +1,28 @@
 From: Ivan Kuten <ivan.kuten@promwad.com>
-Date: Mon, 15 Oct 2007 00:33:02 +0300
-Subject: [Buildroot] Some devices are not created in the ext2 filesystem.
-In-Reply-To: <406A31B117F2734987636D6CCC93EE3C02528F79@ehost011-3.exch011.intermedia.net>
-References: <20071012210141.1DF69A5E1B@busybox.net>	<0710131046500.9729@somehost>	<1192269439.26495.4.camel@elrond.atmel.sweden>	<0710131212520.9729@somehost>	<1192300638.26495.13.camel@elrond.atmel.sweden>	<0710132115250.9729@somehost>	<1192307460.26495.27.camel@elrond.atmel.sweden><0710132305350.9729@somehost>	<47116C13.9020701@promwad.com><406A31B117F2734987636D6CCC93EE3C02528F70@ehost011-3.exch011.intermedia.net>
-	<47120EE5.9040508@promwad.com>
-	<406A31B117F2734987636D6CCC93EE3C02528F79@ehost011-3.exch011.intermedia.net>
-Message-ID: <47128B0E.5040501@promwad.com>
+Date: Mon, 15 Oct 2007 02:34:34 +0300
+Subject: [Buildroot] Libtool error with AVR32
+In-Reply-To: <20071014200947.GA27861@reid1.localdomain>
+References: <20071014200947.GA27861@reid1.localdomain>
+Message-ID: <4712A78A.7090003@promwad.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-> I also see some error from udev:
+> configure: error:
 > 
-> Populating /dev using udev: cannot open /dev/null
-> done
+> *** [Gentoo] sanity check failed! ***
+> *** libtool.m4 and ltmain.sh have a version mismatch! ***
+> *** (libtool.m4 = 1.5.24, ltmain.sh = "1.5.22 Debian 1.5.22-4") ***
 > 
-> /dev/null is certainly present:
+> Please run:
 > 
-> # ls -al /dev/null
-> crw-rw----    1 root     root       1,   3 Dec 31 17:00 /dev/null
-> 
-> What this error is about?
+>   libtoolize --copy --force
 > 
 
-I think it can not just open /dev/null. If udev is run as udev user,
-crw-rw----    1 root     root       1,   3 Dec 31 17:00 /dev/null
+Have you tried to run "libtoolize --copy --force" manually?
 
-/dev/null could not be opened because rw-rw--- but not rw-rw-rw
 
 BR,
 Ivan
-
---------------------------------
-Embedded Linux engineer,
-Promwad Company: http://www.promwad.com/
-Homepage : http://www.ivankuten.com/
---------------------------------
