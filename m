@@ -1,61 +1,35 @@
 From: Ivan Kuten <ivan.kuten@promwad.com>
-Date: Sun, 14 Oct 2007 15:35:37 +0300
-Subject: [Buildroot] PATCH: set BR2_INET_RPC dependency for nfs-utils
- and portmap
-In-Reply-To: <200710141130.49413.yann.morin.1998@anciens.enib.fr>
-References: <471159C8.4050603@promwad.com>
-	<200710141130.49413.yann.morin.1998@anciens.enib.fr>
-Message-ID: <47120D19.8070807@promwad.com>
+Date: Sun, 14 Oct 2007 15:43:17 +0300
+Subject: [Buildroot] Some devices are not created in the ext2 filesystem.
+In-Reply-To: <406A31B117F2734987636D6CCC93EE3C02528F70@ehost011-3.exch011.intermedia.net>
+References: <20071012210141.1DF69A5E1B@busybox.net>	<0710131046500.9729@somehost>	<1192269439.26495.4.camel@elrond.atmel.sweden>	<0710131212520.9729@somehost>	<1192300638.26495.13.camel@elrond.atmel.sweden>	<0710132115250.9729@somehost>	<1192307460.26495.27.camel@elrond.atmel.sweden><0710132305350.9729@somehost>	<47116C13.9020701@promwad.com>
+	<406A31B117F2734987636D6CCC93EE3C02528F70@ehost011-3.exch011.intermedia.net>
+Message-ID: <47120EE5.9040508@promwad.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Yann E. MORIN wrote:
-> On Sunday 14 October 2007 01:50:32 Ivan Kuten wrote:
->> Set BR2_INET_RPC dependency for nfs-utils and portmap:
+> I see that correspondent files are indeed created in the root filesystem
+> tree:
 > 
-> We had the same issue in BusyBox, and solved it the other way around: have
-> tools needing RPC do a 'select' on RPC, such as (this is not a patch!):
+> [leonid at jaipur buildroot]$ ls -al root/dev/mc*
+> -rw-r----- 1 root root 0 2007-10-13 21:56 root/dev/mcfp-0
+> -rw-r----- 1 root root 0 2007-10-13 21:56 root/dev/mcfp-1
 > 
-> ---8<---
-> Index: package/nfs-utils/Config.in
-> ===================================================================
-> --- package/nfs-utils/Config.in (revision 20237)
-> +++ package/nfs-utils/Config.in (working copy)
-> @@ -1,6 +1,7 @@
->  config BR2_PACKAGE_NFS_UTILS
->  	bool "nfs-utils"
->  	default n
-> +	select BR2_INET_RPC
->  	help
->  	  The NFS Linux kernel server.
->  	  Warning: We do not force largefile support on here on purpose.
-> Index: package/portmap/Config.in
-> ===================================================================
-> --- package/portmap/Config.in   (revision 20237)
-> +++ package/portmap/Config.in   (working copy)
-> @@ -1,6 +1,7 @@
->  config BR2_PACKAGE_PORTMAP
->  	bool "portmap"
->  	default n
-> +	select BR2_INET_RPC
->  	help
->  	  The standard portmapper for RPC services.
-> 
-> ---8<---
-> 
-> This is, imho, better this way because what people really want is NFS or
-> portmap, and might not know that RPC is needed to make those two available.
-> 
-> Having NFS and portmap visible and 'select' the needed RPC support is more
-> straightforward. But again, this is my humble opinion.
+> However when I load my ext2 root filesystem, I don't see these device
+> nodes in /dev directory. What is wrong?
 > 
 
-Hello Yann,
-
-I completely agree with you, your approach is better.
+Check that you are not using udev, because udev is mounted over /dev
+thus hiding your entries.
 
 BR,
 Ivan
+
+--------------------------------
+Embedded Linux engineer,
+Promwad Company: http://www.promwad.com/
+Homepage : http://www.ivankuten.com/
+--------------------------------
