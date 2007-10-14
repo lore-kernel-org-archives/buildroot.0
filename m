@@ -1,49 +1,41 @@
-From: softa at ttechgroup.com <softa@ttechgroup.com>
-Date: Sun, 14 Oct 2007 19:13:36 +0300
-Subject: [Buildroot] Some devices are not created in the ext2 filesystem.
-References: <20071012210141.1DF69A5E1B@busybox.net>	<0710131046500.9729@somehost>	<1192269439.26495.4.camel@elrond.atmel.sweden>	<0710131212520.9729@somehost>	<1192300638.26495.13.camel@elrond.atmel.sweden>	<0710132115250.9729@somehost>	<1192307460.26495.27.camel@elrond.atmel.sweden><0710132305350.9729@somehost>	<47116C13.9020701@promwad.com><406A31B117F2734987636D6CCC93EE3C02528F70@ehost011-3.exch011.intermedia.net>
-	<47120EE5.9040508@promwad.com>
-	<002c01c80e5e$f177bcd0$6614a8c0@softalap>
-	<47124ADA.20000@promwad.com>
-Message-ID: <000f01c80e7d$2caf0e70$6614a8c0@softalap>
+From: Jorge S. <jorgesolla@gmail.com>
+Date: Sun, 14 Oct 2007 19:24:39 +0200
+Subject: [Buildroot] Writable EXT2 fs on dataflash (using MTD)
+Message-ID: <6090c5eb0710141024k3eb26ccp39c7a87845719abb@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+Hi all,
 
------ Original Message ----- 
-From: "Ivan Kuten" <ivan.kuten@promwad.com>
-To: <softa@ttechgroup.com>
-Cc: "Leonid" <Leonid@a-k-a.net>; <buildroot@uclibc.org>
-Sent: Sunday, October 14, 2007 7:59 PM
-Subject: Re: [Buildroot] Some devices are not created in the ext2 
-filesystem.
+I've created a rootfs for my AT91RM9200 based custom board and i'm unable to
+mount the ext2 fs on a writable way.
+
+I'm using an AT45DB64 spi dataflash as an MTD device and i've defined 3
+partitions using this kernel bootargs:
+
+console=/dev/ttyS0,115200 root=/dev/mtdblock2
+mtdparts=AT45DB642.spi0:168960(boot)ro,2162688(kernel),-(rootfs)rw
+rootfstype=ext2 mem=32M
+
+After booting the kernel always says:
+
+VFS: Mounted root (ext2 filesystem) readonly.
+
+Even if i try a "mount -o remount,rw /" from the busybox shell, i get this
+message:
+
+mount: /dev/root is write-protected, mounting read-only
+
+The "rootfs" partition is defined "writable" at the u-boot code, so i think
+i can assume the flash is Unlocked.
 
 
->>
->> Listed files are regular files, not device nodes! Use devicetable.txt for
->> creating device nodes.
->>
->> BR
->> Assen
->>
->
-> Assen, but Leonid did use device_table.txt , see his previous post:
+Any ideas? Did i miss something when building the Rootfs? any option?
 
-OK, sorry, my mistake.
-
->
->>I need some device nodes for my proprietary driver and I have added
->>appropriate lines to the end of
->>target/device/Atmel/root/device_table.txt table I'm using:
->
->
-> BR,
-> Ivan
-> --------------------------------
-> Embedded Linux engineer,
-> Promwad Company: http://www.promwad.com/
-> Homepage : http://www.ivankuten.com/
-> -------------------------------- 
+Thanks in advance.
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: http://busybox.net/lists/buildroot/attachments/20071014/52f07f49/attachment.htm 
