@@ -1,88 +1,67 @@
-From: Ulf Samuelsson <ulf@atmel.com>
-Date: Mon, 15 Oct 2007 08:50:57 +0200
-Subject: [Buildroot] svn commit: trunk/buildroot/toolchain/gcc
-References: <20071012210141.1DF69A5E1B@busybox.net><0710131046500.9729@somehost><1192269439.26495.4.camel@elrond.atmel.sweden><0710131212520.9729@somehost><1192300638.26495.13.camel@elrond.atmel.sweden><0710132115250.9729@somehost><1192307460.26495.27.camel@elrond.atmel.sweden>
-	<0710132305350.9729@somehost>
-Message-ID: <016c01c80ef8$e931c350$9900a8c0@atmel.com>
+From: Leonid <Leonid@a-k-a.net>
+Date: Mon, 15 Oct 2007 04:03:28 -0700
+Subject: [Buildroot] Some devices are not created in the ext2 filesystem.
+In-Reply-To: <47128B0E.5040501@promwad.com>
+References: <20071012210141.1DF69A5E1B@busybox.net>	<0710131046500.9729@somehost>	<1192269439.26495.4.camel@elrond.atmel.sweden>	<0710131212520.9729@somehost>	<1192300638.26495.13.camel@elrond.atmel.sweden>	<0710132115250.9729@somehost>	<1192307460.26495.27.camel@elrond.atmel.sweden><0710132305350.9729@somehost>	<47116C13.9020701@promwad.com><406A31B117F2734987636D6CCC93EE3C02528F70@ehost011-3.exch011.intermedia.net><47120EE5.9040508@promwad.com><406A31B117F2734987636D6CCC93EE3C02528F79@ehost011-3.exch011.intermedia.net>
+	<47128B0E.5040501@promwad.com>
+Message-ID: <406A31B117F2734987636D6CCC93EE3C02528F7F@ehost011-3.exch011.intermedia.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->> The guys at Atmel do the gcc ports for AVR32.
-> I see.
+Hi, Ivan:
+
+As I see also on other systems, /dev/null is normally created with 660
+permission like many other devices (/dev/console for example). I thought
+that buildroot runs udev with correct user to be able to rewrite all
+devices in /dev without trouble. 
+
+So, I suppose, my question is this: is it some intrinsic buildroot
+udev-related bug or something wrong in my own system which results in
+such error? What would you recommend to do?
+
+Thanks,
+
+Leonid.
+
+-----Original Message-----
+From: buildroot-bounces@uclibc.org [mailto:buildroot-bounces at uclibc.org]
+On Behalf Of Ivan Kuten
+Sent: Sunday, October 14, 2007 2:33 PM
+To: Leonid
+Cc: buildroot at uclibc.org
+Subject: Re: [Buildroot] Some devices are not created in the ext2
+filesystem.
+
+> I also see some error from udev:
 > 
->> I am trying to make it easier for other people to build it.
-> That's nice of you.
+> Populating /dev using udev: cannot open /dev/null
+> done
 > 
->> This change does not break any other arch.
-> Fair enough.  You may be right.
+> /dev/null is certainly present:
 > 
->> It used to be "-cp", and the change to "cp" broke the AVR32 arch.
+> # ls -al /dev/null
+> crw-rw----    1 root     root       1,   3 Dec 31 17:00 /dev/null
 > 
-> Alright.  Why don't you then make that '-cp' conditional on AVR32 and
-> leave it 'cp' for all other?  In a way that would help identify oddities
-> with AVR32 everywhere.  One size fits all is quite hard to find.
+> What this error is about?
 > 
 
-Some people are against having architecture specific extensions in the common files.
-I believe it is better to continue the build, and then do a verify afterwards.
-If you read archives, a lot of people consider the libgcc_s to be a PITA.
+I think it can not just open /dev/null. If udev is run as udev user,
+crw-rw----    1 root     root       1,   3 Dec 31 17:00 /dev/null
 
->> Can you explain why all other archs are broken?
-> 
-> I'm afraid I can't.  And I won't bother trying to. It may be unfair to
-> blame all buildroot brokenness on you.  Still, buildroot is broken in
-> various places.  One thing gets fixed and two other break.  That's my
-> experience of the passed weeks :(
-> 
+/dev/null could not be opened because rw-rw--- but not rw-rw-rw
 
-The "-cp" -> "cp" patch has caused me several hundred hours
-of extra work, and this can all be blamed on Bernhard.
-Any problems caused by patches trying to fix the broken AVR32
-can therefore indirectly be blamed on Bernhard as well.
+BR,
+Ivan
 
-In practice, I do *not* want to blame Bernhard for *that* patch, since it 
-very difficult to do a full test of buildroot using all parameters.
-
-However, Bernhard has a policy which is to always use the latest stuff,
-which makes IMHO Buildroot, nothing more than a (nice) toy.
-
-You reported a build problem with JPEG and think that creating
-a directory in $(STAGING_DIR) during the jpeg build
-was the problem which caused the toolchain build to fail.
-You probably only need to reflect on this for a millisecond or so to 
-realize how absurd that is...
-
-I rather think this is a result of Bernhards patch to deprecate older
-versions of Binutils, automatically changing an existing *working* ".config" 
-into something which might, or might not work after a "make menuconfig".
-
-
->> If the build works for all other archs, then the cp will work.
-> 
-> Yes, I agree.  'cp' shouldn't be a problem in this context.  Still, if for
-> some misterious reason it doesn't get built, '-cp' doesn't break the build
-> making us aware of that and things break later in other places?  Trouble
-> shooting that scenario will be more painful, IMO.
-> 
->> You have not explained in what way you suffer.
-> 
-> Thanks, I got better after getting out the previous post ;)
-> 
-> I'll try to explain.  Every time I check out a new tree, it takes one or
-> several days to get it to build.  And when I think I'm done (save some
-> patches not yet accepted upstream), check out a new tree, apply my
-> patches, I start seeing things breaking again in various ways and I have
-> to start all over again.  And that's _very_ frustrating!
-> 
-> Happened again today :(
-> 
-
-Build a toolchain that works, then use an external toolchain.
-Saves you a lot of time...
-
-
-Best Regards
-Ulf Samuelsson
+--------------------------------
+Embedded Linux engineer,
+Promwad Company: http://www.promwad.com/
+Homepage : http://www.ivankuten.com/
+--------------------------------
+_______________________________________________
+buildroot mailing list
+buildroot at uclibc.org
+http://busybox.net/mailman/listinfo/buildroot
