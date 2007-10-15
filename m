@@ -1,33 +1,43 @@
-From: don <don_reid@comcast.net>
-Date: Sun, 14 Oct 2007 20:47:34 -0700
-Subject: [Buildroot] Libtool error with AVR32
-In-Reply-To: <4712A78A.7090003@promwad.com>
-References: <20071014200947.GA27861@reid1.localdomain>
-	<4712A78A.7090003@promwad.com>
-Message-ID: <20071015034734.GA15347@reid1.localdomain>
+From: bugs at busybox.net <bugs@busybox.net>
+Date: Sun, 14 Oct 2007 21:45:08 -0700
+Subject: [Buildroot] [buildroot 0001528]: 'make source' doesn't download
+	gcc-4.2.1
+Message-ID: <ba1bd06472b170fdca3ad9b37283f443@busybox.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Mon, Oct 15, 2007 at 02:34:34AM +0300, Ivan Kuten wrote:
-> > configure: error:
-> > 
-> > *** [Gentoo] sanity check failed! ***
-> > *** libtool.m4 and ltmain.sh have a version mismatch! ***
-> > *** (libtool.m4 = 1.5.24, ltmain.sh = "1.5.22 Debian 1.5.22-4") ***
-> > 
-> > Please run:
-> > 
-> >   libtoolize --copy --force
-> > 
-> 
-> Have you tried to run "libtoolize --copy --force" manually?
 
-When I tried it before I must have not been in the right directory (or had
-some other problem).  This time I ran that from build_avr32/libdaemon-0.12
-and then went back to the top.  The build was able to continue, thanks.
+The following issue has been SUBMITTED. 
+====================================================================== 
+http://busybox.net/bugs/view.php?id=1528 
+====================================================================== 
+Reported By:                hmoffatt
+Assigned To:                buildroot
+====================================================================== 
+Project:                    buildroot
+Issue ID:                   1528
+Category:                   Other
+Reproducibility:            always
+Severity:                   minor
+Priority:                   normal
+Status:                     assigned
+====================================================================== 
+Date Submitted:             10-14-2007 21:45 PDT
+Last Modified:              10-14-2007 21:45 PDT
+====================================================================== 
+Summary:                    'make source' doesn't download gcc-4.2.1
+Description: 
+'make source' didn't download gcc-4.2.1; it was downloaded later in the
+build process ok.
+====================================================================== 
 
--- 
-Don
+Issue History 
+Date Modified   Username       Field                    Change               
+====================================================================== 
+10-14-07 21:45  hmoffatt       New Issue                                    
+10-14-07 21:45  hmoffatt       Status                   new => assigned     
+10-14-07 21:45  hmoffatt       Assigned To               => buildroot       
+======================================================================
