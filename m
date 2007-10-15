@@ -1,40 +1,35 @@
-From: Ulf Samuelsson <ulf@atmel.com>
-Date: Mon, 15 Oct 2007 20:16:46 +0200
+From: Bernhard Fischer <rep.dot.nop@gmail.com>
+Date: Mon, 15 Oct 2007 20:55:02 +0200
 Subject: [Buildroot] svn commit: trunk/buildroot/toolchain/gcc
-References: <20071012210141.1DF69A5E1B@busybox.net><0710131046500.9729@somehost><1192269439.26495.4.camel@elrond.atmel.sweden><0710131212520.9729@somehost><1192300638.26495.13.camel@elrond.atmel.sweden><0710132115250.9729@somehost><1192307460.26495.27.camel@elrond.atmel.sweden><0710132305350.9729@somehost><016c01c80ef8$e931c350$9900a8c0@atmel.com>
+In-Reply-To: <0710151840550.11188@somehost>
+References: <0710132305350.9729@somehost>
+	<016c01c80ef8$e931c350$9900a8c0@atmel.com>
 	<0710151840550.11188@somehost>
-Message-ID: <00fd01c80f57$e71f2ad0$01c4af0a@Glamdring>
+Message-ID: <20071015185501.GO20951@aon.at>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+On Mon, Oct 15, 2007 at 07:40:05PM +0200, Cristian Ionescu-Idbohrn wrote:
 
->> I rather think this is a result of Bernhards patch to deprecate older
->> versions of Binutils, automatically changing an existing *working*
->> ".config" into something which might, or might not work after a "make
->> menuconfig".
+>> However, Bernhard has a policy which is to always use the latest stuff,
+>> which makes IMHO Buildroot, nothing more than a (nice) toy.
 >
-> There you go again.  Don't waste your time throwing dirt on one another!
-> Work together instead!  Learn from eachother.  Everyone will benefit.
-> Life is short and then you die, both of you and your "customers".
->
+>I don't see very much wrong with that, as long as you keep things tight.
+>Branching was suggested more than once.  What do you say?  More work?
+>Yes.  More satisfied "customers"?  Oh, yes.  Me for one.  I would rather
+>use something that is controllable (mind you, not top of the notch) than
+>something that is constantly broken.
 
-It is not "throwing dirt", it is advice on where to look for your JPEG build 
-problems.
-I.E: Try an older version of binutils...
+Well top notch would be always pulling the upstream repos. I don't
+remember to have done this even a single time in buildroot.
+There is a subtile difference between these three:
+- top notch
+- current, stable release, usually containing the best-fit bugfixes
+- outdated packages with known bugs (sometimes all over the place).
 
->> Build a toolchain that works, then use an external toolchain.
->> Saves you a lot of time...
->
-> Yes.  Any FAQ on that?
-> But still aspirine, workaround, substitute for the real thing :(
-
-It takes 1-2 hours to build a toolchain.
-It is not neccessary to repeat the process everytime you want to rebuild 
-buildroot.
-Look in the docs directory..
-
-Best Regards
-Ulf Samuelsson
+I'm sure there is endless discussion archived out there about the pros
+and cons of each of them, so i'll spare my keyboard interrupts and your
+time.
