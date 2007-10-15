@@ -1,44 +1,61 @@
-From: Ulf Samuelsson <ulf@atmel.com>
-Date: Mon, 15 Oct 2007 22:48:18 +0200
-Subject: [Buildroot] buildroot for armeb, gcc-4.2.1 fails to build
-References: <20071015054821.GA5245@cloud.net.au>
-	<d83696340710150806x33bc3b44ofe8d5cd349220e4@mail.gmail.com>
-Message-ID: <024701c80f6d$3b703380$01c4af0a@Glamdring>
+From: bugs at busybox.net <bugs@busybox.net>
+Date: Mon, 15 Oct 2007 14:27:31 -0700
+Subject: [Buildroot] [buildroot 0001527]: enabling findutils in svn revision
+	20239 results in fatal build errors
+Message-ID: <9e1f3e822662516f814a94ec0e32363e@busybox.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->I have seen the exact same problem.  It doesn't matter if you select EABI 
->or
-> not (the build doesn't complete either way).  I have been unable to build
-> when selecting "armeb" regardless of what other options I choose.  Little
-> Endian "arm" builds fine.  I have been trying to look into what might be
-> going wrong with little success.  I added "--disable-libmudflap" to the 
-> GCC
-> options, and that got me a little further in the build but it still failed
-> building gcc-final.
->
-> As I said, I have built the little endian toolchain with no issues at all.
-> I have used the little endian toolchain to build a kernel and u-boot
-> 1.2.0which are both big endian.
->
-> One idea I had to simplify things is to modify the buildroot so that it
-> ALWAYS builds the little endian toolchain, but passes -mbig-endian when 
-> the
-> user selects "armeb".  This should greatly reduce the effort required to
-> test both "arm" and "armeb" since the same method/patches would be used 
-> for
-> both.  Thoughts?
->
 
-I think this is possible to do this already,
-select small endian, and make -mbig-endian an
-extra TARGET_CFLAGS parameter.
+A NOTE has been added to this issue. 
+====================================================================== 
+http://busybox.net/bugs/view.php?id=1527 
+====================================================================== 
+Reported By:                hwstar
+Assigned To:                buildroot
+====================================================================== 
+Project:                    buildroot
+Issue ID:                   1527
+Category:                   Architecture Specific
+Reproducibility:            always
+Severity:                   minor
+Priority:                   normal
+Status:                     assigned
+====================================================================== 
+Date Submitted:             10-14-2007 12:13 PDT
+Last Modified:              10-15-2007 14:27 PDT
+====================================================================== 
+Summary:                    enabling findutils in svn revision 20239 results in
+fatal build errors
+Description: 
+Findutils aborts with an error during the make process. 
 
-This of course does not have the benefit of reducing the complexity of the 
-toolchain.
+May be related to bug 1479 (Coreutils fails to build) as it fails for one
+of the same reasons:
 
-Best Regards
-Ulf Samuelsson
+./wchar.h:41:12: error: empty filename in #include
+
+Host: Ubuntu 7.04, kernel 2.6.20-16-generic, gcc version 4.1.2 (Ubuntu
+4.1.2-0ubuntu4)
+
+SVN revision 20239
+
+====================================================================== 
+
+---------------------------------------------------------------------- 
+ UlfSamuelsson - 10-15-07 14:27  
+---------------------------------------------------------------------- 
+Did you enable WCHAR in your toolchain build?
+Some packages do requirwe WCHAR... 
+
+Issue History 
+Date Modified   Username       Field                    Change               
+====================================================================== 
+10-14-07 12:13  hwstar         New Issue                                    
+10-14-07 12:13  hwstar         Status                   new => assigned     
+10-14-07 12:13  hwstar         Assigned To               => buildroot       
+10-15-07 14:27  UlfSamuelsson  Note Added: 0002823                          
+======================================================================
