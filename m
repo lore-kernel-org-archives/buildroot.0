@@ -1,35 +1,37 @@
 From: Ulf Samuelsson <ulf@atmel.com>
-Date: Mon, 15 Oct 2007 23:25:52 +0200
-Subject: [Buildroot] AVR32 4.1.2 toolchain build issues [was svn
-	commit:trunk/buildroot: target/device target/device/Atmel
-	target etc...]
-References: <d6cda7730710140720r55bd9903s5001f0b864fe9952@mail.gmail.com>
-Message-ID: <02c301c80f72$254d2400$01c4af0a@Glamdring>
+Date: Mon, 15 Oct 2007 23:41:11 +0200
+Subject: [Buildroot] Can i buildroot in Cygwin?
+References: <ed4892840710140133i46b99886y25c5e99f38ecf709@mail.gmail.com>
+Message-ID: <02e601c80f74$3fec1a80$01c4af0a@Glamdring>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->   That commit introduced gcc 4.2.1 to avr32, which builds ok, but the
-> compiler still has some bugs, specially the C++ compiler and the
-> template engine.
+----- Original Message ----- 
+From: "Steven Woody" <narkewoody@gmail.com>
+To: <buildroot@uclibc.org>
+Sent: Sunday, October 14, 2007 10:33 AM
+Subject: [Buildroot] Can i buildroot in Cygwin?
 
 
-I tested with
+> hi,
+> 
+> can i buid and use buildroot in cygwin?  is there anything i need to
+> change?  thanks.
+> 
+> -- 
+> woody
+> 
+> then sun rose thinly from the sea and the old man could see the other
+> boats, low on the water and well in toward the shore, spread out
+> across the current.
 
-make atngw100_defconfig
-make
 
-which manages to build both the linux and the root fs.
-
-atstk1002_defconfig has not been tested yet.
-
+There has been some people complaining about failiures
+when trying CygWin.
+You might want to install Linux on top of VM-Ware instead.
 
 Best Regards
-Ulf Samuelsson                ulf at atmel.com
-Atmel Nordic AB
-Mail:  Box 2033, 174 02 Sundbyberg, Sweden
-Visit:  Kavalleriv?gen 24, 174 58 Sundbyberg, Sweden
-Phone +46 (8) 441 54 22     Fax +46 (8) 441 54 29
-GSM    +46 (706) 22 44 57 
+Ulf Samuelsson
