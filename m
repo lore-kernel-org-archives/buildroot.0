@@ -1,104 +1,97 @@
-From: Ulf Samuelsson <ulf@atmel.com>
-Date: Mon, 15 Oct 2007 18:14:49 +0200
-Subject: [Buildroot] Writable EXT2 fs on dataflash (using MTD)
-References: <6090c5eb0710141024k3eb26ccp39c7a87845719abb@mail.gmail.com>
-	<d83696340710150756q56f0b824nb877c16cb0c7be59@mail.gmail.com>
-Message-ID: <00b301c80f47$11c30fb0$01c4af0a@Glamdring>
+From: Cristian Ionescu-Idbohrn <cristian.ionescu-idbohrn@axis.com>
+Date: Mon, 15 Oct 2007 19:40:05 +0200 (CEST)
+Subject: [Buildroot] svn commit: trunk/buildroot/toolchain/gcc
+In-Reply-To: <016c01c80ef8$e931c350$9900a8c0@atmel.com>
+References: <20071012210141.1DF69A5E1B@busybox.net><0710131046500.9729@somehost><1192269439.26495.4.camel@elrond.atmel.sweden><0710131212520.9729@somehost><1192300638.26495.13.camel@elrond.atmel.sweden><0710132115250.9729@somehost><1192307460.26495.27.camel@elrond.atmel.sweden>
+	<0710132305350.9729@somehost>
+	<016c01c80ef8$e931c350$9900a8c0@atmel.com>
+Message-ID: <0710151840550.11188@somehost>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+On Mon, 15 Oct 2007, Ulf Samuelsson wrote:
 
-> You can make sure that the flash is unlocked by running:
->
-> flash_unlock /dev/mtd/x
->
-> (Where /dev/mtd/x is the character device corresponding to the mtd in
-> question).
->
-> "flash_unlock" is part of the mtd tools and can be selected under package
-> selection in the buildroot.
->
-> You might have better luck using jffs2 instead of ext2.  The jffs2 file
-> system is intended for MTD devices, and uses "wear-leveling" to distribute
-> writes over the entire flash part.
->
+> Some people are against having architecture specific extensions in the
+> common files.
 
-Luck has nothing to do with it...
-using EXT2 will wear out the dataflash in record time...
+Alright.  I see a point in that.  But I still think, as I said before:
+"one size doesn't fit everybody".  If incompatibilities arise, one good
+thing is to pin them down, and make them visible.  Is there another way?
 
-There is some support for Dataflash in buildroot, but you have to set the
-page size to 0x420 and the erase size to 0x2100.
+> I believe it is better to continue the build, and then do a verify
+> afterwards.
 
-The sizes are by default, the sizes needed for par flash.
-If you make menuconfig and save it before changing this,
-then the page/erase size will not be changed automagically,
-and you file system will be built in the wrong way.
+I don't.  Side effects can lead one on to treacherous side tracks and
+troubleshooting would be more painful.
 
-I am thinking of changing this to
+> If you read archives, a lot of people consider the libgcc_s to be a
+> PITA.
 
-choice
-config 4kB
-config 1056 byte
-config custom
-endchoice
+But of course.  Anything that is not dead simple is PITA.
 
-config jffs_page_size_custom
-    depends on custom
+> The "-cp" -> "cp" patch has caused me several hundred hours
+> of extra work,
 
-config jffs_page_size
-    string
-    "0x1000" if 4kB
-    "0x420" if 1056 byte
-    $(jffs_page_size_custom) if custom
+Really?  I'm not arguing, but I find it difficult to believe.
 
-Then changing the choice, will update the value
+> and this can all be blamed on Bernhard.
+> Any problems caused by patches trying to fix the broken AVR32
+> can therefore indirectly be blamed on Bernhard as well.
 
+Cool down now.  I do believe that one of the reasons why this project is
+not moving at faster pace is that the magic between you and Bernhard is
+just not working.  And that's really sad.  That said, things won't get
+better if the only noticable thing is you two disagreeing.
 
+> In practice, I do *not* want to blame Bernhard for *that* patch, since
+> it very difficult to do a full test of buildroot using all parameters.
 
-and let the user supply
+True.
 
-> Regards,
->
-> Jon Nalley
->
-> On 10/14/07, Jorge S. <jorgesolla@gmail.com> wrote:
->>
->> Hi all,
->>
->> I've created a rootfs for my AT91RM9200 based custom board and i'm unable
->> to mount the ext2 fs on a writable way.
->>
->> I'm using an AT45DB64 spi dataflash as an MTD device and i've defined 3
->> partitions using this kernel bootargs:
->>
->> console=/dev/ttyS0,115200 root=/dev/mtdblock2 
->> mtdparts=AT45DB642.spi0:168960(boot)ro,2162688(kernel),-(rootfs)rw
->> rootfstype=ext2 mem=32M
->>
->> After booting the kernel always says:
->>
->> VFS: Mounted root (ext2 filesystem) readonly.
->>
->> Even if i try a "mount -o remount,rw /" from the busybox shell, i get 
->> this
->> message:
->>
->> mount: /dev/root is write-protected, mounting read-only
->>
->> The "rootfs" partition is defined "writable" at the u-boot code, so i
->> think i can assume the flash is Unlocked.
->>
->>
->> Any ideas? Did i miss something when building the Rootfs? any option?
->>
->> Thanks in advance.
->>
->>
->>
+> However, Bernhard has a policy which is to always use the latest stuff,
+> which makes IMHO Buildroot, nothing more than a (nice) toy.
+
+I don't see very much wrong with that, as long as you keep things tight.
+Branching was suggested more than once.  What do you say?  More work?
+Yes.  More satisfied "customers"?  Oh, yes.  Me for one.  I would rather
+use something that is controllable (mind you, not top of the notch) than
+something that is constantly broken.
+
+> You reported a build problem with JPEG and think that creating a
+> directory in $(STAGING_DIR) during the jpeg build was the problem which
+> caused the toolchain build to fail.
+
+Your words, not mine.  I'm just an occasional visitor ;)
+
+> You probably only need to reflect on this for a millisecond or so to
+> realize how absurd that is...
+
+I have to admit, I'm not that sharp ;)
+
+> I rather think this is a result of Bernhards patch to deprecate older
+> versions of Binutils, automatically changing an existing *working*
+> ".config" into something which might, or might not work after a "make
+> menuconfig".
+
+There you go again.  Don't waste your time throwing dirt on one another!
+Work together instead!  Learn from eachother.  Everyone will benefit.
+Life is short and then you die, both of you and your "customers".
+
+> Build a toolchain that works, then use an external toolchain.
+> Saves you a lot of time...
+
+Yes.  Any FAQ on that?
+But still aspirine, workaround, substitute for the real thing :(
+Thanks for the advice, anyway.
+
+You two you kan keep disagreing in the back stage.  But don't do it up
+front.  Work together instead.  It's much better for the "business".
 
 
-Best Regards
-Ulf Samuelsson 
+Cheers,
+
+-- 
+Cristian
