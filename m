@@ -1,61 +1,35 @@
-From: bugs at busybox.net <bugs@busybox.net>
-Date: Mon, 15 Oct 2007 14:27:31 -0700
-Subject: [Buildroot] [buildroot 0001527]: enabling findutils in svn revision
-	20239 results in fatal build errors
-Message-ID: <9e1f3e822662516f814a94ec0e32363e@busybox.net>
+From: Ulf Samuelsson <ulf@atmel.com>
+Date: Mon, 15 Oct 2007 23:25:52 +0200
+Subject: [Buildroot] AVR32 4.1.2 toolchain build issues [was svn
+	commit:trunk/buildroot: target/device target/device/Atmel
+	target etc...]
+References: <d6cda7730710140720r55bd9903s5001f0b864fe9952@mail.gmail.com>
+Message-ID: <02c301c80f72$254d2400$01c4af0a@Glamdring>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+>   That commit introduced gcc 4.2.1 to avr32, which builds ok, but the
+> compiler still has some bugs, specially the C++ compiler and the
+> template engine.
 
-A NOTE has been added to this issue. 
-====================================================================== 
-http://busybox.net/bugs/view.php?id=1527 
-====================================================================== 
-Reported By:                hwstar
-Assigned To:                buildroot
-====================================================================== 
-Project:                    buildroot
-Issue ID:                   1527
-Category:                   Architecture Specific
-Reproducibility:            always
-Severity:                   minor
-Priority:                   normal
-Status:                     assigned
-====================================================================== 
-Date Submitted:             10-14-2007 12:13 PDT
-Last Modified:              10-15-2007 14:27 PDT
-====================================================================== 
-Summary:                    enabling findutils in svn revision 20239 results in
-fatal build errors
-Description: 
-Findutils aborts with an error during the make process. 
 
-May be related to bug 1479 (Coreutils fails to build) as it fails for one
-of the same reasons:
+I tested with
 
-./wchar.h:41:12: error: empty filename in #include
+make atngw100_defconfig
+make
 
-Host: Ubuntu 7.04, kernel 2.6.20-16-generic, gcc version 4.1.2 (Ubuntu
-4.1.2-0ubuntu4)
+which manages to build both the linux and the root fs.
 
-SVN revision 20239
+atstk1002_defconfig has not been tested yet.
 
-====================================================================== 
 
----------------------------------------------------------------------- 
- UlfSamuelsson - 10-15-07 14:27  
----------------------------------------------------------------------- 
-Did you enable WCHAR in your toolchain build?
-Some packages do requirwe WCHAR... 
-
-Issue History 
-Date Modified   Username       Field                    Change               
-====================================================================== 
-10-14-07 12:13  hwstar         New Issue                                    
-10-14-07 12:13  hwstar         Status                   new => assigned     
-10-14-07 12:13  hwstar         Assigned To               => buildroot       
-10-15-07 14:27  UlfSamuelsson  Note Added: 0002823                          
-======================================================================
+Best Regards
+Ulf Samuelsson                ulf at atmel.com
+Atmel Nordic AB
+Mail:  Box 2033, 174 02 Sundbyberg, Sweden
+Visit:  Kavalleriv?gen 24, 174 58 Sundbyberg, Sweden
+Phone +46 (8) 441 54 22     Fax +46 (8) 441 54 29
+GSM    +46 (706) 22 44 57 
