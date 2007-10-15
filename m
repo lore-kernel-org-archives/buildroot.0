@@ -1,34 +1,54 @@
-From: Jack Schmidt <buildroot@mowsey.org>
-Date: Mon, 15 Oct 2007 11:51:05 -0400
-Subject: [Buildroot] Curl package cannot be downloaded
-Message-ID: <47138C69.1010400@mowsey.org>
+From: Will Wagner <will_wagner@carallon.com>
+Date: Mon, 15 Oct 2007 16:59:50 +0100
+Subject: [Buildroot] PATCH: lm-sensors - correct patch version
+In-Reply-To: <47113AF7.1050704@promwad.com>
+References: <47113AF7.1050704@promwad.com>
+Message-ID: <47138E76.3070205@carallon.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Howdy, I tried using buildroot to make an image with some fancier 
-applications like curl and xsltproc, but ran into trouble.  The curl 
-trouble seems pretty clearcut (the libxml2 stuff is some path problem).
+I have verified this patch is needed & works, can someone commit it?
 
-The curl package tries to download a fairly old version of curl and that 
-version is no longer at the download page.  Much newer versions are 
-available, and I think they fix some of the security problems patched 
-manually.  However, some manual patches seem to still be needed, but do 
-not apply cleanly.
+Regards,
 
-I wasn't sure exactly which way to help: find an alternate source of 
-ancient curl, find the oldest curl available at the official source, or 
-update the patches for the latest curl.
+Will.
 
+Ivan Kuten wrote:
+> lm-sensors - correct patch version, now download&build successful:
+> 
+> Index: package/lm-sensors/lm-sensors.mk
+> ===================================================================
+> --- package/lm-sensors/lm-sensors.mk    (revision 20237)
+> +++ package/lm-sensors/lm-sensors.mk    (working copy)
+> @@ -5,7 +5,7 @@
+>  #############################################################
+>  LM_SENSORS_VERSION:=2.10.4
+>  LM_SENSORS_SOURCE:=lm-sensors_$(LM_SENSORS_VERSION).orig.tar.gz
+> -LM_SENSORS_PATCH:=lm-sensors_$(LM_SENSORS_VERSION)-1.diff.gz
+> +LM_SENSORS_PATCH:=lm-sensors_$(LM_SENSORS_VERSION)-3.diff.gz
+>  LM_SENSORS_SITE:=http://ftp.debian.org/debian/pool/main/l/lm-sensors/
+>  LM_SENSORS_DIR:=$(BUILD_DIR)/lm_sensors-$(LM_SENSORS_VERSION)
+>  LM_SENSORS_CAT:=$(ZCAT)
+> 
+> 
+> Best regards,
+> Ivan
+> --------------------------------
+> Embedded Linux engineer,
+> Promwad Company: http://www.promwad.com/
+> Homepage : http://www.ivankuten.com/
+> --------------------------------
+> _______________________________________________
+> buildroot mailing list
+> buildroot at uclibc.org
+> http://busybox.net/mailman/listinfo/buildroot
 
-In general, should I expect the packages to "just work" or should I 
-expect buildroot to give me hints at building, and do a lot of the build 
-myself?
-
-I don't want to report bugs in 20 packages, if these are the minor sorts 
-of issues we are expected to work out.  Last time I tried buildroot, 
-virtually everything but the core was broken, but the core worked 
-amazingly great and any package I wanted to use was just ./configure && 
-make && make install.
+-- 
+------------------------------------------------------------------------
+Will Wagner                                     will_wagner at carallon.com
+Senior Project Engineer                  Office Tel: +44 (0)20 7371 2032
+Carallon Ltd, Studio G20, Shepherds Building, Rockley Rd, London W14 0DA
+------------------------------------------------------------------------
