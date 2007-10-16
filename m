@@ -1,8 +1,8 @@
 From: bugs at busybox.net <bugs@busybox.net>
-Date: Tue, 16 Oct 2007 14:17:03 -0700
-Subject: [Buildroot] [buildroot 0001532]: Little error in OSLR startup
-	script - PATCH
-Message-ID: <13080db1704d3a3e037903c8afba76e1@busybox.net>
+Date: Tue, 16 Oct 2007 14:20:24 -0700
+Subject: [Buildroot] [buildroot 0001533]: lockfile-progs 0.1.10 breaks in
+	compilation - PATCH
+Message-ID: <ee0cf29f38637b66c62cf5a77c4842f3@busybox.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -12,32 +12,37 @@ To: buildroot@busybox.net
 
 The following issue has been SUBMITTED. 
 ====================================================================== 
-http://busybox.net/bugs/view.php?id=1532 
+http://busybox.net/bugs/view.php?id=1533 
 ====================================================================== 
 Reported By:                sushisan
 Assigned To:                buildroot
 ====================================================================== 
 Project:                    buildroot
-Issue ID:                   1532
+Issue ID:                   1533
 Category:                   Architecture Specific
 Reproducibility:            always
-Severity:                   minor
+Severity:                   crash
 Priority:                   normal
 Status:                     assigned
 ====================================================================== 
-Date Submitted:             10-16-2007 14:17 PDT
-Last Modified:              10-16-2007 14:17 PDT
+Date Submitted:             10-16-2007 14:20 PDT
+Last Modified:              10-16-2007 14:20 PDT
 ====================================================================== 
-Summary:                    Little error in OSLR startup script - PATCH
+Summary:                    lockfile-progs 0.1.10 breaks in compilation - PATCH
 Description: 
-The binary is located in /usr/bin and not in /usr/sbin
+lockfile-progs 0.1.10 breaks with this error:
+
+undefined reference to `*rindex*'
+
+This patch update the package to 0.1.11 and add a patch to solve this. 
 ====================================================================== 
 
 Issue History 
 Date Modified   Username       Field                    Change               
 ====================================================================== 
-10-16-07 14:17  sushisan       New Issue                                    
-10-16-07 14:17  sushisan       Status                   new => assigned     
-10-16-07 14:17  sushisan       Assigned To               => buildroot       
-10-16-07 14:17  sushisan       File Added: br2-olsr.patch                    
+10-16-07 14:20  sushisan       New Issue                                    
+10-16-07 14:20  sushisan       Status                   new => assigned     
+10-16-07 14:20  sushisan       Assigned To               => buildroot       
+10-16-07 14:20  sushisan       File Added: br2-lockfile-progs.patch             
+      
 ======================================================================
