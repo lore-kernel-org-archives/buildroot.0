@@ -1,87 +1,104 @@
-From: Hamish Moffatt <hamish@cloud.net.au>
-Date: Tue, 16 Oct 2007 10:16:08 +1000
-Subject: [Buildroot] buildroot for armeb, gcc-4.2.1 fails to build
-In-Reply-To: <d83696340710150806x33bc3b44ofe8d5cd349220e4@mail.gmail.com>
-References: <20071015054821.GA5245@cloud.net.au>
-	<d83696340710150806x33bc3b44ofe8d5cd349220e4@mail.gmail.com>
-Message-ID: <20071016001608.GA17751@cloud.net.au>
+From: =?ISO-8859-1?Q?Thiago_A._Corr=EAa?= <thiago.correa@gmail.com>
+Date: Tue, 16 Oct 2007 02:46:32 +0100
+Subject: [Buildroot] AVR32 4.1.2 toolchain build issues [was
+	svncommit:trunk/buildroot: target/device target/device/Atmel
+	targetetc...]
+In-Reply-To: <20071015234955.GA18119@reid1.localdomain>
+References: <d6cda7730710140720r55bd9903s5001f0b864fe9952@mail.gmail.com>
+	<02c301c80f72$254d2400$01c4af0a@Glamdring>
+	<20071015221718.GA15524@reid1.localdomain>
+	<059501c80f79$dd1305d0$01c4af0a@Glamdring>
+	<20071015234955.GA18119@reid1.localdomain>
+Message-ID: <d6cda7730710151846n722419d9t806cea6018d1b54d@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Mon, Oct 15, 2007 at 10:06:13AM -0500, Jonathan Nalley wrote:
-> I have seen the exact same problem.  It doesn't matter if you select EABI or
-> not (the build doesn't complete either way).  I have been unable to build
-> when selecting "armeb" regardless of what other options I choose.  Little
-> Endian "arm" builds fine.  I have been trying to look into what might be
-> going wrong with little success.  I added "--disable-libmudflap" to the GCC
-> options, and that got me a little further in the build but it still failed
-> building gcc-final.
+Ok.... got it to build... it happens to be that atngw100_defconfig now
+builds to a dir without nofp sufix, which makes me wonder if ppl have
+decided weather this thing has or doesn't has an FP, perhaps it's a
+paradox, or a dogma. You just have to belive it works. *smile*
 
-I concur; I can't get armeb to build in any configuration.
+Anyway, disabled libdaemon, which I never use anyway, and now I get
+the uboot issue as well.... but at least I can work now. It should be
+easily enough to pull uboot from the Atmel AVR32 fork and figure out
+what's wrong. Dealing with packages is so much easier.
 
-1. EABI: libgcc_s.so fails to link with incorrect file format error.
-(With or without soft-float.)
+Btw, is there a reason why u-boot is buried into Atmel folder?
+Shouldn't other archs/chips use it as well?
 
-2. OABI + linux 2.6.22 headers + soft-float: uClibc fails to build with
-missing __NR_syscall:
+Hopefully I will come back with patches once more (have a better
+qtopia building, in a single stage, on the works).
 
-libc/sysdeps/linux/arm/syscall.c: In function 'syscall':
-libc/sysdeps/linux/arm/syscall.c:28: error: '__NR_syscall' undeclared (first use in this function)
-libc/sysdeps/linux/arm/syscall.c:28: error: (Each undeclared identifier is reported only once
-libc/sysdeps/linux/arm/syscall.c:28: error: for each function it appears in.)
-
-3. OABI + linux 2.6.21.5 headers + soft-float: uClibc fails to build
-with some missing floating-point symbols, possibly due to a mixup with
-soft float options.
-
-libc/libc_so.a(difftime.os): In function `difftime':
-difftime.c:(.text+0x8): undefined reference to `__floatsidf'
-difftime.c:(.text+0x2c): undefined reference to `__subdf3'
-libc/libc_so.a(_fpmaxtostr.os): In function `_fpmaxtostr':
-_fpmaxtostr.c:(.text+0xe0): undefined reference to `__nedf2'
-_fpmaxtostr.c:(.text+0x104): undefined reference to `__eqdf2'
-_fpmaxtostr.c:(.text+0x120): undefined reference to `__divdf3'
-_fpmaxtostr.c:(.text+0x12c): undefined reference to `__ltdf2'
-_fpmaxtostr.c:(.text+0x1e0): undefined reference to `__muldf3'
-_fpmaxtostr.c:(.text+0x39c): undefined reference to `__gedf2'
-_fpmaxtostr.c:(.text+0x42c): undefined reference to `__floatunsidf'
-libc/libc_so.a(__psfs_do_numeric.os): In function `__psfs_do_numeric':
-__psfs_do_numeric.c:(.text+0x54c): undefined reference to `__truncdfsf2'
-libc/libc_so.a(strtof.os): In function `strtof':
-strtof.c:(.text+0x1c): undefined reference to `__extendsfdf2'
-libc/libc_so.a(__strtofpmax.os): In function `__strtofpmax':
-__strtofpmax.c:(.text+0x154): undefined reference to `__adddf3'
-/home/hamish/tmp/br/buildroot/build_armeb/staging_dir/usr/lib/gcc/armeb-linux-uclibc/4.2.1/libgcc.a(_fixunsdfsi.o): In function `__fixunsdfsi':
-libgcc2.c:(.text+0x34): undefined reference to `__fixdfsi'
-make[2]: *** [lib/libc.so] Error 1
-make[1]: *** [lib/libc.so.0] Error 2
-
-I didn't try OABI without soft-float yet, because I don't want to use
-that configuration.
-
-> As I said, I have built the little endian toolchain with no issues at all.
-> I have used the little endian toolchain to build a kernel and u-boot
-> 1.2.0which are both big endian.
-
-What about user-space applications and uClibc? 
-
-It should work. My last project used gcc-3.4.x with a default of
-little-endian + -mbig-endian everywhere (kernel, uClibc) without issues.
-
-> One idea I had to simplify things is to modify the buildroot so that it
-> ALWAYS builds the little endian toolchain, but passes -mbig-endian when the
-> user selects "armeb".  This should greatly reduce the effort required to
-> test both "arm" and "armeb" since the same method/patches would be used for
-> both.  Thoughts?
-
-Sounds reasonable. In the meantime I wonder where the differences
-between arm and armeb are...
+Friendly Regards,
+    Thiago A. Correa
 
 
-thanks
-Hamish
--- 
-Hamish Moffatt VK3SB <hamish@debian.org> <hamish@cloud.net.au>
+
+On 10/16/07, don <don_reid@comcast.net> wrote:
+> On Tue, Oct 16, 2007 at 12:22:03AM +0200, Ulf Samuelsson wrote:
+> > link: www.avrfreaks.net
+> > ----- Original Message ----- From: "don" <don_reid@comcast.net>
+> > To: "Ulf Samuelsson" <ulf@atmel.com>
+> > Cc: "Thiago A. Corr?a" <thiago.correa@gmail.com>; <buildroot@uclibc.org>
+> > Sent: Tuesday, October 16, 2007 12:17 AM
+> > Subject: Re: [Buildroot] AVR32 4.1.2 toolchain build issues [was
+> > svncommit:trunk/buildroot: target/device target/device/Atmel targetetc...]
+> >
+> >
+> >> On Mon, Oct 15, 2007 at 11:25:52PM +0200, Ulf Samuelsson wrote:
+> >>>>   That commit introduced gcc 4.2.1 to avr32, which builds ok, but the
+> >>>> compiler still has some bugs, specially the C++ compiler and the
+> >>>> template engine.
+> >>>
+> >>>
+> >>> I tested with
+> >>>
+> >>> make atngw100_defconfig
+> >>> make
+> >>>
+> >>> which manages to build both the linux and the root fs.
+> >>
+> >> It failed for me twice.  First with the libtool error I posted
+> >> recently, then in uboot.
+> >>
+> >> ...
+> >> rm -rf
+> >> /home/dev/AVR32/Buildroot/buildroot/project_build_avr32/atngw100/buildroot-config
+> >> mkdir -p /home/dev/AVR32/Buildroot/buildroot/project_build_avr32/atngw100
+> >> cp -dpRf package/config/buildroot-config
+> >> /home/dev/AVR32/Buildroot/buildroot/project_build_avr32/atngw100/buildroot-config
+> >> cp target/device/Atmel/atngw100/u-boot/atngw100.h
+> >> /home/dev/AVR32/Buildroot/buildroot/build_avr32/u-boot-1.2.0-atmel/include/configs/.
+> >> cp: cannot stat `target/device/Atmel/atngw100/u-boot/atngw100.h': No such
+> >> file or directory
+> >> ...
+> >>
+> >> --
+> >> Don
+> >
+> >
+> > Don't know why the libtool stuff fails, but the u-boot was never supported
+> > for ngw100.
+> > It might be as simple as adding the file:
+> >
+> > ...
+> >
+> > Is U-Boot on by default?
+> > Maybe I turned it off, before I built it.
+> >
+> > There is a later u-boot at the u-boot home page.
+>
+> I just did a clean buildroot checkout and then
+>
+>         make atngw100_defconfig
+>         make
+>
+> If U-Boot shouldn't be build for the atngw100_defconfig then that
+> config should turn it off.
+>
+> --
+> Don
+>
