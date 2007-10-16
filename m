@@ -1,37 +1,70 @@
-From: Steven Woody <narkewoody@gmail.com>
-Date: Tue, 16 Oct 2007 11:00:23 +0800
-Subject: [Buildroot] `make source' cannot resume
-Message-ID: <ed4892840710152000r786d9095sb7af7d14d14957ba@mail.gmail.com>
+From: bugs at busybox.net <bugs@busybox.net>
+Date: Mon, 15 Oct 2007 20:17:13 -0700
+Subject: [Buildroot] [buildroot 0001527]: enabling findutils in svn revision
+	20239 results in fatal build errors
+Message-ID: <5d88f7a720422b7abc23009b635312e9@bugs.uclibc.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-hi,
 
-after the downloading process of `make source' broken by some reasons,
-i then restarted it by reissued the same command.  what i expected is
-that those already downloaded will be skipped, and the `make source'
-continue to download those not yet grabbed.  but the truth is not.
-`make source' restarted the whole download process from the beginning
-and to download everything that has already existed in the `dl'
-directory.
+A NOTE has been added to this issue. 
+====================================================================== 
+http://busybox.net/bugs/view.php?id=1527 
+====================================================================== 
+Reported By:                hwstar
+Assigned To:                buildroot
+====================================================================== 
+Project:                    buildroot
+Issue ID:                   1527
+Category:                   Architecture Specific
+Reproducibility:            always
+Severity:                   minor
+Priority:                   normal
+Status:                     assigned
+====================================================================== 
+Date Submitted:             10-14-2007 12:13 PDT
+Last Modified:              10-15-2007 20:17 PDT
+====================================================================== 
+Summary:                    enabling findutils in svn revision 20239 results in
+fatal build errors
+Description: 
+Findutils aborts with an error during the make process. 
 
-i know this problem may has something to do with the system i am using
-( it's cygwin and because i met some problem setting the network of my
-linux box, i have to do the `make source' on cygwin now ).  but i got
-no more clues.
+May be related to bug 1479 (Coreutils fails to build) as it fails for one
+of the same reasons:
 
-ps. another suspicous is the the downloading directory, dl, is not
-located correctly in cygwin.  i am in ~/buildroot and the $HOME is
-/e/woody,  but the `make source' insisted to put everything it grabbed
-in a directory /e/e/woody/buildroot/dl ( please note the second `e' in
-the path name').  it's so weird
+./wchar.h:41:12: error: empty filename in #include
 
--- 
-woody
+Host: Ubuntu 7.04, kernel 2.6.20-16-generic, gcc version 4.1.2 (Ubuntu
+4.1.2-0ubuntu4)
 
-then sun rose thinly from the sea and the old man could see the other
-boats, low on the water and well in toward the shore, spread out
-across the current.
+SVN revision 20239
+
+====================================================================== 
+
+---------------------------------------------------------------------- 
+ UlfSamuelsson - 10-15-07 14:27  
+---------------------------------------------------------------------- 
+Did you enable WCHAR in your toolchain build?
+Some packages do requirwe WCHAR... 
+
+---------------------------------------------------------------------- 
+ hwstar - 10-15-07 20:17  
+---------------------------------------------------------------------- 
+Enabling WCHAR support in menuconfig resolves this issue. However,
+selecting the "development system" in menuconfig should automatically
+enable WCHAR support as the development system build findutils and
+coreutils 
+
+Issue History 
+Date Modified   Username       Field                    Change               
+====================================================================== 
+10-14-07 12:13  hwstar         New Issue                                    
+10-14-07 12:13  hwstar         Status                   new => assigned     
+10-14-07 12:13  hwstar         Assigned To               => buildroot       
+10-15-07 14:27  UlfSamuelsson  Note Added: 0002823                          
+10-15-07 20:17  hwstar         Note Added: 0002824                          
+======================================================================
