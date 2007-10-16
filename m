@@ -1,58 +1,55 @@
-From: Hamish Moffatt <hamish@cloud.net.au>
-Date: Tue, 16 Oct 2007 13:42:33 +1000
-Subject: [Buildroot] buildroot for armeb, gcc-4.2.1 fails to build
-In-Reply-To: <20071016001608.GA17751@cloud.net.au>
-References: <20071015054821.GA5245@cloud.net.au>
-	<d83696340710150806x33bc3b44ofe8d5cd349220e4@mail.gmail.com>
-	<20071016001608.GA17751@cloud.net.au>
-Message-ID: <20071016034233.GA21412@cloud.net.au>
+From: Hans-Christian Egtvedt <hcegtvedt@atmel.com>
+Date: Tue, 16 Oct 2007 07:15:23 +0200
+Subject: [Buildroot] AVR32 4.1.2 toolchain build issues
+	[was	svncommit:trunk/buildroot: target/device
+	target/device/Atmel targetetc...]
+In-Reply-To: <d6cda7730710151846n722419d9t806cea6018d1b54d@mail.gmail.com>
+References: <d6cda7730710140720r55bd9903s5001f0b864fe9952@mail.gmail.com>
+	<02c301c80f72$254d2400$01c4af0a@Glamdring>
+	<20071015221718.GA15524@reid1.localdomain>
+	<059501c80f79$dd1305d0$01c4af0a@Glamdring>
+	<20071015234955.GA18119@reid1.localdomain>
+	<d6cda7730710151846n722419d9t806cea6018d1b54d@mail.gmail.com>
+Message-ID: <1192511723.28237.2.camel@localhost.localdomain>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Tue, Oct 16, 2007 at 10:16:08AM +1000, Hamish Moffatt wrote:
-> 2. OABI + linux 2.6.22 headers + soft-float: uClibc fails to build with
-> missing __NR_syscall:
+On Tue, 2007-10-16 at 02:46 +0100, Thiago A. Corr?a wrote:
+> Ok.... got it to build... it happens to be that atngw100_defconfig now
+> builds to a dir without nofp sufix, which makes me wonder if ppl have
+> decided weather this thing has or doesn't has an FP, perhaps it's a
+> paradox, or a dogma. You just have to belive it works. *smile*
 > 
-> libc/sysdeps/linux/arm/syscall.c: In function 'syscall':
-> libc/sysdeps/linux/arm/syscall.c:28: error: '__NR_syscall' undeclared (first use in this function)
-> libc/sysdeps/linux/arm/syscall.c:28: error: (Each undeclared identifier is reported only once
-> libc/sysdeps/linux/arm/syscall.c:28: error: for each function it appears in.)
 
-Found the problem. The compiler was built for EABI even though I
-selected OABI. This is because the compiler is choosing the ABI based on
-the toolchain suffix.
+It does not have an FPU, probably just a bad defconfig.
 
-If you change your configuration from EABI back to OABI, the toolchain suffix
-is still set to the old default of uclibcgnueabi, so gcc is built
-incorrectly.
+> Anyway, disabled libdaemon, which I never use anyway, and now I get
+> the uboot issue as well.... but at least I can work now. It should be
+> easily enough to pull uboot from the Atmel AVR32 fork and figure out
+> what's wrong. Dealing with packages is so much easier.
+> 
 
-So now it just fails like this:
+The AVR32 fork has the bootloader in target/bootloader/u-boot, and is
+quite different from the one in the Atmel directory.
 
-> libc/libc_so.a(difftime.os): In function `difftime':
-> difftime.c:(.text+0x8): undefined reference to `__floatsidf'
-> difftime.c:(.text+0x2c): undefined reference to `__subdf3'
-> libc/libc_so.a(_fpmaxtostr.os): In function `_fpmaxtostr':
-> _fpmaxtostr.c:(.text+0xe0): undefined reference to `__nedf2'
-> _fpmaxtostr.c:(.text+0x104): undefined reference to `__eqdf2'
-> _fpmaxtostr.c:(.text+0x120): undefined reference to `__divdf3'
-> _fpmaxtostr.c:(.text+0x12c): undefined reference to `__ltdf2'
-> _fpmaxtostr.c:(.text+0x1e0): undefined reference to `__muldf3'
-> _fpmaxtostr.c:(.text+0x39c): undefined reference to `__gedf2'
-> _fpmaxtostr.c:(.text+0x42c): undefined reference to `__floatunsidf'
-> libc/libc_so.a(__psfs_do_numeric.os): In function `__psfs_do_numeric':
-> __psfs_do_numeric.c:(.text+0x54c): undefined reference to `__truncdfsf2'
-> libc/libc_so.a(strtof.os): In function `strtof':
-> strtof.c:(.text+0x1c): undefined reference to `__extendsfdf2'
-> libc/libc_so.a(__strtofpmax.os): In function `__strtofpmax':
-> __strtofpmax.c:(.text+0x154): undefined reference to `__adddf3'
-> /home/hamish/tmp/br/buildroot/build_armeb/staging_dir/usr/lib/gcc/armeb-linux-uclibc/4.2.1/libgcc.a(_fixunsdfsi.o): In function `__fixunsdfsi':
-> libgcc2.c:(.text+0x34): undefined reference to `__fixdfsi'
-> make[2]: *** [lib/libc.so] Error 1
-> make[1]: *** [lib/libc.so.0] Error 2
+> Btw, is there a reason why u-boot is buried into Atmel folder?
+> Shouldn't other archs/chips use it as well?
+> 
 
-Hamish
+The AVR32 fork on atmel.no tries to do the bootloader general for all
+archs.
+
+> Hopefully I will come back with patches once more (have a better
+> qtopia building, in a single stage, on the works).
+> 
+
+You can't, Qtopia hard codes the path to the libraries inside the
+libraries. I have tried and ended up having to do a two stage build. One
+for staging_dir and one for the target dir.
+
 -- 
-Hamish Moffatt VK3SB <hamish@debian.org> <hamish@cloud.net.au>
+With kind regards,
+Hans-Christian Egtvedt, Applications Engineer
