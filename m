@@ -1,7 +1,8 @@
-From: bugs at busybox.net <bugs@busybox.net>
-Date: Tue, 16 Oct 2007 14:27:15 -0700
-Subject: [Buildroot] [buildroot 0001535]: x86_64 kernel target
-Message-ID: <d38eba3b39f7a569d71246f42018efa5@bugs.uclibc.org>
+From: Robert P. J. Day <rpjday@crashcourse.ca>
+Date: Tue, 16 Oct 2007 16:44:15 -0400 (EDT)
+Subject: [Buildroot] trying to confirm Config.in error with
+	BR2_DEFAULT_KERNEL_HEADERS
+Message-ID: <Pine.LNX.4.64.0710161639080.23925@localhost.localdomain>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -9,81 +10,57 @@ Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
 
-The following issue has been SUBMITTED. 
-====================================================================== 
-http://busybox.net/bugs/view.php?id=1535 
-====================================================================== 
-Reported By:                kevint
-Assigned To:                buildroot
-====================================================================== 
-Project:                    buildroot
-Issue ID:                   1535
-Category:                   Architecture Specific
-Reproducibility:            always
-Severity:                   minor
-Priority:                   normal
-Status:                     assigned
-====================================================================== 
-Date Submitted:             10-16-2007 14:27 PDT
-Last Modified:              10-16-2007 14:27 PDT
-====================================================================== 
-Summary:                    x86_64 kernel target
-Description: 
-x86_64 variables not set for kernel build process in buildroot.
+  as a followup to an earlier post of mine, can someone confirm one
+way or the other that there is a build error if you end up selecting a
+snapshot of the linux kernel.
 
-I have been using this trivial patch for a few months now, and it seems
-like it could be useful now (considering building the kernel is now a
-default option, even if you select x86_64 architecture):
+  from toolchain/kernel-headers/Config.in, you can see the config
+entry:
 
-diff -Naur buildroot/target/device/x86/Makefile.in
-buildroot-modified/target/device/x86/Makefile.in
---- buildroot/target/device/x86/Makefile.in     2007-10-16
-01:15:16.000000000 -0600
-+++ buildroot-modified/target/device/x86/Makefile.in    2007-10-16
-10:04:43.000000000 -0600
-@@ -1,3 +1,7 @@
- ifeq ($(strip $(BR2_i386)),y)
- include target/device/x86/i386/Makefile.in
- endif
-+
-+ifeq ($(strip $(BR2_x86_64)),y)
-+include target/device/x86/x86_64/Makefile.in
-+endif
-diff -Naur buildroot/target/device/x86/x86_64/Makefile.in
-buildroot-modified/target/device/x86/x86_64/Makefile.in
---- buildroot/target/device/x86/x86_64/Makefile.in      1969-12-31
-17:00:00.000000000 -0700
-+++ buildroot-modified/target/device/x86/x86_64/Makefile.in     2007-10-16
-10:04:12.000000000 -0600
-@@ -0,0 +1,19 @@
-+BR2_BOARD_PATH:=target/device/x86/x86_64
-+
-+ifeq ($(strip $(BR2_PACKAGE_LINUX_KCONFIG)),)
-+ifndef LINUX26_KCONFIG
-+LINUX26_KCONFIG=$(BR2_BOARD_PATH)/linux26.config
-+endif
-+else
-+LINUX26_KCONFIG=$(strip $(BR2_PACKAGE_LINUX_KCONFIG))
-+endif
-+
-+ifeq ($(strip $(BR2_PACKAGE_LINUX_FORMAT)),)
-+ifndef LINUX26_FORMAT
-+LINUX26_FORMAT=bzImage
-+endif
-+else
-+LINUX26_FORMAT=$(strip $(BR2_PACKAGE_LINUX_FORMAT))
-+endif
-+
-+KERNEL_HEADERS_PATCH_DIR:=$(BR2_BOARD_PATH)/kernel-header-patches
+config BR2_DEFAULT_KERNEL_HEADERS
+        string
+        default "2.4.25"        if BR2_KERNEL_HEADERS_2_4_25
+        default "2.4.27"        if BR2_KERNEL_HEADERS_2_4_27
+        default "2.4.29"        if BR2_KERNEL_HEADERS_2_4_29
+        default "2.4.31"        if BR2_KERNEL_HEADERS_2_4_31
+        default "2.6.9"         if BR2_KERNEL_HEADERS_2_6_9
+        default "2.6.11"        if BR2_KERNEL_HEADERS_2_6_11
+        default "2.6.12"        if BR2_KERNEL_HEADERS_2_6_12
+        default "2.6.20.4"      if BR2_KERNEL_HEADERS_2_6_20_4
+        default "2.6.20.20"     if BR2_KERNEL_HEADERS_2_6_20
+        default "2.6.21.5"      if BR2_KERNEL_HEADERS_2_6_21_5
+        default "2.6.21.7"      if BR2_KERNEL_HEADERS_2_6_21
+        default "2.6.22.1"      if BR2_KERNEL_HEADERS_2_6_22_1
+        default "2.6.22.10"     if BR2_KERNEL_HEADERS_2_6_22_10
+        default "2.6.22.10"     if BR2_KERNEL_HEADERS_2_6_22
+        default "2.6.23"        if BR2_KERNEL_HEADERS_2_6_22
+        default "2.6"           if BR2_KERNEL_HEADERS_SNAP
 
-The linux26.config and busybox.config are not included in the patch, but
-they should be in the target/device/x86/x86_64 directory.
-====================================================================== 
+however, if you end up with a value of simply "2.6", that's going to
+cause problems in toolchain/kernel-headers/kernel-headers-new.makefile
+here:
 
-Issue History 
-Date Modified   Username       Field                    Change               
-====================================================================== 
-10-16-07 14:27  kevint         New Issue                                    
-10-16-07 14:27  kevint         Status                   new => assigned     
-10-16-07 14:27  kevint         Assigned To               => buildroot       
-======================================================================
+...
+LNXVER:=$(subst ., , $(strip $(DEFAULT_KERNEL_HEADERS)))
+VERSION:=$(word 1, $(LNXVER))
+PATCHLEVEL:=$(word 2, $(LNXVER))
+SUBLEVEL:=$(word 3, $(LNXVER))
+EXTRAVERSION:=$(word 4, $(LNXVER))
+LOCALVERSION:=
+...
+
+since that Makefile *clearly* assumes that SUBLEVEL is a non-null
+value later on.
+
+  is there any way that can possibly work with a value of simply "2.6"
+which has no sublevel value?
+
+rday
+-- 
+========================================================================
+Robert P. J. Day
+Linux Consulting, Training and Annoying Kernel Pedantry
+Waterloo, Ontario, CANADA
+
+http://crashcourse.ca
+========================================================================
