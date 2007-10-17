@@ -1,38 +1,48 @@
-From: Ulf Samuelsson <ulf@atmel.com>
-Date: Wed, 17 Oct 2007 07:01:45 +0200
-Subject: [Buildroot] Matchbox compilation failure for Atmel ARM CPU.
-References: <20071015020450.GA1526@cloud.net.au><20071017012240.GA27413@cloud.net.au>
-	<406A31B117F2734987636D6CCC93EE3C02579F1D@ehost011-3.exch011.intermedia.net>
-Message-ID: <002801c8107b$646fa7c0$01c4af0a@Glamdring>
+From: bugs at busybox.net <bugs@busybox.net>
+Date: Tue, 16 Oct 2007 22:33:00 -0700
+Subject: [Buildroot] [buildroot 0001537]: kexec doesn't build for arm/armeb
+Message-ID: <9e896385eff33f3870e5581612e438ff@bugs.uclibc.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-> Hi, Ulf:
->
-> I have managed to create working filesystem for at91rm9200 based board,
-> compiled by reasonably new buildroot of 9/24/2007. Minimal ramdisk is
-> very small (~600K zipped, ~4M unzipped). There is some discrepancy in
-> thttpd configuration, but this is peanuts.
->
 
-Can you do a diff of your .config file for 9/24 and the latests svn.
-Could be binutils-2.18 which generates the problem.
+The following issue has been SUBMITTED. 
+====================================================================== 
+http://busybox.net/bugs/view.php?id=1537 
+====================================================================== 
+Reported By:                hmoffatt
+Assigned To:                buildroot
+====================================================================== 
+Project:                    buildroot
+Issue ID:                   1537
+Category:                   Architecture Specific
+Reproducibility:            always
+Severity:                   minor
+Priority:                   normal
+Status:                     assigned
+====================================================================== 
+Date Submitted:             10-16-2007 22:32 PDT
+Last Modified:              10-16-2007 22:33 PDT
+====================================================================== 
+Summary:                    kexec doesn't build for arm/armeb
+Description: 
+kexec doesn't build on arm or armeb.
 
-> Now I started to compile matchbox (X windows manager). It got
-> successfully through all X11 stuff, but fails on libmatchbox itself:
->
+Problems are:
+1. armeb not a supported architecture;
+2. arm support patch needs to be updated due to an internal API change.
 
+Fix is trivial - attached.
+====================================================================== 
 
-Only enabled matchbox once, and this failed.
-Never had time to look into it.
-
-Best Regards
-Ulf Samuelsson                ulf at atmel.com
-Atmel Nordic AB
-Mail:  Box 2033, 174 02 Sundbyberg, Sweden
-Visit:  Kavalleriv?gen 24, 174 58 Sundbyberg, Sweden
-Phone +46 (8) 441 54 22     Fax +46 (8) 441 54 29
-GSM    +46 (706) 22 44 57
+Issue History 
+Date Modified   Username       Field                    Change               
+====================================================================== 
+10-16-07 22:32  hmoffatt       New Issue                                    
+10-16-07 22:32  hmoffatt       Status                   new => assigned     
+10-16-07 22:32  hmoffatt       Assigned To               => buildroot       
+10-16-07 22:33  hmoffatt       File Added: kexec-arm-fix                    
+======================================================================
