@@ -1,15 +1,33 @@
 From: Leonid <Leonid@a-k-a.net>
-Date: Wed, 17 Oct 2007 05:22:34 -0700
+Date: Wed, 17 Oct 2007 07:41:31 -0700
 Subject: [Buildroot] x11r7-matchbox-tslib patch
-In-Reply-To: <003101c810a2$4c0e96b0$7a01000a@softalap>
+In-Reply-To: <406A31B117F2734987636D6CCC93EE3C02528F8C@ehost011-3.exch011.intermedia.net>
 References: <2825817.260931192589489912.JavaMail.nabble@isper.nabble.com>
 	<003101c810a2$4c0e96b0$7a01000a@softalap>
-Message-ID: <406A31B117F2734987636D6CCC93EE3C02528F8C@ehost011-3.exch011.intermedia.net>
+	<406A31B117F2734987636D6CCC93EE3C02528F8C@ehost011-3.exch011.intermedia.net>
+Message-ID: <406A31B117F2734987636D6CCC93EE3C02528F8F@ehost011-3.exch011.intermedia.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
+
+Actually I have all libraries installed in STAGING directory and all
+these references are present. However it looks like certain -lX...
+options are missed. I tried to play adding them here and there but to no
+avail. What is correct place to add new libraries in matchbox
+compilation?
+
+Thanks,
+
+Leonid.
+
+-----Original Message-----
+From: Leonid 
+Sent: Wednesday, October 17, 2007 5:23 AM
+To: 'softa at ttechgroup.com'
+Cc: buildroot at uclibc.org
+Subject: RE: x11r7-matchbox-tslib patch
 
 Hi, Softa:
 
