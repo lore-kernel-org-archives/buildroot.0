@@ -1,7 +1,7 @@
 From: ulf at uclibc.org <ulf@uclibc.org>
-Date: Wed, 17 Oct 2007 14:56:21 -0700 (PDT)
-Subject: [Buildroot] svn commit: trunk/buildroot/toolchain/gcc/4.2.1
-Message-ID: <20071017215621.8B32CA4569@busybox.net>
+Date: Wed, 17 Oct 2007 15:01:58 -0700 (PDT)
+Subject: [Buildroot] svn commit: trunk/buildroot/target/jffs2
+Message-ID: <20071017220158.E3DB1A45CD@busybox.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -9,45 +9,112 @@ Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
 Author: ulf
-Date: 2007-10-17 14:56:21 -0700 (Wed, 17 Oct 2007)
-New Revision: 20276
+Date: 2007-10-17 15:01:58 -0700 (Wed, 17 Oct 2007)
+New Revision: 20277
 
 Log:
-Softfloat patch
+Update JFFS2 page/erase size correctly
 
-Added:
-   trunk/buildroot/toolchain/gcc/4.2.1/910-soft-float.patch
+Modified:
+   trunk/buildroot/target/jffs2/Config.in
 
 
 Changeset:
-Added: trunk/buildroot/toolchain/gcc/4.2.1/910-soft-float.patch
+Modified: trunk/buildroot/target/jffs2/Config.in
 ===================================================================
---- trunk/buildroot/toolchain/gcc/4.2.1/910-soft-float.patch	                        (rev 0)
-+++ trunk/buildroot/toolchain/gcc/4.2.1/910-soft-float.patch	2007-10-17 21:56:21 UTC (rev 20276)
-@@ -0,0 +1,26 @@
-+--- gcc-4.2-20061205/gcc/config/arm/t-linux    2006-12-08 15:18:33.000000000 -0800
-++++ gcc-4.2-20061205/gcc/config/arm/t-linux    2006-12-08 15:18:33.000000000 -0800
-+@@ -4,7 +4,10 @@
-+ LIBGCC2_DEBUG_CFLAGS = -g0
-+ 
-+ LIB1ASMSRC = arm/lib1funcs.asm
-+-LIB1ASMFUNCS = _udivsi3 _divsi3 _umodsi3 _modsi3 _dvmd_lnx
-++LIB1ASMFUNCS = _udivsi3 _divsi3 _umodsi3 _modsi3 _dvmd_lnx \
-++      _negdf2 _addsubdf3 _muldivdf3 _cmpdf2 _unorddf2 _fixdfsi _fixunsdfsi \
-++      _truncdfsf2 _negsf2 _addsubsf3 _muldivsf3 _cmpsf2 _unordsf2 \
-++      _fixsfsi _fixunssfsi _floatdidf _floatundidf _floatdisf _floatundisf
-+ 
-+ # MULTILIB_OPTIONS = mhard-float/msoft-float
-+ # MULTILIB_DIRNAMES = hard-float soft-float
+--- trunk/buildroot/target/jffs2/Config.in	2007-10-17 21:56:21 UTC (rev 20276)
++++ trunk/buildroot/target/jffs2/Config.in	2007-10-17 22:01:58 UTC (rev 20277)
+@@ -6,48 +6,71 @@
+ 	help
+ 	  Build a jffs2 root filesystem
+ 
+-
+ choice
+ 	prompt "Memory Type"
+-	default BR2_TARGET_ROOTFS_JFFS2_FLASH
++	default BR2_TARGET_ROOTFS_JFFS2_FLASH_128
+ 	depends on BR2_TARGET_ROOTFS_JFFS2
+ 
+-config BR2_TARGET_ROOTFS_JFFS2_FLASH
+-	bool "Parallel flash with 4 kB pagesize"
++config BR2_TARGET_ROOTFS_JFFS2_DATAFLASH_1056
++	bool "AT45 dataflash with 1056 byte pagesize"
+ 	depends on BR2_TARGET_ROOTFS_JFFS2
++	select BR2_TARGET_ROOTFS_JFFS2_NOCLEANMARKER
+ 
+-config BR2_TARGET_ROOTFS_JFFS2_DATAFLASH
+-	bool "AT45 dataflash with 1056 byte pagesize"
++config BR2_TARGET_ROOTFS_JFFS2_DATAFLASH_528
++	bool "AT45 dataflash with 528 byte pagesize"
+ 	depends on BR2_TARGET_ROOTFS_JFFS2
+ 	select BR2_TARGET_ROOTFS_JFFS2_NOCLEANMARKER
+ 
++config BR2_TARGET_ROOTFS_JFFS2_FLASH_128
++	bool "Parallel flash with 4 kB pagesize and 128 kB erase size"
++	depends on BR2_TARGET_ROOTFS_JFFS2
 +
-+--- gcc-4.2-20061205/gcc/config/arm/linux-elf.h        2006-12-08 15:18:33.000000000 -0800
-++++ gcc-4.2-20061205/gcc/config/arm/linux-elf.h        2006-12-08 15:18:33.000000000 -0800
-+@@ -63,7 +63,7 @@
-+    %{shared:-lc} \
-+    %{!shared:%{profile:-lc_p}%{!profile:-lc}}"
-+ 
-+-#define LIBGCC_SPEC "%{msoft-float:-lfloat} %{mfloat-abi=soft*:-lfloat} -lgcc"
-++#define LIBGCC_SPEC "-lgcc"
-+ 
-+ #define GLIBC_DYNAMIC_LINKER "/lib/ld-linux.so.2"
-+ 
++config BR2_TARGET_ROOTFS_JFFS2_FLASH_64
++	bool "Parallel flash with 4 kB pagesize and 64 kB erase size"
++	depends on BR2_TARGET_ROOTFS_JFFS2
++
++config BR2_TARGET_ROOTFS_JFFS2_CUSTOM
++	bool "Select custom page and erase size"
++	depends on BR2_TARGET_ROOTFS_JFFS2
++
+ endchoice
+ 
+-
+-config BR2_TARGET_ROOTFS_JFFS2_PAGESIZE
++config BR2_TARGET_ROOTFS_JFFS2_CUSTOM_PAGESIZE
+ 	hex "Page Size"
+-	depends on BR2_TARGET_ROOTFS_JFFS2_FLASH
++	depends on BR2_TARGET_ROOTFS_JFFS2_CUSTOM
+ 	default 0x1000
+ 	help
+-	  Set to pagesize of memory (Dataflash is 0x210 or 0x420)
++	  Set to pagesize of memory
+ 
++config BR2_TARGET_ROOTFS_JFFS2_CUSTOM_EBSIZE
++	hex "Erase block size"
++	depends on BR2_TARGET_ROOTFS_JFFS2_CUSTOM
++	default 0x20000
++	help
++	  Set to erase size of memory
++
+ config BR2_TARGET_ROOTFS_JFFS2_PAGESIZE
+-	hex "Page Size"
+-	depends on BR2_TARGET_ROOTFS_JFFS2_DATAFLASH
+-	default 0x420
++	hex
++	depends on BR2_TARGET_ROOTFS_JFFS2
++	default 0x420 if BR2_TARGET_ROOTFS_JFFS2_DATAFLASH_1056
++	default 0x210 if BR2_TARGET_ROOTFS_JFFS2_DATAFLASH_528
++	default 0x1000 if BR2_TARGET_ROOTFS_JFFS2_FLASH_128
++	default 0x1000 if BR2_TARGET_ROOTFS_JFFS2_FLASH_64
++	default $(BR2_TARGET_ROOTFS_JFFS2_CUSTOM_PAGESIZE) if BR2_TARGET_ROOTFS_JFFS2_CUSTOM
+ 	help
+-	  Set to pagesize of memory (Dataflash is 0x210 or 0x420)
++	  Set to pagesize of memory
+ 
+ config BR2_TARGET_ROOTFS_JFFS2_EBSIZE
+-	hex "Erase block size"
+-	depends on BR2_TARGET_ROOTFS_JFFS2_FLASH
+-	default 0x20000
++	hex
++	depends on BR2_TARGET_ROOTFS_JFFS2
++	default 0x2100 if BR2_TARGET_ROOTFS_JFFS2_DATAFLASH_1056
++	default 0x1080 if BR2_TARGET_ROOTFS_JFFS2_DATAFLASH_528
++	default 0x20000 if BR2_TARGET_ROOTFS_JFFS2_FLASH_128
++	default 0x10000 if BR2_TARGET_ROOTFS_JFFS2_FLASH_64
++	default $(BR2_TARGET_ROOTFS_JFFS2_CUSTOM_EBSIZE) if BR2_TARGET_ROOTFS_JFFS2_CUSTOM
++	help
++	  Set to Erase Size of memory
+ 
+-config BR2_TARGET_ROOTFS_JFFS2_EBSIZE
+-	hex "Erase block size"
+-	depends on BR2_TARGET_ROOTFS_JFFS2_DATAFLASH
+-	default 0x2100
+-
+ config BR2_TARGET_ROOTFS_JFFS2_NOCLEANMARKER
+ 	bool "Do not use Cleanmarker"
+ 	depends on BR2_TARGET_ROOTFS_JFFS2
