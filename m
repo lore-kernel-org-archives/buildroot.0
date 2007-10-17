@@ -1,8 +1,8 @@
 From: bugs at busybox.net <bugs@busybox.net>
-Date: Tue, 16 Oct 2007 22:53:36 -0700
+Date: Tue, 16 Oct 2007 22:54:09 -0700
 Subject: [Buildroot] [buildroot 0001536]: cp: missing destination file
 	operand
-Message-ID: <08a354a17bcff5ad46edf2e3e6b83e8e@busybox.net>
+Message-ID: <26417bff80773f989a4ecabe5034813f@busybox.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -10,7 +10,7 @@ Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
 
-The following issue has been UPDATED. 
+The following issue has been CLOSED 
 ====================================================================== 
 http://busybox.net/bugs/view.php?id=1536 
 ====================================================================== 
@@ -23,10 +23,12 @@ Category:                   Other
 Reproducibility:            always
 Severity:                   block
 Priority:                   normal
-Status:                     assigned
+Status:                     closed
+Resolution:                 no change required
+Fixed in Version:           
 ====================================================================== 
 Date Submitted:             10-16-2007 17:43 PDT
-Last Modified:              10-16-2007 22:53 PDT
+Last Modified:              10-16-2007 22:54 PDT
 ====================================================================== 
 Summary:                    cp: missing destination file operand
 Description: 
@@ -65,4 +67,5 @@ Date Modified   Username       Field                    Change
 10-16-07 22:53  UlfSamuelsson  Note Added: 0002827                          
 10-16-07 22:53  UlfSamuelsson  Resolution               open => no change
 required
+10-16-07 22:54  UlfSamuelsson  Status                   assigned => closed  
 ======================================================================
