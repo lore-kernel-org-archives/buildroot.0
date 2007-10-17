@@ -1,46 +1,36 @@
-From: kevint <kevint@lanl.gov>
-Date: Wed, 17 Oct 2007 16:12:01 -0600
-Subject: [Buildroot] compiler.h
-Message-ID: <2DA72617-4802-4BCF-9179-36B21AF6259E@lanl.gov>
+From: Ulf Samuelsson <ulf@atmel.com>
+Date: Thu, 18 Oct 2007 01:05:14 +0200
+Subject: [Buildroot] (AT91RM9200/DATAFLASH) Unable to create a	*working*
+	jffs2 rootfs.
+In-Reply-To: <6090c5eb0710171505r739bd7b1le836930f308f5209@mail.gmail.com>
+References: <6090c5eb0710171505r739bd7b1le836930f308f5209@mail.gmail.com>
+Message-ID: <1192662314.17963.6.camel@c-f87ee255>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+tor 2007-10-18 klockan 00:05 +0200 skrev Jorge S.:
+> Dear all,
+> 
+>  I'm still having problems with the rootfs on my AT91RM9200/Dataflash
+> (AT45DB642D) based system.
+> 
+>  Now i'm trying to build a jffs2 rootfs and but getting tons of errors
+> from the kernel when it mounts the rootfs: 
+> 
+> ..
+> .. 
 
-I am preparing a package that uses unlikely and likely gcc  
-extensions.  The code includes:
+[snip]
 
-<linux/compiler.h>
+>   - Any ideas on how to solve this?
+> 
 
-and this file does not exist in my toolchain's header directory.  How  
-do I get this file?  Am I missing something terribly obvious?
+I suspect that you selected an bad version of the MTD.
+20061007 should work.
 
-For now, I am considering placing a compiler.h file in the headers  
-directory that is similar to:
-
-#ifndef likely
-# define likely(x)	__builtin_expect((!!(x)),1)
-#endif
-#ifndef unlikely
-# define unlikely(x)	__builtin_expect((!!(x)),0)
-#endif
-
-to get this package compiled.
-
-Thanks in advance,
-
-********************************************
-Kevin Tegtmeier
-HPC-3 Scientific Computing Resources
-Los Alamos National Laboratory
-email:  kevint at lanl.gov
-********************************************
-
-
-
--------------- next part --------------
-An HTML attachment was scrubbed...
-URL: http://busybox.net/lists/buildroot/attachments/20071017/9cafe24c/attachment.htm 
+-- 
+Best Regards,
+Ulf Samuelsson
