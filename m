@@ -1,8 +1,8 @@
 From: bugs at busybox.net <bugs@busybox.net>
-Date: Tue, 16 Oct 2007 17:43:27 -0700
+Date: Tue, 16 Oct 2007 18:21:04 -0700
 Subject: [Buildroot] [buildroot 0001536]: cp: missing destination file
 	operand
-Message-ID: <731069d7304aa220e959208fdee10d8d@bugs.uclibc.org>
+Message-ID: <4e238a1158c51a8876df60f82ee06313@busybox.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -10,7 +10,7 @@ Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
 
-The following issue has been SUBMITTED. 
+A NOTE has been added to this issue. 
 ====================================================================== 
 http://busybox.net/bugs/view.php?id=1536 
 ====================================================================== 
@@ -26,7 +26,7 @@ Priority:                   normal
 Status:                     assigned
 ====================================================================== 
 Date Submitted:             10-16-2007 17:43 PDT
-Last Modified:              10-16-2007 17:43 PDT
+Last Modified:              10-16-2007 18:21 PDT
 ====================================================================== 
 Summary:                    cp: missing destination file operand
 Description: 
@@ -42,6 +42,11 @@ make: ***
 Error 1
 ====================================================================== 
 
+---------------------------------------------------------------------- 
+ hmoffatt - 10-16-07 18:21  
+---------------------------------------------------------------------- 
+This means you didn't specify a configuration file for the kernel. 
+
 Issue History 
 Date Modified   Username       Field                    Change               
 ====================================================================== 
@@ -50,4 +55,5 @@ Date Modified   Username       Field                    Change
 10-16-07 17:43  Steve Cornett  Assigned To               => buildroot       
 10-16-07 17:43  Steve Cornett  File Added: InputAndOutput.tar                   
 
+10-16-07 18:21  hmoffatt       Note Added: 0002826                          
 ======================================================================
