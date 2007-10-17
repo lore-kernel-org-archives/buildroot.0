@@ -1,126 +1,65 @@
-From: bugs at busybox.net <bugs@busybox.net>
-Date: Tue, 16 Oct 2007 22:56:23 -0700
-Subject: [Buildroot] [buildroot 0001479]: enabling coreutils in revision
-	19733 results in fatal build errors
-Message-ID: <61be0a6461f74daa755c3076dcd96119@busybox.net>
+From: sathesh babu <sathesh_edara2003@yahoo.co.in>
+Date: Wed, 17 Oct 2007 07:55:50 +0100 (BST)
+Subject: [Buildroot] How to build gcc with -m24k option
+In-Reply-To: <26795.192.168.2.100.1192553562.squirrel@home.the-hug.net>
+Message-ID: <760119.69994.qm@web7914.mail.in.yahoo.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+Hi Beth,
+    Thanks for your valueable suggestion. After using  binuilt-1.17, i get the dsp and 24k options.
+   
+   if i try to compile linux-2.6.18.8 kernel with this toolchain i am seeing compilation errors.
+=============================
+   mips-linux-gcc -Wp,-MD,drivers/mtd/.mtd_blkdevs.o.d  -nostdinc -isystem /home/
+sedara/BETA_REL/buildroot/build_mips_nofpu/staging_dir/lib/gcc/mips-linux-uclibc
+/4.2.1/include -D__KERNEL__ -Iinclude  -include include/linux/autoconf.h -DNEW_C
+ONFIG -I/home/sedara/BETA_REL/linux-2.6.18/include -I/home/sedara/BETA_REL/linux
+-2.6.18/../fusiv_src/kernel/ap_code -I/home/sedara/BETA_REL/linux-2.6.18/../fusi
+v_src/kernel/ap_code/inc -I/home/sedara/BETA_REL/linux-2.6.18/../fusiv_src/kerne
+l/drivers/inc -I/home/sedara/BETA_REL/linux-2.6.18/../fusiv_src/kernel/drivers/a
+dsl -Wall -Wstrict-prototypes -Wno-trigraphs -fno-strict-aliasing -fno-common -O
+2  -mabi=32 -G 0 -mno-abicalls -fno-pic -pipe -msoft-float -ffreestanding  -marc
+h=mips32r2 -Wa,-mips32r2 -Wa,--trap -Iinclude/asm-mips/mach-ikan_mips -Iinclude/
+asm-mips/mach-generic -fomit-frame-pointer  -fno-stack-protector -Wdeclaration-a
+fter-statement -Wno-pointer-sign    -D"KBUILD_STR(s)=#s" -D"KBUILD_BASENAME=KBUI
+LD_STR(mtd_blkdevs)"  -D"KBUILD_MODNAME=KBUILD_STR(mtd_blkdevs)" -c -o drivers/m
+td/.tmp_mtd_blkdevs.o drivers/mtd/mtd_blkdevs.c
+mips-linux-ld: final link failed: Bad value
+make[2]: *** [drivers/mtd/mtd_blkdevs.o] Error 1
+make[1]: *** [drivers/mtd] Error 2
+make: *** [drivers] Error 2
+  ===========================================
+  Can you pls tell what could be the reason.
+   
+  Thanks you.
+   
+  Regards,
+  Sathesh 
+   
+  
+Elizabeth Oldham <beth@the-hug.org> wrote:
+  
+> I am trying to build cross toolchain for MIPS24K.
+> I would like to know the suggested GCC ,binutils and uclibc versions to
+> be used to get -mdsp and -m24k flag options.
+>
+> I used GCC-4.2.1,binutils-2.15 and uClibc-0.9.27 but i couldn't succeed.
+> Could you please help me.
 
-The following issue has been RESOLVED. 
-====================================================================== 
-http://busybox.net/bugs/view.php?id=1479 
-====================================================================== 
-Reported By:                spditner
-Assigned To:                buildroot
-====================================================================== 
-Project:                    buildroot
-Issue ID:                   1479
-Category:                   Architecture Specific
-Reproducibility:            always
-Severity:                   major
-Priority:                   normal
-Status:                     resolved
-Resolution:                 fixed
-Fixed in Version:           
-====================================================================== 
-Date Submitted:             08-29-2007 12:05 PDT
-Last Modified:              10-16-2007 22:56 PDT
-====================================================================== 
-Summary:                    enabling coreutils in revision 19733 results in
-fatal build errors
-Description: 
-with BR2_PACKAGE_COREUTILS=y,
-make fails with the following:
+You probably want bintuils-2.17, -m24k may have been taken out as it's
+been marked deprecated. The equivilent is -march=mips32r2 and -mtune=24k.
 
-In file included from mbchar.h:157,
-                 from mbchar.c:22:
-./wchar.h:41:12: error: empty filename in #include
-In file included from mbchar.c:22:
-mbchar.h:242: error: expected ')' before 'wc'
-make[3]: *** [mbchar.o] Error 1
-make[3]: Leaving directory
-`/home/simon/buildroot/build_i386/coreutils-6.9/lib'
-make[2]: *** [all] Error 2
-make[2]: Leaving directory
-`/home/simon/buildroot/build_i386/coreutils-6.9/lib'
-make[1]: *** [all-recursive] Error 1
-make[1]: Leaving directory
-`/home/simon/buildroot/build_i386/coreutils-6.9'
-make: *** [/home/simon/buildroot/build_i386/coreutils-6.9/src/vdir] Error
-2
+Beth
 
 
-Ubuntu 7.04, kernel 2.6.20-16-generic, gcc version 4.1.2 (Ubuntu
-4.1.2-0ubuntu4)
 
-====================================================================== 
-
----------------------------------------------------------------------- 
- hwstar - 10-02-07 18:19  
----------------------------------------------------------------------- 
-I'm having the same exact problem. Here's the output from the failed
-build:
-
-/home/srodgers/projects/limey-linux/limey-linux-test/buildroot/build_i586/staging_dir/usr/bin/i586-linux-uclibc-gcc
--Os -pipe 
--I/home/srodgers/projects/limey-linux/limey-linux-test/buildroot/build_i586/staging_dir/usr/include
--I/home/srodgers/projects/limey-linux/limey-linux-test/buildroot/build_i586/staging_dir/include
---sysroot=/home/srodgers/projects/limey-linux/limey-linux-test/buildroot/build_i586/staging_dir/
--isysroot
-/home/srodgers/projects/limey-linux/limey-linux-test/buildroot/build_i586/staging_dir
--mtune=i586 -march=i586  -I.      -g -O2 -c mbchar.c
-In file included from mbchar.h:157,
-                 from mbchar.c:22:
-./wchar.h:41:12: error: empty filename in #include
-In file included from mbchar.c:22:
-mbchar.h:242: error: expected ')' before 'wc'
-make[3]: *** [mbchar.o] Error 1
-make[3]: Leaving directory
-`/home/srodgers/projects/limey-linux/limey-linux-test/buildroot/build_i586/coreutils-6.9/lib'
-make[2]: *** [all] Error 2
-make[2]: Leaving directory
-`/home/srodgers/projects/limey-linux/limey-linux-test/buildroot/build_i586/coreutils-6.9/lib'
-make[1]: *** [all-recursive] Error 1
-make[1]: Leaving directory
-`/home/srodgers/projects/limey-linux/limey-linux-test/buildroot/build_i586/coreutils-6.9'
-make: ***
-[/home/srodgers/projects/limey-linux/limey-linux-test/buildroot/build_i586/coreutils-6.9/src/vdir]
-Error 2
-
-Target: i586, Host OS: Ubuntu 7.04, Host CC: GCC 4.1.2 (Ubuntu
-4.1.2-0ubuntu4)
-
- 
-
----------------------------------------------------------------------- 
- hwstar - 10-15-07 20:17  
----------------------------------------------------------------------- 
-Enabling WCHAR support in menuconfig resolves this issue. However,
-selecting the "development system" in menuconfig should automatically
-enable WCHAR support as the development system build findutils and
-coreutils 
-
----------------------------------------------------------------------- 
- UlfSamuelsson - 10-16-07 22:56  
----------------------------------------------------------------------- 
-Coreutils, requires toolchain to be built with WCHAR support 
-
-Issue History 
-Date Modified   Username       Field                    Change               
-====================================================================== 
-08-29-07 12:05  spditner       New Issue                                    
-08-29-07 12:05  spditner       Status                   new => assigned     
-08-29-07 12:05  spditner       Assigned To               => buildroot       
-10-02-07 18:13  hwstar         Note Added: 0002808                          
-10-02-07 18:19  hwstar         Note Edited: 0002808                         
-10-13-07 16:59  hwstar         Issue Monitored: hwstar                      
-10-15-07 20:17  hwstar         Note Added: 0002825                          
-10-16-07 06:04  tim            Issue Monitored: tim                         
-10-16-07 22:56  UlfSamuelsson  Status                   assigned => resolved
-10-16-07 22:56  UlfSamuelsson  Resolution               open => fixed       
-10-16-07 22:56  UlfSamuelsson  Note Added: 0002828                          
-======================================================================
+       
+---------------------------------
+ 5, 50, 500, 5000 - Store N number of mails in your inbox. Click here.
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: http://busybox.net/lists/buildroot/attachments/20071017/fab5c9dc/attachment.htm 
