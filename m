@@ -1,56 +1,53 @@
-From: Elizabeth Oldham <beth@the-hug.org>
-Date: Wed, 17 Oct 2007 22:11:57 +0100
-Subject: [Buildroot] How to build gcc with -m24k option
-In-Reply-To: <760119.69994.qm@web7914.mail.in.yahoo.com>
-References: <760119.69994.qm@web7914.mail.in.yahoo.com>
-Message-ID: <47167A9D.5050008@the-hug.org>
+From: ulf at uclibc.org <ulf@uclibc.org>
+Date: Wed, 17 Oct 2007 14:56:21 -0700 (PDT)
+Subject: [Buildroot] svn commit: trunk/buildroot/toolchain/gcc/4.2.1
+Message-ID: <20071017215621.8B32CA4569@busybox.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-sathesh babu wrote:
+Author: ulf
+Date: 2007-10-17 14:56:21 -0700 (Wed, 17 Oct 2007)
+New Revision: 20276
 
-> td/.tmp_mtd_blkdevs.o drivers/mtd/mtd_blkdevs.c
-> mips-linux-ld: final link failed: Bad value
+Log:
+Softfloat patch
 
-Thought I recognised this, it's been on the linux-mips.org mailing list. 
-Here is a response to that OP:
+Added:
+   trunk/buildroot/toolchain/gcc/4.2.1/910-soft-float.patch
 
--------- Original Message --------
-Subject: Re: Linux-2.6.18.8 compilation errors with GCC-4.2.1 and 
-binutils-2.17 on MIPS
-Date: Wed, 17 Oct 2007 09:21:43 -0700
-From: David Daney <ddaney@avtrex.com>
-To: veerasena reddy <veerasena_b@yahoo.co.in>
-CC: linux-kernel.org <linux-kernel@vger.kernel.org>,        linux-mips 
-<linux-mips@linux-mips.org>
-References: <304090.76321.qm@web8411.mail.in.yahoo.com>
 
-veerasena reddy wrote:
- > Hi,
- >
- > I tried to compile Linux-2.6.18.8 for MIPS24KE
- > processor using cross-compiler built from gcc-4.2.1,
- > binutils-2.17 and uClibc-0.9.27. But, the compilation
- > failed with below error message ("mips-linux-ld: final
- > link failed: Bad value"):
- > ================================
-
-The likely cause is:
-
-http://gcc.gnu.org/bugzilla/show_bug.cgi?id=33755
-
-As indicated in the PR, Richard has a patch that he is testing.  I would
-think that by the time gcc-4.2.3 is released that it would be fixed.
-
-I would recommend using a non-4.2.x version of gcc until the problem is
-fixed.
-
-David Daney
-
->   Can you pls tell what could be the reason.
-
-I guess 4.2.1 is broken :)
-Beth
+Changeset:
+Added: trunk/buildroot/toolchain/gcc/4.2.1/910-soft-float.patch
+===================================================================
+--- trunk/buildroot/toolchain/gcc/4.2.1/910-soft-float.patch	                        (rev 0)
++++ trunk/buildroot/toolchain/gcc/4.2.1/910-soft-float.patch	2007-10-17 21:56:21 UTC (rev 20276)
+@@ -0,0 +1,26 @@
++--- gcc-4.2-20061205/gcc/config/arm/t-linux    2006-12-08 15:18:33.000000000 -0800
+++++ gcc-4.2-20061205/gcc/config/arm/t-linux    2006-12-08 15:18:33.000000000 -0800
++@@ -4,7 +4,10 @@
++ LIBGCC2_DEBUG_CFLAGS = -g0
++ 
++ LIB1ASMSRC = arm/lib1funcs.asm
++-LIB1ASMFUNCS = _udivsi3 _divsi3 _umodsi3 _modsi3 _dvmd_lnx
+++LIB1ASMFUNCS = _udivsi3 _divsi3 _umodsi3 _modsi3 _dvmd_lnx \
+++      _negdf2 _addsubdf3 _muldivdf3 _cmpdf2 _unorddf2 _fixdfsi _fixunsdfsi \
+++      _truncdfsf2 _negsf2 _addsubsf3 _muldivsf3 _cmpsf2 _unordsf2 \
+++      _fixsfsi _fixunssfsi _floatdidf _floatundidf _floatdisf _floatundisf
++ 
++ # MULTILIB_OPTIONS = mhard-float/msoft-float
++ # MULTILIB_DIRNAMES = hard-float soft-float
++
++--- gcc-4.2-20061205/gcc/config/arm/linux-elf.h        2006-12-08 15:18:33.000000000 -0800
+++++ gcc-4.2-20061205/gcc/config/arm/linux-elf.h        2006-12-08 15:18:33.000000000 -0800
++@@ -63,7 +63,7 @@
++    %{shared:-lc} \
++    %{!shared:%{profile:-lc_p}%{!profile:-lc}}"
++ 
++-#define LIBGCC_SPEC "%{msoft-float:-lfloat} %{mfloat-abi=soft*:-lfloat} -lgcc"
+++#define LIBGCC_SPEC "-lgcc"
++ 
++ #define GLIBC_DYNAMIC_LINKER "/lib/ld-linux.so.2"
++ 
