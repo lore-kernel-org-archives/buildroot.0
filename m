@@ -1,39 +1,38 @@
-From: Leonid <Leonid@a-k-a.net>
-Date: Tue, 16 Oct 2007 21:11:42 -0700
-Subject: [Buildroot]  x11r7-matchbox-tslib patch
-Message-ID: <406A31B117F2734987636D6CCC93EE3C02528F8A@ehost011-3.exch011.intermedia.net>
+From: Ulf Samuelsson <ulf@atmel.com>
+Date: Wed, 17 Oct 2007 07:01:45 +0200
+Subject: [Buildroot] Matchbox compilation failure for Atmel ARM CPU.
+References: <20071015020450.GA1526@cloud.net.au><20071017012240.GA27413@cloud.net.au>
+	<406A31B117F2734987636D6CCC93EE3C02579F1D@ehost011-3.exch011.intermedia.net>
+Message-ID: <002801c8107b$646fa7c0$01c4af0a@Glamdring>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi, Christopher:
+> Hi, Ulf:
+>
+> I have managed to create working filesystem for at91rm9200 based board,
+> compiled by reasonably new buildroot of 9/24/2007. Minimal ramdisk is
+> very small (~600K zipped, ~4M unzipped). There is some discrepancy in
+> thttpd configuration, but this is peanuts.
+>
 
-Sorry for repetition, I wasn't sure my another message did reach you.
-Could you resolve the problem with matchbox undefined references:
+Can you do a diff of your .config file for 9/24 and the latests svn.
+Could be binutils-2.18 which generates the problem.
 
-/home/christopher/newbuildroot/buildroot/build_arm/libmatchbox-1.9/tests
-/dump-image.c:30: undefined reference to `XOpenDisplay'
-/home/christopher/newbuildroot/buildroot/build_arm/libmatchbox-1.9/tests
-/dump-image.c:41: undefined reference to `XCloseDisplay'
-/home/christopher/newbuildroot/buildroot/build_arm/libmatchbox-1.9/libmb
-/.libs/libmb.so: undefined reference to `XFreePixmap'
-/home/christopher/newbuildroot/buildroot/build_arm/libmatchbox-1.9/libmb
-/.libs/libmb.so: undefined reference to `XShmDetach'
-/home/christopher/newbuildroot/buildroot/build_arm/libmatchbox-1.9/libmb
-/.libs/libmb.so: undefined reference to `XDrawString'
-/home/christopher/newbuildroot/buildroot/build_arm/libmatchbox-1.9/libmb
-/.libs/libmb.so: undefined reference to `XGrabKeyboard'
-/home/christopher/newbuildroot/buildroot/build_arm/libmatchbox-1.9/libmb
-/.libs/libmb.so: undefined reference to `XSync'
-/home/christopher/newbuildroot/buildroot/build_arm/libmatchbox-1.9/libmb
-/.libs/libmb.so: undefined reference to `XDrawLines'
-/home/christopher/newbuildroot/buildroot/build_arm/libmatchbox-1.9/libmb
-/.libs/libmb.so: undefined reference to `XMapWindow'
+> Now I started to compile matchbox (X windows manager). It got
+> successfully through all X11 stuff, but fails on libmatchbox itself:
+>
 
-I have the same now...
 
-Thanks,
+Only enabled matchbox once, and this failed.
+Never had time to look into it.
 
-Leonid.
+Best Regards
+Ulf Samuelsson                ulf at atmel.com
+Atmel Nordic AB
+Mail:  Box 2033, 174 02 Sundbyberg, Sweden
+Visit:  Kavalleriv?gen 24, 174 58 Sundbyberg, Sweden
+Phone +46 (8) 441 54 22     Fax +46 (8) 441 54 29
+GSM    +46 (706) 22 44 57
