@@ -1,36 +1,33 @@
-From: Ulf Samuelsson <ulf@atmel.com>
-Date: Thu, 18 Oct 2007 01:05:14 +0200
-Subject: [Buildroot] (AT91RM9200/DATAFLASH) Unable to create a	*working*
-	jffs2 rootfs.
-In-Reply-To: <6090c5eb0710171505r739bd7b1le836930f308f5209@mail.gmail.com>
-References: <6090c5eb0710171505r739bd7b1le836930f308f5209@mail.gmail.com>
-Message-ID: <1192662314.17963.6.camel@c-f87ee255>
+From: Steven Woody <narkewoody@gmail.com>
+Date: Thu, 18 Oct 2007 09:11:00 +0800
+Subject: [Buildroot] an error in make ( no .config under kernel directory )
+Message-ID: <ed4892840710171811k6210e59cn2bb089a8ec21c297@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-tor 2007-10-18 klockan 00:05 +0200 skrev Jorge S.:
-> Dear all,
-> 
->  I'm still having problems with the rootfs on my AT91RM9200/Dataflash
-> (AT45DB642D) based system.
-> 
->  Now i'm trying to build a jffs2 rootfs and but getting tons of errors
-> from the kernel when it mounts the rootfs: 
-> 
-> ..
-> .. 
+the buildroot is the subversion version in Oct 14.
 
-[snip]
+when doing make, i got
 
->   - Any ideas on how to solve this?
-> 
+...
+cp -dpRf package/config/buildroot-config
+/home/src/buildroot/project_build_arm/M501/buildroot-config
+cp -dpf  /home/src/buildroot/project_build_arm/M501/linux-2.6.22.10/.config
+...
 
-I suspect that you selected an bad version of the MTD.
-20061007 should work.
+and, i go to dl/M501/linux-2.6.22.10 directory and found no .config
+file.  what's wrong here?  the linux-2.6.10 kernel was downloaded in
+another computer and was put in dl directory.
+
+
+thanks.
 
 -- 
-Best Regards,
-Ulf Samuelsson
+woody
+
+then sun rose thinly from the sea and the old man could see the other
+boats, low on the water and well in toward the shore, spread out
+across the current.
