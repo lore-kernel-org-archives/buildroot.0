@@ -1,9 +1,9 @@
 From: Ivan Kuten <ivan.kuten@promwad.com>
-Date: Fri, 19 Oct 2007 01:21:15 +0300
+Date: Fri, 19 Oct 2007 01:44:39 +0300
 Subject: [Buildroot] Ignored patches - WHY?
 In-Reply-To: <a63ecaf0710180612n7f2de529g361b037b40c34727@mail.gmail.com>
 References: <a63ecaf0710180612n7f2de529g361b037b40c34727@mail.gmail.com>
-Message-ID: <4717DC5B.9000508@promwad.com>
+Message-ID: <4717E1D7.8080100@promwad.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -17,32 +17,37 @@ Sushi Sensei wrote:
 > week before and was ignored... There are some problem with this
 > patches??
 
-Hi Sushi,
+Sushi, regading this lockfile-progs patch:
 
-I'm sorry I can not apply this patch : br2-olsr.patch:
 
-Index: package/olsr/S50olsr
+Index: package/lockfile-progs/lockfile-progs.mk
 ===================================================================
---- package/olsr/S50olsr        (revisi?n: 20228)
-+++ package/olsr/S50olsr        (copia de trabajo)
-@@ -6,7 +6,7 @@
- case "$1" in
-   start)
-        echo "Starting OLSRd daemon: "
--       /usr/sbin/olsrd -d 0 -nofork &
-+       /usr/bin/olsrd -d 0 -nofork &
-        ;;
-   stop)
-        echo "Stopping OLSRd daemon: "
+--- package/lockfile-progs/lockfile-progs.mk	(revisi?n: 20228)
++++ package/lockfile-progs/lockfile-progs.mk	(copia de trabajo)
+@@ -3,11 +3,12 @@
+ # lockfile-progs
+ #
+ #############################################################
+-LOCKFILE_PROGS_VERSION=0.1.10
++LOCKFILE_PROGS_VERSION=0.1.11
+ LOCKFILE_PROGS_SOURCE:=lockfile-progs_$(LOCKFILE_PROGS_VERSION).tar.gz
+ LOCKFILE_PROGS_SITE:=http://ftp.debian.org/debian/pool/main/l/lockfile-progs/
+ LOCKFILE_PROGS_CAT:=$(ZCAT)
+-LOCKFILE_PROGS_DIR:=$(BUILD_DIR)/lockfile-progs-$(LOCKFILE_PROGS_VERSION)
++#LOCKFILE_PROGS_DIR:=$(BUILD_DIR)/lockfile-progs-$(LOCKFILE_PROGS_VERSION)/sid
++LOCKFILE_PROGS_DIR:=$(BUILD_DIR)/sid
+ LOCKFILE_PROGS_BINARY:=usr/bin/lockfile-create
+....
 
--- 
+What the meaning of
+-LOCKFILE_PROGS_DIR:=$(BUILD_DIR)/lockfile-progs-$(LOCKFILE_PROGS_VERSION)
++LOCKFILE_PROGS_DIR:=$(BUILD_DIR)/sid
 
-Because an daemon should reside in /usr/sbin directory ,
-please check other buildroot packages such as dropbear, mdnsresponder, and so on - they are all in sbin dir.
-You should change OLSR_TARGET_BINARY:=usr/bin/olsrd instead.
+What does it mean "sid" ???
 
-Please adjust and resubmit.
-Thanks!
+LOCKFILE_PROGS_DIR:=$(BUILD_DIR)/lockfile-progs-$(LOCKFILE_PROGS_VERSION)
+
+this line is pretty good and I do not see a reason to change it. Do you?
 
 Best regards,
 Ivan
