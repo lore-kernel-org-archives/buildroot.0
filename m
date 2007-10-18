@@ -1,33 +1,30 @@
-From: ulf at uclibc.org <ulf@uclibc.org>
-Date: Thu, 18 Oct 2007 00:40:20 -0700 (PDT)
-Subject: [Buildroot] svn commit: trunk/buildroot/package
-Message-ID: <20071018074020.3A5F3A45B7@busybox.net>
+From: Simon Pasch <fpasch@googlemail.com>
+Date: Thu, 18 Oct 2007 10:41:36 +0200
+Subject: [Buildroot] compiling ATK fails because of wrong
+	PKG_CONFIG_PATH-variable
+Message-ID: <f90898420710180141l73cda04aw9d277423bb8b495b@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Author: ulf
-Date: 2007-10-18 00:40:19 -0700 (Thu, 18 Oct 2007)
-New Revision: 20280
+Compiling atk fails, if the PKG_CONFIG_PATH-variable is set by the
+host-system. (glib-object.h is missing)
 
-Log:
-Remove debugging info from package/Makefile.in
+Is this a bug or do I have to generally remove this variable while
+compiling buildroot?
 
-Modified:
-   trunk/buildroot/package/Makefile.in
+Solution is simple: (sorry for the line break, I had to use a webmailer)
 
-
-Changeset:
-Modified: trunk/buildroot/package/Makefile.in
-===================================================================
---- trunk/buildroot/package/Makefile.in	2007-10-18 05:56:05 UTC (rev 20279)
-+++ trunk/buildroot/package/Makefile.in	2007-10-18 07:40:19 UTC (rev 20280)
-@@ -317,6 +317,3 @@
- #"))
- 
- include package/Makefile.autotools.in
--
--package-status:
--	@echo	IMAGE=$(IMAGE)
+--- buildroot.old/package/atk.mk	2007-10-18 10:27:12.000000000 +0200
++++ buildroot/package/atk.mk	2007-10-18 10:27:50.000000000 +0200
+@@ -25,6 +25,7 @@
+ 	(cd $(ATK_DIR); rm -rf config.cache; \
+ 		$(TARGET_CONFIGURE_OPTS) \
+ 		$(TARGET_CONFIGURE_ARGS) \
++		PKG_CONFIG_PATH="$(STAGING_DIR)/lib/pkconfig:$(STAGING_DIR)/usr/lib/pkgconfig"
+\
+ 		ac_cv_func_posix_getpwuid_r=yes \
+ 		glib_cv_stack_grows=no \
+ 		glib_cv_uscore=no \
