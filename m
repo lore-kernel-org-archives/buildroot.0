@@ -1,10 +1,10 @@
 From: Ulf Samuelsson <ulf@atmel.com>
-Date: Thu, 18 Oct 2007 22:33:23 +0200
+Date: Thu, 18 Oct 2007 22:36:07 +0200
 Subject: [Buildroot] svn At revision 20289 breakage
 References: <4717A47F.4000908@asist.si> <4717C93A.3080401@promwad.com>
 	<0c3501c811c4$63522850$01c4af0a@Glamdring>
 	<4717D0BA.1050300@promwad.com>
-Message-ID: <0c5601c811c6$7d98ecb0$01c4af0a@Glamdring>
+Message-ID: <0c5901c811c6$8aecca30$01c4af0a@Glamdring>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -37,15 +37,14 @@ To: buildroot@busybox.net
 
 Gotcha!
 
+Why not try the "Advanced Linux configuration" recently added
+This should allow you to do "make xconfig" to create the needed file.
+
+
 > BR,
 > Ivan
 >
 
 
 Best Regards
-Ulf Samuelsson                ulf at atmel.com
-Atmel Nordic AB
-Mail:  Box 2033, 174 02 Sundbyberg, Sweden
-Visit:  Kavalleriv?gen 24, 174 58 Sundbyberg, Sweden
-Phone +46 (8) 441 54 22     Fax +46 (8) 441 54 29
-GSM    +46 (706) 22 44 57 
+Ulf Samuelsson
