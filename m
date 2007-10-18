@@ -1,30 +1,35 @@
-From: Simon Pasch <fpasch@googlemail.com>
-Date: Thu, 18 Oct 2007 10:41:36 +0200
-Subject: [Buildroot] compiling ATK fails because of wrong
-	PKG_CONFIG_PATH-variable
-Message-ID: <f90898420710180141l73cda04aw9d277423bb8b495b@mail.gmail.com>
+From: ulf at uclibc.org <ulf@uclibc.org>
+Date: Thu, 18 Oct 2007 04:58:48 -0700 (PDT)
+Subject: [Buildroot] svn commit: trunk/buildroot/target/linux
+Message-ID: <20071018115848.6CF79A6830@busybox.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Compiling atk fails, if the PKG_CONFIG_PATH-variable is set by the
-host-system. (glib-object.h is missing)
+Author: ulf
+Date: 2007-10-18 04:58:47 -0700 (Thu, 18 Oct 2007)
+New Revision: 20284
 
-Is this a bug or do I have to generally remove this variable while
-compiling buildroot?
+Log:
+Fix syntax error in Makefile for Advanced Linux configuration
 
-Solution is simple: (sorry for the line break, I had to use a webmailer)
+Modified:
+   trunk/buildroot/target/linux/Makefile.in.advanced
 
---- buildroot.old/package/atk.mk	2007-10-18 10:27:12.000000000 +0200
-+++ buildroot/package/atk.mk	2007-10-18 10:27:50.000000000 +0200
-@@ -25,6 +25,7 @@
- 	(cd $(ATK_DIR); rm -rf config.cache; \
- 		$(TARGET_CONFIGURE_OPTS) \
- 		$(TARGET_CONFIGURE_ARGS) \
-+		PKG_CONFIG_PATH="$(STAGING_DIR)/lib/pkconfig:$(STAGING_DIR)/usr/lib/pkgconfig"
-\
- 		ac_cv_func_posix_getpwuid_r=yes \
- 		glib_cv_stack_grows=no \
- 		glib_cv_uscore=no \
+
+Changeset:
+Modified: trunk/buildroot/target/linux/Makefile.in.advanced
+===================================================================
+--- trunk/buildroot/target/linux/Makefile.in.advanced	2007-10-18 11:11:12 UTC (rev 20283)
++++ trunk/buildroot/target/linux/Makefile.in.advanced	2007-10-18 11:58:47 UTC (rev 20284)
+@@ -252,7 +252,7 @@
+ ifeq ($(BR2_KERNEL_HEADERS_PATCH_DIR),y)
+ 	if [ -d $(KERNEL_HEADERS_PATCH_DIR) ] ; then \
+ 	toolchain/patch-kernel.sh $(LINUX26_DIR) $(KERNEL_HEADERS_PATCH_DIR) \
+-		linux-$(LINUX26_VERSION)-\*.patch{,.gz,.bz2} \
++		linux-$(LINUX26_VERSION)-\*.patch{,.gz,.bz2} ; \
+ 	fi
+ endif
+ ifeq ($(BR2_PACKAGE_OPENSWAN),y)
