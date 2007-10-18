@@ -1,39 +1,36 @@
-From: vanokuten at uclibc.org <vanokuten@uclibc.org>
-Date: Thu, 18 Oct 2007 14:55:09 -0700 (PDT)
-Subject: [Buildroot] svn commit: trunk/buildroot/package/wireless-tools
-Message-ID: <20071018215509.D9158A65F7@busybox.net>
+From: Ivan Kuten <ivan.kuten@promwad.com>
+Date: Fri, 19 Oct 2007 02:02:23 +0300
+Subject: [Buildroot] Ignored patches - WHY?
+In-Reply-To: <4717E1D7.8080100@promwad.com>
+References: <a63ecaf0710180612n7f2de529g361b037b40c34727@mail.gmail.com>
+	<4717E1D7.8080100@promwad.com>
+Message-ID: <4717E5FF.6070202@promwad.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Author: vanokuten
-Date: 2007-10-18 14:55:09 -0700 (Thu, 18 Oct 2007)
-New Revision: 20291
+Ivan Kuten wrote:
+> ....
+> 
+> What the meaning of
+> -LOCKFILE_PROGS_DIR:=$(BUILD_DIR)/lockfile-progs-$(LOCKFILE_PROGS_VERSION)
+> +LOCKFILE_PROGS_DIR:=$(BUILD_DIR)/sid
+> 
+> What does it mean "sid" ???
+> 
+> LOCKFILE_PROGS_DIR:=$(BUILD_DIR)/lockfile-progs-$(LOCKFILE_PROGS_VERSION)
+> 
+> this line is pretty good and I do not see a reason to change it. Do you?
+> 
 
-Log:
-updated wireless-tools to .29 version, thanks to sushisan
+Ah, ok I see that they changed a dir name inside archive.
 
-Modified:
-   trunk/buildroot/package/wireless-tools/wireless-tools.mk
+-- 
 
-
-Changeset:
-Modified: trunk/buildroot/package/wireless-tools/wireless-tools.mk
-===================================================================
---- trunk/buildroot/package/wireless-tools/wireless-tools.mk	2007-10-18 21:49:35 UTC (rev 20290)
-+++ trunk/buildroot/package/wireless-tools/wireless-tools.mk	2007-10-18 21:55:09 UTC (rev 20291)
-@@ -8,10 +8,10 @@
- # which is available in 28-pre3 and later...
- # Jean II
- # v28.pre3 -> earliest possible
--WIRELESS_TOOLS_VERSION:=28
-+WIRELESS_TOOLS_VERSION:=29
- WIRELESS_TOOLS_SUBVER:=
- 
--WIRELESS_TOOLS_SOURCE_URL:=http://pcmcia-cs.sourceforge.net/ftp/contrib
-+WIRELESS_TOOLS_SOURCE_URL:=http://www.hpl.hp.com/personal/Jean_Tourrilhes/Linux/
- WIRELESS_TOOLS_SOURCE:=wireless_tools.$(WIRELESS_TOOLS_VERSION)$(WIRELESS_TOOLS_SUBVER).tar.gz
- WIRELESS_TOOLS_BUILD_DIR=$(BUILD_DIR)/wireless_tools.$(WIRELESS_TOOLS_VERSION)
- 
+--------------------------------
+Embedded Linux engineer,
+Promwad Company: http://www.promwad.com/
+Homepage : http://www.ivankuten.com/
+--------------------------------
