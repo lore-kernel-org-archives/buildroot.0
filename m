@@ -1,66 +1,63 @@
-From: bugs at busybox.net <bugs@busybox.net>
-Date: Wed, 17 Oct 2007 22:27:31 -0700
-Subject: [Buildroot] [buildroot 0001537]: kexec doesn't build for arm/armeb
-Message-ID: <a1a26c05871e60062b21dcb76a88bbe1@busybox.net>
+From: Steven Woody <narkewoody@gmail.com>
+Date: Thu, 18 Oct 2007 13:45:18 +0800
+Subject: [Buildroot] an error in make ( no .config under kernel
+	directory )
+In-Reply-To: <20071018025203.GB2149@cloud.net.au>
+References: <ed4892840710171811k6210e59cn2bb089a8ec21c297@mail.gmail.com>
+	<20071018013332.GA724@cloud.net.au>
+	<ed4892840710171850m506790fbga9e96c0a79250900@mail.gmail.com>
+	<20071018025203.GB2149@cloud.net.au>
+Message-ID: <ed4892840710172245n7ebf6997q8f4722ba25d8c963@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+On 10/18/07, Hamish Moffatt <hamish@cloud.net.au> wrote:
+> On Thu, Oct 18, 2007 at 09:50:51AM +0800, Steven Woody wrote:
+> > On 10/18/07, Hamish Moffatt <hamish@cloud.net.au> wrote:
+> > > > cp -dpRf package/config/buildroot-config
+> > > > /home/src/buildroot/project_build_arm/M501/buildroot-config
+> > > > cp -dpf  /home/src/buildroot/project_build_arm/M501/linux-2.6.22.10/.config
+> > > > ...
+> > > >
+> > > > and, i go to dl/M501/linux-2.6.22.10 directory and found no .config
+> > > > file.  what's wrong here?  the linux-2.6.10 kernel was downloaded in
+> > > > another computer and was put in dl directory.
+> > >
+> > > You have to specify the filename for your configuration file in "make
+> > > menuconfig" -> kernel.
+> >
+> > understood.  but where can i got a configureation file for the
+> > 2.6.22.10?  havn't buildroot supplied a default one suitable to
+> > embedded target for me?
+>
+> I don't think buildroot can supply a meaningful default configuration
+> file unless you are using one of the standard target boards found under
+> target/device (and none of them match an M501).
+>
+> So you need to make your own. It appears that "make linux26-menuconfig"
+> should launch the configuration editor for you.
+>
+> Hamish
 
-The following issue has been RESOLVED. 
-====================================================================== 
-http://busybox.net/bugs/view.php?id=1537 
-====================================================================== 
-Reported By:                hmoffatt
-Assigned To:                buildroot
-====================================================================== 
-Project:                    buildroot
-Issue ID:                   1537
-Category:                   Architecture Specific
-Reproducibility:            always
-Severity:                   minor
-Priority:                   normal
-Status:                     resolved
-Resolution:                 fixed
-Fixed in Version:           
-====================================================================== 
-Date Submitted:             10-16-2007 22:32 PDT
-Last Modified:              10-17-2007 22:27 PDT
-====================================================================== 
-Summary:                    kexec doesn't build for arm/armeb
-Description: 
-kexec doesn't build on arm or armeb.
+thanks for the answer.
 
-Problems are:
-1. armeb not a supported architecture;
-2. arm support patch needs to be updated due to an internal API change.
+1, when i type in `make linux26-menuconfig', an error i got:
 
-Fix is trivial - attached.
-====================================================================== 
+[ -f /home/src/buildroot/project_build_arm/M501/linux-2.6.22.10/.config
+] || cp  /home/src/buildroot/project_build_arm/M501/linux-2.6.22.10/.config
+cp: missing destination file operand after
+`/home/src/buildroot/project_build_arm/M501/linux-2.6.22.10/.config'
 
----------------------------------------------------------------------- 
- hmoffatt - 10-17-07 21:43  
----------------------------------------------------------------------- 
-Use kexec-arm-fix2 instead. It fixes the incorrect syscall number in the
-original source. 
+it seems it still need a .config under the linux-2.6.22.10 directory.
 
----------------------------------------------------------------------- 
- UlfSamuelsson - 10-17-07 22:27  
----------------------------------------------------------------------- 
-kexec-arm-fix2 has been applied in revision 20278 
+2, my M501 is an ARM 922T, if buildroot did not provide a default
+kernel configuration for it, where can i get a similar one as a good
+startup?
 
-Issue History 
-Date Modified   Username       Field                    Change               
-====================================================================== 
-10-16-07 22:32  hmoffatt       New Issue                                    
-10-16-07 22:32  hmoffatt       Status                   new => assigned     
-10-16-07 22:32  hmoffatt       Assigned To               => buildroot       
-10-16-07 22:33  hmoffatt       File Added: kexec-arm-fix                    
-10-17-07 21:42  hmoffatt       File Added: kexec-arm-fix2                    
-10-17-07 21:43  hmoffatt       Note Added: 0002831                          
-10-17-07 22:27  UlfSamuelsson  Status                   assigned => resolved
-10-17-07 22:27  UlfSamuelsson  Resolution               open => fixed       
-10-17-07 22:27  UlfSamuelsson  Note Added: 0002832                          
-======================================================================
+thanks.
+
+-
+woody
