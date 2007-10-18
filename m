@@ -1,82 +1,50 @@
 From: Ivan Kuten <ivan.kuten@promwad.com>
-Date: Fri, 19 Oct 2007 00:58:32 +0300
-Subject: [Buildroot] svn At revision 20289 breakage
-In-Reply-To: <0c5901c811c6$8aecca30$01c4af0a@Glamdring>
-References: <4717A47F.4000908@asist.si> <4717C93A.3080401@promwad.com>
-	<0c3501c811c4$63522850$01c4af0a@Glamdring>
-	<4717D0BA.1050300@promwad.com>
-	<0c5901c811c6$8aecca30$01c4af0a@Glamdring>
-Message-ID: <4717D708.3040902@promwad.com>
+Date: Fri, 19 Oct 2007 01:21:15 +0300
+Subject: [Buildroot] Ignored patches - WHY?
+In-Reply-To: <a63ecaf0710180612n7f2de529g361b037b40c34727@mail.gmail.com>
+References: <a63ecaf0710180612n7f2de529g361b037b40c34727@mail.gmail.com>
+Message-ID: <4717DC5B.9000508@promwad.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Ulf Samuelsson wrote:
->>> Key question:
->>>
->>> What does
->>>
->>> $ cp a
->>>
->>> do?
->>>
->>> Best Regards
->>> Ulf Samuelsson
->>>
->> target/linux/Makefile.in : line 148
->>
->> $(LINUX26_DIR)/.configured: $(LINUX26_DIR)/.patched $(LINUX26_KCONFIG)
->>        cp -dpf $(LINUX26_KCONFIG) $(LINUX26_DIR)/.config
->>        $(SED) '/CONFIG_AEABI=y/d' $(LINUX26_DIR)/.config
->>
->>
->> and LINUX26_KCONFIG is "" because BR2_PACKAGE_LINUX_KCONFIG=""
->>
->>
-> 
-> Gotcha!
-> 
-> Why not try the "Advanced Linux configuration" recently added
-> This should allow you to do "make xconfig" to create the needed file.
-> 
-> 
->> BR,
->> Ivan
->>
-> 
-> 
-> Best Regards
-> Ulf Samuelsson
-> 
+Sushi Sensei wrote:
+> I have send some patches ( 0001534, 0001533, 0001532) this week with
+> the Patch Tracking page, the week before I have send the same patches
+> without notices of this inclusion or error, some patch was send 2 or 3
+> week before and was ignored... There are some problem with this
+> patches??
 
-That's because I have generic arm .config:
+Hi Sushi,
 
-BR2_arm=y
-BR2_arm920t=y
+I'm sorry I can not apply this patch : br2-olsr.patch:
 
-BR2_ARM_TYPE="ARM920T"
-# BR2_ARM_OABI is not set
-BR2_ARM_EABI=y
-BR2_ARCH="arm"
-BR2_ENDIAN="LITTLE"
-BR2_GCC_TARGET_TUNE="arm920t"
+Index: package/olsr/S50olsr
+===================================================================
+--- package/olsr/S50olsr        (revisi?n: 20228)
++++ package/olsr/S50olsr        (copia de trabajo)
+@@ -6,7 +6,7 @@
+ case "$1" in
+   start)
+        echo "Starting OLSRd daemon: "
+-       /usr/sbin/olsrd -d 0 -nofork &
++       /usr/bin/olsrd -d 0 -nofork &
+        ;;
+   stop)
+        echo "Stopping OLSRd daemon: "
 
-BR2_KERNEL_HEADERS_2_6_22=y
-# BR2_KERNEL_HEADERS_SNAP is not set
-BR2_DEFAULT_KERNEL_HEADERS="2.6.22.9"
+-- 
 
-# BR2_KERNEL_none is not set
-BR2_KERNEL_LINUX=y
-# BR2_KERNEL_HURD is not set
-# BR2_PACKAGE_LINUX is not set
+Because an daemon should reside in /usr/sbin directory ,
+please check other buildroot packages such as dropbear, mdnsresponder, and so on - they are all in sbin dir.
+You should change OLSR_TARGET_BINARY:=usr/bin/olsrd instead.
 
-And it was always building OK without any creation of .config for kernel.
-Seems some defconfig for arm920t was broken/changed.
+Please adjust and resubmit.
+Thanks!
 
-
-BR,
+Best regards,
 Ivan
 --------------------------------
 Embedded Linux engineer,
