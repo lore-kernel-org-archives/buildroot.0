@@ -1,29 +1,46 @@
-From: Hamish Moffatt <hamish@cloud.net.au>
-Date: Thu, 18 Oct 2007 15:47:31 +1000
-Subject: [Buildroot] svn commit: trunk/buildroot/package/kexec
-In-Reply-To: <20071018052607.AFA1AA458C@busybox.net>
-References: <20071018052607.AFA1AA458C@busybox.net>
-Message-ID: <20071018054731.GA5735@cloud.net.au>
+From: ulf at uclibc.org <ulf@uclibc.org>
+Date: Wed, 17 Oct 2007 22:56:05 -0700 (PDT)
+Subject: [Buildroot] svn commit: trunk/buildroot/package
+Message-ID: <20071018055605.BED72A65CB@busybox.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Wed, Oct 17, 2007 at 10:26:07PM -0700, ulf at uclibc.org wrote:
-> Author: ulf
-> Date: 2007-10-17 22:26:06 -0700 (Wed, 17 Oct 2007)
-> New Revision: 20278
-> 
-> Log:
-> Fix kexec build for ARM
-> 
-> Modified:
->    trunk/buildroot/package/kexec/kexec-tools-002-add-arch-arm.patch
+Author: ulf
+Date: 2007-10-17 22:56:05 -0700 (Wed, 17 Oct 2007)
+New Revision: 20279
 
-Thanks Ulf. Are patches related to bugs preferred on the mailing list or
-in the bug tracker?
+Log:
+Remove hyphen from images if empty rootfs suffix
 
-Hamish
--- 
-Hamish Moffatt VK3SB <hamish@debian.org> <hamish@cloud.net.au>
+Modified:
+   trunk/buildroot/package/Makefile.in
+
+
+Changeset:
+Modified: trunk/buildroot/package/Makefile.in
+===================================================================
+--- trunk/buildroot/package/Makefile.in	2007-10-18 05:26:06 UTC (rev 20278)
++++ trunk/buildroot/package/Makefile.in	2007-10-18 05:56:05 UTC (rev 20279)
+@@ -65,9 +65,12 @@
+ TARGET_LDFLAGS=-L$(STAGING_DIR)/lib -L$(STAGING_DIR)/usr/lib
+ endif
+ #########################################################################
+-ifeq ($(BR2_ROOTFS_SUFFIX),)
++#ifeq ($(BR2_ROOTFS_SUFFIX),)
++ROOTFS_SUFFIX:=$(strip $(subst ",, $(BR2_ROOTFS_SUFFIX)))
++ifeq ($(ROOTFS_SUFFIX),)
+ ROOTFS_SUFFIX:=
+ else
++XXXX=xxxx
+ ROOTFS_SUFFIX:=-$(BR2_ROOTFS_SUFFIX)
+ endif
+ 
+@@ -315,3 +318,5 @@
+ 
+ include package/Makefile.autotools.in
+ 
++package-status:
++	@echo	IMAGE=$(IMAGE)
