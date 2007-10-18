@@ -1,36 +1,68 @@
-From: Jorge S. <jorgesolla@gmail.com>
-Date: Thu, 18 Oct 2007 15:54:42 +0200
-Subject: [Buildroot] (AT91RM9200/DATAFLASH) Unable to create a *working*
-	jffs2 rootfs.
-In-Reply-To: <997232.91985.qm@web26201.mail.ukl.yahoo.com>
-References: <997232.91985.qm@web26201.mail.ukl.yahoo.com>
-Message-ID: <6090c5eb0710180654s7e6992eeib4abdaedb76f0197@mail.gmail.com>
+From: Steven Woody <narkewoody@gmail.com>
+Date: Thu, 18 Oct 2007 07:50:25 -0700
+Subject: [Buildroot] an error in make ( no .config under kernel
+	directory )
+In-Reply-To: <ed4892840710172245n7ebf6997q8f4722ba25d8c963@mail.gmail.com>
+References: <ed4892840710171811k6210e59cn2bb089a8ec21c297@mail.gmail.com>
+	<20071018013332.GA724@cloud.net.au>
+	<ed4892840710171850m506790fbga9e96c0a79250900@mail.gmail.com>
+	<20071018025203.GB2149@cloud.net.au>
+	<ed4892840710172245n7ebf6997q8f4722ba25d8c963@mail.gmail.com>
+Message-ID: <ed4892840710180750g2e7bc893h2bcbb9ac441d2957@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Ok, im going to give a try.
+On 10/17/07, Steven Woody <narkewoody@gmail.com> wrote:
+> On 10/18/07, Hamish Moffatt <hamish@cloud.net.au> wrote:
+> > On Thu, Oct 18, 2007 at 09:50:51AM +0800, Steven Woody wrote:
+> > > On 10/18/07, Hamish Moffatt <hamish@cloud.net.au> wrote:
+> > > > > cp -dpRf package/config/buildroot-config
+> > > > > /home/src/buildroot/project_build_arm/M501/buildroot-config
+> > > > > cp -dpf  /home/src/buildroot/project_build_arm/M501/linux-2.6.22.10/.config
+> > > > > ...
+> > > > >
+> > > > > and, i go to dl/M501/linux-2.6.22.10 directory and found no .config
+> > > > > file.  what's wrong here?  the linux-2.6.10 kernel was downloaded in
+> > > > > another computer and was put in dl directory.
+> > > >
+> > > > You have to specify the filename for your configuration file in "make
+> > > > menuconfig" -> kernel.
+> > >
+> > > understood.  but where can i got a configureation file for the
+> > > 2.6.22.10?  havn't buildroot supplied a default one suitable to
+> > > embedded target for me?
+> >
+> > I don't think buildroot can supply a meaningful default configuration
+> > file unless you are using one of the standard target boards found under
+> > target/device (and none of them match an M501).
+> >
+> > So you need to make your own. It appears that "make linux26-menuconfig"
+> > should launch the configuration editor for you.
+> >
+> > Hamish
+>
+> thanks for the answer.
+>
+> 1, when i type in `make linux26-menuconfig', an error i got:
+>
+> [ -f /home/src/buildroot/project_build_arm/M501/linux-2.6.22.10/.config
+> ] || cp  /home/src/buildroot/project_build_arm/M501/linux-2.6.22.10/.config
+> cp: missing destination file operand after
+> `/home/src/buildroot/project_build_arm/M501/linux-2.6.22.10/.config'
+>
+> it seems it still need a .config under the linux-2.6.22.10 directory.
+>
+> 2, my M501 is an ARM 922T, if buildroot did not provide a default
+> kernel configuration for it, where can i get a similar one as a good
+> startup?
+>
+> thanks.
+>
+> -
+> woody
+>
 
-2007/10/18, Michael Trimarchi <trimarchimichael@yahoo.it>:
->
-> Hi,
-> try this:
-> start the system with an itiatial ramdisk conteining flash_eraseall
->
-> flash_eraseall /dev/mtd2
->
-> mount -t jffs2 /dev/mtdblock2 /mnt
->
-> copy your system
-> and verify your filesystem
->
-> regards Michael
->
-> ------------------------------
-> L'email della prossima generazione? Puoi averla con la Nuova Yahoo! Mail<http://us.rd.yahoo.com/mail/it/taglines/gmail/nowyoucan/nextgen/*http://it.docs.yahoo.com/nowyoucan.html>
->
--------------- next part --------------
-An HTML attachment was scrubbed...
-URL: http://busybox.net/lists/buildroot/attachments/20071018/2f25244e/attachment.htm 
+please ...
