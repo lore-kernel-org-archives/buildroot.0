@@ -1,15 +1,35 @@
-From: Rex Luscus <sinestado@gmail.com>
-Date: Thu, 18 Oct 2007 19:10:12 -0300
-Subject: [Buildroot] Ignored patches - WHY?
-In-Reply-To: <4717E5FF.6070202@promwad.com>
-References: <a63ecaf0710180612n7f2de529g361b037b40c34727@mail.gmail.com>
-	<4717E1D7.8080100@promwad.com> <4717E5FF.6070202@promwad.com>
-Message-ID: <4717D9C4.6010103@gmail.com>
+From: ulf at uclibc.org <ulf@uclibc.org>
+Date: Thu, 18 Oct 2007 15:59:46 -0700 (PDT)
+Subject: [Buildroot] svn commit: trunk/buildroot/package/hotplug
+Message-ID: <20071018225946.F2D91A4A33@busybox.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-An HTML attachment was scrubbed...
-URL: http://busybox.net/lists/buildroot/attachments/20071018/df4ff934/attachment.htm 
+Author: ulf
+Date: 2007-10-18 15:59:44 -0700 (Thu, 18 Oct 2007)
+New Revision: 20294
+
+Log:
+Hotplug source is inside buildroot
+
+Modified:
+   trunk/buildroot/package/hotplug/hotplug.mk
+
+
+Changeset:
+Modified: trunk/buildroot/package/hotplug/hotplug.mk
+===================================================================
+--- trunk/buildroot/package/hotplug/hotplug.mk	2007-10-18 22:40:02 UTC (rev 20293)
++++ trunk/buildroot/package/hotplug/hotplug.mk	2007-10-18 22:59:44 UTC (rev 20294)
+@@ -26,7 +26,7 @@
+ 
+ hotplug: uclibc $(TARGET_DIR)/sbin/hotplug
+ 
+-hotplug-source: $(DL_DIR)/$(HOTPLUG_SOURCE)
++hotplug-source: $(HOTPLUG_SOURCE)
+ 
+ hotplug-clean:
+ 	rm -f $(TARGET_DIR)/sbin/hotplug
