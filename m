@@ -1,42 +1,42 @@
-From: Michael Trimarchi <trimarchimichael@yahoo.it>
-Date: Thu, 18 Oct 2007 12:24:15 +0000 (GMT)
-Subject: [Buildroot] (AT91RM9200/DATAFLASH) Unable to create a *working*
-	jffs2 rootfs.
-Message-ID: <941891.99466.qm@web26206.mail.ukl.yahoo.com>
+From: ulf at uclibc.org <ulf@uclibc.org>
+Date: Thu, 18 Oct 2007 05:37:09 -0700 (PDT)
+Subject: [Buildroot] svn commit: trunk/buildroot/target/linux
+Message-ID: <20071018123709.094DEA6836@busybox.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+Author: ulf
+Date: 2007-10-18 05:37:09 -0700 (Thu, 18 Oct 2007)
+New Revision: 20285
 
-Hi
+Log:
+Add more info to linux status
 
->at91_rtc at91_rtc: setting the system clock to 1998-01-01 00:06:50 (883613210)
-
->JFFS2 write-buffering enabled buffer (1056) erasesize (8448)
->jffs2_scan_eraseblock(): Magic bitmask 0x1985 not found at 0x00223ae4: 0x2001 instead
->jffs2_scan_eraseblock(): Magic bitmask 0x1985 not found at 0x00223ae8: 0x3c00 instead
-
->jffs2_scan_eraseblock(): Magic bitmask 0x1985 not found at 0x00223aec: 0x2000 instead
->jffs2_scan_eraseblock(): Magic bitmask 0x1985 not found at 0x00223af0: 0x2bf4 instead
->jffs2_scan_eraseblock(): Magic bitmask 0x1985 not found at 0x00223af4: 0x3000 instead
-
->jffs2_scan_eraseblock(): Magic bitmask 0x1985 not found at 0x00223af8: 0x3001 instead
-
-Check if your partition is alignment, but I think so :)
-regards
-Michael
+Modified:
+   trunk/buildroot/target/linux/Makefile.in.advanced
 
 
-
-
-
-
-
-      ___________________________________ 
-L'email della prossima generazione? Puoi averla con la nuova Yahoo! Mail: 
-http://it.docs.yahoo.com/nowyoucan.html
--------------- next part --------------
-An HTML attachment was scrubbed...
-URL: http://busybox.net/lists/buildroot/attachments/20071018/391fb938/attachment.htm 
+Changeset:
+Modified: trunk/buildroot/target/linux/Makefile.in.advanced
+===================================================================
+--- trunk/buildroot/target/linux/Makefile.in.advanced	2007-10-18 11:58:47 UTC (rev 20284)
++++ trunk/buildroot/target/linux/Makefile.in.advanced	2007-10-18 12:37:09 UTC (rev 20285)
+@@ -414,6 +414,7 @@
+ 	@echo LINUX26_BINLOC=$(LINUX26_BINLOC)
+ 	@echo LINUX26_FORMAT=$(LINUX26_FORMAT)
+ 	@echo LINUX26_KERNEL=$(LINUX26_KERNEL)
++	@echo LINUX26_KERNEL_NAME=$(LINUX26_KERNEL_NAME)
+ 	@echo BR2_KERNEL_SITE=$(BR2_KERNEL_SITE)
+ 	@echo BR2_KERNEL_PATCH_SITE=$(BR2_KERNEL_PATCH_SITE)
+ 	@echo BR2_KERNEL_PATCH=$(BR2_KERNEL_PATCH)
+@@ -436,6 +437,6 @@
+ 	@echo BR2_KERNEL_MM_LEVEL=$(BR2_KERNEL_MM_LEVEL)
+ 	@echo LINUX26_LATEST_GIT_PATCH=$(LINUX26_LATEST_GIT_PATCH)
+ 	@echo BR2_KERNEL_GIT_LEVEL=$(BR2_KERNEL_GIT_LEVEL)
++	@echo KERNEL_EXT=$(KERNEL_EXT)
+ 
+-
+ endif
