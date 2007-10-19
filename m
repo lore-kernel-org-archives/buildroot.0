@@ -1,43 +1,57 @@
-From: Thomas Lundquist <lists@zelow.no>
-Date: Fri, 19 Oct 2007 09:03:17 +0200
-Subject: [Buildroot] Semi OT - LZMA
-In-Reply-To: <47181CCC.3070208@gmail.com>
-References: <47181CCC.3070208@gmail.com>
-Message-ID: <20071019070317.GA14101@zelow.no>
+From: Babarovic Ivica <ivica.babarovic@asist.si>
+Date: Fri, 19 Oct 2007 09:32:17 +0200
+Subject: [Buildroot] svn At revision 20289 breakage
+In-Reply-To: <4718510D.5030602@asist.si>
+References: <4717A47F.4000908@asist.si>
+	<4717C93A.3080401@promwad.com>	<0c3501c811c4$63522850$01c4af0a@Glamdring>	<4717D0BA.1050300@promwad.com>	<0c5901c811c6$8aecca30$01c4af0a@Glamdring>
+	<4718510D.5030602@asist.si>
+Message-ID: <47185D81.7080201@asist.si>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Thu, Oct 18, 2007 at 11:56:12PM -0300, Rex Luscus wrote:
-> 
-> Somebody know why the lzma algorithm it's not in mainline kernel yet?
+Babarovic Ivica wrote:
+> Ulf Samuelsson wrote:
+>   
+>>>> Key question:
+>>>>
+>>>> What does
+>>>>
+>>>> $ cp a
+>>>>
+>>>> do?
+>>>>
+>>>> Best Regards
+>>>> Ulf Samuelsson
+>>>>
+>>>>         
+>>> target/linux/Makefile.in : line 148
+>>>
+>>> $(LINUX26_DIR)/.configured: $(LINUX26_DIR)/.patched $(LINUX26_KCONFIG)
+>>>        cp -dpf $(LINUX26_KCONFIG) $(LINUX26_DIR)/.config
+>>>        $(SED) '/CONFIG_AEABI=y/d' $(LINUX26_DIR)/.config
+>>>
+>>>
+>>> and LINUX26_KCONFIG is "" because BR2_PACKAGE_LINUX_KCONFIG=""
+>>>
+>>>
+>>>       
+>> Gotcha!
+>>
+>> Why not try the "Advanced Linux configuration" recently added
+>> This should allow you to do "make xconfig" to create the needed file.
+>>
+>>     
+> Wait! so we should now include our kernel .config files in buildroot 
+> build process?
+> If so Why?
+>
+> BR,
+> I.
+> _______________________________________________
+>   
+Never mind that. I've selected Kernel type (none).
 
-There are three different aspects:
-
- - LZMA compressed squashfs - this was the first kernel patches
-   including lzma I found.
-
- - LZMA compressed kernel (vmlinuz) - The first (and only) patches I've
-   seen and used was made by Ming-Ching Tiew after I asked around.
-
-   These patches works at least on i386 and ARM.
-
- - LZMA compressed initramfs and initrd - Same as with vmlinuz.
-
-   I tried to port this to ARM aswell (or rather, make one generic
-   all-platform patch) but hit problems with the missing FPU.
-
-The first one lives it's own life (away from me at least) and the latter
-two has started their own life aswell. I haven't seen any generic
-versions yet but someone may have made them. They should be generic
-before we try to send them to mainline.
-
-And the way to do that should be through the Tinylinux patches. They
-have Mortons attention now.
-
-I Don't know about more than these patches but please enoughten me if
-I'm blind.
-
-Thomas.
+I.
