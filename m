@@ -1,76 +1,53 @@
-From: Ivan Kuten <ivan.kuten@promwad.com>
-Date: Fri, 19 Oct 2007 21:37:40 +0300
-Subject: [Buildroot] [buildroot 0001542]: arm gcc-4.1.2 + oabi + soft
- floats	fails to build
-In-Reply-To: <90e28420e271f11d8ba34a6bf88df8e2@bugs.uclibc.org>
-References: <90e28420e271f11d8ba34a6bf88df8e2@bugs.uclibc.org>
-Message-ID: <4718F974.3010404@promwad.com>
+From: vanokuten at uclibc.org <vanokuten@uclibc.org>
+Date: Fri, 19 Oct 2007 10:41:58 -0700 (PDT)
+Subject: [Buildroot] svn commit: trunk/buildroot/toolchain/gcc/4.1.2
+Message-ID: <20071019174158.43A8CA686B@busybox.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-> Summary:                    arm gcc-4.1.2 + oabi + soft floats fails to build
-> Description: 
-> gcc 4.1.2 fails to build for OABI with soft floats enabled, with references
-> to missing float functions.
-> 
-> The patch I supplied for gcc-4.2.1 works as-is for 4.1.2 also.
-> So copying toolchain/gcc/4.2.1/910-soft-float.patch to toolchain/gcc/4.1.2
-> will fix this.
-> 
+Author: vanokuten
+Date: 2007-10-19 10:41:58 -0700 (Fri, 19 Oct 2007)
+New Revision: 20297
 
-Hi Hamish,
+Log:
+add soft-float support to 4.1.2 gcc, thanks to Hamish Moffatt
 
-I tried to apply your patch 910-soft-float.patch
-
-BR2_ARM_TYPE="ARM920T"
-BR2_ARM_OABI=y
-# BR2_ARM_EABI is not set
-BR2_ARCH="arm"
-..
-BR2_GCC_VERSION_4_1_2=y
-..
-BR2_GCC_VERSION="4.1.2"
-BR2_SOFT_FLOAT=y
-
-It compiled successfully but
-
-readelf -h build_arm/staging_dir/lib/libuClibc-0.9.29.so
-ELF Header:
-  Magic:   7f 45 4c 46 01 01 01 61 00 00 00 00 00 00 00 00
-  Class:                             ELF32
-  Data:                              2's complement, little endian
-  Version:                           1 (current)
-  OS/ABI:                            ARM
-  ABI Version:                       0
-  Type:                              DYN (Shared object file)
-  Machine:                           ARM
-  Version:                           0x1
-  Entry point address:               0xa520
-  Start of program headers:          52 (bytes into file)
-  Start of section headers:          525932 (bytes into file)
-  Flags:                             0x202, has entry point, GNU EABI, software FP
-  Size of this header:               52 (bytes)
-  Size of program headers:           32 (bytes)
-  Number of program headers:         6
-  Size of section headers:           40 (bytes)
-  Number of section headers:         23
-  Section header string table index: 22
+Added:
+   trunk/buildroot/toolchain/gcc/4.1.2/910-soft-float.patch
 
 
-Seems I get anyway EABI not OABI. Can you confirm this?
-
-seems like "arm gcc-4.1.2 + oabi + soft floats fails to build"
-should be treated as "arm gcc-4.1.2 + EABI + soft floats fails to build" ?
-
-
-
-Best regards,
-Ivan
---------------------------------
-Embedded Linux engineer,
-Promwad Company: http://www.promwad.com/
-Homepage : http://www.ivankuten.com/
---------------------------------
+Changeset:
+Added: trunk/buildroot/toolchain/gcc/4.1.2/910-soft-float.patch
+===================================================================
+--- trunk/buildroot/toolchain/gcc/4.1.2/910-soft-float.patch	                        (rev 0)
++++ trunk/buildroot/toolchain/gcc/4.1.2/910-soft-float.patch	2007-10-19 17:41:58 UTC (rev 20297)
+@@ -0,0 +1,26 @@
++--- gcc-4.2-20061205/gcc/config/arm/t-linux    2006-12-08 15:18:33.000000000 -0800
+++++ gcc-4.2-20061205/gcc/config/arm/t-linux    2006-12-08 15:18:33.000000000 -0800
++@@ -4,7 +4,10 @@
++ LIBGCC2_DEBUG_CFLAGS = -g0
++ 
++ LIB1ASMSRC = arm/lib1funcs.asm
++-LIB1ASMFUNCS = _udivsi3 _divsi3 _umodsi3 _modsi3 _dvmd_lnx
+++LIB1ASMFUNCS = _udivsi3 _divsi3 _umodsi3 _modsi3 _dvmd_lnx \
+++      _negdf2 _addsubdf3 _muldivdf3 _cmpdf2 _unorddf2 _fixdfsi _fixunsdfsi \
+++      _truncdfsf2 _negsf2 _addsubsf3 _muldivsf3 _cmpsf2 _unordsf2 \
+++      _fixsfsi _fixunssfsi _floatdidf _floatundidf _floatdisf _floatundisf
++ 
++ # MULTILIB_OPTIONS = mhard-float/msoft-float
++ # MULTILIB_DIRNAMES = hard-float soft-float
++
++--- gcc-4.2-20061205/gcc/config/arm/linux-elf.h        2006-12-08 15:18:33.000000000 -0800
+++++ gcc-4.2-20061205/gcc/config/arm/linux-elf.h        2006-12-08 15:18:33.000000000 -0800
++@@ -63,7 +63,7 @@
++    %{shared:-lc} \
++    %{!shared:%{profile:-lc_p}%{!profile:-lc}}"
++ 
++-#define LIBGCC_SPEC "%{msoft-float:-lfloat} %{mfloat-abi=soft*:-lfloat} -lgcc"
+++#define LIBGCC_SPEC "-lgcc"
++ 
++ #define GLIBC_DYNAMIC_LINKER "/lib/ld-linux.so.2"
++ 
