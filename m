@@ -1,112 +1,69 @@
 From: Ivan Kuten <ivan.kuten@promwad.com>
-Date: Fri, 19 Oct 2007 23:28:20 +0300
-Subject: [Buildroot] [buildroot 0001542]: arm gcc-4.1.2 + oabi + soft
- floats	fails to build
-In-Reply-To: <00f901c81284$6a0e6350$01c4af0a@Glamdring>
-References: <90e28420e271f11d8ba34a6bf88df8e2@bugs.uclibc.org>
-	<4718F974.3010404@promwad.com>
-	<00f901c81284$6a0e6350$01c4af0a@Glamdring>
-Message-ID: <47191364.4070301@promwad.com>
+Date: Fri, 19 Oct 2007 23:42:58 +0300
+Subject: [Buildroot] [buildroot 0001541]: NCFTP don't download
+In-Reply-To: <4154625e08f3dec89f32fcb6ecc7d343@bugs.uclibc.org>
+References: <4154625e08f3dec89f32fcb6ecc7d343@bugs.uclibc.org>
+Message-ID: <471916D2.6050909@promwad.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Ulf Samuelsson wrote:
-> ----- Original Message ----- 
-> From: "Ivan Kuten" <ivan.kuten@promwad.com>
-> To: <hamish@cloud.net.au>
-> Cc: <buildroot@uclibc.org>
-> Sent: Friday, October 19, 2007 8:37 PM
-> Subject: Re: [Buildroot] [buildroot 0001542]: arm gcc-4.1.2 + oabi + soft 
-> floats fails to build
+bugs at busybox.net wrote:
+> The following issue has been SUBMITTED. 
+> ====================================================================== 
+> http://busybox.net/bugs/view.php?id=1541 
+> ====================================================================== 
+> Reported By:                sushisan
+> Assigned To:                buildroot
+> ====================================================================== 
+> Project:                    buildroot
+> Issue ID:                   1541
+> Category:                   Architecture Specific
+> Reproducibility:            always
+> Severity:                   crash
+> Priority:                   normal
+> Status:                     assigned
+> ====================================================================== 
+> Date Submitted:             10-18-2007 16:37 PDT
+> Last Modified:              10-18-2007 16:37 PDT
+> ====================================================================== 
+> Summary:                    NCFTP don't download
+> Description: 
+> ncftp-3.2.0-src.tar.bz2 are not any more in the repo
 > 
+> ====================================================================== 
 > 
->>> Summary:                    arm gcc-4.1.2 + oabi + soft floats fails to 
->>> build
->>> Description:
->>> gcc 4.1.2 fails to build for OABI with soft floats enabled, with 
->>> references
->>> to missing float functions.
->>>
->>> The patch I supplied for gcc-4.2.1 works as-is for 4.1.2 also.
->>> So copying toolchain/gcc/4.2.1/910-soft-float.patch to 
->>> toolchain/gcc/4.1.2
->>> will fix this.
->>>
->> Hi Hamish,
->>
->> I tried to apply your patch 910-soft-float.patch
->>
->> BR2_ARM_TYPE="ARM920T"
->> BR2_ARM_OABI=y
->> # BR2_ARM_EABI is not set
->> BR2_ARCH="arm"
->> ..
->> BR2_GCC_VERSION_4_1_2=y
->> ..
->> BR2_GCC_VERSION="4.1.2"
->> BR2_SOFT_FLOAT=y
+> Issue History 
+> Date Modified   Username       Field                    Change               
+> ====================================================================== 
+> 10-18-07 16:37  sushisan       New Issue                                    
+> 10-18-07 16:37  sushisan       Status                   new => assigned     
+> 10-18-07 16:37  sushisan       Assigned To               => buildroot       
+> 10-18-07 16:37  sushisan       File Added: br2-ncftp.patch                    
+> ======================================================================
 > 
-> 
->> It compiled successfully but
->>
->> readelf -h build_arm/staging_dir/lib/libuClibc-0.9.29.so
->> ELF Header:
->>  Magic:   7f 45 4c 46 01 01 01 61 00 00 00 00 00 00 00 00
->>  Class:                             ELF32
->>  Data:                              2's complement, little endian
->>  Version:                           1 (current)
->>  OS/ABI:                            ARM
->>  ABI Version:                       0
->>  Type:                              DYN (Shared object file)
->>  Machine:                           ARM
->>  Version:                           0x1
->>  Entry point address:               0xa520
->>  Start of program headers:          52 (bytes into file)
->>  Start of section headers:          525932 (bytes into file)
->>  Flags:                             0x202, has entry point, GNU EABI, 
->> software FP
->>  Size of this header:               52 (bytes)
->>  Size of program headers:           32 (bytes)
->>  Number of program headers:         6
->>  Size of section headers:           40 (bytes)
->>  Number of section headers:         23
->>  Section header string table index: 22
->>
->>
->> Seems I get anyway EABI not OABI. Can you confirm this?
-> 
-> Once you have stored you ".config" the first time, the compiler
-> will not change OABI/EABI.
-> It will go for the string "linux-...-eabi" which is probably present in your 
-> .config
-> 
-> $ grep eabi .config
-> 
-> to check.
-> 
-> 
-> Best Regards
-> Ulf Samuelsson
-> 
+> _______________________________________________
+> buildroot mailing list
+> buildroot at uclibc.org
+> http://busybox.net/mailman/listinfo/buildroot
 
-Ulf,
 
-I have these - which resemble your "linux-...-eabi" prefix:
+Hi, I have applied your patch, but I have the following error when BR2_PACKAGE_NCFTP_UTILS=y selected:
 
-BR2_GNU_BUILD_SUFFIX="pc-linux-gnu"
-BR2_GNU_TARGET_SUFFIX="linux-uclibc"
+make[1]: Leaving directory `/opt/buildroot/build_arm/ncftp-3.2.1'
+/usr/bin/install -m 0755 /opt/buildroot/build_arm/ncftp-3.2.1/bin/ncftp /opt/buildroot/project_build_arm/uclibc/root/usr/bin
+/opt/buildroot/build_arm/staging_dir/usr/bin/arm-linux-uclibc-strip --remove-section=.comment --remove-section=.note --strip-all /opt/buildroot/project_build_arm/uclibc/root/usr/bin/ncftp
+/usr/bin/install -m 0755 /opt/buildroot/build_arm/ncftp-3.2.1/bin/ncftpbatch /opt/buildroot/project_build_arm/uclibc/root/usr/bin
+/opt/buildroot/build_arm/staging_dir/usr/bin/arm-linux-uclibc-strip --remove-section=.comment --remove-section=.note --strip-all /opt/buildroot/project_build_arm/uclibc/root/usr/bin/ncftpbatch
+/usr/bin/install -m 0755 /opt/buildroot/build_arm/ncftp-3.2.1/bin/ncftpbookmarks /opt/buildroot/project_build_arm/uclibc/root/usr/bin
+/usr/bin/install: cannot stat `/opt/buildroot/build_arm/ncftp-3.2.1/bin/ncftpbookmarks': No such file or directory
+make: *** [/opt/buildroot/project_build_arm/uclibc/root/usr/bin/ncftpbookmarks] Error 1
 
-and this :
+If selecting only BR2_PACKAGE_NCFTP=y , build is ok, however I did not verified it on the target.
 
-# BR2_ARM_EABI is not set
-
-which is commented out.
-
-No lower case "eabi" at all.
-
+Can you fix issue with BR2_PACKAGE_NCFTP_UTILS=y ?
 
 Best regards,
 Ivan
