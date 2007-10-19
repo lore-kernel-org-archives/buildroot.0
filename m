@@ -1,39 +1,49 @@
-From: Steven Woody <narkewoody@gmail.com>
-Date: Fri, 19 Oct 2007 09:15:25 +0800
-Subject: [Buildroot] how can make buildroot work
-Message-ID: <ed4892840710181815i6e42a7fbg97f4083f28a90590@mail.gmail.com>
+From: bugs at busybox.net <bugs@busybox.net>
+Date: Thu, 18 Oct 2007 19:40:46 -0700
+Subject: [Buildroot] [buildroot 0001541]: NCFTP don't download
+Message-ID: <37c043b6e84143a66352fd987f428117@bugs.uclibc.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-hi forks,
 
-i have not yet make buildroot work on my linux. i found following two
-problems and need help from you experts.
+A NOTE has been added to this issue. 
+====================================================================== 
+http://busybox.net/bugs/view.php?id=1541 
+====================================================================== 
+Reported By:                sushisan
+Assigned To:                buildroot
+====================================================================== 
+Project:                    buildroot
+Issue ID:                   1541
+Category:                   Architecture Specific
+Reproducibility:            always
+Severity:                   crash
+Priority:                   normal
+Status:                     assigned
+====================================================================== 
+Date Submitted:             10-18-2007 16:37 PDT
+Last Modified:              10-18-2007 19:40 PDT
+====================================================================== 
+Summary:                    NCFTP don't download
+Description: 
+ncftp-3.2.0-src.tar.bz2 are not any more in the repo
 
-1,  even after completed the `make source',  in the middle of `make'
-process, buildroot still need to download many other packages.  it's
-wired.  for example,  in the `make source' stage, it did not download
-the linux-2.6.xx.tar.bz2  but do it when i run `make'.   i can not
-understand.
+====================================================================== 
 
-2,  in the `make',  i failed because i don't have a `.config'  file
-for the kernel.  but havn't buildroot provided any help to make a
-baisc .config file for my 920 ARM target?  i don't believe it and
-asked this list.  but i have not get a answer.
+---------------------------------------------------------------------- 
+ sushisan - 10-18-07 19:40  
+---------------------------------------------------------------------- 
+This patch upgrade to ncftp-3.2.1. sorry 
 
-
-does this mean buildroot hard to use and understand?
-
-
-thanks in advance.
-
-
--- 
-woody
-
-then sun rose thinly from the sea and the old man could see the other
-boats, low on the water and well in toward the shore, spread out
-across the current.
+Issue History 
+Date Modified   Username       Field                    Change               
+====================================================================== 
+10-18-07 16:37  sushisan       New Issue                                    
+10-18-07 16:37  sushisan       Status                   new => assigned     
+10-18-07 16:37  sushisan       Assigned To               => buildroot       
+10-18-07 16:37  sushisan       File Added: br2-ncftp.patch                    
+10-18-07 19:40  sushisan       Note Added: 0002833                          
+======================================================================
