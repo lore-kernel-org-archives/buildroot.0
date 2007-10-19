@@ -1,27 +1,54 @@
-From: Ivan Kuten <ivan.kuten@promwad.com>
-Date: Sat, 20 Oct 2007 01:42:36 +0300
-Subject: [Buildroot] [buildroot 0001541]: NCFTP don't download
-In-Reply-To: <20071019213358.GA1869@aon.at>
-References: <4154625e08f3dec89f32fcb6ecc7d343@bugs.uclibc.org>
-	<471916D2.6050909@promwad.com> <20071019213358.GA1869@aon.at>
-Message-ID: <471932DC.2000906@promwad.com>
+From: bugs at busybox.net <bugs@busybox.net>
+Date: Fri, 19 Oct 2007 14:48:10 -0700
+Subject: [Buildroot] [buildroot 0001528]: 'make source' doesn't download
+	gcc-4.2.1
+Message-ID: <b7e439b5ae8111c27f6b5602448a3be5@bugs.uclibc.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-> 
-> Can you please follow-up in the issue and not on the ML so it is tracked properly?
-> Thanks.
 
-OK, you mean to use bug tracking and not to post on mailing list?
+A NOTE has been added to this issue. 
+====================================================================== 
+http://busybox.net/bugs/view.php?id=1528 
+====================================================================== 
+Reported By:                hmoffatt
+Assigned To:                buildroot
+====================================================================== 
+Project:                    buildroot
+Issue ID:                   1528
+Category:                   Other
+Reproducibility:            always
+Severity:                   minor
+Priority:                   normal
+Status:                     assigned
+====================================================================== 
+Date Submitted:             10-14-2007 21:45 PDT
+Last Modified:              10-19-2007 14:48 PDT
+====================================================================== 
+Summary:                    'make source' doesn't download gcc-4.2.1
+Description: 
+'make source' didn't download gcc-4.2.1; it was downloaded later in the
+build process ok.
+====================================================================== 
 
+---------------------------------------------------------------------- 
+ vanokuten - 10-19-07 14:48  
+---------------------------------------------------------------------- 
+I made a small patch which fixes "make source"  for 4.2.1 and for 4.1.2.
+Could you please verify?
+Probably it's not a real fix but just a quick hack - if anyone knows
+better approach just tell me. 
 
-Best regards,
-Ivan
---------------------------------
-Embedded Linux engineer,
-Promwad Company: http://www.promwad.com/
-Homepage : http://www.ivankuten.com/
---------------------------------
+Issue History 
+Date Modified   Username       Field                    Change               
+====================================================================== 
+10-14-07 21:45  hmoffatt       New Issue                                    
+10-14-07 21:45  hmoffatt       Status                   new => assigned     
+10-14-07 21:45  hmoffatt       Assigned To               => buildroot       
+10-19-07 14:47  vanokuten      File Added: make-source-gcc.patch                
+   
+10-19-07 14:48  vanokuten      Note Added: 0002845                          
+======================================================================
