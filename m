@@ -1,8 +1,10 @@
 From: Ulf Samuelsson <ulf@atmel.com>
-Date: Fri, 19 Oct 2007 09:38:04 +0200
-Subject: [Buildroot] how can make buildroot work
-References: <ed4892840710181815i6e42a7fbg97f4083f28a90590@mail.gmail.com>
-Message-ID: <002f01c81223$039941f0$01c4af0a@Glamdring>
+Date: Fri, 19 Oct 2007 09:45:30 +0200
+Subject: [Buildroot] svn At revision 20289 breakage
+References: <4717A47F.4000908@asist.si>
+	<4717C93A.3080401@promwad.com><0c3501c811c4$63522850$01c4af0a@Glamdring><4717D0BA.1050300@promwad.com><0c5901c811c6$8aecca30$01c4af0a@Glamdring>
+	<4718510D.5030602@asist.si>
+Message-ID: <008201c81224$6c96bd80$01c4af0a@Glamdring>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -10,79 +12,74 @@ Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
 ----- Original Message ----- 
-From: "Steven Woody" <narkewoody@gmail.com>
+From: "Babarovic Ivica" <ivica.babarovic@asist.si>
 To: <buildroot@uclibc.org>
-Sent: Friday, October 19, 2007 3:15 AM
-Subject: [Buildroot] how can make buildroot work
+Sent: Friday, October 19, 2007 8:39 AM
+Subject: Re: [Buildroot] svn At revision 20289 breakage
 
 
-> hi forks,
-> 
-> i have not yet make buildroot work on my linux. i found following two
-> problems and need help from you experts.
-> 
-> 1,  even after completed the `make source',  in the middle of `make'
-> process, buildroot still need to download many other packages.  it's
-> wired.  for example,  in the `make source' stage, it did not download
-> the linux-2.6.xx.tar.bz2  but do it when i run `make'.   i can not
-> understand.
-
-So there is a bug somewhere, find it,   fix it,   send in the patch.
-Hopefully someone will apply it
-
-This is a collaborative effort and you can't expect anyone to do
-any work for you.
-
-> 
-> 2,  in the `make',  i failed because i don't have a `.config'  file
-> for the kernel.  but havn't buildroot provided any help to make a
-> baisc .config file for my 920 ARM target?  i don't believe it and
-> asked this list.  but i have not get a answer.
-> 
-Yes you have, you just did not read the answers.
-
-Buildroot supplies, in a very few cases, a linux ".config" file.
-
-The normal case is that the user generates his/her own linux ".config" file
-by entering the linux directory and type
-
-make ARCH=<arch> xconfig
-
-I.E::
-make ARCH=arm xconfig
-for the "arm" architecture.
-
-Then set the options you need to set for your specific linux kernel.
-
-Buildroot is not the place where to learn how to configure linux.
-If you do not know how to configure linux, then you need to
-find someone else who knows this.
-
-I have suggested the vendor of your chip as a source of ".config".
-
-If they do not supply you with ready made .config examples,
-then I suggest you switch to another chip.
-
-Once you have a ".config", you need to configure buildroot to 
-use it, and this is done in the kernel part of make menuconfig.
-
-> 
-> does this mean buildroot hard to use and understand?
-> 
+> Ulf Samuelsson wrote:
+>>>>
+>>>> Key question:
+>>>>
+>>>> What does
+>>>>
+>>>> $ cp a
+>>>>
+>>>> do?
+>>>>
+>>>> Best Regards
+>>>> Ulf Samuelsson
+>>>>
+>>>
+>>> target/linux/Makefile.in : line 148
+>>>
+>>> $(LINUX26_DIR)/.configured: $(LINUX26_DIR)/.patched $(LINUX26_KCONFIG)
+>>>        cp -dpf $(LINUX26_KCONFIG) $(LINUX26_DIR)/.config
+>>>        $(SED) '/CONFIG_AEABI=y/d' $(LINUX26_DIR)/.config
+>>>
+>>>
+>>> and LINUX26_KCONFIG is "" because BR2_PACKAGE_LINUX_KCONFIG=""
+>>>
+>>>
+>>
+>> Gotcha!
+>>
+>> Why not try the "Advanced Linux configuration" recently added
+>> This should allow you to do "make xconfig" to create the needed file.
+>>
+> Wait! so we should now include our kernel .config files in buildroot
+> build process?
+> If so Why?
 
 
-Buildroot is real easy to use, once you know what to expect from it.
-You are expecting that a ".config" exist for any conceivable chip,
-and that is not the case.
+It is always the case that you have to provide a ".config" file for linux.
 
-> 
-> thanks in advance.
-> 
-> 
-> -- 
-> woody
-> 
+For some lucky souls Buildroot will do it for you.
+This is when there is an appropriate definition somewhere in the target 
+directory,
+and if you have supplied the right kernel.
+
+For some unlucky souls, they now have an option to start a "make xconfig"
+to get a window allowing them to configure things instead of having a failed 
+build.
+
+>
+> BR,
+> I.
 
 
 Best Regards
-Ulf Samuelsson 
+Ulf Samuelsson                ulf at atmel.com
+Atmel Nordic AB
+Mail:  Box 2033, 174 02 Sundbyberg, Sweden
+Visit:  Kavalleriv?gen 24, 174 58 Sundbyberg, Sweden
+Phone +46 (8) 441 54 22     Fax +46 (8) 441 54 29
+GSM    +46 (706) 22 44 57
+
+Technical support when I am not available:
+AT89 C51 Applications Group: mailto:micro.hotline at nto.atmel.com
+AT90 AVR Applications Group: mailto:avr at atmel.com
+AT91 ARM Applications Group: mailto:at91support at atmel.com
+FPSLIC Application Group: mailto:fpslic at atmel.com Best AVR
+link: www.avrfreaks.net 
