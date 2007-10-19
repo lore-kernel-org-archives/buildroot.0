@@ -1,41 +1,85 @@
-From: Hamish Moffatt <hamish@cloud.net.au>
-Date: Fri, 19 Oct 2007 18:37:45 +1000
-Subject: [Buildroot] [buildroot 0001543]: gcc 4.1.2 libmudflap fails
-	to	build due to missing execinfo.h
-In-Reply-To: <47188770.1070704@promwad.com>
-References: <e73b1f587b0c993034a1396b7e2cc5d3@bugs.uclibc.org>
-	<47188770.1070704@promwad.com>
-Message-ID: <20071019083745.GA19263@cloud.net.au>
+From: Ulf Samuelsson <ulf@atmel.com>
+Date: Fri, 19 Oct 2007 10:35:11 +0200
+Subject: [Buildroot] svn At revision 20289 breakage
+References: <4717A47F.4000908@asist.si>	<4717C93A.3080401@promwad.com><0c3501c811c4$63522850$01c4af0a@Glamdring><4717D0BA.1050300@promwad.com><0c5901c811c6$8aecca30$01c4af0a@Glamdring>	<4718510D.5030602@asist.si>	<008201c81224$6c96bd80$01c4af0a@Glamdring>
+	<4718671F.3040005@asist.si> <4718850D.9020302@promwad.com>
+Message-ID: <00da01c8122b$716ad6a0$01c4af0a@Glamdring>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Fri, Oct 19, 2007 at 09:31:12AM -0100, Kuten Ivan wrote:
-> > Description: 
-> > During the gcc-4.1.2-final build, libmudflap files to compile due to
-> > missing execinfo.h. configure detects that execinfo.h exists but is
-> > unusable, but that's because it used the wrong cpp and found the host
-> > version instead.
-> > 
-> > The fix is to pass CPP=<target_cpp>, as in the attached patch.
-> 
-> Is that bug specific to "gcc-4.1.2 + oabi + soft float" configuration?
-> Because I remember to build&run all correctly with "gcc-4.1.2 + eabi + no soft float".
+link: www.avrfreaks.net
+----- Original Message ----- 
+From: "Kuten Ivan" <ivan.kuten@promwad.com>
+To: "Babarovic Ivica" <ivica.babarovic@asist.si>
+Cc: "Ulf Samuelsson" <ulf@atmel.com>; <buildroot@uclibc.org>
+Sent: Friday, October 19, 2007 12:21 PM
+Subject: Re: [Buildroot] svn At revision 20289 breakage
 
-Hi Ivan,
 
-I have no idea - I did not try EABI. I wasted too much time with 4.2.1
-with EABI to try it again. Maybe this patch is not required for everyone
-but it was required for me.
+> Babarovic Ivica wrote:
+>> Ulf Samuelsson wrote:
+>>> It is always the case that you have to provide a ".config" file for
+>>> linux.
+>>>
+>>> For some lucky souls Buildroot will do it for you.
+>>> This is when there is an appropriate definition somewhere in the
+>>> target directory,
+>>> and if you have supplied the right kernel.
+>> Well, I guess I was lucky until now. I never provided any kernel or
+>> .config files.
+>> I still fail to see why this is important for buildroot build. Kernel
+>> headers?
+>>
+>> I have a .config file from a kernel I build. Should I put that into
+>> buildroot process?
+>> What differences would it make?
+>>> For some unlucky souls, they now have an option to start a "make 
+>>> xconfig"
+>>> to get a window allowing them to configure things instead of having a
+>>> failed build.
+>>>
+>> _______________________________________________
+>> buildroot mailing list
+>> buildroot at uclibc.org
+>> http://busybox.net/mailman/listinfo/buildroot
+>
+> As for me, I'm not using building kernel in buildroot - I'm building it 
+> separately.
+> And with recent changes made by Ulf, we have only to regenerate our 
+> .config buildroot config
+> and to select Kernel -> "none". And I have buildroot build OK again.
+> The only thing that Ulf forget to warn people that if they have old 
+> buildroot .config
+> they must regenerate it and select kernel .config or kernel none , 
+> otherwise you will get that error
+> messages when doing cp.
+>
 
-Soft float does not compile for OABI for other reasons (see the other
-bug I submitted) too so who knows.
+It was Bernhard which introduced the new kernel selection so dont blame me.
 
-I had 4.2.1 OABI working, but a kernel I compiled with it does not boot.
-4.1.2 compiles the same kernel with a working result.
+The old way of building the kernel really suck, so I understand why you 
+build it separately.
 
-Hamish
--- 
-Hamish Moffatt VK3SB <hamish@debian.org> <hamish@cloud.net.au>
+I added the Advanced Kernel Configuration last week to fix those problems.
+You can select any 2.6.x.y kernel.
+You can add -rc# patches, -mm# patches and your own proprietary patch which 
+is located in $(DL_DIR)
+You can select easily zImage,bzImage, uImage, vmlinux (proprietary).
+    It would be good if you gave that one a try and provide feedback on any 
+drawbacks you see.
+
+
+> Best regards,
+> Ivan
+
+
+Best Regards
+Ulf Samuelsson                ulf at atmel.com
+Atmel Nordic AB
+Mail:  Box 2033, 174 02 Sundbyberg, Sweden
+Visit:  Kavalleriv?gen 24, 174 58 Sundbyberg, Sweden
+Phone +46 (8) 441 54 22     Fax +46 (8) 441 54 29
+GSM    +46 (706) 22 44 57
