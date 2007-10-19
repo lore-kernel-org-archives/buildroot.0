@@ -1,43 +1,90 @@
-From: vanokuten at uclibc.org <vanokuten@uclibc.org>
-Date: Fri, 19 Oct 2007 10:51:01 -0700 (PDT)
-Subject: [Buildroot] svn commit: trunk/buildroot/toolchain/gcc
-Message-ID: <20071019175101.D1169A6851@busybox.net>
+From: Ulf Samuelsson <ulf@atmel.com>
+Date: Fri, 19 Oct 2007 21:14:27 +0200
+Subject: [Buildroot] [buildroot 0001542]: arm gcc-4.1.2 + oabi + soft
+	floats	fails to build
+References: <90e28420e271f11d8ba34a6bf88df8e2@bugs.uclibc.org>
+	<4718F974.3010404@promwad.com>
+Message-ID: <00f901c81284$6a0e6350$01c4af0a@Glamdring>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Author: vanokuten
-Date: 2007-10-19 10:51:00 -0700 (Fri, 19 Oct 2007)
-New Revision: 20298
-
-Log:
-fix libmudflap build failure for 4.1.2 gcc - pass CPP=<target_cpp>, thanks to Hamish Moffatt
-
-Modified:
-   trunk/buildroot/toolchain/gcc/gcc-uclibc-3.x.mk
+----- Original Message ----- 
+From: "Ivan Kuten" <ivan.kuten@promwad.com>
+To: <hamish@cloud.net.au>
+Cc: <buildroot@uclibc.org>
+Sent: Friday, October 19, 2007 8:37 PM
+Subject: Re: [Buildroot] [buildroot 0001542]: arm gcc-4.1.2 + oabi + soft 
+floats fails to build
 
 
-Changeset:
-Modified: trunk/buildroot/toolchain/gcc/gcc-uclibc-3.x.mk
-===================================================================
---- trunk/buildroot/toolchain/gcc/gcc-uclibc-3.x.mk	2007-10-19 17:41:58 UTC (rev 20297)
-+++ trunk/buildroot/toolchain/gcc/gcc-uclibc-3.x.mk	2007-10-19 17:51:00 UTC (rev 20298)
-@@ -242,6 +242,7 @@
- 	(cd $(GCC_BUILD_DIR2); rm -rf config.cache; \
- 		$(HOST_CONFIGURE_OPTS) \
- 		GCC=$(TARGET_CROSS)gcc \
-+		CPP=$(TARGET_CROSS)cpp \
- 		LDFLAGS_FOR_TARGET="$(patsubst %,LDFLAGS+=-Wl$(comma)%,$(TARGET_LDFLAGS)) -L$(STAGING_DIR)/lib -L$(STAGING_DIR)/usr/lib" \
- 		$(GCC_DIR)/configure \
- 		--prefix=$(STAGING_DIR) \
-@@ -267,7 +268,7 @@
- 	touch $@
- 
- $(GCC_BUILD_DIR2)/.compiled: $(GCC_BUILD_DIR2)/.configured
--	PATH=$(TARGET_PATH) $(MAKE) $(HOST_CONFIGURE_OPTS) -C $(GCC_BUILD_DIR2) all
-+	PATH=$(TARGET_PATH) $(MAKE) $(HOST_CONFIGURE_OPTS) CPP=$(TARGET_CROSS)cpp -C $(GCC_BUILD_DIR2) all
- 	touch $@
- 
- $(GCC_BUILD_DIR2)/.installed: $(GCC_BUILD_DIR2)/.compiled
+>> Summary:                    arm gcc-4.1.2 + oabi + soft floats fails to 
+>> build
+>> Description:
+>> gcc 4.1.2 fails to build for OABI with soft floats enabled, with 
+>> references
+>> to missing float functions.
+>>
+>> The patch I supplied for gcc-4.2.1 works as-is for 4.1.2 also.
+>> So copying toolchain/gcc/4.2.1/910-soft-float.patch to 
+>> toolchain/gcc/4.1.2
+>> will fix this.
+>>
+>
+> Hi Hamish,
+>
+> I tried to apply your patch 910-soft-float.patch
+>
+> BR2_ARM_TYPE="ARM920T"
+> BR2_ARM_OABI=y
+> # BR2_ARM_EABI is not set
+> BR2_ARCH="arm"
+> ..
+> BR2_GCC_VERSION_4_1_2=y
+> ..
+> BR2_GCC_VERSION="4.1.2"
+> BR2_SOFT_FLOAT=y
+
+
+> It compiled successfully but
+>
+> readelf -h build_arm/staging_dir/lib/libuClibc-0.9.29.so
+> ELF Header:
+>  Magic:   7f 45 4c 46 01 01 01 61 00 00 00 00 00 00 00 00
+>  Class:                             ELF32
+>  Data:                              2's complement, little endian
+>  Version:                           1 (current)
+>  OS/ABI:                            ARM
+>  ABI Version:                       0
+>  Type:                              DYN (Shared object file)
+>  Machine:                           ARM
+>  Version:                           0x1
+>  Entry point address:               0xa520
+>  Start of program headers:          52 (bytes into file)
+>  Start of section headers:          525932 (bytes into file)
+>  Flags:                             0x202, has entry point, GNU EABI, 
+> software FP
+>  Size of this header:               52 (bytes)
+>  Size of program headers:           32 (bytes)
+>  Number of program headers:         6
+>  Size of section headers:           40 (bytes)
+>  Number of section headers:         23
+>  Section header string table index: 22
+>
+>
+> Seems I get anyway EABI not OABI. Can you confirm this?
+
+Once you have stored you ".config" the first time, the compiler
+will not change OABI/EABI.
+It will go for the string "linux-...-eabi" which is probably present in your 
+.config
+
+$ grep eabi .config
+
+to check.
+
+
+Best Regards
+Ulf Samuelsson
