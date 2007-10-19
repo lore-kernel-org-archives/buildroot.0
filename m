@@ -1,95 +1,39 @@
-From: Ulf Samuelsson <ulf@atmel.com>
-Date: Fri, 19 Oct 2007 01:47:46 +0200
-Subject: [Buildroot] Ignored patches - WHY?
-In-Reply-To: <4717EE0C.2090900@promwad.com>
-References: <a63ecaf0710180612n7f2de529g361b037b40c34727@mail.gmail.com>
-	<4717DC5B.9000508@promwad.com> <4717DAC8.5050209@gmail.com>
-	<4717EE0C.2090900@promwad.com>
-Message-ID: <1192751266.5848.7.camel@c-f97ee255>
+From: Steven Woody <narkewoody@gmail.com>
+Date: Fri, 19 Oct 2007 09:15:25 +0800
+Subject: [Buildroot] how can make buildroot work
+Message-ID: <ed4892840710181815i6e42a7fbg97f4083f28a90590@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-fre 2007-10-19 klockan 02:36 +0300 skrev Ivan Kuten:
-> Rex Luscus wrote:
-> > Ok. This patch only change the dir of the bin of daemon.
-> > 
-> > Can you change this or you want that I make a new patch?
-> > 
-> > 
-> > PD: ok, ok, my english is HORRIBLE, but I don't use this too often for write, 
-> > only for read :-)
-> > 
-> > 
-> > Ivan Kuten escribi?:
-> >> Sushi Sensei wrote:
-> >>   
-> >>> I have send some patches ( 0001534, 0001533, 0001532) this week with
-> >>> the Patch Tracking page, the week before I have send the same patches
-> >>> without notices of this inclusion or error, some patch was send 2 or 3
-> >>> week before and was ignored... There are some problem with this
-> >>> patches??
-> >>>     
-> >>
-> >> Hi Sushi,
-> >>
-> >> I'm sorry I can not apply this patch : br2-olsr.patch:
-> >>
-> >> Index: package/olsr/S50olsr
-> >> ===================================================================
-> >> --- package/olsr/S50olsr        (revisi?n: 20228)
-> >> +++ package/olsr/S50olsr        (copia de trabajo)
-> >> @@ -6,7 +6,7 @@
-> >>  case "$1" in
-> >>    start)
-> >>         echo "Starting OLSRd daemon: "
-> >> -       /usr/sbin/olsrd -d 0 -nofork &
-> >> +       /usr/bin/olsrd -d 0 -nofork &
-> >>         ;;
-> >>    stop)
-> >>         echo "Stopping OLSRd daemon: "
-> >>
-> >>   
-> > 
-> 
-> >>Because an daemon should reside in /usr/sbin directory ,
-> >>please check other buildroot packages such as dropbear, mdnsresponder, and so on - they are all in sbin dir.
-> >>You should change OLSR_TARGET_BINARY:=usr/bin/olsrd instead.
-> 
-> Unfortunately I could not manage to build OLSR correctly:
-> 
-> /opt/buildroot/build_arm/staging_dir/usr/bin/arm-linux-uclibc-strip olsrd_dot_draw.so.0.3
-> install -D -m 755 olsrd_dot_draw.so.0.3 /usr/lib/olsrd_dot_draw.so.0.3; /sbin/ldconfig -n /usr/lib
-> install: cannot create regular file `/usr/lib/olsrd_dot_draw.so.0.3': Permission denied
-> ...
-> make[2]: Entering directory `/opt/buildroot/build_arm/olsrd-0.5.3/lib/dyn_gw'
-> /opt/buildroot/build_arm/staging_dir/usr/bin/arm-linux-uclibc-strip olsrd_dyn_gw.so.0.4
-> install -D -m 755 olsrd_dyn_gw.so.0.4 /usr/lib/olsrd_dyn_gw.so.0.4; /sbin/ldconfig -n /usr/lib
-> install: cannot create regular file `/usr/lib/olsrd_dyn_gw.so.0.4': Permission denied
-> make[2]: Leaving directory `/opt/buildroot/build_arm/olsrd-0.5.3/lib/dyn_gw'
-> ...
->  make[2]: Entering directory `/opt/buildroot/build_arm/olsrd-0.5.3/lib/secure'
-> /opt/buildroot/build_arm/staging_dir/usr/bin/arm-linux-uclibc-strip olsrd_secure.so.0.5
-> install -D -m 755 olsrd_secure.so.0.5 /usr/lib/olsrd_secure.so.0.5; /sbin/ldconfig -n /usr/lib
-> install: cannot create regular file `/usr/lib/olsrd_secure.so.0.5': Permission denied
-> make[2]: Leaving directory `/opt/buildroot/build_arm/olsrd-0.5.3/lib/secure'
-> 
-> Could you provide a patch?
-> 
+hi forks,
 
-OLSR will do an install in $(DESTDIR)/usr/lib
-You need to add DESTDIR=$(STAGING_DIR) to the make.
+i have not yet make buildroot work on my linux. i found following two
+problems and need help from you experts.
 
-I.E:
+1,  even after completed the `make source',  in the middle of `make'
+process, buildroot still need to download many other packages.  it's
+wired.  for example,  in the `make source' stage, it did not download
+the linux-2.6.xx.tar.bz2  but do it when i run `make'.   i can not
+understand.
 
-$(OLSR_DIR)/$(OLSR_BINARY): $(OLSR_DIR)/.unpacked
-	$(MAKE) $(TARGET_CONFIGURE_OPTS) DESTDIR=$(STAGING_DIR) -C$(OLSR_DIR)
-olsrd $(OLSR_PLUGINS)
+2,  in the `make',  i failed because i don't have a `.config'  file
+for the kernel.  but havn't buildroot provided any help to make a
+baisc .config file for my 920 ARM target?  i don't believe it and
+asked this list.  but i have not get a answer.
 
+
+does this mean buildroot hard to use and understand?
+
+
+thanks in advance.
 
 
 -- 
-Best Regards,
-Ulf Samuelsson
+woody
+
+then sun rose thinly from the sea and the old man could see the other
+boats, low on the water and well in toward the shore, spread out
+across the current.
