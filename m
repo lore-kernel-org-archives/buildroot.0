@@ -1,7 +1,7 @@
 From: bugs at busybox.net <bugs@busybox.net>
-Date: Fri, 19 Oct 2007 12:49:08 -0700
-Subject: [Buildroot] [buildroot 0001534]: Wireless tools update - PATCH
-Message-ID: <7570a239369fce0fc66e2ecffa374e58@bugs.uclibc.org>
+Date: Fri, 19 Oct 2007 12:52:15 -0700
+Subject: [Buildroot] [buildroot 0001526]: lockfile-progs.c fails to compile
+Message-ID: <1febbb7d2e4fbc607052567a1b08edc6@bugs.uclibc.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -11,46 +11,64 @@ To: buildroot@busybox.net
 
 The following issue has been CLOSED 
 ====================================================================== 
-http://busybox.net/bugs/view.php?id=1534 
+http://busybox.net/bugs/view.php?id=1526 
 ====================================================================== 
-Reported By:                sushisan
+Reported By:                Leon Bailly
 Assigned To:                buildroot
 ====================================================================== 
 Project:                    buildroot
-Issue ID:                   1534
+Issue ID:                   1526
 Category:                   Architecture Specific
 Reproducibility:            always
 Severity:                   minor
 Priority:                   normal
 Status:                     closed
-Resolution:                 fixed
+Resolution:                 open
 Fixed in Version:           
 ====================================================================== 
-Date Submitted:             10-16-2007 14:22 PDT
-Last Modified:              10-19-2007 12:49 PDT
+Date Submitted:             10-12-2007 09:03 PDT
+Last Modified:              10-19-2007 12:52 PDT
 ====================================================================== 
-Summary:                    Wireless tools update - PATCH
+Summary:                    lockfile-progs.c fails to compile
 Description: 
-The new version is 29 and the official site is
-http://www.hpl.hp.com/personal/Jean_Tourrilhes/Linux/
+lockfile-progs.c fails to compile due to non-existing library-call to
+rindex.
+
+Patched with:
+
+*** lockfile-progs.c.org        2007-10-10 12:07:56.000000000 +0200
+--- lockfile-progs.c    2007-10-10 12:09:22.000000000 +0200
+***************
+*** 70,76 ****
+      { NULL, 0, NULL, 0 }
+    };
+
+!   char *cmd_name = rindex(argv[0], '/');
+    int mail_cmd_p = 0;
+
+    if(cmd_name != NULL) {
+--- 70,76 ----
+      { NULL, 0, NULL, 0 }
+    };
+
+!   char *cmd_name = strrchr(argv[0], '/');
+    int mail_cmd_p = 0;
+
+    if(cmd_name != NULL) {
+
 ====================================================================== 
 
 ---------------------------------------------------------------------- 
- vanokuten - 10-19-07 12:49  
+ vanokuten - 10-19-07 12:52  
 ---------------------------------------------------------------------- 
 fixed in svn 
 
 Issue History 
 Date Modified   Username       Field                    Change               
 ====================================================================== 
-10-16-07 14:22  sushisan       New Issue                                    
-10-16-07 14:22  sushisan       Status                   new => assigned     
-10-16-07 14:22  sushisan       Assigned To               => buildroot       
-10-16-07 14:22  sushisan       File Added: br2-wireless_tools.patch             
-      
-10-16-07 14:23  sushisan       Issue Monitored: sushisan                    
-10-16-07 14:23  sushisan       Issue End Monitor: sushisan                    
-10-19-07 12:48  vanokuten      Resolution               open => fixed       
-10-19-07 12:49  vanokuten      Status                   assigned => closed  
-10-19-07 12:49  vanokuten      Note Added: 0002837                          
+10-12-07 09:03  Leon Bailly    New Issue                                    
+10-12-07 09:03  Leon Bailly    Status                   new => assigned     
+10-12-07 09:03  Leon Bailly    Assigned To               => buildroot       
+10-19-07 12:52  vanokuten      Status                   assigned => closed  
+10-19-07 12:52  vanokuten      Note Added: 0002838                          
 ======================================================================
