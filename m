@@ -1,50 +1,90 @@
-From: Babarovic Ivica <ivica.babarovic@asist.si>
-Date: Fri, 19 Oct 2007 13:22:14 +0200
-Subject: [Buildroot] FILE_OFFSET_BITS=64 and errors [quick dirty
-	solution]
-In-Reply-To: <47188893.80503@asist.si>
-References: <47188893.80503@asist.si>
-Message-ID: <47189366.6000209@asist.si>
+From: Jorge S. <jorgesolla@gmail.com>
+Date: Fri, 19 Oct 2007 13:30:11 +0200
+Subject: [Buildroot] (AT91RM9200/DATAFLASH) Unable to create a *working*
+	jffs2 rootfs.
+In-Reply-To: <6090c5eb0710190136j2fb3f6f6xe4ce96058593021a@mail.gmail.com>
+References: <750006.56257.qm@web26205.mail.ukl.yahoo.com>
+	<6090c5eb0710190134w575a787cy6ff6bc98516815d9@mail.gmail.com>
+	<6090c5eb0710190136j2fb3f6f6xe4ce96058593021a@mail.gmail.com>
+Message-ID: <6090c5eb0710190430n48ccfbb0r19444de776a6f92@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-In file ./build_powerpc/udev-114/Makefile I simply removed 
--D_FILE_OFFSET_BITS=64.
+Hi Michael,Ulf and all:
 
-#Dirty fix to disable FILE_OFFSET_BITS=64
-CFLAGS        += -g -Wall -pipe -D_GNU_SOURCE
+I did what you sugested:
+
+I'm using an EXT2 initrd with all the flash_tools.
 
 
-Babarovic Ivica wrote:
-> Hi!
->
-> I wonder where is this var defined. I get errors complainig i don't have
-> 64 bit support enabled in uclibc. Well I don't want support for 64 bits
-> and I don't need support for large files.
->
-> I'll attach error log.
->
->
-> $ svn info
-> Path: .
-> URL: svn://uclibc.org/trunk/buildroot
-> Repository Root: svn://uclibc.org
-> Repository UUID: 69ca8d6d-28ef-0310-b511-8ec308f3f277
-> Revision: 20295
-> Node Kind: directory
-> Schedule: normal
-> Last Changed Author: ulf
-> Last Changed Rev: 20294
-> Last Changed Date: 2007-10-19 00:59:44 +0200 (Fri, 19 Oct 2007)
-> Properties Last Updated: 2007-10-19 10:44:52 +0200 (Fri, 19 Oct 2007)
->
->
-> ------------------------------------------------------------------------
->
-> _______________________________________________
-> buildroot mailing list
-> buildroot at uclibc.org
-> http://busybox.net/mailman/listinfo/buildroot
+# ./flash_erase /dev/mtd2
+Erasing 1 Kibyte @ 6067e0 -- 99 % complete.
+# mkdir /mnt/flash
+# mount -t jffs2 /dev/mtdblock2 /mnt/flash
+JFFS2 write-buffering enabled buffer (1056) erasesize (8448)
+JFFS2 notice: (298) jffs2_build_xattr_subsystem: complete building xattr
+subsystem, 0 of xdatum (0 unchecked, 0 orphan) and 0 of xref (0 dead, 0
+orphan) found.
+# cd /mnt/flash/
+# ls -la
+drwxr-xr-x    3 root     root            0 Dec 31  1969 .
+drwxr-xr-x    4 root     root         1024 Dec 31 17:05 ..
+# cd ..
+# mount
+rootfs on / type rootfs (rw)
+/dev/root on / type ext2 (rw)
+proc on /proc type proc (rw)
+devpts on /dev/pts type devpts (rw)
+tmpfs on /tmp type tmpfs (rw)
+/dev/sda1 on /mnt/usb type msdos (rw,fmask=0022,dmask=0022,codepage=cp850)
+/dev/mtdblock2 on /mnt/flash type jffs2 (rw)
+
+# /mnt/usb/armtool/flash_info /dev/mtd2
+Device /dev/mtd2 has 0 erase regions
+
+The procedure looks working fine, i also issued a "flash_info" just for
+testing and enabled the debug messages for jffs2 on my kernel.
+
+After the flash_erase procedure using the initrd, i reboot the system, then
+using u-boot "loadb" command, i dump the JFFS2 rootfs to the DataFlash and
+set the kernel bootargs to boot from /dev/mtdblock2.
+
+Now i have a different behavior while booting but *still* no success, this
+is what the kernel says when booting:
+
+JFFS2 write-buffering enabled buffer (1056) erasesize (8448)
+JFFS2 notice: (1) jffs2_build_xattr_subsystem: complete building xattr
+subsystem, 0 of xdatum (0 unchecked, 0 orphan) and 0 of xref (0 dead, 0
+orphan) found.
+VFS: Mounted root (jffs2 filesystem).
+Freeing init memory: 132K
+Warning: unable to open an initial console.
+
+... and stays here forever. (I know this warning comes from the kernel not
+seeing the /dev/console device...so i assume its unable to properly mount
+the rootfs)
+
+
+ As Ulf is suggesting, i think there's something wrong when using
+mkfs.jffs2to create the jffs2 filesystem.
+
+Questions:
+
+1)  Do you guys have a ready-made jffs2 image proben to work that i can use
+to check my system? If your image works, then i can discard my kernel/u-boot
+configuration and focus on a possible problem when the mkfs.jffs2 process is
+being done.
+
+2) Are there any "must have" options enabled on the kernel configuration to
+deal with MTD rootfs? Maybe i'm missing something.
+
+3) Any other ideas? I'm getting crazy on this :(
+
+
+As usual, BIG thanks helping and sorry about my poor english.
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: http://busybox.net/lists/buildroot/attachments/20071019/61546dc0/attachment.htm 
