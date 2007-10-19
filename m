@@ -1,45 +1,50 @@
-From: Kuten Ivan <ivan.kuten@promwad.com>
-Date: Fri, 19 Oct 2007 09:45:27 -0100
-Subject: [Buildroot] svn At revision 20289 breakage
-In-Reply-To: <00da01c8122b$716ad6a0$01c4af0a@Glamdring>
-References: <4717A47F.4000908@asist.si>	<4717C93A.3080401@promwad.com><0c3501c811c4$63522850$01c4af0a@Glamdring><4717D0BA.1050300@promwad.com><0c5901c811c6$8aecca30$01c4af0a@Glamdring>	<4718510D.5030602@asist.si>	<008201c81224$6c96bd80$01c4af0a@Glamdring>
-	<4718671F.3040005@asist.si> <4718850D.9020302@promwad.com>
-	<00da01c8122b$716ad6a0$01c4af0a@Glamdring>
-Message-ID: <47188AC7.1000503@promwad.com>
+From: Hamish Moffatt <hamish@cloud.net.au>
+Date: Fri, 19 Oct 2007 18:47:13 +1000
+Subject: [Buildroot] [buildroot 0001543]: gcc 4.1.2 libmudflap fails
+	to	build due to missing execinfo.h
+In-Reply-To: <00db01c8122b$71720290$01c4af0a@Glamdring>
+References: <e73b1f587b0c993034a1396b7e2cc5d3@bugs.uclibc.org>
+	<47188770.1070704@promwad.com>
+	<00db01c8122b$71720290$01c4af0a@Glamdring>
+Message-ID: <20071019084713.GA19784@cloud.net.au>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+On Fri, Oct 19, 2007 at 10:36:36AM +0200, Ulf Samuelsson wrote:
+> ----- Original Message ----- 
+> From: "Kuten Ivan" <ivan.kuten@promwad.com>
+> To: <buildroot@uclibc.org>
+> Sent: Friday, October 19, 2007 12:31 PM
+> Subject: Re: [Buildroot] [buildroot 0001543]: gcc 4.1.2 libmudflap fails to 
+> build due to missing execinfo.h
 > 
-> It was Bernhard which introduced the new kernel selection so dont blame me.
+> >> During the gcc-4.1.2-final build, libmudflap files to compile due to
+> >> missing execinfo.h. configure detects that execinfo.h exists but is
+> >> unusable, but that's because it used the wrong cpp and found the host
+> >> version instead.
+> >>
+> >> The fix is to pass CPP=<target_cpp>, as in the attached patch.
+> >
+> > Is that bug specific to "gcc-4.1.2 + oabi + soft float" configuration?
+> > Because I remember to build&run all correctly with "gcc-4.1.2 + eabi + no 
+> > soft float".
 > 
-> The old way of building the kernel really suck, so I understand why you 
-> build it separately.
-> 
-> I added the Advanced Kernel Configuration last week to fix those problems.
-> You can select any 2.6.x.y kernel.
-> You can add -rc# patches, -mm# patches and your own proprietary patch which 
-> is located in $(DL_DIR)
-> You can select easily zImage,bzImage, uImage, vmlinux (proprietary).
->     It would be good if you gave that one a try and provide feedback on any 
-> drawbacks you see.
-> 
+> The patch affects soft-float only, but is currently only in the 4.2.1 
+> subdir.
 
-Sorry Ulf, I did not want to blame anybody.
+Are we talking about the same bug? I submitted two close together.
 
-Yeah, for me it was quite surprising that having buildroot .config which was working
-for several months to see that it's not working anymore.
+#1543 affects the libmudflap build within gcc-4.1.2-final. I don't know
+if that's soft-float or OABI specific, as I did not try any other
+configuration. It does not affect gcc-4.2.1.
 
-OK, i'll try building kernel within buildroot and will inform about results.
+#1542 affects soft-float gcc-4.1.2 only: it needs the same patch as
+I submitted for 4.2.1 earlier this week (and Ulf applied).
 
 
-Best regards,
-Ivan
+Hamish
 -- 
---------------------------------
-Embedded Linux engineer,
-Promwad Company: http://www.promwad.com/
-Homepage : http://www.ivankuten.com/
---------------------------------
+Hamish Moffatt VK3SB <hamish@debian.org> <hamish@cloud.net.au>
