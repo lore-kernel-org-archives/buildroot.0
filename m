@@ -1,7 +1,7 @@
 From: bugs at busybox.net <bugs@busybox.net>
-Date: Fri, 19 Oct 2007 12:48:32 -0700
+Date: Fri, 19 Oct 2007 12:49:08 -0700
 Subject: [Buildroot] [buildroot 0001534]: Wireless tools update - PATCH
-Message-ID: <0643e0dd4c85890630b89c76fe5f9c82@bugs.uclibc.org>
+Message-ID: <7570a239369fce0fc66e2ecffa374e58@bugs.uclibc.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -9,7 +9,7 @@ Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
 
-The following issue has been UPDATED. 
+The following issue has been CLOSED 
 ====================================================================== 
 http://busybox.net/bugs/view.php?id=1534 
 ====================================================================== 
@@ -22,16 +22,23 @@ Category:                   Architecture Specific
 Reproducibility:            always
 Severity:                   minor
 Priority:                   normal
-Status:                     assigned
+Status:                     closed
+Resolution:                 fixed
+Fixed in Version:           
 ====================================================================== 
 Date Submitted:             10-16-2007 14:22 PDT
-Last Modified:              10-19-2007 12:48 PDT
+Last Modified:              10-19-2007 12:49 PDT
 ====================================================================== 
 Summary:                    Wireless tools update - PATCH
 Description: 
 The new version is 29 and the official site is
 http://www.hpl.hp.com/personal/Jean_Tourrilhes/Linux/
 ====================================================================== 
+
+---------------------------------------------------------------------- 
+ vanokuten - 10-19-07 12:49  
+---------------------------------------------------------------------- 
+fixed in svn 
 
 Issue History 
 Date Modified   Username       Field                    Change               
@@ -44,4 +51,6 @@ Date Modified   Username       Field                    Change
 10-16-07 14:23  sushisan       Issue Monitored: sushisan                    
 10-16-07 14:23  sushisan       Issue End Monitor: sushisan                    
 10-19-07 12:48  vanokuten      Resolution               open => fixed       
+10-19-07 12:49  vanokuten      Status                   assigned => closed  
+10-19-07 12:49  vanokuten      Note Added: 0002837                          
 ======================================================================
