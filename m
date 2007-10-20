@@ -1,8 +1,8 @@
 From: bugs at busybox.net <bugs@busybox.net>
-Date: Sat, 20 Oct 2007 11:15:15 -0700
-Subject: [Buildroot] [buildroot 0001543]: gcc 4.1.2 libmudflap fails to
-	build due to missing execinfo.h
-Message-ID: <1eb31c9871ea48b988c625e9dd2a9257@bugs.uclibc.org>
+Date: Sat, 20 Oct 2007 11:24:49 -0700
+Subject: [Buildroot] [buildroot 0001542]: arm gcc-4.1.2 + oabi + soft floats
+	fails to build
+Message-ID: <86a7b22c549a6591abd138e0dea15a27@bugs.uclibc.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -12,13 +12,13 @@ To: buildroot@busybox.net
 
 The following issue has been CLOSED 
 ====================================================================== 
-http://busybox.net/bugs/view.php?id=1543 
+http://busybox.net/bugs/view.php?id=1542 
 ====================================================================== 
 Reported By:                hmoffatt
 Assigned To:                buildroot
 ====================================================================== 
 Project:                    buildroot
-Issue ID:                   1543
+Issue ID:                   1542
 Category:                   Architecture Specific
 Reproducibility:            always
 Severity:                   major
@@ -27,32 +27,31 @@ Status:                     closed
 Resolution:                 open
 Fixed in Version:           
 ====================================================================== 
-Date Submitted:             10-19-2007 01:21 PDT
-Last Modified:              10-20-2007 11:15 PDT
+Date Submitted:             10-19-2007 01:19 PDT
+Last Modified:              10-20-2007 11:24 PDT
 ====================================================================== 
-Summary:                    gcc 4.1.2 libmudflap fails to build due to missing
-execinfo.h
+Summary:                    arm gcc-4.1.2 + oabi + soft floats fails to build
 Description: 
-During the gcc-4.1.2-final build, libmudflap files to compile due to
-missing execinfo.h. configure detects that execinfo.h exists but is
-unusable, but that's because it used the wrong cpp and found the host
-version instead.
+gcc 4.1.2 fails to build for OABI with soft floats enabled, with references
+to missing float functions.
 
-The fix is to pass CPP=<target_cpp>, as in the attached patch.
+The patch I supplied for gcc-4.2.1 works as-is for 4.1.2 also.
+So copying toolchain/gcc/4.2.1/910-soft-float.patch to toolchain/gcc/4.1.2
+will fix this.
+
 ====================================================================== 
 
 ---------------------------------------------------------------------- 
- vanokuten - 10-20-07 11:15  
+ vanokuten - 10-20-07 11:24  
 ---------------------------------------------------------------------- 
 fixed in svn 
 
 Issue History 
 Date Modified   Username       Field                    Change               
 ====================================================================== 
-10-19-07 01:21  hmoffatt       New Issue                                    
-10-19-07 01:21  hmoffatt       Status                   new => assigned     
-10-19-07 01:21  hmoffatt       Assigned To               => buildroot       
-10-19-07 01:21  hmoffatt       File Added: br-gcc412-cpp-fix                    
-10-20-07 11:15  vanokuten      Status                   assigned => closed  
-10-20-07 11:15  vanokuten      Note Added: 0002850                          
+10-19-07 01:19  hmoffatt       New Issue                                    
+10-19-07 01:19  hmoffatt       Status                   new => assigned     
+10-19-07 01:19  hmoffatt       Assigned To               => buildroot       
+10-20-07 11:24  vanokuten      Status                   assigned => closed  
+10-20-07 11:24  vanokuten      Note Added: 0002851                          
 ======================================================================
