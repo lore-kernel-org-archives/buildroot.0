@@ -1,57 +1,43 @@
-From: bugs at busybox.net <bugs@busybox.net>
-Date: Sat, 20 Oct 2007 11:24:49 -0700
-Subject: [Buildroot] [buildroot 0001542]: arm gcc-4.1.2 + oabi + soft floats
-	fails to build
-Message-ID: <86a7b22c549a6591abd138e0dea15a27@bugs.uclibc.org>
+From: Ivan Kuten <ivan.kuten@promwad.com>
+Date: Sun, 21 Oct 2007 02:47:23 +0300
+Subject: [Buildroot] make atngw100_defconfig - errors
+Message-ID: <471A938B.2020004@promwad.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+Hi Ulf,
 
-The following issue has been CLOSED 
-====================================================================== 
-http://busybox.net/bugs/view.php?id=1542 
-====================================================================== 
-Reported By:                hmoffatt
-Assigned To:                buildroot
-====================================================================== 
-Project:                    buildroot
-Issue ID:                   1542
-Category:                   Architecture Specific
-Reproducibility:            always
-Severity:                   major
-Priority:                   normal
-Status:                     closed
-Resolution:                 open
-Fixed in Version:           
-====================================================================== 
-Date Submitted:             10-19-2007 01:19 PDT
-Last Modified:              10-20-2007 11:24 PDT
-====================================================================== 
-Summary:                    arm gcc-4.1.2 + oabi + soft floats fails to build
-Description: 
-gcc 4.1.2 fails to build for OABI with soft floats enabled, with references
-to missing float functions.
+I'm trying to do
 
-The patch I supplied for gcc-4.2.1 works as-is for 4.1.2 also.
-So copying toolchain/gcc/4.2.1/910-soft-float.patch to toolchain/gcc/4.1.2
-will fix this.
+make atngw100_defconfig
 
-====================================================================== 
+make
 
----------------------------------------------------------------------- 
- vanokuten - 10-20-07 11:24  
----------------------------------------------------------------------- 
-fixed in svn 
+and have the following error:
+bzcat /sources/u-boot-1.2.0-atmel-patch.tar.bz2 | tar -C /opt/buildroot/project_build_avr32/atngw100/u-boot-patches -xvf -
+u-boot-1.2.0-atmel-patch/README.txt
+u-boot-1.2.0-atmel-patch/README.txt~
+touch /opt/buildroot/project_build_avr32/atngw100/u-boot-patches/.unpacked
+toolchain/patch-kernel.sh /opt/buildroot/build_avr32/u-boot-1.2.0-atmel /opt/buildroot/project_build_avr32/atngw100/u-boot-patches \*.patch
+touch /opt/buildroot/build_avr32/u-boot-1.2.0-atmel/.patched.u-boot-1.2.0-atmel-patch.tar.bz2
+cp target/device/Atmel/atngw100/u-boot/atngw100.h /opt/buildroot/build_avr32/u-boot-1.2.0-atmel/include/configs/.
+cp: cannot stat `target/device/Atmel/atngw100/u-boot/atngw100.h': No such file or directory
+make: *** [/opt/buildroot/project_build_avr32/atngw100/u-boot-1.2.0-atmel/.configured] Error 1
 
-Issue History 
-Date Modified   Username       Field                    Change               
-====================================================================== 
-10-19-07 01:19  hmoffatt       New Issue                                    
-10-19-07 01:19  hmoffatt       Status                   new => assigned     
-10-19-07 01:19  hmoffatt       Assigned To               => buildroot       
-10-20-07 11:24  vanokuten      Status                   assigned => closed  
-10-20-07 11:24  vanokuten      Note Added: 0002851                          
-======================================================================
+Any advice?
+
+
+Toolchain seems built OK except build_avr32/staging_dir/bin/avr32-linux-uclibc-cc is symlink to gcc
+(which is not present in build_avr32/staging_dir/bin/) - seems it should be symlink to avr32-linux-uclibc-gcc
+
+
+Best regards,
+Ivan
+--------------------------------
+Embedded Linux engineer,
+Promwad Company: http://www.promwad.com/
+Homepage : http://www.ivankuten.com/
+--------------------------------
