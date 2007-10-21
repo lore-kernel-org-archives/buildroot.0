@@ -1,54 +1,43 @@
-From: Ulf Samuelsson <ulf@atmel.com>
-Date: Sun, 21 Oct 2007 10:56:33 +0200
-Subject: [Buildroot] make atngw100_defconfig - errors
-References: <471A938B.2020004@promwad.com>
-Message-ID: <00a001c813c0$e79e50e0$01c4af0a@Glamdring>
+From: vanokuten at uclibc.org <vanokuten@uclibc.org>
+Date: Sun, 21 Oct 2007 05:02:18 -0700 (PDT)
+Subject: [Buildroot] svn commit: trunk/buildroot/package/lsof
+Message-ID: <20071021120218.1C89BA4A39@busybox.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-> Hi Ulf,
->
-> I'm trying to do
->
-> make atngw100_defconfig
->
-> make
->
-> and have the following error:
-> bzcat /sources/u-boot-1.2.0-atmel-patch.tar.bz2 | tar -C 
-> /opt/buildroot/project_build_avr32/atngw100/u-boot-patches -xvf -
-> u-boot-1.2.0-atmel-patch/README.txt
-> u-boot-1.2.0-atmel-patch/README.txt~
-> touch /opt/buildroot/project_build_avr32/atngw100/u-boot-patches/.unpacked
-> toolchain/patch-kernel.sh /opt/buildroot/build_avr32/u-boot-1.2.0-atmel 
-> /opt/buildroot/project_build_avr32/atngw100/u-boot-patches \*.patch
-> touch 
-> /opt/buildroot/build_avr32/u-boot-1.2.0-atmel/.patched.u-boot-1.2.0-atmel-patch.tar.bz2
-> cp target/device/Atmel/atngw100/u-boot/atngw100.h 
-> /opt/buildroot/build_avr32/u-boot-1.2.0-atmel/include/configs/.
-> cp: cannot stat `target/device/Atmel/atngw100/u-boot/atngw100.h': No such 
-> file or directory
-> make: *** 
-> [/opt/buildroot/project_build_avr32/atngw100/u-boot-1.2.0-atmel/.configured] 
-> Error 1
->
-> Any advice?
->
+Author: vanokuten
+Date: 2007-10-21 05:02:16 -0700 (Sun, 21 Oct 2007)
+New Revision: 20310
 
-Download mainstream U-Boot and copy the
-"includes/configs/atngw100.h" file to 
-"target/device/Atmel/atngw100/u-boot/atngw100.h"
-I have seen this before, but did not have time to fix it.
+Log:
+make lsof configure with target includes, thanks to marcg
+
+Modified:
+   trunk/buildroot/package/lsof/lsof.mk
 
 
-> Toolchain seems built OK except 
-> build_avr32/staging_dir/bin/avr32-linux-uclibc-cc is symlink to gcc
-> (which is not present in build_avr32/staging_dir/bin/) - seems it should 
-> be symlink to avr32-linux-uclibc-gcc
->
-
-Best Regards
-Ulf Samuelsson
+Changeset:
+Modified: trunk/buildroot/package/lsof/lsof.mk
+===================================================================
+--- trunk/buildroot/package/lsof/lsof.mk	2007-10-20 19:20:22 UTC (rev 20309)
++++ trunk/buildroot/package/lsof/lsof.mk	2007-10-21 12:02:16 UTC (rev 20310)
+@@ -10,6 +10,7 @@
+ LSOF_DIR:=$(BUILD_DIR)/lsof_$(LSOF_VERSION)
+ LSOF_BINARY:=lsof
+ LSOF_TARGET_BINARY:=bin/lsof
++LSOF_INCLUDE:=$(STAGING_DIR)/usr/include
+ 
+ BR2_LSOF_CFLAGS:=
+ ifeq ($(BR2_LARGEFILE),)
+@@ -33,7 +34,7 @@
+ 	touch $(LSOF_DIR)/.unpacked
+ 
+ $(LSOF_DIR)/.configured: $(LSOF_DIR)/.unpacked
+-	(cd $(LSOF_DIR)/lsof_$(LSOF_VERSION)_src; echo n | $(TARGET_CONFIGURE_OPTS) DEBUG="$(TARGET_CFLAGS) $(BR2_LSOF_CFLAGS)" ./Configure linux)
++	(cd $(LSOF_DIR)/lsof_$(LSOF_VERSION)_src; echo n | $(TARGET_CONFIGURE_OPTS) DEBUG="$(TARGET_CFLAGS) $(BR2_LSOF_CFLAGS)" LSOF_INCLUDE="$(LSOF_INCLUDE)" ./Configure linux)
+ 	touch $(LSOF_DIR)/.configured
+ 
+ $(LSOF_DIR)/lsof_$(LSOF_VERSION)_src/$(LSOF_BINARY): $(LSOF_DIR)/.configured
