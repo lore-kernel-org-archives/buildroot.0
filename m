@@ -1,69 +1,117 @@
-From: =?ISO-8859-1?Q?=D6mer_Celikkanat?= <ocelikkanat@googlemail.com>
-Date: Mon, 22 Oct 2007 12:51:48 +0200
-Subject: [Buildroot] libglib2 error - Please help me
-Message-ID: <9ed1d6350710220351q1925cd8cs6741841dc44f0cbf@mail.gmail.com>
+From: bugs at busybox.net <bugs@busybox.net>
+Date: Mon, 22 Oct 2007 05:47:29 -0700
+Subject: [Buildroot] [buildroot 0001546]: coreutils;
+	empty filename in #include; with WCHAR defined
+Message-ID: <62711e6cc433773bbcfab80b961a7da9@busybox.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi people,
 
-I have a problem with the package "libglib2". I get this compiler eror:
+The following issue has been CLOSED 
+====================================================================== 
+http://busybox.net/bugs/view.php?id=1546 
+====================================================================== 
+Reported By:                DestroyerOfWorlds
+Assigned To:                buildroot
+====================================================================== 
+Project:                    buildroot
+Issue ID:                   1546
+Category:                   Architecture Specific
+Reproducibility:            always
+Severity:                   major
+Priority:                   normal
+Status:                     closed
+Resolution:                 open
+Fixed in Version:           
+====================================================================== 
+Date Submitted:             10-22-2007 00:57 PDT
+Last Modified:              10-22-2007 05:47 PDT
+====================================================================== 
+Summary:                    coreutils; empty filename in #include; with WCHAR
+defined
+Description: 
+Previous buildroot builds work, then, define development and WCHAR and
+fails as below.  Looks similar to 0001479 and 0001527 but I
+do have WCHAR defined and I still get this error.
 
+Version is buildroot-20070927.tar
 
-make[3]: Entering directory `/home/ocelikkanat/buildroot/build_i386/glib-
-2.14.1/gobject'
-if
-/home/ocelikkanat/buildroot/build_i386/staging_dir/usr/bin/i386-linux-uclibc-gcc
--DHAVE_CONFIG_H -I. -I. -I.. -DG_LOG_DOMAIN=\"GLib-GObject\" -I.. -I../glib
--I.. -DG_DISABLE_CAST_CHECKS -DG_DISABLE_DEPRECATED -DGOBJECT_COMPILATION
--DG_DISABLE_CONST_RETURNS  -pthread  -g -O2 -Wall -MT glib-genmarshal.o -MD
--MP -MF ".deps/glib-genmarshal.Tpo" \
-  -c -o glib-genmarshal.o `test -f 'glib-genmarshal.c' || echo './'`glib-
-genmarshal.c; \
-then mv -f ".deps/glib-genmarshal.Tpo" ".deps/glib-genmarshal.Po"; \
-else rm -f ".deps/glib-genmarshal.Tpo"; exit 1; \
-fi
-/bin/sh ../libtool --mode=link
-/home/ocelikkanat/buildroot/build_i386/staging_dir/usr/bin/i386-linux-uclibc-gcc
--g -O2 -Wall  -L/home/ocelikkanat/buildroot/build_i386/staging_dir/usr/lib
--lc -o glib-genmarshal  glib-genmarshal.o ../glib/libglib-2.0.la -lintl
-mkdir .libs
-/home/ocelikkanat/buildroot/build_i386/staging_dir/usr/bin/i386-linux-uclibc-gcc
--g -O2 -Wall -o .libs/glib-genmarshal glib-genmarshal.o
--L/home/ocelikkanat/buildroot/build_i386/staging_dir/usr/lib
-../glib/.libs/libglib-2.0.so-L/home/ocelikkanat/buildroot/build_i386/staging_dir/usr/lib/
-/home/ocelikkanat/buildroot/build_i386/staging_dir/usr/lib/libintl.so -lc
--Wl,--rpath -Wl,/home/ocelikkanat/buildroot/build_i386/staging_dir/usr/lib
-../glib/.libs/libglib-2.0.so: undefined reference to `wcscoll'
-../glib/.libs/libglib-2.0.so: undefined reference to `_stdlib_mb_cur_max'
-../glib/.libs/libglib-2.0.so: undefined reference to `wcsxfrm'
-collect2: ld returned 1 exit status
-make[3]: *** [glib-genmarshal] Error 1
-make[3]: Leaving directory `/home/ocelikkanat/buildroot/build_i386/glib-
-2.14.1/gobject'
-make[2]: *** [all-recursive] Error 1
-make[2]: Leaving directory `/home/ocelikkanat/buildroot/build_i386/glib-
-2.14.1'
-make[1]: *** [all] Error 2
-make[1]: Leaving directory `/home/ocelikkanat/buildroot/build_i386/glib-
-2.14.1'
-make: *** [/home/ocelikkanat/buildroot/build_i386/glib-2.14.1
-/glib/.libs/libglib-2.0.a] Error 2
+[root at localhost buildrootDEV]# make
 
+Checking build system dependencies:
+BUILDROOT_DL_DIR clean:                         Ok
+CC clean:                                       Ok
+CXX clean:                                      Ok
+CPP clean:                                      Ok
+CFLAGS clean:                                   Ok
+INCLUDES clean:                                 Ok
+CXXFLAGS clean:                                 Ok
+which installed:                                Ok
+sed works:                                      Ok (/bin/sed)
+GNU make version '3.81':                        Ok
+C compiler '/usr/lib/ccache/gcc'
+C compiler version '4.1.2':                     Ok
+C++ compiler '/usr/lib/ccache/g++'
+C++ compiler version '4.1.2':                   Ok
+bison installed:                                Ok
+flex installed:                                 Ok
+gettext installed:                              Ok
+makeinfo installed:                             Ok
+Build system dependencies:                      Ok
 
-These functions "wcscoll, wcsxfrm" are included in wchar.h and this is in
-libc. But if I link the libc no success. I'm dispaired and don't know how I
-can get forward. I can compile the other parts like "gthread, gmodule"
-manually. Before this error I got a linker error from "libglib-2.0.so". This
-grabs to libc.so.6 instead of libc.so.0.
+rm -rf /root/buildrootDEV/project_build_mipsel/uclibc/buildroot-config
+mkdir -p /root/buildrootDEV/project_build_mipsel/uclibc
+cp -dpRf package/config/buildroot-config
+/root/buildrootDEV/project_build_mipsel/uclibc/buildroot-config
+/usr/bin/make -j1 -C /root/buildrootDEV/build_mipsel/coreutils-6.9
+make[1]: Entering directory
+`/root/buildrootDEV/build_mipsel/coreutils-6.9'
+Making all in lib
+make[2]: Entering directory
+`/root/buildrootDEV/build_mipsel/coreutils-6.9/lib'
+/usr/bin/make  all-am
+make[3]: Entering directory
+`/root/buildrootDEV/build_mipsel/coreutils-6.9/lib'
+/root/buildrootDEV/build_mipsel/staging_dir/usr/bin/mipsel-linux-uclibc-gcc
+-Os -pipe  -I/root/buildrootDEV/build_mipsel/staging_dir/usr/include
+-I/root/buildrootDEV/build_mipsel/staging_dir/include
+--sysroot=/root/buildrootDEV/build_mipsel/staging_dir/ -isysroot
+/root/buildrootDEV/build_mipsel/staging_dir  -I.      -g -O2 -c mbchar.c
+In file included from mbchar.h:157,
+                 from mbchar.c:22:
+./wchar.h:41:12: error: empty filename in #include
+In file included from mbchar.c:22:
+mbchar.h:242: error: expected ')' before 'wc'
+make[3]: *** [mbchar.o] Error 1
+make[3]: Leaving directory
+`/root/buildrootDEV/build_mipsel/coreutils-6.9/lib'
+make[2]: *** [all] Error 2
+make[2]: Leaving directory
+`/root/buildrootDEV/build_mipsel/coreutils-6.9/lib'
+make[1]: *** [all-recursive] Error 1
+make[1]: Leaving directory
+`/root/buildrootDEV/build_mipsel/coreutils-6.9'
+make: *** [/root/buildrootDEV/build_mipsel/coreutils-6.9/src/vdir] Error
+2
+[root at localhost buildrootDEV]# 
 
-Can anybody help me? Pleaseeeee.
+====================================================================== 
 
-greets
-?mer
--------------- next part --------------
-An HTML attachment was scrubbed...
-URL: http://busybox.net/lists/buildroot/attachments/20071022/969d18a2/attachment.htm 
+---------------------------------------------------------------------- 
+ Ulf Samuelsson - 10-22-07 05:47  
+---------------------------------------------------------------------- 
+If you change WCHAR or any other toolchain configuration, 
+you have to rebuild the toolchain and all applications. 
+
+Issue History 
+Date Modified   Username       Field                    Change               
+====================================================================== 
+10-22-07 00:57  DestroyerOfWorldsNew Issue                                    
+10-22-07 00:57  DestroyerOfWorldsStatus                   new => assigned     
+10-22-07 00:57  DestroyerOfWorldsAssigned To               => buildroot       
+10-22-07 05:47  Ulf Samuelsson Status                   assigned => closed  
+10-22-07 05:47  Ulf Samuelsson Note Added: 0002854                          
+======================================================================
