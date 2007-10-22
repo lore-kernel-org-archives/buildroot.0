@@ -1,8 +1,8 @@
 From: bugs at busybox.net <bugs@busybox.net>
-Date: Mon, 22 Oct 2007 05:47:29 -0700
+Date: Mon, 22 Oct 2007 06:27:39 -0700
 Subject: [Buildroot] [buildroot 0001546]: coreutils;
 	empty filename in #include; with WCHAR defined
-Message-ID: <62711e6cc433773bbcfab80b961a7da9@busybox.net>
+Message-ID: <b68e51bf9df14d0030dad99f0e3b85c9@bugs.uclibc.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -10,7 +10,7 @@ Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
 
-The following issue has been CLOSED 
+The following issue has been REOPENED. 
 ====================================================================== 
 http://busybox.net/bugs/view.php?id=1546 
 ====================================================================== 
@@ -23,12 +23,10 @@ Category:                   Architecture Specific
 Reproducibility:            always
 Severity:                   major
 Priority:                   normal
-Status:                     closed
-Resolution:                 open
-Fixed in Version:           
+Status:                     feedback
 ====================================================================== 
 Date Submitted:             10-22-2007 00:57 PDT
-Last Modified:              10-22-2007 05:47 PDT
+Last Modified:              10-22-2007 06:27 PDT
 ====================================================================== 
 Summary:                    coreutils; empty filename in #include; with WCHAR
 defined
@@ -106,6 +104,19 @@ make: *** [/root/buildrootDEV/build_mipsel/coreutils-6.9/src/vdir] Error
 If you change WCHAR or any other toolchain configuration, 
 you have to rebuild the toolchain and all applications. 
 
+---------------------------------------------------------------------- 
+ DestroyerOfWorlds - 10-22-07 06:27  
+---------------------------------------------------------------------- 
+Hello again,
+
+  I get the same error when I do a 'make clean; make'.
+
+  Should I do somethingelse to 'rebuild' the toolchain?
+
+thanks
+
+DoW 
+
 Issue History 
 Date Modified   Username       Field                    Change               
 ====================================================================== 
@@ -114,4 +125,8 @@ Date Modified   Username       Field                    Change
 10-22-07 00:57  DestroyerOfWorldsAssigned To               => buildroot       
 10-22-07 05:47  Ulf Samuelsson Status                   assigned => closed  
 10-22-07 05:47  Ulf Samuelsson Note Added: 0002854                          
+10-22-07 05:47  Ulf Samuelsson Resolution               open => fixed       
+10-22-07 06:27  DestroyerOfWorldsStatus                   closed => feedback  
+10-22-07 06:27  DestroyerOfWorldsResolution               fixed => reopened   
+10-22-07 06:27  DestroyerOfWorldsNote Added: 0002855                          
 ======================================================================
