@@ -1,52 +1,88 @@
-From: bugs at busybox.net <bugs@busybox.net>
-Date: Mon, 22 Oct 2007 14:26:42 -0700
-Subject: [Buildroot] [buildroot 0001549]:
-	buildroot/build_i386/grep-2.5.1/src/dfa.c:147: undefined
-	reference to `libintl_gettext'
-Message-ID: <b2ebf24df181aab30eafe06be1298026@bugs.uclibc.org>
+From: ulf at uclibc.org <ulf@uclibc.org>
+Date: Tue, 23 Oct 2007 02:49:57 -0700 (PDT)
+Subject: [Buildroot] svn commit: trunk/buildroot: target toolchain
+	toolchain/gcc
+Message-ID: <20071023094957.2D3F4A6804@busybox.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+Author: ulf
+Date: 2007-10-23 02:49:56 -0700 (Tue, 23 Oct 2007)
+New Revision: 20317
 
-The following issue has been SUBMITTED. 
-====================================================================== 
-http://busybox.net/bugs/view.php?id=1549 
-====================================================================== 
-Reported By:                Steve Cornett
-Assigned To:                buildroot
-====================================================================== 
-Project:                    buildroot
-Issue ID:                   1549
-Category:                   Architecture Specific
-Reproducibility:            always
-Severity:                   block
-Priority:                   normal
-Status:                     assigned
-====================================================================== 
-Date Submitted:             10-22-2007 14:26 PDT
-Last Modified:              10-22-2007 14:26 PDT
-====================================================================== 
-Summary:                    buildroot/build_i386/grep-2.5.1/src/dfa.c:147:
-undefined reference to `libintl_gettext'
-Description: 
-Configure for i386.  Build ends with:
+Log:
+Ensure AVR32 FPU config is always correct
 
-dfa.o: In function `xmalloc':
-/home/test/buildroot/build_i386/grep-2.5.1/src/dfa.c:147: undefined
-reference to `libintl_gettext'
+Modified:
+   trunk/buildroot/target/Config.in.arch
+   trunk/buildroot/toolchain/Config.in.2
+   trunk/buildroot/toolchain/gcc/Makefile.in
 
-Input and log attached.
-====================================================================== 
 
-Issue History 
-Date Modified   Username       Field                    Change               
-====================================================================== 
-10-22-07 14:26  Steve Cornett  New Issue                                    
-10-22-07 14:26  Steve Cornett  Status                   new => assigned     
-10-22-07 14:26  Steve Cornett  Assigned To               => buildroot       
-10-22-07 14:26  Steve Cornett  File Added: InputAndOutput.tar                   
+Changeset:
+Modified: trunk/buildroot/target/Config.in.arch
+===================================================================
+--- trunk/buildroot/target/Config.in.arch	2007-10-22 15:53:34 UTC (rev 20316)
++++ trunk/buildroot/target/Config.in.arch	2007-10-23 09:49:56 UTC (rev 20317)
+@@ -12,6 +12,8 @@
+ 	bool "armeb"
+ config BR2_avr32
+ 	bool "avr32"
++	select BR2_SOFT_FLOAT
++
+ config BR2_cris
+ 	bool "cris"
+ config BR2_ia64
 
-======================================================================
+Modified: trunk/buildroot/toolchain/Config.in.2
+===================================================================
+--- trunk/buildroot/toolchain/Config.in.2	2007-10-22 15:53:34 UTC (rev 20316)
++++ trunk/buildroot/toolchain/Config.in.2	2007-10-23 09:49:56 UTC (rev 20317)
+@@ -48,7 +48,7 @@
+ config BR2_SOFT_FLOAT
+ 	bool "Use software floating point by default"
+ 	default n
+-	depends on BR2_arm || BR2_armeb || BR2_mips || BR2_mipsel || BR2_powerpc
++	depends on BR2_arm || BR2_armeb || BR2_avr32 || BR2_mips || BR2_mipsel || BR2_powerpc
+ 	help
+ 	  If your target CPU does not have a Floating Point Unit (FPU) or a
+ 	  kernel FPU emulator, but you still wish to support floating point
+
+Modified: trunk/buildroot/toolchain/gcc/Makefile.in
+===================================================================
+--- trunk/buildroot/toolchain/gcc/Makefile.in	2007-10-22 15:53:34 UTC (rev 20316)
++++ trunk/buildroot/toolchain/gcc/Makefile.in	2007-10-23 09:49:56 UTC (rev 20317)
+@@ -11,14 +11,6 @@
+ EXTRA_GCC_CONFIG_OPTIONS:=$(strip $(subst ",, $(BR2_EXTRA_GCC_CONFIG_OPTIONS)))
+ #"))
+ 
+-# AVR32 GCC configuration
+-ifeq ($(strip $(BR2_avr32)),y)
+-EXTRA_GCC_CONFIG_OPTIONS+=--disable-libmudflap
+-EXTRA_GCC_CONFIG_OPTIONS+=--disable-libssp
+-EXTRA_GCC_CONFIG_OPTIONS+=--with-build-time-tools=$(STAGING_DIR)/$(REAL_GNU_TARGET_NAME)/bin \
+-#EXTRA_GCC_CONFIG_OPTIONS+=--with-as=$(TARGET_CROSS)as
+-endif
+-
+ ifeq ($(strip $(subst ",, $(BR2_GCC_IS_SNAP))),y)
+ #"))
+ GCC_SNAP_DATE:=$(strip $(subst ",, $(BR2_GCC_SNAP_DATE)))
+@@ -71,6 +63,15 @@
+ endif
+ endif
+ 
++# AVR32 GCC configuration
++ifeq ($(strip $(BR2_avr32)),y)
++EXTRA_GCC_CONFIG_OPTIONS+=--disable-libmudflap
++SOFT_FLOAT_CONFIG_OPTION:=
++EXTRA_GCC_CONFIG_OPTIONS+=--disable-libssp
++EXTRA_GCC_CONFIG_OPTIONS+=--with-build-time-tools=$(STAGING_DIR)/$(REAL_GNU_TARGET_NAME)/bin \
++#EXTRA_GCC_CONFIG_OPTIONS+=--with-as=$(TARGET_CROSS)as
++endif
++
+ TARGET_GCC_FLAGS= CFLAGS_FOR_TARGET="$(TARGET_CFLAGS) $(TARGET_SOFT_FLOAT)" \
+ 	CXXFLAGS_FOR_TARGET="$(TARGET_CFLAGS) $(TARGET_SOFT_FLOAT)" \
+ 	CFLAGS="$(TARGET_CFLAGS) $(TARGET_SOFT_FLOAT)" \
