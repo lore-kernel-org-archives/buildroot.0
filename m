@@ -1,30 +1,45 @@
-From: Ivan Kuten <ivan.kuten@promwad.com>
-Date: Wed, 24 Oct 2007 21:34:50 +0300
+From: Michael Trimarchi <trimarchimichael@yahoo.it>
+Date: Wed, 24 Oct 2007 18:37:52 +0000 (GMT)
 Subject: [Buildroot] Dataflash rootfs problems (still)
-In-Reply-To: <6090c5eb0710240954q368b3409k282c02a5e2fcbef4@mail.gmail.com>
-References: <6090c5eb0710240920o4e56f66et2c9f1761c97aea4e@mail.gmail.com>	<1193243618.4415.6.camel@aeglos.sweden.atmel.com>
-	<6090c5eb0710240954q368b3409k282c02a5e2fcbef4@mail.gmail.com>
-Message-ID: <471F904A.5050206@promwad.com>
+Message-ID: <205592.59570.qm@web26204.mail.ukl.yahoo.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-> 
-> During the 1st boot, Dropbear creates and "writes" the generated keys, maybe
-> is this *write* operation the one screwing up the dataflash?
-> 
+Hi,
 
-We have similar problems with Dataflash&RM9200
-*write* operation is unreliable - we had corrupted filesystem after reboot.
-Our solution was to use r/o only on dataflash.
+>I've sucessfully built  several root filesystems  for my custom board (AT91RM9200 + 8MiB DataFlash),  but  now  i'm >facing a  strange problem.
+
+>I'm using a JFFS2 filesystem on an MTD partition into the DataFlash, my rootfs boots OK, but ONLY for the first time. >See steps:
 
 
-Best regards,
-Ivan
---------------------------------
-Embedded Linux engineer,
-Promwad Company: http://www.promwad.com/
-Homepage : http://www.ivankuten.com/
---------------------------------
+>1) Create a rootfs JFFS2 image using buildroot -> OK
+>2) Erase entire flash partition: I boot from an initrd containing mtd-tools for this purpouse. -> OK
+>3) Dump the rootfs image "rootfs.jffs2" into the Dataflash (i use loadb from u-boot here...) -> OK
+
+>4) Boot the system... -> OK
+>5) Login and issue a simple reboot, no other commands...nothing else.... -> OK
+
+>After the reboot at step "5" the system comes again, but now when is press BACKSPACE it writes a space, and if i try >to add a user or change the root password
+
+>i always get a "/etc/passwd" not found.
+
+
+
+Is a problem of your busybox configuration :)
+
+Regards 
+Michael
+
+
+
+
+
+      ___________________________________ 
+L'email della prossima generazione? Puoi averla con la nuova Yahoo! Mail: 
+http://it.docs.yahoo.com/nowyoucan.html
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: http://busybox.net/lists/buildroot/attachments/20071024/44dc3067/attachment.htm 
