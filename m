@@ -1,11 +1,11 @@
 From: Ivan Kuten <ivan.kuten@promwad.com>
-Date: Wed, 24 Oct 2007 21:28:37 +0300
+Date: Wed, 24 Oct 2007 21:30:37 +0300
 Subject: [Buildroot] Busybox minicom-like application?
 In-Reply-To: <1193180356.5708.1.camel@aeglos.sweden.atmel.com>
 References: <6090c5eb0710231132k5146e947r48e3deeedc4b7599@mail.gmail.com>	<471E5044.7020003@promwad.com>	<6090c5eb0710231152r5cc500begf381537fad9efa0b@mail.gmail.com>	<471E53BA.5060401@promwad.com>
 	<20071023224556.GA18766@cloud.net.au>
 	<1193180356.5708.1.camel@aeglos.sweden.atmel.com>
-Message-ID: <471F8ED5.9010801@promwad.com>
+Message-ID: <471F8F4D.6050202@promwad.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
