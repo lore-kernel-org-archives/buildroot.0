@@ -1,19 +1,29 @@
-From: shade <shade130@azet.sk>
-Date: Thu, 25 Oct 2007 15:07:03 -0700 (PDT)
-Subject: [Buildroot]  Cant compile Mplayer package.
-Message-ID: <13409170.post@talk.nabble.com>
+From: Hamish Moffatt <hamish@cloud.net.au>
+Date: Fri, 26 Oct 2007 08:43:43 +1000
+Subject: [Buildroot] tslib fails to build
+In-Reply-To: <1193340722.4552.38.camel@localhost.localdomain>
+References: <1193340722.4552.38.camel@localhost.localdomain>
+Message-ID: <20071025224343.GC2902@cloud.net.au>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+On Thu, Oct 25, 2007 at 07:32:02PM +0000, Ormund Williams wrote:
+> Hi All
+> 
+> I'm trying to build buildroot with DirectFrameBuffer and ran into this
+> error with tslib:
+> 
+> ./autogen.sh: line 4: autoreconf: command not found
+> /bin/sh: line 2: ./configure: No such file or directory
+> make: *** [~/buildroot/build_i686/tslib-1.0/.configured] Error 127
+> 
+> I'm lost, help.
 
-Hi, Im not able to compile mplayer package in current svn version of
-buildroot. Target architecture is 386. Build fails with: "cabac.h:513:
-error: can't find a register in class 'GENERAL_REGS' while reloading 'asm'".
-Please, can You provide any suggestions how to fix this problem? Thx.
- 
+Install autoconf (and probably automake also) on your host.
+
+Hamish
 -- 
-View this message in context: http://www.nabble.com/Cant-compile-Mplayer-package.-tf4691607.html#a13409170
-Sent from the BuildRoot mailing list archive at Nabble.com.
+Hamish Moffatt VK3SB <hamish@debian.org> <hamish@cloud.net.au>
