@@ -1,85 +1,55 @@
-From: bugs at busybox.net <bugs@busybox.net>
-Date: Thu, 25 Oct 2007 06:02:37 -0700
-Subject: [Buildroot] [buildroot 0001556]: xorg compile errors
-Message-ID: <c973808c40da135bb759e66955d3f87d@busybox.net>
+From: Jorge S. <jorgesolla@gmail.com>
+Date: Thu, 25 Oct 2007 18:17:10 +0200
+Subject: [Buildroot] Dataflash rootfs problems (still)
+In-Reply-To: <1193266654.4415.21.camel@aeglos.sweden.atmel.com>
+References: <6090c5eb0710240920o4e56f66et2c9f1761c97aea4e@mail.gmail.com>
+	<1193243618.4415.6.camel@aeglos.sweden.atmel.com>
+	<6090c5eb0710240954q368b3409k282c02a5e2fcbef4@mail.gmail.com>
+	<471F904A.5050206@promwad.com>
+	<1193266654.4415.21.camel@aeglos.sweden.atmel.com>
+Message-ID: <6090c5eb0710250917o712570e1u28d1264d4d6bc4f7@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+What about using the SPI bitbang driver for the AT91??
 
-The following issue has been SUBMITTED. 
-====================================================================== 
-http://busybox.net/bugs/view.php?id=1556 
-====================================================================== 
-Reported By:                carlosz19
-Assigned To:                buildroot
-====================================================================== 
-Project:                    buildroot
-Issue ID:                   1556
-Category:                   Architecture Specific
-Reproducibility:            always
-Severity:                   minor
-Priority:                   normal
-Status:                     assigned
-====================================================================== 
-Date Submitted:             10-25-2007 06:02 PDT
-Last Modified:              10-25-2007 06:02 PDT
-====================================================================== 
-Summary:                    xorg compile errors
-Description: 
-make[6]: Betrete Verzeichnis 'buildroot/build_i386/xc/lib/X11/xlibi18n'
-making all in lib/X11/xlibi18n/lc...
-make[7]: Betrete Verzeichnis
-'buildroot/build_i386/xc/lib/X11/xlibi18n/lc'
-making all in lib/X11/xlibi18n/lc/gen...
-make[8]: Betrete Verzeichnis
-'buildroot/build_i386/xc/lib/X11/xlibi18n/lc/gen'
-rm -f lcGenConv.o
-buildroot/build_i386/staging_dir/usr/bin/i386-linux-uclibc-gcc -c -Os 
--ansi -pedantic -Wall -Wpointer-arith -Wundef   -I../../..
--I../../../../.. -I../../../../../exports/include   -Dlinux -D__i386__
--D_POSIX_SOURCE                            -D_BSD_SOURCE -D_GNU_SOURCE
--DX_LOCALE  -DFUNCPROTO=15 -DNARROWPROTO -DXTHREADS  -D_REENTRANT
--DXUSE_MTSAFE_API    -DMALLOC_0_RETURNS_NULL       -fPIC lcGenConv.c
-lcGenConv.c: In function 'stdc_mbstowcs':
-lcGenConv.c:864: warning: implicit declaration of function 'mbtowc'
-lcGenConv.c: In function 'stdc_wcstombs':
-lcGenConv.c:1029: error: 'MB_CUR_MAX' undeclared (first use in this
-function)
-lcGenConv.c:1029: error: (Each undeclared identifier is reported only
-once
-lcGenConv.c:1029: error: for each function it appears in.)
-lcGenConv.c:1030: warning: implicit declaration of function 'wctomb'
-lcGenConv.c: In function 'stdc_wcstocts':
-lcGenConv.c:1216: error: 'MB_CUR_MAX' undeclared (first use in this
-function)
-lcGenConv.c: In function 'stdc_ctstowcs':
-lcGenConv.c:1539: error: 'MB_CUR_MAX' undeclared (first use in this
-function)
-lcGenConv.c: In function 'stdc_cstowcs':
-lcGenConv.c:1575: error: 'MB_CUR_MAX' undeclared (first use in this
-function)
-lcGenConv.c: In function 'stdc_wcstostr':
-lcGenConv.c:2068: error: 'MB_CUR_MAX' undeclared (first use in this
-function)
-lcGenConv.c: In function 'stdc_strtowcs':
-lcGenConv.c:2597: error: 'MB_CUR_MAX' undeclared (first use in this
-function)
-make[8]: *** [lcGenConv.o] Fehler 1
-
-i read, that this function is not included in uclibc?
-i tried to add a "#define UseXwctomb YES" in the host.def, but it does not
-solve the problem.
-has anybody an idea?
-thanks alot
-====================================================================== 
-
-Issue History 
-Date Modified   Username       Field                    Change               
-====================================================================== 
-10-25-07 06:02  carlosz19      New Issue                                    
-10-25-07 06:02  carlosz19      Status                   new => assigned     
-10-25-07 06:02  carlosz19      Assigned To               => buildroot       
-======================================================================
+2007/10/25, Ulf Samuelsson <ulf@atmel.com>:
+>
+> ons 2007-10-24 klockan 21:34 +0300 skrev Ivan Kuten:
+> > >
+> > > During the 1st boot, Dropbear creates and "writes" the generated keys,
+> maybe
+> > > is this *write* operation the one screwing up the dataflash?
+> > >
+> >
+> > We have similar problems with Dataflash&RM9200
+> > *write* operation is unreliable - we had corrupted filesystem after
+> reboot.
+> > Our solution was to use r/o only on dataflash.
+> >
+>
+> I would reduce speed to 5 Mbps or lower. or implement the external gate.
+> Moving to the AT91SAM9260 is of course a nice alternative.
+> Lower cost, (soon) much higher speed (with the AT91SAM9260A)
+> Better BootROM (I defined it :-)
+>
+>
+> >
+> > Best regards,
+> > Ivan
+> > --------------------------------
+> > Embedded Linux engineer,
+> > Promwad Company: http://www.promwad.com/
+> > Homepage : http://www.ivankuten.com/
+> > --------------------------------
+> --
+> Best Regards,
+> Ulf Samuelsson
+>
+>
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: http://busybox.net/lists/buildroot/attachments/20071025/338118f8/attachment.htm 
