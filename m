@@ -1,21 +1,23 @@
-From: Ormund Williams <ormundw@panix.com>
-Date: Thu, 25 Oct 2007 23:11:04 +0000
-Subject: [Buildroot] tslib fails to build
-In-Reply-To: <20071025224343.GC2902@cloud.net.au>
-References: <1193340722.4552.38.camel@localhost.localdomain>
-	<20071025224343.GC2902@cloud.net.au>
-Message-ID: <1193353865.4552.42.camel@localhost.localdomain>
+From: Simon Pasch <fpasch@googlemail.com>
+Date: Fri, 26 Oct 2007 09:30:19 +0200
+Subject: [Buildroot] Cant compile Mplayer package.
+In-Reply-To: <13409170.post@talk.nabble.com>
+References: <13409170.post@talk.nabble.com>
+Message-ID: <4721978B.7020501@googlemail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Fri, 2007-10-26 at 08:43 +1000, Hamish Moffatt wrote:
+Try to remove the atmel-patch in the package/mplayer directory.
 
-> Install autoconf (and probably automake also) on your host.
-> 
-Thanks, just did that after searching the archive for "autoreconf".
+As I posted some time ago...This Patch should depend on the chosen 
+architecture.
 
-__
-Ormund
+shade wrote:
+> Hi, Im not able to compile mplayer package in current svn version of
+> buildroot. Target architecture is 386. Build fails with: "cabac.h:513:
+> error: can't find a register in class 'GENERAL_REGS' while reloading 'asm'".
+> Please, can You provide any suggestions how to fix this problem? Thx.
+>  
