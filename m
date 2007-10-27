@@ -1,43 +1,60 @@
-From: Ivan Kuten <ivan.kuten@promwad.com>
-Date: Fri, 26 Oct 2007 23:20:20 +0300
-Subject: [Buildroot] Cant compile Mplayer package.
-In-Reply-To: <4721978B.7020501@googlemail.com>
-References: <13409170.post@talk.nabble.com> <4721978B.7020501@googlemail.com>
-Message-ID: <47224C04.4000007@promwad.com>
+From: bugs at busybox.net <bugs@busybox.net>
+Date: Fri, 26 Oct 2007 19:33:24 -0700
+Subject: [Buildroot] [buildroot 0001549]:
+	buildroot/build_i386/grep-2.5.1/src/dfa.c:147: undefined
+	reference to `libintl_gettext'
+Message-ID: <4858fe253cd01bcc30f937683e3840b6@bugs.uclibc.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Simon Pasch wrote:
-> Try to remove the atmel-patch in the package/mplayer directory.
-> 
-> As I posted some time ago...This Patch should depend on the chosen 
-> architecture.
-> 
-> shade wrote:
->> Hi, Im not able to compile mplayer package in current svn version of
->> buildroot. Target architecture is 386. Build fails with: "cabac.h:513:
->> error: can't find a register in class 'GENERAL_REGS' while reloading 'asm'".
->> Please, can You provide any suggestions how to fix this problem? Thx.
->>  
-> 
-> _______________________________________________
-> buildroot mailing list
-> buildroot at uclibc.org
-> http://busybox.net/mailman/listinfo/buildroot
 
-Seems it's x86 specific.
+A NOTE has been added to this issue. 
+====================================================================== 
+http://busybox.net/bugs/view.php?id=1549 
+====================================================================== 
+Reported By:                Steve Cornett
+Assigned To:                buildroot
+====================================================================== 
+Project:                    buildroot
+Issue ID:                   1549
+Category:                   Architecture Specific
+Reproducibility:            always
+Severity:                   block
+Priority:                   normal
+Status:                     assigned
+====================================================================== 
+Date Submitted:             10-22-2007 14:26 PDT
+Last Modified:              10-26-2007 19:33 PDT
+====================================================================== 
+Summary:                    buildroot/build_i386/grep-2.5.1/src/dfa.c:147:
+undefined reference to `libintl_gettext'
+Description: 
+Configure for i386.  Build ends with:
 
-I have successfully built mplayer for ARM.
-mplayer-1.0rc1-atmel.3.patch - is AVR32 specific patch and it does not affect compilation for ARM.
+dfa.o: In function `xmalloc':
+/home/test/buildroot/build_i386/grep-2.5.1/src/dfa.c:147: undefined
+reference to `libintl_gettext'
 
+Input and log attached.
+====================================================================== 
 
-Best regards,
-Ivan
---------------------------------
-Embedded Linux engineer,
-Promwad Company: http://www.promwad.com/
-Homepage : http://www.ivankuten.com/
---------------------------------
+---------------------------------------------------------------------- 
+ pcwalton - 10-26-07 19:33  
+---------------------------------------------------------------------- 
+I'm getting this too. Workaround was to copy the configure line that the
+buildroot makefile spits out, add LDFLAGS="-lintl" to the front of it, and
+reconfigure and make manually. 
+
+Issue History 
+Date Modified   Username       Field                    Change               
+====================================================================== 
+10-22-07 14:26  Steve Cornett  New Issue                                    
+10-22-07 14:26  Steve Cornett  Status                   new => assigned     
+10-22-07 14:26  Steve Cornett  Assigned To               => buildroot       
+10-22-07 14:26  Steve Cornett  File Added: InputAndOutput.tar                   
+
+10-26-07 19:33  pcwalton       Note Added: 0002862                          
+======================================================================
