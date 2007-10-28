@@ -1,8 +1,8 @@
 From: bugs at busybox.net <bugs@busybox.net>
-Date: Sun, 28 Oct 2007 02:56:16 -0700
-Subject: [Buildroot] [buildroot 0001558]: make saveconfig rewrite .conf file
-	incorrect
-Message-ID: <33c94023e10a18640068512b4a78f238@bugs.busybox.net>
+Date: Sun, 28 Oct 2007 11:49:57 -0700
+Subject: [Buildroot] [buildroot 0001559]: mplayer uses llrint which is
+	unavailable on uClibc
+Message-ID: <498caeb71f1da4c5f9b91a628f6c17b4@bugs.uclibc.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -12,38 +12,38 @@ To: buildroot@busybox.net
 
 The following issue has been SUBMITTED. 
 ====================================================================== 
-http://busybox.net/bugs/view.php?id=1558 
+http://busybox.net/bugs/view.php?id=1559 
 ====================================================================== 
-Reported By:                mata
+Reported By:                ikonst
 Assigned To:                buildroot
 ====================================================================== 
 Project:                    buildroot
-Issue ID:                   1558
-Category:                   Other
+Issue ID:                   1559
+Category:                   Architecture Specific
 Reproducibility:            always
 Severity:                   minor
 Priority:                   normal
 Status:                     assigned
 ====================================================================== 
-Date Submitted:             10-28-2007 02:56 PDT
-Last Modified:              10-28-2007 02:56 PDT
+Date Submitted:             10-28-2007 11:49 PDT
+Last Modified:              10-28-2007 11:49 PDT
 ====================================================================== 
-Summary:                    make saveconfig rewrite .conf file incorrect
+Summary:                    mplayer uses llrint which is unavailable on uClibc
 Description: 
-When do `make saveconfig`, config files will be copied to local/proj/, and
-at main .config file uClibc,buildroot,kernel config location are
-overrided.
-But when check with `make menuconfig`, those config file location are
-erased. I chased this process. At finally, I found `saveconfig`
-modification are not for mconf format.
-This patch is for override mconf acceptable format at saveconfig.
+The mplayer-1.0rc1-atmel.3.patch already solves this issue, but does so
+only for AVR32 targets (for no good reason, since the patch itself admits
+it's a uClibc issue).
+
+The attached patch changes this portion of the Atmel patch to apply for
+all uClibc cases.
 ====================================================================== 
 
 Issue History 
 Date Modified   Username       Field                    Change               
 ====================================================================== 
-10-28-07 02:56  mata           New Issue                                    
-10-28-07 02:56  mata           Status                   new => assigned     
-10-28-07 02:56  mata           Assigned To               => buildroot       
-10-28-07 02:56  mata           File Added: project.diff                     
+10-28-07 11:49  ikonst         New Issue                                    
+10-28-07 11:49  ikonst         Status                   new => assigned     
+10-28-07 11:49  ikonst         Assigned To               => buildroot       
+10-28-07 11:49  ikonst         File Added: mplayer-llrint-not-only-atmel.patch  
+                 
 ======================================================================
