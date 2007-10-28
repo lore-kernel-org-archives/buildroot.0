@@ -1,9 +1,8 @@
 From: bugs at busybox.net <bugs@busybox.net>
-Date: Fri, 26 Oct 2007 19:33:24 -0700
-Subject: [Buildroot] [buildroot 0001549]:
-	buildroot/build_i386/grep-2.5.1/src/dfa.c:147: undefined
-	reference to `libintl_gettext'
-Message-ID: <4858fe253cd01bcc30f937683e3840b6@bugs.uclibc.org>
+Date: Sun, 28 Oct 2007 02:56:16 -0700
+Subject: [Buildroot] [buildroot 0001558]: make saveconfig rewrite .conf file
+	incorrect
+Message-ID: <33c94023e10a18640068512b4a78f238@bugs.busybox.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -11,50 +10,40 @@ Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
 
-A NOTE has been added to this issue. 
+The following issue has been SUBMITTED. 
 ====================================================================== 
-http://busybox.net/bugs/view.php?id=1549 
+http://busybox.net/bugs/view.php?id=1558 
 ====================================================================== 
-Reported By:                Steve Cornett
+Reported By:                mata
 Assigned To:                buildroot
 ====================================================================== 
 Project:                    buildroot
-Issue ID:                   1549
-Category:                   Architecture Specific
+Issue ID:                   1558
+Category:                   Other
 Reproducibility:            always
-Severity:                   block
+Severity:                   minor
 Priority:                   normal
 Status:                     assigned
 ====================================================================== 
-Date Submitted:             10-22-2007 14:26 PDT
-Last Modified:              10-26-2007 19:33 PDT
+Date Submitted:             10-28-2007 02:56 PDT
+Last Modified:              10-28-2007 02:56 PDT
 ====================================================================== 
-Summary:                    buildroot/build_i386/grep-2.5.1/src/dfa.c:147:
-undefined reference to `libintl_gettext'
+Summary:                    make saveconfig rewrite .conf file incorrect
 Description: 
-Configure for i386.  Build ends with:
-
-dfa.o: In function `xmalloc':
-/home/test/buildroot/build_i386/grep-2.5.1/src/dfa.c:147: undefined
-reference to `libintl_gettext'
-
-Input and log attached.
+When do `make saveconfig`, config files will be copied to local/proj/, and
+at main .config file uClibc,buildroot,kernel config location are
+overrided.
+But when check with `make menuconfig`, those config file location are
+erased. I chased this process. At finally, I found `saveconfig`
+modification are not for mconf format.
+This patch is for override mconf acceptable format at saveconfig.
 ====================================================================== 
-
----------------------------------------------------------------------- 
- pcwalton - 10-26-07 19:33  
----------------------------------------------------------------------- 
-I'm getting this too. Workaround was to copy the configure line that the
-buildroot makefile spits out, add LDFLAGS="-lintl" to the front of it, and
-reconfigure and make manually. 
 
 Issue History 
 Date Modified   Username       Field                    Change               
 ====================================================================== 
-10-22-07 14:26  Steve Cornett  New Issue                                    
-10-22-07 14:26  Steve Cornett  Status                   new => assigned     
-10-22-07 14:26  Steve Cornett  Assigned To               => buildroot       
-10-22-07 14:26  Steve Cornett  File Added: InputAndOutput.tar                   
-
-10-26-07 19:33  pcwalton       Note Added: 0002862                          
+10-28-07 02:56  mata           New Issue                                    
+10-28-07 02:56  mata           Status                   new => assigned     
+10-28-07 02:56  mata           Assigned To               => buildroot       
+10-28-07 02:56  mata           File Added: project.diff                     
 ======================================================================
