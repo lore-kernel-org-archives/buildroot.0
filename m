@@ -1,9 +1,9 @@
 From: bugs at busybox.net <bugs@busybox.net>
-Date: Sun, 28 Oct 2007 13:59:21 -0700
+Date: Sun, 28 Oct 2007 14:28:10 -0700
 Subject: [Buildroot] [buildroot 0001549]:
 	buildroot/build_i386/grep-2.5.1/src/dfa.c:147: undefined
 	reference to `libintl_gettext'
-Message-ID: <c4a0d379d88479e07d52e1c1ff3dab9c@bugs.uclibc.org>
+Message-ID: <fc4b97ba3ce08f85bc14c436e230b637@busybox.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -27,7 +27,7 @@ Priority:                   normal
 Status:                     assigned
 ====================================================================== 
 Date Submitted:             10-22-2007 14:26 PDT
-Last Modified:              10-28-2007 13:59 PDT
+Last Modified:              10-28-2007 14:28 PDT
 ====================================================================== 
 Summary:                    buildroot/build_i386/grep-2.5.1/src/dfa.c:147:
 undefined reference to `libintl_gettext'
@@ -53,6 +53,26 @@ reconfigure and make manually.
 ---------------------------------------------------------------------- 
 Attached a proposed patch. 
 
+---------------------------------------------------------------------- 
+ vanokuten - 10-28-07 14:28  
+---------------------------------------------------------------------- 
+Can you post your part of config.log file? 
+
+I have arm configuration and it works without applying your patch.
+-lintl is added on configure step when checking for gettext:
+configure:7201: checking for GNU gettext in libintl
+
+/opt/buildroot/build_arm/staging_dir/usr/bin/arm-linux-uclibc-gcc -Os
+-pipe  -I/opt/buildroot/build_arm/staging_dir/usr/include
+-I/opt/buildroot/build_arm/staging_dir/include
+--sysroot=/opt/buildroot/build_arm/staging_dir/ -isysroot
+/opt/buildroot/build_arm/staging_dir -mtune=arm920t -msoft-float  -g -O2  
+-o grep  grep.o dfa.o kwset.o search.o grepmat.o -lintl 
+../lib/libgreputils.a
+
+Regards,
+Ivan 
+
 Issue History 
 Date Modified   Username       Field                    Change               
 ====================================================================== 
@@ -65,4 +85,5 @@ Date Modified   Username       Field                    Change
 10-28-07 13:59  pcwalton       File Added: buildroot-grep.patch                 
   
 10-28-07 13:59  pcwalton       Note Added: 0002863                          
+10-28-07 14:28  vanokuten      Note Added: 0002864                          
 ======================================================================
