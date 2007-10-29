@@ -1,61 +1,42 @@
-From: bugs at busybox.net <bugs@busybox.net>
-Date: Sun, 28 Oct 2007 14:34:38 -0700
-Subject: [Buildroot] [buildroot 0001559]: mplayer uses llrint which is
-	unavailable on uClibc
-Message-ID: <5869689a0d6712f75a9caa50e23e1532@busybox.net>
+From: Hamish Moffatt <hamish@cloud.net.au>
+Date: Mon, 29 Oct 2007 11:42:14 +1100
+Subject: [Buildroot] svn commit: trunk/buildroot/package
+In-Reply-To: <20071026175010.4296EA6137@busybox.net>
+References: <20071026175010.4296EA6137@busybox.net>
+Message-ID: <20071029004214.GA23959@cloud.net.au>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+On Fri, Oct 26, 2007 at 10:50:10AM -0700, vanokuten at uclibc.org wrote:
+> Author: vanokuten
+> Date: 2007-10-26 10:50:09 -0700 (Fri, 26 Oct 2007)
+> New Revision: 20321
+> 
+> Log:
+> make microcom visible until it appear in busybox release
+> 
+> Modified:
+>    trunk/buildroot/package/Config.in
+> 
+> 
+> Changeset:
+> Modified: trunk/buildroot/package/Config.in
+> ===================================================================
+> --- trunk/buildroot/package/Config.in	2007-10-24 22:29:30 UTC (rev 20320)
+> +++ trunk/buildroot/package/Config.in	2007-10-26 17:50:09 UTC (rev 20321)
+> @@ -155,7 +155,7 @@
+>  source "package/links/Config.in"
+>  source "package/lrzsz/Config.in"
+>  source "package/mdnsresponder/Config.in"
+> -if !BR2_PACKAGE_BUSYBOX_HIDE_OTHERS
+> +if !BR2_PACKAGE_BUSYBOX_HIDE_OTHERS && !BR2_PACKAGE_BUSYBOX_SNAPSHOT
+>  source "package/microcom/Config.in"
 
-A NOTE has been added to this issue. 
-====================================================================== 
-http://busybox.net/bugs/view.php?id=1559 
-====================================================================== 
-Reported By:                ikonst
-Assigned To:                buildroot
-====================================================================== 
-Project:                    buildroot
-Issue ID:                   1559
-Category:                   Architecture Specific
-Reproducibility:            always
-Severity:                   minor
-Priority:                   normal
-Status:                     assigned
-====================================================================== 
-Date Submitted:             10-28-2007 11:49 PDT
-Last Modified:              10-28-2007 14:34 PDT
-====================================================================== 
-Summary:                    mplayer uses llrint which is unavailable on uClibc
-Description: 
-The mplayer-1.0rc1-atmel.3.patch already solves this issue, but does so
-only for AVR32 targets (for no good reason, since the patch itself admits
-it's a uClibc issue).
+Shouldn't that be a logical OR rather than AND?
 
-The attached patch changes this portion of the Atmel patch to apply for
-all uClibc cases.
-====================================================================== 
-
----------------------------------------------------------------------- 
- vanokuten - 10-28-07 14:34  
----------------------------------------------------------------------- 
-"mplayer uses llrint which is unavailable on uClibc"
-
-What make you think so? I have it defined in libm-0.9.29.so 
-and Mplayer build OK for arm target, which is not AVR32 one.
-
-regards,
-Ivan 
-
-Issue History 
-Date Modified   Username       Field                    Change               
-====================================================================== 
-10-28-07 11:49  ikonst         New Issue                                    
-10-28-07 11:49  ikonst         Status                   new => assigned     
-10-28-07 11:49  ikonst         Assigned To               => buildroot       
-10-28-07 11:49  ikonst         File Added: mplayer-llrint-not-only-atmel.patch  
-                 
-10-28-07 14:34  vanokuten      Note Added: 0002865                          
-======================================================================
+Hamish
+-- 
+Hamish Moffatt VK3SB <hamish@debian.org> <hamish@cloud.net.au>
