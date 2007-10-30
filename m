@@ -1,36 +1,35 @@
-From: Michael Hunold <hunold@linuxtv.org>
-Date: Tue, 30 Oct 2007 14:54:10 +0100
-Subject: [Buildroot] svn commit: trunk/buildroot/package:  kismet
-In-Reply-To: <20071030091652.2D272A67F9@busybox.net>
-References: <20071030091652.2D272A67F9@busybox.net>
-Message-ID: <47273782.1000900@linuxtv.org>
+From: Paul Barrette <r01325@freescale.com>
+Date: Tue, 30 Oct 2007 10:51:05 -0400
+Subject: [Buildroot] powerpc soft float no  fmsub
+Message-ID: <472744D9.5080706@freescale.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+I am building just the toolchain for powepc (generic) with C++ support. 
+However, when I link a C++ app, there is an undefined ref to "fmsub".  I
+have soft float enabled, which seems to be the reason, and I do not have
+an FPU.  Google is not much help here, unless here is a different name
+for fmsub.
 
-on 30.10.2007 10:16 thomasez at uclibc.org said the following:
-> Author: thomasez
-> Date: 2007-10-30 02:16:51 -0700 (Tue, 30 Oct 2007)
-> New Revision: 20329
-> 
-> Log:
-> Adding Kismet, closing #1557
-> 
-> 
-> Added:
->    trunk/buildroot/package/kismet/
->    trunk/buildroot/package/kismet/Config.in
->    trunk/buildroot/package/kismet/kismet.mk
-> 
-> Modified:
->    trunk/buildroot/package/Config.in
+$ powerpc-linux-g++ -o X test.cc
+~/test_ppc_toolchain-4.2.1/usr/bin/../lib/gcc/powerpc-linux-uclibc/4.2.1/../../../../powerpc-linux-uclibc/lib/libgcc_s.so:
+undefined reference to `fmsub'
 
-Something is wrong now. Buildroot wants to unconditionally download the
-kismet sources even if Kismet was not selected at all.
+Details:
+Build root: 20071029
+uClibc :uClibc-0.9.29
+gcc: 4.2.1
 
-Best regards
-Michael.
+Ideas welcome
+
+Thanks
+Pb
+
+-- 
+Paul Barrette 
+Freescale Semiconductor
+paul.barrette at freescale.com
+(613) 723-9161 x4034
