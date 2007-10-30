@@ -1,49 +1,59 @@
-From: ulf at uclibc.org <ulf@uclibc.org>
-Date: Tue, 30 Oct 2007 13:14:12 -0700 (PDT)
-Subject: [Buildroot] svn commit: trunk/buildroot/project
-Message-ID: <20071030201412.E4B66A5E1E@busybox.net>
+From: bugs at busybox.net <bugs@busybox.net>
+Date: Tue, 30 Oct 2007 13:14:57 -0700
+Subject: [Buildroot] [buildroot 0001558]: make saveconfig rewrite .conf file
+	incorrect
+Message-ID: <960dd21760c0a440d5018a4066a93e7b@busybox.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Author: ulf
-Date: 2007-10-30 13:14:12 -0700 (Tue, 30 Oct 2007)
-New Revision: 20335
 
-Log:
-Fix saveconfig followed by menuconfig
+The following issue has been RESOLVED. 
+====================================================================== 
+http://busybox.net/bugs/view.php?id=1558 
+====================================================================== 
+Reported By:                mata
+Assigned To:                buildroot
+====================================================================== 
+Project:                    buildroot
+Issue ID:                   1558
+Category:                   Other
+Reproducibility:            always
+Severity:                   minor
+Priority:                   normal
+Status:                     resolved
+Resolution:                 fixed
+Fixed in Version:           
+====================================================================== 
+Date Submitted:             10-28-2007 02:56 PDT
+Last Modified:              10-30-2007 13:14 PDT
+====================================================================== 
+Summary:                    make saveconfig rewrite .conf file incorrect
+Description: 
+When do `make saveconfig`, config files will be copied to local/proj/, and
+at main .config file uClibc,buildroot,kernel config location are
+overrided.
+But when check with `make menuconfig`, those config file location are
+erased. I chased this process. At finally, I found `saveconfig`
+modification are not for mconf format.
+This patch is for override mconf acceptable format at saveconfig.
+====================================================================== 
 
-Modified:
-   trunk/buildroot/project/project.mk
+---------------------------------------------------------------------- 
+ UlfSamuelsson - 10-30-07 13:14  
+---------------------------------------------------------------------- 
+Patch applied in rev 20335 
 
-
-Changeset:
-Modified: trunk/buildroot/project/project.mk
-===================================================================
---- trunk/buildroot/project/project.mk	2007-10-30 20:05:25 UTC (rev 20334)
-+++ trunk/buildroot/project/project.mk	2007-10-30 20:14:12 UTC (rev 20335)
-@@ -22,19 +22,19 @@
- 		cp $(LINUX26_DIR)/.config \
- 			$(LOCAL)/$(PROJECT)/linux-$(LINUX26_VERSION).config; \
- 		$(SED) '/BR2_PACKAGE_LINUX_KCONFIG/d' $(PROJECT_FILE); \
--		echo "BR2_PACKAGE_LINUX_KCONFIG:=$(LOCAL)/$(PROJECT)/linux-$(LINUX26_VERSION).config" >> $(PROJECT_FILE); \
-+		echo "BR2_PACKAGE_LINUX_KCONFIG=\"$(LOCAL)/$(PROJECT)/linux-$(LINUX26_VERSION).config\"" >> $(PROJECT_FILE); \
- 	fi
- 	if [ -f $(BUSYBOX_DIR)/.config ]; then \
- 		cp $(BUSYBOX_DIR)/.config \
- 			$(LOCAL)/$(PROJECT)/busybox-$(BUSYBOX_VERSION).config; \
- 		$(SED) '/BR2_PACKAGE_BUSYBOX_CONFIG/d' $(PROJECT_FILE); \
--		echo "BR2_PACKAGE_BUSYBOX_CONFIG:=$(LOCAL)/$(PROJECT)/busybox-$(BUSYBOX_VERSION).config" >> $(PROJECT_FILE); \
-+		echo "BR2_PACKAGE_BUSYBOX_CONFIG=\"$(LOCAL)/$(PROJECT)/busybox-$(BUSYBOX_VERSION).config\"" >> $(PROJECT_FILE); \
- 	fi
- 	if [ -f $(UCLIBC_DIR)/.config ]; then \
- 		cp $(UCLIBC_DIR)/.config \
- 			$(LOCAL)/$(PROJECT)/uclibc-$(UCLIBC_VER).config; \
- 		$(SED) '/BR2_UCLIBC_CONFIG/d' $(PROJECT_FILE); \
--		echo "BR2_UCLIBC_CONFIG:=$(LOCAL)/$(PROJECT)/uclibc-$(UCLIBC_VER).config" >> $(PROJECT_FILE); \
-+		echo "BR2_UCLIBC_CONFIG=\"$(LOCAL)/$(PROJECT)/uclibc-$(UCLIBC_VER).config\"" >> $(PROJECT_FILE); \
- 	fi
- 	if [ -f $(UBOOT_DIR)/include/configs/$(PROJECT).h ]; then \
- 		mkdir -p $(LOCAL)/$(PROJECT)/u-boot; \
+Issue History 
+Date Modified   Username       Field                    Change               
+====================================================================== 
+10-28-07 02:56  mata           New Issue                                    
+10-28-07 02:56  mata           Status                   new => assigned     
+10-28-07 02:56  mata           Assigned To               => buildroot       
+10-28-07 02:56  mata           File Added: project.diff                     
+10-30-07 13:14  UlfSamuelsson  Status                   assigned => resolved
+10-30-07 13:14  UlfSamuelsson  Resolution               open => fixed       
+10-30-07 13:14  UlfSamuelsson  Note Added: 0002878                          
+======================================================================
