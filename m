@@ -1,7 +1,8 @@
 From: bugs at busybox.net <bugs@busybox.net>
-Date: Tue, 30 Oct 2007 14:44:31 -0700
-Subject: [Buildroot] [buildroot 0001537]: kexec doesn't build for arm/armeb
-Message-ID: <f4878ebdb2a6ab47b83afbeec30410da@busybox.net>
+Date: Tue, 30 Oct 2007 14:45:00 -0700
+Subject: [Buildroot] [buildroot 0001558]: make saveconfig rewrite .conf file
+	incorrect
+Message-ID: <0895fafe762dd2a5a61eca296ac5be84@busybox.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -11,14 +12,14 @@ To: buildroot@busybox.net
 
 The following issue has been CLOSED 
 ====================================================================== 
-http://busybox.net/bugs/view.php?id=1537 
+http://busybox.net/bugs/view.php?id=1558 
 ====================================================================== 
-Reported By:                hmoffatt
+Reported By:                mata
 Assigned To:                buildroot
 ====================================================================== 
 Project:                    buildroot
-Issue ID:                   1537
-Category:                   Architecture Specific
+Issue ID:                   1558
+Category:                   Other
 Reproducibility:            always
 Severity:                   minor
 Priority:                   normal
@@ -26,48 +27,40 @@ Status:                     closed
 Resolution:                 fixed
 Fixed in Version:           
 ====================================================================== 
-Date Submitted:             10-16-2007 22:32 PDT
-Last Modified:              10-30-2007 14:44 PDT
+Date Submitted:             10-28-2007 02:56 PDT
+Last Modified:              10-30-2007 14:45 PDT
 ====================================================================== 
-Summary:                    kexec doesn't build for arm/armeb
+Summary:                    make saveconfig rewrite .conf file incorrect
 Description: 
-kexec doesn't build on arm or armeb.
-
-Problems are:
-1. armeb not a supported architecture;
-2. arm support patch needs to be updated due to an internal API change.
-
-Fix is trivial - attached.
+When do `make saveconfig`, config files will be copied to local/proj/, and
+at main .config file uClibc,buildroot,kernel config location are
+overrided.
+But when check with `make menuconfig`, those config file location are
+erased. I chased this process. At finally, I found `saveconfig`
+modification are not for mconf format.
+This patch is for override mconf acceptable format at saveconfig.
 ====================================================================== 
 
 ---------------------------------------------------------------------- 
- hmoffatt - 10-17-07 21:43  
+ UlfSamuelsson - 10-30-07 13:14  
 ---------------------------------------------------------------------- 
-Use kexec-arm-fix2 instead. It fixes the incorrect syscall number in the
-original source. 
+Patch applied in rev 20335 
 
 ---------------------------------------------------------------------- 
- UlfSamuelsson - 10-17-07 22:27  
+ UlfSamuelsson - 10-30-07 14:45  
 ---------------------------------------------------------------------- 
-kexec-arm-fix2 has been applied in revision 20278 
-
----------------------------------------------------------------------- 
- UlfSamuelsson - 10-30-07 14:44  
----------------------------------------------------------------------- 
-FIxed 
+Fixed 
 
 Issue History 
 Date Modified   Username       Field                    Change               
 ====================================================================== 
-10-16-07 22:32  hmoffatt       New Issue                                    
-10-16-07 22:32  hmoffatt       Status                   new => assigned     
-10-16-07 22:32  hmoffatt       Assigned To               => buildroot       
-10-16-07 22:33  hmoffatt       File Added: kexec-arm-fix                    
-10-17-07 21:42  hmoffatt       File Added: kexec-arm-fix2                    
-10-17-07 21:43  hmoffatt       Note Added: 0002831                          
-10-17-07 22:27  UlfSamuelsson  Status                   assigned => resolved
-10-17-07 22:27  UlfSamuelsson  Resolution               open => fixed       
-10-17-07 22:27  UlfSamuelsson  Note Added: 0002832                          
+10-28-07 02:56  mata           New Issue                                    
+10-28-07 02:56  mata           Status                   new => assigned     
+10-28-07 02:56  mata           Assigned To               => buildroot       
+10-28-07 02:56  mata           File Added: project.diff                     
+10-30-07 13:14  UlfSamuelsson  Status                   assigned => resolved
+10-30-07 13:14  UlfSamuelsson  Resolution               open => fixed       
+10-30-07 13:14  UlfSamuelsson  Note Added: 0002878                          
 10-30-07 14:44  UlfSamuelsson  Status                   resolved => closed  
-10-30-07 14:44  UlfSamuelsson  Note Added: 0002881                          
+10-30-07 14:45  UlfSamuelsson  Note Added: 0002882                          
 ======================================================================
