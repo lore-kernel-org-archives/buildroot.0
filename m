@@ -1,66 +1,35 @@
-From: bugs at busybox.net <bugs@busybox.net>
-Date: Tue, 30 Oct 2007 14:45:00 -0700
-Subject: [Buildroot] [buildroot 0001558]: make saveconfig rewrite .conf file
-	incorrect
-Message-ID: <0895fafe762dd2a5a61eca296ac5be84@busybox.net>
+From: ulf at uclibc.org <ulf@uclibc.org>
+Date: Tue, 30 Oct 2007 14:57:44 -0700 (PDT)
+Subject: [Buildroot] svn commit: trunk/buildroot/package/kismet
+Message-ID: <20071030215744.2067EA6079@busybox.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+Author: ulf
+Date: 2007-10-30 14:57:43 -0700 (Tue, 30 Oct 2007)
+New Revision: 20340
 
-The following issue has been CLOSED 
-====================================================================== 
-http://busybox.net/bugs/view.php?id=1558 
-====================================================================== 
-Reported By:                mata
-Assigned To:                buildroot
-====================================================================== 
-Project:                    buildroot
-Issue ID:                   1558
-Category:                   Other
-Reproducibility:            always
-Severity:                   minor
-Priority:                   normal
-Status:                     closed
-Resolution:                 fixed
-Fixed in Version:           
-====================================================================== 
-Date Submitted:             10-28-2007 02:56 PDT
-Last Modified:              10-30-2007 14:45 PDT
-====================================================================== 
-Summary:                    make saveconfig rewrite .conf file incorrect
-Description: 
-When do `make saveconfig`, config files will be copied to local/proj/, and
-at main .config file uClibc,buildroot,kernel config location are
-overrided.
-But when check with `make menuconfig`, those config file location are
-erased. I chased this process. At finally, I found `saveconfig`
-modification are not for mconf format.
-This patch is for override mconf acceptable format at saveconfig.
-====================================================================== 
+Log:
+Fix kismet makefile fragment syntax error
 
----------------------------------------------------------------------- 
- UlfSamuelsson - 10-30-07 13:14  
----------------------------------------------------------------------- 
-Patch applied in rev 20335 
+Modified:
+   trunk/buildroot/package/kismet/kismet.mk
 
----------------------------------------------------------------------- 
- UlfSamuelsson - 10-30-07 14:45  
----------------------------------------------------------------------- 
-Fixed 
 
-Issue History 
-Date Modified   Username       Field                    Change               
-====================================================================== 
-10-28-07 02:56  mata           New Issue                                    
-10-28-07 02:56  mata           Status                   new => assigned     
-10-28-07 02:56  mata           Assigned To               => buildroot       
-10-28-07 02:56  mata           File Added: project.diff                     
-10-30-07 13:14  UlfSamuelsson  Status                   assigned => resolved
-10-30-07 13:14  UlfSamuelsson  Resolution               open => fixed       
-10-30-07 13:14  UlfSamuelsson  Note Added: 0002878                          
-10-30-07 14:44  UlfSamuelsson  Status                   resolved => closed  
-10-30-07 14:45  UlfSamuelsson  Note Added: 0002882                          
-======================================================================
+Changeset:
+Modified: trunk/buildroot/package/kismet/kismet.mk
+===================================================================
+--- trunk/buildroot/package/kismet/kismet.mk	2007-10-30 21:37:39 UTC (rev 20339)
++++ trunk/buildroot/package/kismet/kismet.mk	2007-10-30 21:57:43 UTC (rev 20340)
+@@ -62,8 +62,6 @@
+ 	rm -f $(TARGET_DIR)/$(KISMET_TARGET_DIRECTORY)/kismet_drone
+ 	rm -f $(TARGET_DIR)/$(KISMET_TARGET_DIRECTORY)/kismet_server
+ 	rm -f $(KISMET_DIR)/conf/kismet.conf $(TARGET_DIR)/etc/kismet.conf
+-
+-
+ 	-$(MAKE) -C $(KISMET_DIR) clean
+ 
+ kismet-dirclean:
