@@ -1,73 +1,146 @@
-From: Ulf Samuelsson <ulf@atmel.com>
-Date: Tue, 30 Oct 2007 08:41:54 +0100
-Subject: [Buildroot] Several issues with building multiple"projects"	for
-	same architecture
-References: <d83696340710290855s5e4e4f44y7b5777bfeacf4ec2@mail.gmail.com><1193698207.8485.4.camel@local.atmel.sweden>
-	<20071030001045.GA5198@cloud.net.au>
-Message-ID: <003101c81ac8$75b4be60$01c4af0a@Glamdring>
+From: thomasez at uclibc.org <thomasez@uclibc.org>
+Date: Tue, 30 Oct 2007 02:16:52 -0700 (PDT)
+Subject: [Buildroot] svn commit: trunk/buildroot/package:  kismet
+Message-ID: <20071030091652.2D272A67F9@busybox.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Mon, Oct 29, 2007 at 11:50:07PM +0100, Ulf Samuelsson wrote:
-> m?n 2007-10-29 klockan 10:55 -0500 skrev Jonathan Nalley:
-> > I am using the buildroot to build for several different boards, some
-> > of them have the same CPU architecture (PPC405GP/EP).  I have noticed
-> > some issues with the "project" concept in the buildroot.  Since the
-> > builds are for the same architecture the toolchain is created under
-> > "build_powerpc".  Everything works fine for the first board, but for
-> > subsequent builds for different "project" names things are missing
-> > under "project_build_powerpc/PROJECT_NAME/root".  Specifically:
-> >
-> > /root/lib/libgcc_s.so
-> > /root/usr/lib/libstdc++.so
-> > /root/usr/sbin/ethtool
-> >
-> > This is because the make files that install those files check for:
-> >
-> > $(GCC_BUILD_DIR2)/.libs_installed
+Author: thomasez
+Date: 2007-10-30 02:16:51 -0700 (Tue, 30 Oct 2007)
+New Revision: 20329
 
-There's another problem with this approach. If you are modifying the
-target_skeleton contents you might want to nuke the generated root
-directory and have it rebuilt, but then libgcc_s.so (etc) won't be
-re-copied.
+Log:
+Adding Kismet, closing #1557
 
-> Here is a first attempt to fix this,
-> I have not tested it yet myself though.
->
-> The idea is to create a $(DEP_DIR) directory in $(PROJECT_BUILD_DIR)
-> and then to generate a $(<package>).installed in this directory.
 
-This doesn't solve the problem I note either, although I guess you could
-also delete *.installed. Why not just depend on the actual target rather
-than these stamp files?
+Added:
+   trunk/buildroot/package/kismet/
+   trunk/buildroot/package/kismet/Config.in
+   trunk/buildroot/package/kismet/kismet.mk
 
-==> The proper way of installing a package is often "make install".
-        Question is which files should be copied and in which order.
+Modified:
+   trunk/buildroot/package/Config.in
 
-        If you depend on an arbitrary file, then you risk that
-        the build fails if not all files are copied, but the file,
-         on which we depend *is* copied
 
-        If you detect the order and make it depend on the latest
-        then you have a problem if the package is updated
-        and the order is changed or if new files are introduced
-        by make install.
+Changeset:
+Modified: trunk/buildroot/package/Config.in
+===================================================================
+--- trunk/buildroot/package/Config.in	2007-10-29 21:21:27 UTC (rev 20328)
++++ trunk/buildroot/package/Config.in	2007-10-30 09:16:51 UTC (rev 20329)
+@@ -148,6 +148,7 @@
+ source "package/iproute2/Config.in"
+ source "package/ipsec-tools/Config.in"
+ source "package/iptables/Config.in"
++source "package/kismet/Config.in"
+ source "package/l2tp/Config.in"
+ source "package/libcgi/Config.in"
+ source "package/libcgicc/Config.in"
 
-        You also have a problem if the package has options.
+Added: trunk/buildroot/package/kismet/Config.in
+===================================================================
+--- trunk/buildroot/package/kismet/Config.in	                        (rev 0)
++++ trunk/buildroot/package/kismet/Config.in	2007-10-30 09:16:51 UTC (rev 20329)
+@@ -0,0 +1,15 @@
++config BR2_PACKAGE_KISMET
++	bool "kismet"
++	select BR2_PACKAGE_NCURSES 
++	select BR2_PACKAGE_LIBPCAP
++	default n
++	help
++		Kismet - 802.11 layer2 wireless network detector, sniffer, and intrusion detection system
++
++		Kismet will work with any wireless card which supports raw monitoring (rfmon) mode, and can
++		sniff 802.11b, 802.11a, and 802.11g traffic.
++		
++		Kismet identifies networks by passively collecting packets and detecting standard named
++		networks, detecting (and given time, decloaking) hidden networks, and infering the presence
++		of nonbeaconing networks via data traffic. 
++
 
-        One possible option is to create the .installed
-        inside the root file ssytem, but then you add unneccessary
-        files to your target system.
-
-        If you want to rebuild the project from scratch, then you
-        might as well delete the complete $(PROJECT_BUILD_DIR)
-        instead of the root file system.
-
-        Note that my fix does not handle the "package/Makefile.in.autotools"
-        Someone obviously needs to fix that as well.
-
-Best Regards
-Ulf Samuelsson
+Added: trunk/buildroot/package/kismet/kismet.mk
+===================================================================
+--- trunk/buildroot/package/kismet/kismet.mk	                        (rev 0)
++++ trunk/buildroot/package/kismet/kismet.mk	2007-10-30 09:16:51 UTC (rev 20329)
+@@ -0,0 +1,79 @@
++#############################################################
++#
++# kismet
++#
++#############################################################
++KISMET_VERSION:=2007-10-R1
++KISMET_SOURCE:=kismet-$(KISMET_VERSION).tar.gz
++KISMET_SITE:=http://www.kismetwireless.net/code/
++KISMET_DIR:=$(BUILD_DIR)/kismet-$(KISMET_VERSION)
++KISMET_CAT:=$(ZCAT)
++KISMET_BINARY:=kismet
++KISMET_TARGET_DIRECTORY=usr/bin/
++
++$(DL_DIR)/$(KISMET_SOURCE):
++	$(WGET) -P $(DL_DIR) $(KISMET_SITE)/$(KISMET_SOURCE)
++
++kismet-source: $(DL_DIR)/$(KISMET_SOURCE)
++
++$(KISMET_DIR)/.patched: $(DL_DIR)/$(KISMET_SOURCE)
++	$(KISMET_CAT) $(DL_DIR)/$(KISMET_SOURCE) | tar -C $(BUILD_DIR) $(TAR_OPTIONS) -
++	toolchain/patch-kernel.sh $(KISMET_DIR) package/kismet/ kismet\*.patch
++	touch $@
++
++$(KISMET_DIR)/.configured: $(KISMET_DIR)/.patched
++	(cd $(KISMET_DIR); rm -rf config.cache; \
++		$(TARGET_CONFIGURE_OPTS) \
++		$(TARGET_CONFIGURE_ARGS) \
++		./configure \
++		--target=$(GNU_TARGET_NAME) \
++		--host=$(GNU_TARGET_NAME) \
++		--build=$(GNU_HOST_NAME) \
++		--prefix=/usr \
++		--exec-prefix=/usr \
++		--bindir=/usr/bin \
++		--sbindir=/usr/sbin \
++		--libdir=/lib \
++		--libexecdir=/usr/lib \
++		--sysconfdir=/etc \
++		--datadir=/usr/share \
++		--localstatedir=/var \
++		--mandir=/usr/man \
++		--infodir=/usr/info \
++	)
++	touch $@
++
++$(KISMET_DIR)/$(KISMET_BINARY): $(KISMET_DIR)/.configured
++	$(MAKE) CXX="$(TARGET_CXX)" CC="$(TARGET_CC)" \
++		-C $(KISMET_DIR)
++
++$(TARGET_DIR)/$(KISMET_TARGET_BINARY): $(KISMET_DIR)/$(KISMET_BINARY)
++	install -m 755 $(KISMET_DIR)/kismet $(TARGET_DIR)/$(KISMET_TARGET_DIRECTORY)/kismet
++	install -m 755 $(KISMET_DIR)/kismet_client $(TARGET_DIR)/$(KISMET_TARGET_DIRECTORY)/kismet_client
++	install -m 755 $(KISMET_DIR)/kismet_drone $(TARGET_DIR)/$(KISMET_TARGET_DIRECTORY)/kismet_drone
++	install -m 755 $(KISMET_DIR)/kismet_server $(TARGET_DIR)/$(KISMET_TARGET_DIRECTORY)/kismet_server
++	install -m 755 $(KISMET_DIR)/conf/kismet.conf $(TARGET_DIR)/etc/kismet.conf
++
++kismet: uclibc ncurses libpcap $(TARGET_DIR)/$(KISMET_TARGET_BINARY)
++
++kismet-clean:
++	rm -f $(TARGET_DIR)/$(KISMET_TARGET_DIRECTORY)/kismet
++	rm -f $(TARGET_DIR)/$(KISMET_TARGET_DIRECTORY)/kismet_client
++	rm -f $(TARGET_DIR)/$(KISMET_TARGET_DIRECTORY)/kismet_drone
++	rm -f $(TARGET_DIR)/$(KISMET_TARGET_DIRECTORY)/kismet_server
++	rm -f $(KISMET_DIR)/conf/kismet.conf $(TARGET_DIR)/etc/kismet.conf
++
++
++	-$(MAKE) -C $(KISMET_DIR) clean
++
++kismet-dirclean:
++	rm -rf $(KISMET_DIR)
++
++#############################################################
++#
++# Toplevel Makefile options
++#
++#############################################################
++ifeq ($(strip $(BR2_PACKAGE_KISMET)),y)
++TARGETS+=kismet
++endif
