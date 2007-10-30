@@ -1,8 +1,8 @@
 From: bugs at busybox.net <bugs@busybox.net>
-Date: Tue, 30 Oct 2007 10:50:08 -0700
-Subject: [Buildroot] [buildroot 0001548]: llseek.c:65: error: expected
-	declaration specifiers or '...' before '_llseek'
-Message-ID: <9f24f140f4b97f302ece0df06a41eb92@busybox.net>
+Date: Tue, 30 Oct 2007 12:05:13 -0700
+Subject: [Buildroot] [buildroot 0001564]: Don't build toolchain in build
+	20330
+Message-ID: <c157febc12b98f462efd0cf698127c0d@busybox.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -12,46 +12,41 @@ To: buildroot@busybox.net
 
 A NOTE has been added to this issue. 
 ====================================================================== 
-http://busybox.net/bugs/view.php?id=1548 
+http://busybox.net/bugs/view.php?id=1564 
 ====================================================================== 
-Reported By:                Steve Cornett
+Reported By:                sushisan
 Assigned To:                buildroot
 ====================================================================== 
 Project:                    buildroot
-Issue ID:                   1548
+Issue ID:                   1564
 Category:                   Architecture Specific
 Reproducibility:            always
-Severity:                   block
+Severity:                   crash
 Priority:                   normal
 Status:                     assigned
 ====================================================================== 
-Date Submitted:             10-22-2007 14:17 PDT
-Last Modified:              10-30-2007 10:50 PDT
+Date Submitted:             10-30-2007 09:30 PDT
+Last Modified:              10-30-2007 12:05 PDT
 ====================================================================== 
-Summary:                    llseek.c:65: error: expected declaration specifiers
-or '...' before '_llseek'
+Summary:                    Don't build toolchain in build 20330
 Description: 
-Configure for ARM.  Failure is:
-
-        CC llseek.c
-llseek.c:65: error: expected declaration specifiers or '...' before
-'_llseek'
-
-See attached Config.in and makeLog.
+After a make menuconfig a simple make try to compile the selected packages
+BUT the toolchains are not compile!! (Don't start compiling gcc neither
+others tools)
 ====================================================================== 
 
 ---------------------------------------------------------------------- 
- bernhardf - 10-30-07 10:50  
+ UlfSamuelsson - 10-30-07 12:05  
 ---------------------------------------------------------------------- 
-enable BR2_LARGEFILE 
+It seems to work ok, if "package/kismet/kismet.mk" is renamed
+to "package/kismet/kismet.mkx", removing it from the build,
+so the new package kismet seems to be the culprit. 
 
 Issue History 
 Date Modified   Username       Field                    Change               
 ====================================================================== 
-10-22-07 14:17  Steve Cornett  New Issue                                    
-10-22-07 14:17  Steve Cornett  Status                   new => assigned     
-10-22-07 14:17  Steve Cornett  Assigned To               => buildroot       
-10-22-07 14:17  Steve Cornett  File Added: InputAndOutput.tar                   
-
-10-30-07 10:50  bernhardf      Note Added: 0002873                          
+10-30-07 09:30  sushisan       New Issue                                    
+10-30-07 09:30  sushisan       Status                   new => assigned     
+10-30-07 09:30  sushisan       Assigned To               => buildroot       
+10-30-07 12:05  UlfSamuelsson  Note Added: 0002876                          
 ======================================================================
