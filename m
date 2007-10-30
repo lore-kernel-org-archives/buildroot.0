@@ -1,66 +1,35 @@
-From: Ulf Samuelsson <ulf@atmel.com>
-Date: Tue, 30 Oct 2007 20:36:39 +0100
-Subject: [Buildroot] BUG: ncftpbookmarks fails when building ncftp	utils.
-In-Reply-To: <6090c5eb0710290819s485f9e9dw581599ad5a97f9da@mail.gmail.com>
-References: <6090c5eb0710290819s485f9e9dw581599ad5a97f9da@mail.gmail.com>
-Message-ID: <1193772999.4478.22.camel@aeglos.sweden.atmel.com>
+From: ulf at uclibc.org <ulf@uclibc.org>
+Date: Tue, 30 Oct 2007 13:05:25 -0700 (PDT)
+Subject: [Buildroot] svn commit: trunk/buildroot/package
+Message-ID: <20071030200525.50954A45D3@busybox.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-m?n 2007-10-29 klockan 16:19 +0100 skrev Jorge S.:
-> Hi All,
-> 
-> Ncftp package fails if you've  selected "utils". 
-> 
-> It fails while trying to make the "install -m 0755
-> <path>/ncftpbookmarks" after compiling.
-> 
-> Since i don't need ncftpbookmarks, i solved this changing this in
-> ncftp.mk:
-> 
-> ORIGINAL:
-> 
-> ifeq ($(strip $(BR2_PACKAGE_NCFTP_UTILS)),y)
-> NCFTP_TARGET_BINS+=ncftpbatch ncftpbookmarks ncftpget ncftpls ncftpput
-> endif
-> 
-> 
-> MODIFIED (simply removed ncftpbookmarks): 
-> 
-> ifeq ($(strip $(BR2_PACKAGE_NCFTP_UTILS)),y)
-> NCFTP_TARGET_BINS+=ncftpbatch ncftpget ncftpls ncftpput
-> endif
-> 
-> 
-> It works fine now.
-> 
-> I can submit a patch if someone interested.
-> 
-Is it not better to have a Config.in item
-to allow the user to select which utilities
-and then have "ncftpbatch ncftpget ncftpls ncftpput"
-selected as defaults and anything else unselected.
+Author: ulf
+Date: 2007-10-30 13:05:25 -0700 (Tue, 30 Oct 2007)
+New Revision: 20334
+
+Log:
+Use logical OR instead of AND, Thanks Hamish
+
+Modified:
+   trunk/buildroot/package/Config.in
 
 
-> 
-> Regards, 
-> 
-> Jorge.
-> 
-> 
-> 
-> _______________________________________________
-> buildroot mailing list
-> buildroot at uclibc.org
-> http://busybox.net/mailman/listinfo/buildroot
--- 
-Best Regards,
-Ulf Samuelsson          mail:   ulf at atmel.com
-Atmel Nordic AB
-Box 2033, 174 52 Sundbyberg
-Kavalleriv?gen 24, 174 58 Sundbyberg
-Sweden
-Tel:    +46 8 441 54 22 GSM:    +46 706 224457
+Changeset:
+Modified: trunk/buildroot/package/Config.in
+===================================================================
+--- trunk/buildroot/package/Config.in	2007-10-30 19:54:39 UTC (rev 20333)
++++ trunk/buildroot/package/Config.in	2007-10-30 20:05:25 UTC (rev 20334)
+@@ -156,7 +156,7 @@
+ source "package/links/Config.in"
+ source "package/lrzsz/Config.in"
+ source "package/mdnsresponder/Config.in"
+-if !BR2_PACKAGE_BUSYBOX_HIDE_OTHERS && !BR2_PACKAGE_BUSYBOX_SNAPSHOT
++if !BR2_PACKAGE_BUSYBOX_HIDE_OTHERS || !BR2_PACKAGE_BUSYBOX_SNAPSHOT
+ source "package/microcom/Config.in"
+ endif
+ source "package/mrouted/Config.in"
