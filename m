@@ -1,52 +1,66 @@
-From: bugs at busybox.net <bugs@busybox.net>
-Date: Tue, 30 Oct 2007 12:05:13 -0700
-Subject: [Buildroot] [buildroot 0001564]: Don't build toolchain in build
-	20330
-Message-ID: <c157febc12b98f462efd0cf698127c0d@busybox.net>
+From: Ulf Samuelsson <ulf@atmel.com>
+Date: Tue, 30 Oct 2007 20:36:39 +0100
+Subject: [Buildroot] BUG: ncftpbookmarks fails when building ncftp	utils.
+In-Reply-To: <6090c5eb0710290819s485f9e9dw581599ad5a97f9da@mail.gmail.com>
+References: <6090c5eb0710290819s485f9e9dw581599ad5a97f9da@mail.gmail.com>
+Message-ID: <1193772999.4478.22.camel@aeglos.sweden.atmel.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+m?n 2007-10-29 klockan 16:19 +0100 skrev Jorge S.:
+> Hi All,
+> 
+> Ncftp package fails if you've  selected "utils". 
+> 
+> It fails while trying to make the "install -m 0755
+> <path>/ncftpbookmarks" after compiling.
+> 
+> Since i don't need ncftpbookmarks, i solved this changing this in
+> ncftp.mk:
+> 
+> ORIGINAL:
+> 
+> ifeq ($(strip $(BR2_PACKAGE_NCFTP_UTILS)),y)
+> NCFTP_TARGET_BINS+=ncftpbatch ncftpbookmarks ncftpget ncftpls ncftpput
+> endif
+> 
+> 
+> MODIFIED (simply removed ncftpbookmarks): 
+> 
+> ifeq ($(strip $(BR2_PACKAGE_NCFTP_UTILS)),y)
+> NCFTP_TARGET_BINS+=ncftpbatch ncftpget ncftpls ncftpput
+> endif
+> 
+> 
+> It works fine now.
+> 
+> I can submit a patch if someone interested.
+> 
+Is it not better to have a Config.in item
+to allow the user to select which utilities
+and then have "ncftpbatch ncftpget ncftpls ncftpput"
+selected as defaults and anything else unselected.
 
-A NOTE has been added to this issue. 
-====================================================================== 
-http://busybox.net/bugs/view.php?id=1564 
-====================================================================== 
-Reported By:                sushisan
-Assigned To:                buildroot
-====================================================================== 
-Project:                    buildroot
-Issue ID:                   1564
-Category:                   Architecture Specific
-Reproducibility:            always
-Severity:                   crash
-Priority:                   normal
-Status:                     assigned
-====================================================================== 
-Date Submitted:             10-30-2007 09:30 PDT
-Last Modified:              10-30-2007 12:05 PDT
-====================================================================== 
-Summary:                    Don't build toolchain in build 20330
-Description: 
-After a make menuconfig a simple make try to compile the selected packages
-BUT the toolchains are not compile!! (Don't start compiling gcc neither
-others tools)
-====================================================================== 
 
----------------------------------------------------------------------- 
- UlfSamuelsson - 10-30-07 12:05  
----------------------------------------------------------------------- 
-It seems to work ok, if "package/kismet/kismet.mk" is renamed
-to "package/kismet/kismet.mkx", removing it from the build,
-so the new package kismet seems to be the culprit. 
-
-Issue History 
-Date Modified   Username       Field                    Change               
-====================================================================== 
-10-30-07 09:30  sushisan       New Issue                                    
-10-30-07 09:30  sushisan       Status                   new => assigned     
-10-30-07 09:30  sushisan       Assigned To               => buildroot       
-10-30-07 12:05  UlfSamuelsson  Note Added: 0002876                          
-======================================================================
+> 
+> Regards, 
+> 
+> Jorge.
+> 
+> 
+> 
+> _______________________________________________
+> buildroot mailing list
+> buildroot at uclibc.org
+> http://busybox.net/mailman/listinfo/buildroot
+-- 
+Best Regards,
+Ulf Samuelsson          mail:   ulf at atmel.com
+Atmel Nordic AB
+Box 2033, 174 52 Sundbyberg
+Kavalleriv?gen 24, 174 58 Sundbyberg
+Sweden
+Tel:    +46 8 441 54 22 GSM:    +46 706 224457
