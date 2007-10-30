@@ -1,46 +1,35 @@
-From: bugs at busybox.net <bugs@busybox.net>
-Date: Tue, 30 Oct 2007 02:26:41 -0700
-Subject: [Buildroot] [buildroot 0001561]: missing a $ in assignment for
-	COND_ARCH_FPU_SUFFIX:=(ARCH_FPU_SUFFIX)
-Message-ID: <e6e3f7cb5b2af5f2abee51ac13e1d384@bugs.uclibc.org>
+From: ulf at uclibc.org <ulf@uclibc.org>
+Date: Tue, 30 Oct 2007 03:31:00 -0700 (PDT)
+Subject: [Buildroot] svn commit: trunk/buildroot/package
+Message-ID: <20071030103100.96013A4B70@busybox.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+Author: ulf
+Date: 2007-10-30 03:30:59 -0700 (Tue, 30 Oct 2007)
+New Revision: 20330
 
-The following issue has been SUBMITTED. 
-====================================================================== 
-http://busybox.net/bugs/view.php?id=1561 
-====================================================================== 
-Reported By:                stephaneC
-Assigned To:                buildroot
-====================================================================== 
-Project:                    buildroot
-Issue ID:                   1561
-Category:                   Architecture Specific
-Reproducibility:            always
-Severity:                   block
-Priority:                   normal
-Status:                     assigned
-====================================================================== 
-Date Submitted:             10-30-2007 02:26 PDT
-Last Modified:              10-30-2007 02:26 PDT
-====================================================================== 
-Summary:                    missing a $ in assignment for
-COND_ARCH_FPU_SUFFIX:=(ARCH_FPU_SUFFIX)
-Description: 
-on revision 20328 in file package/Makefile.in line 78
-COND_ARCH_FPU_SUFFIX:=(ARCH_FPU_SUFFIX)
-should be 
-COND_ARCH_FPU_SUFFIX:=$(ARCH_FPU_SUFFIX)
-====================================================================== 
+Log:
+FIx syntax error
 
-Issue History 
-Date Modified   Username       Field                    Change               
-====================================================================== 
-10-30-07 02:26  stephaneC      New Issue                                    
-10-30-07 02:26  stephaneC      Status                   new => assigned     
-10-30-07 02:26  stephaneC      Assigned To               => buildroot       
-======================================================================
+Modified:
+   trunk/buildroot/package/Makefile.in
+
+
+Changeset:
+Modified: trunk/buildroot/package/Makefile.in
+===================================================================
+--- trunk/buildroot/package/Makefile.in	2007-10-30 09:16:51 UTC (rev 20329)
++++ trunk/buildroot/package/Makefile.in	2007-10-30 10:30:59 UTC (rev 20330)
+@@ -75,7 +75,7 @@
+ endif
+ 
+ ifeq ($(strip $(subst ",, $(BR2_FPU_SUFFIX))),y)
+-COND_ARCH_FPU_SUFFIX:=(ARCH_FPU_SUFFIX)
++COND_ARCH_FPU_SUFFIX:=$(ARCH_FPU_SUFFIX)
+ else
+ COND_ARCH_FPU_SUFFIX:=
+ endif
