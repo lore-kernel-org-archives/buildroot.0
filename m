@@ -1,55 +1,49 @@
-From: Ulf Samuelsson <ulf@atmel.com>
-Date: Tue, 30 Oct 2007 21:00:05 +0100
-Subject: [Buildroot] svn commit: trunk/buildroot/package
-In-Reply-To: <20071029004214.GA23959@cloud.net.au>
-References: <20071026175010.4296EA6137@busybox.net>
-	<20071029004214.GA23959@cloud.net.au>
-Message-ID: <1193774405.4478.37.camel@aeglos.sweden.atmel.com>
+From: ulf at uclibc.org <ulf@uclibc.org>
+Date: Tue, 30 Oct 2007 13:14:12 -0700 (PDT)
+Subject: [Buildroot] svn commit: trunk/buildroot/project
+Message-ID: <20071030201412.E4B66A5E1E@busybox.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-m?n 2007-10-29 klockan 11:42 +1100 skrev Hamish Moffatt:
-> On Fri, Oct 26, 2007 at 10:50:10AM -0700, vanokuten at uclibc.org wrote:
-> > Author: vanokuten
-> > Date: 2007-10-26 10:50:09 -0700 (Fri, 26 Oct 2007)
-> > New Revision: 20321
-> > 
-> > Log:
-> > make microcom visible until it appear in busybox release
-> > 
-> > Modified:
-> >    trunk/buildroot/package/Config.in
-> > 
-> > 
-> > Changeset:
-> > Modified: trunk/buildroot/package/Config.in
-> > ===================================================================
-> > --- trunk/buildroot/package/Config.in	2007-10-24 22:29:30 UTC (rev 20320)
-> > +++ trunk/buildroot/package/Config.in	2007-10-26 17:50:09 UTC (rev 20321)
-> > @@ -155,7 +155,7 @@
-> >  source "package/links/Config.in"
-> >  source "package/lrzsz/Config.in"
-> >  source "package/mdnsresponder/Config.in"
-> > -if !BR2_PACKAGE_BUSYBOX_HIDE_OTHERS
-> > +if !BR2_PACKAGE_BUSYBOX_HIDE_OTHERS && !BR2_PACKAGE_BUSYBOX_SNAPSHOT
-> >  source "package/microcom/Config.in"
-> 
-> Shouldn't that be a logical OR rather than AND?
-> 
+Author: ulf
+Date: 2007-10-30 13:14:12 -0700 (Tue, 30 Oct 2007)
+New Revision: 20335
 
-You are right, 
-fixed in svn 20334
+Log:
+Fix saveconfig followed by menuconfig
+
+Modified:
+   trunk/buildroot/project/project.mk
 
 
-> Hamish
--- 
-Best Regards,
-Ulf Samuelsson          mail:   ulf at atmel.com
-Atmel Nordic AB
-Box 2033, 174 52 Sundbyberg
-Kavalleriv?gen 24, 174 58 Sundbyberg
-Sweden
-Tel:    +46 8 441 54 22 GSM:    +46 706 224457
+Changeset:
+Modified: trunk/buildroot/project/project.mk
+===================================================================
+--- trunk/buildroot/project/project.mk	2007-10-30 20:05:25 UTC (rev 20334)
++++ trunk/buildroot/project/project.mk	2007-10-30 20:14:12 UTC (rev 20335)
+@@ -22,19 +22,19 @@
+ 		cp $(LINUX26_DIR)/.config \
+ 			$(LOCAL)/$(PROJECT)/linux-$(LINUX26_VERSION).config; \
+ 		$(SED) '/BR2_PACKAGE_LINUX_KCONFIG/d' $(PROJECT_FILE); \
+-		echo "BR2_PACKAGE_LINUX_KCONFIG:=$(LOCAL)/$(PROJECT)/linux-$(LINUX26_VERSION).config" >> $(PROJECT_FILE); \
++		echo "BR2_PACKAGE_LINUX_KCONFIG=\"$(LOCAL)/$(PROJECT)/linux-$(LINUX26_VERSION).config\"" >> $(PROJECT_FILE); \
+ 	fi
+ 	if [ -f $(BUSYBOX_DIR)/.config ]; then \
+ 		cp $(BUSYBOX_DIR)/.config \
+ 			$(LOCAL)/$(PROJECT)/busybox-$(BUSYBOX_VERSION).config; \
+ 		$(SED) '/BR2_PACKAGE_BUSYBOX_CONFIG/d' $(PROJECT_FILE); \
+-		echo "BR2_PACKAGE_BUSYBOX_CONFIG:=$(LOCAL)/$(PROJECT)/busybox-$(BUSYBOX_VERSION).config" >> $(PROJECT_FILE); \
++		echo "BR2_PACKAGE_BUSYBOX_CONFIG=\"$(LOCAL)/$(PROJECT)/busybox-$(BUSYBOX_VERSION).config\"" >> $(PROJECT_FILE); \
+ 	fi
+ 	if [ -f $(UCLIBC_DIR)/.config ]; then \
+ 		cp $(UCLIBC_DIR)/.config \
+ 			$(LOCAL)/$(PROJECT)/uclibc-$(UCLIBC_VER).config; \
+ 		$(SED) '/BR2_UCLIBC_CONFIG/d' $(PROJECT_FILE); \
+-		echo "BR2_UCLIBC_CONFIG:=$(LOCAL)/$(PROJECT)/uclibc-$(UCLIBC_VER).config" >> $(PROJECT_FILE); \
++		echo "BR2_UCLIBC_CONFIG=\"$(LOCAL)/$(PROJECT)/uclibc-$(UCLIBC_VER).config\"" >> $(PROJECT_FILE); \
+ 	fi
+ 	if [ -f $(UBOOT_DIR)/include/configs/$(PROJECT).h ]; then \
+ 		mkdir -p $(LOCAL)/$(PROJECT)/u-boot; \
