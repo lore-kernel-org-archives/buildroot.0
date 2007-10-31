@@ -1,62 +1,42 @@
-From: Hans-Christian Egtvedt <hcegtvedt@atmel.com>
-Date: Wed, 31 Oct 2007 08:30:35 +0100
-Subject: [Buildroot] [PATCH] dependencies.sh: add check for libtool and
-	libtoolize
-Message-ID: <11938158351147-git-send-email-hcegtvedt@atmel.com>
+From: Hebbar <gururajakr@sanyo.co.in>
+Date: Wed, 31 Oct 2007 01:21:54 -0700 (PDT)
+Subject: [Buildroot]  make error with Kismet even if not selected
+In-Reply-To: <47273782.1000900@linuxtv.org>
+References: <20071030091652.2D272A67F9@busybox.net>
+	<47273782.1000900@linuxtv.org>
+Message-ID: <13504645.post@talk.nabble.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-This patch checks if libtool and libtoolize is installed on the build system,
-if not a warning is generated recommending the user to install the libtool
-package.
 
-Libtool is used by some packages to fix broken ltmain.sh scripts.
+Hi,
 
-Signed-off-by: Hans-Christian Egtvedt <hcegtvedt@atmel.com>
----
- toolchain/dependencies/dependencies.sh |   27 +++++++++++++++++++++++++++
- 1 files changed, 27 insertions(+), 0 deletions(-)
+ i get an error as below when "make world" is given. This is with todays
+buildroot snapshot i havent selected kismet in network utilities section.
+still kismet tries to download and build.
 
-diff --git a/toolchain/dependencies/dependencies.sh b/toolchain/dependencies/dependencies.sh
-index 60b9b65..04885cd 100755
---- a/toolchain/dependencies/dependencies.sh
-+++ b/toolchain/dependencies/dependencies.sh
-@@ -260,6 +260,33 @@ echo "flex installed:					Ok"
- 
- #############################################################
- #
-+# check build system 'libtool'
-+#
-+#############################################################
-+if ! which libtool > /dev/null ; then
-+	echo "libtools installed:			     FALSE"
-+	echo
-+	echo "Most likely some packages will fail to configure."
-+	echo "Either install 'libtool' on your host or fix the respective packages."
-+	echo
-+else
-+	echo "libtool installed:				Ok"
-+fi
-+
-+if ! which libtoolize > /dev/null ; then
-+	echo "libtoolize installed:			     FALSE"
-+	echo
-+	echo "Most likely some packages will fail to configure."
-+	echo "Either install 'libtoolize' on your host or fix the respective packages."
-+	echo "Libtoolize can usually be found in the libtool package for your host."
-+	echo
-+else
-+	echo "libtoolize installed:				Ok"
-+fi
-+
-+
-+#############################################################
-+#
- # check build system 'gettext'
- #
- #############################################################
+Regards
+Gururaja
+
+checking build system type... i386-pc-linux-gnu
+checking host system type... arm-unknown-linux-gnu
+checking for arm-linux-gcc...
+/home/guru/project/toolchain/uclibc/usr/bin/arm-linux-uclibcgnueabi-gcc -Os
+-pipe  -I/home/guru/project/toolchain/uclibc/usr/include
+-I/home/guru/project/toolchain/uclibc/include
+--sysroot=/home/guru/project/toolchain/uclibc/ -isysroot
+/home/guru/project/toolchain/uclibc -mtune=arm9tdmi
+checking for C compiler default output file name... 
+configure: error: C compiler cannot create executables
+See `config.log' for more details.
+make: ***
+[/home/guru/project/original/bldrt/buildroot/build_arm/kismet-2007-10-R1/.configured]
+Error 77
+
+
 -- 
-1.5.2.5
+View this message in context: http://www.nabble.com/svn-commit%3A-trunk-buildroot-package%3A--kismet-tf4717274.html#a13504645
+Sent from the BuildRoot mailing list archive at Nabble.com.
