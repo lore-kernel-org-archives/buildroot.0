@@ -1,26 +1,41 @@
-From: Hamish Moffatt <hamish@cloud.net.au>
-Date: Wed, 31 Oct 2007 20:43:41 +1100
-Subject: [Buildroot] make error with Kismet even if not selected
-In-Reply-To: <13504645.post@talk.nabble.com>
-References: <20071030091652.2D272A67F9@busybox.net>
-	<47273782.1000900@linuxtv.org> <13504645.post@talk.nabble.com>
-Message-ID: <20071031094341.GA20152@cloud.net.au>
+From: bugs at busybox.net <bugs@busybox.net>
+Date: Wed, 31 Oct 2007 03:04:55 -0700
+Subject: [Buildroot] [buildroot 0001566]: New library: PCRE
+Message-ID: <1242f4a5c0205c99a6c1fe6750d735b3@bugs.uclibc.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Wed, Oct 31, 2007 at 01:21:54AM -0700, Hebbar wrote:
->  i get an error as below when "make world" is given. This is with todays
-> buildroot snapshot i havent selected kismet in network utilities section.
-> still kismet tries to download and build.
 
-Noted in bug#1557, and my patch to fix it is in that report too.
+The following issue has been SUBMITTED. 
+====================================================================== 
+http://busybox.net/bugs/view.php?id=1566 
+====================================================================== 
+Reported By:                Tomek
+Assigned To:                buildroot
+====================================================================== 
+Project:                    buildroot
+Issue ID:                   1566
+Category:                   New Features
+Reproducibility:            N/A
+Severity:                   feature
+Priority:                   normal
+Status:                     assigned
+====================================================================== 
+Date Submitted:             10-31-2007 03:04 PDT
+Last Modified:              10-31-2007 03:04 PDT
+====================================================================== 
+Summary:                    New library: PCRE
+Description: 
+New library: PCRE (http://www.pcre.org)
+====================================================================== 
 
-http://bugs.uclibc.org/view.php?id=1557
-
-
-Hamish
--- 
-Hamish Moffatt VK3SB <hamish@debian.org> <hamish@cloud.net.au>
+Issue History 
+Date Modified   Username       Field                    Change               
+====================================================================== 
+10-31-07 03:04  Tomek          New Issue                                    
+10-31-07 03:04  Tomek          Status                   new => assigned     
+10-31-07 03:04  Tomek          Assigned To               => buildroot       
+======================================================================
