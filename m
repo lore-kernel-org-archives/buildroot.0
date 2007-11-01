@@ -1,72 +1,35 @@
-From: Ulf Samuelsson <ulf@atmel.com>
-Date: Thu,  1 Nov 2007 18:16:00 +0100
-Subject: [Buildroot] per-project uclibc configuration does not really w
- ork
-Message-ID: <C0lYQrgSKC8w.XPtGTLcB@mailout.dof.se>
+From: Steven J. Hill <sjhill@realitydiluted.com>
+Date: Thu, 1 Nov 2007 12:40:06 -0500
+Subject: [Buildroot] NPTL support for uClibc-0.9.28
+In-Reply-To: <297299.44939.qm@web7902.mail.in.yahoo.com>
+References: <297299.44939.qm@web7902.mail.in.yahoo.com>
+Message-ID: <20071101174006.GA9683@real.realitydiluted.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+>    I am using buildroot to build cross toolchain for MIPS processor ( binutils 2.15,  gcc 3.4.3, uClibc-0.9.28 and Linux 2.6.18 kernel) .
+>    
+Nope. You will need gcc-4.2 or better and uClibc-0.9.29 from the
+uClibc-NPTL branch in Subversion and binutils-2.17 or better.
 
-buildroot's project support (eg saveconfig target) appears to offer
-per-project uClibc .config support and per-project uClibc version selection.
+>   Can i get Native POSIX Threading (NPTL) support if i use above versions of binutils-2.15,gcc-3.4.3,uClibc-0.9.28 and Linux 2.6.18 kernel by enabling the  "Enable Native POSIX Threading (NPTL) support?"
+>   in the buildroot Toolchain Options.
+>    
 
-=> Once you have built 
-  the toolchain for one
-  project the rest of
-  the projects should
-  use that as an external
-  toolchain and none of the
-  gcc,binutils,uClibc 
-  configuration items in
-  Toolchain should be
-  changed.
+>    Also does uClibc-0.9.28   support Native POSIX Threading (NPTL)?
+>    
+No, and it never will.
 
+>   If not what are the suggested versions of binutils,uClibc and gcc to be used to  get NPTL support for MIPS cross toolchain. 
+>    
+binutils-2.17.60.0.16
+gcc-4.2.0
+uClibc-NPTL
 
+Honestly everyone, I am clearing my schedule to do the NPTL merge and
+get SuperH, ARM and MIPS all with NPTL support into trunk.
 
-However, uclibc is built into the per-arch toolchain_build_$(ARCH) 
-directory and installed into build_$(ARCH), rather than the per-project
-build directory project_build_$(ARCH)/$(PROJECT). And so is the gcc
-cross-compiler built against that uclibc.
-
-Only a few packages build into the per-project build directly, name
-busybox and uclibc. The problem is that if you change your uclibc
-configuration you may well need to rebuild all your programs too,
-because autoconf tests might return different results etc.
-
-=> AII configurable packages
-  should be built ln 
-  project-build-arch if
-  the reconfiguration results
-  in the package binaries
-  changing shape.
-  If the package builds
-  several binaries and
-  the configuration only
-  changes which binaries
-  are copied to the 
-  target dir, then the
-  package can be built in
-  build-dir.
-
-Effectively you have to build everything per-project (including the
-whole toolchain).
-
-=> Dont change the toolchain
-   and you get the benefit.
-
-Is there much benefit in trying to share package builds between
-projects, as buildroot does right now?
-
-=> Yes, if you build several
-   boards with a common
-   toolchain you reduce
-   the build time for each
-   package to a fraction
-   of a second.
-
-
-Best Regards
-Ulf Samuelsson
+-Steve
