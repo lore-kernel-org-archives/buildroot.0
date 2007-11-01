@@ -1,35 +1,86 @@
-From: Steven J. Hill <sjhill@realitydiluted.com>
-Date: Thu, 1 Nov 2007 12:40:06 -0500
-Subject: [Buildroot] NPTL support for uClibc-0.9.28
-In-Reply-To: <297299.44939.qm@web7902.mail.in.yahoo.com>
-References: <297299.44939.qm@web7902.mail.in.yahoo.com>
-Message-ID: <20071101174006.GA9683@real.realitydiluted.com>
+From: =?ISO-8859-1?Q?Thiago_A._Corr=EAa?= <thiago.correa@gmail.com>
+Date: Thu, 1 Nov 2007 18:56:26 -0200
+Subject: [Buildroot] undefined reference to `_dl_app_init_array'
+In-Reply-To: <000801c81c6c$97cf73a0$cd10da91@w1613amsl>
+References: <000801c81c6c$97cf73a0$cd10da91@w1613amsl>
+Message-ID: <d6cda7730711011356x5904afct3b8eab74bb5916fe@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->    I am using buildroot to build cross toolchain for MIPS processor ( binutils 2.15,  gcc 3.4.3, uClibc-0.9.28 and Linux 2.6.18 kernel) .
->    
-Nope. You will need gcc-4.2 or better and uClibc-0.9.29 from the
-uClibc-NPTL branch in Subversion and binutils-2.17 or better.
+I had the same thing both on my application and on libjpeg on AVR32.
+No idea what's wrong :(
 
->   Can i get Native POSIX Threading (NPTL) support if i use above versions of binutils-2.15,gcc-3.4.3,uClibc-0.9.28 and Linux 2.6.18 kernel by enabling the  "Enable Native POSIX Threading (NPTL) support?"
->   in the buildroot Toolchain Options.
->    
+Unfortunally I couldn't investigate it further (i'm working on a
+project that is already late), I'm sticking with a previously working
+revision.
 
->    Also does uClibc-0.9.28   support Native POSIX Threading (NPTL)?
->    
-No, and it never will.
-
->   If not what are the suggested versions of binutils,uClibc and gcc to be used to  get NPTL support for MIPS cross toolchain. 
->    
-binutils-2.17.60.0.16
-gcc-4.2.0
-uClibc-NPTL
-
-Honestly everyone, I am clearing my schedule to do the NPTL merge and
-get SuperH, ARM and MIPS all with NPTL support into trunk.
-
--Steve
+On 11/1/07, Taylan Develioglu - DSV <taylan.develioglu@nl.dsv.com> wrote:
+>
+>
+>
+>
+> Hi all,
+>
+>
+>
+> Something is wrong with a toolchain I recently built with buildroot:
+>
+>
+>
+> To illustrate trying to compile:
+>
+>
+>
+> main ()
+>
+> {
+>
+>   return 0;
+>
+> }
+>
+>
+>
+> Fails with:
+>
+>
+>
+> /lib/libc.so.0: undefined reference to `_dl_app_init_array'
+>
+> /lib/libc.so.0: undefined reference to `_dl_app_fini_array'
+>
+> collect2: ld returned 1 exit status
+>
+>
+>
+> ldd tells me ld-uClibc-0.9.29.so is not a dynamic executable.
+>
+>
+>
+> Buildroot used was snapshot 20071024
+>
+>
+>
+> Anyone have any idea why this is happening? All binaries linked to it are
+> functioning fine, so apparently the library does have the function, making
+> me think this is a linker issue.
+>
+>
+>
+> Regards,
+>
+>
+>
+> Taylan
+>
+>
+>
+>
+> _______________________________________________
+> buildroot mailing list
+> buildroot at uclibc.org
+> http://busybox.net/mailman/listinfo/buildroot
+>
