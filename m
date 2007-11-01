@@ -1,27 +1,43 @@
-From: julien.boibessot at free.fr <julien.boibessot@free.fr>
-Date: Fri, 30 Nov 2007 17:24:05 +0100
-Subject: [Buildroot] svn commit: trunk/buildroot/package:  libosip2
-In-Reply-To: <1196423486.4635.19.camel@elrond.atmel.sweden>
-References: <20071130102837.4DBEBA6AB6@busybox.net>
-	<474FF6C3.8020107@promwad.com>
-	<1196423486.4635.19.camel@elrond.atmel.sweden>
-Message-ID: <1196439845.475039252ddcd@imp.free.fr>
+From: Hamish Moffatt <hamish@cloud.net.au>
+Date: Thu, 1 Nov 2007 17:07:31 +1100
+Subject: [Buildroot] project support: "make BOARD=xyz getconfig" does not
+	work unless	you already have a .config
+Message-ID: <20071101060731.GA20265@cloud.net.au>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Quoting Ulf Samuelsson <ulf@atmel.com>:
+I'm using multiple-project support for a task here (one of the reasons I
+was attracted to buildroot) and I've encountered a few issues.
 
-> Mistake, trying to add Doom as well so that slipped through.
-> Doom fails to compile on ARM due to packing, but I might as well
-> add it since is should compile on AVR32.
->
+One is that "make BOARD=xyz oldconfig" does not work. Bug#1568, with
+patch. Could somebody please apply this?
 
-If you are interested in trying Doom, I have a working Buildroot makefile that
-compiles successfully PrBoom (SDL Doom clone) on my ARM9 platform (i.MXL):
-http://armadeus.svn.sourceforge.net/viewvc/armadeus/trunk/buildroot/package/prboom/
+Another problem is that "make BOARD=xyz getconfig" does not work. This
+one is a bit harder to solve. The situation is that getconfig is defined 
+in project/project.mk, but that files is included after a .config.cmd,
+which you don't have until after running "make oldconfig".
 
-Regards,
-Julien
+Thus you have to do
+
+make BOARD=xyz oldconfig
+make BOARD=xyz getconfig
+make world
+
+while you should logically be able to do
+
+make BOARD=xyz getconfig
+make oldconfig
+make world
+
+You need to be able to execute getconfig even if .config.cmd doesn't
+exist (it doesn't appear to need it). Is it better to move getconfig
+to the top-level Makefile to somewhere that doesn't depend on
+.config.cmd? Logically it belongs in project/project.mk though.
+
+Thanks
+Hamish
+-- 
+Hamish Moffatt VK3SB <hamish@debian.org> <hamish@cloud.net.au>
