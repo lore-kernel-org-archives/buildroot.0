@@ -1,33 +1,71 @@
-From: Hamish Moffatt <hamish@cloud.net.au>
-Date: Thu, 1 Nov 2007 18:07:28 +1100
-Subject: [Buildroot] per-project uclibc configuration does not really work
-Message-ID: <20071101070728.GA21168@cloud.net.au>
+From: Taylan Develioglu - DSV <taylan.develioglu@nl.dsv.com>
+Date: Thu, 1 Nov 2007 10:50:10 +0100
+Subject: [Buildroot] undefined reference to `_dl_app_init_array'
+Message-ID: <000801c81c6c$97cf73a0$cd10da91@w1613amsl>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-buildroot's project support (eg saveconfig target) appears to offer
-per-project uClibc .config support and per-project uClibc version
-selection.
+Hi all,
 
-However, uclibc is built into the per-arch toolchain_build_$(ARCH) 
-directory and installed into build_$(ARCH), rather than the per-project
-build directory project_build_$(ARCH)/$(PROJECT). And so is the gcc
-cross-compiler built against that uclibc.
+ 
 
-Only a few packages build into the per-project build directly, name
-busybox and uclibc. The problem is that if you change your uclibc
-configuration you may well need to rebuild all your programs too,
-because autoconf tests might return different results etc.
+Something is wrong with a toolchain I recently built with buildroot:
 
-Effectively you have to build everything per-project (including the
-whole toolchain).
+ 
 
-Is there much benefit in trying to share package builds between
-projects, as buildroot does right now?
+To illustrate trying to compile:
 
-Hamish
--- 
-Hamish Moffatt VK3SB <hamish@debian.org> <hamish@cloud.net.au>
+ 
+
+main () 
+
+{
+
+  return 0;
+
+}
+
+ 
+
+Fails with:
+
+ 
+
+/lib/libc.so.0: undefined reference to `_dl_app_init_array'
+
+/lib/libc.so.0: undefined reference to `_dl_app_fini_array'
+
+collect2: ld returned 1 exit status
+
+ 
+
+ldd tells me ld-uClibc-0.9.29.so is not a dynamic executable.
+
+ 
+
+Buildroot used was snapshot 20071024
+
+ 
+
+Anyone have any idea why this is happening? All binaries linked to it are
+functioning fine, so apparently the library does have the function, making
+me think this is a linker issue.
+
+ 
+
+Regards,
+
+ 
+
+Taylan
+
+ 
+
+ 
+
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: http://busybox.net/lists/buildroot/attachments/20071101/e3e12aec/attachment.htm 
