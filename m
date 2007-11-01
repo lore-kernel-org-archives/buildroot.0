@@ -1,39 +1,53 @@
-From: aldot at uclibc.org <aldot@uclibc.org>
-Date: Sun, 30 Sep 2007 11:06:35 -0700 (PDT)
-Subject: [Buildroot] svn commit: trunk/buildroot/target/x86/grub
-Message-ID: <20070930180635.2FE6B300D4@busybox.net>
+From: bugs at busybox.net <bugs@busybox.net>
+Date: Wed, 31 Oct 2007 22:52:33 -0700
+Subject: [Buildroot] [buildroot 0001568]: "make BOARD=xyz menuconfig" /
+	oldconfig etc does not work
+Message-ID: <7e2c6439e3f37477e47880a753fc585b@bugs.uclibc.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Author: aldot
-Date: 2007-09-30 11:06:32 -0700 (Sun, 30 Sep 2007)
-New Revision: 20150
 
-Log:
-- put a static grub into the staging dir
+The following issue has been SUBMITTED. 
+====================================================================== 
+http://busybox.net/bugs/view.php?id=1568 
+====================================================================== 
+Reported By:                hmoffatt
+Assigned To:                buildroot
+====================================================================== 
+Project:                    buildroot
+Issue ID:                   1568
+Category:                   Other
+Reproducibility:            always
+Severity:                   minor
+Priority:                   normal
+Status:                     assigned
+====================================================================== 
+Date Submitted:             10-31-2007 22:52 PDT
+Last Modified:              10-31-2007 22:52 PDT
+====================================================================== 
+Summary:                    "make BOARD=xyz menuconfig" / oldconfig etc does not
+work
+Description: 
+buildroot allows you to do "make BOARD=xyz world" to compile using the
+configuration file in local/xyz/xyz.config, but you can't call menuconfig,
+oldconfig etc in this way.
 
+The problem is that the name of the configuration file isn't being passed
+to the kconfig tool (package/config/conf). kconfig uses $BUILDROOT_CONFIG,
+so all that is needed is to set that environment variable.
 
-Modified:
-   trunk/buildroot/target/x86/grub/grub.mk
+Patch attached fixes this so that "make BOARD=xyz oldconfig" works.
+====================================================================== 
 
-
-Changeset:
-Modified: trunk/buildroot/target/x86/grub/grub.mk
-===================================================================
---- trunk/buildroot/target/x86/grub/grub.mk	2007-09-30 17:55:43 UTC (rev 20149)
-+++ trunk/buildroot/target/x86/grub/grub.mk	2007-09-30 18:06:32 UTC (rev 20150)
-@@ -97,6 +97,11 @@
- 
- $(GRUB_DIR)/$(GRUB_BINARY): $(GRUB_DIR)/.configured
- 	$(MAKE) CC=$(TARGET_CC) -C $(GRUB_DIR)
-+	rm -f $(GRUB_DIR)/$(GRUB_BINARY)
-+	$(MAKE) CC=$(TARGET_CC) CFLAGS+=-static -C $(GRUB_DIR)/grub grub
-+	mkdir -p $(dir $(STAGING_DIR)/$(GRUB_TARGET_BINARY))
-+	mv $(GRUB_DIR)/$(GRUB_BINARY) $(STAGING_DIR)/$(GRUB_TARGET_BINARY).static
-+	$(MAKE) CC=$(TARGET_CC) -C $(GRUB_DIR)/grub
- 
- $(GRUB_DIR)/.installed: $(GRUB_DIR)/$(GRUB_BINARY)
- 	cp $(GRUB_DIR)/$(GRUB_BINARY) $(TARGET_DIR)/$(GRUB_TARGET_BINARY)
+Issue History 
+Date Modified   Username       Field                    Change               
+====================================================================== 
+10-31-07 22:52  hmoffatt       New Issue                                    
+10-31-07 22:52  hmoffatt       Status                   new => assigned     
+10-31-07 22:52  hmoffatt       Assigned To               => buildroot       
+10-31-07 22:52  hmoffatt       File Added: br-board-config.diff                 
+  
+======================================================================
