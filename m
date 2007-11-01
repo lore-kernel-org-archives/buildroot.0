@@ -1,71 +1,29 @@
-From: Taylan Develioglu - DSV <taylan.develioglu@nl.dsv.com>
-Date: Thu, 1 Nov 2007 10:50:10 +0100
-Subject: [Buildroot] undefined reference to `_dl_app_init_array'
-Message-ID: <000801c81c6c$97cf73a0$cd10da91@w1613amsl>
+From: sathesh babu <sathesh_edara2003@yahoo.co.in>
+Date: Thu, 1 Nov 2007 10:46:58 +0000 (GMT)
+Subject: [Buildroot] NPTL support for uClibc-0.9.28
+Message-ID: <297299.44939.qm@web7902.mail.in.yahoo.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi all,
+Hi, 
+   I am using buildroot to build cross toolchain for MIPS processor ( binutils 2.15,  gcc 3.4.3, uClibc-0.9.28 and Linux 2.6.18 kernel) .
+   
+  Can i get Native POSIX Threading (NPTL) support if i use above versions of binutils-2.15,gcc-3.4.3,uClibc-0.9.28 and Linux 2.6.18 kernel by enabling the  "Enable Native POSIX Threading (NPTL) support?"
+  in the buildroot Toolchain Options.
+   
+   Also does uClibc-0.9.28   support Native POSIX Threading (NPTL)?
+   
+  If not what are the suggested versions of binutils,uClibc and gcc to be used to  get NPTL support for MIPS cross toolchain. 
+   
+  Regards,
+  Sathesh
 
- 
-
-Something is wrong with a toolchain I recently built with buildroot:
-
- 
-
-To illustrate trying to compile:
-
- 
-
-main () 
-
-{
-
-  return 0;
-
-}
-
- 
-
-Fails with:
-
- 
-
-/lib/libc.so.0: undefined reference to `_dl_app_init_array'
-
-/lib/libc.so.0: undefined reference to `_dl_app_fini_array'
-
-collect2: ld returned 1 exit status
-
- 
-
-ldd tells me ld-uClibc-0.9.29.so is not a dynamic executable.
-
- 
-
-Buildroot used was snapshot 20071024
-
- 
-
-Anyone have any idea why this is happening? All binaries linked to it are
-functioning fine, so apparently the library does have the function, making
-me think this is a linker issue.
-
- 
-
-Regards,
-
- 
-
-Taylan
-
- 
-
- 
-
+       
+---------------------------------
+ Forgot the famous last words? Access your message archive online. Click here.
 -------------- next part --------------
 An HTML attachment was scrubbed...
-URL: http://busybox.net/lists/buildroot/attachments/20071101/e3e12aec/attachment.htm 
+URL: http://busybox.net/lists/buildroot/attachments/20071101/912fef7f/attachment.htm 
