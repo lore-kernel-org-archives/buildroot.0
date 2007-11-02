@@ -1,71 +1,75 @@
-From: bugs at busybox.net <bugs@busybox.net>
-Date: Thu, 1 Nov 2007 21:22:35 -0700
-Subject: [Buildroot] [buildroot 0001570]: external toolchain option not
-	copying libraries properly
-Message-ID: <d9b9f78eeaf3bf9b771a2e4bf4527204@bugs.uclibc.org>
+From: Ulf Samuelsson <ulf@atmel.com>
+Date: Fri, 2 Nov 2007 07:23:03 +0100
+Subject: [Buildroot] per-project uclibc configuration does notreally w
+	ork
+References: <C0lYQrgSKC8w.XPtGTLcB@mailout.dof.se>
+	<20071102001137.GB18120@cloud.net.au>
+Message-ID: <004101c81d19$0de49050$01c4af0a@Glamdring>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+> On Thu, Nov 01, 2007 at 06:16:00PM +0100, Ulf Samuelsson wrote:
+>> buildroot's project support (eg saveconfig target) appears to offer
+>> per-project uClibc .config support and per-project uClibc version 
+>> selection.
+>>
+>> => Once you have built
+>>   the toolchain for one
+>>   project the rest of
+>>   the projects should
+>>   use that as an external
+>>   toolchain and none of the
+>>   gcc,binutils,uClibc
+>>   configuration items in
+>>   Toolchain should be
+>>   changed.
+>
+> OK. So if I have 2+ projects I wish to build using a common toolchain,
+> would you suggest making an additional project just to build the
+> toolchain (no packages, no target filesystems) then setting the other
+> projects to all use an external toolchain?
+>
 
-The following issue has been SUBMITTED. 
-====================================================================== 
-http://busybox.net/bugs/view.php?id=1570 
-====================================================================== 
-Reported By:                hmoffatt
-Assigned To:                buildroot
-====================================================================== 
-Project:                    buildroot
-Issue ID:                   1570
-Category:                   Other
-Reproducibility:            sometimes
-Severity:                   major
-Priority:                   normal
-Status:                     assigned
-====================================================================== 
-Date Submitted:             11-01-2007 21:22 PDT
-Last Modified:              11-01-2007 21:22 PDT
-====================================================================== 
-Summary:                    external toolchain option not copying libraries
-properly
-Description: 
-toolchain/ext-tool.mk has a complicated bunch of code for copying libraries
-from the external toolchain to the system root. 
+It is a matter of taste. You can do it either way.
+I ususally just build to toolchain with one project
+and set the toolchain parameters to the same for the other projects.
 
-It calls gcc -print-file-name and on my system the path returned is
-actually a symlinked directory within the staging_dir, for some reason. It
-uses the result to call find, but find won't follow the symlink and then
-doesn't find the libraries.
+It is probably better to have one project to build the toolchain.
 
-My external toolchain was built by a different buildroot project and lives
-in the same staging dir. gcc -print-file-name is returning
+>> Is there much benefit in trying to share package builds between
+>> projects, as buildroot does right now?
+>>
+>> => Yes, if you build several
+>>    boards with a common
+>>    toolchain you reduce
+>>    the build time for each
+>>    package to a fraction
+>>    of a second.
+>
+> Once the toolchain is common, you could achieve most of the same
+> speedup using ccache, but guarantee the correct results. The current
+> scheme can't guarantee that; you don't know what autoconf might pick up
+> which is target specific (other installed packages etc).
+>
 
-/home/hamish/work/elara/buildroot/build_armeb/staging_dir/lib/gcc/armeb-linux-uclibcgnu/4.1.2/../../../../armeb-linux-uclibcgnu/lib
-
-which is a symlink to
-
-/home/hamish/work/elara/buildroot/build_armeb/staging_dir/lib/gcc/armeb-linux-uclibcgnu/4.1.2/../../../../lib
+I dont see how ccache can help you to speed up building one source
+tree just because you have built another source tree containing the
+iden tical code and a different ccache directory.
 
 
-Adding -H to find causes it to follow links in the command-line parameters
-(but not during the actual find), which solves it.
+> Admittedly if you build a toolchain for each project then you can't
+> effectively use ccache (the compiler will appear to be different, even
+> if it is actually the same).
+>
+>
+> Hamish
+> -- 
+> Hamish Moffatt VK3SB <hamish@debian.org> <hamish@cloud.net.au>
+>
 
-Another alternative would be some sort of path canonicalisation tool, like
-$(realpath ...) in Make, but there doesn't appear to be a standard POSIX
-shell function for this.
 
-The attached patch adds -H to the find flags.
-
-====================================================================== 
-
-Issue History 
-Date Modified   Username       Field                    Change               
-====================================================================== 
-11-01-07 21:22  hmoffatt       New Issue                                    
-11-01-07 21:22  hmoffatt       Status                   new => assigned     
-11-01-07 21:22  hmoffatt       Assigned To               => buildroot       
-11-01-07 21:22  hmoffatt       File Added: br-ext-toolchain.diff                
-   
-======================================================================
+Best Regards
+Ulf Samuelsson 
