@@ -1,56 +1,62 @@
-From: Hamish Moffatt <hamish@cloud.net.au>
-Date: Fri, 2 Nov 2007 11:11:37 +1100
-Subject: [Buildroot] per-project uclibc configuration does not	really w
-	ork
-In-Reply-To: <C0lYQrgSKC8w.XPtGTLcB@mailout.dof.se>
-References: <C0lYQrgSKC8w.XPtGTLcB@mailout.dof.se>
-Message-ID: <20071102001137.GB18120@cloud.net.au>
+From: bugs at busybox.net <bugs@busybox.net>
+Date: Thu, 1 Nov 2007 18:02:14 -0700
+Subject: [Buildroot] [buildroot 0001568]: "make BOARD=xyz menuconfig" /
+	oldconfig etc does not work
+Message-ID: <cd085d6318919d32ce0e59a47934afa1@bugs.uclibc.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Thu, Nov 01, 2007 at 06:16:00PM +0100, Ulf Samuelsson wrote:
-> buildroot's project support (eg saveconfig target) appears to offer
-> per-project uClibc .config support and per-project uClibc version selection.
-> 
-> => Once you have built 
->   the toolchain for one
->   project the rest of
->   the projects should
->   use that as an external
->   toolchain and none of the
->   gcc,binutils,uClibc 
->   configuration items in
->   Toolchain should be
->   changed.
 
-OK. So if I have 2+ projects I wish to build using a common toolchain,
-would you suggest making an additional project just to build the
-toolchain (no packages, no target filesystems) then setting the other
-projects to all use an external toolchain?
+A NOTE has been added to this issue. 
+====================================================================== 
+http://busybox.net/bugs/view.php?id=1568 
+====================================================================== 
+Reported By:                hmoffatt
+Assigned To:                buildroot
+====================================================================== 
+Project:                    buildroot
+Issue ID:                   1568
+Category:                   Other
+Reproducibility:            always
+Severity:                   minor
+Priority:                   normal
+Status:                     assigned
+====================================================================== 
+Date Submitted:             10-31-2007 22:52 PDT
+Last Modified:              11-01-2007 18:02 PDT
+====================================================================== 
+Summary:                    "make BOARD=xyz menuconfig" / oldconfig etc does not
+work
+Description: 
+buildroot allows you to do "make BOARD=xyz world" to compile using the
+configuration file in local/xyz/xyz.config, but you can't call menuconfig,
+oldconfig etc in this way.
 
-> Is there much benefit in trying to share package builds between
-> projects, as buildroot does right now?
-> 
-> => Yes, if you build several
->    boards with a common
->    toolchain you reduce
->    the build time for each
->    package to a fraction
->    of a second.
+The problem is that the name of the configuration file isn't being passed
+to the kconfig tool (package/config/conf). kconfig uses $BUILDROOT_CONFIG,
+so all that is needed is to set that environment variable.
 
-Once the toolchain is common, you could achieve most of the same
-speedup using ccache, but guarantee the correct results. The current
-scheme can't guarantee that; you don't know what autoconf might pick up
-which is target specific (other installed packages etc).
+Patch attached fixes this so that "make BOARD=xyz oldconfig" works.
+====================================================================== 
 
-Admittedly if you build a toolchain for each project then you can't 
-effectively use ccache (the compiler will appear to be different, even
-if it is actually the same).
+---------------------------------------------------------------------- 
+ hmoffatt - 11-01-07 18:02  
+---------------------------------------------------------------------- 
+"make BOARD=xyz world" also fails due to a few more hard-coded references
+to .config. br2-board-config2.diff fixes those. 
 
-
-Hamish
--- 
-Hamish Moffatt VK3SB <hamish@debian.org> <hamish@cloud.net.au>
+Issue History 
+Date Modified   Username       Field                    Change               
+====================================================================== 
+10-31-07 22:52  hmoffatt       New Issue                                    
+10-31-07 22:52  hmoffatt       Status                   new => assigned     
+10-31-07 22:52  hmoffatt       Assigned To               => buildroot       
+10-31-07 22:52  hmoffatt       File Added: br-board-config.diff                 
+  
+11-01-07 18:01  hmoffatt       File Added: br-board-config2.diff                
+   
+11-01-07 18:02  hmoffatt       Note Added: 0002885                          
+======================================================================
