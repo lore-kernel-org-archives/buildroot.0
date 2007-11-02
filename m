@@ -1,8 +1,8 @@
 From: bugs at busybox.net <bugs@busybox.net>
-Date: Thu, 1 Nov 2007 18:02:14 -0700
-Subject: [Buildroot] [buildroot 0001568]: "make BOARD=xyz menuconfig" /
-	oldconfig etc does not work
-Message-ID: <cd085d6318919d32ce0e59a47934afa1@bugs.uclibc.org>
+Date: Thu, 1 Nov 2007 21:22:35 -0700
+Subject: [Buildroot] [buildroot 0001570]: external toolchain option not
+	copying libraries properly
+Message-ID: <d9b9f78eeaf3bf9b771a2e4bf4527204@bugs.uclibc.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -10,53 +10,62 @@ Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
 
-A NOTE has been added to this issue. 
+The following issue has been SUBMITTED. 
 ====================================================================== 
-http://busybox.net/bugs/view.php?id=1568 
+http://busybox.net/bugs/view.php?id=1570 
 ====================================================================== 
 Reported By:                hmoffatt
 Assigned To:                buildroot
 ====================================================================== 
 Project:                    buildroot
-Issue ID:                   1568
+Issue ID:                   1570
 Category:                   Other
-Reproducibility:            always
-Severity:                   minor
+Reproducibility:            sometimes
+Severity:                   major
 Priority:                   normal
 Status:                     assigned
 ====================================================================== 
-Date Submitted:             10-31-2007 22:52 PDT
-Last Modified:              11-01-2007 18:02 PDT
+Date Submitted:             11-01-2007 21:22 PDT
+Last Modified:              11-01-2007 21:22 PDT
 ====================================================================== 
-Summary:                    "make BOARD=xyz menuconfig" / oldconfig etc does not
-work
+Summary:                    external toolchain option not copying libraries
+properly
 Description: 
-buildroot allows you to do "make BOARD=xyz world" to compile using the
-configuration file in local/xyz/xyz.config, but you can't call menuconfig,
-oldconfig etc in this way.
+toolchain/ext-tool.mk has a complicated bunch of code for copying libraries
+from the external toolchain to the system root. 
 
-The problem is that the name of the configuration file isn't being passed
-to the kconfig tool (package/config/conf). kconfig uses $BUILDROOT_CONFIG,
-so all that is needed is to set that environment variable.
+It calls gcc -print-file-name and on my system the path returned is
+actually a symlinked directory within the staging_dir, for some reason. It
+uses the result to call find, but find won't follow the symlink and then
+doesn't find the libraries.
 
-Patch attached fixes this so that "make BOARD=xyz oldconfig" works.
+My external toolchain was built by a different buildroot project and lives
+in the same staging dir. gcc -print-file-name is returning
+
+/home/hamish/work/elara/buildroot/build_armeb/staging_dir/lib/gcc/armeb-linux-uclibcgnu/4.1.2/../../../../armeb-linux-uclibcgnu/lib
+
+which is a symlink to
+
+/home/hamish/work/elara/buildroot/build_armeb/staging_dir/lib/gcc/armeb-linux-uclibcgnu/4.1.2/../../../../lib
+
+
+Adding -H to find causes it to follow links in the command-line parameters
+(but not during the actual find), which solves it.
+
+Another alternative would be some sort of path canonicalisation tool, like
+$(realpath ...) in Make, but there doesn't appear to be a standard POSIX
+shell function for this.
+
+The attached patch adds -H to the find flags.
+
 ====================================================================== 
-
----------------------------------------------------------------------- 
- hmoffatt - 11-01-07 18:02  
----------------------------------------------------------------------- 
-"make BOARD=xyz world" also fails due to a few more hard-coded references
-to .config. br2-board-config2.diff fixes those. 
 
 Issue History 
 Date Modified   Username       Field                    Change               
 ====================================================================== 
-10-31-07 22:52  hmoffatt       New Issue                                    
-10-31-07 22:52  hmoffatt       Status                   new => assigned     
-10-31-07 22:52  hmoffatt       Assigned To               => buildroot       
-10-31-07 22:52  hmoffatt       File Added: br-board-config.diff                 
-  
-11-01-07 18:01  hmoffatt       File Added: br-board-config2.diff                
+11-01-07 21:22  hmoffatt       New Issue                                    
+11-01-07 21:22  hmoffatt       Status                   new => assigned     
+11-01-07 21:22  hmoffatt       Assigned To               => buildroot       
+11-01-07 21:22  hmoffatt       File Added: br-ext-toolchain.diff                
    
-11-01-07 18:02  hmoffatt       Note Added: 0002885                          
 ======================================================================
