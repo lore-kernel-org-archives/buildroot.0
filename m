@@ -1,8 +1,7 @@
 From: bugs at busybox.net <bugs@busybox.net>
-Date: Sun, 4 Nov 2007 03:13:33 -0800
-Subject: [Buildroot] [buildroot 0001571]: AVR32 patch in libmad causes
-	unnecessary config.status --recheck
-Message-ID: <56db2efa9435e743000206f5db1a3a81@bugs.uclibc.org>
+Date: Sun, 4 Nov 2007 03:14:16 -0800
+Subject: [Buildroot] [buildroot 0001560]: libmad should be libtoolized
+Message-ID: <2c44ec566e421c7aa7c94e7201c786eb@bugs.uclibc.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -10,49 +9,50 @@ Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
 
-The following issue has been SUBMITTED. 
+A NOTE has been added to this issue. 
 ====================================================================== 
-http://busybox.net/bugs/view.php?id=1571 
+http://busybox.net/bugs/view.php?id=1560 
 ====================================================================== 
 Reported By:                ikonst
 Assigned To:                buildroot
 ====================================================================== 
 Project:                    buildroot
-Issue ID:                   1571
+Issue ID:                   1560
 Category:                   Architecture Specific
 Reproducibility:            always
 Severity:                   minor
 Priority:                   normal
 Status:                     assigned
 ====================================================================== 
-Date Submitted:             11-04-2007 03:13 PST
-Last Modified:              11-04-2007 03:13 PST
+Date Submitted:             10-28-2007 11:53 PDT
+Last Modified:              11-04-2007 03:14 PST
 ====================================================================== 
-Summary:                    AVR32 patch in libmad causes unnecessary
-config.status --recheck
+Summary:                    libmad should be libtoolized
 Description: 
-Since the libmad-0.15.1b-avr32-optimization.patch modifies both
-'configure.ac' and 'configure', a timing issue will often occur.
+Current version of libmad comes with ltmain.sh which is incompatible with
+modern versions of libtool, causing shared objects to be built without the
+.so extension.
 
-Within every standard Makefile, there's a rule which causes a rebuild of
-the configure file (by means of running autoconf) when 'configure.ac' is
-newer than 'configure'.
-
-Within libmad-0.15.1b-avr32-optimization.patch, configure.ac is patched
-AFTER configure, and so, the 'configure.ac' may end up being newer. Worse
-yet, this happens "randomly": if both files are patches in the same
-second, the problem isn't visible.
-
-The attached patch reorders configure.ac to appear BEFORE configure within
-libmad-0.15.1b-avr32-optimization.patch.
+This patch invokes libtoolize (which is a utility from the libtool package
+and comes along with libtool itself) to create an appropriate ltmain.sh.
 ====================================================================== 
+
+---------------------------------------------------------------------- 
+ ikonst - 11-04-07 03:14  
+---------------------------------------------------------------------- 
+Actually, this patch does not solve the issue and should be reverted.
+
+BTW, I've seen ulf already commited this patch (without marking is as
+FIXED  :(, so if you can, please revert it; the real solution is in issue
+0001571. 
 
 Issue History 
 Date Modified   Username       Field                    Change               
 ====================================================================== 
-11-04-07 03:13  ikonst         New Issue                                    
-11-04-07 03:13  ikonst         Status                   new => assigned     
-11-04-07 03:13  ikonst         Assigned To               => buildroot       
-11-04-07 03:13  ikonst         File Added:
-libmad-avr32-optimization-reorder.patch                    
+10-28-07 11:53  ikonst         New Issue                                    
+10-28-07 11:53  ikonst         Status                   new => assigned     
+10-28-07 11:53  ikonst         Assigned To               => buildroot       
+10-28-07 11:53  ikonst         File Added: buildroot-libmad-libtoolize.patch    
+               
+11-04-07 03:14  ikonst         Note Added: 0002886                          
 ======================================================================
