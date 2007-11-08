@@ -1,8 +1,8 @@
 From: bugs at busybox.net <bugs@busybox.net>
-Date: Thu, 8 Nov 2007 05:12:44 -0800
+Date: Thu, 8 Nov 2007 05:29:35 -0800
 Subject: [Buildroot] [buildroot 0001580]: [PATCH] Updated nios2 support for
 	buildroot
-Message-ID: <b808534ac6ba002800580205f61a9602@bugs.uclibc.org>
+Message-ID: <364b5025193101871480204522c10844@bugs.uclibc.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -26,7 +26,7 @@ Priority:                   normal
 Status:                     assigned
 ====================================================================== 
 Date Submitted:             11-08-2007 05:06 PST
-Last Modified:              11-08-2007 05:12 PST
+Last Modified:              11-08-2007 05:29 PST
 ====================================================================== 
 Summary:                    [PATCH] Updated nios2 support for buildroot
 Description: 
@@ -39,9 +39,18 @@ buildroot, and adds some new features:
 ====================================================================== 
 
 ---------------------------------------------------------------------- 
- atle - 11-08-07 05:12  
+ atle - 11-08-07 05:14  
 ---------------------------------------------------------------------- 
-C++ support depends on the patch in issue 1579. 
+C++ support depends on the patch in
+http://bugs.uclibc.org/view.php?id=1579.
+
+ 
+
+---------------------------------------------------------------------- 
+ atle - 11-08-07 05:29  
+---------------------------------------------------------------------- 
+The uClibc build insists on installing ldd/ldconfig even though their not
+built. Suggested solution attached (uclibc-hostutils-install.diff). 
 
 Issue History 
 Date Modified   Username       Field                    Change               
@@ -57,4 +66,8 @@ Date Modified   Username       Field                    Change
 11-08-07 05:07  atle           File Added: kernel-headers-nios2.diff.gz         
           
 11-08-07 05:12  atle           Note Added: 0002897                          
+11-08-07 05:14  atle           Note Edited: 0002897                         
+11-08-07 05:27  atle           File Added: uclibc-hostutils-install.diff        
+           
+11-08-07 05:29  atle           Note Added: 0002898                          
 ======================================================================
