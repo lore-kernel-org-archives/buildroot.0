@@ -1,8 +1,8 @@
 From: bugs at busybox.net <bugs@busybox.net>
-Date: Fri, 9 Nov 2007 05:46:58 -0800
+Date: Fri, 9 Nov 2007 06:07:36 -0800
 Subject: [Buildroot] [buildroot 0001579]: libstdc++ build fails with uclibc
 	headers
-Message-ID: <33051cfa7c5eaee0175f0a4297c76c73@bugs.uclibc.org>
+Message-ID: <2d94215ef0d943e0768e98384acff09f@busybox.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -10,7 +10,7 @@ Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
 
-A NOTE has been added to this issue. 
+The following issue has been CLOSED 
 ====================================================================== 
 http://busybox.net/bugs/view.php?id=1579 
 ====================================================================== 
@@ -23,10 +23,12 @@ Category:                   Other
 Reproducibility:            always
 Severity:                   minor
 Priority:                   normal
-Status:                     assigned
+Status:                     closed
+Resolution:                 open
+Fixed in Version:           
 ====================================================================== 
 Date Submitted:             11-08-2007 03:30 PST
-Last Modified:              11-09-2007 05:46 PST
+Last Modified:              11-09-2007 06:07 PST
 ====================================================================== 
 Summary:                    libstdc++ build fails with uclibc headers
 Description: 
@@ -52,6 +54,12 @@ I'll be darned... It works without the mentioned patch now (for nios2).
 Must have been a configuration issue. Well, I guess this issue can be
 closed. 
 
+---------------------------------------------------------------------- 
+ vanokuten - 11-09-07 06:07  
+---------------------------------------------------------------------- 
+atle, I'm closing this issue - if you will be able to reproduce - just
+reopen bug. 
+
 Issue History 
 Date Modified   Username       Field                    Change               
 ====================================================================== 
@@ -60,4 +68,6 @@ Date Modified   Username       Field                    Change
 11-08-07 03:30  atle           Assigned To               => buildroot       
 11-08-07 03:31  atle           Issue Monitored: atle                        
 11-09-07 05:46  atle           Note Added: 0002904                          
+11-09-07 06:07  vanokuten      Status                   assigned => closed  
+11-09-07 06:07  vanokuten      Note Added: 0002905                          
 ======================================================================
