@@ -1,65 +1,44 @@
-From: bugs at busybox.net <bugs@busybox.net>
-Date: Fri, 9 Nov 2007 01:28:14 -0800
-Subject: [Buildroot] [buildroot 0001582]: libusb tries to build c++ library
-	even if compiler not available
-Message-ID: <d0a4c8762bf35ac7181e3d4bb3690915@busybox.net>
+From: vanokuten at uclibc.org <vanokuten@uclibc.org>
+Date: Fri,  9 Nov 2007 01:30:08 -0800 (PST)
+Subject: [Buildroot] svn commit: trunk/buildroot/package/libusb
+Message-ID: <20071109093008.C87FB30062@busybox.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+Author: vanokuten
+Date: 2007-11-09 01:30:08 -0800 (Fri, 09 Nov 2007)
+New Revision: 20390
 
-The following issue has been CLOSED 
-====================================================================== 
-http://busybox.net/bugs/view.php?id=1582 
-====================================================================== 
-Reported By:                hmoffatt
-Assigned To:                buildroot
-====================================================================== 
-Project:                    buildroot
-Issue ID:                   1582
-Category:                   Other
-Reproducibility:            always
-Severity:                   minor
-Priority:                   normal
-Status:                     closed
-Resolution:                 open
-Fixed in Version:           
-====================================================================== 
-Date Submitted:             11-08-2007 19:03 PST
-Last Modified:              11-09-2007 01:28 PST
-====================================================================== 
-Summary:                    libusb tries to build c++ library even if compiler
-not available
-Description: 
-libusb tries to build a C++ library (libusbpp) even if cross-g++ is not
-available. It actually tries to use the host compiler, then complains
-about mixing objects from the host and target platforms at link time.
+Log:
+fix libusb autoconf scripts for armeb
 
-My fix was to disable the C++ library and also the test suite which uses
-it, in the attached patch. There doesn't seem to be a configure option in
-libusb to disable that more cleanly.
-====================================================================== 
+Modified:
+   trunk/buildroot/package/libusb/libusb.mk
 
----------------------------------------------------------------------- 
- vanokuten - 11-09-07 01:27  
----------------------------------------------------------------------- 
-Applied, thanks! in r20389 
 
----------------------------------------------------------------------- 
- vanokuten - 11-09-07 01:28  
----------------------------------------------------------------------- 
-fixed in r20389 
-
-Issue History 
-Date Modified   Username       Field                    Change               
-====================================================================== 
-11-08-07 19:03  hmoffatt       New Issue                                    
-11-08-07 19:03  hmoffatt       Status                   new => assigned     
-11-08-07 19:03  hmoffatt       Assigned To               => buildroot       
-11-08-07 19:03  hmoffatt       File Added: br-libusb-cpp.mk                    
-11-09-07 01:27  vanokuten      Note Added: 0002899                          
-11-09-07 01:28  vanokuten      Status                   assigned => closed  
-11-09-07 01:28  vanokuten      Note Added: 0002900                          
-======================================================================
+Changeset:
+Modified: trunk/buildroot/package/libusb/libusb.mk
+===================================================================
+--- trunk/buildroot/package/libusb/libusb.mk	2007-11-09 09:26:37 UTC (rev 20389)
++++ trunk/buildroot/package/libusb/libusb.mk	2007-11-09 09:30:08 UTC (rev 20390)
+@@ -23,7 +23,7 @@
+ 
+ libusb-source: $(DL_DIR)/$(LIBUSB_SOURCE) $(LIBUSB_PATCH)
+ 
+-libusb-unpacked: $(LIBUSB_DIR)/.unpacked
++libusb-unpacked: host-automake host-autoconf $(LIBUSB_DIR)/.unpacked
+ $(LIBUSB_DIR)/.unpacked: $(DL_DIR)/$(LIBUSB_SOURCE)
+ 	$(LIBUSB_CAT) $(DL_DIR)/$(LIBUSB_SOURCE) | tar -C $(BUILD_DIR) $(TAR_OPTIONS) -
+ ifneq ($(LIBUSB_PATCH_FILE),)
+@@ -32,6 +32,8 @@
+ 	toolchain/patch-kernel.sh $(LIBUSB_DIR) package/libusb/ libusb-$(LIBUSB_VERSION)\*.patch*
+ 	$(SED) 's,^all:.*,all:,g' $(LIBUSB_DIR)/tests/Makefile.in
+ 	$(SED) 's,^install:.*,install:,g' $(LIBUSB_DIR)/tests/Makefile.in
++	$(CONFIG_UPDATE) $(LIBUSB_DIR)
++	cd $(LIBUSB_DIR) && $(AUTORECONF)
+ 	touch $@
+ 
+ $(LIBUSB_DIR)/.configured: $(LIBUSB_DIR)/.unpacked
