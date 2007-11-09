@@ -1,66 +1,63 @@
-From: vanokuten at uclibc.org <vanokuten@uclibc.org>
-Date: Fri,  9 Nov 2007 02:07:15 -0800 (PST)
-Subject: [Buildroot] svn commit: trunk/buildroot/toolchain/elf2flt
-Message-ID: <20071109100715.A050930062@busybox.net>
+From: bugs at busybox.net <bugs@busybox.net>
+Date: Fri, 9 Nov 2007 05:46:58 -0800
+Subject: [Buildroot] [buildroot 0001579]: libstdc++ build fails with uclibc
+	headers
+Message-ID: <33051cfa7c5eaee0175f0a4297c76c73@bugs.uclibc.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Author: vanokuten
-Date: 2007-11-09 02:07:15 -0800 (Fri, 09 Nov 2007)
-New Revision: 20394
 
-Log:
-update elf2flt nios2 support, thanks atle
+A NOTE has been added to this issue. 
+====================================================================== 
+http://busybox.net/bugs/view.php?id=1579 
+====================================================================== 
+Reported By:                atle
+Assigned To:                buildroot
+====================================================================== 
+Project:                    buildroot
+Issue ID:                   1579
+Category:                   Other
+Reproducibility:            always
+Severity:                   minor
+Priority:                   normal
+Status:                     assigned
+====================================================================== 
+Date Submitted:             11-08-2007 03:30 PST
+Last Modified:              11-09-2007 05:46 PST
+====================================================================== 
+Summary:                    libstdc++ build fails with uclibc headers
+Description: 
+Building gcc-3.4.6 with c++ support still fails as reported in the closed
+issue http://bugs.uclibc.org/view.php?id=904.
+The issue is reported in gcc PR14939,
+http://gcc.gnu.org/bugzilla/show_bug.cgi?id=14939
+and a patch (incorporated in 4.2) is found here:
+http://gcc.gnu.org/bugzilla/attachment.cgi?id=6132
 
-Modified:
-   trunk/buildroot/toolchain/elf2flt/elf2flt.nios2.conditional
+The patch is tested with gcc-3.4.6 and uClibc-0.9.29 for the nios2
+architecture, and works well. Could you please include this patch in
+toolchain/gcc/3.4.6 ?
+This issue is a show-stopper for compiling libstdc++ on the nios2 as we're
+stuck with gcc 3.4.x.
 
+====================================================================== 
 
-Changeset:
-Modified: trunk/buildroot/toolchain/elf2flt/elf2flt.nios2.conditional
-===================================================================
---- trunk/buildroot/toolchain/elf2flt/elf2flt.nios2.conditional	2007-11-09 09:57:25 UTC (rev 20393)
-+++ trunk/buildroot/toolchain/elf2flt/elf2flt.nios2.conditional	2007-11-09 10:07:15 UTC (rev 20394)
-@@ -1,5 +1,5 @@
- --- elf2flt/elf2flt.ld
--++ elf2flt/elf2flt.ld
-++++ elf2flt/elf2flt.ld
- @@ -62,6 +62,10 @@
-  		*(.eh_frame)
-  		*(.gcc_except_table)
-@@ -11,3 +11,32 @@
-  		/* Microblaze has .sdata and .sbss (small bss).  They must
-  		   be contiguous, so please don't move any of this. JW */
-  		_ssrw = . ;			
-+@@ -72,7 +72,7 @@
-+ 		_ssrw = . ;			
-+ 		*(.sdata) 
-+ 		*(.sdata.*)
-+-		*(.sbss)			/* Don't move this! */
-++		*(.sbss .gnu.linkonce.sb*)		/* Don't move this! */
-+ 		_essrw = . ;
-+ 
-+ 		_ssrw_size = _essrw - _ssrw;
-+--- elf2flt/ld-elf2flt.in
-++++ elf2flt/ld-elf2flt.in
-+@@ -132,7 +132,7 @@
-+ 			esac
-+ 			ARG1="$ARG1 -defsym $GOT_OFFSET=`expr ${SHARED_ID} '*' -4 - 4`"
-+ 		fi
-+-		if [ "@emit_relocs@" = "yes" ]
-++		if [ "no" = "yes" ]
-+ 		then
-+ 			SEDOP="$SEDOP -e s/^SINGLE_LINK://"
-+ 		else
-+@@ -155,7 +155,7 @@
-+ 			LDSCRIPT="$NEWLDSCRIPT"
-+ 		fi
-+ 
-+-		if [ "@emit_relocs@" = "yes" ]
-++		if [ "no" = "yes" ]
-+ 		then
-+ 		 $LINKER $EMUL $SDIRS -T $LDSCRIPT -q -o "$OFILE.gdb" $ARG1             ||exit $?
-+ 		 RFILE="$OFILE.gdb"
+---------------------------------------------------------------------- 
+ atle - 11-09-07 05:46  
+---------------------------------------------------------------------- 
+I'll be darned... It works without the mentioned patch now (for nios2).
+Must have been a configuration issue. Well, I guess this issue can be
+closed. 
+
+Issue History 
+Date Modified   Username       Field                    Change               
+====================================================================== 
+11-08-07 03:30  atle           New Issue                                    
+11-08-07 03:30  atle           Status                   new => assigned     
+11-08-07 03:30  atle           Assigned To               => buildroot       
+11-08-07 03:31  atle           Issue Monitored: atle                        
+11-09-07 05:46  atle           Note Added: 0002904                          
+======================================================================
