@@ -1,44 +1,59 @@
-From: vanokuten at uclibc.org <vanokuten@uclibc.org>
-Date: Fri,  9 Nov 2007 01:30:08 -0800 (PST)
-Subject: [Buildroot] svn commit: trunk/buildroot/package/libusb
-Message-ID: <20071109093008.C87FB30062@busybox.net>
+From: bugs at busybox.net <bugs@busybox.net>
+Date: Fri, 9 Nov 2007 01:31:03 -0800
+Subject: [Buildroot] [buildroot 0001581]: libusb configure.guess/sub doesn't
+	support armeb
+Message-ID: <b6a3a96605a642075cbb178217e6504a@busybox.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Author: vanokuten
-Date: 2007-11-09 01:30:08 -0800 (Fri, 09 Nov 2007)
-New Revision: 20390
 
-Log:
-fix libusb autoconf scripts for armeb
+The following issue has been CLOSED 
+====================================================================== 
+http://busybox.net/bugs/view.php?id=1581 
+====================================================================== 
+Reported By:                hmoffatt
+Assigned To:                buildroot
+====================================================================== 
+Project:                    buildroot
+Issue ID:                   1581
+Category:                   Architecture Specific
+Reproducibility:            always
+Severity:                   minor
+Priority:                   normal
+Status:                     closed
+Resolution:                 open
+Fixed in Version:           
+====================================================================== 
+Date Submitted:             11-08-2007 19:00 PST
+Last Modified:              11-09-2007 01:31 PST
+====================================================================== 
+Summary:                    libusb configure.guess/sub doesn't support armeb
+Description: 
+libusb's configure script doesn't support armeb.
 
-Modified:
-   trunk/buildroot/package/libusb/libusb.mk
+Updating the files using $(CONFIG_UPDATE) caused all sorts of libtool hell
+to break loose, so I had to run autoreconf during the build too. Thus
+adding a dependency on automake, autoconf.
 
+Patch attached fixes this for me.
+====================================================================== 
 
-Changeset:
-Modified: trunk/buildroot/package/libusb/libusb.mk
-===================================================================
---- trunk/buildroot/package/libusb/libusb.mk	2007-11-09 09:26:37 UTC (rev 20389)
-+++ trunk/buildroot/package/libusb/libusb.mk	2007-11-09 09:30:08 UTC (rev 20390)
-@@ -23,7 +23,7 @@
- 
- libusb-source: $(DL_DIR)/$(LIBUSB_SOURCE) $(LIBUSB_PATCH)
- 
--libusb-unpacked: $(LIBUSB_DIR)/.unpacked
-+libusb-unpacked: host-automake host-autoconf $(LIBUSB_DIR)/.unpacked
- $(LIBUSB_DIR)/.unpacked: $(DL_DIR)/$(LIBUSB_SOURCE)
- 	$(LIBUSB_CAT) $(DL_DIR)/$(LIBUSB_SOURCE) | tar -C $(BUILD_DIR) $(TAR_OPTIONS) -
- ifneq ($(LIBUSB_PATCH_FILE),)
-@@ -32,6 +32,8 @@
- 	toolchain/patch-kernel.sh $(LIBUSB_DIR) package/libusb/ libusb-$(LIBUSB_VERSION)\*.patch*
- 	$(SED) 's,^all:.*,all:,g' $(LIBUSB_DIR)/tests/Makefile.in
- 	$(SED) 's,^install:.*,install:,g' $(LIBUSB_DIR)/tests/Makefile.in
-+	$(CONFIG_UPDATE) $(LIBUSB_DIR)
-+	cd $(LIBUSB_DIR) && $(AUTORECONF)
- 	touch $@
- 
- $(LIBUSB_DIR)/.configured: $(LIBUSB_DIR)/.unpacked
+---------------------------------------------------------------------- 
+ vanokuten - 11-09-07 01:31  
+---------------------------------------------------------------------- 
+Applied, thanks. Fix in 20390 rev 
+
+Issue History 
+Date Modified   Username       Field                    Change               
+====================================================================== 
+11-08-07 19:00  hmoffatt       New Issue                                    
+11-08-07 19:00  hmoffatt       Status                   new => assigned     
+11-08-07 19:00  hmoffatt       Assigned To               => buildroot       
+11-08-07 19:00  hmoffatt       File Added: br-libusb-autoconf.mk                
+   
+11-09-07 01:31  vanokuten      Status                   assigned => closed  
+11-09-07 01:31  vanokuten      Note Added: 0002901                          
+======================================================================
