@@ -1,41 +1,31 @@
-From: Eric Malkowski <eric@bvwireless.net>
-Date: Mon, 12 Nov 2007 13:36:39 -0500 (EST)
-Subject: [Buildroot] My tweeks/fixes to get a mostly default system working
- w/ 2.6.23.1 kernel
-Message-ID: <60190.74.94.141.114.1194892599.squirrel@bvwireless.net>
+From: Felipe Uderman <felipe.uderman@gmail.com>
+Date: Mon, 12 Nov 2007 18:16:25 -0300
+Subject: [Buildroot] Trying to use buildroot to configure a uClinux Kernel
+	for ARM Architecture... please help
+Message-ID: <951b8d920711121316l59339959x3b894c9884dbbdca@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Where is your tree located?
+Hello,
 
-I checked branches, tags etc. in svn and couldn't see per developer trees
-or anything that looked obvious to me...
+I have followed the steps described here,
+http://buildroot.uclibc.org/buildroot.html, in order to configure a uClinux
+image with buildroot. I have configured my kernel, busybox and everything
+else with Make Menuconfig, and also saved this configuration on a file. But
+then when I run Make, it generates a i386 project folder. I believe this
+should be a default configuration, and somehow buildroot is ignoring my
+changes. Anyone have idea of what am I doing wrong? Is there something I
+should do in order to tell buildroot to use my configurations and not a
+default one?
 
-In looking at the trunk I see this in package/makefile.in:
+Thank you!
 
-# XXX: FIXME: We would need to grab MALLOC_GLIBC_COMPAT from the
-uClibc.config
-# Including it doesn't seem wise, grepping is ugly.. Suggestions?
-# Does malloc return live pointer for malloc(0) ?
-ifeq ($(MALLOC_GLIBC_COMPAT),y)
-BR2_AC_CV_FUNC_MALLOC_0_NONNULL=ac_cv_func_malloc_0_nonnull=yes \
-				gl_cv_func_malloc_0_nonnull=yes \
-				ac_cv_func_realloc_0_nonnull=yes
-else
-BR2_AC_CV_FUNC_MALLOC_0_NONNULL=ac_cv_func_malloc_0_nonnull=no \
-				gl_cv_func_malloc_0_nonnull=no \
-				ac_cv_func_realloc_0_nonnull=no
-endif
+Regards,
 
-I have MALLOC_GLIBC_COMPAT=y in my uclibc config yet these options don't
-seem to make it into my TARGET_CONFIGURE_OPTS or TARGET_CONFIGURE_ARGS.
-
-perhaps your tree does something better...  if so I'll snag it once I know
-where your tree is.  So far only quagga ran into this problem.
-
-Thanks for the reply.
-
--Eric
+Uderman
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: http://busybox.net/lists/buildroot/attachments/20071112/2414309c/attachment.htm 
