@@ -1,8 +1,8 @@
 From: bugs at busybox.net <bugs@busybox.net>
-Date: Mon, 12 Nov 2007 20:36:13 -0800
-Subject: [Buildroot] [buildroot 0001588]: undefined reference to fmsub when
-	using ppc405 + soft-float + c++
-Message-ID: <122c544139ed3eadca5567c1da27927d@busybox.net>
+Date: Tue, 13 Nov 2007 01:35:57 -0800
+Subject: [Buildroot] [buildroot 0001585]: [buildroot] Netkit package build
+	fails
+Message-ID: <f5b4c130b3a2d78e5fa94056cb5600a6@busybox.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -10,76 +10,106 @@ Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
 
-The following issue has been SUBMITTED. 
+A NOTE has been added to this issue. 
 ====================================================================== 
-http://busybox.net/bugs/view.php?id=1588 
+http://busybox.net/bugs/view.php?id=1585 
 ====================================================================== 
-Reported By:                glikely
+Reported By:                hwstar
 Assigned To:                buildroot
 ====================================================================== 
 Project:                    buildroot
-Issue ID:                   1588
+Issue ID:                   1585
 Category:                   Architecture Specific
 Reproducibility:            always
-Severity:                   crash
+Severity:                   minor
 Priority:                   normal
 Status:                     assigned
 ====================================================================== 
-Date Submitted:             11-12-2007 20:36 PST
-Last Modified:              11-12-2007 20:36 PST
+Date Submitted:             11-11-2007 12:40 PST
+Last Modified:              11-13-2007 01:35 PST
 ====================================================================== 
-Summary:                    undefined reference to fmsub when using ppc405 +
-soft-float + c++
+Summary:                    [buildroot] Netkit package build fails
 Description: 
-C++ seems to be brpken on ppc405 toolchains using softfloat and uClibc. 
-Issue seen on current buildroot top-of-tree.
+Netkit package does not build 
 
-I see the error on the iperf configure script.  Here's the relevant error
-message:
+Make output in "Additional Information" field.
 
-configure:1936: checking for C++ compiler default output file name
-configure:1939:
-/home/grant/hacking/buildroot/build_powerpc/staging_dir/usr/bin/powerpc-linux-uclibc-g++
--Os -pipe 
--I/home/grant/hacking/buildroot/build_powerpc/staging_dir/usr/include
--I/home/grant/hacking/buildroot/build_powerpc/staging_dir/include
---sysroot=/home/grant/hacking/buildroot/build_powerpc/staging_dir/
--isysroot /home/grant/hacking/buildroot/build_powerpc/staging_dir
--mtune=405 -msoft-float    conftest.cc  >&5
-/home/grant/hacking/buildroot/build_powerpc/staging_dir/usr/bin-ccache/../lib/gcc/powerpc-linux-uclibc/4.2.1/../../../../powerpc-linux-uclibc/lib/libgcc_s.so:
-undefined reference to `fmsub'
-collect2: ld returned 1 exit status
-configure:1942: $? = 1
-configure: failed program was:
-| /* confdefs.h.  */
-|
-| #define PACKAGE_NAME "Iperf"
-| #define PACKAGE_TARNAME "iperf"
-| #define PACKAGE_VERSION "2.0.2"
-| #define PACKAGE_STRING "Iperf 2.0.2"
-| #define PACKAGE_BUGREPORT ""
-| #define PACKAGE "iperf"
-| #define VERSION "2.0.2"
-| /* end confdefs.h.  */
-|
-| int
-| main ()
-| {
-|
-|   ;
-|   return 0;
-| }
-configure:1981: error: C++ compiler cannot create executables
-See `config.log' for more details.
+Buildroot config/system info:
 
-I've attached my .config file
+SVN revision 20406
+Host: Ubuntu 7.04 (Feisty)
+Target: i386/i586
+
+
 ====================================================================== 
+
+---------------------------------------------------------------------- 
+ vanokuten - 11-11-07 23:50  
+---------------------------------------------------------------------- 
+you did not set BR2_INET_RPC=y when building your toolchain 
+
+---------------------------------------------------------------------- 
+ hwstar - 11-12-07 17:19  
+---------------------------------------------------------------------- 
+After turning on BR2_INET_RPC, it now fails in the linking part of the
+build.
+
+
+Snippet of config file:
+
+#
+# Common Toolchain Options
+#
+BR2_PACKAGE_SSTRIP_TARGET=y
+BR2_PACKAGE_SSTRIP_HOST=y
+# BR2_ENABLE_MULTILIB is not set
+BR2_LARGEFILE=y
+BR2_INET_IPV6=y
+BR2_INET_RPC=y <<<<<<<<<<
+BR2_USE_WCHAR=y
+BR2_TARGET_OPTIMIZATION="-Os -pipe"
+BR2_CROSS_TOOLCHAIN_TARGET_UTILS=y
+
+Output from failed build:
+
+/home/srodgers/projects/limey-linux/limey-linux-test/buildroot/build_i586/staging_dir/usr/bin/i586-linux-uclibc-gcc
+ inetd.o servtab.o builtins.o sig.o daemon.o setproctitle.o mysleep.o  -o
+inetd
+inetd.o: In function `unregister_rpc':
+inetd.c:(.text+0x6a): undefined reference to `pmap_unset'
+inetd.o: In function `register_rpc':
+inetd.c:(.text+0x138): undefined reference to `pmap_unset'
+inetd.c:(.text+0x154): undefined reference to `pmap_set'
+servtab.o: In function `loadconfigent':
+servtab.c:(.text+0xdc1): undefined reference to `getrpcbyname'
+collect2: ld returned 1 exit status
+make[3]: *** [inetd] Error 1
+make[3]: Leaving directory
+`/home/srodgers/projects/limey-linux/limey-linux-test/buildroot/build_i586/netkit-base-0.17/inetd'
+make[2]: *** [inetd.build] Error 2
+make[2]: Leaving directory
+`/home/srodgers/projects/limey-linux/limey-linux-test/buildroot/build_i586/netkit-base-0.17'
+make[1]: ***
+[/home/srodgers/projects/limey-linux/limey-linux-test/buildroot/build_i586/netkit-base-0.17/inetd/inetd]
+Error 2
+make[1]: Leaving directory
+`/home/srodgers/projects/limey-linux/limey-linux-test/buildroot'
+make: *** [buildroot/binaries/limey-linux/rootfs.i586.ext2] Error 2 
+
+---------------------------------------------------------------------- 
+ vanokuten - 11-13-07 01:35  
+---------------------------------------------------------------------- 
+you to do full rebuild of your toolchain, e.g. delete toolchain_build_i386
+and rebuild 
 
 Issue History 
 Date Modified   Username       Field                    Change               
 ====================================================================== 
-11-12-07 20:36  glikely        New Issue                                    
-11-12-07 20:36  glikely        Status                   new => assigned     
-11-12-07 20:36  glikely        Assigned To               => buildroot       
-11-12-07 20:36  glikely        File Added: .config                          
+11-11-07 12:40  hwstar         New Issue                                    
+11-11-07 12:40  hwstar         Status                   new => assigned     
+11-11-07 12:40  hwstar         Assigned To               => buildroot       
+11-11-07 12:44  hwstar         Issue Monitored: hwstar                      
+11-11-07 23:50  vanokuten      Note Added: 0002907                          
+11-12-07 17:19  hwstar         Note Added: 0002909                          
+11-13-07 01:35  vanokuten      Note Added: 0002910                          
 ======================================================================
