@@ -1,31 +1,33 @@
-From: Cristian Ionescu-Idbohrn <cristian.ionescu-idbohrn@axis.com>
-Date: Tue, 13 Nov 2007 10:47:13 +0100 (CET)
-Subject: [Buildroot] [buildroot 0001585]: [buildroot] Netkit package
- build fails
-In-Reply-To: <36e8e3a67743697941affab0306b3022@bugs.uclibc.org>
-References: <36e8e3a67743697941affab0306b3022@bugs.uclibc.org>
-Message-ID: <0711131038430.7950@somehost>
+From: vanokuten at uclibc.org <vanokuten@uclibc.org>
+Date: Tue, 13 Nov 2007 02:01:04 -0800 (PST)
+Subject: [Buildroot] svn commit: trunk/buildroot/package/netkitbase
+Message-ID: <20071113100104.572E93006F@busybox.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Mon, 12 Nov 2007, bugs at busybox.net wrote:
+Author: vanokuten
+Date: 2007-11-13 02:00:59 -0800 (Tue, 13 Nov 2007)
+New Revision: 20413
 
-> ----------------------------------------------------------------------
->  vanokuten - 11-11-07 23:50
-> ----------------------------------------------------------------------
-> you did not set BR2_INET_RPC=y when building your toolchain
+Log:
+add BR2_INET_RPC dependency
 
-What about fixing package/netkitbase/Config.in to:
-
-	select BR2_INET_RPC
-
-thus sorting out the dependency?
+Modified:
+   trunk/buildroot/package/netkitbase/Config.in
 
 
-Cheers,
-
--- 
-Cristian
+Changeset:
+Modified: trunk/buildroot/package/netkitbase/Config.in
+===================================================================
+--- trunk/buildroot/package/netkitbase/Config.in	2007-11-13 04:05:31 UTC (rev 20412)
++++ trunk/buildroot/package/netkitbase/Config.in	2007-11-13 10:00:59 UTC (rev 20413)
+@@ -1,5 +1,6 @@
+ config BR2_PACKAGE_NETKITBASE
+ 	bool "netkitbase"
++	select BR2_INET_RPC
+ 	default n
+ 	help
+ 	  Old-style inetd.
