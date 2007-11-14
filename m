@@ -1,35 +1,52 @@
-From: Ed Stafford <ed.stafford@gmail.com>
-Date: Wed, 14 Nov 2007 12:31:07 -0600
-Subject: [Buildroot] Buildroot fails to build
-In-Reply-To: <D61182AC8012EA4EBC531B3AF23BE10947FDF3@tranzeo-mail2.12stewart.tranzeo.com>
-References: <41370a610711131402y3fe24e85we6c6fd9bafba3897@mail.gmail.com>
-	<D61182AC8012EA4EBC531B3AF23BE10947FDF3@tranzeo-mail2.12stewart.tranzeo.com>
-Message-ID: <41370a610711141031h560c4b41l2fe74753577ae2f7@mail.gmail.com>
+From: Jean-Claude Gervais <jc.gervais@videotron.ca>
+Date: Wed, 14 Nov 2007 13:33:49 -0500
+Subject: [Buildroot] I think I'm in love! And other newbie-type questions...
+Message-ID: <1195065229.17103.13.camel@mercury.sprymusic>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Nov 13, 2007 4:05 PM, Darcy Watkins <DWatkins@tranzeo.com> wrote:
-> Hi Ed,
->
-> Your ARCH appears to be set to a null value.
+Hi,
 
-Ok, so I did a 'make ARCH=i386'
+	I do CM (configuration management) for an embedded software development
+company. That means I have to create tools and procedures to make it
+possible to re-produce software we have already shipped or will be
+shipping.
 
-and felt dumb... it began working.
+	Reading Buildroot's documentation, I am amazed at the ingenuity of the
+solution and really pleased that it may permit me to accomplish the
+goals I mentioned. Thank you for creating such a useful project.
 
-Then it broke while running a configure on gcc:
+I do have a question:
 
-Unknown CPU given in --with-arch=geode.
-make[1]: *** [configure-gcc] Error 1
-make[1]: Leaving directory
-`/home/estaffor/buildroot/toolchain_build_i386/gcc-4.2.1-initial'
-make: *** [/home/estaffor/buildroot/toolchain_build_i386/gcc-4.2.1-initial/.compiled]
-Error 2
+After running the 'make menuconfig' and selecting a number of options, I
+ran 'make' which proceeded to crank away for a number of hours.
 
-I have, in the 'make menuconfig' of buildroot, set the Target
-Architecture (i386) and Target Architecture Variant (geode).  Did I
-run into a bug or does gcc 4.2.1 no longer support either the Geode or
-requires a different setting?
+At the end though it did not complete because of what appears to be a
+missing file - the kernel .config file. More specifically
+
+cp: missing destination file operand after
+`/home/jgervais/Desktop/sandboxes/buildroot/project_build_arm/uclibc/linux-2.6.22.10/.config'
+
+This sort of makes sense to me because although I did specify some
+kernel options, I don't remember actually running the projected kernel's
+'make menuconfig' which would have permitted me to essentially set all
+the kernel options.
+
+I read more of the documentation but could not find how this should be
+handled although it may be quite evident when you are more experienced.
+
+So my question is - What do I need to do to configure the kernel?
+
+I believe once that is done, I will only need to type make and let the
+buildroot procedure continue where it left off.
+
+If there is a document that explains all this, can you please point me
+towards it?
+
+Thank you
+J
+
+PS - I'll make an effort to not be so long-winded next time.
