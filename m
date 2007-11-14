@@ -1,48 +1,89 @@
-From: Thomas Lundquist <lists@zelow.no>
-Date: Wed, 14 Nov 2007 11:12:59 +0100
-Subject: [Buildroot] buildroot with ipkg
-In-Reply-To: <20070923204317.GF20058@aon.at>
-References: <20070922222827.GD711@zelow.no> <20070923204317.GF20058@aon.at>
-Message-ID: <20071114101259.GA2834@zelow.no>
+From: bugs at busybox.net <bugs@busybox.net>
+Date: Wed, 14 Nov 2007 02:27:04 -0800
+Subject: [Buildroot] [buildroot 0001580]: [PATCH] Updated nios2 support for
+	buildroot
+Message-ID: <8ec41830bccd27680ae1224823d280ea@busybox.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Sun, Sep 23, 2007 at 10:43:17PM +0200, Bernhard Fischer wrote:
 
-About time I commit something package related but I feel we have to
-agree.
+A NOTE has been added to this issue. 
+====================================================================== 
+http://busybox.net/bugs/view.php?id=1580 
+====================================================================== 
+Reported By:                atle
+Assigned To:                buildroot
+====================================================================== 
+Project:                    buildroot
+Issue ID:                   1580
+Category:                   Architecture Specific
+Reproducibility:            N/A
+Severity:                   feature
+Priority:                   normal
+Status:                     assigned
+====================================================================== 
+Date Submitted:             11-08-2007 05:06 PST
+Last Modified:              11-14-2007 02:27 PST
+====================================================================== 
+Summary:                    [PATCH] Updated nios2 support for buildroot
+Description: 
+The attached patches fixes toolchain build for nios2 with the recent
+buildroot, and adds some new features:
 
-> Earlier today, i thought a little bit about that, too. This would
-> certainly be a nice thing to have. We would create a make-includeable
-> file, let's say .auto.deps, that is included after BASE_TARGETS are set,
-> but before including any other stuff.
-> 
-> .auto.deps could look something like:
-> libpcap: $(BASE_TARGETS) zlib
-> tcpdump: $(BASE_TARGETS) libpcap
+* Support for c++
+* Support for using 2.6.23 kernel headers
 
-This would then have to replace the SELECT and DEPENDS in Config.in.
-having it in two places is dangerous.
+====================================================================== 
 
-make *config could do the include or merging.
+---------------------------------------------------------------------- 
+ atle - 11-08-07 05:30  
+---------------------------------------------------------------------- 
+The uClibc build insists on installing ldd/ldconfig even though they are
+not built. Suggested solution attached (uclibc-hostutils-install.diff).
 
-> See r19978 and the log for it for further details and questions that
-> arose.. (apart from my typo "thoughs welcome" which lack a "t"
-> somewhere)
+ 
 
-Have to admit I lost you there. Not sure what you meant.
+---------------------------------------------------------------------- 
+ vanokuten - 11-14-07 02:27  
+---------------------------------------------------------------------- 
+I applied your patch: uclibc-hostutils-install.diff and made a test for
+avr32 arch - as result I got this:
+---------
+make[1]: Leaving directory `/opt/buildroot/build_avr32/genext2fs-1.4'
+touch -c /opt/buildroot/build_avr32/genext2fs-1.4/genext2fs
+test -x
+/opt/buildroot/build_avr32/staging_dir/usr/bin/avr32-linux-uclibc-ldconfig
+&&
+/opt/buildroot/build_avr32/staging_dir/usr/bin/avr32-linux-uclibc-ldconfig
+-r /opt/buildroot/project_build_avr32/atstk1002/root 2>/dev/null
+make: *** [/opt/buildroot/binaries/atstk1002/rootfs.avr32-20071114.ext2]
+Error 1
+---------
 
-For those wanting to read the comment:
+seems your skip of ldconfig applied unconditionally. 
 
-http://buildroot.uclibc.org/cgi-bin/viewcvs.cgi?rev=19978&view=rev
-
-Anyway; any reason I should NOT add my packages patchset? I know it's
-not perfect but it's definately a start. the monkeywork of changeing all
-the FOO_DIR thingies in every .mk file is a valid reason not to but I'm
-willing to do it and I don't have a better solution for it.
-
-
-Thomas.
+Issue History 
+Date Modified   Username       Field                    Change               
+====================================================================== 
+11-08-07 05:06  atle           New Issue                                    
+11-08-07 05:06  atle           Status                   new => assigned     
+11-08-07 05:06  atle           Assigned To               => buildroot       
+11-08-07 05:06  atle           File Added: binutils-nios2.diff.gz               
+    
+11-08-07 05:07  atle           File Added: elf2flt-nios2.diff.gz                
+   
+11-08-07 05:07  atle           File Added: gcc-nios2.diff.gz                    
+11-08-07 05:07  atle           File Added: kernel-headers-nios2.diff.gz         
+          
+11-08-07 05:12  atle           Note Added: 0002897                          
+11-08-07 05:14  atle           Note Edited: 0002897                         
+11-08-07 05:27  atle           File Added: uclibc-hostutils-install.diff        
+           
+11-08-07 05:29  atle           Note Added: 0002898                          
+11-08-07 05:30  atle           Note Edited: 0002898                         
+11-09-07 05:55  atle           Note Deleted: 0002897                        
+11-14-07 02:27  vanokuten      Note Added: 0002914                          
+======================================================================
