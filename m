@@ -1,50 +1,39 @@
-From: Sean Parker <supinlick@yahoo.com>
-Date: Wed, 14 Nov 2007 13:24:09 -0800 (PST)
-Subject: [Buildroot] challenge finding 'root fs' generation-point in Make
-	files
-Message-ID: <95732.18689.qm@web51904.mail.re2.yahoo.com>
+From: Janne Kario <janne.kario@gmail.com>
+Date: Wed, 14 Nov 2007 23:54:25 +0200
+Subject: [Buildroot] I think I'm in love! And other newbie-type
+	questions...
+In-Reply-To: <1195075365.17103.31.camel@mercury.sprymusic>
+References: <1195065229.17103.13.camel@mercury.sprymusic>	<fhfl84$mtf$1@ger.gmane.org>
+	<1195075365.17103.31.camel@mercury.sprymusic>
+Message-ID: <fhfqqj$ar3$1@ger.gmane.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello - 
+Jean-Claude Gervais wrote:
+> Hi Janne,
+> 
+> By reading the mailing list archives, I think I understand the problem;
+> When configuring Buildroot, you must specify the path to your
+> kernel .config file.
 
-  I'm having a hard time finding exactly where the file
-'ramfs.img' is built. (I'm using PMC-Sierra's MIPS/Linux
-dev board, which comes with buildroot/uCLinux/busybox,
-etc.)
+You were 10 minutes ahead of me in reading the mailing lists. :)
 
-  When I build the image and tftp-it-over to the target,
-the /etc/rc script dies trying to unpack and mount /var
-from /ramfs.img. So I wanted to force remaking
-$(TARGET_DIR)/root/ramfs.img, but I can't seem to find it's
-generation (the only ref I find is in a Makefile.in in a
-subdir specifically building PMC-Sierra
-extensions/patches/rootfs files) and I suppose it's a
-generic function that you folks might know of...
+I managed to buildroot compile using 'make defconfig'. Apparently, it 
+uses some default kernel configuration (currently running kernel?). 
+Furthermore buildroot comes with a bunch of default configurations for 
+different boards so typing something like 'make atngw100_defconfig' 
+would create default buildroot suitable for Atmel NGW100.
 
-  Does anyone know where in the Make tree this is built so
-I can prove to myself the make is hitting that place, and
-try to find where I may be clobbering the file later in the
-build?
+I haven't read any of the buildroot documentation (perhaps I should) but 
+I think whenever you manage to build a working kernel configuration for 
+your device you take the .config file and save it so that you can build 
+new updated rootfs with more recent kernel version using the exact same 
+configuration.
 
-  Any help appreciated - thanks
-    Sean
+I'm not trying to accomplish anything yet. Just playing with this 
+awesome stuff.
 
-
-
-
-
-God Bless 
-    Sean Parker 
-
-
-
-
-
-      ____________________________________________________________________________________
-Get easy, one-click access to your favorites. 
-Make Yahoo! your homepage.
-http://www.yahoo.com/r/hs 
+j
