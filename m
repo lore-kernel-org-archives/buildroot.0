@@ -1,89 +1,29 @@
-From: bugs at busybox.net <bugs@busybox.net>
-Date: Wed, 14 Nov 2007 02:27:04 -0800
-Subject: [Buildroot] [buildroot 0001580]: [PATCH] Updated nios2 support for
-	buildroot
-Message-ID: <8ec41830bccd27680ae1224823d280ea@busybox.net>
+From: jake sullivan <jacob_sullivan@yahoo.com>
+Date: Wed, 14 Nov 2007 09:34:01 -0800 (PST)
+Subject: [Buildroot] newbie questions (filesystems and bootimage)
+Message-ID: <899048.6025.qm@web56403.mail.re3.yahoo.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+I have a motion control application that I would like to port from a desktop environment to an "embedded" environment.  I have played with the buildroot software and read through the documentation/mailing lists but still have a couple of questions...
 
-A NOTE has been added to this issue. 
-====================================================================== 
-http://busybox.net/bugs/view.php?id=1580 
-====================================================================== 
-Reported By:                atle
-Assigned To:                buildroot
-====================================================================== 
-Project:                    buildroot
-Issue ID:                   1580
-Category:                   Architecture Specific
-Reproducibility:            N/A
-Severity:                   feature
-Priority:                   normal
-Status:                     assigned
-====================================================================== 
-Date Submitted:             11-08-2007 05:06 PST
-Last Modified:              11-14-2007 02:27 PST
-====================================================================== 
-Summary:                    [PATCH] Updated nios2 support for buildroot
-Description: 
-The attached patches fixes toolchain build for nios2 with the recent
-buildroot, and adds some new features:
+The target device is an i486 device with 128megs of RAM and a 128meg flash drive.  Once loaded into memory, the application rarely (once or twice a month) will write a configuration change to the drive.
 
-* Support for c++
-* Support for using 2.6.23 kernel headers
+1) What is the current wisdom on filesystems/types?  It there a reason to not stick with ext2 which seems to be pretty common?
 
-====================================================================== 
+2) How exactly do I get the target image to the device?  I have an adapter to mount the flash drive into my desktop.  I have tried dd'ing it to the drive and tried something in the mailing archives that used rsync, but when I mounted the drive into the device, it couldn't find the OS.  I know all the hardware is working because I have an old slackware image I can dd to the drive and it boots fine.
 
----------------------------------------------------------------------- 
- atle - 11-08-07 05:30  
----------------------------------------------------------------------- 
-The uClibc build insists on installing ldd/ldconfig even though they are
-not built. Suggested solution attached (uclibc-hostutils-install.diff).
+Jake
 
- 
+Is there a place to post HowTo's/FAQs for this project?  Once I get this working, I might as well post it for the next newbie...
 
----------------------------------------------------------------------- 
- vanokuten - 11-14-07 02:27  
----------------------------------------------------------------------- 
-I applied your patch: uclibc-hostutils-install.diff and made a test for
-avr32 arch - as result I got this:
----------
-make[1]: Leaving directory `/opt/buildroot/build_avr32/genext2fs-1.4'
-touch -c /opt/buildroot/build_avr32/genext2fs-1.4/genext2fs
-test -x
-/opt/buildroot/build_avr32/staging_dir/usr/bin/avr32-linux-uclibc-ldconfig
-&&
-/opt/buildroot/build_avr32/staging_dir/usr/bin/avr32-linux-uclibc-ldconfig
--r /opt/buildroot/project_build_avr32/atstk1002/root 2>/dev/null
-make: *** [/opt/buildroot/binaries/atstk1002/rootfs.avr32-20071114.ext2]
-Error 1
----------
 
-seems your skip of ldconfig applied unconditionally. 
 
-Issue History 
-Date Modified   Username       Field                    Change               
-====================================================================== 
-11-08-07 05:06  atle           New Issue                                    
-11-08-07 05:06  atle           Status                   new => assigned     
-11-08-07 05:06  atle           Assigned To               => buildroot       
-11-08-07 05:06  atle           File Added: binutils-nios2.diff.gz               
-    
-11-08-07 05:07  atle           File Added: elf2flt-nios2.diff.gz                
-   
-11-08-07 05:07  atle           File Added: gcc-nios2.diff.gz                    
-11-08-07 05:07  atle           File Added: kernel-headers-nios2.diff.gz         
-          
-11-08-07 05:12  atle           Note Added: 0002897                          
-11-08-07 05:14  atle           Note Edited: 0002897                         
-11-08-07 05:27  atle           File Added: uclibc-hostutils-install.diff        
-           
-11-08-07 05:29  atle           Note Added: 0002898                          
-11-08-07 05:30  atle           Note Edited: 0002898                         
-11-09-07 05:55  atle           Note Deleted: 0002897                        
-11-14-07 02:27  vanokuten      Note Added: 0002914                          
-======================================================================
+
+
+      ____________________________________________________________________________________
+Be a better sports nut!  Let your teams follow you 
+with Yahoo Mobile. Try it now.  http://mobile.yahoo.com/sports;_ylt=At9_qDKvtAbMuh1G1SQtBI7ntAcJ
