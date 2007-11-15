@@ -1,40 +1,40 @@
-From: ing. Federico Fuga <fuga@studiofuga.com>
-Date: Thu, 15 Nov 2007 14:58:57 +0100
+From: Michael Trimarchi <trimarchimichael@yahoo.it>
+Date: Thu, 15 Nov 2007 14:09:13 +0000 (GMT)
 Subject: [Buildroot] Illegal Instruction in arm buildroot
-In-Reply-To: <896058.54769.qm@web26215.mail.ukl.yahoo.com>
-References: <896058.54769.qm@web26215.mail.ukl.yahoo.com>
-Message-ID: <473C50A1.8090201@studiofuga.com>
+Message-ID: <203109.65849.qm@web26215.mail.ukl.yahoo.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Michael,
+Hi,
 
-thank you for your response.
+>I have searched the config files for soft_float  options, but the only
+>section that provides that is on the external_toolchain
 
-> Maybe you have some soft-float operation and the kernel e/o toolchain
-> doesn't have the support
+>happycactus at cammello:~/buildroot> grep SOFT_FLOAT */*/Config.in
+>toolchain/external-toolchain/Config.in:config BR2_SOFT_FLOAT
 
-I have searched the config files for soft_float  options, but the only
-section that provides that is on the external_toolchain
+double a;
+...
+a = 1.40;
+a = a / 23;
 
-happycactus at cammello:~/buildroot> grep SOFT_FLOAT */*/Config.in
-toolchain/external-toolchain/Config.in:config BR2_SOFT_FLOAT
+If the cpu doesn't provide an fpu unit, you must add the soft float emulation
+in your kernel config e/o in your toolchain.
+
+Kernel just resolve the illegal instruction using a soft float unit.
+
+Regards michael
 
 
-and
 
-happycactus at cammello:~/buildroot> grep FLOAT local/freescan/*
-local/freescan/freescan.config:# BR2_SOFT_FLOAT is not set
-local/freescan/freescan.config:# BR2_PACKAGE_LIBFLOAT is not set
-local/freescan/uclibc-0.9.29.config:UCLIBC_HAS_FLOATS=y
-local/freescan/uclibc-0.9.29.config:UCLIBC_HAS_HEXADECIMAL_FLOATS=y
 
-So I am not sure to have really understood your suggestion.
-Can you explain? Thank you in advance!
 
-Best regards,
 
-ing. Federico Fuga
+      ___________________________________ 
+L'email della prossima generazione? Puoi averla con la nuova Yahoo! Mail: http://it.docs.yahoo.com/nowyoucan.html
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: http://busybox.net/lists/buildroot/attachments/20071115/c2b9b0f2/attachment.htm 
