@@ -1,113 +1,53 @@
-From: bugs at busybox.net <bugs@busybox.net>
-Date: Thu, 15 Nov 2007 02:19:15 -0800
-Subject: [Buildroot] [buildroot 0001580]: [PATCH] Updated nios2 support for
-	buildroot
-Message-ID: <204678532357864db0db8f9bf8f236df@busybox.net>
+From: ing. Federico Fuga <fuga@studiofuga.com>
+Date: Thu, 15 Nov 2007 14:17:09 +0100
+Subject: [Buildroot] Illegal Instruction in arm buildroot
+Message-ID: <473C46D5.8040004@studiofuga.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+Hi,
 
-The following issue has been CLOSED 
-====================================================================== 
-http://busybox.net/bugs/view.php?id=1580 
-====================================================================== 
-Reported By:                atle
-Assigned To:                buildroot
-====================================================================== 
-Project:                    buildroot
-Issue ID:                   1580
-Category:                   Architecture Specific
-Reproducibility:            N/A
-Severity:                   feature
-Priority:                   normal
-Status:                     closed
-Resolution:                 open
-Fixed in Version:           
-====================================================================== 
-Date Submitted:             11-08-2007 05:06 PST
-Last Modified:              11-15-2007 02:19 PST
-====================================================================== 
-Summary:                    [PATCH] Updated nios2 support for buildroot
-Description: 
-The attached patches fixes toolchain build for nios2 with the recent
-buildroot, and adds some new features:
+I have a strange problem with buildroot built for an em-x270 board (an
+arm pxa270 based platform from compulab.co.il).
+All the build is performed correctly, and after some small change I have
+a working environment with busybox, udev, alsa, wireless tools, modutils
+and a kernel 2.6.23.1 (patched with some platform-dependent patch).
+But some program doesn't work at all, because the program receives a
+SIGILL (Illegal Instruction exception): for example, wget crashes after
+reading a remote file, udevd do not work at all, and also udhcpc crashes.
+I have straced udevd and wget, and it seems to crash after a certain
+call to syscall_nnnn where nnnn is different between the two applications.
+I have tried many, many different configurations, involving different
+version of gcc (4.0.1, 4.1.2, 4.2.1), of binutils (2.18 and 2.18.50.3,
+AFAIR), of uclibc (0.9.29 and 0.9.28.x) and kernel headers (2.6.23 and
+2.6.22).
+I also have tried with different arm cpu optimizations, xscale and
+generic, and xscale w/ coprocessor for the uclibc (I hoped that the
+problem was in the different cpu for the uclibc and toolchain, but
+without luck). I have passed --with-cpu=xscale to binutils and gcc.
+None ot these configurations makes the system work.
+I can exclude the kernel, because it's taken from the working
+angstrom-linux provided by compulab, and it works well compiled with the
+uclibc toolchain and a standard glibc toolchain, in both cases.
+I provide the buildroot config files for reference.
+Do you have any idea or suggestion ? 
 
-* Support for c++
-* Support for using 2.6.23 kernel headers
+Thank you in advance!
+best regards,
 
-====================================================================== 
+ing. Federico Fuga
 
----------------------------------------------------------------------- 
- atle - 11-08-07 05:30  
----------------------------------------------------------------------- 
-The uClibc build insists on installing ldd/ldconfig even though they are
-not built. Suggested solution attached (uclibc-hostutils-install.diff).
 
- 
+[ The message was reposted because of the attachment limits ]
+-- 
 
----------------------------------------------------------------------- 
- vanokuten - 11-14-07 02:27  
----------------------------------------------------------------------- 
-I applied your patch: uclibc-hostutils-install.diff and made a test for
-avr32 arch - as result I got this:
----------
-make[1]: Leaving directory `/opt/buildroot/build_avr32/genext2fs-1.4'
-touch -c /opt/buildroot/build_avr32/genext2fs-1.4/genext2fs
-test -x
-/opt/buildroot/build_avr32/staging_dir/usr/bin/avr32-linux-uclibc-ldconfig
-&&
-/opt/buildroot/build_avr32/staging_dir/usr/bin/avr32-linux-uclibc-ldconfig
--r /opt/buildroot/project_build_avr32/atstk1002/root 2>/dev/null
-make: *** [/opt/buildroot/binaries/atstk1002/rootfs.avr32-20071114.ext2]
-Error 1
----------
-
-seems your skip of ldconfig applied unconditionally. 
-
----------------------------------------------------------------------- 
- atle - 11-15-07 00:07  
----------------------------------------------------------------------- 
-Sorry, I was a little too fast there. HAVE_SHARED is defined in the uClibc
-configuration and not visible to the build-system. As far as I can see
-there are no global config-options that tell if shared uClibc is built or
-not, but I may be wrong (?). Perhaps it is better to just check if the
-files exists, see the attached patch (uclibc-hostutils-install_v2.diff). 
-
----------------------------------------------------------------------- 
- vanokuten - 11-15-07 02:18  
----------------------------------------------------------------------- 
-uclibc-hostutils-install_v2.diff applied in rev 20427
-
-other nios2 related patches where applied before, so think we can close an
-issue. 
-
-Issue History 
-Date Modified   Username       Field                    Change               
-====================================================================== 
-11-08-07 05:06  atle           New Issue                                    
-11-08-07 05:06  atle           Status                   new => assigned     
-11-08-07 05:06  atle           Assigned To               => buildroot       
-11-08-07 05:06  atle           File Added: binutils-nios2.diff.gz               
-    
-11-08-07 05:07  atle           File Added: elf2flt-nios2.diff.gz                
-   
-11-08-07 05:07  atle           File Added: gcc-nios2.diff.gz                    
-11-08-07 05:07  atle           File Added: kernel-headers-nios2.diff.gz         
-          
-11-08-07 05:12  atle           Note Added: 0002897                          
-11-08-07 05:14  atle           Note Edited: 0002897                         
-11-08-07 05:27  atle           File Added: uclibc-hostutils-install.diff        
-           
-11-08-07 05:29  atle           Note Added: 0002898                          
-11-08-07 05:30  atle           Note Edited: 0002898                         
-11-09-07 05:55  atle           Note Deleted: 0002897                        
-11-14-07 02:27  vanokuten      Note Added: 0002914                          
-11-14-07 23:58  atle           File Added: uclibc-hostutils-install_v2.diff     
-              
-11-15-07 00:07  atle           Note Added: 0002919                          
-11-15-07 02:18  vanokuten      Note Added: 0002922                          
-11-15-07 02:19  vanokuten      Status                   assigned => closed  
-======================================================================
+-------------- next part --------------
+A non-text attachment was scrubbed...
+Name: freescan.config
+Type: application/x-config
+Size: 15078 bytes
+Desc: not available
+Url : http://busybox.net/lists/buildroot/attachments/20071115/dafef198/attachment.bin 
