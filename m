@@ -1,8 +1,8 @@
 From: bugs at busybox.net <bugs@busybox.net>
-Date: Thu, 15 Nov 2007 02:18:55 -0800
+Date: Thu, 15 Nov 2007 02:19:15 -0800
 Subject: [Buildroot] [buildroot 0001580]: [PATCH] Updated nios2 support for
 	buildroot
-Message-ID: <711f7ea003bfa6aa6bbb9120a9090c90@busybox.net>
+Message-ID: <204678532357864db0db8f9bf8f236df@busybox.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -10,7 +10,7 @@ Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
 
-A NOTE has been added to this issue. 
+The following issue has been CLOSED 
 ====================================================================== 
 http://busybox.net/bugs/view.php?id=1580 
 ====================================================================== 
@@ -23,10 +23,12 @@ Category:                   Architecture Specific
 Reproducibility:            N/A
 Severity:                   feature
 Priority:                   normal
-Status:                     assigned
+Status:                     closed
+Resolution:                 open
+Fixed in Version:           
 ====================================================================== 
 Date Submitted:             11-08-2007 05:06 PST
-Last Modified:              11-15-2007 02:18 PST
+Last Modified:              11-15-2007 02:19 PST
 ====================================================================== 
 Summary:                    [PATCH] Updated nios2 support for buildroot
 Description: 
@@ -107,4 +109,5 @@ Date Modified   Username       Field                    Change
               
 11-15-07 00:07  atle           Note Added: 0002919                          
 11-15-07 02:18  vanokuten      Note Added: 0002922                          
+11-15-07 02:19  vanokuten      Status                   assigned => closed  
 ======================================================================
