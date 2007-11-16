@@ -1,48 +1,65 @@
-From: Privat <zentrale.at.work@gmail.com>
-Date: Fri, 16 Nov 2007 10:25:17 +0100
-Subject: [Buildroot] Gettext / GLib headers in target
-In-Reply-To: <473D523C.10206@Kriegisch.name>
-References: <473D4CAD.4070008@googlemail.com> <473D523C.10206@Kriegisch.name>
-Message-ID: <473D61FD.5040900@googlemail.com>
+From: vanokuten at uclibc.org <vanokuten@uclibc.org>
+Date: Fri, 16 Nov 2007 02:16:49 -0800 (PST)
+Subject: [Buildroot] svn commit: trunk/buildroot/package/freetype
+Message-ID: <20071116101649.DB67330040@busybox.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Alexander Kriegisch schrieb:
->> Would it be possible have the gettext and header in the target to be 
->> able to build tools using the natively?
-> 
-> I do not understand your English, I am afraid. Maybe you can explain
-> again (differently) or just add a German version of your question so at
-> least some people understand what you want to know.
+Author: vanokuten
+Date: 2007-11-16 02:16:48 -0800 (Fri, 16 Nov 2007)
+New Revision: 20431
 
-English:
-Sure. I'm using a BR-created Root-FS with a native toolchain. Using this 
-native toolchain, i would need to be able to build some packages that 
-rely on the gettext and glib libraries. As far as i can see, the 
-respective header files are not copied to the target file system. Is 
-there a way to have this automated, or is the only solution at the 
-moment copying the files by hand?
+Log:
+add more recent version of freetype, required at least for avr32 to build correctly
 
-Deutsch:
-Gerne! Ich benutze ein Root-FS, das mittels BR erzeugt wird und eine 
-native Toolchain beinhaltet. Mittels dieser Toolchain m?chte ich 
-in-target einige Pakete kompilieren, die die gettext- und glib- 
-Bibliotheken nutzen. Die damit notwendigen header files dieser beiden 
-Bibliotheken werden allerdings von BR nicht ins target-filesystem 
-kopiert, soweit ich das sehen kann. Kann dieser Vorgang automatisiert 
-erfolgen, oder besteht im Moment die einzige L?sung darin, die Dateien 
-von Hand "nachzukopieren"?
+Modified:
+   trunk/buildroot/package/freetype/Config.in
+   trunk/buildroot/package/freetype/freetype.mk
 
-Best Regard / Viele Gr?sse
 
--- 
-Sepp "ZaP" Holzmayr
+Changeset:
+Modified: trunk/buildroot/package/freetype/Config.in
+===================================================================
+--- trunk/buildroot/package/freetype/Config.in	2007-11-16 05:24:43 UTC (rev 20430)
++++ trunk/buildroot/package/freetype/Config.in	2007-11-16 10:16:48 UTC (rev 20431)
+@@ -4,3 +4,23 @@
+ 	help
+ 
+ 	http://www.freetype.org/
++
++choice
++	prompt "Freetype Version"
++	depends BR2_PACKAGE_FREETYPE
++	default BR2_FREETYPE_VERSION_2_2_1
++	help
++	  Select the version of Freetype you wish to use.
++
++	config BR2_FREETYPE_VERSION_2_2_1
++		bool "Freetype 2.2.1"
++
++	config BR2_FREETYPE_VERSION_2_3_5
++		bool "Freetype 2.3.5"
++
++endchoice
++
++config BR2_FREETYPE_VERSION
++	string
++	default "2.2.1"		if BR2_FREETYPE_VERSION_2_2_1
++	default "2.3.5"		if BR2_FREETYPE_VERSION_2_3_5
 
-please reply to:
-zentrale.at.work at googlemail.com
-
-watch out for:
-www.rocksociety.de
+Modified: trunk/buildroot/package/freetype/freetype.mk
+===================================================================
+--- trunk/buildroot/package/freetype/freetype.mk	2007-11-16 05:24:43 UTC (rev 20430)
++++ trunk/buildroot/package/freetype/freetype.mk	2007-11-16 10:16:48 UTC (rev 20431)
+@@ -3,7 +3,7 @@
+ # freetype
+ #
+ #############################################################
+-FREETYPE_VERSION:=2.2.1
++FREETYPE_VERSION:=$(strip $(subst ",, $(BR2_FREETYPE_VERSION)))
+ FREETYPE_SOURCE:=freetype-$(FREETYPE_VERSION).tar.bz2
+ FREETYPE_SITE:=http://$(BR2_SOURCEFORGE_MIRROR).dl.sourceforge.net/sourceforge/freetype
+ FREETYPE_CAT:=$(BZCAT)
