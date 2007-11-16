@@ -1,85 +1,65 @@
-From: bugs at busybox.net <bugs@busybox.net>
-Date: Fri, 16 Nov 2007 04:49:42 -0800
-Subject: [Buildroot] [buildroot 0001593]: portage version bump
-Message-ID: <ac09e6cec3247a0e0b9fddd59addb0ca@busybox.net>
+From: Felipe Uderman <felipe.uderman@gmail.com>
+Date: Fri, 16 Nov 2007 09:46:21 -0300
+Subject: [Buildroot] Fails to build: error on copying .config file,
+	please help
+Message-ID: <951b8d920711160446k4bc43ac6n38b33612c161947f@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+Hello,
 
-The following issue has been CLOSED 
-====================================================================== 
-http://busybox.net/bugs/view.php?id=1593 
-====================================================================== 
-Reported By:                aron
-Assigned To:                buildroot
-====================================================================== 
-Project:                    buildroot
-Issue ID:                   1593
-Category:                   Other
-Reproducibility:            always
-Severity:                   minor
-Priority:                   normal
-Status:                     closed
-Resolution:                 open
-Fixed in Version:           
-====================================================================== 
-Date Submitted:             11-16-2007 02:34 PST
-Last Modified:              11-16-2007 04:49 PST
-====================================================================== 
-Summary:                    portage version bump
-Description: 
-This patch bumps portage from 2.1.2.9 to 2.1.3.19
-====================================================================== 
+I am trying to compile a Kernel for the ARM architecture, but my build
+fails. A copy instruction is incomplete, without the destination parameter.
+Please take a look at it:
 
----------------------------------------------------------------------- 
- vanokuten - 11-16-07 02:51  
----------------------------------------------------------------------- 
-after enabling portage and applying portage.patch :
+uderman at udermanlp:~/udAPP/buildroot$ make
 
-mkdir -p /opt/buildroot/project_build_avr32/atstk1002
+Checking build system dependencies:
+BUILDROOT_DL_DIR clean:                         Ok
+CC clean:                                       Ok
+CXX clean:                                      Ok
+CPP clean:                                      Ok
+CFLAGS clean:                                   Ok
+INCLUDES clean:                                 Ok
+CXXFLAGS clean:                                 Ok
+which installed:                                Ok
+sed works:                                      Ok (/bin/sed)
+GNU make version '3.81':                        Ok
+C compiler '/usr/bin/gcc'
+C compiler version '4.1.2':                     Ok
+C++ compiler '/usr/bin/g++'
+C++ compiler version '4.1.2':                   Ok
+bison installed:                                Ok
+flex installed:                                 Ok
+gettext installed:                              Ok
+makeinfo installed:                             Ok
+Build system dependencies:                      Ok
+
+rm -rf
+/home/uderman/udAPP/buildroot/project_build_arm/teste02/buildroot-config
+mkdir -p /home/uderman/udAPP/buildroot/project_build_arm/teste02
 cp -dpRf package/config/buildroot-config
-/opt/buildroot/project_build_avr32/atstk1002/buildroot-config
-wget --passive-ftp  -P /sources
-http://dev.gentoo.org/~azarah/sandbox//sandbox-1.2.18.1.tar.bz2
---13:51:59-- 
-http://dev.gentoo.org/~azarah/sandbox//sandbox-1.2.18.1.tar.bz2
-           => `/sources/sandbox-1.2.18.1.tar.bz2'
-Resolving dev.gentoo.org... 140.211.166.183
-Connecting to dev.gentoo.org|140.211.166.183|:80... connected.
-HTTP request sent, awaiting response... 404 Not Found
-13:51:59 ERROR 404: Not Found. 
+/home/uderman/udAPP/buildroot/project_build_arm/teste02/buildroot-config
+cp -dpf  /home/uderman/udAPP/buildroot/project_build_arm/teste02/linux-
+2.6.22.10/.config
+cp: missing destination file operand after
+`/home/uderman/udAPP/buildroot/project_build_arm/teste02/linux-
+2.6.22.10/.config'
+Try `cp --help' for more information.
+make: *** [/home/uderman/udAPP/buildroot/project_build_arm/teste02/linux-
+2.6.22.10/.configured] Error 1
 
----------------------------------------------------------------------- 
- aron - 11-16-07 02:56  
----------------------------------------------------------------------- 
-YEs, I was stupi enough to ask ulf the reason for using azarahs dev account
-instead of a normal gentoo mirror. I'm opening a new bug report to fix
-that. 
+I could not found the instruction that causes the error on my Makefile, is
+that where it is supposed to be?
 
----------------------------------------------------------------------- 
- aron - 11-16-07 03:02  
----------------------------------------------------------------------- 
-0001594 replaces this one. Pls close. 
+Any sugestions?
 
----------------------------------------------------------------------- 
- vanokuten - 11-16-07 04:49  
----------------------------------------------------------------------- 
-see 0001594 
+Thank you,
 
-Issue History 
-Date Modified   Username       Field                    Change               
-====================================================================== 
-11-16-07 02:34  aron           New Issue                                    
-11-16-07 02:34  aron           Status                   new => assigned     
-11-16-07 02:34  aron           Assigned To               => buildroot       
-11-16-07 02:34  aron           File Added: portage.patch                    
-11-16-07 02:34  aron           Issue Monitored: aron                        
-11-16-07 02:51  vanokuten      Note Added: 0002932                          
-11-16-07 02:56  aron           Note Added: 0002934                          
-11-16-07 03:02  aron           Note Added: 0002935                          
-11-16-07 04:49  vanokuten      Status                   assigned => closed  
-11-16-07 04:49  vanokuten      Note Added: 0002938                          
-======================================================================
+uderman
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: http://busybox.net/lists/buildroot/attachments/20071116/8b8bc043/attachment-0001.htm 
