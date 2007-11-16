@@ -1,85 +1,57 @@
-From: bugs at busybox.net <bugs@busybox.net>
-Date: Fri, 16 Nov 2007 08:11:20 -0800
-Subject: [Buildroot] [buildroot 0001595]: DirectFB detects host installed
-	/usr/bin/libvncserver-config instead checking only in staging dir
-Message-ID: <5f69f3b20ca49daf86b0702b0785537d@busybox.net>
+From: ing. Federico Fuga <fuga@studiofuga.com>
+Date: Fri, 16 Nov 2007 17:50:44 +0100
+Subject: [Buildroot] Alsa problem with arm 2.6.23.1 and uclibc
+In-Reply-To: <473D82AE.5040907@promwad.com>
+References: <473D70A4.3000901@studiofuga.com> <473D82AE.5040907@promwad.com>
+Message-ID: <473DCA64.3060505@studiofuga.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-
-The following issue has been CLOSED 
-====================================================================== 
-http://busybox.net/bugs/view.php?id=1595 
-====================================================================== 
-Reported By:                vanokuten
-Assigned To:                buildroot
-====================================================================== 
-Project:                    buildroot
-Issue ID:                   1595
-Category:                   Architecture Specific
-Reproducibility:            always
-Severity:                   minor
-Priority:                   normal
-Status:                     closed
-Resolution:                 open
-Fixed in Version:           
-====================================================================== 
-Date Submitted:             11-16-2007 05:08 PST
-Last Modified:              11-16-2007 08:11 PST
-====================================================================== 
-Summary:                    DirectFB detects host installed
-/usr/bin/libvncserver-config instead checking only in staging dir
-Description: 
-DirectFB incorrectly detects libvncserver support from host PC instead
-checking only in staging dir
-
-./configure 
-...
-checking for libvncserver-config... /usr/bin/libvncserver-config
-...
-Building Core Systems:
-  Linux FBDev support       yes
-  X11 support               no
-  OSX support               no
-  SDL support               no
-  VNC support               yes
-...
-
-make
-
-...
-
-/opt/buildroot/build_avr32/staging_dir/usr/bin/avr32-linux-uclibc-gcc -Os
--pipe  -I/opt/buildroot/build_avr32/staging_dir/usr/include
--I/opt/buildroot/build_avr32/staging_dir/include -msoft-float -shared 
-.libs/vncinput.o  -Wl,--rpath
--Wl,/opt/buildroot/build_avr32/DirectFB-1.0.1/src/.libs -L/usr/lib
--lvncserver -lvncclient -lnsl -lz -ljpeg ../../src/.libs/libdirectfb.so
--L/opt/buildroot/build_avr32/DirectFB-1.0.1/lib/fusion/.libs
--L/opt/buildroot/build_avr32/DirectFB-1.0.1/lib/direct/.libs -ldl
--lpthread  -msoft-float -Wl,-soname -Wl,libdirectfb_vncinput.so -o
-.libs/libdirectfb_vncinput.so
-/opt/buildroot/build_avr32/staging_dir/usr/bin/avr32-linux-uclibc-ld:
-cannot find -lvncserver
-collect2: ld returned 1 exit status
+Hi Ivan,
 
 
-====================================================================== 
+which kernel version and kernel headers are you using? Mine are 2.6.23.1
+and 2.6.23, but now I am trying to move the kernel headers to 2.6.21
+(Angstrom  linux works without problems, but are based on different
+kernel headers).
+uclibc I am using are 0.9.29, alsa 1.0.14.
+The failing ioctl is identical both in the working (Angstrom) and not
+working versions, and since the kernel is the same (really the same!) I
+am thinking that is only a problem between the "glue" of uclibc and
+kernel...
+I'll keep you informed.
 
----------------------------------------------------------------------- 
- vanokuten - 11-16-07 08:11  
----------------------------------------------------------------------- 
-fixed in 20441 
+Regards,
 
-Issue History 
-Date Modified   Username       Field                    Change               
-====================================================================== 
-11-16-07 05:08  vanokuten      New Issue                                    
-11-16-07 05:08  vanokuten      Status                   new => assigned     
-11-16-07 05:08  vanokuten      Assigned To               => buildroot       
-11-16-07 08:11  vanokuten      Status                   assigned => closed  
-11-16-07 08:11  vanokuten      Note Added: 0002939                          
-======================================================================
+ing. Federico Fuga
+
+(sorry for the duplicate mail!)
+
+
+Ivan Kuten ha scritto:
+
+> > Hi Federico!
+> >
+> > I'm observing the same problem with ALSA as you.
+> >
+> >   
+>   
+>> >> ioctl(4, USBDEVFS_CONTROL, 0xbef809cc)  = 0
+>> >> ioctl(4, UI_DEV_CREATE, 0xbef80ab0)     = 0
+>> >> ioctl(4, USBDEVFS_CONNECTINFO, 0xbef80634) = 0
+>> >> ioctl(4, USBDEVFS_HUB_PORTINFO, 0xbef80748) = -1 ENOTTY (Inappropriate
+>> >> ioctl for device)
+>> >>     
+>>     
+> >
+> > Think these lines are key to understanding what the problem is.
+> >
+> > Regards,
+> > Ivan
+> >
+> >
+> >   
+>   
