@@ -1,45 +1,64 @@
-From: vanokuten at uclibc.org <vanokuten@uclibc.org>
-Date: Fri, 16 Nov 2007 04:48:15 -0800 (PST)
-Subject: [Buildroot] svn commit: trunk/buildroot/package/portage
-Message-ID: <20071116124815.3542030042@busybox.net>
+From: bugs at busybox.net <bugs@busybox.net>
+Date: Fri, 16 Nov 2007 04:48:54 -0800
+Subject: [Buildroot] [buildroot 0001594]: Portage bump, sandbox fix
+Message-ID: <2138d78b98ca7df4f1c0b3cdc3e9fe1c@busybox.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Author: vanokuten
-Date: 2007-11-16 04:48:14 -0800 (Fri, 16 Nov 2007)
-New Revision: 20436
 
-Log:
-update portage version and site
+The following issue has been CLOSED 
+====================================================================== 
+http://busybox.net/bugs/view.php?id=1594 
+====================================================================== 
+Reported By:                aron
+Assigned To:                buildroot
+====================================================================== 
+Project:                    buildroot
+Issue ID:                   1594
+Category:                   Other
+Reproducibility:            always
+Severity:                   minor
+Priority:                   normal
+Status:                     closed
+Resolution:                 open
+Fixed in Version:           
+====================================================================== 
+Date Submitted:             11-16-2007 03:01 PST
+Last Modified:              11-16-2007 04:48 PST
+====================================================================== 
+Summary:                    Portage bump, sandbox fix
+Description: 
+This patch bumps portage and makes buildroot use a standard gentoo mirror
+for sandbox. 
+====================================================================== 
 
-Modified:
-   trunk/buildroot/package/portage/portage.mk
+---------------------------------------------------------------------- 
+ aron - 11-16-07 03:23  
+---------------------------------------------------------------------- 
+For some reason, the .19 patch fails now. Taking the easy route going for
+.9 instead. This make portage build fine. 
+Hence don't bother with the first patch, only use the second one. 
 
+---------------------------------------------------------------------- 
+ vanokuten - 11-16-07 04:48  
+---------------------------------------------------------------------- 
+fixed in 20436 rev 
 
-Changeset:
-Modified: trunk/buildroot/package/portage/portage.mk
-===================================================================
---- trunk/buildroot/package/portage/portage.mk	2007-11-16 12:39:16 UTC (rev 20435)
-+++ trunk/buildroot/package/portage/portage.mk	2007-11-16 12:48:14 UTC (rev 20436)
-@@ -3,7 +3,7 @@
- # portage
- #
- #############################################################
--PORTAGE_DOWNLOAD_VERSION:=2.1.2
-+PORTAGE_DOWNLOAD_VERSION:=2.1.3
- PORTAGE_PATCH_VERSION:=.9
- PORTAGE_VERSION:=$(PORTAGE_DOWNLOAD_VERSION)$(PORTAGE_PATCH_VERSION)
- PORTAGE_PATCH:=portage-$(PORTAGE_VERSION).patch.bz2
-@@ -17,8 +17,7 @@
- 
- SANDBOX_VERSION:=1.2.18.1
- SANDBOX_SOURCE:=sandbox-$(SANDBOX_VERSION).tar.bz2
--SANDBOX_SITE:=http://dev.gentoo.org/~azarah/sandbox/
--#SANDBOX_SITE:=$(PORTAGE_SITE)
-+SANDBOX_SITE:=$(PORTAGE_SITE)
- SANDBOX_CAT:=$(PORTAGE_CAT)
- SANDBOX_DIR:=$(BUILD_DIR)/sandbox-$(SANDBOX_VERSION)
- SANDBOX_TARGET_BINARY:=usr/bin/sandbox
+Issue History 
+Date Modified   Username       Field                    Change               
+====================================================================== 
+11-16-07 03:01  aron           New Issue                                    
+11-16-07 03:01  aron           Status                   new => assigned     
+11-16-07 03:01  aron           Assigned To               => buildroot       
+11-16-07 03:01  aron           File Added: portage_sandbox.patch                
+   
+11-16-07 03:01  aron           Issue Monitored: aron                        
+11-16-07 03:21  aron           File Added: portage_sandbox_2.patch              
+     
+11-16-07 03:23  aron           Note Added: 0002936                          
+11-16-07 04:48  vanokuten      Status                   assigned => closed  
+11-16-07 04:48  vanokuten      Note Added: 0002937                          
+======================================================================
