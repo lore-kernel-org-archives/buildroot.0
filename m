@@ -1,8 +1,7 @@
 From: bugs at busybox.net <bugs@busybox.net>
-Date: Fri, 16 Nov 2007 02:47:41 -0800
-Subject: [Buildroot] [buildroot 0001585]: [buildroot] Netkit package build
-	fails
-Message-ID: <018a700004933c24cb53231b7fc88260@busybox.net>
+Date: Fri, 16 Nov 2007 02:51:52 -0800
+Subject: [Buildroot] [buildroot 0001593]: portage version bump
+Message-ID: <f723672cb0e2f860a6bc3c628faaf4c2@busybox.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -10,121 +9,54 @@ Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
 
-The following issue has been CLOSED 
+A NOTE has been added to this issue. 
 ====================================================================== 
-http://busybox.net/bugs/view.php?id=1585 
+http://busybox.net/bugs/view.php?id=1593 
 ====================================================================== 
-Reported By:                hwstar
+Reported By:                aron
 Assigned To:                buildroot
 ====================================================================== 
 Project:                    buildroot
-Issue ID:                   1585
-Category:                   Architecture Specific
+Issue ID:                   1593
+Category:                   Other
 Reproducibility:            always
 Severity:                   minor
 Priority:                   normal
-Status:                     closed
-Resolution:                 open
-Fixed in Version:           
+Status:                     assigned
 ====================================================================== 
-Date Submitted:             11-11-2007 12:40 PST
-Last Modified:              11-16-2007 02:47 PST
+Date Submitted:             11-16-2007 02:34 PST
+Last Modified:              11-16-2007 02:51 PST
 ====================================================================== 
-Summary:                    [buildroot] Netkit package build fails
+Summary:                    portage version bump
 Description: 
-Netkit package does not build 
-
-Make output in "Additional Information" field.
-
-Buildroot config/system info:
-
-SVN revision 20406
-Host: Ubuntu 7.04 (Feisty)
-Target: i386/i586
-
-
+This patch bumps portage from 2.1.2.9 to 2.1.3.19
 ====================================================================== 
 
 ---------------------------------------------------------------------- 
- vanokuten - 11-11-07 23:50  
+ vanokuten - 11-16-07 02:51  
 ---------------------------------------------------------------------- 
-you did not set BR2_INET_RPC=y when building your toolchain 
+after enabling portage and applying portage.patch :
 
----------------------------------------------------------------------- 
- hwstar - 11-12-07 17:19  
----------------------------------------------------------------------- 
-After turning on BR2_INET_RPC, it now fails in the linking part of the
-build.
-
-
-Snippet of config file:
-
-#
-# Common Toolchain Options
-#
-BR2_PACKAGE_SSTRIP_TARGET=y
-BR2_PACKAGE_SSTRIP_HOST=y
-# BR2_ENABLE_MULTILIB is not set
-BR2_LARGEFILE=y
-BR2_INET_IPV6=y
-BR2_INET_RPC=y <<<<<<<<<<
-BR2_USE_WCHAR=y
-BR2_TARGET_OPTIMIZATION="-Os -pipe"
-BR2_CROSS_TOOLCHAIN_TARGET_UTILS=y
-
-Output from failed build:
-
-/home/srodgers/projects/limey-linux/limey-linux-test/buildroot/build_i586/staging_dir/usr/bin/i586-linux-uclibc-gcc
- inetd.o servtab.o builtins.o sig.o daemon.o setproctitle.o mysleep.o  -o
-inetd
-inetd.o: In function `unregister_rpc':
-inetd.c:(.text+0x6a): undefined reference to `pmap_unset'
-inetd.o: In function `register_rpc':
-inetd.c:(.text+0x138): undefined reference to `pmap_unset'
-inetd.c:(.text+0x154): undefined reference to `pmap_set'
-servtab.o: In function `loadconfigent':
-servtab.c:(.text+0xdc1): undefined reference to `getrpcbyname'
-collect2: ld returned 1 exit status
-make[3]: *** [inetd] Error 1
-make[3]: Leaving directory
-`/home/srodgers/projects/limey-linux/limey-linux-test/buildroot/build_i586/netkit-base-0.17/inetd'
-make[2]: *** [inetd.build] Error 2
-make[2]: Leaving directory
-`/home/srodgers/projects/limey-linux/limey-linux-test/buildroot/build_i586/netkit-base-0.17'
-make[1]: ***
-[/home/srodgers/projects/limey-linux/limey-linux-test/buildroot/build_i586/netkit-base-0.17/inetd/inetd]
-Error 2
-make[1]: Leaving directory
-`/home/srodgers/projects/limey-linux/limey-linux-test/buildroot'
-make: *** [buildroot/binaries/limey-linux/rootfs.i586.ext2] Error 2 
-
----------------------------------------------------------------------- 
- vanokuten - 11-13-07 01:36  
----------------------------------------------------------------------- 
-you have to do full rebuild of your toolchain, e.g. delete
-toolchain_build_i386 and rebuild
-
- 
-
----------------------------------------------------------------------- 
- hwstar - 11-15-07 22:30  
----------------------------------------------------------------------- 
-Yep. That's what fixed it.
-
-Thanks! 
+mkdir -p /opt/buildroot/project_build_avr32/atstk1002
+cp -dpRf package/config/buildroot-config
+/opt/buildroot/project_build_avr32/atstk1002/buildroot-config
+wget --passive-ftp  -P /sources
+http://dev.gentoo.org/~azarah/sandbox//sandbox-1.2.18.1.tar.bz2
+--13:51:59-- 
+http://dev.gentoo.org/~azarah/sandbox//sandbox-1.2.18.1.tar.bz2
+           => `/sources/sandbox-1.2.18.1.tar.bz2'
+Resolving dev.gentoo.org... 140.211.166.183
+Connecting to dev.gentoo.org|140.211.166.183|:80... connected.
+HTTP request sent, awaiting response... 404 Not Found
+13:51:59 ERROR 404: Not Found. 
 
 Issue History 
 Date Modified   Username       Field                    Change               
 ====================================================================== 
-11-11-07 12:40  hwstar         New Issue                                    
-11-11-07 12:40  hwstar         Status                   new => assigned     
-11-11-07 12:40  hwstar         Assigned To               => buildroot       
-11-11-07 12:44  hwstar         Issue Monitored: hwstar                      
-11-11-07 23:50  vanokuten      Note Added: 0002907                          
-11-12-07 17:19  hwstar         Note Added: 0002909                          
-11-13-07 01:35  vanokuten      Note Added: 0002910                          
-11-13-07 01:36  vanokuten      Note Edited: 0002910                         
-11-15-07 22:30  hwstar         Note Added: 0002928                          
-11-15-07 22:30  hwstar         Issue End Monitor: hwstar                    
-11-16-07 02:47  vanokuten      Status                   assigned => closed  
+11-16-07 02:34  aron           New Issue                                    
+11-16-07 02:34  aron           Status                   new => assigned     
+11-16-07 02:34  aron           Assigned To               => buildroot       
+11-16-07 02:34  aron           File Added: portage.patch                    
+11-16-07 02:34  aron           Issue Monitored: aron                        
+11-16-07 02:51  vanokuten      Note Added: 0002932                          
 ======================================================================
