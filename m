@@ -1,65 +1,76 @@
-From: Felipe Uderman <felipe.uderman@gmail.com>
-Date: Fri, 16 Nov 2007 09:46:21 -0300
-Subject: [Buildroot] Fails to build: error on copying .config file,
-	please help
-Message-ID: <951b8d920711160446k4bc43ac6n38b33612c161947f@mail.gmail.com>
+From: bugs at busybox.net <bugs@busybox.net>
+Date: Fri, 16 Nov 2007 05:08:57 -0800
+Subject: [Buildroot] [buildroot 0001595]: DirectFB detects host installed
+	/usr/bin/libvncserver-config instead checking only in staging dir
+Message-ID: <fbfc54a467bf14cd1f834b83b4f4f538@busybox.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
 
-I am trying to compile a Kernel for the ARM architecture, but my build
-fails. A copy instruction is incomplete, without the destination parameter.
-Please take a look at it:
+The following issue has been SUBMITTED. 
+====================================================================== 
+http://busybox.net/bugs/view.php?id=1595 
+====================================================================== 
+Reported By:                vanokuten
+Assigned To:                buildroot
+====================================================================== 
+Project:                    buildroot
+Issue ID:                   1595
+Category:                   Architecture Specific
+Reproducibility:            always
+Severity:                   minor
+Priority:                   normal
+Status:                     assigned
+====================================================================== 
+Date Submitted:             11-16-2007 05:08 PST
+Last Modified:              11-16-2007 05:08 PST
+====================================================================== 
+Summary:                    DirectFB detects host installed
+/usr/bin/libvncserver-config instead checking only in staging dir
+Description: 
+DirectFB incorrectly detects libvncserver support from host PC instead
+checking only in staging dir
 
-uderman at udermanlp:~/udAPP/buildroot$ make
+./configure 
+...
+checking for libvncserver-config... /usr/bin/libvncserver-config
+...
+Building Core Systems:
+  Linux FBDev support       yes
+  X11 support               no
+  OSX support               no
+  SDL support               no
+  VNC support               yes
+...
 
-Checking build system dependencies:
-BUILDROOT_DL_DIR clean:                         Ok
-CC clean:                                       Ok
-CXX clean:                                      Ok
-CPP clean:                                      Ok
-CFLAGS clean:                                   Ok
-INCLUDES clean:                                 Ok
-CXXFLAGS clean:                                 Ok
-which installed:                                Ok
-sed works:                                      Ok (/bin/sed)
-GNU make version '3.81':                        Ok
-C compiler '/usr/bin/gcc'
-C compiler version '4.1.2':                     Ok
-C++ compiler '/usr/bin/g++'
-C++ compiler version '4.1.2':                   Ok
-bison installed:                                Ok
-flex installed:                                 Ok
-gettext installed:                              Ok
-makeinfo installed:                             Ok
-Build system dependencies:                      Ok
+make
 
-rm -rf
-/home/uderman/udAPP/buildroot/project_build_arm/teste02/buildroot-config
-mkdir -p /home/uderman/udAPP/buildroot/project_build_arm/teste02
-cp -dpRf package/config/buildroot-config
-/home/uderman/udAPP/buildroot/project_build_arm/teste02/buildroot-config
-cp -dpf  /home/uderman/udAPP/buildroot/project_build_arm/teste02/linux-
-2.6.22.10/.config
-cp: missing destination file operand after
-`/home/uderman/udAPP/buildroot/project_build_arm/teste02/linux-
-2.6.22.10/.config'
-Try `cp --help' for more information.
-make: *** [/home/uderman/udAPP/buildroot/project_build_arm/teste02/linux-
-2.6.22.10/.configured] Error 1
+...
 
-I could not found the instruction that causes the error on my Makefile, is
-that where it is supposed to be?
+/opt/buildroot/build_avr32/staging_dir/usr/bin/avr32-linux-uclibc-gcc -Os
+-pipe  -I/opt/buildroot/build_avr32/staging_dir/usr/include
+-I/opt/buildroot/build_avr32/staging_dir/include -msoft-float -shared 
+.libs/vncinput.o  -Wl,--rpath
+-Wl,/opt/buildroot/build_avr32/DirectFB-1.0.1/src/.libs -L/usr/lib
+-lvncserver -lvncclient -lnsl -lz -ljpeg ../../src/.libs/libdirectfb.so
+-L/opt/buildroot/build_avr32/DirectFB-1.0.1/lib/fusion/.libs
+-L/opt/buildroot/build_avr32/DirectFB-1.0.1/lib/direct/.libs -ldl
+-lpthread  -msoft-float -Wl,-soname -Wl,libdirectfb_vncinput.so -o
+.libs/libdirectfb_vncinput.so
+/opt/buildroot/build_avr32/staging_dir/usr/bin/avr32-linux-uclibc-ld:
+cannot find -lvncserver
+collect2: ld returned 1 exit status
 
-Any sugestions?
 
-Thank you,
+====================================================================== 
 
-uderman
--------------- next part --------------
-An HTML attachment was scrubbed...
-URL: http://busybox.net/lists/buildroot/attachments/20071116/8b8bc043/attachment-0001.htm 
+Issue History 
+Date Modified   Username       Field                    Change               
+====================================================================== 
+11-16-07 05:08  vanokuten      New Issue                                    
+11-16-07 05:08  vanokuten      Status                   new => assigned     
+11-16-07 05:08  vanokuten      Assigned To               => buildroot       
+======================================================================
