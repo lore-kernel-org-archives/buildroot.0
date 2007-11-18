@@ -1,20 +1,51 @@
-From: Ivan Kuten <ivan.kuten@promwad.com>
-Date: Fri, 16 Nov 2007 20:03:31 +0200
-Subject: [Buildroot] [Re: Re:  Alsa problem with arm 2.6.23.1 and uclibc]
-Message-ID: <473DDB73.6030700@promwad.com>
+From: bugs at busybox.net <bugs@busybox.net>
+Date: Sun, 18 Nov 2007 07:35:40 -0800
+Subject: [Buildroot] [buildroot 0001596]: SUSv3 Legacy Macros not enabled in
+	uClibc default config
+Message-ID: <98b7bb7baea81b9e744982052b1097ab@bugs.uclibc.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi,
 
-I have linux-2.6.22.10 headers but kernel is built by hands
-different versions 2.6.18, 2.6.21, 2.6.23
+The following issue has been SUBMITTED. 
+====================================================================== 
+http://busybox.net/bugs/view.php?id=1596 
+====================================================================== 
+Reported By:                atle
+Assigned To:                buildroot
+====================================================================== 
+Project:                    buildroot
+Issue ID:                   1596
+Category:                   Other
+Reproducibility:            always
+Severity:                   minor
+Priority:                   normal
+Status:                     assigned
+====================================================================== 
+Date Submitted:             11-18-2007 07:35 PST
+Last Modified:              11-18-2007 07:35 PST
+====================================================================== 
+Summary:                    SUSv3 Legacy Macros not enabled in uClibc default
+config
+Description: 
+UCLIBC_SUSV3_LEGACY_MACROS is no longer set in the uClibc default config
+(since svn rev 19987). I guess there is a reason for this (?), but the
+problem is that some applications still are dependent on those macros
+(openssl, ntp, boa, pure-ftpd, ++). I have attached a patch that makes it
+possible to enable SUSV3_LEGACY_MACROS in the menuconfig (disabled by
+default).
 
->>> ioctl(4, USBDEVFS_CONTROL, 0xbef809cc)  = 0
->>> ioctl(4, UI_DEV_CREATE, 0xbef80ab0)     = 0
->>> ioctl(4, USBDEVFS_CONNECTINFO, 0xbef80634) = 0
->>> ioctl(4, USBDEVFS_HUB_PORTINFO, 0xbef80748) = -1 ENOTTY (Inappropriate
->>> ioctl for device)
+====================================================================== 
+
+Issue History 
+Date Modified   Username       Field                    Change               
+====================================================================== 
+11-18-07 07:35  atle           New Issue                                    
+11-18-07 07:35  atle           Status                   new => assigned     
+11-18-07 07:35  atle           Assigned To               => buildroot       
+11-18-07 07:35  atle           File Added:
+uclibc-config_susv3_legacy_macros.diff                    
+======================================================================
