@@ -1,31 +1,31 @@
-From: Ivan Kuten <ivan.kuten@promwad.com>
-Date: Tue, 20 Nov 2007 14:57:26 +0200
-Subject: [Buildroot] SDL fails for Buildroot arm926ejs toolchain
-In-Reply-To: <13855274.post@talk.nabble.com>
-References: <13830846.post@talk.nabble.com>
-	<4741755A.5010404@promwad.com>	<13848331.post@talk.nabble.com>
-	<4742CE14.2060802@promwad.com> <13855274.post@talk.nabble.com>
-Message-ID: <4742D9B6.5090207@promwad.com>
+From: Hebbar <gururajakr@sanyo.co.in>
+Date: Tue, 20 Nov 2007 15:46:34 -0800 (PST)
+Subject: [Buildroot] ImageMagick fails to build because of incorrect version
+Message-ID: <13868373.post@talk.nabble.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hebbar wrote:
-> Hi Ivan
-> 
-> I removed BR2_PACKAGE_SDL_X11 and it worked fine.
-> 
 
-I'd suggest for you to open a bug in bug tracking and
-post your configs, config.log
+Hi all,
 
+1. Imagemagick --> current : 6.3.5 Latest : 6.3.7
+toolchain/patch-kernel.sh
+/home/guru/project/original/bldrt/buildroot/build_arm/ImageMagick-6.3.5
+package/imagemagick/ imagemagick-\*.patch\*
+Aborting. 
+'/home/guru/project/original/bldrt/buildroot/build_arm/ImageMagick-6.3.5' is
+not a directory.
+make: ***
+[/home/guru/project/original/bldrt/buildroot/build_arm/ImageMagick-6.3.5/.unpacked]
+Error 1
 
-Regards,
-Ivan
---------------------------------
-Embedded Linux engineer,
-Promwad Company: http://www.promwad.com/
-Homepage : http://www.ivankuten.com/
---------------------------------
+Kindly update IMAGEMAGICK_VERSION:=6.3.7
+
+Regards
+Gururaja
+-- 
+View this message in context: http://www.nabble.com/ImageMagick-fails-to-build-because-of-incorrect-version-tf4847140.html#a13868373
+Sent from the BuildRoot mailing list archive at Nabble.com.
