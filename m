@@ -1,75 +1,66 @@
-From: bugs at busybox.net <bugs@busybox.net>
-Date: Wed, 21 Nov 2007 10:33:40 -0800
-Subject: [Buildroot] [buildroot 0001469]: Add fuse and ntfs package for
-	buildroot
-Message-ID: <ff6d8ac594357be4ebc29ce1e5f237b7@bugs.busybox.net>
+From: Jean-Claude Gervais <jc.gervais@videotron.ca>
+Date: Wed, 21 Nov 2007 13:31:27 -0500
+Subject: [Buildroot] wchar.h compilation error: empty filename in #include
+Message-ID: <1195669887.9559.2.camel@mercury.sprymusic>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+I am getting a build error:
 
-A NOTE has been added to this issue. 
-====================================================================== 
-http://busybox.net/bugs/view.php?id=1469 
-====================================================================== 
-Reported By:                alextud
-Assigned To:                buildroot
-====================================================================== 
-Project:                    buildroot
-Issue ID:                   1469
-Category:                   New Features
-Reproducibility:            N/A
-Severity:                   feature
-Priority:                   normal
-Status:                     assigned
-====================================================================== 
-Date Submitted:             08-22-2007 08:12 PDT
-Last Modified:              11-21-2007 10:33 PST
-====================================================================== 
-Summary:                    Add fuse and ntfs package for buildroot
-Description: 
-Hi,
-I made some makefile for fuse and ntfs-3g and I'll be happy if you can add
-them to  buildroot package.
-Ntfs-3g mount always fail with default busybox mount command, only work
-with mount from util-linux package, I think that its related with fuse and
-mount from busybox, fix me if I wrong.
-Also I disabled in fuse symvers related to version 2.2 because on runtime
-fusermount show: unknown '" option. 
-I'm just started with buildroot and my files maybe contains some error,
-feel free to modify them.
+[...]
+buildroot/build_i586/staging_dir/usr/bin/i586-linux-uclibc-gcc -Os -pipe
+-Ibuildroot/build_i586/staging_dir/usr/include
+-Ibuildroot/build_i586/staging_dir/include
+--sysroot=buildroot/build_i586/staging_dir/ -isysroot
+buildroot/build_i586/staging_dir -mtune=i586 -march=i586  -I. -g -O2 -c
+mbchar.c
+In file included from mbchar.h:157,
+                 from mbchar.c:22:
+./wchar.h:41:12: error: empty filename in #include
+In file included from mbchar.c:22:
+mbchar.h:242: error: expected ')' before 'wc'
+make[3]: Leaving directory `buildroot/build_i586/coreutils-6.9/lib'
+[...]
 
-Thanks, Alex.
-====================================================================== 
+contents of wchar.h
+-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.
+/* DO NOT EDIT! GENERATED AUTOMATICALLY! */
+/* A substitute for ISO C99 <wchar.h>, for platforms that have issues.
+   [...]
+/*
+ * ISO C 99 <wchar.h> for platforms that have issues.
+ * <http://www.opengroup.org/susv3xbd/wchar.h.html>
+ *
+ * For now, this just ensures proper prerequisite inclusion order.
+ */
 
----------------------------------------------------------------------- 
- alonbl - 11-21-07 10:33  
----------------------------------------------------------------------- 
-Hi!
+#ifndef _GL_WCHAR_H
+#define _GL_WCHAR_H
 
-The patch for fuse works, thanks!
-Have you sent this to fuse developers?
+/* Tru64 with Desktop Toolkit C has a bug: <stdio.h> must be included
+before
+   <wchar.h>.
+   BSD/OS 4.0.1 has a bug: <stddef.h>, <stdio.h> and <time.h> must be
+   included before <wchar.h>.  */
+#include <stddef.h>
+#include <stdio.h>
+#include <time.h>
 
-Can you please rebase to 2.7.1? I don't fully understand these syms...
+/* Include the original <wchar.h>.  */
+#include ""
 
-I succeeded to make busybox mount work, by creating a script that ignores
-the "-i" option.
+#endif /* _GL_WCHAR_H */
+-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.
 
-The problem is that I ntfs-3g segfaults when I umount.
+As you can see, the #include directive at the end of wchar.h IS empty.
+Does anyone know what is causing that or what I should do to correct the
+problem?
+I'd rather not manually edit wchar.h because it claims to be
+automatically-generated, so if I make any further changes to the setup,
+my change will probably keep being overwritten.
 
-I will try to figure out why. 
-
-Issue History 
-Date Modified   Username       Field                    Change               
-====================================================================== 
-08-22-07 08:12  alextud        New Issue                                    
-08-22-07 08:12  alextud        Status                   new => assigned     
-08-22-07 08:12  alextud        Assigned To               => buildroot       
-08-22-07 08:12  alextud        File Added: fuse&ntfs_mk.tar.gz                  
- 
-08-22-07 08:15  alextud        Issue Monitored: alextud                     
-11-21-07 10:30  alonbl         Issue Monitored: alonbl                      
-11-21-07 10:33  alonbl         Note Added: 0002946                          
-======================================================================
+Thanks
+J
