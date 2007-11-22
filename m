@@ -1,39 +1,50 @@
-From: Daniel Mack <daniel@caiaq.de>
-Date: Thu, 22 Nov 2007 15:55:23 +0100
-Subject: [Buildroot] Wrong Image/zImage for arm 926T toolchain?
-In-Reply-To: <46361d9e0711220639l7b064ae6nd1db1814b774908e@mail.gmail.com>
-References: <46361d9e0711220639l7b064ae6nd1db1814b774908e@mail.gmail.com>
-Message-ID: <3CD5659B-8B85-4A16-B2DD-7153F1307AD4@caiaq.de>
+From: ing. Federico Fuga <fuga@studiofuga.com>
+Date: Thu, 22 Nov 2007 16:43:35 +0100
+Subject: [Buildroot] abi problem with arm [solves alsa-lib invalid ioctl]
+Message-ID: <4745A3A7.2000301@studiofuga.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Eric,
+Hi,
 
-On Nov 22, 2007, at 3:39 PM, udmd-eric wann wrote:
+I have found and solved the problem that breaks the ioctl of alsa-lib in
+arm.
+Just a little preamble:
 
->        The new toolchain build the kernel "vmlinux" is only about 1M
->        However, I find linux-2.6.23/arch/arm/bootp/Image is very large
->        and zImage is >3M ....
->
->        If I use my previous toolchain, the output zImage is only  
-> 500K...
->        I guest my objectcopy is wrong...
->        What's wrong with my setting? Could anybody give me a hint...
+when compiling with arm xscale on an em-x270 board, all the installation
+works correctly except that the alsactl cannot set the volume levels of
+mixer:
 
-Your arch/arm/boot/Image is ~3GB, right? I had that too and it drove  
-me nuts for several hours. The explanation is that recent versions  
-(2.18) of binutils get confused about .note.gnu.build-id sections and  
-produce garbage then. The solution is to eigther use 32bit-only  
-userspace binaries to build your toolchain and kernel or to apply the  
-following patch to your kernel tree.
+# alsactl restore
+unknown ioctl = 0xc2c45513 ioctl ELEM_WRITE=0xc2c85513 struct 712
+alsactl: set_control:1159: Cannot write control '2:0:0:Speaker Playback
+Volume:0' : Inappropriate ioctl for device
 
-http://svn.o-hand.com/view/poky/trunk/meta/packages/linux/linux- 
-rp-2.6.22%2B2.6.23-rc4/binutils-buildid-arm.patch?rev=2726&view=markup
+(note that the "unknown ioctl" message is a debug message i put on the
+sound/core/control.c source to get rid of the problem).
+If you compile a simple program that prints the ioctl and sizeof struct
+snd_ctl_elem_value, you'll notice that the structure size is 708 in this
+case.
+As someone pointed out, there may be an alignment problem problem in the
+structure when compiled with the toolchain.
+The strange thing is that a kernel compiled with this toolchain
+(arm-linux-uclibc) works perfectly with all programs except that alsa,
+and that if you run that kernel with a file system and alsa compiled
+with glibc (angstrom linux) alsactl works perfectly.
+So after 5 days of digging, I found that the alsa drivers in the kernel
+are compiled with the -mabi=aapcs-linux option in gcc.
+If I add that option to CFLAGS in the alsa-lib configure script and
+compile, alsactl works perfectly!
+So I suggest to put the option
 
-Hope that helps.
+-mabi=aapcs-linux
 
-Greets,
-Daniel
+to all the compilation of uclibc and buildroot.
+I would propose the patch, but I do not know where to put the option in
+the scripts/configuration.
+Hope that helps,
+
+Federico Fuga
