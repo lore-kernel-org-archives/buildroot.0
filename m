@@ -1,40 +1,35 @@
-From: Hebbar <gururajakr@sanyo.co.in>
-Date: Fri, 23 Nov 2007 01:14:10 -0800 (PST)
-Subject: [Buildroot] svn commit: trunk/buildroot/package/imagemagick
-In-Reply-To: <20071123074016.735F630048@busybox.net>
-References: <20071123074016.735F630048@busybox.net>
-Message-ID: <13909016.post@talk.nabble.com>
+From: jacmet at uclibc.org <jacmet@uclibc.org>
+Date: Fri, 23 Nov 2007 01:46:43 -0800 (PST)
+Subject: [Buildroot] svn commit: trunk/buildroot/package/dbus
+Message-ID: <20071123094643.34155A45E7@busybox.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+Author: jacmet
+Date: 2007-11-23 01:46:42 -0800 (Fri, 23 Nov 2007)
+New Revision: 20490
 
-Hi ulf,
+Log:
+soname changed
 
-Can u help me to solve another problem with ImageMagick. While building
-ImageMagick , it checks for jpeg & tiff's Library from OS root folder 1st
-then from $(STAGING_DIR)/lib/ folder. Because of this i was getting below
-errors with both Jpeg and tiff when building ImageMagick.
+Modified:
+   trunk/buildroot/package/dbus/dbus.mk
 
-/usr/lib/libtiff.so: could not read symbols: File in wrong format 
-collect2: ld returned 1 exit status 
-make[1]: *** [magick/libMagick.la] Error 1 
 
-/usr/lib/libjpeg.so: could not read symbols: File in wrong format 
-collect2: ld returned 1 exit status 
-make[1]: *** [magick/libMagick.la] Error 1 
-
-When i tried to move the respective libs for Jpeg and tiff from OS root
-folder, then ImageMagick properly took libs from $(STAGING_DIR)/lib/ folder
-and was successfully built.
-
-Kindly help me to fix this. Thanks in advance
-
-Regards
-Gururaja
-
--- 
-View this message in context: http://www.nabble.com/svn-commit%3A-trunk-buildroot-package-imagemagick-tf4860117.html#a13909016
-Sent from the BuildRoot mailing list archive at Nabble.com.
+Changeset:
+Modified: trunk/buildroot/package/dbus/dbus.mk
+===================================================================
+--- trunk/buildroot/package/dbus/dbus.mk	2007-11-23 09:27:05 UTC (rev 20489)
++++ trunk/buildroot/package/dbus/dbus.mk	2007-11-23 09:46:42 UTC (rev 20490)
+@@ -70,7 +70,7 @@
+ 	rm -rf $(TARGET_DIR)/usr/lib/dbus-1.0
+ 	rm -f $(TARGET_DIR)/usr/lib/libdbus-1.la \
+ 		$(TARGET_DIR)/usr/lib/libdbus-1.so
+-	-$(STRIPCMD) $(STRIP_STRIP_UNNEEDED) $(TARGET_DIR)/usr/lib/libdbus-1.so.3.2.0
++	-$(STRIPCMD) $(STRIP_STRIP_UNNEEDED) $(TARGET_DIR)/usr/lib/libdbus-1.so.3.3.0
+ 	$(MAKE) DESTDIR=$(TARGET_DIR) initddir=/etc/init.d -C $(DBUS_DIR)/bus install
+ 	$(INSTALL) -m 0755 package/dbus/S97messagebus $(TARGET_DIR)/etc/init.d
+ 	rm -f $(TARGET_DIR)/etc/init.d/messagebus
