@@ -1,31 +1,43 @@
-From: Atle Nissestad <atle@nissestad.no>
-Date: Fri, 23 Nov 2007 17:18:42 +0100
-Subject: [Buildroot] [PATCH] Add SUSv3 Legacy Macros config option
-In-Reply-To: <20071123160335.GA18586@aon.at>
-References: <200711231506.58719.atle@nissestad.no>
-	<20071123160335.GA18586@aon.at>
-Message-ID: <200711231718.43002.atle@nissestad.no>
+From: ing. Federico Fuga <fuga@studiofuga.com>
+Date: Fri, 23 Nov 2007 18:45:08 +0100
+Subject: [Buildroot] [patch] QTopia4 fail to compile tslib support
+Message-ID: <474711A4.80505@studiofuga.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Friday 23. November 2007 17:03:35 Bernhard Fischer wrote:
-> On Fri, Nov 23, 2007 at 03:06:58PM +0100, Atle Nissestad wrote:
-> >Sorry if I'm a bit impatient, but could someone with commit-access add the
-> >patch posted in this issue: http://busybox.net/bugs/view.php?id=1596
-> >(http://bugs.uclibc.org/file_download.php?file_id=1193&type=bug)
-> >
-> >..or alternatively tell me to use a different approach to fix this
-> > issue...
->
-> docs/README
+Hi,
 
-Which says:
+I have seen that in the qtopia4.mk script the compilation would fail if
+the -qt-mouse-tslib is appended to the configure script.
+I have contacted the folks at the trolltech and they remarked that some
+sql options currently passed to configure are only available on the
+commercial release of QTopia4: these drivers are db2, oci and tds.
+I send you a patch that corrects that error (only enables these options
+on the commercial version).
+There is also another, more complicated patchset, that enables the user
+to chose if enable the stl support, the gfx transformed driver and the
+use of sqlite2 (but sqlite2 is not yet available on buildroot, hope
+it'll be soon). this set also include the tslib patch.
+Hope that helps,
+Best regards,
 
-make UCLIBC_CONFIG_FILE=/my/uClibc.config
+ing. Federico Fuga
 
-Yes, I know...
 
-- Atle
+-------------- next part --------------
+A non-text attachment was scrubbed...
+Name: qtopia4-commoptions.patch
+Type: text/x-patch
+Size: 1920 bytes
+Desc: not available
+Url : http://busybox.net/lists/buildroot/attachments/20071123/b790055b/attachment.bin 
+-------------- next part --------------
+A non-text attachment was scrubbed...
+Name: qtopia4-newoptions.patch
+Type: text/x-patch
+Size: 4659 bytes
+Desc: not available
+Url : http://busybox.net/lists/buildroot/attachments/20071123/b790055b/attachment-0001.bin 
