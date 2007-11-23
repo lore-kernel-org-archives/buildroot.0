@@ -1,35 +1,20 @@
-From: jacmet at uclibc.org <jacmet@uclibc.org>
-Date: Fri, 23 Nov 2007 07:46:19 -0800 (PST)
-Subject: [Buildroot] svn commit: trunk/buildroot/package/dbus
-Message-ID: <20071123154619.7E05E30048@busybox.net>
+From: Bernhard Fischer <rep.dot.nop@gmail.com>
+Date: Fri, 23 Nov 2007 17:03:35 +0100
+Subject: [Buildroot] [PATCH] Add SUSv3 Legacy Macros config option
+In-Reply-To: <200711231506.58719.atle@nissestad.no>
+References: <200711231506.58719.atle@nissestad.no>
+Message-ID: <20071123160335.GA18586@aon.at>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Author: jacmet
-Date: 2007-11-23 07:46:18 -0800 (Fri, 23 Nov 2007)
-New Revision: 20504
+On Fri, Nov 23, 2007 at 03:06:58PM +0100, Atle Nissestad wrote:
+>Sorry if I'm a bit impatient, but could someone with commit-access add the 
+>patch posted in this issue: http://busybox.net/bugs/view.php?id=1596 
+>(http://bugs.uclibc.org/file_download.php?file_id=1193&type=bug)
+>
+>..or alternatively tell me to use a different approach to fix this issue...
 
-Log:
-Ups, STRIP is called STRIPCMD nowadays
-
-Modified:
-   trunk/buildroot/package/dbus/dbus.mk
-
-
-Changeset:
-Modified: trunk/buildroot/package/dbus/dbus.mk
-===================================================================
---- trunk/buildroot/package/dbus/dbus.mk	2007-11-23 15:45:30 UTC (rev 20503)
-+++ trunk/buildroot/package/dbus/dbus.mk	2007-11-23 15:46:18 UTC (rev 20504)
-@@ -66,7 +66,7 @@
- 
- $(TARGET_DIR)/$(DBUS_TARGET_BINARY): $(STAGING_DIR)/usr/lib/libdbus-1.so
- 	mkdir -p $(TARGET_DIR)/var/run/dbus $(TARGET_DIR)/etc/init.d
--	$(MAKE) DESTDIR=$(TARGET_DIR) STRIPPROG='$(STRIP)' \
-+	$(MAKE) DESTDIR=$(TARGET_DIR) STRIPPROG='$(STRIPCMD)' \
- 		initdir=/etc/init.d -C $(DBUS_DIR)/dbus install-strip
- 	rm -rf $(TARGET_DIR)/usr/lib/dbus-1.0 \
- 		$(TARGET_DIR)/usr/lib/libdbus-1.la \
+docs/README
