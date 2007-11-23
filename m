@@ -1,31 +1,90 @@
-From: Atle Nissestad <atle@nissestad.no>
-Date: Fri, 23 Nov 2007 16:05:32 +0100
-Subject: [Buildroot] [PATCH] Add SUSv3 Legacy Macros config option
-In-Reply-To: <4746F248.7070306@promwad.com>
-References: <200711231506.58719.atle@nissestad.no>
-	<4746F248.7070306@promwad.com>
-Message-ID: <200711231605.32764.atle@nissestad.no>
+From: bugs at busybox.net <bugs@busybox.net>
+Date: Fri, 23 Nov 2007 07:33:00 -0800
+Subject: [Buildroot] [buildroot 0001469]: Add fuse and ntfs package for
+	buildroot
+Message-ID: <b45c9c53f695f567d07c7ea314551bf7@bugs.busybox.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Friday 23. November 2007 16:31:20 Ivan Kuten wrote:
-> Hi Atle,
->
-> As I remember by previous discussion on mailing list the intention is
-> totally get rid of SUSV3_LEGACY_MACROS - that's why it is disabled by
-> default.
->
-> As I understand correct solution is to fix those packages not to use
-> deprecated functions. Some packages already fixed this way - search for
-> ***SUSV3.patch in packages/ - but not all.
->
-OK, message taken. There are still some packages that need to be fixed (like 
-Boa). Are any of these patches sent upstream?
 
-- Atle
+A NOTE has been added to this issue. 
+====================================================================== 
+http://busybox.net/bugs/view.php?id=1469 
+====================================================================== 
+Reported By:                alextud
+Assigned To:                buildroot
+====================================================================== 
+Project:                    buildroot
+Issue ID:                   1469
+Category:                   New Features
+Reproducibility:            N/A
+Severity:                   feature
+Priority:                   normal
+Status:                     assigned
+====================================================================== 
+Date Submitted:             08-22-2007 08:12 PDT
+Last Modified:              11-23-2007 07:32 PST
+====================================================================== 
+Summary:                    Add fuse and ntfs package for buildroot
+Description: 
+Hi,
+I made some makefile for fuse and ntfs-3g and I'll be happy if you can add
+them to  buildroot package.
+Ntfs-3g mount always fail with default busybox mount command, only work
+with mount from util-linux package, I think that its related with fuse and
+mount from busybox, fix me if I wrong.
+Also I disabled in fuse symvers related to version 2.2 because on runtime
+fusermount show: unknown '" option. 
+I'm just started with buildroot and my files maybe contains some error,
+feel free to modify them.
 
-> Regards,
-> Ivan
+Thanks, Alex.
+====================================================================== 
+
+---------------------------------------------------------------------- 
+ alonbl - 11-21-07 10:33  
+---------------------------------------------------------------------- 
+Hi!
+
+The patch for fuse works, thanks!
+Have you sent this to fuse developers?
+
+Can you please rebase to 2.7.1? I don't fully understand these syms...
+
+I succeeded to make busybox mount work, by creating a script that ignores
+the "-i" option.
+
+The problem is that I ntfs-3g segfaults when I umount.
+
+I will try to figure out why. 
+
+---------------------------------------------------------------------- 
+ alonbl - 11-23-07 07:32  
+---------------------------------------------------------------------- 
+OK.
+Fully working with fuse-2.7.1.
+
+All I done is Added to CFLAGS "-D__asm__\(X\)="
+
+Lastest busybox ignores the -i options.
+
+So now it is working.
+
+Thanks for the lead. 
+
+Issue History 
+Date Modified   Username       Field                    Change               
+====================================================================== 
+08-22-07 08:12  alextud        New Issue                                    
+08-22-07 08:12  alextud        Status                   new => assigned     
+08-22-07 08:12  alextud        Assigned To               => buildroot       
+08-22-07 08:12  alextud        File Added: fuse&ntfs_mk.tar.gz                  
+ 
+08-22-07 08:15  alextud        Issue Monitored: alextud                     
+11-21-07 10:30  alonbl         Issue Monitored: alonbl                      
+11-21-07 10:33  alonbl         Note Added: 0002946                          
+11-23-07 07:32  alonbl         Note Added: 0002953                          
+======================================================================
