@@ -1,26 +1,34 @@
-From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Fri, 23 Nov 2007 13:33:53 +0100
+From: jacmet at uclibc.org <jacmet@uclibc.org>
+Date: Fri, 23 Nov 2007 05:21:16 -0800 (PST)
 Subject: [Buildroot] svn commit: trunk/buildroot/package/dbus
-In-Reply-To: <4746CCAD.4030909@promwad.com> (Ivan Kuten's message of "Fri\,
-	23 Nov 2007 14\:50\:53 +0200")
-References: <20071123114301.6B7493004A@busybox.net>
-	<4746CCAD.4030909@promwad.com>
-Message-ID: <87fxyxdtu6.fsf@macbook.be.48ers.dk>
+Message-ID: <20071123132116.C2D9F3008B@busybox.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Ivan" == Ivan Kuten <ivan.kuten@promwad.com> writes:
+Author: jacmet
+Date: 2007-11-23 05:21:15 -0800 (Fri, 23 Nov 2007)
+New Revision: 20498
 
-Hi,
+Log:
+Generate uuid at startup if needed
 
- Ivan> Are you sure that you need to remove $(TARGET_DIR)/usr/lib/pkgconfig
- Ivan> there could be other *.pc as well?
+Modified:
+   trunk/buildroot/package/dbus/S97messagebus
 
-That shouldn't happend, and as we don't support pkgconfig on the
-target it wouldn't be of any use anyway.
 
--- 
-Bye, Peter Korsgaard
+Changeset:
+Modified: trunk/buildroot/package/dbus/S97messagebus
+===================================================================
+--- trunk/buildroot/package/dbus/S97messagebus	2007-11-23 13:11:42 UTC (rev 20497)
++++ trunk/buildroot/package/dbus/S97messagebus	2007-11-23 13:21:15 UTC (rev 20498)
+@@ -22,6 +22,7 @@
+ start() {
+     echo -n "Starting system message bus: "
+ 
++    dbus-uuidgen --ensure
+     dbus-daemon --system
+     RETVAL=$?
+     echo "done"
