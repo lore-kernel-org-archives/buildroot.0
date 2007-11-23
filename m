@@ -1,73 +1,96 @@
-From: Jean-Claude Gervais <jc.gervais@videotron.ca>
-Date: Fri, 23 Nov 2007 14:11:49 -0500
-Subject: [Buildroot] arm build failing - 'fakeroot: preload library
-	not	found'
-In-Reply-To: <1195762733.20822.11.camel@mercury.sprymusic>
-References: <1195762733.20822.11.camel@mercury.sprymusic>
-Message-ID: <1195845109.5376.11.camel@mercury.sprymusic>
+From: bugs at busybox.net <bugs@busybox.net>
+Date: Fri, 23 Nov 2007 12:56:28 -0800
+Subject: [Buildroot] [buildroot 0001469]: Add fuse and ntfs package for
+	buildroot
+Message-ID: <ab389b7e105cd02556e70d8b52f83a40@busybox.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Thu, 2007-11-22 at 15:18 -0500, Jean-Claude Gervais wrote:
-> I am getting a build error:
-> 
-> >> buildroot/project_build_arm/uclibc/_fakeroot.rootfs.arm.jffs2
-> chmod a
-> +x buildroot/project_build_arm/uclibc/_fakeroot.rootfs.arm.jffs2
-> buildroot/build_arm/staging_dir/usr/bin/fakeroot -- buildroot/project_build_arm/uclibc/_fakeroot.rootfs.arm.jffs2
-> <stdin>:1097:2: warning: #warning syscall fadvise64 not implemented
-> <stdin>:1265:2: warning: #warning syscall migrate_pages not implemented
-> <stdin>:1321:2: warning: #warning syscall pselect6 not implemented
-> <stdin>:1325:2: warning: #warning syscall ppoll not implemented
-> <stdin>:1365:2: warning: #warning syscall epoll_pwait not implemented
-> <stdin>:1385:2: warning: #warning syscall fallocate not implemented
-> <stdin>:1097:2: warning: #warning syscall fadvise64 not implemented
-> <stdin>:1265:2: warning: #warning syscall migrate_pages not implemented
-> <stdin>:1321:2: warning: #warning syscall pselect6 not implemented
-> <stdin>:1325:2: warning: #warning syscall ppoll not implemented
-> <stdin>:1365:2: warning: #warning syscall epoll_pwait not implemented
-> <stdin>:1385:2: warning: #warning syscall fallocate not implemented
-> <stdin>:1097:2: warning: #warning syscall fadvise64 not implemented
-> <stdin>:1265:2: warning: #warning syscall migrate_pages not implemented
-> <stdin>:1321:2: warning: #warning syscall pselect6 not implemented
-> <stdin>:1325:2: warning: #warning syscall ppoll not implemented
-> <stdin>:1365:2: warning: #warning syscall epoll_pwait not implemented
-> <stdin>:1385:2: warning: #warning syscall fallocate not implemented
-> compr_lzo.c: In function 'jffs2_lzo_cmpr':
-> compr_lzo.c:54: warning: passing argument 4 of 'lzo1x_999_compress' from
-> incompatible pointer type
-> compr_lzo.c: In function 'jffs2_lzo_decompress':
-> compr_lzo.c:74: warning: passing argument 4 of 'lzo1x_decompress_safe'
-> from incompatible pointer type
-> fakeroot: preload library not found, aborting.
-> make: ***
-> [buildroot/binaries/uclibc/rootfs.arm.jffs2] Error 1
-> 
-> What does the error message mean?
-> Which library is it looking for?
 
-Finally, I discovered that buildroot needs the host to have fakeroot
-installed.
+A NOTE has been added to this issue. 
+====================================================================== 
+http://busybox.net/bugs/view.php?id=1469 
+====================================================================== 
+Reported By:                alextud
+Assigned To:                buildroot
+====================================================================== 
+Project:                    buildroot
+Issue ID:                   1469
+Category:                   New Features
+Reproducibility:            N/A
+Severity:                   feature
+Priority:                   normal
+Status:                     assigned
+====================================================================== 
+Date Submitted:             08-22-2007 08:12 PDT
+Last Modified:              11-23-2007 12:56 PST
+====================================================================== 
+Summary:                    Add fuse and ntfs package for buildroot
+Description: 
+Hi,
+I made some makefile for fuse and ntfs-3g and I'll be happy if you can add
+them to  buildroot package.
+Ntfs-3g mount always fail with default busybox mount command, only work
+with mount from util-linux package, I think that its related with fuse and
+mount from busybox, fix me if I wrong.
+Also I disabled in fuse symvers related to version 2.2 because on runtime
+fusermount show: unknown '" option. 
+I'm just started with buildroot and my files maybe contains some error,
+feel free to modify them.
 
-I'm afraid I don't understand why that is: In my project configuration,
-I do NOT have 'mark all files as owned by root' selected, so I assume
-that fakeroot is not necessary in such a case. I may be wrong. Can
-anyone clarify?
+Thanks, Alex.
+====================================================================== 
 
-In any case, installing fakeroot (v1.8.1) didn't solve the problem, I am
-now getting a different error message:
+---------------------------------------------------------------------- 
+ alonbl - 11-21-07 10:33  
+---------------------------------------------------------------------- 
+Hi!
 
-buildroot/build_arm/staging_dir/usr/bin/fakeroot: line  131:
-buildroot/build_arm/staging_dir/usr/bin/faked: No such file or directory
-fakeroot: error while starting the `faked' daemon.
+The patch for fuse works, thanks!
+Have you sent this to fuse developers?
 
-Yet, the file ('faked') in question does exist:
+Can you please rebase to 2.7.1? I don't fully understand these syms...
 
--rwxr-xr-x 1 jg jg 42984 Nov 20 12:50
- build_arm/staging_dir/usr/bin/faked
+I succeeded to make busybox mount work, by creating a script that ignores
+the "-i" option.
 
-Thank you for any help.
-J
+The problem is that I ntfs-3g segfaults when I umount.
+
+I will try to figure out why. 
+
+---------------------------------------------------------------------- 
+ alonbl - 11-23-07 07:32  
+---------------------------------------------------------------------- 
+OK.
+Fully working with fuse-2.7.1.
+
+All I done is Added to CFLAGS "-D__asm__\(X\)="
+
+Lastest busybox ignores the -i options.
+
+So now it is working.
+
+Thanks for the lead. 
+
+---------------------------------------------------------------------- 
+ alextud - 11-23-07 12:56  
+---------------------------------------------------------------------- 
+That's great. I will this weekend. 
+
+Issue History 
+Date Modified   Username       Field                    Change               
+====================================================================== 
+08-22-07 08:12  alextud        New Issue                                    
+08-22-07 08:12  alextud        Status                   new => assigned     
+08-22-07 08:12  alextud        Assigned To               => buildroot       
+08-22-07 08:12  alextud        File Added: fuse&ntfs_mk.tar.gz                  
+ 
+08-22-07 08:15  alextud        Issue Monitored: alextud                     
+11-21-07 10:30  alonbl         Issue Monitored: alonbl                      
+11-21-07 10:33  alonbl         Note Added: 0002946                          
+11-23-07 07:32  alonbl         Note Added: 0002953                          
+11-23-07 12:56  alextud        Note Added: 0002954                          
+======================================================================
