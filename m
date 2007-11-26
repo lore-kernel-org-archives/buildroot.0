@@ -1,7 +1,7 @@
 From: jacmet at uclibc.org <jacmet@uclibc.org>
-Date: Mon, 26 Nov 2007 07:39:03 -0800 (PST)
-Subject: [Buildroot] svn commit: trunk/buildroot/package/avahi
-Message-ID: <20071126153903.B31CA300C3@busybox.net>
+Date: Mon, 26 Nov 2007 07:47:41 -0800 (PST)
+Subject: [Buildroot] svn commit: trunk/buildroot/package/dbus
+Message-ID: <20071126154741.4FEB8300D2@busybox.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -9,27 +9,27 @@ Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
 Author: jacmet
-Date: 2007-11-26 07:39:02 -0800 (Mon, 26 Nov 2007)
-New Revision: 20545
+Date: 2007-11-26 07:47:41 -0800 (Mon, 26 Nov 2007)
+New Revision: 20546
 
 Log:
-Ups, TARGET_CONFIGURE_* is needed to find pkg-config (r20501)
+Really fix target install (typo in r20494)
 
 Modified:
-   trunk/buildroot/package/avahi/avahi.mk
+   trunk/buildroot/package/dbus/dbus.mk
 
 
 Changeset:
-Modified: trunk/buildroot/package/avahi/avahi.mk
+Modified: trunk/buildroot/package/dbus/dbus.mk
 ===================================================================
---- trunk/buildroot/package/avahi/avahi.mk	2007-11-26 14:54:15 UTC (rev 20544)
-+++ trunk/buildroot/package/avahi/avahi.mk	2007-11-26 15:39:02 UTC (rev 20545)
-@@ -55,6 +55,8 @@
- $(AVAHI_DIR)/.configured: $(AVAHI_DIR)/.unpacked $(AVAHI_EXTRA_DEPS)
- 	(cd $(AVAHI_DIR) && rm -rf config.cache && autoconf)
- 	(cd $(AVAHI_DIR) && \
-+		$(TARGET_CONFIGURE_OPTS) \
-+		$(TARGET_CONFIGURE_ARGS) \
- 		ac_cv_func_strtod=yes \
- 		ac_fsusage_space=yes \
- 		fu_cv_sys_stat_statfs2_bsize=yes \
+--- trunk/buildroot/package/dbus/dbus.mk	2007-11-26 15:39:02 UTC (rev 20545)
++++ trunk/buildroot/package/dbus/dbus.mk	2007-11-26 15:47:41 UTC (rev 20546)
+@@ -67,7 +67,7 @@
+ $(TARGET_DIR)/$(DBUS_TARGET_BINARY): $(STAGING_DIR)/usr/lib/libdbus-1.so
+ 	mkdir -p $(TARGET_DIR)/var/run/dbus $(TARGET_DIR)/etc/init.d
+ 	$(MAKE) DESTDIR=$(TARGET_DIR) STRIPPROG='$(STRIPCMD)' \
+-		initdir=/etc/init.d -C $(DBUS_DIR)/dbus install-strip
++		initdir=/etc/init.d -C $(DBUS_DIR) install-strip
+ 	rm -rf $(TARGET_DIR)/usr/lib/dbus-1.0 \
+ 		$(TARGET_DIR)/usr/lib/libdbus-1.la \
+ 		$(TARGET_DIR)/usr/include/dbus-1.0 \
