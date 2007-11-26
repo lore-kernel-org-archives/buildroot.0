@@ -1,259 +1,105 @@
-From: jacmet at uclibc.org <jacmet@uclibc.org>
-Date: Mon, 26 Nov 2007 06:54:16 -0800 (PST)
-Subject: [Buildroot] svn commit: trunk/buildroot/toolchain/kernel-headers
-Message-ID: <20071126145416.60507300A6@busybox.net>
+From: bugs at busybox.net <bugs@busybox.net>
+Date: Mon, 26 Nov 2007 07:24:21 -0800
+Subject: [Buildroot] [buildroot 0001469]: Add fuse and ntfs package for
+	buildroot
+Message-ID: <b84847926bbbaa21decae0c292567fbd@bugs.uclibc.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Author: jacmet
-Date: 2007-11-26 06:54:15 -0800 (Mon, 26 Nov 2007)
-New Revision: 20544
 
-Log:
-Fix for old-style kernels (broken by r20018). Check old-style versions before
-including kernel-headers-new.makefile.
+A NOTE has been added to this issue. 
+====================================================================== 
+http://busybox.net/bugs/view.php?id=1469 
+====================================================================== 
+Reported By:                alextud
+Assigned To:                buildroot
+====================================================================== 
+Project:                    buildroot
+Issue ID:                   1469
+Category:                   New Features
+Reproducibility:            N/A
+Severity:                   feature
+Priority:                   normal
+Status:                     assigned
+====================================================================== 
+Date Submitted:             08-22-2007 08:12 PDT
+Last Modified:              11-26-2007 07:24 PST
+====================================================================== 
+Summary:                    Add fuse and ntfs package for buildroot
+Description: 
+Hi,
+I made some makefile for fuse and ntfs-3g and I'll be happy if you can add
+them to  buildroot package.
+Ntfs-3g mount always fail with default busybox mount command, only work
+with mount from util-linux package, I think that its related with fuse and
+mount from busybox, fix me if I wrong.
+Also I disabled in fuse symvers related to version 2.2 because on runtime
+fusermount show: unknown '" option. 
+I'm just started with buildroot and my files maybe contains some error,
+feel free to modify them.
 
+Thanks, Alex.
+====================================================================== 
 
-Added:
-   trunk/buildroot/toolchain/kernel-headers/kernel-headers-old-versions.makefile
+---------------------------------------------------------------------- 
+ alonbl - 11-21-07 10:33  
+---------------------------------------------------------------------- 
+Hi!
 
-Modified:
-   trunk/buildroot/toolchain/kernel-headers/kernel-headers-old.makefile
-   trunk/buildroot/toolchain/kernel-headers/kernel-headers.mk
+The patch for fuse works, thanks!
+Have you sent this to fuse developers?
 
+Can you please rebase to 2.7.1? I don't fully understand these syms...
 
-Changeset:
-Copied: trunk/buildroot/toolchain/kernel-headers/kernel-headers-old-versions.makefile (from rev 20543, trunk/buildroot/toolchain/kernel-headers/kernel-headers-old.makefile)
-===================================================================
---- trunk/buildroot/toolchain/kernel-headers/kernel-headers-old-versions.makefile	                        (rev 0)
-+++ trunk/buildroot/toolchain/kernel-headers/kernel-headers-old-versions.makefile	2007-11-26 14:54:15 UTC (rev 20544)
-@@ -0,0 +1,103 @@
-+#############################################################
-+#
-+# Setup the kernel headers. I include a generic package of
-+# kernel headers here, so you shouldn't need to include your
-+# own. Be aware these kernel headers _will_ get blown away
-+# by a 'make clean' so don't put anything sacred in here...
-+#
-+#############################################################
-+ifeq ("$(DEFAULT_KERNEL_HEADERS)","2.4.25")
-+VERSION:=2
-+PATCHLEVEL:=4
-+SUBLEVEL:=25
-+LINUX_HEADERS_VERSION:=$(VERSION).$(PATCHLEVEL).$(SUBLEVEL)$(EXTRAVERSION)
-+LINUX_HEADERS_SITE:=http://www.uclibc.org/downloads/toolchain
-+LINUX_HEADERS_SOURCE:=linux-libc-headers-2.4.25.tar.bz2
-+LINUX_HEADERS_CAT:=$(BZCAT)
-+LINUX_HEADERS_DIR:=$(TOOL_BUILD_DIR)/linux
-+LINUX_HEADERS_UNPACK_DIR:=$(TOOL_BUILD_DIR)/linux-libc-headers-2.4.25
-+endif
-+
-+ifeq ("$(DEFAULT_KERNEL_HEADERS)","2.4.27")
-+VERSION:=2
-+PATCHLEVEL:=4
-+SUBLEVEL:=27
-+LINUX_HEADERS_VERSION:=$(VERSION).$(PATCHLEVEL).$(SUBLEVEL)$(EXTRAVERSION)
-+LINUX_HEADERS_SITE:=http://www.uclibc.org/downloads/toolchain
-+LINUX_HEADERS_CAT:=$(BZCAT)
-+LINUX_HEADERS_SOURCE:=linux-libc-headers-2.4.27.tar.bz2
-+LINUX_HEADERS_DIR:=$(TOOL_BUILD_DIR)/linux
-+LINUX_HEADERS_UNPACK_DIR:=$(TOOL_BUILD_DIR)/linux-libc-headers-2.4.27
-+endif
-+
-+ifeq ("$(DEFAULT_KERNEL_HEADERS)","2.4.29")
-+VERSION:=2
-+PATCHLEVEL:=4
-+SUBLEVEL:=29
-+LINUX_HEADERS_VERSION:=$(VERSION).$(PATCHLEVEL).$(SUBLEVEL)$(EXTRAVERSION)
-+LINUX_HEADERS_SITE:=http://www.uclibc.org/downloads/toolchain
-+LINUX_HEADERS_SOURCE:=linux-libc-headers-2.4.29.tar.bz2
-+LINUX_HEADERS_CAT:=$(BZCAT)
-+LINUX_HEADERS_DIR:=$(TOOL_BUILD_DIR)/linux
-+LINUX_HEADERS_UNPACK_DIR:=$(TOOL_BUILD_DIR)/linux-libc-headers-2.4.29
-+endif
-+
-+ifeq ("$(DEFAULT_KERNEL_HEADERS)","2.4.31")
-+VERSION:=2
-+PATCHLEVEL:=4
-+SUBLEVEL:=31
-+LINUX_HEADERS_VERSION:=$(VERSION).$(PATCHLEVEL).$(SUBLEVEL)$(EXTRAVERSION)
-+LINUX_HEADERS_SITE:=http://www.uclibc.org/downloads/toolchain
-+LINUX_HEADERS_SOURCE:=linux-libc-headers-2.4.31.tar.bz2
-+LINUX_HEADERS_CAT:=$(BZCAT)
-+LINUX_HEADERS_DIR:=$(TOOL_BUILD_DIR)/linux
-+LINUX_HEADERS_UNPACK_DIR:=$(TOOL_BUILD_DIR)/linux-libc-headers-2.4.31
-+endif
-+
-+ifeq ("$(DEFAULT_KERNEL_HEADERS)","2.6.9")
-+VERSION:=2
-+PATCHLEVEL:=6
-+SUBLEVEL:=9
-+LINUX_HEADERS_VERSION:=$(VERSION).$(PATCHLEVEL).$(SUBLEVEL)$(EXTRAVERSION)
-+LINUX_HEADERS_SITE:=http://ep09.pld-linux.org/~mmazur/linux-libc-headers/
-+LINUX_HEADERS_SOURCE:=linux-libc-headers-2.6.9.1.tar.bz2
-+LINUX_HEADERS_CAT:=$(BZCAT)
-+LINUX_HEADERS_DIR:=$(TOOL_BUILD_DIR)/linux
-+LINUX_HEADERS_UNPACK_DIR:=$(TOOL_BUILD_DIR)/linux-libc-headers-2.6.9.1
-+endif
-+
-+ifeq ("$(DEFAULT_KERNEL_HEADERS)","2.6.10")
-+VERSION:=2
-+PATCHLEVEL:=6
-+SUBLEVEL:=10
-+LINUX_HEADERS_VERSION:=$(VERSION).$(PATCHLEVEL).$(SUBLEVEL)$(EXTRAVERSION)
-+LINUX_HEADERS_SITE:=http://ep09.pld-linux.org/~mmazur/linux-libc-headers/
-+LINUX_HEADERS_SOURCE:=linux-libc-headers-2.6.10.0.tar.bz2
-+LINUX_HEADERS_CAT:=$(BZCAT)
-+LINUX_HEADERS_DIR:=$(TOOL_BUILD_DIR)/linux
-+LINUX_HEADERS_UNPACK_DIR:=$(TOOL_BUILD_DIR)/linux-libc-headers-2.6.10.0
-+endif
-+
-+ifeq ("$(DEFAULT_KERNEL_HEADERS)","2.6.11")
-+VERSION:=2
-+PATCHLEVEL:=6
-+SUBLEVEL:=11
-+LINUX_HEADERS_VERSION:=$(VERSION).$(PATCHLEVEL).$(SUBLEVEL)$(EXTRAVERSION)
-+LINUX_HEADERS_SITE:=http://ep09.pld-linux.org/~mmazur/linux-libc-headers/
-+LINUX_HEADERS_SOURCE:=linux-libc-headers-2.6.11.0.tar.bz2
-+LINUX_HEADERS_CAT:=$(BZCAT)
-+LINUX_HEADERS_DIR:=$(TOOL_BUILD_DIR)/linux
-+LINUX_HEADERS_UNPACK_DIR:=$(TOOL_BUILD_DIR)/linux-libc-headers-2.6.11.0
-+endif
-+
-+ifeq ("$(DEFAULT_KERNEL_HEADERS)","2.6.12")
-+VERSION:=2
-+PATCHLEVEL:=6
-+SUBLEVEL:=12
-+LINUX_HEADERS_VERSION:=$(VERSION).$(PATCHLEVEL).$(SUBLEVEL)$(EXTRAVERSION)
-+LINUX_HEADERS_SITE:=http://ep09.pld-linux.org/~mmazur/linux-libc-headers/
-+LINUX_HEADERS_SOURCE:=linux-libc-headers-2.6.12.0.tar.bz2
-+LINUX_HEADERS_CAT:=$(BZCAT)
-+LINUX_HEADERS_DIR:=$(TOOL_BUILD_DIR)/linux
-+LINUX_HEADERS_UNPACK_DIR:=$(TOOL_BUILD_DIR)/linux-libc-headers-2.6.12.0
-+endif
+I succeeded to make busybox mount work, by creating a script that ignores
+the "-i" option.
 
-Modified: trunk/buildroot/toolchain/kernel-headers/kernel-headers-old.makefile
-===================================================================
---- trunk/buildroot/toolchain/kernel-headers/kernel-headers-old.makefile	2007-11-26 13:02:21 UTC (rev 20543)
-+++ trunk/buildroot/toolchain/kernel-headers/kernel-headers-old.makefile	2007-11-26 14:54:15 UTC (rev 20544)
-@@ -6,103 +6,7 @@
- # by a 'make clean' so don't put anything sacred in here...
- #
- #############################################################
--ifeq ("$(DEFAULT_KERNEL_HEADERS)","2.4.25")
--VERSION:=2
--PATCHLEVEL:=4
--SUBLEVEL:=25
--LINUX_HEADERS_VERSION:=$(VERSION).$(PATCHLEVEL).$(SUBLEVEL)$(EXTRAVERSION)
--LINUX_HEADERS_SITE:=http://www.uclibc.org/downloads/toolchain
--LINUX_HEADERS_SOURCE:=linux-libc-headers-2.4.25.tar.bz2
--LINUX_HEADERS_CAT:=$(BZCAT)
--LINUX_HEADERS_DIR:=$(TOOL_BUILD_DIR)/linux
--LINUX_HEADERS_UNPACK_DIR:=$(TOOL_BUILD_DIR)/linux-libc-headers-2.4.25
--endif
+The problem is that I ntfs-3g segfaults when I umount.
+
+I will try to figure out why. 
+
+---------------------------------------------------------------------- 
+ alonbl - 11-23-07 07:32  
+---------------------------------------------------------------------- 
+OK.
+Fully working with fuse-2.7.1.
+
+All I done is Added to CFLAGS "-D__asm__\(X\)="
+
+Lastest busybox ignores the -i options.
+
+So now it is working.
+
+Thanks for the lead. 
+
+---------------------------------------------------------------------- 
+ alextud - 11-23-07 12:56  
+---------------------------------------------------------------------- 
+That's great. I will this weekend. 
+
+---------------------------------------------------------------------- 
+ alextud - 11-26-07 07:24  
+---------------------------------------------------------------------- 
+I tested, it does work well:
+CFLAGS="$(TARGET_CFLAGS) -D__asm__\(X\)=" \
+
+even df -h command doesn't cause an software interrupt. 
+
+Issue History 
+Date Modified   Username       Field                    Change               
+====================================================================== 
+08-22-07 08:12  alextud        New Issue                                    
+08-22-07 08:12  alextud        Status                   new => assigned     
+08-22-07 08:12  alextud        Assigned To               => buildroot       
+08-22-07 08:12  alextud        File Added: fuse&ntfs_mk.tar.gz                  
  
--ifeq ("$(DEFAULT_KERNEL_HEADERS)","2.4.27")
--VERSION:=2
--PATCHLEVEL:=4
--SUBLEVEL:=27
--LINUX_HEADERS_VERSION:=$(VERSION).$(PATCHLEVEL).$(SUBLEVEL)$(EXTRAVERSION)
--LINUX_HEADERS_SITE:=http://www.uclibc.org/downloads/toolchain
--LINUX_HEADERS_CAT:=$(BZCAT)
--LINUX_HEADERS_SOURCE:=linux-libc-headers-2.4.27.tar.bz2
--LINUX_HEADERS_DIR:=$(TOOL_BUILD_DIR)/linux
--LINUX_HEADERS_UNPACK_DIR:=$(TOOL_BUILD_DIR)/linux-libc-headers-2.4.27
--endif
--
--ifeq ("$(DEFAULT_KERNEL_HEADERS)","2.4.29")
--VERSION:=2
--PATCHLEVEL:=4
--SUBLEVEL:=29
--LINUX_HEADERS_VERSION:=$(VERSION).$(PATCHLEVEL).$(SUBLEVEL)$(EXTRAVERSION)
--LINUX_HEADERS_SITE:=http://www.uclibc.org/downloads/toolchain
--LINUX_HEADERS_SOURCE:=linux-libc-headers-2.4.29.tar.bz2
--LINUX_HEADERS_CAT:=$(BZCAT)
--LINUX_HEADERS_DIR:=$(TOOL_BUILD_DIR)/linux
--LINUX_HEADERS_UNPACK_DIR:=$(TOOL_BUILD_DIR)/linux-libc-headers-2.4.29
--endif
--
--ifeq ("$(DEFAULT_KERNEL_HEADERS)","2.4.31")
--VERSION:=2
--PATCHLEVEL:=4
--SUBLEVEL:=31
--LINUX_HEADERS_VERSION:=$(VERSION).$(PATCHLEVEL).$(SUBLEVEL)$(EXTRAVERSION)
--LINUX_HEADERS_SITE:=http://www.uclibc.org/downloads/toolchain
--LINUX_HEADERS_SOURCE:=linux-libc-headers-2.4.31.tar.bz2
--LINUX_HEADERS_CAT:=$(BZCAT)
--LINUX_HEADERS_DIR:=$(TOOL_BUILD_DIR)/linux
--LINUX_HEADERS_UNPACK_DIR:=$(TOOL_BUILD_DIR)/linux-libc-headers-2.4.31
--endif
--
--ifeq ("$(DEFAULT_KERNEL_HEADERS)","2.6.9")
--VERSION:=2
--PATCHLEVEL:=6
--SUBLEVEL:=9
--LINUX_HEADERS_VERSION:=$(VERSION).$(PATCHLEVEL).$(SUBLEVEL)$(EXTRAVERSION)
--LINUX_HEADERS_SITE:=http://ep09.pld-linux.org/~mmazur/linux-libc-headers/
--LINUX_HEADERS_SOURCE:=linux-libc-headers-2.6.9.1.tar.bz2
--LINUX_HEADERS_CAT:=$(BZCAT)
--LINUX_HEADERS_DIR:=$(TOOL_BUILD_DIR)/linux
--LINUX_HEADERS_UNPACK_DIR:=$(TOOL_BUILD_DIR)/linux-libc-headers-2.6.9.1
--endif
--
--ifeq ("$(DEFAULT_KERNEL_HEADERS)","2.6.10")
--VERSION:=2
--PATCHLEVEL:=6
--SUBLEVEL:=10
--LINUX_HEADERS_VERSION:=$(VERSION).$(PATCHLEVEL).$(SUBLEVEL)$(EXTRAVERSION)
--LINUX_HEADERS_SITE:=http://ep09.pld-linux.org/~mmazur/linux-libc-headers/
--LINUX_HEADERS_SOURCE:=linux-libc-headers-2.6.10.0.tar.bz2
--LINUX_HEADERS_CAT:=$(BZCAT)
--LINUX_HEADERS_DIR:=$(TOOL_BUILD_DIR)/linux
--LINUX_HEADERS_UNPACK_DIR:=$(TOOL_BUILD_DIR)/linux-libc-headers-2.6.10.0
--endif
--
--ifeq ("$(DEFAULT_KERNEL_HEADERS)","2.6.11")
--VERSION:=2
--PATCHLEVEL:=6
--SUBLEVEL:=11
--LINUX_HEADERS_VERSION:=$(VERSION).$(PATCHLEVEL).$(SUBLEVEL)$(EXTRAVERSION)
--LINUX_HEADERS_SITE:=http://ep09.pld-linux.org/~mmazur/linux-libc-headers/
--LINUX_HEADERS_SOURCE:=linux-libc-headers-2.6.11.0.tar.bz2
--LINUX_HEADERS_CAT:=$(BZCAT)
--LINUX_HEADERS_DIR:=$(TOOL_BUILD_DIR)/linux
--LINUX_HEADERS_UNPACK_DIR:=$(TOOL_BUILD_DIR)/linux-libc-headers-2.6.11.0
--endif
--
--ifeq ("$(DEFAULT_KERNEL_HEADERS)","2.6.12")
--VERSION:=2
--PATCHLEVEL:=6
--SUBLEVEL:=12
--LINUX_HEADERS_VERSION:=$(VERSION).$(PATCHLEVEL).$(SUBLEVEL)$(EXTRAVERSION)
--LINUX_HEADERS_SITE:=http://ep09.pld-linux.org/~mmazur/linux-libc-headers/
--LINUX_HEADERS_SOURCE:=linux-libc-headers-2.6.12.0.tar.bz2
--LINUX_HEADERS_CAT:=$(BZCAT)
--LINUX_HEADERS_DIR:=$(TOOL_BUILD_DIR)/linux
--LINUX_HEADERS_UNPACK_DIR:=$(TOOL_BUILD_DIR)/linux-libc-headers-2.6.12.0
--endif
--
--
- # the old sanitized kernel-headers
- ifeq ($(LINUX_HEADERS_IS_KERNEL),n)
- 
-
-Modified: trunk/buildroot/toolchain/kernel-headers/kernel-headers.mk
-===================================================================
---- trunk/buildroot/toolchain/kernel-headers/kernel-headers.mk	2007-11-26 13:02:21 UTC (rev 20543)
-+++ trunk/buildroot/toolchain/kernel-headers/kernel-headers.mk	2007-11-26 14:54:15 UTC (rev 20544)
-@@ -24,6 +24,8 @@
- # assume old manually sanitized kernel-headers
- LINUX_HEADERS_IS_KERNEL=n
- 
-+# this needs to be included before kernel-headers-new to set old-style mode
-+include toolchain/kernel-headers/kernel-headers-old-versions.makefile
- include toolchain/kernel-headers/kernel-headers-new.makefile
- include toolchain/kernel-headers/kernel-headers-old.makefile
- 
+08-22-07 08:15  alextud        Issue Monitored: alextud                     
+11-21-07 10:30  alonbl         Issue Monitored: alonbl                      
+11-21-07 10:33  alonbl         Note Added: 0002946                          
+11-23-07 07:32  alonbl         Note Added: 0002953                          
+11-23-07 12:56  alextud        Note Added: 0002954                          
+11-26-07 07:24  alextud        Note Added: 0002964                          
+======================================================================
