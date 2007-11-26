@@ -1,105 +1,35 @@
-From: bugs at busybox.net <bugs@busybox.net>
-Date: Mon, 26 Nov 2007 07:24:21 -0800
-Subject: [Buildroot] [buildroot 0001469]: Add fuse and ntfs package for
-	buildroot
-Message-ID: <b84847926bbbaa21decae0c292567fbd@bugs.uclibc.org>
+From: jacmet at uclibc.org <jacmet@uclibc.org>
+Date: Mon, 26 Nov 2007 07:39:03 -0800 (PST)
+Subject: [Buildroot] svn commit: trunk/buildroot/package/avahi
+Message-ID: <20071126153903.B31CA300C3@busybox.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+Author: jacmet
+Date: 2007-11-26 07:39:02 -0800 (Mon, 26 Nov 2007)
+New Revision: 20545
 
-A NOTE has been added to this issue. 
-====================================================================== 
-http://busybox.net/bugs/view.php?id=1469 
-====================================================================== 
-Reported By:                alextud
-Assigned To:                buildroot
-====================================================================== 
-Project:                    buildroot
-Issue ID:                   1469
-Category:                   New Features
-Reproducibility:            N/A
-Severity:                   feature
-Priority:                   normal
-Status:                     assigned
-====================================================================== 
-Date Submitted:             08-22-2007 08:12 PDT
-Last Modified:              11-26-2007 07:24 PST
-====================================================================== 
-Summary:                    Add fuse and ntfs package for buildroot
-Description: 
-Hi,
-I made some makefile for fuse and ntfs-3g and I'll be happy if you can add
-them to  buildroot package.
-Ntfs-3g mount always fail with default busybox mount command, only work
-with mount from util-linux package, I think that its related with fuse and
-mount from busybox, fix me if I wrong.
-Also I disabled in fuse symvers related to version 2.2 because on runtime
-fusermount show: unknown '" option. 
-I'm just started with buildroot and my files maybe contains some error,
-feel free to modify them.
+Log:
+Ups, TARGET_CONFIGURE_* is needed to find pkg-config (r20501)
 
-Thanks, Alex.
-====================================================================== 
+Modified:
+   trunk/buildroot/package/avahi/avahi.mk
 
----------------------------------------------------------------------- 
- alonbl - 11-21-07 10:33  
----------------------------------------------------------------------- 
-Hi!
 
-The patch for fuse works, thanks!
-Have you sent this to fuse developers?
-
-Can you please rebase to 2.7.1? I don't fully understand these syms...
-
-I succeeded to make busybox mount work, by creating a script that ignores
-the "-i" option.
-
-The problem is that I ntfs-3g segfaults when I umount.
-
-I will try to figure out why. 
-
----------------------------------------------------------------------- 
- alonbl - 11-23-07 07:32  
----------------------------------------------------------------------- 
-OK.
-Fully working with fuse-2.7.1.
-
-All I done is Added to CFLAGS "-D__asm__\(X\)="
-
-Lastest busybox ignores the -i options.
-
-So now it is working.
-
-Thanks for the lead. 
-
----------------------------------------------------------------------- 
- alextud - 11-23-07 12:56  
----------------------------------------------------------------------- 
-That's great. I will this weekend. 
-
----------------------------------------------------------------------- 
- alextud - 11-26-07 07:24  
----------------------------------------------------------------------- 
-I tested, it does work well:
-CFLAGS="$(TARGET_CFLAGS) -D__asm__\(X\)=" \
-
-even df -h command doesn't cause an software interrupt. 
-
-Issue History 
-Date Modified   Username       Field                    Change               
-====================================================================== 
-08-22-07 08:12  alextud        New Issue                                    
-08-22-07 08:12  alextud        Status                   new => assigned     
-08-22-07 08:12  alextud        Assigned To               => buildroot       
-08-22-07 08:12  alextud        File Added: fuse&ntfs_mk.tar.gz                  
- 
-08-22-07 08:15  alextud        Issue Monitored: alextud                     
-11-21-07 10:30  alonbl         Issue Monitored: alonbl                      
-11-21-07 10:33  alonbl         Note Added: 0002946                          
-11-23-07 07:32  alonbl         Note Added: 0002953                          
-11-23-07 12:56  alextud        Note Added: 0002954                          
-11-26-07 07:24  alextud        Note Added: 0002964                          
-======================================================================
+Changeset:
+Modified: trunk/buildroot/package/avahi/avahi.mk
+===================================================================
+--- trunk/buildroot/package/avahi/avahi.mk	2007-11-26 14:54:15 UTC (rev 20544)
++++ trunk/buildroot/package/avahi/avahi.mk	2007-11-26 15:39:02 UTC (rev 20545)
+@@ -55,6 +55,8 @@
+ $(AVAHI_DIR)/.configured: $(AVAHI_DIR)/.unpacked $(AVAHI_EXTRA_DEPS)
+ 	(cd $(AVAHI_DIR) && rm -rf config.cache && autoconf)
+ 	(cd $(AVAHI_DIR) && \
++		$(TARGET_CONFIGURE_OPTS) \
++		$(TARGET_CONFIGURE_ARGS) \
+ 		ac_cv_func_strtod=yes \
+ 		ac_fsusage_space=yes \
+ 		fu_cv_sys_stat_statfs2_bsize=yes \
