@@ -1,35 +1,31 @@
-From: jacmet at uclibc.org <jacmet@uclibc.org>
-Date: Mon, 26 Nov 2007 05:02:21 -0800 (PST)
+From: Peter Korsgaard <jacmet@uclibc.org>
+Date: Mon, 26 Nov 2007 13:56:48 +0100
 Subject: [Buildroot] svn commit: trunk/buildroot/package/avahi
-Message-ID: <20071126130221.D9F7030063@busybox.net>
+In-Reply-To: <1195979283.4613.2.camel@elrond.atmel.sweden> (Ulf Samuelsson's
+	message of "Sun\, 25 Nov 2007 09\:28\:03 +0100")
+References: <20071123132456.77C9430080@busybox.net>
+	<1195979283.4613.2.camel@elrond.atmel.sweden>
+Message-ID: <87d4txmagf.fsf@macbook.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Author: jacmet
-Date: 2007-11-26 05:02:21 -0800 (Mon, 26 Nov 2007)
-New Revision: 20543
+>>>>> "Ulf" == Ulf Samuelsson <ulf@atmel.com> writes:
 
-Log:
-Install dbus before avahi so dbus directories are available
+ >> Log:
+ >> Compile in dbus support if available
+ >> 
+ >> Modified:
+ >> trunk/buildroot/package/avahi/avahi.mk
 
-Modified:
-   trunk/buildroot/package/avahi/avahi.mk
+ Ulf> Could you please try this patch.
+ Ulf> I dont have the time to test it right now.
 
+Seems to work. Checked in as r20542.
 
-Changeset:
-Modified: trunk/buildroot/package/avahi/avahi.mk
-===================================================================
---- trunk/buildroot/package/avahi/avahi.mk	2007-11-26 12:23:13 UTC (rev 20542)
-+++ trunk/buildroot/package/avahi/avahi.mk	2007-11-26 13:02:21 UTC (rev 20543)
-@@ -37,7 +37,7 @@
- 
- ifeq ($(strip $(BR2_PACKAGE_DBUS)),y)
- AVAHI_DISABLE_DBUS:=
--AVAHI_EXTRA_DEPS+=$(STAGING_DIR)/usr/lib/libdbus-1.so
-+AVAHI_EXTRA_DEPS+=$(TARGET_DIR)/usr/bin/dbus-daemon
- else
- AVAHI_DISABLE_DBUS:=--disable-dbus
- endif
+Thanks!
+
+-- 
+Bye, Peter Korsgaard
