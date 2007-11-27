@@ -1,30 +1,46 @@
-From: ulf at uclibc.org <ulf@uclibc.org>
-Date: Tue, 27 Nov 2007 00:30:34 -0800 (PST)
-Subject: [Buildroot] svn commit: trunk/buildroot/package/l2tp
-Message-ID: <20071127083034.0C28830056@busybox.net>
+From: bugs at busybox.net <bugs@busybox.net>
+Date: Tue, 27 Nov 2007 01:26:51 -0800
+Subject: [Buildroot] [buildroot 0001608]: flex should go to staging dir
+Message-ID: <bd66a0b77fe09d3d61cf44216fac9c0a@bugs.uclibc.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Author: ulf
-Date: 2007-11-27 00:30:34 -0800 (Tue, 27 Nov 2007)
-New Revision: 20550
 
-Log:
-Bump l2tp patch version (CCourtesy of Ivan Kuten)
+The following issue has been SUBMITTED. 
+====================================================================== 
+http://busybox.net/bugs/view.php?id=1608 
+====================================================================== 
+Reported By:                ikonst
+Assigned To:                buildroot
+====================================================================== 
+Project:                    buildroot
+Issue ID:                   1608
+Category:                   Architecture Specific
+Reproducibility:            always
+Severity:                   minor
+Priority:                   normal
+Status:                     assigned
+====================================================================== 
+Date Submitted:             11-27-2007 01:26 PST
+Last Modified:              11-27-2007 01:26 PST
+====================================================================== 
+Summary:                    flex should go to staging dir
+Description: 
+/usr/bin/flex and /usr/lib/libfl.a is needed for building some packages
+(e.g. ipsec-tools) but it's almost never needed on a device.
 
-Removed:
-   trunk/buildroot/package/l2tp/l2tp-rename-func-log.patch
+Issue 0000438 added copying libfl.a to the staging dir but placing it in
+the target dir is unnecessary in the first place and usually needlessly
+increases the size of the target device.
+====================================================================== 
 
-Modified:
-   trunk/buildroot/package/l2tp/l2tp.mk
-
-
-Changeset:
-
-Sorry, the patch is too large to include (2921 lines).
-Please use ViewCVS to see it!
-
-http://uclibc.org/cgi-bin/viewcvs.cgi?view=rev&root=svn&rev=20550
+Issue History 
+Date Modified   Username       Field                    Change               
+====================================================================== 
+11-27-07 01:26  ikonst         New Issue                                    
+11-27-07 01:26  ikonst         Status                   new => assigned     
+11-27-07 01:26  ikonst         Assigned To               => buildroot       
+======================================================================
