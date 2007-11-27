@@ -1,8 +1,8 @@
 From: bugs at busybox.net <bugs@busybox.net>
-Date: Tue, 27 Nov 2007 13:48:50 -0800
-Subject: [Buildroot] [buildroot 0001573]: Clean kernel headers unpack dir
-	before unpacking
-Message-ID: <a427f86f5f38951d3652870ea36090a8@busybox.net>
+Date: Tue, 27 Nov 2007 13:51:36 -0800
+Subject: [Buildroot] [buildroot 0001579]: libstdc++ build fails with uclibc
+	headers
+Message-ID: <69e8516e1da0fb0f764323bc369d701f@busybox.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -10,51 +10,69 @@ Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
 
-The following issue has been CLOSED 
+The following issue has been RESOLVED. 
 ====================================================================== 
-http://busybox.net/bugs/view.php?id=1573 
+http://busybox.net/bugs/view.php?id=1579 
 ====================================================================== 
-Reported By:                ikonst
+Reported By:                atle
 Assigned To:                buildroot
 ====================================================================== 
 Project:                    buildroot
-Issue ID:                   1573
-Category:                   Architecture Specific
+Issue ID:                   1579
+Category:                   Other
 Reproducibility:            always
 Severity:                   minor
 Priority:                   normal
-Status:                     closed
-Resolution:                 open
+Status:                     resolved
+Resolution:                 no change required
 Fixed in Version:           
 ====================================================================== 
-Date Submitted:             11-04-2007 04:45 PST
-Last Modified:              11-27-2007 13:48 PST
+Date Submitted:             11-08-2007 03:30 PST
+Last Modified:              11-27-2007 13:51 PST
 ====================================================================== 
-Summary:                    Clean kernel headers unpack dir before unpacking
+Summary:                    libstdc++ build fails with uclibc headers
 Description: 
-When unpacking the kernel headers, we rm -rf the final kernel headers dir
-but we don't rm -rf the directory we unpack to.
+Building gcc-3.4.6 with c++ support still fails as reported in the closed
+issue http://bugs.uclibc.org/view.php?id=904.
+The issue is reported in gcc PR14939,
+http://gcc.gnu.org/bugzilla/show_bug.cgi?id=14939
+and a patch (incorporated in 4.2) is found here:
+http://gcc.gnu.org/bugzilla/attachment.cgi?id=6132
 
-This causes a problem since, afterwards, we apply patches and if we repeat
-the unpack operation for some reason, we will try patch some files twice
-(i.e. files which don't exist in the tarball and are created by the patch,
-and are therefore not overwritten by the "untar-ing").
+The patch is tested with gcc-3.4.6 and uClibc-0.9.29 for the nios2
+architecture, and works well. Could you please include this patch in
+toolchain/gcc/3.4.6 ?
+This issue is a show-stopper for compiling libstdc++ on the nios2 as we're
+stuck with gcc 3.4.x.
+
 ====================================================================== 
 
 ---------------------------------------------------------------------- 
- UlfSamuelsson - 11-27-07 13:48  
+ atle - 11-09-07 05:46  
 ---------------------------------------------------------------------- 
-Repeating the unpack operation means that something has gone wrong.
-This is just hiding the fact. 
+I'll be darned... It works without the mentioned patch now (for nios2).
+Must have been a configuration issue. Well, I guess this issue can be
+closed. 
+
+---------------------------------------------------------------------- 
+ vanokuten - 11-09-07 06:07  
+---------------------------------------------------------------------- 
+atle, I'm closing this issue - if you will be able to reproduce - just
+reopen bug. 
 
 Issue History 
 Date Modified   Username       Field                    Change               
 ====================================================================== 
-11-04-07 04:45  ikonst         New Issue                                    
-11-04-07 04:45  ikonst         Status                   new => assigned     
-11-04-07 04:45  ikonst         Assigned To               => buildroot       
-11-04-07 04:45  ikonst         File Added: buildroot-kernel-headers-rm.patch    
-               
-11-27-07 13:48  UlfSamuelsson  Status                   assigned => closed  
-11-27-07 13:48  UlfSamuelsson  Note Added: 0002980                          
+11-08-07 03:30  atle           New Issue                                    
+11-08-07 03:30  atle           Status                   new => assigned     
+11-08-07 03:30  atle           Assigned To               => buildroot       
+11-08-07 03:31  atle           Issue Monitored: atle                        
+11-09-07 05:46  atle           Note Added: 0002904                          
+11-09-07 06:07  vanokuten      Status                   assigned => closed  
+11-09-07 06:07  vanokuten      Note Added: 0002905                          
+11-09-07 06:07  vanokuten      Resolution               open => unable to
+reproduce
+11-27-07 13:51  UlfSamuelsson  Status                   closed => resolved  
+11-27-07 13:51  UlfSamuelsson  Resolution               unable to reproduce =>
+no change required
 ======================================================================
