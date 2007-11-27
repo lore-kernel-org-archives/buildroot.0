@@ -1,70 +1,85 @@
-From: bugs at busybox.net <bugs@busybox.net>
-Date: Tue, 27 Nov 2007 07:58:52 -0800
-Subject: [Buildroot] [buildroot 0001614]: Kernel headers unavailable for
-	external toolchain-based builds
-Message-ID: <4b3a1aa6f85a6a774f7e62003f53014e@busybox.net>
+From: ulf at uclibc.org <ulf@uclibc.org>
+Date: Tue, 27 Nov 2007 13:15:16 -0800 (PST)
+Subject: [Buildroot] svn commit: trunk/buildroot/package/portage
+Message-ID: <20071127211516.5FE5AA6AC3@busybox.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+Author: ulf
+Date: 2007-11-27 13:15:15 -0800 (Tue, 27 Nov 2007)
+New Revision: 20552
 
-A NOTE has been added to this issue. 
-====================================================================== 
-http://busybox.net/bugs/view.php?id=1614 
-====================================================================== 
-Reported By:                ikonst
-Assigned To:                buildroot
-====================================================================== 
-Project:                    buildroot
-Issue ID:                   1614
-Category:                   Architecture Specific
-Reproducibility:            always
-Severity:                   minor
-Priority:                   normal
-Status:                     assigned
-====================================================================== 
-Date Submitted:             11-27-2007 06:41 PST
-Last Modified:              11-27-2007 07:58 PST
-====================================================================== 
-Summary:                    Kernel headers unavailable for external
-toolchain-based builds
-Description: 
-Kernel headers are part of the "buildroot toolchain" option, and therefore
-won't be offered at all for external toolchains, even though external
-toolchains may come without kernel headers.
+Log:
+Bump portage to 2.1.3.16
 
-Attached is a patch to decouple kernel header selection from the toolchain
-selection.
-====================================================================== 
+Modified:
+   trunk/buildroot/package/portage/portage.mk
 
----------------------------------------------------------------------- 
- UlfSamuelsson - 11-27-07 07:53  
----------------------------------------------------------------------- 
-This patch is against an old version of buildroot, and won't apply
-cleanly. 
-It should depend on BR2_TOOLCHAIN_EXTERNAL 
-and be within the "Toolchain" menu. 
 
----------------------------------------------------------------------- 
- ikonst - 11-27-07 07:58  
----------------------------------------------------------------------- 
-Ok, I'll clean it up to apply against CVS.
-
-However, putting it under Toolchain is a problem, unless we unify the
-Buildroot and External Toolchains under the same menu -- because otherwise
-I have to include kernel-headers/Config.in twice, and lxdialog doesn't like
-including files twice. 
-
-Issue History 
-Date Modified   Username       Field                    Change               
-====================================================================== 
-11-27-07 06:41  ikonst         New Issue                                    
-11-27-07 06:41  ikonst         Status                   new => assigned     
-11-27-07 06:41  ikonst         Assigned To               => buildroot       
-11-27-07 06:41  ikonst         File Added:
-kernel-headers-for-external-toolchain.patch                    
-11-27-07 07:53  UlfSamuelsson  Note Added: 0002974                          
-11-27-07 07:58  ikonst         Note Added: 0002975                          
-======================================================================
+Changeset:
+Modified: trunk/buildroot/package/portage/portage.mk
+===================================================================
+--- trunk/buildroot/package/portage/portage.mk	2007-11-27 09:42:33 UTC (rev 20551)
++++ trunk/buildroot/package/portage/portage.mk	2007-11-27 21:15:15 UTC (rev 20552)
+@@ -3,14 +3,17 @@
+ # portage
+ #
+ #############################################################
+-PORTAGE_DOWNLOAD_VERSION:=2.1.3
+-PORTAGE_PATCH_VERSION:=.9
+-PORTAGE_VERSION:=$(PORTAGE_DOWNLOAD_VERSION)$(PORTAGE_PATCH_VERSION)
++PORTAGE_BASE_VERSION:=2.1.3
++PORTAGE_DOWNLOAD_VERSION:=$(PORTAGE_BASE_VERSION).16
++PORTAGE_PATCH_VERSION:=.16
++PORTAGE_PATCH_APPLY:=n
++PORTAGE_VERSION:=$(PORTAGE_BASE_VERSION)$(PORTAGE_PATCH_VERSION)
+ PORTAGE_PATCH:=portage-$(PORTAGE_VERSION).patch.bz2
+ 
+ PORTAGE_SOURCE:=portage-$(PORTAGE_DOWNLOAD_VERSION).tar.bz2
+ PORTAGE_SITE:=http://gentoo.osuosl.org/distfiles
+ PORTAGE_CAT:=$(BZCAT)
++PORTAGE_DOWNLOAD_DIR:=$(BUILD_DIR)/portage-$(PORTAGE_DOWNLOAD_VERSION)
+ PORTAGE_DIR:=$(BUILD_DIR)/portage-$(PORTAGE_VERSION)
+ PORTAGE_TARGET_DIR:=$(TARGET_DIR)/usr/lib/portage
+ PORTAGE_TARGET_BINARY:=usr/bin/emerge
+@@ -46,23 +49,31 @@
+ 
+ $(DL_DIR)/$(PORTAGE_SOURCE):
+ 	$(WGET) -P $(DL_DIR) $(PORTAGE_SITE)/$(PORTAGE_SOURCE)
+-$(DL_DIR)/$(PORTAGE_PATCH):
+-	$(WGET) -P $(DL_DIR) $(PORTAGE_SITE)/$(PORTAGE_PATCH)
++
+ $(DL_DIR)/$(SANDBOX_SOURCE):
+ 	$(WGET) -P $(DL_DIR) $(SANDBOX_SITE)/$(SANDBOX_SOURCE)
+ 
+ portage-source: $(DL_DIR)/$(PORTAGE_SOURCE)
+ sandbox-source: $(DL_DIR)/$(SANDBOX_SOURCE)
+ 
+-$(PORTAGE_DIR)/.unpacked: $(DL_DIR)/$(PORTAGE_SOURCE)
++$(PORTAGE_DOWNLOAD_DIR)/.unpacked: $(DL_DIR)/$(PORTAGE_SOURCE)
+ 	$(PORTAGE_CAT) $(DL_DIR)/$(PORTAGE_SOURCE) | tar -C $(BUILD_DIR) -xf -
++	touch $@
++
++ifeq ($(PORTAGE_PATCH_APPLY),y)
++$(DL_DIR)/$(PORTAGE_PATCH):
++	$(WGET) -P $(DL_DIR) $(PORTAGE_SITE)/$(PORTAGE_PATCH)
++
++$(PORTAGE_DIR)/.patched: $(PORTAGE_DOWNLOAD_DIR)/.unpacked $(DL_DIR)/$(PORTAGE_PATCH)
+ 	mv -f $(BUILD_DIR)/portage-$(PORTAGE_DOWNLOAD_VERSION) $(PORTAGE_DIR)
+ 	rm -f $(PORTAGE_DIR)/bin/tbz2tool
+-	touch $@
+-
+-$(PORTAGE_DIR)/.patched: $(PORTAGE_DIR)/.unpacked $(DL_DIR)/$(PORTAGE_PATCH)
+ 	(cd $(PORTAGE_DIR); $(PORTAGE_CAT) $(DL_DIR)/$(PORTAGE_PATCH) | patch -p0)
+ 	touch $@
++else
++$(PORTAGE_DIR)/.patched: $(PORTAGE_DOWNLOAD_DIR)/.unpacked
++	rm -f $(PORTAGE_DIR)/bin/tbz2tool
++	touch $@
++endif
+ 
+ $(SANDBOX_DIR)/.unpacked: $(DL_DIR)/$(SANDBOX_SOURCE)
+ 	$(SANDBOX_CAT) $(DL_DIR)/$(SANDBOX_SOURCE) | tar -C $(BUILD_DIR) -xf -
