@@ -1,67 +1,35 @@
-From: bugs at busybox.net <bugs@busybox.net>
-Date: Tue, 27 Nov 2007 13:41:24 -0800
-Subject: [Buildroot] [buildroot 0001571]: AVR32 patch in libmad causes
-	unnecessary config.status --recheck
-Message-ID: <73ad7825524f99d07f6b99bd97cfe3af@busybox.net>
+From: ulf at uclibc.org <ulf@uclibc.org>
+Date: Tue, 27 Nov 2007 13:44:56 -0800 (PST)
+Subject: [Buildroot] svn commit: trunk/buildroot/package/libmad
+Message-ID: <20071127214456.A5F463006B@busybox.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+Author: ulf
+Date: 2007-11-27 13:44:55 -0800 (Tue, 27 Nov 2007)
+New Revision: 20554
 
-The following issue has been CLOSED 
-====================================================================== 
-http://busybox.net/bugs/view.php?id=1571 
-====================================================================== 
-Reported By:                ikonst
-Assigned To:                buildroot
-====================================================================== 
-Project:                    buildroot
-Issue ID:                   1571
-Category:                   Architecture Specific
-Reproducibility:            always
-Severity:                   minor
-Priority:                   normal
-Status:                     closed
-Resolution:                 open
-Fixed in Version:           
-====================================================================== 
-Date Submitted:             11-04-2007 03:13 PST
-Last Modified:              11-27-2007 13:41 PST
-====================================================================== 
-Summary:                    AVR32 patch in libmad causes unnecessary
-config.status --recheck
-Description: 
-Since the libmad-0.15.1b-avr32-optimization.patch modifies both
-'configure.ac' and 'configure', a timing issue will often occur.
+Log:
+libmad $(MAKE) should be run with full configure environment
 
-Within every standard Makefile, there's a rule which causes a rebuild of
-the configure file (by means of running autoconf) when 'configure.ac' is
-newer than 'configure'.
+Modified:
+   trunk/buildroot/package/libmad/libmad.mk
 
-Within libmad-0.15.1b-avr32-optimization.patch, configure.ac is patched
-AFTER configure, and so, the 'configure.ac' may end up being newer. Worse
-yet, this happens "randomly": if both files are patches in the same
-second, the problem isn't visible.
 
-The attached patch reorders configure.ac to appear BEFORE configure within
-libmad-0.15.1b-avr32-optimization.patch.
-====================================================================== 
-
----------------------------------------------------------------------- 
- UlfSamuelsson - 11-27-07 13:41  
----------------------------------------------------------------------- 
-FIxed in  revision 20553 
-
-Issue History 
-Date Modified   Username       Field                    Change               
-====================================================================== 
-11-04-07 03:13  ikonst         New Issue                                    
-11-04-07 03:13  ikonst         Status                   new => assigned     
-11-04-07 03:13  ikonst         Assigned To               => buildroot       
-11-04-07 03:13  ikonst         File Added:
-libmad-avr32-optimization-reorder.patch                    
-11-27-07 13:41  UlfSamuelsson  Status                   assigned => closed  
-11-27-07 13:41  UlfSamuelsson  Note Added: 0002978                          
-======================================================================
+Changeset:
+Modified: trunk/buildroot/package/libmad/libmad.mk
+===================================================================
+--- trunk/buildroot/package/libmad/libmad.mk	2007-11-27 21:40:57 UTC (rev 20553)
++++ trunk/buildroot/package/libmad/libmad.mk	2007-11-27 21:44:55 UTC (rev 20554)
+@@ -40,7 +40,7 @@
+ 
+ $(LIBMAD_DIR)/libmad.la: $(LIBMAD_DIR)/.configured
+ 	rm -f $@
+-	$(MAKE) -C $(LIBMAD_DIR)
++	$(MAKE) $(TARGET_CONFIGURE_OPTS) -C $(LIBMAD_DIR)
+ 
+ $(STAGING_DIR)/usr/lib/libmad.so.0: $(LIBMAD_DIR)/libmad.la
+ 	$(MAKE) DESTDIR=$(STAGING_DIR) -C $(LIBMAD_DIR) install
