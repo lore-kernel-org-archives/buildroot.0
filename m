@@ -1,62 +1,48 @@
-From: ulf at uclibc.org <ulf@uclibc.org>
-Date: Tue, 27 Nov 2007 00:22:00 -0800 (PST)
-Subject: [Buildroot] svn commit: trunk/buildroot/package/curl
-Message-ID: <20071127082200.C8102A6860@busybox.net>
+From: Ulf Samuelsson <ulf@atmel.com>
+Date: Tue, 27 Nov 2007 09:14:39 +0100
+Subject: [Buildroot] Curl package cannot be downloaded
+In-Reply-To: <47138C69.1010400@mowsey.org>
+References: <47138C69.1010400@mowsey.org>
+Message-ID: <1196151279.15682.64.camel@elrond.atmel.sweden>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Author: ulf
-Date: 2007-11-27 00:21:58 -0800 (Tue, 27 Nov 2007)
-New Revision: 20548
+m?n 2007-10-15 klockan 11:51 -0400 skrev Jack Schmidt:
+> Howdy, I tried using buildroot to make an image with some fancier 
+> applications like curl and xsltproc, but ran into trouble.  The curl 
+> trouble seems pretty clearcut (the libxml2 stuff is some path problem).
 
-Log:
-Bump curl version to 1.17.1
+> The curl package tries to download a fairly old version of curl and that 
+> version is no longer at the download page.  Much newer versions are 
+> available, and I think they fix some of the security problems patched 
+> manually.  However, some manual patches seem to still be needed, but do 
+> not apply cleanly.
+> 
+Version bumped to 1.17.1 inlatest svn.
+Builds cleanly vs ARM.
+Did not attempt to fix any patches though.
 
-Modified:
-   trunk/buildroot/package/curl/curl.mk
-
-
-Changeset:
-Modified: trunk/buildroot/package/curl/curl.mk
-===================================================================
---- trunk/buildroot/package/curl/curl.mk	2007-11-26 18:29:52 UTC (rev 20547)
-+++ trunk/buildroot/package/curl/curl.mk	2007-11-27 08:21:58 UTC (rev 20548)
-@@ -3,7 +3,8 @@
- # curl
- #
- #############################################################
--CURL_VERSION:=7.13.1
-+CURL_VERSION:=7.17.1
-+LIBCURL_VERSION:=4.0.1
- CURL_SOURCE:=curl-$(CURL_VERSION).tar.bz2
- CURL_SITE:=http://curl.haxx.se/download/
- CURL_CAT:=$(BZCAT)
-@@ -17,7 +18,7 @@
- 
- $(CURL_DIR)/.unpacked: $(DL_DIR)/$(CURL_SOURCE)
- 	$(CURL_CAT) $(DL_DIR)/$(CURL_SOURCE) | tar -C $(BUILD_DIR) $(TAR_OPTIONS) -
--	toolchain/patch-kernel.sh $(CURL_DIR) package/curl/ \*.patch*
-+	toolchain/patch-kernel.sh $(CURL_DIR) package/curl/ curl-$(CURL_VERSION)-\*.patch*
- 	touch $(CURL_DIR)/.unpacked
- 
- $(CURL_DIR)/.configured: $(CURL_DIR)/.unpacked
-@@ -44,13 +45,13 @@
- 	-rm -rf $(STAGING_DIR)/man
- 	touch $(STAGING_DIR)/bin/$(CURL_BINARY)
- 
--$(TARGET_DIR)/usr/lib/libcurl.so.3.0.0: $(STAGING_DIR)/bin/$(CURL_BINARY)
-+$(TARGET_DIR)/usr/lib/libcurl.so.$(LIBCURL_VERSION): $(STAGING_DIR)/bin/$(CURL_BINARY)
- 	-mkdir $(TARGET_DIR)/usr/lib
- 	-mkdir $(TARGET_DIR)/usr/bin
- 	cp -a $(STAGING_DIR)/lib/libcurl.so* $(TARGET_DIR)/usr/lib
--	$(STRIPCMD) $(STRIP_STRIP_UNNEEDED) $(TARGET_DIR)/usr/lib/libcurl.so.3.0.0
-+	$(STRIPCMD) $(STRIP_STRIP_UNNEEDED) $(TARGET_DIR)/usr/lib/libcurl.so.$(LIBCURL_VERSION)
- 
--$(TARGET_DIR)/usr/bin/$(CURL_BINARY): $(TARGET_DIR)/usr/lib/libcurl.so.3.0.0
-+$(TARGET_DIR)/usr/bin/$(CURL_BINARY): $(TARGET_DIR)/usr/lib/libcurl.so.$(LIBCURL_VERSION)
- 	cp -a $(STAGING_DIR)/bin/$(CURL_BINARY) $(TARGET_DIR)/usr/bin
- 	$(STRIPCMD) $(STRIP_STRIP_UNNEEDED) $(TARGET_DIR)/usr/bin/$(CURL_BINARY)
- 
+> I wasn't sure exactly which way to help: find an alternate source of 
+> ancient curl, find the oldest curl available at the official source, or 
+> update the patches for the latest curl.
+> 
+> 
+> In general, should I expect the packages to "just work" or should I 
+> expect buildroot to give me hints at building, and do a lot of the build 
+> myself?
+> 
+> I don't want to report bugs in 20 packages, if these are the minor sorts 
+> of issues we are expected to work out.  Last time I tried buildroot, 
+> virtually everything but the core was broken, but the core worked 
+> amazingly great and any package I wanted to use was just ./configure && 
+> make && make install.
+> _______________________________________________
+> buildroot mailing list
+> buildroot at uclibc.org
+> http://busybox.net/mailman/listinfo/buildroot
+-- 
+Best Regards
+Ulf Samuelsson
