@@ -1,8 +1,8 @@
 From: bugs at busybox.net <bugs@busybox.net>
-Date: Tue, 27 Nov 2007 01:50:02 -0800
-Subject: [Buildroot] [buildroot 0001596]: SUSv3 Legacy Macros not enabled in
-	uClibc default config
-Message-ID: <8174f849e37840904c9b7f748af227e1@bugs.uclibc.org>
+Date: Tue, 27 Nov 2007 01:52:52 -0800
+Subject: [Buildroot] [buildroot 0001611]: ipsec-tools.mk should pass CFLAGS,
+	LDFLAGS
+Message-ID: <71f39c808c227aae516a3d6cdd2dee83@bugs.uclibc.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -10,49 +10,38 @@ Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
 
-A NOTE has been added to this issue. 
+The following issue has been SUBMITTED. 
 ====================================================================== 
-http://busybox.net/bugs/view.php?id=1596 
+http://busybox.net/bugs/view.php?id=1611 
 ====================================================================== 
-Reported By:                atle
+Reported By:                ikonst
 Assigned To:                buildroot
 ====================================================================== 
 Project:                    buildroot
-Issue ID:                   1596
-Category:                   Other
+Issue ID:                   1611
+Category:                   Architecture Specific
 Reproducibility:            always
 Severity:                   minor
 Priority:                   normal
 Status:                     assigned
 ====================================================================== 
-Date Submitted:             11-18-2007 07:35 PST
-Last Modified:              11-27-2007 01:50 PST
+Date Submitted:             11-27-2007 01:52 PST
+Last Modified:              11-27-2007 01:52 PST
 ====================================================================== 
-Summary:                    SUSv3 Legacy Macros not enabled in uClibc default
-config
+Summary:                    ipsec-tools.mk should pass CFLAGS, LDFLAGS
 Description: 
-UCLIBC_SUSV3_LEGACY_MACROS is no longer set in the uClibc default config
-(since svn rev 19987). I guess there is a reason for this (?), but the
-problem is that some applications still are dependent on those macros
-(openssl, ntp, boa, pure-ftpd, ++). I have attached a patch that makes it
-possible to enable SUSV3_LEGACY_MACROS in the menuconfig (disabled by
-default).
-
+ipsec-tools.mk fails to pass CFLAGS and LDFLAGS to the child make. This is
+especially important for external toolchain builds, where CFLAGS and
+LDFLAGS are essential for specifying the staging dir's /usr/include and
+/usr/lib.
 ====================================================================== 
-
----------------------------------------------------------------------- 
- ikonst - 11-27-07 01:50  
----------------------------------------------------------------------- 
-Meanwhile, I've been adding patches to legacy function calls with their
-modern equivalents. Will be submitting them soon. 
 
 Issue History 
 Date Modified   Username       Field                    Change               
 ====================================================================== 
-11-18-07 07:35  atle           New Issue                                    
-11-18-07 07:35  atle           Status                   new => assigned     
-11-18-07 07:35  atle           Assigned To               => buildroot       
-11-18-07 07:35  atle           File Added:
-uclibc-config_susv3_legacy_macros.diff                    
-11-27-07 01:50  ikonst         Note Added: 0002971                          
+11-27-07 01:52  ikonst         New Issue                                    
+11-27-07 01:52  ikonst         Status                   new => assigned     
+11-27-07 01:52  ikonst         Assigned To               => buildroot       
+11-27-07 01:52  ikonst         File Added: ipsec-tools-pass-cflags-ldflags.patch
+                   
 ======================================================================
