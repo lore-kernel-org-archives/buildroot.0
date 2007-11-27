@@ -1,8 +1,8 @@
 From: bugs at busybox.net <bugs@busybox.net>
-Date: Tue, 27 Nov 2007 07:53:21 -0800
+Date: Tue, 27 Nov 2007 07:58:52 -0800
 Subject: [Buildroot] [buildroot 0001614]: Kernel headers unavailable for
 	external toolchain-based builds
-Message-ID: <ee5dac9a7e2c3bea71781423e8e00a0c@busybox.net>
+Message-ID: <4b3a1aa6f85a6a774f7e62003f53014e@busybox.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -26,7 +26,7 @@ Priority:                   normal
 Status:                     assigned
 ====================================================================== 
 Date Submitted:             11-27-2007 06:41 PST
-Last Modified:              11-27-2007 07:53 PST
+Last Modified:              11-27-2007 07:58 PST
 ====================================================================== 
 Summary:                    Kernel headers unavailable for external
 toolchain-based builds
@@ -47,6 +47,16 @@ cleanly.
 It should depend on BR2_TOOLCHAIN_EXTERNAL 
 and be within the "Toolchain" menu. 
 
+---------------------------------------------------------------------- 
+ ikonst - 11-27-07 07:58  
+---------------------------------------------------------------------- 
+Ok, I'll clean it up to apply against CVS.
+
+However, putting it under Toolchain is a problem, unless we unify the
+Buildroot and External Toolchains under the same menu -- because otherwise
+I have to include kernel-headers/Config.in twice, and lxdialog doesn't like
+including files twice. 
+
 Issue History 
 Date Modified   Username       Field                    Change               
 ====================================================================== 
@@ -56,4 +66,5 @@ Date Modified   Username       Field                    Change
 11-27-07 06:41  ikonst         File Added:
 kernel-headers-for-external-toolchain.patch                    
 11-27-07 07:53  UlfSamuelsson  Note Added: 0002974                          
+11-27-07 07:58  ikonst         Note Added: 0002975                          
 ======================================================================
