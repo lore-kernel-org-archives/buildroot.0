@@ -1,8 +1,8 @@
 From: bugs at busybox.net <bugs@busybox.net>
-Date: Tue, 27 Nov 2007 13:45:17 -0800
-Subject: [Buildroot] [buildroot 0001572]: libmad $(MAKE) should be run with
-	full configure environment
-Message-ID: <4bd15ac472d43e14005f2bc720c54c82@busybox.net>
+Date: Tue, 27 Nov 2007 13:48:50 -0800
+Subject: [Buildroot] [buildroot 0001573]: Clean kernel headers unpack dir
+	before unpacking
+Message-ID: <a427f86f5f38951d3652870ea36090a8@busybox.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -12,13 +12,13 @@ To: buildroot@busybox.net
 
 The following issue has been CLOSED 
 ====================================================================== 
-http://busybox.net/bugs/view.php?id=1572 
+http://busybox.net/bugs/view.php?id=1573 
 ====================================================================== 
 Reported By:                ikonst
 Assigned To:                buildroot
 ====================================================================== 
 Project:                    buildroot
-Issue ID:                   1572
+Issue ID:                   1573
 Category:                   Architecture Specific
 Reproducibility:            always
 Severity:                   minor
@@ -27,36 +27,34 @@ Status:                     closed
 Resolution:                 open
 Fixed in Version:           
 ====================================================================== 
-Date Submitted:             11-04-2007 03:21 PST
-Last Modified:              11-27-2007 13:45 PST
+Date Submitted:             11-04-2007 04:45 PST
+Last Modified:              11-27-2007 13:48 PST
 ====================================================================== 
-Summary:                    libmad $(MAKE) should be run with full configure
-environment
+Summary:                    Clean kernel headers unpack dir before unpacking
 Description: 
-libmad's Makefile (like any autoconf-based Makefile) may wish to re-run
-'configure'. We should provide it with the same environment as we provide
-'configure' with.
+When unpacking the kernel headers, we rm -rf the final kernel headers dir
+but we don't rm -rf the directory we unpack to.
+
+This causes a problem since, afterwards, we apply patches and if we repeat
+the unpack operation for some reason, we will try patch some files twice
+(i.e. files which don't exist in the tarball and are created by the patch,
+and are therefore not overwritten by the "untar-ing").
 ====================================================================== 
 
 ---------------------------------------------------------------------- 
- ikonst - 11-04-07 03:22  
+ UlfSamuelsson - 11-27-07 13:48  
 ---------------------------------------------------------------------- 
-This patch should be applied only after issue 0001560 is reverted. 
-
----------------------------------------------------------------------- 
- UlfSamuelsson - 11-27-07 13:45  
----------------------------------------------------------------------- 
-Fixed in  revision 20554. 
+Repeating the unpack operation means that something has gone wrong.
+This is just hiding the fact. 
 
 Issue History 
 Date Modified   Username       Field                    Change               
 ====================================================================== 
-11-04-07 03:21  ikonst         New Issue                                    
-11-04-07 03:21  ikonst         Status                   new => assigned     
-11-04-07 03:21  ikonst         Assigned To               => buildroot       
-11-04-07 03:21  ikonst         File Added: libmad-make-with-target-opts.patch   
-                
-11-04-07 03:22  ikonst         Note Added: 0002887                          
-11-27-07 13:45  UlfSamuelsson  Status                   assigned => closed  
-11-27-07 13:45  UlfSamuelsson  Note Added: 0002979                          
+11-04-07 04:45  ikonst         New Issue                                    
+11-04-07 04:45  ikonst         Status                   new => assigned     
+11-04-07 04:45  ikonst         Assigned To               => buildroot       
+11-04-07 04:45  ikonst         File Added: buildroot-kernel-headers-rm.patch    
+               
+11-27-07 13:48  UlfSamuelsson  Status                   assigned => closed  
+11-27-07 13:48  UlfSamuelsson  Note Added: 0002980                          
 ======================================================================
