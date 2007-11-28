@@ -1,7 +1,7 @@
 From: bugs at busybox.net <bugs@busybox.net>
-Date: Tue, 27 Nov 2007 22:47:03 -0800
+Date: Tue, 27 Nov 2007 23:00:01 -0800
 Subject: [Buildroot] [buildroot 0001615]: Can not build?
-Message-ID: <75b4d0a0cca5b1eea01c354990940928@bugs.uclibc.org>
+Message-ID: <c68b89b5424a7275eba8162675d2ed28@busybox.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -25,7 +25,7 @@ Priority:                   normal
 Status:                     assigned
 ====================================================================== 
 Date Submitted:             11-27-2007 22:28 PST
-Last Modified:              11-27-2007 22:47 PST
+Last Modified:              11-27-2007 23:00 PST
 ====================================================================== 
 Summary:                    Can not build?
 Description: 
@@ -52,6 +52,11 @@ itial/.compiled] Error 2
 ---------------------------------------------------------------------- 
 I use Fedora Core 4 
 
+---------------------------------------------------------------------- 
+ UlfSamuelsson - 11-27-07 23:00  
+---------------------------------------------------------------------- 
+Isn't EABI (-mabi=eabi) an ARM thing and not applicable to MIPS arch? 
+
 Issue History 
 Date Modified   Username       Field                    Change               
 ====================================================================== 
@@ -61,4 +66,5 @@ Date Modified   Username       Field                    Change
 11-27-07 22:46  linsample      Issue Monitored: linsample                    
 11-27-07 22:46  linsample      Issue End Monitor: linsample                    
 11-27-07 22:47  linsample      Note Added: 0002982                          
+11-27-07 23:00  UlfSamuelsson  Note Added: 0002983                          
 ======================================================================
