@@ -1,7 +1,7 @@
 From: ulf at uclibc.org <ulf@uclibc.org>
-Date: Wed, 28 Nov 2007 00:57:00 -0800 (PST)
-Subject: [Buildroot] svn commit: trunk/buildroot/package/libgpg-error
-Message-ID: <20071128085700.147623005E@busybox.net>
+Date: Wed, 28 Nov 2007 00:57:26 -0800 (PST)
+Subject: [Buildroot] svn commit: trunk/buildroot/package/curl
+Message-ID: <20071128085726.AB79A3005E@busybox.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -9,54 +9,90 @@ Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
 Author: ulf
-Date: 2007-11-28 00:57:00 -0800 (Wed, 28 Nov 2007)
-New Revision: 20560
+Date: 2007-11-28 00:57:26 -0800 (Wed, 28 Nov 2007)
+New Revision: 20561
 
 Log:
-Move libgpg-error from lib to usr/lib, update libgpg-error.la
+Move curl from lib to usr/lib, update curl.la
 
 Modified:
-   trunk/buildroot/package/libgpg-error/libgpg-error.mk
+   trunk/buildroot/package/curl/curl.mk
 
 
 Changeset:
-Modified: trunk/buildroot/package/libgpg-error/libgpg-error.mk
+Modified: trunk/buildroot/package/curl/curl.mk
 ===================================================================
---- trunk/buildroot/package/libgpg-error/libgpg-error.mk	2007-11-28 08:56:24 UTC (rev 20559)
-+++ trunk/buildroot/package/libgpg-error/libgpg-error.mk	2007-11-28 08:57:00 UTC (rev 20560)
-@@ -8,7 +8,7 @@
- LIBGPG_ERROR_SITE:=ftp://gd.tuwien.ac.at/privacy/gnupg/libgpg-error
- LIBGPG_ERROR_DIR:=$(BUILD_DIR)/libgpg-error-$(LIBGPG_ERROR_VERSION)
- LIBGPG_ERROR_LIBRARY:=src/libgpg-error.la
--LIBGPG_ERROR_DESTDIR:=lib
-+LIBGPG_ERROR_DESTDIR:=usr/lib
- LIBGPG_ERROR_TARGET_LIBRARY=$(LIBGPG_ERROR_DESTDIR)/libgpg-error.so
+--- trunk/buildroot/package/curl/curl.mk	2007-11-28 08:57:00 UTC (rev 20560)
++++ trunk/buildroot/package/curl/curl.mk	2007-11-28 08:57:26 UTC (rev 20561)
+@@ -10,6 +10,7 @@
+ CURL_CAT:=$(BZCAT)
+ CURL_DIR:=$(BUILD_DIR)/curl-$(CURL_VERSION)
+ CURL_BINARY:=curl
++CURL_DESTDIR:=$(STAGING_DIR)/usr
  
- $(DL_DIR)/$(LIBGPG_ERROR_SOURCE):
-@@ -32,7 +32,7 @@
- 		--exec-prefix=/usr \
- 		--bindir=/usr/bin \
- 		--sbindir=/usr/sbin \
--		--libdir=/lib \
+ $(DL_DIR)/$(CURL_SOURCE):
+ 	 $(WGET) -P $(DL_DIR) $(CURL_SITE)/$(CURL_SOURCE)
+@@ -32,39 +33,50 @@
+ 		--target=$(GNU_TARGET_NAME) \
+ 		--host=$(GNU_TARGET_NAME) \
+ 		--build=$(GNU_HOST_NAME) \
+-		--prefix=$(STAGING_DIR) \
++		--prefix=/usr \
++		--exec-prefix=/usr \
++		--bindir=/usr/bin \
++		--sbindir=/usr/sbin \
 +		--libdir=/usr/lib \
- 		--libexecdir=/$(LIBGPG_ERROR_DESTDIR) \
- 		--sysconfdir=/etc \
- 		--datadir=/usr/share \
-@@ -49,8 +49,8 @@
++		--libexecdir=/usr/lib \
++		--sysconfdir=/etc \
++		--datadir=/usr/share \
++		--localstatedir=/var \
++		--includedir=/usr/include \
++		--mandir=/usr/share/man \
++		--infodir=/usr/share/info \
+ 	)
+ 	touch $(CURL_DIR)/.configured
  
- $(STAGING_DIR)/$(LIBGPG_ERROR_TARGET_LIBRARY): $(LIBGPG_ERROR_DIR)/$(LIBGPG_ERROR_LIBRARY)
- 	$(MAKE) DESTDIR=$(STAGING_DIR) -C $(LIBGPG_ERROR_DIR) install
-+	$(SED) "s,^libdir=.*,libdir=\'$(STAGING_DIR)/usr/lib\',g" $(STAGING_DIR)/usr/lib/libgpg-error.la
+ $(CURL_DIR)/src/.libs/$(CURL_BINARY): $(CURL_DIR)/.configured
+ 	$(MAKE) -C $(CURL_DIR)
  
--
- $(TARGET_DIR)/$(LIBGPG_ERROR_TARGET_LIBRARY): $(STAGING_DIR)/$(LIBGPG_ERROR_TARGET_LIBRARY)
- 	cp -dpf $<* $(TARGET_DIR)/$(LIBGPG_ERROR_DESTDIR)
+-$(STAGING_DIR)/bin/$(CURL_BINARY): $(CURL_DIR)/src/.libs/$(CURL_BINARY)
+-	-mkdir $(STAGING_DIR)/bin
+-	$(MAKE) prefix=$(STAGING_DIR) -C $(CURL_DIR) install
+-	-rm -rf $(STAGING_DIR)/man
+-	touch $(STAGING_DIR)/bin/$(CURL_BINARY)
++$(CURL_DESTDIR)/bin/$(CURL_BINARY): $(CURL_DIR)/src/.libs/$(CURL_BINARY)
++	-mkdir $(CURL_DESTDIR)/bin
++	$(MAKE) DESTDIR=$(STAGING_DIR) -C $(CURL_DIR) install
++	$(SED) "s,^libdir=.*,libdir=\'$(CURL_DESTDIR)/lib\',g" $(CURL_DESTDIR)/lib/libcurl.la
++	touch $(CURL_DESTDIR)/bin/$(CURL_BINARY)
  
-@@ -61,6 +61,7 @@
- libgpg-error-clean:
- 	rm -f $(TARGET_DIR)/$(LIBGPG_ERROR_TARGET_LIBRARY)*
- 	-$(MAKE) -C $(LIBGPG_ERROR_DIR) clean
-+	rm -f $(STAGING_DIR)/$(LIBGPG_ERROR_TARGET_LIBRARY)\*
+-$(TARGET_DIR)/usr/lib/libcurl.so.$(LIBCURL_VERSION): $(STAGING_DIR)/bin/$(CURL_BINARY)
++$(TARGET_DIR)/usr/lib/libcurl.so.$(LIBCURL_VERSION): $(CURL_DESTDIR)/bin/$(CURL_BINARY)
+ 	-mkdir $(TARGET_DIR)/usr/lib
+ 	-mkdir $(TARGET_DIR)/usr/bin
+-	cp -a $(STAGING_DIR)/lib/libcurl.so* $(TARGET_DIR)/usr/lib
++	cp -a $(CURL_DESTDIR)/lib/libcurl.so* $(TARGET_DIR)/usr/lib
+ 	$(STRIPCMD) $(STRIP_STRIP_UNNEEDED) $(TARGET_DIR)/usr/lib/libcurl.so.$(LIBCURL_VERSION)
  
- libgpg-error-dirclean:
- 	rm -rf $(LIBGPG_ERROR_DIR)
+ $(TARGET_DIR)/usr/bin/$(CURL_BINARY): $(TARGET_DIR)/usr/lib/libcurl.so.$(LIBCURL_VERSION)
+-	cp -a $(STAGING_DIR)/bin/$(CURL_BINARY) $(TARGET_DIR)/usr/bin
++	cp -a $(CURL_DESTDIR)/bin/$(CURL_BINARY) $(TARGET_DIR)/usr/bin
+ 	$(STRIPCMD) $(STRIP_STRIP_UNNEEDED) $(TARGET_DIR)/usr/bin/$(CURL_BINARY)
+ 
+ curl: uclibc $(TARGET_DIR)/usr/bin/$(CURL_BINARY)
+ 
+-libcurl: $(STAGING_DIR)/bin/$(CURL_BINARY)
++libcurl: $(CURL_DESTDIR)/bin/$(CURL_BINARY)
+ 
+ curl-clean:
+ 	rm -f $(TARGET_DIR)/usr/lib/libcurl.so*
+ 	rm -f $(TARGET_DIR)/usr/bin/curl
+-	rm -f $(STAGING_DIR)/bin/curl*
+-	rm -f $(STAGING_DIR)/lib/libcurl.so*
+-	rm -rf $(STAGING_DIR)/usr/include/curl
++	rm -f $(CURL_DESTDIR)/bin/curl*
++	rm -f $(CURL_DESTDIR)/lib/libcurl.so*
++	rm -rf $(CURL_DESTDIR)/include/curl
+ 	-$(MAKE) -C $(CURL_DIR) clean
+ 
+ curl-dirclean:
