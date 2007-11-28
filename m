@@ -1,51 +1,59 @@
-From: Ulf Samuelsson <ulf@atmel.com>
-Date: Wed, 28 Nov 2007 10:05:45 +0100
-Subject: [Buildroot] svn commit: trunk/buildroot/package/alsa-lib
-In-Reply-To: <1196233660.10698.8.camel@localhost.localdomain>
-References: <20071128070957.BE0E63005D@busybox.net>
-	<1196233660.10698.8.camel@localhost.localdomain>
-Message-ID: <1196240745.13652.6.camel@elrond.atmel.sweden>
+From: bugs at busybox.net <bugs@busybox.net>
+Date: Wed, 28 Nov 2007 04:24:51 -0800
+Subject: [Buildroot] [buildroot 0001616]: dbus-glibc does not compile
+Message-ID: <139dbd1f971a632f94a4ef837e7c64e0@busybox.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-ons 2007-11-28 klockan 08:07 +0100 skrev Hans-Christian Egtvedt:
-> On Tue, 2007-11-27 at 23:09 -0800, ulf at uclibc.org wrote:
-> > Author: ulf
-> > Date: 2007-11-27 23:09:57 -0800 (Tue, 27 Nov 2007)
-> > New Revision: 20557
-> > 
-> > Log:
-> > Add '-mabi=aapcs-linux' to CFLAGS in 'alsa-lib' to be compatible w kernel
-> > 
-> > Modified:
-> >    trunk/buildroot/package/alsa-lib/alsa-lib.mk
-> > 
-> > 
-> > Changeset:
-> > Modified: trunk/buildroot/package/alsa-lib/alsa-lib.mk
-> > ===================================================================
-> > --- trunk/buildroot/package/alsa-lib/alsa-lib.mk	2007-11-28 06:49:42 UTC (rev 20556)
-> > +++ trunk/buildroot/package/alsa-lib/alsa-lib.mk	2007-11-28 07:09:57 UTC (rev 20557)
-> > @@ -24,7 +24,7 @@
-> >  	(cd $(ALSA_LIB_DIR); rm -rf config.cache; \
-> >  		$(TARGET_CONFIGURE_ARGS) \
-> >  		$(TARGET_CONFIGURE_OPTS) \
-> > -		CFLAGS="$(TARGET_CFLAGS)" \
-> > +		CFLAGS="$(TARGET_CFLAGS) -mabi=aapcs-linux" \
-> 
-> Eh, NO! Add it to the TARGET_CFLAGS for architectures supporting this
-> flag.
-> 
-> >  		LDFLAGS="$(TARGET_LDFLAGS)" \
-> >  		./configure \
-> >  		--target=$(GNU_TARGET_NAME) \
-> 
-OK, I made it dependent on ARM in revision 20563.
-If it is needed for other archs, then someone needing it can fix.
 
--- 
-Best Regards
-Ulf Samuelsson
+The following issue has been SUBMITTED. 
+====================================================================== 
+http://busybox.net/bugs/view.php?id=1616 
+====================================================================== 
+Reported By:                zeta
+Assigned To:                buildroot
+====================================================================== 
+Project:                    buildroot
+Issue ID:                   1616
+Category:                   Other
+Reproducibility:            always
+Severity:                   block
+Priority:                   normal
+Status:                     assigned
+====================================================================== 
+Date Submitted:             11-28-2007 04:24 PST
+Last Modified:              11-28-2007 04:24 PST
+====================================================================== 
+Summary:                    dbus-glibc does not compile
+Description: 
+enabled dbus and dbus-glib by make menuconfig.
+dbus-glibc fails in compiling.
+
+seems that the paths are wrong...
+
+i586-linux-gcc -DHAVE_CONFIG_H -I. -I. -I.. -I.. -I..
+-I/usr/include/glib-2.0 -I/usr/lib/glib-2.0/include -DDBUS_COMPILATION=1
+-DDBUS_LOCALEDIR=\"/usr/share/locale\" -DDBUS_API_SUBJECT_TO_CHANGE=1 -g
+-O2 -Wall -Wchar-subscripts -Wmissing-declarations -Wmissing-prototypes
+-Wnested-externs -Wpointer-arith -Wcast-align -Wfloat-equal -Wsign-compare
+-MT dbus-glib.lo -MD -MP -MF .deps/dbus-glib.Tpo -c dbus-glib.c  -fPIC
+-DPIC -o .libs/dbus-glib.o
+
+error is:
+
+[snip]
+../libtool: line 1281: i586-linux-gcc: command not found
+[snip]
+
+====================================================================== 
+
+Issue History 
+Date Modified   Username       Field                    Change               
+====================================================================== 
+11-28-07 04:24  zeta           New Issue                                    
+11-28-07 04:24  zeta           Status                   new => assigned     
+11-28-07 04:24  zeta           Assigned To               => buildroot       
+======================================================================
