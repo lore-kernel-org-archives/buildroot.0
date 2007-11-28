@@ -1,67 +1,46 @@
-From: Ulf Samuelsson <ulf@atmel.com>
-Date: Wed, 28 Nov 2007 08:01:43 +0100
-Subject: [Buildroot] abi problem with arm [solves alsa-lib invalid	ioctl]
-In-Reply-To: <4745A3A7.2000301@studiofuga.com>
-References: <4745A3A7.2000301@studiofuga.com>
-Message-ID: <1196233303.13652.0.camel@elrond.atmel.sweden>
+From: Hans-Christian Egtvedt <hcegtvedt@atmel.com>
+Date: Wed, 28 Nov 2007 08:07:40 +0100
+Subject: [Buildroot] svn commit: trunk/buildroot/package/alsa-lib
+In-Reply-To: <20071128070957.BE0E63005D@busybox.net>
+References: <20071128070957.BE0E63005D@busybox.net>
+Message-ID: <1196233660.10698.8.camel@localhost.localdomain>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-tor 2007-11-22 klockan 16:43 +0100 skrev ing. Federico Fuga:
-> Hi,
+On Tue, 2007-11-27 at 23:09 -0800, ulf at uclibc.org wrote:
+> Author: ulf
+> Date: 2007-11-27 23:09:57 -0800 (Tue, 27 Nov 2007)
+> New Revision: 20557
 > 
-> I have found and solved the problem that breaks the ioctl of alsa-lib in
-> arm.
-> Just a little preamble:
+> Log:
+> Add '-mabi=aapcs-linux' to CFLAGS in 'alsa-lib' to be compatible w kernel
 > 
-> when compiling with arm xscale on an em-x270 board, all the installation
-> works correctly except that the alsactl cannot set the volume levels of
-> mixer:
+> Modified:
+>    trunk/buildroot/package/alsa-lib/alsa-lib.mk
 > 
-> # alsactl restore
-> unknown ioctl = 0xc2c45513 ioctl ELEM_WRITE=0xc2c85513 struct 712
-> alsactl: set_control:1159: Cannot write control '2:0:0:Speaker Playback
-> Volume:0' : Inappropriate ioctl for device
 > 
-> (note that the "unknown ioctl" message is a debug message i put on the
-> sound/core/control.c source to get rid of the problem).
-> If you compile a simple program that prints the ioctl and sizeof struct
-> snd_ctl_elem_value, you'll notice that the structure size is 708 in this
-> case.
-> As someone pointed out, there may be an alignment problem problem in the
-> structure when compiled with the toolchain.
-> The strange thing is that a kernel compiled with this toolchain
-> (arm-linux-uclibc) works perfectly with all programs except that alsa,
-> and that if you run that kernel with a file system and alsa compiled
-> with glibc (angstrom linux) alsactl works perfectly.
-> So after 5 days of digging, I found that the alsa drivers in the kernel
-> are compiled with the -mabi=aapcs-linux option in gcc.
-> If I add that option to CFLAGS in the alsa-lib configure script and
-> compile, alsactl works perfectly!
-> So I suggest to put the option
-> 
-> -mabi=aapcs-linux
-> 
-> to all the compilation of uclibc and buildroot.
-> I would propose the patch, but I do not know where to put the option in
-> the scripts/configuration.
-> Hope that helps,
-> 
-I added this to the 'alsa-lib' build
-Available in revision 20557 and later.
+> Changeset:
+> Modified: trunk/buildroot/package/alsa-lib/alsa-lib.mk
+> ===================================================================
+> --- trunk/buildroot/package/alsa-lib/alsa-lib.mk	2007-11-28 06:49:42 UTC (rev 20556)
+> +++ trunk/buildroot/package/alsa-lib/alsa-lib.mk	2007-11-28 07:09:57 UTC (rev 20557)
+> @@ -24,7 +24,7 @@
+>  	(cd $(ALSA_LIB_DIR); rm -rf config.cache; \
+>  		$(TARGET_CONFIGURE_ARGS) \
+>  		$(TARGET_CONFIGURE_OPTS) \
+> -		CFLAGS="$(TARGET_CFLAGS)" \
+> +		CFLAGS="$(TARGET_CFLAGS) -mabi=aapcs-linux" \
 
+Eh, NO! Add it to the TARGET_CFLAGS for architectures supporting this
+flag.
 
+>  		LDFLAGS="$(TARGET_LDFLAGS)" \
+>  		./configure \
+>  		--target=$(GNU_TARGET_NAME) \
 
-> Federico Fuga
-> 
-> 
-> _______________________________________________
-> buildroot mailing list
-> buildroot at uclibc.org
-> http://busybox.net/mailman/listinfo/buildroot
 -- 
-Best Regards
-Ulf Samuelsson
+With kind regards,
+Hans-Christian Egtvedt, Applications Engineer
