@@ -1,7 +1,7 @@
 From: bugs at busybox.net <bugs@busybox.net>
-Date: Tue, 27 Nov 2007 23:00:01 -0800
+Date: Tue, 27 Nov 2007 23:04:08 -0800
 Subject: [Buildroot] [buildroot 0001615]: Can not build?
-Message-ID: <c68b89b5424a7275eba8162675d2ed28@busybox.net>
+Message-ID: <98e48ae08c66837d871c6be10e5c5310@busybox.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -25,7 +25,7 @@ Priority:                   normal
 Status:                     assigned
 ====================================================================== 
 Date Submitted:             11-27-2007 22:28 PST
-Last Modified:              11-27-2007 23:00 PST
+Last Modified:              11-27-2007 23:04 PST
 ====================================================================== 
 Summary:                    Can not build?
 Description: 
@@ -57,6 +57,20 @@ I use Fedora Core 4
 ---------------------------------------------------------------------- 
 Isn't EABI (-mabi=eabi) an ARM thing and not applicable to MIPS arch? 
 
+---------------------------------------------------------------------- 
+ linsample - 11-27-07 23:04  
+---------------------------------------------------------------------- 
+But I dont do anything for latest buildroot source code.
+
+My steps are as follows:
+
+1. make menuconfig
+   only change CPU type to MIPS
+
+2. make
+
+I dont know why the compiler adds ARM related words? 
+
 Issue History 
 Date Modified   Username       Field                    Change               
 ====================================================================== 
@@ -67,4 +81,5 @@ Date Modified   Username       Field                    Change
 11-27-07 22:46  linsample      Issue End Monitor: linsample                    
 11-27-07 22:47  linsample      Note Added: 0002982                          
 11-27-07 23:00  UlfSamuelsson  Note Added: 0002983                          
+11-27-07 23:04  linsample      Note Added: 0002984                          
 ======================================================================
