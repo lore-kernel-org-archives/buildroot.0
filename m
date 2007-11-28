@@ -1,7 +1,7 @@
 From: ulf at uclibc.org <ulf@uclibc.org>
-Date: Wed, 28 Nov 2007 00:57:26 -0800 (PST)
-Subject: [Buildroot] svn commit: trunk/buildroot/package/curl
-Message-ID: <20071128085726.AB79A3005E@busybox.net>
+Date: Wed, 28 Nov 2007 00:59:17 -0800 (PST)
+Subject: [Buildroot] svn commit: trunk/buildroot/package:  libxslt
+Message-ID: <20071128085917.0D7AC3005E@busybox.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -9,34 +9,98 @@ Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
 Author: ulf
-Date: 2007-11-28 00:57:26 -0800 (Wed, 28 Nov 2007)
-New Revision: 20561
+Date: 2007-11-28 00:59:17 -0800 (Wed, 28 Nov 2007)
+New Revision: 20562
 
 Log:
-Move curl from lib to usr/lib, update curl.la
+Add libxslt package
+
+Added:
+   trunk/buildroot/package/libxslt/
+   trunk/buildroot/package/libxslt/Config.in
+   trunk/buildroot/package/libxslt/libxslt.mk
 
 Modified:
-   trunk/buildroot/package/curl/curl.mk
+   trunk/buildroot/package/Config.in
 
 
 Changeset:
-Modified: trunk/buildroot/package/curl/curl.mk
+Modified: trunk/buildroot/package/Config.in
 ===================================================================
---- trunk/buildroot/package/curl/curl.mk	2007-11-28 08:57:00 UTC (rev 20560)
-+++ trunk/buildroot/package/curl/curl.mk	2007-11-28 08:57:26 UTC (rev 20561)
-@@ -10,6 +10,7 @@
- CURL_CAT:=$(BZCAT)
- CURL_DIR:=$(BUILD_DIR)/curl-$(CURL_VERSION)
- CURL_BINARY:=curl
-+CURL_DESTDIR:=$(STAGING_DIR)/usr
- 
- $(DL_DIR)/$(CURL_SOURCE):
- 	 $(WGET) -P $(DL_DIR) $(CURL_SITE)/$(CURL_SOURCE)
-@@ -32,39 +33,50 @@
- 		--target=$(GNU_TARGET_NAME) \
- 		--host=$(GNU_TARGET_NAME) \
- 		--build=$(GNU_HOST_NAME) \
--		--prefix=$(STAGING_DIR) \
+--- trunk/buildroot/package/Config.in	2007-11-28 08:57:26 UTC (rev 20561)
++++ trunk/buildroot/package/Config.in	2007-11-28 08:59:17 UTC (rev 20562)
+@@ -79,6 +79,7 @@
+ source "package/liblockfile/Config.in"
+ source "package/libsysfs/Config.in"
+ source "package/libxml2/Config.in"
++source "package/libxslt/Config.in"
+ source "package/lockfile-progs/Config.in"
+ source "package/lsof/Config.in"
+ source "package/ltp-testsuite/Config.in"
+
+Added: trunk/buildroot/package/libxslt/Config.in
+===================================================================
+--- trunk/buildroot/package/libxslt/Config.in	                        (rev 0)
++++ trunk/buildroot/package/libxslt/Config.in	2007-11-28 08:59:17 UTC (rev 20562)
+@@ -0,0 +1,21 @@
++config BR2_PACKAGE_LIBXSLT
++	bool "libxslt"
++	default n
++	depends BR2_PACKAGE_PKGCONFIG
++	help
++	  Install the xslt library which is used
++	  to transform XML files to other XML files.
++
++	  XSLT is designed for use as part of XSL, 
++	  which is a stylesheet language for XML. 
++	  In addition to XSLT, XSL includes an XML vocabulary 
++	  for specifying formatting. 
++	  XSL specifies the styling of an XML document by using XSLT
++	  to describe how the document is transformed into another
++	  XML document that uses the formatting vocabulary.
++
++	  http://www.w3.org/TR/xslt
++
++comment "libxslt disabled (requires pkgconfig)"
++	depends !BR2_PACKAGE_PKGCONFIG
++
+
+Added: trunk/buildroot/package/libxslt/libxslt.mk
+===================================================================
+--- trunk/buildroot/package/libxslt/libxslt.mk	                        (rev 0)
++++ trunk/buildroot/package/libxslt/libxslt.mk	2007-11-28 08:59:17 UTC (rev 20562)
+@@ -0,0 +1,99 @@
++#############################################################
++#
++# libxslt
++#
++#############################################################
++LIBXSLT_VERSION=1.1.21
++LIBXSLT_SOURCE=libxslt-$(LIBXSLT_VERSION).tar.gz
++LIBXSLT_SITE=ftp://xmlsoft.org/libxslt
++LIBXSLT_DIR=$(BUILD_DIR)/libxslt-$(LIBXSLT_VERSION)
++
++$(DL_DIR)/$(LIBXSLT_SOURCE):
++	$(WGET) -P $(DL_DIR) $(LIBXSLT_SITE)/$(LIBXSLT_SOURCE)
++
++$(LIBXSLT_DIR)/.unpacked: $(DL_DIR)/$(LIBXSLT_SOURCE)
++	gzip -d -c $(DL_DIR)/$(LIBXSLT_SOURCE) | tar -C $(BUILD_DIR) $(TAR_OPTIONS) -
++	touch $@
++
++#PKG_CONFIG_PATH="$(STAGING_DIR)/lib/pkconfig:$(STAGING_DIR)/usr/lib/pkgconfig" \
++#PKG_CONFIG="$(STAGING_DIR)/usr/bin/pkg-config" \
++#PKG_CONFIG_SYSROOT=$(STAGING_DIR) \
++#
++
++$(LIBXSLT_DIR)/.configured: $(LIBXSLT_DIR)/.unpacked
++	(cd $(LIBXSLT_DIR); \
++		$(TARGET_CONFIGURE_OPTS) \
++		$(TARGET_CONFIGURE_ARGS) \
++		CFLAGS="$(TARGET_CFLAGS) -DNO_LARGEFILE_SOURCE" \
++		./configure \
++		--target=$(GNU_TARGET_NAME) \
++		--host=$(GNU_TARGET_NAME) \
++		--build=$(GNU_HOST_NAME) \
 +		--prefix=/usr \
 +		--exec-prefix=/usr \
 +		--bindir=/usr/bin \
@@ -46,53 +110,62 @@ Modified: trunk/buildroot/package/curl/curl.mk
 +		--sysconfdir=/etc \
 +		--datadir=/usr/share \
 +		--localstatedir=/var \
-+		--includedir=/usr/include \
-+		--mandir=/usr/share/man \
-+		--infodir=/usr/share/info \
- 	)
- 	touch $(CURL_DIR)/.configured
- 
- $(CURL_DIR)/src/.libs/$(CURL_BINARY): $(CURL_DIR)/.configured
- 	$(MAKE) -C $(CURL_DIR)
- 
--$(STAGING_DIR)/bin/$(CURL_BINARY): $(CURL_DIR)/src/.libs/$(CURL_BINARY)
--	-mkdir $(STAGING_DIR)/bin
--	$(MAKE) prefix=$(STAGING_DIR) -C $(CURL_DIR) install
--	-rm -rf $(STAGING_DIR)/man
--	touch $(STAGING_DIR)/bin/$(CURL_BINARY)
-+$(CURL_DESTDIR)/bin/$(CURL_BINARY): $(CURL_DIR)/src/.libs/$(CURL_BINARY)
-+	-mkdir $(CURL_DESTDIR)/bin
-+	$(MAKE) DESTDIR=$(STAGING_DIR) -C $(CURL_DIR) install
-+	$(SED) "s,^libdir=.*,libdir=\'$(CURL_DESTDIR)/lib\',g" $(CURL_DESTDIR)/lib/libcurl.la
-+	touch $(CURL_DESTDIR)/bin/$(CURL_BINARY)
- 
--$(TARGET_DIR)/usr/lib/libcurl.so.$(LIBCURL_VERSION): $(STAGING_DIR)/bin/$(CURL_BINARY)
-+$(TARGET_DIR)/usr/lib/libcurl.so.$(LIBCURL_VERSION): $(CURL_DESTDIR)/bin/$(CURL_BINARY)
- 	-mkdir $(TARGET_DIR)/usr/lib
- 	-mkdir $(TARGET_DIR)/usr/bin
--	cp -a $(STAGING_DIR)/lib/libcurl.so* $(TARGET_DIR)/usr/lib
-+	cp -a $(CURL_DESTDIR)/lib/libcurl.so* $(TARGET_DIR)/usr/lib
- 	$(STRIPCMD) $(STRIP_STRIP_UNNEEDED) $(TARGET_DIR)/usr/lib/libcurl.so.$(LIBCURL_VERSION)
- 
- $(TARGET_DIR)/usr/bin/$(CURL_BINARY): $(TARGET_DIR)/usr/lib/libcurl.so.$(LIBCURL_VERSION)
--	cp -a $(STAGING_DIR)/bin/$(CURL_BINARY) $(TARGET_DIR)/usr/bin
-+	cp -a $(CURL_DESTDIR)/bin/$(CURL_BINARY) $(TARGET_DIR)/usr/bin
- 	$(STRIPCMD) $(STRIP_STRIP_UNNEEDED) $(TARGET_DIR)/usr/bin/$(CURL_BINARY)
- 
- curl: uclibc $(TARGET_DIR)/usr/bin/$(CURL_BINARY)
- 
--libcurl: $(STAGING_DIR)/bin/$(CURL_BINARY)
-+libcurl: $(CURL_DESTDIR)/bin/$(CURL_BINARY)
- 
- curl-clean:
- 	rm -f $(TARGET_DIR)/usr/lib/libcurl.so*
- 	rm -f $(TARGET_DIR)/usr/bin/curl
--	rm -f $(STAGING_DIR)/bin/curl*
--	rm -f $(STAGING_DIR)/lib/libcurl.so*
--	rm -rf $(STAGING_DIR)/usr/include/curl
-+	rm -f $(CURL_DESTDIR)/bin/curl*
-+	rm -f $(CURL_DESTDIR)/lib/libcurl.so*
-+	rm -rf $(CURL_DESTDIR)/include/curl
- 	-$(MAKE) -C $(CURL_DIR) clean
- 
- curl-dirclean:
++		--includedir=/include \
++		--mandir=/usr/man \
++		--infodir=/usr/info \
++		--enable-shared \
++		$(DISABLE_NLS) \
++		--enable-static \
++		--enable-ipv6=no \
++		--without-debugging \
++		--without-python \
++		--without-threads \
++	);
++	touch $@
++
++$(LIBXSLT_DIR)/libxslt.so: $(LIBXSLT_DIR)/.configured
++	$(MAKE) $(TARGET_CONFIGURE_OPTS) -C $(LIBXSLT_DIR)
++	touch $@
++	
++$(STAGING_DIR)/usr/lib/libxslt.so: $(LIBXSLT_DIR)/libxslt.so
++	$(MAKE) DESTDIR=$(STAGING_DIR) -C "$(LIBXSLT_DIR)" install
++	$(SED) "s,^libdir=.*,libdir=\'$(STAGING_DIR)/usr/lib\',g" $(STAGING_DIR)/usr/lib/libxslt.la
++	-rm -rf $(STAGING_DIR)/usr/man/man1/xslt*
++	-rm -rf $(STAGING_DIR)/usr/man/man3/libxslt*
++	-rm -rf $(STAGING_DIR)/usr/man/man3/libexslt*
++	touch $@
++
++$(TARGET_DIR)/usr/lib/libxslt.so: $(STAGING_DIR)/usr/lib/libxslt.so
++	cp -dpf $(STAGING_DIR)/usr/lib/libxslt.so* $(TARGET_DIR)/usr/lib
++	$(STRIPCMD) $(TARGET_DIR)/usr/lib/libxslt.so*
++	touch $@
++
++$(TARGET_DIR)/usr/lib/libxsltx.a: $(STAGING_DIR)/usr/lib/libxslt.so
++	mkdir -p $(TARGET_DIR)/usr/include/libxslt
++	cp -dpf $(LIBXSLT_DIR)/libxslt/*.h $(TARGET_DIR)/usr/include/libxslt
++	cp -dpf $(STAGING_DIR)/usr/lib/libxslt.a $(TARGET_DIR)/usr/lib/
++	(cd $(TARGET_DIR)/usr/lib; ln -fs ../../lib/libxslt.so.$(LIBXSLT_VERSION) libxslt.so)
++	touch -c $@
++
++#	rm -f $(TARGET_DIR)/lib/libxslt.so.$(LIBXSLT_VERSION)
++
++libxslt-headers: $(TARGET_DIR)/usr/lib/libxslt.a
++
++libxslt: uclibc pkgconfig libgcrypt $(TARGET_DIR)/usr/lib/libxslt.so
++
++libxslt-source: $(DL_DIR)/$(LIBXSLT_SOURCE)
++
++libxslt-clean:
++	rm -f $(TARGET_DIR)/lib/libxslt.so*
++	-$(MAKE) -C $(LIBXSLT_DIR) clean
++
++libxslt-dirclean:
++	rm -rf $(LIBXSLT_DIR)
++#############################################################
++#
++# Toplevel Makefile options
++#
++#############################################################
++ifeq ($(strip $(BR2_PACKAGE_LIBXSLT)),y)
++TARGETS+=libxslt
++endif
