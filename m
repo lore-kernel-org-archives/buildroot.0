@@ -1,98 +1,66 @@
-From: bugs at busybox.net <bugs@busybox.net>
-Date: Tue, 27 Nov 2007 23:57:17 -0800
-Subject: [Buildroot] [buildroot 0001615]: Can not build?
-Message-ID: <490a9b18adaec078584ca13852c567be@busybox.net>
+From: ulf at uclibc.org <ulf@uclibc.org>
+Date: Wed, 28 Nov 2007 00:55:41 -0800 (PST)
+Subject: [Buildroot] svn commit: trunk/buildroot/package/libdaemon
+Message-ID: <20071128085541.543F6A685A@busybox.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+Author: ulf
+Date: 2007-11-28 00:55:40 -0800 (Wed, 28 Nov 2007)
+New Revision: 20558
 
-A NOTE has been added to this issue. 
-====================================================================== 
-http://busybox.net/bugs/view.php?id=1615 
-====================================================================== 
-Reported By:                linsample
-Assigned To:                buildroot
-====================================================================== 
-Project:                    buildroot
-Issue ID:                   1615
-Category:                   Other
-Reproducibility:            always
-Severity:                   trivial
-Priority:                   normal
-Status:                     assigned
-====================================================================== 
-Date Submitted:             11-27-2007 22:28 PST
-Last Modified:              11-27-2007 23:57 PST
-====================================================================== 
-Summary:                    Can not build?
-Description: 
-Anybody knows the compile error when I try to build buildroot???
+Log:
+Move libdaemon from lib to usr/lib, update libdaemon.la
 
-/home/sample/projects/LX_2618_RG_5_3_00r4_SRC/buildroot/toolchain_build_mips/gcc-4.2.1/gcc/crtstuff.
-c:1: error: unsupported combination: -mabicalls -mabi=eabi
-make[2]: *** [crtbegin.o] Error 1
-make[2]: Leaving directory
-`/home/sample/projects/LX_2618_RG_5_3_00r4_SRC/buildroot/toolchain_build_
-mips/gcc-4.2.1-initial/gcc'
-make[1]: *** [all-gcc] Error 2
-make[1]: Leaving directory
-`/home/sample/projects/LX_2618_RG_5_3_00r4_SRC/buildroot/toolchain_build_
-mips/gcc-4.2.1-initial'
-make: ***
-[/home/sample/projects/LX_2618_RG_5_3_00r4_SRC/buildroot/toolchain_build_mips/gcc-4.2.1-in
-itial/.compiled] Error 2
+Modified:
+   trunk/buildroot/package/libdaemon/libdaemon.mk
 
-====================================================================== 
 
----------------------------------------------------------------------- 
- linsample - 11-27-07 22:47  
----------------------------------------------------------------------- 
-I use Fedora Core 4 
-
----------------------------------------------------------------------- 
- UlfSamuelsson - 11-27-07 23:00  
----------------------------------------------------------------------- 
-Isn't EABI (-mabi=eabi) an ARM thing and not applicable to MIPS arch? 
-
----------------------------------------------------------------------- 
- linsample - 11-27-07 23:04  
----------------------------------------------------------------------- 
-But I dont do anything for latest buildroot source code.
-
-My steps are as follows:
-
-1. make menuconfig
-   only change CPU type to MIPS
-
-2. make
-
-I dont know why the compiler adds ARM related words? 
-
----------------------------------------------------------------------- 
- linsample - 11-27-07 23:57  
----------------------------------------------------------------------- 
-Same problem is suffered by other people in
-http://www.nabble.com/error-when-building-gcc-using-buildroot-toolchain-t4717991.html
-
-But no work-around is written down there.
-
-So anyone knows the work-around?
-
-Thank you very much. 
-
-Issue History 
-Date Modified   Username       Field                    Change               
-====================================================================== 
-11-27-07 22:28  linsample      New Issue                                    
-11-27-07 22:28  linsample      Status                   new => assigned     
-11-27-07 22:28  linsample      Assigned To               => buildroot       
-11-27-07 22:46  linsample      Issue Monitored: linsample                    
-11-27-07 22:46  linsample      Issue End Monitor: linsample                    
-11-27-07 22:47  linsample      Note Added: 0002982                          
-11-27-07 23:00  UlfSamuelsson  Note Added: 0002983                          
-11-27-07 23:04  linsample      Note Added: 0002984                          
-11-27-07 23:57  linsample      Note Added: 0002985                          
-======================================================================
+Changeset:
+Modified: trunk/buildroot/package/libdaemon/libdaemon.mk
+===================================================================
+--- trunk/buildroot/package/libdaemon/libdaemon.mk	2007-11-28 07:09:57 UTC (rev 20557)
++++ trunk/buildroot/package/libdaemon/libdaemon.mk	2007-11-28 08:55:40 UTC (rev 20558)
+@@ -16,6 +16,7 @@
+ LIBDAEMON_DIR:=$(BUILD_DIR)/$(LIBDAEMON_NAME)
+ LIBDAEMON_SITE:=http://0pointer.de/lennart/projects/libdaemon/
+ LIBDAEMON_SOURCE:=$(LIBDAEMON_NAME).tar.gz
++LIBDAEMON_DESTDIR:=$(STAGING_DIR)/usr/lib
+ LIBDAEMON_CAT:=$(ZCAT)
+ 
+ $(DL_DIR)/$(LIBDAEMON_SOURCE):
+@@ -42,7 +43,7 @@
+ 		--exec-prefix=/usr \
+ 		--bindir=/usr/bin \
+ 		--sbindir=/usr/sbin \
+-		--libdir=/lib \
++		--libdir=/usr/lib \
+ 		--libexecdir=/usr/lib \
+ 		--sysconfdir=/etc \
+ 		--datadir=/usr/share \
+@@ -58,17 +59,18 @@
+ 	touch $@
+ 
+ $(LIBDAEMON_DIR)/.compiled: $(LIBDAEMON_DIR)/.configured
+-	$(MAKE) LIBTOOL=$(LIBDAEMON_DIR)/libtool -C $(LIBDAEMON_DIR)
++	$(MAKE) $(TARGET_CONFIGURE_OPTS) LIBTOOL=$(LIBDAEMON_DIR)/libtool -C $(LIBDAEMON_DIR)
+ 	touch $@
+ 
+-$(STAGING_DIR)/lib/libdaemon.a: $(LIBDAEMON_DIR)/.compiled
++$(LIBDAEMON_DESTDIR)/libdaemon.a: $(LIBDAEMON_DIR)/.compiled
+ 	$(MAKE) DESTDIR=$(STAGING_DIR) -C $(LIBDAEMON_DIR) install
++	$(SED) "s,^libdir=.*,libdir=\'$(STAGING_DIR)/usr/lib\',g" $(STAGING_DIR)/usr/lib/libdaemon.la
+ 	touch -c $@
+ 
+-#$(TARGET_DIR)/usr/lib/libdaemon.a: $(STAGING_DIR)/lib/libdaemon.a
++#$(TARGET_DIR)/usr/lib/libdaemon.a: $(LIBDAEMON_DESTDIR)/libdaemon.a
+ # -$(STRIPCMD) $(STRIP_STRIP_UNNEEDED) $(TARGET_DIR)/usr/lib/libdaemon.a
+ 
+-libdaemon: uclibc pkgconfig $(STAGING_DIR)/lib/libdaemon.a
++libdaemon: uclibc pkgconfig $(LIBDAEMON_DESTDIR)/libdaemon.a
+ 
+ libdaemon-unpacked: $(LIBDAEMON_DIR)/.unpacked
+ 
