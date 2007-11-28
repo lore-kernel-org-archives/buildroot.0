@@ -1,61 +1,48 @@
-From: Ulf Samuelsson <ulf@atmel.com>
-Date: Wed, 28 Nov 2007 09:54:28 +0100
-Subject: [Buildroot] Adding new package to BuildRoot
-In-Reply-To: <b6838d3a0708170647l1ed812c5v7627a7bb58735e6f@mail.gmail.com>
-References: <b6838d3a0708170647l1ed812c5v7627a7bb58735e6f@mail.gmail.com>
-Message-ID: <1196240068.13652.2.camel@elrond.atmel.sweden>
+From: ulf at uclibc.org <ulf@uclibc.org>
+Date: Wed, 28 Nov 2007 01:13:41 -0800 (PST)
+Subject: [Buildroot] svn commit: trunk/buildroot/package/alsa-lib
+Message-ID: <20071128091341.BA9BCA6813@busybox.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-fre 2007-08-17 klockan 09:47 -0400 skrev Daniel Frey:
-> All,
-> 
-> I am attempting to add libxslt to the packages under buildroot.  It
-> fails with the following errors:
-> 
-> /home/dmfrey/dev/embedded
-> /gumstix-buildroot/build_arm_nofpu/staging_dir/bin/arm-linux-uclibcgnueabi-gcc -shared  .libs/attrvt.o .libs/xslt.o .libs/xsltutils.o .libs/pattern.o .libs/templates.o .libs/variables.o .libs/keys.o .libs/numbers.o .libs/extensions.o .libs/extra.o .libs/functions.o .libs/namespaces.o .libs/imports.o .libs/attributes.o .libs/documents.o .libs/preproc.o .libs/transform.o .libs/security.o  -L/usr/lib /usr/lib/libxml2.so -lm  -march=armv5te -mtune=xscale -Wl,-soname -Wl, libxslt.so.1 -o .libs/libxslt.so.1.1.21
-> /usr/lib/libxml2.so: could not read symbols: File in wrong format
-> collect2: ld returned 1 exit status
-> make[3]: *** [libxslt.la] Error 1
-> make[3]: Leaving directory
-> `/home/dmfrey/dev/embedded/gumstix-buildroot/build_arm_nofpu/libxslt-
-> 1.1.21/libxslt'
-> make[2]: *** [all-recursive] Error 1
-> make[2]: Leaving directory
-> `/home/dmfrey/dev/embedded/gumstix-buildroot/build_arm_nofpu/libxslt-1.1.21'
-> make[1]: *** [all] Error 2
-> make[1]: Leaving directory
-> `/home/dmfrey/dev/embedded/gumstix-buildroot/build_arm_nofpu/libxslt-
-> 1.1.21'
-> make: ***
-> [/home/dmfrey/dev/embedded/gumstix-buildroot/build_arm_nofpu/libxslt-1.1.21/libxslt.so] Error 2
-> 
-> 
-> I used the xml2 Config.in and xml2.mk as a model for setting up
-> libxslt.  I am building on ubuntu feisty.  If there is any other info
-> required, please let me know; I have attached my two files in the xslt
-> directory under package.  I am not totally sure as to what is going on
-> here, but I think it has something to do with the fact that libxml2
-> was compiled for my host architecture.  When I see the ouput fly by,
-> it is finding the local systems libxml2.27, versus the libxml2.29 in
-> the buildroot.
-> 
-> Thanks for any help.
-> 
+Author: ulf
+Date: 2007-11-28 01:13:41 -0800 (Wed, 28 Nov 2007)
+New Revision: 20563
 
-libxslt is added in revision 20562.
-Tested on ARM.
+Log:
+Make aapcs-linux abi, dependent on ARM arch
+
+Modified:
+   trunk/buildroot/package/alsa-lib/alsa-lib.mk
 
 
-> 
-> _______________________________________________
-> buildroot mailing list
-> buildroot at uclibc.org
-> http://busybox.net/mailman/listinfo/buildroot
--- 
-Best Regards
-Ulf Samuelsson
+Changeset:
+Modified: trunk/buildroot/package/alsa-lib/alsa-lib.mk
+===================================================================
+--- trunk/buildroot/package/alsa-lib/alsa-lib.mk	2007-11-28 08:59:17 UTC (rev 20562)
++++ trunk/buildroot/package/alsa-lib/alsa-lib.mk	2007-11-28 09:13:41 UTC (rev 20563)
+@@ -11,6 +11,12 @@
+ ALSA_LIB_BINARY:=libasound.so.2.0.0
+ ALSA_LIB_TARGET_BINARY:=usr/lib/$(ALSA_LIB_BINARY)
+ 
++ifeq ($(BR2_arm),y)
++ALSA_LIB_ABI:=-mabi=aapcs-linux
++else
++ALSA_LIB_ABI:=
++endif
++
+ $(DL_DIR)/$(ALSA_LIB_SOURCE):
+ 	$(WGET) -P $(DL_DIR) $(ALSA_LIB_SITE)/$(ALSA_LIB_SOURCE)
+ 
+@@ -24,7 +30,7 @@
+ 	(cd $(ALSA_LIB_DIR); rm -rf config.cache; \
+ 		$(TARGET_CONFIGURE_ARGS) \
+ 		$(TARGET_CONFIGURE_OPTS) \
+-		CFLAGS="$(TARGET_CFLAGS) -mabi=aapcs-linux" \
++		CFLAGS="$(TARGET_CFLAGS) $(ALSA_LIB_ABI)" \
+ 		LDFLAGS="$(TARGET_LDFLAGS)" \
+ 		./configure \
+ 		--target=$(GNU_TARGET_NAME) \
