@@ -1,171 +1,61 @@
-From: ulf at uclibc.org <ulf@uclibc.org>
-Date: Wed, 28 Nov 2007 00:59:17 -0800 (PST)
-Subject: [Buildroot] svn commit: trunk/buildroot/package:  libxslt
-Message-ID: <20071128085917.0D7AC3005E@busybox.net>
+From: Ulf Samuelsson <ulf@atmel.com>
+Date: Wed, 28 Nov 2007 09:54:28 +0100
+Subject: [Buildroot] Adding new package to BuildRoot
+In-Reply-To: <b6838d3a0708170647l1ed812c5v7627a7bb58735e6f@mail.gmail.com>
+References: <b6838d3a0708170647l1ed812c5v7627a7bb58735e6f@mail.gmail.com>
+Message-ID: <1196240068.13652.2.camel@elrond.atmel.sweden>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Author: ulf
-Date: 2007-11-28 00:59:17 -0800 (Wed, 28 Nov 2007)
-New Revision: 20562
+fre 2007-08-17 klockan 09:47 -0400 skrev Daniel Frey:
+> All,
+> 
+> I am attempting to add libxslt to the packages under buildroot.  It
+> fails with the following errors:
+> 
+> /home/dmfrey/dev/embedded
+> /gumstix-buildroot/build_arm_nofpu/staging_dir/bin/arm-linux-uclibcgnueabi-gcc -shared  .libs/attrvt.o .libs/xslt.o .libs/xsltutils.o .libs/pattern.o .libs/templates.o .libs/variables.o .libs/keys.o .libs/numbers.o .libs/extensions.o .libs/extra.o .libs/functions.o .libs/namespaces.o .libs/imports.o .libs/attributes.o .libs/documents.o .libs/preproc.o .libs/transform.o .libs/security.o  -L/usr/lib /usr/lib/libxml2.so -lm  -march=armv5te -mtune=xscale -Wl,-soname -Wl, libxslt.so.1 -o .libs/libxslt.so.1.1.21
+> /usr/lib/libxml2.so: could not read symbols: File in wrong format
+> collect2: ld returned 1 exit status
+> make[3]: *** [libxslt.la] Error 1
+> make[3]: Leaving directory
+> `/home/dmfrey/dev/embedded/gumstix-buildroot/build_arm_nofpu/libxslt-
+> 1.1.21/libxslt'
+> make[2]: *** [all-recursive] Error 1
+> make[2]: Leaving directory
+> `/home/dmfrey/dev/embedded/gumstix-buildroot/build_arm_nofpu/libxslt-1.1.21'
+> make[1]: *** [all] Error 2
+> make[1]: Leaving directory
+> `/home/dmfrey/dev/embedded/gumstix-buildroot/build_arm_nofpu/libxslt-
+> 1.1.21'
+> make: ***
+> [/home/dmfrey/dev/embedded/gumstix-buildroot/build_arm_nofpu/libxslt-1.1.21/libxslt.so] Error 2
+> 
+> 
+> I used the xml2 Config.in and xml2.mk as a model for setting up
+> libxslt.  I am building on ubuntu feisty.  If there is any other info
+> required, please let me know; I have attached my two files in the xslt
+> directory under package.  I am not totally sure as to what is going on
+> here, but I think it has something to do with the fact that libxml2
+> was compiled for my host architecture.  When I see the ouput fly by,
+> it is finding the local systems libxml2.27, versus the libxml2.29 in
+> the buildroot.
+> 
+> Thanks for any help.
+> 
 
-Log:
-Add libxslt package
-
-Added:
-   trunk/buildroot/package/libxslt/
-   trunk/buildroot/package/libxslt/Config.in
-   trunk/buildroot/package/libxslt/libxslt.mk
-
-Modified:
-   trunk/buildroot/package/Config.in
+libxslt is added in revision 20562.
+Tested on ARM.
 
 
-Changeset:
-Modified: trunk/buildroot/package/Config.in
-===================================================================
---- trunk/buildroot/package/Config.in	2007-11-28 08:57:26 UTC (rev 20561)
-+++ trunk/buildroot/package/Config.in	2007-11-28 08:59:17 UTC (rev 20562)
-@@ -79,6 +79,7 @@
- source "package/liblockfile/Config.in"
- source "package/libsysfs/Config.in"
- source "package/libxml2/Config.in"
-+source "package/libxslt/Config.in"
- source "package/lockfile-progs/Config.in"
- source "package/lsof/Config.in"
- source "package/ltp-testsuite/Config.in"
-
-Added: trunk/buildroot/package/libxslt/Config.in
-===================================================================
---- trunk/buildroot/package/libxslt/Config.in	                        (rev 0)
-+++ trunk/buildroot/package/libxslt/Config.in	2007-11-28 08:59:17 UTC (rev 20562)
-@@ -0,0 +1,21 @@
-+config BR2_PACKAGE_LIBXSLT
-+	bool "libxslt"
-+	default n
-+	depends BR2_PACKAGE_PKGCONFIG
-+	help
-+	  Install the xslt library which is used
-+	  to transform XML files to other XML files.
-+
-+	  XSLT is designed for use as part of XSL, 
-+	  which is a stylesheet language for XML. 
-+	  In addition to XSLT, XSL includes an XML vocabulary 
-+	  for specifying formatting. 
-+	  XSL specifies the styling of an XML document by using XSLT
-+	  to describe how the document is transformed into another
-+	  XML document that uses the formatting vocabulary.
-+
-+	  http://www.w3.org/TR/xslt
-+
-+comment "libxslt disabled (requires pkgconfig)"
-+	depends !BR2_PACKAGE_PKGCONFIG
-+
-
-Added: trunk/buildroot/package/libxslt/libxslt.mk
-===================================================================
---- trunk/buildroot/package/libxslt/libxslt.mk	                        (rev 0)
-+++ trunk/buildroot/package/libxslt/libxslt.mk	2007-11-28 08:59:17 UTC (rev 20562)
-@@ -0,0 +1,99 @@
-+#############################################################
-+#
-+# libxslt
-+#
-+#############################################################
-+LIBXSLT_VERSION=1.1.21
-+LIBXSLT_SOURCE=libxslt-$(LIBXSLT_VERSION).tar.gz
-+LIBXSLT_SITE=ftp://xmlsoft.org/libxslt
-+LIBXSLT_DIR=$(BUILD_DIR)/libxslt-$(LIBXSLT_VERSION)
-+
-+$(DL_DIR)/$(LIBXSLT_SOURCE):
-+	$(WGET) -P $(DL_DIR) $(LIBXSLT_SITE)/$(LIBXSLT_SOURCE)
-+
-+$(LIBXSLT_DIR)/.unpacked: $(DL_DIR)/$(LIBXSLT_SOURCE)
-+	gzip -d -c $(DL_DIR)/$(LIBXSLT_SOURCE) | tar -C $(BUILD_DIR) $(TAR_OPTIONS) -
-+	touch $@
-+
-+#PKG_CONFIG_PATH="$(STAGING_DIR)/lib/pkconfig:$(STAGING_DIR)/usr/lib/pkgconfig" \
-+#PKG_CONFIG="$(STAGING_DIR)/usr/bin/pkg-config" \
-+#PKG_CONFIG_SYSROOT=$(STAGING_DIR) \
-+#
-+
-+$(LIBXSLT_DIR)/.configured: $(LIBXSLT_DIR)/.unpacked
-+	(cd $(LIBXSLT_DIR); \
-+		$(TARGET_CONFIGURE_OPTS) \
-+		$(TARGET_CONFIGURE_ARGS) \
-+		CFLAGS="$(TARGET_CFLAGS) -DNO_LARGEFILE_SOURCE" \
-+		./configure \
-+		--target=$(GNU_TARGET_NAME) \
-+		--host=$(GNU_TARGET_NAME) \
-+		--build=$(GNU_HOST_NAME) \
-+		--prefix=/usr \
-+		--exec-prefix=/usr \
-+		--bindir=/usr/bin \
-+		--sbindir=/usr/sbin \
-+		--libdir=/usr/lib \
-+		--libexecdir=/usr/lib \
-+		--sysconfdir=/etc \
-+		--datadir=/usr/share \
-+		--localstatedir=/var \
-+		--includedir=/include \
-+		--mandir=/usr/man \
-+		--infodir=/usr/info \
-+		--enable-shared \
-+		$(DISABLE_NLS) \
-+		--enable-static \
-+		--enable-ipv6=no \
-+		--without-debugging \
-+		--without-python \
-+		--without-threads \
-+	);
-+	touch $@
-+
-+$(LIBXSLT_DIR)/libxslt.so: $(LIBXSLT_DIR)/.configured
-+	$(MAKE) $(TARGET_CONFIGURE_OPTS) -C $(LIBXSLT_DIR)
-+	touch $@
-+	
-+$(STAGING_DIR)/usr/lib/libxslt.so: $(LIBXSLT_DIR)/libxslt.so
-+	$(MAKE) DESTDIR=$(STAGING_DIR) -C "$(LIBXSLT_DIR)" install
-+	$(SED) "s,^libdir=.*,libdir=\'$(STAGING_DIR)/usr/lib\',g" $(STAGING_DIR)/usr/lib/libxslt.la
-+	-rm -rf $(STAGING_DIR)/usr/man/man1/xslt*
-+	-rm -rf $(STAGING_DIR)/usr/man/man3/libxslt*
-+	-rm -rf $(STAGING_DIR)/usr/man/man3/libexslt*
-+	touch $@
-+
-+$(TARGET_DIR)/usr/lib/libxslt.so: $(STAGING_DIR)/usr/lib/libxslt.so
-+	cp -dpf $(STAGING_DIR)/usr/lib/libxslt.so* $(TARGET_DIR)/usr/lib
-+	$(STRIPCMD) $(TARGET_DIR)/usr/lib/libxslt.so*
-+	touch $@
-+
-+$(TARGET_DIR)/usr/lib/libxsltx.a: $(STAGING_DIR)/usr/lib/libxslt.so
-+	mkdir -p $(TARGET_DIR)/usr/include/libxslt
-+	cp -dpf $(LIBXSLT_DIR)/libxslt/*.h $(TARGET_DIR)/usr/include/libxslt
-+	cp -dpf $(STAGING_DIR)/usr/lib/libxslt.a $(TARGET_DIR)/usr/lib/
-+	(cd $(TARGET_DIR)/usr/lib; ln -fs ../../lib/libxslt.so.$(LIBXSLT_VERSION) libxslt.so)
-+	touch -c $@
-+
-+#	rm -f $(TARGET_DIR)/lib/libxslt.so.$(LIBXSLT_VERSION)
-+
-+libxslt-headers: $(TARGET_DIR)/usr/lib/libxslt.a
-+
-+libxslt: uclibc pkgconfig libgcrypt $(TARGET_DIR)/usr/lib/libxslt.so
-+
-+libxslt-source: $(DL_DIR)/$(LIBXSLT_SOURCE)
-+
-+libxslt-clean:
-+	rm -f $(TARGET_DIR)/lib/libxslt.so*
-+	-$(MAKE) -C $(LIBXSLT_DIR) clean
-+
-+libxslt-dirclean:
-+	rm -rf $(LIBXSLT_DIR)
-+#############################################################
-+#
-+# Toplevel Makefile options
-+#
-+#############################################################
-+ifeq ($(strip $(BR2_PACKAGE_LIBXSLT)),y)
-+TARGETS+=libxslt
-+endif
+> 
+> _______________________________________________
+> buildroot mailing list
+> buildroot at uclibc.org
+> http://busybox.net/mailman/listinfo/buildroot
+-- 
+Best Regards
+Ulf Samuelsson
