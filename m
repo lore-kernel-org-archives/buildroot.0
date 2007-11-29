@@ -1,20 +1,19 @@
-From: Fan Zhang <fan.zhang@mac.com>
-Date: Thu, 29 Nov 2007 13:06:42 +0800
-Subject: [Buildroot] make on MAC OS X
-Message-ID: <1D3F8BA5-BB0F-4306-A179-760E18E1EF63@mac.com>
+From: Ryan Ordway <ryan.ordway@oregonstate.edu>
+Date: Wed, 28 Nov 2007 22:38:31 -0800
+Subject: [Buildroot] uClibc-nptl?
+In-Reply-To: <1D3F8BA5-BB0F-4306-A179-760E18E1EF63@mac.com>
+References: <1D3F8BA5-BB0F-4306-A179-760E18E1EF63@mac.com>
+Message-ID: <691A7752-1681-409D-936A-9C6A7935510F@oregonstate.edu>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi,
 
-I am new to buildroot and want to build it on MAC OS X. The first try  
-is failed. Anybody successfully build it on MAC OS X?
+Has anyone gotten uClibc-nptl working with buildroot? Particularly on  
+the ARM arch.
 
-Regards,
-Fan
--------------- next part --------------
-An HTML attachment was scrubbed...
-URL: http://busybox.net/lists/buildroot/attachments/20071129/45c7b9ab/attachment.htm 
+Thanks!
+
+Ryan
