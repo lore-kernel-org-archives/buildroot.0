@@ -1,34 +1,25 @@
-From: vanokuten at uclibc.org <vanokuten@uclibc.org>
-Date: Thu, 29 Nov 2007 05:30:19 -0800 (PST)
-Subject: [Buildroot] svn commit: trunk/buildroot/package/alsa-utils
-Message-ID: <20071129133019.81B5E30082@busybox.net>
+From: Steven J. Hill <sjhill@realitydiluted.com>
+Date: Thu, 29 Nov 2007 07:30:08 -0600
+Subject: [Buildroot] uClibc-nptl?
+In-Reply-To: <691A7752-1681-409D-936A-9C6A7935510F@oregonstate.edu>
+References: <1D3F8BA5-BB0F-4306-A179-760E18E1EF63@mac.com>
+	<691A7752-1681-409D-936A-9C6A7935510F@oregonstate.edu>
+Message-ID: <20071129133008.GB20914@real.realitydiluted.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Author: vanokuten
-Date: 2007-11-29 05:30:17 -0800 (Thu, 29 Nov 2007)
-New Revision: 20590
+> Has anyone gotten uClibc-nptl working with buildroot? Particularly on  
+> the ARM arch.
+> 
+The uClibc-NPTL patches for ARM have been posted to the list. They are
+not currently in trunk, but will get there in the next couple of weeks.
+For now, you could get those patches, and create a tarball of the uClibc
+code and call it 'uClibc-snapshot.tar.bz2'. Next, create the directory
+'dl' in your buildroot tree and copy that tarball in there. Finally,
+select uClibc snapshot from the toolchain configuration menu and you
+should be set.
 
-Log:
-aplay depends on BR2_LARGEFILE support
-
-Modified:
-   trunk/buildroot/package/alsa-utils/Config.in
-
-
-Changeset:
-Modified: trunk/buildroot/package/alsa-utils/Config.in
-===================================================================
---- trunk/buildroot/package/alsa-utils/Config.in	2007-11-29 13:06:42 UTC (rev 20589)
-+++ trunk/buildroot/package/alsa-utils/Config.in	2007-11-29 13:30:17 UTC (rev 20590)
-@@ -44,6 +44,7 @@
- config BR2_PACKAGE_ALSA_UTILS_APLAY
- 	bool "aplay"
- 	default n
-+	select BR2_LARGEFILE
- 	depends on BR2_PACKAGE_ALSA_UTILS
- 
- config BR2_PACKAGE_ALSA_UTILS_ARECORD
+-Steve
