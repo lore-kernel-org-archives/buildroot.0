@@ -1,14 +1,20 @@
-From: shaleh at speakeasy.net <shaleh@speakeasy.net>
-Date: Wed, 28 Nov 2007 23:28:26 +0000
-Subject: [Buildroot] failure to build gtk because of glib-genmarshal being
- built for target not host
-Message-ID: <W9231326052255691196292506@webmail2>
+From: Fan Zhang <fan.zhang@mac.com>
+Date: Thu, 29 Nov 2007 13:06:42 +0800
+Subject: [Buildroot] make on MAC OS X
+Message-ID: <1D3F8BA5-BB0F-4306-A179-760E18E1EF63@mac.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-I am trying to build on x86 for x86. As mentioned in the subject, glib2's glib-genmarshal is built againt uclibc which prevents it from running during the build process. This tool is needed only for compilation and not released systems.
+Hi,
 
-Looking at the log, it appears that glib's configure script correctly determined that a cross-compile was happening. Anyone know what went wrong? Or a resource discussing the issues surrounding compilation of glib2, gtk and friends in a cross-compilation environment?
+I am new to buildroot and want to build it on MAC OS X. The first try  
+is failed. Anybody successfully build it on MAC OS X?
+
+Regards,
+Fan
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: http://busybox.net/lists/buildroot/attachments/20071129/45c7b9ab/attachment.htm 
