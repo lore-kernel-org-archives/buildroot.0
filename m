@@ -1,7 +1,7 @@
 From: ulf at uclibc.org <ulf@uclibc.org>
-Date: Thu, 29 Nov 2007 05:04:42 -0800 (PST)
-Subject: [Buildroot] svn commit: trunk/buildroot/package/avahi
-Message-ID: <20071129130442.4B40F300A1@busybox.net>
+Date: Thu, 29 Nov 2007 05:05:28 -0800 (PST)
+Subject: [Buildroot] svn commit: trunk/buildroot/package/speex
+Message-ID: <20071129130528.0E7D23009F@busybox.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -9,33 +9,26 @@ Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
 Author: ulf
-Date: 2007-11-29 05:04:41 -0800 (Thu, 29 Nov 2007)
-New Revision: 20587
+Date: 2007-11-29 05:05:28 -0800 (Thu, 29 Nov 2007)
+New Revision: 20588
 
 Log:
-Make avahi depend on packets, instead of selecting them
+Update config for speex
 
 Modified:
-   trunk/buildroot/package/avahi/Config.in
+   trunk/buildroot/package/speex/speex.mk
 
 
 Changeset:
-Modified: trunk/buildroot/package/avahi/Config.in
+Modified: trunk/buildroot/package/speex/speex.mk
 ===================================================================
---- trunk/buildroot/package/avahi/Config.in	2007-11-29 13:03:56 UTC (rev 20586)
-+++ trunk/buildroot/package/avahi/Config.in	2007-11-29 13:04:41 UTC (rev 20587)
-@@ -24,9 +24,13 @@
- 	bool "mDNS/DNS-SD daemon"
- 	default n
- 	depends on BR2_PACKAGE_AVAHI
--	select BR2_PACKAGE_EXPAT
-+	depends BR2_PACKAGE_EXPAT
- 	help
- 	  The Avahi mDNS/DNS-SD daemon implementing Apple's ZeroConf
- 	  architecture (also known as "Rendezvous" or "Bonjour").
- 	  The daemon registers local IP addresses and services using
- 	  mDNS/DNS-SD.
-+
-+comment "mDNS/DNS-SD daemon	- disabled (requires expat)"
-+	depends on BR2_PACKAGE_AVAHI
-+	depends !BR2_PACKAGE_EXPAT
+--- trunk/buildroot/package/speex/speex.mk	2007-11-29 13:04:41 UTC (rev 20587)
++++ trunk/buildroot/package/speex/speex.mk	2007-11-29 13:05:28 UTC (rev 20588)
+@@ -23,6 +23,7 @@
+ 
+ $(SPEEX_DIR)/.unpacked: $(DL_DIR)/$(SPEEX_SOURCE)
+ 	$(SPEEX_CAT) $(DL_DIR)/$(SPEEX_SOURCE) | tar -C $(BUILD_DIR) $(TAR_OPTIONS) -
++	$(CONFIG_UPDATE) $(SPEEX_DIR)
+ 	touch $(SPEEX_DIR)/.unpacked
+ 
+ $(SPEEX_DIR)/Makefile: $(SPEEX_DIR)/.unpacked
