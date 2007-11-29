@@ -1,30 +1,42 @@
-From: Ivan Kuten <ivan.kuten@promwad.com>
-Date: Thu, 29 Nov 2007 12:49:32 +0200
-Subject: [Buildroot] failure to build gtk because of glib-genmarshal
- being built for target not host
-In-Reply-To: <W9231326052255691196292506@webmail2>
-References: <W9231326052255691196292506@webmail2>
-Message-ID: <474E993C.7000502@promwad.com>
+From: ulf at uclibc.org <ulf@uclibc.org>
+Date: Thu, 29 Nov 2007 05:00:55 -0800 (PST)
+Subject: [Buildroot] svn commit: trunk/buildroot/package/vpnc
+Message-ID: <20071129130055.5AF6130048@busybox.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-shaleh at speakeasy.net wrote:
-> I am trying to build on x86 for x86. As mentioned in the subject, glib2's glib-genmarshal is built againt uclibc which prevents it from running during the build process. This tool is needed only for compilation and not released systems.
-> 
-> Looking at the log, it appears that glib's configure script correctly determined that a cross-compile was happening. Anyone know what went wrong? Or a resource discussing the issues surrounding compilation of glib2, gtk and friends in a cross-compilation environment?
+Author: ulf
+Date: 2007-11-29 05:00:53 -0800 (Thu, 29 Nov 2007)
+New Revision: 20580
 
-See http://busybox.net/bugs/view.php?id=1408
+Log:
+Make vpnc depend on packets, instead of selecting them
 
-Regards,
-Ivan
+Modified:
+   trunk/buildroot/package/vpnc/Config.in
 
--- 
 
---------------------------------
-Embedded Linux engineer,
-Promwad Company: http://www.promwad.com/
-Homepage : http://www.ivankuten.com/
---------------------------------
+Changeset:
+Modified: trunk/buildroot/package/vpnc/Config.in
+===================================================================
+--- trunk/buildroot/package/vpnc/Config.in	2007-11-29 09:43:36 UTC (rev 20579)
++++ trunk/buildroot/package/vpnc/Config.in	2007-11-29 13:00:53 UTC (rev 20580)
+@@ -1,7 +1,7 @@
+ config BR2_PACKAGE_VPNC
+ 	bool "vpnc"
+-	select BR2_PACKAGE_LIBGCRYPT
+-	select BR2_PACKAGE_LIBGPG_ERROR
++	depends BR2_PACKAGE_LIBGCRYPT
++	depends BR2_PACKAGE_LIBGPG_ERROR
+ 	default n
+ 	help
+ 	  Client for Cisco VPN concentrator
+@@ -12,3 +12,5 @@
+ 
+ 	  http://www.unix-ag.uni-kl.de/~massar/vpnc
+ 
++comment "vpnc		- disabled (requires libgcrypt and libgpg_error)"
++	depends !BR2_PACKAGE_LIBGCRYPT || !BR2_PACKAGE_LIBGPG_ERROR
