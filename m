@@ -1,23 +1,19 @@
-From: phonic at antisocial.nu <phonic@antisocial.nu>
-Date: Thu, 29 Nov 2007 16:41:18 +0100 (CET)
-Subject: [Buildroot] X11R7 error
-Message-ID: <64956.192.121.234.65.1196350878.squirrel@webmail.portlane.com>
+From: Jason Bodnar <jason@shakabuku.org>
+Date: Thu, 29 Nov 2007 13:56:04 -0600
+Subject: [Buildroot] Adding new software so it appears in menuconfig
+Message-ID: <20071129195432.M20637@shakabuku.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello!
-I'm trying to build X11R7 but I get an error in libX11-1.1.1's build process:
+I've followed the documentation online for adding new software packages to
+buildroot <http://buildroot.uclibc.org/buildroot.html#add_software>, but there
+is no information about how to make the new package appear in the package
+selection menu when running make menuconfig. How do I do that?
 
-../src/util/makekeys <
-/root/buildroot/build_i386/staging_dir/usr/include/X11/keysymdef.h >
-ks_tables_h
-/bin/sh: ../src/util/makekeys: No such file or directory
-make[2]: *** [ks_tables.h] Error 127
-
-It seems like src/util/makekeys does not exist, but it does!
-
-Regards
-Jonathan
+--
+Jason Bodnar
+jason at shakabuku.org
+http://www.shakabuku.org
