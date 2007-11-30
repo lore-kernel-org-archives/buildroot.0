@@ -1,49 +1,27 @@
-From: bugs at busybox.net <bugs@busybox.net>
-Date: Fri, 30 Nov 2007 07:28:26 -0800
-Subject: [Buildroot] [buildroot 0001622]: [PATCH] gcc 3.x/4.x symlinks to cc
-Message-ID: <11ed598e4440a89070f1a03789ef4401@bugs.uclibc.org>
+From: julien.boibessot at free.fr <julien.boibessot@free.fr>
+Date: Fri, 30 Nov 2007 17:24:05 +0100
+Subject: [Buildroot] svn commit: trunk/buildroot/package:  libosip2
+In-Reply-To: <1196423486.4635.19.camel@elrond.atmel.sweden>
+References: <20071130102837.4DBEBA6AB6@busybox.net>
+	<474FF6C3.8020107@promwad.com>
+	<1196423486.4635.19.camel@elrond.atmel.sweden>
+Message-ID: <1196439845.475039252ddcd@imp.free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+Quoting Ulf Samuelsson <ulf@atmel.com>:
 
-The following issue has been SUBMITTED. 
-====================================================================== 
-http://busybox.net/bugs/view.php?id=1622 
-====================================================================== 
-Reported By:                atle
-Assigned To:                buildroot
-====================================================================== 
-Project:                    buildroot
-Issue ID:                   1622
-Category:                   Other
-Reproducibility:            always
-Severity:                   minor
-Priority:                   normal
-Status:                     assigned
-====================================================================== 
-Date Submitted:             11-30-2007 07:28 PST
-Last Modified:              11-30-2007 07:28 PST
-====================================================================== 
-Summary:                    [PATCH] gcc 3.x/4.x symlinks to cc
-Description: 
-The 'cc' symlink to 'gcc' is wrongly created as $(REAL_GNU_TARGET_NAME)-cc
-for gcc 3.x (overwrites link to  $(REAL_GNU_TARGET_NAME)-gcc). Also the
-'cc' link should be created in $(STAGING_DIR)/$(REAL_GNU_TARGET_NAME)/bin/
-instead of $(STAGING_DIR)/usr/bin.
+> Mistake, trying to add Doom as well so that slipped through.
+> Doom fails to compile on ARM due to packing, but I might as well
+> add it since is should compile on AVR32.
+>
 
-The attached patch fixes this for both gcc 3.x and 4.x.
+If you are interested in trying Doom, I have a working Buildroot makefile that
+compiles successfully PrBoom (SDL Doom clone) on my ARM9 platform (i.MXL):
+http://armadeus.svn.sourceforge.net/viewvc/armadeus/trunk/buildroot/package/prboom/
 
-====================================================================== 
-
-Issue History 
-Date Modified   Username       Field                    Change               
-====================================================================== 
-11-30-07 07:28  atle           New Issue                                    
-11-30-07 07:28  atle           Status                   new => assigned     
-11-30-07 07:28  atle           Assigned To               => buildroot       
-11-30-07 07:28  atle           File Added: gcc-cc_links-fix.diff                
-   
-======================================================================
+Regards,
+Julien
