@@ -1,58 +1,30 @@
-From: Ivan Kuten <ivan.kuten@promwad.com>
-Date: Fri, 30 Nov 2007 13:40:51 +0200
-Subject: [Buildroot] svn commit: trunk/buildroot/package:  libosip2
-In-Reply-To: <20071130102837.4DBEBA6AB6@busybox.net>
-References: <20071130102837.4DBEBA6AB6@busybox.net>
-Message-ID: <474FF6C3.8020107@promwad.com>
+From: saravanan chanemouganandam <saravanan_sprt@hotmail.com>
+Date: Fri, 30 Nov 2007 16:42:27 +0530
+Subject: [Buildroot] kernel header 2.6.12
+Message-ID: <BAY131-W15D44FED3FDE6342B12D24E2710@phx.gbl>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-> 
-> 
-> Changeset:
-> Modified: trunk/buildroot/package/Config.in
-> ===================================================================
-> --- trunk/buildroot/package/Config.in	2007-11-30 09:12:09 UTC (rev 20593)
-> +++ trunk/buildroot/package/Config.in	2007-11-30 10:28:36 UTC (rev 20594)
-> @@ -153,6 +153,7 @@
->  source "package/l2tp/Config.in"
->  source "package/libcgi/Config.in"
->  source "package/libcgicc/Config.in"
-> +source "package/libosip2/Config.in"
->  source "package/libpcap/Config.in"
->  source "package/links/Config.in"
->  source "package/lrzsz/Config.in"
-> @@ -415,4 +416,14 @@
->  source "package/php/Config.in"
->  endif
->  
-> +menuconfig BR2_GAMES
-> +	bool "Games"
-> +	default y
-> +	help
-> +	  Support for games
-> +
-> +if BR2_GAMES
-> +source "package/lxdoom/Config.in"
-> +endif
-> +
->  endmenu
-> 
 
-Hi Ulf,
-
-Did you intentionally commit BR2_GAMES?
-You mentioned only libosip2 package in your commit log.
-
-Regards,
-Ivan
--- 
-
---------------------------------
-Embedded Linux engineer,
-Promwad Company: http://www.promwad.com/
-Homepage : http://www.ivankuten.com/
---------------------------------
+Hi all,
+ 
+I have downloaded the latest version of buildroot to build toolchain and small rootfs for my arm (armv5te) target pxa270. The board runs  linux 2.6.16 version and I want to replace the existing glibc rootfs with a small uclibc rootfs. 
+ 
+Buildroot's make menuconfig doesn't show kernel header version 2.6.12 to build toolchain. Can anybody tell me how can I choose kernel header version 2.6.12 in toolchain option to build correct toolchain? 
+ 
+will doing make DEFAULT_KERNEL_HEADERS=2.6.12 correcty build the toolchain arm-linux-uclibc-*?
+ 
+Thanks
+sara
+ 
+ 
+ 
+_________________________________________________________________
+Tried the new MSN Messenger? It?s cool! Download now.
+http://messenger.msn.com/Download/Default.aspx?mkt=en-in
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: http://busybox.net/lists/buildroot/attachments/20071130/85995c30/attachment.htm 
