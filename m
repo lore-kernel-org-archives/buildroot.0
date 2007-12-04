@@ -1,34 +1,43 @@
-From: ing. Federico Fuga <fuga@studiofuga.com>
-Date: Tue, 04 Dec 2007 10:43:26 +0100
-Subject: [Buildroot] Kernel not configuring [PowerPC 603e]
-In-Reply-To: <a2be1d440712040052q32bd98d2q2570a670cc770b2b@mail.gmail.com>
-References: <a2be1d440712040019x45aa8fbfp5079d3077e30abf8@mail.gmail.com>	<4ac2955e0712040031w3217e3b3s9733b271e246e671@mail.gmail.com>
-	<a2be1d440712040052q32bd98d2q2570a670cc770b2b@mail.gmail.com>
-Message-ID: <4755213E.7080800@studiofuga.com>
+From: Sean Parker <supinlick@yahoo.com>
+Date: Tue, 4 Dec 2007 07:31:20 -0800 (PST)
+Subject: [Buildroot] Anyone familiar with PLX PCI driver? Otherwise,
+	general driver question...
+In-Reply-To: <fhfqqj$ar3$1@ger.gmane.org>
+Message-ID: <585368.50101.qm@web51907.mail.re2.yahoo.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+Hello -
 
-Andrea Provasi ha scritto:
-> For all of them I'd like to build a Kernel and root filesystem and I 
-> wonder how to differentiate te
-> .config for the different kernels.
+  Does anyone have specific experience with loading a
+PLX-born driver into uCLinux? I'm trying to get it to load
+but it refuses and don't know the specific things to check
+as to why... (I do have insmod available and can execute it
+in the command line of the embedded system. it says "... no
+symbols ... (stripped?)...module not loaded")
 
-Hi Andrea,
+  Otherwise, any advice would be appreciated about the
+GENERAL differences, if any, between loading a module in
+uCLinux vs. "normal system linux" (i.e. RH) Any links/book
+references welcome. Differences such as gcc command line
+params, module directories, busybox issues, insmod/rmmod,
+etc.
 
-you can use make saveconfig and make BOARD=xxx getconfig to save and get 
-the configuration set (kernel/uclibc/busybox) into the local/$(BOARD) 
-subdirectory. I think you also have to specify the correct board name 
-into the right menuconfig entry.
+  My next step is to load try the Hello World example on
+this site, but I'm not only looking for specific task
+results but general knowledge as well.
 
-Regards,
+  Thanks
+    Sean Parker
 
-ing. Federico Fuga
 
->
-> Cheers
-> Andy
->
+
+
+
+      ____________________________________________________________________________________
+Get easy, one-click access to your favorites. 
+Make Yahoo! your homepage.
+http://www.yahoo.com/r/hs 
