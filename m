@@ -1,46 +1,51 @@
-From: Daniel Mack <daniel@caiaq.de>
-Date: Sun, 2 Dec 2007 23:31:10 +0100
-Subject: [Buildroot] Undefined instruction on PXA270
-In-Reply-To: <474556AE.8060209@studiofuga.com>
-References: <20071121233524.GB11890@buzzloop.caiaq.de>
-	<474556AE.8060209@studiofuga.com>
-Message-ID: <20071202223110.GA22365@buzzloop.caiaq.de>
+From: mahendra varman <mahendravarman15@gmail.com>
+Date: Tue, 4 Dec 2007 13:07:25 +0530
+Subject: [Buildroot] libgmp not found
+Message-ID: <4ac2955e0712032337x7631d0bcw43d36a4e67922503@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi,
+Hi
+Iam using buildroot latest snapshot to build a file system for powerpc
+74xx processor
+iam getting the following error*
 
-On Thu, Nov 22, 2007 at 11:15:10AM +0100, ing. Federico Fuga wrote:
-> > we've been trying to hunt a bug of our buildroot based rootfs here
-> > without success. The platform is based on a PXA270 (Compulab's EM-X270)
-> > and buildroot is a recent svn checkout.
-> >
-> > Out kernel 2.6.23 was successfully built with the toolchain set up by
-> > buildroot and can mount root filesystems provided by the vendor of the
-> > module. However, whenever trying to nfs-mount a rootfs built by BR2, we
-> > end up having messages like this:
-> >   
-> I am working on the same platform and board, emx270 from compulab, and
-> never found that problem. The only problem I had was with the
-> monotonic_syscall option you told, but never happened again.
+checking for working alloca.h... yes
+*>*checking for alloca... yes
+*>*checking for __gmpz_init in -lgmp... no
+*>*configure: error: libgmp not found
+*>*make: *** [/home/varma/buildroot/build_powerpc/mpfr-2.3.0/.configured]
+*>*Error 1
 
-Do you have the DOPIC config option set in uClibc?
-I debugged around for a while after the same thing happend again on a
-completely different build machine with another type of embedded system.
-All they have in common is that they're both based on a PXA270. It turned
-out that busybox actually dies on instructions built with (PLT) ending
-up with the messages I described. With the option unset, everything is
-just fine.
+*if i run   ./configure
+--with-gmp-lib=/home/varma/buildroot/toolchain_build_powerpc/gmp/lib/
+--with-gmp-include=/home/varma/buildroot/toolchain_build_powerpc/gmp/include/
+--with-gmp-build=/home/varma/buildroot/toolchain_buil
+under mpfr 2.3.0 iam getting these warnings
 
-However, this option is set by default so I really wonder why nobody
-else runs into this issue than me?
+*checking for alloca... yes
+checking for __gmpz_init in -lgmp... yes
+checking if gmp.h version and libgmp version are the same... (4.2.2/4.1.4) no
+configure: WARNING: 'gmp.h' and 'libgmp' seems to have different versions or
+configure: WARNING: we cannot run a program linked with GMP (if you cannot
+configure: WARNING: see the version numbers above).
+configure: WARNING: However since we can't use 'libtool' inside the configure,
+configure: WARNING: we can't be sure. See 'config.log' for details.
+configure: creating ./config.status
+config.status: creating Makefile
+config.status: creating tests/Makefile
+config.status: creating mparam.h
+config.status: executing depfiles commands
 
-Maybe anybody with more in-depth knowledge about what actually happens
-with PIC-only in conjunction with (PLT) assembly could enlighten me, I'd
-appreciate that :)
+**Help me to solve this issue
 
-Thanks,
-Daniel
+Thanks
+
+
+*
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: http://busybox.net/lists/buildroot/attachments/20071204/fdab238e/attachment.htm 
