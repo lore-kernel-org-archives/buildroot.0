@@ -1,37 +1,30 @@
-From: ing. Federico Fuga <fuga@studiofuga.com>
-Date: Tue, 04 Dec 2007 19:53:53 +0100
-Subject: [Buildroot] Undefined instruction on PXA270
-In-Reply-To: <20071202223110.GA22365@buzzloop.caiaq.de>
-References: <20071121233524.GB11890@buzzloop.caiaq.de>
-	<474556AE.8060209@studiofuga.com>
-	<20071202223110.GA22365@buzzloop.caiaq.de>
-Message-ID: <4755A241.9010902@studiofuga.com>
+From: Ivan Kuten <ivan.kuten@promwad.com>
+Date: Tue, 4 Dec 2007 21:55:34 +0200 (EET)
+Subject: [Buildroot] Anyone familiar with PLX PCI driver? Otherwise,
+ general driver question...
+In-Reply-To: <585368.50101.qm@web51907.mail.re2.yahoo.com>
+References: <585368.50101.qm@web51907.mail.re2.yahoo.com>
+Message-ID: <55534.127.0.0.1.1196798134.squirrel@localhost>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Daniel,
 
-Daniel Mack ha scritto:
-> Do you have the DOPIC config option set in uClibc?
->   
+You may want to try insmod/rmmod from module-init-tools package (not included in buildroot)
+and check if your module get loaded.
 
-yes, I have it:
-> grep DOPIC local/freescan/*
-local/freescan/uclibc-0.9.29.config:DOPIC=y
+Regards,
+Ivan
 
-> However, this option is set by default so I really wonder why nobody
-> else runs into this issue than me?
+
+> Hello -
 >
-> Maybe anybody with more in-depth knowledge about what actually happens
-> with PIC-only in conjunction with (PLT) assembly could enlighten me, I'd
-> appreciate that :)
->   
-
-I suggest to start from a very-basic configuration (default with only
-kernel patches for emx270) then see if that works. Check-out the latest
-busybox sources, and put the patches not yet included.
-
-Good luck :)
+>   Does anyone have specific experience with loading a
+> PLX-born driver into uCLinux? I'm trying to get it to load
+> but it refuses and don't know the specific things to check
+> as to why... (I do have insmod available and can execute it
+> in the command line of the embedded system. it says "... no
+> symbols ... (stripped?)...module not loaded")
+>
