@@ -1,51 +1,55 @@
-From: mahendra varman <mahendravarman15@gmail.com>
-Date: Tue, 4 Dec 2007 13:07:25 +0530
-Subject: [Buildroot] libgmp not found
-Message-ID: <4ac2955e0712032337x7631d0bcw43d36a4e67922503@mail.gmail.com>
+From: Andrea Provasi <pkrcel@gmail.com>
+Date: Tue, 4 Dec 2007 09:19:14 +0100
+Subject: [Buildroot] Kernel not configuring [PowerPC 603e]
+Message-ID: <a2be1d440712040019x45aa8fbfp5079d3077e30abf8@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi
-Iam using buildroot latest snapshot to build a file system for powerpc
-74xx processor
-iam getting the following error*
+Hi all,
+   I am trying to build a rootfs and a kernel with buildroot for a Lite5200
+evaluation board from Freescale. The board has an MPC5200B powerpc (it's a
+603e core)
 
-checking for working alloca.h... yes
-*>*checking for alloca... yes
-*>*checking for __gmpz_init in -lgmp... no
-*>*configure: error: libgmp not found
-*>*make: *** [/home/varma/buildroot/build_powerpc/mpfr-2.3.0/.configured]
-*>*Error 1
+I made buildroot menuconfig changing the config to "Advanced Configuration",
+vmlinux binary image in uImage, and rootfs type ext2 gzip compressed. All
+the rest is as per defconfig (I think)
 
-*if i run   ./configure
---with-gmp-lib=/home/varma/buildroot/toolchain_build_powerpc/gmp/lib/
---with-gmp-include=/home/varma/buildroot/toolchain_build_powerpc/gmp/include/
---with-gmp-build=/home/varma/buildroot/toolchain_buil
-under mpfr 2.3.0 iam getting these warnings
+All build goes fine through toolchain and uClib.
 
-*checking for alloca... yes
-checking for __gmpz_init in -lgmp... yes
-checking if gmp.h version and libgmp version are the same... (4.2.2/4.1.4) no
-configure: WARNING: 'gmp.h' and 'libgmp' seems to have different versions or
-configure: WARNING: we cannot run a program linked with GMP (if you cannot
-configure: WARNING: see the version numbers above).
-configure: WARNING: However since we can't use 'libtool' inside the configure,
-configure: WARNING: we can't be sure. See 'config.log' for details.
-configure: creating ./config.status
-config.status: creating Makefile
-config.status: creating tests/Makefile
-config.status: creating mparam.h
-config.status: executing depfiles commands
+ When it is time to configure the kernel I get the following error:
 
-**Help me to solve this issue
+==========================================================
+You should create a .config for your kernel
+and install it as /-linux-2.6.21.config
 
-Thanks
+cp -dpf /-linux-2.6.21.config/opt/buildroot/project_build_powerpc/uclibc/linux-
+2.6.21/.config
+cp: impossibile fare stat di `/-linux-2.6.21.config': No such file or
+directory
+make: *** [/opt/buildroot/project_build_powerpc/uclibc/linux-2.6.21/.configured]
+Error 1
+===========================================================
 
+this is quite expceted being the .config origin name wrong? (I may ask :-))
 
-*
+Looking into
+the Makefile.in.advanced in the kernel package subtree,
+/opt/buildroot/target/linux
+seem that the calling make process is failing to export the variables:
+
+BR2_BOARD_PATH and BR2_BOARD_NAME
+
+I actuallyam NOT very keen in browsing the makefiles...I can't tell if it's
+ME that I'm missing something or is anywhere anything I should set in the
+menuconfig to define the two envvars?
+
+Many thanks in advance for any help
+
+Regads
+Andy
 -------------- next part --------------
 An HTML attachment was scrubbed...
-URL: http://busybox.net/lists/buildroot/attachments/20071204/fdab238e/attachment.htm 
+URL: http://busybox.net/lists/buildroot/attachments/20071204/1a912394/attachment.htm 
