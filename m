@@ -1,7 +1,7 @@
 From: Hebbar <gururajakr@sanyo.co.in>
-Date: Tue, 4 Dec 2007 20:55:56 -0800 (PST)
-Subject: [Buildroot]  linux fusion clean error due to extra )
-Message-ID: <14165287.post@talk.nabble.com>
+Date: Tue, 4 Dec 2007 21:01:37 -0800 (PST)
+Subject: [Buildroot]  version bumps needed for few packages
+Message-ID: <14165382.post@talk.nabble.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -9,27 +9,25 @@ Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
 
-Hi,
+Hi all,
 
-Linux fusion clean fails due to extra ) 
+Below are the latest version that i tried and which are working fine at my
+end on arm926ejs eabi toolchain
 
-rm -f
-/home/guru/project/original/bldrt/buildroot/project_build_arm/uclibc/root/etc/udev/rules.d/40-fusion.rules)
-/bin/sh: -c: line 0: syntax error near unexpected token `)'
-/bin/sh: -c: line 0: `rm -f
-/home/guru/project/original/bldrt/buildroot/project_build_arm/uclibc/root/etc/udev/rules.d/40-fusion.rules)'
-make: *** [linux-fusion-clean] Error 2
+udev
+UDEV_VERSION:=117
+UDEV_VOLUME_ID_AGE:=81
 
-fusion.mk
+usbutils
+USBUTILS_VERSION:=0.73
 
-linux-fusion-clean:
-	rm -f $(LINUX_FUSION_DIR)/$(LINUX_FUSION))
-                                                                          ^
-                                                                          |
-Please remove the same.
+Also just a small request. is it possible to add/enable ts_test util inside
+ts_lib package
+             cp -dpf $(STAGING_DIR)/usr/bin/ts_test $(TARGET_DIR)/usr/bin/
+	-$(STRIPCMD) $(STRIP_STRIP_UNNEEDED) $(TARGET_DIR)/usr/bin/ts_test
 
-regards
+Regards
 Gururaja
 -- 
-View this message in context: http://www.nabble.com/linux-fusion-clean-error-due-to-extra-%29-tf4947459.html#a14165287
+View this message in context: http://www.nabble.com/version-bumps-needed-for-few-packages-tf4947498.html#a14165382
 Sent from the BuildRoot mailing list archive at Nabble.com.
