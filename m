@@ -1,10 +1,7 @@
-From: Ivan Kuten <ivan.kuten@promwad.com>
-Date: Tue, 4 Dec 2007 21:55:34 +0200 (EET)
-Subject: [Buildroot] Anyone familiar with PLX PCI driver? Otherwise,
- general driver question...
-In-Reply-To: <585368.50101.qm@web51907.mail.re2.yahoo.com>
-References: <585368.50101.qm@web51907.mail.re2.yahoo.com>
-Message-ID: <55534.127.0.0.1.1196798134.squirrel@localhost>
+From: Hebbar <gururajakr@sanyo.co.in>
+Date: Tue, 4 Dec 2007 20:55:56 -0800 (PST)
+Subject: [Buildroot]  linux fusion clean error due to extra )
+Message-ID: <14165287.post@talk.nabble.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -12,19 +9,27 @@ Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
 
-You may want to try insmod/rmmod from module-init-tools package (not included in buildroot)
-and check if your module get loaded.
+Hi,
 
-Regards,
-Ivan
+Linux fusion clean fails due to extra ) 
 
+rm -f
+/home/guru/project/original/bldrt/buildroot/project_build_arm/uclibc/root/etc/udev/rules.d/40-fusion.rules)
+/bin/sh: -c: line 0: syntax error near unexpected token `)'
+/bin/sh: -c: line 0: `rm -f
+/home/guru/project/original/bldrt/buildroot/project_build_arm/uclibc/root/etc/udev/rules.d/40-fusion.rules)'
+make: *** [linux-fusion-clean] Error 2
 
-> Hello -
->
->   Does anyone have specific experience with loading a
-> PLX-born driver into uCLinux? I'm trying to get it to load
-> but it refuses and don't know the specific things to check
-> as to why... (I do have insmod available and can execute it
-> in the command line of the embedded system. it says "... no
-> symbols ... (stripped?)...module not loaded")
->
+fusion.mk
+
+linux-fusion-clean:
+	rm -f $(LINUX_FUSION_DIR)/$(LINUX_FUSION))
+                                                                          ^
+                                                                          |
+Please remove the same.
+
+regards
+Gururaja
+-- 
+View this message in context: http://www.nabble.com/linux-fusion-clean-error-due-to-extra-%29-tf4947459.html#a14165287
+Sent from the BuildRoot mailing list archive at Nabble.com.
