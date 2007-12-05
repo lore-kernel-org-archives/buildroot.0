@@ -1,83 +1,160 @@
-From: Ulf Samuelsson <ulf@atmel.com>
-Date: Wed, 5 Dec 2007 17:51:48 +0100
+From: Sean Parker <supinlick@yahoo.com>
+Date: Wed, 5 Dec 2007 10:52:27 -0800 (PST)
 Subject: [Buildroot] Placement of custom module-building in
 	buildrootprocedure
-References: <996871.76104.qm@web51907.mail.re2.yahoo.com>
-Message-ID: <000201c83769$2c903080$6e03420a@atmel.com>
+In-Reply-To: <000201c83769$2c903080$6e03420a@atmel.com>
+Message-ID: <926515.52343.qm@web51912.mail.re2.yahoo.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-> 
-> Hello -
-> 
->  I've searched the archives for this last year and
-> couldn't find an answer so I appeal to your good humor in
-> guiding me... I'm using buildroot/busybox 1.01/linux 2.6.18
-> ported for MIPS provided by PMC-Sierra.
-> 
->  I'm trying to add another module (dev driver
-> specifically) to the build. Do I need to specifically add
-> my module into a config file under the linux tree, or is it
-> good enough to call the "make M=$(MYSRCDIR) -C $(KERNELDIR)
-> modules" on my own, within my own Makefile, (i.e. along
-> with the build of my applications/libraries) that is
-> included as a separate package in the buildroot process?
-> 
-You should develop your linux driver separate from buildroot,
-and then generate a patch.
-By using the advanced linux configuration you can supply
-a path to the patch, and when linux is decompressed,
-your patch will be applied to the linux source tree.
+Ulf - 
 
-By giving the command:
+  Thanks so much for your reply.
 
-$ make configured
+  It's difficult moving from the application-development
+world
+to the embedded world where kernel issues become prevalant
+- 
+please bear with my ignorance...
 
-you will stop the build before anything is compiled.
-Go into the linux source directory in $(PROJECT_BUILD_DIR) and do 
+> You should develop your linux driver separate from
+>  buildroot, and then generate a patch.
 
-$ make ARCH=mips xconfig.
+I've started by moving my code to the linux tree, say
+under:
+ 
+$(KDIR)/drivers/mymod
+   |
+   + mymod.c
+   |
+   + Makefile <-  includes obj-m+=mymod.o
 
-Save the configuration and ensure that the .config is available
-somewhere in the buildroot tree and that LINUX26_KCONFIG 
-is the path to the file.
+Of course then I do have to edit $(KDIR)/drivers/Makefile 
+to include "mymod/" as a subdir
 
-One way of doing this automatically is to do
+> By using the advanced linux configuration you can supply
+> a path to the patch, and when linux is decompressed,
+> your patch will be applied to the linux source tree.
 
-make saveconfig
+How do I make a patch to the linux kernel? (I thought the
+patch
+process needed some reference tree in order to know "what's
+different")
 
-This will store your configuration files under "local/<project>".
+However, I do see how a patch is the best solution to 
+leaving the distro-linux package untouched. At what point
+in the
+buildroot process/structure do I indicate I have a patch?
+I do have other application code I'm including in my
+project
+as a separate package to the buildroot structure - can I
+put the 
+patch reference in my <my_proj>.mk file? (the one placed
+under
+buildroot/packages/<my_proj>)
 
->  I presume perhaps I can't call 'modules' on my own
-> [during the kernel build] since it needs to be called
-> following all the other modules being built in the linux
-> kernel build - is this correct? If this is true, what't the
-> authoratative buildroot file I add reference to my module
-> so it gets built as the last module?
-> 
->  My module need not start-up at boot, I was going to
-> insmod-it in the rc.local script - is this conventional?
-> 
->  Thanks
->    Sean Parker
-> 
-> P.S. Does anyone know of a resource I could look at to
-> learn the fundamentals of how the Linux build runs,
-> especially the use of the "obj-y obj-m" stuff? I'm a
-> relative Make novice, and would like to understand that
-> better.
-> 
-> 
-> 
-> 
-> 
-> God Bless 
->    Sean Parker 
-> 
+> By giving the command:
+>
+>$ make configured
+>
+> you will stop the build before anything is compiled.
+> Go into the linux source directory in
+$(PROJECT_BUILD_DIR)
+> and do 
+>
+> $ make ARCH=mips xconfig.
+>
+>Save the configuration and ensure that the .config is
+> available somewhere in the buildroot tree and that 
+> LINUX26_KCONFIG is the path to the file.
+
+I'm just leaving $(KDIR)/.config alone for now - if I make 
+mymod "always" I shouldn't need to mees with this should I?
+
+Otherwise, I'm saving the various buildroot/busybox config
+files
+off in my own location, and overwriting the vendor versions
+when I do a clean build, that way I preserve my own copies
+while
+being able to reinstall the vender version cleanly also
+(without the
+extra make menuconfig step every time). 
+
+> One way of doing this automatically is to do
+>   make saveconfig
+>
+> This will store your configuration files under
+"local/<project>".
+>
+
+How does it know, unless I tell it to save it somewhere
+else? It sounds like
+you're saying it'll know about my project just by doing the
+
+make xconfig, but I don't understand how it gets in there
+without
+me editing a config file otherwise...
+
+<snip my stuff>
+
+> Best Regards
+> Ulf Samuelsson
+
+I guess the main confusion here [with me] is the
+distinction between 
+"kernel-" vs. "external-" modules, and the orthogonal ideas
+of
+"cross-compiling" and "adding modules to a local running
+kernel."
+
+  for example:
+
+            X-compile             pre-built
+                                   kernel
+         -----------------------------------------
+         |                     |
+ kernel  |  use obj-y          | compile a module
+  mod    |  in kbuild file     | and re-make linux 
+         |  within buildroot   | kernel
+         |  context            |
+         |                     |
+         -----------------------------------------
+         |                     |
+ external|  as buildroot pkg   |
+  mod    |  refer to code      |
+         |  outside of context | compile a module and
+         |  of linux tree ??? -| do insmod straight-away
+         |  or do a patch to   | to load it for this 
+         |  hack it in         | session only
+         |                     |
+         -----------------------------------------
+
+Does this make sense? Please correct my understanding...
+
+The documentation I suppose takes for granted that these
+are clearly
+defined contexts in anyone's discussion of the issues - and
+thus the need
+for newbies to constantly ask the same questions - i.e.
+"how do I add a module?"
+
+Thanks for your time and effort
+   Sean Parker
 
 
-Best Regards
-Ulf Samuelsson
+
+
+
+God Bless 
+    Sean Parker 
+
+
+
+
+
+      ____________________________________________________________________________________
+Looking for last minute shopping deals?  
+Find them fast with Yahoo! Search.  http://tools.search.yahoo.com/newsearch/category.php?category=shopping
