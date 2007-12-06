@@ -1,8 +1,8 @@
 From: bugs at busybox.net <bugs@busybox.net>
-Date: Thu, 6 Dec 2007 12:16:36 -0800
+Date: Thu, 6 Dec 2007 12:18:49 -0800
 Subject: [Buildroot] [buildroot 0001639]: buildroot fails on avr32 compiling
 	libs for target
-Message-ID: <ec3aad7e325b3d663a72b1652e4643ed@bugs.uclibc.org>
+Message-ID: <b10918d1e338e83042a6b958bb2e815d@bugs.uclibc.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -10,7 +10,7 @@ Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
 
-The following issue has been SUBMITTED. 
+A NOTE has been added to this issue. 
 ====================================================================== 
 http://busybox.net/bugs/view.php?id=1639 
 ====================================================================== 
@@ -26,7 +26,7 @@ Priority:                   normal
 Status:                     assigned
 ====================================================================== 
 Date Submitted:             12-06-2007 12:16 PST
-Last Modified:              12-06-2007 12:16 PST
+Last Modified:              12-06-2007 12:18 PST
 ====================================================================== 
 Summary:                    buildroot fails on avr32 compiling libs for target
 Description: 
@@ -190,6 +190,11 @@ time
 
 ====================================================================== 
 
+---------------------------------------------------------------------- 
+ dl9pf - 12-06-07 12:18  
+---------------------------------------------------------------------- 
+used a svn checkout, btw 
+
 Issue History 
 Date Modified   Username       Field                    Change               
 ====================================================================== 
@@ -197,4 +202,6 @@ Date Modified   Username       Field                    Change
 12-06-07 12:16  dl9pf          Status                   new => assigned     
 12-06-07 12:16  dl9pf          Assigned To               => buildroot       
 12-06-07 12:16  dl9pf          File Added: config_buildroot                    
+12-06-07 12:17  dl9pf          Issue Monitored: dl9pf                       
+12-06-07 12:18  dl9pf          Note Added: 0003039                          
 ======================================================================
