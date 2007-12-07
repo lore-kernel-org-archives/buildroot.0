@@ -1,8 +1,8 @@
 From: bugs at busybox.net <bugs@busybox.net>
-Date: Thu, 6 Dec 2007 17:29:16 -0800
+Date: Thu, 6 Dec 2007 17:36:52 -0800
 Subject: [Buildroot] [buildroot 0001639]: buildroot fails on avr32 compiling
 	libs for target
-Message-ID: <c042a53e1efaf2c5ff66bd827bfcc7c5@bugs.uclibc.org>
+Message-ID: <5d1c9d280cbacda1448efce1d9914868@bugs.uclibc.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -26,7 +26,7 @@ Priority:                   normal
 Status:                     assigned
 ====================================================================== 
 Date Submitted:             12-06-2007 12:16 PST
-Last Modified:              12-06-2007 17:29 PST
+Last Modified:              12-06-2007 17:36 PST
 ====================================================================== 
 Summary:                    buildroot fails on avr32 compiling libs for target
 Description: 
@@ -217,6 +217,23 @@ possible quick & ugly fix ?
  else # not gcc-4.x
  TARGET_SOFT_FLOAT:=-msoft-float 
 
+---------------------------------------------------------------------- 
+ dl9pf - 12-06-07 17:36  
+---------------------------------------------------------------------- 
+toolchain_build_avr32_nofpu/gcc-4.2.1/libstdc++-v3/src/functexcept.cc
+
+quick hack:
+
+#if 0
+#ifdef _GLIBCXX_USE_NLS
+#include <libintl.h>
+#define _(msgid)   gettext (msgid)
+#else
+#define _(msgid)   (msgid)
+#endif
+#endif //0
+#define _(msgid)   (msgid) 
+
 Issue History 
 Date Modified   Username       Field                    Change               
 ====================================================================== 
@@ -228,4 +245,5 @@ Date Modified   Username       Field                    Change
 12-06-07 12:18  dl9pf          Note Added: 0003039                          
 12-06-07 12:20  dl9pf          Note Added: 0003044                          
 12-06-07 17:29  dl9pf          Note Added: 0003054                          
+12-06-07 17:36  dl9pf          Note Added: 0003059                          
 ======================================================================
