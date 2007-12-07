@@ -1,52 +1,29 @@
-From: bugs at busybox.net <bugs@busybox.net>
-Date: Thu, 6 Dec 2007 17:53:05 -0800
-Subject: [Buildroot] [buildroot 0001649]: avr32 & netplug-1.2.9
-Message-ID: <a3a48162a6dca75f2391cf0aaee20171@bugs.uclibc.org>
+From: Erik Andersen <andersen@codepoet.org>
+Date: Thu, 6 Dec 2007 20:00:31 -0700
+Subject: [Buildroot] svn write access
+In-Reply-To: <d6cda7730712042236r2dc72cdes911eb753935f2abe@mail.gmail.com>
+References: <d6cda7730712042236r2dc72cdes911eb753935f2abe@mail.gmail.com>
+Message-ID: <20071207030031.GA1309@codepoet.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+On Wed Dec 05, 2007 at 04:36:59AM -0200, Thiago A. Corr?a wrote:
+> Hi,
+> 
+>     Sorry if this is a bit out of line, but is there a policy on how
+> to get svn write access? Should I just kindly ask for it? Should I
+> just keep sending patches and wait for an invitation if they are ok? I
+> see myself working quite a lot with buildroot lately and there is
+> always some things that need fixing or tweaking to get things working,
+> so being able to commit those changes would be really great.
 
-The following issue has been SUBMITTED. 
-====================================================================== 
-http://busybox.net/bugs/view.php?id=1649 
-====================================================================== 
-Reported By:                dl9pf
-Assigned To:                buildroot
-====================================================================== 
-Project:                    buildroot
-Issue ID:                   1649
-Category:                   Architecture Specific
-Reproducibility:            always
-Severity:                   minor
-Priority:                   normal
-Status:                     assigned
-====================================================================== 
-Date Submitted:             12-06-2007 17:53 PST
-Last Modified:              12-06-2007 17:53 PST
-====================================================================== 
-Summary:                    avr32 & netplug-1.2.9
-Description: 
-Fix for netplug-1.2.9 building with avr32
+http://buildroot.uclibc.org/developer.html
 
-netlink.c  line 287:
+ -Erik
 
-change:
-int addr_len
-
-to:
-socklen_t addr_len
-
-
-
-====================================================================== 
-
-Issue History 
-Date Modified   Username       Field                    Change               
-====================================================================== 
-12-06-07 17:53  dl9pf          New Issue                                    
-12-06-07 17:53  dl9pf          Status                   new => assigned     
-12-06-07 17:53  dl9pf          Assigned To               => buildroot       
-======================================================================
+--
+Erik B. Andersen             http://codepoet-consulting.com/
+--This message was written using 73% post-consumer electrons--
