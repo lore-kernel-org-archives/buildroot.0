@@ -1,8 +1,8 @@
 From: bugs at busybox.net <bugs@busybox.net>
-Date: Sat, 8 Dec 2007 07:23:24 -0800
-Subject: [Buildroot] [buildroot 0001659]: LSOF don't download from
-	lsof.itap.purdue.edu
-Message-ID: <c0cc7cf799c5ff098eff24d55e3c7e5e@bugs.uclibc.org>
+Date: Sat, 8 Dec 2007 08:09:45 -0800
+Subject: [Buildroot] [buildroot 0001664]: error compiling in debian (it says
+	makeinfo is missing even though it is installed and in the $PATH)
+Message-ID: <c1730de53c2204b07df078adac69450c@bugs.uclibc.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -12,55 +12,44 @@ To: buildroot@busybox.net
 
 The following issue has been SUBMITTED. 
 ====================================================================== 
-http://busybox.net/bugs/view.php?id=1659 
+http://busybox.net/bugs/view.php?id=1664 
 ====================================================================== 
-Reported By:                sushisan
+Reported By:                micklweiss
 Assigned To:                buildroot
 ====================================================================== 
 Project:                    buildroot
-Issue ID:                   1659
+Issue ID:                   1664
 Category:                   Architecture Specific
 Reproducibility:            always
-Severity:                   minor
+Severity:                   major
 Priority:                   normal
 Status:                     assigned
 ====================================================================== 
-Date Submitted:             12-08-2007 07:23 PST
-Last Modified:              12-08-2007 07:23 PST
+Date Submitted:             12-08-2007 08:09 PST
+Last Modified:              12-08-2007 08:09 PST
 ====================================================================== 
-Summary:                    LSOF don't download from lsof.itap.purdue.edu
+Summary:                    error compiling in debian (it says makeinfo is
+missing even though it is installed and in the $PATH)
 Description: 
-ftp lsof.itap.purdue.edu respond:
+I get this: http://bugs.uclibc.org/bug_view_advanced_page.php?bug_id=1238
+-- there is no option like in bugzilla here where i can request to reopen
+an issue -- so I'm re-creating it here.
 
-Connected to lsof.itap.purdue.edu (128.210.7.20).
-530-The name server used by lsof.itap.purdue.edu cannot convert your
-network
-530-address to a host name and back to your network address.  Therefore,
-530-lsof.itap.purdue.edu will not accept the connection.  Consult with
-your
-530-DNS provider to determine why DNS lookups do not match correctly for
-530-your network address and host name.
-530-
-530-Even without having proper DNS reverse lookup, you may be able to get
-530-lsof from one of these mirror sites:
-530-
-530- ftp://ftp.cerias.purdue.edu/pub/tools/unix/sysutils/lsof
-530- ftp://ftp.tau.ac.il/pub/unix/admin
-530- ftp://ftp.cert.dfn.de/pub/tools/admin/lsof
-530- ftp://ftp.fu-berlin.de/pub/unix/tools/lsof
-530- ftp://ftp.kaizo.org/pub/lsof/
-530- ftp://ftp.tu-darmstadt.de/pub/sysadmin/lsof
-530- ftp://ftp.tux.org/pub/sites/vic.cc.purdue.edu/tools/unix/lsof
-530- ftp://gd.tuwien.ac.at/utils/admin-tools/lsof
-530- ftp://sunsite.ualberta.ca/pub/Mirror/lsof
-530- ftp://the.wiretapped.net/pub/security/host-security/lsof/
+it was closed but I doubt that the person who closed it was using Ubuntu.
+I say this since I can reproduce this persons problem on Debian (yes I
+have texinfo/makeinfo installed).
+
+I'm using:
+
+$ makeinfo --version
+makeinfo (GNU texinfo) 4.11
 
 ====================================================================== 
 
 Issue History 
 Date Modified   Username       Field                    Change               
 ====================================================================== 
-12-08-07 07:23  sushisan       New Issue                                    
-12-08-07 07:23  sushisan       Status                   new => assigned     
-12-08-07 07:23  sushisan       Assigned To               => buildroot       
+12-08-07 08:09  micklweiss     New Issue                                    
+12-08-07 08:09  micklweiss     Status                   new => assigned     
+12-08-07 08:09  micklweiss     Assigned To               => buildroot       
 ======================================================================
