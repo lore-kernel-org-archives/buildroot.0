@@ -1,8 +1,7 @@
 From: bugs at busybox.net <bugs@busybox.net>
-Date: Sat, 8 Dec 2007 19:47:13 -0800
-Subject: [Buildroot] [buildroot 0001679]: LUA don't appears like a disabled
-	option
-Message-ID: <881ef042dd87a69a9d94877862bd7fd8@bugs.uclibc.org>
+Date: Sun, 9 Dec 2007 09:26:06 -0800
+Subject: [Buildroot] [buildroot 0001684]: New haserl version
+Message-ID: <506858eab563684a2507acb5f30f2477@bugs.uclibc.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -12,35 +11,32 @@ To: buildroot@busybox.net
 
 The following issue has been SUBMITTED. 
 ====================================================================== 
-http://busybox.net/bugs/view.php?id=1679 
+http://busybox.net/bugs/view.php?id=1684 
 ====================================================================== 
 Reported By:                sushisan
 Assigned To:                buildroot
 ====================================================================== 
 Project:                    buildroot
-Issue ID:                   1679
-Category:                   Architecture Specific
+Issue ID:                   1684
+Category:                   New Features
 Reproducibility:            always
-Severity:                   trivial
+Severity:                   minor
 Priority:                   normal
 Status:                     assigned
 ====================================================================== 
-Date Submitted:             12-08-2007 19:47 PST
-Last Modified:              12-08-2007 19:47 PST
+Date Submitted:             12-09-2007 09:26 PST
+Last Modified:              12-09-2007 09:26 PST
 ====================================================================== 
-Summary:                    LUA don't appears like a disabled option
+Summary:                    New haserl version
 Description: 
-If ncurses AND readline are setted lua don't appear like an option
-disabled, is impossible to know this package exist if the depends are no
-setted ( comment "lua            - disabled (requires readline and
-ncurses)" don't are printed)
+New 0.9.21 version
 ====================================================================== 
 
 Issue History 
 Date Modified   Username       Field                    Change               
 ====================================================================== 
-12-08-07 19:47  sushisan       New Issue                                    
-12-08-07 19:47  sushisan       Status                   new => assigned     
-12-08-07 19:47  sushisan       Assigned To               => buildroot       
-12-08-07 19:47  sushisan       File Added: br2-lua.patch                    
+12-09-07 09:26  sushisan       New Issue                                    
+12-09-07 09:26  sushisan       Status                   new => assigned     
+12-09-07 09:26  sushisan       Assigned To               => buildroot       
+12-09-07 09:26  sushisan       File Added: br2-haserl.patch                    
 ======================================================================
