@@ -1,74 +1,76 @@
-From: bugs at busybox.net <bugs@busybox.net>
-Date: Mon, 10 Dec 2007 22:20:36 -0800
-Subject: [Buildroot] [buildroot 0001694]: Missing argument in makefile
-Message-ID: <7946fa08a0318b3cc17ceab103cb24b9@busybox.net>
+From: Hamish Moffatt <hamish@cloud.net.au>
+Date: Tue, 11 Dec 2007 17:28:33 +1100
+Subject: [Buildroot] [buildroot 0001568]: "make BOARD=xyz menuconfig"
+	/	oldconfig etc does not work
+In-Reply-To: <b55faafb87f5cc5a7566708c821671b2@busybox.net>
+References: <b55faafb87f5cc5a7566708c821671b2@busybox.net>
+Message-ID: <20071211062833.GA8833@cloud.net.au>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+On Tue, Nov 27, 2007 at 01:28:49PM -0800, bugs at busybox.net wrote:
+> Description: 
+> buildroot allows you to do "make BOARD=xyz world" to compile using the
+> configuration file in local/xyz/xyz.config, but you can't call menuconfig,
+> oldconfig etc in this way.
+> 
+> The problem is that the name of the configuration file isn't being passed
+> to the kconfig tool (package/config/conf). kconfig uses $BUILDROOT_CONFIG,
+> so all that is needed is to set that environment variable.
+> 
+> Patch attached fixes this so that "make BOARD=xyz oldconfig" works.
+> ====================================================================== 
+> 
+> ---------------------------------------------------------------------- 
+>  hmoffatt - 11-01-07 18:02  
+> ---------------------------------------------------------------------- 
+> "make BOARD=xyz world" also fails due to a few more hard-coded references
+> to .config. br2-board-config2.diff fixes those. 
+> 
+> ---------------------------------------------------------------------- 
+>  UlfSamuelsson - 11-27-07 13:28  
+> ---------------------------------------------------------------------- 
+> Once you have a ".config" file, you can store your board configuration by:
+> 
+> $ make saveconfig
+> 
+> This will store the .config for buildroot, linux, uclibc and busybox.
+> If the project name is "xyz", then they will be stored in the "local/xyz"
+> 
+> 
+> You can retrieve your configuration by:
+> 
+> $ make BOARD=xyz getconfig
+> 
+> It is wrong to make the things depend on BUILDROOT_CONFIG.
+> They should depend on ".config" 
 
-A NOTE has been added to this issue. 
-====================================================================== 
-http://busybox.net/bugs/view.php?id=1694 
-====================================================================== 
-Reported By:                martinmeba
-Assigned To:                buildroot
-====================================================================== 
-Project:                    buildroot
-Issue ID:                   1694
-Category:                   Architecture Specific
-Reproducibility:            always
-Severity:                   minor
-Priority:                   normal
-Status:                     assigned
-====================================================================== 
-Date Submitted:             12-10-2007 20:58 PST
-Last Modified:              12-10-2007 22:20 PST
-====================================================================== 
-Summary:                    Missing argument in makefile
-Description: 
-Error when executing make
-SVN revision for buildroot: 20636
+That's ok if you want to use getconfig and saveconfig all the time. I
+would rather not have any .config but always use "make BOARD=xyz ...".
 
-modinfo.c: In function ?main?:
-modinfo.c:338: warning: ?infosize? may be used uninitialized in this
-function
-/usr/bin/gcc  -g -O2 -Wunused -Wall   -o modinfo  modinfo.o zlibsupport.o 
+IMHO there is too much risk of forgetting to save your configuration. 
+You could "make menuconfig" then "make getconfig" and forget to
+saveconfig in between. I already hate it that you have to 
+"make busybox-update" and "make linux-update" and "make uclibc-update" 
+after reconfiguring those - they should just use my configuration files 
+as specified by BR2_PACKAGE_BUSYBOX_CONFIG etc. 
 
-/usr/bin/gcc  -g -O2 -Wunused -Wall   -o insmod.static -static insmod.o  
-make[1]: Leaving directory
-`/home/martin/buildroot/toolchain_build_arm_nofpu/module-init-tools-3.2.2'
-touch -c
-/home/martin/buildroot/toolchain_build_arm_nofpu/module-init-tools-3.2.2/depmod
-/usr/bin/install -D
-/home/martin/buildroot/toolchain_build_arm_nofpu/module-init-tools-3.2.2/depmod
-/home/martin/buildroot/build_arm/staging_dir/bin/arm-linux-depmod26
-cp -dpf 
-/home/martin/buildroot/project_build_arm/uclibc/linux-2.6.22.10/.config
-cp: missing destination file operand after
-`/home/martin/buildroot/project_build_arm/uclibc/linux-2.6.22.10/.config'
-Try `cp --help' for more information.
-make: ***
-[/home/martin/buildroot/project_build_arm/uclibc/linux-2.6.22.10/.configured]
-Error 1
+This can be done by either modifying the kconf tools to use an
+environment variable, or perhaps by symlinking the relevant files to
+.config instead of copying them (assuming kconf's save is
+symlink-friendly).
 
-I followed the instructions to set the system up.  Is there no second
-argument because I didn't configure something correctly or is this a bug?
-====================================================================== 
+I mean no offense when I ask, is project support well-supported by the
+buildroot community over all? Is it your work originally Ulf with little
+support from the others? Some things like the above don't work as I
+expect them, so it feels a bit rough. In the case of my patch in this
+bug report, you could apply it and make me happy without any detriment
+to the way you work (with getconfig/saveconfig).
 
----------------------------------------------------------------------- 
- hmoffatt - 12-10-07 22:20  
----------------------------------------------------------------------- 
-It's because you failed to set BR2_PACKAGE_LINUX_KCONFIG to the location of
-your kernel configuration file. 
-
-Issue History 
-Date Modified   Username       Field                    Change               
-====================================================================== 
-12-10-07 20:58  martinmeba     New Issue                                    
-12-10-07 20:58  martinmeba     Status                   new => assigned     
-12-10-07 20:58  martinmeba     Assigned To               => buildroot       
-12-10-07 22:20  hmoffatt       Note Added: 0003074                          
-======================================================================
+Regards
+Hamish
+-- 
+Hamish Moffatt VK3SB <hamish@debian.org> <hamish@cloud.net.au>
