@@ -1,7 +1,7 @@
 From: bugs at busybox.net <bugs@busybox.net>
-Date: Mon, 10 Dec 2007 20:58:48 -0800
+Date: Mon, 10 Dec 2007 22:20:36 -0800
 Subject: [Buildroot] [buildroot 0001694]: Missing argument in makefile
-Message-ID: <cd1070e1b0fe5f3b70c3b874444b5ea5@busybox.net>
+Message-ID: <7946fa08a0318b3cc17ceab103cb24b9@busybox.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -9,7 +9,7 @@ Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
 
-The following issue has been SUBMITTED. 
+A NOTE has been added to this issue. 
 ====================================================================== 
 http://busybox.net/bugs/view.php?id=1694 
 ====================================================================== 
@@ -25,7 +25,7 @@ Priority:                   normal
 Status:                     assigned
 ====================================================================== 
 Date Submitted:             12-10-2007 20:58 PST
-Last Modified:              12-10-2007 20:58 PST
+Last Modified:              12-10-2007 22:20 PST
 ====================================================================== 
 Summary:                    Missing argument in makefile
 Description: 
@@ -58,10 +58,17 @@ I followed the instructions to set the system up.  Is there no second
 argument because I didn't configure something correctly or is this a bug?
 ====================================================================== 
 
+---------------------------------------------------------------------- 
+ hmoffatt - 12-10-07 22:20  
+---------------------------------------------------------------------- 
+It's because you failed to set BR2_PACKAGE_LINUX_KCONFIG to the location of
+your kernel configuration file. 
+
 Issue History 
 Date Modified   Username       Field                    Change               
 ====================================================================== 
 12-10-07 20:58  martinmeba     New Issue                                    
 12-10-07 20:58  martinmeba     Status                   new => assigned     
 12-10-07 20:58  martinmeba     Assigned To               => buildroot       
+12-10-07 22:20  hmoffatt       Note Added: 0003074                          
 ======================================================================
