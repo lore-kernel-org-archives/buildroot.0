@@ -1,66 +1,52 @@
-From: bugs at busybox.net <bugs@busybox.net>
-Date: Tue, 11 Dec 2007 12:26:59 -0800
-Subject: [Buildroot] [buildroot 0001612]: TARGET_CONFIGURE_OPTS redefine CC
-	with TARGET_CFLAGS but not TARGET_LDFLAGS
-Message-ID: <9d35baaf374484d5e3bfa35a7c4d3d06@busybox.net>
+From: vanokuten at uclibc.org <vanokuten@uclibc.org>
+Date: Tue, 11 Dec 2007 12:29:55 -0800 (PST)
+Subject: [Buildroot] svn commit: trunk/buildroot/package/haserl
+Message-ID: <20071211202955.E5740128576@busybox.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+Author: vanokuten
+Date: 2007-12-11 12:29:54 -0800 (Tue, 11 Dec 2007)
+New Revision: 20642
 
-A NOTE has been added to this issue. 
-====================================================================== 
-http://busybox.net/bugs/view.php?id=1612 
-====================================================================== 
-Reported By:                ikonst
-Assigned To:                buildroot
-====================================================================== 
-Project:                    buildroot
-Issue ID:                   1612
-Category:                   Architecture Specific
-Reproducibility:            always
-Severity:                   minor
-Priority:                   normal
-Status:                     assigned
-====================================================================== 
-Date Submitted:             11-27-2007 06:13 PST
-Last Modified:              12-11-2007 12:26 PST
-====================================================================== 
-Summary:                    TARGET_CONFIGURE_OPTS redefine CC with TARGET_CFLAGS
-but not TARGET_LDFLAGS
-Description: 
-In package/Makefile.in, we have:
-TARGET_CONFIGURE_OPTS= ...
-               CC="$(TARGET_CROSS)gcc $(TARGET_CFLAGS)" \
+Log:
+bump haserl version
 
-So, instead of passing CFLAGS=$(TARGET_CFLAGS), we define it as part of
-the CC execution string, which is fine. However, we don't pass
-TARGET_LDFLAGS here, which is just as important -- in particular for
-external toolchains, where the LDFLAGS are necessary to link with
-$(STAGING_DIR)/lib.
-====================================================================== 
+Modified:
+   trunk/buildroot/package/haserl/Config.in
 
----------------------------------------------------------------------- 
- vanokuten - 12-11-07 12:26  
----------------------------------------------------------------------- 
-But TARGET_LDFLAGS are passed in:
-LD="$(TARGET_CROSS)ld $(TARGET_LDFLAGS)"
 
-Do not understand why linker flags are needed on compile CC stage.
-Could you please explain what particular problem are you facing with?
-
-regards,
-Ivan 
-
-Issue History 
-Date Modified   Username       Field                    Change               
-====================================================================== 
-11-27-07 06:13  ikonst         New Issue                                    
-11-27-07 06:13  ikonst         Status                   new => assigned     
-11-27-07 06:13  ikonst         Assigned To               => buildroot       
-11-27-07 06:13  ikonst         File Added: target_cc_with_ldflags.patch         
-          
-12-11-07 12:26  vanokuten      Note Added: 0003089                          
-======================================================================
+Changeset:
+Modified: trunk/buildroot/package/haserl/Config.in
+===================================================================
+--- trunk/buildroot/package/haserl/Config.in	2007-12-11 20:21:35 UTC (rev 20641)
++++ trunk/buildroot/package/haserl/Config.in	2007-12-11 20:29:54 UTC (rev 20642)
+@@ -10,7 +10,7 @@
+ 
+ choice
+ 	prompt "Haserl version"
+-	default BR2_PACKAGE_HASERL_VERSION_0_9_20
++	default BR2_PACKAGE_HASERL_VERSION_0_9_21
+ 	depends on BR2_PACKAGE_HASERL
+ 	help
+ 	  Select the older stable version, or the newer developer version
+@@ -20,8 +20,8 @@
+ 	help
+ 	  stable version
+ 
+-config BR2_PACKAGE_HASERL_VERSION_0_9_20
+-	bool	"v 0.9.20"
++config BR2_PACKAGE_HASERL_VERSION_0_9_21
++	bool	"v 0.9.21"
+ 	help
+ 	  developer version - seems OK though
+ 
+@@ -31,4 +31,4 @@
+ config BR2_PACKAGE_HASERL_VERSION
+ 	string
+ 	default "0.8.0"		if BR2_PACKAGE_HASERL_VERSION_0_8_0
+-	default "0.9.20"	if BR2_PACKAGE_HASERL_VERSION_0_9_20
++	default "0.9.21"	if BR2_PACKAGE_HASERL_VERSION_0_9_21
