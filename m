@@ -1,52 +1,51 @@
-From: vanokuten at uclibc.org <vanokuten@uclibc.org>
-Date: Tue, 11 Dec 2007 12:29:55 -0800 (PST)
-Subject: [Buildroot] svn commit: trunk/buildroot/package/haserl
-Message-ID: <20071211202955.E5740128576@busybox.net>
+From: bugs at busybox.net <bugs@busybox.net>
+Date: Tue, 11 Dec 2007 12:30:49 -0800
+Subject: [Buildroot] [buildroot 0001684]: New haserl version
+Message-ID: <8fb9f1396c4c619ad395035f67bb3178@busybox.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Author: vanokuten
-Date: 2007-12-11 12:29:54 -0800 (Tue, 11 Dec 2007)
-New Revision: 20642
 
-Log:
-bump haserl version
+The following issue has been CLOSED 
+====================================================================== 
+http://busybox.net/bugs/view.php?id=1684 
+====================================================================== 
+Reported By:                sushisan
+Assigned To:                buildroot
+====================================================================== 
+Project:                    buildroot
+Issue ID:                   1684
+Category:                   New Features
+Reproducibility:            always
+Severity:                   minor
+Priority:                   normal
+Status:                     closed
+Resolution:                 open
+Fixed in Version:           
+====================================================================== 
+Date Submitted:             12-09-2007 09:26 PST
+Last Modified:              12-11-2007 12:30 PST
+====================================================================== 
+Summary:                    New haserl version
+Description: 
+New 0.9.21 version
+====================================================================== 
 
-Modified:
-   trunk/buildroot/package/haserl/Config.in
+---------------------------------------------------------------------- 
+ vanokuten - 12-11-07 12:30  
+---------------------------------------------------------------------- 
+fixed in 20642 rev 
 
-
-Changeset:
-Modified: trunk/buildroot/package/haserl/Config.in
-===================================================================
---- trunk/buildroot/package/haserl/Config.in	2007-12-11 20:21:35 UTC (rev 20641)
-+++ trunk/buildroot/package/haserl/Config.in	2007-12-11 20:29:54 UTC (rev 20642)
-@@ -10,7 +10,7 @@
- 
- choice
- 	prompt "Haserl version"
--	default BR2_PACKAGE_HASERL_VERSION_0_9_20
-+	default BR2_PACKAGE_HASERL_VERSION_0_9_21
- 	depends on BR2_PACKAGE_HASERL
- 	help
- 	  Select the older stable version, or the newer developer version
-@@ -20,8 +20,8 @@
- 	help
- 	  stable version
- 
--config BR2_PACKAGE_HASERL_VERSION_0_9_20
--	bool	"v 0.9.20"
-+config BR2_PACKAGE_HASERL_VERSION_0_9_21
-+	bool	"v 0.9.21"
- 	help
- 	  developer version - seems OK though
- 
-@@ -31,4 +31,4 @@
- config BR2_PACKAGE_HASERL_VERSION
- 	string
- 	default "0.8.0"		if BR2_PACKAGE_HASERL_VERSION_0_8_0
--	default "0.9.20"	if BR2_PACKAGE_HASERL_VERSION_0_9_20
-+	default "0.9.21"	if BR2_PACKAGE_HASERL_VERSION_0_9_21
+Issue History 
+Date Modified   Username       Field                    Change               
+====================================================================== 
+12-09-07 09:26  sushisan       New Issue                                    
+12-09-07 09:26  sushisan       Status                   new => assigned     
+12-09-07 09:26  sushisan       Assigned To               => buildroot       
+12-09-07 09:26  sushisan       File Added: br2-haserl.patch                    
+12-11-07 12:30  vanokuten      Status                   assigned => closed  
+12-11-07 12:30  vanokuten      Note Added: 0003094                          
+======================================================================
