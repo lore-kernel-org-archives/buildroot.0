@@ -1,51 +1,38 @@
-From: bugs at busybox.net <bugs@busybox.net>
-Date: Tue, 11 Dec 2007 12:30:49 -0800
-Subject: [Buildroot] [buildroot 0001684]: New haserl version
-Message-ID: <8fb9f1396c4c619ad395035f67bb3178@busybox.net>
+From: Ulf Samuelsson <ulf@atmel.com>
+Date: Tue, 11 Dec 2007 23:39:42 +0100
+Subject: [Buildroot] Kernel Name
+References: <d6cda7730712111015h55cd8d7fjc011b1f295757b02@mail.gmail.com>
+Message-ID: <007c01c83c46$bcde9460$ee031b0a@atmel.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+----- Original Message ----- 
+From: "Thiago A. Corr?a" <thiago.correa@gmail.com>
+To: "buildroot" <buildroot@uclibc.org>
+Sent: Tuesday, December 11, 2007 7:15 PM
+Subject: [Buildroot] Kernel Name
 
-The following issue has been CLOSED 
-====================================================================== 
-http://busybox.net/bugs/view.php?id=1684 
-====================================================================== 
-Reported By:                sushisan
-Assigned To:                buildroot
-====================================================================== 
-Project:                    buildroot
-Issue ID:                   1684
-Category:                   New Features
-Reproducibility:            always
-Severity:                   minor
-Priority:                   normal
-Status:                     closed
-Resolution:                 open
-Fixed in Version:           
-====================================================================== 
-Date Submitted:             12-09-2007 09:26 PST
-Last Modified:              12-11-2007 12:30 PST
-====================================================================== 
-Summary:                    New haserl version
-Description: 
-New 0.9.21 version
-====================================================================== 
 
----------------------------------------------------------------------- 
- vanokuten - 12-11-07 12:30  
----------------------------------------------------------------------- 
-fixed in 20642 rev 
+> Hi,
+> 
+>   Don't know in which revision, but the naming of the Kernel binary
+> has changed. It is now being copied to /boot under the name
+> atngw100-linux-2.6.22.10-20071211 which is just awful.
+> 
+>   Is there a way to keep it as /uImage as previously?
+> 
 
-Issue History 
-Date Modified   Username       Field                    Change               
-====================================================================== 
-12-09-07 09:26  sushisan       New Issue                                    
-12-09-07 09:26  sushisan       Status                   new => assigned     
-12-09-07 09:26  sushisan       Assigned To               => buildroot       
-12-09-07 09:26  sushisan       File Added: br2-haserl.patch                    
-12-11-07 12:30  vanokuten      Status                   assigned => closed  
-12-11-07 12:30  vanokuten      Note Added: 0003094                          
-======================================================================
+
+I think you get the simple name by not choosing the the advanced linux installation.
+The "advanced linux" installation will give the image a name, indicating its contents.
+
+In the AT91 U-boot, there is support for autoscripts which will setup the u-boot environment in a way
+that you do not have to type the complete name.
+You can probably quite easily create similar autoscripts.
+
+
+Best Regards
+Ulf Samuelsson
