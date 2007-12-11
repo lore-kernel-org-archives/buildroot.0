@@ -1,36 +1,56 @@
-From: vanokuten at uclibc.org <vanokuten@uclibc.org>
-Date: Tue, 11 Dec 2007 12:21:39 -0800 (PST)
-Subject: [Buildroot] svn commit: trunk/buildroot/toolchain/elf2flt
-Message-ID: <20071211202139.2A21D12802E@busybox.net>
+From: bugs at busybox.net <bugs@busybox.net>
+Date: Tue, 11 Dec 2007 12:22:11 -0800
+Subject: [Buildroot] [buildroot 0001621]: [PATCH] Create GNU_TARGET_NAME
+	links for elf2flt binaries
+Message-ID: <bb75032612225b14b1aa6b2783046ea4@busybox.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Author: vanokuten
-Date: 2007-12-11 12:21:35 -0800 (Tue, 11 Dec 2007)
-New Revision: 20641
 
-Log:
-enable symlinks for the elft2flt binaries
+The following issue has been CLOSED 
+====================================================================== 
+http://busybox.net/bugs/view.php?id=1621 
+====================================================================== 
+Reported By:                atle
+Assigned To:                buildroot
+====================================================================== 
+Project:                    buildroot
+Issue ID:                   1621
+Category:                   Other
+Reproducibility:            always
+Severity:                   feature
+Priority:                   normal
+Status:                     closed
+Resolution:                 open
+Fixed in Version:           
+====================================================================== 
+Date Submitted:             11-30-2007 06:39 PST
+Last Modified:              12-11-2007 12:22 PST
+====================================================================== 
+Summary:                    [PATCH] Create GNU_TARGET_NAME links for elf2flt
+binaries
+Description: 
+The attached patch enables creation of $(GNU_TARGET_NAME)-<prog> symlinks
+for the elft2flt binaries.
 
-Modified:
-   trunk/buildroot/toolchain/elf2flt/elf2flt.mk
+====================================================================== 
 
+---------------------------------------------------------------------- 
+ vanokuten - 12-11-07 12:22  
+---------------------------------------------------------------------- 
+fixed in 20641 rev 
 
-Changeset:
-Modified: trunk/buildroot/toolchain/elf2flt/elf2flt.mk
-===================================================================
---- trunk/buildroot/toolchain/elf2flt/elf2flt.mk	2007-12-11 20:13:13 UTC (rev 20640)
-+++ trunk/buildroot/toolchain/elf2flt/elf2flt.mk	2007-12-11 20:21:35 UTC (rev 20641)
-@@ -35,6 +35,9 @@
- $(ELF2FLT_DIR)/$(ELF2FLT_BINARY): $(ELF2FLT_DIR)/.configured
- 	$(MAKE) -C $(ELF2FLT_DIR) all
- 	$(MAKE) -C $(ELF2FLT_DIR) install
-+	ln -snf $(REAL_GNU_TARGET_NAME)-elf2flt $(STAGING_DIR)/bin/$(GNU_TARGET_NAME)-elf2flt
-+	ln -snf $(REAL_GNU_TARGET_NAME)-flthdr  $(STAGING_DIR)/bin/$(GNU_TARGET_NAME)-flthdr
-+	ln -snf $(REAL_GNU_TARGET_NAME)-ld.real $(STAGING_DIR)/bin/$(GNU_TARGET_NAME)-ld.real
- 
- elf2flt: uclibc_target uclibc-configured binutils gcc $(ELF2FLT_DIR)/$(ELF2FLT_BINARY)
- 
+Issue History 
+Date Modified   Username       Field                    Change               
+====================================================================== 
+11-30-07 06:39  atle           New Issue                                    
+11-30-07 06:39  atle           Status                   new => assigned     
+11-30-07 06:39  atle           Assigned To               => buildroot       
+11-30-07 06:39  atle           File Added: elf2flt-GNU_TARGET_NAME-links.diff   
+                
+12-11-07 12:22  vanokuten      Status                   assigned => closed  
+12-11-07 12:22  vanokuten      Note Added: 0003084                          
+======================================================================
