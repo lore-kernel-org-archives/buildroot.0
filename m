@@ -1,8 +1,8 @@
 From: bugs at busybox.net <bugs@busybox.net>
-Date: Tue, 11 Dec 2007 12:22:11 -0800
-Subject: [Buildroot] [buildroot 0001621]: [PATCH] Create GNU_TARGET_NAME
-	links for elf2flt binaries
-Message-ID: <bb75032612225b14b1aa6b2783046ea4@busybox.net>
+Date: Tue, 11 Dec 2007 12:26:59 -0800
+Subject: [Buildroot] [buildroot 0001612]: TARGET_CONFIGURE_OPTS redefine CC
+	with TARGET_CFLAGS but not TARGET_LDFLAGS
+Message-ID: <9d35baaf374484d5e3bfa35a7c4d3d06@busybox.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -10,47 +10,57 @@ Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
 
-The following issue has been CLOSED 
+A NOTE has been added to this issue. 
 ====================================================================== 
-http://busybox.net/bugs/view.php?id=1621 
+http://busybox.net/bugs/view.php?id=1612 
 ====================================================================== 
-Reported By:                atle
+Reported By:                ikonst
 Assigned To:                buildroot
 ====================================================================== 
 Project:                    buildroot
-Issue ID:                   1621
-Category:                   Other
+Issue ID:                   1612
+Category:                   Architecture Specific
 Reproducibility:            always
-Severity:                   feature
+Severity:                   minor
 Priority:                   normal
-Status:                     closed
-Resolution:                 open
-Fixed in Version:           
+Status:                     assigned
 ====================================================================== 
-Date Submitted:             11-30-2007 06:39 PST
-Last Modified:              12-11-2007 12:22 PST
+Date Submitted:             11-27-2007 06:13 PST
+Last Modified:              12-11-2007 12:26 PST
 ====================================================================== 
-Summary:                    [PATCH] Create GNU_TARGET_NAME links for elf2flt
-binaries
+Summary:                    TARGET_CONFIGURE_OPTS redefine CC with TARGET_CFLAGS
+but not TARGET_LDFLAGS
 Description: 
-The attached patch enables creation of $(GNU_TARGET_NAME)-<prog> symlinks
-for the elft2flt binaries.
+In package/Makefile.in, we have:
+TARGET_CONFIGURE_OPTS= ...
+               CC="$(TARGET_CROSS)gcc $(TARGET_CFLAGS)" \
 
+So, instead of passing CFLAGS=$(TARGET_CFLAGS), we define it as part of
+the CC execution string, which is fine. However, we don't pass
+TARGET_LDFLAGS here, which is just as important -- in particular for
+external toolchains, where the LDFLAGS are necessary to link with
+$(STAGING_DIR)/lib.
 ====================================================================== 
 
 ---------------------------------------------------------------------- 
- vanokuten - 12-11-07 12:22  
+ vanokuten - 12-11-07 12:26  
 ---------------------------------------------------------------------- 
-fixed in 20641 rev 
+But TARGET_LDFLAGS are passed in:
+LD="$(TARGET_CROSS)ld $(TARGET_LDFLAGS)"
+
+Do not understand why linker flags are needed on compile CC stage.
+Could you please explain what particular problem are you facing with?
+
+regards,
+Ivan 
 
 Issue History 
 Date Modified   Username       Field                    Change               
 ====================================================================== 
-11-30-07 06:39  atle           New Issue                                    
-11-30-07 06:39  atle           Status                   new => assigned     
-11-30-07 06:39  atle           Assigned To               => buildroot       
-11-30-07 06:39  atle           File Added: elf2flt-GNU_TARGET_NAME-links.diff   
-                
-12-11-07 12:22  vanokuten      Status                   assigned => closed  
-12-11-07 12:22  vanokuten      Note Added: 0003084                          
+11-27-07 06:13  ikonst         New Issue                                    
+11-27-07 06:13  ikonst         Status                   new => assigned     
+11-27-07 06:13  ikonst         Assigned To               => buildroot       
+11-27-07 06:13  ikonst         File Added: target_cc_with_ldflags.patch         
+          
+12-11-07 12:26  vanokuten      Note Added: 0003089                          
 ======================================================================
