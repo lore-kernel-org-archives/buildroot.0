@@ -1,49 +1,67 @@
-From: Hamish Moffatt <hamish@cloud.net.au>
-Date: Tue, 11 Dec 2007 11:26:45 +1100
-Subject: [Buildroot] Using custom kernel
-In-Reply-To: <474AC5BC.30407@carallon.com>
-References: <474AC5BC.30407@carallon.com>
-Message-ID: <20071211002645.GA5825@cloud.net.au>
+From: bugs at busybox.net <bugs@busybox.net>
+Date: Mon, 10 Dec 2007 20:58:48 -0800
+Subject: [Buildroot] [buildroot 0001694]: Missing argument in makefile
+Message-ID: <cd1070e1b0fe5f3b70c3b874444b5ea5@busybox.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Mon, Nov 26, 2007 at 01:10:20PM +0000, Will Wagner wrote:
-> I would like to use buildroot with a custom kernel. We have the kernel 
-> source we want to use checked into cvs, rather than downloading it from 
-> the net.
-> 
-> Is this currently possible with buildroot? If so where should I look? If 
-> I have to try to customise buildroot myself any suggestions on where to 
-> get started?
 
-Hi Will,
+The following issue has been SUBMITTED. 
+====================================================================== 
+http://busybox.net/bugs/view.php?id=1694 
+====================================================================== 
+Reported By:                martinmeba
+Assigned To:                buildroot
+====================================================================== 
+Project:                    buildroot
+Issue ID:                   1694
+Category:                   Architecture Specific
+Reproducibility:            always
+Severity:                   minor
+Priority:                   normal
+Status:                     assigned
+====================================================================== 
+Date Submitted:             12-10-2007 20:58 PST
+Last Modified:              12-10-2007 20:58 PST
+====================================================================== 
+Summary:                    Missing argument in makefile
+Description: 
+Error when executing make
+SVN revision for buildroot: 20636
 
-(Apologies for the delayed reply; I'm only catching up on the list now
-after a recent vacation.)
+modinfo.c: In function ?main?:
+modinfo.c:338: warning: ?infosize? may be used uninitialized in this
+function
+/usr/bin/gcc  -g -O2 -Wunused -Wall   -o modinfo  modinfo.o zlibsupport.o 
 
-I've done something similar here, though it's messy.
-I added a new directory target/linux-xyz, with my whole kernel source
-tree checked into target/linux-xyz/2.6.15-uc0.
+/usr/bin/gcc  -g -O2 -Wunused -Wall   -o insmod.static -static insmod.o  
+make[1]: Leaving directory
+`/home/martin/buildroot/toolchain_build_arm_nofpu/module-init-tools-3.2.2'
+touch -c
+/home/martin/buildroot/toolchain_build_arm_nofpu/module-init-tools-3.2.2/depmod
+/usr/bin/install -D
+/home/martin/buildroot/toolchain_build_arm_nofpu/module-init-tools-3.2.2/depmod
+/home/martin/buildroot/build_arm/staging_dir/bin/arm-linux-depmod26
+cp -dpf 
+/home/martin/buildroot/project_build_arm/uclibc/linux-2.6.22.10/.config
+cp: missing destination file operand after
+`/home/martin/buildroot/project_build_arm/uclibc/linux-2.6.22.10/.config'
+Try `cp --help' for more information.
+make: ***
+[/home/martin/buildroot/project_build_arm/uclibc/linux-2.6.22.10/.configured]
+Error 1
 
-The kernel source tree supports building into a separate objects
-directory, which I have located in project_build_<arch>/<project> as per
-standard buildroot practice.
+I followed the instructions to set the system up.  Is there no second
+argument because I didn't configure something correctly or is this a bug?
+====================================================================== 
 
-Building out-of-tree modules is even more messy, because now you have
-kernel source in one place, kernel objects (including the include/asm
-symlink and the include/linux/autoconf.h file) in a second place, and
-module binaries going a third place again. But it's workable.
-
-A simpler solution would be to copy the kernel source into
-project_build_<arch>/<project> and build it in-tree. However that isn't
-very good for development, unless you can rig up some complicated
-dependencies between the original source and the copy.
-
-I can share a patch if it would be useful.
-
-Hamish
--- 
-Hamish Moffatt VK3SB <hamish@debian.org> <hamish@cloud.net.au>
+Issue History 
+Date Modified   Username       Field                    Change               
+====================================================================== 
+12-10-07 20:58  martinmeba     New Issue                                    
+12-10-07 20:58  martinmeba     Status                   new => assigned     
+12-10-07 20:58  martinmeba     Assigned To               => buildroot       
+======================================================================
