@@ -1,20 +1,35 @@
-From: =?ISO-8859-1?Q?Thiago_A._Corr=EAa?= <thiago.correa@gmail.com>
-Date: Tue, 11 Dec 2007 16:15:17 -0200
-Subject: [Buildroot] Kernel Name
-Message-ID: <d6cda7730712111015h55cd8d7fjc011b1f295757b02@mail.gmail.com>
+From: vanokuten at uclibc.org <vanokuten@uclibc.org>
+Date: Tue, 11 Dec 2007 11:53:54 -0800 (PST)
+Subject: [Buildroot] svn commit: trunk/buildroot/package/olsr
+Message-ID: <20071211195354.3BF1F12854E@busybox.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi,
+Author: vanokuten
+Date: 2007-12-11 11:53:51 -0800 (Tue, 11 Dec 2007)
+New Revision: 20638
 
-   Don't know in which revision, but the naming of the Kernel binary
-has changed. It is now being copied to /boot under the name
-atngw100-linux-2.6.22.10-20071211 which is just awful.
+Log:
+bump olsr version
 
-   Is there a way to keep it as /uImage as previously?
+Modified:
+   trunk/buildroot/package/olsr/olsr.mk
 
-Regards,
-   Thiago A. Correa
+
+Changeset:
+Modified: trunk/buildroot/package/olsr/olsr.mk
+===================================================================
+--- trunk/buildroot/package/olsr/olsr.mk	2007-12-11 13:15:11 UTC (rev 20637)
++++ trunk/buildroot/package/olsr/olsr.mk	2007-12-11 19:53:51 UTC (rev 20638)
+@@ -5,7 +5,7 @@
+ #############################################################
+ 
+ OLSR_VERSION_MAJOR=0.5
+-OLSR_VERSION_MINOR=3
++OLSR_VERSION_MINOR=4
+ OLSR_VERSION:=$(OLSR_VERSION_MAJOR).$(OLSR_VERSION_MINOR)
+ OLSR_SOURCE:=olsrd-$(OLSR_VERSION).tar.bz2
+ OLSR_SITE:=http://www.olsr.org/releases/$(OLSR_VERSION_MAJOR)
