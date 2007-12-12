@@ -1,7 +1,7 @@
 From: bugs at busybox.net <bugs@busybox.net>
-Date: Wed, 12 Dec 2007 08:06:36 -0800
-Subject: [Buildroot] [buildroot 0001729]: adding support for daemontools
-Message-ID: <2b0272d4eda3974b15f585f2a1b503cc@bugs.uclibc.org>
+Date: Wed, 12 Dec 2007 08:08:25 -0800
+Subject: [Buildroot] [buildroot 0001734]: adding transproxy
+Message-ID: <32694d4ce7a958fd7a6c86749aeabc4c@bugs.uclibc.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -11,33 +11,32 @@ To: buildroot@busybox.net
 
 The following issue has been SUBMITTED. 
 ====================================================================== 
-http://busybox.net/bugs/view.php?id=1729 
+http://busybox.net/bugs/view.php?id=1734 
 ====================================================================== 
 Reported By:                fgrim
 Assigned To:                buildroot
 ====================================================================== 
 Project:                    buildroot
-Issue ID:                   1729
+Issue ID:                   1734
 Category:                   New Features
 Reproducibility:            always
 Severity:                   feature
 Priority:                   normal
 Status:                     assigned
 ====================================================================== 
-Date Submitted:             12-12-2007 08:06 PST
-Last Modified:              12-12-2007 08:06 PST
+Date Submitted:             12-12-2007 08:08 PST
+Last Modified:              12-12-2007 08:08 PST
 ====================================================================== 
-Summary:                    adding support for daemontools
+Summary:                    adding transproxy
 Description: 
-I have written a makefile for daemontools.  It compiles and installs fine
-in a x86 host for a 486 target.
+I have written a makefile for transproxy.  A transparent proxy for linux.
 ====================================================================== 
 
 Issue History 
 Date Modified   Username       Field                    Change               
 ====================================================================== 
-12-12-07 08:06  fgrim          New Issue                                    
-12-12-07 08:06  fgrim          Status                   new => assigned     
-12-12-07 08:06  fgrim          Assigned To               => buildroot       
-12-12-07 08:06  fgrim          File Added: daemontools.mk                    
+12-12-07 08:08  fgrim          New Issue                                    
+12-12-07 08:08  fgrim          Status                   new => assigned     
+12-12-07 08:08  fgrim          Assigned To               => buildroot       
+12-12-07 08:08  fgrim          File Added: transproxy.mk                    
 ======================================================================
