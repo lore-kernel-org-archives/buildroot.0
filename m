@@ -1,7 +1,7 @@
 From: bugs at busybox.net <bugs@busybox.net>
-Date: Wed, 12 Dec 2007 08:04:44 -0800
-Subject: [Buildroot] [buildroot 0001724]: Adding privoxy
-Message-ID: <9a821f493bcbe9c838bb7ee62206ce81@bugs.uclibc.org>
+Date: Wed, 12 Dec 2007 08:06:36 -0800
+Subject: [Buildroot] [buildroot 0001729]: adding support for daemontools
+Message-ID: <2b0272d4eda3974b15f585f2a1b503cc@bugs.uclibc.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -11,34 +11,33 @@ To: buildroot@busybox.net
 
 The following issue has been SUBMITTED. 
 ====================================================================== 
-http://busybox.net/bugs/view.php?id=1724 
+http://busybox.net/bugs/view.php?id=1729 
 ====================================================================== 
 Reported By:                fgrim
 Assigned To:                buildroot
 ====================================================================== 
 Project:                    buildroot
-Issue ID:                   1724
+Issue ID:                   1729
 Category:                   New Features
 Reproducibility:            always
 Severity:                   feature
 Priority:                   normal
 Status:                     assigned
 ====================================================================== 
-Date Submitted:             12-12-2007 08:04 PST
-Last Modified:              12-12-2007 08:04 PST
+Date Submitted:             12-12-2007 08:06 PST
+Last Modified:              12-12-2007 08:06 PST
 ====================================================================== 
-Summary:                    Adding privoxy
+Summary:                    adding support for daemontools
 Description: 
-I have written a makefile for privoxy and I wanted to contribute it if you
-all want it.  it compiles fine on a x86 box for a 486 target.  I have not
-actually run it yet.
+I have written a makefile for daemontools.  It compiles and installs fine
+in a x86 host for a 486 target.
 ====================================================================== 
 
 Issue History 
 Date Modified   Username       Field                    Change               
 ====================================================================== 
-12-12-07 08:04  fgrim          New Issue                                    
-12-12-07 08:04  fgrim          Status                   new => assigned     
-12-12-07 08:04  fgrim          Assigned To               => buildroot       
-12-12-07 08:04  fgrim          File Added: privoxy.mk                       
+12-12-07 08:06  fgrim          New Issue                                    
+12-12-07 08:06  fgrim          Status                   new => assigned     
+12-12-07 08:06  fgrim          Assigned To               => buildroot       
+12-12-07 08:06  fgrim          File Added: daemontools.mk                    
 ======================================================================
