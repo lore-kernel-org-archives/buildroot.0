@@ -1,7 +1,12 @@
-From: bugs at busybox.net <bugs@busybox.net>
-Date: Wed, 12 Dec 2007 08:12:42 -0800
-Subject: [Buildroot] [buildroot 0001744]: adding djbdns
-Message-ID: <68423f943352141f3c3d6e6734316c00@bugs.uclibc.org>
+From: Ryan Ordway <rordway@oregonstate.edu>
+Date: Wed, 12 Dec 2007 12:17:14 -0800
+Subject: [Buildroot] Buildroot and Linux/ARM on AT91SAM9260
+In-Reply-To: <FDBCCC91-31DB-4241-A25E-FC7DDECD2D08@oregonstate.edu>
+References: <1D3F8BA5-BB0F-4306-A179-760E18E1EF63@mac.com>
+	<691A7752-1681-409D-936A-9C6A7935510F@oregonstate.edu>
+	<20071129133008.GB20914@real.realitydiluted.com>
+	<FDBCCC91-31DB-4241-A25E-FC7DDECD2D08@oregonstate.edu>
+Message-ID: <6E89F2D1-2F8C-4F77-ADA8-2727407BBE6C@oregonstate.edu>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -9,35 +14,26 @@ Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
 
-The following issue has been SUBMITTED. 
-====================================================================== 
-http://busybox.net/bugs/view.php?id=1744 
-====================================================================== 
-Reported By:                fgrim
-Assigned To:                buildroot
-====================================================================== 
-Project:                    buildroot
-Issue ID:                   1744
-Category:                   New Features
-Reproducibility:            always
-Severity:                   minor
-Priority:                   normal
-Status:                     assigned
-====================================================================== 
-Date Submitted:             12-12-2007 08:12 PST
-Last Modified:              12-12-2007 08:12 PST
-====================================================================== 
-Summary:                    adding djbdns
-Description: 
-I have written a makefile for daniel bernstein's djbdns package.  It has
-been built on an x86 host for a 486 target.
-====================================================================== 
+I've been using Buildroot with a board based on the AT91SAM9260. I was  
+able to get a successful kernel build (2.6.21.6) and buildroot build  
+(buildroot-atmel-20070521) using gcc 4.0.4, binutils 2.17 and uClibc  
+0.9.28.3. I've been trying to get an updated build from various  
+different versions of buildroot from buildrooot-atmel-20070607,  
+buildroot-trunk, etc. and while things build fine with some tweaking  
+none of the toolchain combinations seem to generate working binaries.  
+I've tried using EABI vs. OABI, softfloat for gcc, NWFPE vs. FastFPE,  
+etc. The only combination that I can get to work reliably are gcc  
+4.0.4, binutils 2.17 and uClibc 0.9.28.3 with my 2.6.21.6 kernel with  
+AT91 patches for 2.6.21 applied.
 
-Issue History 
-Date Modified   Username       Field                    Change               
-====================================================================== 
-12-12-07 08:12  fgrim          New Issue                                    
-12-12-07 08:12  fgrim          Status                   new => assigned     
-12-12-07 08:12  fgrim          Assigned To               => buildroot       
-12-12-07 08:12  fgrim          File Added: djbdns.mk                        
-======================================================================
+Is there a magic compiler, binutils and uClibc trinity for Linux/ARM  
+in particular?
+
+Thanks!
+
+Ryan
+
+--
+Ryan Ordway                           E-mail: rordway at oregonstate.edu
+Unix Systems Administrator               rordway at library.oregonstate.edu
+OSU Libraries, Corvallis, OR 97331    Office: Valley Library #4657
