@@ -1,8 +1,7 @@
 From: bugs at busybox.net <bugs@busybox.net>
-Date: Thu, 13 Dec 2007 04:17:29 -0800
-Subject: [Buildroot] [buildroot 0001469]: Add fuse and ntfs package for
-	buildroot
-Message-ID: <ca543bcb03f1dabe8acde5f1a34a43e8@busybox.net>
+Date: Thu, 13 Dec 2007 04:19:33 -0800
+Subject: [Buildroot] [buildroot 0001569]: portage version bump
+Message-ID: <c662520edcbc40cf3a0b229e1f0a8eeb@busybox.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -10,105 +9,61 @@ Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
 
-A NOTE has been added to this issue. 
+The following issue has been CLOSED 
 ====================================================================== 
-http://busybox.net/bugs/view.php?id=1469 
+http://busybox.net/bugs/view.php?id=1569 
 ====================================================================== 
-Reported By:                alextud
+Reported By:                aron
 Assigned To:                buildroot
 ====================================================================== 
 Project:                    buildroot
-Issue ID:                   1469
-Category:                   New Features
-Reproducibility:            N/A
-Severity:                   feature
+Issue ID:                   1569
+Category:                   Other
+Reproducibility:            always
+Severity:                   minor
 Priority:                   normal
-Status:                     assigned
+Status:                     closed
+Resolution:                 fixed
+Fixed in Version:           
 ====================================================================== 
-Date Submitted:             08-22-2007 08:12 PDT
-Last Modified:              12-13-2007 04:17 PST
+Date Submitted:             11-01-2007 09:48 PDT
+Last Modified:              12-13-2007 04:19 PST
 ====================================================================== 
-Summary:                    Add fuse and ntfs package for buildroot
+Summary:                    portage version bump
 Description: 
-Hi,
-I made some makefile for fuse and ntfs-3g and I'll be happy if you can add
-them to  buildroot package.
-Ntfs-3g mount always fail with default busybox mount command, only work
-with mount from util-linux package, I think that its related with fuse and
-mount from busybox, fix me if I wrong.
-Also I disabled in fuse symvers related to version 2.2 because on runtime
-fusermount show: unknown '" option. 
-I'm just started with buildroot and my files maybe contains some error,
-feel free to modify them.
-
-Thanks, Alex.
+This patch bumps portage from 2.1.2.9 to 2.1.3.15
 ====================================================================== 
 
 ---------------------------------------------------------------------- 
- alonbl - 11-21-07 10:33  
+ aron - 11-16-07 02:32  
 ---------------------------------------------------------------------- 
-Hi!
-
-The patch for fuse works, thanks!
-Have you sent this to fuse developers?
-
-Can you please rebase to 2.7.1? I don't fully understand these syms...
-
-I succeeded to make busybox mount work, by creating a script that ignores
-the "-i" option.
-
-The problem is that I ntfs-3g segfaults when I umount.
-
-I will try to figure out why. 
+This one is obsolete. Should be closed. Opening a new one for the latest
+version. 
 
 ---------------------------------------------------------------------- 
- alonbl - 11-23-07 07:32  
+ vanokuten - 11-16-07 02:46  
 ---------------------------------------------------------------------- 
-OK.
-Fully working with fuse-2.7.1.
-
-All I done is Added to CFLAGS "-D__asm__\(X\)="
-
-Lastest busybox ignores the -i options.
-
-So now it is working.
-
-Thanks for the lead. 
+obsolete, see 1593 
 
 ---------------------------------------------------------------------- 
- alextud - 11-23-07 12:56  
+ UlfSamuelsson - 11-27-07 13:16  
 ---------------------------------------------------------------------- 
-That's great. I will this weekend. 
-
----------------------------------------------------------------------- 
- alextud - 11-26-07 07:24  
----------------------------------------------------------------------- 
-I tested, it does work well:
-CFLAGS="$(TARGET_CFLAGS) -D__asm__\(X\)=" \
-
-even df -h command doesn't cause an software interrupt. 
-
----------------------------------------------------------------------- 
- vanokuten - 12-13-07 04:17  
----------------------------------------------------------------------- 
-can we close it? or some fix to current buildroot is still required?
-
-regards,
-Ivan 
+Bumped to 2.1.3.16 which is later. 
 
 Issue History 
 Date Modified   Username       Field                    Change               
 ====================================================================== 
-08-22-07 08:12  alextud        New Issue                                    
-08-22-07 08:12  alextud        Status                   new => assigned     
-08-22-07 08:12  alextud        Assigned To               => buildroot       
-08-22-07 08:12  alextud        File Added: fuse&ntfs_mk.tar.gz                  
- 
-08-22-07 08:15  alextud        Issue Monitored: alextud                     
-11-21-07 10:30  alonbl         Issue Monitored: alonbl                      
-11-21-07 10:33  alonbl         Note Added: 0002946                          
-11-23-07 07:32  alonbl         Note Added: 0002953                          
-11-23-07 12:56  alextud        Note Added: 0002954                          
-11-26-07 07:24  alextud        Note Added: 0002964                          
-12-13-07 04:17  vanokuten      Note Added: 0003149                          
+11-01-07 09:48  aron           New Issue                                    
+11-01-07 09:48  aron           Status                   new => assigned     
+11-01-07 09:48  aron           Assigned To               => buildroot       
+11-01-07 09:48  aron           File Added: portage.patch                    
+11-16-07 02:29  aron           Issue Monitored: aron                        
+11-16-07 02:32  aron           Note Added: 0002930                          
+11-16-07 02:46  vanokuten      Status                   assigned => closed  
+11-16-07 02:46  vanokuten      Note Added: 0002931                          
+11-16-07 02:46  vanokuten      Resolution               open => won't fix   
+11-27-07 13:16  UlfSamuelsson  Status                   closed => resolved  
+11-27-07 13:16  UlfSamuelsson  Resolution               won't fix => fixed  
+11-27-07 13:16  UlfSamuelsson  Note Added: 0002976                          
+12-13-07 04:19  vanokuten      Status                   resolved => closed  
 ======================================================================
