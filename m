@@ -1,42 +1,29 @@
-From: bugs at busybox.net <bugs@busybox.net>
-Date: Wed, 12 Dec 2007 20:18:56 -0800
-Subject: [Buildroot] [buildroot 0001754]: stunnel don't see OpenSSL
-Message-ID: <1b70b2644b5a538248ad2d6f36aa3e2b@bugs.uclibc.org>
+From: raajesh.n at indiatimes.com <raajesh.n@indiatimes.com>
+Date: Thu, 13 Dec 2007 16:16:34 +0530 (IST)
+Subject: [Buildroot] how to build Buildroot for linux kernel 2.6.12 ?
+Message-ID: <1867757801.118661197542794366.JavaMail.root@mbv4.indiatimes.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+Hi all,
 
-The following issue has been SUBMITTED. 
-====================================================================== 
-http://busybox.net/bugs/view.php?id=1754 
-====================================================================== 
-Reported By:                sushisan
-Assigned To:                buildroot
-====================================================================== 
-Project:                    buildroot
-Issue ID:                   1754
-Category:                   Architecture Specific
-Reproducibility:            always
-Severity:                   minor
-Priority:                   normal
-Status:                     assigned
-====================================================================== 
-Date Submitted:             12-12-2007 20:18 PST
-Last Modified:              12-12-2007 20:18 PST
-====================================================================== 
-Summary:                    stunnel don't see OpenSSL
-Description: 
-openssl library are not in $(STAGING_DIR) but in $(STAGING_DIR)/usr/
-====================================================================== 
+I am new to Buildroot, I downloaded latest version of Buildroot from this site,                         svn co svn://uclibc.org/trunk/buildroot  , but when kernel headers were checked in for 2.6.12 it was not found. latest version of Buildroot has no support for kernel 2.6.12.
 
-Issue History 
-Date Modified   Username       Field                    Change               
-====================================================================== 
-12-12-07 20:18  sushisan       New Issue                                    
-12-12-07 20:18  sushisan       Status                   new => assigned     
-12-12-07 20:18  sushisan       Assigned To               => buildroot       
-12-12-07 20:18  sushisan       File Added: br2-stunnel.patch                    
-======================================================================
+How can I resolve this problem? can I buildroot for for linux 2.6.12 version kernel ?
+
+If there is any modification that has to be done for building Buildroot for linux 2.6.12, Please do inform me.
+
+If there are any serious issues with this Modification , Please do inform me too.
+
+Best Regards,
+
+Rajesh N
+
+
+
+--
+My life has changed. What about yours?
+Log on to the new Indiatimes Mail and Live out of the Inbox!
