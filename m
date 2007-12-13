@@ -1,8 +1,9 @@
 From: Ulf Samuelsson <ulf@atmel.com>
-Date: Thu, 13 Dec 2007 20:54:11 +0100
-Subject: [Buildroot] BR2_PACKAGE_LINUX_KCONFIG question
-References: <5970ab460712131121n7ee4357cl89d769320f2e2a81@mail.gmail.com>
-Message-ID: <028101c83dd2$66ac6620$dcc4af0a@atmel.com>
+Date: Thu, 13 Dec 2007 20:55:32 +0100
+Subject: [Buildroot] how to use custom kernel with its .config in
+	buildroottoolchain ??
+References: <440e0a9b0712130631u6c7d4386jaf07ec7e8e1c4ec5@mail.gmail.com>
+Message-ID: <028201c83dd2$66cc7140$dcc4af0a@atmel.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -11,17 +12,20 @@ To: buildroot@busybox.net
 
 
 
->I can't get buildroot to complete and BR2_PACKAGE_LINUX_KCONFIG was pointed
-> out as the culprit.  It was not set.  I followed the setup instructions on
-> the buildroot website but nothing was mentioned about this variable and I
-> can't find it when I do a "make menuconfig".  What do I need to set this
-> variable to?
+> Hi All
+> 
+> I have customized Linux 2.6.21 kernel for my board specification and
+> produced a .config file
+> 
+> In buildroot how/where to point the above my kernel with my .config file ??
+> 
+> Instead of downloading the kernel, the buildroot should use my kernel and
+> .config
+> 
+> Please help me where to provide this and how to modify this in toolchain ??
 > 
 
-
-grep -r BR2_PACKAGE_LINUX_KCONFIG target
-
-should give you some clues in which Config.in it is defined.
+Use the "Advanced Linux" configuration.
 
 
 Best Regards
