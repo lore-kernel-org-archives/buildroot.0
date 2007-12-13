@@ -1,7 +1,8 @@
 From: bugs at busybox.net <bugs@busybox.net>
-Date: Thu, 13 Dec 2007 04:26:34 -0800
-Subject: [Buildroot] [buildroot 0001694]: Missing argument in makefile
-Message-ID: <394a45d1a65019e9f33faa7e8533dc70@busybox.net>
+Date: Thu, 13 Dec 2007 04:34:21 -0800
+Subject: [Buildroot] [buildroot 0001552]: lvm2 version no longer available
+	for download
+Message-ID: <0be6e81996385c5cd73dd7ec37a00b7a@busybox.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -11,13 +12,13 @@ To: buildroot@busybox.net
 
 The following issue has been CLOSED 
 ====================================================================== 
-http://busybox.net/bugs/view.php?id=1694 
+http://busybox.net/bugs/view.php?id=1552 
 ====================================================================== 
-Reported By:                martinmeba
+Reported By:                Leon Bailly
 Assigned To:                buildroot
 ====================================================================== 
 Project:                    buildroot
-Issue ID:                   1694
+Issue ID:                   1552
 Category:                   Architecture Specific
 Reproducibility:            always
 Severity:                   minor
@@ -26,52 +27,47 @@ Status:                     closed
 Resolution:                 open
 Fixed in Version:           
 ====================================================================== 
-Date Submitted:             12-10-2007 20:58 PST
-Last Modified:              12-13-2007 04:26 PST
+Date Submitted:             10-23-2007 16:45 PDT
+Last Modified:              12-13-2007 04:34 PST
 ====================================================================== 
-Summary:                    Missing argument in makefile
+Summary:                    lvm2 version no longer available for download
 Description: 
-Error when executing make
-SVN revision for buildroot: 20636
+Version 2.02.28 no longer available for download.
+upgrading to 2.02.28 seems to work:
 
-modinfo.c: In function ?main?:
-modinfo.c:338: warning: ?infosize? may be used uninitialized in this
-function
-/usr/bin/gcc  -g -O2 -Wunused -Wall   -o modinfo  modinfo.o zlibsupport.o 
+*** lvm2.mk.org 2007-10-23 03:08:44.000000000 +0200
+--- lvm2.mk     2007-10-23 03:08:51.000000000 +0200
+***************
+*** 24,30 ****
+  # USA
 
-/usr/bin/gcc  -g -O2 -Wunused -Wall   -o insmod.static -static insmod.o  
-make[1]: Leaving directory
-`/home/martin/buildroot/toolchain_build_arm_nofpu/module-init-tools-3.2.2'
-touch -c
-/home/martin/buildroot/toolchain_build_arm_nofpu/module-init-tools-3.2.2/depmod
-/usr/bin/install -D
-/home/martin/buildroot/toolchain_build_arm_nofpu/module-init-tools-3.2.2/depmod
-/home/martin/buildroot/build_arm/staging_dir/bin/arm-linux-depmod26
-cp -dpf 
-/home/martin/buildroot/project_build_arm/uclibc/linux-2.6.22.10/.config
-cp: missing destination file operand after
-`/home/martin/buildroot/project_build_arm/uclibc/linux-2.6.22.10/.config'
-Try `cp --help' for more information.
-make: ***
-[/home/martin/buildroot/project_build_arm/uclibc/linux-2.6.22.10/.configured]
-Error 1
+  LVM2_BASEVER=2.02
+! LVM2_PATCH=26
+  LVM2_VERSION=$(LVM2_BASEVER).$(LVM2_PATCH)
+  LVM2_SOURCE:=LVM2.$(LVM2_VERSION).tgz
+  LVM2_SITE:=ftp://sources.redhat.com/pub/lvm2
+--- 24,30 ----
+  # USA
 
-I followed the instructions to set the system up.  Is there no second
-argument because I didn't configure something correctly or is this a bug?
+  LVM2_BASEVER=2.02
+! LVM2_PATCH=28
+  LVM2_VERSION=$(LVM2_BASEVER).$(LVM2_PATCH)
+  LVM2_SOURCE:=LVM2.$(LVM2_VERSION).tgz
+  LVM2_SITE:=ftp://sources.redhat.com/pub/lvm2
+
 ====================================================================== 
 
 ---------------------------------------------------------------------- 
- hmoffatt - 12-10-07 22:20  
+ vanokuten - 12-13-07 04:34  
 ---------------------------------------------------------------------- 
-It's because you failed to set BR2_PACKAGE_LINUX_KCONFIG to the location of
-your kernel configuration file. 
+fixed 
 
 Issue History 
 Date Modified   Username       Field                    Change               
 ====================================================================== 
-12-10-07 20:58  martinmeba     New Issue                                    
-12-10-07 20:58  martinmeba     Status                   new => assigned     
-12-10-07 20:58  martinmeba     Assigned To               => buildroot       
-12-10-07 22:20  hmoffatt       Note Added: 0003074                          
-12-13-07 04:26  vanokuten      Status                   assigned => closed  
+10-23-07 16:45  Leon Bailly    New Issue                                    
+10-23-07 16:45  Leon Bailly    Status                   new => assigned     
+10-23-07 16:45  Leon Bailly    Assigned To               => buildroot       
+12-13-07 04:34  vanokuten      Status                   assigned => closed  
+12-13-07 04:34  vanokuten      Note Added: 0003164                          
 ======================================================================
