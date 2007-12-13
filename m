@@ -1,7 +1,8 @@
 From: bugs at busybox.net <bugs@busybox.net>
-Date: Thu, 13 Dec 2007 04:22:53 -0800
-Subject: [Buildroot] [buildroot 0001754]: stunnel don't see OpenSSL
-Message-ID: <f2431c4536766c89412b453d395090f1@busybox.net>
+Date: Thu, 13 Dec 2007 04:26:25 -0800
+Subject: [Buildroot] [buildroot 0001469]: Add fuse and ntfs package for
+	buildroot
+Message-ID: <7340fe5d4dd24badd441e92699c40886@busybox.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -9,43 +10,122 @@ Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
 
-The following issue has been CLOSED 
+A NOTE has been added to this issue. 
 ====================================================================== 
-http://busybox.net/bugs/view.php?id=1754 
+http://busybox.net/bugs/view.php?id=1469 
 ====================================================================== 
-Reported By:                sushisan
+Reported By:                alextud
 Assigned To:                buildroot
 ====================================================================== 
 Project:                    buildroot
-Issue ID:                   1754
-Category:                   Architecture Specific
-Reproducibility:            always
-Severity:                   minor
+Issue ID:                   1469
+Category:                   New Features
+Reproducibility:            N/A
+Severity:                   feature
 Priority:                   normal
-Status:                     closed
-Resolution:                 open
-Fixed in Version:           
+Status:                     assigned
 ====================================================================== 
-Date Submitted:             12-12-2007 20:18 PST
-Last Modified:              12-13-2007 04:22 PST
+Date Submitted:             08-22-2007 08:12 PDT
+Last Modified:              12-13-2007 04:26 PST
 ====================================================================== 
-Summary:                    stunnel don't see OpenSSL
+Summary:                    Add fuse and ntfs package for buildroot
 Description: 
-openssl library are not in $(STAGING_DIR) but in $(STAGING_DIR)/usr/
+Hi,
+I made some makefile for fuse and ntfs-3g and I'll be happy if you can add
+them to  buildroot package.
+Ntfs-3g mount always fail with default busybox mount command, only work
+with mount from util-linux package, I think that its related with fuse and
+mount from busybox, fix me if I wrong.
+Also I disabled in fuse symvers related to version 2.2 because on runtime
+fusermount show: unknown '" option. 
+I'm just started with buildroot and my files maybe contains some error,
+feel free to modify them.
+
+Thanks, Alex.
 ====================================================================== 
 
 ---------------------------------------------------------------------- 
- vanokuten - 12-13-07 04:22  
+ alonbl - 11-21-07 10:33  
 ---------------------------------------------------------------------- 
-fixed in 20648 rev 
+Hi!
+
+The patch for fuse works, thanks!
+Have you sent this to fuse developers?
+
+Can you please rebase to 2.7.1? I don't fully understand these syms...
+
+I succeeded to make busybox mount work, by creating a script that ignores
+the "-i" option.
+
+The problem is that I ntfs-3g segfaults when I umount.
+
+I will try to figure out why. 
+
+---------------------------------------------------------------------- 
+ alonbl - 11-23-07 07:32  
+---------------------------------------------------------------------- 
+OK.
+Fully working with fuse-2.7.1.
+
+All I done is Added to CFLAGS "-D__asm__\(X\)="
+
+Lastest busybox ignores the -i options.
+
+So now it is working.
+
+Thanks for the lead. 
+
+---------------------------------------------------------------------- 
+ alextud - 11-23-07 12:56  
+---------------------------------------------------------------------- 
+That's great. I will this weekend. 
+
+---------------------------------------------------------------------- 
+ alextud - 11-26-07 07:24  
+---------------------------------------------------------------------- 
+I tested, it does work well:
+CFLAGS="$(TARGET_CFLAGS) -D__asm__\(X\)=" \
+
+even df -h command doesn't cause an software interrupt. 
+
+---------------------------------------------------------------------- 
+ vanokuten - 12-13-07 04:17  
+---------------------------------------------------------------------- 
+can we close it? or some fix to current buildroot is still required?
+
+regards,
+Ivan 
+
+---------------------------------------------------------------------- 
+ alonbl - 12-13-07 04:26  
+---------------------------------------------------------------------- 
+I don't know the policy here...
+
+But next version of ntfs-3g will not require external fuse, so it is much
+smaller and *SUPPORTED* with uclibc.
+A beta is available at:
+http://ntfs-3g.org/ntfs-3g-1.1206-BETA.tgz
+
+It all resulted from my request of formal uclibc support from the fuse
+maintainer. He disagree, so ntfs-3g maintainer understood the importance
+of being supported on this environment.
+
+So I guess it worth waiting for its release. 
 
 Issue History 
 Date Modified   Username       Field                    Change               
 ====================================================================== 
-12-12-07 20:18  sushisan       New Issue                                    
-12-12-07 20:18  sushisan       Status                   new => assigned     
-12-12-07 20:18  sushisan       Assigned To               => buildroot       
-12-12-07 20:18  sushisan       File Added: br2-stunnel.patch                    
-12-13-07 04:22  vanokuten      Status                   assigned => closed  
-12-13-07 04:22  vanokuten      Note Added: 0003154                          
+08-22-07 08:12  alextud        New Issue                                    
+08-22-07 08:12  alextud        Status                   new => assigned     
+08-22-07 08:12  alextud        Assigned To               => buildroot       
+08-22-07 08:12  alextud        File Added: fuse&ntfs_mk.tar.gz                  
+ 
+08-22-07 08:15  alextud        Issue Monitored: alextud                     
+11-21-07 10:30  alonbl         Issue Monitored: alonbl                      
+11-21-07 10:33  alonbl         Note Added: 0002946                          
+11-23-07 07:32  alonbl         Note Added: 0002953                          
+11-23-07 12:56  alextud        Note Added: 0002954                          
+11-26-07 07:24  alextud        Note Added: 0002964                          
+12-13-07 04:17  vanokuten      Note Added: 0003149                          
+12-13-07 04:26  alonbl         Note Added: 0003159                          
 ======================================================================
