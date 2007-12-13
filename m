@@ -1,54 +1,58 @@
-From: vanokuten at uclibc.org <vanokuten@uclibc.org>
-Date: Thu, 13 Dec 2007 04:10:00 -0800 (PST)
-Subject: [Buildroot] svn commit: trunk/buildroot/toolchain/gcc
-Message-ID: <20071213121000.C92621200F2@busybox.net>
+From: bugs at busybox.net <bugs@busybox.net>
+Date: Thu, 13 Dec 2007 04:10:30 -0800
+Subject: [Buildroot] [buildroot 0001622]: [PATCH] gcc 3.x/4.x symlinks to cc
+Message-ID: <3d8f07d8a4a62bc86b15cbfe2e71d8f1@busybox.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Author: vanokuten
-Date: 2007-12-13 04:09:56 -0800 (Thu, 13 Dec 2007)
-New Revision: 20646
 
-Log:
-fix gcc 3.x/4.x symlinks to cc
+The following issue has been CLOSED 
+====================================================================== 
+http://busybox.net/bugs/view.php?id=1622 
+====================================================================== 
+Reported By:                atle
+Assigned To:                buildroot
+====================================================================== 
+Project:                    buildroot
+Issue ID:                   1622
+Category:                   Other
+Reproducibility:            always
+Severity:                   minor
+Priority:                   normal
+Status:                     closed
+Resolution:                 open
+Fixed in Version:           
+====================================================================== 
+Date Submitted:             11-30-2007 07:28 PST
+Last Modified:              12-13-2007 04:10 PST
+====================================================================== 
+Summary:                    [PATCH] gcc 3.x/4.x symlinks to cc
+Description: 
+The 'cc' symlink to 'gcc' is wrongly created as $(REAL_GNU_TARGET_NAME)-cc
+for gcc 3.x (overwrites link to  $(REAL_GNU_TARGET_NAME)-gcc). Also the
+'cc' link should be created in $(STAGING_DIR)/$(REAL_GNU_TARGET_NAME)/bin/
+instead of $(STAGING_DIR)/usr/bin.
 
-Modified:
-   trunk/buildroot/toolchain/gcc/gcc-uclibc-3.x.mk
-   trunk/buildroot/toolchain/gcc/gcc-uclibc-4.x.mk
+The attached patch fixes this for both gcc 3.x and 4.x.
 
+====================================================================== 
 
-Changeset:
-Modified: trunk/buildroot/toolchain/gcc/gcc-uclibc-3.x.mk
-===================================================================
---- trunk/buildroot/toolchain/gcc/gcc-uclibc-3.x.mk	2007-12-13 12:01:48 UTC (rev 20645)
-+++ trunk/buildroot/toolchain/gcc/gcc-uclibc-3.x.mk	2007-12-13 12:09:56 UTC (rev 20646)
-@@ -293,8 +293,8 @@
- 		ln -snf $(REAL_GNU_TARGET_NAME)-gcc \
- 			$(STAGING_DIR)/usr/bin/$(REAL_GNU_TARGET_NAME)-cc; \
- 	fi
--	if [ ! -e $(STAGING_DIR)/usr/bin/gcc ]; then \
--		ln -snf gcc $(STAGING_DIR)/usr/bin/$(REAL_GNU_TARGET_NAME)-cc; \
-+	if [ ! -e $(STAGING_DIR)/$(REAL_GNU_TARGET_NAME)/bin/cc ]; then \
-+		ln -snf gcc $(STAGING_DIR)/$(REAL_GNU_TARGET_NAME)/bin/cc; \
- 	fi
- 	# Set up the symlinks to enable lying about target name.
- 	set -e; \
+---------------------------------------------------------------------- 
+ vanokuten - 12-13-07 04:10  
+---------------------------------------------------------------------- 
+fixed in 20646 rev 
 
-Modified: trunk/buildroot/toolchain/gcc/gcc-uclibc-4.x.mk
-===================================================================
---- trunk/buildroot/toolchain/gcc/gcc-uclibc-4.x.mk	2007-12-13 12:01:48 UTC (rev 20645)
-+++ trunk/buildroot/toolchain/gcc/gcc-uclibc-4.x.mk	2007-12-13 12:09:56 UTC (rev 20646)
-@@ -306,8 +306,8 @@
- 		ln -snf $(REAL_GNU_TARGET_NAME)-gcc \
- 			$(STAGING_DIR)/usr/bin/$(REAL_GNU_TARGET_NAME)-cc; \
- 	fi
--	if [ ! -e $(STAGING_DIR)/usr/bin/cc ]; then \
--		ln -snf gcc $(STAGING_DIR)/usr/bin/cc; \
-+	if [ ! -e $(STAGING_DIR)/$(REAL_GNU_TARGET_NAME)/bin/cc ]; then \
-+		ln -snf gcc $(STAGING_DIR)/$(REAL_GNU_TARGET_NAME)/bin/cc; \
- 	fi
- 	# Set up the symlinks to enable lying about target name.
- 	set -e; \
+Issue History 
+Date Modified   Username       Field                    Change               
+====================================================================== 
+11-30-07 07:28  atle           New Issue                                    
+11-30-07 07:28  atle           Status                   new => assigned     
+11-30-07 07:28  atle           Assigned To               => buildroot       
+11-30-07 07:28  atle           File Added: gcc-cc_links-fix.diff                
+   
+12-13-07 04:10  vanokuten      Status                   assigned => closed  
+12-13-07 04:10  vanokuten      Note Added: 0003139                          
+======================================================================
