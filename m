@@ -1,59 +1,28 @@
-From: bugs at busybox.net <bugs@busybox.net>
-Date: Thu, 13 Dec 2007 04:38:37 -0800
-Subject: [Buildroot] [buildroot 0001565]: e2fsprogs generates absolute
-	symlinks in the root, confusing ldconfig
-Message-ID: <67e654b20272de85b657e3cea8f92fcd@busybox.net>
+From: vishnuvaradan vishnuvaradan <vishnuvaradanr@gmail.com>
+Date: Thu, 13 Dec 2007 20:01:55 +0530
+Subject: [Buildroot] how to use custom kernel with its .config in buildroot
+	toolchain ??
+Message-ID: <440e0a9b0712130631u6c7d4386jaf07ec7e8e1c4ec5@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+Hi All
 
-The following issue has been CLOSED 
-====================================================================== 
-http://busybox.net/bugs/view.php?id=1565 
-====================================================================== 
-Reported By:                hmoffatt
-Assigned To:                buildroot
-====================================================================== 
-Project:                    buildroot
-Issue ID:                   1565
-Category:                   Other
-Reproducibility:            always
-Severity:                   minor
-Priority:                   normal
-Status:                     closed
-Resolution:                 open
-Fixed in Version:           
-====================================================================== 
-Date Submitted:             10-30-2007 23:54 PDT
-Last Modified:              12-13-2007 04:38 PST
-====================================================================== 
-Summary:                    e2fsprogs generates absolute symlinks in the root,
-confusing ldconfig
-Description: 
-e2fsprogs generates symlinks within the build tree to absolute paths eg
-/lib/libext2.so.*. This works ok on the target system, but confuses
-ldconfig when run on the host before generating the image - it ends up
-reading the host libraries and gets confused, especially if the endianness
-of the host is different to the target.
+I have customized Linux 2.6.21 kernel for my board specification and
+produced a .config file
 
-Attached patch causes e2fsprogs to make relative links instead.
-====================================================================== 
+In buildroot how/where to point the above my kernel with my .config file ??
 
----------------------------------------------------------------------- 
- vanokuten - 12-13-07 04:38  
----------------------------------------------------------------------- 
-fixed in 20649 rev 
+Instead of downloading the kernel, the buildroot should use my kernel and
+.config
 
-Issue History 
-Date Modified   Username       Field                    Change               
-====================================================================== 
-10-30-07 23:54  hmoffatt       New Issue                                    
-10-30-07 23:54  hmoffatt       Status                   new => assigned     
-10-30-07 23:54  hmoffatt       Assigned To               => buildroot       
-10-30-07 23:54  hmoffatt       File Added: br-e2fs.diff                     
-12-13-07 04:38  vanokuten      Status                   assigned => closed  
-12-13-07 04:38  vanokuten      Note Added: 0003169                          
-======================================================================
+Please help me where to provide this and how to modify this in toolchain ??
+
+
+Thanks in advance
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: http://busybox.net/lists/buildroot/attachments/20071213/90f1c104/attachment.htm 
