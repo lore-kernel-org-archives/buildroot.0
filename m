@@ -1,71 +1,54 @@
-From: bugs at busybox.net <bugs@busybox.net>
-Date: Thu, 13 Dec 2007 04:05:17 -0800
-Subject: [Buildroot] [buildroot 0001709]: fakeroot 1.8.2 no longer available
-	from Debian
-Message-ID: <c2c4c7db07389636dbf9a95dbc8e84ba@busybox.net>
+From: vanokuten at uclibc.org <vanokuten@uclibc.org>
+Date: Thu, 13 Dec 2007 04:10:00 -0800 (PST)
+Subject: [Buildroot] svn commit: trunk/buildroot/toolchain/gcc
+Message-ID: <20071213121000.C92621200F2@busybox.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+Author: vanokuten
+Date: 2007-12-13 04:09:56 -0800 (Thu, 13 Dec 2007)
+New Revision: 20646
 
-A NOTE has been added to this issue. 
-====================================================================== 
-http://busybox.net/bugs/view.php?id=1709 
-====================================================================== 
-Reported By:                mfladischer
-Assigned To:                buildroot
-====================================================================== 
-Project:                    buildroot
-Issue ID:                   1709
-Category:                   Architecture Specific
-Reproducibility:            always
-Severity:                   minor
-Priority:                   normal
-Status:                     assigned
-====================================================================== 
-Date Submitted:             12-12-2007 01:02 PST
-Last Modified:              12-13-2007 04:05 PST
-====================================================================== 
-Summary:                    fakeroot 1.8.2 no longer available from Debian
-Description: 
-Rev20642:
-fakeroot 1.8.2 is no longer available from Debian. The new version is
-1.8.10.
-Patches that could not be applied to 1.8.10:
-- fakeroot-uclibc-LFS.patch
+Log:
+fix gcc 3.x/4.x symlinks to cc
 
-====================================================================== 
+Modified:
+   trunk/buildroot/toolchain/gcc/gcc-uclibc-3.x.mk
+   trunk/buildroot/toolchain/gcc/gcc-uclibc-4.x.mk
 
----------------------------------------------------------------------- 
- bonkabonka - 12-12-07 19:25  
----------------------------------------------------------------------- 
-I've attached a patch to the old patch that makes it apply to the 1.8.10
-revision of fakeroot. 
 
----------------------------------------------------------------------- 
- vanokuten - 12-13-07 04:05  
----------------------------------------------------------------------- 
-bonkabonka,
+Changeset:
+Modified: trunk/buildroot/toolchain/gcc/gcc-uclibc-3.x.mk
+===================================================================
+--- trunk/buildroot/toolchain/gcc/gcc-uclibc-3.x.mk	2007-12-13 12:01:48 UTC (rev 20645)
++++ trunk/buildroot/toolchain/gcc/gcc-uclibc-3.x.mk	2007-12-13 12:09:56 UTC (rev 20646)
+@@ -293,8 +293,8 @@
+ 		ln -snf $(REAL_GNU_TARGET_NAME)-gcc \
+ 			$(STAGING_DIR)/usr/bin/$(REAL_GNU_TARGET_NAME)-cc; \
+ 	fi
+-	if [ ! -e $(STAGING_DIR)/usr/bin/gcc ]; then \
+-		ln -snf gcc $(STAGING_DIR)/usr/bin/$(REAL_GNU_TARGET_NAME)-cc; \
++	if [ ! -e $(STAGING_DIR)/$(REAL_GNU_TARGET_NAME)/bin/cc ]; then \
++		ln -snf gcc $(STAGING_DIR)/$(REAL_GNU_TARGET_NAME)/bin/cc; \
+ 	fi
+ 	# Set up the symlinks to enable lying about target name.
+ 	set -e; \
 
-as I see you fully deleted "defined __UCLIBC__ && defined UCLIBC_HAS_LFS"
-in fakeroot-uclibc-LFS.patch.patch 
-
-seems you have to leave this defines intact
-
-regards,
-Ivan 
-
-Issue History 
-Date Modified   Username       Field                    Change               
-====================================================================== 
-12-12-07 01:02  mfladischer    New Issue                                    
-12-12-07 01:02  mfladischer    Status                   new => assigned     
-12-12-07 01:02  mfladischer    Assigned To               => buildroot       
-12-12-07 07:54  swinnenb       Issue Monitored: swinnenb                    
-12-12-07 19:24  bonkabonka     File Added: fakeroot-uclibc-LFS.patch.patch      
-             
-12-12-07 19:25  bonkabonka     Note Added: 0003119                          
-12-13-07 04:05  vanokuten      Note Added: 0003134                          
-======================================================================
+Modified: trunk/buildroot/toolchain/gcc/gcc-uclibc-4.x.mk
+===================================================================
+--- trunk/buildroot/toolchain/gcc/gcc-uclibc-4.x.mk	2007-12-13 12:01:48 UTC (rev 20645)
++++ trunk/buildroot/toolchain/gcc/gcc-uclibc-4.x.mk	2007-12-13 12:09:56 UTC (rev 20646)
+@@ -306,8 +306,8 @@
+ 		ln -snf $(REAL_GNU_TARGET_NAME)-gcc \
+ 			$(STAGING_DIR)/usr/bin/$(REAL_GNU_TARGET_NAME)-cc; \
+ 	fi
+-	if [ ! -e $(STAGING_DIR)/usr/bin/cc ]; then \
+-		ln -snf gcc $(STAGING_DIR)/usr/bin/cc; \
++	if [ ! -e $(STAGING_DIR)/$(REAL_GNU_TARGET_NAME)/bin/cc ]; then \
++		ln -snf gcc $(STAGING_DIR)/$(REAL_GNU_TARGET_NAME)/bin/cc; \
+ 	fi
+ 	# Set up the symlinks to enable lying about target name.
+ 	set -e; \
