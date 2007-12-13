@@ -1,80 +1,40 @@
-From: bugs at busybox.net <bugs@busybox.net>
-Date: Thu, 13 Dec 2007 07:43:37 -0800
-Subject: [Buildroot] [buildroot 0001709]: fakeroot 1.8.2 no longer available
-	from Debian
-Message-ID: <6bda010511ac4e235175ecfc556606b3@busybox.net>
+From: Martin Bures <needemesleepe@gmail.com>
+Date: Thu, 13 Dec 2007 14:21:40 -0500
+Subject: [Buildroot] BR2_PACKAGE_LINUX_KCONFIG question
+Message-ID: <5970ab460712131121n7ee4357cl89d769320f2e2a81@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+I can't get buildroot to complete and BR2_PACKAGE_LINUX_KCONFIG was pointed
+out as the culprit.  It was not set.  I followed the setup instructions on
+the buildroot website but nothing was mentioned about this variable and I
+can't find it when I do a "make menuconfig".  What do I need to set this
+variable to?
 
-A NOTE has been added to this issue. 
-====================================================================== 
-http://busybox.net/bugs/view.php?id=1709 
-====================================================================== 
-Reported By:                mfladischer
-Assigned To:                buildroot
-====================================================================== 
-Project:                    buildroot
-Issue ID:                   1709
-Category:                   Architecture Specific
-Reproducibility:            always
-Severity:                   minor
-Priority:                   normal
-Status:                     assigned
-====================================================================== 
-Date Submitted:             12-12-2007 01:02 PST
-Last Modified:              12-13-2007 07:43 PST
-====================================================================== 
-Summary:                    fakeroot 1.8.2 no longer available from Debian
-Description: 
-Rev20642:
-fakeroot 1.8.2 is no longer available from Debian. The new version is
-1.8.10.
-Patches that could not be applied to 1.8.10:
-- fakeroot-uclibc-LFS.patch
+Without it, this is the error message that I get:
 
-====================================================================== 
+make[1]: Leaving directory
+`/home/martin/buildroot/toolchain_build_arm_nofpu/module-init-tools-3.2.2'
+touch -c
+/home/martin/buildroot/toolchain_build_arm_nofpu/module-init-tools-3.2.2/depmod
+/usr/bin/install -D
+/home/martin/buildroot/toolchain_build_arm_nofpu/module-init-tools-3.2.2/depmod
+/home/martin/buildroot/build_arm/staging_dir/bin/arm-linux-depmod26
+cp -dpf
+/home/martin/buildroot/project_build_arm/uclibc/linux-2.6.22.10/.config
+cp: missing destination file operand after
+`/home/martin/buildroot/project_build_arm/uclibc/linux-2.6.22.10/.config'
+Try `cp --help' for more information.
+make: ***
+[/home/martin/buildroot/project_build_arm/uclibc/linux-2.6.22.10/.configured]
+Error 1
 
----------------------------------------------------------------------- 
- bonkabonka - 12-12-07 19:25  
----------------------------------------------------------------------- 
-I've attached a patch to the old patch that makes it apply to the 1.8.10
-revision of fakeroot. 
 
----------------------------------------------------------------------- 
- vanokuten - 12-13-07 04:05  
----------------------------------------------------------------------- 
-bonkabonka,
-
-as I see you fully deleted "defined __UCLIBC__ && defined UCLIBC_HAS_LFS"
-in fakeroot-uclibc-LFS.patch.patch 
-
-seems you have to leave this defines intact
-
-regards,
-Ivan 
-
----------------------------------------------------------------------- 
- bonkabonka - 12-13-07 07:43  
----------------------------------------------------------------------- 
-*blink*
-
-You're right, I messed up the cut-n-paste out of the working-copy diff. 
-I'll re-attach a proper version of the patch here in a second. 
-
-Issue History 
-Date Modified   Username       Field                    Change               
-====================================================================== 
-12-12-07 01:02  mfladischer    New Issue                                    
-12-12-07 01:02  mfladischer    Status                   new => assigned     
-12-12-07 01:02  mfladischer    Assigned To               => buildroot       
-12-12-07 07:54  swinnenb       Issue Monitored: swinnenb                    
-12-12-07 19:24  bonkabonka     File Added: fakeroot-uclibc-LFS.patch.patch      
-             
-12-12-07 19:25  bonkabonka     Note Added: 0003119                          
-12-13-07 04:05  vanokuten      Note Added: 0003134                          
-12-13-07 07:43  bonkabonka     Note Added: 0003174                          
-======================================================================
+Thanks.
+martin
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: http://busybox.net/lists/buildroot/attachments/20071213/64013490/attachment.htm 
