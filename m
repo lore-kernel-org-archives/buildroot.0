@@ -1,42 +1,39 @@
-From: bugs at busybox.net <bugs@busybox.net>
-Date: Thu, 13 Dec 2007 03:53:43 -0800
-Subject: [Buildroot] [buildroot 0001759]: Haserl updated,
-	prior patch not usefull any more
-Message-ID: <154d5adc271498b94f026db67d503735@bugs.uclibc.org>
+From: vanokuten at uclibc.org <vanokuten@uclibc.org>
+Date: Thu, 13 Dec 2007 04:01:51 -0800 (PST)
+Subject: [Buildroot] svn commit: trunk/buildroot/package/haserl
+Message-ID: <20071213120151.4B2AD1200F2@busybox.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+Author: vanokuten
+Date: 2007-12-13 04:01:48 -0800 (Thu, 13 Dec 2007)
+New Revision: 20645
 
-The following issue has been SUBMITTED. 
-====================================================================== 
-http://busybox.net/bugs/view.php?id=1759 
-====================================================================== 
-Reported By:                sushisan
-Assigned To:                buildroot
-====================================================================== 
-Project:                    buildroot
-Issue ID:                   1759
-Category:                   Architecture Specific
-Reproducibility:            always
-Severity:                   trivial
-Priority:                   normal
-Status:                     assigned
-====================================================================== 
-Date Submitted:             12-13-2007 03:53 PST
-Last Modified:              12-13-2007 03:53 PST
-====================================================================== 
-Summary:                    Haserl updated, prior patch not usefull any more
-Description: 
-please delete package/haserl/haserl-0.9.20-legacy.patch
-====================================================================== 
+Log:
+delete haserl-0.9.20-legacy.patch
 
-Issue History 
-Date Modified   Username       Field                    Change               
-====================================================================== 
-12-13-07 03:53  sushisan       New Issue                                    
-12-13-07 03:53  sushisan       Status                   new => assigned     
-12-13-07 03:53  sushisan       Assigned To               => buildroot       
-======================================================================
+Removed:
+   trunk/buildroot/package/haserl/haserl-0.9.20-legacy.patch
+
+
+Changeset:
+Deleted: trunk/buildroot/package/haserl/haserl-0.9.20-legacy.patch
+===================================================================
+--- trunk/buildroot/package/haserl/haserl-0.9.20-legacy.patch	2007-12-13 11:34:27 UTC (rev 20644)
++++ trunk/buildroot/package/haserl/haserl-0.9.20-legacy.patch	2007-12-13 12:01:48 UTC (rev 20645)
+@@ -1,12 +0,0 @@
+-diff -urN haserl-0.9.20-0rig/src/haserl.c haserl-0.9.20/src/haserl.c
+---- haserl-0.9.20-0rig/src/haserl.c	2007-10-30 22:58:00.000000000 +0100
+-+++ haserl-0.9.20/src/haserl.c	2007-10-30 23:00:10.000000000 +0100
+-@@ -210,7 +210,7 @@
+-     }
+-   memcpy ((char *) (entry + strlen (prefix)), str, strlen (str));
+- 
+--  keylen = (size_t) (index (entry, '=') - entry);
+-+  keylen = (size_t) (strchr (entry, '=') - entry);
+- 
+-   if (keylen <= 0)
+-     {
