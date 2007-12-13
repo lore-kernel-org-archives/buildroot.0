@@ -1,8 +1,7 @@
 From: bugs at busybox.net <bugs@busybox.net>
-Date: Thu, 13 Dec 2007 04:26:25 -0800
-Subject: [Buildroot] [buildroot 0001469]: Add fuse and ntfs package for
-	buildroot
-Message-ID: <7340fe5d4dd24badd441e92699c40886@busybox.net>
+Date: Thu, 13 Dec 2007 04:26:34 -0800
+Subject: [Buildroot] [buildroot 0001694]: Missing argument in makefile
+Message-ID: <394a45d1a65019e9f33faa7e8533dc70@busybox.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -10,122 +9,69 @@ Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
 
-A NOTE has been added to this issue. 
+The following issue has been CLOSED 
 ====================================================================== 
-http://busybox.net/bugs/view.php?id=1469 
+http://busybox.net/bugs/view.php?id=1694 
 ====================================================================== 
-Reported By:                alextud
+Reported By:                martinmeba
 Assigned To:                buildroot
 ====================================================================== 
 Project:                    buildroot
-Issue ID:                   1469
-Category:                   New Features
-Reproducibility:            N/A
-Severity:                   feature
+Issue ID:                   1694
+Category:                   Architecture Specific
+Reproducibility:            always
+Severity:                   minor
 Priority:                   normal
-Status:                     assigned
+Status:                     closed
+Resolution:                 open
+Fixed in Version:           
 ====================================================================== 
-Date Submitted:             08-22-2007 08:12 PDT
+Date Submitted:             12-10-2007 20:58 PST
 Last Modified:              12-13-2007 04:26 PST
 ====================================================================== 
-Summary:                    Add fuse and ntfs package for buildroot
+Summary:                    Missing argument in makefile
 Description: 
-Hi,
-I made some makefile for fuse and ntfs-3g and I'll be happy if you can add
-them to  buildroot package.
-Ntfs-3g mount always fail with default busybox mount command, only work
-with mount from util-linux package, I think that its related with fuse and
-mount from busybox, fix me if I wrong.
-Also I disabled in fuse symvers related to version 2.2 because on runtime
-fusermount show: unknown '" option. 
-I'm just started with buildroot and my files maybe contains some error,
-feel free to modify them.
+Error when executing make
+SVN revision for buildroot: 20636
 
-Thanks, Alex.
+modinfo.c: In function ?main?:
+modinfo.c:338: warning: ?infosize? may be used uninitialized in this
+function
+/usr/bin/gcc  -g -O2 -Wunused -Wall   -o modinfo  modinfo.o zlibsupport.o 
+
+/usr/bin/gcc  -g -O2 -Wunused -Wall   -o insmod.static -static insmod.o  
+make[1]: Leaving directory
+`/home/martin/buildroot/toolchain_build_arm_nofpu/module-init-tools-3.2.2'
+touch -c
+/home/martin/buildroot/toolchain_build_arm_nofpu/module-init-tools-3.2.2/depmod
+/usr/bin/install -D
+/home/martin/buildroot/toolchain_build_arm_nofpu/module-init-tools-3.2.2/depmod
+/home/martin/buildroot/build_arm/staging_dir/bin/arm-linux-depmod26
+cp -dpf 
+/home/martin/buildroot/project_build_arm/uclibc/linux-2.6.22.10/.config
+cp: missing destination file operand after
+`/home/martin/buildroot/project_build_arm/uclibc/linux-2.6.22.10/.config'
+Try `cp --help' for more information.
+make: ***
+[/home/martin/buildroot/project_build_arm/uclibc/linux-2.6.22.10/.configured]
+Error 1
+
+I followed the instructions to set the system up.  Is there no second
+argument because I didn't configure something correctly or is this a bug?
 ====================================================================== 
 
 ---------------------------------------------------------------------- 
- alonbl - 11-21-07 10:33  
+ hmoffatt - 12-10-07 22:20  
 ---------------------------------------------------------------------- 
-Hi!
-
-The patch for fuse works, thanks!
-Have you sent this to fuse developers?
-
-Can you please rebase to 2.7.1? I don't fully understand these syms...
-
-I succeeded to make busybox mount work, by creating a script that ignores
-the "-i" option.
-
-The problem is that I ntfs-3g segfaults when I umount.
-
-I will try to figure out why. 
-
----------------------------------------------------------------------- 
- alonbl - 11-23-07 07:32  
----------------------------------------------------------------------- 
-OK.
-Fully working with fuse-2.7.1.
-
-All I done is Added to CFLAGS "-D__asm__\(X\)="
-
-Lastest busybox ignores the -i options.
-
-So now it is working.
-
-Thanks for the lead. 
-
----------------------------------------------------------------------- 
- alextud - 11-23-07 12:56  
----------------------------------------------------------------------- 
-That's great. I will this weekend. 
-
----------------------------------------------------------------------- 
- alextud - 11-26-07 07:24  
----------------------------------------------------------------------- 
-I tested, it does work well:
-CFLAGS="$(TARGET_CFLAGS) -D__asm__\(X\)=" \
-
-even df -h command doesn't cause an software interrupt. 
-
----------------------------------------------------------------------- 
- vanokuten - 12-13-07 04:17  
----------------------------------------------------------------------- 
-can we close it? or some fix to current buildroot is still required?
-
-regards,
-Ivan 
-
----------------------------------------------------------------------- 
- alonbl - 12-13-07 04:26  
----------------------------------------------------------------------- 
-I don't know the policy here...
-
-But next version of ntfs-3g will not require external fuse, so it is much
-smaller and *SUPPORTED* with uclibc.
-A beta is available at:
-http://ntfs-3g.org/ntfs-3g-1.1206-BETA.tgz
-
-It all resulted from my request of formal uclibc support from the fuse
-maintainer. He disagree, so ntfs-3g maintainer understood the importance
-of being supported on this environment.
-
-So I guess it worth waiting for its release. 
+It's because you failed to set BR2_PACKAGE_LINUX_KCONFIG to the location of
+your kernel configuration file. 
 
 Issue History 
 Date Modified   Username       Field                    Change               
 ====================================================================== 
-08-22-07 08:12  alextud        New Issue                                    
-08-22-07 08:12  alextud        Status                   new => assigned     
-08-22-07 08:12  alextud        Assigned To               => buildroot       
-08-22-07 08:12  alextud        File Added: fuse&ntfs_mk.tar.gz                  
- 
-08-22-07 08:15  alextud        Issue Monitored: alextud                     
-11-21-07 10:30  alonbl         Issue Monitored: alonbl                      
-11-21-07 10:33  alonbl         Note Added: 0002946                          
-11-23-07 07:32  alonbl         Note Added: 0002953                          
-11-23-07 12:56  alextud        Note Added: 0002954                          
-11-26-07 07:24  alextud        Note Added: 0002964                          
-12-13-07 04:17  vanokuten      Note Added: 0003149                          
-12-13-07 04:26  alonbl         Note Added: 0003159                          
+12-10-07 20:58  martinmeba     New Issue                                    
+12-10-07 20:58  martinmeba     Status                   new => assigned     
+12-10-07 20:58  martinmeba     Assigned To               => buildroot       
+12-10-07 22:20  hmoffatt       Note Added: 0003074                          
+12-13-07 04:26  vanokuten      Status                   assigned => closed  
 ======================================================================
