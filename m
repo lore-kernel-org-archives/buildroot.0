@@ -1,32 +1,39 @@
 From: Ulf Samuelsson <ulf@atmel.com>
-Date: Thu, 13 Dec 2007 20:55:32 +0100
-Subject: [Buildroot] how to use custom kernel with its .config in
-	buildroottoolchain ??
-References: <440e0a9b0712130631u6c7d4386jaf07ec7e8e1c4ec5@mail.gmail.com>
-Message-ID: <028201c83dd2$66cc7140$dcc4af0a@atmel.com>
+Date: Thu, 13 Dec 2007 21:28:56 +0100
+Subject: [Buildroot] [buildroot 0001568]: "make BOARD=xyz
+	menuconfig"/	oldconfig etc does not work
+References: <b55faafb87f5cc5a7566708c821671b2@busybox.net>
+	<20071211062833.GA8833@cloud.net.au>
+Message-ID: <028301c83dd2$66d59900$dcc4af0a@atmel.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-
-
-> Hi All
-> 
-> I have customized Linux 2.6.21 kernel for my board specification and
-> produced a .config file
-> 
-> In buildroot how/where to point the above my kernel with my .config file ??
-> 
-> Instead of downloading the kernel, the buildroot should use my kernel and
-> .config
-> 
-> Please help me where to provide this and how to modify this in toolchain ??
+> I mean no offense when I ask, is project support well-supported by the
+> buildroot community over all? Is it your work originally Ulf with little
+> support from the others? Some things like the above don't work as I
+> expect them, so it feels a bit rough. In the case of my patch in this
+> bug report, you could apply it and make me happy without any detriment
+> to the way you work (with getconfig/saveconfig).
 > 
 
-Use the "Advanced Linux" configuration.
+No, you destroy the original intent by making certain things depend
+on the stuff in local/<proj>/*.config
 
+We do not depend on the different "defconfigs" as well.
+We copy them to .config and then we depend on .config
+
+A good way to fix your problem could be to have a 
+
+make BOARD=xyz reconfig
+
+which would 
+
+* make BOARD=$(BOARD) getconfig
+* make menuconfig
+* make saveconfig
 
 Best Regards
 Ulf Samuelsson
