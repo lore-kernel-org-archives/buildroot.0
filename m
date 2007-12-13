@@ -1,8 +1,8 @@
 From: bugs at busybox.net <bugs@busybox.net>
-Date: Thu, 13 Dec 2007 04:16:09 -0800
-Subject: [Buildroot] [buildroot 0001714]: syslinux 3.51 no longer available
-	from kernel.org
-Message-ID: <4bf14d40464ba9272bac258fb65a82ec@busybox.net>
+Date: Thu, 13 Dec 2007 04:17:29 -0800
+Subject: [Buildroot] [buildroot 0001469]: Add fuse and ntfs package for
+	buildroot
+Message-ID: <ca543bcb03f1dabe8acde5f1a34a43e8@busybox.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -10,43 +10,105 @@ Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
 
-The following issue has been CLOSED 
+A NOTE has been added to this issue. 
 ====================================================================== 
-http://busybox.net/bugs/view.php?id=1714 
+http://busybox.net/bugs/view.php?id=1469 
 ====================================================================== 
-Reported By:                mfladischer
+Reported By:                alextud
 Assigned To:                buildroot
 ====================================================================== 
 Project:                    buildroot
-Issue ID:                   1714
-Category:                   Architecture Specific
-Reproducibility:            always
-Severity:                   minor
+Issue ID:                   1469
+Category:                   New Features
+Reproducibility:            N/A
+Severity:                   feature
 Priority:                   normal
-Status:                     closed
-Resolution:                 open
-Fixed in Version:           
+Status:                     assigned
 ====================================================================== 
-Date Submitted:             12-12-2007 01:23 PST
-Last Modified:              12-13-2007 04:16 PST
+Date Submitted:             08-22-2007 08:12 PDT
+Last Modified:              12-13-2007 04:17 PST
 ====================================================================== 
-Summary:                    syslinux 3.51 no longer available from kernel.org
+Summary:                    Add fuse and ntfs package for buildroot
 Description: 
-Rev20642:
-syslinux 3.51 has to be updated to 3.53.
+Hi,
+I made some makefile for fuse and ntfs-3g and I'll be happy if you can add
+them to  buildroot package.
+Ntfs-3g mount always fail with default busybox mount command, only work
+with mount from util-linux package, I think that its related with fuse and
+mount from busybox, fix me if I wrong.
+Also I disabled in fuse symvers related to version 2.2 because on runtime
+fusermount show: unknown '" option. 
+I'm just started with buildroot and my files maybe contains some error,
+feel free to modify them.
+
+Thanks, Alex.
 ====================================================================== 
 
 ---------------------------------------------------------------------- 
- vanokuten - 12-13-07 04:16  
+ alonbl - 11-21-07 10:33  
 ---------------------------------------------------------------------- 
-fixed in 20647 rev 
+Hi!
+
+The patch for fuse works, thanks!
+Have you sent this to fuse developers?
+
+Can you please rebase to 2.7.1? I don't fully understand these syms...
+
+I succeeded to make busybox mount work, by creating a script that ignores
+the "-i" option.
+
+The problem is that I ntfs-3g segfaults when I umount.
+
+I will try to figure out why. 
+
+---------------------------------------------------------------------- 
+ alonbl - 11-23-07 07:32  
+---------------------------------------------------------------------- 
+OK.
+Fully working with fuse-2.7.1.
+
+All I done is Added to CFLAGS "-D__asm__\(X\)="
+
+Lastest busybox ignores the -i options.
+
+So now it is working.
+
+Thanks for the lead. 
+
+---------------------------------------------------------------------- 
+ alextud - 11-23-07 12:56  
+---------------------------------------------------------------------- 
+That's great. I will this weekend. 
+
+---------------------------------------------------------------------- 
+ alextud - 11-26-07 07:24  
+---------------------------------------------------------------------- 
+I tested, it does work well:
+CFLAGS="$(TARGET_CFLAGS) -D__asm__\(X\)=" \
+
+even df -h command doesn't cause an software interrupt. 
+
+---------------------------------------------------------------------- 
+ vanokuten - 12-13-07 04:17  
+---------------------------------------------------------------------- 
+can we close it? or some fix to current buildroot is still required?
+
+regards,
+Ivan 
 
 Issue History 
 Date Modified   Username       Field                    Change               
 ====================================================================== 
-12-12-07 01:23  mfladischer    New Issue                                    
-12-12-07 01:23  mfladischer    Status                   new => assigned     
-12-12-07 01:23  mfladischer    Assigned To               => buildroot       
-12-13-07 04:16  vanokuten      Status                   assigned => closed  
-12-13-07 04:16  vanokuten      Note Added: 0003144                          
+08-22-07 08:12  alextud        New Issue                                    
+08-22-07 08:12  alextud        Status                   new => assigned     
+08-22-07 08:12  alextud        Assigned To               => buildroot       
+08-22-07 08:12  alextud        File Added: fuse&ntfs_mk.tar.gz                  
+ 
+08-22-07 08:15  alextud        Issue Monitored: alextud                     
+11-21-07 10:30  alonbl         Issue Monitored: alonbl                      
+11-21-07 10:33  alonbl         Note Added: 0002946                          
+11-23-07 07:32  alonbl         Note Added: 0002953                          
+11-23-07 12:56  alextud        Note Added: 0002954                          
+11-26-07 07:24  alextud        Note Added: 0002964                          
+12-13-07 04:17  vanokuten      Note Added: 0003149                          
 ======================================================================
