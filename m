@@ -1,39 +1,52 @@
-From: vanokuten at uclibc.org <vanokuten@uclibc.org>
-Date: Thu, 13 Dec 2007 03:34:28 -0800 (PST)
-Subject: [Buildroot] svn commit: trunk/buildroot/package/haserl
-Message-ID: <20071213113428.E15411200F1@busybox.net>
+From: bugs at busybox.net <bugs@busybox.net>
+Date: Thu, 13 Dec 2007 03:35:06 -0800
+Subject: [Buildroot] [buildroot 0001749]: Haserl 0.9.21 don't compile
+Message-ID: <c65a44d97b2d303f95e1bac742b7370a@busybox.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Author: vanokuten
-Date: 2007-12-13 03:34:27 -0800 (Thu, 13 Dec 2007)
-New Revision: 20644
 
-Log:
-susv3 legacy fix for haserl
+The following issue has been CLOSED 
+====================================================================== 
+http://busybox.net/bugs/view.php?id=1749 
+====================================================================== 
+Reported By:                sushisan
+Assigned To:                buildroot
+====================================================================== 
+Project:                    buildroot
+Issue ID:                   1749
+Category:                   Architecture Specific
+Reproducibility:            always
+Severity:                   crash
+Priority:                   normal
+Status:                     closed
+Resolution:                 open
+Fixed in Version:           
+====================================================================== 
+Date Submitted:             12-12-2007 19:45 PST
+Last Modified:              12-13-2007 03:35 PST
+====================================================================== 
+Summary:                    Haserl 0.9.21 don't compile
+Description: 
+Same error of 0.9.20 (index function don't work in buildroot)
+This patch change index to strchr
+====================================================================== 
 
-Added:
-   trunk/buildroot/package/haserl/haserl-0.9.21-susv3-legacy.patch
+---------------------------------------------------------------------- 
+ vanokuten - 12-13-07 03:35  
+---------------------------------------------------------------------- 
+fixed in 20644 rev 
 
-
-Changeset:
-Added: trunk/buildroot/package/haserl/haserl-0.9.21-susv3-legacy.patch
-===================================================================
---- trunk/buildroot/package/haserl/haserl-0.9.21-susv3-legacy.patch	                        (rev 0)
-+++ trunk/buildroot/package/haserl/haserl-0.9.21-susv3-legacy.patch	2007-12-13 11:34:27 UTC (rev 20644)
-@@ -0,0 +1,12 @@
-+diff -urN haserl-0.9.21-0rig/src/haserl.c haserl-0.9.21/src/haserl.c
-+--- haserl-0.9.21-0rig/src/haserl.c	2007-12-13 22:58:00.000000000 +0100
-++++ haserl-0.9.21/src/haserl.c	2007-12-13 23:00:10.000000000 +0100
-+@@ -210,7 +210,7 @@
-+     }
-+   memcpy ((char *) (entry + strlen (prefix)), str, strlen (str));
-+ 
-+-  keylen = (size_t) (index (entry, '=') - entry);
-++  keylen = (size_t) (strchr (entry, '=') - entry);
-+ 
-+   if (keylen <= 0)
-+     {
+Issue History 
+Date Modified   Username       Field                    Change               
+====================================================================== 
+12-12-07 19:45  sushisan       New Issue                                    
+12-12-07 19:45  sushisan       Status                   new => assigned     
+12-12-07 19:45  sushisan       Assigned To               => buildroot       
+12-12-07 19:45  sushisan       File Added: br2-haserl.patch                    
+12-13-07 03:35  vanokuten      Status                   assigned => closed  
+12-13-07 03:35  vanokuten      Note Added: 0003124                          
+======================================================================
