@@ -1,39 +1,44 @@
-From: Ulf Samuelsson <ulf@atmel.com>
-Date: Thu, 13 Dec 2007 21:28:56 +0100
-Subject: [Buildroot] [buildroot 0001568]: "make BOARD=xyz
-	menuconfig"/	oldconfig etc does not work
-References: <b55faafb87f5cc5a7566708c821671b2@busybox.net>
-	<20071211062833.GA8833@cloud.net.au>
-Message-ID: <028301c83dd2$66d59900$dcc4af0a@atmel.com>
+From: bugs at busybox.net <bugs@busybox.net>
+Date: Thu, 13 Dec 2007 16:00:36 -0800
+Subject: [Buildroot] [buildroot 0001764]: build root fails
+Message-ID: <9fb40ce0112ecc2b92c89f80503bc1ac@busybox.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-> I mean no offense when I ask, is project support well-supported by the
-> buildroot community over all? Is it your work originally Ulf with little
-> support from the others? Some things like the above don't work as I
-> expect them, so it feels a bit rough. In the case of my patch in this
-> bug report, you could apply it and make me happy without any detriment
-> to the way you work (with getconfig/saveconfig).
-> 
 
-No, you destroy the original intent by making certain things depend
-on the stuff in local/<proj>/*.config
+The following issue has been SUBMITTED. 
+====================================================================== 
+http://busybox.net/bugs/view.php?id=1764 
+====================================================================== 
+Reported By:                Leo Kaplan
+Assigned To:                buildroot
+====================================================================== 
+Project:                    buildroot
+Issue ID:                   1764
+Category:                   Other
+Reproducibility:            always
+Severity:                   major
+Priority:                   normal
+Status:                     assigned
+====================================================================== 
+Date Submitted:             12-13-2007 16:00 PST
+Last Modified:              12-13-2007 16:00 PST
+====================================================================== 
+Summary:                    build root fails
+Description: 
+After today's check in of gcc-uclibc-4.x.mk the make fails with the
+following error
 
-We do not depend on the different "defconfigs" as well.
-We copy them to .config and then we depend on .config
 
-A good way to fix your problem could be to have a 
+====================================================================== 
 
-make BOARD=xyz reconfig
-
-which would 
-
-* make BOARD=$(BOARD) getconfig
-* make menuconfig
-* make saveconfig
-
-Best Regards
-Ulf Samuelsson
+Issue History 
+Date Modified   Username       Field                    Change               
+====================================================================== 
+12-13-07 16:00  Leo Kaplan     New Issue                                    
+12-13-07 16:00  Leo Kaplan     Status                   new => assigned     
+12-13-07 16:00  Leo Kaplan     Assigned To               => buildroot       
+======================================================================
