@@ -1,37 +1,23 @@
-From: hartleys <hartleys@visionengravers.com>
-Date: Thu, 13 Dec 2007 19:25:59 -0500
-Subject: [Buildroot] UrJTAG (fork of openwince jtag tools)
-Message-ID: <1CF6EDDF0820924DA43C9A52FE73259506D0761E@MI8NYCMAIL17.Mi8.com>
+From: saravanan chanemouganandam <saravanan_sprt@hotmail.com>
+Date: Fri, 14 Dec 2007 14:52:12 +0530
+Subject: [Buildroot] how to build Buildroot for linux kernel 2.6.12 ?
+In-Reply-To: <1867757801.118661197542794366.JavaMail.root@mbv4.indiatimes.com>
+References: <1867757801.118661197542794366.JavaMail.root@mbv4.indiatimes.com>
+Message-ID: <BAY131-W1A66F9F20F34800681B88E2670@phx.gbl>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello all
 
-Has anyone tried building UrJTAG under buildroot?
-
-http://urjtag.wiki.sourceforge.net
-
-I'm trying to cross compile the package for use on an ARM processor
-(Cirrus
-EP93xx family) and can't figure out how to create the necessary .mk
-file.
-
-UrJTAG consists of two packages. An include package with a bunch of
-support
-stuff and the main source package. Both of these are configured normally
-by
-executing two autogen.sh scripts. I really don't understand how the
-automake
-stuff works so I can't work out what I need to do to get it to work with
-buildroot. I can build the package with no problems on my host machine
-but
-need it for the ARM target.
-
-Can anyone offer some suggestions or help?
-
-Thanks,
-
-Hartley
+You are already answered by Joe
+ 
+- Check "Show obsolete/deprecated packages/features"- Use the Mailing List Archive. (Same issue was here not even two weeks ago)
+> Date: Thu, 13 Dec 2007 16:16:34 +0530> From: raajesh.n at indiatimes.com> To: buildroot at uclibc.org> Subject: [Buildroot] how to build Buildroot for linux kernel 2.6.12 ?> > Hi all,> > I am new to Buildroot, I downloaded latest version of Buildroot from this site, svn co svn://uclibc.org/trunk/buildroot , but when kernel headers were checked in for 2.6.12 it was not found. latest version of Buildroot has no support for kernel 2.6.12.> > How can I resolve this problem? can I buildroot for for linux 2.6.12 version kernel ?> > If there is any modification that has to be done for building Buildroot for linux 2.6.12, Please do inform me.> > If there are any serious issues with this Modification , Please do inform me too.> > Best Regards,> > Rajesh N> > > > --> My life has changed. What about yours?> Log on to the new Indiatimes Mail and Live out of the Inbox!> _______________________________________________> buildroot mailing list> buildroot at uclibc.org> http://busybox.net/mailman/listinfo/buildroot
+_________________________________________________________________
+Tried the new MSN Messenger? It?s cool! Download now.
+http://messenger.msn.com/Download/Default.aspx?mkt=en-in
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: http://busybox.net/lists/buildroot/attachments/20071214/0656652f/attachment.htm 
