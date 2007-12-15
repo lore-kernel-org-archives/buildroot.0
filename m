@@ -1,57 +1,63 @@
-From: Lan Ngoc <ngoclan.it@gmail.com>
-Date: Sat, 15 Dec 2007 22:41:08 +0700
-Subject: [Buildroot] Build kernel for ARM with Buildroot
-Message-ID: <2b4282de0712150741n6266e9b0ged662875d25e2824@mail.gmail.com>
+From: bugs at busybox.net <bugs@busybox.net>
+Date: Sat, 15 Dec 2007 15:02:01 -0800
+Subject: [Buildroot] [buildroot 0001779]: Asterisk PBX threading issues when
+	compiled against uClibc on buildroot system (recursive lock
+	test hangs)
+Message-ID: <995425db0004f19f25eff518fb6dacdb@bugs.uclibc.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-I have been building kernel and getting error1: "cp: missing destination
-file operand after" as following:
-................................................................
 
-[root at localhost buildroot]# make
+The following issue has been SUBMITTED. 
+====================================================================== 
+http://busybox.net/bugs/view.php?id=1779 
+====================================================================== 
+Reported By:                hwstar
+Assigned To:                buildroot
+====================================================================== 
+Project:                    buildroot
+Issue ID:                   1779
+Category:                   Architecture Specific
+Reproducibility:            always
+Severity:                   minor
+Priority:                   normal
+Status:                     assigned
+====================================================================== 
+Date Submitted:             12-15-2007 15:02 PST
+Last Modified:              12-15-2007 15:02 PST
+====================================================================== 
+Summary:                    Asterisk PBX threading issues when compiled against
+uClibc on buildroot system (recursive lock test hangs)
+Description: 
+I created a buildroot system with the development tools installed on the
+target.
+When compiling the Asterisk PBX on the target system, the function
+test_for_thread_safety() which tests for recursive mutexes in main/utils.c
+never finishes causing asterisk.ctl to never be created. I attached a code
+snippet from utils.c and an strace dump in the "additional information"
+box below. It shows that the test thread is being created, and from within
+the test thread, the system never returns from the lock right after the
+message "Test thread body stated\n".
+In the main process code, nothing happens after the the call to
+ast_pthread_create().
 
-Checking build system dependencies:
-BUILDROOT_DL_DIR clean:                         Ok
-CC clean:                                       Ok
-CXX clean:                                      Ok
-CPP clean:                                      Ok
-CFLAGS clean:                                   Ok
-INCLUDES clean:                                 Ok
-CXXFLAGS clean:                                 Ok
-which installed:                                Ok
-sed works:                                      Ok (/bin/sed)
-GNU make version '3.81':                        Ok
-C compiler '/usr/lib/ccache/gcc'
-C compiler version '4.1.2':                     Ok
-C++ compiler '/usr/lib/ccache/g++'
-C++ compiler version '4.1.2':                   Ok
-bison installed:                                Ok
-flex installed:                                 Ok
-gettext installed:                              Ok
-makeinfo installed:                             Ok
-Build system dependencies:                      Ok
+My uClibc library .config file is also attached as a file.
 
-rm -rf /mnt/e/buildroot/project_build_arm/ENDUP/buildroot-config
-mkdir -p /mnt/e/buildroot/project_build_arm/ENDUP
-cp -dpRf package/config/buildroot-config
-/mnt/e/buildroot/project_build_arm/ENDUP/buildroot-config
-cp -dpf  /mnt/e/buildroot/project_build_arm/ENDUP/linux-2.6.22.10/.config
-cp: missing destination file operand after
-`/mnt/e/buildroot/project_build_arm/ENDUP/linux-2.6.22.10/.config'
-Try `cp --help' for more information.
-make: *** [/mnt/e/buildroot/project_build_arm/ENDUP/linux-
-2.6.22.10/.configured] Error 1
+Are recursive mutex locks an issue in uClibc?
 
-......................................................
-I'm using Fedora core 7 and lastest Buildroot version.
 
-Please show me how to sovle this error!
 
-Thank you very much!
--------------- next part --------------
-An HTML attachment was scrubbed...
-URL: http://busybox.net/lists/buildroot/attachments/20071215/ed6fa3d1/attachment.htm 
+
+====================================================================== 
+
+Issue History 
+Date Modified   Username       Field                    Change               
+====================================================================== 
+12-15-07 15:02  hwstar         New Issue                                    
+12-15-07 15:02  hwstar         Status                   new => assigned     
+12-15-07 15:02  hwstar         Assigned To               => buildroot       
+12-15-07 15:02  hwstar         File Added: uClibc.config                    
+======================================================================
