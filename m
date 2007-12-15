@@ -1,36 +1,57 @@
-From: jacmet at uclibc.org <jacmet@uclibc.org>
-Date: Fri, 14 Dec 2007 02:12:16 -0800 (PST)
-Subject: [Buildroot] svn commit: trunk/buildroot/package/sqlite
-Message-ID: <20071214101216.4172E1200F1@busybox.net>
+From: Lan Ngoc <ngoclan.it@gmail.com>
+Date: Sat, 15 Dec 2007 22:41:08 +0700
+Subject: [Buildroot] Build kernel for ARM with Buildroot
+Message-ID: <2b4282de0712150741n6266e9b0ged662875d25e2824@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Author: jacmet
-Date: 2007-12-14 02:12:15 -0800 (Fri, 14 Dec 2007)
-New Revision: 20650
+I have been building kernel and getting error1: "cp: missing destination
+file operand after" as following:
+................................................................
 
-Log:
-Bumped version
+[root at localhost buildroot]# make
 
+Checking build system dependencies:
+BUILDROOT_DL_DIR clean:                         Ok
+CC clean:                                       Ok
+CXX clean:                                      Ok
+CPP clean:                                      Ok
+CFLAGS clean:                                   Ok
+INCLUDES clean:                                 Ok
+CXXFLAGS clean:                                 Ok
+which installed:                                Ok
+sed works:                                      Ok (/bin/sed)
+GNU make version '3.81':                        Ok
+C compiler '/usr/lib/ccache/gcc'
+C compiler version '4.1.2':                     Ok
+C++ compiler '/usr/lib/ccache/g++'
+C++ compiler version '4.1.2':                   Ok
+bison installed:                                Ok
+flex installed:                                 Ok
+gettext installed:                              Ok
+makeinfo installed:                             Ok
+Build system dependencies:                      Ok
 
-Modified:
-   trunk/buildroot/package/sqlite/sqlite.mk
+rm -rf /mnt/e/buildroot/project_build_arm/ENDUP/buildroot-config
+mkdir -p /mnt/e/buildroot/project_build_arm/ENDUP
+cp -dpRf package/config/buildroot-config
+/mnt/e/buildroot/project_build_arm/ENDUP/buildroot-config
+cp -dpf  /mnt/e/buildroot/project_build_arm/ENDUP/linux-2.6.22.10/.config
+cp: missing destination file operand after
+`/mnt/e/buildroot/project_build_arm/ENDUP/linux-2.6.22.10/.config'
+Try `cp --help' for more information.
+make: *** [/mnt/e/buildroot/project_build_arm/ENDUP/linux-
+2.6.22.10/.configured] Error 1
 
+......................................................
+I'm using Fedora core 7 and lastest Buildroot version.
 
-Changeset:
-Modified: trunk/buildroot/package/sqlite/sqlite.mk
-===================================================================
---- trunk/buildroot/package/sqlite/sqlite.mk	2007-12-13 12:38:13 UTC (rev 20649)
-+++ trunk/buildroot/package/sqlite/sqlite.mk	2007-12-14 10:12:15 UTC (rev 20650)
-@@ -4,7 +4,7 @@
- #
- #############################################################
- 
--SQLITE_VERSION:=3.4.1
-+SQLITE_VERSION:=3.5.3
- SQLITE_SOURCE:=sqlite-$(SQLITE_VERSION).tar.gz
- SQLITE_SITE:=http://www.sqlite.org
- SQLITE_DIR:=$(BUILD_DIR)/sqlite-$(SQLITE_VERSION)
+Please show me how to sovle this error!
+
+Thank you very much!
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: http://busybox.net/lists/buildroot/attachments/20071215/ed6fa3d1/attachment.htm 
