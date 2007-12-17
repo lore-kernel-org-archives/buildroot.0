@@ -1,7 +1,7 @@
 From: bugs at busybox.net <bugs@busybox.net>
-Date: Mon, 17 Dec 2007 03:39:30 -0800
-Subject: [Buildroot] [buildroot 0001764]: build root fails
-Message-ID: <a275f0fd40ed0a864a335d6e75504f10@busybox.net>
+Date: Mon, 17 Dec 2007 03:41:46 -0800
+Subject: [Buildroot] [buildroot 0001622]: [PATCH] gcc 3.x/4.x symlinks to cc
+Message-ID: <8c6af2def66766c6ea76881a22afadfb@busybox.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -9,47 +9,57 @@ Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
 
-The following issue has been CLOSED 
+The following issue has been REOPENED. 
 ====================================================================== 
-http://busybox.net/bugs/view.php?id=1764 
+http://busybox.net/bugs/view.php?id=1622 
 ====================================================================== 
-Reported By:                Leo Kaplan
+Reported By:                atle
 Assigned To:                buildroot
 ====================================================================== 
 Project:                    buildroot
-Issue ID:                   1764
+Issue ID:                   1622
 Category:                   Other
 Reproducibility:            always
-Severity:                   major
+Severity:                   minor
 Priority:                   normal
-Status:                     closed
-Resolution:                 open
-Fixed in Version:           
+Status:                     feedback
 ====================================================================== 
-Date Submitted:             12-13-2007 16:00 PST
-Last Modified:              12-17-2007 03:39 PST
+Date Submitted:             11-30-2007 07:28 PST
+Last Modified:              12-17-2007 03:41 PST
 ====================================================================== 
-Summary:                    build root fails
+Summary:                    [PATCH] gcc 3.x/4.x symlinks to cc
 Description: 
-After today's check in of gcc-uclibc-4.x.mk the make fails with the
-following error
+The 'cc' symlink to 'gcc' is wrongly created as $(REAL_GNU_TARGET_NAME)-cc
+for gcc 3.x (overwrites link to  $(REAL_GNU_TARGET_NAME)-gcc). Also the
+'cc' link should be created in $(STAGING_DIR)/$(REAL_GNU_TARGET_NAME)/bin/
+instead of $(STAGING_DIR)/usr/bin.
 
+The attached patch fixes this for both gcc 3.x and 4.x.
 
 ====================================================================== 
 
 ---------------------------------------------------------------------- 
- vanokuten - 12-17-07 03:39  
+ vanokuten - 12-13-07 04:10  
 ---------------------------------------------------------------------- 
-thanks for pointing out! 
+fixed in 20646 rev 
 
-affected commit 20646 reverted 
+---------------------------------------------------------------------- 
+ vanokuten - 12-17-07 03:41  
+---------------------------------------------------------------------- 
+bad patch, not working correctly on ARM arch, see 1764 
 
 Issue History 
 Date Modified   Username       Field                    Change               
 ====================================================================== 
-12-13-07 16:00  Leo Kaplan     New Issue                                    
-12-13-07 16:00  Leo Kaplan     Status                   new => assigned     
-12-13-07 16:00  Leo Kaplan     Assigned To               => buildroot       
-12-17-07 03:39  vanokuten      Status                   assigned => closed  
-12-17-07 03:39  vanokuten      Note Added: 0003209                          
+11-30-07 07:28  atle           New Issue                                    
+11-30-07 07:28  atle           Status                   new => assigned     
+11-30-07 07:28  atle           Assigned To               => buildroot       
+11-30-07 07:28  atle           File Added: gcc-cc_links-fix.diff                
+   
+12-13-07 04:10  vanokuten      Status                   assigned => closed  
+12-13-07 04:10  vanokuten      Note Added: 0003139                          
+12-13-07 04:10  vanokuten      Resolution               open => fixed       
+12-17-07 03:41  vanokuten      Status                   closed => feedback  
+12-17-07 03:41  vanokuten      Resolution               fixed => reopened   
+12-17-07 03:41  vanokuten      Note Added: 0003214                          
 ======================================================================
