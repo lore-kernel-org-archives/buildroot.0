@@ -1,54 +1,55 @@
-From: vanokuten at uclibc.org <vanokuten@uclibc.org>
-Date: Mon, 17 Dec 2007 03:37:51 -0800 (PST)
-Subject: [Buildroot] svn commit: trunk/buildroot/toolchain/gcc
-Message-ID: <20071217113751.1B47C1200F0@busybox.net>
+From: bugs at busybox.net <bugs@busybox.net>
+Date: Mon, 17 Dec 2007 03:39:30 -0800
+Subject: [Buildroot] [buildroot 0001764]: build root fails
+Message-ID: <a275f0fd40ed0a864a335d6e75504f10@busybox.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Author: vanokuten
-Date: 2007-12-17 03:37:47 -0800 (Mon, 17 Dec 2007)
-New Revision: 20655
 
-Log:
-revert 20646 rev (gcc-cc_links-fix.diff), it's broken for arm as mentioned in 1764 issue
+The following issue has been CLOSED 
+====================================================================== 
+http://busybox.net/bugs/view.php?id=1764 
+====================================================================== 
+Reported By:                Leo Kaplan
+Assigned To:                buildroot
+====================================================================== 
+Project:                    buildroot
+Issue ID:                   1764
+Category:                   Other
+Reproducibility:            always
+Severity:                   major
+Priority:                   normal
+Status:                     closed
+Resolution:                 open
+Fixed in Version:           
+====================================================================== 
+Date Submitted:             12-13-2007 16:00 PST
+Last Modified:              12-17-2007 03:39 PST
+====================================================================== 
+Summary:                    build root fails
+Description: 
+After today's check in of gcc-uclibc-4.x.mk the make fails with the
+following error
 
-Modified:
-   trunk/buildroot/toolchain/gcc/gcc-uclibc-3.x.mk
-   trunk/buildroot/toolchain/gcc/gcc-uclibc-4.x.mk
 
+====================================================================== 
 
-Changeset:
-Modified: trunk/buildroot/toolchain/gcc/gcc-uclibc-3.x.mk
-===================================================================
---- trunk/buildroot/toolchain/gcc/gcc-uclibc-3.x.mk	2007-12-16 17:22:33 UTC (rev 20654)
-+++ trunk/buildroot/toolchain/gcc/gcc-uclibc-3.x.mk	2007-12-17 11:37:47 UTC (rev 20655)
-@@ -293,8 +293,8 @@
- 		ln -snf $(REAL_GNU_TARGET_NAME)-gcc \
- 			$(STAGING_DIR)/usr/bin/$(REAL_GNU_TARGET_NAME)-cc; \
- 	fi
--	if [ ! -e $(STAGING_DIR)/$(REAL_GNU_TARGET_NAME)/bin/cc ]; then \
--		ln -snf gcc $(STAGING_DIR)/$(REAL_GNU_TARGET_NAME)/bin/cc; \
-+	if [ ! -e $(STAGING_DIR)/usr/bin/gcc ]; then \
-+		ln -snf gcc $(STAGING_DIR)/usr/bin/$(REAL_GNU_TARGET_NAME)-cc; \
- 	fi
- 	# Set up the symlinks to enable lying about target name.
- 	set -e; \
+---------------------------------------------------------------------- 
+ vanokuten - 12-17-07 03:39  
+---------------------------------------------------------------------- 
+thanks for pointing out! 
 
-Modified: trunk/buildroot/toolchain/gcc/gcc-uclibc-4.x.mk
-===================================================================
---- trunk/buildroot/toolchain/gcc/gcc-uclibc-4.x.mk	2007-12-16 17:22:33 UTC (rev 20654)
-+++ trunk/buildroot/toolchain/gcc/gcc-uclibc-4.x.mk	2007-12-17 11:37:47 UTC (rev 20655)
-@@ -306,8 +306,8 @@
- 		ln -snf $(REAL_GNU_TARGET_NAME)-gcc \
- 			$(STAGING_DIR)/usr/bin/$(REAL_GNU_TARGET_NAME)-cc; \
- 	fi
--	if [ ! -e $(STAGING_DIR)/$(REAL_GNU_TARGET_NAME)/bin/cc ]; then \
--		ln -snf gcc $(STAGING_DIR)/$(REAL_GNU_TARGET_NAME)/bin/cc; \
-+	if [ ! -e $(STAGING_DIR)/usr/bin/cc ]; then \
-+		ln -snf gcc $(STAGING_DIR)/usr/bin/cc; \
- 	fi
- 	# Set up the symlinks to enable lying about target name.
- 	set -e; \
+affected commit 20646 reverted 
+
+Issue History 
+Date Modified   Username       Field                    Change               
+====================================================================== 
+12-13-07 16:00  Leo Kaplan     New Issue                                    
+12-13-07 16:00  Leo Kaplan     Status                   new => assigned     
+12-13-07 16:00  Leo Kaplan     Assigned To               => buildroot       
+12-17-07 03:39  vanokuten      Status                   assigned => closed  
+12-17-07 03:39  vanokuten      Note Added: 0003209                          
+======================================================================
