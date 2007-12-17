@@ -1,7 +1,8 @@
 From: bugs at busybox.net <bugs@busybox.net>
-Date: Mon, 17 Dec 2007 03:41:46 -0800
-Subject: [Buildroot] [buildroot 0001622]: [PATCH] gcc 3.x/4.x symlinks to cc
-Message-ID: <8c6af2def66766c6ea76881a22afadfb@busybox.net>
+Date: Mon, 17 Dec 2007 04:13:27 -0800
+Subject: [Buildroot] [buildroot 0001709]: fakeroot 1.8.2 no longer available
+	from Debian
+Message-ID: <f2524837de07659906cf6e6116268fa4@busybox.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -9,57 +10,86 @@ Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
 
-The following issue has been REOPENED. 
+A NOTE has been added to this issue. 
 ====================================================================== 
-http://busybox.net/bugs/view.php?id=1622 
+http://busybox.net/bugs/view.php?id=1709 
 ====================================================================== 
-Reported By:                atle
+Reported By:                mfladischer
 Assigned To:                buildroot
 ====================================================================== 
 Project:                    buildroot
-Issue ID:                   1622
-Category:                   Other
+Issue ID:                   1709
+Category:                   Architecture Specific
 Reproducibility:            always
 Severity:                   minor
 Priority:                   normal
-Status:                     feedback
+Status:                     assigned
 ====================================================================== 
-Date Submitted:             11-30-2007 07:28 PST
-Last Modified:              12-17-2007 03:41 PST
+Date Submitted:             12-12-2007 01:02 PST
+Last Modified:              12-17-2007 04:13 PST
 ====================================================================== 
-Summary:                    [PATCH] gcc 3.x/4.x symlinks to cc
+Summary:                    fakeroot 1.8.2 no longer available from Debian
 Description: 
-The 'cc' symlink to 'gcc' is wrongly created as $(REAL_GNU_TARGET_NAME)-cc
-for gcc 3.x (overwrites link to  $(REAL_GNU_TARGET_NAME)-gcc). Also the
-'cc' link should be created in $(STAGING_DIR)/$(REAL_GNU_TARGET_NAME)/bin/
-instead of $(STAGING_DIR)/usr/bin.
-
-The attached patch fixes this for both gcc 3.x and 4.x.
+Rev20642:
+fakeroot 1.8.2 is no longer available from Debian. The new version is
+1.8.10.
+Patches that could not be applied to 1.8.10:
+- fakeroot-uclibc-LFS.patch
 
 ====================================================================== 
 
 ---------------------------------------------------------------------- 
- vanokuten - 12-13-07 04:10  
+ bonkabonka - 12-12-07 19:25  
 ---------------------------------------------------------------------- 
-fixed in 20646 rev 
+I've attached a patch to the old patch that makes it apply to the 1.8.10
+revision of fakeroot. 
 
 ---------------------------------------------------------------------- 
- vanokuten - 12-17-07 03:41  
+ vanokuten - 12-13-07 04:05  
 ---------------------------------------------------------------------- 
-bad patch, not working correctly on ARM arch, see 1764 
+bonkabonka,
+
+as I see you fully deleted "defined __UCLIBC__ && defined UCLIBC_HAS_LFS"
+in fakeroot-uclibc-LFS.patch.patch 
+
+seems you have to leave this defines intact
+
+regards,
+Ivan 
+
+---------------------------------------------------------------------- 
+ bonkabonka - 12-13-07 07:43  
+---------------------------------------------------------------------- 
+*blink*
+
+You're right, I messed up the cut-n-paste out of the working-copy diff. 
+I'll re-attach a proper version of the patch here in a second. 
+
+---------------------------------------------------------------------- 
+ vanokuten - 12-17-07 04:13  
+---------------------------------------------------------------------- 
+Your patch is not applied properly:
+
+patch -p0 < real-fakeroot-uclibc-LFS.patch.patch
+patching file package/fakeroot/fakeroot.mk
+patching file package/fakeroot/fakeroot-uclibc-LFS.patch
+Hunk http://busybox.net/bugs/view.php?id=1 FAILED@1.
+1 out of 1 hunk FAILED -- saving rejects to file
+package/fakeroot/fakeroot-uclibc-LFS.patch.rej 
 
 Issue History 
 Date Modified   Username       Field                    Change               
 ====================================================================== 
-11-30-07 07:28  atle           New Issue                                    
-11-30-07 07:28  atle           Status                   new => assigned     
-11-30-07 07:28  atle           Assigned To               => buildroot       
-11-30-07 07:28  atle           File Added: gcc-cc_links-fix.diff                
-   
-12-13-07 04:10  vanokuten      Status                   assigned => closed  
-12-13-07 04:10  vanokuten      Note Added: 0003139                          
-12-13-07 04:10  vanokuten      Resolution               open => fixed       
-12-17-07 03:41  vanokuten      Status                   closed => feedback  
-12-17-07 03:41  vanokuten      Resolution               fixed => reopened   
-12-17-07 03:41  vanokuten      Note Added: 0003214                          
+12-12-07 01:02  mfladischer    New Issue                                    
+12-12-07 01:02  mfladischer    Status                   new => assigned     
+12-12-07 01:02  mfladischer    Assigned To               => buildroot       
+12-12-07 07:54  swinnenb       Issue Monitored: swinnenb                    
+12-12-07 19:24  bonkabonka     File Added: fakeroot-uclibc-LFS.patch.patch      
+             
+12-12-07 19:25  bonkabonka     Note Added: 0003119                          
+12-13-07 04:05  vanokuten      Note Added: 0003134                          
+12-13-07 07:43  bonkabonka     Note Added: 0003174                          
+12-13-07 08:07  bonkabonka     File Added: real-fakeroot-uclibc-LFS.patch.patch 
+                  
+12-17-07 04:13  vanokuten      Note Added: 0003219                          
 ======================================================================
