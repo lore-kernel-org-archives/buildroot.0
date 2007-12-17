@@ -1,31 +1,26 @@
-From: Joe <zentrale.at.work@gmail.com>
-Date: Mon, 17 Dec 2007 09:32:57 +0100
-Subject: [Buildroot] Build kernel for ARM with Buildroot
-In-Reply-To: <2b4282de0712150741n6266e9b0ged662875d25e2824@mail.gmail.com>
-References: <2b4282de0712150741n6266e9b0ged662875d25e2824@mail.gmail.com>
-Message-ID: <47663439.6000103@gmail.com>
+From: Michael Hunold <hunold@linuxtv.org>
+Date: Mon, 17 Dec 2007 10:14:42 +0100
+Subject: [Buildroot] error when building gcc using buildroot/toolchain
+In-Reply-To: <476637A3.6010906@linuxtv.org>
+References: <3ed55890710300456o715fd332x1f5d8bf466a54882@mail.gmail.com>
+	<14021271.post@talk.nabble.com> <475E8C8E.5090402@linuxtv.org>
+	<20071211222816.GI17973@aon.at> <476637A3.6010906@linuxtv.org>
+Message-ID: <47663E02.2040502@linuxtv.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-First of all, did you provide a .config for your kernel? If not, do so.
-And maybe don't run around as "root"....
+Hello,
 
-Greetz
+on 17.12.2007 09:47 Michael Hunold said the following:
+> Please note that I did one modification to buildroot. I had to add back
+> the possibility to select 2.6.10 kernel again. I have not tried yet to
+> create buildroot against a later kernel, but I'll try now and let you
+> know the results.
 
-Lan Ngoc wrote:
-> cp -dpf  /mnt/e/buildroot/project_build_arm/ENDUP/linux-2.6.22.10/.config
-> cp: missing destination file operand after
-> `/mnt/e/buildroot/project_build_arm/ENDUP/linux-2.6.22.10/.config'
-> Try `cp --help' for more information.
+Same result with Linux 2.6.22.10.
 
--- 
-Sepp "ZaP" Holzmayr
-
-please reply to:
-zentrale.at.work at gmail.com
-
-watch out for:
-www.rocksociety.de
+CU
+Michael.
