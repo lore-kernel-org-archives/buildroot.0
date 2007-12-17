@@ -1,8 +1,11 @@
-From: bugs at busybox.net <bugs@busybox.net>
-Date: Mon, 17 Dec 2007 10:25:36 -0800
-Subject: [Buildroot] [buildroot 0001709]: fakeroot 1.8.2 no longer available
-	from Debian
-Message-ID: <2a857297e5ae9d06f08b79b83f88a928@busybox.net>
+From: Ryan Ordway <rordway@oregonstate.edu>
+Date: Mon, 17 Dec 2007 11:38:39 -0800
+Subject: [Buildroot] Buildroot and Linux/ARM on AT91SAM9260
+In-Reply-To: <4766A061.7060308@promwad.com>
+References: <1D3F8BA5-BB0F-4306-A179-760E18E1EF63@mac.com>	<691A7752-1681-409D-936A-9C6A7935510F@oregonstate.edu>	<20071129133008.GB20914@real.realitydiluted.com>	<FDBCCC91-31DB-4241-A25E-FC7DDECD2D08@oregonstate.edu>
+	<6E89F2D1-2F8C-4F77-ADA8-2727407BBE6C@oregonstate.edu>
+	<4766A061.7060308@promwad.com>
+Message-ID: <85F68C4E-6290-4E64-875C-982B0E377695@oregonstate.edu>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -10,114 +13,49 @@ Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
 
-A NOTE has been added to this issue. 
-====================================================================== 
-http://busybox.net/bugs/view.php?id=1709 
-====================================================================== 
-Reported By:                mfladischer
-Assigned To:                buildroot
-====================================================================== 
-Project:                    buildroot
-Issue ID:                   1709
-Category:                   Architecture Specific
-Reproducibility:            always
-Severity:                   minor
-Priority:                   normal
-Status:                     assigned
-====================================================================== 
-Date Submitted:             12-12-2007 01:02 PST
-Last Modified:              12-17-2007 10:25 PST
-====================================================================== 
-Summary:                    fakeroot 1.8.2 no longer available from Debian
-Description: 
-Rev20642:
-fakeroot 1.8.2 is no longer available from Debian. The new version is
-1.8.10.
-Patches that could not be applied to 1.8.10:
-- fakeroot-uclibc-LFS.patch
+On Dec 17, 2007, at 8:14 AM, Ivan Kuten wrote:
 
-====================================================================== 
+> Ryan Ordway wrote:
+>> I've been using Buildroot with a board based on the AT91SAM9260. I  
+>> was
+>> able to get a successful kernel build (2.6.21.6) and buildroot build
+>> (buildroot-atmel-20070521) using gcc 4.0.4, binutils 2.17 and uClibc
+>> 0.9.28.3. I've been trying to get an updated build from various
+>> different versions of buildroot from buildrooot-atmel-20070607,
+>> buildroot-trunk, etc. and while things build fine with some tweaking
+>> none of the toolchain combinations seem to generate working binaries.
+>> I've tried using EABI vs. OABI, softfloat for gcc, NWFPE vs. FastFPE,
+>> etc. The only combination that I can get to work reliably are gcc
+>> 4.0.4, binutils 2.17 and uClibc 0.9.28.3 with my 2.6.21.6 kernel with
+>> AT91 patches for 2.6.21 applied.
+>>
+>> Is there a magic compiler, binutils and uClibc trinity for Linux/ARM
+>> in particular?
+>>
+>
+>
+>
+> /sbin/init: can't Kernel panic - not syncing: Attempted to kill init!
+> load library 'libgcc_s.so.1'
+>
+> I checked that there is no libgcc_s.so.1 in rootfs image but I have  
+> BR2_GCC_SHARED_LIBGCC=y
+> May be that is a cause why you not getting working rootfs.
 
----------------------------------------------------------------------- 
- bonkabonka - 12-12-07 19:25  
----------------------------------------------------------------------- 
-I've attached a patch to the old patch that makes it apply to the 1.8.10
-revision of fakeroot. 
 
----------------------------------------------------------------------- 
- vanokuten - 12-13-07 04:05  
----------------------------------------------------------------------- 
-bonkabonka,
+I'm not using a shared libgcc. It's just freezing after the freeing of  
+the initrd memory about the time it should be booting up init. I guess  
+my next step is to start throwing in some printk's to see exactly  
+where it's dying.
 
-as I see you fully deleted "defined __UCLIBC__ && defined UCLIBC_HAS_LFS"
-in fakeroot-uclibc-LFS.patch.patch 
+Of course, I can't get a 2.6.23 kernel to even boot at all, but that  
+may be the same toolchain issues. My 2.6.21.6 kernel seems to be  
+working ok -- that was built with my gcc 4.0.4 based toolchain, the  
+only version I've been able to get successful boots from.
 
-seems you have to leave this defines intact
+Ryan
 
-regards,
-Ivan 
-
----------------------------------------------------------------------- 
- bonkabonka - 12-13-07 07:43  
----------------------------------------------------------------------- 
-*blink*
-
-You're right, I messed up the cut-n-paste out of the working-copy diff. 
-I'll re-attach a proper version of the patch here in a second. 
-
----------------------------------------------------------------------- 
- vanokuten - 12-17-07 04:13  
----------------------------------------------------------------------- 
-Your patch is not applied properly:
-
-patch -p0 < real-fakeroot-uclibc-LFS.patch.patch
-patching file package/fakeroot/fakeroot.mk
-patching file package/fakeroot/fakeroot-uclibc-LFS.patch
-Hunk http://busybox.net/bugs/view.php?id=1 FAILED@1.
-1 out of 1 hunk FAILED -- saving rejects to file
-package/fakeroot/fakeroot-uclibc-LFS.patch.rej 
-
----------------------------------------------------------------------- 
- bonkabonka - 12-17-07 10:25  
----------------------------------------------------------------------- 
-Okay, I guess I'm not bright enough to use 'svn diff' properly to generate
-a patch.  In any event, the following replacement for
-package/fakeroot/fakeroot-uclibc-LFS.patch works properly on a second
-checkout on a different machine:
-
-diff -u fakeroot-1.8.10.orig/communicate.h fakeroot-1.8.10/communicate.h
---- fakeroot-1.8.10.orig/communicate.h  2007-11-20 21:56:53.000000000
--0500
-+++ fakeroot-1.8.10/communicate.h       2007-12-13 11:00:03.000000000
--0500
- @@ -35,7 +35,9 @@
-  #endif
-  
-  /* Then decide whether we do or do not use the stat64 support */
--#if (defined(sun) && !defined(__SunOS_5_5_1) && !defined(_LP64)) ||
-__GLIBC__ > 2 || (__GLIBC__ == 2 && __GLIBC_MINOR__ >= 1)
-+#if (defined(sun) && !defined(__SunOS_5_5_1) && !defined(_LP64)) \
-+       || (!defined __UCLIBC__ && (__GLIBC__ > 2 || (__GLIBC__ == 2 &&
-__GLIBC_MINOR__ >= 1))) \
-+       || (defined __UCLIBC__ && defined UCLIBC_HAS_LFS)
-  # define STAT64_SUPPORT
-  #else
-  # warning Not using stat64 support 
-
-Issue History 
-Date Modified   Username       Field                    Change               
-====================================================================== 
-12-12-07 01:02  mfladischer    New Issue                                    
-12-12-07 01:02  mfladischer    Status                   new => assigned     
-12-12-07 01:02  mfladischer    Assigned To               => buildroot       
-12-12-07 07:54  swinnenb       Issue Monitored: swinnenb                    
-12-12-07 19:24  bonkabonka     File Added: fakeroot-uclibc-LFS.patch.patch      
-             
-12-12-07 19:25  bonkabonka     Note Added: 0003119                          
-12-13-07 04:05  vanokuten      Note Added: 0003134                          
-12-13-07 07:43  bonkabonka     Note Added: 0003174                          
-12-13-07 08:07  bonkabonka     File Added: real-fakeroot-uclibc-LFS.patch.patch 
-                  
-12-17-07 04:13  vanokuten      Note Added: 0003219                          
-12-17-07 10:25  bonkabonka     Note Added: 0003234                          
-======================================================================
+--
+Ryan Ordway                           E-mail: rordway at oregonstate.edu
+Unix Systems Administrator               rordway at library.oregonstate.edu
+OSU Libraries, Corvallis, OR 97331    Office: Valley Library #4657
