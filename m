@@ -1,46 +1,23 @@
-From: bugs at busybox.net <bugs@busybox.net>
-Date: Sun, 16 Dec 2007 12:35:23 -0800
-Subject: [Buildroot] [buildroot 0001789]: Linux-PAM 0.99.9.0 support for
-	buildroot
-Message-ID: <d5f379a2fe0b232b91d635944680d39a@busybox.net>
+From: Marco <developement333@gmx.net>
+Date: Mon, 17 Dec 2007 01:52:28 +0100
+Subject: [Buildroot] bFLT build in precompiled ARM enviroment
+Message-ID: <4765C84C.60605@gmx.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+hello list,
 
-The following issue has been SUBMITTED. 
-====================================================================== 
-http://busybox.net/bugs/view.php?id=1789 
-====================================================================== 
-Reported By:                chrisv
-Assigned To:                buildroot
-====================================================================== 
-Project:                    buildroot
-Issue ID:                   1789
-Category:                   Architecture Specific
-Reproducibility:            N/A
-Severity:                   feature
-Priority:                   normal
-Status:                     assigned
-====================================================================== 
-Date Submitted:             12-16-2007 12:35 PST
-Last Modified:              12-16-2007 12:35 PST
-====================================================================== 
-Summary:                    Linux-PAM 0.99.9.0 support for buildroot
-Description: 
-This patch adds Linux-PAM support to buildroot.  (NIS/YP services are
-removed from PAM to make this work.)  Until to the $(buildroot) directory
-to integrate into the tree.
-====================================================================== 
+i've an running ARM enviroment, i downloaded the precompiled ARM
+buildroot system. now i want to build a "hello worl" bFLT binary.
+however, ive found that compiling bFLT should be something like:
+gcc hw.c -elf2flt
+it spits out an error about the entry point, however compiles to the end
+and is executeable. if i do "file" on the binary it signs it as an "ELF"
+file. so elf2flt was not working i guess.
+can someone tell/link me how to build bflt binaries, is it possible with
+the precompiled enviroment anyway?
 
-Issue History 
-Date Modified   Username       Field                    Change               
-====================================================================== 
-12-16-07 12:35  chrisv         New Issue                                    
-12-16-07 12:35  chrisv         Status                   new => assigned     
-12-16-07 12:35  chrisv         Assigned To               => buildroot       
-12-16-07 12:35  chrisv         File Added: pam-0.99.9.0b-nonis.tar.gz           
-        
-======================================================================
+thanx
