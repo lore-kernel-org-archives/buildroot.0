@@ -1,46 +1,123 @@
-From: =?ISO-8859-1?Q?Thiago_A._Corr=EAa?= <thiago.correa@gmail.com>
-Date: Mon, 17 Dec 2007 15:58:30 -0200
-Subject: [Buildroot] [buildroot 0001699]: [PATCH] Improves Qtopia build.
-In-Reply-To: <4766C25A.9060003@promwad.com>
-References: <30bb2170eec8f7fd5d554251f83cbf18@busybox.net>
-	<d6cda7730712170859w25bf285am82b1c2cb48830a30@mail.gmail.com>
-	<4766C25A.9060003@promwad.com>
-Message-ID: <d6cda7730712170958h2b8b8602lcc1d5171616efed6@mail.gmail.com>
+From: bugs at busybox.net <bugs@busybox.net>
+Date: Mon, 17 Dec 2007 10:25:36 -0800
+Subject: [Buildroot] [buildroot 0001709]: fakeroot 1.8.2 no longer available
+	from Debian
+Message-ID: <2a857297e5ae9d06f08b79b83f88a928@busybox.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Ivan,
 
-   Thanks, Will Wagner just sent me a note saying that the font paths
-are not right, so I will check it again on the STK1000 then resubmit.
+A NOTE has been added to this issue. 
+====================================================================== 
+http://busybox.net/bugs/view.php?id=1709 
+====================================================================== 
+Reported By:                mfladischer
+Assigned To:                buildroot
+====================================================================== 
+Project:                    buildroot
+Issue ID:                   1709
+Category:                   Architecture Specific
+Reproducibility:            always
+Severity:                   minor
+Priority:                   normal
+Status:                     assigned
+====================================================================== 
+Date Submitted:             12-12-2007 01:02 PST
+Last Modified:              12-17-2007 10:25 PST
+====================================================================== 
+Summary:                    fakeroot 1.8.2 no longer available from Debian
+Description: 
+Rev20642:
+fakeroot 1.8.2 is no longer available from Debian. The new version is
+1.8.10.
+Patches that could not be applied to 1.8.10:
+- fakeroot-uclibc-LFS.patch
 
-Regards,
-   Thiago A. Correa
+====================================================================== 
 
-On Dec 17, 2007 4:39 PM, Ivan Kuten <ivan.kuten@promwad.com> wrote:
-> Thiago A. Corr?a wrote:
-> > *bump*
-> >
-> > I've sent this patch to the list, but it is still waiting moderation
-> > due to it's size for at least 2 weeks. So, I sent it to mantis about a
-> > week ago.
-> >
-> > Not complaining, just reminding *smile*
-> >
->
-> I can check only correctness of compile on ARM and AVR32.
-> If nobody will complain about this patch i will apply in a few days.
->
->
->
-> Regards,
-> Ivan
-> --------------------------------
-> Embedded Linux engineer,
-> Promwad Company: http://www.promwad.com/
-> Homepage : http://www.ivankuten.com/
-> --------------------------------
->
+---------------------------------------------------------------------- 
+ bonkabonka - 12-12-07 19:25  
+---------------------------------------------------------------------- 
+I've attached a patch to the old patch that makes it apply to the 1.8.10
+revision of fakeroot. 
+
+---------------------------------------------------------------------- 
+ vanokuten - 12-13-07 04:05  
+---------------------------------------------------------------------- 
+bonkabonka,
+
+as I see you fully deleted "defined __UCLIBC__ && defined UCLIBC_HAS_LFS"
+in fakeroot-uclibc-LFS.patch.patch 
+
+seems you have to leave this defines intact
+
+regards,
+Ivan 
+
+---------------------------------------------------------------------- 
+ bonkabonka - 12-13-07 07:43  
+---------------------------------------------------------------------- 
+*blink*
+
+You're right, I messed up the cut-n-paste out of the working-copy diff. 
+I'll re-attach a proper version of the patch here in a second. 
+
+---------------------------------------------------------------------- 
+ vanokuten - 12-17-07 04:13  
+---------------------------------------------------------------------- 
+Your patch is not applied properly:
+
+patch -p0 < real-fakeroot-uclibc-LFS.patch.patch
+patching file package/fakeroot/fakeroot.mk
+patching file package/fakeroot/fakeroot-uclibc-LFS.patch
+Hunk http://busybox.net/bugs/view.php?id=1 FAILED@1.
+1 out of 1 hunk FAILED -- saving rejects to file
+package/fakeroot/fakeroot-uclibc-LFS.patch.rej 
+
+---------------------------------------------------------------------- 
+ bonkabonka - 12-17-07 10:25  
+---------------------------------------------------------------------- 
+Okay, I guess I'm not bright enough to use 'svn diff' properly to generate
+a patch.  In any event, the following replacement for
+package/fakeroot/fakeroot-uclibc-LFS.patch works properly on a second
+checkout on a different machine:
+
+diff -u fakeroot-1.8.10.orig/communicate.h fakeroot-1.8.10/communicate.h
+--- fakeroot-1.8.10.orig/communicate.h  2007-11-20 21:56:53.000000000
+-0500
++++ fakeroot-1.8.10/communicate.h       2007-12-13 11:00:03.000000000
+-0500
+ @@ -35,7 +35,9 @@
+  #endif
+  
+  /* Then decide whether we do or do not use the stat64 support */
+-#if (defined(sun) && !defined(__SunOS_5_5_1) && !defined(_LP64)) ||
+__GLIBC__ > 2 || (__GLIBC__ == 2 && __GLIBC_MINOR__ >= 1)
++#if (defined(sun) && !defined(__SunOS_5_5_1) && !defined(_LP64)) \
++       || (!defined __UCLIBC__ && (__GLIBC__ > 2 || (__GLIBC__ == 2 &&
+__GLIBC_MINOR__ >= 1))) \
++       || (defined __UCLIBC__ && defined UCLIBC_HAS_LFS)
+  # define STAT64_SUPPORT
+  #else
+  # warning Not using stat64 support 
+
+Issue History 
+Date Modified   Username       Field                    Change               
+====================================================================== 
+12-12-07 01:02  mfladischer    New Issue                                    
+12-12-07 01:02  mfladischer    Status                   new => assigned     
+12-12-07 01:02  mfladischer    Assigned To               => buildroot       
+12-12-07 07:54  swinnenb       Issue Monitored: swinnenb                    
+12-12-07 19:24  bonkabonka     File Added: fakeroot-uclibc-LFS.patch.patch      
+             
+12-12-07 19:25  bonkabonka     Note Added: 0003119                          
+12-13-07 04:05  vanokuten      Note Added: 0003134                          
+12-13-07 07:43  bonkabonka     Note Added: 0003174                          
+12-13-07 08:07  bonkabonka     File Added: real-fakeroot-uclibc-LFS.patch.patch 
+                  
+12-17-07 04:13  vanokuten      Note Added: 0003219                          
+12-17-07 10:25  bonkabonka     Note Added: 0003234                          
+======================================================================
