@@ -1,78 +1,52 @@
-From: bugs at busybox.net <bugs@busybox.net>
-Date: Mon, 17 Dec 2007 22:02:51 -0800
-Subject: [Buildroot] [buildroot 0001799]: Build for MIPs 32 processors fails
-Message-ID: <de559aa0a2c1795d4f3f0f498329a264@busybox.net>
+From: Ivan Kuten <ivan.kuten@promwad.com>
+Date: Tue, 18 Dec 2007 12:29:45 +0200
+Subject: [Buildroot] Buildroot and Linux/ARM on AT91SAM9260
+In-Reply-To: <1CDF1BC9-C921-4E84-B041-B0CDDF8BF3A1@oregonstate.edu>
+References: <1D3F8BA5-BB0F-4306-A179-760E18E1EF63@mac.com>
+	<691A7752-1681-409D-936A-9C6A7935510F@oregonstate.edu>
+	<20071129133008.GB20914@real.realitydiluted.com>
+	<FDBCCC91-31DB-4241-A25E-FC7DDECD2D08@oregonstate.edu>
+	<6E89F2D1-2F8C-4F77-ADA8-2727407BBE6C@oregonstate.edu>
+	<4766A061.7060308@promwad.com>
+	<85F68C4E-6290-4E64-875C-982B0E377695@oregonstate.edu>
+	<47635.127.0.0.1.1197931767.squirrel@localhost>
+	<7E283458-5B84-4AF8-9B2E-7B6D42081922@oregonstate.edu>
+	<0FA0EAE7-0236-46E2-94F1-F3C664582A6B@oregonstate.edu>
+	<52481.127.0.0.1.1197934593.squirrel@localhost>
+	<1CDF1BC9-C921-4E84-B041-B0CDDF8BF3A1@oregonstate.edu>
+Message-ID: <4767A119.6070508@promwad.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+> 
+> 
+>  From what I've seen, at least for ARM, it's very toolchain dependent.  
+> I've tried different versions of gcc, binutils and uClibc, with and  
+> without EABI, using soft float and not. The only combination that has  
+> worked reliably for me has been the combination I listed above. You  
+> might try an older snapshot of buildroot from around May and try gcc  
+> 4.0.4. That's the only compiler version I've gotten to work reliably.
+> 
+> I did finally get a build of the latest trunk of buildroot, but it had  
+> a lot of problems. sshd and other non-busybox applications segfault.  
+> This was using gcc 4.2.1, binutils 2.18 and a snapshot of uClibc from  
+> early december, using softfloat and EABI. I've had to focus on some  
+> other issues so I haven't gotten back to it yet. This was still with  
+> my 2.6.21.6 kernel I'd built previously, still cannot get a working  
+> 2.6.23 kernel with that toolchain.
+> 
 
-The following issue has been SUBMITTED. 
-====================================================================== 
-http://busybox.net/bugs/view.php?id=1799 
-====================================================================== 
-Reported By:                skibud2
-Assigned To:                buildroot
-====================================================================== 
-Project:                    buildroot
-Issue ID:                   1799
-Category:                   Architecture Specific
-Reproducibility:            always
-Severity:                   major
-Priority:                   normal
-Status:                     assigned
-====================================================================== 
-Date Submitted:             12-17-2007 22:02 PST
-Last Modified:              12-17-2007 22:02 PST
-====================================================================== 
-Summary:                    Build for MIPs 32 processors fails
-Description: 
-Building for MIP32 processors fails with the following error:
+This link seems mention the same problem (for 2.6.23):
+Subject: binutils 2.17.50.0.17 --build-id feature breaks arm kernel build
+http://lists.arm.linux.org.uk/lurker/message/20070828.080711.574bb3f0.en.html
 
-/home/mike/Desktop/buildroot/toolchain_build_mips/gcc-4.2.1-initial/./gcc/xgcc
--B/home/mike/Desktop/buildroot/toolchain_build_mips/gcc-4.2.1-initial/./gcc/
--B/home/mike/Desktop/buildroot/build_mips/staging_dir/usr/mips-linux-uclibc/bin/
--B/home/mike/Desktop/buildroot/build_mips/staging_dir/usr/mips-linux-uclibc/lib/
--isystem
-/home/mike/Desktop/buildroot/build_mips/staging_dir/usr/mips-linux-uclibc/include
--isystem
-/home/mike/Desktop/buildroot/build_mips/staging_dir/usr/mips-linux-uclibc/sys-include
--O2 -g -Os -DIN_GCC -DCROSS_COMPILE   -W -Wall -Wwrite-strings
--Wstrict-prototypes -Wmissing-prototypes -Wold-style-definition  -isystem
-./include  -I. -I.
--I/home/mike/Desktop/buildroot/toolchain_build_mips/gcc-4.2.1/gcc
--I/home/mike/Desktop/buildroot/toolchain_build_mips/gcc-4.2.1/gcc/.
--I/home/mike/Desktop/buildroot/toolchain_build_mips/gcc-4.2.1/gcc/../include
--I/home/mike/Desktop/buildroot/toolchain_build_mips/gcc-4.2.1/gcc/../libcpp/include
--I/home/mike/Desktop/buildroot/toolchain_build_mips/gmp/include
--I/home/mike/Desktop/buildroot/toolchain_build_mips/mpfr/include
--I/home/mike/Desktop/buildroot/toolchain_build_mips/gcc-4.2.1/gcc/../libdecnumber
--I../libdecnumber  -g0 -finhibit-size-directive -fno-inline-functions
--fno-exceptions -fno-zero-initialized-in-bss -fno-toplevel-reorder   \
-          -c
-/home/mike/Desktop/buildroot/toolchain_build_mips/gcc-4.2.1/gcc/crtstuff.c
--DCRT_BEGIN \
-          -o crtbegin.o
-/home/mike/Desktop/buildroot/toolchain_build_mips/gcc-4.2.1/gcc/crtstuff.c:1:
-error: unsupported combination: -mabicalls -mabi=eabi
-make[2]: *** [crtbegin.o] Error 1
-make[2]: Leaving directory
-`/home/mike/Desktop/buildroot/toolchain_build_mips/gcc-4.2.1-initial/gcc'
-make[1]: *** [all-gcc] Error 2
-make[1]: Leaving directory
-`/home/mike/Desktop/buildroot/toolchain_build_mips/gcc-4.2.1-initial'
-make: ***
-[/home/mike/Desktop/buildroot/toolchain_build_mips/gcc-4.2.1-initial/.compiled]
-Error 2
-
-====================================================================== 
-
-Issue History 
-Date Modified   Username       Field                    Change               
-====================================================================== 
-12-17-07 22:02  skibud2        New Issue                                    
-12-17-07 22:02  skibud2        Status                   new => assigned     
-12-17-07 22:02  skibud2        Assigned To               => buildroot       
-======================================================================
+Regards,
+Ivan
+--------------------------------
+Embedded Linux engineer,
+Promwad Company: http://www.promwad.com/
+Homepage : http://www.ivankuten.com/
+--------------------------------
