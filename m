@@ -1,7 +1,7 @@
 From: bugs at busybox.net <bugs@busybox.net>
-Date: Tue, 18 Dec 2007 04:21:20 -0800
+Date: Tue, 18 Dec 2007 04:30:00 -0800
 Subject: [Buildroot] [buildroot 0001804]: gcc-4.2.1-final compilation error
-Message-ID: <95a709f6e6147ec495ed30d16fbdb56d@bugs.uclibc.org>
+Message-ID: <9a5b5d44c6be782d89e22bb9fa8189df@busybox.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -9,7 +9,7 @@ Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
 
-The following issue has been SUBMITTED. 
+A NOTE has been added to this issue. 
 ====================================================================== 
 http://busybox.net/bugs/view.php?id=1804 
 ====================================================================== 
@@ -25,7 +25,7 @@ Priority:                   normal
 Status:                     assigned
 ====================================================================== 
 Date Submitted:             12-18-2007 04:21 PST
-Last Modified:              12-18-2007 04:21 PST
+Last Modified:              12-18-2007 04:29 PST
 ====================================================================== 
 Summary:                    gcc-4.2.1-final compilation error
 Description: 
@@ -114,10 +114,18 @@ make: ***
 
 ====================================================================== 
 
+---------------------------------------------------------------------- 
+ hcegtvedt - 12-18-07 04:29  
+---------------------------------------------------------------------- 
+Bug in GCC 4.2.1 when built on 64-bit hosts, see the attached patch. 
+
 Issue History 
 Date Modified   Username       Field                    Change               
 ====================================================================== 
 12-18-07 04:21  dl9pf          New Issue                                    
 12-18-07 04:21  dl9pf          Status                   new => assigned     
 12-18-07 04:21  dl9pf          Assigned To               => buildroot       
+12-18-07 04:29  hcegtvedt      File Added:
+908-avr32-fix-invalid-assembler-code-on-64bit-hosts.patch                    
+12-18-07 04:29  hcegtvedt      Note Added: 0003239                          
 ======================================================================
