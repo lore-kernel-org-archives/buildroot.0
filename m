@@ -1,34 +1,38 @@
-From: Ivan Kuten <ivan.kuten@promwad.com>
-Date: Tue, 18 Dec 2007 18:43:43 +0200
-Subject: [Buildroot] modprobe: cannot parse modules.dep error
-In-Reply-To: <BAY131-W9EFC287D61A251C968D02E2630@phx.gbl>
-References: <BAY131-W32EA6D41FC5B236081ADF0E2630@phx.gbl>
-	<4767A7B2.2000702@promwad.com>
-	<BAY131-W9EFC287D61A251C968D02E2630@phx.gbl>
-Message-ID: <4767F8BF.3050303@promwad.com>
+From: Marco <developement333@gmx.net>
+Date: Wed, 19 Dec 2007 11:21:28 +0100
+Subject: [Buildroot] buildroot fail arm / arm_generic, on coreutils
+Message-ID: <4768F0A8.4090901@gmx.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-saravanan chanemouganandam wrote:
-> Hi Ivan,
->  
->  
-> Here is the starce on iptables showing call to "/sbin/modprobe" . I don't understand why it tries to load the modules thru modprobe when all netfilter ipables and xtables supports are built into the kernel.
->  
-> Execuse me for the mail received in a junk format.
->  
+hello list,
 
-Think iptables do not have a way to know if you compiled iptables as modules or in kernel.
-I'd suggest to try ask on iptables mailing list why it has such behaviour.
+i try to build buildroot on i386 for arm, generic arm cpu. this is the
+actual revision from svn:
 
+svn co svn://uclibc.org/trunk/buildroot
+Revision 20658.
 
-Regards,
-Ivan
---------------------------------
-Embedded Linux engineer,
-Promwad Company: http://www.promwad.com/
-Homepage : http://www.ivankuten.com/
---------------------------------
+during compilation error occurs in coreutils:
+
+/mnt/svn/buildroot/build_arm/staging_dir/usr/bin/arm-linux-uclibc-gcc
+-Os -pipe  -I/mnt/svn/buildroot/build_arm/staging_dir/usr/include
+-I/mnt/svn/buildroot/build_arm/staging_dir/include  -I.      -g -O2 -c
+mbchar.c
+In file included from mbchar.h:157,
+                 from mbchar.c:22:
+./wchar.h:41:12: error: empty filename in #include
+In file included from mbchar.c:22:
+mbchar.h:242: error: expected ')' before 'wc'
+make[3]: *** [mbchar.o] Error 1
+make[3]: Leaving directory `/mnt/svn/buildroot/build_arm/coreutils-6.9/lib'
+make[2]: *** [all] Error 2
+make[2]: Leaving directory `/mnt/svn/buildroot/build_arm/coreutils-6.9/lib'
+make[1]: *** [all-recursive] Fehler 1
+make[1]: Leaving directory `/mnt/svn/buildroot/build_arm/coreutils-6.9'
+make: *** [/mnt/svn/buildroot/build_arm/coreutils-6.9/src/vdir] Fehler 2
+
+marco
