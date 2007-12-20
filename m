@@ -1,53 +1,30 @@
-From: Marco <developement333@gmx.net>
-Date: Thu, 20 Dec 2007 11:13:50 +0100
+From: Ivan Kuten <ivan.kuten@promwad.com>
+Date: Thu, 20 Dec 2007 13:33:38 +0200
 Subject: [Buildroot] buildroot fail arm / arm_generic, on coreutils
-In-Reply-To: <024701c8429e$6e24f180$3ba6fea9@atmel.com>
-References: <4768F0A8.4090901@gmx.net>
-	<024701c8429e$6e24f180$3ba6fea9@atmel.com>
-Message-ID: <476A405E.9020909@gmx.net>
+In-Reply-To: <476A405E.9020909@gmx.net>
+References: <4768F0A8.4090901@gmx.net>	<024701c8429e$6e24f180$3ba6fea9@atmel.com>
+	<476A405E.9020909@gmx.net>
+Message-ID: <476A5312.7090507@promwad.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Ulf Samuelsson schrieb:
-> | hello list,
-> | 
-> | i try to build buildroot on i386 for arm, generic arm cpu. this is the
-> | actual revision from svn:
-> | 
-> | svn co svn://uclibc.org/trunk/buildroot
-> | Revision 20658.
-> | 
-> | during compilation error occurs in coreutils:
-> | 
-> | /mnt/svn/buildroot/build_arm/staging_dir/usr/bin/arm-linux-uclibc-gcc
-> | -Os -pipe  -I/mnt/svn/buildroot/build_arm/staging_dir/usr/include
-> | -I/mnt/svn/buildroot/build_arm/staging_dir/include  -I.      -g -O2 -c
-> | mbchar.c
-> | In file included from mbchar.h:157,
-> |                 from mbchar.c:22:
-> | ./wchar.h:41:12: error: empty filename in #include
-> | In file included from mbchar.c:22:
-> | mbchar.h:242: error: expected ')' before 'wc'
-> | make[3]: *** [mbchar.o] Error 1
-> | make[3]: Leaving directory `/mnt/svn/buildroot/build_arm/coreutils-6.9/lib'
-> | make[2]: *** [all] Error 2
-> | make[2]: Leaving directory `/mnt/svn/buildroot/build_arm/coreutils-6.9/lib'
-> | make[1]: *** [all-recursive] Fehler 1
-> | make[1]: Leaving directory `/mnt/svn/buildroot/build_arm/coreutils-6.9'
-> | make: *** [/mnt/svn/buildroot/build_arm/coreutils-6.9/src/vdir] Fehler 2
-> |
->
-> This is because you built your cross compiler without WCHAR support.
->
-> Best Regards
-> Ulf Samuelsson
->
->   
+>>   
+> 
+>> This is because you built your cross compiler without WCHAR support.
+> 
+>   i enabled and disabled it already, made clean and another make, same
+> error.
 
->This is because you built your cross compiler without WCHAR support.
+Does "make clean" cleans up your toolchain dir (toolchain_build_arm) - i'm sure it does not.
 
-  i enabled and disabled it already, made clean and another make, same
-error.
+
+Regards,
+Ivan
+--------------------------------
+Embedded Linux engineer,
+Promwad Company: http://www.promwad.com/
+Homepage : http://www.ivankuten.com/
+--------------------------------
