@@ -1,71 +1,104 @@
-From: Martin Bures <needemesleepe@gmail.com>
-Date: Thu, 20 Dec 2007 08:53:30 -0500
-Subject: [Buildroot] ARM build question/issue
-In-Reply-To: <20071220035516.GA17349@cloud.net.au>
-References: <5970ab460712191859m276e036exa6ff7b519ec30f8a@mail.gmail.com>
-	<20071220035516.GA17349@cloud.net.au>
-Message-ID: <5970ab460712200553t62589539t9e6d3132b857546c@mail.gmail.com>
+From: Will Wagner <will_wagner@carallon.com>
+Date: Thu, 20 Dec 2007 14:35:18 +0000
+Subject: [Buildroot] Build error
+Message-ID: <476A7DA6.7000102@carallon.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Thanks!  I had been having so many problems building that I thought that I
-was being safe by deselecting almost every package.
+Hi all
 
-I'll try building a generic base system.
+I am trying to build for an arm target. I have successfully built an 
+image with just the basic packages selected by default. However I then 
+add in the qtopia4 package and nothing else and get this error when 
+trying to link the kernel:
 
-martin.
+rm -f
+/home/willw/buildroot/project_build_arm/badger/_fakeroot."rootfs".arm.tar
+/usr/bin/make -j1 HOSTCC="/usr/bin/gcc" HOSTCFLAGS="" ARCH=arm
+CFLAGS_KERNEL="-Os -pipe
+-I/home/willw/buildroot/build_arm/staging_dir/usr/include
+-I/home/willw/buildroot/build_arm/staging_dir/include
+--sysroot=/home/willw/buildroot/build_arm/staging_dir/ -isysroot
+/home/willw/buildroot/build_arm/staging_dir -mtune=arm1136jf-s"
+INSTALL_MOD_PATH=/home/willw/buildroot/project_build_arm/badger/root
+CROSS_COMPILE=/home/willw/buildroot/build_arm/staging_dir/usr/bin/arm-linux-uclibcgnueabi- 
 
-On Dec 19, 2007 10:55 PM, Hamish Moffatt <hamish@cloud.net.au> wrote:
+LDFLAGS="-L/home/willw/buildroot/build_arm/staging_dir/lib
+-L/home/willw/buildroot/build_arm/staging_dir/usr/lib
+--sysroot=/home/willw/buildroot/build_arm/staging_dir/"
+LZMA="/home/willw/buildroot/toolchain_build_arm/bin/lzma"  \
+                 -C
+/home/willw/buildroot/project_build_arm/badger/linux-2.6.19.2 zImage
+make[1]: Entering directory
+`/home/willw/buildroot/project_build_arm/badger/linux-2.6.19.2'
+   CHK     include/linux/version.h
+make[2]: `include/asm-arm/mach-types.h' is up to date.
+   CHK     include/linux/utsrelease.h
+   CHK     include/linux/compile.h
+   GEN     usr/initramfs_data.cpio.gz
+   AS      usr/initramfs_data.o
+   LD      usr/built-in.o
+   GEN     .version
+   CHK     include/linux/compile.h
+   UPD     include/linux/compile.h
+   CC      init/version.o
+   LD      init/built-in.o
+   LD      .tmp_vmlinux1
+init/built-in.o: In function `init':
+calibrate.c:(.text+0x68): relocation truncated to fit: R_ARM_CALL
+against symbol `spawn_ksoftirqd' defined in .init.text section in
+kernel/built-in.o
+calibrate.c:(.text+0x6c): relocation truncated to fit: R_ARM_CALL
+against symbol `sched_init_smp' defined in .init.text section in
+kernel/built-in.o
+calibrate.c:(.text+0x70): relocation truncated to fit: R_ARM_CALL
+against symbol `populate_rootfs' defined in .init.text section in
+init/built-in.o
+calibrate.c:(.text+0x78): relocation truncated to fit: R_ARM_CALL
+against symbol `usermodehelper_init' defined in .init.text section in
+kernel/built-in.o
+calibrate.c:(.text+0x7c): relocation truncated to fit: R_ARM_CALL
+against symbol `driver_init' defined in .init.text section in
+drivers/built-in.o
+calibrate.c:(.text+0x80): relocation truncated to fit: R_ARM_CALL
+against symbol `sysctl_init' defined in .init.text section in
+kernel/built-in.o
+calibrate.c:(.text+0x194): relocation truncated to fit: R_ARM_CALL
+against symbol `prepare_namespace' defined in .init.text section in
+init/built-in.o
+init/built-in.o: In function `loglevel':
+calibrate.c:(.init.text+0x174): relocation truncated to fit: R_ARM_CALL
+against symbol `get_option' defined in .text section in
+lib/lib.a(cmdline.o)
+init/built-in.o: In function `maxcpus':
+calibrate.c:(.init.text+0x1a8): relocation truncated to fit: R_ARM_CALL
+against symbol `get_option' defined in .text section in
+lib/lib.a(cmdline.o)
+init/built-in.o: In function `unknown_bootoption':
+calibrate.c:(.init.text+0x1d8): relocation truncated to fit: R_ARM_CALL
+against symbol `strlen' defined in .text section in lib/lib.a(string.o)
+calibrate.c:(.init.text+0x214): additional relocation overflows omitted
+from the output
+make[1]: *** [.tmp_vmlinux1] Error 1
+make[1]: Leaving directory
+`/home/willw/buildroot/project_build_arm/badger/linux-2.6.19.2'
+make: ***
+[/home/willw/buildroot/binaries/badger/linux-kernel-2.6.19.2-arm] Error
+2
 
-> On Wed, Dec 19, 2007 at 09:59:29PM -0500, Martin Bures wrote:
-> > So I applied the fakeroot patch and the build for an ARM 920T system
-> stopped
-> > here:
-> > touch -c /home/martin/buildroot/build_arm/staging_dir/usr/bin/fakeroot
-> > rm -rf /home/martin/buildroot/build_arm/makedevs
-> > mkdir /home/martin/buildroot/build_arm/makedevs
-> > cp target/makedevs/makedevs.c /home/martin/buildroot/build_arm/makedevs
-> > /usr/bin/gcc -Wall -Werror -O2
-> > /home/martin/buildroot/build_arm/makedevs/makedevs.c -o
-> > /home/martin/buildroot/build_arm/makedevs/makedevs
-> > touch -c /home/martin/buildroot/build_arm/makedevs/makedevs
-> > /usr/bin/install -m 755
-> /home/martin/buildroot/build_arm/makedevs/makedevs
-> > /home/martin/buildroot/build_arm/staging_dir/bin/makedevs
-> > touch -c /home/martin/buildroot/build_arm/staging_dir/bin/makedevs
-> > make: *** No rule to make target `mtd-host', needed by
-> > `/home/martin/buildroot/binaries/uclibc/rootfs.arm_nofpu.jffs2'.  Stop.
-> >
-> > Any thoughts?
-> >
-> > Here is my .config file.
-> [..]
-> > BR2_PACKAGE_MTD=y
-> > # BR2_AUDIO_SUPPORT is not set
-> > # BR2_GRAPHIC_SUPPORT is not set
-> > # BR2_COMPRESSOR_SUPPORT is not set
-> > # BR2_SCRIPTING_SUPPORT is not set
-> > # BR2_GAMES is not set
->
-> Once MTD is selected there are some other options to set which version.
-> None of those are mentioned in your .config, so the correct makefile is
-> not being included.
->
-> I don't know how you could enable BR2_PACKAGE_MTD=y without setting the
-> other options (unless you edited your .config by hand to enable it).
->
->
-> Hamish
-> --
-> Hamish Moffatt VK3SB <hamish@debian.org> <hamish@cloud.net.au>
-> _______________________________________________
-> buildroot mailing list
-> buildroot at uclibc.org
-> http://busybox.net/mailman/listinfo/buildroot
->
--------------- next part --------------
-An HTML attachment was scrubbed...
-URL: http://busybox.net/lists/buildroot/attachments/20071220/3895d2b0/attachment.htm 
+Can someone explain what the errors mean? It appears to be an error when 
+linking the kernel but how can adding a package cause this?
+
+Any help is much appreciated.
+
+Will.
+
+-- 
+------------------------------------------------------------------------
+Will Wagner                                     will_wagner at carallon.com
+Senior Project Engineer                  Office Tel: +44 (0)20 7371 2032
+Carallon Ltd, Studio G20, Shepherds Building, Rockley Rd, London W14 0DA
+------------------------------------------------------------------------
