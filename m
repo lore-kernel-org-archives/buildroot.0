@@ -1,24 +1,19 @@
-From: Candy Man <candyman80211@gmail.com>
-Date: Tue, 25 Dec 2007 19:47:15 -0500
-Subject: [Buildroot] Build Error: Unable to download fakeroot source
-Message-ID: <3ca501d60712251647i19b8bb46i5fbe7281cafa0993@mail.gmail.com>
+From: Lane Brooks <lane@brooks.nu>
+Date: Wed, 26 Dec 2007 00:23:30 -0700
+Subject: [Buildroot] x11r7 modules not installing
+Message-ID: <47720172.3010200@brooks.nu>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-I just downloaded the latest version of buildroot via subversion, but
-when trying to run 'make source' I get the following error:
+I am new to buildroot, but so far it is great.
 
-wget --passive-ftp  -P /home/will/box/v0.0.2/buildroot/buildroot/dl
-http://ftp.debian.org/debian/pool/main/f/fakeroot/fakeroot_1.8.2.tar.gz
---19:41:44--  http://ftp.debian.org/debian/pool/main/f/fakeroot/fakeroot_1.8.2.tar.gz
-           => `/home/will/box/v0.0.2/buildroot/buildroot/dl/fakeroot_1.8.2.tar.gz'
-Resolving ftp.debian.org... 128.101.240.212
-Connecting to ftp.debian.org|128.101.240.212|:80... connected.
-HTTP request sent, awaiting response... 404 Not Found
-19:41:44 ERROR 404: Not Found.
+I am trying to build x11r7, but modules do not seem to get installed 
+correctly.  It seems the build script is calling 'make install-exec', 
+which does not install the modules onto the target.  Am I doing 
+something wrong?  Anyone know why my x11 modules are not getting installed?
 
-make: *** [/home/will/box/v0.0.2/buildroot/buildroot/dl/fakeroot_1.8.2.tar.gz]
-Error 1
+Thanks,
+Lane Brooks
