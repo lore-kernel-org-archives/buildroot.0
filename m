@@ -1,54 +1,64 @@
-From: bugs at busybox.net <bugs@busybox.net>
-Date: Thu, 27 Dec 2007 00:49:42 -0800
-Subject: [Buildroot] [buildroot 0001819]: buildroot 20071226 tries to fetch
-	non-existant fakeroot
-Message-ID: <9d36112a86996f32e4e8c35755e287d8@bugs.uclibc.org>
+From: thomasez at uclibc.org <thomasez@uclibc.org>
+Date: Thu, 27 Dec 2007 03:23:12 -0800 (PST)
+Subject: [Buildroot] svn commit: trunk/buildroot/package/fakeroot
+Message-ID: <20071227112312.EBFDC1200F0@busybox.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+Author: thomasez
+Date: 2007-12-27 03:23:11 -0800 (Thu, 27 Dec 2007)
+New Revision: 20691
 
-A NOTE has been added to this issue. 
-====================================================================== 
-http://busybox.net/bugs/view.php?id=1819 
-====================================================================== 
-Reported By:                alexking
-Assigned To:                buildroot
-====================================================================== 
-Project:                    buildroot
-Issue ID:                   1819
-Category:                   Other
-Reproducibility:            always
-Severity:                   major
-Priority:                   normal
-Status:                     assigned
-====================================================================== 
-Date Submitted:             12-27-2007 00:35 PST
-Last Modified:              12-27-2007 00:49 PST
-====================================================================== 
-Summary:                    buildroot 20071226 tries to fetch non-existant
-fakeroot
-Description: 
-While trying to build a system with buildroot, it tries to fetch fakeroot
-1.8.2, which is not a current version and isn't available in the Debian
-mirrors.
+Log:
+Closing bug #1819 and 1709
 
-1.5.10 is in etch, and 1.8.10 is current in testing/unstable.
 
-====================================================================== 
+Modified:
+   trunk/buildroot/package/fakeroot/fakeroot-uclibc-LFS.patch
+   trunk/buildroot/package/fakeroot/fakeroot.mk
 
----------------------------------------------------------------------- 
- alexking - 12-27-07 00:49  
----------------------------------------------------------------------- 
-OK, I found bug http://busybox.net/bugs/view.php?id=1709 now, which is helpful. 
 
-Issue History 
-Date Modified   Username       Field                    Change               
-====================================================================== 
-12-27-07 00:35  alexking       New Issue                                    
-12-27-07 00:35  alexking       Status                   new => assigned     
-12-27-07 00:35  alexking       Assigned To               => buildroot       
-12-27-07 00:49  alexking       Note Added: 0003269                          
-======================================================================
+Changeset:
+Modified: trunk/buildroot/package/fakeroot/fakeroot-uclibc-LFS.patch
+===================================================================
+--- trunk/buildroot/package/fakeroot/fakeroot-uclibc-LFS.patch	2007-12-26 21:49:33 UTC (rev 20690)
++++ trunk/buildroot/package/fakeroot/fakeroot-uclibc-LFS.patch	2007-12-27 11:23:11 UTC (rev 20691)
+@@ -1,14 +1,14 @@
+-diff -u fakeroot-1.7.1.orig/communicate.h fakeroot-1.7.1/communicate.h
+---- fakeroot-1.7.1.orig/communicate.h	2005-10-02 17:35:36.000000000 +0200
+-+++ fakeroot-1.7.1/communicate.h	2007-09-20 19:43:38.000000000 +0200
++diff -u fakeroot-1.8.10.orig/communicate.h fakeroot-1.8.10/communicate.h
++--- fakeroot-1.8.10.orig/communicate.h  2007-11-20 21:56:53.000000000 -0500
+++++ fakeroot-1.8.10/communicate.h       2007-12-13 11:00:03.000000000 -0500
+ @@ -35,7 +35,9 @@
+  #endif
+  
+  /* Then decide whether we do or do not use the stat64 support */
+--#if defined(sun) || __GLIBC__ > 2 || (__GLIBC__ == 2 && __GLIBC_MINOR__ >= 1)
+-+#if defined(sun) \
+-+	|| (!defined __UCLIBC__ && (__GLIBC__ > 2 || (__GLIBC__ == 2 && __GLIBC_MINOR__ >= 1))) \
+-+	|| (defined __UCLIBC__ && defined UCLIBC_HAS_LFS)
++-#if (defined(sun) && !defined(__SunOS_5_5_1) && !defined(_LP64)) || __GLIBC__ > 2 || (__GLIBC__ == 2 && __GLIBC_MINOR__ >= 1)
+++#if (defined(sun) && !defined(__SunOS_5_5_1) && !defined(_LP64)) \
+++       || (!defined __UCLIBC__ && (__GLIBC__ > 2 || (__GLIBC__ == 2 && __GLIBC_MINOR__ >= 1))) \
+++       || (defined __UCLIBC__ && defined UCLIBC_HAS_LFS)
+  # define STAT64_SUPPORT
+  #else
+  # warning Not using stat64 support
+
+Modified: trunk/buildroot/package/fakeroot/fakeroot.mk
+===================================================================
+--- trunk/buildroot/package/fakeroot/fakeroot.mk	2007-12-26 21:49:33 UTC (rev 20690)
++++ trunk/buildroot/package/fakeroot/fakeroot.mk	2007-12-27 11:23:11 UTC (rev 20691)
+@@ -3,7 +3,7 @@
+ # fakeroot
+ #
+ #############################################################
+-FAKEROOT_VERSION:=1.8.2
++FAKEROOT_VERSION:=1.8.10
+ FAKEROOT_SOURCE:=fakeroot_$(FAKEROOT_VERSION).tar.gz
+ FAKEROOT_SITE:=http://ftp.debian.org/debian/pool/main/f/fakeroot
+ FAKEROOT_CAT:=$(ZCAT)
