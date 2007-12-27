@@ -1,8 +1,8 @@
 From: bugs at busybox.net <bugs@busybox.net>
-Date: Thu, 27 Dec 2007 00:35:06 -0800
+Date: Thu, 27 Dec 2007 00:49:42 -0800
 Subject: [Buildroot] [buildroot 0001819]: buildroot 20071226 tries to fetch
 	non-existant fakeroot
-Message-ID: <e50c5e7384d81283b7d42e51151872bf@busybox.net>
+Message-ID: <9d36112a86996f32e4e8c35755e287d8@bugs.uclibc.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -10,7 +10,7 @@ Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
 
-The following issue has been SUBMITTED. 
+A NOTE has been added to this issue. 
 ====================================================================== 
 http://busybox.net/bugs/view.php?id=1819 
 ====================================================================== 
@@ -26,7 +26,7 @@ Priority:                   normal
 Status:                     assigned
 ====================================================================== 
 Date Submitted:             12-27-2007 00:35 PST
-Last Modified:              12-27-2007 00:35 PST
+Last Modified:              12-27-2007 00:49 PST
 ====================================================================== 
 Summary:                    buildroot 20071226 tries to fetch non-existant
 fakeroot
@@ -39,10 +39,16 @@ mirrors.
 
 ====================================================================== 
 
+---------------------------------------------------------------------- 
+ alexking - 12-27-07 00:49  
+---------------------------------------------------------------------- 
+OK, I found bug http://busybox.net/bugs/view.php?id=1709 now, which is helpful. 
+
 Issue History 
 Date Modified   Username       Field                    Change               
 ====================================================================== 
 12-27-07 00:35  alexking       New Issue                                    
 12-27-07 00:35  alexking       Status                   new => assigned     
 12-27-07 00:35  alexking       Assigned To               => buildroot       
+12-27-07 00:49  alexking       Note Added: 0003269                          
 ======================================================================
