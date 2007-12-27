@@ -1,72 +1,53 @@
-From: bugs at busybox.net <bugs@busybox.net>
-Date: Thu, 27 Dec 2007 04:35:47 -0800
-Subject: [Buildroot] [buildroot 0001824]: mpfr-2.3.0 does not build
-Message-ID: <c338e32a6d43b8b4e7c6a5bb642cf61f@bugs.uclibc.org>
+From: Lane Brooks <lane@brooks.nu>
+Date: Thu, 27 Dec 2007 09:35:41 -0700
+Subject: [Buildroot] x11r7 modules not installing
+In-Reply-To: <477238FD.1080103@promwad.com>
+References: <47720172.3010200@brooks.nu> <477238FD.1080103@promwad.com>
+Message-ID: <4773D45D.40208@brooks.nu>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+Ivan Kuten wrote:
+> Lane Brooks wrote:
+>> I am new to buildroot, but so far it is great.
+>>
+>> I am trying to build x11r7, but modules do not seem to get installed 
+>> correctly.  It seems the build script is calling 'make install-exec', 
+>> which does not install the modules onto the target.  Am I doing 
+>> something wrong?  Anyone know why my x11 modules are not getting installed?
+>>
+>> Thanks,
+>> Lane Brooks
+>> _______________________________________________
+>> buildroot mailing list
+>> buildroot at uclibc.org
+>> http://busybox.net/mailman/listinfo/buildroot
+> 
+> Hi,
+> 
+> This is because X11 support is still experimental - you need to do manual work.
+> Patches are welcome.
+> 
+> 
+> Regards,
+> Ivan
+> 
 
-The following issue has been SUBMITTED. 
-====================================================================== 
-http://busybox.net/bugs/view.php?id=1824 
-====================================================================== 
-Reported By:                mfladischer
-Assigned To:                buildroot
-====================================================================== 
-Project:                    buildroot
-Issue ID:                   1824
-Category:                   Architecture Specific
-Reproducibility:            always
-Severity:                   minor
-Priority:                   normal
-Status:                     assigned
-====================================================================== 
-Date Submitted:             12-27-2007 04:35 PST
-Last Modified:              12-27-2007 04:35 PST
-====================================================================== 
-Summary:                    mpfr-2.3.0 does not build
-Description: 
-mpfr-2.3.0 fails on compile:
+I changed Makefile.autotools.in to call 'install' instead of 
+'install-exec', and now the X11r7 modules are installing correctly (see 
+patch).  I am not sure if this introduces other issues with other 
+packages or what the differences between install-exec and install are. 
+Can anyone explain it?
 
-/usr/bin/make -j1 -C
-/home/users/mfladischer/buildroot/toolchain_build_i386/mpfr-2.3.0-host
-install
-make[1]: Entering directory
-`/home/users/mfladischer/buildroot/toolchain_build_i386/mpfr-2.3.0-host'
-Making install in tests
-make[2]: Entering directory
-`/home/users/mfladischer/buildroot/toolchain_build_i386/mpfr-2.3.0-host/tests'
-make[3]: Entering directory
-`/home/users/mfladischer/buildroot/toolchain_build_i386/mpfr-2.3.0-host/tests'
-make[3]: Nothing to be done for `install-exec-am'.
-make[3]: Nothing to be done for `install-data-am'.
-make[3]: Leaving directory
-`/home/users/mfladischer/buildroot/toolchain_build_i386/mpfr-2.3.0-host/tests'
-make[2]: Leaving directory
-`/home/users/mfladischer/buildroot/toolchain_build_i386/mpfr-2.3.0-host/tests'
-make[2]: Entering directory
-`/home/users/mfladischer/buildroot/toolchain_build_i386/mpfr-2.3.0-host'
-make[2]: *** No rule to make target
-`/home/users/mfladischer/tvclient/buildroot/toolchain_build_i386/mpfr-2.3.0/exceptions.c',
-needed by `exceptions.lo'.  Stop.
-make[2]: Leaving directory
-`/home/users/mfladischer/buildroot/toolchain_build_i386/mpfr-2.3.0-host'
-make[1]: *** [install-recursive] Error 1
-make[1]: Leaving directory
-`/home/users/mfladischer/buildroot/toolchain_build_i386/mpfr-2.3.0-host'
-make: ***
-[/home/users/mfladischer/buildroot/toolchain_build_i386/mpfr/lib/libmpfr.so]
-Error 2
+Lane
 
-====================================================================== 
-
-Issue History 
-Date Modified   Username       Field                    Change               
-====================================================================== 
-12-27-07 04:35  mfladischer    New Issue                                    
-12-27-07 04:35  mfladischer    Status                   new => assigned     
-12-27-07 04:35  mfladischer    Assigned To               => buildroot       
-======================================================================
+-------------- next part --------------
+A non-text attachment was scrubbed...
+Name: x11r7install.patch
+Type: text/x-patch
+Size: 627 bytes
+Desc: not available
+Url : http://busybox.net/lists/buildroot/attachments/20071227/cdce5c66/attachment.bin 
