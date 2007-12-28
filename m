@@ -1,8 +1,8 @@
 From: bugs at busybox.net <bugs@busybox.net>
-Date: Fri, 28 Dec 2007 07:34:01 -0800
+Date: Fri, 28 Dec 2007 10:05:14 -0800
 Subject: [Buildroot] [buildroot 0001789]: Linux-PAM 0.99.9.0 support for
 	buildroot
-Message-ID: <19f30f77c3acd3c80b2d7e85ef027383@busybox.net>
+Message-ID: <01549fd5b9dc3c53c1f20e43eb701cf1@busybox.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -26,7 +26,7 @@ Priority:                   normal
 Status:                     assigned
 ====================================================================== 
 Date Submitted:             12-16-2007 12:35 PST
-Last Modified:              12-28-2007 07:34 PST
+Last Modified:              12-28-2007 10:05 PST
 ====================================================================== 
 Summary:                    Linux-PAM 0.99.9.0 support for buildroot
 Description: 
@@ -61,6 +61,17 @@ http://www.gnu.org/software/autoconf/manual/autoconf-2.57/html_chapter/autoconf_
 Thanks,
 Chris 
 
+---------------------------------------------------------------------- 
+ kriegaex - 12-28-07 10:05  
+---------------------------------------------------------------------- 
+Chris,
+
+the patch did apply cleanly, without the slightest bit of fuzzy match or
+so. This can be clearly seen in the log file I attached. On my system I
+have automake 1.10, if this helps you in any way. It does not make sense
+to attach my build script, because we use an adapted version of buildroot
+with many macros you would be missing. 
+
 Issue History 
 Date Modified   Username       Field                    Change               
 ====================================================================== 
@@ -74,4 +85,5 @@ Date Modified   Username       Field                    Change
 12-28-07 04:57  kriegaex       Note Edited: 0003279                         
 12-28-07 04:57  kriegaex       Issue Monitored: kriegaex                    
 12-28-07 07:34  chrisv         Note Added: 0003284                          
+12-28-07 10:05  kriegaex       Note Added: 0003289                          
 ======================================================================
