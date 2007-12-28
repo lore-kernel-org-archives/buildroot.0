@@ -1,8 +1,8 @@
 From: bugs at busybox.net <bugs@busybox.net>
-Date: Fri, 28 Dec 2007 04:57:13 -0800
+Date: Fri, 28 Dec 2007 07:34:01 -0800
 Subject: [Buildroot] [buildroot 0001789]: Linux-PAM 0.99.9.0 support for
 	buildroot
-Message-ID: <f07061c8235c43404412b75b441b4947@busybox.net>
+Message-ID: <19f30f77c3acd3c80b2d7e85ef027383@busybox.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -26,7 +26,7 @@ Priority:                   normal
 Status:                     assigned
 ====================================================================== 
 Date Submitted:             12-16-2007 12:35 PST
-Last Modified:              12-28-2007 04:57 PST
+Last Modified:              12-28-2007 07:34 PST
 ====================================================================== 
 Summary:                    Linux-PAM 0.99.9.0 support for buildroot
 Description: 
@@ -39,9 +39,27 @@ to integrate into the tree.
  kriegaex - 12-28-07 04:57  
 ---------------------------------------------------------------------- 
 I tried your patch, and it applies cleanly. But afterwards I have problems
-building PAM with a similar makefile adapted from yours (cf. attachment).
-Do you have any hints for me? There are some in the build log, but I do
-not understand them because I am an automake newbie. 
+building PAM with a similar makefile adapted from yours (cf. make log in
+the attachment). Do you have any hints for me? There are some in the build
+log, but I do not understand them because I am an automake newbie.
+
+ 
+
+---------------------------------------------------------------------- 
+ chrisv - 12-28-07 07:34  
+---------------------------------------------------------------------- 
+Hey kriegaex,
+
+Try running autoreconf manually to rebuild the configure script.  It looks
+like the patch didn't apply cleanly ... I'll look into the root cause
+later.  (Some implementations of autoconf/automake will rebuild the
+configure scripts automatically, and it looks like mine did.)
+
+Details on autoreconf can be found here:
+http://www.gnu.org/software/autoconf/manual/autoconf-2.57/html_chapter/autoconf_3.html#SEC14
+
+Thanks,
+Chris 
 
 Issue History 
 Date Modified   Username       Field                    Change               
@@ -53,4 +71,7 @@ Date Modified   Username       Field                    Change
         
 12-28-07 04:56  kriegaex       File Added: make.log                         
 12-28-07 04:57  kriegaex       Note Added: 0003279                          
+12-28-07 04:57  kriegaex       Note Edited: 0003279                         
+12-28-07 04:57  kriegaex       Issue Monitored: kriegaex                    
+12-28-07 07:34  chrisv         Note Added: 0003284                          
 ======================================================================
