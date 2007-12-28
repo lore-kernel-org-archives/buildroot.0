@@ -1,7 +1,7 @@
 From: bugs at busybox.net <bugs@busybox.net>
-Date: Fri, 28 Dec 2007 13:57:29 -0800
+Date: Fri, 28 Dec 2007 15:41:12 -0800
 Subject: [Buildroot] [buildroot 0001824]: mpfr-2.3.0 does not build
-Message-ID: <1504e0b2fdb5e738b81a189a52236634@bugs.uclibc.org>
+Message-ID: <ce2516df2f076f1d453c2a0cecfd1f43@busybox.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -25,7 +25,7 @@ Priority:                   normal
 Status:                     assigned
 ====================================================================== 
 Date Submitted:             12-27-2007 04:35 PST
-Last Modified:              12-28-2007 13:57 PST
+Last Modified:              12-28-2007 15:41 PST
 ====================================================================== 
 Summary:                    mpfr-2.3.0 does not build
 Description: 
@@ -80,6 +80,13 @@ Where did "tvclient" come from in that path?
 
 Thomas. 
 
+---------------------------------------------------------------------- 
+ mfladischer - 12-28-07 15:41  
+---------------------------------------------------------------------- 
+Ok, now I see it. I checked out buildroot in ~/tvclient/buildroot and later
+moved this directory to ~/buildroot.
+It seems that the old path is remembered somewhere. 
+
 Issue History 
 Date Modified   Username       Field                    Change               
 ====================================================================== 
@@ -87,4 +94,5 @@ Date Modified   Username       Field                    Change
 12-27-07 04:35  mfladischer    Status                   new => assigned     
 12-27-07 04:35  mfladischer    Assigned To               => buildroot       
 12-28-07 13:57  thomasez       Note Added: 0003294                          
+12-28-07 15:41  mfladischer    Note Added: 0003299                          
 ======================================================================
