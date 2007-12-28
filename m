@@ -1,53 +1,54 @@
-From: Lane Brooks <lane@brooks.nu>
-Date: Thu, 27 Dec 2007 09:35:41 -0700
-Subject: [Buildroot] x11r7 modules not installing
-In-Reply-To: <477238FD.1080103@promwad.com>
-References: <47720172.3010200@brooks.nu> <477238FD.1080103@promwad.com>
-Message-ID: <4773D45D.40208@brooks.nu>
+From: Corey McGuire <coreyfro@coreyfro.com>
+Date: Thu, 27 Dec 2007 17:39:21 -0800
+Subject: [Buildroot] Specify Modules Directory
+Message-ID: <cc3fd8f30712271739m76383d3bye3e9b2c4e7b1e66b@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Ivan Kuten wrote:
-> Lane Brooks wrote:
->> I am new to buildroot, but so far it is great.
->>
->> I am trying to build x11r7, but modules do not seem to get installed 
->> correctly.  It seems the build script is calling 'make install-exec', 
->> which does not install the modules onto the target.  Am I doing 
->> something wrong?  Anyone know why my x11 modules are not getting installed?
->>
->> Thanks,
->> Lane Brooks
->> _______________________________________________
->> buildroot mailing list
->> buildroot at uclibc.org
->> http://busybox.net/mailman/listinfo/buildroot
-> 
-> Hi,
-> 
-> This is because X11 support is still experimental - you need to do manual work.
-> Patches are welcome.
-> 
-> 
-> Regards,
-> Ivan
-> 
+Hello all,
 
-I changed Makefile.autotools.in to call 'install' instead of 
-'install-exec', and now the X11r7 modules are installing correctly (see 
-patch).  I am not sure if this introduces other issues with other 
-packages or what the differences between install-exec and install are. 
-Can anyone explain it?
+I am new to build root having never cross compiled a linux distro before,
+but I have used uclibc with gentoo for the x86 platform.  This is my first
+foray into the ARM world so if I sound like a complete idiot, please go easy
+on me ;-)
 
-Lane
+I am building with kernel sources based on the following patched kernel:
+ftp://ftp.embeddedarm.com/ts-arm-linux-cd/sources/tskernel-2.6.21-ts-src.tar.gz
 
+I have configured buildroot to use this source for the headers and for the
+kernel, I have provided the .config's and such and tweaked them to my
+specific needs (at least as well as my experience allows) but I get hung up
+when at the following:
+/home/coreyfro/harm/buildroot/build_arm/staging_dir/bin/arm-linux-depmod26
+-b /home/coreyfro/harm/buildroot/project_build_arm/Orb-Swarm/root 2.6.21.7
+WARNING: Couldn't open directory
+/home/coreyfro/harm/buildroot/project_build_arm/Orb-Swarm/root/lib/modules/2.6.21.7:
+No such file or directory
+
+This directory doesn't exist because the kernel I am using wants to put
+modules here:
+buildroot/project_build_arm/#########/root/lib/modules/2.6.21-ts
+
+How SHOULD I fix this (I say "should" because I am very creative when it
+comes to doing things the wrong way.)
+
+I don't believe that including config files is needed because this should be
+relatively cut and dry, but not enough, so, as to be easy to find searching
+the mailing list. Let me know if these files would be helpful.  I would need
+to spend some effort sanitising them for public posting.
+
+Thanks
+
+-- 
+---
+----
+-----     Coreyfro: just a maker, just like you
+--------
+--------------
+--------------------------
 -------------- next part --------------
-A non-text attachment was scrubbed...
-Name: x11r7install.patch
-Type: text/x-patch
-Size: 627 bytes
-Desc: not available
-Url : http://busybox.net/lists/buildroot/attachments/20071227/cdce5c66/attachment.bin 
+An HTML attachment was scrubbed...
+URL: http://busybox.net/lists/buildroot/attachments/20071227/eb186764/attachment.htm 
