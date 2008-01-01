@@ -1,27 +1,33 @@
-From: jake sullivan <jacob_sullivan@yahoo.com>
-Date: Thu, 31 Jan 2008 21:02:34 -0800 (PST)
-Subject: [Buildroot] make clean not so clean
-Message-ID: <214360.55769.qm@web56410.mail.re3.yahoo.com>
+From: Claus Klein <claus.klein@arcormail.de>
+Date: Tue, 01 Jan 2008 14:47:13 +0100
+Subject: [Buildroot] [patch] to use DISABLE_IPV6 instead of fix seting
+Message-ID: <477A4461.70205@arcormail.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-I'm not sure how to go about fixing this, but I have been able to recreate an annoying little bug (that I think is the source of a number of other newb problems).
+Hi all,
 
-I started by building a basic system, got my cross compilers working, and got my embedded system working on a normal hard drive (ext2).  When I went to add jffs2 as a target output, I got a lot of errors about missing things (e.g. the shadow directory).  This was similar to earlier problems that I had solved by deleting the whole directory and re checking out buildroot from svn (make clean didn't solve any of the previous problems).   This time I tried "make clean" again, didn't work, but "make distclean" did work.  It was a little annoying that I had to redownload all the source, but I didn't lose the settings from the buildroot "make menuconfig" (but I did lose the "make menuconfig" settings for the kernel).  I tried checking out another copy of buildroot, building it without jffs2 adding some features, building, adding jffs2 and build error.  I then tried make clean, no luck, and then make distclean.  After all the source was downloaded again, the
- build worked great.
+while working on a new rootfile system with ipv6 support, I had problems 
+with some packages.
+By the way there was an  too error in the libxml2 makefile when 
+installing the target-header.
 
-My gut says to update "make clean" to delete all the config files (and basically everything but the source files), but before I put work into making and testing a patch, I want to make sure that is the right approach...
+Is it documented how makefiles should be written to be flexible for 
+differrent toolchain options like:
 
-Jake
+libintl,
+largefile,
+ipv6,
+...
 
+Here is my patch
 
+ck
 
-
-
-
-      ____________________________________________________________________________________
-Looking for last minute shopping deals?  
-Find them fast with Yahoo! Search.  http://tools.search.yahoo.com/newsearch/category.php?category=shopping
+-------------- next part --------------
+An embedded and charset-unspecified text was scrubbed...
+Name: ipv6-config.diff
+Url: http://busybox.net/lists/buildroot/attachments/20080101/70f51127/attachment.diff 
