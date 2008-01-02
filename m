@@ -1,104 +1,40 @@
-From: mojtaba <kernelppc@gmail.com>
-Date: Wed, 2 Jan 2008 15:30:47 +0100
-Subject: [Buildroot] Filesystem problem
-Message-ID: <002e01c84d4c$11ff0cc0$35fd2640$@com>
+From: Saurav Kumar Barik <sauravb@aztecsoft.com>
+Date: Wed, 2 Jan 2008 20:06:46 +0530
+Subject: [Buildroot] segmentation fault with sudo
+Message-ID: <A1286843C9B74E46B0063D92B7844C2802DE7E21@azindbaex01.aztec.soft>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear all,
 
-I am trying to boot a root file system build by buildroot. But I got this
-error" init has generated signal 11 but has no handler for it".
+Hi,
 
-My kernel version is 2.6.24-rc3
-My target system is PPC 405 (XILINX VIRTEX II pro)
-I am using the 26-12 snapshot of buildroot
+I am getting segmentation fault with sudo.
+I use Gatework's BSP 0.7 which I downloaded from
+       http://bsp.gateworks.com
 
-This is what I get on terminal:
+Searching in the mailing list archives I found with the uClibc-0.9.29
+some of the packages (sudo, SMB etc) show segmentation fault when run.
+Buildroot users have recommended downgrading uClibc to uClibc-0.9.28.3
+version which solves the problem.
 
-loaded at:     00400000 004CE1A0                                
-board data at: 004CC120 004CC19C                                
-relocated to:  0040405C 004040D8                                
-zimage at:     00404E94 004CB08A                                
-avail ram:     004CF000 10000000                                
+But I am not able to downgrade uClibc to 0.9.28.3 version because I use
+the kernel version 2.6.21.4.
+I tried to integrate uClibc-0.9.28.3 to my buildroot system but got a
+lot of compilation errors.
+Some of the files in uClibc-0.9.28.3 searches for "linux/version.h" file
+which is not present in linux-2.6.21.4.
 
-Linux/PPC load: console=ttyS0,9600 root=/dev/xsa2 init=/bin/sh
+Has anybody successfully used sudo with Gatework's BSP 0.7
+(linux-2.6.21.4)?
+Please share some pointers.
 
-Uncompressing Linux...done.                           
-Now booting the kernel                      
-Linux version 2.6.24-rc3 (mojtaba at ubuntu2) (gcc version 4.2.2) #1 Wed Jan 2
-14:3
-
-7:58 CET 2008             
-Xilinx ML300 Reference System (Virtex-II Pro)
-
-Zone PFN ranges:                
-  DMA             0 ->    65536                               
-  Normal      65536 ->    65536                               
-  HighMem     655                
-Movable zone start PFN for each node                                    
-early_node_map[1] active PFN ranges                                   
-    0:        0 ->    65536                           
-Built 1 zonelists in Zone order, mobility grouping on.  Total pages: 65024
-
-Kernel command line: console=ttyS0,9600 root=/dev/xsa2 init=/bin/sh
-
-Xilinx INTC #0 at 0x41200000 mapped to 0xEF5FE000
-
-PID hash table entries: 1024 (order: 10, 4096 bytes)
-
-Console: colour dummy device 80x25                                  
-Dentry cache hash table entries: 32768 (order: 5, 131072 bytes)
-
-Inode-cache hash table entries: 16384 (order: 4, 65536 bytes)
-
-Memory: 258048k available (1288k kernel code, 436k data, 76k init, 0k
-highmem)
-
-Mount-cache hash table entries: 512                                   
-net_namespace: 64 bytes                       
-NET: Registered protocol family 16                                  
-sysctl table check failed: /kernel/l2cr .1.31 Missing strategy
-
-Call Trace:           
-[cfc1fe20] [c0008148] show_stack+0x58/0x188 (unreliable)
-
-[cfc1fe68] [c0038908] set_fail+0x50/0x68
-
-[cfc1fe80] [c0038f7c] sysctl_check_table+0x65c/0x6ac
-
-[cfc1fee8] [c0038f8c] sysctl_check_table+0x66c/0x6ac
-
-[cfc1ff50] [c0026c58] register_sysctl_table+0x64/0xb4
-
-[cfc1ff68] [c019ed4c] register_ppc_htab_sysctl+0x18/0x2c
-[cfc1ff70] [c019b228] kernel_init+0x104/0x290
-[cfc1fff0] [c0004af8] kernel_thread+0x44/0x60
-io scheduler noop registered
-io scheduler anticipatory registered
-io scheduler deadline registered
-io scheduler cfq registered (default)
-Generic RTC Driver v1.07
-Macintosh non-volatile memory driver v1.1
-Serial: 8250/16550 driver $Revision: 1.90 $ 4 ports, IRQ sharing disabled
-serial8250.0: ttyS0 at MMIO 0x40401003 (irq = 2) is a 16550A
-console [ttyS0] enabled
-xsysace xsysace.0: Xilinx SystemACE revision 1.0.12
-xsysace xsysace.0: capacity: 1981728 sectors
- xsa: xsa1 xsa2 xsa3
-Xilinx SystemACE device driver, major=254
-i8042.c: No controller found.
-mice: PS/2 mouse device common for all mice
-VFS: Mounted root (ext2 filesystem) readonly.
-Freeing unused kernel memory: 76k init
-Warning: unable to open an initial console.
-init has generated signal 11 but has no handler for it
-Kernel panic - not syncing: Attempted to kill init!
-Rebooting in 180 seconds..
+Thanks & Regards,
+Saurav
 
 
-Regards,
-Mojtaba
+The information contained in, or attached to, this e-mail, contains confidential information and is intended solely for the use of the individual or entity to whom they are addressed and is subject to legal privilege. If you have received this e-mail in error you should notify the sender immediately by reply e-mail, delete the message from your system and notify your system manager. Please do not copy it for any purpose, or disclose its contents to any other person. The views or opinions presented in this e-mail are solely those of the author and do not necessarily represent those of the company. The recipient should check this e-mail and any attachments for the presence of viruses. The company accepts no liability for any damage caused, directly or indirectly, by any virus transmitted in this email.
+
+www.aztecsoft.com
