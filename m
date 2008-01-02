@@ -1,32 +1,104 @@
-From: Ivan Kuten <ivan.kuten@promwad.com>
-Date: Wed, 2 Jan 2008 14:51:05 +0200 (EET)
-Subject: [Buildroot] [patch] to use DISABLE_IPV6 instead of fix seting
-In-Reply-To: <477A4461.70205@arcormail.de>
-References: <477A4461.70205@arcormail.de>
-Message-ID: <56806.127.0.0.1.1199278265.squirrel@localhost>
+From: mojtaba <kernelppc@gmail.com>
+Date: Wed, 2 Jan 2008 15:30:47 +0100
+Subject: [Buildroot] Filesystem problem
+Message-ID: <002e01c84d4c$11ff0cc0$35fd2640$@com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Claus,
+Dear all,
 
-> while working on a new rootfile system with ipv6 support, I had problems
-> with some packages.
-> By the way there was an  too error in the libxml2 makefile when
-> installing the target-header.
->
-> Is it documented how makefiles should be written to be flexible for
-> differrent toolchain options like:
->
-> libintl,
-> largefile,
-> ipv6,
+I am trying to boot a root file system build by buildroot. But I got this
+error" init has generated signal 11 but has no handler for it".
 
-Seems very few of packages honor these toolchain options. As I know, for example, Mplayer requires
-largefile support. Many people are using only single toolchain and not testing with other toolchain options.
-Thanks for patch - will apply soon.
+My kernel version is 2.6.24-rc3
+My target system is PPC 405 (XILINX VIRTEX II pro)
+I am using the 26-12 snapshot of buildroot
 
-regards,
-Ivan
+This is what I get on terminal:
+
+loaded at:     00400000 004CE1A0                                
+board data at: 004CC120 004CC19C                                
+relocated to:  0040405C 004040D8                                
+zimage at:     00404E94 004CB08A                                
+avail ram:     004CF000 10000000                                
+
+Linux/PPC load: console=ttyS0,9600 root=/dev/xsa2 init=/bin/sh
+
+Uncompressing Linux...done.                           
+Now booting the kernel                      
+Linux version 2.6.24-rc3 (mojtaba at ubuntu2) (gcc version 4.2.2) #1 Wed Jan 2
+14:3
+
+7:58 CET 2008             
+Xilinx ML300 Reference System (Virtex-II Pro)
+
+Zone PFN ranges:                
+  DMA             0 ->    65536                               
+  Normal      65536 ->    65536                               
+  HighMem     655                
+Movable zone start PFN for each node                                    
+early_node_map[1] active PFN ranges                                   
+    0:        0 ->    65536                           
+Built 1 zonelists in Zone order, mobility grouping on.  Total pages: 65024
+
+Kernel command line: console=ttyS0,9600 root=/dev/xsa2 init=/bin/sh
+
+Xilinx INTC #0 at 0x41200000 mapped to 0xEF5FE000
+
+PID hash table entries: 1024 (order: 10, 4096 bytes)
+
+Console: colour dummy device 80x25                                  
+Dentry cache hash table entries: 32768 (order: 5, 131072 bytes)
+
+Inode-cache hash table entries: 16384 (order: 4, 65536 bytes)
+
+Memory: 258048k available (1288k kernel code, 436k data, 76k init, 0k
+highmem)
+
+Mount-cache hash table entries: 512                                   
+net_namespace: 64 bytes                       
+NET: Registered protocol family 16                                  
+sysctl table check failed: /kernel/l2cr .1.31 Missing strategy
+
+Call Trace:           
+[cfc1fe20] [c0008148] show_stack+0x58/0x188 (unreliable)
+
+[cfc1fe68] [c0038908] set_fail+0x50/0x68
+
+[cfc1fe80] [c0038f7c] sysctl_check_table+0x65c/0x6ac
+
+[cfc1fee8] [c0038f8c] sysctl_check_table+0x66c/0x6ac
+
+[cfc1ff50] [c0026c58] register_sysctl_table+0x64/0xb4
+
+[cfc1ff68] [c019ed4c] register_ppc_htab_sysctl+0x18/0x2c
+[cfc1ff70] [c019b228] kernel_init+0x104/0x290
+[cfc1fff0] [c0004af8] kernel_thread+0x44/0x60
+io scheduler noop registered
+io scheduler anticipatory registered
+io scheduler deadline registered
+io scheduler cfq registered (default)
+Generic RTC Driver v1.07
+Macintosh non-volatile memory driver v1.1
+Serial: 8250/16550 driver $Revision: 1.90 $ 4 ports, IRQ sharing disabled
+serial8250.0: ttyS0 at MMIO 0x40401003 (irq = 2) is a 16550A
+console [ttyS0] enabled
+xsysace xsysace.0: Xilinx SystemACE revision 1.0.12
+xsysace xsysace.0: capacity: 1981728 sectors
+ xsa: xsa1 xsa2 xsa3
+Xilinx SystemACE device driver, major=254
+i8042.c: No controller found.
+mice: PS/2 mouse device common for all mice
+VFS: Mounted root (ext2 filesystem) readonly.
+Freeing unused kernel memory: 76k init
+Warning: unable to open an initial console.
+init has generated signal 11 but has no handler for it
+Kernel panic - not syncing: Attempted to kill init!
+Rebooting in 180 seconds..
+
+
+Regards,
+Mojtaba
