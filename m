@@ -1,40 +1,38 @@
-From: Saurav Kumar Barik <sauravb@aztecsoft.com>
-Date: Wed, 2 Jan 2008 20:06:46 +0530
-Subject: [Buildroot] segmentation fault with sudo
-Message-ID: <A1286843C9B74E46B0063D92B7844C2802DE7E21@azindbaex01.aztec.soft>
+From: Grant Likely <grant.likely@secretlab.ca>
+Date: Wed, 2 Jan 2008 11:54:55 -0700
+Subject: [Buildroot] Filesystem problem
+In-Reply-To: <002e01c84d4c$11ff0cc0$35fd2640$@com>
+References: <002e01c84d4c$11ff0cc0$35fd2640$@com>
+Message-ID: <fa686aa40801021054y64b480d0ldbb80ef2c98e5afa@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+On 1/2/08, mojtaba <kernelppc@gmail.com> wrote:
+> Dear all,
+>
+> I am trying to boot a root file system build by buildroot. But I got this
+> error" init has generated signal 11 but has no handler for it".
+>
+> My kernel version is 2.6.24-rc3
+> My target system is PPC 405 (XILINX VIRTEX II pro)
+> I am using the 26-12 snapshot of buildroot
+>
+<snip>
+>
+> mice: PS/2 mouse device common for all mice
+> VFS: Mounted root (ext2 filesystem) readonly.
+> Freeing unused kernel memory: 76k init
+> Warning: unable to open an initial console.
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+You probably don't have /dev/console in your root filesystem.
 
-Hi,
+g.
 
-I am getting segmentation fault with sudo.
-I use Gatework's BSP 0.7 which I downloaded from
-       http://bsp.gateworks.com
-
-Searching in the mailing list archives I found with the uClibc-0.9.29
-some of the packages (sudo, SMB etc) show segmentation fault when run.
-Buildroot users have recommended downgrading uClibc to uClibc-0.9.28.3
-version which solves the problem.
-
-But I am not able to downgrade uClibc to 0.9.28.3 version because I use
-the kernel version 2.6.21.4.
-I tried to integrate uClibc-0.9.28.3 to my buildroot system but got a
-lot of compilation errors.
-Some of the files in uClibc-0.9.28.3 searches for "linux/version.h" file
-which is not present in linux-2.6.21.4.
-
-Has anybody successfully used sudo with Gatework's BSP 0.7
-(linux-2.6.21.4)?
-Please share some pointers.
-
-Thanks & Regards,
-Saurav
-
-
-The information contained in, or attached to, this e-mail, contains confidential information and is intended solely for the use of the individual or entity to whom they are addressed and is subject to legal privilege. If you have received this e-mail in error you should notify the sender immediately by reply e-mail, delete the message from your system and notify your system manager. Please do not copy it for any purpose, or disclose its contents to any other person. The views or opinions presented in this e-mail are solely those of the author and do not necessarily represent those of the company. The recipient should check this e-mail and any attachments for the presence of viruses. The company accepts no liability for any damage caused, directly or indirectly, by any virus transmitted in this email.
-
-www.aztecsoft.com
+-- 
+Grant Likely, B.Sc., P.Eng.
+Secret Lab Technologies Ltd.
+grant.likely at secretlab.ca
+(403) 399-0195
