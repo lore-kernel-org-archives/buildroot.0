@@ -1,7 +1,7 @@
 From: jacmet at uclibc.org <jacmet@uclibc.org>
-Date: Thu,  3 Jan 2008 05:33:19 -0800 (PST)
+Date: Thu,  3 Jan 2008 05:33:22 -0800 (PST)
 Subject: [Buildroot] svn commit: trunk/buildroot/package/busybox
-Message-ID: <20080103133319.71A441200FC@busybox.net>
+Message-ID: <20080103133322.C38D2120113@busybox.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -9,615 +9,76 @@ Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
 Author: jacmet
-Date: 2008-01-03 05:33:19 -0800 (Thu, 03 Jan 2008)
-New Revision: 20701
+Date: 2008-01-03 05:33:21 -0800 (Thu, 03 Jan 2008)
+New Revision: 20702
 
 Log:
-busybox: Remove unused 1.7.0 patches
+busybox: Bump version to 1.7.4
 
 
 
-Removed:
-   trunk/buildroot/package/busybox/busybox-1.7.0-gettimeofday_ns.patch
-   trunk/buildroot/package/busybox/busybox-1.7.0-readlink.patch
-   trunk/buildroot/package/busybox/busybox-1.7.0-targz_nommu.patch
-   trunk/buildroot/package/busybox/busybox-1.7.0-trylink.patch
+Added:
+   trunk/buildroot/package/busybox/busybox-1.7.4-grep.patch
+
+Modified:
+   trunk/buildroot/package/busybox/Config.in
 
 
 Changeset:
-Deleted: trunk/buildroot/package/busybox/busybox-1.7.0-gettimeofday_ns.patch
+Modified: trunk/buildroot/package/busybox/Config.in
 ===================================================================
---- trunk/buildroot/package/busybox/busybox-1.7.0-gettimeofday_ns.patch	2008-01-03 13:31:26 UTC (rev 20700)
-+++ trunk/buildroot/package/busybox/busybox-1.7.0-gettimeofday_ns.patch	2008-01-03 13:33:19 UTC (rev 20701)
-@@ -1,95 +0,0 @@
--diff -urN busybox-1.7.0/networking/isrv.c busybox-1.7.0-gettimeofday_ns/networking/isrv.c
----- busybox-1.7.0/networking/isrv.c	2007-08-24 11:49:41.000000000 +0100
--+++ busybox-1.7.0-gettimeofday_ns/networking/isrv.c	2007-09-06 17:39:55.000000000 +0100
--@@ -21,20 +21,6 @@
-- 
-- /* Helpers */
-- 
---/* Even if _POSIX_MONOTONIC_CLOCK is defined, this
--- * may require librt */
---#if 0 /*def _POSIX_MONOTONIC_CLOCK*/
---static time_t monotonic_time(void)
---{
---	struct timespec ts;
---	if (clock_gettime(CLOCK_MONOTONIC, &ts) != 0)
---		time(&ts.tv_sec);
---	return ts.tv_sec;
---}
---#else
---#define monotonic_time() (time(NULL))
---#endif
---
-- /* Opaque structure */
-- 
-- struct isrv_state_t {
--@@ -258,7 +244,7 @@
-- 			/* this peer is gone */
-- 			remove_peer(state, peer);
-- 		} else if (TIMEOUT) {
---			TIMEO_TBL[peer] = monotonic_time();
--+			TIMEO_TBL[peer] = monotonic_sec();
-- 		}
-- 	}
-- }
--@@ -335,7 +321,7 @@
-- 			break;
-- 
-- 		if (timeout) {
---			time_t t = monotonic_time();
--+			time_t t = monotonic_sec();
-- 			if (t != CURTIME) {
-- 				CURTIME = t;
-- 				handle_timeout(state, do_timeout);
--diff -urN busybox-1.7.0/runit/runsv.c busybox-1.7.0-gettimeofday_ns/runit/runsv.c
----- busybox-1.7.0/runit/runsv.c	2007-08-24 11:50:01.000000000 +0100
--+++ busybox-1.7.0-gettimeofday_ns/runit/runsv.c	2007-09-06 17:39:55.000000000 +0100
--@@ -33,6 +33,34 @@
-- #include "libbb.h"
-- #include "runit_lib.h"
-- 
--+#if ENABLE_MONOTONIC_SYSCALL
--+#include <sys/syscall.h>
--+
--+/* libc has incredibly messy way of doing this,
--+ * typically requiring -lrt. We just skip all this mess */
--+static void gettimeofday_ns(struct timespec *ts)
--+{
--+	syscall(__NR_clock_gettime, CLOCK_REALTIME, ts);
--+}
--+#else
--+static void gettimeofday_ns(struct timespec *ts)
--+{
--+	if (sizeof(struct timeval) == sizeof(struct timespec)
--+	 && sizeof(((struct timeval*)ts)->tv_usec) == sizeof(ts->tv_nsec)
--+	) {
--+		/* Cheat */
--+		gettimeofday((void*)ts, NULL);
--+		ts->tv_nsec *= 1000;
--+	} else {
--+		extern void BUG_need_to_implement_gettimeofday_ns(void);
--+		BUG_need_to_implement_gettimeofday_ns();
--+	}
--+}
--+#endif
--+
--+/* Compare possibly overflowing unsigned counters */
--+#define LESS(a,b) ((int)((unsigned)(b) - (unsigned)(a)) > 0)
--+
-- static int selfpipe[2];
-- 
-- /* state */
--@@ -126,14 +154,6 @@
-- 	return 0;
-- }
-- 
---#define LESS(a,b) ((int)((unsigned)(b) - (unsigned)(a)) > 0)
---
---#include <sys/syscall.h>
---static void gettimeofday_ns(struct timespec *ts)
---{
---	syscall(__NR_clock_gettime, CLOCK_REALTIME, ts);
---}
---
-- static void update_status(struct svdir *s)
-- {
-- 	ssize_t sz;
+--- trunk/buildroot/package/busybox/Config.in	2008-01-03 13:33:19 UTC (rev 20701)
++++ trunk/buildroot/package/busybox/Config.in	2008-01-03 13:33:21 UTC (rev 20702)
+@@ -36,7 +36,7 @@
+ 	string
+ 	default "1.2.2.1"	if BR2_BUSYBOX_VERSION_1_2_2_1
+ 	default "1.6.1"		if BR2_BUSYBOX_VERSION_1_6_1
+-	default "1.7.2"		if BR2_BUSYBOX_VERSION_1_7_X
++	default "1.7.4"		if BR2_BUSYBOX_VERSION_1_7_X
+ 
+ 
+ config BR2_PACKAGE_BUSYBOX_INSTALL_SYMLINKS
 
-Deleted: trunk/buildroot/package/busybox/busybox-1.7.0-readlink.patch
+Added: trunk/buildroot/package/busybox/busybox-1.7.4-grep.patch
 ===================================================================
---- trunk/buildroot/package/busybox/busybox-1.7.0-readlink.patch	2008-01-03 13:31:26 UTC (rev 20700)
-+++ trunk/buildroot/package/busybox/busybox-1.7.0-readlink.patch	2008-01-03 13:33:19 UTC (rev 20701)
-@@ -1,107 +0,0 @@
--diff -urN busybox-1.7.0/applets/applets.c busybox-1.7.0-readlink/applets/applets.c
----- busybox-1.7.0/applets/applets.c	2007-08-24 11:50:02.000000000 +0100
--+++ busybox-1.7.0-readlink/applets/applets.c	2007-09-06 17:41:38.000000000 +0100
--@@ -546,7 +546,7 @@
--  help:
-- 		output_width = 80;
-- 		if (ENABLE_FEATURE_AUTOWIDTH) {
---			/* Obtain the terminal width.  */
--+			/* Obtain the terminal width */
-- 			get_terminal_width_height(0, &output_width, NULL);
-- 		}
-- 		/* leading tab and room to wrap */
--@@ -580,12 +580,11 @@
-- 
-- 	if (ENABLE_FEATURE_INSTALLER && strcmp(argv[1], "--install") == 0) {
-- 		const char *busybox;
---		busybox = xmalloc_readlink_or_warn(bb_busybox_exec_path);
--+		busybox = xmalloc_readlink(bb_busybox_exec_path);
-- 		if (!busybox)
-- 			busybox = bb_busybox_exec_path;
-- 		/* -s makes symlinks */
---		install_links(busybox,
---				 argv[2] && strcmp(argv[2], "-s") == 0);
--+		install_links(busybox, argv[2] && strcmp(argv[2], "-s") == 0);
-- 		return 0;
-- 	}
-- 
--diff -urN busybox-1.7.0/include/libbb.h busybox-1.7.0-readlink/include/libbb.h
----- busybox-1.7.0/include/libbb.h	2007-08-24 11:49:55.000000000 +0100
--+++ busybox-1.7.0-readlink/include/libbb.h	2007-09-06 17:41:38.000000000 +0100
--@@ -248,9 +248,10 @@
-- DIR *xopendir(const char *path);
-- DIR *warn_opendir(const char *path);
-- 
---char *xrealloc_getcwd_or_warn(char *cwd);
--+/* UNUSED: char *xmalloc_realpath(const char *path); */
--+char *xmalloc_readlink(const char *path);
-- char *xmalloc_readlink_or_warn(const char *path);
---char *xmalloc_realpath(const char *path);
--+char *xrealloc_getcwd_or_warn(char *cwd);
-- 
-- 
-- //TODO: signal(sid, f) is the same? then why?
--@@ -316,8 +317,8 @@
-- };
-- /* Create stream socket, and allocate suitable lsa.
--  * (lsa of correct size and lsa->sa.sa_family (AF_INET/AF_INET6))
--- * af == AF_UNSPEC will result in trying to create IPv6, and
--- * if kernel doesn't support it, IPv4.
--+ * af == AF_UNSPEC will result in trying to create IPv6 socket,
--+ * and if kernel doesn't support it, IPv4.
--  */
-- int xsocket_type(len_and_sockaddr **lsap, USE_FEATURE_IPV6(int af,) int sock_type);
-- int xsocket_stream(len_and_sockaddr **lsap);
--diff -urN busybox-1.7.0/libbb/xreadlink.c busybox-1.7.0-readlink/libbb/xreadlink.c
----- busybox-1.7.0/libbb/xreadlink.c	2007-08-24 11:49:51.000000000 +0100
--+++ busybox-1.7.0-readlink/libbb/xreadlink.c	2007-09-06 17:41:38.000000000 +0100
--@@ -10,8 +10,7 @@
--  * NOTE: This function returns a malloced char* that you will have to free
--  * yourself. You have been warned.
--  */
---
---char *xmalloc_readlink_or_warn(const char *path)
--+char *xmalloc_readlink(const char *path)
-- {
-- 	enum { GROWBY = 80 }; /* how large we will grow strings by */
-- 
--@@ -20,20 +19,30 @@
-- 
-- 	do {
-- 		buf = xrealloc(buf, bufsize += GROWBY);
---		readsize = readlink(path, buf, bufsize); /* 1st try */
--+		readsize = readlink(path, buf, bufsize);
-- 		if (readsize == -1) {
---			bb_perror_msg("%s", path);
-- 			free(buf);
-- 			return NULL;
-- 		}
---	}
---	while (bufsize < readsize + 1);
--+	} while (bufsize < readsize + 1);
-- 
-- 	buf[readsize] = '\0';
-- 
-- 	return buf;
-- }
-- 
--+char *xmalloc_readlink_or_warn(const char *path)
--+{
--+	char *buf = xmalloc_readlink(path);
--+	if (!buf) {
--+		/* EINVAL => "file: Invalid argument" => puzzled user */
--+		bb_error_msg("%s: cannot read link (not a symlink?)", path);
--+	}
--+	return buf;
--+}
--+
--+/* UNUSED */
--+#if 0
-- char *xmalloc_realpath(const char *path)
-- {
-- #if defined(__GLIBC__) && !defined(__UCLIBC__)
--@@ -46,3 +55,4 @@
-- 	return xstrdup(realpath(path, buf));
-- #endif
-- }
--+#endif
-
-Deleted: trunk/buildroot/package/busybox/busybox-1.7.0-targz_nommu.patch
-===================================================================
---- trunk/buildroot/package/busybox/busybox-1.7.0-targz_nommu.patch	2008-01-03 13:31:26 UTC (rev 20700)
-+++ trunk/buildroot/package/busybox/busybox-1.7.0-targz_nommu.patch	2008-01-03 13:33:19 UTC (rev 20701)
-@@ -1,282 +0,0 @@
--diff -urN busybox-1.7.0/archival/bbunzip.c busybox-1.7.0-targz_nommu/archival/bbunzip.c
----- busybox-1.7.0/archival/bbunzip.c	2007-08-24 11:49:45.000000000 +0100
--+++ busybox-1.7.0-targz_nommu/archival/bbunzip.c	2007-09-06 17:42:02.000000000 +0100
--@@ -298,7 +298,7 @@
-- int unlzma_main(int argc, char **argv);
-- int unlzma_main(int argc, char **argv)
-- {
---	getopt32(argv, "c");
--+	getopt32(argv, "cf");
-- 	argv += optind;
-- 	/* lzmacat? */
-- 	if (applet_name[4] == 'c')
--diff -urN busybox-1.7.0/archival/libunarchive/Kbuild busybox-1.7.0-targz_nommu/archival/libunarchive/Kbuild
----- busybox-1.7.0/archival/libunarchive/Kbuild	2007-08-24 11:49:45.000000000 +0100
--+++ busybox-1.7.0-targz_nommu/archival/libunarchive/Kbuild	2007-09-06 17:42:02.000000000 +0100
--@@ -35,36 +35,34 @@
-- 	get_header_tar.o \
-- 	filter_accept_list_reassign.o
-- 
---# open_transformer uses fork(). Compile it only if absolutely necessary
-- lib-$(CONFIG_RPM)                       += open_transformer.o
---lib-$(CONFIG_FEATURE_TAR_BZIP2)	        += open_transformer.o
---lib-$(CONFIG_FEATURE_TAR_LZMA)	        += open_transformer.o
---lib-$(CONFIG_FEATURE_TAR_GZIP)		+= open_transformer.o
---lib-$(CONFIG_FEATURE_TAR_COMPRESS)	+= open_transformer.o
---lib-$(CONFIG_FEATURE_DEB_TAR_GZ)	+= open_transformer.o
---lib-$(CONFIG_FEATURE_DEB_TAR_BZ2)	+= open_transformer.o
---lib-$(CONFIG_FEATURE_DEB_TAR_LZMA)	+= open_transformer.o
---
---lib-$(CONFIG_AR)			+= get_header_ar.o unpack_ar_archive.o
---lib-$(CONFIG_BUNZIP2)			+= decompress_bunzip2.o
---lib-$(CONFIG_UNLZMA)			+= decompress_unlzma.o
---lib-$(CONFIG_CPIO)			+= get_header_cpio.o
---lib-$(CONFIG_DPKG)			+= $(DPKG_FILES)
---lib-$(CONFIG_DPKG_DEB)			+= $(DPKG_FILES)
---lib-$(CONFIG_FEATURE_DEB_TAR_GZ)	+= $(GUNZIP_FILES) get_header_tar_gz.o
---lib-$(CONFIG_FEATURE_DEB_TAR_BZ2)	+= decompress_bunzip2.o get_header_tar_bz2.o
---lib-$(CONFIG_FEATURE_DEB_TAR_LZMA)	+= decompress_unlzma.o get_header_tar_lzma.o
---lib-$(CONFIG_GUNZIP)			+= $(GUNZIP_FILES)
---lib-$(CONFIG_FEATURE_GUNZIP_UNCOMPRESS)	+= decompress_uncompress.o
---lib-$(CONFIG_RPM2CPIO)			+= $(GUNZIP_FILES) get_header_cpio.o
---lib-$(CONFIG_RPM)			+= $(GUNZIP_FILES) get_header_cpio.o
---lib-$(CONFIG_FEATURE_RPM_BZ2)		+= decompress_bunzip2.o
---lib-$(CONFIG_TAR)			+= get_header_tar.o
---lib-$(CONFIG_FEATURE_TAR_BZIP2)		+= decompress_bunzip2.o get_header_tar_bz2.o
---lib-$(CONFIG_FEATURE_TAR_LZMA)		+= decompress_unlzma.o get_header_tar_lzma.o
---lib-$(CONFIG_FEATURE_TAR_GZIP)		+= $(GUNZIP_FILES) get_header_tar_gz.o
---lib-$(CONFIG_FEATURE_TAR_COMPRESS)	+= decompress_uncompress.o
---lib-$(CONFIG_UNCOMPRESS)		+= decompress_uncompress.o
---lib-$(CONFIG_UNZIP)			+= $(GUNZIP_FILES)
---lib-$(CONFIG_FEATURE_COMPRESS_USAGE)	+= decompress_bunzip2.o
--+lib-$(CONFIG_FEATURE_TAR_BZIP2)         += open_transformer.o
--+lib-$(CONFIG_FEATURE_TAR_LZMA)          += open_transformer.o
--+lib-$(CONFIG_FEATURE_TAR_GZIP)          += open_transformer.o
--+lib-$(CONFIG_FEATURE_TAR_COMPRESS)      += open_transformer.o
--+lib-$(CONFIG_FEATURE_DEB_TAR_GZ)        += open_transformer.o
--+lib-$(CONFIG_FEATURE_DEB_TAR_BZ2)       += open_transformer.o
--+lib-$(CONFIG_FEATURE_DEB_TAR_LZMA)      += open_transformer.o
-- 
--+lib-$(CONFIG_AR)                        += get_header_ar.o unpack_ar_archive.o
--+lib-$(CONFIG_BUNZIP2)                   += decompress_bunzip2.o
--+lib-$(CONFIG_UNLZMA)                    += decompress_unlzma.o
--+lib-$(CONFIG_CPIO)                      += get_header_cpio.o
--+lib-$(CONFIG_DPKG)                      += $(DPKG_FILES)
--+lib-$(CONFIG_DPKG_DEB)                  += $(DPKG_FILES)
--+lib-$(CONFIG_FEATURE_DEB_TAR_GZ)        += $(GUNZIP_FILES) get_header_tar_gz.o
--+lib-$(CONFIG_FEATURE_DEB_TAR_BZ2)       += decompress_bunzip2.o get_header_tar_bz2.o
--+lib-$(CONFIG_FEATURE_DEB_TAR_LZMA)      += decompress_unlzma.o get_header_tar_lzma.o
--+lib-$(CONFIG_GUNZIP)                    += $(GUNZIP_FILES)
--+lib-$(CONFIG_FEATURE_GUNZIP_UNCOMPRESS) += decompress_uncompress.o
--+lib-$(CONFIG_RPM2CPIO)                  += $(GUNZIP_FILES) get_header_cpio.o
--+lib-$(CONFIG_RPM)                       += $(GUNZIP_FILES) get_header_cpio.o
--+lib-$(CONFIG_FEATURE_RPM_BZ2)           += decompress_bunzip2.o
--+lib-$(CONFIG_TAR)                       += get_header_tar.o
--+lib-$(CONFIG_FEATURE_TAR_BZIP2)         += decompress_bunzip2.o get_header_tar_bz2.o
--+lib-$(CONFIG_FEATURE_TAR_LZMA)          += decompress_unlzma.o get_header_tar_lzma.o
--+lib-$(CONFIG_FEATURE_TAR_GZIP)          += $(GUNZIP_FILES) get_header_tar_gz.o
--+lib-$(CONFIG_FEATURE_TAR_COMPRESS)      += decompress_uncompress.o
--+lib-$(CONFIG_UNCOMPRESS)                += decompress_uncompress.o
--+lib-$(CONFIG_UNZIP)                     += $(GUNZIP_FILES)
--+lib-$(CONFIG_FEATURE_COMPRESS_USAGE)    += decompress_bunzip2.o
--diff -urN busybox-1.7.0/archival/libunarchive/get_header_tar_bz2.c busybox-1.7.0-targz_nommu/archival/libunarchive/get_header_tar_bz2.c
----- busybox-1.7.0/archival/libunarchive/get_header_tar_bz2.c	2007-08-24 11:49:45.000000000 +0100
--+++ busybox-1.7.0-targz_nommu/archival/libunarchive/get_header_tar_bz2.c	2007-09-06 17:42:02.000000000 +0100
--@@ -11,7 +11,7 @@
-- 	/* Can't lseek over pipes */
-- 	archive_handle->seek = seek_by_read;
-- 
---	archive_handle->src_fd = open_transformer(archive_handle->src_fd, unpack_bz2_stream);
--+	archive_handle->src_fd = open_transformer(archive_handle->src_fd, unpack_bz2_stream, "bunzip2", "bunzip2", "-cf", "-", NULL);
-- 	archive_handle->offset = 0;
-- 	while (get_header_tar(archive_handle) == EXIT_SUCCESS) /**/;
-- 
--diff -urN busybox-1.7.0/archival/libunarchive/get_header_tar_gz.c busybox-1.7.0-targz_nommu/archival/libunarchive/get_header_tar_gz.c
----- busybox-1.7.0/archival/libunarchive/get_header_tar_gz.c	2007-08-24 11:49:45.000000000 +0100
--+++ busybox-1.7.0-targz_nommu/archival/libunarchive/get_header_tar_gz.c	2007-09-06 17:42:02.000000000 +0100
--@@ -8,19 +8,26 @@
-- 
-- char get_header_tar_gz(archive_handle_t *archive_handle)
-- {
--+#if BB_MMU
-- 	unsigned char magic[2];
--+#endif
-- 
-- 	/* Can't lseek over pipes */
-- 	archive_handle->seek = seek_by_read;
-- 
--+	/* Check gzip magic only if open_transformer will invoke unpack_gz_stream (MMU case).
--+	 * Otherwise, it will invoke an external helper "gunzip -cf" (NOMMU case) which will
--+	 * need the header. */
--+#if BB_MMU
-- 	xread(archive_handle->src_fd, &magic, 2);
-- 	if ((magic[0] != 0x1f) || (magic[1] != 0x8b)) {
-- 		bb_error_msg_and_die("invalid gzip magic");
-- 	}
-- 
-- 	check_header_gzip_or_die(archive_handle->src_fd);
--+#endif
-- 
---	archive_handle->src_fd = open_transformer(archive_handle->src_fd, unpack_gz_stream);
--+	archive_handle->src_fd = open_transformer(archive_handle->src_fd, unpack_gz_stream, "gunzip", "gunzip", "-cf", "-", NULL);
-- 	archive_handle->offset = 0;
-- 	while (get_header_tar(archive_handle) == EXIT_SUCCESS) /**/;
-- 
--diff -urN busybox-1.7.0/archival/libunarchive/get_header_tar_lzma.c busybox-1.7.0-targz_nommu/archival/libunarchive/get_header_tar_lzma.c
----- busybox-1.7.0/archival/libunarchive/get_header_tar_lzma.c	2007-08-24 11:49:45.000000000 +0100
--+++ busybox-1.7.0-targz_nommu/archival/libunarchive/get_header_tar_lzma.c	2007-09-06 17:42:02.000000000 +0100
--@@ -14,7 +14,7 @@
-- 	/* Can't lseek over pipes */
-- 	archive_handle->seek = seek_by_read;
-- 
---	archive_handle->src_fd = open_transformer(archive_handle->src_fd, unpack_lzma_stream);
--+	archive_handle->src_fd = open_transformer(archive_handle->src_fd, unpack_lzma_stream, "unlzma", "unlzma", "-cf", "-", NULL);
-- 	archive_handle->offset = 0;
-- 	while (get_header_tar(archive_handle) == EXIT_SUCCESS) /**/;
-- 
--diff -urN busybox-1.7.0/archival/libunarchive/open_transformer.c busybox-1.7.0-targz_nommu/archival/libunarchive/open_transformer.c
----- busybox-1.7.0/archival/libunarchive/open_transformer.c	2007-08-24 11:49:45.000000000 +0100
--+++ busybox-1.7.0-targz_nommu/archival/libunarchive/open_transformer.c	2007-09-05 12:28:55.000000000 +0100
--@@ -7,27 +7,48 @@
-- #include "unarchive.h"
-- 
-- /* transformer(), more than meets the eye */
--+/*
--+ * On MMU machine, the transform_prog and ... are stripped
--+ * by a macro in include/unarchive.h. On NOMMU, transformer is stripped.
--+ */
-- int open_transformer(int src_fd,
---	USE_DESKTOP(long long) int (*transformer)(int src_fd, int dst_fd))
--+	USE_DESKTOP(long long) int (*transformer)(int src_fd, int dst_fd),
--+	const char *transform_prog, ...)
-- {
-- 	int fd_pipe[2];
-- 	int pid;
-- 
-- 	xpipe(fd_pipe);
-- 
--+#if BB_MMU
-- 	pid = fork();
---	if (pid == -1) {
--+#else
--+	pid = vfork();
--+#endif
--+	if (pid == -1)
-- 		bb_perror_msg_and_die("fork failed");
---	}
-- 
-- 	if (pid == 0) {
--+#if !BB_MMU
--+		va_list ap;
--+#endif
-- 		/* child process */
-- 		close(fd_pipe[0]); /* We don't wan't to read from the parent */
-- 		// FIXME: error check?
--+#if BB_MMU
-- 		transformer(src_fd, fd_pipe[1]);
---		close(fd_pipe[1]); /* Send EOF */
---		close(src_fd);
--+		if (ENABLE_FEATURE_CLEAN_UP) {
--+			close(fd_pipe[1]); /* Send EOF */
--+			close(src_fd);
--+		}
-- 		exit(0);
--+#else
--+		xmove_fd(src_fd, 0);
--+		xmove_fd(fd_pipe[1], 1);
--+		va_start(ap, transform_prog);
--+		BB_EXECVP(transform_prog, ap);
--+		bb_perror_and_die("exec failed");
--+#endif
-- 		/* notreached */
-- 	}
-- 
--diff -urN busybox-1.7.0/archival/rpm.c busybox-1.7.0-targz_nommu/archival/rpm.c
----- busybox-1.7.0/archival/rpm.c	2007-08-24 11:49:45.000000000 +0100
--+++ busybox-1.7.0-targz_nommu/archival/rpm.c	2007-09-06 17:42:02.000000000 +0100
--@@ -187,9 +187,15 @@
-- 
-- static void extract_cpio_gz(int fd)
-- {
---	USE_DESKTOP(long long) int (*xformer)(int src_fd, int dst_fd);
-- 	archive_handle_t *archive_handle;
-- 	unsigned char magic[2];
--+#if BB_MMU
--+	USE_DESKTOP(long long) int (*xformer)(int src_fd, int dst_fd);
--+	enum { xformer_prog = 0 };
--+#else
--+	enum { xformer = 0 };
--+	const char *xformer_prog;
--+#endif
-- 
-- 	/* Initialize */
-- 	archive_handle = init_handle();
--@@ -202,11 +208,19 @@
-- 	archive_handle->offset = 0;
-- 
-- 	xread(archive_handle->src_fd, &magic, 2);
--+#if BB_MMU
-- 	xformer = unpack_gz_stream;
--+#else
--+	xformer_prog = "gunzip";
--+#endif
-- 	if ((magic[0] != 0x1f) || (magic[1] != 0x8b)) {
-- 		if (ENABLE_FEATURE_RPM_BZ2
-- 		 && (magic[0] == 0x42) && (magic[1] == 0x5a)) {
--+#if BB_MMU
-- 			xformer = unpack_bz2_stream;
--+#else
--+			xformer_prog = "bunzip2";
--+#endif
-- 	/* We can do better, need modifying unpack_bz2_stream to not require
-- 	 * first 2 bytes. Not very hard to do... I mean, TODO :) */
-- 			xlseek(archive_handle->src_fd, -2, SEEK_CUR);
--@@ -214,11 +228,17 @@
-- 			bb_error_msg_and_die("no gzip"
-- 				USE_FEATURE_RPM_BZ2("/bzip")
-- 				" magic");
---	} else
--+	} else {
-- 		check_header_gzip_or_die(archive_handle->src_fd);
--+#if !BB_MMU
--+		/* NOMMU version of open_transformer execs an external unzipper that should
--+		 * have the file position at the start of the file */
--+		xlseek(archive_handle->src_fd, 0, SEEK_SET);
--+#endif
--+	}
-- 
-- 	xchdir("/"); /* Install RPM's to root */
---	archive_handle->src_fd = open_transformer(archive_handle->src_fd, xformer);
--+	archive_handle->src_fd = open_transformer(archive_handle->src_fd, xformer, xformer_prog, xformer_prog, "-cf", "-", NULL);
-- 	archive_handle->offset = 0;
-- 	while (get_header_cpio(archive_handle) == EXIT_SUCCESS)
-- 		continue;
--diff -urN busybox-1.7.0/archival/tar.c busybox-1.7.0-targz_nommu/archival/tar.c
----- busybox-1.7.0/archival/tar.c	2007-08-24 11:49:45.000000000 +0100
--+++ busybox-1.7.0-targz_nommu/archival/tar.c	2007-09-06 17:42:02.000000000 +0100
--@@ -648,7 +648,7 @@
-- 		bb_error_msg_and_die("invalid magic");
-- 	}
-- 
---	archive_handle->src_fd = open_transformer(archive_handle->src_fd, uncompress);
--+	archive_handle->src_fd = open_transformer(archive_handle->src_fd, uncompress, "uncompress", "uncompress", "-cf", "-", NULL);
-- 	archive_handle->offset = 0;
-- 	while (get_header_tar(archive_handle) == EXIT_SUCCESS)
-- 		/* nothing */;
--diff -urN busybox-1.7.0/include/unarchive.h busybox-1.7.0-targz_nommu/include/unarchive.h
----- busybox-1.7.0/include/unarchive.h	2007-08-24 11:49:55.000000000 +0100
--+++ busybox-1.7.0-targz_nommu/include/unarchive.h	2007-09-06 17:42:02.000000000 +0100
--@@ -115,7 +115,13 @@
-- extern USE_DESKTOP(long long) int unpack_gz_stream(int src_fd, int dst_fd);
-- extern USE_DESKTOP(long long) int unpack_lzma_stream(int src_fd, int dst_fd);
-- 
--+#if BB_MMU
-- extern int open_transformer(int src_fd,
-- 	USE_DESKTOP(long long) int (*transformer)(int src_fd, int dst_fd));
--+#define open_transformer(src_fd, transformer, transform_prog, ...) open_transformer(src_fd, transformer)
--+#else
--+extern int open_transformer(int src_fd, const char *transform_prog, ...);
--+#define open_transformer(src_fd, transformer, transform_prog, ...) open_transformer(src_fd, transform_prog, __VA_ARGS__)
--+#endif
-- 
-- #endif
-
-Deleted: trunk/buildroot/package/busybox/busybox-1.7.0-trylink.patch
-===================================================================
---- trunk/buildroot/package/busybox/busybox-1.7.0-trylink.patch	2008-01-03 13:31:26 UTC (rev 20700)
-+++ trunk/buildroot/package/busybox/busybox-1.7.0-trylink.patch	2008-01-03 13:33:19 UTC (rev 20701)
-@@ -1,89 +0,0 @@
--diff -urN busybox-1.7.0/scripts/trylink busybox-1.7.0-trylink/scripts/trylink
----- busybox-1.7.0/scripts/trylink	2007-08-24 11:49:43.000000000 +0100
--+++ busybox-1.7.0-trylink/scripts/trylink	2007-09-03 12:08:18.000000000 +0100
--@@ -14,37 +14,30 @@
-- BBOX_LIB_LIST=`echo "$BBOX_LIB_LIST" | xargs -n1 | sort | uniq | xargs`
-- 
-- # First link with all libs. If it fails, bail out
---l_list=`echo "$BBOX_LIB_LIST" | sed -e 's/ / -l/g' -e 's/^/-l/'`
-- echo "Trying libraries: $BBOX_LIB_LIST"
---try "-Wl,--start-group $l_list -Wl,--end-group" "$@" \
--+l_list=`echo "$BBOX_LIB_LIST" | sed -e 's/ / -l/g' -e 's/^/-l/' -e 's/^-l$//'`
--+test "x$l_list" != "x" && l_list="-Wl,--start-group $l_list -Wl,--end-group"
--+try "$l_list" "$@" \
-- || {
--     echo "Failed: $* -Wl,--start-group $l_list -Wl,--end-group"
--     cat busybox_ld.err
--     exit 1
-- }
-- 
---#### Hack disabled: conflicts with ld --verbose flag in last link phase
---
---##### Hack: we are not supposed to know executable name,
---##### but this hack cuts down link time
---####mv busybox_unstripped busybox_unstripped.tmp
---####mv busybox.map        busybox.map.tmp
---
-- # Now try to remove each lib and build without it.
-- # Stop when no lib can be removed.
---####ever_discarded=false
-- while test "$BBOX_LIB_LIST"; do
--     $debug && echo "Trying libraries: $BBOX_LIB_LIST"
--     all_needed=true
--     for one in $BBOX_LIB_LIST; do
-- 	without_one=`echo " $BBOX_LIB_LIST " | sed "s/ $one / /g" | xargs`
---	l_list=`echo "$without_one" | sed -e 's/ / -l/g' -e 's/^/-l/'`
---	$debug && echo "Trying -l options: $l_list"
---	if try "-Wl,--start-group $l_list -Wl,--end-group" "$@"; then
--+	l_list=`echo "$without_one" | sed -e 's/ / -l/g' -e 's/^/-l/' -e 's/^-l$//'`
--+	test "x$l_list" != "x" && l_list="-Wl,--start-group $l_list -Wl,--end-group"
--+	$debug && echo "Trying -l options: '$l_list'"
--+	if try "$l_list" "$@"; then
-- 		echo "Library $one is not needed"
-- 		BBOX_LIB_LIST="$without_one"
-- 		all_needed=false
---####		ever_discarded=true
-- 	else
-- 		echo "Library $one is needed"
-- 	fi
--@@ -57,24 +50,19 @@
--     #{ echo "$BBOX_LIB_LIST" | grep -q ' '; } || break
-- done
-- 
---####mv busybox_unstripped.tmp busybox_unstripped
---####mv busybox.map.tmp        busybox.map
---####$ever_discarded && {
---    # Make the binary with final, minimal list of libs
---    echo "Final link with: $BBOX_LIB_LIST"
---    l_list=`echo "$BBOX_LIB_LIST" | sed -e 's/ / -l/g' -e 's/^/-l/'`
---    # --verbose gives us gobs of info to stdout (e.g. linker script used)
---    if ! test -f busybox_ldscript; then
---	try "-Wl,--start-group $l_list -Wl,--end-group -Wl,--verbose" "$@" >busybox_ld.out ####|| exit 1
---    else
---	echo "Custom linker script 'busybox_ldscript' found, using it"
---	# Add SORT_BY_ALIGNMENT to linker script (found in busybox_ld.out):
---	#  .rodata         : { *(.rodata SORT_BY_ALIGNMENT(.rodata.*) .gnu.linkonce.r.*) }
---	#  *(.data SORT_BY_ALIGNMENT(.data.*) .gnu.linkonce.d.*)
---	#  *(.bss SORT_BY_ALIGNMENT(.bss.*) .gnu.linkonce.b.*)
---	# This will eliminate most of the data padding (~3kb).
---	try "-Wl,--start-group $l_list -Wl,--end-group -Wl,--verbose -Wl,-T -Wl,busybox_ldscript" "$@" >busybox_ld.out
---    fi
---####}
---####rm busybox_ld.err
---####exit 0  # Ensure "success" exit code
--+# Make the binary with final, minimal list of libs
--+echo "Final link with: $BBOX_LIB_LIST"
--+l_list=`echo "$BBOX_LIB_LIST" | sed -e 's/ / -l/g' -e 's/^/-l/' -e 's/^-l$//'`
--+test "x$l_list" != "x" && l_list="-Wl,--start-group $l_list -Wl,--end-group -Wl,--verbose"
--+# --verbose gives us gobs of info to stdout (e.g. linker script used)
--+if ! test -f busybox_ldscript; then
--+    try "$l_list -Wl,--verbose" "$@" >busybox_ld.out
--+else
--+    echo "Custom linker script 'busybox_ldscript' found, using it"
--+    # Add SORT_BY_ALIGNMENT to linker script (found in busybox_ld.out):
--+    #  .rodata         : { *(.rodata SORT_BY_ALIGNMENT(.rodata.*) .gnu.linkonce.r.*) }
--+    #  *(.data SORT_BY_ALIGNMENT(.data.*) .gnu.linkonce.d.*)
--+    #  *(.bss SORT_BY_ALIGNMENT(.bss.*) .gnu.linkonce.b.*)
--+    # This will eliminate most of the data padding (~3kb).
--+    try "$l_list -Wl,--verbose -Wl,-T -Wl,busybox_ldscript" "$@" >busybox_ld.out
--+fi
+--- trunk/buildroot/package/busybox/busybox-1.7.4-grep.patch	                        (rev 0)
++++ trunk/buildroot/package/busybox/busybox-1.7.4-grep.patch	2008-01-03 13:33:21 UTC (rev 20702)
+@@ -0,0 +1,38 @@
++diff -urN busybox-1.7.4/findutils/grep.c busybox-1.7.4-grep/findutils/grep.c
++--- busybox-1.7.4/findutils/grep.c	2007-09-03 04:48:54.000000000 -0700
+++++ busybox-1.7.4-grep/findutils/grep.c	2007-12-08 19:02:33.000000000 -0800
++@@ -154,14 +154,14 @@
++ 
++ 	while ((line = xmalloc_getline(file)) != NULL) {
++ 		llist_t *pattern_ptr = pattern_head;
++-		grep_list_data_t * gl;
+++		grep_list_data_t *gl = gl; /* for gcc */
++ 
++ 		linenum++;
++ 		ret = 0;
++ 		while (pattern_ptr) {
++ 			gl = (grep_list_data_t *)pattern_ptr->data;
++ 			if (FGREP_FLAG) {
++-				ret = strstr(line, gl->pattern) != NULL;
+++				ret |= (strstr(line, gl->pattern) != NULL);
++ 			} else {
++ 				/*
++ 				 * test for a postitive-assertion match (regexec returns success (0)
++@@ -255,8 +255,15 @@
++ 				print_n_lines_after = lines_after;
++ #endif
++ 				if (option_mask32 & OPT_o) {
++-					line[regmatch.rm_eo] = '\0';
++-					print_line(line + regmatch.rm_so, linenum, ':');
+++					if (FGREP_FLAG) {
+++						/* -Fo just prints the pattern
+++						 * (unless -v: -Fov doesnt print anything at all) */
+++						if (ret)
+++							print_line(gl->pattern, linenum, ':');
+++					} else {
+++						line[regmatch.rm_eo] = '\0';
+++						print_line(line + regmatch.rm_so, linenum, ':');
+++					}
++ 				} else {
++ 					print_line(line, linenum, ':');
++ 				}
