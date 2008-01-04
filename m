@@ -1,45 +1,67 @@
-From: =?ISO-8859-1?Q?Thiago_A._Corr=EAa?= <thiago.correa@gmail.com>
-Date: Fri, 4 Jan 2008 11:06:46 -0200
-Subject: [Buildroot] The target/device/Atmel mess
-In-Reply-To: <d6cda7730712241147g3e1edd25jcc11fcece24e4ec9@mail.gmail.com>
-References: <d6cda7730712241147g3e1edd25jcc11fcece24e4ec9@mail.gmail.com>
-Message-ID: <d6cda7730801040506h364041e7l5c58d90c3c708d6f@mail.gmail.com>
+From: bugs at busybox.net <bugs@busybox.net>
+Date: Fri, 4 Jan 2008 09:36:09 -0800
+Subject: [Buildroot] [buildroot 0001889]: EABI is not compatible with mipsel
+	-mips32
+Message-ID: <5d81f6454208c9f4f2f1c3762379fd93@bugs.uclibc.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi,
 
-   *bump*
+The following issue has been SUBMITTED. 
+====================================================================== 
+http://busybox.net/bugs/view.php?id=1889 
+====================================================================== 
+Reported By:                alec_v
+Assigned To:                buildroot
+====================================================================== 
+Project:                    buildroot
+Issue ID:                   1889
+Category:                   Architecture Specific
+Reproducibility:            always
+Severity:                   trivial
+Priority:                   normal
+Status:                     assigned
+====================================================================== 
+Date Submitted:             01-04-2008 09:36 PST
+Last Modified:              01-04-2008 09:36 PST
+====================================================================== 
+Summary:                    EABI is not compatible with mipsel  -mips32
+Description: 
 
-    Ulf, I see you are back from the holidays, perhaps you could give
-me a hint on this *smile*. Thanks.
 
-Regards,
-   Thiago A. Correa
+.....
+/usr/bin/make MAKE="/usr/bin/make -j1" -C
+/home/alec/mips/buildroot-20080104/toolchain_build_mipsel/uClibc-0.9.29 \
+        PREFIX= \
+        DEVEL_PREFIX=/ \
+        RUNTIME_PREFIX=/ \
+        HOSTCC="/usr/bin/gcc" \
+        all
+make[1]: Entering directory
+`/home/alec/mips/buildroot-20080104/toolchain_build_mipsel/uClibc-0.9.29'
+make[2]: `conf' is up to date.
+ln -fs sgidefs.h ./include/
+:0: error: -march=mips32 is not compatible with the selected ABI
+:0: error: -march=mips32 is not compatible with the selected ABI
+  CC ldso/ldso/ldso.oS
+ldso/ldso/ldso.c:1: error: -march=mips32 is not compatible with the
+selected ABI
+make[1]: *** [ldso/ldso/ldso.oS] Error 1
+make[1]: Leaving directory
+`/home/alec/mips/buildroot-20080104/toolchain_build_mipsel/uClibc-0.9.29'
+make: ***
+[/home/alec/mips/buildroot-20080104/toolchain_build_mipsel/uClibc-0.9.29/lib/libc.a]
+Error 2
 
-On Dec 24, 2007 5:47 PM, Thiago A. Corr?a <thiago.correa@gmail.com> wrote:
-> Hi there,
->
->    I'm trying to update the linux kernel to 2.6.23 (plus patches)
-> based on the Atmel buildroot fork, due to critical fixes that finally
-> enable booting from the sdcard on the STK1000 (which is the only
-> available non-network booting method). But then again, there is a big
-> mess in the Atmel folder. Currently we have:
->
->    arch-avr32/kernel-patches-2.6.2*
->    linux/kernel-patches-2.6.2*
->    Linux/kernel-patches-2.6.2*
->
->    And possibly others that I haven't found yet.
->    Is there any reason for it? Is all of them used? Any of them
-> deprecated? I added the patches to arch-avr32, to find out that at the
-> end of the building, build_avr32/linux-2.6.23 didn't have the patches
-> applied. So, now I'm trying again, but this time I placed the patches
-> on ALL of those (still building). Is that right?
->
-> Kind Regards,
->     Thiago A. Correa
->
+====================================================================== 
+
+Issue History 
+Date Modified   Username       Field                    Change               
+====================================================================== 
+01-04-08 09:36  alec_v         New Issue                                    
+01-04-08 09:36  alec_v         Status                   new => assigned     
+01-04-08 09:36  alec_v         Assigned To               => buildroot       
+======================================================================
