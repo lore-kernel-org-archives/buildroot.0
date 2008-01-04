@@ -1,28 +1,29 @@
 From: =?ISO-8859-1?Q?Thiago_A._Corr=EAa?= <thiago.correa@gmail.com>
-Date: Thu, 3 Jan 2008 22:50:03 -0200
-Subject: [Buildroot] [PATCH] Create /boot/uImage symlink to the current
-	kernel image
-Message-ID: <d6cda7730801031650i439f5821h566eeef460615172@mail.gmail.com>
+Date: Thu, 3 Jan 2008 22:57:41 -0200
+Subject: [Buildroot] [PATCH] Change Samba download URL to the generic
+	ftp.samba.org
+Message-ID: <d6cda7730801031657r673649f6o85d29a18a897e3cc@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi,
+This patch changes SAMPA_SITE to ftp://ftp.samba.org/pub/samba/stable
+instead of ftp://us4.samba.org/pub/samba/.
 
-   A while ago, the kernel naming have been changed to include $(DATE)
-which makes it annoying to keep track. This patch adds an option to
-the Advanced Kernel option to create an /boot/uImage symbolic link to
-the built kernel. Please consider applying, this really improves
-usability, if this naming scheme is to be kept.
+As it's obvious, not everyone lives in the US. *smile*
+It might be down, or it's just me, but from Brazil, I can't connect to
+us4.samba.org. On the other hand, ftp.samba.org works just nicely.
+
+Please apply.
 
 Kind Regards,
-    Thiago A. Correa
+   Thiago A. Correa
 -------------- next part --------------
 A non-text attachment was scrubbed...
-Name: kernel-uImage-symlink.patch
+Name: fix-samba-download.patch
 Type: text/x-patch
-Size: 1237 bytes
+Size: 524 bytes
 Desc: not available
-Url : http://busybox.net/lists/buildroot/attachments/20080103/1edff06a/attachment.bin 
+Url : http://busybox.net/lists/buildroot/attachments/20080103/1ec7acc2/attachment.bin 
