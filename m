@@ -1,70 +1,42 @@
-From: Ivan Kuten <ivan.kuten@promwad.com>
-Date: Thu, 03 Jan 2008 19:55:04 +0200
-Subject: [Buildroot] Build error
-In-Reply-To: <477D0F57.9050204@carallon.com>
-References: <476A7DA6.7000102@carallon.com> <476A9199.4080900@promwad.com>
-	<476BF768.3050201@carallon.com>
-	<40135.127.0.0.1.1198453846.squirrel@localhost>
-	<477D0F57.9050204@carallon.com>
-Message-ID: <477D2178.80801@promwad.com>
+From: =?ISO-8859-1?Q?Thiago_A._Corr=EAa?= <thiago.correa@gmail.com>
+Date: Thu, 3 Jan 2008 22:45:56 -0200
+Subject: [Buildroot] Looking for comments on Libdaemon issues
+Message-ID: <d6cda7730801031645v50d45254wc3a3c3f131ee021a@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Will,
+Hi,
 
-I have not used initramfs, usually qtopia and other large stuff (X.org / GTK ) is run
-from jffs2 filesystem on flash, e.g rootfs is not in RAM but in flash.
 
-Have you tried to adjust these kernel settings:
-CONFIG_BLK_DEV_RAM=y
-CONFIG_BLK_DEV_RAM_COUNT=1
-CONFIG_BLK_DEV_RAM_SIZE=14000
-CONFIG_BLK_DEV_RAM_BLOCKSIZE=1024
+   I'm always having this same issue with libdaemon for quite
+sometime. It stops the build with an error asking for libtoolize
+--force --copy. It happens with both svn and the Atmel fork.
+   If I cd to the build folder and do the libtoolize by hand then
+make, it continues as expected, but it's becoming quite annoying
+thing....
+   Would it be alright if libdaemon.mk would be changed to:
 
-?
+Index: package/libdaemon/libdaemon.mk
+===================================================================
+--- package/libdaemon/libdaemon.mk	(revision 20705)
++++ package/libdaemon/libdaemon.mk	(working copy)
+@@ -31,7 +31,7 @@
+ 	touch $@
+
+ $(LIBDAEMON_DIR)/.configured: $(LIBDAEMON_DIR)/.unpacked
+-	(cd $(LIBDAEMON_DIR) && rm -rf config.cache && autoreconf)
++	(cd $(LIBDAEMON_DIR) && rm -rf config.cache && autoreconf &&
+libtoolize --force --copy)
+ 	(cd $(LIBDAEMON_DIR) && \
+ 		$(TARGET_CONFIGURE_OPTS) \
+ 		$(TARGET_CONFIGURE_ARGS) \
+
+   Or is this A Wrong Thing (tm)? The above change fixes the issues
+I'm having, but I'm not sure if it would affect others.
+   PS: I'm using gentoo on the host.
 
 Regards,
-Ivan
-
-
-Will Wagner wrote:
-> Ivan,
-> 
-> Thanks for your help. Think I have worked out the problem. Appeared to 
-> have too large a rootfs so that the initramfs being built was very 
-> large. Have worked round it for now by reducing the size of the rootfs 
-> (qtopia4 was copying some unneeded files).
-> 
-> Any idea what the size limit is for a rootfs used with initramfs?
-> 
-> Thanks,
-> 
-> Will.
-> 
-> Ivan Kuten wrote:
->>> Thanks for the hint.
->>>
->>> I have compiled both with and without qtopia4 and got the verbose log. I
->>> can not see any difference on what is on the command line between the
->>> two versions.
->>>
->> Will,
->>
->> I can suggest as workaround to set BR2_KERNEL_none=y
->> and build kernel outside a buildroot tree and see if it working this way.
->>
->> Regards,
->> Ivan
-> 
-
-
--- 
-
---------------------------------
-Embedded Linux engineer,
-Promwad Company: http://www.promwad.com/
-Homepage : http://www.ivankuten.com/
---------------------------------
+   Thiago A. Corr?a
