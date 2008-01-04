@@ -1,11 +1,9 @@
 From: =?ISO-8859-1?Q?Thiago_A._Corr=EAa?= <thiago.correa@gmail.com>
-Date: Fri, 4 Jan 2008 10:59:33 -0200
-Subject: [Buildroot] [PATCH] Create /boot/uImage symlink to the
-	currentkernel image
-In-Reply-To: <00fc01c84eb0$07a3e010$0a0514ac@atmel.com>
-References: <d6cda7730801031650i439f5821h566eeef460615172@mail.gmail.com>
-	<00fc01c84eb0$07a3e010$0a0514ac@atmel.com>
-Message-ID: <d6cda7730801040459n63079d3evfc12f2c72420079c@mail.gmail.com>
+Date: Fri, 4 Jan 2008 11:06:46 -0200
+Subject: [Buildroot] The target/device/Atmel mess
+In-Reply-To: <d6cda7730712241147g3e1edd25jcc11fcece24e4ec9@mail.gmail.com>
+References: <d6cda7730712241147g3e1edd25jcc11fcece24e4ec9@mail.gmail.com>
+Message-ID: <d6cda7730801040506h364041e7l5c58d90c3c708d6f@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -14,49 +12,34 @@ To: buildroot@busybox.net
 
 Hi,
 
-Maybe someone might want to have more than one kernel in /boot if they
-are different versions (but would be awkward to get it, since would
-require make menuconfig; make; make menuconfig again to change
-settings then make once again). For different platforms doesn't make
-sense, since the system wouldn't boot. You can't have different
-busybox on the same filesystem. Besides why would you keep 2 kernels
-with different and incompatible binaries?
+   *bump*
 
-About the u-boot scripts, it is equaly bad to have to reflash u-boot
-all the time, whenever I try some different kernel setting or I want
-to rebuild everything from scratch. An STK1000 owner for instance
-might just use an USB Card Reader and not have a JTAG MKii.
-
-This uImage linking is optional, while the naming is imposed.
+    Ulf, I see you are back from the holidays, perhaps you could give
+me a hint on this *smile*. Thanks.
 
 Regards,
    Thiago A. Correa
 
-On Jan 4, 2008 5:50 AM, Ulf Samuelsson <ulf.samuelsson@atmel.com> wrote:
+On Dec 24, 2007 5:47 PM, Thiago A. Corr?a <thiago.correa@gmail.com> wrote:
+> Hi there,
 >
+>    I'm trying to update the linux kernel to 2.6.23 (plus patches)
+> based on the Atmel buildroot fork, due to critical fixes that finally
+> enable booting from the sdcard on the STK1000 (which is the only
+> available non-network booting method). But then again, there is a big
+> mess in the Atmel folder. Currently we have:
 >
+>    arch-avr32/kernel-patches-2.6.2*
+>    linux/kernel-patches-2.6.2*
+>    Linux/kernel-patches-2.6.2*
 >
-> | Hi,
-> |
-> |   A while ago, the kernel naming have been changed to include $(DATE)
-> | which makes it annoying to keep track. This patch adds an option to
-> | the Advanced Kernel option to create an /boot/uImage symbolic link to
-> | the built kernel. Please consider applying, this really improves
-> | usability, if this naming scheme is to be kept.
-> |
-> | Kind Regards,
-> |    Thiago A. Correa
-> |
+>    And possibly others that I haven't found yet.
+>    Is there any reason for it? Is all of them used? Any of them
+> deprecated? I added the patches to arch-avr32, to find out that at the
+> end of the building, build_avr32/linux-2.6.23 didn't have the patches
+> applied. So, now I'm trying again, but this time I placed the patches
+> on ALL of those (still building). Is that right?
 >
-> Maybe,
-> How do you store three different kernels in "/boot", if they have the same name?
-> This could be for three different architectures, or three different versions.
->
-> The AT91 U-Boot makes it real easy to use the long kernel names.
-> If you generate an autoscript for U-boot then it will be as easy to do for other
-> architectures as well.
->
-> Best Regards
-> Ulf Samuelsson
->
+> Kind Regards,
+>     Thiago A. Correa
 >
