@@ -1,60 +1,36 @@
-From: bugs at busybox.net <bugs@busybox.net>
-Date: Fri, 4 Jan 2008 15:34:35 -0800
-Subject: [Buildroot] [buildroot 0001899]: Using the Atmel supplied build
-	root, openssl fails to build
-Message-ID: <029ecaf0602ee33ac28eb9b342b8355e@busybox.net>
+From: jacmet at uclibc.org <jacmet@uclibc.org>
+Date: Sat,  5 Jan 2008 12:31:40 -0800 (PST)
+Subject: [Buildroot] svn commit: trunk/buildroot/package/sqlite
+Message-ID: <20080105203140.DDDFC12C4C5@busybox.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+Author: jacmet
+Date: 2008-01-05 12:31:40 -0800 (Sat, 05 Jan 2008)
+New Revision: 20801
 
-The following issue has been SUBMITTED. 
-====================================================================== 
-http://busybox.net/bugs/view.php?id=1899 
-====================================================================== 
-Reported By:                yogy
-Assigned To:                buildroot
-====================================================================== 
-Project:                    buildroot
-Issue ID:                   1899
-Category:                   Architecture Specific
-Reproducibility:            always
-Severity:                   major
-Priority:                   normal
-Status:                     assigned
-====================================================================== 
-Date Submitted:             01-04-2008 15:34 PST
-Last Modified:              01-04-2008 15:34 PST
-====================================================================== 
-Summary:                    Using the Atmel supplied build root, openssl fails
-to build
-Description: 
-openssl fails to build because avr32 architecture is not supported.
+Log:
+sqlite: bumped version
 
-I have "hacked" the openssl.patch to change the entry for alpha ev4 (which
-I suppose does not really need buildroot support) to 
 
-+"linux-avr32","gcc:-DTERMIO -O3 -fomit-frame-pointer
--Wall::-D_REENTRANT::-ldl:BN_LLONG
-DES_RISC1::::::::::dlfcn:linux-shared:-fPIC::.so.\$(SHLIB_MAJOR).\$(SHLIB_MINOR)",
+Modified:
+   trunk/buildroot/package/sqlite/sqlite.mk
 
-all on one line.
 
-Also, the gcc version used, does not support the -msoft-float option, so I
-had to remove the 
-
-$(SED) 's,/CFLAG=,/CFLAG= $(TARGET_SOFT_FLOAT) ,g' \
-      $(OPENSSL_DIR)/Configure
-
-lines from openssl.mk.  After this, openssl built fine for avr32 .
-====================================================================== 
-
-Issue History 
-Date Modified   Username       Field                    Change               
-====================================================================== 
-01-04-08 15:34  yogy           New Issue                                    
-01-04-08 15:34  yogy           Status                   new => assigned     
-01-04-08 15:34  yogy           Assigned To               => buildroot       
-======================================================================
+Changeset:
+Modified: trunk/buildroot/package/sqlite/sqlite.mk
+===================================================================
+--- trunk/buildroot/package/sqlite/sqlite.mk	2008-01-05 19:05:50 UTC (rev 20800)
++++ trunk/buildroot/package/sqlite/sqlite.mk	2008-01-05 20:31:40 UTC (rev 20801)
+@@ -4,7 +4,7 @@
+ #
+ #############################################################
+ 
+-SQLITE_VERSION:=3.5.3
++SQLITE_VERSION:=3.5.4
+ SQLITE_SOURCE:=sqlite-$(SQLITE_VERSION).tar.gz
+ SQLITE_SITE:=http://www.sqlite.org
+ SQLITE_DIR:=$(BUILD_DIR)/sqlite-$(SQLITE_VERSION)
