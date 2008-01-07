@@ -1,39 +1,47 @@
-From: Ulf Samuelsson <ulf@atmel.com>
-Date: Fri, 4 Jan 2008 14:45:54 +0100
-Subject: [Buildroot] [PATCH] Create /boot/uImage symlink to the
-	currentkernel image
-References: <d6cda7730801031650i439f5821h566eeef460615172@mail.gmail.com>
-Message-ID: <028e01c85141$ba1d0fd0$030514ac@atmel.com>
+From: Piotr Grudzinski <piotr@powersmiths.com>
+Date: Mon, 7 Jan 2008 11:05:46 -0500
+Subject: [Buildroot] Buildroot fails at libstdc++
+References: <36163.1199717483@powersmiths.com>
+	<029101c85141$ba33f330$030514ac@atmel.com>
+Message-ID: <00ca01c85147$2a5cc5b0$7b01a8c0@Piotr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+Thanks for the suggestion to try gcc-4.2.1 but what I would find helpful is 
+to start with a configuration which was successful and created a functional 
+tool for a generic arm, nomad, no FP, soft-float, little-Endean system.
+
+Best Regards,
+Port
+
+----- Original Message ----- 
+From: "Ulf Samuelsson" <ulf@atmel.com>
+To: <buildroot@uclibc.org>
+Sent: Monday, January 07, 2008 10:16 AM
+Subject: Re: [Buildroot] Buildroot fails at libstdc++
 
 
-| Hi,
-| 
-|   A while ago, the kernel naming have been changed to include $(DATE)
-| which makes it annoying to keep track. This patch adds an option to
-| the Advanced Kernel option to create an /boot/uImage symbolic link to
-| the built kernel. Please consider applying, this really improves
-| usability, if this naming scheme is to be kept.
-| 
-| Kind Regards,
-|    Thiago A. Correa
-|
-
-Looking at your patch, I see that we are talking about two different things.
-There is a feature to copy the linux kernel to /tftpboot directory,
-which I thought you were referring to, but If you want the kernel inside
-the root file system, then would it not make more sense to do:
-
--  cp -dpf $(LINUX26_KERNEL) $(TARGET_DIR)/boot/$(LINUX26_KERNEL_NAME)
-+  cp -dpf $(LINUX26_KERNEL) $(TARGET_DIR)/boot/$(BR2_PACKAGE_LINUX_FORMAT)
-
-where BR2_PACKAGE_LINUX_FORMAT could be
-uImage, bzImage, vmlinux etc.
-
-Best Regards
-Ulf Samuelsson
+>> Hi all,
+>>
+>> I am having a problem with taking the buildroot process pass the 
+>> libstdc++ phase.
+>> Here is my setup:
+>
+>> buildroot snapshot 2008-01-02
+>
+>> binutils 2.18
+>> kernel   2.6.22.10
+>> gcc      3.4.6
+>> uClibc   0.9.29
+>
+> Maybe you should try with gcc-4.2.1
+> Best Regards
+> Ulf Samuelsson
+>
+> _______________________________________________
+> buildroot mailing list
+> buildroot at uclibc.org
+> http://busybox.net/mailman/listinfo/buildroot 
