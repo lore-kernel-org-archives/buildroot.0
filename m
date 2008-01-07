@@ -1,71 +1,52 @@
-From: Piotr Grudzinski <piotr@powersmiths.com>
-Date: Mon, 7 Jan 2008 11:35:20 -0500
-Subject: [Buildroot] Buildroot fails at libstdc++
-References: <36163.1199717483@powersmiths.com>
-	<200801071709.25722.atle@nissestad.no>
-Message-ID: <00ed01c8514b$4c1a53d0$7b01a8c0@Piotr>
+From: =?ISO-8859-1?Q?Thiago_A._Corr=EAa?= <thiago.correa@gmail.com>
+Date: Mon, 7 Jan 2008 14:41:42 -0200
+Subject: [Buildroot] [PATCH] Create /boot/uImage symlink to the
+	currentkernel image
+In-Reply-To: <028e01c85141$ba1d0fd0$030514ac@atmel.com>
+References: <d6cda7730801031650i439f5821h566eeef460615172@mail.gmail.com>
+	<028e01c85141$ba1d0fd0$030514ac@atmel.com>
+Message-ID: <d6cda7730801070841l4a5b1f6ahcbdbcb0bbbef2b87@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Thanks Atle,
-
-This sounds very promising but the solution doesn't seem to be accessible.
-
-Piotr
-
-> On Monday 7. January 2008 15:51:23 piotr at powersmiths.com wrote:
->>  Hi all,
->>
->>  I am having a problem with taking the buildroot process pass the 
->> libstdc++
->> phase. Here is my setup:
->>
->>  buildroot snapshot 2008-01-02
->>
->>  binutils 2.18
->>  kernel 2.6.22.10
->>  gcc 3.4.6
->>  uClibc 0.9.29
->>
->>  generic arm, nommu, no FP, soft-float, little-endian (all configs
->> attached) no user apps - just the toolchain
->>
->>  I have made several attempts to run the buildroot program with target 
->> set
->> to "linux-uclibc" and "linux". It always fails the same way:
->>
->>  For the "linux-uclibc" target there are no *.o files in .libs directory
->> (but it contains libstdc++.a, libstdc++.la, and libstdc++.lai).
->>
->>  /home/piotr/buildroot/build_arm/staging_dir/usr/bin/arm-linux-uclibc-ar
->> cru libstdc++_pic.a .libs/*.o ../libsupc++/*.o
->> /home/piotr/buildroot/build_arm/staging_dir/usr/bin/arm-linux-uclibc-ar:
->> .libs/*.o: No such file or directory make[4]: *** [install-exec-local]
->> Error 1
->>  make[4]: Leaving directory
->> `/home/piotr/buildroot/toolchain_build_arm/gcc-3.4.6-final/arm-linux-uclibc
->>/libstdc++-v3/src' make[3]: *** [install-am] Error 2
->>  make[3]: Leaving directory
->> `/home/piotr/buildroot/toolchain_build_arm/gcc-3.4.6-final/arm-linux-uclibc
->>/libstdc++-v3/src' make[2]: *** [install-recursive] Error 1
->>  make[2]: Leaving directory
->> `/home/piotr/buildroot/toolchain_build_arm/gcc-3.4.6-final/arm-linux-uclibc
->>/libstdc++-v3' make[1]: *** [install-target-libstdc++-v3] Error 2
->>  make[1]: Leaving directory
->> `/home/piotr/buildroot/toolchain_build_arm/gcc-3.4.6-final' make: ***
->> [/home/piotr/buildroot/toolchain_build_arm/gcc-3.4.6-final/.installed]
->> Error 2
->>
+On Jan 4, 2008 11:45 AM, Ulf Samuelsson <ulf@atmel.com> wrote:
 >
-> There is a patch which fixes this in the bug-tracker,
-> http://bugs.uclibc.org/view.php?id=1620.
-> Now, if someone with commit access could be so kind .....
 >
-> - Atle
-> _______________________________________________
-> buildroot mailing list
-> buildroot at uclibc.org
-> http://busybox.net/mailman/listinfo/buildroot 
+>
+> | Hi,
+> |
+> |   A while ago, the kernel naming have been changed to include $(DATE)
+> | which makes it annoying to keep track. This patch adds an option to
+> | the Advanced Kernel option to create an /boot/uImage symbolic link to
+> | the built kernel. Please consider applying, this really improves
+> | usability, if this naming scheme is to be kept.
+> |
+> | Kind Regards,
+> |    Thiago A. Correa
+> |
+>
+> Looking at your patch, I see that we are talking about two different things.
+> There is a feature to copy the linux kernel to /tftpboot directory,
+> which I thought you were referring to, but If you want the kernel inside
+> the root file system, then would it not make more sense to do:
+>
+> -  cp -dpf $(LINUX26_KERNEL) $(TARGET_DIR)/boot/$(LINUX26_KERNEL_NAME)
+> +  cp -dpf $(LINUX26_KERNEL) $(TARGET_DIR)/boot/$(BR2_PACKAGE_LINUX_FORMAT)
+>
+> where BR2_PACKAGE_LINUX_FORMAT could be
+> uImage, bzImage, vmlinux etc.
+>
+> Best Regards
+> Ulf Samuelsson
+>
+
+Yes, that was the previous behavior, although perhaps not exactly the
+same code, I haven't checked the svn logs to see how it was before.
+Anyway, since I'm not sure why it changed in the first place, I
+suggested the symlinking as an option.
+
+Regards,
+   Thiago A. Correa
