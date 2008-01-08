@@ -1,45 +1,51 @@
-From: =?ISO-8859-1?Q?Thiago_A._Corr=EAa?= <thiago.correa@gmail.com>
-Date: Tue, 8 Jan 2008 16:04:27 -0200
-Subject: [Buildroot] The target/device/Atmel mess
-In-Reply-To: <00f101c8521c$f73bea40$080514ac@atmel.com>
-References: <00f101c8521c$f73bea40$080514ac@atmel.com>
-Message-ID: <d6cda7730801081004x17489251qf1863e75497af9d7@mail.gmail.com>
+From: bugs at busybox.net <bugs@busybox.net>
+Date: Tue, 8 Jan 2008 11:38:03 -0800
+Subject: [Buildroot] [buildroot 0001914]: many packages do not run
+	CONFIG_UPDATE
+Message-ID: <e2557627849e8ab8fe735ffaa50ce492@busybox.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi,
 
-I have removed the Linux folder and it built without (new) problems
-*smile*. Tested with avr32 build.
+The following issue has been SUBMITTED. 
+====================================================================== 
+http://busybox.net/bugs/view.php?id=1914 
+====================================================================== 
+Reported By:                dann
+Assigned To:                buildroot
+====================================================================== 
+Project:                    buildroot
+Issue ID:                   1914
+Category:                   Other
+Reproducibility:            always
+Severity:                   major
+Priority:                   normal
+Status:                     assigned
+====================================================================== 
+Date Submitted:             01-08-2008 11:38 PST
+Last Modified:              01-08-2008 11:38 PST
+====================================================================== 
+Summary:                    many packages do not run CONFIG_UPDATE
+Description: 
+Many packages do not run ${CONFIG_UPDATE} so they cannot be compiled on
+platforms
+that require a more up to date config.guess and config.sub that what is
+shipped with the package.
 
-Ulf, let me know if there is something I could do to help. Even if
-it's just testing.
+A patch to do that for a few packages is attached.
 
-Regards,
-   Thiago A. Correa
+Please check it in.
+====================================================================== 
 
-On Jan 8, 2008 3:33 PM, Ulf Samuelsson <ulf@atmel.com> wrote:
->
-> > Hi Thiago,
->
-> > As I understood target/device/Atmel/Linux directory should be removed, right?
->
-> > BR,
-> > Ivan
->
-> I'll fix it as soon as I get some spare time.
-> Need to update the kernel support to 2.6.23 anyway
->
-> Best Regards
-> Ulf Samuelsson
->
->
->
-> _______________________________________________
-> buildroot mailing list
-> buildroot at uclibc.org
-> http://busybox.net/mailman/listinfo/buildroot
->
+Issue History 
+Date Modified   Username       Field                    Change               
+====================================================================== 
+01-08-08 11:38  dann           New Issue                                    
+01-08-08 11:38  dann           Status                   new => assigned     
+01-08-08 11:38  dann           Assigned To               => buildroot       
+01-08-08 11:38  dann           File Added: buildroot-CONFIG_UPDATE.patch        
+           
+======================================================================
