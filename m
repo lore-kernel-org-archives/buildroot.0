@@ -1,56 +1,28 @@
-From: bugs at busybox.net <bugs@busybox.net>
-Date: Tue, 8 Jan 2008 04:54:47 -0800
-Subject: [Buildroot] [buildroot 0001620]: [PATCH] Fix
-	300-libstdc++-pic.patch for gcc-3.4.6
-Message-ID: <8e59252590ac90f4010e49e2fdfef746@bugs.uclibc.org>
+From: =?ISO-8859-1?Q?Thiago_A._Corr=EAa?= <thiago.correa@gmail.com>
+Date: Tue, 8 Jan 2008 13:44:51 -0200
+Subject: [Buildroot] The target/device/Atmel mess
+In-Reply-To: <d6cda7730801070923n74d20a21k6d5a1205c2592dbf@mail.gmail.com>
+References: <d6cda7730712241147g3e1edd25jcc11fcece24e4ec9@mail.gmail.com>
+	<d6cda7730801040506h364041e7l5c58d90c3c708d6f@mail.gmail.com>
+	<028d01c85141$ba1a0290$030514ac@atmel.com>
+	<d6cda7730801070923n74d20a21k6d5a1205c2592dbf@mail.gmail.com>
+Message-ID: <d6cda7730801080744g579c2d19wc1fb16b76ff431ee@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+> I have named the folder arch-avr32/kernel-patches-2.6.23
+> Should it be kernel-patches-2.6.23.0?
+> Usually the same patch applies to all minor versions, (ie: 2.6.22.0 to
+> 2.6.22.10), how does one express that?
 
-The following issue has been CLOSED 
-====================================================================== 
-http://busybox.net/bugs/view.php?id=1620 
-====================================================================== 
-Reported By:                atle
-Assigned To:                buildroot
-====================================================================== 
-Project:                    buildroot
-Issue ID:                   1620
-Category:                   Other
-Reproducibility:            always
-Severity:                   minor
-Priority:                   normal
-Status:                     closed
-Resolution:                 open
-Fixed in Version:           
-====================================================================== 
-Date Submitted:             11-30-2007 06:04 PST
-Last Modified:              01-08-2008 04:54 PST
-====================================================================== 
-Summary:                    [PATCH] Fix 300-libstdc++-pic.patch for gcc-3.4.6
-Description: 
-The libstdc++-pic patch for gcc-3.4.6 breaks installation of libstdc++ when
-shared support is disabled. The attached patch fixes this the same way as 
-for gcc-4.x.x.
+Replying to myself, yes, it should be called kernel-patches-2.6.23.0
+to apply. The other issues are still open though, such as the
+apparently unused Linux folder :(
 
-====================================================================== 
+Ulf, anyone?
 
----------------------------------------------------------------------- 
- vanokuten - 01-08-08 04:54  
----------------------------------------------------------------------- 
-fixed in 20822 rev 
-
-Issue History 
-Date Modified   Username       Field                    Change               
-====================================================================== 
-11-30-07 06:04  atle           New Issue                                    
-11-30-07 06:04  atle           Status                   new => assigned     
-11-30-07 06:04  atle           Assigned To               => buildroot       
-11-30-07 06:04  atle           File Added: gcc-3.4.6-fix-libstc++-pic.patch     
-              
-01-08-08 04:54  vanokuten      Status                   assigned => closed  
-01-08-08 04:54  vanokuten      Note Added: 0003429                          
-======================================================================
+Kind Regards,
+   Thiago A. Correa
