@@ -1,34 +1,25 @@
-From: Joe <zentrale.at.work@gmail.com>
-Date: Wed, 09 Jan 2008 18:02:09 +0100
-Subject: [Buildroot] How is the RM9200 status of buildroot ?
-In-Reply-To: <002601c852d6$7d1d72a0$6e00a8c0@JONATHAN>
-References: <05f701c85243$52e4c530$6e00a8c0@JONATHAN>	<01ce01c8524a$65be7fa0$080514ac@atmel.com>
-	<002601c852d6$7d1d72a0$6e00a8c0@JONATHAN>
-Message-ID: <4784FE11.5090702@gmail.com>
+From: Ulf Samuelsson <ulf@atmel.com>
+Date: Wed, 9 Jan 2008 19:26:16 +0100
+Subject: [Buildroot] Kernel headers
+References: <001e01c852d9$00a65220$7b01a8c0@Piotr>
+Message-ID: <014801c852ed$4b5bbfd0$6103170a@atmel.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-> I would like to know if it is possible to do some basinc testing on my board
-> to know if my memories setup is working correctly before going to far with
-> linux etc. ? I have acces to a jtag interface if this can help. 
+> Is it possible to use kernel headers which are already on my system?
 
-Sure. First thing ist to get your U-Boot working and fitted to your 
-System, for it does the whole hardware init concerning low level 
-memories. If it's working fine, you should give the mems some test, 
-especially boundaries of the SDs are of interest. Booting on its own and 
-  having a fuly functional u-boot should the give you a good start for 
-linux.
 
-Greetz Joe
 
--- 
-Sepp "ZaP" Holzmayr
+Anything is possible in an infinite universe.
+In this case, it will probably require changing the toolchain_build_<arch>/linux
+link to point at your kernel headers after they have been extracted,'
+or do it before the kernel headers generated and then fullfil the 
+Makefile needs so they do not get overwritten
 
-please reply to:
-zentrale.at.work at gmail.com
+Question is: Whats the benefit of doing that
 
-watch out for:
-www.rocksociety.de
+Best Regards
+Ulf Samuelsson
