@@ -1,7 +1,7 @@
 From: ulf at uclibc.org <ulf@uclibc.org>
-Date: Thu, 10 Jan 2008 01:30:11 -0800 (PST)
-Subject: [Buildroot] svn commit: trunk/buildroot/toolchain/kernel-headers
-Message-ID: <20080110093011.9AA1212C58B@busybox.net>
+Date: Thu, 10 Jan 2008 01:31:16 -0800 (PST)
+Subject: [Buildroot] svn commit: trunk/buildroot/target/linux
+Message-ID: <20080110093116.0447F12C591@busybox.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -9,33 +9,26 @@ Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
 Author: ulf
-Date: 2008-01-10 01:30:11 -0800 (Thu, 10 Jan 2008)
-New Revision: 20839
+Date: 2008-01-10 01:31:15 -0800 (Thu, 10 Jan 2008)
+New Revision: 20840
 
 Log:
-Define kernelversion if ext toolchain is used
+More debug info for linux
 
 Modified:
-   trunk/buildroot/toolchain/kernel-headers/kernel-headers.mk
+   trunk/buildroot/target/linux/Makefile.in.advanced
 
 
 Changeset:
-Modified: trunk/buildroot/toolchain/kernel-headers/kernel-headers.mk
+Modified: trunk/buildroot/target/linux/Makefile.in.advanced
 ===================================================================
---- trunk/buildroot/toolchain/kernel-headers/kernel-headers.mk	2008-01-10 09:29:06 UTC (rev 20838)
-+++ trunk/buildroot/toolchain/kernel-headers/kernel-headers.mk	2008-01-10 09:30:11 UTC (rev 20839)
-@@ -6,8 +6,14 @@
- # by a 'make clean' so don't put anything sacred in here...
- #
- #############################################################
-+ifeq ($(BR2_TOOLCHAIN_EXTERNAL),y)
-+DEFAULT_KERNEL_HEADERS:=$(strip $(subst ",, $(BR2_LINUX26_VERSION)))
-+#"))
-+else
- DEFAULT_KERNEL_HEADERS:=$(strip $(subst ",, $(BR2_DEFAULT_KERNEL_HEADERS)))
- #"))
-+endif
-+
- LINUX_HEADERS_SITE:=127.0.0.1
- LINUX_HEADERS_SOURCE:=unspecified-kernel-headers
- LINUX_HEADERS_UNPACK_DIR:=$(TOOL_BUILD_DIR)/linux-libc-headers-null
+--- trunk/buildroot/target/linux/Makefile.in.advanced	2008-01-10 09:30:11 UTC (rev 20839)
++++ trunk/buildroot/target/linux/Makefile.in.advanced	2008-01-10 09:31:15 UTC (rev 20840)
+@@ -411,6 +411,7 @@
+ 	@echo TARGETS=$(TARGETS)
+ 	@echo LINUX26_TARGETS=$(LINUX26_TARGETS)
+ 	@echo LINUX26_HEADERS_PATCH_DIR=$(LINUX26_HEADERS_PATCH_DIR)
++	@echo LINUX_HEADERS_VERSION=$(LINUX_HEADERS_VERSION)
+ 	@echo LINUX26_BINLOC=$(LINUX26_BINLOC)
+ 	@echo LINUX26_FORMAT=$(LINUX26_FORMAT)
+ 	@echo LINUX26_KERNEL=$(LINUX26_KERNEL)
