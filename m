@@ -1,7 +1,7 @@
 From: ulf at uclibc.org <ulf@uclibc.org>
-Date: Thu, 10 Jan 2008 01:29:06 -0800 (PST)
-Subject: [Buildroot] svn commit: trunk/buildroot/package
-Message-ID: <20080110092906.BFE9B12C57C@busybox.net>
+Date: Thu, 10 Jan 2008 01:30:11 -0800 (PST)
+Subject: [Buildroot] svn commit: trunk/buildroot/toolchain/kernel-headers
+Message-ID: <20080110093011.9AA1212C58B@busybox.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -9,30 +9,33 @@ Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
 Author: ulf
-Date: 2008-01-10 01:29:06 -0800 (Thu, 10 Jan 2008)
-New Revision: 20838
+Date: 2008-01-10 01:30:11 -0800 (Thu, 10 Jan 2008)
+New Revision: 20839
 
 Log:
-Use host ldconfig, if external toolchain is used
+Define kernelversion if ext toolchain is used
 
 Modified:
-   trunk/buildroot/package/Makefile.in
+   trunk/buildroot/toolchain/kernel-headers/kernel-headers.mk
 
 
 Changeset:
-Modified: trunk/buildroot/package/Makefile.in
+Modified: trunk/buildroot/toolchain/kernel-headers/kernel-headers.mk
 ===================================================================
---- trunk/buildroot/package/Makefile.in	2008-01-10 09:27:25 UTC (rev 20837)
-+++ trunk/buildroot/package/Makefile.in	2008-01-10 09:29:06 UTC (rev 20838)
-@@ -121,7 +121,11 @@
- TARGET_RANLIB=$(TARGET_CROSS)ranlib
- TARGET_OBJCOPY=$(TARGET_CROSS)objcopy
- TARGET_OBJDUMP=$(TARGET_CROSS)objdump
+--- trunk/buildroot/toolchain/kernel-headers/kernel-headers.mk	2008-01-10 09:29:06 UTC (rev 20838)
++++ trunk/buildroot/toolchain/kernel-headers/kernel-headers.mk	2008-01-10 09:30:11 UTC (rev 20839)
+@@ -6,8 +6,14 @@
+ # by a 'make clean' so don't put anything sacred in here...
+ #
+ #############################################################
 +ifeq ($(BR2_TOOLCHAIN_EXTERNAL),y)
-+TARGET_LDCONFIG=/sbin/ldconfig
++DEFAULT_KERNEL_HEADERS:=$(strip $(subst ",, $(BR2_LINUX26_VERSION)))
++#"))
 +else
- TARGET_LDCONFIG=$(TARGET_CROSS)ldconfig
+ DEFAULT_KERNEL_HEADERS:=$(strip $(subst ",, $(BR2_DEFAULT_KERNEL_HEADERS)))
+ #"))
 +endif
- ifeq ($(BR2_STRIP_strip),y)
- STRIP_DISCARD_ALL:=--discard-all
- STRIP_STRIP_UNNEEDED:=--strip-unneeded
++
+ LINUX_HEADERS_SITE:=127.0.0.1
+ LINUX_HEADERS_SOURCE:=unspecified-kernel-headers
+ LINUX_HEADERS_UNPACK_DIR:=$(TOOL_BUILD_DIR)/linux-libc-headers-null
