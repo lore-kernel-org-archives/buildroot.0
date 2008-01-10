@@ -1,88 +1,51 @@
-From: bugs at busybox.net <bugs@busybox.net>
-Date: Wed, 9 Jan 2008 22:05:13 -0800
-Subject: [Buildroot] [buildroot 0001919]: i can't complier the xorg used the
-	buildroot
-Message-ID: <c7015a1221375456432bd7e0fd685b84@bugs.uclibc.org>
+From: friedrich Euler <friedrich.euler@googlemail.com>
+Date: Thu, 10 Jan 2008 09:46:47 +0100
+Subject: [Buildroot] build for mipsel failed - incompatible ABI
+Message-ID: <bd9bbe900801100046m4be2629au43ab3d094b382dc@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+Hello,
 
-The following issue has been SUBMITTED. 
-====================================================================== 
-http://busybox.net/bugs/view.php?id=1919 
-====================================================================== 
-Reported By:                msj0520
-Assigned To:                buildroot
-====================================================================== 
-Project:                    buildroot
-Issue ID:                   1919
-Category:                   Architecture Specific
-Reproducibility:            always
-Severity:                   minor
-Priority:                   normal
-Status:                     assigned
-====================================================================== 
-Date Submitted:             01-09-2008 22:05 PST
-Last Modified:              01-09-2008 22:05 PST
-====================================================================== 
-Summary:                    i can't complier the xorg used the buildroot
-Description: 
-when the buildroot build the xorg automatic, it always appear the same
-error:
+I have a problen with buildroot. I would like to compile it for mipsel
+target architecture. I called make menuconfig and than make. The build ends
+up with the following error message:
 
-make[5]: Entering directory
-`/opt/buildroot/build_i386/xc/programs/dpsinfo'
-/opt/buildroot/build_i386/staging_dir/usr/bin/i386-linux-uclibc-gcc -Os
--ansi -pedantic -Wall -Wpointer-arith -Wundef     -I../..
--I../../exports/include   -Dlinux -D__i386__ -D_POSIX_SOURCE              
-              -D_BSD_SOURCE -D_GNU_SOURCE -DX_LOCALE  -DFUNCPROTO=15
--DNARROWPROTO       -c -o iwraps.o iwraps.c
-/opt/buildroot/build_i386/staging_dir/usr/bin/i386-linux-uclibc-gcc -Os
--ansi -pedantic -Wall -Wpointer-arith -Wundef     -I../..
--I../../exports/include   -Dlinux -D__i386__ -D_POSIX_SOURCE              
-              -D_BSD_SOURCE -D_GNU_SOURCE -DX_LOCALE  -DFUNCPROTO=15
--DNARROWPROTO       -c -o dpsinfo.o dpsinfo.c
-rm -f dpsinfo
-/opt/buildroot/build_i386/staging_dir/usr/bin/i386-linux-uclibc-gcc -o
-dpsinfo -Os -ansi -pedantic -Wall -Wpointer-arith -Wundef    
--L../../exports/lib   iwraps.o dpsinfo.o -ldps -lXt -lSM -lICE -lX11
--L/opt/buildroot/build_i386/staging_dir/i386-linux-uclibc/lib     
-/opt/buildroot/build_i386/staging_dir/usr/bin/../lib/gcc/i386-linux-uclibc/4.2.1/../../../../i386-linux-uclibc/bin/ld:
-warning: libXext.so.6, needed by ../../exports/lib/libdps.so, not found
-(try using -rpath or -rpath-link)
-../../exports/lib/libdps.so: undefined reference to `bcopy'
-collect2: ld returned 1 exit status
-make[5]: *** [dpsinfo]
-&http://busybox.net/bugs/view.php?id=38169;&http://busybox.net/bugs/view.php?id=35823;
-1
-make[5]: Leaving directory
-`/opt/buildroot/build_i386/xc/programs/dpsinfo'
-make[4]: *** [all]
-&http://busybox.net/bugs/view.php?id=38169;&http://busybox.net/bugs/view.php?id=35823;
-2
-make[4]: Leaving directory `/opt/buildroot/build_i386/xc/programs'
-make[3]: *** [all]
-&http://busybox.net/bugs/view.php?id=38169;&http://busybox.net/bugs/view.php?id=35823;
-2
-make[3]: Leaving directory `/opt/buildroot/build_i386/xc'
-make[2]: *** [World]
-&http://busybox.net/bugs/view.php?id=38169;&http://busybox.net/bugs/view.php?id=35823;
-2
-make[2]: Leaving directory `/opt/buildroot/build_i386/xc'
-make[1]: *** [World]
-&http://busybox.net/bugs/view.php?id=38169;&http://busybox.net/bugs/view.php?id=35823;
-2
-make[1]: Leaving directory `/opt/buildroot/build_i386/xc'
+--- begin cut ---
+...
+make[1]: Entering directory
+`/home/friedrich/buildroot-090108/buildroot/toolchain_build_mipsel/uClibc-
+0.9.29'
+make[2]: `conf' is up to date.
+ln -fs sgidefs.h ./include/
+:0: error: -march=mips1 is not compatible with the selected ABI
+:0: error: -march=mips1 is not compatible with the selected ABI
+  CC ldso/ldso/ldso.oS
+ldso/ldso/ldso.c:1: error: -march=mips1 is not compatible with the selected
+ABI
+make[1]: *** [ldso/ldso/ldso.oS] Error 1
+make[1]: Leaving directory
+`/home/friedrich/buildroot-090108/buildroot/toolchain_build_mipsel/uClibc-
+0.9.29'
+make: ***
+[/home/friedrich/buildroot-090108/buildroot/toolchain_build_mipsel/uClibc-
+0.9.29/lib/libc.a] Error 2
+--- end cut ---
 
-====================================================================== 
+The problem is that it show this error for all 3 possible ABI options.
+Another thing is that i selected mips32 and not mips1 as the target
+architecture. I found some other problem descriptions like this one but no
+solution. I am using Ubuntu 7.1 as build system.
 
-Issue History 
-Date Modified   Username       Field                    Change               
-====================================================================== 
-01-09-08 22:05  msj0520        New Issue                                    
-01-09-08 22:05  msj0520        Status                   new => assigned     
-01-09-08 22:05  msj0520        Assigned To               => buildroot       
-======================================================================
+Any suggestions?
+
+
+Thanks
+
+friedrich
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: http://busybox.net/lists/buildroot/attachments/20080110/7d26b956/attachment.htm 
