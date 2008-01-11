@@ -1,7 +1,7 @@
 From: Manuel Sahm <ManuelSahm@freenet.de>
-Date: Fri, 11 Jan 2008 17:09:31 +0100
-Subject: [Buildroot] (no subject)
-Message-ID: <!&!AAAAAAAAAAAYAAAAAAAAAHPNBStbvZ9BluURSOZ8EsPCgAAAEAAAAOiIU8l8bZtEhGLsFeCQS7QBAAAAAA==@freenet.de>
+Date: Fri, 11 Jan 2008 17:10:19 +0100
+Subject: [Buildroot] Buildroot for AT91SAM9260ek ???
+Message-ID: <!&!AAAAAAAAAAAYAAAAAAAAAHPNBStbvZ9BluURSOZ8EsPCgAAAEAAAANwOV1TDEHJNqhX50cqUQ5EBAAAAAA==@freenet.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -63,6 +63,8 @@ Manuel Sahm
 
  
 
+ 
+
 -------------- next part --------------
 An HTML attachment was scrubbed...
-URL: http://busybox.net/lists/buildroot/attachments/20080111/1774f6ed/attachment-0001.htm 
+URL: http://busybox.net/lists/buildroot/attachments/20080111/348800b2/attachment.htm 
