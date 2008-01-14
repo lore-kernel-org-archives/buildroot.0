@@ -1,29 +1,24 @@
 From: Jonathan Dumaresq <jdumaresq@cimeq.qc.ca>
-Date: Mon, 14 Jan 2008 14:16:32 -0500
+Date: Mon, 14 Jan 2008 14:35:52 -0500
 Subject: [Buildroot] error messages
 In-Reply-To: <d6cda7730801140911x5b866f6ew44f96f7f93084f49@mail.gmail.com>
 References: <00b501c853c9$4fc21330$6e00a8c0@JONATHAN>
 	<00a601c85644$796a65c0$020514ac@atmel.com>
 	<01f101c856c9$be8ff5e0$6e00a8c0@JONATHAN>
 	<d6cda7730801140911x5b866f6ew44f96f7f93084f49@mail.gmail.com>
-Message-ID: <022d01c856e1$f8f27a10$6e00a8c0@JONATHAN>
+Message-ID: <022e01c856e4$ac90c480$6e00a8c0@JONATHAN>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi,
 
-This is not something that i'm normaly do on a daily basis. So I have the
-file modified, but I'm try to make a patch. I try with svn diff, but thoses
-file are not part of the svn. So what is the best way of providing a working
-patch ?
+Here the new error message. 
 
 Regards
 
 Jonathan
-
 -----Message d'origine-----
 De?: Thiago A. Corr?a [mailto:thiago.correa at gmail.com] 
 Envoy??: 14 janvier 2008 12:12
@@ -87,3 +82,7 @@ On Jan 14, 2008 2:23 PM, Jonathan Dumaresq <jdumaresq@cimeq.qc.ca> wrote:
 > buildroot at uclibc.org
 > http://busybox.net/mailman/listinfo/buildroot
 >
+-------------- next part --------------
+An embedded and charset-unspecified text was scrubbed...
+Name: error.txt
+Url: http://busybox.net/lists/buildroot/attachments/20080114/89e4a849/attachment.txt 
