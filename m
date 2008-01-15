@@ -1,9 +1,8 @@
-From: Manuel Sahm <ManuelSahm@freenet.de>
-Date: Tue, 15 Jan 2008 22:06:42 +0100
-Subject: [Buildroot] Buildroot for AT91SAM9260ek ???
-In-Reply-To: <068f01c85628$d55a5493$85f0af0a@corp.atmel.com>
-References: <068f01c85628$d55a5493$85f0af0a@corp.atmel.com>
-Message-ID: <!&!AAAAAAAAAAAYAAAAAAAAAHPNBStbvZ9BluURSOZ8EsPCgAAAEAAAAI5pkxmidMNBgS9NNLRpTSUBAAAAAA==@freenet.de>
+From: bugs at busybox.net <bugs@busybox.net>
+Date: Tue, 15 Jan 2008 15:37:32 -0800
+Subject: [Buildroot] [buildroot 0001929]: at91bootstrap-2.4.tar.bz2 cannot
+	be downloaded
+Message-ID: <5bfdc0e49acba34c935630233e068afb@busybox.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -11,106 +10,45 @@ Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
 
-Thanks Mr. Samuelsson,
+A NOTE has been added to this issue. 
+====================================================================== 
+http://busybox.net/bugs/view.php?id=1929 
+====================================================================== 
+Reported By:                tigmac
+Assigned To:                buildroot
+====================================================================== 
+Project:                    buildroot
+Issue ID:                   1929
+Category:                   Architecture Specific
+Reproducibility:            always
+Severity:                   minor
+Priority:                   normal
+Status:                     assigned
+====================================================================== 
+Date Submitted:             01-15-2008 06:41 PST
+Last Modified:              01-15-2008 15:37 PST
+====================================================================== 
+Summary:                    at91bootstrap-2.4.tar.bz2 cannot be downloaded
+Description: 
+I have checked that no such file named at91bootstrap-2.4.tar.bz2 which
+buildroot is trying to download exists on the site.
+It might be a good idea to keep such file copied also on buildroot's site
+a download them from there.
+====================================================================== 
 
-first question:
-------------------
-Could you explain me why it?s not possible, I don?t understand because there
-are binaries from AT91Bootstrap and UBOOT which are loadable from NAND Flash
-at the starting process ???(For example from the firm TIMESYS)
-So why no NAND Flash only system, when does the error happen ?
+---------------------------------------------------------------------- 
+ Ulf Samuelsson - 01-15-08 15:37  
+---------------------------------------------------------------------- 
+ATMEL_MIRROR has changed.
+Fix your .config or do a manual download from 
+ftp://ftp:linux4sam.org/pub/buildroot/at91bootstrap-2.4.tar.bz2
+to your source directory $(DL_DIR) 
 
-second question:
-------------------
-In the Buildroot menuconfig I try to add a patch to the 2.6.23 Kernel. I
-want to download the 2.6.23-at91.patch.gz from
-http://maxim.org.za/AT91RM9200/2.6/2.6.23-at91.patch.gz
-
-But if I type make source the patch isn?t downloaded ?
-
-What do I have to set, to download and apply this patch ?
-
-Thank you very very much...
-
-Manuel Sahm
-
------Urspr?ngliche Nachricht-----
-Von: Samuelsson, Ulf [mailto:ulf.samuelsson at atmel.com] 
-Gesendet: Sonntag, 13. Januar 2008 22:10
-An: Manuel Sahm; 'Ulf Samuelsson'; buildroot at uclibc.org
-Betreff: Re: AW: [Buildroot] Buildroot for AT91SAM9260ek ???
-
-It is open source.
-You can do whatever modlficatllons
-you want.
-Due to Bugs in the BootROM
-the AT91SAM9260 rev A does
-*NOT* support a NAND
-flash only system.
-
-
-
-Best Regards
-Ulf Samuelsson
-
------Original Message-----
-From: Manuel Sahm
-Sent: l?r 2008-01-12 20:07
-To: 'Ulf Samuelsson';buildroot at uclibc.org
-Subject: AW: [Buildroot] Buildroot for AT91SAM9260ek ???
- 
-Thanks Mr. Samuelsson,
-
-but I don?t want to use a DataFlashCard.
-
-I only want to use the NAND flash which is on the Board (AT91SAM9260EK).
-
-In the NAND Flash there should be the AT91Bootstrap, The UBoot Env, the
-UBoot and the RootFileSystem...
-
-Is it possible with Buildroot, what do I have to do/choose for this ?
-
-Thank you very very much
-
-Manuel Sahm
-
------Urspr?ngliche Nachricht-----
-Von: Ulf Samuelsson [mailto:ulf at atmel.com] 
-Gesendet: Samstag, 12. Januar 2008 13:52
-An: Manuel Sahm; buildroot at uclibc.org
-Betreff: Re: [Buildroot] Buildroot for AT91SAM9260ek ???
-
-Hello,
-
- 
-
-I?m new in Linux developing, I choose Buildroot to make my Linux
-Distribution.
-
- 
-
-First I got Buildroot from 
-$ svn co svn://uclibc.org/trunk/buildroot
-then
-$ make menuconfig
-
- 
-
-->
-
-I go out with Exit
-Then I want to enter:
-$ make at91sam9260ek_defconfig
-
-But there is no defconfig for the ek, only for pf and dfc ? 
-What do I have to choose ?
-
-Thank you very much
-Manuel Sahm
-
-==> Use the at91sam9260dfc.
-        This is the AT91SAM9260EK running from a dataflash card
-(AT45DCB008D).
-
-Best Regards
-Ulf Samuelsson
+Issue History 
+Date Modified   Username       Field                    Change               
+====================================================================== 
+01-15-08 06:41  tigmac         New Issue                                    
+01-15-08 06:41  tigmac         Status                   new => assigned     
+01-15-08 06:41  tigmac         Assigned To               => buildroot       
+01-15-08 15:37  Ulf Samuelsson Note Added: 0003454                          
+======================================================================
