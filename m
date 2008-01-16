@@ -1,40 +1,50 @@
-From: Ulf Samuelsson <ulf@atmel.com>
-Date: Tue, 15 Jan 2008 23:59:18 +0100
-Subject: [Buildroot] Buildroot for AT91SAM9260ek ???
-References: <068f01c85628$d55a5493$85f0af0a@corp.atmel.com>
-	<!&!AAAAAAAAAAAYAAAAAAAAAHPNBStbvZ9BluURSOZ8EsPCgAAAEAAAAI5pkxmidMNBgS9NNLRpTSUBAAAAAA==@freenet.de>
-Message-ID: <023e01c857d2$c7f044a0$0b0514ac@atmel.com>
+From: bugs at busybox.net <bugs@busybox.net>
+Date: Tue, 15 Jan 2008 23:24:54 -0800
+Subject: [Buildroot] [buildroot 0001934]: readline package can't install
+	shared library without headers into target
+Message-ID: <ccc042adcaae44c4e45a08d3401e9115@bugs.uclibc.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Thanks Mr. Samuelsson,
 
-first question:
-------------------
-Could you explain me why it?s not possible, I don?t understand because there
-are binaries from AT91Bootstrap and UBOOT which are loadable from NAND Flash
-at the starting process ???(For example from the firm TIMESYS)
-So why no NAND Flash only system, when does the error happen ?
+The following issue has been SUBMITTED. 
+====================================================================== 
+http://busybox.net/bugs/view.php?id=1934 
+====================================================================== 
+Reported By:                hmoffatt
+Assigned To:                buildroot
+====================================================================== 
+Project:                    buildroot
+Issue ID:                   1934
+Category:                   Shared Library Support
+Reproducibility:            always
+Severity:                   minor
+Priority:                   normal
+Status:                     assigned
+====================================================================== 
+Date Submitted:             01-15-2008 23:24 PST
+Last Modified:              01-15-2008 23:24 PST
+====================================================================== 
+Summary:                    readline package can't install shared library
+without headers into target
+Description: 
+If BR2_READLINE is enabled readline is only installed for the host.
 
-==>  It is a bug in the bootROM.
+If BR2_PACKAGE_READLINE_TARGET is enabled, both the shared library and
+also the header files and info documentation are installed onto the
+target.
 
-second question:
-------------------
-In the Buildroot menuconfig I try to add a patch to the 2.6.23 Kernel. I
-want to download the 2.6.23-at91.patch.gz from
-http://maxim.org.za/AT91RM9200/2.6/2.6.23-at91.patch.gz
+It would be useful to be able to install just the shared library, so that
+it can be used by other applications.
+====================================================================== 
 
-But if I type make source the patch isn?t downloaded ?
-
-What do I have to set, to download and apply this patch ?
-
-==> This part needs some extra work,
-        Download manually and put in $(DL_DIR)
-
-
-
-Best Regards
-Ulf Samuelsson 
+Issue History 
+Date Modified   Username       Field                    Change               
+====================================================================== 
+01-15-08 23:24  hmoffatt       New Issue                                    
+01-15-08 23:24  hmoffatt       Status                   new => assigned     
+01-15-08 23:24  hmoffatt       Assigned To               => buildroot       
+======================================================================
