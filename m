@@ -1,14 +1,31 @@
-From: Bernhard Fischer <rep.dot.nop@gmail.com>
-Date: Wed, 16 Jan 2008 20:27:01 +0100
-Subject: [Buildroot] How to configure proftpd 1.3.0a package in	buildroot
-In-Reply-To: <20080116184646.F0F9FC78A@green.qinip.net>
-References: <20080116184646.F0F9FC78A@green.qinip.net>
-Message-ID: <20080116192701.GD27237@aon.at>
+From: Paul <pbor1234@zonnet.nl>
+Date: Wed, 16 Jan 2008 21:17:43 +0100
+Subject: [Buildroot] How to configure proftpd 1.3.0a package inbuildroot
+In-Reply-To: <20080116192701.GD27237@aon.at>
+Message-ID: <20080116201747.EBF95C6FB@green.qinip.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
+
+Bernhard,
+Thanks, i added:
+
+  toolchain/patch-kernel.sh $(PROFTPD_DIR) package/proftpd/ *.patch
+
+To .unpacked: in /buildroot/package/proftpd/proftpd.mk
+
+And it works.
+Paul
+
+
+-----Original Message-----
+From: Bernhard Fischer [mailto:rep.dot.nop at gmail.com] 
+Sent: woensdag 16 januari 2008 20:27
+To: Paul
+Cc: buildroot at uclibc.org
+Subject: Re: [Buildroot] How to configure proftpd 1.3.0a package inbuildroot
 
 On Wed, Jan 16, 2008 at 07:46:41PM +0100, Paul wrote:
 >As a newby i'm stuck in the following, help is appreciated.
