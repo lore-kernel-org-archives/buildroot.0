@@ -1,66 +1,63 @@
 From: Paul <pbor1234@zonnet.nl>
-Date: Thu, 17 Jan 2008 20:35:02 +0100
-Subject: [Buildroot] buildroot building problems
-In-Reply-To: <53499b480801170741m1cee5028q2fc41f1a52b3fd6f@mail.gmail.com>
-Message-ID: <20080117193508.A6B25C6DA@green.qinip.net>
+Date: Thu, 17 Jan 2008 21:56:05 +0100
+Subject: [Buildroot] iconv (trying to add) gives 'libtool: compile: unable
+	to infer tagged configuration'
+Message-ID: <20080117205610.7F6F7C5CD@green.qinip.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Yegor,
-You need a .config for the kernel as well. In make menuconfig you can select
-to run xconfig prior to compiling the kernel. Otherwise run the config tool
-yourself and point to the .config file in make menuconfig. Hope this helps?
-Paul
+I'm trying to add a module to proftpd which requires libiconv. Since its not
+in the toolchain I'm trying to add it and have copied an existing lib
+makefile (libcgi) and modified it for libiconv. I'm not sure how to fix this
+error and also I'm not sure if the makefile is ok now. Any directions are
+appreciated.
 
+ 
 
+cd lib && /usr/bin/make all
 
------Original Message-----
-From: buildroot-bounces@uclibc.org [mailto:buildroot-bounces at uclibc.org] On
-Behalf Of Yegor Masharsky
-Sent: donderdag 17 januari 2008 16:41
-To: buildroot at uclibc.org
-Subject: [Buildroot] buildroot building problems
+make[3]: Entering directory
+`/home/joep/buildroot/build_powerpc/libiconv-1.12/libcharset/lib'
 
-Hi all ,
+/bin/sh ../libtool --mode=compile
+/home/joep/buildroot/build_powerpc/staging_dir/usr/bin/powerpc-linux-uclibc-
+gcc -I. -I. -I.. -I./.. -I../include -g -O2 -fvisibility=hidden
+-DLIBDIR=\"/lib\" -DBUILDING_LIBCHARSET -DBUILDING_DLL
+-DENABLE_RELOCATABLE=1 -DIN_LIBRARY -DINSTALLDIR=\"/lib\" -DNO_XMALLOC
+-Dset_relocation_prefix=libcharset_set_relocation_prefix
+-Drelocate=libcharset_relocate -DHAVE_CONFIG_H -c ./localcharset.c
 
-I'm trying to setup buildroot and uclibc on my host , but something
-goes wrong . According to buildroot manual I've downloaded buildroot
-using
-"svn co svn://uclibc.org/trunk/buildroot" then configured it using
-"make menuconfig" and run "make" . After kernel is patched make fails
-saying that it could not copy .config file . The output is the
-following:
+libtool: compile: unable to infer tagged configuration
 
-rm -rf /home/aym001/buildroot/project_build_powerpc/uclibc/linux-2.6.22.10
-*** Unpacking kernel source
-bzcat /home/aym001/buildroot/dl/linux-2.6.22.10.tar.bz2 | tar -C
-/home/aym001/buildroot/project_build_powerpc/uclibc   -xf -
-touch
-/home/aym001/buildroot/project_build_powerpc/uclibc/linux-2.6.22.10/.unpacke
-d
-toolchain/patch-kernel.sh
-/home/aym001/buildroot/project_build_powerpc/uclibc/linux-2.6.22.10
-toolchain/kernel-headers \
-linux-2.6.22.10-\*.patch{,.gz,.bz2}
-touch
-/home/aym001/buildroot/project_build_powerpc/uclibc/linux-2.6.22.10/.patched
-cp -dpf
-/home/aym001/buildroot/project_build_powerpc/uclibc/linux-2.6.22.10/.config
-cp: missing destination file
-Try `cp --help' for more information.
-make: ***
-[/home/aym001/buildroot/project_build_powerpc/uclibc/linux-2.6.22.10/.config
-ured]
-Error 1
+libtool: compile: specify a tag with `--tag'
 
-What do I do wrong ?
+make[3]: *** [localcharset.lo] Error 1
 
-Thanks,
-Yegor
-_______________________________________________
-buildroot mailing list
-buildroot at uclibc.org
-http://busybox.net/mailman/listinfo/buildroot
+make[3]: Leaving directory
+`/home/joep/buildroot/build_powerpc/libiconv-1.12/libcharset/lib'
+
+make[2]: *** [all] Error 2
+
+make[2]: Leaving directory
+`/home/joep/buildroot/build_powerpc/libiconv-1.12/libcharset'
+
+make[1]: *** [lib/localcharset.h] Error 2
+
+make[1]: Leaving directory
+`/home/joep/buildroot/build_powerpc/libiconv-1.12'
+
+make: *** [/home/joep/buildroot/build_powerpc/libiconv-1.12/src/libiconv.so]
+Error 2
+
+ 
+
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: http://busybox.net/lists/buildroot/attachments/20080117/1c02cc98/attachment.htm 
+-------------- next part --------------
+An embedded and charset-unspecified text was scrubbed...
+Name: libiconv.mk
+Url: http://busybox.net/lists/buildroot/attachments/20080117/1c02cc98/attachment.diff 
