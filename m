@@ -1,25 +1,33 @@
-From: Tim Barr <tbarr@multitech.com>
-Date: Thu, 17 Jan 2008 10:26:44 -0600
-Subject: [Buildroot] Basic question about buildroot
-Message-ID: <1CD05B980C94AC408B37C82BBABAA3E609B6CAE2@mtsexchange.dc.multitech.prv>
+From: Yegor Masharsky <yegor.masharsky@gmail.com>
+Date: Thu, 17 Jan 2008 20:17:28 +0300
+Subject: [Buildroot] buildroot building problems
+In-Reply-To: <20080117160206.GB3086@aon.at>
+References: <53499b480801170741m1cee5028q2fc41f1a52b3fd6f@mail.gmail.com>
+	<20080117160206.GB3086@aon.at>
+Message-ID: <53499b480801170917v714fca95t17138a23d0740905@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-What is the purpose of the defconfig files in the target/device
-directories of buildroot? Are they supposed to be used to set up a
-baseline configuration for specific target boards?
- 
+Hello Bernhard ,
 
+grep KCONFIG .config returns
+BR2_PACKAGE_LINUX_KCONFIG=""
 
-Timothy Barr
-Hardware Development Engineer
-for Multi-Tech Systems, Inc.
- <mailto:tbarr@multitech.com> tbarr at multitech.com 
+docs/README says :
 
- 
--------------- next part --------------
-An HTML attachment was scrubbed...
-URL: http://busybox.net/lists/buildroot/attachments/20080117/dd80fa7b/attachment.htm 
+1) run 'make menuconfig'
+2) select the packages you wish to compile
+3) run 'make'
+4) wait while it compiles
+5) Use your shiny new root filesystem.  Depending on which sortof
+   root filesystem you selected, you may want to loop mount it,
+   chroot into it, nfs mount it on your target device, burn it
+   to flash, or whatever is appropriate for your target system.
+
+So I fail at step 4 but don't see where I missed something
+
+Thanks,
+Yegor
