@@ -1,32 +1,27 @@
-From: Fredy Yanardi <fyanardi@gmail.com>
-Date: Thu, 17 Jan 2008 11:44:36 +0800
-Subject: [Buildroot] Kernel CONFIG_ROOT_NFS is ignored?
-Message-ID: <1ec1a3270801161944v6753f3cp1c56ff3f497b05b8@mail.gmail.com>
+From: Hamish Moffatt <hamish@cloud.net.au>
+Date: Thu, 17 Jan 2008 15:05:26 +1100
+Subject: [Buildroot] [PATCH] readline overhaul
+In-Reply-To: <20080117014020.GA30067@cloud.net.au>
+References: <20080117014020.GA30067@cloud.net.au>
+Message-ID: <20080117040526.GA32117@cloud.net.au>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello all,
+On Thu, Jan 17, 2008 at 12:40:20PM +1100, Hamish Moffatt wrote:
+> Here's a patch to overhaul the readline package. Changes are:
 
-I know this sounds rather stupid, but I've spent few hours figuring
-out this thing. I'm using Buildroot to get a kernel + root filesytem
-for at91rm9261-ek board. So far I've successfully build everything
-(getting kernel image and root filesystem image)
+and an additional patch to strip the libraries installed into the root.
 
-The only problem that I can't boot from NFS using this kernel (no root
-nfs support in kernel). I've tried to modify CONFIG_ROOT_NFS to 'y' in
-target/device/Atmel/at91sam9261ek/at91sam9261ek-linux-2.6.22.1.config
-but somehow seems that it is always been ignored when buildroot
-applying the configuration. When I try to re-run make in buildroot
-directory, it turns out that ROOT_NFS is always set back to 'n'. (I've
-tried to modify other config options from the config file, and the
-change is not ignored).
-
-I'm using buildroot snapshot 16 January 2008. I've also set
-CONFIG_IP_PNP to 'y', maybe I missed something else?
-
-Thanks for all your help,
-
-Fredy
+Hamish
+-- 
+Hamish Moffatt VK3SB <hamish@debian.org> <hamish@cloud.net.au>
+-------------- next part --------------
+A non-text attachment was scrubbed...
+Name: br-readline-strip.patch
+Type: text/x-diff
+Size: 705 bytes
+Desc: not available
+Url : http://busybox.net/lists/buildroot/attachments/20080117/097429aa/attachment.bin 
