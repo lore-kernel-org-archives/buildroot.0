@@ -1,33 +1,36 @@
 From: Hamish Moffatt <hamish@cloud.net.au>
-Date: Thu, 17 Jan 2008 17:31:52 +1100
-Subject: [Buildroot] [PATCH] readline overhaul
-In-Reply-To: <20080117040526.GA32117@cloud.net.au>
-References: <20080117014020.GA30067@cloud.net.au>
-	<20080117040526.GA32117@cloud.net.au>
-Message-ID: <20080117063152.GA1624@cloud.net.au>
+Date: Thu, 17 Jan 2008 17:37:44 +1100
+Subject: [Buildroot] [PATCH] python enhancements
+Message-ID: <20080117063744.GA1661@cloud.net.au>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Thu, Jan 17, 2008 at 03:05:26PM +1100, Hamish Moffatt wrote:
-> On Thu, Jan 17, 2008 at 12:40:20PM +1100, Hamish Moffatt wrote:
-> > Here's a patch to overhaul the readline package. Changes are:
-> 
-> and an additional patch to strip the libraries installed into the root.
+Here are some enhancements for the python package.
 
-and another to fix the dependencies.
+1. Currently it strips .pyc (compiled python modules) from the build.
+Instead, I added the option to strip the .py files instead, or keep
+both. It's much quicker to load from the .pyc files and you often don't
+even need the .py sources.
 
-I'd better just send another full patch. Or ask for commit access?
+2. Currently a bunch of modules are disabled because they need extra
+modules (openssl, readline, ncurses etc). I added configuration options
+to enable them.
+
+3. I also added an option to disable some of the larger compiled modules
+(> 100k each) which are not used much.
+
+
 
 Hamish
 -- 
 Hamish Moffatt VK3SB <hamish@debian.org> <hamish@cloud.net.au>
 -------------- next part --------------
 A non-text attachment was scrubbed...
-Name: br-readline-deps.patch
+Name: br-python.patch
 Type: text/x-diff
-Size: 501 bytes
+Size: 5552 bytes
 Desc: not available
-Url : http://busybox.net/lists/buildroot/attachments/20080117/eb9bd7d1/attachment.bin 
+Url : http://busybox.net/lists/buildroot/attachments/20080117/5e6a6c00/attachment.bin 
