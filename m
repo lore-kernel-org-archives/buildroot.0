@@ -1,35 +1,30 @@
-From: Bernhard Fischer <rep.dot.nop@gmail.com>
-Date: Fri, 18 Jan 2008 00:14:29 +0100
-Subject: [Buildroot] buildroot building problems
-In-Reply-To: <20080117224220.GA26760@cloud.net.au>
-References: <53499b480801170741m1cee5028q2fc41f1a52b3fd6f@mail.gmail.com>
-	<20080117160206.GB3086@aon.at>
-	<20080117224220.GA26760@cloud.net.au>
-Message-ID: <20080117231429.GE27237@aon.at>
+From: Hamish Moffatt <hamish@cloud.net.au>
+Date: Fri, 18 Jan 2008 11:10:42 +1100
+Subject: [Buildroot] [PATCH] readline overhaul
+In-Reply-To: <20080117063152.GA1624@cloud.net.au>
+References: <20080117014020.GA30067@cloud.net.au>
+	<20080117040526.GA32117@cloud.net.au>
+	<20080117063152.GA1624@cloud.net.au>
+Message-ID: <20080118001042.GA28437@cloud.net.au>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Fri, Jan 18, 2008 at 09:42:20AM +1100, Hamish Moffatt wrote:
->On Thu, Jan 17, 2008 at 05:02:06PM +0100, Bernhard Fischer wrote:
->> On Thu, Jan 17, 2008 at 06:41:07PM +0300, Yegor Masharsky wrote:
->> >Hi all ,
->> >
->> >I'm trying to setup buildroot and uclibc on my host , but something
->> >goes wrong . According to buildroot manual I've downloaded buildroot
->> >using
->> 
->> grep KCONFIG .config
->> see docs/README 
->
->Maybe target/linux/Makefile.in could be modified to give an error if
->BR2_PACKAGE_LINUX_KCONFIG is unset, rather than just using it blindly?
->
->It already gives an error if the variable is set to a non-existent file.
->
->That would prevent approximately one post/bug report per week.
+On Thu, Jan 17, 2008 at 05:31:52PM +1100, Hamish Moffatt wrote:
+> I'd better just send another full patch. Or ask for commit access?
 
-Yes, i've fixed this in my tree as
-46fb4073ae91fd4a6f474aab0455b5522edc868f about 5 hours ago.
+Here's my complete readline patch. Could someone please apply it?
+
+thanks
+Hamish
+-- 
+Hamish Moffatt VK3SB <hamish@debian.org> <hamish@cloud.net.au>
+-------------- next part --------------
+A non-text attachment was scrubbed...
+Name: br-readline-all.patch.gz
+Type: application/octet-stream
+Size: 10400 bytes
+Desc: not available
+Url : http://busybox.net/lists/buildroot/attachments/20080118/6791e2b0/attachment-0001.obj 
