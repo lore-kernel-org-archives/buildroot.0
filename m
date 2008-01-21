@@ -1,8 +1,9 @@
 From: bugs at busybox.net <bugs@busybox.net>
-Date: Sun, 20 Jan 2008 19:12:39 -0800
-Subject: [Buildroot] [buildroot 0001944]: gcc copiled by buildroot can not
-	support "-gcov" feature.
-Message-ID: <2b3283954b3cf7b17dc7f63e9ce9eff6@busybox.net>
+Date: Sun, 20 Jan 2008 20:26:23 -0800
+Subject: [Buildroot] [buildroot 0001949]: buildroot toolchain for i386,
+	configured with uClibc 0.9.29 or later,
+	cannot configure uClibc 0.9.29 or later
+Message-ID: <cff0b453bffd364eabd61ca421cda8ce@bugs.uclibc.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -10,69 +11,45 @@ Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
 
-A NOTE has been added to this issue. 
+The following issue has been SUBMITTED. 
 ====================================================================== 
-http://busybox.net/bugs/view.php?id=1944 
+http://busybox.net/bugs/view.php?id=1949 
 ====================================================================== 
-Reported By:                jacky_deng
+Reported By:                zugvogel
 Assigned To:                buildroot
 ====================================================================== 
 Project:                    buildroot
-Issue ID:                   1944
-Category:                   Standards Compliance
+Issue ID:                   1949
+Category:                   Architecture Specific
 Reproducibility:            always
-Severity:                   major
+Severity:                   minor
 Priority:                   normal
 Status:                     assigned
 ====================================================================== 
-Date Submitted:             01-20-2008 18:41 PST
-Last Modified:              01-20-2008 19:12 PST
+Date Submitted:             01-20-2008 20:26 PST
+Last Modified:              01-20-2008 20:26 PST
 ====================================================================== 
-Summary:                    gcc copiled by buildroot can not support "-gcov"
-feature.
+Summary:                    buildroot toolchain for i386, configured with uClibc
+0.9.29 or later, cannot configure uClibc 0.9.29 or later
 Description: 
-I wanna check the code coverage in a system.So I do as the following steps
-1. gcc -fprofile-arcs -ftest-coverage -lgcov -o test -g test.c
-2. No error during compile the file period. The target file "test" and
-"test.gcno" can be successfully generated.
-3. Then I run the program $./test
-Expect:
-  The program can run successfuly and a file "test.gcda" would be created
-automatically.
-Actually:
-  The program can run successfully, But the file test.gcda didn't be
-created.
+The test case was based on the 20080120 snapshot of buildroot, configured
+to make a development system. Underlying uClibc was 0.9.29. Settings were
+changed from their defaults only when necessary to make add-ons (like
+coreutils) compile.
+
+When testing resulting file system as a root jail, make menuconfig would
+segfault while trying to compile the ncurses dialog system. It will
+segfault again when following up with a "make clean". It will fail
+(without segfault) when running make oldconfig against the config file
+used to make the buildroot system in the first place.
 
 
 ====================================================================== 
-
----------------------------------------------------------------------- 
- jacky_deng - 01-20-08 18:45  
----------------------------------------------------------------------- 
-The gcc compiled by buildroot. 
-
----------------------------------------------------------------------- 
- jacky_deng - 01-20-08 19:12  
----------------------------------------------------------------------- 
-I use readelf to check the binary files compiled by "uclibc-gcc"
-
-Expect:
-$ readelf -a test |grep gcov_exit
-    57: 08048a60  3254 FUNC    LOCAL  DEFAULT    3 gcov_exit
-  The above binary is built in another linux workstation,use glibc-gcc.
-
-Actually:
-$ readelf -a test |grep gcov_exit
-didn't find gcov_exit in the binary file.
-  The above binary is built by the uclibc-gcc 
 
 Issue History 
 Date Modified   Username       Field                    Change               
 ====================================================================== 
-01-20-08 18:41  jacky_deng     New Issue                                    
-01-20-08 18:41  jacky_deng     Status                   new => assigned     
-01-20-08 18:41  jacky_deng     Assigned To               => buildroot       
-01-20-08 18:45  jacky_deng     Issue Monitored: jacky_deng                    
-01-20-08 18:45  jacky_deng     Note Added: 0003459                          
-01-20-08 19:12  jacky_deng     Note Added: 0003464                          
+01-20-08 20:26  zugvogel       New Issue                                    
+01-20-08 20:26  zugvogel       Status                   new => assigned     
+01-20-08 20:26  zugvogel       Assigned To               => buildroot       
 ======================================================================
