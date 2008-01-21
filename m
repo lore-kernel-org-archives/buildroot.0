@@ -1,32 +1,39 @@
-From: Tim Barr <tbarr@multitech.com>
-Date: Mon, 21 Jan 2008 09:25:03 -0600
-Subject: [Buildroot] More newb questions
-Message-ID: <1CD05B980C94AC408B37C82BBABAA3E609BFD4EE@mtsexchange.dc.multitech.prv>
+From: Joe <zentrale.at.work@gmail.com>
+Date: Mon, 21 Jan 2008 17:20:43 +0100
+Subject: [Buildroot] buildroot toolchain fails to build kernel: "ld: no
+ machine record defined"
+Message-ID: <4794C65B.4010105@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Is it possible to used menuconfig to edit a linux config file for an Arm
-target?  Or do I have to edit the config file by hand? Whenever I try to
-do this, it defaults to an arch/I386/Kconfig and I get a bunch of
-non-existent parameters.
- 
-I still can't figure out why a -rt9 keeps getting appended to the
-2.6.22.1 directory name created in the lib/modules directory. My
-buildroot keeps failing because there is no 2.6.22.1 directory to put
-modules in. Should I not be using a real-time kernel? Or is this some
-kind of buildroot bug??
- 
+Hi all!
 
+Today I tried to build a new kernel for my dev-board. Last time i did 
+this was Nov 2007, when i also used a buildroot-created toolchain which 
+worked absolutely fine. Today it compiles a lot, and then backs out with
 
-Timothy Barr
-Hardware Development Engineer
-for Multi-Tech Systems, Inc.
- <mailto:tbarr@multitech.com> tbarr at multitech.com 
+"arm-linux-ld: no machine record defined" in the file .tmp_vmlinux1
 
- 
--------------- next part --------------
-An HTML attachment was scrubbed...
-URL: http://busybox.net/lists/buildroot/attachments/20080121/1157b0a5/attachment.htm 
+After googling a lot, i found some messages including one by Russell 
+King indicating that there is probably something wrong with the used 
+binutils and that it should be reported to the binutils people. But 
+because i used the buildroot chain, i thought i'd ask here first.
+Tried combinations include gcc 4.2.1 and 4.1.2 as well as binutils 2.18 
+and 2.17 on kernels 2.6.22.10 and 2.6.23.14. Every possible combination 
+was given a try with the same results.
+
+Are there any ideas on this?
+
+Greetz Joe
+
+-- 
+Sepp "ZaP" Holzmayr
+
+please reply to:
+zentrale.at.work at gmail.com
+
+watch out for:
+www.rocksociety.de
