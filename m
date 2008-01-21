@@ -1,8 +1,8 @@
 From: bugs at busybox.net <bugs@busybox.net>
-Date: Sun, 20 Jan 2008 18:41:46 -0800
+Date: Sun, 20 Jan 2008 18:45:30 -0800
 Subject: [Buildroot] [buildroot 0001944]: gcc copiled by buildroot can not
 	support "-gcov" feature.
-Message-ID: <69f0e6de4f553e682b329c11777cc264@busybox.net>
+Message-ID: <6e1f8e259264586b70e326e415e1536a@busybox.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -10,7 +10,7 @@ Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
 
-The following issue has been SUBMITTED. 
+A NOTE has been added to this issue. 
 ====================================================================== 
 http://busybox.net/bugs/view.php?id=1944 
 ====================================================================== 
@@ -26,7 +26,7 @@ Priority:                   normal
 Status:                     assigned
 ====================================================================== 
 Date Submitted:             01-20-2008 18:41 PST
-Last Modified:              01-20-2008 18:41 PST
+Last Modified:              01-20-2008 18:45 PST
 ====================================================================== 
 Summary:                    gcc copiled by buildroot can not support "-gcov"
 feature.
@@ -46,10 +46,17 @@ created.
 
 ====================================================================== 
 
+---------------------------------------------------------------------- 
+ jacky_deng - 01-20-08 18:45  
+---------------------------------------------------------------------- 
+The gcc compiled by buildroot. 
+
 Issue History 
 Date Modified   Username       Field                    Change               
 ====================================================================== 
 01-20-08 18:41  jacky_deng     New Issue                                    
 01-20-08 18:41  jacky_deng     Status                   new => assigned     
 01-20-08 18:41  jacky_deng     Assigned To               => buildroot       
+01-20-08 18:45  jacky_deng     Issue Monitored: jacky_deng                    
+01-20-08 18:45  jacky_deng     Note Added: 0003459                          
 ======================================================================
