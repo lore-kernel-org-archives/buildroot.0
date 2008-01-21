@@ -1,8 +1,8 @@
 From: bugs at busybox.net <bugs@busybox.net>
-Date: Sun, 20 Jan 2008 18:45:30 -0800
+Date: Sun, 20 Jan 2008 19:12:39 -0800
 Subject: [Buildroot] [buildroot 0001944]: gcc copiled by buildroot can not
 	support "-gcov" feature.
-Message-ID: <6e1f8e259264586b70e326e415e1536a@busybox.net>
+Message-ID: <2b3283954b3cf7b17dc7f63e9ce9eff6@busybox.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -26,7 +26,7 @@ Priority:                   normal
 Status:                     assigned
 ====================================================================== 
 Date Submitted:             01-20-2008 18:41 PST
-Last Modified:              01-20-2008 18:45 PST
+Last Modified:              01-20-2008 19:12 PST
 ====================================================================== 
 Summary:                    gcc copiled by buildroot can not support "-gcov"
 feature.
@@ -51,6 +51,21 @@ created.
 ---------------------------------------------------------------------- 
 The gcc compiled by buildroot. 
 
+---------------------------------------------------------------------- 
+ jacky_deng - 01-20-08 19:12  
+---------------------------------------------------------------------- 
+I use readelf to check the binary files compiled by "uclibc-gcc"
+
+Expect:
+$ readelf -a test |grep gcov_exit
+    57: 08048a60  3254 FUNC    LOCAL  DEFAULT    3 gcov_exit
+  The above binary is built in another linux workstation,use glibc-gcc.
+
+Actually:
+$ readelf -a test |grep gcov_exit
+didn't find gcov_exit in the binary file.
+  The above binary is built by the uclibc-gcc 
+
 Issue History 
 Date Modified   Username       Field                    Change               
 ====================================================================== 
@@ -59,4 +74,5 @@ Date Modified   Username       Field                    Change
 01-20-08 18:41  jacky_deng     Assigned To               => buildroot       
 01-20-08 18:45  jacky_deng     Issue Monitored: jacky_deng                    
 01-20-08 18:45  jacky_deng     Note Added: 0003459                          
+01-20-08 19:12  jacky_deng     Note Added: 0003464                          
 ======================================================================
