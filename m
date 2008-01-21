@@ -1,68 +1,36 @@
-From: bugs at busybox.net <bugs@busybox.net>
-Date: Mon, 21 Jan 2008 01:08:44 -0800
-Subject: [Buildroot] [buildroot 0001954]: fakeroot 1.8.10 no longer
-	available form debain ftp
-Message-ID: <9e170e25aa51f0fc031bd9fbdf92cfa4@busybox.net>
+From: thomasez at uclibc.org <thomasez@uclibc.org>
+Date: Mon, 21 Jan 2008 03:07:58 -0800 (PST)
+Subject: [Buildroot] svn commit: trunk/buildroot/package/fakeroot
+Message-ID: <20080121110758.AA14D12C5D9@busybox.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+Author: thomasez
+Date: 2008-01-21 03:07:57 -0800 (Mon, 21 Jan 2008)
+New Revision: 20882
 
-A NOTE has been added to this issue. 
-====================================================================== 
-http://busybox.net/bugs/view.php?id=1954 
-====================================================================== 
-Reported By:                sharkconi
-Assigned To:                buildroot
-====================================================================== 
-Project:                    buildroot
-Issue ID:                   1954
-Category:                   Other
-Reproducibility:            always
-Severity:                   major
-Priority:                   normal
-Status:                     assigned
-====================================================================== 
-Date Submitted:             01-21-2008 01:04 PST
-Last Modified:              01-21-2008 01:08 PST
-====================================================================== 
-Summary:                    fakeroot 1.8.10 no longer available form debain ftp
-Description: 
-Today, when I try to build another toolchain using buildroot, it reports:"
-wget --passive-ftp  -P /home/sharkconi/project/buildroot/dl
-"http://ftp.debian.org"/debian/pool/main/f/fakeroot/fakeroot_1.8.10.tar.gz
---16:37:49-- 
-http://ftp.debian.org/debian/pool/main/f/fakeroot/fakeroot_1.8.10.tar.gz
-           =>
-`/home/sharkconi/project/buildroot/dl/fakeroot_1.8.10.tar.gz'
-Connecting to ftp.debian.org|128.101.240.212|:80...
-connected&http://busybox.net/bugs/view.php?id=12290;
-Please wait... 404 Not Found
-16:37:50 error 404&http://busybox.net/bugs/view.php?id=65306;Not
-Found&http://busybox.net/bugs/view.php?id=12290;
+Log:
+Upped version, fixing http://busybox.net/bugs/view.php?id=1954
 
-make: *** [/home/sharkconi/project/buildroot/dl/fakeroot_1.8.10.tar.gz]
-error 1
 
-I go to the ftp site to check what's going on.
-Then I found that Debian has remove all of the 1.8.x version's fakeroot.
-So can anyone help me?
+Modified:
+   trunk/buildroot/package/fakeroot/fakeroot.mk
 
-====================================================================== 
 
----------------------------------------------------------------------- 
- hcegtvedt - 01-21-08 01:08  
----------------------------------------------------------------------- 
-http://ftp.debian.org/debian/pool/main/f/fakeroot/fakeroot_1.9.tar.gz is
-available. VERSION needs to be updated. 
-
-Issue History 
-Date Modified   Username       Field                    Change               
-====================================================================== 
-01-21-08 01:04  sharkconi      New Issue                                    
-01-21-08 01:04  sharkconi      Status                   new => assigned     
-01-21-08 01:04  sharkconi      Assigned To               => buildroot       
-01-21-08 01:08  hcegtvedt      Note Added: 0003469                          
-======================================================================
+Changeset:
+Modified: trunk/buildroot/package/fakeroot/fakeroot.mk
+===================================================================
+--- trunk/buildroot/package/fakeroot/fakeroot.mk	2008-01-21 09:42:25 UTC (rev 20881)
++++ trunk/buildroot/package/fakeroot/fakeroot.mk	2008-01-21 11:07:57 UTC (rev 20882)
+@@ -3,7 +3,7 @@
+ # fakeroot
+ #
+ #############################################################
+-FAKEROOT_VERSION:=1.8.10
++FAKEROOT_VERSION:=1.9
+ FAKEROOT_SOURCE:=fakeroot_$(FAKEROOT_VERSION).tar.gz
+ FAKEROOT_SITE:=$(BR2_DEBIAN_MIRROR)/debian/pool/main/f/fakeroot
+ FAKEROOT_CAT:=$(ZCAT)
