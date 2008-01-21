@@ -1,8 +1,8 @@
 From: bugs at busybox.net <bugs@busybox.net>
-Date: Mon, 21 Jan 2008 11:46:13 -0800
+Date: Mon, 21 Jan 2008 11:47:27 -0800
 Subject: [Buildroot] [buildroot 0001959]: mDNSResponder-107.6 fails to cross
 	compile with incompatible object error
-Message-ID: <3f402a1fe7da033c33ff2c37f0f21c5e@bugs.uclibc.org>
+Message-ID: <33d0395a6ce5fbf7ac4fda301ff6c5f6@bugs.uclibc.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -10,7 +10,7 @@ Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
 
-The following issue has been SUBMITTED. 
+A NOTE has been added to this issue. 
 ====================================================================== 
 http://busybox.net/bugs/view.php?id=1959 
 ====================================================================== 
@@ -26,7 +26,7 @@ Priority:                   normal
 Status:                     assigned
 ====================================================================== 
 Date Submitted:             01-21-2008 11:46 PST
-Last Modified:              01-21-2008 11:46 PST
+Last Modified:              01-21-2008 11:47 PST
 ====================================================================== 
 Summary:                    mDNSResponder-107.6 fails to cross compile with
 incompatible object error
@@ -45,6 +45,12 @@ This package compiles properly when the buildroot host is the same
 architecture as the buildroot target.
 ====================================================================== 
 
+---------------------------------------------------------------------- 
+ dajhorn - 01-21-08 11:47  
+---------------------------------------------------------------------- 
+The second attachment is a transcript for a successful native build with
+the same buildroot configuration. 
+
 Issue History 
 Date Modified   Username       Field                    Change               
 ====================================================================== 
@@ -53,4 +59,5 @@ Date Modified   Username       Field                    Change
 01-21-08 11:46  dajhorn        Assigned To               => buildroot       
 01-21-08 11:46  dajhorn        File Added: mDNSResponder-build_amd64.txt        
            
+01-21-08 11:47  dajhorn        Note Added: 0003479                          
 ======================================================================
