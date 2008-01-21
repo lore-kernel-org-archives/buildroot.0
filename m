@@ -1,60 +1,56 @@
-From: Joe <zentrale.at.work@gmail.com>
-Date: Mon, 21 Jan 2008 17:56:49 +0100
-Subject: [Buildroot] buildroot toolchain fails to build kernel: "ld: no
- machine record defined"
-In-Reply-To: <20080121164720.GA22900@aon.at>
-References: <4794C65B.4010105@gmail.com> <20080121164720.GA22900@aon.at>
-Message-ID: <4794CED1.5040906@gmail.com>
+From: bugs at busybox.net <bugs@busybox.net>
+Date: Mon, 21 Jan 2008 11:46:13 -0800
+Subject: [Buildroot] [buildroot 0001959]: mDNSResponder-107.6 fails to cross
+	compile with incompatible object error
+Message-ID: <3f402a1fe7da033c33ff2c37f0f21c5e@bugs.uclibc.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Bernhard Fischer schrieb:
-> On Mon, Jan 21, 2008 at 05:20:43PM +0100, Joe wrote:
->> Hi all!
->>
->> Today I tried to build a new kernel for my dev-board. Last time i did 
->> this was Nov 2007, when i also used a buildroot-created toolchain which 
->> worked absolutely fine. Today it compiles a lot, and then backs out with
->>
->> "arm-linux-ld: no machine record defined" in the file .tmp_vmlinux1
->>
->> After googling a lot, i found some messages including one by Russell 
->> King indicating that there is probably something wrong with the used 
->> binutils and that it should be reported to the binutils people. But 
->> because i used the buildroot chain, i thought i'd ask here first.
->> Tried combinations include gcc 4.2.1 and 4.1.2 as well as binutils 2.18 
->> and 2.17 on kernels 2.6.22.10 and 2.6.23.14. Every possible combination 
->> was given a try with the same results.
->>
->> Are there any ideas on this?
-> 
-> Please send me your buildroot.config and (if it's not the default) your
-> uClibc.config and kernel.config for me to reproduce.
-> 
 
-Thanks for the quick reply, Bernhard.
+The following issue has been SUBMITTED. 
+====================================================================== 
+http://busybox.net/bugs/view.php?id=1959 
+====================================================================== 
+Reported By:                dajhorn
+Assigned To:                buildroot
+====================================================================== 
+Project:                    buildroot
+Issue ID:                   1959
+Category:                   Architecture Specific
+Reproducibility:            always
+Severity:                   minor
+Priority:                   normal
+Status:                     assigned
+====================================================================== 
+Date Submitted:             01-21-2008 11:46 PST
+Last Modified:              01-21-2008 11:46 PST
+====================================================================== 
+Summary:                    mDNSResponder-107.6 fails to cross compile with
+incompatible object error
+Description: 
+The mDNSResponder 107.6 package fails to cross compile in buildroot
+revision 20883 with this error:
 
-Please find the buildroot and kernel configs attached, uclibc config is 
-standard with buildroot latest revision for svn.
+cc dns-sd.c -L../mDNSPosix/build/prod/ -ldns_sd -I../mDNSShared -o
+build/dns-sd
+/usr/bin/ld: skipping incompatible ../mDNSPosix/build/prod//libdns_sd.so
+when searching for -ldns_sd
+/usr/bin/ld: cannot find -ldns_sd
+collect2: ld returned 1 exit status
 
-Greetz Joe
+This package compiles properly when the buildroot host is the same
+architecture as the buildroot target.
+====================================================================== 
 
--- 
-Sepp "ZaP" Holzmayr
-
-please reply to:
-zentrale.at.work at gmail.com
-
-watch out for:
-www.rocksociety.de
--------------- next part --------------
-An embedded and charset-unspecified text was scrubbed...
-Name: buildroot.config
-Url: http://busybox.net/lists/buildroot/attachments/20080121/f4268c8f/attachment-0002.diff 
--------------- next part --------------
-An embedded and charset-unspecified text was scrubbed...
-Name: kernel.config
-Url: http://busybox.net/lists/buildroot/attachments/20080121/f4268c8f/attachment-0003.diff 
+Issue History 
+Date Modified   Username       Field                    Change               
+====================================================================== 
+01-21-08 11:46  dajhorn        New Issue                                    
+01-21-08 11:46  dajhorn        Status                   new => assigned     
+01-21-08 11:46  dajhorn        Assigned To               => buildroot       
+01-21-08 11:46  dajhorn        File Added: mDNSResponder-build_amd64.txt        
+           
+======================================================================
