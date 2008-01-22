@@ -1,108 +1,35 @@
-From: bugs at busybox.net <bugs@busybox.net>
-Date: Tue, 22 Jan 2008 03:41:20 -0800
-Subject: [Buildroot] [buildroot 0001959]: mDNSResponder-107.6 fails to cross
-	compile with incompatible object error
-Message-ID: <8a80f0041506f889784d529620fbd127@busybox.net>
+From: Tim Barr <tbarr@multitech.com>
+Date: Tue, 22 Jan 2008 08:32:56 -0600
+Subject: [Buildroot] Another make problem
+Message-ID: <1CD05B980C94AC408B37C82BBABAA3E609BFD950@mtsexchange.dc.multitech.prv>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+Well, I got past the rt9 issue and have a version of buildroot that
+fixed the fakeroot issue, but now have another error:
 
-A NOTE has been added to this issue. 
-====================================================================== 
-http://busybox.net/bugs/view.php?id=1959 
-====================================================================== 
-Reported By:                dajhorn
-Assigned To:                buildroot
-====================================================================== 
-Project:                    buildroot
-Issue ID:                   1959
-Category:                   Architecture Specific
-Reproducibility:            always
-Severity:                   minor
-Priority:                   normal
-Status:                     assigned
-====================================================================== 
-Date Submitted:             01-21-2008 11:46 PST
-Last Modified:              01-22-2008 03:41 PST
-====================================================================== 
-Summary:                    mDNSResponder-107.6 fails to cross compile with
-incompatible object error
-Description: 
-The mDNSResponder 107.6 package fails to cross compile in buildroot
-revision 20883 with this error:
+/home/falingtrea/buildroot/build_arm_wchar/staging_dir/usr/bin/arm-linux
+-uclibc-gcc -Os -pipe
+-I/home/falingtrea/buildroot/build_arm_wchar/staging_dir/usr/include
+-I/home/falingtrea/buildroot/build_arm_wchar/staging_dir/include
+--sysroot=/home/falingtrea/buildroot/build_arm_wchar/staging_dir/
+-isysroot /home/falingtrea/buildroot/build_arm_wchar/staging_dir -c -O2
+-g -Wall -DHAVE_CONFIG_H -DVERSION=\"3.1.9\" -DETCDIR=\"/etc\"
+-DLOADAVG_MX=0.8 -DDAEMON_USERNAME=\"at\" -DDAEMON_GROUPNAME=\"at\"
+-DLFILE=\"/var/lib/atjobs/.SEQ\" -Wall atd.c
+atd.c:498:2: error: #error "No mail command specified."
+make[1]: *** [atd.o] Error 1
+make[1]: Leaving directory
+`/home/falingtrea/buildroot/build_arm_wchar/at-3.1.10'
+make: *** [/home/falingtrea/buildroot/build_arm_wchar/at-3.1.10/at]
+Error 2
 
-cc dns-sd.c -L../mDNSPosix/build/prod/ -ldns_sd -I../mDNSShared -o
-build/dns-sd
-/usr/bin/ld: skipping incompatible ../mDNSPosix/build/prod//libdns_sd.so
-when searching for -ldns_sd
-/usr/bin/ld: cannot find -ldns_sd
-collect2: ld returned 1 exit status
+Any suggestions??
 
-This package compiles properly when the buildroot host is the same
-architecture as the buildroot target.
-====================================================================== 
-
----------------------------------------------------------------------- 
- dajhorn - 01-21-08 11:47  
----------------------------------------------------------------------- 
-The second attachment is a transcript for a successful native build with
-the same buildroot configuration. 
-
----------------------------------------------------------------------- 
- UlfSamuelsson - 01-21-08 13:51  
----------------------------------------------------------------------- 
-Is it a big surprise that calling the *native* cc compiler
-to link with a cross compiled library fails?
-Suggest you find the place where "cc" is called and change
-that to use the cross compiler and then submit a patch. 
-
----------------------------------------------------------------------- 
- antezedens - 01-22-08 03:41  
----------------------------------------------------------------------- 
-I have identified 3 problems with cross-compiling mDNSResponder:
-First, the STRIP make Variable is not properly set:
-
-/build_080121/package/mdnsresponder/mdnsresponder.mk 
-31c31
-<       $(MAKE1) CC=$(TARGET_CC) os="linux" LD="$(TARGET_CC) -shared"
-STRIP=$(TARGET_STRIP) LOCALBASE="/usr" -C $(MDNSRESPONDER_DIR)/mDNSPosix
----
->       $(MAKE1) CC=$(TARGET_CC) os="linux" LD="$(TARGET_CC) -shared"
-LOCALBASE="/usr" -C $(MDNSRESPONDER_DIR)/mDNSPosix
-
-Second, the wrong ld version is used:
-/build_powerpc/mDNSResponder-107.6/mDNSPosix/Makefile 
-271c271
-< LD = @ld -shared
----
-> LD = ld -shared
-296,297c296
-< STRIP = @strip -S
-< #@strip -S 
-
-Third, the wrong CC is used:
-build_powerpc/mDNSResponder-107.6/Clients/Makefile 
-69c69
-<       $(CC) $(filter %.c %.o, $+) $(LIBS) -I../mDNSShared -o $@
----
->       cc $(filter %.c %.o, $+) $(LIBS) -I../mDNSShared -o $@
-
-After applying these changes the package builds without a problem! 
-
-Issue History 
-Date Modified   Username       Field                    Change               
-====================================================================== 
-01-21-08 11:46  dajhorn        New Issue                                    
-01-21-08 11:46  dajhorn        Status                   new => assigned     
-01-21-08 11:46  dajhorn        Assigned To               => buildroot       
-01-21-08 11:46  dajhorn        File Added: mDNSResponder-build_amd64.txt        
-           
-01-21-08 11:47  dajhorn        Note Added: 0003479                          
-01-21-08 11:47  dajhorn        File Added: mDNSResponder-build_i386.txt         
-          
-01-21-08 13:51  UlfSamuelsson  Note Added: 0003484                          
-01-22-08 03:41  antezedens     Note Added: 0003489                          
-======================================================================
+Timothy Barr
+Hardware Development Engineer
+for Multi-Tech Systems, Inc.
+tbarr at multitech.com
