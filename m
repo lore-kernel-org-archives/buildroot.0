@@ -1,7 +1,7 @@
 From: Ming-Ching Tiew <mingching.tiew@redtone.com>
-Date: Tue, 22 Jan 2008 09:56:49 +0800
-Subject: [Buildroot] strip problem
-Message-ID: <033d01c85c9a$0d4713a0$8119fea9@MingChing>
+Date: Tue, 22 Jan 2008 15:31:42 +0800
+Subject: [Buildroot] C and C++ with different capabilities
+Message-ID: <03e701c85cc8$d5659cc0$8119fea9@MingChing>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -9,23 +9,20 @@ Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
 
-I have been having this big problem with the buildroot,
-which I finally beginning to have some clues that it is likely 
-due to the 'strip' problem.
+I would like to have wchar capabilities in the C++ compiler
+but it just won't compile and it is giving me compile error.
+Is this a known limitattion ?
 
-I select sstrip from the make menuconfig, under the presumption
-that it should only do it on the executables, and then
-I find that the 'strings libcrypto.0.9.7.so |grep MD5_Init'
-returns nothing.
+Now instead of asking the impossibilities, could I have 
+the option of getting a root development environment which 
+has mixed capabities, ie
 
-It seems to allow sstrip to happen on shared library.
+1. C is built with WCHAR capabilites
+2. C++ is not WCHAR capable.
 
-I don't know how many other places where such thing
-is happen to the whole make scripts.
+Is this possible ?
 
-Wonder if anyone else has the same problem with me ?
-
-
+Regards.
 
 --------------------------------------------
 Important Warning! 
