@@ -1,53 +1,108 @@
-From: Bernhard Fischer <rep.dot.nop@gmail.com>
-Date: Tue, 22 Jan 2008 09:37:04 +0100
-Subject: [Buildroot] More newb questions
-In-Reply-To: <030f01c85c89$b3e08590$040514ac@atmel.com>
-References: <1CD05B980C94AC408B37C82BBABAA3E609BFD4EE@mtsexchange.dc.multitech.prv>
-	<030f01c85c89$b3e08590$040514ac@atmel.com>
-Message-ID: <20080122083704.GA30062@aon.at>
+From: bugs at busybox.net <bugs@busybox.net>
+Date: Tue, 22 Jan 2008 03:41:20 -0800
+Subject: [Buildroot] [buildroot 0001959]: mDNSResponder-107.6 fails to cross
+	compile with incompatible object error
+Message-ID: <8a80f0041506f889784d529620fbd127@busybox.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Mon, Jan 21, 2008 at 11:20:56PM +0100, Ulf Samuelsson wrote:
->> Is it possible to used menuconfig to edit a linux config file for an Arm
->> target?  Or do I have to edit the config file by hand? Whenever I try to
->> do this, it defaults to an arch/I386/Kconfig and I get a bunch of
->> non-existent parameters.
->
->No,  It is porbably best to enter the linux directory and do 
->$ make ARCH=<arch> xconfig
 
-This is wrong.
+A NOTE has been added to this issue. 
+====================================================================== 
+http://busybox.net/bugs/view.php?id=1959 
+====================================================================== 
+Reported By:                dajhorn
+Assigned To:                buildroot
+====================================================================== 
+Project:                    buildroot
+Issue ID:                   1959
+Category:                   Architecture Specific
+Reproducibility:            always
+Severity:                   minor
+Priority:                   normal
+Status:                     assigned
+====================================================================== 
+Date Submitted:             01-21-2008 11:46 PST
+Last Modified:              01-22-2008 03:41 PST
+====================================================================== 
+Summary:                    mDNSResponder-107.6 fails to cross compile with
+incompatible object error
+Description: 
+The mDNSResponder 107.6 package fails to cross compile in buildroot
+revision 20883 with this error:
 
-See docs/README.
->
->Once you have done that, you can go back to the buildroot top directory and do 
->
->$ make saveconfig
->The result will be stored in "local"
->
-> 
->> I still can't figure out why a -rt9 keeps getting appended to the
->> 2.6.22.1 directory name created in the lib/modules directory. My
->> buildroot keeps failing because there is no 2.6.22.1 directory to put
->> modules in. Should I not be using a real-time kernel? Or is this some
->> kind of buildroot bug??
->
->Check if you are adding real time patches (defined in the kernel headers section of menuconfig)
->
->Best Regards
->Ulf Samuelsson                ulf at atmel.com
->Atmel Nordic AB
->Mail:  Box 2033, 174 02 Sundbyberg, Sweden
->Visit:  Kavalleriv?gen 24, 174 58 Sundbyberg, Sweden
->Phone +46 (8) 441 54 22     Fax +46 (8) 441 54 29
->GSM    +46 (706) 22 44 57
->
->
->_______________________________________________
->buildroot mailing list
->buildroot at uclibc.org
->http://busybox.net/mailman/listinfo/buildroot
+cc dns-sd.c -L../mDNSPosix/build/prod/ -ldns_sd -I../mDNSShared -o
+build/dns-sd
+/usr/bin/ld: skipping incompatible ../mDNSPosix/build/prod//libdns_sd.so
+when searching for -ldns_sd
+/usr/bin/ld: cannot find -ldns_sd
+collect2: ld returned 1 exit status
+
+This package compiles properly when the buildroot host is the same
+architecture as the buildroot target.
+====================================================================== 
+
+---------------------------------------------------------------------- 
+ dajhorn - 01-21-08 11:47  
+---------------------------------------------------------------------- 
+The second attachment is a transcript for a successful native build with
+the same buildroot configuration. 
+
+---------------------------------------------------------------------- 
+ UlfSamuelsson - 01-21-08 13:51  
+---------------------------------------------------------------------- 
+Is it a big surprise that calling the *native* cc compiler
+to link with a cross compiled library fails?
+Suggest you find the place where "cc" is called and change
+that to use the cross compiler and then submit a patch. 
+
+---------------------------------------------------------------------- 
+ antezedens - 01-22-08 03:41  
+---------------------------------------------------------------------- 
+I have identified 3 problems with cross-compiling mDNSResponder:
+First, the STRIP make Variable is not properly set:
+
+/build_080121/package/mdnsresponder/mdnsresponder.mk 
+31c31
+<       $(MAKE1) CC=$(TARGET_CC) os="linux" LD="$(TARGET_CC) -shared"
+STRIP=$(TARGET_STRIP) LOCALBASE="/usr" -C $(MDNSRESPONDER_DIR)/mDNSPosix
+---
+>       $(MAKE1) CC=$(TARGET_CC) os="linux" LD="$(TARGET_CC) -shared"
+LOCALBASE="/usr" -C $(MDNSRESPONDER_DIR)/mDNSPosix
+
+Second, the wrong ld version is used:
+/build_powerpc/mDNSResponder-107.6/mDNSPosix/Makefile 
+271c271
+< LD = @ld -shared
+---
+> LD = ld -shared
+296,297c296
+< STRIP = @strip -S
+< #@strip -S 
+
+Third, the wrong CC is used:
+build_powerpc/mDNSResponder-107.6/Clients/Makefile 
+69c69
+<       $(CC) $(filter %.c %.o, $+) $(LIBS) -I../mDNSShared -o $@
+---
+>       cc $(filter %.c %.o, $+) $(LIBS) -I../mDNSShared -o $@
+
+After applying these changes the package builds without a problem! 
+
+Issue History 
+Date Modified   Username       Field                    Change               
+====================================================================== 
+01-21-08 11:46  dajhorn        New Issue                                    
+01-21-08 11:46  dajhorn        Status                   new => assigned     
+01-21-08 11:46  dajhorn        Assigned To               => buildroot       
+01-21-08 11:46  dajhorn        File Added: mDNSResponder-build_amd64.txt        
+           
+01-21-08 11:47  dajhorn        Note Added: 0003479                          
+01-21-08 11:47  dajhorn        File Added: mDNSResponder-build_i386.txt         
+          
+01-21-08 13:51  UlfSamuelsson  Note Added: 0003484                          
+01-22-08 03:41  antezedens     Note Added: 0003489                          
+======================================================================
