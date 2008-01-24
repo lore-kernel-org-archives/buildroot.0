@@ -1,34 +1,44 @@
-From: shlomo Tzidkani <shlomotz1@yahoo.com>
-Date: Wed, 23 Jan 2008 23:07:14 -0800 (PST)
-Subject: [Buildroot] svn co fail
-Message-ID: <867591.57120.qm@web32407.mail.mud.yahoo.com>
+From: Thomas Lundquist <lists@zelow.no>
+Date: Thu, 24 Jan 2008 09:28:18 +0100
+Subject: [Buildroot] [Merak Spam 5.26] can't develope any programs using
+	ssl in the root
+In-Reply-To: <00c401c85e2a$9de7f140$8119fea9@MingChing>
+References: <479802C7.9090108@redtone.com>
+	<00c401c85e2a$9de7f140$8119fea9@MingChing>
+Message-ID: <20080124082818.GA1078@zelow.no>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+On Thu, Jan 24, 2008 at 09:44:10AM +0800, Ming-Ching Tiew wrote:
+> 
+> I have found a workaround for it, I delete the entire
+> 
+>    /usr/lib/gcc/i686-linux-uclibc/4.2.0/include/openssl/
+> 
+> Looks to me like a bug. Since I can proceed now, I am staying with
+> this for a while.
 
-browse the buildroot site (http://buildroot.uclibc.org/cgi-bin/viewcvs.cgi/trunk/buildroot/)
-works fine .
-But, the svn checkout is fail with  the following error :
+weird but not sure why.
 
-[st]$ svn checkout  svn://uclibc.org/trunk/buildroot
-svn: Can't connect to host 'uclibc.org': Connection timed out
+> BTW, the sstrip thingie looks to me also a bug. It happens to not
+> just SSL shared library. The uClibc libraries could also be
+> sstripped. This will be quite disasterous.
 
-please advice what i'm doing wrong.
+Not unless you want to build within the buildroot. I do sstrip on all
+libraries on the resulting rootfs (floppyfw and others) but you are
+probably right about sstripping when you have
+CONFIG_BR2_PACKAGE_GCC_TARGET set.
 
-Thanks,
+When building the floppyfw devkit I also set CONFIG_BR2_STRIP_none.
+
+I would consider it a but if any of the packages .mk files 
+does strip anything even when CONFIG_BR2_STRIP_none is set.
+
+Bbut stripping the libraries when the target is a normal rootfs seems
+correct to me.
 
 
-
-
-
-
-      ____________________________________________________________________________________
-Looking for last minute shopping deals?  
-Find them fast with Yahoo! Search.  http://tools.search.yahoo.com/newsearch/category.php?category=shopping
--------------- next part --------------
-An HTML attachment was scrubbed...
-URL: http://busybox.net/lists/buildroot/attachments/20080123/bbdf60b0/attachment.htm 
+Thomas.
