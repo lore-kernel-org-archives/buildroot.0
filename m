@@ -1,10 +1,7 @@
-From: Ming-Ching Tiew <mingching.tiew@redtone.com>
-Date: Thu, 24 Jan 2008 17:30:37 +0800
-Subject: [Buildroot] sstrip and segmentation violation ( was: can't develope
-	any programs using ssl in the root )
-References: <479802C7.9090108@redtone.com><00c401c85e2a$9de7f140$8119fea9@MingChing>
-	<20080124082818.GA1078@zelow.no>
-Message-ID: <047901c85e6b$c7237340$8119fea9@MingChing>
+From: bugs at busybox.net <bugs@busybox.net>
+Date: Thu, 24 Jan 2008 02:47:19 -0800
+Subject: [Buildroot] [buildroot 0001969]: [PATCH] Add gdb-support for nios2
+Message-ID: <af3789ef43b9a6c036ef1d82c356b4e0@busybox.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -12,41 +9,48 @@ Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
 
-From: "Thomas Lundquist" <lists@zelow.no>
-> 
-> > BTW, the sstrip thingie looks to me also a bug. It happens to not
-> > just SSL shared library. The uClibc libraries could also be
-> > sstripped. This will be quite disasterous.
-> 
-> Not unless you want to build within the buildroot. I do sstrip on all
-> libraries on the resulting rootfs (floppyfw and others) but you are
-> probably right about sstripping when you have
-> CONFIG_BR2_PACKAGE_GCC_TARGET set.
-> 
-> When building the floppyfw devkit I also set CONFIG_BR2_STRIP_none.
-> 
-> I would consider it a but if any of the packages .mk files 
-> does strip anything even when CONFIG_BR2_STRIP_none is set.
-> 
-> Bbut stripping the libraries when the target is a normal rootfs seems
-> correct to me.
-> 
+A NOTE has been added to this issue. 
+====================================================================== 
+http://busybox.net/bugs/view.php?id=1969 
+====================================================================== 
+Reported By:                atle
+Assigned To:                buildroot
+====================================================================== 
+Project:                    buildroot
+Issue ID:                   1969
+Category:                   Architecture Specific
+Reproducibility:            always
+Severity:                   feature
+Priority:                   normal
+Status:                     assigned
+====================================================================== 
+Date Submitted:             01-23-2008 14:34 PST
+Last Modified:              01-24-2008 02:47 PST
+====================================================================== 
+Summary:                    [PATCH] Add gdb-support for nios2
+Description: 
+The attached patch (gdb-nios2-svn20890.diff) adds support for building
+gdb/gdbserver for the nios2 arch.
+Updated kernel-headers with fixes for ptrace syscall (needed for
+gdbserver) are also attached: kernel-headers-nios2-svn20890.diff.
 
-Oh I see. This buildroot thingie is rather new to me, so I am gaining
-experience on it.
+====================================================================== 
 
-So it not quite a bug then, it is an not-so-obvious feature which
-one can tumble on it. :-)
+---------------------------------------------------------------------- 
+ bernhardf - 01-24-08 02:47  
+---------------------------------------------------------------------- 
+This kernel-header patch does not apply for me?
+Please verify them against a clean checkout. 
 
-Last but not least, I seem to only get all the wrong things with me now. 
-I managed to compile the rootfs.i686.ext2, using a few different 
-combinations of gcc ( 3.4.6, 4.1.0, 4.2.0 ), uclibc version ( 0.9.28.3
-and 0.9.29 ). But consistantly I get random segmentation violation 
-error when I compile stuff inside the rootfs. Looks like stack 
-corruption or something. Now perhaps I need to change my host 
-OS compiler instead ( I am using 4.1.2 20061028 ). 
-
-Anyone knows if the host compiler version will have an impact 
-on the quality of the rootfs ?
-
-Regards.
+Issue History 
+Date Modified   Username       Field                    Change               
+====================================================================== 
+01-23-08 14:34  atle           New Issue                                    
+01-23-08 14:34  atle           Status                   new => assigned     
+01-23-08 14:34  atle           Assigned To               => buildroot       
+01-23-08 14:34  atle           File Added: gdb-nios2-svn20890.diff              
+     
+01-23-08 14:34  atle           File Added: kernel-headers-nios2-svn20890.diff   
+                
+01-24-08 02:47  bernhardf      Note Added: 0003499                          
+======================================================================
