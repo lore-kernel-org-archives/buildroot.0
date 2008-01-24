@@ -1,97 +1,111 @@
-From: Hamish Moffatt <hamish@cloud.net.au>
-Date: Thu, 24 Jan 2008 09:48:57 +1100
-Subject: [Buildroot] [PATCH] more python enhancements
-In-Reply-To: <20080121001030.GA19176@cloud.net.au>
-References: <20080118025745.GA30978@cloud.net.au>
-	<20080118123750.GA14604@aon.at>
-	<20080121001030.GA19176@cloud.net.au>
-Message-ID: <20080123224857.GB12013@cloud.net.au>
+From: Ming-Ching Tiew <mingching.tiew@redtone.com>
+Date: Thu, 24 Jan 2008 09:44:10 +0800
+Subject: [Buildroot] [Merak Spam 5.26] can't develope any programs using
+	ssl in the root
+References: <479802C7.9090108@redtone.com>
+Message-ID: <00c401c85e2a$9de7f140$8119fea9@MingChing>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Mon, Jan 21, 2008 at 11:10:30AM +1100, Hamish Moffatt wrote:
-> New patch attached.
 
-Could somebody apply this please? Bernard?
+I have found a workaround for it, I delete the entire
 
-thanks,
-Hamish
+   /usr/lib/gcc/i686-linux-uclibc/4.2.0/include/openssl/
 
-> Index: python.mk
-> ===================================================================
-> --- ./package/python/python.mk.orig
-> +++ ./package/python/python.mk
-> @@ -4,6 +4,7 @@
->  #
->  #############################################################
->  PYTHON_VERSION=2.4.2
-> +PYTHON_VERSION_SHORT=2.4
->  PYTHON_SOURCE:=Python-$(PYTHON_VERSION).tar.bz2
->  PYTHON_SITE:=http://python.org/ftp/python/$(PYTHON_VERSION)
->  PYTHON_DIR:=$(BUILD_DIR)/Python-$(PYTHON_VERSION)
-> @@ -136,13 +137,31 @@
->  	find $(TARGET_DIR)/usr/lib/ -name '*.pyo' -exec rm {} \; && \
->  	rm -rf $(TARGET_DIR)/share/locale $(TARGET_DIR)/usr/info \
->  		$(TARGET_DIR)/usr/man $(TARGET_DIR)/usr/share/doc \
-> -		$(TARGET_DIR)/usr/lib/python*/test
-> +		$(TARGET_DIR)/usr/lib/python$(PYTHON_VERSION_SHORT)/test
-> +	cp -dpr $(TARGET_DIR)/usr/include/python$(PYTHON_VERSION_SHORT) $(STAGING_DIR)/usr/include/
-> +	mkdir -p $(STAGING_DIR)/usr/lib/python$(PYTHON_VERSION_SHORT)
-> +	cp -dpr $(TARGET_DIR)/usr/lib/python$(PYTHON_VERSION_SHORT)/config $(STAGING_DIR)/usr/lib/python$(PYTHON_VERSION_SHORT)/
-> +
->  ifeq ($(BR2_PACKAGE_PYTHON_PY_ONLY),y)
->  	find $(TARGET_DIR)/usr/lib/ -name '*.pyc' -exec rm {} \;
->  endif
->  ifeq ($(BR2_PACKAGE_PYTHON_PYC_ONLY),y)
->  	find $(TARGET_DIR)/usr/lib/ -name '*.py' -exec rm {} \;
->  endif
-> +ifneq ($(BR2_PACKAGE_PYTHON_DEV),y)
-> +	rm -rf $(TARGET_DIR)/usr/include/python$(PYTHON_VERSION_SHORT)
-> +	rm -rf $(TARGET_DIR)/usr/lib/python$(PYTHON_VERSION_SHORT)/config
-> +	find $(TARGET_DIR)/usr/lib/ -name '*.py' -exec rm {} \;
-> +endif
-> +ifneq ($(BR2_PACKAGE_PYTHON_BSDDB),y)
-> +	rm -rf $(TARGET_DIR)/usr/lib/python$(PYTHON_VERSION_SHORT)/bsddb
-> +endif
-> +ifneq ($(BR2_PACKAGE_PYTHON_CURSES),y)
-> +	rm -rf $(TARGET_DIR)/usr/lib/python$(PYTHON_VERSION_SHORT)/curses
-> +endif
-> +ifneq ($(BR2_PACKAGE_PYTHON_TKINTER),y)
-> +	rm -rf $(TARGET_DIR)/usr/lib/python$(PYTHON_VERSION_SHORT)/lib-tk
-> +endif
->  
->  python: uclibc $(PYTHON_DEPS) $(TARGET_DIR)/$(PYTHON_TARGET_BINARY)
->  
-> Index: Config.in
-> ===================================================================
-> --- ./package/python/Config.in.orig
-> +++ ./package/python/Config.in
-> @@ -6,6 +6,14 @@
->  
->  	  http://www.python.org/
->  
-> +config BR2_PACKAGE_PYTHON_DEV
-> +	depends on BR2_PACKAGE_PYTHON
-> +	bool "development files on target"
-> +	default n
-> +	help
-> +	  If enabled, development files (headers and static libpython) will be
-> +	  installed on the target.
-> +
->  choice
->  	prompt "Module format to install"
->  	depends on BR2_PACKAGE_PYTHON
+Looks to me like a bug. Since I can proceed now, I am staying with
+this for a while.
+
+BTW, the sstrip thingie looks to me also a bug. It happens to not
+just SSL shared library. The uClibc libraries could also be
+sstripped. This will be quite disasterous.
+
+----- Original Message ----- 
+From: "Ming-Ching Tiew" <mingching.tiew@redtone.com>
+To: <buildroot@uclibc.org>
+Sent: Thursday, January 24, 2008 11:15 AM
+Subject: [Merak Spam 5.26] [Buildroot] can't develope any programs using ssl in the
+root
 
 
--- 
-Hamish Moffatt VK3SB <hamish@debian.org> <hamish@cloud.net.au>
--------------- next part --------------
-A non-text attachment was scrubbed...
-Name: br-python3.patch
-Type: text/x-diff
-Size: 2389 bytes
-Desc: not available
-Url : http://busybox.net/lists/buildroot/attachments/20080124/b53fca3b/attachment.bin 
+>
+> I wonder what I am doing wrong, I have enabled openssl and included
+> the header in the root, but in the root environment, I can't develope
+> any program which requires openssl, configure will fail with this error
+> ( the example below is tcpdump ) :-
+>
+> configure:12791: checking for SSLeay
+> configure:12833: result: /usr
+> configure:12845: checking for DES_cbc_encrypt in -lcrypto
+> configure:12875: gcc -o conftest -DINET6 -g -O2  -L/usr/lib  conftest.c
+> -lcrypto  ./../libpcap-0.9.5/libpcap.a  >&5
+> configure:12881: $? = 0
+> configure:12885: test -z
+>              || test ! -s conftest.err
+> configure:12888: $? = 0
+> configure:12891: test -s conftest
+> configure:12894: $? = 0
+> configure:12907: result: yes
+> configure:12934: checking openssl/evp.h usability
+> configure:12946: gcc -c -DINET6 -g -O2  -I./../libpcap-0.9.5
+> -I/usr/include conftest.c >&5
+> In file included from /usr/include/openssl/asn1.h:68,
+>                  from /usr/include/openssl/rsa.h:63,
+>                  from /usr/include/openssl/evp.h:150,
+>                  from conftest.c:102:
+> /usr/lib/gcc/i686-linux-uclibc/4.2.0/include/openssl/bn.h:301: error:
+> expected specifier-qualifier-list before 'BIGNUM'
+> /usr/lib/gcc/i686-linux-uclibc/4.2.0/include/openssl/bn.h:314: error:
+> expected specifier-qualifier-list before 'BIGNUM'
+> /usr/lib/gcc/i686-linux-uclibc/4.2.0/include/openssl/bn.h:331: error:
+> expected declaration specifiers or '...' before 'BN_GENCB'
+> /usr/lib/gcc/i686-linux-uclibc/4.2.0/include/openssl/bn.h:335: error:
+> expected ')' before '*' token
+> /usr/lib/gcc/i686-linux-uclibc/4.2.0/include/openssl/bn.h:393: error:
+> expected '=', ',', ';', 'asm' or '__attribute__' before '*' token
+> /usr/lib/gcc/i686-linux-uclibc/4.2.0/include/openssl/bn.h:395: error:
+> expected '=', ',', ';', 'asm' or '__attribute__' before '*' token
+> /usr/lib/gcc/i686-linux-uclibc/4.2.0/include/openssl/bn.h:397: error:
+> expected ')' before '*' token
+> /usr/lib/gcc/i686-linux-uclibc/4.2.0/include/openssl/bn.h:399: error:
+> expected ')' before '*' token
+> /usr/lib/gcc/i686-linux-uclibc/4.2.0/include/openssl/bn.h:400: error:
+> expected ')' before '*' token
+> /usr/lib/gcc/i686-linux-uclibc/4.2.0/include/openssl/bn.h:401: error:
+> expected '=', ',', ';', 'asm' or '__attribute__' before '*' token
+> /usr/lib/gcc/i686-linux-uclibc/4.2.0/include/openssl/bn.h:402: error:
+> expected ')' before '*' token
+> /usr/lib/gcc/i686-linux-uclibc/4.2.0/include/openssl/bn.h:403: error:
+> expected ')' before '*' token
+> /usr/lib/gcc/i686-linux-uclibc/4.2.0/include/openssl/bn.h:404: error:
+> expected ')' before '*' token
+> /usr/lib/gcc/i686-linux-uclibc/4.2.0/include/openssl/bn.h:405: error:
+> expected ')' before '*' token
+> /usr/lib/gcc/i686-linux-uclibc/4.2.0/include/openssl/bn.h:406: error:
+> expected ')' before '*' token
+>
+> Anyone has a clue ?
+>
+>
+>
+> --------------------------------------------
+> Important Warning!
+>
+> ***************************
+>
+> This electronic communication (including any attached files) may contain
+confidential and/or legally privileged information and is only intended for the use of
+the person to whom it is addressed. If you are not the intended recipient, you do not
+have permission to read, use, disseminate, distribute, copy or retain any part of this
+communication or its attachments in any form. If this e-mail was sent to you by
+mistake, please take the time to notify the sender so that they can identify the
+problem and avoid any more mistakes in sending e-mail to you. The unauthorised use of
+information contained in this communication or its attachments may result in legal
+action against any person who uses it.
+>
+> _______________________________________________
+> buildroot mailing list
+> buildroot at uclibc.org
+> http://busybox.net/mailman/listinfo/buildroot
