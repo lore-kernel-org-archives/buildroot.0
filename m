@@ -1,85 +1,46 @@
-From: sjhill at uclibc.org <sjhill@uclibc.org>
-Date: Wed, 23 Jan 2008 19:35:51 -0800 (PST)
-Subject: [Buildroot] svn commit: trunk/buildroot/package/netkittelnet
-Message-ID: <20080124033551.29FB112C589@busybox.net>
+From: b93049 <b93049@csie.ntu.edu.tw>
+Date: Thu, 24 Jan 2008 11:57:27 +0800
+Subject: [Buildroot] buildroot make kernel
+Message-ID: <20080124035727.M33801@csie.ntu.edu.tw>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Author: sjhill
-Date: 2008-01-23 19:35:48 -0800 (Wed, 23 Jan 2008)
-New Revision: 20896
+Hello, U have a question about buildroot producing arm board kernel.
+I have assign the location about my kernel config file
+(make menuconfig -> kernel -> .config file).
+But buildroot still want me give it some config information.
+(
+ *
+* General setup
+*
+Local version - append to kernel release (LOCALVERSION) []
+Automatically append version information to the version string
+(LOCALVERSION_AUTO) [Y/n/?] y
+Support for paging of anonymous memory (swap) (SWAP) [Y/n/?] y
+System V IPC (SYSVIPC) [Y/n/?] y
+  IPC Namespaces (IPC_NS) [N/y/?] (NEW) POSIX Message Queues (POSIX_MQUEUE)
+[N/y/?] n
+BSD Process Accounting (BSD_PROCESS_ACCT) [N/y/?] n
+Export task/process statistics through netlink (EXPERIMENTAL) (TASKSTATS)
+[N/y/?] n
+UTS Namespaces (UTS_NS) [N/y/?] (NEW) Auditing support (AUDIT) [N/y/?] n
+Kernel .config support (IKCONFIG) [Y/n/?] y
+  Enable access to .config through /proc/config.gz (IKCONFIG_PROC) [Y/n/?] y
+Kernel log buffer size (16 => 64KB, 17 => 128KB) (LOG_BUF_SHIFT) [14] 14
+Create deprecated sysfs files (SYSFS_DEPRECATED) [Y/n/?] (NEW) Kernel->user
+space relay support (formerly relayfs) (RELAY) [N/y/?] n
+Initial RAM filesystem and RAM disk (initramfs/initrd) support
+(BLK_DEV_INITRD) [Y/n/?] y
+  Initramfs source file(s) (INITRAMFS_SOURCE) []
+Optimize for size (Look out for broken compilers!) (CC_OPTIMIZE_FOR_SIZE)
+[Y/n/?] y
+.........
+)
+Am I taking error steps ??
 
-Log:
-Remove instances of bcopy so package will compile.
 
-
-Added:
-   trunk/buildroot/package/netkittelnet/netkittelnet-bcopy.patch
-
-
-Changeset:
-Added: trunk/buildroot/package/netkittelnet/netkittelnet-bcopy.patch
-===================================================================
---- trunk/buildroot/package/netkittelnet/netkittelnet-bcopy.patch	                        (rev 0)
-+++ trunk/buildroot/package/netkittelnet/netkittelnet-bcopy.patch	2008-01-24 03:35:48 UTC (rev 20896)
-@@ -0,0 +1,57 @@
-+diff -ur netkit-telnet-0.17/telnetd/authenc.c netkit-telnet-0.17-patched/telnetd/authenc.c
-+--- netkit-telnet-0.17/telnetd/authenc.c	1999-12-12 08:59:44.000000000 -0600
-++++ netkit-telnet-0.17-patched/telnetd/authenc.c	2008-01-23 21:31:45.546793060 -0600
-+@@ -35,7 +35,7 @@
-+     int len;
-+ {
-+     if (nfrontp + len < netobuf + BUFSIZ) {
-+-	bcopy((void *)str, (void *)nfrontp, len);
-++	memcpy((void *)nfrontp, (void *)str, len);
-+ 	nfrontp += len;
-+ 	return(len);
-+     }
-+diff -ur netkit-telnet-0.17/telnetd/slc.c netkit-telnet-0.17-patched/telnetd/slc.c
-+--- netkit-telnet-0.17/telnetd/slc.c	1999-12-12 08:59:44.000000000 -0600
-++++ netkit-telnet-0.17-patched/telnetd/slc.c	2008-01-23 21:32:07.859024619 -0600
-+@@ -432,7 +432,7 @@
-+ 	    def_slclen = len;
-+ 	    def_slcbuf = malloc((unsigned)len);
-+ 	    if (def_slcbuf == NULL) return;  /* too bad */
-+-	    bcopy(ptr, def_slcbuf, len);
-++	    memcpy(def_slcbuf, ptr, len);
-+ 	}
-+     }
-+ }
-+diff -ur netkit-telnet-0.17/telnetd/sys_term.c netkit-telnet-0.17-patched/telnetd/sys_term.c
-+--- netkit-telnet-0.17/telnetd/sys_term.c	1999-12-17 08:28:47.000000000 -0600
-++++ netkit-telnet-0.17-patched/telnetd/sys_term.c	2008-01-23 21:32:27.583229320 -0600
-+@@ -84,7 +84,7 @@
-+  */
-+ void copy_termbuf(char *cp, int len) {
-+     if (len > sizeof(termbuf)) len = sizeof(termbuf);
-+-    bcopy(cp, (char *)&termbuf, len);
-++    memcpy((char *)&termbuf, cp, len);
-+     termbuf2 = termbuf;
-+ }
-+ #endif /* defined(LINEMODE) && defined(TIOCPKT_IOCTL) */
-+diff -ur netkit-telnet-0.17/telnetd/utility.c netkit-telnet-0.17-patched/telnetd/utility.c
-+--- netkit-telnet-0.17/telnetd/utility.c	1999-12-12 08:59:45.000000000 -0600
-++++ netkit-telnet-0.17-patched/telnetd/utility.c	2008-01-23 21:33:02.087587426 -0600
-+@@ -248,7 +248,7 @@
-+ 		next = nextitem(next);
-+ 	    } while (wewant(next) && (nfrontp > next));
-+ 	    length = next-thisitem;
-+-	    bcopy(thisitem, good, length);
-++	    memcpy(good, thisitem, length);
-+ 	    good += length;
-+ 	    thisitem = next;
-+ 	} else {
-+@@ -351,7 +351,7 @@
-+ 		netflush();
-+ 	}
-+ 
-+-	bcopy(ptr, nfrontp, len);
-++	memcpy(nfrontp, ptr, len);
-+ 	nfrontp += len;
-+ 
-+ }  /* end of writenet */
+--
+Open WebMail Project (http://openwebmail.org)
