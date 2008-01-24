@@ -1,46 +1,33 @@
-From: bugs at busybox.net <bugs@busybox.net>
-Date: Thu, 24 Jan 2008 10:41:55 -0800
-Subject: [Buildroot] [buildroot 0001974]: mrouted not available at
-	ftp.debian.org or ftp.us.debian.org
-Message-ID: <9ae5b172af9468bed0a87f6d4839525d@bugs.uclibc.org>
+From: Hamish Moffatt <hamish@cloud.net.au>
+Date: Fri, 25 Jan 2008 09:38:46 +1100
+Subject: [Buildroot] [Merak Spam 5.26] can't develope any programs	using
+	ssl in the root
+In-Reply-To: <00c401c85e2a$9de7f140$8119fea9@MingChing>
+References: <479802C7.9090108@redtone.com>
+	<00c401c85e2a$9de7f140$8119fea9@MingChing>
+Message-ID: <20080124223846.GD3397@cloud.net.au>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-
-The following issue has been SUBMITTED. 
-====================================================================== 
-http://busybox.net/bugs/view.php?id=1974 
-====================================================================== 
-Reported By:                alisonken1
-Assigned To:                buildroot
-====================================================================== 
-Project:                    buildroot
-Issue ID:                   1974
-Category:                   Other
-Reproducibility:            always
-Severity:                   block
-Priority:                   normal
-Status:                     assigned
-====================================================================== 
-Date Submitted:             01-24-2008 10:41 PST
-Last Modified:              01-24-2008 10:41 PST
-====================================================================== 
-Summary:                    mrouted not available at ftp.debian.org or
-ftp.us.debian.org
-Description: 
-mrouted sources are not available at the debian websites listed.
-
-Looked under pool/[contrib | main | non-free] directories and mrouted is
-no longer listed.
-====================================================================== 
-
-Issue History 
-Date Modified   Username       Field                    Change               
-====================================================================== 
-01-24-08 10:41  alisonken1     New Issue                                    
-01-24-08 10:41  alisonken1     Status                   new => assigned     
-01-24-08 10:41  alisonken1     Assigned To               => buildroot       
-======================================================================
+On Thu, Jan 24, 2008 at 09:44:10AM +0800, Ming-Ching Tiew wrote:
+> > I wonder what I am doing wrong, I have enabled openssl and included
+> > the header in the root, but in the root environment, I can't develope
+> > any program which requires openssl, configure will fail with this error
+> > ( the example below is tcpdump ) :-
+> >
+> > configure:12791: checking for SSLeay
+> > configure:12833: result: /usr
+> > configure:12845: checking for DES_cbc_encrypt in -lcrypto
+> > configure:12875: gcc -o conftest -DINET6 -g -O2  -L/usr/lib  conftest.c
+> > -lcrypto  ./../libpcap-0.9.5/libpcap.a  >&5
+[...]
+> 
+> I have found a workaround for it, I delete the entire
+> 
+>    /usr/lib/gcc/i686-linux-uclibc/4.2.0/include/openssl/
+> 
+> Looks to me like a bug. Since I can proceed now, I am staying with
+> this for a while.
