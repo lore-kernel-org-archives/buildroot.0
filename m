@@ -1,111 +1,85 @@
-From: Ming-Ching Tiew <mingching.tiew@redtone.com>
-Date: Thu, 24 Jan 2008 09:44:10 +0800
-Subject: [Buildroot] [Merak Spam 5.26] can't develope any programs using
-	ssl in the root
-References: <479802C7.9090108@redtone.com>
-Message-ID: <00c401c85e2a$9de7f140$8119fea9@MingChing>
+From: sjhill at uclibc.org <sjhill@uclibc.org>
+Date: Wed, 23 Jan 2008 19:35:51 -0800 (PST)
+Subject: [Buildroot] svn commit: trunk/buildroot/package/netkittelnet
+Message-ID: <20080124033551.29FB112C589@busybox.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+Author: sjhill
+Date: 2008-01-23 19:35:48 -0800 (Wed, 23 Jan 2008)
+New Revision: 20896
 
-I have found a workaround for it, I delete the entire
-
-   /usr/lib/gcc/i686-linux-uclibc/4.2.0/include/openssl/
-
-Looks to me like a bug. Since I can proceed now, I am staying with
-this for a while.
-
-BTW, the sstrip thingie looks to me also a bug. It happens to not
-just SSL shared library. The uClibc libraries could also be
-sstripped. This will be quite disasterous.
-
------ Original Message ----- 
-From: "Ming-Ching Tiew" <mingching.tiew@redtone.com>
-To: <buildroot@uclibc.org>
-Sent: Thursday, January 24, 2008 11:15 AM
-Subject: [Merak Spam 5.26] [Buildroot] can't develope any programs using ssl in the
-root
+Log:
+Remove instances of bcopy so package will compile.
 
 
->
-> I wonder what I am doing wrong, I have enabled openssl and included
-> the header in the root, but in the root environment, I can't develope
-> any program which requires openssl, configure will fail with this error
-> ( the example below is tcpdump ) :-
->
-> configure:12791: checking for SSLeay
-> configure:12833: result: /usr
-> configure:12845: checking for DES_cbc_encrypt in -lcrypto
-> configure:12875: gcc -o conftest -DINET6 -g -O2  -L/usr/lib  conftest.c
-> -lcrypto  ./../libpcap-0.9.5/libpcap.a  >&5
-> configure:12881: $? = 0
-> configure:12885: test -z
->              || test ! -s conftest.err
-> configure:12888: $? = 0
-> configure:12891: test -s conftest
-> configure:12894: $? = 0
-> configure:12907: result: yes
-> configure:12934: checking openssl/evp.h usability
-> configure:12946: gcc -c -DINET6 -g -O2  -I./../libpcap-0.9.5
-> -I/usr/include conftest.c >&5
-> In file included from /usr/include/openssl/asn1.h:68,
->                  from /usr/include/openssl/rsa.h:63,
->                  from /usr/include/openssl/evp.h:150,
->                  from conftest.c:102:
-> /usr/lib/gcc/i686-linux-uclibc/4.2.0/include/openssl/bn.h:301: error:
-> expected specifier-qualifier-list before 'BIGNUM'
-> /usr/lib/gcc/i686-linux-uclibc/4.2.0/include/openssl/bn.h:314: error:
-> expected specifier-qualifier-list before 'BIGNUM'
-> /usr/lib/gcc/i686-linux-uclibc/4.2.0/include/openssl/bn.h:331: error:
-> expected declaration specifiers or '...' before 'BN_GENCB'
-> /usr/lib/gcc/i686-linux-uclibc/4.2.0/include/openssl/bn.h:335: error:
-> expected ')' before '*' token
-> /usr/lib/gcc/i686-linux-uclibc/4.2.0/include/openssl/bn.h:393: error:
-> expected '=', ',', ';', 'asm' or '__attribute__' before '*' token
-> /usr/lib/gcc/i686-linux-uclibc/4.2.0/include/openssl/bn.h:395: error:
-> expected '=', ',', ';', 'asm' or '__attribute__' before '*' token
-> /usr/lib/gcc/i686-linux-uclibc/4.2.0/include/openssl/bn.h:397: error:
-> expected ')' before '*' token
-> /usr/lib/gcc/i686-linux-uclibc/4.2.0/include/openssl/bn.h:399: error:
-> expected ')' before '*' token
-> /usr/lib/gcc/i686-linux-uclibc/4.2.0/include/openssl/bn.h:400: error:
-> expected ')' before '*' token
-> /usr/lib/gcc/i686-linux-uclibc/4.2.0/include/openssl/bn.h:401: error:
-> expected '=', ',', ';', 'asm' or '__attribute__' before '*' token
-> /usr/lib/gcc/i686-linux-uclibc/4.2.0/include/openssl/bn.h:402: error:
-> expected ')' before '*' token
-> /usr/lib/gcc/i686-linux-uclibc/4.2.0/include/openssl/bn.h:403: error:
-> expected ')' before '*' token
-> /usr/lib/gcc/i686-linux-uclibc/4.2.0/include/openssl/bn.h:404: error:
-> expected ')' before '*' token
-> /usr/lib/gcc/i686-linux-uclibc/4.2.0/include/openssl/bn.h:405: error:
-> expected ')' before '*' token
-> /usr/lib/gcc/i686-linux-uclibc/4.2.0/include/openssl/bn.h:406: error:
-> expected ')' before '*' token
->
-> Anyone has a clue ?
->
->
->
-> --------------------------------------------
-> Important Warning!
->
-> ***************************
->
-> This electronic communication (including any attached files) may contain
-confidential and/or legally privileged information and is only intended for the use of
-the person to whom it is addressed. If you are not the intended recipient, you do not
-have permission to read, use, disseminate, distribute, copy or retain any part of this
-communication or its attachments in any form. If this e-mail was sent to you by
-mistake, please take the time to notify the sender so that they can identify the
-problem and avoid any more mistakes in sending e-mail to you. The unauthorised use of
-information contained in this communication or its attachments may result in legal
-action against any person who uses it.
->
-> _______________________________________________
-> buildroot mailing list
-> buildroot at uclibc.org
-> http://busybox.net/mailman/listinfo/buildroot
+Added:
+   trunk/buildroot/package/netkittelnet/netkittelnet-bcopy.patch
+
+
+Changeset:
+Added: trunk/buildroot/package/netkittelnet/netkittelnet-bcopy.patch
+===================================================================
+--- trunk/buildroot/package/netkittelnet/netkittelnet-bcopy.patch	                        (rev 0)
++++ trunk/buildroot/package/netkittelnet/netkittelnet-bcopy.patch	2008-01-24 03:35:48 UTC (rev 20896)
+@@ -0,0 +1,57 @@
++diff -ur netkit-telnet-0.17/telnetd/authenc.c netkit-telnet-0.17-patched/telnetd/authenc.c
++--- netkit-telnet-0.17/telnetd/authenc.c	1999-12-12 08:59:44.000000000 -0600
+++++ netkit-telnet-0.17-patched/telnetd/authenc.c	2008-01-23 21:31:45.546793060 -0600
++@@ -35,7 +35,7 @@
++     int len;
++ {
++     if (nfrontp + len < netobuf + BUFSIZ) {
++-	bcopy((void *)str, (void *)nfrontp, len);
+++	memcpy((void *)nfrontp, (void *)str, len);
++ 	nfrontp += len;
++ 	return(len);
++     }
++diff -ur netkit-telnet-0.17/telnetd/slc.c netkit-telnet-0.17-patched/telnetd/slc.c
++--- netkit-telnet-0.17/telnetd/slc.c	1999-12-12 08:59:44.000000000 -0600
+++++ netkit-telnet-0.17-patched/telnetd/slc.c	2008-01-23 21:32:07.859024619 -0600
++@@ -432,7 +432,7 @@
++ 	    def_slclen = len;
++ 	    def_slcbuf = malloc((unsigned)len);
++ 	    if (def_slcbuf == NULL) return;  /* too bad */
++-	    bcopy(ptr, def_slcbuf, len);
+++	    memcpy(def_slcbuf, ptr, len);
++ 	}
++     }
++ }
++diff -ur netkit-telnet-0.17/telnetd/sys_term.c netkit-telnet-0.17-patched/telnetd/sys_term.c
++--- netkit-telnet-0.17/telnetd/sys_term.c	1999-12-17 08:28:47.000000000 -0600
+++++ netkit-telnet-0.17-patched/telnetd/sys_term.c	2008-01-23 21:32:27.583229320 -0600
++@@ -84,7 +84,7 @@
++  */
++ void copy_termbuf(char *cp, int len) {
++     if (len > sizeof(termbuf)) len = sizeof(termbuf);
++-    bcopy(cp, (char *)&termbuf, len);
+++    memcpy((char *)&termbuf, cp, len);
++     termbuf2 = termbuf;
++ }
++ #endif /* defined(LINEMODE) && defined(TIOCPKT_IOCTL) */
++diff -ur netkit-telnet-0.17/telnetd/utility.c netkit-telnet-0.17-patched/telnetd/utility.c
++--- netkit-telnet-0.17/telnetd/utility.c	1999-12-12 08:59:45.000000000 -0600
+++++ netkit-telnet-0.17-patched/telnetd/utility.c	2008-01-23 21:33:02.087587426 -0600
++@@ -248,7 +248,7 @@
++ 		next = nextitem(next);
++ 	    } while (wewant(next) && (nfrontp > next));
++ 	    length = next-thisitem;
++-	    bcopy(thisitem, good, length);
+++	    memcpy(good, thisitem, length);
++ 	    good += length;
++ 	    thisitem = next;
++ 	} else {
++@@ -351,7 +351,7 @@
++ 		netflush();
++ 	}
++ 
++-	bcopy(ptr, nfrontp, len);
+++	memcpy(nfrontp, ptr, len);
++ 	nfrontp += len;
++ 
++ }  /* end of writenet */
