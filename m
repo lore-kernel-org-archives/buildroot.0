@@ -1,14 +1,19 @@
 From: Albert Causing <albertcausing@gmail.com>
-Date: Fri, 25 Jan 2008 12:08:11 +0800
-Subject: [Buildroot] also this one! please help i have makeinfo but dont
-	know about this...
-Message-ID: <afc3bae70801242008s5d34543fj3cf76599df4a83b0@mail.gmail.com>
+Date: Fri, 25 Jan 2008 12:02:16 +0800
+Subject: [Buildroot] error on binutils
+Message-ID: <afc3bae70801242002j7f336eb2i89c4bff61c2e843d@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+hi guys,
+
+i've been trying to search but with no avail i guess this is my last
+option, the mailing list.
+
+----- start paste ----
 bt buildroot # make
 target/device/Via/epia-mii/linux.mk:75: warning: overriding commands
 for target `/opt/buildroot/buildroot/build_i386/linux/.configured'
@@ -81,53 +86,40 @@ make[3]: Leaving directory
 `/opt/buildroot/buildroot/toolchain_build_i386/binutils-2.18-build/intl'
 make[3]: Entering directory
 `/opt/buildroot/buildroot/toolchain_build_i386/binutils-2.18-build/bfd'
-Making info in doc
-make[4]: Entering directory
-`/opt/buildroot/buildroot/toolchain_build_i386/binutils-2.18-build/bfd/doc'
-restore=: && backupdir=".am$$" && \
-        rm -rf $backupdir && mkdir $backupdir && \
-        if (/opt/buildroot/buildroot/toolchain_build_i386/binutils-2.18/missing
-makeinfo --split-size=5000000 --split-size=5000000 --version)
->/dev/null 2>&1; then \
-          for f in bfd.info bfd.info-[0-9] bfd.info-[0-9][0-9]
-bfd.i[0-9] bfd.i[0-9][0-9]; do \
-            if test -f $f; then mv $f $backupdir; restore=mv; else :; fi; \
-          done; \
-        else :; fi && \
-        if /opt/buildroot/buildroot/toolchain_build_i386/binutils-2.18/missing
-makeinfo --split-size=5000000 --split-size=5000000   -I
-/opt/buildroot/buildroot/toolchain_build_i386/binutils-2.18/bfd/doc \
-         -o bfd.info `test -f 'bfd.texinfo' || echo
-'/opt/buildroot/buildroot/toolchain_build_i386/binutils-2.18/bfd/doc/'`bfd.texinfo;
-\
-        then \
-          rc=0; \
-        else \
-          rc=$?; \
-          $restore $backupdir/* `echo "./bfd.info" | sed 's|[^/]*$||'`; \
-        fi; \
-        rm -rf $backupdir; exit $rc
-WARNING: `makeinfo' is missing on your system.  You should only need it if
-         you modified a `.texi' or `.texinfo' file, or any other file
-         indirectly affecting the aspect of the manual.  The spurious
-         call might also be the consequence of using a buggy `make' (AIX,
-         DU, IRIX).  You might want to install the `Texinfo' package or
-         the `GNU make' package.  Grab either from any GNU archive site.
-make[4]: *** [bfd.info] Error 1
-make[4]: Leaving directory
-`/opt/buildroot/buildroot/toolchain_build_i386/binutils-2.18-build/bfd/doc'
-Making info in po
-make[4]: Entering directory
-`/opt/buildroot/buildroot/toolchain_build_i386/binutils-2.18-build/bfd/po'
-make[4]: Nothing to be done for `info'.
-make[4]: Leaving directory
-`/opt/buildroot/buildroot/toolchain_build_i386/binutils-2.18-build/bfd/po'
+/usr/bin/make  all-recursive
 make[4]: Entering directory
 `/opt/buildroot/buildroot/toolchain_build_i386/binutils-2.18-build/bfd'
-make[4]: Nothing to be done for `info-am'.
+Making all in doc
+make[5]: Entering directory
+`/opt/buildroot/buildroot/toolchain_build_i386/binutils-2.18-build/bfd/doc'
+make[5]: Nothing to be done for `all'.
+make[5]: Leaving directory
+`/opt/buildroot/buildroot/toolchain_build_i386/binutils-2.18-build/bfd/doc'
+Making all in po
+make[5]: Entering directory
+`/opt/buildroot/buildroot/toolchain_build_i386/binutils-2.18-build/bfd/po'
+make[5]: Nothing to be done for `all'.
+make[5]: Leaving directory
+`/opt/buildroot/buildroot/toolchain_build_i386/binutils-2.18-build/bfd/po'
+make[5]: Entering directory
+`/opt/buildroot/buildroot/toolchain_build_i386/binutils-2.18-build/bfd'
+/bin/sh ./libtool --tag=CC --mode=link /usr/bin/gcc  -W -Wall
+-Wstrict-prototypes -Wmissing-prototypes -g -O2   -o libbfd.la -rpath
+/usr/i386-pc-linux-gnu/i386-linux-uclibc/lib -release `cat
+libtool-soversion`  archive.lo archures.lo bfd.lo bfdio.lo bfdwin.lo
+cache.lo coffgen.lo corefile.lo format.lo init.lo libbfd.lo opncls.lo
+reloc.lo section.lo syms.lo targets.lo hash.lo linker.lo srec.lo
+binary.lo tekhex.lo ihex.lo stabs.lo stab-syms.lo merge.lo dwarf2.lo
+simple.lo `cat ofiles`
+cat: libtool-soversion: No such file or directory
+libtool: link: `bfd.lo' is not a valid libtool object
+make[5]: *** [libbfd.la] Error 1
+make[5]: Leaving directory
+`/opt/buildroot/buildroot/toolchain_build_i386/binutils-2.18-build/bfd'
+make[4]: *** [all-recursive] Error 1
 make[4]: Leaving directory
 `/opt/buildroot/buildroot/toolchain_build_i386/binutils-2.18-build/bfd'
-make[3]: *** [info-recursive] Error 1
+make[3]: *** [all] Error 2
 make[3]: Leaving directory
 `/opt/buildroot/buildroot/toolchain_build_i386/binutils-2.18-build/bfd'
 make[2]: *** [all-bfd] Error 2
@@ -138,8 +130,3 @@ make[1]: Leaving directory
 `/opt/buildroot/buildroot/toolchain_build_i386/binutils-2.18-build'
 make: *** [/opt/buildroot/buildroot/toolchain_build_i386/binutils-2.18-build/binutils/objdump]
 Error 2
-bt buildroot #
-bt buildroot # makeinfo
-makeinfo: missing file argument.
-Try `makeinfo --help' for more information.
-bt buildroot #
