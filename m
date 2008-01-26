@@ -1,59 +1,60 @@
-From: Ming-Ching Tiew <mingching.tiew@redtone.com>
-Date: Sat, 26 Jan 2008 16:44:50 -0500
-Subject: [Buildroot] Segmentation fault in rootfs
-Message-ID: <479BA9D2.6070901@redtone.com>
+From: thomasez at uclibc.org <thomasez@uclibc.org>
+Date: Sat, 26 Jan 2008 07:49:13 -0800 (PST)
+Subject: [Buildroot] svn commit: trunk/buildroot/package/lzma
+Message-ID: <20080126154913.16B0212C577@busybox.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+Author: thomasez
+Date: 2008-01-26 07:49:12 -0800 (Sat, 26 Jan 2008)
+New Revision: 20905
 
-OK I have finally tracked down the intermittent but highly repeatable 
-'segmentation fault'
-which I encounter with the rootfs, which I previously suspect it was due 
-to compiler
-error and versioning, and gave me the impression that the rootfs is of 
-low quality! ;-)
-
-Suspect the least unsuspected, the problem is with the program 'bash' ( 
-version 3.2 is
-what is being used in my buildroot  ). The buildroot supplied about 25 
-patches to bash
-as compared to 30 something on the gnu sites.  And I also tracked down 
-which is the
-offending part of the program, ie it is contributed by patch 'bash32-011'.
-
-Basically when bash-3.2 is crossed compiled, GETCWD is defined as 
-broken, as such
-it will call getcwd( 0,  PATH_MAX ) due to patch bash32-011. This is 
-what will corrupt
-memory and causing intermittent segmentation fault.
-
-Some of the symptoms of the bug :-
-
-1. After getting the rootfs.xxx.ext2, I copied it to a bigger piece of 
-space and chroot
-   into it. The bash will intermittently hang/block forever instead of 
-giving back a
-   command prompt.
-
-2. Sometimes chroot will succeed, but when executing certain make 
-scripts inside
-    the chroot environment can get intermittent 'segmentation fault' at 
-somewhat
-    random location, but it is highly dependent on the type of make 
-scripts. The
-    ones with loops or recurse calls will be highly crashable.
-
-I workaround the problem by undefining GETCWD_BROKEN so that it will call
-getcwd( 0, 0 ) instead.
+Log:
+Upped version, no need for patch. (This is still based on lzma SDK 4.32, 
+alas, should be just bugfixes.)
 
 
+Removed:
+   trunk/buildroot/package/lzma/lzma.100-futimesat.patch
 
---------------------------------------------
-Important Warning! 
+Modified:
+   trunk/buildroot/package/lzma/lzma.mk
 
-*************************** 
 
-This electronic communication (including any attached files) may contain confidential and/or legally privileged information and is only intended for the use of the person to whom it is addressed. If you are not the intended recipient, you do not have permission to read, use, disseminate, distribute, copy or retain any part of this communication or its attachments in any form. If this e-mail was sent to you by mistake, please take the time to notify the sender so that they can identify the problem and avoid any more mistakes in sending e-mail to you. The unauthorised use of information contained in this communication or its attachments may result in legal action against any person who uses it.
+Changeset:
+Deleted: trunk/buildroot/package/lzma/lzma.100-futimesat.patch
+===================================================================
+--- trunk/buildroot/package/lzma/lzma.100-futimesat.patch	2008-01-26 07:55:58 UTC (rev 20904)
++++ trunk/buildroot/package/lzma/lzma.100-futimesat.patch	2008-01-26 15:49:12 UTC (rev 20905)
+@@ -1,14 +0,0 @@
+---- lzma-4.32.0beta3.orig/src/lzma/lzmp.cpp	2006-07-06 23:58:46.000000000 +0200
+-+++ lzma-4.32.0beta3/src/lzma/lzmp.cpp	2006-08-29 20:21:22.000000000 +0200
+-@@ -47,7 +47,11 @@ typedef vector<string> stringVector;
+- 
+- // For Solaris
+- #ifndef HAVE_FUTIMES
+-+#ifdef HAVE_FUTIMESAT
+- #define futimes(fd, tv) futimesat(fd, NULL, tv)
+-+#else
+-+#define futimes(fd, tv) 0 /* utimes(fd, NULL, tv)*/
+-+#endif
+- #endif
+- 
+- #if defined(_WIN32) || defined(OS2) || defined(MSDOS)
+
+Modified: trunk/buildroot/package/lzma/lzma.mk
+===================================================================
+--- trunk/buildroot/package/lzma/lzma.mk	2008-01-26 07:55:58 UTC (rev 20904)
++++ trunk/buildroot/package/lzma/lzma.mk	2008-01-26 15:49:12 UTC (rev 20905)
+@@ -3,7 +3,7 @@
+ # lzma
+ #
+ #############################################################
+-LZMA_VERSION:=4.32.0beta3
++LZMA_VERSION:=4.32.4
+ LZMA_SOURCE:=lzma-$(LZMA_VERSION).tar.gz
+ LZMA_CAT:=$(ZCAT)
+ LZMA_SITE:=http://tukaani.org/lzma/
