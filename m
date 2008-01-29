@@ -1,45 +1,26 @@
-From: Tim Barr <tbarr@multitech.com>
-Date: Mon, 28 Jan 2008 11:41:28 -0600
-Subject: [Buildroot] SUDO download error
-Message-ID: <1CD05B980C94AC408B37C82BBABAA3E609D9AD66@mtsexchange.dc.multitech.prv>
+From: Michael Hirsch <M.Hirsch@phase-zero.de>
+Date: Tue, 29 Jan 2008 12:29:45 +0100
+Subject: [Buildroot] [PATCH]update file version to 4.23
+Message-ID: <479F0E29.6080309@phase-zero.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Also forgot to mention there is a new release version: sudo-1.6.9p12
- 
- 
-----Original Message-----
-From: buildroot-bounces@uclibc.org [mailto:buildroot-bounces at uclibc.org]
-On Behalf Of Tim Barr
-Sent: Monday, January 28, 2008 11:36 AM
-To: buildroot at uclibc.org
-Subject: [Buildroot] SUDO download error
+old version 4.21 was removed from debian server
 
 
-
-Looks like the sudo website access has changed. It is now
-www.sudo.ws/sudo. Courtesan Consulting also changed name to Gratisoft
-Inc.
- 
-
-
-
-Timothy Barr
-Hardware Development Engineer
-for Multi-Tech Systems, Inc.
- <mailto:tbarr@multitech.com> tbarr at multitech.com 
-
-
-
-
-
-
-
- 
-
--------------- next part --------------
-An HTML attachment was scrubbed...
-URL: http://busybox.net/lists/buildroot/attachments/20080128/30807a43/attachment.htm 
+Index: package/file/file.mk
+===================================================================
+--- package/file/file.mk        (revision 20913)
++++ package/file/file.mk        (working copy)
+@@ -3,7 +3,7 @@
+# file
+#
+#############################################################
+-FILE_VERSION:=4.21
++FILE_VERSION:=4.23
+FILE_SOURCE:=file_$(FILE_VERSION).orig.tar.gz
+FILE_SITE:=$(BR2_DEBIAN_MIRROR)/debian/pool/main/f/file
+FILE_SOURCE_DIR:=$(BUILD_DIR)/file-$(FILE_VERSION)
