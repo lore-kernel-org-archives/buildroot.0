@@ -1,53 +1,44 @@
-From: bugs at busybox.net <bugs@busybox.net>
-Date: Wed, 30 Jan 2008 05:58:41 -0800
-Subject: [Buildroot] [buildroot 0002014]: dbus should create /var/lib/dbus
-Message-ID: <9d84b5e4530bad4050c162c04973c782@busybox.net>
+From: Ulf Samuelsson <ulf@atmel.com>
+Date: Wed, 30 Jan 2008 12:03:06 +0100
+Subject: [Buildroot] U-Boot Enviroment in NAND Flash ?
+References: <47A04430.1040900@feig.de>
+Message-ID: <000401c8634b$5474fff0$8901a8c0@atmel.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+> Hello,
+> 
+> (It?s about the AT91SAM9260EK)
+> 
+> I want to locate the U-Boot and the U-Boot enviroment in NAND-Flash.
+> 
+> AT91Bootstrap at 0x00000000
+> U-Boot at 0x00020000
+> U-Boot Env at 0x00060000
+> U-BootEnv_Redund at 0x00080000
+> 
+> U-Boot Env Size is 0x 00020000
+> 
+> When U-Boot starts:
+> .
+> .(NAND and DATAFLASH is initialized)
+> .
+> ***Warning - bad CRC or NAND, using default enviroment
+> 
+> How could I "activate" the enviroment variables located in NAND flash at 
+> address 0x00060000 ?
+> 
 
-The following issue has been CLOSED 
-====================================================================== 
-http://busybox.net/bugs/view.php?id=2014 
-====================================================================== 
-Reported By:                ikonst
-Assigned To:                buildroot
-====================================================================== 
-Project:                    buildroot
-Issue ID:                   2014
-Category:                   Architecture Specific
-Reproducibility:            always
-Severity:                   minor
-Priority:                   normal
-Status:                     closed
-Resolution:                 open
-Fixed in Version:           
-====================================================================== 
-Date Submitted:             01-30-2008 05:53 PST
-Last Modified:              01-30-2008 05:58 PST
-====================================================================== 
-Summary:                    dbus should create /var/lib/dbus
-Description: 
-The dbus package should create the directory /var/lib/dbus since the
-S97messagebus script relies on it.
-====================================================================== 
+This will require a new board support option.
+Have a look at http://www.linux4sam.org/ for more info on NAND support.
 
----------------------------------------------------------------------- 
- vanokuten - 01-30-08 05:58  
----------------------------------------------------------------------- 
-fixed in 20924, thanks! 
+Integrate with buildroot and send a patch.
 
-Issue History 
-Date Modified   Username       Field                    Change               
-====================================================================== 
-01-30-08 05:53  ikonst         New Issue                                    
-01-30-08 05:53  ikonst         Status                   new => assigned     
-01-30-08 05:53  ikonst         Assigned To               => buildroot       
-01-30-08 05:53  ikonst         File Added: buildroot-dbus-var-lib.patch         
-          
-01-30-08 05:58  vanokuten      Status                   assigned => closed  
-01-30-08 05:58  vanokuten      Note Added: 0003599                          
-======================================================================
+
+
+
+Best Regards
+Ulf Samuelsson
