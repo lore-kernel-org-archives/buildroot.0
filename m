@@ -1,8 +1,8 @@
 From: bugs at busybox.net <bugs@busybox.net>
-Date: Wed, 30 Jan 2008 06:36:41 -0800
+Date: Wed, 30 Jan 2008 06:36:46 -0800
 Subject: [Buildroot] [buildroot 0001588]: undefined reference to fmsub when
 	using ppc405 + soft-float + c++
-Message-ID: <6c6a7c49bf13bc61a2421d69a262faef@bugs.uclibc.org>
+Message-ID: <95d75895f8291311349ee60c269c3cf3@bugs.uclibc.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -90,6 +90,16 @@ compatible with the latest versions of the C++ compiler.
 I quite surprise to the fact that this issue has the normal level of
 priority, when such a basic tool as the compiler can not be used. 
 
+---------------------------------------------------------------------- 
+ b5331 - 01-30-08 06:36  
+---------------------------------------------------------------------- 
+I just want to confirm this problem. I have tested C++ gcc-4.2.1 compiler
+with both uClibc-0.9.29 and uClibc-0.9.28.3, they both have the same
+problem: undefined reference to `fmsub'. It seams that uClibc is not
+compatible with the latest versions of the C++ compiler.
+I quite surprise to the fact that this issue has the normal level of
+priority, when such a basic tool as the compiler can not be used. 
+
 Issue History 
 Date Modified   Username       Field                    Change               
 ====================================================================== 
@@ -100,4 +110,5 @@ Date Modified   Username       Field                    Change
 11-16-07 02:53  vanokuten      Note Added: 0002933                          
 01-30-08 06:17  b5331          Issue Monitored: b5331                       
 01-30-08 06:36  b5331          Note Added: 0003604                          
+01-30-08 06:36  b5331          Note Added: 0003609                          
 ======================================================================
