@@ -1,71 +1,63 @@
-From: Robert P. J. Day <rpjday@crashcourse.ca>
-Date: Fri, 1 Feb 2008 04:40:35 -0500 (EST)
-Subject: [Buildroot] make clean not so clean
-In-Reply-To: <20080201082056.GA32415@aon.at>
-References: <214360.55769.qm@web56410.mail.re3.yahoo.com>
-	<1201844203.3526.46.camel@localhost.localdomain>
-	<20080201082056.GA32415@aon.at>
-Message-ID: <alpine.LFD.1.00.0802010432040.9087@localhost.localdomain>
+From: tanweer alam <tanalam@gmail.com>
+Date: Fri, 1 Feb 2008 19:05:04 +0530
+Subject: [Buildroot] building xc-011010 against pango-1.13.5
+Message-ID: <debbe8a90802010535x6a9590fdy6fa572a44a8fafe8@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Fri, 1 Feb 2008, Bernhard Fischer wrote:
+Hi all,
+I am using buildroot release 20071120 for building toolchain and gtk+ with
+tinyx for my arm platform.
+Tinyx seems to compile ok .
+but when it comes to compile pango I get undefined references as follows
 
-> On Fri, Feb 01, 2008 at 12:36:43AM -0500, Ormund Williams wrote:
-> >On Thu, 2008-01-31 at 21:02 -0800, jake sullivan wrote:
-> >> I'm not sure how to go about fixing this, but I have been able to
-> >> recreate an annoying little bug (that I think is the source of a
-> >> number of other newb problems).
-> >>
-> >...(snip)...
-> >> My gut says to update "make clean" to delete all the config files (and
-> >> basically everything but the source files), but before I put work into
-> >> making and testing a patch, I want to make sure that is the right
-> >> approach...
-> >>
-> >Don't know about "Right Appraach", but I just locate my download
-> >directory outside the Buildroot tree.
-> >
-> >Under: Build Options --->
-> >
-> >	$(BASE_DIR)/../dl) Download dir
->
-> This historical behaviour is indeed annoying. Note that distclean only
-> deletes the DL_DIR if it is set to the default ("$(BASE_DIR)/dl"). I
-> usually set it to $(BASE_DIR)/down due to this slightly inconvenient
-> behaviour.
->
-> Changing this behaviour is easy, but how should DL_DIR be
-> cleaned-out? make dl-clean? Suggestions for a better name for the
-> target?
 
-this drove me a bit nuts when i first started working with OpenWrt
-but, as much as it pains me to say it, i think the current behaviour
-is the correct one -- "make distclean" is historically understood to
-mean, "clean right down to the original distribution", and that
-absolutely involves getting rid of downloaded sources *if they've been
-placed in that directory*.
+/mnt/hda1/tanalam/Projects/tools/buildroot/build_arm/staging_dir/usr/bin/../lib/gcc/arm-linux-uclibc/4.2.1/../../../../arm-linux-uclibc/bin/ld:
+warning: libfreetype.so.7, needed by
+/mnt/hda1/tanalam/Projects/tools/buildroot/build_arm/pango-1.13.5
+/pango/.libs/libpangoft2-1.0.so, may conflict with libfreetype.so.6
+./.libs/libpangoxft-1.0.so: undefined reference to
+`XRenderFindStandardFormat'
+./.libs/libpangoxft-1.0.so: undefined reference to `XftFontClose'
+./.libs/libpangoxft-1.0.so: undefined reference to `XftTextExtents8'
+./.libs/libpangoxft-1.0.so: undefined reference to `XftCharExists'
+./.libs/libpangoxft-1.0.so: undefined reference to `XftLockFace'
+./.libs/libpangoxft-1.0.so: undefined reference to
+`XRenderCompositeTrapezoids'
+./.libs/libpangoxft-1.0.so: undefined reference to `XftDrawPicture'
+./.libs/libpangoxft-1.0.so: undefined reference to `XftCharIndex'
+./.libs/libpangoxft-1.0.so: undefined reference to `XftDefaultHasRender'
+./.libs/libpangoxft-1.0.so: undefined reference to `XftGlyphExtents'
+./.libs/libpangoxft-1.0.so: undefined reference to `XftFontOpen'
+./.libs/libpangoxft-1.0.so: undefined reference to `XftDefaultSubstitute'
+./.libs/libpangoxft-1.0.so: undefined reference to `XftFontOpenPattern'
+./.libs/libpangoxft-1.0.so: undefined reference to `XftDrawSrcPicture'
+./.libs/libpangoxft-1.0.so: undefined reference to `XftGlyphSpecRender'
+./.libs/libpangoxft-1.0.so: undefined reference to `XftDrawGlyphSpec'
+./.libs/libpangoxft-1.0.so: undefined reference to `XftUnlockFace'
 
-the only reasonable solution is to somehow emphatically recommend to
-users to keep their downloaded sources elsewhere (which is a good
-idea, anyway).  i don't see the need for an extra target that covers
-the downloads directory.
 
-p.s.  one potentially hideous solution is to not specify a default
-location for the downloads directory and *force* the user to pick an
-initial location, at which point you can warn him/her.  but that
-strikes me as overly annoying, so maybe forget that plan.
+I searched the package of xc-011010 and found that some of the functions are
+not even there.
+Is there any compatilbility issue in builiding the two packages or am I
+missing something.
 
-rday
---
-========================================================================
-Robert P. J. Day
-Linux Consulting, Training and Annoying Kernel Pedantry
-Waterloo, Ontario, CANADA
 
-Home page:                                         http://crashcourse.ca
-Fedora Cookbook:    http://crashcourse.ca/wiki/index.php/Fedora_Cookbook
-========================================================================
+Thanx and regards
+
+Tanweer Alam
+Cell phone: +91 9871208040
+
+
+ / /  (_)__  __ ____  __
+/ /__/ / _ \/ // /\ \/ /  . . .  t h e   c h o i c e   of a
+/____/_/_//_/_,_/ /_/_\            G N U   g e n e r a t i o n.
+
+A world without walls needs neither windows nor gates
+****************************************************************
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: http://busybox.net/lists/buildroot/attachments/20080201/779af8b6/attachment-0001.htm 
