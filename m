@@ -1,43 +1,28 @@
-From: Ivan Kuten <ivan.kuten@promwad.com>
-Date: Tue, 05 Feb 2008 14:00:47 +0200
+From: Gernot Kvas <gernot.kvas@gmail.com>
+Date: Tue, 5 Feb 2008 17:50:02 +0100
 Subject: [Buildroot] X11R7 on ARM
-In-Reply-To: <b47ad75d0802050226u65a6f337i11fe7df4e7b3cc25@mail.gmail.com>
+In-Reply-To: <47A84FEF.2010702@promwad.com>
 References: <b47ad75d0802050226u65a6f337i11fe7df4e7b3cc25@mail.gmail.com>
-Message-ID: <47A84FEF.2010702@promwad.com>
+	<47A84FEF.2010702@promwad.com>
+Message-ID: <b47ad75d0802050850m2b7fecbhac55c2c7850e9a0c@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Gernot Kvas wrote:
-> Hello,
-> 
-> The version of X11R7 (Release 7.2) fails to work properly on ARM.
-> Reason for this is some missing defines that have been fixed years ago
-> for xfree86 [1]. Are there plans to pump the version to 7.3? I
-> compared xserver code (1.2.0 and 1.4) and 1.4 includes these fixes.
-> Anyone working on a more recent X11R7 package in buildroot?
-> 
-> As a sidenote, has anyone successfully tried to mate a PCI-card with
-> an ARM and X11?
-> 
-> Cheers,
-> 
-> Gernot
-> 
-> [1] http://www.mail-archive.com/debian-x at lists.debian.org/msg31585.html
-> _______________________________________________
-> buildroot mailing list
-> buildroot at uclibc.org
-> http://busybox.net/mailman/listinfo/buildroot
+> Actually I tried only framebuffer on ARM - with a little handwork X11R7 7.2 is working.
+> As far as I know there no such plans because X11R7 7.2 is not stabilized.
+> Your patches are welcome.
 
+I'm trying to get a SiliconMotion chip working with an ARM9. I'm
+currently out of luck, because  the X-Server somehow kills my entire
+system - even commands over JTAG fail after a certain point. I'm still
+not ruling out hardware issues, because Xorg -probeonly causes the
+same behaviour.
+I will try the framebuffer on another hardware with fb next week. Any
+special tweakings needed?
 
-Hi,
+Cheers,
 
-Actually I tried only framebuffer on ARM - with a little handwork X11R7 7.2 is working.
-As far as I know there no such plans because X11R7 7.2 is not stabilized.
-Your patches are welcome.
-
-Regards,
-Ivan
+Gernot
