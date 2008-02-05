@@ -1,51 +1,26 @@
-From: bugs at busybox.net <bugs@busybox.net>
-Date: Tue, 5 Feb 2008 00:10:40 -0800
-Subject: [Buildroot] [buildroot 0002034]: Problems with fakeroot1.8.10.tar.gz
-Message-ID: <f4e43b28da9e68da608a5487268b6036@bugs.busybox.net>
+From: Gernot Kvas <gernot.kvas@gmail.com>
+Date: Tue, 5 Feb 2008 11:26:05 +0100
+Subject: [Buildroot] X11R7 on ARM
+Message-ID: <b47ad75d0802050226u65a6f337i11fe7df4e7b3cc25@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+Hello,
 
-The following issue has been SUBMITTED. 
-====================================================================== 
-http://busybox.net/bugs/view.php?id=2034 
-====================================================================== 
-Reported By:                aitormorillo
-Assigned To:                buildroot
-====================================================================== 
-Project:                    buildroot
-Issue ID:                   2034
-Category:                   Other
-Reproducibility:            always
-Severity:                   block
-Priority:                   normal
-Status:                     assigned
-====================================================================== 
-Date Submitted:             02-05-2008 00:10 PST
-Last Modified:              02-05-2008 00:10 PST
-====================================================================== 
-Summary:                    Problems with fakeroot1.8.10.tar.gz
-Description: 
-Hi
+The version of X11R7 (Release 7.2) fails to work properly on ARM.
+Reason for this is some missing defines that have been fixed years ago
+for xfree86 [1]. Are there plans to pump the version to 7.3? I
+compared xserver code (1.2.0 and 1.4) and 1.4 includes these fixes.
+Anyone working on a more recent X11R7 package in buildroot?
 
-I'm trying to build the buildroot avr32-2.1 and in a point it tries to
-download 
-the fakeroot1.8.10.tar.gz archive. I read in a related topic in this issue
-list an d it said to use the fakeroot1.9.tar.gz and update VERSION. But
-where is this file VERSION or what should I do? I tried to install
-fakeroot1.9.10.tar.gz but anyway buildroot still tries to download
-1.8.10.
+As a sidenote, has anyone successfully tried to mate a PCI-card with
+an ARM and X11?
 
-Thank you
-====================================================================== 
+Cheers,
 
-Issue History 
-Date Modified   Username       Field                    Change               
-====================================================================== 
-02-05-08 00:10  aitormorillo   New Issue                                    
-02-05-08 00:10  aitormorillo   Status                   new => assigned     
-02-05-08 00:10  aitormorillo   Assigned To               => buildroot       
-======================================================================
+Gernot
+
+[1] http://www.mail-archive.com/debian-x at lists.debian.org/msg31585.html
