@@ -1,45 +1,59 @@
-From: hamish at uclibc.org <hamish@uclibc.org>
-Date: Tue,  5 Feb 2008 17:26:59 -0800 (PST)
-Subject: [Buildroot] svn commit: trunk/buildroot/package/readline
-Message-ID: <20080206012659.BDA6E12C60F@busybox.net>
+From: Hebbar <gururajakr@sanyo.co.in>
+Date: Wed, 6 Feb 2008 00:39:36 -0800 (PST)
+Subject: [Buildroot] [PATCH] libxml2 build fails due to incurrect folder
+ mention
+Message-ID: <15306305.post@talk.nabble.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Author: hamish
-Date: 2008-02-05 17:26:58 -0800 (Tue, 05 Feb 2008)
-New Revision: 20949
 
-Log:
-Commit the new upstream patches and remove the old
+Hi all,I am trying to build libxml2 for arm926ejs toolchain with buildroot
+snapshot of 050208 and i get below mentioned error. 
 
-
-Added:
-   trunk/buildroot/package/readline/readline52-001
-   trunk/buildroot/package/readline/readline52-002
-   trunk/buildroot/package/readline/readline52-003
-   trunk/buildroot/package/readline/readline52-004
-   trunk/buildroot/package/readline/readline52-005
-   trunk/buildroot/package/readline/readline52-006
-   trunk/buildroot/package/readline/readline52-007
-   trunk/buildroot/package/readline/readline52-008
-   trunk/buildroot/package/readline/readline52-009
-   trunk/buildroot/package/readline/readline52-010
-   trunk/buildroot/package/readline/readline52-011
-   trunk/buildroot/package/readline/readline52-012
-
-Removed:
-   trunk/buildroot/package/readline/readline51-001
-   trunk/buildroot/package/readline/readline51-002
-   trunk/buildroot/package/readline/readline51-003
-   trunk/buildroot/package/readline/readline51-004
+I have copied teh patch to fix this.
 
 
-Changeset:
+cp -af
+/home/guru/project/original/bldrt/buildroot/build_arm/libxml2-2.6.29/include/libxml
+/home/guru/project/original/bldrt/buildroot/build_arm/staging_dir/usr/include/libxml2
+touch -c
+/home/guru/project/original/bldrt/buildroot/build_arm/staging_dir/usr/include/libxml2
+cp -af
+/home/guru/project/original/bldrt/buildroot/build_arm/libxml2-2.6.29/usr/include/libxml2
+/home/guru/project/original/bldrt/buildroot/project_build_arm/uclibc/root/usr/include/libxml2
+cp: cannot stat
+`/home/guru/project/original/bldrt/buildroot/build_arm/libxml2-2.6.29/usr/include/libxml2':
+No such file or directory
+make: ***
+[/home/guru/project/original/bldrt/buildroot/project_build_arm/uclibc/root/usr/include/libxml2]
+Error 1
+root at guru_vlinux:/home/guru/project/original/bldrt/buildroot#
 
-Sorry, the patch is too large to include (1068 lines).
-Please use ViewCVS to see it!
+Patch
+------
 
-http://uclibc.org/cgi-bin/viewcvs.cgi?view=rev&root=svn&rev=20949
+--- libxml2_mk.orig     2008-02-05 03:15:24.000000000 -0500
++++ libxml2.mk  2008-02-06 20:10:48.000000000 -0500
+@@ -70,7 +70,7 @@ $(STAGING_DIR)/usr/include/libxml2: $(TA
+        touch -c $@
+ 
+ $(TARGET_DIR)/usr/include/libxml2: libxml2-headers
+-       cp -af $(LIBXML2_DIR)/usr/include/libxml2
+$(TARGET_DIR)/usr/include/libxml2
++       cp -af $(STAGING_DIR)/usr/include/libxml2
+$(TARGET_DIR)/usr/include/libxml2
+        touch -c $@
+ 
+ $(TARGET_DIR)/usr/include/libxml: libxml2-headers
+
+
+Regards
+Gururaja
+
+
+-- 
+View this message in context: http://www.nabble.com/-PATCH--libxml2-build-fails-due-to-incurrect-folder-mention-tp15306305p15306305.html
+Sent from the BuildRoot mailing list archive at Nabble.com.
