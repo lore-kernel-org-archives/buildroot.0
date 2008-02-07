@@ -1,7 +1,7 @@
 From: hamish at uclibc.org <hamish@uclibc.org>
-Date: Wed,  6 Feb 2008 16:51:57 -0800 (PST)
-Subject: [Buildroot] svn commit: trunk/buildroot/package:  fconfig
-Message-ID: <20080207005157.BC87E120108@busybox.net>
+Date: Wed,  6 Feb 2008 16:53:36 -0800 (PST)
+Subject: [Buildroot] svn commit: trunk/buildroot/package:  fis
+Message-ID: <20080207005336.AFCE412C67E@busybox.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -9,18 +9,19 @@ Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
 Author: hamish
-Date: 2008-02-06 16:51:57 -0800 (Wed, 06 Feb 2008)
-New Revision: 20950
+Date: 2008-02-06 16:53:36 -0800 (Wed, 06 Feb 2008)
+New Revision: 20951
 
 Log:
-Added a package for fconfig, which allows you to modify RedBoot configuration parameters from linux.
+Added package for fis, which allows you to manipulate the RedBoot flash partition table from linux.
 
 
 Added:
-   trunk/buildroot/package/fconfig/
-   trunk/buildroot/package/fconfig/Config.in
-   trunk/buildroot/package/fconfig/fconfig-listmode.patch
-   trunk/buildroot/package/fconfig/fconfig.mk
+   trunk/buildroot/package/fis/
+   trunk/buildroot/package/fis/Config.in
+   trunk/buildroot/package/fis/fis-001-checksum.patch
+   trunk/buildroot/package/fis/fis-002-makefile.patch
+   trunk/buildroot/package/fis/fis.mk
 
 Modified:
    trunk/buildroot/package/Config.in
@@ -29,264 +30,334 @@ Modified:
 Changeset:
 Modified: trunk/buildroot/package/Config.in
 ===================================================================
---- trunk/buildroot/package/Config.in	2008-02-06 01:26:58 UTC (rev 20949)
-+++ trunk/buildroot/package/Config.in	2008-02-07 00:51:57 UTC (rev 20950)
-@@ -66,6 +66,7 @@
+--- trunk/buildroot/package/Config.in	2008-02-07 00:51:57 UTC (rev 20950)
++++ trunk/buildroot/package/Config.in	2008-02-07 00:53:36 UTC (rev 20951)
+@@ -65,8 +65,9 @@
+ source "package/bsdiff/Config.in"
  source "package/customize/Config.in"
  source "package/dash/Config.in"
- source "package/file/Config.in"
 +source "package/fconfig/Config.in"
+ source "package/file/Config.in"
+-source "package/fconfig/Config.in"
++source "package/fis/Config.in"
  source "package/kexec/Config.in"
  if !BR2_PACKAGE_BUSYBOX_HIDE_OTHERS
  source "package/less/Config.in"
 
-Added: trunk/buildroot/package/fconfig/Config.in
+Added: trunk/buildroot/package/fis/Config.in
 ===================================================================
---- trunk/buildroot/package/fconfig/Config.in	                        (rev 0)
-+++ trunk/buildroot/package/fconfig/Config.in	2008-02-07 00:51:57 UTC (rev 20950)
+--- trunk/buildroot/package/fis/Config.in	                        (rev 0)
++++ trunk/buildroot/package/fis/Config.in	2008-02-07 00:53:36 UTC (rev 20951)
 @@ -0,0 +1,6 @@
-+config BR2_PACKAGE_FCONFIG
-+	bool "fconfig"
++config BR2_PACKAGE_FIS
++	bool "fis"
 +	default n
 +	help
-+	  fconfig - get/set RedBoot configuration parameters from Linux.
++	  fis - manipulate RedBoot partition table from Linux.
 +
 
-Added: trunk/buildroot/package/fconfig/fconfig-listmode.patch
+Added: trunk/buildroot/package/fis/fis-001-checksum.patch
 ===================================================================
---- trunk/buildroot/package/fconfig/fconfig-listmode.patch	                        (rev 0)
-+++ trunk/buildroot/package/fconfig/fconfig-listmode.patch	2008-02-07 00:51:57 UTC (rev 20950)
-@@ -0,0 +1,177 @@
-+diff -x.svn -u fconfig/crunchfc.c ../../../snapgear_avila/user/fconfig/crunchfc.c
-+--- fconfig/crunchfc.c	2006-03-15 01:18:17.000000000 +1100
-++++ ../../../snapgear_avila/user/fconfig/crunchfc.c	2007-09-06 13:48:38.000000000 +1000
-+@@ -320,6 +320,48 @@
+--- trunk/buildroot/package/fis/fis-001-checksum.patch	                        (rev 0)
++++ trunk/buildroot/package/fis/fis-001-checksum.patch	2008-02-07 00:53:36 UTC (rev 20951)
+@@ -0,0 +1,227 @@
++--- fis/fis.c	2007-05-03 06:42:51.000000000 +1000
+++++ ../../snapgear_avila/user/fconfig/fis.c	2007-09-06 13:48:38.000000000 +1000
++@@ -141,8 +141,8 @@
++ 
++ static void dump_desc(FILE* f, const struct fis_image_desc* d)
++ {
++-  fprintf(f,"%16s: addr = 0x%08x, size = 0x%08x\n",
++-             d->name,     d->flash_base, d->size);
+++  fprintf(f,"%16s: addr = 0x%08x, size = 0x%08x, checksum = 0x%08x\n",
+++             d->name,     d->flash_base, d->size, d->file_cksum);
++   for (unsigned int i=0; i<(sizeof(d->skips)/4); ++i) {
++     if (d->skips[i]==0x736b6970 || d->skips[i]==0x70696b73) { // "skip"
++       uint32_t offset = d->skips[i+1];
++@@ -332,6 +332,7 @@
++   d->size        = swap_end_32(d->size);
++   d->entry_point = swap_end_32(d->entry_point);
++   d->data_length = swap_end_32(d->data_length);
+++  d->file_cksum  = swap_end_32(d->file_cksum);
++   for (unsigned int i=0; i<(sizeof(d->skips)/4); ++i) {
++     d->skips[i] = swap_end_32(d->skips[i]);
++   }
++@@ -499,6 +500,66 @@
++   save_dir(fd,offset,size,swap_endianness,dir);
 + }
 + 
-+ /*
-++ * List known keys.
-++ */
-++int8_t list_keys(struct config_data *data)
+++static void fis_checksum(const char* device, int offset, int size, bool swap_endianness,
+++                       int argc, char* argv[])
 ++{
-++	struct fconfig_key key;
-++	uint32_t len = data->reallen;
-++	uint8_t *keyptr = NULL;
-++	uint8_t *ptr = data->buf+8;
-++	uint8_t *ptrend = data->buf+len-9;
-++	printer_t printer;
+++  char* name = NULL;
+++  char* filename = NULL;
 ++
-++	while (ptr < ptrend-4) {
-++		keyptr = ptr;
-++		ptr = get_key(ptr, &key);
-++		if (ptr == NULL) {
-++			MESSAGE(VERB_LOW, "Error in structure\n");
-++			return -1;
-++		}
-++		if (ptr > ptrend) {
-++			MESSAGE(VERB_LOW, "Parser went out of struct!\n");
-++			return -1;
-++		}
+++  for (int i=0; i<argc; ++i) {
+++    char* arg=argv[i];
+++    if (strcmp(arg,"-f")==0) {
+++      if (i==argc-1) {
+++        fatal("argumnet missing for -f");
+++      }
+++      ++i;
+++      filename = argv[i];
+++    } else if (strcmp(arg,"-n")==0) {
+++      if (i==argc-1) {
+++        fatal("argumnet missing for -n");
+++      }
+++      ++i;
+++      name = argv[i];
+++      if (strlen(name)>=16) {
+++        fatal("name too long, max 16 chars including terminating null");
+++      }
+++    } else {
+++      fputs("Unrecognised option '",stderr);
+++      fputs(arg,stderr);
+++      fputs("'\n",stderr);
+++      exit(1);
+++    }
+++  }
 ++
-++		if ((key.type == 0) && (key.namelen==0)) {
-++			MESSAGE(VERB_NORMAL, "EOF reached - key not found\n");
-++			return -1;
-++		}
-++		
-++		print_key(&key, VERB_HIGH, data->swab);
+++  if (name == NULL || filename == NULL)
+++    fatal("filename and partition name must be specified");
 ++
-++		printf("%s: ", key.keyname);
-++		printer = TYPE_PRINTER(key.type);
-++		if (printer == NULL) {
-++			MESSAGE(VERB_LOW, "Printer missing for type %d\n", key.type);
-++			return -1;
-++		}	
-++		printer(key.dataval);
-++		printf("\n");
+++  int fd;
+++  char *buf;
+++  struct stat stat_buf;
+++  uint32_t crc;
+++
+++  CHECK(fd=open(filename,O_RDONLY),-1);
+++  CHECK(stat(filename, &stat_buf),-1);
+++  buf = (char*)chk_malloc(stat_buf.st_size);
+++  CHECK(read(fd,buf,stat_buf.st_size),-1);
+++  crc = crc32(buf,stat_buf.st_size);
+++  close(fd);
+++  free(buf);
+++
+++  CHECK(fd=open(device,O_RDWR),-1);
+++  dir_t dir;
+++  load_dir(fd,offset,&size,swap_endianness,&dir);
+++  iter_t after = NULL;
+++  FOR_EACH_DIR_ENTRY(dir,i) {
+++    if (strcmp(get(i)->name, name) == 0) {
+++      get(i)->file_cksum = crc;
+++      get(i)->data_length = stat_buf.st_size;
+++      break;
+++    }
+++  }
+++  save_dir(fd,offset,size,swap_endianness,dir);
+++}
++ 
++ static void fis_delete(const char* device, int offset, int size, bool swap_endianness,
++                        char* name)
++@@ -528,6 +589,7 @@
++         "  fis [options] init\n"
++         "  fis [options] create -f address -l size -n name\n"
++         "  fis [options] delete name\n"
+++        "  fis [options] checksum -f filename -n name\n"
++         "Options:\n"
++         "  -d device    specify /dev/mtd* device containing directory\n"
++         "  -o offset    specify offset into device of start of directory\n"
++@@ -597,6 +659,11 @@
++         fis_create(device,offset,size,swap_endianness,
++                    argc-i-1,&argv[i+1]);
++         break;
+++      } else if (strcmp(arg,"checksum")==0) {
+++        check_dev(device);
+++        fis_checksum(device,offset,size,swap_endianness,
+++                   argc-i-1,&argv[i+1]);
+++        break;
++       } else if (strcmp(arg,"delete")==0) {
++         if (i!=argc-2) {
++           fatal("Exactly one argumnet required after 'delete'");
++--- fis/crc.c	1970-01-01 10:00:00.000000000 +1000
+++++ ../../snapgear_avila/user/fconfig/crc.c	2007-09-06 13:48:38.000000000 +1000
++@@ -0,0 +1,88 @@
+++/*
+++ * crc.c
+++ *
+++ * $Id: crc.c,v 1.1 2006/02/13 09:58:08 andrzej Exp $
+++ *
+++ * Gary S. Brown's CRC
+++ * Code based on Gary S. Brown CRC (1986). 
+++ * Generation polynomial is:
+++ *   X^32+X^26+X^23+X^22+X^16+X^12+X^11+X^10+X^8+X^7+X^5+X^4+X^2+X^1+X^0 
+++ *
+++ * Copyright (C) 2006 Ekiert sp z o.o.
+++ * Author: Andrzej Ekiert <a.ekiert@ekiert.com>
+++ *
+++ * This program is free software; you can redistribute it and/or
+++ * modify it under the terms of the GNU General Public License
+++ * as published by the Free Software Foundation; either version
+++ * 2 of the License, or (at your option) any later version. 
+++ */
+++
+++#include <stdint.h>
+++
+++#include "crc.h"
+++
+++static const uint32_t crc32_tab[] = {
+++      0x00000000L, 0x77073096L, 0xee0e612cL, 0x990951baL, 0x076dc419L,
+++      0x706af48fL, 0xe963a535L, 0x9e6495a3L, 0x0edb8832L, 0x79dcb8a4L,
+++      0xe0d5e91eL, 0x97d2d988L, 0x09b64c2bL, 0x7eb17cbdL, 0xe7b82d07L,
+++      0x90bf1d91L, 0x1db71064L, 0x6ab020f2L, 0xf3b97148L, 0x84be41deL,
+++      0x1adad47dL, 0x6ddde4ebL, 0xf4d4b551L, 0x83d385c7L, 0x136c9856L,
+++      0x646ba8c0L, 0xfd62f97aL, 0x8a65c9ecL, 0x14015c4fL, 0x63066cd9L,
+++      0xfa0f3d63L, 0x8d080df5L, 0x3b6e20c8L, 0x4c69105eL, 0xd56041e4L,
+++      0xa2677172L, 0x3c03e4d1L, 0x4b04d447L, 0xd20d85fdL, 0xa50ab56bL,
+++      0x35b5a8faL, 0x42b2986cL, 0xdbbbc9d6L, 0xacbcf940L, 0x32d86ce3L,
+++      0x45df5c75L, 0xdcd60dcfL, 0xabd13d59L, 0x26d930acL, 0x51de003aL,
+++      0xc8d75180L, 0xbfd06116L, 0x21b4f4b5L, 0x56b3c423L, 0xcfba9599L,
+++      0xb8bda50fL, 0x2802b89eL, 0x5f058808L, 0xc60cd9b2L, 0xb10be924L,
+++      0x2f6f7c87L, 0x58684c11L, 0xc1611dabL, 0xb6662d3dL, 0x76dc4190L,
+++      0x01db7106L, 0x98d220bcL, 0xefd5102aL, 0x71b18589L, 0x06b6b51fL,
+++      0x9fbfe4a5L, 0xe8b8d433L, 0x7807c9a2L, 0x0f00f934L, 0x9609a88eL,
+++      0xe10e9818L, 0x7f6a0dbbL, 0x086d3d2dL, 0x91646c97L, 0xe6635c01L,
+++      0x6b6b51f4L, 0x1c6c6162L, 0x856530d8L, 0xf262004eL, 0x6c0695edL,
+++      0x1b01a57bL, 0x8208f4c1L, 0xf50fc457L, 0x65b0d9c6L, 0x12b7e950L,
+++      0x8bbeb8eaL, 0xfcb9887cL, 0x62dd1ddfL, 0x15da2d49L, 0x8cd37cf3L,
+++      0xfbd44c65L, 0x4db26158L, 0x3ab551ceL, 0xa3bc0074L, 0xd4bb30e2L,
+++      0x4adfa541L, 0x3dd895d7L, 0xa4d1c46dL, 0xd3d6f4fbL, 0x4369e96aL,
+++      0x346ed9fcL, 0xad678846L, 0xda60b8d0L, 0x44042d73L, 0x33031de5L,
+++      0xaa0a4c5fL, 0xdd0d7cc9L, 0x5005713cL, 0x270241aaL, 0xbe0b1010L,
+++      0xc90c2086L, 0x5768b525L, 0x206f85b3L, 0xb966d409L, 0xce61e49fL,
+++      0x5edef90eL, 0x29d9c998L, 0xb0d09822L, 0xc7d7a8b4L, 0x59b33d17L,
+++      0x2eb40d81L, 0xb7bd5c3bL, 0xc0ba6cadL, 0xedb88320L, 0x9abfb3b6L,
+++      0x03b6e20cL, 0x74b1d29aL, 0xead54739L, 0x9dd277afL, 0x04db2615L,
+++      0x73dc1683L, 0xe3630b12L, 0x94643b84L, 0x0d6d6a3eL, 0x7a6a5aa8L,
+++      0xe40ecf0bL, 0x9309ff9dL, 0x0a00ae27L, 0x7d079eb1L, 0xf00f9344L,
+++      0x8708a3d2L, 0x1e01f268L, 0x6906c2feL, 0xf762575dL, 0x806567cbL,
+++      0x196c3671L, 0x6e6b06e7L, 0xfed41b76L, 0x89d32be0L, 0x10da7a5aL,
+++      0x67dd4accL, 0xf9b9df6fL, 0x8ebeeff9L, 0x17b7be43L, 0x60b08ed5L,
+++      0xd6d6a3e8L, 0xa1d1937eL, 0x38d8c2c4L, 0x4fdff252L, 0xd1bb67f1L,
+++      0xa6bc5767L, 0x3fb506ddL, 0x48b2364bL, 0xd80d2bdaL, 0xaf0a1b4cL,
+++      0x36034af6L, 0x41047a60L, 0xdf60efc3L, 0xa867df55L, 0x316e8eefL,
+++      0x4669be79L, 0xcb61b38cL, 0xbc66831aL, 0x256fd2a0L, 0x5268e236L,
+++      0xcc0c7795L, 0xbb0b4703L, 0x220216b9L, 0x5505262fL, 0xc5ba3bbeL,
+++      0xb2bd0b28L, 0x2bb45a92L, 0x5cb36a04L, 0xc2d7ffa7L, 0xb5d0cf31L,
+++      0x2cd99e8bL, 0x5bdeae1dL, 0x9b64c2b0L, 0xec63f226L, 0x756aa39cL,
+++      0x026d930aL, 0x9c0906a9L, 0xeb0e363fL, 0x72076785L, 0x05005713L,
+++      0x95bf4a82L, 0xe2b87a14L, 0x7bb12baeL, 0x0cb61b38L, 0x92d28e9bL,
+++      0xe5d5be0dL, 0x7cdcefb7L, 0x0bdbdf21L, 0x86d3d2d4L, 0xf1d4e242L,
+++      0x68ddb3f8L, 0x1fda836eL, 0x81be16cdL, 0xf6b9265bL, 0x6fb077e1L,
+++      0x18b74777L, 0x88085ae6L, 0xff0f6a70L, 0x66063bcaL, 0x11010b5cL,
+++      0x8f659effL, 0xf862ae69L, 0x616bffd3L, 0x166ccf45L, 0xa00ae278L,
+++      0xd70dd2eeL, 0x4e048354L, 0x3903b3c2L, 0xa7672661L, 0xd06016f7L,
+++      0x4969474dL, 0x3e6e77dbL, 0xaed16a4aL, 0xd9d65adcL, 0x40df0b66L,
+++      0x37d83bf0L, 0xa9bcae53L, 0xdebb9ec5L, 0x47b2cf7fL, 0x30b5ffe9L,
+++      0xbdbdf21cL, 0xcabac28aL, 0x53b39330L, 0x24b4a3a6L, 0xbad03605L,
+++      0xcdd70693L, 0x54de5729L, 0x23d967bfL, 0xb3667a2eL, 0xc4614ab8L,
+++      0x5d681b02L, 0x2a6f2b94L, 0xb40bbe37L, 0xc30c8ea1L, 0x5a05df1bL,
+++      0x2d02ef8dL
+++   };
+++
+++uint32_t crc32(uint8_t *s, uint32_t len)
+++{
+++	uint32_t i, val = 0;
+++
+++	for (i = 0;  i < len;  i++) {
+++		val = crc32_tab[(val^s[i]) & 0xff] ^ (val >> 8);
 ++	}
+++	return val;
 ++}
 ++
++--- fis/crc.h0	1970-01-01 10:00:00.000000000 +1000
+++++ fis/crc.h	2007-10-18 12:12:19.000000000 +1000
++@@ -0,0 +1,25 @@
 ++/*
-+  * Find a key with given nickname, check its type and set value
-+  * Assumes that verify_fconfig() has been called on 'data' before. 
-+  */
-+diff -x.svn -u fconfig/crunchfc.h ../../../snapgear_avila/user/fconfig/crunchfc.h
-+--- fconfig/crunchfc.h	2006-03-15 01:18:17.000000000 +1100
-++++ ../../../snapgear_avila/user/fconfig/crunchfc.h	2007-09-06 13:48:38.000000000 +1000
-+@@ -31,6 +31,7 @@
-+ int8_t verify_fconfig(struct config_data *data);
-+ int8_t get_key_value(struct config_data *data, uint8_t *nickname);
-+ int8_t set_key_value(struct config_data *data, uint8_t *nickname, void *value);
-++int8_t list_keys(struct config_data *data);
-+ void recalculate_crc(struct config_data *data);
-+ 
-+ #endif //CRUNCHFC_H
-+diff -x.svn -u fconfig/fconfig.c ../../../snapgear_avila/user/fconfig/fconfig.c
-+--- fconfig/fconfig.c	2006-03-15 01:18:18.000000000 +1100
-++++ ../../../snapgear_avila/user/fconfig/fconfig.c	2007-09-06 13:48:38.000000000 +1000
-+@@ -35,8 +35,9 @@
-+ #include <string.h>
-+ #include <unistd.h>
-+ #include <fcntl.h>
-++#include <getopt.h>
-+ 
-+ #include "debug.h"
-+ #include "ftypes.h"
-+ #include "crunchfc.h"
-+ 
-+@@ -72,7 +73,7 @@
-+ 	}
-+ 
-+ 	fputs("Read or write Redboot configuration\n", stdout);
-+-	fputs("usage: fconfig [-r|-w] -d dev -n nickname -x value\n", stdout);
-++	fputs("usage: fconfig [-r|-w|-l] -d dev -n nickname -x value\n", stdout);
-+ 	fputs("'dev' may be a char device, block device or a file\n", stdout);
-+ 	fputs("Supported types: \n", stdout);
-+ 	for (i = 0; i < NUM_TYPES; i++) {
-+@@ -181,7 +182,33 @@
-+ 	close_fconfig_handle(data);
-+ 	return 0;
-+ 
-+-exit_fail: 
-++exit_fail:
-++	close_fconfig_handle(data);
-++	return 1;
-++}
-++
-++/*
-++ * List mode of operation: list parameter values from the configuration.
+++ * crc.h
+++ *
+++ * $Id: crc.h,v 1.1 2006/02/13 09:58:08 andrzej Exp $
+++ *
+++ * Gary S. Brown's CRC - header. 
+++ *
+++ * Copyright (C) 2006 Ekiert sp z o.o.
+++ * Author: Andrzej Ekiert <a.ekiert@ekiert.com>
+++ *
+++ * This program is free software; you can redistribute it and/or
+++ * modify it under the terms of the GNU General Public License
+++ * as published by the Free Software Foundation; either version
+++ * 2 of the License, or (at your option) any later version. 
 ++ */
-++static int list_mode(struct config_data *data, uint8_t *device)
-++{
-++	if (get_fconfig_handle(data, device, O_RDONLY) == NULL) {
-++		MESSAGE(VERB_LOW, "Could not get a config data handle!\n");
-++		return 1;
-++	}
-++	if (verify_fconfig(data)) {
-++		MESSAGE(VERB_LOW, "Config verification failed!\n");
-++		goto exit_fail;
-++	}
 ++
-++	if (list_keys(data)) {
-++		goto exit_fail;
-++	}
+++#ifndef CRC_H
+++#define CRC_H
 ++
-++	close_fconfig_handle(data);
-++	return 0;
+++#include <stdint.h>
 ++
-++exit_fail:
-+ 	close_fconfig_handle(data);
-+ 	return 1;
-+ }
-+@@ -189,6 +216,7 @@
-+ #define MODE_NONE 0
-+ #define MODE_WRITE 1
-+ #define MODE_READ 2
-++#define MODE_LIST 3
-+ 
-+ /*
-+  * main(). ...nuff said.
-+@@ -202,14 +230,17 @@
-+ 	uint8_t *value = NULL;
-+ 	uint8_t *device = NULL;
-+ 
-+-	while ((c = getopt(argc, argv, "hrwvsd:n:x:")) != -1) {
-++	while ((c = getopt(argc, argv, "hrwlvsd:n:x:")) != -1) {
-+ 		switch (c) {
-+ 		case 'r':
-+ 			mode = MODE_READ;
-+ 			break;
-+-		case 'w': 
-++		case 'w':
-+ 			mode = MODE_WRITE;
-+ 			break;
-++		case 'l':
-++			mode = MODE_LIST;
-++			break;
-+ 		case 'n':
-+ 			nickname = optarg;
-+ 			break;
-+@@ -240,7 +271,7 @@
-+ 	MESSAGE(VERB_NORMAL, "Normal verbosity messages are printed.\n");
-+ 	MESSAGE(VERB_HIGH, "High verbosity messages are printed.\n");
-+ 
-+-	if (nickname == NULL) {
-++	if (nickname == NULL && mode != MODE_LIST) {
-+ 		usage();
-+ 		exit(1);
-+ 	}
-+@@ -251,13 +282,16 @@
-+ 	}
-+ 
-+ 	switch (mode) {
-+-		case MODE_WRITE : 
-++		case MODE_WRITE :
-+ 			ret = write_mode(&data, device, nickname, value);
-+ 			break;
-+-		case MODE_READ : 
-++		case MODE_READ :
-+ 			ret = read_mode(&data, device, nickname);
-+ 			break;
-+-		default : 
-++		case MODE_LIST :
-++			ret = list_mode(&data, device);
-++			break;
-++		default :
-+ 			MESSAGE(VERB_LOW, "Unknown mode of operation\n");
-+ 			usage();
-+ 			ret = 1;
+++uint32_t crc32(uint8_t *s, uint32_t len);
+++
+++#endif //CRC_H
+++
 
-Added: trunk/buildroot/package/fconfig/fconfig.mk
+Added: trunk/buildroot/package/fis/fis-002-makefile.patch
 ===================================================================
---- trunk/buildroot/package/fconfig/fconfig.mk	                        (rev 0)
-+++ trunk/buildroot/package/fconfig/fconfig.mk	2008-02-07 00:51:57 UTC (rev 20950)
-@@ -0,0 +1,50 @@
+--- trunk/buildroot/package/fis/fis-002-makefile.patch	                        (rev 0)
++++ trunk/buildroot/package/fis/fis-002-makefile.patch	2008-02-07 00:53:36 UTC (rev 20951)
+@@ -0,0 +1,10 @@
++--- fis/Makefile0	1970-01-01 10:00:00.000000000 +1000
+++++ fis/Makefile	2007-10-18 12:08:56.000000000 +1000
++@@ -0,0 +1,7 @@
+++CFLAGS += -std=c99
+++
+++fis: fis.o crc.o
+++
+++clean:
+++	-rm -f fis *.o
+++
+
+Added: trunk/buildroot/package/fis/fis.mk
+===================================================================
+--- trunk/buildroot/package/fis/fis.mk	                        (rev 0)
++++ trunk/buildroot/package/fis/fis.mk	2008-02-07 00:53:36 UTC (rev 20951)
+@@ -0,0 +1,51 @@
 +#############################################################
 +#
-+# fconfig
++# fis
 +#
 +#############################################################
-+FCONFIG_VERSION:=20060419
-+FCONFIG_SOURCE:=fconfig-$(FCONFIG_VERSION).tar.gz
-+FCONFIG_SITE:=http://andrzejekiert.ovh.org/software/fconfig/
-+FCONFIG_CAT:=$(ZCAT)
-+FCONFIG_DIR:=$(BUILD_DIR)/fconfig
-+FCONFIG_BINARY:=fconfig
-+FCONFIG_TARGET_BINARY:=sbin/fconfig
++FIS_SOURCE:=fis.c
++FIS_SITE:=http://svn.chezphil.org/utils/trunk
++FIS_CAT:=$(ZCAT)
++FIS_DIR:=$(BUILD_DIR)/fis
++FIS_BINARY:=fis
++FIS_TARGET_BINARY:=sbin/fis
 +
-+$(DL_DIR)/$(FCONFIG_SOURCE):
-+	 $(WGET) -P $(DL_DIR) $(FCONFIG_SITE)/$(FCONFIG_SOURCE)
++$(DL_DIR)/$(FIS_SOURCE):
++	 $(WGET) -P $(DL_DIR) $(FIS_SITE)/$(FIS_SOURCE)
 +
-+fconfig-source: $(DL_DIR)/$(FCONFIG_SOURCE)
++fis-source: $(DL_DIR)/$(FIS_SOURCE)
 +
-+$(FCONFIG_DIR)/.unpacked: $(DL_DIR)/$(FCONFIG_SOURCE)
-+	$(FCONFIG_CAT) $(DL_DIR)/$(FCONFIG_SOURCE) | tar -C $(BUILD_DIR) $(TAR_OPTIONS) -
-+	toolchain/patch-kernel.sh $(FCONFIG_DIR) package/fconfig \*.patch
++$(FIS_DIR)/.unpacked: $(DL_DIR)/$(FIS_SOURCE)
++	mkdir -p $(FIS_DIR)
++	cp -f $(DL_DIR)/$(FIS_SOURCE) $(FIS_DIR)
++	toolchain/patch-kernel.sh $(FIS_DIR) package/fis \*.patch
 +	touch $@
 +
-+$(FCONFIG_DIR)/$(FCONFIG_BINARY): $(FCONFIG_DIR)/.unpacked
-+	$(MAKE) $(TARGET_CONFIGURE_OPTS) -C $(FCONFIG_DIR) \
-+		CFLAGS="$(TARGET_CFLAGS)" \
++$(FIS_DIR)/$(FIS_BINARY): $(FIS_DIR)/.unpacked
++	$(MAKE) -C $(FIS_DIR) \
++		CC="$(TARGET_CC)" \
++		CFLAGS="$(TARGET_CFLAGS) -std=c99" \
 +		LDFLAGS="$(TARGET_LDFLAGS)"
 +
-+$(TARGET_DIR)/$(FCONFIG_TARGET_BINARY): $(FCONFIG_DIR)/$(FCONFIG_BINARY)
-+	rm -f $(TARGET_DIR)/$(FCONFIG_TARGET_BINARY)
-+	$(INSTALL) -D -m 0755 $(FCONFIG_DIR)/$(FCONFIG_BINARY) $(TARGET_DIR)/$(FCONFIG_TARGET_BINARY)
++$(TARGET_DIR)/$(FIS_TARGET_BINARY): $(FIS_DIR)/$(FIS_BINARY)
++	rm -f $(TARGET_DIR)/$(FIS_TARGET_BINARY)
++	$(INSTALL) -D -m 0755 $(FIS_DIR)/$(FIS_BINARY) $(TARGET_DIR)/$(FIS_TARGET_BINARY)
 +	$(STRIPCMD) $(STRIP_STRIP_ALL) $@
 +
-+fconfig: uclibc $(TARGET_DIR)/$(FCONFIG_TARGET_BINARY)
++fis: uclibc $(TARGET_DIR)/$(FIS_TARGET_BINARY)
 +
-+fconfig-clean:
-+	-$(MAKE) -C $(FCONFIG_DIR) clean
-+	rm -f $(TARGET_DIR)/$(FCONFIG_TARGET_BINARY)
++fis-clean:
++	-$(MAKE) -C $(FIS_DIR) clean
++	rm -f $(TARGET_DIR)/$(FIS_TARGET_BINARY)
 +
-+fconfig-dirclean:
-+	rm -rf $(FCONFIG_DIR)
++fis-dirclean:
++	rm -rf $(FIS_DIR)
 +
 +#############################################################
 +#
 +# Toplevel Makefile options
 +#
 +#############################################################
-+ifeq ($(strip $(BR2_PACKAGE_FCONFIG)),y)
-+TARGETS+=fconfig
++ifeq ($(strip $(BR2_PACKAGE_FIS)),y)
++TARGETS+=fis
 +endif
