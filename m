@@ -1,66 +1,292 @@
-From: Tim Barr <tbarr@multitech.com>
-Date: Wed, 6 Feb 2008 17:06:42 -0600
-Subject: [Buildroot] SUDO download error
-Message-ID: <1CD05B980C94AC408B37C82BBABAA3E609FE2201@mtsexchange.dc.multitech.prv>
+From: hamish at uclibc.org <hamish@uclibc.org>
+Date: Wed,  6 Feb 2008 16:51:57 -0800 (PST)
+Subject: [Buildroot] svn commit: trunk/buildroot/package:  fconfig
+Message-ID: <20080207005157.BC87E120108@busybox.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-I modified sudo.mk and was able to get the latest version to download
-but now it looks like there are some cross-compile patches that don't
-match up. I'm getting into territory that I am totally unfamiliar with
-now. I thought maybe I could find version 1.6.8p12 tar file  in the old
-directory of the sudo site but there is olnly a 1.6.8 tar file and a
-1.6.8p12 patch.
- 
-Timothy Barr
-Hardware Development Engineer
-for Multi-Tech Systems, Inc.
- <mailto:tbarr@multitech.com> tbarr at multitech.com
+Author: hamish
+Date: 2008-02-06 16:51:57 -0800 (Wed, 06 Feb 2008)
+New Revision: 20950
+
+Log:
+Added a package for fconfig, which allows you to modify RedBoot configuration parameters from linux.
 
 
------Original Message-----
-From: buildroot-bounces@uclibc.org [mailto:buildroot-bounces at uclibc.org]
-On Behalf Of Tim Barr
-Sent: Monday, January 28, 2008 11:41 AM
-To: buildroot at uclibc.org
-Subject: Re: [Buildroot] SUDO download error
+Added:
+   trunk/buildroot/package/fconfig/
+   trunk/buildroot/package/fconfig/Config.in
+   trunk/buildroot/package/fconfig/fconfig-listmode.patch
+   trunk/buildroot/package/fconfig/fconfig.mk
+
+Modified:
+   trunk/buildroot/package/Config.in
 
 
-Also forgot to mention there is a new release version: sudo-1.6.9p12
- 
- 
-----Original Message-----
-From: buildroot-bounces@uclibc.org [mailto:buildroot-bounces at uclibc.org]
-On Behalf Of Tim Barr
-Sent: Monday, January 28, 2008 11:36 AM
-To: buildroot at uclibc.org
-Subject: [Buildroot] SUDO download error
+Changeset:
+Modified: trunk/buildroot/package/Config.in
+===================================================================
+--- trunk/buildroot/package/Config.in	2008-02-06 01:26:58 UTC (rev 20949)
++++ trunk/buildroot/package/Config.in	2008-02-07 00:51:57 UTC (rev 20950)
+@@ -66,6 +66,7 @@
+ source "package/customize/Config.in"
+ source "package/dash/Config.in"
+ source "package/file/Config.in"
++source "package/fconfig/Config.in"
+ source "package/kexec/Config.in"
+ if !BR2_PACKAGE_BUSYBOX_HIDE_OTHERS
+ source "package/less/Config.in"
 
+Added: trunk/buildroot/package/fconfig/Config.in
+===================================================================
+--- trunk/buildroot/package/fconfig/Config.in	                        (rev 0)
++++ trunk/buildroot/package/fconfig/Config.in	2008-02-07 00:51:57 UTC (rev 20950)
+@@ -0,0 +1,6 @@
++config BR2_PACKAGE_FCONFIG
++	bool "fconfig"
++	default n
++	help
++	  fconfig - get/set RedBoot configuration parameters from Linux.
++
 
+Added: trunk/buildroot/package/fconfig/fconfig-listmode.patch
+===================================================================
+--- trunk/buildroot/package/fconfig/fconfig-listmode.patch	                        (rev 0)
++++ trunk/buildroot/package/fconfig/fconfig-listmode.patch	2008-02-07 00:51:57 UTC (rev 20950)
+@@ -0,0 +1,177 @@
++diff -x.svn -u fconfig/crunchfc.c ../../../snapgear_avila/user/fconfig/crunchfc.c
++--- fconfig/crunchfc.c	2006-03-15 01:18:17.000000000 +1100
+++++ ../../../snapgear_avila/user/fconfig/crunchfc.c	2007-09-06 13:48:38.000000000 +1000
++@@ -320,6 +320,48 @@
++ }
++ 
++ /*
+++ * List known keys.
+++ */
+++int8_t list_keys(struct config_data *data)
+++{
+++	struct fconfig_key key;
+++	uint32_t len = data->reallen;
+++	uint8_t *keyptr = NULL;
+++	uint8_t *ptr = data->buf+8;
+++	uint8_t *ptrend = data->buf+len-9;
+++	printer_t printer;
+++
+++	while (ptr < ptrend-4) {
+++		keyptr = ptr;
+++		ptr = get_key(ptr, &key);
+++		if (ptr == NULL) {
+++			MESSAGE(VERB_LOW, "Error in structure\n");
+++			return -1;
+++		}
+++		if (ptr > ptrend) {
+++			MESSAGE(VERB_LOW, "Parser went out of struct!\n");
+++			return -1;
+++		}
+++
+++		if ((key.type == 0) && (key.namelen==0)) {
+++			MESSAGE(VERB_NORMAL, "EOF reached - key not found\n");
+++			return -1;
+++		}
+++		
+++		print_key(&key, VERB_HIGH, data->swab);
+++
+++		printf("%s: ", key.keyname);
+++		printer = TYPE_PRINTER(key.type);
+++		if (printer == NULL) {
+++			MESSAGE(VERB_LOW, "Printer missing for type %d\n", key.type);
+++			return -1;
+++		}	
+++		printer(key.dataval);
+++		printf("\n");
+++	}
+++}
+++
+++/*
++  * Find a key with given nickname, check its type and set value
++  * Assumes that verify_fconfig() has been called on 'data' before. 
++  */
++diff -x.svn -u fconfig/crunchfc.h ../../../snapgear_avila/user/fconfig/crunchfc.h
++--- fconfig/crunchfc.h	2006-03-15 01:18:17.000000000 +1100
+++++ ../../../snapgear_avila/user/fconfig/crunchfc.h	2007-09-06 13:48:38.000000000 +1000
++@@ -31,6 +31,7 @@
++ int8_t verify_fconfig(struct config_data *data);
++ int8_t get_key_value(struct config_data *data, uint8_t *nickname);
++ int8_t set_key_value(struct config_data *data, uint8_t *nickname, void *value);
+++int8_t list_keys(struct config_data *data);
++ void recalculate_crc(struct config_data *data);
++ 
++ #endif //CRUNCHFC_H
++diff -x.svn -u fconfig/fconfig.c ../../../snapgear_avila/user/fconfig/fconfig.c
++--- fconfig/fconfig.c	2006-03-15 01:18:18.000000000 +1100
+++++ ../../../snapgear_avila/user/fconfig/fconfig.c	2007-09-06 13:48:38.000000000 +1000
++@@ -35,8 +35,9 @@
++ #include <string.h>
++ #include <unistd.h>
++ #include <fcntl.h>
+++#include <getopt.h>
++ 
++ #include "debug.h"
++ #include "ftypes.h"
++ #include "crunchfc.h"
++ 
++@@ -72,7 +73,7 @@
++ 	}
++ 
++ 	fputs("Read or write Redboot configuration\n", stdout);
++-	fputs("usage: fconfig [-r|-w] -d dev -n nickname -x value\n", stdout);
+++	fputs("usage: fconfig [-r|-w|-l] -d dev -n nickname -x value\n", stdout);
++ 	fputs("'dev' may be a char device, block device or a file\n", stdout);
++ 	fputs("Supported types: \n", stdout);
++ 	for (i = 0; i < NUM_TYPES; i++) {
++@@ -181,7 +182,33 @@
++ 	close_fconfig_handle(data);
++ 	return 0;
++ 
++-exit_fail: 
+++exit_fail:
+++	close_fconfig_handle(data);
+++	return 1;
+++}
+++
+++/*
+++ * List mode of operation: list parameter values from the configuration.
+++ */
+++static int list_mode(struct config_data *data, uint8_t *device)
+++{
+++	if (get_fconfig_handle(data, device, O_RDONLY) == NULL) {
+++		MESSAGE(VERB_LOW, "Could not get a config data handle!\n");
+++		return 1;
+++	}
+++	if (verify_fconfig(data)) {
+++		MESSAGE(VERB_LOW, "Config verification failed!\n");
+++		goto exit_fail;
+++	}
+++
+++	if (list_keys(data)) {
+++		goto exit_fail;
+++	}
+++
+++	close_fconfig_handle(data);
+++	return 0;
+++
+++exit_fail:
++ 	close_fconfig_handle(data);
++ 	return 1;
++ }
++@@ -189,6 +216,7 @@
++ #define MODE_NONE 0
++ #define MODE_WRITE 1
++ #define MODE_READ 2
+++#define MODE_LIST 3
++ 
++ /*
++  * main(). ...nuff said.
++@@ -202,14 +230,17 @@
++ 	uint8_t *value = NULL;
++ 	uint8_t *device = NULL;
++ 
++-	while ((c = getopt(argc, argv, "hrwvsd:n:x:")) != -1) {
+++	while ((c = getopt(argc, argv, "hrwlvsd:n:x:")) != -1) {
++ 		switch (c) {
++ 		case 'r':
++ 			mode = MODE_READ;
++ 			break;
++-		case 'w': 
+++		case 'w':
++ 			mode = MODE_WRITE;
++ 			break;
+++		case 'l':
+++			mode = MODE_LIST;
+++			break;
++ 		case 'n':
++ 			nickname = optarg;
++ 			break;
++@@ -240,7 +271,7 @@
++ 	MESSAGE(VERB_NORMAL, "Normal verbosity messages are printed.\n");
++ 	MESSAGE(VERB_HIGH, "High verbosity messages are printed.\n");
++ 
++-	if (nickname == NULL) {
+++	if (nickname == NULL && mode != MODE_LIST) {
++ 		usage();
++ 		exit(1);
++ 	}
++@@ -251,13 +282,16 @@
++ 	}
++ 
++ 	switch (mode) {
++-		case MODE_WRITE : 
+++		case MODE_WRITE :
++ 			ret = write_mode(&data, device, nickname, value);
++ 			break;
++-		case MODE_READ : 
+++		case MODE_READ :
++ 			ret = read_mode(&data, device, nickname);
++ 			break;
++-		default : 
+++		case MODE_LIST :
+++			ret = list_mode(&data, device);
+++			break;
+++		default :
++ 			MESSAGE(VERB_LOW, "Unknown mode of operation\n");
++ 			usage();
++ 			ret = 1;
 
-Looks like the sudo website access has changed. It is now
-www.sudo.ws/sudo. Courtesan Consulting also changed name to Gratisoft
-Inc.
- 
-
-
-
-Timothy Barr
-Hardware Development Engineer
-for Multi-Tech Systems, Inc.
- <mailto:tbarr@multitech.com> tbarr at multitech.com 
-
-
-
-
-
-
-
- 
-
--------------- next part --------------
-An HTML attachment was scrubbed...
-URL: http://busybox.net/lists/buildroot/attachments/20080206/d6e4499c/attachment.htm 
+Added: trunk/buildroot/package/fconfig/fconfig.mk
+===================================================================
+--- trunk/buildroot/package/fconfig/fconfig.mk	                        (rev 0)
++++ trunk/buildroot/package/fconfig/fconfig.mk	2008-02-07 00:51:57 UTC (rev 20950)
+@@ -0,0 +1,50 @@
++#############################################################
++#
++# fconfig
++#
++#############################################################
++FCONFIG_VERSION:=20060419
++FCONFIG_SOURCE:=fconfig-$(FCONFIG_VERSION).tar.gz
++FCONFIG_SITE:=http://andrzejekiert.ovh.org/software/fconfig/
++FCONFIG_CAT:=$(ZCAT)
++FCONFIG_DIR:=$(BUILD_DIR)/fconfig
++FCONFIG_BINARY:=fconfig
++FCONFIG_TARGET_BINARY:=sbin/fconfig
++
++$(DL_DIR)/$(FCONFIG_SOURCE):
++	 $(WGET) -P $(DL_DIR) $(FCONFIG_SITE)/$(FCONFIG_SOURCE)
++
++fconfig-source: $(DL_DIR)/$(FCONFIG_SOURCE)
++
++$(FCONFIG_DIR)/.unpacked: $(DL_DIR)/$(FCONFIG_SOURCE)
++	$(FCONFIG_CAT) $(DL_DIR)/$(FCONFIG_SOURCE) | tar -C $(BUILD_DIR) $(TAR_OPTIONS) -
++	toolchain/patch-kernel.sh $(FCONFIG_DIR) package/fconfig \*.patch
++	touch $@
++
++$(FCONFIG_DIR)/$(FCONFIG_BINARY): $(FCONFIG_DIR)/.unpacked
++	$(MAKE) $(TARGET_CONFIGURE_OPTS) -C $(FCONFIG_DIR) \
++		CFLAGS="$(TARGET_CFLAGS)" \
++		LDFLAGS="$(TARGET_LDFLAGS)"
++
++$(TARGET_DIR)/$(FCONFIG_TARGET_BINARY): $(FCONFIG_DIR)/$(FCONFIG_BINARY)
++	rm -f $(TARGET_DIR)/$(FCONFIG_TARGET_BINARY)
++	$(INSTALL) -D -m 0755 $(FCONFIG_DIR)/$(FCONFIG_BINARY) $(TARGET_DIR)/$(FCONFIG_TARGET_BINARY)
++	$(STRIPCMD) $(STRIP_STRIP_ALL) $@
++
++fconfig: uclibc $(TARGET_DIR)/$(FCONFIG_TARGET_BINARY)
++
++fconfig-clean:
++	-$(MAKE) -C $(FCONFIG_DIR) clean
++	rm -f $(TARGET_DIR)/$(FCONFIG_TARGET_BINARY)
++
++fconfig-dirclean:
++	rm -rf $(FCONFIG_DIR)
++
++#############################################################
++#
++# Toplevel Makefile options
++#
++#############################################################
++ifeq ($(strip $(BR2_PACKAGE_FCONFIG)),y)
++TARGETS+=fconfig
++endif
