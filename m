@@ -1,8 +1,8 @@
-From: Ulf Samuelsson <ulf@atmel.com>
-Date: Fri, 8 Feb 2008 08:08:02 +0100
-Subject: [Buildroot] segmentation fault running kismet
-References: <A1286843C9B74E46B0063D92B7844C280380FC65@azindbaex01.aztec.soft>
-Message-ID: <005301c86a21$f1065c10$c503760a@atmel.com>
+From: Hebbar <gururajakr@sanyo.co.in>
+Date: Thu, 7 Feb 2008 23:22:09 -0800 (PST)
+Subject: [Buildroot] DirectFB Fails with --enable-static option because of
+ incorrect ld location
+Message-ID: <15350519.post@talk.nabble.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -10,79 +10,51 @@ Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
 
-> 
-> Joe et al.,
-> Please help him and ignore the disclaimer.
-> Neither Saurav nor I can help remove it from the mailer.
-> 
-> And to top it, we don't have permission to access to external
-> (un-official) mail servers; therefore we cannot help but send
-> mails/requests from official id.
-> 
-> Sorry for the inconvenience caused.
-> 
-> Thanks & Regards,
-> yogesh
-> 
+Hi,
 
-The mailing list IS disclosing and distributing the mail.
-You can add a disclaimer in your signature
-saying that the comment below is not applicable to
-any mail sent to an public mailing list!
-Otherwise you should not be sending mails to mailing lists.
+Today i was trying to make arm926ejs toolchain with buildroot 4th feb
+snapshot. I added --enable-static option in directfb.mk file. During build i
+noticed that directfb is using root ld (/usr/bin/ld) instead of arm-linux-ld
+build by buildroot toolchain. i renamed /usr/bin/ld to /usr/bin/ld_orig and
+it failed with below error. 
 
-Best Regards
-Ulf Samuelsson
+Is there any way to make directfb makefile to consider buildroot toolchain
+built ld instead of /usr/bin/ld 
 
+<snip>
+<snip>
 
-> 
-> -----Original Message-----
-> From: buildroot-bounces at uclibc.org [mailto:buildroot-bounces at uclibc.org]
-> On Behalf Of Joe
-> Sent: Thursday, February 07, 2008 10:46 PM
-> To: Saurav Kumar Barik
-> Cc: buildroot at uclibc.org
-> Subject: Re: [Buildroot] segmentation fault running kismet
-> 
-> 
-> Do you really want an answer? So get rid of this. Some other MLs would
-> have you banned on the spot.
-> 
->> This email message and its attachments may contain CONFIDENTIAL AND
->> PRIVILEGED INFORMATION intended for the sole use of the addressee(s).
->> If you have received it in error, please contact the sender by return
->> email, notify your system manager and destroy the original message and
-> 
->> any copies thereof. Any review, use, disclosure or distribution is
->> unlawful. Please check this email and any attachments for the presence
-> 
->> of viruses. The Company accepts no  liability for any damage caused by
-> 
->> any virus transmitted by this email. The views or opinions presented
->> in this e-mail are solely those of the author and do not necessarily
->> represent those of the company. The Company reserves the right to
->> monitor, review and store the content of all messages sent to or from
->> this e-mail address.
-> 
-> Greetz Joe
-> 
-> --
-> Sepp "ZaP" Holzmayr
-> 
-> please reply to: zentrale.at.work at gmail.com
-> "Never underestimate the bandwidth of a freight train full of DAT tapes.
-> 
-> Only the round-trip is a little suboptimal."
-> _______________________________________________
-> buildroot mailing list
-> buildroot at uclibc.org http://busybox.net/mailman/listinfo/buildroot
-> 
-> This email message and its attachments may contain CONFIDENTIAL AND PRIVILEGED INFORMATION intended for the sole use of the addressee(s). If you have received it in error, please contact the sender by return email, notify your system manager and destroy the original message and any copies thereof. Any review, use, disclosure or distribution is unlawful. Please check this email and any attachments for the presence of viruses. The Company accepts no  liability for any damage caused by any virus transmitted by this email. The views or opinions presented in this e-mail are solely those of the author and do not necessarily represent those of the company.
-> The Company reserves the right to monitor, review and store the content of all messages sent to or from this e-mail address.
-> 
-> www.aztecsoft.com
-> _______________________________________________
-> buildroot mailing list
-> buildroot at uclibc.org
-> http://busybox.net/mailman/listinfo/buildroot
->
+Making install in fbdev
+make[3]: Entering directory
+`/home/project/original/bldrt/buildroot/build_arm/DirectFB-1.0.1/systems/fbdev'
+rm -f .libs/libdirectfb_fbdev.a.tmp/*.o
+if test -d .libs/libdirectfb_fbdev.a.tmp; then rmdir
+.libs/libdirectfb_fbdev.a.tmp; fi
+mkdir .libs/libdirectfb_fbdev.a.tmp
+(cd .libs/libdirectfb_fbdev.a.tmp &&
+/home/project/original/bldrt/buildroot/build_arm/staging_dir/usr/bin/arm-linux-uclibc-ar
+x ../../.libs/libdirectfb_fbdev.a)
+ld -o libdirectfb_fbdev.o -r .libs/libdirectfb_fbdev.a.tmp/*.o
+/bin/sh: ld: command not found
+make[3]: *** [libdirectfb_fbdev.o] Error 127
+make[3]: Leaving directory
+`/home/project/original/bldrt/buildroot/build_arm/DirectFB-1.0.1/systems/fbdev'
+make[2]: *** [install-recursive] Error 1
+make[2]: Leaving directory
+`/home/project/original/bldrt/buildroot/build_arm/DirectFB-1.0.1/systems'
+make[1]: *** [install-recursive] Error 1
+make[1]: Leaving directory
+`/home/project/original/bldrt/buildroot/build_arm/DirectFB-1.0.1'
+make: ***
+[/home/project/original/bldrt/buildroot/build_arm/staging_dir/usr/lib/libdirectfb.so]
+Error 2
+
+root at guru_vlinux:~/project/original/bldrt/buildroot# ls -la /usr/bin/ld*
+-rwxr-xr-x 1 root root 430804 Jan  4 11:17 /usr/bin/ld_orig
+-rwxr-xr-x 1 root root   5871 Jan 12 15:21 /usr/bin/ldd_orig
+
+Regards
+Gururaja
+-- 
+View this message in context: http://www.nabble.com/DirectFB-Fails-with---enable-static-option-because-of-incorrect-ld-location-tp15350519p15350519.html
+Sent from the BuildRoot mailing list archive at Nabble.com.
