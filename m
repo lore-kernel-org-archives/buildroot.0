@@ -1,71 +1,56 @@
-From: Yogesh Kumar Sharma <yogeshs@aztecsoft.com>
-Date: Fri, 8 Feb 2008 10:35:59 +0530
+From: saurav barik <saurav.barik@gmail.com>
+Date: Fri, 8 Feb 2008 12:21:24 +0530
 Subject: [Buildroot] segmentation fault running kismet
-In-Reply-To: <47AB3CEC.2050206@gmail.com>
-Message-ID: <A1286843C9B74E46B0063D92B7844C280380FC65@azindbaex01.aztec.soft>
+Message-ID: <26b26d180802072251w7c06a39es337ee76936182b96@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+ Hi,
 
-Joe et al.,
-Please help him and ignore the disclaimer.
-Neither Saurav nor I can help remove it from the mailer.
+I am getting segmentation fault with kismet.
 
-And to top it, we don't have permission to access to external
-(un-official) mail servers; therefore we cannot help but send
-mails/requests from official id.
+My setup is .
+Gateworks BSP 0.7
+Buildroot
+Linux-2.6.21.4
+kismet-2007-10-R1
 
-Sorry for the inconvenience caused.
+I followed the following thread for integrating kismet .
+    http://www.busybox.net/lists/buildroot/2007-October/006129.html
+There were no issues with the build. I cross verified the kismet.conf
+file and the values were proper.
+
+**********************************************************************************************
+[root at saurav]# ./kismet_server -f kismet.conf
+Using alternate config file: kismet.conf
+Will drop privs to saurav (1001) gid 1001
+No specific sources given to be enabled, all will be enabled.
+Enabling channel hopping.
+Enabling channel splitting.
+Dropped privs to saurav (1001) gid 1001
+WARNING:  Disabling GPS logging.
+Logging networks to Kismet.network
+Logging networks in CSV format to Kismet.csv
+Logging networks in XML format to Kismet.xml
+Logging cryptographically weak packets to Kismet.weak
+Logging cisco product information to Kismet.cisco
+Tracking probe responses and associating probe networks.
+Reading AP manufacturer data and defaults from /home/saurav/ap_manuf
+Reading client manufacturer data and defaults from /home/saurav/client_manuf
+
+Segmentation fault
+***********************************************************************************************
+
+Has anybody successfully used kismet with buildroot?
+I shall be grateful if somebody could share some pointers on this issue.
 
 Thanks & Regards,
-yogesh
+Saurav
 
-
------Original Message-----
-From: buildroot-bounces@uclibc.org [mailto:buildroot-bounces at uclibc.org]
-On Behalf Of Joe
-Sent: Thursday, February 07, 2008 10:46 PM
-To: Saurav Kumar Barik
-Cc: buildroot at uclibc.org
-Subject: Re: [Buildroot] segmentation fault running kismet
-
-
-Do you really want an answer? So get rid of this. Some other MLs would
-have you banned on the spot.
-
-> This email message and its attachments may contain CONFIDENTIAL AND
-> PRIVILEGED INFORMATION intended for the sole use of the addressee(s).
-> If you have received it in error, please contact the sender by return
-> email, notify your system manager and destroy the original message and
-
-> any copies thereof. Any review, use, disclosure or distribution is
-> unlawful. Please check this email and any attachments for the presence
-
-> of viruses. The Company accepts no  liability for any damage caused by
-
-> any virus transmitted by this email. The views or opinions presented
-> in this e-mail are solely those of the author and do not necessarily
-> represent those of the company. The Company reserves the right to
-> monitor, review and store the content of all messages sent to or from
-> this e-mail address.
-
-Greetz Joe
-
---
-Sepp "ZaP" Holzmayr
-
-please reply to: zentrale.at.work at gmail.com
-"Never underestimate the bandwidth of a freight train full of DAT tapes.
-
-Only the round-trip is a little suboptimal."
-_______________________________________________
-buildroot mailing list
-buildroot at uclibc.org http://busybox.net/mailman/listinfo/buildroot
-
-This email message and its attachments may contain CONFIDENTIAL AND PRIVILEGED INFORMATION intended for the sole use of the addressee(s). If you have received it in error, please contact the sender by return email, notify your system manager and destroy the original message and any copies thereof. Any review, use, disclosure or distribution is unlawful. Please check this email and any attachments for the presence of viruses. The Company accepts no  liability for any damage caused by any virus transmitted by this email. The views or opinions presented in this e-mail are solely those of the author and do not necessarily represent those of the company.
-The Company reserves the right to monitor, review and store the content of all messages sent to or from this e-mail address.
-
-www.aztecsoft.com
+PS: I earlier sent same mail from my company's mail id, but since that
+mail had company's disclaimer towards the end of it; therefore am
+sending it again from a personal mail id. Thanks Joe for pointing that
+out. Please help :-).
