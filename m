@@ -1,256 +1,197 @@
-From: =?ISO-8859-1?Q?Thiago_A._Corr=EAa?= <thiago.correa@gmail.com>
-Date: Mon, 11 Feb 2008 11:57:25 -0200
-Subject: [Buildroot] [ping] [patch] CONFIG_UPDATE for a few packages
-In-Reply-To: <200802102331.m1ANVuFi015689@sallyv1.ics.uci.edu>
-References: <200801041753.m04Hr3Pi011109@oogie-boogie.ics.uci.edu>
-	<200802102331.m1ANVuFi015689@sallyv1.ics.uci.edu>
-Message-ID: <d6cda7730802110557h3b931e72rbbf57084d46dcfd1@mail.gmail.com>
+From: bugs at busybox.net <bugs@busybox.net>
+Date: Mon, 11 Feb 2008 07:11:35 -0800
+Subject: [Buildroot] [buildroot 0001467]: fontconfig-2.4.2 refuses to
+	configure due to autoreconfig problems
+Message-ID: <ec4e7886c06c12a10caa4626cc9dc31a@bugs.busybox.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Dan,
 
-    Unfortunally, most of the ppl with commit powers are pretty busy
-and quite often misses the patches (I have sent some 2 or 3 myself
-around the same time). Doing what you just did (bumping the message)
-usually catches some attention. Also, it wold really help the guy
-applying it if you would make it as an attachment instead of copying
-it to the body of the message.
+A NOTE has been added to this issue. 
+====================================================================== 
+http://busybox.net/bugs/view.php?id=1467 
+====================================================================== 
+Reported By:                mastag
+Assigned To:                buildroot
+====================================================================== 
+Project:                    buildroot
+Issue ID:                   1467
+Category:                   Architecture Specific
+Reproducibility:            always
+Severity:                   major
+Priority:                   normal
+Status:                     assigned
+====================================================================== 
+Date Submitted:             08-19-2007 16:07 PDT
+Last Modified:              02-11-2008 07:11 PST
+====================================================================== 
+Summary:                    fontconfig-2.4.2 refuses to configure due to
+autoreconfig problems
+Description: 
+I'm trying to build fontconfig for sh4 using gcc 3.4.6.
+It unpacks and gets patched but when trying to configure it will fail.
+Here is the full log:
 
-    I have also once made it an bug issue on the bug tracker which
-seamed to be effective. Please don't give up :)
+gzip -d -c /home/mastag/buildroot/dl/fontconfig-2.4.2.tar.gz | tar -C
+/home/mastag/buildroot/build_sh4   -xf -
+toolchain/patch-kernel.sh
+/home/mastag/buildroot/build_sh4/fontconfig-2.4.2 package/fontconfig/
+\*.patch*
 
-Kind Regards,
-    Thiago A. Correa
+Applying fc-lang.patch using plaintext: 
+patching file fc-lang/fc-lang.c
 
-On Feb 10, 2008 9:31 PM, Dan Nicolaescu <dann@ics.uci.edu> wrote:
-> Dan Nicolaescu <dann-qtdZKglfhziVc3sceRu5cw@public.gmane.org> writes:
->
->   > Hi,
->   >
->   > On a platform that needs very recent config.sub and config.guess files,
->   > a few more packages need to run CONFIG_UPDATE.
->   >
->   > Can someone please apply the patch below?
->
-> I sent this patch over a month ago.  Nobody has made any comments, or
-> applied it yet.
-> The patch is pretty straight forward....
->
-> Is there a different way of submitting patches? Do I need to do
-> something different?  Please let me know.
->
-> Thanks!
->
->                 --dan
->
->
->
->   > --- netcat/netcat.mk~
->   > +++ netcat/netcat.mk
->   > @@ -19,6 +19,7 @@
->   >
->   >  $(NETCAT_DIR)/.unpacked: $(DL_DIR)/$(NETCAT_SOURCE)
->   >     $(NETCAT_CAT) $(DL_DIR)/$(NETCAT_SOURCE) | tar -C $(BUILD_DIR) $(TAR_OPTIONS) -
->   > +   $(CONFIG_UPDATE) $(NETCAT_DIR)
->   >     touch $@
->   >
->   >  $(NETCAT_DIR)/.configured: $(NETCAT_DIR)/.unpacked
->   > --- which/which.mk~
->   > +++ which/which.mk
->   > @@ -18,6 +18,7 @@
->   >
->   >  $(WHICH_DIR)/.unpacked: $(DL_DIR)/$(WHICH_SOURCE)
->   >     $(WHICH_CAT) $(DL_DIR)/$(WHICH_SOURCE) | tar -C $(BUILD_DIR) $(TAR_OPTIONS) -
->   > +   $(CONFIG_UPDATE) $(WHICH_DIR)
->   >     touch $(WHICH_DIR)/.unpacked
->   >
->   >  $(WHICH_DIR)/.configured: $(WHICH_DIR)/.unpacked
->   > --- rsync/rsync.mk~
->   > +++ rsync/rsync.mk
->   > @@ -19,6 +19,7 @@
->   >  $(RSYNC_DIR)/.unpacked: $(DL_DIR)/$(RSYNC_SOURCE)
->   >     $(RSYNC_CAT) $(DL_DIR)/$(RSYNC_SOURCE) | tar -C $(BUILD_DIR) $(TAR_OPTIONS) -
->   >     toolchain/patch-kernel.sh $(RSYNC_DIR) package/rsync/ rsync\*.patch
->   > +   $(CONFIG_UPDATE) $(RSYNC_DIR)
->   >     touch $(RSYNC_DIR)/.unpacked
->   >
->   >  $(RSYNC_DIR)/.configured: $(RSYNC_DIR)/.unpacked
->   > --- rxvt/rxvt.mk~
->   > +++ rxvt/rxvt.mk
->   > @@ -35,6 +35,7 @@
->   >  $(RXVT_DIR)/.unpacked: $(DL_DIR)/$(RXVT_SOURCE)
->   >     $(RXVT_CAT) $(DL_DIR)/$(RXVT_SOURCE) | tar -C $(BUILD_DIR) $(TAR_OPTIONS) -
->   >     toolchain/patch-kernel.sh $(RXVT_DIR) package/rxvt/ \*.patch
->   > +   $(CONFIG_UPDATE) $(RXVT_DIR)/autoconf
->   >     touch $(RXVT_DIR)/.unpacked
->   >
->   >  $(RXVT_DIR)/.configured: $(RXVT_DIR)/.unpacked
->   > --- coreutils/coreutils.mk~
->   > +++ coreutils/coreutils.mk
->   > @@ -22,6 +22,7 @@
->   >  $(COREUTILS_DIR)/.unpacked: $(DL_DIR)/$(COREUTILS_SOURCE)
->   >     $(COREUTILS_CAT) $(DL_DIR)/$(COREUTILS_SOURCE) | tar -C $(BUILD_DIR) $(TAR_OPTIONS) -
->   >     toolchain/patch-kernel.sh $(COREUTILS_DIR) package/coreutils/ coreutils\*.patch
->   > +   $(CONFIG_UPDATE) $(COREUTILS_DIR)/build-aux
->   >     touch $@
->   >
->   >  $(COREUTILS_DIR)/.configured: $(COREUTILS_DIR)/.unpacked
->   > --- tar/tar.mk~
->   > +++ tar/tar.mk
->   > @@ -19,6 +19,8 @@
->   >  $(GNUTAR_DIR)/.unpacked: $(DL_DIR)/$(GNUTAR_SOURCE)
->   >     $(GNUTAR_CAT) $(DL_DIR)/$(GNUTAR_SOURCE) | tar -C $(BUILD_DIR) $(TAR_OPTIONS) -
->   >     toolchain/patch-kernel.sh $(GNUTAR_DIR) package/tar/ tar\*.patch
->   > +   $(CONFIG_UPDATE) $(GNUTAR_DIR)
->   > +   $(CONFIG_UPDATE) $(GNUTAR_DIR)/build-aux
->   >     touch $@
->   >
->   >  $(GNUTAR_DIR)/.configured: $(GNUTAR_DIR)/.unpacked
->   > --- grep/grep.mk~
->   > +++ grep/grep.mk
->   > @@ -22,6 +22,7 @@
->   >     mv $(GNUGREP_DIR) $(GNUGREP_DIR).xxx
->   >     $(GNUGREP_CAT) $(GNUGREP_DIR).xxx/grep_$(GNUGREP_VERSION).tar.gz | tar -C $(BUILD_DIR) $(TAR_OPTIONS) -
->   >     rm -rf $(GNUGREP_DIR).xxx
->   > +   $(CONFIG_UPDATE) $(GNUGREP_DIR)
->   >     touch $(GNUGREP_DIR)/.unpacked
->   >
->   >  $(GNUGREP_DIR)/.configured: $(GNUGREP_DIR)/.unpacked
->   > --- libdrm/libdrm.mk~
->   > +++ libdrm/libdrm.mk
->   > @@ -16,6 +16,7 @@
->   >
->   >  $(LIBDRM_DIR)/.unpacked: $(DL_DIR)/$(LIBDRM_SOURCE)
->   >     $(LIBDRM_CAT) $(DL_DIR)/$(LIBDRM_SOURCE) | tar -C $(BUILD_DIR) $(TAR_OPTIONS) -
->   > +   $(CONFIG_UPDATE) $(LIBDRM_DIR)
->   >     touch $@
->   >
->   >  $(LIBDRM_DIR)/.configured: $(LIBDRM_DIR)/.unpacked
->   > --- freetype/freetype.mk~
->   > +++ freetype/freetype.mk
->   > @@ -17,6 +17,7 @@
->   >  $(FREETYPE_DIR)/.unpacked: $(DL_DIR)/$(FREETYPE_SOURCE)
->   >     $(FREETYPE_CAT) $(DL_DIR)/$(FREETYPE_SOURCE) | tar -C $(BUILD_DIR) $(TAR_OPTIONS) -
->   >     $(CONFIG_UPDATE) $(FREETYPE_DIR)
->   > +   $(CONFIG_UPDATE) $(FREETYPE_DIR)/builds/unix
->   >     touch $(FREETYPE_DIR)/.unpacked
->   >
->   >  # freetype for the target
->   > --- sudo/sudo.mk~
->   > +++ sudo/sudo.mk
->   > @@ -18,6 +18,7 @@
->   >  $(SUDO_DIR)/.unpacked: $(DL_DIR)/$(SUDO_SOURCE)
->   >     $(SUDO_UNZIP) $(DL_DIR)/$(SUDO_SOURCE) | tar -C $(BUILD_DIR) $(TAR_OPTIONS) -
->   >     toolchain/patch-kernel.sh $(SUDO_DIR) package/sudo sudo\*.patch
->   > +   $(CONFIG_UPDATE) $(SUDO_DIR)
->   >     touch $(SUDO_DIR)/.unpacked
->   >
->   >  $(SUDO_DIR)/.configured: $(SUDO_DIR)/.unpacked $(SUDO_CONFIG_FILE)
->   > --- sed/sed.mk~
->   > +++ sed/sed.mk
->   > @@ -37,6 +37,7 @@
->   >     mkdir -p $(HOST_SED_DIR)/bin
->   >     $(SED_CAT) $(DL_DIR)/$(SED_SOURCE) | tar -C $(TOOL_BUILD_DIR) $(TAR_OPTIONS) -
->   >     toolchain/patch-kernel.sh $(SED_DIR1) package/sed/ configure.patch
->   > +   $(CONFIG_UPDATE) $(SED_DIR1)/config
->   >     touch $@
->   >
->   >  $(SED_DIR1)/.configured: $(SED_DIR1)/.unpacked
->   > @@ -97,6 +98,7 @@
->   >  #############################################################
->   >  $(SED_DIR2)/.unpacked: $(DL_DIR)/$(SED_SOURCE)
->   >     $(SED_CAT) $(DL_DIR)/$(SED_SOURCE) | tar -C $(BUILD_DIR) $(TAR_OPTIONS) -
->   > +   $(CONFIG_UPDATE) $(SED_DIR2)/config
->   >     touch $(SED_DIR2)/.unpacked
->   >
->   >  $(SED_DIR2)/.configured: $(SED_DIR2)/.unpacked
->   > --- autoconf/autoconf.mk
->   > +++ autoconf/autoconf.mk
->   > @@ -24,6 +24,7 @@
->   >
->   >  $(AUTOCONF_SRC_DIR)/.unpacked: $(DL_DIR)/$(AUTOCONF_SOURCE)
->   >     $(AUTOCONF_CAT) $(DL_DIR)/$(AUTOCONF_SOURCE) | tar -C $(TOOL_BUILD_DIR) $(TAR_OPTIONS) -
->   > +   $(CONFIG_UPDATE) $(AUTOCONF_SRC_DIR)
->   >     touch $@
->   >
->   >  #############################################################
->   > --- dialog/dialog.mk
->   > +++ dialog/dialog.mk
->   > @@ -15,6 +15,7 @@
->   >
->   >  $(DIALOG_DIR)/.source: $(DL_DIR)/$(DIALOG_SOURCE) $(DL_DIR)/$(DIALOG_PATCH1)
->   >     $(ZCAT) $(DL_DIR)/$(DIALOG_SOURCE) | tar -C $(BUILD_DIR) $(TAR_OPTIONS) -
->   > +   $(CONFIG_UPDATE) $(DIALOG_DIR)
->   >     touch $@
->   >
->   >  $(DIALOG_DIR)/.configured: $(DIALOG_DIR)/.source
->   > --- libtool/libtool.mk
->   > +++ libtool/libtool.mk
->   > @@ -20,6 +20,8 @@
->   >
->   >  $(LIBTOOL_SRC_DIR)/.unpacked: $(DL_DIR)/$(LIBTOOL_SOURCE)
->   >     $(LIBTOOL_CAT) $(DL_DIR)/$(LIBTOOL_SOURCE) | tar -C $(TOOL_BUILD_DIR) $(TAR_OPTIONS) -
->   > +   $(CONFIG_UPDATE) $(LIBTOOL_SRC_DIR)
->   > +   $(CONFIG_UPDATE) $(LIBTOOL_SRC_DIR)/libltdl
->   >     touch $@
->   >
->   >  #############################################################
->   > --- wget/wget.mk
->   > +++ wget/wget.mk
->   > @@ -18,6 +18,7 @@
->   >
->   >  $(WGET_DIR)/.unpacked: $(DL_DIR)/$(WGET_SOURCE)
->   >     $(WGET_CAT) $(DL_DIR)/$(WGET_SOURCE) | tar -C $(BUILD_DIR) $(TAR_OPTIONS) -
->   > +   $(CONFIG_UPDATE) $(WGET_DIR)
->   >     touch $(WGET_DIR)/.unpacked
->   >
->   >  $(WGET_DIR)/.configured: $(WGET_DIR)/.unpacked
->   > --- expat/expat.mk
->   > +++ expat/expat.mk
->   > @@ -22,6 +22,7 @@
->   >     $(EXPAT_CAT) $(DL_DIR)/$(EXPAT_SOURCE) | \
->   >             tar -C $(BUILD_DIR) $(TAR_OPTIONS) -
->   >     $(CONFIG_UPDATE) $(EXPAT_DIR)
->   > +   $(CONFIG_UPDATE) $(EXPAT_DIR)/conftools
->   >     touch $@
->   >
->   >  $(EXPAT_DIR)/.configured: $(EXPAT_DIR)/.unpacked
->   > --- cvs/cvs.mk
->   > +++ cvs/cvs.mk
->   > @@ -38,6 +38,7 @@
->   >     $(BZCAT) $(CVS_DIR)/cvs-$(CVS_VERSION)/cvs-$(CVS_VERSION).tar.bz2 | tar -C $(BUILD_DIR) $(TAR_OPTIONS) -
->   >     rm -rf $(CVS_DIR)/cvs-$(CVS_VERSION)
->   >     $(CONFIG_UPDATE) $(CVS_DIR)
->   > +   $(CONFIG_UPDATE) $(CVS_DIR)/build-aux
->   >     toolchain/patch-kernel.sh $(CVS_DIR) package/cvs \*$(CVS_VERSION)\*.patch
->   >  ifneq ($(CVS_PATCH),)
->   >     toolchain/patch-kernel.sh $(CVS_DIR) $(DL_DIR) $(CVS_PATCH)
->   > --- nano/nano.mk
->   > +++ nano/nano.mk
->   > @@ -18,6 +18,7 @@
->   >
->   >  $(NANO_DIR)/.unpacked: $(DL_DIR)/$(NANO_SOURCE)
->   >     $(NANO_CAT) $(DL_DIR)/$(NANO_SOURCE) | tar -C $(BUILD_DIR) $(TAR_OPTIONS) -
->   > +   $(CONFIG_UPDATE) $(NANO_DIR)
->   >     touch $(NANO_DIR)/.unpacked
->   >
->   >  $(NANO_DIR)/.configured: $(NANO_DIR)/.unpacked
->   > --- mplayer/mplayer.mk
->   > +++ mplayer/mplayer.mk
->   > @@ -23,6 +23,7 @@
->   >  $(MPLAYER_DIR)/.unpacked: $(DL_DIR)/$(MPLAYER_SOURCE)
->   >     $(MPLAYER_CAT) $(DL_DIR)/$(MPLAYER_SOURCE) | tar -C $(BUILD_DIR) $(TAR_OPTIONS) -
->   >     toolchain/patch-kernel.sh $(MPLAYER_DIR) package/mplayer/ mplayer-$(MPLAYER_VERSION)\*.patch\*
->   > +   $(CONFIG_UPDATE) $(MPLAYER_DIR)
->   >     touch $@
->   >
->   >  $(MPLAYER_DIR)/.configured: $(MPLAYER_DIR)/.unpacked
-> _______________________________________________
-> buildroot mailing list
-> buildroot at uclibc.org
-> http://busybox.net/mailman/listinfo/buildroot
->
+Applying host-tools.patch using plaintext: 
+patching file fc-lang/Makefile.am
+patching file fc-case/Makefile.am
+patching file fc-glyphname/Makefile.am
+patching file configure.in
+patching file fc-arch/Makefile.am
+
+Applying libdir-la.patch using plaintext: 
+patching file ltmain.sh
+Hunk http://busybox.net/bugs/view.php?id=2 succeeded at 2408 (offset 3 lines).
+Hunk http://busybox.net/bugs/view.php?id=4 succeeded at 5623 (offset 8 lines).
+FREETYPE_CFLAGS="-I/home/mastag/buildroot/toolchain_build_sh4/freetype-2.2.1-host/include/freetype2
+-I/home/mastag/buildroot/toolchain_build_sh4/freetype-2.2.1-host/include";
+\
+       
+FREETYPE_LIBS="-L/home/mastag/buildroot/toolchain_build_sh4/freetype-2.2.1-host/lib
+-Wl,--rpath
+-Wl,/home/mastag/buildroot/toolchain_build_sh4/freetype-2.2.1-host/lib
+-lfreetype -lz"; \
+        for dir in fc-case fc-glyphname fc-lang fc-arch; \
+        do \
+                /home/mastag/buildroot/toolchain_build_sh4/bin/sed -i -e
+"s~^FREETYPE_CFLAGS =.*~FREETYPE_CFLAGS = $FREETYPE_CFLAGS~" \
+                    -e "s~^FREETYPE_LIBS =.*~FREETYPE_LIBS =
+$FREETYPE_LIBS~" \
+                       
+/home/mastag/buildroot/build_sh4/fontconfig-2.4.2/$dir/Makefile.in; \
+        done
+cp -f package/gnuconfig/config.sub package/gnuconfig/config.guess 
+/home/mastag/buildroot/build_sh4/fontconfig-2.4.2
+touch /home/mastag/buildroot/build_sh4/fontconfig-2.4.2/.unpacked
+(cd /home/mastag/buildroot/build_sh4/fontconfig-2.4.2; rm -rf config.cache
+; \
+               
+PATH="/home/mastag/buildroot/toolchain_build_sh4/bin:/home/mastag/buildroot/build_sh4/staging_dir/bin:/home/mastag/buildroot/build_sh4/staging_dir/usr/bin:/usr/kerberos/bin:/usr/lib/ccache:/usr/local/bin:/usr/bin:/bin:/home/mastag/bin:/home/mastag/buildroot/build_sh4/staging_dir/bin"
+AR_FOR_BUILD="/usr/bin/ar" AS_FOR_BUILD="/usr/bin/as"
+CC_FOR_BUILD="/usr/lib/ccache/gcc" GCC_FOR_BUILD="/usr/lib/ccache/gcc"
+CXX_FOR_BUILD="/usr/lib/ccache/g++" LD_FOR_BUILD="/usr/bin/ld"
+CFLAGS_FOR_BUILD="" CXXFLAGS_FOR_BUILD="" LDFLAGS_FOR_BUILD=""
+AR_FOR_TARGET=/home/mastag/buildroot/build_sh4/staging_dir/usr/bin/sh4-linux-uclibc-ar
+AS_FOR_TARGET=/home/mastag/buildroot/build_sh4/staging_dir/usr/bin/sh4-linux-uclibc-as
+LD_FOR_TARGET=/home/mastag/buildroot/build_sh4/staging_dir/usr/bin/sh4-linux-uclibc-ld
+NM_FOR_TARGET=/home/mastag/buildroot/build_sh4/staging_dir/usr/bin/sh4-linux-uclibc-nm
+RANLIB_FOR_TARGET=/home/mastag/buildroot/build_sh4/staging_dir/usr/bin/sh4-linux-uclibc-ranlib
+STRIP_FOR_TARGET=/home/mastag/buildroot/build_sh4/staging_dir/usr/bin/sh4-linux-uclibc-strip
+OBJCOPY_FOR_TARGET=/home/mastag/buildroot/build_sh4/staging_dir/usr/bin/sh4-linux-uclibc-objcopy
+ACLOCAL="aclocal -I
+/home/mastag/buildroot/build_sh4/staging_dir/usr/share/aclocal" autoreconf
+-v -f -i -I
+"/home/mastag/buildroot/build_sh4/staging_dir/usr/share/aclocal" && \
+               
+PATH="/home/mastag/buildroot/toolchain_build_sh4/bin:/home/mastag/buildroot/build_sh4/staging_dir/bin:/home/mastag/buildroot/build_sh4/staging_dir/usr/bin:/usr/kerberos/bin:/usr/lib/ccache:/usr/local/bin:/usr/bin:/bin:/home/mastag/bin:/home/mastag/buildroot/build_sh4/staging_dir/bin"
+AR=/home/mastag/buildroot/build_sh4/staging_dir/usr/bin/sh4-linux-uclibc-ar
+AS=/home/mastag/buildroot/build_sh4/staging_dir/usr/bin/sh4-linux-uclibc-as
+LD="/home/mastag/buildroot/build_sh4/staging_dir/usr/bin/sh4-linux-uclibc-ld
+-L/home/mastag/buildroot/build_sh4/staging_dir/lib
+-L/home/mastag/buildroot/build_sh4/staging_dir/usr/lib"
+NM=/home/mastag/buildroot/build_sh4/staging_dir/usr/bin/sh4-linux-uclibc-nm
+CC="/home/mastag/buildroot/build_sh4/staging_dir/usr/bin/sh4-linux-uclibc-gcc
+-Os -pipe  -I/home/mastag/buildroot/build_sh4/staging_dir/usr/include
+-I/home/mastag/buildroot/build_sh4/staging_dir/include"
+GCC="/home/mastag/buildroot/build_sh4/staging_dir/usr/bin/sh4-linux-uclibc-gcc
+-Os -pipe  -I/home/mastag/buildroot/build_sh4/staging_dir/usr/include
+-I/home/mastag/buildroot/build_sh4/staging_dir/include"
+CXX="/home/mastag/buildroot/build_sh4/staging_dir/usr/bin/sh4-linux-uclibc-g++
+-Os -pipe  -I/home/mastag/buildroot/build_sh4/staging_dir/usr/include
+-I/home/mastag/buildroot/build_sh4/staging_dir/include"
+CPP="/home/mastag/buildroot/build_sh4/staging_dir/usr/bin/sh4-linux-uclibc-cpp
+-Os -pipe  -I/home/mastag/buildroot/build_sh4/staging_dir/usr/include
+-I/home/mastag/buildroot/build_sh4/staging_dir/include"
+RANLIB=/home/mastag/buildroot/build_sh4/staging_dir/usr/bin/sh4-linux-uclibc-ranlib
+STRIP=/home/mastag/buildroot/build_sh4/staging_dir/usr/bin/sh4-linux-uclibc-strip
+OBJCOPY=/home/mastag/buildroot/build_sh4/staging_dir/usr/bin/sh4-linux-uclibc-objcopy
+AR_FOR_BUILD="/usr/bin/ar" AS_FOR_BUILD="/usr/bin/as"
+CC_FOR_BUILD="/usr/lib/ccache/gcc" CXX_FOR_BUILD="/usr/lib/ccache/g++"
+LD_FOR_BUILD="/usr/bin/ld" CFLAGS_FOR_BUILD="" CXXFLAGS_FOR_BUILD=""
+LDFLAGS_FOR_BUILD=""
+PKG_CONFIG_SYSROOT="/home/mastag/buildroot/build_sh4/staging_dir"
+PKG_CONFIG="/home/mastag/buildroot/build_sh4/staging_dir/usr/bin/pkg-config"
+PKG_CONFIG_PATH="/home/mastag/buildroot/build_sh4/staging_dir/usr/lib/pkgconfig:"
+PKG_CONFIG_ALLOW_SYSTEM_CFLAGS=1 PKG_CONFIG_ALLOW_SYSTEM_LIBS=1
+STAGING_DIR="/home/mastag/buildroot/build_sh4/staging_dir" \
+                ac_cv_lbl_unaligned_fail=yes
+ac_cv_func_mmap_fixed_mapped=yes ac_cv_func_memcmp_working=yes
+ac_cv_c_bigendian=no \
+               
+CFLAGS_FOR_BUILD="-I/home/mastag/buildroot/toolchain_build_sh4/freetype-2.2.1-host/include/freetype2
+-I/home/mastag/buildroot/toolchain_build_sh4/freetype-2.2.1-host/include"
+\
+                ./configure \
+                --target=sh4-linux \
+                --host=sh4-linux \
+                --build=i386-pc-linux-gnu \
+                --with-arch=sh4-linux \
+                --prefix=/usr \
+                --exec-prefix=/usr \
+                --bindir=/usr/bin \
+                --sbindir=/usr/sbin \
+                --libdir=/usr/lib \
+                --libexecdir=/usr/lib \
+                --sysconfdir=/etc \
+                --datadir=/usr/share \
+                --localstatedir=/var \
+                --includedir=/usr/include \
+                --mandir=/usr/man \
+                --infodir=/usr/info \
+               
+--with-freetype-config="/home/mastag/buildroot/build_sh4/staging_dir/usr/bin/freetype-config"
+\
+               
+--with-expat="/home/mastag/buildroot/build_sh4/staging_dir/usr/lib" \
+               
+--with-expat-lib=/home/mastag/buildroot/build_sh4/staging_dir/usr/lib \
+               
+--with-expat-includes=/home/mastag/buildroot/build_sh4/staging_dir/usr/include
+\
+                --disable-docs \
+        )
+autoreconf: Entering directory `.'
+autoreconf: configure.in: not using Gettext
+autoreconf: running: aclocal -I
+/home/mastag/buildroot/build_sh4/staging_dir/usr/share/aclocal --force 
+configure.in:64: warning: macro `AM_PROG_LIBTOOL' not found in library
+autoreconf: configure.in: tracing
+autoreconf: configure.in: not using Libtool
+autoreconf: running: /usr/bin/autoconf
+--include=/home/mastag/buildroot/build_sh4/staging_dir/usr/share/aclocal
+--force
+configure.in:63: error: possibly undefined macro: AC_LIBTOOL_WIN32_DLL
+      If this token and others are legitimate, please use
+m4_pattern_allow.
+      See the Autoconf documentation.
+configure.in:64: error: possibly undefined macro: AM_PROG_LIBTOOL
+autoreconf: /usr/bin/autoconf failed with exit status: 1
+make: *** [/home/mastag/buildroot/build_sh4/fontconfig-2.4.2/.configured]
+Fout 1
+====================================================================== 
+
+---------------------------------------------------------------------- 
+ ericstjean - 02-11-08 07:11  
+---------------------------------------------------------------------- 
+resolved by installing libtool 
+
+Issue History 
+Date Modified   Username       Field                    Change               
+====================================================================== 
+08-19-07 16:07  mastag         New Issue                                    
+08-19-07 16:07  mastag         Status                   new => assigned     
+08-19-07 16:07  mastag         Assigned To               => buildroot       
+02-11-08 07:11  ericstjean     Note Added: 0003854                          
+======================================================================
