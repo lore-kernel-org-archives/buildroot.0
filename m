@@ -1,39 +1,41 @@
-From: Hans-Christian Egtvedt <hcegtvedt@atmel.com>
-Date: Tue, 12 Feb 2008 07:11:53 +0100
-Subject: [Buildroot] Libtool relinking problem
-In-Reply-To: <46a136670802111753w4b6a7fbar93030a13b101eb28@mail.gmail.com>
-References: <46a136670802111753w4b6a7fbar93030a13b101eb28@mail.gmail.com>
-Message-ID: <1202796713.26099.5.camel@localhost>
+From: Ulf Samuelsson <ulf@atmel.com>
+Date: Mon, 11 Feb 2008 16:26:29 +0100
+Subject: [Buildroot] Best way to add custom step
+References: <47B0661A.6070605@carallon.com>
+Message-ID: <000201c86d49$57af3700$2301a8c0@atmel.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Mon, 2008-02-11 at 20:53 -0500, John Voltz wrote:
-> I'm wondering if anyone else has noticed problems when installing some
-> libraries to the staging_dir, sometimes libtool will place a  random
-> dependency reference as /usr/lib/xxx.la instead of
-> $(STAGING_DIR)/usr/lib/xxx.la.
+----- Original Message ----- 
+From: "Will Wagner" <will_wagner@carallon.com>
+To: <buildroot@uclibc.org>
+Sent: Monday, February 11, 2008 4:13 PM
+Subject: [Buildroot] Best way to add custom step
+
+
+> Hi All,
+> 
+> I need to add a custom step to my build process after the linux image is 
+> built into the binaries directory. I was wondering about what was the 
+> best way to go about this.
+> 
+> I could add my changes to the top level makefile or to the 
+> target\linux\Makefile.in file. Is one way better than the other? Is 
+> there a better way of doing this?
+> 
+> Thanks,
 > 
 
-Unsure why some libraries fail to install with correct path while others
-manage to do $(DESTDIR)/$(PREFIX)/lib/libxxx.la.
 
-I usually add a $(SED) to the Buildroot Makefile to correct the
-libxxx.la file.
+If it is board specific, then it makes more sense to put it
+in target/device and let the target depend on the linux binary.
 
-$(SED) "s,^libdir=.*,libdir=\'$(STAGING_DIR)/usr/lib\',g" $(STAGING_DIR)/usr/lib/libxxx.la
+What is the custom  step?
 
-> This appears to be caused by the libtool re-linking during install.
-> Anybody know what to do to fix this? I tried adding
-> LDFLAGS="-L$(STAGING_DIR)/usr/lib" to make install, but it didn't
-> help.
-> 
 
-Fiddling with LDFLAGS, CFLAGS, etc to solve an issue is seldom the right
-solution.
 
--- 
-With kind regards,
-Hans-Christian Egtvedt, Applications Engineer
+Best Regards
+Ulf Samuelsson
