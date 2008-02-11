@@ -1,49 +1,50 @@
-From: Wayne Keenan <wayne.keenan@gmail.com>
-Date: Mon, 11 Feb 2008 17:32:11 +0000
-Subject: [Buildroot] kernel cross compilation problem (at91sam9260)
-In-Reply-To: <642838.65822.qm@web23403.mail.ird.yahoo.com>
-References: <642838.65822.qm@web23403.mail.ird.yahoo.com>
-Message-ID: <270858e90802110932s7b41e7e3v2d6dd6323c3dcf4f@mail.gmail.com>
+From: Andrew Dyer <amdyer@gmail.com>
+Date: Mon, 11 Feb 2008 11:27:11 -0600
+Subject: [Buildroot] alsa for arm compile options & svn 20557
+Message-ID: <c166aa9f0802110927n1fcade83w87c3bae4017b509a@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi,
+I believe a change introduced in SVN 20557 is incorrect for some arm
+kernel builds with alsa.  Here is the 20557 change:
 
-Dropping back to using gcc 3.4.6  and uclib x.x.28 worked for me.  - not a
-proper fix, but it was a combination that worked andI was fed up of trying
-combinations :)
+--- trunk/buildroot/package/alsa-lib/alsa-lib.mk	2007/10/01 16:15:31	20163
++++ trunk/buildroot/package/alsa-lib/alsa-lib.mk	2007/11/28 07:09:57	20557
+@@ -24,7 +24,7 @@
+ 	(cd $(ALSA_LIB_DIR); rm -rf config.cache; \
+ 		$(TARGET_CONFIGURE_ARGS) \
+ 		$(TARGET_CONFIGURE_OPTS) \
+-		CFLAGS="$(TARGET_CFLAGS)" \
++		CFLAGS="$(TARGET_CFLAGS) -mabi=aapcs-linux" \
+ 		LDFLAGS="$(TARGET_LDFLAGS)" \
+ 		./configure \
+ 		--target=$(GNU_TARGET_NAME) \
 
+The root problem is that the kernel and the alsa libraries must be
+compiled such that certain structure sizes work out the same, else the
+ioctls used by alsa in communicating between userland and kernel will
+fail.  The bug manifests itself on the target like so:
 
-Regards
-Wayne
+# alsamixer
+alsamixer: function snd_mixer_load failed: Inappropriate ioctl for device
 
+The problem with the 20557 change is that depending on the kernel
+config used the -mabi switch can be different.  The kernel option that
+controls this is CONFIG_AEABI - both settings for this seem to be used
+for varying platforms defconfigs.  My platform happens to use the
+wrong one :-(
 
-On Feb 11, 2008 4:10 PM, grego rigolo <gregorigolo2002@yahoo.fr> wrote:
+Looking in linux-2.6/arch/arm/Makefile, the value of the -mabi option
+can be either -maapcs-linux or -mapcs-gnu.  I am not enough of a arm
+gcc guru to know if any of the other command line switches will affect
+the generated structure size.
 
-> hello,
-> I'm using the buildroot-20080206.tar.bz2 package to build a rootfilesystem
-> and a cross compilation toolchain for my embedded board (sam9260).
-> I tried to cross compile (arm-linux-gcc-4.1.2) a 2.6.23 linux kernel
-> seperately (not the one included in buildroot) , and i noticed that the size
-> had increased by 3Mb respect to my old version.
-> On the other hand when i try to use the generated kernel, it hangs at the
-> stage
-> uncompressing Linux ....................
-> Does anyone encounters this kind of problem ?
-> greg
->
->
-> ------------------------------
-> Ne gardez plus qu'une seule adresse mail ! Copiez vos mails<http://fr.rd.yahoo..com/mail/mail_taglines/trueswitch/SIG=11gshn0bu/**http%3A%2F%2Fwww.trueswitch.com%2Fyahoo-fr%2F>vers Yahoo! Mail
->
-> _______________________________________________
-> buildroot mailing list
-> buildroot at uclibc.org
-> http://busybox.net/mailman/listinfo/buildroot
->
--------------- next part --------------
-An HTML attachment was scrubbed...
-URL: http://busybox.net/lists/buildroot/attachments/20080211/7b6f612f/attachment-0001.htm 
+confirmed experimentally on my target by redefining aapcs-linux to
+apcs-gnu, recompiling, and alsamixer does not error out any more.
+
+-- 
+Hardware, n.:
+        The parts of a computer system that can be kicked.
