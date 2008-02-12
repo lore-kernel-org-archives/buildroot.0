@@ -1,48 +1,229 @@
-From: John Voltz <john.voltz@gmail.com>
-Date: Tue, 12 Feb 2008 11:38:11 -0500
-Subject: [Buildroot] Libtool relinking problem
-In-Reply-To: <1202796713.26099.5.camel@localhost>
-References: <46a136670802111753w4b6a7fbar93030a13b101eb28@mail.gmail.com>
-	<1202796713.26099.5.camel@localhost>
-Message-ID: <46a136670802120838x3efe85a9ied2a0d006d7f7f37@mail.gmail.com>
+From: =?ISO-8859-1?Q?Thiago_A._Corr=EAa?= <thiago.correa@gmail.com>
+Date: Tue, 12 Feb 2008 15:16:26 -0200
+Subject: [Buildroot] [PATCH] John Voltz changes part 1 (atk)
+Message-ID: <d6cda7730802120916x1d1c5e44k6e6c99b2b4a30d68@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-The sed command in Makefile.autotools.in is not terminated with the
-letter g. So it only fixes one problem in the line!
+Hi,
 
-John
+    I hate to see this proliferation of forks... now I want this
+feature from this fork, that other feature from that other fork...
+really frustrating :(
 
-On Feb 12, 2008 1:11 AM, Hans-Christian Egtvedt <hcegtvedt@atmel.com> wrote:
-> On Mon, 2008-02-11 at 20:53 -0500, John Voltz wrote:
-> > I'm wondering if anyone else has noticed problems when installing some
-> > libraries to the staging_dir, sometimes libtool will place a  random
-> > dependency reference as /usr/lib/xxx.la instead of
-> > $(STAGING_DIR)/usr/lib/xxx.la.
+    I have checked out John's tree from his svn at google and I'm
+starting to split it up into manageable change patches. Will send them
+as I get them split up.
+    First one: atk changes. I have ace of penguins ready, but it's
+340Kb, so I will keep it last :)
+
+    For this one, don't forget to do svn add
+package/atk/atk-1.9.1-libdir-la.patch package/atk/libdir-la.patch
+
+    Please review and apply.
+
+Kind Regards,
+   Thiago A. Correa
+
+
+
+On Feb 11, 2008 12:35 AM, John Voltz <john.voltz@gmail.com> wrote:
+> Rather than make a ridiculous patch, I'll point you to an uploaded
+> copy of my work:
+> http://avr32linux.org/twiki/bin/view/Main/DevelopmentTools
+> I can't remember what daily upstream snapshot it was based off of,
+> wouldn't be more than a week old though. I haven't taken the time to
+> sync it with the latest.
+>
+> Here's a rundown of what I've done:
+>
+> Added pixman, xkb_data, fonts and font-util to X.org, updated
+> everything to v7.3 except for the drivers (I don't use any of them)
+> Updated cairo, pango, glib, and gtk to the latest stable. I'm planning
+> to change them over to the new style makefiles later, it's much less
+> sloppy.
+> Updated the toolchain for AVR32 using the last official downstream
+> release of buildroot from Atmel.
+> Added support for kernel 2.6.24.
+> Added ace of penguins games (important!), cups, libsexy, webkit, fltk,
+> and synergy.
+> Many small bugfixes to other packages. There were still a lot of
+> packages installing to staging_dir/lib staging_dir/include. This
+> screws up pkgconfig badly. I fixed a lot of them, but some still
+> remain.
+> Added a patch to uClibc that I think needs fixed, to add the function
+> pthread_getattr_np() to allow webkit to build. It's used by the
+> javascipt collector functions. I think my patch actually causes webkit
+> to crash on pages with javascript on them. At least I tried!
+>
+> I may have introduced some other new annoyances to buildroot with all
+> of my poking around, so don't be surprised.
+>
+> There's also a couple of screen shots of Midori+WebKit running on my
+> AVR32 board here: http://avr32linux.org/twiki/bin/view/Main/Midori for
+> your viewing enjoyment.
+>
+> Regards,
+>
+> John Voltz
+>
+>
+>
+>
+> On Feb 10, 2008 3:00 PM,  <buildroot-request@uclibc.org> wrote:
+> > Send buildroot mailing list submissions to
+> >         buildroot at uclibc.org
 > >
->
-> Unsure why some libraries fail to install with correct path while others
-> manage to do $(DESTDIR)/$(PREFIX)/lib/libxxx.la.
->
-> I usually add a $(SED) to the Buildroot Makefile to correct the
-> libxxx.la file.
->
-> $(SED) "s,^libdir=.*,libdir=\'$(STAGING_DIR)/usr/lib\',g" $(STAGING_DIR)/usr/lib/libxxx.la
->
-> > This appears to be caused by the libtool re-linking during install.
-> > Anybody know what to do to fix this? I tried adding
-> > LDFLAGS="-L$(STAGING_DIR)/usr/lib" to make install, but it didn't
-> > help.
+> > To subscribe or unsubscribe via the World Wide Web, visit
+> >         http://busybox.net/mailman/listinfo/buildroot
+> > or, via email, send a message with subject or body 'help' to
+> >         buildroot-request at uclibc.org
 > >
+> > You can reach the person managing the list at
+> >         buildroot-owner at uclibc.org
+> >
+> > When replying, please edit your Subject line so it is more specific
+> > than "Re: Contents of buildroot digest..."
+> >
+> >
+> > Today's Topics:
+> >
+> >    1. HUGE patch for buildroot (John Voltz)
+> >    2. Re: HUGE patch for buildroot (Ormund Williams)
+> >    3. Re: HUGE patch for buildroot (Ivan Kuten)
+> >
+> >
+> > ----------------------------------------------------------------------
+> >
+> > Message: 1
+> > Date: Sat, 9 Feb 2008 21:28:35 -0500
+> > From: "John Voltz" <john.voltz@gmail.com>
+> > Subject: [Buildroot] HUGE patch for buildroot
+> > To: "Buildroot List" <buildroot@uclibc.org>
+> > Message-ID:
+> >         <46a136670802091828v558e5d50n131cc9076605bd7c@mail.gmail.com>
+> > Content-Type: text/plain; charset=ISO-8859-1
+> >
+> > Hello,
+> >
+> > I'm wondering if the buildroot maintainers frequent this list, and if
+> > so, how do you feel about receiving a humongous patch for it? I've
+> > been working on bugfixes for well over a week now and I believe it's
+> > going to be a huge patch. It would take me weeks more to break it into
+> > individual patches. So far I've fixed a bunch of incorrect package
+> > install arguments that cause problems with pkgconfig and libtool
+> > resulting in build failures. I've added the X.org fonts and some other
+> > missing X.org packages, icu, fltk, webkit, midori, ipkg, updated
+> > cairo, pango, gtk, and glib to the latest versions. I also merged the
+> > current branch of the Atmel AVR32 buildroot architecture for that CPU.
+> > Is there any interest in it, or should I just keep it to myself?
+> >
+> > Kind regards,
+> > John Voltz
+> >
+> >
+> > ------------------------------
+> >
+> > Message: 2
+> > Date: Sat, 09 Feb 2008 22:04:34 -0500
+> > From: Ormund Williams <ormundw@panix.com>
+> > Subject: Re: [Buildroot] HUGE patch for buildroot
+> > To: buildroot at uclibc.org
+> > Message-ID: <1202612674.3293.8.camel@localhost.localdomain>
+> > Content-Type: text/plain
+> >
+> >
+> > On Sat, 2008-02-09 at 21:28 -0500, John Voltz wrote:
+> > > Hello,
+> > >
+> > > I'm wondering if the buildroot maintainers frequent this list, and if
+> > > so, how do you feel about receiving a humongous patch for it? I've
+> > > been working on bugfixes for well over a week now and I believe it's
+> > > going to be a huge patch. It would take me weeks more to break it into
+> > > individual patches. So far I've fixed a bunch of incorrect package
+> > > install arguments that cause problems with pkgconfig and libtool
+> > > resulting in build failures. I've added the X.org fonts and some other
+> > > missing X.org packages, icu, fltk, webkit, midori, ipkg, updated
+> > > cairo, pango, gtk, and glib to the latest versions. I also merged the
+> > > current branch of the Atmel AVR32 buildroot architecture for that CPU.
+> > > Is there any interest in it, or should I just keep it to myself?
+> > >
+> > Do NOT keep it to yourself.  If the buildroot maintainers wont accept it
+> > and you don't have time to break it up into smaller patches, I'll do it.
+> >
+> > Thanks for the work.
+> >
+> > __
+> > Ormund
+> >
+> >
+> >
+> >
+> > ------------------------------
+> >
+> > Message: 3
+> > Date: Sun, 10 Feb 2008 18:49:41 +0200 (EET)
+> > From: "Ivan Kuten" <ivan.kuten@promwad.com>
+> > Subject: Re: [Buildroot] HUGE patch for buildroot
+> > To: "John Voltz" <john.voltz@gmail.com>
+> > Cc: Buildroot List <buildroot@uclibc.org>
+> > Message-ID: <45445.127.0.0.1.1202662181.squirrel@localhost>
+> > Content-Type: text/plain;charset=utf-8
+> >
+> > Hi John,
+> >
+> > Of course please post your patch. Even if the patch too huge somebody will split it.
+> >
+> > Regards,
+> > Ivan
+> >
+> > > Hello,
+> > >
+> > > I'm wondering if the buildroot maintainers frequent this list, and if
+> > > so, how do you feel about receiving a humongous patch for it? I've
+> > > been working on bugfixes for well over a week now and I believe it's
+> > > going to be a huge patch. It would take me weeks more to break it into
+> > > individual patches. So far I've fixed a bunch of incorrect package
+> > > install arguments that cause problems with pkgconfig and libtool
+> > > resulting in build failures. I've added the X.org fonts and some other
+> > > missing X.org packages, icu, fltk, webkit, midori, ipkg, updated
+> > > cairo, pango, gtk, and glib to the latest versions. I also merged the
+> > > current branch of the Atmel AVR32 buildroot architecture for that CPU.
+> > > Is there any interest in it, or should I just keep it to myself?
+> > >
+> > > Kind regards,
+> > > John Voltz
+> > > _______________________________________________
+> > > buildroot mailing list
+> > > buildroot at uclibc.org
+> > > http://busybox.net/mailman/listinfo/buildroot
+> > >
+> >
+> >
+> >
+> >
+> > ------------------------------
+> >
+> > _______________________________________________
+> > buildroot mailing list
+> > buildroot at uclibc.org
+> > http://busybox.net/mailman/listinfo/buildroot
+> >
+> > End of buildroot Digest, Vol 20, Issue 13
+> > *****************************************
+> >
+> _______________________________________________
+> buildroot mailing list
+> buildroot at uclibc.org
+> http://busybox.net/mailman/listinfo/buildroot
 >
-> Fiddling with LDFLAGS, CFLAGS, etc to solve an issue is seldom the right
-> solution.
->
-> --
-> With kind regards,
-> Hans-Christian Egtvedt, Applications Engineer
->
->
+-------------- next part --------------
+A non-text attachment was scrubbed...
+Name: atk.patch
+Type: text/x-patch
+Size: 10959 bytes
+Desc: not available
+Url : http://busybox.net/lists/buildroot/attachments/20080212/8c1508d3/attachment-0001.bin 
