@@ -1,20 +1,103 @@
 From: John Voltz <john.voltz@gmail.com>
-Date: Tue, 12 Feb 2008 16:04:59 -0500
-Subject: [Buildroot] John Voltz patches
-Message-ID: <46a136670802121304q52633a48gf072a071e0f033c5@mail.gmail.com>
+Date: Tue, 12 Feb 2008 17:01:32 -0500
+Subject: [Buildroot] Wizard script for buildroot
+Message-ID: <46a136670802121401m36f02c9dmaf72d03308cc8b05@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-You might want to do a svn update if you are merging my stuff into
-mainline buildroot. I know there is lots of crappy stuff in some of
-those early makefiles. I was still learning how the buildroot system
-works with an old version of buildroot from Atmel, and then I
-discovered the new makefile system in the upstream buildroot. I've
-been fscking around with undoing all of my madness. Please bear with
-me.
+#!/bin/sh
 
-These are reasons why I'm not trying to get svn access to buildroot,
-I'm not going to be responsible for screwing up other people's work.
+echo "**** Autotools Add New Package Wizard ****"
+echo " This script will generate files to add a"
+echo " new package to buildroot."
+echo
+
+echo "What is the name of the package?"
+read PACKAGE_NAME
+
+echo "What is the version number?"
+read VERSION_NUM
+
+echo "What is the web address of the tarball?"
+read DOWNLOAD_LOC
+
+echo "Enter any known dependencies, separated"
+echo "by spaces, or just press enter."
+read EXTRA_DEPS
+
+echo "Enter a description of the package."
+read DESCRIPTION
+
+echo "Does autoreconf need to be run first? (y/n)"
+read ANSWER
+
+if [ "$ANSWER" = "y" ]; then
+	RECONF="YES"
+else
+	RECONF="NO"
+fi
+
+echo "Does it need to be installed to the staging dir?"
+echo "Say yes, if other packages depend on it."
+echo "(If not sure, just say yes. It will only use more"
+echo "space on your hard drive.)"
+read ANSWER
+
+if [ "$ANSWER" = "y" ]; then
+	STAGING="YES"
+else
+	STAGING="NO"
+fi
+
+echo "Enter any configure script options."
+read CONFIG_OPTIONS
+
+URL=${DOWNLOAD_LOC%/*}
+TARBALL=${DOWNLOAD_LOC##*/}
+EXTENSION=${TARBALL##*.tar.}
+NAME_UPPER=`echo ${PACKAGE_NAME} | tr [a-z] [A-Z]`
+
+mkdir package/${PACKAGE_NAME}
+
+cat > package/${PACKAGE_NAME}/${PACKAGE_NAME}.mk <<EOF
+#############################################################
+#
+# ${PACKAGE_NAME}
+#
+#############################################################
+${NAME_UPPER}_VERSION = ${VERSION_NUM}
+${NAME_UPPER}_SOURCE =
+${PACKAGE_NAME}-\$(${NAME_UPPER}_VERSION).tar$.{EXTENSION}
+${NAME_UPPER}_SITE = ${URL}
+${NAME_UPPER}_AUTORECONF = ${RECONF}
+${NAME_UPPER}_INSTALL_STAGING = ${STAGING}
+${NAME_UPPER}_INSTALL_TARGET = YES
+
+${NAME_UPPER}_CONF_OPT = ${CONFIG_OPTIONS}
+
+${NAME_UPPER}_DEPENDENCIES = uclibc ${EXTRA_DEPS}
+
+\$(eval \$(call AUTOTARGETS,package,${PACKAGE_NAME}))
+
+EOF
+
+cat > package/${PACKAGE_NAME}/Config.in <<EOF
+config BR2_PACKAGE_${NAME_UPPER}
+	bool "${PACKAGE_NAME}"
+	default n
+	help
+	  ${DESCRIPTION}
+
+	  ${URL}
+EOF
+
+echo "Just add: source package/${PACKAGE_NAME}/Config.in"
+echo "to the file package/Config.in in an appropriate"
+echo "location."
+echo
+echo "You are now ready to build ${PACKAGE_NAME}"
+echo "Just run make menuconfig and select your new"
+echo "package, then run make."
