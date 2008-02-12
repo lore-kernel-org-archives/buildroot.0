@@ -1,173 +1,441 @@
-From: Bernhard Fischer <rep.dot.nop@gmail.com>
-Date: Tue, 12 Feb 2008 19:22:50 +0100
-Subject: [Buildroot] [PATCH] John Voltz changes part 2 (blackbox,
-	cairo	and cups)
-In-Reply-To: <d6cda7730802120947s73dce9a4ub19c84b6f2022518@mail.gmail.com>
-References: <d6cda7730802120946x4fb51bebn979dd8991c778e68@mail.gmail.com>
-	<d6cda7730802120947s73dce9a4ub19c84b6f2022518@mail.gmail.com>
-Message-ID: <20080212182250.GA15951@aon.at>
+From: grego rigolo <gregorigolo2002@yahoo.fr>
+Date: Tue, 12 Feb 2008 18:27:21 +0000 (GMT)
+Subject: [Buildroot] Re :  kernel cross compilation problem (at91sam9260)
+Message-ID: <471886.17673.qm@web23404.mail.ird.yahoo.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Tue, Feb 12, 2008 at 03:47:55PM -0200, Thiago A. Corr?a wrote:
->This is more of his changes:
+hello,
+During the linux kernel compilation, i noticed that the file named "Image" had a different size.
+Indeed
+when i built the kernel with my old buildroot uclibc toolchain, i got
+an Image file of about 2.5Mb while with my new configuration, i got an
+Image file of 3Gb  !!!!!
+Image file is generated from the vmlinux file with the following command:
+-----> arm-linux-objcopy -O binary -R .note -R .comment -S  vmlinux arch/arm/boot/Image
+In both cases, the size of my vmlinux file is similar.
+I also noticed in my new "vmlinux.o" file that a new section had been created: .ARM.attributes respect to the old vmlinux.o
+greg
+
+
+----- Message d'origine ----
+De : Doug the RockRat <rickyrockrat@yahoo.com>
+? : Rick Foos <rick@synchromeshcomputing.com>; Wayne Keenan <wayne.keenan@gmail.com>; grego rigolo <gregorigolo2002@yahoo.fr>
+Cc : buildroot at uclibc.org
+Envoy? le : Lundi, 11 F?vrier 2008, 21h57mn 35s
+Objet : Re: [Buildroot] kernel cross compilation problem (at91sam9260)
+
+Is 
+it 
+possible 
+that 
+a 
+boot 
+logo 
+was 
+perhaps 
+added?  
+That 
+does 
+add 
+a 
+significant 
+amount 
+of 
+size 
+to 
+the
+kernel.
+--- 
+Rick 
+Foos 
+<rick@synchromeshcomputing.com> 
+wrote:
+
+> 
+Hi,
+>  
+> 
+I 
+had 
+the 
+same 
+problem 
+going 
+from 
+800k 
+to 
+3MB
+> 
+kernels. 
+It 
+was 
+not 
+related 
+to 
+compilers. 
+>  
+> 
+The 
+size 
+is 
+due 
+to 
+a 
+large 
+initrd 
+filesystem.
+>  
+> 
+Clean 
+everything 
+out, 
+the 
+standard 
+cleans 
+don't 
+seem
+> 
+to 
+do 
+it. 
+>  
+> 
+I 
+can't 
+say 
+what 
+exactly 
+gets 
+it 
+done, 
+removing 
+init
+> 
+ram 
+filesystem, 
+but 
+it 
+looks 
+like 
+toolchain 
+rebuild
+> 
+as 
+well 
+is 
+required.
+>  
+> 
+, 
+and 
+in 
+.config
+>  
+> 
+# 
+BR2_TARGET_ROOTFS_INITRAMFS 
+is 
+not 
+set
+>  
+> 
+Best 
+Regards,
+> 
+Rick
+> 
+> 
+________________________________
+> 
+> 
+From: 
+buildroot-bounces at uclibc.org 
+on 
+behalf 
+of
+> 
+Wayne 
+Keenan
+> 
+Sent: 
+Mon 
+2/11/2008 
+11:32 
+AM
+> 
+To: 
+grego 
+rigolo
+> 
+Cc: 
+buildroot at uclibc.org
+> 
+Subject: 
+Re: 
+[Buildroot] 
+kernel 
+cross 
+compilation
+> 
+problem 
+(at91sam9260)
+> 
+> 
+> 
+Hi,
+> 
+> 
+Dropping 
+back 
+to 
+using 
+gcc 
+3.4.6  
+and 
+uclib 
+x.x.28
+> 
+worked 
+for 
+me.  
+- 
+not 
+a 
+proper 
+fix, 
+but 
+it 
+was 
+a
+> 
+combination 
+that 
+worked 
+andI 
+was 
+fed 
+up 
+of 
+trying
+> 
+combinations 
+:)
+> 
+> 
+> 
+Regards
+> 
+Wayne
+> 
+> 
+> 
+> 
+On 
+Feb 
+11, 
+2008 
+4:10 
+PM, 
+grego 
+rigolo
+> 
+<gregorigolo2002@yahoo.fr> 
+wrote:
+> 
+> 
+> 
+    
+hello,
+> 
+    
+I'm 
+using 
+the 
+buildroot-20080206.tar.bz2 
+package 
+to
+> 
+build 
+a 
+rootfilesystem 
+and 
+a 
+cross 
+compilation
+> 
+toolchain 
+for 
+my 
+embedded 
+board 
+(sam9260).
+> 
+    
+I 
+tried 
+to 
+cross 
+compile 
+(arm-linux-gcc-4.1.2) 
+a
+> 
+2.6.23 
+linux 
+kernel 
+seperately 
+(not 
+the 
+one 
+included
+> 
+in 
+buildroot) 
+, 
+and 
+i 
+noticed 
+that 
+the 
+size 
+had
+> 
+increased 
+by 
+3Mb 
+respect 
+to 
+my 
+old 
+version.
+> 
+    
+On 
+the 
+other 
+hand 
+when 
+i 
+try 
+to 
+use 
+the 
+generated
+> 
+kernel, 
+it 
+hangs 
+at 
+the 
+stage 
+> 
+    
+uncompressing 
+Linux 
+....................
+> 
+    
+Does 
+anyone 
+encounters 
+this 
+kind 
+of 
+problem 
+?
+> 
+    
+greg
+> 
+    
+> 
+> 
+> 
+________________________________
+> 
+> 
+    
+Ne 
+gardez 
+plus 
+qu'une 
+seule 
+adresse 
+mail 
+! 
+Copiez
+> 
+vos 
+mails
 >
->adds blackbox to the window managers list
->
->Please don't forget to do svn add svn add package/blackbox/
->
->-----
->
->cairo fixes and version bump
->
->Please don't forget to do svn add package/cairo/cairo-1.4.14-libdir-la.patch
->
->-----
->
->add cups
->
->Please don't forget to do svn add package/cups
+<http://fr.rd.yahoo..com/mail/mail_taglines/trueswitch/SIG=11gshn0bu/**http%3A%2F%2Fwww.trueswitch.com%2Fyahoo-fr%2F>
+>  
+vers 
+Yahoo! 
+Mail 
+> 
+> 
+    
+_______________________________________________
+> 
+    
+buildroot 
+mailing 
+list
+> 
+    
+buildroot at uclibc.org
+> 
+    
+http://busybox.net/mailman/listinfo/buildroot
+> 
+    
+> 
+> 
+> 
+> 
+_______________________________________________
+> 
+buildroot 
+mailing 
+list
+> 
+buildroot at uclibc.org
+> 
+http://busybox.net/mailman/listinfo/buildroot
 
->Index: package/Config.in
->===================================================================
->--- package/Config.in	(revision 20993)
->+++ package/Config.in	(working copy)
->@@ -380,6 +380,7 @@
-> comment "X Window managers"
-> source "package/matchbox/Config.in"
-> source "package/metacity/Config.in"
->+source "package/blackbox/Config.in"
-> comment "X applications"
-> source "package/dillo/Config.in"
-> source "package/rdesktop/Config.in"
->Index: package/blackbox/blackbox-0.70.1-configure.patch
->===================================================================
->--- package/blackbox/blackbox-0.70.1-configure.patch	(revision 0)
->+++ package/blackbox/blackbox-0.70.1-configure.patch	(revision 0)
->@@ -0,0 +1,15 @@
->+--- a/configure	2005-11-03 03:27:16.000000000 -0500
->++++ b/configure	2008-02-02 23:25:25.000000000 -0500
->+@@ -1980,12 +1980,6 @@ am__tar='${AMTAR} chof - "$$tardir"'; am
->+ 
->+ test "x$prefix" = "xNONE" && prefix="$ac_default_prefix"
->+ 
->+-CPPFLAGS="$CPPFLAGS -I$prefix/include"
->+-LDFLAGS="$LDFLAGS -L$prefix/lib"
->+-if test "x$prefix" != "x/usr/local"; then
->+-  CPPFLAGS="$CPPFLAGS -I/usr/local/include"
->+-  LDFLAGS="$LDFLAGS -L/usr/local/lib"
->+-fi
->+ 
->+ ac_ext=c
->+ ac_cpp='$CPP $CPPFLAGS'
 
-I'll just comment on this single package, vicarious for the rest. Of
-course these are only my personal POV.
 
->Index: package/blackbox/Config.in
->===================================================================
->--- package/blackbox/Config.in	(revision 0)
->+++ package/blackbox/Config.in	(revision 0)
->@@ -0,0 +1,11 @@
->+config BR2_PACKAGE_BLACKBOX
->+	bool "blackbox"
->+	default n
->+	depends on BR2_PACKAGE_XORG||BR2_PACKAGE_XORG7
->+	help
->+	  Blackbox is a fast, lightweight window manager for the X Window System.
->+
->+	  http://blackboxwm.sourceforge.net/
->+
->+comment "blackbox		- disabled (requires Xorg(7))"
->+	depends !(BR2_PACKAGE_XORG || BR2_PACKAGE_XORG7)
+  
+  
+  
+____________________________________________________________________________________
+Be 
+a 
+better 
+friend, 
+newshound, 
+and 
+know-it-all 
+with 
+Yahoo! 
+Mobile.  
+Try 
+it 
+now.  
+http://mobile.yahoo.com/;_ylt=Ahu06i62sR8HDtDypao8Wcj9tAcJ 
 
-Why would this not work with non-Xorg based X11-servers? That's wrong.
-Putting such stuff into comments is just ugly, imo.
-Of course you do not need a CXX cross-compiler to build it, or do you
-and the deps are just wrong once more?
 
->Index: package/blackbox/blackbox.mk
->===================================================================
->--- package/blackbox/blackbox.mk	(revision 0)
->+++ package/blackbox/blackbox.mk	(revision 0)
->@@ -0,0 +1,62 @@
->+#############################################################
->+#
->+# blackbox
->+#
->+#############################################################
->+
->+BLACKBOX_VERSION=0.70.1
->+BLACKBOX_SOURCE=blackbox-$(BLACKBOX_VERSION).tar.bz2
->+BLACKBOX_SITE=http://superb-west.dl.sourceforge.net/sourceforge/blackboxwm/
->+BLACKBOX_DIR=$(BUILD_DIR)/blackbox-$(BLACKBOX_VERSION)
->+BLACKBOX_CAT:=$(BZCAT)
->+
->+$(DL_DIR)/$(BLACKBOX_SOURCE):
->+	$(WGET) -P $(DL_DIR) $(BLACKBOX_SITE)/$(BLACKBOX_SOURCE)
->+
->+$(BLACKBOX_DIR)/.unpacked: $(DL_DIR)/$(BLACKBOX_SOURCE)
->+	$(BLACKBOX_CAT) $(DL_DIR)/$(BLACKBOX_SOURCE) | tar -C $(BUILD_DIR) $(TAR_OPTIONS) -
->+	toolchain/patch-kernel.sh $(BLACKBOX_DIR) package/blackbox/ \*.patch
->+	$(CONFIG_UPDATE) $(BLACKBOX_DIR)
->+	touch $(BLACKBOX_DIR)/.unpacked
 
-brittle, bloated and big. touch $@ would have been a sensible thing to
-do.
 
->+
->+$(BLACKBOX_DIR)/.configured: $(BLACKBOX_DIR)/.unpacked
->+	(cd $(BLACKBOX_DIR); rm -rf config.cache; \
->+		$(TARGET_CONFIGURE_OPTS) \
->+		$(TARGET_CONFIGURE_ARGS) \
->+		./configure \
->+		--target=$(GNU_TARGET_NAME) \
->+		--host=$(GNU_TARGET_NAME) \
->+		--build=$(GNU_HOST_NAME) \
->+		--prefix=/usr \
->+		--sysconfdir=/etc \
->+		--x-includes=$(STAGING_DIR)/usr/include/X11 \
->+		--x-libraries=$(STAGING_DIR)/usr/lib \
->+	)
->+	touch $(BLACKBOX_DIR)/.configured
->+
->+$(BLACKBOX_DIR)/src/blackbox: $(BLACKBOX_DIR)/.configured
->+	$(MAKE) CC=$(TARGET_CC) -C $(BLACKBOX_DIR)
 
-wrong.
 
->+
->+$(BLACKBOX_DIR)/.installed: $(BLACKBOX_DIR)/src/blackbox
->+	$(MAKE) -C $(BLACKBOX_DIR) DESTDIR=$(TARGET_DIR) install
->+	touch $(BLACKBOX_DIR)/.installed
 
-ugly. $@. and additionally wrong since it doesn't strip
-
->+
->+blackbox: uclibc $(XSERVER) $(BLACKBOX_DIR)/.installed
->+
->+blackbox-source: $(DL_DIR)/$(BLACKBOX_SOURCE)
->+
->+blackbox-clean:
->+	@if [ -d $(BLACKBOX_DIR)/Makefile ]; then \
->+		$(MAKE) -C $(BLACKBOX_DIR) clean; \
->+	fi
-
-Lines like those 3 above are just sad.
-
->+
->+blackbox-dirclean:
->+	rm -rf $(BLACKBOX_DIR)
->+#############################################################
->+#
->+# Toplevel Makefile options
->+#
->+#############################################################
->+ifeq ($(strip $(BR2_PACKAGE_BLACKBOX)),y)
-
-bloated, superfluous and ugly.
-And yes, i'm grumpy and annoyed by now.
-[snip]
+      ______________________________________________________________________________ 
+Yahoo! Mail : un mail innovant avec Messenger compatible Windows Live + stockage illimit?. http://mail.yahoo.fr
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: http://busybox.net/lists/buildroot/attachments/20080212/f600e363/attachment.htm 
