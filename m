@@ -1,103 +1,60 @@
-From: John Voltz <john.voltz@gmail.com>
-Date: Tue, 12 Feb 2008 17:01:32 -0500
-Subject: [Buildroot] Wizard script for buildroot
-Message-ID: <46a136670802121401m36f02c9dmaf72d03308cc8b05@mail.gmail.com>
+From: Kelvin <kelvin@willowglen.com.my>
+Date: Wed, 13 Feb 2008 19:08:07 +0800
+Subject: [Buildroot] How to combine kernel,
+	busybox and rfs into 1 single image?
+In-Reply-To: <024901c86d64$61ac2d10$2301a8c0@atmel.com>
+Message-ID: <013a01c86e30$b93a4b30$4452a8c0@KelvinChewPC>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-#!/bin/sh
+-----Original Message-----
+From: Ulf Samuelsson [mailto:ulf.samuelsson at atmel.com] 
+Sent: Tuesday, February 12, 2008 6:35 PM
+To: Kelvin; buildroot at uclibc.org
+Subject: Re: [Buildroot] How to combine kernel,busybox and rfs into 1 single
+image?
 
-echo "**** Autotools Add New Package Wizard ****"
-echo " This script will generate files to add a"
-echo " new package to buildroot."
-echo
+----- Original Message ----- 
+From: "Kelvin" <kelvin@willowglen.com.my>
+To: <buildroot@uclibc.org>
+Sent: Tuesday, February 12, 2008 10:21 AM
+Subject: [Buildroot] How to combine kernel,busybox and rfs into 1 single
+image?
 
-echo "What is the name of the package?"
-read PACKAGE_NAME
 
-echo "What is the version number?"
-read VERSION_NUM
+> Hi,
+> 
+> 
+> 
+> I'm building an embedded Linux system using Buildroot2. How can I combine
+> and build the kernel image (vmlinux, version2.4), busybox utilities
+(version
+> 1.00) and RFS (jffs2 filesystem) into a single image for easier download?
+> 
+> 
+> 
+> Any help on this is much appreciated. Thanks!
+> 
+> 
+> 
+> Regards,
+> 
+> Kelvin
+> 
 
-echo "What is the web address of the tarball?"
-read DOWNLOAD_LOC
 
-echo "Enter any known dependencies, separated"
-echo "by spaces, or just press enter."
-read EXTRA_DEPS
+Why bother?
+If you are using U-Boot, you can generate a script which handles the
+download of everything automatically.
 
-echo "Enter a description of the package."
-read DESCRIPTION
+Best Regards
+Ulf Samuelsson
 
-echo "Does autoreconf need to be run first? (y/n)"
-read ANSWER
 
-if [ "$ANSWER" = "y" ]; then
-	RECONF="YES"
-else
-	RECONF="NO"
-fi
+But what's U-Boot? Can't I do it with Buildroot2?
 
-echo "Does it need to be installed to the staging dir?"
-echo "Say yes, if other packages depend on it."
-echo "(If not sure, just say yes. It will only use more"
-echo "space on your hard drive.)"
-read ANSWER
-
-if [ "$ANSWER" = "y" ]; then
-	STAGING="YES"
-else
-	STAGING="NO"
-fi
-
-echo "Enter any configure script options."
-read CONFIG_OPTIONS
-
-URL=${DOWNLOAD_LOC%/*}
-TARBALL=${DOWNLOAD_LOC##*/}
-EXTENSION=${TARBALL##*.tar.}
-NAME_UPPER=`echo ${PACKAGE_NAME} | tr [a-z] [A-Z]`
-
-mkdir package/${PACKAGE_NAME}
-
-cat > package/${PACKAGE_NAME}/${PACKAGE_NAME}.mk <<EOF
-#############################################################
-#
-# ${PACKAGE_NAME}
-#
-#############################################################
-${NAME_UPPER}_VERSION = ${VERSION_NUM}
-${NAME_UPPER}_SOURCE =
-${PACKAGE_NAME}-\$(${NAME_UPPER}_VERSION).tar$.{EXTENSION}
-${NAME_UPPER}_SITE = ${URL}
-${NAME_UPPER}_AUTORECONF = ${RECONF}
-${NAME_UPPER}_INSTALL_STAGING = ${STAGING}
-${NAME_UPPER}_INSTALL_TARGET = YES
-
-${NAME_UPPER}_CONF_OPT = ${CONFIG_OPTIONS}
-
-${NAME_UPPER}_DEPENDENCIES = uclibc ${EXTRA_DEPS}
-
-\$(eval \$(call AUTOTARGETS,package,${PACKAGE_NAME}))
-
-EOF
-
-cat > package/${PACKAGE_NAME}/Config.in <<EOF
-config BR2_PACKAGE_${NAME_UPPER}
-	bool "${PACKAGE_NAME}"
-	default n
-	help
-	  ${DESCRIPTION}
-
-	  ${URL}
-EOF
-
-echo "Just add: source package/${PACKAGE_NAME}/Config.in"
-echo "to the file package/Config.in in an appropriate"
-echo "location."
-echo
-echo "You are now ready to build ${PACKAGE_NAME}"
-echo "Just run make menuconfig and select your new"
-echo "package, then run make."
+Regards,
+Kelvin
