@@ -1,60 +1,40 @@
-From: Kelvin <kelvin@willowglen.com.my>
-Date: Wed, 13 Feb 2008 19:08:07 +0800
-Subject: [Buildroot] How to combine kernel,
-	busybox and rfs into 1 single image?
-In-Reply-To: <024901c86d64$61ac2d10$2301a8c0@atmel.com>
-Message-ID: <013a01c86e30$b93a4b30$4452a8c0@KelvinChewPC>
+From: Darcy Watkins <DWatkins@tranzeo.com>
+Date: Wed, 13 Feb 2008 10:14:29 -0800
+Subject: [Buildroot] pciutils-2.2.6 fails to build for powerpc  405
+In-Reply-To: <D61182AC8012EA4EBC531B3AF23BE1095020F0@tranzeo-mail2.12stewart.tranzeo.com>
+References: <D61182AC8012EA4EBC531B3AF23BE1093F1374@tranzeo-mail2.12stewart.tranzeo.com><20070913092615.GA15641@aon.at>
+	<D61182AC8012EA4EBC531B3AF23BE1093F1421@tranzeo-mail2.12stewart.tranzeo.com>
+	<D61182AC8012EA4EBC531B3AF23BE1095020F0@tranzeo-mail2.12stewart.tranzeo.com>
+Message-ID: <D61182AC8012EA4EBC531B3AF23BE1095020F3@tranzeo-mail2.12stewart.tranzeo.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
------Original Message-----
-From: Ulf Samuelsson [mailto:ulf.samuelsson at atmel.com] 
-Sent: Tuesday, February 12, 2008 6:35 PM
-To: Kelvin; buildroot at uclibc.org
-Subject: Re: [Buildroot] How to combine kernel,busybox and rfs into 1 single
-image?
+Hello,
 
------ Original Message ----- 
-From: "Kelvin" <kelvin@willowglen.com.my>
-To: <buildroot@uclibc.org>
-Sent: Tuesday, February 12, 2008 10:21 AM
-Subject: [Buildroot] How to combine kernel,busybox and rfs into 1 single
-image?
-
-
-> Hi,
-> 
-> 
-> 
-> I'm building an embedded Linux system using Buildroot2. How can I combine
-> and build the kernel image (vmlinux, version2.4), busybox utilities
-(version
-> 1.00) and RFS (jffs2 filesystem) into a single image for easier download?
-> 
-> 
-> 
-> Any help on this is much appreciated. Thanks!
-> 
-> 
-> 
-> Regards,
-> 
-> Kelvin
-> 
-
-
-Why bother?
-If you are using U-Boot, you can generate a script which handles the
-download of everything automatically.
-
-Best Regards
-Ulf Samuelsson
-
-
-But what's U-Boot? Can't I do it with Buildroot2?
+The submitted patch may also address bug #1904 "Impossible to build
+pciutils for mipsel architecture"
 
 Regards,
-Kelvin
+
+Darcy
+
+-----Original Message-----
+From: Darcy Watkins 
+Sent: Wednesday, February 13, 2008 10:06 AM
+To: buildroot at uclibc.org
+Cc: 'mj at ucw.cz'
+Subject: RE: [Buildroot] pciutils-2.2.6 fails to build for powerpc 405
+
+Hello,
+
+Included / attached is patch to allow pciutils to cross compile under
+buildroot for non i386 architectures.  I believe that the pciutils
+package will natively compile for non i386 architectures.  It failed to
+cross compile due to the use of 'uname' on the build machine by the
+configure script to attempt to determine system information that applies
+to the target machine.
+
+--snip!--
