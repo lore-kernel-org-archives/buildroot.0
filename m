@@ -1,36 +1,44 @@
-From: Fathi Boudra <fboudra@gmail.com>
-Date: Thu, 14 Feb 2008 09:14:19 +0100
-Subject: [Buildroot] binutils ftbfs on x86_amd64 host
-In-Reply-To: <20080213234203.GC30407@cloud.net.au>
-References: <6a2e33620802131426g4ef22451k8f0a9e80e7ad0ba8@mail.gmail.com>
-	<20080213234203.GC30407@cloud.net.au>
-Message-ID: <6a2e33620802140014x1acfccf6n2eb27d93669f061@mail.gmail.com>
+From: bugs at busybox.net <bugs@busybox.net>
+Date: Thu, 14 Feb 2008 01:32:00 -0800
+Subject: [Buildroot] [buildroot 0002104]: grub_0.97-28.diff.gz no longer
+	available from debian ftp site
+Message-ID: <f5b18e9f01373209dd0b983a78cc2788@bugs.uclibc.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Hamish,
 
-What's your target ?
+The following issue has been SUBMITTED. 
+====================================================================== 
+http://busybox.net/bugs/view.php?id=2104 
+====================================================================== 
+Reported By:                sharkconi
+Assigned To:                buildroot
+====================================================================== 
+Project:                    buildroot
+Issue ID:                   2104
+Category:                   Architecture Specific
+Reproducibility:            always
+Severity:                   minor
+Priority:                   normal
+Status:                     assigned
+====================================================================== 
+Date Submitted:             02-14-2008 01:31 PST
+Last Modified:              02-14-2008 01:31 PST
+====================================================================== 
+Summary:                    grub_0.97-28.diff.gz no longer available from debian
+ftp site
+Description: 
+Today, I want to install the grub, it can't get grub_0.97-28.diff.gz from
+the debian ftp site, because debian has remove the source file. 
+====================================================================== 
 
-
-powerpc (mpc8347e)
-
-
-> Maybe you can post your .config. I use an amd64 host
-> here building for armeb without issue.
-
-
-I tried on i386 chroot, same failure.
--------------- next part --------------
-An HTML attachment was scrubbed...
-URL: http://busybox.net/lists/buildroot/attachments/20080214/b64dcbb8/attachment.htm 
--------------- next part --------------
-A non-text attachment was scrubbed...
-Name: .config
-Type: application/octet-stream
-Size: 14469 bytes
-Desc: not available
-Url : http://busybox.net/lists/buildroot/attachments/20080214/b64dcbb8/attachment.obj 
+Issue History 
+Date Modified   Username       Field                    Change               
+====================================================================== 
+02-14-08 01:31  sharkconi      New Issue                                    
+02-14-08 01:31  sharkconi      Status                   new => assigned     
+02-14-08 01:31  sharkconi      Assigned To               => buildroot       
+======================================================================
