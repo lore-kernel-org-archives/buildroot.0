@@ -1,33 +1,36 @@
-From: Robin Gilks <robin.gilks@tait.co.nz>
-Date: Thu, 14 Feb 2008 14:56:44 +1300
-Subject: [Buildroot] uclibc++ and buildroot
-Message-ID: <47B39FDC.3050503@tait.co.nz>
+From: Fathi Boudra <fboudra@gmail.com>
+Date: Thu, 14 Feb 2008 09:14:19 +0100
+Subject: [Buildroot] binutils ftbfs on x86_amd64 host
+In-Reply-To: <20080213234203.GC30407@cloud.net.au>
+References: <6a2e33620802131426g4ef22451k8f0a9e80e7ad0ba8@mail.gmail.com>
+	<20080213234203.GC30407@cloud.net.au>
+Message-ID: <6a2e33620802140014x1acfccf6n2eb27d93669f061@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-As far as I can see, uclibc++ is quite usable - what I'm not clear on is 
-how (or if) it integrates with buildroot and the cross compile 
-environment I'm using to build powerpc executables.
+Hi Hamish,
 
-Any tips appreciated.
-
--- 
-Robin Gilks
+What's your target ?
 
 
+powerpc (mpc8347e)
 
 
-=======================================================================
-This email, including any attachments, is only for the intended
-addressee.  It is subject to copyright, is confidential and may be
-the subject of legal or other privilege, none of which is waived or
-lost by reason of this transmission.
-If the receiver is not the intended addressee, please accept our
-apologies, notify us by return, delete all copies and perform no
-other act on the email.
-Unfortunately, we cannot warrant that the email has not been
- altered or corrupted during transmission.
-=======================================================================
+> Maybe you can post your .config. I use an amd64 host
+> here building for armeb without issue.
+
+
+I tried on i386 chroot, same failure.
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: http://busybox.net/lists/buildroot/attachments/20080214/b64dcbb8/attachment.htm 
+-------------- next part --------------
+A non-text attachment was scrubbed...
+Name: .config
+Type: application/octet-stream
+Size: 14469 bytes
+Desc: not available
+Url : http://busybox.net/lists/buildroot/attachments/20080214/b64dcbb8/attachment.obj 
