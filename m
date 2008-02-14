@@ -1,23 +1,33 @@
-From: Hamish Moffatt <hamish@cloud.net.au>
-Date: Thu, 14 Feb 2008 10:42:03 +1100
-Subject: [Buildroot] binutils ftbfs on x86_amd64 host
-In-Reply-To: <6a2e33620802131426g4ef22451k8f0a9e80e7ad0ba8@mail.gmail.com>
-References: <6a2e33620802131426g4ef22451k8f0a9e80e7ad0ba8@mail.gmail.com>
-Message-ID: <20080213234203.GC30407@cloud.net.au>
+From: Robin Gilks <robin.gilks@tait.co.nz>
+Date: Thu, 14 Feb 2008 14:56:44 +1300
+Subject: [Buildroot] uclibc++ and buildroot
+Message-ID: <47B39FDC.3050503@tait.co.nz>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Wed, Feb 13, 2008 at 11:26:21PM +0100, Fathi Boudra wrote:
-> using latest buildroot to build an uClibc cross-compiler toolchain,
-> I have a ftbfs at binutils stage. Same results with 2.18 and 2.18.50.0.1.
-> My host is a Debian Sid amd64. Any ideas how to fix ?
+As far as I can see, uclibc++ is quite usable - what I'm not clear on is 
+how (or if) it integrates with buildroot and the cross compile 
+environment I'm using to build powerpc executables.
 
-What's your target? Maybe you can post your .config. I use an amd64 host
-here building for armeb without issue.
+Any tips appreciated.
 
-Hamish
 -- 
-Hamish Moffatt VK3SB <hamish@debian.org> <hamish@cloud.net.au>
+Robin Gilks
+
+
+
+
+=======================================================================
+This email, including any attachments, is only for the intended
+addressee.  It is subject to copyright, is confidential and may be
+the subject of legal or other privilege, none of which is waived or
+lost by reason of this transmission.
+If the receiver is not the intended addressee, please accept our
+apologies, notify us by return, delete all copies and perform no
+other act on the email.
+Unfortunately, we cannot warrant that the email has not been
+ altered or corrupted during transmission.
+=======================================================================
