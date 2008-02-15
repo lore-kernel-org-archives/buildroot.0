@@ -1,37 +1,42 @@
-From: jacmet at uclibc.org <jacmet@uclibc.org>
-Date: Fri, 15 Feb 2008 06:06:41 -0800 (PST)
-Subject: [Buildroot] svn commit: trunk/buildroot/package/libusb
-Message-ID: <20080215140641.8EE26120110@busybox.net>
+From: bugs at busybox.net <bugs@busybox.net>
+Date: Fri, 15 Feb 2008 15:27:48 -0800
+Subject: [Buildroot] [buildroot 0002154]: Option to link bash to sh
+Message-ID: <485387628b0e5bdcac4edd4f35203b51@busybox.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Author: jacmet
-Date: 2008-02-15 06:06:39 -0800 (Fri, 15 Feb 2008)
-New Revision: 21029
 
-Log:
-libusb: install into target with cp instead of install to preserve symlinks
+The following issue has been SUBMITTED. 
+====================================================================== 
+http://busybox.net/bugs/view.php?id=2154 
+====================================================================== 
+Reported By:                antab
+Assigned To:                buildroot
+====================================================================== 
+Project:                    buildroot
+Issue ID:                   2154
+Category:                   New Features
+Reproducibility:            N/A
+Severity:                   minor
+Priority:                   normal
+Status:                     assigned
+====================================================================== 
+Date Submitted:             02-15-2008 15:27 PST
+Last Modified:              02-15-2008 15:27 PST
+====================================================================== 
+Summary:                    Option to link bash to sh
+Description: 
+This patch adds the option to select if bash should be linked to /bin/sh.
+====================================================================== 
 
-
-Modified:
-   trunk/buildroot/package/libusb/libusb.mk
-
-
-Changeset:
-Modified: trunk/buildroot/package/libusb/libusb.mk
-===================================================================
---- trunk/buildroot/package/libusb/libusb.mk	2008-02-15 07:19:03 UTC (rev 21028)
-+++ trunk/buildroot/package/libusb/libusb.mk	2008-02-15 14:06:39 UTC (rev 21029)
-@@ -56,8 +56,7 @@
- 	$(MAKE) -C $(LIBUSB_DIR) DESTDIR=$(STAGING_DIR) install
- 
- $(TARGET_DIR)/$(LIBUSB_BINARY): $(STAGING_DIR)/lib/libusb.so
--	$(INSTALL) -D $(LIBUSB_DIR)/.libs/libusb*.so* $(STAGING_DIR)/usr/lib/
--	$(INSTALL) -D $(LIBUSB_DIR)/.libs/libusb*.so* $(TARGET_DIR)/usr/lib/
-+	cp -dpf $(STAGING_DIR)/usr/lib/libusb*.so* $(TARGET_DIR)/usr/lib/
- 	$(STRIPCMD) $(STRIP_STRIP_UNNEEDED) $(TARGET_DIR)/usr/lib/libusb*.so*
- 
- libusb: uclibc $(TARGET_DIR)/$(LIBUSB_BINARY)
+Issue History 
+Date Modified   Username       Field                    Change               
+====================================================================== 
+02-15-08 15:27  antab          New Issue                                    
+02-15-08 15:27  antab          Status                   new => assigned     
+02-15-08 15:27  antab          Assigned To               => buildroot       
+02-15-08 15:27  antab          File Added: bash.patch                       
+======================================================================
