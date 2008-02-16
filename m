@@ -1,8 +1,8 @@
 From: bugs at busybox.net <bugs@busybox.net>
-Date: Fri, 15 Feb 2008 19:37:55 -0800
-Subject: [Buildroot] [buildroot 0002174]: sdl_ttf fails with not able to
+Date: Fri, 15 Feb 2008 19:38:09 -0800
+Subject: [Buildroot] [buildroot 0002184]: sdl_ttf fails with not able to
 	find SDL.h
-Message-ID: <27d3fc00140cc4ca378591f8d8ac3e23@busybox.net>
+Message-ID: <913b88657326b9f25ea3505c16efc866@busybox.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -12,21 +12,21 @@ To: buildroot@busybox.net
 
 The following issue has been SUBMITTED. 
 ====================================================================== 
-http://busybox.net/bugs/view.php?id=2174 
+http://busybox.net/bugs/view.php?id=2184 
 ====================================================================== 
 Reported By:                hbr_in
 Assigned To:                buildroot
 ====================================================================== 
 Project:                    buildroot
-Issue ID:                   2174
+Issue ID:                   2184
 Category:                   Architecture Specific
 Reproducibility:            always
 Severity:                   major
 Priority:                   normal
 Status:                     assigned
 ====================================================================== 
-Date Submitted:             02-15-2008 19:37 PST
-Last Modified:              02-15-2008 19:37 PST
+Date Submitted:             02-15-2008 19:38 PST
+Last Modified:              02-15-2008 19:38 PST
 ====================================================================== 
 Summary:                    sdl_ttf fails with not able to find SDL.h
 Description: 
@@ -88,15 +88,12 @@ Thanks in advance.
 
 Regards
 Gururaja
-
-
-
 ====================================================================== 
 
 Issue History 
 Date Modified   Username       Field                    Change               
 ====================================================================== 
-02-15-08 19:37  hbr_in         New Issue                                    
-02-15-08 19:37  hbr_in         Status                   new => assigned     
-02-15-08 19:37  hbr_in         Assigned To               => buildroot       
+02-15-08 19:38  hbr_in         New Issue                                    
+02-15-08 19:38  hbr_in         Status                   new => assigned     
+02-15-08 19:38  hbr_in         Assigned To               => buildroot       
 ======================================================================
