@@ -1,8 +1,8 @@
 From: bugs at busybox.net <bugs@busybox.net>
-Date: Fri, 15 Feb 2008 19:38:09 -0800
-Subject: [Buildroot] [buildroot 0002184]: sdl_ttf fails with not able to
+Date: Fri, 15 Feb 2008 20:46:37 -0800
+Subject: [Buildroot] [buildroot 0002174]: sdl_ttf fails with not able to
 	find SDL.h
-Message-ID: <913b88657326b9f25ea3505c16efc866@busybox.net>
+Message-ID: <6d46fad1761ff35c690e21ffac25fa41@busybox.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -10,23 +10,23 @@ Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
 
-The following issue has been SUBMITTED. 
+A NOTE has been added to this issue. 
 ====================================================================== 
-http://busybox.net/bugs/view.php?id=2184 
+http://busybox.net/bugs/view.php?id=2174 
 ====================================================================== 
 Reported By:                hbr_in
 Assigned To:                buildroot
 ====================================================================== 
 Project:                    buildroot
-Issue ID:                   2184
+Issue ID:                   2174
 Category:                   Architecture Specific
 Reproducibility:            always
 Severity:                   major
 Priority:                   normal
 Status:                     assigned
 ====================================================================== 
-Date Submitted:             02-15-2008 19:38 PST
-Last Modified:              02-15-2008 19:38 PST
+Date Submitted:             02-15-2008 19:37 PST
+Last Modified:              02-15-2008 20:46 PST
 ====================================================================== 
 Summary:                    sdl_ttf fails with not able to find SDL.h
 Description: 
@@ -88,12 +88,32 @@ Thanks in advance.
 
 Regards
 Gururaja
+
+
+
 ====================================================================== 
+
+---------------------------------------------------------------------- 
+ hbr_in - 02-15-08 20:46  
+---------------------------------------------------------------------- 
+Hi,
+
+I have updated sdl_ttf.mk to allow patching from package/sdl_ttf/ folder
+
+Also i have added patch file to temporarily allow sdl_ttf to build.
+Kindly go through the files and let me know if this is ok.
+
+regards
+Gururaja 
 
 Issue History 
 Date Modified   Username       Field                    Change               
 ====================================================================== 
-02-15-08 19:38  hbr_in         New Issue                                    
-02-15-08 19:38  hbr_in         Status                   new => assigned     
-02-15-08 19:38  hbr_in         Assigned To               => buildroot       
+02-15-08 19:37  hbr_in         New Issue                                    
+02-15-08 19:37  hbr_in         Status                   new => assigned     
+02-15-08 19:37  hbr_in         Assigned To               => buildroot       
+02-15-08 20:44  hbr_in         File Added: sdl_ttf_mk.patch                    
+02-15-08 20:45  hbr_in         File Added:
+sdl_ttf-2.0.9_sdl_header_include.patch                    
+02-15-08 20:46  hbr_in         Note Added: 0004954                          
 ======================================================================
