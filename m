@@ -1,8 +1,8 @@
 From: bugs at busybox.net <bugs@busybox.net>
-Date: Fri, 15 Feb 2008 19:27:40 -0800
-Subject: [Buildroot] [buildroot 0002164]: DirectFB Fails with
-	--enable-static option because of incorrect ld location
-Message-ID: <d338add7d7956fb6821db0c1b916ccea@busybox.net>
+Date: Fri, 15 Feb 2008 19:37:55 -0800
+Subject: [Buildroot] [buildroot 0002174]: sdl_ttf fails with not able to
+	find SDL.h
+Message-ID: <27d3fc00140cc4ca378591f8d8ac3e23@busybox.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -12,79 +12,91 @@ To: buildroot@busybox.net
 
 The following issue has been SUBMITTED. 
 ====================================================================== 
-http://busybox.net/bugs/view.php?id=2164 
+http://busybox.net/bugs/view.php?id=2174 
 ====================================================================== 
-Reported By:                gururaj
+Reported By:                hbr_in
 Assigned To:                buildroot
 ====================================================================== 
 Project:                    buildroot
-Issue ID:                   2164
-Category:                   Shared Library Support
+Issue ID:                   2174
+Category:                   Architecture Specific
 Reproducibility:            always
-Severity:                   feature
+Severity:                   major
 Priority:                   normal
 Status:                     assigned
 ====================================================================== 
-Date Submitted:             02-15-2008 19:27 PST
-Last Modified:              02-15-2008 19:27 PST
+Date Submitted:             02-15-2008 19:37 PST
+Last Modified:              02-15-2008 19:37 PST
 ====================================================================== 
-Summary:                    DirectFB Fails with --enable-static option because
-of incorrect ld location
+Summary:                    sdl_ttf fails with not able to find SDL.h
 Description: 
-Hi, 
+Hi,
 
-Today i was trying to make arm926ejs toolchain with buildroot 4th feb
-snapshot. I added --enable-static option in directfb.mk file. During build
-i noticed that directfb is using root ld (/usr/bin/ld) instead of
-arm-linux-ld build by buildroot toolchain. i renamed /usr/bin/ld to
-/usr/bin/ld_orig and it failed with below error. 
+I am trying to build sdl_ttf for arm926ejs toolchain with buildroto
+snapshot. SDL_ttf build fails with below error saying unable to find SDL.h
+and SDL_endian.h. and also for many other SDL related header files.
 
-Is there any way to make directfb makefile to consider buildroot toolchain
-built ld instead of /usr/bin/ld 
+/home/guru/project/original/bldrt/buildroot/build_arm/staging_dir/usr/bin/arm-linux-uclibc-gcc
+-Os -pipe
+-I/home/guru/project/original/bldrt/buildroot/build_arm/staging_dir/usr/include
+-I/home/guru/project/original/bldrt/buildroot/build_arm/staging_dir/include
+--sysroot=/home/guru/project/original/bldrt/buildroot/build_arm/staging_dir/
+-isysroot /home/guru/project/original/bldrt/buildroot/build_arm/staging_dir
+-mtune=arm9tdmi -DPACKAGE_NAME=\"\" -DPACKAGE_TARNAME=\"\"
+-DPACKAGE_VERSION=\"\" -DPACKAGE_STRING=\"\" -DPACKAGE_BUGREPORT=\"\"
+-DPACKAGE=\"SDL_ttf\" -DVERSION=\"2.0.9\" -DSTDC_HEADERS=1
+-DHAVE_SYS_TYPES_H=1 -DHAVE_SYS_STAT_H=1 -DHAVE_STDLIB_H=1
+-DHAVE_STRING_H=1 -DHAVE_MEMORY_H=1 -DHAVE_STRINGS_H=1 -DHAVE_INTTYPES_H=1
+-DHAVE_STDINT_H=1 -DHAVE_UNISTD_H=1 -DHAVE_DLFCN_H=1 -DHAVE_ALLOCA_H=1
+-DHAVE_ALLOCA=1 -DX_DISPLAY_MISSING=1 -I. -I. -g -O2
+-I/home/guru/project/original/bldrt/buildroot/build_arm/staging_dir/usr/include/freetype2
+-I/home/guru/project/original/bldrt/buildroot/build_arm/staging_dir/usr/include
+-I/home/guru/project/original/bldrt/buildroot/build_arm/staging_dir/include/SDL
+-D_GNU_SOURCE=1 -D_REENTRANT -MT SDL_ttf.lo -MD -MP -MF .deps/SDL_ttf.Tpo
+-c SDL_ttf.c  -fPIC -DPIC -o .libs/SDL_ttf.o
+SDL_ttf.c:47:17: error: SDL.h: No such file or directory
+SDL_ttf.c:48:24: error: SDL_endian.h: No such file or directory
+In file included from SDL_ttf.c:49:
+SDL_ttf.h:34:24: error: begin_code.h: No such file or directory
+In file included from SDL_ttf.c:49:
+SDL_ttf.h:67: error: expected '=', ',', ';', 'asm' or '__attribute__'
+before 'const'
+SDL_ttf.h:77: error: expected '=', ',', ';', 'asm' or '__attribute__'
+before 'void'
+SDL_ttf.h:83: error: expected '=', ',', ';', 'asm' or '__attribute__'
+before 'int'
+SDL_ttf.h:89: error: expected '=', ',', ';', 'asm' or '__attribute__'
+before 'TTF_Font'
+SDL_ttf.h:90: error: expected '=', ',', ';', 'asm' or '__attribute__'
+before 'TTF_Font'
+SDL_ttf.h:91: error: expected '=', ',', ';', 'asm' or '__attribute__'
+before 'TTF_Font'
+SDL_ttf.h:92: error: expected '=', ',', ';', 'asm' or '__attribute__'
+before 'TTF_Font'
+SDL_ttf.h:102: error: expected '=', ',', ';', 'asm' or '__attribute__'
+before 'int'
+SDL_ttf.h:103: error: expected '=', ',', ';', 'asm' or '__attribute__'
+before 'void'
+<snip>
+<snip>
+<snip>
 
-<snip> 
-<snip> 
 
-Making install in fbdev 
-make[3]: Entering directory
-`/home/project/original/bldrt/buildroot/build_arm/DirectFB-1.0.1/systems/fbdev'
+Let me know if i need to change or asdd any steps to solve this.
 
-rm -f .libs/libdirectfb_fbdev.a.tmp/*.o 
-if test -d .libs/libdirectfb_fbdev.a.tmp; then rmdir
-.libs/libdirectfb_fbdev.a.tmp; fi 
-mkdir .libs/libdirectfb_fbdev.a.tmp 
-(cd .libs/libdirectfb_fbdev.a.tmp &&
-/home/project/original/bldrt/buildroot/build_arm/staging_dir/usr/bin/arm-linux-uclibc-ar
-x ../../.libs/libdirectfb_fbdev.a) 
-ld -o libdirectfb_fbdev.o -r .libs/libdirectfb_fbdev.a.tmp/*.o 
-/bin/sh: ld: command not found 
-make[3]: *** [libdirectfb_fbdev.o] Error 127 
-make[3]: Leaving directory
-`/home/project/original/bldrt/buildroot/build_arm/DirectFB-1.0.1/systems/fbdev'
+Thanks in advance.
 
-make[2]: *** [install-recursive] Error 1 
-make[2]: Leaving directory
-`/home/project/original/bldrt/buildroot/build_arm/DirectFB-1.0.1/systems'
+Regards
+Gururaja
 
-make[1]: *** [install-recursive] Error 1 
-make[1]: Leaving directory
-`/home/project/original/bldrt/buildroot/build_arm/DirectFB-1.0.1' 
-make: ***
-[/home/project/original/bldrt/buildroot/build_arm/staging_dir/usr/lib/libdirectfb.so]
-Error 2 
 
-root at guru_vlinux:~/project/original/bldrt/buildroot# ls -la /usr/bin/ld* 
--rwxr-xr-x 1 root root 430804 Jan  4 11:17 /usr/bin/ld_orig 
--rwxr-xr-x 1 root root   5871 Jan 12 15:21 /usr/bin/ldd_orig 
 
-Regards 
-Gururaja 
 ====================================================================== 
 
 Issue History 
 Date Modified   Username       Field                    Change               
 ====================================================================== 
-02-15-08 19:27  gururaj        New Issue                                    
-02-15-08 19:27  gururaj        Status                   new => assigned     
-02-15-08 19:27  gururaj        Assigned To               => buildroot       
+02-15-08 19:37  hbr_in         New Issue                                    
+02-15-08 19:37  hbr_in         Status                   new => assigned     
+02-15-08 19:37  hbr_in         Assigned To               => buildroot       
 ======================================================================
