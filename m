@@ -1,8 +1,7 @@
 From: bugs at busybox.net <bugs@busybox.net>
-Date: Mon, 18 Feb 2008 01:14:44 -0800
-Subject: [Buildroot] [buildroot 0002214]: fails to build toolchain with NPTL
-	selected for powerpc target
-Message-ID: <3f4f96e889e856bf1a282809bdbd1632@bugs.uclibc.org>
+Date: Mon, 18 Feb 2008 02:03:12 -0800
+Subject: [Buildroot] [buildroot 0002224]: microperl somewhat useless for me
+Message-ID: <87da21b162bf3186572cc443d5db0fd4@bugs.uclibc.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -12,38 +11,40 @@ To: buildroot@busybox.net
 
 The following issue has been SUBMITTED. 
 ====================================================================== 
-http://busybox.net/bugs/view.php?id=2214 
+http://busybox.net/bugs/view.php?id=2224 
 ====================================================================== 
-Reported By:                fabo
+Reported By:                KHAksnes
 Assigned To:                buildroot
 ====================================================================== 
 Project:                    buildroot
-Issue ID:                   2214
-Category:                   Architecture Specific
+Issue ID:                   2224
+Category:                   New Features
 Reproducibility:            always
-Severity:                   minor
+Severity:                   major
 Priority:                   normal
 Status:                     assigned
 ====================================================================== 
-Date Submitted:             02-18-2008 01:14 PST
-Last Modified:              02-18-2008 01:14 PST
+Date Submitted:             02-18-2008 02:03 PST
+Last Modified:              02-18-2008 02:03 PST
 ====================================================================== 
-Summary:                    fails to build toolchain with NPTL selected for
-powerpc target
+Summary:                    microperl somewhat useless for me
 Description: 
-libpthread/linuxthreads/sysdeps/pthread/errno-loc.c:23:27: error:
-sysdep-cancel.h: No such file or directory
+I intended to use perl to run some scripts on a firewall I am trying to
+build.
+One of my scripts needs the URI package to be installed.
+To install URI I need to run perl Makefile.PL wich requires
+ExtUtils::MakeMaker.pm
+which via some files requires Config.pm which are missing from the perl
+build.
 
-This is reproducible for powerpc target and NPTL support option.
-Switching to another thread library implementation workarounds the issue.
-
-
+Is it possible to make Config.pm available for inclusion in the microperl
+modules list. It would be nice to be able to add CPAN packages at target.
 ====================================================================== 
 
 Issue History 
 Date Modified   Username       Field                    Change               
 ====================================================================== 
-02-18-08 01:14  fabo           New Issue                                    
-02-18-08 01:14  fabo           Status                   new => assigned     
-02-18-08 01:14  fabo           Assigned To               => buildroot       
+02-18-08 02:03  KHAksnes       New Issue                                    
+02-18-08 02:03  KHAksnes       Status                   new => assigned     
+02-18-08 02:03  KHAksnes       Assigned To               => buildroot       
 ======================================================================
