@@ -1,23 +1,46 @@
-From: Darik Horn <dajhorn@vanadac.com>
-Date: Mon, 18 Feb 2008 09:33:08 -0600
-Subject: [Buildroot] mkfs.jffs2 error
-In-Reply-To: <20080216144427.5FC5012C811@busybox.net>
-References: <20080216144427.5FC5012C811@busybox.net>
-Message-ID: <47B9A534.6060001@vanadac.com>
+From: bugs at busybox.net <bugs@busybox.net>
+Date: Mon, 18 Feb 2008 11:52:07 -0800
+Subject: [Buildroot] [buildroot 0002234]: make clean fails
+Message-ID: <74084a6ce4843833902e7b1413ab5299@bugs.uclibc.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
- > I get an error "..../default.script" file not found.
 
-The filesystem scripts sometimes try to pack the udhcp files even if 
-CONFIG_APP_UDHCPC is not set, which is a bug.
+The following issue has been SUBMITTED. 
+====================================================================== 
+http://busybox.net/bugs/view.php?id=2234 
+====================================================================== 
+Reported By:                KHAksnes
+Assigned To:                buildroot
+====================================================================== 
+Project:                    buildroot
+Issue ID:                   2234
+Category:                   Other
+Reproducibility:            always
+Severity:                   minor
+Priority:                   normal
+Status:                     assigned
+====================================================================== 
+Date Submitted:             02-18-2008 11:52 PST
+Last Modified:              02-18-2008 11:52 PST
+====================================================================== 
+Summary:                    make clean fails
+Description: 
+make clean fails in dropbear-clean
 
-The quick fix is:
+To repoduce make sure dropbear are among the applications built, then do a
+make followed by a make clean.
 
-$ mkdir -p project_build_*/*/root/usr/share/udhcpc/
-$ touch project_build_*/*/root/usr/share/udhcpc/default.script
+The uninstall target seems to be missing.
+====================================================================== 
 
-You should provide more of the error transcript to get better help sooner.
+Issue History 
+Date Modified   Username       Field                    Change               
+====================================================================== 
+02-18-08 11:52  KHAksnes       New Issue                                    
+02-18-08 11:52  KHAksnes       Status                   new => assigned     
+02-18-08 11:52  KHAksnes       Assigned To               => buildroot       
+======================================================================
