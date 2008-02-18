@@ -1,36 +1,67 @@
-From: thomasez at uclibc.org <thomasez@uclibc.org>
-Date: Mon, 18 Feb 2008 14:10:10 -0800 (PST)
-Subject: [Buildroot] svn commit: trunk/buildroot/target/x86/syslinux
-Message-ID: <20080218221010.ABD49120128@busybox.net>
+From: Tim Barr <tbarr@multitech.com>
+Date: Mon, 18 Feb 2008 17:20:55 -0600
+Subject: [Buildroot] Latest build problem
+Message-ID: <1CD05B980C94AC408B37C82BBABAA3E60A3420CD@mtsexchange.dc.multitech.prv>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Author: thomasez
-Date: 2008-02-18 14:10:05 -0800 (Mon, 18 Feb 2008)
-New Revision: 21055
-
-Log:
-Upped version, the one here didn't exist any more. 3.61 compiled nicely (todo; check if nasm is installed on host?, syslinux needs it. Guess I copuld just add a target/host package.)
-
-
-Modified:
-   trunk/buildroot/target/x86/syslinux/syslinux.mk
-
-
-Changeset:
-Modified: trunk/buildroot/target/x86/syslinux/syslinux.mk
-===================================================================
---- trunk/buildroot/target/x86/syslinux/syslinux.mk	2008-02-18 21:08:49 UTC (rev 21054)
-+++ trunk/buildroot/target/x86/syslinux/syslinux.mk	2008-02-18 22:10:05 UTC (rev 21055)
-@@ -22,7 +22,7 @@
- #
- #############################################################
+Here is the latest error I get when I try to make a buildroot. This time
+I did  clean and dir clean. And this is the error I get now:
  
--SYSLINUX_VERSION:=3.53
-+SYSLINUX_VERSION:=3.61
- SYSLINUX_DIR=$(BUILD_DIR)/syslinux-$(SYSLINUX_VERSION)
- SYSLINUX_DIR2=$(TOOL_BUILD_DIR)/syslinux-$(SYSLINUX_VERSION)
- SYSLINUX_SOURCE=syslinux-$(SYSLINUX_VERSION).tar.bz2
+mkdir -p /home/falingtrea/buildroot/build_arm_wchar/staging_dir/usr/bin
+/home/falingtrea/buildroot/build_arm_wchar/staging_dir/usr/arm-linux-ucl
+ibc/bin
+
+/usr/bin/gcc -g -O2 .//toolchain/sstrip/sstrip.c -o
+/home/falingtrea/buildroot/build_arm_wchar/staging_dir/usr/bin/arm-linux
+-uclibc-sstrip
+
+ln -snf ../../bin/arm-linux-uclibc-sstrip \
+
+/home/falingtrea/buildroot/build_arm_wchar/staging_dir/usr/arm-linux-ucl
+ibc/bin/sstrip
+
+ln -snf arm-linux-uclibc-sstrip \
+
+/home/falingtrea/buildroot/build_arm_wchar/staging_dir/usr/bin/arm-linux
+-sstrip
+
+/home/falingtrea/buildroot/build_arm_wchar/staging_dir/usr/bin/arm-linux
+-uclibc-gcc -Os -pipe
+-I/home/falingtrea/buildroot/build_arm_wchar/staging_dir/usr/include
+-I/home/falingtrea/buildroot/build_arm_wchar/staging_dir/include
+--sysroot=/home/falingtrea/buildroot/build_arm_wchar/staging_dir/
+-isysroot /home/falingtrea/buildroot/build_arm_wchar/staging_dir
+.//toolchain/sstrip/sstrip.c -o
+/home/falingtrea/buildroot/project_build_arm_wchar/SuperModem-2.6.22.1/r
+oot/usr/bin/sstrip
+
+/home/falingtrea/buildroot/build_arm_wchar/staging_dir/usr/bin-ccache/..
+/lib/gcc/arm-linux-uclibc/4.2.1/../../../../arm-linux-uclibc/bin/ld:
+cannot open output file
+/home/falingtrea/buildroot/project_build_arm_wchar/SuperModem-2.6.22.1/r
+oot/usr/bin/sstrip: No such file or directory
+
+collect2: ld returned 1 exit status
+
+make: ***
+[/home/falingtrea/buildroot/project_build_arm_wchar/SuperModem-2.6.22.1/
+root/usr/bin/sstrip] Error 1
+
+Any suggestions on what I can do to move forward would be appreciated.
+
+ 
+
+
+Timothy Barr
+Hardware Development Engineer
+for Multi-Tech Systems, Inc.
+ <mailto:tbarr@multitech.com> tbarr at multitech.com 
+
+ 
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: http://busybox.net/lists/buildroot/attachments/20080218/9bf74382/attachment.htm 
