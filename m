@@ -1,46 +1,36 @@
-From: bugs at busybox.net <bugs@busybox.net>
-Date: Mon, 18 Feb 2008 11:52:07 -0800
-Subject: [Buildroot] [buildroot 0002234]: make clean fails
-Message-ID: <74084a6ce4843833902e7b1413ab5299@bugs.uclibc.org>
+From: thomasez at uclibc.org <thomasez@uclibc.org>
+Date: Mon, 18 Feb 2008 14:10:10 -0800 (PST)
+Subject: [Buildroot] svn commit: trunk/buildroot/target/x86/syslinux
+Message-ID: <20080218221010.ABD49120128@busybox.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+Author: thomasez
+Date: 2008-02-18 14:10:05 -0800 (Mon, 18 Feb 2008)
+New Revision: 21055
 
-The following issue has been SUBMITTED. 
-====================================================================== 
-http://busybox.net/bugs/view.php?id=2234 
-====================================================================== 
-Reported By:                KHAksnes
-Assigned To:                buildroot
-====================================================================== 
-Project:                    buildroot
-Issue ID:                   2234
-Category:                   Other
-Reproducibility:            always
-Severity:                   minor
-Priority:                   normal
-Status:                     assigned
-====================================================================== 
-Date Submitted:             02-18-2008 11:52 PST
-Last Modified:              02-18-2008 11:52 PST
-====================================================================== 
-Summary:                    make clean fails
-Description: 
-make clean fails in dropbear-clean
+Log:
+Upped version, the one here didn't exist any more. 3.61 compiled nicely (todo; check if nasm is installed on host?, syslinux needs it. Guess I copuld just add a target/host package.)
 
-To repoduce make sure dropbear are among the applications built, then do a
-make followed by a make clean.
 
-The uninstall target seems to be missing.
-====================================================================== 
+Modified:
+   trunk/buildroot/target/x86/syslinux/syslinux.mk
 
-Issue History 
-Date Modified   Username       Field                    Change               
-====================================================================== 
-02-18-08 11:52  KHAksnes       New Issue                                    
-02-18-08 11:52  KHAksnes       Status                   new => assigned     
-02-18-08 11:52  KHAksnes       Assigned To               => buildroot       
-======================================================================
+
+Changeset:
+Modified: trunk/buildroot/target/x86/syslinux/syslinux.mk
+===================================================================
+--- trunk/buildroot/target/x86/syslinux/syslinux.mk	2008-02-18 21:08:49 UTC (rev 21054)
++++ trunk/buildroot/target/x86/syslinux/syslinux.mk	2008-02-18 22:10:05 UTC (rev 21055)
+@@ -22,7 +22,7 @@
+ #
+ #############################################################
+ 
+-SYSLINUX_VERSION:=3.53
++SYSLINUX_VERSION:=3.61
+ SYSLINUX_DIR=$(BUILD_DIR)/syslinux-$(SYSLINUX_VERSION)
+ SYSLINUX_DIR2=$(TOOL_BUILD_DIR)/syslinux-$(SYSLINUX_VERSION)
+ SYSLINUX_SOURCE=syslinux-$(SYSLINUX_VERSION).tar.bz2
