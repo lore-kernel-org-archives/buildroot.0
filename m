@@ -1,45 +1,23 @@
-From: Mile Davidovic <md4uclibc@gmail.com>
-Date: Mon, 18 Feb 2008 16:27:23 +0100
-Subject: [Buildroot] Buildroot failed
-Message-ID: <f185607a0802180727o4577010em39d2b277a6a92ccd@mail.gmail.com>
+From: Darik Horn <dajhorn@vanadac.com>
+Date: Mon, 18 Feb 2008 09:33:08 -0600
+Subject: [Buildroot] mkfs.jffs2 error
+In-Reply-To: <20080216144427.5FC5012C811@busybox.net>
+References: <20080216144427.5FC5012C811@busybox.net>
+Message-ID: <47B9A534.6060001@vanadac.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
-I got this error with latest buildroot:
-gmake[2]: Leaving directory
-`/scratch/buildroot/toolchain_build_mips_nofpu/gcc-4.2.1-initial/gcc'
-gmake[1]: Leaving directory
-`/scratch/buildroot/toolchain_build_mips_nofpu/gcc-4.2.1-initial'
- touch /scratch/buildroot/toolchain_build_mips_nofpu/gcc-4.2.1-initial/.installed
-/tools/gnu/i686-linux/tools/make-3.81/bin/gmake
-MAKE="/tools/gnu/i686-linux/tools/make-3.81/bin/gmake -j1" -C
-/scratch/buildroot/toolchain_build_mips_nofpu/uClibc-0.9.29 \
-                 PREFIX= \
-                DEVEL_PREFIX=/ \
-                RUNTIME_PREFIX=/ \
-                HOSTCC="/usr/bin/gcc" \
-                all
-gmake[1]: Entering directory
-`/scratch/buildroot/toolchain_build_mips_nofpu/uClibc-0.9.29'
- ln -fs sgidefs.h ./include/
-:0: error: -march=mips32 is not compatible with the selected ABI
-:0: error: -march=mips32 is not compatible with the selected ABI
-  CC ldso/ldso/ldso.oS
-ldso/ldso/ldso.c:1: error: -march=mips32 is not compatible with the selected ABI
- gmake[1]: *** [ldso/ldso/ldso.oS] Error 1
+ > I get an error "..../default.script" file not found.
 
-In the attachment is buildroot config file. Is this buildroot related question?
+The filesystem scripts sometimes try to pack the udhcp files even if 
+CONFIG_APP_UDHCPC is not set, which is a bug.
 
-Best regards
-Mile
--------------- next part --------------
-A non-text attachment was scrubbed...
-Name: b.config
-Type: application/octet-stream
-Size: 16457 bytes
-Desc: not available
-Url : http://busybox.net/lists/buildroot/attachments/20080218/b9ce164c/attachment-0001.obj 
+The quick fix is:
+
+$ mkdir -p project_build_*/*/root/usr/share/udhcpc/
+$ touch project_build_*/*/root/usr/share/udhcpc/default.script
+
+You should provide more of the error transcript to get better help sooner.
