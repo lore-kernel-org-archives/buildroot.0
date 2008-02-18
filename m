@@ -1,10 +1,8 @@
-From: Hebbar <gururajakr@sanyo.co.in>
-Date: Sun, 17 Feb 2008 20:58:47 -0800 (PST)
-Subject: [Buildroot] unable to make libglib12. error about missing
- libglib12.so
-In-Reply-To: <12265775.post@talk.nabble.com>
-References: <12265775.post@talk.nabble.com>
-Message-ID: <15539024.post@talk.nabble.com>
+From: bugs at busybox.net <bugs@busybox.net>
+Date: Mon, 18 Feb 2008 01:14:44 -0800
+Subject: [Buildroot] [buildroot 0002214]: fails to build toolchain with NPTL
+	selected for powerpc target
+Message-ID: <3f4f96e889e856bf1a282809bdbd1632@bugs.uclibc.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -12,89 +10,40 @@ Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
 
-Hi,
+The following issue has been SUBMITTED. 
+====================================================================== 
+http://busybox.net/bugs/view.php?id=2214 
+====================================================================== 
+Reported By:                fabo
+Assigned To:                buildroot
+====================================================================== 
+Project:                    buildroot
+Issue ID:                   2214
+Category:                   Architecture Specific
+Reproducibility:            always
+Severity:                   minor
+Priority:                   normal
+Status:                     assigned
+====================================================================== 
+Date Submitted:             02-18-2008 01:14 PST
+Last Modified:              02-18-2008 01:14 PST
+====================================================================== 
+Summary:                    fails to build toolchain with NPTL selected for
+powerpc target
+Description: 
+libpthread/linuxthreads/sysdeps/pthread/errno-loc.c:23:27: error:
+sysdep-cancel.h: No such file or directory
 
-when compilling libglib12, configure output says
-
-<snip>
-<snip>
-<snip>
-
-checking for /opt/arm-uclinux/usr/bin/arm-linux-uclibcgnueabi-ld
--L/opt/arm-uclinux/lib -L/opt/arm-uclinux/usr/lib
---sysroot=/opt/arm-uclinux/ option to reload object files... -r
-checking dynamic linker characteristics... no
-checking if libtool supports shared libraries... no
-checking whether to build shared libraries... no
-checking whether to build static libraries... yes
-checking for objdir... .libs
-creating libtool
-<snip>
-<snip>
-<snip>
-
-In ltconfig file, host_os is taken as arm_linux. I placed an echo for
-host_os at line 1793 in ltconfig file.
-
-echo $ac_n "checking dynamic linker characteristics... for host $host_os
-$ac_c" 1>&6
-case "$host_os" in
-
-  Here it checks for Dynamic linking characteristics of this os (arm-linux)
-and hence it fails the test. So it cannot build shared libraries. 
-
-Can anyone shed some light on this. 
-
-Should i add 
-host_os=linux-uclibc 
-
-or 
-
-linux-uclibc*)
-arm-linux*)                     ----> add this line. is this correct
-
-Thanks in advance
-
-Regards
-Gururaja
+This is reproducible for powerpc target and NPTL support option.
+Switching to another thread library implementation workarounds the issue.
 
 
-Hebbar wrote:
-> 
-> Hi all,
-> 
->  I am trying to make libglib12 and it ends with error about missing
-> libglib.so in buildroot/build_arm/staging_dir/lib/. When i searched in
-> this firectory i had 
-> root at box124:~/project/original/bldrt/buildroot# ls -la
-> build_arm/staging_dir/lib/libglib.*
-> -rw-r--r-- 1 root root 596464 Aug 22 11:58
-> build_arm/staging_dir/lib/libglib.a
-> -rwxr-xr-x 1 root root    593 Aug 22 11:58
-> build_arm/staging_dir/lib/libglib.la
-> 
-> Kindly help me to resolve the same. I tried editing libglib12.mk file but
-> failed. 
-> 
-> Regards
-> Gururaja
-> 
-> 
-> Make libglib12 error-->  
-> 
-> 
-> cp -dpf
-> /home/guru/project/original/bldrt/buildroot/build_arm/staging_dir/lib/libglib.so
-> /home/guru/project/original/bldrt/buildroot/project_build_arm/uclibc/root/lib/
-> cp: cannot stat
-> `/home/guru/project/original/bldrt/buildroot/build_arm/staging_dir/lib/libglib.so':
-> No such file or directory
-> make: ***
-> [/home/guru/project/original/bldrt/buildroot/project_build_arm/uclibc/root/lib/libglib-1.2.so.0.0.10]
-> Error 1
-> 
-> 
+====================================================================== 
 
--- 
-View this message in context: http://www.nabble.com/unable-to-make-libglib12.-error-about-missing-libglib12.so-tp12265775p15539024.html
-Sent from the BuildRoot mailing list archive at Nabble.com.
+Issue History 
+Date Modified   Username       Field                    Change               
+====================================================================== 
+02-18-08 01:14  fabo           New Issue                                    
+02-18-08 01:14  fabo           Status                   new => assigned     
+02-18-08 01:14  fabo           Assigned To               => buildroot       
+======================================================================
