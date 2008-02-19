@@ -1,43 +1,54 @@
-From: bugs at busybox.net <bugs@busybox.net>
-Date: Tue, 19 Feb 2008 02:39:55 -0800
-Subject: [Buildroot] [buildroot 0002254]: util-linux fails to compile for
-	i686 using svn(21060) version of buildroot
-Message-ID: <f2572e5ea6f1692b431b62ddb105c92f@bugs.uclibc.org>
+From: Mile Davidovic <md4uclibc@gmail.com>
+Date: Tue, 19 Feb 2008 12:50:52 +0100
+Subject: [Buildroot] Trouble with building MIPS cross compiler
+Message-ID: <f185607a0802190350w7b545cb1sc3ccf4be2182ee41@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+Hello,
+I am unable to build MIPS cross compiler, here is log:
+cat /scratch/buildroot/toolchain_build_mips/gcc-4.2.1/gcc/config/fp-bit.c
+>> dp-bit.c
+/scratch/buildroot/toolchain_build_mips/gcc-4.2.1-initial/./gcc/xgcc
+-B/scratch/buildroot/toolchain_build_mips/gcc-4.2.1-initial/./gcc/
+-B/scratch/buildroot/build_mips/staging_dir/usr/mips-linux-uclibc/bin/
+-B/scratch/buildroot/build_mips/staging_dir/usr/mips-linux-uclibc/lib/
+-isystem /scratch/buildroot/build_mips/staging_dir/usr/mips-linux-uclibc/include
+-isystem /scratch/buildroot/build_mips/staging_dir/usr/mips-linux-uclibc/sys-include
+-O2 -g -Os -DIN_GCC -DCROSS_COMPILE   -W -Wall -Wwrite-strings
+-Wstrict-prototypes -Wmissing-prototypes -Wold-style-definition
+-isystem ./include  -I. -I.
+-I/scratch/buildroot/toolchain_build_mips/gcc-4.2.1/gcc
+-I/scratch/buildroot/toolchain_build_mips/gcc-4.2.1/gcc/.
+-I/scratch/buildroot/toolchain_build_mips/gcc-4.2.1/gcc/../include
+-I/scratch/buildroot/toolchain_build_mips/gcc-4.2.1/gcc/../libcpp/include
+-I/scratch/buildroot/toolchain_build_mips/gmp/include
+-I/scratch/buildroot/toolchain_build_mips/mpfr/include
+-I/scratch/buildroot/toolchain_build_mips/gcc-4.2.1/gcc/../libdecnumber
+-I../libdecnumber  -g0 -finhibit-size-directive -fno-inline-functions
+-fno-exceptions -fno-zero-initialized-in-bss -fno-toplevel-reorder   \
+          -c /scratch/buildroot/toolchain_build_mips/gcc-4.2.1/gcc/crtstuff.c
+-DCRT_BEGIN \
+          -o crtbegin.o
+/scratch/buildroot/toolchain_build_mips/gcc-4.2.1/gcc/crtstuff.c:1:
+error: unsupported combination: -mabicalls -mabi=eabi
+gmake[2]: *** [crtbegin.o] Error 1
+gmake[2]: Leaving directory
+`/scratch/buildroot/toolchain_build_mips/gcc-4.2.1-initial/gcc'
 
-The following issue has been SUBMITTED. 
-====================================================================== 
-http://busybox.net/bugs/view.php?id=2254 
-====================================================================== 
-Reported By:                KHAksnes
-Assigned To:                buildroot
-====================================================================== 
-Project:                    buildroot
-Issue ID:                   2254
-Category:                   Architecture Specific
-Reproducibility:            always
-Severity:                   minor
-Priority:                   normal
-Status:                     assigned
-====================================================================== 
-Date Submitted:             02-19-2008 02:39 PST
-Last Modified:              02-19-2008 02:39 PST
-====================================================================== 
-Summary:                    util-linux fails to compile for i686 using
-svn(21060) version of buildroot
-Description: 
-util-linux fails to compile and is required by development platform builds.
-====================================================================== 
+Please find attached .config
 
-Issue History 
-Date Modified   Username       Field                    Change               
-====================================================================== 
-02-19-08 02:39  KHAksnes       New Issue                                    
-02-19-08 02:39  KHAksnes       Status                   new => assigned     
-02-19-08 02:39  KHAksnes       Assigned To               => buildroot       
-======================================================================
+Do we have any suggestion?
+
+BR
+Mile
+-------------- next part --------------
+A non-text attachment was scrubbed...
+Name: a.config
+Type: application/octet-stream
+Size: 15064 bytes
+Desc: not available
+Url : http://busybox.net/lists/buildroot/attachments/20080219/233d0b82/attachment-0001.obj 
