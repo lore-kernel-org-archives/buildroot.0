@@ -1,37 +1,31 @@
-From: Joe <zentrale.at.work@gmail.com>
-Date: Tue, 19 Feb 2008 14:52:26 +0100
-Subject: [Buildroot] uclibc and mips32r2
-In-Reply-To: <f185607a0802190520o779ec4f6r6cf2f59efec99725@mail.gmail.com>
-References: <f185607a0802190520o779ec4f6r6cf2f59efec99725@mail.gmail.com>
-Message-ID: <47BADF1A.5020804@gmail.com>
+From: Kai Moritz <kai@ich-geh-kaputt.de>
+Date: Tue, 19 Feb 2008 16:03:33 +0100
+Subject: [Buildroot] How to build MIPS cross compiler
+In-Reply-To: <f185607a0802190354v51d3e721ib9678782e72252f1@mail.gmail.com>
+References: <f185607a0802190354v51d3e721ib9678782e72252f1@mail.gmail.com>
+Message-ID: <47BAEFC5.9080609@ich-geh-kaputt.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Obviously not, for you triple(!!!) posted it already on buildroot, and 
-that in one day.
-
-Maybe you should go for the OABI?
-
-Greetz Joe
-
 Mile Davidovic schrieb:
 > Hello,
-> is ti possible to build uClibC with MIPS32R2 and EABI as used ABI?
-> 
-> BR
-> Mile
-> _______________________________________________
-> uClibc mailing list
-> uClibc at uclibc.org
-> http://busybox.net/cgi-bin/mailman/listinfo/uclibc
-> 
+> I am trying to build MIPS based toolchain, but unfortunately I got
+> error with unsupported ABI.
+>   
+Hi Mile,
 
--- 
-Sepp "ZaP" Holzmayr
+I have the same problem.
+I have tried out all available combinations of mips and ABI.
+None of them worked...
 
-please reply to: zentrale.at.work at gmail.com
-"Never underestimate the bandwidth of a freight train full of DAT tapes. 
-Only the round-trip is a little suboptimal."
+Bernhard Fischer (rep.dot.nop at gmail.com) send me a link to his personal 
+git-Branch of buildroot, which is slightly older than trunk from svn.
+That branch worked for me.
+But I do not know, if it will be merged back into trunk, or when...
+
+Greetings
+
+Kai Moritz
