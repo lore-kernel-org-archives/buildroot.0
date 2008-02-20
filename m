@@ -1,7 +1,8 @@
-From: Tim Barr <tbarr@multitech.com>
-Date: Tue, 19 Feb 2008 09:20:11 -0600
+From: Ulf Samuelsson <ulf.samuelsson@atmel.com>
+Date: Wed, 20 Feb 2008 01:18:29 +0100
 Subject: [Buildroot] SUDO download error
-Message-ID: <1CD05B980C94AC408B37C82BBABAA3E60A342204@mtsexchange.dc.multitech.prv>
+References: <1CD05B980C94AC408B37C82BBABAA3E60A342204@mtsexchange.dc.multitech.prv>
+Message-ID: <011901c87359$33864420$050514ac@atmel.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -29,27 +30,16 @@ make[1]: *** [atd.o] Error 1
 
 And I have a rootfs file, the build is successful?
 
-Timothy Barr
-Hardware Development Engineer
-for Multi-Tech Systems, Inc.
-tbarr at multitech.com
 
 
+==> NO, because the rootfs is there from a previous successful build.
+        buildroot cannot generate a new root fs, if the makefile exits with 
+        an error.
 
------Original Message-----
-From: Ulf Samuelsson [mailto:ulf.samuelsson at atmel.com] 
-Sent: Tuesday, February 19, 2008 12:33 AM
-To: Tim Barr; buildroot at uclibc.org
-Subject: Re: [Buildroot] SUDO download error
+        If you have configured buildroot to build several root fs (jffs2, ext2 etc.)
+        then ALL of them have to be present, or the build have failed.
 
-
- 
-> Does buildroot tell you whether it finishes? Or do I just assume that 
-> if I see no errors that buildroot was successful?
-
-You succeeded, If you get a root file system in your binaries directory.
-
-
+        Any "make[1] ... Error #" like error message means that the build failed.
 
 Best Regards
 Ulf Samuelsson 
