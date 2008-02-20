@@ -1,45 +1,41 @@
-From: Ulf Samuelsson <ulf.samuelsson@atmel.com>
-Date: Wed, 20 Feb 2008 01:18:29 +0100
-Subject: [Buildroot] SUDO download error
-References: <1CD05B980C94AC408B37C82BBABAA3E60A342204@mtsexchange.dc.multitech.prv>
-Message-ID: <011901c87359$33864420$050514ac@atmel.com>
+From: Robin Gilks <robin.gilks@tait.co.nz>
+Date: Wed, 20 Feb 2008 16:53:56 +1300
+Subject: [Buildroot] uclibc++ and buildroot
+In-Reply-To: <47B39FDC.3050503@tait.co.nz>
+References: <47B39FDC.3050503@tait.co.nz>
+Message-ID: <47BBA454.2030808@tait.co.nz>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-So even if I get an error like this:
+Robin Gilks wrote:
+> As far as I can see, uclibc++ is quite usable - what I'm not clear on is 
+> how (or if) it integrates with buildroot and the cross compile 
+> environment I'm using to build powerpc executables.
+> 
+> Any tips appreciated.
+> 
 
-make[1]: Entering directory
-`/home/falingtrea/buildroot/build_arm_wchar/at-3.1.10'
+I take it nobody is building it under buildroot.
 
-/home/falingtrea/buildroot/build_arm_wchar/staging_dir/usr/bin/arm-linux
--uclibc-gcc -Os -pipe
--I/home/falingtrea/buildroot/build_arm_wchar/staging_dir/usr/include
--I/home/falingtrea/buildroot/build_arm_wchar/staging_dir/include
---sysroot=/home/falingtrea/buildroot/build_arm_wchar/staging_dir/
--isysroot /home/falingtrea/buildroot/build_arm_wchar/staging_dir -c -O2
--g -Wall -DHAVE_CONFIG_H -DVERSION=\"3.1.9\" -DETCDIR=\"/etc\"
--DLOADAVG_MX=0.8 -DDAEMON_USERNAME=\"root\" -DDAEMON_GROUPNAME=\"root\"
--DLFILE=\"/var/lib/atjobs/.SEQ\" -Wall atd.c
+Has anyone at least used it in a cross compiled environment who can give 
+me some tips on where to install the libs and wrapper script? I'll 
+polish my buildroot makefile to suit and post it here...
 
-atd.c:498:2: error: #error "No mail command specified."
-
-make[1]: *** [atd.o] Error 1
-
-And I have a rootfs file, the build is successful?
+-- 
+Robin
 
 
-
-==> NO, because the rootfs is there from a previous successful build.
-        buildroot cannot generate a new root fs, if the makefile exits with 
-        an error.
-
-        If you have configured buildroot to build several root fs (jffs2, ext2 etc.)
-        then ALL of them have to be present, or the build have failed.
-
-        Any "make[1] ... Error #" like error message means that the build failed.
-
-Best Regards
-Ulf Samuelsson 
+=======================================================================
+This email, including any attachments, is only for the intended
+addressee.  It is subject to copyright, is confidential and may be
+the subject of legal or other privilege, none of which is waived or
+lost by reason of this transmission.
+If the receiver is not the intended addressee, please accept our
+apologies, notify us by return, delete all copies and perform no
+other act on the email.
+Unfortunately, we cannot warrant that the email has not been
+ altered or corrupted during transmission.
+=======================================================================
