@@ -1,44 +1,71 @@
-From: Hamish Moffatt <hamish@cloud.net.au>
-Date: Thu, 21 Feb 2008 16:20:15 +1100
-Subject: [Buildroot] patch to allow selection of e2fsprogs
-	tools	toinstall
-In-Reply-To: <007501c87443$5565b9a0$040514ac@atmel.com>
-References: <20080220061811.GA8033@cloud.net.au>
-	<007d01c8738a$903f7ca0$f4031a0a@atmel.com>
-	<20080221013827.GA27859@cloud.net.au>
-	<007501c87443$5565b9a0$040514ac@atmel.com>
-Message-ID: <20080221052015.GA31271@cloud.net.au>
+From: Tim Barr <tbarr@multitech.com>
+Date: Thu, 21 Feb 2008 08:04:36 -0600
+Subject: [Buildroot] Latest build problem
+Message-ID: <1CD05B980C94AC408B37C82BBABAA3E60A5233B5@mtsexchange.dc.multitech.prv>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Thu, Feb 21, 2008 at 05:36:25AM +0100, Ulf Samuelsson wrote:
-> That doesn't work so I assume it was never tested.
-> Pls test before you resubmit.
+Well, I did a grep of the whole buildroot directory looking for
+"/usr/bin/sstrip" and found two occurrences. One was a svn file and the
+other was in "sstrip.mk". The specific line in sstrip.mk was:
 
-I did, and it works for me.
+SSTRIP_TARGET := $(TARGET_DIR)/usr/bin/sstrip
 
-> $(E2FSPROGS_RM) is always clear
-> $(E2FSPROGS_RM-y) and $(E2FSPROGS_RM-n) may have contents.
+Which seems to be correct, so now I am really confused.
 
-No,
-
-> > +E2FSPROGS_RM$(strip $(BR2_PACKAGE_E2FSPROGS_BADBLOCKS)) += ${TARGET_DIR}/sbin/badblocks
-> > +E2FSPROGS_RM$(strip $(BR2_PACKAGE_E2FSPROGS_BLKID)) += ${TARGET_DIR}/sbin/blkid
-
-$(E2FSPROGS_RM-*) is not used, it is $(E2FSPROGS_RM)y and
-$(E2FSPROGS_RM). I could have used RM-, but I thought $(E2FSPROGS_RM-)
-looked odd.
-
-Hence,
-
-> > +ifneq ($(strip $(E2FSPROGS_RM)),)
-> > + rm -rf $(E2FSPROGS_RM)
-> > +endif
+Timothy Barr
+Hardware Development Engineer
+for Multi-Tech Systems, Inc.
+tbarr at multitech.com
 
 
-Hamish
--- 
-Hamish Moffatt VK3SB <hamish@debian.org> <hamish@cloud.net.au>
+
+> -----Original Message-----
+> From: Ulf Samuelsson [mailto:ulf.samuelsson at atmel.com] 
+> Sent: Tuesday, February 19, 2008 12:18 AM
+> To: Tim Barr; buildroot at uclibc.org
+> Subject: Re: [Buildroot] Latest build problem
+> 
+> 
+> 
+> > 
+> /home/falingtrea/buildroot/build_arm_wchar/staging_dir/usr/bin/arm-lin
+> > ux
+> > -uclibc-gcc -Os -pipe
+> > -I/home/falingtrea/buildroot/build_arm_wchar/staging_dir/usr/include
+> > -I/home/falingtrea/buildroot/build_arm_wchar/staging_dir/include
+> > --sysroot=/home/falingtrea/buildroot/build_arm_wchar/staging_dir/
+> > -isysroot /home/falingtrea/buildroot/build_arm_wchar/staging_dir
+> > .//toolchain/sstrip/sstrip.c -o
+> > 
+> /home/falingtrea/buildroot/project_build_arm_wchar/SuperModem-
+> 2.6.22.1/r
+> > oot/usr/bin/sstrip
+> 
+> [snip]
+> 
+> > Any suggestions on what I can do to move forward would be 
+> appreciated. 
+> > Timothy Barr
+> 
+> You need to look at the rule generating this statement in 
+> package/SuperModem/SuperModem.mk
+> 
+> -o 
+> /home/falingtrea/buildroot/project_build_arm_wchar/SuperModem-
+> 2.6.22.1/r
+> oot/usr/bin/sstrip
+> 
+> It looks to me that it is defined as 
+> -o $(SUPERMODEM_DIR)/root/usr/bin/sstrip
+> instead of
+> -o $(TARGET_DIR)/usr/bin/sstrip
+> or similar
+> 
+> 
+> Best Regards,
+> Ulf Samuelsson
+> 
