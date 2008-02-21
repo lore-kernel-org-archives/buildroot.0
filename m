@@ -1,71 +1,64 @@
-From: Tim Barr <tbarr@multitech.com>
-Date: Thu, 21 Feb 2008 08:04:36 -0600
-Subject: [Buildroot] Latest build problem
-Message-ID: <1CD05B980C94AC408B37C82BBABAA3E60A5233B5@mtsexchange.dc.multitech.prv>
+From: Gururaja Hebbar K R <gururajakr@sanyo.co.in>
+Date: Thu, 21 Feb 2008 06:52:58 +0530
+Subject: [Buildroot] aplay fails because of alsa-lib build issue with uclibc
+	and versioned symbols - (Solution included)
+References: <mailman.1.1203278405.28189.buildroot@uclibc.org>
+Message-ID: <5BF78BCE8D9BF14A83F836BD9E3916BA053E63@blrms.slti.sanyo.co.in>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Well, I did a grep of the whole buildroot directory looking for
-"/usr/bin/sstrip" and found two occurrences. One was a svn file and the
-other was in "sstrip.mk". The specific line in sstrip.mk was:
+Hi,
 
-SSTRIP_TARGET := $(TARGET_DIR)/usr/bin/sstrip
+i had tried aplay before built statically with CodeSourcery toolchain
+and it worked successfully on my arm board.
 
-Which seems to be correct, so now I am really confused.
+when i tried aplay built shared with buildroot uclibc arm926ejs
+toolchain it failed with below error
 
-Timothy Barr
-Hardware Development Engineer
-for Multi-Tech Systems, Inc.
-tbarr at multitech.com
+mnt/mmc # aplay /home/default/10Sec_44.1K.wav
+Playing WAVE '/home/default/10Sec_44.1K.wav' : Signed 16 bit Little
+Endian, Rate 44100 Hz, Stereo
+aplay: set_params:1012: unable to install sw params:
+start_mode: DATA
+xrun_mode: STOP
+tstamp_mode: NONE
+period_step: 1
+sleep_min: 0
+avail_min: 0
+xfer_align: 10
+silence_threshold: 0
+silence_size: 0
+boundary: 1073741824
+/mnt/mmc #
+
+When i searched on the internet for below error, i found that this error
+is mainly related to alsa-lib and uclibc and it requires adding
+--with-versioned=no as an option to alsa-lib ./configure.
+
+http://article.gmane.org/gmane.linux.alsa.devel/50595
+
+i added the same to alsa-lib.mk and now its working fine.
+
+		./configure \
+		--target=$(GNU_TARGET_NAME) \
+		--host=$(GNU_TARGET_NAME) \
+		--build=$(GNU_HOST_NAME) \
+		--prefix=/usr \
+		--with-versioned=no \
+		--sysconfdir=/etc \
+		--enable-shared \
+		--enable-static \
+		--disable-docs \
+		$(DISABLE_NLS) \
 
 
+Kindly can someone shed some light on this and if required can someone
+add patch to alsa-lib make file.
 
-> -----Original Message-----
-> From: Ulf Samuelsson [mailto:ulf.samuelsson at atmel.com] 
-> Sent: Tuesday, February 19, 2008 12:18 AM
-> To: Tim Barr; buildroot at uclibc.org
-> Subject: Re: [Buildroot] Latest build problem
-> 
-> 
-> 
-> > 
-> /home/falingtrea/buildroot/build_arm_wchar/staging_dir/usr/bin/arm-lin
-> > ux
-> > -uclibc-gcc -Os -pipe
-> > -I/home/falingtrea/buildroot/build_arm_wchar/staging_dir/usr/include
-> > -I/home/falingtrea/buildroot/build_arm_wchar/staging_dir/include
-> > --sysroot=/home/falingtrea/buildroot/build_arm_wchar/staging_dir/
-> > -isysroot /home/falingtrea/buildroot/build_arm_wchar/staging_dir
-> > .//toolchain/sstrip/sstrip.c -o
-> > 
-> /home/falingtrea/buildroot/project_build_arm_wchar/SuperModem-
-> 2.6.22.1/r
-> > oot/usr/bin/sstrip
-> 
-> [snip]
-> 
-> > Any suggestions on what I can do to move forward would be 
-> appreciated. 
-> > Timothy Barr
-> 
-> You need to look at the rule generating this statement in 
-> package/SuperModem/SuperModem.mk
-> 
-> -o 
-> /home/falingtrea/buildroot/project_build_arm_wchar/SuperModem-
-> 2.6.22.1/r
-> oot/usr/bin/sstrip
-> 
-> It looks to me that it is defined as 
-> -o $(SUPERMODEM_DIR)/root/usr/bin/sstrip
-> instead of
-> -o $(TARGET_DIR)/usr/bin/sstrip
-> or similar
-> 
-> 
-> Best Regards,
-> Ulf Samuelsson
-> 
+Thanks in advance
+
+Regards
+Gururaja
