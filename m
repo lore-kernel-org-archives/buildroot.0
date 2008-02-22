@@ -1,64 +1,62 @@
-From: Gururaja Hebbar K R <gururajakr@sanyo.co.in>
-Date: Thu, 21 Feb 2008 06:52:58 +0530
-Subject: [Buildroot] aplay fails because of alsa-lib build issue with uclibc
-	and versioned symbols - (Solution included)
-References: <mailman.1.1203278405.28189.buildroot@uclibc.org>
-Message-ID: <5BF78BCE8D9BF14A83F836BD9E3916BA053E63@blrms.slti.sanyo.co.in>
+From: bugs at busybox.net <bugs@busybox.net>
+Date: Fri, 22 Feb 2008 04:37:37 -0800
+Subject: [Buildroot] [buildroot 0002294]: Using Snapshot (21/02/08) of
+	buildroot,
+	con't compile uclibc 's stdlic.c 'strtol_l' was here error
+Message-ID: <052c470505325cfc53534d37179c02df@bugs.uclibc.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi,
 
-i had tried aplay before built statically with CodeSourcery toolchain
-and it worked successfully on my arm board.
+The following issue has been SUBMITTED. 
+====================================================================== 
+http://busybox.net/bugs/view.php?id=2294 
+====================================================================== 
+Reported By:                kickinz1
+Assigned To:                buildroot
+====================================================================== 
+Project:                    buildroot
+Issue ID:                   2294
+Category:                   Other
+Reproducibility:            always
+Severity:                   major
+Priority:                   normal
+Status:                     assigned
+====================================================================== 
+Date Submitted:             02-22-2008 04:37 PST
+Last Modified:              02-22-2008 04:37 PST
+====================================================================== 
+Summary:                    Using Snapshot (21/02/08) of buildroot, con't
+compile uclibc 's stdlic.c 'strtol_l' was here error
+Description: 
+Hi, 
 
-when i tried aplay built shared with buildroot uclibc arm926ejs
-toolchain it failed with below error
+First use of buildroot, I've read the doc, searched into mailing list
+(buildroot and uclibc). I've tried with gcc-4.2.x gcc-4.1, gcc-3.4.6
 
-mnt/mmc # aplay /home/default/10Sec_44.1K.wav
-Playing WAVE '/home/default/10Sec_44.1K.wav' : Signed 16 bit Little
-Endian, Rate 44100 Hz, Stereo
-aplay: set_params:1012: unable to install sw params:
-start_mode: DATA
-xrun_mode: STOP
-tstamp_mode: NONE
-period_step: 1
-sleep_min: 0
-avail_min: 0
-xfer_align: 10
-silence_threshold: 0
-silence_size: 0
-boundary: 1073741824
-/mnt/mmc #
+can't achieve compiling uclibc:
 
-When i searched on the internet for below error, i found that this error
-is mainly related to alsa-lib and uclibc and it requires adding
---with-versioned=no as an option to alsa-lib ./configure.
+  CC libc/stdlib/strtol_l.os
+In file included from ../../libc/stdlib/strtol_l.c:8:
+../../libc/stdlib/stdlib.c:346: error: conflicting types for 'strtoll_l'
+../../include/stdlib.h:266: error: previous declaration of 'strtoll_l' was
+here
+../../libc/stdlib/stdlib.c:347: error: conflicting types for 'strtoll_l'
+../../include/stdlib.h:266: error: previous declaration of 'strtoll_l' was
+here
+../../libc/stdlib/stdlib.c:348: error: conflicting types for 'strtoll_l'
+../../include/stdlib.h:266: error: previous declaration of 'strtoll_l' was
+here
+make: *** [../../libc/stdlib/strtol_l.os
+====================================================================== 
 
-http://article.gmane.org/gmane.linux.alsa.devel/50595
-
-i added the same to alsa-lib.mk and now its working fine.
-
-		./configure \
-		--target=$(GNU_TARGET_NAME) \
-		--host=$(GNU_TARGET_NAME) \
-		--build=$(GNU_HOST_NAME) \
-		--prefix=/usr \
-		--with-versioned=no \
-		--sysconfdir=/etc \
-		--enable-shared \
-		--enable-static \
-		--disable-docs \
-		$(DISABLE_NLS) \
-
-
-Kindly can someone shed some light on this and if required can someone
-add patch to alsa-lib make file.
-
-Thanks in advance
-
-Regards
-Gururaja
+Issue History 
+Date Modified   Username       Field                    Change               
+====================================================================== 
+02-22-08 04:37  kickinz1       New Issue                                    
+02-22-08 04:37  kickinz1       Status                   new => assigned     
+02-22-08 04:37  kickinz1       Assigned To               => buildroot       
+======================================================================
