@@ -1,8 +1,8 @@
 From: bugs at busybox.net <bugs@busybox.net>
-Date: Sat, 23 Feb 2008 14:55:50 -0800
+Date: Sat, 23 Feb 2008 14:56:29 -0800
 Subject: [Buildroot] [buildroot 0002214]: fails to build toolchain with NPTL
 	selected for powerpc target
-Message-ID: <6372b84f2abfc435d924d262b36a5e8d@bugs.uclibc.org>
+Message-ID: <bd067a0ff025af27d01163cb9ba25fd1@bugs.uclibc.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -26,7 +26,7 @@ Priority:                   normal
 Status:                     assigned
 ====================================================================== 
 Date Submitted:             02-18-2008 01:14 PST
-Last Modified:              02-23-2008 14:55 PST
+Last Modified:              02-23-2008 14:56 PST
 ====================================================================== 
 Summary:                    fails to build toolchain with NPTL selected for
 powerpc target
@@ -46,6 +46,11 @@ Switching to another thread library implementation workarounds the issue.
 uClibc NPTL is not available for the PPC architecture yet. It will be a few
 months before that is available. 
 
+---------------------------------------------------------------------- 
+ sjhill - 02-23-08 14:56  
+---------------------------------------------------------------------- 
+This is not a buildroot issue. 
+
 Issue History 
 Date Modified   Username       Field                    Change               
 ====================================================================== 
@@ -54,4 +59,5 @@ Date Modified   Username       Field                    Change
 02-18-08 01:14  fabo           Assigned To               => buildroot       
 02-18-08 01:15  fabo           Issue Monitored: fabo                        
 02-23-08 14:55  sjhill         Note Added: 0005274                          
+02-23-08 14:56  sjhill         Note Added: 0005284                          
 ======================================================================
