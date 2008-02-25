@@ -1,8 +1,8 @@
 From: sjhill at uclibc.org <sjhill@uclibc.org>
-Date: Sun, 24 Feb 2008 16:17:36 -0800 (PST)
+Date: Sun, 24 Feb 2008 16:25:03 -0800 (PST)
 Subject: [Buildroot] svn commit:
-	trunk/buildroot/toolchain/binutils/2.17.50.0.12
-Message-ID: <20080225001736.E4AD412C6D3@busybox.net>
+	trunk/buildroot/toolchain/binutils/2.17.50.0.17
+Message-ID: <20080225002503.6253D12C6E8@busybox.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -10,36 +10,159 @@ Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
 Author: sjhill
-Date: 2008-02-24 16:17:36 -0800 (Sun, 24 Feb 2008)
-New Revision: 21109
+Date: 2008-02-24 16:25:02 -0800 (Sun, 24 Feb 2008)
+New Revision: 21110
 
 Log:
-Fix 'makeinfo' failure.
+Copy patch needed for dynamic loader strings and config targets.
 
 
 Added:
-   trunk/buildroot/toolchain/binutils/2.17.50.0.12/100-makeinfo-version.patch
+   trunk/buildroot/toolchain/binutils/2.17.50.0.17/100-uclibc-conf.patch
 
 
 Changeset:
-Added: trunk/buildroot/toolchain/binutils/2.17.50.0.12/100-makeinfo-version.patch
+Copied: trunk/buildroot/toolchain/binutils/2.17.50.0.17/100-uclibc-conf.patch (from rev 21109, trunk/buildroot/toolchain/binutils/2.17.50.0.16/100-uclibc-conf.patch)
 ===================================================================
---- trunk/buildroot/toolchain/binutils/2.17.50.0.12/100-makeinfo-version.patch	                        (rev 0)
-+++ trunk/buildroot/toolchain/binutils/2.17.50.0.12/100-makeinfo-version.patch	2008-02-25 00:17:36 UTC (rev 21109)
-@@ -0,0 +1,16 @@
-+diff -ur binutils-2.17.50.0.12/configure binutils-2.17.50.0.12-patched/configure
-+--- binutils-2.17.50.0.12/configure	2007-01-23 15:37:00.000000000 -0600
-++++ binutils-2.17.50.0.12-patched/configure	2008-01-26 15:15:40.018188886 -0600
-+@@ -3835,10 +3835,10 @@
-+   *" texinfo "*) MAKEINFO='$$r/$(BUILD_SUBDIR)/texinfo/makeinfo/makeinfo' ;;
-+   *)
+--- trunk/buildroot/toolchain/binutils/2.17.50.0.17/100-uclibc-conf.patch	                        (rev 0)
++++ trunk/buildroot/toolchain/binutils/2.17.50.0.17/100-uclibc-conf.patch	2008-02-25 00:25:02 UTC (rev 21110)
+@@ -0,0 +1,139 @@
++--- binutils-2.16.91.0.7/bfd/configure
+++++ binutils-2.16.91.0.7/bfd/configure
++@@ -3576,7 +3576,7 @@
++   ;;
 + 
-+-    # For an installed makeinfo, we require it to be from texinfo 4.4 or
-++    # For an installed makeinfo, we require it to be from texinfo 4.6 or
-+     # higher, else we use the "missing" dummy.
-+     if ${MAKEINFO} --version \
-+-       | egrep 'texinfo[^0-9]*([1-3][0-9]|4\.[4-9]|[5-9])' >/dev/null 2>&1; then
-++       | egrep 'texinfo[^0-9]*(4\.([6-9]|[1-9][0-9])|[5-9]|[1-9][0-9])' >/dev/null 2>&1; then
-+       :
-+     else
-+       MAKEINFO="$MISSING makeinfo"
++ # This must be Linux ELF.
++-linux-gnu*)
+++linux-gnu*|linux-uclibc*)
++   lt_cv_deplibs_check_method=pass_all
++   ;;
++ 
++--- binutils-2.16.91.0.7/binutils/configure
+++++ binutils-2.16.91.0.7/binutils/configure
++@@ -3411,7 +3411,7 @@
++   ;;
++ 
++ # This must be Linux ELF.
++-linux-gnu*)
+++linux-gnu*|linux-uclibc*)
++   lt_cv_deplibs_check_method=pass_all
++   ;;
++ 
++--- binutils-2.16.91.0.7/configure
+++++ binutils-2.16.91.0.7/configure
++@@ -1270,7 +1270,7 @@
++   am33_2.0-*-linux*)
++     noconfigdirs="$noconfigdirs ${libgcj} target-newlib target-libgloss"
++     ;;
++-  sh-*-linux*)
+++  sh*-*-linux*)
++     noconfigdirs="$noconfigdirs ${libgcj} target-newlib target-libgloss"
++     ;;    
++   sh*-*-pe|mips*-*-pe|*arm-wince-pe)
++@@ -1578,7 +1578,7 @@
++   romp-*-*)
++     noconfigdirs="$noconfigdirs bfd binutils ld gas opcodes target-libgloss ${libgcj}"
++     ;;
++-  sh-*-* | sh64-*-*)
+++  sh*-*-* | sh64-*-*)
++     case "${host}" in
++       i[3456789]86-*-vsta) ;; # don't add gprof back in
++       i[3456789]86-*-go32*) ;; # don't add gprof back in
++--- binutils-2.16.91.0.7/configure.ac
+++++ binutils-2.16.91.0.7/configure.ac
++@@ -468,7 +468,7 @@
++   am33_2.0-*-linux*)
++     noconfigdirs="$noconfigdirs ${libgcj} target-newlib target-libgloss"
++     ;;
++-  sh-*-linux*)
+++  sh*-*-linux*)
++     noconfigdirs="$noconfigdirs ${libgcj} target-newlib target-libgloss"
++     ;;    
++   sh*-*-pe|mips*-*-pe|*arm-wince-pe)
++@@ -776,7 +776,7 @@
++   romp-*-*)
++     noconfigdirs="$noconfigdirs bfd binutils ld gas opcodes target-libgloss ${libgcj}"
++     ;;
++-  sh-*-* | sh64-*-*)
+++  sh*-*-* | sh64-*-*)
++     case "${host}" in
++       i[[3456789]]86-*-vsta) ;; # don't add gprof back in
++       i[[3456789]]86-*-go32*) ;; # don't add gprof back in
++--- binutils-2.16.91.0.7/gas/configure
+++++ binutils-2.16.91.0.7/gas/configure
++@@ -3411,7 +3411,7 @@
++   ;;
++ 
++ # This must be Linux ELF.
++-linux-gnu*)
+++linux-gnu*|linux-uclibc*)
++   lt_cv_deplibs_check_method=pass_all
++   ;;
++ 
++--- binutils-2.16.91.0.7/gprof/configure
+++++ binutils-2.16.91.0.7/gprof/configure
++@@ -3419,6 +3419,11 @@
++   lt_cv_file_magic_test_file=`echo /lib/libc.so* /lib/libc-*.so`
++   ;;
++ 
+++linux-uclibc*)
+++  lt_cv_deplibs_check_method=pass_all
+++  lt_cv_file_magic_test_file=`echo /lib/libuClibc-*.so`
+++  ;;
+++
++ netbsd* | knetbsd*-gnu)
++   if echo __ELF__ | $CC -E - | grep __ELF__ > /dev/null; then
++     lt_cv_deplibs_check_method='match_pattern /lib[^/\.]+\.so\.[0-9]+\.[0-9]+$'
++--- binutils-2.16.91.0.7/ld/configure
+++++ binutils-2.16.91.0.7/ld/configure
++@@ -3413,7 +3413,7 @@
++   ;;
++ 
++ # This must be Linux ELF.
++-linux-gnu*)
+++linux-gnu*|linux-uclibc*)
++   lt_cv_deplibs_check_method=pass_all
++   ;;
++ 
++--- binutils-2.16.91.0.7/libtool.m4
+++++ binutils-2.16.91.0.7/libtool.m4
++@@ -739,7 +739,7 @@
++   ;;
++ 
++ # This must be Linux ELF.
++-linux-gnu*)
+++linux-gnu*|linux-uclibc*)
++   lt_cv_deplibs_check_method=pass_all
++   ;;
++ 
++--- binutils-2.16.91.0.7/ltconfig
+++++ binutils-2.16.91.0.7/ltconfig
++@@ -602,6 +602,7 @@
++ 
++ # Transform linux* to *-*-linux-gnu*, to support old configure scripts.
++ case $host_os in
+++linux-uclibc*) ;;
++ linux-gnu*) ;;
++ linux*) host=`echo $host | sed 's/^\(.*-.*-linux\)\(.*\)$/\1-gnu\2/'`
++ esac
++@@ -1247,7 +1248,7 @@
++   ;;
++ 
++ # This must be Linux ELF.
++-linux-gnu*)
+++linux-gnu*|linux-uclibc*)
++   version_type=linux
++   need_lib_prefix=no
++   need_version=no
++--- binutils-2.16.91.0.7/opcodes/configure
+++++ binutils-2.16.91.0.7/opcodes/configure
++@@ -3579,7 +3579,7 @@
++   ;;
++ 
++ # This must be Linux ELF.
++-linux-gnu*)
+++linux-gnu*|linux-uclibc*)
++   lt_cv_deplibs_check_method=pass_all
++   ;;
++ 
