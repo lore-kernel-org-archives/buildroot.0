@@ -1,73 +1,28 @@
-From: bugs at busybox.net <bugs@busybox.net>
-Date: Mon, 25 Feb 2008 00:41:07 -0800
-Subject: [Buildroot] [buildroot 0002324]: Problems building DirectFB (cannot
-	find -lvncserver)
-Message-ID: <32da4492c4e5d5613c2eceaefe339a77@bugs.busybox.net>
+From: Hamish Moffatt <hamish@cloud.net.au>
+Date: Mon, 25 Feb 2008 23:43:20 +1100
+Subject: [Buildroot] svn commit: trunk/buildroot/package/e2fsprogs
+In-Reply-To: <20080225083323.GA21690@zelow.no>
+References: <20080224230257.E5F2712C639@busybox.net>
+	<20080225083323.GA21690@zelow.no>
+Message-ID: <20080225124320.GA4740@cloud.net.au>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+On Mon, Feb 25, 2008 at 09:33:23AM +0100, Thomas Lundquist wrote:
+> On Sun, Feb 24, 2008 at 03:02:57PM -0800, hamish at uclibc.org wrote:
+> > 
+> > Log:
+> > Allow selection of e2fsprogs to install in the target
+> 
+> Any reason resize ain't a part of this?
+> 
+> (--disable-resize is still in the configure part.)
 
-The following issue has been SUBMITTED. 
-====================================================================== 
-http://busybox.net/bugs/view.php?id=2324 
-====================================================================== 
-Reported By:                aitormorillo
-Assigned To:                buildroot
-====================================================================== 
-Project:                    buildroot
-Issue ID:                   2324
-Category:                   Other
-Reproducibility:            always
-Severity:                   feature
-Priority:                   normal
-Status:                     assigned
-====================================================================== 
-Date Submitted:             02-25-2008 00:41 PST
-Last Modified:              02-25-2008 00:41 PST
-====================================================================== 
-Summary:                    Problems building DirectFB (cannot find -lvncserver)
-Description: 
-Hi
+None that I know of -- I'll investigate tomorrow. Patches welcome!
 
-When trying to build DirectFB in a buildroot for a Atmel avr32 atstk1002 I
-get the next error:
-
-/root/avr32/build_avr32_nofpu/staging_dir/usr/bin/avr32-linux-uclibc-gcc
--Os -pipe  -I/root/avr32/build_avr32_nofpu/staging_dir/usr/include
--msoft-float -shared  .libs/vncinput.o  -Wl,--rpath
--Wl,/root/avr32/build_avr32_nofpu/DirectFB-0.9.25.1/src/.libs -L/usr/lib
--lvncserver -lvncclient -lnsl -lz -ljpeg ../../src/.libs/libdirectfb.so
--ldl -lpthread  -msoft-float -Wl,-soname -Wl,libdirectfb_vncinput.so -o
-.libs/libdirectfb_vncinput.so
-/root/avr32/build_avr32_nofpu/staging_dir/lib/gcc/avr32-linux-uclibc/4.2.1/../../../../avr32-linux-uclibc/bin/ld:
-cannot find -lvncserver
-collect2: ld returned 1 exit status
-make[4]: *** [libdirectfb_vncinput.la] Error 1
-make[4]: Leaving directory
-`/root/avr32/build_avr32_nofpu/DirectFB-0.9.25.1/systems/vnc'
-make[3]: *** [all-recursive] Error 1
-make[3]: Leaving directory
-`/root/avr32/build_avr32_nofpu/DirectFB-0.9.25.1/systems'
-make[2]: *** [all-recursive] Error 1
-make[2]: Leaving directory
-`/root/avr32/build_avr32_nofpu/DirectFB-0.9.25.1'
-make[1]: *** [all-recursive-am] Error 2
-make[1]: Leaving directory
-`/root/avr32/build_avr32_nofpu/DirectFB-0.9.25.1'
-make: *** [/root/avr32/build_avr32_nofpu/DirectFB-0.9.25.1/.compiled]
-Error 2
-
-Any idea?
-
-====================================================================== 
-
-Issue History 
-Date Modified   Username       Field                    Change               
-====================================================================== 
-02-25-08 00:41  aitormorillo   New Issue                                    
-02-25-08 00:41  aitormorillo   Status                   new => assigned     
-02-25-08 00:41  aitormorillo   Assigned To               => buildroot       
-======================================================================
+Hamish
+-- 
+Hamish Moffatt VK3SB <hamish@debian.org> <hamish@cloud.net.au>
