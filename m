@@ -1,98 +1,115 @@
-From: bugs at busybox.net <bugs@busybox.net>
-Date: Tue, 26 Feb 2008 00:15:23 -0800
-Subject: [Buildroot] [buildroot 0002324]: Problems building DirectFB (cannot
-	find -lvncserver)
-Message-ID: <63c0d36ca037209c223b4e09b656db53@bugs.uclibc.org>
+From: Mile Davidovic <md4uclibc@gmail.com>
+Date: Tue, 26 Feb 2008 16:31:15 +0100
+Subject: [Buildroot] How to build MIPS cross compiler
+In-Reply-To: <47C0E656.2080707@ruby.dti.ne.jp>
+References: <f185607a0802190354v51d3e721ib9678782e72252f1@mail.gmail.com>
+	<47BAEFC5.9080609@ich-geh-kaputt.de> <47C0E656.2080707@ruby.dti.ne.jp>
+Message-ID: <f185607a0802260731g2094d02cyfc63afcab2118ec@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+Thanks a lot.
+I will try this ASAP.
 
-A NOTE has been added to this issue. 
-====================================================================== 
-http://busybox.net/bugs/view.php?id=2324 
-====================================================================== 
-Reported By:                aitormorillo
-Assigned To:                buildroot
-====================================================================== 
-Project:                    buildroot
-Issue ID:                   2324
-Category:                   Other
-Reproducibility:            always
-Severity:                   feature
-Priority:                   normal
-Status:                     assigned
-====================================================================== 
-Date Submitted:             02-25-2008 00:41 PST
-Last Modified:              02-26-2008 00:15 PST
-====================================================================== 
-Summary:                    Problems building DirectFB (cannot find -lvncserver)
-Description: 
-Hi
+BR
+Mile
 
-When trying to build DirectFB in a buildroot for a Atmel avr32 atstk1002 I
-get the next error:
-
-/root/avr32/build_avr32_nofpu/staging_dir/usr/bin/avr32-linux-uclibc-gcc
--Os -pipe  -I/root/avr32/build_avr32_nofpu/staging_dir/usr/include
--msoft-float -shared  .libs/vncinput.o  -Wl,--rpath
--Wl,/root/avr32/build_avr32_nofpu/DirectFB-0.9.25.1/src/.libs -L/usr/lib
--lvncserver -lvncclient -lnsl -lz -ljpeg ../../src/.libs/libdirectfb.so
--ldl -lpthread  -msoft-float -Wl,-soname -Wl,libdirectfb_vncinput.so -o
-.libs/libdirectfb_vncinput.so
-/root/avr32/build_avr32_nofpu/staging_dir/lib/gcc/avr32-linux-uclibc/4.2.1/../../../../avr32-linux-uclibc/bin/ld:
-cannot find -lvncserver
-collect2: ld returned 1 exit status
-make[4]: *** [libdirectfb_vncinput.la] Error 1
-make[4]: Leaving directory
-`/root/avr32/build_avr32_nofpu/DirectFB-0.9.25.1/systems/vnc'
-make[3]: *** [all-recursive] Error 1
-make[3]: Leaving directory
-`/root/avr32/build_avr32_nofpu/DirectFB-0.9.25.1/systems'
-make[2]: *** [all-recursive] Error 1
-make[2]: Leaving directory
-`/root/avr32/build_avr32_nofpu/DirectFB-0.9.25.1'
-make[1]: *** [all-recursive-am] Error 2
-make[1]: Leaving directory
-`/root/avr32/build_avr32_nofpu/DirectFB-0.9.25.1'
-make: *** [/root/avr32/build_avr32_nofpu/DirectFB-0.9.25.1/.compiled]
-Error 2
-
-Any idea?
-
-====================================================================== 
-
----------------------------------------------------------------------- 
- aitormorillo - 02-26-08 00:15  
----------------------------------------------------------------------- 
-Alredy fixed previous error, new one:
-
-/usr/lib/libvncserver.so: could not read symbols: File in wrong format
-collect2: ld returned 1 exit status
-make[4]: *** [libdirectfb_vncinput.la] Error 1
-make[4]: Leaving directory
-`/home/buildroot-avr32-v2.1.0/build_avr32_nofpu/DirectFB-0.9.25.1/systems/vnc'
-make[3]: *** [all-recursive] Error 1
-make[3]: Leaving directory
-`/home/buildroot-avr32-v2.1.0/build_avr32_nofpu/DirectFB-0.9.25.1/systems'
-make[2]: *** [all-recursive] Error 1
-make[2]: Leaving directory
-`/home/buildroot-avr32-v2.1.0/build_avr32_nofpu/DirectFB-0.9.25.1'
-make[1]: *** [all-recursive-am] Error 2
-make[1]: Leaving directory
-`/home/buildroot-avr32-v2.1.0/build_avr32_nofpu/DirectFB-0.9.25.1'
-make: ***
-[/home/buildroot-avr32-v2.1.0/build_avr32_nofpu/DirectFB-0.9.25.1/.compiled]
-Error 2 
-
-Issue History 
-Date Modified   Username       Field                    Change               
-====================================================================== 
-02-25-08 00:41  aitormorillo   New Issue                                    
-02-25-08 00:41  aitormorillo   Status                   new => assigned     
-02-25-08 00:41  aitormorillo   Assigned To               => buildroot       
-02-26-08 00:14  aitormorillo   Issue Monitored: aitormorillo                    
-02-26-08 00:15  aitormorillo   Note Added: 0005334                          
-======================================================================
+On Sun, Feb 24, 2008 at 4:36 AM, Shinya Kuribayashi
+<skuribay@ruby.dti.ne.jp> wrote:
+>
+> Kai Moritz wrote:
+>  > Mile Davidovic schrieb:
+>  >> Hello,
+>  >> I am trying to build MIPS based toolchain, but unfortunately I got
+>  >> error with unsupported ABI.
+>  >>
+>  > Hi Mile,
+>  >
+>  > I have the same problem.
+>  > I have tried out all available combinations of mips and ABI.
+>  > None of them worked...
+>  >
+>  > Bernhard Fischer (rep.dot.nop at gmail.com) send me a link to his personal
+>  > git-Branch of buildroot, which is slightly older than trunk from svn.
+>  > That branch worked for me.
+>  > But I do not know, if it will be merged back into trunk, or when...
+>
+>  Here's the workable patch suggested by Elizabeth Oldham[1], back in Oct
+>  2007. Bernhard also posted a patch[2], but that didn't work due to
+>  `--with-abi=o32' for OABI. Do we need --with-abi=32, instead?
+>             ^
+>
+>  Bernhard, Elizabeth, do you have any time to fix this up?
+>
+>   Shinya
+>
+>  [1] http://buildroot.uclibc.org/lists/buildroot/2007-October/005742.html
+>  [2] http://buildroot.uclibc.org/lists/buildroot/2007-October/005743.html
+>
+>  Index: target/Config.in.arch
+>  ===================================================================
+>  --- target/Config.in.arch       (revision 21094)
+>  +++ target/Config.in.arch       (working copy)
+>  @@ -148,24 +148,25 @@
+>         bool "mips 32r2"
+>   config BR2_mips_64
+>         bool "mips 64"
+>  -config BR2_mips_16
+>  -       bool "mips 16"
+>  +config BR2_mips_64r2
+>  +       bool "mips 64r2"
+>   endchoice
+>
+>
+>   choice
+>         prompt "Target ABI"
+>         depends BR2_mips || BR2_mipsel
+>  -       default BR2_MIPS_EABI
+>  +       default BR_mips_ABI_O32 if BR_mips_32 || BR_mips_32r2
+>  +       default BR_mips_ABI_N32 if BR_mips_64 || BR_mips_64r2
+>         help
+>           Application Binary Interface to use
+>
+>  -config BR2_MIPS_OABI
+>  -       bool "OABI"
+>  -config BR2_MIPS_EABI
+>  -       bool "EABI"
+>  -config BR2_MIPS_ABI64
+>  -       bool "N64"
+>  +config BR2_MIPS_ABI_O32
+>  +       bool "o32"
+>  +config BR2_MIPS_ABI_N32
+>  +       bool "n32"
+>  +config BR2_MIPS_ABI_N64
+>  +       bool "n64"
+>   endchoice
+>
+>   choice
+>  @@ -589,7 +590,7 @@
+>         default mips32          if BR2_mips_32
+>         default mips32r2        if BR2_mips_32r2
+>         default mips64          if BR2_mips_64
+>  -       default mips16          if BR2_mips_16
+>  +       default mips64r2        if BR2_mips_64r2
+>         default 401             if BR2_powerpc_401
+>         default 403             if BR2_powerpc_403
+>         default 405             if BR2_powerpc_405
+>  @@ -689,11 +690,9 @@
+>         default aapcs           if BR2_arm_dunno
+>         default aapcs-linux     if BR2_arm_dunno
+>         default iwmmxt          if BR2_iwmmxt
+>  -       default 32              if BR2_mipsel && BR2_MIPS_OABI
+>  -       default n32             if BR2_mipsel && BR2_MIPS_EABI
+>  -       default o64             if BR2_mips && BR2_MIPS_OABI
+>  -       default eabi            if BR2_mips && BR2_MIPS_EABI
+>  -       default 64              if BR2_mips && BR2_MIPS_ABI64
+>  +       default 32              if BR2_MIPS_ABI_O32
+>  +       default n32             if BR2_MIPS_ABI_N32
+>  +       default 64              if BR2_MIPS_ABI_N64
+>         default mmixware        if BR2_mmix && BR2_MMIX_ABI_native
+>         default gnu             if BR2_mmix && !BR2_MMIX_ABI_native
+>         default altivec         if BR2_powerpc && BR2_PPC_ABI_altivec
+>
