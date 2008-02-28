@@ -1,114 +1,123 @@
-From: bugs at busybox.net <bugs@busybox.net>
-Date: Thu, 28 Feb 2008 07:29:57 -0800
-Subject: [Buildroot] [buildroot 0002104]: grub_0.97-28.diff.gz no longer
-	available from debian ftp site
-Message-ID: <2bda1d795e9f2be2a98fd197f905206f@bugs.uclibc.org>
+From: Rex Ashbaugh <rexa@xeratech.com>
+Date: Thu, 28 Feb 2008 08:33:19 -0700
+Subject: [Buildroot] Problem with iperf
+In-Reply-To: <337959.75035.qm@web23402.mail.ird.yahoo.com>
+References: <337959.75035.qm@web23402.mail.ird.yahoo.com>
+Message-ID: <6311fe0b0802280733q17996f0n14e5cedade44df78@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+Also, check how your cross compiler is configured for floating point
+handling..
 
-The following issue has been CLOSED 
-====================================================================== 
-http://busybox.net/bugs/view.php?id=2104 
-====================================================================== 
-Reported By:                sharkconi
-Assigned To:                buildroot
-====================================================================== 
-Project:                    buildroot
-Issue ID:                   2104
-Category:                   Architecture Specific
-Reproducibility:            always
-Severity:                   minor
-Priority:                   normal
-Status:                     closed
-Resolution:                 open
-Fixed in Version:           
-====================================================================== 
-Date Submitted:             02-14-2008 01:31 PST
-Last Modified:              02-28-2008 07:29 PST
-====================================================================== 
-Summary:                    grub_0.97-28.diff.gz no longer available from debian
-ftp site
-Description: 
-Today, I want to install the grub, it can't get grub_0.97-28.diff.gz from
-the debian ftp site, because debian has remove the source file. 
-====================================================================== 
+http://www.arm.linux.org.uk/mailinglists/faq.php
 
----------------------------------------------------------------------- 
- fabo - 02-14-08 02:02  
----------------------------------------------------------------------- 
-[2008-02-13] Accepted 0.97-31 in unstable (low) (Robert Millan)
+3. I feel really confused about what's the difference with gcc
+          soft-float support and the kernel NWFPE/FastFPE support?
+          [31 January 2004 - np]
+          Scenario 1 (hard-float): The compiler emits opcodes designed to
+          be  used  with a hardware floating point coprocessor (FPU). The
+          FPU  usually  has a set of extra registers for its use, and the
+          compiler  may as well pass floating point argument to functions
+          through  those registers. This is of course the best performing
+          solution when a real hardware FPU is used.
 
-0.97-29 and 0.97-30 are also available.
+          Scenario  2  (soft-float): the compiler converts floating point
+          operations into function calls and a special library is used to
+          provide  all  functions performing the required operations, all
+          in software with no FPU instructions at all. There is obviously
+          no  extra  floating  point  registers  available  in this case,
+          therefore  all  FP  arguments  to  functions  have to be passed
+          through  standard  registers or on the stack. This is of course
+          the best performing solution when no hardware FPU is available,
+          given  that  the  library  implementing  the  FP  operations is
+          optimally coded.
 
-grub (0.97-31) unstable; urgency=low
+          Now,  unfortunately, the default on ARM Linux has traditionally
+          been set to have the compiler use hard-float, even if ARM Linux
+          never  ran  on any ARM CPU with a real hardware FPU. The CPU is
+          therefore  raising  the invalid instruction exception each time
+          some  FPU  opcode  is  encountered.  Then the kernel traps that
+          exception,  looks  at the given FPU instruction and emulates it
+          in  software.  But here not only the kernel must perform the FP
+          operation,  it  must  emulates  the whole hardware FPU as well.
+          That's  what  NWFPE or FastFPE are doing. This is obviously the
+          worst  performing  arrangement that can be due to the exception
+          trap and emulation overhead
 
-  * README.Debian, NEWS.Debian: Recommend that users invoke update-grub
-    directly without hardcoding its path.  (Closes:
-http://busybox.net/bugs/view.php?id=465235)
-  * savedefault command is now issued when enabled via menu.lst variable
-    of the same name, when user accepts the implications (note, that in
-    the default configuration it was already disabled).
-    (Closes: http://busybox.net/bugs/view.php?id=393079,
-http://busybox.net/bugs/view.php?id=462701)
-  * Restrict license in debian/copyright to GPLv2-only.  (Closes:
-http://busybox.net/bugs/view.php?id=438177)
 
- -- Robert Millan <rmh@aybabtu.com>  Mon, 11 Feb 2008 17:32:57 +0100
 
-grub (0.97-30) unstable; urgency=low
-
-  * update-grub:
-    - Update Marc Haber's address.  (Closes:
-http://busybox.net/bugs/view.php?id=432700)
-    - Make it more friendly to its GRUB 2 compatibiliy fork.
-  * control (Build-Depends-Indep): Remove e2tools and mkisofs.
-  * patches/ext3_256byte_inode.diff: New.  Support 256-byte inodes in
-ext3.
-    Thanks Stefan Lippers-Hollmann.  (Closes:
-http://busybox.net/bugs/view.php?id=463236)
-
- -- Robert Millan <rmh@aybabtu.com>  Sun,  3 Feb 2008 01:19:47 +0100
-
-grub (0.97-29) unstable; urgency=low
-
-  [ Otavio Salvador ]
-  * update-grub: Improve sorting with mixed numeric and non-numeric
-    characters. Thanks dann frazier <dannf@debian.org> for the
-    patch. Closes: http://busybox.net/bugs/view.php?id=422759
-
-  [ Robert Millan ]
-  * Add myself to Uploaders.
-  * update-grub: Remove core.img handling.  It was becoming meaningless
-    without presence of the grub-pc package.
-  * control (Architecture): Replace any-* arches with the old, boring,
-    hardcoded list.  (Closes: http://busybox.net/bugs/view.php?id=424510)
-  * Get rid of grub-disk, mkbimage and grub-floppy.  They're deprecated
-    in favour of grub-rescue-pc now.  (Closes:
-http://busybox.net/bugs/view.php?id=399168,
-http://busybox.net/bugs/view.php?id=250938,
-http://busybox.net/bugs/view.php?id=429576,
-    http://busybox.net/bugs/view.php?id=352731)
-
- -- Robert Millan <rmh@debian.org>  Tue, 26 Jun 2007 07:48:57 +0200 
-
----------------------------------------------------------------------- 
- sjhill - 02-28-08 07:29  
----------------------------------------------------------------------- 
-Fixed in revision 21086 and confirmed working by Fathi. 
-
-Issue History 
-Date Modified   Username       Field                    Change               
-====================================================================== 
-02-14-08 01:31  sharkconi      New Issue                                    
-02-14-08 01:31  sharkconi      Status                   new => assigned     
-02-14-08 01:31  sharkconi      Assigned To               => buildroot       
-02-14-08 02:00  fabo           File Added: update_grub_patch_version.diff       
-            
-02-14-08 02:02  fabo           Note Added: 0004574                          
-02-28-08 07:29  sjhill         Status                   assigned => closed  
-02-28-08 07:29  sjhill         Note Added: 0005504                          
-======================================================================
+On 2/28/08, Nicola Salvemini <nicolasalvemini@yahoo.it> wrote:
+>
+> Hi Rex,
+>
+> Yes I tried with the previous version (2.0.1) of iperf, bat I had same
+> results.
+> I'm waiting for a replay from iperf maintainer.
+> Best regards,
+>
+> Nicola.
+>
+> ----- Messaggio originale -----
+> Da: Rex Ashbaugh <rexa@xeratech.com>
+> A: Nicola Salvemini <nicolasalvemini@yahoo.it>
+> Cc: buildroot at uclibc.org
+> Inviato: Mercoled? 27 febbraio 2008, 16:52:03
+> Oggetto: Re: [Buildroot] Problem with iperf
+>
+>
+> NWFPE is the floating point emulator.
+>
+> 00000002 is a floating point divide-by-zero.
+>
+> try another version of iperf maybe?
+> report this problem to the iperf maintainer?
+> -Rex
+>
+>
+> On 2/27/08, Nicola Salvemini <nicolasalvemini@yahoo.it> wrote:
+> >
+> > Hi all,
+> >
+> > I have a ARM arm926t (it's a little-endian) target platform and I use
+> > buildroot to cross-compile applications.
+> > I include iperf in the package selection for the target and the build
+> > phase go to the end without problems, but when I try to use iperf on the
+> > target, I take an exception:
+> >
+> > NWFPE: iperf[770] takes exception 00000002 at c00288f0 from 400f4580
+> > NWFPE: iperf[770] takes exception 00000002 at c00288f0 from 400f4580
+> > NWFPE: iperf[770] takes exception 00000002 at c00288f0 from 400f4580
+> >
+> > Could you please give me an idea to resolve the problem?
+> > Thanks in advance,
+> >
+> >
+> > Nicola.
+> >
+> >
+> >
+> >
+> >
+> >       ___________________________________
+> > L'email della prossima generazione? Puoi averla con la nuova Yahoo!
+> > Mail: http://it.docs.yahoo.com/nowyoucan.html<http://it.docs..yahoo.com/nowyoucan.html>
+> >
+> > _______________________________________________
+> > buildroot mailing list
+> > buildroot at uclibc.org
+> > http://busybox.net/mailman/listinfo/buildroot
+> >
+>
+>
+>
+> ------------------------------
+> ------------------------------
+> L'email della prossima generazione? Puoi averla con la nuova Yahoo! Mail<http://us.rd.yahoo.com/mail/it/taglines/hotmail/nowyoucan/nextgen/*http://it.docs.yahoo.com/nowyoucan.html>
+>
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: http://busybox.net/lists/buildroot/attachments/20080228/8df3feb6/attachment.htm 
