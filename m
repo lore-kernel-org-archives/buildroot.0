@@ -1,35 +1,44 @@
-From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Thu, 28 Feb 2008 09:17:28 +0100
-Subject: [Buildroot] svn commit: trunk/buildroot: package/libpng
-	package/microcom package/ etc...
-In-Reply-To: <20080228021343.DF5EA120154@busybox.net> (sjhill@uclibc.org's
-	message of "Wed\, 27 Feb 2008 18\:13\:43 -0800 \(PST\)")
-References: <20080228021343.DF5EA120154@busybox.net>
-Message-ID: <87tzjtxzon.fsf@macbook.be.48ers.dk>
+From: bugs at busybox.net <bugs@busybox.net>
+Date: Thu, 28 Feb 2008 03:03:42 -0800
+Subject: [Buildroot] [buildroot 0002374]: u-boot ftp address at atmel is
+	false
+Message-ID: <f25db3efe94b89bed29ca9922e71eecc@busybox.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "sjhill" == sjhill  <sjhill@uclibc.org> writes:
 
- sjhill> Author: sjhill
- sjhill> Date: 2008-02-27 18:13:42 -0800 (Wed, 27 Feb 2008)
- sjhill> New Revision: 21130
+The following issue has been SUBMITTED. 
+====================================================================== 
+http://busybox.net/bugs/view.php?id=2374 
+====================================================================== 
+Reported By:                JNAvila
+Assigned To:                buildroot
+====================================================================== 
+Project:                    buildroot
+Issue ID:                   2374
+Category:                   Architecture Specific
+Reproducibility:            always
+Severity:                   minor
+Priority:                   normal
+Status:                     assigned
+====================================================================== 
+Date Submitted:             02-28-2008 03:03 PST
+Last Modified:              02-28-2008 03:03 PST
+====================================================================== 
+Summary:                    u-boot ftp address at atmel is false
+Description: 
+The generated ftp address is false when selecting U-boot 
+====================================================================== 
 
- sjhill> Log:
-
- sjhill> Make sure 'linkage.h' headers are installed. Add hack to
- sjhill> bootstrap newer versions of GCC. Filter out 'gnu99' from
- sjhill> assembly flags. Use the 'headers' target instead of 'pregen'
- sjhill> to prepare for more NPTL integration. Fix broken MTD package
- sjhill> configuration....someone believes in the Klingon release
- sjhill> process apparently. Fix build issues with netplug and
- sjhill> libpng. Fix source path for microcom as original site no
- sjhill> longer exists.
-
-Please don't check in unrelated stuff in the same commit.
-
--- 
-Bye, Peter Korsgaard
+Issue History 
+Date Modified   Username       Field                    Change               
+====================================================================== 
+02-28-08 03:03  JNAvila        New Issue                                    
+02-28-08 03:03  JNAvila        Status                   new => assigned     
+02-28-08 03:03  JNAvila        Assigned To               => buildroot       
+02-28-08 03:03  JNAvila        File Added: u-boot-address.patch                 
+  
+======================================================================
