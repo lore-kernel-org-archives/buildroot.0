@@ -1,56 +1,61 @@
-From: bugs at busybox.net <bugs@busybox.net>
-Date: Wed, 27 Feb 2008 18:16:16 -0800
-Subject: [Buildroot] [buildroot 0001187]: PATCH: netplug package
-Message-ID: <02f3ddafd9cbf1b6c744b35ea458dabc@bugs.uclibc.org>
+From: sjhill at uclibc.org <sjhill@uclibc.org>
+Date: Wed, 27 Feb 2008 18:19:38 -0800 (PST)
+Subject: [Buildroot] svn commit: trunk/buildroot/package/netplug
+Message-ID: <20080228021938.E380C120154@busybox.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+Author: sjhill
+Date: 2008-02-27 18:19:38 -0800 (Wed, 27 Feb 2008)
+New Revision: 21131
 
-The following issue has been CLOSED 
-====================================================================== 
-http://busybox.net/bugs/view.php?id=1187 
-====================================================================== 
-Reported By:                janlana
-Assigned To:                buildroot
-====================================================================== 
-Project:                    buildroot
-Issue ID:                   1187
-Category:                   Other
-Reproducibility:            always
-Severity:                   minor
-Priority:                   normal
-Status:                     closed
-Resolution:                 open
-Fixed in Version:           
-====================================================================== 
-Date Submitted:             01-31-2007 02:40 PST
-Last Modified:              02-27-2008 18:16 PST
-====================================================================== 
-Summary:                    PATCH: netplug package
-Description: 
-netplug's Makefile uses strict build flag -Werror. because gcc 4.2 reports
-some differ in signedness warnings the build failed. 
+Log:
+Remove old patch and fix the type properly.
 
-The attached patch remove '-Werror' flag
-====================================================================== 
 
----------------------------------------------------------------------- 
- sjhill - 02-27-08 18:16  
----------------------------------------------------------------------- 
-This is the same issue as Bug http://busybox.net/bugs/view.php?id=0001649. 
+Added:
+   trunk/buildroot/package/netplug/netplug-socklen-type.patch
 
-Issue History 
-Date Modified   Username       Field                    Change               
-====================================================================== 
-01-31-07 02:40  janlana        New Issue                                    
-01-31-07 02:40  janlana        Status                   new => assigned     
-01-31-07 02:40  janlana        Assigned To               => uClibc          
-01-31-07 02:40  janlana        File Added: netplug_build.patch                  
- 
-02-12-07 05:33  vapier         Assigned To              uClibc => buildroot 
-02-27-08 18:16  sjhill         Status                   assigned => closed  
-02-27-08 18:16  sjhill         Note Added: 0005474                          
-======================================================================
+Removed:
+   trunk/buildroot/package/netplug/netplug-getsockname-cast.patch
+
+
+Changeset:
+Deleted: trunk/buildroot/package/netplug/netplug-getsockname-cast.patch
+===================================================================
+--- trunk/buildroot/package/netplug/netplug-getsockname-cast.patch	2008-02-28 02:13:42 UTC (rev 21130)
++++ trunk/buildroot/package/netplug/netplug-getsockname-cast.patch	2008-02-28 02:19:38 UTC (rev 21131)
+@@ -1,12 +0,0 @@
+-diff -ur netplug-1.2.9/netlink.c netplug-1.2.9-patched/netlink.c
+---- netplug-1.2.9/netlink.c	2005-01-07 23:57:09.000000000 -0600
+-+++ netplug-1.2.9-patched/netlink.c	2008-02-27 17:59:48.373864047 -0600
+-@@ -286,7 +286,7 @@
+- 
+-     int addr_len = sizeof(addr);
+- 
+--    if (getsockname(fd, (struct sockaddr *) &addr, &addr_len) == -1) {
+-+    if (getsockname(fd, (struct sockaddr *) &addr, (socklen_t *) &addr_len) == -1) {
+-         do_log(LOG_ERR, "Could not get socket details: %m");
+-         exit(1);
+-     }
+
+Added: trunk/buildroot/package/netplug/netplug-socklen-type.patch
+===================================================================
+--- trunk/buildroot/package/netplug/netplug-socklen-type.patch	                        (rev 0)
++++ trunk/buildroot/package/netplug/netplug-socklen-type.patch	2008-02-28 02:19:38 UTC (rev 21131)
+@@ -0,0 +1,12 @@
++diff -ur netplug-1.2.9/netlink.c netplug-1.2.9-patched/netlink.c
++--- netplug-1.2.9/netlink.c	2005-01-07 23:57:09.000000000 -0600
+++++ netplug-1.2.9-patched/netlink.c	2008-02-27 20:18:09.855767996 -0600
++@@ -284,7 +284,7 @@
++         exit(1);
++     }
++ 
++-    int addr_len = sizeof(addr);
+++    socklen_t addr_len = sizeof(addr);
++ 
++     if (getsockname(fd, (struct sockaddr *) &addr, &addr_len) == -1) {
++         do_log(LOG_ERR, "Could not get socket details: %m");
