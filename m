@@ -1,7 +1,8 @@
-From: JS <js@hipro.co.in>
-Date: Sun, 02 Mar 2008 01:05:40 +0530
-Subject: [Buildroot] Reg. CC_FOR_BUILD in xlib_libX11
-Message-ID: <1204400140.23564.9.camel@localhost>
+From: bugs at busybox.net <bugs@busybox.net>
+Date: Sat, 1 Mar 2008 14:22:18 -0800
+Subject: [Buildroot] [buildroot 0002384]: [PATCH] Use the BR2_LINUX_COPYTO
+	symbol for the tftpboot path of the kernel
+Message-ID: <e876f447b27bedae1a11ccaa748854fb@busybox.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -9,34 +10,47 @@ Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
 
-Hello,
+The following issue has been SUBMITTED. 
+====================================================================== 
+http://busybox.net/bugs/view.php?id=2384 
+====================================================================== 
+Reported By:                jcdr
+Assigned To:                buildroot
+====================================================================== 
+Project:                    buildroot
+Issue ID:                   2384
+Category:                   Other
+Reproducibility:            always
+Severity:                   minor
+Priority:                   normal
+Status:                     assigned
+====================================================================== 
+Date Submitted:             03-01-2008 14:22 PST
+Last Modified:              03-01-2008 14:22 PST
+====================================================================== 
+Summary:                    [PATCH] Use the BR2_LINUX_COPYTO symbol for the
+tftpboot path of the kernel
+Description: 
+The target/linux/Makefile.in.advanced use hard coded "/tftoboot" string
+instead of using the already properly defined BR2_LINUX_COPYTO symbol that
+define it. This stop the build with an permission error if the
+BR2_LINUX_COPYTO symbol is anything but "/tftoboot". Sadly last LSB and
+thus more en more distribution use "/var/lib/tftpboot" instead of
+"/tftpboot".
 
-In package/x11r7/xlib_libX11/xlib_libX11.mk, the variable
-'XLIB_LIBX11_CONF_ENV' confuses me. CC_FOR_BUILD is set to
-use /usr/bin/gcc (native gcc) to use the headers from cross-compiler's
-toolchain. Is this right?
-
-Building x11r7 for mipsel fails with failures starting as,
+Patch against current HEAD is provided to fix this problem. See
+attachment.
 
 
-> make[3]: Entering directory `/home/joe/work/inventsoln/tornado/tornado-gnu/buildroot/build_mipsel/xlib_libX11-1.1.1/src/util'
-> Makefile:510: warning: overriding commands for target `makekeys-makekeys.o'
-> Makefile:313: warning: ignoring old commands for target `makekeys-makekeys.o'
-> Makefile:513: warning: overriding commands for target `makekeys'
-> Makefile:280: warning: ignoring old commands for target `makekeys'
-> /usr/bin/gcc -I/home/joe/work/inventsoln/tornado/tornado-gnu/buildroot/build_mipsel/staging_dir/usr/include -DHAVE_CONFIG_H -I. -I../../src -I../../include/X11      -c makekeys.c -o makekeys-makekeys.o
-> In file included from /home/joe/work/inventsoln/tornado/tornado-gnu/buildroot/build_mipsel/staging_dir/usr/include/sys/types.h:31,
->                  from /home/joe/work/inventsoln/tornado/tornado-gnu/buildroot/build_mipsel/staging_dir/usr/include/X11/Xos.h:60,
->                  from makekeys.c:35:
-> /home/joe/work/inventsoln/tornado/tornado-gnu/buildroot/build_mipsel/staging_dir/usr/include/bits/types.h:133:3: error: #error 
-> In file included from /home/joe/work/inventsoln/tornado/tornado-gnu/buildroot/build_mipsel/staging_dir/usr/include/sys/types.h:31,
->                  from /home/joe/work/inventsoln/tornado/tornado-gnu/buildroot/build_mipsel/staging_dir/usr/include/X11/Xos.h:60,
->                  from makekeys.c:35:
+====================================================================== 
 
-After a bit of digging into the failure, I saw that __WORDSIZE is
-defined to _MIPS_SZPTR in include/bits/wordsize.h . And, since the
-compiler used is a native compiler (i686), I did not define that macro.
-
--- 
-HiPro Solutions
-http://hipro.co.in/
+Issue History 
+Date Modified   Username       Field                    Change               
+====================================================================== 
+03-01-08 14:22  jcdr           New Issue                                    
+03-01-08 14:22  jcdr           Status                   new => assigned     
+03-01-08 14:22  jcdr           Assigned To               => buildroot       
+03-01-08 14:22  jcdr           File Added:
+0001-Use-the-BR2_LINUX_COPYTO-symbol-for-the-tftpboot-pat.patch                 
+  
+======================================================================
