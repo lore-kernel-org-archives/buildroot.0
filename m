@@ -1,8 +1,9 @@
 From: bugs at busybox.net <bugs@busybox.net>
-Date: Sat, 1 Mar 2008 14:24:04 -0800
-Subject: [Buildroot] [buildroot 0002374]: u-boot ftp address at atmel is
-	false
-Message-ID: <d99ef3f2aa03ff87584c637dbb9a8eb0@busybox.net>
+Date: Sat, 1 Mar 2008 14:28:12 -0800
+Subject: [Buildroot] [buildroot 0002394]: [PATCH] Use the
+	BR2_TARGET_ATMEL_COPYTO for the tftpboot path of the Atmel
+	bootstrap and uboot
+Message-ID: <98c37da9e5fdbb1029f88c72dd714acb@busybox.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -10,43 +11,45 @@ Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
 
-A NOTE has been added to this issue. 
+The following issue has been SUBMITTED. 
 ====================================================================== 
-http://busybox.net/bugs/view.php?id=2374 
+http://busybox.net/bugs/view.php?id=2394 
 ====================================================================== 
-Reported By:                JNAvila
+Reported By:                jcdr
 Assigned To:                buildroot
 ====================================================================== 
 Project:                    buildroot
-Issue ID:                   2374
+Issue ID:                   2394
 Category:                   Architecture Specific
 Reproducibility:            always
 Severity:                   minor
 Priority:                   normal
 Status:                     assigned
 ====================================================================== 
-Date Submitted:             02-28-2008 03:03 PST
-Last Modified:              03-01-2008 14:24 PST
+Date Submitted:             03-01-2008 14:28 PST
+Last Modified:              03-01-2008 14:28 PST
 ====================================================================== 
-Summary:                    u-boot ftp address at atmel is false
+Summary:                    [PATCH] Use the BR2_TARGET_ATMEL_COPYTO for the
+tftpboot path of the Atmel bootstrap and uboot
 Description: 
-The generated ftp address is false when selecting U-boot 
-====================================================================== 
+The "/tftpboot" is hard coded into the file
+target/device/Atmel/at91bootstrap/at91bootstrap.mk and
+target/device/Atmel/u-boot/u-boot.mk. This stop the build with a
+permission error if the BR2_TARGET_ATMEL_COPYTO symbol is anything but
+"/tftpboot". Sadly, the last LSB and more an more distribution use
+"/var/lib/tftpboot".
 
----------------------------------------------------------------------- 
- jcdr - 03-01-08 14:24  
----------------------------------------------------------------------- 
-I have see the exact same problem and used the exact same patch to solve
-it.
-Please apply. 
+The provided patch in attachment fix this.
+
+====================================================================== 
 
 Issue History 
 Date Modified   Username       Field                    Change               
 ====================================================================== 
-02-28-08 03:03  JNAvila        New Issue                                    
-02-28-08 03:03  JNAvila        Status                   new => assigned     
-02-28-08 03:03  JNAvila        Assigned To               => buildroot       
-02-28-08 03:03  JNAvila        File Added: u-boot-address.patch                 
+03-01-08 14:28  jcdr           New Issue                                    
+03-01-08 14:28  jcdr           Status                   new => assigned     
+03-01-08 14:28  jcdr           Assigned To               => buildroot       
+03-01-08 14:28  jcdr           File Added:
+0002-Use-the-BR2_TARGET_ATMEL_COPYTO-for-the-tftpboot-pat.patch                 
   
-03-01-08 14:24  jcdr           Note Added: 0005564                          
 ======================================================================
