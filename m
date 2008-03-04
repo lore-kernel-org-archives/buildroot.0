@@ -1,29 +1,45 @@
-From: JS <js@hipro.co.in>
-Date: Tue, 04 Mar 2008 11:50:49 +0530
-Subject: [Buildroot] To fix the build failure of xlib_liblbxutil, xlib_libX11,
-	xlib_libXt
-Message-ID: <1204611649.4313.7.camel@localhost>
+From: bugs at busybox.net <bugs@busybox.net>
+Date: Mon, 3 Mar 2008 22:28:58 -0800
+Subject: [Buildroot] [buildroot 0002424]: trying to execute cross-compiled
+	glib-genmarshal on host fails gtk+2.10.9 build failure
+Message-ID: <8ef635188aef8f16d6b943e4b022d896@bugs.uclibc.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-I am building for mipsel. And, I had to do the following modifications
-to get x11r7 to build. I have not tested the binaries yet (they are
-still getting built) so dont know whether these are right.
 
-Please can someone look into these patches and tell me whether I am
-missing something.
+The following issue has been SUBMITTED. 
+====================================================================== 
+http://busybox.net/bugs/view.php?id=2424 
+====================================================================== 
+Reported By:                ajs
+Assigned To:                buildroot
+====================================================================== 
+Project:                    buildroot
+Issue ID:                   2424
+Category:                   Architecture Specific
+Reproducibility:            always
+Severity:                   minor
+Priority:                   normal
+Status:                     assigned
+====================================================================== 
+Date Submitted:             03-03-2008 22:28 PST
+Last Modified:              03-03-2008 22:28 PST
+====================================================================== 
+Summary:                    trying to execute cross-compiled glib-genmarshal on
+host fails gtk+2.10.9 build failure
+Description: 
+The build-system of GTK+ tries to execute a cross-compiled glib-genmarshal
+on the host (build machine). This fails the build.
 
--- 
-HiPro Solutions
-http://hipro.co.in/
+====================================================================== 
 
--------------- next part --------------
-A non-text attachment was scrubbed...
-Name: xlib.diff
-Type: text/x-patch
-Size: 2737 bytes
-Desc: not available
-Url : http://busybox.net/lists/buildroot/attachments/20080304/fd2ca2c1/attachment.bin 
+Issue History 
+Date Modified   Username       Field                    Change               
+====================================================================== 
+03-03-08 22:28  ajs            New Issue                                    
+03-03-08 22:28  ajs            Status                   new => assigned     
+03-03-08 22:28  ajs            Assigned To               => buildroot       
+======================================================================
