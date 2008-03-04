@@ -1,26 +1,29 @@
-From: Erik Andersen <andersen@codepoet.org>
-Date: Mon, 3 Mar 2008 20:18:43 -0700
-Subject: [Buildroot] Anyone Know why Website is Down?
-In-Reply-To: <D61182AC8012EA4EBC531B3AF23BE1095827F6@tranzeo-mail2.12stewart.tranzeo.com>
-References: <D61182AC8012EA4EBC531B3AF23BE1095827F6@tranzeo-mail2.12stewart.tranzeo.com>
-Message-ID: <20080304031843.GA16922@codepoet.org>
+From: JS <js@hipro.co.in>
+Date: Tue, 04 Mar 2008 11:50:49 +0530
+Subject: [Buildroot] To fix the build failure of xlib_liblbxutil, xlib_libX11,
+	xlib_libXt
+Message-ID: <1204611649.4313.7.camel@localhost>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Mon Mar 03, 2008 at 06:45:23AM -0800, Darcy Watkins wrote:
-> Hello,
-> 
-> Does anyone know why the uclibc/buildroot/busybox web site is down?  SVN
-> appears to be up.  Please cc me in your reply since I have mail turned
-> off and obviously cannot check the mail archives on the web server.  ;-(
+I am building for mipsel. And, I had to do the following modifications
+to get x11r7 to build. I have not tested the binaries yet (they are
+still getting built) so dont know whether these are right.
 
-Should be working now...
+Please can someone look into these patches and tell me whether I am
+missing something.
 
- -Erik
+-- 
+HiPro Solutions
+http://hipro.co.in/
 
---
-Erik B. Andersen             http://codepoet-consulting.com/
---This message was written using 73% post-consumer electrons--
+-------------- next part --------------
+A non-text attachment was scrubbed...
+Name: xlib.diff
+Type: text/x-patch
+Size: 2737 bytes
+Desc: not available
+Url : http://busybox.net/lists/buildroot/attachments/20080304/fd2ca2c1/attachment.bin 
