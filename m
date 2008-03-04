@@ -1,36 +1,26 @@
-From: Hamish Moffatt <hamish@cloud.net.au>
-Date: Tue, 4 Mar 2008 14:01:53 +1100
-Subject: [Buildroot] more stuff for buildroot
-In-Reply-To: <46a136670803031657g5520b45s7026145d87d168a5@mail.gmail.com>
-References: <46a136670803031657g5520b45s7026145d87d168a5@mail.gmail.com>
-Message-ID: <20080304030153.GA4416@cloud.net.au>
+From: Erik Andersen <andersen@codepoet.org>
+Date: Mon, 3 Mar 2008 20:18:43 -0700
+Subject: [Buildroot] Anyone Know why Website is Down?
+In-Reply-To: <D61182AC8012EA4EBC531B3AF23BE1095827F6@tranzeo-mail2.12stewart.tranzeo.com>
+References: <D61182AC8012EA4EBC531B3AF23BE1095827F6@tranzeo-mail2.12stewart.tranzeo.com>
+Message-ID: <20080304031843.GA16922@codepoet.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Mon, Mar 03, 2008 at 07:57:41PM -0500, John Voltz wrote:
-> I dropped in here a couple of weeks ago to offer some new stuff for
-> buildroot. I think most of my ugly work is now fixed, so if somebody
-> is interested in pulling from subversion, here's the link (below). I
+On Mon Mar 03, 2008 at 06:45:23AM -0800, Darcy Watkins wrote:
+> Hello,
+> 
+> Does anyone know why the uclibc/buildroot/busybox web site is down?  SVN
+> appears to be up.  Please cc me in your reply since I have mail turned
+> off and obviously cannot check the mail archives on the web server.  ;-(
 
-Can you send patches? SVN doesn't support "pulling" a la git, so it
-isn't possible to merge your changes in automatically. The proper
-protocol is to send patches to this list, ideally broken up into blocks
-of related changes.
+Should be working now...
 
-By the way, the description of your googlecode project is rather
-provocative:
-"The intention of this project is to fork the buildroot
-project to allow easier developer access. It is originally based on the
-buildroot daily snapshot 20080211."
+ -Erik
 
-In what way does the current arrangement on uclibc.org constrain
-developer access? You don't appear to have ever posted to this list
-until last month, barely before that 20080211 date.
-
-
-Hamish
--- 
-Hamish Moffatt VK3SB <hamish@debian.org> <hamish@cloud.net.au>
+--
+Erik B. Andersen             http://codepoet-consulting.com/
+--This message was written using 73% post-consumer electrons--
