@@ -1,19 +1,31 @@
-From: Darcy Watkins <DWatkins@tranzeo.com>
-Date: Mon, 3 Mar 2008 06:45:23 -0800
-Subject: [Buildroot] Anyone Know why Website is Down?
-Message-ID: <D61182AC8012EA4EBC531B3AF23BE1095827F6@tranzeo-mail2.12stewart.tranzeo.com>
+From: John Voltz <john.voltz@gmail.com>
+Date: Mon, 3 Mar 2008 19:57:41 -0500
+Subject: [Buildroot] more stuff for buildroot
+Message-ID: <46a136670803031657g5520b45s7026145d87d168a5@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+Hi,
 
-Does anyone know why the uclibc/buildroot/busybox web site is down?  SVN
-appears to be up.  Please cc me in your reply since I have mail turned
-off and obviously cannot check the mail archives on the web server.  ;-(
+I dropped in here a couple of weeks ago to offer some new stuff for
+buildroot. I think most of my ugly work is now fixed, so if somebody
+is interested in pulling from subversion, here's the link (below). I
+still have three issues I'm currently working on. First, the blackbox
+window manager crashes when it tries to read the styles file, it must
+have something to do with uClibc 0.9.29, because it works fine with
+0.9.28. Webkit+Midori crashes on a lot of websites with either
+segfaults or bus errors And last, but not least, I cannot for the life
+of me create a working filesystem for x86. Has anyone tried this
+recently? It always locks up after init takes over. Weird things
+happen with the busybox shell (try mount -t versus mount -vt, or
+strace -o  and see what I mean) and bash will not work at all. Any
+insight into these issues would be appreciated.
+
+svn checkout http://buildroot.googlecode.com/svn/trunk/ buildroot-read-only
 
 Regards,
 
-Darcy
+John Voltz
