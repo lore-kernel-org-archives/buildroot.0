@@ -1,7 +1,7 @@
 From: jacmet at uclibc.org <jacmet@uclibc.org>
-Date: Tue,  4 Mar 2008 03:36:21 -0800 (PST)
-Subject: [Buildroot] svn commit: trunk/buildroot/target/squashfs
-Message-ID: <20080304113621.5D44412011B@busybox.net>
+Date: Tue,  4 Mar 2008 03:36:23 -0800 (PST)
+Subject: [Buildroot] svn commit: trunk/buildroot/package/libpng
+Message-ID: <20080304113623.E69C512C7B0@busybox.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -9,29 +9,29 @@ Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
 Author: jacmet
-Date: 2008-03-04 03:36:20 -0800 (Tue, 04 Mar 2008)
-New Revision: 21158
+Date: 2008-03-04 03:36:23 -0800 (Tue, 04 Mar 2008)
+New Revision: 21159
 
 Log:
-squashfs: bump version
+libpng: bump version
 
 
 
 Modified:
-   trunk/buildroot/target/squashfs/squashfsroot.mk
+   trunk/buildroot/package/libpng/libpng.mk
 
 
 Changeset:
-Modified: trunk/buildroot/target/squashfs/squashfsroot.mk
+Modified: trunk/buildroot/package/libpng/libpng.mk
 ===================================================================
---- trunk/buildroot/target/squashfs/squashfsroot.mk	2008-03-02 19:57:53 UTC (rev 21157)
-+++ trunk/buildroot/target/squashfs/squashfsroot.mk	2008-03-04 11:36:20 UTC (rev 21158)
-@@ -3,7 +3,7 @@
- # mksquashfs to build to target squashfs filesystems
- #
- #############################################################
--SQUASHFS_VERSION:=3.2-r2
-+SQUASHFS_VERSION:=3.3
- SQUASHFS_DIR:=$(BUILD_DIR)/squashfs$(SQUASHFS_VERSION)
- SQUASHFS_SOURCE:=squashfs$(SQUASHFS_VERSION).tar.gz
- SQUASHFS_SITE:=http://$(BR2_SOURCEFORGE_MIRROR).dl.sourceforge.net/sourceforge/squashfs
+--- trunk/buildroot/package/libpng/libpng.mk	2008-03-04 11:36:20 UTC (rev 21158)
++++ trunk/buildroot/package/libpng/libpng.mk	2008-03-04 11:36:23 UTC (rev 21159)
+@@ -21,7 +21,7 @@
+ # Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307
+ # USA
+ 
+-LIBPNG_VERSION:=1.2.16
++LIBPNG_VERSION:=1.2.25
+ LIBPNG_DIR:=$(BUILD_DIR)/libpng-$(LIBPNG_VERSION)
+ LIBPNG_SITE:=http://$(BR2_SOURCEFORGE_MIRROR).dl.sourceforge.net/sourceforge/libpng
+ LIBPNG_SOURCE:=libpng-$(LIBPNG_VERSION).tar.bz2
