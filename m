@@ -1,45 +1,48 @@
-From: bugs at busybox.net <bugs@busybox.net>
-Date: Mon, 3 Mar 2008 22:28:58 -0800
-Subject: [Buildroot] [buildroot 0002424]: trying to execute cross-compiled
-	glib-genmarshal on host fails gtk+2.10.9 build failure
-Message-ID: <8ef635188aef8f16d6b943e4b022d896@bugs.uclibc.org>
+From: Ulf Samuelsson <ulf.samuelsson@atmel.com>
+Date: Tue, 4 Mar 2008 09:18:12 +0100
+Subject: [Buildroot] more stuff for buildroot
+References: <46a136670803031657g5520b45s7026145d87d168a5@mail.gmail.com>
+	<20080304030153.GA4416@cloud.net.au>
+Message-ID: <00c201c87ddb$1b1cc800$060514ac@atmel.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+> On Mon, Mar 03, 2008 at 07:57:41PM -0500, John Voltz wrote:
+>> I dropped in here a couple of weeks ago to offer some new stuff for
+>> buildroot. I think most of my ugly work is now fixed, so if somebody
+>> is interested in pulling from subversion, here's the link (below). I
+> 
+> Can you send patches? SVN doesn't support "pulling" a la git, so it
+> isn't possible to merge your changes in automatically. The proper
+> protocol is to send patches to this list, ideally broken up into blocks
+> of related changes.
+> 
+> By the way, the description of your googlecode project is rather
+> provocative:
+> "The intention of this project is to fork the buildroot
+> project to allow easier developer access. It is originally based on the
+> buildroot daily snapshot 20080211."
+> 
+> In what way does the current arrangement on uclibc.org constrain
+> developer access? You don't appear to have ever posted to this list
+> until last month, barely before that 20080211 date.
+> 
 
-The following issue has been SUBMITTED. 
-====================================================================== 
-http://busybox.net/bugs/view.php?id=2424 
-====================================================================== 
-Reported By:                ajs
-Assigned To:                buildroot
-====================================================================== 
-Project:                    buildroot
-Issue ID:                   2424
-Category:                   Architecture Specific
-Reproducibility:            always
-Severity:                   minor
-Priority:                   normal
-Status:                     assigned
-====================================================================== 
-Date Submitted:             03-03-2008 22:28 PST
-Last Modified:              03-03-2008 22:28 PST
-====================================================================== 
-Summary:                    trying to execute cross-compiled glib-genmarshal on
-host fails gtk+2.10.9 build failure
-Description: 
-The build-system of GTK+ tries to execute a cross-compiled glib-genmarshal
-on the host (build machine). This fails the build.
+I do not see that there is a problem using a separate svn to develop 
+and test code in a separate svn, before it is sent in as a patch,
+so let's not start a war.
 
-====================================================================== 
+John has done a lot of good work for the AVR32 specific buildroot,
+including getting X11R7 working. I do think we want his contribution.
 
-Issue History 
-Date Modified   Username       Field                    Change               
-====================================================================== 
-03-03-08 22:28  ajs            New Issue                                    
-03-03-08 22:28  ajs            Status                   new => assigned     
-03-03-08 22:28  ajs            Assigned To               => buildroot       
-======================================================================
+It should be done in the form of separate patches though.
+
+I assume that if people like what he provides, he can get
+write access to the main svn pretty soon and then there
+should be no problems.
+
+Best Regards
+Ulf Samuelsson
