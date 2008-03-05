@@ -1,11 +1,7 @@
-From: JS <js@hipro.co.in>
-Date: Wed, 05 Mar 2008 14:19:45 +0530
-Subject: [Buildroot] To fix the build failure of xlib_liblbxutil,
-	xlib_libX11, xlib_libXt
-In-Reply-To: <20080305030255.GA2436@codepoet.org>
-References: <1204611649.4313.7.camel@localhost>
-	<20080305030255.GA2436@codepoet.org>
-Message-ID: <1204706985.6596.3.camel@localhost>
+From: matthias van essche <matthias_van_essche@hotmail.com>
+Date: Wed, 5 Mar 2008 12:34:07 +0000
+Subject: [Buildroot] lighttpd + php > 503 not found
+Message-ID: <BAY128-W17F9404B2F430F7A86F3B5A2110@phx.gbl>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,25 +9,31 @@ Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
 
-On Tue, 2008-03-04 at 20:02 -0700, Erik Andersen wrote:
-> Thanks for your work trying to get X11r7 working in buildroot.
+Hello,
 
-Thanks for replying. I started to think that I was missing something
-very obvious ;)
+I am using buildroot 20887 on a at91sam9260.
+After I installed lighttpd and the php interpreter language the webserver only shows .html pages and gives the error 503-not found on .php pages.
+I edited the /etc/lighttpd/lighttpd.conf files, uncomenting these lines:
 
-> This does seem to be an improvement; however, there still seems
-> to be some problems.  At least for me I am getting "-L/usr/lib"
-> in the build, which then pulls the wrong libraries..
-> 
-> (cd /home/andersen/SVN/buildroot/build_i586/xlib_libX11-1.1.1/src; /bin/bash ../libtool  --tag=CC --mode=relink /home/andersen/SVN/buildroot/build_i586/staging_dir/usr/bin/i586-linux-uclibc-gcc -Os -pipe -I/home/andersen/SVN/buildroot/build_i586/staging_dir/usr/include -I/home/andersen/SVN/buildroot/build_i586/staging_dir/include --sysroot=/home/andersen/SVN/buildroot/build_i586/staging_dir/ -isysroot /home/andersen/SVN/buildroot/build_i586/staging_dir -mtune=i586 -march=i586 -I../include -I../include/X11 -I../include -I../include/X11 -I../src/xcms -I../src/xkb -I../src/xlibi18n -Wall -Wpointer-arith -Wstrict-prototypes -Wmissing-prototypes -Wmissing-declarations -Wnested-externs -fno-strict-aliasing -D_BSD_SOURCE -DHAS_FCHOWN -DHAS_STICKY_DIR_BIT -I/home/andersen/SVN/buildroot/build_i586/staging_dir/usr/include -I/home/andersen/SVN/buildroot/build_i586/staging_dir/usr/include -I/home/andersen/SVN/buildroot/build_i586/staging_dir/usr/include -I/home/andersen/SVN/buildroot/build_i586/staging_dir/usr/include -D_BSD_SOURCE -DX11_t -DTRANS_CLIENT -g -O2 -version-info 1:0:0 -no-undefined -o libX11-xcb.la -rpath /usr/lib x11_xcb.lo libX11.la -ldl -inst-prefix-dir /home/andersen/SVN/buildroot/project_build_i586/uclibc/root)
-> /home/andersen/SVN/buildroot/build_i586/staging_dir/usr/bin/i586-linux-uclibc-gcc -Os -pipe  -I/home/andersen/SVN/buildroot/build_i586/staging_dir/usr/include -I/home/andersen/SVN/buildroot/build_i586/staging_dir/include --sysroot=/home/andersen/SVN/buildroot/build_i586/staging_dir/ -isysroot /home/andersen/SVN/buildroot/build_i586/staging_dir -mtune=i586 -march=i586 -shared  .libs/x11_xcb.o  -L/home/andersen/SVN/buildroot/project_build_i586/uclibc/root/usr/lib -L/usr/lib -lX11 -L/home/andersen/SVN/buildroot/build_i586/staging_dir/usr/lib -ldl  -mtune=i586 -march=i586 -Wl,-soname -Wl,libX11-xcb.so.1 -o .libs/libX11-xcb.so.1.0.0
-> /usr/lib/libdl.so: file not recognized: File format not recognized
-> collect2: ld returned 1 exit status
+#### fastcgi module
+## read fastcgi.txt for more info
+## for PHP don't forget to set cgi.fix_pathinfo = 1 in the php.ini
+fastcgi.server             = ( ".php" =>
+                               ( "localhost" =>
+                                 (
+                                   "socket" => "/var/run/lighttpd/php-fastcgi.socket",
+                                   "bin-path" => "/usr/local/bin/php-cgi"
+                                 )
+                               )
+                            )
+#### CGI module
 
-This doesnt seem to happen for me (on mipsel). I am currently stuck at
-another issue that I filed a bug on (Bug:0002424), which happens much
-later. I mean after x11 gets built, in gdk-pixbuf.
+The paths are correct and php is installed.
+I woul really be gratefull if you would be so kindly to give me a thought how to solve this problem.
 
--- 
-HiPro Solutions
-http://hipro.co.in/
+Thanks in advance,
+Matthias van Essche
+
+_________________________________________________________________
+Bekijk Yes-R's real life soap op MSN Video!
+http://video.msn.com/video.aspx?mkt=nl-nl&tab=m1192527562294&vid=8aff5b76-b78d-4b55-8b64-ef7e1d73aab2&playlist=videoByUuids:uuids:50b732c2-c105-41e9-adf0-36bd627d4eaa,0813da8c-031b-423f-a79d-35d925aee805,5cce447e-948d-43af-9862-45bb6bb9d6d8,6a39138c-f562-4254-be70-9d93343650f8,f9b8d78f-05a4-4c74-8e4b-28d20a4037ab&from=NLNL_Yes-R
