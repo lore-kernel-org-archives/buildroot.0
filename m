@@ -1,55 +1,28 @@
-From: Salvatore Fassi <salvatore.fassi@gmail.com>
-Date: Wed, 5 Mar 2008 18:27:59 +0100
-Subject: [Buildroot] Glibc instead of uclibc
-In-Reply-To: <6311fe0b0803050923uf9686eep184516ce1bf14b8c@mail.gmail.com>
-References: <c05908680803050744i38177299u2af49445fdff5990@mail.gmail.com>
-	<20080305165910.GA1935@real.realitydiluted.com>
-	<c05908680803050916l5077f6f7xfc0e2d3100d60fa8@mail.gmail.com>
-	<6311fe0b0803050923uf9686eep184516ce1bf14b8c@mail.gmail.com>
-Message-ID: <c05908680803050927r7277a62fu5d3d03be8866710@mail.gmail.com>
+From: Jorge S. <jorgesolla@gmail.com>
+Date: Wed, 5 Mar 2008 20:37:48 +0100
+Subject: [Buildroot] Buildroot on Kwikbyte KBAT9261
+Message-ID: <6090c5eb0803051137xd753f7ax3db33d595f037e96@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Ok!
-Thank you all for these useful information!
+Dear all,
 
-Salvo
+I've just ordered one KBAT9261 from kwikbyte, wich is AT91SAM9261 based, i'm
+just planning to build a custom board based on the AT91SAM9261 and use it as
+an HMI.
 
-On Wed, Mar 5, 2008 at 6:23 PM, Rex Ashbaugh <rexa@xeratech.com> wrote:
+Somebody here tested buildroot on an AT91SAM9261? Does it works to build any
+kind of Xserver? Any library available on buildroot to use on my graphical
+applications?
 
-> yes and yes.
-> unless you can find a suitable pre-built cross glibc toolchain somewhere
-> online.
->
-> -Rex
->
-> On 3/5/08, Salvatore Fassi <salvatore.fassi@gmail.com> wrote:
->
-> > So is not possible to use the toolchain that is currently installed on
-> > my linux pc?
-> > Must I download binutils, gcc etc etc to compile a brand new toolchain
-> > (following the instructions provided in some cross-compiler how-to)?
-> >
-> >
-> > On Wed, Mar 5, 2008 at 5:59 PM, <sjhill@realitydiluted.com> wrote:
-> >
-> > > The only way to use glibc is to build an external glibc toolchain and
-> > > then specify using an external toolchain in buildroot.
-> > >
-> > > -Steve
-> > >
-> >
-> >
-> > _______________________________________________
-> > buildroot mailing list
-> > buildroot at uclibc.org
-> > http://busybox.net/mailman/listinfo/buildroot
-> >
->
->
+Thanks in advance for your time.
+
+Regards,
+
+Jorge.
 -------------- next part --------------
 An HTML attachment was scrubbed...
-URL: http://busybox.net/lists/buildroot/attachments/20080305/5ce50e1e/attachment.htm 
+URL: http://busybox.net/lists/buildroot/attachments/20080305/626a0057/attachment.htm 
