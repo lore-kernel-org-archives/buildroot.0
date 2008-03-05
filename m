@@ -1,84 +1,45 @@
-From: Steve Calfee <nospamcalfee@yahoo.com>
-Date: Tue, 4 Mar 2008 17:33:22 -0800 (PST)
-Subject: [Buildroot] build problems
-Message-ID: <234005.33609.qm@web58214.mail.re3.yahoo.com>
+From: Erik Andersen <andersen@codepoet.org>
+Date: Tue, 4 Mar 2008 20:02:55 -0700
+Subject: [Buildroot] To fix the build failure of xlib_liblbxutil,
+	xlib_libX11, xlib_libXt
+In-Reply-To: <1204611649.4313.7.camel@localhost>
+References: <1204611649.4313.7.camel@localhost>
+Message-ID: <20080305030255.GA2436@codepoet.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-
-
------ Original Message ----
-> From: Ulf Samuelsson <ulf.samuelsson@atmel.com>
-> To: Steve Calfee <nospamcalfee@yahoo.com>
-> Sent: Tuesday, March 4, 2008 4:21:09 PM
-> Subject: Re: [Buildroot] build problems
+On Tue Mar 04, 2008 at 11:50:49AM +0530, JS wrote:
+> I am building for mipsel. And, I had to do the following modifications
+> to get x11r7 to build. I have not tested the binaries yet (they are
+> still getting built) so dont know whether these are right.
 > 
-> Hi, I am continually having problems building.
-> > I have the latest svn sources.
-> > 
-> > Does anybody know which of the arm926 projects ie xxxx_defconfig currently is 
-> buildable. I would like to get an existing build to work before I customize it. 
-> I am running on ubuntu Feisty.
-> > 
-> > As a second question, if I wish to change the package selection, do I need to 
-> do a make clean? or will another make only deal with the current package 
-> selections? If I do a make menuconfig, does it blitz the existing .config back 
-> to defaults, or can I change packages at will starting with whatever prebuilt 
-> xxx-defconfig I used?
-> > 
-> > Thanks, Steve
-> > 
-> > 
-> 
-> 
-> I think that 
-> 
-> $ touch .config
-> $ make at91sam9260dfc_defconfig
-> $ make
-> 
-> should complete the build, but it was some time
-> since I downloaded to a target, so I do not know if it will run.
-> 
-> I run OpenSuSE 10.2
-> 
+> Please can someone look into these patches and tell me whether I am
+> missing something.
 
-Thanks for the help. I had tried that before. the file package download site version had changed and I fixed that. Now when I do the build I get:
+Thanks for your work trying to get X11r7 working in buildroot.
 
-gzip -d -c /usr/local/install/downloads/libdaemon-0.12.tar.gz | tar -C /home/calfee/buildroot/arm/buildroot/build_arm   -xf -
-toolchain/patch-kernel.sh /home/calfee/buildroot/arm/buildroot/build_arm/libdaemon-0.12 package/libdaemon/ \*.patch
+This does seem to be an improvement; however, there still seems
+to be some problems.  At least for me I am getting "-L/usr/lib"
+in the build, which then pulls the wrong libraries..
 
-Applying libdir-la.patch using plaintext: 
-patching file ltmain.sh
-Hunk #1 succeeded at 273 (offset 42 lines).
-Hunk #2 succeeded at 2408 with fuzz 2 (offset 128 lines).
-Hunk #3 succeeded at 2896 (offset 135 lines).
-Hunk #4 succeeded at 5623 (offset 465 lines).
-Hunk #5 succeeded at 5948 (offset 468 lines).
+(cd /home/andersen/SVN/buildroot/build_i586/xlib_libX11-1.1.1/src; /bin/bash ../libtool  --tag=CC --mode=relink /home/andersen/SVN/buildroot/build_i586/staging_dir/usr/bin/i586-linux-uclibc-gcc -Os -pipe -I/home/andersen/SVN/buildroot/build_i586/staging_dir/usr/include -I/home/andersen/SVN/buildroot/build_i586/staging_dir/include --sysroot=/home/andersen/SVN/buildroot/build_i586/staging_dir/ -isysroot /home/andersen/SVN/buildroot/build_i586/staging_dir -mtune=i586 -march=i586 -I../include -I../include/X11 -I../include -I../include/X11 -I../src/xcms -I../src/xkb -I../src/xlibi18n -Wall -Wpointer-arith -Wstrict-prototypes -Wmissing-prototypes -Wmissing-declarations -Wnested-externs -fno-strict-aliasing -D_BSD_SOURCE -DHAS_FCHOWN -DHAS_STICKY_DIR_BIT -I/home/andersen/SVN/buildroot/build_i586/staging_dir/usr/include -I/home/andersen/SVN/buildroot/build_i586/staging_dir/usr/include -I/home/andersen/SVN/buildroot/build_i586/staging_dir/usr/include -I/home/andersen/SVN/buildroot/build_i586/staging_dir/usr/include -D_BSD_SOURCE -DX11_t -DTRANS_CLIENT -g -O2 -version-info 1:0:0 -no-undefined -o libX11-xcb.la -rpath /usr/lib x11_xcb.lo libX11.la -ldl -inst-prefix-dir /home/andersen/SVN/buildroot/project_build_i586/uclibc/root)
+/home/andersen/SVN/buildroot/build_i586/staging_dir/usr/bin/i586-linux-uclibc-gcc -Os -pipe  -I/home/andersen/SVN/buildroot/build_i586/staging_dir/usr/include -I/home/andersen/SVN/buildroot/build_i586/staging_dir/include --sysroot=/home/andersen/SVN/buildroot/build_i586/staging_dir/ -isysroot /home/andersen/SVN/buildroot/build_i586/staging_dir -mtune=i586 -march=i586 -shared  .libs/x11_xcb.o  -L/home/andersen/SVN/buildroot/project_build_i586/uclibc/root/usr/lib -L/usr/lib -lX11 -L/home/andersen/SVN/buildroot/build_i586/staging_dir/usr/lib -ldl  -mtune=i586 -march=i586 -Wl,-soname -Wl,libX11-xcb.so.1 -o .libs/libX11-xcb.so.1.0.0
+/usr/lib/libdl.so: file not recognized: File format not recognized
+collect2: ld returned 1 exit status
+libtool: install: error: relink `libX11-xcb.la' with the above command before installing it
+make[3]: *** [install-libLTLIBRARIES] Error 1
+make[3]: Leaving directory `/home/andersen/SVN/buildroot/build_i586/xlib_libX11-1.1.1/src'
+make[2]: *** [install-exec-recursive] Error 1
+make[2]: Leaving directory `/home/andersen/SVN/buildroot/build_i586/xlib_libX11-1.1.1/src'
+make[1]: *** [install-exec-recursive] Error 1
+make[1]: Leaving directory `/home/andersen/SVN/buildroot/build_i586/xlib_libX11-1.1.1'
+make: *** [/home/andersen/SVN/buildroot/build_i586/xlib_libX11-1.1.1/.stamp_target_installed] Error 2
 
-Applying xcompile-setpgrp.patch using plaintext: 
-patching file configure.ac
-cp -f package/gnuconfig/config.sub package/gnuconfig/config.guess /home/calfee/buildroot/arm/buildroot/build_arm/libdaemon-0.12
-touch /home/calfee/buildroot/arm/buildroot/build_arm/libdaemon-0.12/.unpacked
-(cd /home/calfee/buildroot/arm/buildroot/build_arm/libdaemon-0.12 && rm -rf config.cache && autoreconf)
-configure.ac:41: error: possibly undefined macro: AC_PROG_LIBTOOL
-      If this token and others are legitimate, please use m4_pattern_allow.
-      See the Autoconf documentation.
-autoreconf2.50: /usr/bin/autoconf failed with exit status: 1
-make: *** [/home/calfee/buildroot/arm/buildroot/build_arm/libdaemon-0.12/.configured] Error 1
-calfee at squiggy-linux:~/buildroot/arm/buildroot$ 
+ -Erik
 
-
-I have tried several other defconfig packages, and they all seem to have their own peculiar failures. This failed after the busybox build, so I guess it is a selected package. I know you don't have time to diagnose my problem, that is why I am looking for someone who has a recent arm926 package building with pure buildroot files. Maybe there isn't any?
-
-Thanks for the suggestion, Steve
-
-
-
-
-      ____________________________________________________________________________________
-Never miss a thing.  Make Yahoo your home page. 
-http://www.yahoo.com/r/hs
+--
+Erik B. Andersen             http://codepoet-consulting.com/
+--This message was written using 73% post-consumer electrons--
