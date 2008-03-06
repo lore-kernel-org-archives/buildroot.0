@@ -1,8 +1,7 @@
 From: ninevoltz at uclibc.org <ninevoltz@uclibc.org>
-Date: Thu,  6 Mar 2008 10:25:46 -0800 (PST)
-Subject: [Buildroot] svn commit: trunk/buildroot/package:
-	startup-notification
-Message-ID: <20080306182546.D987F120281@busybox.net>
+Date: Thu,  6 Mar 2008 10:26:11 -0800 (PST)
+Subject: [Buildroot] svn commit: trunk/buildroot/package/sudo
+Message-ID: <20080306182611.13B18120250@busybox.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -10,52 +9,41 @@ Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
 Author: ninevoltz
-Date: 2008-03-06 10:25:46 -0800 (Thu, 06 Mar 2008)
-New Revision: 21229
+Date: 2008-03-06 10:26:10 -0800 (Thu, 06 Mar 2008)
+New Revision: 21230
 
 Log:
-added startup-notification
+cleanup sudo makefile
 
-Added:
-   trunk/buildroot/package/startup-notification/
-   trunk/buildroot/package/startup-notification/Config.in
-   trunk/buildroot/package/startup-notification/startup-notification.mk
+Modified:
+   trunk/buildroot/package/sudo/sudo.mk
 
 
 Changeset:
-Added: trunk/buildroot/package/startup-notification/Config.in
+Modified: trunk/buildroot/package/sudo/sudo.mk
 ===================================================================
---- trunk/buildroot/package/startup-notification/Config.in	                        (rev 0)
-+++ trunk/buildroot/package/startup-notification/Config.in	2008-03-06 18:25:46 UTC (rev 21229)
-@@ -0,0 +1,7 @@
-+config BR2_PACKAGE_STARTUP_NOTIFICATION
-+	bool "startup-notification"
-+	default n
-+	help
-+	  Startup-notification is a library used to monitor application startup.
-+
-+	  http://freedesktop.org/software/startup-notification/releases
-
-Added: trunk/buildroot/package/startup-notification/startup-notification.mk
-===================================================================
---- trunk/buildroot/package/startup-notification/startup-notification.mk	                        (rev 0)
-+++ trunk/buildroot/package/startup-notification/startup-notification.mk	2008-03-06 18:25:46 UTC (rev 21229)
-@@ -0,0 +1,18 @@
-+#############################################################
-+#
-+# startup-notification
-+#
-+#############################################################
-+STARTUP_NOTIFICATION_VERSION = 0.9
-+STARTUP_NOTIFICATION_SOURCE = startup-notification-$(STARTUP_NOTIFICATION_VERSION).tar.gz
-+STARTUP_NOTIFICATION_SITE = http://freedesktop.org/software/startup-notification/releases
-+STARTUP_NOTIFICATION_AUTORECONF = NO
-+STARTUP_NOTIFICATION_INSTALL_STAGING = YES
-+STARTUP_NOTIFICATION_INSTALL_TARGET = YES
-+
-+STARTUP_NOTIFICATION_CONF_ENV = lf_cv_sane_realloc=yes
-+
-+STARTUP_NOTIFICATION_DEPENDENCIES = uclibc 
-+
-+$(eval $(call AUTOTARGETS,package,startup-notification))
-+
+--- trunk/buildroot/package/sudo/sudo.mk	2008-03-06 18:25:46 UTC (rev 21229)
++++ trunk/buildroot/package/sudo/sudo.mk	2008-03-06 18:26:10 UTC (rev 21230)
+@@ -19,7 +19,7 @@
+ 	$(SUDO_UNZIP) $(DL_DIR)/$(SUDO_SOURCE) | tar -C $(BUILD_DIR) $(TAR_OPTIONS) -
+ 	toolchain/patch-kernel.sh $(SUDO_DIR) package/sudo sudo\*.patch
+ 	$(CONFIG_UPDATE) $(SUDO_DIR)
+-	touch $(SUDO_DIR)/.unpacked
++	touch $@
+ 
+ $(SUDO_DIR)/.configured: $(SUDO_DIR)/.unpacked $(SUDO_CONFIG_FILE)
+ 	(cd $(SUDO_DIR); rm -rf config.cache; \
+@@ -50,11 +50,11 @@
+ 		$(SUDO_EXTRA_CONFIG) \
+ 	)
+ 
+-	touch $(SUDO_DIR)/.configured
++	touch $@
+ 
+ $(SUDO_DIR)/sudo: $(SUDO_DIR)/.configured
+ 	$(MAKE) -C $(SUDO_DIR)
+-	touch -c $(SUDO_DIR)/sudo
++	touch -c $@
+ 
+ $(TARGET_DIR)/usr/bin/sudo: $(SUDO_DIR)/sudo
+ 	$(INSTALL) -m 4555 -D $(SUDO_DIR)/sudo $(TARGET_DIR)/usr/bin/sudo
