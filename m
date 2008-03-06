@@ -1,7 +1,7 @@
 From: ninevoltz at uclibc.org <ninevoltz@uclibc.org>
-Date: Thu,  6 Mar 2008 09:54:27 -0800 (PST)
-Subject: [Buildroot] svn commit: trunk/buildroot/package/aumix
-Message-ID: <20080306175427.853E11201B9@busybox.net>
+Date: Thu,  6 Mar 2008 09:54:47 -0800 (PST)
+Subject: [Buildroot] svn commit: trunk/buildroot/package/avahi
+Message-ID: <20080306175447.024A2120159@busybox.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -9,44 +9,32 @@ Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
 Author: ninevoltz
-Date: 2008-03-06 09:54:27 -0800 (Thu, 06 Mar 2008)
-New Revision: 21179
+Date: 2008-03-06 09:54:47 -0800 (Thu, 06 Mar 2008)
+New Revision: 21180
 
 Log:
-makefile cleanup for aumix
+makefile cleanup for avahi
 
 Modified:
-   trunk/buildroot/package/aumix/aumix.mk
+   trunk/buildroot/package/avahi/avahi.mk
 
 
 Changeset:
-Modified: trunk/buildroot/package/aumix/aumix.mk
+Modified: trunk/buildroot/package/avahi/avahi.mk
 ===================================================================
---- trunk/buildroot/package/aumix/aumix.mk	2008-03-06 17:54:01 UTC (rev 21178)
-+++ trunk/buildroot/package/aumix/aumix.mk	2008-03-06 17:54:27 UTC (rev 21179)
-@@ -15,7 +15,7 @@
+--- trunk/buildroot/package/avahi/avahi.mk	2008-03-06 17:54:27 UTC (rev 21179)
++++ trunk/buildroot/package/avahi/avahi.mk	2008-03-06 17:54:47 UTC (rev 21180)
+@@ -145,11 +145,13 @@
+ 	touch $@
  
- $(AUMIX_DIR)/.unpacked: $(DL_DIR)/$(AUMIX_SOURCE)
- 	$(AUMIX_CAT) $(DL_DIR)/$(AUMIX_SOURCE) | tar -C $(BUILD_DIR) $(TAR_OPTIONS) -
--	touch $(AUMIX_DIR)/.unpacked
-+	touch $@
+ $(AVAHI_DIR)/.installed: $(AVAHI_DIR)/.compiled
++	mkdir -p $(STAGING_DIR)/etc/avahi
+ 	$(MAKE) DESTDIR=$(STAGING_DIR) -C $(AVAHI_DIR) install
+ 	touch $@
  
- $(AUMIX_DIR)/.configured: $(AUMIX_DIR)/.unpacked
- 	(cd $(AUMIX_DIR); rm -rf config.cache; \
-@@ -36,14 +36,14 @@
- 		--without-sysmouse \
- 		$(DISABLE_NLS) \
- 	)
--	touch $(AUMIX_DIR)/.configured
-+	touch $@
- 
- $(AUMIX_DIR)/src/aumix: $(AUMIX_DIR)/.configured
- 	$(MAKE) CC=$(TARGET_CC) -C $(AUMIX_DIR)
- 
- $(AUMIX_DIR)/.installed: $(AUMIX_DIR)/src/aumix
- 	$(MAKE) -C $(AUMIX_DIR) DESTDIR=$(TARGET_DIR) install
--	touch $(AUMIX_DIR)/.installed
-+	touch $@
- 
- aumix: uclibc ncurses $(AUMIX_DIR)/.installed
- 
+ $(TARGET_DIR)/usr/sbin/avahi-autoipd: $(AVAHI_DIR)/.installed
+ 	mkdir -p $(TARGET_DIR)/etc/avahi
++	mkdir -p $(TARGET_DIR)/etc/init.d
+ 	mkdir -p $(TARGET_DIR)/var/lib
+ 	mkdir -p $(TARGET_DIR)/usr/share/udhcpc
+ 	cp -af $(STAGING_DIR)/etc/avahi/avahi-autoipd.action $(TARGET_DIR)/etc/avahi/
