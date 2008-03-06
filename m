@@ -1,7 +1,7 @@
 From: ninevoltz at uclibc.org <ninevoltz@uclibc.org>
-Date: Thu,  6 Mar 2008 10:27:19 -0800 (PST)
-Subject: [Buildroot] svn commit: trunk/buildroot/package/tiff
-Message-ID: <20080306182719.524EF120250@busybox.net>
+Date: Thu,  6 Mar 2008 10:27:38 -0800 (PST)
+Subject: [Buildroot] svn commit: trunk/buildroot/package:  torsmo
+Message-ID: <20080306182738.CDFCA120281@busybox.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -9,51 +9,52 @@ Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
 Author: ninevoltz
-Date: 2008-03-06 10:27:19 -0800 (Thu, 06 Mar 2008)
-New Revision: 21233
+Date: 2008-03-06 10:27:38 -0800 (Thu, 06 Mar 2008)
+New Revision: 21234
 
 Log:
-fixes for tiff makefile
+added torsmo
 
-Modified:
-   trunk/buildroot/package/tiff/tiff.mk
+Added:
+   trunk/buildroot/package/torsmo/
+   trunk/buildroot/package/torsmo/Config.in
+   trunk/buildroot/package/torsmo/torsmo.mk
 
 
 Changeset:
-Modified: trunk/buildroot/package/tiff/tiff.mk
+Added: trunk/buildroot/package/torsmo/Config.in
 ===================================================================
---- trunk/buildroot/package/tiff/tiff.mk	2008-03-06 18:26:58 UTC (rev 21232)
-+++ trunk/buildroot/package/tiff/tiff.mk	2008-03-06 18:27:19 UTC (rev 21233)
-@@ -35,7 +35,7 @@
- 		--exec-prefix=/usr \
- 		--bindir=/usr/bin \
- 		--sbindir=/usr/sbin \
--		--libdir=/lib \
-+		--libdir=/usr/lib \
- 		--libexecdir=/usr/lib \
- 		--sysconfdir=/etc \
- 		--datadir=/usr/share \
-@@ -58,16 +58,16 @@
- 	$(MAKE) -C $(TIFF_DIR)
- 	touch -c $(TIFF_DIR)/libtiff/.libs/libtiff.a
- 
--$(STAGING_DIR)/lib/libtiff.so.$(TIFF_VERSION): $(TIFF_DIR)/libtiff/.libs/libtiff.a
-+$(STAGING_DIR)/usr/lib/libtiff.so.$(TIFF_VERSION): $(TIFF_DIR)/libtiff/.libs/libtiff.a
- 	$(MAKE) DESTDIR=$(STAGING_DIR) -C $(TIFF_DIR) install
--	$(SED) "s,^libdir=.*,libdir=\'$(STAGING_DIR)/lib\',g" $(STAGING_DIR)/lib/libtiff.la
--	touch -c $(STAGING_DIR)/lib/libtiff.so.$(TIFF_VERSION)
-+	$(SED) "s,^libdir=.*,libdir=\'$(STAGING_DIR)/usr/lib\',g" $(STAGING_DIR)/usr/lib/libtiff.la
-+	touch -c $(STAGING_DIR)/usr/lib/libtiff.so.$(TIFF_VERSION)
- 
--$(TARGET_DIR)/lib/libtiff.so.$(TIFF_VERSION): $(STAGING_DIR)/lib/libtiff.so.$(TIFF_VERSION)
--	cp -dpf $(STAGING_DIR)/lib/libtiff.so* $(TARGET_DIR)/lib/
--	-$(STRIPCMD) $(STRIP_STRIP_UNNEEDED) $(TARGET_DIR)/lib/libtiff.so.$(TIFF_VERSION)
-+$(TARGET_DIR)/usr/lib/libtiff.so.$(TIFF_VERSION): $(STAGING_DIR)/usr/lib/libtiff.so.$(TIFF_VERSION)
-+	cp -dpf $(STAGING_DIR)/usr/lib/libtiff.so* $(TARGET_DIR)/usr/lib/
-+	-$(STRIPCMD) $(STRIP_STRIP_UNNEEDED) $(TARGET_DIR)/usr/lib/libtiff.so.$(TIFF_VERSION)
- 
--tiff: uclibc zlib jpeg $(TARGET_DIR)/lib/libtiff.so.$(TIFF_VERSION)
-+tiff: uclibc zlib jpeg $(TARGET_DIR)/usr/lib/libtiff.so.$(TIFF_VERSION)
- 
- tiff-clean:
- 	-$(MAKE) -C $(TIFF_DIR) clean
+--- trunk/buildroot/package/torsmo/Config.in	                        (rev 0)
++++ trunk/buildroot/package/torsmo/Config.in	2008-03-06 18:27:38 UTC (rev 21234)
+@@ -0,0 +1,7 @@
++config BR2_PACKAGE_TORSMO
++	bool "torsmo"
++	default n
++	help
++	  Torsmo is a system monitor that sits in the corner of your desktop.
++
++	  http://avr32linux.org/twiki/pub/Main/Torsmo
+
+Added: trunk/buildroot/package/torsmo/torsmo.mk
+===================================================================
+--- trunk/buildroot/package/torsmo/torsmo.mk	                        (rev 0)
++++ trunk/buildroot/package/torsmo/torsmo.mk	2008-03-06 18:27:38 UTC (rev 21234)
+@@ -0,0 +1,18 @@
++#############################################################
++#
++# torsmo
++#
++#############################################################
++TORSMO_VERSION = 0.18
++TORSMO_SOURCE = torsmo-$(TORSMO_VERSION).tar.gz
++TORSMO_SITE = http://avr32linux.org/twiki/pub/Main/Torsmo
++TORSMO_AUTORECONF = NO
++TORSMO_INSTALL_STAGING = NO
++TORSMO_INSTALL_TARGET = YES
++
++TORSMO_CONF_OPT = --x-includes="-I$(STAGING_DIR)/usr/include/X11" --x-libraries="-I$(STAGING_DIR)/usr/lib" --with-x
++
++TORSMO_DEPENDENCIES = uclibc 
++
++$(eval $(call AUTOTARGETS,package,torsmo))
++
