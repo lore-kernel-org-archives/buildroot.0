@@ -1,28 +1,46 @@
-From: John Voltz <john.voltz@gmail.com>
-Date: Thu, 6 Mar 2008 14:45:34 -0500
-Subject: [Buildroot] (no subject)
-Message-ID: <46a136670803061145v2453608bh255005be6ee0e479@mail.gmail.com>
+From: ninevoltz at uclibc.org <ninevoltz@uclibc.org>
+Date: Thu,  6 Mar 2008 11:48:40 -0800 (PST)
+Subject: [Buildroot] svn commit: trunk/buildroot/package/alsa-lib
+Message-ID: <20080306194840.A3A951201A0@busybox.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
- >> +             --with-alsa-devdir=/dev \
+Author: ninevoltz
+Date: 2008-03-06 11:48:39 -0800 (Thu, 06 Mar 2008)
+New Revision: 21259
 
->Why? Better approach to make a proper mdev.conf script which puts alsa
->devices into the correct place.
+Log:
+fixed arch dependent option
 
->> +             --with-softfloat \
+Modified:
+   trunk/buildroot/package/alsa-lib/alsa-lib.mk
 
->Architecture dependant?
 
-I didn't know about doing it with mdev. Recently I had been having trouble
-getting mdev to even work with busybox 1.9.x.
-
-I'll fix that arch dependent line pronto.
-
-John
--------------- next part --------------
-An HTML attachment was scrubbed...
-URL: http://busybox.net/lists/buildroot/attachments/20080306/2a05a359/attachment.htm 
+Changeset:
+Modified: trunk/buildroot/package/alsa-lib/alsa-lib.mk
+===================================================================
+--- trunk/buildroot/package/alsa-lib/alsa-lib.mk	2008-03-06 19:10:06 UTC (rev 21258)
++++ trunk/buildroot/package/alsa-lib/alsa-lib.mk	2008-03-06 19:48:39 UTC (rev 21259)
+@@ -17,6 +17,10 @@
+ ALSA_LIB_ABI:=
+ endif
+ 
++ifeq ($(BR2_SOFT_FLOAT),y)
++	SOFT_FLOAT=--with-softfloat
++endif
++
+ $(DL_DIR)/$(ALSA_LIB_SOURCE):
+ 	$(WGET) -P $(DL_DIR) $(ALSA_LIB_SITE)/$(ALSA_LIB_SOURCE)
+ 
+@@ -42,7 +46,7 @@
+ 		--enable-static \
+ 		--disable-docs \
+ 		--with-alsa-devdir=/dev \
+-		--with-softfloat \
++		$(SOFT_FLOAT) \
+ 		$(DISABLE_NLS) \
+ 	)
+ 	touch $@
