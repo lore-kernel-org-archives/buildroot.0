@@ -1,168 +1,98 @@
-From: Tim Barr <tbarr@multitech.com>
-Date: Wed, 5 Mar 2008 16:02:18 -0600
-Subject: [Buildroot] I really need some help
-Message-ID: <1CD05B980C94AC408B37C82BBABAA3E60A91DDB1@mtsexchange.dc.multitech.prv>
+From: Emil =?ISO-8859-1?Q?Kr=FCper?= <e.krueper@solcon-systemtechnik.de>
+Date: Thu, 06 Mar 2008 08:12:26 +0100
+Subject: [Buildroot] Glibc instead of uclibc
+In-Reply-To: <c05908680803050933p15ae7f46y77a16d3af3262e45@mail.gmail.com>
+References: <c05908680803050744i38177299u2af49445fdff5990@mail.gmail.com>
+	<20080305165910.GA1935@real.realitydiluted.com>
+	<c05908680803050916l5077f6f7xfc0e2d3100d60fa8@mail.gmail.com>
+	<1204737793.5023.1.camel@localhost>
+	<c05908680803050933p15ae7f46y77a16d3af3262e45@mail.gmail.com>
+Message-ID: <1204787546.28258.21.camel@PC-EK.Solcon>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-I have been trying for the past 2+ months to successfully complete a
-buildroot session for a AT91SAM9260EK. I first installed buildroot via
-svn. Then I then did a "make at91sam9260pf_defconfig" to get baseline
-config files. Then I ran a "make configured" in order to get a baseline
-codeset. I ran "make menuconfig" in the kernel directory in order to
-update the kernel config from what defconfig installed, otherwise I kept
-getting prompted about missing config info during the make. The only
-change I made to the kernel config was to add USB ACM support so I could
-talk to a USB wireless module. I have tried both 2.6.22.1 and 2.6.22.10
-kernels.
- 
-I have been able to figure out workarounds for some of the errors I have
-gotten, either manually downloading source files that buildroot could
-not find or creating directories that buildroot could not find or would
-not create itself. Now I am getting an error about "No mail command
-specified". Log file info follows:
- 
-# Use fakeroot to pretend all target binaries are owned by root
+In the toolchain menu select external toolchain. Next you should go to
+the external toolchain options and change the external toolchain path
+to /usr and the external toolchain prefix to i386-linux-gnu. Just to be
+safe have a look at /usr/bin/, depending on your distribution it might
+be i486, i586 or i686. Modify the external toolchain prefix accordingly.
+If there is something missing at compile time, create a symbolic link
+from the appropriate binary to /usr/bin/ix86-linux-gnu-xxx. That usually
+happens the first times you run your buildroot with your systems
+toolchain.
 
-rm -f
-/home/falingtrea/buildroot/project_build_arm_wchar/SuperModem-2.6.22.1/_
-fakeroot.rootfs.arm-20080305.ext2
-
-touch
-/home/falingtrea/buildroot/project_build_arm_wchar/SuperModem-2.6.22.1/.
-fakeroot.00000
-
-cat
-/home/falingtrea/buildroot/project_build_arm_wchar/SuperModem-2.6.22.1/.
-fakeroot* >
-/home/falingtrea/buildroot/project_build_arm_wchar/SuperModem-2.6.22.1/_
-fakeroot.rootfs.arm-20080305.ext2
-
-echo "chown -R 0:0
-/home/falingtrea/buildroot/project_build_arm_wchar/SuperModem-2.6.22.1/r
-oot" >>
-/home/falingtrea/buildroot/project_build_arm_wchar/SuperModem-2.6.22.1/_
-fakeroot.rootfs.arm-20080305.ext2
-
-# Use fakeroot to pretend to create all needed device nodes
-
-echo
-"/home/falingtrea/buildroot/build_arm_wchar/staging_dir/bin/makedevs -d
-target/device/Atmel/root/device_table.txt
-/home/falingtrea/buildroot/project_build_arm_wchar/SuperModem-2.6.22.1/r
-oot" \
-
->>
-/home/falingtrea/buildroot/project_build_arm_wchar/SuperModem-2.6.22.1/_
-fakeroot.rootfs.arm-20080305.ext2
-
-# Use fakeroot so genext2fs believes the previous fakery
-
-GENEXT2_REALSIZE=`LC_ALL=C du -s -c -k
-/home/falingtrea/buildroot/project_build_arm_wchar/SuperModem-2.6.22.1/r
-oot | grep total | sed -e "s/total//"`; \
-
-GENEXT2_ADDTOROOTSIZE=`if [ $GENEXT2_REALSIZE -ge 20000 ]; then echo
-16384; else echo 2400; fi`; \
-
-GENEXT2_SIZE=`expr $GENEXT2_REALSIZE + $GENEXT2_ADDTOROOTSIZE`; \
-
-GENEXT2_ADDTOINODESIZE=`find
-/home/falingtrea/buildroot/project_build_arm_wchar/SuperModem-2.6.22.1/r
-oot | wc -l`; \
-
-GENEXT2_INODES=`expr $GENEXT2_ADDTOINODESIZE + 400`; \
-
-set -x; \
-
-echo "/home/falingtrea/buildroot/build_arm_wchar/genext2fs-1.4/genext2fs
--b $GENEXT2_SIZE " \
-
-"-N $GENEXT2_INODES -d
-/home/falingtrea/buildroot/project_build_arm_wchar/SuperModem-2.6.22.1/r
-oot " \
-
-" -U -m 0
-/home/falingtrea/buildroot/binaries/SuperModem-2.6.22.1/rootfs.arm-20080
-305.ext2" >>
-/home/falingtrea/buildroot/project_build_arm_wchar/SuperModem-2.6.22.1/_
-fakeroot.rootfs.arm-20080305.ext2
-
-+ echo
-/home/falingtrea/buildroot/build_arm_wchar/genext2fs-1.4/genext2fs -b
-46612 -N 1479 -d
-/home/falingtrea/buildroot/project_build_arm_wchar/SuperModem-2.6.22.1/r
-oot -U -m 0
-/home/falingtrea/buildroot/binaries/SuperModem-2.6.22.1/rootfs.arm-20080
-305.ext2
-
-chmod a+x
-/home/falingtrea/buildroot/project_build_arm_wchar/SuperModem-2.6.22.1/_
-fakeroot.rootfs.arm-20080305.ext2
-
-/home/falingtrea/buildroot/build_arm_wchar/staging_dir/usr/bin/fakeroot
---
-/home/falingtrea/buildroot/project_build_arm_wchar/SuperModem-2.6.22.1/_
-fakeroot.rootfs.arm-20080305.ext2
-
-make[1]: Entering directory
-`/home/falingtrea/buildroot/build_arm_wchar/at-3.1.10'
-
-/home/falingtrea/buildroot/build_arm_wchar/staging_dir/usr/bin/arm-linux
--uclibc-gcc -Os -pipe
--I/home/falingtrea/buildroot/build_arm_wchar/staging_dir/usr/include
--I/home/falingtrea/buildroot/build_arm_wchar/staging_dir/include
---sysroot=/home/falingtrea/buildroot/build_arm_wchar/staging_dir/
--isysroot /home/falingtrea/buildroot/build_arm_wchar/staging_dir -c -O2
--g -Wall -DHAVE_CONFIG_H -DVERSION=\"3.1.9\" -DETCDIR=\"/etc\"
--DLOADAVG_MX=0.8 -DDAEMON_USERNAME=\"root\" -DDAEMON_GROUPNAME=\"root\"
--DLFILE=\"/var/lib/atjobs/.SEQ\" -Wall atd.c
-
-atd.c:498:2: error: #error "No mail command specified."
-
-make[1]: *** [atd.o] Error 1
-
-make[1]: Leaving directory
-`/home/falingtrea/buildroot/build_arm_wchar/at-3.1.10'
-
-rootdir=/home/falingtrea/buildroot/project_build_arm_wchar/SuperModem-2.
-6.22.1/root
-
-table='target/device/Atmel/root/device_table.txt'
-
-makedevs: line 42: regular file
-'/home/falingtrea/buildroot/project_build_arm_wchar/SuperModem-2.6.22.1/
-root/etc/shadow' does not exist: No such file or directory
-
-makedevs: line 43: regular file
-'/home/falingtrea/buildroot/project_build_arm_wchar/SuperModem-2.6.22.1/
-root/etc/passwd' does not exist: No such file or directory
-
-makedevs: line 48: regular file
-'/home/falingtrea/buildroot/project_build_arm_wchar/SuperModem-2.6.22.1/
-root/usr/share/udhcpc/default.script' does not exist: No such file or
-directory
-
--rw-r--r-- 1 falingtrea falingtrea 47730688 2008-03-05 12:12
-/home/falingtrea/buildroot/binaries/SuperModem-2.6.22.1/rootfs.arm-20080
-305.ext2
-
-rm -f
-/home/falingtrea/buildroot/project_build_arm_wchar/SuperModem-2.6.22.1/.
-fakeroot*
-
- 
+Best regards
+Emil Kr?per
 
 
-Timothy Barr
-Hardware Development Engineer
-for Multi-Tech Systems, Inc.
- <mailto:tbarr@multitech.com> tbarr at multitech.com 
+On Wed, 2008-03-05 at 18:33 +0100, Salvatore Fassi wrote:
+> No, I'm not searching for an arm/mipsel toolchain...I need only a
+> simple i386 toolchain, that's why I wanted to use the one from my
+> linux pc.
+> However thank you for the suggestion...it will be useful for the
+> future!
+> 
+> Salvo
+> 
+> On Wed, Mar 5, 2008 at 6:23 PM, JS <js@hipro.co.in> wrote:
+>         On Wed, 2008-03-05 at 18:16 +0100, Salvatore Fassi wrote:
+>         > So is not possible to use the toolchain that is currently
+>         installed on
+>         > my linux pc?
+>         > Must I download binutils, gcc etc etc to compile a brand new
+>         toolchain
+>         > (following the instructions provided in some cross-compiler
+>         how-to)?
+>         
+>         
+>         If you are lookin for a arm/mipsel toolchain, you should
+>         checkout eldk.
+>         I am sure you can use ELDK along with buildroot..
+>         
+>         --
+>         HiPro Solutions
+>         http://hipro.co.in/
+>         
+>         
+>         
+>         _______________________________________________
+>         buildroot mailing list
+>         buildroot at uclibc.org
+>         http://busybox.net/mailman/listinfo/buildroot
+>         
+> 
+> _______________________________________________
+> buildroot mailing list
+> buildroot at uclibc.org
+> http://busybox.net/mailman/listinfo/buildroot
+-- 
+Mit freundlichen Gr??en
 
- 
--------------- next part --------------
-An HTML attachment was scrubbed...
-URL: http://busybox.net/lists/buildroot/attachments/20080305/d3a07c65/attachment.htm 
+
+Emil Kr?per
+
+Solcon Systemtechnik GmbH
+Niels-Bohr-Ring 3-5
+23568 L?beck
+
+Tel.: (0451)-40948-19
+Fax.: (0451)-40948-88
+Email: e.krueper at solcon-systemtechnik.de
+www.solcon-systemtechnik.de
+
+Sitz der Gesellschaft: L?beck
+Amtsgericht: L?beck | HRB 3662
+Gesch?ftsf?hrer: Dr.-Ing. Reiner Wieck, Dr.-Ing. Gerd Schneider
+
+
+Der Inhalt dieser E-Mail ist vertraulich und oder rechtlich gesch?tzt,
+und damit ausschlie?lich f?r den bezeichneten Adressaten bestimmt. Wenn
+Sie nicht der vorgesehene Adressat dieser E-Mail oder dessen Vertreter
+sein sollten, so beachten Sie bitte, dass jede Form der Kenntnisnahme,
+Ver?ffentlichung, Vervielf?ltigung oder Weitergabe des Inhalts dieser
+E-Mail unzul?ssig ist. Wir bitten Sie, sich in diesem Fall mit dem
+Absender in Verbindung zu setzen und diese E-Mail und jeden Anhang von
+Ihrem System zu l?schen. Vielen Dank.
