@@ -1,33 +1,42 @@
-From: Hans-Christian Egtvedt <hcegtvedt@atmel.com>
-Date: Thu, 06 Mar 2008 19:50:21 +0100
-Subject: [Buildroot] svn commit: trunk/buildroot/package/tslib
-In-Reply-To: <20080306182758.09F16120295@busybox.net>
-References: <20080306182758.09F16120295@busybox.net>
-Message-ID: <1204829421.9461.81.camel@localhost>
+From: ninevoltz at uclibc.org <ninevoltz@uclibc.org>
+Date: Thu,  6 Mar 2008 10:52:05 -0800 (PST)
+Subject: [Buildroot] svn commit: trunk/buildroot/toolchain: binutils/2.17
+	gcc/4.2.1 gdb/6.4 kernel- etc...
+Message-ID: <20080306185205.EDC8E120159@busybox.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Thu, 2008-03-06 at 10:27 -0800, ninevoltz at uclibc.org wrote:
-> Author: ninevoltz
-> Date: 2008-03-06 10:27:57 -0800 (Thu, 06 Mar 2008)
-> New Revision: 21235
-> 
-> Log:
-> patches for tslib
-> 
-> Added:
->    trunk/buildroot/package/tslib/tslib-1.0-absbit.patch
->    trunk/buildroot/package/tslib/tslib-1.0-remove-return-on-error-from-check-df.patch
+Author: ninevoltz
+Date: 2008-03-06 10:52:01 -0800 (Thu, 06 Mar 2008)
+New Revision: 21252
 
-These two patches are actually wrong, I think the tslib error you (I)
-see is because of big-endian architecture. I will hopefully give it a go
-next week. As long as I remember it (-:
+Log:
+toolchain updates
 
-<cut patches>
+Added:
+   trunk/buildroot/toolchain/binutils/2.17/500-avr32-atmel.1.3.0.patch
+   trunk/buildroot/toolchain/binutils/2.17/501-avr32-fix-pool-alignment.patch
+   trunk/buildroot/toolchain/binutils/2.17/502-avr32-fix-got-refcount.patch
+   trunk/buildroot/toolchain/gcc/4.2.1/900-avr32-atmel.1.3.2.patch
+   trunk/buildroot/toolchain/gcc/4.2.1/901-avr32-add-mno-pic.patch
+   trunk/buildroot/toolchain/gcc/4.2.1/902-avr32-fix-pic-redefinition-warning.patch
+   trunk/buildroot/toolchain/gcc/4.2.1/903-avr32-fix-expanding-builtin-xchg.patch
+   trunk/buildroot/toolchain/gcc/4.2.1/905-avr32-fix-folding-machine-reorg-optimizations.patch
+   trunk/buildroot/toolchain/gcc/4.2.1/906-avr32-use-rjmp-instead-of-got-when-jumping.patch
+   trunk/buildroot/toolchain/gcc/4.2.1/908-avr32-fix-invalid-assembler-code-on-64bit-hosts.patch
+   trunk/buildroot/toolchain/gdb/6.4/700-avr32.patch
 
--- 
-With kind regards,
-Hans-Christian Egtvedt, Applications Engineer
+Modified:
+   trunk/buildroot/toolchain/Config.in
+   trunk/buildroot/toolchain/kernel-headers/Config.in
+
+
+Changeset:
+
+Sorry, the patch is too large to include (229359 lines).
+Please use ViewCVS to see it!
+
+http://uclibc.org/cgi-bin/viewcvs.cgi?view=rev&root=svn&rev=21252
