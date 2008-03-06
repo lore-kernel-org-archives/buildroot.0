@@ -1,30 +1,30 @@
-From: Hamish Moffatt <hamish@cloud.net.au>
-Date: Fri, 7 Mar 2008 10:54:55 +1100
-Subject: [Buildroot] svn commit: trunk/buildroot/package:
-	editors	editors/vim
-In-Reply-To: <20080306180815.1953E120159@busybox.net>
-References: <20080306180815.1953E120159@busybox.net>
-Message-ID: <20080306235455.GD26530@cloud.net.au>
+From: Ulf Samuelsson <ulf.samuelsson@atmel.com>
+Date: Fri, 7 Mar 2008 00:44:32 +0100
+Subject: [Buildroot] Huge update
+References: <46a136670803061116v7e4e03baj8d11392632c40760@mail.gmail.com>
+Message-ID: <041701c87fe5$ada773d0$030514ac@atmel.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Thu, Mar 06, 2008 at 10:08:15AM -0800, ninevoltz at uclibc.org wrote:
-> Author: ninevoltz
-> Date: 2008-03-06 10:08:14 -0800 (Thu, 06 Mar 2008)
-> New Revision: 21189
+----- Original Message ----- 
+From: "John Voltz" <john.voltz@gmail.com>
+To: "Buildroot List" <buildroot@uclibc.org>
+Sent: Thursday, March 06, 2008 8:16 PM
+Subject: [Buildroot] Huge update
+
+
+> Well, the huge update from my Google svn is now merged into buildroot's svn.
+> As of this moment, they are both identical. I'll keep my Google svn open as
+> a testing/play ground and only merge the solid changes upstream.
 > 
-> Log:
-> added vim and editors directory
-> 
-> Added:
->    trunk/buildroot/package/editors/
+> John Voltz
+>
 
-Why add hierarchy into the package directory?
+This must be some kind of a record :-)
 
 
-Hamish
--- 
-Hamish Moffatt VK3SB <hamish@debian.org> <hamish@cloud.net.au>
+Best Regards
+Ulf Samuelsson
