@@ -1,8 +1,9 @@
 From: Ulf Samuelsson <ulf.samuelsson@atmel.com>
-Date: Fri, 7 Mar 2008 00:44:32 +0100
-Subject: [Buildroot] Huge update
-References: <46a136670803061116v7e4e03baj8d11392632c40760@mail.gmail.com>
-Message-ID: <041701c87fe5$ada773d0$030514ac@atmel.com>
+Date: Fri, 7 Mar 2008 00:56:09 +0100
+Subject: [Buildroot] svn commit: trunk/buildroot/package/bzip2
+References: <20080306175611.EB4541201CA@busybox.net>
+	<20080306234746.GC26530@cloud.net.au>
+Message-ID: <041901c87fe5$b1503080$030514ac@atmel.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -10,20 +11,43 @@ Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
 ----- Original Message ----- 
-From: "John Voltz" <john.voltz@gmail.com>
-To: "Buildroot List" <buildroot@uclibc.org>
-Sent: Thursday, March 06, 2008 8:16 PM
-Subject: [Buildroot] Huge update
+From: "Hamish Moffatt" <hamish@cloud.net.au>
+To: <buildroot@uclibc.org>
+Sent: Friday, March 07, 2008 12:47 AM
+Subject: Re: [Buildroot] svn commit: trunk/buildroot/package/bzip2
 
 
-> Well, the huge update from my Google svn is now merged into buildroot's svn.
-> As of this moment, they are both identical. I'll keep my Google svn open as
-> a testing/play ground and only merge the solid changes upstream.
+> On Thu, Mar 06, 2008 at 09:56:11AM -0800, ninevoltz at uclibc.org wrote:
+>> Author: ninevoltz
+>> Date: 2008-03-06 09:56:10 -0800 (Thu, 06 Mar 2008)
+>> New Revision: 21184
+>> 
+>> Log:
+>> makefile cleanup for bzip2
+>> 
+>> Modified:
+>>    trunk/buildroot/package/bzip2/bzip2.mk
+>> 
+>> 
+>> Changeset:
+>> Modified: trunk/buildroot/package/bzip2/bzip2.mk
+>> ===================================================================
+>> --- trunk/buildroot/package/bzip2/bzip2.mk 2008-03-06 17:55:51 UTC (rev 21183)
+>> +++ trunk/buildroot/package/bzip2/bzip2.mk 2008-03-06 17:56:10 UTC (rev 21184)
+>> @@ -29,7 +29,7 @@
+>>  $(SED) "s:-O2:$(TARGET_CFLAGS):" $(BZIP2_DIR)/Makefile-libbz2_so
+>>  touch $@
+>>  
+>> -$(STAGING_DIR)/lib/libbz2.so.$(BZIP2_VERSION): $(BZIP2_DIR)/.unpacked
+>> +$(STAGING_DIR)/usr/lib/libbz2.so.$(BZIP2_VERSION): $(BZIP2_DIR)/.unpacked
 > 
-> John Voltz
->
+> Why move libbz2 from /lib to /usr/lib?
+> 
+> 
 
-This must be some kind of a record :-)
+
+I think that this has been the trend for the last year.
+A lot of packages has had this change.
 
 
 Best Regards
