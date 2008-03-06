@@ -1,7 +1,7 @@
 From: ninevoltz at uclibc.org <ninevoltz@uclibc.org>
-Date: Thu,  6 Mar 2008 10:23:39 -0800 (PST)
-Subject: [Buildroot] svn commit: trunk/buildroot/package/rxvt
-Message-ID: <20080306182339.E76AA1201F1@busybox.net>
+Date: Thu,  6 Mar 2008 10:23:59 -0800 (PST)
+Subject: [Buildroot] svn commit: trunk/buildroot/package/samba
+Message-ID: <20080306182359.CB307120272@busybox.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -9,36 +9,27 @@ Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
 Author: ninevoltz
-Date: 2008-03-06 10:23:39 -0800 (Thu, 06 Mar 2008)
-New Revision: 21225
+Date: 2008-03-06 10:23:59 -0800 (Thu, 06 Mar 2008)
+New Revision: 21226
 
 Log:
-cleanup rxvt makefile
+update samba version
 
 Modified:
-   trunk/buildroot/package/rxvt/rxvt.mk
+   trunk/buildroot/package/samba/samba.mk
 
 
 Changeset:
-Modified: trunk/buildroot/package/rxvt/rxvt.mk
+Modified: trunk/buildroot/package/samba/samba.mk
 ===================================================================
---- trunk/buildroot/package/rxvt/rxvt.mk	2008-03-06 18:23:13 UTC (rev 21224)
-+++ trunk/buildroot/package/rxvt/rxvt.mk	2008-03-06 18:23:39 UTC (rev 21225)
-@@ -36,7 +36,7 @@
- 	$(RXVT_CAT) $(DL_DIR)/$(RXVT_SOURCE) | tar -C $(BUILD_DIR) $(TAR_OPTIONS) -
- 	toolchain/patch-kernel.sh $(RXVT_DIR) package/rxvt/ \*.patch
- 	$(CONFIG_UPDATE) $(RXVT_DIR)/autoconf
--	touch $(RXVT_DIR)/.unpacked
-+	touch $@
- 
- $(RXVT_DIR)/.configured: $(RXVT_DIR)/.unpacked
- 	(cd $(RXVT_DIR); rm -rf config.cache; \
-@@ -55,7 +55,7 @@
- 		--disable-resources \
- 		--disable-memset \
- 	)
--	touch $(RXVT_DIR)/.configured
-+	touch $@
- 
- $(RXVT_BINARY): $(RXVT_DIR)/.configured
- 	$(MAKE) CC=$(TARGET_CC) -C $(RXVT_DIR)
+--- trunk/buildroot/package/samba/samba.mk	2008-03-06 18:23:39 UTC (rev 21225)
++++ trunk/buildroot/package/samba/samba.mk	2008-03-06 18:23:59 UTC (rev 21226)
+@@ -3,7 +3,7 @@
+ # samba
+ #
+ #############################################################
+-SAMBA_VERSION:=3.0.26a
++SAMBA_VERSION:=3.0.28
+ SAMBA_SOURCE:=samba-$(SAMBA_VERSION).tar.gz
+ SAMBA_SITE:=ftp://us4.samba.org/pub/samba/
+ SAMBA_DIR:=$(BUILD_DIR)/samba-$(SAMBA_VERSION)/source
