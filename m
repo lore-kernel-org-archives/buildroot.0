@@ -1,7 +1,7 @@
 From: ninevoltz at uclibc.org <ninevoltz@uclibc.org>
-Date: Thu,  6 Mar 2008 10:28:27 -0800 (PST)
-Subject: [Buildroot] svn commit: trunk/buildroot/package:  vice
-Message-ID: <20080306182827.4301812028A@busybox.net>
+Date: Thu,  6 Mar 2008 10:28:49 -0800 (PST)
+Subject: [Buildroot] svn commit: trunk/buildroot/package:  webkit
+Message-ID: <20080306182849.78A0A12029A@busybox.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -9,80 +9,78 @@ Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
 Author: ninevoltz
-Date: 2008-03-06 10:28:26 -0800 (Thu, 06 Mar 2008)
-New Revision: 21236
+Date: 2008-03-06 10:28:48 -0800 (Thu, 06 Mar 2008)
+New Revision: 21237
 
 Log:
-added vice
-
+added webkit
 
 Added:
-   trunk/buildroot/package/vice/
-   trunk/buildroot/package/vice/Config.in
-   trunk/buildroot/package/vice/vice-1.22-remove-bzero.patch
-   trunk/buildroot/package/vice/vice.mk
+   trunk/buildroot/package/webkit/
+   trunk/buildroot/package/webkit/Config.in
+   trunk/buildroot/package/webkit/webkit-r30267-trunc.patch
+   trunk/buildroot/package/webkit/webkit.mk
 
 
 Changeset:
-Added: trunk/buildroot/package/vice/Config.in
+Added: trunk/buildroot/package/webkit/Config.in
 ===================================================================
---- trunk/buildroot/package/vice/Config.in	                        (rev 0)
-+++ trunk/buildroot/package/vice/Config.in	2008-03-06 18:28:26 UTC (rev 21236)
-@@ -0,0 +1,7 @@
-+config BR2_PACKAGE_VICE
-+	bool "vice"
+--- trunk/buildroot/package/webkit/Config.in	                        (rev 0)
++++ trunk/buildroot/package/webkit/Config.in	2008-03-06 18:28:48 UTC (rev 21237)
+@@ -0,0 +1,14 @@
++config BR2_PACKAGE_WEBKIT
++	bool "webkit"
++	select BR2_PACKAGE_LIBGTK2
++	select BR2_PACKAGE_ICU
++	select BR2_PACKAGE_CURL 
++	select BR2_PACKAGE_LIBXML2 
++	select BR2_PACKAGE_LIBXSLT 
++	select BR2_PACKAGE_SQLITE
 +	default n
 +	help
-+	  VICE is a Commodore emulator
++		WebKit is an open source, standards compliant web browser engine. 
 +
-+	  http://www.viceteam.org/online
++		http://webkit.org/
++
 
-Added: trunk/buildroot/package/vice/vice-1.22-remove-bzero.patch
+Added: trunk/buildroot/package/webkit/webkit-r30267-trunc.patch
 ===================================================================
---- trunk/buildroot/package/vice/vice-1.22-remove-bzero.patch	                        (rev 0)
-+++ trunk/buildroot/package/vice/vice-1.22-remove-bzero.patch	2008-03-06 18:28:26 UTC (rev 21236)
-@@ -0,0 +1,20 @@
-+--- a/src/network.c	2007-07-15 18:49:24.000000000 -0400
-++++ b/src/network.c	2008-03-01 21:29:40.000000000 -0500
-+@@ -742,7 +742,7 @@ int network_start_server(void)
+--- trunk/buildroot/package/webkit/webkit-r30267-trunc.patch	                        (rev 0)
++++ trunk/buildroot/package/webkit/webkit-r30267-trunc.patch	2008-03-06 18:28:48 UTC (rev 21237)
+@@ -0,0 +1,11 @@
++--- a/JavaScriptCore/wtf/MathExtras.h	2008-02-04 21:09:08.000000000 -0500
+++++ b/JavaScriptCore/wtf/MathExtras.h	2008-02-11 13:31:28.000000000 -0500
++@@ -75,6 +75,8 @@ inline bool signbit(double x) { return x
 + 
-+ #ifdef HAVE_IPV6
-+     if (netplay_ipv6) {
-+-        bzero((char*)&server_addr6, sizeof(struct sockaddr_in6));
-++        memset((char*)&server_addr6, 0, sizeof(struct sockaddr_in6));
-+         server_addr6.sin6_port = htons(server_port);
-+         server_addr6.sin6_family = PF_INET6;
-+         server_addr6.sin6_addr=in6addr_any;
-+@@ -853,7 +853,7 @@ int network_connect_client(void)
-+     }
-+ #ifdef HAVE_IPV6
-+     if (netplay_ipv6) {
-+-        bzero((char*)&server_addr6, sizeof(struct sockaddr_in6));
-++        memset((char*)&server_addr6, 0, sizeof(struct sockaddr_in6));
-+         server_addr6.sin6_port = htons(server_port);
-+         server_addr6.sin6_family = PF_INET6;
-+         memcpy(&server_addr6.sin6_addr, server_hostent->h_addr, server_hostent->h_length);
++ #endif
++ 
+++inline double trunc(double num) { return num > 0 ? floor(num) : ceil(num); }
+++
++ #if COMPILER(MSVC)
++ 
++ inline bool isinf(double num) { return !_finite(num) && !_isnan(num); }
 
-Added: trunk/buildroot/package/vice/vice.mk
+Added: trunk/buildroot/package/webkit/webkit.mk
 ===================================================================
---- trunk/buildroot/package/vice/vice.mk	                        (rev 0)
-+++ trunk/buildroot/package/vice/vice.mk	2008-03-06 18:28:26 UTC (rev 21236)
-@@ -0,0 +1,18 @@
+--- trunk/buildroot/package/webkit/webkit.mk	                        (rev 0)
++++ trunk/buildroot/package/webkit/webkit.mk	2008-03-06 18:28:48 UTC (rev 21237)
+@@ -0,0 +1,19 @@
 +#############################################################
 +#
-+# vice
++# webkit
 +#
 +#############################################################
-+VICE_VERSION = 1.22
-+VICE_SOURCE = vice-$(VICE_VERSION).tar.gz
-+VICE_SITE = http://www.viceteam.org/online
-+VICE_AUTORECONF = NO
-+VICE_INSTALL_STAGING = NO
-+VICE_INSTALL_TARGET = YES
++WEBKIT_VERSION = r30574
++WEBKIT_SOURCE = WebKit-$(WEBKIT_VERSION).tar.bz2
++WEBKIT_SITE = http://nightly.webkit.org/files/trunk/src/
 +
-+VICE_CONF_OPT = --without-resid --with-alsa CFLAGS="-O0"
++WEBKIT_INSTALL_STAGING = YES
++WEBKIT_INSTALL_TARGET = YES
++WEBKIT_INSTALL_STAGING_OPT = DESTDIR=$(STAGING_DIR) install 
 +
-+VICE_DEPENDENCIES = uclibc 
++WEBKIT_AUTORECONF = YES
++WEBKIT_DEPENDENCIES = icu curl libxml2 libxslt xserver_xorg-server libgtk2 sqlite
++WEBKIT_MAKE_OPT = GLIB_GENMARSHAL=/usr/bin/glib-genmarshal GLIB_MKENUMS=/usr/bin/glib-mkenums
 +
-+$(eval $(call AUTOTARGETS,package,vice))
++$(eval $(call AUTOTARGETS,package,webkit))
 +
