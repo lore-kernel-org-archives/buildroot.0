@@ -1,8 +1,7 @@
 From: ninevoltz at uclibc.org <ninevoltz@uclibc.org>
-Date: Thu,  6 Mar 2008 10:52:05 -0800 (PST)
-Subject: [Buildroot] svn commit: trunk/buildroot/toolchain: binutils/2.17
-	gcc/4.2.1 gdb/6.4 kernel- etc...
-Message-ID: <20080306185205.EDC8E120159@busybox.net>
+Date: Thu,  6 Mar 2008 10:52:43 -0800 (PST)
+Subject: [Buildroot] svn commit: trunk/buildroot/target/linux
+Message-ID: <20080306185243.AAE5A1202C9@busybox.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -10,33 +9,131 @@ Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
 Author: ninevoltz
-Date: 2008-03-06 10:52:01 -0800 (Thu, 06 Mar 2008)
-New Revision: 21252
+Date: 2008-03-06 10:52:43 -0800 (Thu, 06 Mar 2008)
+New Revision: 21253
 
 Log:
-toolchain updates
-
-Added:
-   trunk/buildroot/toolchain/binutils/2.17/500-avr32-atmel.1.3.0.patch
-   trunk/buildroot/toolchain/binutils/2.17/501-avr32-fix-pool-alignment.patch
-   trunk/buildroot/toolchain/binutils/2.17/502-avr32-fix-got-refcount.patch
-   trunk/buildroot/toolchain/gcc/4.2.1/900-avr32-atmel.1.3.2.patch
-   trunk/buildroot/toolchain/gcc/4.2.1/901-avr32-add-mno-pic.patch
-   trunk/buildroot/toolchain/gcc/4.2.1/902-avr32-fix-pic-redefinition-warning.patch
-   trunk/buildroot/toolchain/gcc/4.2.1/903-avr32-fix-expanding-builtin-xchg.patch
-   trunk/buildroot/toolchain/gcc/4.2.1/905-avr32-fix-folding-machine-reorg-optimizations.patch
-   trunk/buildroot/toolchain/gcc/4.2.1/906-avr32-use-rjmp-instead-of-got-when-jumping.patch
-   trunk/buildroot/toolchain/gcc/4.2.1/908-avr32-fix-invalid-assembler-code-on-64bit-hosts.patch
-   trunk/buildroot/toolchain/gdb/6.4/700-avr32.patch
+added support for kernel 2.6.24
 
 Modified:
-   trunk/buildroot/toolchain/Config.in
-   trunk/buildroot/toolchain/kernel-headers/Config.in
+   trunk/buildroot/target/linux/Config.in.advanced
+   trunk/buildroot/target/linux/Makefile.in.advanced
 
 
 Changeset:
+Modified: trunk/buildroot/target/linux/Config.in.advanced
+===================================================================
+--- trunk/buildroot/target/linux/Config.in.advanced	2008-03-06 18:52:01 UTC (rev 21252)
++++ trunk/buildroot/target/linux/Config.in.advanced	2008-03-06 18:52:43 UTC (rev 21253)
+@@ -40,7 +40,7 @@
+ 
+ config BR2_KERNEL_CURRENT_VERSION
+ 	string
+-	default "2.6.23.1"
++	default "2.6.24"
+ 
+ config BR2_KERNEL_NEXT_VERSION
+ 	string
+@@ -51,6 +51,7 @@
+ 
+ config BR2_KERNEL_THIS_VERSION
+ 	string
++	default "2.6.24" if BR2_LINUX_2_6_24
+ 	default "2.6.23" if BR2_LINUX_2_6_23
+ 	default "2.6.22" if BR2_LINUX_2_6_22
+ 	default "2.6.21" if BR2_LINUX_2_6_21
+@@ -58,15 +59,15 @@
+ 
+ config LINUX26_LATEST_RC_VERSION
+ 	string
+-	default "2.6.23" if BR2_KERNEL_ADD_LATEST_RC_PATCH
++	default "2.6.24" if BR2_KERNEL_ADD_LATEST_RC_PATCH
+ 
+ config LINUX26_LATEST_MM_VERSION
+ 	string
+-	default "2.6.23-mm1" if BR2_KERNEL_ADD_LATEST_MM_PATCH
++	default "2.6.24-mm1" if BR2_KERNEL_ADD_LATEST_MM_PATCH
+ 
+ config LINUX26_LATEST_GIT_VERSION
+ 	string
+-	default "2.6.23-git3" if BR2_KERNEL_ADD_LATEST_SNAPSHOT
++	default "2.6.24-git3" if BR2_KERNEL_ADD_LATEST_SNAPSHOT
+ 
+ config BR2_KERNEL_SITE
+ 	string
+@@ -124,10 +125,16 @@
+ 	  Select the specific Linux version you want to use
+ 
+ config BR2_LINUX_2_6_STABLE
+-	bool "The latest stable Linux kernel (2.6.23)"
++	bool "The latest stable Linux kernel (2.6.24)"
+ 	help
+-	  Linux 2.6.23
++	  Linux 2.6.24
+ 
++config BR2_LINUX_2_6_24
++	bool "Linux 2.6.24"
++	select BR2_KERNEL_BASE
++	help
++	  Linux 2.6.24
++
+ config BR2_LINUX_2_6_23
+ 	bool "Linux 2.6.23"
+ 	select BR2_KERNEL_BASE
 
-Sorry, the patch is too large to include (229359 lines).
-Please use ViewCVS to see it!
-
-http://uclibc.org/cgi-bin/viewcvs.cgi?view=rev&root=svn&rev=21252
+Modified: trunk/buildroot/target/linux/Makefile.in.advanced
+===================================================================
+--- trunk/buildroot/target/linux/Makefile.in.advanced	2008-03-06 18:52:01 UTC (rev 21252)
++++ trunk/buildroot/target/linux/Makefile.in.advanced	2008-03-06 18:52:43 UTC (rev 21253)
+@@ -91,7 +91,7 @@
+ ifeq ($(BR2_i386),y)
+ LINUX26_KCONFIG:=$(BOARD_PATH)/linux26.config
+ else
+-LINUX26_KCONFIG:=$(BR2_BOARD_PATH)/$(BR2_BOARD_NAME)-linux-$(LINUX26_VERSION).config
++LINUX26_KCONFIG:=$(BR2_BOARD_PATH)/linux-$(LINUX26_VERSION).config
+ endif
+ endif
+ endif
+@@ -139,15 +139,29 @@
+ # --------------
+ # BZIMAGE
+ ifeq ($(LINUX26_FORMAT),bzImage)
+-LINUX26_BINLOC:=arch/$(KERNEL_ARCH)/boot/$(LINUX26_FORMAT)
+-KERNEL_EXT:=.bz
++LINUX26_BINLOC:=arch/$(KERNEL_ARCH)/boot/bzImage
++KERNEL_EXT:=
+ endif
+ 
+ endif
+ 
+ # -----------------------------------------------------------------------------
+ # File name for the Linux kernel binary
++ifeq ($(LINUX26_FORMAT),uImage)
++LINUX26_KERNEL_NAME:="uImage"
++endif
++ifeq ($(LINUX26_FORMAT),bzImage)
++LINUX26_KERNEL_NAME:="bzImage"
++endif
++ifeq ($(LINUX26_FORMAT),vmlinux)
++LINUX26_KERNEL_NAME:="vmlinux"
++endif
++ifeq ($(LINUX26_FORMAT),zImage)
++LINUX26_KERNEL_NAME:="zImage"
++endif
++ifeq ($(LINUX26_FORMAT),custom)
+ LINUX26_KERNEL_NAME:=$(BOARD_NAME)-linux-$(LINUX26_VERSION)-$(DATE)$(KERNEL_EXT)
++endif
+ 
+ ifndef LINUX26_KERNEL
+ LINUX26_KERNEL:=$(BINARIES_DIR)/$(BOARD_NAME)-linux-$(LINUX26_VERSION)-$(DATE)$(KERNEL_EXT)
+@@ -260,9 +274,7 @@
+ 		linux-$(LINUX26_VERSION)-\*.patch{,.gz,.bz2}
+ endif
+ ifneq ($(LINUX26_PATCH_DIR),)
+-	if [ -d $(LINUX26_PATCH_DIR) ] ; then \
+-		toolchain/patch-kernel.sh $(LINUX26_DIR) $(LINUX26_PATCH_DIR) linux-$(LINUX26_VERSION)-\*.patch ; \
+-	fi
++		toolchain/patch-kernel.sh $(LINUX26_DIR) $(LINUX26_PATCH_DIR) linux-$(LINUX26_VERSION)-\*.patch ; 
+ endif
+ 	touch $@
+ 
