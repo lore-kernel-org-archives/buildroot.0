@@ -1,7 +1,7 @@
 From: ninevoltz at uclibc.org <ninevoltz@uclibc.org>
-Date: Thu,  6 Mar 2008 10:14:38 -0800 (PST)
-Subject: [Buildroot] svn commit: trunk/buildroot/package:  leafpad
-Message-ID: <20080306181438.513D21201F4@busybox.net>
+Date: Thu,  6 Mar 2008 10:15:06 -0800 (PST)
+Subject: [Buildroot] svn commit: trunk/buildroot/package/libdrm
+Message-ID: <20080306181506.845C4120207@busybox.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -9,50 +9,58 @@ Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
 Author: ninevoltz
-Date: 2008-03-06 10:14:37 -0800 (Thu, 06 Mar 2008)
-New Revision: 21203
+Date: 2008-03-06 10:15:06 -0800 (Thu, 06 Mar 2008)
+New Revision: 21204
 
 Log:
-added leafpad
+fixed libdrm makefile
 
-Added:
-   trunk/buildroot/package/leafpad/
-   trunk/buildroot/package/leafpad/Config.in
-   trunk/buildroot/package/leafpad/leafpad.mk
+Modified:
+   trunk/buildroot/package/libdrm/libdrm.mk
 
 
 Changeset:
-Added: trunk/buildroot/package/leafpad/Config.in
+Modified: trunk/buildroot/package/libdrm/libdrm.mk
 ===================================================================
---- trunk/buildroot/package/leafpad/Config.in	                        (rev 0)
-+++ trunk/buildroot/package/leafpad/Config.in	2008-03-06 18:14:37 UTC (rev 21203)
-@@ -0,0 +1,7 @@
-+config BR2_PACKAGE_LEAFPAD
-+	bool "leafpad"
-+	default n
-+	help
-+	  GTK+ based simple text editor
-+
-+	  http://savannah.nongnu.org/download/leafpad
-
-Added: trunk/buildroot/package/leafpad/leafpad.mk
-===================================================================
---- trunk/buildroot/package/leafpad/leafpad.mk	                        (rev 0)
-+++ trunk/buildroot/package/leafpad/leafpad.mk	2008-03-06 18:14:37 UTC (rev 21203)
-@@ -0,0 +1,16 @@
-+#############################################################
-+#
-+# leafpad
-+#
-+#############################################################
-+LEAFPAD_VERSION = 0.8.14
-+LEAFPAD_SOURCE = leafpad-$(LEAFPAD_VERSION).tar.gz
-+LEAFPAD_SITE = http://savannah.nongnu.org/download/leafpad
-+LEAFPAD_AUTORECONF = NO
-+LEAFPAD_INSTALL_STAGING = NO
-+LEAFPAD_INSTALL_TARGET = YES
-+
-+LEAFPAD_DEPENDENCIES = uclibc libgtk2
-+
-+$(eval $(call AUTOTARGETS,package,leafpad))
-+
+--- trunk/buildroot/package/libdrm/libdrm.mk	2008-03-06 18:14:37 UTC (rev 21203)
++++ trunk/buildroot/package/libdrm/libdrm.mk	2008-03-06 18:15:06 UTC (rev 21204)
+@@ -32,7 +32,7 @@
+ 		--exec-prefix=/usr \
+ 		--bindir=/usr/bin \
+ 		--sbindir=/usr/sbin \
+-		--libdir=/lib \
++		--libdir=/usr/lib \
+ 		--libexecdir=/usr/lib \
+ 		--sysconfdir=/etc \
+ 		--datadir=/usr/share \
+@@ -47,21 +47,21 @@
+ 	$(MAKE) CCexe="$(HOSTCC)" -C $(LIBDRM_DIR)
+ 	touch $(LIBDRM_DIR)/.compiled
+ 
+-$(STAGING_DIR)/lib/libdrm.so: $(LIBDRM_DIR)/.compiled
++$(STAGING_DIR)/usr/lib/libdrm.so: $(LIBDRM_DIR)/.compiled
+ 	$(MAKE) DESTDIR=$(STAGING_DIR) -C $(LIBDRM_DIR) install
+-	$(SED) "s,^libdir=.*,libdir=\'$(STAGING_DIR)/lib\',g" $(STAGING_DIR)/lib/libdrm.la
++	$(SED) "s,^libdir=.*,libdir=\'$(STAGING_DIR)/usr/lib\',g" $(STAGING_DIR)/usr/lib/libdrm.la
+ 	#$(SED) "s,^prefix=.*,prefix=\'$(STAGING_DIR)\',g" \
+ 	# -e "s,^exec_prefix=.*,exec_prefix=\'$(STAGING_DIR)/usr\',g" \
+-	# -e "s,^includedir=.*,includedir=\'$(STAGING_DIR)/include\',g" \
+-	# -e "s,^libdir=.*,libdir=\'$(STAGING_DIR)/lib\',g" \
++	# -e "s,^includedir=.*,includedir=\'$(STAGING_DIR)/usr/include\',g" \
++	# -e "s,^libdir=.*,libdir=\'$(STAGING_DIR)/usr/lib\',g" \
+ 	# $(STAGING_DIR)/usr/bin/libdrm-config
+-	touch -c $(STAGING_DIR)/lib/libdrm.so
++	touch -c $(STAGING_DIR)/usr/lib/libdrm.so
+ 
+-$(TARGET_DIR)/lib/libdrm.so: $(STAGING_DIR)/lib/libdrm.so
+-	cp -dpf $(STAGING_DIR)/lib/libdrm.so* $(TARGET_DIR)/lib/
+-	-$(STRIPCMD) $(STRIP_STRIP_UNNEEDED) $(TARGET_DIR)/lib/libdrm.so
++$(TARGET_DIR)/usr/lib/libdrm.so: $(STAGING_DIR)/usr/lib/libdrm.so
++	cp -dpf $(STAGING_DIR)/usr/lib/libdrm.so* $(TARGET_DIR)/usr/lib/
++	-$(STRIPCMD) $(STRIP_STRIP_UNNEEDED) $(TARGET_DIR)/usr/lib/libdrm.so
+ 
+-libdrm: uclibc pkgconfig $(TARGET_DIR)/lib/libdrm.so
++libdrm: uclibc pkgconfig $(TARGET_DIR)/usr/lib/libdrm.so
+ 
+ libdrm-clean:
+ 	$(MAKE) DESTDIR=$(TARGET_DIR) CC=$(TARGET_CC) -C $(LIBDRM_DIR) uninstall
