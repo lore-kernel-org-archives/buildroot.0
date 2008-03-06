@@ -1,7 +1,7 @@
 From: ninevoltz at uclibc.org <ninevoltz@uclibc.org>
-Date: Thu,  6 Mar 2008 10:16:50 -0800 (PST)
-Subject: [Buildroot] svn commit: trunk/buildroot/package/libxslt
-Message-ID: <20080306181650.8C895120235@busybox.net>
+Date: Thu,  6 Mar 2008 10:17:15 -0800 (PST)
+Subject: [Buildroot] svn commit: trunk/buildroot/package/lxdoom
+Message-ID: <20080306181715.E1CC012022B@busybox.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -9,82 +9,356 @@ Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
 Author: ninevoltz
-Date: 2008-03-06 10:16:49 -0800 (Thu, 06 Mar 2008)
-New Revision: 21209
+Date: 2008-03-06 10:17:13 -0800 (Thu, 06 Mar 2008)
+New Revision: 21210
 
 Log:
-updated libxslt
+fixed lxdoom make
 
 Added:
-   trunk/buildroot/package/libxslt/libxslt-1.1.21-configure.patch
+   trunk/buildroot/package/lxdoom/lxdoom-1.4.4-updated.patch
+   trunk/buildroot/package/lxdoom/lxdoom-wad.mk
 
 Modified:
-   trunk/buildroot/package/libxslt/libxslt.mk
+   trunk/buildroot/package/lxdoom/Config.in
+   trunk/buildroot/package/lxdoom/lxdoom.mk
 
 
 Changeset:
-Added: trunk/buildroot/package/libxslt/libxslt-1.1.21-configure.patch
+Modified: trunk/buildroot/package/lxdoom/Config.in
 ===================================================================
---- trunk/buildroot/package/libxslt/libxslt-1.1.21-configure.patch	                        (rev 0)
-+++ trunk/buildroot/package/libxslt/libxslt-1.1.21-configure.patch	2008-03-06 18:16:49 UTC (rev 21209)
-@@ -0,0 +1,18 @@
-+--- a/configure	2007-06-12 12:43:03.000000000 -0400
-++++ b/configure	2008-02-18 08:52:36.000000000 -0500
-+@@ -22090,15 +22090,11 @@ esac
-+ 
-+ 
-+ 
-+-XSLT_LIBDIR='-L${libdir}'
-+-XSLT_INCLUDEDIR='-I${includedir}'
-+ XSLT_LIBS="-lxslt $LIBXML_LIBS $M_LIBS"
-+ 
-+ 
-+ 
-+ 
-+-EXSLT_LIBDIR='-L${libdir}'
-+-EXSLT_INCLUDEDIR='-I${includedir}'
-+ EXSLT_LIBS="-lexslt $XSLT_LIBS $LIBGCRYPT_LIBS"
-+ 
-+ 
+--- trunk/buildroot/package/lxdoom/Config.in	2008-03-06 18:16:49 UTC (rev 21209)
++++ trunk/buildroot/package/lxdoom/Config.in	2008-03-06 18:17:13 UTC (rev 21210)
+@@ -1,5 +1,10 @@
+-config BR2_PACKAGE_DOOM
+-	bool "doom"
++config BR2_PACKAGE_LXDOOM
++	bool "lxdoom"
+ 	default n
+ 	help
+ 	  This is the linux version of the popular doom game.
++config BR2_PACKAGE_LXDOOM_WAD
++	bool "lxdoom-wad"
++	default n
++	help
++	  This is the shareware wad data files for the doom game.
 
-Modified: trunk/buildroot/package/libxslt/libxslt.mk
+Added: trunk/buildroot/package/lxdoom/lxdoom-1.4.4-updated.patch
 ===================================================================
---- trunk/buildroot/package/libxslt/libxslt.mk	2008-03-06 18:16:30 UTC (rev 21208)
-+++ trunk/buildroot/package/libxslt/libxslt.mk	2008-03-06 18:16:49 UTC (rev 21209)
-@@ -13,6 +13,8 @@
+--- trunk/buildroot/package/lxdoom/lxdoom-1.4.4-updated.patch	                        (rev 0)
++++ trunk/buildroot/package/lxdoom/lxdoom-1.4.4-updated.patch	2008-03-06 18:17:13 UTC (rev 21210)
+@@ -0,0 +1,173 @@
++diff -Nrup lxdoom-1.4.4/src/m_menu.c lxdoom-1.4.4-avr32/src/m_menu.c
++--- a/src/m_menu.c	2000-03-17 15:50:30.000000000 -0500
+++++ b/src/m_menu.c	2007-10-22 17:18:43.000000000 -0400
++@@ -38,6 +38,7 @@ rcsid[] = "$Id: m_menu.c,v 1.24 2000/03/
++ 
++ #include <fcntl.h>
++ #include <unistd.h>
+++#include <bits/posix1_lim.h>
++ 
++ #include "doomdef.h"
++ #include "doomstat.h"
++diff -Nrup lxdoom-1.4.4/src/p_maputl.c lxdoom-1.4.4-avr32/src/p_maputl.c
++--- a/src/p_maputl.c	1999-10-12 09:01:13.000000000 -0400
+++++ b/src/p_maputl.c	2007-10-22 17:20:56.000000000 -0400
++@@ -322,7 +322,7 @@ void P_SetThingPosition(mobj_t *thing)
++ //
++ // A fast function for testing intersections between things and linedefs.
++ 
++-boolean CONSTFUNC ThingIsOnLine(const mobj_t *t, const line_t *l)
+++boolean ThingIsOnLine(const mobj_t *t, const line_t *l)
++ {
++   int dx = l->dx >> FRACBITS;                             // Linedef vector
++   int dy = l->dy >> FRACBITS;
++diff -Nrup lxdoom-1.4.4/src/r_data.c lxdoom-1.4.4-avr32/src/r_data.c
++--- a/src/r_data.c	2000-01-25 17:40:45.000000000 -0500
+++++ b/src/r_data.c	2007-10-22 17:19:29.000000000 -0400
++@@ -38,6 +38,7 @@ rcsid[] = "$Id: r_data.c,v 1.13 2000/01/
++ #include "r_main.h"
++ #include "r_sky.h"
++ #include "lprintf.h"  // jff 08/03/98 - declaration of lprintf
+++#include <bits/posix1_lim.h>
++ 
++ //
++ // Graphics.
++diff -Nrup lxdoom-1.4.4/src/r_segs.c lxdoom-1.4.4-avr32/src/r_segs.c
++--- a/src/r_segs.c	1999-10-17 04:52:04.000000000 -0400
+++++ b/src/r_segs.c	2007-10-22 17:14:46.000000000 -0400
++@@ -47,15 +47,15 @@ rcsid[] = "$Id: r_segs.c,v 1.14 1999/10/
++ // killough 1/6/98: replaced globals with statics where appropriate
++ 
++ // True if any of the segs textures might be visible.
++-static boolean  segtextured;
++-static boolean  markfloor;      // False if the back side is the same plane.
++-static boolean  markceiling;
++-static boolean  maskedtexture;
++-static int      toptexture;
++-static int      bottomtexture;
++-static int      midtexture;
+++boolean  segtextured;
+++boolean  markfloor;      // False if the back side is the same plane.
+++boolean  markceiling;
+++boolean  maskedtexture;
+++int      toptexture;
+++int      bottomtexture;
+++int      midtexture;
++ 
++-static fixed_t  toptexheight, midtexheight, bottomtexheight; // cph
+++fixed_t  toptexheight, midtexheight, bottomtexheight; // cph
++ 
++ angle_t         rw_normalangle; // angle to line origin
++ int             rw_angle1;
++@@ -65,28 +65,28 @@ lighttable_t    **walllights;
++ //
++ // regular wall
++ //
++-static int      rw_x;
++-static int      rw_stopx;
++-static angle_t  rw_centerangle;
++-static fixed_t  rw_offset;
++-static fixed_t  rw_scale;
++-static fixed_t  rw_scalestep;
++-static fixed_t  rw_midtexturemid;
++-static fixed_t  rw_toptexturemid;
++-static fixed_t  rw_bottomtexturemid;
++-static int      worldtop;
++-static int      worldbottom;
++-static int      worldhigh;
++-static int      worldlow;
++-static fixed_t  pixhigh;
++-static fixed_t  pixlow;
++-static fixed_t  pixhighstep;
++-static fixed_t  pixlowstep;
++-static fixed_t  topfrac;
++-static fixed_t  topstep;
++-static fixed_t  bottomfrac;
++-static fixed_t  bottomstep;
++-static short    *maskedtexturecol;
+++int      rw_x;
+++int      rw_stopx;
+++angle_t  rw_centerangle;
+++fixed_t  rw_offset;
+++fixed_t  rw_scale;
+++fixed_t  rw_scalestep;
+++fixed_t  rw_midtexturemid;
+++fixed_t  rw_toptexturemid;
+++fixed_t  rw_bottomtexturemid;
+++int      worldtop;
+++int      worldbottom;
+++int      worldhigh;
+++int      worldlow;
+++fixed_t  pixhigh;
+++fixed_t  pixlow;
+++fixed_t  pixhighstep;
+++fixed_t  pixlowstep;
+++fixed_t  topfrac;
+++fixed_t  topstep;
+++fixed_t  bottomfrac;
+++fixed_t  bottomstep;
+++short    *maskedtexturecol;
++ 
++ //
++ // R_ScaleFromGlobalAngle
++--- a/src/wi_stuff.c	2008-02-12 14:02:42.000000000 -0500
+++++ b/src/wi_stuff.c	2008-02-12 14:04:34.000000000 -0500
++@@ -368,7 +368,7 @@ static const patch_t  * items;
++ static const patch_t  * frags;
++ 
++ // Time sucks.
++-static const patch_t  * time;
+++static const patch_t  * mytime;
++ static const patch_t  * par;
++ static const patch_t  * sucks;
++
++diff -Nrup lxdoom-1.4.4/src/d_main.c lxdoom-1.4.4-avr32/src/d_main.c
++--- a/src/d_main.c	2000-03-27 05:33:49.000000000 -0500
+++++ b/src/d_main.c	2007-10-22 17:18:05.000000000 -0400
++@@ -39,7 +39,7 @@ static const char rcsid[] = "$Id: d_main
++ #include <sys/types.h>
++ #include <sys/stat.h>
++ #include <fcntl.h>
++-
+++#include <bits/posix1_lim.h>
++ #include "doomdef.h"
++ #include "doomstat.h"
++ #include "dstrings.h"
++@@ -228,7 +228,7 @@ void D_Display (void)
++     case -1:
++     case GS_LEVEL:
++       V_SetPalette(0); // cph - use default (basic) palette  
++-    default:
+++    default:;
++     }
++ 
++     switch (gamestate) {
++@@ -241,7 +241,7 @@ void D_Display (void)
++     case GS_DEMOSCREEN:
++       D_PageDrawer();
++       break;
++-    default:
+++    default:;
++     }
++   } else if (gametic) { // In a level
++     boolean redrawborderstuff;
++diff -Nrup lxdoom-1.4.4/src/g_game.c lxdoom-1.4.4-avr32/src/g_game.c
++--- a/src/g_game.c	2000-03-17 15:50:30.000000000 -0500
+++++ b/src/g_game.c	2007-10-22 17:18:10.000000000 -0400
++@@ -67,6 +67,7 @@ rcsid[] = "$Id: g_game.c,v 1.36 2000/03/
++ #include "lprintf.h"
++ #include "i_main.h"
++ #include "i_system.h"
+++#include <bits/posix1_lim.h>
++ 
++ #define SAVEGAMESIZE  0x20000
++ #define SAVESTRINGSIZE  24
++@@ -868,7 +869,7 @@ void G_Ticker (void)
++     switch (prevgamestate) {
++     case GS_INTERMISSION:
++       WI_End();
++-    default:
+++    default:;
++     }
++     prevgamestate = gamestate;
++   } 
+\ No newline at end of file
+
+Added: trunk/buildroot/package/lxdoom/lxdoom-wad.mk
+===================================================================
+--- trunk/buildroot/package/lxdoom/lxdoom-wad.mk	                        (rev 0)
++++ trunk/buildroot/package/lxdoom/lxdoom-wad.mk	2008-03-06 18:17:13 UTC (rev 21210)
+@@ -0,0 +1,35 @@
++#############################################################
++#
++# lxdoom-wad
++#
++#############################################################
++
++LXDOOM_WAD_VERSION = 1.8
++LXDOOM_WAD_SOURCE = doom-$(LXDOOM_WAD_VERSION).wad.gz
++LXDOOM_WAD_SITE = ftp://ftp.idsoftware.com/idstuff/doom/
++LXDOOM_WAD_DIR=$(BUILD_DIR)/lxdoom-$(LXDOOM_WAD_VERSION)-wad
++
++$(DL_DIR)/$(LXDOOM_WAD_SOURCE):
++	 $(WGET) -P $(DL_DIR) $(LXDOOM_WAD_SITE)/$(LXDOOM_WAD_SOURCE)
++
++$(LXDOOM_WAD_DIR)/.unpacked: $(DL_DIR)/$(LXDOOM_WAD_SOURCE)
++	mkdir -p $(LXDOOM_WAD_DIR)
++	cp -f $(DL_DIR)/$(LXDOOM_WAD_SOURCE) $(LXDOOM_WAD_DIR)
++	gunzip -d $(LXDOOM_WAD_DIR)/$(LXDOOM_WAD_SOURCE) 
++	touch $@
++
++$(LXDOOM_WAD_DIR)/.installed: $(LXDOOM_WAD_DIR)/.unpacked
++	cp -f $(LXDOOM_WAD_DIR)/* $(TARGET_DIR)/usr/games
++	touch $@
++
++lxdoom-wad: lxdoom $(LXDOOM_WAD_DIR)/.installed
++
++#############################################################
++#
++# Toplevel Makefile options
++#
++#############################################################
++ifeq ($(strip $(BR2_PACKAGE_LXDOOM_WAD)),y)
++TARGETS+=lxdoom-wad
++endif
++
+
+Modified: trunk/buildroot/package/lxdoom/lxdoom.mk
+===================================================================
+--- trunk/buildroot/package/lxdoom/lxdoom.mk	2008-03-06 18:16:49 UTC (rev 21209)
++++ trunk/buildroot/package/lxdoom/lxdoom.mk	2008-03-06 18:17:13 UTC (rev 21210)
+@@ -4,79 +4,19 @@
+ #
+ #############################################################
  
- $(LIBXSLT_DIR)/.unpacked: $(DL_DIR)/$(LIBXSLT_SOURCE)
- 	gzip -d -c $(DL_DIR)/$(LIBXSLT_SOURCE) | tar -C $(BUILD_DIR) $(TAR_OPTIONS) -
-+	toolchain/patch-kernel.sh $(LIBXSLT_DIR) package/libxslt/ libxslt-$(LIBXSLT_VERSION)\*.patch*
-+	$(CONFIG_UPDATE) $(LIBXSLT_DIR)
- 	touch $@
+-LXDOOM_VERSION=1.4.4
++LXDOOM_VERSION = 1.4.4
++LXDOOM_SOURCE = lxdoom-$(LXDOOM_VERSION).tar.gz
++LXDOOM_SITE = http://$(BR2_SOURCEFORGE_MIRROR).dl.sourceforge.net/sourceforge/lxdoom
++LXDOOM_AUTORECONF = NO
++LXDOOM_INSTALL_STAGING = NO
++LXDOOM_INSTALL_TARGET = YES
++LXDOOM_INSTALL_TARGET_OPT = DESTDIR=$(TARGET_DIR) install
  
- #PKG_CONFIG_PATH="$(STAGING_DIR)/lib/pkconfig:$(STAGING_DIR)/usr/lib/pkgconfig" \
-@@ -24,7 +26,10 @@
- 	(cd $(LIBXSLT_DIR); \
- 		$(TARGET_CONFIGURE_OPTS) \
- 		$(TARGET_CONFIGURE_ARGS) \
-+		PKG_CONFIG_PATH="$(STAGING_DIR)/usr/lib/pkgconfig" \
- 		CFLAGS="$(TARGET_CFLAGS) -DNO_LARGEFILE_SOURCE" \
-+		EXSLT_LIBDIR=$(STAGING_DIR)/usr/lib \
-+		XSLT_LIBDIR=$(STAGING_DIR)/usr/lib \
- 		./configure \
- 		--target=$(GNU_TARGET_NAME) \
- 		--host=$(GNU_TARGET_NAME) \
-@@ -38,7 +43,7 @@
- 		--sysconfdir=/etc \
- 		--datadir=/usr/share \
- 		--localstatedir=/var \
--		--includedir=/include \
-+		--includedir=/usr/include \
- 		--mandir=/usr/man \
- 		--infodir=/usr/info \
- 		--enable-shared \
-@@ -48,6 +53,7 @@
- 		--without-debugging \
- 		--without-python \
- 		--without-threads \
-+		--with-libxml-libs-prefix=$(STAGING_DIR)/usr/lib \
- 	);
- 	touch $@
+-# Don't alter below this line unless you (think) you know
+-# what you are doing! Danger, Danger!
++LXDOOM_CONF_OPT = --target=$(GNU_TARGET_NAME) --host=$(GNU_TARGET_NAME) \
++		--build=$(GNU_HOST_NAME) --prefix=/usr \
++		--includedir=/usr/include --enable-shared \
++		$(DISABLE_NLS)
  
+-LXDOOM_SOURCE=lxdoom-$(LXDOOM_VERSION).tar.gz
+-LXDOOM_CAT:=$(ZCAT)
+-LXDOOM_SITE=http://$(BR2_SOURCEFORGE_MIRROR).dl.sourceforge.net/sourceforge/lxdoom
++LXDOOM_DEPENDENCIES = uclibc  
+ 
+-LXDOOM_DIR=$(BUILD_DIR)/lxdoom-$(LXDOOM_VERSION)
+-
+-$(DL_DIR)/$(LXDOOM_SOURCE):
+-	$(WGET) -P $(DL_DIR) $(LXDOOM_SITE)/$(LXDOOM_SOURCE)
+-
+-$(LXDOOM_DIR)/.unpacked: $(DL_DIR)/$(LXDOOM_SOURCE)
+-	$(LXDOOM_CAT) $(DL_DIR)/$(LXDOOM_SOURCE) | tar -C $(BUILD_DIR) $(TAR_OPTIONS) -
+-	toolchain/patch-kernel.sh $(LXDOOM_DIR) package/lxdoom/ lxdoom-$(LXDOOM_VERSION)\*.patch
+-	$(CONFIG_UPDATE) $(LXDOOM_DIR)
+-	touch $(LXDOOM_DIR)/.unpacked
+-
+-$(LXDOOM_DIR)/Makefile: $(LXDOOM_DIR)/.unpacked
+-	rm -f $(LXDOOM_DIR)/Makefile
+-	mkdir -p $(LXDOOM_DIR)
+-	(cd $(LXDOOM_DIR); rm -rf config.cache; \
+-		$(TARGET_CONFIGURE_OPTS) \
+-		$(TARGET_CONFIGURE_ARGS) \
+-		$(LXDOOM_DIR)/configure \
+-		--target=$(GNU_TARGET_NAME) \
+-		--host=$(GNU_TARGET_NAME) \
+-		--build=$(GNU_HOST_NAME) \
+-		--prefix=/usr \
+-		--includedir=/usr/include \
+-		--enable-shared \
+-		$(DISABLE_NLS); \
+-	)
+-
+-$(LXDOOM_DIR)/lxdoom: $(LXDOOM_DIR)/Makefile
+-	rm -f $@
+-	$(MAKE) $(TARGET_CONFIGURE_OPTS) -C $(LXDOOM_DIR)
+-
+-$(LXDOOM_DIR)/.installed: $(LXDOOM_DIR)/lxdoom
+-	$(MAKE) DESTDIR=$(STAGING_DIR) -C $(LXDOOM_DIR) install
+-	$(SED) "s,^libdir=.*,libdir=\'$(STAGING_DIR)/usr/lib\',g" $(STAGING_DIR)/usr/lib/liblxdoom.la
+-	touch $@
+-
+-$(TARGET_DIR)/usr/bin/lxdoomdec: $(LXDOOM_DIR)/.installed
+-	cp -dpf $(STAGING_DIR)/usr/bin/lxdoomdec $(TARGET_DIR)/usr/bin/lxdoomdec
+-
+-$(TARGET_DIR)/usr/bin/lxdoomenc: $(TARGET_DIR)/usr/bin/lxdoomdec
+-	cp -dpf $(STAGING_DIR)/usr/bin/lxdoomenc $(TARGET_DIR)/usr/bin/lxdoomenc
+-
+-$(TARGET_DIR)/usr/lib/liblxdoom.so: $(TARGET_DIR)/usr/bin/lxdoomenc
+-	cp -dpf $(STAGING_DIR)/usr/lib/liblxdoom.so* $(TARGET_DIR)/usr/lib
+-
+-lxdoom-bins:	
+-
+-lxdoom: uclibc libogg $(TARGET_DIR)/usr/lib/liblxdoom.so
+-
+-lxdoom-source: $(DL_DIR)/$(LXDOOM_SOURCE)
+-
+-lxdoom-clean:
+-	@if [ -d $(LXDOOM_DIR)/Makefile ]; then \
+-		$(MAKE) -C $(LXDOOM_DIR) clean; \
+-	fi
+-
+-lxdoom-dirclean:
+-	rm -rf $(LXDOOM_DIR)
+-
+-#############################################################
+-#
+-# Toplevel Makefile options
+-#
+-#############################################################
+-ifeq ($(strip $(BR2_PACKAGE_LXDOOM)),y)
+-TARGETS+=lxdoom
+-endif
++$(eval $(call AUTOTARGETS,package,lxdoom))
+\ No newline at end of file
