@@ -1,7 +1,7 @@
 From: ninevoltz at uclibc.org <ninevoltz@uclibc.org>
-Date: Thu,  6 Mar 2008 10:26:58 -0800 (PST)
-Subject: [Buildroot] svn commit: trunk/buildroot/package:  synergy
-Message-ID: <20080306182658.BD6E412028A@busybox.net>
+Date: Thu,  6 Mar 2008 10:27:19 -0800 (PST)
+Subject: [Buildroot] svn commit: trunk/buildroot/package/tiff
+Message-ID: <20080306182719.524EF120250@busybox.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -9,57 +9,51 @@ Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
 Author: ninevoltz
-Date: 2008-03-06 10:26:58 -0800 (Thu, 06 Mar 2008)
-New Revision: 21232
+Date: 2008-03-06 10:27:19 -0800 (Thu, 06 Mar 2008)
+New Revision: 21233
 
 Log:
-added synergy
+fixes for tiff makefile
 
-Added:
-   trunk/buildroot/package/synergy/
-   trunk/buildroot/package/synergy/Config.in
-   trunk/buildroot/package/synergy/synergy.mk
+Modified:
+   trunk/buildroot/package/tiff/tiff.mk
 
 
 Changeset:
-Added: trunk/buildroot/package/synergy/Config.in
+Modified: trunk/buildroot/package/tiff/tiff.mk
 ===================================================================
---- trunk/buildroot/package/synergy/Config.in	                        (rev 0)
-+++ trunk/buildroot/package/synergy/Config.in	2008-03-06 18:26:58 UTC (rev 21232)
-@@ -0,0 +1,11 @@
-+config BR2_PACKAGE_SYNERGY
-+	bool "synergy"
-+	default n
-+	depends on BR2_PACKAGE_XORG||BR2_PACKAGE_XORG7
-+	help
-+	  Synergy lets you easily share a single mouse and keyboard between multiple computers with different operating systems, each with its own display, without special hardware.
-+
-+	  http://synergy2.sourceforge.net/
-+
-+comment "synergy		- disabled (requires Xorg(7))"
-+	depends !(BR2_PACKAGE_XORG || BR2_PACKAGE_XORG7)
-
-Added: trunk/buildroot/package/synergy/synergy.mk
-===================================================================
---- trunk/buildroot/package/synergy/synergy.mk	                        (rev 0)
-+++ trunk/buildroot/package/synergy/synergy.mk	2008-03-06 18:26:58 UTC (rev 21232)
-@@ -0,0 +1,19 @@
-+#############################################################
-+#
-+# synergy
-+#
-+#############################################################
-+
-+SYNERGY_VERSION = 1.3.1
-+SYNERGY_SOURCE = synergy-$(SYNERGY_VERSION).tar.gz
-+SYNERGY_SITE = http://internap.dl.sourceforge.net/sourceforge/synergy2/
-+SYNERGY_AUTORECONF = NO
-+SYNERGY_INSTALL_STAGING = NO
-+SYNERGY_INSTALL_TARGET = YES
-+
-+SYNERGY_CONF_OPT = --target=$(GNU_TARGET_NAME) --host=$(GNU_TARGET_NAME) \
-+		--build=$(GNU_HOST_NAME) --prefix=/usr --sysconfdir=/etc 
-+
-+SYNERGY_DEPENDENCIES = uclibc $(XSERVER)
-+
-+$(eval $(call AUTOTARGETS,package,synergy))
+--- trunk/buildroot/package/tiff/tiff.mk	2008-03-06 18:26:58 UTC (rev 21232)
++++ trunk/buildroot/package/tiff/tiff.mk	2008-03-06 18:27:19 UTC (rev 21233)
+@@ -35,7 +35,7 @@
+ 		--exec-prefix=/usr \
+ 		--bindir=/usr/bin \
+ 		--sbindir=/usr/sbin \
+-		--libdir=/lib \
++		--libdir=/usr/lib \
+ 		--libexecdir=/usr/lib \
+ 		--sysconfdir=/etc \
+ 		--datadir=/usr/share \
+@@ -58,16 +58,16 @@
+ 	$(MAKE) -C $(TIFF_DIR)
+ 	touch -c $(TIFF_DIR)/libtiff/.libs/libtiff.a
+ 
+-$(STAGING_DIR)/lib/libtiff.so.$(TIFF_VERSION): $(TIFF_DIR)/libtiff/.libs/libtiff.a
++$(STAGING_DIR)/usr/lib/libtiff.so.$(TIFF_VERSION): $(TIFF_DIR)/libtiff/.libs/libtiff.a
+ 	$(MAKE) DESTDIR=$(STAGING_DIR) -C $(TIFF_DIR) install
+-	$(SED) "s,^libdir=.*,libdir=\'$(STAGING_DIR)/lib\',g" $(STAGING_DIR)/lib/libtiff.la
+-	touch -c $(STAGING_DIR)/lib/libtiff.so.$(TIFF_VERSION)
++	$(SED) "s,^libdir=.*,libdir=\'$(STAGING_DIR)/usr/lib\',g" $(STAGING_DIR)/usr/lib/libtiff.la
++	touch -c $(STAGING_DIR)/usr/lib/libtiff.so.$(TIFF_VERSION)
+ 
+-$(TARGET_DIR)/lib/libtiff.so.$(TIFF_VERSION): $(STAGING_DIR)/lib/libtiff.so.$(TIFF_VERSION)
+-	cp -dpf $(STAGING_DIR)/lib/libtiff.so* $(TARGET_DIR)/lib/
+-	-$(STRIPCMD) $(STRIP_STRIP_UNNEEDED) $(TARGET_DIR)/lib/libtiff.so.$(TIFF_VERSION)
++$(TARGET_DIR)/usr/lib/libtiff.so.$(TIFF_VERSION): $(STAGING_DIR)/usr/lib/libtiff.so.$(TIFF_VERSION)
++	cp -dpf $(STAGING_DIR)/usr/lib/libtiff.so* $(TARGET_DIR)/usr/lib/
++	-$(STRIPCMD) $(STRIP_STRIP_UNNEEDED) $(TARGET_DIR)/usr/lib/libtiff.so.$(TIFF_VERSION)
+ 
+-tiff: uclibc zlib jpeg $(TARGET_DIR)/lib/libtiff.so.$(TIFF_VERSION)
++tiff: uclibc zlib jpeg $(TARGET_DIR)/usr/lib/libtiff.so.$(TIFF_VERSION)
+ 
+ tiff-clean:
+ 	-$(MAKE) -C $(TIFF_DIR) clean
