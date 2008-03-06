@@ -1,7 +1,8 @@
 From: ninevoltz at uclibc.org <ninevoltz@uclibc.org>
-Date: Thu,  6 Mar 2008 10:52:43 -0800 (PST)
-Subject: [Buildroot] svn commit: trunk/buildroot/target/linux
-Message-ID: <20080306185243.AAE5A1202C9@busybox.net>
+Date: Thu,  6 Mar 2008 10:59:24 -0800 (PST)
+Subject: [Buildroot] svn commit: trunk/buildroot/target/device: Atmel
+	Atmel/DataFlashBoot Atmel/Linux A etc...
+Message-ID: <20080306185924.F04441201AD@busybox.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -9,131 +10,299 @@ Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
 Author: ninevoltz
-Date: 2008-03-06 10:52:43 -0800 (Thu, 06 Mar 2008)
-New Revision: 21253
+Date: 2008-03-06 10:59:14 -0800 (Thu, 06 Mar 2008)
+New Revision: 21254
 
 Log:
-added support for kernel 2.6.24
+updates and additions for avr32 arch
+
+Added:
+   trunk/buildroot/target/device/Atmel/AT91_Config.in
+   trunk/buildroot/target/device/Atmel/AVR32_Config.in
+   trunk/buildroot/target/device/Atmel/Linux/
+   trunk/buildroot/target/device/Atmel/Linux/kernel-patches-2.6.20.4/
+   trunk/buildroot/target/device/Atmel/Linux/kernel-patches-2.6.20.4/linux-2.6.20.4-atmel.patch
+   trunk/buildroot/target/device/Atmel/Linux/kernel-patches-2.6.21.1/
+   trunk/buildroot/target/device/Atmel/Linux/kernel-patches-2.6.21.1/2.6.21.1-at91.patch
+   trunk/buildroot/target/device/Atmel/Linux/kernel-patches-2.6.21.1/linux-2.6.21.1-at91-1-update.patch
+   trunk/buildroot/target/device/Atmel/atngw100-base/
+   trunk/buildroot/target/device/Atmel/atngw100-base/Makefile.in
+   trunk/buildroot/target/device/Atmel/atngw100-base/atngw100-base-linux-2.6.23.config
+   trunk/buildroot/target/device/Atmel/atngw100-base/atngw100-base-linux-2.6.24.config
+   trunk/buildroot/target/device/Atmel/atngw100-base/busybox-1.7.2.config
+   trunk/buildroot/target/device/Atmel/atngw100-base/busybox-1.8.0.config
+   trunk/buildroot/target/device/Atmel/atngw100-base/busybox-1.9.0.config
+   trunk/buildroot/target/device/Atmel/atngw100-base/busybox-1.9.1.config
+   trunk/buildroot/target/device/Atmel/atngw100-base/device_table.txt
+   trunk/buildroot/target/device/Atmel/atngw100-base/kernel-patches/
+   trunk/buildroot/target/device/Atmel/atngw100-base/kernel-patches/linux-2.6.23-100-avr32-atmel.2.patch
+   trunk/buildroot/target/device/Atmel/atngw100-base/kernel-patches/linux-2.6.23-200-fix-include-typo-for-atngw100-board.patch
+   trunk/buildroot/target/device/Atmel/atngw100-base/kernel-patches/linux-2.6.24-100-avr32-git.1.patch
+   trunk/buildroot/target/device/Atmel/atngw100-base/kernel-patches/linux-2.6.24-avr32-mmc.patch
+   trunk/buildroot/target/device/Atmel/atngw100-base/target_skeleton/
+   trunk/buildroot/target/device/Atmel/atngw100-base/target_skeleton/etc/
+   trunk/buildroot/target/device/Atmel/atngw100-base/target_skeleton/etc/TZ
+   trunk/buildroot/target/device/Atmel/atngw100-base/target_skeleton/etc/fstab
+   trunk/buildroot/target/device/Atmel/atngw100-base/target_skeleton/etc/group
+   trunk/buildroot/target/device/Atmel/atngw100-base/target_skeleton/etc/hostname
+   trunk/buildroot/target/device/Atmel/atngw100-base/target_skeleton/etc/hosts
+   trunk/buildroot/target/device/Atmel/atngw100-base/target_skeleton/etc/init.d/
+   trunk/buildroot/target/device/Atmel/atngw100-base/target_skeleton/etc/init.d/K70sendsig
+   trunk/buildroot/target/device/Atmel/atngw100-base/target_skeleton/etc/init.d/S00mountvirtfs
+   trunk/buildroot/target/device/Atmel/atngw100-base/target_skeleton/etc/init.d/S01hotplug
+   trunk/buildroot/target/device/Atmel/atngw100-base/target_skeleton/etc/init.d/S02hostname
+   trunk/buildroot/target/device/Atmel/atngw100-base/target_skeleton/etc/init.d/S08syslog
+   trunk/buildroot/target/device/Atmel/atngw100-base/target_skeleton/etc/init.d/S09klog
+   trunk/buildroot/target/device/Atmel/atngw100-base/target_skeleton/etc/init.d/rcK
+   trunk/buildroot/target/device/Atmel/atngw100-base/target_skeleton/etc/init.d/rcS
+   trunk/buildroot/target/device/Atmel/atngw100-base/target_skeleton/etc/inittab
+   trunk/buildroot/target/device/Atmel/atngw100-base/target_skeleton/etc/mdev.conf
+   trunk/buildroot/target/device/Atmel/atngw100-base/target_skeleton/etc/mtab
+   trunk/buildroot/target/device/Atmel/atngw100-base/target_skeleton/etc/network/
+   trunk/buildroot/target/device/Atmel/atngw100-base/target_skeleton/etc/network/interfaces
+   trunk/buildroot/target/device/Atmel/atngw100-base/target_skeleton/etc/passwd
+   trunk/buildroot/target/device/Atmel/atngw100-base/target_skeleton/etc/protocols
+   trunk/buildroot/target/device/Atmel/atngw100-base/target_skeleton/etc/resolv.conf
+   trunk/buildroot/target/device/Atmel/atngw100-base/target_skeleton/etc/services
+   trunk/buildroot/target/device/Atmel/atngw100-base/target_skeleton/etc/shadow
+   trunk/buildroot/target/device/Atmel/atngw100-base/target_skeleton/etc/shells
+   trunk/buildroot/target/device/Atmel/atngw100-base_defconfig
+   trunk/buildroot/target/device/Atmel/atngw100-expanded/
+   trunk/buildroot/target/device/Atmel/atngw100-expanded/Makefile.in
+   trunk/buildroot/target/device/Atmel/atngw100-expanded/atngw100-expanded-linux-2.6.23.config
+   trunk/buildroot/target/device/Atmel/atngw100-expanded/atngw100-expanded-linux-2.6.24.config
+   trunk/buildroot/target/device/Atmel/atngw100-expanded/busybox-1.7.2.config
+   trunk/buildroot/target/device/Atmel/atngw100-expanded/busybox-1.8.0.config
+   trunk/buildroot/target/device/Atmel/atngw100-expanded/busybox-1.9.0.config
+   trunk/buildroot/target/device/Atmel/atngw100-expanded/busybox-1.9.1.config
+   trunk/buildroot/target/device/Atmel/atngw100-expanded/device_table.txt
+   trunk/buildroot/target/device/Atmel/atngw100-expanded/jffs2_partitions.txt
+   trunk/buildroot/target/device/Atmel/atngw100-expanded/kernel-patches/
+   trunk/buildroot/target/device/Atmel/atngw100-expanded/kernel-patches/linux-2.6.23-100-avr32-atmel.2.patch
+   trunk/buildroot/target/device/Atmel/atngw100-expanded/kernel-patches/linux-2.6.23-200-fix-include-typo-for-atngw100-board.patch
+   trunk/buildroot/target/device/Atmel/atngw100-expanded/kernel-patches/linux-2.6.23-300-atngw100-video.patch
+   trunk/buildroot/target/device/Atmel/atngw100-expanded/kernel-patches/linux-2.6.24-100-avr32-git.1.patch
+   trunk/buildroot/target/device/Atmel/atngw100-expanded/kernel-patches/linux-2.6.24-200-atngw100-video.patch
+   trunk/buildroot/target/device/Atmel/atngw100-expanded/kernel-patches/linux-2.6.24-300-avr32-psif-2.patch
+   trunk/buildroot/target/device/Atmel/atngw100-expanded/kernel-patches/linux-2.6.24-500-avr32-ac97-reset.patch
+   trunk/buildroot/target/device/Atmel/atngw100-expanded/kernel-patches/linux-2.6.24-600-avr32-mmc.patch
+   trunk/buildroot/target/device/Atmel/atngw100-expanded/target_skeleton/
+   trunk/buildroot/target/device/Atmel/atngw100-expanded/target_skeleton/dev/
+   trunk/buildroot/target/device/Atmel/atngw100-expanded/target_skeleton/dev/.DEVICES
+   trunk/buildroot/target/device/Atmel/atngw100-expanded/target_skeleton/etc/
+   trunk/buildroot/target/device/Atmel/atngw100-expanded/target_skeleton/etc/TZ
+   trunk/buildroot/target/device/Atmel/atngw100-expanded/target_skeleton/etc/default/
+   trunk/buildroot/target/device/Atmel/atngw100-expanded/target_skeleton/etc/default/ntpdate
+   trunk/buildroot/target/device/Atmel/atngw100-expanded/target_skeleton/etc/dnsmasq.conf
+   trunk/buildroot/target/device/Atmel/atngw100-expanded/target_skeleton/etc/fstab
+   trunk/buildroot/target/device/Atmel/atngw100-expanded/target_skeleton/etc/group
+   trunk/buildroot/target/device/Atmel/atngw100-expanded/target_skeleton/etc/hostname
+   trunk/buildroot/target/device/Atmel/atngw100-expanded/target_skeleton/etc/hosts
+   trunk/buildroot/target/device/Atmel/atngw100-expanded/target_skeleton/etc/hosts.dnsmasq
+   trunk/buildroot/target/device/Atmel/atngw100-expanded/target_skeleton/etc/httpd.conf
+   trunk/buildroot/target/device/Atmel/atngw100-expanded/target_skeleton/etc/inetd.conf
+   trunk/buildroot/target/device/Atmel/atngw100-expanded/target_skeleton/etc/init.d/
+   trunk/buildroot/target/device/Atmel/atngw100-expanded/target_skeleton/etc/init.d/K70sendsig
+   trunk/buildroot/target/device/Atmel/atngw100-expanded/target_skeleton/etc/init.d/K80netfs
+   trunk/buildroot/target/device/Atmel/atngw100-expanded/target_skeleton/etc/init.d/K85network
+   trunk/buildroot/target/device/Atmel/atngw100-expanded/target_skeleton/etc/init.d/K90localfs
+   trunk/buildroot/target/device/Atmel/atngw100-expanded/target_skeleton/etc/init.d/S00mountvirtfs
+   trunk/buildroot/target/device/Atmel/atngw100-expanded/target_skeleton/etc/init.d/S01hotplug
+   trunk/buildroot/target/device/Atmel/atngw100-expanded/target_skeleton/etc/init.d/S02hostname
+   trunk/buildroot/target/device/Atmel/atngw100-expanded/target_skeleton/etc/init.d/S08syslog
+   trunk/buildroot/target/device/Atmel/atngw100-expanded/target_skeleton/etc/init.d/S09klog
+   trunk/buildroot/target/device/Atmel/atngw100-expanded/target_skeleton/etc/init.d/S10modules-init
+   trunk/buildroot/target/device/Atmel/atngw100-expanded/target_skeleton/etc/init.d/S20network
+   trunk/buildroot/target/device/Atmel/atngw100-expanded/target_skeleton/etc/init.d/S41inetd
+   trunk/buildroot/target/device/Atmel/atngw100-expanded/target_skeleton/etc/init.d/S42httpd
+   trunk/buildroot/target/device/Atmel/atngw100-expanded/target_skeleton/etc/init.d/S43ntp
+   trunk/buildroot/target/device/Atmel/atngw100-expanded/target_skeleton/etc/init.d/S49netfs
+   trunk/buildroot/target/device/Atmel/atngw100-expanded/target_skeleton/etc/init.d/S90firstboot
+   trunk/buildroot/target/device/Atmel/atngw100-expanded/target_skeleton/etc/init.d/rcK
+   trunk/buildroot/target/device/Atmel/atngw100-expanded/target_skeleton/etc/init.d/rcS
+   trunk/buildroot/target/device/Atmel/atngw100-expanded/target_skeleton/etc/inittab
+   trunk/buildroot/target/device/Atmel/atngw100-expanded/target_skeleton/etc/modules
+   trunk/buildroot/target/device/Atmel/atngw100-expanded/target_skeleton/etc/mtab
+   trunk/buildroot/target/device/Atmel/atngw100-expanded/target_skeleton/etc/network/
+   trunk/buildroot/target/device/Atmel/atngw100-expanded/target_skeleton/etc/network/interfaces
+   trunk/buildroot/target/device/Atmel/atngw100-expanded/target_skeleton/etc/ntp.conf
+   trunk/buildroot/target/device/Atmel/atngw100-expanded/target_skeleton/etc/passwd
+   trunk/buildroot/target/device/Atmel/atngw100-expanded/target_skeleton/etc/proftpd.conf
+   trunk/buildroot/target/device/Atmel/atngw100-expanded/target_skeleton/etc/protocols
+   trunk/buildroot/target/device/Atmel/atngw100-expanded/target_skeleton/etc/resolv.conf
+   trunk/buildroot/target/device/Atmel/atngw100-expanded/target_skeleton/etc/samba/
+   trunk/buildroot/target/device/Atmel/atngw100-expanded/target_skeleton/etc/samba/smb.conf
+   trunk/buildroot/target/device/Atmel/atngw100-expanded/target_skeleton/etc/samba/smbpasswd
+   trunk/buildroot/target/device/Atmel/atngw100-expanded/target_skeleton/etc/services
+   trunk/buildroot/target/device/Atmel/atngw100-expanded/target_skeleton/etc/shadow
+   trunk/buildroot/target/device/Atmel/atngw100-expanded/target_skeleton/etc/shells
+   trunk/buildroot/target/device/Atmel/atngw100-expanded/target_skeleton/usr/
+   trunk/buildroot/target/device/Atmel/atngw100-expanded/target_skeleton/usr/share/
+   trunk/buildroot/target/device/Atmel/atngw100-expanded/target_skeleton/usr/share/udhcpc/
+   trunk/buildroot/target/device/Atmel/atngw100-expanded/target_skeleton/usr/share/udhcpc/default.script
+   trunk/buildroot/target/device/Atmel/atngw100/atngw100-linux-2.6.23.config
+   trunk/buildroot/target/device/Atmel/atngw100/atngw100-linux-2.6.24.config
+   trunk/buildroot/target/device/Atmel/atngw100/busybox-1.8.0.config
+   trunk/buildroot/target/device/Atmel/atngw100/busybox-1.9.0.config
+   trunk/buildroot/target/device/Atmel/atngw100/busybox-1.9.1.config
+   trunk/buildroot/target/device/Atmel/atngw100/kernel-patches/linux-2.6.23-100-avr32-atmel.2.patch
+   trunk/buildroot/target/device/Atmel/atngw100/kernel-patches/linux-2.6.23-200-fix-include-typo-for-atngw100-board.patch
+   trunk/buildroot/target/device/Atmel/atngw100/kernel-patches/linux-2.6.24-100-avr32-git.1.patch
+   trunk/buildroot/target/device/Atmel/atngw100/kernel-patches/linux-2.6.24-avr32-mmc.patch
+   trunk/buildroot/target/device/Atmel/atngw100/target_skeleton/etc/proftpd.conf
+   trunk/buildroot/target/device/Atmel/atngw100/target_skeleton/tmp/resolv.conf
+   trunk/buildroot/target/device/Atmel/atngw100_defconfig
+   trunk/buildroot/target/device/Atmel/atngw100_expanded_defconfig
+   trunk/buildroot/target/device/Atmel/atstk1002-no-mplayer_defconfig
+   trunk/buildroot/target/device/Atmel/atstk1002/atstk1002-linux-2.6.23.config
+   trunk/buildroot/target/device/Atmel/atstk1002/atstk1002-linux-2.6.24.config
+   trunk/buildroot/target/device/Atmel/atstk1002/busybox-1.7.4.config
+   trunk/buildroot/target/device/Atmel/atstk1002/busybox-1.8.2.config
+   trunk/buildroot/target/device/Atmel/atstk1002/busybox-1.9.0.config
+   trunk/buildroot/target/device/Atmel/atstk1002/busybox-1.9.1.config
+   trunk/buildroot/target/device/Atmel/atstk1002/kernel-patches/linux-2.6.23-100-avr32-atmel.2.patch
+   trunk/buildroot/target/device/Atmel/atstk1002/kernel-patches/linux-2.6.23-200-gpio_mouse-setup-for-atstk1000-board.patch
+   trunk/buildroot/target/device/Atmel/atstk1002/kernel-patches/linux-2.6.24-100-avr32-git.1.patch
+   trunk/buildroot/target/device/Atmel/atstk1002/kernel-patches/linux-2.6.24-avr32-mmc.patch
+   trunk/buildroot/target/device/Atmel/atstk1002/target_skeleton/etc/proftpd.conf
+   trunk/buildroot/target/device/Atmel/atstk1002/target_skeleton/proc/mounts
+   trunk/buildroot/target/device/Atmel/atstk1002/target_skeleton/tmp/resolv.conf
+   trunk/buildroot/target/device/Atmel/atstk1002_defconfig
+   trunk/buildroot/target/device/Atmel/misc-patches/
+   trunk/buildroot/target/device/Atmel/misc-patches/README
+   trunk/buildroot/target/device/Atmel/misc-patches/linux-2.6.24-500-v4l-avr32-isi.patch
+   trunk/buildroot/target/device/Atmel/misc-patches/linux-2.6.24-avr32-ac97-reset.patch
+   trunk/buildroot/target/device/Atmel/misc-patches/linux-2.6.24-avr32-psif-2.patch
+   trunk/buildroot/target/device/Atmel/misc-patches/u-boot-1.3.0-200MHz-ngw100.patch
+   trunk/buildroot/target/device/Atmel/misc-patches/u-boot-1.3.0-64MB-sdram-ngw100.patch
+   trunk/buildroot/target/device/Atmel/u-boot/u-boot-1.3.0-100-atmel.2.patch
+   trunk/buildroot/target/device/valka/
+   trunk/buildroot/target/device/valka/Config.in
+   trunk/buildroot/target/device/valka/Makefile.in
+   trunk/buildroot/target/device/valka/device_table.txt
+   trunk/buildroot/target/device/valka/target_skeleton/
+   trunk/buildroot/target/device/valka/target_skeleton/etc/
+   trunk/buildroot/target/device/valka/target_skeleton/etc/TZ
+   trunk/buildroot/target/device/valka/target_skeleton/etc/crontab/
+   trunk/buildroot/target/device/valka/target_skeleton/etc/crontab/root
+   trunk/buildroot/target/device/valka/target_skeleton/etc/default/
+   trunk/buildroot/target/device/valka/target_skeleton/etc/default/ntpdate
+   trunk/buildroot/target/device/valka/target_skeleton/etc/default/rc.conf
+   trunk/buildroot/target/device/valka/target_skeleton/etc/fonts/
+   trunk/buildroot/target/device/valka/target_skeleton/etc/fstab
+   trunk/buildroot/target/device/valka/target_skeleton/etc/group
+   trunk/buildroot/target/device/valka/target_skeleton/etc/hostname
+   trunk/buildroot/target/device/valka/target_skeleton/etc/hosts
+   trunk/buildroot/target/device/valka/target_skeleton/etc/inetd.conf
+   trunk/buildroot/target/device/valka/target_skeleton/etc/init.d/
+   trunk/buildroot/target/device/valka/target_skeleton/etc/inittab
+   trunk/buildroot/target/device/valka/target_skeleton/etc/mdev.conf
+   trunk/buildroot/target/device/valka/target_skeleton/etc/modules
+   trunk/buildroot/target/device/valka/target_skeleton/etc/mtab
+   trunk/buildroot/target/device/valka/target_skeleton/etc/network/
+   trunk/buildroot/target/device/valka/target_skeleton/etc/network/if-down.d/
+   trunk/buildroot/target/device/valka/target_skeleton/etc/network/if-post-down.d/
+   trunk/buildroot/target/device/valka/target_skeleton/etc/network/if-pre-up.d/
+   trunk/buildroot/target/device/valka/target_skeleton/etc/network/if-up.d/
+   trunk/buildroot/target/device/valka/target_skeleton/etc/network/interfaces
+   trunk/buildroot/target/device/valka/target_skeleton/etc/ntp.conf
+   trunk/buildroot/target/device/valka/target_skeleton/etc/passwd
+   trunk/buildroot/target/device/valka/target_skeleton/etc/protocols
+   trunk/buildroot/target/device/valka/target_skeleton/etc/rc
+   trunk/buildroot/target/device/valka/target_skeleton/etc/rc.conf
+   trunk/buildroot/target/device/valka/target_skeleton/etc/rc.d/
+   trunk/buildroot/target/device/valka/target_skeleton/etc/rc.d/00.virtualfs
+   trunk/buildroot/target/device/valka/target_skeleton/etc/rc.d/01.mdev
+   trunk/buildroot/target/device/valka/target_skeleton/etc/rc.d/02.localfs
+   trunk/buildroot/target/device/valka/target_skeleton/etc/rc.d/03.hostname
+   trunk/buildroot/target/device/valka/target_skeleton/etc/rc.d/04.syslog
+   trunk/buildroot/target/device/valka/target_skeleton/etc/rc.d/05.klog
+   trunk/buildroot/target/device/valka/target_skeleton/etc/rc.d/06.modules
+   trunk/buildroot/target/device/valka/target_skeleton/etc/rc.d/10.network
+   trunk/buildroot/target/device/valka/target_skeleton/etc/rc.d/11.ntpdate
+   trunk/buildroot/target/device/valka/target_skeleton/etc/rc.d/crond
+   trunk/buildroot/target/device/valka/target_skeleton/etc/rc.d/dbus
+   trunk/buildroot/target/device/valka/target_skeleton/etc/rc.d/dropbear
+   trunk/buildroot/target/device/valka/target_skeleton/etc/rc.d/gpio
+   trunk/buildroot/target/device/valka/target_skeleton/etc/rc.d/gui
+   trunk/buildroot/target/device/valka/target_skeleton/etc/rc.d/inetd
+   trunk/buildroot/target/device/valka/target_skeleton/etc/rc.d/lighttpd
+   trunk/buildroot/target/device/valka/target_skeleton/etc/rc.d/ntpd
+   trunk/buildroot/target/device/valka/target_skeleton/etc/rc.d/onewire
+   trunk/buildroot/target/device/valka/target_skeleton/etc/rc.d/portmap
+   trunk/buildroot/target/device/valka/target_skeleton/etc/rc.local
+   trunk/buildroot/target/device/valka/target_skeleton/etc/rc.shutdown
+   trunk/buildroot/target/device/valka/target_skeleton/etc/rc.subr
+   trunk/buildroot/target/device/valka/target_skeleton/etc/resolv.conf
+   trunk/buildroot/target/device/valka/target_skeleton/etc/services
+   trunk/buildroot/target/device/valka/target_skeleton/etc/shadow
+   trunk/buildroot/target/device/valka/target_skeleton/etc/shells
+   trunk/buildroot/target/device/valka/target_skeleton/usr/
+   trunk/buildroot/target/device/valka/target_skeleton/usr/share/
+   trunk/buildroot/target/device/valka/target_skeleton/usr/share/udhcpc/
+   trunk/buildroot/target/device/valka/target_skeleton/usr/share/udhcpc/default.script
+   trunk/buildroot/target/device/valka/target_skeleton/var/
+   trunk/buildroot/target/device/valka/target_skeleton/var/db/
+   trunk/buildroot/target/device/valka/target_skeleton/var/lock
+   trunk/buildroot/target/device/valka/target_skeleton/var/run/
+   trunk/buildroot/target/device/valka/target_skeleton/web/
+   trunk/buildroot/target/device/valka/v100sc2/
+   trunk/buildroot/target/device/valka/v100sc2/busybox-1.9.0.config
+   trunk/buildroot/target/device/valka/v100sc2/busybox-1.9.1.config
+   trunk/buildroot/target/device/valka/v100sc2/kernel-patches/
+   trunk/buildroot/target/device/valka/v100sc2/kernel-patches/linux-2.6.24-100-avr32-git.1.patch
+   trunk/buildroot/target/device/valka/v100sc2/kernel-patches/linux-2.6.24-200-atngw100-video.patch
+   trunk/buildroot/target/device/valka/v100sc2/kernel-patches/linux-2.6.24-300-avr32-psif.patch
+   trunk/buildroot/target/device/valka/v100sc2/kernel-patches/linux-2.6.24-400-wire-up-avr32-mmc2.patch
+   trunk/buildroot/target/device/valka/v100sc2/uClibc.config
+   trunk/buildroot/target/device/valka/v100sc2/v100sc2-linux-2.6.24.config
+   trunk/buildroot/target/device/valka/v100sc2_defconfig
+
+Removed:
+   trunk/buildroot/target/device/Atmel/Config.in.at91
+   trunk/buildroot/target/device/Atmel/Config.in.avr32
+   trunk/buildroot/target/device/Atmel/atngw100/atngw100_defconfig
+   trunk/buildroot/target/device/Atmel/atngw100/atngw100small_defconfig
+   trunk/buildroot/target/device/Atmel/atstk1002/atstk1002_defconfig
+   trunk/buildroot/target/device/Atmel/atstk1002/busybox-1.7.2.config
+   trunk/buildroot/target/device/Atmel/linux/
 
 Modified:
-   trunk/buildroot/target/linux/Config.in.advanced
-   trunk/buildroot/target/linux/Makefile.in.advanced
+   trunk/buildroot/target/device/Atmel/Config.in
+   trunk/buildroot/target/device/Atmel/DataFlashBoot/DataflashBoot.mk
+   trunk/buildroot/target/device/Atmel/Makefile.in
+   trunk/buildroot/target/device/Atmel/at91bootstrap/Config.in
+   trunk/buildroot/target/device/Atmel/at91bootstrap/at91bootstrap.mk
+   trunk/buildroot/target/device/Atmel/at91rm9200df/Makefile.in
+   trunk/buildroot/target/device/Atmel/at91rm9200df/busybox-1.6.0.config
+   trunk/buildroot/target/device/Atmel/at91sam9260dfc/Makefile.in
+   trunk/buildroot/target/device/Atmel/at91sam9261ek/Makefile.in
+   trunk/buildroot/target/device/Atmel/at91sam9263ek/Makefile.in
+   trunk/buildroot/target/device/Atmel/atngw100/Makefile.in
+   trunk/buildroot/target/device/Atmel/atngw100/busybox-1.7.2.config
+   trunk/buildroot/target/device/Atmel/atngw100/device_table.txt
+   trunk/buildroot/target/device/Atmel/atngw100/target_skeleton/etc/hosts
+   trunk/buildroot/target/device/Atmel/atngw100/target_skeleton/etc/httpd.conf
+   trunk/buildroot/target/device/Atmel/atngw100/target_skeleton/etc/init.d/S00mountvirtfs
+   trunk/buildroot/target/device/Atmel/atngw100/target_skeleton/etc/init.d/S40telnetd
+   trunk/buildroot/target/device/Atmel/atngw100/target_skeleton/etc/inittab
+   trunk/buildroot/target/device/Atmel/atngw100/target_skeleton/etc/samba/smb.conf
+   trunk/buildroot/target/device/Atmel/atstk1002/Makefile.in
+   trunk/buildroot/target/device/Atmel/atstk1002/device_table.txt
+   trunk/buildroot/target/device/Atmel/atstk1002/target_skeleton/etc/httpd.conf
+   trunk/buildroot/target/device/Atmel/atstk1002/target_skeleton/etc/init.d/S00mountvirtfs
+   trunk/buildroot/target/device/Atmel/atstk1002/target_skeleton/etc/init.d/S40telnetd
+   trunk/buildroot/target/device/Atmel/atstk1002/target_skeleton/etc/inittab
+   trunk/buildroot/target/device/Atmel/atstk1002/target_skeleton/etc/samba/smb.conf
+   trunk/buildroot/target/device/Atmel/u-boot/Config.in
+   trunk/buildroot/target/device/Atmel/u-boot/u-boot.mk
+   trunk/buildroot/target/device/Atmel/uClibc.config.avr32
+   trunk/buildroot/target/device/Config.in
 
 
 Changeset:
-Modified: trunk/buildroot/target/linux/Config.in.advanced
-===================================================================
---- trunk/buildroot/target/linux/Config.in.advanced	2008-03-06 18:52:01 UTC (rev 21252)
-+++ trunk/buildroot/target/linux/Config.in.advanced	2008-03-06 18:52:43 UTC (rev 21253)
-@@ -40,7 +40,7 @@
- 
- config BR2_KERNEL_CURRENT_VERSION
- 	string
--	default "2.6.23.1"
-+	default "2.6.24"
- 
- config BR2_KERNEL_NEXT_VERSION
- 	string
-@@ -51,6 +51,7 @@
- 
- config BR2_KERNEL_THIS_VERSION
- 	string
-+	default "2.6.24" if BR2_LINUX_2_6_24
- 	default "2.6.23" if BR2_LINUX_2_6_23
- 	default "2.6.22" if BR2_LINUX_2_6_22
- 	default "2.6.21" if BR2_LINUX_2_6_21
-@@ -58,15 +59,15 @@
- 
- config LINUX26_LATEST_RC_VERSION
- 	string
--	default "2.6.23" if BR2_KERNEL_ADD_LATEST_RC_PATCH
-+	default "2.6.24" if BR2_KERNEL_ADD_LATEST_RC_PATCH
- 
- config LINUX26_LATEST_MM_VERSION
- 	string
--	default "2.6.23-mm1" if BR2_KERNEL_ADD_LATEST_MM_PATCH
-+	default "2.6.24-mm1" if BR2_KERNEL_ADD_LATEST_MM_PATCH
- 
- config LINUX26_LATEST_GIT_VERSION
- 	string
--	default "2.6.23-git3" if BR2_KERNEL_ADD_LATEST_SNAPSHOT
-+	default "2.6.24-git3" if BR2_KERNEL_ADD_LATEST_SNAPSHOT
- 
- config BR2_KERNEL_SITE
- 	string
-@@ -124,10 +125,16 @@
- 	  Select the specific Linux version you want to use
- 
- config BR2_LINUX_2_6_STABLE
--	bool "The latest stable Linux kernel (2.6.23)"
-+	bool "The latest stable Linux kernel (2.6.24)"
- 	help
--	  Linux 2.6.23
-+	  Linux 2.6.24
- 
-+config BR2_LINUX_2_6_24
-+	bool "Linux 2.6.24"
-+	select BR2_KERNEL_BASE
-+	help
-+	  Linux 2.6.24
-+
- config BR2_LINUX_2_6_23
- 	bool "Linux 2.6.23"
- 	select BR2_KERNEL_BASE
 
-Modified: trunk/buildroot/target/linux/Makefile.in.advanced
-===================================================================
---- trunk/buildroot/target/linux/Makefile.in.advanced	2008-03-06 18:52:01 UTC (rev 21252)
-+++ trunk/buildroot/target/linux/Makefile.in.advanced	2008-03-06 18:52:43 UTC (rev 21253)
-@@ -91,7 +91,7 @@
- ifeq ($(BR2_i386),y)
- LINUX26_KCONFIG:=$(BOARD_PATH)/linux26.config
- else
--LINUX26_KCONFIG:=$(BR2_BOARD_PATH)/$(BR2_BOARD_NAME)-linux-$(LINUX26_VERSION).config
-+LINUX26_KCONFIG:=$(BR2_BOARD_PATH)/linux-$(LINUX26_VERSION).config
- endif
- endif
- endif
-@@ -139,15 +139,29 @@
- # --------------
- # BZIMAGE
- ifeq ($(LINUX26_FORMAT),bzImage)
--LINUX26_BINLOC:=arch/$(KERNEL_ARCH)/boot/$(LINUX26_FORMAT)
--KERNEL_EXT:=.bz
-+LINUX26_BINLOC:=arch/$(KERNEL_ARCH)/boot/bzImage
-+KERNEL_EXT:=
- endif
- 
- endif
- 
- # -----------------------------------------------------------------------------
- # File name for the Linux kernel binary
-+ifeq ($(LINUX26_FORMAT),uImage)
-+LINUX26_KERNEL_NAME:="uImage"
-+endif
-+ifeq ($(LINUX26_FORMAT),bzImage)
-+LINUX26_KERNEL_NAME:="bzImage"
-+endif
-+ifeq ($(LINUX26_FORMAT),vmlinux)
-+LINUX26_KERNEL_NAME:="vmlinux"
-+endif
-+ifeq ($(LINUX26_FORMAT),zImage)
-+LINUX26_KERNEL_NAME:="zImage"
-+endif
-+ifeq ($(LINUX26_FORMAT),custom)
- LINUX26_KERNEL_NAME:=$(BOARD_NAME)-linux-$(LINUX26_VERSION)-$(DATE)$(KERNEL_EXT)
-+endif
- 
- ifndef LINUX26_KERNEL
- LINUX26_KERNEL:=$(BINARIES_DIR)/$(BOARD_NAME)-linux-$(LINUX26_VERSION)-$(DATE)$(KERNEL_EXT)
-@@ -260,9 +274,7 @@
- 		linux-$(LINUX26_VERSION)-\*.patch{,.gz,.bz2}
- endif
- ifneq ($(LINUX26_PATCH_DIR),)
--	if [ -d $(LINUX26_PATCH_DIR) ] ; then \
--		toolchain/patch-kernel.sh $(LINUX26_DIR) $(LINUX26_PATCH_DIR) linux-$(LINUX26_VERSION)-\*.patch ; \
--	fi
-+		toolchain/patch-kernel.sh $(LINUX26_DIR) $(LINUX26_PATCH_DIR) linux-$(LINUX26_VERSION)-\*.patch ; 
- endif
- 	touch $@
- 
+Sorry, the patch is too large to include (261220 lines).
+Please use ViewCVS to see it!
+
+http://uclibc.org/cgi-bin/viewcvs.cgi?view=rev&root=svn&rev=21254
