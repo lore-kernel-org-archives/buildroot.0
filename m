@@ -1,7 +1,7 @@
 From: ninevoltz at uclibc.org <ninevoltz@uclibc.org>
-Date: Thu,  6 Mar 2008 10:10:00 -0800 (PST)
-Subject: [Buildroot] svn commit: trunk/buildroot/package/freetype
-Message-ID: <20080306181000.551161201F4@busybox.net>
+Date: Thu,  6 Mar 2008 10:10:26 -0800 (PST)
+Subject: [Buildroot] svn commit: trunk/buildroot/package:  gamin
+Message-ID: <20080306181026.452861201D2@busybox.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -9,343 +9,176 @@ Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
 Author: ninevoltz
-Date: 2008-03-06 10:09:59 -0800 (Thu, 06 Mar 2008)
-New Revision: 21193
+Date: 2008-03-06 10:10:25 -0800 (Thu, 06 Mar 2008)
+New Revision: 21194
 
 Log:
-updated freetype
+added gamin
 
 Added:
-   trunk/buildroot/package/freetype/freetype-2.2.1-libdir-la.patch
-
-Removed:
-   trunk/buildroot/package/freetype/libdir-la.patch
-
-Modified:
-   trunk/buildroot/package/freetype/Config.in
-   trunk/buildroot/package/freetype/freetype.mk
+   trunk/buildroot/package/gamin/
+   trunk/buildroot/package/gamin/Config.in
+   trunk/buildroot/package/gamin/gamin-0.1.9-configure.patch
+   trunk/buildroot/package/gamin/gamin-0.1.9-debug.patch
+   trunk/buildroot/package/gamin/gamin.mk
 
 
 Changeset:
-Modified: trunk/buildroot/package/freetype/Config.in
+Added: trunk/buildroot/package/gamin/Config.in
 ===================================================================
---- trunk/buildroot/package/freetype/Config.in	2008-03-06 18:09:37 UTC (rev 21192)
-+++ trunk/buildroot/package/freetype/Config.in	2008-03-06 18:09:59 UTC (rev 21193)
-@@ -2,6 +2,7 @@
- 	bool "freetype"
- 	default n
- 	help
-+	a free, high-quality and portable font engine.
- 
- 	http://www.freetype.org/
- 
+--- trunk/buildroot/package/gamin/Config.in	                        (rev 0)
++++ trunk/buildroot/package/gamin/Config.in	2008-03-06 18:10:25 UTC (rev 21194)
+@@ -0,0 +1,7 @@
++config BR2_PACKAGE_GAMIN
++	bool "gamin"
++	default n
++	help
++	  the File Alteration Monitor
++
++	  http://www.gnome.org/~veillard/gamin/sources
 
-Added: trunk/buildroot/package/freetype/freetype-2.2.1-libdir-la.patch
+Added: trunk/buildroot/package/gamin/gamin-0.1.9-configure.patch
 ===================================================================
---- trunk/buildroot/package/freetype/freetype-2.2.1-libdir-la.patch	                        (rev 0)
-+++ trunk/buildroot/package/freetype/freetype-2.2.1-libdir-la.patch	2008-03-06 18:09:59 UTC (rev 21193)
-@@ -0,0 +1,77 @@
-+--- freetype-2.2.1/builds/unix/ltmain.sh.orig	2006-04-20 08:27:27.000000000 -0600
-++++ freetype-2.2.1/builds/unix/ltmain.sh	2007-01-13 14:26:01.000000000 -0700
-+@@ -273,8 +273,9 @@
-+ 	# line option must be used.
-+ 	if test -z "$tagname"; then
-+ 	  $echo "$modename: unable to infer tagged configuration"
-+-	  $echo "$modename: specify a tag with \`--tag'" 1>&2
-+-	  exit $EXIT_FAILURE
-++	  $echo "$modename: defaulting to \`CC'"
-++	  $echo "$modename: if this is not correct, specify a tag with \`--tag'"
-++#	  exit $EXIT_FAILURE
-+ #        else
-+ #          $echo "$modename: using $tagname tagged configuration"
-+ 	fi
-+@@ -2404,8 +2405,14 @@
-+ 	    absdir="$abs_ladir"
-+ 	    libdir="$abs_ladir"
-+ 	  else
-+-	    dir="$libdir"
-+-	    absdir="$libdir"
-++            # Adding 'libdir' from the .la file to our library search paths
-++            # breaks crosscompilation horribly.  We cheat here and don't add
-++            # it, instead adding the path where we found the .la.  -CL
-++	    dir="$abs_ladir"
-++	    absdir="$abs_ladir"
-++	    libdir="$abs_ladir"
-++	    #dir="$libdir"
-++	    #absdir="$libdir"
-+ 	  fi
-+ 	  test "X$hardcode_automatic" = Xyes && avoidtemprpath=yes
-+ 	else
-+@@ -2886,6 +2893,16 @@
-+ 		esac
-+ 		if grep "^installed=no" $deplib > /dev/null; then
-+ 		  path="$absdir/$objdir"
-++#		This interferes with crosscompilation. -CL
-++#		else
-++#		  eval libdir=`${SED} -n -e 's/^libdir=\(.*\)$/\1/p' $deplib`
-++#		  if test -z "$libdir"; then
-++#		    $echo "$modename: \`$deplib' is not a valid libtool archive" 1>&2
-++#		    exit 1
-++#		  fi
-++#		  if test "$absdir" != "$libdir"; then
-++#		    $echo "$modename: warning: \`$deplib' seems to be moved" 1>&2
-++#		  fi
-+ 		else
-+ 		  eval libdir=`${SED} -n -e 's/^libdir=\(.*\)$/\1/p' $deplib`
-+ 		  if test -z "$libdir"; then
-+@@ -5598,6 +5615,10 @@
-+ 	    # Replace all uninstalled libtool libraries with the installed ones
-+ 	    newdependency_libs=
-+ 	    for deplib in $dependency_libs; do
-++              # Replacing uninstalled with installed can easily break crosscompilation,
-++              # since the installed path is generally the wrong architecture.  -CL
-++              newdependency_libs="$newdependency_libs $deplib"
-++              continue
-+ 	      case $deplib in
-+ 	      *.la)
-+ 		name=`$echo "X$deplib" | $Xsed -e 's%^.*/%%'`
-+@@ -5919,10 +5940,13 @@
-+ 	  # At present, this check doesn't affect windows .dll's that
-+ 	  # are installed into $libdir/../bin (currently, that works fine)
-+ 	  # but it's something to keep an eye on.
-+-	  if test "$inst_prefix_dir" = "$destdir"; then
-+-	    $echo "$modename: error: cannot install \`$file' to a directory not ending in $libdir" 1>&2
-+-	    exit $EXIT_FAILURE
-+-	  fi
-++	  #
-++	  # This breaks install into our staging area.  -PB
-++	  # 
-++	  # if test "$inst_prefix_dir" = "$destdir"; then
-++	  #   $echo "$modename: error: cannot install \`$file' to a directory not ending in $libdir" 1>&2
-++	  #   exit $EXIT_FAILURE
-++	  # fi
+--- trunk/buildroot/package/gamin/gamin-0.1.9-configure.patch	                        (rev 0)
++++ trunk/buildroot/package/gamin/gamin-0.1.9-configure.patch	2008-03-06 18:10:25 UTC (rev 21194)
+@@ -0,0 +1,92 @@
++--- a/configure	2007-07-27 10:27:34.000000000 -0400
+++++ b/configure	2008-02-13 15:00:27.000000000 -0500
++@@ -23161,89 +23161,6 @@ ac_compile='$CC -c $CFLAGS $CPPFLAGS con
++ ac_link='$CC -o conftest$ac_exeext $CFLAGS $CPPFLAGS $LDFLAGS conftest.$ac_ext $LIBS >&5'
++ ac_compiler_gnu=$ac_cv_c_compiler_gnu
 + 
-+ 	  if test -n "$inst_prefix_dir"; then
-+ 	    # Stick the inst_prefix_dir data into the link command.
++-if test "$cross_compiling" = yes; then
++-  { { echo "$as_me:$LINENO: error: cannot run test program while cross compiling
++-See \`config.log' for more details." >&5
++-echo "$as_me: error: cannot run test program while cross compiling
++-See \`config.log' for more details." >&2;}
++-   { (exit 1); exit 1; }; }
++-else
++-  cat >conftest.$ac_ext <<_ACEOF
++-/* confdefs.h.  */
++-_ACEOF
++-cat confdefs.h >>conftest.$ac_ext
++-cat >>conftest.$ac_ext <<_ACEOF
++-/* end confdefs.h.  */
++-
++-#include <sys/types.h>
++-#include <stdlib.h>
++-#include <string.h>
++-#include <stdio.h>
++-#include <sys/socket.h>
++-#include <sys/un.h>
++-#include <errno.h>
++-
++-int
++-main ()
++-{
++-
++-  int listen_fd;
++-  struct sockaddr_un addr;
++-
++-  listen_fd = socket (PF_UNIX, SOCK_STREAM, 0);
++-
++-  if (listen_fd < 0)
++-    {
++-      fprintf (stderr, "socket() failed: %s\n", strerror (errno));
++-      exit (1);
++-    }
++-
++-  memset (&addr, '\0', sizeof (addr));
++-  addr.sun_family = AF_UNIX;
++-  strcpy (addr.sun_path, "X/tmp/dbus-fake-socket-path-used-in-configure-test");
++-  addr.sun_path[0] = '\0'; /* this is what makes it abstract */
++-
++-  if (bind (listen_fd, (struct sockaddr*) &addr, SUN_LEN (&addr)) < 0)
++-    {
++-       fprintf (stderr, "Abstract socket namespace bind() failed: %s\n",
++-                strerror (errno));
++-       exit (1);
++-    }
++-  else
++-    exit (0);
++-
++-  ;
++-  return 0;
++-}
++-_ACEOF
++-rm -f conftest$ac_exeext
++-if { (eval echo "$as_me:$LINENO: \"$ac_link\"") >&5
++-  (eval $ac_link) 2>&5
++-  ac_status=$?
++-  echo "$as_me:$LINENO: \$? = $ac_status" >&5
++-  (exit $ac_status); } && { ac_try='./conftest$ac_exeext'
++-  { (eval echo "$as_me:$LINENO: \"$ac_try\"") >&5
++-  (eval $ac_try) 2>&5
++-  ac_status=$?
++-  echo "$as_me:$LINENO: \$? = $ac_status" >&5
++-  (exit $ac_status); }; }; then
++-  have_abstract_sockets=yes
++-else
++-  echo "$as_me: program exited with status $ac_status" >&5
++-echo "$as_me: failed program was:" >&5
++-sed 's/^/| /' conftest.$ac_ext >&5
++-
++-( exit $ac_status )
++-have_abstract_sockets=no
++-fi
++-rm -f core *.core gmon.out bb.out conftest$ac_exeext conftest.$ac_objext conftest.$ac_ext
++-fi
++-ac_ext=c
++-ac_cpp='$CPP $CPPFLAGS'
++-ac_compile='$CC -c $CFLAGS $CPPFLAGS conftest.$ac_ext >&5'
++-ac_link='$CC -o conftest$ac_exeext $CFLAGS $CPPFLAGS $LDFLAGS conftest.$ac_ext $LIBS >&5'
++-ac_compiler_gnu=$ac_cv_c_compiler_gnu
++-
++ echo "$as_me:$LINENO: result: $have_abstract_sockets" >&5
++ echo "${ECHO_T}$have_abstract_sockets" >&6
++ 
 
-Modified: trunk/buildroot/package/freetype/freetype.mk
+Added: trunk/buildroot/package/gamin/gamin-0.1.9-debug.patch
 ===================================================================
---- trunk/buildroot/package/freetype/freetype.mk	2008-03-06 18:09:37 UTC (rev 21192)
-+++ trunk/buildroot/package/freetype/freetype.mk	2008-03-06 18:09:59 UTC (rev 21193)
-@@ -3,119 +3,24 @@
- # freetype
- #
- #############################################################
--FREETYPE_VERSION:=$(strip $(subst ",, $(BR2_FREETYPE_VERSION)))
--FREETYPE_SOURCE:=freetype-$(FREETYPE_VERSION).tar.bz2
--FREETYPE_SITE:=http://$(BR2_SOURCEFORGE_MIRROR).dl.sourceforge.net/sourceforge/freetype
--FREETYPE_CAT:=$(BZCAT)
--FREETYPE_DIR:=$(BUILD_DIR)/freetype-$(FREETYPE_VERSION)
--FREETYPE_DIR1:=$(TOOL_BUILD_DIR)/freetype-$(FREETYPE_VERSION)
--FREETYPE_HOST_DIR:=$(TOOL_BUILD_DIR)/freetype-$(FREETYPE_VERSION)-host
-+FREETYPE_VERSION = $(strip $(subst ",, $(BR2_FREETYPE_VERSION)))
-+FREETYPE_SOURCE = freetype-$(FREETYPE_VERSION).tar.bz2
-+FREETYPE_SITE = http://$(BR2_SOURCEFORGE_MIRROR).dl.sourceforge.net/sourceforge/freetype
-+FREETYPE_AUTORECONF = NO
-+FREETYPE_INSTALL_STAGING = YES
-+FREETYPE_INSTALL_TARGET = YES
-+FREETYPE_INSTALL_TARGET_OPT = DESTDIR=$(TARGET_DIR) install
- 
--$(DL_DIR)/$(FREETYPE_SOURCE):
--	$(WGET) -P $(DL_DIR) $(FREETYPE_SITE)/$(FREETYPE_SOURCE)
-+FREETYPE_CONF_OPT = --target=$(GNU_TARGET_NAME) --host=$(GNU_TARGET_NAME) \
-+		--build=$(GNU_HOST_NAME) --prefix=/usr \
-+		--exec-prefix=/usr --bindir=/usr/bin \
-+		--sbindir=/usr/sbin --libdir=/usr/lib \
-+		--libexecdir=/usr/lib --sysconfdir=/etc \
-+		--datadir=/usr/share --localstatedir=/var \
-+		--includedir=/usr/include --mandir=/usr/man \
-+		--infodir=/usr/info 
- 
--$(FREETYPE_DIR)/.unpacked: $(DL_DIR)/$(FREETYPE_SOURCE)
--	$(FREETYPE_CAT) $(DL_DIR)/$(FREETYPE_SOURCE) | tar -C $(BUILD_DIR) $(TAR_OPTIONS) -
--	$(CONFIG_UPDATE) $(FREETYPE_DIR)
--	$(CONFIG_UPDATE) $(FREETYPE_DIR)/builds/unix
--	touch $(FREETYPE_DIR)/.unpacked
-+FREETYPE_MAKE_OPT = CCexe="$(HOSTCC)"
-+FREETYPE_DEPENDENCIES = uclibc pkgconfig
- 
--# freetype for the target
--$(FREETYPE_DIR)/.configured: $(FREETYPE_DIR)/.unpacked
--	(cd $(FREETYPE_DIR); rm -f config.cache; \
--		$(TARGET_CONFIGURE_OPTS) \
--		$(TARGET_CONFIGURE_ARGS) \
--		./configure \
--		--target=$(GNU_TARGET_NAME) \
--		--host=$(GNU_TARGET_NAME) \
--		--build=$(GNU_HOST_NAME) \
--		--prefix=/usr \
--		--exec-prefix=/usr \
--		--bindir=/usr/bin \
--		--sbindir=/usr/sbin \
--		--libdir=/lib \
--		--libexecdir=/usr/lib \
--		--sysconfdir=/etc \
--		--datadir=/usr/share \
--		--localstatedir=/var \
--		--includedir=/usr/include \
--		--mandir=/usr/man \
--		--infodir=/usr/info \
--	)
--	touch $(FREETYPE_DIR)/.configured
--
--$(FREETYPE_DIR)/.compiled: $(FREETYPE_DIR)/.configured
--	$(MAKE) CCexe="$(HOSTCC)" -C $(FREETYPE_DIR)
--	touch $(FREETYPE_DIR)/.compiled
--
--$(STAGING_DIR)/usr/include/freetype:
--	ln -sf ./freetype2/freetype $(STAGING_DIR)/usr/include/freetype
--
--#$(STAGING_DIR)/include/freetype:
--#	mkdir -p $(STAGING_DIR)/include
--#	ln -sf ../usr/include/freetype2/freetype $(STAGING_DIR)/include/freetype
--
--$(STAGING_DIR)/lib/libfreetype.so: $(FREETYPE_DIR)/.compiled
--	$(MAKE) DESTDIR=$(STAGING_DIR) -C $(FREETYPE_DIR) install
--	$(SED) "s,^libdir=.*,libdir=\'$(STAGING_DIR)/lib\',g" $(STAGING_DIR)/lib/libfreetype.la
--	$(SED) "s,^prefix=.*,prefix=\'$(STAGING_DIR)\',g" \
--		-e "s,^exec_prefix=.*,exec_prefix=\'$(STAGING_DIR)/usr\',g" \
--		-e "s,^includedir=.*,includedir=\'$(STAGING_DIR)/usr/include\',g" \
--		-e "s,^libdir=.*,libdir=\'$(STAGING_DIR)/lib\',g" \
--		$(STAGING_DIR)/usr/bin/freetype-config
--	touch -c $(STAGING_DIR)/lib/libfreetype.so
--
--$(TARGET_DIR)/lib/libfreetype.so: $(STAGING_DIR)/lib/libfreetype.so
--	cp -dpf $(STAGING_DIR)/lib/libfreetype.so* $(TARGET_DIR)/lib/
--	-$(STRIPCMD) $(STRIP_STRIP_UNNEEDED) $(TARGET_DIR)/lib/libfreetype.so
--
--# freetype for the host, needed for build-tools of fontconfig
--
--# great, it can't be built out of tree reliably
--$(FREETYPE_DIR1)/.unpacked: $(DL_DIR)/$(FREETYPE_SOURCE)
--	$(FREETYPE_CAT) $(DL_DIR)/$(FREETYPE_SOURCE) | tar -C $(TOOL_BUILD_DIR) $(TAR_OPTIONS) -
--	touch $(FREETYPE_DIR1)/.unpacked
--
--$(FREETYPE_DIR1)/.configured: $(FREETYPE_DIR1)/.unpacked
--	(cd $(FREETYPE_DIR1); \
--	./configure \
--		CC="$(HOSTCC)" \
--		--prefix="$(FREETYPE_HOST_DIR)" \
--	)
--	touch $(FREETYPE_DIR1)/.configured
--
--$(FREETYPE_DIR1)/.compiled: $(FREETYPE_DIR1)/.configured
--	$(MAKE) CCexe="$(HOSTCC)" -C $(FREETYPE_DIR1)
--	touch $(FREETYPE_DIR1)/.compiled
--
--$(FREETYPE_HOST_DIR)/lib/libfreetype.so: $(FREETYPE_DIR1)/.configured
--	$(MAKE) -C $(FREETYPE_DIR1) install
--	touch -c $@
--
--.PHONY: freetype freetype-source freetype-links freetype-clean freetype-dirclean
--
--freetype: uclibc pkgconfig $(TARGET_DIR)/lib/libfreetype.so freetype-links
--
--freetype-source: $(DL_DIR)/$(FREETYPE_SOURCE)
--
--freetype-links: $(STAGING_DIR)/usr/include/freetype # $(STAGING_DIR)/include/freetype
--
--freetype-clean:
--	$(MAKE) DESTDIR=$(TARGET_DIR) CC=$(TARGET_CC) -C $(FREETYPE_DIR) uninstall
--	-$(MAKE) -C $(FREETYPE_DIR) clean
--
--freetype-dirclean:
--	rm -rf $(FREETYPE_DIR)
--
--.PHONY: host-freetype
--
--host-freetype: $(FREETYPE_HOST_DIR)/lib/libfreetype.so
--
--#############################################################
--#
--# Toplevel Makefile options
--#
--#############################################################
--ifeq ($(strip $(BR2_PACKAGE_FREETYPE)),y)
--TARGETS+=freetype
--endif
-+$(eval $(call AUTOTARGETS,package,freetype))
-\ No newline at end of file
+--- trunk/buildroot/package/gamin/gamin-0.1.9-debug.patch	                        (rev 0)
++++ trunk/buildroot/package/gamin/gamin-0.1.9-debug.patch	2008-03-06 18:10:25 UTC (rev 21194)
+@@ -0,0 +1,14 @@
++--- a/server/gam_poll_basic.c	2007-07-04 09:46:29.000000000 -0400
+++++ b/server/gam_poll_basic.c	2008-02-13 15:04:57.000000000 -0500
++@@ -343,9 +343,9 @@ gam_poll_basic_poll_file(GamNode * node)
++ #ifdef VERBOSE_POLL
++ 		GAM_DEBUG(DEBUG_INFO, "Poll: poll_file %s unchanged\n", path);
++ #ifdef ST_MTIM_NSEC
++-		GAM_DEBUG(DEBUG_INFO, "%d %d : %d %d\n", node->sbuf.st_mtim.tv_sec, node->sbuf.st_mtim.tv_nsec, sbuf.st_mtim.tv_sec, sbuf.st_mtim.tv_nsec);
+++//		GAM_DEBUG(DEBUG_INFO, "%d %d : %d %d\n", node->sbuf.st_mtim.tv_sec, node->sbuf.st_mtim.tv_nsec, sbuf.st_mtim.tv_sec, sbuf.st_mtim.tv_nsec);
++ #else
++-		GAM_DEBUG(DEBUG_INFO, "%d : %d\n", node->sbuf.st_mtime, sbuf.st_mtim.tv_nsec);
+++//		GAM_DEBUG(DEBUG_INFO, "%d : %d\n", node->sbuf.st_mtime, sbuf.st_mtim.tv_nsec);
++ #endif /* ST_MTIM_NSEC */
++ #endif /* VERBOSE_POLL */
++ 	}
 
-Deleted: trunk/buildroot/package/freetype/libdir-la.patch
+Added: trunk/buildroot/package/gamin/gamin.mk
 ===================================================================
---- trunk/buildroot/package/freetype/libdir-la.patch	2008-03-06 18:09:37 UTC (rev 21192)
-+++ trunk/buildroot/package/freetype/libdir-la.patch	2008-03-06 18:09:59 UTC (rev 21193)
-@@ -1,77 +0,0 @@
----- freetype-2.2.1/builds/unix/ltmain.sh.orig	2006-04-20 08:27:27.000000000 -0600
--+++ freetype-2.2.1/builds/unix/ltmain.sh	2007-01-13 14:26:01.000000000 -0700
--@@ -273,8 +273,9 @@
-- 	# line option must be used.
-- 	if test -z "$tagname"; then
-- 	  $echo "$modename: unable to infer tagged configuration"
---	  $echo "$modename: specify a tag with \`--tag'" 1>&2
---	  exit $EXIT_FAILURE
--+	  $echo "$modename: defaulting to \`CC'"
--+	  $echo "$modename: if this is not correct, specify a tag with \`--tag'"
--+#	  exit $EXIT_FAILURE
-- #        else
-- #          $echo "$modename: using $tagname tagged configuration"
-- 	fi
--@@ -2404,8 +2405,14 @@
-- 	    absdir="$abs_ladir"
-- 	    libdir="$abs_ladir"
-- 	  else
---	    dir="$libdir"
---	    absdir="$libdir"
--+            # Adding 'libdir' from the .la file to our library search paths
--+            # breaks crosscompilation horribly.  We cheat here and don't add
--+            # it, instead adding the path where we found the .la.  -CL
--+	    dir="$abs_ladir"
--+	    absdir="$abs_ladir"
--+	    libdir="$abs_ladir"
--+	    #dir="$libdir"
--+	    #absdir="$libdir"
-- 	  fi
-- 	  test "X$hardcode_automatic" = Xyes && avoidtemprpath=yes
-- 	else
--@@ -2886,6 +2893,16 @@
-- 		esac
-- 		if grep "^installed=no" $deplib > /dev/null; then
-- 		  path="$absdir/$objdir"
--+#		This interferes with crosscompilation. -CL
--+#		else
--+#		  eval libdir=`${SED} -n -e 's/^libdir=\(.*\)$/\1/p' $deplib`
--+#		  if test -z "$libdir"; then
--+#		    $echo "$modename: \`$deplib' is not a valid libtool archive" 1>&2
--+#		    exit 1
--+#		  fi
--+#		  if test "$absdir" != "$libdir"; then
--+#		    $echo "$modename: warning: \`$deplib' seems to be moved" 1>&2
--+#		  fi
-- 		else
-- 		  eval libdir=`${SED} -n -e 's/^libdir=\(.*\)$/\1/p' $deplib`
-- 		  if test -z "$libdir"; then
--@@ -5598,6 +5615,10 @@
-- 	    # Replace all uninstalled libtool libraries with the installed ones
-- 	    newdependency_libs=
-- 	    for deplib in $dependency_libs; do
--+              # Replacing uninstalled with installed can easily break crosscompilation,
--+              # since the installed path is generally the wrong architecture.  -CL
--+              newdependency_libs="$newdependency_libs $deplib"
--+              continue
-- 	      case $deplib in
-- 	      *.la)
-- 		name=`$echo "X$deplib" | $Xsed -e 's%^.*/%%'`
--@@ -5919,10 +5940,13 @@
-- 	  # At present, this check doesn't affect windows .dll's that
-- 	  # are installed into $libdir/../bin (currently, that works fine)
-- 	  # but it's something to keep an eye on.
---	  if test "$inst_prefix_dir" = "$destdir"; then
---	    $echo "$modename: error: cannot install \`$file' to a directory not ending in $libdir" 1>&2
---	    exit $EXIT_FAILURE
---	  fi
--+	  #
--+	  # This breaks install into our staging area.  -PB
--+	  # 
--+	  # if test "$inst_prefix_dir" = "$destdir"; then
--+	  #   $echo "$modename: error: cannot install \`$file' to a directory not ending in $libdir" 1>&2
--+	  #   exit $EXIT_FAILURE
--+	  # fi
-- 
-- 	  if test -n "$inst_prefix_dir"; then
-- 	    # Stick the inst_prefix_dir data into the link command.
+--- trunk/buildroot/package/gamin/gamin.mk	                        (rev 0)
++++ trunk/buildroot/package/gamin/gamin.mk	2008-03-06 18:10:25 UTC (rev 21194)
+@@ -0,0 +1,22 @@
++#############################################################
++#
++# gamin
++#
++#############################################################
++GAMIN_VERSION = 0.1.9
++GAMIN_SOURCE = gamin-$(GAMIN_VERSION).tar.gz
++GAMIN_SITE = http://www.gnome.org/~veillard/gamin/sources
++GAMIN_AUTORECONF = NO
++GAMIN_INSTALL_STAGING = YES
++GAMIN_INSTALL_TARGET = YES
++
++GAMIN_CONF_OPT = --program-prefix=""
++
++GAMIN_INSTALL_TARGET_OPT = DESTDIR=$(TARGET_DIR) install
++
++GAMIN_CONF_ENV = have_abstract_sockets=no
++
++GAMIN_DEPENDENCIES = uclibc libgtk2
++
++$(eval $(call AUTOTARGETS,package,gamin))
++
