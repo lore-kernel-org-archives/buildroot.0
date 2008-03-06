@@ -1,7 +1,7 @@
 From: ninevoltz at uclibc.org <ninevoltz@uclibc.org>
-Date: Thu,  6 Mar 2008 10:59:57 -0800 (PST)
-Subject: [Buildroot] svn commit: trunk/buildroot/target/x86/syslinux
-Message-ID: <20080306185957.7303F12024B@busybox.net>
+Date: Thu,  6 Mar 2008 11:00:38 -0800 (PST)
+Subject: [Buildroot] svn commit: trunk/buildroot/target
+Message-ID: <20080306190038.754A61202D3@busybox.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -9,30 +9,41 @@ Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
 Author: ninevoltz
-Date: 2008-03-06 10:59:57 -0800 (Thu, 06 Mar 2008)
-New Revision: 21255
+Date: 2008-03-06 11:00:38 -0800 (Thu, 06 Mar 2008)
+New Revision: 21256
 
 Log:
-added syslinux patch
+added u-boot location
 
-Added:
-   trunk/buildroot/target/x86/syslinux/syslinux-3.61-makefile.patch
+Modified:
+   trunk/buildroot/target/Config.in
+   trunk/buildroot/target/Makefile.in
 
 
 Changeset:
-Added: trunk/buildroot/target/x86/syslinux/syslinux-3.61-makefile.patch
+Modified: trunk/buildroot/target/Config.in
 ===================================================================
---- trunk/buildroot/target/x86/syslinux/syslinux-3.61-makefile.patch	                        (rev 0)
-+++ trunk/buildroot/target/x86/syslinux/syslinux-3.61-makefile.patch	2008-03-06 18:59:57 UTC (rev 21255)
-@@ -0,0 +1,11 @@
-+--- a/Makefile	2008-02-18 09:39:41.000000000 -0500
-++++ b/Makefile	2008-02-18 09:43:21.000000000 -0500
-+@@ -75,7 +75,7 @@ BTARGET  = kwdhash.gen version.gen versi
-+ 	   ldlinux.bss ldlinux.sys ldlinux.bin \
-+ 	   pxelinux.0 isolinux.bin isolinux-debug.bin \
-+ 	   extlinux.bin extlinux.bss extlinux.sys
-+-BOBJECTS = $(BTARGET) mbr/mbr.bin dos/syslinux.com win32/syslinux.exe \
-++BOBJECTS = $(BTARGET) mbr/mbr.bin dos/syslinux.com  \
-+ 	memdisk/memdisk memdump/memdump.com
-+ # BESUBDIRS and IESUBDIRS are "early", i.e. before the root; BSUBDIRS
-+ # and ISUBDIRS are "late", after the root.
+--- trunk/buildroot/target/Config.in	2008-03-06 18:59:57 UTC (rev 21255)
++++ trunk/buildroot/target/Config.in	2008-03-06 19:00:38 UTC (rev 21256)
+@@ -18,6 +18,7 @@
+ #source "target/x86/grub2/Config.in"
+ source "target/x86/syslinux/Config.in"
+ source "target/powerpc/yaboot/Config.in"
++source "target/device/Atmel/u-boot/Config.in"
+ endmenu
+ 
+ menu "Kernel"
+
+Modified: trunk/buildroot/target/Makefile.in
+===================================================================
+--- trunk/buildroot/target/Makefile.in	2008-03-06 18:59:57 UTC (rev 21255)
++++ trunk/buildroot/target/Makefile.in	2008-03-06 19:00:38 UTC (rev 21256)
+@@ -10,6 +10,8 @@
+ include target/device/Makefile.in
+ include target/x86/Makefile.in
+ include target/powerpc/Makefile.in
++include target/device/Atmel/u-boot/u-boot.mk
++
+ # and finally build the filesystems/tarballs
+ include target/*/*.mk
+ 
