@@ -1,10 +1,10 @@
 From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Thu, 06 Mar 2008 22:41:59 +0100
-Subject: [Buildroot] svn commit: trunk/buildroot/package:  synergy
-In-Reply-To: <20080306182658.BD6E412028A@busybox.net> (ninevoltz@uclibc.org's
-	message of "Thu\, 6 Mar 2008 10\:26\:58 -0800 \(PST\)")
-References: <20080306182658.BD6E412028A@busybox.net>
-Message-ID: <87r6enedi0.fsf@macbook.be.48ers.dk>
+Date: Thu, 06 Mar 2008 22:44:12 +0100
+Subject: [Buildroot] svn commit: trunk/buildroot/package/which
+In-Reply-To: <20080306182921.D5ACB1202A5@busybox.net> (ninevoltz@uclibc.org's
+	message of "Thu\, 6 Mar 2008 10\:29\:21 -0800 \(PST\)")
+References: <20080306182921.D5ACB1202A5@busybox.net>
+Message-ID: <87mypbedeb.fsf@macbook.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,22 +13,20 @@ To: buildroot@busybox.net
 
 >>>>> "ninevoltz" == ninevoltz  <ninevoltz@uclibc.org> writes:
 
-Hi,
+ ninevoltz> Author: ninevoltz
+ ninevoltz> Date: 2008-03-06 10:29:21 -0800 (Thu, 06 Mar 2008)
+ ninevoltz> New Revision: 21239
 
- ninevoltz> Changeset:
- ninevoltz> Added: trunk/buildroot/package/synergy/Config.in
- ninevoltz> ===================================================================
- ninevoltz> --- trunk/buildroot/package/synergy/Config.in	                        (rev 0)
- ninevoltz> +++ trunk/buildroot/package/synergy/Config.in	2008-03-06 18:26:58 UTC (rev 21232)
- ninevoltz> @@ -0,0 +1,11 @@
- ninevoltz> +config BR2_PACKAGE_SYNERGY
- ninevoltz> +	bool "synergy"
- ninevoltz> +	default n
- ninevoltz> +	depends on BR2_PACKAGE_XORG||BR2_PACKAGE_XORG7
- ninevoltz> +	help
- ninevoltz> +	  Synergy lets you easily share a single mouse and keyboard between multiple computers with different operating systems, each with its own display, without special hardware.
+ ninevoltz> Log:
+ ninevoltz> cleanup which makefile
 
-Sane line lengths please.
+...
+
+ ninevoltz>  #############################################################
+ ninevoltz> -WHICH_VERSION:=2.16
+ ninevoltz> +WHICH_VERSION:=2.19
+
+Please don't do this together with a cleanup.
 
 -- 
 Bye, Peter Korsgaard
