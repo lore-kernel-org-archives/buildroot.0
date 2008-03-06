@@ -1,7 +1,7 @@
 From: ninevoltz at uclibc.org <ninevoltz@uclibc.org>
-Date: Thu,  6 Mar 2008 10:16:32 -0800 (PST)
-Subject: [Buildroot] svn commit: trunk/buildroot/package/libxml2
-Message-ID: <20080306181632.4CC1B1201F9@busybox.net>
+Date: Thu,  6 Mar 2008 10:16:50 -0800 (PST)
+Subject: [Buildroot] svn commit: trunk/buildroot/package/libxslt
+Message-ID: <20080306181650.8C895120235@busybox.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -9,145 +9,82 @@ Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
 Author: ninevoltz
-Date: 2008-03-06 10:16:30 -0800 (Thu, 06 Mar 2008)
-New Revision: 21208
+Date: 2008-03-06 10:16:49 -0800 (Thu, 06 Mar 2008)
+New Revision: 21209
 
 Log:
-updated libxml2 makefile
+updated libxslt
+
+Added:
+   trunk/buildroot/package/libxslt/libxslt-1.1.21-configure.patch
 
 Modified:
-   trunk/buildroot/package/libxml2/libxml2.mk
+   trunk/buildroot/package/libxslt/libxslt.mk
 
 
 Changeset:
-Modified: trunk/buildroot/package/libxml2/libxml2.mk
+Added: trunk/buildroot/package/libxslt/libxslt-1.1.21-configure.patch
 ===================================================================
---- trunk/buildroot/package/libxml2/libxml2.mk	2008-03-06 18:16:05 UTC (rev 21207)
-+++ trunk/buildroot/package/libxml2/libxml2.mk	2008-03-06 18:16:30 UTC (rev 21208)
-@@ -4,107 +4,26 @@
- #
- #############################################################
+--- trunk/buildroot/package/libxslt/libxslt-1.1.21-configure.patch	                        (rev 0)
++++ trunk/buildroot/package/libxslt/libxslt-1.1.21-configure.patch	2008-03-06 18:16:49 UTC (rev 21209)
+@@ -0,0 +1,18 @@
++--- a/configure	2007-06-12 12:43:03.000000000 -0400
+++++ b/configure	2008-02-18 08:52:36.000000000 -0500
++@@ -22090,15 +22090,11 @@ esac
++ 
++ 
++ 
++-XSLT_LIBDIR='-L${libdir}'
++-XSLT_INCLUDEDIR='-I${includedir}'
++ XSLT_LIBS="-lxslt $LIBXML_LIBS $M_LIBS"
++ 
++ 
++ 
++ 
++-EXSLT_LIBDIR='-L${libdir}'
++-EXSLT_INCLUDEDIR='-I${includedir}'
++ EXSLT_LIBS="-lexslt $XSLT_LIBS $LIBGCRYPT_LIBS"
++ 
++ 
+
+Modified: trunk/buildroot/package/libxslt/libxslt.mk
+===================================================================
+--- trunk/buildroot/package/libxslt/libxslt.mk	2008-03-06 18:16:30 UTC (rev 21208)
++++ trunk/buildroot/package/libxslt/libxslt.mk	2008-03-06 18:16:49 UTC (rev 21209)
+@@ -13,6 +13,8 @@
  
--LIBXML2_VERSION=2.6.29
--LIBXML2_SOURCE=libxml2-sources-$(LIBXML2_VERSION).tar.gz
--LIBXML2_SITE=ftp://xmlsoft.org/libxml2
--LIBXML2_DIR=$(BUILD_DIR)/libxml2-$(LIBXML2_VERSION)
--LIBXML2_CAT:=$(ZCAT)
-+LIBXML2_VERSION = 2.6.29
-+LIBXML2_SOURCE = libxml2-sources-$(LIBXML2_VERSION).tar.gz
-+LIBXML2_SITE = ftp://xmlsoft.org/libxml2
-+LIBXML2_AUTORECONF = NO
-+LIBXML2_INSTALL_STAGING = YES
-+LIBXML2_INSTALL_TARGET = YES
+ $(LIBXSLT_DIR)/.unpacked: $(DL_DIR)/$(LIBXSLT_SOURCE)
+ 	gzip -d -c $(DL_DIR)/$(LIBXSLT_SOURCE) | tar -C $(BUILD_DIR) $(TAR_OPTIONS) -
++	toolchain/patch-kernel.sh $(LIBXSLT_DIR) package/libxslt/ libxslt-$(LIBXSLT_VERSION)\*.patch*
++	$(CONFIG_UPDATE) $(LIBXSLT_DIR)
+ 	touch $@
  
--$(DL_DIR)/$(LIBXML2_SOURCE):
--	$(WGET) -P $(DL_DIR) $(LIBXML2_SITE)/$(LIBXML2_SOURCE)
-+LIBXML2_CONF_OPT = --target=$(GNU_TARGET_NAME) --host=$(GNU_TARGET_NAME) \
-+		--build=$(GNU_HOST_NAME) --prefix=/usr \
-+		--exec-prefix=/usr --bindir=/usr/bin \
-+		--sbindir=/usr/sbin --libexecdir=/usr/lib \
-+		--sysconfdir=/etc --datadir=/usr/share \
-+		--localstatedir=/var --mandir=/usr/man \
-+		--infodir=/usr/info --includedir=/usr/include \
-+		--with-gnu-ld --enable-shared \
-+		--enable-static --enable-ipv6=no \
-+		--without-debugging --without-python \
-+		--without-threads $(DISABLE_NLS) 
+ #PKG_CONFIG_PATH="$(STAGING_DIR)/lib/pkconfig:$(STAGING_DIR)/usr/lib/pkgconfig" \
+@@ -24,7 +26,10 @@
+ 	(cd $(LIBXSLT_DIR); \
+ 		$(TARGET_CONFIGURE_OPTS) \
+ 		$(TARGET_CONFIGURE_ARGS) \
++		PKG_CONFIG_PATH="$(STAGING_DIR)/usr/lib/pkgconfig" \
+ 		CFLAGS="$(TARGET_CFLAGS) -DNO_LARGEFILE_SOURCE" \
++		EXSLT_LIBDIR=$(STAGING_DIR)/usr/lib \
++		XSLT_LIBDIR=$(STAGING_DIR)/usr/lib \
+ 		./configure \
+ 		--target=$(GNU_TARGET_NAME) \
+ 		--host=$(GNU_TARGET_NAME) \
+@@ -38,7 +43,7 @@
+ 		--sysconfdir=/etc \
+ 		--datadir=/usr/share \
+ 		--localstatedir=/var \
+-		--includedir=/include \
++		--includedir=/usr/include \
+ 		--mandir=/usr/man \
+ 		--infodir=/usr/info \
+ 		--enable-shared \
+@@ -48,6 +53,7 @@
+ 		--without-debugging \
+ 		--without-python \
+ 		--without-threads \
++		--with-libxml-libs-prefix=$(STAGING_DIR)/usr/lib \
+ 	);
+ 	touch $@
  
--$(LIBXML2_DIR)/.unpacked: $(DL_DIR)/$(LIBXML2_SOURCE)
--	$(LIBXML2_CAT) $(DL_DIR)/$(LIBXML2_SOURCE) | tar -C $(BUILD_DIR) $(TAR_OPTIONS) -
--	touch $(LIBXML2_DIR)/.unpacked
- 
--$(LIBXML2_DIR)/.configured: $(LIBXML2_DIR)/.unpacked
--	(cd $(LIBXML2_DIR); rm -rf config.cache; \
--		$(TARGET_CONFIGURE_OPTS) \
--		$(TARGET_CONFIGURE_ARGS) \
--		./configure \
--		--target=$(GNU_TARGET_NAME) \
--		--host=$(GNU_TARGET_NAME) \
--		--build=$(GNU_HOST_NAME) \
--		--prefix=/usr \
--		--exec-prefix=/usr \
--		--bindir=/usr/bin \
--		--sbindir=/usr/sbin \
--		--libexecdir=/usr/lib \
--		--sysconfdir=/etc \
--		--datadir=/usr/share \
--		--localstatedir=/var \
--		--mandir=/usr/man \
--		--infodir=/usr/info \
--		--includedir=/usr/include \
--		--with-gnu-ld \
--		--enable-shared \
--		--enable-static \
--		--enable-ipv6=no \
--		--without-debugging \
--		--without-python \
--		--without-threads \
--		$(DISABLE_NLS) \
--	)
--	touch $(LIBXML2_DIR)/.configured
-+LIBXML2_DEPENDENCIES = uclibc 
- 
--$(STAGING_DIR)/usr/lib/libxml2.so: $(LIBXML2_DIR)/.configured
--	$(MAKE) CC=$(TARGET_CC) -C $(LIBXML2_DIR)
--	$(MAKE) DESTDIR=$(STAGING_DIR) -C $(LIBXML2_DIR) install
--	rm -f $(STAGING_DIR)/usr/lib/libxml2.la
--	$(SED) 's:prefix=/usr:prefix=$(STAGING_DIR)/usr:' \
--		-e 's:includedir=/usr/include:includedir=$(STAGING_DIR)/usr/include:' \
--		$(STAGING_DIR)/usr/bin/xml2-config
--
--$(TARGET_DIR)/usr/lib/libxml2.so: $(STAGING_DIR)/usr/lib/libxml2.so
--	mkdir -p $(TARGET_DIR)/usr/include $(TARGET_DIR)/usr/lib
--	cp -dpf $(STAGING_DIR)/usr/lib/libxml2.so* $(TARGET_DIR)/usr/lib/
--	$(STRIPCMD) $(STRIP_STRIP_UNNEEDED) $(TARGET_DIR)/usr/lib/libxml2.so*
--
--$(TARGET_DIR)/usr/lib/libxml2.a: $(STAGING_DIR)/usr/lib/libxml2.so
--	cp -dpf $(STAGING_DIR)/usr/lib/libxml2.*a $(TARGET_DIR)/usr/lib/
--
--libxml2: uclibc $(TARGET_DIR)/usr/lib/libxml2.so libxml2-headers
--
--$(STAGING_DIR)/usr/include/libxml2: $(TARGET_DIR)/usr/lib/libxml2.so
--	cp -af $(LIBXML2_DIR)/include/libxml $(STAGING_DIR)/usr/include/libxml2
--	touch -c $@
--
--$(TARGET_DIR)/usr/include/libxml2: libxml2-headers
--	cp -af $(LIBXML2_DIR)/usr/include/libxml2 $(TARGET_DIR)/usr/include/libxml2
--	touch -c $@
--
--$(TARGET_DIR)/usr/include/libxml: libxml2-headers
--	ln -s libxml2/libxml $(LIBXML2_DIR)/usr/include/libxml
--	touch -c $@
--
--libxml2-headers: $(STAGING_DIR)/usr/include/libxml2
--
--libxml2-target-headers: $(TARGET_DIR)/usr/include/libxml2 \
--	$(TARGET_DIR)/usr/include/libxml2 \
--	$(TARGET_DIR)/usr/lib/libxml2.a
--
--libxml2-source: $(DL_DIR)/$(LIBXML2_SOURCE)
--
--libxml2-clean:
--	@if [ -d $(LIBXML2_DIR)/Makefile ]; then \
--		$(MAKE) -C $(LIBXML2_DIR) clean; \
--	fi
--	rm -f $(STAGING_DIR)/usr/lib/libxml2.*
--	rm -f $(TARGET_DIR)/usr/lib/libxml2.*
--
--
--libxml2-dirclean:
--	rm -rf $(LIBXML2_DIR)
--
--.PHONY: libxml2-headers libxml2-target-headers
--#############################################################
--#
--# Toplevel Makefile options
--#
--#############################################################
--ifeq ($(strip $(BR2_PACKAGE_LIBXML2)),y)
--TARGETS+=libxml2
--endif
--ifeq ($(strip $(BR2_PACKAGE_LIBXML2_TARGET_HEADERS)),y)
--TARGETS+=libxml2-target-headers
--endif
-+$(eval $(call AUTOTARGETS,package,libxml2))
