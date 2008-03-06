@@ -1,54 +1,28 @@
-From: Ulf Samuelsson <ulf.samuelsson@atmel.com>
-Date: Fri, 7 Mar 2008 00:56:09 +0100
-Subject: [Buildroot] svn commit: trunk/buildroot/package/bzip2
-References: <20080306175611.EB4541201CA@busybox.net>
-	<20080306234746.GC26530@cloud.net.au>
-Message-ID: <041901c87fe5$b1503080$030514ac@atmel.com>
+From: Hamish Moffatt <hamish@cloud.net.au>
+Date: Fri, 7 Mar 2008 10:56:54 +1100
+Subject: [Buildroot] svn commit: trunk/buildroot/package/jpeg
+In-Reply-To: <20080306181416.BD8A9120217@busybox.net>
+References: <20080306181416.BD8A9120217@busybox.net>
+Message-ID: <20080306235654.GE26530@cloud.net.au>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
------ Original Message ----- 
-From: "Hamish Moffatt" <hamish@cloud.net.au>
-To: <buildroot@uclibc.org>
-Sent: Friday, March 07, 2008 12:47 AM
-Subject: Re: [Buildroot] svn commit: trunk/buildroot/package/bzip2
-
-
-> On Thu, Mar 06, 2008 at 09:56:11AM -0800, ninevoltz at uclibc.org wrote:
->> Author: ninevoltz
->> Date: 2008-03-06 09:56:10 -0800 (Thu, 06 Mar 2008)
->> New Revision: 21184
->> 
->> Log:
->> makefile cleanup for bzip2
->> 
->> Modified:
->>    trunk/buildroot/package/bzip2/bzip2.mk
->> 
->> 
->> Changeset:
->> Modified: trunk/buildroot/package/bzip2/bzip2.mk
->> ===================================================================
->> --- trunk/buildroot/package/bzip2/bzip2.mk 2008-03-06 17:55:51 UTC (rev 21183)
->> +++ trunk/buildroot/package/bzip2/bzip2.mk 2008-03-06 17:56:10 UTC (rev 21184)
->> @@ -29,7 +29,7 @@
->>  $(SED) "s:-O2:$(TARGET_CFLAGS):" $(BZIP2_DIR)/Makefile-libbz2_so
->>  touch $@
->>  
->> -$(STAGING_DIR)/lib/libbz2.so.$(BZIP2_VERSION): $(BZIP2_DIR)/.unpacked
->> +$(STAGING_DIR)/usr/lib/libbz2.so.$(BZIP2_VERSION): $(BZIP2_DIR)/.unpacked
+On Thu, Mar 06, 2008 at 10:14:16AM -0800, ninevoltz at uclibc.org wrote:
+> Author: ninevoltz
+> Date: 2008-03-06 10:14:14 -0800 (Thu, 06 Mar 2008)
+> New Revision: 21202
 > 
-> Why move libbz2 from /lib to /usr/lib?
-> 
-> 
+> Log:
+> fixed jpeg makefile
+
+(Moved from /lib to /usr/lib.)
+
+What does this fix?
 
 
-I think that this has been the trend for the last year.
-A lot of packages has had this change.
-
-
-Best Regards
-Ulf Samuelsson
+Hamish
+-- 
+Hamish Moffatt VK3SB <hamish@debian.org> <hamish@cloud.net.au>
