@@ -1,18 +1,28 @@
 From: John Voltz <john.voltz@gmail.com>
-Date: Thu, 6 Mar 2008 14:16:11 -0500
-Subject: [Buildroot] Huge update
-Message-ID: <46a136670803061116v7e4e03baj8d11392632c40760@mail.gmail.com>
+Date: Thu, 6 Mar 2008 14:45:34 -0500
+Subject: [Buildroot] (no subject)
+Message-ID: <46a136670803061145v2453608bh255005be6ee0e479@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Well, the huge update from my Google svn is now merged into buildroot's svn.
-As of this moment, they are both identical. I'll keep my Google svn open as
-a testing/play ground and only merge the solid changes upstream.
+ >> +             --with-alsa-devdir=/dev \
 
-John Voltz
+>Why? Better approach to make a proper mdev.conf script which puts alsa
+>devices into the correct place.
+
+>> +             --with-softfloat \
+
+>Architecture dependant?
+
+I didn't know about doing it with mdev. Recently I had been having trouble
+getting mdev to even work with busybox 1.9.x.
+
+I'll fix that arch dependent line pronto.
+
+John
 -------------- next part --------------
 An HTML attachment was scrubbed...
-URL: http://busybox.net/lists/buildroot/attachments/20080306/ed26ef5e/attachment.htm 
+URL: http://busybox.net/lists/buildroot/attachments/20080306/2a05a359/attachment.htm 
