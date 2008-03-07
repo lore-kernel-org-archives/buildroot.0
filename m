@@ -1,29 +1,36 @@
-From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Fri, 07 Mar 2008 14:30:51 +0100
-Subject: [Buildroot] svn commit: trunk/buildroot/package/ncurses
-In-Reply-To: <20080306181915.D86B5120244@busybox.net> (ninevoltz@uclibc.org's
-	message of "Thu\, 6 Mar 2008 10\:19\:15 -0800 \(PST\)")
-References: <20080306181915.D86B5120244@busybox.net>
-Message-ID: <87d4q6acfo.fsf@macbook.be.48ers.dk>
+From: jacmet at uclibc.org <jacmet@uclibc.org>
+Date: Fri,  7 Mar 2008 05:31:07 -0800 (PST)
+Subject: [Buildroot] svn commit: trunk/buildroot/package/sdl
+Message-ID: <20080307133107.C1F36120195@busybox.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "ninevoltz" == ninevoltz  <ninevoltz@uclibc.org> writes:
+Author: jacmet
+Date: 2008-03-07 05:31:07 -0800 (Fri, 07 Mar 2008)
+New Revision: 21267
 
- ninevoltz> Author: ninevoltz
- ninevoltz> Date: 2008-03-06 10:19:15 -0800 (Thu, 06 Mar 2008)
- ninevoltz> New Revision: 21215
+Log:
+sdl: remove wrong comment
 
- ninevoltz> Log:
- ninevoltz> updated ncurses makefile
 
-This seems totally fubar'ed. It now installs .a files under TARGET_DIR
-and usr/share/terminfo is over 6MB!
+Modified:
+   trunk/buildroot/package/sdl/sdl.mk
 
-Please fix otherwise I'll revert the commit.
 
--- 
-Bye, Peter Korsgaard
+Changeset:
+Modified: trunk/buildroot/package/sdl/sdl.mk
+===================================================================
+--- trunk/buildroot/package/sdl/sdl.mk	2008-03-07 10:07:35 UTC (rev 21266)
++++ trunk/buildroot/package/sdl/sdl.mk	2008-03-07 13:31:07 UTC (rev 21267)
+@@ -4,8 +4,6 @@
+ #
+ #############################################################
+ SDL_VERSION:=1.2.12
+-# 1.2.12 is available, but depends on Pulse Audio 0.9
+-# which is not available in buildroot (yet)
+ SDL_SOURCE:=SDL-$(SDL_VERSION).tar.gz
+ SDL_SITE:=http://www.libsdl.org/release
+ SDL_CAT:=$(ZCAT)
