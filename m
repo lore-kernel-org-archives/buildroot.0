@@ -1,83 +1,36 @@
-From: bugs at busybox.net <bugs@busybox.net>
-Date: Fri, 7 Mar 2008 08:11:58 -0800
-Subject: [Buildroot] [buildroot 0002474]: Error building GCC-4.2.1
-Message-ID: <0a57bd7f6e87c3ff3e4c53961cb94a8d@bugs.uclibc.org>
+From: ninevoltz at uclibc.org <ninevoltz@uclibc.org>
+Date: Fri,  7 Mar 2008 08:54:45 -0800 (PST)
+Subject: [Buildroot] svn commit: trunk/buildroot/package
+Message-ID: <20080307165445.F0789120159@busybox.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+Author: ninevoltz
+Date: 2008-03-07 08:54:45 -0800 (Fri, 07 Mar 2008)
+New Revision: 21275
 
-The following issue has been SUBMITTED. 
-====================================================================== 
-http://busybox.net/bugs/view.php?id=2474 
-====================================================================== 
-Reported By:                Olivier
-Assigned To:                buildroot
-====================================================================== 
-Project:                    buildroot
-Issue ID:                   2474
-Category:                   Architecture Specific
-Reproducibility:            always
-Severity:                   block
-Priority:                   normal
-Status:                     assigned
-====================================================================== 
-Date Submitted:             03-07-2008 08:11 PST
-Last Modified:              03-07-2008 08:11 PST
-====================================================================== 
-Summary:                    Error building GCC-4.2.1
-Description: 
-Hello, 
+Log:
+remove .a files from lib directories after install
 
-I want to build a tool chain for a MPIS 32.
-I use the dayly snapshoot of buildroot (07-Mar-2008).
-I have confiured using 'make menuconfig' and when I whant to compile it, I
-have the following error:
-
-/home/buildroot-20080307/toolchain_build_mips/gcc-4.2.1-initial/./gcc/xgcc
--B/home/buildroot-20080307/toolchain_build_mips/gcc-4.2.1-initial/./gcc/
--B/home/buildroot-20080307/build_mips/staging_dir/usr/mips-linux-uclibc/bin/
--B/home/buildroot-20080307/build_mips/staging_dir/usr/mips-linux-uclibc/lib/
--isystem
-/home/buildroot-20080307/build_mips/staging_dir/usr/mips-linux-uclibc/include
--isystem
-/home/buildroot-20080307/build_mips/staging_dir/usr/mips-linux-uclibc/sys-include
--O2 -g -Os -DIN_GCC -DCROSS_COMPILE   -W -Wall -Wwrite-strings
--Wstrict-prototypes -Wmissing-prototypes -Wold-style-definition  -isystem
-./include  -I. -I.
--I/home/buildroot-20080307/toolchain_build_mips/gcc-4.2.1/gcc
--I/home/buildroot-20080307/toolchain_build_mips/gcc-4.2.1/gcc/.
--I/home/buildroot-20080307/toolchain_build_mips/gcc-4.2.1/gcc/../include
--I/home/buildroot-20080307/toolchain_build_mips/gcc-4.2.1/gcc/../libcpp/include
--I/home/buildroot-20080307/toolchain_build_mips/gmp/include
--I/home/buildroot-20080307/toolchain_build_mips/mpfr/include
--I/home/buildroot-20080307/toolchain_build_mips/gcc-4.2.1/gcc/../libdecnumber
--I../libdecnumber  -g0 -finhibit-size-directive -fno-inline-functions
--fno-exceptions -fno-zero-initialized-in-bss -fno-toplevel-reorder   \
-          -c
-/home/buildroot-20080307/toolchain_build_mips/gcc-4.2.1/gcc/crtstuff.c
--DCRT_BEGIN \
-          -o crtbegin.o
-/home/buildroot-20080307/toolchain_build_mips/gcc-4.2.1/gcc/crtstuff.c:1:
-error: unsupported combination: -mabicalls -mabi=eabi
-make[2]: *** [crtbegin.o] Erreur 1
+Modified:
+   trunk/buildroot/package/Makefile.autotools.in
 
 
-I have replaced in the configuration Target ABI = EABI by Target ABI =
-OABI, but the error is still the same.
-
-
-I have put my .config file as attachement.
-
-====================================================================== 
-
-Issue History 
-Date Modified   Username       Field                    Change               
-====================================================================== 
-03-07-08 08:11  Olivier        New Issue                                    
-03-07-08 08:11  Olivier        Status                   new => assigned     
-03-07-08 08:11  Olivier        Assigned To               => buildroot       
-03-07-08 08:11  Olivier        File Added: .config                          
-======================================================================
+Changeset:
+Modified: trunk/buildroot/package/Makefile.autotools.in
+===================================================================
+--- trunk/buildroot/package/Makefile.autotools.in	2008-03-07 14:12:14 UTC (rev 21274)
++++ trunk/buildroot/package/Makefile.autotools.in	2008-03-07 16:54:45 UTC (rev 21275)
+@@ -231,6 +231,9 @@
+ 		rm -rf $(TARGET_DIR)/$$d $(TARGET_DIR)/usr/$$d; \
+ 	done)
+ 	find $(TARGET_DIR) -name '*.la' -delete
++	find $(TARGET_DIR)/lib -name '*.a' -delete
++	find $(TARGET_DIR)/usr/lib -name '*.a' -delete
++
+ 	touch $@
+ 
+ $(BUILD_DIR)/%/.stamp_cleaned:
