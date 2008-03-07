@@ -1,29 +1,36 @@
-From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Fri, 07 Mar 2008 11:00:23 +0100
-Subject: [Buildroot] svn commit:
-	trunk/buildroot/package:editors	editors/vi
-In-Reply-To: <4D6547F3-9672-4606-90EA-88630B3565E9@valka.is> (Arnar Mar Sig's
-	message of "Fri\, 7 Mar 2008 08\:57\:08 +0000")
-References: <ADB1372A-7CAA-41A5-A619-09A9DF0A0D0D@valka.is>
-	<008b01c88027$780e44a0$040514ac@atmel.com>
-	<4D6547F3-9672-4606-90EA-88630B3565E9@valka.is>
-Message-ID: <87tzjic0qw.fsf@macbook.be.48ers.dk>
+From: jacmet at uclibc.org <jacmet@uclibc.org>
+Date: Fri,  7 Mar 2008 02:07:35 -0800 (PST)
+Subject: [Buildroot] svn commit: trunk/buildroot/package/editors/nano
+Message-ID: <20080307100735.DFD33120159@busybox.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Arnar" == Arnar Mar Sig <antab@valka.is> writes:
+Author: jacmet
+Date: 2008-03-07 02:07:35 -0800 (Fri, 07 Mar 2008)
+New Revision: 21266
 
-Hi,
+Log:
+nano: install to /usr/bin
 
- Arnar> This patch moves the other editors nano, uemacs and ed into packages/
- Arnar> editors and also moves the includes from package/Config.in into
- Arnar> package/editors/Config.in. Makes the package/ dir a bit more
- Arnar> organized.
 
-Committed, thanks.
+Modified:
+   trunk/buildroot/package/editors/nano/nano.mk
 
--- 
-Bye, Peter Korsgaard
+
+Changeset:
+Modified: trunk/buildroot/package/editors/nano/nano.mk
+===================================================================
+--- trunk/buildroot/package/editors/nano/nano.mk	2008-03-07 10:02:12 UTC (rev 21265)
++++ trunk/buildroot/package/editors/nano/nano.mk	2008-03-07 10:07:35 UTC (rev 21266)
+@@ -9,7 +9,7 @@
+ NANO_DIR:=$(BUILD_DIR)/nano-$(NANO_VERSION)
+ NANO_CAT:=$(ZCAT)
+ NANO_BINARY:=src/nano
+-NANO_TARGET_BINARY:=bin/nano
++NANO_TARGET_BINARY:=sbin/bin/nano
+ 
+ $(DL_DIR)/$(NANO_SOURCE):
+ 	$(WGET) -P $(DL_DIR) $(NANO_SITE)/$(NANO_SOURCE)
