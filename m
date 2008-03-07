@@ -1,41 +1,39 @@
-From: Arnar Mar Sig <antab@valka.is>
-Date: Fri, 7 Mar 2008 04:43:17 +0000
-Subject: [Buildroot] svn commit: trunk/buildroot/package:
-	editors	editors/vi
-Message-ID: <ADB1372A-7CAA-41A5-A619-09A9DF0A0D0D@valka.is>
+From: ulf at uclibc.org <ulf@uclibc.org>
+Date: Thu,  6 Mar 2008 22:20:09 -0800 (PST)
+Subject: [Buildroot] svn commit: trunk/buildroot/target/device/Atmel:
+	atngw100 atngw100-base atngw100-expande etc...
+Message-ID: <20080307062009.0CAD4120159@busybox.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-> From: Hamish Moffatt <hamish@cloud.net.au>
-> Date: March 6, 2008 11:54:55 PM GMT+00:00
-> To: buildroot at uclibc.org
-> Subject: Re: [Buildroot] svn commit: trunk/buildroot/package:  
-> editors	editors/vim
->>
->> Added:
->>  trunk/buildroot/package/editors/
->
-> Why add hierarchy into the package directory?
->
-It's getting a little crowded in the package/ directory so i added  
-this subdirectory
+Author: ulf
+Date: 2008-03-06 22:20:08 -0800 (Thu, 06 Mar 2008)
+New Revision: 21262
 
-> From: Peter Korsgaard <jacmet@uclibc.org>
-> Date: March 6, 2008 9:33:26 PM GMT+00:00
-> To: buildroot at uclibc.org
-> Subject: Re: [Buildroot] svn commit: trunk/buildroot/package:  
-> editors editors/vim
->
-> There's already a texteditors submenu under packages. Please merge vim
-> with that (and probably move nano+uemacs under editors/).
+Log:
+Move defconfigs to board directory
 
-Didin't see any editors submenu when i added the package, i was going  
-to move the other editor packages under editors/ and move the  
-Config.in includes from packages/Config.in, or are you people against  
-this move?
+Added:
+   trunk/buildroot/target/device/Atmel/atngw100-base/atngw100-base_defconfig
+   trunk/buildroot/target/device/Atmel/atngw100-expanded/atngw100_expanded_defconfig
+   trunk/buildroot/target/device/Atmel/atngw100/atngw100_defconfig
+   trunk/buildroot/target/device/Atmel/atstk1002/atstk1002-no-mplayer_defconfig
+   trunk/buildroot/target/device/Atmel/atstk1002/atstk1002_defconfig
+
+Removed:
+   trunk/buildroot/target/device/Atmel/atngw100-base_defconfig
+   trunk/buildroot/target/device/Atmel/atngw100_defconfig
+   trunk/buildroot/target/device/Atmel/atngw100_expanded_defconfig
+   trunk/buildroot/target/device/Atmel/atstk1002-no-mplayer_defconfig
+   trunk/buildroot/target/device/Atmel/atstk1002_defconfig
 
 
-Arnar Mar Sig
+Changeset:
+
+Sorry, the patch is too large to include (7783 lines).
+Please use ViewCVS to see it!
+
+http://uclibc.org/cgi-bin/viewcvs.cgi?view=rev&root=svn&rev=21262
