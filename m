@@ -1,52 +1,53 @@
-From: Ulf Samuelsson <ulf.samuelsson@atmel.com>
-Date: Fri, 7 Mar 2008 01:09:31 +0100
-Subject: [Buildroot] svn commit: trunk/buildroot/package/libxml2
-References: <20080306181632.4CC1B1201F9@busybox.net>
-Message-ID: <051a01c87feb$16251430$030514ac@atmel.com>
+From: John Voltz <john.voltz@gmail.com>
+Date: Thu, 6 Mar 2008 20:10:41 -0500
+Subject: [Buildroot] Huge update
+Message-ID: <46a136670803061710ka7f2c40u223e1348b1a04d21@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+ > --- trunk/buildroot/scripts/build-ext3-img
+ (rev 0)
+> +++ trunk/buildroot/scripts/build-ext3-img    2008-03-06 17:52:37 UTC (rev
+21176)
 
+Why isn't this just a normal target? Or an option to the current ext2
+target?
 
+I would like to do that once I find a good way to do it. It will create a
+bootable ext3 image with grub that can be run directly with qemu or vmware.
+I've been trying to get this to work with minimal success. I don't think
+anyone has built a buildroot image for x86 since uClibc 0.9.27 was around,
+it doesn't seem to work.
 
-> Author: ninevoltz
-> Date: 2008-03-06 10:16:30 -0800 (Thu, 06 Mar 2008)
-> New Revision: 21208
-> 
-> Log:
-> updated libxml2 makefile
-> 
-> Modified:
->   trunk/buildroot/package/libxml2/libxml2.mk
-> 
-> 
-> Changeset:
-> Modified: trunk/buildroot/package/libxml2/libxml2.mk
-> ===================================================================
-> --- trunk/buildroot/package/libxml2/libxml2.mk 2008-03-06 18:16:05 UTC (rev 21207)
-> +++ trunk/buildroot/package/libxml2/libxml2.mk 2008-03-06 18:16:30 UTC (rev 21208)
-> @@ -4,107 +4,26 @@
-> #
-> #############################################################
-> 
-> -LIBXML2_VERSION=2.6.29
-> -LIBXML2_SOURCE=libxml2-sources-$(LIBXML2_VERSION).tar.gz
-> -LIBXML2_SITE=ftp://xmlsoft.org/libxml2
-> -LIBXML2_DIR=$(BUILD_DIR)/libxml2-$(LIBXML2_VERSION)
-> -LIBXML2_CAT:=$(ZCAT)
-> +LIBXML2_VERSION = 2.6.29
-> +LIBXML2_SOURCE = libxml2-sources-$(LIBXML2_VERSION).tar.gz
-> +LIBXML2_SITE = ftp://xmlsoft.org/libxml2
-> +LIBXML2_AUTORECONF = NO
-> +LIBXML2_INSTALL_STAGING = YES
-> +LIBXML2_INSTALL_TARGET = YES
-> 
+The move to /usr/lib was partly because a few embedded systems have the root
+file system stored in a smallish flash device on the main board, sufficient
+to boot the kernel, start networking, and get into a shell. The /usr
+directory can be mounted with a removable device such as an SD card and hold
+more enormous contents. Also, a lot of regular packages expect to find most
+of these libraries in /usr/lib, from what I've experienced.
 
-Please don't  add extra whitespace like this, or you
-get Bernhard on your case faster than boiled aspargus.
+> Added:
+>    trunk/buildroot/package/editors/
 
-Best Regards
-Ulf Samuelsson 
+Why add hierarchy into the package directory?
+
+It's getting a bit crowded in there I think. But this wasn't my work, it was
+Arnar Mar Sigurdsson from Valka Ehf.
+
+> fixed jpeg makefile
+
+(Moved from /lib to /usr/lib.)
+
+What does this fix?
+
+I forgot now. Some other package, probably glib or gtk, placed it in it's
+package config flags as /usr/lib and then other packages couldn't find it.
+Hard coded paths are the bestest.
+
+John
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: http://busybox.net/lists/buildroot/attachments/20080306/9568a53c/attachment.htm 
