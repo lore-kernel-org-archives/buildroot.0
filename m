@@ -1,39 +1,41 @@
-From: ulf at uclibc.org <ulf@uclibc.org>
-Date: Thu,  6 Mar 2008 22:20:09 -0800 (PST)
-Subject: [Buildroot] svn commit: trunk/buildroot/target/device/Atmel:
-	atngw100 atngw100-base atngw100-expande etc...
-Message-ID: <20080307062009.0CAD4120159@busybox.net>
+From: bugs at busybox.net <bugs@busybox.net>
+Date: Thu, 6 Mar 2008 22:54:51 -0800
+Subject: [Buildroot] [buildroot 0002464]: Fakeroot 1.9
+Message-ID: <0d7f9fc87a5837d9aa03f54425a90772@bugs.uclibc.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Author: ulf
-Date: 2008-03-06 22:20:08 -0800 (Thu, 06 Mar 2008)
-New Revision: 21262
 
-Log:
-Move defconfigs to board directory
+The following issue has been SUBMITTED. 
+====================================================================== 
+http://busybox.net/bugs/view.php?id=2464 
+====================================================================== 
+Reported By:                noel_v
+Assigned To:                buildroot
+====================================================================== 
+Project:                    buildroot
+Issue ID:                   2464
+Category:                   Other
+Reproducibility:            always
+Severity:                   block
+Priority:                   normal
+Status:                     assigned
+====================================================================== 
+Date Submitted:             03-06-2008 22:54 PST
+Last Modified:              03-06-2008 22:54 PST
+====================================================================== 
+Summary:                    Fakeroot 1.9
+Description: 
+No longer available from debian ( compiling with 1.9.3 fails)
+====================================================================== 
 
-Added:
-   trunk/buildroot/target/device/Atmel/atngw100-base/atngw100-base_defconfig
-   trunk/buildroot/target/device/Atmel/atngw100-expanded/atngw100_expanded_defconfig
-   trunk/buildroot/target/device/Atmel/atngw100/atngw100_defconfig
-   trunk/buildroot/target/device/Atmel/atstk1002/atstk1002-no-mplayer_defconfig
-   trunk/buildroot/target/device/Atmel/atstk1002/atstk1002_defconfig
-
-Removed:
-   trunk/buildroot/target/device/Atmel/atngw100-base_defconfig
-   trunk/buildroot/target/device/Atmel/atngw100_defconfig
-   trunk/buildroot/target/device/Atmel/atngw100_expanded_defconfig
-   trunk/buildroot/target/device/Atmel/atstk1002-no-mplayer_defconfig
-   trunk/buildroot/target/device/Atmel/atstk1002_defconfig
-
-
-Changeset:
-
-Sorry, the patch is too large to include (7783 lines).
-Please use ViewCVS to see it!
-
-http://uclibc.org/cgi-bin/viewcvs.cgi?view=rev&root=svn&rev=21262
+Issue History 
+Date Modified   Username       Field                    Change               
+====================================================================== 
+03-06-08 22:54  noel_v         New Issue                                    
+03-06-08 22:54  noel_v         Status                   new => assigned     
+03-06-08 22:54  noel_v         Assigned To               => buildroot       
+======================================================================
