@@ -1,26 +1,27 @@
-From: Ulf Samuelsson <ulf.samuelsson@atmel.com>
-Date: Fri, 7 Mar 2008 08:47:11 +0100
-Subject: [Buildroot] svn commit:
-	trunk/buildroot/package:editors	editors/vi
-References: <ADB1372A-7CAA-41A5-A619-09A9DF0A0D0D@valka.is>
-Message-ID: <008b01c88027$780e44a0$040514ac@atmel.com>
+From: Hans-Christian Egtvedt <hcegtvedt@atmel.com>
+Date: Fri, 07 Mar 2008 09:21:43 +0100
+Subject: [Buildroot] Huge update
+In-Reply-To: <46a136670803061116v7e4e03baj8d11392632c40760@mail.gmail.com>
+References: <46a136670803061116v7e4e03baj8d11392632c40760@mail.gmail.com>
+Message-ID: <1204878103.9461.85.camel@localhost>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>> Added:
->>>  trunk/buildroot/package/editors/
->>
->> Why add hierarchy into the package directory?
->>
-> It's getting a little crowded in the package/ directory so i added  
-> this subdirectory
+On Thu, 2008-03-06 at 14:16 -0500, John Voltz wrote:
+> Well, the huge update from my Google svn is now merged into
+> buildroot's svn. As of this moment, they are both identical. I'll keep
+> my Google svn open as a testing/play ground and only merge the solid
+> changes upstream.
 > 
 
-Guess what, searching "package/*/*.mk" will not find anything related to editors.
+You could also make your own branch in buildroot SVN for testing out new
+stuff before you commit them as well ;)
 
+Thanks for the major update.
 
-Best Regards
-Ulf Samuelsson
+-- 
+With kind regards,
+Hans-Christian Egtvedt, Applications Engineer
