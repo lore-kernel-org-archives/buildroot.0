@@ -1,41 +1,39 @@
-From: bugs at busybox.net <bugs@busybox.net>
-Date: Thu, 6 Mar 2008 22:54:51 -0800
-Subject: [Buildroot] [buildroot 0002464]: Fakeroot 1.9
-Message-ID: <0d7f9fc87a5837d9aa03f54425a90772@bugs.uclibc.org>
+From: ulf at uclibc.org <ulf@uclibc.org>
+Date: Thu,  6 Mar 2008 23:24:36 -0800 (PST)
+Subject: [Buildroot] svn commit: trunk/buildroot/target: device/Atmel
+	device/Atmel/u-boot
+Message-ID: <20080307072436.6DA70120159@busybox.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+Author: ulf
+Date: 2008-03-06 23:24:35 -0800 (Thu, 06 Mar 2008)
+New Revision: 21263
 
-The following issue has been SUBMITTED. 
-====================================================================== 
-http://busybox.net/bugs/view.php?id=2464 
-====================================================================== 
-Reported By:                noel_v
-Assigned To:                buildroot
-====================================================================== 
-Project:                    buildroot
-Issue ID:                   2464
-Category:                   Other
-Reproducibility:            always
-Severity:                   block
-Priority:                   normal
-Status:                     assigned
-====================================================================== 
-Date Submitted:             03-06-2008 22:54 PST
-Last Modified:              03-06-2008 22:54 PST
-====================================================================== 
-Summary:                    Fakeroot 1.9
-Description: 
-No longer available from debian ( compiling with 1.9.3 fails)
-====================================================================== 
+Log:
+revert bad U-Boot patch
 
-Issue History 
-Date Modified   Username       Field                    Change               
-====================================================================== 
-03-06-08 22:54  noel_v         New Issue                                    
-03-06-08 22:54  noel_v         Status                   new => assigned     
-03-06-08 22:54  noel_v         Assigned To               => buildroot       
-======================================================================
+Added:
+   trunk/buildroot/target/device/Atmel/u-boot/u-boot-1.3.0-100-atmel.2.patch.bad
+   trunk/buildroot/target/device/Atmel/u-boot/u-boot-1.3.0.mk.bad
+   trunk/buildroot/target/device/Atmel/u-boot/u-boot.mk
+
+Removed:
+   trunk/buildroot/target/device/Atmel/u-boot/u-boot-1.3.0-100-atmel.2.patch
+   trunk/buildroot/target/device/Atmel/u-boot/u-boot.mk
+
+Modified:
+   trunk/buildroot/target/Config.in
+   trunk/buildroot/target/device/Atmel/Config.in
+   trunk/buildroot/target/device/Atmel/u-boot/Config.in
+
+
+Changeset:
+
+Sorry, the patch is too large to include (7126 lines).
+Please use ViewCVS to see it!
+
+http://uclibc.org/cgi-bin/viewcvs.cgi?view=rev&root=svn&rev=21263
