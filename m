@@ -1,39 +1,45 @@
-From: ulf at uclibc.org <ulf@uclibc.org>
-Date: Thu,  6 Mar 2008 23:24:36 -0800 (PST)
-Subject: [Buildroot] svn commit: trunk/buildroot/target: device/Atmel
-	device/Atmel/u-boot
-Message-ID: <20080307072436.6DA70120159@busybox.net>
+From: Ulf Samuelsson <ulf.samuelsson@atmel.com>
+Date: Fri, 7 Mar 2008 08:47:05 +0100
+Subject: [Buildroot] Huge update
+References: <46a136670803061710ka7f2c40u223e1348b1a04d21@mail.gmail.com>
+Message-ID: <008a01c88027$7736d060$040514ac@atmel.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Author: ulf
-Date: 2008-03-06 23:24:35 -0800 (Thu, 06 Mar 2008)
-New Revision: 21263
+Hi John.
+Your U-Boot patches unfortunately breaks the AT91 build.
+AT91 is not well supported in the main U-Boot trunk.
+The U-Boot build in target/device/Atmel/u-boot will therefore download
+a prepatched version of u-boot (instead of adding 100s of kB in form
+of patches).
 
-Log:
-revert bad U-Boot patch
+Upgrading to mainstream u-boot will therefore ensure that almost
+none of the AT91 processors will build.
+Also the configuration items for u-boot are irrelevant for mainstream.
 
-Added:
-   trunk/buildroot/target/device/Atmel/u-boot/u-boot-1.3.0-100-atmel.2.patch.bad
-   trunk/buildroot/target/device/Atmel/u-boot/u-boot-1.3.0.mk.bad
-   trunk/buildroot/target/device/Atmel/u-boot/u-boot.mk
+I have disabled your u-boot, but the files remain.
+Please create a separate u-boot directory outside the Atmel directory and
 
-Removed:
-   trunk/buildroot/target/device/Atmel/u-boot/u-boot-1.3.0-100-atmel.2.patch
-   trunk/buildroot/target/device/Atmel/u-boot/u-boot.mk
+1) ensure that you do not have any conflicts with the prepatched version
+2) AT91 u-boot can selected inside the AT91 target configuration.
+3) AVR32 should use the generic u-boot.
 
-Modified:
-   trunk/buildroot/target/Config.in
-   trunk/buildroot/target/device/Atmel/Config.in
-   trunk/buildroot/target/device/Atmel/u-boot/Config.in
+once fixed, resubmit.
 
 
-Changeset:
+It will be more complex in the future, since the AT91CAP9
+will probably have good u-boot support in the near future,
+so ideally the user should have a choice between
+building the generic and the prepatched version.
 
-Sorry, the patch is too large to include (7126 lines).
-Please use ViewCVS to see it!
+Personally I think that putting the bootloader configuration
+inside the root fs build is wrong.
+Makes more sense to me to have it in the target.
 
-http://uclibc.org/cgi-bin/viewcvs.cgi?view=rev&root=svn&rev=21263
+Don't be dismayed by this, keep the patches coming.
+
+Best Regards
+Ulf Samuelsson
