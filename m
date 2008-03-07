@@ -1,44 +1,41 @@
-From: Hamish Moffatt <hamish@cloud.net.au>
-Date: Fri, 7 Mar 2008 13:57:00 +1100
-Subject: [Buildroot] Huge update
-In-Reply-To: <46a136670803061710ka7f2c40u223e1348b1a04d21@mail.gmail.com>
-References: <46a136670803061710ka7f2c40u223e1348b1a04d21@mail.gmail.com>
-Message-ID: <20080307025700.GA31483@cloud.net.au>
+From: Arnar Mar Sig <antab@valka.is>
+Date: Fri, 7 Mar 2008 04:43:17 +0000
+Subject: [Buildroot] svn commit: trunk/buildroot/package:
+	editors	editors/vi
+Message-ID: <ADB1372A-7CAA-41A5-A619-09A9DF0A0D0D@valka.is>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Thu, Mar 06, 2008 at 08:10:41PM -0500, John Voltz wrote:
->  > --- trunk/buildroot/scripts/build-ext3-img
->  (rev 0)
-> > +++ trunk/buildroot/scripts/build-ext3-img    2008-03-06 17:52:37 UTC (rev
-> 21176)
-> 
-> Why isn't this just a normal target? Or an option to the current ext2
-> target?
-> 
-> I would like to do that once I find a good way to do it. It will create a
-> bootable ext3 image with grub that can be run directly with qemu or vmware.
+> From: Hamish Moffatt <hamish@cloud.net.au>
+> Date: March 6, 2008 11:54:55 PM GMT+00:00
+> To: buildroot at uclibc.org
+> Subject: Re: [Buildroot] svn commit: trunk/buildroot/package:  
+> editors	editors/vim
+>>
+>> Added:
+>>  trunk/buildroot/package/editors/
+>
+> Why add hierarchy into the package directory?
+>
+It's getting a little crowded in the package/ directory so i added  
+this subdirectory
 
-Right, I see that it's building a whole hard disk image rather than just
-an ext3 file system image.
+> From: Peter Korsgaard <jacmet@uclibc.org>
+> Date: March 6, 2008 9:33:26 PM GMT+00:00
+> To: buildroot at uclibc.org
+> Subject: Re: [Buildroot] svn commit: trunk/buildroot/package:  
+> editors editors/vim
+>
+> There's already a texteditors submenu under packages. Please merge vim
+> with that (and probably move nano+uemacs under editors/).
 
-> The move to /usr/lib was partly because a few embedded systems have the root
-> file system stored in a smallish flash device on the main board, sufficient
-
-OK. I'm a bit concerned that we might have some binaries installed in
-/bin or /sbin which need those libraries that moved.
-
-Also we don't any targets (image generators) capable of generating
-separate root and /usr images afaik. But they can be developed later.
-
-
-Thanks for all your patches by the way. I don't mean to be a harsh
-critic.
+Didin't see any editors submenu when i added the package, i was going  
+to move the other editor packages under editors/ and move the  
+Config.in includes from packages/Config.in, or are you people against  
+this move?
 
 
-Hamish
--- 
-Hamish Moffatt VK3SB <hamish@debian.org> <hamish@cloud.net.au>
+Arnar Mar Sig
