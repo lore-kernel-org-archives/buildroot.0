@@ -1,36 +1,29 @@
-From: jacmet at uclibc.org <jacmet@uclibc.org>
-Date: Fri,  7 Mar 2008 02:07:35 -0800 (PST)
-Subject: [Buildroot] svn commit: trunk/buildroot/package/editors/nano
-Message-ID: <20080307100735.DFD33120159@busybox.net>
+From: Peter Korsgaard <jacmet@uclibc.org>
+Date: Fri, 07 Mar 2008 14:30:51 +0100
+Subject: [Buildroot] svn commit: trunk/buildroot/package/ncurses
+In-Reply-To: <20080306181915.D86B5120244@busybox.net> (ninevoltz@uclibc.org's
+	message of "Thu\, 6 Mar 2008 10\:19\:15 -0800 \(PST\)")
+References: <20080306181915.D86B5120244@busybox.net>
+Message-ID: <87d4q6acfo.fsf@macbook.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Author: jacmet
-Date: 2008-03-07 02:07:35 -0800 (Fri, 07 Mar 2008)
-New Revision: 21266
+>>>>> "ninevoltz" == ninevoltz  <ninevoltz@uclibc.org> writes:
 
-Log:
-nano: install to /usr/bin
+ ninevoltz> Author: ninevoltz
+ ninevoltz> Date: 2008-03-06 10:19:15 -0800 (Thu, 06 Mar 2008)
+ ninevoltz> New Revision: 21215
 
+ ninevoltz> Log:
+ ninevoltz> updated ncurses makefile
 
-Modified:
-   trunk/buildroot/package/editors/nano/nano.mk
+This seems totally fubar'ed. It now installs .a files under TARGET_DIR
+and usr/share/terminfo is over 6MB!
 
+Please fix otherwise I'll revert the commit.
 
-Changeset:
-Modified: trunk/buildroot/package/editors/nano/nano.mk
-===================================================================
---- trunk/buildroot/package/editors/nano/nano.mk	2008-03-07 10:02:12 UTC (rev 21265)
-+++ trunk/buildroot/package/editors/nano/nano.mk	2008-03-07 10:07:35 UTC (rev 21266)
-@@ -9,7 +9,7 @@
- NANO_DIR:=$(BUILD_DIR)/nano-$(NANO_VERSION)
- NANO_CAT:=$(ZCAT)
- NANO_BINARY:=src/nano
--NANO_TARGET_BINARY:=bin/nano
-+NANO_TARGET_BINARY:=sbin/bin/nano
- 
- $(DL_DIR)/$(NANO_SOURCE):
- 	$(WGET) -P $(DL_DIR) $(NANO_SITE)/$(NANO_SOURCE)
+-- 
+Bye, Peter Korsgaard
