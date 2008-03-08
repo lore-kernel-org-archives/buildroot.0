@@ -1,7 +1,7 @@
 From: ninevoltz at uclibc.org <ninevoltz@uclibc.org>
-Date: Sat,  8 Mar 2008 09:31:06 -0800 (PST)
-Subject: [Buildroot] svn commit: trunk/buildroot/package/x11r7/xlib_libX11
-Message-ID: <20080308173106.0D08112C7B6@busybox.net>
+Date: Sat,  8 Mar 2008 13:33:41 -0800 (PST)
+Subject: [Buildroot] svn commit: trunk/buildroot/package/x11r7/xlib_libXt
+Message-ID: <20080308213341.148F912C90E@busybox.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -9,55 +9,66 @@ Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
 Author: ninevoltz
-Date: 2008-03-08 09:31:05 -0800 (Sat, 08 Mar 2008)
-New Revision: 21276
+Date: 2008-03-08 13:33:40 -0800 (Sat, 08 Mar 2008)
+New Revision: 21277
 
 Log:
-added missing patch for libX11
+added missing patch
 
 Added:
-   trunk/buildroot/package/x11r7/xlib_libX11/xlib_libX11-1.1.3-makekeys-nocc.patch
+   trunk/buildroot/package/x11r7/xlib_libXt/xlib_libXt-1.0.4-makestrs-nocc.patch
 
 
 Changeset:
-Added: trunk/buildroot/package/x11r7/xlib_libX11/xlib_libX11-1.1.3-makekeys-nocc.patch
+Added: trunk/buildroot/package/x11r7/xlib_libXt/xlib_libXt-1.0.4-makestrs-nocc.patch
 ===================================================================
---- trunk/buildroot/package/x11r7/xlib_libX11/xlib_libX11-1.1.3-makekeys-nocc.patch	                        (rev 0)
-+++ trunk/buildroot/package/x11r7/xlib_libX11/xlib_libX11-1.1.3-makekeys-nocc.patch	2008-03-08 17:31:05 UTC (rev 21276)
-@@ -0,0 +1,36 @@
-+--- a/src/util/Makefile.in.orig	2008-01-30 10:54:59.000000000 -0500
-++++ b/src/util/Makefile.in	2008-01-30 10:54:16.000000000 -0500
-+@@ -50,8 +50,8 @@ PROGRAMS = $(noinst_PROGRAMS)
-+ makekeys_SOURCES = makekeys.c
-+ makekeys_OBJECTS = makekeys-makekeys.$(OBJEXT)
-+ makekeys_LDADD = $(LDADD)
-+-makekeys_LINK = $(LIBTOOL) --tag=CC $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) \
-+-	--mode=link $(CCLD) $(makekeys_CFLAGS) $(CFLAGS) $(AM_LDFLAGS) \
+--- trunk/buildroot/package/x11r7/xlib_libXt/xlib_libXt-1.0.4-makestrs-nocc.patch	                        (rev 0)
++++ trunk/buildroot/package/x11r7/xlib_libXt/xlib_libXt-1.0.4-makestrs-nocc.patch	2008-03-08 21:33:40 UTC (rev 21277)
+@@ -0,0 +1,47 @@
++--- a/util/Makefile.in.orig	2008-01-30 11:06:09.000000000 -0500
+++++ b/util/Makefile.in	2008-01-30 11:07:23.000000000 -0500
++@@ -64,8 +64,11 @@ LTCOMPILE = $(LIBTOOL) $(LT_QUIET) --tag
++ 	$(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) \
++ 	$(CPPFLAGS) $(AM_CFLAGS) $(CFLAGS)
++ CCLD = $(CC)
 ++HOST_CC = gcc
-++makekeys_LINK = $(HOST_CC) $(makekeys_CFLAGS) $(CFLAGS) $(AM_LDFLAGS) \
-+ 	$(LDFLAGS) -o $@
-+ DEFAULT_INCLUDES = -I. -I$(top_builddir)/src -I$(top_builddir)/include/X11 at am__isrc@
-+ depcomp = $(SHELL) $(top_srcdir)/depcomp
-+@@ -307,18 +307,18 @@ distclean-compile:
-+ @am__fastdepCC_FALSE@	$(LTCOMPILE) -c -o $@ $<
++ LINK = $(LIBTOOL) $(LT_QUIET) --tag=CC --mode=link $(CCLD) \
++ 	$(AM_CFLAGS) $(CFLAGS) $(AM_LDFLAGS) $(LDFLAGS) -o $@
+++makestrs_LINK = $(HOST_CC) \
+++	$(AM_CFLAGS) $(CFLAGS) $(AM_LDFLAGS) $(LDFLAGS) -o $@
++ SOURCES = $(makestrs_SOURCES)
++ DIST_SOURCES = $(makestrs_SOURCES)
++ am__vpath_adj_setup = srcdirstrip=`echo "$(srcdir)" | sed 's|.|.|g'`;
++@@ -312,7 +315,7 @@ clean-noinstPROGRAMS:
++ makestrs$(EXEEXT): $(makestrs_OBJECTS) $(makestrs_DEPENDENCIES) 
++ 	@@AMPRETTYECHO@ '  [LD        ]  makestrs$(EXEEXT)'
++ 	@rm -f makestrs$(EXEEXT)
++-	@AMSHOWCMDSAT@$(LINK) $(makestrs_LDFLAGS) $(makestrs_OBJECTS) $(makestrs_LDADD) $(LIBS)
+++	@AMSHOWCMDSAT@$(makestrs_LINK) $(makestrs_LDFLAGS) $(makestrs_OBJECTS) $(makestrs_LDADD) $(LIBS)
 + 
-+ makekeys-makekeys.o: makekeys.c
-+- at am__fastdepCC_TRUE@	$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(makekeys_CFLAGS) $(CFLAGS) -MT makekeys-makekeys.o -MD -MP -MF $(DEPDIR)/makekeys-makekeys.Tpo -c -o makekeys-makekeys.o `test -f 'makekeys.c' || echo '$(srcdir)/'`makekeys.c
-++ at am__fastdepCC_TRUE@	$(HOST_CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(makekeys_CFLAGS) $(CFLAGS) -MT makekeys-makekeys.o -MD -MP -MF $(DEPDIR)/makekeys-makekeys.Tpo -c -o makekeys-makekeys.o `test -f 'makekeys.c' || echo '$(srcdir)/'`makekeys.c
-+ @am__fastdepCC_TRUE@	mv -f $(DEPDIR)/makekeys-makekeys.Tpo $(DEPDIR)/makekeys-makekeys.Po
-+ @AMDEP_TRUE@@am__fastdepCC_FALSE@	source='makekeys.c' object='makekeys-makekeys.o' libtool=no @AMDEPBACKSLASH@
-+ @AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
-+- at am__fastdepCC_FALSE@	$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(makekeys_CFLAGS) $(CFLAGS) -c -o makekeys-makekeys.o `test -f 'makekeys.c' || echo '$(srcdir)/'`makekeys.c
-++ at am__fastdepCC_FALSE@	$(HOST_CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(makekeys_CFLAGS) $(CFLAGS) -c -o makekeys-makekeys.o `test -f 'makekeys.c' || echo '$(srcdir)/'`makekeys.c
++ mostlyclean-compile:
++ 	@@AMPRETTYECHO@ '  [RM        ]  *.$(OBJEXT)'
++@@ -350,19 +353,19 @@ distclean-compile:
 + 
-+ makekeys-makekeys.obj: makekeys.c
-+- at am__fastdepCC_TRUE@	$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(makekeys_CFLAGS) $(CFLAGS) -MT makekeys-makekeys.obj -MD -MP -MF $(DEPDIR)/makekeys-makekeys.Tpo -c -o makekeys-makekeys.obj `if test -f 'makekeys.c'; then $(CYGPATH_W) 'makekeys.c'; else $(CYGPATH_W) '$(srcdir)/makekeys.c'; fi`
-++ at am__fastdepCC_TRUE@	$(HOST_CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(makekeys_CFLAGS) $(CFLAGS) -MT makekeys-makekeys.obj -MD -MP -MF $(DEPDIR)/makekeys-makekeys.Tpo -c -o makekeys-makekeys.obj `if test -f 'makekeys.c'; then $(CYGPATH_W) 'makekeys.c'; else $(CYGPATH_W) '$(srcdir)/makekeys.c'; fi`
-+ @am__fastdepCC_TRUE@	mv -f $(DEPDIR)/makekeys-makekeys.Tpo $(DEPDIR)/makekeys-makekeys.Po
-+ @AMDEP_TRUE@@am__fastdepCC_FALSE@	source='makekeys.c' object='makekeys-makekeys.obj' libtool=no @AMDEPBACKSLASH@
++ makestrs-makestrs.o: makestrs.c
++ 	@@AMPRETTYECHO@ '  [C         ]  makestrs.c'
++- at am__fastdepCC_TRUE@	@AMSHOWCMDSAT at if $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(makestrs_CFLAGS) $(CFLAGS) -MT makestrs-makestrs.o -MD -MP -MF "$(DEPDIR)/makestrs-makestrs.Tpo" -c -o makestrs-makestrs.o `test -f 'makestrs.c' || echo '$(srcdir)/'`makestrs.c; \
+++ at am__fastdepCC_TRUE@	@AMSHOWCMDSAT at if $(HOST_CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(makestrs_CFLAGS) $(CFLAGS) -MT makestrs-makestrs.o -MD -MP -MF "$(DEPDIR)/makestrs-makestrs.Tpo" -c -o makestrs-makestrs.o `test -f 'makestrs.c' || echo '$(srcdir)/'`makestrs.c; \
++ @am__fastdepCC_TRUE@	then mv -f "$(DEPDIR)/makestrs-makestrs.Tpo" "$(DEPDIR)/makestrs-makestrs.Po"; else rm -f "$(DEPDIR)/makestrs-makestrs.Tpo"; exit 1; fi
++ @AMDEP_TRUE@@am__fastdepCC_FALSE@	@AMSHOWCMDSAT at source='makestrs.c' object='makestrs-makestrs.o' libtool=no @AMDEPBACKSLASH@
 + @AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
-+- at am__fastdepCC_FALSE@	$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(makekeys_CFLAGS) $(CFLAGS) -c -o makekeys-makekeys.obj `if test -f 'makekeys.c'; then $(CYGPATH_W) 'makekeys.c'; else $(CYGPATH_W) '$(srcdir)/makekeys.c'; fi`
-++@am__fastdepCC_FALSE@	$(HOST_CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(makekeys_CFLAGS) $(CFLAGS) -c -o makekeys-makekeys.obj `if test -f 'makekeys.c'; then $(CYGPATH_W) 'makekeys.c'; else $(CYGPATH_W) '$(srcdir)/makekeys.c'; fi`
++- at am__fastdepCC_FALSE@	@AMDEPSHOWCMDSAT@$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(makestrs_CFLAGS) $(CFLAGS) -c -o makestrs-makestrs.o `test -f 'makestrs.c' || echo '$(srcdir)/'`makestrs.c
+++ at am__fastdepCC_FALSE@	@AMDEPSHOWCMDSAT@$(HOST_CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(makestrs_CFLAGS) $(CFLAGS) -c -o makestrs-makestrs.o `test -f 'makestrs.c' || echo '$(srcdir)/'`makestrs.c
++ 
++ makestrs-makestrs.obj: makestrs.c
++ 	@@AMPRETTYECHO@ '  [C         ]  makestrs.c'
++- at am__fastdepCC_TRUE@	@AMSHOWCMDSAT at if $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(makestrs_CFLAGS) $(CFLAGS) -MT makestrs-makestrs.obj -MD -MP -MF "$(DEPDIR)/makestrs-makestrs.Tpo" -c -o makestrs-makestrs.obj `if test -f 'makestrs.c'; then $(CYGPATH_W) 'makestrs.c'; else $(CYGPATH_W) '$(srcdir)/makestrs.c'; fi`; \
+++ at am__fastdepCC_TRUE@	@AMSHOWCMDSAT at if $(HOST_CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(makestrs_CFLAGS) $(CFLAGS) -MT makestrs-makestrs.obj -MD -MP -MF "$(DEPDIR)/makestrs-makestrs.Tpo" -c -o makestrs-makestrs.obj `if test -f 'makestrs.c'; then $(CYGPATH_W) 'makestrs.c'; else $(CYGPATH_W) '$(srcdir)/makestrs.c'; fi`; \
++ @am__fastdepCC_TRUE@	then mv -f "$(DEPDIR)/makestrs-makestrs.Tpo" "$(DEPDIR)/makestrs-makestrs.Po"; else rm -f "$(DEPDIR)/makestrs-makestrs.Tpo"; exit 1; fi
++ @AMDEP_TRUE@@am__fastdepCC_FALSE@	@AMSHOWCMDSAT at source='makestrs.c' object='makestrs-makestrs.obj' libtool=no @AMDEPBACKSLASH@
++ @AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
++- at am__fastdepCC_FALSE@	@AMDEPSHOWCMDSAT@$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(makestrs_CFLAGS) $(CFLAGS) -c -o makestrs-makestrs.obj `if test -f 'makestrs.c'; then $(CYGPATH_W) 'makestrs.c'; else $(CYGPATH_W) '$(srcdir)/makestrs.c'; fi`
+++ at am__fastdepCC_FALSE@	@AMDEPSHOWCMDSAT@$(HOST_CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(makestrs_CFLAGS) $(CFLAGS) -c -o makestrs-makestrs.obj `if test -f 'makestrs.c'; then $(CYGPATH_W) 'makestrs.c'; else $(CYGPATH_W) '$(srcdir)/makestrs.c'; fi`
 + 
 + mostlyclean-libtool:
-+ 	-rm -f *.lo
++ 	@@AMPRETTYECHO@ '  [RM        ]  *.lo'
