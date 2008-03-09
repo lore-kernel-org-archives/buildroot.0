@@ -1,74 +1,83 @@
-From: ninevoltz at uclibc.org <ninevoltz@uclibc.org>
-Date: Sat,  8 Mar 2008 13:33:41 -0800 (PST)
-Subject: [Buildroot] svn commit: trunk/buildroot/package/x11r7/xlib_libXt
-Message-ID: <20080308213341.148F912C90E@busybox.net>
+From: bugs at busybox.net <bugs@busybox.net>
+Date: Sat, 8 Mar 2008 17:09:29 -0800
+Subject: [Buildroot] [buildroot 0002494]: Attempt to build usb tools fails
+	by missing libusb.so
+Message-ID: <0e304e81194e3a264db151c91af98f77@busybox.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Author: ninevoltz
-Date: 2008-03-08 13:33:40 -0800 (Sat, 08 Mar 2008)
-New Revision: 21277
 
-Log:
-added missing patch
+A NOTE has been added to this issue. 
+====================================================================== 
+http://busybox.net/bugs/view.php?id=2494 
+====================================================================== 
+Reported By:                ucdamiano
+Assigned To:                buildroot
+====================================================================== 
+Project:                    buildroot
+Issue ID:                   2494
+Category:                   Architecture Specific
+Reproducibility:            always
+Severity:                   block
+Priority:                   normal
+Status:                     assigned
+====================================================================== 
+Date Submitted:             03-08-2008 04:29 PST
+Last Modified:              03-08-2008 17:09 PST
+====================================================================== 
+Summary:                    Attempt to build usb tools fails by missing
+libusb.so
+Description: 
+I try to build USB libraries packages on ARM S3C2410, the vanilla
+compilation is OK and the generated systems works (only using OABi, but it
+works) but when I try to add support for USB I get the following error (see
+additional information)
+====================================================================== 
 
-Added:
-   trunk/buildroot/package/x11r7/xlib_libXt/xlib_libXt-1.0.4-makestrs-nocc.patch
+---------------------------------------------------------------------- 
+ ucdamiano - 03-08-08 06:23  
+---------------------------------------------------------------------- 
+It is possible to continue by issuing
 
+cp build_arm/staging_dir/lib/libusb.so build_arm/staging_dir/usr/lib 
 
-Changeset:
-Added: trunk/buildroot/package/x11r7/xlib_libXt/xlib_libXt-1.0.4-makestrs-nocc.patch
-===================================================================
---- trunk/buildroot/package/x11r7/xlib_libXt/xlib_libXt-1.0.4-makestrs-nocc.patch	                        (rev 0)
-+++ trunk/buildroot/package/x11r7/xlib_libXt/xlib_libXt-1.0.4-makestrs-nocc.patch	2008-03-08 21:33:40 UTC (rev 21277)
-@@ -0,0 +1,47 @@
-+--- a/util/Makefile.in.orig	2008-01-30 11:06:09.000000000 -0500
-++++ b/util/Makefile.in	2008-01-30 11:07:23.000000000 -0500
-+@@ -64,8 +64,11 @@ LTCOMPILE = $(LIBTOOL) $(LT_QUIET) --tag
-+ 	$(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) \
-+ 	$(CPPFLAGS) $(AM_CFLAGS) $(CFLAGS)
-+ CCLD = $(CC)
-++HOST_CC = gcc
-+ LINK = $(LIBTOOL) $(LT_QUIET) --tag=CC --mode=link $(CCLD) \
-+ 	$(AM_CFLAGS) $(CFLAGS) $(AM_LDFLAGS) $(LDFLAGS) -o $@
-++makestrs_LINK = $(HOST_CC) \
-++	$(AM_CFLAGS) $(CFLAGS) $(AM_LDFLAGS) $(LDFLAGS) -o $@
-+ SOURCES = $(makestrs_SOURCES)
-+ DIST_SOURCES = $(makestrs_SOURCES)
-+ am__vpath_adj_setup = srcdirstrip=`echo "$(srcdir)" | sed 's|.|.|g'`;
-+@@ -312,7 +315,7 @@ clean-noinstPROGRAMS:
-+ makestrs$(EXEEXT): $(makestrs_OBJECTS) $(makestrs_DEPENDENCIES) 
-+ 	@@AMPRETTYECHO@ '  [LD        ]  makestrs$(EXEEXT)'
-+ 	@rm -f makestrs$(EXEEXT)
-+-	@AMSHOWCMDSAT@$(LINK) $(makestrs_LDFLAGS) $(makestrs_OBJECTS) $(makestrs_LDADD) $(LIBS)
-++	@AMSHOWCMDSAT@$(makestrs_LINK) $(makestrs_LDFLAGS) $(makestrs_OBJECTS) $(makestrs_LDADD) $(LIBS)
-+ 
-+ mostlyclean-compile:
-+ 	@@AMPRETTYECHO@ '  [RM        ]  *.$(OBJEXT)'
-+@@ -350,19 +353,19 @@ distclean-compile:
-+ 
-+ makestrs-makestrs.o: makestrs.c
-+ 	@@AMPRETTYECHO@ '  [C         ]  makestrs.c'
-+- at am__fastdepCC_TRUE@	@AMSHOWCMDSAT at if $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(makestrs_CFLAGS) $(CFLAGS) -MT makestrs-makestrs.o -MD -MP -MF "$(DEPDIR)/makestrs-makestrs.Tpo" -c -o makestrs-makestrs.o `test -f 'makestrs.c' || echo '$(srcdir)/'`makestrs.c; \
-++ at am__fastdepCC_TRUE@	@AMSHOWCMDSAT at if $(HOST_CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(makestrs_CFLAGS) $(CFLAGS) -MT makestrs-makestrs.o -MD -MP -MF "$(DEPDIR)/makestrs-makestrs.Tpo" -c -o makestrs-makestrs.o `test -f 'makestrs.c' || echo '$(srcdir)/'`makestrs.c; \
-+ @am__fastdepCC_TRUE@	then mv -f "$(DEPDIR)/makestrs-makestrs.Tpo" "$(DEPDIR)/makestrs-makestrs.Po"; else rm -f "$(DEPDIR)/makestrs-makestrs.Tpo"; exit 1; fi
-+ @AMDEP_TRUE@@am__fastdepCC_FALSE@	@AMSHOWCMDSAT at source='makestrs.c' object='makestrs-makestrs.o' libtool=no @AMDEPBACKSLASH@
-+ @AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
-+- at am__fastdepCC_FALSE@	@AMDEPSHOWCMDSAT@$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(makestrs_CFLAGS) $(CFLAGS) -c -o makestrs-makestrs.o `test -f 'makestrs.c' || echo '$(srcdir)/'`makestrs.c
-++ at am__fastdepCC_FALSE@	@AMDEPSHOWCMDSAT@$(HOST_CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(makestrs_CFLAGS) $(CFLAGS) -c -o makestrs-makestrs.o `test -f 'makestrs.c' || echo '$(srcdir)/'`makestrs.c
-+ 
-+ makestrs-makestrs.obj: makestrs.c
-+ 	@@AMPRETTYECHO@ '  [C         ]  makestrs.c'
-+- at am__fastdepCC_TRUE@	@AMSHOWCMDSAT at if $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(makestrs_CFLAGS) $(CFLAGS) -MT makestrs-makestrs.obj -MD -MP -MF "$(DEPDIR)/makestrs-makestrs.Tpo" -c -o makestrs-makestrs.obj `if test -f 'makestrs.c'; then $(CYGPATH_W) 'makestrs.c'; else $(CYGPATH_W) '$(srcdir)/makestrs.c'; fi`; \
-++ at am__fastdepCC_TRUE@	@AMSHOWCMDSAT at if $(HOST_CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(makestrs_CFLAGS) $(CFLAGS) -MT makestrs-makestrs.obj -MD -MP -MF "$(DEPDIR)/makestrs-makestrs.Tpo" -c -o makestrs-makestrs.obj `if test -f 'makestrs.c'; then $(CYGPATH_W) 'makestrs.c'; else $(CYGPATH_W) '$(srcdir)/makestrs.c'; fi`; \
-+ @am__fastdepCC_TRUE@	then mv -f "$(DEPDIR)/makestrs-makestrs.Tpo" "$(DEPDIR)/makestrs-makestrs.Po"; else rm -f "$(DEPDIR)/makestrs-makestrs.Tpo"; exit 1; fi
-+ @AMDEP_TRUE@@am__fastdepCC_FALSE@	@AMSHOWCMDSAT at source='makestrs.c' object='makestrs-makestrs.obj' libtool=no @AMDEPBACKSLASH@
-+ @AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
-+- at am__fastdepCC_FALSE@	@AMDEPSHOWCMDSAT@$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(makestrs_CFLAGS) $(CFLAGS) -c -o makestrs-makestrs.obj `if test -f 'makestrs.c'; then $(CYGPATH_W) 'makestrs.c'; else $(CYGPATH_W) '$(srcdir)/makestrs.c'; fi`
-++ at am__fastdepCC_FALSE@	@AMDEPSHOWCMDSAT@$(HOST_CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(makestrs_CFLAGS) $(CFLAGS) -c -o makestrs-makestrs.obj `if test -f 'makestrs.c'; then $(CYGPATH_W) 'makestrs.c'; else $(CYGPATH_W) '$(srcdir)/makestrs.c'; fi`
-+ 
-+ mostlyclean-libtool:
-+ 	@@AMPRETTYECHO@ '  [RM        ]  *.lo'
+---------------------------------------------------------------------- 
+ hbr_in - 03-08-08 17:09  
+---------------------------------------------------------------------- 
+Hi,
+
+here is the patch to correct this error. i had sent this earlier but no
+one comited this.
+
+Regards
+Gururaja
+
+diff -purN buildroot/package/libusb/libusb.mk
+buildroot_patched/package/libusb/libusb.mk
+--- buildroot/package/libusb/libusb.mk	2008-03-04 03:15:13.000000000
+-0500
++++ buildroot_patched/package/libusb/libusb.mk	2008-02-21
+16:46:07.000000000 -0500
+@@ -56,7 +56,7 @@ $(STAGING_DIR)/lib/libusb.so: $(LIBUSB_D
+ 	$(MAKE) -C $(LIBUSB_DIR) DESTDIR=$(STAGING_DIR) install
+ 
+ $(TARGET_DIR)/$(LIBUSB_BINARY): $(STAGING_DIR)/lib/libusb.so
+-	cp -dpf $(STAGING_DIR)/usr/lib/libusb*.so* $(TARGET_DIR)/usr/lib/
++	cp -dpf $(STAGING_DIR)/lib/libusb*.so* $(TARGET_DIR)/usr/lib/
+ 	$(STRIPCMD) $(STRIP_STRIP_UNNEEDED) $(TARGET_DIR)/usr/lib/libusb*.so*
+ 
+ libusb: uclibc $(TARGET_DIR)/$(LIBUSB_BINARY) 
+
+Issue History 
+Date Modified   Username       Field                    Change               
+====================================================================== 
+03-08-08 04:29  ucdamiano      New Issue                                    
+03-08-08 04:29  ucdamiano      Status                   new => assigned     
+03-08-08 04:29  ucdamiano      Assigned To               => buildroot       
+03-08-08 06:19  ucdamiano      Issue Monitored: ucdamiano                    
+03-08-08 06:23  ucdamiano      Note Added: 0005614                          
+03-08-08 17:09  hbr_in         Note Added: 0005634                          
+======================================================================
