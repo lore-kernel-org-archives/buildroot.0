@@ -1,65 +1,52 @@
 From: Ulf Samuelsson <ulf.samuelsson@atmel.com>
-Date: Mon, 10 Mar 2008 20:40:38 +0100
-Subject: [Buildroot] svn commit:
-	trunk/buildroot/package:editors	editors/vi
-References: <ADB1372A-7CAA-41A5-A619-09A9DF0A0D0D@valka.is><008b01c88027$780e44a0$040514ac@atmel.com><4D6547F3-9672-4606-90EA-88630B3565E9@valka.is><20080307235344.GA6144@cloud.net.au><87zlt7bmdg.fsf@macbook.be.48ers.dk><042e01c882d4$d82aa450$f1c4af0a@atmel.com>
-	<87skyy2yav.fsf@macbook.be.48ers.dk>
-Message-ID: <007a01c882ec$717efea0$080514ac@atmel.com>
+Date: Mon, 10 Mar 2008 21:20:42 +0100
+Subject: [Buildroot] svn commit: trunk/buildroot:  package
+References: <20080310152243.544A212C5F4@busybox.net>
+	<877iga5yy6.fsf@macbook.be.48ers.dk>
+Message-ID: <007c01c882ec$733d2960$080514ac@atmel.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+----- Original Message ----- 
+From: "Peter Korsgaard" <jacmet@uclibc.org>
+To: <buildroot@uclibc.org>
+Sent: Monday, March 10, 2008 5:24 PM
+Subject: Re: [Buildroot] svn commit: trunk/buildroot: package
 
 
->>>>>> "Ulf" == Ulf Samuelsson <ulf.samuelsson@atmel.com> writes:
+>>>>>> "ninevoltz" == ninevoltz  <ninevoltz@uclibc.org> writes:
 > 
-> Ulf> It is not OK, to introduce this without discussing it on the
-> Ulf> list though.  Luckily, we have a method to resolve a controversy
-> Ulf> and that is to let Eric decide.  I think we should give him
-> Ulf> maybe a week, and only if no reply the patches should be
-> Ulf> reverted.  (With possible resubmit, if Eric comes back later
-> Ulf> with ACK)
+> ninevoltz> Author: ninevoltz
+> ninevoltz> Date: 2008-03-10 08:22:43 -0700 (Mon, 10 Mar 2008)
+> ninevoltz> New Revision: 21282
 > 
-> Ulf, you have added plenty of controversal stuff without discussing
-> it on the list. 
-
-I started off by giving a description to Eric what I wanted to do in the beginning
-and this was acked by him. There has been protest against several things
-which he acked.
-
-
-> I really don't see a simple cleanup like this being a big issue.
+> ninevoltz> Log:
+> ninevoltz> added dev files in target option
 > 
-
-> And no - with all respect, considering Eric's lack of involvement the
-> last few years - I don't see that as being a solution. Most likely he
-> isn't reading this thread at all.
+> Great! A few minor points though:
 > 
-
-Then we do not have any way to resolve differences.
-How do you plan to resolve this - by suggesting your way is the only way?
-
-> Do you have any TECHNICAL objections to the patch? If not, I would
-> suggest we keep it.
+> ninevoltz> +config BR2_TARGET_DEV_FILES
+> ninevoltz> + bool "Development files in target filesystem"
 > 
-
-Yes, it is harder to process the information in each directory using scripts.
-That is enough for me.
-
-> Ulf> An alternative way of handling the problem is to have TWO trees.
+> What about calling int BR2_HAVE_DEVFILES to match the info/make
+> configs just above? Also remember to not use upper case in the bool
+> description (E.G. bool "development files in .. ")
 > 
-> That seems to me to complicate matters rather than solving any
-> problems.
-
-This will provide both the current structure and the structure people want to move to.
-If you think it is over complex, I am happy if the current patches are reverted.
-
+> ninevoltz> +else
+> ninevoltz> + rm -rf $(TARGET_DIR)/usr/include
+> ninevoltz> + find $(TARGET_DIR)/usr/lib -name '*.a' -delete
+> 
+> Not that I really care, but is -delete supported by non-GNU find?
 > 
 > -- 
-> Bye, Peter Korsgaard
->
+
+
+What happens if you want *some*   ".a" files in the target.
+Didn't see the patch, just occured to me when I read this email.
+
 
 Best Regards
-Ulf Samuelsson 
+Ulf Samuelsson
