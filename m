@@ -1,35 +1,39 @@
-From: ninevoltz at uclibc.org <ninevoltz@uclibc.org>
-Date: Mon, 10 Mar 2008 09:17:28 -0700 (PDT)
-Subject: [Buildroot] svn commit: trunk/buildroot/package/rsync
-Message-ID: <20080310161728.1D00F12011A@busybox.net>
+From: Peter Korsgaard <jacmet@uclibc.org>
+Date: Mon, 10 Mar 2008 17:24:49 +0100
+Subject: [Buildroot] svn commit: trunk/buildroot:  package
+In-Reply-To: <20080310152243.544A212C5F4@busybox.net> (ninevoltz@uclibc.org's
+	message of "Mon\, 10 Mar 2008 08\:22\:43 -0700 \(PDT\)")
+References: <20080310152243.544A212C5F4@busybox.net>
+Message-ID: <877iga5yy6.fsf@macbook.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Author: ninevoltz
-Date: 2008-03-10 09:17:26 -0700 (Mon, 10 Mar 2008)
-New Revision: 21283
+>>>>> "ninevoltz" == ninevoltz  <ninevoltz@uclibc.org> writes:
 
-Log:
-cheanged rsync download url
+ ninevoltz> Author: ninevoltz
+ ninevoltz> Date: 2008-03-10 08:22:43 -0700 (Mon, 10 Mar 2008)
+ ninevoltz> New Revision: 21282
 
-Modified:
-   trunk/buildroot/package/rsync/rsync.mk
+ ninevoltz> Log:
+ ninevoltz> added dev files in target option
 
+Great! A few minor points though:
+ 
+ ninevoltz> +config BR2_TARGET_DEV_FILES
+ ninevoltz> +	bool "Development files in target filesystem"
 
-Changeset:
-Modified: trunk/buildroot/package/rsync/rsync.mk
-===================================================================
---- trunk/buildroot/package/rsync/rsync.mk	2008-03-10 15:22:43 UTC (rev 21282)
-+++ trunk/buildroot/package/rsync/rsync.mk	2008-03-10 16:17:26 UTC (rev 21283)
-@@ -5,7 +5,7 @@
- #############################################################
- RSYNC_VERSION:=2.6.9
- RSYNC_SOURCE:=rsync-$(RSYNC_VERSION).tar.gz
--RSYNC_SITE:=http://rsync.samba.org/ftp/rsync/
-+RSYNC_SITE:=http://rsync.samba.org/ftp/rsync/src
- RSYNC_DIR:=$(BUILD_DIR)/rsync-$(RSYNC_VERSION)
- RSYNC_CAT:=$(ZCAT)
- RSYNC_BINARY:=rsync
+What about calling int BR2_HAVE_DEVFILES to match the info/make
+configs just above? Also remember to not use upper case in the bool
+description (E.G. bool "development files in .. ")
+
+ ninevoltz> +else
+ ninevoltz> +	rm -rf $(TARGET_DIR)/usr/include
+ ninevoltz> +	find $(TARGET_DIR)/usr/lib -name '*.a' -delete
+
+Not that I really care, but is -delete supported by non-GNU find?
+
+-- 
+Bye, Peter Korsgaard
