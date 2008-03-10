@@ -1,22 +1,24 @@
-From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Sun, 09 Mar 2008 22:50:38 +0100
-Subject: [Buildroot] Build failure with busybox 1.9.1
-In-Reply-To: <47D149B9.9060603@carallon.com> (Will Wagner's message of "Fri\,
-	07 Mar 2008 13\:57\:13 +0000")
-References: <47D149B9.9060603@carallon.com>
-Message-ID: <87od9nbm8h.fsf@macbook.be.48ers.dk>
+From: Tzungder Lin <tzungder@gmail.com>
+Date: Mon, 10 Mar 2008 09:17:23 +0800
+Subject: [Buildroot] Can stdlibc++ compile with ARM EABI ?
+Message-ID: <528f811a0803091817l711dc830w98cd5563a6187415@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Will" == Will Wagner <will_wagner@carallon.com> writes:
+Hi All,
 
- Will> Hi All, Have just tried a new config from scratch and it is
- Will> failing while configuring busybox as there is no
- Will> package/busybox/busybox-1.9.0.config file, previously I think
- Will> it used the 1.6.0 file.
+I try to build a ARM EABI toolchain with g++ supported.
+I have try gcc 4.1/4.2 with binutils 2.17.x / 2.18, uclibc0.9.27/28
+But it keeps fail at compiling stdlibc++, the error message is come
+from the assembler:
+libstdc++-v3/libsupc++/eh_alloc.cc
+Error: duplicate .personality directive
+I have do some google searching but no useful result.
+Any response is welcome, I have been stuck in this for more than 6 months...
+Thanks a lot !
 
-Hmm, I don't see why it would try to to use that file - Are you sure
-you didn't change the config by hand?
+Regards
+  jonathan
