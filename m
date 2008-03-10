@@ -1,10 +1,8 @@
-From: Will Wagner <will_wagner@carallon.com>
-Date: Mon, 10 Mar 2008 10:35:49 +0000
-Subject: [Buildroot] Build failure with busybox 1.9.1
-In-Reply-To: <d6cda7730803080445w775ee23eq44b7434becf6701d@mail.gmail.com>
-References: <47D149B9.9060603@carallon.com>
-	<d6cda7730803080445w775ee23eq44b7434becf6701d@mail.gmail.com>
-Message-ID: <47D50F05.30306@carallon.com>
+From: bugs at busybox.net <bugs@busybox.net>
+Date: Mon, 10 Mar 2008 04:42:08 -0700
+Subject: [Buildroot] [buildroot 0002504]: buildroot fails: directory
+	"kernel-patches-2.6.24" does not exist
+Message-ID: <fab4288ffdad16d9e0c893e973da07fa@busybox.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -12,17 +10,45 @@ Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
 
+The following issue has been SUBMITTED. 
+====================================================================== 
+http://busybox.net/bugs/view.php?id=2504 
+====================================================================== 
+Reported By:                chris_k
+Assigned To:                buildroot
+====================================================================== 
+Project:                    buildroot
+Issue ID:                   2504
+Category:                   Architecture Specific
+Reproducibility:            always
+Severity:                   trivial
+Priority:                   normal
+Status:                     assigned
+====================================================================== 
+Date Submitted:             03-10-2008 04:42 PDT
+Last Modified:              03-10-2008 04:42 PDT
+====================================================================== 
+Summary:                    buildroot fails: directory "kernel-patches-2.6.24"
+does not exist
+Description: 
+building buildroot aborts, since directory
+target/device/x86/i386/kernel-patches-2.6.24 does not exist.
 
-Thiago A. Corr?a wrote:
-> That file is usually at the target folder not package, which target
-> are you compiling to?
-> 
+toolchain/patch-kernel.sh
+/home/cklaiber/buildroot/project_build_i486/uclibc/linux-2.6.24
+target/device/x86/i386/kernel-patches-2.6.24/ linux-2.6.24-\*.patch ; 
+Aborting.  'target/device/x86/i386/kernel-patches-2.6.24/' is not a
+directory.
+make: ***
+[/home/cklaiber/buildroot/project_build_i486/uclibc/linux-2.6.24/.patched]
+Fehler 1
 
-I'm trying got build a generic arm11 target.
+====================================================================== 
 
--- 
-------------------------------------------------------------------------
-Will Wagner                                     will_wagner at carallon.com
-Senior Project Engineer                  Office Tel: +44 (0)20 7371 2032
-Carallon Ltd, Studio G20, Shepherds Building, Rockley Rd, London W14 0DA
-------------------------------------------------------------------------
+Issue History 
+Date Modified   Username       Field                    Change               
+====================================================================== 
+03-10-08 04:42  chris_k        New Issue                                    
+03-10-08 04:42  chris_k        Status                   new => assigned     
+03-10-08 04:42  chris_k        Assigned To               => buildroot       
+======================================================================
