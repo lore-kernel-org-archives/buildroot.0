@@ -1,39 +1,52 @@
-From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Mon, 10 Mar 2008 17:24:49 +0100
-Subject: [Buildroot] svn commit: trunk/buildroot:  package
-In-Reply-To: <20080310152243.544A212C5F4@busybox.net> (ninevoltz@uclibc.org's
-	message of "Mon\, 10 Mar 2008 08\:22\:43 -0700 \(PDT\)")
-References: <20080310152243.544A212C5F4@busybox.net>
-Message-ID: <877iga5yy6.fsf@macbook.be.48ers.dk>
+From: ninevoltz at uclibc.org <ninevoltz@uclibc.org>
+Date: Mon, 10 Mar 2008 09:34:19 -0700 (PDT)
+Subject: [Buildroot] svn commit: trunk/buildroot
+Message-ID: <20080310163419.CA43B12015C@busybox.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "ninevoltz" == ninevoltz  <ninevoltz@uclibc.org> writes:
+Author: ninevoltz
+Date: 2008-03-10 09:34:19 -0700 (Mon, 10 Mar 2008)
+New Revision: 21284
 
- ninevoltz> Author: ninevoltz
- ninevoltz> Date: 2008-03-10 08:22:43 -0700 (Mon, 10 Mar 2008)
- ninevoltz> New Revision: 21282
+Log:
+renamed variable, removed uppercase config text
 
- ninevoltz> Log:
- ninevoltz> added dev files in target option
+Modified:
+   trunk/buildroot/Config.in
+   trunk/buildroot/Makefile
 
-Great! A few minor points though:
+
+Changeset:
+Modified: trunk/buildroot/Config.in
+===================================================================
+--- trunk/buildroot/Config.in	2008-03-10 16:17:26 UTC (rev 21283)
++++ trunk/buildroot/Config.in	2008-03-10 16:34:19 UTC (rev 21284)
+@@ -239,8 +239,8 @@
+ 	  If you say n here, your target will not contain any
+ 	  infopage.
  
- ninevoltz> +config BR2_TARGET_DEV_FILES
- ninevoltz> +	bool "Development files in target filesystem"
+-config BR2_TARGET_DEV_FILES
+-	bool "Development files in target filesystem"
++config BR2_HAVE_DEVFILES
++	bool "development files in target filesystem"
+ 	default n
+ 	help
+ 	  Install headers and static libraries in the
 
-What about calling int BR2_HAVE_DEVFILES to match the info/make
-configs just above? Also remember to not use upper case in the bool
-description (E.G. bool "development files in .. ")
-
- ninevoltz> +else
- ninevoltz> +	rm -rf $(TARGET_DIR)/usr/include
- ninevoltz> +	find $(TARGET_DIR)/usr/lib -name '*.a' -delete
-
-Not that I really care, but is -delete supported by non-GNU find?
-
--- 
-Bye, Peter Korsgaard
+Modified: trunk/buildroot/Makefile
+===================================================================
+--- trunk/buildroot/Makefile	2008-03-10 16:17:26 UTC (rev 21283)
++++ trunk/buildroot/Makefile	2008-03-10 16:34:19 UTC (rev 21284)
+@@ -318,7 +318,7 @@
+ 	rm -f $(PROJECT_BUILD_DIR)/.fakeroot*
+ 
+ target-devfiles:
+-ifeq ($(strip $(BR2_TARGET_DEV_FILES)),y)
++ifeq ($(strip $(BR2_HAVE_DEVFILES)),y)
+ 	cp -a $(STAGING_DIR)/usr/include $(TARGET_DIR)/usr
+ 	cp $(STAGING_DIR)/usr/lib/*.a $(TARGET_DIR)/usr/lib
+ 	cp $(STAGING_DIR)/lib/*.a $(TARGET_DIR)/lib
