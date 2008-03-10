@@ -1,59 +1,58 @@
 From: Ulf Samuelsson <ulf.samuelsson@atmel.com>
-Date: Mon, 10 Mar 2008 22:32:31 +0100
-Subject: [Buildroot] svn commit: trunk/buildroot:  package
-References: <20080310152243.544A212C5F4@busybox.net><877iga5yy6.fsf@macbook.be.48ers.dk><007c01c882ec$733d2960$080514ac@atmel.com><87wsoa1fpk.fsf@macbook.be.48ers.dk><00ab01c882f4$1dd68bd0$080514ac@atmel.com>
-	<87d4q21daj.fsf@macbook.be.48ers.dk>
-Message-ID: <01a201c882fb$c8bab2e0$080514ac@atmel.com>
+Date: Mon, 10 Mar 2008 22:55:41 +0100
+Subject: [Buildroot] svn commit:
+	trunk/buildroot/package:editors	editors/vi
+References: <ADB1372A-7CAA-41A5-A619-09A9DF0A0D0D@valka.is><008b01c88027$780e44a0$040514ac@atmel.com><4D6547F3-9672-4606-90EA-88630B3565E9@valka.is><20080307235344.GA6144@cloud.net.au><87zlt7bmdg.fsf@macbook.be.48ers.dk><042e01c882d4$d82aa450$f1c4af0a@atmel.com><87skyy2yav.fsf@macbook.be.48ers.dk><007a01c882ec$717efea0$080514ac@atmel.com><87pru21f8a.fsf@macbook.be.48ers.dk><00aa01c882f4$1cfd90f0$080514ac@atmel.com><871w6i1d1w.fsf@macbook.be.48ers.dk>
+	<87wsoaz2h6.fsf@macbook.be.48ers.dk>
+Message-ID: <01a401c882fb$ca574be0$080514ac@atmel.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
------ Original Message ----- 
-From: "Peter Korsgaard" <jacmet@uclibc.org>
-To: "Ulf Samuelsson" <ulf.samuelsson@atmel.com>
-Cc: "Peter Korsgaard" <jacmet@uclibc.org>; <buildroot@uclibc.org>
-Sent: Monday, March 10, 2008 10:26 PM
-Subject: Re: [Buildroot] svn commit: trunk/buildroot: package
+> >>> Come on, just add -r to your grep. You already need to search
+> >>> package/, toolchain/ and target/ anyway. That doesn't sound like a
+> >>> real issue.
+> 
+> Ulf> I am talking about sed and awk which will be more difficult.
+> 
+> Peter> Then just do a find ..|xargs on those or use **/*.mk (if you use a
+> Peter> proper shell).
+> 
+
+Yes, I can try to become an expert in shell programming, but
+that is not on my top 100 list of things to do.
+
+> >>> Bernard several times asked you to fork and do the atmel stuff in a
+> >>> seperate branch. I still don't think that's a good idea considering
+> >>> the limited amount of BR development ressources we have.
+> 
+> Ulf> He complained about things breaking, but this is bound to
+> Ulf> happen.  He seemed to complain a lot on me, when patches in
+> Ulf> reality came from others.  I know *his* patches caused me about
+> Ulf> 3-4 weeks of extra work.
+> 
+> Peter> Well, it's very hard to be absolutely sure you don't break anything
+> Peter> when you change something in a system like BR simply because of the
+> Peter> number of config combinations you would need to test.
+> 
+
+Yes, however sometimes others can see that a patch has potential problems
+in certain areas, and if pointed out I think that the submitter should do some extra testing.
+
+> Peter> That ofcause doesn't mean we shouldn't be careful, just that random
+> Peter> breakage is to be expected.
+> 
+> Peter> I've been playing a bit around with buildbot (http://buildbot.net) -
+> Peter> And that looks quite nice.
 
 
->>>>>> "Ulf" == Ulf Samuelsson <ulf.samuelsson@atmel.com> writes:
 > 
-> Hi,
+> Peter> -- 
+> Peter> Bye, Peter Korsgaard
 > 
-> Ulf> I might be wrong, since I didn't look at the patch, but it looks
-> Ulf> to me that the patch will clean out the directory if unset.
-> 
-> Ulf> If the switch is there, then the files should be copied to th
-> Ulf> target directory.  If the switch was never there, then there
-> Ulf> should not be any such files in the target directory.  If the
-> Ulf> switch was there and is unset then I think the directory should
-> Ulf> be cleaned out with an explicit command.
-> 
-> Sure, that's the nicest approach. But it also means every package .mk
-> needs to get fixed. This approach basically gives the same result with
-> only 4 lines or so of code.
-> 
-> So the basic system is here, but it can be refined by adding
-> HAVE_DEVFILES support to (library) packages (and the C library) one by
-> one. Once that is done this "dirty" solution can be removed.
-> 
-> Or we can simply decide it isn't worth it and stick with the current
-> solution.
-> 
-> -- 
-> Bye, Peter Korsgaard
 
-Or add this to the Makefile:
-
-nodevfiles:
-            rm -rf $(TARGET_DIR)/usr/include
-            find $(TARGET_DIR)/usr/lib -name '*.a' -delete
-
-Then the user can make his own decisions.
-The packages will not add any ".a" packages,
-and none will be deleted, unless the user wishes them to be.
 
 Best Regards
 Ulf Samuelsson
