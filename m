@@ -1,24 +1,35 @@
-From: Ivan Kuten <ivan.kuten@promwad.com>
-Date: Mon, 10 Mar 2008 18:13:06 +0200
+From: ninevoltz at uclibc.org <ninevoltz@uclibc.org>
+Date: Mon, 10 Mar 2008 08:15:58 -0700 (PDT)
 Subject: [Buildroot] svn commit: trunk/buildroot/package/icu
-In-Reply-To: <20080310145241.B906812C734@busybox.net>
-References: <20080310145241.B906812C734@busybox.net>
-Message-ID: <47D55E12.6090502@promwad.com>
+Message-ID: <20080310151558.2F2CF12011A@busybox.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+Author: ninevoltz
+Date: 2008-03-10 08:15:57 -0700 (Mon, 10 Mar 2008)
+New Revision: 21281
 
->  ICU_SOURCE:=icu$(ICU_VERSION)-src.tgz
-> -ICU_SITE:=http://download.icu-project.org/files/icu4c/$(ICU_VERSION_NUM)
-> +ICU_SITE:=http://superb-west.dl.sourceforge.net/sourceforge/icu
->  ICU_CAT:=$(ZCAT)
+Log:
+changed to use sourceforge variable
 
-Please use sourceforge mirror variable.
-Thanks!
+Modified:
+   trunk/buildroot/package/icu/icu.mk
 
 
-BR,
-Ivan
+Changeset:
+Modified: trunk/buildroot/package/icu/icu.mk
+===================================================================
+--- trunk/buildroot/package/icu/icu.mk	2008-03-10 14:52:39 UTC (rev 21280)
++++ trunk/buildroot/package/icu/icu.mk	2008-03-10 15:15:57 UTC (rev 21281)
+@@ -6,7 +6,7 @@
+ 
+ ICU_VERSION:=4c-3_8_1
+ ICU_SOURCE:=icu$(ICU_VERSION)-src.tgz
+-ICU_SITE:=http://superb-west.dl.sourceforge.net/sourceforge/icu
++ICU_SITE:=http://$(BR2_SOURCEFORGE_MIRROR).dl.sourceforge.net/sourceforge/icu
+ ICU_CAT:=$(ZCAT)
+ ICU_DIR:=$(BUILD_DIR)/icu/source
+ ICU_HOST_DIR:=$(BUILD_DIR)/icu-host/source
