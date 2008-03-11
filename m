@@ -1,46 +1,21 @@
-From: John Voltz <john.voltz@gmail.com>
-Date: Tue, 11 Mar 2008 09:38:50 -0400
-Subject: [Buildroot] [buildroot 0002514]: fakeroot has an invalid version
-In-Reply-To: <1205216050.8434.14.camel@localhost>
-References: <3602fa0f2bfc9d33e7fe0380c3243a05@busybox.net>
-	<d6cda7730803102151k687bc79ek9117e63ae3241dc8@mail.gmail.com>
-	<1205216050.8434.14.camel@localhost>
-Message-ID: <46a136670803110638j36c03d7eo5f83f200f5cd7246@mail.gmail.com>
+From: Sunil Gupta <sg@monsoon.com>
+Date: Tue, 11 Mar 2008 09:45:44 -0400 (EDT)
+Subject: [Buildroot] svn commit: trunk/buildroot/package/fakeroot
+In-Reply-To: <20080311133228.7C2CC12C5D2@busybox.net>
+References: <20080311133228.7C2CC12C5D2@busybox.net>
+Message-ID: <53247.69.65.92.49.1205243144.squirrel@webmail.learningsoft.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-I just updated it to 1.9.3. It seems to be working ok for me.
+> Log:
+> removed patch for older fakeroot
+>
+> Removed:
+>    trunk/buildroot/package/fakeroot/fakeroot-revert-ltmain.patch
 
-John Voltz
+Applying fakeroot-uclibc-LFS.patch now fails.
 
-
-On Tue, Mar 11, 2008 at 2:14 AM, Hans-Christian Egtvedt <
-hans-christian.egtvedt@atmel.com> wrote:
-
-> On Tue, 2008-03-11 at 01:51 -0300, Thiago A. Corr?a wrote:
-> > Hi there,
-> >
-> >     Is debian.org the only source for those things? It's quite
-> > annoying when they suddenly remove files from their servers... and
-> > this happens just about all the time.
-> >
->
-> This repository seems to be more complete, perhaps move to this?
->
-> http://ftp.tr.debian.org/debian/pool/main/f/fakeroot/
->
-> --
-> With kind regards,
-> Hans-Christian Egtvedt, Applications Engineer
->
-> _______________________________________________
-> buildroot mailing list
-> buildroot at uclibc.org
-> http://busybox.net/mailman/listinfo/buildroot
->
--------------- next part --------------
-An HTML attachment was scrubbed...
-URL: http://busybox.net/lists/buildroot/attachments/20080311/ac28ba9f/attachment-0001.htm 
+-- sg
