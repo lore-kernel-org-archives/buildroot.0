@@ -1,34 +1,35 @@
-From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Tue, 11 Mar 2008 20:12:37 +0100
-Subject: [Buildroot] svn commit: trunk/buildroot/package
-In-Reply-To: <20080311181532.39F43120135@busybox.net> (ninevoltz@uclibc.org's
-	message of "Tue\, 11 Mar 2008 11\:15\:32 -0700 \(PDT\)")
-References: <20080311181532.39F43120135@busybox.net>
-Message-ID: <87tzjdt6qi.fsf@macbook.be.48ers.dk>
+From: ninevoltz at uclibc.org <ninevoltz@uclibc.org>
+Date: Tue, 11 Mar 2008 12:13:40 -0700 (PDT)
+Subject: [Buildroot] svn commit: trunk/buildroot/package/samba
+Message-ID: <20080311191340.0D1EA120135@busybox.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "ninevoltz" == ninevoltz  <ninevoltz@uclibc.org> writes:
+Author: ninevoltz
+Date: 2008-03-11 12:13:38 -0700 (Tue, 11 Mar 2008)
+New Revision: 21306
 
- ninevoltz> Author: ninevoltz
- ninevoltz> Date: 2008-03-11 11:15:30 -0700 (Tue, 11 Mar 2008)
- ninevoltz> New Revision: 21301
+Log:
+updated samba version
 
- ninevoltz> Log:
- ninevoltz> added debug option
-
- ninevoltz> +ifeq ($(BR2_ENABLE_DEBUG),y)
- ninevoltz> +ENABLE_DEBUG:=--enable-debug
- ninevoltz> +else
- ninevoltz> +ENABLE_DEBUG:=
- ninevoltz> +endif
-
-What about the corresponding Kconfig option to actually set this?
+Modified:
+   trunk/buildroot/package/samba/samba.mk
 
 
-
--- 
-Bye, Peter Korsgaard
+Changeset:
+Modified: trunk/buildroot/package/samba/samba.mk
+===================================================================
+--- trunk/buildroot/package/samba/samba.mk	2008-03-11 18:54:17 UTC (rev 21305)
++++ trunk/buildroot/package/samba/samba.mk	2008-03-11 19:13:38 UTC (rev 21306)
+@@ -3,7 +3,7 @@
+ # samba
+ #
+ #############################################################
+-SAMBA_VERSION:=3.0.28
++SAMBA_VERSION:=3.0.28a
+ SAMBA_SOURCE:=samba-$(SAMBA_VERSION).tar.gz
+ SAMBA_SITE:=ftp://us4.samba.org/pub/samba/
+ SAMBA_DIR:=$(BUILD_DIR)/samba-$(SAMBA_VERSION)/source
