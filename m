@@ -1,43 +1,35 @@
-From: jacmet at uclibc.org <jacmet@uclibc.org>
-Date: Tue, 11 Mar 2008 01:49:47 -0700 (PDT)
-Subject: [Buildroot] svn commit: trunk/buildroot/target
-Message-ID: <20080311084947.4030012011A@busybox.net>
+From: Peter Korsgaard <jacmet@uclibc.org>
+Date: Tue, 11 Mar 2008 09:50:12 +0100
+Subject: [Buildroot] $(ARCH) not set & mirrors
+In-Reply-To: <1205224708.10692.195.camel@nigel-x60> (Nigel Kukard's message of
+	"Tue\, 11 Mar 2008 08\:38\:28 +0000")
+References: <1205178237.10692.178.camel@nigel-x60>
+	<878x0q2uyr.fsf@macbook.be.48ers.dk>
+	<1205216387.10692.185.camel@nigel-x60>
+	<871w6hznbg.fsf@macbook.be.48ers.dk>
+	<1205224708.10692.195.camel@nigel-x60>
+Message-ID: <87lk4py797.fsf@macbook.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Author: jacmet
-Date: 2008-03-11 01:49:45 -0700 (Tue, 11 Mar 2008)
-New Revision: 21287
+>>>>> "Nigel" == Nigel Kukard <nkukard@lbsd.net> writes:
 
-Log:
-buildroot: fix missing ARCH for some x86 variants
+Hi,
 
-Patch by Nigel Kukard.
+ >> Thanks. Committed except for the hunk changing the fakeroot
+ >> version. Please don't mix multiple changes in the same patch.
 
+ Nigel> Blast ... sorry. I'll be more careful.
 
-Modified:
-   trunk/buildroot/target/Config.in.arch
+Great ;)
 
+ Nigel> Patch attached for fixing of ARCH not being defined when
+ Nigel> selecting some x86 target arch variants.
 
-Changeset:
-Modified: trunk/buildroot/target/Config.in.arch
-===================================================================
---- trunk/buildroot/target/Config.in.arch	2008-03-11 08:17:17 UTC (rev 21286)
-+++ trunk/buildroot/target/Config.in.arch	2008-03-11 08:49:45 UTC (rev 21287)
-@@ -476,8 +476,13 @@
- 	default "i386"		if BR2_x86_i386
- 	default "i486"		if BR2_x86_i486
- 	default "i586"		if BR2_x86_i586
-+	default "i586"		if BR2_x86_pentium_mmx
- 	default "i686"		if BR2_x86_i686
-+	default "i686"		if BR2_x86_pentium2
-+	default "i686"		if BR2_x86_pentium3
- 	default "i686"		if BR2_x86_pentium4
-+	default "i686"		if BR2_x86_pentium_m
-+	default "i686"		if BR2_x86_pentiumpro
- 	default "i686"		if BR2_x86_nocona
- 	default "i686"		if BR2_x86_core2
- 	default "ia64"		if BR2_ia64
+Thanks - Applied.
+
+-- 
+Bye, Peter Korsgaard
