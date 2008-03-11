@@ -1,41 +1,43 @@
-From: Ulf Samuelsson <ulf.samuelsson@atmel.com>
-Date: Tue, 11 Mar 2008 09:11:24 +0100
-Subject: [Buildroot] svn commit: trunk/buildroot: package
-References: <20080310152243.544A212C5F4@busybox.net>
-	<877iga5yy6.fsf@macbook.be.48ers.dk>
-	<007c01c882ec$733d2960$080514ac@atmel.com>
-	<87wsoa1fpk.fsf@macbook.be.48ers.dk>
-	<00ab01c882f4$1dd68bd0$080514ac@atmel.com>
-	<87d4q21daj.fsf@macbook.be.48ers.dk>
-	<01a201c882fb$c8bab2e0$080514ac@atmel.com>
-	<d6cda7730803101624s42b8287fv442221977d21584d@mail.gmail.com>
-Message-ID: <02fa01c88353$7aee2210$090514ac@atmel.com>
+From: jacmet at uclibc.org <jacmet@uclibc.org>
+Date: Tue, 11 Mar 2008 01:49:47 -0700 (PDT)
+Subject: [Buildroot] svn commit: trunk/buildroot/target
+Message-ID: <20080311084947.4030012011A@busybox.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+Author: jacmet
+Date: 2008-03-11 01:49:45 -0700 (Tue, 11 Mar 2008)
+New Revision: 21287
+
+Log:
+buildroot: fix missing ARCH for some x86 variants
+
+Patch by Nigel Kukard.
 
 
-
-> >
->>  nodevfiles:
->>
->>             rm -rf $(TARGET_DIR)/usr/include
->>
->>             find $(TARGET_DIR)/usr/lib -name '*.a' -delete
->>
->>  Then the user can make his own decisions.
->>  The packages will not add any ".a" packages,
->>  and none will be deleted, unless the user wishes them to be.
-> 
-> Provided he actually reads this mailling list. IMHO we already have
-> too many magic targets.
-
-If a separate configuration was added to clean out the directory,
-then that problem is solved.
+Modified:
+   trunk/buildroot/target/Config.in.arch
 
 
-Best Regards
-Ulf Samuelsson
+Changeset:
+Modified: trunk/buildroot/target/Config.in.arch
+===================================================================
+--- trunk/buildroot/target/Config.in.arch	2008-03-11 08:17:17 UTC (rev 21286)
++++ trunk/buildroot/target/Config.in.arch	2008-03-11 08:49:45 UTC (rev 21287)
+@@ -476,8 +476,13 @@
+ 	default "i386"		if BR2_x86_i386
+ 	default "i486"		if BR2_x86_i486
+ 	default "i586"		if BR2_x86_i586
++	default "i586"		if BR2_x86_pentium_mmx
+ 	default "i686"		if BR2_x86_i686
++	default "i686"		if BR2_x86_pentium2
++	default "i686"		if BR2_x86_pentium3
+ 	default "i686"		if BR2_x86_pentium4
++	default "i686"		if BR2_x86_pentium_m
++	default "i686"		if BR2_x86_pentiumpro
+ 	default "i686"		if BR2_x86_nocona
+ 	default "i686"		if BR2_x86_core2
+ 	default "ia64"		if BR2_ia64
