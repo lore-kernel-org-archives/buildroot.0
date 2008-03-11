@@ -1,54 +1,60 @@
-From: Sunil Gupta <sg@monsoon.com>
-Date: Tue, 11 Mar 2008 09:30:58 -0400 (EDT)
-Subject: [Buildroot] svn commit: trunk/buildroot/package/fakeroot
-In-Reply-To: <20080311131116.CF77A120135@busybox.net>
-References: <20080311131116.CF77A120135@busybox.net>
-Message-ID: <47870.69.65.92.49.1205242258.squirrel@webmail.learningsoft.net>
+From: Habib Bouaziz-Viallet <habib.bouaziz@gmail.com>
+Date: Tue, 11 Mar 2008 13:27:25 +0100
+Subject: [Buildroot] build for AT91 fails
+Message-ID: <d449ded70803110527t3ea96b09r78dec92cb72beea3@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Changing the fakeroot version number is not sufficient to correct the
-defect in this case. As noted in the bug report:
+Hi all !
 
-    The closest matching version is 1.9.3. However, the patch file
-    "fakeroot-revert-ltmain.patch" fails to apply against that
-    version.
+I'm facing a problem with targeting 'at91sam9261ek'
 
--- sg
 
-> Author: ninevoltz
-> Date: 2008-03-11 06:11:14 -0700 (Tue, 11 Mar 2008)
-> New Revision: 21289
->
-> Log:
-> updated fakeroot version
->
-> Modified:
->    trunk/buildroot/package/fakeroot/fakeroot.mk
->
->
-> Changeset:
-> Modified: trunk/buildroot/package/fakeroot/fakeroot.mk
-> ===================================================================
-> --- trunk/buildroot/package/fakeroot/fakeroot.mk	2008-03-11 10:25:42 UTC
-> (rev 21288)
-> +++ trunk/buildroot/package/fakeroot/fakeroot.mk	2008-03-11 13:11:14 UTC
-> (rev 21289)
-> @@ -3,7 +3,7 @@
->  # fakeroot
->  #
->  #############################################################
-> -FAKEROOT_VERSION:=1.9
-> +FAKEROOT_VERSION:=1.9.3
->  FAKEROOT_SOURCE:=fakeroot_$(FAKEROOT_VERSION).tar.gz
->  FAKEROOT_SITE:=$(BR2_DEBIAN_MIRROR)/debian/pool/main/f/fakeroot
->  FAKEROOT_CAT:=$(ZCAT)
->
-> _______________________________________________
-> buildroot mailing list
-> buildroot at uclibc.org
-> http://busybox.net/mailman/listinfo/buildroot
->
+
+Checking build system dependencies:
+BUILDROOT_DL_DIR clean:                         Ok
+CC clean:                                       Ok
+CXX clean:                                      Ok
+CPP clean:                                      Ok
+CFLAGS clean:                                   Ok
+INCLUDES clean:                                 Ok
+CXXFLAGS clean:                                 Ok
+which installed:                                Ok
+sed works:                                      Ok (/bin/sed)
+GNU make version '3.81':                        Ok
+C compiler '/usr/bin/gcc'
+C compiler version '4.1.2':                     Ok
+C++ compiler '/usr/bin/g++'
+C++ compiler version '4.1.2':                   Ok
+bison installed:                                Ok
+flex installed:                                 Ok
+gettext installed:                              Ok
+makeinfo installed:                             Ok
+Build system dependencies:                      Ok
+
+rm -rf /home/habib/PROJETS/PERSO/buildroot/project_build_arm/AT91_SBC/buildroot-config
+mkdir -p /home/habib/PROJETS/PERSO/buildroot/project_build_arm/AT91_SBC
+cp -dpRf package/config/buildroot-config
+/home/habib/PROJETS/PERSO/buildroot/project_build_arm/AT91_SBC/buildroot-config
+toolchain/patch-kernel.sh
+/home/habib/PROJETS/PERSO/buildroot/project_build_arm/AT91_SBC/linux-2.6.24
+toolchain/kernel-headers \
+                linux-2.6.24-\*.patch{,.gz,.bz2}
+toolchain/patch-kernel.sh
+/home/habib/PROJETS/PERSO/buildroot/project_build_arm/AT91_SBC/linux-2.6.24
+target/device/Atmel/at91sam9261ek/kernel-patches linux-2.6.24-\*.patch
+;
+Aborting.  'target/device/Atmel/at91sam9261ek/kernel-patches' is not a
+directory.
+make: *** [/home/habib/PROJETS/PERSO/buildroot/project_build_arm/AT91_SBC/linux-2.6.24/.patched]
+Erreur 1
+
+May be ../at91sam9261ek/kernel-patches is a symlink ?
+
+please help.
+
+-- 
+M. Bouaziz-Viallet
