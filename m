@@ -1,21 +1,17 @@
 From: Sunil Gupta <sg@monsoon.com>
-Date: Tue, 11 Mar 2008 09:45:44 -0400 (EDT)
-Subject: [Buildroot] svn commit: trunk/buildroot/package/fakeroot
-In-Reply-To: <20080311133228.7C2CC12C5D2@busybox.net>
-References: <20080311133228.7C2CC12C5D2@busybox.net>
-Message-ID: <53247.69.65.92.49.1205243144.squirrel@webmail.learningsoft.net>
+Date: Tue, 11 Mar 2008 09:49:33 -0400 (EDT)
+Subject: [Buildroot] [buildroot 0002514]: fakeroot has an invalid version
+Message-ID: <51000.69.65.92.49.1205243373.squirrel@webmail.learningsoft.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-> Log:
-> removed patch for older fakeroot
+> I just updated it to 1.9.3. It seems to be working ok for me.
 >
-> Removed:
->    trunk/buildroot/package/fakeroot/fakeroot-revert-ltmain.patch
+> John Voltz
 
-Applying fakeroot-uclibc-LFS.patch now fails.
+Do you perform "make host-fakeroot-dirclean" before you test?
 
 -- sg
