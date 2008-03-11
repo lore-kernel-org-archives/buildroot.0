@@ -1,76 +1,93 @@
-From: Marco Lazzarotto <m.lazzarotto@robox.it>
-Date: Tue, 11 Mar 2008 15:25:56 +0100
-Subject: [Buildroot] Trying to build parted
-Message-ID: <47D69674.9060504@robox.it>
+From: Habib Bouaziz-Viallet <habib.bouaziz@gmail.com>
+Date: Tue, 11 Mar 2008 15:46:55 +0100
+Subject: [Buildroot] build for AT91 fails
+In-Reply-To: <04c101c88381$c24bda70$090514ac@atmel.com>
+References: <d449ded70803110527t3ea96b09r78dec92cb72beea3@mail.gmail.com>
+	<04c101c88381$c24bda70$090514ac@atmel.com>
+Message-ID: <d449ded70803110746t6dc07450gc297414415fdb1da@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi all,
+2008/3/11, Ulf Samuelsson <ulf.samuelsson@atmel.com>:
+>
+>
+>  > Hi all !
+>  >
+>  > I'm facing a problem with targeting 'at91sam9261ek'
+>  >
+>  >
+>  >
+>  > Checking build system dependencies:
+>  > BUILDROOT_DL_DIR clean:                         Ok
+>  > CC clean:                                       Ok
+>  > CXX clean:                                      Ok
+>  > CPP clean:                                      Ok
+>  > CFLAGS clean:                                   Ok
+>  > INCLUDES clean:                                 Ok
+>  > CXXFLAGS clean:                                 Ok
+>  > which installed:                                Ok
+>  > sed works:                                      Ok (/bin/sed)
+>  > GNU make version '3.81':                        Ok
+>  > C compiler '/usr/bin/gcc'
+>  > C compiler version '4.1.2':                     Ok
+>  > C++ compiler '/usr/bin/g++'
+>  > C++ compiler version '4.1.2':                   Ok
+>  > bison installed:                                Ok
+>  > flex installed:                                 Ok
+>  > gettext installed:                              Ok
+>  > makeinfo installed:                             Ok
+>  > Build system dependencies:                      Ok
+>  >
+>  > rm -rf /home/habib/PROJETS/PERSO/buildroot/project_build_arm/AT91_SBC/buildroot-config
+>  > mkdir -p /home/habib/PROJETS/PERSO/buildroot/project_build_arm/AT91_SBC
+>  > cp -dpRf package/config/buildroot-config
+>  > /home/habib/PROJETS/PERSO/buildroot/project_build_arm/AT91_SBC/buildroot-config
+>  > toolchain/patch-kernel.sh
+>  > /home/habib/PROJETS/PERSO/buildroot/project_build_arm/AT91_SBC/linux-2.6.24
+>  > toolchain/kernel-headers \
+>  >                linux-2.6.24-\*.patch{,.gz,.bz2}
+>  > toolchain/patch-kernel.sh
+>  > /home/habib/PROJETS/PERSO/buildroot/project_build_arm/AT91_SBC/linux-2.6.24
+>  > target/device/Atmel/at91sam9261ek/kernel-patches linux-2.6.24-\*.patch
+>  > ;
+>  > Aborting.  'target/device/Atmel/at91sam9261ek/kernel-patches' is not a
+>  > directory.
+>
+>
+> When you build against a new kernel, you have to make sure that
+>  you generate the appropriate directories.
+>  Also, the latest maxim.org.za patches should be present.
 
-I'm trying to compile GNU parted without success.
-Did someone try it?
+I though that make creates appropriate directories for kernel patches.
 
-I created the directory package/parted with the attached files Config.in 
-and parted.mk
+Ok John suggest me to create 'kernel-patches' directory but you know
+that there is a directory
+'target/device/Atmel/Linux/kernel-patches-2.6.20.4/' in within some
+patches are already present
 
-After modifying package/e2fsprogs/e2fsprogs.mk (as included) to install 
-the headers and the librarie for libuuid in $STAGING_DIR i get this error:
+habib at mizar:~/PROJETS/PERSO/buildroot$ ll
+target/device/Atmel/Linux/kernel-patches-2.6.20.4
+total 764
+-rw-r--r-- 1 habib commun 775953 2008-03-11 13:36 linux-2.6.20.4-atmel.patch
 
-/home/marco/buildroot/build_i586/staging_dir/usr/bin/i586-linux-uclibc-gcc 
--I. -Os -pipe -I/home/marco/buildroot/build_i586/staging_dir/usr/include 
--I/home/marco/buildroot/build_i586/staging_dir/include 
---sysroot=/home/marco/buildroot/build_i586/staging_dir/ -isysroot 
-/home/marco/buildroot/build_i586/staging_dir -mtune=i586 -march=i586 
--Werror -MT regex.lo -MD -MP -MF .deps/regex.Tpo -c regex.c -o regex.o
-In file included from regex.c:61:
-regcomp.c: In function 'init_dfa':
-regcomp.c:867: error: 'MB_CUR_MAX' undeclared (first use in this function)
-regcomp.c:867: error: (Each undeclared identifier is reported only once
-regcomp.c:867: error: for each function it appears in.)
-make[3]: *** [regex.lo] Error 1
-make[3]: Leaving directory 
-`/home/marco/buildroot/build_i586/parted-1.8.8/lib'
-make[2]: *** [all] Error 2
-make[2]: Leaving directory 
-`/home/marco/buildroot/build_i586/parted-1.8.8/lib'
-make[1]: *** [all-recursive] Error 1
-make[1]: Leaving directory `/home/marco/buildroot/build_i586/parted-1.8.8'
-make: *** [/home/marco/buildroot/build_i586/parted-1.8.8/parted] Error 2
 
-[I tried to #include <stdlib.h> in the file 
-build_i586/parted-1.8.8/lib/regex.c but without success]
+I'll give it a try with John suggestions
+
+>
+>  A known deficiency, and an update would be welcome.
+
+svn up did not help.
+>
+>  Best Regards
+>
+> Ulf Samuelsson
+>
+>
+
+Many thanks
 
 -- 
-  *------------------------------------------------------------------*
-  | Vi preghiamo, se questo messaggio fosse ricevuto per errore,     |
-  | di avvisare il mittente e, tenuto conto delle responsabilita'    |
-  | connesse all'indebito utilizzo e/o divulgazione del messaggio    |
-  | e/o delle informazioni in esso contenute, di cancellare          |
-  | l'originale e distruggere le varie copie o stampe. Grazie        |
-  *------------------------------------------------------------------*
-  | The information in this e-mail is solely for the addressee.      |
-  | Please delete this e-mail if you are not the intended recipient. |
-  | Do not disclose or distribute the communication in any form.     |
-  *------------------------------------------------------------------*
--------------- next part --------------
-An embedded and charset-unspecified text was scrubbed...
-Name: e2fsprogs.mk
-Url: http://busybox.net/lists/buildroot/attachments/20080311/ea105bd6/attachment.diff 
--------------- next part --------------
-An embedded and charset-unspecified text was scrubbed...
-Name: parted.mk
-Url: http://busybox.net/lists/buildroot/attachments/20080311/ea105bd6/attachment-0001.diff 
--------------- next part --------------
-An embedded and charset-unspecified text was scrubbed...
-Name: Config.in
-Url: http://busybox.net/lists/buildroot/attachments/20080311/ea105bd6/attachment-0002.diff 
--------------- next part --------------
-A non-text attachment was scrubbed...
-Name: m_lazzarotto.vcf
-Type: text/x-vcard
-Size: 259 bytes
-Desc: not available
-Url : http://busybox.net/lists/buildroot/attachments/20080311/ea105bd6/attachment.vcf 
+M. Bouaziz-Viallet
