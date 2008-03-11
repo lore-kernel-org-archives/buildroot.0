@@ -1,41 +1,35 @@
-From: Nigel Kukard <nkukard@lbsd.net>
-Date: Tue, 11 Mar 2008 15:54:25 +0000
-Subject: [Buildroot] svn commit: trunk/buildroot/toolchain/binutils
-In-Reply-To: <20080311154910.4CAEC120137@busybox.net>
-References: <20080311154910.4CAEC120137@busybox.net>
-Message-ID: <1205250865.10692.235.camel@nigel-x60>
+From: ninevoltz at uclibc.org <ninevoltz@uclibc.org>
+Date: Tue, 11 Mar 2008 08:58:06 -0700 (PDT)
+Subject: [Buildroot] svn commit: trunk/buildroot/package/mpfr
+Message-ID: <20080311155806.1627A120137@busybox.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+Author: ninevoltz
+Date: 2008-03-11 08:58:05 -0700 (Tue, 11 Mar 2008)
+New Revision: 21294
 
-> Author: ninevoltz
-> Date: 2008-03-11 08:49:09 -0700 (Tue, 11 Mar 2008)
-> New Revision: 21293
-> 
-> Log:
-> fixed path problem
-> 
-> Modified:
->    trunk/buildroot/toolchain/binutils/binutils.mk
-> 
-> 
-> Changeset:
-> Modified: trunk/buildroot/toolchain/binutils/binutils.mk
-> ===================================================================
+Log:
+fixed path to mpfr patch 
 
-I added /gnu/  because most of the other packages have it.
+Modified:
+   trunk/buildroot/package/mpfr/mpfr.mk
 
-grep -r '$(BR2_GNU_MIRROR)/gnu' buildroot/
 
-The path will be invalid if you remove it?
-
--------------- next part --------------
-A non-text attachment was scrubbed...
-Name: not available
-Type: application/pgp-signature
-Size: 189 bytes
-Desc: This is a digitally signed message part
-Url : http://busybox.net/lists/buildroot/attachments/20080311/c107deef/attachment.pgp 
+Changeset:
+Modified: trunk/buildroot/package/mpfr/mpfr.mk
+===================================================================
+--- trunk/buildroot/package/mpfr/mpfr.mk	2008-03-11 15:49:09 UTC (rev 21293)
++++ trunk/buildroot/package/mpfr/mpfr.mk	2008-03-11 15:58:05 UTC (rev 21294)
+@@ -32,7 +32,7 @@
+ 	toolchain/patch-kernel.sh $(MPFR_DIR) package/mpfr/ \*.patch
+ 	$(CONFIG_UPDATE) $(MPFR_DIR)
+ ifneq ($(MPFR_PATCH),)
+-	( cd $(MPFR_DIR); patch -p1 -N -Z < $(MPFR_PATCH_SOURCE); )
++	( cd $(MPFR_DIR); patch -p1 -N -Z < ../../$(MPFR_PATCH_SOURCE); )
+ endif
+ 	touch $@
+ 
