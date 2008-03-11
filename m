@@ -1,42 +1,39 @@
-From: Will Wagner <will_wagner@carallon.com>
-Date: Tue, 11 Mar 2008 20:39:09 +0000
-Subject: [Buildroot] svn commit: trunk/buildroot/package/tslib
-In-Reply-To: <1204829421.9461.81.camel@localhost>
-References: <20080306182758.09F16120295@busybox.net>
-	<1204829421.9461.81.camel@localhost>
-Message-ID: <47D6EDED.5090506@carallon.com>
+From: Hamish Moffatt <hamish@cloud.net.au>
+Date: Wed, 12 Mar 2008 10:22:34 +1100
+Subject: [Buildroot] [buildroot 0002514]: fakeroot has an invalid	version
+In-Reply-To: <d6cda7730803110655i42ba1d12pd0253344bec51e10@mail.gmail.com>
+References: <3602fa0f2bfc9d33e7fe0380c3243a05@busybox.net>
+	<d6cda7730803102151k687bc79ek9117e63ae3241dc8@mail.gmail.com>
+	<1205216050.8434.14.camel@localhost>
+	<46a136670803110638j36c03d7eo5f83f200f5cd7246@mail.gmail.com>
+	<d6cda7730803110655i42ba1d12pd0253344bec51e10@mail.gmail.com>
+Message-ID: <20080311232234.GA10859@cloud.net.au>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-
->> Log:
->> patches for tslib
->>
->> Added:
->>    trunk/buildroot/package/tslib/tslib-1.0-absbit.patch
->>    trunk/buildroot/package/tslib/tslib-1.0-remove-return-on-error-from-check-df.patch
+On Tue, Mar 11, 2008 at 10:55:24AM -0300, Thiago A. Corr?a wrote:
+> John,
 > 
-> These two patches are actually wrong, I think the tslib error you (I)
-> see is because of big-endian architecture. I will hopefully give it a go
-> next week. As long as I remember it (-:
+>    What I'm rumbling about is that in no less than 1 or 2 months we
+> will be forced to change it again, just because someone at debian
+> decided that they wouldn't host an older version anymore. This is
+> quite constant with the packages that download from there.
 
-tslib-1.0-remove-return-on-error-from-check-df.patch is definitely wrong 
-- with this patch applied I get lots of error messages and inspecting 
-the code the patch removes code that is needed.
+Please don't suggest malicious intent from Debian where none exists. The
+Debian package pool (http://ftp.debian.org/debian/pool/... and mirrors)
+effectively uses garbage collection; versions of packages are
+automatically removed when they are no longer the current version in 
+the 'stable', 'unstable' or 'testing' distributions.
 
-Not sure about the tslib-1.0-absbit.patch patch. I think it is correct 
-as you only need 16 bits as ABS_MAX is 0x3f
+One way to stabilise the fakeroot package would be to use the version
+from stable, unless we particularly need features from the new version.
+That version is 1.5.10. stable only changes every couple of years other
+than for security updates.
 
-Regards,
 
-Will
-
+Hamish
 -- 
-------------------------------------------------------------------------
-Will Wagner                                     will_wagner at carallon.com
-Senior Project Engineer                  Office Tel: +44 (0)20 7371 2032
-Carallon Ltd, Studio G20, Shepherds Building, Rockley Rd, London W14 0DA
-------------------------------------------------------------------------
+Hamish Moffatt VK3SB <hamish@debian.org> <hamish@cloud.net.au>
