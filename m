@@ -1,69 +1,63 @@
-From: =?ISO-8859-1?Q?Thiago_A._Corr=EAa?= <thiago.correa@gmail.com>
-Date: Tue, 11 Mar 2008 10:55:24 -0300
-Subject: [Buildroot] [buildroot 0002514]: fakeroot has an invalid version
-In-Reply-To: <46a136670803110638j36c03d7eo5f83f200f5cd7246@mail.gmail.com>
-References: <3602fa0f2bfc9d33e7fe0380c3243a05@busybox.net>
-	<d6cda7730803102151k687bc79ek9117e63ae3241dc8@mail.gmail.com>
-	<1205216050.8434.14.camel@localhost>
-	<46a136670803110638j36c03d7eo5f83f200f5cd7246@mail.gmail.com>
-Message-ID: <d6cda7730803110655i42ba1d12pd0253344bec51e10@mail.gmail.com>
+From: Ulf Samuelsson <ulf.samuelsson@atmel.com>
+Date: Tue, 11 Mar 2008 15:07:37 +0100
+Subject: [Buildroot] build for AT91 fails
+References: <d449ded70803110527t3ea96b09r78dec92cb72beea3@mail.gmail.com>
+Message-ID: <04c101c88381$c24bda70$090514ac@atmel.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-John,
-
-   What I'm rumbling about is that in no less than 1 or 2 months we
-will be forced to change it again, just because someone at debian
-decided that they wouldn't host an older version anymore. This is
-quite constant with the packages that download from there.
 
 
-On Tue, Mar 11, 2008 at 10:38 AM, John Voltz <john.voltz@gmail.com> wrote:
-> I just updated it to 1.9.3. It seems to be working ok for me.
->
-> John Voltz
->
->
->
->
-> On Tue, Mar 11, 2008 at 2:14 AM, Hans-Christian Egtvedt
-> <hans-christian.egtvedt@atmel.com> wrote:
->
-> >
-> >
-> >
-> >
-> > On Tue, 2008-03-11 at 01:51 -0300, Thiago A. Corr?a wrote:
-> > > Hi there,
-> > >
-> > >     Is debian.org the only source for those things? It's quite
-> > > annoying when they suddenly remove files from their servers... and
-> > > this happens just about all the time.
-> > >
-> >
-> > This repository seems to be more complete, perhaps move to this?
-> >
-> > http://ftp.tr.debian.org/debian/pool/main/f/fakeroot/
-> >
-> > --
-> > With kind regards,
-> > Hans-Christian Egtvedt, Applications Engineer
-> >
-> >
-> >
-> >
-> >
-> > _______________________________________________
-> > buildroot mailing list
-> > buildroot at uclibc.org
-> > http://busybox.net/mailman/listinfo/buildroot
->
->
-> _______________________________________________
->  buildroot mailing list
->  buildroot at uclibc.org
->  http://busybox.net/mailman/listinfo/buildroot
->
+> Hi all !
+> 
+> I'm facing a problem with targeting 'at91sam9261ek'
+> 
+> 
+> 
+> Checking build system dependencies:
+> BUILDROOT_DL_DIR clean:                         Ok
+> CC clean:                                       Ok
+> CXX clean:                                      Ok
+> CPP clean:                                      Ok
+> CFLAGS clean:                                   Ok
+> INCLUDES clean:                                 Ok
+> CXXFLAGS clean:                                 Ok
+> which installed:                                Ok
+> sed works:                                      Ok (/bin/sed)
+> GNU make version '3.81':                        Ok
+> C compiler '/usr/bin/gcc'
+> C compiler version '4.1.2':                     Ok
+> C++ compiler '/usr/bin/g++'
+> C++ compiler version '4.1.2':                   Ok
+> bison installed:                                Ok
+> flex installed:                                 Ok
+> gettext installed:                              Ok
+> makeinfo installed:                             Ok
+> Build system dependencies:                      Ok
+> 
+> rm -rf /home/habib/PROJETS/PERSO/buildroot/project_build_arm/AT91_SBC/buildroot-config
+> mkdir -p /home/habib/PROJETS/PERSO/buildroot/project_build_arm/AT91_SBC
+> cp -dpRf package/config/buildroot-config
+> /home/habib/PROJETS/PERSO/buildroot/project_build_arm/AT91_SBC/buildroot-config
+> toolchain/patch-kernel.sh
+> /home/habib/PROJETS/PERSO/buildroot/project_build_arm/AT91_SBC/linux-2.6.24
+> toolchain/kernel-headers \
+>                linux-2.6.24-\*.patch{,.gz,.bz2}
+> toolchain/patch-kernel.sh
+> /home/habib/PROJETS/PERSO/buildroot/project_build_arm/AT91_SBC/linux-2.6.24
+> target/device/Atmel/at91sam9261ek/kernel-patches linux-2.6.24-\*.patch
+> ;
+> Aborting.  'target/device/Atmel/at91sam9261ek/kernel-patches' is not a
+> directory.
+
+When you build against a new kernel, you have to make sure that
+you generate the appropriate directories.
+Also, the latest maxim.org.za patches should be present.
+
+A known deficiency, and an update would be welcome.
+
+Best Regards
+Ulf Samuelsson
