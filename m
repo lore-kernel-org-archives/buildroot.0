@@ -1,35 +1,28 @@
-From: ninevoltz at uclibc.org <ninevoltz@uclibc.org>
-Date: Tue, 11 Mar 2008 12:13:40 -0700 (PDT)
-Subject: [Buildroot] svn commit: trunk/buildroot/package/samba
-Message-ID: <20080311191340.0D1EA120135@busybox.net>
+From: Peter Korsgaard <jacmet@uclibc.org>
+Date: Tue, 11 Mar 2008 20:14:07 +0100
+Subject: [Buildroot] svn commit: trunk/buildroot:	package/editors/uemacs
+	package/module-in etc...
+In-Reply-To: <1205261807.10692.241.camel@nigel-x60> (Nigel Kukard's message of
+	"Tue\, 11 Mar 2008 18\:56\:47 +0000")
+References: <20080311185419.65024120135@busybox.net>
+	<1205261807.10692.241.camel@nigel-x60>
+Message-ID: <87myp5t6o0.fsf@macbook.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Author: ninevoltz
-Date: 2008-03-11 12:13:38 -0700 (Tue, 11 Mar 2008)
-New Revision: 21306
+>>>>> "Nigel" == Nigel Kukard <nkukard@lbsd.net> writes:
 
-Log:
-updated samba version
+Hi,
 
-Modified:
-   trunk/buildroot/package/samba/samba.mk
+ Nigel> Didn't add it eveyrwhere as I wasn't sure if all the sources were
+ Nigel> available on all the mirrors  ;)
 
+I'm not exactly sure, but for the mirror I checked it was ok (nl).
 
-Changeset:
-Modified: trunk/buildroot/package/samba/samba.mk
-===================================================================
---- trunk/buildroot/package/samba/samba.mk	2008-03-11 18:54:17 UTC (rev 21305)
-+++ trunk/buildroot/package/samba/samba.mk	2008-03-11 19:13:38 UTC (rev 21306)
-@@ -3,7 +3,7 @@
- # samba
- #
- #############################################################
--SAMBA_VERSION:=3.0.28
-+SAMBA_VERSION:=3.0.28a
- SAMBA_SOURCE:=samba-$(SAMBA_VERSION).tar.gz
- SAMBA_SITE:=ftp://us4.samba.org/pub/samba/
- SAMBA_DIR:=$(BUILD_DIR)/samba-$(SAMBA_VERSION)/source
+Anyway, the default value (www.kernel.org) is surely ok.
+
+-- 
+Bye, Peter Korsgaard
