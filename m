@@ -1,49 +1,64 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Wed, 12 Mar 2008 09:18:43 +0100
-Subject: [Buildroot] [PATCH] Fixed URL for fakeroot sources
-Message-ID: <20080312091843.615e5bbf@crazy>
+From: bugs at busybox.net <bugs@busybox.net>
+Date: Wed, 12 Mar 2008 01:32:37 -0700
+Subject: [Buildroot] [buildroot 0002504]: buildroot fails: directory
+	"kernel-patches-2.6.24" does not exist
+Message-ID: <e2d8bb846810c67d33d7710bc0f8c190@bugs.uclibc.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Fixed URL for fakeroot sources
 
-Used a fixed URL from snapshot.debian.net for fakeroot sources, so
-that it won't break every time a new version is uploaded to Debian.
+A NOTE has been added to this issue. 
+====================================================================== 
+http://busybox.net/bugs/view.php?id=2504 
+====================================================================== 
+Reported By:                chris_k
+Assigned To:                buildroot
+====================================================================== 
+Project:                    buildroot
+Issue ID:                   2504
+Category:                   Architecture Specific
+Reproducibility:            always
+Severity:                   trivial
+Priority:                   normal
+Status:                     assigned
+====================================================================== 
+Date Submitted:             03-10-2008 04:42 PDT
+Last Modified:              03-12-2008 01:32 PDT
+====================================================================== 
+Summary:                    buildroot fails: directory "kernel-patches-2.6.24"
+does not exist
+Description: 
+building buildroot aborts, since directory
+target/device/x86/i386/kernel-patches-2.6.24 does not exist.
 
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+toolchain/patch-kernel.sh
+/home/cklaiber/buildroot/project_build_i486/uclibc/linux-2.6.24
+target/device/x86/i386/kernel-patches-2.6.24/ linux-2.6.24-\*.patch ; 
+Aborting.  'target/device/x86/i386/kernel-patches-2.6.24/' is not a
+directory.
+make: ***
+[/home/cklaiber/buildroot/project_build_i486/uclibc/linux-2.6.24/.patched]
+Fehler 1
 
----
- package/fakeroot/fakeroot.mk |    4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+====================================================================== 
 
-Index: buildroot.new/package/fakeroot/fakeroot.mk
-===================================================================
---- buildroot.new.orig/package/fakeroot/fakeroot.mk
-+++ buildroot.new/package/fakeroot/fakeroot.mk
-@@ -4,8 +4,8 @@
- #
- #############################################################
- FAKEROOT_VERSION:=1.9.3
--FAKEROOT_SOURCE:=fakeroot_$(FAKEROOT_VERSION).tar.gz
--FAKEROOT_SITE:=$(BR2_DEBIAN_MIRROR)/debian/pool/main/f/fakeroot
-+FAKEROOT_SOURCE:=fakeroot-$(FAKEROOT_VERSION).tar.gz
-+FAKEROOT_SITE:=http://snapshot.debian.net/archive/2008/02/06/debian/pool/main/f/fakeroot
- FAKEROOT_CAT:=$(ZCAT)
- FAKEROOT_SOURCE_DIR:=$(BUILD_DIR)/fakeroot-$(FAKEROOT_VERSION)
- FAKEROOT_DIR1:=$(TOOL_BUILD_DIR)/fakeroot-$(FAKEROOT_VERSION)-host
+---------------------------------------------------------------------- 
+ KHAksnes - 03-12-08 01:32  
+---------------------------------------------------------------------- 
+The obvious workaround:
+mkdir target/device/x86/i36/kernel-patches-2.6.24 
+works well. 
 
--- 
-Thomas Petazzoni, Free Electrons
-Free Embedded Linux Training Materials
-on http://free-electrons.com/training
-(More than 1500 pages!)
--------------- next part --------------
-A non-text attachment was scrubbed...
-Name: signature.asc
-Type: application/pgp-signature
-Size: 189 bytes
-Desc: not available
-Url : http://busybox.net/lists/buildroot/attachments/20080312/06dc9899/attachment.pgp 
+Issue History 
+Date Modified   Username       Field                    Change               
+====================================================================== 
+03-10-08 04:42  chris_k        New Issue                                    
+03-10-08 04:42  chris_k        Status                   new => assigned     
+03-10-08 04:42  chris_k        Assigned To               => buildroot       
+03-10-08 07:23  grindars       Issue Monitored: grindars                    
+03-11-08 15:46  KHAksnes       Issue Monitored: KHAksnes                    
+03-12-08 01:32  KHAksnes       Note Added: 0005654                          
+======================================================================
