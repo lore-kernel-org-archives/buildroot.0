@@ -1,7 +1,7 @@
 From: bugs at busybox.net <bugs@busybox.net>
-Date: Wed, 12 Mar 2008 07:53:45 -0700
+Date: Wed, 12 Mar 2008 08:07:21 -0700
 Subject: [Buildroot] [buildroot 0002534]: Impossible to log
-Message-ID: <1597e22d334bdc04f23c96084bdade77@bugs.uclibc.org>
+Message-ID: <8ccf9fa9b7a246409a390c034629f308@busybox.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -25,7 +25,7 @@ Priority:                   normal
 Status:                     assigned
 ====================================================================== 
 Date Submitted:             03-12-2008 04:21 PDT
-Last Modified:              03-12-2008 07:53 PDT
+Last Modified:              03-12-2008 08:07 PDT
 ====================================================================== 
 Summary:                    Impossible to log
 Description: 
@@ -63,6 +63,34 @@ architecture. Which toolchain and versions of all components (binutils,
 GCC, uClibc, etc.). Are you using glibc or uClibc? Once you provide the
 information, it can be analyzed. 
 
+---------------------------------------------------------------------- 
+ saga31 - 03-12-08 08:07  
+---------------------------------------------------------------------- 
+Sorry. I complete the information.
+
+The processor architecture is an arm AT91SAM9620.
+
+versions of components:
+binutils-2.18.tar.bz2
+busybox-1.9.1.tar.bz2
+fakeroot_1.9.tar.gz
+gcc-4.2.1.tar.bz2
+genext2fs-1.4.tar.gz
+gmp-4.2.2.tar.bz2
+gzip-1.3.5.tar.gz
+linux-2.6.22.10.tar.bz2
+lzma-4.32.4.tar.gz
+lzo_1.08.orig.tar.gz
+module-init-tools-3.2.2.tar.bz2
+mpfr-2.3.0.patch
+mpfr-2.3.0.tar.bz2
+mtd-utils-1.1.0.tar.bz2
+tcl8.4.9-src.tar.gz
+uClibc-0.9.29.tar.bz2
+zlib-1.2.3.tar.bz2
+
+thanks 
+
 Issue History 
 Date Modified   Username       Field                    Change               
 ====================================================================== 
@@ -70,4 +98,5 @@ Date Modified   Username       Field                    Change
 03-12-08 04:21  saga31         Status                   new => assigned     
 03-12-08 04:21  saga31         Assigned To               => buildroot       
 03-12-08 07:53  sjhill         Note Added: 0005664                          
+03-12-08 08:07  saga31         Note Added: 0005674                          
 ======================================================================
