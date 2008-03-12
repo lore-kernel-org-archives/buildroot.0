@@ -1,40 +1,73 @@
-From: ninevoltz at uclibc.org <ninevoltz@uclibc.org>
-Date: Wed, 12 Mar 2008 07:51:34 -0700 (PDT)
-Subject: [Buildroot] svn commit: trunk/buildroot/package/dbus
-Message-ID: <20080312145134.2589F120132@busybox.net>
+From: bugs at busybox.net <bugs@busybox.net>
+Date: Wed, 12 Mar 2008 07:53:45 -0700
+Subject: [Buildroot] [buildroot 0002534]: Impossible to log
+Message-ID: <1597e22d334bdc04f23c96084bdade77@bugs.uclibc.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Author: ninevoltz
-Date: 2008-03-12 07:51:32 -0700 (Wed, 12 Mar 2008)
-New Revision: 21317
 
-Log:
-fix dbus makefile to install with or without stripping
+A NOTE has been added to this issue. 
+====================================================================== 
+http://busybox.net/bugs/view.php?id=2534 
+====================================================================== 
+Reported By:                saga31
+Assigned To:                buildroot
+====================================================================== 
+Project:                    buildroot
+Issue ID:                   2534
+Category:                   Architecture Specific
+Reproducibility:            always
+Severity:                   block
+Priority:                   normal
+Status:                     assigned
+====================================================================== 
+Date Submitted:             03-12-2008 04:21 PDT
+Last Modified:              03-12-2008 07:53 PDT
+====================================================================== 
+Summary:                    Impossible to log
+Description: 
+Hello,
 
-Modified:
-   trunk/buildroot/package/dbus/dbus.mk
+I have install and setup buildroot, busybox-1.9.1 and linux kenerl
+2.6.22.10, but when I want to connect on my board, it's a big problem.
+
+boot:
+......
+VFS: Mounted root (ext2 filesystem).
+Freeing init memory: 80K
 
 
-Changeset:
-Modified: trunk/buildroot/package/dbus/dbus.mk
-===================================================================
---- trunk/buildroot/package/dbus/dbus.mk	2008-03-12 13:57:59 UTC (rev 21316)
-+++ trunk/buildroot/package/dbus/dbus.mk	2008-03-12 14:51:32 UTC (rev 21317)
-@@ -66,8 +66,13 @@
- 
- $(TARGET_DIR)/$(DBUS_TARGET_BINARY): $(STAGING_DIR)/usr/lib/libdbus-1.so
- 	mkdir -p $(TARGET_DIR)/var/run/dbus $(TARGET_DIR)/var/lib/dbus $(TARGET_DIR)/etc/init.d
-+ifeq ($(BR2_STRIP_none),y)
-+	$(MAKE) DESTDIR=$(TARGET_DIR) \
-+		initdir=/etc/init.d -C $(DBUS_DIR) install
-+else
- 	$(MAKE) DESTDIR=$(TARGET_DIR) STRIPPROG='$(STRIPCMD)' \
- 		initdir=/etc/init.d -C $(DBUS_DIR) install-strip
-+endif
- 	rm -rf $(TARGET_DIR)/usr/lib/dbus-1.0 \
- 		$(TARGET_DIR)/usr/lib/libdbus-1.la \
- 		$(TARGET_DIR)/usr/include/dbus-1.0 \
+
+Welcome to the Erik's uClibc development environment.
+(none) login: root
+Jan  1 00:00:05 login[157]: root login on 'console'
+
+Welcome to the Erik's uClibc development environment.
+(none) login: default
+
+Welcome to the Erik's uClibc development environment.
+(none) login:
+
+I don't know why login fail.
+Help me please.
+====================================================================== 
+
+---------------------------------------------------------------------- 
+ sjhill - 03-12-08 07:53  
+---------------------------------------------------------------------- 
+You have not provided enough information. What is your processor
+architecture. Which toolchain and versions of all components (binutils,
+GCC, uClibc, etc.). Are you using glibc or uClibc? Once you provide the
+information, it can be analyzed. 
+
+Issue History 
+Date Modified   Username       Field                    Change               
+====================================================================== 
+03-12-08 04:21  saga31         New Issue                                    
+03-12-08 04:21  saga31         Status                   new => assigned     
+03-12-08 04:21  saga31         Assigned To               => buildroot       
+03-12-08 07:53  sjhill         Note Added: 0005664                          
+======================================================================
