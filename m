@@ -1,64 +1,42 @@
-From: bugs at busybox.net <bugs@busybox.net>
-Date: Wed, 12 Mar 2008 04:21:50 -0700
-Subject: [Buildroot] [buildroot 0002534]: Impossible to log
-Message-ID: <d04e25b9f21d798fb90eb0fda80b71ab@bugs.busybox.net>
+From: ninevoltz at uclibc.org <ninevoltz@uclibc.org>
+Date: Wed, 12 Mar 2008 04:23:13 -0700 (PDT)
+Subject: [Buildroot] svn commit: trunk/buildroot
+Message-ID: <20080312112313.D9C2C12011A@busybox.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+Author: ninevoltz
+Date: 2008-03-12 04:23:11 -0700 (Wed, 12 Mar 2008)
+New Revision: 21312
 
-The following issue has been SUBMITTED. 
-====================================================================== 
-http://busybox.net/bugs/view.php?id=2534 
-====================================================================== 
-Reported By:                saga31
-Assigned To:                buildroot
-====================================================================== 
-Project:                    buildroot
-Issue ID:                   2534
-Category:                   Architecture Specific
-Reproducibility:            always
-Severity:                   block
-Priority:                   normal
-Status:                     assigned
-====================================================================== 
-Date Submitted:             03-12-2008 04:21 PDT
-Last Modified:              03-12-2008 04:21 PDT
-====================================================================== 
-Summary:                    Impossible to log
-Description: 
-Hello,
+Log:
+added debugging option
 
-I have install and setup buildroot, busybox-1.9.1 and linux kenerl
-2.6.22.10, but when I want to connect on my board, it's a big problem.
-
-boot:
-......
-VFS: Mounted root (ext2 filesystem).
-Freeing init memory: 80K
+Modified:
+   trunk/buildroot/Config.in
 
 
-
-Welcome to the Erik's uClibc development environment.
-(none) login: root
-Jan  1 00:00:05 login[157]: root login on 'console'
-
-Welcome to the Erik's uClibc development environment.
-(none) login: default
-
-Welcome to the Erik's uClibc development environment.
-(none) login:
-
-I don't know why login fail.
-Help me please.
-====================================================================== 
-
-Issue History 
-Date Modified   Username       Field                    Change               
-====================================================================== 
-03-12-08 04:21  saga31         New Issue                                    
-03-12-08 04:21  saga31         Status                   new => assigned     
-03-12-08 04:21  saga31         Assigned To               => buildroot       
-======================================================================
+Changeset:
+Modified: trunk/buildroot/Config.in
+===================================================================
+--- trunk/buildroot/Config.in	2008-03-12 01:13:46 UTC (rev 21311)
++++ trunk/buildroot/Config.in	2008-03-12 11:23:11 UTC (rev 21312)
+@@ -211,6 +211,15 @@
+ 	  none    do not strip (only for debugging!)
+ endchoice
+ 
++if BR2_STRIP_none
++config BR2_ENABLE_DEBUG
++	bool "build packages with debugging symbols"
++	default n
++	help
++	  Build packages with debugging symbols
++	  enabled
++endif
++
+ config BR2_PREFER_STATIC_LIB
+ 	bool "prefer static libraries"
+ 	default n
