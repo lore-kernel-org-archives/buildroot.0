@@ -1,63 +1,205 @@
-From: Hans-Christian Egtvedt <hans-christian.egtvedt@atmel.com>
-Date: Wed, 12 Mar 2008 14:05:12 +0100
-Subject: [Buildroot] [patch] Fix Qtopia Core 4 compile and
-	installtion	and bump to version 4.4.0 snapshot
-In-Reply-To: <d6cda7730803120550t6db30ba0v4d96abf905818ef8@mail.gmail.com>
-References: <1205316445.8480.20.camel@localhost>
-	<d6cda7730803120516h4025e60bt2c6d1051690963e7@mail.gmail.com>
-	<1205325580.8459.3.camel@localhost>
-	<d6cda7730803120550t6db30ba0v4d96abf905818ef8@mail.gmail.com>
-Message-ID: <1205327112.8459.8.camel@localhost>
+From: ninevoltz at uclibc.org <ninevoltz@uclibc.org>
+Date: Wed, 12 Mar 2008 06:07:14 -0700 (PDT)
+Subject: [Buildroot] svn commit: trunk/buildroot:  package
+Message-ID: <20080312130714.F267412011A@busybox.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Wed, 2008-03-12 at 09:50 -0300, Thiago A. Corr?a wrote:
-> >
-> >  Like all other packages, set the PATH variable correct, which is done by
-> >  TARGET_CONFIGURE_OPTS.
-> 
-> How exactly? I have a .mk with:
-> $(MYPACKAGE_DIR)/.configured: $(MYPACKAGE_DIR)/.unpacked
->         (cd $(MYPACKAGE_DIR); rm -rf Makefile; \
->          $(QTOPIA4_QMAKE) -spec
+Author: ninevoltz
+Date: 2008-03-12 06:07:10 -0700 (Wed, 12 Mar 2008)
+New Revision: 21313
 
-Change to
+Log:
+added more debugging options for packages
 
-$(TARGET_CONFIGURE_OPTS) qmake -spec
+Modified:
+   trunk/buildroot/Config.in
+   trunk/buildroot/package/Makefile.in
 
-> qws/linux-$(BR2_PACKAGE_QTOPIA4_EMB_PLATFORM)-g++ \
->         )
->         touch $@
-> 
-> What should I change?
-> 
-> >  With the old Makefile for Qtopia Core non of the executables made were
-> >  executable on target because of weird paths used.
-> >
-> >  Works for me as it is now, I use the TARGET_CONFIGURE_OPTS and do qmake.
-> 
-> It worked for me as it was then. The executable on the target ran just fine.
-> 
 
-I find that weird, since the libraries had a path issue depending on the
-directory you built Qtopia Core.
+Changeset:
+Modified: trunk/buildroot/Config.in
+===================================================================
+--- trunk/buildroot/Config.in	2008-03-12 11:23:11 UTC (rev 21312)
++++ trunk/buildroot/Config.in	2008-03-12 13:07:10 UTC (rev 21313)
+@@ -184,7 +184,44 @@
+ 	help
+ 	  This option show recent versions of packages.
+ 
++config BR2_ENABLE_DEBUG
++	bool "build packages with debugging symbols"
++	default n
++	help
++	  Build packages with debugging symbols
++	  enabled
++
++if BR2_ENABLE_DEBUG
+ choice
++	prompt "gcc debug level"
++	default BR2_DEBUG_2
++	help
++	  Set the debug level for gcc
++
++config BR2_DEBUG_1
++	bool "debug level 1"
++	help
++	  Debug level 1 produces minimal information, enough 
++	  for making backtraces in parts of the program that 
++	  you don't plan to debug. This includes descriptions 
++	  of functions and external variables, but no information
++	  about local variables and no line numbers.
++
++config BR2_DEBUG_2
++	bool "debug level 2"
++	help
++	  The default gcc debug level is 2
++
++config BR2_DEBUG_3
++	bool "debug level 3"
++	help
++	  Level 3 includes extra information, such as all the 
++	  macro definitions present in the program. Some debuggers
++	  support macro expansion when you use -g3.
++endchoice
++endif
++
++choice
+ 	prompt "strip"
+ 	default BR2_STRIP_strip
+ 	help
+@@ -196,12 +233,14 @@
+ 
+ config BR2_STRIP_strip
+ 	bool "strip"
++	depends !BR2_ENABLE_DEBUG
+ 	help
+ 	  strip   is the normal strip command
+ 
+ config BR2_STRIP_sstrip
+ 	bool "sstrip"
+ 	select BR2_PACKAGE_SSTRIP_HOST
++	depends !BR2_ENABLE_DEBUG
+ 	help
+ 	  sstrip  is a strip that discards more than the normal strip
+ 
+@@ -211,15 +250,72 @@
+ 	  none    do not strip (only for debugging!)
+ endchoice
+ 
+-if BR2_STRIP_none
+-config BR2_ENABLE_DEBUG
+-	bool "build packages with debugging symbols"
+-	default n
++choice
++	prompt "gcc optimization level"
++	default BR2_OPTIMIZE_0
+ 	help
+-	  Build packages with debugging symbols
+-	  enabled
+-endif
++	  Set the optimization level for gcc
+ 
++config BR2_OPTIMIZE_0
++	bool "optimization level 0"
++	help
++	  Do not optimize. This is the default. 
++
++config BR2_OPTIMIZE_1
++	bool "optimization level 1"
++	help
++	  Optimize. Optimizing compilation takes somewhat more time, 
++	  and a lot more memory for a large function. With -O, the 
++	  compiler tries to reduce code size and execution time, 
++	  without performing any optimizations that take a great deal 
++	  of compilation time. -O turns on the following optimization 
++	  flags: -fdefer-pop -fdelayed-branch -fguess-branch-probability 
++	  -fcprop-registers -floop-optimize -fif-conversion 
++	  -fif-conversion2 -ftree-ccp -ftree-dce -ftree-dominator-opts 
++	  -ftree-dse -ftree-ter -ftree-lrs -ftree-sra -ftree-copyrename 
++	  -ftree-fre -ftree-ch -funit-at-a-time -fmerge-constants
++	  -O also turns on -fomit-frame-pointer on machines where doing 
++	  so does not interfere with debugging.
++
++config BR2_OPTIMIZE_2
++	bool "optimization level 2"
++	help
++	  Optimize even more. GCC performs nearly all supported optimizations
++	  that do not involve a space-speed tradeoff. The compiler does not 
++	  perform loop unrolling or function inlining when you specify -O2. 
++	  As compared to -O, this option increases both compilation time and 
++	  the performance of the generated code. -O2 turns on all optimization 
++	  flags specified by -O. It also turns on the following optimization 
++	  flags: -fthread-jumps -fcrossjumping -foptimize-sibling-calls 
++	  -fcse-follow-jumps -fcse-skip-blocks -fgcse  -fgcse-lm 
++	  -fexpensive-optimizations -fstrength-reduce -frerun-cse-after-loop  
++	  -frerun-loop-opt -fcaller-saves -fpeephole2 -fschedule-insns  
++	  -fschedule-insns2 -fsched-interblock -fsched-spec -fregmove 
++	  -fstrict-aliasing -fdelete-null-pointer-checks -freorder-blocks  
++	  -freorder-functions -falign-functions -falign-jumps -falign-loops  
++	  -falign-labels -ftree-vrp -ftree-pre
++	  Please note the warning under -fgcse about invoking -O2 on programs
++	  that use computed gotos.
++
++config BR2_OPTIMIZE_3
++	bool "optimization level 3"
++	help
++	  Optimize yet more. -O3 turns on all optimizations specified by -O2 
++	  and also turns on the -finline-functions, -funswitch-loops and 
++	  -fgcse-after-reload options.
++
++config BR2_OPTIMIZE_S
++	bool "optimize for size"
++	help
++	  Optimize for size. -Os enables all -O2 optimizations that do not 
++	  typically increase code size. It also performs further optimizations
++	  designed to reduce code size. -Os disables the following optimization 
++	  flags: -falign-functions -falign-jumps -falign-loops -falign-labels  
++	  -freorder-blocks -freorder-blocks-and-partition -fprefetch-loop-arrays
++	  -ftree-vect-loop-version
++     
++endchoice
++
+ config BR2_PREFER_STATIC_LIB
+ 	bool "prefer static libraries"
+ 	default n
 
-> >  I guess it would be possible to change the installed mkspecs files, but
-> >  I do not see the need.
-> 
-> AFAIK, makes the life of users of the lib easier, so they can call
-> qmake without having to know buildroot specific issues.
-> 
-
-Well, when I use the toolchain in Buildroot by placing it first in my
-PATH it works strait forward; qmake&&make
-
-When you make a package you must look into how Buildroot does this
-anyway.
-
--- 
-With kind regards,
-Hans-Christian Egtvedt, Applications Engineer
+Modified: trunk/buildroot/package/Makefile.in
+===================================================================
+--- trunk/buildroot/package/Makefile.in	2008-03-12 11:23:11 UTC (rev 21312)
++++ trunk/buildroot/package/Makefile.in	2008-03-12 13:07:10 UTC (rev 21313)
+@@ -9,7 +9,32 @@
+ MAKE1:=$(HOSTMAKE) MAKE="$(firstword $(HOSTMAKE)) -j1"
+ MAKE:=$(HOSTMAKE) -j$(BR2_JLEVEL)
+ 
++ifeq ($(BR2_OPTIMIZE_0),y)
++TARGET_OPTIMIZATION=-O0
++endif
++ifeq ($(BR2_OPTIMIZE_1),y)
++TARGET_OPTIMIZATION=-O1
++endif
++ifeq ($(BR2_OPTIMIZE_2),y)
++TARGET_OPTIMIZATION=-O2
++endif
++ifeq ($(BR2_OPTIMIZE_3),y)
++TARGET_OPTIMIZATION=-O3
++endif
++ifeq ($(BR2_OPTIMIZE_S),y)
++TARGET_OPTIMIZATION=-Os
++endif
++ifeq ($(BR2_DEBUG_1),y)
++TARGET_DEBUGGING=-g1
++endif
++ifeq ($(BR2_DEBUG_2),y)
++TARGET_DEBUGGING=-g2
++endif
++ifeq ($(BR2_DEBUG_3),y)
++TARGET_DEBUGGING=-g3
++endif
+ 
++
+ #########################################################################
+ ifeq ($(BR2_TOOLCHAIN_SOURCE),y)
+ TARGET_CFLAGS=$(TARGET_OPTIMIZATION) $(TARGET_DEBUGGING) \
