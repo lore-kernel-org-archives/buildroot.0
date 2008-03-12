@@ -1,27 +1,40 @@
-From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Wed, 12 Mar 2008 15:20:50 +0100
-Subject: [Buildroot] svn commit: trunk/buildroot/package/qtopia4
-In-Reply-To: <20080312135303.CCD1B120150@busybox.net> (ninevoltz@uclibc.org's
-	message of "Wed\, 12 Mar 2008 06\:53\:03 -0700 \(PDT\)")
-References: <20080312135303.CCD1B120150@busybox.net>
-Message-ID: <87myp4nhvh.fsf@macbook.be.48ers.dk>
+From: ninevoltz at uclibc.org <ninevoltz@uclibc.org>
+Date: Wed, 12 Mar 2008 07:51:34 -0700 (PDT)
+Subject: [Buildroot] svn commit: trunk/buildroot/package/dbus
+Message-ID: <20080312145134.2589F120132@busybox.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "ninevoltz" == ninevoltz  <ninevoltz@uclibc.org> writes:
+Author: ninevoltz
+Date: 2008-03-12 07:51:32 -0700 (Wed, 12 Mar 2008)
+New Revision: 21317
 
- ninevoltz> Author: ninevoltz
- ninevoltz> Date: 2008-03-12 06:53:02 -0700 (Wed, 12 Mar 2008)
- ninevoltz> New Revision: 21315
+Log:
+fix dbus makefile to install with or without stripping
 
- ninevoltz> Log:
- ninevoltz> Fix Qtopia Core 4 compile and installation and bump to
- ninevoltz> version 4.4.0
+Modified:
+   trunk/buildroot/package/dbus/dbus.mk
 
-Please note in the commit message who the patch was from.
 
--- 
-Bye, Peter Korsgaard
+Changeset:
+Modified: trunk/buildroot/package/dbus/dbus.mk
+===================================================================
+--- trunk/buildroot/package/dbus/dbus.mk	2008-03-12 13:57:59 UTC (rev 21316)
++++ trunk/buildroot/package/dbus/dbus.mk	2008-03-12 14:51:32 UTC (rev 21317)
+@@ -66,8 +66,13 @@
+ 
+ $(TARGET_DIR)/$(DBUS_TARGET_BINARY): $(STAGING_DIR)/usr/lib/libdbus-1.so
+ 	mkdir -p $(TARGET_DIR)/var/run/dbus $(TARGET_DIR)/var/lib/dbus $(TARGET_DIR)/etc/init.d
++ifeq ($(BR2_STRIP_none),y)
++	$(MAKE) DESTDIR=$(TARGET_DIR) \
++		initdir=/etc/init.d -C $(DBUS_DIR) install
++else
+ 	$(MAKE) DESTDIR=$(TARGET_DIR) STRIPPROG='$(STRIPCMD)' \
+ 		initdir=/etc/init.d -C $(DBUS_DIR) install-strip
++endif
+ 	rm -rf $(TARGET_DIR)/usr/lib/dbus-1.0 \
+ 		$(TARGET_DIR)/usr/lib/libdbus-1.la \
+ 		$(TARGET_DIR)/usr/include/dbus-1.0 \
