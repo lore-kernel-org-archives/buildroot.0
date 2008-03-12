@@ -1,44 +1,183 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Wed, 12 Mar 2008 08:53:35 +0100
-Subject: [Buildroot] [buildroot 0002514]: fakeroot has an invalid version
-In-Reply-To: <20080311232234.GA10859@cloud.net.au>
-References: <3602fa0f2bfc9d33e7fe0380c3243a05@busybox.net>
-	<d6cda7730803102151k687bc79ek9117e63ae3241dc8@mail.gmail.com>
-	<1205216050.8434.14.camel@localhost>
-	<46a136670803110638j36c03d7eo5f83f200f5cd7246@mail.gmail.com>
-	<d6cda7730803110655i42ba1d12pd0253344bec51e10@mail.gmail.com>
-	<20080311232234.GA10859@cloud.net.au>
-Message-ID: <20080312085335.3b74128d@crazy>
+Date: Wed, 12 Mar 2008 09:08:46 +0100
+Subject: [Buildroot] [PATCH] Add thumb support to buildroot for the ARM
+	architecture
+Message-ID: <20080312090846.2cfecec8@crazy>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Le Wed, 12 Mar 2008 10:22:34 +1100,
-Hamish Moffatt <hamish@cloud.net.au> a ?crit :
+Hi,
 
-> One way to stabilise the fakeroot package would be to use the version
-> from stable, unless we particularly need features from the new
-> version. That version is 1.5.10. stable only changes every couple of
-> years other than for security updates.
+You'll find enclosed in this mail a patch that adds Thumb support for
+buildroot. It allows to generate an interworking-enabled toolchain,
+with an uClibc compiled in ARM mode, and then to compile userspace
+applications in Thumb mode.
 
-Or use URLs from snapshot.debian.net, because they never change. For
-example, for fakeroot 1.9.3:
+More details are available in the patch description.
 
- http://snapshot.debian.net/archive/2008/02/06/debian/pool/main/f/fakeroot/fakeroot_1.9.tar.gz
+Of course, your comments, reviews and suggestions are welcome!
 
-See
-
- http://snapshot.debian.net/archive/pool/f/fakeroot/source/Sources.gz
-
-for the complete list of fakeroot versions hosted by
-snapshot.debian.net. It goes all the way back to 0.4.5, released in
-2002.
+Thanks for developing such a great tool,
 
 Sincerly,
 
 Thomas
+
+---
+Add thumb support to buildroot for the ARM architecture
+
+The Thumb instruction set is encoded on 16 bits opcode instead of 32
+bits opcode for the regular ARM instruction set. It generally allows
+for greater code density, leading to reduced code size, which is nice
+on memory-constrained embedded systems.
+
+Currently, uClibc cannot be fully compiled using the Thumb instruction
+set. Therefore, this patch still compile uClibc in regular ARM mode,
+but allows to enable interworking support for the
+toolchain. Interworking allows Thumb code to call ARM code and
+vice-versa, allowing a mixed Thumb/ARM userspace.
+
+Enabling interworking at the toolchain level is done using the
+BR2_INTERWORKING_SUPPORT option, added by the patch. When enabled, it
+adds --enable-interwork to the binutils and gcc configure options,
+adds -mthumb-interwork to the CFLAGS during uClibc compilation, and
+enables the USE_BX config option of uClibc (bx is an ARM instruction
+that allows to switch between ARM and Thumb mode).
+
+Once interworking is enabled, it is then possible to compile the
+userspace applications in Thumb mode. This is what the new
+BR2_THUMB_BINARIES option allows, by adding -mthumb to the CFLAGS used
+during the compilation of userspace applications.
+
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+
+---
+ Config.in                      |    8 ++++++++
+ package/Makefile.in            |    4 ++++
+ toolchain/Config.in.2          |   12 ++++++++++++
+ toolchain/binutils/binutils.mk |    5 +++++
+ toolchain/gcc/Makefile.in      |    4 ++++
+ toolchain/uClibc/uclibc.mk     |    7 +++++++
+ 6 files changed, 40 insertions(+)
+
+Index: buildroot.new/Config.in
+===================================================================
+--- buildroot.new.orig/Config.in
++++ buildroot.new/Config.in
+@@ -223,6 +223,14 @@
+ 
+ 	  WARNING: This is highly experimental at the moment.
+ 
++config BR2_THUMB_BINARIES
++	bool "generate Thumb binaries"
++	default n
++	depends on BR2_INTERWORKING_SUPPORT
++	help
++	  Compile binaries in Thumb mode. Only valid for ARM
++	  architecture.
++
+ config BR2_HAVE_MANPAGES
+ 	bool "manpages on the target"
+ 	default n
+Index: buildroot.new/package/Makefile.in
+===================================================================
+--- buildroot.new.orig/package/Makefile.in
++++ buildroot.new/package/Makefile.in
+@@ -46,6 +46,10 @@
+ TARGET_CFLAGS+=-msoft-float
+ endif
+ 
++ifeq ($(BR2_THUMB_BINARIES),y)
++TARGET_CFLAGS+=-mthumb
++endif
++
+ # enable VIS for v9a and v9b
+ ifeq ($(findstring y,$(BR2_sparc_v9a)$(BR2_sparc64_v9a)$(BR2_sparc_v9b)$(BR2_sparc64_v9b)),y)
+ TARGET_CFLAGS+=-mvis
+Index: buildroot.new/toolchain/Config.in.2
+===================================================================
+--- buildroot.new.orig/toolchain/Config.in.2
++++ buildroot.new/toolchain/Config.in.2
+@@ -61,6 +61,18 @@
+ #	bool "Use softfp"
+ #	default n
+ 
++config BR2_INTERWORKING_SUPPORT
++	bool "Enable interworking support"
++	default n
++	depends on BR2_arm || BR2_armeb
++	depends on !BR2_generic_arm && !BR2_arm610 && !BR2_arm710
++	help
++	  Interworking allows Thumb userspace binaries to be linked
++	  against the C standard library compiled in ARM mode.
++
++	  This is only possible on Thumb-aware architectures, i.e not
++	  Generic ARM, ARM610 or ARM710.
++
+ config BR2_TARGET_OPTIMIZATION
+ 	string "Target Optimizations"
+ 	default "-Os -pipe"
+Index: buildroot.new/toolchain/binutils/binutils.mk
+===================================================================
+--- buildroot.new.orig/toolchain/binutils/binutils.mk
++++ buildroot.new/toolchain/binutils/binutils.mk
+@@ -65,6 +65,10 @@
+ BINUTILS_TARGET_CONFIG_OPTIONS+=--with-mpfr="$(MPFR_TARGET_DIR)"
+ endif
+ 
++ifeq ($(BR2_INTERWORKING_SUPPORT),y)
++INTERWORKING_CONFIG_OPTION=--enable-interwork
++endif
++
+ BINUTILS_OFFICIAL_VERSION:=$(BINUTILS_VERSION)$(VENDOR_SUFFIX)$(VENDOR_BINUTILS_RELEASE)
+ ifeq ($(BR2_TOOLCHAIN_BUILDROOT),y)
+ BINUTILS_PATCH_DIR:=toolchain/binutils/$(BINUTILS_VERSION)
+@@ -112,6 +116,7 @@
+ 		--disable-werror \
+ 		$(SOFT_FLOAT_CONFIG_OPTION) \
+ 		$(EXTRA_BINUTILS_CONFIG_OPTIONS) \
++		$(INTERWORKING_CONFIG_OPTION) \
+ 	)
+ 	touch $@
+ 
+Index: buildroot.new/toolchain/gcc/Makefile.in
+===================================================================
+--- buildroot.new.orig/toolchain/gcc/Makefile.in
++++ buildroot.new/toolchain/gcc/Makefile.in
+@@ -65,6 +65,10 @@
+ endif
+ endif
+ 
++ifeq ($(BR2_INTERWORKING_SUPPORT),y)
++EXTRA_GCC_CONFIG_OPTIONS+=--enable-interwork
++endif
++
+ # AVR32 GCC configuration
+ ifeq ($(strip $(BR2_avr32)),y)
+ EXTRA_GCC_CONFIG_OPTIONS+=--disable-libmudflap
+Index: buildroot.new/toolchain/uClibc/uclibc.mk
+===================================================================
+--- buildroot.new.orig/toolchain/uClibc/uclibc.mk
++++ buildroot.new/toolchain/uClibc/uclibc.mk
+@@ -322,6 +322,13 @@
+ else
+ 	$(SED) 's,^.*UCLIBC_HAS_WCHAR.*,UCLIBC_HAS_WCHAR=n,g' $(UCLIBC_DIR)/.oldconfig
+ endif
++ifeq ($(BR2_INTERWORKING_SUPPORT),y)
++	$(SED) 's,^.*USE_BX.*,USE_BX=y,g' $(UCLIBC_DIR)/.oldconfig
++	$(SED) 's,^.*UCLIBC_EXTRA_CFLAGS.*,UCLIBC_EXTRA_CFLAGS="-mthumb-interwork",g' $(UCLIBC_DIR)/.oldconfig
++else
++
++	$(SED) 's,^.*USE_BX.*,USE_BX=n,g' $(UCLIBC_DIR)/.oldconfig
++endif
+ ifeq ($(BR2_UCLIBC_PROGRAM_INVOCATION),y)
+ 	$(SED) 's,^.*UCLIBC_HAS_PROGRAM_INVOCATION_NAME.*,UCLIBC_HAS_PROGRAM_INVOCATION_NAME=y,g' $(UCLIBC_DIR)/.oldconfig
+ else
+
+
 -- 
 Thomas Petazzoni, Free Electrons
 Free Embedded Linux Training Materials
@@ -50,4 +189,4 @@ Name: signature.asc
 Type: application/pgp-signature
 Size: 189 bytes
 Desc: not available
-Url : http://busybox.net/lists/buildroot/attachments/20080312/88c02903/attachment.pgp 
+Url : http://busybox.net/lists/buildroot/attachments/20080312/09bfe59a/attachment.pgp 
