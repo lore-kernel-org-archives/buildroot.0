@@ -1,39 +1,29 @@
-From: Hans-Christian Egtvedt <hans-christian.egtvedt@atmel.com>
-Date: Thu, 13 Mar 2008 07:26:15 +0100
-Subject: [Buildroot] svn commit: trunk/buildroot/package/qtopia4
-In-Reply-To: <47D82493.6090505@carallon.com>
-References: <20080312135303.CCD1B120150@busybox.net>
-	<47D82493.6090505@carallon.com>
-Message-ID: <1205389575.6797.7.camel@localhost>
+From: Hamish Moffatt <hamish@cloud.net.au>
+Date: Thu, 13 Mar 2008 17:32:24 +1100
+Subject: [Buildroot] fakeroot patch
+In-Reply-To: <10259697.390451205373041411.JavaMail.root@zmail.rearden.com>
+References: <10259697.390451205373041411.JavaMail.root@zmail.rearden.com>
+Message-ID: <20080313063224.GA2546@cloud.net.au>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Wed, 2008-03-12 at 18:44 +0000, Will Wagner wrote:
-> ninevoltz at uclibc.org wrote:
+On Wed, Mar 12, 2008 at 06:50:41PM -0700, J. Spence wrote:
+> Did that last patch to the fakeroot package break anyone else's build?  The debian server that the patch now points to is responding 404 when the build system tries to get the fakeroot tarball.
 
-<snipp>
+Yes the patch was wrong:
 
-> > -config BR2_PACKAGE_QTOPIA4_DEPTHS
-> > -	string "color depths to support"
-> > -	default "-depths 8"
-> > -	depends BR2_PACKAGE_QTOPIA4
-> > -	help
-> > -	    Which color depths to support for the library. Default is "-depths
-> > -	    8". Is specified by a comma separated list, i.e. -depths 24,16,8.
-> > -
-> 
-> Why have you removed the option to configure supported colour depths?
-> 
+http://buildroot.uclibc.org/cgi-bin/viewcvs.cgi/trunk/buildroot/package/fakeroot/fakeroot.mk?rev=21316&r1=21289&r2=21316
 
-Why do you need it? It would only reduce the footprint by some kB anyway
-to specify a specific color depth.
+-FAKEROOT_SOURCE:=fakeroot_$(FAKEROOT_VERSION).tar.gz
++FAKEROOT_SOURCE:=fakeroot-$(FAKEROOT_VERSION).tar.gz
 
-Not specifying -depths will give you all depths supported by Qt
-Embedded.
+This didn't need changing.
 
+Please all, test your commits.
+
+Hamish
 -- 
-With kind regards,
-Hans-Christian Egtvedt, Applications Engineer
+Hamish Moffatt VK3SB <hamish@debian.org> <hamish@cloud.net.au>
