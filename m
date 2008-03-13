@@ -1,23 +1,26 @@
-From: John Voltz <john.voltz@gmail.com>
-Date: Thu, 13 Mar 2008 14:28:38 -0400
-Subject: [Buildroot] svn commit: trunk/buildroot/toolchain
-In-Reply-To: <87prty5vpd.fsf@macbook.be.48ers.dk>
-References: <20080313171042.D38B5120156@busybox.net>
-	<87prty5vpd.fsf@macbook.be.48ers.dk>
-Message-ID: <46a136670803131128v593e8652geac1b0ca62aaa3d4@mail.gmail.com>
+From: Peter Korsgaard <jacmet@uclibc.org>
+Date: Thu, 13 Mar 2008 19:30:47 +0100
+Subject: [Buildroot] continuous integration testing
+In-Reply-To: <20597005.396401205429513354.JavaMail.root@zmail.rearden.com> (J.
+	Spence's message of "Thu\, 13 Mar 2008 10\:31\:53 -0700 \(PDT\)")
+References: <20597005.396401205429513354.JavaMail.root@zmail.rearden.com>
+Message-ID: <8763vq5ve0.fsf@macbook.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->
->
-> What's the purpose of cat?
->
->
-It prevents the echo from overwriting the last echo, if there are multiple
-patches.
--------------- next part --------------
-An HTML attachment was scrubbed...
-URL: http://busybox.net/lists/buildroot/attachments/20080313/eee61580/attachment-0001.htm 
+>>>>> "J" == J Spence <j3mail-busybox@rearden.com> writes:
+
+ J> After troubleshooting a few more things with trunk, I'm beginning
+ J> to think that I need to set up some kind of continuous integration
+ J> platform so that any other mistakes in checkins trigger a
+ J> notification.  Does anyone have anything like this already, even
+ J> in a broken state?  I'd rather repair a few squeaky wheels than
+ J> build the whole cart myself.
+
+Buildbot is quite nice (http://buildbot.net).
+
+-- 
+Bye, Peter Korsgaard
