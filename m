@@ -1,19 +1,31 @@
-From: J. Spence <j3mail-busybox@rearden.com>
-Date: Thu, 13 Mar 2008 10:31:53 -0700 (PDT)
-Subject: [Buildroot] continuous integration testing
-Message-ID: <20597005.396401205429513354.JavaMail.root@zmail.rearden.com>
+From: Nigel Kukard <nkukard@lbsd.net>
+Date: Thu, 13 Mar 2008 18:05:27 +0000
+Subject: [Buildroot] RFC: initramfs & fakeroot
+Message-ID: <1205431527.10692.457.camel@nigel-x60>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-After troubleshooting a few more things with trunk, I'm beginning to think that I need to set up some kind of continuous integration platform so that any other mistakes in checkins trigger a notification.  
+Hrmmm,
 
-Does anyone have anything like this already, even in a broken state?  I'd rather repair a few squeaky wheels than build the whole cart myself.
+A normal non-priv user cannot create an iniramfs image, makedevs borks
+out with operation not permitted on the device files.
 
-This raises a few issues:
+1. Why even use makedevs? why not parse the device file list directly
+into gen_initramfs_list.sh?
 
-* CI notifications could be kind of annoying if they're all sent to the list.
+2. Would one even require fakeroot then? all its doing is hiding errors
+and creating files instead of devs?
 
-* This will probably include cross-platform regressions as well, which could also be kind of annoying (imagine getting notifications about build problems on totally wacky configurations, like uclibc for itanium).
+Maybe I'm missing something?
+
+-N
+-------------- next part --------------
+A non-text attachment was scrubbed...
+Name: not available
+Type: application/pgp-signature
+Size: 189 bytes
+Desc: This is a digitally signed message part
+Url : http://busybox.net/lists/buildroot/attachments/20080313/3cbd1bba/attachment.pgp 
