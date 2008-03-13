@@ -1,7 +1,7 @@
 From: ninevoltz at uclibc.org <ninevoltz@uclibc.org>
-Date: Thu, 13 Mar 2008 10:10:42 -0700 (PDT)
-Subject: [Buildroot] svn commit: trunk/buildroot/toolchain
-Message-ID: <20080313171042.D38B5120156@busybox.net>
+Date: Thu, 13 Mar 2008 10:16:31 -0700 (PDT)
+Subject: [Buildroot] svn commit: trunk/buildroot/docs
+Message-ID: <20080313171631.D6BFF120156@busybox.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -9,26 +9,62 @@ Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
 Author: ninevoltz
-Date: 2008-03-13 10:10:40 -0700 (Thu, 13 Mar 2008)
-New Revision: 21325
+Date: 2008-03-13 10:16:30 -0700 (Thu, 13 Mar 2008)
+New Revision: 21326
 
 Log:
-make patch-kernel create lists of applied patches, very handy indeed
+add some documentation about buildroot's patch system
 
-Modified:
-   trunk/buildroot/toolchain/patch-kernel.sh
+Added:
+   trunk/buildroot/docs/patches.html
 
 
 Changeset:
-Modified: trunk/buildroot/toolchain/patch-kernel.sh
+Added: trunk/buildroot/docs/patches.html
 ===================================================================
---- trunk/buildroot/toolchain/patch-kernel.sh	2008-03-13 07:38:10 UTC (rev 21324)
-+++ trunk/buildroot/toolchain/patch-kernel.sh	2008-03-13 17:10:40 UTC (rev 21325)
-@@ -37,6 +37,7 @@
-     esac
-     echo ""
-     echo "Applying ${i} using ${type}: " 
-+	echo ${i} | cat >> ${targetdir}/.applied_patches_list
-     ${uncomp} ${patchdir}/${i} | patch -p1 -E -d ${targetdir} 
-     if [ $? != 0 ] ; then
-         echo "Patch failed!  Please fix $i!"
+--- trunk/buildroot/docs/patches.html	                        (rev 0)
++++ trunk/buildroot/docs/patches.html	2008-03-13 17:16:30 UTC (rev 21326)
+@@ -0,0 +1,43 @@
++<!--#include file="header.html" -->
++
++<h2>Buildroot patch structure</h2>
++
++<p>
++<h4>Keeping track of applied patches</h4>
++Whenever a patch is applied to a source code directory in buildroot, a text file named .applied_patches_list is created inside that source directory. 
++This file contains a list of all the patch filenames that were applied to that source code, just for reference. 
++</p>
++
++<p>
++<h4>Linux kernel patches</h4>
++The Linux kernel has several patch levels available for it in the buildroot patch system. 
++Buildroot first downloads the chosen kernel source from the mirror site, followed by any selected minor patch.
++Buildroot then extracts the kernel source from the compressed file and applies the minor patch, if one was chosen.
++After extracting the source and applying the official minor patch, buildroot looks for more patches in the following locations and in the order shown:
++
++<ol>
++<li> a custom, user downloaded kernel patch can be located in $(DL_DIR) and the filename is stored as $(LINUX26_BSP_PATCH) </li>
++<li> Atmel keeps their official kernel patches in target/device/Atmel/Linux/kernel-patches with subdirectories for each kernel release. 
++They also keep any board-specific patches in $(BR2_BOARD_PATH) </li>
++<li> globally available patches are kept in toolchain/kernel-headers </li>
++<li> IPMI (<a href="http://www.intel.com/design/servers/ipmi/ipmi.htm">Intelligent Platform Management Interface</a>) 
++kernel patches are kept in toolchain/kernel-headers/ipmi </li>
++<li> LZMA kernel compression support patches are kept in toolchain/kernel-headers/lzma </li>
++<li> <a href="http://www.realtimelinuxfoundation.org/downloads/downloads.html">Real-time Linux kernel</a> patches are kept in $(LINUX_RT_SOURCE) </li>
++<li> <a href="http://www.openswan.org/">Openswan</a> kernel patches are kept in package/openswan </li>
++</ol>
++</p>
++ 
++ <p>
++ <h4>Package source patches</h4>
++ Any patches for the Linux programs supported by buildroot are kept in that program's corresponding package/ directory.
++ </p>
++ 
++ <p>
++ <h4>How the patching is done</h4>
++Patches are applied in buildroot by running a shell script called toolchain/patch-kernel.sh with three arguments. The first argument is the target directory
++where the source code to be patched is saved. The second argument is the directory where the patch is saved. The third argument is the filename pattern
++to match when looking in the patch directory. The third argument can include wildcards to select multiple patch files. 
++</p>
++
++<!--#include file="footer.html" -->
