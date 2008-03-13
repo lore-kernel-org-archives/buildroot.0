@@ -1,70 +1,19 @@
-From: ninevoltz at uclibc.org <ninevoltz@uclibc.org>
-Date: Thu, 13 Mar 2008 10:16:31 -0700 (PDT)
-Subject: [Buildroot] svn commit: trunk/buildroot/docs
-Message-ID: <20080313171631.D6BFF120156@busybox.net>
+From: J. Spence <j3mail-busybox@rearden.com>
+Date: Thu, 13 Mar 2008 10:31:53 -0700 (PDT)
+Subject: [Buildroot] continuous integration testing
+Message-ID: <20597005.396401205429513354.JavaMail.root@zmail.rearden.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Author: ninevoltz
-Date: 2008-03-13 10:16:30 -0700 (Thu, 13 Mar 2008)
-New Revision: 21326
+After troubleshooting a few more things with trunk, I'm beginning to think that I need to set up some kind of continuous integration platform so that any other mistakes in checkins trigger a notification.  
 
-Log:
-add some documentation about buildroot's patch system
+Does anyone have anything like this already, even in a broken state?  I'd rather repair a few squeaky wheels than build the whole cart myself.
 
-Added:
-   trunk/buildroot/docs/patches.html
+This raises a few issues:
 
+* CI notifications could be kind of annoying if they're all sent to the list.
 
-Changeset:
-Added: trunk/buildroot/docs/patches.html
-===================================================================
---- trunk/buildroot/docs/patches.html	                        (rev 0)
-+++ trunk/buildroot/docs/patches.html	2008-03-13 17:16:30 UTC (rev 21326)
-@@ -0,0 +1,43 @@
-+<!--#include file="header.html" -->
-+
-+<h2>Buildroot patch structure</h2>
-+
-+<p>
-+<h4>Keeping track of applied patches</h4>
-+Whenever a patch is applied to a source code directory in buildroot, a text file named .applied_patches_list is created inside that source directory. 
-+This file contains a list of all the patch filenames that were applied to that source code, just for reference. 
-+</p>
-+
-+<p>
-+<h4>Linux kernel patches</h4>
-+The Linux kernel has several patch levels available for it in the buildroot patch system. 
-+Buildroot first downloads the chosen kernel source from the mirror site, followed by any selected minor patch.
-+Buildroot then extracts the kernel source from the compressed file and applies the minor patch, if one was chosen.
-+After extracting the source and applying the official minor patch, buildroot looks for more patches in the following locations and in the order shown:
-+
-+<ol>
-+<li> a custom, user downloaded kernel patch can be located in $(DL_DIR) and the filename is stored as $(LINUX26_BSP_PATCH) </li>
-+<li> Atmel keeps their official kernel patches in target/device/Atmel/Linux/kernel-patches with subdirectories for each kernel release. 
-+They also keep any board-specific patches in $(BR2_BOARD_PATH) </li>
-+<li> globally available patches are kept in toolchain/kernel-headers </li>
-+<li> IPMI (<a href="http://www.intel.com/design/servers/ipmi/ipmi.htm">Intelligent Platform Management Interface</a>) 
-+kernel patches are kept in toolchain/kernel-headers/ipmi </li>
-+<li> LZMA kernel compression support patches are kept in toolchain/kernel-headers/lzma </li>
-+<li> <a href="http://www.realtimelinuxfoundation.org/downloads/downloads.html">Real-time Linux kernel</a> patches are kept in $(LINUX_RT_SOURCE) </li>
-+<li> <a href="http://www.openswan.org/">Openswan</a> kernel patches are kept in package/openswan </li>
-+</ol>
-+</p>
-+ 
-+ <p>
-+ <h4>Package source patches</h4>
-+ Any patches for the Linux programs supported by buildroot are kept in that program's corresponding package/ directory.
-+ </p>
-+ 
-+ <p>
-+ <h4>How the patching is done</h4>
-+Patches are applied in buildroot by running a shell script called toolchain/patch-kernel.sh with three arguments. The first argument is the target directory
-+where the source code to be patched is saved. The second argument is the directory where the patch is saved. The third argument is the filename pattern
-+to match when looking in the patch directory. The third argument can include wildcards to select multiple patch files. 
-+</p>
-+
-+<!--#include file="footer.html" -->
+* This will probably include cross-platform regressions as well, which could also be kind of annoying (imagine getting notifications about build problems on totally wacky configurations, like uclibc for itanium).
