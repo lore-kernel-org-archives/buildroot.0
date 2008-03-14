@@ -1,54 +1,79 @@
-From: bugs at busybox.net <bugs@busybox.net>
-Date: Fri, 14 Mar 2008 09:13:01 -0700
-Subject: [Buildroot] [buildroot 0002604]: Unable to compile Buildroot
-Message-ID: <4ab19dd6ca053decbfde434db1e41348@bugs.uclibc.org>
+From: John Voltz <john.voltz@gmail.com>
+Date: Fri, 14 Mar 2008 12:14:54 -0400
+Subject: [Buildroot] Problems after building rootfs.i386.ext2
+In-Reply-To: <20080314142333.GA14688@mail.mhnet.de>
+References: <20080313160410.GA13136@mail.mhnet.de>
+	<46a136670803130959n7d6cfcaxf8eb0a78d93acf71@mail.gmail.com>
+	<20080314142333.GA14688@mail.mhnet.de>
+Message-ID: <46a136670803140914h6843f70csaf9bd46da581f194@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+In the latest buildroot, there is a shell script located in the scripts
+directory called build-ext3-img. It will build a bootable ext3 image that
+can be run using qemu or vmware (you have to convert the image to vmdk to
+use it with vmware, see qemu-img). You might try this instead. Take a look
+inside the script to see how it works.
 
-The following issue has been SUBMITTED. 
-====================================================================== 
-http://busybox.net/bugs/view.php?id=2604 
-====================================================================== 
-Reported By:                Graol
-Assigned To:                buildroot
-====================================================================== 
-Project:                    buildroot
-Issue ID:                   2604
-Category:                   Architecture Specific
-Reproducibility:            always
-Severity:                   block
-Priority:                   normal
-Status:                     assigned
-====================================================================== 
-Date Submitted:             03-14-2008 09:13 PDT
-Last Modified:              03-14-2008 09:13 PDT
-====================================================================== 
-Summary:                    Unable to compile Buildroot
-Description: 
-Hi,
+John
 
-I'm running a virtual machine with Debian 32 bits installed (on a Xeon
-core 2 server). I tried to install buildroot in x86_64 arch but I always
-get the same error at last:
 
-Unknown CPU given in --with-tune=core2.
-make[1]: *** [configure-gcc] Error 1
-make[1]: Leaving directory
-`/usr/src/buildroot/toolchain_build_x86_64/gcc-4.2.1-initial'
-make: ***
-[/usr/src/buildroot/toolchain_build_x86_64/gcc-4.2.1-initial/.compiled]
-Error 2
+On Fri, Mar 14, 2008 at 10:23 AM, Micha Holzmann <holzmann@gmx.de> wrote:
 
-====================================================================== 
-
-Issue History 
-Date Modified   Username       Field                    Change               
-====================================================================== 
-03-14-08 09:13  Graol          New Issue                                    
-03-14-08 09:13  Graol          Status                   new => assigned     
-03-14-08 09:13  Graol          Assigned To               => buildroot       
-======================================================================
+> Hi,
+>
+> i did what you recommended. I chrooted and tried to mount proc with
+> several methods.
+>
+> mount -t proc proc /proc
+> mount -t proc none /prot
+>
+> proc was not mounted. mount said, to mount it needs proc mounted. At
+> this moment mount is a symlink to busybox. I left the chroot and mounted
+> proc to the proc inside the rootfs and do chroot again. mount without
+> options shows me infos. But ls -al still stucks until i press CTRL-C.
+> No change in the behavior.
+>
+> The second hint you gave me, was to use strace. I activated strace in
+> the menuconfig. The compiler gives me errors for two lines:
+>
+> net.c: In function ?printsock?:
+> net.c:958: error: field ?ll? has incomplete type
+> net.c:961: error: field ?nl? has incomplete type
+> make[2]: *** [net.o] Fehler 1
+>
+> In this case i have no strace which runs inside the chroot.
+>
+> I tried to build buildroot the last two weeks over 30+ times.
+> Now i am running out of ideas what to do.   :-)
+>
+> May you have any further idea(s)?
+>
+>
+> Quoting John Voltz:
+> > I think when you chroot you need to remount /proc. That can cause weird
+> > problems like you describe. Also try using strace on commands that fail
+> or
+> > freeze up. This can be very enlightening (or confusing). You might not
+> even
+> > be able to chroot into it since you are using uClibc instead of glibc. I
+> > don't know for sure. Does anyone else?
+> >
+> > John Voltz
+>
+>
+> Best regards,
+> Micha Holzmann
+>
+>
+> _______________________________________________
+> buildroot mailing list
+> buildroot at uclibc.org
+> http://busybox.net/mailman/listinfo/buildroot
+>
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: http://busybox.net/lists/buildroot/attachments/20080314/67258a31/attachment.htm 
