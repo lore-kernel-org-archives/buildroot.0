@@ -1,51 +1,55 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Fri, 14 Mar 2008 14:56:55 +0100
-Subject: [Buildroot] [PATCH] Add thumb support to buildroot for the ARM
- architecture
-In-Reply-To: <20080314141929.006a424d@crazy>
-References: <20080312090846.2cfecec8@crazy> <20080314090331.11f1bddc@crazy>
-	<47DA7E94.2070302@promwad.com> <20080314141929.006a424d@crazy>
-Message-ID: <20080314145655.3c119daa@crazy>
+From: Micha Holzmann <holzmann@gmx.de>
+Date: Fri, 14 Mar 2008 15:23:34 +0100
+Subject: [Buildroot] Problems after building rootfs.i386.ext2
+In-Reply-To: <46a136670803130959n7d6cfcaxf8eb0a78d93acf71@mail.gmail.com>
+References: <20080313160410.GA13136@mail.mhnet.de>
+	<46a136670803130959n7d6cfcaxf8eb0a78d93acf71@mail.gmail.com>
+Message-ID: <20080314142333.GA14688@mail.mhnet.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Le Fri, 14 Mar 2008 14:19:29 +0100,
-Thomas Petazzoni <thomas.petazzoni@free-electrons.com> a ?crit :
+Hi,
 
-> However, there is quite a big difference between your S3C2440 real
-> hardware and the Qemu versatilepb emulation. S3C2440 is based on 920T
-> as you say, which supports the ARMv4T ISA. But the versatilepb
-> emulation of Qemu emulates an ARM926EJ-S CPU, which supports the
-> ARMv5TEJ ISA. And as far as I understood, there are some differences
-> in the ARM <-> Thumb switch capabilities between ARMv4T and ARMv5T.
+i did what you recommended. I chrooted and tried to mount proc with
+several methods.
 
-In particular, from the ARM architecture manual:
+mount -t proc proc /proc
+mount -t proc none /prot
 
-?
-BL (H == 10 and H == 11 forms) is in all T variants.
-BLX (H == 01 form) is in T variants of ARMv5 and above.
-?
+proc was not mounted. mount said, to mount it needs proc mounted. At
+this moment mount is a symlink to busybox. I left the chroot and mounted
+proc to the proc inside the rootfs and do chroot again. mount without
+options shows me infos. But ls -al still stucks until i press CTRL-C.
+No change in the behavior.
 
-So on your S3C2440, the 'blx' instruction is not supported. And this
-instruction can especially be used to do interworking. So if gcc
-generated this instruction, it of course will fail with the "illegal
-instruction" exception.
+The second hint you gave me, was to use strace. I activated strace in
+the menuconfig. The compiler gives me errors for two lines:
 
-Sincerly,
+net.c: In function ?printsock?:
+net.c:958: error: field ?ll? has incomplete type
+net.c:961: error: field ?nl? has incomplete type
+make[2]: *** [net.o] Fehler 1
 
-Thomas
--- 
-Thomas Petazzoni, Free Electrons
-Free Embedded Linux Training Materials
-on http://free-electrons.com/training
-(More than 1500 pages!)
--------------- next part --------------
-A non-text attachment was scrubbed...
-Name: signature.asc
-Type: application/pgp-signature
-Size: 189 bytes
-Desc: not available
-Url : http://busybox.net/lists/buildroot/attachments/20080314/729ea7f3/attachment.pgp 
+In this case i have no strace which runs inside the chroot.
+
+I tried to build buildroot the last two weeks over 30+ times.
+Now i am running out of ideas what to do.   :-)
+
+May you have any further idea(s)?
+
+
+Quoting John Voltz:
+> I think when you chroot you need to remount /proc. That can cause weird
+> problems like you describe. Also try using strace on commands that fail or
+> freeze up. This can be very enlightening (or confusing). You might not even
+> be able to chroot into it since you are using uClibc instead of glibc. I
+> don't know for sure. Does anyone else?
+> 
+> John Voltz
+
+
+Best regards,
+Micha Holzmann
