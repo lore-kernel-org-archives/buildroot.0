@@ -1,49 +1,68 @@
-From: Will Wagner <will_wagner@carallon.com>
-Date: Fri, 14 Mar 2008 12:55:14 +0000
-Subject: [Buildroot] Problem patching linux
-Message-ID: <47DA75B2.50004@carallon.com>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Fri, 14 Mar 2008 14:19:29 +0100
+Subject: [Buildroot] [PATCH] Add thumb support to buildroot for the ARM
+ architecture
+In-Reply-To: <47DA7E94.2070302@promwad.com>
+References: <20080312090846.2cfecec8@crazy> <20080314090331.11f1bddc@crazy>
+	<47DA7E94.2070302@promwad.com>
+Message-ID: <20080314141929.006a424d@crazy>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi All,
+Le Fri, 14 Mar 2008 15:33:08 +0200,
+Ivan Kuten <ivan.kuten@promwad.com> a ?crit :
 
-I have a custom board in target/device/my_board. Inside that folder I 
-have a kernel_patches folder and I have changed the config so that it 
-should apply my patches.
+> Thanks for your excellent work! Before committing your patch I have a
+> question: have you tested it? on which CPU? which buildroot configs?
 
-It all works when applying the patches for the kernel headers, but it 
-fails to patch the actual kernel. This is because of the different ways 
-the patch-kernel.sh script is called.
+Yes, I tested it using Qemu versatilepb emulation. Enclosed is the
+buildroot configuration I used.
 
-In kernel-headers-new.makefile it is:
-	toolchain/patch-kernel.sh $(LINUX_HEADERS_UNPACK_DIR) 
-$(KERNEL_HEADERS_PATCH_DIR) \
-		\*.patch{,.gz,.bz2}
+> I'm asking this because for almost half of year I did not managed to
+> build a good ARM EABI toolchain with buildroot. Toolchain seems emit
+> invalid instructions when building busybox. So I managed only to run
+> very simple hello-world when set in cmdline init=hello-world, but not
+> a busybox binary with shell, etc. Boot process just hangs when
+> busybox running. Magic-SysRq key shows that illegal instruction trap
+> was involved. What is surprising that rootfs can be launched ok on
+> qemu with versatilepb machine emulation, but as I told fails to run
+> on real hardware S3C2440 CPU - 920T target.
 
-But in the linux Makefile.in it is:
-	toolchain/patch-kernel.sh $(LINUX26_DIR) $(KERNEL_HEADERS_PATCH_DIR) \
-		linux-$(LINUX26_VERSION)-\*.patch{,.gz,.bz2}
+I have not tested on real hardware, so I can't say. There might be
+remaining issues.
 
-The regex is much tougher when actually patching the kernel. The problem 
-I have it that my patch files are all in this format:
+However, there is quite a big difference between your S3C2440 real
+hardware and the Qemu versatilepb emulation. S3C2440 is based on 920T
+as you say, which supports the ARMv4T ISA. But the versatilepb
+emulation of Qemu emulates an ARM926EJ-S CPU, which supports the
+ARMv5TEJ ISA. And as far as I understood, there are some differences in
+the ARM <-> Thumb switch capabilities between ARMv4T and ARMv5T.
 
-012-linux-2.6.22.19-some_patch
+For what exact CPU did you configure your buildroot ? What was the
+exact instruction causing the "Illegal instruction" exception ?
 
-I need the numbers at the beginning to ensure they get patched in the 
-right order.
+Sincerly,
 
-How should I fix this? How should my patch files be named? Is this just 
-a bug in the patching of the kernel?
-
-Thanks,
-
-Will.
+Thomas
 -- 
-------------------------------------------------------------------------
-Will Wagner                                     will_wagner at carallon.com
-Senior Project Engineer                  Office Tel: +44 (0)20 7371 2032
-Carallon Ltd, Studio G20, Shepherds Building, Rockley Rd, London W14 0DA
-------------------------------------------------------------------------
+Thomas Petazzoni, Free Electrons
+Free Embedded Linux Training Materials
+on http://free-electrons.com/training
+(More than 1500 pages!)
+-------------- next part --------------
+A non-text attachment was scrubbed...
+Name: buildroot-config-with-interworking-and-thumb-applications
+Type: application/octet-stream
+Size: 9648 bytes
+Desc: not available
+Url : http://busybox.net/lists/buildroot/attachments/20080314/2a9ee424/attachment.obj 
+-------------- next part --------------
+A non-text attachment was scrubbed...
+Name: signature.asc
+Type: application/pgp-signature
+Size: 189 bytes
+Desc: not available
+Url : http://busybox.net/lists/buildroot/attachments/20080314/2a9ee424/attachment.pgp 
