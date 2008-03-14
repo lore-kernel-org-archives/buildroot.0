@@ -1,62 +1,73 @@
-From: bugs at busybox.net <bugs@busybox.net>
-Date: Fri, 14 Mar 2008 09:21:35 -0700
-Subject: [Buildroot] [buildroot 0002604]: Unable to compile Buildroot
-Message-ID: <3a7634005bc9b78f9281888fdbcd1be9@bugs.uclibc.org>
+From: John Voltz <john.voltz@gmail.com>
+Date: Fri, 14 Mar 2008 13:12:15 -0400
+Subject: [Buildroot] Problem patching linux
+In-Reply-To: <47DA75B2.50004@carallon.com>
+References: <47DA75B2.50004@carallon.com>
+Message-ID: <46a136670803141012i332205bfp456ddc5879418902@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+name it linux-2.6.22.19-012-some_patch
 
-A NOTE has been added to this issue. 
-====================================================================== 
-http://busybox.net/bugs/view.php?id=2604 
-====================================================================== 
-Reported By:                Graol
-Assigned To:                buildroot
-====================================================================== 
-Project:                    buildroot
-Issue ID:                   2604
-Category:                   Architecture Specific
-Reproducibility:            always
-Severity:                   block
-Priority:                   normal
-Status:                     assigned
-====================================================================== 
-Date Submitted:             03-14-2008 09:13 PDT
-Last Modified:              03-14-2008 09:21 PDT
-====================================================================== 
-Summary:                    Unable to compile Buildroot
-Description: 
-Hi,
+the patch kernel reads the files in the same order as the ls command would
+print them, so if you have linux-2.6.22.19-012-some_patch and
+linux-2.6.22.19-013-another_patch it will order them like you want.
 
-I'm running a virtual machine with Debian 32 bits installed (on a Xeon
-core 2 server). I tried to install buildroot in x86_64 arch but I always
-get the same error at last:
+John
 
-Unknown CPU given in --with-tune=core2.
-make[1]: *** [configure-gcc] Error 1
-make[1]: Leaving directory
-`/usr/src/buildroot/toolchain_build_x86_64/gcc-4.2.1-initial'
-make: ***
-[/usr/src/buildroot/toolchain_build_x86_64/gcc-4.2.1-initial/.compiled]
-Error 2
+On Fri, Mar 14, 2008 at 8:55 AM, Will Wagner <will_wagner@carallon.com>
+wrote:
 
-====================================================================== 
-
----------------------------------------------------------------------- 
- Graol - 03-14-08 09:21  
----------------------------------------------------------------------- 
-gcc version is 4.2.1
-multilib is disabled 
-
-Issue History 
-Date Modified   Username       Field                    Change               
-====================================================================== 
-03-14-08 09:13  Graol          New Issue                                    
-03-14-08 09:13  Graol          Status                   new => assigned     
-03-14-08 09:13  Graol          Assigned To               => buildroot       
-03-14-08 09:13  Graol          Issue Monitored: Graol                       
-03-14-08 09:21  Graol          Note Added: 0005774                          
-======================================================================
+> Hi All,
+>
+> I have a custom board in target/device/my_board. Inside that folder I
+> have a kernel_patches folder and I have changed the config so that it
+> should apply my patches.
+>
+> It all works when applying the patches for the kernel headers, but it
+> fails to patch the actual kernel. This is because of the different ways
+> the patch-kernel.sh script is called.
+>
+> In kernel-headers-new.makefile it is:
+>        toolchain/patch-kernel.sh $(LINUX_HEADERS_UNPACK_DIR)
+> $(KERNEL_HEADERS_PATCH_DIR) \
+>                \*.patch{,.gz,.bz2}
+>
+> But in the linux Makefile.in it is:
+>        toolchain/patch-kernel.sh $(LINUX26_DIR)
+> $(KERNEL_HEADERS_PATCH_DIR) \
+>                linux-$(LINUX26_VERSION)-\*.patch{,.gz,.bz2}
+>
+> The regex is much tougher when actually patching the kernel. The problem
+> I have it that my patch files are all in this format:
+>
+> 012-linux-2.6.22.19-some_patch
+>
+> I need the numbers at the beginning to ensure they get patched in the
+> right order.
+>
+> How should I fix this? How should my patch files be named? Is this just
+> a bug in the patching of the kernel?
+>
+> Thanks,
+>
+> Will.
+> --
+> ------------------------------------------------------------------------
+> Will Wagner                                     will_wagner at carallon.com
+> Senior Project Engineer                  Office Tel: +44 (0)20 7371 2032
+> Carallon Ltd, Studio G20, Shepherds Building, Rockley Rd, London W14 0DA
+> ------------------------------------------------------------------------
+>
+>
+> _______________________________________________
+> buildroot mailing list
+> buildroot at uclibc.org
+> http://busybox.net/mailman/listinfo/buildroot
+>
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: http://busybox.net/lists/buildroot/attachments/20080314/bcadefaf/attachment.htm 
