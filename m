@@ -1,208 +1,101 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Fri, 14 Mar 2008 09:03:31 +0100
-Subject: [Buildroot] [PATCH] Add thumb support to buildroot for the ARM
- architecture
-In-Reply-To: <20080312090846.2cfecec8@crazy>
-References: <20080312090846.2cfecec8@crazy>
-Message-ID: <20080314090331.11f1bddc@crazy>
+From: Steffen Kaufmann <Steffen.Kaufmann@garz-fricke.com>
+Date: Fri, 14 Mar 2008 11:11:24 +0100
+Subject: [Buildroot] Problems - building rsync-2.6.9
+Message-ID: <D99582E5322435468A77E74BB0039E7B1DDB03A3@SRV02.hamburg.garz-fricke.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi,
+Hello,
 
-Any comments on that ? Are you interested in merging such a patch ?
-
-Thanks,
-
-Thomas
-
-Le Wed, 12 Mar 2008 09:08:46 +0100,
-Thomas Petazzoni <thomas.petazzoni@free-electrons.com> a ?crit :
-
-> Hi,
-> 
-> You'll find enclosed in this mail a patch that adds Thumb support for
-> buildroot. It allows to generate an interworking-enabled toolchain,
-> with an uClibc compiled in ARM mode, and then to compile userspace
-> applications in Thumb mode.
-> 
-> More details are available in the patch description.
-> 
-> Of course, your comments, reviews and suggestions are welcome!
-> 
-> Thanks for developing such a great tool,
-> 
-> Sincerly,
-> 
-> Thomas
-> 
-> ---
-> Add thumb support to buildroot for the ARM architecture
-> 
-> The Thumb instruction set is encoded on 16 bits opcode instead of 32
-> bits opcode for the regular ARM instruction set. It generally allows
-> for greater code density, leading to reduced code size, which is nice
-> on memory-constrained embedded systems.
-> 
-> Currently, uClibc cannot be fully compiled using the Thumb instruction
-> set. Therefore, this patch still compile uClibc in regular ARM mode,
-> but allows to enable interworking support for the
-> toolchain. Interworking allows Thumb code to call ARM code and
-> vice-versa, allowing a mixed Thumb/ARM userspace.
-> 
-> Enabling interworking at the toolchain level is done using the
-> BR2_INTERWORKING_SUPPORT option, added by the patch. When enabled, it
-> adds --enable-interwork to the binutils and gcc configure options,
-> adds -mthumb-interwork to the CFLAGS during uClibc compilation, and
-> enables the USE_BX config option of uClibc (bx is an ARM instruction
-> that allows to switch between ARM and Thumb mode).
-> 
-> Once interworking is enabled, it is then possible to compile the
-> userspace applications in Thumb mode. This is what the new
-> BR2_THUMB_BINARIES option allows, by adding -mthumb to the CFLAGS used
-> during the compilation of userspace applications.
-> 
-> Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-> 
-> ---
->  Config.in                      |    8 ++++++++
->  package/Makefile.in            |    4 ++++
->  toolchain/Config.in.2          |   12 ++++++++++++
->  toolchain/binutils/binutils.mk |    5 +++++
->  toolchain/gcc/Makefile.in      |    4 ++++
->  toolchain/uClibc/uclibc.mk     |    7 +++++++
->  6 files changed, 40 insertions(+)
-> 
-> Index: buildroot.new/Config.in
-> ===================================================================
-> --- buildroot.new.orig/Config.in
-> +++ buildroot.new/Config.in
-> @@ -223,6 +223,14 @@
->  
->  	  WARNING: This is highly experimental at the moment.
->  
-> +config BR2_THUMB_BINARIES
-> +	bool "generate Thumb binaries"
-> +	default n
-> +	depends on BR2_INTERWORKING_SUPPORT
-> +	help
-> +	  Compile binaries in Thumb mode. Only valid for ARM
-> +	  architecture.
-> +
->  config BR2_HAVE_MANPAGES
->  	bool "manpages on the target"
->  	default n
-> Index: buildroot.new/package/Makefile.in
-> ===================================================================
-> --- buildroot.new.orig/package/Makefile.in
-> +++ buildroot.new/package/Makefile.in
-> @@ -46,6 +46,10 @@
->  TARGET_CFLAGS+=-msoft-float
->  endif
->  
-> +ifeq ($(BR2_THUMB_BINARIES),y)
-> +TARGET_CFLAGS+=-mthumb
-> +endif
-> +
->  # enable VIS for v9a and v9b
->  ifeq ($(findstring
-> y,$(BR2_sparc_v9a)$(BR2_sparc64_v9a)$(BR2_sparc_v9b)$(BR2_sparc64_v9b)),y)
-> TARGET_CFLAGS+=-mvis Index: buildroot.new/toolchain/Config.in.2
-> ===================================================================
-> --- buildroot.new.orig/toolchain/Config.in.2
-> +++ buildroot.new/toolchain/Config.in.2
-> @@ -61,6 +61,18 @@
->  #	bool "Use softfp"
->  #	default n
->  
-> +config BR2_INTERWORKING_SUPPORT
-> +	bool "Enable interworking support"
-> +	default n
-> +	depends on BR2_arm || BR2_armeb
-> +	depends on !BR2_generic_arm && !BR2_arm610 && !BR2_arm710
-> +	help
-> +	  Interworking allows Thumb userspace binaries to be linked
-> +	  against the C standard library compiled in ARM mode.
-> +
-> +	  This is only possible on Thumb-aware architectures, i.e not
-> +	  Generic ARM, ARM610 or ARM710.
-> +
->  config BR2_TARGET_OPTIMIZATION
->  	string "Target Optimizations"
->  	default "-Os -pipe"
-> Index: buildroot.new/toolchain/binutils/binutils.mk
-> ===================================================================
-> --- buildroot.new.orig/toolchain/binutils/binutils.mk
-> +++ buildroot.new/toolchain/binutils/binutils.mk
-> @@ -65,6 +65,10 @@
->  BINUTILS_TARGET_CONFIG_OPTIONS+=--with-mpfr="$(MPFR_TARGET_DIR)"
->  endif
->  
-> +ifeq ($(BR2_INTERWORKING_SUPPORT),y)
-> +INTERWORKING_CONFIG_OPTION=--enable-interwork
-> +endif
-> +
->  BINUTILS_OFFICIAL_VERSION:=$(BINUTILS_VERSION)$(VENDOR_SUFFIX)$(VENDOR_BINUTILS_RELEASE)
->  ifeq ($(BR2_TOOLCHAIN_BUILDROOT),y)
->  BINUTILS_PATCH_DIR:=toolchain/binutils/$(BINUTILS_VERSION)
-> @@ -112,6 +116,7 @@
->  		--disable-werror \
->  		$(SOFT_FLOAT_CONFIG_OPTION) \
->  		$(EXTRA_BINUTILS_CONFIG_OPTIONS) \
-> +		$(INTERWORKING_CONFIG_OPTION) \
->  	)
->  	touch $@
->  
-> Index: buildroot.new/toolchain/gcc/Makefile.in
-> ===================================================================
-> --- buildroot.new.orig/toolchain/gcc/Makefile.in
-> +++ buildroot.new/toolchain/gcc/Makefile.in
-> @@ -65,6 +65,10 @@
->  endif
->  endif
->  
-> +ifeq ($(BR2_INTERWORKING_SUPPORT),y)
-> +EXTRA_GCC_CONFIG_OPTIONS+=--enable-interwork
-> +endif
-> +
->  # AVR32 GCC configuration
->  ifeq ($(strip $(BR2_avr32)),y)
->  EXTRA_GCC_CONFIG_OPTIONS+=--disable-libmudflap
-> Index: buildroot.new/toolchain/uClibc/uclibc.mk
-> ===================================================================
-> --- buildroot.new.orig/toolchain/uClibc/uclibc.mk
-> +++ buildroot.new/toolchain/uClibc/uclibc.mk
-> @@ -322,6 +322,13 @@
->  else
->  	$(SED) 's,^.*UCLIBC_HAS_WCHAR.*,UCLIBC_HAS_WCHAR=n,g'
-> $(UCLIBC_DIR)/.oldconfig endif
-> +ifeq ($(BR2_INTERWORKING_SUPPORT),y)
-> +	$(SED) 's,^.*USE_BX.*,USE_BX=y,g' $(UCLIBC_DIR)/.oldconfig
-> +	$(SED)
-> 's,^.*UCLIBC_EXTRA_CFLAGS.*,UCLIBC_EXTRA_CFLAGS="-mthumb-interwork",g'
-> $(UCLIBC_DIR)/.oldconfig +else +
-> +	$(SED) 's,^.*USE_BX.*,USE_BX=n,g' $(UCLIBC_DIR)/.oldconfig
-> +endif
->  ifeq ($(BR2_UCLIBC_PROGRAM_INVOCATION),y)
->  	$(SED)
-> 's,^.*UCLIBC_HAS_PROGRAM_INVOCATION_NAME.*,UCLIBC_HAS_PROGRAM_INVOCATION_NAME=y,g'
-> $(UCLIBC_DIR)/.oldconfig else
-> 
-> 
+I try to build the head revision from svn for avr32, but I ran into trouble. I get the following output:
 
 
--- 
-Thomas Petazzoni, Free Electrons
-Free Embedded Linux Training Materials
-on http://free-electrons.com/training
-(More than 1500 pages!)
--------------- next part --------------
-A non-text attachment was scrubbed...
-Name: signature.asc
-Type: application/pgp-signature
-Size: 189 bytes
-Desc: not available
-Url : http://busybox.net/lists/buildroot/attachments/20080314/20868ae7/attachment.pgp 
+---------------------
+
+steffen at debianVM:~/buildroot/buildroot-svn$ make
+
+Checking build system dependencies:
+BUILDROOT_DL_DIR clean:                         Ok
+CC clean:                                       Ok
+CXX clean:                                      Ok
+CPP clean:                                      Ok
+CFLAGS clean:                                   Ok
+INCLUDES clean:                                 Ok
+CXXFLAGS clean:                                 Ok
+which installed:                                Ok
+sed works:                                      Ok (/bin/sed)
+GNU make version '3.81':                        Ok
+C compiler '/usr/bin/gcc'
+C compiler version '4.1.2':                     Ok
+C++ compiler '/usr/bin/g++'
+C++ compiler version '4.1.2':                   Ok
+bison installed:                                Ok
+flex installed:                                 Ok
+gettext installed:                              Ok
+makeinfo installed:                             Ok
+Build system dependencies:                      Ok
+
+rm -rf /home/steffen/buildroot/buildroot-svn/project_build_avr32/atstk1002/buildroot-config
+mkdir -p /home/steffen/buildroot/buildroot-svn/project_build_avr32/atstk1002
+cp -dpRf package/config/buildroot-config /home/steffen/buildroot/buildroot-svn/project_build_avr32/atstk1002/buildroot-config
+/usr/bin/make -j1 PATH="/home/steffen/buildroot/buildroot-svn/toolchain_build_avr32/bin:/home/steffen/buildroot/buildroot-svn/build_avr32/staging_dir/bin:/home/steffen/buildroot/buildroot-svn/build_avr32/staging_dir/usr/bin:/usr/local/bin:/usr/bin:/bin:/usr/games" AR="/home/steffen/buildroot/buildroot-svn/build_avr32/staging_dir/usr/bin/avr32-linux-uclibc-ar" AS="/home/steffen/buildroot/buildroot-svn/build_avr32/staging_dir/usr/bin/avr32-linux-uclibc-as" LD="/home/steffen/buildroot/buildroot-svn/build_avr32/staging_dir/usr/bin/avr32-linux-uclibc-ld -L/home/steffen/buildroot/buildroot-svn/build_avr32/staging_dir/lib -L/home/steffen/buildroot/buildroot-svn/build_avr32/staging_dir/usr/lib" NM="/home/steffen/buildroot/buildroot-svn/build_avr32/staging_dir/usr/bin/avr32-linux-uclibc-nm" CC="/home/steffen/buildroot/buildroot-svn/build_avr32/staging_dir/usr/bin/avr32-linux-uclibc-gcc -O0  -I/home/steffen/buildroot/buildroot-svn/build_avr32/staging_dir/usr/include -I/home/steffen/buildroot/buildroot-svn/build_avr32/staging_dir/include -msoft-float" GCC="/home/steffen/buildroot/buildroot-svn/build_avr32/staging_dir/usr/bin/avr32-linux-uclibc-gcc -O0  -I/home/steffen/buildroot/buildroot-svn/build_avr32/staging_dir/usr/include -I/home/steffen/buildroot/buildroot-svn/build_avr32/staging_dir/include -msoft-float" CPP="/home/steffen/buildroot/buildroot-svn/build_avr32/staging_dir/usr/bin/avr32-linux-uclibc-cpp -O0  -I/home/steffen/buildroot/buildroot-svn/build_avr32/staging_dir/usr/include -I/home/steffen/buildroot/buildroot-svn/build_avr32/staging_dir/include -msoft-float" CXX="/home/steffen/buildroot/buildroot-svn/build_avr32/staging_dir/usr/bin/avr32-linux-uclibc-g++ -O0  -I/home/steffen/buildroot/buildroot-svn/build_avr32/staging_dir/usr/include -I/home/steffen/buildroot/buildroot-svn/build_avr32/staging_dir/include -msoft-float" FC="/home/steffen/buildroot/buildroot-svn/build_avr32/staging_dir/usr/bin/avr32-linux-uclibc-gfortran " RANLIB="/home/steffen/buildroot/buildroot-svn/build_avr32/staging_dir/usr/bin/avr32-linux-uclibc-ranlib" STRIP="/home/steffen/buildroot/buildroot-svn/build_avr32/staging_dir/usr/bin/avr32-linux-uclibc-strip" OBJCOPY="/home/steffen/buildroot/buildroot-svn/build_avr32/staging_dir/usr/bin/avr32-linux-uclibc-objcopy" AR_FOR_BUILD="/usr/bin/ar" AS_FOR_BUILD="/usr/bin/as" CC_FOR_BUILD="/usr/bin/gcc" GCC_FOR_BUILD="/usr/bin/gcc" CXX_FOR_BUILD="/usr/bin/g++" FC_FOR_BUILD="/usr/bin/ld" LD_FOR_BUILD="/usr/bin/ld" CFLAGS_FOR_BUILD="" CXXFLAGS_FOR_BUILD="" LDFLAGS_FOR_BUILD="" FCFLAGS_FOR_BUILD="" AR_FOR_TARGET="/home/steffen/buildroot/buildroot-svn/build_avr32/staging_dir/usr/bin/avr32-linux-uclibc-ar" AS_FOR_TARGET="/home/steffen/buildroot/buildroot-svn/build_avr32/staging_dir/usr/bin/avr32-linux-uclibc-as" CC_FOR_TARGET="/home/steffen/buildroot/buildroot-svn/build_avr32/staging_dir/usr/bin/avr32-linux-uclibc-gcc" LD_FOR_TARGET="/home/steffen/buildroot/buildroot-svn/build_avr32/staging_dir/usr/bin/avr32-linux-uclibc-ld" NM_FOR_TARGET="/home/steffen/buildroot/buildroot-svn/build_avr32/staging_dir/usr/bin/avr32-linux-uclibc-nm" DEFAULT_ASSEMBLER="/home/steffen/buildroot/buildroot-svn/build_avr32/staging_dir/usr/bin/avr32-linux-uclibc-as" DEFAULT_LINKER="/home/steffen/buildroot/buildroot-svn/build_avr32/staging_dir/usr/bin/avr32-linux-uclibc-ld" PKG_CONFIG_SYSROOT="/home/steffen/buildroot/buildroot-svn/build_avr32/staging_dir" PKG_CONFIG="/home/steffen/buildroot/buildroot-svn/build_avr32/staging_dir/usr/bin/pkg-config" PKG_CONFIG_PATH="/home/steffen/buildroot/buildroot-svn/build_avr32/staging_dir/usr/lib/pkgconfig:" PKG_CONFIG_ALLOW_SYSTEM_CFLAGS=1 PKG_CONFIG_ALLOW_SYSTEM_LIBS=1 STAGING_DIR="/home/steffen/buildroot/buildroot-svn/build_avr32/staging_dir" -C /home/steffen/buildroot/buildroot-svn/build_avr32/rsync-2.6.9
+make[1]: Entering directory `/home/steffen/buildroot/buildroot-svn/build_avr32/rsync-2.6.9'
+/home/steffen/buildroot/buildroot-svn/build_avr32/staging_dir/usr/bin/avr32-linux-uclibc-gcc -O0  -I/home/steffen/buildroot/buildroot-svn/build_avr32/staging_dir/usr/include -I/home/steffen/buildroot/buildroot-svn/build_avr32/staging_dir/include -msoft-float -I. -I. -g -O2 -DHAVE_CONFIG_H -Wall -W -I./popt  -c rsync.c -o rsync.o
+In file included from rsync.c:23:
+rsync.h:367:3: error: #error Could not find a 32-bit integer variable
+In file included from rsync.c:23:
+rsync.h:501: error: expected specifier-qualifier-list before 'int32'
+rsync.h:571: error: expected specifier-qualifier-list before 'int32'
+rsync.h:581: error: expected specifier-qualifier-list before 'int32'
+rsync.h:592: error: expected specifier-qualifier-list before 'int32'
+rsync.h:626: error: expected ':', ',', ';', '}' or '__attribute__' before 'match_flags'
+In file included from rsync.h:657,
+                 from rsync.c:23:
+lib/mdfour.h:24: error: expected ':', ',', ';', '}' or '__attribute__' before 'A'
+lib/mdfour.h:30: error: expected ';', ',' or ')' before 'n'
+In file included from rsync.h:660,
+                 from rsync.c:23:
+lib/addrinfo.h:111: error: redefinition of 'struct sockaddr_storage'
+In file included from rsync.h:672,
+                 from rsync.c:23:
+proto.h:13: error: expected '=', ',', ';', 'asm' or '__attribute__' before 'get_checksum1'
+proto.h:14: error: expected declaration specifiers or '...' before 'int32'
+proto.h:17: error: expected declaration specifiers or '...' before 'int32'
+proto.h:55: error: expected ';', ',' or ')' before 'mflags'
+proto.h:57: error: expected ';', ',' or ')' before 'mflags'
+proto.h:65: error: expected declaration specifiers or '...' before 'int32'
+proto.h:66: error: expected declaration specifiers or '...' before 'int32'
+proto.h:67: error: expected declaration specifiers or '...' before 'int32'
+proto.h:88: error: expected declaration specifiers or '...' before 'int32'
+proto.h:118: error: expected '=', ',', ';', 'asm' or '__attribute__' before 'read_int'
+proto.h:128: error: expected declaration specifiers or '...' before 'int32'
+proto.h:205: error: expected '=', ',', ';', 'asm' or '__attribute__' before 'remember_children'
+proto.h:229: error: expected '=', ',', ';', 'asm' or '__attribute__' before 'sig_int'
+proto.h:265: warning: 'struct direct' declared inside parameter list
+proto.h:265: warning: its scope is only this definition or declaration, which is probably not what you want
+proto.h:267: error: expected declaration specifiers or '...' before 'int32'
+proto.h:268: error: expected declaration specifiers or '...' before 'int32'
+proto.h:268: error: expected declaration specifiers or '...' before 'int32'
+proto.h:269: error: expected '=', ',', ';', 'asm' or '__attribute__' before 'recv_token'
+proto.h:270: error: expected declaration specifiers or '...' before 'int32'
+proto.h:317: error: expected '=', ',', ';', 'asm' or '__attribute__' before 'fuzzy_distance'
+In file included from rsync.c:23:
+rsync.h:881: error: conflicting types for 'inet_ntop'
+/home/steffen/buildroot/buildroot-svn/build_avr32/staging_dir/lib/gcc/avr32-linux-uclibc/4.2.1/../../../../avr32-linux-uclibc/sys-include/arpa/inet.h:67: error: previous declaration of 'inet_ntop' was here
+rsync.c: In function 'free_sums':
+rsync.c:97: warning: implicit declaration of function 'free'
+rsync.c: At top level:
+rsync.c:233: error: expected '=', ',', ';', 'asm' or '__attribute__' before 'sig_int'
+make[1]: *** [rsync.o] Fehler 1
+make[1]: Leaving directory `/home/steffen/buildroot/buildroot-svn/build_avr32/rsync-2.6.9'
+make: *** [/home/steffen/buildroot/buildroot-svn/build_avr32/rsync-2.6.9/rsync] Fehler 2
+
+---------------------
+
+Can anybody help me?
+
+Thanks!
+Steffen
