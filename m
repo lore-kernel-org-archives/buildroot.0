@@ -1,8 +1,7 @@
 From: bugs at busybox.net <bugs@busybox.net>
-Date: Thu, 13 Mar 2008 18:58:02 -0700
-Subject: [Buildroot] [buildroot 0002564]: Inconsistent placement of "/gnu/"
-	in GNU mirror path
-Message-ID: <7ab8078e45d7463208fdc78369087556@busybox.net>
+Date: Thu, 13 Mar 2008 19:01:43 -0700
+Subject: [Buildroot] [buildroot 0002574]: Tell SVN to ignore ".auto.deps"
+Message-ID: <8049ffdc16522e47fa926fe236dcb0d0@busybox.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -12,47 +11,34 @@ To: buildroot@busybox.net
 
 The following issue has been SUBMITTED. 
 ====================================================================== 
-http://busybox.net/bugs/view.php?id=2564 
+http://busybox.net/bugs/view.php?id=2574 
 ====================================================================== 
 Reported By:                mth
 Assigned To:                buildroot
 ====================================================================== 
 Project:                    buildroot
-Issue ID:                   2564
+Issue ID:                   2574
 Category:                   Other
 Reproducibility:            always
-Severity:                   major
+Severity:                   trivial
 Priority:                   normal
 Status:                     assigned
 ====================================================================== 
-Date Submitted:             03-13-2008 18:58 PDT
-Last Modified:              03-13-2008 18:58 PDT
+Date Submitted:             03-13-2008 19:01 PDT
+Last Modified:              03-13-2008 19:01 PDT
 ====================================================================== 
-Summary:                    Inconsistent placement of "/gnu/" in GNU mirror path
+Summary:                    Tell SVN to ignore ".auto.deps"
 Description: 
-An example download path of a GNU tool looks like this
-"http://ftp.nluug.nl/pub/gnu/binutils/". The problem is that some packages
-expect the "/gnu/" segment to be part of BR2_GNU_MIRROR, while other
-packages expect the "/gnu/" segment to be part of the package-specific
-download location. As a result, it is not possible to set BR2_GNU_MIRROR
-in such a way that all GNU packages can be downloaded.
-
-I grepped the source tree and the majority of packages expects "/gnu/" in
-the package-specific download location. Therefore I changed the Makefiles
-of the packages that expected "/gnu/" to be part of BR2_GNU_MIRROR. A
-patch containing those changes is attached to this bug report.
-
-If the opposite approach is desired ("/gnu/" in BR2_GNU_MIRROR), let me
-know and I'll create a patch for that instead.
+The file ".auto.deps" is automatically generated, but it is not in the
+svn:ignore property of the top-level dir, so it pollutes the "svn st"
+output. Please add it to the ignore list.
 
 ====================================================================== 
 
 Issue History 
 Date Modified   Username       Field                    Change               
 ====================================================================== 
-03-13-08 18:58  mth            New Issue                                    
-03-13-08 18:58  mth            Status                   new => assigned     
-03-13-08 18:58  mth            Assigned To               => buildroot       
-03-13-08 18:58  mth            File Added: gnu-mirror-dir.diff                  
- 
+03-13-08 19:01  mth            New Issue                                    
+03-13-08 19:01  mth            Status                   new => assigned     
+03-13-08 19:01  mth            Assigned To               => buildroot       
 ======================================================================
