@@ -1,35 +1,24 @@
-From: ulf at uclibc.org <ulf@uclibc.org>
-Date: Fri, 14 Mar 2008 22:07:27 -0700 (PDT)
-Subject: [Buildroot] svn commit: trunk/buildroot/target/linux
-Message-ID: <20080315050727.5176E12011B@busybox.net>
+From: Dino Joseph Mycle <dinomycle@gmail.com>
+Date: Sat, 15 Mar 2008 16:12:55 +0530
+Subject: [Buildroot] compiling for 2.4.34 kernel
+Message-ID: <64ef8c1b0803150342n11bbe46cpa07411b086decbf0@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Author: ulf
-Date: 2008-03-14 22:07:26 -0700 (Fri, 14 Mar 2008)
-New Revision: 21330
+Hi
+  i need help in compiling the buildroot for 2.4.34 kernel. inthe make
+menuconfig there is no option to select 2.4 kernel. if sopme patch has to be
+applied please suggest. my target board requires 2.4.34 kernel
 
-Log:
-Use correct Linux version for depmod
+-- 
+---
+Regards,
 
-Modified:
-   trunk/buildroot/target/linux/Makefile.in.advanced
-
-
-Changeset:
-Modified: trunk/buildroot/target/linux/Makefile.in.advanced
-===================================================================
---- trunk/buildroot/target/linux/Makefile.in.advanced	2008-03-13 20:12:08 UTC (rev 21329)
-+++ trunk/buildroot/target/linux/Makefile.in.advanced	2008-03-15 05:07:26 UTC (rev 21330)
-@@ -347,7 +347,7 @@
- 		INSTALL_MOD_PATH=$(TARGET_DIR) modules_install
- 	rm -f $(TARGET_DIR)/lib/modules/$(LINUX26_VERSION)/build
- 	rm -f $(TARGET_DIR)/lib/modules/$(LINUX26_VERSION)/source
--	$(STAGING_DIR)/bin/$(GNU_TARGET_NAME)-depmod26 -b $(TARGET_DIR) $(LINUX_HEADERS_VERSION)
-+	$(STAGING_DIR)/bin/$(GNU_TARGET_NAME)-depmod26 -b $(TARGET_DIR) $(LINUX26_VERSION)	#$(LINUX_HEADERS_VERSION)
- 	touch -c $@
- 
- linux26-menuconfig: $(LINUX26_DIR)/.patched host-sed
+Dino Joseph Mycle
+Mobile: +919840702884
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: http://busybox.net/lists/buildroot/attachments/20080315/f17a0b1c/attachment.htm 
