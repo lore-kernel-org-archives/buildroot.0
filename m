@@ -1,66 +1,69 @@
-From: =?ISO-8859-1?Q?Thiago_A._Corr=EAa?= <thiago.correa@gmail.com>
-Date: Sun, 16 Mar 2008 20:04:27 -0300
-Subject: [Buildroot] Unable to compile kernel
-In-Reply-To: <46a136670803160621g336f254bhb84e07c27a354da1@mail.gmail.com>
-References: <d6cda7730803160552s38da9abahd1f8d1e4056d079@mail.gmail.com>
-	<46a136670803160621g336f254bhb84e07c27a354da1@mail.gmail.com>
-Message-ID: <d6cda7730803161604x2c668a3ena012df82a5621784@mail.gmail.com>
+From: Perry Hung <iperry@gmail.com>
+Date: Mon, 17 Mar 2008 00:55:37 -0400
+Subject: [Buildroot] Errors Linking/Compiling Busybox
+Message-ID: <ae16bd8c0803162155k16ebce9fv3bc3a8e31d8d8ec9@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Yup, that was it, thanks :)
+I'm trying to build a file system with busybox, uclibc, tinyx and matchbox.
 
-On Sun, Mar 16, 2008 at 10:21 AM, John Voltz <john.voltz@gmail.com> wrote:
-> Set the gcc optimization level to 2, 3, or S in menuconfig, under build
-> options.
->
-> John
->
->
->
->
-> On Sun, Mar 16, 2008 at 8:52 AM, Thiago A. Corr?a <thiago.correa@gmail.com>
-> wrote:
->
-> >
-> >
-> >
-> > Hi,
-> >
-> >   I have been recently unable to compile the kernel, using both
-> > atstk1002_defconfig and atngw100_defconfig.
-> >
-> >   Here is what I get:
-> >
-> > include/asm/ocd.h: In function 'die':
-> > include/asm/ocd.h:525: error: Parameter 1 to __builtin_mfdr must be a
-> > constant number
-> > make[2]: *** [arch/avr32/kernel/traps.o] Error 1
-> > make[1]: *** [arch/avr32/kernel] Error 2
-> > make[1]: Leaving directory
-> > `/root/buildroot2-avr32/project_build_avr32/atngw100/linux-2.6.24'
-> > make: ***
-> [/root/buildroot2-avr32/binaries/atngw100/atngw100-linux-2.6.24-20080316]
-> > Error 2
-> >
-> >   The kernel version hasn't changed (2.6.24) or the toolchain as far
-> > as I know, so I can only guess it's a new patch(?).
-> >   Anyone having the same issue?
-> >
-> > Kind Regards,
-> >   Thiago A. Correa
-> > _______________________________________________
-> > buildroot mailing list
-> > buildroot at uclibc.org
-> > http://busybox.net/mailman/listinfo/buildroot
-> >
->
->
-> _______________________________________________
->  buildroot mailing list
->  buildroot at uclibc.org
->  http://busybox.net/mailman/listinfo/buildroot
->
+While linking busybox, it appears to fail linking against some libraries:
+
+
+LINK    busybox_unstripped
+Trying libraries: crypt m
+Failed: busybox_unstripped
+/local/perry/buildroot/build_arm/staging_dir/usr/bin/arm-linux-uclibc-gcc
+   applets/built-in.o  archival/lib.a  archival/libunarchive/lib.a
+console-tools/lib.a  coreutils/lib.a  coreutils/libcoreutils/lib.a
+debianutils/lib.a  e2fsprogs/lib.a  editors/lib.a  findutils/lib.a
+init/lib.a  ipsvd/lib.a  libbb/lib.a  libpwdgrp/lib.a
+loginutils/lib.a  miscutils/lib.a  modutils/lib.a  networking/lib.a
+networking/libiproute/lib.a  networking/udhcp/lib.a  procps/lib.a
+runit/lib.a  selinux/lib.a  shell/lib.a  sysklogd/lib.a
+util-linux/lib.a  archival/built-in.o
+archival/libunarchive/built-in.o  console-tools/built-in.o
+coreutils/built-in.o  coreutils/libcoreutils/built-in.o
+debianutils/built-in.o  e2fsprogs/built-in.o  editors/built-in.o
+findutils/built-in.o  init/built-in.o  ipsvd/built-in.o
+libbb/built-in.o  libpwdgrp/built-in.o  loginutils/built-in.o
+miscutils/built-in.o  modutils/built-in.o  networking/built-in.o
+networking/libiproute/built-in.o  networking/udhcp/built-in.o
+procps/built-in.o  runit/built-in.o  selinux/built-in.o
+shell/built-in.o  sysklogd/built-in.o  util-linux/built-in.o  m crypt
+-Wl,--start-group -lcrypt -lm -Wl,--end-group
+Output of:
+/local/perry/buildroot/build_arm/staging_dir/usr/bin/arm-linux-uclibc-gcc
+-o busybox_unstripped -Wl,--sort-common -Wl,--sort-section
+-Wl,alignment -Wl,--gc-sections -Wl,--start-group applets/built-in.o
+archival/lib.a archival/libunarchive/lib.a console-tools/lib.a
+coreutils/lib.a coreutils/libcoreutils/lib.a debianutils/lib.a
+e2fsprogs/lib.a editors/lib.a findutils/lib.a init/lib.a ipsvd/lib.a
+libbb/lib.a libpwdgrp/lib.a loginutils/lib.a miscutils/lib.a
+modutils/lib.a networking/lib.a networking/libiproute/lib.a
+networking/udhcp/lib.a procps/lib.a runit/lib.a selinux/lib.a
+shell/lib.a sysklogd/lib.a util-linux/lib.a archival/built-in.o
+archival/libunarchive/built-in.o console-tools/built-in.o
+coreutils/built-in.o coreutils/libcoreutils/built-in.o
+debianutils/built-in.o e2fsprogs/built-in.o editors/built-in.o
+findutils/built-in.o init/built-in.o ipsvd/built-in.o libbb/built-in.o
+libpwdgrp/built-in.o loginutils/built-in.o miscutils/built-in.o
+modutils/built-in.o networking/built-in.o
+networking/libiproute/built-in.o networking/udhcp/built-in.o
+procps/built-in.o runit/built-in.o selinux/built-in.o shell/built-in.o
+sysklogd/built-in.o util-linux/built-in.o -Wl,--end-group
+-Wl,--start-group -lcrypt -lm -Wl,--end-group
+==========
+procps/lib.a(top.o): In function `top_main':
+top.c:(.text.top_main+0x518): undefined reference to
+`display_topmem_process_list'
+top.c:(.text.top_main+0x6c8): undefined reference to `topmem_sort'
+collect2: ld returned 1 exit status
+
+This is the the 316 snapshot of buildroot. Any ideas?
+
+thanks,
+-perry
