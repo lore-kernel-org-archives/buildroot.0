@@ -1,7 +1,7 @@
 From: jacmet at uclibc.org <jacmet@uclibc.org>
-Date: Mon, 17 Mar 2008 09:39:03 -0700 (PDT)
-Subject: [Buildroot] svn commit: trunk/buildroot/package/sdl
-Message-ID: <20080317163904.07D8312C82C@busybox.net>
+Date: Mon, 17 Mar 2008 12:44:43 -0700 (PDT)
+Subject: [Buildroot] svn commit: trunk/buildroot/package/busybox
+Message-ID: <20080317194443.985ED12CB1F@busybox.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -9,44 +9,65 @@ Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
 Author: jacmet
-Date: 2008-03-17 09:39:03 -0700 (Mon, 17 Mar 2008)
-New Revision: 21369
+Date: 2008-03-17 12:44:43 -0700 (Mon, 17 Mar 2008)
+New Revision: 21370
 
 Log:
-sdl: Fix include files install.
-
-Patch sdl-config rpath setting rather than setting exec-prefix and
-using DESTDIR as the SDL makefile uses prefix for some files,
-and exec-prefix for others leading to double $(STAGING_DIR) prefix.
+busybox: additional 1.9.1 patches
 
 
-Modified:
-   trunk/buildroot/package/sdl/sdl.mk
+Added:
+   trunk/buildroot/package/busybox/busybox-1.9.1-httpd-POST.patch
+   trunk/buildroot/package/busybox/busybox-1.9.1-init.patch
 
 
 Changeset:
-Modified: trunk/buildroot/package/sdl/sdl.mk
+Added: trunk/buildroot/package/busybox/busybox-1.9.1-httpd-POST.patch
 ===================================================================
---- trunk/buildroot/package/sdl/sdl.mk	2008-03-17 15:28:07 UTC (rev 21368)
-+++ trunk/buildroot/package/sdl/sdl.mk	2008-03-17 16:39:03 UTC (rev 21369)
-@@ -56,7 +56,6 @@
- 		--host=$(GNU_TARGET_NAME) \
- 		--build=$(GNU_HOST_NAME) \
- 		--prefix=$(STAGING_DIR)/usr \
--		--exec-prefix=/usr \
- 		--sysconfdir=/etc \
- 		--localstatedir=/var \
- 		--enable-pulseaudio=no \
-@@ -83,9 +82,9 @@
- 	touch $@
- 
- $(STAGING_DIR)/usr/lib/libSDL.so: $(SDL_DIR)/.compiled
--	$(MAKE) DESTDIR=$(STAGING_DIR) -C $(SDL_DIR) install
--# sdl-config uses -Lexec_prefix/lib instead of -Lprefix/lib - fix it
--	$(SED) 's^-L\$${exec_prefix}^-L\$${prefix}^' \
-+	$(MAKE) -C $(SDL_DIR) install
-+# use correct rpath for linking
-+	$(SED) 's^libdir=\$${exec_prefix}^libdir=/usr^' \
- 		$(STAGING_DIR)/usr/bin/sdl-config
- 	touch -c $@
- 
+--- trunk/buildroot/package/busybox/busybox-1.9.1-httpd-POST.patch	                        (rev 0)
++++ trunk/buildroot/package/busybox/busybox-1.9.1-httpd-POST.patch	2008-03-17 19:44:43 UTC (rev 21370)
+@@ -0,0 +1,11 @@
++--- busybox-1.9.1/networking/httpd.c	Tue Feb 12 17:03:01 2008
+++++ busybox-1.9.1-httpd-POST/networking/httpd.c	Mon Mar 17 13:58:09 2008
++@@ -1950,7 +1950,7 @@
++ 			if ((STRNCASECMP(iobuf, "Content-length:") == 0)) {
++ 				/* extra read only for POST */
++ 				if (prequest != request_GET) {
++-					tptr = iobuf + sizeof("Content-length:") - 1;
+++					tptr = tptr = skip_whitespace(iobuf + sizeof("Content-length:") - 1);
++ 					if (!tptr[0])
++ 						send_headers_and_exit(HTTP_BAD_REQUEST);
++ 					errno = 0;
+
+Added: trunk/buildroot/package/busybox/busybox-1.9.1-init.patch
+===================================================================
+--- trunk/buildroot/package/busybox/busybox-1.9.1-init.patch	                        (rev 0)
++++ trunk/buildroot/package/busybox/busybox-1.9.1-init.patch	2008-03-17 19:44:43 UTC (rev 21370)
+@@ -0,0 +1,27 @@
++--- busybox-1.9.1/init/init.c	Tue Feb 12 17:03:12 2008
+++++ busybox-1.9.1-init/init/init.c	Mon Mar 17 14:19:41 2008
++@@ -225,8 +225,22 @@
++ 		}
++ 		messageD(L_LOG, "console='%s'", s);
++ 	} else {
++-		/* Make sure fd 0,1,2 are not closed */
++-		bb_sanitize_stdio();
+++		/* Make sure fd 0,1,2 are not closed
+++		 * (so that they won't be used by future opens) */
+++
+++		/* bb_sanitize_stdio(); - WRONG.
+++		 * Fail if "/dev/null" doesnt exist, and for init
+++		 * this is a real possibility! Open code it instead. */
+++
+++		int fd = open(bb_dev_null, O_RDWR);
+++		if (fd < 0) {
+++			/* Give me _ANY_ open descriptor! */
+++			fd = xopen("/", O_RDONLY); /* we don't believe this can fail */
+++		}
+++    		while ((unsigned)fd < 2)
+++            		fd = dup(fd);
+++		if (fd > 2)
+++			close (fd);
++ 	}
++ 
++ 	s = getenv("TERM");
