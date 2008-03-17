@@ -1,69 +1,138 @@
-From: Perry Hung <iperry@gmail.com>
-Date: Mon, 17 Mar 2008 00:55:37 -0400
-Subject: [Buildroot] Errors Linking/Compiling Busybox
-Message-ID: <ae16bd8c0803162155k16ebce9fv3bc3a8e31d8d8ec9@mail.gmail.com>
+From: bugs at busybox.net <bugs@busybox.net>
+Date: Mon, 17 Mar 2008 00:54:19 -0700
+Subject: [Buildroot] [buildroot 0002614]: Cannot build toolchain with
+	kernel-2.6.22.10 and uClibc 0.9.29
+Message-ID: <c689152d8195b2260f5ee094fd3f0cdf@bugs.uclibc.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-I'm trying to build a file system with busybox, uclibc, tinyx and matchbox.
 
-While linking busybox, it appears to fail linking against some libraries:
+The following issue has been SUBMITTED. 
+====================================================================== 
+http://busybox.net/bugs/view.php?id=2614 
+====================================================================== 
+Reported By:                Stanley
+Assigned To:                buildroot
+====================================================================== 
+Project:                    buildroot
+Issue ID:                   2614
+Category:                   Architecture Specific
+Reproducibility:            always
+Severity:                   minor
+Priority:                   normal
+Status:                     assigned
+====================================================================== 
+Date Submitted:             03-17-2008 00:54 PDT
+Last Modified:              03-17-2008 00:54 PDT
+====================================================================== 
+Summary:                    Cannot build toolchain with kernel-2.6.22.10 and
+uClibc 0.9.29
+Description: 
+I grab the toolchains and configure kernel as 2.6.22.10.
+It fails while buding kernel.
+Is there something wrong in my environment?
 
+Following are the error message:
+Checking build system dependencies:
+BUILDROOT_DL_DIR clean:                         Ok
+CC clean:                                       Ok
+CXX clean:                                      Ok
+CPP clean:                                      Ok
+CFLAGS clean:                                   Ok
+INCLUDES clean:                                 Ok
+CXXFLAGS clean:                                 Ok
+which installed:                                Ok
+sed works:                                      Ok (/bin/sed)
+GNU make version '3.81':                        Ok
+C compiler '/usr/bin/gcc'
+C compiler version '3.4.6':                     Ok
+C++ Compiler installed:             FALSE
 
-LINK    busybox_unstripped
-Trying libraries: crypt m
-Failed: busybox_unstripped
-/local/perry/buildroot/build_arm/staging_dir/usr/bin/arm-linux-uclibc-gcc
-   applets/built-in.o  archival/lib.a  archival/libunarchive/lib.a
-console-tools/lib.a  coreutils/lib.a  coreutils/libcoreutils/lib.a
-debianutils/lib.a  e2fsprogs/lib.a  editors/lib.a  findutils/lib.a
-init/lib.a  ipsvd/lib.a  libbb/lib.a  libpwdgrp/lib.a
-loginutils/lib.a  miscutils/lib.a  modutils/lib.a  networking/lib.a
-networking/libiproute/lib.a  networking/udhcp/lib.a  procps/lib.a
-runit/lib.a  selinux/lib.a  shell/lib.a  sysklogd/lib.a
-util-linux/lib.a  archival/built-in.o
-archival/libunarchive/built-in.o  console-tools/built-in.o
-coreutils/built-in.o  coreutils/libcoreutils/built-in.o
-debianutils/built-in.o  e2fsprogs/built-in.o  editors/built-in.o
-findutils/built-in.o  init/built-in.o  ipsvd/built-in.o
-libbb/built-in.o  libpwdgrp/built-in.o  loginutils/built-in.o
-miscutils/built-in.o  modutils/built-in.o  networking/built-in.o
-networking/libiproute/built-in.o  networking/udhcp/built-in.o
-procps/built-in.o  runit/built-in.o  selinux/built-in.o
-shell/built-in.o  sysklogd/built-in.o  util-linux/built-in.o  m crypt
--Wl,--start-group -lcrypt -lm -Wl,--end-group
-Output of:
-/local/perry/buildroot/build_arm/staging_dir/usr/bin/arm-linux-uclibc-gcc
--o busybox_unstripped -Wl,--sort-common -Wl,--sort-section
--Wl,alignment -Wl,--gc-sections -Wl,--start-group applets/built-in.o
-archival/lib.a archival/libunarchive/lib.a console-tools/lib.a
-coreutils/lib.a coreutils/libcoreutils/lib.a debianutils/lib.a
-e2fsprogs/lib.a editors/lib.a findutils/lib.a init/lib.a ipsvd/lib.a
-libbb/lib.a libpwdgrp/lib.a loginutils/lib.a miscutils/lib.a
-modutils/lib.a networking/lib.a networking/libiproute/lib.a
-networking/udhcp/lib.a procps/lib.a runit/lib.a selinux/lib.a
-shell/lib.a sysklogd/lib.a util-linux/lib.a archival/built-in.o
-archival/libunarchive/built-in.o console-tools/built-in.o
-coreutils/built-in.o coreutils/libcoreutils/built-in.o
-debianutils/built-in.o e2fsprogs/built-in.o editors/built-in.o
-findutils/built-in.o init/built-in.o ipsvd/built-in.o libbb/built-in.o
-libpwdgrp/built-in.o loginutils/built-in.o miscutils/built-in.o
-modutils/built-in.o networking/built-in.o
-networking/libiproute/built-in.o networking/udhcp/built-in.o
-procps/built-in.o runit/built-in.o selinux/built-in.o shell/built-in.o
-sysklogd/built-in.o util-linux/built-in.o -Wl,--end-group
--Wl,--start-group -lcrypt -lm -Wl,--end-group
-==========
-procps/lib.a(top.o): In function `top_main':
-top.c:(.text.top_main+0x518): undefined reference to
-`display_topmem_process_list'
-top.c:(.text.top_main+0x6c8): undefined reference to `topmem_sort'
-collect2: ld returned 1 exit status
+You may have to install 'g++' on your build machine
 
-This is the the 316 snapshot of buildroot. Any ideas?
+bison installed:                                Ok
+flex installed:                                 Ok
+gettext installed:                              Ok
+makeinfo installed:                             Ok
+Build system dependencies:                      Ok
 
-thanks,
--perry
+rm -rf
+/usr/local/src/buildroot/project_build_i386/uclibc/buildroot-config
+mkdir -p /usr/local/src/buildroot/project_build_i386/uclibc
+cp -dpRf package/config/buildroot-config
+/usr/local/src/buildroot/project_build_ i386/uclibc/buildroot-config
+rm -rf
+/usr/local/src/buildroot/project_build_i386/uclibc/root/usr/include
+find /usr/local/src/buildroot/project_build_i386/uclibc/root/usr/lib -name
+'*.a'  -delete
+find /usr/local/src/buildroot/project_build_i386/uclibc/root/lib -name
+'*.a' -de lete
+find /usr/local/src/buildroot/project_build_i386/uclibc/root/usr/lib -name
+'*.la ' -delete
+find /usr/local/src/buildroot/project_build_i386/uclibc/root/lib -name
+'*.la' -d elete
+/usr/bin/make -j1 HOSTCC="/usr/bin/gcc" HOSTCFLAGS="" ARCH=i386
+CFLAGS_KERNEL="- O0
+-I/usr/local/src/buildroot/build_i386/staging_dir/usr/include
+-I/usr/local/sr c/buildroot/build_i386/staging_dir/include -mtune=i386
+-march=i386" INSTALL_MOD_
+PATH=/usr/local/src/buildroot/project_build_i386/uclibc/root
+CROSS_COMPILE=/usr/
+local/src/buildroot/build_i386/staging_dir/usr/bin/i386-linux-uclibc-
+LDFLAGS="- L/usr/local/src/buildroot/build_i386/staging_dir/lib
+-L/usr/local/src/buildroot/ build_i386/staging_dir/usr/lib"
+LZMA="/usr/local/src/buildroot/toolchain_build_i 386/bin/lzma"  \
+                -C
+/usr/local/src/buildroot/project_build_i386/uclibc/linux-2.6. 22.10
+bzImage
+make[1]: Entering directory
+`/usr/local/src/buildroot/project_build_i386/uclibc/ linux-2.6.22.10'
+  CHK     include/linux/version.h
+  CHK     include/linux/utsrelease.h
+  CALL    scripts/checksyscalls.sh
+  CHK     include/linux/compile.h
+  GEN     .version
+  CHK     include/linux/compile.h
+  UPD     include/linux/compile.h
+  CC      init/version.o
+  LD      init/built-in.o
+  LD      vmlinux
+mm/built-in.o: In function `kmem_cache_init':
+(.init.text+0x41ff): undefined reference to `__bad_size'
+mm/built-in.o: In function `kmem_cache_init':
+(.init.text+0x4225): undefined reference to `__bad_size'
+mm/built-in.o: In function `kmem_cache_init':
+(.init.text+0x4247): undefined reference to `__bad_size'
+mm/built-in.o: In function `kmem_cache_init':
+(.init.text+0x4294): undefined reference to `__bad_size'
+mm/built-in.o: In function `kmem_cache_init':
+(.init.text+0x42a5): undefined reference to `__bad_size'
+mm/built-in.o:(.init.text+0x42be): more undefined references to
+`__bad_size' fol low
+arch/i386/lib/lib.a(usercopy.o): In function `__copy_to_user_ll':
+usercopy.c:(.text+0x2c1): undefined reference to `__copy_user_intel'
+arch/i386/lib/lib.a(usercopy.o): In function `__copy_from_user_ll':
+usercopy.c:(.text+0x361): undefined reference to
+`__copy_user_zeroing_intel'
+arch/i386/lib/lib.a(usercopy.o): In function
+`__copy_from_user_ll_nozero':
+usercopy.c:(.text+0x401): undefined reference to `__copy_user_intel'
+make[1]: *** [vmlinux] Error 1
+make[1]: Leaving directory
+`/usr/local/src/buildroot/project_build_i386/uclibc/l inux-2.6.22.10'
+make: ***
+[/usr/local/src/buildroot/binaries/uclibc/linux-kernel-2.6.22.10-i386] 
+Error 2
+
+====================================================================== 
+
+Issue History 
+Date Modified   Username       Field                    Change               
+====================================================================== 
+03-17-08 00:54  Stanley        New Issue                                    
+03-17-08 00:54  Stanley        Status                   new => assigned     
+03-17-08 00:54  Stanley        Assigned To               => buildroot       
+======================================================================
