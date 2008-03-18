@@ -1,23 +1,35 @@
-From: Will Newton <will.newton@gmail.com>
-Date: Wed, 19 Mar 2008 17:31:01 +0000
-Subject: [Buildroot] [PATCH] Update libtool config.sub before building
-Message-ID: <87a5b0800803191031x3dc2a940p7f741f54e99cdf69@mail.gmail.com>
+From: Daniel Laird <daniel.j.laird@nxp.com>
+Date: Tue, 18 Mar 2008 05:54:02 -0700 (PDT)
+Subject: [Buildroot]  Freetype build broken when using freetype-config
+Message-ID: <16120565.post@talk.nabble.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi,
 
-This patch runs $(CONFIG_UPDATE) on the libtool tree before trying to
-build libtool. This is necessary if the config.sub shipping with
-libtool does not contain all the features for your target
-architecture.
--------------- next part --------------
-A non-text attachment was scrubbed...
-Name: libtool-config-update.patch
-Type: text/x-diff
-Size: 680 bytes
-Desc: not available
-Url : http://busybox.net/lists/buildroot/attachments/20080319/47751b69/attachment.patch 
+If I use buildroot (latest version) to build DirectFB and freetype I get a
+linker error.
+The reason for this is that when freetype-config is called it returns
+/usr/lib/* for the libs.
+
+This is because freetype-config returns /usr/lib/* for the libraries it
+requires.
+
+In the old freetype makefile (before AUTOTARGETS was used) freetype-config
+was patched to return the correct libs.
+
+Was this wrong?
+
+I think this is now incorrect again.
+Currently it does not build for me but if I revert to the previous versions
+(i.e keep libdir-la.patch and freetype.mk) all is ok.
+
+I presume I could define a _HOOK_POSTBUILD targets todo the same thing.
+
+Has anyone else seen this?
+Daniel Laird
+-- 
+View this message in context: http://www.nabble.com/Freetype-build-broken-when-using-freetype-config-tp16120565p16120565.html
+Sent from the BuildRoot mailing list archive at Nabble.com.
