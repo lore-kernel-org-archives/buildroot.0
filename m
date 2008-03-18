@@ -1,8 +1,8 @@
 From: ulf at uclibc.org <ulf@uclibc.org>
-Date: Tue, 18 Mar 2008 05:02:40 -0700 (PDT)
+Date: Tue, 18 Mar 2008 05:03:02 -0700 (PDT)
 Subject: [Buildroot] svn commit:
-	trunk/buildroot/target/device/Atmel/atngw100/kernel-patches
-Message-ID: <20080318120240.9FDC112CFC5@busybox.net>
+	trunk/buildroot/target/device/Atmel/atngw100-base/kernel-patches
+Message-ID: <20080318120302.257AE12CFC9@busybox.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -10,24 +10,24 @@ Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
 Author: ulf
-Date: 2008-03-18 05:02:40 -0700 (Tue, 18 Mar 2008)
-New Revision: 21391
+Date: 2008-03-18 05:03:01 -0700 (Tue, 18 Mar 2008)
+New Revision: 21392
 
 Log:
 Use same name for same patch
 
 Added:
-   trunk/buildroot/target/device/Atmel/atngw100/kernel-patches/linux-2.6.24-600-avr32-mmc.patch
+   trunk/buildroot/target/device/Atmel/atngw100-base/kernel-patches/linux-2.6.24-600-avr32-mmc.patch
 
 Removed:
-   trunk/buildroot/target/device/Atmel/atngw100/kernel-patches/linux-2.6.24-avr32-mmc.patch
+   trunk/buildroot/target/device/Atmel/atngw100-base/kernel-patches/linux-2.6.24-avr32-mmc.patch
 
 
 Changeset:
-Copied: trunk/buildroot/target/device/Atmel/atngw100/kernel-patches/linux-2.6.24-600-avr32-mmc.patch (from rev 21379, trunk/buildroot/target/device/Atmel/atngw100/kernel-patches/linux-2.6.24-avr32-mmc.patch)
+Copied: trunk/buildroot/target/device/Atmel/atngw100-base/kernel-patches/linux-2.6.24-600-avr32-mmc.patch (from rev 21379, trunk/buildroot/target/device/Atmel/atngw100-base/kernel-patches/linux-2.6.24-avr32-mmc.patch)
 ===================================================================
---- trunk/buildroot/target/device/Atmel/atngw100/kernel-patches/linux-2.6.24-600-avr32-mmc.patch	                        (rev 0)
-+++ trunk/buildroot/target/device/Atmel/atngw100/kernel-patches/linux-2.6.24-600-avr32-mmc.patch	2008-03-18 12:02:40 UTC (rev 21391)
+--- trunk/buildroot/target/device/Atmel/atngw100-base/kernel-patches/linux-2.6.24-600-avr32-mmc.patch	                        (rev 0)
++++ trunk/buildroot/target/device/Atmel/atngw100-base/kernel-patches/linux-2.6.24-600-avr32-mmc.patch	2008-03-18 12:03:01 UTC (rev 21392)
 @@ -0,0 +1,255 @@
 +diff --git a/drivers/mmc/host/atmel-mci.c b/drivers/mmc/host/atmel-mci.c
 +index eeac479..7913cd8 100644
@@ -285,10 +285,10 @@ Copied: trunk/buildroot/target/device/Atmel/atngw100/kernel-patches/linux-2.6.24
 + 
 + 		mmc_remove_host(host->mmc);
 
-Deleted: trunk/buildroot/target/device/Atmel/atngw100/kernel-patches/linux-2.6.24-avr32-mmc.patch
+Deleted: trunk/buildroot/target/device/Atmel/atngw100-base/kernel-patches/linux-2.6.24-avr32-mmc.patch
 ===================================================================
---- trunk/buildroot/target/device/Atmel/atngw100/kernel-patches/linux-2.6.24-avr32-mmc.patch	2008-03-18 12:02:16 UTC (rev 21390)
-+++ trunk/buildroot/target/device/Atmel/atngw100/kernel-patches/linux-2.6.24-avr32-mmc.patch	2008-03-18 12:02:40 UTC (rev 21391)
+--- trunk/buildroot/target/device/Atmel/atngw100-base/kernel-patches/linux-2.6.24-avr32-mmc.patch	2008-03-18 12:02:40 UTC (rev 21391)
++++ trunk/buildroot/target/device/Atmel/atngw100-base/kernel-patches/linux-2.6.24-avr32-mmc.patch	2008-03-18 12:03:01 UTC (rev 21392)
 @@ -1,255 +0,0 @@
 -diff --git a/drivers/mmc/host/atmel-mci.c b/drivers/mmc/host/atmel-mci.c
 -index eeac479..7913cd8 100644
