@@ -1,57 +1,31 @@
-From: jacmet at uclibc.org <jacmet@uclibc.org>
-Date: Tue, 18 Mar 2008 01:37:01 -0700 (PDT)
-Subject: [Buildroot] svn commit: trunk/buildroot
-Message-ID: <20080318083701.BE5E212CF80@busybox.net>
+From: ulf at uclibc.org <ulf@uclibc.org>
+Date: Tue, 18 Mar 2008 01:56:51 -0700 (PDT)
+Subject: [Buildroot] svn commit:
+	trunk/buildroot/target/device/Atmel/at91sam9260dfc
+Message-ID: <20080318085651.AE0B012CF86@busybox.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Author: jacmet
-Date: 2008-03-18 01:37:01 -0700 (Tue, 18 Mar 2008)
-New Revision: 21381
+Author: ulf
+Date: 2008-03-18 01:56:51 -0700 (Tue, 18 Mar 2008)
+New Revision: 21382
 
 Log:
-add .auto.deps to svn:ignore
+Use latest kernel for at91sam9260
 
-Modified:
-   trunk/buildroot/
+Added:
+   trunk/buildroot/target/device/Atmel/at91sam9260dfc/at91sam9260dfc-linux-2.6.24.3.config
+
+Removed:
+   trunk/buildroot/target/device/Atmel/at91sam9260dfc/at91sam9260dfc-linux-2.6.24.config
 
 
 Changeset:
 
-Property changes on: trunk/buildroot
-___________________________________________________________________
-Name: svn:ignore
-   - dl
-.config
-.config.cmd
-.config.old
-.auto.deps
-config.*
-build_*
-toolchain_build_*
-rootfs*
-linux-kernel-*
-binaries
-project_build_*
-target_build_*
-include
+Sorry, the patch is too large to include (2845 lines).
+Please use ViewCVS to see it!
 
-   + dl
-.config
-.config.cmd
-.config.old
-.auto.deps
-config.*
-build_*
-toolchain_build_*
-rootfs*
-linux-kernel-*
-binaries
-project_build_*
-target_build_*
-include
-.auto.deps
- 
+http://uclibc.org/cgi-bin/viewcvs.cgi?view=rev&root=svn&rev=21382
