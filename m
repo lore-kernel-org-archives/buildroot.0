@@ -1,7 +1,7 @@
 From: Reinier Coetzer <reinier.coetzer@gmail.com>
-Date: Wed, 19 Mar 2008 20:18:52 +0200
-Subject: [Buildroot] Buildroot compilation error with 2.6.18.8 kernel
-Message-ID: <823018ed0803191118j6146663l8a4f9bc53af05fb8@mail.gmail.com>
+Date: Tue, 18 Mar 2008 12:57:14 +0200
+Subject: [Buildroot] Buildroot compilation error
+Message-ID: <823018ed0803180357s43bf8890s37521d7606aca432@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -51,4 +51,4 @@ Kind Regards
   Reinier
 -------------- next part --------------
 An HTML attachment was scrubbed...
-URL: http://busybox.net/lists/buildroot/attachments/20080319/7f36753a/attachment.htm 
+URL: http://busybox.net/lists/buildroot/attachments/20080318/b8a554e1/attachment.htm 
