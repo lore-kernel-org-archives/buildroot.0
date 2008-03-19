@@ -1,7 +1,7 @@
 From: Will Newton <will.newton@gmail.com>
-Date: Wed, 19 Mar 2008 17:25:22 +0000
-Subject: [Buildroot] [PATCH] Add libneon package
-Message-ID: <87a5b0800803191025o427c5e99t8a306793b0ca3b35@mail.gmail.com>
+Date: Wed, 19 Mar 2008 17:31:01 +0000
+Subject: [Buildroot] [PATCH] Update libtool config.sub before building
+Message-ID: <87a5b0800803191031x3dc2a940p7f741f54e99cdf69@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -10,12 +10,14 @@ To: buildroot@busybox.net
 
 Hi,
 
-This patch adds a libneon package to buildroot. libneon is an HTTP and
-WebDAV library.
+This patch runs $(CONFIG_UPDATE) on the libtool tree before trying to
+build libtool. This is necessary if the config.sub shipping with
+libtool does not contain all the features for your target
+architecture.
 -------------- next part --------------
 A non-text attachment was scrubbed...
-Name: libneon-package.patch
+Name: libtool-config-update.patch
 Type: text/x-diff
-Size: 3555 bytes
+Size: 680 bytes
 Desc: not available
-Url : http://busybox.net/lists/buildroot/attachments/20080319/91fd7a32/attachment.patch 
+Url : http://busybox.net/lists/buildroot/attachments/20080319/47751b69/attachment.patch 
