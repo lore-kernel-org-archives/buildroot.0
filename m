@@ -1,7 +1,7 @@
 From: Hebbar <gururajakr@sanyo.co.in>
-Date: Tue, 18 Mar 2008 17:55:17 -0700 (PDT)
-Subject: [Buildroot]  [PATCH] Allow Cairo to see directfb include files
-Message-ID: <16134981.post@talk.nabble.com>
+Date: Tue, 18 Mar 2008 18:06:55 -0700 (PDT)
+Subject: [Buildroot] [PATCH] Allow users to choose Custom Skeleton directory
+Message-ID: <16135129.post@talk.nabble.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -11,38 +11,62 @@ To: buildroot@busybox.net
 
 Hi,
 
-If directfb is enabled, cairo is made to build upon directfb. But cairo is
-unable to find directfb include files. At present it happens on my system.
-Below patch corrects the same.
+At present, Buildroot allows only 2 skeleton directory for root preparation
+other than those for atmel,amd etc.
 
-Regards
+1. target/generic/target_busybox_skeleton
+2. target/generic/target_skeleton
+
+Below patch allows customers to define their own cutom skeleton directory
+and patch.
+
+I welcome comments and changes or updates required for the same.
+
+Thanks and regards
 Gururaja
 
+Signed-off-by: Gururaja Hebbar <gururaja@sanyo.co.in>
 
-Signed-off-by: Gururaja Hebbar <gururajakr@sanyo.co.in>
+buildroot/package/busybox/Config.in
+buildroot/target/generic/Makefile.in
 
-diff -purN buildroot/package/cairo/cairo.mk
-buildroot_kboard/package/cairo/cairo.mk
---- buildroot/package/cairo/cairo.mk	2008-03-18 03:15:26.000000000 -0400
-+++ buildroot_kboard/package/cairo/cairo.mk	2008-03-17 12:43:21.000000000
+diff -purN buildroot/package/busybox/Config.in
+buildroot_kboard/package/busybox/Config.in
+--- buildroot/package/busybox/Config.in	2008-03-18 03:15:30.000000000 -0400
++++ buildroot_kboard/package/busybox/Config.in	2008-03-15 20:19:33.000000000
 -0400
-@@ -39,11 +39,13 @@ CAIRO_CONF_ENV = ac_cv_func_posix_getpwu
- 		gl_cv_func_mkdir_trailing_slash_bug=no gl_cv_func_mkstemp_limitations=no
-\
- 		ac_cv_func_working_mktime=yes jm_cv_func_working_re_compile_pattern=yes \
- 		ac_use_included_regex=no gl_cv_c_restrict=no \
--		ac_cv_path_GLIB_GENMARSHAL=/usr/bin/glib-genmarshal 
-+		ac_cv_path_GLIB_GENMARSHAL=/usr/bin/glib-genmarshal
+@@ -92,6 +92,18 @@ config BR2_PACKAGE_BUSYBOX_SKELETON
+ 	  Use a minimal target skeleton. Make sure to select mdev
+ 	  which is used to populate /dev/.
  
- ifeq ($(BR2_PACKAGE_DIRECTFB),y)
- 	CAIRO_CONF_OPT = --disable-xlib --without-x --enable-directfb
++config BR2_PACKAGE_CUSTOM_SKELETON
++	bool "use custom target skeleton"	
++	depends on !BR2_PACKAGE_BUSYBOX_SKELETON
++	help
++	  Use a Custom target skeleton. Make sure it includes all
++	  required directories and files.
++	  
++config BR2_PACKAGE_CUSTOM_SKELETON_PATH
++	string "custom target skeleton Path"
++	depends on BR2_PACKAGE_CUSTOM_SKELETON
++	default ""
++
+ #config BR2_PACKAGE_BUSYBOX_INITRAMFS
+ #	bool "initramfs perusing busybox"
+ #	depends on BR2_PACKAGE_BUSYBOX
+
+diff -purN buildroot/target/generic/Makefile.in
+buildroot_kboard/target/generic/Makefile.in
+--- buildroot/target/generic/Makefile.in	2008-03-18 03:15:20.000000000 -0400
++++ buildroot_kboard/target/generic/Makefile.in	2008-03-18
+17:56:48.000000000 -0400
+@@ -7,3 +7,6 @@ TARGET_SKELETON=target/generic/target_bu
+ TARGET_DEVICE_TABLE=target/generic/mini_device_table.txt
  endif
-+	
-+CAIRO_MAKE_OPT = CFLAGS+=-I$(STAGING_DIR)/usr/include/directfb
  
- CAIRO_DEPENDENCIES = uclibc gettext libintl pkgconfig libglib2 zlib png
-fontconfig $(XSERVER) 
- 
++ifeq ($(BR2_PACKAGE_CUSTOM_SKELETON),y)
++TARGET_SKELETON=$(strip $(subst ",, $(BR2_PACKAGE_CUSTOM_SKELETON_PATH)))
++endif
 -- 
-View this message in context: http://www.nabble.com/-PATCH--Allow-Cairo-to-see-directfb-include-files-tp16134981p16134981.html
+View this message in context: http://www.nabble.com/-PATCH--Allow-users-to-choose-Custom-Skeleton-directory-tp16135129p16135129.html
 Sent from the BuildRoot mailing list archive at Nabble.com.
