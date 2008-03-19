@@ -1,32 +1,38 @@
-From: Habib Bouaziz-Viallet <habib.bouaziz@gmail.com>
-Date: Tue, 18 Mar 2008 11:44:09 +0100
-Subject: [Buildroot] Thumb support in kernel config
-Message-ID: <d449ded70803180344re1a0f17i347e8412943b86a@mail.gmail.com>
+From: Ulf Samuelsson <ulf@atmel.com>
+Date: Wed, 19 Mar 2008 22:45:09 +0100
+Subject: [Buildroot] [PATCH] Allow users to choose Custom Skeleton
+	directory
+References: <16135129.post@talk.nabble.com>
+Message-ID: <047f01c88a0a$8a1ef5d0$070514ac@atmel.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi all !
+> 
+> Hi,
+> 
+> At present, Buildroot allows only 2 skeleton directory for root preparation
+> other than those for atmel,amd etc.
+> 
+> 1. target/generic/target_busybox_skeleton
+> 2. target/generic/target_skeleton
+> 
+> Below patch allows customers to define their own cutom skeleton directory
+> and patch.
+> 
+> I welcome comments and changes or updates required for the same.
+> 
+> Thanks and regards
+> Gururaja
+> 
 
-I have just realize that there is 'Thumb' support in within Linux kernel
+If someone wants to have a custom skeleton, why not
+create support for a new board where the board makefile
+specifies the target skeleton.
 
+I can't really see why you want to be able to specify a non-existing skeleton.
 
-  ARM system type (Atmel AT91)  --->
-*** Boot options ***
-*** Power management ***
-Atmel AT91 System-on-Chip  --->
-*** Processor Type ***
-[*] Support ARM926T processor
-*** Processor Features ***
-[*] Support Thumb user binaries
-
-My question :
-
-What is involved in this option? The kernel itself, or user-land applications ?
-
-Best regards
-
---
-M. Bouaziz-Viallet H
+Best Regards
+Ulf Samuelsson
