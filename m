@@ -1,33 +1,29 @@
-From: Ulf Samuelsson <ulf@atmel.com>
-Date: Wed, 19 Mar 2008 22:45:18 +0100
-Subject: [Buildroot] updating package/mtd
-References: <20080318063516.GA607@cloud.net.au>
-Message-ID: <048001c88a0a$8a2696f0$070514ac@atmel.com>
+From: Nathanael D. Noblet <nathanael@gnat.ca>
+Date: Wed, 19 Mar 2008 15:20:04 -0600
+Subject: [Buildroot] [ PATCH ] adjust gnu download paths
+Message-ID: <47E18384.6020106@gnat.ca>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+Some projects download from gnu mirrors, however the project.mk adds an 
+extra /gnu thus causing a 404. The following patch removes all extra 
+/gnu from packages using the BR2_GNU_MIRROR to define the project site 
+variable.
 
+On a side note, it has been a few years since I was actively involved in 
+providing patches for buildroot, however I have another project coming 
+up here where I expect to use buildroot quite a bit. How do I go about 
+getting svn access for bugs/patches like this?
 
-> I'm going to update package/mtd to support a newer version, because I
-> need access to ubi and other new tools.
-> 
-> Using the MTD snapshot version seems to be broken - there are no
-> snapshots on the ftp.uk.linux.org server any more. Also I think we could
-> merge the makefiles for the 2005* and 2006* versions.
-> 
-> Any comments, thoughts, objections, requests?
-> 
-> thanks
-> Hamish
-> -- 
-
-
-If you want to work on this, you need to test the result on AT45 dataflash.
-Unless you have access to such a target, I suggest you leave the 2006 support there
-and add yet another version.
-
-Best Regards
-Ulf Samuelsson
+-- 
+Nathanael D. Noblet
+-------------- next part --------------
+A non-text attachment was scrubbed...
+Name: gnu_path.diff
+Type: text/x-patch
+Size: 9046 bytes
+Desc: not available
+Url : http://busybox.net/lists/buildroot/attachments/20080319/b422a700/attachment.bin 
