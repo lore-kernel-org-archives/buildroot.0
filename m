@@ -1,35 +1,32 @@
-From: ulf at uclibc.org <ulf@uclibc.org>
-Date: Wed, 19 Mar 2008 00:26:34 -0700 (PDT)
-Subject: [Buildroot] svn commit: trunk/buildroot/target/device
-Message-ID: <20080319144044.2C00A12CF13@busybox.net>
+From: Daniel Laird <danieljlaird@hotmail.com>
+Date: Wed, 19 Mar 2008 10:46:43 +0000
+Subject: [Buildroot] Freetype build broken when using freetype-config
+Message-ID: <BAY124-W58E8487C0D6A266F6F8F52DC070@phx.gbl>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Author: ulf
-Date: 2008-03-19 00:26:34 -0700 (Wed, 19 Mar 2008)
-New Revision: 21398
 
-Log:
-Fix AVR32 ext toolchain
+If I use buildroot (latest version) to build DirectFB and freetype I get a linker error.
+The reason for this is that when freetype-config is called it returns /usr/lib/* for the libs.
 
-Modified:
-   trunk/buildroot/target/device/Config.in.toolchain
+This is because freetype-config returns /usr/lib/* for the libraries it requires.
+
+In the old freetype makefile (before AUTOTARGETS was used) freetype-config was patched to return the correct libs.
+
+Was this wrong?
+
+I think this is now incorrect again.
+Currently it does not build for me but if I revert to the previous versions (i.e keep libdir-la.patch and freetype.mk) all is ok.
+
+I presume I could define a _HOOK_POSTBUILD targets todo the same thing.
+
+Has anyone else seen this?
+Daniel Laird
 
 
-Changeset:
-Modified: trunk/buildroot/target/device/Config.in.toolchain
-===================================================================
---- trunk/buildroot/target/device/Config.in.toolchain	2008-03-19 05:00:05 UTC (rev 21397)
-+++ trunk/buildroot/target/device/Config.in.toolchain	2008-03-19 07:26:34 UTC (rev 21398)
-@@ -1,7 +1,7 @@
- if BR2_TOOLCHAIN_EXTERNAL_SOURCE
- choice
- 	prompt "Source location:"
--	default BR2_TOOLCHAIN_ATMEL_AVR32 if BR2_avr32
-+	default BR2_TOOLCHAIN_ATMEL_AVR32_4_2_1 if BR2_avr32
- 	help
- 	  Select whether to use the toolchain built by the buildroot
- 	  system or an external pre-built toolchain.
+_________________________________________________________________
+Play the Andrex Hello Softie Game & win great prizes 
+http://www.thehellosoftiegame.co.uk
