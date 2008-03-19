@@ -1,32 +1,21 @@
-From: Daniel Laird <danieljlaird@hotmail.com>
-Date: Wed, 19 Mar 2008 10:46:43 +0000
-Subject: [Buildroot] Freetype build broken when using freetype-config
-Message-ID: <BAY124-W58E8487C0D6A266F6F8F52DC070@phx.gbl>
+From: Will Newton <will.newton@gmail.com>
+Date: Wed, 19 Mar 2008 13:52:16 +0000
+Subject: [Buildroot] [PATCH] Bump version of LTP testsuite
+Message-ID: <87a5b0800803190652l76009b51hf064ce7f3b9beef1@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+Hi,
 
-If I use buildroot (latest version) to build DirectFB and freetype I get a linker error.
-The reason for this is that when freetype-config is called it returns /usr/lib/* for the libs.
-
-This is because freetype-config returns /usr/lib/* for the libraries it requires.
-
-In the old freetype makefile (before AUTOTARGETS was used) freetype-config was patched to return the correct libs.
-
-Was this wrong?
-
-I think this is now incorrect again.
-Currently it does not build for me but if I revert to the previous versions (i.e keep libdir-la.patch and freetype.mk) all is ok.
-
-I presume I could define a _HOOK_POSTBUILD targets todo the same thing.
-
-Has anyone else seen this?
-Daniel Laird
-
-
-_________________________________________________________________
-Play the Andrex Hello Softie Game & win great prizes 
-http://www.thehellosoftiegame.co.uk
+A little patch to bump the version of the LTP testsuite to the most
+recently released one.
+-------------- next part --------------
+A non-text attachment was scrubbed...
+Name: ltp-version.patch
+Type: text/x-diff
+Size: 511 bytes
+Desc: not available
+Url : http://busybox.net/lists/buildroot/attachments/20080319/d586251b/attachment.patch 
