@@ -1,7 +1,7 @@
-From: Daniel Laird <daniel.j.laird@nxp.com>
-Date: Tue, 18 Mar 2008 05:54:02 -0700 (PDT)
-Subject: [Buildroot]  Freetype build broken when using freetype-config
-Message-ID: <16120565.post@talk.nabble.com>
+From: Hebbar <gururajakr@sanyo.co.in>
+Date: Tue, 18 Mar 2008 17:55:17 -0700 (PDT)
+Subject: [Buildroot]  [PATCH] Allow Cairo to see directfb include files
+Message-ID: <16134981.post@talk.nabble.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -9,27 +9,40 @@ Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
 
-If I use buildroot (latest version) to build DirectFB and freetype I get a
-linker error.
-The reason for this is that when freetype-config is called it returns
-/usr/lib/* for the libs.
+Hi,
 
-This is because freetype-config returns /usr/lib/* for the libraries it
-requires.
+If directfb is enabled, cairo is made to build upon directfb. But cairo is
+unable to find directfb include files. At present it happens on my system.
+Below patch corrects the same.
 
-In the old freetype makefile (before AUTOTARGETS was used) freetype-config
-was patched to return the correct libs.
+Regards
+Gururaja
 
-Was this wrong?
 
-I think this is now incorrect again.
-Currently it does not build for me but if I revert to the previous versions
-(i.e keep libdir-la.patch and freetype.mk) all is ok.
+Signed-off-by: Gururaja Hebbar <gururajakr@sanyo.co.in>
 
-I presume I could define a _HOOK_POSTBUILD targets todo the same thing.
-
-Has anyone else seen this?
-Daniel Laird
+diff -purN buildroot/package/cairo/cairo.mk
+buildroot_kboard/package/cairo/cairo.mk
+--- buildroot/package/cairo/cairo.mk	2008-03-18 03:15:26.000000000 -0400
++++ buildroot_kboard/package/cairo/cairo.mk	2008-03-17 12:43:21.000000000
+-0400
+@@ -39,11 +39,13 @@ CAIRO_CONF_ENV = ac_cv_func_posix_getpwu
+ 		gl_cv_func_mkdir_trailing_slash_bug=no gl_cv_func_mkstemp_limitations=no
+\
+ 		ac_cv_func_working_mktime=yes jm_cv_func_working_re_compile_pattern=yes \
+ 		ac_use_included_regex=no gl_cv_c_restrict=no \
+-		ac_cv_path_GLIB_GENMARSHAL=/usr/bin/glib-genmarshal 
++		ac_cv_path_GLIB_GENMARSHAL=/usr/bin/glib-genmarshal
+ 
+ ifeq ($(BR2_PACKAGE_DIRECTFB),y)
+ 	CAIRO_CONF_OPT = --disable-xlib --without-x --enable-directfb
+ endif
++	
++CAIRO_MAKE_OPT = CFLAGS+=-I$(STAGING_DIR)/usr/include/directfb
+ 
+ CAIRO_DEPENDENCIES = uclibc gettext libintl pkgconfig libglib2 zlib png
+fontconfig $(XSERVER) 
+ 
 -- 
-View this message in context: http://www.nabble.com/Freetype-build-broken-when-using-freetype-config-tp16120565p16120565.html
+View this message in context: http://www.nabble.com/-PATCH--Allow-Cairo-to-see-directfb-include-files-tp16134981p16134981.html
 Sent from the BuildRoot mailing list archive at Nabble.com.
