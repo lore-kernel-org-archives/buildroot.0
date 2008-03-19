@@ -1,38 +1,33 @@
 From: Ulf Samuelsson <ulf@atmel.com>
-Date: Wed, 19 Mar 2008 22:45:09 +0100
-Subject: [Buildroot] [PATCH] Allow users to choose Custom Skeleton
-	directory
-References: <16135129.post@talk.nabble.com>
-Message-ID: <047f01c88a0a$8a1ef5d0$070514ac@atmel.com>
+Date: Wed, 19 Mar 2008 22:45:18 +0100
+Subject: [Buildroot] updating package/mtd
+References: <20080318063516.GA607@cloud.net.au>
+Message-ID: <048001c88a0a$8a2696f0$070514ac@atmel.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-> 
-> Hi,
-> 
-> At present, Buildroot allows only 2 skeleton directory for root preparation
-> other than those for atmel,amd etc.
-> 
-> 1. target/generic/target_busybox_skeleton
-> 2. target/generic/target_skeleton
-> 
-> Below patch allows customers to define their own cutom skeleton directory
-> and patch.
-> 
-> I welcome comments and changes or updates required for the same.
-> 
-> Thanks and regards
-> Gururaja
-> 
 
-If someone wants to have a custom skeleton, why not
-create support for a new board where the board makefile
-specifies the target skeleton.
 
-I can't really see why you want to be able to specify a non-existing skeleton.
+> I'm going to update package/mtd to support a newer version, because I
+> need access to ubi and other new tools.
+> 
+> Using the MTD snapshot version seems to be broken - there are no
+> snapshots on the ftp.uk.linux.org server any more. Also I think we could
+> merge the makefiles for the 2005* and 2006* versions.
+> 
+> Any comments, thoughts, objections, requests?
+> 
+> thanks
+> Hamish
+> -- 
+
+
+If you want to work on this, you need to test the result on AT45 dataflash.
+Unless you have access to such a target, I suggest you leave the 2006 support there
+and add yet another version.
 
 Best Regards
 Ulf Samuelsson
