@@ -1,86 +1,40 @@
-From: paradoxxa <paradoxxa2001@web.de>
-Date: Thu, 20 Mar 2008 07:36:49 -0700 (PDT)
-Subject: [Buildroot] build for ARM926EJ-S fails with
- kernel-patches-2.6.24
-In-Reply-To: <00c301c88a95$df7c61d0$e0c4af0a@atmel.com>
-References: <16119611.post@talk.nabble.com>
-	<00e701c88a6e$4643e730$040514ac@atmel.com>
-	<16175986.post@talk.nabble.com>
-	<00c301c88a95$df7c61d0$e0c4af0a@atmel.com>
-Message-ID: <16180137.post@talk.nabble.com>
+From: Nathanael D. Noblet <nathanael@gnat.ca>
+Date: Thu, 20 Mar 2008 08:45:41 -0600
+Subject: [Buildroot] ncurse address error
+In-Reply-To: <00be01c88a77$c9601e00$ad289e86@LPSC0173W>
+References: <823018ed0803180357s43bf8890s37521d7606aca432@mail.gmail.com>
+	<00be01c88a77$c9601e00$ad289e86@LPSC0173W>
+Message-ID: <47E27895.2000909@gnat.ca>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+Guillaume Dargaud wrote:
+> There's an extra 'gnu' being appended in the path:
+> 
+> wget --passive-ftp  -P /home/guinevere/buildroot/dl 
+> "http://ftp.gnu.org/pub/gnu"/gnu/ncurses/ncurses-5.6.tar.gz
+> --11:44:49--  http://ftp.gnu.org/pub/gnu/gnu/ncurses/ncurses-5.6.tar.gz
+>            => `/home/guinevere/buildroot/dl/ncurses-5.6.tar.gz'
+> Resolving ftp.gnu.org... 140.186.70.20
+> Connecting to ftp.gnu.org|140.186.70.20|:80... connected.
+> HTTP request sent, awaiting response... 404 Not Found
+> 11:44:49 ERROR 404: Not Found.
 
-Ok, i will try this.
-Thank you very much for your help.
-Best Regards
-
-
-Ulf Samuelsson-4 wrote:
-> 
-> 
->> 
->> Hi Ulf Samuelsson,
->> here is the full .config
->> Best Regards
->> 
->> #
->> # Automatically generated make config: don't edit
->> # Tue Mar 18 10:10:04 2008
->> #
->> BR2_HAVE_DOT_CONFIG=y
->> BR2_VERSION="0.10.0-svn"
->> # BR2_alpha is not set
->> BR2_arm=y
->> BR2_arm926t=y
->> BR2_ARM_TYPE="ARM926T"
->> BR2_ARM_EABI=y
->> BR2_ARCH="arm"
->> BR2_ENDIAN="LITTLE"
->> BR2_GCC_TARGET_TUNE="arm9tdmi"
->> 
-> 
-> [snip]
-> 
->> #
->> # Preset Devices
->> #
->> # BR2_TARGET_ARM is not set
->> # BR2_TARGET_ATMEL is not set
->> # BR2_TARGET_SHARP is not set
->> 
->> 
-> 
-> 
-> Since you do not have $(BOARD_PATH) defined, something will break.
-> This is only set, if you select a target.
-> 
-> Suggest you start from scratch by doing 
-> 
-> mv .config .config.original
-> touch .config
-> make at91sam9260dfc_defconfig.
-> 
-> then change the stuff as you need.
-> 
-> This will ensure that the 
-> I noted that you are using an x86 based linux configuration and that will
-> never work.
-> 
-> Best Regards
-> Ulf Samuelsson
-> 
-> _______________________________________________
-> buildroot mailing list
-> buildroot at uclibc.org
-> http://busybox.net/mailman/listinfo/buildroot
-> 
-> 
+I provided a patch yesterday to fix this, but haven't seen/heard a 
+response. Here it is again, since there are a handful of packages 
+affected by it.
 
 -- 
-View this message in context: http://www.nabble.com/build-for-ARM926EJ-S-fails-with-kernel-patches-2.6.24-tp16119611p16180137.html
-Sent from the BuildRoot mailing list archive at Nabble.com.
+Nathanael D. Noblet
+
+
+-------------- next part --------------
+A non-text attachment was scrubbed...
+Name: gnu_path.diff
+Type: text/x-patch
+Size: 9046 bytes
+Desc: not available
+Url : http://busybox.net/lists/buildroot/attachments/20080320/807d3404/attachment-0001.bin 
