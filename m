@@ -1,67 +1,86 @@
-From: Ulf Samuelsson <ulf.samuelsson@atmel.com>
-Date: Thu, 20 Mar 2008 14:42:03 +0100
-Subject: [Buildroot] updating package/mtd
-References: <20080318063516.GA607@cloud.net.au>
-	<048001c88a0a$8a2696f0$070514ac@atmel.com>
-	<20080319234917.GC17292@cloud.net.au>
-	<00e801c88a6e$47078550$040514ac@atmel.com>
-	<20080320102730.GA1454@cloud.net.au>
-Message-ID: <00c401c88a95$dff82180$e0c4af0a@atmel.com>
+From: paradoxxa <paradoxxa2001@web.de>
+Date: Thu, 20 Mar 2008 07:36:49 -0700 (PDT)
+Subject: [Buildroot] build for ARM926EJ-S fails with
+ kernel-patches-2.6.24
+In-Reply-To: <00c301c88a95$df7c61d0$e0c4af0a@atmel.com>
+References: <16119611.post@talk.nabble.com>
+	<00e701c88a6e$4643e730$040514ac@atmel.com>
+	<16175986.post@talk.nabble.com>
+	<00c301c88a95$df7c61d0$e0c4af0a@atmel.com>
+Message-ID: <16180137.post@talk.nabble.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
------ Original Message ----- 
-From: "Hamish Moffatt" <hamish@cloud.net.au>
-To: "Ulf Samuelsson" <ulf.samuelsson@atmel.com>
-Cc: <buildroot@uclibc.org>
-Sent: Thursday, March 20, 2008 11:27 AM
-Subject: Re: [Buildroot] updating package/mtd
 
-
-> On Thu, Mar 20, 2008 at 09:57:13AM +0100, Ulf Samuelsson wrote:
->> >> > I'm going to update package/mtd to support a newer version, because I
->> >> > need access to ubi and other new tools.
->> >> > 
->> >> > Using the MTD snapshot version seems to be broken - there are no
->> >> > snapshots on the ftp.uk.linux.org server any more. Also I think we could
->> >> > merge the makefiles for the 2005* and 2006* versions.
->> >> > 
->> >> > Any comments, thoughts, objections, requests?
->> >> 
->> >> If you want to work on this, you need to test the result on AT45 dataflash.
->> >> Unless you have access to such a target, I suggest you leave the 2006 support there
->> >> and add yet another version.
->> > 
->> > OK. Is AT45 dataflash not working in the current git version, or 1.1.0?
->> > Do we need the 2005* version as well, and also the 1.1.0 release which
->> > is the latest of the 3 current working options?
->> > 
->> 
->> Have no clue if it is working in the git.
->> I know 2005 isn't, but I could not test on a multitude of targets,
->> therefore I added 2006 (which works for AT45) but allowed
->> people to keep 2005.
->> IIRC, There are different directory structures between 2005 and 2006,
->> making it hard to share makefiles.
->> 
->> > I need something from git myself to get access to the ubi tools.
->> > 
->> 
->> Suggest you use a separate makefile for the latest version to avoid trouble.
->> AT91 should use 2006 by default.
-> 
-> OK. I was going to remove the snapshot from the 2005* makefile and
-> create a separate one. That will make it all slightly tidier and
-> symmetric at least.
-> 
-
-
-That makes sense to me.
-No need for snapshot support in 2005 or 2006.
-
-
+Ok, i will try this.
+Thank you very much for your help.
 Best Regards
-Ulf Samuelsson
+
+
+Ulf Samuelsson-4 wrote:
+> 
+> 
+>> 
+>> Hi Ulf Samuelsson,
+>> here is the full .config
+>> Best Regards
+>> 
+>> #
+>> # Automatically generated make config: don't edit
+>> # Tue Mar 18 10:10:04 2008
+>> #
+>> BR2_HAVE_DOT_CONFIG=y
+>> BR2_VERSION="0.10.0-svn"
+>> # BR2_alpha is not set
+>> BR2_arm=y
+>> BR2_arm926t=y
+>> BR2_ARM_TYPE="ARM926T"
+>> BR2_ARM_EABI=y
+>> BR2_ARCH="arm"
+>> BR2_ENDIAN="LITTLE"
+>> BR2_GCC_TARGET_TUNE="arm9tdmi"
+>> 
+> 
+> [snip]
+> 
+>> #
+>> # Preset Devices
+>> #
+>> # BR2_TARGET_ARM is not set
+>> # BR2_TARGET_ATMEL is not set
+>> # BR2_TARGET_SHARP is not set
+>> 
+>> 
+> 
+> 
+> Since you do not have $(BOARD_PATH) defined, something will break.
+> This is only set, if you select a target.
+> 
+> Suggest you start from scratch by doing 
+> 
+> mv .config .config.original
+> touch .config
+> make at91sam9260dfc_defconfig.
+> 
+> then change the stuff as you need.
+> 
+> This will ensure that the 
+> I noted that you are using an x86 based linux configuration and that will
+> never work.
+> 
+> Best Regards
+> Ulf Samuelsson
+> 
+> _______________________________________________
+> buildroot mailing list
+> buildroot at uclibc.org
+> http://busybox.net/mailman/listinfo/buildroot
+> 
+> 
+
+-- 
+View this message in context: http://www.nabble.com/build-for-ARM926EJ-S-fails-with-kernel-patches-2.6.24-tp16119611p16180137.html
+Sent from the BuildRoot mailing list archive at Nabble.com.
