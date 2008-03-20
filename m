@@ -1,39 +1,39 @@
-From: John Voltz <john.voltz@gmail.com>
-Date: Thu, 20 Mar 2008 13:32:42 -0400
-Subject: [Buildroot] Shell-Weirdness
-In-Reply-To: <1206033139.2562.48.camel@nigel-x60>
-References: <1206018367.6470.7.camel@luder>
-	<46a136670803201005o355c88a0jf50936b9a27fd36f@mail.gmail.com>
-	<1206033001.2562.45.camel@nigel-x60>
-	<1206033139.2562.48.camel@nigel-x60>
-Message-ID: <46a136670803201032p55b8aa2dx91dd48fae97c79a3@mail.gmail.com>
+From: Will Wagner <will_wagner@carallon.com>
+Date: Thu, 20 Mar 2008 19:07:55 +0000
+Subject: [Buildroot] zImage corruption
+Message-ID: <47E2B60B.70106@carallon.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Wow. That stinks. I'll forward this message to the Atmel guys and see if
-they have any idea what to do to maybe fix this.
+Hi All,
 
-John Voltz
+I have been happily using buildroot for a while (thanks all its a great 
+tool).
 
-On Thu, Mar 20, 2008 at 1:12 PM, Nigel Kukard <nkukard@lbsd.net> wrote:
+However I have started seeing a problem where the linux zImage being 
+built gets corrupted and does not boot.
 
->
-> > The problem is the avr32 patch against GCC.
-> >
-> > It took me the past 3 days with Jacmet to track it down.
-> >
-> > 900-avr32-atmel.1.3.2.patch   <= THAT patch.
-> >
-> > I'm still investigating how to fix it.
->
-> As the patches after it will more than likely fail ... remove every
-> patch 900 and above and it works perfectly no problem.
->
-> -N
->
--------------- next part --------------
-An HTML attachment was scrubbed...
-URL: http://busybox.net/lists/buildroot/attachments/20080320/dc2e88e8/attachment.htm 
+I am building a custom arm device using initramfs. If I checkout from 
+clean and build it all works great and get a working zImage that is 
+~7.5MB. However if I then run make again I get a zImage file that is 
+~6.5MB and does not boot.
+
+I have compared the root filesystems before and after calling make again 
+and can see no difference. I have also tried doing a dirclean on the 
+kernel and rebuilding and this still leads to a corrupt zImage.
+
+Has anyone seen this before? Can anyone suggest what could be going on?
+
+I can supply more config info if needed.
+
+Thanks,
+Will
+-- 
+------------------------------------------------------------------------
+Will Wagner                                     will_wagner at carallon.com
+Senior Project Engineer                  Office Tel: +44 (0)20 7371 2032
+Carallon Ltd, Studio G20, Shepherds Building, Rockley Rd, London W14 0DA
+------------------------------------------------------------------------
