@@ -1,35 +1,25 @@
-From: Christof Klaiber <christof.klaiber@merath-maschinen.de>
-Date: Thu, 20 Mar 2008 14:06:07 +0100
-Subject: [Buildroot] Shell-Weirdness
-Message-ID: <1206018367.6470.7.camel@luder>
+From: Peter Korsgaard <jacmet@uclibc.org>
+Date: Thu, 20 Mar 2008 14:22:00 +0100
+Subject: [Buildroot] Is bug tracking system down?
+In-Reply-To: <20080320102727.133350@gmx.net> (ddittmann@gmx.net's message of
+	"Thu\, 20 Mar 2008 11\:27\:27 +0100")
+References: <20080320102727.133350@gmx.net>
+Message-ID: <87zlst4jk7.fsf@macbook.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-I built buildroot from svn for i486 and try to run it in qemu.
+>>>>> "ddittmann" == ddittmann  <ddittmann@gmx.net> writes:
 
-~/qemu/bin/qemu -hda binaries/uclibc/rootfs.i686.ext2 -kernel
-project_build_i686/uclibc/linux-2.6.24.3/arch/i386/boot/bzImage -append
-root=/dev/hda
+Hi,
 
-After booting the kernel, it complains about not finding /etc/init.d/rcS
-- where did it go? It used to be there in earlier times.
+ ddittmann> Fatal error: main() [function.require]: Failed opening required '/usr/share/mantis/gui/core/adodb/adodb.inc.php' (include_path='.') in /usr/share/mantis/gui/core/database_api.php on line 19
 
-Then I can activate a shell by hitting Enter.
+ ddittmann> Thanks in advance,
 
-The shell works fine, but whenever I try to enter a command which
-contains a "-", I get an error message or the shell blocks.
+Yes, I noticed it as well and reported it to Erik.
 
-e.g. 
-
-/ # ls -l
--> terminal blocks
-
-somtimes I can use <ctrl>-c to escape, sometimes I have to quit qemu.
-
-Any suggestions, why this can happen?
-
-Regards,
-  Christof
+-- 
+Bye, Peter Korsgaard
