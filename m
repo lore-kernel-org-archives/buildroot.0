@@ -1,39 +1,121 @@
-From: Will Wagner <will_wagner@carallon.com>
-Date: Thu, 20 Mar 2008 19:07:55 +0000
-Subject: [Buildroot] zImage corruption
-Message-ID: <47E2B60B.70106@carallon.com>
+From: ulf at uclibc.org <ulf@uclibc.org>
+Date: Thu, 20 Mar 2008 15:06:11 -0700 (PDT)
+Subject: [Buildroot] svn commit: trunk/buildroot/target/device:  ARMLTD
+Message-ID: <20080320220611.2EA333C320@busybox.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi All,
+Author: ulf
+Date: 2008-03-20 15:06:10 -0700 (Thu, 20 Mar 2008)
+New Revision: 21419
 
-I have been happily using buildroot for a while (thanks all its a great 
-tool).
+Log:
+Move ARM target to ARMLTD target to prepare for generic ARM
 
-However I have started seeing a problem where the linux zImage being 
-built gets corrupted and does not boot.
+Added:
+   trunk/buildroot/target/device/ARMLTD/
 
-I am building a custom arm device using initramfs. If I checkout from 
-clean and build it all works great and get a working zImage that is 
-~7.5MB. However if I then run make again I get a zImage file that is 
-~6.5MB and does not boot.
+Removed:
+   trunk/buildroot/target/device/Arm/
 
-I have compared the root filesystems before and after calling make again 
-and can see no difference. I have also tried doing a dirclean on the 
-kernel and rebuilding and this still leads to a corrupt zImage.
+Modified:
+   trunk/buildroot/target/device/ARMLTD/Config.in
+   trunk/buildroot/target/device/ARMLTD/Makefile.in
+   trunk/buildroot/target/device/ARMLTD/integrator926_defconfig
+   trunk/buildroot/target/device/ARMLTD/integrator926_huge_defconfig
+   trunk/buildroot/target/device/Config.in
 
-Has anyone seen this before? Can anyone suggest what could be going on?
 
-I can supply more config info if needed.
+Changeset:
+Copied: trunk/buildroot/target/device/ARMLTD (from rev 21418, trunk/buildroot/target/device/Arm)
 
-Thanks,
-Will
--- 
-------------------------------------------------------------------------
-Will Wagner                                     will_wagner at carallon.com
-Senior Project Engineer                  Office Tel: +44 (0)20 7371 2032
-Carallon Ltd, Studio G20, Shepherds Building, Rockley Rd, London W14 0DA
-------------------------------------------------------------------------
+Modified: trunk/buildroot/target/device/ARMLTD/Config.in
+===================================================================
+--- trunk/buildroot/target/device/Arm/Config.in	2008-03-20 21:19:35 UTC (rev 21418)
++++ trunk/buildroot/target/device/ARMLTD/Config.in	2008-03-20 22:06:10 UTC (rev 21419)
+@@ -1,14 +1,14 @@
+-menuconfig BR2_TARGET_ARM
++menuconfig BR2_TARGET_ARMLTD
+ 	bool "ARM Ltd. Device Support"
+ 	depends BR2_arm
+ 	default n
+ 
+ comment "Arm based Device Support"
+-	depends BR2_arm && BR2_TARGET_ARM
++	depends BR2_arm && BR2_TARGET_ARMLTD
+ 
+ config BR2_TARGET_ARM_INTEGRATOR_926
+ 	bool "Integrator arm926"
+-	depends BR2_arm && BR2_TARGET_ARM
++	depends BR2_arm && BR2_TARGET_ARMLTD
+ 	default n
+ 	select BR2_PACKAGE_LINUX
+ 	select BR2_ARM_EABI
+
+Modified: trunk/buildroot/target/device/ARMLTD/Makefile.in
+===================================================================
+--- trunk/buildroot/target/device/Arm/Makefile.in	2008-03-20 21:19:35 UTC (rev 21418)
++++ trunk/buildroot/target/device/ARMLTD/Makefile.in	2008-03-20 22:06:10 UTC (rev 21419)
+@@ -1,4 +1,4 @@
+-ifeq ($(BR2_TARGET_ARM_INTEGRATOR_926),y)
++ifeq ($(BR2_TARGET_ARMLTD_INTEGRATOR_926),y)
+ LINUX26_KCONFIG:=target/device/Arm/linux26.integrator926.config
+ TARGETS+=linux26
+ 
+
+Modified: trunk/buildroot/target/device/ARMLTD/integrator926_defconfig
+===================================================================
+--- trunk/buildroot/target/device/Arm/integrator926_defconfig	2008-03-20 21:19:35 UTC (rev 21418)
++++ trunk/buildroot/target/device/ARMLTD/integrator926_defconfig	2008-03-20 22:06:10 UTC (rev 21419)
+@@ -84,12 +84,12 @@
+ # Preset Devices
+ #
+ BR2_PACKAGE_LINUX=y
+-BR2_TARGET_ARM=y
++BR2_TARGET_ARMLTD=y
+ 
+ #
+ # Arm based Device Support
+ #
+-BR2_TARGET_ARM_INTEGRATOR_926=y
++BR2_TARGET_ARMLTD_INTEGRATOR_926=y
+ # BR2_TARGET_ATMEL is not set
+ # BR2_TARGET_SHARP is not set
+ 
+
+Modified: trunk/buildroot/target/device/ARMLTD/integrator926_huge_defconfig
+===================================================================
+--- trunk/buildroot/target/device/Arm/integrator926_huge_defconfig	2008-03-20 21:19:35 UTC (rev 21418)
++++ trunk/buildroot/target/device/ARMLTD/integrator926_huge_defconfig	2008-03-20 22:06:10 UTC (rev 21419)
+@@ -60,12 +60,12 @@
+ # Preset Devices
+ #
+ BR2_PACKAGE_LINUX=y
+-BR2_TARGET_ARM=y
++BR2_TARGET_ARMLTD=y
+ 
+ #
+ # Arm based Device Support
+ #
+-BR2_TARGET_ARM_INTEGRATOR_926=y
++BR2_TARGET_ARMLTD_INTEGRATOR_926=y
+ # BR2_TARGET_ATMEL is not set
+ # BR2_TARGET_SHARP is not set
+ 
+
+Modified: trunk/buildroot/target/device/Config.in
+===================================================================
+--- trunk/buildroot/target/device/Config.in	2008-03-20 21:19:35 UTC (rev 21418)
++++ trunk/buildroot/target/device/Config.in	2008-03-20 22:06:10 UTC (rev 21419)
+@@ -5,7 +5,7 @@
+ comment "Preset Devices"
+ 
+ source "target/device/AMD/Config.in"
+-source "target/device/Arm/Config.in"
++source "target/device/ARMLTD/Config.in"
+ source "target/device/Atmel/Config.in"
+ source "target/device/Hitachi/Config.in"
+ source "target/device/jp/Config.in"
