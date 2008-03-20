@@ -1,25 +1,63 @@
-From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Thu, 20 Mar 2008 14:22:00 +0100
-Subject: [Buildroot] Is bug tracking system down?
-In-Reply-To: <20080320102727.133350@gmx.net> (ddittmann@gmx.net's message of
-	"Thu\, 20 Mar 2008 11\:27\:27 +0100")
-References: <20080320102727.133350@gmx.net>
-Message-ID: <87zlst4jk7.fsf@macbook.be.48ers.dk>
+From: Ulf Samuelsson <ulf.samuelsson@atmel.com>
+Date: Thu, 20 Mar 2008 14:40:10 +0100
+Subject: [Buildroot] build for ARM926EJ-S fails with
+	kernel-patches-2.6.24
+References: <16119611.post@talk.nabble.com><00e701c88a6e$4643e730$040514ac@atmel.com>
+	<16175986.post@talk.nabble.com>
+Message-ID: <00c301c88a95$df7c61d0$e0c4af0a@atmel.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "ddittmann" == ddittmann  <ddittmann@gmx.net> writes:
 
-Hi,
+> 
+> Hi Ulf Samuelsson,
+> here is the full .config
+> Best Regards
+> 
+> #
+> # Automatically generated make config: don't edit
+> # Tue Mar 18 10:10:04 2008
+> #
+> BR2_HAVE_DOT_CONFIG=y
+> BR2_VERSION="0.10.0-svn"
+> # BR2_alpha is not set
+> BR2_arm=y
+> BR2_arm926t=y
+> BR2_ARM_TYPE="ARM926T"
+> BR2_ARM_EABI=y
+> BR2_ARCH="arm"
+> BR2_ENDIAN="LITTLE"
+> BR2_GCC_TARGET_TUNE="arm9tdmi"
+> 
 
- ddittmann> Fatal error: main() [function.require]: Failed opening required '/usr/share/mantis/gui/core/adodb/adodb.inc.php' (include_path='.') in /usr/share/mantis/gui/core/database_api.php on line 19
+[snip]
 
- ddittmann> Thanks in advance,
+> #
+> # Preset Devices
+> #
+> # BR2_TARGET_ARM is not set
+> # BR2_TARGET_ATMEL is not set
+> # BR2_TARGET_SHARP is not set
+> 
+> 
 
-Yes, I noticed it as well and reported it to Erik.
 
--- 
-Bye, Peter Korsgaard
+Since you do not have $(BOARD_PATH) defined, something will break.
+This is only set, if you select a target.
+
+Suggest you start from scratch by doing 
+
+mv .config .config.original
+touch .config
+make at91sam9260dfc_defconfig.
+
+then change the stuff as you need.
+
+This will ensure that the 
+I noted that you are using an x86 based linux configuration and that will never work.
+
+Best Regards
+Ulf Samuelsson
