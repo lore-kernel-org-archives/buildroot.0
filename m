@@ -1,74 +1,46 @@
 From: John Voltz <john.voltz@gmail.com>
-Date: Fri, 21 Mar 2008 07:40:48 -0400
-Subject: [Buildroot] pthread broken in avr32 build
-In-Reply-To: <47E38167.7010908@apss.it>
-References: <47E38167.7010908@apss.it>
-Message-ID: <46a136670803210440g70b611fbo2e72acac903747a3@mail.gmail.com>
+Date: Fri, 21 Mar 2008 07:55:36 -0400
+Subject: [Buildroot] svn commit: trunk/buildroot/toolchain/gcc/4.2.1:
+	avr32_patches_break_x86
+In-Reply-To: <87lk4cxq51.fsf@macbook.be.48ers.dk>
+References: <20080321112103.A34573C2F3@busybox.net>
+	<87lk4cxq51.fsf@macbook.be.48ers.dk>
+Message-ID: <46a136670803210455l30fffb0dx90c449c7aa5c551e@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-There are some nasty problems in the AVR32 parts of gcc, I would bet these
-are the true cause of your problems. I'm hoping the folks at Atmel will give
-it some serious attention soon.
+I'd rather leave it unusable until Atmel (or someone else) can fix it
+properly. It has caused way too many people headaches and wasted LOTS of
+people's time tracking down the causes of bugs and weirdness.
 
-John Voltz
+John
 
 
-On Fri, Mar 21, 2008 at 5:35 AM, Marco Cane <mca@apss.it> wrote:
+On Fri, Mar 21, 2008 at 7:39 AM, Peter Korsgaard <jacmet@uclibc.org> wrote:
 
-> hi,
-> this is my first post on this list.
+> >>>>> "ninevoltz" == ninevoltz  <ninevoltz@uclibc.org> writes:
 >
-> I'm developing an embedded system based on the atngw100 board, powered
-> by an Atmel AVR32 CPU but I found a big issue.
-> It seems that libpthread has some problems because every program using
-> threads ends with a segmentation fault. I first discovered this bug
-> while testing JamVM & GNU Classpath. All worked fine, but simple
-> applications using Java threads behaved in unexpected manner, while they
-> worked fine on my Ubuntu box
-> So I tried a simple C program like this
-> http://www.opengroup.org/onlinepubs/009695399/functions/pthread_join.html,
-> compiled by the toolchain and also by the installed gcc with the
-> -lpthread option with the same result.
+>  ninevoltz> Author: ninevoltz
+>  ninevoltz> Date: 2008-03-21 04:21:02 -0700 (Fri, 21 Mar 2008)
+>  ninevoltz> New Revision: 21439
 >
-> I also tried to compile uclibc with the new linux thread support but
-> it's broken, due to a missing file (tls.h) for AVR32 architecture.
+>  ninevoltz> Log:
+>  ninevoltz> current avr32 gcc patches break x86 and possibly other
+>  ninevoltz> systems. moving bad patches to separate directory until a
+>  ninevoltz> proper fix is made. discovered by jacmet and Dr. Nigel
+>  ninevoltz> Kukard
 >
-> So my questions are:
-> 1. has anyone experienced this bug and found any solution/workaround?
-> 2. how can I retrieve, if exists, a snapshot of buildroot correctly
-> supporting threads for AVR32? because I think something went wrong with
-> some patches and I wonder if there is somewhere a working snapshot,
-> older than recent ones
+> Thanks!
 >
-> thanks in advance
+> So I take it that gcc 4.2.1 is broken on AVR32 now? Perhaps you could
+> add a conditional in gcc-uclibc-4.x.mk like the ones for ARM to apply
+> these patches for AVR32?
 >
-> Marco
->
->
->
->
-> Ai sensi del D.Lgs. 196/2003, si precisa che le informazioni contenute in
-> questo messaggio e nei suoi eventuali allegati sono riservate e per uso
-> esclusivo del destinatario. Nessuno, all'infuori dello stesso, pu? copiare o
-> distribuire il messaggio, o parte di esso, a terzi. Chiunque riceva questo
-> messaggio per errore, ? pregato di distruggerlo e di darne informazione
-> all'indirizzo di origine.
->
-> The information contained in this message may be privileged and
-> confidential and thus protected from disclosure. If the reader of this
-> message is not the intended recipient, or an employee or agent responsible
-> for delivering this message to the intended recipient, you are hereby
-> notified that any dissemination, distribution or copying of this
-> communication is strictly prohibited. If you have received this
-> communication in error, please notify us immediately by replying to the
-> message and deleting it from your computer. Thank you.
->
->
->
+> --
+> Bye, Peter Korsgaard
 > _______________________________________________
 > buildroot mailing list
 > buildroot at uclibc.org
@@ -76,4 +48,4 @@ On Fri, Mar 21, 2008 at 5:35 AM, Marco Cane <mca@apss.it> wrote:
 >
 -------------- next part --------------
 An HTML attachment was scrubbed...
-URL: http://busybox.net/lists/buildroot/attachments/20080321/4b238bee/attachment.htm 
+URL: http://busybox.net/lists/buildroot/attachments/20080321/28a264c6/attachment.htm 
