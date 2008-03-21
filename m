@@ -1,20 +1,54 @@
-From: John Voltz <john.voltz@gmail.com>
-Date: Fri, 21 Mar 2008 16:42:34 -0400
-Subject: [Buildroot] avr32 breakage
-Message-ID: <46a136670803211342if9a5d93m6b4f821a165dac26@mail.gmail.com>
+From: Jean-Christian de Rivaz <jc@eclis.ch>
+Date: Fri, 21 Mar 2008 22:00:53 +0100
+Subject: [Buildroot] question about /tftpboot
+In-Reply-To: <d449ded70803211116k29dfe743u304b9bc59f317791@mail.gmail.com>
+References: <d449ded70803211040i68f1d764gac70fdd27632ded5@mail.gmail.com>	
+	<47E3F85A.7000608@eclis.ch>
+	<d449ded70803211116k29dfe743u304b9bc59f317791@mail.gmail.com>
+Message-ID: <47E42205.40609@eclis.ch>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-I can say without a doubt now that the avr32 gcc patches are bad. I created
-a bootable ext3 image for x86 and ran it in qemu, everything works fine.
-Blackbox works fine in X too. I wasn't able to get Webkit+Midori to run
-because I didn't have time before I left the shop. I will report back with
-more later.
+Habib Bouaziz-Viallet a ?crit :
+> 2008/3/21, Jean-Christian de Rivaz <jc@eclis.ch>:
+>> Habib Bouaziz-Viallet a ?crit :
+>>
+>>> Hi all !
+>>  >
+>>  > I would like my tftp server provides access to another directory (e.g
+>>  > /var/... param configured with /etc/inetd.conf  with my GNU Debian)
+>>  >
+>>  > '/ tftpboot'. Changing '/ tftpboot' is apparently not possible from
+>>  > 'make menuconfig'
+>>  >
+>>  > How do i do ? Many thanks
+>>  >
+>>
+>>
+>> There is a symbol BR2_LINUX_COPYTO to adjust that. Some time ago I found
+>>  it broken by the target/linux/Makefile.in.advanced file and I proposed a
+>>  patch in this bug report: http://bugs.uclibc.org/view.php?id=2384
+> Ok. Did you apply this successfully ? If so how to ?
 
-John
+You can apply with the "patch -p0" command like this:
+
+buildroot$ patch -p0 < patch-tftpboot-kernel.diff
+patching file target/linux/Makefile.in.advanced
+Hunk #1 succeeded at 227 (offset 18 lines).
+Hunk #2 succeeded@387 (offset 19 lines).
+
+I have attached an updated patch that don't show "offset lines".
+
+I am interested to know if it work for your case.
+-- 
+Jean-Christian de Rivaz
 -------------- next part --------------
-An HTML attachment was scrubbed...
-URL: http://busybox.net/lists/buildroot/attachments/20080321/7a96c928/attachment.htm 
+A non-text attachment was scrubbed...
+Name: patch-tftpboot-kernel.diff
+Type: text/x-patch
+Size: 1042 bytes
+Desc: not available
+Url : http://busybox.net/lists/buildroot/attachments/20080321/077472de/attachment.bin 
