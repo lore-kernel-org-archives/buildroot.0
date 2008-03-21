@@ -1,33 +1,60 @@
 From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Fri, 21 Mar 2008 08:29:45 +0100
-Subject: [Buildroot] Compilation Error
-In-Reply-To: <1d09f8b80803201838p2fa47bdcgcece859532c48be5@mail.gmail.com>
-	(Will Buik's message of "Thu\, 20 Mar 2008 21\:38\:04 -0400")
-References: <1d09f8b80803201838p2fa47bdcgcece859532c48be5@mail.gmail.com>
-Message-ID: <87wsnw357a.fsf@macbook.be.48ers.dk>
+Date: Fri, 21 Mar 2008 08:45:42 +0100
+Subject: [Buildroot] avr32 patches vs. x86 breakage
+In-Reply-To: <1206079232.2562.60.camel@nigel-x60> (Nigel Kukard's message of
+	"Fri\, 21 Mar 2008 06\:00\:32 +0000")
+References: <1206079232.2562.60.camel@nigel-x60>
+Message-ID: <87k5jw34gp.fsf@macbook.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Will" == Will Buik <willbuik@gmail.com> writes:
+>>>>> "Nigel" == Nigel Kukard <nkukard@lbsd.net> writes:
 
 Hi,
 
- Will> I am getting this error with a default configuration of buildroot:
- Will> `/XXX/buildroot/dl/busybox-snapshot.tar.bz2' saved [2989276/2989276]
+ Nigel> Hi Guys,
+ Nigel> Will this proposal to fix the problem work ...
 
- Will> bzcat /XXX/buildroot/dl/busybox-snapshot.tar.bz2 | tar -C /XXX/buildroot/
- Will> project_build_i686/uclibc   -xf -
- Will> # Allow busybox patches.
- Will> toolchain/patch-kernel.sh /XXX/buildroot/project_build_i686/uclibc/busybox
- Will> package/busybox busybox.\*.patch
- Will> touch /XXX/buildroot/project_build_i686/uclibc/busybox/.unpacked
- Will> make: *** No rule to make target `package/busybox/busybox-1.9.0.config', needed
- 
-Did you change BR2_PACKAGE_BUSYBOX_CONFIG? Please set it to
-busybox-1.6.0.config instead.
+ Nigel> - Make a dir under arch-avr32, for gcc-x.y.z
+
+ Nigel> - Add a make file to set something like
+ Nigel> BOARD_EXTRA_PATCH_PATH=target/device/arch-avr32  this will be set if the
+ Nigel> board is AVR32 based 
+
+ Nigel> - In GCC / binutils/ uclibc and where ever else avr32 patches are
+ Nigel> applied, we can tst if BOARD_EXTRA_PATCH_PATH is available. If it is to
+ Nigel> add those patches into the patch set being applied. This should be
+ Nigel> simplistic as we know the version for instance GCC_VERSION, we'd just
+ Nigel> have to test the path exists and do something like    \*.patch
+ Nigel> $(MORE_PATCHES)  , where we set a few lines up.  MORE_PATCHES=
+ Nigel> $(BOARD_EXTRA_PATCH_PATH)/gcc-$(GCC_VERSION)
+
+As discussed on IRC, I think its cleaner if everything related to a
+package is located under the package/<package>/ dir.
+
+The real problem is that apparent quality issues of some of the arch
+specific patches.
+
+If possible, I would prefer if all archs would use the same sources
+(so apply the same patches for all archs) as the patches then get a
+lot more testing - E.G. you might otherwise not notice if a patch for
+some obscure arch no longer applies because you bumped the version of
+a package.
+
+But that doesn't seem realistic with the current patches, so I instead
+suggest we split up patches in generic and arch specific. The generic
+ones gets applied to all archs, and only the arch specific ones for
+the selected arch.
+
+The easiest setup is probably to use the naming convention:
+
+ - package-version-*.patch for generic stuff
+ - arch-package-version-*.patch for arch specific stuff
+
+What do you think?
 
 -- 
 Bye, Peter Korsgaard
