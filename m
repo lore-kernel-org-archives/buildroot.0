@@ -1,28 +1,52 @@
-From: Guillaume Dargaud <dargaud@lpsc.in2p3.fr>
-Date: Fri, 21 Mar 2008 11:30:33 +0100
-Subject: [Buildroot] ncurse address error
-References: <823018ed0803180357s43bf8890s37521d7606aca432@mail.gmail.com>
-	<00be01c88a77$c9601e00$ad289e86@LPSC0173W>
-	<47E27895.2000909@gnat.ca>
-Message-ID: <01d701c88b3e$9b1336a0$ad289e86@LPSC0173W>
+From: Bernhard Fischer <rep.dot.nop@gmail.com>
+Date: Fri, 21 Mar 2008 11:34:30 +0100
+Subject: [Buildroot] Differences in kernel configuration
+In-Reply-To: <01b801c88b3c$b94aba00$ad289e86@LPSC0173W>
+References: <01b801c88b3c$b94aba00$ad289e86@LPSC0173W>
+Message-ID: <20080321103430.GA10140@mx.loc>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-> I provided a patch yesterday to fix this, but haven't seen/heard a
-> response. Here it is again, since there are a handful of packages
-> affected by it.
+On Fri, Mar 21, 2008 at 11:17:02AM +0100, Guillaume Dargaud wrote:
+>Hello all,
+>
+>How come I don't get the same options if I do this from the buildroot 
+>directory:
+>make ARCH=ppc menuconfig
+>(with the [Kernel][Run make ARCH=$(ARCH) xconfig before build] activated)
+>
+>And this:
+>cd ./project_build_ppc/genepy/linux-2.6.24; make ARCH=ppc xconfig
+>
+>In particular, in the 2nd case I have an option for [Processor][IBM 4xx 
+>options][Machine type]  available for Xilinx-ML403 which is missing in the 
+>first case
+>
+>linux-2.6.24 $ grep XIL .config
+># CONFIG_XILINX_ML300 is not set
+>CONFIG_XILINX_ML403=y
+>CONFIG_XILINX_VIRTEX_4_FX=y
+>CONFIG_XILINX_VIRTEX=y
+># CONFIG_XILINX_SYSACE is not set
+>
+>buildroot $ grep XIL project_build_ppc/genepy/linux-2.6.24/.config
+>CONFIG_XILINX_VIRTEX_GENERIC_BOARD=y
+>CONFIG_XILINX_VIRTEX=y
+>CONFIG_XILINX_VIRTEX_II_PRO=y
+>CONFIG_XILINX_VIRTEX_4_FX=y
+># CONFIG_XILINX_SYSACE is not set
+>
+>
+>I've also heard that there can be discrepancies between using xconfig and 
+>menuconfig, so is it possible to tell the main 'make' to use the kernel's 
 
+xconfig and menuconfig should result in the same .config, IIRC.
 
-Thanks, I got your message after I posted my question, so it may have been 
-delayed.
+Apart from that you want to read
+docs/README
+for the reliable way to configure your kernel.
 
-I see that the svn repository of buildroot is updated daily, so as a general 
-rule how long before such a patch makes it into the tree ?
-
-[...still fighting to get a first compile...]
--- 
-Guillaume Dargaud
-http://www.gdargaud.net/
+HTH,
