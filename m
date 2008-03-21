@@ -1,43 +1,33 @@
-From: Nigel Kukard <nkukard@lbsd.net>
-Date: Fri, 21 Mar 2008 06:00:32 +0000
-Subject: [Buildroot] avr32 patches vs. x86 breakage
-Message-ID: <1206079232.2562.60.camel@nigel-x60>
+From: Peter Korsgaard <jacmet@uclibc.org>
+Date: Fri, 21 Mar 2008 08:29:45 +0100
+Subject: [Buildroot] Compilation Error
+In-Reply-To: <1d09f8b80803201838p2fa47bdcgcece859532c48be5@mail.gmail.com>
+	(Will Buik's message of "Thu\, 20 Mar 2008 21\:38\:04 -0400")
+References: <1d09f8b80803201838p2fa47bdcgcece859532c48be5@mail.gmail.com>
+Message-ID: <87wsnw357a.fsf@macbook.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Guys,
+>>>>> "Will" == Will Buik <willbuik@gmail.com> writes:
 
-Will this proposal to fix the problem work ...
+Hi,
 
-- Make a dir under arch-avr32, for gcc-x.y.z
+ Will> I am getting this error with a default configuration of buildroot:
+ Will> `/XXX/buildroot/dl/busybox-snapshot.tar.bz2' saved [2989276/2989276]
 
-- Add a make file to set something like
-BOARD_EXTRA_PATCH_PATH=target/device/arch-avr32  this will be set if the
-board is AVR32 based 
+ Will> bzcat /XXX/buildroot/dl/busybox-snapshot.tar.bz2 | tar -C /XXX/buildroot/
+ Will> project_build_i686/uclibc   -xf -
+ Will> # Allow busybox patches.
+ Will> toolchain/patch-kernel.sh /XXX/buildroot/project_build_i686/uclibc/busybox
+ Will> package/busybox busybox.\*.patch
+ Will> touch /XXX/buildroot/project_build_i686/uclibc/busybox/.unpacked
+ Will> make: *** No rule to make target `package/busybox/busybox-1.9.0.config', needed
+ 
+Did you change BR2_PACKAGE_BUSYBOX_CONFIG? Please set it to
+busybox-1.6.0.config instead.
 
-- In GCC / binutils/ uclibc and where ever else avr32 patches are
-applied, we can tst if BOARD_EXTRA_PATCH_PATH is available. If it is to
-add those patches into the patch set being applied. This should be
-simplistic as we know the version for instance GCC_VERSION, we'd just
-have to test the path exists and do something like    \*.patch
-$(MORE_PATCHES)  , where we set a few lines up.  MORE_PATCHES=
-$(BOARD_EXTRA_PATCH_PATH)/gcc-$(GCC_VERSION)
-
-
-I think this is a good fix to only apply board specific patches if we
-need them ... and by simply creating a dir off the board name dir with
-the package name in it for each package we muck with.
-
-Good/bad idea? or any combination of idea above.
-
--N
--------------- next part --------------
-A non-text attachment was scrubbed...
-Name: not available
-Type: application/pgp-signature
-Size: 189 bytes
-Desc: This is a digitally signed message part
-Url : http://busybox.net/lists/buildroot/attachments/20080321/586f4f2b/attachment-0001.pgp 
+-- 
+Bye, Peter Korsgaard
