@@ -1,31 +1,25 @@
-From: Jean-Christian de Rivaz <jc@eclis.ch>
-Date: Fri, 21 Mar 2008 19:03:06 +0100
+From: JS <js@hipro.co.in>
+Date: Sat, 22 Mar 2008 00:03:21 +0530
 Subject: [Buildroot] question about /tftpboot
 In-Reply-To: <d449ded70803211040i68f1d764gac70fdd27632ded5@mail.gmail.com>
 References: <d449ded70803211040i68f1d764gac70fdd27632ded5@mail.gmail.com>
-Message-ID: <47E3F85A.7000608@eclis.ch>
+Message-ID: <1206124401.4692.2.camel@localhost>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Habib Bouaziz-Viallet a ?crit :
-> Hi all !
-> 
+
+On Fri, 2008-03-21 at 18:40 +0100, Habib Bouaziz-Viallet wrote:
 > I would like my tftp server provides access to another directory (e.g
 > /var/... param configured with /etc/inetd.conf  with my GNU Debian)
 > 
 > '/ tftpboot'. Changing '/ tftpboot' is apparently not possible from
 > 'make menuconfig'
-> 
-> How do i do ? Many thanks
-> 
 
-There is a symbol BR2_LINUX_COPYTO to adjust that. Some time ago I found 
-it broken by the target/linux/Makefile.in.advanced file and I proposed a 
-patch in this bug report: http://bugs.uclibc.org/view.php?id=2384
+I usually symlink /tftpboot to whereever I want.. 
 
-Maybe the situation is better now.
 -- 
-Jean-Christian de Rivaz
+HiPro Solutions
+http://hipro.co.in/
