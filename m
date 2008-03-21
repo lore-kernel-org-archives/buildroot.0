@@ -1,27 +1,40 @@
-From: ninevoltz at uclibc.org <ninevoltz@uclibc.org>
-Date: Fri, 21 Mar 2008 11:01:47 -0700 (PDT)
-Subject: [Buildroot] svn commit: trunk/buildroot/package/xfsprogs
-Message-ID: <20080321180147.DA5513C342@busybox.net>
+From: John Voltz <john.voltz@gmail.com>
+Date: Fri, 21 Mar 2008 14:07:14 -0400
+Subject: [Buildroot] question about /tftpboot
+In-Reply-To: <d449ded70803211040i68f1d764gac70fdd27632ded5@mail.gmail.com>
+References: <d449ded70803211040i68f1d764gac70fdd27632ded5@mail.gmail.com>
+Message-ID: <46a136670803211107p359bcd92k6090aa1fad5e4582@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Author: ninevoltz
-Date: 2008-03-21 11:01:46 -0700 (Fri, 21 Mar 2008)
-New Revision: 21443
+I think this is done by changing the tftp configuration file in /etc after
+it is installed. There might also be something under /etc/inet.d
 
-Log:
-Fixed xfsprogs to build without needing bzero & bcopy. Patch by Nigel Kukard
+John
 
-Added:
-   trunk/buildroot/package/xfsprogs/xfsprogs-2.7.11_susv3-legacy.patch
+On Fri, Mar 21, 2008 at 1:40 PM, Habib Bouaziz-Viallet <
+habib.bouaziz@gmail.com> wrote:
 
-
-Changeset:
-
-Sorry, the patch is too large to include (1250 lines).
-Please use ViewCVS to see it!
-
-http://uclibc.org/cgi-bin/viewcvs.cgi?view=rev&root=svn&rev=21443
+> Hi all !
+>
+> I would like my tftp server provides access to another directory (e.g
+> /var/... param configured with /etc/inetd.conf  with my GNU Debian)
+>
+> '/ tftpboot'. Changing '/ tftpboot' is apparently not possible from
+> 'make menuconfig'
+>
+> How do i do ? Many thanks
+>
+> --
+> M. Bouaziz-Viallet
+> _______________________________________________
+> buildroot mailing list
+> buildroot at uclibc.org
+> http://busybox.net/mailman/listinfo/buildroot
+>
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: http://busybox.net/lists/buildroot/attachments/20080321/f7c4f289/attachment.htm 
