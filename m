@@ -1,57 +1,35 @@
-From: Jean-Christian de Rivaz <jc@eclis.ch>
-Date: Fri, 21 Mar 2008 22:20:29 +0100
-Subject: [Buildroot] question about /tftpboot
-In-Reply-To: <47E42205.40609@eclis.ch>
-References: <d449ded70803211040i68f1d764gac70fdd27632ded5@mail.gmail.com>	
-	<47E3F85A.7000608@eclis.ch>
-	<d449ded70803211116k29dfe743u304b9bc59f317791@mail.gmail.com>
-	<47E42205.40609@eclis.ch>
-Message-ID: <47E4269D.3060207@eclis.ch>
+From: Tim Barr <tbarr@multitech.com>
+Date: Fri, 21 Mar 2008 16:26:10 -0500
+Subject: [Buildroot] Problem with buildroot and AT91SAM9260EK
+Message-ID: <1CD05B980C94AC408B37C82BBABAA3E60ACA766E@mtsexchange.dc.multitech.prv>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Jean-Christian de Rivaz a ?crit :
-> Habib Bouaziz-Viallet a ?crit :
->> 2008/3/21, Jean-Christian de Rivaz <jc@eclis.ch>:
->>> Habib Bouaziz-Viallet a ?crit :
->>>
->>>> Hi all !
->>>  >
->>>  > I would like my tftp server provides access to another directory (e.g
->>>  > /var/... param configured with /etc/inetd.conf  with my GNU Debian)
->>>  >
->>>  > '/ tftpboot'. Changing '/ tftpboot' is apparently not possible from
->>>  > 'make menuconfig'
->>>  >
->>>  > How do i do ? Many thanks
->>>  >
->>>
->>>
->>> There is a symbol BR2_LINUX_COPYTO to adjust that. Some time ago I found
->>>  it broken by the target/linux/Makefile.in.advanced file and I 
->>> proposed a
->>>  patch in this bug report: http://bugs.uclibc.org/view.php?id=2384
->> Ok. Did you apply this successfully ? If so how to ?
-> 
-> You can apply with the "patch -p0" command like this:
-> 
-> buildroot$ patch -p0 < patch-tftpboot-kernel.diff
-> patching file target/linux/Makefile.in.advanced
-> Hunk #1 succeeded at 227 (offset 18 lines).
-> Hunk #2 succeeded at 387 (offset 19 lines).
-> 
-> I have attached an updated patch that don't show "offset lines".
-> 
-> I am interested to know if it work for your case.
+I did a dirclean to basically start with a baseline make. When I do a
+"make menuconfig" and select arm architecture, then go to: 
+                   target options--> Atmel Device Support--> Board
+Support for Atmel
+and set the AT91 device to a AT91SAM9260, for the development board
+support selections I get the choice of AT91SAM9260DFC, AT91SAM9260EK, or
+AT91SAM9XE-EK. But in the target/device/atmel directory there is only a
+at91sam9260dfc and at91sam9260pf directory. So if I pick the
+at91sam9260ek I get an error when try to a "make configured" because it
+is looking for files in a nonexistent directory. So my first question is
+whether there is supposed to be an at91sam9260ek directory? Or is the
+at91sam9260dfc the proper one to use even if you are using the board
+mounted DataFlash device?
+ 
 
-Ooops! The attached patch need to be applyed with the -p1 option like this:
 
-buildroot$ patch -p1 < ../buildroot-patch/patch-tftpboot-kernel.diff
-patching file target/linux/Makefile.in.advanced
+Timothy Barr
+Hardware Development Engineer
+for Multi-Tech Systems, Inc.
+ <mailto:tbarr@multitech.com> tbarr at multitech.com 
 
-Sorry for the mistake.
--- 
-Jean-Christian de Rivaz
+ 
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: http://busybox.net/lists/buildroot/attachments/20080321/f9570526/attachment.htm 
