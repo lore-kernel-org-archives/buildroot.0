@@ -1,34 +1,34 @@
-From: John Voltz <john.voltz@gmail.com>
-Date: Fri, 21 Mar 2008 07:36:00 -0400
-Subject: [Buildroot] avr32 patches vs. x86 breakage
-In-Reply-To: <87wsnwzakv.fsf@macbook.be.48ers.dk>
-References: <1206079232.2562.60.camel@nigel-x60>
-	<87k5jw34gp.fsf@macbook.be.48ers.dk> <20080321085200.GB8894@mx.loc>
-	<87hcf01m0r.fsf@macbook.be.48ers.dk>
-	<87wsnwzakv.fsf@macbook.be.48ers.dk>
-Message-ID: <46a136670803210436s6f464029jb6f48b6319aa765a@mail.gmail.com>
+From: Peter Korsgaard <jacmet@uclibc.org>
+Date: Fri, 21 Mar 2008 12:39:22 +0100
+Subject: [Buildroot] svn commit: trunk/buildroot/toolchain/gcc/4.2.1:
+	avr32_patches_break_x86
+In-Reply-To: <20080321112103.A34573C2F3@busybox.net> (ninevoltz@uclibc.org's
+	message of "Fri\, 21 Mar 2008 04\:21\:03 -0700 \(PDT\)")
+References: <20080321112103.A34573C2F3@busybox.net>
+Message-ID: <87lk4cxq51.fsf@macbook.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-I agree with Bernhard, the AVR32 arch gcc patches seriously need fixed.
-There are quite a few problems caused by gcc on the AVR32 as well. It works
-pretty well for the most part, but there were problems back with gcc
-4.1.2causing the kernel to oops while reading ext2 and ext3
-filesystems, and now
-gcc 4.2.1 breaks blackbox, and I've never been able to get webkit to work
-reliably. gcc 4.2.1 also broke almost all of the open file dialogs in the
-applications too. I'm blaming it all on the gcc patches.
+>>>>> "ninevoltz" == ninevoltz  <ninevoltz@uclibc.org> writes:
 
-Have there been other issues with buildroot in the past when adding other
-arches? I'm actually glad all of this happened because it shines a light on
-the quality issues in the AVR32 patches. Thanks to Nigel and Peter. I would
-have never discovered this on my own. Sorry for giving you guys the
-headaches though!
+ ninevoltz> Author: ninevoltz
+ ninevoltz> Date: 2008-03-21 04:21:02 -0700 (Fri, 21 Mar 2008)
+ ninevoltz> New Revision: 21439
 
-John Voltz
--------------- next part --------------
-An HTML attachment was scrubbed...
-URL: http://busybox.net/lists/buildroot/attachments/20080321/b9b4eabc/attachment.htm 
+ ninevoltz> Log:
+ ninevoltz> current avr32 gcc patches break x86 and possibly other
+ ninevoltz> systems. moving bad patches to separate directory until a
+ ninevoltz> proper fix is made. discovered by jacmet and Dr. Nigel
+ ninevoltz> Kukard 
+
+Thanks!
+
+So I take it that gcc 4.2.1 is broken on AVR32 now? Perhaps you could
+add a conditional in gcc-uclibc-4.x.mk like the ones for ARM to apply
+these patches for AVR32?
+
+-- 
+Bye, Peter Korsgaard
