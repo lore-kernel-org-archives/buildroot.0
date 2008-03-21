@@ -1,43 +1,41 @@
-From: Bernhard Fischer <rep.dot.nop@gmail.com>
-Date: Fri, 21 Mar 2008 13:11:13 +0100
+From: John Voltz <john.voltz@gmail.com>
+Date: Fri, 21 Mar 2008 08:47:13 -0400
 Subject: [Buildroot] avr32 patches vs. x86 breakage
-In-Reply-To: <46a136670803210436s6f464029jb6f48b6319aa765a@mail.gmail.com>
+In-Reply-To: <20080321121113.GA10632@mx.loc>
 References: <1206079232.2562.60.camel@nigel-x60>
 	<87k5jw34gp.fsf@macbook.be.48ers.dk> <20080321085200.GB8894@mx.loc>
 	<87hcf01m0r.fsf@macbook.be.48ers.dk>
 	<87wsnwzakv.fsf@macbook.be.48ers.dk>
 	<46a136670803210436s6f464029jb6f48b6319aa765a@mail.gmail.com>
-Message-ID: <20080321121113.GA10632@mx.loc>
+	<20080321121113.GA10632@mx.loc>
+Message-ID: <46a136670803210547yaee66b4reecd55d403b69839@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Fri, Mar 21, 2008 at 07:36:00AM -0400, John Voltz wrote:
->I agree with Bernhard, the AVR32 arch gcc patches seriously need fixed.
->There are quite a few problems caused by gcc on the AVR32 as well. It works
->pretty well for the most part, but there were problems back with gcc
->4.1.2causing the kernel to oops while reading ext2 and ext3
->filesystems, and now
->gcc 4.2.1 breaks blackbox, and I've never been able to get webkit to work
->reliably. gcc 4.2.1 also broke almost all of the open file dialogs in the
->applications too. I'm blaming it all on the gcc patches.
 >
->Have there been other issues with buildroot in the past when adding other
->arches? I'm actually glad all of this happened because it shines a light on
-
-buildroot is not ment to be a patch-sink.
-The _proper_ thing to do is to add your arch to the upstream packages.
-
-Likewise, if you have to patch a package (for buildroot), then please take
-it upon you to fix the issues _upstream_. Everything else is just a
-maintenance-nightmare and does the opposite of what OSS is ment to
-achieve in the long-run.
-
-
->the quality issues in the AVR32 patches. Thanks to Nigel and Peter. I would
->have never discovered this on my own. Sorry for giving you guys the
->headaches though!
 >
->John Voltz
+> buildroot is not ment to be a patch-sink.
+> The _proper_ thing to do is to add your arch to the upstream packages.
+>
+
+This is absolutely true. The reason the gcc patches haven't gone upstream is
+because Atmel's legal department hasn't filed the copyright paperwork with
+the FSF yet. And obviously we should all be glad that they haven't, because
+the breakage would be widespread. I've asked the Atmel developers about the
+status of upstream patches and it goes something like this:
+
+gcc (and binutils?), waiting on legal documents for FSF
+
+uClibc, in svn, will appear on 0.9.30 release.
+
+Linux kernel, all upstream (in -mm, I think) except for some peripherals
+that are still under testing.
+
+
+John
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: http://busybox.net/lists/buildroot/attachments/20080321/3251f89f/attachment.htm 
