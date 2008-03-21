@@ -1,41 +1,37 @@
-From: John Voltz <john.voltz@gmail.com>
-Date: Fri, 21 Mar 2008 08:47:13 -0400
-Subject: [Buildroot] avr32 patches vs. x86 breakage
-In-Reply-To: <20080321121113.GA10632@mx.loc>
-References: <1206079232.2562.60.camel@nigel-x60>
-	<87k5jw34gp.fsf@macbook.be.48ers.dk> <20080321085200.GB8894@mx.loc>
-	<87hcf01m0r.fsf@macbook.be.48ers.dk>
-	<87wsnwzakv.fsf@macbook.be.48ers.dk>
-	<46a136670803210436s6f464029jb6f48b6319aa765a@mail.gmail.com>
-	<20080321121113.GA10632@mx.loc>
-Message-ID: <46a136670803210547yaee66b4reecd55d403b69839@mail.gmail.com>
+From: Guillaume Dargaud <dargaud@lpsc.in2p3.fr>
+Date: Fri, 21 Mar 2008 15:47:59 +0100
+Subject: [Buildroot] Wrong compiling commands ?
+References: <01b801c88b3c$b94aba00$ad289e86@LPSC0173W>
+	<20080321103430.GA10140@mx.loc>
+Message-ID: <02b201c88b62$91888bc0$ad289e86@LPSC0173W>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->
->
-> buildroot is not ment to be a patch-sink.
-> The _proper_ thing to do is to add your arch to the upstream packages.
->
+Hello all,
+sorry if I ask a lot of newbie questions here, but 12 years since my last 
+embedded work on totally different architectures (TI), I have a hard time 
+getting back in the game.
 
-This is absolutely true. The reason the gcc patches haven't gone upstream is
-because Atmel's legal department hasn't filed the copyright paperwork with
-the FSF yet. And obviously we should all be glad that they haven't, because
-the breakage would be widespread. I've asked the Atmel developers about the
-status of upstream patches and it goes something like this:
+The more I look at what is going on, the more I think things are just plain 
+wrong. Look at the invocation to compile uClibc:
 
-gcc (and binutils?), waiting on legal documents for FSF
+$ make ARCH=ppc
+[...]
+/usr/bin/make MAKE="/usr/bin/make -j1" -C 
+/home/guinevere/buildroot/toolchain_build_ppc/uClibc-0.9.29 \
+        PREFIX= \
+        DEVEL_PREFIX=/ \
+        RUNTIME_PREFIX=/ \
+        HOSTCC="/usr/bin/gcc" \
+        all
+[...]
+Finishing with a whole bunch of errors...
+Shouldn't there be a CROSS=something in there ? And some path for PREFIX ?
 
-uClibc, in svn, will appear on 0.9.30 release.
-
-Linux kernel, all upstream (in -mm, I think) except for some peripherals
-that are still under testing.
-
-
-John
--------------- next part --------------
-An HTML attachment was scrubbed...
-URL: http://busybox.net/lists/buildroot/attachments/20080321/3251f89f/attachment.htm 
+Thanks
+-- 
+Guillaume Dargaud
+http://www.gdargaud.net/
