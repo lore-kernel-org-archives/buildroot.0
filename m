@@ -1,28 +1,46 @@
-From: Jean-Christian de Rivaz <jc@eclis.ch>
-Date: Sat, 22 Mar 2008 17:38:15 +0100
-Subject: [Buildroot] question about /tftpboot
-In-Reply-To: <d449ded70803220329u576c9854kf10c4fa1cf1f4e48@mail.gmail.com>
-References: <d449ded70803211040i68f1d764gac70fdd27632ded5@mail.gmail.com>	
-	<47E3F85A.7000608@eclis.ch>	
-	<d449ded70803211116k29dfe743u304b9bc59f317791@mail.gmail.com>	
-	<47E42205.40609@eclis.ch> <47E4269D.3060207@eclis.ch>
-	<d449ded70803220329u576c9854kf10c4fa1cf1f4e48@mail.gmail.com>
-Message-ID: <47E535F7.5050707@eclis.ch>
+From: bugs at busybox.net <bugs@busybox.net>
+Date: Sat, 22 Mar 2008 09:42:34 -0700
+Subject: [Buildroot] [buildroot 0002634]: path to ncurses seems to contain
+	extra 'gnu/'
+Message-ID: <70451397bfd92cda3ec58eaf59f796c7@bugs.uclibc.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Habib Bouaziz-Viallet a ?crit :
 
->>  > I am interested to know if it work for your case.
-> Oh it does not work for me ... unfortunately. I resolved the pb by a
-> symbolic link.
+The following issue has been SUBMITTED. 
+====================================================================== 
+http://busybox.net/bugs/view.php?id=2634 
+====================================================================== 
+Reported By:                travishein
+Assigned To:                buildroot
+====================================================================== 
+Project:                    buildroot
+Issue ID:                   2634
+Category:                   Other
+Reproducibility:            always
+Severity:                   minor
+Priority:                   normal
+Status:                     assigned
+====================================================================== 
+Date Submitted:             03-22-2008 09:42 PDT
+Last Modified:              03-22-2008 09:42 PDT
+====================================================================== 
+Summary:                    path to ncurses seems to contain extra 'gnu/'
+Description: 
+The value of the variable $(BR2_GNU_MIRROR) seems to contain the /gnu/ path
+component, so in the package/ncurses/ncurses.mk where it includes
+gnu/ncurses again it is not finding it
+====================================================================== 
 
-Ok. Can you give me the error message or the configuration to reproduce 
-the problem ? I have some motivation to solve this issue.
-
-Thanks anyway for your test.
--- 
-Jean-Christian de Rivaz
+Issue History 
+Date Modified   Username       Field                    Change               
+====================================================================== 
+03-22-08 09:42  travishein     New Issue                                    
+03-22-08 09:42  travishein     Status                   new => assigned     
+03-22-08 09:42  travishein     Assigned To               => buildroot       
+03-22-08 09:42  travishein     File Added: ncurses_path_20080321.diff           
+        
+======================================================================
