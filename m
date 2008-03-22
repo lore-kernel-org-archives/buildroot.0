@@ -1,36 +1,31 @@
-From: Steven J. Hill <sjhill@realitydiluted.com>
-Date: Fri, 21 Mar 2008 23:56:03 -0500
+From: Nigel Kukard <nkukard@lbsd.net>
+Date: Sat, 22 Mar 2008 05:46:29 +0000
 Subject: [Buildroot] svn commit: trunk/buildroot/package/xfsprogs
-In-Reply-To: <20080321180147.DA5513C342@busybox.net>
+In-Reply-To: <47E49163.5070805@realitydiluted.com>
 References: <20080321180147.DA5513C342@busybox.net>
-Message-ID: <47E49163.5070805@realitydiluted.com>
+	<47E49163.5070805@realitydiluted.com>
+Message-ID: <1206164789.14300.5.camel@nigel-x60>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
------BEGIN PGP SIGNED MESSAGE-----
-Hash: SHA1
+> > 
+> > Log:
+> > Fixed xfsprogs to build without needing bzero & bcopy. Patch by Nigel Kukard
+> > 
+> Would you or Nigel please push this up to the xfsprogs maintainer(s)? These
+> legacy functions need to die and the only way they're going to is if we keep
+> pushing these back to the various package maintainers. Thanks.
 
-ninevoltz at uclibc.org wrote:
-> Author: ninevoltz
-> Date: 2008-03-21 11:01:46 -0700 (Fri, 21 Mar 2008)
-> New Revision: 21443
-> 
-> Log:
-> Fixed xfsprogs to build without needing bzero & bcopy. Patch by Nigel Kukard
-> 
-Would you or Nigel please push this up to the xfsprogs maintainer(s)? These
-legacy functions need to die and the only way they're going to is if we keep
-pushing these back to the various package maintainers. Thanks.
+already in the process of doing so  ;)
 
-- -Steve
------BEGIN PGP SIGNATURE-----
-Version: GnuPG v1.4.6 (GNU/Linux)
-Comment: Using GnuPG with Mozilla - http://enigmail.mozdev.org
-
-iD8DBQFH5JFjgyK5H2Ic36cRAq+QAJ9+9u4MjKi8VHJQ2e9YmDpPr9YIYwCeMgRw
-Hn2+2Gmu+2o5jMQ1cCo83fo=
-=C5Zy
------END PGP SIGNATURE-----
+-N
+-------------- next part --------------
+A non-text attachment was scrubbed...
+Name: not available
+Type: application/pgp-signature
+Size: 189 bytes
+Desc: This is a digitally signed message part
+Url : http://busybox.net/lists/buildroot/attachments/20080322/eb46065b/attachment.pgp 
