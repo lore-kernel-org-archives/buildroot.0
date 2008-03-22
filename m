@@ -1,40 +1,36 @@
-From: =?ISO-8859-1?Q?Thiago_A._Corr=EAa?= <thiago.correa@gmail.com>
-Date: Fri, 21 Mar 2008 23:11:48 -0300
-Subject: [Buildroot] svn commit: trunk/buildroot/toolchain/gcc/4.2.1:
-	avr32_patches_break_x86
-In-Reply-To: <46a136670803210844i7e3a232fpde354e2422b385f9@mail.gmail.com>
-References: <20080321112103.A34573C2F3@busybox.net>
-	<87lk4cxq51.fsf@macbook.be.48ers.dk>
-	<46a136670803210455l30fffb0dx90c449c7aa5c551e@mail.gmail.com>
-	<d6cda7730803210814v1cbc6b73ge6e7cdf65a0b5f9@mail.gmail.com>
-	<46a136670803210824y45035bd4u50dfa5446b9e8003@mail.gmail.com>
-	<d6cda7730803210833s3cdce637m8b701f53dad302b@mail.gmail.com>
-	<46a136670803210844i7e3a232fpde354e2422b385f9@mail.gmail.com>
-Message-ID: <d6cda7730803211911sf109fb6iaf3a865f7ef749b2@mail.gmail.com>
+From: Steven J. Hill <sjhill@realitydiluted.com>
+Date: Fri, 21 Mar 2008 23:56:03 -0500
+Subject: [Buildroot] svn commit: trunk/buildroot/package/xfsprogs
+In-Reply-To: <20080321180147.DA5513C342@busybox.net>
+References: <20080321180147.DA5513C342@busybox.net>
+Message-ID: <47E49163.5070805@realitydiluted.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-That's what's puzzling, everything was running ok for quite sometime
-here as well.  At first I thought it could be the optimization issues,
-as sometimes I get a different error saying that it can't find the
-entry point of several standard c libraries, but it seams that earlier
-revisions also segfaults. :(
+-----BEGIN PGP SIGNED MESSAGE-----
+Hash: SHA1
 
-The earlier I tried was 180 (google code) and still has the issues
-(3rd march). Now I have updated to HEAD and I'm trying to build with
-the external toolchain prepatched sources I've mentioned.
+ninevoltz at uclibc.org wrote:
+> Author: ninevoltz
+> Date: 2008-03-21 11:01:46 -0700 (Fri, 21 Mar 2008)
+> New Revision: 21443
+> 
+> Log:
+> Fixed xfsprogs to build without needing bzero & bcopy. Patch by Nigel Kukard
+> 
+Would you or Nigel please push this up to the xfsprogs maintainer(s)? These
+legacy functions need to die and the only way they're going to is if we keep
+pushing these back to the various package maintainers. Thanks.
 
-> I'm not blaming buildroot for my problems, it's a fantastic tool that I will
-> continue to use and improve.
+- -Steve
+-----BEGIN PGP SIGNATURE-----
+Version: GnuPG v1.4.6 (GNU/Linux)
+Comment: Using GnuPG with Mozilla - http://enigmail.mozdev.org
 
-I'm not blaming anyone, or saying that I will stop sending patches or
-anything. Since you mention that the AVR32 patches were causing issues
-to x86 users, I'm just sharing that there are problems with the AVR32
-as well, at least on my end, and that I've been trying to figure it
-out.
-
-Kind Regards,
-   Thiago A. Correa
+iD8DBQFH5JFjgyK5H2Ic36cRAq+QAJ9+9u4MjKi8VHJQ2e9YmDpPr9YIYwCeMgRw
+Hn2+2Gmu+2o5jMQ1cCo83fo=
+=C5Zy
+-----END PGP SIGNATURE-----
