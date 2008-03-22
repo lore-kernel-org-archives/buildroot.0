@@ -1,12 +1,12 @@
 From: Habib Bouaziz-Viallet <habib.bouaziz@gmail.com>
-Date: Sat, 22 Mar 2008 08:53:54 +0100
+Date: Sat, 22 Mar 2008 11:29:05 +0100
 Subject: [Buildroot] question about /tftpboot
 In-Reply-To: <47E4269D.3060207@eclis.ch>
 References: <d449ded70803211040i68f1d764gac70fdd27632ded5@mail.gmail.com>
 	<47E3F85A.7000608@eclis.ch>
 	<d449ded70803211116k29dfe743u304b9bc59f317791@mail.gmail.com>
 	<47E42205.40609@eclis.ch> <47E4269D.3060207@eclis.ch>
-Message-ID: <d449ded70803220053t14db45e3pd17130d357cc10ba@mail.gmail.com>
+Message-ID: <d449ded70803220329u576c9854kf10c4fa1cf1f4e48@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -48,6 +48,11 @@ To: buildroot@busybox.net
 >  > I have attached an updated patch that don't show "offset lines".
 >  >
 >  > I am interested to know if it work for your case.
+Oh it does not work for me ... unfortunately. I resolved the pb by a
+symbolic link.
+
+Thanks for the topic anyway.
+
 >
 >
 > Ooops! The attached patch need to be applyed with the -p1 option like this:
@@ -58,7 +63,6 @@ To: buildroot@busybox.net
 >
 >
 > Sorry for the mistake.
-Ok thanks Jean-Christian i'll give it a try.
 >  --
 >
 > Jean-Christian de Rivaz
