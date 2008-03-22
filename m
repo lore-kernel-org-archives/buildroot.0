@@ -1,73 +1,58 @@
-From: Habib Bouaziz-Viallet <habib.bouaziz@gmail.com>
-Date: Sat, 22 Mar 2008 11:29:05 +0100
-Subject: [Buildroot] question about /tftpboot
-In-Reply-To: <47E4269D.3060207@eclis.ch>
-References: <d449ded70803211040i68f1d764gac70fdd27632ded5@mail.gmail.com>
-	<47E3F85A.7000608@eclis.ch>
-	<d449ded70803211116k29dfe743u304b9bc59f317791@mail.gmail.com>
-	<47E42205.40609@eclis.ch> <47E4269D.3060207@eclis.ch>
-Message-ID: <d449ded70803220329u576c9854kf10c4fa1cf1f4e48@mail.gmail.com>
+From: Ivan Kuten <ivan.kuten@promwad.com>
+Date: Sat, 22 Mar 2008 13:06:58 +0200 (EET)
+Subject: [Buildroot] [PATCH] Add thumb support to buildroot for the ARM
+ architecture
+In-Reply-To: <20080314145655.3c119daa@crazy>
+References: <20080312090846.2cfecec8@crazy> <20080314090331.11f1bddc@crazy>
+	<47DA7E94.2070302@promwad.com> <20080314141929.006a424d@crazy>
+	<20080314145655.3c119daa@crazy>
+Message-ID: <59110.195.222.79.169.1206184018.squirrel@webmail.promwad.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-2008/3/21, Jean-Christian de Rivaz <jc@eclis.ch>:
-> Jean-Christian de Rivaz a ?crit :
->
-> > Habib Bouaziz-Viallet a ?crit :
->  >> 2008/3/21, Jean-Christian de Rivaz <jc@eclis.ch>:
->  >>> Habib Bouaziz-Viallet a ?crit :
->  >>>
->  >>>> Hi all !
->  >>>  >
->  >>>  > I would like my tftp server provides access to another directory (e.g
->  >>>  > /var/... param configured with /etc/inetd.conf  with my GNU Debian)
->  >>>  >
->  >>>  > '/ tftpboot'. Changing '/ tftpboot' is apparently not possible from
->  >>>  > 'make menuconfig'
->  >>>  >
->  >>>  > How do i do ? Many thanks
->  >>>  >
->  >>>
->  >>>
->  >>> There is a symbol BR2_LINUX_COPYTO to adjust that. Some time ago I found
->  >>>  it broken by the target/linux/Makefile.in.advanced file and I
->  >>> proposed a
->  >>>  patch in this bug report: http://bugs.uclibc.org/view.php?id=2384
->  >> Ok. Did you apply this successfully ? If so how to ?
->  >
->  > You can apply with the "patch -p0" command like this:
->  >
->  > buildroot$ patch -p0 < patch-tftpboot-kernel.diff
->  > patching file target/linux/Makefile.in.advanced
->  > Hunk #1 succeeded at 227 (offset 18 lines).
->  > Hunk #2 succeeded at 387 (offset 19 lines).
->  >
->  > I have attached an updated patch that don't show "offset lines".
->  >
->  > I am interested to know if it work for your case.
-Oh it does not work for me ... unfortunately. I resolved the pb by a
-symbolic link.
+Hi Thomas,
 
-Thanks for the topic anyway.
+I compiled for ARM_920T & EABI & SOFTFLOAT.
+I checked busybox binary ( arm-linux-objdump ) - there is no blx instruction.
+Seems all these ARM troubles were related to avr32 patches (see recent posts in mailing list) because
+yesterday finally I managed to build working rootfs. However busybox binary seems resulted
+ in OABI format because when in kernel disable OABI_COMPAT - rootfs does not boot.
 
->
->
-> Ooops! The attached patch need to be applyed with the -p1 option like this:
->
->  buildroot$ patch -p1 < ../buildroot-patch/patch-tftpboot-kernel.diff
->
-> patching file target/linux/Makefile.in.advanced
->
->
-> Sorry for the mistake.
->  --
->
-> Jean-Christian de Rivaz
->
+BR,
+Ivan
 
 
--- 
-M. Bouaziz-Viallet
+> Le Fri, 14 Mar 2008 14:19:29 +0100,
+> Thomas Petazzoni <thomas.petazzoni@free-electrons.com> a ?crit :
+>
+>> However, there is quite a big difference between your S3C2440 real
+>> hardware and the Qemu versatilepb emulation. S3C2440 is based on 920T
+>> as you say, which supports the ARMv4T ISA. But the versatilepb
+>> emulation of Qemu emulates an ARM926EJ-S CPU, which supports the
+>> ARMv5TEJ ISA. And as far as I understood, there are some differences
+>> in the ARM <-> Thumb switch capabilities between ARMv4T and ARMv5T.
+>
+> In particular, from the ARM architecture manual:
+>
+> ?
+> BL (H == 10 and H == 11 forms) is in all T variants.
+> BLX (H == 01 form) is in T variants of ARMv5 and above.
+> ?
+>
+> So on your S3C2440, the 'blx' instruction is not supported. And this
+> instruction can especially be used to do interworking. So if gcc
+> generated this instruction, it of course will fail with the "illegal
+> instruction" exception.
+>
+> Sincerly,
+>
+> Thomas
+> --
+> Thomas Petazzoni, Free Electrons
+> Free Embedded Linux Training Materials
+> on http://free-electrons.com/training
+> (More than 1500 pages!)
+>
