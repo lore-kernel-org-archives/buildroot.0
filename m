@@ -1,8 +1,7 @@
 From: bugs at busybox.net <bugs@busybox.net>
-Date: Sat, 22 Mar 2008 13:21:50 -0700
-Subject: [Buildroot] [buildroot 0002634]: path to ncurses seems to contain
-	extra 'gnu/'
-Message-ID: <df0e7304beacdc8b25025ec14bc9cccc@bugs.uclibc.org>
+Date: Sun, 23 Mar 2008 00:14:29 -0700
+Subject: [Buildroot] [buildroot 0002644]: incorrect FTP address for NCURSES
+Message-ID: <237c02891b0d915b6756cd7fe9c75c4d@busybox.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -10,70 +9,48 @@ Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
 
-A NOTE has been added to this issue. 
+The following issue has been SUBMITTED. 
 ====================================================================== 
-http://busybox.net/bugs/view.php?id=2634 
+http://busybox.net/bugs/view.php?id=2644 
 ====================================================================== 
-Reported By:                travishein
+Reported By:                testarx
 Assigned To:                buildroot
 ====================================================================== 
 Project:                    buildroot
-Issue ID:                   2634
-Category:                   Other
+Issue ID:                   2644
+Category:                   Architecture Specific
 Reproducibility:            always
 Severity:                   minor
 Priority:                   normal
 Status:                     assigned
 ====================================================================== 
-Date Submitted:             03-22-2008 09:42 PDT
-Last Modified:              03-22-2008 13:21 PDT
+Date Submitted:             03-23-2008 00:14 PDT
+Last Modified:              03-23-2008 00:14 PDT
 ====================================================================== 
-Summary:                    path to ncurses seems to contain extra 'gnu/'
+Summary:                    incorrect FTP address for NCURSES
 Description: 
-The value of the variable $(BR2_GNU_MIRROR) seems to contain the /gnu/ path
-component, so in the package/ncurses/ncurses.mk where it includes
-gnu/ncurses again it is not finding it
+The address for ncurses is incorrectly computed as
+"http://ftp.gnu.org/pub/gnu"/gnu/ncurses/ncurses-5.6.tar.gz"
+which contains an extra /gnu/ 
+
+
+output:
+
+wget --passive-ftp  -P /home/x/Desktop/omap/buildroot/dl
+"http://ftp.gnu.org/pub/gnu"/gnu/ncurses/ncurses-5.6.tar.gz
+--02:09:34--  http://ftp.gnu.org/pub/gnu/gnu/ncurses/ncurses-5.6.tar.gz
+           => `/home/x/Desktop/omap/buildroot/dl/ncurses-5.6.tar.gz'
+Resolving ftp.gnu.org... 140.186.70.20
+Connecting to ftp.gnu.org|140.186.70.20|:80... connected.
+HTTP request sent, awaiting response... 404 Not Found
+02:09:34 ERROR 404: Not Found.
+
 ====================================================================== 
-
----------------------------------------------------------------------- 
- travishein - 03-22-08 13:21  
----------------------------------------------------------------------- 
-hmm actually everything that relies on the BR2_GNU_MIRROR variable is
-currently suffering from this issue.
-
-Im not sure, if the BR2_GNU_MIRROR in the .config (and .defconfig) should
-be changed from http://ftp.gnu.org/pub/gnu to http://ftp.gnu.org/pub
-
-or if the following package that refer to BR2_GNU_MIRROR should have their
-path updated ?
-
-package/gawk/gawk.mk
-package/gzip/gzip.mk
-package/autoconf/autoconf.mk
-package/ncurses/ncurses.mk
-package/findutils/findutils.mk
-package/gettext/gettext.mk
-package/editors/ed/ed.mk
-package/bash/bash.mk
-package/diffutils/diffutils.mk
-package/wget/wget.mk
-package/tar/tar.mk
-package/m4/m4.mk
-package/make/make.mk
-package/bison/bison.mk
-package/sed/sed.mk
-package/automake/automake.mk
-package/readline/readline.mk
-package/libtool/libtool.mk
-package/coreutils/coreutils.mk 
 
 Issue History 
 Date Modified   Username       Field                    Change               
 ====================================================================== 
-03-22-08 09:42  travishein     New Issue                                    
-03-22-08 09:42  travishein     Status                   new => assigned     
-03-22-08 09:42  travishein     Assigned To               => buildroot       
-03-22-08 09:42  travishein     File Added: ncurses_path_20080321.diff           
-        
-03-22-08 13:21  travishein     Note Added: 0005834                          
+03-23-08 00:14  testarx        New Issue                                    
+03-23-08 00:14  testarx        Status                   new => assigned     
+03-23-08 00:14  testarx        Assigned To               => buildroot       
 ======================================================================
