@@ -1,83 +1,59 @@
-From: bugs at busybox.net <bugs@busybox.net>
-Date: Sun, 23 Mar 2008 11:13:14 -0700
-Subject: [Buildroot] [buildroot 0002664]: Linking xvmc fails looking for
-	libs in wrong places
-Message-ID: <0a89df27029969f1ddb6f71b97bbf0ad@bugs.uclibc.org>
+From: Ivan Kuten <ivan.kuten@promwad.com>
+Date: Sun, 23 Mar 2008 23:57:57 +0200 (EET)
+Subject: [Buildroot] [PATCH] Add thumb support to buildroot for the ARM
+ architecture
+In-Reply-To: <20080322131902.1b4a74bf@crazy>
+References: <20080312090846.2cfecec8@crazy> <20080314090331.11f1bddc@crazy>
+	<47DA7E94.2070302@promwad.com> <20080314141929.006a424d@crazy>
+	<20080314145655.3c119daa@crazy>
+	<59110.195.222.79.169.1206184018.squirrel@webmail.promwad.com>
+	<20080322131902.1b4a74bf@crazy>
+Message-ID: <34487.195.222.88.127.1206309477.squirrel@webmail.promwad.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+Hi,
 
-The following issue has been SUBMITTED. 
-====================================================================== 
-http://busybox.net/bugs/view.php?id=2664 
-====================================================================== 
-Reported By:                jbruchon
-Assigned To:                buildroot
-====================================================================== 
-Project:                    buildroot
-Issue ID:                   2664
-Category:                   Shared Library Support
-Reproducibility:            have not tried
-Severity:                   minor
-Priority:                   normal
-Status:                     assigned
-====================================================================== 
-Date Submitted:             03-23-2008 11:13 PDT
-Last Modified:              03-23-2008 11:13 PDT
-====================================================================== 
-Summary:                    Linking xvmc fails looking for libs in wrong places
-Description: 
-I'm having to make symlinks to fulfill missing library searches because
-compiling libxvmc is looking for my Slackware libs instead of my uClibc
-libs.  Here's an example:
+Sure I had CONFIG_EABI enabled.
 
-(cd /home/nonroot/Desktop/buildroot/build_i486/libxcb-1.1/src; /bin/sh
-../libtool  --tag=CC --mode=relink
-/home/nonroot/Desktop/buildroot/build_i486/staging_dir/usr/bin/i486-linux-uclibc-gcc
--Os -I/home/nonroot/Desktop/buildroot/build_i486/staging_dir/usr/include
--I/home/nonroot/Desktop/buildroot/build_i486/staging_dir/include
---sysroot=/home/nonroot/Desktop/buildroot/build_i486/staging_dir/
--isysroot /home/nonroot/Desktop/buildroot/build_i486/staging_dir
--mtune=i486 -march=i486 -Wall -pedantic -Wpointer-arith
--Wstrict-prototypes -Wmissing-declarations -Wnested-externs
--I/home/nonroot/Desktop/buildroot/build_i486/staging_dir/usr/include
--I/home/nonroot/Desktop/buildroot/build_i486/staging_dir/usr/include -g
--O2 -o libxcb-xvmc.la -rpath /usr/lib -version-info 0:0:0 xvmc.lo
-libxcb.la -inst-prefix-dir
-/home/nonroot/Desktop/buildroot/project_build_i486/uclibc/root)
-/home/nonroot/Desktop/buildroot/build_i486/staging_dir/usr/bin/i486-linux-uclibc-gcc
--Os  -I/home/nonroot/Desktop/buildroot/build_i486/staging_dir/usr/include
--I/home/nonroot/Desktop/buildroot/build_i486/staging_dir/include
---sysroot=/home/nonroot/Desktop/buildroot/build_i486/staging_dir/
--isysroot /home/nonroot/Desktop/buildroot/build_i486/staging_dir
--mtune=i486 -march=i486 -shared  .libs/xvmc.o 
--L/home/nonroot/Desktop/buildroot/project_build_i486/uclibc/root/usr/lib
--L/usr/lib -lxcb  -mtune=i486 -march=i486 -Wl,-soname -Wl,libxcb-xvmc.so.0
--o .libs/libxcb-xvmc.so.0.0.0
-/home/nonroot/Desktop/buildroot/build_i486/staging_dir/usr/bin-ccache/../lib/gcc/i486-linux-uclibc/4.2.1/../../../../i486-linux-uclibc/bin/ld:
-cannot find /usr/lib/uclibc_nonshared.a
-collect2: ld returned 1 exit status
-libtool: install: error: relink `libxcb-xvmc.la' with the above command
-before installing it
-make[2]: *** [install-libLTLIBRARIES] Error 1
-make[2]: Leaving directory
-`/home/nonroot/Desktop/buildroot/build_i486/libxcb-1.1/src'
-make[1]: *** [install-exec-recursive] Error 1
-make[1]: Leaving directory
-`/home/nonroot/Desktop/buildroot/build_i486/libxcb-1.1'
-make: ***
-[/home/nonroot/Desktop/buildroot/build_i486/libxcb-1.1/.stamp_target_installed]
-Error 2
+I tried to apply your patch - when ucLibc is configured ( BR2_UCLIBC_CONFIG=toolchain/uClibc/uClibc-0.9.29.config )
+it is asking Target File Format:
+1. FDPIC ELF
+2. STATIC FLAT
+3. STATIC FLAT (sep-data)
+4. SHARED FLAT
 
-====================================================================== 
+What did you choose? If I choose FDPIC ELF I'm getting unrecognized command line option "-mfdpic" - when
+arm-linux-gcc is trying to build uClibc.
 
-Issue History 
-Date Modified   Username       Field                    Change               
-====================================================================== 
-03-23-08 11:13  jbruchon       New Issue                                    
-03-23-08 11:13  jbruchon       Status                   new => assigned     
-03-23-08 11:13  jbruchon       Assigned To               => buildroot       
-======================================================================
+Regards,
+Ivan
+
+
+>> I compiled for ARM_920T & EABI & SOFTFLOAT.
+>> I checked busybox binary ( arm-linux-objdump ) - there is no blx
+>> instruction. Seems all these ARM troubles were related to avr32
+>> patches (see recent posts in mailing list) because yesterday finally
+>> I managed to build working rootfs.
+>
+> Hum, maybe.
+>
+>> However busybox binary seems resulted in OABI format because when
+>> in kernel disable OABI_COMPAT - rootfs does not boot.
+>
+> Do you have CONFIG_EABI=y in your buildroot config file ?
+>
+> But anyway, do you confirm that my patch works ?
+>
+> Sincerly,
+>
+> Thomas
+> --
+> Thomas Petazzoni, Free Electrons
+> Free Embedded Linux Training Materials
+> on http://free-electrons.com/training
+> (More than 1500 pages!)
+>
