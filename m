@@ -1,25 +1,83 @@
-From: Steve Calfee <nospamcalfee@yahoo.com>
-Date: Sun, 23 Mar 2008 08:51:15 -0700 (PDT)
-Subject: [Buildroot] build problems
-Message-ID: <772424.36220.qm@web58210.mail.re3.yahoo.com>
+From: bugs at busybox.net <bugs@busybox.net>
+Date: Sun, 23 Mar 2008 11:13:14 -0700
+Subject: [Buildroot] [buildroot 0002664]: Linking xvmc fails looking for
+	libs in wrong places
+Message-ID: <0a89df27029969f1ddb6f71b97bbf0ad@bugs.uclibc.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi All,
 
-I used buildroot a couple of years ago successfully with a samsung 2410 soc.
+The following issue has been SUBMITTED. 
+====================================================================== 
+http://busybox.net/bugs/view.php?id=2664 
+====================================================================== 
+Reported By:                jbruchon
+Assigned To:                buildroot
+====================================================================== 
+Project:                    buildroot
+Issue ID:                   2664
+Category:                   Shared Library Support
+Reproducibility:            have not tried
+Severity:                   minor
+Priority:                   normal
+Status:                     assigned
+====================================================================== 
+Date Submitted:             03-23-2008 11:13 PDT
+Last Modified:              03-23-2008 11:13 PDT
+====================================================================== 
+Summary:                    Linking xvmc fails looking for libs in wrong places
+Description: 
+I'm having to make symlinks to fulfill missing library searches because
+compiling libxvmc is looking for my Slackware libs instead of my uClibc
+libs.  Here's an example:
 
-I am now trying to use it for a new project. My problem is I cannot get any build to work.
- 
-Has anyone done a svn update and select a default config and have it build? I want to build an arm system, but first I would like some default config to build. I am using ubuntu feisty and think I have installed all the required tools. The mailing list seems to be quite active, but things seem to be in chaos. Can anyone tell me a starting place that is known to work?
+(cd /home/nonroot/Desktop/buildroot/build_i486/libxcb-1.1/src; /bin/sh
+../libtool  --tag=CC --mode=relink
+/home/nonroot/Desktop/buildroot/build_i486/staging_dir/usr/bin/i486-linux-uclibc-gcc
+-Os -I/home/nonroot/Desktop/buildroot/build_i486/staging_dir/usr/include
+-I/home/nonroot/Desktop/buildroot/build_i486/staging_dir/include
+--sysroot=/home/nonroot/Desktop/buildroot/build_i486/staging_dir/
+-isysroot /home/nonroot/Desktop/buildroot/build_i486/staging_dir
+-mtune=i486 -march=i486 -Wall -pedantic -Wpointer-arith
+-Wstrict-prototypes -Wmissing-declarations -Wnested-externs
+-I/home/nonroot/Desktop/buildroot/build_i486/staging_dir/usr/include
+-I/home/nonroot/Desktop/buildroot/build_i486/staging_dir/usr/include -g
+-O2 -o libxcb-xvmc.la -rpath /usr/lib -version-info 0:0:0 xvmc.lo
+libxcb.la -inst-prefix-dir
+/home/nonroot/Desktop/buildroot/project_build_i486/uclibc/root)
+/home/nonroot/Desktop/buildroot/build_i486/staging_dir/usr/bin/i486-linux-uclibc-gcc
+-Os  -I/home/nonroot/Desktop/buildroot/build_i486/staging_dir/usr/include
+-I/home/nonroot/Desktop/buildroot/build_i486/staging_dir/include
+--sysroot=/home/nonroot/Desktop/buildroot/build_i486/staging_dir/
+-isysroot /home/nonroot/Desktop/buildroot/build_i486/staging_dir
+-mtune=i486 -march=i486 -shared  .libs/xvmc.o 
+-L/home/nonroot/Desktop/buildroot/project_build_i486/uclibc/root/usr/lib
+-L/usr/lib -lxcb  -mtune=i486 -march=i486 -Wl,-soname -Wl,libxcb-xvmc.so.0
+-o .libs/libxcb-xvmc.so.0.0.0
+/home/nonroot/Desktop/buildroot/build_i486/staging_dir/usr/bin-ccache/../lib/gcc/i486-linux-uclibc/4.2.1/../../../../i486-linux-uclibc/bin/ld:
+cannot find /usr/lib/uclibc_nonshared.a
+collect2: ld returned 1 exit status
+libtool: install: error: relink `libxcb-xvmc.la' with the above command
+before installing it
+make[2]: *** [install-libLTLIBRARIES] Error 1
+make[2]: Leaving directory
+`/home/nonroot/Desktop/buildroot/build_i486/libxcb-1.1/src'
+make[1]: *** [install-exec-recursive] Error 1
+make[1]: Leaving directory
+`/home/nonroot/Desktop/buildroot/build_i486/libxcb-1.1'
+make: ***
+[/home/nonroot/Desktop/buildroot/build_i486/libxcb-1.1/.stamp_target_installed]
+Error 2
 
-Thanks, Steve
+====================================================================== 
 
-
-
-      ____________________________________________________________________________________
-Be a better friend, newshound, and 
-know-it-all with Yahoo! Mobile.  Try it now.  http://mobile.yahoo.com/;_ylt=Ahu06i62sR8HDtDypao8Wcj9tAcJ
+Issue History 
+Date Modified   Username       Field                    Change               
+====================================================================== 
+03-23-08 11:13  jbruchon       New Issue                                    
+03-23-08 11:13  jbruchon       Status                   new => assigned     
+03-23-08 11:13  jbruchon       Assigned To               => buildroot       
+======================================================================
