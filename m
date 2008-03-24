@@ -1,80 +1,21 @@
-From: John Voltz <john.voltz@gmail.com>
-Date: Mon, 24 Mar 2008 08:52:19 -0400
-Subject: [Buildroot] build problems
-In-Reply-To: <1CD05B980C94AC408B37C82BBABAA3E60ACA76FC@mtsexchange.dc.multitech.prv>
-References: <1CD05B980C94AC408B37C82BBABAA3E60ACA76FC@mtsexchange.dc.multitech.prv>
-Message-ID: <46a136670803240552ob3474b4qb6fb5e4365b0f91@mail.gmail.com>
+From: Arun Reddy <reddyac@gmail.com>
+Date: Mon, 24 Mar 2008 08:18:34 -0700
+Subject: [Buildroot] Buildroot initrd support?
+Message-ID: <326f33790803240818w716d0c4ch1603eb851ecd5070@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Timothy,
+Hi everyone,
 
-What type of problems are you having with buildroot? What's failing for you?
-
-John Voltz
-
-On Mon, Mar 24, 2008 at 8:45 AM, Tim Barr <tbarr@multitech.com> wrote:
-
-> I have had a similar problem, Steve. I wonder if any of the maintainers
-> has tried running buildroot after a dirclean recently? Or cleared out
-> the download directory to see if any package download interfaces have
-> changed? I have been trying to get a successful buildroot process (for
-> an AT91SAM9260EK) to complete for over 3 months now with no luck
-> whatsoever. I ended up having to buy a Timesys linuxlink license in
-> order to move forward.
->
-> Timothy Barr
-> Hardware Development Engineer
-> for Multi-Tech Systems, Inc.
-> tbarr at multitech.com
->
->
->
-> > -----Original Message-----
-> > From: buildroot-bounces at uclibc.org
-> > [mailto:buildroot-bounces at uclibc.org] On Behalf Of Steve Calfee
-> > Sent: Sunday, March 23, 2008 10:51 AM
-> > To: buildroot at uclibc.org
-> > Subject: Re: [Buildroot] build problems
-> >
-> >
-> > Hi All,
-> >
-> > I used buildroot a couple of years ago successfully with a
-> > samsung 2410 soc.
-> >
-> > I am now trying to use it for a new project. My problem is I
-> > cannot get any build to work.
-> >
-> > Has anyone done a svn update and select a default config and
-> > have it build? I want to build an arm system, but first I
-> > would like some default config to build. I am using ubuntu
-> > feisty and think I have installed all the required tools. The
-> > mailing list seems to be quite active, but things seem to be
-> > in chaos. Can anyone tell me a starting place that is known to work?
-> >
-> > Thanks, Steve
-> >
-> >
-> >
-> >
-> > ______________________________________________________________
-> > ______________________
-> > Be a better friend, newshound, and
-> > know-it-all with Yahoo! Mobile.  Try it now.
-> > http://mobile.yahoo.com/;_ylt=Ahu06i62sR8HDtDypao8Wcj9tAcJ
-> > _______________________________________________
-> > buildroot mailing list
-> > buildroot at uclibc.org http://busybox.net/mailman/listinfo/buildroot
-> >
-> _______________________________________________
-> buildroot mailing list
-> buildroot at uclibc.org
-> http://busybox.net/mailman/listinfo/buildroot
->
+I have just successfully used Buildroot to create for myself a filesystem
+image, and also an .iso as well using the buildroot options. I looked in the
+mailing list archives and I found some posts noting that buildroot doesn't
+support initrd? Can direct me on how I can boot off the RAM disk? I found
+general tutorials on creating the initrd, and was wondering if I should
+start there. Thank you for your help!
 -------------- next part --------------
 An HTML attachment was scrubbed...
-URL: http://busybox.net/lists/buildroot/attachments/20080324/3ef03030/attachment.htm 
+URL: http://busybox.net/lists/buildroot/attachments/20080324/23d6fedf/attachment.htm 
