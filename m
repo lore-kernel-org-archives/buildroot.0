@@ -1,86 +1,60 @@
-From: bugs at busybox.net <bugs@busybox.net>
-Date: Mon, 24 Mar 2008 10:14:23 -0700
-Subject: [Buildroot] [buildroot 0002634]: path to ncurses seems to contain
-	extra 'gnu/'
-Message-ID: <63bbbfcd98df8c1450360c376e6652fb@busybox.net>
+From: Reinier Coetzer <reinier.coetzer@gmail.com>
+Date: Mon, 24 Mar 2008 20:39:48 +0200
+Subject: [Buildroot] Fwd: Buildroot compilation error with 2.6.18.8 kernel
+In-Reply-To: <823018ed0803191118j6146663l8a4f9bc53af05fb8@mail.gmail.com>
+References: <823018ed0803191118j6146663l8a4f9bc53af05fb8@mail.gmail.com>
+Message-ID: <823018ed0803241139j4ebf4034qb9cf5c8cb8525dd8@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+Hi all,
 
-A NOTE has been added to this issue. 
-====================================================================== 
-http://busybox.net/bugs/view.php?id=2634 
-====================================================================== 
-Reported By:                travishein
-Assigned To:                buildroot
-====================================================================== 
-Project:                    buildroot
-Issue ID:                   2634
-Category:                   Other
-Reproducibility:            always
-Severity:                   minor
-Priority:                   normal
-Status:                     assigned
-====================================================================== 
-Date Submitted:             03-22-2008 09:42 PDT
-Last Modified:              03-24-2008 10:14 PDT
-====================================================================== 
-Summary:                    path to ncurses seems to contain extra 'gnu/'
-Description: 
-The value of the variable $(BR2_GNU_MIRROR) seems to contain the /gnu/ path
-component, so in the package/ncurses/ncurses.mk where it includes
-gnu/ncurses again it is not finding it
-====================================================================== 
+I noticed that no one responded to my previous post, so I'm trying again. If
+there is something wrong with
+how I post please let me know!
 
----------------------------------------------------------------------- 
- travishein - 03-22-08 13:21  
----------------------------------------------------------------------- 
-hmm actually everything that relies on the BR2_GNU_MIRROR variable is
-currently suffering from this issue.
+I want to cross-compile for my EBOX with a Vortex86SX CPU (
+http://www.dmp.com.tw/tech/vortex86sx/).
+The problem is that I have to use the 2.6.18.8 kernel as described by DMP. I
+configured everything
+with menuconfig, but I cant select kernel headers earlier than 2.6.21 for my
+toolchain in menuconfig and I
+have a feeling that is why I get the following error:
 
-Im not sure, if the BR2_GNU_MIRROR in the .config (and .defconfig) should
-be changed from http://ftp.gnu.org/pub/gnu to http://ftp.gnu.org/pub
+if [ -r System.map -a -x
+/home/harry/Desktop/buildroot/build_i486/staging_dir/bin/i486-linux-depmod26
+]; then
+/home/harry/Desktop/buildroot/build_i486/staging_dir/bin/i486-linux-depmod26
+-ae -F System.map -b
+/home/harry/Desktop/buildroot/project_build_i486/Agritel/root -r
+2.6.18.8-DMP; fi
+make[1]: Leaving directory
+`/home/harry/Desktop/buildroot/project_build_i486/Agritel/linux-2.6.18.8'
+rm -f
+/home/harry/Desktop/buildroot/project_build_i486/Agritel/root/lib/modules/2.6.18.8/build
+rm -f
+/home/harry/Desktop/buildroot/project_build_i486/Agritel/root/lib/modules/2.6.18.8/source
+/home/harry/Desktop/buildroot/build_i486/staging_dir/bin/i486-linux-depmod26
+-b /home/harry/Desktop/buildroot/project_build_i486/Agritel/root 2.6.23
+WARNING: Couldn't open directory
+/home/harry/Desktop/buildroot/project_build_i486/Agritel/root/lib/modules/2.6.23:
+No such file or directory
+FATAL: Could not open
+/home/harry/Desktop/buildroot/project_build_i486/Agritel/root/lib/modules/2.6.23/modules.dep.temp
+for writing: No such file or directory
+make: ***
+[/home/harry/Desktop/buildroot/project_build_i486/Agritel/root/lib/modules/2.6.18.8/modules.dep]
+Error 1
 
-or if the following package that refer to BR2_GNU_MIRROR should have their
-path updated ?
+I dont know what to change in order to avoid this error. I'm rather new to
+kernel compilation so a detailed answer would be very much appreciated.
+Thanks in advance!
 
-package/gawk/gawk.mk
-package/gzip/gzip.mk
-package/autoconf/autoconf.mk
-package/ncurses/ncurses.mk
-package/findutils/findutils.mk
-package/gettext/gettext.mk
-package/editors/ed/ed.mk
-package/bash/bash.mk
-package/diffutils/diffutils.mk
-package/wget/wget.mk
-package/tar/tar.mk
-package/m4/m4.mk
-package/make/make.mk
-package/bison/bison.mk
-package/sed/sed.mk
-package/automake/automake.mk
-package/readline/readline.mk
-package/libtool/libtool.mk
-package/coreutils/coreutils.mk 
-
----------------------------------------------------------------------- 
- gnat - 03-24-08 10:14  
----------------------------------------------------------------------- 
-a patch to fix all gnu packages is attached to bug
-http://busybox.net/bugs/view.php?id=2654. 
-
-Issue History 
-Date Modified   Username       Field                    Change               
-====================================================================== 
-03-22-08 09:42  travishein     New Issue                                    
-03-22-08 09:42  travishein     Status                   new => assigned     
-03-22-08 09:42  travishein     Assigned To               => buildroot       
-03-22-08 09:42  travishein     File Added: ncurses_path_20080321.diff           
-        
-03-22-08 13:21  travishein     Note Added: 0005834                          
-03-24-08 10:14  gnat           Note Added: 0005854                          
-======================================================================
+Kind Regards
+  Reinier
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: http://busybox.net/lists/buildroot/attachments/20080324/b0845abf/attachment-0001.htm 
