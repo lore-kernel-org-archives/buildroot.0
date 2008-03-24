@@ -1,103 +1,97 @@
-From: Haresh_Eswari at Dell.com <Haresh_Eswari@Dell.com>
-Date: Mon, 24 Mar 2008 15:37:28 +0530
-Subject: [Buildroot] Creating rootfs
-Message-ID: <4112A5EBE8485449B6A0F7F0D12F48F12EEA68@blrx3m14.blr.amer.dell.com>
+From: John Voltz <john.voltz@gmail.com>
+Date: Mon, 24 Mar 2008 06:32:02 -0400
+Subject: [Buildroot] rpm & buildroot
+In-Reply-To: <1206343539.3605.1.camel@nigel-x60>
+References: <1206343539.3605.1.camel@nigel-x60>
+Message-ID: <46a136670803240332w469c8e59s169b3ba1ccfe2c1e@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi,
+Nigel,
 
-I am new to linux and I need to create rootfs for my target. I have my
-compiled busybox, net-tools and some other open source libraries for my
-MIPS processor. I need to intergrate with this root file system and
-create new rootfs.zip.
+Why RPM? Busybox has facilities for dpkg, and I added ipkg to buildroot
+recently too. Isn't RPM a little bit too much of a resource hog for embedded
+use? I know it would be nice, but is it really practical?
 
-I have /root,/bin,/etc,/lib,/proc,/mipsel-linux directories.
-
-i got the following info from google
-
-isting 4. Utility (mkird) to create a custom initrd 
-
-#!/bin/bash
-
-# Housekeeping...
-rm -f /tmp/ramdisk.img
-rm -f /tmp/ramdisk.img.gz
-
-# Ramdisk Constants
-RDSIZE=4000
-BLKSIZE=1024
-
-# Create an empty ramdisk image
-dd if=/dev/zero of=/tmp/ramdisk.img bs=$BLKSIZE count=$RDSIZE
-
-# Make it an ext2 mountable file system
-/sbin/mke2fs -F -m 0 -b $BLKSIZE /tmp/ramdisk.img $RDSIZE
-
-# Mount it so that we can populate
-mount /tmp/ramdisk.img /mnt/initrd -t ext2 -o loop=/dev/loop0
-
-# Populate the filesystem (subdirectories)
-mkdir /mnt/initrd/bin
-mkdir /mnt/initrd/sys
-mkdir /mnt/initrd/dev
-mkdir /mnt/initrd/proc
-
-# Grab busybox and create the symbolic links
-pushd /mnt/initrd/bin
-cp /usr/local/src/busybox-1.1.1/busybox .
-ln -s busybox ash
-ln -s busybox mount
-ln -s busybox echo
-ln -s busybox ls
-ln -s busybox cat
-ln -s busybox ps
-ln -s busybox dmesg
-ln -s busybox sysctl
-popd
-
-# Grab the necessary dev files
-cp -a /dev/console /mnt/initrd/dev
-cp -a /dev/ramdisk /mnt/initrd/dev
-cp -a /dev/ram0 /mnt/initrd/dev
-cp -a /dev/null /mnt/initrd/dev
-cp -a /dev/tty1 /mnt/initrd/dev
-cp -a /dev/tty2 /mnt/initrd/dev
-
-# Equate sbin with bin
-pushd /mnt/initrd
-ln -s bin sbin
-popd
-
-# Create the init file
-cat >> /mnt/initrd/linuxrc << EOF
-#!/bin/ash
-echo
-echo "Simple initrd is active"
-echo
-mount -t proc /proc /proc
-mount -t sysfs none /sys
-/bin/ash --login
-EOF
-
-chmod +x /mnt/initrd/linuxrc
-
-# Finish up...
-umount /mnt/initrd
-gzip -9 /tmp/ramdisk.img
-cp /tmp/ramdisk.img.gz /boot/ramdisk.img.gz	
-
-Is this a way to create root file system? Please let me know as soon as
-possible.
-
-Thanks,
-Haresh E.L.
+John Voltz
 
 
+On Mon, Mar 24, 2008 at 3:25 AM, Nigel Kukard <nkukard@lbsd.net> wrote:
 
+> Hi Guys,
+>
+> I'm working on adding rpm to buildroot and after 3 days of working and
+> hacking rpm to be uclibc compatible I've got this problem...
+>
+> Is it obvious what I"m doing wrong or something I can do to track this
+> issue further?
+>
+> # rpm
+> argc=1 argv=0xbff8dc74 envp=0xbff8dc7c
+> ELF header=0xb7f90000
+> First Dynamic section entry=0xb7f9aefc
+> Scanning DYNAMIC section
+> Done scanning DYNAMIC section
+> About to do library loader relocations
+> Done relocating ldso; we can now use globals and make function calls!
+> _dl_get_ready_to_run:169: Cool, ldso survived making function calls
+> _dl_get_ready_to_run:261: Position Independent Executable:
+> app_tpnt->loadaddr=0x80000000
+> _dl_malloc:892: mmapping more memory
+> _dl_get_ready_to_run:340: Lib Loader: (0xb7f90000) /lib/ld-uClibc.so.0
+> _dl_get_ready_to_run:609: Loading: (0xb7f1e000) /usr/lib/librpm-4.4.so
+> _dl_get_ready_to_run:609: Loading: (0xb7dd4000) /usr/lib/librpmdb-4.4.so
+> _dl_get_ready_to_run:609: Loading: (0xb7d4b000) /usr/lib/librpmio-4.4.so
+> _dl_get_ready_to_run:609: Loading: (0xb7d45000) /usr/lib/libpopt.so.0
+> _dl_get_ready_to_run:609: Loading:
+> (0xb7d10000) /usr/lib/libbeecrypt.so.6
+> _dl_get_ready_to_run:609: Loading: (0xb7cfb000) /usr/lib/libneon.so.25
+> _dl_get_ready_to_run:609: Loading: (0xb7cda000) /usr/lib/libexpat.so.1
+> _dl_get_ready_to_run:609: Loading: (0xb7cc9000) /lib/libm.so.0
+> _dl_get_ready_to_run:609: Loading: (0xb7cc4000) /lib/libdl.so.0
+> _dl_get_ready_to_run:609: Loading: (0xb7cb4000) /usr/lib/libz.so.1
+> _dl_get_ready_to_run:609: Loading: (0xb7c9e000) /lib/libpthread.so.0
+> _dl_get_ready_to_run:609: Loading: (0xb7c39000) /lib/libc.so.0
+> _dl_get_ready_to_run:609: Loading: (0xb7dd4000) /usr/lib/librpmdb-4.4.so
+> _dl_get_ready_to_run:609: Loading: (0xb7d4b000) /usr/lib/librpmio-4.4.so
+> _dl_get_ready_to_run:609: Loading: (0xb7d45000) /usr/lib/libpopt.so.0
+> _dl_get_ready_to_run:609: Loading: (0xb7c39000) /lib/libc.so.0
+> _dl_get_ready_to_run:609: Loading: (0xb7d4b000) /usr/lib/librpmio-4.4.so
+> _dl_get_ready_to_run:609: Loading: (0xb7d45000) /usr/lib/libpopt.so.0
+> _dl_get_ready_to_run:609: Loading: (0xb7c9e000) /lib/libpthread.so.0
+> _dl_get_ready_to_run:609: Loading: (0xb7c39000) /lib/libc.so.0
+> _dl_get_ready_to_run:609: Loading:
+> (0xb7d10000) /usr/lib/libbeecrypt.so.6
+> _dl_get_ready_to_run:609: Loading: (0xb7cfb000) /usr/lib/libneon.so.25
+> _dl_get_ready_to_run:609: Loading: (0xb7cc9000) /lib/libm.so.0
+> _dl_get_ready_to_run:609: Loading: (0xb7cc4000) /lib/libdl.so.0
+> _dl_get_ready_to_run:609: Loading: (0xb7cb4000) /usr/lib/libz.so.1
+> _dl_get_ready_to_run:609: Loading: (0xb7c9e000) /lib/libpthread.so.0
+> _dl_get_ready_to_run:609: Loading: (0xb7c39000) /lib/libc.so.0
+> _dl_get_ready_to_run:609: Loading: (0xb7c39000) /lib/libc.so.0
+> _dl_get_ready_to_run:609: Loading: (0xb7c9e000) /lib/libpthread.so.0
+> _dl_get_ready_to_run:609: Loading: (0xb7cc4000) /lib/libdl.so.0
+> _dl_get_ready_to_run:609: Loading: (0xb7c39000) /lib/libc.so.0
+> _dl_get_ready_to_run:609: Loading: (0xb7cb4000) /usr/lib/libz.so.1
+> _dl_get_ready_to_run:609: Loading: (0xb7cda000) /usr/lib/libexpat.so.1
+> _dl_get_ready_to_run:609: Loading: (0xb7c39000) /lib/libc.so.0
+> _dl_get_ready_to_run:609: Loading: (0xb7c39000) /lib/libc.so.0
+> _dl_get_ready_to_run:609: Loading: (0xb7c39000) /lib/libc.so.0
+> _dl_get_ready_to_run:609: Loading: (0xb7c39000) /lib/libc.so.0
+> _dl_get_ready_to_run:609: Loading: (0xb7c39000) /lib/libc.so.0
+> _dl_get_ready_to_run:609: Loading: (0xb7c39000) /lib/libc.so.0
+> _dl_get_ready_to_run:736: Beginning relocation fixups
+> Segmentation fault
+>
+>
+> _______________________________________________
+> buildroot mailing list
+> buildroot at uclibc.org
+> http://busybox.net/mailman/listinfo/buildroot
+>
 -------------- next part --------------
 An HTML attachment was scrubbed...
-URL: http://busybox.net/lists/buildroot/attachments/20080324/18a50889/attachment.htm 
+URL: http://busybox.net/lists/buildroot/attachments/20080324/55b5c1e9/attachment-0001.htm 
