@@ -1,8 +1,8 @@
 From: bugs at busybox.net <bugs@busybox.net>
-Date: Mon, 24 Mar 2008 10:12:21 -0700
-Subject: [Buildroot] [buildroot 0002654]: Snapshot downloads ncurses-5.6
-	from incorrect location
-Message-ID: <974af305129668155b892b8c1e9a2de0@busybox.net>
+Date: Mon, 24 Mar 2008 10:14:23 -0700
+Subject: [Buildroot] [buildroot 0002634]: path to ncurses seems to contain
+	extra 'gnu/'
+Message-ID: <63bbbfcd98df8c1450360c376e6652fb@busybox.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -12,43 +12,75 @@ To: buildroot@busybox.net
 
 A NOTE has been added to this issue. 
 ====================================================================== 
-http://busybox.net/bugs/view.php?id=2654 
+http://busybox.net/bugs/view.php?id=2634 
 ====================================================================== 
-Reported By:                jbruchon
+Reported By:                travishein
 Assigned To:                buildroot
 ====================================================================== 
 Project:                    buildroot
-Issue ID:                   2654
+Issue ID:                   2634
 Category:                   Other
 Reproducibility:            always
 Severity:                   minor
 Priority:                   normal
 Status:                     assigned
 ====================================================================== 
-Date Submitted:             03-23-2008 07:44 PDT
-Last Modified:              03-24-2008 10:12 PDT
+Date Submitted:             03-22-2008 09:42 PDT
+Last Modified:              03-24-2008 10:14 PDT
 ====================================================================== 
-Summary:                    Snapshot downloads ncurses-5.6 from incorrect
-location
+Summary:                    path to ncurses seems to contain extra 'gnu/'
 Description: 
-buildroot-snapshot from 2008-03-23 attempted to download ncurses-5.6 from
-the GNU mirror, and stopped because the URL had "/pub/gnu/gnu/ncurses"
-instead of "/pub/gnu/ncurses".  Downloading manually and placing
-ncurses-5.6.tar.gz in the dl/ directory successfully works around the
-error.
+The value of the variable $(BR2_GNU_MIRROR) seems to contain the /gnu/ path
+component, so in the package/ncurses/ncurses.mk where it includes
+gnu/ncurses again it is not finding it
 ====================================================================== 
 
 ---------------------------------------------------------------------- 
- gnat - 03-24-08 10:12  
+ travishein - 03-22-08 13:21  
 ---------------------------------------------------------------------- 
-the patch above fixes this and other gnu download path software. 
+hmm actually everything that relies on the BR2_GNU_MIRROR variable is
+currently suffering from this issue.
+
+Im not sure, if the BR2_GNU_MIRROR in the .config (and .defconfig) should
+be changed from http://ftp.gnu.org/pub/gnu to http://ftp.gnu.org/pub
+
+or if the following package that refer to BR2_GNU_MIRROR should have their
+path updated ?
+
+package/gawk/gawk.mk
+package/gzip/gzip.mk
+package/autoconf/autoconf.mk
+package/ncurses/ncurses.mk
+package/findutils/findutils.mk
+package/gettext/gettext.mk
+package/editors/ed/ed.mk
+package/bash/bash.mk
+package/diffutils/diffutils.mk
+package/wget/wget.mk
+package/tar/tar.mk
+package/m4/m4.mk
+package/make/make.mk
+package/bison/bison.mk
+package/sed/sed.mk
+package/automake/automake.mk
+package/readline/readline.mk
+package/libtool/libtool.mk
+package/coreutils/coreutils.mk 
+
+---------------------------------------------------------------------- 
+ gnat - 03-24-08 10:14  
+---------------------------------------------------------------------- 
+a patch to fix all gnu packages is attached to bug
+http://busybox.net/bugs/view.php?id=2654. 
 
 Issue History 
 Date Modified   Username       Field                    Change               
 ====================================================================== 
-03-23-08 07:44  jbruchon       New Issue                                    
-03-23-08 07:44  jbruchon       Status                   new => assigned     
-03-23-08 07:44  jbruchon       Assigned To               => buildroot       
-03-24-08 10:12  gnat           File Added: gnu_path.diff                    
-03-24-08 10:12  gnat           Note Added: 0005844                          
+03-22-08 09:42  travishein     New Issue                                    
+03-22-08 09:42  travishein     Status                   new => assigned     
+03-22-08 09:42  travishein     Assigned To               => buildroot       
+03-22-08 09:42  travishein     File Added: ncurses_path_20080321.diff           
+        
+03-22-08 13:21  travishein     Note Added: 0005834                          
+03-24-08 10:14  gnat           Note Added: 0005854                          
 ======================================================================
