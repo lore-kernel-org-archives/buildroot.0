@@ -1,45 +1,62 @@
-From: John Voltz <john.voltz@gmail.com>
-Date: Mon, 24 Mar 2008 07:37:11 -0400
-Subject: [Buildroot] rpm & buildroot
-In-Reply-To: <1206355410.3605.5.camel@nigel-x60>
-References: <1206343539.3605.1.camel@nigel-x60>
-	<46a136670803240332w469c8e59s169b3ba1ccfe2c1e@mail.gmail.com>
-	<1206355410.3605.5.camel@nigel-x60>
-Message-ID: <46a136670803240437k1bb9234fm7643e2d410ee1c99@mail.gmail.com>
+From: Tim Barr <tbarr@multitech.com>
+Date: Mon, 24 Mar 2008 07:45:19 -0500
+Subject: [Buildroot] build problems
+Message-ID: <1CD05B980C94AC408B37C82BBABAA3E60ACA76FC@mtsexchange.dc.multitech.prv>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-I just assume most people use buildroot for embedded devices, but I guess
-it's not restricted to that alone :)
+I have had a similar problem, Steve. I wonder if any of the maintainers
+has tried running buildroot after a dirclean recently? Or cleared out
+the download directory to see if any package download interfaces have
+changed? I have been trying to get a successful buildroot process (for
+an AT91SAM9260EK) to complete for over 3 months now with no luck
+whatsoever. I ended up having to buy a Timesys linuxlink license in
+order to move forward.
 
-Did you try using strace or maybe run it in a gdbserver? I use Eclipse with
-the RSE (Remote System Explorer) plugins. You can easily debug over ethernet
-this way. I wrote a quick how-to for AVR32 but it will work just the same
-for x86.
+Timothy Barr
+Hardware Development Engineer
+for Multi-Tech Systems, Inc.
+tbarr at multitech.com
 
-http://avr32linux.org/twiki/bin/view/Main/RemoteDebugging
 
-John
 
-On Mon, Mar 24, 2008 at 6:43 AM, Nigel Kukard <nkukard@lbsd.net> wrote:
-
->
-> > Why RPM? Busybox has facilities for dpkg, and I added ipkg to
-> > buildroot recently too. Isn't RPM a little bit too much of a resource
-> > hog for embedded use? I know it would be nice, but is it really
-> > practical?
->
-> Not for embedded use.
->
-> I'm using it for a rescue initramfs for x86's.
->
-> Buildroot isn't restricted to embedded use is it?   ;)
->
-> -N
->
--------------- next part --------------
-An HTML attachment was scrubbed...
-URL: http://busybox.net/lists/buildroot/attachments/20080324/839413ae/attachment.htm 
+> -----Original Message-----
+> From: buildroot-bounces at uclibc.org 
+> [mailto:buildroot-bounces at uclibc.org] On Behalf Of Steve Calfee
+> Sent: Sunday, March 23, 2008 10:51 AM
+> To: buildroot at uclibc.org
+> Subject: Re: [Buildroot] build problems
+> 
+> 
+> Hi All,
+> 
+> I used buildroot a couple of years ago successfully with a 
+> samsung 2410 soc.
+> 
+> I am now trying to use it for a new project. My problem is I 
+> cannot get any build to work.
+>  
+> Has anyone done a svn update and select a default config and 
+> have it build? I want to build an arm system, but first I 
+> would like some default config to build. I am using ubuntu 
+> feisty and think I have installed all the required tools. The 
+> mailing list seems to be quite active, but things seem to be 
+> in chaos. Can anyone tell me a starting place that is known to work?
+> 
+> Thanks, Steve
+> 
+> 
+> 
+>       
+> ______________________________________________________________
+> ______________________
+> Be a better friend, newshound, and 
+> know-it-all with Yahoo! Mobile.  Try it now.  
+> http://mobile.yahoo.com/;_ylt=Ahu06i62sR8HDtDypao8Wcj9tAcJ
+> _______________________________________________
+> buildroot mailing list
+> buildroot at uclibc.org http://busybox.net/mailman/listinfo/buildroot
+> 
