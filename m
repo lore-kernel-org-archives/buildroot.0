@@ -1,34 +1,26 @@
-From: jacmet at uclibc.org <jacmet@uclibc.org>
-Date: Tue, 25 Mar 2008 01:49:39 -0700 (PDT)
-Subject: [Buildroot] svn commit: trunk/buildroot/package/php
-Message-ID: <20080325084939.859043C3C5@busybox.net>
+From: Ulf Samuelsson <ulf.samuelsson@atmel.com>
+Date: Tue, 25 Mar 2008 09:45:18 +0100
+Subject: [Buildroot] avr32 breakage
+References: <46a136670803211342if9a5d93m6b4f821a165dac26@mail.gmail.com>
+Message-ID: <049901c88e5d$528dda30$070514ac@atmel.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Author: jacmet
-Date: 2008-03-25 01:49:38 -0700 (Tue, 25 Mar 2008)
-New Revision: 21490
-
-Log:
-php: hide extensions menu if not enabled
 
 
-Modified:
-   trunk/buildroot/package/php/Config.in
+>I can say without a doubt now that the avr32 gcc patches are bad. I created
+> a bootable ext3 image for x86 and ran it in qemu, everything works fine.
+> Blackbox works fine in X too. I wasn't able to get Webkit+Midori to run
+> because I didn't have time before I left the shop. I will report back with
+> more later.
+> 
+> John
+>
 
+Did you build using the external source, or internal source.
 
-Changeset:
-Modified: trunk/buildroot/package/php/Config.in
-===================================================================
---- trunk/buildroot/package/php/Config.in	2008-03-25 07:49:43 UTC (rev 21489)
-+++ trunk/buildroot/package/php/Config.in	2008-03-25 08:49:38 UTC (rev 21490)
-@@ -31,4 +31,6 @@
-         help
-           fast cgi interface for php
- 
-+if BR2_PACKAGE_PHP
- source "package/php/Config.ext"
-+endif
+Best Regards
+Ulf Samuelsson
