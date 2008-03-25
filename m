@@ -1,29 +1,39 @@
 From: Ulf Samuelsson <ulf.samuelsson@atmel.com>
-Date: Tue, 25 Mar 2008 11:10:42 +0100
-Subject: [Buildroot] build problems
-References: <772424.36220.qm@web58210.mail.re3.yahoo.com>
-Message-ID: <071101c88e62$eaf568b0$070514ac@atmel.com>
+Date: Tue, 25 Mar 2008 11:17:07 +0100
+Subject: [Buildroot] Problem with buildroot and AT91SAM9260EK
+References: <1CD05B980C94AC408B37C82BBABAA3E60ACA766E@mtsexchange.dc.multitech.prv>
+Message-ID: <071201c88e62$ec118710$070514ac@atmel.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+> I did a dirclean to basically start with a baseline make. When I do a
+> "make menuconfig" and select arm architecture, then go to: 
+>                    target options--> Atmel Device Support--> Board
+> Support for Atmel
+> and set the AT91 device to a AT91SAM9260, for the development board
+> support selections I get the choice of AT91SAM9260DFC, AT91SAM9260EK, or
+> AT91SAM9XE-EK. But in the target/device/atmel directory there is only a
+> at91sam9260dfc and at91sam9260pf directory. So if I pick the
+> at91sam9260ek I get an error when try to a "make configured" because it
+> is looking for files in a nonexistent directory. So my first question is
+> whether there is supposed to be an at91sam9260ek directory? Or is the
+> at91sam9260dfc the proper one to use even if you are using the board
+> mounted DataFlash device?
 
+Only at91sam9260dfc gets regularily tested by me at this point.
+Patches for other things is welcome.
 
-> Hi All,
-> 
-> I used buildroot a couple of years ago successfully with a samsung 2410 soc.
-> 
-> I am now trying to use it for a new project. My problem is I cannot get any build to work.
-> 
-> Has anyone done a svn update and select a default config and have it build? I want to build an arm system, but first I would like some default config to build. I am using ubuntu feisty and think I have installed all the required tools. The mailing list seems to be quite active, but things seem to be in chaos. Can anyone tell me a starting place that is known to work?
-> 
-> Thanks, Steve
-> 
-There is no support for SAMSUNG 2410, which in practice means
-that you have to disable building linux/U-boot etc, and only build the root fs.
-
+If you want to use the internal dataflash, then you can
+download binaries for u-boot/dataflashboot from www.linux4sam.org 
+Root fs should be the same.
 
 Best Regards
-Ulf Samuelsson
+Ulf Samuelsson                ulf at atmel.com
+Atmel Nordic AB
+Mail:  Box 2033, 174 02 Sundbyberg, Sweden
+Visit:  Kavalleriv?gen 24, 174 58 Sundbyberg, Sweden
+Phone +46 (8) 441 54 22     Fax +46 (8) 441 54 29
+GSM    +46 (706) 22 44 57
