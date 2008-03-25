@@ -1,99 +1,71 @@
-From: bugs at busybox.net <bugs@busybox.net>
-Date: Tue, 25 Mar 2008 09:23:36 -0700
-Subject: [Buildroot] [buildroot 0002604]: Unable to compile Buildroot
-Message-ID: <95cac1b60969f9ebb6bbe097b4942584@bugs.busybox.net>
+From: Jean-Christian de Rivaz <jc@eclis.ch>
+Date: Tue, 25 Mar 2008 18:31:48 +0100
+Subject: [Buildroot] question about /tftpboot
+In-Reply-To: <00da01c88e8c$9254dd60$070514ac@atmel.com>
+References: <d449ded70803211040i68f1d764gac70fdd27632ded5@mail.gmail.com>
+	<47E3F85A.7000608@eclis.ch>
+	<071301c88e62$eced8f30$070514ac@atmel.com>
+	<47E8DBA5.3040304@eclis.ch>
+	<00da01c88e8c$9254dd60$070514ac@atmel.com>
+Message-ID: <47E93704.6070804@eclis.ch>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+Ulf Samuelsson a ?crit :
+>> The idea to use only one symbol cam after I see that there is two of 
+>> them for Atmel targets. I still don't see why something would go wrong 
+>> if the BR2_TARGET_ATMEL_COPYTO will be replaced by the BR2_LINUX_COPYTO. 
+> 
+> Not running Linux on my laptop at the moment, so I cannot check the svn
+> but as I see it, you want to be able to copy the linux image to
+> 
+> 1) BINARIES_DIR
+> 2) root file system (option)
+> 3) A place where it is easy to download to the target using tftp,
+>     which defaults to "/tftpboot".
+>     It is OK, to make this programmable as long the default is used.
+>     As an option, we could add a shell symbol "BUILDROOT_TFTP_DIR"
+>     which overrides the menuconfig.
 
-A NOTE has been added to this issue. 
-====================================================================== 
-http://busybox.net/bugs/view.php?id=2604 
-====================================================================== 
-Reported By:                Graol
-Assigned To:                buildroot
-====================================================================== 
-Project:                    buildroot
-Issue ID:                   2604
-Category:                   Architecture Specific
-Reproducibility:            always
-Severity:                   block
-Priority:                   normal
-Status:                     assigned
-====================================================================== 
-Date Submitted:             03-14-2008 09:13 PDT
-Last Modified:              03-25-2008 09:23 PDT
-====================================================================== 
-Summary:                    Unable to compile Buildroot
-Description: 
-Hi,
+Ok, thanks for the explanation.
 
-I'm running a virtual machine with Debian 32 bits installed (on a Xeon
-core 2 server). I tried to install buildroot in x86_64 arch but I always
-get the same error at last:
+My two proposed patches only take care of the point number 3 in your 
+list. Currently there is two symbols used to copy some file into the 
+tftpboot directory: BR2_LINUX_COPYTO and BR2_TARGET_ATMEL_COPYTO.
 
-Unknown CPU given in --with-tune=core2.
-make[1]: *** [configure-gcc] Error 1
-make[1]: Leaving directory
-`/usr/src/buildroot/toolchain_build_x86_64/gcc-4.2.1-initial'
-make: ***
-[/usr/src/buildroot/toolchain_build_x86_64/gcc-4.2.1-initial/.compiled]
-Error 2
 
-====================================================================== 
+a) Each of this symbols cannot be set to anything other than "/tftpboot" 
+because the scripts that use them have hard coded "/tftpboot" into them. 
+  The 2 patches only fix for this simple problem. Without those patches 
+the BR2_LINUX_COPYTO and BR2_TARGET_ATMEL_COPYTO are actually almost 
+useless as modifying them are granted to fail because of the hard coded 
+path in the scripts.
 
----------------------------------------------------------------------- 
- Graol - 03-25-08 08:28  
----------------------------------------------------------------------- 
-CPU is Intel Core2 2.13 GHz (according to cpuinfo)
+Take for example the "target/linux/Makefile.in.advanced" file. It 3 
+lines with the path "/tftpboot" hard coded into it. My patch only 
+replace those "/tftpboot" by the symbol "$(BR2_LINUX_COPYTO)". Same 
+logic apply for the patch that replace the hard coded "/tftpboot" ba the 
+symbol "$(BR2_TARGET_ATMEL_COPYTO)" into the files 
+"target/device/Atmel/at91bootstrap/at91bootstrap.mk" and 
+"target/device/Atmel/u-boot/u-boot.mk".
 
-Toolchain Config: 
-- Toolchain type: Buildroot toolchain
-- target arch x86_64
-- variant arch core2
-- kernel headers 2.6.24.x
-- uClib = daily snapshot
-- busybox 1.9.x
-- gcc 4.2.1
-- binutils 2.18
-- multilib disabled
+Did you see anything wrong that prevent those small patches to be applyed ?
 
- 
 
----------------------------------------------------------------------- 
- Graol - 03-25-08 07:42  
----------------------------------------------------------------------- 
-I reinstalled the official 64 bits Debian distrib, then updated the kernel
-to 2.6.24.3 version. I changed sources list to testing repository to get
-gcc 4.3: nothing new, I still have the same error message (Unknown CPU).
+b) Yes there is several symbols that are used to copy the linux kernel, 
+but only the two symbols BR2_LINUX_COPYTO and BR2_TARGET_ATMEL_COPYTO 
+are set by default to copy files into the /tftpboot directory. In my 
+understanding there are both used for the exact same purpose: copy some 
+files (not only the linux kernel) into the right tftpboot directory 
+(possibly not alway "/tftpboot"). As there carry the same semantic, I 
+wonder why we need two of them as there will alway have the same value 
+to get a working setup. If there are alway the same, why not simply use 
+one of them (BR2_LINUX_COPYTO) and replace the second 
+(BR2_TARGET_ATMEL_COPYTO) by the first ?
 
- 
-
----------------------------------------------------------------------- 
- Graol - 03-25-08 09:23  
----------------------------------------------------------------------- 
-I solved the problem by specifying a Nocona CPU instead of a Core2 one.
-Seems like  the Core2 does not support EM64T technology, unlike the Xeaon
-Nocona. See http://softwarecommunity.intel.com/articles/eng/1699.htm 
-
-Issue History 
-Date Modified   Username       Field                    Change               
-====================================================================== 
-03-14-08 09:13  Graol          New Issue                                    
-03-14-08 09:13  Graol          Status                   new => assigned     
-03-14-08 09:13  Graol          Assigned To               => buildroot       
-03-14-08 09:13  Graol          Issue Monitored: Graol                       
-03-14-08 09:21  Graol          Note Added: 0005774                          
-03-25-08 07:41  Graol          Note Added: 0005894                          
-03-25-08 07:42  Graol          Note Edited: 0005894                         
-03-25-08 07:44  Graol          Note Edited: 0005774                         
-03-25-08 07:45  Graol          Note Edited: 0005774                         
-03-25-08 07:52  Graol          Issue End Monitor: Graol                     
-03-25-08 07:52  Graol          Issue Monitored: Graol                       
-03-25-08 07:56  Graol          Note Edited: 0005774                         
-03-25-08 08:28  Graol          Note Edited: 0005774                         
-03-25-08 09:23  Graol          Note Added: 0005904                          
-======================================================================
+Best Regards,
+-- 
+Jean-Christian de Rivaz
