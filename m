@@ -1,54 +1,62 @@
-From: John Voltz <john.voltz@gmail.com>
-Date: Tue, 25 Mar 2008 15:18:01 -0400
-Subject: [Buildroot] Linking Cups with dbus broken
-In-Reply-To: <47E93B5A.6060805@st.com>
-References: <47E93B5A.6060805@st.com>
-Message-ID: <46a136670803251218u2b5c669m1a550dc54b89c98b@mail.gmail.com>
+From: Samuelsson, Ulf <ulf.samuelsson@atmel.com>
+Date: 25 Mar 2008 13:10:14 +0000
+Subject: [Buildroot] avr32 breakage
+Message-ID: <026a01c88ebf$17ba0f82$85f0af0a@corp.atmel.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-CUPS shouldn't be getting selected by X, it is a dependency for the gtk
-printing backend. But anyway, I don't know if the latest cups version even
-supports the latest dbus. Unless you need some new feature of dbus, I would
-just roll the dbus version back. If you are using gtk, there is probably a
-way to disable the print backend so cups isn't required.
+Suggest you work with the 
+external source and apply
+patches against that.
 
-John Voltz
+Best Regards
+Ulf Samuelsson
 
-On Tue, Mar 25, 2008 at 1:50 PM, Christian SCHWARZ <christian.schwarz@st.com>
+-----Originalmeddelande-----
+Fr?n: John Voltz
+Skickat: tis 2008-03-25 12:34
+Till: Buildroot List
+?rende: Re: [Buildroot] avr32 breakage
+
+I used the internal source, without the AVR32 patches. I'm not sure what to
+do with the AVR32 stuff yet. gcc 4.2.1 creates unstable executables. I'm
+recommending that people use gcc 4.1.2 until something is done about 4.2.1.
+I'm generating and testing updated patches for 4.1.2 right now. I'll commit
+them if they don't cause problems with other arches and seem to be stable.
+
+John
+
+On Tue, Mar 25, 2008 at 4:45 AM, Ulf Samuelsson <ulf.samuelsson@atmel.com>
 wrote:
 
-> The linking of Cups with dbus does not work (any more). ARM11 target
-> with March 17th snapshot, dbus is 1.1.1 :
 >
-> ------------------------snip---------------------------------
-> subscriptions.o: In function `cupsd_send_dbus':
-> buildroot/build_arm/cups-1.3.5/scheduler/subscriptions.c:1334: undefined
-> reference to `dbus_message_append_iter_init'
-> buildroot/build_arm/cups-1.3.5/scheduler/subscriptions.c:1336: undefined
-> reference to `dbus_message_iter_append_string'
-> buildroot/build_arm/cups-1.3.5/scheduler/subscriptions.c:1339: undefined
-> reference to `dbus_message_iter_append_uint32'
-> buildroot/build_arm/cups-1.3.5/scheduler/subscriptions.c:1340: undefined
-> reference to `dbus_message_iter_append_string'
-> -------------------------snap--------------------------------
 >
-> The linker correctly finds the dbus libraries, but a grep/objdump
-> confirmed that the symbols are not in the dbus libraries. Might need to
-> bump the version?
+> >I can say without a doubt now that the avr32 gcc patches are bad. I
+> created
+> > a bootable ext3 image for x86 and ran it in qemu, everything works fine.
+> > Blackbox works fine in X too. I wasn't able to get Webkit+Midori to run
+> > because I didn't have time before I left the shop. I will report back
+> with
+> > more later.
+> >
+> > John
+> >
 >
-> CUPS is automatically selected when building X, is that really necessary?
+> Did you build using the external source, or internal source.
 >
-> cheers,
-> Christian
-> _______________________________________________
-> buildroot mailing list
-> buildroot at uclibc.org
-> http://busybox.net/mailman/listinfo/buildroot
+> Best Regards
+> Ulf Samuelsson
 >
+>
+
+
 -------------- next part --------------
-An HTML attachment was scrubbed...
-URL: http://busybox.net/lists/buildroot/attachments/20080325/44883936/attachment.htm 
+A non-text attachment was scrubbed...
+Name: UlfSamuelsson.vcf
+Type: application/octet-stream
+Size: 475 bytes
+Desc: UlfSamuelsson.vcf
+Url : http://busybox.net/lists/buildroot/attachments/20080325/c6e4278d/attachment.obj 
