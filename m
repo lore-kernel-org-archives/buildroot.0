@@ -1,39 +1,35 @@
 From: Ulf Samuelsson <ulf.samuelsson@atmel.com>
-Date: Tue, 25 Mar 2008 11:17:07 +0100
-Subject: [Buildroot] Problem with buildroot and AT91SAM9260EK
-References: <1CD05B980C94AC408B37C82BBABAA3E60ACA766E@mtsexchange.dc.multitech.prv>
-Message-ID: <071201c88e62$ec118710$070514ac@atmel.com>
+Date: Tue, 25 Mar 2008 11:08:30 +0100
+Subject: [Buildroot] build problems
+References: <1CD05B980C94AC408B37C82BBABAA3E60ACA76FC@mtsexchange.dc.multitech.prv>
+Message-ID: <071001c88e62$e99bf330$070514ac@atmel.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-> I did a dirclean to basically start with a baseline make. When I do a
-> "make menuconfig" and select arm architecture, then go to: 
->                    target options--> Atmel Device Support--> Board
-> Support for Atmel
-> and set the AT91 device to a AT91SAM9260, for the development board
-> support selections I get the choice of AT91SAM9260DFC, AT91SAM9260EK, or
-> AT91SAM9XE-EK. But in the target/device/atmel directory there is only a
-> at91sam9260dfc and at91sam9260pf directory. So if I pick the
-> at91sam9260ek I get an error when try to a "make configured" because it
-> is looking for files in a nonexistent directory. So my first question is
-> whether there is supposed to be an at91sam9260ek directory? Or is the
-> at91sam9260dfc the proper one to use even if you are using the board
-> mounted DataFlash device?
 
-Only at91sam9260dfc gets regularily tested by me at this point.
-Patches for other things is welcome.
+>I have had a similar problem, Steve. I wonder if any of the maintainers
+> has tried running buildroot after a dirclean recently? Or cleared out
+> the download directory to see if any package download interfaces have
+> changed? I have been trying to get a successful buildroot process (for
+> an AT91SAM9260EK) to complete for over 3 months now with no luck
+> whatsoever. I ended up having to buy a Timesys linuxlink license in
+> order to move forward.
+> 
+> Timothy Barr
+> Hardware Development Engineer
+> for Multi-Tech Systems, Inc.
+> tbarr at multitech.com
+> 
 
-If you want to use the internal dataflash, then you can
-download binaries for u-boot/dataflashboot from www.linux4sam.org 
-Root fs should be the same.
+I build  at91sam9260dfc_defconfig regularily on my 
+OpenSuSE 10.2 system and it seems to compile OK.
+If you add more packages using menuconfig, there could be
+problems of course.
+
+
 
 Best Regards
-Ulf Samuelsson                ulf at atmel.com
-Atmel Nordic AB
-Mail:  Box 2033, 174 02 Sundbyberg, Sweden
-Visit:  Kavalleriv?gen 24, 174 58 Sundbyberg, Sweden
-Phone +46 (8) 441 54 22     Fax +46 (8) 441 54 29
-GSM    +46 (706) 22 44 57
+Ulf Samuelsson 
