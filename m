@@ -1,9 +1,8 @@
 From: bugs at busybox.net <bugs@busybox.net>
-Date: Tue, 25 Mar 2008 03:51:11 -0700
-Subject: [Buildroot] [buildroot 0002394]: [PATCH] Use the
-	BR2_TARGET_ATMEL_COPYTO for the tftpboot path of the Atmel
-	bootstrap and uboot
-Message-ID: <e9c6f21bbfe104c6377a7869f17f8c88@bugs.uclibc.org>
+Date: Tue, 25 Mar 2008 03:52:22 -0700
+Subject: [Buildroot] [buildroot 0002384]: [PATCH] Use the BR2_LINUX_COPYTO
+	symbol for the tftpboot path of the kernel
+Message-ID: <25b157cba6c24d29376af03657e6fac6@bugs.uclibc.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,52 +12,54 @@ To: buildroot@busybox.net
 
 A NOTE has been added to this issue. 
 ====================================================================== 
-http://busybox.net/bugs/view.php?id=2394 
+http://busybox.net/bugs/view.php?id=2384 
 ====================================================================== 
 Reported By:                jcdr
 Assigned To:                buildroot
 ====================================================================== 
 Project:                    buildroot
-Issue ID:                   2394
-Category:                   Architecture Specific
+Issue ID:                   2384
+Category:                   Other
 Reproducibility:            always
 Severity:                   minor
 Priority:                   normal
 Status:                     assigned
 ====================================================================== 
-Date Submitted:             03-01-2008 14:28 PST
-Last Modified:              03-25-2008 03:51 PDT
+Date Submitted:             03-01-2008 14:22 PST
+Last Modified:              03-25-2008 03:52 PDT
 ====================================================================== 
-Summary:                    [PATCH] Use the BR2_TARGET_ATMEL_COPYTO for the
-tftpboot path of the Atmel bootstrap and uboot
+Summary:                    [PATCH] Use the BR2_LINUX_COPYTO symbol for the
+tftpboot path of the kernel
 Description: 
-The "/tftpboot" is hard coded into the file
-target/device/Atmel/at91bootstrap/at91bootstrap.mk and
-target/device/Atmel/u-boot/u-boot.mk. This stop the build with a
-permission error if the BR2_TARGET_ATMEL_COPYTO symbol is anything but
-"/tftpboot". Sadly, the last LSB and more an more distribution use
-"/var/lib/tftpboot".
+The target/linux/Makefile.in.advanced use hard coded "/tftoboot" string
+instead of using the already properly defined BR2_LINUX_COPYTO symbol that
+define it. This stop the build with an permission error if the
+BR2_LINUX_COPYTO symbol is anything but "/tftoboot". Sadly last LSB and
+thus more en more distribution use "/var/lib/tftpboot" instead of
+"/tftpboot".
 
-The provided patch in attachment fix this.
+Patch against current HEAD is provided to fix this problem. See
+attachment.
+
 
 ====================================================================== 
 
 ---------------------------------------------------------------------- 
- jcdr - 03-25-08 03:51  
+ jcdr - 03-25-08 03:52  
 ---------------------------------------------------------------------- 
-I have attached a new version of the patch "patch-tftpboot-atmel.diff" to
+I have attached a new version of the patch "patch-tftpboot-kernel.diff" to
 be applyed to the "Tue Mar 25 08:49:38 2008 +0000" SVN head. 
 
 Issue History 
 Date Modified   Username       Field                    Change               
 ====================================================================== 
-03-01-08 14:28  jcdr           New Issue                                    
-03-01-08 14:28  jcdr           Status                   new => assigned     
-03-01-08 14:28  jcdr           Assigned To               => buildroot       
-03-01-08 14:28  jcdr           File Added:
-0002-Use-the-BR2_TARGET_ATMEL_COPYTO-for-the-tftpboot-pat.patch                 
+03-01-08 14:22  jcdr           New Issue                                    
+03-01-08 14:22  jcdr           Status                   new => assigned     
+03-01-08 14:22  jcdr           Assigned To               => buildroot       
+03-01-08 14:22  jcdr           File Added:
+0001-Use-the-BR2_LINUX_COPYTO-symbol-for-the-tftpboot-pat.patch                 
   
-03-25-08 03:49  jcdr           File Added: patch-tftpboot-atmel.diff            
-       
-03-25-08 03:51  jcdr           Note Added: 0005864                          
+03-25-08 03:51  jcdr           File Added: patch-tftpboot-kernel.diff           
+        
+03-25-08 03:52  jcdr           Note Added: 0005874                          
 ======================================================================
