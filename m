@@ -1,65 +1,60 @@
-From: bugs at busybox.net <bugs@busybox.net>
-Date: Tue, 25 Mar 2008 03:52:22 -0700
-Subject: [Buildroot] [buildroot 0002384]: [PATCH] Use the BR2_LINUX_COPYTO
-	symbol for the tftpboot path of the kernel
-Message-ID: <25b157cba6c24d29376af03657e6fac6@bugs.uclibc.org>
+From: Jean-Christian de Rivaz <jc@eclis.ch>
+Date: Tue, 25 Mar 2008 12:01:57 +0100
+Subject: [Buildroot] question about /tftpboot
+In-Reply-To: <071301c88e62$eced8f30$070514ac@atmel.com>
+References: <d449ded70803211040i68f1d764gac70fdd27632ded5@mail.gmail.com>
+	<47E3F85A.7000608@eclis.ch>
+	<071301c88e62$eced8f30$070514ac@atmel.com>
+Message-ID: <47E8DBA5.3040304@eclis.ch>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+Ulf Samuelsson a ?crit :
+>> 
+>> Habib Bouaziz-Viallet a ?crit :
+>>> Hi all !
+>>>
+>>> I would like my tftp server provides access to another directory (e.g
+>>> /var/... param configured with /etc/inetd.conf  with my GNU Debian)
+>>>
+>>> '/ tftpboot'. Changing '/ tftpboot' is apparently not possible from
+>>> 'make menuconfig'
+>>>
+>>> How do i do ? Many thanks
+>>>
+>> 
+>> There is a symbol BR2_LINUX_COPYTO to adjust that. Some time ago I found 
+>> it broken by the target/linux/Makefile.in.advanced file and I proposed a 
+>> patch in this bug report: http://bugs.uclibc.org/view.php?id=2384
+>> 
+>> Maybe the situation is better now.
+ >
+ >The linux kernel should possibly be copied several times, and
+ >you cannot use a single symbol for this.
 
-A NOTE has been added to this issue. 
-====================================================================== 
-http://busybox.net/bugs/view.php?id=2384 
-====================================================================== 
-Reported By:                jcdr
-Assigned To:                buildroot
-====================================================================== 
-Project:                    buildroot
-Issue ID:                   2384
-Category:                   Other
-Reproducibility:            always
-Severity:                   minor
-Priority:                   normal
-Status:                     assigned
-====================================================================== 
-Date Submitted:             03-01-2008 14:22 PST
-Last Modified:              03-25-2008 03:52 PDT
-====================================================================== 
-Summary:                    [PATCH] Use the BR2_LINUX_COPYTO symbol for the
-tftpboot path of the kernel
-Description: 
-The target/linux/Makefile.in.advanced use hard coded "/tftoboot" string
-instead of using the already properly defined BR2_LINUX_COPYTO symbol that
-define it. This stop the build with an permission error if the
-BR2_LINUX_COPYTO symbol is anything but "/tftoboot". Sadly last LSB and
-thus more en more distribution use "/var/lib/tftpboot" instead of
-"/tftpboot".
+Thanks Ulf for your hint, but did you have a more precise example ? I 
+observed that only the Atmel targets uses a second symbol 
+BR2_TARGET_ATMEL_COPYTO.
 
-Patch against current HEAD is provided to fix this problem. See
-attachment.
+I have updated my two proposed patchs 
+http://bugs.uclibc.org/view.php?id=2384 and 
+http://bugs.uclibc.org/view.php?id=2394 to match the current SVN head. 
+There don't change the fact that there is two symbols, there only make 
+the COPYTOP symbols possibly work if the tftpboot directory is anything 
+other than "/tftpboot" like this is more and more the case on the new 
+distributions.
 
+The idea to use only one symbol cam after I see that there is two of 
+them for Atmel targets. I still don't see why something would go wrong 
+if the BR2_TARGET_ATMEL_COPYTO will be replaced by the BR2_LINUX_COPYTO. 
+ From my point of view this remove the confusion for the users to set 
+two symbols instead of a single one. I will propose a patch to do that 
+only if the first two will be accepted as this one will obviously be 
+useless without them.
 
-====================================================================== 
-
----------------------------------------------------------------------- 
- jcdr - 03-25-08 03:52  
----------------------------------------------------------------------- 
-I have attached a new version of the patch "patch-tftpboot-kernel.diff" to
-be applyed to the "Tue Mar 25 08:49:38 2008 +0000" SVN head. 
-
-Issue History 
-Date Modified   Username       Field                    Change               
-====================================================================== 
-03-01-08 14:22  jcdr           New Issue                                    
-03-01-08 14:22  jcdr           Status                   new => assigned     
-03-01-08 14:22  jcdr           Assigned To               => buildroot       
-03-01-08 14:22  jcdr           File Added:
-0001-Use-the-BR2_LINUX_COPYTO-symbol-for-the-tftpboot-pat.patch                 
-  
-03-25-08 03:51  jcdr           File Added: patch-tftpboot-kernel.diff           
-        
-03-25-08 03:52  jcdr           Note Added: 0005874                          
-======================================================================
+Best Regards,
+-- 
+Jean-Christian de Rivaz
