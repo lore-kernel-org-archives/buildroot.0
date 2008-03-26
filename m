@@ -1,7 +1,8 @@
 From: bugs at busybox.net <bugs@busybox.net>
-Date: Tue, 25 Mar 2008 20:32:37 -0700
-Subject: [Buildroot] [buildroot 0002644]: incorrect FTP address for NCURSES
-Message-ID: <f2001039caa6ed1eba2bce19cfa1b24d@bugs.uclibc.org>
+Date: Tue, 25 Mar 2008 20:33:22 -0700
+Subject: [Buildroot] [buildroot 0002564]: Inconsistent placement of "/gnu/"
+	in GNU mirror path
+Message-ID: <ea7d13306ff1a8b1a520d5fb1795f397@bugs.uclibc.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -11,41 +12,40 @@ To: buildroot@busybox.net
 
 The following issue has been RESOLVED. 
 ====================================================================== 
-http://busybox.net/bugs/view.php?id=2644 
+http://busybox.net/bugs/view.php?id=2564 
 ====================================================================== 
-Reported By:                testarx
+Reported By:                mth
 Assigned To:                buildroot
 ====================================================================== 
 Project:                    buildroot
-Issue ID:                   2644
-Category:                   Architecture Specific
+Issue ID:                   2564
+Category:                   Other
 Reproducibility:            always
-Severity:                   minor
+Severity:                   major
 Priority:                   normal
 Status:                     resolved
 Resolution:                 fixed
 Fixed in Version:           
 ====================================================================== 
-Date Submitted:             03-23-2008 00:14 PDT
-Last Modified:              03-25-2008 20:32 PDT
+Date Submitted:             03-13-2008 18:58 PDT
+Last Modified:              03-25-2008 20:33 PDT
 ====================================================================== 
-Summary:                    incorrect FTP address for NCURSES
+Summary:                    Inconsistent placement of "/gnu/" in GNU mirror path
 Description: 
-The address for ncurses is incorrectly computed as
-"http://ftp.gnu.org/pub/gnu"/gnu/ncurses/ncurses-5.6.tar.gz"
-which contains an extra /gnu/ 
+An example download path of a GNU tool looks like this
+"http://ftp.nluug.nl/pub/gnu/binutils/". The problem is that some packages
+expect the "/gnu/" segment to be part of BR2_GNU_MIRROR, while other
+packages expect the "/gnu/" segment to be part of the package-specific
+download location. As a result, it is not possible to set BR2_GNU_MIRROR
+in such a way that all GNU packages can be downloaded.
 
+I grepped the source tree and the majority of packages expects "/gnu/" in
+the package-specific download location. Therefore I changed the Makefiles
+of the packages that expected "/gnu/" to be part of BR2_GNU_MIRROR. A
+patch containing those changes is attached to this bug report.
 
-output:
-
-wget --passive-ftp  -P /home/x/Desktop/omap/buildroot/dl
-"http://ftp.gnu.org/pub/gnu"/gnu/ncurses/ncurses-5.6.tar.gz
---02:09:34--  http://ftp.gnu.org/pub/gnu/gnu/ncurses/ncurses-5.6.tar.gz
-           => `/home/x/Desktop/omap/buildroot/dl/ncurses-5.6.tar.gz'
-Resolving ftp.gnu.org... 140.186.70.20
-Connecting to ftp.gnu.org|140.186.70.20|:80... connected.
-HTTP request sent, awaiting response... 404 Not Found
-02:09:34 ERROR 404: Not Found.
+If the opposite approach is desired ("/gnu/" in BR2_GNU_MIRROR), let me
+know and I'll create a patch for that instead.
 
 ======================================================================
 Relationships       ID      Summary
@@ -53,14 +53,22 @@ Relationships       ID      Summary
 duplicate of        0002634 path to ncurses seems to contain extra ...
 ====================================================================== 
 
+---------------------------------------------------------------------- 
+ UlfSamuelsson - 03-13-08 23:30  
+---------------------------------------------------------------------- 
+I'd vote for having "/gnu/" included in BR2_GNU_MIRROR 
+
 Issue History 
 Date Modified   Username       Field                    Change               
 ====================================================================== 
-03-23-08 00:14  testarx        New Issue                                    
-03-23-08 00:14  testarx        Status                   new => assigned     
-03-23-08 00:14  testarx        Assigned To               => buildroot       
-03-25-08 20:32  hmoffatt       Relationship added       duplicate of 0002634
-03-25-08 20:32  hmoffatt       Duplicate ID             0 => 2634           
-03-25-08 20:32  hmoffatt       Status                   assigned => resolved
-03-25-08 20:32  hmoffatt       Resolution               open => fixed       
+03-13-08 18:58  mth            New Issue                                    
+03-13-08 18:58  mth            Status                   new => assigned     
+03-13-08 18:58  mth            Assigned To               => buildroot       
+03-13-08 18:58  mth            File Added: gnu-mirror-dir.diff                  
+ 
+03-13-08 23:30  UlfSamuelsson  Note Added: 0005734                          
+03-25-08 20:33  hmoffatt       Relationship added       duplicate of 0002634
+03-25-08 20:33  hmoffatt       Duplicate ID             0 => 2634           
+03-25-08 20:33  hmoffatt       Status                   assigned => resolved
+03-25-08 20:33  hmoffatt       Resolution               open => fixed       
 ======================================================================
