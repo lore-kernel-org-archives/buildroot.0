@@ -1,57 +1,171 @@
-From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Wed, 26 Mar 2008 22:41:48 +0100
-Subject: [Buildroot] using of local dir
-In-Reply-To: <032301c88f86$de33de70$060514ac@atmel.com> (Ulf Samuelsson's
-	message of "Wed\, 26 Mar 2008 21\:36\:02 +0100")
-References: <47EA8F05.8090102@gmx.net> <20080326180926.GA404@mx.loc>
-	<877ifp1bzg.fsf@macbook.be.48ers.dk>
-	<032301c88f86$de33de70$060514ac@atmel.com>
-Message-ID: <87hcetyxgj.fsf@macbook.be.48ers.dk>
+From: jacmet at uclibc.org <jacmet@uclibc.org>
+Date: Wed, 26 Mar 2008 14:49:59 -0700 (PDT)
+Subject: [Buildroot] svn commit: trunk/buildroot/package/busybox
+Message-ID: <20080326214959.9F2583C3A2@busybox.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Ulf" == Ulf Samuelsson <ulf.samuelsson@atmel.com> writes:
+Author: jacmet
+Date: 2008-03-26 14:49:58 -0700 (Wed, 26 Mar 2008)
+New Revision: 21510
 
-Hi,
-
- >> It indeed seems quite broken. The $LOCAL variable isn't used
- >> anywhere either.
-
- Ulf> Check "project.mk"
-
-Ahh. Why isn't the variable set there if it's only used in project.mk
-anyway?
+Log:
+busybox: bump 1.7.x and 1.8.x versions
 
 
- Bernhard> *shrug* I'd rip it out in a whim either way
- >> 
- >> Well, the local/save/getconfig stuff does seem kinda overengineered -
- >> Couldn't we just have a bunch of *_defconfig files under configs/
- >> instead with a make %_defconfig target like the kernel has instead?
- >> 
+Removed:
+   trunk/buildroot/package/busybox/busybox-1.7.4-grep.patch
+   trunk/buildroot/package/busybox/busybox-1.8.2-arping.patch
+   trunk/buildroot/package/busybox/busybox-1.8.2-static.patch
+   trunk/buildroot/package/busybox/busybox-1.8.2-vi.patch
 
- Ulf> The purpose of this is to allow you to start with an existing
- Ulf> defconfig, and the commands will collects the different
- Ulf> configurations in one place.  You can't replace this function
- Ulf> with defconfigs, but you can use the result to create new
- Ulf> defconfigs.
+Modified:
+   trunk/buildroot/package/busybox/Config.in
 
- Ulf> At this time, not having access to the source tree, I can't see why LOCAL
- Ulf> is defined *after* the include, so maybe this needs to be moved.
- Ulf> Feel free to test.
 
-No thanks - You made the mess, and you get to clean it up.
+Changeset:
+Modified: trunk/buildroot/package/busybox/Config.in
+===================================================================
+--- trunk/buildroot/package/busybox/Config.in	2008-03-26 20:06:24 UTC (rev 21509)
++++ trunk/buildroot/package/busybox/Config.in	2008-03-26 21:49:58 UTC (rev 21510)
+@@ -47,8 +47,8 @@
+ 	string
+ 	default "1.2.2.1"	if BR2_BUSYBOX_VERSION_1_2_2_1
+ 	default "1.6.1"		if BR2_BUSYBOX_VERSION_1_6_1
+-	default "1.7.4"		if BR2_BUSYBOX_VERSION_1_7_X
+-	default "1.8.2"		if BR2_BUSYBOX_VERSION_1_8_X
++	default "1.7.5"		if BR2_BUSYBOX_VERSION_1_7_X
++	default "1.8.3"		if BR2_BUSYBOX_VERSION_1_8_X
+ 	default "1.9.2"		if BR2_BUSYBOX_VERSION_1_9_X
+ 	default "1.10.0"	if BR2_BUSYBOX_VERSION_1_10_X
+ 
 
-<grumpy-mode>
+Deleted: trunk/buildroot/package/busybox/busybox-1.7.4-grep.patch
+===================================================================
+--- trunk/buildroot/package/busybox/busybox-1.7.4-grep.patch	2008-03-26 20:06:24 UTC (rev 21509)
++++ trunk/buildroot/package/busybox/busybox-1.7.4-grep.patch	2008-03-26 21:49:58 UTC (rev 21510)
+@@ -1,38 +0,0 @@
+-diff -urN busybox-1.7.4/findutils/grep.c busybox-1.7.4-grep/findutils/grep.c
+---- busybox-1.7.4/findutils/grep.c	2007-09-03 04:48:54.000000000 -0700
+-+++ busybox-1.7.4-grep/findutils/grep.c	2007-12-08 19:02:33.000000000 -0800
+-@@ -154,14 +154,14 @@
+- 
+- 	while ((line = xmalloc_getline(file)) != NULL) {
+- 		llist_t *pattern_ptr = pattern_head;
+--		grep_list_data_t * gl;
+-+		grep_list_data_t *gl = gl; /* for gcc */
+- 
+- 		linenum++;
+- 		ret = 0;
+- 		while (pattern_ptr) {
+- 			gl = (grep_list_data_t *)pattern_ptr->data;
+- 			if (FGREP_FLAG) {
+--				ret = strstr(line, gl->pattern) != NULL;
+-+				ret |= (strstr(line, gl->pattern) != NULL);
+- 			} else {
+- 				/*
+- 				 * test for a postitive-assertion match (regexec returns success (0)
+-@@ -255,8 +255,15 @@
+- 				print_n_lines_after = lines_after;
+- #endif
+- 				if (option_mask32 & OPT_o) {
+--					line[regmatch.rm_eo] = '\0';
+--					print_line(line + regmatch.rm_so, linenum, ':');
+-+					if (FGREP_FLAG) {
+-+						/* -Fo just prints the pattern
+-+						 * (unless -v: -Fov doesnt print anything at all) */
+-+						if (ret)
+-+							print_line(gl->pattern, linenum, ':');
+-+					} else {
+-+						line[regmatch.rm_eo] = '\0';
+-+						print_line(line + regmatch.rm_so, linenum, ':');
+-+					}
+- 				} else {
+- 					print_line(line, linenum, ':');
+- 				}
 
-I really think we need to focus on getting the basic functionality of
-buildroot stable and working so we can put out a release instead of
-adding (what atleast looks like) half baked extensions.
+Deleted: trunk/buildroot/package/busybox/busybox-1.8.2-arping.patch
+===================================================================
+--- trunk/buildroot/package/busybox/busybox-1.8.2-arping.patch	2008-03-26 20:06:24 UTC (rev 21509)
++++ trunk/buildroot/package/busybox/busybox-1.8.2-arping.patch	2008-03-26 21:49:58 UTC (rev 21510)
+@@ -1,13 +0,0 @@
+-diff -urN busybox-1.8.2/networking/arping.c busybox-1.8.2-arping/networking/arping.c
+---- busybox-1.8.2/networking/arping.c	2007-11-10 01:40:47.000000000 +0000
+-+++ busybox-1.8.2-arping/networking/arping.c	2007-12-18 10:31:55.000000000 +0000
+-@@ -207,7 +207,8 @@
+- 		}
+- 
+- 		if (last) {
+--			printf(" %u.%03ums\n", last / 1000, last % 1000);
+-+			unsigned diff = MONOTONIC_US() - last;
+-+			printf(" %u.%03ums\n", diff / 1000, diff % 1000);
+- 		} else {
+- 			printf(" UNSOLICITED?\n");
+- 		}
 
-</grumpy-mode>
+Deleted: trunk/buildroot/package/busybox/busybox-1.8.2-static.patch
+===================================================================
+--- trunk/buildroot/package/busybox/busybox-1.8.2-static.patch	2008-03-26 20:06:24 UTC (rev 21509)
++++ trunk/buildroot/package/busybox/busybox-1.8.2-static.patch	2008-03-26 21:49:58 UTC (rev 21510)
+@@ -1,12 +0,0 @@
+-diff -urN busybox-1.8.2/applets/applets.c busybox-1.8.2-static/applets/applets.c
+---- busybox-1.8.2/applets/applets.c	2007-11-10 01:40:53.000000000 +0000
+-+++ busybox-1.8.2-static/applets/applets.c	2007-12-09 03:46:04.000000000 +0000
+-@@ -17,7 +17,7 @@
+- #warning See sources.redhat.com/bugzilla/show_bug.cgi?id=3400
+- #warning Note that glibc is unsuitable for static linking anyway.
+- #warning If you still want to do it, remove -Wl,--gc-sections
+--#warning from top-level Makefile and remove this warning.
+-+#warning from file scripts/trylink and remove this warning.
+- #error Aborting compilation.
+- #endif
+- 
 
--- 
-Bye, Peter Korsgaard
+Deleted: trunk/buildroot/package/busybox/busybox-1.8.2-vi.patch
+===================================================================
+--- trunk/buildroot/package/busybox/busybox-1.8.2-vi.patch	2008-03-26 20:06:24 UTC (rev 21509)
++++ trunk/buildroot/package/busybox/busybox-1.8.2-vi.patch	2008-03-26 21:49:58 UTC (rev 21510)
+@@ -1,40 +0,0 @@
+-diff -urN busybox-1.8.2/editors/vi.c busybox-1.8.2-vi/editors/vi.c
+---- busybox-1.8.2/editors/vi.c	2007-11-10 01:40:54.000000000 +0000
+-+++ busybox-1.8.2-vi/editors/vi.c	2007-12-10 16:26:01.000000000 +0000
+-@@ -184,6 +184,7 @@
+- #if ENABLE_FEATURE_VI_COLON
+- 	char *initial_cmds[3];  // currently 2 entries, NULL terminated
+- #endif
+-+	char readbuffer[MAX_LINELEN];
+- };
+- #define G (*ptr_to_globals)
+- #define text           (G.text          )
+-@@ -200,6 +201,10 @@
+- #define term_orig      (G.term_orig     )
+- #define term_vi        (G.term_vi       )
+- #define initial_cmds   (G.initial_cmds  )
+-+#define readbuffer     (G.readbuffer    )
+-+#define INIT_G() do { \
+-+	PTR_TO_GLOBALS = xzalloc(sizeof(G)); \
+-+} while (0)
+- 
+- static int init_text_buffer(char *); // init from file or create new
+- static void edit_file(char *);	// edit one file
+-@@ -321,7 +326,7 @@
+- 	my_pid = getpid();
+- #endif
+- 
+--	PTR_TO_GLOBALS = xzalloc(sizeof(G));
+-+	INIT_G();
+- 
+- #if ENABLE_FEATURE_VI_CRASHME
+- 	srand((long) my_pid);
+-@@ -2142,8 +2147,6 @@
+- 	return safe_poll(pfd, 1, hund*10) > 0;
+- }
+- 
+--#define readbuffer bb_common_bufsiz1
+--
+- static int readed_for_parse;
+- 
+- //----- IO Routines --------------------------------------------
