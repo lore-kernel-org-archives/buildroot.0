@@ -1,13 +1,12 @@
 From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Wed, 26 Mar 2008 22:34:10 +0100
-Subject: [Buildroot] build problems
-In-Reply-To: <032601c88f86$e52e3720$060514ac@atmel.com> (Ulf Samuelsson's
-	message of "Wed\, 26 Mar 2008 22\:15\:04 +0100")
-References: <1CD05B980C94AC408B37C82BBABAA3E60ACA8184@mtsexchange.dc.multitech.prv>
-	<034f01c88ece$ef015bf0$040514ac@atmel.com>
-	<87ve39buzq.fsf@macbook.be.48ers.dk>
-	<032601c88f86$e52e3720$060514ac@atmel.com>
-Message-ID: <87lk45yxt9.fsf@macbook.be.48ers.dk>
+Date: Wed, 26 Mar 2008 22:41:48 +0100
+Subject: [Buildroot] using of local dir
+In-Reply-To: <032301c88f86$de33de70$060514ac@atmel.com> (Ulf Samuelsson's
+	message of "Wed\, 26 Mar 2008 21\:36\:02 +0100")
+References: <47EA8F05.8090102@gmx.net> <20080326180926.GA404@mx.loc>
+	<877ifp1bzg.fsf@macbook.be.48ers.dk>
+	<032301c88f86$de33de70$060514ac@atmel.com>
+Message-ID: <87hcetyxgj.fsf@macbook.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -16,31 +15,43 @@ To: buildroot@busybox.net
 
 >>>>> "Ulf" == Ulf Samuelsson <ulf.samuelsson@atmel.com> writes:
 
- >> I see that the directory only has a busybox config for 1.6.1 and
- >> 1.9.1, so it's broken anyway if the user selects anything else than
- >> that.
+Hi,
 
- Ulf> Yes, and then the user is responsible for creating a
- Ulf> configuration for that.  The current tree will modify the
- Ulf> configuration of an existing .config file without warning the
- Ulf> user, which is even more broken.
+ >> It indeed seems quite broken. The $LOCAL variable isn't used
+ >> anywhere either.
 
-.. Because the hidding magic in the Makefile is broken. The config
-option is called BR2_BUSYBOX_VERSION_1_9_X instead of 1_9_1 for a
-reason.
+ Ulf> Check "project.mk"
 
+Ahh. Why isn't the variable set there if it's only used in project.mk
+anyway?
+
+
+ Bernhard> *shrug* I'd rip it out in a whim either way
  >> 
- >> To me it doesn't make sense to keep earlier versions than the latest
- >> stable release of a given major version (E.G. 1.9.2 instead of 1.9.1)
+ >> Well, the local/save/getconfig stuff does seem kinda overengineered -
+ >> Couldn't we just have a bunch of *_defconfig files under configs/
+ >> instead with a make %_defconfig target like the kernel has instead?
+ >> 
 
- Ulf> What you are saying here is that you do not want to allow people
- Ulf> to decide for themselves when they should upgrade the busybox version.
- Ulf> I think a lot of project managers would have an issue with this.
+ Ulf> The purpose of this is to allow you to start with an existing
+ Ulf> defconfig, and the commands will collects the different
+ Ulf> configurations in one place.  You can't replace this function
+ Ulf> with defconfigs, but you can use the result to create new
+ Ulf> defconfigs.
 
-Exactly - Just like all the other packages we have.
+ Ulf> At this time, not having access to the source tree, I can't see why LOCAL
+ Ulf> is defined *after* the include, so maybe this needs to be moved.
+ Ulf> Feel free to test.
 
-Buildroot lives and evolves over time (and it has to). If you want a
-static config, just don't change your buildroot snapshot.
+No thanks - You made the mess, and you get to clean it up.
+
+<grumpy-mode>
+
+I really think we need to focus on getting the basic functionality of
+buildroot stable and working so we can put out a release instead of
+adding (what atleast looks like) half baked extensions.
+
+</grumpy-mode>
 
 -- 
 Bye, Peter Korsgaard
