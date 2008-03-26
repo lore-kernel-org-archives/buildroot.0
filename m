@@ -1,68 +1,50 @@
-From: bugs at busybox.net <bugs@busybox.net>
-Date: Wed, 26 Mar 2008 06:25:35 -0700
-Subject: [Buildroot] [buildroot 0002684]: Fakeroot 1.9 again
-Message-ID: <ca9dd8b6d63d7eec85f22f0e5c6355f6@busybox.net>
+From: Simon Pasch <fpasch@googlemail.com>
+Date: Wed, 26 Mar 2008 14:42:49 +0100
+Subject: [Buildroot] svn commit: trunk/buildroot/package/editors/nano
+In-Reply-To: <20080307100735.DFD33120159@busybox.net>
+References: <20080307100735.DFD33120159@busybox.net>
+Message-ID: <f90898420803260642j671818c3p603a31b2ba185c3f@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+There seems to be a little typo in this patch...
 
-A NOTE has been added to this issue. 
-====================================================================== 
-http://busybox.net/bugs/view.php?id=2684 
-====================================================================== 
-Reported By:                Graol
-Assigned To:                buildroot
-====================================================================== 
-Project:                    buildroot
-Issue ID:                   2684
-Category:                   Architecture Specific
-Reproducibility:            always
-Severity:                   block
-Priority:                   normal
-Status:                     assigned
-====================================================================== 
-Date Submitted:             03-26-2008 03:45 PDT
-Last Modified:              03-26-2008 06:25 PDT
-====================================================================== 
-Summary:                    Fakeroot 1.9 again
-Description: 
-Fakeroot 1.9 has disappeared again from the official debian repository, and
-the 1.9.3 version fails to compile (on architecture x86_64).
-====================================================================== 
+nano should be installed to usr/bin/nano not to sbin/bin/nano.
 
----------------------------------------------------------------------- 
- hmoffatt - 03-26-08 06:08  
----------------------------------------------------------------------- 
-Please provide details of the failure, ie a log. It builds fine for me on
-amd64. 
 
----------------------------------------------------------------------- 
- Graol - 03-26-08 06:20  
----------------------------------------------------------------------- 
-The server I used to work on not available anymore (reconfigured for
-release). I forgot to save the log, but it said something like "applying a
-patch to fakeroot 1.9.3... Trunk failure 1 on 1 etc... ## trunk failures in
-##".
-Despite modifying the /etc/apt/sources.list, a make still got the fakeroot
-package from the official debian repo instead of snapshot.debian.net 
-
----------------------------------------------------------------------- 
- hmoffatt - 03-26-08 06:25  
----------------------------------------------------------------------- 
-buildroot doesn't use your /etc/apt/sources.list - it fetches the source
-directly using wget. If yours didn't go to snapshot.debian.net then it
-isn't up to date. 
-
-Issue History 
-Date Modified   Username       Field                    Change               
-====================================================================== 
-03-26-08 03:45  Graol          New Issue                                    
-03-26-08 03:45  Graol          Status                   new => assigned     
-03-26-08 03:45  Graol          Assigned To               => buildroot       
-03-26-08 06:08  hmoffatt       Note Added: 0005994                          
-03-26-08 06:20  Graol          Note Added: 0006004                          
-03-26-08 06:25  hmoffatt       Note Added: 0006014                          
-======================================================================
+2008/3/7, jacmet at uclibc.org <jacmet@uclibc.org>:
+> Author: jacmet
+>  Date: 2008-03-07 02:07:35 -0800 (Fri, 07 Mar 2008)
+>  New Revision: 21266
+>
+>  Log:
+>  nano: install to /usr/bin
+>
+>
+>  Modified:
+>    trunk/buildroot/package/editors/nano/nano.mk
+>
+>
+>  Changeset:
+>  Modified: trunk/buildroot/package/editors/nano/nano.mk
+>  ===================================================================
+>  --- trunk/buildroot/package/editors/nano/nano.mk        2008-03-07 10:02:12 UTC (rev 21265)
+>  +++ trunk/buildroot/package/editors/nano/nano.mk        2008-03-07 10:07:35 UTC (rev 21266)
+>  @@ -9,7 +9,7 @@
+>   NANO_DIR:=$(BUILD_DIR)/nano-$(NANO_VERSION)
+>   NANO_CAT:=$(ZCAT)
+>   NANO_BINARY:=src/nano
+>  -NANO_TARGET_BINARY:=bin/nano
+>  +NANO_TARGET_BINARY:=sbin/bin/nano
+>
+>   $(DL_DIR)/$(NANO_SOURCE):
+>         $(WGET) -P $(DL_DIR) $(NANO_SITE)/$(NANO_SOURCE)
+>
+>  _______________________________________________
+>  buildroot mailing list
+>  buildroot at uclibc.org
+>  http://busybox.net/mailman/listinfo/buildroot
+>
