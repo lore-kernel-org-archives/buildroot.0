@@ -1,7 +1,7 @@
 From: bugs at busybox.net <bugs@busybox.net>
-Date: Wed, 26 Mar 2008 06:20:22 -0700
+Date: Wed, 26 Mar 2008 06:25:35 -0700
 Subject: [Buildroot] [buildroot 0002684]: Fakeroot 1.9 again
-Message-ID: <6f8c0b25996aa786aaba3c7bc2c65b8e@bugs.uclibc.org>
+Message-ID: <ca9dd8b6d63d7eec85f22f0e5c6355f6@busybox.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -25,7 +25,7 @@ Priority:                   normal
 Status:                     assigned
 ====================================================================== 
 Date Submitted:             03-26-2008 03:45 PDT
-Last Modified:              03-26-2008 06:20 PDT
+Last Modified:              03-26-2008 06:25 PDT
 ====================================================================== 
 Summary:                    Fakeroot 1.9 again
 Description: 
@@ -49,6 +49,13 @@ patch to fakeroot 1.9.3... Trunk failure 1 on 1 etc... ## trunk failures in
 Despite modifying the /etc/apt/sources.list, a make still got the fakeroot
 package from the official debian repo instead of snapshot.debian.net 
 
+---------------------------------------------------------------------- 
+ hmoffatt - 03-26-08 06:25  
+---------------------------------------------------------------------- 
+buildroot doesn't use your /etc/apt/sources.list - it fetches the source
+directly using wget. If yours didn't go to snapshot.debian.net then it
+isn't up to date. 
+
 Issue History 
 Date Modified   Username       Field                    Change               
 ====================================================================== 
@@ -57,4 +64,5 @@ Date Modified   Username       Field                    Change
 03-26-08 03:45  Graol          Assigned To               => buildroot       
 03-26-08 06:08  hmoffatt       Note Added: 0005994                          
 03-26-08 06:20  Graol          Note Added: 0006004                          
+03-26-08 06:25  hmoffatt       Note Added: 0006014                          
 ======================================================================
