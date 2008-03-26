@@ -1,8 +1,7 @@
 From: bugs at busybox.net <bugs@busybox.net>
-Date: Tue, 25 Mar 2008 20:31:31 -0700
-Subject: [Buildroot] [buildroot 0002654]: Snapshot downloads ncurses-5.6
-	from incorrect location
-Message-ID: <7f29d7a8838755ac8a26c470033f6369@bugs.uclibc.org>
+Date: Tue, 25 Mar 2008 20:32:37 -0700
+Subject: [Buildroot] [buildroot 0002644]: incorrect FTP address for NCURSES
+Message-ID: <f2001039caa6ed1eba2bce19cfa1b24d@bugs.uclibc.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -12,54 +11,56 @@ To: buildroot@busybox.net
 
 The following issue has been RESOLVED. 
 ====================================================================== 
-http://busybox.net/bugs/view.php?id=2654 
+http://busybox.net/bugs/view.php?id=2644 
 ====================================================================== 
-Reported By:                jbruchon
+Reported By:                testarx
 Assigned To:                buildroot
 ====================================================================== 
 Project:                    buildroot
-Issue ID:                   2654
-Category:                   Other
+Issue ID:                   2644
+Category:                   Architecture Specific
 Reproducibility:            always
 Severity:                   minor
 Priority:                   normal
 Status:                     resolved
-Resolution:                 duplicate
-Duplicate:                  2634
+Resolution:                 fixed
 Fixed in Version:           
 ====================================================================== 
-Date Submitted:             03-23-2008 07:44 PDT
-Last Modified:              03-25-2008 20:31 PDT
+Date Submitted:             03-23-2008 00:14 PDT
+Last Modified:              03-25-2008 20:32 PDT
 ====================================================================== 
-Summary:                    Snapshot downloads ncurses-5.6 from incorrect
-location
+Summary:                    incorrect FTP address for NCURSES
 Description: 
-buildroot-snapshot from 2008-03-23 attempted to download ncurses-5.6 from
-the GNU mirror, and stopped because the URL had "/pub/gnu/gnu/ncurses"
-instead of "/pub/gnu/ncurses".  Downloading manually and placing
-ncurses-5.6.tar.gz in the dl/ directory successfully works around the
-error.
+The address for ncurses is incorrectly computed as
+"http://ftp.gnu.org/pub/gnu"/gnu/ncurses/ncurses-5.6.tar.gz"
+which contains an extra /gnu/ 
+
+
+output:
+
+wget --passive-ftp  -P /home/x/Desktop/omap/buildroot/dl
+"http://ftp.gnu.org/pub/gnu"/gnu/ncurses/ncurses-5.6.tar.gz
+--02:09:34--  http://ftp.gnu.org/pub/gnu/gnu/ncurses/ncurses-5.6.tar.gz
+           => `/home/x/Desktop/omap/buildroot/dl/ncurses-5.6.tar.gz'
+Resolving ftp.gnu.org... 140.186.70.20
+Connecting to ftp.gnu.org|140.186.70.20|:80... connected.
+HTTP request sent, awaiting response... 404 Not Found
+02:09:34 ERROR 404: Not Found.
+
 ======================================================================
 Relationships       ID      Summary
 ----------------------------------------------------------------------
 duplicate of        0002634 path to ncurses seems to contain extra ...
 ====================================================================== 
 
----------------------------------------------------------------------- 
- gnat - 03-24-08 10:12  
----------------------------------------------------------------------- 
-the patch above fixes this and other gnu download path software. 
-
 Issue History 
 Date Modified   Username       Field                    Change               
 ====================================================================== 
-03-23-08 07:44  jbruchon       New Issue                                    
-03-23-08 07:44  jbruchon       Status                   new => assigned     
-03-23-08 07:44  jbruchon       Assigned To               => buildroot       
-03-24-08 10:12  gnat           File Added: gnu_path.diff                    
-03-24-08 10:12  gnat           Note Added: 0005844                          
-03-25-08 20:31  hmoffatt       Relationship added       duplicate of 0002634
-03-25-08 20:31  hmoffatt       Duplicate ID             0 => 2634           
-03-25-08 20:31  hmoffatt       Status                   assigned => resolved
-03-25-08 20:31  hmoffatt       Resolution               open => duplicate   
+03-23-08 00:14  testarx        New Issue                                    
+03-23-08 00:14  testarx        Status                   new => assigned     
+03-23-08 00:14  testarx        Assigned To               => buildroot       
+03-25-08 20:32  hmoffatt       Relationship added       duplicate of 0002634
+03-25-08 20:32  hmoffatt       Duplicate ID             0 => 2634           
+03-25-08 20:32  hmoffatt       Status                   assigned => resolved
+03-25-08 20:32  hmoffatt       Resolution               open => fixed       
 ======================================================================
