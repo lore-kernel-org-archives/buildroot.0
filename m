@@ -1,7 +1,8 @@
 From: bugs at busybox.net <bugs@busybox.net>
-Date: Tue, 25 Mar 2008 20:35:32 -0700
-Subject: [Buildroot] [buildroot 0002464]: Fakeroot 1.9
-Message-ID: <030a747c939fecf378155604a71bba33@bugs.uclibc.org>
+Date: Tue, 25 Mar 2008 20:45:11 -0700
+Subject: [Buildroot] [buildroot 0002674]: patch-kernel.sh failes on newer
+	versions of Ubuntu
+Message-ID: <5bb6a2fd210abaa08061822182ced615@bugs.uclibc.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -9,48 +10,53 @@ Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
 
-The following issue has been RESOLVED. 
+A NOTE has been added to this issue. 
 ====================================================================== 
-http://busybox.net/bugs/view.php?id=2464 
+http://busybox.net/bugs/view.php?id=2674 
 ====================================================================== 
-Reported By:                noel_v
+Reported By:                antab
 Assigned To:                buildroot
 ====================================================================== 
 Project:                    buildroot
-Issue ID:                   2464
-Category:                   Other
+Issue ID:                   2674
+Category:                   Standards Compliance
 Reproducibility:            always
-Severity:                   block
+Severity:                   major
 Priority:                   normal
-Status:                     resolved
-Resolution:                 fixed
-Fixed in Version:           
+Status:                     assigned
 ====================================================================== 
-Date Submitted:             03-06-2008 22:54 PST
-Last Modified:              03-25-2008 20:35 PDT
+Date Submitted:             03-25-2008 08:20 PDT
+Last Modified:              03-25-2008 20:45 PDT
 ====================================================================== 
-Summary:                    Fakeroot 1.9
+Summary:                    patch-kernel.sh failes on newer versions of Ubuntu
 Description: 
-No longer available from debian ( compiling with 1.9.3 fails)
+The patch-kernel.sh script fails on newer versions of Ubuntu (and debian)
+where the /bin/sh link has been changed form /bin/bash to /bin/dash. The
+script will fail at line 23:
+for i in `cd ${patchdir}; ls -d ${patchpattern} 2> /dev/null` ; do
+
+where dash dosen't expand the ${patchpattern} but passes it directly to
+ls. Quick fix is to relink /bin/sh to bash, but scripts that depend on
+bash only features should NOT use /bin/sh but /bin/bash directly.
+
+more about the difference between dash and bash at:
+https://wiki.ubuntu.com/DashAsBinSh.
 ====================================================================== 
 
 ---------------------------------------------------------------------- 
- hmoffatt - 03-25-08 20:35  
+ hmoffatt - 03-25-08 20:45  
 ---------------------------------------------------------------------- 
-URL for fakeroot download changed to snapshot.debian.net where it should
-remain valid forever.  
+Can't reproduce this on Debian (changed top of script to #!/bin/dash
+instead). Which package?
+
+Mind you there doesn't seem to be any need to use ${x} throughout the
+script rather than $x. 
 
 Issue History 
 Date Modified   Username       Field                    Change               
 ====================================================================== 
-03-06-08 22:54  noel_v         New Issue                                    
-03-06-08 22:54  noel_v         Status                   new => assigned     
-03-06-08 22:54  noel_v         Assigned To               => buildroot       
-03-07-08 01:41  noel_v         Issue Monitored: noel_v                      
-03-10-08 07:23  grindars       Issue Monitored: grindars                    
-03-11-08 01:02  johaahn        Issue Monitored: johaahn                     
-03-25-08 20:35  hmoffatt       Note Added: 0005934                          
-03-25-08 20:35  hmoffatt       Status                   assigned => confirmed
-03-25-08 20:35  hmoffatt       Status                   confirmed => resolved
-03-25-08 20:35  hmoffatt       Resolution               open => fixed       
+03-25-08 08:20  antab          New Issue                                    
+03-25-08 08:20  antab          Status                   new => assigned     
+03-25-08 08:20  antab          Assigned To               => buildroot       
+03-25-08 20:45  hmoffatt       Note Added: 0005944                          
 ======================================================================
