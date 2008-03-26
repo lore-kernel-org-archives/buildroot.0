@@ -1,23 +1,35 @@
-From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Wed, 26 Mar 2008 14:55:51 +0100
-Subject: [Buildroot] svn commit: trunk/buildroot/package/editors/nano
-In-Reply-To: <f90898420803260642j671818c3p603a31b2ba185c3f@mail.gmail.com>
-	(Simon Pasch's message of "Wed\, 26 Mar 2008 14\:42\:49 +0100")
-References: <20080307100735.DFD33120159@busybox.net>
-	<f90898420803260642j671818c3p603a31b2ba185c3f@mail.gmail.com>
-Message-ID: <87zlsl8u8o.fsf@macbook.be.48ers.dk>
+From: Tim Barr <tbarr@multitech.com>
+Date: Wed, 26 Mar 2008 11:09:39 -0500
+Subject: [Buildroot] build problems
+Message-ID: <1CD05B980C94AC408B37C82BBABAA3E60AD7C963@mtsexchange.dc.multitech.prv>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Simon" == Simon Pasch <fpasch@googlemail.com> writes:
+FYI, when I modified the buildroot config to generate a uImage file, it
+could not find the file so it could copy it into the binaries directory.
+Looking at the log file, builroot was looking for the uImage file in the
+"kernel" root directory instead of the "kernel"/arch/arm/boot directory.
+At least I know where to find the uImage file so I can test it.
 
- Simon> There seems to be a little typo in this patch...
- Simon> nano should be installed to usr/bin/nano not to sbin/bin/nano.
+cp -dpf
+/home/falingtrea/buildroot/project_build_arm/SuperModem-2.6.22.1/linux-2
+.6.22.1/uImage
+/home/falingtrea/buildroot/binaries/SuperModem-2.6.22.1/at91sam9260dfc-l
+inux-2.6.22.1-20080326
 
-Indeed. Fixed in r21499 - Thanks!
+Should be:
 
--- 
-Bye, Peter Korsgaard
+cp -dpf
+/home/falingtrea/buildroot/project_build_arm/SuperModem-2.6.22.1/linux-2
+.6.22.1/arch/arm/boot/uImage
+/home/falingtrea/buildroot/binaries/SuperModem-2.6.22.1/at91sam9260dfc-l
+inux-2.6.22.1-20080326
+
+
+Timothy Barr
+Hardware Development Engineer
+for Multi-Tech Systems, Inc.
+tbarr at multitech.com
