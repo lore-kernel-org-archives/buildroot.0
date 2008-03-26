@@ -1,49 +1,29 @@
-From: bugs at busybox.net <bugs@busybox.net>
-Date: Wed, 26 Mar 2008 06:08:35 -0700
-Subject: [Buildroot] [buildroot 0002684]: Fakeroot 1.9 again
-Message-ID: <00d6965c6a5b3a5048d8652956d181a5@busybox.net>
+From: Tim Barr <tbarr@multitech.com>
+Date: Wed, 26 Mar 2008 08:19:56 -0500
+Subject: [Buildroot] Buildroot, busysbox and microcom
+Message-ID: <1CD05B980C94AC408B37C82BBABAA3E60ACA823F@mtsexchange.dc.multitech.prv>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+Something I noticed is that in the list of applications you can select
+for busybox from the buildroot config does not include the microcom
+terminal emulator app. What is the proper process to get this included?
+Do I just do a 'make configured' and just edit the busybox .config file,
+and then make? Or do I need to do something with saveconfig and
+getconfig? Or are those commands just used to save and get custom
+.config files in the project directory?
+ 
 
-A NOTE has been added to this issue. 
-====================================================================== 
-http://busybox.net/bugs/view.php?id=2684 
-====================================================================== 
-Reported By:                Graol
-Assigned To:                buildroot
-====================================================================== 
-Project:                    buildroot
-Issue ID:                   2684
-Category:                   Architecture Specific
-Reproducibility:            always
-Severity:                   block
-Priority:                   normal
-Status:                     assigned
-====================================================================== 
-Date Submitted:             03-26-2008 03:45 PDT
-Last Modified:              03-26-2008 06:08 PDT
-====================================================================== 
-Summary:                    Fakeroot 1.9 again
-Description: 
-Fakeroot 1.9 has disappeared again from the official debian repository, and
-the 1.9.3 version fails to compile (on architecture x86_64).
-====================================================================== 
 
----------------------------------------------------------------------- 
- hmoffatt - 03-26-08 06:08  
----------------------------------------------------------------------- 
-Please provide details of the failure, ie a log. It builds fine for me on
-amd64. 
+Timothy Barr
+Hardware Development Engineer
+for Multi-Tech Systems, Inc.
+ <mailto:tbarr@multitech.com> tbarr at multitech.com 
 
-Issue History 
-Date Modified   Username       Field                    Change               
-====================================================================== 
-03-26-08 03:45  Graol          New Issue                                    
-03-26-08 03:45  Graol          Status                   new => assigned     
-03-26-08 03:45  Graol          Assigned To               => buildroot       
-03-26-08 06:08  hmoffatt       Note Added: 0005994                          
-======================================================================
+ 
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: http://busybox.net/lists/buildroot/attachments/20080326/45e5262d/attachment.htm 
