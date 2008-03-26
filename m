@@ -1,50 +1,34 @@
-From: jacmet at uclibc.org <jacmet@uclibc.org>
-Date: Wed, 26 Mar 2008 14:53:16 -0700 (PDT)
-Subject: [Buildroot] svn commit: trunk/buildroot/package/busybox
-Message-ID: <20080326215316.8AC593C42C@busybox.net>
+From: Peter Korsgaard <jacmet@uclibc.org>
+Date: Wed, 26 Mar 2008 23:39:41 +0100
+Subject: [Buildroot] build problems
+In-Reply-To: <20080326171751.GH29267@mx.loc> (Bernhard Fischer's message of
+	"Wed\, 26 Mar 2008 18\:17\:51 +0100")
+References: <1CD05B980C94AC408B37C82BBABAA3E60ACA8184@mtsexchange.dc.multitech.prv>
+	<034f01c88ece$ef015bf0$040514ac@atmel.com>
+	<87ve39buzq.fsf@macbook.be.48ers.dk> <20080326171751.GH29267@mx.loc>
+Message-ID: <87r6dxw1n6.fsf@macbook.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Author: jacmet
-Date: 2008-03-26 14:53:15 -0700 (Wed, 26 Mar 2008)
-New Revision: 21511
+>>>>> "Bernhard" == Bernhard Fischer <rep.dot.nop@gmail.com> writes:
 
-Log:
-busybox: remove unused configs/patches
+Hi,
 
+ >> To me it doesn't make sense to keep earlier versions than the latest
+ >> stable release of a given major version (E.G. 1.9.2 instead of 1.9.1)
+ >> - Otherwise it'll get too hard to handle. I think it's also soon time
+ >> to retire some of the really ancient versions like 1.2.x - 1.6.x.
 
-Removed:
-   trunk/buildroot/package/busybox/busybox-1.0.1.config
-   trunk/buildroot/package/busybox/busybox-1.1.3.config
-   trunk/buildroot/package/busybox/busybox-1.4.0-conf.patch
-   trunk/buildroot/package/busybox/busybox-1.4.0-libnetlink.patch
-   trunk/buildroot/package/busybox/busybox-1.4.0-max_host_len_40.patch
-   trunk/buildroot/package/busybox/busybox-1.4.0-parse_config_file.patch
-   trunk/buildroot/package/busybox/busybox-1.4.0-syslogd-n.patch
-   trunk/buildroot/package/busybox/busybox-1.4.0-tar.patch
-   trunk/buildroot/package/busybox/busybox-1.4.0.config
-   trunk/buildroot/package/busybox/busybox-1.4.1-binhex.patch
-   trunk/buildroot/package/busybox/busybox-1.4.1-iproute.patch
-   trunk/buildroot/package/busybox/busybox-1.4.1-tar_t.patch
-   trunk/buildroot/package/busybox/busybox-1.4.1-tftp.patch
-   trunk/buildroot/package/busybox/busybox-1.4.1-wgetSEGV.patch
-   trunk/buildroot/package/busybox/busybox-1.4.1.config
-   trunk/buildroot/package/busybox/busybox-1.5.0-hdparm.patch
-   trunk/buildroot/package/busybox/busybox-1.5.0-max_host_len_40.patch
-   trunk/buildroot/package/busybox/busybox-1.5.0-ps.patch
-   trunk/buildroot/package/busybox/busybox-1.5.0-sed.patch
-   trunk/buildroot/package/busybox/busybox-1.5.0.config
-   trunk/buildroot/package/busybox/busybox-1.6.0-echo.patch
-   trunk/buildroot/package/busybox/busybox-1.6.0-hushdep.patch
-   trunk/buildroot/package/busybox/busybox-1.6.0-test.patch
+ Bernhard> hehe, sounds familiar. I've already had my share of fun
+ Bernhard> with Ulf in exactly this area and consequently there is
+ Bernhard> that git-repo which fixes alot of this stuff for good.
 
+I take it that you have completely stopped committing to svn - Would
+you object to me cherry picking a few commits from your git repo
+(E.G. newer toolchains)?
 
-Changeset:
-
-Sorry, the patch is too large to include (3948 lines).
-Please use ViewCVS to see it!
-
-http://uclibc.org/cgi-bin/viewcvs.cgi?view=rev&root=svn&rev=21511
+-- 
+Bye, Peter Korsgaard
