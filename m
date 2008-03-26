@@ -1,7 +1,7 @@
 From: bugs at busybox.net <bugs@busybox.net>
-Date: Tue, 25 Mar 2008 20:33:46 -0700
-Subject: [Buildroot] [buildroot 0002574]: Tell SVN to ignore ".auto.deps"
-Message-ID: <3bc26505b0e0afb3ac23da29bafa3215@bugs.uclibc.org>
+Date: Tue, 25 Mar 2008 20:35:32 -0700
+Subject: [Buildroot] [buildroot 0002464]: Fakeroot 1.9
+Message-ID: <030a747c939fecf378155604a71bba33@bugs.uclibc.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -11,44 +11,46 @@ To: buildroot@busybox.net
 
 The following issue has been RESOLVED. 
 ====================================================================== 
-http://busybox.net/bugs/view.php?id=2574 
+http://busybox.net/bugs/view.php?id=2464 
 ====================================================================== 
-Reported By:                mth
+Reported By:                noel_v
 Assigned To:                buildroot
 ====================================================================== 
 Project:                    buildroot
-Issue ID:                   2574
+Issue ID:                   2464
 Category:                   Other
 Reproducibility:            always
-Severity:                   trivial
+Severity:                   block
 Priority:                   normal
 Status:                     resolved
 Resolution:                 fixed
 Fixed in Version:           
 ====================================================================== 
-Date Submitted:             03-13-2008 19:01 PDT
-Last Modified:              03-25-2008 20:33 PDT
+Date Submitted:             03-06-2008 22:54 PST
+Last Modified:              03-25-2008 20:35 PDT
 ====================================================================== 
-Summary:                    Tell SVN to ignore ".auto.deps"
+Summary:                    Fakeroot 1.9
 Description: 
-The file ".auto.deps" is automatically generated, but it is not in the
-svn:ignore property of the top-level dir, so it pollutes the "svn st"
-output. Please add it to the ignore list.
-
+No longer available from debian ( compiling with 1.9.3 fails)
 ====================================================================== 
 
 ---------------------------------------------------------------------- 
- hmoffatt - 03-25-08 20:33  
+ hmoffatt - 03-25-08 20:35  
 ---------------------------------------------------------------------- 
-Done 
+URL for fakeroot download changed to snapshot.debian.net where it should
+remain valid forever.  
 
 Issue History 
 Date Modified   Username       Field                    Change               
 ====================================================================== 
-03-13-08 19:01  mth            New Issue                                    
-03-13-08 19:01  mth            Status                   new => assigned     
-03-13-08 19:01  mth            Assigned To               => buildroot       
-03-25-08 20:33  hmoffatt       Status                   assigned => resolved
-03-25-08 20:33  hmoffatt       Resolution               open => fixed       
-03-25-08 20:33  hmoffatt       Note Added: 0005924                          
+03-06-08 22:54  noel_v         New Issue                                    
+03-06-08 22:54  noel_v         Status                   new => assigned     
+03-06-08 22:54  noel_v         Assigned To               => buildroot       
+03-07-08 01:41  noel_v         Issue Monitored: noel_v                      
+03-10-08 07:23  grindars       Issue Monitored: grindars                    
+03-11-08 01:02  johaahn        Issue Monitored: johaahn                     
+03-25-08 20:35  hmoffatt       Note Added: 0005934                          
+03-25-08 20:35  hmoffatt       Status                   assigned => confirmed
+03-25-08 20:35  hmoffatt       Status                   confirmed => resolved
+03-25-08 20:35  hmoffatt       Resolution               open => fixed       
 ======================================================================
