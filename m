@@ -1,8 +1,7 @@
 From: bugs at busybox.net <bugs@busybox.net>
-Date: Tue, 25 Mar 2008 20:45:11 -0700
-Subject: [Buildroot] [buildroot 0002674]: patch-kernel.sh failes on newer
-	versions of Ubuntu
-Message-ID: <5bb6a2fd210abaa08061822182ced615@bugs.uclibc.org>
+Date: Tue, 25 Mar 2008 20:45:46 -0700
+Subject: [Buildroot] [buildroot 0002514]: fakeroot has an invalid version
+Message-ID: <617ed101296bc81ef9994c83cb95ba64@bugs.uclibc.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -10,53 +9,48 @@ Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
 
-A NOTE has been added to this issue. 
+The following issue has been RESOLVED. 
 ====================================================================== 
-http://busybox.net/bugs/view.php?id=2674 
+http://busybox.net/bugs/view.php?id=2514 
 ====================================================================== 
-Reported By:                antab
+Reported By:                sg
 Assigned To:                buildroot
 ====================================================================== 
 Project:                    buildroot
-Issue ID:                   2674
-Category:                   Standards Compliance
+Issue ID:                   2514
+Category:                   Other
 Reproducibility:            always
-Severity:                   major
+Severity:                   block
 Priority:                   normal
-Status:                     assigned
+Status:                     resolved
+Resolution:                 fixed
+Fixed in Version:           
 ====================================================================== 
-Date Submitted:             03-25-2008 08:20 PDT
+Date Submitted:             03-10-2008 19:28 PDT
 Last Modified:              03-25-2008 20:45 PDT
 ====================================================================== 
-Summary:                    patch-kernel.sh failes on newer versions of Ubuntu
+Summary:                    fakeroot has an invalid version
 Description: 
-The patch-kernel.sh script fails on newer versions of Ubuntu (and debian)
-where the /bin/sh link has been changed form /bin/bash to /bin/dash. The
-script will fail at line 23:
-for i in `cd ${patchdir}; ls -d ${patchpattern} 2> /dev/null` ; do
-
-where dash dosen't expand the ${patchpattern} but passes it directly to
-ls. Quick fix is to relink /bin/sh to bash, but scripts that depend on
-bash only features should NOT use /bin/sh but /bin/bash directly.
-
-more about the difference between dash and bash at:
-https://wiki.ubuntu.com/DashAsBinSh.
+The version of fakeroot demanded by the current buildroot in
+package/fakeroot/fakeroot.mk is 1.9. That version does not exist on
+debain.org. The closest matching version is 1.9.3. However, the patch file
+"fakeroot-revert-ltmain.patch" fails to apply against that version.
 ====================================================================== 
 
 ---------------------------------------------------------------------- 
  hmoffatt - 03-25-08 20:45  
 ---------------------------------------------------------------------- 
-Can't reproduce this on Debian (changed top of script to #!/bin/dash
-instead). Which package?
-
-Mind you there doesn't seem to be any need to use ${x} throughout the
-script rather than $x. 
+This has been fixed (not by me). 
 
 Issue History 
 Date Modified   Username       Field                    Change               
 ====================================================================== 
-03-25-08 08:20  antab          New Issue                                    
-03-25-08 08:20  antab          Status                   new => assigned     
-03-25-08 08:20  antab          Assigned To               => buildroot       
-03-25-08 20:45  hmoffatt       Note Added: 0005944                          
+03-10-08 19:28  sg             New Issue                                    
+03-10-08 19:28  sg             Status                   new => assigned     
+03-10-08 19:28  sg             Assigned To               => buildroot       
+03-11-08 03:09  johaahn        Issue Monitored: johaahn                     
+03-11-08 07:40  grindars       Issue Monitored: grindars                    
+03-25-08 20:45  hmoffatt       Status                   assigned => resolved
+03-25-08 20:45  hmoffatt       Resolution               open => fixed       
+03-25-08 20:45  hmoffatt       Note Added: 0005954                          
 ======================================================================
