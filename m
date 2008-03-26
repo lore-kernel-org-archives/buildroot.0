@@ -1,38 +1,74 @@
-From: jacmet at uclibc.org <jacmet@uclibc.org>
-Date: Wed, 26 Mar 2008 06:55:18 -0700 (PDT)
-Subject: [Buildroot] svn commit: trunk/buildroot/package/editors/nano
-Message-ID: <20080326135518.EBABF3C3C0@busybox.net>
+From: bugs at busybox.net <bugs@busybox.net>
+Date: Wed, 26 Mar 2008 06:56:10 -0700
+Subject: [Buildroot] [buildroot 0002684]: Fakeroot 1.9 again
+Message-ID: <20aa79c9c2bd211b99f6dbfdf8677f33@bugs.uclibc.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Author: jacmet
-Date: 2008-03-26 06:55:18 -0700 (Wed, 26 Mar 2008)
-New Revision: 21499
 
-Log:
-nano: fix install location
+A NOTE has been added to this issue. 
+====================================================================== 
+http://busybox.net/bugs/view.php?id=2684 
+====================================================================== 
+Reported By:                Graol
+Assigned To:                buildroot
+====================================================================== 
+Project:                    buildroot
+Issue ID:                   2684
+Category:                   Architecture Specific
+Reproducibility:            always
+Severity:                   block
+Priority:                   normal
+Status:                     assigned
+====================================================================== 
+Date Submitted:             03-26-2008 03:45 PDT
+Last Modified:              03-26-2008 06:56 PDT
+====================================================================== 
+Summary:                    Fakeroot 1.9 again
+Description: 
+Fakeroot 1.9 has disappeared again from the official debian repository, and
+the 1.9.3 version fails to compile (on architecture x86_64).
+====================================================================== 
 
-Fix typo in install location. Reported by Simon Pasch.
+---------------------------------------------------------------------- 
+ hmoffatt - 03-26-08 06:08  
+---------------------------------------------------------------------- 
+Please provide details of the failure, ie a log. It builds fine for me on
+amd64. 
 
+---------------------------------------------------------------------- 
+ Graol - 03-26-08 06:20  
+---------------------------------------------------------------------- 
+The server I used to work on not available anymore (reconfigured for
+release). I forgot to save the log, but it said something like "applying a
+patch to fakeroot 1.9.3... Trunk failure 1 on 1 etc... ## trunk failures in
+##".
+Despite modifying the /etc/apt/sources.list, a make still got the fakeroot
+package from the official debian repo instead of snapshot.debian.net 
 
-Modified:
-   trunk/buildroot/package/editors/nano/nano.mk
+---------------------------------------------------------------------- 
+ hmoffatt - 03-26-08 06:25  
+---------------------------------------------------------------------- 
+buildroot doesn't use your /etc/apt/sources.list - it fetches the source
+directly using wget. If yours didn't go to snapshot.debian.net then it
+isn't up to date. 
 
+---------------------------------------------------------------------- 
+ Graol - 03-26-08 06:56  
+---------------------------------------------------------------------- 
+Well, I used the Buildroot snapshot from 02-11-2008... 
 
-Changeset:
-Modified: trunk/buildroot/package/editors/nano/nano.mk
-===================================================================
---- trunk/buildroot/package/editors/nano/nano.mk	2008-03-26 13:40:36 UTC (rev 21498)
-+++ trunk/buildroot/package/editors/nano/nano.mk	2008-03-26 13:55:18 UTC (rev 21499)
-@@ -9,7 +9,7 @@
- NANO_DIR:=$(BUILD_DIR)/nano-$(NANO_VERSION)
- NANO_CAT:=$(ZCAT)
- NANO_BINARY:=src/nano
--NANO_TARGET_BINARY:=sbin/bin/nano
-+NANO_TARGET_BINARY:=usr/bin/nano
- 
- $(DL_DIR)/$(NANO_SOURCE):
- 	$(WGET) -P $(DL_DIR) $(NANO_SITE)/$(NANO_SOURCE)
+Issue History 
+Date Modified   Username       Field                    Change               
+====================================================================== 
+03-26-08 03:45  Graol          New Issue                                    
+03-26-08 03:45  Graol          Status                   new => assigned     
+03-26-08 03:45  Graol          Assigned To               => buildroot       
+03-26-08 06:08  hmoffatt       Note Added: 0005994                          
+03-26-08 06:20  Graol          Note Added: 0006004                          
+03-26-08 06:25  hmoffatt       Note Added: 0006014                          
+03-26-08 06:56  Graol          Note Added: 0006024                          
+======================================================================
