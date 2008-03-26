@@ -1,7 +1,8 @@
 From: bugs at busybox.net <bugs@busybox.net>
-Date: Tue, 25 Mar 2008 20:45:46 -0700
-Subject: [Buildroot] [buildroot 0002514]: fakeroot has an invalid version
-Message-ID: <617ed101296bc81ef9994c83cb95ba64@bugs.uclibc.org>
+Date: Tue, 25 Mar 2008 20:55:31 -0700
+Subject: [Buildroot] [buildroot 0001613]: mtd-utils external toolchain fix;
+	lzo dependency fix
+Message-ID: <4a1ba633ba8252df029382f77ba5752e@bugs.uclibc.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -9,48 +10,46 @@ Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
 
-The following issue has been RESOLVED. 
+A NOTE has been added to this issue. 
 ====================================================================== 
-http://busybox.net/bugs/view.php?id=2514 
+http://busybox.net/bugs/view.php?id=1613 
 ====================================================================== 
-Reported By:                sg
+Reported By:                ikonst
 Assigned To:                buildroot
 ====================================================================== 
 Project:                    buildroot
-Issue ID:                   2514
-Category:                   Other
+Issue ID:                   1613
+Category:                   Architecture Specific
 Reproducibility:            always
-Severity:                   block
+Severity:                   minor
 Priority:                   normal
-Status:                     resolved
-Resolution:                 fixed
-Fixed in Version:           
+Status:                     assigned
 ====================================================================== 
-Date Submitted:             03-10-2008 19:28 PDT
-Last Modified:              03-25-2008 20:45 PDT
+Date Submitted:             11-27-2007 06:19 PST
+Last Modified:              03-25-2008 20:55 PDT
 ====================================================================== 
-Summary:                    fakeroot has an invalid version
+Summary:                    mtd-utils external toolchain fix; lzo dependency fix
 Description: 
-The version of fakeroot demanded by the current buildroot in
-package/fakeroot/fakeroot.mk is 1.9. That version does not exist on
-debain.org. The closest matching version is 1.9.3. However, the patch file
-"fakeroot-revert-ltmain.patch" fails to apply against that version.
+mtd-utils has a few problems:
+1. $(TARGET_LDFLAGS) missing from make command, which makes it impossible
+to build in an external toolchain configuration.
+2. lzo is missing from the dependency chain, while mtd-utils use lzo.
+
+The attached patch fixes the problems.
 ====================================================================== 
 
 ---------------------------------------------------------------------- 
- hmoffatt - 03-25-08 20:45  
+ hmoffatt - 03-25-08 20:55  
 ---------------------------------------------------------------------- 
-This has been fixed (not by me). 
+I'm using mtd-utils with an external toolchain and I don't seem to need
+$(TARGET_LDFLAGS). Which arch are you using? 
 
 Issue History 
 Date Modified   Username       Field                    Change               
 ====================================================================== 
-03-10-08 19:28  sg             New Issue                                    
-03-10-08 19:28  sg             Status                   new => assigned     
-03-10-08 19:28  sg             Assigned To               => buildroot       
-03-11-08 03:09  johaahn        Issue Monitored: johaahn                     
-03-11-08 07:40  grindars       Issue Monitored: grindars                    
-03-25-08 20:45  hmoffatt       Status                   assigned => resolved
-03-25-08 20:45  hmoffatt       Resolution               open => fixed       
-03-25-08 20:45  hmoffatt       Note Added: 0005954                          
+11-27-07 06:19  ikonst         New Issue                                    
+11-27-07 06:19  ikonst         Status                   new => assigned     
+11-27-07 06:19  ikonst         Assigned To               => buildroot       
+11-27-07 06:19  ikonst         File Added: mtd-utils.patch                    
+03-25-08 20:55  hmoffatt       Note Added: 0005964                          
 ======================================================================
