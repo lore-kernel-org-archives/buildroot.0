@@ -1,38 +1,30 @@
 From: Bernhard Fischer <rep.dot.nop@gmail.com>
-Date: Wed, 26 Mar 2008 13:02:21 +0100
-Subject: [Buildroot] Build root fails
-In-Reply-To: <dcf6addc0803260232m74584c1cpf1f057f1dba3466@mail.gmail.com>
-References: <dcf6addc0803260227r6d2e458fr242e9a529ec8a8b8@mail.gmail.com>
-	<dcf6addc0803260232m74584c1cpf1f057f1dba3466@mail.gmail.com>
-Message-ID: <20080326120221.GA29267@mx.loc>
+Date: Wed, 26 Mar 2008 13:03:24 +0100
+Subject: [Buildroot] [buildroot 0002514]: fakeroot has an invalid	version
+In-Reply-To: <20080326095008.GA5235@cloud.net.au>
+References: <6120e54db705f325f96caacd10f5780b@busybox.net>
+	<20080326095008.GA5235@cloud.net.au>
+Message-ID: <20080326120324.GB29267@mx.loc>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Wed, Mar 26, 2008 at 05:32:19PM +0800, Jun Ma wrote:
->On Wed, Mar 26, 2008 at 5:27 PM, Jun Ma <sync.jma@gmail.com> wrote:
+On Wed, Mar 26, 2008 at 08:50:08PM +1100, Hamish Moffatt wrote:
+>On Wed, Mar 26, 2008 at 01:42:32AM -0700, bugs at busybox.net wrote:
+>> ---------------------------------------------------------------------- 
+>>  bernhardf - 03-26-08 01:42  
+>> ---------------------------------------------------------------------- 
+>> hmoffatt,
+>> 
+>> Please *close* bugs (don't set them to resolved).
+>> 
+>> TIA for fixing all other states you ment to close yesterday. 
 >
->> here is a link with the same problems reported:
->> http://www.busybox.net/lists/buildroot/2008-January/006754.html
->> Should I need git clone that tree, or waiting for this svn update?
->> :)
->>
+>Oh, my apologies! I didn't realise there was a difference. I haven't
+>seen such a distinction in other bug trackers.
 >
->Two config files attached.
->
->-- 
->FIXME if it is wrong.
+>I've closed the affected bugs now.
 
->#
-># Automatically generated make config: don't edit
-># Tue Feb 17 01:24:25 2015
-[]
->#
-># Atmel Mirrors
->#
->BR2_ATMEL_MIRROR="ftp://www.at91.com/pub/buildroot/"
->BR2_AT91_PATCH_MIRROR="http://maxim.org.za/AT91RM9200/2.6/"
-
-This is not my repo, so better git clone
+Thanks!
