@@ -1,34 +1,66 @@
-From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Wed, 26 Mar 2008 23:39:41 +0100
-Subject: [Buildroot] build problems
-In-Reply-To: <20080326171751.GH29267@mx.loc> (Bernhard Fischer's message of
-	"Wed\, 26 Mar 2008 18\:17\:51 +0100")
-References: <1CD05B980C94AC408B37C82BBABAA3E60ACA8184@mtsexchange.dc.multitech.prv>
-	<034f01c88ece$ef015bf0$040514ac@atmel.com>
-	<87ve39buzq.fsf@macbook.be.48ers.dk> <20080326171751.GH29267@mx.loc>
-Message-ID: <87r6dxw1n6.fsf@macbook.be.48ers.dk>
+From: bugs at busybox.net <bugs@busybox.net>
+Date: Wed, 26 Mar 2008 17:07:02 -0700
+Subject: [Buildroot] [buildroot 0002694]: busybox generates illegal
+	instruction error on ARM platform
+Message-ID: <a7b7533c001839146cf389c646b86c02@busybox.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Bernhard" == Bernhard Fischer <rep.dot.nop@gmail.com> writes:
 
+A NOTE has been added to this issue. 
+====================================================================== 
+http://busybox.net/bugs/view.php?id=2694 
+====================================================================== 
+Reported By:                ychuang
+Assigned To:                buildroot
+====================================================================== 
+Project:                    buildroot
+Issue ID:                   2694
+Category:                   Architecture Specific
+Reproducibility:            always
+Severity:                   major
+Priority:                   normal
+Status:                     assigned
+====================================================================== 
+Date Submitted:             03-26-2008 04:30 PDT
+Last Modified:              03-26-2008 17:07 PDT
+====================================================================== 
+Summary:                    busybox generates illegal instruction error on ARM
+platform
+Description: 
+After applying current new patchs (using svn) for buildroot, busybox
+commands: insmod, rmmod, and ping generate illegal instruction error after
+rebuilding the whole toolchain and recompiling busybox 1.9 (or 1.10).
+
+busybox 1.9.0 was working with old toolchain back on 2007/11/02.
+====================================================================== 
+
+---------------------------------------------------------------------- 
+ hbr_in - 03-26-08 17:07  
+---------------------------------------------------------------------- 
 Hi,
 
- >> To me it doesn't make sense to keep earlier versions than the latest
- >> stable release of a given major version (E.G. 1.9.2 instead of 1.9.1)
- >> - Otherwise it'll get too hard to handle. I think it's also soon time
- >> to retire some of the really ancient versions like 1.2.x - 1.6.x.
+I also had the same issue with busybox and buildroot. Then i updated my
+buildroot and busybox config and its working fine now. I have tested it
+against Busybox-1.9.1 version. Attached is the buildroot and busybox
+config files.
+Let me know if this has helped you any way.
 
- Bernhard> hehe, sounds familiar. I've already had my share of fun
- Bernhard> with Ulf in exactly this area and consequently there is
- Bernhard> that git-repo which fixes alot of this stuff for good.
+Regards
+Gururaja 
 
-I take it that you have completely stopped committing to svn - Would
-you object to me cherry picking a few commits from your git repo
-(E.G. newer toolchains)?
-
--- 
-Bye, Peter Korsgaard
+Issue History 
+Date Modified   Username       Field                    Change               
+====================================================================== 
+03-26-08 04:30  ychuang        New Issue                                    
+03-26-08 04:30  ychuang        Status                   new => assigned     
+03-26-08 04:30  ychuang        Assigned To               => buildroot       
+03-26-08 04:30  ychuang        File Added: .config                          
+03-26-08 17:00  hbr_in         File Added: myboard_defconfig                    
+03-26-08 17:00  hbr_in         File Added: busybox-1.9.1-full_opti.config       
+            
+03-26-08 17:07  hbr_in         Note Added: 0006094                          
+======================================================================
