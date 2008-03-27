@@ -1,23 +1,27 @@
-From: Arndt Kritzner <kritzner@logicway.de>
-Date: Thu, 27 Mar 2008 13:16:43 +0100
-Subject: [Buildroot] external mkimage needed for uImage generation?
-Message-ID: <47EB902B.8040802@logicway.de>
+From: Bernhard Fischer <rep.dot.nop@gmail.com>
+Date: Thu, 27 Mar 2008 13:50:54 +0100
+Subject: [Buildroot] make clean problem and patch
+In-Reply-To: <47EB6E57.4080101@logicway.de>
+References: <47EB6E57.4080101@logicway.de>
+Message-ID: <20080327125053.GE13379@mx.loc>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-When using the atstk1002_defconfig, kernel image building in uImage
-format fails because of a missing mkimage converter (from U-Boot).
-(For the moment I "borrowed" a binary mkimage from Atmels files and
-installed it to /usr/bin.)
--- 
+On Thu, Mar 27, 2008 at 10:52:23AM +0100, Arndt Kritzner wrote:
+>"make clean" fails after incomplete build attempts because of missing
+>files or directories. The attached patch precedes the clean actions with
+>a "-" to ignore these errors. With atstk1002_defconfig the packages
+>avahi, dropbear, file, lzo, ncftp and strace caused this sort of aborts.
+>The attached patch concerns these packages.
 
---
-###############################################################
-Dipl. Ing Arndt Kritzner    Tel:    (0385) 3993 448
-Logic Way GmbH              Fax:    (0385) 3993 458
-Hagenower Strasse 73        HTTP:   http://www.logicway.de
-19061 Schwerin              email:  mailto:kritzner at logicway.de
-###############################################################
+Unfortunately your list was incomplete.
+Fixed in my tree, thanks for mentioning this!
+
+PS:
+http://repo.or.cz/w/buildroot.git?a=commit;h=4c0e0b63bdc1fd65889bbaeb3d6ad8eb4d0fe22f
+
+cheers,
+Bernhard
