@@ -1,47 +1,61 @@
-From: Ulf Samuelsson <ulf.samuelsson@atmel.com>
-Date: Thu, 27 Mar 2008 06:14:17 +0100
-Subject: [Buildroot] using of local dir
-References: <47EA8F05.8090102@gmx.net>
-	<20080326180926.GA404@mx.loc><877ifp1bzg.fsf@macbook.be.48ers.dk>
-	<20080327025740.GB5036@cloud.net.au>
-Message-ID: <006901c88fc9$c232b280$070514ac@atmel.com>
+From: Arndt Kritzner <kritzner@logicway.de>
+Date: Thu, 27 Mar 2008 09:40:52 +0100
+Subject: [Buildroot] avr32 Problem in toolchain build
+Message-ID: <47EB5D94.4070006@logicway.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-> On Wed, Mar 26, 2008 at 09:12:03PM +0100, Peter Korsgaard wrote:
->> Well, the local/save/getconfig stuff does seem kinda overengineered -
->> Couldn't we just have a bunch of *_defconfig files under configs/
->> instead with a make %_defconfig target like the kernel has instead?
-> 
-> As long as you can have several projects built within the same tree. I'm
-> using the projects functionality to have several related projects built
-> this way.
-> 
+Building the snapshots 20080325 or 20080327 with "make
+atstk1002_defconfig; make" bails out in building the (bootstrap?)
+compiler. In 20080320 this problem didn't occur.
 
-That is its intended use.
+"make" output:
+creating ./config.status
+creating Makefile
+touch
+/media/usb-hdd/buildroot.20080325.2/toolchain_build_avr32/gcc-4.2.1-initial/.configured
+PATH="/media/usb-hdd/buildroot.20080325.2/toolchain_build_avr32/bin:/media/usb-hdd/buildroot.20080325.2/build_avr32/staging_dir/bin:/media/usb-hdd/buildroot.20080325.2/build_avr32/staging_dir/usr/bin:/bin:/usr/bin:/sbin:/usr/sbin:/usr/X11R6/bin:/opt/bin:/opt/gnome/bin:/opt/java/bin:/opt/java/jre/bin:/opt/kde/bin:/opt/mozilla/bin:/opt/qt/bin"
+/usr/bin/make -j1 -C
+/media/usb-hdd/buildroot.20080325.2/toolchain_build_avr32/gcc-4.2.1-initial
+all-gcc
+make[1]: Entering directory
+`/media/usb-hdd/buildroot.20080325.2/toolchain_build_avr32/gcc-4.2.1-initial'
+mkdir -p -- ./intl
+Configuring in ./intl
+configure: creating cache ./config.cache
+checking whether make sets $(MAKE)... yes
+checking for a BSD-compatible install... /bin/install -c
+checking whether NLS is requested... no
+checking for msgfmt... /usr/bin/msgfmt
+checking for gmsgfmt... /usr/bin/msgfmt
+checking for xgettext... /usr/bin/xgettext
+...
+checking whether setrlimit is declared... yes
+checking whether getrusage is declared... yes
+checking whether ldgetname is declared... no
+checking whether times is declared... yes
+checking whether sigaltstack is declared... yes
+checking for struct tms... yes
+checking for clock_t... yes
+checking for .preinit_array/.init_array/.fini_array support... yes
+checking if mkdir takes one argument... no
+*** Configuration avr32-unknown-linux-uclibc not supported
+make[1]: *** [configure-gcc] Fehler 1
+make[1]: Leaving directory
+`/media/usb-hdd/buildroot.20080325.2/toolchain_build_avr32/gcc-4.2.1-initial'
+make: ***
+[/media/usb-hdd/buildroot.20080325.2/toolchain_build_avr32/gcc-4.2.1-initial/.compiled]
+Fehler 2
 
-> Mind you I don't like using getconfig/saveconfig; too prone to losing
-> changes if you forget to saveconfig. Instead I use "make BOARD=xyz .."
-> each time. I will sometime send some patches to improve this method.
-> 
+-- 
 
-The stuff is used to generate the files needed by "make BOARD=xyz"
-If you have no need to change the configs after that,then
-you can use the BOARD=xyz after that.
-Once you think it is frozen, you can submit a new board.
-
-What do you want to change?
-
-> Hamish
-> -- 
-> Hamish Moffatt VK3SB <hamish@debian.org> <hamish@cloud.net.au>
-> _______________________________________________
-
-
-
-
-Best Regards
-Ulf Samuelsson
+--
+###############################################################
+Dipl. Ing Arndt Kritzner    Tel:    (0385) 3993 448
+Logic Way GmbH              Fax:    (0385) 3993 458
+Hagenower Strasse 73        HTTP:   http://www.logicway.de
+19061 Schwerin              email:  mailto:kritzner at logicway.de
+###############################################################
