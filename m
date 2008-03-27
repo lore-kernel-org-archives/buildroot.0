@@ -1,27 +1,51 @@
-From: Bernhard Fischer <rep.dot.nop@gmail.com>
-Date: Thu, 27 Mar 2008 13:50:54 +0100
-Subject: [Buildroot] make clean problem and patch
-In-Reply-To: <47EB6E57.4080101@logicway.de>
-References: <47EB6E57.4080101@logicway.de>
-Message-ID: <20080327125053.GE13379@mx.loc>
+From: jacmet at uclibc.org <jacmet@uclibc.org>
+Date: Thu, 27 Mar 2008 06:00:32 -0700 (PDT)
+Subject: [Buildroot] svn commit: trunk/buildroot/package/libusb
+Message-ID: <20080327130032.219ED3C346@busybox.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Thu, Mar 27, 2008 at 10:52:23AM +0100, Arndt Kritzner wrote:
->"make clean" fails after incomplete build attempts because of missing
->files or directories. The attached patch precedes the clean actions with
->a "-" to ignore these errors. With atstk1002_defconfig the packages
->avahi, dropbear, file, lzo, ncftp and strace caused this sort of aborts.
->The attached patch concerns these packages.
+Author: jacmet
+Date: 2008-03-27 06:00:31 -0700 (Thu, 27 Mar 2008)
+New Revision: 21514
 
-Unfortunately your list was incomplete.
-Fixed in my tree, thanks for mentioning this!
+Log:
+libusb: correctly install into STAGING_DIR/usr
 
-PS:
-http://repo.or.cz/w/buildroot.git?a=commit;h=4c0e0b63bdc1fd65889bbaeb3d6ad8eb4d0fe22f
+Closes #2494
 
-cheers,
-Bernhard
+
+Modified:
+   trunk/buildroot/package/libusb/libusb.mk
+
+
+Changeset:
+Modified: trunk/buildroot/package/libusb/libusb.mk
+===================================================================
+--- trunk/buildroot/package/libusb/libusb.mk	2008-03-27 10:23:13 UTC (rev 21513)
++++ trunk/buildroot/package/libusb/libusb.mk	2008-03-27 13:00:31 UTC (rev 21514)
+@@ -45,17 +45,17 @@
+ 		--target=$(GNU_TARGET_NAME) \
+ 		--host=$(GNU_TARGET_NAME) \
+ 		--build=$(GNU_HOST_NAME) \
+-		--prefix=/ \
++		--prefix=$(STAGING_DIR)/usr \
+ 		--disable-debug \
+ 		--disable-build-docs \
+ 	)
+ 	touch $@
+ 
+-$(STAGING_DIR)/lib/libusb.so: $(LIBUSB_DIR)/.configured
++$(STAGING_DIR)/usr/lib/libusb.so: $(LIBUSB_DIR)/.configured
+ 	$(MAKE) -C $(LIBUSB_DIR)
+-	$(MAKE) -C $(LIBUSB_DIR) DESTDIR=$(STAGING_DIR) install
++	$(MAKE) -C $(LIBUSB_DIR) install
+ 
+-$(TARGET_DIR)/$(LIBUSB_BINARY): $(STAGING_DIR)/lib/libusb.so
++$(TARGET_DIR)/$(LIBUSB_BINARY): $(STAGING_DIR)/usr/lib/libusb.so
+ 	cp -dpf $(STAGING_DIR)/usr/lib/libusb*.so* $(TARGET_DIR)/usr/lib/
+ 	$(STRIPCMD) $(STRIP_STRIP_UNNEEDED) $(TARGET_DIR)/usr/lib/libusb*.so*
+ 
