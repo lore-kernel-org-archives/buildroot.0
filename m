@@ -1,48 +1,40 @@
 From: Bernhard Fischer <rep.dot.nop@gmail.com>
-Date: Thu, 27 Mar 2008 12:24:16 +0100
-Subject: [Buildroot] build problems
-In-Reply-To: <87r6dxw1n6.fsf@macbook.be.48ers.dk>
-References: <1CD05B980C94AC408B37C82BBABAA3E60ACA8184@mtsexchange.dc.multitech.prv>
-	<034f01c88ece$ef015bf0$040514ac@atmel.com>
-	<87ve39buzq.fsf@macbook.be.48ers.dk>
-	<20080326171751.GH29267@mx.loc>
-	<87r6dxw1n6.fsf@macbook.be.48ers.dk>
-Message-ID: <20080327112416.GB13379@mx.loc>
+Date: Thu, 27 Mar 2008 13:06:39 +0100
+Subject: [Buildroot] Using a different kernel tree ?
+In-Reply-To: <057401c88ff0$46259410$ad289e86@LPSC0173W>
+References: <057401c88ff0$46259410$ad289e86@LPSC0173W>
+Message-ID: <20080327120639.GD13379@mx.loc>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Wed, Mar 26, 2008 at 11:39:41PM +0100, Peter Korsgaard wrote:
->>>>>> "Bernhard" == Bernhard Fischer <rep.dot.nop@gmail.com> writes:
+On Thu, Mar 27, 2008 at 10:52:22AM +0100, Guillaume Dargaud wrote:
+>Hello all,
+>I'd like to use, within buildroot, the kernel tree from 
+>git://git.xilinx.com/linux-2.6-xlnx.git instead of the vanilla tree coming 
+>with buildroot.
 >
->Hi,
->
-> >> To me it doesn't make sense to keep earlier versions than the latest
-> >> stable release of a given major version (E.G. 1.9.2 instead of 1.9.1)
-> >> - Otherwise it'll get too hard to handle. I think it's also soon time
-> >> to retire some of the really ancient versions like 1.2.x - 1.6.x.
->
-> Bernhard> hehe, sounds familiar. I've already had my share of fun
-> Bernhard> with Ulf in exactly this area and consequently there is
-> Bernhard> that git-repo which fixes alot of this stuff for good.
->
->I take it that you have completely stopped committing to svn - Would
->you object to me cherry picking a few commits from your git repo
->(E.G. newer toolchains)?
+>How does one do that ?
 
-The git tree is publically available for anybody to use under the terms
-and conditions of the license, so take it or leave it, as a whole or in
-parts, sure.
+The easiest approach would be to git clone that kernel and
+tar -cjf dl/linux-2.6.24.4.tar.bz2 linux-2.6-xlnx.git
+(--exclude='.git' if you don't want to write patches against it) and use
+that.
 
-But apart from you guys using outdated toolchains, let me point you to
-the more severe issue that you guys (i.e. not my git tree) build with
-fux0red up CFLAGS, so you'd better start off with fixing that before
-anything else.
-I think that i solved this nicely and cleanly in my tree.
-I even fixed some of the most annoying breakage (or my inability to use
-it properly, depending on your POV) that Ulf applied over time, fwiw.
+>If I just replace toolchain_build_ppc/linux-2.6.24 and/or 
+>project_build_ppc/my_project/linux-2.6.24 with the Xilinx tree, on the next 
+>"make ARCH=ppc linux26-menuconfig" it just deletes the whole directory and 
+>rebuilds it from bzcat...
+>
+>Or are there alternatives if I want to use the nice toolchain built by 
+>buildroot ?
+>
+>
+>BTW, what is the difference between toolchain_build_ppc/linux-2.6.24 and 
+>project_build_ppc/my_project/linux-2.6.24 ?
 
-HTH,
-Bernhard
+No, previously we only had one source-tree, but Ulf changed that for
+reasons that i do not remember offhand (conflicting patches, i.e. broken
+patches, IIRC).
