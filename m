@@ -1,66 +1,38 @@
-From: bugs at busybox.net <bugs@busybox.net>
-Date: Wed, 26 Mar 2008 17:07:02 -0700
-Subject: [Buildroot] [buildroot 0002694]: busybox generates illegal
-	instruction error on ARM platform
-Message-ID: <a7b7533c001839146cf389c646b86c02@busybox.net>
+From: Jun Ma <sync.jma@gmail.com>
+Date: Thu, 27 Mar 2008 09:37:01 +0800
+Subject: [Buildroot] Build root fails
+In-Reply-To: <20080326120221.GA29267@mx.loc>
+References: <dcf6addc0803260227r6d2e458fr242e9a529ec8a8b8@mail.gmail.com>
+	<dcf6addc0803260232m74584c1cpf1f057f1dba3466@mail.gmail.com>
+	<20080326120221.GA29267@mx.loc>
+Message-ID: <dcf6addc0803261837t7b48b1c9ge8bfa749995abae9@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+On Wed, Mar 26, 2008 at 8:02 PM, Bernhard Fischer <rep.dot.nop@gmail.com> wrote:
 
-A NOTE has been added to this issue. 
-====================================================================== 
-http://busybox.net/bugs/view.php?id=2694 
-====================================================================== 
-Reported By:                ychuang
-Assigned To:                buildroot
-====================================================================== 
-Project:                    buildroot
-Issue ID:                   2694
-Category:                   Architecture Specific
-Reproducibility:            always
-Severity:                   major
-Priority:                   normal
-Status:                     assigned
-====================================================================== 
-Date Submitted:             03-26-2008 04:30 PDT
-Last Modified:              03-26-2008 17:07 PDT
-====================================================================== 
-Summary:                    busybox generates illegal instruction error on ARM
-platform
-Description: 
-After applying current new patchs (using svn) for buildroot, busybox
-commands: insmod, rmmod, and ping generate illegal instruction error after
-rebuilding the whole toolchain and recompiling busybox 1.9 (or 1.10).
+> >#
+> ># Automatically generated make config: don't edit
+> ># Tue Feb 17 01:24:25 2015
+> []
+> >#
+> ># Atmel Mirrors
+> >#
+> >BR2_ATMEL_MIRROR="ftp://www.at91.com/pub/buildroot/"
+> >BR2_AT91_PATCH_MIRROR="http://maxim.org.za/AT91RM9200/2.6/"
+>
+> This is not my repo, so better git clone
+>
 
-busybox 1.9.0 was working with old toolchain back on 2007/11/02.
-====================================================================== 
+I am confused, the buildroot source was dowloaded from
+http://buildroot.uclibc.org/downloads/snapshots/,
+seems the officially release is based on svn, not
+git('http://repo.or.cz/w/buildroot.git').
 
----------------------------------------------------------------------- 
- hbr_in - 03-26-08 17:07  
----------------------------------------------------------------------- 
-Hi,
+Thanks
 
-I also had the same issue with busybox and buildroot. Then i updated my
-buildroot and busybox config and its working fine now. I have tested it
-against Busybox-1.9.1 version. Attached is the buildroot and busybox
-config files.
-Let me know if this has helped you any way.
-
-Regards
-Gururaja 
-
-Issue History 
-Date Modified   Username       Field                    Change               
-====================================================================== 
-03-26-08 04:30  ychuang        New Issue                                    
-03-26-08 04:30  ychuang        Status                   new => assigned     
-03-26-08 04:30  ychuang        Assigned To               => buildroot       
-03-26-08 04:30  ychuang        File Added: .config                          
-03-26-08 17:00  hbr_in         File Added: myboard_defconfig                    
-03-26-08 17:00  hbr_in         File Added: busybox-1.9.1-full_opti.config       
-            
-03-26-08 17:07  hbr_in         Note Added: 0006094                          
-======================================================================
+-- 
+FIXME if it is wrong.
