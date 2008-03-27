@@ -1,8 +1,7 @@
 From: bugs at busybox.net <bugs@busybox.net>
-Date: Thu, 27 Mar 2008 12:38:14 -0700
-Subject: [Buildroot] [buildroot 0001588]: undefined reference to fmsub when
-	using ppc405 + soft-float + c++
-Message-ID: <71d95698824279a5217a0d172682dfad@bugs.uclibc.org>
+Date: Thu, 27 Mar 2008 15:44:41 -0700
+Subject: [Buildroot] [buildroot 0002684]: Fakeroot 1.9 again
+Message-ID: <c2281e04aa6efdae11e33efbeeb472fb@busybox.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -12,130 +11,94 @@ To: buildroot@busybox.net
 
 The following issue has been CLOSED 
 ====================================================================== 
-http://busybox.net/bugs/view.php?id=1588 
+http://busybox.net/bugs/view.php?id=2684 
 ====================================================================== 
-Reported By:                glikely
+Reported By:                Graol
 Assigned To:                buildroot
 ====================================================================== 
 Project:                    buildroot
-Issue ID:                   1588
+Issue ID:                   2684
 Category:                   Architecture Specific
 Reproducibility:            always
-Severity:                   crash
+Severity:                   block
 Priority:                   normal
 Status:                     closed
 Resolution:                 open
 Fixed in Version:           
 ====================================================================== 
-Date Submitted:             11-12-2007 20:36 PST
-Last Modified:              03-27-2008 12:38 PDT
+Date Submitted:             03-26-2008 03:45 PDT
+Last Modified:              03-27-2008 15:44 PDT
 ====================================================================== 
-Summary:                    undefined reference to fmsub when using ppc405 +
-soft-float + c++
+Summary:                    Fakeroot 1.9 again
 Description: 
-C++ seems to be brpken on ppc405 toolchains using softfloat and uClibc. 
-Issue seen on current buildroot top-of-tree.
-
-I see the error on the iperf configure script.  Here's the relevant error
-message:
-
-configure:1936: checking for C++ compiler default output file name
-configure:1939:
-/home/grant/hacking/buildroot/build_powerpc/staging_dir/usr/bin/powerpc-linux-uclibc-g++
--Os -pipe 
--I/home/grant/hacking/buildroot/build_powerpc/staging_dir/usr/include
--I/home/grant/hacking/buildroot/build_powerpc/staging_dir/include
---sysroot=/home/grant/hacking/buildroot/build_powerpc/staging_dir/
--isysroot /home/grant/hacking/buildroot/build_powerpc/staging_dir
--mtune=405 -msoft-float    conftest.cc  >&5
-/home/grant/hacking/buildroot/build_powerpc/staging_dir/usr/bin-ccache/../lib/gcc/powerpc-linux-uclibc/4.2.1/../../../../powerpc-linux-uclibc/lib/libgcc_s.so:
-undefined reference to `fmsub'
-collect2: ld returned 1 exit status
-configure:1942: $? = 1
-configure: failed program was:
-| /* confdefs.h.  */
-|
-| #define PACKAGE_NAME "Iperf"
-| #define PACKAGE_TARNAME "iperf"
-| #define PACKAGE_VERSION "2.0.2"
-| #define PACKAGE_STRING "Iperf 2.0.2"
-| #define PACKAGE_BUGREPORT ""
-| #define PACKAGE "iperf"
-| #define VERSION "2.0.2"
-| /* end confdefs.h.  */
-|
-| int
-| main ()
-| {
-|
-|   ;
-|   return 0;
-| }
-configure:1981: error: C++ compiler cannot create executables
-See `config.log' for more details.
-
-I've attached my .config file
+Fakeroot 1.9 has disappeared again from the official debian repository, and
+the 1.9.3 version fails to compile (on architecture x86_64).
 ====================================================================== 
 
 ---------------------------------------------------------------------- 
- vanokuten - 11-16-07 02:53  
+ hmoffatt - 03-26-08 06:08  
 ---------------------------------------------------------------------- 
-Do you have a fix for it? 
+Please provide details of the failure, ie a log. It builds fine for me on
+amd64. 
 
 ---------------------------------------------------------------------- 
- b5331 - 01-31-08 05:48  
+ Graol - 03-26-08 06:20  
 ---------------------------------------------------------------------- 
-I just want to confirm this problem. I have tested C++ gcc-4.2.1 compiler
-with both uClibc-0.9.29 and uClibc-0.9.28.3, they both have the same
-problem: undefined reference to `fmsub'. It seams that uClibc is not
-compatible with the latest versions of the C++ compiler.
-I am quite surprised to the fact that this issue has the normal level of
-priority, when such a basic tool as the compiler can not be used.
-
- 
+The server I used to work on not available anymore (reconfigured for
+release). I forgot to save the log, but it said something like "applying a
+patch to fakeroot 1.9.3... Trunk failure 1 on 1 etc... ## trunk failures in
+##".
+Despite modifying the /etc/apt/sources.list, a make still got the fakeroot
+package from the official debian repo instead of snapshot.debian.net 
 
 ---------------------------------------------------------------------- 
- b5331 - 02-01-08 09:20  
+ hmoffatt - 03-26-08 06:25  
 ---------------------------------------------------------------------- 
-Hi guys, it seams that I have a solution for this problem. I am not sure
-that it is hundred percents correct , but at least it works for me.
-I am using Freescale  MPC8540 microchip.
-The gcc/config/rs6000/darwin-ldouble.c file contents the fmsub function.
-This file was not included in  previous versions of gcc in the project for
-this type of processors, because it mainly encloses functions irrelevant
-for 32-bit processors. Having difficulty to exclude this file from the
-project, I have disabled it by moving the conditional compiling directive.
-After that I was able to build applications with no error message from the
-linker.
+buildroot doesn't use your /etc/apt/sources.list - it fetches the source
+directly using wget. If yours didn't go to snapshot.debian.net then it
+isn't up to date. 
 
-The proposed '920-soft-float.patch' patch is attached. Any comments are
-welcome
+---------------------------------------------------------------------- 
+ Graol - 03-26-08 07:00  
+---------------------------------------------------------------------- 
+Well, I used the Buildroot snapshot from 02-11-2008. I'll try again with
+the most up-to-date one and keep you informed.
 
  
 
 ---------------------------------------------------------------------- 
- jacmet - 03-27-08 12:38  
+ hmoffatt - 03-26-08 14:20  
 ---------------------------------------------------------------------- 
-Fixed in r2152 - Thanks! 
+That's about 6 weeks ago. The change to use snapshot.debian.net was made on
+2008-03-13, exactly because of the problem you are reporting. 
+
+---------------------------------------------------------------------- 
+ Graol - 03-27-08 08:56  
+---------------------------------------------------------------------- 
+Ok fixed. Thank you.
+
+ 
+
+---------------------------------------------------------------------- 
+ hmoffatt - 03-27-08 15:44  
+---------------------------------------------------------------------- 
+Fixed already 
 
 Issue History 
 Date Modified   Username       Field                    Change               
 ====================================================================== 
-11-12-07 20:36  glikely        New Issue                                    
-11-12-07 20:36  glikely        Status                   new => assigned     
-11-12-07 20:36  glikely        Assigned To               => buildroot       
-11-12-07 20:36  glikely        File Added: .config                          
-11-16-07 02:53  vanokuten      Note Added: 0002933                          
-01-30-08 06:17  b5331          Issue Monitored: b5331                       
-01-30-08 06:36  b5331          Note Added: 0003604                          
-01-30-08 06:36  b5331          Note Added: 0003609                          
-01-30-08 06:37  b5331          Note Deleted: 0003609                        
-01-31-08 05:48  b5331          Note Edited: 0003604                         
-02-01-08 06:55  b5331          File Added: 920-soft-float.patch                 
-  
-02-01-08 06:55  b5331          Note Added: 0003634                          
-02-01-08 07:51  b5331          Note Edited: 0003634                         
-02-01-08 09:20  b5331          Note Edited: 0003634                         
-03-27-08 12:38  jacmet         Status                   assigned => closed  
-03-27-08 12:38  jacmet         Note Added: 0006134                          
+03-26-08 03:45  Graol          New Issue                                    
+03-26-08 03:45  Graol          Status                   new => assigned     
+03-26-08 03:45  Graol          Assigned To               => buildroot       
+03-26-08 06:08  hmoffatt       Note Added: 0005994                          
+03-26-08 06:20  Graol          Note Added: 0006004                          
+03-26-08 06:25  hmoffatt       Note Added: 0006014                          
+03-26-08 06:56  Graol          Note Added: 0006024                          
+03-26-08 07:00  Graol          Note Edited: 0006024                         
+03-26-08 14:20  hmoffatt       Note Added: 0006064                          
+03-27-08 08:37  Graol          Note Added: 0006124                          
+03-27-08 08:37  Graol          Note Edited: 0006124                         
+03-27-08 08:56  Graol          Note Edited: 0006124                         
+03-27-08 15:44  hmoffatt       Status                   assigned => closed  
+03-27-08 15:44  hmoffatt       Note Added: 0006144                          
 ======================================================================
