@@ -1,46 +1,48 @@
 From: Bernhard Fischer <rep.dot.nop@gmail.com>
-Date: Thu, 27 Mar 2008 12:13:24 +0100
-Subject: [Buildroot] Build root fails
-In-Reply-To: <dcf6addc0803261837t7b48b1c9ge8bfa749995abae9@mail.gmail.com>
-References: <dcf6addc0803260227r6d2e458fr242e9a529ec8a8b8@mail.gmail.com>
-	<dcf6addc0803260232m74584c1cpf1f057f1dba3466@mail.gmail.com>
-	<20080326120221.GA29267@mx.loc>
-	<dcf6addc0803261837t7b48b1c9ge8bfa749995abae9@mail.gmail.com>
-Message-ID: <20080327111324.GA13379@mx.loc>
+Date: Thu, 27 Mar 2008 12:24:16 +0100
+Subject: [Buildroot] build problems
+In-Reply-To: <87r6dxw1n6.fsf@macbook.be.48ers.dk>
+References: <1CD05B980C94AC408B37C82BBABAA3E60ACA8184@mtsexchange.dc.multitech.prv>
+	<034f01c88ece$ef015bf0$040514ac@atmel.com>
+	<87ve39buzq.fsf@macbook.be.48ers.dk>
+	<20080326171751.GH29267@mx.loc>
+	<87r6dxw1n6.fsf@macbook.be.48ers.dk>
+Message-ID: <20080327112416.GB13379@mx.loc>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Thu, Mar 27, 2008 at 09:37:01AM +0800, Jun Ma wrote:
->On Wed, Mar 26, 2008 at 8:02 PM, Bernhard Fischer <rep.dot.nop@gmail.com> wrote:
+On Wed, Mar 26, 2008 at 11:39:41PM +0100, Peter Korsgaard wrote:
+>>>>>> "Bernhard" == Bernhard Fischer <rep.dot.nop@gmail.com> writes:
 >
->> >#
->> ># Automatically generated make config: don't edit
->> ># Tue Feb 17 01:24:25 2015
->> []
->> >#
->> ># Atmel Mirrors
->> >#
->> >BR2_ATMEL_MIRROR="ftp://www.at91.com/pub/buildroot/"
->> >BR2_AT91_PATCH_MIRROR="http://maxim.org.za/AT91RM9200/2.6/"
->>
->> This is not my repo, so better git clone
->>
+>Hi,
 >
->I am confused, the buildroot source was dowloaded from
->http://buildroot.uclibc.org/downloads/snapshots/,
->seems the officially release is based on svn, not
->git('http://repo.or.cz/w/buildroot.git').
+> >> To me it doesn't make sense to keep earlier versions than the latest
+> >> stable release of a given major version (E.G. 1.9.2 instead of 1.9.1)
+> >> - Otherwise it'll get too hard to handle. I think it's also soon time
+> >> to retire some of the really ancient versions like 1.2.x - 1.6.x.
+>
+> Bernhard> hehe, sounds familiar. I've already had my share of fun
+> Bernhard> with Ulf in exactly this area and consequently there is
+> Bernhard> that git-repo which fixes alot of this stuff for good.
+>
+>I take it that you have completely stopped committing to svn - Would
+>you object to me cherry picking a few commits from your git repo
+>(E.G. newer toolchains)?
 
-yes, exactly. To recap, you asked:
-"here is a link with the same problems reported:
-http://www.busybox.net/lists/buildroot/2008-January/006754.html
-Should I need git clone that tree, or waiting for this svn update?
-:)
-"
+The git tree is publically available for anybody to use under the terms
+and conditions of the license, so take it or leave it, as a whole or in
+parts, sure.
 
-Currently, i will not pull packages/* from svn since i already cleaned
-up the most commonly used packages and do not have a need for the rest,
-so don't hold your breath.
+But apart from you guys using outdated toolchains, let me point you to
+the more severe issue that you guys (i.e. not my git tree) build with
+fux0red up CFLAGS, so you'd better start off with fixing that before
+anything else.
+I think that i solved this nicely and cleanly in my tree.
+I even fixed some of the most annoying breakage (or my inability to use
+it properly, depending on your POV) that Ulf applied over time, fwiw.
+
+HTH,
+Bernhard
