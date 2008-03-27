@@ -1,31 +1,32 @@
-From: Arndt Kritzner <kritzner@logicway.de>
-Date: Thu, 27 Mar 2008 10:52:23 +0100
-Subject: [Buildroot] make clean problem and patch
-Message-ID: <47EB6E57.4080101@logicway.de>
+From: Guillaume Dargaud <dargaud@lpsc.in2p3.fr>
+Date: Thu, 27 Mar 2008 10:52:22 +0100
+Subject: [Buildroot] Using a different kernel tree ?
+Message-ID: <057401c88ff0$46259410$ad289e86@LPSC0173W>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-"make clean" fails after incomplete build attempts because of missing
-files or directories. The attached patch precedes the clean actions with
-a "-" to ignore these errors. With atstk1002_defconfig the packages
-avahi, dropbear, file, lzo, ncftp and strace caused this sort of aborts.
-The attached patch concerns these packages.
--- 
+Hello all,
+I'd like to use, within buildroot, the kernel tree from 
+git://git.xilinx.com/linux-2.6-xlnx.git instead of the vanilla tree coming 
+with buildroot.
 
---
-###############################################################
-Dipl. Ing Arndt Kritzner    Tel:    (0385) 3993 448
-Logic Way GmbH              Fax:    (0385) 3993 458
-Hagenower Strasse 73        HTTP:   http://www.logicway.de
-19061 Schwerin              email:  mailto:kritzner at logicway.de
-###############################################################
--------------- next part --------------
-A non-text attachment was scrubbed...
-Name: buildroot-make_clean.diff
-Type: text/x-patch
-Size: 2330 bytes
-Desc: not available
-Url : http://busybox.net/lists/buildroot/attachments/20080327/2d3fbc8a/attachment-0001.bin 
+How does one do that ?
+
+If I just replace toolchain_build_ppc/linux-2.6.24 and/or 
+project_build_ppc/my_project/linux-2.6.24 with the Xilinx tree, on the next 
+"make ARCH=ppc linux26-menuconfig" it just deletes the whole directory and 
+rebuilds it from bzcat...
+
+Or are there alternatives if I want to use the nice toolchain built by 
+buildroot ?
+
+
+BTW, what is the difference between toolchain_build_ppc/linux-2.6.24 and 
+project_build_ppc/my_project/linux-2.6.24 ?
+-- 
+Guillaume Dargaud
+http://www.gdargaud.net/
+  "It's a little-known fact that the Y1K problem caused the Dark Ages." 
