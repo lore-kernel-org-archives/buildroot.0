@@ -1,86 +1,66 @@
-From: jacmet at uclibc.org <jacmet@uclibc.org>
-Date: Thu, 27 Mar 2008 03:23:14 -0700 (PDT)
-Subject: [Buildroot] svn commit: trunk/buildroot/toolchain/uClibc
-Message-ID: <20080327102314.CDAA33C376@busybox.net>
+From: paradoxxa <paradoxxa2001@web.de>
+Date: Thu, 27 Mar 2008 04:02:39 -0700 (PDT)
+Subject: [Buildroot]  NetSilicon 9360 and Xenomai/Adeos
+Message-ID: <16324293.post@talk.nabble.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Author: jacmet
-Date: 2008-03-27 03:23:13 -0700 (Thu, 27 Mar 2008)
-New Revision: 21513
 
-Log:
-uClibc 0.9.28.3: use optimized string ops on ppc
+I have here a NetSilicon 9360 (ARM926EJ-Sid(wb) [41069264] revision 4
+(ARMv5TEJ)) Board and a buildroot toolchain. I will porting Xenomai/Adeos to
+this Board. Actual i patches the Kernel (2.6.24) with Xenaomai:
 
-Use optimized string ops instead of dummy generic ones on PPC.
+$ /usr/src/xenomai-2.4.3/scripts/prepare-kernel.sh	\ 	
+		--linux=/usr/src/linux-2.6.24-gentoo/ 	\
+	
+--adeos=/usr/src/xenomai-2.4.3/ksrc/arch/arm/patches/adeos-ipipe-2.6.24-arm-1.9-01.patch
+--arch=arm
+$ cd /usr/src/linux-2.6.24-gentoo
+$ build_root=/usr/src/build_root/
+$ make ARCH=arm CROSS_COMPILE=arm-linux- O=$build_root ns9xxx_defconfig
+
+Here the cross compiler from buildroot is used.
+Then i started to port the I-Pipe recording to I-pipe:ArmPorting  (
+http://www.xenomai.org/index.php/I-pipe:ArmPorting
+http://www.xenomai.org/index.php/I-pipe:ArmPorting ). I added the variables
+and functions to the following files: /arch/arm/mach-ns9xxx/time.c,
+include/asm-arm/arch-ns9xx/irqs.h and /arch/arm/mach-ns9xxx/irq.c
+
+The next step in the howto i don't understand really. I found nowhere the
+pxa_timer_interrupt() function and so on. Therefore i don't know what i have
+to do further.
+When i try to compiling it i get this errors:
+
+$ make ARCH=arm CROSS_COMPILE=arm-linux- O=$build_root
+  CHK     include/linux/version.h
+make[2]: ?include/asm-arm/mach-types.h? ist bereits aktualisiert.
+  Using /usr/src/linux-2.6.24-gentoo as source for kernel
+  GEN     /usr/src/build_root/Makefile
+  CHK     include/linux/utsrelease.h
+  CALL    /usr/src/linux-2.6.24-gentoo/scripts/checksyscalls.sh
+<stdin>:1097:2: warning: #warning syscall fadvise64 not implemented
+<stdin>:1265:2: warning: #warning syscall migrate_pages not implemented
+<stdin>:1321:2: warning: #warning syscall pselect6 not implemented
+<stdin>:1325:2: warning: #warning syscall ppoll not implemented
+<stdin>:1365:2: warning: #warning syscall epoll_pwait not implemented
+  CHK     include/linux/compile.h
+  CC      arch/arm/kernel/ipipe.o
+/usr/src/linux-2.6.24-gentoo/arch/arm/kernel/ipipe.c: In function
+'__ipipe_grab_irq':
+/usr/src/linux-2.6.24-gentoo/arch/arm/kernel/ipipe.c:429: error: expected
+expression before ')' token
+make[2]: *** [arch/arm/kernel/ipipe.o] error 1
+make[1]: *** [arch/arm/kernel] error 2
+make: *** [sub-make] error 2
 
 
-Added:
-   trunk/buildroot/toolchain/uClibc/uClibc-0.9.28.3-ppc-string-ops.patch
+Do someone have an idea and could help me?
+Thanks
 
 
-Changeset:
-Added: trunk/buildroot/toolchain/uClibc/uClibc-0.9.28.3-ppc-string-ops.patch
-===================================================================
---- trunk/buildroot/toolchain/uClibc/uClibc-0.9.28.3-ppc-string-ops.patch	                        (rev 0)
-+++ trunk/buildroot/toolchain/uClibc/uClibc-0.9.28.3-ppc-string-ops.patch	2008-03-27 10:23:13 UTC (rev 21513)
-@@ -0,0 +1,56 @@
-+diff -urpN uClibc-0.9.28.3/libc/string/powerpc/string.c uClibc-0.9.28.3-patched/libc/string/powerpc/string.c
-+--- uClibc-0.9.28.3/libc/string/powerpc/string.c	2005-06-21 16:03:15.000000000 +0200
-++++ uClibc-0.9.28.3-patched/libc/string/powerpc/string.c	2008-03-27 00:22:16.000000000 +0100
-+@@ -32,7 +32,7 @@
-+ #include <locale.h> /* for __LOCALE_C_ONLY */
-+ 
-+ #ifdef L_memcpy
-+-void attribute_hidden *__memcpy(void *to, const void *from, size_t n)
-++void *memcpy(void *to, const void *from, size_t n)
-+ /* PPC can do pre increment and load/store, but not post increment and load/store.
-+    Therefore use *++ptr instead of *ptr++. */
-+ {
-+@@ -87,11 +87,10 @@ void attribute_hidden *__memcpy(void *to
-+ 		goto copy_chunks;
-+ 	goto lessthan8;
-+ }
-+-strong_alias(__memcpy, memcpy);
-+ #endif
-+ 
-+ #ifdef L_memmove
-+-void attribute_hidden *__memmove(void *to, const void *from, size_t n)
-++void *memmove(void *to, const void *from, size_t n)
-+ {
-+ 	unsigned long rem, chunks, tmp1, tmp2;
-+ 	unsigned char *tmp_to;
-+@@ -142,7 +141,6 @@ void attribute_hidden *__memmove(void *t
-+ 		goto copy_chunks;
-+ 	goto lessthan8;
-+ }
-+-strong_alias(__memmove, memmove);
-+ #endif
-+ 
-+ #ifdef L_memset
-+@@ -156,7 +154,7 @@ static inline int expand_byte_word(int c
-+ 	    : "=r" (c) : "0" (c));
-+ 	return c;
-+ }
-+-void attribute_hidden *__memset(void *to, int c, size_t n)
-++void *memset(void *to, int c, size_t n)
-+ {
-+ 	unsigned long rem, chunks;
-+ 	unsigned char *tmp_to;
-+@@ -202,12 +200,10 @@ void attribute_hidden *__memset(void *to
-+ 		goto copy_chunks;
-+ 	goto lessthan8;
-+ }
-+-strong_alias(__memset, memset);
-+ #endif
-+ 
-+ #ifdef L_bzero
-+-weak_alias(__bzero,bzero);
-+-void __bzero(void *s, size_t n)
-++void bzero(void *s, size_t n)
-+ {
-+ 	(void)memset(s, 0, n);
-+ }
+-- 
+View this message in context: http://www.nabble.com/NetSilicon-9360-and-Xenomai-Adeos-tp16324293p16324293.html
+Sent from the BuildRoot mailing list archive at Nabble.com.
