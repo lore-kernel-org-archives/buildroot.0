@@ -1,54 +1,141 @@
-From: jacmet at uclibc.org <jacmet@uclibc.org>
-Date: Thu, 27 Mar 2008 12:37:34 -0700 (PDT)
-Subject: [Buildroot] svn commit: trunk/buildroot/toolchain/gcc/4.2.1
-Message-ID: <20080327193734.614AF3C419@busybox.net>
+From: bugs at busybox.net <bugs@busybox.net>
+Date: Thu, 27 Mar 2008 12:38:14 -0700
+Subject: [Buildroot] [buildroot 0001588]: undefined reference to fmsub when
+	using ppc405 + soft-float + c++
+Message-ID: <71d95698824279a5217a0d172682dfad@bugs.uclibc.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Author: jacmet
-Date: 2008-03-27 12:37:33 -0700 (Thu, 27 Mar 2008)
-New Revision: 21520
 
-Log:
-gcc 4.2.1: fix undefined reference to fmsub in C++ programs with soft float
+The following issue has been CLOSED 
+====================================================================== 
+http://busybox.net/bugs/view.php?id=1588 
+====================================================================== 
+Reported By:                glikely
+Assigned To:                buildroot
+====================================================================== 
+Project:                    buildroot
+Issue ID:                   1588
+Category:                   Architecture Specific
+Reproducibility:            always
+Severity:                   crash
+Priority:                   normal
+Status:                     closed
+Resolution:                 open
+Fixed in Version:           
+====================================================================== 
+Date Submitted:             11-12-2007 20:36 PST
+Last Modified:              03-27-2008 12:38 PDT
+====================================================================== 
+Summary:                    undefined reference to fmsub when using ppc405 +
+soft-float + c++
+Description: 
+C++ seems to be brpken on ppc405 toolchains using softfloat and uClibc. 
+Issue seen on current buildroot top-of-tree.
 
-Fix 'undefined reference to fmsub' linking errors with C++ programs
-when soft float is enabled. Patch by b5331.
+I see the error on the iperf configure script.  Here's the relevant error
+message:
 
-Closes #1588.
+configure:1936: checking for C++ compiler default output file name
+configure:1939:
+/home/grant/hacking/buildroot/build_powerpc/staging_dir/usr/bin/powerpc-linux-uclibc-g++
+-Os -pipe 
+-I/home/grant/hacking/buildroot/build_powerpc/staging_dir/usr/include
+-I/home/grant/hacking/buildroot/build_powerpc/staging_dir/include
+--sysroot=/home/grant/hacking/buildroot/build_powerpc/staging_dir/
+-isysroot /home/grant/hacking/buildroot/build_powerpc/staging_dir
+-mtune=405 -msoft-float    conftest.cc  >&5
+/home/grant/hacking/buildroot/build_powerpc/staging_dir/usr/bin-ccache/../lib/gcc/powerpc-linux-uclibc/4.2.1/../../../../powerpc-linux-uclibc/lib/libgcc_s.so:
+undefined reference to `fmsub'
+collect2: ld returned 1 exit status
+configure:1942: $? = 1
+configure: failed program was:
+| /* confdefs.h.  */
+|
+| #define PACKAGE_NAME "Iperf"
+| #define PACKAGE_TARNAME "iperf"
+| #define PACKAGE_VERSION "2.0.2"
+| #define PACKAGE_STRING "Iperf 2.0.2"
+| #define PACKAGE_BUGREPORT ""
+| #define PACKAGE "iperf"
+| #define VERSION "2.0.2"
+| /* end confdefs.h.  */
+|
+| int
+| main ()
+| {
+|
+|   ;
+|   return 0;
+| }
+configure:1981: error: C++ compiler cannot create executables
+See `config.log' for more details.
 
+I've attached my .config file
+====================================================================== 
 
-Added:
-   trunk/buildroot/toolchain/gcc/4.2.1/920-soft-float.patch
+---------------------------------------------------------------------- 
+ vanokuten - 11-16-07 02:53  
+---------------------------------------------------------------------- 
+Do you have a fix for it? 
 
+---------------------------------------------------------------------- 
+ b5331 - 01-31-08 05:48  
+---------------------------------------------------------------------- 
+I just want to confirm this problem. I have tested C++ gcc-4.2.1 compiler
+with both uClibc-0.9.29 and uClibc-0.9.28.3, they both have the same
+problem: undefined reference to `fmsub'. It seams that uClibc is not
+compatible with the latest versions of the C++ compiler.
+I am quite surprised to the fact that this issue has the normal level of
+priority, when such a basic tool as the compiler can not be used.
 
-Changeset:
-Added: trunk/buildroot/toolchain/gcc/4.2.1/920-soft-float.patch
-===================================================================
---- trunk/buildroot/toolchain/gcc/4.2.1/920-soft-float.patch	                        (rev 0)
-+++ trunk/buildroot/toolchain/gcc/4.2.1/920-soft-float.patch	2008-03-27 19:37:33 UTC (rev 21520)
-@@ -0,0 +1,21 @@
-+diff -uNpr gcc-4.2.1_orig/gcc/config/rs6000/darwin-ldouble.c gcc-4.2.1/gcc/config/rs6000/darwin-ldouble.c
-+--- gcc-4.2.1_orig/gcc/config/rs6000/darwin-ldouble.c	2007-03-05 11:54:00.000000000 -0500
-++++ gcc-4.2.1/gcc/config/rs6000/darwin-ldouble.c	2008-01-31 17:51:24.000000000 -0500
-+@@ -70,6 +70,8 @@ Software Foundation, 51 Franklin Street,
-+    but GCC currently generates poor code when a union is used to turn
-+    a long double into a pair of doubles.  */
-+ 
-++#if defined (_SOFT_FLOAT) && defined (__LONG_DOUBLE_128__)
-++
-+ long double __gcc_qadd (double, double, double, double);
-+ long double __gcc_qsub (double, double, double, double);
-+ long double __gcc_qmul (double, double, double, double);
-+@@ -219,8 +221,6 @@ __gcc_qdiv (double a, double b, double c
-+   return z.ldval;
-+ }
-+ 
-+-#if defined (_SOFT_FLOAT) && defined (__LONG_DOUBLE_128__)
-+-
-+ long double __gcc_qneg (double, double);
-+ int __gcc_qeq (double, double, double, double);
-+ int __gcc_qne (double, double, double, double);
+ 
+
+---------------------------------------------------------------------- 
+ b5331 - 02-01-08 09:20  
+---------------------------------------------------------------------- 
+Hi guys, it seams that I have a solution for this problem. I am not sure
+that it is hundred percents correct , but at least it works for me.
+I am using Freescale  MPC8540 microchip.
+The gcc/config/rs6000/darwin-ldouble.c file contents the fmsub function.
+This file was not included in  previous versions of gcc in the project for
+this type of processors, because it mainly encloses functions irrelevant
+for 32-bit processors. Having difficulty to exclude this file from the
+project, I have disabled it by moving the conditional compiling directive.
+After that I was able to build applications with no error message from the
+linker.
+
+The proposed '920-soft-float.patch' patch is attached. Any comments are
+welcome
+
+ 
+
+---------------------------------------------------------------------- 
+ jacmet - 03-27-08 12:38  
+---------------------------------------------------------------------- 
+Fixed in r2152 - Thanks! 
+
+Issue History 
+Date Modified   Username       Field                    Change               
+====================================================================== 
+11-12-07 20:36  glikely        New Issue                                    
+11-12-07 20:36  glikely        Status                   new => assigned     
+11-12-07 20:36  glikely        Assigned To               => buildroot       
+11-12-07 20:36  glikely        File Added: .config                          
+11-16-07 02:53  vanokuten      Note Added: 0002933                          
+01-30-08 06:17  b5331          Issue Monitored: b5331                       
+01-30-08 06:36  b5331          Note Added: 0003604                          
+01-30-08 06:36  b5331          Note Added: 0003609                          
+01-30-08 06:37  b5331          Note Deleted: 0003609                        
+01-31-08 05:48  b5331          Note Edited: 0003604                         
+02-01-08 06:55  b5331          File Added: 920-soft-float.patch                 
+  
+02-01-08 06:55  b5331          Note Added: 0003634                          
+02-01-08 07:51  b5331          Note Edited: 0003634                         
+02-01-08 09:20  b5331          Note Edited: 0003634                         
+03-27-08 12:38  jacmet         Status                   assigned => closed  
+03-27-08 12:38  jacmet         Note Added: 0006134                          
+======================================================================
