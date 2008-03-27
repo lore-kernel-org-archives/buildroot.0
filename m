@@ -1,32 +1,35 @@
-From: Guillaume Dargaud <dargaud@lpsc.in2p3.fr>
-Date: Thu, 27 Mar 2008 10:52:22 +0100
-Subject: [Buildroot] Using a different kernel tree ?
-Message-ID: <057401c88ff0$46259410$ad289e86@LPSC0173W>
+From: jacmet at uclibc.org <jacmet@uclibc.org>
+Date: Thu, 27 Mar 2008 03:23:04 -0700 (PDT)
+Subject: [Buildroot] svn commit: trunk/buildroot/toolchain/uClibc
+Message-ID: <20080327102304.C357A3C365@busybox.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello all,
-I'd like to use, within buildroot, the kernel tree from 
-git://git.xilinx.com/linux-2.6-xlnx.git instead of the vanilla tree coming 
-with buildroot.
+Author: jacmet
+Date: 2008-03-27 03:23:03 -0700 (Thu, 27 Mar 2008)
+New Revision: 21512
 
-How does one do that ?
-
-If I just replace toolchain_build_ppc/linux-2.6.24 and/or 
-project_build_ppc/my_project/linux-2.6.24 with the Xilinx tree, on the next 
-"make ARCH=ppc linux26-menuconfig" it just deletes the whole directory and 
-rebuilds it from bzcat...
-
-Or are there alternatives if I want to use the nice toolchain built by 
-buildroot ?
+Log:
+uclibc: remove unused legacy patches
 
 
-BTW, what is the difference between toolchain_build_ppc/linux-2.6.24 and 
-project_build_ppc/my_project/linux-2.6.24 ?
--- 
-Guillaume Dargaud
-http://www.gdargaud.net/
-  "It's a little-known fact that the Y1K problem caused the Dark Ages." 
+Removed:
+   trunk/buildroot/toolchain/uClibc/uClibc-0.9.28-100-fix_includes.patch
+   trunk/buildroot/toolchain/uClibc/uClibc-0.9.28-200-host-ldconfig.patch
+   trunk/buildroot/toolchain/uClibc/uClibc-0.9.28-300-ldso.patch
+   trunk/buildroot/toolchain/uClibc/uClibc-0.9.28-400-math-endianness.patch
+   trunk/buildroot/toolchain/uClibc/uClibc-0.9.28-500-mutex-cancel.patch
+   trunk/buildroot/toolchain/uClibc/uClibc-0.9.28-600-new_dst_rules.patch
+   trunk/buildroot/toolchain/uClibc/uClibc-0.9.28-700-rm-whitespace.patch
+   trunk/buildroot/toolchain/uClibc/uClibc-0.9.28-800-avr32-1.patch
+
+
+Changeset:
+
+Sorry, the patch is too large to include (19697 lines).
+Please use ViewCVS to see it!
+
+http://uclibc.org/cgi-bin/viewcvs.cgi?view=rev&root=svn&rev=21512
