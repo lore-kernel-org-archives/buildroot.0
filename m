@@ -1,49 +1,41 @@
-From: nkukard at uclibc.org <nkukard@uclibc.org>
-Date: Fri, 28 Mar 2008 14:27:03 -0700 (PDT)
-Subject: [Buildroot] svn commit: trunk/buildroot/toolchain/gcc/4.2.2
-Message-ID: <20080328212703.681B63C478@busybox.net>
+From: Peter Korsgaard <jacmet@uclibc.org>
+Date: Fri, 28 Mar 2008 22:27:09 +0100
+Subject: [Buildroot] svn commit: trunk/buildroot: target/device
+	target/device/ARMLTD targ etc...
+In-Reply-To: <20080328211852.GQ1783@mx.loc> (Bernhard Fischer's message of
+	"Fri\, 28 Mar 2008 22\:18\:52 +0100")
+References: <20080328210305.9A5EF3C3B1@busybox.net>
+	<87wsnmftfe.fsf@macbook.be.48ers.dk> <20080328211852.GQ1783@mx.loc>
+Message-ID: <87tziqedzm.fsf@macbook.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Author: nkukard
-Date: 2008-03-28 14:27:03 -0700 (Fri, 28 Mar 2008)
-New Revision: 21542
+>>>>> "Bernhard" == Bernhard Fischer <rep.dot.nop@gmail.com> writes:
 
-Log:
-* Missed jacmet's patch, r21520
+ Bernhard> On Fri, Mar 28, 2008 at 10:08:21PM +0100, Peter Korsgaard wrote:
+ >>>>>>> "nkukard" == nkukard  <nkukard@uclibc.org> writes:
+ >> 
+ nkukard> Author: nkukard
+ nkukard> Date: 2008-03-28 14:03:04 -0700 (Fri, 28 Mar 2008)
+ nkukard> New Revision: 21540
+ >> 
+ nkukard> Log:
+ nkukard> * Bumped GCC to 4.2.2, removed 4.2.0
+ >> 
+ >> Any particular reason why you didn't go with 4.2.3 right away?
 
+ Bernhard> 4.2.3?
+ Bernhard> 4.2.x is outdated. The current stable, supported release is 4.3.0
+ Bernhard> http://gcc.gnu.org/ and see "Status" there.
+ Bernhard> Welcome to the third millenium.. ;P
 
-Added:
-   trunk/buildroot/toolchain/gcc/4.2.2/920-soft-float.patch
+Sure, but if you want to update 4.2.x you might as well go to the
+highest value of x.
 
+You're welcome to commit 4.3.0 support to svn ;P
 
-Changeset:
-Added: trunk/buildroot/toolchain/gcc/4.2.2/920-soft-float.patch
-===================================================================
---- trunk/buildroot/toolchain/gcc/4.2.2/920-soft-float.patch	                        (rev 0)
-+++ trunk/buildroot/toolchain/gcc/4.2.2/920-soft-float.patch	2008-03-28 21:27:03 UTC (rev 21542)
-@@ -0,0 +1,21 @@
-+diff -uNpr gcc-4.2.1_orig/gcc/config/rs6000/darwin-ldouble.c gcc-4.2.1/gcc/config/rs6000/darwin-ldouble.c
-+--- gcc-4.2.1_orig/gcc/config/rs6000/darwin-ldouble.c	2007-03-05 11:54:00.000000000 -0500
-++++ gcc-4.2.1/gcc/config/rs6000/darwin-ldouble.c	2008-01-31 17:51:24.000000000 -0500
-+@@ -70,6 +70,8 @@ Software Foundation, 51 Franklin Street,
-+    but GCC currently generates poor code when a union is used to turn
-+    a long double into a pair of doubles.  */
-+ 
-++#if defined (_SOFT_FLOAT) && defined (__LONG_DOUBLE_128__)
-++
-+ long double __gcc_qadd (double, double, double, double);
-+ long double __gcc_qsub (double, double, double, double);
-+ long double __gcc_qmul (double, double, double, double);
-+@@ -219,8 +221,6 @@ __gcc_qdiv (double a, double b, double c
-+   return z.ldval;
-+ }
-+ 
-+-#if defined (_SOFT_FLOAT) && defined (__LONG_DOUBLE_128__)
-+-
-+ long double __gcc_qneg (double, double);
-+ int __gcc_qeq (double, double, double, double);
-+ int __gcc_qne (double, double, double, double);
+-- 
+Bye, Peter Korsgaard
