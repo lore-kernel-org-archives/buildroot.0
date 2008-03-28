@@ -1,28 +1,27 @@
-From: Nigel Kukard <nkukard@lbsd.net>
-Date: Fri, 28 Mar 2008 21:06:34 +0000
-Subject: [Buildroot] legacy sources in svn
-Message-ID: <1206738394.3224.82.camel@nigel-x60>
+From: Peter Korsgaard <jacmet@uclibc.org>
+Date: Fri, 28 Mar 2008 22:08:21 +0100
+Subject: [Buildroot] svn commit: trunk/buildroot: target/device
+	target/device/ARMLTD targ etc...
+In-Reply-To: <20080328210305.9A5EF3C3B1@busybox.net> (nkukard@uclibc.org's
+	message of "Fri\, 28 Mar 2008 14\:03\:05 -0700 \(PDT\)")
+References: <20080328210305.9A5EF3C3B1@busybox.net>
+Message-ID: <87wsnmftfe.fsf@macbook.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Is there a reason for example that there are removed gcc versions still
-in toolchain/gcc/x.y.z ?
+>>>>> "nkukard" == nkukard  <nkukard@uclibc.org> writes:
 
-Are they kept there incase someone needs to build an older version?
+ nkukard> Author: nkukard
+ nkukard> Date: 2008-03-28 14:03:04 -0700 (Fri, 28 Mar 2008)
+ nkukard> New Revision: 21540
 
-Surely they can get the old patches from svn? I mean, the versions are
-mostly removed from all Config.in and .mk files anyway?
+ nkukard> Log:
+ nkukard> * Bumped GCC to 4.2.2, removed 4.2.0
 
-Or maybe I"m missing something obvious?
+Any particular reason why you didn't go with 4.2.3 right away?
 
--N
--------------- next part --------------
-A non-text attachment was scrubbed...
-Name: not available
-Type: application/pgp-signature
-Size: 189 bytes
-Desc: This is a digitally signed message part
-Url : http://busybox.net/lists/buildroot/attachments/20080328/cae9f5b5/attachment-0001.pgp 
+-- 
+Bye, Peter Korsgaard
