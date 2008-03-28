@@ -1,54 +1,31 @@
-From: Nigel Kukard <nkukard@lbsd.net>
-Date: Fri, 28 Mar 2008 21:31:05 +0000
-Subject: [Buildroot] svn commit: trunk/buildroot:
-	target/device	target/device/ARMLTD targ etc...
-In-Reply-To: <87tziqedzm.fsf@macbook.be.48ers.dk>
+From: Ulf Samuelsson <ulf.samuelsson@atmel.com>
+Date: Fri, 28 Mar 2008 22:34:57 +0100
+Subject: [Buildroot] svn commit:
+	trunk/buildroot:target/devicetarget/device/ARMLTD targ etc...
 References: <20080328210305.9A5EF3C3B1@busybox.net>
-	<87wsnmftfe.fsf@macbook.be.48ers.dk> <20080328211852.GQ1783@mx.loc>
-	<87tziqedzm.fsf@macbook.be.48ers.dk>
-Message-ID: <1206739865.3224.94.camel@nigel-x60>
+	<007901c89119$14846510$6c01a8c0@atmel.com>
+	<1206739421.3224.91.camel@nigel-x60>
+Message-ID: <00b101c8911b$96d0f400$6c01a8c0@atmel.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-
-On Fri, 2008-03-28 at 22:27 +0100, Peter Korsgaard wrote:
-> >>>>> "Bernhard" == Bernhard Fischer <rep.dot.nop@gmail.com> writes:
+> Could you show me what I did wrong, 
+> I'm busy committing the patches now for 4.2.2.
 > 
->  Bernhard> On Fri, Mar 28, 2008 at 10:08:21PM +0100, Peter Korsgaard wrote:
->  >>>>>>> "nkukard" == nkukard  <nkukard@uclibc.org> writes:
->  >> 
->  nkukard> Author: nkukard
->  nkukard> Date: 2008-03-28 14:03:04 -0700 (Fri, 28 Mar 2008)
->  nkukard> New Revision: 21540
->  >> 
->  nkukard> Log:
->  nkukard> * Bumped GCC to 4.2.2, removed 4.2.0
->  >> 
->  >> Any particular reason why you didn't go with 4.2.3 right away?
-> 
->  Bernhard> 4.2.3?
->  Bernhard> 4.2.x is outdated. The current stable, supported release is 4.3.0
->  Bernhard> http://gcc.gnu.org/ and see "Status" there.
->  Bernhard> Welcome to the third millenium.. ;P
-> 
-> Sure, but if you want to update 4.2.x you might as well go to the
-> highest value of x.
-> 
-> You're welcome to commit 4.3.0 support to svn ;P
+> Got no problem in reverting if you can show me where I messed up?
 
-I bumped to 4.2.2 as its the one I've tested.
+gcc-4.2.2 has not been ported to the AVR32,
+so you have obviously not built a toolchain.
 
-Will see what I messed up when Ulf comes back to me and commit 4.2.3
-after I've fixed & tested it.
+Even the Atmel defconfigs for the AT91 should not be updated
+to gcc-4.2.1 before they have been tested on target H/W.
+Unless you have booted Linux, don't touch them.
 
--N
--------------- next part --------------
-A non-text attachment was scrubbed...
-Name: not available
-Type: application/pgp-signature
-Size: 189 bytes
-Desc: This is a digitally signed message part
-Url : http://busybox.net/lists/buildroot/attachments/20080328/bec82525/attachment.pgp 
+Others may object to updating compiler versions
+of their targets, without testing.
+
+Best Regards
+Ulf Samuelsson
