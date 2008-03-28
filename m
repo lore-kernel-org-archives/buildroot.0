@@ -1,104 +1,68 @@
-From: bugs at busybox.net <bugs@busybox.net>
-Date: Thu, 27 Mar 2008 15:44:41 -0700
-Subject: [Buildroot] [buildroot 0002684]: Fakeroot 1.9 again
-Message-ID: <c2281e04aa6efdae11e33efbeeb472fb@busybox.net>
+From: jspence at uclibc.org <jspence@uclibc.org>
+Date: Thu, 27 Mar 2008 19:50:42 -0700 (PDT)
+Subject: [Buildroot] svn commit: trunk/buildroot
+Message-ID: <20080328025042.B52E23C31E@busybox.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+Author: jspence
+Date: 2008-03-27 19:50:42 -0700 (Thu, 27 Mar 2008)
+New Revision: 21525
 
-The following issue has been CLOSED 
-====================================================================== 
-http://busybox.net/bugs/view.php?id=2684 
-====================================================================== 
-Reported By:                Graol
-Assigned To:                buildroot
-====================================================================== 
-Project:                    buildroot
-Issue ID:                   2684
-Category:                   Architecture Specific
-Reproducibility:            always
-Severity:                   block
-Priority:                   normal
-Status:                     closed
-Resolution:                 open
-Fixed in Version:           
-====================================================================== 
-Date Submitted:             03-26-2008 03:45 PDT
-Last Modified:              03-27-2008 15:44 PDT
-====================================================================== 
-Summary:                    Fakeroot 1.9 again
-Description: 
-Fakeroot 1.9 has disappeared again from the official debian repository, and
-the 1.9.3 version fails to compile (on architecture x86_64).
-====================================================================== 
+Log:
+Added ccache support and removed grub from defconfig due to brokenness at the moment.
 
----------------------------------------------------------------------- 
- hmoffatt - 03-26-08 06:08  
----------------------------------------------------------------------- 
-Please provide details of the failure, ie a log. It builds fine for me on
-amd64. 
+Modified:
+   trunk/buildroot/.defconfig
+   trunk/buildroot/Makefile
 
----------------------------------------------------------------------- 
- Graol - 03-26-08 06:20  
----------------------------------------------------------------------- 
-The server I used to work on not available anymore (reconfigured for
-release). I forgot to save the log, but it said something like "applying a
-patch to fakeroot 1.9.3... Trunk failure 1 on 1 etc... ## trunk failures in
-##".
-Despite modifying the /etc/apt/sources.list, a make still got the fakeroot
-package from the official debian repo instead of snapshot.debian.net 
 
----------------------------------------------------------------------- 
- hmoffatt - 03-26-08 06:25  
----------------------------------------------------------------------- 
-buildroot doesn't use your /etc/apt/sources.list - it fetches the source
-directly using wget. If yours didn't go to snapshot.debian.net then it
-isn't up to date. 
+Changeset:
+Modified: trunk/buildroot/.defconfig
+===================================================================
+--- trunk/buildroot/.defconfig	2008-03-28 02:24:59 UTC (rev 21524)
++++ trunk/buildroot/.defconfig	2008-03-28 02:50:42 UTC (rev 21525)
+@@ -628,8 +628,8 @@
+ #
+ # bootloader for target device
+ #
+-BR2_TARGET_GRUB=y
+-BR2_TARGET_GRUB_SPLASH=y
++# BR2_TARGET_GRUB is not set
++# BR2_TARGET_GRUB_SPLASH is not set
+ # BR2_TARGET_GRUB_DISKLESS is not set
+ # BR2_TARGET_GRUB_3c595 is not set
+ # BR2_TARGET_GRUB_3c90x is not set
 
----------------------------------------------------------------------- 
- Graol - 03-26-08 07:00  
----------------------------------------------------------------------- 
-Well, I used the Buildroot snapshot from 02-11-2008. I'll try again with
-the most up-to-date one and keep you informed.
-
+Modified: trunk/buildroot/Makefile
+===================================================================
+--- trunk/buildroot/Makefile	2008-03-28 02:24:59 UTC (rev 21524)
++++ trunk/buildroot/Makefile	2008-03-28 02:50:42 UTC (rev 21525)
+@@ -78,6 +78,11 @@
  
-
----------------------------------------------------------------------- 
- hmoffatt - 03-26-08 14:20  
----------------------------------------------------------------------- 
-That's about 6 weeks ago. The change to use snapshot.debian.net was made on
-2008-03-13, exactly because of the problem you are reporting. 
-
----------------------------------------------------------------------- 
- Graol - 03-27-08 08:56  
----------------------------------------------------------------------- 
-Ok fixed. Thank you.
-
+ export CONFIG_SHELL quiet Q KBUILD_VERBOSE VERBOSE
  
-
----------------------------------------------------------------------- 
- hmoffatt - 03-27-08 15:44  
----------------------------------------------------------------------- 
-Fixed already 
-
-Issue History 
-Date Modified   Username       Field                    Change               
-====================================================================== 
-03-26-08 03:45  Graol          New Issue                                    
-03-26-08 03:45  Graol          Status                   new => assigned     
-03-26-08 03:45  Graol          Assigned To               => buildroot       
-03-26-08 06:08  hmoffatt       Note Added: 0005994                          
-03-26-08 06:20  Graol          Note Added: 0006004                          
-03-26-08 06:25  hmoffatt       Note Added: 0006014                          
-03-26-08 06:56  Graol          Note Added: 0006024                          
-03-26-08 07:00  Graol          Note Edited: 0006024                         
-03-26-08 14:20  hmoffatt       Note Added: 0006064                          
-03-27-08 08:37  Graol          Note Added: 0006124                          
-03-27-08 08:37  Graol          Note Edited: 0006124                         
-03-27-08 08:56  Graol          Note Edited: 0006124                         
-03-27-08 15:44  hmoffatt       Status                   assigned => closed  
-03-27-08 15:44  hmoffatt       Note Added: 0006144                          
-======================================================================
++HOSTCCACHE:=$(shell $(CONFIG_SHELL) -c "which ccache")
++ifneq ($(HOSTCCACHE),)
++BR2_HAVE_HOST_CCACHE=y
++endif
++
+ ifndef HOSTAR
+ HOSTAR:=ar
+ endif
+@@ -124,6 +129,12 @@
+ ifndef FCFLAGS_FOR_BUILD
+ FCFLAGS_FOR_BUILD:=-g -O2
+ endif
++
++ifeq ($(BR2_HAVE_HOST_CCACHE),y)
++HOSTCC:=$(HOSTCCACHE) $(HOSTCC)
++HOSTCXX:=$(HOSTCCACHE) $(HOSTCXX)
++endif
++
+ export HOSTAR HOSTAS HOSTCC HOSTCXX HOSTFC HOSTLD
+ 
+ 
