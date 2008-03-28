@@ -1,30 +1,47 @@
-From: Bernhard Fischer <rep.dot.nop@gmail.com>
-Date: Fri, 28 Mar 2008 22:18:52 +0100
-Subject: [Buildroot] svn commit: trunk/buildroot:
-	target/device	target/device/ARMLTD targ etc...
-In-Reply-To: <87wsnmftfe.fsf@macbook.be.48ers.dk>
-References: <20080328210305.9A5EF3C3B1@busybox.net>
-	<87wsnmftfe.fsf@macbook.be.48ers.dk>
-Message-ID: <20080328211852.GQ1783@mx.loc>
+From: nkukard at uclibc.org <nkukard@uclibc.org>
+Date: Fri, 28 Mar 2008 14:19:13 -0700 (PDT)
+Subject: [Buildroot] svn commit: trunk/buildroot/toolchain/gcc:  4.2.2
+Message-ID: <20080328211913.181443C477@busybox.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Fri, Mar 28, 2008 at 10:08:21PM +0100, Peter Korsgaard wrote:
->>>>>> "nkukard" == nkukard  <nkukard@uclibc.org> writes:
->
-> nkukard> Author: nkukard
-> nkukard> Date: 2008-03-28 14:03:04 -0700 (Fri, 28 Mar 2008)
-> nkukard> New Revision: 21540
->
-> nkukard> Log:
-> nkukard> * Bumped GCC to 4.2.2, removed 4.2.0
->
->Any particular reason why you didn't go with 4.2.3 right away?
+Author: nkukard
+Date: 2008-03-28 14:19:12 -0700 (Fri, 28 Mar 2008)
+New Revision: 21541
 
-4.2.3?
-4.2.x is outdated. The current stable, supported release is 4.3.0
-http://gcc.gnu.org/ and see "Status" there.
-Welcome to the third millenium.. ;P
+Log:
+* Added 4.2.2 patchset
+
+
+Added:
+   trunk/buildroot/toolchain/gcc/4.2.2/
+   trunk/buildroot/toolchain/gcc/4.2.2/100-uclibc-conf.patch
+   trunk/buildroot/toolchain/gcc/4.2.2/103-uclibc-conf-noupstream.patch
+   trunk/buildroot/toolchain/gcc/4.2.2/104-gnuhurd-uclibc-conf.patch
+   trunk/buildroot/toolchain/gcc/4.2.2/200-uclibc-locale.patch
+   trunk/buildroot/toolchain/gcc/4.2.2/203-uclibc-locale-no__x.patch
+   trunk/buildroot/toolchain/gcc/4.2.2/204-uclibc-locale-wchar_fix.patch
+   trunk/buildroot/toolchain/gcc/4.2.2/205-uclibc-locale-update.patch
+   trunk/buildroot/toolchain/gcc/4.2.2/300-libstdc++-pic.patch
+   trunk/buildroot/toolchain/gcc/4.2.2/301-missing-execinfo_h.patch
+   trunk/buildroot/toolchain/gcc/4.2.2/302-c99-snprintf.patch
+   trunk/buildroot/toolchain/gcc/4.2.2/303-c99-complex-ugly-hack.patch
+   trunk/buildroot/toolchain/gcc/4.2.2/304-index_macro.patch
+   trunk/buildroot/toolchain/gcc/4.2.2/305-libmudflap-susv3-legacy.patch
+   trunk/buildroot/toolchain/gcc/4.2.2/306-libstdc++-namespace.patch
+   trunk/buildroot/toolchain/gcc/4.2.2/307-locale_facets.patch
+   trunk/buildroot/toolchain/gcc/4.2.2/402-libbackend_dep_gcov-iov.h.patch
+   trunk/buildroot/toolchain/gcc/4.2.2/800-arm-bigendian.patch
+   trunk/buildroot/toolchain/gcc/4.2.2/904-flatten-switch-stmt-00.patch
+   trunk/buildroot/toolchain/gcc/4.2.2/910-soft-float.patch
+
+
+Changeset:
+
+Sorry, the patch is too large to include (4213 lines).
+Please use ViewCVS to see it!
+
+http://uclibc.org/cgi-bin/viewcvs.cgi?view=rev&root=svn&rev=21541
