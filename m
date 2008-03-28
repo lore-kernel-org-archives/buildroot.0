@@ -1,177 +1,67 @@
-From: jspence at uclibc.org <jspence@uclibc.org>
-Date: Thu, 27 Mar 2008 19:54:42 -0700 (PDT)
-Subject: [Buildroot] svn commit: trunk/buildroot/package:  udpcast
-Message-ID: <20080328025442.9F6123C32C@busybox.net>
+From: ulf at uclibc.org <ulf@uclibc.org>
+Date: Fri, 28 Mar 2008 00:31:29 -0700 (PDT)
+Subject: [Buildroot] svn commit: trunk/buildroot
+Message-ID: <20080328073129.4BFF33C313@busybox.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Author: jspence
-Date: 2008-03-27 19:54:42 -0700 (Thu, 27 Mar 2008)
-New Revision: 21526
+Author: ulf
+Date: 2008-03-28 00:31:28 -0700 (Fri, 28 Mar 2008)
+New Revision: 21527
 
 Log:
-Added udpcast package.
-
-Added:
-   trunk/buildroot/package/udpcast/
-   trunk/buildroot/package/udpcast/Config.in
-   trunk/buildroot/package/udpcast/udpcast.mk
+Use BUSYBOX_LOCAL shell variable, if defined
 
 Modified:
-   trunk/buildroot/package/Config.in
+   trunk/buildroot/Makefile
 
 
 Changeset:
-Modified: trunk/buildroot/package/Config.in
+Modified: trunk/buildroot/Makefile
 ===================================================================
---- trunk/buildroot/package/Config.in	2008-03-28 02:50:42 UTC (rev 21525)
-+++ trunk/buildroot/package/Config.in	2008-03-28 02:54:42 UTC (rev 21526)
-@@ -205,6 +205,7 @@
- # ATTENTION! This was merged into busybox!
- #source "package/udhcp/Config.in"
- #endif
-+source "package/udpcast/Config.in"
- source "package/vpnc/Config.in"
- source "package/vtun/Config.in"
- if !BR2_PACKAGE_BUSYBOX_HIDE_OTHERS
-
-Added: trunk/buildroot/package/udpcast/Config.in
-===================================================================
---- trunk/buildroot/package/udpcast/Config.in	                        (rev 0)
-+++ trunk/buildroot/package/udpcast/Config.in	2008-03-28 02:54:42 UTC (rev 21526)
-@@ -0,0 +1,27 @@
-+config BR2_PACKAGE_UDPCAST
-+        bool "udpcast"
-+        default n
-+        help
-+          A multicast protocol implementation which happens to
-+          be very handy for imaging drives over the network.
+--- trunk/buildroot/Makefile	2008-03-28 02:54:42 UTC (rev 21526)
++++ trunk/buildroot/Makefile	2008-03-28 07:31:28 UTC (rev 21527)
+@@ -31,25 +31,30 @@
+ 	defconfig allyesconfig allnoconfig release tags \
+ 	source-check help
+ 
+-# $(shell find . -name *_defconfig |sed 's/.*\///')
+ 
+-# Pull in the user's configuration file
+-ifeq ($(filter $(noconfig_targets),$(MAKECMDGOALS)),)
+-ifeq ($(BOARD),)
+--include $(TOPDIR).config
+-else
+--include $(TOPDIR)/local/$(BOARD)/$(BOARD).config
+-endif
+-endif
++# Use shell variables, if defined
+ ifneq ($(BUILDROOT_DL_DIR),)
+ BR2_DL_DIR:=$(BUILDROOT_DL_DIR)
+ endif
 +
-+          http://www.udpcast.linux.lu/
-+
-+menu "udpcast tools selection"
-+        depends on BR2_PACKAGE_UDPCAST
-+
-+config BR2_PACKAGE_UDPCAST_SENDER
-+        bool "sender"
-+        default n
-+        depends on BR2_PACKAGE_UDPCAST
-+        help
-+          The udpcast transmitter.
-+
-+config BR2_PACKAGE_UDPCAST_RECEIVER
-+        bool "receiver"
-+        default n
-+        depends on BR2_PACKAGE_UDPCAST
-+        help
-+          The udpcast receiver.
-+
-+endmenu
-
-Added: trunk/buildroot/package/udpcast/udpcast.mk
-===================================================================
---- trunk/buildroot/package/udpcast/udpcast.mk	                        (rev 0)
-+++ trunk/buildroot/package/udpcast/udpcast.mk	2008-03-28 02:54:42 UTC (rev 21526)
-@@ -0,0 +1,99 @@
-+#############################################################
-+#
-+# udpcast
-+#
-+#############################################################
-+UDPCAST_VERSION:=20071228
-+UDPCAST_SOURCE:=udpcast-$(UDPCAST_VERSION).tar.gz
-+UDPCAST_SITE:=http://www.udpcast.linux.lu/download
-+UDPCAST_CAT:=$(ZCAT)
-+UDPCAST_DIR:=$(BUILD_DIR)/udpcast-$(UDPCAST_VERSION)
-+
-+BR2_UDPCAST_CFLAGS:=
-+
-+$(DL_DIR)/$(UDPCAST_SOURCE):
-+	 $(WGET) -P $(DL_DIR) $(UDPCAST_SITE)/$(UDPCAST_SOURCE)
-+
-+udpcast-source: $(DL_DIR)/$(UDPCAST_SOURCE)
-+
-+$(UDPCAST_DIR)/.unpacked: $(DL_DIR)/$(UDPCAST_SOURCE)
-+	$(UDPCAST_CAT) $(DL_DIR)/$(UDPCAST_SOURCE) | tar -C $(BUILD_DIR) $(TAR_OPTIONS) -
-+	toolchain/patch-kernel.sh $(UDPCAST_DIR) package/udpcast udpcast\*.patch
-+	$(CONFIG_UPDATE) $(UDPCAST_DIR)
-+	touch $(UDPCAST_DIR)/.unpacked
-+
-+$(UDPCAST_DIR)/.configured: $(UDPCAST_DIR)/.unpacked
-+	(cd $(UDPCAST_DIR); rm -rf config.cache; \
-+		$(if $(BR_LARGEFILE),ac_cv_type_stat64=yes,ac_cv_type_stat64=no) \
-+		$(TARGET_CONFIGURE_OPTS) \
-+		$(TARGET_CONFIGURE_ARGS) \
-+		CFLAGS="$(TARGET_CFLAGS) $(BR2_UDPCAST_CFLAGS)" \
-+		./configure \
-+		--target=$(REAL_GNU_TARGET_NAME) \
-+		--host=$(REAL_GNU_TARGET_NAME) \
-+		--build=$(GNU_HOST_NAME) \
-+		--prefix=/usr \
-+		--exec-prefix=/usr \
-+		--bindir=/usr/bin \
-+		--sbindir=/usr/sbin \
-+		--libdir=/lib \
-+		--libexecdir=/usr/lib \
-+		--sysconfdir=/etc \
-+		--datadir=/usr/share \
-+		--localstatedir=/var \
-+		--mandir=/usr/man \
-+		--infodir=/usr/info \
-+		$(DISABLE_NLS) \
-+	)
-+	touch $(UDPCAST_DIR)/.configured
-+
-+UDPCAST_BINARIES:=udp-sender udp-receiver
-+
-+UDPCAST_BUILD_TARGETS:=$(addprefix $(UDPCAST_DIR)/,$(UDPCAST_BINARIES))
-+
-+$(UDPCAST_BUILD_TARGETS): $(UDPCAST_DIR)/.configured
-+	$(MAKE) CC=$(TARGET_CC) -C $(UDPCAST_DIR)
-+
-+UDPCAST_PROGS:=$(addprefix $(TARGET_DIR)/usr/sbin/,$(UDPCAST_BINARIES))
-+
-+UDPCAST_INSTALL_MANPAGES=$(addprefix $(TARGET_DIR)/usr/man/, $(addsuffix .1,$(UDPCAST_BINARIES)))
-+
-+UDPCAST_INSTALL_FILES:=$(UDPCAST_PROGS) $(UDPCAST_INSTALL_MANPAGES)
-+
-+$(UDPCAST_PROGS): $(UDPCAST_BUILD_TARGETS)
-+	$(MAKE) -C $(UDPCAST_DIR) DESTDIR=$(TARGET_DIR) install
-+	$(STRIPCMD) $(STRIP_STRIP_UNNEEDED) $(REMOVE_SECTION_COMMENT) \
-+	  $(REMOVE_SECTION_NOTE) \
-+	  $(UDPCAST_PROGS)
-+ifneq ($(BR2_PACKAGE_UDPCAST_SENDER),y)
-+	rm -f $(TARGET_DIR)/usr/sbin/udp-sender
-+	rm -f $(TARGET_DIR)/usr/sbin/udp-sender.1
+ ifneq ($(BUILDROOT_LOCAL),)
+ LOCAL:=$(BUILDROOT_LOCAL)
+ else
+-LOCAL:=local
++LOCAL:=$(TOPDIR)/local
+ endif
+ 
++# $(shell find . -name *_defconfig |sed 's/.*\///')
++# Pull in the user's configuration file
++ifeq ($(filter $(noconfig_targets),$(MAKECMDGOALS)),)
++ifeq ($(BOARD),)
++# if "make BOARD=xyz" command
++-include $(TOPDIR).config
++else
++# if "make" command
++-include $(LOCAL)/$(BOARD)/$(BOARD).config
 +endif
-+ifneq ($(BR2_PACKAGE_UDPCAST_RECEIVER),y)
-+	rm -f $(TARGET_DIR)/usr/sbin/udp-receiver
-+	rm -f $(TARGET_DIR)/usr/sbin/udp-receiver.1
-+endif
-+ifneq ($(BR2_HAVE_MANPAGES),y)
-+	rm -f $(addprefix $(TARGET_DIR)/usr/man/, \
-+		$(addsuffix .1,$(UDPCAST_BINARIES)))
 +endif
 +
-+udpcast: uclibc $(UDPCAST_PROGS)
-+
-+udpcast-clean:
-+	rm -f $(UDPCAST_INSTALL_FILES)
-+	$(MAKE) -C $(UDPCAST_DIR) clean
-+	rm -f $(UDPCAST_DIR)/.configured
-+
-+udpcast-dirclean:
-+	rm -rf $(UDPCAST_DIR)
-+
-+
-+#############################################################
-+#
-+# Toplevel Makefile options
-+#
-+#############################################################
-+ifeq ($(strip $(BR2_PACKAGE_UDPCAST)),y)
-+TARGETS+=udpcast
-+endif
+ # To put more focus on warnings, be less verbose as default
+ # Use 'make V=1' to see the full commands
+ ifdef V
