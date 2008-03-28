@@ -1,7 +1,8 @@
 From: jacmet at uclibc.org <jacmet@uclibc.org>
-Date: Fri, 28 Mar 2008 03:40:28 -0700 (PDT)
-Subject: [Buildroot] svn commit: trunk/buildroot/package
-Message-ID: <20080328104028.7513E3C382@busybox.net>
+Date: Fri, 28 Mar 2008 03:40:46 -0700 (PDT)
+Subject: [Buildroot] svn commit: trunk/buildroot/package: classpath
+	concierge concierge/files jam etc...
+Message-ID: <20080328104046.524613C361@busybox.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -9,31 +10,51 @@ Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
 Author: jacmet
-Date: 2008-03-28 03:40:28 -0700 (Fri, 28 Mar 2008)
-New Revision: 21536
+Date: 2008-03-28 03:40:45 -0700 (Fri, 28 Mar 2008)
+New Revision: 21537
 
 Log:
-AUTOTARGETS: also support non-version-dependent arch specific patches
+package: move java packages to package/java sub directory
 
+
+Added:
+   trunk/buildroot/package/java/
+   trunk/buildroot/package/java/Config.in
+   trunk/buildroot/package/java/classpath/
+   trunk/buildroot/package/java/classpath/Config.in
+   trunk/buildroot/package/java/classpath/classpath-avr32-endianness.patch
+   trunk/buildroot/package/java/classpath/classpath.mk
+   trunk/buildroot/package/java/concierge/
+   trunk/buildroot/package/java/concierge/Config.in
+   trunk/buildroot/package/java/concierge/concierge.mk
+   trunk/buildroot/package/java/concierge/files/
+   trunk/buildroot/package/java/concierge/files/concierge
+   trunk/buildroot/package/java/concierge/files/init.xargs
+   trunk/buildroot/package/java/jamvm/
+   trunk/buildroot/package/java/jamvm/Config.in
+   trunk/buildroot/package/java/jamvm/jamvm-1.5.0.patch.avr32
+   trunk/buildroot/package/java/jamvm/jamvm.mk
+   trunk/buildroot/package/java/java.mk
+
+Removed:
+   trunk/buildroot/package/classpath/Config.in
+   trunk/buildroot/package/classpath/classpath-avr32-endianness.patch
+   trunk/buildroot/package/classpath/classpath.mk
+   trunk/buildroot/package/concierge/Config.in
+   trunk/buildroot/package/concierge/concierge.mk
+   trunk/buildroot/package/concierge/files/concierge
+   trunk/buildroot/package/concierge/files/init.xargs
+   trunk/buildroot/package/jamvm/Config.in
+   trunk/buildroot/package/jamvm/jamvm-1.5.0.patch.avr32
+   trunk/buildroot/package/jamvm/jamvm.mk
 
 Modified:
-   trunk/buildroot/package/Makefile.autotools.in
+   trunk/buildroot/package/Config.in
 
 
 Changeset:
-Modified: trunk/buildroot/package/Makefile.autotools.in
-===================================================================
---- trunk/buildroot/package/Makefile.autotools.in	2008-03-28 10:40:08 UTC (rev 21535)
-+++ trunk/buildroot/package/Makefile.autotools.in	2008-03-28 10:40:28 UTC (rev 21536)
-@@ -158,9 +158,9 @@
- 	  if test "$(wildcard $($(PKG)_DIR_PREFIX)/$($(PKG)_NAME)/$(NAMEVER)*.patch*)"; then \
- 	    toolchain/patch-kernel.sh $(@D) $($(PKG)_DIR_PREFIX)/$($(PKG)_NAME) $(NAMEVER)\*.patch $(NAMEVER)\*.patch.$(ARCH) || exit 1; \
- 	  else \
--	    toolchain/patch-kernel.sh $(@D) $($(PKG)_DIR_PREFIX)/$($(PKG)_NAME) $($(PKG)_NAME)\*.patch || exit 1; \
-+	    toolchain/patch-kernel.sh $(@D) $($(PKG)_DIR_PREFIX)/$($(PKG)_NAME) $($(PKG)_NAME)\*.patch $($(PKG)_NAME)\*.patch.$(ARCH) || exit 1; \
- 	    if test -d package/$($(PKG)_DIR_PREFIX)/$($(PKG)_NAME)/$(NAMEVER); then \
--	      toolchain/patch-kernel.sh $(@D) $($(PKG)_DIR_PREFIX)/$($(PKG)_NAME)/$(NAMEVER) \*.patch || exit 1; \
-+	      toolchain/patch-kernel.sh $(@D) $($(PKG)_DIR_PREFIX)/$($(PKG)_NAME)/$(NAMEVER) \*.patch \*.patch.$(ARCH) || exit 1; \
- 	    fi; \
- 	  fi; \
- 	fi; \
+
+Sorry, the patch is too large to include (3739 lines).
+Please use ViewCVS to see it!
+
+http://uclibc.org/cgi-bin/viewcvs.cgi?view=rev&root=svn&rev=21537
