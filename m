@@ -1,54 +1,68 @@
 From: Ulf Samuelsson <ulf.samuelsson@atmel.com>
-Date: Fri, 28 Mar 2008 14:08:31 +0100
-Subject: [Buildroot] Size of svn
-Message-ID: <021701c890d9$3e8c6370$dcc4af0a@atmel.com>
+Date: Fri, 28 Mar 2008 13:33:33 +0100
+Subject: [Buildroot] Using a different kernel tree ?
+References: <057401c88ff0$46259410$ad289e86@LPSC0173W>
+	<20080327120639.GD13379@mx.loc>
+Message-ID: <021301c890d9$3bc5c960$dcc4af0a@atmel.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-I looked through the svn.
+> On Thu, Mar 27, 2008 at 10:52:22AM +0100, Guillaume Dargaud wrote:
+>>Hello all,
+>>I'd like to use, within buildroot, the kernel tree from 
+>>git://git.xilinx.com/linux-2.6-xlnx.git instead of the vanilla tree coming 
+>>with buildroot.
+>>
+>>How does one do that ?
+> 
+> The easiest approach would be to git clone that kernel and
+> tar -cjf dl/linux-2.6.24.4.tar.bz2 linux-2.6-xlnx.git
+> (--exclude='.git' if you don't want to write patches against it) and use
+> that.
+> 
+>>If I just replace toolchain_build_ppc/linux-2.6.24 and/or 
+>>project_build_ppc/my_project/linux-2.6.24 with the Xilinx tree, on the next 
+>>"make ARCH=ppc linux26-menuconfig" it just deletes the whole directory and 
+>>rebuilds it from bzcat...
+>>
+>>Or are there alternatives if I want to use the nice toolchain built by 
+>>buildroot ?
+>>
+>>
+>>BTW, what is the difference between toolchain_build_ppc/linux-2.6.24 and 
+>>project_build_ppc/my_project/linux-2.6.24 ?
+> 
 
-The avr32 boards (target/device/Atmel/atngw100_<xxx>)
-recently added by John Voltz, each have their own patchset, 
-and the large patches are duplications of the patches in
-(target/device/Atmel/arch-avr32/kernel-patches-<version>)
-That adds 2-3 MB and should be cleaned up.
+The toolchain headers is generated from toolchain_build_ppc/linux-2.6.24
+and the project related source tree is used for building the kernel image(s).
 
-The major remaining part in terms of size in target/device/Atmel 
-are kernel patches for at91 and avr32 for different kernel versions.
-It would be possible to download these patches as well
-from an ftpserver, but the infrastructure in "target/linux" is
-not there yet. I think this is 5-6 MB.
+You can build multiple kernels for the same chip, or one kernel for
+multiple chips, or combinations of above.
 
-==========================
-The toolchain patches for avr32 added by John,
-is IMHO unneccessary and can be removed. 
-IIRC they add 7-8 MB to the svn size.
+The following would be possible:
 
-The avr32 toolchain can (and should)
-be built using the prepatched source.
-If patches are required, then they can be located in the
-(target/device/Atmel/toolchain) directory.
+toolchain_build_ppc/linux-2.6.24
+project_build_ppc/my_project_24__/linux-2.6.24
+project_build_ppc/my_project_24_1/linux-2.6.24.1
+project_build_ppc/my_project_24_2/linux-2.6.24.2
+project_build_ppc/my_project_24_3/linux-2.6.24.3
+
+This allows you to apply different patchsets for different builds.
+Any package built in build_ppc/<package> have to use the same configuration
+for all projects. If you need to configure them differently, then
+the package needs to be built in project_build_dir/<package>.
+
+
+> No, previously we only had one source-tree, but Ulf changed that for
+> reasons that i do not remember offhand (conflicting patches, i.e. broken
+> patches, IIRC).
+> _______________________________________________
+
 
 
 
 Best Regards
-Ulf Samuelsson                ulf at atmel.com
-Atmel Nordic AB
-Mail:  Box 2033, 174 02 Sundbyberg, Sweden
-Visit:  Kavalleriv?gen 24, 174 58 Sundbyberg, Sweden
-Phone +46 (8) 441 54 22     Fax +46 (8) 441 54 29
-GSM    +46 (706) 22 44 57
-
-Join the Atmel 2008 Microcontroller Seminar April 7-10.
-Introducing X-Mega, AVR32 and ARM9. STK600 Kit included.
-Register at Acte, Arrow or EBV webpage.
-
-Technical support when I am not available:
-AT90 AVR Applications Group: mailto:avr at atmel.com
-AT91 ARM Applications Group: mailto:at91support at atmel.com
-AVR32 Applications Group        mailto:avr32 at atmel.com
-http://www.avrfreaks.net/;            http://avr32linux.org/
-http://www.at91.com/ ;                 http://www.linux4sam.org/
+Ulf Samuelsson
