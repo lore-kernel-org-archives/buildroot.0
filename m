@@ -1,34 +1,32 @@
-From: Bernhard Fischer <rep.dot.nop@gmail.com>
-Date: Fri, 28 Mar 2008 22:13:42 +0100
-Subject: [Buildroot] gcc 4.2.2 patch
-In-Reply-To: <1206738222.3224.78.camel@nigel-x60>
-References: <1206735722.3224.70.camel@nigel-x60> <20080328204136.GN1783@mx.loc>
-	<1206738222.3224.78.camel@nigel-x60>
-Message-ID: <20080328211342.GP1783@mx.loc>
+From: Peter Korsgaard <jacmet@uclibc.org>
+Date: Fri, 28 Mar 2008 22:14:52 +0100
+Subject: [Buildroot] legacy sources in svn
+In-Reply-To: <1206738394.3224.82.camel@nigel-x60> (Nigel Kukard's message of
+	"Fri\, 28 Mar 2008 21\:06\:34 +0000")
+References: <1206738394.3224.82.camel@nigel-x60>
+Message-ID: <87k5jmft4j.fsf@macbook.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Fri, Mar 28, 2008 at 09:03:42PM +0000, Nigel Kukard wrote:
->> close.
->> Correct would have been to use $(INSTALL). Also the for loop doesn't
->> make too much sense, fwiw.
->> 
->> Something like this should do everything that is needed and is not
->> bloated:
->> 	$(INSTALL) -D -m0755 $(patsubst %,$(STAGING_DIR)/sbin/%,$(LVM2_SBIN)) $(TARGET_DIR)/sbin/
->> 
->> Remember that this is *make* and not your favourite shell..
->
->Thanks, I'll keep that in mind. I've found quite a number of for's in
->the tree, if I come across them again I'll fix it.
+>>>>> "Nigel" == Nigel Kukard <nkukard@lbsd.net> writes:
 
-Fair enough, but it would be nicer if you would take it upon you to fix
-them in one sweep and once and for all. Every such occurance should be
-fixed and no new occurance (or touch thereof) should be accepted into
-the tree.
-Same with all those (="??%?) touch /the/make_target. There is $@ and it
-should be used for the sake of cleanlyness. I could go on with another
-handful of such cruft but you get the idea..
+ Nigel> Is there a reason for example that there are removed gcc
+ Nigel> versions still in toolchain/gcc/x.y.z ?
+
+ Nigel> Are they kept there incase someone needs to build an older version?
+
+I think people simply forget to remove them when they remove the
+Kconfig stuff - I have lately been cleaning up the uClibc patches that
+weren't used any more.
+
+ Nigel> Surely they can get the old patches from svn? I mean, the
+ Nigel> versions are mostly removed from all Config.in and .mk files
+ Nigel> anyway?
+
+Exactly, feel free to remove them.
+
+-- 
+Bye, Peter Korsgaard
