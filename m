@@ -1,53 +1,53 @@
-From: ulf at uclibc.org <ulf@uclibc.org>
-Date: Fri, 28 Mar 2008 00:32:54 -0700 (PDT)
-Subject: [Buildroot] svn commit: trunk/buildroot/target/device/Atmel:
-	at91rm9200df at91sam9260dfc at91sam9261 etc...
-Message-ID: <20080328073254.766C03C318@busybox.net>
+From: Peter Korsgaard <jacmet@uclibc.org>
+Date: Fri, 28 Mar 2008 08:42:42 +0100
+Subject: [Buildroot] svn commit: trunk/buildroot
+In-Reply-To: <20080328025042.B52E23C31E@busybox.net> (jspence@uclibc.org's
+	message of "Thu\, 27 Mar 2008 19\:50\:42 -0700 \(PDT\)")
+References: <20080328025042.B52E23C31E@busybox.net>
+Message-ID: <87prtfmgzx.fsf@macbook.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Author: ulf
-Date: 2008-03-28 00:32:54 -0700 (Fri, 28 Mar 2008)
-New Revision: 21528
+>>>>> "jspence" == jspence  <jspence@uclibc.org> writes:
 
-Log:
-Define busybox config in board directory for Atmel boards
+ jspence> Author: jspence
+ jspence> Date: 2008-03-27 19:50:42 -0700 (Thu, 27 Mar 2008)
+ jspence> New Revision: 21525
 
-Removed:
-   trunk/buildroot/target/device/Atmel/atngw100-base/busybox-1.7.2.config
-   trunk/buildroot/target/device/Atmel/atngw100-base/busybox-1.8.0.config
-   trunk/buildroot/target/device/Atmel/atngw100-base/busybox-1.9.0.config
-   trunk/buildroot/target/device/Atmel/atngw100-expanded/busybox-1.7.2.config
-   trunk/buildroot/target/device/Atmel/atngw100-expanded/busybox-1.8.0.config
-   trunk/buildroot/target/device/Atmel/atngw100-expanded/busybox-1.9.0.config
-   trunk/buildroot/target/device/Atmel/atngw100/busybox-1.6.1.config
-   trunk/buildroot/target/device/Atmel/atngw100/busybox-1.7.1.config
-   trunk/buildroot/target/device/Atmel/atngw100/busybox-1.7.2.config
-   trunk/buildroot/target/device/Atmel/atngw100/busybox-1.8.0.config
-   trunk/buildroot/target/device/Atmel/atngw100/busybox-1.9.0.config
-   trunk/buildroot/target/device/Atmel/atstk1002/busybox-1.6.1.config
-   trunk/buildroot/target/device/Atmel/atstk1002/busybox-1.7.4.config
-   trunk/buildroot/target/device/Atmel/atstk1002/busybox-1.8.2.config
-   trunk/buildroot/target/device/Atmel/atstk1002/busybox-1.9.0.config
+ jspence> Log:
+ jspence> Added ccache support and removed grub from defconfig due to
+ jspence> brokenness at the moment.
 
-Modified:
-   trunk/buildroot/target/device/Atmel/Makefile.in
-   trunk/buildroot/target/device/Atmel/at91rm9200df/Makefile.in
-   trunk/buildroot/target/device/Atmel/at91sam9260dfc/Makefile.in
-   trunk/buildroot/target/device/Atmel/at91sam9261ek/Makefile.in
-   trunk/buildroot/target/device/Atmel/at91sam9263ek/Makefile.in
-   trunk/buildroot/target/device/Atmel/atngw100-base/Makefile.in
-   trunk/buildroot/target/device/Atmel/atngw100-expanded/Makefile.in
-   trunk/buildroot/target/device/Atmel/atngw100/Makefile.in
-   trunk/buildroot/target/device/Atmel/atstk1002/Makefile.in
+How does this interact with the existing ccache support under
+toolchain/ccache?
+ 
+ jspence> +HOSTCCACHE:=$(shell $(CONFIG_SHELL) -c "which ccache")
 
+ jspence> +ifneq ($(HOSTCCACHE),)
+ jspence> +BR2_HAVE_HOST_CCACHE=y
+ jspence> +endif
+ jspence> +
+ jspence>  ifndef HOSTAR
+ jspence>  HOSTAR:=ar
+ jspence>  endif
+ jspence> @@ -124,6 +129,12 @@
+ jspence>  ifndef FCFLAGS_FOR_BUILD
+ jspence>  FCFLAGS_FOR_BUILD:=-g -O2
+ jspence>  endif
+ jspence> +
+ jspence> +ifeq ($(BR2_HAVE_HOST_CCACHE),y)
+ jspence> +HOSTCC:=$(HOSTCCACHE) $(HOSTCC)
+ jspence> +HOSTCXX:=$(HOSTCCACHE) $(HOSTCXX)
+ jspence> +endif
 
-Changeset:
+This is no good for the people (like me) that already use ccache by
+prepending /usr/lib/ccache to the PATH.
 
-Sorry, the patch is too large to include (11497 lines).
-Please use ViewCVS to see it!
+Maybe you should simply add it as another option to the existing
+ccache Config.in?
 
-http://uclibc.org/cgi-bin/viewcvs.cgi?view=rev&root=svn&rev=21528
+-- 
+Bye, Peter Korsgaard
