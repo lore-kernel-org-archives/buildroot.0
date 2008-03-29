@@ -1,39 +1,41 @@
-From: nkukard at uclibc.org <nkukard@uclibc.org>
-Date: Sat, 29 Mar 2008 10:47:36 -0700 (PDT)
-Subject: [Buildroot] svn commit: trunk/buildroot/target/linux
-Message-ID: <20080329174736.4BEA53C4C4@busybox.net>
+From: ulf at uclibc.org <ulf@uclibc.org>
+Date: Sat, 29 Mar 2008 13:36:25 -0700 (PDT)
+Subject: [Buildroot] svn commit: trunk/buildroot/target/device/ARM
+Message-ID: <20080329203625.26F843C4C0@busybox.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Author: nkukard
-Date: 2008-03-29 10:47:36 -0700 (Sat, 29 Mar 2008)
-New Revision: 21561
+Author: ulf
+Date: 2008-03-29 13:36:24 -0700 (Sat, 29 Mar 2008)
+New Revision: 21563
 
 Log:
-Feeding the kernel zero optimization -O0 breaks the kernel build at least on x86 with asm errors, remove -O0 when building the kernel
-
+Remove duplication of default kernel patch dir setting
 
 Modified:
-   trunk/buildroot/target/linux/Makefile.in
+   trunk/buildroot/target/device/ARM/Makefile.in
 
 
 Changeset:
-Modified: trunk/buildroot/target/linux/Makefile.in
+Modified: trunk/buildroot/target/device/ARM/Makefile.in
 ===================================================================
---- trunk/buildroot/target/linux/Makefile.in	2008-03-29 17:34:23 UTC (rev 21560)
-+++ trunk/buildroot/target/linux/Makefile.in	2008-03-29 17:47:36 UTC (rev 21561)
-@@ -84,9 +84,10 @@
- endif
- endif
- __LINUX26_NO_PIC=-fPIC -fpic -DPIC -fwrapv -ftrapv
-+__LINUX26_ZERO_OPTIMIZATION=-O0
- LINUX26_MAKE_FLAGS = HOSTCC="$(HOSTCC)" HOSTCFLAGS="$(HOSTCFLAGS)" \
- 	ARCH=$(KERNEL_ARCH) \
--	CFLAGS_KERNEL="$(filter-out $(__LINUX26_NO_PIC),$(TARGET_CFLAGS))" \
-+	CFLAGS_KERNEL="$(filter-out $(__LINUX26_NO_PIC) $(__LINUX26_ZERO_OPTIMIZATION),$(TARGET_CFLAGS))" \
- 	INSTALL_MOD_PATH=$(TARGET_DIR) \
- 	CROSS_COMPILE=$(KERNEL_CROSS) \
- 	LDFLAGS="$(TARGET_LDFLAGS)" \
+--- trunk/buildroot/target/device/ARM/Makefile.in	2008-03-29 17:59:27 UTC (rev 21562)
++++ trunk/buildroot/target/device/ARM/Makefile.in	2008-03-29 20:36:24 UTC (rev 21563)
+@@ -29,12 +29,12 @@
+ 
+ LINUX26_COPYTO:=/tftpboot
+ 
+-LINUX26_PATCH_DIR:=target/device/ARM/kernel-patches
++#LINUX26_PATCH_DIR:=$(BOARD_PATH)/kernel-patches
+ 
+ # The board specific Makefile.in can redefine BOARD_NAME's
+ LINUX_BOARD_NAME:=$(BOARD_NAME)
+ 
+-BR2_PACKAGE_BUSYBOX_CONFIG:=$(BR2_BOARD_PATH)/busybox.config
++BR2_PACKAGE_BUSYBOX_CONFIG:=$(BOARD_PATH)/busybox.config
+ 
+ 
+ # Needs to be AFTER board specific Makefiles
