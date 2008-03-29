@@ -1,36 +1,52 @@
-From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Sat, 29 Mar 2008 13:29:17 +0100
-Subject: [Buildroot] legacy sources in svn
-In-Reply-To: <87a5b0800803290508t3b1bd407n1eb2e2c76c2a803a@mail.gmail.com>
-	(Will Newton's message of "Sat\, 29 Mar 2008 12\:08\:19 +0000")
-References: <1206738394.3224.82.camel@nigel-x60>
-	<87k5jmft4j.fsf@macbook.be.48ers.dk>
-	<87a5b0800803290508t3b1bd407n1eb2e2c76c2a803a@mail.gmail.com>
-Message-ID: <87prtdaf36.fsf@macbook.be.48ers.dk>
+From: Arndt Kritzner <kritzner@logicway.de>
+Date: Sat, 29 Mar 2008 14:23:14 +0100
+Subject: [Buildroot] avr32 target,
+	defconfig and target uclibc config issues (partly solved)
+Message-ID: <47EE42C2.6070000@logicway.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Will" == Will Newton <will.newton@gmail.com> writes:
+Glib2 didn't compile for avr32 target because of missing "iconv"
+functionality, that is dependant on locale support.
 
-Hi,
+The specified custom uClibc "target/device/Atmel/uClibc.config.avr32"
+enables UCLIBC_HAS_WCHAR=y and UCLIBC_HAS_LOCALE=y.
+In atstk1002_defconfig BR2_ENABLE_LOCALE is not set.
+In the resulting target "toolchain_build_avr32/uClibc-0.9.29/.config"
+the UCLIBC_HAS_LOCALE is not set and that's why no locale support is built.
 
- >> Exactly, feel free to remove them.
+For some reason this is irreparable afterwards by just enabling the
+LOCALE support with menuconfig and touching uClibc.config.avr32 to
+rebuild the target uClibc. Also make clean doesn't repair this issue.
 
- Will> I have some concerns about this. People may want to keep stable
- Will> toolchains to avoid bugs in newer versions or for QA purposes.
- Will> Removing working configurations in the name of "tidying up" sounds
- Will> like a bad idea to me.
+To resolve the conflict I enabled general locale support in
+atstk1002_defconfig. Maybe the changes in the uClib config are just for
+the sake of good order and have no other function.
 
-The question was about removing old patches that aren't used (the
-versions cannot be selected) anymore.
-
-Regarding updating versions - We do that all the time (and have to do
-so as bugs are found in old versions or they simply no longer
-available upstream). If you want to keep a stable environment, you
-should simply not update your buildroot snapshot.
-
+With this changes glib2 can be built on avr32 with the stk1002_defconfig.
 -- 
-Bye, Peter Korsgaard
+
+--
+###############################################################
+Dipl. Ing Arndt Kritzner    Tel:    (0385) 3993 448
+Logic Way GmbH              Fax:    (0385) 3993 458
+Hagenower Strasse 73        HTTP:   http://www.logicway.de
+19061 Schwerin
+###############################################################
+-------------- next part --------------
+A non-text attachment was scrubbed...
+Name: atstk1002_defconfig.20080329.diff
+Type: text/x-patch
+Size: 468 bytes
+Desc: not available
+Url : http://busybox.net/lists/buildroot/attachments/20080329/3a786b31/attachment.bin 
+-------------- next part --------------
+A non-text attachment was scrubbed...
+Name: uClibc.config.avr32.20080329.diff
+Type: text/x-patch
+Size: 819 bytes
+Desc: not available
+Url : http://busybox.net/lists/buildroot/attachments/20080329/3a786b31/attachment-0001.bin 
