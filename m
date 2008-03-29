@@ -1,7 +1,7 @@
 From: ulf at uclibc.org <ulf@uclibc.org>
-Date: Sat, 29 Mar 2008 13:36:25 -0700 (PDT)
-Subject: [Buildroot] svn commit: trunk/buildroot/target/device/ARM
-Message-ID: <20080329203625.26F843C4C0@busybox.net>
+Date: Sat, 29 Mar 2008 13:36:54 -0700 (PDT)
+Subject: [Buildroot] svn commit: trunk/buildroot/target/device/AMD/DBAu1500
+Message-ID: <20080329203654.4326C3C4F8@busybox.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -9,33 +9,28 @@ Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
 Author: ulf
-Date: 2008-03-29 13:36:24 -0700 (Sat, 29 Mar 2008)
-New Revision: 21563
+Date: 2008-03-29 13:36:54 -0700 (Sat, 29 Mar 2008)
+New Revision: 21564
 
 Log:
 Remove duplication of default kernel patch dir setting
 
 Modified:
-   trunk/buildroot/target/device/ARM/Makefile.in
+   trunk/buildroot/target/device/AMD/DBAu1500/linux26.mk
 
 
 Changeset:
-Modified: trunk/buildroot/target/device/ARM/Makefile.in
+Modified: trunk/buildroot/target/device/AMD/DBAu1500/linux26.mk
 ===================================================================
---- trunk/buildroot/target/device/ARM/Makefile.in	2008-03-29 17:59:27 UTC (rev 21562)
-+++ trunk/buildroot/target/device/ARM/Makefile.in	2008-03-29 20:36:24 UTC (rev 21563)
-@@ -29,12 +29,12 @@
+--- trunk/buildroot/target/device/AMD/DBAu1500/linux26.mk	2008-03-29 20:36:24 UTC (rev 21563)
++++ trunk/buildroot/target/device/AMD/DBAu1500/linux26.mk	2008-03-29 20:36:54 UTC (rev 21564)
+@@ -30,7 +30,8 @@
+ LINUX26_DIR=$(BUILD_DIR)/linux-$(LINUX26_VERSION)
  
- LINUX26_COPYTO:=/tftpboot
+ # kernel patches
+-LINUX26_PATCH_DIR=target/device/AMD/DBAu1500/kernel-patches/
++# This is default anyway
++# LINUX26_PATCH_DIR=$(BOARD_PATH)/kernel-patches/
  
--LINUX26_PATCH_DIR:=target/device/ARM/kernel-patches
-+#LINUX26_PATCH_DIR:=$(BOARD_PATH)/kernel-patches
- 
- # The board specific Makefile.in can redefine BOARD_NAME's
- LINUX_BOARD_NAME:=$(BOARD_NAME)
- 
--BR2_PACKAGE_BUSYBOX_CONFIG:=$(BR2_BOARD_PATH)/busybox.config
-+BR2_PACKAGE_BUSYBOX_CONFIG:=$(BOARD_PATH)/busybox.config
- 
- 
- # Needs to be AFTER board specific Makefiles
+ LINUX26_MAKE_FLAGS = $(TARGET_CONFIGURE_OPTS) ARCH=$(KERNEL_ARCH) \
+ 	PATH=$(TARGET_PATH) INSTALL_MOD_PATH=$(TARGET_DIR) \
