@@ -1,38 +1,60 @@
-From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Sat, 29 Mar 2008 17:13:51 +0100
-Subject: [Buildroot] initramfs doesn't need root to create an image
-In-Reply-To: <1206802610.3224.180.camel@nigel-x60> (Nigel Kukard's message of
-	"Sat\, 29 Mar 2008 14\:56\:50 +0000")
-References: <1206773941.3224.126.camel@nigel-x60>
-	<20080329140004.GA25949@cloud.net.au>
-	<1206799922.3224.157.camel@nigel-x60>
-	<87myoh8us4.fsf@macbook.be.48ers.dk>
-	<1206802610.3224.180.camel@nigel-x60>
-Message-ID: <87wsnl7bk0.fsf@macbook.be.48ers.dk>
+From: nkukard at uclibc.org <nkukard@uclibc.org>
+Date: Sat, 29 Mar 2008 09:23:16 -0700 (PDT)
+Subject: [Buildroot] svn commit: trunk/buildroot/toolchain/uClibc
+Message-ID: <20080329162316.C78283C51A@busybox.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Nigel" == Nigel Kukard <nkukard@lbsd.net> writes:
+Author: nkukard
+Date: 2008-03-29 09:23:16 -0700 (Sat, 29 Mar 2008)
+New Revision: 21558
 
- Nigel> Not fakeroot itself, but you cannot create a device if you're
- Nigel> a non-priv user. So ... nothing fails, makedevs generates
- Nigel> lovely zero size files instead of devices & fakeroot appears
- Nigel> to hide the errors.
- >> 
- >> But that's the point of fakeroot. Applications run from within
- >> fakeroot believes the trickery and sees the (fake) device nodes. I
- >> haven't looked into the initramfs stuff, but why wouldn't that work
- >> there as well?
+Log:
+* Fixed uClibc sub-x86 arch selection
 
- Nigel> Does fakeroot keep device-special information if you create
- Nigel> devices inside its environment? ie. if you create a /dev/hda
- Nigel> inside a fakeroot using mknod, tar it up, exit fakeroot, untar
- Nigel> it with admin privs, is it still a device special file?
 
-Yes, that's the point of fakeroot.
+Modified:
+   trunk/buildroot/toolchain/uClibc/uclibc.mk
 
--- 
-Bye, Peter Korsgaard
+
+Changeset:
+Modified: trunk/buildroot/toolchain/uClibc/uclibc.mk
+===================================================================
+--- trunk/buildroot/toolchain/uClibc/uclibc.mk	2008-03-29 16:07:46 UTC (rev 21557)
++++ trunk/buildroot/toolchain/uClibc/uclibc.mk	2008-03-29 16:23:16 UTC (rev 21558)
+@@ -353,7 +353,31 @@
+ endif
+ ifeq ($(BR2_x86_i586),y)
+ 	$(SED) 's,# CONFIG_586 is not set,CONFIG_586=y,g' $(UCLIBC_DIR)/.oldconfig
+-endif
++endif 
++ifeq ($(BR2_x86_pentium_mmx),y)
++	$(SED) 's,# CONFIG_586MMX is not set,CONFIG_586MMX=y,g' $(UCLIBC_DIR)/.oldconfig
++endif 
++ifeq ($(BR2_x86_pentium2),y)
++	$(SED) 's,# CONFIG_PENTIUMII is not set,CONFIG_PENTIUMII=y,g' $(UCLIBC_DIR)/.oldconfig
++endif 
++ifeq ($(BR2_x86_pentium3),y)
++	$(SED) 's,# CONFIG_PENTIUMIII is not set,CONFIG_PENTIUMIII=y,g' $(UCLIBC_DIR)/.oldconfig
++endif 
++ifeq ($(BR2_x86_pentium4),y)
++	$(SED) 's,# CONFIG_PENTIUM4 is not set,CONFIG_PENTIUM4=y,g' $(UCLIBC_DIR)/.oldconfig
++endif 
++ifeq ($(BR2_x86_pentium_m),y)
++	$(SED) 's,# CONFIG_PENTIUM4 is not set,CONFIG_PENTIUM4=y,g' $(UCLIBC_DIR)/.oldconfig
++endif 
++ifeq ($(BR2_x86_pentiumpro),y)
++	$(SED) 's,# CONFIG_PENTIUM4 is not set,CONFIG_PENTIUM4=y,g' $(UCLIBC_DIR)/.oldconfig
++endif 
++ifeq ($(BR2_x86_nocona),y)
++	$(SED) 's,# CONFIG_PENTIUM4 is not set,CONFIG_PENTIUM4=y,g' $(UCLIBC_DIR)/.oldconfig
++endif 
++ifeq ($(BR2_x86_core2),y)
++	$(SED) 's,# CONFIG_PENTIUM4 is not set,CONFIG_PENTIUM4=y,g' $(UCLIBC_DIR)/.oldconfig
++endif 
+ ifeq ($(BR2_x86_i686),y)
+ 	$(SED) 's,# CONFIG_686 is not set,CONFIG_686=y,g' $(UCLIBC_DIR)/.oldconfig
+ endif
