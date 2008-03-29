@@ -1,7 +1,7 @@
 From: nkukard at uclibc.org <nkukard@uclibc.org>
-Date: Sat, 29 Mar 2008 10:34:24 -0700 (PDT)
-Subject: [Buildroot] svn commit: trunk/buildroot/toolchain/uClibc
-Message-ID: <20080329173424.207703C538@busybox.net>
+Date: Sat, 29 Mar 2008 10:47:36 -0700 (PDT)
+Subject: [Buildroot] svn commit: trunk/buildroot/target/linux
+Message-ID: <20080329174736.4BEA53C4C4@busybox.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -9,52 +9,31 @@ Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
 Author: nkukard
-Date: 2008-03-29 10:34:23 -0700 (Sat, 29 Mar 2008)
-New Revision: 21560
+Date: 2008-03-29 10:47:36 -0700 (Sat, 29 Mar 2008)
+New Revision: 21561
 
 Log:
-PentiumPro is not Pentium4 but i686
+Feeding the kernel zero optimization -O0 breaks the kernel build at least on x86 with asm errors, remove -O0 when building the kernel
 
 
 Modified:
-   trunk/buildroot/toolchain/uClibc/uclibc.mk
+   trunk/buildroot/target/linux/Makefile.in
 
 
 Changeset:
-Modified: trunk/buildroot/toolchain/uClibc/uclibc.mk
+Modified: trunk/buildroot/target/linux/Makefile.in
 ===================================================================
---- trunk/buildroot/toolchain/uClibc/uclibc.mk	2008-03-29 17:26:10 UTC (rev 21559)
-+++ trunk/buildroot/toolchain/uClibc/uclibc.mk	2008-03-29 17:34:23 UTC (rev 21560)
-@@ -357,6 +357,12 @@
- ifeq ($(BR2_x86_pentium_mmx),y)
- 	$(SED) 's,# CONFIG_586MMX is not set,CONFIG_586MMX=y,g' $(UCLIBC_DIR)/.oldconfig
- endif 
-+ifeq ($(BR2_x86_i686),y)
-+	$(SED) 's,# CONFIG_686 is not set,CONFIG_686=y,g' $(UCLIBC_DIR)/.oldconfig
-+endif
-+ifeq ($(BR2_x86_pentiumpro),y)
-+	$(SED) 's,# CONFIG_686 is not set,CONFIG_686=y,g' $(UCLIBC_DIR)/.oldconfig
-+endif 
- ifeq ($(BR2_x86_pentium2),y)
- 	$(SED) 's,# CONFIG_PENTIUMII is not set,CONFIG_PENTIUMII=y,g' $(UCLIBC_DIR)/.oldconfig
- endif 
-@@ -369,19 +375,13 @@
- ifeq ($(BR2_x86_pentium_m),y)
- 	$(SED) 's,# CONFIG_PENTIUM4 is not set,CONFIG_PENTIUM4=y,g' $(UCLIBC_DIR)/.oldconfig
- endif 
--ifeq ($(BR2_x86_pentiumpro),y)
--	$(SED) 's,# CONFIG_PENTIUM4 is not set,CONFIG_PENTIUM4=y,g' $(UCLIBC_DIR)/.oldconfig
--endif 
- ifeq ($(BR2_x86_nocona),y)
- 	$(SED) 's,# CONFIG_PENTIUM4 is not set,CONFIG_PENTIUM4=y,g' $(UCLIBC_DIR)/.oldconfig
- endif 
- ifeq ($(BR2_x86_core2),y)
- 	$(SED) 's,# CONFIG_PENTIUM4 is not set,CONFIG_PENTIUM4=y,g' $(UCLIBC_DIR)/.oldconfig
- endif 
--ifeq ($(BR2_x86_i686),y)
--	$(SED) 's,# CONFIG_686 is not set,CONFIG_686=y,g' $(UCLIBC_DIR)/.oldconfig
+--- trunk/buildroot/target/linux/Makefile.in	2008-03-29 17:34:23 UTC (rev 21560)
++++ trunk/buildroot/target/linux/Makefile.in	2008-03-29 17:47:36 UTC (rev 21561)
+@@ -84,9 +84,10 @@
  endif
--endif
- 
- $(UCLIBC_DIR)/.config: $(UCLIBC_DIR)/.oldconfig
- 	cp -f $(UCLIBC_DIR)/.oldconfig $(UCLIBC_DIR)/.config
+ endif
+ __LINUX26_NO_PIC=-fPIC -fpic -DPIC -fwrapv -ftrapv
++__LINUX26_ZERO_OPTIMIZATION=-O0
+ LINUX26_MAKE_FLAGS = HOSTCC="$(HOSTCC)" HOSTCFLAGS="$(HOSTCFLAGS)" \
+ 	ARCH=$(KERNEL_ARCH) \
+-	CFLAGS_KERNEL="$(filter-out $(__LINUX26_NO_PIC),$(TARGET_CFLAGS))" \
++	CFLAGS_KERNEL="$(filter-out $(__LINUX26_NO_PIC) $(__LINUX26_ZERO_OPTIMIZATION),$(TARGET_CFLAGS))" \
+ 	INSTALL_MOD_PATH=$(TARGET_DIR) \
+ 	CROSS_COMPILE=$(KERNEL_CROSS) \
+ 	LDFLAGS="$(TARGET_LDFLAGS)" \
