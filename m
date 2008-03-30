@@ -1,33 +1,40 @@
-From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Sun, 30 Mar 2008 22:55:42 +0200
-Subject: [Buildroot] svn commit: trunk/buildroot/package: webif
-	webif/files webif/files/etc webif etc...
-In-Reply-To: <20080330204053.E286B3C520@busybox.net> (ulf@uclibc.org's message
-	of "Sun\, 30 Mar 2008 13\:40\:53 -0700 \(PDT\)")
-References: <20080330204053.E286B3C520@busybox.net>
-Message-ID: <87iqz4ylrl.fsf@macbook.be.48ers.dk>
+From: ulf at uclibc.org <ulf@uclibc.org>
+Date: Sun, 30 Mar 2008 14:49:16 -0700 (PDT)
+Subject: [Buildroot] svn commit: trunk/buildroot
+Message-ID: <20080330214917.064FA3C52C@busybox.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "ulf" == ulf  <ulf@uclibc.org> writes:
+Author: ulf
+Date: 2008-03-30 14:49:16 -0700 (Sun, 30 Mar 2008)
+New Revision: 21589
 
- ulf> Author: ulf
- ulf> Date: 2008-03-30 13:40:53 -0700 (Sun, 30 Mar 2008)
- ulf> New Revision: 21584
+Log:
+Do not allow optimizations which breaks linux build
 
- ulf> Log:
- ulf> Add webif package
+Modified:
+   trunk/buildroot/Config.in
 
- ulf> Added:
- ulf>    trunk/buildroot/package/webif/
- ulf>    trunk/buildroot/package/webif/Config.in
 
-I see that you don't enforce use of the old 0.8.0 version of
-haserl. Webif afaik only used to work with that one, not the new 0.9
-series - Is that still the case?
-
--- 
-Bye, Peter Korsgaard
+Changeset:
+Modified: trunk/buildroot/Config.in
+===================================================================
+--- trunk/buildroot/Config.in	2008-03-30 20:52:33 UTC (rev 21588)
++++ trunk/buildroot/Config.in	2008-03-30 21:49:16 UTC (rev 21589)
+@@ -259,11 +259,13 @@
+ 
+ config BR2_OPTIMIZE_0
+ 	bool "optimization level 0"
++	depends on !BR2_PACKAGE_LINUX
+ 	help
+ 	  Do not optimize. This is the default. 
+ 
+ config BR2_OPTIMIZE_1
+ 	bool "optimization level 1"
++	depends on !BR2_PACKAGE_LINUX
+ 	help
+ 	  Optimize. Optimizing compilation takes somewhat more time, 
+ 	  and a lot more memory for a large function. With -O, the 
