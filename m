@@ -1,37 +1,33 @@
-From: jacmet at uclibc.org <jacmet@uclibc.org>
-Date: Sun, 30 Mar 2008 13:52:34 -0700 (PDT)
-Subject: [Buildroot] svn commit: trunk/buildroot
-Message-ID: <20080330205234.46CC33C54C@busybox.net>
+From: Peter Korsgaard <jacmet@uclibc.org>
+Date: Sun, 30 Mar 2008 22:55:42 +0200
+Subject: [Buildroot] svn commit: trunk/buildroot/package: webif
+	webif/files webif/files/etc webif etc...
+In-Reply-To: <20080330204053.E286B3C520@busybox.net> (ulf@uclibc.org's message
+	of "Sun\, 30 Mar 2008 13\:40\:53 -0700 \(PDT\)")
+References: <20080330204053.E286B3C520@busybox.net>
+Message-ID: <87iqz4ylrl.fsf@macbook.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Author: jacmet
-Date: 2008-03-30 13:52:33 -0700 (Sun, 30 Mar 2008)
-New Revision: 21588
+>>>>> "ulf" == ulf  <ulf@uclibc.org> writes:
 
-Log:
-Makefile: merge CVS and .svn find invocation
+ ulf> Author: ulf
+ ulf> Date: 2008-03-30 13:40:53 -0700 (Sun, 30 Mar 2008)
+ ulf> New Revision: 21584
 
+ ulf> Log:
+ ulf> Add webif package
 
-Modified:
-   trunk/buildroot/Makefile
+ ulf> Added:
+ ulf>    trunk/buildroot/package/webif/
+ ulf>    trunk/buildroot/package/webif/Config.in
 
+I see that you don't enforce use of the old 0.8.0 version of
+haserl. Webif afaik only used to work with that one, not the new 0.9
+series - Is that still the case?
 
-Changeset:
-Modified: trunk/buildroot/Makefile
-===================================================================
---- trunk/buildroot/Makefile	2008-03-30 20:48:13 UTC (rev 21587)
-+++ trunk/buildroot/Makefile	2008-03-30 20:52:33 UTC (rev 21588)
-@@ -328,8 +328,7 @@
- 		fi; \
- 		touch $(STAGING_DIR)/.fakeroot.00000; \
- 	fi
--	-find $(TARGET_DIR) -type d -name CVS | xargs rm -rf
--	-find $(TARGET_DIR) -type d -name .svn | xargs rm -rf
-+	-find $(TARGET_DIR) -type d -name CVS -o -name .svn | xargs rm -rf
- 	-find $(TARGET_DIR) -type f -name .empty | xargs rm -rf	
- 	touch $@
- 
+-- 
+Bye, Peter Korsgaard
