@@ -1,7 +1,8 @@
 From: ulf at uclibc.org <ulf@uclibc.org>
-Date: Sun, 30 Mar 2008 13:39:42 -0700 (PDT)
-Subject: [Buildroot] svn commit: trunk/buildroot/package:  dummy
-Message-ID: <20080330203942.3B70B3C517@busybox.net>
+Date: Sun, 30 Mar 2008 13:40:53 -0700 (PDT)
+Subject: [Buildroot] svn commit: trunk/buildroot/package: webif webif/files
+	webif/files/etc webif etc...
+Message-ID: <20080330204053.E286B3C520@busybox.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -9,128 +10,90 @@ Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
 Author: ulf
-Date: 2008-03-30 13:39:41 -0700 (Sun, 30 Mar 2008)
-New Revision: 21583
+Date: 2008-03-30 13:40:53 -0700 (Sun, 30 Mar 2008)
+New Revision: 21584
 
 Log:
-Add example package
+Add webif package
 
 Added:
-   trunk/buildroot/package/dummy/
-   trunk/buildroot/package/dummy/Config.in
-   trunk/buildroot/package/dummy/dummy.mk
+   trunk/buildroot/package/webif/
+   trunk/buildroot/package/webif/Config.in
+   trunk/buildroot/package/webif/files/
+   trunk/buildroot/package/webif/files/etc/
+   trunk/buildroot/package/webif/files/etc/httpd.conf
+   trunk/buildroot/package/webif/files/usr/
+   trunk/buildroot/package/webif/files/usr/lib/
+   trunk/buildroot/package/webif/files/usr/lib/webif/
+   trunk/buildroot/package/webif/files/usr/lib/webif/apply.sh
+   trunk/buildroot/package/webif/files/usr/lib/webif/categories.awk
+   trunk/buildroot/package/webif/files/usr/lib/webif/common.awk
+   trunk/buildroot/package/webif/files/usr/lib/webif/form.awk
+   trunk/buildroot/package/webif/files/usr/lib/webif/lang/
+   trunk/buildroot/package/webif/files/usr/lib/webif/lang/ca/
+   trunk/buildroot/package/webif/files/usr/lib/webif/lang/ca/common.txt
+   trunk/buildroot/package/webif/files/usr/lib/webif/lang/cz/
+   trunk/buildroot/package/webif/files/usr/lib/webif/lang/cz/common.txt
+   trunk/buildroot/package/webif/files/usr/lib/webif/lang/de/
+   trunk/buildroot/package/webif/files/usr/lib/webif/lang/de/common.txt
+   trunk/buildroot/package/webif/files/usr/lib/webif/lang/dk/
+   trunk/buildroot/package/webif/files/usr/lib/webif/lang/dk/common.txt
+   trunk/buildroot/package/webif/files/usr/lib/webif/lang/ee/
+   trunk/buildroot/package/webif/files/usr/lib/webif/lang/ee/common.txt
+   trunk/buildroot/package/webif/files/usr/lib/webif/lang/es/
+   trunk/buildroot/package/webif/files/usr/lib/webif/lang/es/common.txt
+   trunk/buildroot/package/webif/files/usr/lib/webif/lang/fr/
+   trunk/buildroot/package/webif/files/usr/lib/webif/lang/fr/common.txt
+   trunk/buildroot/package/webif/files/usr/lib/webif/lang/hr/
+   trunk/buildroot/package/webif/files/usr/lib/webif/lang/hr/common.txt
+   trunk/buildroot/package/webif/files/usr/lib/webif/lang/hu/
+   trunk/buildroot/package/webif/files/usr/lib/webif/lang/hu/common.txt
+   trunk/buildroot/package/webif/files/usr/lib/webif/lang/it/
+   trunk/buildroot/package/webif/files/usr/lib/webif/lang/it/common.txt
+   trunk/buildroot/package/webif/files/usr/lib/webif/lang/nl/
+   trunk/buildroot/package/webif/files/usr/lib/webif/lang/nl/common.txt
+   trunk/buildroot/package/webif/files/usr/lib/webif/lang/no/
+   trunk/buildroot/package/webif/files/usr/lib/webif/lang/no/common.txt
+   trunk/buildroot/package/webif/files/usr/lib/webif/lang/pl/
+   trunk/buildroot/package/webif/files/usr/lib/webif/lang/pl/common.txt
+   trunk/buildroot/package/webif/files/usr/lib/webif/lang/pt/
+   trunk/buildroot/package/webif/files/usr/lib/webif/lang/pt/common.txt
+   trunk/buildroot/package/webif/files/usr/lib/webif/lang/ru/
+   trunk/buildroot/package/webif/files/usr/lib/webif/lang/ru/common.txt
+   trunk/buildroot/package/webif/files/usr/lib/webif/lang/se/
+   trunk/buildroot/package/webif/files/usr/lib/webif/lang/se/common.txt
+   trunk/buildroot/package/webif/files/usr/lib/webif/languages.awk
+   trunk/buildroot/package/webif/files/usr/lib/webif/subcategories.awk
+   trunk/buildroot/package/webif/files/usr/lib/webif/validate.awk
+   trunk/buildroot/package/webif/files/usr/lib/webif/webif.sh
+   trunk/buildroot/package/webif/files/www/
+   trunk/buildroot/package/webif/files/www/cgi-bin/
+   trunk/buildroot/package/webif/files/www/cgi-bin/webif.sh
+   trunk/buildroot/package/webif/files/www/cgi-bin/webif/
+   trunk/buildroot/package/webif/files/www/cgi-bin/webif/.categories
+   trunk/buildroot/package/webif/files/www/cgi-bin/webif/about.sh
+   trunk/buildroot/package/webif/files/www/cgi-bin/webif/config.sh
+   trunk/buildroot/package/webif/files/www/cgi-bin/webif/index.sh
+   trunk/buildroot/package/webif/files/www/cgi-bin/webif/info.sh
+   trunk/buildroot/package/webif/files/www/cgi-bin/webif/ipkg.sh
+   trunk/buildroot/package/webif/files/www/cgi-bin/webif/status-connection.sh
+   trunk/buildroot/package/webif/files/www/cgi-bin/webif/status-dhcp.sh
+   trunk/buildroot/package/webif/files/www/cgi-bin/webif/status-wireless.sh
+   trunk/buildroot/package/webif/files/www/index.html
+   trunk/buildroot/package/webif/files/www/webif.css
+   trunk/buildroot/package/webif/files/www/webif.js
+   trunk/buildroot/package/webif/src/
+   trunk/buildroot/package/webif/src/bstrip.c
+   trunk/buildroot/package/webif/src/webif-page.c
+   trunk/buildroot/package/webif/webif.mk
+
+Modified:
+   trunk/buildroot/package/Config.in
 
 
 Changeset:
-Added: trunk/buildroot/package/dummy/Config.in
-===================================================================
---- trunk/buildroot/package/dummy/Config.in	                        (rev 0)
-+++ trunk/buildroot/package/dummy/Config.in	2008-03-30 20:39:41 UTC (rev 21583)
-@@ -0,0 +1,8 @@
-+config BR2_PACKAGE_DUMMY
-+	bool "dummy"
-+	default n
-+	help
-+	  This is a dummy package to show how to integrate a new package into
-+	  Buildroot. The syntax for this file is the default kbuild from the
-+	  Linux kernel, more information at
-+	  http://git.kernel.org/?p=linux/kernel/git/torvalds/linux-2.6.git;a=tree;f=Documentation/kbuild
 
-Added: trunk/buildroot/package/dummy/dummy.mk
-===================================================================
---- trunk/buildroot/package/dummy/dummy.mk	                        (rev 0)
-+++ trunk/buildroot/package/dummy/dummy.mk	2008-03-30 20:39:41 UTC (rev 21583)
-@@ -0,0 +1,93 @@
-+#############################################################
-+#
-+# dummy
-+#
-+#############################################################
-+
-+# Current version, use the latest unless there are any known issues.
-+DUMMY_VERSION=1.2.3
-+# The filename of the package to download.
-+DUMMY_SOURCE=dummy-$(DUMMY_VERSION).tar.bz2
-+# The site and path to where the source packages are.
-+DUMMY_SITE=http://www.example.net/dummy/source
-+# The directory which the source package is extracted to.
-+DUMMY_DIR=$(BUILD_DIR)/dummy-$(DUMMY_VERSION)
-+# Which decompression to use, BZCAT or ZCAT.
-+DUMMY_CAT:=$(BZCAT)
-+# Target binary for the package.
-+DUMMY_BINARY:=dummy
-+# Not really needed, but often handy define.
-+DUMMY_TARGET_BINARY:=usr/bin/$(DUMMY_BINARY)
-+
-+# The download rule. Main purpose is to download the source package.
-+$(DL_DIR)/$(DUMMY_SOURCE):
-+	$(WGET) -P $(DL_DIR) $(DUMMY_SITE)/$(DUMMY_SOURCE)
-+
-+# The unpacking rule. Main purpose is to extract the source package, apply any
-+# patches and update config.guess and config.sub.
-+$(DUMMY_DIR)/.unpacked: $(DL_DIR)/$(DUMMY_SOURCE)
-+	$(DUMMY_CAT) $(DL_DIR)/$(DUMMY_SOURCE) | tar -C $(BUILD_DIR) $(TAR_OPTIONS) -
-+	toolchain/patch-kernel.sh $(DUMMY_DIR) package/dummy/ dummy-$(DUMMY_VERSION)-\*.patch\*
-+	$(CONFIG_UPDATE) $(DUMMY_DIR)
-+	touch $@
-+
-+# The configure rule. Main purpose is to get the package ready for compilation,
-+# usually by running the configure script with different kinds of options
-+# specified.
-+$(DUMMY_DIR)/.configured: $(DUMMY_DIR)/.unpacked
-+	(cd $(DUMMY_DIR); rm -rf config.cache; \
-+		$(TARGET_CONFIGURE_OPTS) \
-+		$(TARGET_CONFIGURE_ARGS) \
-+		./configure \
-+		--target=$(GNU_TARGET_NAME) \
-+		--host=$(GNU_TARGET_NAME) \
-+		--build=$(GNU_HOST_NAME) \
-+		--prefix=/usr \
-+		--sysconfdir=/etc \
-+		$(DISABLE_NLS) \
-+		$(DISABLE_LARGEFILE) \
-+	)
-+	touch $@
-+
-+$(DUMMY_DIR)/$(DUMMY_BINARY): $(DUMMY_DIR)/.configured
-+	$(MAKE) -C $(DUMMY_DIR)
-+
-+# The installing rule. Main purpose is to install the binary into the target
-+# root directory and make sure it is stripped from debug symbols to reduce the
-+# space requirements to a minimum.
-+#
-+# Only the files needed to run the application should be installed to the
-+# target root directory, to not waste valuable flash space.
-+$(TARGET_DIR)/$(DUMMY_TARGET_BINARY): $(DUMMY_DIR)/$(DUMMY_BINARY)
-+	cp -dpf $(DUMMY_DIR)/dummy $@
-+	$(STRIP) --strip-unneeded $@
-+
-+# Main rule which shows which other packages must be installed before the dummy
-+# package is installed. This to ensure that all depending libraries are
-+# installed.
-+dummy:	uclibc $(TARGET_DIR)/$(DUMMY_TARGET_BINARY)
-+
-+# Source download rule. Main purpose to download the source package. Since some
-+# people would like to work offline, it is mandotory to implement a rule which
-+# downloads everything this package needs.
-+dummy-source: $(DL_DIR)/$(DUMMY_SOURCE)
-+
-+# Clean rule. Main purpose is to clean the build directory, thus forcing a new
-+# rebuild the next time Buildroot is made.
-+dummy-clean:
-+	-$(MAKE) -C $(DUMMY_DIR) clean
-+
-+# Directory clean rule. Main purpose is to remove the build directory, forcing
-+# a new extraction, patching and rebuild the next time Buildroot is made.
-+dummy-dirclean:
-+	rm -rf $(DUMMY_DIR)
-+
-+#############################################################
-+#
-+# Toplevel Makefile options
-+#
-+#############################################################
-+# This is how the dummy package is added to the list of rules to build.
-+ifeq ($(strip $(BR2_PACKAGE_DUMMY)),y)
-+TARGETS+=dummy
-+endif
+Sorry, the patch is too large to include (5903 lines).
+Please use ViewCVS to see it!
+
+http://uclibc.org/cgi-bin/viewcvs.cgi?view=rev&root=svn&rev=21584
