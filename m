@@ -1,7 +1,7 @@
 From: ulf at uclibc.org <ulf@uclibc.org>
-Date: Sat, 29 Mar 2008 23:38:46 -0700 (PDT)
-Subject: [Buildroot] svn commit: trunk/buildroot
-Message-ID: <20080330063846.B77563C4A2@busybox.net>
+Date: Sun, 30 Mar 2008 00:06:15 -0700 (PDT)
+Subject: [Buildroot] svn commit: trunk/buildroot/package/libglib12
+Message-ID: <20080330070621.7FC9C3C4A0@busybox.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -9,53 +9,53 @@ Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
 Author: ulf
-Date: 2008-03-29 23:38:46 -0700 (Sat, 29 Mar 2008)
-New Revision: 21570
+Date: 2008-03-30 00:06:12 -0700 (Sun, 30 Mar 2008)
+New Revision: 21571
 
 Log:
-Ensure shell environment is handled correctly
+libglib12 cleanup
 
 Modified:
-   trunk/buildroot/Makefile
+   trunk/buildroot/package/libglib12/libglib12.mk
 
 
 Changeset:
-Modified: trunk/buildroot/Makefile
+Modified: trunk/buildroot/package/libglib12/libglib12.mk
 ===================================================================
---- trunk/buildroot/Makefile	2008-03-30 06:29:30 UTC (rev 21569)
-+++ trunk/buildroot/Makefile	2008-03-30 06:38:46 UTC (rev 21570)
-@@ -33,14 +33,10 @@
+--- trunk/buildroot/package/libglib12/libglib12.mk	2008-03-30 06:38:46 UTC (rev 21570)
++++ trunk/buildroot/package/libglib12/libglib12.mk	2008-03-30 07:06:12 UTC (rev 21571)
+@@ -13,13 +13,11 @@
+ $(DL_DIR)/$(LIBGLIB12_SOURCE):
+ 	 $(WGET) -P $(DL_DIR) $(LIBGLIB12_SITE)/$(LIBGLIB12_SOURCE)
  
- 
- # Use shell variables, if defined
--ifneq ($(BUILDROOT_DL_DIR),)
--BR2_DL_DIR:=$(BUILDROOT_DL_DIR)
--endif
+-libglib12-source: $(DL_DIR)/$(LIBGLIB12_SOURCE)
 -
- ifneq ($(BUILDROOT_LOCAL),)
--LOCAL:=$(BUILDROOT_LOCAL)
-+BR2_LOCAL:=$(BUILDROOT_LOCAL)
- else
--LOCAL:=$(TOPDIR)/local
-+BR2_LOCAL:=$(TOPDIR)/local
- endif
+ $(LIBGLIB12_DIR)/.unpacked: $(DL_DIR)/$(LIBGLIB12_SOURCE)
+ 	$(LIBGLIB12_CAT) $(DL_DIR)/$(LIBGLIB12_SOURCE) | tar -C $(BUILD_DIR) $(TAR_OPTIONS) -
+ 	toolchain/patch-kernel.sh $(LIBGLIB12_DIR) package/libglib12/ \*.patch*
+ 	$(CONFIG_UPDATE) $(LIBGLIB12_DIR)
+-	touch $(LIBGLIB12_DIR)/.unpacked
++	touch $@
  
- # $(shell find . -name *_defconfig |sed 's/.*\///')
-@@ -51,10 +47,16 @@
- -include $(TOPDIR).config
- else
- # if "make" command
---include $(LOCAL)/$(BOARD)/$(BOARD).config
-+-include $(BR2_LOCAL)/$(BOARD)/$(BOARD).config
- endif
- endif
+ $(LIBGLIB12_DIR)/.configured: $(LIBGLIB12_DIR)/.unpacked
+ 	(cd $(LIBGLIB12_DIR); rm -rf config.cache; \
+@@ -44,7 +42,7 @@
+ 		--enable-shared \
+ 		$(DISABLE_NLS) \
+ 	)
+-	touch $(LIBGLIB12_DIR)/.configured
++	touch $@
  
-+# Override BR2_DL_DIR if shell variable defined
-+ifneq ($(BUILDROOT_DL_DIR),)
-+BR2_DL_DIR:=$(BUILDROOT_DL_DIR)
-+endif
-+LOCAL:=$(BR2_LOCAL)
+ $(LIBGLIB12_DIR)/.libs/$(LIBGLIB12_BINARY): $(LIBGLIB12_DIR)/.configured
+ 	$(MAKE) CC=$(TARGET_CC) -C $(LIBGLIB12_DIR)
+@@ -76,6 +74,10 @@
+ 	$(STRIPCMD) $(STRIP_STRIP_UNNEEDED) $(TARGET_DIR)/lib/libglib-1.2.so.0.0.10
+ 	$(STRIPCMD) $(STRIP_STRIP_UNNEEDED) $(TARGET_DIR)/lib/libgmodule-1.2.so.0.0.10
+ 
++libglib12-source: $(DL_DIR)/$(LIBGLIB12_SOURCE)
 +
- # To put more focus on warnings, be less verbose as default
- # Use 'make V=1' to see the full commands
- ifdef V
++libglib12-unpacked: $(LIBGLIB12_DIR)/.unpacked
++
+ libglib12: uclibc $(TARGET_DIR)/lib/libglib-1.2.so.0.0.10
+ 
+ libglib12-clean:
