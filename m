@@ -1,26 +1,24 @@
-From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Sun, 30 Mar 2008 09:16:32 +0200
-Subject: [Buildroot] svn commit: trunk/buildroot/toolchain/gdb:  6.7.1
-In-Reply-To: <20080330070908.0A36D3C4B1@busybox.net> (ulf@uclibc.org's message
-	of "Sun\, 30 Mar 2008 00\:09\:08 -0700 \(PDT\)")
-References: <20080330070908.0A36D3C4B1@busybox.net>
-Message-ID: <87myog4r73.fsf@macbook.be.48ers.dk>
+From: nkukard at uclibc.org <nkukard@uclibc.org>
+Date: Sun, 30 Mar 2008 01:04:15 -0700 (PDT)
+Subject: [Buildroot] svn commit: trunk/buildroot/toolchain/gcc
+Message-ID: <20080330080415.9564F3C4BE@busybox.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "ulf" == ulf  <ulf@uclibc.org> writes:
+Author: nkukard
+Date: 2008-03-30 01:04:14 -0700 (Sun, 30 Mar 2008)
+New Revision: 21573
 
- ulf> Author: ulf
- ulf> Date: 2008-03-30 00:09:07 -0700 (Sun, 30 Mar 2008)
- ulf> New Revision: 21572
+Log:
+Remove legacy GCC 3.3.x versions
 
- ulf> Log:
- ulf> Add build support for latest gdb
 
-Thanks, but latest gdb is 6.8.
+Removed:
+   trunk/buildroot/toolchain/gcc/3.3.5/
+   trunk/buildroot/toolchain/gcc/3.3.6/
 
--- 
-Bye, Peter Korsgaard
+
+Changeset:
