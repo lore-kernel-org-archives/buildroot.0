@@ -1,71 +1,39 @@
-From: jacmet at uclibc.org <jacmet@uclibc.org>
-Date: Sun, 30 Mar 2008 07:37:07 -0700 (PDT)
-Subject: [Buildroot] svn commit: trunk/buildroot/package/busybox
-Message-ID: <20080330143707.8361D3C4E8@busybox.net>
+From: Nigel Kukard <nkukard@lbsd.net>
+Date: Sun, 30 Mar 2008 16:46:39 +0000
+Subject: [Buildroot] bzip2 -9'd kernel modules
+Message-ID: <1206895599.3290.7.camel@nigel-x60>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Author: jacmet
-Date: 2008-03-30 07:37:06 -0700 (Sun, 30 Mar 2008)
-New Revision: 21579
+As some may know, module-init-tools contains support for gzip'd kernel
+modules.
 
-Log:
-busybox: additional 1.10.0 fixes
+Anyone interested in bzip2'd modules?
+
+I just took my 2.6.22 modules...
+Unstripped - 47Mb
+Strippped (-g) - 45Mb
+Gzipped - 15Mb
+Bzip2'd - 13Mb
 
 
-Added:
-   trunk/buildroot/package/busybox/busybox-1.10.0-fuser.patch
+any thoughts?  the module-init-tools code is pretty simplistic to patch
+with bzip2 support.
 
+With that maybe an option under module-init-tools to automagically
+gzip/bzip2 them?
 
-Changeset:
-Added: trunk/buildroot/package/busybox/busybox-1.10.0-fuser.patch
-===================================================================
---- trunk/buildroot/package/busybox/busybox-1.10.0-fuser.patch	                        (rev 0)
-+++ trunk/buildroot/package/busybox/busybox-1.10.0-fuser.patch	2008-03-30 14:37:06 UTC (rev 21579)
-@@ -0,0 +1,43 @@
-+--- busybox-1.10.0/procps/fuser.c	Thu Mar 20 12:47:05 2008
-++++ busybox-1.10.0-fuser/procps/fuser.c	Sat Mar 29 18:55:23 2008
-+@@ -57,11 +57,11 @@
-+ 
-+ static char *parse_net_arg(const char *arg, unsigned *port)
-+ {
-+-	char path[12], tproto[5];
-++	char path[20], tproto[5];
-+ 
-+ 	if (sscanf(arg, "%u/%4s", port, tproto) != 2)
-+ 		return NULL;
-+-	sprintf(path, "net/%s", tproto);
-++	sprintf(path, "/proc/net/%s", tproto);
-+ 	if (access(path, R_OK) != 0)
-+ 		return NULL;
-+ 	return xstrdup(tproto);
-+@@ -99,7 +99,7 @@
-+ static inode_list *scan_proc_net(const char *proto,
-+ 				unsigned port, inode_list *ilist)
-+ {
-+-	char path[12], line[MAX_LINE + 1];
-++	char path[20], line[MAX_LINE + 1];
-+ 	char addr[128];
-+ 	ino_t tmp_inode;
-+ 	dev_t tmp_dev;
-+@@ -109,7 +109,7 @@
-+ 
-+ 	tmp_dev = find_socket_dev();
-+ 
-+-	sprintf(path, "net/%s", proto);
-++	sprintf(path, "/proc/net/%s", proto);
-+ 	f = fopen(path, "r");
-+ 	if (!f)
-+ 		return ilist;
-+@@ -313,8 +313,6 @@
-+ 
-+ 	opt = getopt32(argv, OPTION_STRING);
-+ 	argv += optind;
-+-
-+-	xchdir("/proc");
-+ 
-+ 	ilist = NULL;
-+ 	pp = argv;
+Obviously this adds some overhead requiring libz or libbz2 ... 100kb
+odd.
+
+-N
+-------------- next part --------------
+A non-text attachment was scrubbed...
+Name: not available
+Type: application/pgp-signature
+Size: 189 bytes
+Desc: This is a digitally signed message part
+Url : http://busybox.net/lists/buildroot/attachments/20080330/f39cbd41/attachment.pgp 
