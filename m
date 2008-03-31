@@ -1,68 +1,40 @@
-From: ulf at uclibc.org <ulf@uclibc.org>
-Date: Sun, 30 Mar 2008 22:42:04 -0700 (PDT)
-Subject: [Buildroot] svn commit: trunk/buildroot/target/linux
-Message-ID: <20080331054204.ECD433C3A5@busybox.net>
+From: Peter Korsgaard <jacmet@uclibc.org>
+Date: Mon, 31 Mar 2008 08:49:29 +0200
+Subject: [Buildroot] svn commit: trunk/buildroot/toolchain
+In-Reply-To: <20080330233915.GA22016@cloud.net.au> (Hamish Moffatt's message
+	of "Mon\, 31 Mar 2008 10\:39\:15 +1100")
+References: <20080329231048.1533A3C48B@busybox.net>
+	<87wsnk2wkz.fsf@macbook.be.48ers.dk>
+	<20080330233915.GA22016@cloud.net.au>
+Message-ID: <87k5jjxu9y.fsf@macbook.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Author: ulf
-Date: 2008-03-30 22:42:03 -0700 (Sun, 30 Mar 2008)
-New Revision: 21591
+>>>>> "Hamish" == Hamish Moffatt <hamish@cloud.net.au> writes:
 
-Log:
-Patch in EXTRA_VERSION
+ Hamish> On Sun, Mar 30, 2008 at 03:03:08PM +0200, Peter Korsgaard wrote:
+ >> >>>>> "ulf" == ulf  <ulf@uclibc.org> writes:
+ >> 
+ ulf> Author: ulf
+ ulf> Date: 2008-03-29 16:10:47 -0700 (Sat, 29 Mar 2008)
+ ulf> New Revision: 21568
+ >> 
+ ulf> Log:
+ ulf> Force use of bash for patching
+ >> 
+ ulf> Modified:
+ ulf> trunk/buildroot/toolchain/patch-kernel.sh
+ >> 
+ >> Please close the bug report (2674) as well.
 
-Modified:
-   trunk/buildroot/target/linux/Config.in.advanced
-   trunk/buildroot/target/linux/Makefile.in.advanced
+ Hamish> It would be better to make patch-kernel.sh work with a posix
+ Hamish> shell (eg dash) rather than forcing bash.
 
+Sure - You had a look at it already, didn't you? You are welcome to
+fix it.
 
-Changeset:
-Modified: trunk/buildroot/target/linux/Config.in.advanced
-===================================================================
---- trunk/buildroot/target/linux/Config.in.advanced	2008-03-30 22:23:39 UTC (rev 21590)
-+++ trunk/buildroot/target/linux/Config.in.advanced	2008-03-31 05:42:03 UTC (rev 21591)
-@@ -346,6 +346,14 @@
- 	default "$(BR2_LINUX26_MM_VERSION).bz2" if BR2_KERNEL_ADD_MM_PATCH
- 	default $(BR2_CUSTOM_LINUX26_PATCH) if BR2_LINUX26_CUSTOM
- 
-+config BR2_EXTRA_VERSION
-+	string
-+	default ".$(BR2_KERNEL_PATCH_LEVEL)"	if  BR2_KERNEL_ADD_MINORPATCH || BR2_KERNEL_ADD_LATEST_MINORPATCH
-+	default "$(BR2_KERNEL_RC_LEVEL)"	if BR2_KERNEL_ADD_LATEST_RC_PATCH
-+	default "$(BR2_KERNEL_RC_LEVEL)"	if BR2_KERNEL_ADD_RC_PATCH
-+	default "BR2_KERNEL_GIT_LEVEL"		if BR2_KERNEL_ADD_LATEST_SNAPSHOT
-+	default	"$(BR2_KERNEL_MM_LEVEL)"	if BR2_KERNEL_ADD_LATEST_MM_PATCH
-+	default	"$(BR2_KERNEL_MM_LEVEL)"	if BR2_KERNEL_ADD_MM_PATCH
- endmenu
- 
- # -----------------------------------------------
-
-Modified: trunk/buildroot/target/linux/Makefile.in.advanced
-===================================================================
---- trunk/buildroot/target/linux/Makefile.in.advanced	2008-03-30 22:23:39 UTC (rev 21590)
-+++ trunk/buildroot/target/linux/Makefile.in.advanced	2008-03-31 05:42:03 UTC (rev 21591)
-@@ -103,7 +103,7 @@
- endif
- endif
- 
--KERNEL_CONFIG_METHOD:=($(strip $(subst ",,$(BR2_KERNEL_CONFIG_METHOD))),)
-+KERNEL_CONFIG_METHOD:=$(strip $(subst ",,$(BR2_KERNEL_CONFIG_METHOD)))
- #"))
- ifeq ($(KERNEL_CONFIG_METHOD),)
- KERNEL_CONFIG_METHOD:=xconfig
-@@ -335,7 +335,11 @@
- 		$(MAKE) $(LINUX26_MAKE_FLAGS) -C $(LINUX26_DIR) $(KERNEL_CONFIG_METHOD) ; \
- 	fi
- endif
-+ifneq ($(strip $(subst ",,$(BR2_EXTRA_VERSION))),)
-+	$(SED) 's,^EXTRA_VERSION=.*,EXTRA_VERSION=="$(BR2_EXTRA_VERSION)",g'
-+endif
- 
-+
- # -----------------------------------------------------------------------------
- $(LINUX26_DIR)/.configured: $(LINUX26_DIR)/.config
- 	$(SED) '/CONFIG_AEABI=y/d' $(LINUX26_DIR)/.config
+-- 
+Bye, Peter Korsgaard
