@@ -1,7 +1,7 @@
 From: jacmet at uclibc.org <jacmet@uclibc.org>
-Date: Mon, 31 Mar 2008 07:28:38 -0700 (PDT)
-Subject: [Buildroot] svn commit: trunk/buildroot/package/avahi
-Message-ID: <20080331142838.8386C3C4EF@busybox.net>
+Date: Mon, 31 Mar 2008 07:32:38 -0700 (PDT)
+Subject: [Buildroot] svn commit: trunk/buildroot/package/readline
+Message-ID: <20080331143238.7A7EA3C516@busybox.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -9,32 +9,28 @@ Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
 Author: jacmet
-Date: 2008-03-31 07:28:38 -0700 (Mon, 31 Mar 2008)
-New Revision: 21594
+Date: 2008-03-31 07:32:38 -0700 (Mon, 31 Mar 2008)
+New Revision: 21595
 
 Log:
-avahi: depend on dbus-daemon in staging_dir
-
-Depend on dbus-daemon in staging_dir instead of in target_dir as
-fakeroot updates the timestamp on the target_dir version every time,
-so the avahi makefile thinks it always needs to recompile avahi.
+readline: ignore errors in target-clean target
 
 
 Modified:
-   trunk/buildroot/package/avahi/avahi.mk
+   trunk/buildroot/package/readline/readline.mk
 
 
 Changeset:
-Modified: trunk/buildroot/package/avahi/avahi.mk
+Modified: trunk/buildroot/package/readline/readline.mk
 ===================================================================
---- trunk/buildroot/package/avahi/avahi.mk	2008-03-31 09:51:59 UTC (rev 21593)
-+++ trunk/buildroot/package/avahi/avahi.mk	2008-03-31 14:28:38 UTC (rev 21594)
-@@ -37,7 +37,7 @@
+--- trunk/buildroot/package/readline/readline.mk	2008-03-31 14:28:38 UTC (rev 21594)
++++ trunk/buildroot/package/readline/readline.mk	2008-03-31 14:32:38 UTC (rev 21595)
+@@ -91,7 +91,7 @@
+ readline-target: readline $(TARGET_DIR)/$(READLINE_TARGET_SHARED_BINARY)
  
- ifeq ($(strip $(BR2_PACKAGE_DBUS)),y)
- AVAHI_DISABLE_DBUS:=
--AVAHI_EXTRA_DEPS+=$(TARGET_DIR)/usr/bin/dbus-daemon
-+AVAHI_EXTRA_DEPS+=$(STAGING_DIR)/usr/bin/dbus-daemon
- else
- AVAHI_DISABLE_DBUS:=--disable-dbus
- endif
+ readline-target-clean:
+-	$(MAKE1) DESTDIR=$(TARGET_DIR) -C $(READLINE_DIR) uninstall
++	-$(MAKE) DESTDIR=$(TARGET_DIR) -C $(READLINE_DIR) uninstall
+ 
+ ifeq ($(strip $(BR2_READLINE)),y)
+ TARGETS+=readline
