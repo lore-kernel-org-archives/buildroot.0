@@ -1,47 +1,73 @@
-From: Tim Barr <tbarr@multitech.com>
-Date: Mon, 31 Mar 2008 17:00:17 -0500
-Subject: [Buildroot] Kernel not happy on at91sam9260ek board.
-Message-ID: <1CD05B980C94AC408B37C82BBABAA3E60AE5A7F3@mtsexchange.dc.multitech.prv>
+From: Hebbar <gururajakr@sanyo.co.in>
+Date: Mon, 31 Mar 2008 16:54:31 -0700 (PDT)
+Subject: [Buildroot]  wrong patches placed inside toolchain/gdb/6.7.1
+Message-ID: <16400898.post@talk.nabble.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-I have built a 2.6.22.1 kernel using buildroot, but the rfs won't load.
-The error looks like the kernel is looking for a 16 bit NAND device but
-only finds an 8 bit one. The errors are:
- 
-NAND device: Manufacturer ID: 0xec, Chip ID: 0xda (Samsung NAND 256MiB
-3,3V 8-bit) 
 
-NAND bus width 16 instead 8 bit 
+Hi,
 
-No NAND device found!!! 
+I am trying to use 31/3/2008 buildroot snapshot for building arm9 toolchain. 
 
-and:
- 
-List of all partitions: 
+i have selected gdb-6.7.1 for compilation. while compilling  gdb i get below
+error message
 
-No filesystem could mount root, tried: jffs2 
+#
+# Now for the ugly 3.3.x soft float hack...
+#
+#
+# Ok... that's enough of that.
+#
+mkdir -p /opt/buildroot/project_build_arm/uclibc/root/usr/lib
+/opt/buildroot/project_build_arm/uclibc/root/usr/sbin
+touch /opt/buildroot/toolchain_build_arm/gcc-4.2.3-final/.installed
+# These are in /lib, so...
+rm -rf /opt/buildroot/project_build_arm/uclibc/root/usr/lib/libgcc_s*.so*
+cp -dpf
+/opt/buildroot/build_arm/staging_dir/usr/arm-linux-uclibcgnueabi/lib/libgcc_s*
+\
+                /opt/buildroot/project_build_arm/uclibc/root/lib/
+cp -dpf
+/opt/buildroot/build_arm/staging_dir/usr/arm-linux-uclibcgnueabi/lib/libstdc++.so*
+\
+                /opt/buildroot/project_build_arm/uclibc/root/usr/lib/
+touch /opt/buildroot/toolchain_build_arm/gcc-4.2.3-final/.libs_installed
+mkdir -p /opt/buildroot/toolchain_build_arm
+bzcat /opt/buildroot/dl/gdb-6.7.1.tar.bz2 | tar -C
+/opt/buildroot/toolchain_build_arm   -xf -
+toolchain/patch-kernel.sh /opt/buildroot/toolchain_build_arm/gdb-6.7.1
+toolchain/gdb/6.7.1 \*.patch
 
-Kernel panic - not syncing: VFS: Unable to mount root fs on
-unknown-block(0,0) 
+Applying 100-uclibc-conf.patch using plaintext:
+patching file bfd/configure
+Hunk #1 FAILED at 3579.
+1 out of 1 hunk FAILED -- saving rejects to file bfd/configure.rej
+patching file libtool.m4
+Hunk #1 succeeded at 2370 with fuzz 2 (offset 1619 lines).
+can't find file to patch at input line 34
+Perhaps you used the wrong -p or --strip option?
+The text leading up to this was:
+--------------------------
+|diff -rNdup gdb-6.6.orig/ltconfig gdb-6.6/ltconfig
+|--- gdb-6.6.orig/ltconfig      2006-07-04 22:31:03.000000000 +0200
+|+++ gdb-6.6/ltconfig   2007-05-14 10:35:50.000000000 +0200
+--------------------------
+File to patch:                                                       
 
- 
-
-Is there some setting in a .config file somewhere that I am missing or
-have wrong? Where do I need to look to fix this?
-
- 
 
 
-Timothy Barr
-Hardware Development Engineer
-for Multi-Tech Systems, Inc.
- <mailto:tbarr@multitech.com> tbarr at multitech.com 
+When i checked the toolchain/gdb/6.7.1 directory for patches,
+100-uclibc-conf.patch & 600-fix-compile-flag-mismatch.patch have patches for
+gdb-6.6 and not gdb-6.7.1.
 
- 
--------------- next part --------------
-An HTML attachment was scrubbed...
-URL: http://busybox.net/lists/buildroot/attachments/20080331/888797cc/attachment.htm 
+Kindly update if i am wrong.
+
+Regards
+Gururaja
+-- 
+View this message in context: http://www.nabble.com/wrong-patches-placed-inside-toolchain-gdb-6.7.1-tp16400898p16400898.html
+Sent from the BuildRoot mailing list archive at Nabble.com.
