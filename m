@@ -1,37 +1,52 @@
-From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Mon, 31 Mar 2008 11:04:54 +0200
+From: jacmet at uclibc.org <jacmet@uclibc.org>
+Date: Mon, 31 Mar 2008 02:06:43 -0700 (PDT)
 Subject: [Buildroot] svn commit: trunk/buildroot
-In-Reply-To: <87prtfmgzx.fsf@macbook.be.48ers.dk>
-References: <20080328025042.B52E23C31E@busybox.net>
-	<87prtfmgzx.fsf@macbook.be.48ers.dk>
-Message-ID: <9305ca410803310204g6fc64204t557a88c751472a9a@mail.gmail.com>
+Message-ID: <20080331090643.CDFB93C4D3@busybox.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Fri, Mar 28, 2008 at 9:42 AM, Peter Korsgaard <jacmet@uclibc.org> wrote:
-> >>>>> "jspence" == jspence  <jspence@uclibc.org> writes:
+Author: jacmet
+Date: 2008-03-31 02:06:26 -0700 (Mon, 31 Mar 2008)
+New Revision: 21592
 
->   jspence> @@ -124,6 +129,12 @@
->   jspence>  ifndef FCFLAGS_FOR_BUILD
->   jspence>  FCFLAGS_FOR_BUILD:=-g -O2
->   jspence>  endif
->   jspence> +
->   jspence> +ifeq ($(BR2_HAVE_HOST_CCACHE),y)
->   jspence> +HOSTCC:=$(HOSTCCACHE) $(HOSTCC)
->   jspence> +HOSTCXX:=$(HOSTCCACHE) $(HOSTCXX)
->   jspence> +endif
->
->  This is no good for the people (like me) that already use ccache by
->  prepending /usr/lib/ccache to the PATH.
->
->  Maybe you should simply add it as another option to the existing
->  ccache Config.in?
+Log:
+Makefile: revert broken ccache (r21525) for now.
 
-This breaks the build for ccache users, so I'm reverting the hunk for
-now. Please commit a fixed version of it.
 
--- 
-Bye, Peter Korsgaard
+Modified:
+   trunk/buildroot/Makefile
+
+
+Changeset:
+Modified: trunk/buildroot/Makefile
+===================================================================
+--- trunk/buildroot/Makefile	2008-03-31 05:42:03 UTC (rev 21591)
++++ trunk/buildroot/Makefile	2008-03-31 09:06:26 UTC (rev 21592)
+@@ -85,11 +85,6 @@
+ 
+ export CONFIG_SHELL quiet Q KBUILD_VERBOSE VERBOSE
+ 
+-HOSTCCACHE:=$(shell $(CONFIG_SHELL) -c "which ccache")
+-ifneq ($(HOSTCCACHE),)
+-BR2_HAVE_HOST_CCACHE=y
+-endif
+-
+ ifndef HOSTAR
+ HOSTAR:=ar
+ endif
+@@ -136,12 +131,6 @@
+ ifndef FCFLAGS_FOR_BUILD
+ FCFLAGS_FOR_BUILD:=-g -O2
+ endif
+-
+-ifeq ($(BR2_HAVE_HOST_CCACHE),y)
+-HOSTCC:=$(HOSTCCACHE) $(HOSTCC)
+-HOSTCXX:=$(HOSTCCACHE) $(HOSTCXX)
+-endif
+-
+ export HOSTAR HOSTAS HOSTCC HOSTCXX HOSTFC HOSTLD
+ 
+ 
