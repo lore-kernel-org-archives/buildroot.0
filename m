@@ -1,7 +1,7 @@
 From: jacmet at uclibc.org <jacmet@uclibc.org>
-Date: Mon, 31 Mar 2008 12:50:05 -0700 (PDT)
-Subject: [Buildroot] svn commit: trunk/buildroot: project scripts
-Message-ID: <20080331195005.C0B1B3C488@busybox.net>
+Date: Mon, 31 Mar 2008 12:56:58 -0700 (PDT)
+Subject: [Buildroot] svn commit: trunk/buildroot/package/avahi
+Message-ID: <20080331195658.EF1153C495@busybox.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -9,125 +9,59 @@ Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
 Author: jacmet
-Date: 2008-03-31 12:50:05 -0700 (Mon, 31 Mar 2008)
-New Revision: 21600
+Date: 2008-03-31 12:56:58 -0700 (Mon, 31 Mar 2008)
+New Revision: 21601
 
 Log:
-buildroot: add /etc/br-version with version info to target dir
+avahi: bump version
 
-
-Added:
-   trunk/buildroot/scripts/setlocalversion
 
 Modified:
-   trunk/buildroot/project/project.mk
+   trunk/buildroot/package/avahi/avahi.mk
+   trunk/buildroot/package/avahi/uclibc.patch
 
 
 Changeset:
-Modified: trunk/buildroot/project/project.mk
+Modified: trunk/buildroot/package/avahi/avahi.mk
 ===================================================================
---- trunk/buildroot/project/project.mk	2008-03-31 19:43:50 UTC (rev 21599)
-+++ trunk/buildroot/project/project.mk	2008-03-31 19:50:05 UTC (rev 21600)
-@@ -3,18 +3,22 @@
+--- trunk/buildroot/package/avahi/avahi.mk	2008-03-31 19:50:05 UTC (rev 21600)
++++ trunk/buildroot/package/avahi/avahi.mk	2008-03-31 19:56:58 UTC (rev 21601)
+@@ -10,7 +10,7 @@
+ # either version 2.1 of the License, or (at your option) any
+ # later version.
  
- .PHONY: target-host-info saveconfig getconfig
- 
--target-host-info: $(TARGET_DIR)/etc/issue $(TARGET_DIR)/etc/hostname
-+target-host-info: $(TARGET_DIR)/etc/issue $(TARGET_DIR)/etc/hostname $(TARGET_DIR)/etc/br-version
- 
- $(TARGET_DIR)/etc/issue: .config
- 	mkdir -p $(TARGET_DIR)/etc
--	echo "" > $(TARGET_DIR)/etc/issue
--	echo "" >> $(TARGET_DIR)/etc/issue
--	echo "$(BANNER)" >> $(TARGET_DIR)/etc/issue
-+	echo "" > $@
-+	echo "" >> $@
-+	echo "$(BANNER)" >> $@
- 
- $(TARGET_DIR)/etc/hostname: .config
- 	mkdir -p $(TARGET_DIR)/etc
--	echo "$(TARGET_HOSTNAME)" > $(TARGET_DIR)/etc/hostname
-+	echo "$(TARGET_HOSTNAME)" > $@
- 
-+$(TARGET_DIR)/etc/br-version: .config
-+	mkdir -p $(TARGET_DIR)/etc
-+	echo $(BR2_VERSION)$(shell $(TOPDIR)/scripts/setlocalversion) >$@
-+
- saveconfig: $(CONFIG)/conf
- 	mkdir -p $(LOCAL)/$(PROJECT)
- 	-cp .config $(PROJECT_FILE)
+-AVAHI_VERSION:=0.6.21
++AVAHI_VERSION:=0.6.22
+ AVAHI_DIR:=$(BUILD_DIR)/avahi-$(AVAHI_VERSION)
+ AVAHI_SITE:=http://www.avahi.org/download/
+ AVAHI_SOURCE:=avahi-$(AVAHI_VERSION).tar.gz
+@@ -120,6 +120,7 @@
+ 		$(DISABLE_NLS) \
+ 		$(DISABLE_LARGEFILE) \
+ 		--disable-glib \
++		--disable-gobject \
+ 		--disable-qt3 \
+ 		--disable-qt4 \
+ 		--disable-gtk \
 
-Added: trunk/buildroot/scripts/setlocalversion
+Modified: trunk/buildroot/package/avahi/uclibc.patch
 ===================================================================
---- trunk/buildroot/scripts/setlocalversion	                        (rev 0)
-+++ trunk/buildroot/scripts/setlocalversion	2008-03-31 19:50:05 UTC (rev 21600)
-@@ -0,0 +1,63 @@
-+#!/bin/sh
-+# Print additional version information for non-release trees.
-+
-+usage() {
-+	echo "Usage: $0 [srctree]" >&2
-+	exit 1
-+}
-+
-+cd "${1:-.}" || usage
-+
-+# Check for git and a git repo.
-+if head=`git rev-parse --verify HEAD 2>/dev/null`; then
-+	# Do we have an untagged version?
-+	if git name-rev --tags HEAD | grep -E '^HEAD[[:space:]]+(.*~[0-9]*|undefined)$' > /dev/null; then
-+	        git describe | awk -F- '{printf("-%05d-%s", $(NF-1),$(NF))}'
-+	fi
-+
-+	# Are there uncommitted changes?
-+	git update-index --refresh --unmerged > /dev/null
-+	if git diff-index --name-only HEAD | grep -v "^scripts/package" \
-+	    | read dummy; then
-+		printf '%s' -dirty
-+	fi
-+
-+	# All done with git
-+	exit
-+fi
-+
-+# Check for mercurial and a mercurial repo.
-+if hgid=`hg id 2>/dev/null`; then
-+	tag=`printf '%s' "$hgid" | cut -d' ' -f2`
-+
-+	# Do we have an untagged version?
-+	if [ -z "$tag" -o "$tag" = tip ]; then
-+		id=`printf '%s' "$hgid" | sed 's/[+ ].*//'`
-+		printf '%s%s' -hg "$id"
-+	fi
-+
-+	# Are there uncommitted changes?
-+	# These are represented by + after the changeset id.
-+	case "$hgid" in
-+		*+|*+\ *) printf '%s' -dirty ;;
-+	esac
-+
-+	# All done with mercurial
-+	exit
-+fi
-+
-+# Check for svn and a svn repo.
-+if rev=`svn info 2>/dev/null | grep '^Revision'`; then
-+	rev=`echo $rev | awk '{print $NF}'`
-+	changes=`svn status 2>/dev/null | grep '^[AMD]' | wc -l`
-+
-+	# Are there uncommitted changes?
-+	if [ $changes != 0 ]; then
-+		printf -- '-svn%s%s%s' "$rev" -dirty "$changes"
-+	else
-+		printf -- '-svn%s' "$rev"
-+	fi
-+
-+	# All done with svn
-+	exit
-+fi
-
-
-Property changes on: trunk/buildroot/scripts/setlocalversion
-___________________________________________________________________
-Name: svn:executable
-   + *
+--- trunk/buildroot/package/avahi/uclibc.patch	2008-03-31 19:50:05 UTC (rev 21600)
++++ trunk/buildroot/package/avahi/uclibc.patch	2008-03-31 19:56:58 UTC (rev 21601)
+@@ -1,11 +1,11 @@
+-diff -urN avahi-0.6.14-orig/avahi-core/socket.c avahi-0.6.14/avahi-core/socket.c
+---- avahi-0.6.14-orig/avahi-core/socket.c	2006-08-31 10:18:03.000000000 -0700
+-+++ avahi-0.6.14/avahi-core/socket.c	2006-09-21 19:01:31.000000000 -0700
+-@@ -394,13 +394,13 @@
++diff -urpN avahi-0.6.22.orig/avahi-core/socket.c avahi-0.6.22/avahi-core/socket.c
++--- avahi-0.6.22.orig/avahi-core/socket.c	2007-12-16 22:03:08.000000000 +0100
+++++ avahi-0.6.22/avahi-core/socket.c	2008-03-31 17:13:24.000000000 +0200
++@@ -394,13 +394,13 @@ int avahi_open_socket_ipv6(int no_reuse)
+          avahi_log_warn("IPV6_UNICAST_HOPS failed: %s", strerror(errno));
+          goto fail;
+      }
+--    
++-
+ +#ifdef IPV6_V6ONLY
+      yes = 1;
+      if (setsockopt(fd, IPPROTO_IPV6, IPV6_V6ONLY, &yes, sizeof(yes)) < 0) {
