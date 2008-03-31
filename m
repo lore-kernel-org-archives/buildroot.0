@@ -1,40 +1,36 @@
-From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Mon, 31 Mar 2008 08:49:29 +0200
-Subject: [Buildroot] svn commit: trunk/buildroot/toolchain
-In-Reply-To: <20080330233915.GA22016@cloud.net.au> (Hamish Moffatt's message
-	of "Mon\, 31 Mar 2008 10\:39\:15 +1100")
-References: <20080329231048.1533A3C48B@busybox.net>
-	<87wsnk2wkz.fsf@macbook.be.48ers.dk>
-	<20080330233915.GA22016@cloud.net.au>
-Message-ID: <87k5jjxu9y.fsf@macbook.be.48ers.dk>
+From: Salvatore Fassi <salvatore.fassi@gmail.com>
+Date: Mon, 31 Mar 2008 08:57:27 +0200
+Subject: [Buildroot] apt-get and "ubuntu like" skeleton in buildroot
+In-Reply-To: <c05908680803280631s30e1aaeaxdb430f35e773aa9d@mail.gmail.com>
+References: <c05908680803280631s30e1aaeaxdb430f35e773aa9d@mail.gmail.com>
+Message-ID: <c05908680803302357y14967d5cr928199434c40d9c7@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Hamish" == Hamish Moffatt <hamish@cloud.net.au> writes:
+Has this message arrived to the mailing list?
+Please help!
 
- Hamish> On Sun, Mar 30, 2008 at 03:03:08PM +0200, Peter Korsgaard wrote:
- >> >>>>> "ulf" == ulf  <ulf@uclibc.org> writes:
- >> 
- ulf> Author: ulf
- ulf> Date: 2008-03-29 16:10:47 -0700 (Sat, 29 Mar 2008)
- ulf> New Revision: 21568
- >> 
- ulf> Log:
- ulf> Force use of bash for patching
- >> 
- ulf> Modified:
- ulf> trunk/buildroot/toolchain/patch-kernel.sh
- >> 
- >> Please close the bug report (2674) as well.
+Salvo
 
- Hamish> It would be better to make patch-kernel.sh work with a posix
- Hamish> shell (eg dash) rather than forcing bash.
+On Fri, Mar 28, 2008 at 3:31 PM, Salvatore Fassi <salvatore.fassi@gmail.com>
+wrote:
 
-Sure - You had a look at it already, didn't you? You are welcome to
-fix it.
-
--- 
-Bye, Peter Korsgaard
+> Hi all,
+>
+> I'm trying to build an "ubuntu like" rootfs using buildroot.
+> My target is to be able to use "apt-get" to install packages easily at
+> run-time from the ubuntu repositories.
+> Do you think this will be easy to do?
+> Has anyone tried to a similar thing?
+>
+> Thank you.
+> Best regards.
+>
+> Salvo
+>
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: http://busybox.net/lists/buildroot/attachments/20080331/1ff1401c/attachment.htm 
