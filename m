@@ -1,7 +1,12 @@
 From: Hebbar <gururajakr@sanyo.co.in>
-Date: Mon, 31 Mar 2008 17:10:25 -0700 (PDT)
-Subject: [Buildroot] [patch] directfb: ignore errors in target-clean target
-Message-ID: <16400908.post@talk.nabble.com>
+Date: Mon, 31 Mar 2008 17:12:53 -0700 (PDT)
+Subject: [Buildroot] [PATCH] Allow users to choose Custom
+	Skeleton	directory
+In-Reply-To: <16171529.post@talk.nabble.com>
+References: <16135129.post@talk.nabble.com>
+	<047f01c88a0a$8a1ef5d0$070514ac@atmel.com>
+	<47E1E4FE.4090208@speakeasy.net> <16171529.post@talk.nabble.com>
+Message-ID: <16400912.post@talk.nabble.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -11,26 +16,14 @@ To: buildroot@busybox.net
 
 Hi,
 
-At present, directfb-clean fails if directfb directory doesnt exist. Below
-patch corrects the same
+    can anyone update me about this patch. does this patch needs any
+changes/updates/removals to be applied. 
 
---- package/directfb/directfb.mk_orig   2008-03-31 03:15:30.000000000 -0400
-+++ package/directfb/directfb.mk        2008-04-01 17:33:58.000000000 -0400
-@@ -108,7 +108,7 @@ directfb: uclibc jpeg libpng freetype li
-                $(TARGET_DIR)/usr/lib/libdirectfb.so
-
- directfb-clean:
--       $(MAKE) DESTDIR=$(TARGET_DIR) CC=$(TARGET_CC) -C $(DIRECTFB_DIR)
-uninstall
-+       -$(MAKE) DESTDIR=$(TARGET_DIR) CC=$(TARGET_CC) -C $(DIRECTFB_DIR)
-uninstall
-        -$(MAKE) -C $(DIRECTFB_DIR) clean
-
- directfb-dirclean:
-
+Atleast can anyone tell y this hasnt made to the final version.
 
 Regards
 Gururaja
+
 -- 
-View this message in context: http://www.nabble.com/-patch--directfb%3A-ignore-errors-in-target-clean-target-tp16400908p16400908.html
+View this message in context: http://www.nabble.com/-PATCH--Allow-users-to-choose-Custom-Skeleton-directory-tp16135129p16400912.html
 Sent from the BuildRoot mailing list archive at Nabble.com.
