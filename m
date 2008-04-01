@@ -1,41 +1,25 @@
-From: <bogus@does.not.exist.com>
-Date: Wed, 23 Apr 2008 14:39:25 -0000
-Subject: No subject
-Message-ID: <mailman.12.1213902371.1342.buildroot@uclibc.org>
+From: Peter Korsgaard <jacmet@uclibc.org>
+Date: Tue, 01 Apr 2008 08:52:06 +0200
+Subject: [Buildroot] [patch] directfb: ignore errors in target-clean
+	target
+In-Reply-To: <16400908.post@talk.nabble.com> (Hebbar's message of "Mon\,
+	31 Mar 2008 17\:10\:25 -0700 \(PDT\)")
+References: <16400908.post@talk.nabble.com>
+Message-ID: <87bq4urrs9.fsf@macbook.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+>>>>> "Hebbar" == Hebbar  <gururajakr@sanyo.co.in> writes:
 
-Added:
-   trunk/buildroot/package/config/check.sh
+ Hebbar> Hi,
 
+ Hebbar> At present, directfb-clean fails if directfb directory doesnt
+ Hebbar> exist. Below patch corrects the same
 
-Changeset:
-Added: trunk/buildroot/package/config/check.sh
-===================================================================
---- trunk/buildroot/package/config/check.sh	                        (rev 0)
-+++ trunk/buildroot/package/config/check.sh	2008-06-19 19:06:08 UTC (rev 22454)
-@@ -0,0 +1,14 @@
-+#!/bin/sh
-+# Needed for systems without gettext
-+$* -xc -o /dev/null - > /dev/null 2>&1 << EOF
-+#include <libintl.h>
-+int main()
-+{
-+	gettext("");
-+	return 0;
-+}
-+EOF
-+if [ ! "$?" -eq "0"  ]; then
-+	echo -DKBUILD_NO_NLS;
-+fi
-+
+Thanks - Fixed in r21604.
 
-
-Property changes on: trunk/buildroot/package/config/check.sh
-___________________________________________________________________
-Name: svn:executable
-   + *
+-- 
+Bye, Peter Korsgaard
