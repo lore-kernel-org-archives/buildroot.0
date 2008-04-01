@@ -1,33 +1,36 @@
-From: Ormund Williams <ormundw@panix.com>
-Date: Fri, 01 Feb 2008 00:36:43 -0500
-Subject: [Buildroot] make clean not so clean
-In-Reply-To: <214360.55769.qm@web56410.mail.re3.yahoo.com>
-References: <214360.55769.qm@web56410.mail.re3.yahoo.com>
-Message-ID: <1201844203.3526.46.camel@localhost.localdomain>
+From: Hebbar <gururajakr@sanyo.co.in>
+Date: Mon, 31 Mar 2008 17:10:25 -0700 (PDT)
+Subject: [Buildroot] [patch] directfb: ignore errors in target-clean target
+Message-ID: <16400908.post@talk.nabble.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Thu, 2008-01-31 at 21:02 -0800, jake sullivan wrote:
-> I'm not sure how to go about fixing this, but I have been able to
-> recreate an annoying little bug (that I think is the source of a
-> number of other newb problems).
-> 
-...(snip)...
-> My gut says to update "make clean" to delete all the config files (and
-> basically everything but the source files), but before I put work into
-> making and testing a patch, I want to make sure that is the right
-> approach...
-> 
-Don't know about "Right Appraach", but I just locate my download
-directory outside the Buildroot tree.
 
-Under: Build Options --->
+Hi,
 
-	$(BASE_DIR)/../dl) Download dir
+At present, directfb-clean fails if directfb directory doesnt exist. Below
+patch corrects the same
+
+--- package/directfb/directfb.mk_orig   2008-03-31 03:15:30.000000000 -0400
++++ package/directfb/directfb.mk        2008-04-01 17:33:58.000000000 -0400
+@@ -108,7 +108,7 @@ directfb: uclibc jpeg libpng freetype li
+                $(TARGET_DIR)/usr/lib/libdirectfb.so
+
+ directfb-clean:
+-       $(MAKE) DESTDIR=$(TARGET_DIR) CC=$(TARGET_CC) -C $(DIRECTFB_DIR)
+uninstall
++       -$(MAKE) DESTDIR=$(TARGET_DIR) CC=$(TARGET_CC) -C $(DIRECTFB_DIR)
+uninstall
+        -$(MAKE) -C $(DIRECTFB_DIR) clean
+
+ directfb-dirclean:
 
 
-__
-Ormund
+Regards
+Gururaja
+-- 
+View this message in context: http://www.nabble.com/-patch--directfb%3A-ignore-errors-in-target-clean-target-tp16400908p16400908.html
+Sent from the BuildRoot mailing list archive at Nabble.com.
