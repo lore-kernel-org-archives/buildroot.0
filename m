@@ -1,7 +1,7 @@
 From: jacmet at uclibc.org <jacmet@uclibc.org>
-Date: Tue,  1 Apr 2008 02:53:15 -0700 (PDT)
-Subject: [Buildroot] svn commit: trunk/buildroot/scripts
-Message-ID: <20080401095315.649A53C3BD@busybox.net>
+Date: Tue,  1 Apr 2008 03:00:00 -0700 (PDT)
+Subject: [Buildroot] svn commit: trunk/buildroot/package/busybox
+Message-ID: <20080401100000.510D63C51B@busybox.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -9,35 +9,36 @@ Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
 Author: jacmet
-Date: 2008-04-01 02:53:14 -0700 (Tue, 01 Apr 2008)
-New Revision: 21606
+Date: 2008-04-01 03:00:00 -0700 (Tue, 01 Apr 2008)
+New Revision: 21607
 
 Log:
-setlocalversion: add git-svn support
+busybox: additional 1.10.0 fix
 
 
-Modified:
-   trunk/buildroot/scripts/setlocalversion
+Added:
+   trunk/buildroot/package/busybox/busybox-1.10.0-tcpudp.patch
 
 
 Changeset:
-Modified: trunk/buildroot/scripts/setlocalversion
+Added: trunk/buildroot/package/busybox/busybox-1.10.0-tcpudp.patch
 ===================================================================
---- trunk/buildroot/scripts/setlocalversion	2008-04-01 07:03:07 UTC (rev 21605)
-+++ trunk/buildroot/scripts/setlocalversion	2008-04-01 09:53:14 UTC (rev 21606)
-@@ -12,9 +12,14 @@
- if head=`git rev-parse --verify HEAD 2>/dev/null`; then
- 	# Do we have an untagged version?
- 	if git name-rev --tags HEAD | grep -E '^HEAD[[:space:]]+(.*~[0-9]*|undefined)$' > /dev/null; then
--	        git describe | awk -F- '{printf("-%05d-%s", $(NF-1),$(NF))}'
-+	        git describe 2>/dev/null | awk -F- '{printf("-%05d-%s", $(NF-1),$(NF))}'
- 	fi
- 
-+	# Is this git on svn?
-+	if git config --get svn-remote.svn.url >/dev/null; then
-+	        printf -- '-svn%s' "`git-svn find-rev $head`"
-+	fi
-+
- 	# Are there uncommitted changes?
- 	git update-index --refresh --unmerged > /dev/null
- 	if git diff-index --name-only HEAD | grep -v "^scripts/package" \
+--- trunk/buildroot/package/busybox/busybox-1.10.0-tcpudp.patch	                        (rev 0)
++++ trunk/buildroot/package/busybox/busybox-1.10.0-tcpudp.patch	2008-04-01 10:00:00 UTC (rev 21607)
+@@ -0,0 +1,16 @@
++--- busybox-1.10.0/networking/tcpudp.c	Thu Mar 20 12:46:42 2008
+++++ busybox-1.10.0-tcpudp/networking/tcpudp.c	Mon Mar 31 21:27:38 2008
++@@ -29,10 +29,10 @@
++  * - don't know how to retrieve ORIGDST for udp.
++  */
++ 
++-#include <limits.h>
++-#include <linux/netfilter_ipv4.h> /* wants <limits.h> */
++-
++ #include "libbb.h"
+++/* Wants <limits.h> etc, thus included after libbb.h: */
+++#include <linux/netfilter_ipv4.h>
+++
++ // TODO: move into this file:
++ #include "tcpudp_perhost.h"
++ 
