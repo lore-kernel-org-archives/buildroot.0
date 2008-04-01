@@ -1,181 +1,136 @@
-From: Hebbar <gururajakr@sanyo.co.in>
-Date: Mon, 31 Mar 2008 21:52:30 -0700 (PDT)
-Subject: [Buildroot]  [PATCH] ignore errors in target-clean for directfb,
- file, gettext, libdrm, lzo...
-Message-ID: <16412845.post@talk.nabble.com>
+From: digitalpeer <buildroot@digitalpeer.com>
+Date: Mon, 31 Mar 2008 22:39:04 -0700
+Subject: [Buildroot] [PATCH] add support for micromonitor bootloader
+Message-ID: <3530b0eb0803312239h4df25ffch73349edc7c4ff34c@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-
-Hi,
-
-Below is a patch to ignore errors in target-clean target
-
-Regards
-Gururaja
-
-Log: 
-ignore errors in target-clean target 
+The following patch adds support for the Microcross Micromonitor
+(uMon) bootloader.
+Josh
 
 
-Modified files:
-package/directfb/directfb.mk
-package/file/file.mk
-package/gettext/gettext.mk
-package/libdrm/libdrm.mk
-package/lzo/lzo.mk
-package/pkgconfig/pkgconfig.mk
-package/tslib/tslib.mk
-package/x11r7/xdata_xcursor-themes/xdata_xcursor-themes.mk
-target/u-boot/Makefile.in
+diff -purN buildroot/target/Config.in buildroot-umon/target/Config.in
+--- buildroot/target/Config.in	2008-03-31 00:15:26.000000000 -0700
++++ buildroot-umon/target/Config.in	2008-03-31 22:22:09.000000000 -0700
+@@ -19,6 +19,7 @@ source "target/x86/grub/Config.in"
+ source "target/x86/syslinux/Config.in"
+ source "target/powerpc/yaboot/Config.in"
+ source "target/u-boot/Config.in"
++source "target/umon/Config.in"
+ endmenu
 
+ menu "Kernel"
+diff -purN buildroot/target/Makefile.in buildroot-umon/target/Makefile.in
+--- buildroot/target/Makefile.in	2008-03-31 00:15:26.000000000 -0700
++++ buildroot-umon/target/Makefile.in	2008-03-31 22:22:30.000000000 -0700
+@@ -15,6 +15,10 @@ ifeq ($(strip $(BR2_TARGET_UBOOT)),y)
+ include target/u-boot/Makefile.in
+ endif
 
-diff -purN buildroot/package/directfb/directfb.mk
-buildroot_changed/package/directfb/directfb.mk
---- buildroot/package/directfb/directfb.mk	2008-03-31 03:15:30.000000000
--0400
-+++ buildroot_changed/package/directfb/directfb.mk	2008-04-01
-17:33:58.000000000 -0400
-@@ -108,7 +108,7 @@ directfb: uclibc jpeg libpng freetype li
- 		$(TARGET_DIR)/usr/lib/libdirectfb.so
- 
- directfb-clean:
--	$(MAKE) DESTDIR=$(TARGET_DIR) CC=$(TARGET_CC) -C $(DIRECTFB_DIR) uninstall
-+	-$(MAKE) DESTDIR=$(TARGET_DIR) CC=$(TARGET_CC) -C $(DIRECTFB_DIR)
-uninstall
- 	-$(MAKE) -C $(DIRECTFB_DIR) clean
- 
- directfb-dirclean:
++ifeq ($(strip $(BR2_TARGET_UMON)),y)
++include target/umon/Makefile.in
++endif
++
+ # and finally build the filesystems/tarballs
+ include target/*/*.mk
 
-diff -purN buildroot/package/file/file.mk
-buildroot_changed/package/file/file.mk
---- buildroot/package/file/file.mk	2008-03-31 03:15:55.000000000 -0400
-+++ buildroot_changed/package/file/file.mk	2008-04-01 19:33:07.000000000
--0400
-@@ -105,7 +105,7 @@ endif
- file: zlib uclibc $(TARGET_DIR)/$(FILE_TARGET_BINARY)
- 
- file-clean:
--	$(MAKE) DESTDIR=$(TARGET_DIR) CC=$(TARGET_CC) -C $(FILE_DIR2) uninstall
-+	-$(MAKE) DESTDIR=$(TARGET_DIR) CC=$(TARGET_CC) -C $(FILE_DIR2) uninstall
- 	-$(MAKE) -C $(FILE_DIR2) clean
- 
- file-dirclean:
-
-diff -purN buildroot/package/gettext/gettext.mk
-buildroot_changed/package/gettext/gettext.mk
---- buildroot/package/gettext/gettext.mk	2008-03-31 03:15:50.000000000 -0400
-+++ buildroot_changed/package/gettext/gettext.mk	2008-04-01
-19:33:45.000000000 -0400
-@@ -125,7 +125,7 @@ gettext: uclibc pkgconfig $(STAGING_DIR)
- gettext-unpacked: $(GETTEXT_DIR)/.unpacked
- 
- gettext-clean:
--	$(MAKE) DESTDIR=$(TARGET_DIR) CC=$(TARGET_CC) -C $(GETTEXT_DIR) uninstall
-+	-$(MAKE) DESTDIR=$(TARGET_DIR) CC=$(TARGET_CC) -C $(GETTEXT_DIR) uninstall
- 	-$(MAKE) -C $(GETTEXT_DIR) clean
- 
- gettext-dirclean:
-
-diff -purN buildroot/package/libdrm/libdrm.mk
-buildroot_changed/package/libdrm/libdrm.mk
---- buildroot/package/libdrm/libdrm.mk	2008-03-31 03:15:41.000000000 -0400
-+++ buildroot_changed/package/libdrm/libdrm.mk	2008-04-01 19:34:21.000000000
--0400
-@@ -64,7 +64,7 @@ $(TARGET_DIR)/usr/lib/libdrm.so: $(STAGI
- libdrm: uclibc pkgconfig $(TARGET_DIR)/usr/lib/libdrm.so
- 
- libdrm-clean:
--	$(MAKE) DESTDIR=$(TARGET_DIR) CC=$(TARGET_CC) -C $(LIBDRM_DIR) uninstall
-+	-$(MAKE) DESTDIR=$(TARGET_DIR) CC=$(TARGET_CC) -C $(LIBDRM_DIR) uninstall
- 	-$(MAKE) -C $(LIBDRM_DIR) clean
- 
- libdrm-dirclean:
-
-diff -purN buildroot/package/lzo/lzo.mk buildroot_changed/package/lzo/lzo.mk
---- buildroot/package/lzo/lzo.mk	2008-03-31 03:15:55.000000000 -0400
-+++ buildroot_changed/package/lzo/lzo.mk	2008-04-01 19:38:47.000000000 -0400
-@@ -54,7 +54,7 @@ $(STAGING_DIR)/usr/lib/liblzo.a: $(LZO_D
- lzo: uclibc $(STAGING_DIR)/usr/lib/liblzo.a
- 
- lzo-clean:
--	$(MAKE) DESTDIR=$(STAGING_DIR) -C $(LZO_DIR) uninstall
-+	-$(MAKE) DESTDIR=$(STAGING_DIR) -C $(LZO_DIR) uninstall
- 	-$(MAKE) -C $(LZO_DIR) clean
- 
- lzo-dirclean:
-
-diff -purN buildroot/package/pkgconfig/pkgconfig.mk
-buildroot_changed/package/pkgconfig/pkgconfig.mk
---- buildroot/package/pkgconfig/pkgconfig.mk	2008-03-31 03:16:03.000000000
--0400
-+++ buildroot_changed/package/pkgconfig/pkgconfig.mk	2008-04-01
-19:39:20.000000000 -0400
-@@ -55,7 +55,7 @@ $(STAGING_DIR)/$(PKGCONFIG_TARGET_BINARY
- pkgconfig: uclibc $(STAGING_DIR)/$(PKGCONFIG_TARGET_BINARY)
- 
- pkgconfig-clean:
--	$(MAKE) DESTDIR=$(STAGING_DIR) -C $(PKGCONFIG_DIR) uninstall
-+	-$(MAKE) DESTDIR=$(STAGING_DIR) -C $(PKGCONFIG_DIR) uninstall
- 	-$(MAKE) -C $(PKGCONFIG_DIR) clean
- 
- pkgconfig-dirclean:
-
-diff -purN buildroot/package/tslib/tslib.mk
-buildroot_changed/package/tslib/tslib.mk
---- buildroot/package/tslib/tslib.mk	2008-03-31 03:15:53.000000000 -0400
-+++ buildroot_changed/package/tslib/tslib.mk	2008-04-01 19:40:20.000000000
--0400
-@@ -91,7 +91,7 @@ tslib-build: uclibc $(TSLIB_DIR)/.config
- 	touch $(TSLIB_DIR)/.compiled
- 
- tslib-clean:
--	$(MAKE) DESTDIR=$(TARGET_DIR) CC=$(TARGET_CC) -C $(TSLIB_DIR) uninstall
-+	-$(MAKE) DESTDIR=$(TARGET_DIR) CC=$(TARGET_CC) -C $(TSLIB_DIR) uninstall
- 	rm -f $(STAGING_DIR)/lib/libts.*
- 	rm -f $(STAGING_DIR)/usr/lib/libts.*
- 	-$(MAKE) -C $(TSLIB_DIR) clean
-
-diff -purN
-buildroot/package/x11r7/xdata_xcursor-themes/xdata_xcursor-themes.mk
-buildroot_changed/package/x11r7/xdata_xcursor-themes/xdata_xcursor-themes.mk
---- buildroot/package/x11r7/xdata_xcursor-themes/xdata_xcursor-themes.mk
-2008-03-31 03:15:37.000000000 -0400
-+++
-buildroot_changed/package/x11r7/xdata_xcursor-themes/xdata_xcursor-themes.mk
-2008-04-01 20:03:00.000000000 -0400
-@@ -58,8 +58,8 @@ $(XDATA_XCURSOR_THEMES_DIR)/.installed: 
- 	touch $@
- 
- xdata_xcursor-themes-clean:
--	$(MAKE) prefix=$(STAGING_DIR)/usr -C $(XDATA_XCURSOR_THEMES_DIR) uninstall
--	$(MAKE) prefix=$(TARGET_DIR)/usr -C $(XDATA_XCURSOR_THEMES_DIR) uninstall
-+	-$(MAKE) prefix=$(STAGING_DIR)/usr -C $(XDATA_XCURSOR_THEMES_DIR)
-uninstall
-+	-$(MAKE) prefix=$(TARGET_DIR)/usr -C $(XDATA_XCURSOR_THEMES_DIR) uninstall
- 	-$(MAKE) -C $(XDATA_XCURSOR_THEMES_DIR) clean
- 	-rm $(XDATA_XCURSOR_THEMES_DIR)/.installed
- 	-rm $(XDATA_XCURSOR_THEMES_DIR)/.built
-
-diff -purN buildroot/target/u-boot/Makefile.in
-buildroot_changed/target/u-boot/Makefile.in
---- buildroot/target/u-boot/Makefile.in	2008-03-31 03:15:25.000000000 -0400
-+++ buildroot_changed/target/u-boot/Makefile.in	2008-04-01
-20:04:02.000000000 -0400
-@@ -113,7 +113,7 @@ $(BINARIES_DIR)/$(U_BOOT_BIN): $(U_BOOT_
- u-boot: gcc $(BINARIES_DIR)/$(U_BOOT_BIN)
- 
- u-boot-clean:
--	$(MAKE) -C $(U_BOOT_DIR) clean
-+	-$(MAKE) -C $(U_BOOT_DIR) clean
- 
- u-boot-dirclean:
- 	rm -rf $(U_BOOT_DIR)
-
-
--- 
-View this message in context: http://www.nabble.com/-PATCH--ignore-errors-in-target-clean-for-directfb%2C-file%2Cgettext%2C-libdrm%2Clzo...-tp16412845p16412845.html
-Sent from the BuildRoot mailing list archive at Nabble.com.
+diff -purN buildroot/target/umon/Config.in buildroot-umon/target/umon/Config.in
+--- buildroot/target/umon/Config.in	1969-12-31 16:00:00.000000000 -0800
++++ buildroot-umon/target/umon/Config.in	2008-03-31 22:18:49.000000000 -0700
+@@ -0,0 +1,20 @@
++config BR2_TARGET_UMON
++	bool "Micromonitor Boot Loader"
++	default n
++	help
++	  Build uMon bootloader.
++
++config BR2_TARGET_UMON_PORT
++	string "port name"
++	depends on BR2_TARGET_UMON
++	default "$(BOARD_NAME)"
++	help
++	  uMon port name. This is the name of the directory under umon_ports.
++
++config BR2_TARGET_UMON_CUSTOM_PATCH
++	string "custom patch"
++	depends on BR2_TARGET_UMON
++	help
++	  If your board requires a custom patch, add the path to the file here.
++	  Most users may leave this empty.
++
+diff -purN buildroot/target/umon/Makefile.in
+buildroot-umon/target/umon/Makefile.in
+--- buildroot/target/umon/Makefile.in	1969-12-31 16:00:00.000000000 -0800
++++ buildroot-umon/target/umon/Makefile.in	2008-03-31 22:18:49.000000000 -0700
+@@ -0,0 +1,66 @@
++#############################################################
++#
++# umon
++#
++#############################################################
++UMON_VERSION:=sep8_2007
++UMON_SOURCE:=umon_$(UMON_VERSION).tgz
++UMON_SITE:=http://microcross.com
++UMON_PORT:=$(strip $(subst ",,$(BR2_TARGET_UMON_PORT)))
++UMON_DIR:=$(PROJECT_BUILD_DIR)/umon/umon_ports/$(UMON_PORT)
++UMON_HOST_DIR:=$(PROJECT_BUILD_DIR)/umon/umon_main/host
++UMON_PATCH_DIR:=$(PROJECT_BUILD_DIR)/umon-patches
++UMON_CAT:=$(ZCAT)
++UMON_BIN:=boot.bin
++UMON_TOP:=$(PROJECT_BUILD_DIR)/umon/umon_main
++# this is a nasty hack to get the PLATFORM variable from the makefile
++UMON_PLATFORM:=$$(grep '^PLATFORM.*=' $(UMON_DIR)/makefile | sed
+'s@^PLATFORM.*=@@')
++
++$(DL_DIR)/$(UMON_SOURCE):
++	 $(WGET) -P $(DL_DIR) $(UMON_SITE)/$(UMON_SOURCE)
++
++$(UMON_DIR)/.unpacked: $(DL_DIR)/$(UMON_SOURCE)
++	$(UMON_CAT) $(DL_DIR)/$(UMON_SOURCE) \
++		| tar -C $(PROJECT_BUILD_DIR) $(TAR_OPTIONS) -
++	touch $@
++
++$(UMON_DIR)/.patched: $(UMON_DIR)/.unpacked
++ifneq ($(strip $(BR2_TARGET_UMON_CUSTOM_PATCH)),"")
++	@mkdir -p $(UMON_PATCH_DIR)
++	cp -dpr $(BR2_TARGET_UMON_CUSTOM_PATCH) $(UMON_PATCH_DIR)
++	toolchain/patch-kernel.sh $(PROJECT_BUILD_DIR)/umon $(UMON_PATCH_DIR) *.patch
++endif
++	touch $@
++
++$(UMON_DIR)/build_$(UMON_PLATFORM)/$(UMON_BIN): $(UMON_DIR)/.patched
++	$(MAKE) -C $(UMON_HOST_DIR) UMON_TOP=$(UMON_TOP) OSTYPE=linux install
++	$(MAKE) $(TARGET_CONFIGURE_OPTS) -C $(UMON_DIR) UMONTOP=$(UMON_TOP)
++
++$(BINARIES_DIR)/$(UMON_BIN): $(UMON_DIR)/build_$(UMON_PLATFORM)/$(UMON_BIN)
++	cp $(UMON_DIR)/build_$(UMON_PLATFORM)/$(UMON_BIN) $(BINARIES_DIR)/$(UMON_BIN)
++
++umon: $(BINARIES_DIR)/$(UMON_BIN)
++
++umon-clean:
++	$(MAKE) -C $(UMON_DIR) clean
++
++umon-dirclean:
++	rm -rf $(UMON_DIR)
++
++umon-source: $(DL_DIR)/$(UMON_SOURCE)
++
++#############################################################
++#
++# Toplevel Makefile options
++#
++#############################################################
++ifeq ($(strip $(BR2_TARGET_UMON)),y)
++TARGETS+=umon
++endif
++
++umon-status:
++	@echo
++	@echo BR2_TARGET_UMON_PORT = $(BR2_TARGET_UMON_PORT)
++	@echo BR2_TARGET_UMON_CUSTOM_PATCH = $(BR2_TARGET_UMON_CUSTOM_PATCH)
++	@echo
++	@exit 0
