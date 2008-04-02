@@ -1,51 +1,54 @@
-From: Salvatore Fassi <salvatore.fassi@gmail.com>
-Date: Wed, 2 Apr 2008 15:15:05 +0200
-Subject: [Buildroot] Firefox in buildroot
-In-Reply-To: <46a136670804020541t40acd99apc8cae47c1f44dd17@mail.gmail.com>
-References: <c05908680804020326g1e3d624er665295621b8e4883@mail.gmail.com>
-	<46a136670804020541t40acd99apc8cae47c1f44dd17@mail.gmail.com>
-Message-ID: <c05908680804020615u27bc1475o3acf7d718565e5e2@mail.gmail.com>
+From: bugs at busybox.net <bugs@busybox.net>
+Date: Wed, 2 Apr 2008 06:54:14 -0700
+Subject: [Buildroot] [buildroot 0002724]: freetype-2.3.5 configure fails
+Message-ID: <ce5cd726afa2774179d4f634092bf1c9@busybox.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Thank you John,
 
-Are webkit and midori based on gecko?
-Salvo
+The following issue has been SUBMITTED. 
+====================================================================== 
+http://busybox.net/bugs/view.php?id=2724 
+====================================================================== 
+Reported By:                seek
+Assigned To:                buildroot
+====================================================================== 
+Project:                    buildroot
+Issue ID:                   2724
+Category:                   Architecture Specific
+Reproducibility:            always
+Severity:                   major
+Priority:                   normal
+Status:                     assigned
+====================================================================== 
+Date Submitted:             04-02-2008 06:54 PDT
+Last Modified:              04-02-2008 06:54 PDT
+====================================================================== 
+Summary:                    freetype-2.3.5 configure fails
+Description: 
+Building of freetype-2.3.5 stops with this error:
 
-On Wed, Apr 2, 2008 at 2:41 PM, John Voltz <john.voltz@gmail.com> wrote:
+checking for x86_64-pc-linux-gnu-gcc... x86_64-pc-linux-gnu
+checking for x86_64-pc-linux-gnu-gcc... (cached) x86_64-pc-linux-gnu
+checking for x86_64-pc-linux-gnu-gcc... (cached) x86_64-pc-linux-gnu
+checking for suffix of native executables... ./configure: line 3392:
+x86_64-pc-linux-gnu: command not found
+configure: error: native C compiler is not working
+make[1]: *** [setup] Fehler 1
 
-> No firefox, but webkit+midori is in there.
->
-> John
->
-> On Wed, Apr 2, 2008 at 6:26 AM, Salvatore Fassi <salvatore.fassi@gmail.com>
-> wrote:
->
-> > Hi all,
-> >
-> > Does anyone have ported firefox (mozilla) in buildroot?
-> > Please let me know.
-> >
-> > Thank you.
-> >
-> > Salvo
-> >
-> > _______________________________________________
-> > buildroot mailing list
-> > buildroot at uclibc.org
-> > http://busybox.net/mailman/listinfo/buildroot
-> >
->
->
-> _______________________________________________
-> buildroot mailing list
-> buildroot at uclibc.org
-> http://busybox.net/mailman/listinfo/buildroot
->
--------------- next part --------------
-An HTML attachment was scrubbed...
-URL: http://busybox.net/lists/buildroot/attachments/20080402/41d7b3ce/attachment.htm 
+freetype-2.2.1 works as expected.
+
+
+
+====================================================================== 
+
+Issue History 
+Date Modified   Username       Field                    Change               
+====================================================================== 
+04-02-08 06:54  seek           New Issue                                    
+04-02-08 06:54  seek           Status                   new => assigned     
+04-02-08 06:54  seek           Assigned To               => buildroot       
+======================================================================
