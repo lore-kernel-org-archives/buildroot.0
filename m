@@ -1,38 +1,38 @@
-From: Hamish Moffatt <hamish@cloud.net.au>
-Date: Wed, 2 Apr 2008 11:22:58 +1100
-Subject: [Buildroot] [PATCH] Update lighttpd package
-In-Reply-To: <DA636050-A5F5-4DA6-9D61-8B2C1FD153FE@valka.is>
-References: <DA636050-A5F5-4DA6-9D61-8B2C1FD153FE@valka.is>
-Message-ID: <20080402002258.GD4616@cloud.net.au>
+From: digitalpeer <buildroot@digitalpeer.com>
+Date: Tue, 1 Apr 2008 17:28:38 -0700
+Subject: [Buildroot] [PATCH] add romfs support
+In-Reply-To: <20080402002005.GC4616@cloud.net.au>
+References: <3530b0eb0804011424t3d88f2f2sc6777f9d7a9edf57@mail.gmail.com>
+	<20080402002005.GC4616@cloud.net.au>
+Message-ID: <3530b0eb0804011728j45dd33e9j3edb7acc238d83ca@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Tue, Apr 01, 2008 at 11:58:27PM +0000, Arnar Mar Sig wrote:
-> This patch bumps lighttpd up to version 1.4.19 and adds the option to  
-> compile with pcre support to enable mod_rewrite. Tested on AVR32
+Hmm, I'll send future patches as attachments if you prefer?
 
-Your patch is badly damaged by word-wrap. Can you resend?
+On Tue, Apr 1, 2008 at 5:20 PM, Hamish Moffatt <hamish@cloud.net.au> wrote:
 
-> +--- lighttpd-1.4.19-org/configure	2008-03-10 21:46:12.000000000 +0000
-> ++++ lighttpd-1.4.19/configure	2008-03-31 06:58:41.000000000 +0000
-> +@@ -23971,7 +23971,7 @@
-> + { echo "$as_me:$LINENO: result: $WITH_PCRE" >&5
-> + echo "${ECHO_T}$WITH_PCRE" >&6; }
-> +
-> +-if test "x$cross_compiling" = xno -a "$WITH_PCRE" != "no"; then
-> ++if test "$WITH_PCRE" != "no"; then
-> +   # Extract the first word of "pcre-config", so it can be a program  
-> name with args.
-> + set dummy pcre-config; ac_word=$2
-> + { echo "$as_me:$LINENO: checking for $ac_word" >&5
-
-Patching configure scripts directly is a bit of a hack. Can you edit
-configure.in/.ac and run $(AUTORECONF) instead?
-
-
-Hamish
--- 
-Hamish Moffatt VK3SB <hamish@debian.org> <hamish@cloud.net.au>
+> On Tue, Apr 01, 2008 at 02:24:00PM -0700, digitalpeer wrote:
+> > The following patch adds the ability to generate a romfs image using
+> genromfs.
+>
+> Thanks, committed in rev 21618.
+>
+> Two notes;
+>
+> 1. Your patch was word-wrapped in a few places.
+>
+> 2. Needed to edit target/Config.in to include target/romfs/Config.in
+> also. I guess you did this but forgot to send the patch.
+>
+>
+> Hamish
+> --
+> Hamish Moffatt VK3SB <hamish@debian.org> <hamish@cloud.net.au>
+>
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: http://busybox.net/lists/buildroot/attachments/20080401/ce9d1260/attachment.htm 
