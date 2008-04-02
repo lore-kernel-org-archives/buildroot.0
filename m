@@ -1,54 +1,41 @@
-From: bugs at busybox.net <bugs@busybox.net>
-Date: Wed, 2 Apr 2008 06:54:14 -0700
-Subject: [Buildroot] [buildroot 0002724]: freetype-2.3.5 configure fails
-Message-ID: <ce5cd726afa2774179d4f634092bf1c9@busybox.net>
+From: Guillaume Dargaud <dargaud@lpsc.in2p3.fr>
+Date: Wed, 2 Apr 2008 16:16:12 +0200
+Subject: [Buildroot] ARCH=ppc vs powerpc
+Message-ID: <0d2f01c894cc$1fb56540$f52f9e86@LPSC0173W>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+Anyone care to comment on that:
 
-The following issue has been SUBMITTED. 
-====================================================================== 
-http://busybox.net/bugs/view.php?id=2724 
-====================================================================== 
-Reported By:                seek
-Assigned To:                buildroot
-====================================================================== 
-Project:                    buildroot
-Issue ID:                   2724
-Category:                   Architecture Specific
-Reproducibility:            always
-Severity:                   major
-Priority:                   normal
-Status:                     assigned
-====================================================================== 
-Date Submitted:             04-02-2008 06:54 PDT
-Last Modified:              04-02-2008 06:54 PDT
-====================================================================== 
-Summary:                    freetype-2.3.5 configure fails
-Description: 
-Building of freetype-2.3.5 stops with this error:
+$ make ARCH=ppc linux26-menuconfig
+[ -f
+/home/guinevere/buildroot/project_build_ppc/genepy/linux-2.6.24/.config ] |
+| cp local/genepy/linux-2.6.24.config
+/home/guinevere/buildroot/project_build_pp
+c/genepy/linux-2.6.24/.config
+/usr/bin/make -j1 HOSTCC="/usr/bin/gcc" HOSTCFLAGS="" ARCH=powerpc
+[...]
 
-checking for x86_64-pc-linux-gnu-gcc... x86_64-pc-linux-gnu
-checking for x86_64-pc-linux-gnu-gcc... (cached) x86_64-pc-linux-gnu
-checking for x86_64-pc-linux-gnu-gcc... (cached) x86_64-pc-linux-gnu
-checking for suffix of native executables... ./configure: line 3392:
-x86_64-pc-linux-gnu: command not found
-configure: error: native C compiler is not working
-make[1]: *** [setup] Fehler 1
+Why does ARCH change ?!?
 
-freetype-2.2.1 works as expected.
+[...]
+.config:132:warning: trying to assign nonexistent symbol XILINX_ML405
+[...]
 
+$ find -name Kconfig -exec grep -H XILINX_ML405 {} \;
+./toolchain_build_powerpc/linux-2.6.24/arch/ppc/platforms/4xx/Kconfig:config
+XILINX_ML405
+./project_build_ppc/genepy/linux-2.6.24/arch/ppc/platforms/4xx/Kconfig:config
+XILINX_ML405
+./toolchain_build_ppc/linux-2.6.24/arch/ppc/platforms/4xx/Kconfig:config
+XILINX_ML405
 
-
-====================================================================== 
-
-Issue History 
-Date Modified   Username       Field                    Change               
-====================================================================== 
-04-02-08 06:54  seek           New Issue                                    
-04-02-08 06:54  seek           Status                   new => assigned     
-04-02-08 06:54  seek           Assigned To               => buildroot       
-======================================================================
+Well, it's no surprise that it won't find them if it looks in the powerpc
+branch...
+The question is why ?
+-- 
+Guillaume Dargaud
+http://www.gdargaud.net/
