@@ -1,39 +1,44 @@
-From: Bernhard Fischer <rep.dot.nop@gmail.com>
-Date: Wed, 2 Apr 2008 18:41:54 +0200
-Subject: [Buildroot] ARCH=ppc vs powerpc
-In-Reply-To: <8763v071sq.fsf@macbook.be.48ers.dk>
-References: <0d2f01c894cc$1fb56540$f52f9e86@LPSC0173W>
-	<8763v071sq.fsf@macbook.be.48ers.dk>
-Message-ID: <20080402164154.GE9436@mx.loc>
+From: Ulf Samuelsson <ulf.samuelsson@atmel.com>
+Date: Wed, 2 Apr 2008 23:28:37 +0200
+Subject: [Buildroot] svn commit: trunk/buildroot/target/linux
+References: <20080331054204.ECD433C3A5@busybox.net> <47F217F5.5030908@eclis.ch>
+Message-ID: <01e001c8950d$99237390$0e0514ac@atmel.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Wed, Apr 02, 2008 at 04:45:57PM +0200, Peter Korsgaard wrote:
->>>>>> "Guillaume" == Guillaume Dargaud <dargaud@lpsc.in2p3.fr> writes:
->
-> Guillaume> Anyone care to comment on that:
-> Guillaume> $ make ARCH=ppc linux26-menuconfig
-> Guillaume> [ -f
-> Guillaume> /home/guinevere/buildroot/project_build_ppc/genepy/linux-2.6.24/.config ] |
-> Guillaume> | cp local/genepy/linux-2.6.24.config
-> Guillaume> /home/guinevere/buildroot/project_build_pp
-> Guillaume> c/genepy/linux-2.6.24/.config
-> Guillaume> /usr/bin/make -j1 HOSTCC="/usr/bin/gcc" HOSTCFLAGS="" ARCH=powerpc
-> Guillaume> [...]
->
-> Guillaume> Why does ARCH change ?!?
->
->Because target/linux/Makefile.in uses KERNEL_ARCH for ARCH setting,
->and not what you have set ARCH to on the cmdline.
->
->KERNEL_ARCH is calculated in
->toolchain/kernel-headers/kernel-headers.mk - Notice that arch/ppc is
->deprecated, you should use arch/powerpc nowadays.
 
-Somebody did IMHO the Wrong Thing by silently unset'ing ARCH in the
-toplevel Makefile. The proper thing to do is either $(error ARCH is set)
-or, preferably, check that $ARCH is clean via dependencies.sh
-Silently unseting ARCH is error-prone and misleading (as you see).
+
+ulf at uclibc.org a ?crit :
+> --- trunk/buildroot/target/linux/Makefile.in.advanced 2008-03-30 22:23:39 UTC (rev 21590)
+> +++ trunk/buildroot/target/linux/Makefile.in.advanced 2008-03-31 05:42:03 UTC (rev 21591)
+> @@ -103,7 +103,7 @@
+>  endif
+>  endif
+>  
+> -KERNEL_CONFIG_METHOD:=($(strip $(subst ",,$(BR2_KERNEL_CONFIG_METHOD))),)
+> +KERNEL_CONFIG_METHOD:=$(strip $(subst ",,$(BR2_KERNEL_CONFIG_METHOD)))
+>  #"))
+>  ifeq ($(KERNEL_CONFIG_METHOD),)
+>  KERNEL_CONFIG_METHOD:=xconfig
+> @@ -335,7 +335,11 @@
+>  $(MAKE) $(LINUX26_MAKE_FLAGS) -C $(LINUX26_DIR) $(KERNEL_CONFIG_METHOD) ; \
+>  fi
+>  endif
+> +ifneq ($(strip $(subst ",,$(BR2_EXTRA_VERSION))),)
+> + $(SED) 's,^EXTRA_VERSION=.*,EXTRA_VERSION=="$(BR2_EXTRA_VERSION)",g'
+> +endif
+
+> This patch break the default compilation for AT91SAM9261 (make 
+> at91sam9261ek_defconfig && make) with the following error:
+
+
+Choose another kernel version like 2.6.22.1.
+I have a fix ready, but I am having problems
+with svn access from where I am at the moment.
+
+
+Best Regards
+Ulf Samuelsson
