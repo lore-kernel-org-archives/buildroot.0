@@ -1,53 +1,39 @@
-From: Guillaume Dargaud <dargaud@lpsc.in2p3.fr>
-Date: Wed, 2 Apr 2008 18:23:14 +0200
+From: Bernhard Fischer <rep.dot.nop@gmail.com>
+Date: Wed, 2 Apr 2008 18:41:54 +0200
 Subject: [Buildroot] ARCH=ppc vs powerpc
+In-Reply-To: <8763v071sq.fsf@macbook.be.48ers.dk>
 References: <0d2f01c894cc$1fb56540$f52f9e86@LPSC0173W>
 	<8763v071sq.fsf@macbook.be.48ers.dk>
-Message-ID: <0d6e01c894dd$dcebbfe0$f52f9e86@LPSC0173W>
+Message-ID: <20080402164154.GE9436@mx.loc>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-
-> Because target/linux/Makefile.in uses KERNEL_ARCH for ARCH setting,
-> and not what you have set ARCH to on the cmdline.
+On Wed, Apr 02, 2008 at 04:45:57PM +0200, Peter Korsgaard wrote:
+>>>>>> "Guillaume" == Guillaume Dargaud <dargaud@lpsc.in2p3.fr> writes:
 >
-> KERNEL_ARCH is calculated in
-> toolchain/kernel-headers/kernel-headers.mk - Notice that arch/ppc is
-> deprecated, you should use arch/powerpc nowadays.
+> Guillaume> Anyone care to comment on that:
+> Guillaume> $ make ARCH=ppc linux26-menuconfig
+> Guillaume> [ -f
+> Guillaume> /home/guinevere/buildroot/project_build_ppc/genepy/linux-2.6.24/.config ] |
+> Guillaume> | cp local/genepy/linux-2.6.24.config
+> Guillaume> /home/guinevere/buildroot/project_build_pp
+> Guillaume> c/genepy/linux-2.6.24/.config
+> Guillaume> /usr/bin/make -j1 HOSTCC="/usr/bin/gcc" HOSTCFLAGS="" ARCH=powerpc
+> Guillaume> [...]
+>
+> Guillaume> Why does ARCH change ?!?
+>
+>Because target/linux/Makefile.in uses KERNEL_ARCH for ARCH setting,
+>and not what you have set ARCH to on the cmdline.
+>
+>KERNEL_ARCH is calculated in
+>toolchain/kernel-headers/kernel-headers.mk - Notice that arch/ppc is
+>deprecated, you should use arch/powerpc nowadays.
 
-
-Thank you very much.
-
-Now I can do this properly [*]:
-$ make ARCH=ppc KERNEL_ARCH=ppc linux26
-
-And also this:
-$ make ARCH=ppc uclibc
-$ make ARCH=ppc busybox
-
-Now how do I combine it all in one line ? This doesn't work:
-$ make ARCH=ppc KERNEL_ARCH=ppc
-
-
-[*]: yet it fails at the very end:
-[...]
-cp -f arch/ppc/boot/simple/zvmlinux arch/ppc/boot/images/zImage.elf
-rm -f arch/ppc/boot/simple/zvmlinux
-make[1]: Leaving directory 
-`/home/guinevere/buildroot/project_build_ppc/genepy/linux-2.6.24'
-cp -dpf 
-/home/guinevere/buildroot/project_build_ppc/genepy/linux-2.6.24/arch/ppc/boot/zImage 
-/home/guinevere/buildroot/binaries/genepy/ppc-linux-2.6.24-20080402.z
-cp: cannot stat 
-`/home/guinevere/buildroot/project_build_ppc/genepy/linux-2.6.24/arch/ppc/boot/zImage': 
-No such file or directory
-make: *** 
-[/home/guinevere/buildroot/binaries/genepy/ppc-linux-2.6.24-20080402.z] 
-Error 1
-
--- 
-Guillaume Dargaud
-http://www.gdargaud.net/ 
+Somebody did IMHO the Wrong Thing by silently unset'ing ARCH in the
+toplevel Makefile. The proper thing to do is either $(error ARCH is set)
+or, preferably, check that $ARCH is clean via dependencies.sh
+Silently unseting ARCH is error-prone and misleading (as you see).
