@@ -2,7 +2,7 @@ From: Ulf Samuelsson <ulf.samuelsson@atmel.com>
 Date: Wed, 2 Apr 2008 23:28:37 +0200
 Subject: [Buildroot] svn commit: trunk/buildroot/target/linux
 References: <20080331054204.ECD433C3A5@busybox.net> <47F217F5.5030908@eclis.ch>
-Message-ID: <01e001c8950d$99237390$0e0514ac@atmel.com>
+Message-ID: <01df01c8950d$9890a970$0e0514ac@atmel.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
