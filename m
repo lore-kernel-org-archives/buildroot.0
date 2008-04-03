@@ -1,591 +1,645 @@
-From: ninevoltz at uclibc.org <ninevoltz@uclibc.org>
-Date: Thu,  3 Apr 2008 10:13:47 -0700 (PDT)
-Subject: [Buildroot] svn commit: trunk/buildroot/package: festival
-	festival/festival festival/lex etc...
-Message-ID: <20080403171347.45CE63C347@busybox.net>
+From: ffileppo at alice.it <ffileppo@alice.it>
+Date: Thu, 3 Apr 2008 20:44:36 +0200
+Subject: [Buildroot] Buildroot with java compiler and libgcj problem (arm
+	iwmmxt EABI softfp)
+Message-ID: <FBCMMO02kzr0FNacww50004c0c6@FBCMMO02.fbc.local>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Author: ninevoltz
-Date: 2008-04-03 10:13:46 -0700 (Thu, 03 Apr 2008)
-New Revision: 21627
+Hello,
 
-Log:
-add festival speech synthesis package from University of Edinburgh
+I'm trying to compile buildroot with java compiler and libgcj for arm-iwmmxt-eabi with software floating point.
 
-Added:
-   trunk/buildroot/package/festival/
-   trunk/buildroot/package/festival/Config.in
-   trunk/buildroot/package/festival/festival.mk
-   trunk/buildroot/package/festival/festival/
-   trunk/buildroot/package/festival/festival/festival-1.96-beta-doc.patch
-   trunk/buildroot/package/festival/festival/festival-1.96-beta-etcsiteinit.patch
-   trunk/buildroot/package/festival/festival/festival-1.96-beta-libdir.patch
-   trunk/buildroot/package/festival/festival/festival-1.96-beta-speechtools-dir.patch
-   trunk/buildroot/package/festival/festival/festival.mk
-   trunk/buildroot/package/festival/lexicons/
-   trunk/buildroot/package/festival/lexicons/Config.in
-   trunk/buildroot/package/festival/lexicons/festlex.mk
-   trunk/buildroot/package/festival/speech-tools/
-   trunk/buildroot/package/festival/speech-tools/Config.in
-   trunk/buildroot/package/festival/speech-tools/speech-tools-1.2.96-beta-install.patch
-   trunk/buildroot/package/festival/speech-tools/speech-tools.mk
-   trunk/buildroot/package/festival/voices/
-   trunk/buildroot/package/festival/voices/Config.in
-   trunk/buildroot/package/festival/voices/festvox.mk
+I'm using:
+linux headers 2.6.22.x
+uClibc	0.9.29
+binutils 2.18
+gcc 4.2.3
 
-Modified:
-   trunk/buildroot/package/Config.in
+I get this error (see below) -- Without java compiler and libgcj buildroot is able to complete the compilation.
+
+Any idea how to fix this? I'm really puzzled..
+
+Anyone know a working combination (gcc,binutils,uClibc and linux headers version) to compile gcj for my platform?
+
+Thank you
+
+Francesco
+
+--Here is the error:
+
+# Now for the ugly 3.3.x soft float hack...
+#
+#
+# Ok... that's enough of that.
+#
+mkdir -p /root/tmp/buildroot/project_build_arm/uclibc/root/usr/lib /root/tmp/buildroot/project_build_arm/uclibc/root/usr/sbin
+touch /root/tmp/buildroot/toolchain_build_arm/gcc-4.2.3-final/.installed
+# These are in /lib, so...
+rm -rf /root/tmp/buildroot/project_build_arm/uclibc/root/usr/lib/libgcc_s*.so*
+cp -dpf /root/tmp/buildroot/build_arm/staging_dir/usr/arm-linux-uclibc/lib/libgcc_s* \
+                /root/tmp/buildroot/project_build_arm/uclibc/root/lib/
+cp -dpf /root/tmp/buildroot/build_arm/staging_dir/usr/arm-linux-uclibc/lib/libstdc++.so* \
+                /root/tmp/buildroot/project_build_arm/uclibc/root/usr/lib/
+cp -dpf /root/tmp/buildroot/build_arm/staging_dir/lib/libgcj.so* /root/tmp/buildroot/project_build_arm/uclibc/root/lib/
+cp: cannot stat `/root/tmp/buildroot/build_arm/staging_dir/lib/libgcj.so*': No such file or directory
+make: *** [/root/tmp/buildroot/toolchain_build_arm/gcc-4.2.3-final/.libs_installed] Error 1
 
 
-Changeset:
-Modified: trunk/buildroot/package/Config.in
-===================================================================
---- trunk/buildroot/package/Config.in	2008-04-03 11:44:09 UTC (rev 21626)
-+++ trunk/buildroot/package/Config.in	2008-04-03 17:13:46 UTC (rev 21627)
-@@ -289,6 +289,7 @@
- source "package/madplay/Config.in"
- source "package/mpg123/Config.in"
- source "package/speex/Config.in"
-+source "package/festival/Config.in"
- endif
- 
- menuconfig BR2_GRAPHIC_SUPPORT
+--Here is my config file:
 
-Added: trunk/buildroot/package/festival/Config.in
-===================================================================
---- trunk/buildroot/package/festival/Config.in	                        (rev 0)
-+++ trunk/buildroot/package/festival/Config.in	2008-04-03 17:13:46 UTC (rev 21627)
-@@ -0,0 +1,23 @@
-+menuconfig BR2_PACKAGE_FESTIVAL
-+bool "festival text-to-speech system"
-+default n
-+select BR2_PACKAGE_ALSA_LIB
-+select BR2_PACKAGE_SPEECH_TOOLS
-+help
-+	Text to speech system for Linux
-+
-+if BR2_PACKAGE_FESTIVAL
-+
-+	menu "speech tools"
-+		source "package/festival/speech-tools/Config.in"
-+	endmenu
-+
-+	menu "festival lexicons"
-+		source "package/festival/lexicons/Config.in"
-+	endmenu
-+
-+	menu "festival voices"
-+		source "package/festival/voices/Config.in"
-+	endmenu
-+
-+endif
+#
+# Automatically generated make config: don't edit
+# Thu Apr  3 20:09:32 2008
+#
+BR2_HAVE_DOT_CONFIG=y
+BR2_VERSION="0.10.0-svn"
+# BR2_alpha is not set
+BR2_arm=y
+# BR2_armeb is not set
+# BR2_avr32 is not set
+# BR2_cris is not set
+# BR2_ia64 is not set
+# BR2_i386 is not set
+# BR2_m68k is not set
+# BR2_mips is not set
+# BR2_mipsel is not set
+# BR2_nios2 is not set
+# BR2_powerpc is not set
+# BR2_s390 is not set
+# BR2_sh is not set
+# BR2_sh64 is not set
+# BR2_sparc is not set
+# BR2_sparc64 is not set
+# BR2_x86_64 is not set
+# BR2_generic_arm is not set
+# BR2_arm7tdmi is not set
+# BR2_arm610 is not set
+# BR2_arm710 is not set
+# BR2_arm720t is not set
+# BR2_arm920t is not set
+# BR2_arm922t is not set
+# BR2_arm926t is not set
+# BR2_arm10t is not set
+# BR2_arm1136jf_s is not set
+# BR2_arm1176jz_s is not set
+# BR2_arm1176jzf_s is not set
+# BR2_sa110 is not set
+# BR2_sa1100 is not set
+# BR2_xscale is not set
+BR2_iwmmxt=y
+BR2_ARM_TYPE="ARM_IWMMXT"
+# BR2_ARM_OABI is not set
+BR2_ARM_EABI=y
+BR2_ARCH="arm"
+BR2_ENDIAN="LITTLE"
+BR2_GCC_TARGET_TUNE="iwmmxt"
+BR2_GCC_TARGET_ARCH="iwmmxt"
+BR2_GCC_TARGET_ABI="iwmmxt"
 
-Added: trunk/buildroot/package/festival/festival/festival-1.96-beta-doc.patch
-===================================================================
---- trunk/buildroot/package/festival/festival/festival-1.96-beta-doc.patch	                        (rev 0)
-+++ trunk/buildroot/package/festival/festival/festival-1.96-beta-doc.patch	2008-04-03 17:13:46 UTC (rev 21627)
-@@ -0,0 +1,23 @@
-+--- a/doc/Makefile	2008-04-02 15:13:28.000000000 -0400
-++++ b/doc/Makefile	2008-04-02 15:13:09.000000000 -0400
-+@@ -64,7 +64,7 @@ MANPAGES = festival.head festival.tail \
-+ FILES=Makefile $(MANPAGES) festival.texi $(SGMLFILES) refcard.tex  $(DOCXXFILES)
-+ LOCAL_CLEAN = *.aux *.cp *.fn *.ky *.log *.pg *.toc *.tp *.vr
-+ 
-+-ALL = festival.1 festival_client.1
-++#ALL = festival.1 festival_client.1
-+ 
-+ include $(TOP)/config/common_make_rules
-+ include $(EST)/config/rules/doc.mak
-+@@ -72,9 +72,9 @@ include $(EST)/config/rules/doc.mak
-+ %.1 : %.head %.options %.tail 
-+ 	cat $^ >$@
-+ %.options : $(TOP)/src/main/%
-+-	$(TOP)/bin/$* -man_options >$@
-++#	$(TOP)/bin/$* -man_options >$@
-+ %.options : $(TOP)/src/main/%.exe
-+-	$(TOP)/bin/$* -man_options >$@
-++#	$(TOP)/bin/$* -man_options >$@
-+ 
-+ festival.info: festival.texi festfunc.texi festvars.texi festfeat.texi
-+ 	@ if [ ! -d info ] ; \
+#
+# Target options
+#
 
-Added: trunk/buildroot/package/festival/festival/festival-1.96-beta-etcsiteinit.patch
-===================================================================
---- trunk/buildroot/package/festival/festival/festival-1.96-beta-etcsiteinit.patch	                        (rev 0)
-+++ trunk/buildroot/package/festival/festival/festival-1.96-beta-etcsiteinit.patch	2008-04-03 17:13:46 UTC (rev 21627)
-@@ -0,0 +1,55 @@
-+diff -ur festival.orig/lib/init.scm festival/lib/init.scm
-+--- festival.orig/lib/init.scm	2004-07-15 19:03:04.000000000 -0400
-++++ festival/lib/init.scm	2007-03-15 11:58:09.000000000 -0400
-+@@ -55,6 +55,10 @@
-+ (if (probe_file (path-append libdir "sitevars.scm"))
-+     (load (path-append libdir "sitevars.scm")))
-+ 
-++(if (probe_file "/etc/festival/sitevars.scm")
-++    (load "/etc/festival/sitevars.scm"))
-++
-++
-+ ;;; CSTR siod extensions
-+ (require 'cstr)
-+ 
-+@@ -98,7 +102,7 @@
-+  (t  ;; can't find direct support so guess that /dev/audio for 8k ulaw exists
-+   (Parameter.def 'Audio_Method 'sunaudio)))
-+ ;;;  If you have an external program to play audio add its definition
-+-;;;  in siteinit.scm
-++;;;  in ~/.festivalrc or /etc/festival/siteinit.scm
-+ 
-+ ;;; The audio spooler doesn't work under Windows so redefine audio_mode
-+ (if (member 'mplayeraudio *modules*)
-+@@ -135,9 +139,13 @@
-+ ;;;
-+ ;;;  Local site initialization, if the file exists load it
-+ ;;;
-++
-+ (if (probe_file (path-append libdir "siteinit.scm"))
-+     (load (path-append libdir "siteinit.scm")))
-+ 
-++(if (probe_file "/etc/festival/siteinit.scm")
-++    (load "/etc/festival/siteinit.scm"))
-++
-+ ;;;  User initialization, if a user has a personal customization
-+ ;;;  file loaded it
-+ (if (probe_file (path-append home-directory ".siodrc"))
-+diff -ur festival.orig/lib/voices.scm festival/lib/voices.scm
-+--- festival.orig/lib/voices.scm	2005-05-02 10:20:37.000000000 -0400
-++++ festival/lib/voices.scm	2007-03-15 12:00:19.000000000 -0400
-+@@ -45,12 +45,12 @@
-+ (defvar system-voice-path '( )
-+   "system-voice-path
-+    Additional directory not near the load path where voices can be
-+-   found, this can be redefined in lib/sitevars.scm if desired.")
-++   found, this can be redefined in /etc/festival/sitevars.scm if desired.")
-+ 
-+ (defvar system-voice-path-multisyn '( )
-+   "system-voice-path-multisyn
-+    Additional directory not near the load path where multisyn voices can be
-+-   found, this can be redefined in lib/sitevars.scm if desired.")
-++   found, this can be redefined in /etc/festival/sitevars.scm if desired.")
-+ 
-+ (defvar voice-path 
-+   (remove-duplicates
+#
+# Project Options
+#
+BR2_PROJECT="uclibc"
+BR2_HOSTNAME="uclibc"
+BR2_BANNER="WiTP root filesystem"
 
-Added: trunk/buildroot/package/festival/festival/festival-1.96-beta-libdir.patch
-===================================================================
---- trunk/buildroot/package/festival/festival/festival-1.96-beta-libdir.patch	                        (rev 0)
-+++ trunk/buildroot/package/festival/festival/festival-1.96-beta-libdir.patch	2008-04-03 17:13:46 UTC (rev 21627)
-@@ -0,0 +1,10 @@
-+--- a/config/project.mak	2005-05-02 10:21:29.000000000 -0400
-++++ b/config/project.mak	2008-04-01 14:22:01.000000000 -0400
-+@@ -113,6 +113,6 @@ PROJECT_JAVA_ROOT=$(TOP)/src/modules/jav
-+ DOCXX_DIRS = $(TOP)/src 
-+ MODULE_TO_DOCXX = perl $(TOP)/src/modules/utilities/extract_module_doc++.prl
-+ 
-+-FTLIBDIR = $(FESTIVAL_HOME)/lib 
-++FTLIBDIR = /usr/share/festival/lib 
-+ 
-+ 
+#
+# Preset Devices
+#
+# BR2_TARGET_ARMLTD is not set
+# BR2_TARGET_ATMEL is not set
+BR2_BOARD_NAME="arm"
+BR2_BOARD_PATH="target/device/ARM"
+# BR2_TARGET_SHARP is not set
 
-Added: trunk/buildroot/package/festival/festival/festival-1.96-beta-speechtools-dir.patch
-===================================================================
---- trunk/buildroot/package/festival/festival/festival-1.96-beta-speechtools-dir.patch	                        (rev 0)
-+++ trunk/buildroot/package/festival/festival/festival-1.96-beta-speechtools-dir.patch	2008-04-03 17:13:46 UTC (rev 21627)
-@@ -0,0 +1,11 @@
-+--- a/config/config.in	2008-03-31 15:20:02.000000000 -0400
-++++ b/config/config.in	2008-03-31 15:26:09.000000000 -0400
-+@@ -10,7 +10,7 @@
-+ ###########################################################################
-+ ## Which speech tools to use
-+ 
-+-EST=$(TOP)/../speech_tools
-++EST=$(TOP)/../speech-tools-1.2.96-beta
-+ 
-+ ###########################################################################
-+ ## Where the festival tree will be installed.
+#
+# Generic Architecture support
+#
+BR2_TARGET_ARM=y
 
-Added: trunk/buildroot/package/festival/festival/festival.mk
-===================================================================
---- trunk/buildroot/package/festival/festival/festival.mk	                        (rev 0)
-+++ trunk/buildroot/package/festival/festival/festival.mk	2008-04-03 17:13:46 UTC (rev 21627)
-@@ -0,0 +1,21 @@
-+#############################################################
-+#
-+# festival
-+#
-+#############################################################
-+FESTIVAL_VERSION = 1.96-beta
-+FESTIVAL_SOURCE = festival-$(FESTIVAL_VERSION).tar.gz
-+FESTIVAL_SITE = http://festvox.org/packed/festival/latest
-+FESTIVAL_AUTORECONF = NO
-+FESTIVAL_INSTALL_STAGING = NO
-+FESTIVAL_INSTALL_TARGET = YES
-+FESTIVAL_INSTALL_TARGET_OPT = DESTDIR=$(TARGET_DIR) STRIP=$(TARGET_STRIP) install
-+
-+FESTIVAL_CONF_OPT = --prefix=/usr --libdir=/usr/share/festival/lib
-+
-+FESTIVAL_MAKE_OPT = CC=$(TARGET_CC) CXX=$(TARGET_CXX)
-+
-+FESTIVAL_DEPENDENCIES = uclibc alsa-lib speech-tools
-+
-+$(eval $(call AUTOTARGETS,package/festival,festival))
-+
+#
+# Generic System Support
+#
+# BR2_TARGET_GENERIC_ACCESS_POINT is not set
+# BR2_TARGET_GENERIC_FIREWALL is not set
+# BR2_TARGET_GENERIC_DEV_SYSTEM is not set
 
-Added: trunk/buildroot/package/festival/festival.mk
-===================================================================
---- trunk/buildroot/package/festival/festival.mk	                        (rev 0)
-+++ trunk/buildroot/package/festival/festival.mk	2008-04-03 17:13:46 UTC (rev 21627)
-@@ -0,0 +1,4 @@
-+include package/festival/speech-tools/speech-tools.mk
-+include package/festival/festival/festival.mk
-+include package/festival/voices/festvox.mk
-+include package/festival/lexicons/festlex.mk
+#
+# Build options
+#
+BR2_WGET="wget --passive-ftp"
+BR2_SVN_CO="svn co"
+BR2_SVN_UP="svn up"
+BR2_GIT="git clone"
+BR2_ZCAT="gzip -d -c"
+BR2_BZCAT="bzcat"
+BR2_TAR_OPTIONS=""
+BR2_DL_DIR="$(BASE_DIR)/dl"
 
-Added: trunk/buildroot/package/festival/lexicons/Config.in
-===================================================================
---- trunk/buildroot/package/festival/lexicons/Config.in	                        (rev 0)
-+++ trunk/buildroot/package/festival/lexicons/Config.in	2008-04-03 17:13:46 UTC (rev 21627)
-@@ -0,0 +1,23 @@
-+config BR2_PACKAGE_FESTLEX_CMU
-+	bool "Carnegie Mellon University"
-+	default n
-+	help
-+	  Lexicon for the festival text to speech system
-+
-+	  http://festvox.org/packed/festival/latest
-+
-+config BR2_PACKAGE_FESTLEX_OALD
-+	bool "Oxford Advanced Learners dictionary"
-+	default n
-+	help
-+	  Lexicon for the festival text to speech system
-+
-+	  http://festvox.org/packed/festival/latest
-+
-+config BR2_PACKAGE_FESTLEX_POS
-+	bool "POSLEX"
-+	default n
-+	help
-+	  Lexicon for the festival text to speech system
-+
-+	  http://festvox.org/packed/festival/latest
-\ No newline at end of file
+#
+# Mirrors and Download locations
+#
+BR2_SOURCEFORGE_MIRROR="easynews"
+BR2_KERNEL_MIRROR="http://www.kernel.org/pub/"
+BR2_GNU_MIRROR="http://ftp.gnu.org/pub/gnu"
+BR2_DEBIAN_MIRROR="http://ftp.debian.org"
 
-Added: trunk/buildroot/package/festival/lexicons/festlex.mk
-===================================================================
---- trunk/buildroot/package/festival/lexicons/festlex.mk	                        (rev 0)
-+++ trunk/buildroot/package/festival/lexicons/festlex.mk	2008-04-03 17:13:46 UTC (rev 21627)
-@@ -0,0 +1,46 @@
-+#############################################################
-+#
-+# festival lexicons
-+#
-+#############################################################
-+LEX1 = festlex_CMU.tar.gz
-+LEX2 = festlex_OALD.tar.gz
-+LEX3 = festlex_POSLEX.tar.gz
-+FESTLEX_STATUS_DIR = $(BUILD_DIR)/festival_lexicons
-+FESTLEX_INSTALL_DIR = $(TARGET_DIR)/usr/share
-+
-+$(FESTLEX_STATUS_DIR)/.downloaded:
-+	mkdir -p $(FESTLEX_STATUS_DIR)
-+ifeq ($(BR2_PACKAGE_FESTLEX_CMU),y)
-+	$(WGET) -P $(DL_DIR) $(FESTIVAL_SITE)/$(LEX1)
-+endif
-+ifeq ($(BR2_PACKAGE_FESTLEX_OALD),y)
-+	$(WGET) -P $(DL_DIR) $(FESTIVAL_SITE)/$(LEX2)
-+endif
-+ifeq ($(BR2_PACKAGE_FESTLEX_POS),y)
-+	$(WGET) -P $(DL_DIR) $(FESTIVAL_SITE)/$(LEX3)
-+endif
-+	touch $@
-+
-+$(FESTLEX_STATUS_DIR)/.installed: $(FESTLEX_STATUS_DIR)/.downloaded
-+ifeq ($(BR2_PACKAGE_FESTLEX_CMU),y)
-+	tar -xvf $(DL_DIR)/$(LEX1) --directory $(FESTLEX_INSTALL_DIR)
-+endif
-+ifeq ($(BR2_PACKAGE_FESTLEX_OALD),y)
-+	tar -xvf $(DL_DIR)/$(LEX2) --directory $(FESTLEX_INSTALL_DIR)
-+endif
-+ifeq ($(BR2_PACKAGE_FESTLEX_POS),y)
-+	tar -xvf $(DL_DIR)/$(LEX3) --directory $(FESTLEX_INSTALL_DIR)
-+endif
-+	touch $@
-+
-+festlex: $(FESTLEX_STATUS_DIR)/.installed
-+
-+#############################################################
-+#
-+# Toplevel Makefile options
-+#
-+#############################################################
-+ifeq ($(strip $(BR2_PACKAGE_FESTIVAL)),y)
-+TARGETS+=festlex
-+endif
+#
+# Atmel Mirrors
+#
+BR2_ATMEL_MIRROR="ftp://www.at91.com/pub/buildroot/"
+BR2_AT91_PATCH_MIRROR="http://maxim.org.za/AT91RM9200/2.6/"
+BR2_STAGING_DIR="$(BUILD_DIR)/staging_dir"
+# BR2_FPU_SUFFIX is not set
+BR2_TOPDIR_PREFIX=""
+BR2_TOPDIR_SUFFIX=""
+BR2_ROOTFS_PREFIX="rootfs"
+BR2_ROOTFS_SUFFIX=""
+BR2_GNU_BUILD_SUFFIX="pc-linux-gnu"
+BR2_GNU_TARGET_SUFFIX="linux-uclibc"
+BR2_JLEVEL=1
+# BR2_PREFER_IMA is not set
+# BR2_DEPRECATED is not set
+BR2_RECENT=y
+# BR2_ENABLE_DEBUG is not set
+BR2_STRIP_strip=y
+# BR2_STRIP_sstrip is not set
+# BR2_STRIP_none is not set
+# BR2_OPTIMIZE_0 is not set
+# BR2_OPTIMIZE_1 is not set
+# BR2_OPTIMIZE_2 is not set
+# BR2_OPTIMIZE_3 is not set
+BR2_OPTIMIZE_S=y
+# BR2_PREFER_STATIC_LIB is not set
+# BR2_HAVE_MANPAGES is not set
+# BR2_HAVE_INFOPAGES is not set
+# BR2_HAVE_DEVFILES is not set
+BR2_UPDATE_CONFIG=y
 
-Added: trunk/buildroot/package/festival/speech-tools/Config.in
-===================================================================
---- trunk/buildroot/package/festival/speech-tools/Config.in	                        (rev 0)
-+++ trunk/buildroot/package/festival/speech-tools/Config.in	2008-04-03 17:13:46 UTC (rev 21627)
-@@ -0,0 +1,7 @@
-+ config BR2_PACKAGE_SPEECH_TOOLS
-+	bool "speech tools for festival"
-+	default n
-+	help
-+	  Speech tools for the festival text to speech system
-+
-+	  http://festvox.org/packed/festival/latest
+#
+# Toolchain
+#
+BR2_TOOLCHAIN_BUILDROOT=y
+# BR2_TOOLCHAIN_EXTERNAL is not set
+# BR2_TOOLCHAIN_EXTERNAL_SOURCE is not set
+BR2_TOOLCHAIN_SOURCE=y
+BR2_EXT_GCC_VERSION_4_1_2=y
+BR2_EXT_GCC_VERSION_4_2_1=y
+BR2_EXT_BINUTILS_VERSION_2_17=y
+BR2_EXT_UCLIBC_VERSION_0_9_29=y
+BR2_EXT_UCLIBC_VERSION_0_9_28_3=y
 
-Added: trunk/buildroot/package/festival/speech-tools/speech-tools-1.2.96-beta-install.patch
-===================================================================
---- trunk/buildroot/package/festival/speech-tools/speech-tools-1.2.96-beta-install.patch	                        (rev 0)
-+++ trunk/buildroot/package/festival/speech-tools/speech-tools-1.2.96-beta-install.patch	2008-04-03 17:13:46 UTC (rev 21627)
-@@ -0,0 +1,36 @@
-+--- a/config/rules/install.mak	2001-04-04 07:55:32.000000000 -0400
-++++ b/config/rules/install.mak	2008-04-03 12:37:45.000000000 -0400
-+@@ -50,9 +50,9 @@ ifneq ($(SHARED),0)
-+ endif
-+ endif
-+ 
-+-ifeq ($(PROJECT_HOME_PATH), $(PROJECT_TOP_PATH))
-+-    TO_INSTALL=make_bin
-+-else
-++#ifeq ($(PROJECT_HOME_PATH), $(PROJECT_TOP_PATH))
-++#    TO_INSTALL=make_bin
-++#else
-+ 
-+     TO_INSTALL= \
-+ 	make_installed_exec$(S) \
-+@@ -62,7 +62,7 @@ else
-+     INSTALLED_LIB=$(shell (cd $($(PROJECT_PREFIX)_HOME); pwd))/lib
-+     INSTALLED_PRIVATE_LIB=$(INSTALLED_LIB)/$(shell echo $(PROJECT_PREFIX)| tr A-Z a-z)
-+     INSTALLED_BIN=$(shell (cd $($(PROJECT_PREFIX)_HOME); pwd))/bin
-+-endif
-++#endif
-+ 
-+ install: $(TO_INSTALL)
-+ 
-+--- a/config/rules/bin_process.mak	2004-01-27 18:56:39.000000000 -0500
-++++ b/config/rules/bin_process.mak	2008-04-03 12:37:31.000000000 -0400
-+@@ -69,7 +69,8 @@ endif
-+ 	    do \
-+ 	    b=`basename "$$i"`;\
-+ 	    $(ECHO_N) " $$b";\
-+-	    $(INSTALL_PROG) -s "$$main/$$i" "$(subst TOP,$(TOP),$(BIN))/$$b";\
-++	    $(INSTALL_PROG) "$$main/$$i" "$(DESTDIR)/usr/bin/$$b";\
-++		$(STRIP) "$(DESTDIR)/usr/bin/$$b";\
-+ 	done
-+ 	@echo
-+ 
+#
+# Kernel Header Options
+#
+# BR2_KERNEL_HEADERS_2_4_25 is not set
+# BR2_KERNEL_HEADERS_2_4_27 is not set
+# BR2_KERNEL_HEADERS_2_4_29 is not set
+# BR2_KERNEL_HEADERS_2_4_31 is not set
+# BR2_KERNEL_HEADERS_2_6_9 is not set
+# BR2_KERNEL_HEADERS_2_6_11 is not set
+# BR2_KERNEL_HEADERS_2_6_12 is not set
+# BR2_KERNEL_HEADERS_2_6_20_4 is not set
+# BR2_KERNEL_HEADERS_2_6_20 is not set
+# BR2_KERNEL_HEADERS_2_6_21_5 is not set
+# BR2_KERNEL_HEADERS_2_6_21 is not set
+# BR2_KERNEL_HEADERS_2_6_22_1 is not set
+# BR2_KERNEL_HEADERS_2_6_22_10 is not set
+BR2_KERNEL_HEADERS_2_6_22=y
+# BR2_KERNEL_HEADERS_2_6_23 is not set
+# BR2_KERNEL_HEADERS_2_6_24 is not set
+# BR2_KERNEL_HEADERS_SNAP is not set
+BR2_DEFAULT_KERNEL_HEADERS="2.6.22.10"
 
-Added: trunk/buildroot/package/festival/speech-tools/speech-tools.mk
-===================================================================
---- trunk/buildroot/package/festival/speech-tools/speech-tools.mk	                        (rev 0)
-+++ trunk/buildroot/package/festival/speech-tools/speech-tools.mk	2008-04-03 17:13:46 UTC (rev 21627)
-@@ -0,0 +1,20 @@
-+#############################################################
-+#
-+# speech-tools
-+#
-+#############################################################
-+SPEECH_TOOLS_VERSION = 1.2.96-beta
-+SPEECH_TOOLS_SOURCE = speech_tools-$(SPEECH_TOOLS_VERSION).tar.gz
-+SPEECH_TOOLS_SITE = http://festvox.org/packed/festival/latest
-+SPEECH_TOOLS_AUTORECONF = NO
-+SPEECH_TOOLS_INSTALL_STAGING = NO
-+SPEECH_TOOLS_INSTALL_TARGET = YES
-+SPEECH_TOOLS_INSTALL_TARGET_OPT = DESTDIR=$(TARGET_DIR) STRIP=$(TARGET_STRIP) install
-+
-+SPEECH_TOOLS_CONF_OPT = 
-+SPEECH_TOOLS_MAKE_OPT = CC=$(TARGET_CC) CXX=$(TARGET_CXX)
-+
-+SPEECH_TOOLS_DEPENDENCIES = uclibc ncurses
-+
-+$(eval $(call AUTOTARGETS,package/festival,speech-tools))
-+
+#
+# uClibc Options
+#
+# BR2_UCLIBC_VERSION_0_9_28_3 is not set
+BR2_UCLIBC_VERSION_0_9_29=y
+# BR2_UCLIBC_VERSION_SNAPSHOT is not set
+BR2_UCLIBC_CONFIG="toolchain/uClibc/uClibc-0.9.29.config"
+BR2_ENABLE_LOCALE=y
+# BR2_PTHREADS_NONE is not set
+# BR2_PTHREADS is not set
+BR2_PTHREADS_OLD=y
+# BR2_PTHREADS_NATIVE is not set
+# BR2_PTHREAD_DEBUG is not set
+# BR2_UCLIBC_PROGRAM_INVOCATION is not set
 
-Added: trunk/buildroot/package/festival/voices/Config.in
-===================================================================
---- trunk/buildroot/package/festival/voices/Config.in	                        (rev 0)
-+++ trunk/buildroot/package/festival/voices/Config.in	2008-04-03 17:13:46 UTC (rev 21627)
-@@ -0,0 +1,72 @@
-+config BR2_PACKAGE_FESTVOX_AWB
-+	bool "Alan Scottish English"
-+	default n
-+	help
-+	  Scottish English voice for the festival text to speech system
-+
-+	  http://festvox.org/packed/festival/latest
-+
-+config BR2_PACKAGE_FESTVOX_BDL
-+	bool "Brian US English"
-+	default n
-+	help
-+	  US English male voice for the festival text to speech system
-+
-+	  http://festvox.org/packed/festival/latest
-+
-+config BR2_PACKAGE_FESTVOX_JMK
-+	bool "John Canadian English"
-+	default n
-+	help
-+	  Canadian English voice for the festival text to speech system
-+
-+	  http://festvox.org/packed/festival/latest
-+
-+config BR2_PACKAGE_FESTVOX_SLT
-+	bool "Stephanie US English"
-+	default n
-+	help
-+	  US English female voice for the festival text to speech system
-+
-+	  http://festvox.org/packed/festival/latest
-+
-+config BR2_PACKAGE_FESTVOX_AWB_MULTISYN
-+	bool "Alan multisyn (big file)"
-+	default n
-+	help
-+	  voice for the festival text to speech system
-+
-+	  http://festvox.org/packed/festival/latest
-+
-+config BR2_PACKAGE_FESTVOX_JMK_MULTISYN
-+	bool "John multisyn (big file)"
-+	default n
-+	help
-+	  voice for the festival text to speech system
-+
-+	  http://festvox.org/packed/festival/latest
-+
-+config BR2_PACKAGE_FESTVOX_KAL_SIXTEENK
-+	bool "Kevin diphone US English 16k"
-+	default n
-+	help
-+	  diphone voice for the festival text to speech system
-+
-+	  http://festvox.org/packed/festival/latest
-+
-+config BR2_PACKAGE_FESTVOX_KED_EIGHTK
-+	bool "Kurt diphone American English 8k"
-+	default n
-+	help
-+	  diphone voice for the festival text to speech system
-+
-+	  http://festvox.org/packed/festival/latest
-+
-+config BR2_PACKAGE_FESTVOX_KED_SIXTEENK
-+	bool "Kurt diphone American English 16k"
-+	default n
-+	help
-+	  diphone voice for the festival text to speech system
-+
-+	  http://festvox.org/packed/festival/latest
-+
+#
+# Binutils Options
+#
+# BR2_BINUTILS_VERSION_2_17 is not set
+# BR2_BINUTILS_VERSION_2_17_50_0_17 is not set
+BR2_BINUTILS_VERSION_2_18=y
+# BR2_BINUTILS_VERSION_2_18_50_0_1 is not set
+BR2_BINUTILS_VERSION="2.18"
+BR2_EXTRA_BINUTILS_CONFIG_OPTIONS=""
 
-Added: trunk/buildroot/package/festival/voices/festvox.mk
-===================================================================
---- trunk/buildroot/package/festival/voices/festvox.mk	                        (rev 0)
-+++ trunk/buildroot/package/festival/voices/festvox.mk	2008-04-03 17:13:46 UTC (rev 21627)
-@@ -0,0 +1,99 @@
-+#############################################################
-+#
-+# festival voices
-+#
-+#############################################################
-+VOICE1 = festvox_cmu_us_awb_arctic_hts.tar.gz
-+VOICE2 = festvox_cmu_us_bdl_arctic_hts.tar.gz
-+VOICE3 = festvox_cmu_us_jmk_arctic_hts.tar.gz
-+VOICE4 = festvox_cmu_us_slt_arctic_hts.tar.gz
-+VOICE5 = festvox_cstr_us_awb_arctic_multisyn-1.0.tar.gz
-+VOICE6 = festvox_cstr_us_jmk_arctic_multisyn-1.0.tar.gz
-+VOICE7 = festvox_kallpc16k.tar.gz
-+VOICE8 = festvox_kedlpc8k.tar.gz
-+VOICE9 = festvox_kedlpc16k.tar.gz
-+FRONTEND1 = festvox_us1.tar.gz
-+FRONTEND2 = festvox_us2.tar.gz
-+FRONTEND3 = festvox_us3.tar.gz
-+FESTVOX_STATUS_DIR = $(BUILD_DIR)/festival_voices
-+FESTVOX_INSTALL_DIR = $(TARGET_DIR)/usr/share
-+
-+$(FESTVOX_STATUS_DIR)/.downloaded:
-+	mkdir -p $(FESTVOX_STATUS_DIR)
-+ifeq ($(BR2_PACKAGE_FESTVOX_AWB),y)
-+	$(WGET) -P $(DL_DIR) $(FESTIVAL_SITE)/$(VOICE1)
-+endif
-+ifeq ($(BR2_PACKAGE_FESTVOX_BDL),y)
-+	$(WGET) -P $(DL_DIR) $(FESTIVAL_SITE)/$(VOICE2)
-+endif
-+ifeq ($(BR2_PACKAGE_FESTVOX_JMK),y)
-+	$(WGET) -P $(DL_DIR) $(FESTIVAL_SITE)/$(VOICE3)
-+endif
-+ifeq ($(BR2_PACKAGE_FESTVOX_SLT),y)
-+	$(WGET) -P $(DL_DIR) $(FESTIVAL_SITE)/$(VOICE4)
-+endif
-+ifeq ($(BR2_PACKAGE_FESTVOX_AWB_MULTISYN),y)
-+	$(WGET) -P $(DL_DIR) $(FESTIVAL_SITE)/$(VOICE5)
-+endif
-+ifeq ($(BR2_PACKAGE_FESTVOX_JMK_MULTISYN),y)
-+	$(WGET) -P $(DL_DIR) $(FESTIVAL_SITE)/$(VOICE6)
-+endif
-+ifeq ($(BR2_PACKAGE_FESTVOX_KAL_SIXTEENK),y)
-+	$(WGET) -P $(DL_DIR) $(FESTIVAL_SITE)/$(VOICE7)
-+endif
-+ifeq ($(BR2_PACKAGE_FESTVOX_KED_EIGHTK),y)
-+	$(WGET) -P $(DL_DIR) $(FESTIVAL_SITE)/$(VOICE8)
-+endif
-+ifeq ($(BR2_PACKAGE_FESTVOX_KED_SIXTEENK),y)
-+	$(WGET) -P $(DL_DIR) $(FESTIVAL_SITE)/$(VOICE9)
-+endif
-+	$(WGET) -P $(DL_DIR) $(FESTIVAL_SITE)/$(FRONTEND1)
-+	$(WGET) -P $(DL_DIR) $(FESTIVAL_SITE)/$(FRONTEND2)
-+	$(WGET) -P $(DL_DIR) $(FESTIVAL_SITE)/$(FRONTEND3)
-+
-+	touch $@
-+
-+$(FESTVOX_STATUS_DIR)/.installed: $(FESTVOX_STATUS_DIR)/.downloaded
-+ifeq ($(BR2_PACKAGE_FESTVOX_AWB),y)
-+	tar -xvf $(DL_DIR)/$(VOICE1) --directory $(FESTVOX_INSTALL_DIR)
-+endif
-+ifeq ($(BR2_PACKAGE_FESTVOX_BDL),y)
-+	tar -xvf $(DL_DIR)/$(VOICE2) --directory $(FESTVOX_INSTALL_DIR)
-+endif
-+ifeq ($(BR2_PACKAGE_FESTVOX_JMK),y)
-+	tar -xvf $(DL_DIR)/$(VOICE3) --directory $(FESTVOX_INSTALL_DIR)
-+endif
-+ifeq ($(BR2_PACKAGE_FESTVOX_SLT),y)
-+	tar -xvf $(DL_DIR)/$(VOICE4) --directory $(FESTVOX_INSTALL_DIR)
-+endif
-+ifeq ($(BR2_PACKAGE_FESTVOX_AWB_MULTISYN),y)
-+	tar -xvf $(DL_DIR)/$(VOICE5) --directory $(FESTVOX_INSTALL_DIR)
-+endif
-+ifeq ($(BR2_PACKAGE_FESTVOX_JMK_MULTISYN),y)
-+	tar -xvf $(DL_DIR)/$(VOICE6) --directory $(FESTVOX_INSTALL_DIR)
-+endif
-+ifeq ($(BR2_PACKAGE_FESTVOX_KAL_SIXTEENK),y)
-+	tar -xvf $(DL_DIR)/$(VOICE7) --directory $(FESTVOX_INSTALL_DIR)
-+endif
-+ifeq ($(BR2_PACKAGE_FESTVOX_KED_EIGHTK),y)
-+	tar -xvf $(DL_DIR)/$(VOICE8) --directory $(FESTVOX_INSTALL_DIR)
-+endif
-+ifeq ($(BR2_PACKAGE_FESTVOX_KED_SIXTEENK),y)
-+	tar -xvf $(DL_DIR)/$(VOICE9) --directory $(FESTVOX_INSTALL_DIR)
-+endif
-+	tar -xvf $(DL_DIR)/$(FRONTEND1) --directory $(FESTVOX_INSTALL_DIR)
-+	tar -xvf $(DL_DIR)/$(FRONTEND2) --directory $(FESTVOX_INSTALL_DIR)
-+	tar -xvf $(DL_DIR)/$(FRONTEND3) --directory $(FESTVOX_INSTALL_DIR)
-+
-+	touch $@
-+
-+festvox: $(FESTVOX_STATUS_DIR)/.installed
-+
-+#############################################################
-+#
-+# Toplevel Makefile options
-+#
-+#############################################################
-+ifeq ($(strip $(BR2_PACKAGE_FESTIVAL)),y)
-+TARGETS+=festvox
-+endif
+#
+# GCC Options
+#
+# BR2_GCC_VERSION_3_4_6 is not set
+# BR2_GCC_VERSION_4_0_4 is not set
+# BR2_GCC_VERSION_4_1_2 is not set
+# BR2_GCC_VERSION_4_2_1 is not set
+BR2_GCC_VERSION_4_2_3=y
+# BR2_GCC_IS_SNAP is not set
+BR2_GCC_SUPPORTS_SYSROOT=y
+# BR2_GCC_SUPPORTS_FINEGRAINEDMTUNE is not set
+BR2_GCC_VERSION="4.2.3"
+BR2_TOOLCHAIN_SYSROOT=y
+# BR2_GCC_USE_SJLJ_EXCEPTIONS is not set
+BR2_EXTRA_GCC_CONFIG_OPTIONS=""
+BR2_GCC_CROSS_CXX=y
+# BR2_GCC_CROSS_FORTRAN is not set
+BR2_INSTALL_LIBSTDCPP=y
+BR2_INSTALL_LIBGCJ=y
+# BR2_INSTALL_OBJC is not set
+# BR2_INSTALL_FORTRAN is not set
+BR2_GCC_SHARED_LIBGCC=y
+
+#
+# Ccache Options
+#
+# BR2_CCACHE is not set
+
+#
+# Gdb Options
+#
+# BR2_PACKAGE_GDB is not set
+# BR2_PACKAGE_GDB_SERVER is not set
+# BR2_PACKAGE_GDB_HOST is not set
+
+#
+# elf2flt
+#
+# BR2_ELF2FLT is not set
+# BR2_MKLIBS is not set
+
+#
+# Common Toolchain Options
+#
+# BR2_PACKAGE_SSTRIP_TARGET is not set
+# BR2_PACKAGE_SSTRIP_HOST is not set
+# BR2_ENABLE_MULTILIB is not set
+BR2_LARGEFILE=y
+# BR2_INET_IPV6 is not set
+BR2_INET_RPC=y
+BR2_USE_WCHAR=y
+BR2_SOFT_FLOAT=y
+BR2_TARGET_OPTIMIZATION="-Os -pipe"
+BR2_CROSS_TOOLCHAIN_TARGET_UTILS=y
+
+#
+# Package Selection for the target
+#
+# BR2_PACKAGE_BUSYBOX is not set
+
+#
+# The minimum needed to build a uClibc development system
+#
+# BR2_PACKAGE_BASH is not set
+# BR2_PACKAGE_BZIP2 is not set
+# BR2_PACKAGE_COREUTILS is not set
+# BR2_PACKAGE_DIFFUTILS is not set
+# BR2_PACKAGE_FINDUTILS is not set
+# BR2_PACKAGE_FLEX is not set
+# BR2_PACKAGE_GAWK is not set
+# BR2_PACKAGE_GCC_TARGET is not set
+# BR2_PACKAGE_GREP is not set
+BR2_PACKAGE_MAKE=y
+# BR2_PACKAGE_PATCH is not set
+# BR2_PACKAGE_SED is not set
+# BR2_PACKAGE_TAR is not set
+
+#
+# Other development stuff
+#
+# BR2_PACKAGE_AUTOCONF is not set
+# BR2_PACKAGE_AUTOMAKE is not set
+# BR2_PACKAGE_BISON is not set
+# BR2_PACKAGE_CCACHE_TARGET is not set
+# BR2_PACKAGE_CVS is not set
+# BR2_PACKAGE_DISTCC is not set
+# BR2_PACKAGE_DMALLOC is not set
+# BR2_PACKAGE_FAKEROOT is not set
+# BR2_HOST_FAKEROOT is not set
+# BR2_PACKAGE_GETTEXT is not set
+# BR2_PACKAGE_LIBINTL is not set
+# BR2_PACKAGE_LIBGMP is not set
+# BR2_PACKAGE_LIBMPFR is not set
+# BR2_PACKAGE_LIBTOOL is not set
+# BR2_PACKAGE_M4 is not set
+# BR2_PACKAGE_PKGCONFIG is not set
+# BR2_READLINE is not set
+
+#
+# Other stuff
+#
+# BR2_PACKAGE_AT is not set
+# BR2_PACKAGE_BERKELEYDB is not set
+# BR2_PACKAGE_BSDIFF is not set
+# BR2_PACKAGE_CUPS is not set
+# BR2_PACKAGE_CUSTOMIZE is not set
+# BR2_PACKAGE_DASH is not set
+# BR2_PACKAGE_FILE is not set
+# BR2_PACKAGE_GAMIN is not set
+# BR2_PACKAGE_ICU is not set
+BR2_PACKAGE_IPKG=y
+# BR2_PACKAGE_KEXEC is not set
+# BR2_PACKAGE_LESS is not set
+# BR2_PACKAGE_LIBDAEMON is not set
+# BR2_PACKAGE_LIBELF is not set
+# BR2_PACKAGE_LIBEVENT is not set
+# BR2_PACKAGE_LIBFLOAT is not set
+# BR2_PACKAGE_LIBGCRYPT is not set
+# BR2_PACKAGE_LIBGPG_ERROR is not set
+# BR2_PACKAGE_LIBLOCKFILE is not set
+# BR2_PACKAGE_LIBSYSFS is not set
+# BR2_PACKAGE_LOCKFILE_PROGS is not set
+# BR2_PACKAGE_LSOF is not set
+# BR2_PACKAGE_LTP-TESTSUITE is not set
+# BR2_PACKAGE_LTRACE is not set
+# BR2_PACKAGE_LTT is not set
+# BR2_PACKAGE_MODULE_INIT_TOOLS is not set
+# BR2_PACKAGE_MODUTILS is not set
+# BR2_PACKAGE_NG_SPICE_REWORK is not set
+# BR2_PACKAGE_PORTAGE is not set
+# BR2_PACKAGE_PROCPS is not set
+# BR2_PACKAGE_PSMISC is not set
+# BR2_PACKAGE_SQLITE is not set
+# BR2_PACKAGE_STARTUP_NOTIFICATION is not set
+# BR2_PACKAGE_STRACE is not set
+# BR2_PACKAGE_SUDO is not set
+# BR2_PACKAGE_SYSKLOGD is not set
+# BR2_PACKAGE_SYSVINIT is not set
+# BR2_PACKAGE_TINYLOGIN is not set
+# BR2_PACKAGE_UTIL-LINUX is not set
+# BR2_PACKAGE_WHICH is not set
+# BR2_TEXTEDIT_SUPPORT is not set
+BR2_NETWORK_SUPPORT=y
+
+#
+# Networking applications
+#
+# BR2_PACKAGE_ARGUS is not set
+# BR2_PACKAGE_AVAHI is not set
+# BR2_PACKAGE_BOA is not set
+# BR2_PACKAGE_BIND is not set
+# BR2_PACKAGE_BRIDGE is not set
+# BR2_PACKAGE_CURL is not set
+# BR2_PACKAGE_LIBCURL is not set
+# BR2_PACKAGE_ISC_DHCP is not set
+# BR2_PACKAGE_DNSMASQ is not set
+BR2_PACKAGE_DROPBEAR=y
+BR2_PACKAGE_ETHTOOL=y
+# BR2_PACKAGE_HASERL is not set
+# BR2_PACKAGE_IRDA_UTILS is not set
+# BR2_PACKAGE_IPERF is not set
+# BR2_PACKAGE_IPROUTE2 is not set
+
+#
+# ipsec-tools	- disabled (requires openssl, flex and the flex library (libfl.a) )
+#
+BR2_PACKAGE_IPTABLES=y
+# BR2_PACKAGE_KISMET is not set
+# BR2_PACKAGE_L2TP is not set
+# BR2_PACKAGE_LIBCGI is not set
+# BR2_PACKAGE_LIBCGICC is not set
+# BR2_PACKAGE_LIBEXOSIP2 is not set
+# BR2_PACKAGE_LIBOSIP2 is not set
+BR2_PACKAGE_LIBPCAP=y
+# BR2_PACKAGE_LINKS is not set
+# BR2_PACKAGE_LRZSZ is not set
+# BR2_PACKAGE_MDNSRESPONDER is not set
+# BR2_PACKAGE_MICROCOM is not set
+# BR2_PACKAGE_MROUTED is not set
+# BR2_PACKAGE_MUTT is not set
+# BR2_PACKAGE_NBD is not set
+# BR2_PACKAGE_NCFTP is not set
+# BR2_PACKAGE_NETCAT is not set
+# BR2_PACKAGE_NETKITBASE is not set
+# BR2_PACKAGE_NETKITTELNET is not set
+# BR2_PACKAGE_NETPLUG is not set
+# BR2_PACKAGE_NETSNMP is not set
+# BR2_PACKAGE_NFS_UTILS is not set
+# BR2_PACKAGE_NTP is not set
+# BR2_PACKAGE_OLSR is not set
+# BR2_PACKAGE_OPENNTPD is not set
+# BR2_PACKAGE_OPENSSH is not set
+# BR2_PACKAGE_OPENSSL is not set
+# BR2_PACKAGE_OPENVPN is not set
+# BR2_PACKAGE_OPENSWAN is not set
+# BR2_PACKAGE_PORTMAP is not set
+# BR2_PACKAGE_PPPD is not set
+# BR2_PACKAGE_RP_PPPOE is not set
+# BR2_PACKAGE_PPTP_LINUX is not set
+# BR2_PACKAGE_PROFTPD is not set
+# BR2_PACKAGE_QUAGGA is not set
+
+#
+# quagga suite
+#
+# BR2_PACKAGE_QUAGGA_ZEBRA is not set
+# BR2_PACKAGE_QUAGGA_BGPD is not set
+# BR2_PACKAGE_QUAGGA_RIPD is not set
+# BR2_PACKAGE_QUAGGA_RIPNGD is not set
+# BR2_PACKAGE_QUAGGA_OSPFD is not set
+# BR2_PACKAGE_QUAGGA_WATCHQUAGGA is not set
+# BR2_PACKAGE_QUAGGA_ISISD is not set
+# BR2_PACKAGE_RSYNC is not set
+# BR2_PACKAGE_SAMBA is not set
+# BR2_PACKAGE_SOCAT is not set
+# BR2_PACKAGE_STUNNEL is not set
+BR2_PACKAGE_TCPDUMP=y
+# BR2_PACKAGE_TCPDUMP_SMB is not set
+# BR2_PACKAGE_DHCPDUMP is not set
+# BR2_PACKAGE_TFTPD is not set
+# BR2_PACKAGE_LIGHTTPD is not set
+# BR2_PACKAGE_THTTPD is not set
+# BR2_PACKAGE_TINYHTTPD is not set
+# BR2_PACKAGE_TN5250 is not set
+# BR2_PACKAGE_TTCP is not set
+# BR2_PACKAGE_UDPCAST is not set
+
+#
+# vpnc		- disabled (requires libgcrypt and libgpg_error)
+#
+# BR2_PACKAGE_VTUN is not set
+# BR2_PACKAGE_WEBIF is not set
+# BR2_PACKAGE_WGET is not set
+# BR2_PACKAGE_WIRELESS_TOOLS is not set
+BR2_BLOCKDEV_SUPPORT=y
+
+#
+# dbus not available (need expat or libxml2)
+#
+# BR2_PACKAGE_DM is not set
+# BR2_PACKAGE_DMRAID is not set
+# BR2_PACKAGE_E2FSPROGS is not set
+# BR2_PACKAGE_FCONFIG is not set
+# BR2_PACKAGE_FIS is not set
+# BR2_PACKAGE_LIBFUSE is not set
+# BR2_PACKAGE_GADGETFS_TEST is not set
+# BR2_PACKAGE_HAL is not set
+# BR2_PACKAGE_HDPARM is not set
+# BR2_PACKAGE_HOTPLUG is not set
+# BR2_PACKAGE_HWDATA is not set
+# BR2_PACKAGE_IOSTAT is not set
+# BR2_PACKAGE_LIBAIO is not set
+# BR2_PACKAGE_LIBRAW1394 is not set
+# BR2_PACKAGE_LIBUSB is not set
+# BR2_PACKAGE_LM_SENSORS is not set
+# BR2_PACKAGE_LVM2 is not set
+# BR2_PACKAGE_MDADM is not set
+# BR2_PACKAGE_MEMTESTER is not set
+# BR2_PACKAGE_MKDOSFS is not set
+BR2_PACKAGE_MTD=y
+BR2_PACKAGE_MTD_UTILS=y
+# BR2_PACKAGE_MTD_20061007 is not set
+# BR2_PACKAGE_MTD_20050122 is not set
+# BR2_PACKAGE_MTD_UTILS_GIT is not set
+
+#
+# MTD tools selection
+#
+# BR2_PACKAGE_MTD_DOCFDISK is not set
+# BR2_PACKAGE_MTD_DOC_LOADBIOS is not set
+BR2_PACKAGE_MTD_FLASHCP=y
+BR2_PACKAGE_MTD_FLASH_ERASE=y
+BR2_PACKAGE_MTD_FLASH_ERASEALL=y
+BR2_PACKAGE_MTD_FLASH_INFO=y
+BR2_PACKAGE_MTD_FLASH_LOCK=y
+BR2_PACKAGE_MTD_FLASH_UNLOCK=y
+# BR2_PACKAGE_MTD_FTL_CHECK is not set
+# BR2_PACKAGE_MTD_FTL_FORMAT is not set
+BR2_PACKAGE_MTD_JFFS2DUMP=y
+BR2_PACKAGE_MTD_MKFSJFFS2=y
+# BR2_PACKAGE_MTD_MKFSJFFS is not set
+BR2_PACKAGE_MTD_MTD_DEBUG=y
+# BR2_PACKAGE_MTD_NANDDUMP is not set
+# BR2_PACKAGE_MTD_NANDWRITE is not set
+# BR2_PACKAGE_MTD_NFTL_FORMAT is not set
+# BR2_PACKAGE_MTD_NFTLDUMP is not set
+# BR2_PACKAGE_MTD_SUMTOOL is not set
+# BR2_PACKAGE_NTFS-3G is not set
+# BR2_PACKAGE_PCIUTILS is not set
+# BR2_PACKAGE_PCMCIA is not set
+# BR2_PACKAGE_RAIDTOOLS is not set
+# BR2_PACKAGE_SETSERIAL is not set
+# BR2_PACKAGE_SFDISK is not set
+# BR2_PACKAGE_SMARTMONTOOLS is not set
+# BR2_PACKAGE_UDEV is not set
+# BR2_PACKAGE_USBMOUNT is not set
+# BR2_PACKAGE_USBUTILS is not set
+# BR2_PACKAGE_WIPE is not set
+# BR2_PACKAGE_XFSPROGS is not set
+# BR2_AUDIO_SUPPORT is not set
+# BR2_GRAPHIC_SUPPORT is not set
+# BR2_COMPRESSOR_SUPPORT is not set
+BR2_PACKAGE_LZO=y
+BR2_PACKAGE_ZLIB=y
+# BR2_SCRIPTING_SUPPORT is not set
+# BR2_XML_SUPPORT is not set
+# BR2_JAVA_SUPPORT is not set
+# BR2_GAMES is not set
+
+#
+# Target filesystem options
+#
+
+#
+# filesystem for target device
+#
+# BR2_TARGET_ROOTFS_CRAMFS is not set
+# BR2_TARGET_ROOTFS_CLOOP is not set
+# BR2_TARGET_ROOTFS_EXT2 is not set
+# BR2_TARGET_ROOTFS_JFFS2 is not set
+# BR2_TARGET_ROOTFS_SQUASHFS is not set
+# BR2_TARGET_ROOTFS_TAR is not set
+# BR2_TARGET_ROOTFS_CPIO is not set
+# BR2_TARGET_ROOTFS_INITRAMFS is not set
+# BR2_TARGET_ROOTFS_ROMFS is not set
+
+#
+# bootloader for target device
+#
+# BR2_TARGET_UBOOT is not set
+
+#
+# Kernel
+#
+# BR2_KERNEL_none is not set
+BR2_KERNEL_LINUX_ADVANCED=y
+# BR2_KERNEL_LINUX is not set
+# BR2_KERNEL_HURD is not set
+BR2_PACKAGE_LINUX=y
+BR2_PACKAGE_LINUX_KCONFIG="target/device/x86/i386/linux-$(BR2_LINUX26_VERSION).config"
+BR2_PACKAGE_LINUX_FORMAT="zImage"
+BR2_KERNEL_CURRENT_VERSION="2.6.24.4"
+BR2_KERNEL_NEXT_VERSION="2.6.25"
+BR2_KERNEL_THIS_VERSION="2.6.24"
+BR2_KERNEL_SITE="http://ftp.kernel.org/pub/linux/kernel/v2.6/"
+BR2_MM_PATCH_SITE="http://ftp.kernel.org/pub/linux/kernel/people/akpm/patches/2.6"
+BR2_RC_MM_PATCH_DIR="$(BR2_KERNEL_NEXT_VERSION)-rc$(BR2_KERNEL_RC_LEVEL)/2.6.$(BR2_KERNEL_NEXT_VERSION)-rc$(BR2_KERNEL_RC_LEVEL)-mm$(BR2_KERNEL_MM_LEVEL)"
+# BR2_LINUX_2_6_STABLE is not set
+BR2_LINUX_2_6_24=y
+# BR2_LINUX_2_6_23 is not set
+# BR2_LINUX_2_6_22_10 is not set
+# BR2_LINUX_2_6_22_1 is not set
+# BR2_LINUX_2_6_22 is not set
+# BR2_LINUX_2_6_21_7 is not set
+# BR2_LINUX_2_6_21_5 is not set
+# BR2_LINUX_2_6_21 is not set
+# BR2_LINUX_2_6_20 is not set
+# BR2_LINUX_2_6_25 is not set
+# BR2_LINUX26_CUSTOM is not set
+
+#
+# Patches
+#
+# BR2_KERNEL_ADD_KERNEL_ORG_PATCH is not set
+# BR2_KERNEL_ADD_PATCH is not set
+# BR2_KERNEL_ARCH_PATCH_ENABLED is not set
+BR2_LINUX_BOARD_PATCH=y
+BR2_LINUX_BSP_PATCH=""
+# BR2_KERNEL_PREPATCHED is not set
+BR2_KERNEL_BASE=y
+# BR2_KERNEL_LATEST is not set
+BR2_DOWNLOAD_LINUX26_VERSION="$(BR2_KERNEL_THIS_VERSION)"
+BR2_LINUX26_VERSION="$(BR2_KERNEL_THIS_VERSION)"
+
+#
+# Linux Kernel Configuration
+#
+BR2_PACKAGE_LINUX_USE_KCONFIG=y
+# BR2_PACKAGE_LINUX_USE_DEFCONFIG is not set
+# BR2_PACKAGE_LINUX_USE_XCONFIG is not set
+# BR2_MAKE_XCONFIG is not set
+BR2_MAKE_MENUCONFIG=y
+BR2_KERNEL_CONFIG_METHOD="menuconfig"
+# BR2_LINUX_BIN_BZIMAGE is not set
+# BR2_LINUX_BIN_UIMAGE is not set
+# BR2_LINUX_BIN_VMLINUX is not set
+BR2_LINUX_BIN_ZIMAGE=y
+# BR2_LINUX_BIN_CUSTOM is not set
+
+#
+# Destinations for linux kernel binaries
+#
+BR2_LINUX_COPYTO_ROOTFS=y
+# BR2_LINUX_COPYTO_TFTPBOOT is not set
+BR2_LINUX_COPYTO=""
+# BR2_LINUX_COPY_CONFIGURATION is not set
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: http://busybox.net/lists/buildroot/attachments/20080403/7a58a577/attachment-0001.htm 
