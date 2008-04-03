@@ -1,36 +1,37 @@
-From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Thu, 03 Apr 2008 21:00:32 +0200
+From: John Voltz <john.voltz@gmail.com>
+Date: Thu, 3 Apr 2008 15:33:40 -0400
 Subject: [Buildroot] svn commit: trunk/buildroot/package: festival
 	festival/festival festival/lex etc...
-In-Reply-To: <20080403171347.45CE63C347@busybox.net> (ninevoltz@uclibc.org's
-	message of "Thu\, 3 Apr 2008 10\:13\:47 -0700 \(PDT\)")
+In-Reply-To: <87ve2yzru7.fsf@macbook.be.48ers.dk>
 References: <20080403171347.45CE63C347@busybox.net>
-Message-ID: <87ve2yzru7.fsf@macbook.be.48ers.dk>
+	<87ve2yzru7.fsf@macbook.be.48ers.dk>
+Message-ID: <46a136670804031233r2d741c48qbebd44b4e3b8a19f@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "ninevoltz" == ninevoltz  <ninevoltz@uclibc.org> writes:
+True. I didn't notice the more stable URL. duh.
 
- ninevoltz> Author: ninevoltz
- ninevoltz> Date: 2008-04-03 10:13:46 -0700 (Thu, 03 Apr 2008)
- ninevoltz> New Revision: 21627
+I'll fix it tomorrow.
 
- ninevoltz> Log:
- ninevoltz> add festival speech synthesis package from University of Edinburgh
+John
 
-Neat.
 
- ninevoltz> +FESTIVAL_VERSION = 1.96-beta
- ninevoltz> +FESTIVAL_SOURCE = festival-$(FESTIVAL_VERSION).tar.gz
- ninevoltz> +FESTIVAL_SITE = http://festvox.org/packed/festival/latest
-
-That doesn't sound like a very stable URL :/
-
-The /packed/festival/1.96 directory seems to have the same contents,
-wouldn't it be better to use that instead?
-
--- 
-Bye, Peter Korsgaard
+>
+> That doesn't sound like a very stable URL :/
+>
+> The /packed/festival/1.96 directory seems to have the same contents,
+> wouldn't it be better to use that instead?
+>
+> --
+> Bye, Peter Korsgaard
+> _______________________________________________
+> buildroot mailing list
+> buildroot at uclibc.org
+> http://busybox.net/mailman/listinfo/buildroot
+>
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: http://busybox.net/lists/buildroot/attachments/20080403/2443909d/attachment.htm 
