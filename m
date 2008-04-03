@@ -1,7 +1,7 @@
 From: jacmet at uclibc.org <jacmet@uclibc.org>
-Date: Thu,  3 Apr 2008 04:30:14 -0700 (PDT)
-Subject: [Buildroot] svn commit: trunk/buildroot/package/gzip
-Message-ID: <20080403113014.2A9133C467@busybox.net>
+Date: Thu,  3 Apr 2008 04:44:09 -0700 (PDT)
+Subject: [Buildroot] svn commit: trunk/buildroot/package/diffutils
+Message-ID: <20080403114409.A27513C47D@busybox.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -9,65 +9,57 @@ Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
 Author: jacmet
-Date: 2008-04-03 04:30:13 -0700 (Thu, 03 Apr 2008)
-New Revision: 21625
+Date: 2008-04-03 04:44:09 -0700 (Thu, 03 Apr 2008)
+New Revision: 21626
 
 Log:
-gzip: cleanup makefile
+diffutils: cleanup makefile
 
-Cleanup configure args, strip executables in TARGET_DIR, install
-info / manpages into TARGET_DIR/usr/share/ and fixup
-convenience aliases (gunzip, zcat, zdiff, ..)
+Cleanup configure args, strip executables in TARGET_DIR and
+honor BR2_ENABLE_LOCALE.
 
 
 Modified:
-   trunk/buildroot/package/gzip/gzip.mk
+   trunk/buildroot/package/diffutils/diffutils.mk
 
 
 Changeset:
-Modified: trunk/buildroot/package/gzip/gzip.mk
+Modified: trunk/buildroot/package/diffutils/diffutils.mk
 ===================================================================
---- trunk/buildroot/package/gzip/gzip.mk	2008-04-03 09:32:52 UTC (rev 21624)
-+++ trunk/buildroot/package/gzip/gzip.mk	2008-04-03 11:30:13 UTC (rev 21625)
-@@ -30,15 +30,6 @@
+--- trunk/buildroot/package/diffutils/diffutils.mk	2008-04-03 11:30:13 UTC (rev 21625)
++++ trunk/buildroot/package/diffutils/diffutils.mk	2008-04-03 11:44:09 UTC (rev 21626)
+@@ -83,14 +83,6 @@
+ 		--host=$(GNU_TARGET_NAME) \
  		--build=$(GNU_HOST_NAME) \
  		--prefix=/usr \
- 		--exec-prefix=/ \
--		--bindir=/bin \
--		--sbindir=/bin \
+-		--exec-prefix=/usr \
+-		--bindir=/usr/bin \
+-		--sbindir=/usr/sbin \
 -		--libdir=/lib \
 -		--libexecdir=/usr/lib \
 -		--sysconfdir=/etc \
--		--datadir=/usr/share/misc \
+-		--datadir=/usr/share \
 -		--localstatedir=/var \
--		--mandir=/usr/share/man \
--		--infodir=/usr/share/info \
+ 		--mandir=/usr/share/man \
+ 		--infodir=/usr/share/info \
  		$(DISABLE_NLS) \
- 		$(DISABLE_LARGEFILE) \
- 	)
-@@ -48,22 +39,13 @@
- 	$(MAKE) CC=$(TARGET_CC) -C $(GZIP_DIR)
+@@ -102,15 +94,16 @@
+ 	$(MAKE) CC=$(TARGET_CC) -C $(DIFFUTILS_DIR)
  
- $(GZIP_TARGET_BINARY): $(GZIP_BINARY)
--	$(MAKE) DESTDIR=$(TARGET_DIR) CC=$(TARGET_CC) -C $(GZIP_DIR) install
-+	$(MAKE) DESTDIR=$(TARGET_DIR) CC=$(TARGET_CC) -C $(GZIP_DIR) install-strip
+ $(TARGET_DIR)/$(DIFFUTILS_TARGET_BINARY): $(DIFFUTILS_DIR)/$(DIFFUTILS_BINARY)
+-	$(MAKE) DESTDIR=$(TARGET_DIR) CC=$(TARGET_CC) -C $(DIFFUTILS_DIR) install
++	$(MAKE) DESTDIR=$(TARGET_DIR) CC=$(TARGET_CC) -C $(DIFFUTILS_DIR) install-strip
  ifneq ($(BR2_HAVE_INFOPAGES),y)
--	rm -rf $(TARGET_DIR)/usr/info
-+	rm -rf $(TARGET_DIR)/usr/share/info
+ 	rm -rf $(TARGET_DIR)/usr/share/info
  endif
  ifneq ($(BR2_HAVE_MANPAGES),y)
--	rm -rf $(TARGET_DIR)/usr/man
-+	rm -rf $(TARGET_DIR)/usr/share/man
+ 	rm -rf $(TARGET_DIR)/usr/share/man
  endif
 -	rm -rf $(TARGET_DIR)/share/locale
 -	rm -rf $(TARGET_DIR)/usr/share/doc
--	(cd $(TARGET_DIR)/bin; \
--		$(HOSTLN) -snf gzip gunzip; \
--		$(HOSTLN) -snf gzip zcat; \
--		$(HOSTLN) -snf zdiff zcmp; \
--		$(HOSTLN) -snf zgrep zegrep; \
--		$(HOSTLN) -snf zgrep zfgrep; \
--	)
++ifneq ($(BR2_ENABLE_LOCALE),y)
++	rm -rf $(TARGET_DIR)/usr/share/locale
++endif
  
- gzip: uclibc $(GZIP_TARGET_BINARY)
+ diffutils: uclibc $(TARGET_DIR)/$(DIFFUTILS_TARGET_BINARY)
  
