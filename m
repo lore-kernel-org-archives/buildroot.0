@@ -1,73 +1,76 @@
-From: bugs at busybox.net <bugs@busybox.net>
-Date: Thu, 3 Apr 2008 01:41:12 -0700
-Subject: [Buildroot] [buildroot 0002394]: [PATCH] Use the
-	BR2_TARGET_ATMEL_COPYTO for the tftpboot path of the Atmel
-	bootstrap and uboot
-Message-ID: <107a0ba2d9800b228c0d92087e761990@bugs.uclibc.org>
+From: jacmet at uclibc.org <jacmet@uclibc.org>
+Date: Thu,  3 Apr 2008 02:28:56 -0700 (PDT)
+Subject: [Buildroot] svn commit: trunk/buildroot: package/diffutils
+	package/gzip target/x8 etc...
+Message-ID: <20080403092856.ACAED3C3D4@busybox.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+Author: jacmet
+Date: 2008-04-03 02:28:56 -0700 (Thu, 03 Apr 2008)
+New Revision: 21623
 
-A NOTE has been added to this issue. 
-====================================================================== 
-http://busybox.net/bugs/view.php?id=2394 
-====================================================================== 
-Reported By:                jcdr
-Assigned To:                buildroot
-====================================================================== 
-Project:                    buildroot
-Issue ID:                   2394
-Category:                   Architecture Specific
-Reproducibility:            always
-Severity:                   minor
-Priority:                   normal
-Status:                     assigned
-====================================================================== 
-Date Submitted:             03-01-2008 14:28 PST
-Last Modified:              04-03-2008 01:41 PDT
-====================================================================== 
-Summary:                    [PATCH] Use the BR2_TARGET_ATMEL_COPYTO for the
-tftpboot path of the Atmel bootstrap and uboot
-Description: 
-The "/tftpboot" is hard coded into the file
-target/device/Atmel/at91bootstrap/at91bootstrap.mk and
-target/device/Atmel/u-boot/u-boot.mk. This stop the build with a
-permission error if the BR2_TARGET_ATMEL_COPYTO symbol is anything but
-"/tftpboot". Sadly, the last LSB and more an more distribution use
-"/var/lib/tftpboot".
+Log:
+gzip, diff, grub: bump versions
 
-The provided patch in attachment fix this.
+Patch by andrewma (closes #2754)
 
-====================================================================== 
 
----------------------------------------------------------------------- 
- jcdr - 03-25-08 03:51  
----------------------------------------------------------------------- 
-I have attached a new version of the patch "patch-tftpboot-atmel.diff" to
-be applyed to the "Tue Mar 25 08:49:38 2008 +0000" SVN head. 
+Modified:
+   trunk/buildroot/package/diffutils/diffutils.mk
+   trunk/buildroot/package/gzip/gzip.mk
+   trunk/buildroot/target/x86/grub/grub.mk
 
----------------------------------------------------------------------- 
- jcdr - 04-03-08 01:41  
----------------------------------------------------------------------- 
-New version in the file patch-tftpboot-atmel-20080403.diff to properly
-apply to the SVN HEAD. 
 
-Issue History 
-Date Modified   Username       Field                    Change               
-====================================================================== 
-03-01-08 14:28  jcdr           New Issue                                    
-03-01-08 14:28  jcdr           Status                   new => assigned     
-03-01-08 14:28  jcdr           Assigned To               => buildroot       
-03-01-08 14:28  jcdr           File Added:
-0002-Use-the-BR2_TARGET_ATMEL_COPYTO-for-the-tftpboot-pat.patch                 
-  
-03-25-08 03:49  jcdr           File Added: patch-tftpboot-atmel.diff            
-       
-03-25-08 03:51  jcdr           Note Added: 0005864                          
-04-03-08 01:40  jcdr           File Added: patch-tftpboot-atmel-20080403.diff   
-                
-04-03-08 01:41  jcdr           Note Added: 0006354                          
-======================================================================
+Changeset:
+Modified: trunk/buildroot/package/diffutils/diffutils.mk
+===================================================================
+--- trunk/buildroot/package/diffutils/diffutils.mk	2008-04-03 04:10:14 UTC (rev 21622)
++++ trunk/buildroot/package/diffutils/diffutils.mk	2008-04-03 09:28:56 UTC (rev 21623)
+@@ -3,9 +3,8 @@
+ # diffutils
+ #
+ #############################################################
+-DIFFUTILS_VERSION=2.8.7
++DIFFUTILS_VERSION=2.8.1
+ DIFFUTILS_SOURCE:=diffutils-$(DIFFUTILS_VERSION).tar.gz
+-#DIFFUTILS_SITE:=ftp://alpha.gnu.org/gnu/diffutils/
+ DIFFUTILS_SITE:=$(BR2_GNU_MIRROR)/diffutils
+ DIFFUTILS_CAT:=$(ZCAT)
+ DIFFUTILS_DIR:=$(BUILD_DIR)/diffutils-$(DIFFUTILS_VERSION)
+
+Modified: trunk/buildroot/package/gzip/gzip.mk
+===================================================================
+--- trunk/buildroot/package/gzip/gzip.mk	2008-04-03 04:10:14 UTC (rev 21622)
++++ trunk/buildroot/package/gzip/gzip.mk	2008-04-03 09:28:56 UTC (rev 21623)
+@@ -3,9 +3,8 @@
+ # gzip
+ #
+ #############################################################
+-GZIP_VERSION:=1.3.5
++GZIP_VERSION:=1.3.12
+ GZIP_SOURCE:=gzip-$(GZIP_VERSION).tar.gz
+-#GZIP_SITE:=ftp://alpha.gnu.org/gnu/gzip
+ GZIP_SITE:=$(BR2_GNU_MIRROR)/gzip
+ GZIP_DIR:=$(BUILD_DIR)/gzip-$(GZIP_VERSION)
+ GZIP_CAT:=$(ZCAT)
+
+Modified: trunk/buildroot/target/x86/grub/grub.mk
+===================================================================
+--- trunk/buildroot/target/x86/grub/grub.mk	2008-04-03 04:10:14 UTC (rev 21622)
++++ trunk/buildroot/target/x86/grub/grub.mk	2008-04-03 09:28:56 UTC (rev 21623)
+@@ -21,9 +21,9 @@
+ #
+ #############################################################
+ GRUB_SOURCE:=grub_0.97.orig.tar.gz
+-GRUB_PATCH:=grub_0.97-31.diff.gz
++GRUB_PATCH:=grub_0.97-35.diff.gz
+ GRUB_SITE=$(BR2_DEBIAN_MIRROR)/debian/pool/main/g/grub
+-GRUB_PATCH_SITE:=$(BR2_DEBIAN_MIRROR)/debian/pool/main/g/grub
++GRUB_PATCH_SITE:=$(GRUB_SITE)
+ GRUB_CAT:=$(ZCAT)
+ GRUB_DIR:=$(BUILD_DIR)/grub-0.97
+ GRUB_BINARY:=grub/grub
