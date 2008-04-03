@@ -1,51 +1,29 @@
-From: jacmet at uclibc.org <jacmet@uclibc.org>
-Date: Thu,  3 Apr 2008 02:32:52 -0700 (PDT)
-Subject: [Buildroot] svn commit: trunk/buildroot/package/editors: ed uemacs
-Message-ID: <20080403093253.14C6B3C4B3@busybox.net>
+From: Joe <zentrale.at.work@gmail.com>
+Date: Thu, 03 Apr 2008 11:41:51 +0200
+Subject: [Buildroot] Flash for AT91RM9200
+Message-ID: <47F4A65F.5030002@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Author: jacmet
-Date: 2008-04-03 02:32:52 -0700 (Thu, 03 Apr 2008)
-New Revision: 21624
+Hi you all!
 
-Log:
-package/editors: fix patch-kernel.sh arguments
+I'm looking for a NOR-Flash for a RM9200-based board, and i thought 
+maybe some of you could give some hints or experiences.
+Basically it should be 128MByte size, with larger drop-in replacements 
+as a favorable option. As with all RM9200 parallel flash, must have CFI, 
+and must be available in a non-BGA package.
+For a first guess, i found the Spansion S29G128P - any experiences with 
+that one? How well is it supported by the kernel, or are there any 
+obvious caveats that i overlooked now?
 
+Greetz, Joe
 
-Modified:
-   trunk/buildroot/package/editors/ed/ed.mk
-   trunk/buildroot/package/editors/uemacs/uemacs.mk
+-- 
+Sepp "ZaP" Holzmayr
 
-
-Changeset:
-Modified: trunk/buildroot/package/editors/ed/ed.mk
-===================================================================
---- trunk/buildroot/package/editors/ed/ed.mk	2008-04-03 09:28:56 UTC (rev 21623)
-+++ trunk/buildroot/package/editors/ed/ed.mk	2008-04-03 09:32:52 UTC (rev 21624)
-@@ -16,7 +16,7 @@
- 
- $(ED_DIR)/.unpacked: $(DL_DIR)/$(ED_SOURCE)
- 	$(ED_CAT) $(DL_DIR)/$(ED_SOURCE) | tar -C $(BUILD_DIR) $(TAR_OPTIONS) -
--	toolchain/patch-kernel.sh $(ED_DIR) package/ed/ ed-\*.patch
-+	toolchain/patch-kernel.sh $(ED_DIR) package/editors/ed/ ed-\*.patch
- 	touch $@
- 
- $(ED_DIR)/.configured: $(ED_DIR)/.unpacked
-
-Modified: trunk/buildroot/package/editors/uemacs/uemacs.mk
-===================================================================
---- trunk/buildroot/package/editors/uemacs/uemacs.mk	2008-04-03 09:28:56 UTC (rev 21623)
-+++ trunk/buildroot/package/editors/uemacs/uemacs.mk	2008-04-03 09:32:52 UTC (rev 21624)
-@@ -18,7 +18,7 @@
- 
- $(UEMACS_DIR)/.unpacked: $(DL_DIR)/$(UEMACS_SOURCE)
- 	$(UEMACS_CAT) $(DL_DIR)/$(UEMACS_SOURCE) | tar -C $(BUILD_DIR) $(TAR_OPTIONS) -
--	toolchain/patch-kernel.sh $(UEMACS_DIR) package/uemacs/ uemacs\*.patch
-+	toolchain/patch-kernel.sh $(UEMACS_DIR) package/editors/uemacs/ uemacs\*.patch
- 	touch $(UEMACS_DIR)/.unpacked
- 
- $(UEMACS_DIR)/$(UEMACS_BINARY): $(UEMACS_DIR)/.unpacked
+please reply to: zentrale.at.work at gmail.com
+"Never underestimate the bandwidth of a freight train full of DAT tapes. 
+Only the round-trip is a little suboptimal."
