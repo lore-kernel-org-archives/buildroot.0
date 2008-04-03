@@ -1,47 +1,51 @@
-From: hamish at uclibc.org <hamish@uclibc.org>
-Date: Wed,  2 Apr 2008 21:10:14 -0700 (PDT)
-Subject: [Buildroot] svn commit: trunk/buildroot/package/bridge-utils
-Message-ID: <20080403041014.E12C93C465@busybox.net>
+From: Jean-Christian de Rivaz <jc@eclis.ch>
+Date: Thu, 03 Apr 2008 08:53:01 +0200
+Subject: [Buildroot] svn commit: trunk/buildroot/target/linux
+In-Reply-To: <01df01c8950d$9890a970$0e0514ac@atmel.com>
+References: <20080331054204.ECD433C3A5@busybox.net> <47F217F5.5030908@eclis.ch>
+	<01df01c8950d$9890a970$0e0514ac@atmel.com>
+Message-ID: <47F47ECD.10901@eclis.ch>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Author: hamish
-Date: 2008-04-02 21:10:14 -0700 (Wed, 02 Apr 2008)
-New Revision: 21622
+Ulf Samuelsson a ?crit :
+> 
+> ulf at uclibc.org a ?crit :
+>> --- trunk/buildroot/target/linux/Makefile.in.advanced 2008-03-30 22:23:39 UTC (rev 21590)
+>> +++ trunk/buildroot/target/linux/Makefile.in.advanced 2008-03-31 05:42:03 UTC (rev 21591)
+>> @@ -103,7 +103,7 @@
+>>  endif
+>>  endif
+>>  
+>> -KERNEL_CONFIG_METHOD:=($(strip $(subst ",,$(BR2_KERNEL_CONFIG_METHOD))),)
+>> +KERNEL_CONFIG_METHOD:=$(strip $(subst ",,$(BR2_KERNEL_CONFIG_METHOD)))
+>>  #"))
+>>  ifeq ($(KERNEL_CONFIG_METHOD),)
+>>  KERNEL_CONFIG_METHOD:=xconfig
+>> @@ -335,7 +335,11 @@
+>>  $(MAKE) $(LINUX26_MAKE_FLAGS) -C $(LINUX26_DIR) $(KERNEL_CONFIG_METHOD) ; \
+>>  fi
+>>  endif
+>> +ifneq ($(strip $(subst ",,$(BR2_EXTRA_VERSION))),)
+>> + $(SED) 's,^EXTRA_VERSION=.*,EXTRA_VERSION=="$(BR2_EXTRA_VERSION)",g'
+>> +endif
+> 
+>> This patch break the default compilation for AT91SAM9261 (make 
+>> at91sam9261ek_defconfig && make) with the following error:
+> 
+> 
+> Choose another kernel version like 2.6.22.1.
+> I have a fix ready, but I am having problems
+> with svn access from where I am at the moment.
 
-Log:
-Unbreak the bridge-utils package..
+Thanks Ulf for your answer. It work well with the 2.6.22.1.
 
+I still have the /tftpboot issue. Il will make a new update to my 
+proposed patches.
 
-Modified:
-   trunk/buildroot/package/bridge-utils/bridge.mk
-
-
-Changeset:
-Modified: trunk/buildroot/package/bridge-utils/bridge.mk
-===================================================================
---- trunk/buildroot/package/bridge-utils/bridge.mk	2008-04-02 21:20:35 UTC (rev 21621)
-+++ trunk/buildroot/package/bridge-utils/bridge.mk	2008-04-03 04:10:14 UTC (rev 21622)
-@@ -51,15 +51,15 @@
- 	#cp -af $(BRIDGE_BUILD_DIR)/brctl/brctld $(TARGET_DIR)/usr/sbin/
- 	#$(STRIPCMD) $(TARGET_DIR)/usr/sbin/brctld
- 
--bridge: $(TARGET_DIR)/$(BRIDGE_TARGET_BINARY)
-+bridge-utils: $(TARGET_DIR)/$(BRIDGE_TARGET_BINARY)
- 
--bridge-source: $(DL_DIR)/$(BRIDGE_SOURCE)
-+bridge-utils-source: $(DL_DIR)/$(BRIDGE_SOURCE)
- 
--bridge-clean:
-+bridge-utils-clean:
- 	#$(MAKE) DESTDIR=$(TARGET_DIR) CC=$(TARGET_CC) -C $(BRIDGE_BUILD_DIR) uninstall
- 	-$(MAKE) -C $(BRIDGE_BUILD_DIR) clean
- 
--bridge-dirclean:
-+bridge-utils-dirclean:
- 	rm -rf $(BRIDGE_BUILD_DIR)
- #############################################################
- #
+Regards,
+--
+Jean-Christian de Rivaz
