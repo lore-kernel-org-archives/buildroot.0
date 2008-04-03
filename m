@@ -1,66 +1,45 @@
-From: Arun Reddy <reddyac@gmail.com>
-Date: Thu, 3 Apr 2008 15:13:41 -0700
-Subject: [Buildroot] Error when compiling Buildroot to create .iso
-	(cannot stat /.../i386-linux-2.6.24-20
-In-Reply-To: <BLU136-W8787D45D6697B1F3539C3C3F70@phx.gbl>
-References: <326f33790804031358n63fd21bs5ee753b194d3a89b@mail.gmail.com>
-	<BLU136-W8787D45D6697B1F3539C3C3F70@phx.gbl>
-Message-ID: <326f33790804031513n230462e5hb65b1705dafabace@mail.gmail.com>
+From: bugs at busybox.net <bugs@busybox.net>
+Date: Thu, 3 Apr 2008 15:18:38 -0700
+Subject: [Buildroot] [buildroot 0002804]: grub_0.97-31.diff gz no longer
+	available from Debian
+Message-ID: <82cba9c5980da25c1d3bdc759127bdb3@bugs.uclibc.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Thanks a lot for your suggestion. I made a symbolic link to the x86
-directory but I still don't find my rootfs.i386.iso file within
-buildroot/binaries/$PROJECT.
 
-I also didn't see any errors this time, but I piped the errors to error.log
-and checked it, and still get the message that reads
-i386-linux-2.6.24-20080403 cannot be found.
+The following issue has been SUBMITTED. 
+====================================================================== 
+http://busybox.net/bugs/view.php?id=2804 
+====================================================================== 
+Reported By:                rah
+Assigned To:                buildroot
+====================================================================== 
+Project:                    buildroot
+Issue ID:                   2804
+Category:                   Architecture Specific
+Reproducibility:            always
+Severity:                   minor
+Priority:                   normal
+Status:                     assigned
+====================================================================== 
+Date Submitted:             04-03-2008 15:18 PDT
+Last Modified:              04-03-2008 15:18 PDT
+====================================================================== 
+Summary:                    grub_0.97-31.diff gz no longer available from Debian
+Description: 
+wget --passive-ftp  -P /home/Aleks/dimmpc/buildroot/dl
+"http://ftp.debian.org"/debian/pool/main/g/grub/grub_0.97-31.diff.gz
+--23:55:20-- 
+http://ftp.debian.org/debian/pool/main/g/grub/grub_0.97-31.diff.gz
+====================================================================== 
 
-On Thu, Apr 3, 2008 at 2:33 PM, Ma Andrew <andrewma83@hotmail.com> wrote:
-
->
-> I think you can make a sym link like this on your /root/buildroot
-> directory.
-> "ln -s ./project_build_i686//linux-2.6.24/arch/x86 x86" and see if it
-> works for you.
->
->
->
-> ________________________________
-> > Date: Thu, 3 Apr 2008 13:58:28 -0700
-> > From: reddyac at gmail.com
-> > To: buildroot at uclibc.org
-> > Subject: [Buildroot] Error when compiling Buildroot to create .iso
-> (cannot stat /.../i386-linux-2.6.24-20080403)
-> >
-> > Hi everyone.
-> >
-> > I am able to successfully compile Buildroot and I end up with a
-> resulting file system image rootfs.i386.ext2 and a bzImage for the kernel. I
-> want to boot up my newly created kernel in VirtualBox, and I will need an
-> .iso to do that. So modified menuconfig to give me an .iso and typed make
-> again. Unfortunately I run into an error that states:
-> >
-> > cp: cannot stat
-> '/root/buildroot/binaries/uclibc/i386-linux-2.6.24-20080403': No such file
-> or directory
-> > make: *** [/root/buildroot/binaries/uclibc/rootfs.i386.iso] Error 1
-> >
-> > I checked that folder and I see file named i386-linux-2.6.24-20080403,
-> and cannot understand why it is giving me this error. Can someone give me a
-> clearer indication to what this error is referring and how I can go about
-> fixing it?
-> >
-> > Thank you in advance for your response!
->
-> _________________________________________________________________
-> ??????????????? ? MSN ?????
-> http://toolbar.live.com/
->
--------------- next part --------------
-An HTML attachment was scrubbed...
-URL: http://busybox.net/lists/buildroot/attachments/20080403/2e2a4582/attachment.htm 
+Issue History 
+Date Modified   Username       Field                    Change               
+====================================================================== 
+04-03-08 15:18  rah            New Issue                                    
+04-03-08 15:18  rah            Status                   new => assigned     
+04-03-08 15:18  rah            Assigned To               => buildroot       
+======================================================================
