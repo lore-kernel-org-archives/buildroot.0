@@ -1,10 +1,7 @@
-From: Guillaume Dargaud <dargaud@lpsc.in2p3.fr>
-Date: Thu, 3 Apr 2008 17:34:55 +0200
-Subject: [Buildroot] ARCH=ppc vs powerpc
-References: <0d2f01c894cc$1fb56540$f52f9e86@LPSC0173W><8763v071sq.fsf@macbook.be.48ers.dk>
-	<20080402164154.GE9436@mx.loc><0ddc01c89583$84ecb960$f52f9e86@LPSC0173W><87ej9n2kj4.fsf@macbook.be.48ers.dk><0e8d01c89595$e3482140$f52f9e86@LPSC0173W>
-	<87bq4r0ybx.fsf@macbook.be.48ers.dk>
-Message-ID: <0e9b01c895a0$47d11590$f52f9e86@LPSC0173W>
+From: Samuelsson, Ulf <ulf.samuelsson@atmel.com>
+Date: 3 Apr 2008 12:26:35 +0000
+Subject: [Buildroot] Flash for AT91RM9200
+Message-ID: <039401c895a7$61f39304$85f0af0a@corp.atmel.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -12,24 +9,59 @@ Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
 
-> Suit yourself, but buildroot with Xilinx/ARCH=ppc kernels works (I use
-> it myself).
 
-Yes, but how ? What's the proper set of steps ? The idiot's guide to ml405 
-system building if you wish !
+Hi you all!
 
-Indeed Buildroot looks like a great idea and a lovely system, that's why I 
-spent so much time learning how to use it, but with nothing to show at the 
-end. 2 days ago I could compile everything cleanly, although it wouldn't 
-boot for some reason. Today after a distclean and using the same .config 
-files, it just won't go past the first few files ('no cross compiler' ?!?)
+I'm looking for a NOR-Flash for a RM9200-based board, and i thought 
+maybe some of you could give some hints or experiences.
+Basically it should be 128MByte size, with larger drop-in replacements 
+as a favorable option. As with all RM9200 parallel flash, must have CFI, 
+and must be available in a non-BGA package.
+For a first guess, i found the Spansion S29G128P - any experiences with 
+that one? How well is it supported by the kernel, or are there any 
+obvious caveats that i overlooked now?
 
-Funny thing is that I have a colleague who told me to use it because he's 
-using it successfully on the same architecture, although his version is 
-about a year old. I asked him to show me... He can't figure out how he ever 
-got it to build in the first place.
+Greetz, Joe
 
-OK, sorry for my rant. Just need to vent off some frustration.
+=> The AT91RM9200 has 
+     26 Adress pins (A0-A5)
+     but A24 is nol  available.
+     (See Errata)
+     This gives you a 16 MB
+     linear adressrange.
+     Since A25 is available
+     you can have 2 x 16 MB
+     spaces with a 16 MB
+     hole in between.
+
+    However, I suspect that
+    you only plan 128 Mbit
+    and not 128 MByte
+    and then this is not
+    a problem
+    
+    If you are starting a design
+    now,You should perhaps
+    consider the AT91SAM9260
+    or  the  AT91SAMG20
+    
+
 -- 
-Guillaume Dargaud
-http://www.gdargaud.net/
+Sepp "ZaP" Holzmayr
+
+please reply to: zentrale.at.work at gmail.com
+"Never underestimate the bandwidth of a freight train full of DAT tapes. 
+Only the round-trip is a little suboptimal."
+_______________________________________________
+buildroot mailing list
+buildroot at uclibc.org
+http://busybox.net/mailman/listinfo/buildroot
+
+
+-------------- next part --------------
+A non-text attachment was scrubbed...
+Name: UlfSamuelsson.vcf
+Type: application/octet-stream
+Size: 491 bytes
+Desc: UlfSamuelsson.vcf
+Url : http://busybox.net/lists/buildroot/attachments/20080403/40ce5d7e/attachment.obj 
