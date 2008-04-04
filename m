@@ -1,55 +1,53 @@
-From: ninevoltz at uclibc.org <ninevoltz@uclibc.org>
-Date: Fri,  4 Apr 2008 05:23:29 -0700 (PDT)
-Subject: [Buildroot] svn commit:
-	trunk/buildroot/package/festival/speech-tools
-Message-ID: <20080404122329.5DF1A3C3A2@busybox.net>
+From: Guillaume Dargaud <dargaud@lpsc.in2p3.fr>
+Date: Fri, 4 Apr 2008 14:30:52 +0200
+Subject: [Buildroot] ARCH=ppc vs powerpc
+References: <0d2f01c894cc$1fb56540$f52f9e86@LPSC0173W><8763v071sq.fsf@macbook.be.48ers.dk>
+	<20080402164154.GE9436@mx.loc><0ddc01c89583$84ecb960$f52f9e86@LPSC0173W><87ej9n2kj4.fsf@macbook.be.48ers.dk><0e8d01c89595$e3482140$f52f9e86@LPSC0173W><87bq4r0ybx.fsf@macbook.be.48ers.dk><0e9b01c895a0$47d11590$f52f9e86@LPSC0173W><87ej9mvygr.fsf@macbook.be.48ers.dk><0efa01c89632$9b7d9910$f52f9e86@LPSC0173W><8763uyufji.fsf@macbook.be.48ers.dk><0f2901c8963e$92fc82e0$f52f9e86@LPSC0173W>
+	<87ve2xubdp.fsf@macbook.be.48ers.dk>
+Message-ID: <0f4a01c8964f$bbc064b0$f52f9e86@LPSC0173W>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Author: ninevoltz
-Date: 2008-04-04 05:23:28 -0700 (Fri, 04 Apr 2008)
-New Revision: 21635
+> Ok. I don't have such an old GCC on my system so I cannot test. Maybe
+> you will have more luck if you select GCC 3.4.6 in buildroot instead?
 
-Log:
-fix for festival install patch
+Trying this right now...
 
-Modified:
-   trunk/buildroot/package/festival/speech-tools/speech-tools-1.2.96-beta-install.patch
+$ make
+[...]
+strip --strip-all -R .note -R .comment 
+/home/guinevere/buildroot/build_powerpc/staging_dir/usr/bin/powerpc-linux-uclibc-addr2line 
+/home/guinevere/buildroot/build_powerpc/staging_dir/usr/bin/powerpc-linux-uclibc-ar 
+/home/guinevere/buildroot/build_powerpc/staging_dir/usr/bin/powerpc-linux-uclibc-as 
+/home/guinevere/buildroot/build_powerpc/staging_dir/usr/bin/powerpc-linux-uclibc-c++filt 
+/home/guinevere/buildroot/build_powerpc/staging_dir/usr/bin/powerpc-linux-uclibc-cpp 
+/home/guinevere/buildroot/build_powerpc/staging_dir/usr/bin/powerpc-linux-uclibc-embedspu 
+/home/guinevere/buildroot/build_powerpc/staging_dir/usr/bin/powerpc-linux-uclibc-gcc 
+/home/guinevere/buildroot/build_powerpc/staging_dir/usr/bin/powerpc-linux-uclibc-gcc-3.4.6 
+/home/guinevere/buildroot/build_powerpc/staging_dir/usr/bin/powerpc-linux-uclibc-gcov 
+/home/guinevere/buildroot/build_powerpc/staging_dir/usr/bin/powerpc-linux-uclibc-gprof 
+/home/guinevere/buildroot/build_powerpc/staging_dir/usr/bin/powerpc-linux-uclibc-ld 
+/home/guinevere/buildroot/build_powerpc/staging_dir/usr/bin/powerpc-linux-uclibc-ldconfig 
+/home/guinevere/buildroot/build_powerpc/staging_dir/usr/bin/powerpc-linux-uclibc-ldd 
+/home/guinevere/buildroot/build_powerpc/staging_dir/usr/bin/powerpc-linux-uclibc-nm 
+/home/guinevere/buildroot/build_powerpc/staging_dir/usr/bin/powerpc-linux-uclibc-objcopy 
+/home/guinevere/buildroot/build_powerpc/staging_dir/usr/bin/powerpc-linux-uclibc-objdump 
+/home/guinevere/buildroot/build_powerpc/staging_dir/usr/bin/powerpc-linux-uclibc-ranlib 
+/home/guinevere/buildroot/build_powerpc/staging_dir/usr/bin/powerpc-linux-uclibc-readelf 
+/home/guinevere/buildroot/build_powerpc/staging_dir/usr/bin/powerpc-linux-uclibc-size 
+/home/guinevere/buildroot/build_powerpc/staging_dir/usr/bin/powerpc-linux-uclibc-strings 
+/home/guinevere/buildroot/build_powerpc/staging_dir/usr/bin/powerpc-linux-uclibc-strip
+strip: 
+/home/guinevere/buildroot/build_powerpc/staging_dir/usr/bin/powerpc-linux-uclibc-embedspu: 
+File format not recognized
+make: *** 
+[/home/guinevere/buildroot/toolchain_build_powerpc/gcc-3.4.6-final/.installed] 
+Error 1
 
-
-Changeset:
-Modified: trunk/buildroot/package/festival/speech-tools/speech-tools-1.2.96-beta-install.patch
-===================================================================
---- trunk/buildroot/package/festival/speech-tools/speech-tools-1.2.96-beta-install.patch	2008-04-04 10:04:41 UTC (rev 21634)
-+++ trunk/buildroot/package/festival/speech-tools/speech-tools-1.2.96-beta-install.patch	2008-04-04 12:23:28 UTC (rev 21635)
-@@ -24,7 +24,7 @@
-  
- --- a/config/rules/bin_process.mak	2004-01-27 18:56:39.000000000 -0500
- +++ b/config/rules/bin_process.mak	2008-04-03 12:37:31.000000000 -0400
--@@ -69,7 +69,8 @@ endif
-+@@ -69,10 +69,17 @@ endif
-  	    do \
-  	    b=`basename "$$i"`;\
-  	    $(ECHO_N) " $$b";\
-@@ -32,5 +32,15 @@
- +	    $(INSTALL_PROG) "$$main/$$i" "$(DESTDIR)/usr/bin/$$b";\
- +		$(STRIP) "$(DESTDIR)/usr/bin/$$b";\
-  	done
-- 	@echo
-- 
-+-	@echo
-+-
-++	@$(ECHO_N) "Install Scheme Libraries:"
-++	@main=`pwd` ;\
-++	cp -a "$$main/../../lib" "$(DESTDIR)/usr/share/festival";\
-++	for i in `find "$(DESTDIR)/usr/share/festival/lib" -name Makefile`;\
-++		do \
-++		rm "$$i"; \
-++	done
-++
-+ .link_main:
-+ 	@$(MAKE) MADE_FROM_ABOVE=1 --no-print-directory -C '$(PROJECT_MAIN_DIR)' BIN=TOP/$(DIRNAME) LIBDIR=MAIN/TOP/$(PROJECT_LIBRARY_DIR) MAIN='$($(PROJECT_PREFIX)_HOME)' .link_main$(S)
-\ No newline at end of file
+And nothing changes no matter if I try strip, sstrip or none...
+-- 
+Guillaume Dargaud
+http://www.gdargaud.net/
