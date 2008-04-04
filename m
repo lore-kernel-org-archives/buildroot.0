@@ -1,163 +1,294 @@
-From: Ma Andrew <andrewma83@hotmail.com>
-Date: Thu, 3 Apr 2008 19:03:20 -0700
-Subject: [Buildroot] Error when compiling Buildroot to create .iso
- (cannot stat /.../i386-linux-2.6.24-20
-In-Reply-To: <326f33790804031722y751e20fbp90953425cc54b247@mail.gmail.com>
-References: <326f33790804031358n63fd21bs5ee753b194d3a89b@mail.gmail.com>
-	<BLU136-W8787D45D6697B1F3539C3C3F70@phx.gbl>
-	<326f33790804031513n230462e5hb65b1705dafabace@mail.gmail.com>
-	<BLU136-W3608C3619B673FB8C4FC10C3F70@phx.gbl>
-	<326f33790804031646w6a11671fgba1f50aba995f450@mail.gmail.com>
-	<BLU136-W408F3BBAFC783BCAF49646C3F70@phx.gbl> 
-	<326f33790804031722y751e20fbp90953425cc54b247@mail.gmail.com>
-Message-ID: <BLU136-W23D741198BD0E52C39F5A9C3F60@phx.gbl>
+From: hamish at uclibc.org <hamish@uclibc.org>
+Date: Thu,  3 Apr 2008 21:25:18 -0700 (PDT)
+Subject: [Buildroot] svn commit: trunk/buildroot/target:  ubifs
+Message-ID: <20080404042519.039A53C2F0@busybox.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+Author: hamish
+Date: 2008-04-03 21:25:18 -0700 (Thu, 03 Apr 2008)
+New Revision: 21630
 
-ok this is what I get after I remove the link (and my project named zero)
-
-cp /mnt/lab/buildroot/binaries/zero/i686-linux-2.6.24-20080404 /mnt/lab/buildroot/build_i686/iso9660/kernel
-cp: cannot stat `/mnt/lab/buildroot/binaries/zero/i686-linux-2.6.24-20080404': No such file or directory
-
-You may want to see what is /mnt/lab/buildroot/binaries/zero/i686-linux-2.6.24-20080404.  It turns out to be /mnt/lab/buildroot/binaries/zero/i686-linux-2.6.24-20080404 -> ../../x86/boot/bzImage
-
-With ../../ , it will move you back to the buildroot .  In this case, I remove my symlink in the buildroot directory, the build process cannot complete due to broken link.
-
-Now I put the link x86 in my buildroot directory, I am using/running the command (with the only change on the project name from uclibc to zero) that I show you on the buildroot directory.
-
-I run the command that I gave you and I see the problem too. :(  It seems like there is a cut and paste typo in the command.
-It should be 'ln -s project_build_i386/uclibc/linux-2.6.24/arch/x86 x86'  Fixing that 2.6-24 to 2.6.24
-
-To double check, you can "ls -l x86" it should show you some directory content instead of a x86.
+Log:
+Add ubifs target
 
 
-P.S. final product:
-Size of boot image is 4 sectors -> No emulation
- 12.29% done, estimate finish Thu Apr  3 19:02:20 2008
- 24.54% done, estimate finish Thu Apr  3 19:02:20 2008
- 36.82% done, estimate finish Thu Apr  3 19:02:22 2008
- 49.07% done, estimate finish Thu Apr  3 19:02:26 2008
- 61.36% done, estimate finish Thu Apr  3 19:02:24 2008
- 73.60% done, estimate finish Thu Apr  3 19:02:24 2008
- 85.89% done, estimate finish Thu Apr  3 19:02:25 2008
- 98.14% done, estimate finish Thu Apr  3 19:02:26 2008
-Total translation table size: 2048
-Total rockridge attributes bytes: 996
-Total directory bytes: 4096
-Path table size(bytes): 34
-Max brk space used 0
-40762 extents written (79 MB)
-echo /mnt/lab/buildroot/binaries/zero/rootfs.i686.iso
-/mnt/lab/buildroot/binaries/zero/rootfs.i686.iso
--rw-rw-r-- 1 andrewma andrewma 83480576 4?  3 19:02 /mnt/lab/buildroot/binaries/zero/rootfs.i686.iso
+Added:
+   trunk/buildroot/target/ubifs/
+   trunk/buildroot/target/ubifs/Config.in
+   trunk/buildroot/target/ubifs/ubifsroot.mk
 
-Hope this help.
---Andrew
+Modified:
+   trunk/buildroot/target/Config.in
 
 
-________________________________
-> Date: Thu, 3 Apr 2008 17:22:29 -0700
-> From: reddyac at gmail.com
-> To: andrewma83 at hotmail.com
-> Subject: Re: [Buildroot] Error when compiling Buildroot to create .iso (cannot stat /.../i386-linux-2.6.24-20
-> CC: buildroot at uclibc.org
-> 
-> Hi Andrew,
-> 
-> I just made the symbolic link by typing in
-> 
-> 'ln -s project_build_i386/uclibc/linux-2.6-24/arch/x86 x86'
-> 
-> in the buildroot directory. I then compiled again and I was still presented with the same error. I should point out that in the error.log, I am also seeing:
-> 
-> + echo '/root/buildroot/build_i386/genext2fs-1.4/genext2fs -b 67936 ' ' -N 1621 -d /root/buildroot/project_build_i386/uclibc/root ' ' -U -m 0 /root/buildroot/binaries/uclibc/rootfs.i386.ext2
-> 
-> right before the error displays that i386-linux-2.6.24-20080403 cannot be found. (This has now changed to i386-linux-2.6.24-20080404 since it's April 4th in the time that buildroot is using).
-> 
-> Does this mean that I need to delete my rootfs.i386.ext2 and compile again from scratch with .iso selected in order to get the .iso? I hope this isn't the case since it took me a while to do the build. Thanks!
-> 
-> 2008/4/3 Ma Andrew <andrewma83@hotmail.com>:
-> 
-> ok hope this one would help.
-> 
-> 'ln -s project_build_i386/uclibc/linux-2.6-24/arch/x86 x86' in your buildroot.  It should at least let you pass through the error that you post on the email.
-> 
-> --Andrew
-> ________________________________
->> Date: Thu, 3 Apr 2008 16:46:03 -0700
->> From: reddyac at gmail.com
->> To: andrewma83 at hotmail.com
->> Subject: Re: [Buildroot] Error when compiling Buildroot to create .iso (cannot stat /.../i386-linux-2.6.24-20
->> CC: buildroot at uclibc.org
->>
->> Hi Andrew,
->>
->> I found the actual bzImage (not the symbolic links) at:
->>
->> /buildroot/project_build_i386/uclibc/linux-2.6-24/arch/x86/boot/bzImage
->>
->> So I made a symbolic link to that bzImage and I can see it within /buildroot/binaries/$PROJECT.
->>
->> Unfortunately the .iso file is no where to be found after I compile. Hopefully someone can give some feedback on this. Thanks again for your suggestions Andrew!
->>
->> 2008/4/3 Ma Andrew>:
->>
->> Sorry I want to send the command but somehow hotmail doens't let me.  There is a missing part on the command that I suggest.  You can do a "find . -name bzImage -print" on "/root/buildroot" will show all the path that contain bzImage.  Only one contains the real file, all of them are just symbolic links.  I believe the script is trying to look for bzImage but it is a sym link point to somewhere it doesn't exists.
->>
->> Perhaps, there may be a better way to solve it in "make menuconfig" instead of hacking it through sym link.
->>
->> --Andrew
->> ________________________________
->>> Date: Thu, 3 Apr 2008 15:13:41 -0700
->>> From: reddyac at gmail.com
->>> To: andrewma83 at hotmail.com
->>> Subject: Re: [Buildroot] Error when compiling Buildroot to create .iso (cannot stat /.../i386-linux-2.6.24-20
->>> CC: buildroot at uclibc.org
->>>
->>> Thanks a lot for your suggestion. I made a symbolic link to the x86 directory but I still don't find my rootfs.i386.iso file within buildroot/binaries/$PROJECT.
->>>
->>> I also didn't see any errors this time, but I piped the errors to error.log and checked it, and still get the message that reads i386-linux-2.6.24-20080403 cannot be found.
->>>
->>> On Thu, Apr 3, 2008 at 2:33 PM, Ma Andrew> wrote:
->>>
->>> I think you can make a sym link like this on your /root/buildroot directory.
->>> "ln -s ./project_build_i686//linux-2.6.24/arch/x86 x86" and see if it works for you.
->>>
->>>
->>>
->>> ________________________________
->>>> Date: Thu, 3 Apr 2008 13:58:28 -0700
->>>> From: reddyac at gmail.com
->>>> To: buildroot at uclibc.org
->>>> Subject: [Buildroot] Error when compiling Buildroot to create .iso (cannot stat /.../i386-linux-2.6.24-20080403)
->>>>
->>>> Hi everyone.
->>>>
->>>> I am able to successfully compile Buildroot and I end up with a resulting file system image rootfs.i386.ext2 and a bzImage for the kernel. I want to boot up my newly created kernel in VirtualBox, and I will need an .iso to do that. So modified menuconfig to give me an .iso and typed make again. Unfortunately I run into an error that states:
->>>>
->>>> cp: cannot stat '/root/buildroot/binaries/uclibc/i386-linux-2.6.24-20080403': No such file or directory
->>>> make: *** [/root/buildroot/binaries/uclibc/rootfs.i386.iso] Error 1
->>>>
->>>> I checked that folder and I see file named i386-linux-2.6.24-20080403, and cannot understand why it is giving me this error. Can someone give me a clearer indication to what this error is referring and how I can go about fixing it?
->>>>
->>>> Thank you in advance for your response!
->>>
->>> _________________________________________________________________
->>> ??????????????? ? MSN ?????
->>> http://toolbar.live.com/
->>
->> _________________________________________________________________
->> ?? Windows Live Messenger 8.5 ??????????????????????????? ????
->> http://get.live.com/zh-cht-tw/betas/messenger_betas
-> 
-> _________________________________________________________________
-> ??? Windows Live Messenger ? Hotmail????????????? ? Windows Live for Mobile
-> http://www.msn.com.tw/msnmobile/
+Changeset:
+Modified: trunk/buildroot/target/Config.in
+===================================================================
+--- trunk/buildroot/target/Config.in	2008-04-04 00:13:56 UTC (rev 21629)
++++ trunk/buildroot/target/Config.in	2008-04-04 04:25:18 UTC (rev 21630)
+@@ -6,6 +6,7 @@
+ source "target/cloop/Config.in"
+ source "target/ext2/Config.in"
+ source "target/jffs2/Config.in"
++source "target/ubifs/Config.in"
+ source "target/squashfs/Config.in"
+ source "target/tar/Config.in"
+ source "target/cpio/Config.in"
 
-_________________________________________________________________
-5 GB ???? ????????????????? ? ???? Windows Live Hotmail
-http://mail.live.com 
+Added: trunk/buildroot/target/ubifs/Config.in
+===================================================================
+--- trunk/buildroot/target/ubifs/Config.in	                        (rev 0)
++++ trunk/buildroot/target/ubifs/Config.in	2008-04-04 04:25:18 UTC (rev 21630)
+@@ -0,0 +1,103 @@
++config BR2_TARGET_ROOTFS_UBIFS
++	bool "ubifs root filesystem"
++	default n
++	select BR2_HOST_FAKEROOT
++	help
++	  Build a ubifs root filesystem
++
++config BR2_TARGET_ROOTFS_UBIFS_LEBSIZE
++	hex "UBI logical erase block size"
++	depends on BR2_TARGET_ROOTFS_UBIFS
++	default 0x1f800
++
++config BR2_TARGET_ROOTFS_UBIFS_MINIOSIZE
++	hex "UBI minimum I/O size"
++	depends on BR2_TARGET_ROOTFS_UBIFS
++	default 0x800
++	help
++	  Some comment required here
++
++config BR2_TARGET_ROOTFS_UBIFS_MAXLEBCNT
++	int "Maximum LEB count"
++	depends on BR2_TARGET_ROOTFS_UBIFS
++	default 2048
++	help
++	  Some comment required here
++
++config BR2_TARGET_ROOTFS_UBIFS_SQUASH
++	bool "Make all files be owned by root"
++	depends on  BR2_TARGET_ROOTFS_UBIFS
++	default y
++
++config BR2_TARGET_ROOTFS_UBIFS_OUTPUT
++	string "Output File"
++	depends on BR2_TARGET_ROOTFS_UBIFS
++	default "$(IMAGE).ubifs"
++
++choice
++	prompt "ubifs runtime compression"
++	default BR2_TARGET_ROOTFS_UBIFS_LZO
++	depends on BR2_TARGET_ROOTFS_UBIFS
++	help
++	  Select compressor for ubifs filesystem of the root filesystem
++
++config BR2_TARGET_ROOTFS_UBIFS_NONE
++	bool "no compression"
++	help
++	  Do not compress the ubifs filesystem.
++
++config BR2_TARGET_ROOTFS_UBIFS_ZLIB
++	bool "gzip"
++	help
++	  Compress the ubifs filesystem with zlib.
++
++config BR2_TARGET_ROOTFS_UBIFS_LZO
++	bool "lzo"
++	help
++	  Compress the ext2 filesystem with lzo.
++
++endchoice
++
++choice
++	prompt "Compression method"
++	default BR2_TARGET_ROOTFS_UBIFS_NONE
++	depends on BR2_TARGET_ROOTFS_UBIFS
++	help
++	  Select compressor for ubifs filesystem of the root filesystem
++
++config BR2_TARGET_ROOTFS_UBIFS_NONE
++	bool "no compression"
++	help
++	  Do not compress the ubifs filesystem.
++
++config BR2_TARGET_ROOTFS_UBIFS_GZIP
++	bool "gzip"
++	help
++	  Do compress the ubifs filesystem with gzip.
++	  Note that you either have to have gzip installed on your host
++	  or select to build a gzip for your host. See the packages submenu.
++
++config BR2_TARGET_ROOTFS_UBIFS_BZIP2
++	bool "bzip2"
++	help
++	  Do compress the ubifs filesystem with bzip2.
++	  Note that you either have to have bzip2 installed on your host
++	  or select to build a bzip2 for your host. See the packages submenu.
++
++config BR2_TARGET_ROOTFS_UBIFS_LZMA
++	bool "lzma"
++	help
++	  Do compress the ubifs filesystem with lzma.
++	  Note that you either have to have lzma installed on your host
++	  or select to build a lzma for your host. See the packages submenu.
++
++endchoice
++
++config BR2_TARGET_ROOTFS_UBIFS_COPYTO
++	string "also copy the image to..."
++	depends on BR2_TARGET_ROOTFS_UBIFS
++	default ""
++	help
++	  Copies the resulting image to a secondary location
++	  like a tftp server's root directory.
++
+
+Added: trunk/buildroot/target/ubifs/ubifsroot.mk
+===================================================================
+--- trunk/buildroot/target/ubifs/ubifsroot.mk	                        (rev 0)
++++ trunk/buildroot/target/ubifs/ubifsroot.mk	2008-04-04 04:25:18 UTC (rev 21630)
+@@ -0,0 +1,139 @@
++#############################################################
++#
++# mkfs.ubifs to build to target ubifs filesystems
++#
++#############################################################
++MKFS_UBIFS_VERSION=2582f128dad78591bc3adcc87c343c690bb82e61
++MKFS_UBIFS_URL=http://git.infradead.org/users/dedekind/mkfs.ubifs.git?a=snapshot;h=$(MKFS_UBIFS_VERSION);sf=tgz
++MKFS_UBIFS_SOURCE:=mkfs.ubifs-$(MKFS_UBIFS_VERSION).tar.gz
++MKFS_UBIFS_DIR:= $(BUILD_DIR)/mkfs-ubifs-$(MKFS_UBIFS_VERSION)
++MKFS_UBIFS_CAT:=$(ZCAT)
++MKFS_UBIFS_NAME:=mkfs.ubifs
++
++$(DL_DIR)/$(MKFS_UBIFS_SOURCE):
++	$(WGET) -O $(DL_DIR)/$(MKFS_UBIFS_SOURCE) "$(MKFS_UBIFS_URL)"
++
++$(MKFS_UBIFS_DIR)/.unpacked: $(DL_DIR)/$(MKFS_UBIFS_SOURCE)
++	$(ZCAT) $(DL_DIR)/$(MKFS_UBIFS_SOURCE) | tar -C $(BUILD_DIR) -xvf -
++	mv $(BUILD_DIR)/$(MKFS_UBIFS_NAME) $(MKFS_UBIFS_DIR)
++	toolchain/patch-kernel.sh $(MKFS_UBIFS_DIR) target/ubifs/ mkfs-ubifs-\*.patch
++	touch $@
++
++$(MKFS_UBIFS_DIR)/mkfs.ubifs: $(MKFS_UBIFS_DIR)/.unpacked
++	$(MAKE) -C $(MKFS_UBIFS_DIR)
++	touch -c $@
++
++mkfs.ubifs-dirclean:
++	rm -rf $(MKFS_UBIFS_DIR)
++
++mkfs.ubifs: $(MKFS_UBIFS_DIR)/mkfs.ubifs
++
++#############################################################
++#
++# Build the ubifs root filesystem image
++#
++#############################################################
++
++UBIFS_OPTS := -e $(BR2_TARGET_ROOTFS_UBIFS_LEBSIZE) -c $(BR2_TARGET_ROOTFS_UBIFS_MAXLEBCNT) -m $(BR2_TARGET_ROOTFS_UBIFS_MINIOSIZE)
++
++UBIFS_BASE := $(subst ",,$(BR2_TARGET_ROOTFS_UBIFS_OUTPUT))
++#")
++
++ifeq ($(BR2_TARGET_ROOTFS_UBIFS_ZLIB),y)
++UBIFS_OPTS += -x zlib
++endif
++ifeq ($(BR2_TARGET_ROOTFS_UBIFS_LZI),y)
++UBIFS_OPTS += -x lzo
++endif
++ifeq ($(BR2_TARGET_ROOTFS_UBIFS_NONE),y)
++UBIFS_OPTS += -x none
++endif
++
++UBIFS_ROOTFS_COMPRESSOR:=
++UBIFS_ROOTFS_COMPRESSOR_EXT:=
++UBIFS_ROOTFS_COMPRESSOR_PREREQ:=
++ifeq ($(BR2_TARGET_ROOTFS_UBIFS_GZIP),y)
++UBIFS_ROOTFS_COMPRESSOR:=gzip -9 -c
++UBIFS_ROOTFS_COMPRESSOR_EXT:=gz
++#UBIFS_ROOTFS_COMPRESSOR_PREREQ:= gzip-host
++endif
++ifeq ($(BR2_TARGET_ROOTFS_UBIFS_BZIP2),y)
++UBIFS_ROOTFS_COMPRESSOR:=bzip2 -9 -c
++UBIFS_ROOTFS_COMPRESSOR_EXT:=bz2
++#UBIFS_ROOTFS_COMPRESSOR_PREREQ:= bzip2-host
++endif
++ifeq ($(BR2_TARGET_ROOTFS_UBIFS_LZMA),y)
++UBIFS_ROOTFS_COMPRESSOR:=lzma -9 -c
++UBIFS_ROOTFS_COMPRESSOR_EXT:=lzma
++UBIFS_ROOTFS_COMPRESSOR_PREREQ:= lzma-host
++endif
++
++ifneq ($(UBIFS_ROOTFS_COMPRESSOR),)
++UBIFS_TARGET := $(UBIFS_BASE).$(UBIFS_ROOTFS_COMPRESSOR_EXT)
++else
++UBIFS_TARGET := $(UBIFS_BASE)
++endif
++
++$(UBIFS_BASE): host-fakeroot makedevs mkfs.ubifs
++	- at find $(TARGET_DIR) -type f -perm +111 | xargs $(STRIPCMD) 2>/dev/null || true
++ifneq ($(BR2_HAVE_MANPAGES),y)
++	@rm -rf $(TARGET_DIR)/usr/man
++	@rm -rf $(TARGET_DIR)/usr/share/man
++endif
++ifneq ($(BR2_HAVE_INFOPAGES),y)
++	@rm -rf $(TARGET_DIR)/usr/info
++endif
++	@test -d $(TARGET_DIR)/usr/share && \
++		rmdir -p --ignore-fail-on-non-empty $(TARGET_DIR)/usr/share || \
++		true
++	$(if $(TARGET_LDCONFIG),test -x $(TARGET_LDCONFIG) && $(TARGET_LDCONFIG) -r $(TARGET_DIR) 2>/dev/null)
++	# Use fakeroot to pretend all target binaries are owned by root
++	rm -f $(PROJECT_BUILD_DIR)/_fakeroot.$(notdir $(UBIFS_TARGET))
++	touch $(PROJECT_BUILD_DIR)/.fakeroot.00000
++	cat $(PROJECT_BUILD_DIR)/.fakeroot* > $(PROJECT_BUILD_DIR)/_fakeroot.$(notdir $(UBIFS_TARGET))
++ifneq ($(BR2_TARGET_ROOTFS_UBIFS_SQUASH),)
++	echo "chown -R 0:0 $(TARGET_DIR)" >> $(PROJECT_BUILD_DIR)/_fakeroot.$(notdir $(UBIFS_TARGET))
++endif
++ifneq ($(TARGET_DEVICE_TABLE),)
++	# Use fakeroot to pretend to create all needed device nodes
++	echo "$(STAGING_DIR)/bin/makedevs -d $(TARGET_DEVICE_TABLE) $(TARGET_DIR)" \
++		>> $(PROJECT_BUILD_DIR)/_fakeroot.$(notdir $(UBIFS_TARGET))
++endif
++	# Use fakeroot so mkfs.ubifs believes the previous fakery
++	echo "$(MKFS_UBIFS_DIR)/mkfs.ubifs -d $(TARGET_DIR) " \
++		"$(UBIFS_OPTS) -o $(UBIFS_BASE)" >> $(PROJECT_BUILD_DIR)/_fakeroot.$(notdir $(UBIFS_TARGET))
++	chmod a+x $(PROJECT_BUILD_DIR)/_fakeroot.$(notdir $(UBIFS_TARGET))
++	$(STAGING_DIR)/usr/bin/fakeroot -- $(PROJECT_BUILD_DIR)/_fakeroot.$(notdir $(UBIFS_TARGET))
++	- at rm -f $(PROJECT_BUILD_DIR)/_fakeroot.$(notdir $(UBIFS_TARGET))
++
++ifneq ($(UBIFS_ROOTFS_COMPRESSOR),)
++$(UBIFS_BASE).$(UBIFS_ROOTFS_COMPRESSOR_EXT): $(UBIFS_ROOTFS_COMPRESSOR_PREREQ) $(UBIFS_BASE)
++	$(UBIFS_ROOTFS_COMPRESSOR) $(UBIFS_BASE) > $(UBIFS_TARGET)
++endif
++
++UBIFS_COPYTO := $(strip $(subst ",,$(BR2_TARGET_ROOTFS_UBIFS_COPYTO)))
++# "))
++
++ubifsroot: $(UBIFS_TARGET)
++	@ls -l $(UBIFS_TARGET)
++ifneq ($(UBIFS_COPYTO),)
++	@cp -f $(UBIFS_TARGET) $(UBIFS_COPYTO)
++endif
++
++ubifsroot-source: $(DL_DIR)/$(GENUBIFS_SOURCE)
++
++ubifsroot-clean:
++	-$(MAKE) -C $(MKFS_UBIFS_DIR) clean
++
++ubifsroot-dirclean:
++	rm -rf $(MKFS_UBIFS_DIR)
++
++#############################################################
++#
++# Toplevel Makefile options
++#
++#############################################################
++ifeq ($(strip $(BR2_TARGET_ROOTFS_UBIFS)),y)
++TARGETS+=ubifsroot
++endif
++
