@@ -1,294 +1,43 @@
-From: hamish at uclibc.org <hamish@uclibc.org>
-Date: Thu,  3 Apr 2008 21:25:18 -0700 (PDT)
-Subject: [Buildroot] svn commit: trunk/buildroot/target:  ubifs
-Message-ID: <20080404042519.039A53C2F0@busybox.net>
+From: Nigel Kukard <nkukard@lbsd.net>
+Date: Fri, 04 Apr 2008 04:48:05 +0000
+Subject: [Buildroot] Error when compiling Buildroot to create
+	.iso	(cannot stat /.../i386-linux-2.6.24-20
+In-Reply-To: <BLU136-W23D741198BD0E52C39F5A9C3F60@phx.gbl>
+References: <326f33790804031358n63fd21bs5ee753b194d3a89b@mail.gmail.com>
+	<BLU136-W8787D45D6697B1F3539C3C3F70@phx.gbl>
+	<326f33790804031513n230462e5hb65b1705dafabace@mail.gmail.com>
+	<BLU136-W3608C3619B673FB8C4FC10C3F70@phx.gbl>
+	<326f33790804031646w6a11671fgba1f50aba995f450@mail.gmail.com>
+	<BLU136-W408F3BBAFC783BCAF49646C3F70@phx.gbl>
+	<326f33790804031722y751e20fbp90953425cc54b247@mail.gmail.com>
+	<BLU136-W23D741198BD0E52C39F5A9C3F60@phx.gbl>
+Message-ID: <1207284485.3964.26.camel@nigel-x60>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Author: hamish
-Date: 2008-04-03 21:25:18 -0700 (Thu, 03 Apr 2008)
-New Revision: 21630
 
-Log:
-Add ubifs target
+> cp /mnt/lab/buildroot/binaries/zero/i686-linux-2.6.24-20080404 /mnt/lab/buildroot/build_i686/iso9660/kernel
+> cp: cannot stat
+> `/mnt/lab/buildroot/binaries/zero/i686-linux-2.6.24-20080404': No such
+> file or directory
+> 
+> You may want to see what
+> is /mnt/lab/buildroot/binaries/zero/i686-linux-2.6.24-20080404.  It
+> turns out to
+> be /mnt/lab/buildroot/binaries/zero/i686-linux-2.6.24-20080404
+> -> ../../x86/boot/bzImage
 
+I submitted a patch to fix this afaik (commit r21441). Are you using
+latest svn?
 
-Added:
-   trunk/buildroot/target/ubifs/
-   trunk/buildroot/target/ubifs/Config.in
-   trunk/buildroot/target/ubifs/ubifsroot.mk
-
-Modified:
-   trunk/buildroot/target/Config.in
-
-
-Changeset:
-Modified: trunk/buildroot/target/Config.in
-===================================================================
---- trunk/buildroot/target/Config.in	2008-04-04 00:13:56 UTC (rev 21629)
-+++ trunk/buildroot/target/Config.in	2008-04-04 04:25:18 UTC (rev 21630)
-@@ -6,6 +6,7 @@
- source "target/cloop/Config.in"
- source "target/ext2/Config.in"
- source "target/jffs2/Config.in"
-+source "target/ubifs/Config.in"
- source "target/squashfs/Config.in"
- source "target/tar/Config.in"
- source "target/cpio/Config.in"
-
-Added: trunk/buildroot/target/ubifs/Config.in
-===================================================================
---- trunk/buildroot/target/ubifs/Config.in	                        (rev 0)
-+++ trunk/buildroot/target/ubifs/Config.in	2008-04-04 04:25:18 UTC (rev 21630)
-@@ -0,0 +1,103 @@
-+config BR2_TARGET_ROOTFS_UBIFS
-+	bool "ubifs root filesystem"
-+	default n
-+	select BR2_HOST_FAKEROOT
-+	help
-+	  Build a ubifs root filesystem
-+
-+config BR2_TARGET_ROOTFS_UBIFS_LEBSIZE
-+	hex "UBI logical erase block size"
-+	depends on BR2_TARGET_ROOTFS_UBIFS
-+	default 0x1f800
-+
-+config BR2_TARGET_ROOTFS_UBIFS_MINIOSIZE
-+	hex "UBI minimum I/O size"
-+	depends on BR2_TARGET_ROOTFS_UBIFS
-+	default 0x800
-+	help
-+	  Some comment required here
-+
-+config BR2_TARGET_ROOTFS_UBIFS_MAXLEBCNT
-+	int "Maximum LEB count"
-+	depends on BR2_TARGET_ROOTFS_UBIFS
-+	default 2048
-+	help
-+	  Some comment required here
-+
-+config BR2_TARGET_ROOTFS_UBIFS_SQUASH
-+	bool "Make all files be owned by root"
-+	depends on  BR2_TARGET_ROOTFS_UBIFS
-+	default y
-+
-+config BR2_TARGET_ROOTFS_UBIFS_OUTPUT
-+	string "Output File"
-+	depends on BR2_TARGET_ROOTFS_UBIFS
-+	default "$(IMAGE).ubifs"
-+
-+choice
-+	prompt "ubifs runtime compression"
-+	default BR2_TARGET_ROOTFS_UBIFS_LZO
-+	depends on BR2_TARGET_ROOTFS_UBIFS
-+	help
-+	  Select compressor for ubifs filesystem of the root filesystem
-+
-+config BR2_TARGET_ROOTFS_UBIFS_NONE
-+	bool "no compression"
-+	help
-+	  Do not compress the ubifs filesystem.
-+
-+config BR2_TARGET_ROOTFS_UBIFS_ZLIB
-+	bool "gzip"
-+	help
-+	  Compress the ubifs filesystem with zlib.
-+
-+config BR2_TARGET_ROOTFS_UBIFS_LZO
-+	bool "lzo"
-+	help
-+	  Compress the ext2 filesystem with lzo.
-+
-+endchoice
-+
-+choice
-+	prompt "Compression method"
-+	default BR2_TARGET_ROOTFS_UBIFS_NONE
-+	depends on BR2_TARGET_ROOTFS_UBIFS
-+	help
-+	  Select compressor for ubifs filesystem of the root filesystem
-+
-+config BR2_TARGET_ROOTFS_UBIFS_NONE
-+	bool "no compression"
-+	help
-+	  Do not compress the ubifs filesystem.
-+
-+config BR2_TARGET_ROOTFS_UBIFS_GZIP
-+	bool "gzip"
-+	help
-+	  Do compress the ubifs filesystem with gzip.
-+	  Note that you either have to have gzip installed on your host
-+	  or select to build a gzip for your host. See the packages submenu.
-+
-+config BR2_TARGET_ROOTFS_UBIFS_BZIP2
-+	bool "bzip2"
-+	help
-+	  Do compress the ubifs filesystem with bzip2.
-+	  Note that you either have to have bzip2 installed on your host
-+	  or select to build a bzip2 for your host. See the packages submenu.
-+
-+config BR2_TARGET_ROOTFS_UBIFS_LZMA
-+	bool "lzma"
-+	help
-+	  Do compress the ubifs filesystem with lzma.
-+	  Note that you either have to have lzma installed on your host
-+	  or select to build a lzma for your host. See the packages submenu.
-+
-+endchoice
-+
-+config BR2_TARGET_ROOTFS_UBIFS_COPYTO
-+	string "also copy the image to..."
-+	depends on BR2_TARGET_ROOTFS_UBIFS
-+	default ""
-+	help
-+	  Copies the resulting image to a secondary location
-+	  like a tftp server's root directory.
-+
-
-Added: trunk/buildroot/target/ubifs/ubifsroot.mk
-===================================================================
---- trunk/buildroot/target/ubifs/ubifsroot.mk	                        (rev 0)
-+++ trunk/buildroot/target/ubifs/ubifsroot.mk	2008-04-04 04:25:18 UTC (rev 21630)
-@@ -0,0 +1,139 @@
-+#############################################################
-+#
-+# mkfs.ubifs to build to target ubifs filesystems
-+#
-+#############################################################
-+MKFS_UBIFS_VERSION=2582f128dad78591bc3adcc87c343c690bb82e61
-+MKFS_UBIFS_URL=http://git.infradead.org/users/dedekind/mkfs.ubifs.git?a=snapshot;h=$(MKFS_UBIFS_VERSION);sf=tgz
-+MKFS_UBIFS_SOURCE:=mkfs.ubifs-$(MKFS_UBIFS_VERSION).tar.gz
-+MKFS_UBIFS_DIR:= $(BUILD_DIR)/mkfs-ubifs-$(MKFS_UBIFS_VERSION)
-+MKFS_UBIFS_CAT:=$(ZCAT)
-+MKFS_UBIFS_NAME:=mkfs.ubifs
-+
-+$(DL_DIR)/$(MKFS_UBIFS_SOURCE):
-+	$(WGET) -O $(DL_DIR)/$(MKFS_UBIFS_SOURCE) "$(MKFS_UBIFS_URL)"
-+
-+$(MKFS_UBIFS_DIR)/.unpacked: $(DL_DIR)/$(MKFS_UBIFS_SOURCE)
-+	$(ZCAT) $(DL_DIR)/$(MKFS_UBIFS_SOURCE) | tar -C $(BUILD_DIR) -xvf -
-+	mv $(BUILD_DIR)/$(MKFS_UBIFS_NAME) $(MKFS_UBIFS_DIR)
-+	toolchain/patch-kernel.sh $(MKFS_UBIFS_DIR) target/ubifs/ mkfs-ubifs-\*.patch
-+	touch $@
-+
-+$(MKFS_UBIFS_DIR)/mkfs.ubifs: $(MKFS_UBIFS_DIR)/.unpacked
-+	$(MAKE) -C $(MKFS_UBIFS_DIR)
-+	touch -c $@
-+
-+mkfs.ubifs-dirclean:
-+	rm -rf $(MKFS_UBIFS_DIR)
-+
-+mkfs.ubifs: $(MKFS_UBIFS_DIR)/mkfs.ubifs
-+
-+#############################################################
-+#
-+# Build the ubifs root filesystem image
-+#
-+#############################################################
-+
-+UBIFS_OPTS := -e $(BR2_TARGET_ROOTFS_UBIFS_LEBSIZE) -c $(BR2_TARGET_ROOTFS_UBIFS_MAXLEBCNT) -m $(BR2_TARGET_ROOTFS_UBIFS_MINIOSIZE)
-+
-+UBIFS_BASE := $(subst ",,$(BR2_TARGET_ROOTFS_UBIFS_OUTPUT))
-+#")
-+
-+ifeq ($(BR2_TARGET_ROOTFS_UBIFS_ZLIB),y)
-+UBIFS_OPTS += -x zlib
-+endif
-+ifeq ($(BR2_TARGET_ROOTFS_UBIFS_LZI),y)
-+UBIFS_OPTS += -x lzo
-+endif
-+ifeq ($(BR2_TARGET_ROOTFS_UBIFS_NONE),y)
-+UBIFS_OPTS += -x none
-+endif
-+
-+UBIFS_ROOTFS_COMPRESSOR:=
-+UBIFS_ROOTFS_COMPRESSOR_EXT:=
-+UBIFS_ROOTFS_COMPRESSOR_PREREQ:=
-+ifeq ($(BR2_TARGET_ROOTFS_UBIFS_GZIP),y)
-+UBIFS_ROOTFS_COMPRESSOR:=gzip -9 -c
-+UBIFS_ROOTFS_COMPRESSOR_EXT:=gz
-+#UBIFS_ROOTFS_COMPRESSOR_PREREQ:= gzip-host
-+endif
-+ifeq ($(BR2_TARGET_ROOTFS_UBIFS_BZIP2),y)
-+UBIFS_ROOTFS_COMPRESSOR:=bzip2 -9 -c
-+UBIFS_ROOTFS_COMPRESSOR_EXT:=bz2
-+#UBIFS_ROOTFS_COMPRESSOR_PREREQ:= bzip2-host
-+endif
-+ifeq ($(BR2_TARGET_ROOTFS_UBIFS_LZMA),y)
-+UBIFS_ROOTFS_COMPRESSOR:=lzma -9 -c
-+UBIFS_ROOTFS_COMPRESSOR_EXT:=lzma
-+UBIFS_ROOTFS_COMPRESSOR_PREREQ:= lzma-host
-+endif
-+
-+ifneq ($(UBIFS_ROOTFS_COMPRESSOR),)
-+UBIFS_TARGET := $(UBIFS_BASE).$(UBIFS_ROOTFS_COMPRESSOR_EXT)
-+else
-+UBIFS_TARGET := $(UBIFS_BASE)
-+endif
-+
-+$(UBIFS_BASE): host-fakeroot makedevs mkfs.ubifs
-+	- at find $(TARGET_DIR) -type f -perm +111 | xargs $(STRIPCMD) 2>/dev/null || true
-+ifneq ($(BR2_HAVE_MANPAGES),y)
-+	@rm -rf $(TARGET_DIR)/usr/man
-+	@rm -rf $(TARGET_DIR)/usr/share/man
-+endif
-+ifneq ($(BR2_HAVE_INFOPAGES),y)
-+	@rm -rf $(TARGET_DIR)/usr/info
-+endif
-+	@test -d $(TARGET_DIR)/usr/share && \
-+		rmdir -p --ignore-fail-on-non-empty $(TARGET_DIR)/usr/share || \
-+		true
-+	$(if $(TARGET_LDCONFIG),test -x $(TARGET_LDCONFIG) && $(TARGET_LDCONFIG) -r $(TARGET_DIR) 2>/dev/null)
-+	# Use fakeroot to pretend all target binaries are owned by root
-+	rm -f $(PROJECT_BUILD_DIR)/_fakeroot.$(notdir $(UBIFS_TARGET))
-+	touch $(PROJECT_BUILD_DIR)/.fakeroot.00000
-+	cat $(PROJECT_BUILD_DIR)/.fakeroot* > $(PROJECT_BUILD_DIR)/_fakeroot.$(notdir $(UBIFS_TARGET))
-+ifneq ($(BR2_TARGET_ROOTFS_UBIFS_SQUASH),)
-+	echo "chown -R 0:0 $(TARGET_DIR)" >> $(PROJECT_BUILD_DIR)/_fakeroot.$(notdir $(UBIFS_TARGET))
-+endif
-+ifneq ($(TARGET_DEVICE_TABLE),)
-+	# Use fakeroot to pretend to create all needed device nodes
-+	echo "$(STAGING_DIR)/bin/makedevs -d $(TARGET_DEVICE_TABLE) $(TARGET_DIR)" \
-+		>> $(PROJECT_BUILD_DIR)/_fakeroot.$(notdir $(UBIFS_TARGET))
-+endif
-+	# Use fakeroot so mkfs.ubifs believes the previous fakery
-+	echo "$(MKFS_UBIFS_DIR)/mkfs.ubifs -d $(TARGET_DIR) " \
-+		"$(UBIFS_OPTS) -o $(UBIFS_BASE)" >> $(PROJECT_BUILD_DIR)/_fakeroot.$(notdir $(UBIFS_TARGET))
-+	chmod a+x $(PROJECT_BUILD_DIR)/_fakeroot.$(notdir $(UBIFS_TARGET))
-+	$(STAGING_DIR)/usr/bin/fakeroot -- $(PROJECT_BUILD_DIR)/_fakeroot.$(notdir $(UBIFS_TARGET))
-+	- at rm -f $(PROJECT_BUILD_DIR)/_fakeroot.$(notdir $(UBIFS_TARGET))
-+
-+ifneq ($(UBIFS_ROOTFS_COMPRESSOR),)
-+$(UBIFS_BASE).$(UBIFS_ROOTFS_COMPRESSOR_EXT): $(UBIFS_ROOTFS_COMPRESSOR_PREREQ) $(UBIFS_BASE)
-+	$(UBIFS_ROOTFS_COMPRESSOR) $(UBIFS_BASE) > $(UBIFS_TARGET)
-+endif
-+
-+UBIFS_COPYTO := $(strip $(subst ",,$(BR2_TARGET_ROOTFS_UBIFS_COPYTO)))
-+# "))
-+
-+ubifsroot: $(UBIFS_TARGET)
-+	@ls -l $(UBIFS_TARGET)
-+ifneq ($(UBIFS_COPYTO),)
-+	@cp -f $(UBIFS_TARGET) $(UBIFS_COPYTO)
-+endif
-+
-+ubifsroot-source: $(DL_DIR)/$(GENUBIFS_SOURCE)
-+
-+ubifsroot-clean:
-+	-$(MAKE) -C $(MKFS_UBIFS_DIR) clean
-+
-+ubifsroot-dirclean:
-+	rm -rf $(MKFS_UBIFS_DIR)
-+
-+#############################################################
-+#
-+# Toplevel Makefile options
-+#
-+#############################################################
-+ifeq ($(strip $(BR2_TARGET_ROOTFS_UBIFS)),y)
-+TARGETS+=ubifsroot
-+endif
-+
+-N
+-------------- next part --------------
+A non-text attachment was scrubbed...
+Name: not available
+Type: application/pgp-signature
+Size: 189 bytes
+Desc: This is a digitally signed message part
+Url : http://busybox.net/lists/buildroot/attachments/20080404/fac2aac9/attachment.pgp 
