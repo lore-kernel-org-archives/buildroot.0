@@ -1,155 +1,91 @@
-From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Fri, 04 Apr 2008 10:03:16 +0200
+From: Guillaume Dargaud <dargaud@lpsc.in2p3.fr>
+Date: Fri, 4 Apr 2008 11:02:23 +0200
 Subject: [Buildroot] ARCH=ppc vs powerpc
-In-Reply-To: <0e9b01c895a0$47d11590$f52f9e86@LPSC0173W> (Guillaume Dargaud's
-	message of "Thu\, 3 Apr 2008 17\:34\:55 +0200")
-References: <0d2f01c894cc$1fb56540$f52f9e86@LPSC0173W>
-	<8763v071sq.fsf@macbook.be.48ers.dk> <20080402164154.GE9436@mx.loc>
-	<0ddc01c89583$84ecb960$f52f9e86@LPSC0173W>
-	<87ej9n2kj4.fsf@macbook.be.48ers.dk>
-	<0e8d01c89595$e3482140$f52f9e86@LPSC0173W>
-	<87bq4r0ybx.fsf@macbook.be.48ers.dk>
-	<0e9b01c895a0$47d11590$f52f9e86@LPSC0173W>
-Message-ID: <87ej9mvygr.fsf@macbook.be.48ers.dk>
+References: <0d2f01c894cc$1fb56540$f52f9e86@LPSC0173W><8763v071sq.fsf@macbook.be.48ers.dk>
+	<20080402164154.GE9436@mx.loc><0ddc01c89583$84ecb960$f52f9e86@LPSC0173W><87ej9n2kj4.fsf@macbook.be.48ers.dk><0e8d01c89595$e3482140$f52f9e86@LPSC0173W><87bq4r0ybx.fsf@macbook.be.48ers.dk><0e9b01c895a0$47d11590$f52f9e86@LPSC0173W>
+	<87ej9mvygr.fsf@macbook.be.48ers.dk>
+Message-ID: <0efa01c89632$9b7d9910$f52f9e86@LPSC0173W>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Guillaume" == Guillaume Dargaud <dargaud@lpsc.in2p3.fr> writes:
+Hello Peter and thanks for the support.
 
- >> Suit yourself, but buildroot with Xilinx/ARCH=ppc kernels works (I use
- >> it myself).
+> Just do make menuconfig and select powerpc/405/softfloat and off you
+> go.
 
- Guillaume> Yes, but how ? What's the proper set of steps ? The
- Guillaume> idiot's guide to ml405 system building if you wish !
+Did exactly that from a clean svn. Incidentaly I notice that there are now 
+far fewer activated defaults (no IPV6, CXX, locale, kernel compilation, 
+etc...):
+$ make menuconfig
+$ make
+[...]
+                /home/guinevere/buildroot/toolchain_build_powerpc/gmp-4.2.2/configure 
+\
+                --prefix="/home/guinevere/buildroot/toolchain_build_powerpc/gmp" 
+\
+                --build=i386-pc-linux-gnu \
+                --host=i386-pc-linux-gnu \
+                --enable-shared \
+                --enable-static \
+                --disable-nls \
+        )
+checking build system type... i386-pc-linux-gnu
+checking host system type... i386-pc-linux-gnu
+checking for a BSD-compatible install... /usr/bin/install -c
+checking whether build environment is sane... yes
+checking for gawk... gawk
+checking whether make sets $(MAKE)... yes
+checking whether to enable maintainer-specific portions of Makefiles... no
+checking ABI=32
+checking compiler /usr/bin/gcc  -m32 -O2 -fomit-frame-pointer ... yes
+checking compiler /usr/bin/gcc  -m32 -O2 -fomit-frame-pointer has 
+sizeof(long)==4... yes
+checking compiler 
+usr/bin/gcc  -m32 -O2 -fomit-frame-pointer  -mtune=i386... yes
+checking compiler 
+usr/bin/gcc  -m32 -O2 -fomit-frame-pointer -mtune=i386  -march=i386... yes
+checking for i386-pc-linux-gnu-gcc... /usr/bin/gcc
+checking for C compiler default output file name... a.out
+checking whether the C compiler works... yes
+checking whether we are cross compiling... no
+checking for suffix of executables...
+checking for suffix of object files... o
+checking whether we are using the GNU C compiler... yes
+checking whether /usr/bin/gcc  accepts -g... yes
+checking for /usr/bin/gcc  option to accept ANSI C... none needed
+checking how to run the C preprocessor... /usr/bin/cpp
+configure: error: C preprocessor "/usr/bin/cpp " fails sanity check
+See `config.log' for more details.
+make: *** 
+[/home/guinevere/buildroot/toolchain_build_powerpc/gmp-4.2.2-host/.configured] 
+Error 1
 
-Just do make menuconfig and select powerpc/405/softfloat and off you
-go.
+It also tries to compile gmp without the BR2_SOFT_FLOAT option. And same 
+error with your .config.
 
- Guillaume> Indeed Buildroot looks like a great idea and a lovely
- Guillaume> system, that's why I spent so much time learning how to
- Guillaume> use it, but with nothing to show at the end. 2 days ago I
- Guillaume> could compile everything cleanly, although it wouldn't
- Guillaume> boot for some reason. Today after a distclean and using
- Guillaume> the same .config files, it just won't go past the first
- Guillaume> few files ('no cross compiler' ?!?)
+Now gmp is a dependency of uclibc, right ? So I disable the FPU in there... 
+same thing.
 
-It sounds like you have modified some files and/or the clean didn't
-clean it out. Could you give a fresh svn checkout a try?
+There's something wrong with the cross compiler, right ?!?
 
-I just did a build with the following .config and it seems to work:
-
-#
-# Automatically generated make config: don't edit
-# Fri Apr  4 09:20:55 2008
-#
+2 $ egrep -v "^#|^$" .config
 BR2_HAVE_DOT_CONFIG=y
 BR2_VERSION="0.10.0-svn"
-# BR2_alpha is not set
-# BR2_arm is not set
-# BR2_armeb is not set
-# BR2_avr32 is not set
-# BR2_cris is not set
-# BR2_ia64 is not set
-# BR2_i386 is not set
-# BR2_m68k is not set
-# BR2_mips is not set
-# BR2_mipsel is not set
-# BR2_nios2 is not set
 BR2_powerpc=y
-# BR2_s390 is not set
-# BR2_sh is not set
-# BR2_sh64 is not set
-# BR2_sparc is not set
-# BR2_sparc64 is not set
-# BR2_x86_64 is not set
-# BR2_x86_i386 is not set
-# BR2_x86_i486 is not set
-# BR2_x86_i586 is not set
-# BR2_x86_i686 is not set
-# BR2_x86_pentiumpro is not set
-# BR2_x86_pentium_mmx is not set
-# BR2_x86_pentium_m is not set
-# BR2_x86_pentium2 is not set
-# BR2_x86_pentium3 is not set
-# BR2_x86_pentium4 is not set
-# BR2_x86_prescott is not set
-# BR2_x86_nocona is not set
-# BR2_x86_core2 is not set
-# BR2_x86_k6 is not set
-# BR2_x86_k6_2 is not set
-# BR2_x86_athlon is not set
-# BR2_x86_athlon_4 is not set
-# BR2_x86_opteron is not set
-# BR2_x86_opteron_sse3 is not set
-# BR2_x86_barcelona is not set
-# BR2_x86_geode is not set
-# BR2_x86_c3 is not set
-# BR2_x86_winchip_c6 is not set
-# BR2_x86_winchip2 is not set
-# BR2_generic_powerpc is not set
-# BR2_powerpc_401 is not set
-# BR2_powerpc_403 is not set
 BR2_powerpc_405=y
-# BR2_powerpc_405fp is not set
-# BR2_powerpc_440 is not set
-# BR2_powerpc_440fp is not set
-# BR2_powerpc_505 is not set
-# BR2_powerpc_601 is not set
-# BR2_powerpc_602 is not set
-# BR2_powerpc_603 is not set
-# BR2_powerpc_603e is not set
-# BR2_powerpc_604 is not set
-# BR2_powerpc_604e is not set
-# BR2_powerpc_620 is not set
-# BR2_powerpc_630 is not set
-# BR2_powerpc_740 is not set
-# BR2_powerpc_7400 is not set
-# BR2_powerpc_7450 is not set
-# BR2_powerpc_750 is not set
-# BR2_powerpc_801 is not set
-# BR2_powerpc_821 is not set
-# BR2_powerpc_823 is not set
-# BR2_powerpc_860 is not set
-# BR2_powerpc_970 is not set
-# BR2_powerpc_8540 is not set
 BR2_ARCH="powerpc"
 BR2_ENDIAN="BIG"
 BR2_GCC_TARGET_TUNE="405"
-
-#
-# Target options
-#
-
-#
-# Project Options
-#
 BR2_PROJECT="uclibc"
 BR2_HOSTNAME="uclibc"
 BR2_BANNER="Welcome to the Erik's uClibc development environment."
-
-#
-# Preset Devices
-#
 BR2_BOARD_NAME="arm"
 BR2_BOARD_PATH="target/device/ARM"
+### What is this doing here ?!?
 
-#
-# Generic Architecture support
-#
-
-#
-# Generic System Support
-#
-# BR2_TARGET_GENERIC_ACCESS_POINT is not set
-# BR2_TARGET_GENERIC_FIREWALL is not set
-# BR2_TARGET_GENERIC_DEV_SYSTEM is not set
-
-#
-# Build options
-#
 BR2_WGET="wget --passive-ftp -nd"
 BR2_SVN_CO="svn co"
 BR2_SVN_UP="svn up"
@@ -158,22 +94,13 @@ BR2_ZCAT="gzip -d -c"
 BR2_BZCAT="bzcat"
 BR2_TAR_OPTIONS=""
 BR2_DL_DIR="$(BASE_DIR)/dl"
-
-#
-# Mirrors and Download locations
-#
 BR2_SOURCEFORGE_MIRROR="easynews"
 BR2_KERNEL_MIRROR="http://www.kernel.org/pub/"
 BR2_GNU_MIRROR="http://ftp.gnu.org/pub/gnu"
 BR2_DEBIAN_MIRROR="http://ftp.debian.org"
-
-#
-# Atmel Mirrors
-#
 BR2_ATMEL_MIRROR="ftp://www.at91.com/pub/buildroot/"
 BR2_AT91_PATCH_MIRROR="http://maxim.org.za/AT91RM9200/2.6/"
 BR2_STAGING_DIR="$(BUILD_DIR)/staging_dir"
-# BR2_FPU_SUFFIX is not set
 BR2_TOPDIR_PREFIX=""
 BR2_TOPDIR_SUFFIX=""
 BR2_ROOTFS_PREFIX="rootfs"
@@ -181,569 +108,55 @@ BR2_ROOTFS_SUFFIX=""
 BR2_GNU_BUILD_SUFFIX="pc-linux-gnu"
 BR2_GNU_TARGET_SUFFIX="linux-uclibc"
 BR2_JLEVEL=1
-# BR2_PREFER_IMA is not set
-# BR2_DEPRECATED is not set
 BR2_RECENT=y
-# BR2_ENABLE_DEBUG is not set
 BR2_STRIP_strip=y
-# BR2_STRIP_sstrip is not set
-# BR2_STRIP_none is not set
-# BR2_OPTIMIZE_0 is not set
-# BR2_OPTIMIZE_1 is not set
-# BR2_OPTIMIZE_2 is not set
-# BR2_OPTIMIZE_3 is not set
 BR2_OPTIMIZE_S=y
-# BR2_PREFER_STATIC_LIB is not set
-# BR2_HAVE_MANPAGES is not set
-# BR2_HAVE_INFOPAGES is not set
-# BR2_HAVE_DEVFILES is not set
 BR2_UPDATE_CONFIG=y
-
-#
-# Toolchain
-#
 BR2_TOOLCHAIN_BUILDROOT=y
-# BR2_TOOLCHAIN_EXTERNAL is not set
-# BR2_TOOLCHAIN_EXTERNAL_SOURCE is not set
 BR2_TOOLCHAIN_SOURCE=y
 BR2_EXT_GCC_VERSION_4_1_2=y
 BR2_EXT_GCC_VERSION_4_2_1=y
 BR2_EXT_BINUTILS_VERSION_2_17=y
 BR2_EXT_UCLIBC_VERSION_0_9_29=y
 BR2_EXT_UCLIBC_VERSION_0_9_28_3=y
-
-#
-# Kernel Header Options
-#
-# BR2_KERNEL_HEADERS_2_4_25 is not set
-# BR2_KERNEL_HEADERS_2_4_27 is not set
-# BR2_KERNEL_HEADERS_2_4_29 is not set
-# BR2_KERNEL_HEADERS_2_4_31 is not set
-# BR2_KERNEL_HEADERS_2_6_9 is not set
-# BR2_KERNEL_HEADERS_2_6_11 is not set
-# BR2_KERNEL_HEADERS_2_6_12 is not set
-# BR2_KERNEL_HEADERS_2_6_20_4 is not set
-# BR2_KERNEL_HEADERS_2_6_20 is not set
-# BR2_KERNEL_HEADERS_2_6_21_5 is not set
-# BR2_KERNEL_HEADERS_2_6_21 is not set
-# BR2_KERNEL_HEADERS_2_6_22_1 is not set
-# BR2_KERNEL_HEADERS_2_6_22_10 is not set
-# BR2_KERNEL_HEADERS_2_6_22 is not set
-# BR2_KERNEL_HEADERS_2_6_23 is not set
 BR2_KERNEL_HEADERS_2_6_24=y
-# BR2_KERNEL_HEADERS_SNAP is not set
 BR2_DEFAULT_KERNEL_HEADERS="2.6.24"
-
-#
-# uClibc Options
-#
-# BR2_UCLIBC_VERSION_0_9_28_3 is not set
 BR2_UCLIBC_VERSION_0_9_29=y
-# BR2_UCLIBC_VERSION_SNAPSHOT is not set
 BR2_UCLIBC_CONFIG="toolchain/uClibc/uClibc-0.9.29.config"
-# BR2_ENABLE_LOCALE is not set
-# BR2_PTHREADS_NONE is not set
-# BR2_PTHREADS is not set
 BR2_PTHREADS_OLD=y
-# BR2_PTHREADS_NATIVE is not set
-# BR2_PTHREAD_DEBUG is not set
-# BR2_UCLIBC_PROGRAM_INVOCATION is not set
-
-#
-# Binutils Options
-#
-# BR2_BINUTILS_VERSION_2_17 is not set
-# BR2_BINUTILS_VERSION_2_17_50_0_17 is not set
 BR2_BINUTILS_VERSION_2_18=y
-# BR2_BINUTILS_VERSION_2_18_50_0_1 is not set
 BR2_BINUTILS_VERSION="2.18"
 BR2_EXTRA_BINUTILS_CONFIG_OPTIONS=""
-
-#
-# GCC Options
-#
-# BR2_GCC_VERSION_3_4_6 is not set
-# BR2_GCC_VERSION_4_0_4 is not set
-# BR2_GCC_VERSION_4_1_2 is not set
-# BR2_GCC_VERSION_4_2_1 is not set
 BR2_GCC_VERSION_4_2_3=y
-# BR2_GCC_IS_SNAP is not set
 BR2_GCC_SUPPORTS_SYSROOT=y
-# BR2_GCC_SUPPORTS_FINEGRAINEDMTUNE is not set
 BR2_GCC_VERSION="4.2.3"
 BR2_TOOLCHAIN_SYSROOT=y
-# BR2_GCC_USE_SJLJ_EXCEPTIONS is not set
 BR2_EXTRA_GCC_CONFIG_OPTIONS=""
-# BR2_GCC_CROSS_CXX is not set
-# BR2_GCC_CROSS_FORTRAN is not set
-# BR2_INSTALL_LIBSTDCPP is not set
-# BR2_INSTALL_OBJC is not set
-# BR2_INSTALL_FORTRAN is not set
 BR2_GCC_SHARED_LIBGCC=y
-
-#
-# Ccache Options
-#
-# BR2_CCACHE is not set
-
-#
-# Gdb Options
-#
-# BR2_PACKAGE_GDB is not set
-# BR2_PACKAGE_GDB_SERVER is not set
-# BR2_PACKAGE_GDB_HOST is not set
-
-#
-# elf2flt
-#
-# BR2_ELF2FLT is not set
-# BR2_MKLIBS is not set
-
-#
-# Common Toolchain Options
-#
-# BR2_PACKAGE_SSTRIP_TARGET is not set
-# BR2_PACKAGE_SSTRIP_HOST is not set
-# BR2_ENABLE_MULTILIB is not set
-# BR2_LARGEFILE is not set
-# BR2_INET_IPV6 is not set
-# BR2_INET_RPC is not set
-# BR2_USE_WCHAR is not set
-# BR2_SOFT_FLOAT is not set
 BR2_TARGET_OPTIMIZATION="-Os -pipe"
 BR2_CROSS_TOOLCHAIN_TARGET_UTILS=y
-
-#
-# Package Selection for the target
-#
 BR2_PACKAGE_BUSYBOX=y
-# BR2_BUSYBOX_VERSION_1_2_2_1 is not set
-# BR2_BUSYBOX_VERSION_1_6_1 is not set
-# BR2_BUSYBOX_VERSION_1_7_X is not set
-# BR2_BUSYBOX_VERSION_1_8_X is not set
-# BR2_BUSYBOX_VERSION_1_9_X is not set
 BR2_BUSYBOX_VERSION_1_10_X=y
-# BR2_PACKAGE_BUSYBOX_SNAPSHOT is not set
 BR2_BUSYBOX_VERSION="1.10.0"
 BR2_PACKAGE_BUSYBOX_FULLINSTALL=y
 BR2_PACKAGE_BUSYBOX_CONFIG="package/busybox/busybox-1.6.0.config"
-# BR2_PACKAGE_BUSYBOX_HIDE_OTHERS is not set
-# BR2_PACKAGE_BUSYBOX_SKELETON is not set
-
-#
-# The minimum needed to build a uClibc development system
-#
-# BR2_PACKAGE_BASH is not set
-# BR2_PACKAGE_BZIP2 is not set
-# BR2_PACKAGE_DIFFUTILS is not set
-# BR2_PACKAGE_FLEX is not set
-# BR2_PACKAGE_GCC_TARGET is not set
-# BR2_PACKAGE_GREP is not set
-# BR2_PACKAGE_MAKE is not set
-# BR2_PACKAGE_PATCH is not set
-
-#
-# Other development stuff
-#
-# BR2_PACKAGE_AUTOCONF is not set
-# BR2_PACKAGE_AUTOMAKE is not set
-# BR2_PACKAGE_BISON is not set
-# BR2_PACKAGE_CCACHE_TARGET is not set
-# BR2_PACKAGE_DISTCC is not set
-# BR2_PACKAGE_DMALLOC is not set
-# BR2_PACKAGE_FAKEROOT is not set
-# BR2_HOST_FAKEROOT is not set
-# BR2_PACKAGE_GETTEXT is not set
-# BR2_PACKAGE_LIBINTL is not set
-# BR2_PACKAGE_LIBGMP is not set
-# BR2_PACKAGE_LIBMPFR is not set
-# BR2_PACKAGE_LIBTOOL is not set
-# BR2_PACKAGE_M4 is not set
-# BR2_PACKAGE_PKGCONFIG is not set
-# BR2_READLINE is not set
-# BR2_PACKAGE_VALGRIND is not set
-
-#
-# Other stuff
-#
-# BR2_PACKAGE_AT is not set
-# BR2_PACKAGE_BERKELEYDB is not set
-# BR2_PACKAGE_BSDIFF is not set
-# BR2_PACKAGE_CUPS is not set
-# BR2_PACKAGE_CUSTOMIZE is not set
-# BR2_PACKAGE_DASH is not set
-# BR2_PACKAGE_FILE is not set
-# BR2_PACKAGE_GAMIN is not set
-# BR2_PACKAGE_ICU is not set
-# BR2_PACKAGE_IPKG is not set
-# BR2_PACKAGE_KEXEC is not set
-# BR2_PACKAGE_LESS is not set
-# BR2_PACKAGE_LIBDAEMON is not set
-# BR2_PACKAGE_LIBELF is not set
-# BR2_PACKAGE_LIBEVENT is not set
-# BR2_PACKAGE_LIBFLOAT is not set
-# BR2_PACKAGE_LIBGCRYPT is not set
-# BR2_PACKAGE_LIBGPG_ERROR is not set
-# BR2_PACKAGE_LIBLOCKFILE is not set
-# BR2_PACKAGE_LIBSYSFS is not set
-# BR2_PACKAGE_LOCKFILE_PROGS is not set
-# BR2_PACKAGE_LSOF is not set
-# BR2_PACKAGE_LTP-TESTSUITE is not set
-# BR2_PACKAGE_LTRACE is not set
-# BR2_PACKAGE_LTT is not set
-# BR2_PACKAGE_MODULE_INIT_TOOLS is not set
-# BR2_PACKAGE_MODUTILS is not set
-# BR2_PACKAGE_NG_SPICE_REWORK is not set
-# BR2_PACKAGE_PORTAGE is not set
-# BR2_PACKAGE_PROCPS is not set
-# BR2_PACKAGE_PSMISC is not set
-# BR2_PACKAGE_SQLITE is not set
-# BR2_PACKAGE_STARTUP_NOTIFICATION is not set
-# BR2_PACKAGE_STRACE is not set
-# BR2_PACKAGE_SUDO is not set
-# BR2_PACKAGE_SYSKLOGD is not set
-# BR2_PACKAGE_SYSVINIT is not set
-# BR2_PACKAGE_TINYLOGIN is not set
-# BR2_PACKAGE_UTIL-LINUX is not set
-# BR2_PACKAGE_WHICH is not set
 BR2_TEXTEDIT_SUPPORT=y
-# BR2_PACKAGE_ED is not set
-# BR2_PACKAGE_NANO is not set
-# BR2_PACKAGE_UEMACS is not set
-# BR2_PACKAGE_VIM is not set
 BR2_NETWORK_SUPPORT=y
-
-#
-# Networking applications
-#
-
-#
-# argus		- disabled (requires libpcap)
-#
-# BR2_PACKAGE_AVAHI is not set
-# BR2_PACKAGE_BOA is not set
-# BR2_PACKAGE_BIND is not set
-# BR2_PACKAGE_BRIDGE is not set
-# BR2_PACKAGE_CURL is not set
-# BR2_PACKAGE_LIBCURL is not set
-# BR2_PACKAGE_ISC_DHCP is not set
-# BR2_PACKAGE_DNSMASQ is not set
-# BR2_PACKAGE_DROPBEAR is not set
-# BR2_PACKAGE_ETHTOOL is not set
-# BR2_PACKAGE_HASERL is not set
-# BR2_PACKAGE_IRDA_UTILS is not set
-# BR2_PACKAGE_IPERF is not set
-# BR2_PACKAGE_IPROUTE2 is not set
-
-#
-# ipsec-tools	- disabled (requires openssl, flex and the flex library (libfl.a) )
-#
-# BR2_PACKAGE_IPTABLES is not set
-# BR2_PACKAGE_KISMET is not set
-# BR2_PACKAGE_L2TP is not set
-# BR2_PACKAGE_LIBCGI is not set
-# BR2_PACKAGE_LIBCGICC is not set
-# BR2_PACKAGE_LIBEXOSIP2 is not set
-# BR2_PACKAGE_LIBOSIP2 is not set
-# BR2_PACKAGE_LIBPCAP is not set
-# BR2_PACKAGE_LINKS is not set
-# BR2_PACKAGE_LRZSZ is not set
-# BR2_PACKAGE_MDNSRESPONDER is not set
-# BR2_PACKAGE_MICROCOM is not set
-# BR2_PACKAGE_MROUTED is not set
-# BR2_PACKAGE_MUTT is not set
-# BR2_PACKAGE_NBD is not set
-# BR2_PACKAGE_NCFTP is not set
-# BR2_PACKAGE_NETCAT is not set
-# BR2_PACKAGE_NETKITBASE is not set
-# BR2_PACKAGE_NETKITTELNET is not set
-# BR2_PACKAGE_NETPLUG is not set
-# BR2_PACKAGE_NETSNMP is not set
-
-#
-# nfs-utils requires a toolchain with 'Enable RPC' selected
-#
-# BR2_PACKAGE_NTP is not set
-# BR2_PACKAGE_OLSR is not set
-# BR2_PACKAGE_OPENNTPD is not set
-# BR2_PACKAGE_OPENSSH is not set
-# BR2_PACKAGE_OPENSSL is not set
-# BR2_PACKAGE_OPENVPN is not set
-# BR2_PACKAGE_OPENSWAN is not set
-
-#
-# portmap requires a toolchain with 'Enable RPC' selected
-#
-# BR2_PACKAGE_PPPD is not set
-# BR2_PACKAGE_RP_PPPOE is not set
-# BR2_PACKAGE_PPTP_LINUX is not set
-# BR2_PACKAGE_PROFTPD is not set
-# BR2_PACKAGE_QUAGGA is not set
-
-#
-# quagga suite
-#
-# BR2_PACKAGE_QUAGGA_ZEBRA is not set
-# BR2_PACKAGE_QUAGGA_BGPD is not set
-# BR2_PACKAGE_QUAGGA_RIPD is not set
-# BR2_PACKAGE_QUAGGA_RIPNGD is not set
-# BR2_PACKAGE_QUAGGA_OSPFD is not set
-# BR2_PACKAGE_QUAGGA_WATCHQUAGGA is not set
-# BR2_PACKAGE_QUAGGA_ISISD is not set
-# BR2_PACKAGE_RSYNC is not set
-# BR2_PACKAGE_SAMBA is not set
-# BR2_PACKAGE_SOCAT is not set
-# BR2_PACKAGE_STUNNEL is not set
-# BR2_PACKAGE_TCPDUMP is not set
-# BR2_PACKAGE_DHCPDUMP is not set
-# BR2_PACKAGE_TFTPD is not set
-# BR2_PACKAGE_LIGHTTPD is not set
-# BR2_PACKAGE_THTTPD is not set
-# BR2_PACKAGE_TINYHTTPD is not set
-# BR2_PACKAGE_TN5250 is not set
-# BR2_PACKAGE_TTCP is not set
-# BR2_PACKAGE_UDPCAST is not set
-
-#
-# vpnc		- disabled (requires libgcrypt and libgpg_error)
-#
-# BR2_PACKAGE_VTUN is not set
-# BR2_PACKAGE_WEBIF is not set
-# BR2_PACKAGE_WGET is not set
-# BR2_PACKAGE_WIRELESS_TOOLS is not set
 BR2_BLOCKDEV_SUPPORT=y
-
-#
-# dbus not available (need expat or libxml2)
-#
-# BR2_PACKAGE_DM is not set
-# BR2_PACKAGE_DMRAID is not set
-# BR2_PACKAGE_E2FSPROGS is not set
-# BR2_PACKAGE_FCONFIG is not set
-# BR2_PACKAGE_FIS is not set
-# BR2_PACKAGE_LIBFUSE is not set
-# BR2_PACKAGE_GADGETFS_TEST is not set
-# BR2_PACKAGE_HAL is not set
-# BR2_PACKAGE_HDPARM is not set
-# BR2_PACKAGE_HOTPLUG is not set
-# BR2_PACKAGE_HWDATA is not set
-# BR2_PACKAGE_IOSTAT is not set
-# BR2_PACKAGE_LIBAIO is not set
-# BR2_PACKAGE_LIBRAW1394 is not set
-# BR2_PACKAGE_LIBUSB is not set
-# BR2_PACKAGE_LM_SENSORS is not set
-# BR2_PACKAGE_LVM2 is not set
-# BR2_PACKAGE_MDADM is not set
-# BR2_PACKAGE_MEMTESTER is not set
-# BR2_PACKAGE_MKDOSFS is not set
-# BR2_PACKAGE_MTD is not set
-# BR2_PACKAGE_NTFS-3G is not set
-# BR2_PACKAGE_PCIUTILS is not set
-# BR2_PACKAGE_RAIDTOOLS is not set
-# BR2_PACKAGE_SETSERIAL is not set
-# BR2_PACKAGE_SFDISK is not set
-# BR2_PACKAGE_SMARTMONTOOLS is not set
-# BR2_PACKAGE_UDEV is not set
-# BR2_PACKAGE_USBMOUNT is not set
-# BR2_PACKAGE_USBUTILS is not set
-# BR2_PACKAGE_WIPE is not set
-# BR2_PACKAGE_XFSPROGS is not set
 BR2_AUDIO_SUPPORT=y
-# BR2_PACKAGE_ALSA_LIB is not set
-
-#
-# asterisk	- disabled (required openssl and mpg123)
-#
-# BR2_PACKAGE_AUMIX is not set
-# BR2_PACKAGE_LIBMAD is not set
-# BR2_PACKAGE_LIBOGG is not set
-# BR2_PACKAGE_LIBSNDFILE is not set
-
-#
-# libvorbis requires the package libogg to build
-#
-# BR2_PACKAGE_MADPLAY is not set
-# BR2_PACKAGE_MPG123 is not set
-# BR2_PACKAGE_SPEEX is not set
-# BR2_PACKAGE_FESTIVAL is not set
 BR2_GRAPHIC_SUPPORT=y
-
-#
-# text rendering libraries
-#
-# BR2_PACKAGE_NCURSES is not set
-# BR2_PACKAGE_NEWT is not set
-# BR2_PACKAGE_SLANG is not set
-
-#
-# text rendering applications
-#
-# BR2_PACKAGE_DIALOG is not set
-
-#
-# graphic libraries
-#
-# BR2_PACKAGE_DIRECTFB is not set
-# BR2_PACKAGE_IMAGEMAGICK is not set
-# BR2_PACKAGE_JPEG is not set
-# BR2_PACKAGE_LIBPNG is not set
-# BR2_PACKAGE_LIBUNGIF is not set
-# BR2_PACKAGE_SDL is not set
-# BR2_PACKAGE_SDL_MIXER is not set
-# BR2_PACKAGE_SDL_TTF is not set
-# BR2_PACKAGE_TIFF is not set
-
-#
-# busybox graphic applications
-#
-
-#
-# --> (May be broken in busybox)
-#
-# BR2_PACKAGE_FBV is not set
-# BR2_PACKAGE_FBSET is not set
-
-#
-# other GUIs
-#
-# BR2_PACKAGE_QTE is not set
-# BR2_PACKAGE_QTOPIA4 is not set
 BR2_PACKAGE_XSERVER_none=y
-# BR2_PACKAGE_XSERVER_x11r7 is not set
-# BR2_PACKAGE_XSERVER_xorg is not set
-# BR2_PACKAGE_XSERVER_tinyx is not set
 BR2_X11_PREFIX="/usr"
-
-#
-# X libraries and helper libraries
-#
-
-#
-# atk		- disabled (requires libglib2)
-#
-# BR2_PACKAGE_PANGO is not set
-# BR2_PACKAGE_LIBDRM is not set
-# BR2_PACKAGE_LIBGLIB12 is not set
-# BR2_PACKAGE_LIBGLIB2 is not set
-# BR2_PACKAGE_LIBSEXY is not set
-
-#
-# fltk		- disabled (requires Xorg(7))
-#
-# BR2_PACKAGE_OPENMOTIF is not set
-# BR2_PACKAGE_FONTCONFIG is not set
-# BR2_PACKAGE_FREETYPE is not set
-# BR2_PACKAGE_TSLIB is not set
-# BR2_PACKAGE_WEBKIT is not set
-
-#
-# X Window managers
-#
-# BR2_PACKAGE_MATCHBOX is not set
-
-#
-# blackbox		- disabled (requires Xorg(7))
-#
-
-#
-# X applications
-#
-# BR2_PACKAGE_ALSAMIXERGUI is not set
-
-#
-# dillo		- disabled (requires jpeg,libglib12,libgtk12,zlib,libpng and Xorg(7))
-#
-# BR2_PACKAGE_DOCKER is not set
-# BR2_PACKAGE_GQVIEW is not set
-# BR2_PACKAGE_LEAFPAD is not set
-
-#
-# midori		- disabled (requires Xorg(7))
-#
-# BR2_PACKAGE_PCMANFM is not set
-# BR2_PACKAGE_SYLPHEED is not set
-# BR2_PACKAGE_TORSMO is not set
-# BR2_PACKAGE_X11VNC is not set
-# BR2_PACKAGE_XPDF is not set
-# BR2_PACKAGE_XSTROKE is not set
-# BR2_PACKAGE_XVKBD is not set
-
-#
-# Video libraries/codecs and applications
-#
-# BR2_PACKAGE_MPLAYER is not set
 BR2_COMPRESSOR_SUPPORT=y
-# BR2_PACKAGE_GZIP is not set
-# BR2_PACKAGE_LZO is not set
-# BR2_PACKAGE_LZMA_TARGET is not set
-# BR2_PACKAGE_LZMA_HOST is not set
-# BR2_PACKAGE_ZLIB is not set
 BR2_SCRIPTING_SUPPORT=y
-
-#
-# lua		- disabled (requires readline and ncurses)
-#
-# BR2_PACKAGE_MICROPERL is not set
-# BR2_PACKAGE_PYTHON is not set
-# BR2_PACKAGE_RUBY is not set
-# BR2_PACKAGE_TCL is not set
-# BR2_PACKAGE_PHP is not set
 BR2_XML_SUPPORT=y
-# BR2_PACKAGE_EXPAT is not set
-# BR2_PACKAGE_EZXML is not set
-# BR2_PACKAGE_LIBXML2 is not set
-
-#
-# libxslt	- disabled (requires pkgconfig)
-#
-# BR2_PACKAGE_XERCES is not set
 BR2_JAVA_SUPPORT=y
-# BR2_PACKAGE_CLASSPATH is not set
 BR2_GAMES=y
-# BR2_PACKAGE_LXDOOM is not set
-# BR2_PACKAGE_LXDOOM_WAD is not set
-# BR2_PACKAGE_GNUCHESS is not set
-# BR2_PACKAGE_XBOARD is not set
-# BR2_PACKAGE_RUBIX is not set
-# BR2_PACKAGE_MAGICCUBE4D is not set
-# BR2_PACKAGE_VICE is not set
-
-#
-# Target filesystem options
-#
-
-#
-# filesystem for target device
-#
-# BR2_TARGET_ROOTFS_CRAMFS is not set
-# BR2_TARGET_ROOTFS_CLOOP is not set
-# BR2_TARGET_ROOTFS_EXT2 is not set
-# BR2_TARGET_ROOTFS_EXT2_NONE is not set
-# BR2_TARGET_ROOTFS_EXT2_GZIP is not set
-# BR2_TARGET_ROOTFS_EXT2_BZIP2 is not set
-# BR2_TARGET_ROOTFS_EXT2_LZMA is not set
-# BR2_TARGET_ROOTFS_JFFS2 is not set
-# BR2_TARGET_ROOTFS_UBIFS is not set
-# BR2_TARGET_ROOTFS_SQUASHFS is not set
-# BR2_TARGET_ROOTFS_TAR is not set
-# BR2_TARGET_ROOTFS_CPIO is not set
-# BR2_TARGET_ROOTFS_INITRAMFS is not set
-# BR2_TARGET_ROOTFS_ROMFS is not set
-
-#
-# bootloader for target device
-#
-# BR2_TARGET_YABOOT is not set
-# BR2_TARGET_UBOOT is not set
-
-#
-# Kernel
-#
 BR2_KERNEL_none=y
-# BR2_KERNEL_LINUX_ADVANCED is not set
-# BR2_KERNEL_LINUX is not set
-# BR2_KERNEL_HURD is not set
-# BR2_PACKAGE_LINUX is not set
 
+
+
+Thanks.
 -- 
-Bye, Peter Korsgaard
+Guillaume Dargaud
+http://www.gdargaud.net/Antarctica/
