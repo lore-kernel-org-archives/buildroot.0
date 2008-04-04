@@ -1,49 +1,68 @@
-From: Hans-Christian Egtvedt <hans-christian.egtvedt@atmel.com>
-Date: Fri, 04 Apr 2008 14:59:57 +0200
-Subject: [Buildroot] Flash for AT91RM9200
-In-Reply-To: <6090c5eb0804040554w3d675e90q52c6bd8724925374@mail.gmail.com>
-References: <039401c895a7$61f39304$85f0af0a@corp.atmel.com>
-	<6090c5eb0804040452s11dc749m4fb3c1e44c341295@mail.gmail.com>
-	<1207311272.1106.4.camel@localhost>
-	<6090c5eb0804040554w3d675e90q52c6bd8724925374@mail.gmail.com>
-Message-ID: <1207313997.1106.15.camel@localhost>
+From: Peter Korsgaard <jacmet@uclibc.org>
+Date: Fri, 04 Apr 2008 15:37:40 +0200
+Subject: [Buildroot] ARCH=ppc vs powerpc
+In-Reply-To: <0f4a01c8964f$bbc064b0$f52f9e86@LPSC0173W> (Guillaume Dargaud's
+	message of "Fri\, 4 Apr 2008 14\:30\:52 +0200")
+References: <0d2f01c894cc$1fb56540$f52f9e86@LPSC0173W>
+	<8763v071sq.fsf@macbook.be.48ers.dk> <20080402164154.GE9436@mx.loc>
+	<0ddc01c89583$84ecb960$f52f9e86@LPSC0173W>
+	<87ej9n2kj4.fsf@macbook.be.48ers.dk>
+	<0e8d01c89595$e3482140$f52f9e86@LPSC0173W>
+	<87bq4r0ybx.fsf@macbook.be.48ers.dk>
+	<0e9b01c895a0$47d11590$f52f9e86@LPSC0173W>
+	<87ej9mvygr.fsf@macbook.be.48ers.dk>
+	<0efa01c89632$9b7d9910$f52f9e86@LPSC0173W>
+	<8763uyufji.fsf@macbook.be.48ers.dk>
+	<0f2901c8963e$92fc82e0$f52f9e86@LPSC0173W>
+	<87ve2xubdp.fsf@macbook.be.48ers.dk>
+	<0f4a01c8964f$bbc064b0$f52f9e86@LPSC0173W>
+Message-ID: <874pahspuj.fsf@macbook.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Fri, 2008-04-04 at 14:54 +0200, Jorge S. wrote:
-> Hi Hans:
-> 
-> Thanks for your urgent reply. 
-> 
-> What do you think about a combo solution? 
-> 
-> - SPI Dataflash for booting
+>>>>> "Guillaume" == Guillaume Dargaud <dargaud@lpsc.in2p3.fr> writes:
 
-Does not work for AVR32 devices, AVR32 AP700X only supports booting from
-NOR flash. Will be changed in future devices though.
+ >> Ok. I don't have such an old GCC on my system so I cannot test. Maybe
+ >> you will have more luck if you select GCC 3.4.6 in buildroot instead?
 
-> - Some at least 128 MiB Flash for rootfs...
-> 
+ Guillaume> Trying this right now...
 
-Seems sane, depends on your application. I guess GUI with tons of
-graphics?
+ Guillaume> $ make
+ Guillaume> [...]
+ Guillaume> strip --strip-all -R .note -R .comment 
+ Guillaume> /home/guinevere/buildroot/build_powerpc/staging_dir/usr/bin/powerpc-linux-uclibc-addr2line 
+ Guillaume> /home/guinevere/buildroot/build_powerpc/staging_dir/usr/bin/powerpc-linux-uclibc-ar 
+ Guillaume> /home/guinevere/buildroot/build_powerpc/staging_dir/usr/bin/powerpc-linux-uclibc-as 
+ Guillaume> /home/guinevere/buildroot/build_powerpc/staging_dir/usr/bin/powerpc-linux-uclibc-c++filt 
+ Guillaume> /home/guinevere/buildroot/build_powerpc/staging_dir/usr/bin/powerpc-linux-uclibc-cpp 
+ Guillaume> /home/guinevere/buildroot/build_powerpc/staging_dir/usr/bin/powerpc-linux-uclibc-embedspu 
+ Guillaume> /home/guinevere/buildroot/build_powerpc/staging_dir/usr/bin/powerpc-linux-uclibc-gcc 
+ Guillaume> /home/guinevere/buildroot/build_powerpc/staging_dir/usr/bin/powerpc-linux-uclibc-gcc-3.4.6 
+ Guillaume> /home/guinevere/buildroot/build_powerpc/staging_dir/usr/bin/powerpc-linux-uclibc-gcov 
+ Guillaume> /home/guinevere/buildroot/build_powerpc/staging_dir/usr/bin/powerpc-linux-uclibc-gprof 
+ Guillaume> /home/guinevere/buildroot/build_powerpc/staging_dir/usr/bin/powerpc-linux-uclibc-ld 
+ Guillaume> /home/guinevere/buildroot/build_powerpc/staging_dir/usr/bin/powerpc-linux-uclibc-ldconfig 
+ Guillaume> /home/guinevere/buildroot/build_powerpc/staging_dir/usr/bin/powerpc-linux-uclibc-ldd 
+ Guillaume> /home/guinevere/buildroot/build_powerpc/staging_dir/usr/bin/powerpc-linux-uclibc-nm 
+ Guillaume> /home/guinevere/buildroot/build_powerpc/staging_dir/usr/bin/powerpc-linux-uclibc-objcopy 
+ Guillaume> /home/guinevere/buildroot/build_powerpc/staging_dir/usr/bin/powerpc-linux-uclibc-objdump 
+ Guillaume> /home/guinevere/buildroot/build_powerpc/staging_dir/usr/bin/powerpc-linux-uclibc-ranlib 
+ Guillaume> /home/guinevere/buildroot/build_powerpc/staging_dir/usr/bin/powerpc-linux-uclibc-readelf 
+ Guillaume> /home/guinevere/buildroot/build_powerpc/staging_dir/usr/bin/powerpc-linux-uclibc-size 
+ Guillaume> /home/guinevere/buildroot/build_powerpc/staging_dir/usr/bin/powerpc-linux-uclibc-strings 
+ Guillaume> /home/guinevere/buildroot/build_powerpc/staging_dir/usr/bin/powerpc-linux-uclibc-strip
+ Guillaume> strip: 
+ Guillaume> /home/guinevere/buildroot/build_powerpc/staging_dir/usr/bin/powerpc-linux-uclibc-embedspu: 
+ Guillaume> File format not recognized
 
-> Any known problem on the AVR32 world with big nand flashes? 
-> 
-
-I have heard one report on 2 GB NAND device being slow to mount, but
-that may be kernel JFFS2 related and/or extreme slow once when writing
-cleanmarkers problem.
-
-Others report 1 GB being fast and nifty.
-
-PS! I only work with AVR32 products, so I have little knowledge about
-the ARM line. I guess Ulf can fill in the missing spots.
-
+So your strip doesn't seem to like to strip the
+powerpc-linux-uclibc-embedspu shellscript (cannot blame it) - Could
+you try setting GCC_STRIP_HOST_BINARIES to something else than true in
+toolchain/gcc/gcc-uclibc-3.x.mk or alternative add %-embedspu to the
+filter-out in line 289?
 
 -- 
-With kind regards,
-Hans-Christian Egtvedt, Applications Engineer
+Bye, Peter Korsgaard
