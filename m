@@ -1,18 +1,8 @@
-From: Ma Andrew <andrewma83@hotmail.com>
-Date: Thu, 3 Apr 2008 22:36:07 -0700
-Subject: [Buildroot] Error when compiling Buildroot to create
-	.iso	(cannot stat /.../i386-linux-2.6.24-20
-In-Reply-To: <1207284485.3964.26.camel@nigel-x60>
-References: <326f33790804031358n63fd21bs5ee753b194d3a89b@mail.gmail.com>
-	<BLU136-W8787D45D6697B1F3539C3C3F70@phx.gbl>
-	<326f33790804031513n230462e5hb65b1705dafabace@mail.gmail.com>
-	<BLU136-W3608C3619B673FB8C4FC10C3F70@phx.gbl>
-	<326f33790804031646w6a11671fgba1f50aba995f450@mail.gmail.com>
-	<BLU136-W408F3BBAFC783BCAF49646C3F70@phx.gbl>
-	<326f33790804031722y751e20fbp90953425cc54b247@mail.gmail.com>
-	<BLU136-W23D741198BD0E52C39F5A9C3F60@phx.gbl> 
-	<1207284485.3964.26.camel@nigel-x60>
-Message-ID: <BLU136-W53B177A876BAF0750E74CCC3F60@phx.gbl>
+From: J. Spence <j3mail-busybox@rearden.com>
+Date: Thu, 3 Apr 2008 22:52:28 -0700 (PDT)
+Subject: [Buildroot] svn commit: trunk/buildroot
+In-Reply-To: <9305ca410803310204g6fc64204t557a88c751472a9a@mail.gmail.com>
+Message-ID: <2565792.95771207288348335.JavaMail.root@zmail.rearden.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -20,38 +10,29 @@ Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
 
-Hello Nigel,
-
-I didn't have a chance to compile from a fresh checkout copy, and only do a "svn update" when I see your email.  The copy that I compiled is checked out from yesterday.  The revision that I am in is 21630.  I am still suffering from the same problem if the sym link is removed.
-
-Thanks
---Andrew
-
-
-----------------------------------------
-> Subject: Re: [Buildroot] Error when compiling Buildroot to create .iso	(cannot stat /.../i386-linux-2.6.24-20
-> From: nkukard at lbsd.net
-> To: andrewma83 at hotmail.com
-> CC: reddyac at gmail.com; buildroot at uclibc.org
-> Date: Fri, 4 Apr 2008 04:48:05 +0000
+----- "Peter Korsgaard" <jacmet@uclibc.org> wrote:
+> On Fri, Mar 28, 2008 at 9:42 AM, Peter Korsgaard <jacmet@uclibc.org>
+> wrote:
+> > >>>>> "jspence" == jspence  <jspence@uclibc.org> writes:
 > 
+> >   jspence> @@ -124,6 +129,12 @@
+> >   jspence>  ifndef FCFLAGS_FOR_BUILD
+> >   jspence>  FCFLAGS_FOR_BUILD:=-g -O2
+> >   jspence>  endif
+> >   jspence> +
+> >   jspence> +ifeq ($(BR2_HAVE_HOST_CCACHE),y)
+> >   jspence> +HOSTCC:=$(HOSTCCACHE) $(HOSTCC)
+> >   jspence> +HOSTCXX:=$(HOSTCCACHE) $(HOSTCXX)
+> >   jspence> +endif
+> >
+> >  This is no good for the people (like me) that already use ccache
+> by
+> >  prepending /usr/lib/ccache to the PATH.
+> >
+> >  Maybe you should simply add it as another option to the existing
+> >  ccache Config.in?
 > 
->> cp /mnt/lab/buildroot/binaries/zero/i686-linux-2.6.24-20080404 /mnt/lab/buildroot/build_i686/iso9660/kernel
->> cp: cannot stat
->> `/mnt/lab/buildroot/binaries/zero/i686-linux-2.6.24-20080404': No such
->> file or directory
->> 
->> You may want to see what
->> is /mnt/lab/buildroot/binaries/zero/i686-linux-2.6.24-20080404.  It
->> turns out to
->> be /mnt/lab/buildroot/binaries/zero/i686-linux-2.6.24-20080404
->> -> ../../x86/boot/bzImage
-> 
-> I submitted a patch to fix this afaik (commit r21441). Are you using
-> latest svn?
-> 
-> -N
+> This breaks the build for ccache users, so I'm reverting the hunk for
+> now. Please commit a fixed version of it.
 
-_________________________________________________________________
-??? Windows Live Messenger ? Hotmail????????????? ? Windows Live for Mobile 
-http://www.msn.com.tw/msnmobile/ 
+Oops, my fault.  We don't have a /usr/lib/ccache on our big build machine, so we did it the way you see it in the patch.  It didn't occur to me to change the path instead, so I think we'll do that on our build machine.
