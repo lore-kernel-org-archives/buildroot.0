@@ -1,46 +1,99 @@
-From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Fri, 04 Apr 2008 13:07:14 +0200
-Subject: [Buildroot] ARCH=ppc vs powerpc
-In-Reply-To: <0f2901c8963e$92fc82e0$f52f9e86@LPSC0173W> (Guillaume Dargaud's
-	message of "Fri\, 4 Apr 2008 12\:28\:02 +0200")
-References: <0d2f01c894cc$1fb56540$f52f9e86@LPSC0173W>
-	<8763v071sq.fsf@macbook.be.48ers.dk> <20080402164154.GE9436@mx.loc>
-	<0ddc01c89583$84ecb960$f52f9e86@LPSC0173W>
-	<87ej9n2kj4.fsf@macbook.be.48ers.dk>
-	<0e8d01c89595$e3482140$f52f9e86@LPSC0173W>
-	<87bq4r0ybx.fsf@macbook.be.48ers.dk>
-	<0e9b01c895a0$47d11590$f52f9e86@LPSC0173W>
-	<87ej9mvygr.fsf@macbook.be.48ers.dk>
-	<0efa01c89632$9b7d9910$f52f9e86@LPSC0173W>
-	<8763uyufji.fsf@macbook.be.48ers.dk>
-	<0f2901c8963e$92fc82e0$f52f9e86@LPSC0173W>
-Message-ID: <87ve2xubdp.fsf@macbook.be.48ers.dk>
+From: Jorge S. <jorgesolla@gmail.com>
+Date: Fri, 4 Apr 2008 13:52:24 +0200
+Subject: [Buildroot] Flash for AT91RM9200
+In-Reply-To: <039401c895a7$61f39304$85f0af0a@corp.atmel.com>
+References: <039401c895a7$61f39304$85f0af0a@corp.atmel.com>
+Message-ID: <6090c5eb0804040452s11dc749m4fb3c1e44c341295@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Guillaume" == Guillaume Dargaud <dargaud@lpsc.in2p3.fr> writes:
+Hi All:
 
-Hi,
+Regarding to this FLASH/Dataflash stuff...
 
- >> gcc version 4.1.3 20070831 (prerelease) (Debian 4.1.2-16)
+I'm now facing a new board desing based on the AT91SAM9260 or the AVR32, we
+are still on very early stages of the design.
 
- Guillaume> I'm on Scientific Linux, a clone of Red Hat.
+Our big doubts are those concerning the DataFlash and NAND/NOR flash
+selection.
 
- Guillaume> $ gcc -v
- Guillaume> Reading specs from /usr/lib/gcc/i386-redhat-linux/3.4.6/specs
- Guillaume> Configured with: 
- Guillaume> ../configure --prefix=/usr --mandir=/usr/share/man --infodir=/usr/share/info 
- Guillaume>  --enable-shared --enable-threads=posix --disable-checking --with-system-zlib 
- Guillaume>  --enable-__cxa_atexit --disable-libunwind-exceptions --enable-java-awt=gtk  
- Guillaume> --host=i386-redhat-linux
- Guillaume> Thread model: posix
- Guillaume> gcc version 3.4.6 20060404 (Red Hat 3.4.6-9)
+Since there are several of erratas on this CPUs,and a little bit confused.
+Can you please Ulf clarify what is working and what is not?
 
-Ok. I don't have such an old GCC on my system so I cannot test. Maybe
-you will have more luck if you select GCC 3.4.6 in buildroot instead?
+I'm planning to use *ONLY* nor/nand flash, and *not* use the Dataflash
+because we don't want to
+get constrained by storage capacity. So if we can use a BIG flash there's no
+need for a spi dataflash.
 
--- 
-Bye, Peter Korsgaard
+Is it possible to boot from nand (or nor) flash on the AVR32 and the
+AT91SAMxxxx series? if yes, can you please
+provide part numbers for known working chips?.
+
+Thanks in advance.
+
+
+On Thu, Apr 3, 2008 at 2:26 PM, Samuelsson, Ulf <ulf.samuelsson@atmel.com>
+wrote:
+
+>
+>
+> Hi you all!
+>
+> I'm looking for a NOR-Flash for a RM9200-based board, and i thought
+> maybe some of you could give some hints or experiences.
+> Basically it should be 128MByte size, with larger drop-in replacements
+> as a favorable option. As with all RM9200 parallel flash, must have CFI,
+> and must be available in a non-BGA package.
+> For a first guess, i found the Spansion S29G128P - any experiences with
+> that one? How well is it supported by the kernel, or are there any
+> obvious caveats that i overlooked now?
+>
+> Greetz, Joe
+>
+> > The AT91RM9200 has
+>     26 Adress pins (A0-A5)
+>     but A24 is nol  available.
+>     (See Errata)
+>     This gives you a 16 MB
+>     linear adressrange.
+>     Since A25 is available
+>     you can have 2 x 16 MB
+>     spaces with a 16 MB
+>     hole in between.
+>
+>    However, I suspect that
+>    you only plan 128 Mbit
+>    and not 128 MByte
+>    and then this is not
+>    a problem
+>
+>    If you are starting a design
+>    now,You should perhaps
+>    consider the AT91SAM9260
+>    or  the  AT91SAMG20
+>
+>
+> --
+> Sepp "ZaP" Holzmayr
+>
+> please reply to: zentrale.at.work at gmail.com
+> "Never underestimate the bandwidth of a freight train full of DAT tapes.
+> Only the round-trip is a little suboptimal."
+> _______________________________________________
+> buildroot mailing list
+> buildroot at uclibc.org
+> http://busybox.net/mailman/listinfo/buildroot
+>
+>
+>
+> _______________________________________________
+> buildroot mailing list
+> buildroot at uclibc.org
+> http://busybox.net/mailman/listinfo/buildroot
+>
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: http://busybox.net/lists/buildroot/attachments/20080404/8534ba04/attachment.htm 
