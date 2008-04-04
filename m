@@ -1,34 +1,32 @@
-From: Ulf Samuelsson <ulf.samuelsson@atmel.com>
-Date: Fri, 4 Apr 2008 17:24:13 +0200
-Subject: [Buildroot] svn commit: trunk/buildroot/target/linux
-References: <20080331054204.ECD433C3A5@busybox.net> <47F217F5.5030908@eclis.ch>
-	<01df01c8950d$9890a970$0e0514ac@atmel.com>
-	<47F47ECD.10901@eclis.ch>
-Message-ID: <024701c89668$ea422df0$080514ac@atmel.com>
+From: Guillaume Dargaud <dargaud@lpsc.in2p3.fr>
+Date: Fri, 4 Apr 2008 18:00:00 +0200
+Subject: [Buildroot] ARCH=ppc vs powerpc
+References: <87ve2xubdp.fsf@macbook.be.48ers.dk>
+	<0f4a01c8964f$bbc064b0$f52f9e86@LPSC0173W>
+	<20080404141058.GA30388@mx.loc>
+Message-ID: <0f8401c8966c$f30cb5f0$f52f9e86@LPSC0173W>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-> 
->> Choose another kernel version like 2.6.22.1.
->> I have a fix ready, but I am having problems
->> with svn access from where I am at the moment.
-> 
-> Thanks Ulf for your answer. It work well with the 2.6.22.1.
-> 
-> I still have the /tftpboot issue. Il will make a new update to my 
-> proposed patches.
-> 
-> Regards,
-> --
-> Jean-Christian de Rivaz
-> 
->
-I have a fix for that as well, which will be committed as soon
-as reach a network which does not filter svn commits :-(
+>>> Ok. I don't have such an old GCC on my system so I cannot test. Maybe
+>>> you will have more luck if you select GCC 3.4.6 in buildroot instead?
+
+OK, big system upgrade, I'm now at gcc 4.1.2 and I seem to be able to 
+compile so far (haven't tried the kernel yet).
+
+One thing to note: changing options in menuconfig is often poorly reflected 
+in the 'makes' underneath and no amount of 'make clean' or 'make distclean' 
+can make it right. Restarting from a clean svn and copying the .config file 
+works though, but that's rather a big waste of time like in the case of 
+strip/sstrip/none for instance.
 
 
-Best Regards
-Ulf Samuelsson
+Side question: where to best learn how to make a bootable ACE file for the 
+Xilinx architecture from a kernel and, I assume, a bootloader ? Or in other 
+words, how do I use the U-Boot option of buildroot ?
+-- 
+Guillaume Dargaud
+http://www.gdargaud.net/
