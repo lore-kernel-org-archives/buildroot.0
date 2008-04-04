@@ -1,8 +1,19 @@
-From: J. Spence <j3mail-busybox@rearden.com>
-Date: Thu, 3 Apr 2008 22:52:28 -0700 (PDT)
-Subject: [Buildroot] svn commit: trunk/buildroot
-In-Reply-To: <9305ca410803310204g6fc64204t557a88c751472a9a@mail.gmail.com>
-Message-ID: <2565792.95771207288348335.JavaMail.root@zmail.rearden.com>
+From: Nigel Kukard <nkukard@lbsd.net>
+Date: Fri, 04 Apr 2008 06:26:37 +0000
+Subject: [Buildroot] Error when compiling Buildroot to create
+	.iso	(cannot stat /.../i386-linux-2.6.24-20
+In-Reply-To: <BLU136-W53B177A876BAF0750E74CCC3F60@phx.gbl>
+References: <326f33790804031358n63fd21bs5ee753b194d3a89b@mail.gmail.com>
+	<BLU136-W8787D45D6697B1F3539C3C3F70@phx.gbl>
+	<326f33790804031513n230462e5hb65b1705dafabace@mail.gmail.com>
+	<BLU136-W3608C3619B673FB8C4FC10C3F70@phx.gbl>
+	<326f33790804031646w6a11671fgba1f50aba995f450@mail.gmail.com>
+	<BLU136-W408F3BBAFC783BCAF49646C3F70@phx.gbl>
+	<326f33790804031722y751e20fbp90953425cc54b247@mail.gmail.com>
+	<BLU136-W23D741198BD0E52C39F5A9C3F60@phx.gbl>
+	<1207284485.3964.26.camel@nigel-x60>
+	<BLU136-W53B177A876BAF0750E74CCC3F60@phx.gbl>
+Message-ID: <1207290397.2660.1.camel@nigel-x60>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -10,29 +21,21 @@ Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
 
------ "Peter Korsgaard" <jacmet@uclibc.org> wrote:
-> On Fri, Mar 28, 2008 at 9:42 AM, Peter Korsgaard <jacmet@uclibc.org>
-> wrote:
-> > >>>>> "jspence" == jspence  <jspence@uclibc.org> writes:
+On Thu, 2008-04-03 at 22:36 -0700, Ma Andrew wrote:
+> Hello Nigel,
 > 
-> >   jspence> @@ -124,6 +129,12 @@
-> >   jspence>  ifndef FCFLAGS_FOR_BUILD
-> >   jspence>  FCFLAGS_FOR_BUILD:=-g -O2
-> >   jspence>  endif
-> >   jspence> +
-> >   jspence> +ifeq ($(BR2_HAVE_HOST_CCACHE),y)
-> >   jspence> +HOSTCC:=$(HOSTCCACHE) $(HOSTCC)
-> >   jspence> +HOSTCXX:=$(HOSTCCACHE) $(HOSTCXX)
-> >   jspence> +endif
-> >
-> >  This is no good for the people (like me) that already use ccache
-> by
-> >  prepending /usr/lib/ccache to the PATH.
-> >
-> >  Maybe you should simply add it as another option to the existing
-> >  ccache Config.in?
-> 
-> This breaks the build for ccache users, so I'm reverting the hunk for
-> now. Please commit a fixed version of it.
+> I didn't have a chance to compile from a fresh checkout copy, and only do a "svn update" when I see your email.  The copy that I compiled is checked out from yesterday.  The revision that I am in is 21630.  I am still suffering from the same problem if the sym link is removed.
 
-Oops, my fault.  We don't have a /usr/lib/ccache on our big build machine, so we did it the way you see it in the patch.  It didn't occur to me to change the path instead, so I think we'll do that on our build machine.
+Nuke all the files in the destination dir, if the symlink is there its
+not going to copy over the dereferenced file in any case.
+
+So nuke all the files, and rebuild.
+
+-N
+-------------- next part --------------
+A non-text attachment was scrubbed...
+Name: not available
+Type: application/pgp-signature
+Size: 189 bytes
+Desc: This is a digitally signed message part
+Url : http://busybox.net/lists/buildroot/attachments/20080404/51726774/attachment.pgp 
