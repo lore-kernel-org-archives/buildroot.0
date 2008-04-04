@@ -1,152 +1,100 @@
-From: jacmet at uclibc.org <jacmet@uclibc.org>
-Date: Sun,  6 Apr 2008 12:59:22 -0700 (PDT)
-Subject: [Buildroot] svn commit: trunk/buildroot/package:  input-tools
-Message-ID: <20080406195922.A37283C484@busybox.net>
+From: Gururaja Hebbar K R <gururajakr@sanyo.co.in>
+Date: Fri, 4 Apr 2008 13:58:36 +0530
+Subject: [Buildroot] svn commit: trunk/buildroot/package/avahi
+References: <20080331142838.8386C3C4EF@busybox.net><16477104.post@talk.nabble.com>
+	<87zlsavzwx.fsf@macbook.be.48ers.dk>
+Message-ID: <5BF78BCE8D9BF14A83F836BD9E3916BA0DDB2A@blrms.slti.sanyo.co.in>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Author: jacmet
-Date: 2008-04-06 12:59:21 -0700 (Sun, 06 Apr 2008)
-New Revision: 21657
-
-Log:
-buildroot: add input-tools package (evtest, inputattach, jscal, jstest)
+Hi,
 
 
-Added:
-   trunk/buildroot/package/input-tools/
-   trunk/buildroot/package/input-tools/Config.in
-   trunk/buildroot/package/input-tools/input-tools.mk
+>Do you still have that problem now?
+i have attached the output of my make world below. this happens even if
+i type "make world" continuously like 5 times. As you said, if fakeroot
+updates the timestamp of ncurses and zlib libraries, make target simply
+runs targets $(TARGET_DIR)/lib/libncurses.so.$(NCURSES_VERSION) &
+$(TARGET_DIR)/usr/lib/libz.so.$(ZLIB_VERSION) irrespective of whether it
+is actually needed.
 
-Modified:
-   trunk/buildroot/package/Config.in
 
+> > Hebbar> ncurses: $(TARGET_DIR)/lib/libncurses.so.$(NCURSES_VERSION)
+> 
+> > Hebbar> zlib: uclibc $(TARGET_DIR)/usr/lib/libz.so.$(ZLIB_VERSION)
+> 
+> > Hebbar> libusb: uclibc $(TARGET_DIR)/$(LIBUSB_BINARY)
+> 
+> No, this seems correct to me. We need the files installed in
+TARGET_DIR, so they cannot depend on the files in STAGING_DIR.
 
-Changeset:
-Modified: trunk/buildroot/package/Config.in
-===================================================================
---- trunk/buildroot/package/Config.in	2008-04-06 13:32:59 UTC (rev 21656)
-+++ trunk/buildroot/package/Config.in	2008-04-06 19:59:21 UTC (rev 21657)
-@@ -240,6 +240,7 @@
- source "package/hotplug/Config.in"
- endif
- source "package/hwdata/Config.in"
-+source "package/input-tools/Config.in"
- source "package/iostat/Config.in"
- source "package/libaio/Config.in"
- source "package/libraw1394/Config.in"
+I know this files need to be installed in target dir but i am little
+confused about the target options points to $(TARGET_DIR)/ instead of
+pointing to staging_dir
 
-Added: trunk/buildroot/package/input-tools/Config.in
-===================================================================
---- trunk/buildroot/package/input-tools/Config.in	                        (rev 0)
-+++ trunk/buildroot/package/input-tools/Config.in	2008-04-06 19:59:21 UTC (rev 21657)
-@@ -0,0 +1,34 @@
-+config BR2_PACKAGE_INPUT_TOOLS
-+	bool "input-tools"
-+	default n
-+	help
-+	  Tools for the Linux kernel input layer.
-+	  http://linuxconsole.sourceforge.net/
-+
-+config BR2_PACKAGE_INPUT_TOOLS_EVTEST
-+        bool "evtest"
-+        depends on BR2_PACKAGE_INPUT_TOOLS
-+        default y
-+        help
-+	  Input event interface test program.
-+
-+config BR2_PACKAGE_INPUT_TOOLS_INPUTATTACH
-+        bool "inputattach"
-+        depends on BR2_PACKAGE_INPUT_TOOLS
-+        default y
-+        help
-+	  Inputattach is used for attaching a serial line to the input layer.
-+
-+config BR2_PACKAGE_INPUT_TOOLS_JSCAL
-+        bool "jscal"
-+        depends on BR2_PACKAGE_INPUT_TOOLS
-+        default y
-+        help
-+	  Joystick calibration program.
-+
-+config BR2_PACKAGE_INPUT_TOOLS_JSTEST
-+        bool "jstest"
-+        depends on BR2_PACKAGE_INPUT_TOOLS
-+        default y
-+        help
-+	  Joystick test program.
+Thanks in advance
 
-Added: trunk/buildroot/package/input-tools/input-tools.mk
-===================================================================
---- trunk/buildroot/package/input-tools/input-tools.mk	                        (rev 0)
-+++ trunk/buildroot/package/input-tools/input-tools.mk	2008-04-06 19:59:21 UTC (rev 21657)
-@@ -0,0 +1,66 @@
-+#############################################################
-+#
-+# input-tools
-+#
-+#############################################################
-+
-+INPUT_TOOLS_VERSION:=20051019
-+INPUT_TOOLS_SOURCE:=joystick_$(INPUT_TOOLS_VERSION).orig.tar.gz
-+INPUT_TOOLS_PATCH:=joystick_$(INPUT_TOOLS_VERSION)-1.1.diff.gz
-+INPUT_TOOLS_SITE:=$(BR2_DEBIAN_MIRROR)/debian/pool/main/j/joystick/
-+INPUT_TOOLS_DIR:=$(BUILD_DIR)/joystick-$(INPUT_TOOLS_VERSION).orig
-+INPUT_TOOLS_CAT:=$(ZCAT)
-+
-+INPUT_TOOLS_TARGETS-y:=
-+
-+INPUT_TOOLS_TARGETS-$(BR2_PACKAGE_INPUT_TOOLS_EVTEST) += evtest
-+INPUT_TOOLS_TARGETS-$(BR2_PACKAGE_INPUT_TOOLS_INPUTATTACH) += inputattach
-+INPUT_TOOLS_TARGETS-$(BR2_PACKAGE_INPUT_TOOLS_JSCAL) += jscal
-+INPUT_TOOLS_TARGETS-$(BR2_PACKAGE_INPUT_TOOLS_JSTEST) += jstest
-+
-+INPUT_TOOLS_TARGETS := $(addprefix $(TARGET_DIR)/usr/bin/, $(INPUT_TOOLS_TARGETS-y))
-+INPUT_TOOLS_SOURCES := $(addprefix $(INPUT_TOOLS_DIR)/utils/, \
-+	$(addsuffix .c, $(INPUT_TOOLS_TARGETS-y)))
-+
-+$(DL_DIR)/$(INPUT_TOOLS_SOURCE):
-+	$(WGET) -P $(DL_DIR) $(INPUT_TOOLS_SITE)/$(@F)
-+
-+$(DL_DIR)/$(INPUT_TOOLS_PATCH):
-+	$(WGET) -P $(DL_DIR) $(INPUT_TOOLS_SITE)/$(@F)
-+
-+$(INPUT_TOOLS_DIR)/.unpacked: $(DL_DIR)/$(INPUT_TOOLS_SOURCE) $(DL_DIR)/$(INPUT_TOOLS_PATCH)
-+	$(INPUT_TOOLS_CAT) $(DL_DIR)/$(INPUT_TOOLS_SOURCE) | tar -C $(BUILD_DIR) $(TAR_OPTIONS) -
-+ifneq ($(INPUT_TOOLS_PATCH),)
-+	(cd $(INPUT_TOOLS_DIR) && $(INPUT_TOOLS_CAT) $(DL_DIR)/$(INPUT_TOOLS_PATCH) | patch -p1)
-+endif
-+	toolchain/patch-kernel.sh $(INPUT_TOOLS_DIR) package/input-tools/ \*.patch
-+	touch $@
-+
-+$(INPUT_TOOLS_SOURCES): $(INPUT_TOOLS_DIR)/.unpacked
-+
-+$(INPUT_TOOLS_DIR)/utils/%: $(INPUT_TOOLS_DIR)/utils/%.c
-+	$(TARGET_CC) $(TARGET_CFLAGS) -o $@ $^
-+
-+$(INPUT_TOOLS_TARGETS): $(TARGET_DIR)/usr/bin/%: $(INPUT_TOOLS_DIR)/utils/%
-+	cp -dpf $^ $@
-+	$(STRIPCMD) $(STRIP_STRIP_ALL) $@
-+
-+input-tools: uclibc $(INPUT_TOOLS_TARGETS)
-+
-+input-tools-source: $(DL_DIR)/$(INPUT_TOOLS_SOURCE) $(DL_DIR)/$(INPUT_TOOLS_PATCH)
-+
-+input-tools-unpacked: $(INPUT_TOOLS_DIR)/.unpacked
-+
-+input-tools-clean:
-+	rm -f $(INPUT_TOOLS_TARGETS)
-+
-+input-tools-dirclean:
-+	rm -rf $(INPUT_TOOLS_DIR)
-+#############################################################
-+#
-+# Toplevel Makefile options
-+#
-+#############################################################
-+ifeq ($(strip $(BR2_PACKAGE_INPUT_TOOLS)),y)
-+TARGETS+=input-tools
-+endif
+Regards
+Gururaja
+
+<snip>
+<snip>
+rm -rf /opt/buildroot/project_build_arm/uclibc/buildroot-config
+mkdir -p /opt/buildroot/project_build_arm/uclibc
+cp -dpRf package/config/buildroot-config
+/opt/buildroot/project_build_arm/uclibc/buildroot-config
+mkdir -p /opt/buildroot/project_build_arm/uclibc/root/usr/include
+cp -dpf /opt/buildroot/build_arm/ncurses-5.6/include/curses.h
+/opt/buildroot/project_build_arm/uclibc/root/usr/include/ncurses.h
+cp -dpf /opt/buildroot/build_arm/ncurses-5.6/include/ncurses_dll.h
+/opt/buildroot/project_build_arm/uclibc/root/usr/include/ncurses_dll.h
+cp -dpf /opt/buildroot/build_arm/ncurses-5.6/include/term.h
+/opt/buildroot/project_build_arm/uclibc/root/usr/include/
+cp -dpf /opt/buildroot/build_arm/ncurses-5.6/include/unctrl.h
+/opt/buildroot/project_build_arm/uclibc/root/usr/include/
+cp -dpf /opt/buildroot/build_arm/ncurses-5.6/include/termcap.h
+/opt/buildroot/project_build_arm/uclibc/root/usr/include/
+cp -dpf /opt/buildroot/build_arm/ncurses-5.6/lib/libncurses.a
+/opt/buildroot/project_build_arm/uclibc/root/usr/lib/
+(cd /opt/buildroot/project_build_arm/uclibc/root/usr/lib; \
+         ln -fs libncurses.a libcurses.a; \
+         ln -fs libncurses.a libtermcap.a; \
+        )
+(cd /opt/buildroot/project_build_arm/uclibc/root/usr/include; ln -fs
+ncurses.h curses.h)
+rm -f /opt/buildroot/project_build_arm/uclibc/root/lib/libncurses.so
+(cd /opt/buildroot/project_build_arm/uclibc/root/usr/lib; ln -fs
+../../lib/libncurses.so.5.6 libncurses.so)
+/opt/buildroot/build_arm/staging_dir/usr/bin/arm-linux-uclibcgnueabi-str
+ip --remove-section=.comment --remove-section=.note --strip-unneeded
+/opt/buildroot/project_build_arm/uclibc/root/lib/libncurses.so.5.6
+touch -c
+/opt/buildroot/project_build_arm/uclibc/root/usr/lib/libncurses.a
+mkdir -p /opt/buildroot/project_build_arm/uclibc/root/usr/include
+/opt/buildroot/project_build_arm/uclibc/root/usr/lib
+cp -dpf /opt/buildroot/build_arm/staging_dir/usr/include/zlib.h
+/opt/buildroot/project_build_arm/uclibc/root/usr/include/
+cp -dpf /opt/buildroot/build_arm/staging_dir/usr/include/zconf.h
+/opt/buildroot/project_build_arm/uclibc/root/usr/include/
+cp -dpf /opt/buildroot/build_arm/staging_dir/usr/lib/libz.a
+/opt/buildroot/project_build_arm/uclibc/root/usr/lib/
+rm -f /opt/buildroot/project_build_arm/uclibc/root/lib/libz.so
+/opt/buildroot/project_build_arm/uclibc/root/usr/lib/libz.so
+ln -sf libz.so.1.2.3
+/opt/buildroot/project_build_arm/uclibc/root/usr/lib/libz.so
+touch -c /opt/buildroot/project_build_arm/uclibc/root/usr/lib/libz.a
+rm -rf /opt/buildroot/project_build_arm/uclibc/root/usr/include
+find /opt/buildroot/project_build_arm/uclibc/root/usr/lib -name '*.a'
+-delete
+find /opt/buildroot/project_build_arm/uclibc/root/lib -name '*.a'
+-delete
+find /opt/buildroot/project_build_arm/uclibc/root/usr/lib -name '*.la'
+-delete
+find /opt/buildroot/project_build_arm/uclibc/root/lib -name '*.la'
+-delete
+<snip>
+<snip>
+<snip>
