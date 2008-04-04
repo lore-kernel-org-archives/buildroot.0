@@ -1,51 +1,27 @@
-From: jacmet at uclibc.org <jacmet@uclibc.org>
-Date: Fri,  4 Apr 2008 07:16:07 -0700 (PDT)
-Subject: [Buildroot] svn commit: trunk/buildroot/toolchain/gcc
-Message-ID: <20080404141607.119B83C3B0@busybox.net>
+From: Peter Korsgaard <jacmet@uclibc.org>
+Date: Fri, 04 Apr 2008 16:18:17 +0200
+Subject: [Buildroot] ARCH=ppc vs powerpc
+In-Reply-To: <20080404141058.GA30388@mx.loc> (Bernhard Fischer's message of
+	"Fri\, 4 Apr 2008 16\:10\:58 +0200")
+References: <87ve2xubdp.fsf@macbook.be.48ers.dk>
+	<0f4a01c8964f$bbc064b0$f52f9e86@LPSC0173W>
+	<20080404141058.GA30388@mx.loc>
+Message-ID: <8763uxr9ee.fsf@macbook.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Author: jacmet
-Date: 2008-04-04 07:16:06 -0700 (Fri, 04 Apr 2008)
-New Revision: 21636
+>>>>> "Bernhard" == Bernhard Fischer <rep.dot.nop@gmail.com> writes:
 
-Log:
-toolchain/gcc: do not try to strip *-embedspu
+Hi,
 
+ Bernhard> http://repo.or.cz/w/buildroot.git?a=commit;h=bae48dfcac2cfb5b25a6ca6addfb0ce16aacbade
 
-Modified:
-   trunk/buildroot/toolchain/gcc/gcc-uclibc-3.x.mk
-   trunk/buildroot/toolchain/gcc/gcc-uclibc-4.x.mk
+Ahh, like my suggestion.
 
+I've checked it into svn as well as r21636.
 
-Changeset:
-Modified: trunk/buildroot/toolchain/gcc/gcc-uclibc-3.x.mk
-===================================================================
---- trunk/buildroot/toolchain/gcc/gcc-uclibc-3.x.mk	2008-04-04 12:23:28 UTC (rev 21635)
-+++ trunk/buildroot/toolchain/gcc/gcc-uclibc-3.x.mk	2008-04-04 14:16:06 UTC (rev 21636)
-@@ -286,7 +286,7 @@
- 	fi
- 	# Strip the host binaries
- ifeq ($(GCC_STRIP_HOST_BINARIES),true)
--	strip --strip-all -R .note -R .comment $(filter-out %-gccbug,$(wildcard $(STAGING_DIR)/usr/bin/$(REAL_GNU_TARGET_NAME)-*))
-+	strip --strip-all -R .note -R .comment $(filter-out %-gccbug %-embedspu,$(wildcard $(STAGING_DIR)/usr/bin/$(REAL_GNU_TARGET_NAME)-*))
- endif
- 	# Make sure we have 'cc'.
- 	if [ ! -e $(STAGING_DIR)/usr/bin/$(REAL_GNU_TARGET_NAME)-cc ]; then \
-
-Modified: trunk/buildroot/toolchain/gcc/gcc-uclibc-4.x.mk
-===================================================================
---- trunk/buildroot/toolchain/gcc/gcc-uclibc-4.x.mk	2008-04-04 12:23:28 UTC (rev 21635)
-+++ trunk/buildroot/toolchain/gcc/gcc-uclibc-4.x.mk	2008-04-04 14:16:06 UTC (rev 21636)
-@@ -299,7 +299,7 @@
- 	fi
- 	# Strip the host binaries
- ifeq ($(GCC_STRIP_HOST_BINARIES),true)
--	strip --strip-all -R .note -R .comment $(filter-out %-gccbug,$(wildcard $(STAGING_DIR)/usr/bin/$(REAL_GNU_TARGET_NAME)-*))
-+	strip --strip-all -R .note -R .comment $(filter-out %-gccbug %-embedspu,$(wildcard $(STAGING_DIR)/usr/bin/$(REAL_GNU_TARGET_NAME)-*))
- endif
- 	# Make sure we have 'cc'.
- 	if [ ! -e $(STAGING_DIR)/usr/bin/$(REAL_GNU_TARGET_NAME)-cc ]; then \
+-- 
+Bye, Peter Korsgaard
