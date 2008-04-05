@@ -1,52 +1,37 @@
-From: bugs at busybox.net <bugs@busybox.net>
-Date: Sat, 5 Apr 2008 03:15:21 -0700
-Subject: [Buildroot] [buildroot 0002844]: bash.mk update for
-	Makefile.autotools.in
-Message-ID: <1fd8026e7b60747367819b6d45409fb3@busybox.net>
+From: jacmet at uclibc.org <jacmet@uclibc.org>
+Date: Sat,  5 Apr 2008 09:11:04 -0700 (PDT)
+Subject: [Buildroot] svn commit: trunk/buildroot/target/device/ARM
+Message-ID: <20080405161104.2E3F23C30B@busybox.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+Author: jacmet
+Date: 2008-04-05 09:11:03 -0700 (Sat, 05 Apr 2008)
+New Revision: 21644
 
-A NOTE has been added to this issue. 
-====================================================================== 
-http://busybox.net/bugs/view.php?id=2844 
-====================================================================== 
-Reported By:                Andrew Mahone
-Assigned To:                buildroot
-====================================================================== 
-Project:                    buildroot
-Issue ID:                   2844
-Category:                   Other
-Reproducibility:            N/A
-Severity:                   tweak
-Priority:                   normal
-Status:                     assigned
-====================================================================== 
-Date Submitted:             04-05-2008 03:06 PDT
-Last Modified:              04-05-2008 03:15 PDT
-====================================================================== 
-Summary:                    bash.mk update for Makefile.autotools.in
-Description: 
-patch vs current SVN to update bash to use Makefile.autotools.in
-====================================================================== 
+Log:
+target/device/ARM: don't override busybox config
 
----------------------------------------------------------------------- 
- Andrew Mahone - 04-05-08 03:15  
----------------------------------------------------------------------- 
-slightly cleaner bash.mk 
 
-Issue History 
-Date Modified   Username       Field                    Change               
-====================================================================== 
-04-05-08 03:06  Andrew Mahone  New Issue                                    
-04-05-08 03:06  Andrew Mahone  Status                   new => assigned     
-04-05-08 03:06  Andrew Mahone  Assigned To               => buildroot       
-04-05-08 03:06  Andrew Mahone  File Added: bash-autotools.patch                 
-  
-04-05-08 03:14  Andrew Mahone  File Added: bash-autotools-cleaner.patch         
-          
-04-05-08 03:15  Andrew Mahone  Note Added: 0006414                          
-======================================================================
+Modified:
+   trunk/buildroot/target/device/ARM/Makefile.in
+
+
+Changeset:
+Modified: trunk/buildroot/target/device/ARM/Makefile.in
+===================================================================
+--- trunk/buildroot/target/device/ARM/Makefile.in	2008-04-05 04:24:23 UTC (rev 21643)
++++ trunk/buildroot/target/device/ARM/Makefile.in	2008-04-05 16:11:03 UTC (rev 21644)
+@@ -34,9 +34,6 @@
+ # The board specific Makefile.in can redefine BOARD_NAME's
+ LINUX_BOARD_NAME:=$(BOARD_NAME)
+ 
+-BR2_PACKAGE_BUSYBOX_CONFIG:=$(BOARD_PATH)/busybox.config
+-
+-
+ # Needs to be AFTER board specific Makefiles
+ 
+ arm_status:
