@@ -1,52 +1,34 @@
-From: jacmet at uclibc.org <jacmet@uclibc.org>
-Date: Sun,  6 Apr 2008 01:19:58 -0700 (PDT)
-Subject: [Buildroot] svn commit: trunk/buildroot/target/device/ARM
-Message-ID: <20080406081958.CF5183C3B5@busybox.net>
+From: ulf at uclibc.org <ulf@uclibc.org>
+Date: Sun,  6 Apr 2008 03:01:30 -0700 (PDT)
+Subject: [Buildroot] svn commit: trunk/buildroot/scripts
+Message-ID: <20080406100130.9F7033C399@busybox.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Author: jacmet
-Date: 2008-04-06 01:19:58 -0700 (Sun, 06 Apr 2008)
-New Revision: 21648
+Author: ulf
+Date: 2008-04-06 03:01:29 -0700 (Sun, 06 Apr 2008)
+New Revision: 21649
 
 Log:
-target/device/ARM: Use menuconfig and add description of options
-
+Fix bad use of symbol
 
 Modified:
-   trunk/buildroot/target/device/ARM/Config.in
+   trunk/buildroot/scripts/get_linux_config.sh
 
 
 Changeset:
-Modified: trunk/buildroot/target/device/ARM/Config.in
+Modified: trunk/buildroot/scripts/get_linux_config.sh
 ===================================================================
---- trunk/buildroot/target/device/ARM/Config.in	2008-04-06 08:08:07 UTC (rev 21647)
-+++ trunk/buildroot/target/device/ARM/Config.in	2008-04-06 08:19:58 UTC (rev 21648)
-@@ -1,15 +1,20 @@
--config BR2_TARGET_ARM
--	bool
-+menuconfig BR2_TARGET_ARM
-+	bool "Generic ARM Support"
- 	depends on BR2_arm
- 	depends on !BR2_TARGET_ARMLTD
- 	depends on !BR2_TARGET_ATMEL
- 	depends on !BR2_TARGET_SHARP
- 	default y
+--- trunk/buildroot/scripts/get_linux_config.sh	2008-04-06 08:19:58 UTC (rev 21648)
++++ trunk/buildroot/scripts/get_linux_config.sh	2008-04-06 10:01:29 UTC (rev 21649)
+@@ -8,6 +8,7 @@
+ LINUX26_DIR=$2
  
-+if BR2_TARGET_ARM
-+
- config BR2_BOARD_NAME
--	string
-+	string "Board Name"
- 	default "arm"
- 
- config BR2_BOARD_PATH
--	string
-+	string "Board Path"
- 	default "target/device/ARM"
-+
-+endif
-+
+ cd ${TOPDIR}/${BOARD_PATH}
++mkdir -p ${LINUX26_DIR}
+ for i in `ls *linux*.config` ; do
+ 	echo Copying $i ...
+ 	cp $i ${LINUX26_DIR}/.config
