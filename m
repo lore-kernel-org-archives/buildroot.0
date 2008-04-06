@@ -1,52 +1,41 @@
-From: Nigel Kukard <nkukard@lbsd.net>
-Date: Sun, 06 Apr 2008 16:33:34 +0000
+From: Peter Korsgaard <jacmet@uclibc.org>
+Date: Sun, 06 Apr 2008 19:18:26 +0200
 Subject: [Buildroot] svn commit: trunk/buildroot/target/linux
-In-Reply-To: <47F8EB5B.9050905@eclis.ch>
-References: <03b601c897df$7b07f7b4$85f0af0a@corp.atmel.com>
-	<874paf88ma.fsf@macbook.be.48ers.dk>  <47F8EB5B.9050905@eclis.ch>
-Message-ID: <1207499614.6817.36.camel@nigel-x60>
+In-Reply-To: <03b701c89801$6b9003e6$85f0af0a@corp.atmel.com> (Ulf Samuelsson's
+	message of "6 Apr 2008 15\:28\:50 +0000")
+References: <03b701c89801$6b9003e6$85f0af0a@corp.atmel.com>
+Message-ID: <87k5ja7vh9.fsf@macbook.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+>>>>> "Ulf" == Samuelsson, Ulf <ulf.samuelsson@atmel.com> writes:
 
-> >  Ulf> I am not happy with menuconfig
-> >  Ulf> so either this or revert your
-> >  Ulf> patch.
-> >  Ulf> Your choice...
-> > 
-> > Bah, as I said back then xconfig is not a good default. It has
-> > additional dependencies we don't provide/check for and as we already
-> > use menuconfig interface for buildroot that's the only sane default.
-> > 
-> > The default values should work out of the box!
-> > 
-> > But as it's just a default, you can always change it locally if you
-> > prefer xconfig.
-> > 
-> 
-> I strongly recommend menuconfig. A lot of peoples I know work on virtual 
-> machines that have just the bare minimal packages to do compilation. 
-> There don't have X11 and will clearly not install a X11 server just for 
-> a single configuration tool that have on other side a perfectly working 
-> console interface. Other problem is that those virtual machines are 
-> mainly used on Windows based system where the most used program to do a 
-> SSH connection to it is PuTTY that don't support X11.
+ Ulf> But as it's just a default, you can always change it locally if you
+ Ulf> prefer xconfig.
 
-Please revert this patch. As Jean said, not everyone runs X11 or even
-builds buildroot locally and has bandwidth to support running remote X
-sessions.
+ Ulf> => Try "make > project.log 2>&1"
+ Ulf>     with menuconfig enabled.
+ Ulf>     I doubt that will give the 
+ Ulf>      desired result.
 
-Ulf, if you want to use xconfig, I suggest *you* change *your* local
-copy. Don't put this requirement on everyone else.
+Then don't do that (Doctor, it hurts when I ..).
 
--N
--------------- next part --------------
-A non-text attachment was scrubbed...
-Name: not available
-Type: application/pgp-signature
-Size: 189 bytes
-Desc: This is a digitally signed message part
-Url : http://busybox.net/lists/buildroot/attachments/20080406/e0e8f231/attachment.pgp 
+I guess it works with a tee project.log instead.
+
+Similarly, a xconfig doesn't work within a screen session.
+
+ Ulf>      If people have a problem
+ Ulf>     then they should keep
+ Ulf>     the normal kernel build.
+ Ulf>     Menuconfig is soo 20th 
+ Ulf>    century.
+
+So, where's the xconfig patch for buildroot itself? ;)
+
+(No, please don't).
+
+-- 
+Bye, Peter Korsgaard
