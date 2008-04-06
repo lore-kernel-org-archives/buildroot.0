@@ -1,50 +1,36 @@
-From: nkukard at uclibc.org <nkukard@uclibc.org>
-Date: Sun,  6 Apr 2008 03:35:23 -0700 (PDT)
-Subject: [Buildroot] svn commit: trunk/buildroot/package/udev
-Message-ID: <20080406103523.680C33C419@busybox.net>
+From: Micha Holzmann <holzmann@gmx.de>
+Date: Sun, 6 Apr 2008 12:42:32 +0200
+Subject: [Buildroot] Problems after building rootfs.i386.ext2
+In-Reply-To: <46a136670803140914h6843f70csaf9bd46da581f194@mail.gmail.com>
+References: <20080313160410.GA13136@mail.mhnet.de>
+	<46a136670803130959n7d6cfcaxf8eb0a78d93acf71@mail.gmail.com>
+	<20080314142333.GA14688@mail.mhnet.de>
+	<46a136670803140914h6843f70csaf9bd46da581f194@mail.gmail.com>
+Message-ID: <20080406104232.GB3033@gandalf.pf.mhnet.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Author: nkukard
-Date: 2008-04-06 03:35:22 -0700 (Sun, 06 Apr 2008)
-New Revision: 21654
+Hello,
 
-Log:
-* udev will not install if you remove project_build_*/uclibc/root and project_build_*/uclibc/.root ... this sets the dependency on the target binary so if its removed, its installed again
+John Voltz wrote:
+> In the latest buildroot, there is a shell script located in the
+> scripts directory called build-ext3-img. It will build a bootable ext3
+> image that can be run using qemu or vmware (you have to convert the
+> image to vmdk to use it with vmware, see qemu-img). You might try this
+> instead. Take a look inside the script to see how it works.
 
+this helps a lot. At least i assume it was a broken g++ installation on
+my machine. After reinstalling the package and check the links the
+decribed behavior has gone.
 
-Modified:
-   trunk/buildroot/package/udev/udev.mk
+Many thanks for your hints.
 
+Best regards,
+Micha Holzmann
 
-Changeset:
-Modified: trunk/buildroot/package/udev/udev.mk
-===================================================================
---- trunk/buildroot/package/udev/udev.mk	2008-04-06 10:32:34 UTC (rev 21653)
-+++ trunk/buildroot/package/udev/udev.mk	2008-04-06 10:35:22 UTC (rev 21654)
-@@ -47,8 +47,6 @@
- 		LDFLAGS="-warn-common" \
- 		USE_LOG=false USE_SELINUX=false \
- 		udevdir=$(UDEV_ROOT) -C $(UDEV_DIR) install
--
--$(UDEV_DIR)/.target_install: $(UDEV_DIR)/$(UDEV_BINARY)
- 	$(INSTALL) -m 0755 package/udev/S10udev $(TARGET_DIR)/etc/init.d
- 	$(INSTALL) -m 0644 $(UDEV_DIR)/etc/udev/frugalware/* $(TARGET_DIR)/etc/udev/rules.d
- 	( grep udev_root $(TARGET_DIR)/etc/udev/udev.conf > /dev/null 2>&1 || echo 'udev_root=/dev' >> $(TARGET_DIR)/etc/udev/udev.conf )
-@@ -59,12 +57,11 @@
- 	rm -f $(TARGET_DIR)/usr/bin/udevinfo
- 	rm -f $(TARGET_DIR)/usr/bin/udevtest
- endif
--	touch $@
- 
- #####################################################################
- .PHONY: udev-source udev udev-clean udev-dirclean
- 
--udev: uclibc $(TARGET_DIR)/$(UDEV_TARGET_BINARY) $(UDEV_DIR)/.target_install
-+udev: uclibc $(TARGET_DIR)/$(UDEV_TARGET_BINARY)
- 
- udev-source: $(DL_DIR)/$(UDEV_SOURCE)
- 
+-- 
+$> man woman
+$> Segmentation fault (core dumped)
