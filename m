@@ -1,39 +1,43 @@
-From: Micha Holzmann <holzmann@gmx.de>
-Date: Sun, 6 Apr 2008 12:47:21 +0200
-Subject: [Buildroot] C compiler cannot create executables
-Message-ID: <20080406104721.GC3033@gandalf.pf.mhnet.de>
+From: Peter Korsgaard <jacmet@uclibc.org>
+Date: Sun, 06 Apr 2008 13:42:52 +0200
+Subject: [Buildroot] svn commit: trunk/buildroot/target/linux
+In-Reply-To: <20080406101031.259663C3CA@busybox.net> (ulf@uclibc.org's message
+	of "Sun\, 6 Apr 2008 03\:10\:31 -0700 \(PDT\)")
+References: <20080406101031.259663C3CA@busybox.net>
+Message-ID: <87zls78b0j.fsf@macbook.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+>>>>> "ulf" == ulf  <ulf@uclibc.org> writes:
 
-after compiling buildroot successfully, i mounted the rootfs via loop,
-copied the tar sources into the rootfs an did chroot. After cd to the
-tar source dir i run ./configure.
+ ulf> Author: ulf
+ ulf> Date: 2008-04-06 03:10:30 -0700 (Sun, 06 Apr 2008)
+ ulf> New Revision: 21651
 
-sh-3.2# ./configure
-checking for a BSD-compatible install... /usr/bin/install -c
-checking whether build environment is sane... yes
-checking for gawk... no
-checking for mawk... no
-checking for nawk... no
-checking for awk... awk
-checking whether make sets $(MAKE)... yes
-checking for style of include used by make... GNU
-checking for gcc... gcc
-checking for C compiler default output file name... configure: error: C
-compiler cannot create executables
-See `config.log' for more details.
+ ulf> Log:
+ ulf> Make xconfig the default for Atmel targets
 
-in config.log i found: /usr/bin/ld: cannot find -lgcc
+ ulf> Modified:
+ ulf>    trunk/buildroot/target/linux/Config.in.advanced
 
-What have i did wrong or what is missing.
 
-Best regards,
-Micha Holzmann
+ ulf> Changeset:
+ ulf> Modified: trunk/buildroot/target/linux/Config.in.advanced
+ ulf> ===================================================================
+ ulf> --- trunk/buildroot/target/linux/Config.in.advanced	2008-04-06 10:02:53 UTC (rev 21650)
+ ulf> +++ trunk/buildroot/target/linux/Config.in.advanced	2008-04-06 10:10:30 UTC (rev 21651)
+ ulf> @@ -445,6 +445,7 @@
+ 
+ ulf>  choice
+ ulf>  	prompt "Preferred config tool"
+ ulf> +	default BR2_MAKE_XCONFIG IF BR2_TARGET_ATMEL
+ ulf>  	default BR2_MAKE_MENUCONFIG
+
+Why? Could we please stop having all this special casing of Atmel
+stuff all over buildroot?
 
 -- 
-Who the hell is General Failure, and why he is reading my disk?
+Bye, Peter Korsgaard
