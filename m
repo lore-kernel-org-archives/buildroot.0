@@ -1,17 +1,28 @@
-From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Sun, 06 Apr 2008 13:42:52 +0200
+From: Samuelsson, Ulf <ulf.samuelsson@atmel.com>
+Date: 6 Apr 2008 12:07:16 +0000
 Subject: [Buildroot] svn commit: trunk/buildroot/target/linux
-In-Reply-To: <20080406101031.259663C3CA@busybox.net> (ulf@uclibc.org's message
-	of "Sun\, 6 Apr 2008 03\:10\:31 -0700 \(PDT\)")
-References: <20080406101031.259663C3CA@busybox.net>
-Message-ID: <87zls78b0j.fsf@macbook.be.48ers.dk>
+Message-ID: <03b601c897df$7b07f7b4$85f0af0a@corp.atmel.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "ulf" == ulf  <ulf@uclibc.org> writes:
+I am not happy with menuconfig
+so either this or revert your
+patch.
+Your choice...
+
+Best Regards
+Ulf Samuelsson
+
+-----Originalmeddelande-----
+Fr?n: Peter Korsgaard
+Skickat: s?n 2008-04-06 13:43
+Till: buildroot at uclibc.org
+?rende: Re: [Buildroot] svn commit: trunk/buildroot/target/linux
+
+>>>>> "ulf" = ulf  <ulf@uclibc.org> writes:
 
  ulf> Author: ulf
  ulf> Date: 2008-04-06 03:10:30 -0700 (Sun, 06 Apr 2008)
@@ -26,8 +37,7 @@ To: buildroot@busybox.net
 
  ulf> Changeset:
  ulf> Modified: trunk/buildroot/target/linux/Config.in.advanced
- ulf> ===================================================================
- ulf> --- trunk/buildroot/target/linux/Config.in.advanced	2008-04-06 10:02:53 UTC (rev 21650)
+ ulf> ================================= ulf> --- trunk/buildroot/target/linux/Config.in.advanced	2008-04-06 10:02:53 UTC (rev 21650)
  ulf> +++ trunk/buildroot/target/linux/Config.in.advanced	2008-04-06 10:10:30 UTC (rev 21651)
  ulf> @@ -445,6 +445,7 @@
  
@@ -41,3 +51,16 @@ stuff all over buildroot?
 
 -- 
 Bye, Peter Korsgaard
+_______________________________________________
+buildroot mailing list
+buildroot at uclibc.org
+http://busybox.net/mailman/listinfo/buildroot
+
+
+-------------- next part --------------
+A non-text attachment was scrubbed...
+Name: UlfSamuelsson.vcf
+Type: application/octet-stream
+Size: 491 bytes
+Desc: UlfSamuelsson.vcf
+Url : http://busybox.net/lists/buildroot/attachments/20080406/90c9d299/attachment-0001.obj 
