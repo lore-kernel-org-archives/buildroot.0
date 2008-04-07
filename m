@@ -1,78 +1,44 @@
-From: bugs at busybox.net <bugs@busybox.net>
-Date: Sun, 6 Apr 2008 14:28:48 -0700
-Subject: [Buildroot] [buildroot 0002864]: Java compiler and libgcj build
-	fails (arm-iwmmxt-eabi)
-Message-ID: <df3eaaf350fe226f6d324e44d6a1aef9@busybox.net>
+From: Ulf Samuelsson <ulf.samuelsson@atmel.com>
+Date: Mon, 7 Apr 2008 02:29:31 +0200
+Subject: [Buildroot] svn commit: trunk/buildroot/target/linux
+References: <03b601c897df$7b07f7b4$85f0af0a@corp.atmel.com><874paf88ma.fsf@macbook.be.48ers.dk>
+	<47F8EB5B.9050905@eclis.ch><1207499614.6817.36.camel@nigel-x60>
+	<87iqyuu8d0.fsf@macbook.be.48ers.dk>
+Message-ID: <007601c89846$ee875b80$020514ac@atmel.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+> 
+> Hi,
+> 
+> Nigel> Please revert this patch. As Jean said, not everyone runs X11 or even
+> Nigel> builds buildroot locally and has bandwidth to support running remote X
+> Nigel> sessions.
+> 
+> Nigel> Ulf, if you want to use xconfig, I suggest *you* change *your* local
+> Nigel> copy. Don't put this requirement on everyone else.
+> 
+I do not put this requirement on everyone else.
+The default behaviour is 
+1) To not build a kernel at all or
+2) To build a kernel using the classic behaviour.
 
-The following issue has been SUBMITTED. 
-====================================================================== 
-http://busybox.net/bugs/view.php?id=2864 
-====================================================================== 
-Reported By:                Francesco
-Assigned To:                buildroot
-====================================================================== 
-Project:                    buildroot
-Issue ID:                   2864
-Category:                   Architecture Specific
-Reproducibility:            always
-Severity:                   minor
-Priority:                   normal
-Status:                     assigned
-====================================================================== 
-Date Submitted:             04-06-2008 14:28 PDT
-Last Modified:              04-06-2008 14:28 PDT
-====================================================================== 
-Summary:                    Java compiler and libgcj build fails
-(arm-iwmmxt-eabi)
-Description: 
-I get this error while trying to compile libgcj and java compiler for
-arm-iwmmxt-eabi:
+Only by selecting two non-default behaviours you get 
+exposed to the "advanced" linux configuration
+I have spent considerable time on during the last 9 months.
 
-#
-# Now for the ugly 3.3.x soft float hack...
-#
-#
-# Ok... that's enough of that.
-#
-mkdir -p /root/tmp/buildroot/project_build_arm/uclibc/root/usr/lib
-/root/tmp/buildroot/project_build_arm/uclibc/root/usr/sbin
-touch /root/tmp/buildroot/toolchain_build_arm/gcc-4.2.3-final/.installed
-# These are in /lib, so...
-rm -rf
-/root/tmp/buildroot/project_build_arm/uclibc/root/usr/lib/libgcc_s*.so*
-cp -dpf
-root/tmp/buildroot/build_arm/staging_dir/usr/arm-linux-uclibcgnueabi/lib/libgcc_s*
-\
-                /root/tmp/buildroot/project_build_arm/uclibc/root/lib/
-cp -dpf
-/root/tmp/buildroot/build_arm/staging_dir/usr/arm-linux-uclibcgnueabi/lib/libstdc++.so*
-\
-               
-/root/tmp/buildroot/project_build_arm/uclibc/root/usr/lib/
-cp -dpf /root/tmp/buildroot/build_arm/staging_dir/lib/libgcj.so*
-/root/tmp/buildroot/project_build_arm/uclibc/root/lib/
-cp: cannot stat
-`/root/tmp/buildroot/build_arm/staging_dir/lib/libgcj.so*': No such file
-or directory
-make: ***
-[/root/tmp/buildroot/toolchain_build_arm/gcc-4.2.3-final/.libs_installed]
-Error 1
+This will default to xconfig for AT91/AVR32 chips,
+but you have the option to select the menuconfig you want.
+
+If someone wants a different behaviour,
+then they can create yet another linux makefile.
+
+> Even easier, change the setting in the defconfigs he works with.
+> 
 
 
-
-====================================================================== 
-
-Issue History 
-Date Modified   Username       Field                    Change               
-====================================================================== 
-04-06-08 14:28  Francesco      New Issue                                    
-04-06-08 14:28  Francesco      Status                   new => assigned     
-04-06-08 14:28  Francesco      Assigned To               => buildroot       
-04-06-08 14:28  Francesco      File Added: .config                          
-======================================================================
+Best Regards
+Ulf Samuelsson 
