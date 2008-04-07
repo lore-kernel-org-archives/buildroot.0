@@ -1,86 +1,41 @@
 From: Arun Reddy <reddyac@gmail.com>
-Date: Mon, 7 Apr 2008 10:02:53 -0700
-Subject: [Buildroot] Compiled buildroot with iso,
-	error during boot "can't open /dev/ttyX: No such device or address"
-In-Reply-To: <1207549270.3711.18.camel@PC-EK.Solcon>
-References: <326f33790804041623l65cb5bfbub116b5391ff6ff3c@mail.gmail.com>
-	<1207549270.3711.18.camel@PC-EK.Solcon>
-Message-ID: <326f33790804071002o5bf1d7a5p98cf6d7ad28ce532@mail.gmail.com>
+Date: Mon, 7 Apr 2008 11:58:49 -0700
+Subject: [Buildroot] Creating a bootable filesystem image?
+Message-ID: <326f33790804071158h125bc8c3n9701bf1774ce5611@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Excellent, thank you very much guys I was able to debug the problem using
-your suggestions.
+Hi everyone,
 
-2008/4/6 Emil Kr?per <e.krueper@solcon-systemtechnik.de>:
+I was able to create a filesystem image and .iso using buildroot.
 
-> You have to properly edit the content of
-> target/generic/mini_device_table.txt or target/generic/device_table.txt,
-> which ?depends on "Package Selection for the Target --->  [*] use
-> minimal target skeleton" in the config. In order to adopt the changes
-> you have to rebuild (to make) your buildroot.
->
-> Best regards,
->
-> Emil Kr?per
->
->
-> On Fri, 2008-04-04 at 16:23 -0700, Arun Reddy wrote:
-> > Hi everyone,
-> >
-> > I have compiled buildroot and created a .iso image that I am now
-> > trying to use to boot a new kernel on VirtualBox. Unfortunately,
-> > during boot I am given consistent errors saying:
-> >
-> > can't open /dev/tty1: No such device or address or tty2, tty3, up to
-> > tty5.
-> >
-> > I looked online and it seems that the reason this occurs is because I
-> > don't have enough Virtual terminals to support all the users. The key
-> > lies in populating /dev/tty, but I am wondering how I can do this in
-> > buildroot? Does anyone know what I must set within Buildroot to avoid
-> > this problem, and then recompile again to get a new iso image that
-> > will boot fine without any problems?
-> >
-> > Thank you in advance for your response.
-> > _______________________________________________
-> > buildroot mailing list
-> > buildroot at uclibc.org
-> > http://busybox.net/mailman/listinfo/buildroot
-> --
-> Mit freundlichen Gr??en
->
->
-> Emil Kr?per
->
-> Solcon Systemtechnik GmbH
-> Niels-Bohr-Ring 3-5
-> 23568 L?beck
->
-> Tel.: (0451)-40948-19
-> Fax.: (0451)-40948-88
-> Email: e.krueper at solcon-systemtechnik.de
-> www.solcon-systemtechnik.de
->
-> Sitz der Gesellschaft: L?beck
-> Amtsgericht: L?beck | HRB 3662
-> Gesch?ftsf?hrer: Dr.-Ing. Reiner Wieck, Dr.-Ing. Gerd Schneider
->
->
->
-> Der Inhalt dieser E-Mail ist vertraulich und oder rechtlich gesch?tzt,
-> und damit ausschlie?lich f?r den bezeichneten Adressaten bestimmt. Wenn
-> Sie nicht der vorgesehene Adressat dieser E-Mail oder dessen Vertreter
-> sein sollten, so beachten Sie bitte, dass jede Form der Kenntnisnahme,
-> Ver?ffentlichung, Vervielf?ltigung oder Weitergabe des Inhalts dieser
-> E-Mail unzul?ssig ist. Wir bitten Sie, sich in diesem Fall mit dem
-> Absender in Verbindung zu setzen und diese E-Mail und jeden Anhang von
-> Ihrem System zu l?schen. Vielen Dank.
->
->
+In experimenting with booting up the new kernel on a virtual machine
+(VirtualBox), I found that I needed to convert my rootfs.i386.ext2
+filesystem image to a .vdi file (using VirtualBox software).
+I tried booting the .vdi alone, but unfortunately I encountered an immediate
+error that stated "no bootable medium could be found." To get passed this
+error, I mounted the .iso as well along with my .vdi file. Using some help
+from the mailing list members, I got passed a few minor problems during
+bootup, and got the kernel running with a shell.
+
+With that milestone complete, I now want to avoid using both the .iso and
+the harddisk (.vdi) together. I just want to be able to convert the
+rootfs.i386.ext2 to a .vdi file and run that alone. The fact that this .vdi
+cannot boot alone leads me to believe the filesystem that buildroot creates
+for me is not bootable. (I may have missed an important part in my reading,
+but either the filesystem absolutely needs an .iso to work, or it is used
+for the user to chroot into it and boot from there).
+
+My question is, does anyone know if there is a way to configure buildroot to
+make rootfs.i386.ext2 bootable? Please note that I disabled RAMDISK in the
+kernel .config before compiling buildroot because I don't need to use one.
+
+Thank you in advance for your responses!
+
+Arun
 -------------- next part --------------
 An HTML attachment was scrubbed...
-URL: http://busybox.net/lists/buildroot/attachments/20080407/bdecbf53/attachment-0001.htm 
+URL: http://busybox.net/lists/buildroot/attachments/20080407/971ecbeb/attachment.htm 
