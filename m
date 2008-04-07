@@ -1,64 +1,86 @@
-From: =?ISO-8859-1?Q?Thiago_A._Corr=EAa?= <thiago.correa@gmail.com>
-Date: Mon, 7 Apr 2008 11:01:50 -0300
-Subject: [Buildroot] svn commit: trunk/buildroot/target/linux
-In-Reply-To: <007601c89846$ee875b80$020514ac@atmel.com>
-References: <03b601c897df$7b07f7b4$85f0af0a@corp.atmel.com>
-	<874paf88ma.fsf@macbook.be.48ers.dk> <47F8EB5B.9050905@eclis.ch>
-	<1207499614.6817.36.camel@nigel-x60>
-	<87iqyuu8d0.fsf@macbook.be.48ers.dk>
-	<007601c89846$ee875b80$020514ac@atmel.com>
-Message-ID: <d6cda7730804070701k4da8e45dpfbced7f63561fefb@mail.gmail.com>
+From: Arun Reddy <reddyac@gmail.com>
+Date: Mon, 7 Apr 2008 10:02:53 -0700
+Subject: [Buildroot] Compiled buildroot with iso,
+	error during boot "can't open /dev/ttyX: No such device or address"
+In-Reply-To: <1207549270.3711.18.camel@PC-EK.Solcon>
+References: <326f33790804041623l65cb5bfbub116b5391ff6ff3c@mail.gmail.com>
+	<1207549270.3711.18.camel@PC-EK.Solcon>
+Message-ID: <326f33790804071002o5bf1d7a5p98cf6d7ad28ce532@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Ulf,
+Excellent, thank you very much guys I was able to debug the problem using
+your suggestions.
 
-   I for one use buildroot from an ssh shell, even thought the
-building machine is right besides me. A default that requires X is
-unreasonable, give that buildroot doesn't check for X, and doesn't
-require X either. I too back up the others on the opinion that the
-default behavior should be menuconfig.
+2008/4/6 Emil Kr?per <e.krueper@solcon-systemtechnik.de>:
 
->  I do not put this requirement on everyone else.
->  The default behaviour is
->  1) To not build a kernel at all or
->  2) To build a kernel using the classic behaviour.
+> You have to properly edit the content of
+> target/generic/mini_device_table.txt or target/generic/device_table.txt,
+> which ?depends on "Package Selection for the Target --->  [*] use
+> minimal target skeleton" in the config. In order to adopt the changes
+> you have to rebuild (to make) your buildroot.
 >
->  Only by selecting two non-default behaviours you get
->  exposed to the "advanced" linux configuration
->  I have spent considerable time on during the last 9 months.
-
-Actually, the default behavior for NGW100 and STK1000 is to use the
-advanced linux configuration. And it's the only one that works at all
-AFAIK.
-
->  This will default to xconfig for AT91/AVR32 chips,
->  but you have the option to select the menuconfig you want.
-
-Which is exactly what most people seam to be using at the moment. At
-least I haven't seen any target/device/Hitachi users, I doubt it even
-builds new days.
-Whenever I do an an{stk1002|ngw100}_defconfig, I have to craw thru a
-bunch of menus and packages to change stuff (libdaemon doesn't build
-on gentoo, using -j2 makes lot more sense than -j1, etc, etc....). Why
-should a default config be tailored to a single user's needs?
-IMHO it should be a reasonable minimum set of options most would be
-happy with, and clearly xconfig isn't.
-
->  If someone wants a different behaviour,
->  then they can create yet another linux makefile.
-
-That would just introduce more maintenance, just makes no sense.
-
->  > Even easier, change the setting in the defconfigs he works with.
->  >
-
-Please don't. We might use ARMs too in the future. :)
-What about the make BOARD=<name> save/get thing? I never used it
-myself, but should work as an option.
-
-Kind Regards,
-    Thiago A. Correa
+> Best regards,
+>
+> Emil Kr?per
+>
+>
+> On Fri, 2008-04-04 at 16:23 -0700, Arun Reddy wrote:
+> > Hi everyone,
+> >
+> > I have compiled buildroot and created a .iso image that I am now
+> > trying to use to boot a new kernel on VirtualBox. Unfortunately,
+> > during boot I am given consistent errors saying:
+> >
+> > can't open /dev/tty1: No such device or address or tty2, tty3, up to
+> > tty5.
+> >
+> > I looked online and it seems that the reason this occurs is because I
+> > don't have enough Virtual terminals to support all the users. The key
+> > lies in populating /dev/tty, but I am wondering how I can do this in
+> > buildroot? Does anyone know what I must set within Buildroot to avoid
+> > this problem, and then recompile again to get a new iso image that
+> > will boot fine without any problems?
+> >
+> > Thank you in advance for your response.
+> > _______________________________________________
+> > buildroot mailing list
+> > buildroot at uclibc.org
+> > http://busybox.net/mailman/listinfo/buildroot
+> --
+> Mit freundlichen Gr??en
+>
+>
+> Emil Kr?per
+>
+> Solcon Systemtechnik GmbH
+> Niels-Bohr-Ring 3-5
+> 23568 L?beck
+>
+> Tel.: (0451)-40948-19
+> Fax.: (0451)-40948-88
+> Email: e.krueper at solcon-systemtechnik.de
+> www.solcon-systemtechnik.de
+>
+> Sitz der Gesellschaft: L?beck
+> Amtsgericht: L?beck | HRB 3662
+> Gesch?ftsf?hrer: Dr.-Ing. Reiner Wieck, Dr.-Ing. Gerd Schneider
+>
+>
+>
+> Der Inhalt dieser E-Mail ist vertraulich und oder rechtlich gesch?tzt,
+> und damit ausschlie?lich f?r den bezeichneten Adressaten bestimmt. Wenn
+> Sie nicht der vorgesehene Adressat dieser E-Mail oder dessen Vertreter
+> sein sollten, so beachten Sie bitte, dass jede Form der Kenntnisnahme,
+> Ver?ffentlichung, Vervielf?ltigung oder Weitergabe des Inhalts dieser
+> E-Mail unzul?ssig ist. Wir bitten Sie, sich in diesem Fall mit dem
+> Absender in Verbindung zu setzen und diese E-Mail und jeden Anhang von
+> Ihrem System zu l?schen. Vielen Dank.
+>
+>
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: http://busybox.net/lists/buildroot/attachments/20080407/bdecbf53/attachment-0001.htm 
