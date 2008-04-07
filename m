@@ -1,74 +1,64 @@
-From: bugs at busybox.net <bugs@busybox.net>
-Date: Mon, 7 Apr 2008 04:05:50 -0700
-Subject: [Buildroot] [buildroot 0002874]: libglib2 does not build
-Message-ID: <272677f0ce95a6fefc545af50e49d5d2@busybox.net>
+From: =?ISO-8859-1?Q?Thiago_A._Corr=EAa?= <thiago.correa@gmail.com>
+Date: Mon, 7 Apr 2008 11:01:50 -0300
+Subject: [Buildroot] svn commit: trunk/buildroot/target/linux
+In-Reply-To: <007601c89846$ee875b80$020514ac@atmel.com>
+References: <03b601c897df$7b07f7b4$85f0af0a@corp.atmel.com>
+	<874paf88ma.fsf@macbook.be.48ers.dk> <47F8EB5B.9050905@eclis.ch>
+	<1207499614.6817.36.camel@nigel-x60>
+	<87iqyuu8d0.fsf@macbook.be.48ers.dk>
+	<007601c89846$ee875b80$020514ac@atmel.com>
+Message-ID: <d6cda7730804070701k4da8e45dpfbced7f63561fefb@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+Ulf,
 
-A NOTE has been added to this issue. 
-====================================================================== 
-http://busybox.net/bugs/view.php?id=2874 
-====================================================================== 
-Reported By:                joedawson
-Assigned To:                buildroot
-====================================================================== 
-Project:                    buildroot
-Issue ID:                   2874
-Category:                   Architecture Specific
-Reproducibility:            always
-Severity:                   minor
-Priority:                   normal
-Status:                     assigned
-====================================================================== 
-Date Submitted:             04-07-2008 00:47 PDT
-Last Modified:              04-07-2008 04:05 PDT
-====================================================================== 
-Summary:                    libglib2 does not build
-Description: 
-libglib2 fails to build. Is tested for ARM and x86 builds, giving the same
-error:
-make[4]: Entering directory
-`/srv/br-svn/build_arm/libglib2-2.15.4/gobject'
-make[4]: `glib-genmarshal' is up to date.
-make[4]: Leaving directory
-`/srv/br-svn/build_arm/libglib2-2.15.4/gobject'
-echo "#ifndef __G_MARSHAL_H__" > xgen-gmh \
-        && echo "#define __G_MARSHAL_H__" >> xgen-gmh \
-        && /usr/bin/glib-genmarshal --nostdinc --prefix=g_cclosure_marshal
-./gmarshal.list --header >> xgen-gmh \
-        && echo "#endif /* __G_MARSHAL_H__ */" >> xgen-gmh \
-        && (cmp -s xgen-gmh gmarshal.h 2>/dev/null || cp xgen-gmh
-gmarshal.h) \
-        && rm -f xgen-gmh xgen-gmh~ \
-        && echo timestamp > stamp-gmarshal.h
-/bin/bash: line 2: /usr/bin/glib-genmarshal: No such file or directory
-make[3]: *** [stamp-gmarshal.h] Error 127
-make[3]: Leaving directory
-`/srv/br-svn/build_arm/libglib2-2.15.4/gobject'
-make[2]: *** [all-recursive] Error 1
-make[2]: Leaving directory `/srv/br-svn/build_arm/libglib2-2.15.4'
-make[1]: *** [all] Error 2
-make[1]: Leaving directory `/srv/br-svn/build_arm/libglib2-2.15.4'
-make: *** [/srv/br-svn/build_arm/libglib2-2.15.4/.stamp_built] Error 2
+   I for one use buildroot from an ssh shell, even thought the
+building machine is right besides me. A default that requires X is
+unreasonable, give that buildroot doesn't check for X, and doesn't
+require X either. I too back up the others on the opinion that the
+default behavior should be menuconfig.
 
-====================================================================== 
+>  I do not put this requirement on everyone else.
+>  The default behaviour is
+>  1) To not build a kernel at all or
+>  2) To build a kernel using the classic behaviour.
+>
+>  Only by selecting two non-default behaviours you get
+>  exposed to the "advanced" linux configuration
+>  I have spent considerable time on during the last 9 months.
 
----------------------------------------------------------------------- 
- joedawson - 04-07-08 04:05  
----------------------------------------------------------------------- 
-correction: it relies on libglib2 to be installed on the development
-machine. is it possible to have that tested in some way? 
+Actually, the default behavior for NGW100 and STK1000 is to use the
+advanced linux configuration. And it's the only one that works at all
+AFAIK.
 
-Issue History 
-Date Modified   Username       Field                    Change               
-====================================================================== 
-04-07-08 00:47  joedawson      New Issue                                    
-04-07-08 00:47  joedawson      Status                   new => assigned     
-04-07-08 00:47  joedawson      Assigned To               => buildroot       
-04-07-08 00:47  joedawson      File Added: config                           
-04-07-08 04:05  joedawson      Note Added: 0006434                          
-======================================================================
+>  This will default to xconfig for AT91/AVR32 chips,
+>  but you have the option to select the menuconfig you want.
+
+Which is exactly what most people seam to be using at the moment. At
+least I haven't seen any target/device/Hitachi users, I doubt it even
+builds new days.
+Whenever I do an an{stk1002|ngw100}_defconfig, I have to craw thru a
+bunch of menus and packages to change stuff (libdaemon doesn't build
+on gentoo, using -j2 makes lot more sense than -j1, etc, etc....). Why
+should a default config be tailored to a single user's needs?
+IMHO it should be a reasonable minimum set of options most would be
+happy with, and clearly xconfig isn't.
+
+>  If someone wants a different behaviour,
+>  then they can create yet another linux makefile.
+
+That would just introduce more maintenance, just makes no sense.
+
+>  > Even easier, change the setting in the defconfigs he works with.
+>  >
+
+Please don't. We might use ARMs too in the future. :)
+What about the make BOARD=<name> save/get thing? I never used it
+myself, but should work as an option.
+
+Kind Regards,
+    Thiago A. Correa
