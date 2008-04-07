@@ -1,41 +1,45 @@
-From: Arun Reddy <reddyac@gmail.com>
-Date: Mon, 7 Apr 2008 11:58:49 -0700
-Subject: [Buildroot] Creating a bootable filesystem image?
-Message-ID: <326f33790804071158h125bc8c3n9701bf1774ce5611@mail.gmail.com>
+From: ninevoltz at uclibc.org <ninevoltz@uclibc.org>
+Date: Mon,  7 Apr 2008 12:26:05 -0700 (PDT)
+Subject: [Buildroot] svn commit:
+	trunk/buildroot/package/festival/speech-tools
+Message-ID: <20080407192606.0537F3C3AE@busybox.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi everyone,
+Author: ninevoltz
+Date: 2008-04-07 12:26:02 -0700 (Mon, 07 Apr 2008)
+New Revision: 21663
 
-I was able to create a filesystem image and .iso using buildroot.
+Log:
+another minor installer fix for festival
 
-In experimenting with booting up the new kernel on a virtual machine
-(VirtualBox), I found that I needed to convert my rootfs.i386.ext2
-filesystem image to a .vdi file (using VirtualBox software).
-I tried booting the .vdi alone, but unfortunately I encountered an immediate
-error that stated "no bootable medium could be found." To get passed this
-error, I mounted the .iso as well along with my .vdi file. Using some help
-from the mailing list members, I got passed a few minor problems during
-bootup, and got the kernel running with a shell.
+Modified:
+   trunk/buildroot/package/festival/speech-tools/speech-tools-1.2.96-beta-install.patch
 
-With that milestone complete, I now want to avoid using both the .iso and
-the harddisk (.vdi) together. I just want to be able to convert the
-rootfs.i386.ext2 to a .vdi file and run that alone. The fact that this .vdi
-cannot boot alone leads me to believe the filesystem that buildroot creates
-for me is not bootable. (I may have missed an important part in my reading,
-but either the filesystem absolutely needs an .iso to work, or it is used
-for the user to chroot into it and boot from there).
 
-My question is, does anyone know if there is a way to configure buildroot to
-make rootfs.i386.ext2 bootable? Please note that I disabled RAMDISK in the
-kernel .config before compiling buildroot because I don't need to use one.
-
-Thank you in advance for your responses!
-
-Arun
--------------- next part --------------
-An HTML attachment was scrubbed...
-URL: http://busybox.net/lists/buildroot/attachments/20080407/971ecbeb/attachment.htm 
+Changeset:
+Modified: trunk/buildroot/package/festival/speech-tools/speech-tools-1.2.96-beta-install.patch
+===================================================================
+--- trunk/buildroot/package/festival/speech-tools/speech-tools-1.2.96-beta-install.patch	2008-04-07 07:59:08 UTC (rev 21662)
++++ trunk/buildroot/package/festival/speech-tools/speech-tools-1.2.96-beta-install.patch	2008-04-07 19:26:02 UTC (rev 21663)
+@@ -36,11 +36,12 @@
+ -
+ +	@$(ECHO_N) "Install Scheme Libraries:"
+ +	@main=`pwd` ;\
+-+	cp -a "$$main/../../lib" "$(DESTDIR)/usr/share/festival";\
+++	mkdir -p "$(DESTDIR)/usr/share/festival"; cp -a "$$main/../../lib" "$(DESTDIR)/usr/share/festival";\
+ +	for i in `find "$(DESTDIR)/usr/share/festival/lib" -name Makefile`;\
+ +		do \
+ +		rm "$$i"; \
+ +	done
+-+
+- .link_main:
+- 	@$(MAKE) MADE_FROM_ABOVE=1 --no-print-directory -C '$(PROJECT_MAIN_DIR)' BIN=TOP/$(DIRNAME) LIBDIR=MAIN/TOP/$(PROJECT_LIBRARY_DIR) MAIN='$($(PROJECT_PREFIX)_HOME)' .link_main$(S)
+\ No newline at end of file
+++ 
++ .link_main: 
++ 	@$(MAKE) MADE_FROM_ABOVE=1 --no-print-directory -C '$(PROJECT_MAIN_DIR)' BIN=TOP/$(DIRNAME) LIBDIR=MAIN/TOP/$(PROJECT_LIBRARY_DIR) MAIN='$($(PROJECT_PREFIX)_HOME)' .link_main$(S)
++ 
