@@ -1,75 +1,67 @@
-From: Emil =?ISO-8859-1?Q?Kr=FCper?= <e.krueper@solcon-systemtechnik.de>
-Date: Mon, 07 Apr 2008 08:21:10 +0200
-Subject: [Buildroot] Compiled buildroot with iso,
-	error during boot	"can't open /dev/ttyX: No such device or address"
-In-Reply-To: <326f33790804041623l65cb5bfbub116b5391ff6ff3c@mail.gmail.com>
-References: <326f33790804041623l65cb5bfbub116b5391ff6ff3c@mail.gmail.com>
-Message-ID: <1207549270.3711.18.camel@PC-EK.Solcon>
+From: bugs at busybox.net <bugs@busybox.net>
+Date: Mon, 7 Apr 2008 00:47:04 -0700
+Subject: [Buildroot] [buildroot 0002874]: libglib2 does not build
+Message-ID: <bc7991469d1b0ab9459e752ec465b429@busybox.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-You have to properly edit the content of
-target/generic/mini_device_table.txt or target/generic/device_table.txt,
-which ?depends on "Package Selection for the Target --->  [*] use
-minimal target skeleton" in the config. In order to adopt the changes
-you have to rebuild (to make) your buildroot.
 
-Best regards,
+The following issue has been SUBMITTED. 
+====================================================================== 
+http://busybox.net/bugs/view.php?id=2874 
+====================================================================== 
+Reported By:                joedawson
+Assigned To:                buildroot
+====================================================================== 
+Project:                    buildroot
+Issue ID:                   2874
+Category:                   Architecture Specific
+Reproducibility:            always
+Severity:                   minor
+Priority:                   normal
+Status:                     assigned
+====================================================================== 
+Date Submitted:             04-07-2008 00:47 PDT
+Last Modified:              04-07-2008 00:47 PDT
+====================================================================== 
+Summary:                    libglib2 does not build
+Description: 
+libglib2 fails to build. Is tested for ARM and x86 builds, giving the same
+error:
+make[4]: Entering directory
+`/srv/br-svn/build_arm/libglib2-2.15.4/gobject'
+make[4]: `glib-genmarshal' is up to date.
+make[4]: Leaving directory
+`/srv/br-svn/build_arm/libglib2-2.15.4/gobject'
+echo "#ifndef __G_MARSHAL_H__" > xgen-gmh \
+        && echo "#define __G_MARSHAL_H__" >> xgen-gmh \
+        && /usr/bin/glib-genmarshal --nostdinc --prefix=g_cclosure_marshal
+./gmarshal.list --header >> xgen-gmh \
+        && echo "#endif /* __G_MARSHAL_H__ */" >> xgen-gmh \
+        && (cmp -s xgen-gmh gmarshal.h 2>/dev/null || cp xgen-gmh
+gmarshal.h) \
+        && rm -f xgen-gmh xgen-gmh~ \
+        && echo timestamp > stamp-gmarshal.h
+/bin/bash: line 2: /usr/bin/glib-genmarshal: No such file or directory
+make[3]: *** [stamp-gmarshal.h] Error 127
+make[3]: Leaving directory
+`/srv/br-svn/build_arm/libglib2-2.15.4/gobject'
+make[2]: *** [all-recursive] Error 1
+make[2]: Leaving directory `/srv/br-svn/build_arm/libglib2-2.15.4'
+make[1]: *** [all] Error 2
+make[1]: Leaving directory `/srv/br-svn/build_arm/libglib2-2.15.4'
+make: *** [/srv/br-svn/build_arm/libglib2-2.15.4/.stamp_built] Error 2
 
-Emil Kr?per
+====================================================================== 
 
-
-On Fri, 2008-04-04 at 16:23 -0700, Arun Reddy wrote:
-> Hi everyone,
-> 
-> I have compiled buildroot and created a .iso image that I am now
-> trying to use to boot a new kernel on VirtualBox. Unfortunately,
-> during boot I am given consistent errors saying:
-> 
-> can't open /dev/tty1: No such device or address or tty2, tty3, up to
-> tty5.
-> 
-> I looked online and it seems that the reason this occurs is because I
-> don't have enough Virtual terminals to support all the users. The key
-> lies in populating /dev/tty, but I am wondering how I can do this in
-> buildroot? Does anyone know what I must set within Buildroot to avoid
-> this problem, and then recompile again to get a new iso image that
-> will boot fine without any problems?
-> 
-> Thank you in advance for your response.
-> _______________________________________________
-> buildroot mailing list
-> buildroot at uclibc.org
-> http://busybox.net/mailman/listinfo/buildroot
--- 
-Mit freundlichen Gr??en
-
-
-Emil Kr?per
-
-Solcon Systemtechnik GmbH
-Niels-Bohr-Ring 3-5
-23568 L?beck
-
-Tel.: (0451)-40948-19
-Fax.: (0451)-40948-88
-Email: e.krueper at solcon-systemtechnik.de
-www.solcon-systemtechnik.de
-
-Sitz der Gesellschaft: L?beck
-Amtsgericht: L?beck | HRB 3662
-Gesch?ftsf?hrer: Dr.-Ing. Reiner Wieck, Dr.-Ing. Gerd Schneider
-
-
-
-Der Inhalt dieser E-Mail ist vertraulich und oder rechtlich gesch?tzt,
-und damit ausschlie?lich f?r den bezeichneten Adressaten bestimmt. Wenn
-Sie nicht der vorgesehene Adressat dieser E-Mail oder dessen Vertreter
-sein sollten, so beachten Sie bitte, dass jede Form der Kenntnisnahme,
-Ver?ffentlichung, Vervielf?ltigung oder Weitergabe des Inhalts dieser
-E-Mail unzul?ssig ist. Wir bitten Sie, sich in diesem Fall mit dem
-Absender in Verbindung zu setzen und diese E-Mail und jeden Anhang von
-Ihrem System zu l?schen. Vielen Dank.
+Issue History 
+Date Modified   Username       Field                    Change               
+====================================================================== 
+04-07-08 00:47  joedawson      New Issue                                    
+04-07-08 00:47  joedawson      Status                   new => assigned     
+04-07-08 00:47  joedawson      Assigned To               => buildroot       
+04-07-08 00:47  joedawson      File Added: config                           
+======================================================================
