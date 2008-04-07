@@ -1,54 +1,74 @@
-From: jacmet at uclibc.org <jacmet@uclibc.org>
-Date: Mon,  7 Apr 2008 00:59:08 -0700 (PDT)
-Subject: [Buildroot] svn commit: trunk/buildroot/package/haserl
-Message-ID: <20080407075908.DADCC3C3B9@busybox.net>
+From: bugs at busybox.net <bugs@busybox.net>
+Date: Mon, 7 Apr 2008 04:05:50 -0700
+Subject: [Buildroot] [buildroot 0002874]: libglib2 does not build
+Message-ID: <272677f0ce95a6fefc545af50e49d5d2@busybox.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Author: jacmet
-Date: 2008-04-07 00:59:08 -0700 (Mon, 07 Apr 2008)
-New Revision: 21662
 
-Log:
-haserl: bump version
+A NOTE has been added to this issue. 
+====================================================================== 
+http://busybox.net/bugs/view.php?id=2874 
+====================================================================== 
+Reported By:                joedawson
+Assigned To:                buildroot
+====================================================================== 
+Project:                    buildroot
+Issue ID:                   2874
+Category:                   Architecture Specific
+Reproducibility:            always
+Severity:                   minor
+Priority:                   normal
+Status:                     assigned
+====================================================================== 
+Date Submitted:             04-07-2008 00:47 PDT
+Last Modified:              04-07-2008 04:05 PDT
+====================================================================== 
+Summary:                    libglib2 does not build
+Description: 
+libglib2 fails to build. Is tested for ARM and x86 builds, giving the same
+error:
+make[4]: Entering directory
+`/srv/br-svn/build_arm/libglib2-2.15.4/gobject'
+make[4]: `glib-genmarshal' is up to date.
+make[4]: Leaving directory
+`/srv/br-svn/build_arm/libglib2-2.15.4/gobject'
+echo "#ifndef __G_MARSHAL_H__" > xgen-gmh \
+        && echo "#define __G_MARSHAL_H__" >> xgen-gmh \
+        && /usr/bin/glib-genmarshal --nostdinc --prefix=g_cclosure_marshal
+./gmarshal.list --header >> xgen-gmh \
+        && echo "#endif /* __G_MARSHAL_H__ */" >> xgen-gmh \
+        && (cmp -s xgen-gmh gmarshal.h 2>/dev/null || cp xgen-gmh
+gmarshal.h) \
+        && rm -f xgen-gmh xgen-gmh~ \
+        && echo timestamp > stamp-gmarshal.h
+/bin/bash: line 2: /usr/bin/glib-genmarshal: No such file or directory
+make[3]: *** [stamp-gmarshal.h] Error 127
+make[3]: Leaving directory
+`/srv/br-svn/build_arm/libglib2-2.15.4/gobject'
+make[2]: *** [all-recursive] Error 1
+make[2]: Leaving directory `/srv/br-svn/build_arm/libglib2-2.15.4'
+make[1]: *** [all] Error 2
+make[1]: Leaving directory `/srv/br-svn/build_arm/libglib2-2.15.4'
+make: *** [/srv/br-svn/build_arm/libglib2-2.15.4/.stamp_built] Error 2
 
+====================================================================== 
 
-Removed:
-   trunk/buildroot/package/haserl/haserl-0.9.22-susv3-legacy.patch
+---------------------------------------------------------------------- 
+ joedawson - 04-07-08 04:05  
+---------------------------------------------------------------------- 
+correction: it relies on libglib2 to be installed on the development
+machine. is it possible to have that tested in some way? 
 
-Modified:
-   trunk/buildroot/package/haserl/Config.in
-
-
-Changeset:
-Modified: trunk/buildroot/package/haserl/Config.in
-===================================================================
---- trunk/buildroot/package/haserl/Config.in	2008-04-07 07:59:03 UTC (rev 21661)
-+++ trunk/buildroot/package/haserl/Config.in	2008-04-07 07:59:08 UTC (rev 21662)
-@@ -31,4 +31,4 @@
- config BR2_PACKAGE_HASERL_VERSION
- 	string
- 	default "0.8.0"		if BR2_PACKAGE_HASERL_VERSION_0_8_X
--	default "0.9.22"	if BR2_PACKAGE_HASERL_VERSION_0_9_X
-+	default "0.9.23"	if BR2_PACKAGE_HASERL_VERSION_0_9_X
-
-Deleted: trunk/buildroot/package/haserl/haserl-0.9.22-susv3-legacy.patch
-===================================================================
---- trunk/buildroot/package/haserl/haserl-0.9.22-susv3-legacy.patch	2008-04-07 07:59:03 UTC (rev 21661)
-+++ trunk/buildroot/package/haserl/haserl-0.9.22-susv3-legacy.patch	2008-04-07 07:59:08 UTC (rev 21662)
-@@ -1,12 +0,0 @@
--diff -urN haserl-0.9.21-0rig/src/haserl.c haserl-0.9.21/src/haserl.c
----- haserl-0.9.21-0rig/src/haserl.c	2007-12-13 22:58:00.000000000 +0100
--+++ haserl-0.9.21/src/haserl.c	2007-12-13 23:00:10.000000000 +0100
--@@ -210,7 +210,7 @@
--     }
--   memcpy ((char *) (entry + strlen (prefix)), str, strlen (str));
-- 
---  keylen = (size_t) (index (entry, '=') - entry);
--+  keylen = (size_t) (strchr (entry, '=') - entry);
-- 
--   if (keylen <= 0)
--     {
+Issue History 
+Date Modified   Username       Field                    Change               
+====================================================================== 
+04-07-08 00:47  joedawson      New Issue                                    
+04-07-08 00:47  joedawson      Status                   new => assigned     
+04-07-08 00:47  joedawson      Assigned To               => buildroot       
+04-07-08 00:47  joedawson      File Added: config                           
+04-07-08 04:05  joedawson      Note Added: 0006434                          
+======================================================================
