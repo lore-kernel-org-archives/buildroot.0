@@ -1,85 +1,111 @@
-From: Arun Reddy <reddyac@gmail.com>
-Date: Mon, 7 Apr 2008 16:30:24 -0700
-Subject: [Buildroot] Creating a bootable filesystem image?
-In-Reply-To: <20080407200406.A0C4F2FE0348@sam.liddicott.com>
-References: <20080407200406.A0C4F2FE0348@sam.liddicott.com>
-Message-ID: <326f33790804071630l359860ccu80104cb28d35fa66@mail.gmail.com>
+From: hamish at uclibc.org <hamish@uclibc.org>
+Date: Mon,  7 Apr 2008 21:18:13 -0700 (PDT)
+Subject: [Buildroot] svn commit: trunk/buildroot/package/mtd: mtd-utils.git
+Message-ID: <20080408041813.237043C2FF@busybox.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi John,
+Author: hamish
+Date: 2008-04-07 21:18:11 -0700 (Mon, 07 Apr 2008)
+New Revision: 21667
 
-Thanks a lot for pointing me to that script... the comments are well made
-and tell me exactly what it does. In this case, this works for an ext3 file
-system. Would the best approach be to modify it and change all ext3 code to
-ext2 and run it to see what it does?
+Log:
+Remove configuration item for git commit ID, as our patches are version-specific.
+Upgrade to a newer version than the previous default.
+Fix parallel compile issue.
+Fix issue with quoting of URL.
 
-Hi Sam,
 
-I will certainly look for that script that you mentioned if the previous
-method does not work.
 
-Thank you.
+Removed:
+   trunk/buildroot/package/mtd/mtd-utils.git/mtd-utils-all-argp.patch
 
-On Mon, Apr 7, 2008 at 1:07 PM, Sam Liddicott <sam@liddicott.com> wrote:
+Modified:
+   trunk/buildroot/package/mtd/Config.in
+   trunk/buildroot/package/mtd/mtd-utils.git/mtd.mk
 
-> There is a script in scripts which does most of this which I psoted a
-> patch for recently.
->
-> The script still needs modifying to use LBA mode not CHS which I will do
-> soon, or you could...
->
-> Sam
->
-> -----Original Message-----
-> From: John Voltz <john.voltz@gmail.com>
-> Sent: 07 April 2008 20:29
-> To: Buildroot List <buildroot@uclibc.org>
-> Subject: Re: [Buildroot] Creating a bootable filesystem image?
->
-> You need a bootloader like grub to kickstart everything. Buildroot will
-> build grub for you. You have to do a little tweaking of /boot/grub/menu.lst
-> to point grub at your kernel. You can look inside /scripts/create-ext3-img
-> to see what needs to be done, or just use that script to do your bidding.
->
-> John
->
->
-> On Mon, Apr 7, 2008 at 2:58 PM, Arun Reddy <reddyac@gmail.com> wrote:
-> Hi everyone,
->
-> I was able to create a filesystem image and .iso using buildroot.
->
-> In experimenting with booting up the new kernel on a virtual machine
-> (VirtualBox), I found that I needed to convert my rootfs.i386.ext2
-> filesystem image to a .vdi file (using VirtualBox software).
->  I tried booting the .vdi alone, but unfortunately I encountered an
-> immediate error that stated "no bootable medium could be found." To get
-> passed this error, I mounted the .iso as well along with my .vdi file. Using
-> some help from the mailing list members, I got passed a few minor problems
-> during bootup, and got the kernel running with a shell.
->
-> With that milestone complete, I now want to avoid using both the .iso and
-> the harddisk (.vdi) together. I just want to be able to convert the
-> rootfs.i386.ext2 to a .vdi file and run that alone. The fact that this .vdi
-> cannot boot alone leads me to believe the filesystem that buildroot creates
-> for me is not bootable. (I may have missed an important part in my reading,
-> but either the filesystem absolutely needs an .iso to work, or it is used
-> for the user to chroot into it and boot from there).
->
-> My question is, does anyone know if there is a way to configure buildroot
-> to make rootfs.i386.ext2 bootable? Please note that I disabled RAMDISK in
-> the kernel .config before compiling buildroot because I don't need to use
-> one
->
-> _______________________________________________
-> buildroot mailing list
-> buildroot at uclibc.org
-> http://busybox.net/mailman/listinfo/buildroot
->
--------------- next part --------------
-An HTML attachment was scrubbed...
-URL: http://busybox.net/lists/buildroot/attachments/20080407/2a512b48/attachment.htm 
+
+Changeset:
+Modified: trunk/buildroot/package/mtd/Config.in
+===================================================================
+--- trunk/buildroot/package/mtd/Config.in	2008-04-07 21:11:23 UTC (rev 21666)
++++ trunk/buildroot/package/mtd/Config.in	2008-04-08 04:18:11 UTC (rev 21667)
+@@ -37,18 +37,6 @@
+ 
+ endchoice
+ 
+-config BR2_PACKAGE_MTD_UTILS_GIT_COMMIT_ID
+-	string	"Commit ID to use"
+-	default "e6088d987c545d60a86e1f44836ab8ba072fffd9"
+-	depends on BR2_PACKAGE_MTD_UTILS_GIT
+-	help
+-	  If you wish to use the mtd-utils.git tree as of a specific
+-	  commit, you can enter the commit ID here (for example,
+-	  e6088d987c545d60a86e1f44836ab8ba072fffd9). 
+-
+-	  Alternatively you can specify HEAD. Note that the current
+-	  HEAD will be downloaded but won't be tracked when it changes.
+-
+ comment "MTD tools selection"
+ 	depends BR2_PACKAGE_MTD
+ 
+
+Deleted: trunk/buildroot/package/mtd/mtd-utils.git/mtd-utils-all-argp.patch
+===================================================================
+--- trunk/buildroot/package/mtd/mtd-utils.git/mtd-utils-all-argp.patch	2008-04-07 21:11:23 UTC (rev 21666)
++++ trunk/buildroot/package/mtd/mtd-utils.git/mtd-utils-all-argp.patch	2008-04-08 04:18:11 UTC (rev 21667)
+@@ -1,10 +0,0 @@
+---- mtd-utils-e6088d987c545d60a86e1f44836ab8ba072fffd9/ubi-utils/new-utils/src/ubicrc32.c.orig	2008-03-26 16:08:13.000000000 +1100
+-+++ mtd-utils-e6088d987c545d60a86e1f44836ab8ba072fffd9/ubi-utils/new-utils/src/ubicrc32.c	2008-03-26 16:08:20.000000000 +1100
+-@@ -26,7 +26,6 @@
+- #include <stdint.h>
+- #include <stdlib.h>
+- #include <getopt.h>
+--#include <argp.h>
+- #include <unistd.h>
+- #include <mtd/ubi-header.h>
+- 
+
+Modified: trunk/buildroot/package/mtd/mtd-utils.git/mtd.mk
+===================================================================
+--- trunk/buildroot/package/mtd/mtd-utils.git/mtd.mk	2008-04-07 21:11:23 UTC (rev 21666)
++++ trunk/buildroot/package/mtd/mtd-utils.git/mtd.mk	2008-04-08 04:18:11 UTC (rev 21667)
+@@ -3,8 +3,7 @@
+ # mtd provides jffs2 utilities
+ #
+ #############################################################
+-MTD_VERSION:=$(strip $(subst ",, $(BR2_PACKAGE_MTD_UTILS_GIT_COMMIT_ID)))
+-#"))
++MTD_VERSION:=fcb52ccc99679460640386c297023f852b108f68
+ MTD_SOURCE:=mtd-utils-$(MTD_VERSION).tar.gz
+ MTD_URL:=http://git.infradead.org/mtd-utils.git?a=snapshot;h=$(MTD_VERSION);sf=tgz
+ MTD_HOST_DIR:= $(TOOL_BUILD_DIR)/mtd-utils-$(MTD_VERSION)
+@@ -22,7 +21,7 @@
+ SUMTOOL := $(MTD_HOST_DIR)/sumtool
+ 
+ $(DL_DIR)/$(MTD_SOURCE):
+-	$(WGET) -O $(DL_DIR)/$(MTD_SOURCE) $(MTD_URL)
++	$(WGET) -O $(DL_DIR)/$(MTD_SOURCE) "$(MTD_URL)"
+ 
+ $(MTD_HOST_DIR)/.unpacked: $(DL_DIR)/$(MTD_SOURCE)
+ 	$(MTD_CAT) $(DL_DIR)/$(MTD_SOURCE) | tar -C $(TOOL_BUILD_DIR) $(TAR_OPTIONS) -
+@@ -64,6 +63,7 @@
+ #############################################################
+ $(MTD_DIR)/.unpacked: $(DL_DIR)/$(MTD_SOURCE)
+ 	$(MTD_CAT) $(DL_DIR)/$(MTD_SOURCE) | tar -C $(BUILD_DIR) $(TAR_OPTIONS) -
++	rm -rf $(MTD_DIR)
+ 	mv $(BUILD_DIR)/$(MTD_NAME) $(MTD_DIR)
+ 	toolchain/patch-kernel.sh $(MTD_DIR) package/mtd/mtd-utils.git mtd-utils-all\*.patch
+ 	toolchain/patch-kernel.sh $(MTD_DIR) package/mtd/mtd-utils.git mtd-utils-target\*.patch
+@@ -108,7 +108,7 @@
+ 
+ $(MTD_BUILD_TARGETS): $(MTD_DIR)/.unpacked
+ 	mkdir -p $(TARGET_DIR)/usr/sbin
+-	$(MAKE) OPTFLAGS="-DNEED_BCOPY -Dbcmp=memcmp -I$(STAGING_DIR)/usr/include $(TARGET_CFLAGS)" \
++	$(MAKE1) OPTFLAGS="-DNEED_BCOPY -Dbcmp=memcmp -I$(STAGING_DIR)/usr/include $(TARGET_CFLAGS)" \
+ 	       BUILDDIR=$(MTD_DIR) \
+ 	       CROSS=$(TARGET_CROSS) CC=$(TARGET_CC) WITHOUT_XATTR=1 -C $(MTD_DIR)
+ 
