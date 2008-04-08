@@ -1,34 +1,36 @@
-From: Michel (BusError) <buildroot.atmel.com@pollet.net>
-Date: Tue, 8 Apr 2008 13:40:13 +0100
-Subject: [Buildroot] Hi There
-Message-ID: <200804081340.13053.buildroot.atmel.com@pollet.net>
+From: nkukard at uclibc.org <nkukard@uclibc.org>
+Date: Tue,  8 Apr 2008 06:06:11 -0700 (PDT)
+Subject: [Buildroot] svn commit: trunk/buildroot/package/pciutils
+Message-ID: <20080408130611.0BE893C305@busybox.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+Author: nkukard
+Date: 2008-04-08 06:06:07 -0700 (Tue, 08 Apr 2008)
+New Revision: 21670
 
-I've been using buildroot via atmel's AVR32 git tree for some time, and I 
-started to fix problems. It's been suggested that I push my 'general' patches 
-to you guys so they will come back down the feeding chain to us :-)
+Log:
+* Bump pciutils version
 
-First a question : is there an official git repositiory somewhere ? I've 
-quickly grown to rely on git, and it would make things easier for me...
 
-Alternatively, should I push patch emails directly to this list ? I do try to 
-make them as small as possible.
+Modified:
+   trunk/buildroot/package/pciutils/pciutils.mk
 
-What I have to push right now is :
-+ NCURSES: Fixed GNU URL pathname for ncurses
-+ SCREEN: Added support for GNU screen
-+ NCURSES: ncurses install procedure now also copies the 'extra' libraries 
-like libpanel.so into the target. This allows tools like 'iptraf' to work
-+ IPTRAF: Added support for 'iptraf' curses based traffic monitor
-+ U-BOOT: A patch to fix the fw_printenv compilation
-+ U-BOOT: Added support for linux userland environmnet access
-+ U-BOOT: Documented that the fw_setenv will only work if the MTD partition is 
-R/W
 
-Please advise.
-Michel
+Changeset:
+Modified: trunk/buildroot/package/pciutils/pciutils.mk
+===================================================================
+--- trunk/buildroot/package/pciutils/pciutils.mk	2008-04-08 10:21:16 UTC (rev 21669)
++++ trunk/buildroot/package/pciutils/pciutils.mk	2008-04-08 13:06:07 UTC (rev 21670)
+@@ -3,7 +3,7 @@
+ # pciutils
+ #
+ #############################################################
+-PCIUTILS_VERSION:=2.2.6
++PCIUTILS_VERSION:=2.2.10
+ PCIUTILS_SOURCE:=pciutils-$(PCIUTILS_VERSION).tar.gz
+ PCIUTILS_CAT:=$(ZCAT)
+ PCIUTILS_SITE:=ftp://atrey.karlin.mff.cuni.cz/pub/linux/pci
