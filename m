@@ -1,57 +1,36 @@
-From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Tue, 08 Apr 2008 16:00:50 +0200
-Subject: [Buildroot] Hi There
-In-Reply-To: <200804081340.13053.buildroot.atmel.com@pollet.net> (Michel's
-	message of "Tue\, 8 Apr 2008 13\:40\:13 +0100")
-References: <200804081340.13053.buildroot.atmel.com@pollet.net>
-Message-ID: <877if8jvjh.fsf@macbook.be.48ers.dk>
+From: Guillaume Dargaud <dargaud@lpsc.in2p3.fr>
+Date: Tue, 8 Apr 2008 16:29:18 +0200
+Subject: [Buildroot] Editing filesystem files
+Message-ID: <111801c89984$f480be70$f52f9e86@LPSC0173W>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Michel" == Michel (BusError) <buildroot.atmel.com@pollet.net> writes:
+Hello all,
+thanks to the support I got here, I now have a nice boot on my ml405 and I 
+get to the login with no error. Which brings me to the question:
 
- Michel> I've been using buildroot via atmel's AVR32 git tree for some
- Michel> time, and I started to fix problems. It's been suggested that
- Michel> I push my 'general' patches to you guys so they will come
- Michel> back down the feeding chain to us :-)
+- how do I login ?
+If I type 'root' it refuses without even asking for a password, so I guess 
+ttyUL0 is not allowed by /etc/securetty
 
-Sounds good!
+- how do I edit the various target files (/etc/securetty, /etc/passwd, 
+/etc/shadow...) _before_ creating the ramdisk ?
 
- Michel> First a question : is there an official git repositiory
- Michel> somewhere ? I've quickly grown to rely on git, and it would
- Michel> make things easier for me...
+I mean, I could unzip rootfs.powerpc.ext2.gz, mount it, edit it, rezip it 
+and then proceed with the kernel 'make ARCH=ppc 
+CROSS_COMPILE=powerpc-linux-uclibc- zImage.initrd' and genace, but if I ever 
+do 'make' in buildroot again, I'll loose all my changes.
 
-Well, you can always use git-svn like I do.
+I see target/generic/target_skeleton/etc/shadow and 
+target/generic/target_busybox_skeleton/etc/shadow but if I modify files in 
+there and do 'make' again, the new project_build_powerpc/genepy/root/ or 
+ramdisk file don't reflect the changes. Do I need to make clean or something 
+?
 
- Michel> Alternatively, should I push patch emails directly to this
- Michel> list ? I do try to make them as small as possible.
-
-Yes please, that's the easiest for review.
-
- Michel> What I have to push right now is :
- Michel> + NCURSES: Fixed GNU URL pathname for ncurses
-
-Hmm, from a quick look the URL seems correct - Are you uptodate with
-trunk?
-
- Michel> + SCREEN: Added support for GNU screen
- Michel> + NCURSES: ncurses install procedure now also copies the
- Michel> + 'extra' libraries like libpanel.so into the target. This
- Michel> + allows tools like 'iptraf' to work
-
-Ok, how big is libpanel? Does it make sense to make a specific CONFIG_
-setting for that?
-
- Michel> + IPTRAF: Added support for 'iptraf' curses based traffic monitor
- Michel> + U-BOOT: A patch to fix the fw_printenv compilation
- Michel> + U-BOOT: Added support for linux userland environmnet access
- Michel> + U-BOOT: Documented that the fw_setenv will only work if the
- Michel> + MTD partition is R/W
-
-Sounds good, looking forward to seeing the patches.
-
+Thanks
 -- 
-Bye, Peter Korsgaard
+Guillaume Dargaud
+http://www.gdargaud.net/
