@@ -1,36 +1,44 @@
-From: Guillaume Dargaud <dargaud@lpsc.in2p3.fr>
-Date: Tue, 8 Apr 2008 16:29:18 +0200
-Subject: [Buildroot] Editing filesystem files
-Message-ID: <111801c89984$f480be70$f52f9e86@LPSC0173W>
+From: Peter Korsgaard <jacmet@uclibc.org>
+Date: Tue, 08 Apr 2008 16:37:13 +0200
+Subject: [Buildroot] svn commit: trunk/buildroot/package:  bootutils
+In-Reply-To: <20080408130930.75F073C306@busybox.net> (nkukard@uclibc.org's
+	message of "Tue\, 8 Apr 2008 06\:09\:30 -0700 \(PDT\)")
+References: <20080408130930.75F073C306@busybox.net>
+Message-ID: <87wsn8ifae.fsf@macbook.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello all,
-thanks to the support I got here, I now have a nice boot on my ml405 and I 
-get to the login with no error. Which brings me to the question:
+>>>>> "nkukard" == nkukard  <nkukard@uclibc.org> writes:
 
-- how do I login ?
-If I type 'root' it refuses without even asking for a password, so I guess 
-ttyUL0 is not allowed by /etc/securetty
+ nkukard> Author: nkukard
+ nkukard> Date: 2008-04-08 06:09:29 -0700 (Tue, 08 Apr 2008)
+ nkukard> New Revision: 21671
 
-- how do I edit the various target files (/etc/securetty, /etc/passwd, 
-/etc/shadow...) _before_ creating the ramdisk ?
+ nkukard> Log:
+ nkukard> * Added bootutils
 
-I mean, I could unzip rootfs.powerpc.ext2.gz, mount it, edit it, rezip it 
-and then proceed with the kernel 'make ARCH=ppc 
-CROSS_COMPILE=powerpc-linux-uclibc- zImage.initrd' and genace, but if I ever 
-do 'make' in buildroot again, I'll loose all my changes.
+...
 
-I see target/generic/target_skeleton/etc/shadow and 
-target/generic/target_busybox_skeleton/etc/shadow but if I modify files in 
-there and do 'make' again, the new project_build_powerpc/genepy/root/ or 
-ramdisk file don't reflect the changes. Do I need to make clean or something 
-?
+ nkukard> Added: trunk/buildroot/package/bootutils/Config.in
+ nkukard> ===================================================================
+ nkukard> --- trunk/buildroot/package/bootutils/Config.in	                        (rev 0)
+ nkukard> +++ trunk/buildroot/package/bootutils/Config.in	2008-04-08 13:09:29 UTC (rev 21671)
+ nkukard> @@ -0,0 +1,11 @@
+ nkukard> +config BR2_PACKAGE_BOOTUTILS
+ nkukard> +	bool "bootutils"
+ nkukard> +	default n
+ nkukard> +	help
+ nkukard> +	  BootUtils is a collection of utilities to facilitate booting of 
+ nkukard> +	  Linux 2.6-based systems. The process of finding the root volume 
+ nkukard> +	  either by label or explicit label= on the kernel command line, 
+ nkukard> +	  mounting it, and 'switchroot'ing is automated.
+ nkukard> +
+ nkukard> +	  http://www.freshmeat.net/projects/bootutils
 
-Thanks
+Shouldn't this be http://bootutils.pr.linuxrulz.org/ instead?
+
 -- 
-Guillaume Dargaud
-http://www.gdargaud.net/
+Bye, Peter Korsgaard
