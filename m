@@ -1,39 +1,34 @@
-From: Sebastian <bastisoft@arcor.de>
-Date: Tue, 08 Apr 2008 12:02:58 +0200
-Subject: [Buildroot] Creating a bootable filesystem image?
-In-Reply-To: <326f33790804071158h125bc8c3n9701bf1774ce5611@mail.gmail.com>
-References: <326f33790804071158h125bc8c3n9701bf1774ce5611@mail.gmail.com>
-Message-ID: <47FB42D2.7040905@arcor.de>
+From: Michel (BusError) <buildroot.atmel.com@pollet.net>
+Date: Tue, 8 Apr 2008 13:40:13 +0100
+Subject: [Buildroot] Hi There
+Message-ID: <200804081340.13053.buildroot.atmel.com@pollet.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello Arun,
 
- > My question is, does anyone know if there is a way to configure 
-buildroot to make rootfs.i386.ext2 bootable? Please note that I disabled 
-RAMDISK in the > kernel .config before compiling buildroot because I 
-don't need to use one.
+I've been using buildroot via atmel's AVR32 git tree for some time, and I 
+started to fix problems. It's been suggested that I push my 'general' patches 
+to you guys so they will come back down the feeding chain to us :-)
 
-This is because rootfs.i386.ext2 is only a file system image, not a hard 
-disk image. It is missing the boot sector of the disk, which contains 
-the Master Boot Record and the partition table. The BIOS on i386 does 
-only execute the first sector on the disk (the MBR code) which usually 
-only boots from the active partition. So you need a bootloader, as the 
-kernel itself is not able to be loaded this way.
+First a question : is there an official git repositiory somewhere ? I've 
+quickly grown to rely on git, and it would make things easier for me...
 
-Like John said, you can use GRUB. But if you only want to boot a ext2 
-partition, you can easily get away with Extlinux. It is a syslinux 
-derivate with support for ext2 (and ext3) instead of FAT. It installs 
-only into the partition (not into the master boot record), which means 
-you should be fine by creating and activating the partition containing 
-your ext2 image.
+Alternatively, should I push patch emails directly to this list ? I do try to 
+make them as small as possible.
 
-The changes in scripts/build-ext3-img references ext3 only while 
-creating the file system. So you only need to change that if you want to 
-use grub.
+What I have to push right now is :
++ NCURSES: Fixed GNU URL pathname for ncurses
++ SCREEN: Added support for GNU screen
++ NCURSES: ncurses install procedure now also copies the 'extra' libraries 
+like libpanel.so into the target. This allows tools like 'iptraf' to work
++ IPTRAF: Added support for 'iptraf' curses based traffic monitor
++ U-BOOT: A patch to fix the fw_printenv compilation
++ U-BOOT: Added support for linux userland environmnet access
++ U-BOOT: Documented that the fw_setenv will only work if the MTD partition is 
+R/W
 
-Best regards,
-Sebastian
+Please advise.
+Michel
