@@ -1,7 +1,7 @@
 From: hamish at uclibc.org <hamish@uclibc.org>
-Date: Mon,  7 Apr 2008 21:18:13 -0700 (PDT)
-Subject: [Buildroot] svn commit: trunk/buildroot/package/mtd: mtd-utils.git
-Message-ID: <20080408041813.237043C2FF@busybox.net>
+Date: Mon,  7 Apr 2008 21:28:19 -0700 (PDT)
+Subject: [Buildroot] svn commit: trunk/buildroot/target/ubifs
+Message-ID: <20080408042819.210953C362@busybox.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -9,103 +9,85 @@ Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
 Author: hamish
-Date: 2008-04-07 21:18:11 -0700 (Mon, 07 Apr 2008)
-New Revision: 21667
+Date: 2008-04-07 21:28:18 -0700 (Mon, 07 Apr 2008)
+New Revision: 21668
 
 Log:
-Remove configuration item for git commit ID, as our patches are version-specific.
-Upgrade to a newer version than the previous default.
-Fix parallel compile issue.
-Fix issue with quoting of URL.
+Fix UBI compression options
 
-
-
-Removed:
-   trunk/buildroot/package/mtd/mtd-utils.git/mtd-utils-all-argp.patch
 
 Modified:
-   trunk/buildroot/package/mtd/Config.in
-   trunk/buildroot/package/mtd/mtd-utils.git/mtd.mk
+   trunk/buildroot/target/ubifs/Config.in
+   trunk/buildroot/target/ubifs/ubifsroot.mk
 
 
 Changeset:
-Modified: trunk/buildroot/package/mtd/Config.in
+Modified: trunk/buildroot/target/ubifs/Config.in
 ===================================================================
---- trunk/buildroot/package/mtd/Config.in	2008-04-07 21:11:23 UTC (rev 21666)
-+++ trunk/buildroot/package/mtd/Config.in	2008-04-08 04:18:11 UTC (rev 21667)
-@@ -37,18 +37,6 @@
+--- trunk/buildroot/target/ubifs/Config.in	2008-04-08 04:18:11 UTC (rev 21667)
++++ trunk/buildroot/target/ubifs/Config.in	2008-04-08 04:28:18 UTC (rev 21668)
+@@ -36,25 +36,25 @@
+ 
+ choice
+ 	prompt "ubifs runtime compression"
+-	default BR2_TARGET_ROOTFS_UBIFS_LZO
++	default BR2_TARGET_ROOTFS_UBIFS_RT_LZO
+ 	depends on BR2_TARGET_ROOTFS_UBIFS
+ 	help
+-	  Select compressor for ubifs filesystem of the root filesystem
++	  Select which compression format to use at run-time within the ubifs file system.
+ 
+-config BR2_TARGET_ROOTFS_UBIFS_NONE
++config BR2_TARGET_ROOTFS_UBIFS_RT_NONE
+ 	bool "no compression"
+ 	help
+-	  Do not compress the ubifs filesystem.
++	  Don't use run-time compression.
+ 
+-config BR2_TARGET_ROOTFS_UBIFS_ZLIB
++config BR2_TARGET_ROOTFS_UBIFS_RT_ZLIB
+ 	bool "gzip"
+ 	help
+-	  Compress the ubifs filesystem with zlib.
++	  Use zlib compression at run-time.
+ 
+-config BR2_TARGET_ROOTFS_UBIFS_LZO
++config BR2_TARGET_ROOTFS_UBIFS_RT_LZO
+ 	bool "lzo"
+ 	help
+-	  Compress the ext2 filesystem with lzo.
++	  Use lzo compression at run-time.
  
  endchoice
  
--config BR2_PACKAGE_MTD_UTILS_GIT_COMMIT_ID
--	string	"Commit ID to use"
--	default "e6088d987c545d60a86e1f44836ab8ba072fffd9"
--	depends on BR2_PACKAGE_MTD_UTILS_GIT
--	help
--	  If you wish to use the mtd-utils.git tree as of a specific
--	  commit, you can enter the commit ID here (for example,
--	  e6088d987c545d60a86e1f44836ab8ba072fffd9). 
--
--	  Alternatively you can specify HEAD. Note that the current
--	  HEAD will be downloaded but won't be tracked when it changes.
--
- comment "MTD tools selection"
- 	depends BR2_PACKAGE_MTD
+@@ -63,7 +63,7 @@
+ 	default BR2_TARGET_ROOTFS_UBIFS_NONE
+ 	depends on BR2_TARGET_ROOTFS_UBIFS
+ 	help
+-	  Select compressor for ubifs filesystem of the root filesystem
++	  Select which compression format to compress the final image into.
  
+ config BR2_TARGET_ROOTFS_UBIFS_NONE
+ 	bool "no compression"
 
-Deleted: trunk/buildroot/package/mtd/mtd-utils.git/mtd-utils-all-argp.patch
+Modified: trunk/buildroot/target/ubifs/ubifsroot.mk
 ===================================================================
---- trunk/buildroot/package/mtd/mtd-utils.git/mtd-utils-all-argp.patch	2008-04-07 21:11:23 UTC (rev 21666)
-+++ trunk/buildroot/package/mtd/mtd-utils.git/mtd-utils-all-argp.patch	2008-04-08 04:18:11 UTC (rev 21667)
-@@ -1,10 +0,0 @@
----- mtd-utils-e6088d987c545d60a86e1f44836ab8ba072fffd9/ubi-utils/new-utils/src/ubicrc32.c.orig	2008-03-26 16:08:13.000000000 +1100
--+++ mtd-utils-e6088d987c545d60a86e1f44836ab8ba072fffd9/ubi-utils/new-utils/src/ubicrc32.c	2008-03-26 16:08:20.000000000 +1100
--@@ -26,7 +26,6 @@
-- #include <stdint.h>
-- #include <stdlib.h>
-- #include <getopt.h>
---#include <argp.h>
-- #include <unistd.h>
-- #include <mtd/ubi-header.h>
-- 
-
-Modified: trunk/buildroot/package/mtd/mtd-utils.git/mtd.mk
-===================================================================
---- trunk/buildroot/package/mtd/mtd-utils.git/mtd.mk	2008-04-07 21:11:23 UTC (rev 21666)
-+++ trunk/buildroot/package/mtd/mtd-utils.git/mtd.mk	2008-04-08 04:18:11 UTC (rev 21667)
-@@ -3,8 +3,7 @@
- # mtd provides jffs2 utilities
- #
- #############################################################
--MTD_VERSION:=$(strip $(subst ",, $(BR2_PACKAGE_MTD_UTILS_GIT_COMMIT_ID)))
--#"))
-+MTD_VERSION:=fcb52ccc99679460640386c297023f852b108f68
- MTD_SOURCE:=mtd-utils-$(MTD_VERSION).tar.gz
- MTD_URL:=http://git.infradead.org/mtd-utils.git?a=snapshot;h=$(MTD_VERSION);sf=tgz
- MTD_HOST_DIR:= $(TOOL_BUILD_DIR)/mtd-utils-$(MTD_VERSION)
-@@ -22,7 +21,7 @@
- SUMTOOL := $(MTD_HOST_DIR)/sumtool
+--- trunk/buildroot/target/ubifs/ubifsroot.mk	2008-04-08 04:18:11 UTC (rev 21667)
++++ trunk/buildroot/target/ubifs/ubifsroot.mk	2008-04-08 04:28:18 UTC (rev 21668)
+@@ -41,13 +41,13 @@
+ UBIFS_BASE := $(subst ",,$(BR2_TARGET_ROOTFS_UBIFS_OUTPUT))
+ #")
  
- $(DL_DIR)/$(MTD_SOURCE):
--	$(WGET) -O $(DL_DIR)/$(MTD_SOURCE) $(MTD_URL)
-+	$(WGET) -O $(DL_DIR)/$(MTD_SOURCE) "$(MTD_URL)"
- 
- $(MTD_HOST_DIR)/.unpacked: $(DL_DIR)/$(MTD_SOURCE)
- 	$(MTD_CAT) $(DL_DIR)/$(MTD_SOURCE) | tar -C $(TOOL_BUILD_DIR) $(TAR_OPTIONS) -
-@@ -64,6 +63,7 @@
- #############################################################
- $(MTD_DIR)/.unpacked: $(DL_DIR)/$(MTD_SOURCE)
- 	$(MTD_CAT) $(DL_DIR)/$(MTD_SOURCE) | tar -C $(BUILD_DIR) $(TAR_OPTIONS) -
-+	rm -rf $(MTD_DIR)
- 	mv $(BUILD_DIR)/$(MTD_NAME) $(MTD_DIR)
- 	toolchain/patch-kernel.sh $(MTD_DIR) package/mtd/mtd-utils.git mtd-utils-all\*.patch
- 	toolchain/patch-kernel.sh $(MTD_DIR) package/mtd/mtd-utils.git mtd-utils-target\*.patch
-@@ -108,7 +108,7 @@
- 
- $(MTD_BUILD_TARGETS): $(MTD_DIR)/.unpacked
- 	mkdir -p $(TARGET_DIR)/usr/sbin
--	$(MAKE) OPTFLAGS="-DNEED_BCOPY -Dbcmp=memcmp -I$(STAGING_DIR)/usr/include $(TARGET_CFLAGS)" \
-+	$(MAKE1) OPTFLAGS="-DNEED_BCOPY -Dbcmp=memcmp -I$(STAGING_DIR)/usr/include $(TARGET_CFLAGS)" \
- 	       BUILDDIR=$(MTD_DIR) \
- 	       CROSS=$(TARGET_CROSS) CC=$(TARGET_CC) WITHOUT_XATTR=1 -C $(MTD_DIR)
+-ifeq ($(BR2_TARGET_ROOTFS_UBIFS_ZLIB),y)
++ifeq ($(BR2_TARGET_ROOTFS_UBIFS_RT_ZLIB),y)
+ UBIFS_OPTS += -x zlib
+ endif
+-ifeq ($(BR2_TARGET_ROOTFS_UBIFS_LZI),y)
++ifeq ($(BR2_TARGET_ROOTFS_UBIFS_RT_LZI),y)
+ UBIFS_OPTS += -x lzo
+ endif
+-ifeq ($(BR2_TARGET_ROOTFS_UBIFS_NONE),y)
++ifeq ($(BR2_TARGET_ROOTFS_UBIFS_RT_NONE),y)
+ UBIFS_OPTS += -x none
+ endif
  
