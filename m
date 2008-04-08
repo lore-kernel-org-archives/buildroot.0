@@ -1,69 +1,53 @@
-From: Arun Reddy <reddyac@gmail.com>
-Date: Tue, 8 Apr 2008 13:27:28 -0700
-Subject: [Buildroot] Fwd:  Creating a bootable filesystem image?
-In-Reply-To: <326f33790804081325s680eb37bg9b8e73663277f4c2@mail.gmail.com>
-References: <326f33790804071158h125bc8c3n9701bf1774ce5611@mail.gmail.com>
-	<47FB42D2.7040905@arcor.de>
-	<326f33790804081325s680eb37bg9b8e73663277f4c2@mail.gmail.com>
-Message-ID: <326f33790804081327n55f93beajbf2fb7ea7fafc913@mail.gmail.com>
+From: Ulf Samuelsson <ulf.samuelsson@atmel.com>
+Date: Tue, 8 Apr 2008 23:19:02 +0200
+Subject: [Buildroot] Hi There
+References: <200804081340.13053.buildroot.atmel.com@pollet.net>
+	<877if8jvjh.fsf@macbook.be.48ers.dk>
+Message-ID: <012f01c899bf$242ab100$070514ac@atmel.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-I apologize I forgot to send the message below to the whole mailing list.
 
----------- Forwarded message ----------
-From: Arun Reddy <reddyac@gmail.com>
-Date: Tue, Apr 8, 2008 at 1:25 PM
-Subject: Re: [Buildroot] Creating a bootable filesystem image?
-To: Sebastian <bastisoft@arcor.de>
+>>>>>> "Michel" == Michel (BusError) <buildroot.atmel.com@pollet.net> writes:
+> 
+> Michel> I've been using buildroot via atmel's AVR32 git tree for some
+> Michel> time, and I started to fix problems. It's been suggested that
+> Michel> I push my 'general' patches to you guys so they will come
+> Michel> back down the feeding chain to us :-)
+> 
+> Sounds good!
+> 
+> Michel> First a question : is there an official git repositiory
+> Michel> somewhere ? I've quickly grown to rely on git, and it would
+> Michel> make things easier for me...
+> 
+> Well, you can always use git-svn like I do.
+> 
+> Michel> Alternatively, should I push patch emails directly to this
+> Michel> list ? I do try to make them as small as possible.
+> 
+> Yes please, that's the easiest for review.
+> 
 
 
-Hi Sebastian,
+The structured alternative is to report into the bug-tracking system
+at buildroot.uclibc.org.
 
-Thank you for this email. Would you be willing to explain why I would need
-to change ext3 in order to use grub? Can grub not work on ext3 filesystem? I
-just picked ext2 in the kernel configuration as a test but I can really use
-any filesystem I want (ext2, ext3, etc). So if the script will create for me
-a bootable ext3 filesystem cannot I just use that as it is?
+This makes sure that the patch is available for anyone even
+if they joined the list after you sent the mail.
+
+Personally, I let you decided what you prefer.
 
 
-On Tue, Apr 8, 2008 at 3:02 AM, Sebastian <bastisoft@arcor.de> wrote:
+On the U-Boot patch, pls try to push the patch at the u-boot mailing list.
+After spending years in Limbo, the patching process of U-Boot is
+progressing at a a rapid pace and if the patch is OK, you
+should get it into U-boot in notime..
 
-> Hello Arun,
->
->  > My question is, does anyone know if there is a way to configure
-> buildroot to make rootfs.i386.ext2 bootable? Please note that I disabled
-> RAMDISK in the > kernel .config before compiling buildroot because I
-> don't need to use one.
->
-> This is because rootfs.i386.ext2 is only a file system image, not a hard
-> disk image. It is missing the boot sector of the disk, which contains
-> the Master Boot Record and the partition table. The BIOS on i386 does
-> only execute the first sector on the disk (the MBR code) which usually
-> only boots from the active partition. So you need a bootloader, as the
-> kernel itself is not able to be loaded this way.
->
-> Like John said, you can use GRUB. But if you only want to boot a ext2
-> partition, you can easily get away with Extlinux. It is a syslinux
-> derivate with support for ext2 (and ext3) instead of FAT. It installs
-> only into the partition (not into the master boot record), which means
-> you should be fine by creating and activating the partition containing
-> your ext2 image.
->
-> The changes in scripts/build-ext3-img references ext3 only while
-> creating the file system. So you only need to change that if you want to
-> use grub.
->
-> Best regards,
-> Sebastian
-> _______________________________________________
-> buildroot mailing list
-> buildroot at uclibc.org
-> http://busybox.net/mailman/listinfo/buildroot
->
--------------- next part --------------
-An HTML attachment was scrubbed...
-URL: http://busybox.net/lists/buildroot/attachments/20080408/b5f5dabf/attachment.htm 
+
+
+Best Regards
+Ulf Samuelsson
