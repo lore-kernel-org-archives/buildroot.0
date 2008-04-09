@@ -1,83 +1,33 @@
-From: Hamish Moffatt <hamish@cloud.net.au>
-Date: Thu, 10 Apr 2008 08:35:52 +1000
-Subject: [Buildroot] svn commit: trunk/buildroot/package/ncurses
-In-Reply-To: <20080409113849.004993C4BA@busybox.net>
-References: <20080409113849.004993C4BA@busybox.net>
-Message-ID: <20080409223551.GC4582@cloud.net.au>
+From: Michel (BusError) <buildroot.atmel.com@pollet.net>
+Date: Wed, 9 Apr 2008 23:49:44 +0100
+Subject: [Buildroot] [PATCH] SWILL: Added support for the Simple Web
+	Interface Link Library
+In-Reply-To: <200804091706.06235.buildroot.atmel.com@pollet.net>
+References: <200804091706.06235.buildroot.atmel.com@pollet.net>
+Message-ID: <200804092349.44497.buildroot.atmel.com@pollet.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Wed, Apr 09, 2008 at 04:38:48AM -0700, nkukard at uclibc.org wrote:
-> Author: nkukard
-> Date: 2008-04-09 04:38:48 -0700 (Wed, 09 Apr 2008)
-> New Revision: 21682
-> 
-> Log:
-> Some package use ncurses libpanel/libform/libmenu, this config allows to selectively
-> copy them to the target filesystem at the same time at the main library is installed.
-> -Patch by Michel (BusError)
-> 
-> 
-> Modified:
->    trunk/buildroot/package/ncurses/Config.in
->    trunk/buildroot/package/ncurses/ncurses.mk
-> 
-> 
-> Changeset:
-> Modified: trunk/buildroot/package/ncurses/Config.in
-> ===================================================================
-> --- trunk/buildroot/package/ncurses/Config.in	2008-04-09 10:22:22 UTC (rev 21681)
-> +++ trunk/buildroot/package/ncurses/Config.in	2008-04-09 11:38:48 UTC (rev 21682)
-> @@ -7,6 +7,28 @@
->  
->  	  http://www.gnu.org/software/ncurses/
->  
-> +config BR2_PACKAGE_NCURSES_TARGET_PANEL
-> +	bool "ncurses libpanel in target"
-> +	default n
-> +	depends on BR2_PACKAGE_NCURSES
-> +	help
-> +	  Ncurses headers in target
-          ^^^^^^^^^^^^^^^^^^^^^^^^^
-> +	  Includes ncurses dynamic libpanel in target
+On Wednesday 09 April 2008, Michel (BusError) wrote:
+>     SWILL is a programming library that makes it relatively easy to add a
+> web interface to programs written in C and C++. It does this by allowing an
+> application to function as a simple web-server to which users can connect
+> using a browser.
 
-This looks like a copy/paste error.
+Slight correction on the patch above; I had missed the change to 
+package/Config.in 
+I added the config option alongside libcgi and such.
 
-> + 
-> +config BR2_PACKAGE_NCURSES_TARGET_FORM
-> +	bool "ncurses libform in target"
-> +	default n
-> +	depends on BR2_PACKAGE_NCURSES
-> +	help
-> +	  Includes ncurses dynamic libform in target
-> + 
-> +config BR2_PACKAGE_NCURSES_TARGET_MENU
-> +        bool "ncurses libmenu in target"
-> +        default n
-> +        depends on BR2_PACKAGE_NCURSES
-> +        help
-> + 	  Includes ncurses dynamic libmenu in target
+This is a new, complete patch; it replaces the previous one entirely.
 
-Weird tab/spaces mix here.
-
->  $(TARGET_DIR)/lib/libncurses.so.$(NCURSES_VERSION): $(STAGING_DIR)/lib/libncurses.so.$(NCURSES_VERSION)
->  	cp -dpf $(NCURSES_DIR)/lib/libncurses.so* $(TARGET_DIR)/lib/
-> +ifeq ($(strip $(BR2_PACKAGE_NCURSES_TARGET_PANEL)),y)
-> +	cp -dpf $(NCURSES_DIR)/lib/libpanel.so* $(TARGET_DIR)/lib/
-> +endif
-> +ifeq ($(strip $(BR2_PACKAGE_NCURSES_TARGET_FORM)),y)
-> +	cp -dpf $(NCURSES_DIR)/lib/libform.so* $(TARGET_DIR)/lib/
-> +endif
-> +ifeq ($(strip $(BR2_PACKAGE_NCURSES_TARGET_MENU)),y)
-> +	cp -dpf $(NCURSES_DIR)/lib/libmenu.so* $(TARGET_DIR)/lib/
-> +endif
-
-Should be /usr/lib rather than /lib?
-
-thanks
-Hamish
--- 
-Hamish Moffatt VK3SB <hamish@debian.org> <hamish@cloud.net.au>
+Michel
+-------------- next part --------------
+A non-text attachment was scrubbed...
+Name: 0001-SWILL-Added-support-for-the-Simple-Web-Interface-Li.patch
+Type: text/x-diff
+Size: 4312 bytes
+Desc: not available
+Url : http://busybox.net/lists/buildroot/attachments/20080409/01a680bc/attachment.patch 
