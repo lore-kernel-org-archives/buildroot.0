@@ -1,36 +1,30 @@
-From: jacmet at uclibc.org <jacmet@uclibc.org>
-Date: Wed,  9 Apr 2008 00:02:24 -0700 (PDT)
-Subject: [Buildroot] svn commit: trunk/buildroot/target/u-boot
-Message-ID: <20080409070224.369323C4B9@busybox.net>
+From: Peter Korsgaard <jacmet@uclibc.org>
+Date: Wed, 09 Apr 2008 09:02:14 +0200
+Subject: [Buildroot] Hi There
+In-Reply-To: <1207724078.1139.0.camel@localhost> (Hans-Christian Egtvedt's
+	message of "Wed\, 09 Apr 2008 08\:54\:38 +0200")
+References: <200804081340.13053.buildroot.atmel.com@pollet.net>
+	<877if8jvjh.fsf@macbook.be.48ers.dk>
+	<012f01c899bf$242ab100$070514ac@atmel.com>
+	<873apwggb0.fsf@macbook.be.48ers.dk>
+	<013101c89a01$e94531d0$030514ac@atmel.com>
+	<87myo3froz.fsf@macbook.be.48ers.dk>
+	<1207724078.1139.0.camel@localhost>
+Message-ID: <8763urfr49.fsf@macbook.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Author: jacmet
-Date: 2008-04-09 00:02:20 -0700 (Wed, 09 Apr 2008)
-New Revision: 21678
+>>>>> "Hans-Christian" == Hans-Christian Egtvedt <hans-christian.egtvedt@atmel.com> writes:
 
-Log:
-u-boot: fix custom patch handling
+Hi,
 
+ Hans-Christian> Yes, upstream version 1.3.2 got all those changes and
+ Hans-Christian> a couple of other fixes as well.
 
-Modified:
-   trunk/buildroot/target/u-boot/Makefile.in
+Great - Thanks!
 
-
-Changeset:
-Modified: trunk/buildroot/target/u-boot/Makefile.in
-===================================================================
---- trunk/buildroot/target/u-boot/Makefile.in	2008-04-09 07:02:16 UTC (rev 21677)
-+++ trunk/buildroot/target/u-boot/Makefile.in	2008-04-09 07:02:20 UTC (rev 21678)
-@@ -40,7 +40,7 @@
- ifneq ($(strip $(BR2_TARGET_UBOOT_CUSTOM_PATCH)),"")
- 	@mkdir -p $(U_BOOT_PATCH_DIR)
- 	cp -dpr $(BR2_TARGET_UBOOT_CUSTOM_PATCH) $(U_BOOT_PATCH_DIR)
--	toolchain/patch-kernel.sh $(U_BOOT_DIR) $(U_BOOT_PATCH_DIR) *.patch
-+	toolchain/patch-kernel.sh $(U_BOOT_DIR) $(U_BOOT_PATCH_DIR) \*.patch
- endif
- 	touch $@
- 
+-- 
+Bye, Peter Korsgaard
