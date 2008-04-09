@@ -1,33 +1,54 @@
-From: nkukard at uclibc.org <nkukard@uclibc.org>
-Date: Wed,  9 Apr 2008 03:22:22 -0700 (PDT)
-Subject: [Buildroot] svn commit: trunk/buildroot/package/libbeecrypt
-Message-ID: <20080409102222.B189B3C4ED@busybox.net>
+From: Michel (BusError) <buildroot.atmel.com@pollet.net>
+Date: Wed, 9 Apr 2008 11:26:44 +0100
+Subject: [Buildroot] [PATCH] SCREEN: Added support for GNU Screen
+In-Reply-To: <1207718113.6817.282.camel@nigel-x60>
+References: <1207683703-14842-1-git-send-email-buildroot.atmel.com@pollet.net>
+	<200804082116.44818.buildroot.atmel.com@pollet.net>
+	<1207718113.6817.282.camel@nigel-x60>
+Message-ID: <200804091126.44251.buildroot.atmel.com@pollet.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Author: nkukard
-Date: 2008-04-09 03:22:22 -0700 (Wed, 09 Apr 2008)
-New Revision: 21681
+On Wednesday 09 April 2008, Nigel Kukard wrote:
+> > > > --- /dev/null
+> > > > +++ b/package/screen/screen-4.0.2-100-cross-compile.patch
+> > > > @@ -0,0 +1,967 @@
+> > > > +diff -c screen.orig/configure screen-4.0.2/configure
+> > > > +*** screen.orig/configure	2003-12-05 13:46:53.000000000 +0000
+> > > > +--- screen-4.0.2/configure	2008-04-05 18:48:27.000000000 +0100
+> > >
+> > > <snip>
+> > >
+> > > Can we not modify configure.ac/in and autoreconf?  (assuming configure
+> > > is originally built from configure.in or configure.ac)
+> > >
+> > > -N
+> >
+> > You can't. I spent a lot of time trying. This configure relies /a lot/ on
+> > testing the hosts libraries, and all of these test fail with these
+> > exit(1). Unless you know of a magic auto*.* setting that skips the 'cross
+> > compile' tests and/or errors, this is the only way I found to have it
+> > working...
+>
+> I really don't like adding a 40k patch, which will more than likely
+> break on each version bump. :)
+>
+> Could you show me how to reproduce the errors when cross-compiling,
+> maybe send me your .config and I'll see what I can do?
+>
+> -N
 
-Log:
-* Fixed URL for libbeecrypt
+Hi Nigel;
 
+I think the easiest way is to apply the patch on a 'temp' tree, remove the 
+package/screen/*.patch file, 'make oldconfig' in buildroot, select 
+the 'screen' package, then 'make'. You will immediately see the dreaded 
+configure problems...
 
-Modified:
-   trunk/buildroot/package/libbeecrypt/Config.in
+'screen' is very rarely updated tho, it's not a fast moving trendy package, 
+just a one that's indispensable once you grok it's power :-)
 
-
-Changeset:
-Modified: trunk/buildroot/package/libbeecrypt/Config.in
-===================================================================
---- trunk/buildroot/package/libbeecrypt/Config.in	2008-04-09 09:57:25 UTC (rev 21680)
-+++ trunk/buildroot/package/libbeecrypt/Config.in	2008-04-09 10:22:22 UTC (rev 21681)
-@@ -4,4 +4,4 @@
- 	help
- 	  Beecrypt is a general-purpose cryptography library.
- 
--	  http://rpm5.org
-+	  http://beecrypt.sf.net
+Michel
