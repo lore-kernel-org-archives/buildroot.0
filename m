@@ -1,54 +1,80 @@
-From: Michel (BusError) <buildroot.atmel.com@pollet.net>
-Date: Wed, 9 Apr 2008 11:26:44 +0100
-Subject: [Buildroot] [PATCH] SCREEN: Added support for GNU Screen
-In-Reply-To: <1207718113.6817.282.camel@nigel-x60>
-References: <1207683703-14842-1-git-send-email-buildroot.atmel.com@pollet.net>
-	<200804082116.44818.buildroot.atmel.com@pollet.net>
-	<1207718113.6817.282.camel@nigel-x60>
-Message-ID: <200804091126.44251.buildroot.atmel.com@pollet.net>
+From: nkukard at uclibc.org <nkukard@uclibc.org>
+Date: Wed,  9 Apr 2008 04:38:48 -0700 (PDT)
+Subject: [Buildroot] svn commit: trunk/buildroot/package/ncurses
+Message-ID: <20080409113849.004993C4BA@busybox.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Wednesday 09 April 2008, Nigel Kukard wrote:
-> > > > --- /dev/null
-> > > > +++ b/package/screen/screen-4.0.2-100-cross-compile.patch
-> > > > @@ -0,0 +1,967 @@
-> > > > +diff -c screen.orig/configure screen-4.0.2/configure
-> > > > +*** screen.orig/configure	2003-12-05 13:46:53.000000000 +0000
-> > > > +--- screen-4.0.2/configure	2008-04-05 18:48:27.000000000 +0100
-> > >
-> > > <snip>
-> > >
-> > > Can we not modify configure.ac/in and autoreconf?  (assuming configure
-> > > is originally built from configure.in or configure.ac)
-> > >
-> > > -N
-> >
-> > You can't. I spent a lot of time trying. This configure relies /a lot/ on
-> > testing the hosts libraries, and all of these test fail with these
-> > exit(1). Unless you know of a magic auto*.* setting that skips the 'cross
-> > compile' tests and/or errors, this is the only way I found to have it
-> > working...
->
-> I really don't like adding a 40k patch, which will more than likely
-> break on each version bump. :)
->
-> Could you show me how to reproduce the errors when cross-compiling,
-> maybe send me your .config and I'll see what I can do?
->
-> -N
+Author: nkukard
+Date: 2008-04-09 04:38:48 -0700 (Wed, 09 Apr 2008)
+New Revision: 21682
 
-Hi Nigel;
+Log:
+Some package use ncurses libpanel/libform/libmenu, this config allows to selectively
+copy them to the target filesystem at the same time at the main library is installed.
+-Patch by Michel (BusError)
 
-I think the easiest way is to apply the patch on a 'temp' tree, remove the 
-package/screen/*.patch file, 'make oldconfig' in buildroot, select 
-the 'screen' package, then 'make'. You will immediately see the dreaded 
-configure problems...
 
-'screen' is very rarely updated tho, it's not a fast moving trendy package, 
-just a one that's indispensable once you grok it's power :-)
+Modified:
+   trunk/buildroot/package/ncurses/Config.in
+   trunk/buildroot/package/ncurses/ncurses.mk
 
-Michel
+
+Changeset:
+Modified: trunk/buildroot/package/ncurses/Config.in
+===================================================================
+--- trunk/buildroot/package/ncurses/Config.in	2008-04-09 10:22:22 UTC (rev 21681)
++++ trunk/buildroot/package/ncurses/Config.in	2008-04-09 11:38:48 UTC (rev 21682)
+@@ -7,6 +7,28 @@
+ 
+ 	  http://www.gnu.org/software/ncurses/
+ 
++config BR2_PACKAGE_NCURSES_TARGET_PANEL
++	bool "ncurses libpanel in target"
++	default n
++	depends on BR2_PACKAGE_NCURSES
++	help
++	  Ncurses headers in target
++	  Includes ncurses dynamic libpanel in target
++ 
++config BR2_PACKAGE_NCURSES_TARGET_FORM
++	bool "ncurses libform in target"
++	default n
++	depends on BR2_PACKAGE_NCURSES
++	help
++	  Includes ncurses dynamic libform in target
++ 
++config BR2_PACKAGE_NCURSES_TARGET_MENU
++        bool "ncurses libmenu in target"
++        default n
++        depends on BR2_PACKAGE_NCURSES
++        help
++ 	  Includes ncurses dynamic libmenu in target
++
+ config BR2_PACKAGE_NCURSES_TARGET_HEADERS
+ 	bool "ncurses headers in target"
+ 	default n
+
+Modified: trunk/buildroot/package/ncurses/ncurses.mk
+===================================================================
+--- trunk/buildroot/package/ncurses/ncurses.mk	2008-04-09 10:22:22 UTC (rev 21681)
++++ trunk/buildroot/package/ncurses/ncurses.mk	2008-04-09 11:38:48 UTC (rev 21682)
+@@ -104,6 +104,15 @@
+ 
+ $(TARGET_DIR)/lib/libncurses.so.$(NCURSES_VERSION): $(STAGING_DIR)/lib/libncurses.so.$(NCURSES_VERSION)
+ 	cp -dpf $(NCURSES_DIR)/lib/libncurses.so* $(TARGET_DIR)/lib/
++ifeq ($(strip $(BR2_PACKAGE_NCURSES_TARGET_PANEL)),y)
++	cp -dpf $(NCURSES_DIR)/lib/libpanel.so* $(TARGET_DIR)/lib/
++endif
++ifeq ($(strip $(BR2_PACKAGE_NCURSES_TARGET_FORM)),y)
++	cp -dpf $(NCURSES_DIR)/lib/libform.so* $(TARGET_DIR)/lib/
++endif
++ifeq ($(strip $(BR2_PACKAGE_NCURSES_TARGET_MENU)),y)
++	cp -dpf $(NCURSES_DIR)/lib/libmenu.so* $(TARGET_DIR)/lib/
++endif
+ 	ln -sf /usr/share/terminfo $(TARGET_DIR)/usr/lib/terminfo
+ 	mkdir -p $(TARGET_DIR)/usr/share/terminfo/x
+ 	cp -dpf $(STAGING_DIR)/usr/share/terminfo/x/xterm $(TARGET_DIR)/usr/share/terminfo/x
