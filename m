@@ -1,11 +1,9 @@
-From: Nigel Kukard <nkukard@lbsd.net>
-Date: Wed, 09 Apr 2008 05:15:13 +0000
-Subject: [Buildroot] [PATCH] SCREEN: Added support for GNU Screen
-In-Reply-To: <200804082116.44818.buildroot.atmel.com@pollet.net>
-References: <1207683703-14842-1-git-send-email-buildroot.atmel.com@pollet.net>
-	<1207684648.6817.280.camel@nigel-x60>
-	<200804082116.44818.buildroot.atmel.com@pollet.net>
-Message-ID: <1207718113.6817.282.camel@nigel-x60>
+From: Ulf Samuelsson <ulf.samuelsson@atmel.com>
+Date: Wed, 9 Apr 2008 06:17:09 +0200
+Subject: [Buildroot] Hi There
+References: <200804081340.13053.buildroot.atmel.com@pollet.net><877if8jvjh.fsf@macbook.be.48ers.dk><012f01c899bf$242ab100$070514ac@atmel.com>
+	<873apwggb0.fsf@macbook.be.48ers.dk>
+Message-ID: <013101c89a01$e94531d0$030514ac@atmel.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,36 +11,42 @@ Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
 
-> > > --- /dev/null
-> > > +++ b/package/screen/screen-4.0.2-100-cross-compile.patch
-> > > @@ -0,0 +1,967 @@
-> > > +diff -c screen.orig/configure screen-4.0.2/configure
-> > > +*** screen.orig/configure	2003-12-05 13:46:53.000000000 +0000
-> > > +--- screen-4.0.2/configure	2008-04-05 18:48:27.000000000 +0100
-> >
-> > <snip>
-> >
-> > Can we not modify configure.ac/in and autoreconf?  (assuming configure
-> > is originally built from configure.in or configure.ac)
-> >
-> > -N
+
+>>>>>> "Ulf" == Ulf Samuelsson <ulf.samuelsson@atmel.com> writes:
 > 
-> You can't. I spent a lot of time trying. This configure relies /a lot/ on 
-> testing the hosts libraries, and all of these test fail with these exit(1). 
-> Unless you know of a magic auto*.* setting that skips the 'cross compile' 
-> tests and/or errors, this is the only way I found to have it working...
+> Ulf> On the U-Boot patch, pls try to push the patch at the u-boot mailing list.
+> Ulf> After spending years in Limbo, the patching process of U-Boot is
+> Ulf> progressing at a a rapid pace and if the patch is OK, you
+> Ulf> should get it into U-boot in notime..
+> 
+> Talking about u-boot, what's the status of the avr32 patch? Can we
+> bump the u-boot version to 1.3.2?
+> 
 
-I really don't like adding a 40k patch, which will more than likely
-break on each version bump. :)
 
-Could you show me how to reproduce the errors when cross-compiling,
-maybe send me your .config and I'll see what I can do?
+The AVR32 has been fully integrated into U-Boot for quite some time
+and I think there should be no reason to give any special consideration
+when bumping versions.
 
--N
--------------- next part --------------
-A non-text attachment was scrubbed...
-Name: not available
-Type: application/pgp-signature
-Size: 189 bytes
-Desc: This is a digitally signed message part
-Url : http://busybox.net/lists/buildroot/attachments/20080409/c3efdc49/attachment.pgp 
+It might be good to allow for several versions of U-Boot though,
+if some release do break a board or architecture.
+
+The reason for providing prepatched U-boot in the Atmel directory is the AT91.
+The AT91 team failed to get even a reply when they submitted  patches, 
+so they basically gave up.
+
+Now, the U-Boot project has changed strategy and there is a significant number 
+of "Custodians" and the AT91 team has been working with third parties which
+are subitting patches to the Custodians on almost daily basis.
+
+I hope the situation will stabilize and that the AT91 stuff can be merged in 
+mainstream buildroot during the summer.
+
+
+Best Regards
+Ulf Samuelsson                ulf at atmel.com
+Atmel Nordic AB
+Mail:  Box 2033, 174 02 Sundbyberg, Sweden
+Visit:  Kavalleriv?gen 24, 174 58 Sundbyberg, Sweden
+Phone +46 (8) 441 54 22     Fax +46 (8) 441 54 29
+GSM    +46 (706) 22 44 57
