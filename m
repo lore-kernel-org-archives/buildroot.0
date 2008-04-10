@@ -1,54 +1,75 @@
-From: nkukard at uclibc.org <nkukard@uclibc.org>
-Date: Wed,  9 Apr 2008 22:14:53 -0700 (PDT)
+From: Nigel Kukard <nkukard@lbsd.net>
+Date: Thu, 10 Apr 2008 05:14:26 +0000
 Subject: [Buildroot] svn commit: trunk/buildroot/package/ncurses
-Message-ID: <20080410051453.E8FA63C4F7@busybox.net>
+In-Reply-To: <20080409223551.GC4582@cloud.net.au>
+References: <20080409113849.004993C4BA@busybox.net>
+	<20080409223551.GC4582@cloud.net.au>
+Message-ID: <1207804466.6817.395.camel@nigel-x60>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Author: nkukard
-Date: 2008-04-09 22:14:53 -0700 (Wed, 09 Apr 2008)
-New Revision: 21689
 
-Log:
-* Fixed copy-and-paste error, incorrect description
-* Fixed another copy-and-paste error, weird space/tab mixes
-- Thanks Hamish Moffatt
+> >  
+> > +config BR2_PACKAGE_NCURSES_TARGET_PANEL
+> > +	bool "ncurses libpanel in target"
+> > +	default n
+> > +	depends on BR2_PACKAGE_NCURSES
+> > +	help
+> > +	  Ncurses headers in target
+>           ^^^^^^^^^^^^^^^^^^^^^^^^^
+> > +	  Includes ncurses dynamic libpanel in target
+> 
+> This looks like a copy/paste error.
 
+Fixed
 
-Modified:
-   trunk/buildroot/package/ncurses/Config.in
+> 
+> > + 
+> > +config BR2_PACKAGE_NCURSES_TARGET_FORM
+> > +	bool "ncurses libform in target"
+> > +	default n
+> > +	depends on BR2_PACKAGE_NCURSES
+> > +	help
+> > +	  Includes ncurses dynamic libform in target
+> > + 
+> > +config BR2_PACKAGE_NCURSES_TARGET_MENU
+> > +        bool "ncurses libmenu in target"
+> > +        default n
+> > +        depends on BR2_PACKAGE_NCURSES
+> > +        help
+> > + 	  Includes ncurses dynamic libmenu in target
+> 
+> Weird tab/spaces mix here.
 
+Fixed
 
-Changeset:
-Modified: trunk/buildroot/package/ncurses/Config.in
-===================================================================
---- trunk/buildroot/package/ncurses/Config.in	2008-04-10 02:09:40 UTC (rev 21688)
-+++ trunk/buildroot/package/ncurses/Config.in	2008-04-10 05:14:53 UTC (rev 21689)
-@@ -12,7 +12,6 @@
- 	default n
- 	depends on BR2_PACKAGE_NCURSES
- 	help
--	  Ncurses headers in target
- 	  Includes ncurses dynamic libpanel in target
-  
- config BR2_PACKAGE_NCURSES_TARGET_FORM
-@@ -23,11 +22,11 @@
- 	  Includes ncurses dynamic libform in target
-  
- config BR2_PACKAGE_NCURSES_TARGET_MENU
--        bool "ncurses libmenu in target"
--        default n
--        depends on BR2_PACKAGE_NCURSES
--        help
-- 	  Includes ncurses dynamic libmenu in target
-+	bool "ncurses libmenu in target"
-+	default n
-+	depends on BR2_PACKAGE_NCURSES
-+	help
-+	  Includes ncurses dynamic libmenu in target
- 
- config BR2_PACKAGE_NCURSES_TARGET_HEADERS
- 	bool "ncurses headers in target"
+> 
+> >  $(TARGET_DIR)/lib/libncurses.so.$(NCURSES_VERSION): $(STAGING_DIR)/lib/libncurses.so.$(NCURSES_VERSION)
+> >  	cp -dpf $(NCURSES_DIR)/lib/libncurses.so* $(TARGET_DIR)/lib/
+> > +ifeq ($(strip $(BR2_PACKAGE_NCURSES_TARGET_PANEL)),y)
+> > +	cp -dpf $(NCURSES_DIR)/lib/libpanel.so* $(TARGET_DIR)/lib/
+> > +endif
+> > +ifeq ($(strip $(BR2_PACKAGE_NCURSES_TARGET_FORM)),y)
+> > +	cp -dpf $(NCURSES_DIR)/lib/libform.so* $(TARGET_DIR)/lib/
+> > +endif
+> > +ifeq ($(strip $(BR2_PACKAGE_NCURSES_TARGET_MENU)),y)
+> > +	cp -dpf $(NCURSES_DIR)/lib/libmenu.so* $(TARGET_DIR)/lib/
+> > +endif
+> 
+> Should be /usr/lib rather than /lib?
+
+The rest of the libs are being installed to /lib ... I don't like
+changing install paths, but I agree with you it should be /usr/lib ...
+anyone got any very good reason why ncurses should be installed in /lib?
+
+-N
+-------------- next part --------------
+A non-text attachment was scrubbed...
+Name: not available
+Type: application/pgp-signature
+Size: 189 bytes
+Desc: This is a digitally signed message part
+Url : http://busybox.net/lists/buildroot/attachments/20080410/71bdb923/attachment.pgp 
