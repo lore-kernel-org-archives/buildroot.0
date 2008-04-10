@@ -1,34 +1,36 @@
-From: ninevoltz at uclibc.org <ninevoltz@uclibc.org>
-Date: Thu, 10 Apr 2008 12:25:10 -0700 (PDT)
-Subject: [Buildroot] svn commit: trunk/buildroot/package/alsa-lib
-Message-ID: <20080410192510.B77683C590@busybox.net>
+From: ulf at uclibc.org <ulf@uclibc.org>
+Date: Thu, 10 Apr 2008 14:02:12 -0700 (PDT)
+Subject: [Buildroot] svn commit:
+	trunk/buildroot/target/device/Atmel/DataFlashBoot
+Message-ID: <20080410210212.DF78C3C5B0@busybox.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Author: ninevoltz
-Date: 2008-04-10 12:25:10 -0700 (Thu, 10 Apr 2008)
-New Revision: 21691
+Author: ulf
+Date: 2008-04-10 14:02:12 -0700 (Thu, 10 Apr 2008)
+New Revision: 21694
 
 Log:
-remove devdir config option from alsa lib, should use mdev rule instead
+Avoid hardwiring tftpboot
 
 Modified:
-   trunk/buildroot/package/alsa-lib/alsa-lib.mk
+   trunk/buildroot/target/device/Atmel/DataFlashBoot/DataflashBoot.mk
 
 
 Changeset:
-Modified: trunk/buildroot/package/alsa-lib/alsa-lib.mk
+Modified: trunk/buildroot/target/device/Atmel/DataFlashBoot/DataflashBoot.mk
 ===================================================================
---- trunk/buildroot/package/alsa-lib/alsa-lib.mk	2008-04-10 08:17:14 UTC (rev 21690)
-+++ trunk/buildroot/package/alsa-lib/alsa-lib.mk	2008-04-10 19:25:10 UTC (rev 21691)
-@@ -45,7 +45,6 @@
- 		--enable-shared \
- 		--enable-static \
- 		--disable-docs \
--		--with-alsa-devdir=/dev \
- 		$(SOFT_FLOAT) \
- 		$(DISABLE_NLS) \
- 	)
+--- trunk/buildroot/target/device/Atmel/DataFlashBoot/DataflashBoot.mk	2008-04-10 20:39:07 UTC (rev 21693)
++++ trunk/buildroot/target/device/Atmel/DataFlashBoot/DataflashBoot.mk	2008-04-10 21:02:12 UTC (rev 21694)
+@@ -34,7 +34,7 @@
+ 	mkdir -p $(BINARIES_DIR)
+ 	cp $(DATAFLASHBOOT_DIR)/$(DATAFLASHBOOT_BINARY)	$(BINARIES_DIR)/$(BOARD_NAME)-$(DATAFLASHBOOT_BINARY)
+ ifneq	($(TARGET_ATMEL_COPYTO),)
+-	cp $(DATAFLASHBOOT_DIR)/$(DATAFLASHBOOT_BINARY)	/tftpboot/$(BOARD_NAME)-$(DATAFLASHBOOT_BINARY)
++	cp $(DATAFLASHBOOT_DIR)/$(DATAFLASHBOOT_BINARY)	$(TARGET_ATMEL_COPYTO)/$(BOARD_NAME)-$(DATAFLASHBOOT_BINARY)
+ endif
+ 
+ #############################################################
