@@ -1,96 +1,41 @@
-From: Sam Liddicott <sam@liddicott.com>
-Date: Fri, 11 Apr 2008 20:11:26 +0100
-Subject: [Buildroot] Creating a bootable filesystem image?
-Message-ID: <20080411190815.5EB722FE0D36@sam.liddicott.com>
+From: Jean-Christian de Rivaz <jc@eclis.ch>
+Date: Fri, 11 Apr 2008 22:55:33 +0200
+Subject: [Buildroot] svn commit:
+	trunk/buildroot/target/device/Atmel/u-boot
+In-Reply-To: <20080410210327.E728B3C5B8@busybox.net>
+References: <20080410210327.E728B3C5B8@busybox.net>
+Message-ID: <47FFD045.8080102@eclis.ch>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-I've managed to understand lba and chs freakery.
+ulf at uclibc.org a ?crit :
+> Author: ulf
+> Date: 2008-04-10 14:03:27 -0700 (Thu, 10 Apr 2008)
+> New Revision: 21695
+> 
+> Log:
+> Avoid hardwiring tftpboot
+> 
+> Modified:
+>    trunk/buildroot/target/device/Atmel/u-boot/u-boot.mk
 
-The disk image chs mapping that gub ses is not the one used bye the mount the copied the files.
+Thanks Ulf for this fix. I have found two others files with the exact 
+same issue:
+target/device/Atmel/at91bootstrap/at91bootstrap.mk
+target/linux/Makefile.in.advanced
 
-I've spent the best part of a day this week playing with lba and chs mappings and think that on Monday I can fix the script.
+Please apply the attached patch to fix them.
 
-Sam
-
-
------Original Message-----
-From: Arun Reddy <reddyac@gmail.com>
-Sent: 11 April 2008 19:51
-To: Sebastian <bastisoft@arcor.de>
-Cc: Buildroot List <buildroot@uclibc.org>
-Subject: Re: [Buildroot] Creating a bootable filesystem image?
-
-Sebastian and Buildroot members
-
-I will try this as soon as I can. Right now I am not near my machine with my build system. If anyone can please try this out for themselves to give further feedback I would greatly appreciate it. This might be something I can submit as a bug if everyone is experiencing it. Thank you and I will let you know about my results as soon as I can.
-
-Arun
-
-On Wed, Apr 9, 2008 at 10:44 AM, Sebastian <bastisoft@arcor.de> wrote:
-Hello Arun,
-
- I tried to create an ext2 file system myself (i486 architecture without any applications enabled).
-
- The first two questions I answered with return, the last one with /home/basti/linux/buildroot/binaries/uclibc/ and then I noticed that the fdisk command gave the same error message as you wrote.
-
- But it doesn't create a partition, so I create one myself: (n)ew, (p)rimary, (1), return, return, (w)rite. Then it tries to install grub which fails for me, as it can't find /boot/grub/stage1 on the image. If I could provide these files, it should work, as grub recognizes the partition.
-
- Maybe you could try to build no ISO image at all, just the ext2 (ext3) root file system. I have really no idea why it tries to copy your iso file onto the image, as it is not to be placed there.
-
- Best regards,
-Sebastian
-
-
-? ? ? ?Sebastian,
-
- ? ? ? ?Thanks for the information, I do understand it much clearer
- ? ? ? ?now. I am attempting to run the script and find out whether my
- ? ? ? ?input will result in the bootable filesystem I want. When
- ? ? ? ?running build-ext-img, I input
-
- ? ? ? ?Enter the path to the image:
-
- ? ? ? ?I input "/root/buildroot/scripts/" since that is where the
- ? ? ? ?filesystem image is located.
-
- ? ? ? ?Enter the name of the image file:
-
- ? ? ? ?I input "buildroot.img"
-
- ? ? ? ?Enter the path to the root filesystem that you want to install
- ? ? ? ?the image
-
- ? ? ? ?I input "/root/buildroot/binaries/uclibc/" since this is where
- ? ? ? ?my filesystem image (rootfs.i386.ext2) is located.
-
- ? ? ? ?When the script runs, it looks like everything is ok at first,
- ? ? ? ?but eventually I get the warning stating Device contains
- ? ? ? ?neither a valid DOS partition table, nor Sun, SGI... etc. It
- ? ? ? ?builds a new DOS disklabel for me, so I go ahead and continue.
- ? ? ? ?I also get a warning that there is an invalid flag 0x0000 of
- ? ? ? ?partition table 4 that will be corrected by w(rite) which I go
- ? ? ? ?ahead an accept. I then type q to quit and continue building
- ? ? ? ?the bootable FS.
-
- ? ? ? ?I am finally left with
-
- ? ? ? ?cp: writing /root/buildroot/scripts/temp/rootfs.i386.iso: No
- ? ? ? ?space left on device.
-
- ? ? ? ?I examined the script and noticed when installing software to
- ? ? ? ?the image, ${IMAGE} is mounted to ${IMAGE_PATH}/temp, then
- ? ? ? ?${ROOT_PATH}/* is copied to that location, and then the temp
- ? ? ? ?folder is unmounted and removed. Am I getting that there is no
- ? ? ? ?space on the device because it is trying to copy to a folder
- ? ? ? ?where the image is mounted? Or did I not correctly interpret
- ? ? ? ?the inputs correctly above? Thanks for answering these. I
- ? ? ? ?should point out I am using Snapshot from 4-1-2008.
-
-
+Regards,
+--
+Jean-Christian de Rivaz
 -------------- next part --------------
-An HTML attachment was scrubbed...
-URL: http://busybox.net/lists/buildroot/attachments/20080411/7c90a37f/attachment.htm 
+A non-text attachment was scrubbed...
+Name: patch-tftpboot.diff
+Type: text/x-patch
+Size: 1732 bytes
+Desc: not available
+Url : http://busybox.net/lists/buildroot/attachments/20080411/72e7f6c8/attachment.bin 
