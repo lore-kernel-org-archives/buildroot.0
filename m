@@ -1,61 +1,128 @@
-From: bugs at busybox.net <bugs@busybox.net>
-Date: Fri, 11 Apr 2008 00:59:29 -0700
-Subject: [Buildroot] [buildroot 0002524]: kernel symlinks broken
-Message-ID: <b44b392157a82c44d537d57be00440fb@bugs.uclibc.org>
+From: jacmet at uclibc.org <jacmet@uclibc.org>
+Date: Fri, 11 Apr 2008 04:31:40 -0700 (PDT)
+Subject: [Buildroot] svn commit: trunk/buildroot/package:  libart
+Message-ID: <20080411113141.0032E3C4B8@busybox.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+Author: jacmet
+Date: 2008-04-11 04:31:40 -0700 (Fri, 11 Apr 2008)
+New Revision: 21707
 
-A NOTE has been added to this issue. 
-====================================================================== 
-http://busybox.net/bugs/view.php?id=2524 
-====================================================================== 
-Reported By:                KHAksnes
-Assigned To:                buildroot
-====================================================================== 
-Project:                    buildroot
-Issue ID:                   2524
-Category:                   Architecture Specific
-Reproducibility:            always
-Severity:                   minor
-Priority:                   normal
-Status:                     assigned
-====================================================================== 
-Date Submitted:             03-12-2008 02:03 PDT
-Last Modified:              04-11-2008 00:59 PDT
-====================================================================== 
-Summary:                    kernel symlinks broken
-Description: 
-This bug is present in current trunk versions of buildroot. 
-I am at revision 21311 in subversion.
+Log:
+buildroot: add libart package
 
-I am building a fairly plain i686 system.  The kernel builds nicely after
-applying my workaround for bug 0002504, but it doesn't install well under
-binaries. A symlink is installed pointing to a nonexisting file. This
-symlink also breaks previous naming conventions as it doesn't add the .bz
-suffix for a bzImage kernel.
 
-At least 3 things are wrong.
-1) The binaries directory should contain physical copies not symlinks.
-2) The right kernel file must be copied to the binaries/$PROJECTNAME
-3) Changing naming strategy shouldn't be done unless strictly necessary,
-some of us have installation scripts that stops working 
-====================================================================== 
+Added:
+   trunk/buildroot/package/libart/
+   trunk/buildroot/package/libart/Config.in
+   trunk/buildroot/package/libart/libart-art-config-cross.patch
+   trunk/buildroot/package/libart/libart.mk
 
----------------------------------------------------------------------- 
- KHAksnes - 04-11-08 00:59  
----------------------------------------------------------------------- 
-This bug seems to be fixed now. 
+Modified:
+   trunk/buildroot/package/Config.in
 
-Issue History 
-Date Modified   Username       Field                    Change               
-====================================================================== 
-03-12-08 02:03  KHAksnes       New Issue                                    
-03-12-08 02:03  KHAksnes       Status                   new => assigned     
-03-12-08 02:03  KHAksnes       Assigned To               => buildroot       
-03-12-08 02:03  KHAksnes       File Added: FW.config                        
-04-11-08 00:59  KHAksnes       Note Added: 0006564                          
-======================================================================
+
+Changeset:
+Modified: trunk/buildroot/package/Config.in
+===================================================================
+--- trunk/buildroot/package/Config.in	2008-04-11 11:27:29 UTC (rev 21706)
++++ trunk/buildroot/package/Config.in	2008-04-11 11:31:40 UTC (rev 21707)
+@@ -318,6 +318,7 @@
+ source "package/fusion/Config.in"
+ source "package/imagemagick/Config.in"
+ source "package/jpeg/Config.in"
++source "package/libart/Config.in"
+ source "package/libpng/Config.in"
+ source "package/libungif/Config.in"
+ source "package/sdl/Config.in"
+
+Added: trunk/buildroot/package/libart/Config.in
+===================================================================
+--- trunk/buildroot/package/libart/Config.in	                        (rev 0)
++++ trunk/buildroot/package/libart/Config.in	2008-04-11 11:31:40 UTC (rev 21707)
+@@ -0,0 +1,15 @@
++config BR2_PACKAGE_LIBART
++	bool "libart"
++	default n
++	help
++	  Libart is a library for high-performance 2D graphics. It
++	  supports a very powerful imaging model, basically the same
++	  as SVG and the Java 2D API. It includes all PostScript
++	  imaging operations, and adds antialiasing and
++	  alpha-transparency. It is also highly tuned for incremental
++	  rendering. It contains data structures and algorithms suited
++	  to rapid, precise computation of Region of Interest, and a
++	  two-phase rendering pipeline optimized for interactive
++	  display.
++
++	  http://www.levien.com/libart/
+
+Added: trunk/buildroot/package/libart/libart-art-config-cross.patch
+===================================================================
+--- trunk/buildroot/package/libart/libart-art-config-cross.patch	                        (rev 0)
++++ trunk/buildroot/package/libart/libart-art-config-cross.patch	2008-04-11 11:31:40 UTC (rev 21707)
+@@ -0,0 +1,34 @@
++diff -urpN libart_lgpl-2.3.20.orig/art_config.h libart_lgpl-2.3.20/art_config.h
++--- libart_lgpl-2.3.20.orig/art_config.h	2008-04-11 10:50:04.000000000 +0200
+++++ libart_lgpl-2.3.20/art_config.h	2008-04-11 10:51:32.000000000 +0200
++@@ -1,9 +1,15 @@
++ /* Automatically generated by gen_art_config.c */
++ 
+++#include <limits.h>
+++
++ #define ART_SIZEOF_CHAR 1
++ #define ART_SIZEOF_SHORT 2
++ #define ART_SIZEOF_INT 4
+++#if LONG_MAX == 2147483647L
++ #define ART_SIZEOF_LONG 4
+++#else
+++#define ART_SIZEOF_LONG 8
+++#endif
++ 
++ typedef unsigned char art_u8;
++ typedef unsigned short art_u16;
++diff -urpN libart_lgpl-2.3.20.orig/Makefile.am libart_lgpl-2.3.20/Makefile.am
++--- libart_lgpl-2.3.20.orig/Makefile.am	2008-04-11 10:50:04.000000000 +0200
+++++ libart_lgpl-2.3.20/Makefile.am	2008-04-11 10:50:31.000000000 +0200
++@@ -3,11 +3,6 @@ noinst_PROGRAMS = testart testuta gen_ar
++ bin_SCRIPTS = \
++ 	libart2-config
++ 
++-BUILT_SOURCES = art_config.h
++-
++-art_config.h:	gen_art_config$(EXEEXT)
++-	./gen_art_config > art_config.h
++-
++ EXTRA_DIST = 			\
++ 	libart.def		\
++ 	libart-config.in	\
+
+Added: trunk/buildroot/package/libart/libart.mk
+===================================================================
+--- trunk/buildroot/package/libart/libart.mk	                        (rev 0)
++++ trunk/buildroot/package/libart/libart.mk	2008-04-11 11:31:40 UTC (rev 21707)
+@@ -0,0 +1,20 @@
++#############################################################
++#
++# libart
++#
++#############################################################
++
++LIBART_VERSION = 2.3.20
++LIBART_SOURCE = libart_lgpl-$(LIBART_VERSION).tar.gz
++LIBART_SITE = http://ftp.gnome.org/pub/gnome/sources/libart_lgpl/2.3/
++LIBART_AUTORECONF = YES
++LIBART_STAGING = YES
++LIBART_TARGET = YES
++
++LIBART_CONF_OPT = --target=$(GNU_TARGET_NAME) \
++		--host=$(GNU_TARGET_NAME) --build=$(GNU_HOST_NAME) \
++		--prefix=/usr --sysconfdir=/etc
++
++LIBART_DEPENDENCIES = uclibc
++
++$(eval $(call AUTOTARGETS,package,libart))
