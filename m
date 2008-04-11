@@ -1,41 +1,67 @@
-From: Jean-Christian de Rivaz <jc@eclis.ch>
-Date: Fri, 11 Apr 2008 22:55:33 +0200
-Subject: [Buildroot] svn commit:
-	trunk/buildroot/target/device/Atmel/u-boot
-In-Reply-To: <20080410210327.E728B3C5B8@busybox.net>
-References: <20080410210327.E728B3C5B8@busybox.net>
-Message-ID: <47FFD045.8080102@eclis.ch>
+From: jacmet at uclibc.org <jacmet@uclibc.org>
+Date: Fri, 11 Apr 2008 14:32:10 -0700 (PDT)
+Subject: [Buildroot] svn commit: trunk/buildroot/target:
+	device/Atmel/at91bootstrap linux
+Message-ID: <20080411213210.573C33C4DB@busybox.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-ulf at uclibc.org a ?crit :
-> Author: ulf
-> Date: 2008-04-10 14:03:27 -0700 (Thu, 10 Apr 2008)
-> New Revision: 21695
-> 
-> Log:
-> Avoid hardwiring tftpboot
-> 
-> Modified:
->    trunk/buildroot/target/device/Atmel/u-boot/u-boot.mk
+Author: jacmet
+Date: 2008-04-11 14:32:09 -0700 (Fri, 11 Apr 2008)
+New Revision: 21712
 
-Thanks Ulf for this fix. I have found two others files with the exact 
-same issue:
-target/device/Atmel/at91bootstrap/at91bootstrap.mk
-target/linux/Makefile.in.advanced
+Log:
+buildroot: additional tftpboot fixes
 
-Please apply the attached patch to fix them.
+Patch by Jean-Christian de Rivaz
 
-Regards,
---
-Jean-Christian de Rivaz
--------------- next part --------------
-A non-text attachment was scrubbed...
-Name: patch-tftpboot.diff
-Type: text/x-patch
-Size: 1732 bytes
-Desc: not available
-Url : http://busybox.net/lists/buildroot/attachments/20080411/72e7f6c8/attachment.bin 
+
+Modified:
+   trunk/buildroot/target/device/Atmel/at91bootstrap/at91bootstrap.mk
+   trunk/buildroot/target/linux/Makefile.in.advanced
+
+
+Changeset:
+Modified: trunk/buildroot/target/device/Atmel/at91bootstrap/at91bootstrap.mk
+===================================================================
+--- trunk/buildroot/target/device/Atmel/at91bootstrap/at91bootstrap.mk	2008-04-11 12:42:23 UTC (rev 21711)
++++ trunk/buildroot/target/device/Atmel/at91bootstrap/at91bootstrap.mk	2008-04-11 21:32:09 UTC (rev 21712)
+@@ -63,7 +63,7 @@
+ $(BINARIES_DIR)/$(AT91BOOTSTRAP_BINARY): $(AT91BOOTSTRAP_TARGET)
+ 	mkdir -p $(BINARIES_DIR)
+ 	cp $(AT91BOOTSTRAP_TARGET) $(BINARIES_DIR)/$(AT91BOOTSTRAP_BINARY)
+-	cp $(AT91BOOTSTRAP_TARGET) /tftpboot/$(AT91BOOTSTRAP_BINARY)
++	cp $(AT91BOOTSTRAP_TARGET) $(BR2_TARGET_ATMEL_COPYTO)/$(AT91BOOTSTRAP_BINARY)
+ 
+ .PHONY: at91bootstrap at91bootstrap-source
+ 
+
+Modified: trunk/buildroot/target/linux/Makefile.in.advanced
+===================================================================
+--- trunk/buildroot/target/linux/Makefile.in.advanced	2008-04-11 12:42:23 UTC (rev 21711)
++++ trunk/buildroot/target/linux/Makefile.in.advanced	2008-04-11 21:32:09 UTC (rev 21712)
+@@ -230,7 +230,7 @@
+ endif
+ 
+ ifeq ($(BR2_LINUX_COPYTO_TFTPBOOT),y)
+-LINUX26_TARGETS+=/tftpboot/$(LINUX26_KERNEL_NAME)
++LINUX26_TARGETS+=$(BR2_LINUX_COPYTO)/$(LINUX26_KERNEL_NAME)
+ endif
+ 
+ ifneq ($(strip $(subst ",,$(BR2_LINUX_COPYTO))),)
+@@ -437,9 +437,9 @@
+ 	mkdir -p $(TARGET_DIR)/boot
+ 	cp -dpf .config $(TARGET_DIR)/boot/busybox.config
+ 
+-/tftpboot/$(LINUX26_KERNEL_NAME): $(LINUX26_KERNEL)
+-	mkdir -p /tftpboot
+-	cp -dpf $(LINUX26_KERNEL) /tftpboot/$(LINUX26_KERNEL_NAME)
++$(BR2_LINUX_COPYTO)/$(LINUX26_KERNEL_NAME): $(LINUX26_KERNEL)
++	mkdir -p $(BR2_LINUX_COPYTO)
++	cp -dpf $(LINUX26_KERNEL) $(BR2_LINUX_COPYTO)/$(LINUX26_KERNEL_NAME)
+ 
+ $(LINUX_COPYTO)/$(LINUX26_KERNEL_NAME): $(LINUX26_KERNEL)
+ 	mkdir -p $(LINUX_COPYTO)
