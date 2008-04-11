@@ -1,205 +1,126 @@
-From: ulf at uclibc.org <ulf@uclibc.org>
-Date: Thu, 10 Apr 2008 14:05:33 -0700 (PDT)
-Subject: [Buildroot] svn commit:
-	trunk/buildroot/target/device/Atmel/at91bootstrap
-Message-ID: <20080410210533.496AC3C5B8@busybox.net>
+From: Kuniyasu Suzaki <k.suzaki@aist.go.jp>
+Date: Fri, 11 Apr 2008 09:16:25 +0900 (JST)
+Subject: [Buildroot] Release: InetBoot(GRUB+BuildRoot+httpfs)
+Message-ID: <20080411.091625.74740808.k.suzaki@aist.go.jp>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Author: ulf
-Date: 2008-04-10 14:05:30 -0700 (Thu, 10 Apr 2008)
-New Revision: 21696
 
-Log:
-Add configuration items to at91bootstrap
+Dear,
 
-Modified:
-   trunk/buildroot/target/device/Atmel/at91bootstrap/Config.in
-   trunk/buildroot/target/device/Atmel/at91bootstrap/at91bootstrap.mk
+InetBoot(GRUB+BuildRoot+httpfs) "netfs" version is released.
+  HP:        http://openlab.jp/oscircular/inetboot/
+  Guide-PDF: http://openlab.ring.gr.jp/oscircular/inetboot/InetBoot-netfs080409-E.pdf
 
+InetBoot(GRUB+BuildRoot+httpfs) loads a kernel from a ISO(KNOPPIX/Xenoppix) file on HTTP 
+server and boots the OS(KNOPPIX/Xenoppix).
 
-Changeset:
-Modified: trunk/buildroot/target/device/Atmel/at91bootstrap/Config.in
-===================================================================
---- trunk/buildroot/target/device/Atmel/at91bootstrap/Config.in	2008-04-10 21:03:27 UTC (rev 21695)
-+++ trunk/buildroot/target/device/Atmel/at91bootstrap/Config.in	2008-04-10 21:05:30 UTC (rev 21696)
-@@ -1,5 +1,5 @@
- config BR2_TARGET_AT91BOOTSTRAP
--	depends on BR2_TARGET_AT91SAM9260EK || BR2_TARGET_AT91SAM9260DFC || \
-+	depends on BR2_TARGET_AT91SAM9260EK || BR2_TARGET_AT91SAM9260DFC || BR2_TARGET_AT91SAM9260PF || \
- 	BR2_TARGET_AT91SAM9261EK || BR2_TARGET_AT91SAM9263EK || BR2_TARGET_AT91SAM9XEEK
- 	bool "Build AT91 Bootstrap for selected chip"
- 
-@@ -26,8 +26,8 @@
- 	bool "NAND Flash"
- 
- config BR2_TARGET_AT91BOOT_FLASH
--        depends on BR2_TARGET_AT91SAM9XEEK
--	bool "Internal Flash"
-+        depends on BR2_TARGET_AT91SAM9XEEK || BR2_TARGET_AT91SAM9260PF
-+	bool "Internal Flash or external parallel flash"
- 
- endchoice
- 
-@@ -37,3 +37,47 @@
- 	default	"dataflashcard"	if	BR2_TARGET_AT91BOOT_DATAFLASHCARD
- 	default	"nandflash"	if	BR2_TARGET_AT91BOOT_NANDFLASH
- 	default	"flash"		if	BR2_TARGET_AT91BOOT_FLASH
-+
-+config	BR2_AT91BOOTSTRAP_IMG_SIZE
-+	string	"Image Size to copy to SDRAM"
-+	default	"0x32000"	if	BR2_TARGET_AT91BOOT_DATAFLASH || BR2_TARGET_AT91BOOT_DATAFLASHCARD
-+	default	"0x30000"	if	BR2_TARGET_AT91BOOT_NANDFLASH
-+	default	"0x100000"	if	BR2_TARGET_AT91BOOT_FLASH
-+	depends BR2_TARGET_AT91BOOTSTRAP
-+	help
-+	  Select the size of your application
-+	  AT91 Bootstrap will copy this amount from flash to SDRAM
-+
-+choice	
-+	prompt "Start address of application"
-+	default BR2_AT91BOOTSTRAP_JUMP_TO_DEFAULT
-+	depends on BR2_TARGET_AT91BOOTSTRAP
-+	help
-+	  Select Chip for which AT91 bootstrap should be built
-+	  Currently supports AT91SAM9260EK, AT91SAM9261EK, AT91SAM9XEEK, AT91SAM9263EK
-+
-+config	BR2_AT91BOOTSTRAP_JUMP_TO_DEFAULT
-+	bool "Copy to the default U-Boot start location in the SDRAM"
-+	help
-+	  This is where you copy the U-Boot boot loader
-+
-+config	BR2_AT91BOOTSTRAP_JUMP_TO_HIGH_SDRAM
-+	bool "Copy to the last Megabyte of the SDRAM"
-+	help
-+	  This is where you copy a boot loader
-+
-+config	BR2_AT91BOOTSTRAP_JUMP_TO_START_OF_SDRAM
-+	bool "Copy to the start of the SDRAM"
-+	help
-+	  This is where you copy a standalone application
-+endchoice
-+
-+config	BR2_AT91BOOTSTRAP_JUMP_ADDR
-+	string
-+	default	"0x23F00000" if BR2_AT91BOOTSTRAP_JUMP_TO_DEFAULT
-+	default	"0x23F00000" if BR2_AT91BOOTSTRAP_JUMP_TO_HIGH_SDRAM	
-+	default "0x20000000" if BR2_AT91BOOTSTRAP_JUMP_TO_START_OF_SDRAM
-+	depends on BR2_TARGET_AT91BOOTSTRAP
-+
-+comment "It will be copied to $(BR2_AT91BOOTSTRAP_JUMP_ADDR)"
-+
+Your comments are welcome. This topic will be discussed at the BOF of
+Ottawa Linux Symposium08.
+     http://www.linuxsymposium.org/2008/view_abstract.php?content_key=231
 
-Modified: trunk/buildroot/target/device/Atmel/at91bootstrap/at91bootstrap.mk
-===================================================================
---- trunk/buildroot/target/device/Atmel/at91bootstrap/at91bootstrap.mk	2008-04-10 21:03:27 UTC (rev 21695)
-+++ trunk/buildroot/target/device/Atmel/at91bootstrap/at91bootstrap.mk	2008-04-10 21:05:30 UTC (rev 21696)
-@@ -4,59 +4,83 @@
- #
- #############################################################
- AT91BOOTSTRAP_VERSION:=2.3
-+AT91BOOTSTRAP_PATCH_LEVEL:=4
-+AT91BOOTSTRAP_PATCHED_VERSION:=$(AT91BOOTSTRAP_VERSION).$(AT91BOOTSTRAP_PATCH_LEVEL)
- AT91BOOTSTRAP_NAME:=at91bootstrap-$(AT91BOOTSTRAP_VERSION)
--ATMEL_MIRROR:=$(strip  $(subst ",, $(BR2_ATMEL_MIRROR)))
-+ATMEL_MIRROR:=$(strip $(subst ",, $(BR2_ATMEL_MIRROR)))
-+#"))
- AT91BOOTSTRAP_SITE:=$(ATMEL_MIRROR)
- AT91BOOTSTRAP_SOURCE:=$(AT91BOOTSTRAP_NAME).tar.bz2
- AT91BOOTSTRAP_DIR:=$(PROJECT_BUILD_DIR)/$(AT91BOOTSTRAP_NAME)
--AT91BOOTSTRAP:=$(strip  $(subst ",, $(BR2_AT91BOOTSTRAP)))
--AT91BOOTSTRAP_ZCAT:=bzcat
-+AT91BOOTSTRAP:=$(strip $(subst ",, $(BR2_AT91BOOTSTRAP)))
-+#"))
-+AT91BOOTSTRAP_ZCAT:=$(BZCAT)
- 
--AT91BOOTSTRAP_MEMORY:=$(strip  $(subst ",, $(BR2_TARGET_AT91BOOTSTRAP_MEMORY)))
-+AT91BOOTSTRAP_MEMORY:=$(strip $(subst ",, $(BR2_TARGET_AT91BOOTSTRAP_MEMORY)))
-+#"))
- 
-+AT91BOOTSTRAP_BINARY:=$(BOARD_NAME)-$(AT91BOOTSTRAP_MEMORY)boot-$(AT91BOOTSTRAP_PATCHED_VERSION).bin
- 
--AT91BOOTSTRAP_BINARY:=$(BOARD_NAME)-$(AT91BOOTSTRAP_MEMORY)boot-$(AT91BOOTSTRAP_VERSION).bin
--
- AT91BOOTSTRAP_TARGET:=$(AT91BOOTSTRAP_DIR)/binaries/$(AT91BOOTSTRAP_BINARY)
- 
-+AT91BOOTSTRAP_JUMP_ADDR:=$(strip $(subst ",, $(BR2_AT91BOOTSTRAP_JUMP_ADDR)))
-+#"))
-+AT91BOOTSTRAP_IMG_SIZE:=$(strip $(subst ",, $(BR2_AT91BOOTSTRAP_IMG_SIZE)))
-+#"))
-+
-+AT91_CUSTOM_FLAGS:=
-+ifneq ($(AT91BOOTSTRAP_JUMP_ADDR),)
-+AT91_CUSTOM_FLAGS+=-DJUMP_ADDR=$(AT91BOOTSTRAP_JUMP_ADDR)
-+endif
-+ifneq ($(AT91BOOTSTRAP_IMG_SIZE),)
-+AT91_CUSTOM_FLAGS+=-DIMG_SIZE=$(AT91BOOTSTRAP_IMG_SIZE)
-+endif
-+
- $(DL_DIR)/$(AT91BOOTSTRAP_SOURCE):
- 	 $(WGET) -P $(DL_DIR) $(AT91BOOTSTRAP_SITE)/$(AT91BOOTSTRAP_SOURCE)
- 
- $(AT91BOOTSTRAP_DIR)/.unpacked: $(DL_DIR)/$(AT91BOOTSTRAP_SOURCE)
- 	mkdir -p $(PROJECT_BUILD_DIR)
- 	$(AT91BOOTSTRAP_ZCAT) $(DL_DIR)/$(AT91BOOTSTRAP_SOURCE) | tar -C $(PROJECT_BUILD_DIR) $(TAR_OPTIONS) -
-+	toolchain/patch-kernel.sh $(AT91BOOTSTRAP_DIR) target/device/Atmel/at91bootstrap/ at91bootstrap\*.patch
- 	touch $(AT91BOOTSTRAP_DIR)/.unpacked
- 
- $(AT91BOOTSTRAP_DIR)/.configured: $(AT91BOOTSTRAP_DIR)/.unpacked .config
--	$(MAKE)					\
--		MEMORY=$(AT91BOOTSTRAP_MEMORY)	\
--		CROSS_COMPILE=$(TARGET_CROSS)	\
--		-C $(AT91BOOTSTRAP_DIR)		\
-+	$(MAKE) \
-+		MEMORY=$(AT91BOOTSTRAP_MEMORY) \
-+		CROSS_COMPILE=$(TARGET_CROSS) \
-+		-C $(AT91BOOTSTRAP_DIR) \
- 		$(BOARD_NAME)_defconfig
--	touch	$(AT91BOOTSTRAP_DIR)/.configured
-+	touch $(AT91BOOTSTRAP_DIR)/.configured
- 
- $(AT91BOOTSTRAP_TARGET): $(AT91BOOTSTRAP_DIR)/.configured
--	$(MAKE)					\
--		MEMORY=$(AT91BOOTSTRAP_MEMORY)	\
--		CROSS_COMPILE=$(TARGET_CROSS)	\
-+	$(MAKE) \
-+		MEMORY=$(AT91BOOTSTRAP_MEMORY) \
-+		CROSS_COMPILE=$(TARGET_CROSS) \
-+		AT91_CUSTOM_FLAGS="$(AT91_CUSTOM_FLAGS)" \
- 		-C $(AT91BOOTSTRAP_DIR)
- 
-+$(BINARIES_DIR)/$(AT91BOOTSTRAP_BINARY): $(AT91BOOTSTRAP_TARGET)
-+	mkdir -p $(BINARIES_DIR)
-+	cp $(AT91BOOTSTRAP_TARGET) $(BINARIES_DIR)/$(AT91BOOTSTRAP_BINARY)
-+	cp $(AT91BOOTSTRAP_TARGET) /tftpboot/$(AT91BOOTSTRAP_BINARY)
-+
-+.PHONY: at91bootstrap at91bootstrap-source
-+
-+at91bootstrap: $(BINARIES_DIR)/$(AT91BOOTSTRAP_BINARY)
-+
- at91bootstrap-source: $(DL_DIR)/$(AT91BOOTSTRAP_SOURCE)
- 
-+at91bootstrap-unpacked: $(AT91BOOTSTRAP_DIR)/.unpacked
-+
-+.PHONY: at91bootstrap-clean at91bootstrap-dirclean
-+
- at91bootstrap-clean:
- 	make -C $(AT91BOOTSTRAP_DIR) clean
- 
- at91bootstrap-dirclean:
- 	rm -rf $(AT91BOOTSTRAP_DIR)
- 
--at91bootstrap:	$(BINARIES_DIR)/$(AT91BOOTSTRAP_BINARY)
--
--$(BINARIES_DIR)/$(AT91BOOTSTRAP_BINARY):	$(AT91BOOTSTRAP_TARGET)
--	mkdir -p $(BINARIES_DIR)
--	cp $(AT91BOOTSTRAP_TARGET)	$(BINARIES_DIR)/$(AT91BOOTSTRAP_BINARY)
--	cp $(AT91BOOTSTRAP_TARGET)	/tftpboot/$(AT91BOOTSTRAP_BINARY)
--
--.PHONY:	at91bootstrap
- #############################################################
- #
- # Toplevel Makefile options
+------------------------------------------------------------------------
+InetBoot is a bootloader which gets kernel and disk image via Internet
+and boots form it. "netfs" version boots from a ISO file of KNOPPIX/VMKnoppix 
+which is uploaded on a HTTP server. The sample bootable CD (5MB) can 
+boot 3 types of KNOPPIX and 5 types of VMKnoppix.
+  * 3 types of KNOPPIX(511,501, 402) and 
+  * 5 types of VMKnoppix (Xen: 3.2.0, 3.1.1, 3.1.0, 3.0.4.1, 3.0.4)
+InetBoot will boot an ISO file which is based on KNOPPIX 4.0.2 or
+later. (CAUTION: It doesn't not support special customization. Refer
+known problems.)
+
+### Special Feature ###
+InetBoot loads a kernel form a HTTP server. Since it doesn't use
+BOOTP and TFTP which are used for normal network boot (PXE), InetBoot
+is not limited on LAN environment. It also doesn't use a satefull NFS
+server for a root file system. InetBoot uses stateless HTTP for a root
+file system and enables the dynamic load lancing.
+
+All you have to designate the URL of KNOPPIX at the boot menu and you
+can boot the KNOPPIX from Internet. It means you don't need to burn a
+CD/DVD for new KNOPPIX.
+
+InetBoot is consisted of GRUB and BuildRoot (BusyBox). It is not
+simple boot loader. It boots a mini Linux, sets up the network,
+obtains a new kernel form a HTTP server, re-masters the miniroot,
+reboots with "kexec". The new OS boots with loopback-mounting the
+ISO file at HTTP server with httpfs.
+
+### Usage ###
+Download "linux" and "minirt.gz" of BuildRoot and set up GRUB.
+Only you have to designate the URL of ISO file of KNOPPIX at GRUB menu.
+
+Ex: Normal KNOPPIX
+  kernel /boot/grub/linux netdir=http://***/knoppix.iso ramdisk_size=100000 lang=ja vga=normal
+  initrd /boot/grub/minirt.gz
+
+Ex: VMKnoppix. Add "bootxen=1" option.
+  kernel /boot/grub/linux netdir=http://***/Xenoppix.iso bootxen=1 ramdisk_size=100000 lang=ja vga=normal
+  initrd /boot/grub/minirt.gz
+
+The sample bootable-CD includes some URLs of ISO file. They are load
+balanced by SLB(Global Server Load Balance) and InetBoot finds a
+suitable site automatically form 3 sites in US, 3 sites in EU, and 7
+sites in Japan.
+    * knoppix511 (linux 2.6.19)
+    * knoppix501 (linux 2.6.17)
+    * knoppix402 (linux 2.6.12)
+    * VMKnoppix (Xen3.2.0+Linux 2.6.18)
+    * VMKnoppix (Xen3.1.1+Linux 2.6.18)
+    * VMKnoppix (Xen3.1.0+Linux 2.6.18)
+    * VMKnoppix (Xen3.0.4.1+Linux 2.6.18) Oprofile
+    * VMKnoppix (Xen3.0.4) +Linux 2.6.18
+
+### Detail of Implementation ###
+The designated URL at GRUB Menu is passed to BuildRoot as a kernel option.
+On the BuildRoot (BusyBox) do the following steps.
+   1) Set up the network by "udhcp" 
+   2) Mount the ISO file by "httpfs"
+   3) Extract the kernel
+   4) Re-master the miniroot. (The new kernel will mount ISO file with "httpfs".)
+   5) Reboot by "kexec" (Warm Boot)
+The download kernel boots with the re-mastered miniroot.
+   1)  Mount the ISO file at /cdrom with "httpfs"
+   2)  Pass the control to "init" and boots as the normal KNOPPIX
+After that it works as the normal KNOPPIX.
+
+### Known Problems ###
+* Depend on Network Interface.
+    InetBoot sets up Network Interface TWICE (in BuildRoot and
+    downladed new kernel). Both of them have to set up a suitable
+    driver.
+* Depend on the situation of server and network.
+  + It is sensitive of network latency and load of the server because
+    the root file system is mounted by "httpfs".
+  + The situation may change by rebooting because the load balancer
+    (GSLB) may select another site.
+* InetBoot can not applied a deeply re-mastered KNOPPIX.
+  + InetBoot has to know the boot procedure to re-master miniroot.
+* Some HTTP servers have 2GB limitation. 
+  + "httpfs" can not mount DVD ISO file from the servers.
+
+### Related URL ###
+[1] BuildRoot: http://buildroot.uclibc.org/
+[2] httpfs: http://httpfs.sourceforge.net/
+[3] kboot: http://kboot.sourceforge.net/
+[4] Linux Symposium 08 BOF: OS Circular,
+     http://www.linuxsymposium.org/2008/view_abstract.php?content_key=231
+
+### Download ###
+Sample Bootable CD (ISO file) 
+  The included UPLs are temporal service. Please designate your favorite URL.
+  http://www.ring.gr.jp/archives/linux/oscircular/iso/inetboot-netfs-20080409-us.iso
+  MD5: 1c32b27fbe93903ee2decaec220cfbc6
+kernel and miniroot of BuildRoot
+  http://www.ring.gr.jp/archives/linux/oscircular/iso/inetboot-netfs-20080409/linux
+  http://www.ring.gr.jp/archives/linux/oscircular/iso/inetboot-netfs-20080409/minirt.gz
+
+### Acknowledgement ###
+The research and development is a part of "OS Circular" project.
+
+------
+suzaki
