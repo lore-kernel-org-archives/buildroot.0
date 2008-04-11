@@ -1,62 +1,102 @@
-From: Simon Pasch <fpasch@googlemail.com>
-Date: Fri, 11 Apr 2008 13:46:57 +0200
-Subject: [Buildroot] svn commit: trunk/buildroot/target/device/x86/i386
-In-Reply-To: <20080318115143.B649712CFC1@busybox.net>
-References: <20080318115143.B649712CFC1@busybox.net>
-Message-ID: <f90898420804110446v7e60cae4iaec0da33ef0a5ee0@mail.gmail.com>
+From: Arun Reddy <reddyac@gmail.com>
+Date: Fri, 11 Apr 2008 14:51:31 -0400
+Subject: [Buildroot] Creating a bootable filesystem image?
+In-Reply-To: <47FCD648.8040007@arcor.de>
+References: <326f33790804071158h125bc8c3n9701bf1774ce5611@mail.gmail.com>
+	<47FB42D2.7040905@arcor.de>
+	<326f33790804081325s680eb37bg9b8e73663277f4c2@mail.gmail.com>
+	<47FBE4A8.9080104@arcor.de>
+	<326f33790804081526m5d6fa19bi16dcd55c8e1c5cdf@mail.gmail.com>
+	<47FBF3F3.4040001@arcor.de>
+	<326f33790804081650r61d9cac7m7cbbd70c9bb3adee@mail.gmail.com>
+	<47FCD648.8040007@arcor.de>
+Message-ID: <326f33790804111151k7373bbf3j7e13f6dc8e2d981@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-With this change it isn't possible any more to create a custom
-x86-board with kernel-patches and kernel-configuration because
-"trunk/buildroot/target/device/x86/i386/Makefile.in" overrides custom
-BOARD_PATH.
+Sebastian and Buildroot members
 
-Perhaps it should be modfied or reverted.
+I will try this as soon as I can. Right now I am not near my machine with my
+build system. If anyone can please try this out for themselves to give
+further feedback I would greatly appreciate it. This might be something I
+can submit as a bug if everyone is experiencing it. Thank you and I will let
+you know about my results as soon as I can.
 
+Arun
 
+On Wed, Apr 9, 2008 at 10:44 AM, Sebastian <bastisoft@arcor.de> wrote:
 
-2008/3/18, ulf at uclibc.org <ulf@uclibc.org>:
-> Author: ulf
->  Date: 2008-03-18 04:51:43 -0700 (Tue, 18 Mar 2008)
->  New Revision: 21389
+> Hello Arun,
 >
->  Log:
->  Use BOARD_PATH instead of BR2_BOARD_PATH for x86
+> I tried to create an ext2 file system myself (i486 architecture without
+> any applications enabled).
 >
->  Modified:
->    trunk/buildroot/target/device/x86/i386/Makefile.in
+> The first two questions I answered with return, the last one with
+> /home/basti/linux/buildroot/binaries/uclibc/ and then I noticed that the
+> fdisk command gave the same error message as you wrote.
+>
+> But it doesn't create a partition, so I create one myself: (n)ew,
+> (p)rimary, (1), return, return, (w)rite. Then it tries to install grub which
+> fails for me, as it can't find /boot/grub/stage1 on the image. If I could
+> provide these files, it should work, as grub recognizes the partition.
+>
+> Maybe you could try to build no ISO image at all, just the ext2 (ext3)
+> root file system. I have really no idea why it tries to copy your iso file
+> onto the image, as it is not to be placed there.
+>
+> Best regards,
+> Sebastian
 >
 >
->  Changeset:
->  Modified: trunk/buildroot/target/device/x86/i386/Makefile.in
->  ===================================================================
->  --- trunk/buildroot/target/device/x86/i386/Makefile.in  2008-03-18 11:47:31 UTC (rev 21388)
->  +++ trunk/buildroot/target/device/x86/i386/Makefile.in  2008-03-18 11:51:43 UTC (rev 21389)
->  @@ -1,8 +1,9 @@
->  -BR2_BOARD_PATH:=target/device/x86/i386
->  +# BR2_BOARD_PATH:=target/device/x86/i386
->  +BOARD_PATH:=target/device/x86/i386
->
->   ifeq ($(strip $(BR2_PACKAGE_LINUX_KCONFIG)),)
->   ifndef LINUX26_KCONFIG
->  -LINUX26_KCONFIG=$(BR2_BOARD_PATH)/linux26.config
->  +LINUX26_KCONFIG=$(BOARD_PATH)/linux26.config
->   endif
->   else
->   LINUX26_KCONFIG=$(strip $(BR2_PACKAGE_LINUX_KCONFIG))
->  @@ -16,4 +17,4 @@
->   LINUX26_FORMAT=$(strip $(BR2_PACKAGE_LINUX_FORMAT))
->   endif
->
->  -KERNEL_HEADERS_PATCH_DIR:=$(BR2_BOARD_PATH)/kernel-header-patches
->  +KERNEL_HEADERS_PATCH_DIR:=$(BOARD_PATH)/kernel-header-patches
->
->  _______________________________________________
->  buildroot mailing list
->  buildroot at uclibc.org
->  http://busybox.net/mailman/listinfo/buildroot
->
+>         Sebastian,
+> >
+> >        Thanks for the information, I do understand it much clearer
+> >        now. I am attempting to run the script and find out whether my
+> >        input will result in the bootable filesystem I want. When
+> >        running build-ext-img, I input
+> >
+> >        Enter the path to the image:
+> >
+> >        I input "/root/buildroot/scripts/" since that is where the
+> >        filesystem image is located.
+> >
+> >        Enter the name of the image file:
+> >
+> >        I input "buildroot.img"
+> >
+> >        Enter the path to the root filesystem that you want to install
+> >        the image
+> >
+> >        I input "/root/buildroot/binaries/uclibc/" since this is where
+> >        my filesystem image (rootfs.i386.ext2) is located.
+> >
+> >        When the script runs, it looks like everything is ok at first,
+> >        but eventually I get the warning stating Device contains
+> >        neither a valid DOS partition table, nor Sun, SGI... etc. It
+> >        builds a new DOS disklabel for me, so I go ahead and continue.
+> >        I also get a warning that there is an invalid flag 0x0000 of
+> >        partition table 4 that will be corrected by w(rite) which I go
+> >        ahead an accept. I then type q to quit and continue building
+> >        the bootable FS.
+> >
+> >        I am finally left with
+> >
+> >        cp: writing /root/buildroot/scripts/temp/rootfs.i386.iso: No
+> >        space left on device.
+> >
+> >        I examined the script and noticed when installing software to
+> >        the image, ${IMAGE} is mounted to ${IMAGE_PATH}/temp, then
+> >        ${ROOT_PATH}/* is copied to that location, and then the temp
+> >        folder is unmounted and removed. Am I getting that there is no
+> >        space on the device because it is trying to copy to a folder
+> >        where the image is mounted? Or did I not correctly interpret
+> >        the inputs correctly above? Thanks for answering these. I
+> >        should point out I am using Snapshot from 4-1-2008.
+> >
+> >
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: http://busybox.net/lists/buildroot/attachments/20080411/32c10b3a/attachment.htm 
