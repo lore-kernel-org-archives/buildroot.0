@@ -1,7 +1,7 @@
 From: nkukard at uclibc.org <nkukard@uclibc.org>
-Date: Sat, 12 Apr 2008 02:45:50 -0700 (PDT)
-Subject: [Buildroot] svn commit: trunk/buildroot/package:  beecrypt
-Message-ID: <20080412094550.0F6653C59C@busybox.net>
+Date: Sat, 12 Apr 2008 02:51:21 -0700 (PDT)
+Subject: [Buildroot] svn commit: trunk/buildroot/package:  popt
+Message-ID: <20080412095121.C5A183C5A9@busybox.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -9,18 +9,18 @@ Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
 Author: nkukard
-Date: 2008-04-12 02:45:49 -0700 (Sat, 12 Apr 2008)
-New Revision: 21715
+Date: 2008-04-12 02:51:21 -0700 (Sat, 12 Apr 2008)
+New Revision: 21716
 
 Log:
-* Added beecrypt
+* Added popt
 
 
 Added:
-   trunk/buildroot/package/beecrypt/
-   trunk/buildroot/package/beecrypt/Config.in
-   trunk/buildroot/package/beecrypt/beecrypt-4.1.2_no-cxx-glue.patch
-   trunk/buildroot/package/beecrypt/beecrypt.mk
+   trunk/buildroot/package/popt/
+   trunk/buildroot/package/popt/Config.in
+   trunk/buildroot/package/popt/popt-1.14_no-wchar.patch
+   trunk/buildroot/package/popt/popt.mk
 
 Modified:
    trunk/buildroot/package/Config.in
@@ -29,68 +29,70 @@ Modified:
 Changeset:
 Modified: trunk/buildroot/package/Config.in
 ===================================================================
---- trunk/buildroot/package/Config.in	2008-04-12 09:44:42 UTC (rev 21714)
-+++ trunk/buildroot/package/Config.in	2008-04-12 09:45:49 UTC (rev 21715)
-@@ -58,6 +58,7 @@
- 
- comment "Other stuff"
- source "package/at/Config.in"
-+source "package/beecrypt/Config.in"
- source "package/berkeleydb/Config.in"
- source "package/bsdiff/Config.in"
+--- trunk/buildroot/package/Config.in	2008-04-12 09:45:49 UTC (rev 21715)
++++ trunk/buildroot/package/Config.in	2008-04-12 09:51:21 UTC (rev 21716)
+@@ -93,6 +93,7 @@
+ source "package/modutils/Config.in"
+ endif
+ source "package/ng-spice-rework/Config.in"
++source "package/popt/Config.in"
+ source "package/portage/Config.in"
  if !BR2_PACKAGE_BUSYBOX_HIDE_OTHERS
+ source "package/procps/Config.in"
 
-Added: trunk/buildroot/package/beecrypt/Config.in
+Added: trunk/buildroot/package/popt/Config.in
 ===================================================================
---- trunk/buildroot/package/beecrypt/Config.in	                        (rev 0)
-+++ trunk/buildroot/package/beecrypt/Config.in	2008-04-12 09:45:49 UTC (rev 21715)
+--- trunk/buildroot/package/popt/Config.in	                        (rev 0)
++++ trunk/buildroot/package/popt/Config.in	2008-04-12 09:51:21 UTC (rev 21716)
 @@ -0,0 +1,7 @@
-+config BR2_PACKAGE_BEECRYPT
-+	bool "beecrypt"
++config BR2_PACKAGE_POPT
++	bool "popt"
 +	default n
 +	help
-+	  Beecrypt is a general-purpose cryptography library.
++	  Popt is a C library for parsing command line parameters.
 +
-+	  http://beecrypt.sf.net
++	  http://rpm5.org
 
-Added: trunk/buildroot/package/beecrypt/beecrypt-4.1.2_no-cxx-glue.patch
+Added: trunk/buildroot/package/popt/popt-1.14_no-wchar.patch
 ===================================================================
---- trunk/buildroot/package/beecrypt/beecrypt-4.1.2_no-cxx-glue.patch	                        (rev 0)
-+++ trunk/buildroot/package/beecrypt/beecrypt-4.1.2_no-cxx-glue.patch	2008-04-12 09:45:49 UTC (rev 21715)
+--- trunk/buildroot/package/popt/popt-1.14_no-wchar.patch	                        (rev 0)
++++ trunk/buildroot/package/popt/popt-1.14_no-wchar.patch	2008-04-12 09:51:21 UTC (rev 21716)
 @@ -0,0 +1,12 @@
-+diff -ru beecrypt-4.1.2_vanilla/Makefile.am beecrypt-4.1.2_disable-cxxglue/Makefile.am
-+--- beecrypt-4.1.2_vanilla/Makefile.am	2004-12-22 07:06:31.000000000 +0000
-++++ beecrypt-4.1.2_disable-cxxglue/Makefile.am	2008-03-21 23:24:51.000000000 +0000
-+@@ -49,7 +49,7 @@
++diff -ru popt-1.14_vanilla/popthelp.c popt-1.14_no-wchar/popthelp.c
++--- popt-1.14_vanilla/popthelp.c	2008-03-27 17:33:08.000000000 +0000
+++++ popt-1.14_no-wchar/popthelp.c	2008-04-10 05:44:43.000000000 +0000
++@@ -15,7 +15,7 @@
++ #include <sys/ioctl.h>
++ #endif
 + 
-+ libalt_LTLIBRARIES = libbeecrypt.la
-+ 
-+-libbeecrypt_la_SOURCES = aes.c base64.c beecrypt.c blockmode.c blockpad.c blowfish.c dhaes.c dldp.c dlkp.c dlpk.c dlsvdp-dh.c dsa.c elgamal.c endianness.c entropy.c fips186.c hmac.c hmacmd5.c hmacsha1.c hmacsha256.c md5.c hmacsha384.c hmacsha512.c memchunk.c mp.c mpbarrett.c mpnumber.c mpprime.c mtprng.c pkcs1.c pkcs12.c rsa.c rsakp.c rsapk.c sha1.c sha256.c sha384.c sha512.c sha_k.c timestamp.c cppglue.cxx
-++libbeecrypt_la_SOURCES = aes.c base64.c beecrypt.c blockmode.c blockpad.c blowfish.c dhaes.c dldp.c dlkp.c dlpk.c dlsvdp-dh.c dsa.c elgamal.c endianness.c entropy.c fips186.c hmac.c hmacmd5.c hmacsha1.c hmacsha256.c md5.c hmacsha384.c hmacsha512.c memchunk.c mp.c mpbarrett.c mpnumber.c mpprime.c mtprng.c pkcs1.c pkcs12.c rsa.c rsakp.c rsapk.c sha1.c sha256.c sha384.c sha512.c sha_k.c timestamp.c
-+ libbeecrypt_la_DEPENDENCIES = $(BEECRYPT_OBJECTS)
-+ libbeecrypt_la_LIBADD = aesopt.lo blowfishopt.lo mpopt.lo sha1opt.lo
-+ libbeecrypt_la_LDFLAGS = -no-undefined -version-info $(LIBBEECRYPT_LT_CURRENT):$(LIBBEECRYPT_LT_REVISION):$(LIBBEECRYPT_LT_AGE)
++-#define	POPT_WCHAR_HACK
+++/* #define	POPT_WCHAR_HACK */
++ #ifdef 	POPT_WCHAR_HACK
++ #include <wchar.h>			/* for mbsrtowcs */
++ /*@access mbstate_t @*/
 
-Added: trunk/buildroot/package/beecrypt/beecrypt.mk
+Added: trunk/buildroot/package/popt/popt.mk
 ===================================================================
---- trunk/buildroot/package/beecrypt/beecrypt.mk	                        (rev 0)
-+++ trunk/buildroot/package/beecrypt/beecrypt.mk	2008-04-12 09:45:49 UTC (rev 21715)
-@@ -0,0 +1,18 @@
+--- trunk/buildroot/package/popt/popt.mk	                        (rev 0)
++++ trunk/buildroot/package/popt/popt.mk	2008-04-12 09:51:21 UTC (rev 21716)
+@@ -0,0 +1,20 @@
 +#############################################################
 +#
-+# beecrypt
++# popt
 +#
 +#############################################################
-+BEECRYPT_VERSION = 4.1.2
-+BEECRYPT_SITE = http://$(BR2_SOURCEFORGE_MIRROR).dl.sourceforge.net/sourceforge/beecrypt
-+BEECRYPT_AUTORECONF = YES
-+BEECRYPT_INSTALL_STAGING = YES
++POPT_VERSION = 1.14
++POPT_SITE = http://rpm5.org/files/popt
++POPT_INSTALL_STAGING = YES
 +
-+BEECRYPT_CONF_OPT =  --without-cplusplus \
-+		--without-java \
-+		--without-python  \
-+		--disable-rpath
 +
-+BEECRYPT_INSTALL_TARGET_OPT=DESTDIR=$(TARGET_DIR) install
++POPT_CONF_ENV = ac_cv_va_copy=yes 
 +
-+$(eval $(call AUTOTARGETS,package,beecrypt))
++
++POPT_CONF_OPT = --target=$(GNU_TARGET_NAME) --host=$(REAL_GNU_TARGET_NAME) \
++		--build=$(GNU_HOST_NAME) --prefix=/usr
++
++POPT_INSTALL_TARGET_OPT=DESTDIR=$(TARGET_DIR) install
++
++
++$(eval $(call AUTOTARGETS,package,popt))
