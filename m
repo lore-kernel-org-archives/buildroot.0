@@ -1,60 +1,38 @@
-From: Stefan Gehrer <stefan.gehrer@gmx.de>
-Date: Sat, 12 Apr 2008 11:16:27 +0200
-Subject: [Buildroot] [BUG] some issues building for ARM1176JZF-S
-In-Reply-To: <4800762C.6070403@gmx.de>
-References: <4800762C.6070403@gmx.de>
-Message-ID: <48007DEB.1070100@gmx.de>
+From: Hamish Moffatt <hamish@cloud.net.au>
+Date: Sat, 12 Apr 2008 19:22:10 +1000
+Subject: [Buildroot] Editing filesystem files
+In-Reply-To: <005b01c89b00$1630eeb0$ad289e86@LPSC0173W>
+References: <20080409223102.GA4582@cloud.net.au>
+	<005b01c89b00$1630eeb0$ad289e86@LPSC0173W>
+Message-ID: <20080412092210.GA15915@cloud.net.au>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Stefan Gehrer wrote:
-> Hi list,
+On Thu, Apr 10, 2008 at 01:43:20PM +0200, Guillaume Dargaud wrote:
 > 
-> I am just starting with buildroot and try to build for an ARM11 based 
-> system. Building the toolchain and kernel was smooth, there were just
-> some issues in individual packages. When I will get more used to 
-> buildroot I hope I will be able to send patches, but at the moment
-> I just try my best in reporting:
+> > Dependencies between files in the root and the target_skeleton would be
+> > preferable. This would detect everything other than file deletions.
 > 
-> When building package grep-2.5.1, linking in build_arm/grep-2.5.1/src
-> failed with unknown references to libintl_gettext. Adding -lintl to
-> the Makefile's CC line helped as a workaround.
-> 
-> After building libogg-1.1.3, the copying of the libraries to the
-> staging_dir does not work as the source directory assumption is
-> wrong. My workaround was to run following command in 
-> build_arm/libogg-1.1.3:
-> ln -s src/.libs lib
-> 
-> Linking of package libvorbis-1.2.0 failed with
-> libtool: install: error: relink `libvorbisenc.la' with the above command 
-> before installing it
-> Just running make a second time worked.
-> 
-> Before package SDL-1.2.13 was built, buildroot tried to create
-> a symbolic link staging_dir/include/directfb.
-> staging_dir/include did not exist at that point so that failed.
-> Creating staging_dir/include by hand helped
-> 
-> Now I am stuck compiling util-linux-2.12r with following errors
-> umount.c:45: error: expected declaration specifiers or '...' before 
-> 'umount2'
-> umount.c:45: error: expected declaration specifiers or '...' before 'path'
-> umount.c:45: error: expected declaration specifiers or '...' before 'flags'
+> Yes, but it would be quite heavy to put it all in a make file, with the risk 
+> of forgetting something. I'm okay with the idea of the root being rebuilt 
 
-I patched one line in util-linux-2.12r/mount/umount.c and it compiled,
-not sure if it is right though:
+There's no need to list all the files in the Makefile; you can use
+$(wildcard ...) to generate the list dynamically. Although I haven't
+tried to do this for a whole tree.
 
--#if defined(MNT_FORCE) && !defined(__sparc__) && !defined(__arm__)
-+#if defined(MNT_FORCE) && !defined(__sparc__)
-/* Interesting ... it seems libc knows about MNT_FORCE and presumably
-    about umount2 as well -- need not do anything */
-#else /* MNT_FORCE */
+> from scratch, but how do you trigger that ? As you say, even deleting it 
+> completely won't copy some of the skeleton back. What can we 'touch' to make 
+> this happen ?
 
-By the way, this is all with current SVN checkout.
+With external toolchain it seems to be safe to delete most (if not all)
+of the project_build_xyz/abc/root directory. I don't have a good answer
+to your question though. Personally I would like to have proper
+dependencies so that I don't need to do an explicit re-copy operation.
 
-Best regards
-Stefan Gehrer
+
+Hamish
+-- 
+Hamish Moffatt VK3SB <hamish@debian.org> <hamish@cloud.net.au>
