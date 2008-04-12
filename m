@@ -1,7 +1,7 @@
 From: nkukard at uclibc.org <nkukard@uclibc.org>
-Date: Sat, 12 Apr 2008 02:51:21 -0700 (PDT)
-Subject: [Buildroot] svn commit: trunk/buildroot/package:  popt
-Message-ID: <20080412095121.C5A183C5A9@busybox.net>
+Date: Sat, 12 Apr 2008 02:56:15 -0700 (PDT)
+Subject: [Buildroot] svn commit: trunk/buildroot/package:  neon
+Message-ID: <20080412095615.AA3FA3C58F@busybox.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -9,18 +9,17 @@ Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
 Author: nkukard
-Date: 2008-04-12 02:51:21 -0700 (Sat, 12 Apr 2008)
-New Revision: 21716
+Date: 2008-04-12 02:56:15 -0700 (Sat, 12 Apr 2008)
+New Revision: 21717
 
 Log:
-* Added popt
+* Added neon
 
 
 Added:
-   trunk/buildroot/package/popt/
-   trunk/buildroot/package/popt/Config.in
-   trunk/buildroot/package/popt/popt-1.14_no-wchar.patch
-   trunk/buildroot/package/popt/popt.mk
+   trunk/buildroot/package/neon/
+   trunk/buildroot/package/neon/Config.in
+   trunk/buildroot/package/neon/neon.mk
 
 Modified:
    trunk/buildroot/package/Config.in
@@ -29,70 +28,88 @@ Modified:
 Changeset:
 Modified: trunk/buildroot/package/Config.in
 ===================================================================
---- trunk/buildroot/package/Config.in	2008-04-12 09:45:49 UTC (rev 21715)
-+++ trunk/buildroot/package/Config.in	2008-04-12 09:51:21 UTC (rev 21716)
-@@ -93,6 +93,7 @@
- source "package/modutils/Config.in"
- endif
- source "package/ng-spice-rework/Config.in"
-+source "package/popt/Config.in"
- source "package/portage/Config.in"
+--- trunk/buildroot/package/Config.in	2008-04-12 09:51:21 UTC (rev 21716)
++++ trunk/buildroot/package/Config.in	2008-04-12 09:56:15 UTC (rev 21717)
+@@ -172,6 +172,7 @@
+ source "package/mutt/Config.in"
+ source "package/nbd/Config.in"
+ source "package/ncftp/Config.in"
++source "package/neon/Config.in"
  if !BR2_PACKAGE_BUSYBOX_HIDE_OTHERS
- source "package/procps/Config.in"
+ source "package/netcat/Config.in"
+ endif
 
-Added: trunk/buildroot/package/popt/Config.in
+Added: trunk/buildroot/package/neon/Config.in
 ===================================================================
---- trunk/buildroot/package/popt/Config.in	                        (rev 0)
-+++ trunk/buildroot/package/popt/Config.in	2008-04-12 09:51:21 UTC (rev 21716)
-@@ -0,0 +1,7 @@
-+config BR2_PACKAGE_POPT
-+	bool "popt"
+--- trunk/buildroot/package/neon/Config.in	                        (rev 0)
++++ trunk/buildroot/package/neon/Config.in	2008-04-12 09:56:15 UTC (rev 21717)
+@@ -0,0 +1,38 @@
++config BR2_PACKAGE_NEON
++	bool "libneon"
 +	default n
 +	help
-+	  Popt is a C library for parsing command line parameters.
++	  HTTP and WebDAV client library, with a C interface.
 +
-+	  http://rpm5.org
++	  http://www.webdav.org/neon/
++
++choice
++	prompt "XML Support"
++	default BR2_PACKAGE_NEON_NOXML
++	depends BR2_PACKAGE_NEON
++	help
++	  Select which XML library to use...
++	  expat      use exapt
++	  libxml2    use libxml2
++	  none       do not build with XML support
++
++config BR2_PACKAGE_NEON_EXPAT
++	bool "expat"
++	depends BR2_PACKAGE_EXPAT
++	help
++	  expat      use exapt, a library for parsing XML.
++
++config BR2_PACKAGE_NEON_LIBXML2
++	bool "libxml2"
++	depends BR2_PACKAGE_LIBXML2
++	help
++	  libxml2    use libxml2, a library to read, modify and 
++	             write XML and HTML files.
++
++config BR2_PACKAGE_NEON_NOXML
++	bool "none"
++	help
++	  none       don't use XML, if this is the only option
++	             and you want XML support, you must choose
++		     XML handling below.
++endchoice
 
-Added: trunk/buildroot/package/popt/popt-1.14_no-wchar.patch
+Added: trunk/buildroot/package/neon/neon.mk
 ===================================================================
---- trunk/buildroot/package/popt/popt-1.14_no-wchar.patch	                        (rev 0)
-+++ trunk/buildroot/package/popt/popt-1.14_no-wchar.patch	2008-04-12 09:51:21 UTC (rev 21716)
-@@ -0,0 +1,12 @@
-+diff -ru popt-1.14_vanilla/popthelp.c popt-1.14_no-wchar/popthelp.c
-+--- popt-1.14_vanilla/popthelp.c	2008-03-27 17:33:08.000000000 +0000
-++++ popt-1.14_no-wchar/popthelp.c	2008-04-10 05:44:43.000000000 +0000
-+@@ -15,7 +15,7 @@
-+ #include <sys/ioctl.h>
-+ #endif
-+ 
-+-#define	POPT_WCHAR_HACK
-++/* #define	POPT_WCHAR_HACK */
-+ #ifdef 	POPT_WCHAR_HACK
-+ #include <wchar.h>			/* for mbsrtowcs */
-+ /*@access mbstate_t @*/
-
-Added: trunk/buildroot/package/popt/popt.mk
-===================================================================
---- trunk/buildroot/package/popt/popt.mk	                        (rev 0)
-+++ trunk/buildroot/package/popt/popt.mk	2008-04-12 09:51:21 UTC (rev 21716)
-@@ -0,0 +1,20 @@
+--- trunk/buildroot/package/neon/neon.mk	                        (rev 0)
++++ trunk/buildroot/package/neon/neon.mk	2008-04-12 09:56:15 UTC (rev 21717)
+@@ -0,0 +1,25 @@
 +#############################################################
 +#
-+# popt
++# neon
 +#
 +#############################################################
-+POPT_VERSION = 1.14
-+POPT_SITE = http://rpm5.org/files/popt
-+POPT_INSTALL_STAGING = YES
++NEON_VERSION = 0.28.2
++NEON_SITE = http://www.webdav.org/neon/
++NEON_INSTALL_STAGING = YES
 +
++NEON_CONF_OPT+=--enable-shared --without-gssapi --disable-rpath
 +
-+POPT_CONF_ENV = ac_cv_va_copy=yes 
++NEON_INSTALL_TARGET_OPT=DESTDIR=$(TARGET_DIR) install
 +
++ifeq ($(strip $(BR2_PACKAGE_NEON_LIBXML2)),y)
++NEON_CONF_OPT+=--with-libxml2=yes
++NEON_CONF_OPT+=--with-expat=no
++NEON_DEPENDENCIES+=libxml2
++endif
++ifeq ($(strip $(BR2_PACKAGE_NEON_EXPAT)),y)
++NEON_CONF_OPT+=--with-expat=$(STAGING_DIR)/usr/lib/libexpat.la
++NEON_CONF_OPT+=--with-libxml2=no
++NEON_DEPENDENCIES+=expat
++endif
 +
-+POPT_CONF_OPT = --target=$(GNU_TARGET_NAME) --host=$(REAL_GNU_TARGET_NAME) \
-+		--build=$(GNU_HOST_NAME) --prefix=/usr
-+
-+POPT_INSTALL_TARGET_OPT=DESTDIR=$(TARGET_DIR) install
-+
-+
-+$(eval $(call AUTOTARGETS,package,popt))
++$(eval $(call AUTOTARGETS,package,neon))
