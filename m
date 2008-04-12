@@ -1,35 +1,58 @@
-From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Sat, 12 Apr 2008 15:16:36 +0200
-Subject: [Buildroot] advice on makefile
-In-Reply-To: <20080412092510.GB15915@cloud.net.au> (Hamish Moffatt's message
-	of "Sat\, 12 Apr 2008 19\:25\:10 +1000")
-References: <1207827171.6817.432.camel@nigel-x60>
-	<87tzi9apo6.fsf@macbook.be.48ers.dk>
-	<1207836719.6817.433.camel@nigel-x60>
-	<8763upaice.fsf@macbook.be.48ers.dk>
-	<1207839098.6817.444.camel@nigel-x60>
-	<20080412092510.GB15915@cloud.net.au>
-Message-ID: <87ej9b1adn.fsf@macbook.be.48ers.dk>
+From: jacmet at uclibc.org <jacmet@uclibc.org>
+Date: Sat, 12 Apr 2008 06:26:58 -0700 (PDT)
+Subject: [Buildroot] svn commit: trunk/buildroot/package/haserl
+Message-ID: <20080412132658.2BBDC3C573@busybox.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Hamish" == Hamish Moffatt <hamish@cloud.net.au> writes:
+Author: jacmet
+Date: 2008-04-12 06:26:57 -0700 (Sat, 12 Apr 2008)
+New Revision: 21718
 
-Hi,
+Log:
+haserl: depend on haserl binary in TARGET_DIR and also cleanup TARGET_DIR.
 
- >> If we add .stamp_xxx to the build dir ... I guess my luck will run
- >> out ;)
 
- Hamish> Yep, that really sucks. Please, depend on files in the target
- Hamish> dir rather than on stamp files elsewhere. Unless you use
- Hamish> external toolchain I think nuking the root is already unsafe
- Hamish> :-(
+Modified:
+   trunk/buildroot/package/haserl/haserl.mk
 
-Notice this was about files in STAGING_DIR (and providing a known
-filename that other packages can depend on).
 
--- 
-Bye, Peter Korsgaard
+Changeset:
+Modified: trunk/buildroot/package/haserl/haserl.mk
+===================================================================
+--- trunk/buildroot/package/haserl/haserl.mk	2008-04-12 09:56:15 UTC (rev 21717)
++++ trunk/buildroot/package/haserl/haserl.mk	2008-04-12 13:26:57 UTC (rev 21718)
+@@ -10,6 +10,7 @@
+ HASERL_SITE:=http://$(BR2_SOURCEFORGE_MIRROR).dl.sourceforge.net/sourceforge/haserl/
+ HASERL_DIR:=$(BUILD_DIR)/haserl-$(HASERL_VERSION)
+ HASERL_CAT:=$(ZCAT)
++HASERL_BINARY:=usr/bin/haserl
+ 
+ $(DL_DIR)/$(HASERL_SOURCE):
+ 	$(WGET) -P $(DL_DIR) $(HASERL_SITE)/$(HASERL_SOURCE)
+@@ -35,11 +36,10 @@
+ $(HASERL_DIR)/src/haserl: $(HASERL_DIR)/.configured
+ 	$(MAKE) CC=$(TARGET_CC) -C $(HASERL_DIR)
+ 
+-$(HASERL_DIR)/.installed: $(HASERL_DIR)/src/haserl
+-	cp $(HASERL_DIR)/src/haserl $(TARGET_DIR)/usr/bin
+-	touch $@
++$(TARGET_DIR)/$(HASERL_BINARY): $(HASERL_DIR)/src/haserl
++	cp $^ $@
+ 
+-haserl: uclibc $(HASERL_DIR)/.installed
++haserl: uclibc $(TARGET_DIR)/$(HASERL_BINARY)
+ 
+ haserl-source: $(DL_DIR)/$(HASERL_SOURCE)
+ 
+@@ -47,6 +47,7 @@
+ 
+ haserl-clean:
+ 	-$(MAKE) -C $(HASERL_DIR) clean
++	rm -f $(TARGET_DIR)/$(HASERL_BINARY)
+ 
+ haserl-dirclean:
+ 	rm -rf $(HASERL_DIR)
