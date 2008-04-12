@@ -1,24 +1,35 @@
-From: Nigel Kukard <nkukard@lbsd.net>
-Date: Sat, 12 Apr 2008 11:34:27 +0000
-Subject: [Buildroot] uclibc snapshot vs. stable config
-Message-ID: <1208000067.6817.562.camel@nigel-x60>
+From: Peter Korsgaard <jacmet@uclibc.org>
+Date: Sat, 12 Apr 2008 15:16:36 +0200
+Subject: [Buildroot] advice on makefile
+In-Reply-To: <20080412092510.GB15915@cloud.net.au> (Hamish Moffatt's message
+	of "Sat\, 12 Apr 2008 19\:25\:10 +1000")
+References: <1207827171.6817.432.camel@nigel-x60>
+	<87tzi9apo6.fsf@macbook.be.48ers.dk>
+	<1207836719.6817.433.camel@nigel-x60>
+	<8763upaice.fsf@macbook.be.48ers.dk>
+	<1207839098.6817.444.camel@nigel-x60>
+	<20080412092510.GB15915@cloud.net.au>
+Message-ID: <87ej9b1adn.fsf@macbook.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Seems uclibc snapshot is a little off from the current stable config.
+>>>>> "Hamish" == Hamish Moffatt <hamish@cloud.net.au> writes:
 
-May be an idea to add uclibc-snapshot.config ? just like
-uclibc-VERSION.config . This should prevent make stopping to ask for
-config options.
+Hi,
 
--N
--------------- next part --------------
-A non-text attachment was scrubbed...
-Name: not available
-Type: application/pgp-signature
-Size: 189 bytes
-Desc: This is a digitally signed message part
-Url : http://busybox.net/lists/buildroot/attachments/20080412/5d455def/attachment-0001.pgp 
+ >> If we add .stamp_xxx to the build dir ... I guess my luck will run
+ >> out ;)
+
+ Hamish> Yep, that really sucks. Please, depend on files in the target
+ Hamish> dir rather than on stamp files elsewhere. Unless you use
+ Hamish> external toolchain I think nuking the root is already unsafe
+ Hamish> :-(
+
+Notice this was about files in STAGING_DIR (and providing a known
+filename that other packages can depend on).
+
+-- 
+Bye, Peter Korsgaard
