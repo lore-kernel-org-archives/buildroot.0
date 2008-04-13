@@ -1,58 +1,44 @@
-From: jacmet at uclibc.org <jacmet@uclibc.org>
-Date: Sat, 12 Apr 2008 06:26:58 -0700 (PDT)
-Subject: [Buildroot] svn commit: trunk/buildroot/package/haserl
-Message-ID: <20080412132658.2BBDC3C573@busybox.net>
+From: fpml at adinet.com.uy <fpml@adinet.com.uy>
+Date: Sun, 13 Apr 2008 01:28:11 -0300 (UYT)
+Subject: [Buildroot] libtool, libglib2, *_HOOK_POST_(BUILD|INSTALL)
+Message-ID: <27218521.1208060891367.JavaMail.tomcat@fe-ps02>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Author: jacmet
-Date: 2008-04-12 06:26:57 -0700 (Sat, 12 Apr 2008)
-New Revision: 21718
 
-Log:
-haserl: depend on haserl binary in TARGET_DIR and also cleanup TARGET_DIR.
+target: x86 uclibc/busybox
 
+(1) libtool built by many packages use system paths to find shared-
+objects, producing libraries that don't work on target.
 
-Modified:
-   trunk/buildroot/package/haserl/haserl.mk
+I'm using this shell script to patch libtool after configure:
 
+#!/bin/sh
+sed 's/sys_lib_search_path_spec=\"[^\"]*\"/sys_lib_search_path_spec=\"
+\"/' $1 >/tmp/sedtmp1
+sed 's/sys_lib_dlsearch_path_spec=\"[^\"]*\"
+/sys_lib_dlsearch_path_spec=\"\"/' /tmp/sedtmp1 >/tmp/sedtmp2
+#sed 's/shlibpath_var=LD_LIBRARY_PATH/shlibpath_var=\"\"/' 
+/tmp/sedtmp2 >/tmp/sedtmp3
+mv /tmp/sedtmp2 $1
+chmod +x $1
 
-Changeset:
-Modified: trunk/buildroot/package/haserl/haserl.mk
-===================================================================
---- trunk/buildroot/package/haserl/haserl.mk	2008-04-12 09:56:15 UTC (rev 21717)
-+++ trunk/buildroot/package/haserl/haserl.mk	2008-04-12 13:26:57 UTC (rev 21718)
-@@ -10,6 +10,7 @@
- HASERL_SITE:=http://$(BR2_SOURCEFORGE_MIRROR).dl.sourceforge.net/sourceforge/haserl/
- HASERL_DIR:=$(BUILD_DIR)/haserl-$(HASERL_VERSION)
- HASERL_CAT:=$(ZCAT)
-+HASERL_BINARY:=usr/bin/haserl
- 
- $(DL_DIR)/$(HASERL_SOURCE):
- 	$(WGET) -P $(DL_DIR) $(HASERL_SITE)/$(HASERL_SOURCE)
-@@ -35,11 +36,10 @@
- $(HASERL_DIR)/src/haserl: $(HASERL_DIR)/.configured
- 	$(MAKE) CC=$(TARGET_CC) -C $(HASERL_DIR)
- 
--$(HASERL_DIR)/.installed: $(HASERL_DIR)/src/haserl
--	cp $(HASERL_DIR)/src/haserl $(TARGET_DIR)/usr/bin
--	touch $@
-+$(TARGET_DIR)/$(HASERL_BINARY): $(HASERL_DIR)/src/haserl
-+	cp $^ $@
- 
--haserl: uclibc $(HASERL_DIR)/.installed
-+haserl: uclibc $(TARGET_DIR)/$(HASERL_BINARY)
- 
- haserl-source: $(DL_DIR)/$(HASERL_SOURCE)
- 
-@@ -47,6 +47,7 @@
- 
- haserl-clean:
- 	-$(MAKE) -C $(HASERL_DIR) clean
-+	rm -f $(TARGET_DIR)/$(HASERL_BINARY)
- 
- haserl-dirclean:
- 	rm -rf $(HASERL_DIR)
+(2) libglib2 builds some libs that use shared-objects from host 
+system, even after patching its libtool.
+
+eg gmodule/.libs/libgmodule-2.0.so.0.1504.0 << works
+  gmodule/.libs/libgmodule-2.0.so.0.1504.0T << host libs
+
+Good one copied to staging, while the other goes to project_*, so 
+binaries on the final image fail to run due to missing libs (eg instead 
+of uclibc's libc.so.0, libgmodule requests libc.so.6 present in my 
+Slackware host)
+
+(3) How does one use {pkgname}_HOOK_POST_BUILD and INSTALL?  I tried 
+to use it on libglib2's mk but looks like it is ignored.
+
+Thanks,
+Fernando.
