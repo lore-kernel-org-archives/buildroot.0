@@ -1,21 +1,40 @@
-From: Joe <zentrale.at.work@gmail.com>
-Date: Mon, 14 Apr 2008 15:39:24 +0200
-Subject: [Buildroot] Version bumps glib and xerces
-In-Reply-To: <48035AD9.4050504@gmail.com>
-References: <48035AD9.4050504@gmail.com>
-Message-ID: <48035E8C.80303@gmail.com>
+From: Guillaume Dargaud <dargaud@lpsc.in2p3.fr>
+Date: Mon, 14 Apr 2008 18:05:52 +0200
+Subject: [Buildroot] zImage.embedded
+References: <014701c89bda$09380060$ad289e86@LPSC0173W>
+	<fa686aa40804110655x48120e84tde01a52d8bb39a3@mail.gmail.com>
+Message-ID: <01e801c89e49$6d0e6400$ad289e86@LPSC0173W>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Don't mind xerces at the moment, it has bigger problems than just a 
-version bump, as far as i can tell.
+[cross posting from one mailing list to another]
 
+>>  is the file zImage.elf my proper network image ?
+>
+> What bootloader is on your board?  zImage.elf *might* be the proper
+> image.  If you're using u-boot, then you want to build a uImage
+> instead.
+
+I'm trying to compile u-boot with buildroot, but it fails with:
+
+                /usr/bin/make -j1 -C 
+/home/guinevere/Min_UartLite_NetLite_Ace/buildroot/project_build_powerpc/genepy/u-boot-1.3.2 
+\
+                ""_config
+make[1]: Entering directory 
+`/home/guinevere/Min_UartLite_NetLite_Ace/buildroot/project_build_powerpc/genepy/u-boot-1.3.2'
+make[1]: *** No rule to make target `_config'.  Stop.
+make[1]: Leaving directory 
+`/home/guinevere/Min_UartLite_NetLite_Ace/buildroot/project_build_powerpc/genepy/u-boot-1.3.2'
+make: *** 
+[/home/guinevere/Min_UartLite_NetLite_Ace/buildroot/project_build_powerpc/genepy/u-boot-1.3.2/.configured] 
+Error 2
+
+Apparently it expects a BOARD_NAME variable, but I don't know what to put in 
+it (I looked at the makefile and can't find the ml405 referenced in there).
 -- 
-Sepp "ZaP" Holzmayr
-
-please reply to: zentrale.at.work at gmail.com
-"Never underestimate the bandwidth of a freight train full of DAT tapes. 
-Only the round-trip is a little suboptimal."
+Guillaume Dargaud
+http://www.gdargaud.net/
