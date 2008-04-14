@@ -1,25 +1,55 @@
-From: Joe <zentrale.at.work@gmail.com>
-Date: Mon, 14 Apr 2008 15:26:32 +0200
-Subject: [Buildroot] Mount_filesystem_s3c2440
-In-Reply-To: <659459.61809.qm@web94107.mail.in2.yahoo.com>
-References: <659459.61809.qm@web94107.mail.in2.yahoo.com>
-Message-ID: <48035B88.20905@gmail.com>
+From: bugs at busybox.net <bugs@busybox.net>
+Date: Mon, 14 Apr 2008 07:22:47 -0700
+Subject: [Buildroot] [buildroot 0002914]: X11R7 fails to build with a fork
+	bomb.
+Message-ID: <038b04f9788747b4668b1c19d3403ac8@bugs.busybox.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-> Freeing init memory: 1148K
-> Cannot run '/etc/init.d/rcS': No such file or directory
 
-Does this one exist?
+A NOTE has been added to this issue. 
+====================================================================== 
+http://busybox.net/bugs/view.php?id=2914 
+====================================================================== 
+Reported By:                KHAksnes
+Assigned To:                buildroot
+====================================================================== 
+Project:                    buildroot
+Issue ID:                   2914
+Category:                   Architecture Specific
+Reproducibility:            always
+Severity:                   major
+Priority:                   normal
+Status:                     assigned
+====================================================================== 
+Date Submitted:             04-14-2008 04:35 PDT
+Last Modified:              04-14-2008 07:22 PDT
+====================================================================== 
+Summary:                    X11R7 fails to build with a fork bomb.
+Description: 
+X11R7 fails to build in a nasty way. 
+The package check is missing (As far as I understand this is
+check.sourceforge.net) When ./configure in libxcb-1.1 tries to test for
+this it starts a fork bomb making my development machine (a fedora 8
+laptop) grind to a halt.
 
-Greetz
+I am using a current buildroot. (svn at 21732)
+====================================================================== 
 
--- 
-Sepp "ZaP" Holzmayr
+---------------------------------------------------------------------- 
+ KHAksnes - 04-14-08 07:22  
+---------------------------------------------------------------------- 
+Building of RPM shows the same behaviour. The fork bomb involves
+pkg-config, glib-config and sed at least. 
 
-please reply to: zentrale.at.work at gmail.com
-"Never underestimate the bandwidth of a freight train full of DAT tapes. 
-Only the round-trip is a little suboptimal."
+Issue History 
+Date Modified   Username       Field                    Change               
+====================================================================== 
+04-14-08 04:35  KHAksnes       New Issue                                    
+04-14-08 04:35  KHAksnes       Status                   new => assigned     
+04-14-08 04:35  KHAksnes       Assigned To               => buildroot       
+04-14-08 07:22  KHAksnes       Note Added: 0006614                          
+======================================================================
