@@ -1,40 +1,130 @@
-From: Guillaume Dargaud <dargaud@lpsc.in2p3.fr>
-Date: Mon, 14 Apr 2008 18:05:52 +0200
-Subject: [Buildroot] zImage.embedded
-References: <014701c89bda$09380060$ad289e86@LPSC0173W>
-	<fa686aa40804110655x48120e84tde01a52d8bb39a3@mail.gmail.com>
-Message-ID: <01e801c89e49$6d0e6400$ad289e86@LPSC0173W>
+From: Arun Reddy <reddyac@gmail.com>
+Date: Mon, 14 Apr 2008 09:57:35 -0700
+Subject: [Buildroot] Creating a bootable filesystem image?
+In-Reply-To: <20080411190815.5EB722FE0D36@sam.liddicott.com>
+References: <20080411190815.5EB722FE0D36@sam.liddicott.com>
+Message-ID: <326f33790804140957h5059545aw4cc9fea56c79cd0e@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-[cross posting from one mailing list to another]
+Hi Sam,
 
->>  is the file zImage.elf my proper network image ?
+Just to be clear are you referring to the same script "build-ext3-img"
+script? If so can I get some more information on what exactly it is you are
+trying to fix with it?
+
+I would like to point out that I was also able to bypass the error Sam and I
+mentioned by simply moving my .iso image from the .../binaries/uclibc folder
+and placing it somewhere else. Using the script, it then made use of the
+actual rootfs.i386.ext2 image. Unfortunately I am still getting the error
+that there is no space.
+
+arun
+
+On Fri, Apr 11, 2008 at 12:11 PM, Sam Liddicott <sam@liddicott.com> wrote:
+
+> I've managed to understand lba and chs freakery.
 >
-> What bootloader is on your board?  zImage.elf *might* be the proper
-> image.  If you're using u-boot, then you want to build a uImage
-> instead.
-
-I'm trying to compile u-boot with buildroot, but it fails with:
-
-                /usr/bin/make -j1 -C 
-/home/guinevere/Min_UartLite_NetLite_Ace/buildroot/project_build_powerpc/genepy/u-boot-1.3.2 
-\
-                ""_config
-make[1]: Entering directory 
-`/home/guinevere/Min_UartLite_NetLite_Ace/buildroot/project_build_powerpc/genepy/u-boot-1.3.2'
-make[1]: *** No rule to make target `_config'.  Stop.
-make[1]: Leaving directory 
-`/home/guinevere/Min_UartLite_NetLite_Ace/buildroot/project_build_powerpc/genepy/u-boot-1.3.2'
-make: *** 
-[/home/guinevere/Min_UartLite_NetLite_Ace/buildroot/project_build_powerpc/genepy/u-boot-1.3.2/.configured] 
-Error 2
-
-Apparently it expects a BOARD_NAME variable, but I don't know what to put in 
-it (I looked at the makefile and can't find the ml405 referenced in there).
--- 
-Guillaume Dargaud
-http://www.gdargaud.net/
+> The disk image chs mapping that gub ses is not the one used bye the mount
+> the copied the files.
+>
+> I've spent the best part of a day this week playing with lba and chs
+> mappings and think that on Monday I can fix the script.
+>
+> Sam
+>
+>
+> ------------------------------
+> From: Arun Reddy <reddyac@gmail.com>
+> Sent: 11 April 2008 19:51
+> To: Sebastian <bastisoft@arcorde>
+> Cc: Buildroot List <buildroot@uclibc.org>
+> Subject: Re: [Buildroot] Creating a bootable filesystem image?
+>
+> Sebastian and Buildroot members
+>
+> I will try this as soon as I can. Right now I am not near my machine with
+> my build system. If anyone can please try this out for themselves to give
+> further feedback I would greatly appreciate it. This might be something I
+> can submit as a bug if everyone is experiencing it. Thank you and I will let
+> you know about my results as soon as I can
+>
+> Arun
+>
+> On Wed, Apr 9, 2008 at 10:44 AM, Sebastian <bastisoft@arcor.de> wrote:
+>
+> > Hello Arun,
+> >
+> > I tried to create an ext2 file system myself (i486 architecture without
+> > any applications enabled).
+> >
+> > The first two questions I answered with return, the last one with
+> > /home/basti/linux/buildroot/binaries/uclibc/ and then I noticed that the
+> > fdisk command gave the same error message as you wrote.
+> >
+> > But it doesn't create a partition, so I create one myself: (n)ew,
+> > (p)rimary, (1), return, return, (w)rite. Then it tries to install grub which
+> > fails for me, as it can't find /boot/grub/stage1 on the image. If I could
+> > provide these files, it should work, as grub recognizes the partition.
+> >
+> > Maybe you could try to build no ISO image at all, just the ext2 (ext3)
+> > root file system. I have really no idea why it tries to copy your iso file
+> > onto the image, as it is not to be placed there.
+> >
+> > Best regards,
+> > Sebastian
+> >
+> >
+> >        Sebastian,
+> > >
+> > >        Thanks for the information, I do understand it much clearer
+> > >        now. I am attempting to run the script and find out whether my
+> > >        input will result in the bootable filesystem I want. When
+> > >        running build-ext-img, I input
+> > >
+> > >        Enter the path to the image:
+> > >
+> > >        I input "/root/buildroot/scripts/" since that is where the
+> > >        filesystem image is located.
+> > >
+> > >        Enter the name of the image file:
+> > >
+> > >        I input "buildroot.img"
+> > >
+> > >        Enter the path to the root filesystem that you want to install
+> > >        the image
+> > >
+> > >        I input "/root/buildroot/binaries/uclibc/" since this is where
+> > >        my filesystem image (rootfs.i386.ext2) is located.
+> > >
+> > >        When the script runs, it looks like everything is ok at first,
+> > >        but eventually I get the warning stating Device contains
+> > >        neither a valid DOS partition table, nor Sun, SGI... etc. It
+> > >        builds a new DOS disklabel for me, so I go ahead and continue.
+> > >        I also get a warning that there is an invalid flag 0x0000 of
+> > >        partition table 4 that will be corrected by w(rite) which I go
+> > >        ahead an accept. I then type q to quit and continue building
+> > >        the bootable FS.
+> > >
+> > >        I am finally left with
+> > >
+> > >        cp: writing /root/buildroot/scripts/temp/rootfs.i386.iso: No
+> > >        space left on device.
+> > >
+> > >        I examined the script and noticed when installing software to
+> > >        the image, ${IMAGE} is mounted to ${IMAGE_PATH}/temp, then
+> > >        ${ROOT_PATH}/* is copied to that location, and then the temp
+> > >        folder is unmounted and removed. Am I getting that there is no
+> > >        space on the device because it is trying to copy to a folder
+> > >        where the image is mounted? Or did I not correctly interpret
+> > >        the inputs correctly above? Thanks for answering these. I
+> > >        should point out I am using Snapshot from 4-1-2008.
+> > >
+> > >
+>
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: http://busybox.net/lists/buildroot/attachments/20080414/1b4d9b28/attachment.htm 
