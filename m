@@ -1,8 +1,8 @@
 From: bugs at busybox.net <bugs@busybox.net>
-Date: Mon, 14 Apr 2008 07:22:47 -0700
+Date: Mon, 14 Apr 2008 07:31:41 -0700
 Subject: [Buildroot] [buildroot 0002914]: X11R7 fails to build with a fork
 	bomb.
-Message-ID: <038b04f9788747b4668b1c19d3403ac8@bugs.busybox.net>
+Message-ID: <dda915cbf78b47c0fc4cccbba6dbc865@bugs.busybox.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -26,7 +26,7 @@ Priority:                   normal
 Status:                     assigned
 ====================================================================== 
 Date Submitted:             04-14-2008 04:35 PDT
-Last Modified:              04-14-2008 07:22 PDT
+Last Modified:              04-14-2008 07:31 PDT
 ====================================================================== 
 Summary:                    X11R7 fails to build with a fork bomb.
 Description: 
@@ -45,6 +45,13 @@ I am using a current buildroot. (svn at 21732)
 Building of RPM shows the same behaviour. The fork bomb involves
 pkg-config, glib-config and sed at least. 
 
+---------------------------------------------------------------------- 
+ KHAksnes - 04-14-08 07:31  
+---------------------------------------------------------------------- 
+I forgot to mention that I was trying to build for i686 using, a fairly
+standard setup with, kernel: 2.6.24, uclibc: 0.9.29, binutils:
+2.18.50.0.1, gcc: 4.2.3, busybox: 1.10. 
+
 Issue History 
 Date Modified   Username       Field                    Change               
 ====================================================================== 
@@ -52,4 +59,5 @@ Date Modified   Username       Field                    Change
 04-14-08 04:35  KHAksnes       Status                   new => assigned     
 04-14-08 04:35  KHAksnes       Assigned To               => buildroot       
 04-14-08 07:22  KHAksnes       Note Added: 0006614                          
+04-14-08 07:31  KHAksnes       Note Added: 0006624                          
 ======================================================================
