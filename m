@@ -1,91 +1,109 @@
-From: Jean-Christian de Rivaz <jc@eclis.ch>
-Date: Tue, 15 Apr 2008 23:09:04 +0200
+From: Ulf Samuelsson <ulf.samuelsson@atmel.com>
+Date: Tue, 15 Apr 2008 23:25:05 +0200
 Subject: [Buildroot] svn commit: trunk/buildroot/target/linux
-In-Reply-To: <017101c89f3a$46076b30$070514ac@atmel.com>
 References: <20080415171026.A45293C435@busybox.net> <4804E950.4080108@eclis.ch>
 	<007c01c89f2c$3e015030$070514ac@atmel.com>
 	<48050024.2040102@eclis.ch>
 	<017101c89f3a$46076b30$070514ac@atmel.com>
-Message-ID: <48051970.1020909@eclis.ch>
+	<48051970.1020909@eclis.ch>
+Message-ID: <01a601c89f3f$93e2a7c0$070514ac@atmel.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Ulf Samuelsson a ?crit :
-> 
->> Ulf Samuelsson a ?crit :
->>> ----- Original Message ----- 
->>> From: "Jean-Christian de Rivaz" <jc@eclis.ch>
->>> To: <buildroot@uclibc.org>
->>> Cc: <ulf@uclibc.org>
->>> Sent: Tuesday, April 15, 2008 7:43 PM
->>> Subject: Re: [Buildroot] svn commit: trunk/buildroot/target/linux
->>>
->>>
->>>> ulf at uclibc.org a ?crit :
->>>>> Author: ulf
->>>>> Date: 2008-04-15 10:10:24 -0700 (Tue, 15 Apr 2008)
->>>>> New Revision: 21739
->>>>>
->>>>> Log:
->>>>> Reversing bad tftpboot patch resulting in two identical targets
->>>>>
->>>>> Modified:
->>>>>    trunk/buildroot/target/linux/Makefile.in.advanced
->>>> Ouch! Can you please explain why did you re-introduce this bug ?
->>>> The BR2_LINUX_COPYTO variable have absolutely no way to work with a hard 
->>>> coded "/tftpboot/". Just try to copy to /var/lib/tftpboot for example.
->>> Because it is not a bug.
->>>
->>> The Configuration now allows you to
->>>
->>> 1) Copy to /tftpboot                                (if BR2_LINUX_COPYTO_TFTPBOOT is set)
->>> 2) Copy to $(BR2_LINUX_COPYTO)    (if BR2_LINUX_COPYTO is non-empty)
->>>
->>> Before the patch you would have (a little simplified)
->>>
->>> ++++++++++++++++++++++++++++++++++++++++++++++++++++++
->>> LINUX_COPYTO:=BR2_LINUX_COPYTO
->>>
->>> $(BR2_LINUX_COPYTO)/$(LINUX26_KERNEL_NAME): $(LINUX26_KERNEL)
->>>         mkdir -p $(BR2_LINUX_COPYTO)
->>>         cp -dpf $(LINUX26_KERNEL) $(BR2_LINUX_COPYTO)/$(LINUX26_KERNEL_NAME)
->>>
->>> $(LINUX_COPYTO)/$(LINUX26_KERNEL_NAME): $(LINUX26_KERNEL)
->>>         mkdir -p $(LINUX_COPYTO)
->>>         cp -dpf $(LINUX26_KERNEL) $(LINUX_COPYTO)/$(LINUX26_KERNEL_NAME)
->>> --------------------------------------------------------------------------------------------------
->>>
->>> Since LINUX_COPYTO is identical to BR2_LINUX_COPYTO you 
->>> have two IDENTICAL rules, which makes no sense.
->>>
->>> If you want to copy to "/var/lib/tftpboot" your .config should contain:
->>>
->>> BR2_LINUX_COPYTO_TFTPBOOT=n
->>> BR2_LINUX_COPYTO="/var/lib/tftpboot"
->> Ok, I understand your point now, but I still maintain that hardcoded 
->> "/tftpboot" is not a solution for this problem, because on many systems 
->> there is no "/tftpboot" in the root filesystem, because the users don't
->> have the right to create it, and because new distributions use 
->> /var/lib/tftpboot instead of /tftpboot.
->>
-> 
-> If you cannot use "/tftpboot" then don't use it!
-> 
-> The purpose of BR2_LINUX_COPYTO is to allow people
-> to copy to any directory of their choice and this includes "/var/lib/tftpboot".
-> 
-> I have told you how to configure buildroot to do the copy the files to where you want.
-> 
-> Please change your configuration files and get on with other things.
 
-Why not simply removing BR2_LINUX_COPYTO_TFTPBOOT and set by default 
-BR2_LINUX_COPYTO="/tftpboot" ? Peoples that wants to copy elsewhere can 
-simply change BR2_LINUX_COPYTO according to there setup.
 
-This will simplify the whole things without losing any possibility.
+> Ulf Samuelsson a ?crit :
+>> 
+>>> Ulf Samuelsson a ?crit :
+>>>> ----- Original Message ----- 
+>>>> From: "Jean-Christian de Rivaz" <jc@eclis.ch>
+>>>> To: <buildroot@uclibc.org>
+>>>> Cc: <ulf@uclibc.org>
+>>>> Sent: Tuesday, April 15, 2008 7:43 PM
+>>>> Subject: Re: [Buildroot] svn commit: trunk/buildroot/target/linux
+>>>>
+>>>>
+>>>>> ulf at uclibc.org a ?crit :
+>>>>>> Author: ulf
+>>>>>> Date: 2008-04-15 10:10:24 -0700 (Tue, 15 Apr 2008)
+>>>>>> New Revision: 21739
+>>>>>>
+>>>>>> Log:
+>>>>>> Reversing bad tftpboot patch resulting in two identical targets
+>>>>>>
+>>>>>> Modified:
+>>>>>>    trunk/buildroot/target/linux/Makefile.in.advanced
+>>>>> Ouch! Can you please explain why did you re-introduce this bug ?
+>>>>> The BR2_LINUX_COPYTO variable have absolutely no way to work with a hard 
+>>>>> coded "/tftpboot/". Just try to copy to /var/lib/tftpboot for example.
+>>>> Because it is not a bug.
+>>>>
+>>>> The Configuration now allows you to
+>>>>
+>>>> 1) Copy to /tftpboot                                (if BR2_LINUX_COPYTO_TFTPBOOT is set)
+>>>> 2) Copy to $(BR2_LINUX_COPYTO)    (if BR2_LINUX_COPYTO is non-empty)
+>>>>
+>>>> Before the patch you would have (a little simplified)
+>>>>
+>>>> ++++++++++++++++++++++++++++++++++++++++++++++++++++++
+>>>> LINUX_COPYTO:=BR2_LINUX_COPYTO
+>>>>
+>>>> $(BR2_LINUX_COPYTO)/$(LINUX26_KERNEL_NAME): $(LINUX26_KERNEL)
+>>>>         mkdir -p $(BR2_LINUX_COPYTO)
+>>>>         cp -dpf $(LINUX26_KERNEL) $(BR2_LINUX_COPYTO)/$(LINUX26_KERNEL_NAME)
+>>>>
+>>>> $(LINUX_COPYTO)/$(LINUX26_KERNEL_NAME): $(LINUX26_KERNEL)
+>>>>         mkdir -p $(LINUX_COPYTO)
+>>>>         cp -dpf $(LINUX26_KERNEL) $(LINUX_COPYTO)/$(LINUX26_KERNEL_NAME)
+>>>> --------------------------------------------------------------------------------------------------
+>>>>
+>>>> Since LINUX_COPYTO is identical to BR2_LINUX_COPYTO you 
+>>>> have two IDENTICAL rules, which makes no sense.
+>>>>
+>>>> If you want to copy to "/var/lib/tftpboot" your .config should contain:
+>>>>
+>>>> BR2_LINUX_COPYTO_TFTPBOOT=n
+>>>> BR2_LINUX_COPYTO="/var/lib/tftpboot"
+>>> Ok, I understand your point now, but I still maintain that hardcoded 
+>>> "/tftpboot" is not a solution for this problem, because on many systems 
+>>> there is no "/tftpboot" in the root filesystem, because the users don't
+>>> have the right to create it, and because new distributions use 
+>>> /var/lib/tftpboot instead of /tftpboot.
+>>>
+>> 
+>> If you cannot use "/tftpboot" then don't use it!
+>> 
+>> The purpose of BR2_LINUX_COPYTO is to allow people
+>> to copy to any directory of their choice and this includes "/var/lib/tftpboot".
+>> 
+>> I have told you how to configure buildroot to do the copy the files to where you want.
+>> 
+>> Please change your configuration files and get on with other things.
+> 
+> Why not simply removing BR2_LINUX_COPYTO_TFTPBOOT and set by default 
+> BR2_LINUX_COPYTO="/tftpboot" ? Peoples that wants to copy elsewhere can 
+> simply change BR2_LINUX_COPYTO according to there setup.
+> 
+> This will simplify the whole things without losing any possibility.
+> 
 
--- 
-Jean-Christian de Rivaz
+
+The default is no copy for BR2_LINUX_COPYTO and I did not
+want to force other people to do the copy, and I did not want
+to type "/tftpboot" to replace a default "" either.
+
+I think it now works as intended.
+
+It is always possible to make a link from /tftpboot to anywhere
+if you are superuser and if you are not, you can ask 
+any friendly superuser to fix that for you once and for all.
+
+If you do not like the existing defconfigs, you can always create your own
+defconfig using the "make saveconfig" feature and use that for 
+new svn checkouts.
+
+Best Regards
+Ulf Samuelsson
