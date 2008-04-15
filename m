@@ -1,35 +1,29 @@
-From: Joe <zentrale.at.work@gmail.com>
-Date: Tue, 15 Apr 2008 08:28:47 +0200
-Subject: [Buildroot] Mount_filesystem_s3c2440
-In-Reply-To: <272700.14141.qm@web94101.mail.in2.yahoo.com>
-References: <272700.14141.qm@web94101.mail.in2.yahoo.com>
-Message-ID: <48044B1F.3070805@gmail.com>
+From: Peter Korsgaard <jacmet@uclibc.org>
+Date: Tue, 15 Apr 2008 09:10:59 +0200
+Subject: [Buildroot] [PATCH] UBOOT: Provide Version selection option to
+	user
+In-Reply-To: <16695022.post@talk.nabble.com> (Hebbar's message of "Mon\,
+	14 Apr 2008 21\:53\:14 -0700 \(PDT\)")
+References: <16695022.post@talk.nabble.com>
+Message-ID: <87skxna8zg.fsf@macbook.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->> Freeing init memory: 1148K
->>> Cannot run '/etc/init.d/rcS': No such file or directory
->> Does this one exist?
-> 
-> 
-> It did not exist. So, I compiled it all new again and the following is the output.
+>>>>> "Hebbar" == Hebbar  <gururajakr@sanyo.co.in> writes:
 
-ok.
-1. is it really a valid shellscript as set by buildroot?
-2. does your inittab really put a getty/shell onto your (pretty unusual) 
-console, e.g. something like:
-ttySAC0::respawn:/sbin/getty -L ttysac0 115200 vt100 (probably)
-near line 30 in the standard buildroot inittab?
-3. what happens if you give init=/bin/sh as a kernel parameter?
+ Hebbar> Hi,
 
-Greetz
+ Hebbar>   Below patch provides Uboot version selection option to user.
+
+ Hebbar> Comments welcome.
+
+This doesn't apply to trunk - Uboot is now at v1.3.2.
+
+Why would you want a version selector here? Is something not working
+in 1.3.2?
 
 -- 
-Sepp "ZaP" Holzmayr
-
-please reply to: zentrale.at.work at gmail.com
-"Never underestimate the bandwidth of a freight train full of DAT tapes. 
-Only the round-trip is a little suboptimal."
+Bye, Peter Korsgaard
