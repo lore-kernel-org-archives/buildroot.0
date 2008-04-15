@@ -1,97 +1,75 @@
-From: Tiju Jacob <jacob_tiju@yahoo.com>
-Date: Tue, 15 Apr 2008 09:23:56 +0530 (IST)
-Subject: [Buildroot] Mount_filesystem_s3c2440
-Message-ID: <272700.14141.qm@web94101.mail.in2.yahoo.com>
+From: Hebbar <gururajakr@sanyo.co.in>
+Date: Mon, 14 Apr 2008 21:53:14 -0700 (PDT)
+Subject: [Buildroot] [PATCH] UBOOT: Provide Version selection option to user
+Message-ID: <16695022.post@talk.nabble.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+
 Hi,
 
-> Freeing init memory: 1148K
-> > Cannot run '/etc/init.d/rcS': No such file or directory
-> 
-> Does this one exist?
+  Below patch provides Uboot version selection option to user.
+
+Comments welcome.
+
+Regards
+Gururaja
+
+Modified Files:
+target/u-boot/Config.in
+target/u-boot/Makefile.in
 
 
-It did not exist. So, I compiled it all new again and the following is the output.
+diff -purN u-boot_orig/Config.in u-boot/Config.in
+--- u-boot_orig/Config.in	2008-04-03 03:15:11.000000000 -0400
++++ u-boot/Config.in	2008-04-15 16:24:47.000000000 -0400
+@@ -5,6 +5,29 @@ config BR2_TARGET_UBOOT
+ 	help
+ 	  Build "Das U-Boot" Boot Monitor
+ 
++choice
++	prompt "Uboot Version"
++	default BR2_UBOOT_VERSION_1_3_0
++	depends on BR2_TARGET_UBOOT
++	help
++	  Select the version of Uboot you wish to use.
++
++	config BR2_UBOOT_VERSION_1_3_0
++		bool "uboot 1.3.0"
++
++	config BR2_UBOOT_VERSION_1_3_1
++		bool "uboot 1.3.1"
++
++	config BR2_UBOOT_VERSION_1_3_2
++		bool "uboot 1.3.2"
++endchoice
++
++config BR2_UBOOT_VERSION
++	string
++	default "1.3.0"    if BR2_UBOOT_VERSION_1_3_0
++	default "1.3.1"    if BR2_UBOOT_VERSION_1_3_1
++	default "1.3.2"    if BR2_UBOOT_VERSION_1_3_2
++
+ config BR2_TARGET_UBOOT_BOARDNAME
+ 	string "board name"
+ 	depends on BR2_TARGET_UBOOT
 
-Starting kernel ...
+diff -purN u-boot_orig/Makefile.in u-boot/Makefile.in
+--- u-boot_orig/Makefile.in	2008-04-15 16:21:56.000000000 -0400
++++ u-boot/Makefile.in	2008-04-15 16:18:32.000000000 -0400
+@@ -3,7 +3,7 @@
+ # U-Boot
+ #
+ #############################################################
+-U_BOOT_VERSION:=1.3.0
++U_BOOT_VERSION:=$(strip $(subst ",, $(BR2_UBOOT_VERSION)))
+ U_BOOT_SOURCE:=u-boot-$(U_BOOT_VERSION).tar.bz2
+ U_BOOT_SITE:=ftp://ftp.denx.de/pub/u-boot
+ U_BOOT_DIR:=$(PROJECT_BUILD_DIR)/u-boot-$(U_BOOT_VERSION)
 
-Uncompressing Linux............................................................................................
-Linux version 2.6.24.4-default (tiju at tiju) (gcc version 4.2.1) #57 Tue Apr 15 08:58:38 IST 2008
-CPU: ARM920T [41129200] revision 0 (ARMv4T), cr=00007177
-Machine: DPB2440
-Warning: bad configuration page, trying to continue
-Memory policy: ECC disabled, Data cache writeback
-CPU S3C2440A (id 0x32440001)
-S3C244X: core 405.000 MHz, memory 101.250 MHz, peripheral 50.625 MHz
-S3C24XX Clocks, (c) 2004 Simtec Electronics
-CLOCK: Slow mode (1.500 MHz), fast, MPLL on, UPLL on
-CPU0: D VIVT write-back cache
-CPU0: I cache: 16384 bytes, associativity 64, 32 byte lines, 8 sets
-CPU0: D cache: 16384 bytes, associativity 64, 32 byte lines, 8 sets
-Built 1 zonelists in Zone order, mobility grouping off.  Total pages: 4064
-Kernel command line: root=/dev/ram0 rw console=ttySAC0,115200
-irq: clearing pending ext status 00000b00
-irq: clearing subpending status 00000003
-irq: clearing subpending status 00000002
-PID hash table entries: 64 (order: 6, 256 bytes)
-timer tcon=00500000, tcnt a4ca, tcfg 00000200,00000000, usec 00001e57
-Console: colour dummy device 80x30
-console [ttySAC0] enabled
-Dentry cache hash table entries: 2048 (order: 1, 8192 bytes)
-Inode-cache hash table entries: 1024 (order: 0, 4096 bytes)
-Memory: 16MB = 16MB total
-Memory: 12620KB available (2184K code, 342K data, 1032K init)
-Security Framework initialized
-Mount-cache hash table entries: 512
-CPU: Testing write buffer coherency: ok
-net_namespace: 64 bytes
-NET: Registered protocol family 16
-S3C2440: Initialising architecture
-S3C2440: IRQ Support
-S3C2440: Clock Support, DVS off
-S3C24XX DMA Driver, (c) 2003-2004,2006 Simtec Electronics
-DMA channel 0 at c1800000, irq 33
-DMA channel 1 at c1800040, irq 34
-DMA channel 2 at c1800080, irq 35
-DMA channel 3 at c18000c0, irq 36
-usbcore: registered new interface driver usbfs
-usbcore: registered new interface driver hub
-usbcore: registered new device driver usb
-NET: Registered protocol family 2
-IP route cache hash table entries: 1024 (order: 0, 4096 bytes)
-TCP established hash table entries: 512 (order: 0, 4096 bytes)
-TCP bind hash table entries: 512 (order: -1, 2048 bytes)
-TCP: Hash tables configured (established 512 bind 512)
-TCP reno registered
-audit: initializing netlink socket (disabled)
-audit(1.975:1): initialized
-VFS: Disk quotas dquot_6.5.1
-Dquot-cache hash table entries: 1024 (order 0, 4096 bytes)
-io scheduler noop registered
-io scheduler anticipatory registered
-io scheduler deadline registered
-io scheduler cfq registered (default)
-s3c2440-uart.0: s3c2410_serial0 at MMIO 0x50000000 (irq = 70) is a S3C2440
-s3c2440-uart.1: s3c2410_serial1 at MMIO 0x50004000 (irq = 73) is a S3C2440
-s3c2440-uart.2: s3c2410_serial2 at MMIO 0x50008000 (irq = 76) is a S3C2440
-mice: PS/2 mouse device common for all mice
-S3C2410 Watchdog Timer, (c) 2004 Simtec Electronics
-s3c2410-wdt s3c2410-wdt: watchdog inactive, reset disabled, irq enabled
-NET: Registered protocol family 1
-NET: Registered protocol family 17
-registered taskstats version 1
-Freeing init memory: 1032K
-
-Thats it. Nothing else appears. What could be the problem?
-
-Thanks in advance.
-Tiju
-
-
-
-      Check out the all-new face of Yahoo! India. Go to http://in.yahoo.com/
+-- 
+View this message in context: http://www.nabble.com/-PATCH--UBOOT%3A-Provide-Version-selection-option-to-user-tp16695022p16695022.html
+Sent from the BuildRoot mailing list archive at Nabble.com.
