@@ -1,45 +1,30 @@
-From: Guillaume Dargaud <dargaud@lpsc.in2p3.fr>
-Date: Tue, 15 Apr 2008 15:17:48 +0200
-Subject: [Buildroot] Can't compile NSF mounts
-References: <005601c89afa$bdfe24b0$ad289e86@LPSC0173W>	<02fb01c89ee7$5d21f680$ad289e86@LPSC0173W>	<48048C8E.50006@gmail.com>
-	<030801c89ef4$901679a0$ad289e86@LPSC0173W>
-	<4804A041.1030809@gmail.com>
-Message-ID: <031501c89efb$1cbbd1b0$ad289e86@LPSC0173W>
+From: Tiju Jacob <jacob_tiju@yahoo.com>
+Date: Tue, 15 Apr 2008 19:03:39 +0530 (IST)
+Subject: [Buildroot] Mount_filesystem_s3c2440
+Message-ID: <157384.18826.qm@web94114.mail.in2.yahoo.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-> Have you tried mounting the NFS filesystem from another box?
-> To narrow it down if it's a server or a client issue..
+Hi Joe, 
 
-Yes, and it works fine.
+I dint google it because I was a bit confused weather that was the problem or not.
 
-I just managed to mount it on my target board... but it goes incredibly 
-slowly (about one byte per second, so maybe there's something wrong with my 
-network configuration or my design, I'm using XILINX_EMACLITE):
+But this time I did.
 
-# cat >>/etc/fstab
-192.168.1.185:/home/guinevere/prj/buildroot/project_build_powerpc/genepy/root 
-/media/loop nfs wsize=1024,rsize=1024,hard,intr,rw 0 0
+Now the output is :
 
-# mount /media/loop
+Welcome to the Erik's uClibc development environment.
+uclibc login:
 
-# mount
-rootfs on / type rootfs (rw)
-/dev/root on / type ext2 (rw)
-proc on /proc type proc (rw)
-devpts on /dev/pts type devpts (rw)
-tmpfs on /tmp type tmpfs (rw)
-192.168.1.185:/home/guinevere/prj/buildroot/project_build_powerpc/genepy/root 
-on /media/loop type nfs 
-(rw,vers=3,rsize=1024,wsize=1024,hard,intr,proto=udp,timeo=7,retrans=3,sec=sys,addr=192.168.1.185)
+What could be the login and password?
 
-# time cat /media/loop/etc/inittab
-one minute !!!
+Thanks in advance.
+Tiju
 
-I have to see if all protocols are as slow...
--- 
-Guillaume Dargaud
-http://www.gdargaud.net/ 
+
+
+
+      Check out the all-new face of Yahoo! India. Go to http://in.yahoo.com/
