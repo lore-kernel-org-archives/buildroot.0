@@ -1,38 +1,74 @@
-From: Ulf Samuelsson <ulf.samuelsson@atmel.com>
-Date: Tue, 15 Apr 2008 12:52:39 +0200
-Subject: [Buildroot] atstk1002_defconfig problems and (possible) fix
-References: <48045BB1.9000406@logicway.de>
-Message-ID: <008e01c89ee9$7bf15040$dfb5fea9@atmel.com>
+From: Tiju Jacob <jacob_tiju@yahoo.com>
+Date: Tue, 15 Apr 2008 17:38:37 +0530 (IST)
+Subject: [Buildroot] Mount_filesystem_s3c2440
+Message-ID: <854271.68256.qm@web94114.mail.in2.yahoo.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
------ Original Message ----- 
-From: "Arndt Kritzner" <kritzner@logicway.de>
-To: <buildroot@uclibc.org>
-Sent: Tuesday, April 15, 2008 9:39 AM
-Subject: [Buildroot] atstk1002_defconfig problems and (possible) fix
+Hi Joe,
+
+> 1. is it really a valid shellscript as set by buildroot?
+Yes, It is a valid shell script. It is as follows.
+
+for i in /etc/init.d/S??* ;do
+
+     # Ignore dangling symlinks (if any).
+     [ ! -f "$i" ] && continue
+
+     case "$i" in
+    *.sh)
+        # Source shell script for speed.
+        (
+        trap - INT QUIT TSTP
+        set start
+        . $i
+        )
+        ;;
+    *)
+        # No sh extension, so fork subprocess.
+        $i start
+        ;;
+    esac
+done
 
 
-file doesn't exist:
-BR2_PACKAGE_BUSYBOX_CONFIG="package/busybox-1.6.0.config"
+> 2. does your inittab really put a getty/shell onto your (pretty unusual) 
+> console, e.g. something like:
+> ttySAC0::respawn:/sbin/getty -L ttysac0 115200 vt100 (probably)
+> near line 30 in the standard buildroot inittab?
 
-> in my local copy changed to "package/busybox/busybox-1.6.0.config"
+No it does not have. And I uncommented the line saying:
+ttyS0::respawn:/sbin/getty -L ttyS0 115200 vt100
+and the output:
+.....
+registered taskstats version 1
+Freeing init memory: 1032K
+Can't open /dev/ttyS0: No such device or address
+Can't open /dev/ttyS0: No such device or address
+Can't open /dev/ttyS0: No such device or address                                                              
 
-this doesn't work any more:
-BR2_LINUX_COPYTO_TFTPBOOT=y
-BR2_LINUX_COPYTO=""
+Then I added the line:
+ttySAC0::respawn:/sbin/getty -L ttySAC0 115200 vt100
+and the output:
+....
+registered taskstats version 1
+Freeing init memory: 1032K
+Can't open /dev/ttySAC0: No such file or directory
+Can't open /dev/ttySAC0: No such file or directory
+Can't open /dev/ttySAC0: No such file or directory 
 
-> in my local copy changed to BR2_LINUX_COPYTO="/tftpboot"
+> 3. what happens if you give init=/bin/sh as a kernel parameter?
+Same output.
 
-Gru? und tsch?s
-Arndt
--- 
+What do I do to redirect the console to ttySAC0? I think that is the problem, right?
 
-I did not have a chance to look at it in detail, but I think
-Peter Korsgaard made a mistake when "fixing" this.
+Thanks in advance.
+Tiju
 
-Best Regards
-Ulf Samuelsson
+
+
+
+      Check out the all-new face of Yahoo! India. Go to http://in.yahoo.com/
