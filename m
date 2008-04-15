@@ -1,31 +1,35 @@
-From: Ulf Samuelsson <ulf.samuelsson@atmel.com>
-Date: Tue, 15 Apr 2008 09:20:31 +0200
-Subject: [Buildroot] [PATCH] UBOOT: Provide Version selection option
-	touser
-References: <16695022.post@talk.nabble.com>
-	<87skxna8zg.fsf@macbook.be.48ers.dk>
-Message-ID: <010301c89ed1$e2233210$070514ac@atmel.com>
+From: nkukard at uclibc.org <nkukard@uclibc.org>
+Date: Tue, 15 Apr 2008 01:25:33 -0700 (PDT)
+Subject: [Buildroot] svn commit: trunk/buildroot/package/rpm
+Message-ID: <20080415082533.2284B3C53D@busybox.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>>> "Hebbar" == Hebbar  <gururajakr@sanyo.co.in> writes:
-> 
-> Hebbar> Hi,
-> 
-> Hebbar>   Below patch provides Uboot version selection option to user.
-> 
-> Hebbar> Comments welcome.
-> 
-> This doesn't apply to trunk - Uboot is now at v1.3.2.
-> 
-> Why would you want a version selector here? Is something not working in 1.3.2?
+Author: nkukard
+Date: 2008-04-15 01:25:32 -0700 (Tue, 15 Apr 2008)
+New Revision: 21737
 
-There are probably a lot of U-boot versions out there which never
-made it to the main trunk, so people maintain their own patches.
-These might or might not apply to the latest trunc.
+Log:
+* Disable DB3 mutexes in rpm, this caused a segfault after a "Function Not Implemented" error
 
-Best Regards
-Ulf Samuelsson
+
+Modified:
+   trunk/buildroot/package/rpm/rpm.mk
+
+
+Changeset:
+Modified: trunk/buildroot/package/rpm/rpm.mk
+===================================================================
+--- trunk/buildroot/package/rpm/rpm.mk	2008-04-15 08:23:19 UTC (rev 21736)
++++ trunk/buildroot/package/rpm/rpm.mk	2008-04-15 08:25:32 UTC (rev 21737)
+@@ -18,6 +18,7 @@
+ 	--with-zlib=$(STAGING_DIR) \
+ 	--with-libbeecrypt=$(STAGING_DIR) \
+ 	--with-popt=$(STAGING_DIR) \
++	--disable-mutexsupport \
+ 	$(DISABLE_NLS)
+ 
+ RPM_INSTALL_TARGET_OPT=DESTDIR=$(TARGET_DIR) program_transform_name= install
