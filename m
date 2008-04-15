@@ -1,32 +1,30 @@
-From: Guillaume Dargaud <dargaud@lpsc.in2p3.fr>
-Date: Tue, 15 Apr 2008 11:33:37 +0200
-Subject: [Buildroot] zImage.embedded
-References: <014701c89bda$09380060$ad289e86@LPSC0173W><fa686aa40804110655x48120e84tde01a52d8bb39a3@mail.gmail.com>
-	<01e801c89e49$6d0e6400$ad289e86@LPSC0173W>
-	<000b01c89eb5$2af81630$070514ac@atmel.com>
-Message-ID: <02f201c89edb$cb666150$ad289e86@LPSC0173W>
+From: Jean-Christian de Rivaz <jc@eclis.ch>
+Date: Tue, 15 Apr 2008 11:40:11 +0200
+Subject: [Buildroot] atstk1002_defconfig problems and (possible) fix
+In-Reply-To: <200804150846.51504.buildroot.atmel.com@pollet.net>
+References: <48045BB1.9000406@logicway.de>
+	<200804150846.51504.buildroot.atmel.com@pollet.net>
+Message-ID: <480477FB.5010208@eclis.ch>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-> I think you need to figure out how to build u-boot for your board
-> outside buildroot, before you try to build it inside buildroot.
+Michel (BusError) a ?crit :
+> On Tuesday 15 April 2008, Arndt Kritzner wrote:
+> [...]
+>> this doesn't work any more:
+>> BR2_LINUX_COPYTO_TFTPBOOT=y
+>> BR2_LINUX_COPYTO=""
+>>
+>>> in my local copy changed to BR2_LINUX_COPYTO="/tftpboot"
 
-Working on it...
+This is a side effect of the patch that fix the BR2_LINUX_COPYTO 
+handling by removing the hardcoded "/tftpboot/". The default 
+configuration file that set the BR2_LINUX_COPYTO_TFTPBOOT to 'y' but set 
+the BR2_LINUX_COPYTO to "" are broken now and should be fixed by setting 
+BR2_LINUX_COPYTO="/tftpboot" exactly like you do.
 
-While I do that, I have a side question:
-is it possible to boot off a first kernel on a local partition, but tell it 
-to tftp boot off another kernel instead ?
-
-The rational is that I have a working system on a card in my embedded 
-system, but if possible I'd like to have it boot off the latest version 
-available on the network.
-
-And if not available, simple boot using fallback parameters.
-
-Makes sense ?
--- 
-Guillaume Dargaud
-http://www.gdargaud.net/
+--
+Jean-Christian de Rivaz
