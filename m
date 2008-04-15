@@ -1,28 +1,32 @@
 From: Guillaume Dargaud <dargaud@lpsc.in2p3.fr>
-Date: Tue, 15 Apr 2008 10:35:36 +0200
-Subject: [Buildroot] Creating a bootable filesystem image?
-References: <20080411190815.5EB722FE0D36@sam.liddicott.com><326f33790804140957h5059545aw4cc9fea56c79cd0e@mail.gmail.com>
-	<326f33790804141009iadec986u91a1abbde904bbf1@mail.gmail.com>
-Message-ID: <028d01c89ed3$b035e7f0$ad289e86@LPSC0173W>
+Date: Tue, 15 Apr 2008 11:33:37 +0200
+Subject: [Buildroot] zImage.embedded
+References: <014701c89bda$09380060$ad289e86@LPSC0173W><fa686aa40804110655x48120e84tde01a52d8bb39a3@mail.gmail.com>
+	<01e801c89e49$6d0e6400$ad289e86@LPSC0173W>
+	<000b01c89eb5$2af81630$070514ac@atmel.com>
+Message-ID: <02f201c89edb$cb666150$ad289e86@LPSC0173W>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-I normally just use dd to transfer the filesystem image onto a larger one.
-Say you have /dev/sdc2 which is 500Mb and rootfs.powerpc.ext2 which is 10Mb 
-like in my case. I just do
-dd if=rootfs.powerpc.ext2 of=/dev/sdc2
+> I think you need to figure out how to build u-boot for your board
+> outside buildroot, before you try to build it inside buildroot.
 
-There may be some hidden problems with that, but I never ran into them. Even 
-a subsequent chkdsk runs without errors (you'd assume it would at least tell 
-you the free space is missreported).
+Working on it...
 
-If you really want an ext2 at a specific size, just do the opposite:
-dd if=/dev/sdc2 of=- | bzip2 > test.ext2.bz2
+While I do that, I have a side question:
+is it possible to boot off a first kernel on a local partition, but tell it 
+to tftp boot off another kernel instead ?
 
-You may be able to use a loopback mount to do this, but I haven't tried it.
+The rational is that I have a working system on a card in my embedded 
+system, but if possible I'd like to have it boot off the latest version 
+available on the network.
+
+And if not available, simple boot using fallback parameters.
+
+Makes sense ?
 -- 
 Guillaume Dargaud
 http://www.gdargaud.net/
