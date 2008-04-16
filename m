@@ -1,49 +1,88 @@
-From: Hans-Christian Egtvedt <hans-christian.egtvedt@atmel.com>
-Date: Wed, 16 Apr 2008 14:20:34 +0200
-Subject: [Buildroot] [patch] AVR32: rename atstk1002 target board
-	to	more generic	atstk100x
-In-Reply-To: <1208335958.23163.4.camel@localhost>
-References: <1208335958.23163.4.camel@localhost>
-Message-ID: <1208348434.8069.5.camel@localhost>
+From: Jean-Christian de Rivaz <jc@eclis.ch>
+Date: Wed, 16 Apr 2008 14:30:52 +0200
+Subject: [Buildroot] svn commit: trunk/buildroot/target/linux
+In-Reply-To: <008401c89f9c$9a0b8560$050514ac@atmel.com>
+References: <20080415214647.D2C693C53C@busybox.net><20080415223131.GB27329@cloud.net.au>	<002f01c89f7b$fae7fb00$050514ac@atmel.com>
+	<004301c89f7f$51139540$050514ac@atmel.com>
+	<480595BE.3030105@eclis.ch>
+	<008401c89f9c$9a0b8560$050514ac@atmel.com>
+Message-ID: <4805F17C.7050107@eclis.ch>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Wed, 2008-04-16 at 10:52 +0200, Hans-Christian Egtvedt wrote:
-> Hi,
+Ulf Samuelsson a ?crit :
+>> I think that we mess with two different goals:
+>>
+>> 1) Allow the build to complete by not using "/tftpboot". This is really 
+>> important. As pointed many times:
+>>  - System don't have alway a /tftpboot.
+>>  - It is not alway writable by the users.
+>>  - Superuser are not alway ok to do a /tftpboot just for an application.
 > 
-> Please consider applying the linked patch:
+> Linux is not built by default.
+
+Are you talking about the Linux kernel ? If yes, this is not true at 
+least for the at91sam9261 target.
+
+> If you enable Linux, then the normal build is the default.
+
+Sorry, I don't understand your sentence. I make the test by using the 
+default configuration of the at91sam9261 target. What do you means by 
+"enable Linux" ?
+
+> The problem only occurs when you do the advanced build
+> and have the COPYTO_TFTPBOOT set.
+
+Again what an "advanced build". If I wants to change the tftpboot path I 
+simply edit the .config file. This method, default config or changes 
+made by menuconfig make no difference for the Makefile.
+
+> There is an easy workaround, and that is to disable copying to /tftpboot if there is a problem.
+> You can always copy manually from your BINARIES to wherever,
+> or use the programmable COPYTO.
+
+Yes, but this is not obvious from the user perspective.
+
+> Question is how much we need to protect the user from impossible combinations.
+
+As mush as possible by replacing difficult and fragile things by simple 
+and reliable ones.
+
+>>  - It will not work as expected in case multiple users run buildroot.
+>>  - It is the wrong path for a TFTP server in many new distributions.
+>> So I think there is really no point to keep it (other than the effort to 
+>> change little code in target/linux/Makefile.in.advanced). All the 
+>> Makefile targets and results of the build at this stage must be only 
+>> into the buildroot user tree.
 > 
-> http://www.atmel.no/~hcegtvedt/patches/0001-AVR32-rename-atstk1002-target-board-to-more-generic.patch
-> 
+> The point is that it simplifies the complete build to doing "make".
 
-Hmmm, nah, git format-patch did not do the trick for patch.
+Exactly. Currently this goal in not reach because of the hardcoded 
+/tftpboot in the Makefile.
 
-The patch below will work, but requires some manual hands-on.
+>> 2) Option to copy the result of the build into the TFTP server 
+>> directory. This stage simply take the result of the previous stage and 
+>> allow to have ready to go files available with the TFTP protocol at the 
+>> end of the build. Technically the best way would be to know if there is 
+>> a TFTP server installed and use the directory he serve as a default, or 
+>> to not make a copy if none is installed. As this idea seem difficult to 
+>> make, I agree that we can live with "/tftpboot" by default, even if I 
+>> suspect that "/var/lib/tftpboot" will be more and more appropriate.
+>>
+>> This will not solve the possibility that multiple users clash there 
+>> files into the TFTP directory, but at least this remove any possibility 
+>> that there build are broken because of a common target in there 
+>> Makefiles. Users that wants to share a common TFTP server should take 
+>> each others to agree to a directory structure into the TFTP server that 
+>> let each of them have a private space for theres files.
 
-http://www.atmel.no/~hcegtvedt/patches/0001-AVR32-rename-atstk1002-target-board-to-more-generic-take2.patch
+> As long as they do not use the same project name, there is no conflict.
+> That is the purpose of the long file names.
 
-patch -p1 < 0001-AVR32-rename-atstk1002-target-board-to-more-generic-take2.patch
-~ > mv target/device/Atmel/atstk1002/* target/device/Atmel/atstk100x/
-~ > rmdir target/device/Atmel/atstk1002
+Multiples users can work on the same targets.
 
-Then commit.
-
-I update the two _defconfigs to reflect the changes.
-
-> This patch renames the Atmel atstk1002 target board to a more generic
-> atstk100x name. This to make it easier to add support for other
-> CPU-boards than atstk1002.
-> 
-> Signed-off-by: Hans-Christian Egtvedt <hans-christian.egtvedt@atmel.com>
-> 
-> Applies clean to snapshot from 20080416.
-> 
-
-Should apply clean now.
-
--- 
-With kind regards,
-Hans-Christian Egtvedt, Applications Engineer
+--
+Jean-Christian de Rivaz
