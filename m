@@ -1,45 +1,68 @@
-From: Hebbar <gururajakr@sanyo.co.in>
-Date: Tue, 15 Apr 2008 17:02:13 -0700 (PDT)
-Subject: [Buildroot] [PATCH] UBOOT: Provide Version selection option to
- user
-In-Reply-To: <87skxna8zg.fsf@macbook.be.48ers.dk>
-References: <16695022.post@talk.nabble.com>
-	<87skxna8zg.fsf@macbook.be.48ers.dk>
-Message-ID: <16713915.post@talk.nabble.com>
+From: Ulf Samuelsson <ulf.samuelsson@atmel.com>
+Date: Wed, 16 Apr 2008 06:39:18 +0200
+Subject: [Buildroot] svn commit: trunk/buildroot/target/linux
+References: <20080415214647.D2C693C53C@busybox.net>
+	<20080415223131.GB27329@cloud.net.au>
+Message-ID: <002f01c89f7b$fae7fb00$050514ac@atmel.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-
-Hi,
-Latest Gdb Version is Gdb 6.8 But we still have options starting at 6.4 in
-buildroot.
-
-option provided to build GDB 6.4 only to support AVR32
-option provided for versions that support nios2.
-
-   when bloats for atxx and avr32 can pushed all over buildroot, why cant a
-general version support be provided which supports many others customized
-boards..
-
-  I think this is what is done for Busybox also. Even though Latest Busybox
-version is 1.10.0 we still have few version options given going back to
-1.7.x. 
+----- Original Message ----- 
+From: "Hamish Moffatt" <hamish@cloud.net.au>
+To: <buildroot@uclibc.org>
+Sent: Wednesday, April 16, 2008 12:31 AM
+Subject: Re: [Buildroot] svn commit: trunk/buildroot/target/linux
 
 
-Regards
-Gururaja
+> On Tue, Apr 15, 2008 at 02:46:47PM -0700, ulf at uclibc.org wrote:
+>> Author: ulf
+>> Date: 2008-04-15 14:46:47 -0700 (Tue, 15 Apr 2008)
+>> New Revision: 21740
+>> 
+>> Log:
+>> Allow build to complete, even if tftpboot is not writeable by user
+>> 
+>> Modified:
+>>    trunk/buildroot/target/linux/Makefile.in.advanced
+>> 
+>> 
+>> Changeset:
+>> Modified: trunk/buildroot/target/linux/Makefile.in.advanced
+>> ===================================================================
+>> --- trunk/buildroot/target/linux/Makefile.in.advanced 2008-04-15 17:10:24 UTC (rev 21739)
+>> +++ trunk/buildroot/target/linux/Makefile.in.advanced 2008-04-15 21:46:47 UTC (rev 21740)
+>> @@ -438,8 +438,8 @@
+>>  cp -dpf .config $(TARGET_DIR)/boot/busybox.config
+>>  
+>>  /tftpboot/$(LINUX26_KERNEL_NAME): $(LINUX26_KERNEL)
+>> - mkdir -p /tftpboot
+>> - cp -dpf $(LINUX26_KERNEL) /tftpboot/$(LINUX26_KERNEL_NAME)
+>> + -mkdir -p /tftpboot
+>> + -cp -dpf $(LINUX26_KERNEL) /tftpboot/$(LINUX26_KERNEL_NAME)
+> 
+> I think that's a bad idea. Now you will build the system, the copy
+> silently fails to run, you will boot your embedded target and wonder why
+> it behaves the same as before?
+> 
+> 
 
 
+OK, I see your point.
+AFAIK, the copy will only fail if you do not have any write access or if the disk is full.
+Since the filename contains a date, you have to be very unlucky if someone
+else has created a u-boot for the same project, the same day.
+Even if there is such a file, your problem will disappear the next day,
 
->>
->>This doesn't apply to trunk - Uboot is now at v1.3.2.
->>
->>Why would you want a version selector here? Is something not working
->>in 1.3.2?
+I think the u-boot configuration is written to the file system
+and the file system will thus always be created after u-boot.
+If the disk is full, then the build will probably fail at this point.
 
--- 
-View this message in context: http://www.nabble.com/-PATCH--UBOOT%3A-Provide-Version-selection-option-to-user-tp16695022p16713915.html
-Sent from the BuildRoot mailing list archive at Nabble.com.
+
+The advantage of this, is that the build can continue and u-boot generated
+in binaries even if there is no /tftpboot access.
+
+Best Regards
+Ulf Samuelsson
