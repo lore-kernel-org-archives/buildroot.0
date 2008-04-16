@@ -1,42 +1,49 @@
-From: Tiju Jacob <jacob_tiju@yahoo.com>
-Date: Wed, 16 Apr 2008 17:39:37 +0530 (IST)
-Subject: [Buildroot] uclibc_login_s3c2440
-Message-ID: <501544.71316.qm@web94103.mail.in2.yahoo.com>
+From: Hans-Christian Egtvedt <hans-christian.egtvedt@atmel.com>
+Date: Wed, 16 Apr 2008 14:20:34 +0200
+Subject: [Buildroot] [patch] AVR32: rename atstk1002 target board
+	to	more generic	atstk100x
+In-Reply-To: <1208335958.23163.4.camel@localhost>
+References: <1208335958.23163.4.camel@localhost>
+Message-ID: <1208348434.8069.5.camel@localhost>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi All,
+On Wed, 2008-04-16 at 10:52 +0200, Hans-Christian Egtvedt wrote:
+> Hi,
+> 
+> Please consider applying the linked patch:
+> 
+> http://www.atmel.no/~hcegtvedt/patches/0001-AVR32-rename-atstk1002-target-board-to-more-generic.patch
+> 
 
-I have used buildroot to build a cpio filesystem for s3c2440A processor.
+Hmmm, nah, git format-patch did not do the trick for patch.
 
-I build
-the whole buildroot. Do we have to make the changes only
-in"target/generic/device_table.txt" and "etc/inittab" to enable
-ttySAC0? Do we have to modify "/etc/securetty" to have root permissions?
-If so,I tried modifying it and added ttySAC0. But still it comes back
-to thesame login.
-Output is as follows:
-....
-....
-NET: Registered protocol family 1
-NET: Registered protocol family 17
-registered taskstats version 1
-Freeing init memory: 1108K
+The patch below will work, but requires some manual hands-on.
 
-Welcome to the uClibc development environment.
-DPB2440 login: root
+http://www.atmel.no/~hcegtvedt/patches/0001-AVR32-rename-atstk1002-target-board-to-more-generic-take2.patch
 
-Welcome to the uClibc development environment.
-DPB2440 login:
+patch -p1 < 0001-AVR32-rename-atstk1002-target-board-to-more-generic-take2.patch
+~ > mv target/device/Atmel/atstk1002/* target/device/Atmel/atstk100x/
+~ > rmdir target/device/Atmel/atstk1002
 
-What could be the problem? Someone please help ! ! !
+Then commit.
 
-Thanks in Advance.
-Tiju
+I update the two _defconfigs to reflect the changes.
 
+> This patch renames the Atmel atstk1002 target board to a more generic
+> atstk100x name. This to make it easier to add support for other
+> CPU-boards than atstk1002.
+> 
+> Signed-off-by: Hans-Christian Egtvedt <hans-christian.egtvedt@atmel.com>
+> 
+> Applies clean to snapshot from 20080416.
+> 
 
+Should apply clean now.
 
-      Bring your gang together. Do your thing. Find your favourite Yahoo! group at http://in.promos.yahoo.com/groups/
+-- 
+With kind regards,
+Hans-Christian Egtvedt, Applications Engineer
