@@ -1,55 +1,99 @@
-From: Ulf Samuelsson <ulf.samuelsson@atmel.com>
-Date: Wed, 16 Apr 2008 21:21:33 +0200
-Subject: [Buildroot] svn commit: trunk/buildroot/target/linux
-References: <20080415214647.D2C693C53C@busybox.net><20080415223131.GB27329@cloud.net.au>	<002f01c89f7b$fae7fb00$050514ac@atmel.com>
-	<004301c89f7f$51139540$050514ac@atmel.com>
-	<480595BE.3030105@eclis.ch>
-	<008401c89f9c$9a0b8560$050514ac@atmel.com>
-	<4805F17C.7050107@eclis.ch>
-	<065801c89fcd$c457f570$dfb5fea9@atmel.com>
-	<480643F6.1070800@eclis.ch>
-Message-ID: <008b01c8a001$f5d75300$090514ac@atmel.com>
+From: ulf at uclibc.org <ulf@uclibc.org>
+Date: Wed, 16 Apr 2008 15:45:48 -0700 (PDT)
+Subject: [Buildroot] svn commit: trunk/buildroot/target: device/Atmel linux
+Message-ID: <20080416224548.D5D8F3C617@busybox.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->> 
->> And they will have to understand the conflict and 
->> can use "make menuconfig" to resolve the problem.
->> An easy way to do this, is to call the project:
->> "Jean-Christian-at91sam9261"
->> Then the binaries in will contain files like:
->> "Jean-Christian-at91sam9261-linux-2.6.24.bin"
-> 
-> I have not tryed this, but after the build I have thoses file into the 
-> /var/lib/tftpboot:
-> 
-> -rw-r--r--  1 jcdr jcdr     553 2008-04-16 20:12 autoscript.at91sam9261ek
-> -rwxr-xr-x  1 jcdr jcdr  200708 2008-04-16 20:12 
-> at91sam9261ek-u-boot-1.2.0-atmel-20080416.bin
-> drwxrwxrwx  2 root root    4096 2008-04-16 20:12 .
-> -rwxr-xr-x  1 jcdr jcdr    4100 2008-04-16 20:12 
-> at91sam9261ek-dataflashboot-2.3.4.bin
-> -rw-r--r--  1 jcdr jcdr 1611128 2008-04-16 20:17 uImage
-> 
-> I wonder why the "uImage" is not prefixed with a "at91sam9261ek".
+Author: ulf
+Date: 2008-04-16 15:45:47 -0700 (Wed, 16 Apr 2008)
+New Revision: 21747
 
-That is a bug.
-Have not seen this before.
+Log:
+Fix bad linux kernel name
+
+Modified:
+   trunk/buildroot/target/device/Atmel/Makefile.in
+   trunk/buildroot/target/linux/Makefile.in.advanced
 
 
-> 
-> -- 
-> Jean-Christian de Rivaz
->
+Changeset:
+Modified: trunk/buildroot/target/device/Atmel/Makefile.in
+===================================================================
+--- trunk/buildroot/target/device/Atmel/Makefile.in	2008-04-16 15:01:48 UTC (rev 21746)
++++ trunk/buildroot/target/device/Atmel/Makefile.in	2008-04-16 22:45:47 UTC (rev 21747)
+@@ -37,7 +37,7 @@
+ # This should be part of target/linux/Makefile.in
+ LINUX26_BUILD_DIR:=$(PROJECT_BUILD_DIR)
+ 
+-LINUX26_BINLOC=$(LINUX26_FORMAT)
++#LINUX26_BINLOC=$(LINUX26_FORMAT)
+ #LINUX26_BINLOC:=$(BINARIES_DIR)/$(LINUX26_KERNEL)
+ ifeq ($(strip $(BR2_avr32)),y)
+ LINUX26_BINLOC:=arch/$(KERNEL_ARCH)/boot/images/$(BR2_PACKAGE_LINUX_FORMAT)
 
-
-Best Regards
-Ulf Samuelsson                ulf at atmel.com
-Atmel Nordic AB
-Mail:  Box 2033, 174 02 Sundbyberg, Sweden
-Visit:  Kavalleriv?gen 24, 174 58 Sundbyberg, Sweden
-Phone +46 (8) 441 54 22     Fax +46 (8) 441 54 29
-GSM    +46 (706) 22 44 57
+Modified: trunk/buildroot/target/linux/Makefile.in.advanced
+===================================================================
+--- trunk/buildroot/target/linux/Makefile.in.advanced	2008-04-16 15:01:48 UTC (rev 21746)
++++ trunk/buildroot/target/linux/Makefile.in.advanced	2008-04-16 22:45:47 UTC (rev 21747)
+@@ -134,11 +134,7 @@
+ # --------------
+ # UIMAGE
+ ifeq ($(LINUX26_FORMAT),uImage)
+-ifeq ($(BR2_avr32),y)
+-LINUX26_BINLOC:=arch/$(KERNEL_ARCH)/boot/images/$(LINUX26_FORMAT)
+-else
+ LINUX26_BINLOC:=arch/$(KERNEL_ARCH)/boot/$(LINUX26_FORMAT)
+-endif
+ KERNEL_EXT:=.gz
+ endif
+ 
+@@ -153,29 +149,16 @@
+ # BZIMAGE
+ ifeq ($(LINUX26_FORMAT),bzImage)
+ LINUX26_BINLOC:=arch/$(KERNEL_ARCH)/boot/bzImage
+-KERNEL_EXT:=
++KERNEL_EXT:=.bz
+ endif
+ 
+ endif
+ 
+ # -----------------------------------------------------------------------------
+ # File name for the Linux kernel binary
+-ifeq ($(LINUX26_FORMAT),uImage)
+-LINUX26_KERNEL_NAME:="uImage"
+-endif
+-ifeq ($(LINUX26_FORMAT),bzImage)
+-LINUX26_KERNEL_NAME:="bzImage"
+-endif
+-ifeq ($(LINUX26_FORMAT),vmlinux)
+-LINUX26_KERNEL_NAME:="vmlinux"
+-endif
+-ifeq ($(LINUX26_FORMAT),zImage)
+-LINUX26_KERNEL_NAME:="zImage"
+-endif
+-ifeq ($(LINUX26_FORMAT),custom)
+ LINUX26_KERNEL_NAME:=$(BOARD_NAME)-linux-$(LINUX26_VERSION)-$(DATE)$(KERNEL_EXT)
+-endif
+ 
++
+ ifeq ($(BOARD_NAME),)
+ BOARD_NAME=$(ARCH)
+ endif
+@@ -387,10 +370,12 @@
+ 	$(MAKE) $(LINUX26_MAKE_FLAGS) -C $(LINUX26_DIR) prepare
+ 	touch $@
+ 
+-$(LINUX26_KERNEL): $(INITRAMFS_TARGET) $(BB_INITRAMFS_TARGET) \
++$(LINUX26_DIR)/$(LINUX26_BINLOC): $(INITRAMFS_TARGET) $(BB_INITRAMFS_TARGET) \
+ 		$(LINUX26_DIR)/.depend_done
+ 	$(MAKE) $(LINUX26_MAKE_FLAGS) \
+ 		-C $(LINUX26_DIR) $(LINUX26_FORMAT)
++
++$(LINUX26_KERNEL): $(LINUX26_DIR)/$(LINUX26_BINLOC)
+ 	cp -pf $(LINUX26_DIR)/$(LINUX26_BINLOC) $(LINUX26_KERNEL)
+ 	touch -c $@
+ 
