@@ -1,121 +1,119 @@
-From: Ulf Samuelsson <ulf.samuelsson@atmel.com>
-Date: Wed, 16 Apr 2008 14:59:51 +0200
-Subject: [Buildroot] svn commit: trunk/buildroot/target/linux
-References: <20080415214647.D2C693C53C@busybox.net><20080415223131.GB27329@cloud.net.au>	<002f01c89f7b$fae7fb00$050514ac@atmel.com>
-	<004301c89f7f$51139540$050514ac@atmel.com>
-	<480595BE.3030105@eclis.ch>
-	<008401c89f9c$9a0b8560$050514ac@atmel.com>
-	<4805F17C.7050107@eclis.ch>
-Message-ID: <065801c89fcd$c457f570$dfb5fea9@atmel.com>
+From: Darcy Watkins <DWatkins@tranzeo.com>
+Date: Wed, 16 Apr 2008 08:07:49 -0700
+Subject: [Buildroot] uclibc make fails building libpthread for powerpc32
+In-Reply-To: <D61182AC8012EA4EBC531B3AF23BE10958329C@tranzeo-mail2.12stewart.tranzeo.com>
+References: <D61182AC8012EA4EBC531B3AF23BE10958329C@tranzeo-mail2.12stewart.tranzeo.com>
+Message-ID: <D61182AC8012EA4EBC531B3AF23BE1095832A0@tranzeo-mail2.12stewart.tranzeo.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+I see the compile error below attempting to build buildroot with POSIX
+pthreads selected instead of linux pthreads.  
+
+------
+
+  CC libpthread/linuxthreads/sysdeps/pthread/errno-loc.os
+In file included from
+./libpthread/linuxthreads/sysdeps/powerpc/pt-machine.h:5,
+                 from
+./libpthread/linuxthreads/sysdeps/powerpc/tls.h:25,
+                 from ./include/bits/uClibc_errno.h:14,
+                 from ./include/errno.h:62,
+                 from
+libpthread/linuxthreads/sysdeps/pthread/errno-loc.c:21:
+./libpthread/linuxthreads/sysdeps/powerpc/powerpc32/pt-machine.h:79:
+warning: C99 inline functions are not supported; using GNU89
+./libpthread/linuxthreads/sysdeps/powerpc/powerpc32/pt-machine.h:79:
+warning: to disable this warning use -fgnu89-inline or the gnu_inline
+function attribute
+./libpthread/linuxthreads/sysdeps/powerpc/powerpc32/pt-machine.h:103:
+warning: C99 inline functions are not supported; using GNU89
+In file included from
+libpthread/linuxthreads/sysdeps/pthread/errno-loc.c:22:
+./libpthread/linuxthreads/internals.h:538: warning: C99 inline functions
+are not supported; using GNU89
+libpthread/linuxthreads/sysdeps/pthread/errno-loc.c:23:27: error:
+sysdep-cancel.h: No such file or directory
+make[1]: *** [libpthread/linuxthreads/sysdeps/pthread/errno-loc.os]
+Error 1
+make[1]: Leaving directory
+`/home/darcy/workspace/tsf-buildroot/buildroot/toolchain_build_powerpc/u
+Clibc-0.9.29'
+make: ***
+[/home/darcy/workspace/tsf-buildroot/buildroot/toolchain_build_powerpc/u
+Clibc-0.9.29/lib/libc.a] Error 2
+
+----------
+
+The patches below allowed me to compile for powerpc (PPC405EP).  You
+will notice that they are hacks and likely will not work for other
+architectures.  I think that the cause is missing/bad '-I' paths in the
+build files for building uClibc (either the buildroot files or the
+makefiles in uClibc itself).
+
+----------
+
+diff -pruN
+uClibc-0.9.29/libpthread/linuxthreads/sysdeps/pthread/errno-loc.c
+uClibc-0.9.29.mod/libpthread/linuxthreads/sysdeps/pthread/errno-loc.c
+--- uClibc-0.9.29/libpthread/linuxthreads/sysdeps/pthread/errno-loc.c
+2006-01-30 21:05:15.000000000 -0800
++++
+uClibc-0.9.29.mod/libpthread/linuxthreads/sysdeps/pthread/errno-loc.c
+2008-04-16 06:27:41.000000000 -0700
+@@ -20,7 +20,7 @@
+
+ #include <errno.h>
+ #include <linuxthreads/internals.h>
+-#include <sysdep-cancel.h>
++//#include <sysdep-cancel.h>
+
+ #if ! USE___THREAD && !RTLD_PRIVATE_ERRNO
+ #undef errno
+diff -pruN
+uClibc-0.9.29/libpthread/linuxthreads/sysdeps/pthread/herrno-loc.c
+uClibc-0.9.29.mod/libpthread/linuxthreads/sysdeps/pthread/herrno-loc.c
+--- uClibc-0.9.29/libpthread/linuxthreads/sysdeps/pthread/herrno-loc.c
+2006-01-30 21:05:15.000000000 -0800
++++
+uClibc-0.9.29.mod/libpthread/linuxthreads/sysdeps/pthread/herrno-loc.c
+2008-04-16 07:01:16.000000000 -0700
+@@ -19,7 +19,7 @@
+ #include <netdb.h>
+ #include <tls.h>
+ #include <linuxthreads/internals.h>
+-#include <sysdep-cancel.h>
++#include <powerpc/powerpc32/sysdep-cancel.h>
+
+ #if ! USE___THREAD
+ # undef h_errno
+diff -pruN
+uClibc-0.9.29/libpthread/linuxthreads/sysdeps/unix/sysv/linux/powerpc/po
+werpc32/sysdep-cancel.h
+uClibc-0.9.29.mod/libpthread/linuxthreads/sysdeps/unix/sysv/linux/powerp
+c/powerpc32/sysdep-cancel.h
+---
+uClibc-0.9.29/libpthread/linuxthreads/sysdeps/unix/sysv/linux/powerpc/po
+werpc32/sysdep-cancel.h     2006-01-30 21:05:15.000000000 -0800
++++
+uClibc-0.9.29.mod/libpthread/linuxthreads/sysdeps/unix/sysv/linux/powerp
+c/powerpc32/sysdep-cancel.h 2008-04-16 07:04:14.000000000 -0700
+@@ -17,7 +17,7 @@
+    Software Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA
+    02111-1307 USA.  */
+
+-#include <sysdep.h>
++//#include <sysdep.h>
+ #include <tls.h>
+ #ifndef __ASSEMBLER__
+ # include <linuxthreads/internals.h>
 
 
-> Ulf Samuelsson a ?crit :
->>> I think that we mess with two different goals:
->>>
->>> 1) Allow the build to complete by not using "/tftpboot". This is really 
->>> important. As pointed many times:
->>>  - System don't have alway a /tftpboot.
->>>  - It is not alway writable by the users.
->>>  - Superuser are not alway ok to do a /tftpboot just for an application.
->> 
->> Linux is not built by default.
-> 
-> Are you talking about the Linux kernel ? If yes, this is not true at 
-> least for the at91sam9261 target.
-> 
->> If you enable Linux, then the normal build is the default.
-> 
-> Sorry, I don't understand your sentence. I make the test by using the 
-> default configuration of the at91sam9261 target. What do you means by 
-> "enable Linux" ?
-> 
-
-The default is not when you use the make <XXX>_defconfig.
-They you are using a predefined board, and that may have
-configuration items which are different from default settings.
-
-Default is when you do the make menuconfig from scratch.
-
->> The problem only occurs when you do the advanced build
->> and have the COPYTO_TFTPBOOT set.
-> 
-> Again what an "advanced build". If I wants to change the tftpboot path I 
-> simply edit the .config file. This method, default config or changes 
-> made by menuconfig make no difference for the Makefile.
-> 
-
-"Advanced build" is a selection done in the target/linux/Config.in's.
-
->> There is an easy workaround, and that is to disable copying to /tftpboot if there is a problem.
->> You can always copy manually from your BINARIES to wherever,
->> or use the programmable COPYTO.
-> 
-> Yes, but this is not obvious from the user perspective.
-> 
-
-You only need to learn once.
-
->> Question is how much we need to protect the user from impossible combinations.
-> 
-> As mush as possible by replacing difficult and fragile things by simple 
-> and reliable ones.
 
 
->>>  - It will not work as expected in case multiple users run buildroot.
->>>  - It is the wrong path for a TFTP server in many new distributions.
->>> So I think there is really no point to keep it (other than the effort to 
->>> change little code in target/linux/Makefile.in.advanced). All the 
->>> Makefile targets and results of the build at this stage must be only 
->>> into the buildroot user tree.
->> 
->> The point is that it simplifies the complete build to doing "make".
-> 
-> Exactly. Currently this goal in not reach because of the hardcoded 
-> /tftpboot in the Makefile.
+Regards,
 
-No, the Makefile is not the problem, the ".config" is the problem,
-and that is an easy fix by the user.
-Now, the build will continue if the copy fails.
-
->>> 2) Option to copy the result of the build into the TFTP server 
->>> directory. This stage simply take the result of the previous stage and 
->>> allow to have ready to go files available with the TFTP protocol at the 
->>> end of the build. Technically the best way would be to know if there is 
->>> a TFTP server installed and use the directory he serve as a default, or 
->>> to not make a copy if none is installed. As this idea seem difficult to 
->>> make, I agree that we can live with "/tftpboot" by default, even if I 
->>> suspect that "/var/lib/tftpboot" will be more and more appropriate.
->>>
->>> This will not solve the possibility that multiple users clash there 
->>> files into the TFTP directory, but at least this remove any possibility 
->>> that there build are broken because of a common target in there 
->>> Makefiles. Users that wants to share a common TFTP server should take 
->>> each others to agree to a directory structure into the TFTP server that 
->>> let each of them have a private space for theres files.
-> 
->> As long as they do not use the same project name, there is no conflict.
->> That is the purpose of the long file names.
-> 
-> Multiples users can work on the same targets.
-
-And they will have to understand the conflict and 
-can use "make menuconfig" to resolve the problem.
-An easy way to do this, is to call the project:
-"Jean-Christian-at91sam9261"
-Then the binaries in will contain files like:
-"Jean-Christian-at91sam9261-linux-2.6.24.bin"
-
-
-> 
-> --
-> Jean-Christian de Rivaz
->
-
-Best Regards
-Ulf Samuelsson
+Darcy
