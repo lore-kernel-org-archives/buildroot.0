@@ -1,21 +1,20 @@
-From: Salvatore Fassi <salvatore.fassi@gmail.com>
-Date: Wed, 16 Apr 2008 13:15:53 +0200
-Subject: [Buildroot] Adding DRI and GLX support in buildroot xorg
-Message-ID: <c05908680804160415p457b547ds638e58c9b09ba441@mail.gmail.com>
+From: Igor Tseglevskiy <igor.tseglevskiy@gmail.com>
+Date: Wed, 16 Apr 2008 15:56:29 +0400
+Subject: [Buildroot] user shell exits immediately after start.
+Message-ID: <443458e80804160456u7861da33pc17f717e9b90a925@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi all,
+Folks, I need your help.
 
-How can I add support for DRI and GLX in the buildroot xorg?
-I can't find any "configure" or other configuration files!
+I have buildroot on arm9 device. System loads correctly, starts
+intetd, shows login prompt on serial console. User default has no
+assword. System checks login and starts /bin/sh (I now it because I
+inserted some debug prints in shell source). But shell after it exits
+immediately without any messages in log and on console. Behavior is
+identical on console and via telnet. Do you have ideas?
 
-Thank you.
-
-Salvo
--------------- next part --------------
-An HTML attachment was scrubbed...
-URL: http://busybox.net/lists/buildroot/attachments/20080416/0d1ab2a7/attachment.htm 
+Igor Tseglevskiy
