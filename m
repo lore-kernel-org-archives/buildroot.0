@@ -1,7 +1,7 @@
 From: nkukard at uclibc.org <nkukard@uclibc.org>
-Date: Thu, 17 Apr 2008 06:23:21 -0700 (PDT)
-Subject: [Buildroot] svn commit: trunk/buildroot/package/sfdisk
-Message-ID: <20080417132321.210B43C4FC@busybox.net>
+Date: Thu, 17 Apr 2008 06:25:48 -0700 (PDT)
+Subject: [Buildroot] svn commit: trunk/buildroot/toolchain/uClibc
+Message-ID: <20080417132548.44D6D3C4FC@busybox.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -9,70 +9,269 @@ Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
 Author: nkukard
-Date: 2008-04-17 06:23:20 -0700 (Thu, 17 Apr 2008)
-New Revision: 21754
+Date: 2008-04-17 06:25:47 -0700 (Thu, 17 Apr 2008)
+New Revision: 21755
 
 Log:
-* Fix _llseek not being defined in some cases
-* Add index & rindex defines if they're not defined either (legacy susv4 functions)
+* Added uclibc snapshot config, differes from the stable and kept asking questions for config
+* Added ARM config options to makefile just like the other arch's
 
 
 Added:
-   trunk/buildroot/package/sfdisk/sfdisk.005.no-llseek-fix.patch
-   trunk/buildroot/package/sfdisk/sfdisk.010.index-rindex-fix.patch
+   trunk/buildroot/toolchain/uClibc/uClibc-snapshot.config
+
+Modified:
+   trunk/buildroot/toolchain/uClibc/Config.in
+   trunk/buildroot/toolchain/uClibc/uclibc.mk
 
 
 Changeset:
-Added: trunk/buildroot/package/sfdisk/sfdisk.005.no-llseek-fix.patch
+Modified: trunk/buildroot/toolchain/uClibc/Config.in
 ===================================================================
---- trunk/buildroot/package/sfdisk/sfdisk.005.no-llseek-fix.patch	                        (rev 0)
-+++ trunk/buildroot/package/sfdisk/sfdisk.005.no-llseek-fix.patch	2008-04-17 13:23:20 UTC (rev 21754)
-@@ -0,0 +1,21 @@
-+diff -ur sfdisk_vanilla/sfdisk.c sfdisk_llseek-fix/sfdisk.c
-+--- sfdisk_vanilla/sfdisk.c	2004-01-13 13:03:11.000000000 +0000
-++++ sfdisk_llseek-fix/sfdisk.c	2008-04-17 08:42:35.000000000 +0000
-+@@ -134,9 +137,17 @@
-+  * Note: we use 512-byte sectors here, irrespective of the hardware ss.
-+  */
-+ #if defined(__linux__) && !defined (__alpha__) && !defined (__ia64__) && !defined (__x86_64__) && !defined (__s390x__)
-++#if defined(_llseek)
-+ static
-+ _syscall5(int,  _llseek,  unsigned int,  fd, ulong, hi, ulong, lo,
-+        loff_t *, res, unsigned int, wh);
-++#else
-++static int _llseek (unsigned int fd, unsigned long oh,
-++		unsigned long ol, long long *result,
-++		unsigned int origin) {
-++	return syscall (__NR__llseek, fd, oh, ol, result, origin);
-++#endif
-++}
-+ #endif
-+ 
-+ static int
+--- trunk/buildroot/toolchain/uClibc/Config.in	2008-04-17 13:23:20 UTC (rev 21754)
++++ trunk/buildroot/toolchain/uClibc/Config.in	2008-04-17 13:25:47 UTC (rev 21755)
+@@ -36,7 +36,7 @@
+ 	default "toolchain/uClibc/uClibc-0.9.28.config" if BR2_UCLIBC_VERSION_0_9_28_3
+ 	default "toolchain/uClibc/uClibc-0.9.29.config" if BR2_UCLIBC_VERSION_0_9_29
+ 	default "toolchain/uClibc/uClibc-0.9.29.config" if BR2_UCLIBC_VERSION_0_9_30
+-	default "toolchain/uClibc/uClibc-0.9.29.config" if BR2_UCLIBC_VERSION_SNAPSHOT
++	default "toolchain/uClibc/uClibc-snapshot.config" if BR2_UCLIBC_VERSION_SNAPSHOT
+ 	help
+ 	  Some people may wish to use their own modified uClibc configuration
+ 	  file and will specify their config file location with this option.
 
-Added: trunk/buildroot/package/sfdisk/sfdisk.010.index-rindex-fix.patch
+Added: trunk/buildroot/toolchain/uClibc/uClibc-snapshot.config
 ===================================================================
---- trunk/buildroot/package/sfdisk/sfdisk.010.index-rindex-fix.patch	                        (rev 0)
-+++ trunk/buildroot/package/sfdisk/sfdisk.010.index-rindex-fix.patch	2008-04-17 13:23:20 UTC (rev 21754)
-@@ -0,0 +1,21 @@
-+diff -ru sfdisk_llseek-fix/sfdisk.c sfdisk_index-rindex-fix/sfdisk.c
-+--- sfdisk_llseek-fix/sfdisk.c	2008-04-17 08:42:35.000000000 +0000
-++++ sfdisk_index-rindex-fix/sfdisk.c	2008-04-17 09:50:17.000000000 +0000
-+@@ -58,6 +58,17 @@
-+ 
-+ #define SIZE(a)	(sizeof(a)/sizeof(a[0]))
-+ 
-++/* 
-++ * Why these wouldn't be defined in string.h, I don't know, there is a block
-++ * testing for BSD, and no other mention of these functions ... NK
-++ */
-++#if !defined(index)
-++#  define index(s,c) strchr((s), (c))
-++#endif
-++#if !defined(rindex)
-++#  define rindex(s,c) strrchr((s), (c))
-++#endif
-++
-+ /*
-+  * Table of contents:
-+  *  A. About seeking
+--- trunk/buildroot/toolchain/uClibc/uClibc-snapshot.config	                        (rev 0)
++++ trunk/buildroot/toolchain/uClibc/uClibc-snapshot.config	2008-04-17 13:25:47 UTC (rev 21755)
+@@ -0,0 +1,201 @@
++#
++# Automatically generated make config: don't edit
++#
++# TARGET_alpha is not set
++# TARGET_arm is not set
++# TARGET_avr32 is not set
++# TARGET_bfin is not set
++# TARGET_cris is not set
++# TARGET_e1 is not set
++# TARGET_frv is not set
++# TARGET_h8300 is not set
++# TARGET_hppa is not set
++# TARGET_i386 is not set
++# TARGET_i960 is not set
++# TARGET_ia64 is not set
++# TARGET_m68k is not set
++# TARGET_microblaze is not set
++# TARGET_mips is not set
++# TARGET_nios is not set
++# TARGET_nios2 is not set
++# TARGET_powerpc is not set
++# TARGET_sh is not set
++# TARGET_sh64 is not set
++# TARGET_sparc is not set
++# TARGET_v850 is not set
++# TARGET_vax is not set
++# TARGET_x86_64 is not set
++# TARGET_xtensa is not set
++TARGET_SUBARCH=""
++
++#
++# Target Architecture Features and Options
++#
++TARGET_ARCH="none"
++FORCE_OPTIONS_FOR_ARCH=y
++
++#
++# Using ELF file format
++#
++# ARCH_LITTLE_ENDIAN is not set
++# ARCH_BIG_ENDIAN is not set
++# ARCH_WANTS_LITTLE_ENDIAN is not set
++# ARCH_WANTS_BIG_ENDIAN is not set
++
++#
++# Using Little Endian
++#
++ARCH_HAS_MMU=y
++ARCH_USE_MMU=y
++UCLIBC_HAS_FLOATS=y
++UCLIBC_HAS_FPU=y
++DO_C99_MATH=y
++# UCLIBC_HAS_FENV is not set
++KERNEL_HEADERS="/usr/src/linux/include"
++HAVE_DOT_CONFIG=y
++
++#
++# General Library Settings
++#
++# HAVE_NO_PIC is not set
++DOPIC=y
++# HAVE_NO_SHARED is not set
++# ARCH_HAS_NO_LDSO is not set
++HAVE_SHARED=y
++# FORCE_SHAREABLE_TEXT_SEGMENTS is not set
++LDSO_LDD_SUPPORT=y
++LDSO_CACHE_SUPPORT=y
++# LDSO_PRELOAD_FILE_SUPPORT is not set
++LDSO_BASE_FILENAME="ld.so"
++# UCLIBC_STATIC_LDCONFIG is not set
++# LDSO_RUNPATH is not set
++UCLIBC_CTOR_DTOR=y
++# LDSO_GNU_HASH_SUPPORT is not set
++# HAS_NO_THREADS is not set
++UCLIBC_HAS_THREADS=y
++# PTHREADS_DEBUG_SUPPORT is not set
++LINUXTHREADS_OLD=y
++UCLIBC_HAS_LFS=y
++# MALLOC is not set
++# MALLOC_SIMPLE is not set
++MALLOC_STANDARD=y
++MALLOC_GLIBC_COMPAT=y
++UCLIBC_DYNAMIC_ATEXIT=y
++# COMPAT_ATEXIT is not set
++# UCLIBC_SUSV3_LEGACY is not set
++# UCLIBC_SUSV3_LEGACY_MACROS is not set
++UCLIBC_HAS_SHADOW=y
++# UCLIBC_HAS_PROGRAM_INVOCATION_NAME is not set
++# UNIX98PTY_ONLY is not set
++ASSUME_DEVPTS=y
++UCLIBC_HAS_TM_EXTENSIONS=y
++UCLIBC_HAS_TZ_CACHING=y
++UCLIBC_HAS_TZ_FILE=y
++UCLIBC_HAS_TZ_FILE_READ_MANY=y
++UCLIBC_TZ_FILE_PATH="/etc/TZ"
++
++#
++# Advanced Library Settings
++#
++UCLIBC_PWD_BUFFER_SIZE=256
++UCLIBC_GRP_BUFFER_SIZE=256
++
++#
++# Networking Support
++#
++UCLIBC_HAS_IPV6=y
++UCLIBC_HAS_RPC=y
++UCLIBC_HAS_FULL_RPC=y
++UCLIBC_HAS_REENTRANT_RPC=y
++# UCLIBC_USE_NETLINK is not set
++# UCLIBC_HAS_BSD_RES_CLOSE is not set
++
++#
++# String and Stdio Support
++#
++UCLIBC_HAS_STRING_GENERIC_OPT=y
++UCLIBC_HAS_STRING_ARCH_OPT=y
++UCLIBC_HAS_CTYPE_TABLES=y
++UCLIBC_HAS_CTYPE_SIGNED=y
++# UCLIBC_HAS_CTYPE_UNSAFE is not set
++UCLIBC_HAS_CTYPE_CHECKED=y
++# UCLIBC_HAS_CTYPE_ENFORCED is not set
++# UCLIBC_HAS_WCHAR is not set
++# UCLIBC_HAS_LOCALE is not set
++UCLIBC_HAS_HEXADECIMAL_FLOATS=y
++UCLIBC_HAS_GLIBC_CUSTOM_PRINTF=y
++# USE_OLD_VFPRINTF is not set
++UCLIBC_PRINTF_SCANF_POSITIONAL_ARGS=9
++UCLIBC_HAS_SCANF_GLIBC_A_FLAG=y
++# UCLIBC_HAS_STDIO_BUFSIZ_NONE is not set
++# UCLIBC_HAS_STDIO_BUFSIZ_256 is not set
++# UCLIBC_HAS_STDIO_BUFSIZ_512 is not set
++# UCLIBC_HAS_STDIO_BUFSIZ_1024 is not set
++# UCLIBC_HAS_STDIO_BUFSIZ_2048 is not set
++UCLIBC_HAS_STDIO_BUFSIZ_4096=y
++# UCLIBC_HAS_STDIO_BUFSIZ_8192 is not set
++UCLIBC_HAS_STDIO_BUILTIN_BUFFER_NONE=y
++# UCLIBC_HAS_STDIO_BUILTIN_BUFFER_4 is not set
++# UCLIBC_HAS_STDIO_BUILTIN_BUFFER_8 is not set
++# UCLIBC_HAS_STDIO_SHUTDOWN_ON_ABORT is not set
++UCLIBC_HAS_STDIO_GETC_MACRO=y
++UCLIBC_HAS_STDIO_PUTC_MACRO=y
++UCLIBC_HAS_STDIO_AUTO_RW_TRANSITION=y
++# UCLIBC_HAS_FOPEN_LARGEFILE_MODE is not set
++UCLIBC_HAS_FOPEN_EXCLUSIVE_MODE=y
++UCLIBC_HAS_GLIBC_CUSTOM_STREAMS=y
++UCLIBC_HAS_PRINTF_M_SPEC=y
++UCLIBC_HAS_ERRNO_MESSAGES=y
++# UCLIBC_HAS_SYS_ERRLIST is not set
++UCLIBC_HAS_SIGNUM_MESSAGES=y
++# UCLIBC_HAS_SYS_SIGLIST is not set
++UCLIBC_HAS_GNU_GETOPT=y
++UCLIBC_HAS_GNU_GETSUBOPT=y
++
++#
++# Big and Tall
++#
++UCLIBC_HAS_REGEX=y
++UCLIBC_HAS_REGEX_OLD=y
++UCLIBC_HAS_FNMATCH=y
++UCLIBC_HAS_FNMATCH_OLD=y
++# UCLIBC_HAS_WORDEXP is not set
++UCLIBC_HAS_FTW=y
++UCLIBC_HAS_GLOB=y
++UCLIBC_HAS_GNU_GLOB=y
++
++#
++# Library Installation Options
++#
++SHARED_LIB_LOADER_PREFIX="/lib"
++RUNTIME_PREFIX="/"
++DEVEL_PREFIX="/usr/"
++
++#
++# Security options
++#
++# UCLIBC_BUILD_PIE is not set
++# UCLIBC_HAS_ARC4RANDOM is not set
++# HAVE_NO_SSP is not set
++# UCLIBC_HAS_SSP is not set
++UCLIBC_BUILD_RELRO=y
++UCLIBC_BUILD_NOW=y
++# UCLIBC_BUILD_NOEXECSTACK is not set
++
++#
++# uClibc development/debugging options
++#
++CROSS_COMPILER_PREFIX=""
++UCLIBC_EXTRA_CFLAGS=""
++# DODEBUG is not set
++# DODEBUG_PT is not set
++DOSTRIP=y
++# DOASSERTS is not set
++# SUPPORT_LD_DEBUG is not set
++# SUPPORT_LD_DEBUG_EARLY is not set
++# UCLIBC_MALLOC_DEBUGGING is not set
++WARNINGS="-Wall"
++# EXTRA_WARNINGS is not set
++# DOMULTI is not set
++# UCLIBC_MJN3_ONLY is not set
++
+
+Modified: trunk/buildroot/toolchain/uClibc/uclibc.mk
+===================================================================
+--- trunk/buildroot/toolchain/uClibc/uclibc.mk	2008-04-17 13:23:20 UTC (rev 21754)
++++ trunk/buildroot/toolchain/uClibc/uclibc.mk	2008-04-17 13:25:47 UTC (rev 21755)
+@@ -135,6 +135,23 @@
+ 		-e 's,^SHARED_LIB_LOADER_PREFIX=.*,SHARED_LIB_LOADER_PREFIX=\"/lib\",g' \
+ 		$(UCLIBC_DIR)/.oldconfig
+ ifeq ($(UCLIBC_TARGET_ARCH),arm)
++	(/bin/echo "# CONFIG_GENERIC_ARM is not set"; \
++	 /bin/echo "# CONFIG_ARM610 is not set"; \
++	 /bin/echo "# CONFIG_ARM710 is not set"; \
++	 /bin/echo "# CONFIG_ARM7TDMI is not set"; \
++	 /bin/echo "# CONFIG_ARM720T is not set"; \
++	 /bin/echo "# CONFIG_ARM920T is not set"; \
++	 /bin/echo "# CONFIG_ARM922T is not set"; \
++	 /bin/echo "# CONFIG_ARM926T is not set"; \
++	 /bin/echo "# CONFIG_ARM10T is not set"; \
++	 /bin/echo "# CONFIG_ARM1136JF_S is not set"; \
++	 /bin/echo "# CONFIG_ARM1176JZ_S is not set"; \
++	 /bin/echo "# CONFIG_ARM1176JZF_S is not set"; \
++	 /bin/echo "# CONFIG_ARM_SA110 is not set"; \
++	 /bin/echo "# CONFIG_ARM_SA1100 is not set"; \
++	 /bin/echo "# CONFIG_ARM_XSCALE is not set"; \
++	 /bin/echo "# CONFIG_ARM_IWMMXT is not set"; \
++	) >> $(UCLIBC_DIR)/.oldconfig
+ 	$(SED) 's/^\(CONFIG_[^_]*[_]*ARM[^=]*\)=.*/# \1 is not set/g' \
+ 		 $(UCLIBC_DIR)/.oldconfig
+ 	$(SED) 's/^.*$(UCLIBC_ARM_TYPE).*/$(UCLIBC_ARM_TYPE)=y/g' $(UCLIBC_DIR)/.oldconfig
