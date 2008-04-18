@@ -1,60 +1,25 @@
-From: =?ISO-8859-1?Q?Thiago_A._Corr=EAa?= <thiago.correa@gmail.com>
-Date: Fri, 18 Apr 2008 17:52:01 -0300
-Subject: [Buildroot] gcj on any platform
-In-Reply-To: <a9067d050804181314w76b5de27v32a6e06c9b7c93da@mail.gmail.com>
-References: <a9067d050804181012h7b686733i4bcfde2cfb9f253e@mail.gmail.com>
-	<200804181312.08925.bcook@bpointsys.com>
-	<a9067d050804181314w76b5de27v32a6e06c9b7c93da@mail.gmail.com>
-Message-ID: <d6cda7730804181352l6f829a5cq6ae2cd56f4a33837@mail.gmail.com>
+From: Christopher Taylor <chtaylo3@gmail.com>
+Date: Fri, 18 Apr 2008 19:47:34 -0400
+Subject: [Buildroot] r21760 and device_table.txt problems
+Message-ID: <2590773a0804181647y4200320du60683223dd30a1d4@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-static compile as well as strip will only attempt to remove unneeded
-code from the executable. The gain in size depends heavily on the
-application.
+First, thank you all for your efforts.
 
-On Fri, Apr 18, 2008 at 5:14 PM, Azra Aiyl <azraiyl@gmail.com> wrote:
-> Thanks for your idea. Memory is not the problem (64 MB) but Flash (8
->  MB). Following page http://www.linuxjournal.com/article/8757 states
->  that you should able to strip the statically linked executable. But if
->  you say this is not true ("not true" means, as heavy as with shared
->  libs), then it's one more reason to try it with another
->  implementation.
->
->  2008/4/18, Brent Cook <bcook@bpointsys.com>:
->
->
-> > On Friday 18 April 2008 12:12:18 Azra Aiyl wrote:
->  > > Hi,
->  > >
->  > > While looking through this archive I can see at least 3 persons who
->  > > try to compile a gcj (they got no answers). I've tried the same thing
->  > > for ppc and i386 but always get the same compile error. While googling
->  > > i was able to collect the following statements.
->  > >
->  > > - libgcj needs unicode
->  > > - uClibc does not support unicode
->  > > - glibc supports unicode
->  > > - glibc does not support full statical linking
->  > >
->  > > I conclude from this statements:
->  > >
->  > > - it is currently not possible no build a gcj with uclibc
->  > > - nor is it possible to build a statically linked programm with
->  > > glibc-gcj and let it run on a platform with uclibc
->  > >
->  > > If anyone here says I'm wrong then I'll try to build it on my own
->  >
->  > As a workaround, you could include shared glibc with your libgcj app in a
->  > chroot environment on top of your uclibc environment. This would be about
->  > as resource-heavy as a statically linked executable, if memory is not a
->  > limiting factor.
->  >
->  _______________________________________________
->  buildroot mailing list
->  buildroot at uclibc.org
->  http://busybox.net/mailman/listinfo/buildroot
->
+I'm using r21760 and it appears that the device nodes aren't getting
+populated.  I realize that the root filesystem is now created in
+buildroot/project_build_ARCH/PROJECT/root but I don't see the device
+nodes specified by the device_table.txt
+
+I'm assume I'm missing a step that tells buildroot to read the device
+table while it creates the root file system referenced above, but I
+didn't find it via make menuconfig.
+
+Any help would be appreciated!
+
+Respectfully,
+Chris
