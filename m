@@ -1,25 +1,40 @@
-From: Christopher Taylor <chtaylo3@gmail.com>
-Date: Fri, 18 Apr 2008 19:47:34 -0400
-Subject: [Buildroot] r21760 and device_table.txt problems
-Message-ID: <2590773a0804181647y4200320du60683223dd30a1d4@mail.gmail.com>
+From: nkukard at uclibc.org <nkukard@uclibc.org>
+Date: Fri, 18 Apr 2008 22:59:07 -0700 (PDT)
+Subject: [Buildroot] svn commit: trunk/buildroot/package/bootutils
+Message-ID: <20080419055907.44C7F3C58F@busybox.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-First, thank you all for your efforts.
+Author: nkukard
+Date: 2008-04-18 22:59:07 -0700 (Fri, 18 Apr 2008)
+New Revision: 21769
 
-I'm using r21760 and it appears that the device nodes aren't getting
-populated.  I realize that the root filesystem is now created in
-buildroot/project_build_ARCH/PROJECT/root but I don't see the device
-nodes specified by the device_table.txt
+Log:
+* This fix is included upstream as from 0.0.8
 
-I'm assume I'm missing a step that tells buildroot to read the device
-table while it creates the root file system referenced above, but I
-didn't find it via make menuconfig.
 
-Any help would be appreciated!
+Removed:
+   trunk/buildroot/package/bootutils/bootutils-0.0.7_header-fix.patch
 
-Respectfully,
-Chris
+
+Changeset:
+Deleted: trunk/buildroot/package/bootutils/bootutils-0.0.7_header-fix.patch
+===================================================================
+--- trunk/buildroot/package/bootutils/bootutils-0.0.7_header-fix.patch	2008-04-19 05:28:39 UTC (rev 21768)
++++ trunk/buildroot/package/bootutils/bootutils-0.0.7_header-fix.patch	2008-04-19 05:59:07 UTC (rev 21769)
+@@ -1,12 +0,0 @@
+-diff -ru bootutils-0.0.7_vanilla/libblkid/blkid.h bootutils-0.0.7_header-fix/libblkid/blkid.h
+---- bootutils-0.0.7_vanilla/libblkid/blkid.h	2007-07-16 18:30:48.000000000 +0000
+-+++ bootutils-0.0.7_header-fix/libblkid/blkid.h	2008-03-29 15:34:54.000000000 +0000
+-@@ -14,7 +14,7 @@
+- #define _BLKID_BLKID_H
+- 
+- #include <sys/types.h>
+--#include <blkid/blkid_types.h>
+-+#include "blkid_types.h"
+- 
+- #ifdef __cplusplus
+- extern "C" {
