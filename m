@@ -1,8 +1,8 @@
 From: bugs at busybox.net <bugs@busybox.net>
-Date: Sun, 20 Apr 2008 07:30:47 -0700
+Date: Sun, 20 Apr 2008 07:39:51 -0700
 Subject: [Buildroot] [uClibc 0002214]: fails to build toolchain with NPTL
 	selected for powerpc target
-Message-ID: <19548d8ebb8a135dc630392533080053@bugs.uclibc.org>
+Message-ID: <2d10cef1f44f0fdc67f13aa73f2f3eb3@bugs.uclibc.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -10,7 +10,7 @@ Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
 
-The following issue has been REOPENED. 
+A NOTE has been added to this issue. 
 ====================================================================== 
 http://busybox.net/bugs/view.php?id=2214 
 ====================================================================== 
@@ -26,7 +26,7 @@ Priority:                   normal
 Status:                     feedback
 ====================================================================== 
 Date Submitted:             02-18-2008 01:14 PST
-Last Modified:              04-20-2008 07:30 PDT
+Last Modified:              04-20-2008 07:39 PDT
 ====================================================================== 
 Summary:                    fails to build toolchain with NPTL selected for
 powerpc target
@@ -69,6 +69,12 @@ fails to build toolchain with NPTL selected for powerpc target
 suggesting to use linuxthreads.old implementation for pthread is a
 workaround, not a bug resolution. 
 
+---------------------------------------------------------------------- 
+ carmelo73 - 04-20-08 07:39  
+---------------------------------------------------------------------- 
+Sorry, I was thinking to mips... anyway powerpc is not currently
+implementing nptl. 
+
 Issue History 
 Date Modified   Username       Field                    Change               
 ====================================================================== 
@@ -85,4 +91,5 @@ Date Modified   Username       Field                    Change
 04-20-08 07:30  fabo           Status                   closed => feedback  
 04-20-08 07:30  fabo           Resolution               suspended => reopened
 04-20-08 07:30  fabo           Note Added: 0006744                          
+04-20-08 07:39  carmelo73      Note Added: 0006754                          
 ======================================================================
