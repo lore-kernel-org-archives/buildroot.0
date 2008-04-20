@@ -1,43 +1,76 @@
-From: Christopher Taylor <chtaylo3@gmail.com>
-Date: Sun, 20 Apr 2008 01:17:34 -0400
-Subject: [Buildroot] r21760 and device_table.txt problems
-In-Reply-To: <20080419145815.GB12780@cloud.net.au>
-References: <2590773a0804181647y4200320du60683223dd30a1d4@mail.gmail.com>
-	<20080419145815.GB12780@cloud.net.au>
-Message-ID: <2590773a0804192217i61a6fe1ct7801f800e3afdd39@mail.gmail.com>
+From: bugs at busybox.net <bugs@busybox.net>
+Date: Sat, 19 Apr 2008 23:22:19 -0700
+Subject: [Buildroot] [uClibc 0002214]: fails to build toolchain with NPTL
+	selected for powerpc target
+Message-ID: <32f9d73079ece3eef1437528c49bc15a@bugs.uclibc.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hamish,
 
-Yes, that makes sense. Unfortunately, I'm not even seeing regular files.
-Your response leads me to conclude that while the device nodes are not
-currently present in the fs tree (for the reasons you specified), they
-_will_ be created during boot.
+The following issue has been CLOSED 
+====================================================================== 
+http://busybox.net/bugs/view.php?id=2214 
+====================================================================== 
+Reported By:                fabo
+Assigned To:                buildroot
+====================================================================== 
+Project:                    uClibc
+Issue ID:                   2214
+Category:                   Architecture Specific
+Reproducibility:            always
+Severity:                   minor
+Priority:                   normal
+Status:                     closed
+Resolution:                 open
+Fixed in Version:           
+====================================================================== 
+Date Submitted:             02-18-2008 01:14 PST
+Last Modified:              04-19-2008 23:22 PDT
+====================================================================== 
+Summary:                    fails to build toolchain with NPTL selected for
+powerpc target
+Description: 
+libpthread/linuxthreads/sysdeps/pthread/errno-loc.c:23:27: error:
+sysdep-cancel.h: No such file or directory
 
-In a desktop environment this is usually handled by devfs or udev
-these days.  How is it usually done within buildroot? I don't remember
-enabling devfs or udev in buildroot or the kernel, but I'll look on
-Monday.  If it's a static listings like before devfs, how should I go
-about creating the device nodes for my target fs ... just mknod as
-root before I make an image?
-
-Would simply running make as root fix this and create the device nodes
-per the deivce_table?
-
-Respectfully,
-Chris
+This is reproducible for powerpc target and NPTL support option.
+Switching to another thread library implementation workarounds the issue.
 
 
->  Once the build finishes the device nodes will look like regular files.
->  This is because they are created within a fakeroot session. They can't
->  be real device nodes because that would require root priviledges at
->  build-time.
->
->  Hamish
->  --
->  Hamish Moffatt VK3SB <hamish@debian.org> <hamish@cloud.net.au>
->  _______________________________________________
+====================================================================== 
+
+---------------------------------------------------------------------- 
+ sjhill - 02-23-08 14:55  
+---------------------------------------------------------------------- 
+uClibc NPTL is not available for the PPC architecture yet. It will be a few
+months before that is available. 
+
+---------------------------------------------------------------------- 
+ sjhill - 02-23-08 14:56  
+---------------------------------------------------------------------- 
+This is not a buildroot issue. 
+
+---------------------------------------------------------------------- 
+ carmelo73 - 04-19-08 23:22  
+---------------------------------------------------------------------- 
+NTPL mips is available in branch, not on the main stream.
+Use branch (that is still under development) otherwise use
+linuxthreads.old
+implementation for pthread. 
+
+Issue History 
+Date Modified   Username       Field                    Change               
+====================================================================== 
+02-18-08 01:14  fabo           New Issue                                    
+02-18-08 01:14  fabo           Status                   new => assigned     
+02-18-08 01:14  fabo           Assigned To               => buildroot       
+02-18-08 01:15  fabo           Issue Monitored: fabo                        
+02-23-08 14:55  sjhill         Note Added: 0005274                          
+02-23-08 14:56  sjhill         Note Added: 0005284                          
+02-23-08 14:57  sjhill         Project                  buildroot => uClibc 
+04-19-08 23:22  carmelo73      Status                   assigned => closed  
+04-19-08 23:22  carmelo73      Note Added: 0006734                          
+======================================================================
