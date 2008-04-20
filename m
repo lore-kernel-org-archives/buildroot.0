@@ -1,38 +1,88 @@
-From: Tiago Maluta <maluta_tiago@yahoo.com.br>
-Date: Sun, 20 Apr 2008 09:47:23 -0300
-Subject: [Buildroot] Question about: builroot (ARM) + pthreads + libgomp
-Message-ID: <480B3B5B.7050509@yahoo.com.br>
+From: bugs at busybox.net <bugs@busybox.net>
+Date: Sun, 20 Apr 2008 07:30:47 -0700
+Subject: [Buildroot] [uClibc 0002214]: fails to build toolchain with NPTL
+	selected for powerpc target
+Message-ID: <19548d8ebb8a135dc630392533080053@bugs.uclibc.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi,
 
-I saw an message [1] in buildroot maillist history about an error with 
-ARM, pthreads and libgomp.
+The following issue has been REOPENED. 
+====================================================================== 
+http://busybox.net/bugs/view.php?id=2214 
+====================================================================== 
+Reported By:                fabo
+Assigned To:                buildroot
+====================================================================== 
+Project:                    uClibc
+Issue ID:                   2214
+Category:                   Architecture Specific
+Reproducibility:            always
+Severity:                   minor
+Priority:                   normal
+Status:                     feedback
+====================================================================== 
+Date Submitted:             02-18-2008 01:14 PST
+Last Modified:              04-20-2008 07:30 PDT
+====================================================================== 
+Summary:                    fails to build toolchain with NPTL selected for
+powerpc target
+Description: 
+libpthread/linuxthreads/sysdeps/pthread/errno-loc.c:23:27: error:
+sysdep-cancel.h: No such file or directory
 
-I'm using buildroot-0.10.0-svn with `generic_arm` configuration:
+This is reproducible for powerpc target and NPTL support option.
+Switching to another thread library implementation workarounds the issue.
 
-- Target architecture variant: generic_arm
-- Thread library implementation: Native POSIX Threading (NTPL)
-- Target ABI: EABI
-- uClibc C library version: 0.9.29
-- Linux headers: 2.6.24.x
-- Additional gcc options: --disable-libgomp   <---
 
-I'm trying a new approach with (--disable-libgomp) because I got the 
-same error discussed on old thread.
+====================================================================== 
 
-I'm on slackware 12
-My host cc is: gcc version 4.1.2 with Thread model: posix
+---------------------------------------------------------------------- 
+ sjhill - 02-23-08 14:55  
+---------------------------------------------------------------------- 
+uClibc NPTL is not available for the PPC architecture yet. It will be a few
+months before that is available. 
 
-I'd like to know if somebody, maybe Michael Miller who started the 
-thread fixed the problem.
+---------------------------------------------------------------------- 
+ sjhill - 02-23-08 14:56  
+---------------------------------------------------------------------- 
+This is not a buildroot issue. 
 
-Best regards,
-Tiago Maluta
+---------------------------------------------------------------------- 
+ carmelo73 - 04-19-08 23:22  
+---------------------------------------------------------------------- 
+NTPL mips is available in branch, not on the main stream.
+Use branch (that is still under development) otherwise use
+linuxthreads.old
+implementation for pthread. 
 
-References:
-[1] http://www.busybox.net/lists/buildroot/2007-June/003243.html
+---------------------------------------------------------------------- 
+ fabo - 04-20-08 07:30  
+---------------------------------------------------------------------- 
+The bug was reported for NPTL/powerpc usage. Not MIPS.
+By the way, the bug is still valid:
+fails to build toolchain with NPTL selected for powerpc target
+
+suggesting to use linuxthreads.old implementation for pthread is a
+workaround, not a bug resolution. 
+
+Issue History 
+Date Modified   Username       Field                    Change               
+====================================================================== 
+02-18-08 01:14  fabo           New Issue                                    
+02-18-08 01:14  fabo           Status                   new => assigned     
+02-18-08 01:14  fabo           Assigned To               => buildroot       
+02-18-08 01:15  fabo           Issue Monitored: fabo                        
+02-23-08 14:55  sjhill         Note Added: 0005274                          
+02-23-08 14:56  sjhill         Note Added: 0005284                          
+02-23-08 14:57  sjhill         Project                  buildroot => uClibc 
+04-19-08 23:22  carmelo73      Status                   assigned => closed  
+04-19-08 23:22  carmelo73      Note Added: 0006734                          
+04-19-08 23:22  carmelo73      Resolution               open => suspended   
+04-20-08 07:30  fabo           Status                   closed => feedback  
+04-20-08 07:30  fabo           Resolution               suspended => reopened
+04-20-08 07:30  fabo           Note Added: 0006744                          
+======================================================================
