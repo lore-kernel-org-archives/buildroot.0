@@ -1,54 +1,43 @@
-From: Arun Reddy <reddyac@gmail.com>
-Date: Sat, 19 Apr 2008 20:12:23 -0700
-Subject: [Buildroot] Buildroot for AT91RM9200EK?
-In-Reply-To: <844460.38324.qm@web31807.mail.mud.yahoo.com>
-References: <118206.91133.qm@web31803.mail.mud.yahoo.com>
-	<844460.38324.qm@web31807.mail.mud.yahoo.com>
-Message-ID: <326f33790804192012obfa723aof17a9716b815012b@mail.gmail.com>
+From: Christopher Taylor <chtaylo3@gmail.com>
+Date: Sun, 20 Apr 2008 01:17:34 -0400
+Subject: [Buildroot] r21760 and device_table.txt problems
+In-Reply-To: <20080419145815.GB12780@cloud.net.au>
+References: <2590773a0804181647y4200320du60683223dd30a1d4@mail.gmail.com>
+	<20080419145815.GB12780@cloud.net.au>
+Message-ID: <2590773a0804192217i61a6fe1ct7801f800e3afdd39@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Pink Boy,
+Hamish,
 
-While I am uncertain why uImage is not appearing in the source folder,
+Yes, that makes sense. Unfortunately, I'm not even seeing regular files.
+Your response leads me to conclude that while the device nodes are not
+currently present in the fs tree (for the reasons you specified), they
+_will_ be created during boot.
 
-*"I'm wondering
-is there is either an option I'm not setting, the current source
-is broken and I need to use an older one, or there is some patch
-I need."*
+In a desktop environment this is usually handled by devfs or udev
+these days.  How is it usually done within buildroot? I don't remember
+enabling devfs or udev in buildroot or the kernel, but I'll look on
+Monday.  If it's a static listings like before devfs, how should I go
+about creating the device nodes for my target fs ... just mknod as
+root before I make an image?
 
-to solve the problem of retrieving the older source, cannot you simply
-modify the .mk file and manually change the source file that is currently
-listed to an older, available one?
+Would simply running make as root fix this and create the device nodes
+per the deivce_table?
 
-Arun
+Respectfully,
+Chris
 
-On Sat, Apr 19, 2008 at 7:42 PM, Pink Boy <dasfoo@yahoo.com> wrote:
 
-> Hi,
+>  Once the build finishes the device nodes will look like regular files.
+>  This is because they are created within a fakeroot session. They can't
+>  be real device nodes because that would require root priviledges at
+>  build-time.
 >
-> One more thing, the command that seems to bomb,
->
->
-> cp -pf
-> /home/tu/workspace/arm920_tool/buildroot/project_build_arm/uclibc/linux-2.6.22.1/arch/arm/boot/uImage
->
-> /home/tu/workspace/arm920_tool/buildroot/binaries/uclibc/at91rm9200ek-linux-2.6.22.1-20080420.gz
->
-> The is no uImage in the source folder, there is however a zImage.
->
-> ???
->
-> Mr Foo
->
-> _______________________________________________
-> buildroot mailing list
-> buildroot at uclibc.org
-> http://busybox.net/mailman/listinfo/buildroot
->
--------------- next part --------------
-An HTML attachment was scrubbed...
-URL: http://busybox.net/lists/buildroot/attachments/20080419/ed74fbcc/attachment.htm 
+>  Hamish
+>  --
+>  Hamish Moffatt VK3SB <hamish@debian.org> <hamish@cloud.net.au>
+>  _______________________________________________
