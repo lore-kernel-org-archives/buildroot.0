@@ -1,59 +1,38 @@
-From: bugs at busybox.net <bugs@busybox.net>
-Date: Sun, 20 Apr 2008 04:33:00 -0700
-Subject: [Buildroot] [buildroot 0002974]: package lighttpd source fails
-Message-ID: <fcb4d762c5c3ed510b279c51e922d3d2@bugs.uclibc.org>
+From: Tiago Maluta <maluta_tiago@yahoo.com.br>
+Date: Sun, 20 Apr 2008 09:47:23 -0300
+Subject: [Buildroot] Question about: builroot (ARM) + pthreads + libgomp
+Message-ID: <480B3B5B.7050509@yahoo.com.br>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+Hi,
 
-The following issue has been SUBMITTED. 
-====================================================================== 
-http://busybox.net/bugs/view.php?id=2974 
-====================================================================== 
-Reported By:                Jean-Baptiste Maillet
-Assigned To:                buildroot
-====================================================================== 
-Project:                    buildroot
-Issue ID:                   2974
-Category:                   Other
-Reproducibility:            always
-Severity:                   minor
-Priority:                   normal
-Status:                     assigned
-====================================================================== 
-Date Submitted:             04-20-2008 04:32 PDT
-Last Modified:              04-20-2008 04:32 PDT
-====================================================================== 
-Summary:                    package lighttpd source fails
-Description: 
-$ make lighttpd
-wget --passive-ftp -nd  -P /var/p2p/jbm/sandbox/buildroot/../download
-"http://ftp.debian.org"/debian/pool/main/l/lighttpd/lighttpd_1.4.18.orig.tar.gz
---2008-04-20 13:25:21-- 
-http://ftp.debian.org/debian/pool/main/l/lighttpd/lighttpd_1.4.18.orig.tar.gz
-Resolving ftp.debian.org... 128.101.240.212
-Connecting to ftp.debian.org|128.101.240.212|:80... connected.
-HTTP request sent, awaiting response... 404 Not Found
-2008-04-20 13:25:21 ERROR 404: Not Found.
+I saw an message [1] in buildroot maillist history about an error with 
+ARM, pthreads and libgomp.
 
-make: ***
-[/var/p2p/jbm/sandbox/buildroot/../download/lighttpd_1.4.18.orig.tar.gz]
-Error 1
+I'm using buildroot-0.10.0-svn with `generic_arm` configuration:
 
-====================================================================== 
+- Target architecture variant: generic_arm
+- Thread library implementation: Native POSIX Threading (NTPL)
+- Target ABI: EABI
+- uClibc C library version: 0.9.29
+- Linux headers: 2.6.24.x
+- Additional gcc options: --disable-libgomp   <---
 
-Issue History 
-Date Modified   Username       Field                    Change               
-====================================================================== 
-04-20-08 04:32  Jean-Baptiste MailletNew Issue                                  
- 
-04-20-08 04:32  Jean-Baptiste MailletStatus                   new => assigned   
- 
-04-20-08 04:32  Jean-Baptiste MailletAssigned To               => buildroot     
- 
-04-20-08 04:32  Jean-Baptiste MailletFile Added: lighttpd.patch                 
-  
-======================================================================
+I'm trying a new approach with (--disable-libgomp) because I got the 
+same error discussed on old thread.
+
+I'm on slackware 12
+My host cc is: gcc version 4.1.2 with Thread model: posix
+
+I'd like to know if somebody, maybe Michael Miller who started the 
+thread fixed the problem.
+
+Best regards,
+Tiago Maluta
+
+References:
+[1] http://www.busybox.net/lists/buildroot/2007-June/003243.html
