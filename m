@@ -1,8 +1,8 @@
 From: bugs at busybox.net <bugs@busybox.net>
-Date: Sun, 20 Apr 2008 07:39:51 -0700
-Subject: [Buildroot] [uClibc 0002214]: fails to build toolchain with NPTL
-	selected for powerpc target
-Message-ID: <2d10cef1f44f0fdc67f13aa73f2f3eb3@bugs.uclibc.org>
+Date: Sun, 20 Apr 2008 08:35:56 -0700
+Subject: [Buildroot] [buildroot 0002984]: [error] building a `generic_arm`
+	toolchain
+Message-ID: <d336ffb93ccf70395aaf8be6edec1a98@busybox.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -10,86 +10,61 @@ Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
 
-A NOTE has been added to this issue. 
+The following issue has been SUBMITTED. 
 ====================================================================== 
-http://busybox.net/bugs/view.php?id=2214 
+http://busybox.net/bugs/view.php?id=2984 
 ====================================================================== 
-Reported By:                fabo
+Reported By:                maluta
 Assigned To:                buildroot
 ====================================================================== 
-Project:                    uClibc
-Issue ID:                   2214
+Project:                    buildroot
+Issue ID:                   2984
 Category:                   Architecture Specific
 Reproducibility:            always
 Severity:                   minor
 Priority:                   normal
-Status:                     feedback
+Status:                     assigned
 ====================================================================== 
-Date Submitted:             02-18-2008 01:14 PST
-Last Modified:              04-20-2008 07:39 PDT
+Date Submitted:             04-20-2008 08:35 PDT
+Last Modified:              04-20-2008 08:35 PDT
 ====================================================================== 
-Summary:                    fails to build toolchain with NPTL selected for
-powerpc target
+Summary:                    [error] building a `generic_arm`  toolchain
 Description: 
+make[1]: Entering directory
+`/home/maluta/builroot/buildroot/toolchain_build_arm/uClibc-0.9.29'
+make[2]: `conf' is up to date.
+make[3]: `conf' is up to date.
+  CC libpthread/linuxthreads/sysdeps/pthread/errno-loc.os
+In file included from ./libpthread/linuxthreads/sysdeps/arm/tls.h:26,
+                 from ./include/bits/uClibc_errno.h:14,
+                 from ./include/errno.h:62,
+                 from
+libpthread/linuxthreads/sysdeps/pthread/errno-loc.c:21:
+./libpthread/linuxthreads/sysdeps/arm/pt-machine.h:39: warning: C99 inline
+functions are not supported; using GNU89
+./libpthread/linuxthreads/sysdeps/arm/pt-machine.h:39: warning: to disable
+this warning use -fgnu89-inline or the gnu_inline function attribute
+In file included from
+libpthread/linuxthreads/sysdeps/pthread/errno-loc.c:22:
+./libpthread/linuxthreads/internals.h:538: warning: C99 inline functions
+are not supported; using GNU89
 libpthread/linuxthreads/sysdeps/pthread/errno-loc.c:23:27: error:
 sysdep-cancel.h: No such file or directory
-
-This is reproducible for powerpc target and NPTL support option.
-Switching to another thread library implementation workarounds the issue.
-
+make[1]: *** [libpthread/linuxthreads/sysdeps/pthread/errno-loc.os] Error
+1
+make[1]: Leaving directory
+`/home/maluta/builroot/buildroot/toolchain_build_arm/uClibc-0.9.29'
+make: ***
+[/home/maluta/builroot/buildroot/toolchain_build_arm/uClibc-0.9.29/lib/libc.a]
+Error 2
 
 ====================================================================== 
-
----------------------------------------------------------------------- 
- sjhill - 02-23-08 14:55  
----------------------------------------------------------------------- 
-uClibc NPTL is not available for the PPC architecture yet. It will be a few
-months before that is available. 
-
----------------------------------------------------------------------- 
- sjhill - 02-23-08 14:56  
----------------------------------------------------------------------- 
-This is not a buildroot issue. 
-
----------------------------------------------------------------------- 
- carmelo73 - 04-19-08 23:22  
----------------------------------------------------------------------- 
-NTPL mips is available in branch, not on the main stream.
-Use branch (that is still under development) otherwise use
-linuxthreads.old
-implementation for pthread. 
-
----------------------------------------------------------------------- 
- fabo - 04-20-08 07:30  
----------------------------------------------------------------------- 
-The bug was reported for NPTL/powerpc usage. Not MIPS.
-By the way, the bug is still valid:
-fails to build toolchain with NPTL selected for powerpc target
-
-suggesting to use linuxthreads.old implementation for pthread is a
-workaround, not a bug resolution. 
-
----------------------------------------------------------------------- 
- carmelo73 - 04-20-08 07:39  
----------------------------------------------------------------------- 
-Sorry, I was thinking to mips... anyway powerpc is not currently
-implementing nptl. 
 
 Issue History 
 Date Modified   Username       Field                    Change               
 ====================================================================== 
-02-18-08 01:14  fabo           New Issue                                    
-02-18-08 01:14  fabo           Status                   new => assigned     
-02-18-08 01:14  fabo           Assigned To               => buildroot       
-02-18-08 01:15  fabo           Issue Monitored: fabo                        
-02-23-08 14:55  sjhill         Note Added: 0005274                          
-02-23-08 14:56  sjhill         Note Added: 0005284                          
-02-23-08 14:57  sjhill         Project                  buildroot => uClibc 
-04-19-08 23:22  carmelo73      Status                   assigned => closed  
-04-19-08 23:22  carmelo73      Note Added: 0006734                          
-04-19-08 23:22  carmelo73      Resolution               open => suspended   
-04-20-08 07:30  fabo           Status                   closed => feedback  
-04-20-08 07:30  fabo           Resolution               suspended => reopened
-04-20-08 07:30  fabo           Note Added: 0006744                          
-04-20-08 07:39  carmelo73      Note Added: 0006754                          
+04-20-08 08:35  maluta         New Issue                                    
+04-20-08 08:35  maluta         Status                   new => assigned     
+04-20-08 08:35  maluta         Assigned To               => buildroot       
+04-20-08 08:35  maluta         File Added: config                           
 ======================================================================
