@@ -1,8 +1,8 @@
 From: bugs at busybox.net <bugs@busybox.net>
-Date: Sun, 20 Apr 2008 01:31:22 -0700
-Subject: [Buildroot] [buildroot 0002954]: package cgicc no longer available
-	from author site, source and build fails
-Message-ID: <79d65ad2e9c34c1d9fe794ef3e7adbaa@busybox.net>
+Date: Sun, 20 Apr 2008 02:06:57 -0700
+Subject: [Buildroot] [buildroot 0002964]: package libosip2,
+	source and build fails
+Message-ID: <935dfb036e0a12f272915d04285c961d@bugs.uclibc.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -12,46 +12,50 @@ To: buildroot@busybox.net
 
 The following issue has been SUBMITTED. 
 ====================================================================== 
-http://busybox.net/bugs/view.php?id=2954 
+http://busybox.net/bugs/view.php?id=2964 
 ====================================================================== 
 Reported By:                Jean-Baptiste Maillet
 Assigned To:                buildroot
 ====================================================================== 
 Project:                    buildroot
-Issue ID:                   2954
+Issue ID:                   2964
 Category:                   Other
 Reproducibility:            always
 Severity:                   minor
 Priority:                   normal
 Status:                     assigned
 ====================================================================== 
-Date Submitted:             04-20-2008 01:31 PDT
-Last Modified:              04-20-2008 01:31 PDT
+Date Submitted:             04-20-2008 02:06 PDT
+Last Modified:              04-20-2008 02:06 PDT
 ====================================================================== 
-Summary:                    package cgicc no longer available from author site,
-source and build fails
+Summary:                    package libosip2, source and build fails
 Description: 
-make libcgicc
-...
+make libosip2
 wget --passive-ftp -nd  -P /var/p2p/jbm/sandbox/buildroot/../download
-http://www.cgicc.org/files/cgicc-3.2.3.tar.bz2
---2008-04-20 08:16:03--  http://www.cgicc.org/files/cgicc-3.2.3.tar.bz2
-Resolving www.cgicc.org... 66.39.154.96
-Connecting to www.cgicc.org|66.39.154.96|:80... connected.
+http://www.antisip.com/download//libosip2-3.0.1.tar.gz
+--2008-04-20 11:00:08-- 
+http://www.antisip.com/download//libosip2-3.0.1.tar.gz
+Resolving www.antisip.com... 91.121.81.212
+Connecting to www.antisip.com|91.121.81.212|:80... connected.
 HTTP request sent, awaiting response... 404 Not Found
-2008-04-20 08:16:04 ERROR 404: Not Found.
+2008-04-20 11:00:08 ERROR 404: Not Found.
+
+make: ***
+[/var/p2p/jbm/sandbox/buildroot/../download/libosip2-3.0.1.tar.gz] Error
+1
+
 
 ====================================================================== 
 
 Issue History 
 Date Modified   Username       Field                    Change               
 ====================================================================== 
-04-20-08 01:31  Jean-Baptiste MailletNew Issue                                  
+04-20-08 02:06  Jean-Baptiste MailletNew Issue                                  
  
-04-20-08 01:31  Jean-Baptiste MailletStatus                   new => assigned   
+04-20-08 02:06  Jean-Baptiste MailletStatus                   new => assigned   
  
-04-20-08 01:31  Jean-Baptiste MailletAssigned To               => buildroot     
+04-20-08 02:06  Jean-Baptiste MailletAssigned To               => buildroot     
  
-04-20-08 01:31  Jean-Baptiste MailletFile Added: libcgicc.patch                 
+04-20-08 02:06  Jean-Baptiste MailletFile Added: libosip2.patch                 
   
 ======================================================================
