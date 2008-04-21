@@ -1,7 +1,7 @@
 From: bugs at busybox.net <bugs@busybox.net>
-Date: Mon, 21 Apr 2008 07:09:58 -0700
+Date: Mon, 21 Apr 2008 07:16:06 -0700
 Subject: [Buildroot] [buildroot 0003004]: undefined reference problem
-Message-ID: <4ca5cc60b602851fa73953474d6da437@busybox.net>
+Message-ID: <912ebd6f7ede2c64262c7b527567c5c4@busybox.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -25,7 +25,7 @@ Priority:                   normal
 Status:                     assigned
 ====================================================================== 
 Date Submitted:             04-21-2008 01:17 PDT
-Last Modified:              04-21-2008 07:09 PDT
+Last Modified:              04-21-2008 07:16 PDT
 ====================================================================== 
 Summary:                    undefined reference problem
 Description: 
@@ -85,6 +85,54 @@ buildroot (in that case it would be installed in build_$arch/staging_dir,
 not in /opt/atmel). I think you should complain to the vendor, as
 buildroot can't fix a broken external toolchain. 
 
+---------------------------------------------------------------------- 
+ gebecom - 04-21-08 07:16  
+---------------------------------------------------------------------- 
+i have wrong kopiert, hier is the error
+Generating embedded module rules ...
+   [CC] stereorize.c -> stereorize.o
+   [CC] frame.c -> frame.o
+   [LD] stereorize.o frame.o -> stereorize
+/build-tools/buildroot/build_mipsel/staging_dir/bin-ccache/../lib/gcc/mipsel-linux-uclibc/3.4.6/../../../../mipsel-linux-uclibc/lib/libstdc++.so:
+undefined reference to `__towupper_l'
+/build-tools/buildroot/build_mipsel/staging_dir/bin-ccache/../lib/gcc/mipsel-linux-uclibc/3.4.6/../../../../mipsel-linux-uclibc/lib/libstdc++.so:
+undefined reference to `__strtold_l'
+/build-tools/buildroot/build_mipsel/staging_dir/bin-ccache/../lib/gcc/mipsel-linux-uclibc/3.4.6/../../../../mipsel-linux-uclibc/lib/libstdc++.so:
+undefined reference to `__strftime_l'
+/build-tools/buildroot/build_mipsel/staging_dir/bin-ccache/../lib/gcc/mipsel-linux-uclibc/3.4.6/../../../../mipsel-linux-uclibc/lib/libstdc++.so:
+undefined reference to `__nl_langinfo_l'
+/build-tools/buildroot/build_mipsel/staging_dir/bin-ccache/../lib/gcc/mipsel-linux-uclibc/3.4.6/../../../../mipsel-linux-uclibc/lib/libstdc++.so:
+undefined reference to `__newlocale'
+/build-tools/buildroot/build_mipsel/staging_dir/bin-ccache/../lib/gcc/mipsel-linux-uclibc/3.4.6/../../../../mipsel-linux-uclibc/lib/libstdc++.so:
+undefined reference to `__freelocale'
+/build-tools/buildroot/build_mipsel/staging_dir/bin-ccache/../lib/gcc/mipsel-linux-uclibc/3.4.6/../../../../mipsel-linux-uclibc/lib/libstdc++.so:
+undefined reference to `__wcsxfrm_l'
+/build-tools/buildroot/build_mipsel/staging_dir/bin-ccache/../lib/gcc/mipsel-linux-uclibc/3.4.6/../../../../mipsel-linux-uclibc/lib/libstdc++.so:
+undefined reference to `__iswctype_l'
+/build-tools/buildroot/build_mipsel/staging_dir/bin-ccache/../lib/gcc/mipsel-linux-uclibc/3.4.6/../../../../mipsel-linux-uclibc/lib/libstdc++.so:
+undefined reference to `__towlower_l'
+/build-tools/buildroot/build_mipsel/staging_dir/bin-ccache/../lib/gcc/mipsel-linux-uclibc/3.4.6/../../../../mipsel-linux-uclibc/lib/libstdc++.so:
+undefined reference to `__strtod_l'
+/build-tools/buildroot/build_mipsel/staging_dir/bin-ccache/../lib/gcc/mipsel-linux-uclibc/3.4.6/../../../../mipsel-linux-uclibc/lib/libstdc++.so:
+undefined reference to `__uselocale'
+/build-tools/buildroot/build_mipsel/staging_dir/bin-ccache/../lib/gcc/mipsel-linux-uclibc/3.4.6/../../../../mipsel-linux-uclibc/lib/libstdc++.so:
+undefined reference to `__strcoll_l'
+/build-tools/buildroot/build_mipsel/staging_dir/bin-ccache/../lib/gcc/mipsel-linux-uclibc/3.4.6/../../../../mipsel-linux-uclibc/lib/libstdc++.so:
+undefined reference to `__wctype_l'
+/build-tools/buildroot/build_mipsel/staging_dir/bin-ccache/../lib/gcc/mipsel-linux-uclibc/3.4.6/../../../../mipsel-linux-uclibc/lib/libstdc++.so:
+undefined reference to `__strxfrm_l'
+/build-tools/buildroot/build_mipsel/staging_dir/bin-ccache/../lib/gcc/mipsel-linux-uclibc/3.4.6/../../../../mipsel-linux-uclibc/lib/libstdc++.so:
+undefined reference to `__wcsftime_l'
+/build-tools/buildroot/build_mipsel/staging_dir/bin-ccache/../lib/gcc/mipsel-linux-uclibc/3.4.6/../../../../mipsel-linux-uclibc/lib/libstdc++.so:
+undefined reference to `__strtof_l'
+/build-tools/buildroot/build_mipsel/staging_dir/bin-ccache/../lib/gcc/mipsel-linux-uclibc/3.4.6/../../../../mipsel-linux-uclibc/lib/libstdc++.so:
+undefined reference to `__wcscoll_l'
+/build-tools/buildroot/build_mipsel/staging_dir/bin-ccache/../lib/gcc/mipsel-linux-uclibc/3.4.6/../../../../mipsel-linux-uclibc/lib/libstdc++.so:
+undefined reference to `__duplocale'
+collect2: ld returned 1 exit status
+make[1]: *** [stereorize] Error 1
+make: *** [utils] Error 2 
+
 Issue History 
 Date Modified   Username       Field                    Change               
 ====================================================================== 
@@ -92,4 +140,6 @@ Date Modified   Username       Field                    Change
 04-21-08 01:17  gebecom        Status                   new => assigned     
 04-21-08 01:17  gebecom        Assigned To               => buildroot       
 04-21-08 07:09  hmoffatt       Note Added: 0006794                          
+04-21-08 07:14  gebecom        Issue Monitored: gebecom                     
+04-21-08 07:16  gebecom        Note Added: 0006804                          
 ======================================================================
