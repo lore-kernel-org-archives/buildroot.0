@@ -1,86 +1,50 @@
-From: bugs at busybox.net <bugs@busybox.net>
-Date: Mon, 21 Apr 2008 01:17:20 -0700
-Subject: [Buildroot] [buildroot 0003004]: undefined reference problem
-Message-ID: <f70cc8baefca46df7a9289ec2cf69076@www.busybox.net>
+From: Hamish Moffatt <hamish@cloud.net.au>
+Date: Tue, 22 Apr 2008 00:06:13 +1000
+Subject: [Buildroot] r21760 and device_table.txt problems
+In-Reply-To: <2590773a0804192217i61a6fe1ct7801f800e3afdd39@mail.gmail.com>
+References: <2590773a0804181647y4200320du60683223dd30a1d4@mail.gmail.com>
+	<20080419145815.GB12780@cloud.net.au>
+	<2590773a0804192217i61a6fe1ct7801f800e3afdd39@mail.gmail.com>
+Message-ID: <20080421140613.GB21702@cloud.net.au>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+On Sun, Apr 20, 2008 at 01:17:34AM -0400, Christopher Taylor wrote:
+> Yes, that makes sense. Unfortunately, I'm not even seeing regular files.
+> Your response leads me to conclude that while the device nodes are not
+> currently present in the fs tree (for the reasons you specified), they
+> _will_ be created during boot.
 
-The following issue has been SUBMITTED. 
-====================================================================== 
-http://busybox.net/bugs/view.php?id=3004 
-====================================================================== 
-Reported By:                gebecom
-Assigned To:                buildroot
-====================================================================== 
-Project:                    buildroot
-Issue ID:                   3004
-Category:                   Architecture Specific
-Reproducibility:            always
-Severity:                   minor
-Priority:                   normal
-Status:                     assigned
-====================================================================== 
-Date Submitted:             04-21-2008 01:17 PDT
-Last Modified:              04-21-2008 01:17 PDT
-====================================================================== 
-Summary:                    undefined reference problem
-Description: 
-/opt/gcc-4.1.2-uclibc/bin/../lib/gcc/arm-linux-uclibc/4.1.2/../../../../arm-linux-uclibc/bin/ld:
-cannot find /opt/usr/local/arm/gcc-4.1.2-uclibc/lib/libc.so.0
-collect2: ld returned 1 exit status
+Can you post the output of the final stages of make? You should see it
+running genext2fs, mkfs.jffs2 or something similar for the output format
+you are using, within a fakeroot environment which also includes running
+the makedevs program.
 
-actually it is trying to get libc.so.s0 from a wrong path, i copied the
-files at that particular file path but it fails at some next stage giving
-the error details below...
+In my case, I see a bunch of empty regular files left in the
+project_build_$arch/$project/root/dev directory after the build, which
+is what I expected.
 
-/opt/atmel/gcc-4.1.2-uclibc/bin/../lib/gcc/arm-linux-uclibc/4.1.2/../../../../arm-linux-uclibc/lib/libstdc++.so:
-undefined reference to `__towupper_l'
-/opt/atmel/gcc-4.1.2-uclibc/bin/../lib/gcc/arm-linux-uclibc/4.1.2/../../../../arm-linux-uclibc/lib/libstdc++.so:
-undefined reference to `__strtold_l'
-/opt/atmel/gcc-4.1.2-uclibc/bin/../lib/gcc/arm-linux-uclibc/4.1.2/../../../../arm-linux-uclibc/lib/libstdc++.so:
-undefined reference to `__strftime_l'
-/opt/atmel/gcc-4.1.2-uclibc/bin/../lib/gcc/arm-linux-uclibc/4.1.2/../../../../arm-linux-uclibc/lib/libstdc++.so:
-undefined reference to `__nl_langinfo_l'
-/opt/atmel/gcc-4.1.2-uclibc/bin/../lib/gcc/arm-linux-uclibc/4.1.2/../../../../arm-linux-uclibc/lib/libstdc++.so:
-undefined reference to `__newlocale'
-/opt/atmel/gcc-4.1.2-uclibc/bin/../lib/gcc/arm-linux-uclibc/4.1.2/../../../../arm-linux-uclibc/lib/libstdc++.so:
-undefined reference to `__freelocale'
-/opt/atmel/gcc-4.1.2-uclibc/bin/../lib/gcc/arm-linux-uclibc/4.1.2/../../../../arm-linux-uclibc/lib/libstdc++.so:
-undefined reference to `__wcsxfrm_l'
-/opt/atmel/gcc-4.1.2-uclibc/bin/../lib/gcc/arm-linux-uclibc/4.1.2/../../../../arm-linux-uclibc/lib/libstdc++.so:
-undefined reference to `__iswctype_l'
-/opt/atmel/gcc-4.1.2-uclibc/bin/../lib/gcc/arm-linux-uclibc/4.1.2/../../../../arm-linux-uclibc/lib/libstdc++.so:
-undefined reference to `__towlower_l'
-/opt/atmel/gcc-4.1.2-uclibc/bin/../lib/gcc/arm-linux-uclibc/4.1.2/../../../../arm-linux-uclibc/lib/libstdc++.so:
-undefined reference to `__strtod_l'
-/opt/atmel/gcc-4.1.2-uclibc/bin/../lib/gcc/arm-linux-uclibc/4.1.2/../../../../arm-linux-uclibc/lib/libstdc++.so:
-undefined reference to `__uselocale'
-/opt/atmel/gcc-4.1.2-uclibc/bin/../lib/gcc/arm-linux-uclibc/4.1.2/../../../../arm-linux-uclibc/lib/libstdc++.so:
-undefined reference to `__strcoll_l'
-/opt/atmel/gcc-4.1.2-uclibc/bin/../lib/gcc/arm-linux-uclibc/4.1.2/../../../../arm-linux-uclibc/lib/libstdc++.so:
-undefined reference to `__wctype_l'
-/opt/atmel/gcc-4.1.2-uclibc/bin/../lib/gcc/arm-linux-uclibc/4.1.2/../../../../arm-linux-uclibc/lib/libstdc++.so:
-undefined reference to `__strxfrm_l'
-/opt/atmel/gcc-4.1.2-uclibc/bin/../lib/gcc/arm-linux-uclibc/4.1.2/../../../../arm-linux-uclibc/lib/libstdc++.so:
-undefined reference to `__wcsftime_l'
-/opt/atmel/gcc-4.1.2-uclibc/bin/../lib/gcc/arm-linux-uclibc/4.1.2/../../../../arm-linux-uclibc/lib/libstdc++.so:
-undefined reference to `__strtof_l'
-/opt/atmel/gcc-4.1.2-uclibc/bin/../lib/gcc/arm-linux-uclibc/4.1.2/../../../../arm-linux-uclibc/lib/libstdc++.so:
-undefined reference to `__wcscoll_l'
-/opt/atmel/gcc-4.1.2-uclibc/bin/../lib/gcc/arm-linux-uclibc/4.1.2/../../../../arm-linux-uclibc/lib/libstdc++.so:
-undefined reference to `__duplocale'
+> In a desktop environment this is usually handled by devfs or udev
+> these days.  How is it usually done within buildroot? I don't remember
+> enabling devfs or udev in buildroot or the kernel, but I'll look on
+> Monday.  If it's a static listings like before devfs, how should I go
+> about creating the device nodes for my target fs ... just mknod as
+> root before I make an image?
 
-please guide me how can i fix this issue and the possible reason, 
-====================================================================== 
+The device table is supposed to be used to populate the static /dev in
+the root image. If you want dynamic /dev I think you need to write this
+into your rc script yourself. Probably mount tmpfs on /dev and run mdev
+or udev to populate it.
 
-Issue History 
-Date Modified   Username       Field                    Change               
-====================================================================== 
-04-21-08 01:17  gebecom        New Issue                                    
-04-21-08 01:17  gebecom        Status                   new => assigned     
-04-21-08 01:17  gebecom        Assigned To               => buildroot       
-======================================================================
+> Would simply running make as root fix this and create the device nodes
+> per the deivce_table?
+
+I suspect not. It will depend on what you see from the build.
+
+
+Hamish
+-- 
+Hamish Moffatt VK3SB <hamish@debian.org> <hamish@cloud.net.au>
