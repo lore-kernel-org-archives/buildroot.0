@@ -1,7 +1,7 @@
 From: bugs at busybox.net <bugs@busybox.net>
-Date: Mon, 21 Apr 2008 07:35:31 -0700
+Date: Mon, 21 Apr 2008 08:04:25 -0700
 Subject: [Buildroot] [buildroot 0003004]: undefined reference problem
-Message-ID: <b31a1f16aa0498fb2dbd6c91637a9957@busybox.net>
+Message-ID: <70fef0a89cdfe547184441d2af6d7fc9@www.busybox.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -25,7 +25,7 @@ Priority:                   normal
 Status:                     assigned
 ====================================================================== 
 Date Submitted:             04-21-2008 01:17 PDT
-Last Modified:              04-21-2008 07:35 PDT
+Last Modified:              04-21-2008 08:04 PDT
 ====================================================================== 
 Summary:                    undefined reference problem
 Description: 
@@ -146,9 +146,20 @@ make uclibc-menuconfig and turn on "wide character support" under "string
 and stdio" support. 
 
 ---------------------------------------------------------------------- 
- gebecom - 04-21-08 07:35  
+ gebecom - 04-21-08 07:38  
 ---------------------------------------------------------------------- 
-i have tried. but does not work! 
+hmoffatt,sorry,i have tried. but does not work!
+i cross compile asterisk!
+please help me!!
+
+ 
+
+---------------------------------------------------------------------- 
+ gebecom - 04-21-08 08:04  
+---------------------------------------------------------------------- 
+hmoffatt,if i turn on the "wide character support", i can not successfully
+make buildroot.      if i turn on the "wide character support" , turn off
+the locales support? 
 
 Issue History 
 Date Modified   Username       Field                    Change               
@@ -162,4 +173,7 @@ Date Modified   Username       Field                    Change
 04-21-08 07:17  gebecom        Note Edited: 0006804                         
 04-21-08 07:24  hmoffatt       Note Added: 0006814                          
 04-21-08 07:35  gebecom        Note Added: 0006824                          
+04-21-08 07:37  gebecom        Note Edited: 0006824                         
+04-21-08 07:38  gebecom        Note Edited: 0006824                         
+04-21-08 08:04  gebecom        Note Added: 0006834                          
 ======================================================================
