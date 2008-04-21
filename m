@@ -1,7 +1,7 @@
 From: bugs at busybox.net <bugs@busybox.net>
-Date: Mon, 21 Apr 2008 07:24:20 -0700
+Date: Mon, 21 Apr 2008 07:35:31 -0700
 Subject: [Buildroot] [buildroot 0003004]: undefined reference problem
-Message-ID: <f6c78d5caed04101b63a09dc7f25a660@busybox.net>
+Message-ID: <b31a1f16aa0498fb2dbd6c91637a9957@busybox.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -25,7 +25,7 @@ Priority:                   normal
 Status:                     assigned
 ====================================================================== 
 Date Submitted:             04-21-2008 01:17 PDT
-Last Modified:              04-21-2008 07:24 PDT
+Last Modified:              04-21-2008 07:35 PDT
 ====================================================================== 
 Summary:                    undefined reference problem
 Description: 
@@ -145,6 +145,11 @@ WCHAR support in uClibc which is disabled in your build.
 make uclibc-menuconfig and turn on "wide character support" under "string
 and stdio" support. 
 
+---------------------------------------------------------------------- 
+ gebecom - 04-21-08 07:35  
+---------------------------------------------------------------------- 
+i have tried. but does not work! 
+
 Issue History 
 Date Modified   Username       Field                    Change               
 ====================================================================== 
@@ -156,4 +161,5 @@ Date Modified   Username       Field                    Change
 04-21-08 07:16  gebecom        Note Added: 0006804                          
 04-21-08 07:17  gebecom        Note Edited: 0006804                         
 04-21-08 07:24  hmoffatt       Note Added: 0006814                          
+04-21-08 07:35  gebecom        Note Added: 0006824                          
 ======================================================================
