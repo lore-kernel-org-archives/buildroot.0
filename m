@@ -1,179 +1,29 @@
-From: bugs at busybox.net <bugs@busybox.net>
-Date: Mon, 21 Apr 2008 08:04:25 -0700
-Subject: [Buildroot] [buildroot 0003004]: undefined reference problem
-Message-ID: <70fef0a89cdfe547184441d2af6d7fc9@www.busybox.net>
+From: John Voltz <john.voltz@gmail.com>
+Date: Mon, 21 Apr 2008 14:45:40 -0400
+Subject: [Buildroot] Linking on x86
+Message-ID: <46a136670804211145h7a05e2e0n4cfffaa36fb0b02f@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+Hi,
 
-A NOTE has been added to this issue. 
-====================================================================== 
-http://busybox.net/bugs/view.php?id=3004 
-====================================================================== 
-Reported By:                gebecom
-Assigned To:                buildroot
-====================================================================== 
-Project:                    buildroot
-Issue ID:                   3004
-Category:                   Architecture Specific
-Reproducibility:            always
-Severity:                   minor
-Priority:                   normal
-Status:                     assigned
-====================================================================== 
-Date Submitted:             04-21-2008 01:17 PDT
-Last Modified:              04-21-2008 08:04 PDT
-====================================================================== 
-Summary:                    undefined reference problem
-Description: 
-/opt/gcc-4.1.2-uclibc/bin/../lib/gcc/arm-linux-uclibc/4.1.2/../../../../arm-linux-uclibc/bin/ld:
-cannot find /opt/usr/local/arm/gcc-4.1.2-uclibc/lib/libc.so.0
-collect2: ld returned 1 exit status
+I've been working on an x86 filesystem in buildroot, and I'm having some
+issues with linking. Some packages, gtk in particular, are linking against
+the host libraries. When I attempt to run anything gtk based on the target,
+it complains that it can't find libc.so.6, libm.so.6, libdl.so.2, etc. If I
+create the links, then I get "could not resolve __lxstat64 in
+libgtk-x11.so.2" (obviously, it got linked against the glibc on the host)
 
-actually it is trying to get libc.so.s0 from a wrong path, i copied the
-files at that particular file path but it fails at some next stage giving
-the error details below...
+What I would like to know is, is there an easy way to prevent the linker
+from being able to see /lib and /usr/lib when it is linking? Maybe a patch
+to binutils or something?
 
-/opt/atmel/gcc-4.1.2-uclibc/bin/../lib/gcc/arm-linux-uclibc/4.1.2/../../../../arm-linux-uclibc/lib/libstdc++.so:
-undefined reference to `__towupper_l'
-/opt/atmel/gcc-4.1.2-uclibc/bin/../lib/gcc/arm-linux-uclibc/4.1.2/../../../../arm-linux-uclibc/lib/libstdc++.so:
-undefined reference to `__strtold_l'
-/opt/atmel/gcc-4.1.2-uclibc/bin/../lib/gcc/arm-linux-uclibc/4.1.2/../../../../arm-linux-uclibc/lib/libstdc++.so:
-undefined reference to `__strftime_l'
-/opt/atmel/gcc-4.1.2-uclibc/bin/../lib/gcc/arm-linux-uclibc/4.1.2/../../../../arm-linux-uclibc/lib/libstdc++.so:
-undefined reference to `__nl_langinfo_l'
-/opt/atmel/gcc-4.1.2-uclibc/bin/../lib/gcc/arm-linux-uclibc/4.1.2/../../../../arm-linux-uclibc/lib/libstdc++.so:
-undefined reference to `__newlocale'
-/opt/atmel/gcc-4.1.2-uclibc/bin/../lib/gcc/arm-linux-uclibc/4.1.2/../../../../arm-linux-uclibc/lib/libstdc++.so:
-undefined reference to `__freelocale'
-/opt/atmel/gcc-4.1.2-uclibc/bin/../lib/gcc/arm-linux-uclibc/4.1.2/../../../../arm-linux-uclibc/lib/libstdc++.so:
-undefined reference to `__wcsxfrm_l'
-/opt/atmel/gcc-4.1.2-uclibc/bin/../lib/gcc/arm-linux-uclibc/4.1.2/../../../../arm-linux-uclibc/lib/libstdc++.so:
-undefined reference to `__iswctype_l'
-/opt/atmel/gcc-4.1.2-uclibc/bin/../lib/gcc/arm-linux-uclibc/4.1.2/../../../../arm-linux-uclibc/lib/libstdc++.so:
-undefined reference to `__towlower_l'
-/opt/atmel/gcc-4.1.2-uclibc/bin/../lib/gcc/arm-linux-uclibc/4.1.2/../../../../arm-linux-uclibc/lib/libstdc++.so:
-undefined reference to `__strtod_l'
-/opt/atmel/gcc-4.1.2-uclibc/bin/../lib/gcc/arm-linux-uclibc/4.1.2/../../../../arm-linux-uclibc/lib/libstdc++.so:
-undefined reference to `__uselocale'
-/opt/atmel/gcc-4.1.2-uclibc/bin/../lib/gcc/arm-linux-uclibc/4.1.2/../../../../arm-linux-uclibc/lib/libstdc++.so:
-undefined reference to `__strcoll_l'
-/opt/atmel/gcc-4.1.2-uclibc/bin/../lib/gcc/arm-linux-uclibc/4.1.2/../../../../arm-linux-uclibc/lib/libstdc++.so:
-undefined reference to `__wctype_l'
-/opt/atmel/gcc-4.1.2-uclibc/bin/../lib/gcc/arm-linux-uclibc/4.1.2/../../../../arm-linux-uclibc/lib/libstdc++.so:
-undefined reference to `__strxfrm_l'
-/opt/atmel/gcc-4.1.2-uclibc/bin/../lib/gcc/arm-linux-uclibc/4.1.2/../../../../arm-linux-uclibc/lib/libstdc++.so:
-undefined reference to `__wcsftime_l'
-/opt/atmel/gcc-4.1.2-uclibc/bin/../lib/gcc/arm-linux-uclibc/4.1.2/../../../../arm-linux-uclibc/lib/libstdc++.so:
-undefined reference to `__strtof_l'
-/opt/atmel/gcc-4.1.2-uclibc/bin/../lib/gcc/arm-linux-uclibc/4.1.2/../../../../arm-linux-uclibc/lib/libstdc++.so:
-undefined reference to `__wcscoll_l'
-/opt/atmel/gcc-4.1.2-uclibc/bin/../lib/gcc/arm-linux-uclibc/4.1.2/../../../../arm-linux-uclibc/lib/libstdc++.so:
-undefined reference to `__duplocale'
+Thanks,
 
-please guide me how can i fix this issue and the possible reason, 
-====================================================================== 
-
----------------------------------------------------------------------- 
- hmoffatt - 04-21-08 07:09  
----------------------------------------------------------------------- 
-Where did you get your compiler? It doesn't seem to have been built with
-buildroot (in that case it would be installed in build_$arch/staging_dir,
-not in /opt/atmel). I think you should complain to the vendor, as
-buildroot can't fix a broken external toolchain. 
-
----------------------------------------------------------------------- 
- gebecom - 04-21-08 07:17  
----------------------------------------------------------------------- 
-i have wrong kopiert, hier is the error
-how can i solve the question?
-Generating embedded module rules ...
-   [CC] stereorize.c -> stereorize.o
-   [CC] frame.c -> frame.o
-   [LD] stereorize.o frame.o -> stereorize
-/build-tools/buildroot/build_mipsel/staging_dir/bin-ccache/../lib/gcc/mipsel-linux-uclibc/3.4.6/../../../../mipsel-linux-uclibc/lib/libstdc++.so:
-undefined reference to `__towupper_l'
-/build-tools/buildroot/build_mipsel/staging_dir/bin-ccache/../lib/gcc/mipsel-linux-uclibc/3.4.6/../../../../mipsel-linux-uclibc/lib/libstdc++.so:
-undefined reference to `__strtold_l'
-/build-tools/buildroot/build_mipsel/staging_dir/bin-ccache/../lib/gcc/mipsel-linux-uclibc/3.4.6/../../../../mipsel-linux-uclibc/lib/libstdc++.so:
-undefined reference to `__strftime_l'
-/build-tools/buildroot/build_mipsel/staging_dir/bin-ccache/../lib/gcc/mipsel-linux-uclibc/3.4.6/../../../../mipsel-linux-uclibc/lib/libstdc++.so:
-undefined reference to `__nl_langinfo_l'
-/build-tools/buildroot/build_mipsel/staging_dir/bin-ccache/../lib/gcc/mipsel-linux-uclibc/3.4.6/../../../../mipsel-linux-uclibc/lib/libstdc++.so:
-undefined reference to `__newlocale'
-/build-tools/buildroot/build_mipsel/staging_dir/bin-ccache/../lib/gcc/mipsel-linux-uclibc/3.4.6/../../../../mipsel-linux-uclibc/lib/libstdc++.so:
-undefined reference to `__freelocale'
-/build-tools/buildroot/build_mipsel/staging_dir/bin-ccache/../lib/gcc/mipsel-linux-uclibc/3.4.6/../../../../mipsel-linux-uclibc/lib/libstdc++.so:
-undefined reference to `__wcsxfrm_l'
-/build-tools/buildroot/build_mipsel/staging_dir/bin-ccache/../lib/gcc/mipsel-linux-uclibc/3.4.6/../../../../mipsel-linux-uclibc/lib/libstdc++.so:
-undefined reference to `__iswctype_l'
-/build-tools/buildroot/build_mipsel/staging_dir/bin-ccache/../lib/gcc/mipsel-linux-uclibc/3.4.6/../../../../mipsel-linux-uclibc/lib/libstdc++.so:
-undefined reference to `__towlower_l'
-/build-tools/buildroot/build_mipsel/staging_dir/bin-ccache/../lib/gcc/mipsel-linux-uclibc/3.4.6/../../../../mipsel-linux-uclibc/lib/libstdc++.so:
-undefined reference to `__strtod_l'
-/build-tools/buildroot/build_mipsel/staging_dir/bin-ccache/../lib/gcc/mipsel-linux-uclibc/3.4.6/../../../../mipsel-linux-uclibc/lib/libstdc++.so:
-undefined reference to `__uselocale'
-/build-tools/buildroot/build_mipsel/staging_dir/bin-ccache/../lib/gcc/mipsel-linux-uclibc/3.4.6/../../../../mipsel-linux-uclibc/lib/libstdc++.so:
-undefined reference to `__strcoll_l'
-/build-tools/buildroot/build_mipsel/staging_dir/bin-ccache/../lib/gcc/mipsel-linux-uclibc/3.4.6/../../../../mipsel-linux-uclibc/lib/libstdc++.so:
-undefined reference to `__wctype_l'
-/build-tools/buildroot/build_mipsel/staging_dir/bin-ccache/../lib/gcc/mipsel-linux-uclibc/3.4.6/../../../../mipsel-linux-uclibc/lib/libstdc++.so:
-undefined reference to `__strxfrm_l'
-/build-tools/buildroot/build_mipsel/staging_dir/bin-ccache/../lib/gcc/mipsel-linux-uclibc/3.4.6/../../../../mipsel-linux-uclibc/lib/libstdc++.so:
-undefined reference to `__wcsftime_l'
-/build-tools/buildroot/build_mipsel/staging_dir/bin-ccache/../lib/gcc/mipsel-linux-uclibc/3.4.6/../../../../mipsel-linux-uclibc/lib/libstdc++.so:
-undefined reference to `__strtof_l'
-/build-tools/buildroot/build_mipsel/staging_dir/bin-ccache/../lib/gcc/mipsel-linux-uclibc/3.4.6/../../../../mipsel-linux-uclibc/lib/libstdc++.so:
-undefined reference to `__wcscoll_l'
-/build-tools/buildroot/build_mipsel/staging_dir/bin-ccache/../lib/gcc/mipsel-linux-uclibc/3.4.6/../../../../mipsel-linux-uclibc/lib/libstdc++.so:
-undefined reference to `__duplocale'
-collect2: ld returned 1 exit status
-make[1]: *** [stereorize] Error 1
-make: *** [utils] Error 2
-
- 
-
----------------------------------------------------------------------- 
- hmoffatt - 04-21-08 07:24  
----------------------------------------------------------------------- 
-It looks like whatever package you are building (stereorize.o etc) needs
-WCHAR support in uClibc which is disabled in your build. 
-
-make uclibc-menuconfig and turn on "wide character support" under "string
-and stdio" support. 
-
----------------------------------------------------------------------- 
- gebecom - 04-21-08 07:38  
----------------------------------------------------------------------- 
-hmoffatt,sorry,i have tried. but does not work!
-i cross compile asterisk!
-please help me!!
-
- 
-
----------------------------------------------------------------------- 
- gebecom - 04-21-08 08:04  
----------------------------------------------------------------------- 
-hmoffatt,if i turn on the "wide character support", i can not successfully
-make buildroot.      if i turn on the "wide character support" , turn off
-the locales support? 
-
-Issue History 
-Date Modified   Username       Field                    Change               
-====================================================================== 
-04-21-08 01:17  gebecom        New Issue                                    
-04-21-08 01:17  gebecom        Status                   new => assigned     
-04-21-08 01:17  gebecom        Assigned To               => buildroot       
-04-21-08 07:09  hmoffatt       Note Added: 0006794                          
-04-21-08 07:14  gebecom        Issue Monitored: gebecom                     
-04-21-08 07:16  gebecom        Note Added: 0006804                          
-04-21-08 07:17  gebecom        Note Edited: 0006804                         
-04-21-08 07:24  hmoffatt       Note Added: 0006814                          
-04-21-08 07:35  gebecom        Note Added: 0006824                          
-04-21-08 07:37  gebecom        Note Edited: 0006824                         
-04-21-08 07:38  gebecom        Note Edited: 0006824                         
-04-21-08 08:04  gebecom        Note Added: 0006834                          
-======================================================================
+John Voltz
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: http://busybox.net/lists/buildroot/attachments/20080421/74a32a42/attachment.htm 
