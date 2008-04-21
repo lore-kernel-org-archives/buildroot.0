@@ -1,8 +1,7 @@
-From: Hebbar <gururajakr@sanyo.co.in>
-Date: Sun, 20 Apr 2008 23:14:31 -0700 (PDT)
-Subject: [Buildroot] Improper device nodes created inside
- project_build_arm/uclibc/root/dev/
-Message-ID: <16803332.post@talk.nabble.com>
+From: bugs at busybox.net <bugs@busybox.net>
+Date: Mon, 21 Apr 2008 01:17:20 -0700
+Subject: [Buildroot] [buildroot 0003004]: undefined reference problem
+Message-ID: <f70cc8baefca46df7a9289ec2cf69076@www.busybox.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -10,43 +9,78 @@ Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
 
-Hi,
+The following issue has been SUBMITTED. 
+====================================================================== 
+http://busybox.net/bugs/view.php?id=3004 
+====================================================================== 
+Reported By:                gebecom
+Assigned To:                buildroot
+====================================================================== 
+Project:                    buildroot
+Issue ID:                   3004
+Category:                   Architecture Specific
+Reproducibility:            always
+Severity:                   minor
+Priority:                   normal
+Status:                     assigned
+====================================================================== 
+Date Submitted:             04-21-2008 01:17 PDT
+Last Modified:              04-21-2008 01:17 PDT
+====================================================================== 
+Summary:                    undefined reference problem
+Description: 
+/opt/gcc-4.1.2-uclibc/bin/../lib/gcc/arm-linux-uclibc/4.1.2/../../../../arm-linux-uclibc/bin/ld:
+cannot find /opt/usr/local/arm/gcc-4.1.2-uclibc/lib/libc.so.0
+collect2: ld returned 1 exit status
 
-I am trying to build arm9 toolchain using recent buildroot toolchain.
-everything works fine except the device nodes inside my
-project_build_arm/uclibc/root/dev/ directory.
+actually it is trying to get libc.so.s0 from a wrong path, i copied the
+files at that particular file path but it fails at some next stage giving
+the error details below...
 
-oot at guru_vlinux:/opt/buildroot_plain# ls -la
-project_build_arm/uclibc/root/dev/
-total 0
-drwxr-xr-x  3 root root 192 Apr 17 23:23 .
-drwxr-xr-x 16 root root 408 Apr 17 22:44 ..
--rw-rw-rw-  1 root root   0 Apr 18 00:36 console
-lrwxrwxrwx  1 root root  10 Apr 17 22:14 log -> ../tmp/log
--rw-rw-rw-  1 root root   0 Apr 18 00:36 null
-drwxr-xr-x  2 root root  48 Apr 17 22:14 pts
--rw-rw-rw-  1 root root   0 Apr 18 00:36 ttyAMA0
--rw-rw-rw-  1 root root   0 Apr 18 00:36 zero
+/opt/atmel/gcc-4.1.2-uclibc/bin/../lib/gcc/arm-linux-uclibc/4.1.2/../../../../arm-linux-uclibc/lib/libstdc++.so:
+undefined reference to `__towupper_l'
+/opt/atmel/gcc-4.1.2-uclibc/bin/../lib/gcc/arm-linux-uclibc/4.1.2/../../../../arm-linux-uclibc/lib/libstdc++.so:
+undefined reference to `__strtold_l'
+/opt/atmel/gcc-4.1.2-uclibc/bin/../lib/gcc/arm-linux-uclibc/4.1.2/../../../../arm-linux-uclibc/lib/libstdc++.so:
+undefined reference to `__strftime_l'
+/opt/atmel/gcc-4.1.2-uclibc/bin/../lib/gcc/arm-linux-uclibc/4.1.2/../../../../arm-linux-uclibc/lib/libstdc++.so:
+undefined reference to `__nl_langinfo_l'
+/opt/atmel/gcc-4.1.2-uclibc/bin/../lib/gcc/arm-linux-uclibc/4.1.2/../../../../arm-linux-uclibc/lib/libstdc++.so:
+undefined reference to `__newlocale'
+/opt/atmel/gcc-4.1.2-uclibc/bin/../lib/gcc/arm-linux-uclibc/4.1.2/../../../../arm-linux-uclibc/lib/libstdc++.so:
+undefined reference to `__freelocale'
+/opt/atmel/gcc-4.1.2-uclibc/bin/../lib/gcc/arm-linux-uclibc/4.1.2/../../../../arm-linux-uclibc/lib/libstdc++.so:
+undefined reference to `__wcsxfrm_l'
+/opt/atmel/gcc-4.1.2-uclibc/bin/../lib/gcc/arm-linux-uclibc/4.1.2/../../../../arm-linux-uclibc/lib/libstdc++.so:
+undefined reference to `__iswctype_l'
+/opt/atmel/gcc-4.1.2-uclibc/bin/../lib/gcc/arm-linux-uclibc/4.1.2/../../../../arm-linux-uclibc/lib/libstdc++.so:
+undefined reference to `__towlower_l'
+/opt/atmel/gcc-4.1.2-uclibc/bin/../lib/gcc/arm-linux-uclibc/4.1.2/../../../../arm-linux-uclibc/lib/libstdc++.so:
+undefined reference to `__strtod_l'
+/opt/atmel/gcc-4.1.2-uclibc/bin/../lib/gcc/arm-linux-uclibc/4.1.2/../../../../arm-linux-uclibc/lib/libstdc++.so:
+undefined reference to `__uselocale'
+/opt/atmel/gcc-4.1.2-uclibc/bin/../lib/gcc/arm-linux-uclibc/4.1.2/../../../../arm-linux-uclibc/lib/libstdc++.so:
+undefined reference to `__strcoll_l'
+/opt/atmel/gcc-4.1.2-uclibc/bin/../lib/gcc/arm-linux-uclibc/4.1.2/../../../../arm-linux-uclibc/lib/libstdc++.so:
+undefined reference to `__wctype_l'
+/opt/atmel/gcc-4.1.2-uclibc/bin/../lib/gcc/arm-linux-uclibc/4.1.2/../../../../arm-linux-uclibc/lib/libstdc++.so:
+undefined reference to `__strxfrm_l'
+/opt/atmel/gcc-4.1.2-uclibc/bin/../lib/gcc/arm-linux-uclibc/4.1.2/../../../../arm-linux-uclibc/lib/libstdc++.so:
+undefined reference to `__wcsftime_l'
+/opt/atmel/gcc-4.1.2-uclibc/bin/../lib/gcc/arm-linux-uclibc/4.1.2/../../../../arm-linux-uclibc/lib/libstdc++.so:
+undefined reference to `__strtof_l'
+/opt/atmel/gcc-4.1.2-uclibc/bin/../lib/gcc/arm-linux-uclibc/4.1.2/../../../../arm-linux-uclibc/lib/libstdc++.so:
+undefined reference to `__wcscoll_l'
+/opt/atmel/gcc-4.1.2-uclibc/bin/../lib/gcc/arm-linux-uclibc/4.1.2/../../../../arm-linux-uclibc/lib/libstdc++.so:
+undefined reference to `__duplocale'
 
-While it should be 
+please guide me how can i fix this issue and the possible reason, 
+====================================================================== 
 
-root at guru_vlinux:/opt/buildroot_plain# ls -la /dev/console /dev/null
-/dev/zero
-crw------- 1 root root 5, 1 Apr 18 12:10 /dev/console
-crw-rw-rw- 1 root root 1, 3 Apr 18 08:08 /dev/null
-crw-rw-rw- 1 root root 1, 5 Apr 18 08:08 /dev/zero
-
-I have to manualy delete them and cp the basic one from my system root/dev.
-Once i copy from root device nodes, i am able to load the root using nfs
-mount or by compressing the root directory.
-
-Why are the device nodes not properly cretaed. I have logged into console
-with root privileges.
-
-Thanks in advance
-
-Regards
-Gururaja
--- 
-View this message in context: http://www.nabble.com/Improper-device-nodes-created-inside-project_build_arm-uclibc-root-dev--tp16803332p16803332.html
-Sent from the BuildRoot mailing list archive at Nabble.com.
+Issue History 
+Date Modified   Username       Field                    Change               
+====================================================================== 
+04-21-08 01:17  gebecom        New Issue                                    
+04-21-08 01:17  gebecom        Status                   new => assigned     
+04-21-08 01:17  gebecom        Assigned To               => buildroot       
+======================================================================
