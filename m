@@ -1,7 +1,7 @@
 From: bugs at busybox.net <bugs@busybox.net>
-Date: Mon, 21 Apr 2008 07:16:06 -0700
+Date: Mon, 21 Apr 2008 07:24:20 -0700
 Subject: [Buildroot] [buildroot 0003004]: undefined reference problem
-Message-ID: <912ebd6f7ede2c64262c7b527567c5c4@busybox.net>
+Message-ID: <f6c78d5caed04101b63a09dc7f25a660@busybox.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -25,7 +25,7 @@ Priority:                   normal
 Status:                     assigned
 ====================================================================== 
 Date Submitted:             04-21-2008 01:17 PDT
-Last Modified:              04-21-2008 07:16 PDT
+Last Modified:              04-21-2008 07:24 PDT
 ====================================================================== 
 Summary:                    undefined reference problem
 Description: 
@@ -86,9 +86,10 @@ not in /opt/atmel). I think you should complain to the vendor, as
 buildroot can't fix a broken external toolchain. 
 
 ---------------------------------------------------------------------- 
- gebecom - 04-21-08 07:16  
+ gebecom - 04-21-08 07:17  
 ---------------------------------------------------------------------- 
 i have wrong kopiert, hier is the error
+how can i solve the question?
 Generating embedded module rules ...
    [CC] stereorize.c -> stereorize.o
    [CC] frame.c -> frame.o
@@ -131,7 +132,18 @@ undefined reference to `__wcscoll_l'
 undefined reference to `__duplocale'
 collect2: ld returned 1 exit status
 make[1]: *** [stereorize] Error 1
-make: *** [utils] Error 2 
+make: *** [utils] Error 2
+
+ 
+
+---------------------------------------------------------------------- 
+ hmoffatt - 04-21-08 07:24  
+---------------------------------------------------------------------- 
+It looks like whatever package you are building (stereorize.o etc) needs
+WCHAR support in uClibc which is disabled in your build. 
+
+make uclibc-menuconfig and turn on "wide character support" under "string
+and stdio" support. 
 
 Issue History 
 Date Modified   Username       Field                    Change               
@@ -142,4 +154,6 @@ Date Modified   Username       Field                    Change
 04-21-08 07:09  hmoffatt       Note Added: 0006794                          
 04-21-08 07:14  gebecom        Issue Monitored: gebecom                     
 04-21-08 07:16  gebecom        Note Added: 0006804                          
+04-21-08 07:17  gebecom        Note Edited: 0006804                         
+04-21-08 07:24  hmoffatt       Note Added: 0006814                          
 ======================================================================
