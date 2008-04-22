@@ -1,138 +1,236 @@
-From: Kuniyasu Suzaki <k.suzaki@aist.go.jp>
-Date: Tue, 22 Apr 2008 18:15:54 +0900 (JST)
-Subject: [Buildroot] Release: InetBoot (GRUB + BuildRoot + HTTP-FUSE)
-Message-ID: <20080422.181554.15248718.k.suzaki@aist.go.jp>
+From: jacmet at uclibc.org <jacmet@uclibc.org>
+Date: Tue, 22 Apr 2008 02:37:23 -0700 (PDT)
+Subject: [Buildroot] svn commit: trunk/buildroot/package/busybox
+Message-ID: <20080422093723.5811F3C6E8@busybox.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+Author: jacmet
+Date: 2008-04-22 02:37:22 -0700 (Tue, 22 Apr 2008)
+New Revision: 21795
 
-Dear,
+Log:
+busybox: bump version
 
-InetBoot (GRUB + BuildRoot + HTTP-FUSE) is released.
- HP:  http://openlab.jp/oscircular/inetboot/
- Guide-PDF: http://openlab.ring.gr.jp/oscircular/inetboot/InetBoot-httpfuse080418-E.pdf
- Sample bootable CD 5.4MB (MD5: cb93a918ebec70d1763a116a133a50ce)
-  http://www.ring.gr.jp/archives/linux/oscircular/iso/inetboot-http-fuse-20080418.iso
 
-InetBoot (GRUB + BuildRoot + HTTP-FUSE) is a bootloader which gets
-hypervisor, kernel and miniroot via Internet and reboots them with 
-"kexec"(Warm Reboot). The root file system is obtained by HTTP-FUSE
-CLOOP via Internet. The sample bootable CD (5.4MB) boots 3 types of
-KNOPPIX and 3 types of Xenoppix.
- 3 types of KNOPPIX; 511,501, and 402
- 3 types of Xenoppix(Xen2.0.6); KNOPPIX on Dom0, Plan9 on DomU, and NetBSD on DomU.
-# Xen environment uses old Linux kernel and limits the network
-# interface (for examples NE2000 and RL8139). Fortunately they boots
-# on QEMU, KQEMU, and VMWare (Xen2.0.6 on a virtual machine!).
+Removed:
+   trunk/buildroot/package/busybox/busybox-1.10.0-fuser.patch
+   trunk/buildroot/package/busybox/busybox-1.10.0-tail.patch
+   trunk/buildroot/package/busybox/busybox-1.10.0-taskset.patch
+   trunk/buildroot/package/busybox/busybox-1.10.0-tcpudp.patch
+   trunk/buildroot/package/busybox/busybox-1.10.0-udhcp.patch
 
-# Your comments are welcome. This topic will be discussed at the BOF of
-# Ottawa Linux Symposium08.
-#     http://www.linuxsymposium.org/2008/view_abstract.php?content_key=231
+Modified:
+   trunk/buildroot/package/busybox/Config.in
 
-### Special Feature ###
-InetBoot downloads a kernel form a HTTP server and reboot it with
-"kexec". Since InetBoot doesn't use BOOTP and TFTP which are used for
-normal network boot (PXE), InetBoot is not limited on LAN
-environment. It also doesn't use satefull NFS server for root file
-system. InetBoot uses stateless HTTP for root file system and enables
-dynamic load lancing.
-    You only have to designate the URL of KNOPPIX at the GRUB menu and you
-can boot the KNOPPIX/VMKoppix from Internet. It means you don't need
-to burn a CD/DVD for new KNOPPIX/VMKnoppix.
 
-    InetBoot is consisted of GRUB and BuildRoot (BusyBox). It is not
-simple boot loader. It boots a mini Linux, sets up the network,
-obtains hypervisor, kernel, and miniroot form a HTTP server, and reboots
-them with "kexec". The new OS boots with loopback-mounting HTTP-FUSE
-CLOOP. So InetBoot is PreBoot-Linux which adds some operations before
-targeted OS.
-    InetBoot can download a script and execute it. This function makes
-flexible to control the PreBoot-Linux. Xenoppix uses this function.
-    HTTP-FUSE CLOOP saves parts of block device (block files) on a local
-storage. The saved block files prevent downloads of same block files
-and reduces total traffic. They are used for re-boot and makes quick
-boot.
+Changeset:
+Modified: trunk/buildroot/package/busybox/Config.in
+===================================================================
+--- trunk/buildroot/package/busybox/Config.in	2008-04-22 00:16:29 UTC (rev 21794)
++++ trunk/buildroot/package/busybox/Config.in	2008-04-22 09:37:22 UTC (rev 21795)
+@@ -50,7 +50,7 @@
+ 	default "1.7.5"		if BR2_BUSYBOX_VERSION_1_7_X
+ 	default "1.8.3"		if BR2_BUSYBOX_VERSION_1_8_X
+ 	default "1.9.2"		if BR2_BUSYBOX_VERSION_1_9_X
+-	default "1.10.0"	if BR2_BUSYBOX_VERSION_1_10_X
++	default "1.10.1"	if BR2_BUSYBOX_VERSION_1_10_X
+ 
+ 
+ config BR2_PACKAGE_BUSYBOX_FULLINSTALL
 
-### Usage ###
-Download "linux" and "minirt.gz" of BuildRoot and set up GRUB.
-Ony you have to designate the URL of HTTP-FUSE KNOPPIX/Xenoppix at GRUB menu.
+Deleted: trunk/buildroot/package/busybox/busybox-1.10.0-fuser.patch
+===================================================================
+--- trunk/buildroot/package/busybox/busybox-1.10.0-fuser.patch	2008-04-22 00:16:29 UTC (rev 21794)
++++ trunk/buildroot/package/busybox/busybox-1.10.0-fuser.patch	2008-04-22 09:37:22 UTC (rev 21795)
+@@ -1,43 +0,0 @@
+---- busybox-1.10.0/procps/fuser.c	Thu Mar 20 12:47:05 2008
+-+++ busybox-1.10.0-fuser/procps/fuser.c	Sat Mar 29 18:55:23 2008
+-@@ -57,11 +57,11 @@
+- 
+- static char *parse_net_arg(const char *arg, unsigned *port)
+- {
+--	char path[12], tproto[5];
+-+	char path[20], tproto[5];
+- 
+- 	if (sscanf(arg, "%u/%4s", port, tproto) != 2)
+- 		return NULL;
+--	sprintf(path, "net/%s", tproto);
+-+	sprintf(path, "/proc/net/%s", tproto);
+- 	if (access(path, R_OK) != 0)
+- 		return NULL;
+- 	return xstrdup(tproto);
+-@@ -99,7 +99,7 @@
+- static inode_list *scan_proc_net(const char *proto,
+- 				unsigned port, inode_list *ilist)
+- {
+--	char path[12], line[MAX_LINE + 1];
+-+	char path[20], line[MAX_LINE + 1];
+- 	char addr[128];
+- 	ino_t tmp_inode;
+- 	dev_t tmp_dev;
+-@@ -109,7 +109,7 @@
+- 
+- 	tmp_dev = find_socket_dev();
+- 
+--	sprintf(path, "net/%s", proto);
+-+	sprintf(path, "/proc/net/%s", proto);
+- 	f = fopen(path, "r");
+- 	if (!f)
+- 		return ilist;
+-@@ -313,8 +313,6 @@
+- 
+- 	opt = getopt32(argv, OPTION_STRING);
+- 	argv += optind;
+--
+--	xchdir("/proc");
+- 
+- 	ilist = NULL;
+- 	pp = argv;
 
-Ex: Normal KNOPPIX
-kernel /boot/grub/linux httpfuse=http://knoppix.inetboot.net/archives/linux/oscircular/tcgeeks/v1.0/ ramdisk_size=100000 lang=en vga=normal nodhcp lang=us
-initrd /boot/grub/minirt.gz
+Deleted: trunk/buildroot/package/busybox/busybox-1.10.0-tail.patch
+===================================================================
+--- trunk/buildroot/package/busybox/busybox-1.10.0-tail.patch	2008-04-22 00:16:29 UTC (rev 21794)
++++ trunk/buildroot/package/busybox/busybox-1.10.0-tail.patch	2008-04-22 09:37:22 UTC (rev 21795)
+@@ -1,62 +0,0 @@
+---- busybox-1.10.0/coreutils/tail.c	Thu Mar 20 12:46:51 2008
+-+++ busybox-1.10.0-tail/coreutils/tail.c	Sun Mar 23 04:25:12 2008
+-@@ -163,8 +163,6 @@
+- 	fmt = header_fmt + 1;	/* Skip header leading newline on first output. */
+- 	i = 0;
+- 	do {
+--		off_t current;
+--
+- 		if (nfiles > header_threshhold) {
+- 			tail_xprint_header(fmt, argv[i]);
+- 			fmt = header_fmt;
+-@@ -173,19 +171,17 @@
+- 		/* Optimizing count-bytes case if the file is seekable.
+- 		 * Beware of backing up too far.
+- 		 * Also we exclude files with size 0 (because of /proc/xxx) */
+--		current = lseek(fds[i], 0, SEEK_END);
+--		if (current > 0) {
+--			if (!from_top) {
+-+		if (COUNT_BYTES && !from_top) {
+-+			off_t current = lseek(fds[i], 0, SEEK_END);
+-+			if (current > 0) {
+- 				if (count == 0)
+- 					continue; /* showing zero lines is easy :) */
+--				if (COUNT_BYTES) {
+--					current -= count;
+--					if (current < 0)
+--						current = 0;
+--					xlseek(fds[i], current, SEEK_SET);
+--					bb_copyfd_size(fds[i], STDOUT_FILENO, count);
+--					continue;
+--				}
+-+				current -= count;
+-+				if (current < 0)
+-+					current = 0;
+-+				xlseek(fds[i], current, SEEK_SET);
+-+				bb_copyfd_size(fds[i], STDOUT_FILENO, count);
+-+				continue;
+- 			}
+- 		}
+- 
+---- busybox-1.10.0/testsuite/tail/tail-n-works	Thu Mar 20 12:46:57 2008
+-+++ busybox-1.10.0-tail/testsuite/tail/tail-n-works	Sun Mar 23 04:25:12 2008
+-@@ -1,4 +1,4 @@
+--[ -n "$d" ] || d=..
+--tail -n 2 "$d/README" > logfile.gnu
+--busybox tail -n 2 "$d/README" > logfile.bb
+--cmp logfile.gnu logfile.bb
+-+echo -ne "abc\ndef\n123\n" >input
+-+echo -ne "def\n123\n" >logfile.ok
+-+busybox tail -n 2 input > logfile.bb
+-+cmp logfile.ok logfile.bb
+---- busybox-1.10.0/testsuite/tail/tail-works	Thu Mar 20 12:46:57 2008
+-+++ busybox-1.10.0-tail/testsuite/tail/tail-works	Sun Mar 23 04:25:12 2008
+-@@ -1,4 +1,4 @@
+--[ -n "$d" ] || d=..
+--tail -n 2 "$d/README" > logfile.gnu
+--busybox tail -n 2 "$d/README" > logfile.bb
+--cmp logfile.gnu logfile.bb
+-+echo -ne "abc\ndef\n123\n" >input
+-+echo -ne "def\n123\n" >logfile.ok
+-+busybox tail -2 input > logfile.bb
+-+cmp logfile.ok logfile.bb
 
-Ex: Xenoppix.
-kernel /boot/grub/linux iscript=http://knoppix.inetboot.net/archives/linux/knoppix/xenoppix_http/kexec.sh ramdisk_size=100000 lang=en vga=normal nodhcp lang=us
-initrd /boot/grub/minirt.gz
+Deleted: trunk/buildroot/package/busybox/busybox-1.10.0-taskset.patch
+===================================================================
+--- trunk/buildroot/package/busybox/busybox-1.10.0-taskset.patch	2008-04-22 00:16:29 UTC (rev 21794)
++++ trunk/buildroot/package/busybox/busybox-1.10.0-taskset.patch	2008-04-22 09:37:22 UTC (rev 21795)
+@@ -1,27 +0,0 @@
+---- busybox-1.10.0/miscutils/taskset.c	Thu Mar 20 12:46:55 2008
+-+++ busybox-1.10.0-taskset/miscutils/taskset.c	Sat Mar 22 18:46:21 2008
+-@@ -50,6 +50,11 @@
+- 	char *pid_str;
+- 	char *aff = aff; /* for compiler */
+- 
+-+	/* NB: we mimic util-linux's taskset: -p does not take
+-+	 * an argument, i.e., "-pN" is NOT valid, only "-p N"!
+-+	 * Indeed, util-linux-2.13-pre7 uses:
+-+	 * getopt_long(argc, argv, "+pchV", ...), not "...p:..." */
+-+
+- 	opt_complementary = "-1"; /* at least 1 arg */
+- 	opt_p = getopt32(argv, "+p");
+- 	argv += optind;
+---- busybox-1.10.0/testsuite/taskset.tests	Thu Mar 20 12:47:04 2008
+-+++ busybox-1.10.0-taskset/testsuite/taskset.tests	Sat Mar 22 18:46:21 2008
+-@@ -7,8 +7,8 @@
+- a="taskset"
+- 
+- # testing "test name"              "opts" "expected result" "file inp" "stdin"
+--testing "taskset (get from pid 1)" "$a -p1 >/dev/null;echo \$?" "0\n" "" ""
+--testing "taskset (invalid pid)"    "$a -p0 >/dev/null 2>&1;echo \$?" "1\n" "" ""
+-+testing "taskset (get from pid 1)" "$a -p 1 >/dev/null;echo \$?" "0\n" "" ""
+-+testing "taskset (invalid pid)"    "$a -p 0 >/dev/null 2>&1;echo \$?" "1\n" "" ""
+- testing "taskset (set_aff, needs CAP_SYS_NICE)" \
+-                                    "$a 0x1 $SHELL -c $a\ -p\ \$$\|grep\ \"current\ affinity\ mask:\ 1\" >/dev/null;echo \$?" \
+- 				                                "0\n" "" ""
 
-# "iscript=" designate a script which is executed on the BuildRoot.
+Deleted: trunk/buildroot/package/busybox/busybox-1.10.0-tcpudp.patch
+===================================================================
+--- trunk/buildroot/package/busybox/busybox-1.10.0-tcpudp.patch	2008-04-22 00:16:29 UTC (rev 21794)
++++ trunk/buildroot/package/busybox/busybox-1.10.0-tcpudp.patch	2008-04-22 09:37:22 UTC (rev 21795)
+@@ -1,16 +0,0 @@
+---- busybox-1.10.0/networking/tcpudp.c	Thu Mar 20 12:46:42 2008
+-+++ busybox-1.10.0-tcpudp/networking/tcpudp.c	Mon Mar 31 21:27:38 2008
+-@@ -29,10 +29,10 @@
+-  * - don't know how to retrieve ORIGDST for udp.
+-  */
+- 
+--#include <limits.h>
+--#include <linux/netfilter_ipv4.h> /* wants <limits.h> */
+--
+- #include "libbb.h"
+-+/* Wants <limits.h> etc, thus included after libbb.h: */
+-+#include <linux/netfilter_ipv4.h>
+-+
+- // TODO: move into this file:
+- #include "tcpudp_perhost.h"
+- 
 
-The sample bootable-CD includes some URLs of HTTP-FUSE
-KNOPPIX/Xenoppix. They are load-balanced by SLB(Global Server Load
-Balance) and InetBoot finds a suitable site automatically form 3 sites
-in US, 3 sites in EU, and 7 sites in Japan. The available OS are 
- * knoppix511 (linux 2.6.19)
- * knoppix501 (linux 2.6.17)
- * knoppix402 (linux 2.6.12)
- * Xenoppix (Xen2.0.6+Linux 2.6.12)
- * Plan9 on Xenoppix (Xen2.0.6+Linux 2.6.12)
- * NetBSD on Xenoppix (Xen2.0.6+Linux 2.6.12)
-CAUTION: The included URLs are temporal service. The service will be
-stop after a certain period.
-
-* Disk Image Caching
-The disk image is distributed by block files. Some block files are
-saved on local storage and reduce the network traffic.
-    The "\knxblock" folder on a local storage (Ex. USB memory) is detected
-by the driver of HTTP-FUSE CLOOP and block files are saved at the
-folder. The local storage must be FAT or Ext2/Ext3 because the driver
-can recognize it. The free space should be more than 100MB. If the
-free space is 1GB, it will save whole image of an OS.
-
-### Detail of Implementation ###
-The following indicates the boot procedure of InetBoot.
-
-* GRUB
-The designated URL at GRUB Menu is passed to BuildRoot as a kernel option.
-
-* BuildRoot (BusyBox)
-The BuildRoot (BusyBox) opeates the following steps.
-  1) Set up the network by "udhcp" 
-  2) Download hypervisor, kernel miniroot from a HTTP server.
-  3) Reboot them with "kexec" (Warm Boot)
-
-*  Targeted kernel
-The download kernel boots with the downloaded miniroot which includes
-the driver of HTTP-FUSE CLOOP.
-  1)  Set up the network by "udhcp" 
-  2)  Mount "/cdrom" with the driver of HTTP-FUSE CLOOP.
-  3)  Loopback mount "/KNOPPIX" with "/cdrom/Disk1/knoppix".
-  4)  Pass the control to "init".
-After that it works as the normal KNOPPIX.
-
-#### Known Problems ####
- * Depend on Network Interface.
-  + InetBoot sets up Network Interface twice (in BuildRoot and
-    downladed new kernel). Both of them have to set up a suitable
-    driver.
-  + Xenoppix uses old kernel and boots with a few Network Inerface. We
-    confirmed only RealTeck RL8139 and NE2000. Xenoppix can boots on
-    QEMU, KQEMU, and VMWare.
- * Depend on the situation of server and network.
-  + It is sensitive of network latency and load of the server because
-    the root file system is mounted by "HTTP-FUSE CLOOP".
-  + The situation may change by rebooting because the load balancer
-    (GSLB) may select another site.
-
-#### Download ####
- Sample bootable CD 5.4MB (MD5: cb93a918ebec70d1763a116a133a50ce)
-  http://www.ring.gr.jp/archives/linux/oscircular/iso/inetboot-http-fuse-20080418.iso
- kernel and miniroot of BuildRoot(They are used on sample CD.)
-  http://www.ring.gr.jp/archives/linux/oscircular/iso/inetboot-http-fuse-20080418/linux
-  http://www.ring.gr.jp/archives/linux/oscircular/iso/inetboot-http-fuse-20080418/minirt.gz
-
-------
-suzaki
+Deleted: trunk/buildroot/package/busybox/busybox-1.10.0-udhcp.patch
+===================================================================
+--- trunk/buildroot/package/busybox/busybox-1.10.0-udhcp.patch	2008-04-22 00:16:29 UTC (rev 21794)
++++ trunk/buildroot/package/busybox/busybox-1.10.0-udhcp.patch	2008-04-22 09:37:22 UTC (rev 21795)
+@@ -1,15 +0,0 @@
+---- busybox-1.10.0/networking/udhcp/clientsocket.c	Thu Mar 20 12:46:42 2008
+-+++ busybox-1.10.0-udhcp/networking/udhcp/clientsocket.c	Tue Mar 25 07:04:32 2008
+-@@ -22,11 +22,11 @@
+-  */
+- 
+- #include <features.h>
+-+#include <asm/types.h>
+- #if (defined(__GLIBC__) && __GLIBC__ >= 2 && __GLIBC_MINOR__ >= 1) || defined(_NEWLIB_VERSION)
+- #include <netpacket/packet.h>
+- #include <net/ethernet.h>
+- #else
+--#include <asm/types.h>
+- #include <linux/if_packet.h>
+- #include <linux/if_ether.h>
+- #endif
