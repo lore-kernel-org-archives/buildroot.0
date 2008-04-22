@@ -1,47 +1,30 @@
-From: Hamish Moffatt <hamish@cloud.net.au>
-Date: Tue, 22 Apr 2008 11:56:01 +1000
-Subject: [Buildroot] Improper device nodes
-	created	insideproject_build_arm/uclibc/root/dev/
-In-Reply-To: <5BF78BCE8D9BF14A83F836BD9E3916BA0DDC58@blrms.slti.sanyo.co.in>
+From: Peter Korsgaard <jacmet@uclibc.org>
+Date: Tue, 22 Apr 2008 09:12:37 +0200
+Subject: [Buildroot] Improper device nodes created
+	inside	project_build_arm/uclibc/root/dev/
+In-Reply-To: <16819059.post@talk.nabble.com> (Hebbar's message of "Mon\,
+	21 Apr 2008 17\:12\:30 -0700 \(PDT\)")
 References: <16803332.post@talk.nabble.com>
-	<20080421140757.GC21702@cloud.net.au>
-	<16819059.post@talk.nabble.com>
-	<20080422005042.GA19794@cloud.net.au>
-	<5BF78BCE8D9BF14A83F836BD9E3916BA0DDC58@blrms.slti.sanyo.co.in>
-Message-ID: <20080422015601.GA20995@cloud.net.au>
+	<20080421140757.GC21702@cloud.net.au> <16819059.post@talk.nabble.com>
+Message-ID: <87d4oiqs62.fsf@macbook.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi,
+>>>>> "Hebbar" == Hebbar  <gururajakr@sanyo.co.in> writes:
 
-On Tue, Apr 22, 2008 at 07:28:49AM +0530, Gururaja Hebbar K R wrote:
-> > The build process is not intended to create proper device nodes on
-> desk (non-root user can't do that)
-> i have logged into console with su root. i am using root shell for this
-> 
-> root at guru_vlinux:/opt/buildroot_plain# whoami
-> root
+ Hebbar> Hi,
 
-It doesn't matter, buildroot will use fakeroot anyway. It's not a good
-idea to do development as the root user.
+ Hebbar>     I use the root directory as it is for nfs boot. i put
+ Hebbar> this directory inside /etc/exports and mount it on my board
+ Hebbar> at boot time. when i do this linux kernel and busybox
+ Hebbar> complains about missing /dev/console, /dev/ttyAMA0.
 
-Also, some of the target methods don't create the device entries in the
-project_build_$arch/$project/root directory at all - they are added to
-the image by the generator tool without ever being on disk.
+Ahh, this is not how you should do it. Instead select the option to
+create a tarball of the system and unpack it (with root permissions)
+in your nfsroot.
 
-> >Finally you could use something other than NFS root, if you don't need
-> to write back to it. Perhaps have your boot loader load a ramdisk via
-> tftp.
-> yes i tried this and this is working fine. But i am doing a development
-> project and i need to update the root all the time. so i use NFS boot.
-
-Although your changes will be lost when you rebuild the project anyway?
-The project_build_$arch/$project/root is temporary.
-
-
-Hamish
 -- 
-Hamish Moffatt VK3SB <hamish@debian.org> <hamish@cloud.net.au>
+Bye, Peter Korsgaard
