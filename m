@@ -1,7 +1,7 @@
 From: bugs at busybox.net <bugs@busybox.net>
-Date: Tue, 22 Apr 2008 07:42:28 -0700
-Subject: [Buildroot] [buildroot 0003054]: error while compiling buildroot
-Message-ID: <05435b3bb5becbd344f4ca48761cc345@busybox.net>
+Date: Tue, 22 Apr 2008 07:50:08 -0700
+Subject: [Buildroot] [buildroot 0003004]: undefined reference problem
+Message-ID: <21e7c3f529e12d0cbc09e363a0d586f3@busybox.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -9,337 +9,276 @@ Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
 
-The following issue has been SUBMITTED. 
+A NOTE has been added to this issue. 
 ====================================================================== 
-http://busybox.net/bugs/view.php?id=3054 
+http://busybox.net/bugs/view.php?id=3004 
 ====================================================================== 
 Reported By:                gebecom
 Assigned To:                buildroot
 ====================================================================== 
 Project:                    buildroot
-Issue ID:                   3054
+Issue ID:                   3004
 Category:                   Architecture Specific
 Reproducibility:            always
 Severity:                   minor
 Priority:                   normal
 Status:                     assigned
 ====================================================================== 
-Date Submitted:             04-22-2008 07:42 PDT
-Last Modified:              04-22-2008 07:42 PDT
+Date Submitted:             04-21-2008 01:17 PDT
+Last Modified:              04-22-2008 07:50 PDT
 ====================================================================== 
-Summary:                    error while compiling buildroot
+Summary:                    undefined reference problem
 Description: 
-wenn i excute make , follows error:
-make CC="/usr/bin/gcc" -C package/config conf mconf
-make[1]: Entering directory `/build-tools/buildroot/package/config'
-/usr/bin/gcc -DCURSES_LOC="<ncurses.h>" -DLOCALE -g -O2 -DKBUILD_NO_NLS
--MM *.c > .depend 2>/dev/null || :
-make[1]: Leaving directory `/build-tools/buildroot/package/config'
-make[1]: Entering directory `/build-tools/buildroot/package/config'
-/usr/bin/gcc -DCURSES_LOC="<ncurses.h>" -DLOCALE -g -O2 -DKBUILD_NO_NLS 
--c conf.c -o conf.o
-In file included from /usr/include/ctype.h:28,
-                 from conf.c:6:
-/usr/include/bits/types.h:133:2: error: #error
-In file included from /usr/include/ctype.h:28,
-                 from conf.c:6:
-/usr/include/bits/types.h:138: error: expected ?=?, ?,?, ?;?, ?asm? or
-?__attribute__? before ?__UQUAD_TYPE?
-/usr/include/bits/types.h:139: error: expected ?=?, ?,?, ?;?, ?asm? or
-?__attribute__? before ?unsigned?
-/usr/include/bits/types.h:140: error: expected ?=?, ?,?, ?;?, ?asm? or
-?__attribute__? before ?unsigned?
-/usr/include/bits/types.h:141: error: expected ?=?, ?,?, ?;?, ?asm? or
-?__attribute__? before ?unsigned?
-/usr/include/bits/types.h:142: error: expected ?=?, ?,?, ?;?, ?asm? or
-?__attribute__? before ?__UQUAD_TYPE?
-/usr/include/bits/types.h:143: error: expected ?=?, ?,?, ?;?, ?asm? or
-?__attribute__? before ?unsigned?
-/usr/include/bits/types.h:144: error: expected ?=?, ?,?, ?;?, ?asm? or
-?__attribute__? before ?__UWORD_TYPE?
-/usr/include/bits/types.h:145: error: expected ?=?, ?,?, ?;?, ?asm? or
-?__attribute__? before ?long?
-/usr/include/bits/types.h:146: error: expected ?=?, ?,?, ?;?, ?asm? or
-?__attribute__? before ?__SQUAD_TYPE?
-/usr/include/bits/types.h:147: error: expected ?=?, ?,?, ?;?, ?asm? or
-?__attribute__? before ?int?
-/usr/include/bits/types.h:148: error: expected ?=?, ?,?, ?;?, ?asm? or
-?__attribute__? before ?struct?
-/usr/include/bits/types.h:149: error: expected ?=?, ?,?, ?;?, ?asm? or
-?__attribute__? before ?long?
-/usr/include/bits/types.h:150: error: expected ?=?, ?,?, ?;?, ?asm? or
-?__attribute__? before ?unsigned?
-/usr/include/bits/types.h:151: error: expected ?=?, ?,?, ?;?, ?asm? or
-?__attribute__? before ?__UQUAD_TYPE?
-/usr/include/bits/types.h:152: error: expected ?=?, ?,?, ?;?, ?asm? or
-?__attribute__? before ?unsigned?
-/usr/include/bits/types.h:153: error: expected ?=?, ?,?, ?;?, ?asm? or
-?__attribute__? before ?long?
-/usr/include/bits/types.h:154: error: expected ?=?, ?,?, ?;?, ?asm? or
-?__attribute__? before ?unsigned?
-/usr/include/bits/types.h:155: error: expected ?=?, ?,?, ?;?, ?asm? or
-?__attribute__? before ?long?
-/usr/include/bits/types.h:157: error: expected ?=?, ?,?, ?;?, ?asm? or
-?__attribute__? before ?int?
-/usr/include/bits/types.h:158: error: expected ?=?, ?,?, ?;?, ?asm? or
-?__attribute__? before ?long?
-/usr/include/bits/types.h:159: error: expected ?=?, ?,?, ?;?, ?asm? or
-?__attribute__? before ?int?
-/usr/include/bits/types.h:162: error: expected ?=?, ?,?, ?;?, ?asm? or
-?__attribute__? before ?int?
-/usr/include/bits/types.h:165: error: expected ?=?, ?,?, ?;?, ?asm? or
-?__attribute__? before ?void?
-/usr/include/bits/types.h:168: error: expected ?=?, ?,?, ?;?, ?asm? or
-?__attribute__? before ?long?
-/usr/include/bits/types.h:173: error: expected ?=?, ?,?, ?;?, ?asm? or
-?__attribute__? before ?long?
-/usr/include/bits/types.h:174: error: expected ?=?, ?,?, ?;?, ?asm? or
-?__attribute__? before ?__SQUAD_TYPE?
-/usr/include/bits/types.h:177: error: expected ?=?, ?,?, ?;?, ?asm? or
-?__attribute__? before ?unsigned?
-/usr/include/bits/types.h:178: error: expected ?=?, ?,?, ?;?, ?asm? or
-?__attribute__? before ?__UQUAD_TYPE?
-/usr/include/bits/types.h:181: error: expected ?=?, ?,?, ?;?, ?asm? or
-?__attribute__? before ?unsigned?
-/usr/include/bits/types.h:182: error: expected ?=?, ?,?, ?;?, ?asm? or
-?__attribute__? before ?__UQUAD_TYPE?
-/usr/include/bits/types.h:184: error: expected ?=?, ?,?, ?;?, ?asm? or
-?__attribute__? before ?__SWORD_TYPE?
-/usr/include/bits/types.h:188: error: expected ?=?, ?,?, ?;?, ?asm? or
-?__attribute__? before ?__loff_t?
-/usr/include/bits/types.h:193: error: expected ?=?, ?,?, ?;?, ?asm? or
-?__attribute__? before ?__SWORD_TYPE?
-/usr/include/bits/types.h:196: error: expected ?=?, ?,?, ?;?, ?asm? or
-?__attribute__? before ?unsigned?
-In file included from /usr/include/stdlib.h:306,
-                 from conf.c:7:
-/usr/include/sys/types.h:41: error: expected ?=?, ?,?, ?;?, ?asm? or
-?__attribute__? before ?fsid_t?
-/usr/include/sys/types.h:46: error: expected ?=?, ?,?, ?;?, ?asm? or
-?__attribute__? before ?loff_t?
-/usr/include/sys/types.h:50: error: expected ?=?, ?,?, ?;?, ?asm? or
-?__attribute__? before ?ino_t?
-/usr/include/sys/types.h:62: error: expected ?=?, ?,?, ?;?, ?asm? or
-?__attribute__? before ?dev_t?
-/usr/include/sys/types.h:67: error: expected ?=?, ?,?, ?;?, ?asm? or
-?__attribute__? before ?gid_t?
-/usr/include/sys/types.h:72: error: expected ?=?, ?,?, ?;?, ?asm? or
-?__attribute__? before ?mode_t?
-/usr/include/sys/types.h:77: error: expected ?=?, ?,?, ?;?, ?asm? or
-?__attribute__? before ?nlink_t?
-/usr/include/sys/types.h:82: error: expected ?=?, ?,?, ?;?, ?asm? or
-?__attribute__? before ?uid_t?
-/usr/include/sys/types.h:88: error: expected ?=?, ?,?, ?;?, ?asm? or
-?__attribute__? before ?off_t?
-/usr/include/sys/types.h:100: error: expected ?=?, ?,?, ?;?, ?asm? or
-?__attribute__? before ?pid_t?
-/usr/include/sys/types.h:105: error: expected ?=?, ?,?, ?;?, ?asm? or
-?__attribute__? before ?id_t?
-/usr/include/sys/types.h:110: error: expected ?=?, ?,?, ?;?, ?asm? or
-?__attribute__? before ?ssize_t?
-/usr/include/sys/types.h:116: error: expected ?=?, ?,?, ?;?, ?asm? or
-?__attribute__? before ?daddr_t?
-/usr/include/sys/types.h:123: error: expected ?=?, ?,?, ?;?, ?asm? or
-?__attribute__? before ?key_t?
-In file included from /usr/include/sys/types.h:133,
-                 from /usr/include/stdlib.h:306,
-                 from conf.c:7:
-/usr/include/time.h:77: error: expected ?=?, ?,?, ?;?, ?asm? or
-?__attribute__? before ?time_t?
-/usr/include/time.h:93: error: expected ?=?, ?,?, ?;?, ?asm? or
-?__attribute__? before ?clockid_t?
-/usr/include/time.h:105: error: expected ?=?, ?,?, ?;?, ?asm? or
-?__attribute__? before ?timer_t?
-In file included from /usr/include/sys/select.h:44,
-                 from /usr/include/sys/types.h:220,
-                 from /usr/include/stdlib.h:306,
-                 from conf.c:7:
-/usr/include/time.h:123: error: expected specifier-qualifier-list before
-?__time_t?
-In file included from /usr/include/sys/select.h:46,
-                 from /usr/include/sys/types.h:220,
-                 from /usr/include/stdlib.h:306,
-                 from conf.c:7:
-/usr/include/bits/time.h:75: error: expected specifier-qualifier-list
-before ?__time_t?
-In file included from /usr/include/sys/types.h:220,
-                 from /usr/include/stdlib.h:306,
-                 from conf.c:7:
-/usr/include/sys/select.h:49: error: expected ?=?, ?,?, ?;?, ?asm? or
-?__attribute__? before ?suseconds_t?
-In file included from /usr/include/stdlib.h:306,
-                 from conf.c:7:
-/usr/include/sys/types.h:235: error: expected ?=?, ?,?, ?;?, ?asm? or
-?__attribute__? before ?blkcnt_t?
-/usr/include/sys/types.h:239: error: expected ?=?, ?,?, ?;?, ?asm? or
-?__attribute__? before ?fsblkcnt_t?
-/usr/include/sys/types.h:243: error: expected ?=?, ?,?, ?;?, ?asm? or
-?__attribute__? before ?fsfilcnt_t?
-In file included from /usr/include/pthread.h:20,
-                 from /usr/include/bits/uClibc_mutex.h:15,
-                 from /usr/include/bits/uClibc_stdio.h:119,
-                 from /usr/include/stdio.h:72,
-                 from conf.c:8:
-/usr/include/sched.h:40: error: expected ?)? before ?__pid?
-/usr/include/sched.h:44: error: expected ?)? before ?__pid?
-/usr/include/sched.h:47: error: expected ?)? before ?__pid?
-/usr/include/sched.h:51: error: expected ?)? before ?__pid?
-/usr/include/sched.h:63: error: expected ?)? before ?__pid?
-In file included from /usr/include/pthread.h:21,
-                 from /usr/include/bits/uClibc_mutex.h:15,
-                 from /usr/include/bits/uClibc_stdio.h:119,
-                 from /usr/include/stdio.h:72,
-                 from conf.c:8:
-/usr/include/time.h:61: error: expected ?=?, ?,?, ?;?, ?asm? or
-?__attribute__? before ?clock_t?
-/usr/include/time.h:186: error: expected ?=?, ?,?, ?;?, ?asm? or
-?__attribute__? before ?clock?
-/usr/include/time.h:189: error: expected ?=?, ?,?, ?;?, ?asm? or
-?__attribute__? before ?time?
-/usr/include/time.h:193: error: expected ?)? before ?__time1?
-/usr/include/time.h:198: error: expected ?=?, ?,?, ?;?, ?asm? or
-?__attribute__? before ?mktime?
-/usr/include/time.h:238: error: expected ?;?, ?,? or ?)? before ?*? token
-/usr/include/time.h:242: error: expected ?;?, ?,? or ?)? before ?*? token
-/usr/include/time.h:248: error: expected ?;?, ?,? or ?)? before ?*? token
-/usr/include/time.h:253: error: expected ?;?, ?,? or ?)? before ?*? token
-/usr/include/time.h:263: error: expected ?;?, ?,? or ?)? before ?*? token
-/usr/include/time.h:275: error: expected ?;?, ?,? or ?)? before ?*? token
-/usr/include/time.h:306: error: expected ?;?, ?,? or ?)? before ?*? token
-/usr/include/time.h:321: error: expected ?=?, ?,?, ?;?, ?asm? or
-?__attribute__? before ?timegm?
-/usr/include/time.h:324: error: expected ?=?, ?,?, ?;?, ?asm? or
-?__attribute__? before ?timelocal?
-/usr/include/time.h:341: error: expected ?)? before ?__clock_id?
-/usr/include/time.h:344: error: expected ?)? before ?__clock_id?
-/usr/include/time.h:347: error: expected ?)? before ?__clock_id?
-/usr/include/time.h:368: error: expected ?)? before ?__clock_id?
-/usr/include/time.h:373: error: expected ?)? before ?__timerid?
-/usr/include/time.h:376: error: expected ?)? before ?__timerid?
-/usr/include/time.h:381: error: expected ?)? before ?__timerid?
-/usr/include/time.h:385: error: expected ?)? before ?__timerid?
-In file included from /usr/include/stdio.h:72,
-                 from conf.c:8:
-/usr/include/bits/uClibc_stdio.h:171: error: expected
-specifier-qualifier-list before ?__off_t?
-/usr/include/bits/uClibc_stdio.h:182: error: expected
-specifier-qualifier-list before ?__off64_t?
-/usr/include/bits/uClibc_stdio.h:194: error: expected ?=?, ?,?, ?;?, ?asm?
-or ?__attribute__? before ?__offmax_t?
-/usr/include/bits/uClibc_stdio.h:202: error: expected ?=?, ?,?, ?;?, ?asm?
-or ?__attribute__? before ?__io_read_fn?
-/usr/include/bits/uClibc_stdio.h:203: error: expected ?=?, ?,?, ?;?, ?asm?
-or ?__attribute__? before ?__io_write_fn?
-/usr/include/bits/uClibc_stdio.h:209: error: expected declaration
-specifiers or ?...? before ?__offmax_t?
-/usr/include/bits/uClibc_stdio.h:213: error: expected
-specifier-qualifier-list before ?__io_read_fn?
-In file included from conf.c:10:
-/usr/include/unistd.h:236: error: expected ?=?, ?,?, ?;?, ?asm? or
-?__attribute__? before ?intptr_t?
-/usr/include/unistd.h:243: error: expected ?=?, ?,?, ?;?, ?asm? or
-?__attribute__? before ?socklen_t?
-/usr/include/unistd.h:299: error: expected ?=?, ?,?, ?;?, ?asm? or
-?__attribute__? before ?lseek?
-/usr/include/unistd.h:325: error: expected ?=?, ?,?, ?;?, ?asm? or
-?__attribute__? before ?read?
-/usr/include/unistd.h:331: error: expected ?=?, ?,?, ?;?, ?asm? or
-?__attribute__? before ?write?
-/usr/include/unistd.h:410: error: expected ?=?, ?,?, ?;?, ?asm? or
-?__attribute__? before ?ualarm?
-/usr/include/unistd.h:418: error: expected ?)? before ?__useconds?
-/usr/include/unistd.h:431: error: expected declaration specifiers or ?...?
-before ?__uid_t?
-/usr/include/unistd.h:431: error: expected declaration specifiers or ?...?
-before ?__gid_t?
-/usr/include/unistd.h:436: error: expected declaration specifiers or ?...?
-before ?__uid_t?
-/usr/include/unistd.h:436: error: expected declaration specifiers or ?...?
-before ?__gid_t?
-/usr/include/unistd.h:441: error: expected declaration specifiers or ?...?
-before ?__uid_t?
-/usr/include/unistd.h:441: error: expected declaration specifiers or ?...?
-before ?__gid_t?
-In file included from conf.c:10:
-/usr/include/unistd.h:571: error: expected ?=?, ?,?, ?;?, ?asm? or
-?__attribute__? before ?getpid?
-/usr/include/unistd.h:574: error: expected ?=?, ?,?, ?;?, ?asm? or
-?__attribute__? before ?getppid?
-/usr/include/unistd.h:579: error: expected ?=?, ?,?, ?;?, ?asm? or
-?__attribute__? before ?getpgrp?
-/usr/include/unistd.h:589: error: expected ?=?, ?,?, ?;?, ?asm? or
-?__attribute__? before ?__getpgid?
-/usr/include/unistd.h:598: error: expected ?)? before ?__pid?
-/usr/include/unistd.h:632: error: expected ?=?, ?,?, ?;?, ?asm? or
-?__attribute__? before ?setsid?
-/usr/include/unistd.h:640: error: expected ?=?, ?,?, ?;?, ?asm? or
-?__attribute__? before ?getuid?
-/usr/include/unistd.h:643: error: expected ?=?, ?,?, ?;?, ?asm? or
-?__attribute__? before ?geteuid?
-/usr/include/unistd.h:646: error: expected ?=?, ?,?, ?;?, ?asm? or
-?__attribute__? before ?getgid?
-/usr/include/unistd.h:649: error: expected ?=?, ?,?, ?;?, ?asm? or
-?__attribute__? before ?getegid?
-/usr/include/unistd.h:654: error: expected declaration specifiers or ?...?
-before ?__gid_t?
-/usr/include/unistd.h:665: error: expected ?)? before ?__uid?
-/usr/include/unistd.h:670: error: expected ?)? before ?__ruid?
-/usr/include/unistd.h:675: error: expected ?)? before ?__uid?
-/usr/include/unistd.h:682: error: expected ?)? before ?__gid?
-/usr/include/unistd.h:687: error: expected ?)? before ?__rgid?
-/usr/include/unistd.h:692: error: expected ?)? before ?__gid?
-/usr/include/unistd.h:722: error: expected ?=?, ?,?, ?;?, ?asm? or
-?__attribute__? before ?fork?
-/usr/include/unistd.h:730: error: expected ?=?, ?,?, ?;?, ?asm? or
-?__attribute__? before ?vfork?
-/usr/include/unistd.h:775: error: expected ?=?, ?,?, ?;?, ?asm? or
-?__attribute__? before ?readlink?
-/usr/include/unistd.h:805: error: expected ?=?, ?,?, ?;?, ?asm? or
-?__attribute__? before ?tcgetpgrp?
-/usr/include/unistd.h:808: error: expected declaration specifiers or ?...?
-before ?__pid_t?
-In file included from conf.c:10:
-/usr/include/unistd.h:953: error: expected declaration specifiers or ?...?
-before ?__off_t?
-/usr/include/unistd.h:975: error: expected declaration specifiers or ?...?
-before ?__off_t?
-/usr/include/unistd.h:1001: error: expected ?)? before ?__delta?
-/usr/include/unistd.h:1039: error: expected declaration specifiers or
-?...? before ?__off_t?
-In file included from /usr/include/sys/stat.h:105,
-                 from conf.c:12:
-/usr/include/bits/stat.h:88: error: expected specifier-qualifier-list
-before ?__ino_t?
-In file included from conf.c:12:
-/usr/include/sys/stat.h:280: error: expected declaration specifiers or
-?...? before ?__mode_t?
-/usr/include/sys/stat.h:293: error: expected declaration specifiers or
-?...? before ?__mode_t?
-/usr/include/sys/stat.h:307: error: expected ?=?, ?,?, ?;?, ?asm? or
-?__attribute__? before ?umask?
-/usr/include/sys/stat.h:316: error: expected declaration specifiers or
-?...? before ?__mode_t?
-/usr/include/sys/stat.h:331: error: expected declaration specifiers or
-?...? before ?__mode_t?
-/usr/include/sys/stat.h:331: error: expected declaration specifiers or
-?...? before ?__dev_t?
-/usr/include/sys/stat.h:345: error: expected declaration specifiers or
-?...? before ?__mode_t?
-make[1]: *** [conf.o] Error 1
-make[1]: Leaving directory `/build-tools/buildroot/package/config'
-make: *** [package/config/mconf] Error 2
+/opt/gcc-4.1.2-uclibc/bin/../lib/gcc/arm-linux-uclibc/4.1.2/../../../../arm-linux-uclibc/bin/ld:
+cannot find /opt/usr/local/arm/gcc-4.1.2-uclibc/lib/libc.so.0
+collect2: ld returned 1 exit status
 
+actually it is trying to get libc.so.s0 from a wrong path, i copied the
+files at that particular file path but it fails at some next stage giving
+the error details below...
 
-please guide me!!!
-what is it!
-i have buildroot successfully compiled, but i dont know, why appeares the
-error.
+/opt/atmel/gcc-4.1.2-uclibc/bin/../lib/gcc/arm-linux-uclibc/4.1.2/../../../../arm-linux-uclibc/lib/libstdc++.so:
+undefined reference to `__towupper_l'
+/opt/atmel/gcc-4.1.2-uclibc/bin/../lib/gcc/arm-linux-uclibc/4.1.2/../../../../arm-linux-uclibc/lib/libstdc++.so:
+undefined reference to `__strtold_l'
+/opt/atmel/gcc-4.1.2-uclibc/bin/../lib/gcc/arm-linux-uclibc/4.1.2/../../../../arm-linux-uclibc/lib/libstdc++.so:
+undefined reference to `__strftime_l'
+/opt/atmel/gcc-4.1.2-uclibc/bin/../lib/gcc/arm-linux-uclibc/4.1.2/../../../../arm-linux-uclibc/lib/libstdc++.so:
+undefined reference to `__nl_langinfo_l'
+/opt/atmel/gcc-4.1.2-uclibc/bin/../lib/gcc/arm-linux-uclibc/4.1.2/../../../../arm-linux-uclibc/lib/libstdc++.so:
+undefined reference to `__newlocale'
+/opt/atmel/gcc-4.1.2-uclibc/bin/../lib/gcc/arm-linux-uclibc/4.1.2/../../../../arm-linux-uclibc/lib/libstdc++.so:
+undefined reference to `__freelocale'
+/opt/atmel/gcc-4.1.2-uclibc/bin/../lib/gcc/arm-linux-uclibc/4.1.2/../../../../arm-linux-uclibc/lib/libstdc++.so:
+undefined reference to `__wcsxfrm_l'
+/opt/atmel/gcc-4.1.2-uclibc/bin/../lib/gcc/arm-linux-uclibc/4.1.2/../../../../arm-linux-uclibc/lib/libstdc++.so:
+undefined reference to `__iswctype_l'
+/opt/atmel/gcc-4.1.2-uclibc/bin/../lib/gcc/arm-linux-uclibc/4.1.2/../../../../arm-linux-uclibc/lib/libstdc++.so:
+undefined reference to `__towlower_l'
+/opt/atmel/gcc-4.1.2-uclibc/bin/../lib/gcc/arm-linux-uclibc/4.1.2/../../../../arm-linux-uclibc/lib/libstdc++.so:
+undefined reference to `__strtod_l'
+/opt/atmel/gcc-4.1.2-uclibc/bin/../lib/gcc/arm-linux-uclibc/4.1.2/../../../../arm-linux-uclibc/lib/libstdc++.so:
+undefined reference to `__uselocale'
+/opt/atmel/gcc-4.1.2-uclibc/bin/../lib/gcc/arm-linux-uclibc/4.1.2/../../../../arm-linux-uclibc/lib/libstdc++.so:
+undefined reference to `__strcoll_l'
+/opt/atmel/gcc-4.1.2-uclibc/bin/../lib/gcc/arm-linux-uclibc/4.1.2/../../../../arm-linux-uclibc/lib/libstdc++.so:
+undefined reference to `__wctype_l'
+/opt/atmel/gcc-4.1.2-uclibc/bin/../lib/gcc/arm-linux-uclibc/4.1.2/../../../../arm-linux-uclibc/lib/libstdc++.so:
+undefined reference to `__strxfrm_l'
+/opt/atmel/gcc-4.1.2-uclibc/bin/../lib/gcc/arm-linux-uclibc/4.1.2/../../../../arm-linux-uclibc/lib/libstdc++.so:
+undefined reference to `__wcsftime_l'
+/opt/atmel/gcc-4.1.2-uclibc/bin/../lib/gcc/arm-linux-uclibc/4.1.2/../../../../arm-linux-uclibc/lib/libstdc++.so:
+undefined reference to `__strtof_l'
+/opt/atmel/gcc-4.1.2-uclibc/bin/../lib/gcc/arm-linux-uclibc/4.1.2/../../../../arm-linux-uclibc/lib/libstdc++.so:
+undefined reference to `__wcscoll_l'
+/opt/atmel/gcc-4.1.2-uclibc/bin/../lib/gcc/arm-linux-uclibc/4.1.2/../../../../arm-linux-uclibc/lib/libstdc++.so:
+undefined reference to `__duplocale'
+
+please guide me how can i fix this issue and the possible reason, 
 ====================================================================== 
+
+---------------------------------------------------------------------- 
+ hmoffatt - 04-21-08 07:09  
+---------------------------------------------------------------------- 
+Where did you get your compiler? It doesn't seem to have been built with
+buildroot (in that case it would be installed in build_$arch/staging_dir,
+not in /opt/atmel). I think you should complain to the vendor, as
+buildroot can't fix a broken external toolchain. 
+
+---------------------------------------------------------------------- 
+ gebecom - 04-21-08 07:17  
+---------------------------------------------------------------------- 
+i have wrong kopiert, hier is the error
+how can i solve the question?
+Generating embedded module rules ...
+   [CC] stereorize.c -> stereorize.o
+   [CC] frame.c -> frame.o
+   [LD] stereorize.o frame.o -> stereorize
+/build-tools/buildroot/build_mipsel/staging_dir/bin-ccache/../lib/gcc/mipsel-linux-uclibc/3.4.6/../../../../mipsel-linux-uclibc/lib/libstdc++.so:
+undefined reference to `__towupper_l'
+/build-tools/buildroot/build_mipsel/staging_dir/bin-ccache/../lib/gcc/mipsel-linux-uclibc/3.4.6/../../../../mipsel-linux-uclibc/lib/libstdc++.so:
+undefined reference to `__strtold_l'
+/build-tools/buildroot/build_mipsel/staging_dir/bin-ccache/../lib/gcc/mipsel-linux-uclibc/3.4.6/../../../../mipsel-linux-uclibc/lib/libstdc++.so:
+undefined reference to `__strftime_l'
+/build-tools/buildroot/build_mipsel/staging_dir/bin-ccache/../lib/gcc/mipsel-linux-uclibc/3.4.6/../../../../mipsel-linux-uclibc/lib/libstdc++.so:
+undefined reference to `__nl_langinfo_l'
+/build-tools/buildroot/build_mipsel/staging_dir/bin-ccache/../lib/gcc/mipsel-linux-uclibc/3.4.6/../../../../mipsel-linux-uclibc/lib/libstdc++.so:
+undefined reference to `__newlocale'
+/build-tools/buildroot/build_mipsel/staging_dir/bin-ccache/../lib/gcc/mipsel-linux-uclibc/3.4.6/../../../../mipsel-linux-uclibc/lib/libstdc++.so:
+undefined reference to `__freelocale'
+/build-tools/buildroot/build_mipsel/staging_dir/bin-ccache/../lib/gcc/mipsel-linux-uclibc/3.4.6/../../../../mipsel-linux-uclibc/lib/libstdc++.so:
+undefined reference to `__wcsxfrm_l'
+/build-tools/buildroot/build_mipsel/staging_dir/bin-ccache/../lib/gcc/mipsel-linux-uclibc/3.4.6/../../../../mipsel-linux-uclibc/lib/libstdc++.so:
+undefined reference to `__iswctype_l'
+/build-tools/buildroot/build_mipsel/staging_dir/bin-ccache/../lib/gcc/mipsel-linux-uclibc/3.4.6/../../../../mipsel-linux-uclibc/lib/libstdc++.so:
+undefined reference to `__towlower_l'
+/build-tools/buildroot/build_mipsel/staging_dir/bin-ccache/../lib/gcc/mipsel-linux-uclibc/3.4.6/../../../../mipsel-linux-uclibc/lib/libstdc++.so:
+undefined reference to `__strtod_l'
+/build-tools/buildroot/build_mipsel/staging_dir/bin-ccache/../lib/gcc/mipsel-linux-uclibc/3.4.6/../../../../mipsel-linux-uclibc/lib/libstdc++.so:
+undefined reference to `__uselocale'
+/build-tools/buildroot/build_mipsel/staging_dir/bin-ccache/../lib/gcc/mipsel-linux-uclibc/3.4.6/../../../../mipsel-linux-uclibc/lib/libstdc++.so:
+undefined reference to `__strcoll_l'
+/build-tools/buildroot/build_mipsel/staging_dir/bin-ccache/../lib/gcc/mipsel-linux-uclibc/3.4.6/../../../../mipsel-linux-uclibc/lib/libstdc++.so:
+undefined reference to `__wctype_l'
+/build-tools/buildroot/build_mipsel/staging_dir/bin-ccache/../lib/gcc/mipsel-linux-uclibc/3.4.6/../../../../mipsel-linux-uclibc/lib/libstdc++.so:
+undefined reference to `__strxfrm_l'
+/build-tools/buildroot/build_mipsel/staging_dir/bin-ccache/../lib/gcc/mipsel-linux-uclibc/3.4.6/../../../../mipsel-linux-uclibc/lib/libstdc++.so:
+undefined reference to `__wcsftime_l'
+/build-tools/buildroot/build_mipsel/staging_dir/bin-ccache/../lib/gcc/mipsel-linux-uclibc/3.4.6/../../../../mipsel-linux-uclibc/lib/libstdc++.so:
+undefined reference to `__strtof_l'
+/build-tools/buildroot/build_mipsel/staging_dir/bin-ccache/../lib/gcc/mipsel-linux-uclibc/3.4.6/../../../../mipsel-linux-uclibc/lib/libstdc++.so:
+undefined reference to `__wcscoll_l'
+/build-tools/buildroot/build_mipsel/staging_dir/bin-ccache/../lib/gcc/mipsel-linux-uclibc/3.4.6/../../../../mipsel-linux-uclibc/lib/libstdc++.so:
+undefined reference to `__duplocale'
+collect2: ld returned 1 exit status
+make[1]: *** [stereorize] Error 1
+make: *** [utils] Error 2
+
+ 
+
+---------------------------------------------------------------------- 
+ hmoffatt - 04-21-08 07:24  
+---------------------------------------------------------------------- 
+It looks like whatever package you are building (stereorize.o etc) needs
+WCHAR support in uClibc which is disabled in your build. 
+
+make uclibc-menuconfig and turn on "wide character support" under "string
+and stdio" support. 
+
+---------------------------------------------------------------------- 
+ gebecom - 04-22-08 03:50  
+---------------------------------------------------------------------- 
+it works!
+thanks!
+
+ 
+
+---------------------------------------------------------------------- 
+ hmoffatt - 04-22-08 03:02  
+---------------------------------------------------------------------- 
+Can you tell us which package was failing to compile? Maybe we can prevent
+this problem from happening to other people. Thanks. 
+
+---------------------------------------------------------------------- 
+ gebecom - 04-22-08 03:56  
+---------------------------------------------------------------------- 
+i solve the problem with your guide.
+i will cross compile asterisk.(port to asterisk)
+after configure i excute make.
+but it fails, error is:
+[CC] hash/hash.c -> hash/hash.o
+   [CC] hash/hash_bigkey.c -> hash/hash_bigkey.o
+   [CC] hash/hash_buf.c -> hash/hash_buf.o
+   [CC] hash/hash_func.c -> hash/hash_func.o
+   [CC] hash/hash_log2.c -> hash/hash_log2.o
+   [CC] hash/hash_page.c -> hash/hash_page.o
+   [CC] hash/ndbm.c -> hash/ndbm.o
+   [CC] btree/bt_close.c -> btree/bt_close.o
+   [CC] btree/bt_conv.c -> btree/bt_conv.o
+   [CC] btree/bt_debug.c -> btree/bt_debug.o
+   [CC] btree/bt_delete.c -> btree/bt_delete.o
+   [CC] btree/bt_get.c -> btree/bt_get.o
+   [CC] btree/bt_open.c -> btree/bt_open.o
+   [CC] btree/bt_overflow.c -> btree/bt_overflow.o
+   [CC] btree/bt_page.c -> btree/bt_page.o
+   [CC] btree/bt_put.c -> btree/bt_put.o
+   [CC] btree/bt_search.c -> btree/bt_search.o
+   [CC] btree/bt_seq.c -> btree/bt_seq.o
+   [CC] btree/bt_split.c -> btree/bt_split.o
+   [CC] btree/bt_utils.c -> btree/bt_utils.o
+   [CC] db/db.c -> db/db.o
+   [CC] mpool/mpool.c -> mpool/mpool.o
+   [CC] recno/rec_close.c -> recno/rec_close.o
+   [CC] recno/rec_delete.c -> recno/rec_delete.o
+   [CC] recno/rec_get.c -> recno/rec_get.o
+   [CC] recno/rec_open.c -> recno/rec_open.o
+   [CC] recno/rec_put.c -> recno/rec_put.o
+   [CC] recno/rec_search.c -> recno/rec_search.o
+   [CC] recno/rec_seq.c -> recno/rec_seq.o
+   [CC] recno/rec_utils.c -> recno/rec_utils.o
+   [AR] hash/hash.o hash/hash_bigkey.o hash/hash_buf.o hash/hash_func.o
+hash/hash_log2.o hash/hash_page.o hash/ndbm.o btree/bt_close.o
+btree/bt_conv.o btree/bt_debug.o btree/bt_delete.o btree/bt_get.o
+btree/bt_open.o btree/bt_overflow.o btree/bt_page.o btree/bt_put.o
+btree/bt_search.o btree/bt_seq.o btree/bt_split.o btree/bt_utils.o db/db.o
+mpool/mpool.o recno/rec_close.o recno/rec_delete.o recno/rec_get.o
+recno/rec_open.o recno/rec_put.o recno/rec_search.o recno/rec_seq.o
+recno/rec_utils.o -> libdb1.a
+   [LD] abstract_jb.o acl.o aescrypt.o aeskey.o aestab.o alaw.o app.o
+ast_expr2.o ast_expr2f.o asterisk.o astmm.o astobj2.o audiohook.o
+autoservice.o callerid.o cdr.o channel.o chanvars.o cli.o config.o
+cryptostub.o db.o devicestate.o dial.o dns.o dnsmgr.o dsp.o enum.o file.o
+fixedjitterbuf.o frame.o fskmodem.o global_datastores.o http.o image.o
+indications.o io.o jitterbuf.o loader.o logger.o manager.o md5.o netsock.o
+pbx.o plc.o privacy.o rtp.o say.o sched.o sha1.o slinfactory.o srv.o
+stdtime/localtime.o strcompat.o tdd.o term.o threadstorage.o translate.o
+udptl.o ulaw.o utils.o editline/libedit.a db1-ast/libdb1.a -> asterisk
+dns.o: In function `ast_search_dns':
+/gebecom/asterisk-1.4.19/main/dns.c:285: undefined reference to
+`__res_close'
+collect2: ld returned 1 exit status
+make[1]: *** [asterisk] Error 1
+make: *** [main] Error 2
+
+please guide me how can i fix this issue and the possible reason,
+thanks in advances 
+
+---------------------------------------------------------------------- 
+ bernhardf - 04-22-08 05:29  
+---------------------------------------------------------------------- 
+asterisk should be fixed not to rely on such BSD-ism.
+I suppose you fix asterisk and submit your patch to the
+asterisk-developers.
+
+As a quick workaround, enable res_close in uClibc (IIRC in networking,
+marged BSD-compat). 
+
+---------------------------------------------------------------------- 
+ hmoffatt - 04-22-08 06:56  
+---------------------------------------------------------------------- 
+Are you using the asterisk package in buildroot (package/asterisk), or
+simply using the buildroot-generated toolchain to compile it yourself?
+
+I think the latter because you mention version 1.4.9, while the asterisk
+package in buildroot specifies 1.6.0-beta6.
+
+It looks like asterisk is calling internal glibc functions to do DNS
+resolution. At this point it's really a uClibc issue rather than a
+buildroot issue, and you really can't expect uClibc to be providing
+internal glibc interfaces.
+
+The buildroot asterisk package has a patch which MAY help - look in
+package/asterisk. 
+
+---------------------------------------------------------------------- 
+ gebecom - 04-22-08 07:50  
+---------------------------------------------------------------------- 
+i use the buildroot toolchain to compile asterisk itself.
+wenn i can't expect uClibc to be providing internal glibc interfaces, whan
+can i do?
+i have turn on the res_close support in uclibc.but it doesnt work. 
 
 Issue History 
 Date Modified   Username       Field                    Change               
 ====================================================================== 
-04-22-08 07:42  gebecom        New Issue                                    
-04-22-08 07:42  gebecom        Status                   new => assigned     
-04-22-08 07:42  gebecom        Assigned To               => buildroot       
+04-21-08 01:17  gebecom        New Issue                                    
+04-21-08 01:17  gebecom        Status                   new => assigned     
+04-21-08 01:17  gebecom        Assigned To               => buildroot       
+04-21-08 07:09  hmoffatt       Note Added: 0006794                          
+04-21-08 07:14  gebecom        Issue Monitored: gebecom                     
+04-21-08 07:16  gebecom        Note Added: 0006804                          
+04-21-08 07:17  gebecom        Note Edited: 0006804                         
+04-21-08 07:24  hmoffatt       Note Added: 0006814                          
+04-21-08 07:35  gebecom        Note Added: 0006824                          
+04-21-08 07:37  gebecom        Note Edited: 0006824                         
+04-21-08 07:38  gebecom        Note Edited: 0006824                         
+04-21-08 08:04  gebecom        Note Added: 0006834                          
+04-22-08 02:46  gebecom        Note Deleted: 0006834                        
+04-22-08 02:46  gebecom        Note Edited: 0006824                         
+04-22-08 03:02  hmoffatt       Note Added: 0006874                          
+04-22-08 03:50  gebecom        Note Edited: 0006824                         
+04-22-08 03:56  gebecom        Note Added: 0006884                          
+04-22-08 05:29  bernhardf      Note Added: 0006904                          
+04-22-08 06:56  hmoffatt       Note Added: 0006914                          
+04-22-08 07:50  gebecom        Note Added: 0006954                          
 ======================================================================
