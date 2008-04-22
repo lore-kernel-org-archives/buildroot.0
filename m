@@ -1,35 +1,38 @@
-From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Tue, 22 Apr 2008 09:54:21 +0200
-Subject: [Buildroot] Improper device nodes
-	created	insideproject_build_arm/uclibc/root/dev/
-In-Reply-To: <20080422015601.GA20995@cloud.net.au> (Hamish Moffatt's message
-	of "Tue\, 22 Apr 2008 11\:56\:01 +1000")
-References: <16803332.post@talk.nabble.com>
-	<20080421140757.GC21702@cloud.net.au> <16819059.post@talk.nabble.com>
-	<20080422005042.GA19794@cloud.net.au>
-	<5BF78BCE8D9BF14A83F836BD9E3916BA0DDC58@blrms.slti.sanyo.co.in>
-	<20080422015601.GA20995@cloud.net.au>
-Message-ID: <871w4yqq8i.fsf@macbook.be.48ers.dk>
+From: RainerB <berns@BEKA-Elektronik.de>
+Date: Tue, 22 Apr 2008 00:59:05 -0700 (PDT)
+Subject: [Buildroot]  Buildroot fails with GTK+
+Message-ID: <16823504.post@talk.nabble.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Hamish" == Hamish Moffatt <hamish@cloud.net.au> writes:
 
 Hi,
 
- >> > The build process is not intended to create proper device nodes on
- >> desk (non-root user can't do that)
- >> i have logged into console with su root. i am using root shell for this
- >> 
- >> root at guru_vlinux:/opt/buildroot_plain# whoami
- >> root
+when i use buildroot (/trunk from 18.04.2008) for at91sam9261ek it creates
+the root file system and the toolchain. 
+If i select gtk+ it fails during atk 1.9.1 Building with the following
+message:
 
-Don't compile as root! Or atleast, don't come complaining when we make
-a typo somewhere and accidently remove something critical on your
-machine like /lib ;)
+grep:
+/usr/local/development/buildroot/build_arm/staging_dir/usr/local/development/buildroot/build_arm/libglib2-2.15.4/glib/libglib-2.0.la:
+No such file or directory
 
+The file libglib-2.0.1a exist in
+...../buildroot/build_arm/libglib2-2.15.4/glib/ but not in the above
+nonsense directory.
+
+The log file is attached.
+
+Thanks for any help.
+
+Regards
+
+Rainer
+
+http://www.nabble.com/file/p16823504/test.log test.log 
 -- 
-Bye, Peter Korsgaard
+View this message in context: http://www.nabble.com/Buildroot-fails-with-GTK%2B-tp16823504p16823504.html
+Sent from the BuildRoot mailing list archive at Nabble.com.
