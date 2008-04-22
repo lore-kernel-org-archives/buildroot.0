@@ -1,7 +1,7 @@
 From: bugs at busybox.net <bugs@busybox.net>
-Date: Tue, 22 Apr 2008 03:56:33 -0700
+Date: Tue, 22 Apr 2008 05:29:10 -0700
 Subject: [Buildroot] [buildroot 0003004]: undefined reference problem
-Message-ID: <d2e2a8b22d029db05b12603eab0999cb@busybox.net>
+Message-ID: <6dfc5dde2a9d15d15a47990d7afaa1f7@busybox.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -25,7 +25,7 @@ Priority:                   normal
 Status:                     assigned
 ====================================================================== 
 Date Submitted:             04-21-2008 01:17 PDT
-Last Modified:              04-22-2008 03:56 PDT
+Last Modified:              04-22-2008 05:29 PDT
 ====================================================================== 
 Summary:                    undefined reference problem
 Description: 
@@ -223,6 +223,16 @@ make: *** [main] Error 2
 please guide me how can i fix this issue and the possible reason,
 thanks in advances 
 
+---------------------------------------------------------------------- 
+ bernhardf - 04-22-08 05:29  
+---------------------------------------------------------------------- 
+asterisk should be fixed not to rely on such BSD-ism.
+I suppose you fix asterisk and submit your patch to the
+asterisk-developers.
+
+As a quick workaround, enable res_close in uClibc (IIRC in networking,
+marged BSD-compat). 
+
 Issue History 
 Date Modified   Username       Field                    Change               
 ====================================================================== 
@@ -243,4 +253,5 @@ Date Modified   Username       Field                    Change
 04-22-08 03:02  hmoffatt       Note Added: 0006874                          
 04-22-08 03:50  gebecom        Note Edited: 0006824                         
 04-22-08 03:56  gebecom        Note Added: 0006884                          
+04-22-08 05:29  bernhardf      Note Added: 0006904                          
 ======================================================================
