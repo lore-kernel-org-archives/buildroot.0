@@ -1,28 +1,32 @@
-From: hartleys <hartleys@visionengravers.com>
-Date: Tue, 22 Apr 2008 13:59:01 -0400
-Subject: [Buildroot] trouble building grep
-Message-ID: <1CF6EDDF0820924DA43C9A52FE7325950ABFA085@MI8NYCMAIL17.Mi8.com>
+From: Peter Korsgaard <jacmet@uclibc.org>
+Date: Tue, 22 Apr 2008 20:24:24 +0200
+Subject: [Buildroot] Improper device nodes
+	createdinside	project_build_arm/uclibc/root/dev/
+In-Reply-To: <040301c8a49d$c1408170$050514ac@atmel.com> (Ulf Samuelsson's
+	message of "Tue\, 22 Apr 2008 18\:40\:53 +0200")
+References: <16803332.post@talk.nabble.com>
+	<20080421140757.GC21702@cloud.net.au> <16819059.post@talk.nabble.com>
+	<20080422005042.GA19794@cloud.net.au>
+	<8763uaqs3b.fsf@macbook.be.48ers.dk>
+	<20080422095909.GA31643@cloud.net.au>
+	<040301c8a49d$c1408170$050514ac@atmel.com>
+Message-ID: <87tzhtoihz.fsf@macbook.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello all,
+>>>>> "Ulf" == Ulf Samuelsson <ulf.samuelsson@atmel.com> writes:
 
-I'm trying to cross compile grep for an ARM processor and have a problem
-I can't work out.
+Hi,
 
-As far as I can tell the dependants (uclibc, gettext and libintl) are
-being built with no problem. When the make runs for grep it appears to
-get configured fine but during the actual build I get error messages
-that I think are during the link of libgreputils.a. I get undefined
-reference messages for libintl_gettext at various lines in the source
-then the build stops. 
+ Ulf> Maybe we should have a configuration item allowing this to happen
+ Ulf> automatically using "sudo".
 
-I'm kind of stuck. Any ideas what the problem could be? I already
-checked my $(STAGING_DIR)/usr/lib directory and the libgettext and
-libintl files are there.
+I respectfully disagree. It doesn't add anything to using the tarball
+option, and it opens up a can of worms (system libs getting
+overridden).
 
-Thanks,
-Hartley
+-- 
+Bye, Peter Korsgaard
