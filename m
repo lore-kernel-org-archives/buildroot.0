@@ -1,7 +1,7 @@
 From: jacmet at uclibc.org <jacmet@uclibc.org>
-Date: Wed, 23 Apr 2008 06:03:47 -0700 (PDT)
+Date: Wed, 23 Apr 2008 06:03:51 -0700 (PDT)
 Subject: [Buildroot] svn commit: trunk/buildroot/target/u-boot
-Message-ID: <20080423130347.A46833C738@busybox.net>
+Message-ID: <20080423130351.559DF3C742@busybox.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -9,11 +9,11 @@ Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
 Author: jacmet
-Date: 2008-04-23 06:03:47 -0700 (Wed, 23 Apr 2008)
-New Revision: 21807
+Date: 2008-04-23 06:03:50 -0700 (Wed, 23 Apr 2008)
+New Revision: 21808
 
 Log:
-u-boot: clean: also remove mkimage from staging_dir
+u-boot: use correct ARCH
 
 
 Modified:
@@ -23,13 +23,23 @@ Modified:
 Changeset:
 Modified: trunk/buildroot/target/u-boot/Makefile.in
 ===================================================================
---- trunk/buildroot/target/u-boot/Makefile.in	2008-04-23 10:30:03 UTC (rev 21806)
-+++ trunk/buildroot/target/u-boot/Makefile.in	2008-04-23 13:03:47 UTC (rev 21807)
-@@ -117,6 +117,7 @@
+--- trunk/buildroot/target/u-boot/Makefile.in	2008-04-23 13:03:47 UTC (rev 21807)
++++ trunk/buildroot/target/u-boot/Makefile.in	2008-04-23 13:03:50 UTC (rev 21808)
+@@ -12,7 +12,7 @@
+ U_BOOT_BIN:=u-boot.bin
+ U_BOOT_TOOLS_BIN:=mkimage
+ # u-boot still uses arch=ppc for powerpc
+-U_BOOT_ARCH=$(echo $(KERNEL_ARCH)|$(SED) 's/powerpc/ppc/')
++U_BOOT_ARCH:=$(shell echo $(KERNEL_ARCH)|$(HOST_SED_DIR)/bin/sed 's/powerpc/ppc/')
  
- u-boot-clean:
- 	-$(MAKE) -C $(U_BOOT_DIR) clean
-+	rm -f $(STAGING_DIR)/usr/bin/$(U_BOOT_TOOLS_BIN)
+ ifneq ($(BR2_TARGET_U_BOOT_CONFIG_BOARD),)
+ U_BOOT_INC_CONF_FILE:=$(U_BOOT_DIR)/include/configs/$(subst _config,,$(BR2_TARGET_U_BOOT_CONFIG_BOARD)).h
+@@ -106,7 +106,7 @@
+ 	$(TARGET_CONFIGURE_OPTS) \
+ 		CFLAGS="$(TARGET_CFLAGS)" \
+ 		LDFLAGS="$(TARGET_LDFLAGS)" \
+-		$(MAKE) CROSS_COMPILE="$(TARGET_CROSS)" ARCH=$(KERNEL_ARCH) \
++		$(MAKE) CROSS_COMPILE="$(TARGET_CROSS)" ARCH=$(U_BOOT_ARCH) \
+ 		 -C $(U_BOOT_DIR)
  
- u-boot-dirclean:
- 	rm -rf $(U_BOOT_DIR)
+ $(BINARIES_DIR)/$(U_BOOT_BIN): $(U_BOOT_DIR)/$(U_BOOT_BIN)
