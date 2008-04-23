@@ -1,58 +1,46 @@
-From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Wed, 23 Apr 2008 12:10:12 +0200
-Subject: [Buildroot] Failing NFS root mount (SOLVED)
-In-Reply-To: <076001c8a527$0105e410$ad289e86@LPSC0173W> (Guillaume Dargaud's
-	message of "Wed\, 23 Apr 2008 11\:47\:06 +0200")
-References: <067701c8a475$2df6d860$ad289e86@LPSC0173W>
-	<20080422140727.GA32518@cloud.net.au>
-	<06fe01c8a51f$e37d5470$ad289e86@LPSC0173W>
-	<87iqy9j5ds.fsf@macbook.be.48ers.dk>
-	<076001c8a527$0105e410$ad289e86@LPSC0173W>
-Message-ID: <8763u8khkr.fsf@macbook.be.48ers.dk>
+From: jacmet at uclibc.org <jacmet@uclibc.org>
+Date: Wed, 23 Apr 2008 03:30:04 -0700 (PDT)
+Subject: [Buildroot] svn commit: trunk/buildroot/target/u-boot
+Message-ID: <20080423103004.1CDDA3C737@busybox.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Guillaume" == Guillaume Dargaud <dargaud@lpsc.in2p3.fr> writes:
+Author: jacmet
+Date: 2008-04-23 03:30:03 -0700 (Wed, 23 Apr 2008)
+New Revision: 21806
 
- Guillaume> In retrospect that makes a lot of sense... (but then
- Guillaume> again, so do many things in life).
+Log:
+u-boot: set ARCH and CROSS_COMPILE
 
-;)
 
- Guillaume> I was exporting with NFS the
- Guillaume> project_build_powerpc/genepy/root directory to mount as
- Guillaume> root. And that failed.
+Modified:
+   trunk/buildroot/target/u-boot/Makefile.in
 
-Ah yes, you are not supposed to do that. Instead enable tarball
-creation under target options and untar that file uner your nfsroot
-as root to get the proper permissions/devices.
 
-See the 'Improper device nodes' thread on the list for details.
-
- Guillaume> But then if do:
- Guillaume> mount -o loop binaries/genepy/rootfs.powerpc.ext2 /media/loop/
- Guillaume> And export /media/loop instead, I can boot fine !!!
-
-That's an option as well, but the tarball is handier.
-
- Guillaume> Doing a diff between the two dirs reveals that for
- Guillaume> instance the devices are normal files in the project
- Guillaume> directory...
-
-Yes. This is handled by fakeroot so you can compile as non-root.
-
- >> Well, you'll need to unpack the tarball as root in order to create the
- >> device nodes and get the permissions right on stuff like /etc/passwd -
- >> If you do that, you shouldn't need to do any additional chown.
-
- Guillaume> I saw your reply right after solving it and that confirms it...
-
- Guillaume> Thanks to all who contributed.
-
-You're welcome.
-
--- 
-Bye, Peter Korsgaard
+Changeset:
+Modified: trunk/buildroot/target/u-boot/Makefile.in
+===================================================================
+--- trunk/buildroot/target/u-boot/Makefile.in	2008-04-23 07:22:31 UTC (rev 21805)
++++ trunk/buildroot/target/u-boot/Makefile.in	2008-04-23 10:30:03 UTC (rev 21806)
+@@ -11,6 +11,8 @@
+ U_BOOT_CAT:=$(BZCAT)
+ U_BOOT_BIN:=u-boot.bin
+ U_BOOT_TOOLS_BIN:=mkimage
++# u-boot still uses arch=ppc for powerpc
++U_BOOT_ARCH=$(echo $(KERNEL_ARCH)|$(SED) 's/powerpc/ppc/')
+ 
+ ifneq ($(BR2_TARGET_U_BOOT_CONFIG_BOARD),)
+ U_BOOT_INC_CONF_FILE:=$(U_BOOT_DIR)/include/configs/$(subst _config,,$(BR2_TARGET_U_BOOT_CONFIG_BOARD)).h
+@@ -104,7 +106,8 @@
+ 	$(TARGET_CONFIGURE_OPTS) \
+ 		CFLAGS="$(TARGET_CFLAGS)" \
+ 		LDFLAGS="$(TARGET_LDFLAGS)" \
+-		$(MAKE) -C $(U_BOOT_DIR)
++		$(MAKE) CROSS_COMPILE="$(TARGET_CROSS)" ARCH=$(KERNEL_ARCH) \
++		 -C $(U_BOOT_DIR)
+ 
+ $(BINARIES_DIR)/$(U_BOOT_BIN): $(U_BOOT_DIR)/$(U_BOOT_BIN)
+ 	cp -dpf $(U_BOOT_DIR)/$(U_BOOT_BIN) $(BINARIES_DIR)
