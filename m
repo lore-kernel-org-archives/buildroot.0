@@ -1,51 +1,48 @@
 From: <bogus@does.not.exist.com>
 Date: Wed, 23 Apr 2008 14:39:25 -0000
 Subject: No subject
-Message-ID: <mailman.7.1213795026.1342.buildroot@uclibc.org>
+Message-ID: <mailman.8.1213863099.1342.buildroot@uclibc.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-make[1]: Entering directory
-`/media/EkstraDisk/buildroot/build_i686/dnsmasq-2.41'
-cd src && /usr/bin/make \
- DBUS_MINOR=" `echo -DNO_IPV6 | ../bld/pkg-wrapper pkg-config --modversion
-dbus-1 | nawk -F . -- '{ if ($(NF-1)) print \"-DDBUS_MINOR=\"$(NF-1) }'`" 
-\
- DBUS_CFLAGS="`echo -DNO_IPV6 | ../bld/pkg-wrapper pkg-config --cflags
-dbus-1`"  \
- DBUS_LIBS="  `echo -DNO_IPV6 | ../bld/pkg-wrapper pkg-config --libs
-dbus-1`"  \
- SUNOS_LIBS=" `if uname | grep SunOS 2>&1 >/dev/null; then echo -lsocket
--lnsl -lposix4; fi `" \
- SUNOS_VER="  `if uname | grep SunOS 2>&1 >/dev/null; then uname -r | nawk
--F . -- '{ print \"-DSUNOS_VER=\"$2 }'; fi`" \
- -f ../bld/Makefile dnsmasq 
-/bin/sh: line 1: nawk: command not found
 
-Don't you have nawk installed? On my system, nawk is a link to gawk.
+Modified:
+   trunk/buildroot/Makefile
+   trunk/buildroot/package/config/Makefile
 
-Seems like we don't currently check for awk in dependencies.sh, will fix 
 
----------------------------------------------------------------------- 
- jacmet - 06-18-08 06:17  
----------------------------------------------------------------------- 
-I have now added an awk check to dependencies.sh and forced dnsmasq to use
-awk rather than nawk, so closing issue. 
+Changeset:
+Modified: trunk/buildroot/Makefile
+===================================================================
+--- trunk/buildroot/Makefile	2008-06-19 07:24:59 UTC (rev 22448)
++++ trunk/buildroot/Makefile	2008-06-19 08:11:35 UTC (rev 22449)
+@@ -170,6 +170,8 @@
+ HOST_EXEEXT:=.exe
+ HOST_LIBEXT:=.lib
+ HOST_SHREXT:=.dll
++HOST_LOADLIBES="-lcurses -lintl"
++export HOST_LOADLIBES
+ endif
+ ifneq ($(findstring mingw,$(BR2_GNU_BUILD_SUFFIX)),)
+ HOST_EXEEXT:=.exe
 
-Issue History 
-Date Modified   Username       Field                    Change               
-====================================================================== 
-06-14-08 17:01  KHAksnes       New Issue                                    
-06-14-08 17:01  KHAksnes       Status                   new => assigned     
-06-14-08 17:01  KHAksnes       Assigned To               => buildroot       
-06-15-08 13:40  jacmet         Note Added: 0008264                          
-06-15-08 14:07  KHAksnes       Note Added: 0008274                          
-06-15-08 14:08  KHAksnes       File Added: compilelog                       
-06-18-08 06:06  jacmet         Note Added: 0008384                          
-06-18-08 06:17  jacmet         Status                   assigned => resolved
-06-18-08 06:17  jacmet         Resolution               open => fixed       
-06-18-08 06:17  jacmet         Note Added: 0008394                          
-======================================================================
+Modified: trunk/buildroot/package/config/Makefile
+===================================================================
+--- trunk/buildroot/package/config/Makefile	2008-06-19 07:24:59 UTC (rev 22448)
++++ trunk/buildroot/package/config/Makefile	2008-06-19 08:11:35 UTC (rev 22449)
+@@ -17,10 +17,10 @@
+ host-cobjs := $(sort $(foreach m,$(__hostprogs),$($(m)-objs)))
+ 
+ $(host-csingle): %: %.c
+-	$(HOSTCC) $(HOST_EXTRACFLAGS) $(HOSTCFLAGS) $(HOSTCFLAGS_$@) $(HOST_LOADLIBES) $< -o $@
++	$(HOSTCC) $(HOST_EXTRACFLAGS) $(HOSTCFLAGS) $(HOSTCFLAGS_$@) $< $(HOST_LOADLIBES) -o $@
+ 
+ $(host-cmulti): %: $(host-cobjs) $(host-cshlib)
+-	$(HOSTCC) $(HOST_EXTRACFLAGS) $(HOSTCFLAGS) $(HOSTCFLAGS_$@) $(HOST_LOADLIBES) $($@-objs) -o $@
++	$(HOSTCC) $(HOST_EXTRACFLAGS) $(HOSTCFLAGS) $(HOSTCFLAGS_$@) $($@-objs) $(HOST_LOADLIBES) -o $@
+ 
+ $(host-cobjs): %.o: %.c
+ 	$(HOSTCC) $(HOST_EXTRACFLAGS) $(HOSTCFLAGS) $(HOSTCFLAGS_$@) -c $< -o $@
