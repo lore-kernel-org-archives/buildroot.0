@@ -1,7 +1,7 @@
 From: <bogus@does.not.exist.com>
 Date: Wed, 23 Apr 2008 14:39:25 -0000
 Subject: No subject
-Message-ID: <mailman.6.1213794405.1342.buildroot@uclibc.org>
+Message-ID: <mailman.7.1213795026.1342.buildroot@uclibc.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -29,6 +29,12 @@ Don't you have nawk installed? On my system, nawk is a link to gawk.
 
 Seems like we don't currently check for awk in dependencies.sh, will fix 
 
+---------------------------------------------------------------------- 
+ jacmet - 06-18-08 06:17  
+---------------------------------------------------------------------- 
+I have now added an awk check to dependencies.sh and forced dnsmasq to use
+awk rather than nawk, so closing issue. 
+
 Issue History 
 Date Modified   Username       Field                    Change               
 ====================================================================== 
@@ -39,4 +45,7 @@ Date Modified   Username       Field                    Change
 06-15-08 14:07  KHAksnes       Note Added: 0008274                          
 06-15-08 14:08  KHAksnes       File Added: compilelog                       
 06-18-08 06:06  jacmet         Note Added: 0008384                          
+06-18-08 06:17  jacmet         Status                   assigned => resolved
+06-18-08 06:17  jacmet         Resolution               open => fixed       
+06-18-08 06:17  jacmet         Note Added: 0008394                          
 ======================================================================
