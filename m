@@ -1,33 +1,41 @@
-From: Bernhard Fischer <rep.dot.nop@gmail.com>
-Date: Wed, 23 Apr 2008 19:35:57 +0200
+From: Peter Korsgaard <jacmet@uclibc.org>
+Date: Wed, 23 Apr 2008 20:05:20 +0200
 Subject: [Buildroot] svn commit: trunk/buildroot/target/u-boot
-In-Reply-To: <010901c8a560$2493f960$020514ac@atmel.com>
-References: <20080423145238.B61043C759@busybox.net>
-	<d6cda7730804230759w3814c841iba5a7255ddf6a734@mail.gmail.com>
-	<010901c8a560$2493f960$020514ac@atmel.com>
-Message-ID: <20080423173556.GC10167@mx.loc>
+In-Reply-To: <010801c8a560$21c744d0$020514ac@atmel.com> (Ulf Samuelsson's
+	message of "Wed\, 23 Apr 2008 18\:09\:48 +0200")
+References: <20080423130355.7668C3C747@busybox.net>
+	<010801c8a560$21c744d0$020514ac@atmel.com>
+Message-ID: <87skxcfnvj.fsf@macbook.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Wed, Apr 23, 2008 at 06:22:46PM +0200, Ulf Samuelsson wrote:
->
->> Hmmm I have never seen patch.$ARCH in buildroot.
->> 
->> It's usually -$ARCH.patch like toolchain/kernel-headers
->> package/qtopia4 and others.
->
->
->If you patch with "*.patch",  then *all* architecture dependent patches will be applied
->if you use "-$ARCH.patch"
->
->You want to apply 
->* architecture independent patches
->* architecture dependent patches pertaining to your architecture.
->
->so ".patch.$ARCH" is much cleaner
+>>>>> "Ulf" == Ulf Samuelsson <ulf.samuelsson@atmel.com> writes:
 
-The concept of per-arch patches is broken per se. You're better off to
-fix or drop the dysfunctional patches.
+ >> Author: jacmet
+ >> Date: 2008-04-23 06:03:53 -0700 (Wed, 23 Apr 2008)
+ >> New Revision: 21809
+ >> 
+ >> Log:
+ >> u-boot: tools in target (mkimage, fw_printenv and fw_setenv)
+ >> 
+ >> 
+
+ Ulf> Why install mkimage in the target???
+
+To create images and more importantly, to see the version info of
+images in the flash (mkimage -l).
+
+ Ulf> It is used to create the linux kernel image so that U-Boot can load it.
+ Ulf> If you download a new image, I would expect it is already created
+ Ulf> using mkimage on the host.
+
+Sure, but uImages are not just for kernels, E.G. the board I'm working
+on has firmware for 2 fpgas in seperate uImages. It's handy to be able
+to check the version info of the installed images under Linux, similar
+to the imls u-boot command.
+
+-- 
+Bye, Peter Korsgaard
