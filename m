@@ -1,7 +1,7 @@
 From: <bogus@does.not.exist.com>
 Date: Wed, 23 Apr 2008 14:39:25 -0000
 Subject: No subject
-Message-ID: <mailman.10.1213863115.1342.buildroot@uclibc.org>
+Message-ID: <mailman.11.1213893916.1342.buildroot@uclibc.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -31,4 +31,8 @@ Changeset:
 Sorry, the patch is too large to include (4155 lines).
 Please use ViewCVS to see it!
 
-http://uclibc.org/cgi-bin/viewcvs.cgi?view=rev&root=svn&rev=22451
+http://uclibc.org/cgi-bin/viewcvs.cgi?view=3Drev&root=3Dsvn&rev=3D22451
+_______________________________________________
+buildroot mailing list
+buildroot at uclibc.org
+http://busybox.net/mailman/listinfo/buildroot
