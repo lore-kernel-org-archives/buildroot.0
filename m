@@ -1,7 +1,7 @@
 From: jacmet at uclibc.org <jacmet@uclibc.org>
-Date: Wed, 23 Apr 2008 07:52:36 -0700 (PDT)
+Date: Wed, 23 Apr 2008 07:52:38 -0700 (PDT)
 Subject: [Buildroot] svn commit: trunk/buildroot/target/u-boot
-Message-ID: <20080423145236.263C63C74F@busybox.net>
+Message-ID: <20080423145238.B61043C759@busybox.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -9,11 +9,14 @@ Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
 Author: jacmet
-Date: 2008-04-23 07:52:35 -0700 (Wed, 23 Apr 2008)
-New Revision: 21810
+Date: 2008-04-23 07:52:38 -0700 (Wed, 23 Apr 2008)
+New Revision: 21811
 
 Log:
-u-boot: don't error on existing symlink
+u-boot: support platform-independent patches
+
+Support platform independent patches (.patch) and use .patch.$ARCH for
+platform dependent ones like elsewhere.
 
 
 Modified:
@@ -23,14 +26,15 @@ Modified:
 Changeset:
 Modified: trunk/buildroot/target/u-boot/Makefile.in
 ===================================================================
---- trunk/buildroot/target/u-boot/Makefile.in	2008-04-23 13:03:53 UTC (rev 21809)
-+++ trunk/buildroot/target/u-boot/Makefile.in	2008-04-23 14:52:35 UTC (rev 21810)
-@@ -132,7 +132,7 @@
- 		-DUSE_HOSTCC -o $@ \
- 		$(U_BOOT_DIR)/tools/env/*.c $(U_BOOT_DIR)/tools/crc32.c
- 	$(STRIPCMD) $(STRIP_STRIP_UNNEEDED) $@
--	ln -s fw_printenv $(TARGET_DIR)/usr/sbin/fw_setenv
-+	ln -sf fw_printenv $(TARGET_DIR)/usr/sbin/fw_setenv
+--- trunk/buildroot/target/u-boot/Makefile.in	2008-04-23 14:52:35 UTC (rev 21810)
++++ trunk/buildroot/target/u-boot/Makefile.in	2008-04-23 14:52:38 UTC (rev 21811)
+@@ -47,7 +47,8 @@
  
- u-boot: gcc $(BINARIES_DIR)/$(U_BOOT_BIN) $(U_BOOT_TARGET_TOOLS)
- 
+ $(U_BOOT_DIR)/.patched: $(U_BOOT_DIR)/.unpacked
+ 	toolchain/patch-kernel.sh $(U_BOOT_DIR) target/u-boot/ \
+-		u-boot-$(U_BOOT_VERSION)-$(BR2_ARCH)-\*.patch\*
++		u-boot-$(U_BOOT_VERSION)-\*.patch \
++		u-boot-$(U_BOOT_VERSION)-\*.patch.$(ARCH)
+ ifneq ($(strip $(BR2_TARGET_UBOOT_CUSTOM_PATCH)),"")
+ 	@mkdir -p $(U_BOOT_PATCH_DIR)
+ 	cp -dpr $(BR2_TARGET_UBOOT_CUSTOM_PATCH) $(U_BOOT_PATCH_DIR)
