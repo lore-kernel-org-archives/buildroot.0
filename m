@@ -1,31 +1,50 @@
-From: Tiju Jacob <jacob_tiju@yahoo.com>
-Date: Wed, 23 Apr 2008 09:38:30 +0530 (IST)
-Subject: [Buildroot] Mount_filesystem_s3c2440
-Message-ID: <516766.13884.qm@web94110.mail.in2.yahoo.com>
+From: bugs at busybox.net <bugs@busybox.net>
+Date: Tue, 22 Apr 2008 21:12:45 -0700
+Subject: [Buildroot] [buildroot 0003084]: Updated OpenSSL patches to support
+	v0.9.8g
+Message-ID: <eba4f855a2ffcfd67001ee6527ca5ef5@busybox.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Russel,
 
-> > Welcome to the Waveaxis's development environment.
-> > uclibc login: root
-> > process '/sbin/getty -L ttySAC0 115200 vt100' (pid 315) exited. Scheduling it 
-> for restart.
-> > starting pid 316, tty '/dev/ttySAC0': '/sbin/getty'
-> > 
-> > 
-> > What could be the problem?
-> 
-> You don't have ttySAC0 in /etc/securetty ?
+The following issue has been SUBMITTED. 
+====================================================================== 
+http://busybox.net/bugs/view.php?id=3084 
+====================================================================== 
+Reported By:                Zero
+Assigned To:                buildroot
+====================================================================== 
+Project:                    buildroot
+Issue ID:                   3084
+Category:                   Architecture Specific
+Reproducibility:            N/A
+Severity:                   feature
+Priority:                   normal
+Status:                     assigned
+====================================================================== 
+Date Submitted:             04-22-2008 21:12 PDT
+Last Modified:              04-22-2008 21:12 PDT
+====================================================================== 
+Summary:                    Updated OpenSSL patches to support v0.9.8g
+Description: 
+I have managed to update the OpenSSL patch to work with 0.9.8g.
 
-No, I dont have.. Just adding ttySAC0 in /etc/securetty dint make any difference.
-Is there anything else that I should change?
+I have included the patches here. (openssl.mk and openssl.patch).
 
-Thanks in advance.
-Tiju
+It might need a little tweaking to work for all users, i cant really say.
 
+Thanks.
+====================================================================== 
 
-      Bring your gang together. Do your thing. Find your favourite Yahoo! group at http://in.promos.yahoo.com/groups/
+Issue History 
+Date Modified   Username       Field                    Change               
+====================================================================== 
+04-22-08 21:12  Zero           New Issue                                    
+04-22-08 21:12  Zero           Status                   new => assigned     
+04-22-08 21:12  Zero           Assigned To               => buildroot       
+04-22-08 21:12  Zero           File Added: OpenSSL patch.tar.gz                 
+  
+======================================================================
