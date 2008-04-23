@@ -1,52 +1,84 @@
-From: =?ISO-8859-1?Q?Thiago_A._Corr=EAa?= <thiago.correa@gmail.com>
-Date: Tue, 22 Apr 2008 21:45:40 -0300
-Subject: [Buildroot] Improper device nodes createdinside
-	project_build_arm/uclibc/root/dev/
-In-Reply-To: <87hcdtobni.fsf@macbook.be.48ers.dk>
-References: <16803332.post@talk.nabble.com>
-	<20080421140757.GC21702@cloud.net.au> <16819059.post@talk.nabble.com>
-	<20080422005042.GA19794@cloud.net.au>
-	<8763uaqs3b.fsf@macbook.be.48ers.dk>
-	<20080422095909.GA31643@cloud.net.au>
-	<040301c8a49d$c1408170$050514ac@atmel.com>
-	<87tzhtoihz.fsf@macbook.be.48ers.dk>
-	<044f01c8a4a9$cfed41c0$050514ac@atmel.com>
-	<87hcdtobni.fsf@macbook.be.48ers.dk>
-Message-ID: <d6cda7730804221745r419a43dft863faddfd681aba7@mail.gmail.com>
+From: Li Liang <li.liang@neomeridian.com>
+Date: Wed, 23 Apr 2008 13:38:30 +1000
+Subject: [Buildroot] Error:"Staging_dir/lib/libc.so.0: could not read
+	symbols:file in wrong format" while "make" buildroot with
+	xscale, gcc-4.2.3
+In-Reply-To: <6311fe0b0804220845q232b2ce3h41713d533eeb40f@mail.gmail.com>
+References: <1208876655.480dfe6f0bef5@www.server101.com>
+	<6311fe0b0804220845q232b2ce3h41713d533eeb40f@mail.gmail.com>
+Message-ID: <1208921910.480eaf36b427a@www.server101.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-I have my own script for that, formats the sdcard, mounts it and
-extracts the tar.
+The same error message appeared again as following while I executed "make" after
+"make menuconfig"
 
-One could have a similar script in ~/buildroot/scripts for that, like
-the one we have for the ext3 images. Then just point it out, no need
-to have it on the make targets.
+/home/user/workspace/MFSP/uCroot/buildroot/build_armeb/staging_dir/lib/libc.so.0:
+could not read symbols: File in wrong format
+collect2: ld returned 1 exit status
+make[4]: *** [libgcc_s.so] Error 1
+make[4]: Leaving directory
+`/home/user/workspace/MFSP/uCroot/buildroot/toolchain_build_armeb/gcc-4.2.3-final/gcc'
+make[3]: *** [stmp-multilib] Error 2
+make[3]: Leaving directory
+`/home/user/workspace/MFSP/uCroot/buildroot/toolchain_build_armeb/gcc-4.2.3-final/gcc'
+make[2]: *** [all-gcc] Error 2
+make[2]: Leaving directory
+`/home/user/workspace/MFSP/uCroot/buildroot/toolchain_build_armeb/gcc-4.2.3-final'
+make[1]: *** [all] Error 2
+make[1]: Leaving directory
+`/home/user/workspace/MFSP/uCroot/buildroot/toolchain_build_armeb/gcc-4.2.3-final'
+make: ***
+[/home/user/workspace/MFSP/uCroot/buildroot/toolchain_build_armeb/gcc-4.2.3-final/.compiled]
+Error 2
 
-On Tue, Apr 22, 2008 at 5:52 PM, Peter Korsgaard <jacmet@uclibc.org> wrote:
-> >>>>> "Ulf" == Ulf Samuelsson <ulf.samuelsson@atmel.com> writes:
+I am using the following packages to build the tool-chain:
+
+kernel 2.6.24
+uClibc 0.9.29
+binutils 2.18
+gcc 4.2.3
+
+~LL
+
+
+
+Quoting Rex Ashbaugh <rexa@xeratech.com>:
+
+> Try performing the last failing operation again (move to the correct
+> directory and copy the last command from the console window, then execute
+> it)
+> while also inserting the --verbose flag (or whatever the verbose flag is).
+> This may give you a few more clues.
+> -Rex
 >
->  Hi,
 >
->   Ulf> Using the tarball is a manual process.
->   Ulf> Manual processes are error-prone.
+> On Tue, Apr 22, 2008 at 8:04 AM, Li Liang <li.liang@neomeridian.com> wrote:
 >
->  Well, if you can type make, then you can probably also type tar xvf
->
->   Ulf> I agree that it is dangerous though, and needs to be carefully
->   Ulf> thought through.
->
->  I still think it's needless bloat.
->
->  --
->  Bye, Peter Korsgaard
->
->
-> _______________________________________________
->  buildroot mailing list
->  buildroot at uclibc.org
->  http://busybox.net/mailman/listinfo/buildroot
+> > I have struggled with this problem for few days. Actually I found a
+> > similar
+> > subject in
+> >
+> > http://busybox.net/lists/buildroot/2007-October/005854.html
+> >
+> > However, I checked the mentioned patch in that thread, it actually applied
+> > to
+> > the gcc-4.2.3. Unfortunately, the issue wasn't be solved. Moreover, I
+> > couldn't
+> > find further useful info regarding to this problem. I really appreciate if
+> > anyone could tell me the solution. If any further log or info could help
+> > to
+> > diagnose this issue,please don't hesitate to ask me. Thank you very much
+> > in
+> > advance.
+> >
+> > ~LL
+> > _______________________________________________
+> > buildroot mailing list
+> > buildroot at uclibc.org
+> > http://busybox.net/mailman/listinfo/buildroot
+> >
 >
