@@ -1,42 +1,34 @@
-From: jacmet at uclibc.org <jacmet@uclibc.org>
-Date: Wed, 23 Apr 2008 08:27:16 -0700 (PDT)
-Subject: [Buildroot] svn commit: trunk/buildroot/package/qtopia4
-Message-ID: <20080423152716.A6A5F3C752@busybox.net>
+From: Ulf Samuelsson <ulf.samuelsson@atmel.com>
+Date: Wed, 23 Apr 2008 18:09:48 +0200
+Subject: [Buildroot] svn commit: trunk/buildroot/target/u-boot
+References: <20080423130355.7668C3C747@busybox.net>
+Message-ID: <010801c8a560$21c744d0$020514ac@atmel.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Author: jacmet
-Date: 2008-04-23 08:27:15 -0700 (Wed, 23 Apr 2008)
-New Revision: 21812
+> Author: jacmet
+> Date: 2008-04-23 06:03:53 -0700 (Wed, 23 Apr 2008)
+> New Revision: 21809
+> 
+> Log:
+> u-boot: tools in target (mkimage, fw_printenv and fw_setenv)
+> 
+> 
 
-Log:
-qtopia4: use .patch.$ARCH naming convention
+Why install mkimage in the target???
+It is used to create the linux kernel image so that U-Boot can load it.
+If you download a new image, I would expect it is already created
+using mkimage on the host.
 
-
-Added:
-   trunk/buildroot/package/qtopia4/qtopia-4.2.2-add-avr32-arch.patch.avr32
-   trunk/buildroot/package/qtopia4/qtopia-4.2.2-add-avr32-qatomic-header-to-header-list.patch.avr32
-   trunk/buildroot/package/qtopia4/qtopia-4.3.1-add-avr32-arch.patch.avr32
-   trunk/buildroot/package/qtopia4/qtopia-4.3.1-add-avr32-qatomic-header-to-header-list.patch.avr32
-   trunk/buildroot/package/qtopia4/qtopia-4.3.2-add-avr32-arch.patch.avr32
-
-Removed:
-   trunk/buildroot/package/qtopia4/qtopia-4.2.2-add-avr32-arch.patch
-   trunk/buildroot/package/qtopia4/qtopia-4.2.2-add-avr32-qatomic-header-to-header-list.patch
-   trunk/buildroot/package/qtopia4/qtopia-4.3.1-add-avr32-arch.patch
-   trunk/buildroot/package/qtopia4/qtopia-4.3.1-add-avr32-qatomic-header-to-header-list.patch
-   trunk/buildroot/package/qtopia4/qtopia-4.3.2-add-avr32-arch.patch
-
-Modified:
-   trunk/buildroot/package/qtopia4/qtopia4.mk
+> Modified:
+>   trunk/buildroot/target/u-boot/Config.in
+>   trunk/buildroot/target/u-boot/Makefile.in
+> 
+> 
 
 
-Changeset:
-
-Sorry, the patch is too large to include (37034 lines).
-Please use ViewCVS to see it!
-
-http://uclibc.org/cgi-bin/viewcvs.cgi?view=rev&root=svn&rev=21812
+Best Regards
+Ulf Samuelsson
