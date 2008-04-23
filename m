@@ -1,29 +1,33 @@
-From: Hebbar <gururajakr@sanyo.co.in>
-Date: Tue, 22 Apr 2008 22:45:12 -0700 (PDT)
-Subject: [Buildroot] Improper device nodes created
-	inside	project_build_arm/uclibc/root/dev/
-In-Reply-To: <87d4oiqs62.fsf@macbook.be.48ers.dk>
-References: <16803332.post@talk.nabble.com>
-	<20080421140757.GC21702@cloud.net.au>
-	<16819059.post@talk.nabble.com>
-	<87d4oiqs62.fsf@macbook.be.48ers.dk>
-Message-ID: <16831542.post@talk.nabble.com>
+From: Guillaume Dargaud <dargaud@lpsc.in2p3.fr>
+Date: Wed, 23 Apr 2008 09:22:28 +0200
+Subject: [Buildroot] trouble building grep
+References: <1CF6EDDF0820924DA43C9A52FE7325950ABFA085@MI8NYCMAIL17.Mi8.com>
+Message-ID: <06ee01c8a512$ccac08c0$ad289e86@LPSC0173W>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+> As far as I can tell the dependants (uclibc, gettext and libintl) are
+> being built with no problem. When the make runs for grep it appears to
+> get configured fine but during the actual build I get error messages
+> that I think are during the link of libgreputils.a. I get undefined
+> reference messages for libintl_gettext at various lines in the source
+> then the build stops.
+>
+> I'm kind of stuck. Any ideas what the problem could be? I already
+> checked my $(STAGING_DIR)/usr/lib directory and the libgettext and
+> libintl files are there.
 
-Hi,
+All I can offer is that the grep from busybox works fine, and doesn't need 
+gettext.
 
-Thanks to everyone for their valuable inputs. Now i am using tarball. i
-untar and mount it for nfsboot and everything works fine now.  
+I assume you have selected BR2_PACKAGE_GETTEXT in the main config of 
+buildroot.
 
-Thanks again
-
-Regards
-Gururaja
+But I think the main problem is with locales (intl) and/or wchar 
+dependencies missing from the uclibc config.
 -- 
-View this message in context: http://www.nabble.com/Improper-device-nodes-created-inside-project_build_arm-uclibc-root-dev--tp16803332p16831542.html
-Sent from the BuildRoot mailing list archive at Nabble.com.
+Guillaume Dargaud
+http://www.gdargaud.net/
