@@ -1,52 +1,40 @@
-From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Thu, 24 Apr 2008 21:00:22 +0200
-Subject: [Buildroot] svn commit: trunk/buildroot/package:  libiconv vlc
-In-Reply-To: <20080424183544.47A0A3C84F@busybox.net> (ninevoltz@uclibc.org's
-	message of "Thu\, 24 Apr 2008 11\:35\:44 -0700 \(PDT\)")
-References: <20080424183544.47A0A3C84F@busybox.net>
-Message-ID: <87mynj13jt.fsf@macbook.be.48ers.dk>
+From: John Voltz <john.voltz@gmail.com>
+Date: Thu, 24 Apr 2008 15:04:57 -0400
+Subject: [Buildroot] svn commit: trunk/buildroot/package: oprofile
+In-Reply-To: <871w4v2ir0.fsf@macbook.be.48ers.dk>
+References: <20080424165429.5E3993C7F0@busybox.net>
+	<87zlrj2khz.fsf@macbook.be.48ers.dk>
+	<46a136670804241120x702e3482rbd7104ffba99215@mail.gmail.com>
+	<871w4v2ir0.fsf@macbook.be.48ers.dk>
+Message-ID: <46a136670804241204w75b41198na00338a881cc828c@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "ninevoltz" == ninevoltz  <ninevoltz@uclibc.org> writes:
+I know, I keep forgetting to add the originator's name. I don't know why
+they never got sent to the mailing list, the Atmel development people seem
+like they might be a little short of time and man power to get things
+"upstream". That's why I try to help (read: break stuff) when I can.
 
- ninevoltz> Author: ninevoltz
- ninevoltz> Date: 2008-04-24 11:35:44 -0700 (Thu, 24 Apr 2008)
- ninevoltz> New Revision: 21850
+John
 
- ninevoltz> Log:
- ninevoltz> add libiconv and framework for vlc
+On Thu, Apr 24, 2008 at 2:46 PM, Peter Korsgaard <jacmet@uclibc.org> wrote:
 
-Please don't check in unrelated stuff in the same commit.
-
- ninevoltz> Added:
- ninevoltz>    trunk/buildroot/package/libiconv/
- ninevoltz>    trunk/buildroot/package/libiconv/Config.in
- ninevoltz>    trunk/buildroot/package/libiconv/libiconv.mk
- ninevoltz>    trunk/buildroot/package/vlc/
- ninevoltz>    trunk/buildroot/package/vlc/Config.in
- ninevoltz>    trunk/buildroot/package/vlc/vlc.mk
-
- ninevoltz> Modified:
- ninevoltz>    trunk/buildroot/package/Config.in
-
- ninevoltz> Added: trunk/buildroot/package/vlc/Config.in
- ninevoltz> ===================================================================
- ninevoltz> --- trunk/buildroot/package/vlc/Config.in	                        (rev 0)
- ninevoltz> +++ trunk/buildroot/package/vlc/Config.in	2008-04-24 18:35:44 UTC (rev 21850)
- ninevoltz> @@ -0,0 +1,7 @@
- ninevoltz> +config BR2_PACKAGE_VLC
- ninevoltz> +	bool "vlc"
- ninevoltz> +	default n
- ninevoltz> +	help
- ninevoltz> +	  a free cross-platform media player
- ninevoltz> +
- ninevoltz> +	  http://download.videolan.org/pub/videolan/vlc/0.8.6e
-
-http://www.videolan.org is probably a better link.
-
--- 
-Bye, Peter Korsgaard
+> >>>>> "John" == John Voltz <john.voltz@gmail.com> writes:
+>
+>  John> I'll leave the explanations about this package to
+>  John> Hans-Christian Egtvedt. It was developed by him/Atmel some time
+>  John> ago. I just did the commit :-) I have not used it personally
+>  John> either.
+>
+> Then please give them credit when you commit stuff. Why haven't these
+> patches been submitted to the mailing list instead?
+>
+> --
+> Bye, Peter Korsgaard
+>
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: http://busybox.net/lists/buildroot/attachments/20080424/496ce839/attachment.htm 
