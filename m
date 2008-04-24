@@ -1,21 +1,52 @@
-From: p <pmeloy@shaw.ca>
-Date: Thu, 24 Apr 2008 05:55:24 -0700
-Subject: [Buildroot] Example .configs?
-Message-ID: <1209041724.6819.3.camel@rhodan.rho>
+From: ninevoltz at uclibc.org <ninevoltz@uclibc.org>
+Date: Thu, 24 Apr 2008 07:04:23 -0700 (PDT)
+Subject: [Buildroot] svn commit: trunk/buildroot/package/expat
+Message-ID: <20080424140423.8D52C3C89E@busybox.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-I'm new to buildroot and fairly new to linux. I'm wondering if there are
-any example .configs or something resembling the kernel defconfigs for
-buildroot?
+Author: ninevoltz
+Date: 2008-04-24 07:04:23 -0700 (Thu, 24 Apr 2008)
+New Revision: 21841
 
-I'm having trouble compiling in that I always seem to miss a dependency
-someplace. CHoose packages then find out near the end of a long compile
-that some package or other isn't present and it all aborts.
+Log:
+revert commit 21832
 
-I'm also wondering where mdev is in the configs? One selection said to
-make sure I added mdev but even a search of the .config doesn't show any
-mention of mdev, set or not.
+Modified:
+   trunk/buildroot/package/expat/expat.mk
+
+
+Changeset:
+Modified: trunk/buildroot/package/expat/expat.mk
+===================================================================
+--- trunk/buildroot/package/expat/expat.mk	2008-04-24 13:26:25 UTC (rev 21840)
++++ trunk/buildroot/package/expat/expat.mk	2008-04-24 14:04:23 UTC (rev 21841)
+@@ -35,16 +35,8 @@
+ 		--build=$(GNU_HOST_NAME) \
+ 		--prefix=/usr \
+ 		--exec-prefix=/usr \
+-		--bindir=/bin \
+-		--sbindir=/sbin \
+-		--libdir=/lib \
+-		--libexecdir=/lib \
+ 		--sysconfdir=/etc \
+-		--datadir=/share \
+ 		--localstatedir=/var \
+-		--includedir=/include \
+-		--mandir=/man \
+-		--infodir=/info \
+ 		--enable-shared \
+ 	)
+ 	touch $@
+@@ -54,7 +46,7 @@
+ 	touch -c $@
+ 
+ $(STAGING_DIR)/$(EXPAT_TARGET_BINARY): $(EXPAT_DIR)/$(EXPAT_BINARY)
+-	$(MAKE) DESTDIR=$(STAGING_DIR)/usr -C $(EXPAT_DIR) install
++	$(MAKE) DESTDIR=$(STAGING_DIR) -C $(EXPAT_DIR) install
+ 	$(SED) "s,^libdir=.*,libdir=\'$(STAGING_DIR)/usr/lib\',g" \
+ 		$(STAGING_DIR)/usr/lib/libexpat.la
+ 	touch -c $@
