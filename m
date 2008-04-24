@@ -1,52 +1,37 @@
 From: John Voltz <john.voltz@gmail.com>
-Date: Thu, 24 Apr 2008 10:31:27 -0400
-Subject: [Buildroot] Question regarding CUPS package
-In-Reply-To: <6090c5eb0804240603r1c89303eg4977bd66af67f4a7@mail.gmail.com>
-References: <6090c5eb0804240603r1c89303eg4977bd66af67f4a7@mail.gmail.com>
-Message-ID: <46a136670804240731u105be48bvbd77665e64bdfa36@mail.gmail.com>
+Date: Thu, 24 Apr 2008 10:36:54 -0400
+Subject: [Buildroot] svn commit: trunk/buildroot/package/x11r7:
+	xapp_xclock xkeyboard-config xserver_xor etc...
+In-Reply-To: <87iqy75pje.fsf@macbook.be.48ers.dk>
+References: <20080424132214.B024D3C858@busybox.net>
+	<87iqy75pje.fsf@macbook.be.48ers.dk>
+Message-ID: <46a136670804240736t206b2875g7f5acdefd7be15fe@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Check out the line CUPS_MAKE_OPT in package/cups/cups.mk, and make sure it
-only lists the sections you want to build
+Added support for tslib in xserver .
+Ubuntu has a problem finding gmsgfmt when building xkeyboard.
+And xclock needs to link with libiconv.
 
-also make sure that BR2_PACKAGE_XSERVER_none is selected when you run
-menuconfig, that will remove the X dependency during the build.
+On Thu, Apr 24, 2008 at 9:51 AM, Peter Korsgaard <jacmet@uclibc.org> wrote:
 
-John
-
-
-On Thu, Apr 24, 2008 at 9:03 AM, Jorge S. <jorgesolla@gmail.com> wrote:
-
-> Hello all,
+> >>>>> "ninevoltz" == ninevoltz  <ninevoltz@uclibc.org> writes:
 >
-> I'm creating a rootfs for a custom AT91RM9200 board.
-> I'm planning to use the board as kind of a printer server and i need to
-> use CUPS.
+>  ninevoltz> Author: ninevoltz
+>  ninevoltz> Date: 2008-04-24 06:22:14 -0700 (Thu, 24 Apr 2008)
+>  ninevoltz> New Revision: 21836
 >
-> The problem comes when building the CUPS package because it depends on X11
-> libs.
-> Just reading on the cups project documentation and some forums posts i've
-> discovered that CUPS only needs X11 libs
-> when you are planning to build/use GUI config tools, but if only need
-> cups-base and lpr are needed you can remove
-> the X11 libs dependence.
+>  ninevoltz> Log:
+>  ninevoltz> some fixes for X
 >
-> Does somebody on the list is using CUPS without X11 libs? Any available
-> patch? Any ideas on how to solve this?
+> Could you be more specific in your commit messages? What have you
+> fixed and why?
 >
->
-> Thanks in advance.
->
-> Regards,
->
-> Jorge.
->
->
->
+> --
+> Bye, Peter Korsgaard
 > _______________________________________________
 > buildroot mailing list
 > buildroot at uclibc.org
@@ -54,4 +39,4 @@ On Thu, Apr 24, 2008 at 9:03 AM, Jorge S. <jorgesolla@gmail.com> wrote:
 >
 -------------- next part --------------
 An HTML attachment was scrubbed...
-URL: http://busybox.net/lists/buildroot/attachments/20080424/bd034c93/attachment.htm 
+URL: http://busybox.net/lists/buildroot/attachments/20080424/b733db96/attachment-0001.htm 
