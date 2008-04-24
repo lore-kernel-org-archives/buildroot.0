@@ -1,60 +1,42 @@
 From: John Voltz <john.voltz@gmail.com>
-Date: Thu, 24 Apr 2008 14:24:49 -0400
-Subject: [Buildroot] svn commit: trunk/buildroot/package: pcre
-In-Reply-To: <87ve272kgg.fsf@macbook.be.48ers.dk>
-References: <20080424165606.555523C7F7@busybox.net>
-	<87ve272kgg.fsf@macbook.be.48ers.dk>
-Message-ID: <46a136670804241124g2e909d94pa3c73a501536c82@mail.gmail.com>
+Date: Thu, 24 Apr 2008 14:34:02 -0400
+Subject: [Buildroot] svn commit: trunk/buildroot/package/java: classpath
+	concierge jamvm
+In-Reply-To: <87fxtb2jxo.fsf@macbook.be.48ers.dk>
+References: <20080424164821.800223C7C2@busybox.net>
+	<874p9r408c.fsf@macbook.be.48ers.dk>
+	<46a136670804241111j3548905fn3ca6f80b56e92dcf@mail.gmail.com>
+	<87fxtb2jxo.fsf@macbook.be.48ers.dk>
+Message-ID: <46a136670804241134t28b93dddl80fd382224d0afa1@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-This one was created by Arnar Mar Sigurdsson. He'll have to answer that
-question, I don't use it myself.
+Makefile.autotools.in will use the first argument of call AUTOTARGETS, look
+around line 161. I've never used <pkg>_DIR_PREFIX in any of the makefiles
+I've created and it works in festival this way, even with the multiple
+sub-directories.
 
 John
 
 
-On Thu, Apr 24, 2008 at 2:09 PM, Peter Korsgaard <jacmet@uclibc.org> wrote:
+On Thu, Apr 24, 2008 at 2:21 PM, Peter Korsgaard <jacmet@uclibc.org> wrote:
 
-> >>>>> "ninevoltz" == ninevoltz  <ninevoltz@uclibc.org> writes:
+> >>>>> "John" == John Voltz <john.voltz@gmail.com> writes:
 >
->  ninevoltz> Author: ninevoltz
->  ninevoltz> Date: 2008-04-24 09:56:06 -0700 (Thu, 24 Apr 2008)
->  ninevoltz> New Revision: 21848
+>  John> I don't even see where JAMVM_DIR_PREFIX is being used at
+>  John> all. I'm removing it.
 >
->  ninevoltz> Log:
->  ninevoltz> add pcre
+> It seems to be used in Makfile.autotools.in ($(PKG)_DIR_PREFIX) for
+> finding the patches, so you better not.
 >
->  ninevoltz> +#############################################################
->  ninevoltz> +#
->  ninevoltz> +# PCRE
->  ninevoltz> +#
->  ninevoltz> +#############################################################
->  ninevoltz> +PCRE_VERSION = 7.6
->  ninevoltz> +PCRE_SOURCE = pcre-$(PCRE_VERSION).tar.bz2
->  ninevoltz> +PCRE_SITE =
-> ftp://ftp.csx.cam.ac.uk/pub/software/programming/pcre
->  ninevoltz> +PCRE_INSTALL_STAGING = YES
->  ninevoltz> +PCRE_INSTALL_TARGET = YES
->  ninevoltz> +
->  ninevoltz> +PCRE_CONF_OPT = --target=$(GNU_TARGET_NAME)
-> --host=$(GNU_TARGET_NAME) \
->  ninevoltz> +        --build=$(GNU_HOST_NAME) --prefix=/usr \
->  ninevoltz> +        --includedir=/usr/include
->
-> Is --includedir needed?
->
+> Does it apply the avr32 patch if you leave it out?
 >
 > --
 > Bye, Peter Korsgaard
-> _______________________________________________
-> buildroot mailing list
-> buildroot at uclibc.org
-> http://busybox.net/mailman/listinfo/buildroot
 >
 -------------- next part --------------
 An HTML attachment was scrubbed...
-URL: http://busybox.net/lists/buildroot/attachments/20080424/5886d89e/attachment.htm 
+URL: http://busybox.net/lists/buildroot/attachments/20080424/e01130d9/attachment.htm 
