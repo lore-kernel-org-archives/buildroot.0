@@ -1,42 +1,124 @@
-From: John Voltz <john.voltz@gmail.com>
-Date: Thu, 24 Apr 2008 14:34:02 -0400
-Subject: [Buildroot] svn commit: trunk/buildroot/package/java: classpath
-	concierge jamvm
-In-Reply-To: <87fxtb2jxo.fsf@macbook.be.48ers.dk>
-References: <20080424164821.800223C7C2@busybox.net>
-	<874p9r408c.fsf@macbook.be.48ers.dk>
-	<46a136670804241111j3548905fn3ca6f80b56e92dcf@mail.gmail.com>
-	<87fxtb2jxo.fsf@macbook.be.48ers.dk>
-Message-ID: <46a136670804241134t28b93dddl80fd382224d0afa1@mail.gmail.com>
+From: ninevoltz at uclibc.org <ninevoltz@uclibc.org>
+Date: Thu, 24 Apr 2008 11:35:44 -0700 (PDT)
+Subject: [Buildroot] svn commit: trunk/buildroot/package:  libiconv vlc
+Message-ID: <20080424183544.47A0A3C84F@busybox.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Makefile.autotools.in will use the first argument of call AUTOTARGETS, look
-around line 161. I've never used <pkg>_DIR_PREFIX in any of the makefiles
-I've created and it works in festival this way, even with the multiple
-sub-directories.
+Author: ninevoltz
+Date: 2008-04-24 11:35:44 -0700 (Thu, 24 Apr 2008)
+New Revision: 21850
 
-John
+Log:
+add libiconv and framework for vlc
+
+Added:
+   trunk/buildroot/package/libiconv/
+   trunk/buildroot/package/libiconv/Config.in
+   trunk/buildroot/package/libiconv/libiconv.mk
+   trunk/buildroot/package/vlc/
+   trunk/buildroot/package/vlc/Config.in
+   trunk/buildroot/package/vlc/vlc.mk
+
+Modified:
+   trunk/buildroot/package/Config.in
 
 
-On Thu, Apr 24, 2008 at 2:21 PM, Peter Korsgaard <jacmet@uclibc.org> wrote:
+Changeset:
+Modified: trunk/buildroot/package/Config.in
+===================================================================
+--- trunk/buildroot/package/Config.in	2008-04-24 18:13:02 UTC (rev 21849)
++++ trunk/buildroot/package/Config.in	2008-04-24 18:35:44 UTC (rev 21850)
+@@ -83,6 +83,7 @@
+ source "package/libfloat/Config.in"
+ source "package/libgcrypt/Config.in"
+ source "package/libgpg-error/Config.in"
++source "package/libiconv/Config.in"
+ source "package/liblockfile/Config.in"
+ source "package/libsysfs/Config.in"
+ source "package/lockfile-progs/Config.in"
+@@ -428,6 +429,7 @@
+ 
+ comment "Video libraries/codecs and applications"
+ source "package/mplayer/Config.in"
++source "package/vlc/Config.in"
+ endif
+ 
+ menuconfig BR2_COMPRESSOR_SUPPORT
 
-> >>>>> "John" == John Voltz <john.voltz@gmail.com> writes:
->
->  John> I don't even see where JAMVM_DIR_PREFIX is being used at
->  John> all. I'm removing it.
->
-> It seems to be used in Makfile.autotools.in ($(PKG)_DIR_PREFIX) for
-> finding the patches, so you better not.
->
-> Does it apply the avr32 patch if you leave it out?
->
-> --
-> Bye, Peter Korsgaard
->
--------------- next part --------------
-An HTML attachment was scrubbed...
-URL: http://busybox.net/lists/buildroot/attachments/20080424/e01130d9/attachment.htm 
+Added: trunk/buildroot/package/libiconv/Config.in
+===================================================================
+--- trunk/buildroot/package/libiconv/Config.in	                        (rev 0)
++++ trunk/buildroot/package/libiconv/Config.in	2008-04-24 18:35:44 UTC (rev 21850)
+@@ -0,0 +1,7 @@
++config BR2_PACKAGE_LIBICONV
++	bool "libiconv"
++	default n
++	help
++	  unicode conversion library
++
++	  http://ftp.gnu.org/pub/gnu/libiconv
+
+Added: trunk/buildroot/package/libiconv/libiconv.mk
+===================================================================
+--- trunk/buildroot/package/libiconv/libiconv.mk	                        (rev 0)
++++ trunk/buildroot/package/libiconv/libiconv.mk	2008-04-24 18:35:44 UTC (rev 21850)
+@@ -0,0 +1,18 @@
++#############################################################
++#
++# libiconv
++#
++#############################################################
++LIBICONV_VERSION = 1.12
++LIBICONV_SOURCE = libiconv-$(LIBICONV_VERSION).tar.gz
++LIBICONV_SITE = http://ftp.gnu.org/pub/gnu/libiconv
++LIBICONV_AUTORECONF = NO
++LIBICONV_INSTALL_STAGING = YES
++LIBICONV_INSTALL_TARGET = YES
++
++LIBICONV_INSTALL_TARGET_OPT = DESTDIR=$(TARGET_DIR) install
++
++LIBICONV_DEPENDENCIES = uclibc 
++
++$(eval $(call AUTOTARGETS,package,libiconv))
++
+
+Added: trunk/buildroot/package/vlc/Config.in
+===================================================================
+--- trunk/buildroot/package/vlc/Config.in	                        (rev 0)
++++ trunk/buildroot/package/vlc/Config.in	2008-04-24 18:35:44 UTC (rev 21850)
+@@ -0,0 +1,7 @@
++config BR2_PACKAGE_VLC
++	bool "vlc"
++	default n
++	help
++	  a free cross-platform media player
++
++	  http://download.videolan.org/pub/videolan/vlc/0.8.6e
+
+Added: trunk/buildroot/package/vlc/vlc.mk
+===================================================================
+--- trunk/buildroot/package/vlc/vlc.mk	                        (rev 0)
++++ trunk/buildroot/package/vlc/vlc.mk	2008-04-24 18:35:44 UTC (rev 21850)
+@@ -0,0 +1,18 @@
++#############################################################
++#
++# vlc
++#
++#############################################################
++VLC_VERSION = 0.8.6e
++VLC_SOURCE = vlc-$(VLC_VERSION).tar.bz2
++VLC_SITE = http://download.videolan.org/pub/videolan/vlc/0.8.6e
++VLC_AUTORECONF = NO
++VLC_INSTALL_STAGING = NO
++VLC_INSTALL_TARGET = YES
++
++VLC_CONF_OPT = 
++
++VLC_DEPENDENCIES = uclibc 
++
++$(eval $(call AUTOTARGETS,package,vlc))
++
