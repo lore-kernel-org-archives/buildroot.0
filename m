@@ -1,27 +1,21 @@
-From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Thu, 24 Apr 2008 15:54:36 +0200
-Subject: [Buildroot] svn commit: trunk/buildroot/package/mtd:
-	mtd-utils.git
-In-Reply-To: <20080424132625.A3C6D3C871@busybox.net> (ninevoltz@uclibc.org's
-	message of "Thu\, 24 Apr 2008 06\:26\:25 -0700 \(PDT\)")
-References: <20080424132625.A3C6D3C871@busybox.net>
-Message-ID: <87abjj5per.fsf@macbook.be.48ers.dk>
+From: p <pmeloy@shaw.ca>
+Date: Thu, 24 Apr 2008 05:55:24 -0700
+Subject: [Buildroot] Example .configs?
+Message-ID: <1209041724.6819.3.camel@rhodan.rho>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "ninevoltz" == ninevoltz  <ninevoltz@uclibc.org> writes:
+I'm new to buildroot and fairly new to linux. I'm wondering if there are
+any example .configs or something resembling the kernel defconfigs for
+buildroot?
 
- ninevoltz> Author: ninevoltz
- ninevoltz> Date: 2008-04-24 06:26:25 -0700 (Thu, 24 Apr 2008)
- ninevoltz> New Revision: 21840
+I'm having trouble compiling in that I always seem to miss a dependency
+someplace. CHoose packages then find out near the end of a long compile
+that some package or other isn't present and it all aborts.
 
- ninevoltz> Log:
- ninevoltz> add selectable commit id to mtd-utils
-
-Isn't that a revert of Hamish' r21667?
-
--- 
-Bye, Peter Korsgaard
+I'm also wondering where mdev is in the configs? One selection said to
+make sure I added mdev but even a search of the .config doesn't show any
+mention of mdev, set or not.
