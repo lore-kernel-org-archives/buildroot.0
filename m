@@ -1,41 +1,52 @@
-From: Christopher Taylor <chtaylo3@gmail.com>
-Date: Thu, 24 Apr 2008 10:38:49 -0400
-Subject: [Buildroot] troubleshooting techniques for cross compiled binaries
-Message-ID: <2590773a0804240738h5877ca3bo86b36aba71936ff@mail.gmail.com>
+From: John Voltz <john.voltz@gmail.com>
+Date: Thu, 24 Apr 2008 10:56:27 -0400
+Subject: [Buildroot] Example .configs?
+In-Reply-To: <1209041724.6819.3.camel@rhodan.rho>
+References: <1209041724.6819.3.camel@rhodan.rho>
+Message-ID: <46a136670804240756y200cf080vacf8d18372177e9a@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Can anyone share any insights they have to troubleshooting
-cross-compiled binaries?
+mdev is a part of busybox, therefore an option to the busybox config. Your
+architecture determines where the busybox .config file is kept in the
+buildroot tree. It will either use the default in package/busybox or
+somewhere in target/device/your-arch
 
-Specifically, we have an older version of buildroot building kernels
-etc.  I loaded buildroot r21760 up, built the kernel and a file
-system.  Both kernels are 2.6.20.4  The newly compiled kernel works
-fine against the old file system but neither the new nor the old
-kernels work against the new file system.
+There may also be defconfigs for your architecture in
+target/device/your-arch, look in target/device/Atmel/atngw100 for an
+example. atngw100_defconfig is the buildroot .config, then there are the
+Linux kernel .configs, and the busybox .configs. Atmel keeps the uClibc
+.config for that arch in target/device/Atmel/uClibc.config.avr32
 
-When booting either kernel against the new file system I get a kernel panic:
-Freeing init memory: 104K
- 1Kernel panic - not syncing: Attempted to kill init!
+I wrote a wiki about using buildroot on Ubuntu that you might want to have a
+look at too:
+http://code.google.com/p/buildroot/wiki/BuildingonUbuntu
 
-When I boot using a ramdisk and then mount the bad filesystem on the
-target over nfs (to /mnt/nfs) and try to execute one of the binaries I
-get:
--sh: bin/echo: not found
+John
 
-I get this for any binary, not just the ones related to busybox which
-makes me thing it's a problem with how I compiled uclibc.
+On Thu, Apr 24, 2008 at 8:55 AM, p <pmeloy@shaw.ca> wrote:
 
-file busybox from the fs that doesn't work gives:
- setuid ELF 32-bit LSB executable, ARM, version 1, dynamically linked
-(uses shared libs), stripped
-file busybox from the fs that _does_ work gives:
- ELF 32-bit LSB executable, ARM, version 1 (ARM), statically linked, stripped
-
-so I'm at a loss as to what's causing the problem.  Any extra hints
-for techniques would be helpful...
-
--Chris
+> I'm new to buildroot and fairly new to linux. I'm wondering if there are
+> any example .configs or something resembling the kernel defconfigs for
+> buildroot?
+>
+> I'm having trouble compiling in that I always seem to miss a dependency
+> someplace. CHoose packages then find out near the end of a long compile
+> that some package or other isn't present and it all aborts.
+>
+> I'm also wondering where mdev is in the configs? One selection said to
+> make sure I added mdev but even a search of the .config doesn't show any
+> mention of mdev, set or not.
+>
+>
+> _______________________________________________
+> buildroot mailing list
+> buildroot at uclibc.org
+> http://busybox.net/mailman/listinfo/buildroot
+>
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: http://busybox.net/lists/buildroot/attachments/20080424/fcf0aa74/attachment.htm 
