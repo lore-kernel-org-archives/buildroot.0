@@ -1,52 +1,25 @@
-From: ninevoltz at uclibc.org <ninevoltz@uclibc.org>
-Date: Thu, 24 Apr 2008 07:04:23 -0700 (PDT)
-Subject: [Buildroot] svn commit: trunk/buildroot/package/expat
-Message-ID: <20080424140423.8D52C3C89E@busybox.net>
+From: Arndt Kritzner <kritzner@logicway.de>
+Date: Thu, 24 Apr 2008 16:04:09 +0200
+Subject: [Buildroot] irda-utils problem and (possible) patch
+Message-ID: <48109359.5010204@logicway.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Author: ninevoltz
-Date: 2008-04-24 07:04:23 -0700 (Thu, 24 Apr 2008)
-New Revision: 21841
+Irda-utils's package makefile is a stub without real function at the moment.
 
-Log:
-revert commit 21832
+The patch adds functionality to download and compile the package. But on
+avr32 only irattach could be built successfully.
 
-Modified:
-   trunk/buildroot/package/expat/expat.mk
+Gru? und tsch?s
+Arndt
 
-
-Changeset:
-Modified: trunk/buildroot/package/expat/expat.mk
-===================================================================
---- trunk/buildroot/package/expat/expat.mk	2008-04-24 13:26:25 UTC (rev 21840)
-+++ trunk/buildroot/package/expat/expat.mk	2008-04-24 14:04:23 UTC (rev 21841)
-@@ -35,16 +35,8 @@
- 		--build=$(GNU_HOST_NAME) \
- 		--prefix=/usr \
- 		--exec-prefix=/usr \
--		--bindir=/bin \
--		--sbindir=/sbin \
--		--libdir=/lib \
--		--libexecdir=/lib \
- 		--sysconfdir=/etc \
--		--datadir=/share \
- 		--localstatedir=/var \
--		--includedir=/include \
--		--mandir=/man \
--		--infodir=/info \
- 		--enable-shared \
- 	)
- 	touch $@
-@@ -54,7 +46,7 @@
- 	touch -c $@
- 
- $(STAGING_DIR)/$(EXPAT_TARGET_BINARY): $(EXPAT_DIR)/$(EXPAT_BINARY)
--	$(MAKE) DESTDIR=$(STAGING_DIR)/usr -C $(EXPAT_DIR) install
-+	$(MAKE) DESTDIR=$(STAGING_DIR) -C $(EXPAT_DIR) install
- 	$(SED) "s,^libdir=.*,libdir=\'$(STAGING_DIR)/usr/lib\',g" \
- 		$(STAGING_DIR)/usr/lib/libexpat.la
- 	touch -c $@
+-------------- next part --------------
+A non-text attachment was scrubbed...
+Name: irda.mk.20080424.diff
+Type: text/x-patch
+Size: 2458 bytes
+Desc: not available
+Url : http://busybox.net/lists/buildroot/attachments/20080424/472000ae/attachment.bin 
