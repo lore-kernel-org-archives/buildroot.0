@@ -1,35 +1,57 @@
-From: ninevoltz at uclibc.org <ninevoltz@uclibc.org>
-Date: Thu, 24 Apr 2008 07:26:48 -0700 (PDT)
-Subject: [Buildroot] svn commit: trunk/buildroot/package/alsamixergui
-Message-ID: <20080424142648.BE1F03C8DD@busybox.net>
+From: John Voltz <john.voltz@gmail.com>
+Date: Thu, 24 Apr 2008 10:31:27 -0400
+Subject: [Buildroot] Question regarding CUPS package
+In-Reply-To: <6090c5eb0804240603r1c89303eg4977bd66af67f4a7@mail.gmail.com>
+References: <6090c5eb0804240603r1c89303eg4977bd66af67f4a7@mail.gmail.com>
+Message-ID: <46a136670804240731u105be48bvbd77665e64bdfa36@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Author: ninevoltz
-Date: 2008-04-24 07:26:48 -0700 (Thu, 24 Apr 2008)
-New Revision: 21844
+Check out the line CUPS_MAKE_OPT in package/cups/cups.mk, and make sure it
+only lists the sections you want to build
 
-Log:
-remove arch specific mistake
+also make sure that BR2_PACKAGE_XSERVER_none is selected when you run
+menuconfig, that will remove the X dependency during the build.
 
-Modified:
-   trunk/buildroot/package/alsamixergui/alsamixergui.mk
+John
 
 
-Changeset:
-Modified: trunk/buildroot/package/alsamixergui/alsamixergui.mk
-===================================================================
---- trunk/buildroot/package/alsamixergui/alsamixergui.mk	2008-04-24 14:25:09 UTC (rev 21843)
-+++ trunk/buildroot/package/alsamixergui/alsamixergui.mk	2008-04-24 14:26:48 UTC (rev 21844)
-@@ -10,7 +10,7 @@
- ALSAMIXERGUI_INSTALL_STAGING = NO
- ALSAMIXERGUI_INSTALL_TARGET = YES
- 
--ALSAMIXERGUI_CONF_OPT = LDFLAGS="-L$(STAGING_DIR)/usr/lib -L$(STAGING_DIR)/lib -L$(STAGING_DIR)/usr/avr32-linux-uclibc/lib -lstdc++ -lX11"
-+ALSAMIXERGUI_CONF_OPT = LDFLAGS="-L$(STAGING_DIR)/usr/lib -L$(STAGING_DIR)/lib -lstdc++ -lX11"
- 
- ALSAMIXERGUI_DEPENDENCIES = uclibc fltk
- 
+On Thu, Apr 24, 2008 at 9:03 AM, Jorge S. <jorgesolla@gmail.com> wrote:
+
+> Hello all,
+>
+> I'm creating a rootfs for a custom AT91RM9200 board.
+> I'm planning to use the board as kind of a printer server and i need to
+> use CUPS.
+>
+> The problem comes when building the CUPS package because it depends on X11
+> libs.
+> Just reading on the cups project documentation and some forums posts i've
+> discovered that CUPS only needs X11 libs
+> when you are planning to build/use GUI config tools, but if only need
+> cups-base and lpr are needed you can remove
+> the X11 libs dependence.
+>
+> Does somebody on the list is using CUPS without X11 libs? Any available
+> patch? Any ideas on how to solve this?
+>
+>
+> Thanks in advance.
+>
+> Regards,
+>
+> Jorge.
+>
+>
+>
+> _______________________________________________
+> buildroot mailing list
+> buildroot at uclibc.org
+> http://busybox.net/mailman/listinfo/buildroot
+>
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: http://busybox.net/lists/buildroot/attachments/20080424/bd034c93/attachment.htm 
