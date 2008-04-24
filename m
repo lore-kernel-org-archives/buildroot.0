@@ -1,29 +1,53 @@
-From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Thu, 24 Apr 2008 15:53:38 +0200
-Subject: [Buildroot] svn commit: trunk/buildroot/package/xstroke
-In-Reply-To: <20080424132329.0B95B3C863@busybox.net> (ninevoltz@uclibc.org's
-	message of "Thu\, 24 Apr 2008 06\:23\:29 -0700 \(PDT\)")
-References: <20080424132329.0B95B3C863@busybox.net>
-Message-ID: <87ej8v5pgd.fsf@macbook.be.48ers.dk>
+From: John Voltz <john.voltz@gmail.com>
+Date: Thu, 24 Apr 2008 09:53:43 -0400
+Subject: [Buildroot] svn commit: trunk/buildroot/package/alsamixergui
+In-Reply-To: <20080424133421.GA11391@mx.loc>
+References: <20080424131426.5FAF93C824@busybox.net>
+	<20080424133421.GA11391@mx.loc>
+Message-ID: <46a136670804240653t51798ddfw8eab35bb0db22d53@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "ninevoltz" == ninevoltz  <ninevoltz@uclibc.org> writes:
+It's not sane. I will revert it. I honestly don't know why that got put in
+there. I'm going to stop now before I do any more damage :-(
 
- ninevoltz> Author: ninevoltz
- ninevoltz> Date: 2008-04-24 06:23:28 -0700 (Thu, 24 Apr 2008)
- ninevoltz> New Revision: 21838
+John
 
- ninevoltz> Log:
- ninevoltz> select docker with xstroke so xstroke has a place to live
 
- ninevoltz> -XSTROKE_DEPENDENCIES = uclibc docker
- ninevoltz> +XSTROKE_DEPENDENCIES = uclibc 
+On Thu, Apr 24, 2008 at 9:34 AM, Bernhard Fischer <rep.dot.nop@gmail.com>
+wrote:
 
-Trailing space.
-
--- 
-Bye, Peter Korsgaard
+> On Thu, Apr 24, 2008 at 06:14:26AM -0700, ninevoltz at uclibc.org wrote:
+> >Author: ninevoltz
+> >Date: 2008-04-24 06:14:25 -0700 (Thu, 24 Apr 2008)
+> >New Revision: 21831
+>
+> >Modified: trunk/buildroot/package/alsamixergui/alsamixergui.mk
+> >===================================================================
+> >--- trunk/buildroot/package/alsamixergui/alsamixergui.mk       2008-04-24
+> 11:22:06 UTC (rev 21830)
+> >+++ trunk/buildroot/package/alsamixergui/alsamixergui.mk       2008-04-24
+> 13:14:25 UTC (rev 21831)
+> >@@ -10,7 +10,7 @@
+> > ALSAMIXERGUI_INSTALL_STAGING = NO
+> > ALSAMIXERGUI_INSTALL_TARGET = YES
+> >
+> >-ALSAMIXERGUI_CONF_OPT = LDFLAGS="-L$(STAGING_DIR)/usr/lib
+> -L$(STAGING_DIR)/lib -L$(STAGING_DIR)/usr/avr32-linux-uclibc/lib -lstdc++"
+> >+ALSAMIXERGUI_CONF_OPT = LDFLAGS="-L$(STAGING_DIR)/usr/lib
+> -L$(STAGING_DIR)/lib -L$(STAGING_DIR)/usr/avr32-linux-uclibc/lib -lstdc++
+> -lX11"
+> >
+>
+> and why is having "avr32" in there sane?
+> _______________________________________________
+> buildroot mailing list
+> buildroot at uclibc.org
+> http://busybox.net/mailman/listinfo/buildroot
+>
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: http://busybox.net/lists/buildroot/attachments/20080424/c61498e6/attachment.htm 
