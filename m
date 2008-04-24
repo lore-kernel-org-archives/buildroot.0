@@ -1,40 +1,53 @@
-From: John Voltz <john.voltz@gmail.com>
-Date: Thu, 24 Apr 2008 15:04:57 -0400
-Subject: [Buildroot] svn commit: trunk/buildroot/package: oprofile
-In-Reply-To: <871w4v2ir0.fsf@macbook.be.48ers.dk>
-References: <20080424165429.5E3993C7F0@busybox.net>
-	<87zlrj2khz.fsf@macbook.be.48ers.dk>
-	<46a136670804241120x702e3482rbd7104ffba99215@mail.gmail.com>
-	<871w4v2ir0.fsf@macbook.be.48ers.dk>
-Message-ID: <46a136670804241204w75b41198na00338a881cc828c@mail.gmail.com>
+From: Peter Korsgaard <jacmet@uclibc.org>
+Date: Thu, 24 Apr 2008 21:07:33 +0200
+Subject: [Buildroot] Problem files
+In-Reply-To: <46a136670804241157r1b0d178fi1d81474a38555621@mail.gmail.com>
+	(John Voltz's message of "Thu\, 24 Apr 2008 14\:57\:59 -0400")
+References: <46a136670804241157r1b0d178fi1d81474a38555621@mail.gmail.com>
+Message-ID: <878wz3137u.fsf@macbook.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-I know, I keep forgetting to add the originator's name. I don't know why
-they never got sent to the mailing list, the Atmel development people seem
-like they might be a little short of time and man power to get things
-"upstream". That's why I try to help (read: break stuff) when I can.
+>>>>> "John" == John Voltz <john.voltz@gmail.com> writes:
 
-John
+ John> I've noticed a few packages that use the "hackish" method of
+ John> defining their build environment by using a shell script
+ John> instead of pkg-config. These scripts reside in /usr/bin and are
+ John> called by the configure script of other packages that depend on
+ John> them, the following is a list of the packages I have found that
+ John> do this:
 
-On Thu, Apr 24, 2008 at 2:46 PM, Peter Korsgaard <jacmet@uclibc.org> wrote:
+I take it you mean STAGING_DIR/usr/bin.
 
-> >>>>> "John" == John Voltz <john.voltz@gmail.com> writes:
->
->  John> I'll leave the explanations about this package to
->  John> Hans-Christian Egtvedt. It was developed by him/Atmel some time
->  John> ago. I just did the commit :-) I have not used it personally
->  John> either.
->
-> Then please give them credit when you commit stuff. Why haven't these
-> patches been submitted to the mailing list instead?
->
-> --
-> Bye, Peter Korsgaard
->
--------------- next part --------------
-An HTML attachment was scrubbed...
-URL: http://busybox.net/lists/buildroot/attachments/20080424/496ce839/attachment.htm 
+ John> cups-config
+ John> curl-config
+ John> fltk-config
+ John> freetype-config
+ John> gpg-error-config
+ John> ibgcrypt-config
+ John> icu-config
+ John> libpng12-config
+ John> pkg-config
+ John> xft-config
+ John> xml2-config
+ John> xslt-config
+
+SDL also has a sdl-config script.
+
+ John> I'm looking for suggestions on what could be done to fix them
+ John> so cross compiling works. I would prefer to not have to rewrite
+ John> all of the makefiles to sed the right paths in. Freetype is the
+ John> worst offender, it breaks pango and fontconfig on Ubuntu. And
+ John> if you build a system for x86, a few packages will get linked
+ John> against your build machine libraries instead of the target,
+ John> then you will get errors like "can't find libc.so.6" (gtk and
+ John> glib are the two I that know of)
+
+I don't really think there's any other solution, but fixing the
+-config scripts isn't that hard, see the sdl makefile for an example.
+
+-- 
+Bye, Peter Korsgaard
