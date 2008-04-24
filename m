@@ -1,7 +1,7 @@
 From: jacmet at uclibc.org <jacmet@uclibc.org>
-Date: Thu, 24 Apr 2008 02:03:23 -0700 (PDT)
-Subject: [Buildroot] svn commit: trunk/buildroot/package/fbset
-Message-ID: <20080424090323.3A4B23C7E0@busybox.net>
+Date: Thu, 24 Apr 2008 02:03:26 -0700 (PDT)
+Subject: [Buildroot] svn commit: trunk/buildroot/package/fbv
+Message-ID: <20080424090326.304B73C7E5@busybox.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -9,264 +9,325 @@ Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
 Author: jacmet
-Date: 2008-04-24 02:03:22 -0700 (Thu, 24 Apr 2008)
-New Revision: 21823
+Date: 2008-04-24 02:03:25 -0700 (Thu, 24 Apr 2008)
+New Revision: 21824
 
 Log:
-fbset: use .patch.$ARCH naming convention
+fbv: use .patch.$ARCH naming convention
 
 
 Added:
-   trunk/buildroot/package/fbset/fbset-2.1-support.patch.avr32
+   trunk/buildroot/package/fbv/fbv-1.0b-arch.patch.avr32
+   trunk/buildroot/package/fbv/fbv-1.0b-cross.patch
+   trunk/buildroot/package/fbv/fbv-1.0b-include.patch
 
 Removed:
-   trunk/buildroot/package/fbset/fbset-2.1-avr32.patch
+   trunk/buildroot/package/fbv/fbv-1.0b-avr32.patch
 
 Modified:
-   trunk/buildroot/package/fbset/fbset.mk
+   trunk/buildroot/package/fbv/fbv.mk
 
 
 Changeset:
-Deleted: trunk/buildroot/package/fbset/fbset-2.1-avr32.patch
+Added: trunk/buildroot/package/fbv/fbv-1.0b-arch.patch.avr32
 ===================================================================
---- trunk/buildroot/package/fbset/fbset-2.1-avr32.patch	2008-04-24 09:03:19 UTC (rev 21822)
-+++ trunk/buildroot/package/fbset/fbset-2.1-avr32.patch	2008-04-24 09:03:22 UTC (rev 21823)
-@@ -1,108 +0,0 @@
--diff -ru fbset-2.1/fb.h fbset-2.1-avr32/fb.h
----- fbset-2.1/fb.h	1999-06-23 16:09:48.000000000 +0200
--+++ fbset-2.1-avr32/fb.h	2005-12-09 16:00:07.000000000 +0100
--@@ -131,6 +131,7 @@
-- 					/* vtotal = 144d/288n/576i => PAL  */
-- 					/* vtotal = 121d/242n/484i => NTSC */
-- #define FB_SYNC_ON_GREEN	32	/* sync on green */
--+#define FB_SYNC_PCLK_RISING     64      /* pixel data sampled on rising pclk */
+--- trunk/buildroot/package/fbv/fbv-1.0b-arch.patch.avr32	                        (rev 0)
++++ trunk/buildroot/package/fbv/fbv-1.0b-arch.patch.avr32	2008-04-24 09:03:25 UTC (rev 21824)
+@@ -0,0 +1,48 @@
++diff -ur fbv-1.0b/fb_display.c fbv-1.0b-avr32/fb_display.c
++--- fbv-1.0b/fb_display.c	2004-09-07 14:09:43.000000000 +0200
+++++ fbv-1.0b-avr32/fb_display.c	2006-05-04 13:30:25.000000000 +0200
++@@ -276,9 +276,6 @@
++ 	    for(i = 0; i < yc; i++, fbptr += scr_xs * cpp, imptr += pic_xs * cpp)
++ 			memcpy(fbptr, imptr, xc * cpp);
++ 		
++-	if(cpp == 1)
++-	    set8map(fh, &map_back);
++-	
++ 	munmap(fb, scr_xs * scr_ys * cpp);
++ }
++ 
++@@ -293,17 +290,17 @@
++ inline static unsigned short make15color(unsigned char r, unsigned char g, unsigned char b)
++ {
++     return (
++-	(((r >> 3) & 31) << 10) |
+++	(((r >> 3) & 31)) |
++ 	(((g >> 3) & 31) << 5)  |
++-	 ((b >> 3) & 31)        );
+++	 ((b >> 3) & 31) << 10);
++ }
++ 
++ inline static unsigned short make16color(unsigned char r, unsigned char g, unsigned char b)
++ {
++     return (
++-	(((r >> 3) & 31) << 11) |
++-	(((g >> 2) & 63) << 5)  |
++-	 ((b >> 3) & 31)        );
+++	(((r >> 3) & 31))      |
+++	(((g >> 3) & 31) << 5) |
+++	 ((b >> 3) & 31) << 10);
++ }
++ 
++ void* convertRGB2FB(int fh, unsigned char *rgbbuff, unsigned long count, int bpp, int *cpp)
++@@ -342,9 +339,9 @@
++ 	    *cpp = 4;
++ 	    i_fbbuff = (unsigned int *) malloc(count * sizeof(unsigned int));
++ 	    for(i = 0; i < count ; i++)
++-		i_fbbuff[i] = ((rgbbuff[i*3] << 16) & 0xFF0000) |
+++		i_fbbuff[i] = ((rgbbuff[i*3+2] << 16) & 0xFF0000) |
++ 			    ((rgbbuff[i*3+1] << 8) & 0xFF00) |
++-			    (rgbbuff[i*3+2] & 0xFF);
+++			    (rgbbuff[i*3] & 0xFF);
++ 	    fbbuff = (void *) i_fbbuff;
++ 	    break;
++ 	default:
+
+Deleted: trunk/buildroot/package/fbv/fbv-1.0b-avr32.patch
+===================================================================
+--- trunk/buildroot/package/fbv/fbv-1.0b-avr32.patch	2008-04-24 09:03:22 UTC (rev 21823)
++++ trunk/buildroot/package/fbv/fbv-1.0b-avr32.patch	2008-04-24 09:03:25 UTC (rev 21824)
+@@ -1,144 +0,0 @@
+-diff -ur fbv-1.0b/configure fbv-1.0b-avr32/configure
+---- fbv-1.0b/configure	2004-09-07 13:29:27.000000000 +0200
+-+++ fbv-1.0b-avr32/configure	2006-05-04 11:10:06.000000000 +0200
+-@@ -21,6 +21,7 @@
+- unset png
+- unset bmp
+- unset dfb
+-+unset CC
 - 
-- #define FB_VMODE_NONINTERLACED  0	/* non interlaced */
-- #define FB_VMODE_INTERLACED	1	/* interlaced	*/
--diff -ru fbset-2.1/fbset.c fbset-2.1-avr32/fbset.c
----- fbset-2.1/fbset.c	1999-06-23 16:11:46.000000000 +0200
--+++ fbset-2.1-avr32/fbset.c	2005-12-09 16:04:53.000000000 +0100
--@@ -85,6 +85,7 @@
-- static const char *Opt_vsync = NULL;
-- static const char *Opt_csync = NULL;
-- static const char *Opt_gsync = NULL;
--+static const char *Opt_pclk = NULL;
-- static const char *Opt_extsync = NULL;
-- static const char *Opt_bcast = NULL;
-- static const char *Opt_laced = NULL;
--@@ -122,6 +123,7 @@
--     { "-vsync", &Opt_vsync, 1 },
--     { "-csync", &Opt_csync, 1 },
--     { "-gsync", &Opt_gsync, 1 },
--+    { "-pclk", &Opt_pclk, 1 },
--     { "-extsync", &Opt_extsync, 1 },
--     { "-bcast", &Opt_bcast, 1 },
--     { "-laced", &Opt_laced, 1 },
--@@ -344,6 +346,8 @@
-- 	var->sync |= FB_SYNC_COMP_HIGH_ACT;
--     if (vmode->gsync == HIGH)
-- 	var->sync |= FB_SYNC_ON_GREEN;
--+    if (vmode->pclk == RISING)
--+	var->sync |= FB_SYNC_PCLK_RISING;
--     if (vmode->extsync == TRUE)
-- 	var->sync |= FB_SYNC_EXT;
--     if (vmode->bcast == TRUE)
--@@ -389,6 +393,7 @@
--     vmode->vsync = var->sync & FB_SYNC_VERT_HIGH_ACT ? HIGH : LOW;
--     vmode->csync = var->sync & FB_SYNC_COMP_HIGH_ACT ? HIGH : LOW;
--     vmode->gsync = var->sync & FB_SYNC_ON_GREEN ? TRUE : FALSE;
--+    vmode->pclk = var->sync & FB_SYNC_PCLK_RISING ? RISING : FALLING;
--     vmode->extsync = var->sync & FB_SYNC_EXT ? TRUE : FALSE;
--     vmode->bcast = var->sync & FB_SYNC_BROADCAST ? TRUE : FALSE;
--     vmode->grayscale = var->grayscale;
--@@ -420,11 +425,11 @@
+- help(){
+- cat << EOF >&2
+-@@ -33,6 +34,7 @@
+- General:
+-   --help	print this message
+-   --libs=LIBS	additional libraries required (try -lX11 for ungif, -lz for PNG)
+-+  --cc=CC	specify compiler to use
+-   
+- Directory and file names:
+-   --prefix=PREFIX	install files in PREFIX [/usr/local]
+-@@ -53,7 +55,7 @@
+- --long help,\
+- prefix:,srcdir:,bindir:,\
+- infodir:,mandir:,\
+--without-libungif,without-libjpeg,without-libpng,without-bmp,libs: \
+-+without-libungif,without-libjpeg,without-libpng,without-bmp,libs:,cc: \
+- -n "$BASENAME" -- "$@")
 - 
--     if (!strcasecmp(var, "false") || !strcasecmp(var, "low") ||
-- 	!strcasecmp(var, "no") || !strcasecmp(var, "off") ||
---	!strcmp(var, "0"))
--+	!strcmp(var, "0") || !strcasecmp(var, "falling"))
-- 	value = 0;
--     else if (!strcasecmp(var, "true") || !strcasecmp(var, "high") ||
-- 	     !strcasecmp(var, "yes") || !strcasecmp(var, "on") ||
---	     !strcmp(var, "1"))
--+	     !strcmp(var, "1") || !strcasecmp(var, "rising"))
-- 	value = 1;
--     else
-- 	Die("Invalid value `%s'\n", var);
--@@ -559,6 +564,8 @@
-- 	vmode->csync = atoboolean(Opt_csync);
--     if (Opt_gsync)
-- 	vmode->gsync = atoboolean(Opt_gsync);
--+    if (Opt_pclk)
--+	vmode->pclk = atoboolean(Opt_pclk);
--     if (Opt_extsync)
-- 	vmode->extsync = atoboolean(Opt_extsync);
--     if (Opt_bcast)
--@@ -635,6 +642,8 @@
-- 	    puts("    csync high");
-- 	if (vmode->gsync)
-- 	    puts("    gsync true");
--+	if (vmode->pclk)
--+	    puts("    pclk rising");
-- 	if (vmode->extsync)
-- 	    puts("    extsync true");
-- 	if (vmode->bcast)
--@@ -875,6 +884,7 @@
-- 	"    -vsync <value>     : vertical sync polarity (low or high)\n"
-- 	"    -csync <value>     : composite sync polarity (low or high)\n"
-- 	"    -gsync <value>     : synch on green (false or true)\n"
--+	"    -pclk <value>      : pclk edge on which pixeldata is valid (rising or falling)\n"
-- 	"    -extsync <value>   : external sync enable (false or true)\n"
-- 	"    -bcast <value>     : broadcast enable (false or true)\n"
-- 	"    -laced <value>     : interlace enable (false or true)\n"
--diff -ru fbset-2.1/fbset.h fbset-2.1-avr32/fbset.h
----- fbset-2.1/fbset.h	1999-06-23 16:12:28.000000000 +0200
--+++ fbset-2.1-avr32/fbset.h	2005-12-09 16:05:25.000000000 +0100
--@@ -26,6 +26,9 @@
-- #define LOW		(0)
-- #define HIGH		(1)
+- if [ $? != 0 ] ; then help ; exit 1 ; fi
+-@@ -65,6 +67,7 @@
+- 	case "$1" in
+- 		-h|--help) help ; exit 0 ;;
+- 		--libs) libs="$2"; shift 2 ;;
+-+		--cc) CC="$2"; shift 2 ;;
+- 		--prefix) prefix="$2" ; shift 2 ;;
+- 		--srcdir) srcdir="$2" ; shift 2 ;;
+- 		--bindir) bindir="$2" ; shift 2 ;;
+-@@ -80,6 +83,7 @@
+- 	esac
+- done
 - 
--+#define FALLING		(0)
--+#define RISING		(1)
+-+[ -z "$CC" ] && CC=cc
+- [ -z "$prefix" ] && prefix="/usr/local"
+- [ -z "$bindir" ] && bindir="${prefix}/bin"
+- [ -z "$mandir" ] && mandir="${prefix}/man"
+-@@ -106,12 +110,12 @@
+- ungif="no"
+- echo "libungif check" >>./config.log
+- echo "  1st:" >>./config.log
+--cc 2>>./config.log >>./config.log -o \$\$~test \$\$~test.c -lungif $libs
+-+$CC 2>>./config.log >>./config.log -o \$\$~test \$\$~test.c -lungif $libs
+- if [ -e \$\$~test ]; then
+- 	libs="-lungif $libs" ; ungif="yes"
+- else
+- 	echo "  2nd: -lX11 -L$xdir/lib" >>./config.log
+--	cc 2>>./config.log >>./config.log -o \$\$~test \$\$~test.c -lungif -lX11 -L$xdir/lib $libs
+-+	$CC 2>>./config.log >>./config.log -o \$\$~test \$\$~test.c -lungif -lX11 -L$xdir/lib $libs
+- 	if [ -e \$\$~test ]; then
+- 	libs="-lungif -lX11 -L$xdir/lib $libs" ; ungif="yes"
+- 	fi
+-@@ -124,7 +128,7 @@
+- echo -n "checking for libjpeg presence... "
+- if [ "$jpeg" != "disabled" ]; then
+- jpeg="no"
+--cc 2>>./config.log >>./config.log -o \$\$~test \$\$~test.c -ljpeg $libs
+-+$CC 2>>./config.log >>./config.log -o \$\$~test \$\$~test.c -ljpeg $libs
+- if [ -e \$\$~test ]; then
+- 	libs="-ljpeg $libs" ; jpeg="yes"
+- fi
+-@@ -135,7 +139,7 @@
+- echo -n "checking for libpng presence... "
+- if [ "$png" != "disabled" ]; then
+- png="no"
+--cc 2>>./config.log >>./config.log -o \$\$~test \$\$~test.c -lpng $libs
+-+$CC 2>>./config.log >>./config.log -o \$\$~test \$\$~test.c -lpng $libs
+- if [ -e \$\$~test ]; then
+- 	libs="-lpng $libs" ; png="yes"
+- fi
+-diff -ur fbv-1.0b/fb_display.c fbv-1.0b-avr32/fb_display.c
+---- fbv-1.0b/fb_display.c	2004-09-07 14:09:43.000000000 +0200
+-+++ fbv-1.0b-avr32/fb_display.c	2006-05-04 13:30:25.000000000 +0200
+-@@ -18,8 +18,6 @@
+-     Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
+- */
+- 
+--#include <linux/fb.h>
+--
+- #include <stdio.h>
+- #include <stdlib.h>
+- #include <sys/types.h>
+-@@ -31,7 +29,9 @@
+- #include <asm/types.h>
+- #include <string.h>
+- #include <errno.h>
+-+#include <linux/fb.h>
+- #include "config.h"
 -+
-- #define FALSE		(0)
-- #define TRUE		(1)
+- /* Public Use Functions:
+-  *
+-  * extern void fb_display(unsigned char *rgbbuff,
+-@@ -276,9 +276,6 @@
+- 	    for(i = 0; i < yc; i++, fbptr += scr_xs * cpp, imptr += pic_xs * cpp)
+- 			memcpy(fbptr, imptr, xc * cpp);
+- 		
+--	if(cpp == 1)
+--	    set8map(fh, &map_back);
+--	
+- 	munmap(fb, scr_xs * scr_ys * cpp);
+- }
 - 
--@@ -59,6 +62,7 @@
--     unsigned vsync : 1;
--     unsigned csync : 1;
--     unsigned gsync : 1;
--+    unsigned pclk : 1;
--     unsigned extsync : 1;
--     unsigned bcast : 1;
--     unsigned laced : 1;
+-@@ -293,17 +290,17 @@
+- inline static unsigned short make15color(unsigned char r, unsigned char g, unsigned char b)
+- {
+-     return (
+--	(((r >> 3) & 31) << 10) |
+-+	(((r >> 3) & 31)) |
+- 	(((g >> 3) & 31) << 5)  |
+--	 ((b >> 3) & 31)        );
+-+	 ((b >> 3) & 31) << 10);
+- }
+- 
+- inline static unsigned short make16color(unsigned char r, unsigned char g, unsigned char b)
+- {
+-     return (
+--	(((r >> 3) & 31) << 11) |
+--	(((g >> 2) & 63) << 5)  |
+--	 ((b >> 3) & 31)        );
+-+	(((r >> 3) & 31))      |
+-+	(((g >> 3) & 31) << 5) |
+-+	 ((b >> 3) & 31) << 10);
+- }
+- 
+- void* convertRGB2FB(int fh, unsigned char *rgbbuff, unsigned long count, int bpp, int *cpp)
+-@@ -342,9 +339,9 @@
+- 	    *cpp = 4;
+- 	    i_fbbuff = (unsigned int *) malloc(count * sizeof(unsigned int));
+- 	    for(i = 0; i < count ; i++)
+--		i_fbbuff[i] = ((rgbbuff[i*3] << 16) & 0xFF0000) |
+-+		i_fbbuff[i] = ((rgbbuff[i*3+2] << 16) & 0xFF0000) |
+- 			    ((rgbbuff[i*3+1] << 8) & 0xFF00) |
+--			    (rgbbuff[i*3+2] & 0xFF);
+-+			    (rgbbuff[i*3] & 0xFF);
+- 	    fbbuff = (void *) i_fbbuff;
+- 	    break;
+- 	default:
 
-Copied: trunk/buildroot/package/fbset/fbset-2.1-support.patch.avr32 (from rev 21822, trunk/buildroot/package/fbset/fbset-2.1-avr32.patch)
+Added: trunk/buildroot/package/fbv/fbv-1.0b-cross.patch
 ===================================================================
---- trunk/buildroot/package/fbset/fbset-2.1-support.patch.avr32	                        (rev 0)
-+++ trunk/buildroot/package/fbset/fbset-2.1-support.patch.avr32	2008-04-24 09:03:22 UTC (rev 21823)
-@@ -0,0 +1,108 @@
-+diff -ru fbset-2.1/fb.h fbset-2.1-avr32/fb.h
-+--- fbset-2.1/fb.h	1999-06-23 16:09:48.000000000 +0200
-++++ fbset-2.1-avr32/fb.h	2005-12-09 16:00:07.000000000 +0100
-+@@ -131,6 +131,7 @@
-+ 					/* vtotal = 144d/288n/576i => PAL  */
-+ 					/* vtotal = 121d/242n/484i => NTSC */
-+ #define FB_SYNC_ON_GREEN	32	/* sync on green */
-++#define FB_SYNC_PCLK_RISING     64      /* pixel data sampled on rising pclk */
+--- trunk/buildroot/package/fbv/fbv-1.0b-cross.patch	                        (rev 0)
++++ trunk/buildroot/package/fbv/fbv-1.0b-cross.patch	2008-04-24 09:03:25 UTC (rev 21824)
+@@ -0,0 +1,44 @@
++diff -urpN fbv-1.0b.orig/configure fbv-1.0b/configure
++--- fbv-1.0b.orig/configure	2004-09-07 13:29:27.000000000 +0200
+++++ fbv-1.0b/configure	2008-04-24 10:52:37.000000000 +0200
++@@ -80,6 +80,7 @@ while true ; do
++ 	esac
++ done
 + 
-+ #define FB_VMODE_NONINTERLACED  0	/* non interlaced */
-+ #define FB_VMODE_INTERLACED	1	/* interlaced	*/
-+diff -ru fbset-2.1/fbset.c fbset-2.1-avr32/fbset.c
-+--- fbset-2.1/fbset.c	1999-06-23 16:11:46.000000000 +0200
-++++ fbset-2.1-avr32/fbset.c	2005-12-09 16:04:53.000000000 +0100
-+@@ -85,6 +85,7 @@
-+ static const char *Opt_vsync = NULL;
-+ static const char *Opt_csync = NULL;
-+ static const char *Opt_gsync = NULL;
-++static const char *Opt_pclk = NULL;
-+ static const char *Opt_extsync = NULL;
-+ static const char *Opt_bcast = NULL;
-+ static const char *Opt_laced = NULL;
-+@@ -122,6 +123,7 @@
-+     { "-vsync", &Opt_vsync, 1 },
-+     { "-csync", &Opt_csync, 1 },
-+     { "-gsync", &Opt_gsync, 1 },
-++    { "-pclk", &Opt_pclk, 1 },
-+     { "-extsync", &Opt_extsync, 1 },
-+     { "-bcast", &Opt_bcast, 1 },
-+     { "-laced", &Opt_laced, 1 },
-+@@ -344,6 +346,8 @@
-+ 	var->sync |= FB_SYNC_COMP_HIGH_ACT;
-+     if (vmode->gsync == HIGH)
-+ 	var->sync |= FB_SYNC_ON_GREEN;
-++    if (vmode->pclk == RISING)
-++	var->sync |= FB_SYNC_PCLK_RISING;
-+     if (vmode->extsync == TRUE)
-+ 	var->sync |= FB_SYNC_EXT;
-+     if (vmode->bcast == TRUE)
-+@@ -389,6 +393,7 @@
-+     vmode->vsync = var->sync & FB_SYNC_VERT_HIGH_ACT ? HIGH : LOW;
-+     vmode->csync = var->sync & FB_SYNC_COMP_HIGH_ACT ? HIGH : LOW;
-+     vmode->gsync = var->sync & FB_SYNC_ON_GREEN ? TRUE : FALSE;
-++    vmode->pclk = var->sync & FB_SYNC_PCLK_RISING ? RISING : FALLING;
-+     vmode->extsync = var->sync & FB_SYNC_EXT ? TRUE : FALSE;
-+     vmode->bcast = var->sync & FB_SYNC_BROADCAST ? TRUE : FALSE;
-+     vmode->grayscale = var->grayscale;
-+@@ -420,11 +425,11 @@
-+ 
-+     if (!strcasecmp(var, "false") || !strcasecmp(var, "low") ||
-+ 	!strcasecmp(var, "no") || !strcasecmp(var, "off") ||
-+-	!strcmp(var, "0"))
-++	!strcmp(var, "0") || !strcasecmp(var, "falling"))
-+ 	value = 0;
-+     else if (!strcasecmp(var, "true") || !strcasecmp(var, "high") ||
-+ 	     !strcasecmp(var, "yes") || !strcasecmp(var, "on") ||
-+-	     !strcmp(var, "1"))
-++	     !strcmp(var, "1") || !strcasecmp(var, "rising"))
-+ 	value = 1;
-+     else
-+ 	Die("Invalid value `%s'\n", var);
-+@@ -559,6 +564,8 @@
-+ 	vmode->csync = atoboolean(Opt_csync);
-+     if (Opt_gsync)
-+ 	vmode->gsync = atoboolean(Opt_gsync);
-++    if (Opt_pclk)
-++	vmode->pclk = atoboolean(Opt_pclk);
-+     if (Opt_extsync)
-+ 	vmode->extsync = atoboolean(Opt_extsync);
-+     if (Opt_bcast)
-+@@ -635,6 +642,8 @@
-+ 	    puts("    csync high");
-+ 	if (vmode->gsync)
-+ 	    puts("    gsync true");
-++	if (vmode->pclk)
-++	    puts("    pclk rising");
-+ 	if (vmode->extsync)
-+ 	    puts("    extsync true");
-+ 	if (vmode->bcast)
-+@@ -875,6 +884,7 @@
-+ 	"    -vsync <value>     : vertical sync polarity (low or high)\n"
-+ 	"    -csync <value>     : composite sync polarity (low or high)\n"
-+ 	"    -gsync <value>     : synch on green (false or true)\n"
-++	"    -pclk <value>      : pclk edge on which pixeldata is valid (rising or falling)\n"
-+ 	"    -extsync <value>   : external sync enable (false or true)\n"
-+ 	"    -bcast <value>     : broadcast enable (false or true)\n"
-+ 	"    -laced <value>     : interlace enable (false or true)\n"
-+diff -ru fbset-2.1/fbset.h fbset-2.1-avr32/fbset.h
-+--- fbset-2.1/fbset.h	1999-06-23 16:12:28.000000000 +0200
-++++ fbset-2.1-avr32/fbset.h	2005-12-09 16:05:25.000000000 +0100
-+@@ -26,6 +26,9 @@
-+ #define LOW		(0)
-+ #define HIGH		(1)
-+ 
-++#define FALLING		(0)
-++#define RISING		(1)
-++
-+ #define FALSE		(0)
-+ #define TRUE		(1)
-+ 
-+@@ -59,6 +62,7 @@
-+     unsigned vsync : 1;
-+     unsigned csync : 1;
-+     unsigned gsync : 1;
-++    unsigned pclk : 1;
-+     unsigned extsync : 1;
-+     unsigned bcast : 1;
-+     unsigned laced : 1;
+++[ -z "$CC" ] && CC=cc
++ [ -z "$prefix" ] && prefix="/usr/local"
++ [ -z "$bindir" ] && bindir="${prefix}/bin"
++ [ -z "$mandir" ] && mandir="${prefix}/man"
++@@ -106,12 +107,12 @@ xdir="/usr/X11R6"
++ ungif="no"
++ echo "libungif check" >>./config.log
++ echo "  1st:" >>./config.log
++-cc 2>>./config.log >>./config.log -o \$\$~test \$\$~test.c -lungif $libs
+++$CC 2>>./config.log >>./config.log -o \$\$~test \$\$~test.c -lungif $libs
++ if [ -e \$\$~test ]; then
++ 	libs="-lungif $libs" ; ungif="yes"
++ else
++ 	echo "  2nd: -lX11 -L$xdir/lib" >>./config.log
++-	cc 2>>./config.log >>./config.log -o \$\$~test \$\$~test.c -lungif -lX11 -L$xdir/lib $libs
+++	$CC 2>>./config.log >>./config.log -o \$\$~test \$\$~test.c -lungif -lX11 -L$xdir/lib $libs
++ 	if [ -e \$\$~test ]; then
++ 	libs="-lungif -lX11 -L$xdir/lib $libs" ; ungif="yes"
++ 	fi
++@@ -124,7 +125,7 @@ echo "libungif: $ungif" >> ./config.log
++ echo -n "checking for libjpeg presence... "
++ if [ "$jpeg" != "disabled" ]; then
++ jpeg="no"
++-cc 2>>./config.log >>./config.log -o \$\$~test \$\$~test.c -ljpeg $libs
+++$CC 2>>./config.log >>./config.log -o \$\$~test \$\$~test.c -ljpeg $libs
++ if [ -e \$\$~test ]; then
++ 	libs="-ljpeg $libs" ; jpeg="yes"
++ fi
++@@ -135,7 +136,7 @@ echo "libjpeg: $jpeg" >> ./config.log
++ echo -n "checking for libpng presence... "
++ if [ "$png" != "disabled" ]; then
++ png="no"
++-cc 2>>./config.log >>./config.log -o \$\$~test \$\$~test.c -lpng $libs
+++$CC 2>>./config.log >>./config.log -o \$\$~test \$\$~test.c -lpng $libs
++ if [ -e \$\$~test ]; then
++ 	libs="-lpng $libs" ; png="yes"
++ fi
 
-Modified: trunk/buildroot/package/fbset/fbset.mk
+Added: trunk/buildroot/package/fbv/fbv-1.0b-include.patch
 ===================================================================
---- trunk/buildroot/package/fbset/fbset.mk	2008-04-24 09:03:19 UTC (rev 21822)
-+++ trunk/buildroot/package/fbset/fbset.mk	2008-04-24 09:03:22 UTC (rev 21823)
-@@ -16,7 +16,9 @@
+--- trunk/buildroot/package/fbv/fbv-1.0b-include.patch	                        (rev 0)
++++ trunk/buildroot/package/fbv/fbv-1.0b-include.patch	2008-04-24 09:03:25 UTC (rev 21824)
+@@ -0,0 +1,20 @@
++diff -urpN fbv-1.0b.orig/fb_display.c fbv-1.0b/fb_display.c
++--- fbv-1.0b.orig/fb_display.c	2004-09-07 14:09:43.000000000 +0200
+++++ fbv-1.0b/fb_display.c	2008-04-24 10:48:29.000000000 +0200
++@@ -18,8 +18,6 @@
++     Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
++ */
++ 
++-#include <linux/fb.h>
++-
++ #include <stdio.h>
++ #include <stdlib.h>
++ #include <sys/types.h>
++@@ -31,6 +29,7 @@
++ #include <asm/types.h>
++ #include <string.h>
++ #include <errno.h>
+++#include <linux/fb.h>
++ #include "config.h"
++ /* Public Use Functions:
++  *
+
+Modified: trunk/buildroot/package/fbv/fbv.mk
+===================================================================
+--- trunk/buildroot/package/fbv/fbv.mk	2008-04-24 09:03:22 UTC (rev 21823)
++++ trunk/buildroot/package/fbv/fbv.mk	2008-04-24 09:03:25 UTC (rev 21824)
+@@ -18,7 +18,8 @@
  
- $(FBSET_DIR)/.unpacked: $(DL_DIR)/$(FBSET_SOURCE)
- 	$(FBSET_CAT) $(DL_DIR)/$(FBSET_SOURCE) | tar -C $(BUILD_DIR) $(TAR_OPTIONS) -
--	toolchain/patch-kernel.sh $(FBSET_DIR) package/fbset/ fbset-$(FBSET_VERSION)\*.patch\*
-+	toolchain/patch-kernel.sh $(FBSET_DIR) package/fbset/ \
-+		fbset-$(FBSET_VERSION)\*.patch \
-+		fbset-$(FBSET_VERSION)\*.patch.$(ARCH)
+ $(FBV_DIR)/.unpacked: $(DL_DIR)/$(FBV_SOURCE)
+ 	$(FBV_CAT) $(DL_DIR)/$(FBV_SOURCE) | tar -C $(BUILD_DIR) $(TAR_OPTIONS) -
+-	toolchain/patch-kernel.sh $(FBV_DIR) package/fbv/ fbv-$(FBV_VERSION)\*.patch\*
++	toolchain/patch-kernel.sh $(FBV_DIR) package/fbv/ \
++		fbv-$(FBV_VERSION)\*.patch fbv-$(FBV_VERSION)\*.patch.$(ARCH)
  	touch $@
  
- $(FBSET_DIR)/$(FBSET_BINARY): $(FBSET_DIR)/.unpacked
+ $(FBV_DIR)/.configured: $(FBV_DIR)/.unpacked
+@@ -27,7 +28,6 @@
+ 		$(TARGET_CONFIGURE_ARGS) \
+ 		./configure \
+ 		--prefix=/usr \
+-		--cc=$(TARGET_CC) \
+ 		--libs="-lz -lm" \
+ 	)
+ 	touch $@
