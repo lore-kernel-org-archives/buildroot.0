@@ -1,7 +1,7 @@
 From: bugs at busybox.net <bugs@busybox.net>
-Date: Thu, 24 Apr 2008 13:54:16 -0700
-Subject: [Buildroot] [buildroot 0001799]: Build for MIPs 32 processors fails
-Message-ID: <ea35ff56211fe5a0a5713c052ca821d5@busybox.net>
+Date: Thu, 24 Apr 2008 13:55:34 -0700
+Subject: [Buildroot] [buildroot 0001615]: Can not build?
+Message-ID: <d9108c1a28f74978335988de086eeb18@busybox.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -11,71 +11,85 @@ To: buildroot@busybox.net
 
 A NOTE has been added to this issue. 
 ====================================================================== 
-http://busybox.net/bugs/view.php?id=1799 
+http://busybox.net/bugs/view.php?id=1615 
 ====================================================================== 
-Reported By:                skibud2
+Reported By:                linsample
 Assigned To:                buildroot
 ====================================================================== 
 Project:                    buildroot
-Issue ID:                   1799
-Category:                   Architecture Specific
+Issue ID:                   1615
+Category:                   Other
 Reproducibility:            always
-Severity:                   major
+Severity:                   trivial
 Priority:                   normal
 Status:                     assigned
 ====================================================================== 
-Date Submitted:             12-17-2007 22:02 PST
-Last Modified:              04-24-2008 13:54 PDT
+Date Submitted:             11-27-2007 22:28 PST
+Last Modified:              04-24-2008 13:55 PDT
 ====================================================================== 
-Summary:                    Build for MIPs 32 processors fails
+Summary:                    Can not build?
 Description: 
-Building for MIP32 processors fails with the following error:
+Anybody knows the compile error when I try to build buildroot???
 
-/home/mike/Desktop/buildroot/toolchain_build_mips/gcc-4.2.1-initial/./gcc/xgcc
--B/home/mike/Desktop/buildroot/toolchain_build_mips/gcc-4.2.1-initial/./gcc/
--B/home/mike/Desktop/buildroot/build_mips/staging_dir/usr/mips-linux-uclibc/bin/
--B/home/mike/Desktop/buildroot/build_mips/staging_dir/usr/mips-linux-uclibc/lib/
--isystem
-/home/mike/Desktop/buildroot/build_mips/staging_dir/usr/mips-linux-uclibc/include
--isystem
-/home/mike/Desktop/buildroot/build_mips/staging_dir/usr/mips-linux-uclibc/sys-include
--O2 -g -Os -DIN_GCC -DCROSS_COMPILE   -W -Wall -Wwrite-strings
--Wstrict-prototypes -Wmissing-prototypes -Wold-style-definition  -isystem
-./include  -I. -I.
--I/home/mike/Desktop/buildroot/toolchain_build_mips/gcc-4.2.1/gcc
--I/home/mike/Desktop/buildroot/toolchain_build_mips/gcc-4.2.1/gcc/.
--I/home/mike/Desktop/buildroot/toolchain_build_mips/gcc-4.2.1/gcc/../include
--I/home/mike/Desktop/buildroot/toolchain_build_mips/gcc-4.2.1/gcc/../libcpp/include
--I/home/mike/Desktop/buildroot/toolchain_build_mips/gmp/include
--I/home/mike/Desktop/buildroot/toolchain_build_mips/mpfr/include
--I/home/mike/Desktop/buildroot/toolchain_build_mips/gcc-4.2.1/gcc/../libdecnumber
--I../libdecnumber  -g0 -finhibit-size-directive -fno-inline-functions
--fno-exceptions -fno-zero-initialized-in-bss -fno-toplevel-reorder   \
-          -c
-/home/mike/Desktop/buildroot/toolchain_build_mips/gcc-4.2.1/gcc/crtstuff.c
--DCRT_BEGIN \
-          -o crtbegin.o
-/home/mike/Desktop/buildroot/toolchain_build_mips/gcc-4.2.1/gcc/crtstuff.c:1:
-error: unsupported combination: -mabicalls -mabi=eabi
+/home/sample/projects/LX_2618_RG_5_3_00r4_SRC/buildroot/toolchain_build_mips/gcc-4.2.1/gcc/crtstuff.
+c:1: error: unsupported combination: -mabicalls -mabi=eabi
 make[2]: *** [crtbegin.o] Error 1
 make[2]: Leaving directory
-`/home/mike/Desktop/buildroot/toolchain_build_mips/gcc-4.2.1-initial/gcc'
+`/home/sample/projects/LX_2618_RG_5_3_00r4_SRC/buildroot/toolchain_build_
+mips/gcc-4.2.1-initial/gcc'
 make[1]: *** [all-gcc] Error 2
 make[1]: Leaving directory
-`/home/mike/Desktop/buildroot/toolchain_build_mips/gcc-4.2.1-initial'
+`/home/sample/projects/LX_2618_RG_5_3_00r4_SRC/buildroot/toolchain_build_
+mips/gcc-4.2.1-initial'
 make: ***
-[/home/mike/Desktop/buildroot/toolchain_build_mips/gcc-4.2.1-initial/.compiled]
-Error 2
+[/home/sample/projects/LX_2618_RG_5_3_00r4_SRC/buildroot/toolchain_build_mips/gcc-4.2.1-in
+itial/.compiled] Error 2
 
 ====================================================================== 
 
 ---------------------------------------------------------------------- 
- skibud2 - 12-24-07 11:16  
+ linsample - 11-28-07 00:03  
 ---------------------------------------------------------------------- 
-Is there a quick hack that I can do to get around this? 
+I use Fedora Core 4
+I use latest buildroot soruce code.
+
+ 
 
 ---------------------------------------------------------------------- 
- dpelton - 04-24-08 13:54  
+ UlfSamuelsson - 11-27-07 23:00  
+---------------------------------------------------------------------- 
+Isn't EABI (-mabi=eabi) an ARM thing and not applicable to MIPS arch? 
+
+---------------------------------------------------------------------- 
+ linsample - 11-27-07 23:04  
+---------------------------------------------------------------------- 
+But I dont do anything for latest buildroot source code.
+
+My steps are as follows:
+
+1. make menuconfig
+   only change CPU type to MIPS
+
+2. make
+
+I dont know why the compiler adds ARM related words? 
+
+---------------------------------------------------------------------- 
+ linsample - 11-28-07 00:02  
+---------------------------------------------------------------------- 
+Same problem is suffered by other people in
+http://www.nabble.com/error-when-building-gcc-using-buildroot-toolchain-t4717991.html
+
+But no any work-around is mentioned there.
+
+So anyone knows the work-around?
+
+Thank you very much.
+
+ 
+
+---------------------------------------------------------------------- 
+ dpelton - 04-24-08 13:55  
 ---------------------------------------------------------------------- 
 The patch referenced in the link below seems to address this issue.
 
@@ -83,15 +97,22 @@ http://buildroot.uclibc.org/lists/buildroot/2008-February/007070.html
 
 This issue is duplicated:
 http://busybox.net/bugs/view.php?id=2474
-http://bugs.busybox.net/view.php?id=1615 
+http://bugs.busybox.net/view.php?id=1799 
 
 Issue History 
 Date Modified   Username       Field                    Change               
 ====================================================================== 
-12-17-07 22:02  skibud2        New Issue                                    
-12-17-07 22:02  skibud2        Status                   new => assigned     
-12-17-07 22:02  skibud2        Assigned To               => buildroot       
-12-22-07 11:06  skibud2        Issue Monitored: skibud2                     
-12-24-07 11:16  skibud2        Note Added: 0003264                          
-04-24-08 13:54  dpelton        Note Added: 0007074                          
+11-27-07 22:28  linsample      New Issue                                    
+11-27-07 22:28  linsample      Status                   new => assigned     
+11-27-07 22:28  linsample      Assigned To               => buildroot       
+11-27-07 22:46  linsample      Issue Monitored: linsample                    
+11-27-07 22:46  linsample      Issue End Monitor: linsample                    
+11-27-07 22:47  linsample      Note Added: 0002982                          
+11-27-07 23:00  UlfSamuelsson  Note Added: 0002983                          
+11-27-07 23:04  linsample      Note Added: 0002984                          
+11-27-07 23:57  linsample      Note Added: 0002985                          
+11-28-07 00:02  linsample      Note Edited: 0002985                         
+11-28-07 00:02  linsample      Note Edited: 0002985                         
+11-28-07 00:03  linsample      Note Edited: 0002982                         
+04-24-08 13:55  dpelton        Note Added: 0007084                          
 ======================================================================
