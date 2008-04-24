@@ -1,48 +1,91 @@
-From: =?ISO-8859-1?Q?Thiago_A._Corr=EAa?= <thiago.correa@gmail.com>
-Date: Thu, 24 Apr 2008 17:27:13 -0300
-Subject: [Buildroot] svn commit: trunk/buildroot/package/qtopia4
-In-Reply-To: <87ej8vyqzy.fsf@macbook.be.48ers.dk>
-References: <20080424184430.B4D613C849@busybox.net>
-	<87iqy713d1.fsf@macbook.be.48ers.dk>
-	<46a136670804241230k2fe7dd25p3d2fa0f5650107ef@mail.gmail.com>
-	<87ej8vyqzy.fsf@macbook.be.48ers.dk>
-Message-ID: <d6cda7730804241327y444a9dfchf945ca73f4904c24@mail.gmail.com>
+From: bugs at busybox.net <bugs@busybox.net>
+Date: Thu, 24 Apr 2008 13:49:44 -0700
+Subject: [Buildroot] [buildroot 0002474]: Error building GCC-4.2.1
+Message-ID: <fe0357216c2705dbb0165f49a8ec558a@busybox.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Sorry, I was actually going to wait a little bit to send a patch....
-then would have caught this on the diff. But that's quite a small
-change anyway. The only thing that makes me uncomfortable is the QMAKE
-variable, it could go without the CONFIGURE_OPTS thing.
 
-Anyway, given that it now actually works as opposed to not, that's
-quite a minor annoyance.
+A NOTE has been added to this issue. 
+====================================================================== 
+http://busybox.net/bugs/view.php?id=2474 
+====================================================================== 
+Reported By:                Olivier
+Assigned To:                buildroot
+====================================================================== 
+Project:                    buildroot
+Issue ID:                   2474
+Category:                   Architecture Specific
+Reproducibility:            always
+Severity:                   block
+Priority:                   normal
+Status:                     assigned
+====================================================================== 
+Date Submitted:             03-07-2008 08:11 PST
+Last Modified:              04-24-2008 13:49 PDT
+====================================================================== 
+Summary:                    Error building GCC-4.2.1
+Description: 
+Hello, 
 
-Btw, it seams to be missing the new Config.in.sql
+I want to build a tool chain for a MPIS 32.
+I use the dayly snapshoot of buildroot (07-Mar-2008).
+I have confiured using 'make menuconfig' and when I whant to compile it, I
+have the following error:
 
-On Thu, Apr 24, 2008 at 4:47 PM, Peter Korsgaard <jacmet@uclibc.org> wrote:
-> >>>>> "John" == John Voltz <john.voltz@gmail.com> writes:
->
->   John> I would assume it was due to changes in the build from the
->   John> different snapshot versions of qtopia. The commit log goes like
->   John> this:
->
->  That still doesn't explain the white space changes. Please cleanup
->  stuff before checking in to buildroot instead of simply mirroring what
->  you have in the other repo.
->
->  Or alternatively, send the indivual changes as patches and give us
->  some days to comment before checking in.
->
->  --
->
->
-> Bye, Peter Korsgaard
->  _______________________________________________
->  buildroot mailing list
->  buildroot at uclibc.org
->  http://busybox.net/mailman/listinfo/buildroot
->
+/home/buildroot-20080307/toolchain_build_mips/gcc-4.2.1-initial/./gcc/xgcc
+-B/home/buildroot-20080307/toolchain_build_mips/gcc-4.2.1-initial/./gcc/
+-B/home/buildroot-20080307/build_mips/staging_dir/usr/mips-linux-uclibc/bin/
+-B/home/buildroot-20080307/build_mips/staging_dir/usr/mips-linux-uclibc/lib/
+-isystem
+/home/buildroot-20080307/build_mips/staging_dir/usr/mips-linux-uclibc/include
+-isystem
+/home/buildroot-20080307/build_mips/staging_dir/usr/mips-linux-uclibc/sys-include
+-O2 -g -Os -DIN_GCC -DCROSS_COMPILE   -W -Wall -Wwrite-strings
+-Wstrict-prototypes -Wmissing-prototypes -Wold-style-definition  -isystem
+./include  -I. -I.
+-I/home/buildroot-20080307/toolchain_build_mips/gcc-4.2.1/gcc
+-I/home/buildroot-20080307/toolchain_build_mips/gcc-4.2.1/gcc/.
+-I/home/buildroot-20080307/toolchain_build_mips/gcc-4.2.1/gcc/../include
+-I/home/buildroot-20080307/toolchain_build_mips/gcc-4.2.1/gcc/../libcpp/include
+-I/home/buildroot-20080307/toolchain_build_mips/gmp/include
+-I/home/buildroot-20080307/toolchain_build_mips/mpfr/include
+-I/home/buildroot-20080307/toolchain_build_mips/gcc-4.2.1/gcc/../libdecnumber
+-I../libdecnumber  -g0 -finhibit-size-directive -fno-inline-functions
+-fno-exceptions -fno-zero-initialized-in-bss -fno-toplevel-reorder   \
+          -c
+/home/buildroot-20080307/toolchain_build_mips/gcc-4.2.1/gcc/crtstuff.c
+-DCRT_BEGIN \
+          -o crtbegin.o
+/home/buildroot-20080307/toolchain_build_mips/gcc-4.2.1/gcc/crtstuff.c:1:
+error: unsupported combination: -mabicalls -mabi=eabi
+make[2]: *** [crtbegin.o] Erreur 1
+
+
+I have replaced in the configuration Target ABI = EABI by Target ABI =
+OABI, but the error is still the same.
+
+
+I have put my .config file as attachement.
+
+====================================================================== 
+
+---------------------------------------------------------------------- 
+ dpelton - 04-24-08 13:49  
+---------------------------------------------------------------------- 
+The patch referenced in the link below seems to address this issue.
+
+http://buildroot.uclibc.org/lists/buildroot/2008-February/007070.html 
+
+Issue History 
+Date Modified   Username       Field                    Change               
+====================================================================== 
+03-07-08 08:11  Olivier        New Issue                                    
+03-07-08 08:11  Olivier        Status                   new => assigned     
+03-07-08 08:11  Olivier        Assigned To               => buildroot       
+03-07-08 08:11  Olivier        File Added: .config                          
+04-24-08 13:49  dpelton        Note Added: 0007064                          
+======================================================================
