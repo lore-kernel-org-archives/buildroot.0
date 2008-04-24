@@ -1,33 +1,31 @@
-From: Hebbar <gururajakr@sanyo.co.in>
-Date: Wed, 23 Apr 2008 19:12:17 -0700 (PDT)
-Subject: [Buildroot]  Need help using makefile.autotools.in
-Message-ID: <16835545.post@talk.nabble.com>
+From: Li Liang <li.liang@neomeridian.com>
+Date: Thu, 24 Apr 2008 13:51:05 +1000
+Subject: [Buildroot] Error:
+	gcc-4.2.3/gcc/config/arm/lib1funcs.asm:1000:undefined
+	reference to 'raise'
+Message-ID: <1209009065.481003a919dc5@www.server101.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+I was trying to compile the kernel for arm, and then the error message
+encountered :
 
-Hi all,
+/home/ll/work/MFSP/uCroot/buildroot/toolchain_build_arm/gcc-4.2.3/gcc/config/arm/lib1funcs.asm:1000:
+undefined reference to `raise'
+make[5]: *** [lib] Error 1
+make[5]: Leaving directory `/home/ll/work/MFSP/snapgear/uClibc/ldso/ldso'
+make[4]: *** [all] Error 2
+make[4]: Leaving directory `/home/ll/work/MFSP/snapgear/uClibc/ldso'
+make[3]: *** [_dir_ldso] Error 2
 
-   I am trying to modify pcmanfm.mk file inorder to override default make
-install command. present make install in autotools doesnt run make
-install-data required by pcmanfm package to install data file to root/
-directory.
+A google search leads me to:
 
-I checked makefile.autotools.in file and found that if we use
-FOO_TARGET_INSTALL_TARGET or FOO_TARGET_INSTALL_STAGING or
-$(FOO_TARGET_INSTALL) we can run custom install but i am not able to
-implement the same in pcmanfm package. 
+http://buildroot.uclibc.org/lists/buildroot/2006-October/000362.html
 
-can some one help me to run custom install command inside package.mk files
-using autotools method.
+Unfortunately, I couldn't download the mentioned patch from the SVN due to
+authentication is required. So anyone can help me out? Thank you.
 
-Thanks in advance
-
-Regards
-Gururaja
--- 
-View this message in context: http://www.nabble.com/Need-help-using-makefile.autotools.in-tp16835545p16835545.html
-Sent from the BuildRoot mailing list archive at Nabble.com.
+~LL
