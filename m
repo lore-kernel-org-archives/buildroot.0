@@ -1,36 +1,35 @@
-From: Jorge S. <jorgesolla@gmail.com>
-Date: Thu, 24 Apr 2008 15:03:12 +0200
-Subject: [Buildroot] Question regarding CUPS package
-Message-ID: <6090c5eb0804240603r1c89303eg4977bd66af67f4a7@mail.gmail.com>
+From: ninevoltz at uclibc.org <ninevoltz@uclibc.org>
+Date: Thu, 24 Apr 2008 06:14:26 -0700 (PDT)
+Subject: [Buildroot] svn commit: trunk/buildroot/package/alsamixergui
+Message-ID: <20080424131426.5FAF93C824@busybox.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello all,
+Author: ninevoltz
+Date: 2008-04-24 06:14:25 -0700 (Thu, 24 Apr 2008)
+New Revision: 21831
 
-I'm creating a rootfs for a custom AT91RM9200 board.
-I'm planning to use the board as kind of a printer server and i need to use
-CUPS.
+Log:
+small fix for alsamixergui
 
-The problem comes when building the CUPS package because it depends on X11
-libs.
-Just reading on the cups project documentation and some forums posts i've
-discovered that CUPS only needs X11 libs
-when you are planning to build/use GUI config tools, but if only need
-cups-base and lpr are needed you can remove
-the X11 libs dependence.
-
-Does somebody on the list is using CUPS without X11 libs? Any available
-patch? Any ideas on how to solve this?
+Modified:
+   trunk/buildroot/package/alsamixergui/alsamixergui.mk
 
 
-Thanks in advance.
-
-Regards,
-
-Jorge.
--------------- next part --------------
-An HTML attachment was scrubbed...
-URL: http://busybox.net/lists/buildroot/attachments/20080424/d8fd0c08/attachment-0001.htm 
+Changeset:
+Modified: trunk/buildroot/package/alsamixergui/alsamixergui.mk
+===================================================================
+--- trunk/buildroot/package/alsamixergui/alsamixergui.mk	2008-04-24 11:22:06 UTC (rev 21830)
++++ trunk/buildroot/package/alsamixergui/alsamixergui.mk	2008-04-24 13:14:25 UTC (rev 21831)
+@@ -10,7 +10,7 @@
+ ALSAMIXERGUI_INSTALL_STAGING = NO
+ ALSAMIXERGUI_INSTALL_TARGET = YES
+ 
+-ALSAMIXERGUI_CONF_OPT = LDFLAGS="-L$(STAGING_DIR)/usr/lib -L$(STAGING_DIR)/lib -L$(STAGING_DIR)/usr/avr32-linux-uclibc/lib -lstdc++"
++ALSAMIXERGUI_CONF_OPT = LDFLAGS="-L$(STAGING_DIR)/usr/lib -L$(STAGING_DIR)/lib -L$(STAGING_DIR)/usr/avr32-linux-uclibc/lib -lstdc++ -lX11"
+ 
+ ALSAMIXERGUI_DEPENDENCIES = uclibc fltk
+ 
