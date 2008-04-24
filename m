@@ -1,52 +1,43 @@
-From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Thu, 24 Apr 2008 21:04:26 +0200
-Subject: [Buildroot] svn commit: trunk/buildroot/package/qtopia4
-In-Reply-To: <20080424184430.B4D613C849@busybox.net> (ninevoltz@uclibc.org's
-	message of "Thu\, 24 Apr 2008 11\:44\:30 -0700 \(PDT\)")
-References: <20080424184430.B4D613C849@busybox.net>
-Message-ID: <87iqy713d1.fsf@macbook.be.48ers.dk>
+From: John Voltz <john.voltz@gmail.com>
+Date: Thu, 24 Apr 2008 15:13:20 -0400
+Subject: [Buildroot] svn commit: trunk/buildroot/package/java: classpath
+	concierge jamvm
+In-Reply-To: <87r6cv13mx.fsf@macbook.be.48ers.dk>
+References: <20080424164821.800223C7C2@busybox.net>
+	<874p9r408c.fsf@macbook.be.48ers.dk>
+	<46a136670804241111j3548905fn3ca6f80b56e92dcf@mail.gmail.com>
+	<87fxtb2jxo.fsf@macbook.be.48ers.dk>
+	<46a136670804241134t28b93dddl80fd382224d0afa1@mail.gmail.com>
+	<87r6cv13mx.fsf@macbook.be.48ers.dk>
+Message-ID: <46a136670804241213q7d676fa9k3e73f36dcad7bc99@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "ninevoltz" == ninevoltz  <ninevoltz@uclibc.org> writes:
+I didn't :) I don't even know who the originator was for the whole
+java/jam/classpath/concierge collection. I know there were several people
+involved, but as far as the actual commit in the Google Code svn, it was
+Thiago Correa.
 
- ninevoltz> Author: ninevoltz
- ninevoltz> Date: 2008-04-24 11:44:30 -0700 (Thu, 24 Apr 2008)
- ninevoltz> New Revision: 21851
+John
 
- ninevoltz> Log:
- ninevoltz> update qtopia snapshot version and fix problem with qmake
- ninevoltz> generated makefiles being unable to find the toolchain
+On Thu, Apr 24, 2008 at 2:58 PM, Peter Korsgaard <jacmet@uclibc.org> wrote:
 
-What about all the config changes? Why don't you comment on them? Why
-are you changing it?
-
- ninevoltz> Modified:
- ninevoltz>    trunk/buildroot/package/qtopia4/Config.in
- ninevoltz>    trunk/buildroot/package/qtopia4/qtopia4.mk
-
-
- ninevoltz> Changeset:
- ninevoltz> Modified: trunk/buildroot/package/qtopia4/Config.in
- ninevoltz> ===================================================================
- ninevoltz> --- trunk/buildroot/package/qtopia4/Config.in	2008-04-24 18:35:44 UTC (rev 21850)
- ninevoltz> +++ trunk/buildroot/package/qtopia4/Config.in	2008-04-24 18:44:30 UTC (rev 21851)
- ninevoltz> @@ -12,6 +12,7 @@
- ninevoltz>  	bool "Compile with debug support"
- ninevoltz>  	default n
- ninevoltz>  	depends BR2_PACKAGE_QTOPIA4
- ninevoltz> +	help
-
-Why?
-
- ninevoltz> +qtopia4-status:
- ninevoltz> +	@echo "QTOPIA4_QMAKE:               " $(QTOPIA4_QMAKE)
- ninevoltz> +	@echo "QTOPIA4_DEP_LIBS:            " $(QTOPIA4_DEP_LIBS)
-
-What is that for?
-
--- 
-Bye, Peter Korsgaard
+> >>>>> "John" == John Voltz <john.voltz@gmail.com> writes:
+>
+>  John> Makefile.autotools.in will use the first argument of call
+>  John> AUTOTARGETS, look around line 161. I've never used
+>  John> <pkg>_DIR_PREFIX in any of the makefiles I've created and it
+>  John> works in festival this way, even with the multiple
+>  John> sub-directories.
+>
+> Ok, so why did you add it to classpath and jamvm?
+>
+> --
+> Bye, Peter Korsgaard
+>
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: http://busybox.net/lists/buildroot/attachments/20080424/6a59c675/attachment.htm 
