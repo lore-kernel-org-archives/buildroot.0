@@ -1,26 +1,55 @@
-From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Thu, 24 Apr 2008 12:36:57 +0200
-Subject: [Buildroot] svn commit: trunk/buildroot/package/fbset
-In-Reply-To: <1209032650.13600.3.camel@localhost> (Hans-Christian Egtvedt's
-	message of "Thu\, 24 Apr 2008 12\:24\:10 +0200")
-References: <20080424090323.3A4B23C7E0@busybox.net>
-	<1209032650.13600.3.camel@localhost>
-Message-ID: <87wsmn8rp2.fsf@macbook.be.48ers.dk>
+From: Hans-Christian Egtvedt <hans-christian.egtvedt@atmel.com>
+Date: Thu, 24 Apr 2008 12:38:57 +0200
+Subject: [Buildroot] [patch] AVR32: rename atstk1002 target
+	board	to	more generic	atstk100x
+In-Reply-To: <1208348434.8069.5.camel@localhost>
+References: <1208335958.23163.4.camel@localhost>
+	<1208348434.8069.5.camel@localhost>
+Message-ID: <1209033537.18722.5.camel@localhost>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Hans-Christian" == Hans-Christian Egtvedt <hans-christian.egtvedt@atmel.com> writes:
+Bump
 
-Hi,
+Any chance of getting this through?
 
- Hans-Christian> It is actually fine to kill this patch now. The pclk
- Hans-Christian> stuff to fbset is not needed for AVR32 architecture
- Hans-Christian> anymore.
-
-Ok, thanks.
-
+On Wed, 2008-04-16 at 14:20 +0200, Hans-Christian Egtvedt wrote:
+> On Wed, 2008-04-16 at 10:52 +0200, Hans-Christian Egtvedt wrote:
+> > Hi,
+> > 
+> > Please consider applying the linked patch:
+> > 
+> > http://www.atmel.no/~hcegtvedt/patches/0001-AVR32-rename-atstk1002-target-board-to-more-generic.patch
+> > 
+> 
+> Hmmm, nah, git format-patch did not do the trick for patch.
+> 
+> The patch below will work, but requires some manual hands-on.
+> 
+> http://www.atmel.no/~hcegtvedt/patches/0001-AVR32-rename-atstk1002-target-board-to-more-generic-take2.patch
+> 
+> patch -p1 < 0001-AVR32-rename-atstk1002-target-board-to-more-generic-take2.patch
+> ~ > mv target/device/Atmel/atstk1002/* target/device/Atmel/atstk100x/
+> ~ > rmdir target/device/Atmel/atstk1002
+> 
+> Then commit.
+> 
+> I update the two _defconfigs to reflect the changes.
+> 
+> > This patch renames the Atmel atstk1002 target board to a more generic
+> > atstk100x name. This to make it easier to add support for other
+> > CPU-boards than atstk1002.
+> > 
+> > Signed-off-by: Hans-Christian Egtvedt <hans-christian.egtvedt@atmel.com>
+> > 
+> > Applies clean to snapshot from 20080416.
+> > 
+> 
+> Should apply clean now.
+> 
 -- 
-Bye, Peter Korsgaard
+With kind regards,
+Hans-Christian Egtvedt, Applications Engineer
