@@ -1,7 +1,7 @@
 From: bugs at busybox.net <bugs@busybox.net>
-Date: Thu, 24 Apr 2008 13:49:44 -0700
-Subject: [Buildroot] [buildroot 0002474]: Error building GCC-4.2.1
-Message-ID: <fe0357216c2705dbb0165f49a8ec558a@busybox.net>
+Date: Thu, 24 Apr 2008 13:54:16 -0700
+Subject: [Buildroot] [buildroot 0001799]: Build for MIPs 32 processors fails
+Message-ID: <ea35ff56211fe5a0a5713c052ca821d5@busybox.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -11,81 +11,87 @@ To: buildroot@busybox.net
 
 A NOTE has been added to this issue. 
 ====================================================================== 
-http://busybox.net/bugs/view.php?id=2474 
+http://busybox.net/bugs/view.php?id=1799 
 ====================================================================== 
-Reported By:                Olivier
+Reported By:                skibud2
 Assigned To:                buildroot
 ====================================================================== 
 Project:                    buildroot
-Issue ID:                   2474
+Issue ID:                   1799
 Category:                   Architecture Specific
 Reproducibility:            always
-Severity:                   block
+Severity:                   major
 Priority:                   normal
 Status:                     assigned
 ====================================================================== 
-Date Submitted:             03-07-2008 08:11 PST
-Last Modified:              04-24-2008 13:49 PDT
+Date Submitted:             12-17-2007 22:02 PST
+Last Modified:              04-24-2008 13:54 PDT
 ====================================================================== 
-Summary:                    Error building GCC-4.2.1
+Summary:                    Build for MIPs 32 processors fails
 Description: 
-Hello, 
+Building for MIP32 processors fails with the following error:
 
-I want to build a tool chain for a MPIS 32.
-I use the dayly snapshoot of buildroot (07-Mar-2008).
-I have confiured using 'make menuconfig' and when I whant to compile it, I
-have the following error:
-
-/home/buildroot-20080307/toolchain_build_mips/gcc-4.2.1-initial/./gcc/xgcc
--B/home/buildroot-20080307/toolchain_build_mips/gcc-4.2.1-initial/./gcc/
--B/home/buildroot-20080307/build_mips/staging_dir/usr/mips-linux-uclibc/bin/
--B/home/buildroot-20080307/build_mips/staging_dir/usr/mips-linux-uclibc/lib/
+/home/mike/Desktop/buildroot/toolchain_build_mips/gcc-4.2.1-initial/./gcc/xgcc
+-B/home/mike/Desktop/buildroot/toolchain_build_mips/gcc-4.2.1-initial/./gcc/
+-B/home/mike/Desktop/buildroot/build_mips/staging_dir/usr/mips-linux-uclibc/bin/
+-B/home/mike/Desktop/buildroot/build_mips/staging_dir/usr/mips-linux-uclibc/lib/
 -isystem
-/home/buildroot-20080307/build_mips/staging_dir/usr/mips-linux-uclibc/include
+/home/mike/Desktop/buildroot/build_mips/staging_dir/usr/mips-linux-uclibc/include
 -isystem
-/home/buildroot-20080307/build_mips/staging_dir/usr/mips-linux-uclibc/sys-include
+/home/mike/Desktop/buildroot/build_mips/staging_dir/usr/mips-linux-uclibc/sys-include
 -O2 -g -Os -DIN_GCC -DCROSS_COMPILE   -W -Wall -Wwrite-strings
 -Wstrict-prototypes -Wmissing-prototypes -Wold-style-definition  -isystem
 ./include  -I. -I.
--I/home/buildroot-20080307/toolchain_build_mips/gcc-4.2.1/gcc
--I/home/buildroot-20080307/toolchain_build_mips/gcc-4.2.1/gcc/.
--I/home/buildroot-20080307/toolchain_build_mips/gcc-4.2.1/gcc/../include
--I/home/buildroot-20080307/toolchain_build_mips/gcc-4.2.1/gcc/../libcpp/include
--I/home/buildroot-20080307/toolchain_build_mips/gmp/include
--I/home/buildroot-20080307/toolchain_build_mips/mpfr/include
--I/home/buildroot-20080307/toolchain_build_mips/gcc-4.2.1/gcc/../libdecnumber
+-I/home/mike/Desktop/buildroot/toolchain_build_mips/gcc-4.2.1/gcc
+-I/home/mike/Desktop/buildroot/toolchain_build_mips/gcc-4.2.1/gcc/.
+-I/home/mike/Desktop/buildroot/toolchain_build_mips/gcc-4.2.1/gcc/../include
+-I/home/mike/Desktop/buildroot/toolchain_build_mips/gcc-4.2.1/gcc/../libcpp/include
+-I/home/mike/Desktop/buildroot/toolchain_build_mips/gmp/include
+-I/home/mike/Desktop/buildroot/toolchain_build_mips/mpfr/include
+-I/home/mike/Desktop/buildroot/toolchain_build_mips/gcc-4.2.1/gcc/../libdecnumber
 -I../libdecnumber  -g0 -finhibit-size-directive -fno-inline-functions
 -fno-exceptions -fno-zero-initialized-in-bss -fno-toplevel-reorder   \
           -c
-/home/buildroot-20080307/toolchain_build_mips/gcc-4.2.1/gcc/crtstuff.c
+/home/mike/Desktop/buildroot/toolchain_build_mips/gcc-4.2.1/gcc/crtstuff.c
 -DCRT_BEGIN \
           -o crtbegin.o
-/home/buildroot-20080307/toolchain_build_mips/gcc-4.2.1/gcc/crtstuff.c:1:
+/home/mike/Desktop/buildroot/toolchain_build_mips/gcc-4.2.1/gcc/crtstuff.c:1:
 error: unsupported combination: -mabicalls -mabi=eabi
-make[2]: *** [crtbegin.o] Erreur 1
-
-
-I have replaced in the configuration Target ABI = EABI by Target ABI =
-OABI, but the error is still the same.
-
-
-I have put my .config file as attachement.
+make[2]: *** [crtbegin.o] Error 1
+make[2]: Leaving directory
+`/home/mike/Desktop/buildroot/toolchain_build_mips/gcc-4.2.1-initial/gcc'
+make[1]: *** [all-gcc] Error 2
+make[1]: Leaving directory
+`/home/mike/Desktop/buildroot/toolchain_build_mips/gcc-4.2.1-initial'
+make: ***
+[/home/mike/Desktop/buildroot/toolchain_build_mips/gcc-4.2.1-initial/.compiled]
+Error 2
 
 ====================================================================== 
 
 ---------------------------------------------------------------------- 
- dpelton - 04-24-08 13:49  
+ skibud2 - 12-24-07 11:16  
+---------------------------------------------------------------------- 
+Is there a quick hack that I can do to get around this? 
+
+---------------------------------------------------------------------- 
+ dpelton - 04-24-08 13:54  
 ---------------------------------------------------------------------- 
 The patch referenced in the link below seems to address this issue.
 
-http://buildroot.uclibc.org/lists/buildroot/2008-February/007070.html 
+http://buildroot.uclibc.org/lists/buildroot/2008-February/007070.html
+
+This issue is duplicated:
+http://busybox.net/bugs/view.php?id=2474
+http://bugs.busybox.net/view.php?id=1615 
 
 Issue History 
 Date Modified   Username       Field                    Change               
 ====================================================================== 
-03-07-08 08:11  Olivier        New Issue                                    
-03-07-08 08:11  Olivier        Status                   new => assigned     
-03-07-08 08:11  Olivier        Assigned To               => buildroot       
-03-07-08 08:11  Olivier        File Added: .config                          
-04-24-08 13:49  dpelton        Note Added: 0007064                          
+12-17-07 22:02  skibud2        New Issue                                    
+12-17-07 22:02  skibud2        Status                   new => assigned     
+12-17-07 22:02  skibud2        Assigned To               => buildroot       
+12-22-07 11:06  skibud2        Issue Monitored: skibud2                     
+12-24-07 11:16  skibud2        Note Added: 0003264                          
+04-24-08 13:54  dpelton        Note Added: 0007074                          
 ======================================================================
