@@ -1,69 +1,109 @@
-From: =?ISO-8859-1?Q?Thiago_A._Corr=EAa?= <thiago.correa@gmail.com>
-Date: Fri, 25 Apr 2008 12:00:24 -0300
-Subject: [Buildroot] Improper device nodes
-	createdinsideproject_build_arm/uclibc/root/dev/
-In-Reply-To: <87wsmna99s.fsf@macbook.be.48ers.dk>
-References: <16803332.post@talk.nabble.com>
-	<040301c8a49d$c1408170$050514ac@atmel.com>
-	<87tzhtoihz.fsf@macbook.be.48ers.dk>
-	<044f01c8a4a9$cfed41c0$050514ac@atmel.com>
-	<87hcdtobni.fsf@macbook.be.48ers.dk>
-	<d6cda7730804221745r419a43dft863faddfd681aba7@mail.gmail.com>
-	<016401c8a564$106164b0$020514ac@atmel.com>
-	<87od80fnnu.fsf@macbook.be.48ers.dk>
-	<004201c8a593$e3796b20$080514ac@atmel.com>
-	<87wsmna99s.fsf@macbook.be.48ers.dk>
-Message-ID: <d6cda7730804250800h439e3c64ic532fa5dc76564bd@mail.gmail.com>
+From: ninevoltz at uclibc.org <ninevoltz@uclibc.org>
+Date: Fri, 25 Apr 2008 09:45:28 -0700 (PDT)
+Subject: [Buildroot] svn commit: trunk/buildroot/package/cups
+Message-ID: <20080425164528.18C6C3C758@busybox.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Thu, Apr 24, 2008 at 6:31 AM, Peter Korsgaard <jacmet@uclibc.org> wrote:
-> >>>>> "Ulf" == Ulf Samuelsson <ulf.samuelsson@atmel.com> writes:
->
->  >> Sure, but where to stop? I think most if not all disk based needs are
->   >> covered by the existing tar/ext2/ext3 support.
->
->   Ulf> I am just talking about a configuration option which will
->   Ulf> write a file system generated using the existing options
->   Ulf> to the SD-Card card.
->
->   Ulf> config BR2_WRITE_SD_CARD
->   Ulf>         string    "Write to SD-Card in the /mnt area"
->   Ulf>         default "sdcard"
+Author: ninevoltz
+Date: 2008-04-25 09:45:27 -0700 (Fri, 25 Apr 2008)
+New Revision: 21860
 
-This is not enough. You will also want to initialize the card... if
-it's brand new, it has FAT in it,not ext2. And, if it has been used
-before, it can have files in it from previous builds that will not be
-in the current build.
-To add to the issue, it's a removable media, you will want to make
-sure it's mounted.
+Log:
+Change cups makefile to fix $(STAGING_DIR)/usr/bin/cups-config
 
->  Why special case SD cards? it can be any block device you want. What
->  about permissions?
->
->  I still think it's silly - What is next, add stuff to fire up a
->  terminal emulator (with config options for port and baudrate) and
->  upload file to bootloader?
+Modified:
+   trunk/buildroot/package/cups/cups.mk
 
-I agree... If you want to go an extra mile for the users, why not add
-a script to ~/buildroot/script? It could be customized to one's need
-if it's not perfect.
 
->
->   >> Not in a current project, no - But I have (or rather CF cards, but
->   >> that's the same). What's the problem with the existing ext2 support?
->
->   Ulf> It creates the file in $(BINARIES_DIR) and not on the SD-card.
->   Ulf> It would make sense to allow creating a CF-card as well.
->
->  What's the difference between CF and SD card support? The big
->  difference between putting stuff in BINARIES_DIR and on some block
->  device is permissions. You can do everything in buildroot without root
->  permissions, let's not change that.
->
->  --
->  Bye, Peter Korsgaard
->
+Changeset:
+Modified: trunk/buildroot/package/cups/cups.mk
+===================================================================
+--- trunk/buildroot/package/cups/cups.mk	2008-04-25 13:43:00 UTC (rev 21859)
++++ trunk/buildroot/package/cups/cups.mk	2008-04-25 16:45:27 UTC (rev 21860)
+@@ -3,30 +3,68 @@
+ # cups
+ #
+ ################################################################################
+-
+ CUPS_VERSION = 1.3.5
+-CUPS_SOURCE = cups-$(CUPS_VERSION)-source.tar.bz2
++CUPS_NAME = cups-$(CUPS_VERSION)
++CUPS_DIR = $(BUILD_DIR)/$(CUPS_NAME)
+ CUPS_SITE = http://ftp.easysw.com/pub/cups/1.3.5
+-CUPS_AUTORECONF = NO
+-CUPS_INSTALL_STAGING = YES
+-CUPS_INSTALL_TARGET = YES
+-CUPS_INSTALL_STAGING_OPT = DESTDIR=$(STAGING_DIR) install DSTROOT=$(STAGING_DIR)
+-CUPS_INSTALL_TARGET_OPT = DESTDIR=$(TARGET_DIR) install DSTROOT=$(TARGET_DIR)
++CUPS_SOURCE:=$(CUPS_NAME)-source.tar.bz2
++CUPS_DESTDIR:=$(STAGING_DIR)/usr/lib
++CUPS_CAT:=$(BZCAT)
+ 
+ ifeq ($(BR2_PACKAGE_DBUS),y)
+-        CUPS_CONF_OPT_DBUS =--disable-dbus
++        CUPS_CONF_OPT_DBUS =--enable-dbus
+         CUPS_DEPENDENCIES_DBUS = dbus
+ else
+-        CUPS_CONF_OPT_DBUS =--enable-dbus
++        CUPS_CONF_OPT_DBUS =--disable-dbus
+ endif
+ 
+ ifneq ($(BR2_PACKAGE_XSERVER_none),y)
+         CUPS_DEPENDENCIES_X = xlib_libX11
+ endif
+ 
+-CUPS_CONF_OPT = --prefix=/usr --includedir=/usr/include --libdir=/usr/lib --disable-gnutls --disable-gssapi $(CUPS_CONF_OPT_DBUS)
+-CUPS_MAKE_OPT = cups backend berkeley cgi-bin filter locale monitor notifier pdftops scheduler systemv scripting/php conf data doc fonts ppd templates
++$(DL_DIR)/$(CUPS_SOURCE):
++	 $(WGET) -P $(DL_DIR) $(CUPS_SITE)/$(CUPS_SOURCE)
+ 
+-CUPS_DEPENDENCIES = $(CUPS_DEPENDENCIES_DBUS) $(CUPS_DEPENDENCIES_X) 
++$(CUPS_DIR)/.unpacked: $(DL_DIR)/$(CUPS_SOURCE)
++	$(CUPS_CAT) $(DL_DIR)/$(CUPS_SOURCE) | tar -C $(BUILD_DIR) $(TAR_OPTIONS) -
++	toolchain/patch-kernel.sh $(CUPS_DIR) package/cups/ \*.patch
++	$(CONFIG_UPDATE) $(CUPS_DIR)
++	touch $@
+ 
+-$(eval $(call AUTOTARGETS,package,cups))
++$(CUPS_DIR)/.configured: $(CUPS_DIR)/.unpacked
++	(cd $(CUPS_DIR) && \
++		$(TARGET_CONFIGURE_OPTS) \
++		$(TARGET_CONFIGURE_ARGS) \
++		./configure \
++		--prefix=/usr $(CUPS_CONF_OPT_DBUS) --includedir=/usr/include  \
++		--libdir=/usr/lib --disable-gnutls --disable-gssapi --host=$(ARCH) \ )
++	touch $@
++
++$(CUPS_DIR)/.compiled: $(CUPS_DIR)/.configured
++	$(MAKE) -C $(CUPS_DIR) cups backend berkeley cgi-bin filter \
++	locale monitor notifier pdftops scheduler systemv scripting/php \
++	conf data doc fonts ppd templates
++	touch $@
++
++$(CUPS_DIR)/.installed: $(CUPS_DIR)/.compiled
++	$(MAKE) -C $(CUPS_DIR) DESTDIR=$(STAGING_DIR) DSTROOT=$(STAGING_DIR) install
++	$(MAKE) -C $(CUPS_DIR) DESTDIR=$(TARGET_DIR) DSTROOT=$(TARGET_DIR) install
++	$(SED) "s,^prefix=.*,prefix=\'$(STAGING_DIR)/usr\',g" $(STAGING_DIR)/usr/bin/cups-config
++	$(SED) "s,^exec_prefix=.*,exec_prefix=\'$(STAGING_DIR)/usr\',g" $(STAGING_DIR)/usr/bin/cups-config
++	$(SED) "s,^includedir=.*,includedir=\'$(STAGING_DIR)/usr/include\',g" $(STAGING_DIR)/usr/bin/cups-config
++	$(SED) "s,^libdir=.*,libdir=\'$(STAGING_DIR)/usr/lib\',g" $(STAGING_DIR)/usr/bin/cups-config
++	touch $@
++
++cups: uclibc $(CUPS_DEPENDENCIES_DBUS) $(CUPS_DEPENDENCIES_X) $(CUPS_DIR)/.installed
++
++cups-clean:
++	-$(MAKE) -C $(CUPS_DIR) clean
++
++#############################################################
++#
++# Toplevel Makefile options
++#
++#############################################################
++ifeq ($(strip $(BR2_PACKAGE_CUPS)),y)
++TARGETS+=cups
++endif
+\ No newline at end of file
