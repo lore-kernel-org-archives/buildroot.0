@@ -1,7 +1,7 @@
 From: ninevoltz at uclibc.org <ninevoltz@uclibc.org>
-Date: Fri, 25 Apr 2008 09:45:28 -0700 (PDT)
-Subject: [Buildroot] svn commit: trunk/buildroot/package/cups
-Message-ID: <20080425164528.18C6C3C758@busybox.net>
+Date: Fri, 25 Apr 2008 09:45:49 -0700 (PDT)
+Subject: [Buildroot] svn commit: trunk/buildroot/package/freetype
+Message-ID: <20080425164549.A09BC3C78E@busybox.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -9,101 +9,92 @@ Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
 Author: ninevoltz
-Date: 2008-04-25 09:45:27 -0700 (Fri, 25 Apr 2008)
-New Revision: 21860
+Date: 2008-04-25 09:45:49 -0700 (Fri, 25 Apr 2008)
+New Revision: 21861
 
 Log:
-Change cups makefile to fix $(STAGING_DIR)/usr/bin/cups-config
+Change freetype makefile to fix $(STAGING_DIR)/usr/bin/freetype-config
 
 Modified:
-   trunk/buildroot/package/cups/cups.mk
+   trunk/buildroot/package/freetype/freetype.mk
 
 
 Changeset:
-Modified: trunk/buildroot/package/cups/cups.mk
+Modified: trunk/buildroot/package/freetype/freetype.mk
 ===================================================================
---- trunk/buildroot/package/cups/cups.mk	2008-04-25 13:43:00 UTC (rev 21859)
-+++ trunk/buildroot/package/cups/cups.mk	2008-04-25 16:45:27 UTC (rev 21860)
-@@ -3,30 +3,68 @@
- # cups
+--- trunk/buildroot/package/freetype/freetype.mk	2008-04-25 16:45:27 UTC (rev 21860)
++++ trunk/buildroot/package/freetype/freetype.mk	2008-04-25 16:45:49 UTC (rev 21861)
+@@ -4,23 +4,61 @@
  #
- ################################################################################
--
- CUPS_VERSION = 1.3.5
--CUPS_SOURCE = cups-$(CUPS_VERSION)-source.tar.bz2
-+CUPS_NAME = cups-$(CUPS_VERSION)
-+CUPS_DIR = $(BUILD_DIR)/$(CUPS_NAME)
- CUPS_SITE = http://ftp.easysw.com/pub/cups/1.3.5
--CUPS_AUTORECONF = NO
--CUPS_INSTALL_STAGING = YES
--CUPS_INSTALL_TARGET = YES
--CUPS_INSTALL_STAGING_OPT = DESTDIR=$(STAGING_DIR) install DSTROOT=$(STAGING_DIR)
--CUPS_INSTALL_TARGET_OPT = DESTDIR=$(TARGET_DIR) install DSTROOT=$(TARGET_DIR)
-+CUPS_SOURCE:=$(CUPS_NAME)-source.tar.bz2
-+CUPS_DESTDIR:=$(STAGING_DIR)/usr/lib
-+CUPS_CAT:=$(BZCAT)
+ #############################################################
+ FREETYPE_VERSION = $(strip $(subst ",, $(BR2_FREETYPE_VERSION)))
+-FREETYPE_SOURCE = freetype-$(FREETYPE_VERSION).tar.bz2
++FREETYPE_NAME = freetype-$(FREETYPE_VERSION)
++FREETYPE_DIR = $(BUILD_DIR)/$(FREETYPE_NAME)
+ FREETYPE_SITE = http://$(BR2_SOURCEFORGE_MIRROR).dl.sourceforge.net/sourceforge/freetype
+-FREETYPE_AUTORECONF = NO
+-FREETYPE_INSTALL_STAGING = YES
+-FREETYPE_INSTALL_TARGET = YES
+-FREETYPE_INSTALL_TARGET_OPT = DESTDIR=$(TARGET_DIR) install
++FREETYPE_SOURCE:=$(FREETYPE_NAME).tar.bz2
++FREETYPE_DESTDIR:=$(STAGING_DIR)/usr/lib
++FREETYPE_CAT:=$(BZCAT)
  
- ifeq ($(BR2_PACKAGE_DBUS),y)
--        CUPS_CONF_OPT_DBUS =--disable-dbus
-+        CUPS_CONF_OPT_DBUS =--enable-dbus
-         CUPS_DEPENDENCIES_DBUS = dbus
- else
--        CUPS_CONF_OPT_DBUS =--enable-dbus
-+        CUPS_CONF_OPT_DBUS =--disable-dbus
- endif
- 
- ifneq ($(BR2_PACKAGE_XSERVER_none),y)
-         CUPS_DEPENDENCIES_X = xlib_libX11
- endif
- 
--CUPS_CONF_OPT = --prefix=/usr --includedir=/usr/include --libdir=/usr/lib --disable-gnutls --disable-gssapi $(CUPS_CONF_OPT_DBUS)
--CUPS_MAKE_OPT = cups backend berkeley cgi-bin filter locale monitor notifier pdftops scheduler systemv scripting/php conf data doc fonts ppd templates
-+$(DL_DIR)/$(CUPS_SOURCE):
-+	 $(WGET) -P $(DL_DIR) $(CUPS_SITE)/$(CUPS_SOURCE)
- 
--CUPS_DEPENDENCIES = $(CUPS_DEPENDENCIES_DBUS) $(CUPS_DEPENDENCIES_X) 
-+$(CUPS_DIR)/.unpacked: $(DL_DIR)/$(CUPS_SOURCE)
-+	$(CUPS_CAT) $(DL_DIR)/$(CUPS_SOURCE) | tar -C $(BUILD_DIR) $(TAR_OPTIONS) -
-+	toolchain/patch-kernel.sh $(CUPS_DIR) package/cups/ \*.patch
-+	$(CONFIG_UPDATE) $(CUPS_DIR)
+-FREETYPE_CONF_OPT = --target=$(GNU_TARGET_NAME) --host=$(GNU_TARGET_NAME) \
++$(DL_DIR)/$(FREETYPE_SOURCE):
++	 $(WGET) -P $(DL_DIR) $(FREETYPE_SITE)/$(FREETYPE_SOURCE)
++
++$(FREETYPE_DIR)/.unpacked: $(DL_DIR)/$(FREETYPE_SOURCE)
++	$(FREETYPE_CAT) $(DL_DIR)/$(FREETYPE_SOURCE) | tar -C $(BUILD_DIR) $(TAR_OPTIONS) -
++	toolchain/patch-kernel.sh $(FREETYPE_DIR) package/freetype/ \*.patch
++	$(CONFIG_UPDATE) $(FREETYPE_DIR)
 +	touch $@
- 
--$(eval $(call AUTOTARGETS,package,cups))
-+$(CUPS_DIR)/.configured: $(CUPS_DIR)/.unpacked
-+	(cd $(CUPS_DIR) && \
++
++$(FREETYPE_DIR)/.configured: $(FREETYPE_DIR)/.unpacked
++	(cd $(FREETYPE_DIR) && \
 +		$(TARGET_CONFIGURE_OPTS) \
 +		$(TARGET_CONFIGURE_ARGS) \
 +		./configure \
-+		--prefix=/usr $(CUPS_CONF_OPT_DBUS) --includedir=/usr/include  \
-+		--libdir=/usr/lib --disable-gnutls --disable-gssapi --host=$(ARCH) \ )
++		--target=$(GNU_TARGET_NAME) --host=$(GNU_TARGET_NAME) \
+ 		--build=$(GNU_HOST_NAME) --prefix=/usr \
+ 		--exec-prefix=/usr --bindir=/usr/bin \
+ 		--sbindir=/usr/sbin --libdir=/usr/lib \
+ 		--libexecdir=/usr/lib --sysconfdir=/etc \
+ 		--datadir=/usr/share --localstatedir=/var \
+ 		--includedir=/usr/include --mandir=/usr/man \
+-		--infodir=/usr/info 
++		--infodir=/usr/info \ )
++	touch $@
+ 
+-FREETYPE_MAKE_OPT = CCexe="$(HOSTCC)"
+-FREETYPE_DEPENDENCIES = uclibc pkgconfig
++$(FREETYPE_DIR)/.compiled: $(FREETYPE_DIR)/.configured
++	$(MAKE) CCexe="$(HOSTCC)" -C $(FREETYPE_DIR)
++	touch $@
+ 
+-$(eval $(call AUTOTARGETS,package,freetype))
+\ No newline at end of file
++$(FREETYPE_DIR)/.installed: $(FREETYPE_DIR)/.compiled
++	$(MAKE) DESTDIR=$(STAGING_DIR) -C $(FREETYPE_DIR) install
++	$(MAKE) DESTDIR=$(TARGET_DIR) -C $(FREETYPE_DIR) install
++	$(SED) "s,^libdir=.*,libdir=\'$(STAGING_DIR)/usr/lib\',g" $(STAGING_DIR)/usr/lib/libfreetype.la
++	$(SED) "s,^prefix=.*,prefix=\'$(STAGING_DIR)/usr\',g" $(STAGING_DIR)/usr/bin/freetype-config
++	$(SED) "s,^exec_prefix=.*,exec_prefix=\'$(STAGING_DIR)/usr\',g" $(STAGING_DIR)/usr/bin/freetype-config
++	$(SED) "s,^includedir=.*,includedir=\'$(STAGING_DIR)/usr/include\',g" $(STAGING_DIR)/usr/bin/freetype-config
++	$(SED) "s,^libdir=.*,libdir=\'$(STAGING_DIR)/usr/lib\',g" $(STAGING_DIR)/usr/bin/freetype-config
 +	touch $@
 +
-+$(CUPS_DIR)/.compiled: $(CUPS_DIR)/.configured
-+	$(MAKE) -C $(CUPS_DIR) cups backend berkeley cgi-bin filter \
-+	locale monitor notifier pdftops scheduler systemv scripting/php \
-+	conf data doc fonts ppd templates
-+	touch $@
++freetype: uclibc pkgconfig $(FREETYPE_DIR)/.installed
 +
-+$(CUPS_DIR)/.installed: $(CUPS_DIR)/.compiled
-+	$(MAKE) -C $(CUPS_DIR) DESTDIR=$(STAGING_DIR) DSTROOT=$(STAGING_DIR) install
-+	$(MAKE) -C $(CUPS_DIR) DESTDIR=$(TARGET_DIR) DSTROOT=$(TARGET_DIR) install
-+	$(SED) "s,^prefix=.*,prefix=\'$(STAGING_DIR)/usr\',g" $(STAGING_DIR)/usr/bin/cups-config
-+	$(SED) "s,^exec_prefix=.*,exec_prefix=\'$(STAGING_DIR)/usr\',g" $(STAGING_DIR)/usr/bin/cups-config
-+	$(SED) "s,^includedir=.*,includedir=\'$(STAGING_DIR)/usr/include\',g" $(STAGING_DIR)/usr/bin/cups-config
-+	$(SED) "s,^libdir=.*,libdir=\'$(STAGING_DIR)/usr/lib\',g" $(STAGING_DIR)/usr/bin/cups-config
-+	touch $@
-+
-+cups: uclibc $(CUPS_DEPENDENCIES_DBUS) $(CUPS_DEPENDENCIES_X) $(CUPS_DIR)/.installed
-+
-+cups-clean:
-+	-$(MAKE) -C $(CUPS_DIR) clean
++freetype-clean:
++	-$(MAKE) -C $(FREETYPE_DIR) clean
 +
 +#############################################################
 +#
 +# Toplevel Makefile options
 +#
 +#############################################################
-+ifeq ($(strip $(BR2_PACKAGE_CUPS)),y)
-+TARGETS+=cups
++ifeq ($(strip $(BR2_PACKAGE_FREETYPE)),y)
++TARGETS+=freetype
 +endif
 \ No newline at end of file
