@@ -1,27 +1,28 @@
-From: =?ISO-8859-1?Q?Thiago_A._Corr=EAa?= <thiago.correa@gmail.com>
-Date: Thu, 24 Apr 2008 20:06:02 -0300
-Subject: [Buildroot] svn commit: trunk/buildroot/package: pcre
-In-Reply-To: <87ve272kgg.fsf@macbook.be.48ers.dk>
-References: <20080424165606.555523C7F7@busybox.net>
-	<87ve272kgg.fsf@macbook.be.48ers.dk>
-Message-ID: <d6cda7730804241606h52615abdx4017182bf00907a2@mail.gmail.com>
+From: Arun Reddy <reddyac@gmail.com>
+Date: Thu, 24 Apr 2008 21:33:15 -0700
+Subject: [Buildroot] Encountered error when building ARM toolchain (sed)
+Message-ID: <326f33790804242133q559ed57bjcec04560001611f9@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->   ninevoltz> +PCRE_VERSION = 7.6
->   ninevoltz> +PCRE_SOURCE = pcre-$(PCRE_VERSION).tar.bz2
->   ninevoltz> +PCRE_SITE = ftp://ftp.csx.cam.ac.uk/pub/software/programming/pcre
->   ninevoltz> +PCRE_INSTALL_STAGING = YES
->   ninevoltz> +PCRE_INSTALL_TARGET = YES
->   ninevoltz> +
->   ninevoltz> +PCRE_CONF_OPT = --target=$(GNU_TARGET_NAME) --host=$(GNU_TARGET_NAME) \
->   ninevoltz> +        --build=$(GNU_HOST_NAME) --prefix=/usr \
->   ninevoltz> +        --includedir=/usr/include
->
->  Is --includedir needed?
->
+Hi everyone,
 
-It just doesn't seam right. If it's needed, then it's using the host includes.
+After successfully doing a build for an x86 platform, I am now attempting to
+build for an ARM platform. After about half an hour into the build process I
+encountered the error:
+
+/root/buildroot/toolchain_build_arm/bin/sed -i -e
+'s,^EXTRA_VERSION=.*,EXTRA_VERSION==""."4""",g'
+/root/buildroot/toolchain_build_arm/bin/sed: no input files
+
+Does anyone happen to know what this error is referring to? I understand
+that the editor sed requires an input stream where it performs text
+transformations, but why am I getting "no input files" here? Is the syntax
+for the line above that's being passed for sed not correct? Any tips on how
+to fix this? Thanks a lot for looking into this.
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: http://busybox.net/lists/buildroot/attachments/20080424/277a6f61/attachment.htm 
