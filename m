@@ -1,22 +1,34 @@
-From: Guillaume Dargaud <dargaud@lpsc.in2p3.fr>
-Date: Fri, 25 Apr 2008 10:25:57 +0200
-Subject: [Buildroot] [buildroot 0001615]: Can not build?
-References: <d9108c1a28f74978335988de086eeb18@busybox.net>
-Message-ID: <08f001c8a6ad$ff56a2c0$ad289e86@LPSC0173W>
+From: Bernhard Fischer <rep.dot.nop@gmail.com>
+Date: Fri, 25 Apr 2008 10:36:53 +0200
+Subject: [Buildroot] svn commit: trunk/buildroot/package:  oprofile
+In-Reply-To: <87k5imxs7r.fsf@macbook.be.48ers.dk>
+References: <20080424165429.5E3993C7F0@busybox.net>
+	<87zlrj2khz.fsf@macbook.be.48ers.dk>
+	<20080425064853.GA1525@cloud.net.au>
+	<20080425080950.GA12947@mx.loc>
+	<87k5imxs7r.fsf@macbook.be.48ers.dk>
+Message-ID: <20080425083653.GA25569@mx.loc>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-I've had this eabi problem too when trying to use the Xilinx compilers and 
-toolchain from .../xilinx/edk/gnu/powerpc-eabi/lin/bin/
-I exchanged some messages with tech support that kind of hinted that I 
-wouldn't be able to compile a kernel with it (I have no idea why). So I did 
-it with the buildroot toolchain instead and haven't looked back.
+On Fri, Apr 25, 2008 at 10:18:48AM +0200, Peter Korsgaard wrote:
+>>>>>> "Bernhard" == Bernhard Fischer <rep.dot.nop@gmail.com> writes:
+>
+>Hi,
+>
+> >> I doubt it.. I think it's quite difficult to get gcc recompiled after
+> >> changing the options - usually means deleting most (if not all) of
+> >> toolchain_build_$arch.
+>
+> Bernhard> of course toggling toolchain-related options does rebuild
+> Bernhard> the needed parts and dependencies properly in my tree..
+>
+>Patches are welcome ;)
+sure.
 
-I also noticed those ARM keywords at the time, I think they go away if you 
-"make ARCH=ppc".
--- 
-Guillaume Dargaud
-http://www.gdargaud.net/ 
+http://repo.or.cz/w/buildroot.git?a=log
+
+:P
