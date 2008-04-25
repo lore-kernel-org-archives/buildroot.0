@@ -1,8 +1,7 @@
 From: bugs at busybox.net <bugs@busybox.net>
-Date: Thu, 24 Apr 2008 22:27:33 -0700
-Subject: [Buildroot] [uClibc 0002214]: fails to build toolchain with NPTL
-	selected for powerpc target
-Message-ID: <392a1bd7c7b19b5b45fb89baf411d6c4@bugs.uclibc.org>
+Date: Thu, 24 Apr 2008 22:47:03 -0700
+Subject: [Buildroot] [buildroot 0002974]: package lighttpd source fails
+Message-ID: <a2fbb4331a54e1d94f1b918bb445e150@bugs.uclibc.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -10,101 +9,90 @@ Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
 
-The following issue has been CLOSED 
+A NOTE has been added to this issue. 
 ====================================================================== 
-http://busybox.net/bugs/view.php?id=2214 
+http://busybox.net/bugs/view.php?id=2974 
 ====================================================================== 
-Reported By:                fabo
+Reported By:                Jean-Baptiste Maillet
 Assigned To:                buildroot
 ====================================================================== 
-Project:                    uClibc
-Issue ID:                   2214
-Category:                   Architecture Specific
+Project:                    buildroot
+Issue ID:                   2974
+Category:                   Other
 Reproducibility:            always
 Severity:                   minor
 Priority:                   normal
-Status:                     closed
-Resolution:                 reopened
-Fixed in Version:           
+Status:                     assigned
 ====================================================================== 
-Date Submitted:             02-18-2008 01:14 PST
-Last Modified:              04-24-2008 22:27 PDT
+Date Submitted:             04-20-2008 04:32 PDT
+Last Modified:              04-24-2008 22:47 PDT
 ====================================================================== 
-Summary:                    fails to build toolchain with NPTL selected for
-powerpc target
+Summary:                    package lighttpd source fails
 Description: 
-libpthread/linuxthreads/sysdeps/pthread/errno-loc.c:23:27: error:
-sysdep-cancel.h: No such file or directory
+$ make lighttpd
+wget --passive-ftp -nd  -P /var/p2p/jbm/sandbox/buildroot/../download
+"http://ftp.debian.org"/debian/pool/main/l/lighttpd/lighttpd_1.4.18.orig.tar.gz
+--2008-04-20 13:25:21-- 
+http://ftp.debian.org/debian/pool/main/l/lighttpd/lighttpd_1.4.18.orig.tar.gz
+Resolving ftp.debian.org... 128.101.240.212
+Connecting to ftp.debian.org|128.101.240.212|:80... connected.
+HTTP request sent, awaiting response... 404 Not Found
+2008-04-20 13:25:21 ERROR 404: Not Found.
 
-This is reproducible for powerpc target and NPTL support option.
-Switching to another thread library implementation workarounds the issue.
-
+make: ***
+[/var/p2p/jbm/sandbox/buildroot/../download/lighttpd_1.4.18.orig.tar.gz]
+Error 1
 
 ====================================================================== 
 
 ---------------------------------------------------------------------- 
- sjhill - 02-23-08 14:55  
+ Jean-Baptiste Maillet - 04-24-08 22:47  
 ---------------------------------------------------------------------- 
-uClibc NPTL is not available for the PPC architecture yet. It will be a few
-months before that is available. 
+lighttpd has been updated at r21835 (not the attached patch fix), but still
+does not build, missing dep/select or config option.
 
----------------------------------------------------------------------- 
- sjhill - 02-23-08 14:56  
----------------------------------------------------------------------- 
-This is not a buildroot issue. 
+jbm at polux:/var/p2p/jbm/sandbox/buildroot$ svn up
+...
+D    package/lighttpd/rc.lighttpd
+A    package/lighttpd/lighttpd-1.4.19-configure.patch
+C    package/lighttpd/lighttpd.mk
+C    package/lighttpd/Config.in
+...
+jbm at polux:/var/p2p/jbm/sandbox/buildroot$ rm -rf package/lighttpd
+jbm at polux:/var/p2p/jbm/sandbox/buildroot$ svn up
+A    package/lighttpd
+A    package/lighttpd/lighttpd-1.4.19-configure.patch
+A    package/lighttpd/lighttpd.mk
+A    package/lighttpd/Config.in
+Updated to revision 21853.
+jbm at polux:/var/p2p/jbm/sandbox/buildroot$ make  lighttpd
 
----------------------------------------------------------------------- 
- carmelo73 - 04-19-08 23:22  
----------------------------------------------------------------------- 
-NTPL mips is available in branch, not on the main stream.
-Use branch (that is still under development) otherwise use
-linuxthreads.old
-implementation for pthread. 
+>>> lighttpd 1.4.19 Downloading
 
----------------------------------------------------------------------- 
- fabo - 04-20-08 07:30  
----------------------------------------------------------------------- 
-The bug was reported for NPTL/powerpc usage. Not MIPS.
-By the way, the bug is still valid:
-fails to build toolchain with NPTL selected for powerpc target
-
-suggesting to use linuxthreads.old implementation for pthread is a
-workaround, not a bug resolution. 
-
----------------------------------------------------------------------- 
- carmelo73 - 04-20-08 07:39  
----------------------------------------------------------------------- 
-Sorry, I was thinking to mips... anyway powerpc is not currently
-implementing nptl. 
-
----------------------------------------------------------------------- 
- carmelo73 - 04-24-08 22:27  
----------------------------------------------------------------------- 
-Currently, for what I know, there are no plan to port NPTL on powerpc,
-and I don't know is somebody is working on it.
-So this isseu will be closed as 'won't fix'.
-If you interested ito providing this support for powerpc arch, that you
-are using,
-feel free to start working on it and provide such patches.
-Currently the nptl-branch should be your starting point. 
+--2008-04-25 07:31:00-- 
+http://www.lighttpd.net/download/lighttpd-1.4.19.tar.bz2
+...
+checking for OpenSSL... no
+checking for perl regular expressions support... no
+checking for zlib support... yes
+checking for deflate in -lz... no
+configure: error: zlib-headers and/or libs where not found, install them
+or build with --without-zlib
+make: ***
+[/var/p2p/jbm/sandbox/buildroot/build_arm/lighttpd-1.4.19/.stamp_configured]
+Error 1 
 
 Issue History 
 Date Modified   Username       Field                    Change               
 ====================================================================== 
-02-18-08 01:14  fabo           New Issue                                    
-02-18-08 01:14  fabo           Status                   new => assigned     
-02-18-08 01:14  fabo           Assigned To               => buildroot       
-02-18-08 01:15  fabo           Issue Monitored: fabo                        
-02-23-08 14:55  sjhill         Note Added: 0005274                          
-02-23-08 14:56  sjhill         Note Added: 0005284                          
-02-23-08 14:57  sjhill         Project                  buildroot => uClibc 
-04-19-08 23:22  carmelo73      Status                   assigned => closed  
-04-19-08 23:22  carmelo73      Note Added: 0006734                          
-04-19-08 23:22  carmelo73      Resolution               open => suspended   
-04-20-08 07:30  fabo           Status                   closed => feedback  
-04-20-08 07:30  fabo           Resolution               suspended => reopened
-04-20-08 07:30  fabo           Note Added: 0006744                          
-04-20-08 07:39  carmelo73      Note Added: 0006754                          
-04-24-08 22:27  carmelo73      Status                   feedback => closed  
-04-24-08 22:27  carmelo73      Note Added: 0007114                          
+04-20-08 04:32  Jean-Baptiste MailletNew Issue                                  
+ 
+04-20-08 04:32  Jean-Baptiste MailletStatus                   new => assigned   
+ 
+04-20-08 04:32  Jean-Baptiste MailletAssigned To               => buildroot     
+ 
+04-20-08 04:32  Jean-Baptiste MailletFile Added: lighttpd.patch                 
+  
+04-24-08 22:47  Jean-Baptiste MailletNote Added: 0007124                        
+ 
 ======================================================================
