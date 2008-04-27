@@ -1,32 +1,91 @@
-From: p <pmeloy@shaw.ca>
-Date: Sun, 27 Apr 2008 06:41:27 -0700
-Subject: [Buildroot] QWidget cannot check for file existence when cross
-	compiling
-In-Reply-To: <20080427095133.504A83C6E3@busybox.net>
-References: <20080427095133.504A83C6E3@busybox.net>
-Message-ID: <1209303687.31310.6.camel@rhodan.rho>
+From: bugs at busybox.net <bugs@busybox.net>
+Date: Sun, 27 Apr 2008 07:18:37 -0700
+Subject: [Buildroot] [buildroot 0003154]: configure option for local package
+	mirror
+Message-ID: <cda71f7ebcc51d69d8b3c15c5721564e@busybox.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-I've been trying to get past this error:
 
-checking QT_LIBS... -L/home/pat/buildroot/build_arm/staging_dir/usr/lib
--lQtGui -lpng -lQtNetwork -lQtCore -lz -lm -lrt -lpthread -ldl  
-checking
-for /home/pat/buildroot/build_arm/staging_dir/usr/include/QtGui/QWidget... configure: error: cannot check for file existence when cross compiling
-make: ***
-[/home/pat/buildroot/build_arm/classpath-0.97.1/.stamp_configured] Error
-1
+A NOTE has been added to this issue. 
+====================================================================== 
+http://busybox.net/bugs/view.php?id=3154 
+====================================================================== 
+Reported By:                kendallc
+Assigned To:                buildroot
+====================================================================== 
+Project:                    buildroot
+Issue ID:                   3154
+Category:                   New Features
+Reproducibility:            N/A
+Severity:                   feature
+Priority:                   normal
+Status:                     assigned
+====================================================================== 
+Date Submitted:             04-26-2008 19:21 PDT
+Last Modified:              04-27-2008 07:18 PDT
+====================================================================== 
+Summary:                    configure option for local package mirror
+Description: 
+It would be nice to have an option for buildroot pull packages from a local
+mirror. This feature would allow users to run a fresh buildroot build
+without an internet connection. It requires the addition of a
+configuration option. It also requires a few lines below the "..._SITE:="
+stuff in every package's makefile.
 
-I checked and the QWidget file does exist in the path specified. I
-thought maybe it was something missing on the host so I installed
-everything QT4ish that seemed remotely appropriate.
+I've attached a patch that adds a BR2_PACKAGE_MIRROR option to
+target/device/Config.in.mirrors. The patch adds support for the option to
+uClibc, and busybox. This patch is just an example of how this feature
+could be added to a couple of packages.
 
-I just checked out the buildroot SVN this morning and modified the
-qtopia4.mk to use a few different snapshots of 4.4.0 (the original
-snapshot specified no longer exists) but always the same result.
+The code to add the feature is fairly simple; however, it requires
+touching every package makefile.
+====================================================================== 
 
-Any clues as to how to get past this?
+---------------------------------------------------------------------- 
+ hbr_in - 04-26-08 21:38  
+---------------------------------------------------------------------- 
+Hi,
+
+Instead of adding an option, what i do is that -->
+
+i have a local directory which contain all my sources. 
+
+my local src --> /opt/source
+my buildroot directory --> /opt/buildroot
+
+Inside Buildroot, i link the above folder to dl directory i.e., to a
+directory where buildroot downloads and stores all package source
+
+/opt/buildroot # ln -s /opt/source dl
+
+So when buildroot starts make it 1st check in dl/ directory (which is my
+local source directory) and if it finds the source there then it doesnt
+need any internet connection.
+
+Regards
+Gururaja 
+
+---------------------------------------------------------------------- 
+ UlfSamuelsson - 04-27-08 07:18  
+---------------------------------------------------------------------- 
+A better implementation would replace $(WGET) with a script
+which test the main location first and then goes through a
+list of mirrors.
+Then no package file need to be touched, and it is easy
+to maintain a number of mirrors. 
+
+Issue History 
+Date Modified   Username       Field                    Change               
+====================================================================== 
+04-26-08 19:21  kendallc       New Issue                                    
+04-26-08 19:21  kendallc       Status                   new => assigned     
+04-26-08 19:21  kendallc       Assigned To               => buildroot       
+04-26-08 19:21  kendallc       File Added: buildroot-local-mirror.patch         
+          
+04-26-08 21:38  hbr_in         Note Added: 0007254                          
+04-27-08 07:18  UlfSamuelsson  Note Added: 0007274                          
+======================================================================
