@@ -1,37 +1,56 @@
-From: p <pmeloy@shaw.ca>
-Date: Sat, 26 Apr 2008 16:02:11 -0700
-Subject: [Buildroot] Example .configs?
-In-Reply-To: <326f33790804240814n15f862f2s9b3c64937ad04df0@mail.gmail.com>
-References: <1209041724.6819.3.camel@rhodan.rho>
-	<46a136670804240756y200cf080vacf8d18372177e9a@mail.gmail.com>
-	<46a136670804240759o3f60813dx20f5d44ee1f63edf@mail.gmail.com>
-	<326f33790804240814n15f862f2s9b3c64937ad04df0@mail.gmail.com>
-Message-ID: <1209250931.29663.18.camel@rhodan.rho>
+From: bugs at busybox.net <bugs@busybox.net>
+Date: Sat, 26 Apr 2008 19:21:32 -0700
+Subject: [Buildroot] [buildroot 0003154]: configure option for local package
+	mirror
+Message-ID: <0068e9a97731ab42cd99db8071d7566e@bugs.uclibc.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Thu, 2008-04-24 at 08:14 -0700, Arun Reddy wrote:
-> P,
-> 
-> If you find that you are missing packages and the build aborts, you will be told which package you're missing.
 
-Ok, so no "make clean" needed after a failure? Phew!
+The following issue has been SUBMITTED. 
+====================================================================== 
+http://busybox.net/bugs/view.php?id=3154 
+====================================================================== 
+Reported By:                kendallc
+Assigned To:                buildroot
+====================================================================== 
+Project:                    buildroot
+Issue ID:                   3154
+Category:                   New Features
+Reproducibility:            N/A
+Severity:                   feature
+Priority:                   normal
+Status:                     assigned
+====================================================================== 
+Date Submitted:             04-26-2008 19:21 PDT
+Last Modified:              04-26-2008 19:21 PDT
+====================================================================== 
+Summary:                    configure option for local package mirror
+Description: 
+It would be nice to have an option for buildroot pull packages from a local
+mirror. This feature would allow users to run a fresh buildroot build
+without an internet connection. It requires the addition of a
+configuration option. It also requires a few lines below the "..._SITE:="
+stuff in every package's makefile.
 
-I should have been more descriptive about the defconfig part. I don't
-mean for the kernel (I have a kernel built already, its just a rootfs
-that I need). I meant for selecting packages.
+I've attached a patch that adds a BR2_PACKAGE_MIRROR option to
+target/device/Config.in.mirrors. The patch adds support for the option to
+uClibc, and busybox. This patch is just an example of how this feature
+could be added to a couple of packages.
 
-For instance, I want to get a WIMP interface going it would be great if
-I could do a make qtopia_defconfig and have that select the packages
-required for a rootfs that includes qtopia. As it stands how I just tell
-menuconfig to hide the busybox supplied bits then read each item's help
-entry to see if it sounds like it is something I need to have. I know
-this is more an issue of not knowing linux well enough than anything
-else but it would sure be convenient.
+The code to add the feature is fairly simple; however, it requires
+touching every package makefile.
+====================================================================== 
 
-On a related note, the help entries really need to be more verbose!
-"libwhatsit - provides libwhatsit utilities" makes it rough on us poor
-newbies - makes our brains hurt (worse than they already do!)
+Issue History 
+Date Modified   Username       Field                    Change               
+====================================================================== 
+04-26-08 19:21  kendallc       New Issue                                    
+04-26-08 19:21  kendallc       Status                   new => assigned     
+04-26-08 19:21  kendallc       Assigned To               => buildroot       
+04-26-08 19:21  kendallc       File Added: buildroot-local-mirror.patch         
+          
+======================================================================
