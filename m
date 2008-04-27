@@ -1,46 +1,32 @@
-From: nkukard at uclibc.org <nkukard@uclibc.org>
-Date: Sun, 27 Apr 2008 02:51:33 -0700 (PDT)
-Subject: [Buildroot] svn commit: trunk/buildroot/package/rpm
-Message-ID: <20080427095133.504A83C6E3@busybox.net>
+From: p <pmeloy@shaw.ca>
+Date: Sun, 27 Apr 2008 06:41:27 -0700
+Subject: [Buildroot] QWidget cannot check for file existence when cross
+	compiling
+In-Reply-To: <20080427095133.504A83C6E3@busybox.net>
+References: <20080427095133.504A83C6E3@busybox.net>
+Message-ID: <1209303687.31310.6.camel@rhodan.rho>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Author: nkukard
-Date: 2008-04-27 02:51:32 -0700 (Sun, 27 Apr 2008)
-New Revision: 21875
+I've been trying to get past this error:
 
-Log:
-* Bump to 5.1.0
-* Use fnctl for locking
+checking QT_LIBS... -L/home/pat/buildroot/build_arm/staging_dir/usr/lib
+-lQtGui -lpng -lQtNetwork -lQtCore -lz -lm -lrt -lpthread -ldl  
+checking
+for /home/pat/buildroot/build_arm/staging_dir/usr/include/QtGui/QWidget... configure: error: cannot check for file existence when cross compiling
+make: ***
+[/home/pat/buildroot/build_arm/classpath-0.97.1/.stamp_configured] Error
+1
 
+I checked and the QWidget file does exist in the path specified. I
+thought maybe it was something missing on the host so I installed
+everything QT4ish that seemed remotely appropriate.
 
-Modified:
-   trunk/buildroot/package/rpm/rpm.mk
+I just checked out the buildroot SVN this morning and modified the
+qtopia4.mk to use a few different snapshots of 4.4.0 (the original
+snapshot specified no longer exists) but always the same result.
 
-
-Changeset:
-Modified: trunk/buildroot/package/rpm/rpm.mk
-===================================================================
---- trunk/buildroot/package/rpm/rpm.mk	2008-04-27 03:33:29 UTC (rev 21874)
-+++ trunk/buildroot/package/rpm/rpm.mk	2008-04-27 09:51:32 UTC (rev 21875)
-@@ -3,7 +3,7 @@
- # rpm
- #
- #############################################################
--RPM_VERSION = 5.0.3
-+RPM_VERSION = 5.1.0
- RPM_SITE = http://rpm5.org/files/rpm/rpm-5.0/
- RPM_AUTORECONF = YES
- 
-@@ -18,7 +18,7 @@
- 	--with-zlib=$(STAGING_DIR) \
- 	--with-libbeecrypt=$(STAGING_DIR) \
- 	--with-popt=$(STAGING_DIR) \
--	--disable-mutexsupport \
-+	--with-mutex=UNIX/fcntl \
- 	$(DISABLE_NLS)
- 
- RPM_INSTALL_TARGET_OPT=DESTDIR=$(TARGET_DIR) program_transform_name= install
+Any clues as to how to get past this?
