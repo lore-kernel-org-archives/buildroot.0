@@ -1,39 +1,44 @@
 From: p <pmeloy@shaw.ca>
-Date: Mon, 28 Apr 2008 07:30:33 -0700
-Subject: [Buildroot] QWidget cannot check for file existence when
-	cross	compiling
-In-Reply-To: <d6cda7730804280619t28c08fe7racbee68f00a8fb7d@mail.gmail.com>
-References: <20080427095133.504A83C6E3@busybox.net>
-	<1209303687.31310.6.camel@rhodan.rho>
-	<d6cda7730804280619t28c08fe7racbee68f00a8fb7d@mail.gmail.com>
-Message-ID: <1209393033.19474.15.camel@rhodan.rho>
+Date: Mon, 28 Apr 2008 09:44:56 -0700
+Subject: [Buildroot] lockfiles-progs problems
+In-Reply-To: <48109359.5010204@logicway.de>
+References: <48109359.5010204@logicway.de>
+Message-ID: <1209401096.3050.6.camel@rhodan.rho>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Thanks! Classpath.mk had a bit different entry than --enable-qt but I
-commented out the whole if..endif dealing with qt and I made it past. 
+lockfile-progs_0.1.11 no longer exists in the repo and has apparently
+been replaced by 0.1.11-0.1.
 
-On Mon, 2008-04-28 at 10:19 -0300, Thiago A. Corr?a wrote:
-> I had seen this in classpath.
+I changed the .mk version to 0.1.11-0.1 and make downloaded the file but
+then it aborts at "touch" with a somewhat misleading error message.
+
+toolchain/patch-kernel.sh /home/pat/buildroot/build_arm/lockfile-progs-0.1.11-0.1/ package/lockfile-progs *.patch
+Aborting.  '/home/pat/buildroot/build_arm/lockfile-progs-0.1.11-0.1/' is
+not a directory.
+make: ***
+[/home/pat/buildroot/build_arm/lockfile-progs-0.1.11-0.1/.unpacked]
+Error 1
+
+pat at rhodan:~/buildroot$ ls build_arm/lockfile-progs-0.1.11/ -a
+.  ..  COPYING  debian  .git  .gitignore  lockfile-progs.1
+lockfile-progs.c  Makefile  TODO
+
+In reality .unpacked is missing for some reason.
+
+On Thu, 2008-04-24 at 16:04 +0200, Arndt Kritzner wrote:
+> Irda-utils's package makefile is a stub without real function at the moment.
 > 
-> It's a problem with it's configure. Only God knows why, but they added
-> a check in the configure script that when crosscompiling, it will just
-> fail with Qt integration enabled. There are 2 ways to fix it: drop the
-> --enable-qt in classpath.mk or patch configure.
+> The patch adds functionality to download and compile the package. But on
+> avr32 only irattach could be built successfully.
 > 
-> Kind Regards,
->    Thiago A. Correa
+> Gru? und tsch?s
+> Arndt
 > 
-> On Sun, Apr 27, 2008 at 10:41 AM, p <pmeloy@shaw.ca> wrote:
-> > I've been trying to get past this error:
-> >
-> >  checking QT_LIBS... -L/home/pat/buildroot/build_arm/staging_dir/usr/lib
-> >  -lQtGui -lpng -lQtNetwork -lQtCore -lz -lm -lrt -lpthread -ldl
-> >  checking
-> >  for /home/pat/buildroot/build_arm/staging_dir/usr/include/QtGui/QWidget... configure: error: cannot check for file existence when cross compiling
-> >  make: ***
-> >  [/home/pat/buildroot/build_arm/classpath-0.97.1/.stamp_configured] Error
-> >  1
+> _______________________________________________
+> buildroot mailing list
+> buildroot at uclibc.org
+> http://busybox.net/mailman/listinfo/buildroot
