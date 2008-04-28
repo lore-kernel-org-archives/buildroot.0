@@ -1,43 +1,51 @@
-From: Tiju Jacob <jacob_tiju@yahoo.com>
-Date: Mon, 28 Apr 2008 10:16:48 +0530 (IST)
-Subject: [Buildroot] Buildroot login issue
-Message-ID: <261861.27627.qm@web94111.mail.in2.yahoo.com>
+From: =?ISO-8859-1?Q?Thiago_A._Corr=EAa?= <thiago.correa@gmail.com>
+Date: Mon, 28 Apr 2008 10:19:58 -0300
+Subject: [Buildroot] QWidget cannot check for file existence when cross
+	compiling
+In-Reply-To: <1209303687.31310.6.camel@rhodan.rho>
+References: <20080427095133.504A83C6E3@busybox.net>
+	<1209303687.31310.6.camel@rhodan.rho>
+Message-ID: <d6cda7730804280619t28c08fe7racbee68f00a8fb7d@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi all,
+I had seen this in classpath.
 
-I have compiled a kernel, version linux-2.6.24.4 using the toolchain at http://cross-lfs.org/view/clfs-sysroot/arm/ which is not a uClibc version. Then I have compiled a cpio file system using buildroot which has it own version of uClibc.
+It's a problem with it's configure. Only God knows why, but they added
+a check in the configure script that when crosscompiling, it will just
+fail with Qt integration enabled. There are 2 ways to fix it: drop the
+--enable-qt in classpath.mk or patch configure.
 
-When I try to boot these images, I am not able to login. It comes back to the same login prompt when I login as root.
+Kind Regards,
+   Thiago A. Correa
 
-Could the difference in the toolchain versions cause this error?
-
-Output:
-....
-....
-NET: Registered protocol family 1
-NET: Registered protocol family 17
-registered taskstats version 1
-Freeing init memory: 1108K
-
-Welcome to the uClibc development environment.
-DPB2440 login: root
-
-Welcome to the uClibc development environment.
-DPB2440 login:
-
-
-
-Any help would be appreciated.
-
-Thanks in Advance.
-Tiju
-
-
-
-
-      Get the freedom to save as many mails as you wish. To know how, go to http://help.yahoo.com/l/in/yahoo/mail/yahoomail/tools/tools-08.html
+On Sun, Apr 27, 2008 at 10:41 AM, p <pmeloy@shaw.ca> wrote:
+> I've been trying to get past this error:
+>
+>  checking QT_LIBS... -L/home/pat/buildroot/build_arm/staging_dir/usr/lib
+>  -lQtGui -lpng -lQtNetwork -lQtCore -lz -lm -lrt -lpthread -ldl
+>  checking
+>  for /home/pat/buildroot/build_arm/staging_dir/usr/include/QtGui/QWidget... configure: error: cannot check for file existence when cross compiling
+>  make: ***
+>  [/home/pat/buildroot/build_arm/classpath-0.97.1/.stamp_configured] Error
+>  1
+>
+>  I checked and the QWidget file does exist in the path specified. I
+>  thought maybe it was something missing on the host so I installed
+>  everything QT4ish that seemed remotely appropriate.
+>
+>  I just checked out the buildroot SVN this morning and modified the
+>  qtopia4.mk to use a few different snapshots of 4.4.0 (the original
+>  snapshot specified no longer exists) but always the same result.
+>
+>  Any clues as to how to get past this?
+>
+>
+>  _______________________________________________
+>  buildroot mailing list
+>  buildroot at uclibc.org
+>  http://busybox.net/mailman/listinfo/buildroot
+>
