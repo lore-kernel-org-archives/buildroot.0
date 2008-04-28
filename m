@@ -1,91 +1,43 @@
-From: bugs at busybox.net <bugs@busybox.net>
-Date: Sun, 27 Apr 2008 07:18:37 -0700
-Subject: [Buildroot] [buildroot 0003154]: configure option for local package
-	mirror
-Message-ID: <cda71f7ebcc51d69d8b3c15c5721564e@busybox.net>
+From: Tiju Jacob <jacob_tiju@yahoo.com>
+Date: Mon, 28 Apr 2008 10:16:48 +0530 (IST)
+Subject: [Buildroot] Buildroot login issue
+Message-ID: <261861.27627.qm@web94111.mail.in2.yahoo.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+Hi all,
 
-A NOTE has been added to this issue. 
-====================================================================== 
-http://busybox.net/bugs/view.php?id=3154 
-====================================================================== 
-Reported By:                kendallc
-Assigned To:                buildroot
-====================================================================== 
-Project:                    buildroot
-Issue ID:                   3154
-Category:                   New Features
-Reproducibility:            N/A
-Severity:                   feature
-Priority:                   normal
-Status:                     assigned
-====================================================================== 
-Date Submitted:             04-26-2008 19:21 PDT
-Last Modified:              04-27-2008 07:18 PDT
-====================================================================== 
-Summary:                    configure option for local package mirror
-Description: 
-It would be nice to have an option for buildroot pull packages from a local
-mirror. This feature would allow users to run a fresh buildroot build
-without an internet connection. It requires the addition of a
-configuration option. It also requires a few lines below the "..._SITE:="
-stuff in every package's makefile.
+I have compiled a kernel, version linux-2.6.24.4 using the toolchain at http://cross-lfs.org/view/clfs-sysroot/arm/ which is not a uClibc version. Then I have compiled a cpio file system using buildroot which has it own version of uClibc.
 
-I've attached a patch that adds a BR2_PACKAGE_MIRROR option to
-target/device/Config.in.mirrors. The patch adds support for the option to
-uClibc, and busybox. This patch is just an example of how this feature
-could be added to a couple of packages.
+When I try to boot these images, I am not able to login. It comes back to the same login prompt when I login as root.
 
-The code to add the feature is fairly simple; however, it requires
-touching every package makefile.
-====================================================================== 
+Could the difference in the toolchain versions cause this error?
 
----------------------------------------------------------------------- 
- hbr_in - 04-26-08 21:38  
----------------------------------------------------------------------- 
-Hi,
+Output:
+....
+....
+NET: Registered protocol family 1
+NET: Registered protocol family 17
+registered taskstats version 1
+Freeing init memory: 1108K
 
-Instead of adding an option, what i do is that -->
+Welcome to the uClibc development environment.
+DPB2440 login: root
 
-i have a local directory which contain all my sources. 
+Welcome to the uClibc development environment.
+DPB2440 login:
 
-my local src --> /opt/source
-my buildroot directory --> /opt/buildroot
 
-Inside Buildroot, i link the above folder to dl directory i.e., to a
-directory where buildroot downloads and stores all package source
 
-/opt/buildroot # ln -s /opt/source dl
+Any help would be appreciated.
 
-So when buildroot starts make it 1st check in dl/ directory (which is my
-local source directory) and if it finds the source there then it doesnt
-need any internet connection.
+Thanks in Advance.
+Tiju
 
-Regards
-Gururaja 
 
----------------------------------------------------------------------- 
- UlfSamuelsson - 04-27-08 07:18  
----------------------------------------------------------------------- 
-A better implementation would replace $(WGET) with a script
-which test the main location first and then goes through a
-list of mirrors.
-Then no package file need to be touched, and it is easy
-to maintain a number of mirrors. 
 
-Issue History 
-Date Modified   Username       Field                    Change               
-====================================================================== 
-04-26-08 19:21  kendallc       New Issue                                    
-04-26-08 19:21  kendallc       Status                   new => assigned     
-04-26-08 19:21  kendallc       Assigned To               => buildroot       
-04-26-08 19:21  kendallc       File Added: buildroot-local-mirror.patch         
-          
-04-26-08 21:38  hbr_in         Note Added: 0007254                          
-04-27-08 07:18  UlfSamuelsson  Note Added: 0007274                          
-======================================================================
+
+      Get the freedom to save as many mails as you wish. To know how, go to http://help.yahoo.com/l/in/yahoo/mail/yahoomail/tools/tools-08.html
