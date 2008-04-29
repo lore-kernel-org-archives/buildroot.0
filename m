@@ -1,66 +1,102 @@
-From: Hamish Moffatt <hamish@cloud.net.au>
-Date: Tue, 29 Apr 2008 11:04:39 +1000
-Subject: [Buildroot] question about make
-In-Reply-To: <46a136670804281005t11bcda79mb985e6b78b25e717@mail.gmail.com>
-References: <46a136670804281005t11bcda79mb985e6b78b25e717@mail.gmail.com>
-Message-ID: <20080429010439.GB23316@cloud.net.au>
+From: bugs at busybox.net <bugs@busybox.net>
+Date: Mon, 28 Apr 2008 19:56:35 -0700
+Subject: [Buildroot] [buildroot 0003154]: configure option for local package
+	mirror
+Message-ID: <6bbf97a9f25055ff4de5f024e0256a88@bugs.uclibc.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Mon, Apr 28, 2008 at 01:05:33PM -0400, John Voltz wrote:
-> I'm hoping someone can help me figure out the best way to fix the buildroot
-> makefiles for the festival voices and lexicons, right now make doesn't check
-> to see if you have already downloaded the tarball before it does it again.
-> What's the easiest way to check for the existence of a file with make?
 
-Make something depend on it, and add a rule to download it to fulfill
-the dependency. Random example (from gzip.mk);
+A NOTE has been added to this issue. 
+====================================================================== 
+http://busybox.net/bugs/view.php?id=3154 
+====================================================================== 
+Reported By:                kendallc
+Assigned To:                buildroot
+====================================================================== 
+Project:                    buildroot
+Issue ID:                   3154
+Category:                   New Features
+Reproducibility:            N/A
+Severity:                   feature
+Priority:                   normal
+Status:                     assigned
+====================================================================== 
+Date Submitted:             04-26-2008 19:21 PDT
+Last Modified:              04-28-2008 19:56 PDT
+====================================================================== 
+Summary:                    configure option for local package mirror
+Description: 
+It would be nice to have an option for buildroot pull packages from a local
+mirror. This feature would allow users to run a fresh buildroot build
+without an internet connection. It requires the addition of a
+configuration option. It also requires a few lines below the "..._SITE:="
+stuff in every package's makefile.
 
-$(DL_DIR)/$(GZIP_SOURCE):
-	 $(WGET) -P $(DL_DIR) $(GZIP_SITE)/$(GZIP_SOURCE)
+I've attached a patch that adds a BR2_PACKAGE_MIRROR option to
+target/device/Config.in.mirrors. The patch adds support for the option to
+uClibc, and busybox. This patch is just an example of how this feature
+could be added to a couple of packages.
 
-gzip-source: $(DL_DIR)/$(GZIP_SOURCE)
+The code to add the feature is fairly simple; however, it requires
+touching every package makefile.
+====================================================================== 
 
-$(GZIP_DIR)/.unpacked: $(DL_DIR)/$(GZIP_SOURCE)
-	$(GZIP_CAT) $(DL_DIR)/$(GZIP_SOURCE) | tar -C $(BUILD_DIR) $(TAR_OPTIONS) -
-	touch $(GZIP_DIR)/.unpacked
+---------------------------------------------------------------------- 
+ hbr_in - 04-26-08 21:38  
+---------------------------------------------------------------------- 
+Hi,
 
-> This is the very simplistic method that is currently used for grabbing the
-> lexicons:
-> 
-> $(FESTLEX_STATUS_DIR)/.downloaded:
->     mkdir -p $(FESTLEX_STATUS_DIR)
-> ifeq ($(BR2_PACKAGE_FESTLEX_CMU),y)
->     $(WGET) -P $(DL_DIR) $(FESTIVAL_SITE)/$(LEX1)
-> endif
-> ifeq ($(BR2_PACKAGE_FESTLEX_OALD),y)
->     $(WGET) -P $(DL_DIR) $(FESTIVAL_SITE)/$(LEX2)
-> endif
-> ifeq ($(BR2_PACKAGE_FESTLEX_POS),y)
->     $(WGET) -P $(DL_DIR) $(FESTIVAL_SITE)/$(LEX3)
-> endif
->     touch $@
+Instead of adding an option, what i do is that -->
 
-You probably want to write something like:
+i have a local directory which contain all my sources. 
 
-$(DL_DIR)/$(LEX1):
-	$(WGET) -P $(DL_DIR) $(FESTIVAL_SITE)/$(LEX1)
-$(DL_DIR)/$(LEX2):
-	$(WGET) -P $(DL_DIR) $(FESTIVAL_SITE)/$(LEX2)
-$(DL_DIR)/$(LEX3):
-	$(WGET) -P $(DL_DIR) $(FESTIVAL_SITE)/$(LEX3)
+my local src --> /opt/source
+my buildroot directory --> /opt/buildroot
 
-FESTLEX_DOWNLOAD_$(BR2_PACKAGE_FESTLEX_CMU) += $(DL_DIR)/$(LEX1)
-FESTLEX_DOWNLOAD_$(BR2_PACKAGE_FESTLEX_OALD) += $(DL_DIR)/$(LEX2)
-FESTLEX_DOWNLOAD_$(BR2_PACKAGE_FESTLEX_POS) += $(DL_DIR)/$(LEX3)
+Inside Buildroot, i link the above folder to dl directory i.e., to a
+directory where buildroot downloads and stores all package source
 
-$(FESTLEX_DIR)/.unpacked: $(FESTLEX_DOWNLOAD_y)
-	...
+/opt/buildroot # ln -s /opt/source dl
 
+So when buildroot starts make it 1st check in dl/ directory (which is my
+local source directory) and if it finds the source there then it doesnt
+need any internet connection.
 
-Hamish
--- 
-Hamish Moffatt VK3SB <hamish@debian.org> <hamish@cloud.net.au>
+Regards
+Gururaja 
+
+---------------------------------------------------------------------- 
+ UlfSamuelsson - 04-27-08 07:18  
+---------------------------------------------------------------------- 
+A better implementation would replace $(WGET) with a script
+which test the main location first and then goes through a
+list of mirrors.
+Then no package file need to be touched, and it is easy
+to maintain a number of mirrors. 
+
+---------------------------------------------------------------------- 
+ kendallc - 04-28-08 19:56  
+---------------------------------------------------------------------- 
+There are ways to accomplish this outside of buildroot. My suggestion was
+to integrate this feature into buildroot.
+
+Whatever the implementation, it will take some effort to do it properly. I
+guess the first issue is whether or not this feature useful to enough users
+to warrant implementing. 
+
+Issue History 
+Date Modified   Username       Field                    Change               
+====================================================================== 
+04-26-08 19:21  kendallc       New Issue                                    
+04-26-08 19:21  kendallc       Status                   new => assigned     
+04-26-08 19:21  kendallc       Assigned To               => buildroot       
+04-26-08 19:21  kendallc       File Added: buildroot-local-mirror.patch         
+          
+04-26-08 21:38  hbr_in         Note Added: 0007254                          
+04-27-08 07:18  UlfSamuelsson  Note Added: 0007274                          
+04-28-08 19:56  kendallc       Note Added: 0007294                          
+======================================================================
