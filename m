@@ -1,23 +1,25 @@
-From: Paradoxxa2001 at web.de <Paradoxxa2001@web.de>
-Date: Tue, 29 Apr 2008 11:12:56 +0200
-Subject: [Buildroot] at91sam9263ek and at91bootstrap-2.4/2.3
-Message-ID: <1144873254@web.de>
+From: John Voltz <john.voltz@gmail.com>
+Date: Tue, 29 Apr 2008 08:29:18 -0400
+Subject: [Buildroot] x86 linking
+Message-ID: <46a136670804290529s520dbc97if728241104f03d15@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi,
+I've been building for x86 and struggling with a problem that I don't fully
+understand. I'm hoping someone here can shed some light on it for me. I've
+found that a few libraries are getting relinked against the host libraries,
+I'm guessing during the "make install" phase. If I look in the build
+directories there are two .so files. One is properly linked, the other ends
+in a capital T and is linked against the host, and this is the one that gets
+installed to the TARGET_DIR. Is libtool responsible for this, and how can it
+be fixed? So far I have found this problem with gtk, glib, pango, xcb, and
+openmotif. Anyone have an idea why this happens?
 
-Today i figured out that when i use at91sam9263ek_defconfig with the Buidroot svn revision 21892 
-i will get problems with the at91bootstrap-2.3 package because there is a define problem with 
-CFG_DEBUG in drivers/debug.c. I found on ftp://www.at91.com/pub/buildroot/ a newer Version of 
-at91bootstrap (2.4). I included this Version in the Buildroot Makefiles and now it works to compile it. 
-I'm still waiting of my hardware, so i can't  check if it works. Maybe someone can do that?
-
-Best Regards,
-Thomas
-_________________________________________________________________________
-In 5 Schritten zur eigenen Homepage. Jetzt Domain sichern und gestalten! 
-Nur 3,99 EUR/Monat! http://www.maildomain.web.de/?mc=021114
+Thanks,
+John
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: http://busybox.net/lists/buildroot/attachments/20080429/6e2fa593/attachment.htm 
