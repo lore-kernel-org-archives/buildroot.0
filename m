@@ -1,102 +1,70 @@
-From: bugs at busybox.net <bugs@busybox.net>
-Date: Mon, 28 Apr 2008 19:56:35 -0700
-Subject: [Buildroot] [buildroot 0003154]: configure option for local package
-	mirror
-Message-ID: <6bbf97a9f25055ff4de5f024e0256a88@bugs.uclibc.org>
+From: nkukard at uclibc.org <nkukard@uclibc.org>
+Date: Mon, 28 Apr 2008 22:04:14 -0700 (PDT)
+Subject: [Buildroot] svn commit: trunk/buildroot/package/rpm
+Message-ID: <20080429050414.9E7E93C6A5@busybox.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+Author: nkukard
+Date: 2008-04-28 22:04:14 -0700 (Mon, 28 Apr 2008)
+New Revision: 21891
 
-A NOTE has been added to this issue. 
-====================================================================== 
-http://busybox.net/bugs/view.php?id=3154 
-====================================================================== 
-Reported By:                kendallc
-Assigned To:                buildroot
-====================================================================== 
-Project:                    buildroot
-Issue ID:                   3154
-Category:                   New Features
-Reproducibility:            N/A
-Severity:                   feature
-Priority:                   normal
-Status:                     assigned
-====================================================================== 
-Date Submitted:             04-26-2008 19:21 PDT
-Last Modified:              04-28-2008 19:56 PDT
-====================================================================== 
-Summary:                    configure option for local package mirror
-Description: 
-It would be nice to have an option for buildroot pull packages from a local
-mirror. This feature would allow users to run a fresh buildroot build
-without an internet connection. It requires the addition of a
-configuration option. It also requires a few lines below the "..._SITE:="
-stuff in every package's makefile.
+Log:
+* Bump version to 5.1.1
+* Use bzip2 compression (rpms can have gzip or bzip2 payloads)
+* -j1, rpm cannot build with more than 1 thread
 
-I've attached a patch that adds a BR2_PACKAGE_MIRROR option to
-target/device/Config.in.mirrors. The patch adds support for the option to
-uClibc, and busybox. This patch is just an example of how this feature
-could be added to a couple of packages.
 
-The code to add the feature is fairly simple; however, it requires
-touching every package makefile.
-====================================================================== 
+Modified:
+   trunk/buildroot/package/rpm/Config.in
+   trunk/buildroot/package/rpm/rpm.mk
 
----------------------------------------------------------------------- 
- hbr_in - 04-26-08 21:38  
----------------------------------------------------------------------- 
-Hi,
 
-Instead of adding an option, what i do is that -->
+Changeset:
+Modified: trunk/buildroot/package/rpm/Config.in
+===================================================================
+--- trunk/buildroot/package/rpm/Config.in	2008-04-29 04:40:15 UTC (rev 21890)
++++ trunk/buildroot/package/rpm/Config.in	2008-04-29 05:04:14 UTC (rev 21891)
+@@ -2,6 +2,7 @@
+ 	bool "rpm"
+ 	default n
+ 	select BR2_PACKAGE_ZLIB
++	select BR2_PACKAGE_BZIP2
+ 	select BR2_PACKAGE_BEECRYPT
+ 	select BR2_PACKAGE_NEON
+ 	select BR2_PACKAGE_POPT
 
-i have a local directory which contain all my sources. 
-
-my local src --> /opt/source
-my buildroot directory --> /opt/buildroot
-
-Inside Buildroot, i link the above folder to dl directory i.e., to a
-directory where buildroot downloads and stores all package source
-
-/opt/buildroot # ln -s /opt/source dl
-
-So when buildroot starts make it 1st check in dl/ directory (which is my
-local source directory) and if it finds the source there then it doesnt
-need any internet connection.
-
-Regards
-Gururaja 
-
----------------------------------------------------------------------- 
- UlfSamuelsson - 04-27-08 07:18  
----------------------------------------------------------------------- 
-A better implementation would replace $(WGET) with a script
-which test the main location first and then goes through a
-list of mirrors.
-Then no package file need to be touched, and it is easy
-to maintain a number of mirrors. 
-
----------------------------------------------------------------------- 
- kendallc - 04-28-08 19:56  
----------------------------------------------------------------------- 
-There are ways to accomplish this outside of buildroot. My suggestion was
-to integrate this feature into buildroot.
-
-Whatever the implementation, it will take some effort to do it properly. I
-guess the first issue is whether or not this feature useful to enough users
-to warrant implementing. 
-
-Issue History 
-Date Modified   Username       Field                    Change               
-====================================================================== 
-04-26-08 19:21  kendallc       New Issue                                    
-04-26-08 19:21  kendallc       Status                   new => assigned     
-04-26-08 19:21  kendallc       Assigned To               => buildroot       
-04-26-08 19:21  kendallc       File Added: buildroot-local-mirror.patch         
-          
-04-26-08 21:38  hbr_in         Note Added: 0007254                          
-04-27-08 07:18  UlfSamuelsson  Note Added: 0007274                          
-04-28-08 19:56  kendallc       Note Added: 0007294                          
-======================================================================
+Modified: trunk/buildroot/package/rpm/rpm.mk
+===================================================================
+--- trunk/buildroot/package/rpm/rpm.mk	2008-04-29 04:40:15 UTC (rev 21890)
++++ trunk/buildroot/package/rpm/rpm.mk	2008-04-29 05:04:14 UTC (rev 21891)
+@@ -3,11 +3,11 @@
+ # rpm
+ #
+ #############################################################
+-RPM_VERSION = 5.1.0
+-RPM_SITE = http://rpm5.org/files/rpm/rpm-5.0/
++RPM_VERSION = 5.1.1
++RPM_SITE = http://rpm5.org/files/rpm/rpm-5.1/
+ RPM_AUTORECONF = YES
+ 
+-RPM_DEPENDENCIES = zlib beecrypt neon popt
++RPM_DEPENDENCIES = zlib bzip2 beecrypt neon popt
+ 
+ RPM_CONF_ENV = CFLAGS="-I$(STAGING_DIR)/usr/include/beecrypt -I$(STAGING_DIR)/usr/include/neon" \
+ 		ac_cv_va_copy=yes
+@@ -19,8 +19,11 @@
+ 	--with-libbeecrypt=$(STAGING_DIR) \
+ 	--with-popt=$(STAGING_DIR) \
+ 	--with-mutex=UNIX/fcntl \
++	--with-bzip2 \
+ 	$(DISABLE_NLS)
+ 
++RPM_MAKE_OPT = -j1
++
+ RPM_INSTALL_TARGET_OPT=DESTDIR=$(TARGET_DIR) program_transform_name= install
+ 
+ $(eval $(call AUTOTARGETS,package,rpm))
