@@ -1,113 +1,51 @@
-From: Arun Reddy <reddyac@gmail.com>
-Date: Wed, 30 Apr 2008 07:02:35 -0700
-Subject: [Buildroot] Buildroot ARM toolchain build Error: libexpat
-In-Reply-To: <326f33790804291643y4b2f296bs9b364e1587b21808@mail.gmail.com>
-References: <326f33790804281532w187e0968lcc383e59fe65c77a@mail.gmail.com>
-	<326f33790804291507pb562331k1782b1b5c48af0f@mail.gmail.com>
-	<d6cda7730804291518x5bf85cas204ac3129db5bc1d@mail.gmail.com>
-	<326f33790804291643y4b2f296bs9b364e1587b21808@mail.gmail.com>
-Message-ID: <326f33790804300702if3df40eq292ac7cbf01c9a2a@mail.gmail.com>
+From: John Voltz <john.voltz@gmail.com>
+Date: Wed, 30 Apr 2008 10:46:29 -0400
+Subject: [Buildroot] x86 image for download
+In-Reply-To: <326f33790804292359j6c46b3a5ya769efd022a30999@mail.gmail.com>
+References: <46a136670804291039y34a80ff2p70bd4d38a63ffcf@mail.gmail.com>
+	<48181753.50707@gmail.com>
+	<326f33790804292359j6c46b3a5ya769efd022a30999@mail.gmail.com>
+Message-ID: <46a136670804300746u484199b3nc245522b184f6b34@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-I'd just like to point out that I located "libexpat" in my build system and
-a bunch of files are under /usr/lib as libexpat.a, libexpat.la, libexpat.so,
-etc. Do you guys these need to be moved somewhere in
-/root/buildroot/build_arm/staging_dir/ for them to be located?
+The thing is, it should just work for everyone. I'm working on a fix for
+libtool right now, that was the major stumbling block for building for x86.
+Libtool is relinking the libraries with -rpath=/usr/lib which is no good.
+I'm taking care of that little nasty. I'm also going to work at integrating
+the bootable ext3 option into menuconfig.
 
-On Tue, Apr 29, 2008 at 4:43 PM, Arun Reddy <reddyac@gmail.com> wrote:
+John
 
-> Hi Thiago,
+
+On Wed, Apr 30, 2008 at 2:59 AM, Arun Reddy <reddyac@gmail.com> wrote:
+
+> I'd like to second this request as well! I recently got a bootable x86
+> image working and successfully converted it to a .vdi to be used in
+> VirtualBox. It would be nice to see how a professional does it so maybe I
+> can learn to optimize my method.
 >
-> I actually did not have expat in the menuconfig. The build process fails
-> after it does a check for a whole bunch of files shown here...
+> On Tue, Apr 29, 2008 at 11:53 PM, Joe <zentrale.at.work@gmail.com> wrote:
 >
-> http://img209.imageshack.us/img209/4053/buildrootproblemra9.jpg
->
-> I am not sure whether it needs expat to actually complete the build
-> process or not. I went ahead and changed my buildroot .config file to
-> include expat just in case, but I still get the same error. I attached my
-> .config file as you requested. (I had to save it as a .txt file because I am
-> using VirtualBox and my shared folder wouldn't accept the .config file
-> itself). Thank you for your help.
->
->
-> On Tue, Apr 29, 2008 at 3:18 PM, Thiago A. Corr?a <thiago.correa@gmail.com>
-> wrote:
->
-> > Hi,
+> > Hi John, thanks for sharing! Looks really interesting to me...
 > >
-> > If this is a package from buildroot that you are compiling, it should
-> > be looking for libexpat in the staging_dir, not in the system
-> > libs/includes.
+> > > I finally created a bootable x86 image using buildroot, and a lot of
+> > > hand-copying of files to my target dir.
+> > Is it really complicated, or can you maybe do some short guide on how
+> > you did it? This could be a very efficient way to set up special-purpose
+> > machines in vmware...
 > >
-> > Did you enable expat in the menuconfig? Which package is failing?
-> > Could you share your .config file?
+> > Thanks again, Joe
 > >
-> > Kind Regards,
-> >   Thiago A. Correa
+> > --
+> > Sepp "ZaP" Holzmayr
 > >
-> > On Tue, Apr 29, 2008 at 7:07 PM, Arun Reddy <reddyac@gmail.com> wrote:
-> > > A little more info on the problem. I tried to build again using a
-> > different
-> > > configuration just to see if the problem was unique, but I ran into
-> > the same
-> > > one again. After a little bit of Google searching, it seems to me that
-> > there
-> > > might be an undefined symbol error. I looked  at the config.log file
-> > to see
-> > > if I could find it but couldn't pinpoint anything.
-> > >
-> > > I should also point out, when I look at config.log:
-> > >
-> > > (/root/buildroot/build_arm/avahi-0.6.22/config.log), I see that the
-> > line $
-> > > ./configure has "--disable-expat" in it. Is this why my build is
-> > getting the
-> > > error that libexpat can't be found?
-> > >
-> > > Thanks for any help!
-> > >
-> > >
-> > >
-> > > On Mon, Apr 28, 2008 at 3:32 PM, Arun Reddy <reddyac@gmail.com> wrote:
-> > > > Hi everyone,
-> > > >
-> > > > I have done a kernel configuration for at91sam9263ek, and I am now
-> > going
-> > > through the build process. I have fixed up some errors I encountered
-> > with
-> > > missing packages, but I then encountered that...
-> > > >
-> > > > Checking for XML_ParserCreate in -lexpat... no
-> > > > Checking for XML_ParserCreate in -lbsdxml... no
-> > > > Configure: error: *** neither libexpat not libbsdxml could be found
-> > ***
-> > > >
-> > > > I made sure to install the expat package (apt-get install
-> > libexpat-dev)
-> > > and tried to find out if I needed to install the libbsdxml package as
-> > well,
-> > > but couldn't find enough information online about what libbsdxml is
-> > (it does
-> > > seem like it's just another name for libexpat) or any solutions to
-> > this
-> > > error.
-> > > >
-> > > > Anyone know what the problem here is, and what package I actually
-> > need?
-> > > Thanks!
-> > > >
-> > >
-> > >
-> > > _______________________________________________
-> > >  buildroot mailing list
-> > >  buildroot at uclibc.org
-> > >  http://busybox.net/mailman/listinfo/buildroot
-> > >
+> > please reply to: zentrale.at.work at gmail.com
+> > "Never underestimate the bandwidth of a freight train full of DAT tapes.
+> > Only the round-trip is a little suboptimal."
 > > _______________________________________________
 > > buildroot mailing list
 > > buildroot at uclibc.org
@@ -117,4 +55,4 @@ On Tue, Apr 29, 2008 at 4:43 PM, Arun Reddy <reddyac@gmail.com> wrote:
 >
 -------------- next part --------------
 An HTML attachment was scrubbed...
-URL: http://busybox.net/lists/buildroot/attachments/20080430/c6c2c380/attachment-0001.htm 
+URL: http://busybox.net/lists/buildroot/attachments/20080430/6b99623e/attachment.htm 
