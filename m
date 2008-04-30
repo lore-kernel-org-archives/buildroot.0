@@ -1,58 +1,51 @@
 From: John Voltz <john.voltz@gmail.com>
-Date: Wed, 30 Apr 2008 10:46:29 -0400
-Subject: [Buildroot] x86 image for download
-In-Reply-To: <326f33790804292359j6c46b3a5ya769efd022a30999@mail.gmail.com>
-References: <46a136670804291039y34a80ff2p70bd4d38a63ffcf@mail.gmail.com>
-	<48181753.50707@gmail.com>
-	<326f33790804292359j6c46b3a5ya769efd022a30999@mail.gmail.com>
-Message-ID: <46a136670804300746u484199b3nc245522b184f6b34@mail.gmail.com>
+Date: Wed, 30 Apr 2008 11:14:50 -0400
+Subject: [Buildroot] fixing libtool in buildroot
+Message-ID: <46a136670804300814n1fb0bb1bi796d5e1db3a82134@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-The thing is, it should just work for everyone. I'm working on a fix for
-libtool right now, that was the major stumbling block for building for x86.
-Libtool is relinking the libraries with -rpath=/usr/lib which is no good.
-I'm taking care of that little nasty. I'm also going to work at integrating
-the bootable ext3 option into menuconfig.
+I've got a modification/patch I would like to run by everybody before I
+commit it. It will remove all of the libdirla.patch patches in the packages
+that use Makefile.autotools.in and instead integrate the patch with
+Makefile.autotools.in. If the package has ltmain.sh,
+Makefile.autotools.inwill automatically patch it. This is what that
+looks like:
+
+# Retrieve and unpack the archive
+$(BUILD_DIR)/%/.stamp_extracted:
+    $(call MESSAGE,"Extracting")
+    $(Q)mkdir -p $(@D)
+    $(Q)$(INFLATE$(suffix $($(PKG)_SOURCE))) $(DL_DIR)/$($(PKG)_SOURCE) | \
+    $(TAR) --strip-components=1 -C $(@D) $(TAR_OPTIONS) -
+# some packages have messed up permissions inside
+    $(Q)chmod -R ug+rw $(@D)
+# if the package uses libtool, patch it for cross-compiling in buildroot
+    $(Q)test -e $(@D)/ltmain.sh && toolchain/patch-kernel.sh $(@D) package
+buildroot-libtool.patch
+    $(Q)touch $@
+
+I am also adding to the patch a one line fix that prevents libtool from
+relinking during the "make install" phase of the build. This is simply:
+
+need_relink = no
+
+Attached is the new buildroot-libtool.patch
+
+Let me know what you think, or if you see problems with that, otherwise I
+will go ahead and commit it tomorrow.
 
 John
-
-
-On Wed, Apr 30, 2008 at 2:59 AM, Arun Reddy <reddyac@gmail.com> wrote:
-
-> I'd like to second this request as well! I recently got a bootable x86
-> image working and successfully converted it to a .vdi to be used in
-> VirtualBox. It would be nice to see how a professional does it so maybe I
-> can learn to optimize my method.
->
-> On Tue, Apr 29, 2008 at 11:53 PM, Joe <zentrale.at.work@gmail.com> wrote:
->
-> > Hi John, thanks for sharing! Looks really interesting to me...
-> >
-> > > I finally created a bootable x86 image using buildroot, and a lot of
-> > > hand-copying of files to my target dir.
-> > Is it really complicated, or can you maybe do some short guide on how
-> > you did it? This could be a very efficient way to set up special-purpose
-> > machines in vmware...
-> >
-> > Thanks again, Joe
-> >
-> > --
-> > Sepp "ZaP" Holzmayr
-> >
-> > please reply to: zentrale.at.work at gmail.com
-> > "Never underestimate the bandwidth of a freight train full of DAT tapes.
-> > Only the round-trip is a little suboptimal."
-> > _______________________________________________
-> > buildroot mailing list
-> > buildroot at uclibc.org
-> > http://busybox.net/mailman/listinfo/buildroot
-> >
->
->
 -------------- next part --------------
 An HTML attachment was scrubbed...
-URL: http://busybox.net/lists/buildroot/attachments/20080430/6b99623e/attachment.htm 
+URL: http://busybox.net/lists/buildroot/attachments/20080430/391ed0ce/attachment.htm 
+-------------- next part --------------
+A non-text attachment was scrubbed...
+Name: buildroot-libtool.patch
+Type: text/x-patch
+Size: 3272 bytes
+Desc: not available
+Url : http://busybox.net/lists/buildroot/attachments/20080430/391ed0ce/attachment.bin 
