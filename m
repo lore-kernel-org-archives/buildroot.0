@@ -1,24 +1,34 @@
 From: John Voltz <john.voltz@gmail.com>
-Date: Wed, 30 Apr 2008 13:06:28 -0400
-Subject: [Buildroot] mplayer in buildroot
-Message-ID: <46a136670804301006p74346c55qf9fc2253f34b7c52@mail.gmail.com>
+Date: Wed, 30 Apr 2008 15:07:29 -0400
+Subject: [Buildroot] fixing libtool in buildroot
+In-Reply-To: <46a136670804300914o6419f372yd25ac44dc475fdb6@mail.gmail.com>
+References: <46a136670804300814n1fb0bb1bi796d5e1db3a82134@mail.gmail.com>
+	<87a5b0800804300818w26275393x8eb43fbdec13c1e4@mail.gmail.com>
+	<46a136670804300825i60392054g3f1b191afef5ce95@mail.gmail.com>
+	<46a136670804300914o6419f372yd25ac44dc475fdb6@mail.gmail.com>
+Message-ID: <46a136670804301207h74ed82cesf54bfd604795fabb@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-I cannot get mplayer to build for x86 in buildroot. I keep getting this
-error:
+Another thing I discovered, if autoreconf runs, it replaces ltmain.sh with a
+new copy. So I propose this next addition to Makefile.autotools.in:
 
-cabac.h:513: error: can't find a register in class 'GENERAL_REGS' while
-reloading 'asm'
-cabac.h:513: error: 'asm' operand has impossible constraints
+# Configuring
+$(BUILD_DIR)/%/.stamp_configured:
+    $(call MESSAGE,"Configuring")
+    $(Q)if test "$($(PKG)_AUTORECONF)" = "YES"; then \
+        cd $(@D)/$($(PKG)_SUBDIR) && $(AUTORECONF); \
+        for i in `find $(@D) -name ltmain.sh`; do \
+            ../../toolchain/patch-kernel.sh $${i%/*} ../../package
+buildroot-libtool.patch; \
+        done \
+    fi
 
-Why can't it use inline assembler? It compiles just fine if I build it for
-AVR32.
 
-John
+>
 -------------- next part --------------
 An HTML attachment was scrubbed...
-URL: http://busybox.net/lists/buildroot/attachments/20080430/20510887/attachment.htm 
+URL: http://busybox.net/lists/buildroot/attachments/20080430/8aff90a0/attachment.htm 
