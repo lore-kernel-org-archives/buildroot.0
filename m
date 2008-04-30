@@ -1,46 +1,45 @@
-From: Grant Likely <grant.likely@secretlab.ca>
-Date: Wed, 30 Apr 2008 07:22:06 -0600
-Subject: [Buildroot] Buildroot tutorial for Xilinx ML405
-In-Reply-To: <46a136670804300555p5973098dh7f0812df3a389a43@mail.gmail.com>
-References: <0ad501c8aabb$9f580050$ad289e86@LPSC0173W>
-	<46a136670804300555p5973098dh7f0812df3a389a43@mail.gmail.com>
-Message-ID: <fa686aa40804300622w37029156kad6aa35d5e90b238@mail.gmail.com>
+From: bugs at busybox.net <bugs@busybox.net>
+Date: Wed, 30 Apr 2008 06:26:55 -0700
+Subject: [Buildroot] [buildroot 0003214]: buildroot tries to download
+	grub_0.97-35.diff.gz from Debian FTP, but it doesn't exist
+Message-ID: <598213d53b808ab50668a7e09cd0e81c@busybox.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Wed, Apr 30, 2008 at 6:55 AM, John Voltz <john.voltz@gmail.com> wrote:
-> Very interesting. I've always been interested in FPGAs, but never found a
-> reason to use them. I've got an Altium Nanoboard that has been gathering
-> dust on a shelf for years.
->
-> So how fast can you run a PowerPC core on an FPGA anyway?
 
-The Virtex parts have 1 or more hard powerpc 405 or 440 cores
-(dedicated silicon, not synthesized in the FPGA) attached to the FPGA
-fabric.  I believe they can run up to 400MHz.
+The following issue has been SUBMITTED. 
+====================================================================== 
+http://busybox.net/bugs/view.php?id=3214 
+====================================================================== 
+Reported By:                Uzi
+Assigned To:                buildroot
+====================================================================== 
+Project:                    buildroot
+Issue ID:                   3214
+Category:                   Architecture Specific
+Reproducibility:            always
+Severity:                   block
+Priority:                   normal
+Status:                     assigned
+====================================================================== 
+Date Submitted:             04-30-2008 06:26 PDT
+Last Modified:              04-30-2008 06:26 PDT
+====================================================================== 
+Summary:                    buildroot tries to download grub_0.97-35.diff.gz
+from Debian FTP, but it doesn't exist
+Description: 
+During make process, buildroot tried to download from
+http://ftp.debian.org/debian/pool/main/g/grub/grub_0.97-35.diff.gz, but
+this URL is invalid, so the make process stopped.
+====================================================================== 
 
-> Is it possible to
-> get video out of that board too?
-
-Yes, the ML405 has a VGA port.
-
-> What kind of licensing goes along with the
-> IP cores if you commercialize a design?
-
-Xilinx provides a set of stock cores for common devices.  Some of them
-require licensing fees, some are free.
-
-> Are the cores free for tinkering, or
-> do you have to buy them?
-
-You can also use the stuff from opencores.org
-
-Cheers,
-g.
-
--- 
-Grant Likely, B.Sc., P.Eng.
-Secret Lab Technologies Ltd.
+Issue History 
+Date Modified   Username       Field                    Change               
+====================================================================== 
+04-30-08 06:26  Uzi            New Issue                                    
+04-30-08 06:26  Uzi            Status                   new => assigned     
+04-30-08 06:26  Uzi            Assigned To               => buildroot       
+======================================================================
