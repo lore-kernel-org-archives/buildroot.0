@@ -1,131 +1,98 @@
-From: Olivier Singla <olivier.singla@gmail.com>
-Date: Thu, 1 May 2008 10:11:02 -0400
-Subject: [Buildroot] pthreads debugging issue (arm9)
-Message-ID: <506410170805010711l7b10d198j1f450235cf4d4f77@mail.gmail.com>
+From: ninevoltz at uclibc.org <ninevoltz@uclibc.org>
+Date: Thu,  1 May 2008 07:11:31 -0700 (PDT)
+Subject: [Buildroot] svn commit: trunk/buildroot/package/festival: lexicons
+	voices
+Message-ID: <20080501141131.27DF83C669@busybox.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi,
+Author: ninevoltz
+Date: 2008-05-01 07:11:30 -0700 (Thu, 01 May 2008)
+New Revision: 21907
 
-I am having some issue while trying to debug a multi-threaded application.
-I am building for the AT91SAM9260-EK reference board (ARM9 based SOC).
+Log:
+fix festival file downloaders
 
-Here a simple test.c program:
-#include <stdio.h>
-#include <stdlib.h>
-#include <unistd.h>
-#include <pthread.h>
+Modified:
+   trunk/buildroot/package/festival/lexicons/festlex.mk
+   trunk/buildroot/package/festival/voices/festvox.mk
 
-void *my_thread( void *arg ) {
-    for ( int n = 0; n < 90; n++ ) {
-        printf( "%d\n", n );
-        sleep( 1 );
-    }
-    return NULL;
-}
 
-main() {
-    pthread_t tid;
-    pthread_attr_t attr;
-    pthread_attr_init( &attr );
-    pthread_attr_setdetachstate( &attr, PTHREAD_CREATE_DETACHED );
-    pthread_create( &tid, &attr, my_thread, NULL );
-    printf( "Thread created\n");
-    sleep( 120 );
-}
+Changeset:
+Modified: trunk/buildroot/package/festival/lexicons/festlex.mk
+===================================================================
+--- trunk/buildroot/package/festival/lexicons/festlex.mk	2008-05-01 14:07:11 UTC (rev 21906)
++++ trunk/buildroot/package/festival/lexicons/festlex.mk	2008-05-01 14:11:30 UTC (rev 21907)
+@@ -12,13 +12,13 @@
+ $(FESTLEX_STATUS_DIR)/.downloaded:
+ 	mkdir -p $(FESTLEX_STATUS_DIR)
+ ifeq ($(BR2_PACKAGE_FESTLEX_CMU),y)
+-	$(WGET) -P $(DL_DIR) $(FESTIVAL_SITE)/$(LEX1)
++	$(Q)test -e $(DL_DIR)/$(LEX1) || $(WGET) -P $(DL_DIR) $(FESTIVAL_SITE)/$(LEX1)
+ endif
+ ifeq ($(BR2_PACKAGE_FESTLEX_OALD),y)
+-	$(WGET) -P $(DL_DIR) $(FESTIVAL_SITE)/$(LEX2)
++	$(Q)test -e $(DL_DIR)/$(LEX2) || $(WGET) -P $(DL_DIR) $(FESTIVAL_SITE)/$(LEX2)
+ endif
+ ifeq ($(BR2_PACKAGE_FESTLEX_POS),y)
+-	$(WGET) -P $(DL_DIR) $(FESTIVAL_SITE)/$(LEX3)
++	$(Q)test -e $(DL_DIR)/$(LEX3) || $(WGET) -P $(DL_DIR) $(FESTIVAL_SITE)/$(LEX3)
+ endif
+ 	touch $@
+ 
 
-Here is how I cross compile it:
-~/buildroot-9260/buildroot/build_arm/staging_dir/usr/bin/arm-linux-uclibc-gcc
--o test -O0 -g -std=gnu99 -lpthread test.c
-
-Here is how the cross-compiler is built:
-~$ ~/buildroot-9260/buildroot/build_arm/staging_dir/usr/bin/arm-linux-uclibc-gcc
--v
-Using built-in specs.
-Target: arm-linux-uclibc
-Configured with:
-/home/osingla/buildroot-9260/buildroot/toolchain_build_arm/gcc-4.2.1/configure
---prefix=/usr --build=x86_64-pc-linux-gnu --host=x86_64-pc-linux-gnu
---target=arm-linux-uclibc --enable-languages=c,c++
---with-sysroot=/home/osingla/buildroot-9260/buildroot/build_arm/staging_dir
---with-build-time-tools=/home/osingla/buildroot-9260/buildroot/build_arm/staging_dir/usr/arm-linux-uclibc/bin
---disable-__cxa_atexit --enable-target-optspace --with-gnu-ld
---enable-shared
---with-gmp=/home/osingla/buildroot-9260/buildroot/toolchain_build_arm/gmp
---with-mpfr=/home/osingla/buildroot-9260/buildroot/toolchain_build_arm/mpfr
---enable-threads --disable-multilib --with-tune=arm920t :
-(reconfigured) /home/osingla/buildroot-9260/buildroot/toolchain_build_arm/gcc-4.2.1/configure
---prefix=/usr --build=x86_64-pc-linux-gnu --host=x86_64-pc-linux-gnu
---target=arm-linux-uclibc --enable-languages=c,c++
---with-sysroot=/home/osingla/buildroot-9260/buildroot/build_arm/staging_dir
---with-build-time-tools=/home/osingla/buildroot-9260/buildroot/build_arm/staging_dir/usr/arm-linux-uclibc/bin
---disable-__cxa_atexit --enable-target-optspace --with-gnu-ld
---enable-shared
---with-gmp=/home/osingla/buildroot-9260/buildroot/toolchain_build_arm/gmp
---with-mpfr=/home/osingla/buildroot-9260/buildroot/toolchain_build_arm/mpfr
---enable-threads --disable-multilib --with-tune=arm920t :
-(reconfigured) /home/osingla/buildroot-9260/buildroot/toolchain_build_arm/gcc-4.2.1/configure
---prefix=/usr --build=x86_64-pc-linux-gnu --host=x86_64-pc-linux-gnu
---target=arm-linux-uclibc --enable-languages=c,c++
---with-sysroot=/home/osingla/buildroot-9260/buildroot/build_arm/staging_dir
---with-build-time-tools=/home/osingla/buildroot-9260/buildroot/build_arm/staging_dir/usr/arm-linux-uclibc/bin
---disable-__cxa_atexit --enable-target-optspace --with-gnu-ld
---enable-shared
---with-gmp=/home/osingla/buildroot-9260/buildroot/toolchain_build_arm/gmp
---with-mpfr=/home/osingla/buildroot-9260/buildroot/toolchain_build_arm/mpfr
---enable-threads --disable-multilib --with-tune=arm920t
-Thread model: posix
-gcc version 4.2.1
-
-Here is my .gdbinit:
-set auto-solib-add 1
-set solib-absolute-prefix /fake
-set solib-search-path
-/home/osingla/buildroot-9260/buildroot/build_arm/staging_dir/:\
-/home/osingla/buildroot-9260/buildroot/build_arm/staging_dir/lib
-set confirm off
-file ./test -readnow
-target remote 192.168.1.10:9000
-dir $cdir:$cwd
-handle SIG32 nostop
-b main
-cont
-
-Here is a debugging session:
-TARGET:
-# gdbserver :9000 /tmp/test
-Process /tmp/test created; pid = 1947
-Listening on port 9000
-
-HOST:
-~$ ~/buildroot-9260/buildroot/build_arm/staging_dir/usr/bin/arm-linux-uclibc-gdb
-GNU gdb 6.6
-Copyright (C) 2006 Free Software Foundation, Inc.
-GDB is free software, covered by the GNU General Public License, and you are
-welcome to change it and/or distribute copies of it under certain conditions.
-Type "show copying" to see the conditions.
-There is absolutely no warranty for GDB.  Type "show warranty" for details.
-This GDB was configured as "--host=x86_64-pc-linux-gnu
---target=arm-linux-uclibc".
-
-warning: Remote failure reply: E01
-0x40000930 in _start () from
-/home/osingla/buildroot-9260/buildroot/build_arm/staging_dir/lib/ld-uClibc.so.0
-Breakpoint 1 at 0x85fc: file test.c, line 17.
-
-Breakpoint 1, main () at test.c:17
-17          pthread_attr_init( &attr );
-(gdb) n
-18          pthread_attr_setdetachstate( &attr, PTHREAD_CREATE_DETACHED );
-(gdb)
-19          pthread_create( &tid, &attr, my_thread, NULL );
-(gdb)
-
-Program received signal SIG32, Real-time event 32.
-20          printf( "Thread created\n");
-(gdb) info threads
-  1 Thread 1947  main ()@test.c:20
-(gdb) info sharedlibrary
+Modified: trunk/buildroot/package/festival/voices/festvox.mk
+===================================================================
+--- trunk/buildroot/package/festival/voices/festvox.mk	2008-05-01 14:07:11 UTC (rev 21906)
++++ trunk/buildroot/package/festival/voices/festvox.mk	2008-05-01 14:11:30 UTC (rev 21907)
+@@ -21,35 +21,35 @@
+ $(FESTVOX_STATUS_DIR)/.downloaded:
+ 	mkdir -p $(FESTVOX_STATUS_DIR)
+ ifeq ($(BR2_PACKAGE_FESTVOX_AWB),y)
+-	$(WGET) -P $(DL_DIR) $(FESTIVAL_SITE)/$(VOICE1)
++	$(Q)test -e $(DL_DIR)/$(VOICE1) || $(WGET) -P $(DL_DIR) $(FESTIVAL_SITE)/$(VOICE1)
+ endif
+ ifeq ($(BR2_PACKAGE_FESTVOX_BDL),y)
+-	$(WGET) -P $(DL_DIR) $(FESTIVAL_SITE)/$(VOICE2)
++	$(Q)test -e $(DL_DIR)/$(VOICE2) || $(WGET) -P $(DL_DIR) $(FESTIVAL_SITE)/$(VOICE2)
+ endif
+ ifeq ($(BR2_PACKAGE_FESTVOX_JMK),y)
+-	$(WGET) -P $(DL_DIR) $(FESTIVAL_SITE)/$(VOICE3)
++	$(Q)test -e $(DL_DIR)/$(VOICE3) || $(WGET) -P $(DL_DIR) $(FESTIVAL_SITE)/$(VOICE3)
+ endif
+ ifeq ($(BR2_PACKAGE_FESTVOX_SLT),y)
+-	$(WGET) -P $(DL_DIR) $(FESTIVAL_SITE)/$(VOICE4)
++	$(Q)test -e $(DL_DIR)/$(VOICE4) || $(WGET) -P $(DL_DIR) $(FESTIVAL_SITE)/$(VOICE4)
+ endif
+ ifeq ($(BR2_PACKAGE_FESTVOX_AWB_MULTISYN),y)
+-	$(WGET) -P $(DL_DIR) $(FESTIVAL_SITE)/$(VOICE5)
++	$(Q)test -e $(DL_DIR)/$(VOICE5) || $(WGET) -P $(DL_DIR) $(FESTIVAL_SITE)/$(VOICE5)
+ endif
+ ifeq ($(BR2_PACKAGE_FESTVOX_JMK_MULTISYN),y)
+-	$(WGET) -P $(DL_DIR) $(FESTIVAL_SITE)/$(VOICE6)
++	$(Q)test -e $(DL_DIR)/$(VOICE6) || $(WGET) -P $(DL_DIR) $(FESTIVAL_SITE)/$(VOICE6)
+ endif
+ ifeq ($(BR2_PACKAGE_FESTVOX_KAL_SIXTEENK),y)
+-	$(WGET) -P $(DL_DIR) $(FESTIVAL_SITE)/$(VOICE7)
++	$(Q)test -e $(DL_DIR)/$(VOICE7) || $(WGET) -P $(DL_DIR) $(FESTIVAL_SITE)/$(VOICE7)
+ endif
+ ifeq ($(BR2_PACKAGE_FESTVOX_KED_EIGHTK),y)
+-	$(WGET) -P $(DL_DIR) $(FESTIVAL_SITE)/$(VOICE8)
++	$(Q)test -e $(DL_DIR)/$(VOICE8) || $(WGET) -P $(DL_DIR) $(FESTIVAL_SITE)/$(VOICE8)
+ endif
+ ifeq ($(BR2_PACKAGE_FESTVOX_KED_SIXTEENK),y)
+-	$(WGET) -P $(DL_DIR) $(FESTIVAL_SITE)/$(VOICE9)
++	$(Q)test -e $(DL_DIR)/$(VOICE9) || $(WGET) -P $(DL_DIR) $(FESTIVAL_SITE)/$(VOICE9)
+ endif
+-	$(WGET) -P $(DL_DIR) $(FESTIVAL_SITE)/$(FRONTEND1)
+-	$(WGET) -P $(DL_DIR) $(FESTIVAL_SITE)/$(FRONTEND2)
+-	$(WGET) -P $(DL_DIR) $(FESTIVAL_SITE)/$(FRONTEND3)
++	$(Q)test -e $(DL_DIR)/$(FRONTEND1) || $(WGET) -P $(DL_DIR) $(FESTIVAL_SITE)/$(FRONTEND1)
++	$(Q)test -e $(DL_DIR)/$(FRONTEND2) || $(WGET) -P $(DL_DIR) $(FESTIVAL_SITE)/$(FRONTEND2)
++	$(Q)test -e $(DL_DIR)/$(FRONTEND3) || $(WGET) -P $(DL_DIR) $(FESTIVAL_SITE)/$(FRONTEND3)
+ 
+ 	touch $@
+ 
