@@ -1,39 +1,34 @@
-From: Robert Nelson <robert.nelson.work@gmail.com>
-Date: Thu, 01 May 2008 12:14:25 -0500
-Subject: [Buildroot] What is the best way to deactivate XML Parser
- (expat) for ARM build?
-In-Reply-To: <326f33790805010916n321c394ej93bf891b65c34986@mail.gmail.com>
-References: <326f33790805010751v24facd35o4207041c297da12c@mail.gmail.com>	
-	<4819E7FF.5000902@gmail.com>
-	<326f33790805010916n321c394ej93bf891b65c34986@mail.gmail.com>
-Message-ID: <4819FA71.4010901@gmail.com>
+From: ninevoltz at uclibc.org <ninevoltz@uclibc.org>
+Date: Thu,  1 May 2008 10:14:47 -0700 (PDT)
+Subject: [Buildroot] svn commit: trunk/buildroot/target/x86/grub
+Message-ID: <20080501171447.CCF933C678@busybox.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Arun,
+Author: ninevoltz
+Date: 2008-05-01 10:14:46 -0700 (Thu, 01 May 2008)
+New Revision: 21909
 
-Not 100% on that one. I also had a finished build of 
-at91sam9261ek_defconfig in the same buildroot directory, which may have 
-solved that dependency.. Rebuilding now from a fresh install.
+Log:
+add menu.lst for grub
 
---
-Robert Nelson
-FAE - Digi-Key
+Added:
+   trunk/buildroot/target/x86/grub/menu.lst
 
-Arun Reddy wrote:
-> Robert,
->
-> Thank you very much for that information! I was almost about to try to 
-> do a build for at91sam9260 or a previous version just to be certain. I 
-> did make expat, then after that finished I went ahead and proceeded 
-> with the build by typing make. I got past the error above about 
-> libexpat, but I ended up getting to an error saying:
->
-> Checking for XML::Parser...configure: error: XML::Parser perl module 
-> is required for intltool.
->
-> Was this supposed to be resolved with make expat as well? Or does this 
-> require a different package to be passed into make? Thanks again.
+
+Changeset:
+Added: trunk/buildroot/target/x86/grub/menu.lst
+===================================================================
+--- trunk/buildroot/target/x86/grub/menu.lst	                        (rev 0)
++++ trunk/buildroot/target/x86/grub/menu.lst	2008-05-01 17:14:46 UTC (rev 21909)
+@@ -0,0 +1,7 @@
++default=0
++timeout=5
++splashimage=(hd0,0)/boot/grub/splash.xpm.gz
++hiddenmenu
++title Buildroot
++	root (hd0,0)
++	kernel /boot/bzImage rw root=/dev/hda1 vga=791 
