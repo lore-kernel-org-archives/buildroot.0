@@ -1,7 +1,7 @@
 From: ninevoltz at uclibc.org <ninevoltz@uclibc.org>
-Date: Thu,  1 May 2008 12:01:11 -0700 (PDT)
-Subject: [Buildroot] svn commit: trunk/buildroot/package/fontconfig
-Message-ID: <20080501190111.6360A3C67D@busybox.net>
+Date: Thu,  1 May 2008 12:03:48 -0700 (PDT)
+Subject: [Buildroot] svn commit: trunk/buildroot/package/x11r7/pixman
+Message-ID: <20080501190348.AA19C3C684@busybox.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -9,25 +9,25 @@ Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
 Author: ninevoltz
-Date: 2008-05-01 12:01:10 -0700 (Thu, 01 May 2008)
-New Revision: 21911
+Date: 2008-05-01 12:03:48 -0700 (Thu, 01 May 2008)
+New Revision: 21912
 
 Log:
 remove libdir-la.patch, handled by Makefile.autotools.in
 
 Removed:
-   trunk/buildroot/package/fontconfig/fontconfig-2.4.2-libdir-la.patch
+   trunk/buildroot/package/x11r7/pixman/pixman-0.9.6-libdir-la.patch
 
 
 Changeset:
-Deleted: trunk/buildroot/package/fontconfig/fontconfig-2.4.2-libdir-la.patch
+Deleted: trunk/buildroot/package/x11r7/pixman/pixman-0.9.6-libdir-la.patch
 ===================================================================
---- trunk/buildroot/package/fontconfig/fontconfig-2.4.2-libdir-la.patch	2008-05-01 17:15:35 UTC (rev 21910)
-+++ trunk/buildroot/package/fontconfig/fontconfig-2.4.2-libdir-la.patch	2008-05-01 19:01:10 UTC (rev 21911)
+--- trunk/buildroot/package/x11r7/pixman/pixman-0.9.6-libdir-la.patch	2008-05-01 19:01:10 UTC (rev 21911)
++++ trunk/buildroot/package/x11r7/pixman/pixman-0.9.6-libdir-la.patch	2008-05-01 19:03:48 UTC (rev 21912)
 @@ -1,77 +0,0 @@
----- fontconfig/ltmain.sh.orig	2006-04-20 08:27:27.000000000 -0600
--+++ fontconfig/ltmain.sh	2007-01-13 14:26:01.000000000 -0700
--@@ -273,8 +273,9 @@
+---- libdaemon/ltmain.sh.orig	2004-11-23 09:19:19.000000000 -0700
+-+++ libdaemon/ltmain.sh	2007-01-13 14:36:53.000000000 -0700
+-@@ -231,8 +231,9 @@
 - 	# line option must be used.
 - 	if test -z "$tagname"; then
 - 	  $echo "$modename: unable to infer tagged configuration"
@@ -39,7 +39,7 @@ Deleted: trunk/buildroot/package/fontconfig/fontconfig-2.4.2-libdir-la.patch
 - #        else
 - #          $echo "$modename: using $tagname tagged configuration"
 - 	fi
--@@ -2404,8 +2405,14 @@
+-@@ -2279,8 +2280,14 @@
 - 	    absdir="$abs_ladir"
 - 	    libdir="$abs_ladir"
 - 	  else
@@ -54,9 +54,9 @@ Deleted: trunk/buildroot/package/fontconfig/fontconfig-2.4.2-libdir-la.patch
 -+	    #dir="$libdir"
 -+	    #absdir="$libdir"
 - 	  fi
-- 	  test "X$hardcode_automatic" = Xyes && avoidtemprpath=yes
 - 	else
--@@ -2886,6 +2893,16 @@
+- 	  if test ! -f "$ladir/$objdir/$linklib" && test -f "$abs_ladir/$linklib"; then
+-@@ -2754,6 +2761,16 @@
 - 		esac
 - 		if grep "^installed=no" $deplib > /dev/null; then
 - 		  path="$absdir/$objdir"
@@ -73,7 +73,7 @@ Deleted: trunk/buildroot/package/fontconfig/fontconfig-2.4.2-libdir-la.patch
 - 		else
 - 		  eval libdir=`${SED} -n -e 's/^libdir=\(.*\)$/\1/p' $deplib`
 - 		  if test -z "$libdir"; then
--@@ -5598,6 +5615,10 @@
+-@@ -5141,6 +5158,10 @@
 - 	    # Replace all uninstalled libtool libraries with the installed ones
 - 	    newdependency_libs=
 - 	    for deplib in $dependency_libs; do
@@ -84,7 +84,7 @@ Deleted: trunk/buildroot/package/fontconfig/fontconfig-2.4.2-libdir-la.patch
 - 	      case $deplib in
 - 	      *.la)
 - 		name=`$echo "X$deplib" | $Xsed -e 's%^.*/%%'`
--@@ -5919,10 +5940,13 @@
+-@@ -5459,10 +5480,13 @@
 - 	  # At present, this check doesn't affect windows .dll's that
 - 	  # are installed into $libdir/../bin (currently, that works fine)
 - 	  # but it's something to keep an eye on.
