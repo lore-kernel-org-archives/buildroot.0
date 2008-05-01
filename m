@@ -1,27 +1,19 @@
-From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Sat, 31 May 2008 14:59:05 +0200
-Subject: [Buildroot] svn commit: trunk/buildroot/package/busybox
-In-Reply-To: <0805310937520.10516@somehost> (Cristian Ionescu-Idbohrn's
-	message of "Sat\, 31 May 2008 09\:39\:16 +0200 \(CEST\)")
-References: <20080531072806.016BD3C8B7@busybox.net>
-	<0805310937520.10516@somehost>
-Message-ID: <87bq2mmxye.fsf@macbook.be.48ers.dk>
+From: Jared Holzman <j.holzman@genesysdesign.com.au>
+Date: Thu, 01 May 2008 13:22:55 +1000
+Subject: [Buildroot] Glib 1.2 doesn't build shared libraries
+Message-ID: <4819378F.2020806@genesysdesign.com.au>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Cristian" == Cristian Ionescu-Idbohrn <cristian.ionescu-idbohrn@axis.com> writes:
-
-Hi,
-
- Cristian> You missed one:  fuser.
-
-That one wasn't there on the 25th. It's added now together with the ip
-patch.
-
-Thanks.
-
--- 
-Bye, Peter Korsgaard
+An HTML attachment was scrubbed...
+URL: http://lists.busybox.net/pipermail/buildroot/attachments/20080501/0723760c/attachment-0002.htm 
+-------------- next part --------------
+A non-text attachment was scrubbed...
+Name: config.zip
+Type: application/x-zip-compressed
+Size: 3671 bytes
+Desc: not available
+Url : http://lists.busybox.net/pipermail/buildroot/attachments/20080501/0723760c/attachment-0002.bin 
