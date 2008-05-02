@@ -1,69 +1,80 @@
-From: ninevoltz at uclibc.org <ninevoltz@uclibc.org>
-Date: Fri,  2 May 2008 04:20:01 -0700 (PDT)
-Subject: [Buildroot] svn commit: trunk/buildroot/package/docker
-Message-ID: <20080502112001.0FD603C732@busybox.net>
+From: John Voltz <john.voltz@gmail.com>
+Date: Fri, 2 May 2008 07:32:18 -0400
+Subject: [Buildroot] Cannot login a shell
+In-Reply-To: <96471.16332.qm@web94105.mail.in2.yahoo.com>
+References: <96471.16332.qm@web94105.mail.in2.yahoo.com>
+Message-ID: <46a136670805020432q7e9e00c1p78e278ad509a5da4@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Author: ninevoltz
-Date: 2008-05-02 04:20:00 -0700 (Fri, 02 May 2008)
-New Revision: 21919
+Tiju,
 
-Log:
-pkgconfig fix for docker
+Edit /etc/inittab and comment out any getty's and add this:
 
-Added:
-   trunk/buildroot/package/docker/docker-1.5-pkgconfig.patch
+ttyS0::respawn:-/bin/sh (if you are using a serial port)
 
-Modified:
-   trunk/buildroot/package/docker/docker.mk
+or
 
+tty0::respawn:-/bin/sh (if you are using a regular console)
 
-Changeset:
-Added: trunk/buildroot/package/docker/docker-1.5-pkgconfig.patch
-===================================================================
---- trunk/buildroot/package/docker/docker-1.5-pkgconfig.patch	                        (rev 0)
-+++ trunk/buildroot/package/docker/docker-1.5-pkgconfig.patch	2008-05-02 11:20:00 UTC (rev 21919)
-@@ -0,0 +1,23 @@
-+--- a/Makefile	2002-11-20 05:20:49.000000000 -0500
-++++ b/Makefile	2008-04-28 12:36:23.000000000 -0400
-+@@ -20,7 +20,6 @@ CFLAGS=-pedantic -Wall -W -O
-+ 
-+ PACKAGE=docker
-+ VERSION=1.5
-+-
-+ target=docker
-+ sources=docker.c kde.c icons.c xproperty.c net.c
-+ headers=docker.h kde.h icons.h xproperty.h net.h version.h
-+@@ -31,10 +30,10 @@ all: $(target) $(sources) $(headers)
-+ 
-+ $(target): $(sources:.c=.o)
-+ 	$(CC) $(CFLAGS) -L$(XLIBPATH) -lX11 \
-+-		`pkg-config --libs glib-2.0` $^ -o $@
-++		`$(PKGCONFIG) --libs glib-2.0` $^ -o $@
-+ 
-+ %.o: %.c
-+-	$(CC) -c $(CFLAGS) `pkg-config --cflags glib-2.0` $<
-++	$(CC) -c $(CFLAGS) `$(PKGCONFIG) --cflags glib-2.0` $<
-+ 
-+ version.h: version.h.in Makefile
-+ 	sed -e "s/@VERSION@/$(VERSION)/" version.h.in > $@
+then change the root password:
 
-Modified: trunk/buildroot/package/docker/docker.mk
-===================================================================
---- trunk/buildroot/package/docker/docker.mk	2008-05-02 09:39:09 UTC (rev 21918)
-+++ trunk/buildroot/package/docker/docker.mk	2008-05-02 11:20:00 UTC (rev 21919)
-@@ -12,7 +12,9 @@
- 
- DOCKER_MAKE_OPT = CC=$(TARGET_CC) CXX=$(TARGET_CXX) LD=$(TARGET_LD) \
- 					CFLAGS="-I$(STAGING_DIR)/usr/include" \
--					LDFLAGS="-L$(STAGING_DIR)/usr/lib -L$(STAGING_DIR)/lib"
-+					LDFLAGS="-L$(STAGING_DIR)/usr/lib -L$(STAGING_DIR)/lib" \
-+					PKGCONFIG="$(STAGING_DIR)/usr/bin/pkg-config" \
-+					PKG_CONFIG_SYSROOT="$(STAGING_DIR)"
- 
- DOCKER_INSTALL_TARGET_OPT = PREFIX=$(TARGET_DIR)/usr install
- 
+passwd root
+
+This should hopefully get you in. If not, you might have some other problem.
+
+John
+
+On Fri, May 2, 2008 at 3:35 AM, Tiju Jacob <jacob_tiju@yahoo.com> wrote:
+
+> Hi Erik,
+>
+> I have compiled a kernel, version linux-2.6.24.4 using the toolchain at
+> http://cross-lfs.org/view/clfs-sysroot/arm/ which is not a uClibc version.
+> Then I have compiled a cpio file system using buildroot which has it own
+> version of uClibc.
+>
+> When I try to boot these images, I am not able to login. It comes back to
+> the same login prompt when I login as root.
+>
+> Output:
+> ....
+> ....
+> NET: Registered protocol family 1
+> NET: Registered protocol family 17
+> registered taskstats version 1
+> Freeing init memory: 1108K
+>
+> Welcome to the Erik's uClibc development environment.
+> uClibc login: root
+>
+> Welcome to the Erik's uClibc development environment..
+> uClibc login:
+>
+>
+>
+> Ihave tried compiling with different versions but it remains the same.It
+> actually spawns a shell, but it comes back to the login. It is thesame with
+> busybox as well as bash.
+>
+> Kindly help me.
+>
+> Thanks in Advance.
+> Tiju
+>
+>
+>
+>      Meet people who discuss and share your passions. Go to
+> http://in.promos.yahoo.com/groups/bestofyahoo/
+>
+> _______________________________________________
+> buildroot mailing list
+> buildroot at uclibc.org
+> http://busybox.net/mailman/listinfo/buildroot
+>
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: http://busybox.net/lists/buildroot/attachments/20080502/95047217/attachment.htm 
