@@ -1,42 +1,42 @@
-From: Tiju Jacob <jacob_tiju@yahoo.com>
-Date: Fri, 2 May 2008 13:05:23 +0530 (IST)
-Subject: [Buildroot] Cannot login a shell
-Message-ID: <96471.16332.qm@web94105.mail.in2.yahoo.com>
+From: pen ontable <penontable@gmail.com>
+Date: Fri, 2 May 2008 11:15:06 +0200
+Subject: [Buildroot] ATMEL SAM9 board
+Message-ID: <290b1c870805020215s4d472318kdc72eddfc601f848@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Erik,
+Hi all,
 
-I have compiled a kernel, version linux-2.6.24.4 using the toolchain at http://cross-lfs.org/view/clfs-sysroot/arm/ which is not a uClibc version. Then I have compiled a cpio file system using buildroot which has it own version of uClibc.
+I have a prototype board based on AT91RM9200+AT45DB64.
+I have evaluated the buildroot framework starting from the at91rm9200df
+configurations set that is tailored on the AT91RM9200-EK. Changes were made
+since my board has a different ethernet PHY and a different GPIO map, to
+leds, MMC/SD, etc..
 
-When I try to boot these images, I am not able to login. It comes back to the same login prompt when I login as root.
+The most important difference with respect the at91rm9200df configurations
+set is that I need the linux kernel mounts the root fs read-write on the
+dataflash.
+I have changed the u-boot bootcmd and bootargs accordingly (defenv) and the
+linux kernel .config in order to use only the legacy AT91RM9200 SPI driver
+(the only SPI driver that detects the dataflash).
 
-Output:
-....
-....
-NET: Registered protocol family 1
-NET: Registered protocol family 17
-registered taskstats version 1
-Freeing init memory: 1108K
+U-boot and linux work fine but I still have problems with the file system
+image. It seems that the kernel doesn't find initrc (busybox), there are not
+scripts outputs to console.
 
-Welcome to the Erik's uClibc development environment.
-uClibc login: root
+I suppose the problems can be solved (hints will be appreciated) but I have
+to decide between keeping the AT91RM9200 board as production board or to
+design a new board based on another ATMEL SAM9.
 
-Welcome to the Erik's uClibc development environment..
-uClibc login:
+My question is: in your opinion/experience how good buildroot supports ATMEL
+SAM9 + Dataflash or ATMEL SAM9 + NOR Flash platforms?
 
+Thank you,
 
-
-Ihave tried compiling with different versions but it remains the same.It actually spawns a shell, but it comes back to the login. It is thesame with busybox as well as bash.
-
-Kindly help me.
-
-Thanks in Advance.
-Tiju
-
-
-
-      Meet people who discuss and share your passions. Go to http://in.promos.yahoo.com/groups/bestofyahoo/
+Mike.
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: http://busybox.net/lists/buildroot/attachments/20080502/2ce9bed6/attachment.htm 
