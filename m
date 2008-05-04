@@ -1,80 +1,48 @@
-From: John Voltz <john.voltz@gmail.com>
-Date: Fri, 2 May 2008 07:32:18 -0400
-Subject: [Buildroot] Cannot login a shell
-In-Reply-To: <96471.16332.qm@web94105.mail.in2.yahoo.com>
-References: <96471.16332.qm@web94105.mail.in2.yahoo.com>
-Message-ID: <46a136670805020432q7e9e00c1p78e278ad509a5da4@mail.gmail.com>
+From: Ragnar Ouchterlony <ragnar+buildroot@lysator.liu.se>
+Date: Sun, 04 May 2008 20:39:20 +0200
+Subject: [Buildroot] libstdc++.la and it's libdir
+Message-ID: <1209926360.20914.11.camel@localhost>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Tiju,
+Hi,
 
-Edit /etc/inittab and comment out any getty's and add this:
+I'm doing a personal project where I am building a new rootdisk for my
+DNS-323 (an ARM machine).
 
-ttyS0::respawn:-/bin/sh (if you are using a serial port)
+I use buildroot from 20080430 (currently) with gcc-4.2.3. Although I
+have a few patches to make things work, I don't have anything that
+touches gcc.
 
-or
+Now over to my problem:
 
-tty0::respawn:-/bin/sh (if you are using a regular console)
+The libdir variable in libstdc++.la (residing
+in /path/to/buildroot/build_arm/staging_dir/usr/arm-linux-uclibc/lib/libstdc++.la
+file is wrong. It says:
 
-then change the root password:
+libdir='/usr/arm-linux-uclibc/lib'
 
-passwd root
+where I would have expected it to say:
 
-This should hopefully get you in. If not, you might have some other problem.
+libdir='?/path/to/buildroot/build_arm/staging_dir/usr/arm-linux-uclibc/lib'
 
-John
+This causes problems when using libtool. I.e, I compile a c++ libary (in
+this case libsigc++-2.0) and then that library gets in it's .la file a
+dependency for ?/usr/arm-linux-uclibc/lib/libstdc++.la and when I in
+turn compile a program that uses libsigc++ libtool fails because it
+can't find /usr/arm-linux-uclibc/lib/libstdc++.la.
 
-On Fri, May 2, 2008 at 3:35 AM, Tiju Jacob <jacob_tiju@yahoo.com> wrote:
+If I manually edit libstdc++.la for it to point to the correct place,
+things work as expected when I recompile my dependent libraries.
 
-> Hi Erik,
->
-> I have compiled a kernel, version linux-2.6.24.4 using the toolchain at
-> http://cross-lfs.org/view/clfs-sysroot/arm/ which is not a uClibc version.
-> Then I have compiled a cpio file system using buildroot which has it own
-> version of uClibc.
->
-> When I try to boot these images, I am not able to login. It comes back to
-> the same login prompt when I login as root.
->
-> Output:
-> ....
-> ....
-> NET: Registered protocol family 1
-> NET: Registered protocol family 17
-> registered taskstats version 1
-> Freeing init memory: 1108K
->
-> Welcome to the Erik's uClibc development environment.
-> uClibc login: root
->
-> Welcome to the Erik's uClibc development environment..
-> uClibc login:
->
->
->
-> Ihave tried compiling with different versions but it remains the same.It
-> actually spawns a shell, but it comes back to the login. It is thesame with
-> busybox as well as bash.
->
-> Kindly help me.
->
-> Thanks in Advance.
-> Tiju
->
->
->
->      Meet people who discuss and share your passions. Go to
-> http://in.promos.yahoo.com/groups/bestofyahoo/
->
-> _______________________________________________
-> buildroot mailing list
-> buildroot at uclibc.org
-> http://busybox.net/mailman/listinfo/buildroot
->
--------------- next part --------------
-An HTML attachment was scrubbed...
-URL: http://busybox.net/lists/buildroot/attachments/20080502/95047217/attachment.htm 
+Have anyone else had this problem and have any idea where I should look
+for a more permanent fix instead of doing things manually. I know I can
+probably use sed somewhere to change the offending line, but I would
+really like to know why it sets it wrong the first time around.
+
+Any help is appreciated.
+
+/Ragnar Ouchterlony
