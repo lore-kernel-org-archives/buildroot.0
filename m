@@ -1,42 +1,28 @@
-From: Ulf Samuelsson <ulf.samuelsson@atmel.com>
-Date: Mon, 5 May 2008 23:41:55 +0200
-Subject: [Buildroot] Ulf, you broke AVR32, why?
-References: <d6cda7730805051134j245a8687o66eaa6fc9d3c93ae@mail.gmail.com>
-Message-ID: <013a01c8aef9$5aa98d10$070514ac@atmel.com>
+From: Peter Korsgaard <jacmet@uclibc.org>
+Date: Mon, 05 May 2008 23:50:24 +0200
+Subject: [Buildroot] booting root filesystem over nfs
+In-Reply-To: <814162.35883.qm@web31804.mail.mud.yahoo.com> (Pink Boy's message
+	of "Mon\, 5 May 2008 13\:49\:14 -0700 \(PDT\)")
+References: <814162.35883.qm@web31804.mail.mud.yahoo.com>
+Message-ID: <877ie8l8tb.fsf@macbook.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-> You removed something that was working in favor of something that is
-> not for no reason.
+>>>>> "Pink" == Pink Boy <dasfoo@yahoo.com> writes:
 
-The Atmel patches adds way too much bloat to the svn.
-That is why the external toolchain was added.
-Also, IIRC some patches broke other architectures.
+Hi,
 
-> On top of that, external toolchain tries to download prepatched
-> toochain from a site that you control, but that has no such files to
-> download from.
+ Pink> I'm having some issues mounting a root file system over
+ Pink> NFS on Ubuntu.  Might be related.  Just to get it to mount
+ Pink> I had to manually add no_root_squash to the etc/exports 
 
-BR2_ATMEL_MIRROR should be ftp://www.at91.com/pub/buildroot/
-I see the files in this location.
+Sure, no_root_squash is needed for booting, otherwise root only has
+access as nobody.
 
-> For some Godly unknown reason, there was no commit message on the mailling list.
-> 
-> Please revert your changes asap.
-> 
+This is not related to buildroot though.
 
-No, if there are problems, it should be fixed within the external toolchain
-to avoid adding those megabytes, which are of no interest to AVR32 users.
-There are hooks to patch the external toolchain if neccessary.
-
- 
-Best Regards
-Ulf Samuelsson                ulf at atmel.com
-Atmel Nordic AB
-Mail:  Box 2033, 174 02 Sundbyberg, Sweden
-Visit:  Kavalleriv?gen 24, 174 58 Sundbyberg, Sweden
-Phone +46 (8) 441 54 22     Fax +46 (8) 441 54 29
-GSM    +46 (706) 22 44 57
+-- 
+Bye, Peter Korsgaard
