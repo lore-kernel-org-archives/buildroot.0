@@ -1,28 +1,27 @@
-From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Mon, 05 May 2008 23:50:24 +0200
-Subject: [Buildroot] booting root filesystem over nfs
-In-Reply-To: <814162.35883.qm@web31804.mail.mud.yahoo.com> (Pink Boy's message
-	of "Mon\, 5 May 2008 13\:49\:14 -0700 \(PDT\)")
-References: <814162.35883.qm@web31804.mail.mud.yahoo.com>
-Message-ID: <877ie8l8tb.fsf@macbook.be.48ers.dk>
+From: =?ISO-8859-1?Q?Thiago_A._Corr=EAa?= <thiago.correa@gmail.com>
+Date: Mon, 5 May 2008 20:34:20 -0300
+Subject: [Buildroot] Ulf, you broke AVR32, why?
+In-Reply-To: <013a01c8aef9$5aa98d10$070514ac@atmel.com>
+References: <d6cda7730805051134j245a8687o66eaa6fc9d3c93ae@mail.gmail.com>
+	<013a01c8aef9$5aa98d10$070514ac@atmel.com>
+Message-ID: <d6cda7730805051634p6bb3a5c4mb9e584e6059cb693@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Pink" == Pink Boy <dasfoo@yahoo.com> writes:
+On Mon, May 5, 2008 at 6:41 PM, Ulf Samuelsson <ulf.samuelsson@atmel.com> wrote:
+> > You removed something that was working in favor of something that is
+>  > not for no reason.
+>
+>  The Atmel patches adds way too much bloat to the svn.
 
-Hi,
+Google's entire svn history has 3Mb, including the AVR32 patches plus
+careless local svn mv's. How is that too much bloat?
 
- Pink> I'm having some issues mounting a root file system over
- Pink> NFS on Ubuntu.  Might be related.  Just to get it to mount
- Pink> I had to manually add no_root_squash to the etc/exports 
+>  That is why the external toolchain was added.
+>  Also, IIRC some patches broke other architectures.
+>
 
-Sure, no_root_squash is needed for booting, otherwise root only has
-access as nobody.
-
-This is not related to buildroot though.
-
--- 
-Bye, Peter Korsgaard
+That's why people is working on selectively applying patches based on $ARCH
