@@ -1,43 +1,52 @@
-From: Mike Sander <msander@ripnet.com>
-Date: Mon, 05 May 2008 09:18:53 -0400
-Subject: [Buildroot] booting root filesystem over nfs
-Message-ID: <481F093D.9070906@ripnet.com>
+From: Leonid <Leonid@a-k-a.net>
+Date: Mon, 5 May 2008 07:54:13 -0700
+Subject: [Buildroot] ATMEL SAM9 board
+In-Reply-To: <290b1c870805020215s4d472318kdc72eddfc601f848@mail.gmail.com>
+References: <290b1c870805020215s4d472318kdc72eddfc601f848@mail.gmail.com>
+Message-ID: <406A31B117F2734987636D6CCC93EE3C0252938E@ehost011-3.exch011.intermedia.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi All,
+I am using buildroot on at91rm9200 based platform with NOR flash. It's
+not latest buildroot, but the one published by Ulf Samuelson in 2006.
+Leonid.
 
-First of all, I want to thank contributors to
-buildroot (and friends).  It is pretty awesome.
+________________________________________
+From: buildroot-bounces@uclibc.org [mailto:buildroot-bounces at uclibc.org]
+On Behalf Of pen ontable
+Sent: Friday, May 02, 2008 2:15 AM
+To: buildroot
+Subject: [Buildroot] ATMEL SAM9 board
 
-I was wondering if it is intended for the
-project_build_ARCH/uclibc/root to be suitable for
-booting over nfs.  I have seen some indication in the
-mailing list that others have done so.
+Hi all,
 
-I have tried and encountered 2 issues:
+I have a prototype board based on AT91RM9200+AT45DB64.
+I have evaluated the buildroot framework starting from the at91rm9200df
+configurations set that is tailored on the AT91RM9200-EK. Changes were
+made since my board has a different ethernet PHY and a different GPIO
+map, to leds, MMC/SD, etc.. 
 
-1) After a "make" the /dev entries are all normal
-files instead of device nodes.   This does not appear
-to depend upon the target root filesystem type.  Is
-this correct behavior?   If not, is there an
-additional step I need to perform.   For now I have
-manually created /dev/console & /dev/null
+The most important difference with respect the at91rm9200df
+configurations set is that I need the linux kernel mounts the root fs
+read-write on the dataflash. 
+I have changed the u-boot bootcmd and bootargs accordingly (defenv) and
+the linux kernel .config in order to use only the legacy AT91RM9200 SPI
+driver (the only SPI driver that detects the dataflash).
 
-2) the "root" in path to the root filesystem was
-causing boot problems on my target.    I was getting
-error messages of the form "mounting proc/ ... mount:
-permission denied.  (are you root?)".   Simply
-renaming "root" to "rfs" (for example) on my Host
-(ubuntu 7.10) caused this particular problem to go
-away.  Having to do this makes me wonder if I am
-doing something wrong.
+U-boot and linux work fine but I still have problems with the file
+system image. It seems that the kernel doesn't find initrc (busybox),
+there are not scripts outputs to console.
 
-Any guidance would be appreciated.
+I suppose the problems can be solved (hints will be appreciated) but I
+have to decide between keeping the AT91RM9200 board as production board
+or to design a new board based on another ATMEL SAM9.
 
-Regards,
+My question is: in your opinion/experience how good buildroot supports
+ATMEL SAM9 + Dataflash or ATMEL SAM9 + NOR Flash platforms? 
 
-Mike
+Thank you,
+
+Mike.
