@@ -1,28 +1,42 @@
-From: hartleys <hartleys@visionengravers.com>
-Date: Mon, 5 May 2008 17:02:29 -0400
-Subject: [Buildroot] svn co/up package sample
-In-Reply-To: <20080505201710.GD9589@mx.loc>
-References: <1CF6EDDF0820924DA43C9A52FE7325950B282DA1@MI8NYCMAIL17.Mi8.com>
-	<20080505201710.GD9589@mx.loc>
-Message-ID: <1CF6EDDF0820924DA43C9A52FE7325950B2BEB58@MI8NYCMAIL17.Mi8.com>
+From: Ulf Samuelsson <ulf.samuelsson@atmel.com>
+Date: Mon, 5 May 2008 23:41:55 +0200
+Subject: [Buildroot] Ulf, you broke AVR32, why?
+References: <d6cda7730805051134j245a8687o66eaa6fc9d3c93ae@mail.gmail.com>
+Message-ID: <013a01c8aef9$5aa98d10$070514ac@atmel.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Monday, May 05, 2008 1:17 PM, Bernhard Fischer wrote:
-> >Hello all,
-> >
-> >Are there any packages that use svn co/up to download/update the 
-> >package source?
->
-> uclibc, busybox, gcc. Others trivially added.
-> http://repo.or.cz/w/buildroot.git/
+> You removed something that was working in favor of something that is
+> not for no reason.
 
-It appears those packages in your git are using $(WGET) to fetch the
-package source. I'm looking for something that uses$(SVN_CO) and
-$(SVN_UP). Did I just miss something?
+The Atmel patches adds way too much bloat to the svn.
+That is why the external toolchain was added.
+Also, IIRC some patches broke other architectures.
 
-Thanks,
-Hartley
+> On top of that, external toolchain tries to download prepatched
+> toochain from a site that you control, but that has no such files to
+> download from.
+
+BR2_ATMEL_MIRROR should be ftp://www.at91.com/pub/buildroot/
+I see the files in this location.
+
+> For some Godly unknown reason, there was no commit message on the mailling list.
+> 
+> Please revert your changes asap.
+> 
+
+No, if there are problems, it should be fixed within the external toolchain
+to avoid adding those megabytes, which are of no interest to AVR32 users.
+There are hooks to patch the external toolchain if neccessary.
+
+ 
+Best Regards
+Ulf Samuelsson                ulf at atmel.com
+Atmel Nordic AB
+Mail:  Box 2033, 174 02 Sundbyberg, Sweden
+Visit:  Kavalleriv?gen 24, 174 58 Sundbyberg, Sweden
+Phone +46 (8) 441 54 22     Fax +46 (8) 441 54 29
+GSM    +46 (706) 22 44 57
