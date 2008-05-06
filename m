@@ -1,27 +1,47 @@
-From: =?ISO-8859-1?Q?Thiago_A._Corr=EAa?= <thiago.correa@gmail.com>
-Date: Mon, 5 May 2008 20:34:20 -0300
-Subject: [Buildroot] Ulf, you broke AVR32, why?
-In-Reply-To: <013a01c8aef9$5aa98d10$070514ac@atmel.com>
-References: <d6cda7730805051134j245a8687o66eaa6fc9d3c93ae@mail.gmail.com>
-	<013a01c8aef9$5aa98d10$070514ac@atmel.com>
-Message-ID: <d6cda7730805051634p6bb3a5c4mb9e584e6059cb693@mail.gmail.com>
+From: ulf at uclibc.org <ulf@uclibc.org>
+Date: Mon,  5 May 2008 18:37:27 -0700 (PDT)
+Subject: [Buildroot] svn commit: trunk/buildroot/target/device/Atmel:
+	at91bootstrap
+Message-ID: <20080506013727.4612B3C67A@busybox.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Mon, May 5, 2008 at 6:41 PM, Ulf Samuelsson <ulf.samuelsson@atmel.com> wrote:
-> > You removed something that was working in favor of something that is
->  > not for no reason.
->
->  The Atmel patches adds way too much bloat to the svn.
+Author: ulf
+Date: 2008-05-05 18:37:26 -0700 (Mon, 05 May 2008)
+New Revision: 21935
 
-Google's entire svn history has 3Mb, including the AVR32 patches plus
-careless local svn mv's. How is that too much bloat?
+Log:
+Fix dependencies in Configs
 
->  That is why the external toolchain was added.
->  Also, IIRC some patches broke other architectures.
->
+Modified:
+   trunk/buildroot/target/device/Atmel/AT91_Config.in
+   trunk/buildroot/target/device/Atmel/at91bootstrap/Config.in
 
-That's why people is working on selectively applying patches based on $ARCH
+
+Changeset:
+Modified: trunk/buildroot/target/device/Atmel/AT91_Config.in
+===================================================================
+--- trunk/buildroot/target/device/Atmel/AT91_Config.in	2008-05-05 17:17:00 UTC (rev 21934)
++++ trunk/buildroot/target/device/Atmel/AT91_Config.in	2008-05-06 01:37:26 UTC (rev 21935)
+@@ -12,6 +12,7 @@
+ 
+ config	BR2_TARGET_ATMEL_ALL
+ 	bool "Allow all ARM targets"
++	depends BR2_arm
+ 	default y
+ 
+ config	BR2_TARGET_ATMEL_NET
+
+Modified: trunk/buildroot/target/device/Atmel/at91bootstrap/Config.in
+===================================================================
+--- trunk/buildroot/target/device/Atmel/at91bootstrap/Config.in	2008-05-05 17:17:00 UTC (rev 21934)
++++ trunk/buildroot/target/device/Atmel/at91bootstrap/Config.in	2008-05-06 01:37:26 UTC (rev 21935)
+@@ -80,4 +80,5 @@
+ 	depends on BR2_TARGET_AT91BOOTSTRAP
+ 
+ comment "It will be copied to $(BR2_AT91BOOTSTRAP_JUMP_ADDR)"
++	depends on BR2_TARGET_AT91BOOTSTRAP
+ 
