@@ -1,31 +1,29 @@
-From: Tiju Jacob <jacob_tiju@yahoo.com>
-Date: Tue, 6 May 2008 10:41:39 +0530 (IST)
+From: =?ISO-8859-1?Q?Thiago_A._Corr=EAa?= <thiago.correa@gmail.com>
+Date: Tue, 6 May 2008 02:16:33 -0300
 Subject: [Buildroot] link to busybox
-Message-ID: <547821.98673.qm@web94103.mail.in2.yahoo.com>
+In-Reply-To: <547821.98673.qm@web94103.mail.in2.yahoo.com>
+References: <547821.98673.qm@web94103.mail.in2.yahoo.com>
+Message-ID: <d6cda7730805052216v18ea7bd1l7681744d84d78b13@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi all,
+>
+>  I am using buildroot for an arm board.
+>
+>  Is it common to have all my executables as links to busybox?
 
-I am using buildroot for an arm board. 
+Yes, that's how busybox works, it's a single binary file for all the
+tools, so it shares code and reduces total size.
 
-Is it common to have all my executables as links to busybox?
+>  The issue I am facing is that I am not able to get the shell prompt. It keeps on respawning the getty when I try to login.
+>
 
-eg.
--rwsr-xr-x 216 tiju users 589352 May  6 10:30 freeramdisk -> ../bin/busybox
--rwsr-xr-x 216 tiju users 589352 May  6 10:30 fsck -> ../bin/busybox
--rwsr-xr-x 216 tiju users 589352 May  6 10:30 getty -> ../bin/busybox
--rwsr-xr-x 216 tiju users 589352 May  6 10:30 halt -> ../bin/busybox
--rwsr-xr-x 216 tiju users 589352 May  6 10:30 hdparm -> ../bin/busybox
--rwsr-xr-x 216 tiju users 589352 May  6 10:30 hwclock -> ../bin/busybox
+I don't use arms, but AVR32 instead. I had a similar issue a while
+back and it was something to do with bash, once I removed bash from
+the build, everything worked ok. You might want to try that.
 
-The issue I am facing is that I am not able to get the shell prompt. It keeps on respawning the getty when I try to login.
-
-Thanks in advance.
-Tiju
-
-
-      Meet people who discuss and share your passions. Go to http://in.promos.yahoo.com/groups/bestofyahoo/
+Kind Regards,
+   Thiago A. Correa
