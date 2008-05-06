@@ -1,71 +1,78 @@
-From: Arnar Mar Sig <antab@valka.is>
-Date: Tue, 6 May 2008 13:23:37 +0000
+From: Ulf Samuelsson <ulf.samuelsson@atmel.com>
+Date: Tue, 6 May 2008 16:06:49 +0200
 Subject: [Buildroot] Ulf, you broke AVR32, why?
-In-Reply-To: <008a01c8af69$7d5d1be0$5e8d910a@atmel.com>
 References: <d6cda7730805051134j245a8687o66eaa6fc9d3c93ae@mail.gmail.com>
 	<013a01c8aef9$5aa98d10$070514ac@atmel.com>
-	<d6cda7730805051634p6bb3a5c4mb9e584e6059cb693@mail.gmail.com>
-	<008a01c8af69$7d5d1be0$5e8d910a@atmel.com>
-Message-ID: <FB55BA20-F1DB-43D5-B40A-8897ED97FAC8@valka.is>
+	<75DA8A60-EC04-485B-AA62-BE88EF164D53@valka.is>
+Message-ID: <000b01c8af82$a74deb50$060514ac@atmel.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On May 6, 2008, at 9:57 AM, Ulf Samuelsson wrote:
->> On Mon, May 5, 2008 at 6:41 PM, Ulf Samuelsson <ulf.samuelsson@atmel.com 
->> > wrote:
->>>> You removed something that was working in favor of something that  
->>>> is
->>>> not for no reason.
->>>
->>> The Atmel patches adds way too much bloat to the svn.
->>
->> Google's entire svn history has 3Mb, including the AVR32 patches plus
->> careless local svn mv's. How is that too much bloat?
->>
->
-> The AVR32 patches are larger than that, just for one version.
-> Adding patches for several versions of the toolchain will make this  
-> worse.
+> Ulf,
 
-antab at imbakassi:~/v100sc2$ du -sch buildroot-upstream/
-131M	buildroot-upstream/
+> You talk about us AVR32 people breaking packages, not testing our  
+> changes and demanding that we take our effort at maintaining packages  
+> and arch support to a separate tree. But still you do all off thous  
+> things, breaking packages, removing needed arch patches, not testing  
+> your changes and generally fucking up everything except AT91 support,  
+> WHY?
 
-antab at imbakassi:~/v100sc2/buildroot-fork/toolchain/gcc$ du -ch 4.2.2/ 
-*avr32*
-900K	4.2.2/900-gcc-4.2.2.atmel.1.0.8.patch.avr32
-4.0K	4.2.2/901-avr32-no-cond-exec-before-reload-by-default.patch.avr32
-904K	total
+> In my opinion, Buildroot is a collection of PATCHES to make cross- 
+> compiling easier, not to create some broken package system that i have  
+> to download every source and patch myself and patch by hand.
 
-Thats under 1MB for one version, and thous patches dont change that  
-often. I dont mind that patches are removed for old toolchains, but  
-IMO they should not be removed. It pisses me alot more to have to  
-download a 43MB with the prepatched toolchain source from a dead slow  
-server every time its updated.
-I also build for x86 and now i have to keep and download source for 2  
-toolchains, thats 86MB while it could have been 44MB...
+> My 10cent in the penis fight.
+> Arnar Mar Sig.
 
->>
->> You didn't even care to test your changes, and despite protests
->> removed the toolchain support anyway. You are taking away our freedom
->> to update, fix, do whatever with the toolchain from within buildroot.
->
-> If you check above, you see it is not like that.
-> You can modify the external toolchain by applying patches,
-> so you have the freedom you want.
->
-> If you can find another host where the stuff can be located
-> then it is easy to move it. I just put it on that server for  
-> convenience
-> and I see only drawbacks that it cannot be updated by other
-> members of the buildroot community.
+Yeah right,
+I made sure that AVR32 is supported by introducing the AVR32 to buildroot
+in the first place and by ensuring that the AVR32 product line adopted
+buildroot as the main delivery vehicle for their Linux.
 
-I'm can donate a server for storing thous patches, could be setup up  
-as a SVN repo so members can easy add to it (and keeping track of  
-everything), and then a script that checks that stuff out and makes it  
-accessable via FTP and HTTP at the same site.
+When I introduced AVR32 support in buildroot, I made a
+decision to use a prepatched source for various reasons.
+One of them is that using a non-supported architecture
+does not scale well, because that means that svn buildroot svn
+grows by a significant amount every time a new toolchain is supported.
+Another is that I noticed that the autotools version is really sensitive
+causing problems with a number of customers.
 
-Greets
-	Arnar mar Sig
+I do not think that using prepatched source is the same thing as using a different tree.
+
+I dont "accuse" people for breaking packages. I note that the redundant
+toolchain support that was added later cause complaints both
+for breaking other architectures and for size.
+
+Since the patches are NOT neccessary, as you claim, 
+because you can download exactly the same thing by
+using the prepatched toolchain, 
+the easiest way is to remove the offending patches.
+
+The system works if the mirror has the proper value, 
+which is has if the .config file is configured from scratch.
+
+If you want to apply patches to the prepatched tree, you can,  
+so your comment about manually downloading patches
+and applying manually is 
+
+As I see it there is one problem, and that is that the ATMEL MIRROR
+is not write accessible to the public. I can't change that for the current mirror, 
+but as I mentioned previously, 
+I do not see any value in me beeing the only one able to update this,
+only disadvantages, so anyone volunteering to host the mirror
+and make it accessible to all buildroot maintainers are welcome.
+
+=======================
+Once we updated the prepatched toolchain from John's site we will be able to:
+
+1) Download latest AVR32 toolchain in a prepatched format.
+2) Apply any patch located in "target/device/Atmel/toolchain" automatically
+    (Including selected patches copied from the toolchain directory)
+
+I really do nor see the problem with this.
+
+Best Regards
+Ulf Samuelsson
