@@ -1,60 +1,54 @@
-From: Ulf Samuelsson <ulf.samuelsson@atmel.com>
-Date: Wed, 7 May 2008 17:07:18 +0200
-Subject: [Buildroot] buildroot - python problem
-References: <223E6519BDCAC74695BEE9D163F8E6592218AB@oakleaf10.oakleafconsultancy.com>
-	<c166aa9f0805070734h10591bf3sbdf6c6b5bc696c04@mail.gmail.com>
-Message-ID: <079f01c8b054$166a3620$060514ac@atmel.com>
+From: bugs at busybox.net <bugs@busybox.net>
+Date: Wed, 7 May 2008 11:01:08 -0700
+Subject: [Buildroot] [buildroot 0003274]: Package Python broken
+Message-ID: <6fd46b8f7e4f7ee6e5532e88d5baab30@bugs.uclibc.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-> On Wed, May 7, 2008 at 4:48 AM, Richard Hardy
-> <richardh@oakleafconsultancy.com> wrote:
->> I get a long way through the process (selecting mostly the default options),
->> and then I get an error as follows:
->>
->>
->>
->> Make[1] Leaving directory
->> '/home/richardh/AT91SAM9263/buildroot/build_arm/Python-2.4.2'
->>
->> /bin/sh: line 8 -/usr/bin/make No such file or directory
->>
->> Make: ***
->> [/home/richardh/AT91SAM9263/buildroot/build_arm/Python-2.4.2/.hostpython]
->> Error 127
->>
->>
->>
->> Can anyone help me as to why this is happening and what I might do about it?
-> 
-> I found this as well.  I was able to get around it by making the
-> change it the patch below (beware line wrap as I just pasted it in).
-> As I understand it a - at the beginning of a command is legal in make,
-> but since this is a continuation of one long command line I don't
-> think it's okay there.
-> 
-> Index: package/python/python.mk
-> ===================================================================
-> --- package/python/python.mk    (revision 21884)
-> +++ package/python/python.mk    (working copy)
-> @@ -89,7 +89,7 @@
->                $(MAKE) python Parser/pgen && \
->                mv python hostpython && \
->                mv Parser/pgen Parser/hostpgen && \
-> -               -$(MAKE) distclean \
-> +               $(MAKE) distclean \
->        ) && \
->        touch $@
-> 
 
+The following issue has been SUBMITTED. 
+====================================================================== 
+http://busybox.net/bugs/view.php?id=3274 
+====================================================================== 
+Reported By:                roeme
+Assigned To:                buildroot
+====================================================================== 
+Project:                    buildroot
+Issue ID:                   3274
+Category:                   Architecture Specific
+Reproducibility:            always
+Severity:                   major
+Priority:                   normal
+Status:                     assigned
+====================================================================== 
+Date Submitted:             05-07-2008 11:01 PDT
+Last Modified:              05-07-2008 11:01 PDT
+====================================================================== 
+Summary:                    Package Python broken
+Description: 
+When trying to include the python package, the build process fails with the
+following error:
 
-The python.mk looks pretty unclean to me.
-Should not the host python be built in the toolchain directory,
-and the result moved to STAGING_DIR?
-Then it could be easily be used for other stuff as well.
+make[1]: Leaving directory
+`/home/roeme/minim/buildroot/buildroot/build_i586/Python-2.4.2'
+/bin/sh: line 8: -/usr/bin/make: No such file or directory
+make: ***
+[/home/roeme/minim/buildroot/buildroot/build_i586/Python-2.4.2/.hostpython]
+Error 127
 
-Best Regards
-Ulf Samuelsson
+Enabling "Development Files on target" or removing modules marked as
+"unusual" (curses/unicodedata) does not help as well as reducing the
+number of jobs to run simultaneously.
+
+====================================================================== 
+
+Issue History 
+Date Modified   Username       Field                    Change               
+====================================================================== 
+05-07-08 11:01  roeme          New Issue                                    
+05-07-08 11:01  roeme          Status                   new => assigned     
+05-07-08 11:01  roeme          Assigned To               => buildroot       
+======================================================================
