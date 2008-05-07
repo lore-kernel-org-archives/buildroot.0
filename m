@@ -1,7 +1,7 @@
 From: bugs at busybox.net <bugs@busybox.net>
-Date: Wed, 7 May 2008 11:01:08 -0700
+Date: Wed, 7 May 2008 11:37:20 -0700
 Subject: [Buildroot] [buildroot 0003274]: Package Python broken
-Message-ID: <6fd46b8f7e4f7ee6e5532e88d5baab30@bugs.uclibc.org>
+Message-ID: <e093698bffdace5bf5ffcbd7db0cffc5@busybox.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -9,7 +9,7 @@ Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
 
-The following issue has been SUBMITTED. 
+A NOTE has been added to this issue. 
 ====================================================================== 
 http://busybox.net/bugs/view.php?id=3274 
 ====================================================================== 
@@ -25,7 +25,7 @@ Priority:                   normal
 Status:                     assigned
 ====================================================================== 
 Date Submitted:             05-07-2008 11:01 PDT
-Last Modified:              05-07-2008 11:01 PDT
+Last Modified:              05-07-2008 11:37 PDT
 ====================================================================== 
 Summary:                    Package Python broken
 Description: 
@@ -45,10 +45,21 @@ number of jobs to run simultaneously.
 
 ====================================================================== 
 
+---------------------------------------------------------------------- 
+ bernhardf - 05-07-08 11:37  
+---------------------------------------------------------------------- 
+Thy pyhon package wants a big cleanup anyway:
+
+- unpack into one location (I'd use the TOOL_BUIDDIR)
+- build python-host (why is that needed anyway?) into
+(TOOL_BUILDDIR)/$(PYTHON_DIR)-host
+- build python in $(BUILD_DIR) 
+
 Issue History 
 Date Modified   Username       Field                    Change               
 ====================================================================== 
 05-07-08 11:01  roeme          New Issue                                    
 05-07-08 11:01  roeme          Status                   new => assigned     
 05-07-08 11:01  roeme          Assigned To               => buildroot       
+05-07-08 11:37  bernhardf      Note Added: 0007474                          
 ======================================================================
