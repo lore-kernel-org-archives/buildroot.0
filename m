@@ -1,44 +1,54 @@
-From: Ulf Samuelsson <ulf.samuelsson@atmel.com>
-Date: Wed, 7 May 2008 14:18:30 +0200
-Subject: [Buildroot] svn commit:
-	trunk/buildroot/target/device/Atmel:atngw100 atngw100-base
-	atngw100-expanded etc...
-References: <20080506013810.213FE3C6D4@busybox.net>
-	<46a136670805051855v20cfee30o267907b605f6bc9a@mail.gmail.com>
-Message-ID: <054a01c8b03c$79deccb0$060514ac@atmel.com>
+From: Andrew Dyer <amdyer@gmail.com>
+Date: Wed, 7 May 2008 09:34:16 -0500
+Subject: [Buildroot] buildroot - python problem
+In-Reply-To: <223E6519BDCAC74695BEE9D163F8E6592218AB@oakleaf10.oakleafconsultancy.com>
+References: <223E6519BDCAC74695BEE9D163F8E6592218AB@oakleaf10.oakleafconsultancy.com>
+Message-ID: <c166aa9f0805070734h10591bf3sbdf6c6b5bc696c04@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+On Wed, May 7, 2008 at 4:48 AM, Richard Hardy
+<richardh@oakleafconsultancy.com> wrote:
+> I get a long way through the process (selecting mostly the default options),
+> and then I get an error as follows:
+>
+>
+>
+> Make[1] Leaving directory
+> '/home/richardh/AT91SAM9263/buildroot/build_arm/Python-2.4.2'
+>
+> /bin/sh: line 8 -/usr/bin/make No such file or directory
+>
+> Make: ***
+> [/home/richardh/AT91SAM9263/buildroot/build_arm/Python-2.4.2/.hostpython]
+> Error 127
+>
+>
+>
+> Can anyone help me as to why this is happening and what I might do about it?
 
+I found this as well.  I was able to get around it by making the
+change it the patch below (beware line wrap as I just pasted it in).
+As I understand it a - at the beginning of a command is legal in make,
+but since this is a continuation of one long command line I don't
+think it's okay there.
 
-> The ftp site seems to be out-of-date. The latest avr32 patches for gcc are
-> for version 4.2.2 with atmel patch 1.0.8. I'm not sure about the others
-> though. Also, they don't seem to be patched with the other uClibc patches as
-> well, and there is no facility in buildroot to patch the pre-patched files
-> either, as gcc 4.2.2 doesn't even have a toolchain directory. I've got
-> pre-patched sources here: ftp://64.31.81.93 that includes avr32-atmel.1.0.8
-> and all of the other uClibc patches as well. If you want to move them to the
-> at91 site that would be great. A couple of us AVR32 users have been
-> discussing the patch.avr32 scheme, is this out of the question?
-> 
-> Regards,
-> John Voltz
-> 
+Index: package/python/python.mk
+===================================================================
+--- package/python/python.mk    (revision 21884)
++++ package/python/python.mk    (working copy)
+@@ -89,7 +89,7 @@
+                $(MAKE) python Parser/pgen && \
+                mv python hostpython && \
+                mv Parser/pgen Parser/hostpgen && \
+-               -$(MAKE) distclean \
++               $(MAKE) distclean \
+        ) && \
+        touch $@
 
-The Atmel stuff is uploaded, as mentioned in another email
-Your patches are not included, so I am also uploading your gcc-4.2.2/4.2.3 with
-the addition of the -uclibc extension (and removal of ".atmel").
-
-Additional patches can be added in appropriate directories under 
-"target/device/Atmel/toolchain".
-If someone wants to move them to the "toolchain" tree,
-that is OK with me.
-
-Maybe "toolchain/gcc/4.2.2" has to be added as well.
-
-
-Best Regards
-Ulf Samuelsson
+-- 
+Hardware, n.:
+ The parts of a computer system that can be kicked.
