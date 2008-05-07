@@ -1,7 +1,7 @@
 From: bugs at busybox.net <bugs@busybox.net>
-Date: Wed, 7 May 2008 11:37:20 -0700
+Date: Wed, 7 May 2008 12:04:35 -0700
 Subject: [Buildroot] [buildroot 0003274]: Package Python broken
-Message-ID: <e093698bffdace5bf5ffcbd7db0cffc5@busybox.net>
+Message-ID: <c70af63fc62a1117211bb46dbe19e5ef@bugs.uclibc.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -25,7 +25,7 @@ Priority:                   normal
 Status:                     assigned
 ====================================================================== 
 Date Submitted:             05-07-2008 11:01 PDT
-Last Modified:              05-07-2008 11:37 PDT
+Last Modified:              05-07-2008 12:04 PDT
 ====================================================================== 
 Summary:                    Package Python broken
 Description: 
@@ -55,6 +55,19 @@ Thy pyhon package wants a big cleanup anyway:
 (TOOL_BUILDDIR)/$(PYTHON_DIR)-host
 - build python in $(BUILD_DIR) 
 
+---------------------------------------------------------------------- 
+ roeme - 05-07-08 12:04  
+---------------------------------------------------------------------- 
+How can I help? Or what must one do to get the package working?
+
+I'll dive into the docs now. Maybe I'll get something working, I wanted to
+get accustomed to buildroot's internals anyway, to add sw by myself.
+
+However, I'm a bloody novice, so any help on this bug is GREATLY
+appreciated. Since I'm in a thight schedule, it might take several months
+before I even have a clue how to fix it, whereas you guys probably only
+need one day. 
+
 Issue History 
 Date Modified   Username       Field                    Change               
 ====================================================================== 
@@ -62,4 +75,5 @@ Date Modified   Username       Field                    Change
 05-07-08 11:01  roeme          Status                   new => assigned     
 05-07-08 11:01  roeme          Assigned To               => buildroot       
 05-07-08 11:37  bernhardf      Note Added: 0007474                          
+05-07-08 12:04  roeme          Note Added: 0007484                          
 ======================================================================
