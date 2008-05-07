@@ -1,7 +1,7 @@
 From: bugs at busybox.net <bugs@busybox.net>
-Date: Wed, 7 May 2008 12:04:35 -0700
+Date: Wed, 7 May 2008 12:39:25 -0700
 Subject: [Buildroot] [buildroot 0003274]: Package Python broken
-Message-ID: <c70af63fc62a1117211bb46dbe19e5ef@bugs.uclibc.org>
+Message-ID: <a328de13c8ed416ea4c0d931b5d36eae@bugs.uclibc.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -25,7 +25,7 @@ Priority:                   normal
 Status:                     assigned
 ====================================================================== 
 Date Submitted:             05-07-2008 11:01 PDT
-Last Modified:              05-07-2008 12:04 PDT
+Last Modified:              05-07-2008 12:39 PDT
 ====================================================================== 
 Summary:                    Package Python broken
 Description: 
@@ -56,7 +56,7 @@ Thy pyhon package wants a big cleanup anyway:
 - build python in $(BUILD_DIR) 
 
 ---------------------------------------------------------------------- 
- roeme - 05-07-08 12:04  
+ roeme - 05-07-08 12:28  
 ---------------------------------------------------------------------- 
 How can I help? Or what must one do to get the package working?
 
@@ -66,7 +66,25 @@ get accustomed to buildroot's internals anyway, to add sw by myself.
 However, I'm a bloody novice, so any help on this bug is GREATLY
 appreciated. Since I'm in a thight schedule, it might take several months
 before I even have a clue how to fix it, whereas you guys probably only
-need one day. 
+need one day.
+
+There's a typo in the submission, by host system I meant build system.
+
+ 
+
+---------------------------------------------------------------------- 
+ roeme - 05-07-08 12:39  
+---------------------------------------------------------------------- 
+Python seems to have cross-compilation support (see also:
+http://mail.python.org/pipermail/patches/2004-October/016312.html )
+
+However, it's not used: 
+(snip)
+checking whether we are cross compiling... no
+(/snip)
+
+(I might be off-track here, but maybe this is of some use to the
+developers) 
 
 Issue History 
 Date Modified   Username       Field                    Change               
@@ -76,4 +94,6 @@ Date Modified   Username       Field                    Change
 05-07-08 11:01  roeme          Assigned To               => buildroot       
 05-07-08 11:37  bernhardf      Note Added: 0007474                          
 05-07-08 12:04  roeme          Note Added: 0007484                          
+05-07-08 12:28  roeme          Note Edited: 0007484                         
+05-07-08 12:39  roeme          Note Added: 0007494                          
 ======================================================================
