@@ -1,41 +1,43 @@
-From: Christian SCHWARZ <christian.schwarz@st.com>
-Date: Wed, 07 May 2008 09:15:35 +0200
-Subject: [Buildroot] link to busybox
-In-Reply-To: <102389.57784.qm@web94112.mail.in2.yahoo.com>
-References: <102389.57784.qm@web94112.mail.in2.yahoo.com>
-Message-ID: <48215717.9090808@st.com>
+From: Arun Reddy <reddyac@gmail.com>
+Date: Wed, 7 May 2008 00:42:07 -0700
+Subject: [Buildroot] Anyone know why Buildroot complains about uClibc
+	RPC for NFS support?
+In-Reply-To: <20080507020954.GA28208@cloud.net.au>
+References: <326f33790805061757l56e09784x5021e51f919479b5@mail.gmail.com>
+	<20080507020954.GA28208@cloud.net.au>
+Message-ID: <326f33790805070042r1098db7cl52a0a05d6ced1066@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Tiju,
+Thanks fellas. That was my mistake. :)
 
-I believe root filesystems are not an exact science, thus I can only 
-provide you with some generic stuff, which mostly works.
-For me, a simple device layout like the following (using busybox or 
-buildroot) works on several different embedded platforms:
+On Tue, May 6, 2008 at 7:09 PM, Hamish Moffatt <hamish@cloud.net.au> wrote:
 
-mknod initrd b 1 250
-mknod console c 5 1
-mknod mem c 1 1
-mknod null c 1 3
-mknod ram1 b 1 1
-mknod ttyAM0 c 204 16
-mknod ram0 b 1 0
-ln -s ram1 ram
-ln -s ram0 ramdisk
-
-In your case you'd probably replace ttyAM0 with ttySAC0..
-
-> I am very new to this. Could you please tell me how to modify these files to my requirement or atleast the links from where I will get more information regarding this?
-Even though this is the buildroot mailing list, I would recommend to 
-first try a rootfs with only busybox, thus without buildroot. You can 
-easily use the buildroot-generated cross-compiling toolchain with busybox..
-  make CROSS_COMPILE=<xtoolchain-prefix> all install
-
-The rc.S file is not required by busybox, it makes some smart assumptions.
-
-hope this helps,
-Christian
+> On Tue, May 06, 2008 at 05:57:45PM -0700, Arun Reddy wrote:
+> > #error "*You* *need to build uClibc with UCLIBC_HAS_RPC* for NFS
+> support."
+> >
+> > http://img254.imageshack.us/img254/8638/rpcproblemka7.jpg
+> >
+> > I am not understanding this error, because I never wanted support for
+> NFS in
+> > the first place. (I just want to build something that will run in QEMU).
+> > Does anyone know why I get this error and why it complains about NFS
+> support
+> > even though I disabled it in the kernel?
+>
+> The kernel doesn't use uClibc, and disabling NFS in the kernel isn't
+> enough. Maybe you have the NFS utilities package enabled, and/or NFS mount
+> support in busybox?
+>
+>
+> Hamish
+> --
+> Hamish Moffatt VK3SB <hamish@debian.org> <hamish@cloud.net.au>
+>
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: http://busybox.net/lists/buildroot/attachments/20080507/4f348f60/attachment.htm 
