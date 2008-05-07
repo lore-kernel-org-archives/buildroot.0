@@ -1,41 +1,30 @@
-From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Wed, 07 May 2008 12:20:19 +0200
-Subject: [Buildroot] Booting from USB Memory Stick
-In-Reply-To: <B44D4D5BF344094DABB900C4E0F6E353016EB1F1A1@srv02.nortechonline.net>
-	(Simon Hodgson's message of "Tue\, 6 May 2008 18\:25\:14 +0100")
-References: <B44D4D5BF344094DABB900C4E0F6E353016EB1F1A1@srv02.nortechonline.net>
-Message-ID: <87ej8e2z6k.fsf@macbook.be.48ers.dk>
+From: Ulf Samuelsson <ulf.samuelsson@atmel.com>
+Date: Wed, 7 May 2008 13:12:40 +0200
+Subject: [Buildroot] Latest AVR32 toolchain sources uploaded tp
+	BR2_ATMEL_MIRROR
+References: <d6cda7730805051134j245a8687o66eaa6fc9d3c93ae@mail.gmail.com><013a01c8aef9$5aa98d10$070514ac@atmel.com><d6cda7730805051634p6bb3a5c4mb9e584e6059cb693@mail.gmail.com><008a01c8af69$7d5d1be0$5e8d910a@atmel.com>
+	<d6cda7730805060808g5aa7d98am3e29c421e88345a@mail.gmail.com>
+Message-ID: <054501c8b03c$38a409e0$060514ac@atmel.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Simon" == Hodgson, Simon <Simon.Hodgson@nortechonline.co.uk> writes:
+I uploaded 
 
-Hi,
+avr32-gcc-4.2.2.atmel.1.0.8.tar.gz      ==> gcc-4.2.2-avr32-1.0.8.tar.bz2
+avr32-binutils-2.17.atmel.1.2.6.tar.gz  ==> binutils-2.17-avr32-2.1.4.tar.bz2
+avr32-gdb-6.7.1.atmel.1.0.3.tar.bz2    ==> gdb-6.7.1-avr32-1.0.3.tar.bz2
 
- Simon> The plan is to format the memory stick with ext2 and copy my
- Simon> rootfs onto there. The Kernel will go into the 4MB DataFlash
- Simon> on the board. From u-boot I'll set bootargs so it includes
- Simon> "root=/dev/sda1"
+to $(BR2_ATMEL_MIRROR) = ftp://www.at91.com/pub/buildroot today.
 
- Simon> Only when I boot the device, it sees the memory stick but
- Simon> doesn't set "/dev/sda1" up.
+Since I can download from this mirror at 40 Mbit/s I doubt
+that a new mirror is needed for download speed purposes.
 
-What do you mean? Don't you have a /dev/sda1 device node on your ext2
-file system or does it return -ENODEV when you try to open it?
+If someone wants to set up another alternative mirror to
+allow write access to anyone, then It is not hard to 
+fix so that the user can select a mirror from a list of mirrors.
 
- Simon> Extract of the relevant Kernel boot output provided below
- Simon> (full text attached):
-
-It takes a while for the kernel to scan for USB sticks and read the
-partition table, so it isn't available by the time the kernel tries to
-mount the rootfs. You need to add rootdelay=10 (or similar) to your
-kernel cmdline.
-
-See http://peter.korsgaard.com/articles/debian-nslu2.php#usb-boot for
-details.
-
--- 
-Bye, Peter Korsgaard
+Best Regards
+Ulf Samuelsson
