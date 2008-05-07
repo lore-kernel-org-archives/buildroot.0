@@ -1,31 +1,36 @@
-From: Hamish Moffatt <hamish@cloud.net.au>
-Date: Wed, 7 May 2008 12:09:54 +1000
-Subject: [Buildroot] Anyone know why Buildroot complains about
-	uClibc	RPC for NFS support?
-In-Reply-To: <326f33790805061757l56e09784x5021e51f919479b5@mail.gmail.com>
-References: <326f33790805061757l56e09784x5021e51f919479b5@mail.gmail.com>
-Message-ID: <20080507020954.GA28208@cloud.net.au>
+From: Tiju Jacob <jacob_tiju@yahoo.com>
+Date: Wed, 7 May 2008 11:03:00 +0530 (IST)
+Subject: [Buildroot] link to busybox
+Message-ID: <102389.57784.qm@web94112.mail.in2.yahoo.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Tue, May 06, 2008 at 05:57:45PM -0700, Arun Reddy wrote:
-> #error "*You* *need to build uClibc with UCLIBC_HAS_RPC* for NFS support."
-> 
-> http://img254.imageshack.us/img254/8638/rpcproblemka7.jpg
-> 
-> I am not understanding this error, because I never wanted support for NFS in
-> the first place. (I just want to build something that will run in QEMU).
-> Does anyone know why I get this error and why it complains about NFS support
-> even though I disabled it in the kernel?
+Hi Christian,
 
-The kernel doesn't use uClibc, and disabling NFS in the kernel isn't
-enough. Maybe you have the NFS utilities package enabled, and/or NFS mount
-support in busybox?
+> The respawn problem typically is not related to a specific shell, but 
+> either to a misconfiguration of the /etc files (especially rc.S) or, 
+> more probable, missing /dev/tty??
+> You might want to check those messages.
+
+What kind of tty? My serial device ttySAC0 is present in /dev.
+
+> In my case, I had to add several special devices by hand, not added by 
+> buildroot
+
+What type of devices? I may also be missing these devices.
+
+>(and I also replaced all the files in /etc with a single rc.S one, 
+>which resolved several other problems). The 
+>platform is an ARMv6 board.
+ 
+I am very new to this. Could you please tell me how to modify these files to my requirement or atleast the links from where I will get more information regarding this?
+
+Thanks in advance.
+Tiju
 
 
-Hamish
--- 
-Hamish Moffatt VK3SB <hamish@debian.org> <hamish@cloud.net.au>
+
+      From Chandigarh to Chennai - find friends all over India. Go to http://in.promos.yahoo.com/groups/citygroups/
