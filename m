@@ -1,7 +1,7 @@
-From: bugs at busybox.net <bugs@busybox.net>
-Date: Wed, 7 May 2008 12:39:25 -0700
-Subject: [Buildroot] [buildroot 0003274]: Package Python broken
-Message-ID: <a328de13c8ed416ea4c0d931b5d36eae@bugs.uclibc.org>
+From: Hebbar <gururajakr@sanyo.co.in>
+Date: Wed, 7 May 2008 17:05:25 -0700 (PDT)
+Subject: [Buildroot]  Need help adding/updating Makefile.autotools.in
+Message-ID: <17117160.post@talk.nabble.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -9,91 +9,135 @@ Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
 
-A NOTE has been added to this issue. 
-====================================================================== 
-http://busybox.net/bugs/view.php?id=3274 
-====================================================================== 
-Reported By:                roeme
-Assigned To:                buildroot
-====================================================================== 
-Project:                    buildroot
-Issue ID:                   3274
-Category:                   Architecture Specific
-Reproducibility:            always
-Severity:                   major
-Priority:                   normal
-Status:                     assigned
-====================================================================== 
-Date Submitted:             05-07-2008 11:01 PDT
-Last Modified:              05-07-2008 12:39 PDT
-====================================================================== 
-Summary:                    Package Python broken
-Description: 
-When trying to include the python package, the build process fails with the
-following error:
-
-make[1]: Leaving directory
-`/home/roeme/minim/buildroot/buildroot/build_i586/Python-2.4.2'
-/bin/sh: line 8: -/usr/bin/make: No such file or directory
-make: ***
-[/home/roeme/minim/buildroot/buildroot/build_i586/Python-2.4.2/.hostpython]
-Error 127
-
-Enabling "Development Files on target" or removing modules marked as
-"unusual" (curses/unicodedata) does not help as well as reducing the
-number of jobs to run simultaneously.
-
-====================================================================== 
-
----------------------------------------------------------------------- 
- bernhardf - 05-07-08 11:37  
----------------------------------------------------------------------- 
-Thy pyhon package wants a big cleanup anyway:
-
-- unpack into one location (I'd use the TOOL_BUIDDIR)
-- build python-host (why is that needed anyway?) into
-(TOOL_BUILDDIR)/$(PYTHON_DIR)-host
-- build python in $(BUILD_DIR) 
-
----------------------------------------------------------------------- 
- roeme - 05-07-08 12:28  
----------------------------------------------------------------------- 
-How can I help? Or what must one do to get the package working?
-
-I'll dive into the docs now. Maybe I'll get something working, I wanted to
-get accustomed to buildroot's internals anyway, to add sw by myself.
-
-However, I'm a bloody novice, so any help on this bug is GREATLY
-appreciated. Since I'm in a thight schedule, it might take several months
-before I even have a clue how to fix it, whereas you guys probably only
-need one day.
-
-There's a typo in the submission, by host system I meant build system.
+Hi all,
+ 
+I need some help/guidance to add/update Makefile.autotools.in to add few
+options for different packages.
+ 
+During building of few packages i observed that
+ 
+1. packages like pcmanfm, vlc needs few data files like icons, .desktop
+files to installed to target_dir/usr/share/ folder 2. packages like
+libxml2,xlib_libXft needs there (pkg)-config files to edited to change
+prefix,exec-prefix variables to point to staging_dir/usr rather than just
+/usr
+ 
+For giving the 1st option i changed Makefile.autotools.in a bit to give
+option to add install data as below. 
+ 
+--- Makefile.autotools.in_orig 2008-04-08 16:10:24.000000000 -0400
++++ Makefile.autotools.in 2008-05-04 20:36:14.000000000 -0400
+@@ -43,10 +43,14 @@
+ # install the package to the staging directory  # FOO_INSTALL_TARGET
+[YES/NO, default YES]  # install the package to the target directory
++# FOO_INSTALL_DATA [YES/NO, default YES] # install the data from 
++package to the target directory
+ # FOO_INSTALL_STAGING_OPT [default DESTDIR=$(STAGING_DIR)/usr install]  #
+arguments passed to <make> while installing to the staging directory  #
+FOO_INSTALL_TARGET_OPT [default DESTDIR=$(TARGET_DIR)/usr install-exec]  #
+arguments passed to <make> while installing to the target directory
++# FOO_INSTALL_TARGET_DATA [default DESTDIR=$(TARGET_DIR)/usr 
++install-data] # arguments passed to <make> while installing data to the 
++target directory
+ # FOO_CLEAN_OPT [default clean]
+ # arguments passed to <make> while installing to the staging directory  #
+FOO_UNINSTALL_STAGING_OPT  [default DESTDIR=$(STAGING_DIR)/usr uninstall] @@
+-68,7 +72,7 @@  #  ## The following variables contain targets that can be
+overriden  # -# FOO_TARGET_INSTALL_TARGET FOO_TARGET_INSTALL_STAGING
+FOO_TARGET_BUILD
++# FOO_TARGET_INSTALL_TARGET FOO_TARGET_INSTALL_DATA 
++FOO_TARGET_INSTALL_STAGING FOO_TARGET_BUILD
+ # FOO_TARGET_CONFIGURE FOO_TARGET_PATCH FOO_TARGET_EXTRACT
+FOO_TARGET_SOURCE  # FOO_TARGET_UNINSTALL FOO_TARGET_CLEAN
+FOO_TARGET_DIRCLEAN  # @@ -232,6 +244,12 @@
+$(BUILD_DIR)/%/.stamp_target_installed:
+  done)
+  touch $@
+ 
++# Install to target dir
++$(BUILD_DIR)/%/.stamp_target_data_installed:
++ $(call MESSAGE,"Installing data to target")
++ $($(PKG)_MAKE_ENV) $(MAKE) DESTDIR=$(TARGET_DIR)  install-data -C 
++$(@D)/$($(PKG)_SUBDIR)  touch $@
++
+ $(BUILD_DIR)/%/.stamp_cleaned:
+  $(call MESSAGE,"Cleaning up")
+  -$($(PKG)_MAKE_ENV) $(MAKE)  $($(PKG)_UNINSTALL_STAGING_OPT) -C
+$(@D)/$($(PKG)_SUBDIR)
+@@ -278,8 +296,10 @@ $(2)_MAKE_ENV   ?=
+ $(2)_MAKE_OPT   ?=
+ $(2)_INSTALL_STAGING  ?= NO
+ $(2)_INSTALL_TARGET  ?= YES
++$(2)_INSTALL_DATA  ?= YES
+ $(2)_INSTALL_STAGING_OPT ?= DESTDIR=$$(STAGING_DIR) install 
+$(2)_INSTALL_TARGET_OPT  ?= DESTDIR=$$(TARGET_DIR)  install-exec
++$(2)_INSTALL_TARGET_DATA ?= DESTDIR=$$(TARGET_DIR)  install-data
+ $(2)_CLEAN_OPT   ?= clean
+ $(2)_UNINSTALL_STAGING_OPT ?= DESTDIR=$$(STAGING_DIR) uninstall 
+$(2)_UNINSTALL_TARGET_OPT ?= DESTDIR=$$(TARGET_DIR)  uninstall
+@@ -288,6 +308,7 @@ $(2)_DIR_PREFIX   =  $(if $(3),$(3),$(TO
+ 
+ 
+ # define sub-target stamps
++$(2)_TARGET_INSTALL_DATA = $$($(2)_DIR)/.stamp_target_data_installed
+ $(2)_TARGET_INSTALL_TARGET = $$($(2)_DIR)/.stamp_target_installed
+ $(2)_TARGET_INSTALL_STAGING = $$($(2)_DIR)/.stamp_staging_installed
+ $(2)_TARGET_BUILD =  $$($(2)_DIR)/.stamp_built @@ -314,6 +335,12 @@ else
+ $(1)-install-target:
+ endif
+ 
++ifeq ($$($(2)_INSTALL_DATA),YES)
++$(1)-install-data: $(1)-build $$($(2)_TARGET_INSTALL_DATA) else
++$(1)-install-data:
++endif
++
+ ifeq ($$($(2)_INSTALL_STAGING),YES)
+ $(1)-install-staging: $(1)-build $$($(2)_TARGET_INSTALL_STAGING)  else @@
+-350,6 +377,7 @@ $(1)-dirclean:  $$($(2)_TARGET_DIRCLEAN)
+ 
+ # define the PKG variable for all targets, containing the  # uppercase
+package variable prefix
++$$($(2)_TARGET_INSTALL_DATA)  PKG=$(2)
+ $$($(2)_TARGET_INSTALL_TARGET):  PKG=$(2)
+ $$($(2)_TARGET_INSTALL_STAGING): PKG=$(2)
+ $$($(2)_TARGET_BUILD):   PKG=$(2)
 
  
+and changed package Makefile as below (for pcmand fm)
+ 
+#############################################################
+#
+# pcmanfm
+#
+#############################################################
+PCMANFM_VERSION = 0.3.9.98
+PCMANFM_SOURCE = pcmanfm-$(PCMANFM_VERSION).tar.gz PCMANFM_SITE =
+http://internap.dl.sourceforge.net/sourceforge/pcmanfm
+PCMANFM_AUTORECONF = NO
+PCMANFM_INSTALL_STAGING = NO
+PCMANFM_INSTALL_TARGET = YES
+PCMANFM_INSTALL_DATA = YES
+ 
+PCMANFM_CONF_ENV = PKG_CONFIG_PATH=$(STAGING_DIR)/usr/lib/pkgconfig
+PCMANFM_CONF_OPT = --disable-hal
+ 
+PCMANFM_DEPENDENCIES = uclibc libgtk2 gamin startup-notification
+ 
+$(eval $(call AUTOTARGETS,package,pcmanfm))
 
----------------------------------------------------------------------- 
- roeme - 05-07-08 12:39  
----------------------------------------------------------------------- 
-Python seems to have cross-compilation support (see also:
-http://mail.python.org/pipermail/patches/2004-October/016312.html )
-
-However, it's not used: 
-(snip)
-checking whether we are cross compiling... no
-(/snip)
-
-(I might be off-track here, but maybe this is of some use to the
-developers) 
-
-Issue History 
-Date Modified   Username       Field                    Change               
-====================================================================== 
-05-07-08 11:01  roeme          New Issue                                    
-05-07-08 11:01  roeme          Status                   new => assigned     
-05-07-08 11:01  roeme          Assigned To               => buildroot       
-05-07-08 11:37  bernhardf      Note Added: 0007474                          
-05-07-08 12:04  roeme          Note Added: 0007484                          
-05-07-08 12:28  roeme          Note Edited: 0007484                         
-05-07-08 12:39  roeme          Note Added: 0007494                          
-======================================================================
+ 
+Bu during make, $(BUILD_DIR)/%/.stamp_target_data_installed isnt called and
+hence make install-data isn't accomplished.
+ 
+I am not so good in editing makefile.autotools.in file. Kindly correct me
+and guide me to update the same.
+ 
+I will try few steps for second option and reply asap
+ 
+Thanks in advance
+ 
+Regards
+Gururaja
+-- 
+View this message in context: http://www.nabble.com/Need-help-adding-updating-Makefile.autotools.in-tp17117160p17117160.html
+Sent from the BuildRoot mailing list archive at Nabble.com.
