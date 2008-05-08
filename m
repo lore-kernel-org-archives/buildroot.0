@@ -1,47 +1,59 @@
-From: Arun Reddy <reddyac@gmail.com>
-Date: Thu, 8 May 2008 09:08:15 -0700
-Subject: [Buildroot] Bash patches not working? (bash32-025 and up)
-In-Reply-To: <326f33790805080640g6f9b4c6av67b884767fea397@mail.gmail.com>
-References: <326f33790805071819n32858557o187314db62ce5b26@mail.gmail.com>
-	<1210223891.4822.142.camel@nigel-x60>
-	<326f33790805072238s6eff6e3em9d789b1f57e598a0@mail.gmail.com>
-	<1210225844.4822.143.camel@nigel-x60>
-	<326f33790805080640g6f9b4c6av67b884767fea397@mail.gmail.com>
-Message-ID: <326f33790805080908y71905f83k713d6895a63d32fa@mail.gmail.com>
+From: Ulf Samuelsson <ulf@atmel.com>
+Date: Thu, 8 May 2008 19:22:47 +0200
+Subject: [Buildroot] svn commit: trunk/buildroot/target:
+	device/Atmellinux
+References: <20080416224548.D5D8F3C617@busybox.net>
+	<d6cda7730805080743v4a298223m5ed424b4ee6c80a4@mail.gmail.com>
+Message-ID: <004401c8b130$9f5fc760$dfc4af0a@Glamdring>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-The way I see it, I don't understand how removing the bash directory would
-even help, considering that buildroot is building bash. It's always going to
-unpack bash-3.2 and recreate that directory.
 
-Does anyone happen to know how I can edit any .mk file properly to retrieve
-these packages? I just don't understand why these patches are failing. Thank
-you for all the help.
 
-On Thu, May 8, 2008 at 6:40 AM, Arun Reddy <reddyac@gmail.com> wrote:
+>> @@ -153,29 +149,16 @@
+>>  # BZIMAGE
+>>  ifeq ($(LINUX26_FORMAT),bzImage)
+>>  LINUX26_BINLOC:=arch/$(KERNEL_ARCH)/boot/bzImage
+>> -KERNEL_EXT:=
+>> +KERNEL_EXT:=.bz
+>>  endif
+>
+> I have never seen any distro doing this. Why?
+>
+>>  # -----------------------------------------------------------------------------
+>>  # File name for the Linux kernel binary
+>> -ifeq ($(LINUX26_FORMAT),uImage)
+>> -LINUX26_KERNEL_NAME:="uImage"
+>> -endif
+>> -ifeq ($(LINUX26_FORMAT),bzImage)
+>> -LINUX26_KERNEL_NAME:="bzImage"
+>> -endif
+>> -ifeq ($(LINUX26_FORMAT),vmlinux)
+>> -LINUX26_KERNEL_NAME:="vmlinux"
+>> -endif
+>> -ifeq ($(LINUX26_FORMAT),zImage)
+>> -LINUX26_KERNEL_NAME:="zImage"
+>> -endif
+>> -ifeq ($(LINUX26_FORMAT),custom)
+>> 
+>> LINUX26_KERNEL_NAME:=$(BOARD_NAME)-linux-$(LINUX26_VERSION)-$(DATE)$(KERNEL_EXT)
+>> -endif
+>
+> Why on Earth did you remove John's changes from May 6?
 
-> It seems I am still running into the same problem. I removed bash-3.2 and
-> ran make, but found the same error, so I did a make clean first then built
-> again, and I see the same error. Even the bash-3.2 folder appears again. Is
-> there something else? A setting within buildroot's menuconfig perhaps?
->
->
-> On Wed, May 7, 2008 at 10:50 PM, Nigel Kukard <nkukard@lbsd.net> wrote:
->
->>
->> > Are you suggesting that I remove the ~/buildroot/build_arm/bash-3.2
->> > directory?
->>
->> Yep.
->>
->> -N
->>
->
->
--------------- next part --------------
-An HTML attachment was scrubbed...
-URL: http://busybox.net/lists/buildroot/attachments/20080508/2b391f6d/attachment.htm 
+One of the reasons I had to create the advanced linux configuration in 
+buildroot
+was that I wanted to be able to store multiple kernel images in the same 
+directory.
+John's patch makes this impossible and also makes the image name 
+incompatible
+with the automatically generated scripts which downloads the kernel to the 
+target.
+
+$(BOARD_NAME) needs to be changed to $(PROJECT) though.
+
+Best Regards
+Ulf Samuelsson
