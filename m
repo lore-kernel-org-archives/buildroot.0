@@ -1,34 +1,32 @@
-From: Hamish Moffatt <hamish@cloud.net.au>
-Date: Thu, 8 May 2008 10:27:16 +1000
-Subject: [Buildroot] buildroot - python problem
-In-Reply-To: <079f01c8b054$166a3620$060514ac@atmel.com>
-References: <223E6519BDCAC74695BEE9D163F8E6592218AB@oakleaf10.oakleafconsultancy.com>
-	<c166aa9f0805070734h10591bf3sbdf6c6b5bc696c04@mail.gmail.com>
-	<079f01c8b054$166a3620$060514ac@atmel.com>
-Message-ID: <20080508002716.GB5014@cloud.net.au>
+From: Ulf Samuelsson <ulf@atmel.com>
+Date: Thu, 08 May 2008 02:43:08 +0200
+Subject: [Buildroot] AVR32 toolchain
+Message-ID: <1210207388.2385.6.camel@elrond.atmel.sweden>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Wed, May 07, 2008 at 05:07:18PM +0200, Ulf Samuelsson wrote:
-> The python.mk looks pretty unclean to me.
-> Should not the host python be built in the toolchain directory,
-> and the result moved to STAGING_DIR?
-> Then it could be easily be used for other stuff as well.
+I checked if I could build with the new gcc-4.2.2 /binutils/gdb-4.7.1
 
-I'm using the python package here and never saw the problem reported in
-this thread. Your suggestion of installing properly into $STAGING_DIR
-seems reasonable though.
+My patches for buildroot are at
+ftp://www.at91.com/pub/buildroot/avr32-tools-20080508.patch
+287 kB so I did not want to send to the list.
 
-I am planning to update the package for Python 2.5 soon so I will fix
-that up at the same time. Next week hopefully.
+The build of gcc-4.2.2 at least completes.
+The binutils fails, complaining about building for
+i386-pc-linux-gnu.
+gdb also fails.
 
-Changing versions might break some people's code, so it may be necessary
-to support multiple versions and allow the user to choose. Do you other
-Python users have any comments on this?
+Some patches will be duplicated with the patches in the toolchain
+directory, but they should go away in a final version.
 
-Hamish
 -- 
-Hamish Moffatt VK3SB <hamish@debian.org> <hamish@cloud.net.au>
+Best Regards
+Ulf Samuelsson
+Atmel Nordic AB
+Mail: Box 2033, 174 50 Sundbyberg
+Visit:Kavalleriv?gen 24, 174 58 Sundbyberg
+Phone: +46 8 441 54 22, GSM: +46 706 22 44 57
+eMail: ulf at atmel.com
