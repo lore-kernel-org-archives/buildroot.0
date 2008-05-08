@@ -1,39 +1,33 @@
-From: Arnar Mar Sig <antab@valka.is>
-Date: Thu, 8 May 2008 13:23:07 +0000
-Subject: [Buildroot] make clean;make fails
-In-Reply-To: <B44D4D5BF344094DABB900C4E0F6E353016EB1F1FE@srv02.nortechonline.net>
-References: <B44D4D5BF344094DABB900C4E0F6E353016EB1F1FE@srv02.nortechonline.net>
-Message-ID: <DF151FE7-5E4F-4604-9F3D-DDC5F48E2319@valka.is>
+From: Arun Reddy <reddyac@gmail.com>
+Date: Thu, 8 May 2008 06:40:50 -0700
+Subject: [Buildroot] Bash patches not working? (bash32-025 and up)
+In-Reply-To: <1210225844.4822.143.camel@nigel-x60>
+References: <326f33790805071819n32858557o187314db62ce5b26@mail.gmail.com>
+	<1210223891.4822.142.camel@nigel-x60>
+	<326f33790805072238s6eff6e3em9d789b1f57e598a0@mail.gmail.com>
+	<1210225844.4822.143.camel@nigel-x60>
+Message-ID: <326f33790805080640g6f9b4c6av67b884767fea397@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+It seems I am still running into the same problem. I removed bash-3.2 and
+ran make, but found the same error, so I did a make clean first then built
+again, and I see the same error. Even the bash-3.2 folder appears again. Is
+there something else? A setting within buildroot's menuconfig perhaps?
 
-On May 8, 2008, at 1:01 PM, Hodgson, Simon wrote:
+On Wed, May 7, 2008 at 10:50 PM, Nigel Kukard <nkukard@lbsd.net> wrote:
 
-> Hi There,
 >
-> I'm trying to remove some packages from my buildroot to free up some  
-> diskspace.
+> > Are you suggesting that I remove the ~/buildroot/build_arm/bash-3.2
+> > directory?
 >
-> First, I noticed if I do 'make menuconfig' remove the packages then  
-> 'make' they don't actually get removed from the rootfs disk image.
-There is no standard deinstall/remove for packages in buildroot (that  
-I know off), some packages have rules to remove them, but not all.
-
-> So then I thought I'd try 'make clean', 'make' but it would appear  
-> this doesn't put all the necessary stuff into project_build_arm/ 
-> at91sam9260dfc/root/ (e.g. /usr/bin directory is missing, /etc/ 
-> shadow file is missing amongst others)
+> Yep.
 >
-> Is this is bug in the buildroot system, or something I'm doing wrong?
-/etc/shadow and most /etc files are installed from the target_skelaton  
-you are using, and that depends on the Device target you are building  
-for.
-/usr/bin is only created if needed by packages, so if it isin't there,  
-no packages needed it.
-
-
-Arnar Mar Sig
+> -N
+>
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: http://busybox.net/lists/buildroot/attachments/20080508/6a5d0373/attachment.htm 
