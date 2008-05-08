@@ -1,33 +1,33 @@
-From: Arun Reddy <reddyac@gmail.com>
-Date: Thu, 8 May 2008 06:40:50 -0700
-Subject: [Buildroot] Bash patches not working? (bash32-025 and up)
-In-Reply-To: <1210225844.4822.143.camel@nigel-x60>
-References: <326f33790805071819n32858557o187314db62ce5b26@mail.gmail.com>
-	<1210223891.4822.142.camel@nigel-x60>
-	<326f33790805072238s6eff6e3em9d789b1f57e598a0@mail.gmail.com>
-	<1210225844.4822.143.camel@nigel-x60>
-Message-ID: <326f33790805080640g6f9b4c6av67b884767fea397@mail.gmail.com>
+From: Will Wagner <will_wagner@carallon.com>
+Date: Thu, 08 May 2008 14:43:22 +0100
+Subject: [Buildroot] make clean;make fails
+In-Reply-To: <B44D4D5BF344094DABB900C4E0F6E353016EB1F1FE@srv02.nortechonline.net>
+References: <B44D4D5BF344094DABB900C4E0F6E353016EB1F1FE@srv02.nortechonline.net>
+Message-ID: <4823037A.3000400@carallon.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-It seems I am still running into the same problem. I removed bash-3.2 and
-ran make, but found the same error, so I did a make clean first then built
-again, and I see the same error. Even the bash-3.2 folder appears again. Is
-there something else? A setting within buildroot's menuconfig perhaps?
+<snip>
+> So then I thought I'd try 'make clean', 'make' but it would appear this doesn't put all the necessary stuff into project_build_arm/at91sam9260dfc/root/ (e.g. /usr/bin directory is missing, /etc/shadow file is missing amongst others)
+> 
+> Is this is bug in the buildroot system, or something I'm doing wrong?
+> 
 
-On Wed, May 7, 2008 at 10:50 PM, Nigel Kukard <nkukard@lbsd.net> wrote:
+I have also found that this leaves you with a non-working buildroot. I 
+think it is a bug but have never had the time to investigate exactly 
+what is broken.
 
->
-> > Are you suggesting that I remove the ~/buildroot/build_arm/bash-3.2
-> > directory?
->
-> Yep.
->
-> -N
->
--------------- next part --------------
-An HTML attachment was scrubbed...
-URL: http://busybox.net/lists/buildroot/attachments/20080508/6a5d0373/attachment.htm 
+Doing a make dirclean as well before the make seems to get you a working 
+again.
+
+Will
+
+-- 
+------------------------------------------------------------------------
+Will Wagner                                     will_wagner at carallon.com
+Senior Project Engineer                  Office Tel: +44 (0)20 7371 2032
+Carallon Ltd, Studio G20, Shepherds Building, Rockley Rd, London W14 0DA
+------------------------------------------------------------------------
