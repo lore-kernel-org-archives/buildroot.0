@@ -1,49 +1,38 @@
-From: Hamish Moffatt <hamish@cloud.net.au>
-Date: Thu, 8 May 2008 10:58:02 +1000
-Subject: [Buildroot] buildroot - python problem
-In-Reply-To: <1210206686.29431.8.camel@elrond.atmel.sweden>
-References: <223E6519BDCAC74695BEE9D163F8E6592218AB@oakleaf10.oakleafconsultancy.com>
-	<c166aa9f0805070734h10591bf3sbdf6c6b5bc696c04@mail.gmail.com>
-	<079f01c8b054$166a3620$060514ac@atmel.com>
-	<20080508002716.GB5014@cloud.net.au>
-	<1210206686.29431.8.camel@elrond.atmel.sweden>
-Message-ID: <20080508005802.GA6115@cloud.net.au>
+From: Arun Reddy <reddyac@gmail.com>
+Date: Wed, 7 May 2008 18:19:24 -0700
+Subject: [Buildroot] Bash patches not working? (bash32-025 and up)
+Message-ID: <326f33790805071819n32858557o187314db62ce5b26@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Thu, May 08, 2008 at 02:31:26AM +0200, Ulf Samuelsson wrote:
-> tor 2008-05-08 klockan 10:27 +1000 skrev Hamish Moffatt:
-> > On Wed, May 07, 2008 at 05:07:18PM +0200, Ulf Samuelsson wrote:
-> > > The python.mk looks pretty unclean to me.
-> > > Should not the host python be built in the toolchain directory,
-> > > and the result moved to STAGING_DIR?
-> > > Then it could be easily be used for other stuff as well.
-> > 
-> > I'm using the python package here and never saw the problem reported in
-> > this thread. Your suggestion of installing properly into $STAGING_DIR
-> > seems reasonable though.
-> > 
-> > I am planning to update the package for Python 2.5 soon so I will fix
-> > that up at the same time. Next week hopefully.
-> > 
-> > Changing versions might break some people's code, so it may be necessary
-> > to support multiple versions and allow the user to choose. Do you other
-> > Python users have any comments on this?
-> 
-> Here is a start, not tested yet...
+Continuing on with my ARM926T variant build, I run into a bit of a problem
+with the BASH patches being applied.
 
-Thanks. I think that for a host-python in $STAGING_DIR to be useful for
-more than just building target-python, you need to build/install more
-than just the python and pgen binaries. It needs to install the standard
-library (some of which has to be compiled).
+bash32-001 through bash32-024 are successful. But starting with bash32-025 I
+am getting problems as shown here:
 
-I don't think "make install" installs the host pgen (required to 
-cross-compile python) though so we can't just replace the copy of the
-host python/pgen binaries with "make install".
+http://img329.imageshack.us/img329/4510/bashpatchnn1.jpg
 
-Hamish
--- 
-Hamish Moffatt VK3SB <hamish@debian.org> <hamish@cloud.net.au>
+It seems that the patch files under ~/buildroot/package/bash/ have lines
+that show the location of specific files. For example, bash32-025 shows:
+lib/readline/input.c, while bash32-024 and before show locations such as
+bash-3.2/lib/readline/display.c
+
+The difference is that "bash-3.2" location in the directory name. It is
+possible that the correct patch can't be found for 25 and up because of
+this. The thing is I can't edit these patch files because they are
+overwrriten during the build, which means they are copied or downloaded from
+somwhere. I looked at the bash patch fixes and the latest ones seem to fix
+25 and up, and this was done 6 days ago. So I simply upgraded my snapshot to
+the latest one available- May 7th 2008. But I build again and still run into
+the same problem.
+
+http://buildroot.uclibc.org/cgi-bin/viewcvs.cgi/trunk/buildroot/package/bash/
+
+Anyone know what I can do to fix this? Any help is of course appreciated.
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: http://busybox.net/lists/buildroot/attachments/20080507/ec46e29d/attachment.htm 
