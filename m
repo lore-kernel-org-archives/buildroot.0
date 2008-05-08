@@ -1,42 +1,45 @@
-From: =?ISO-8859-1?Q?Thiago_A._Corr=EAa?= <thiago.correa@gmail.com>
-Date: Thu, 8 May 2008 11:43:32 -0300
-Subject: [Buildroot] svn commit: trunk/buildroot/target: device/Atmel
-	linux
-In-Reply-To: <20080416224548.D5D8F3C617@busybox.net>
-References: <20080416224548.D5D8F3C617@busybox.net>
-Message-ID: <d6cda7730805080743v4a298223m5ed424b4ee6c80a4@mail.gmail.com>
+From: Roman Bigler <roeme@roeme.ch>
+Date: Thu, 8 May 2008 16:51:44 +0200
+Subject: [Buildroot] Python package broken, Trying to fix, Need hints.
+Message-ID: <A5E553DC-19FF-4F4E-817E-996DA88B2858@roeme.ch>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-> @@ -153,29 +149,16 @@
->  # BZIMAGE
->  ifeq ($(LINUX26_FORMAT),bzImage)
->  LINUX26_BINLOC:=arch/$(KERNEL_ARCH)/boot/bzImage
-> -KERNEL_EXT:=
-> +KERNEL_EXT:=.bz
->  endif
+Hello List,
 
-I have never seen any distro doing this. Why?
+in the last two days I've tried to use the python package, however, it  
+fails to build.
+The build process barfs the following at me:
+<snip>
+make[1]: Leaving directory `/home/roeme/minim/buildroot/buildroot/ 
+build_i586/Python-2.4.2'
+/bin/sh: line 8: -/usr/bin/make: No such file or directory
+make: *** [/home/roeme/minim/buildroot/buildroot/build_i586/ 
+Python-2.4.2/.hostpython] Error 127
+<snap>
 
->  # -----------------------------------------------------------------------------
->  # File name for the Linux kernel binary
-> -ifeq ($(LINUX26_FORMAT),uImage)
-> -LINUX26_KERNEL_NAME:="uImage"
-> -endif
-> -ifeq ($(LINUX26_FORMAT),bzImage)
-> -LINUX26_KERNEL_NAME:="bzImage"
-> -endif
-> -ifeq ($(LINUX26_FORMAT),vmlinux)
-> -LINUX26_KERNEL_NAME:="vmlinux"
-> -endif
-> -ifeq ($(LINUX26_FORMAT),zImage)
-> -LINUX26_KERNEL_NAME:="zImage"
-> -endif
-> -ifeq ($(LINUX26_FORMAT),custom)
->  LINUX26_KERNEL_NAME:=$(BOARD_NAME)-linux-$(LINUX26_VERSION)-$(DATE)$(KERNEL_EXT)
-> -endif
+The error is reproduceable.
 
-Why on Earth did you remove John's changes from May 6?
+I tried the follow so far, with no luck:
+- disabling all python modules
+- disabling some python modules
+- make distclean; make
+- creating a python package from scratch (by using this doc: http://buildroot.uclibc.org/buildroot.html#add_software) 
+,
+   this brought other errors, so I bailed out on that.
+
+I filed a bugreport (#3274, see http://bugs.busybox.net/view.php? 
+id=3274 ) and since I'm
+in a thight schedule, set out to fix it by myself, despite being a  
+bloody novice.
+
+- Does it take less effort to create a new package instead of fixing  
+the current one?
+- If yes, can somebody give me some hints which files to look at/into  
+to fix it?
+- If I can help out with anything else, please let me know.
+
+Thanks in advance for any help!
