@@ -1,33 +1,43 @@
-From: Will Wagner <will_wagner@carallon.com>
-Date: Thu, 08 May 2008 14:43:22 +0100
-Subject: [Buildroot] make clean;make fails
-In-Reply-To: <B44D4D5BF344094DABB900C4E0F6E353016EB1F1FE@srv02.nortechonline.net>
-References: <B44D4D5BF344094DABB900C4E0F6E353016EB1F1FE@srv02.nortechonline.net>
-Message-ID: <4823037A.3000400@carallon.com>
+From: =?ISO-8859-1?Q?Thiago_A._Corr=EAa?= <thiago.correa@gmail.com>
+Date: Thu, 8 May 2008 11:03:07 -0300
+Subject: [Buildroot] AVR32 toolchain
+In-Reply-To: <1210207388.2385.6.camel@elrond.atmel.sweden>
+References: <1210207388.2385.6.camel@elrond.atmel.sweden>
+Message-ID: <d6cda7730805080703kc5d5a38gbf0a5b284c41cf2d@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-<snip>
-> So then I thought I'd try 'make clean', 'make' but it would appear this doesn't put all the necessary stuff into project_build_arm/at91sam9260dfc/root/ (e.g. /usr/bin directory is missing, /etc/shadow file is missing amongst others)
-> 
-> Is this is bug in the buildroot system, or something I'm doing wrong?
-> 
+This configuration is working at the buildroot.googlecode.com, using
+buildroot toolchain patched with patches from avr32linux.com
 
-I have also found that this leaves you with a non-working buildroot. I 
-think it is a bug but have never had the time to investigate exactly 
-what is broken.
-
-Doing a make dirclean as well before the make seems to get you a working 
-again.
-
-Will
-
--- 
-------------------------------------------------------------------------
-Will Wagner                                     will_wagner at carallon.com
-Senior Project Engineer                  Office Tel: +44 (0)20 7371 2032
-Carallon Ltd, Studio G20, Shepherds Building, Rockley Rd, London W14 0DA
-------------------------------------------------------------------------
+On Wed, May 7, 2008 at 9:43 PM, Ulf Samuelsson <ulf@atmel.com> wrote:
+> I checked if I could build with the new gcc-4.2.2 /binutils/gdb-4.7.1
+>
+> My patches for buildroot are at
+> ftp://www.at91.com/pub/buildroot/avr32-tools-20080508.patch
+> 287 kB so I did not want to send to the list.
+>
+> The build of gcc-4.2.2 at least completes.
+> The binutils fails, complaining about building for
+> i386-pc-linux-gnu.
+> gdb also fails.
+>
+> Some patches will be duplicated with the patches in the toolchain
+> directory, but they should go away in a final version.
+>
+> --
+> Best Regards
+> Ulf Samuelsson
+> Atmel Nordic AB
+> Mail: Box 2033, 174 50 Sundbyberg
+> Visit:Kavalleriv?gen 24, 174 58 Sundbyberg
+> Phone: +46 8 441 54 22, GSM: +46 706 22 44 57
+> eMail: ulf at atmel.com
+>
+> _______________________________________________
+> buildroot mailing list
+> buildroot at uclibc.org
+> http://busybox.net/mailman/listinfo/buildroot
