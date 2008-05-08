@@ -1,129 +1,27 @@
-From: Ulf Samuelsson <ulf@atmel.com>
-Date: Fri, 09 May 2008 00:09:18 +0200
-Subject: [Buildroot] [PATCH] Simple kernel name
-Message-ID: <1210284558.8562.3.camel@elrond.atmel.sweden>
+From: Arun Reddy <reddyac@gmail.com>
+Date: Thu, 8 May 2008 15:49:19 -0700
+Subject: [Buildroot] ARM build error with llseek.c
+Message-ID: <326f33790805081549v3afdc776u56cdeb8e57167782@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Here is a complete patch which will allow both a simple name
-and the current name of the linux kernel.
-It also changes $(BOARD_NAME) -> $(PROJECT) which is more relevant
+Hi everyone,
 
+I am continuing with my ARM build and I ran into a problem with llseek.c:
 
-Index: target/linux/Makefile.in.advanced
-===================================================================
---- target/linux/Makefile.in.advanced	(revision 21954)
-+++ target/linux/Makefile.in.advanced	(arbetskopia)
-@@ -128,43 +128,72 @@
- # VMLINUX
- ifeq ($(LINUX26_FORMAT),vmlinux)
- LINUX26_BINLOC:=$(LINUX26_FORMAT)
--KERNEL_EXT:=
- endif
- 
- # --------------
- # UIMAGE
- ifeq ($(LINUX26_FORMAT),uImage)
- LINUX26_BINLOC:=arch/$(KERNEL_ARCH)/boot/$(LINUX26_FORMAT)
--KERNEL_EXT:=.gz
- endif
- 
- # --------------
- # ZIMAGE
- ifeq ($(LINUX26_FORMAT),zImage)
- LINUX26_BINLOC:=arch/$(KERNEL_ARCH)/boot/$(LINUX26_FORMAT)
--KERNEL_EXT:=.z
- endif
- 
- # --------------
- # BZIMAGE
- ifeq ($(LINUX26_FORMAT),bzImage)
- LINUX26_BINLOC:=arch/$(KERNEL_ARCH)/boot/bzImage
--KERNEL_EXT:=.bz
- endif
- 
- endif
- 
-+# --------------
-+# VMLINUX
-+ifeq ($(LINUX26_FORMAT),vmlinux)
-+KERNEL_EXT:=
-+endif
-+
-+# --------------
-+# UIMAGE
-+ifeq ($(LINUX26_FORMAT),uImage)
-+KERNEL_EXT:=.gz
-+endif
-+
-+# --------------
-+# ZIMAGE
-+ifeq ($(LINUX26_FORMAT),zImage)
-+KERNEL_EXT:=.z
-+endif
-+
-+# --------------
-+# BZIMAGE
-+ifeq ($(LINUX26_FORMAT),bzImage)
-+KERNEL_EXT:=.bz
-+endif
-+
- #
------------------------------------------------------------------------------
- # File name for the Linux kernel binary
--LINUX26_KERNEL_NAME:=
-$(BOARD_NAME)-linux-$(LINUX26_VERSION)-$(DATE)$(KERNEL_EXT)
- 
-+ifeq ($(strip $(subst ",,$(BR2_LINUX_NAME_SIMPLE))),y)
-+#"))
-+LINUX26_KERNEL_NAME:=$(strip $(subst ",,$(LINUX26_FORMAT)))
-+#"))
-+else
-+LINUX26_KERNEL_NAME:=
-$(PROJECT)-linux-$(LINUX26_VERSION)-$(DATE)$(KERNEL_EXT)
-+endif
- 
-+
-+
-+
- ifeq ($(BOARD_NAME),)
- BOARD_NAME=$(ARCH)
- endif
- 
- ifndef LINUX26_KERNEL
--LINUX26_KERNEL:=
-$(BINARIES_DIR)/$(BOARD_NAME)-linux-$(LINUX26_VERSION)-$(DATE)$(KERNEL_EXT)
-+LINUX26_KERNEL:=$(BINARIES_DIR)/$(LINUX26_KERNEL_NAME)
- endif
- 
- # for packages that need it
-Index: target/linux/Config.in.advanced
-===================================================================
---- target/linux/Config.in.advanced	(revision 21954)
-+++ target/linux/Config.in.advanced	(arbetskopia)
-@@ -540,6 +540,13 @@
- 	  board-imposed value by passing LINUX26_FORMAT=<string> to
- 	  make.
- 
-+config BR2_LINUX_NAME_SIMPLE
-+	bool "Use traditional Image name"
-+	default n
-+	depends BR2_PACKAGE_LINUX
-+	help
-+	  Use the traditional Image name like uImage, bzImage etc.
-+
- menu "Destinations for linux kernel binaries"
- 
- config BR2_LINUX_COPYTO_ROOTFS
+http://img211.imageshack.us/img211/6387/e2fsprogsph4.jpg
 
--- 
-Best Regards
-Ulf Samuelsson
-Atmel Nordic AB
-Mail: Box 2033, 174 50 Sundbyberg
-Visit:Kavalleriv?gen 24, 174 58 Sundbyberg
-Phone: +46 8 441 54 22, GSM: +46 706 22 44 57
-eMail: ulf at atmel.com
+I found that this problem was reported before:
+http://bugs.busybox.net/view.php?id=1548
+
+and the solution seemed to involve enabling large file support in
+buildroot's configuration. I did this, but still get the same error. Does
+anyone know why LFS needs to be activated and in my case, why it doesn't
+resolve this issue? Any help on this problem would be appreciated. Thank
+you.
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: http://busybox.net/lists/buildroot/attachments/20080508/d0bc2df3/attachment.htm 
