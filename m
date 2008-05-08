@@ -1,45 +1,47 @@
-From: Roman Bigler <roeme@roeme.ch>
-Date: Thu, 8 May 2008 16:51:44 +0200
-Subject: [Buildroot] Python package broken, Trying to fix, Need hints.
-Message-ID: <A5E553DC-19FF-4F4E-817E-996DA88B2858@roeme.ch>
+From: Arun Reddy <reddyac@gmail.com>
+Date: Thu, 8 May 2008 09:08:15 -0700
+Subject: [Buildroot] Bash patches not working? (bash32-025 and up)
+In-Reply-To: <326f33790805080640g6f9b4c6av67b884767fea397@mail.gmail.com>
+References: <326f33790805071819n32858557o187314db62ce5b26@mail.gmail.com>
+	<1210223891.4822.142.camel@nigel-x60>
+	<326f33790805072238s6eff6e3em9d789b1f57e598a0@mail.gmail.com>
+	<1210225844.4822.143.camel@nigel-x60>
+	<326f33790805080640g6f9b4c6av67b884767fea397@mail.gmail.com>
+Message-ID: <326f33790805080908y71905f83k713d6895a63d32fa@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello List,
+The way I see it, I don't understand how removing the bash directory would
+even help, considering that buildroot is building bash. It's always going to
+unpack bash-3.2 and recreate that directory.
 
-in the last two days I've tried to use the python package, however, it  
-fails to build.
-The build process barfs the following at me:
-<snip>
-make[1]: Leaving directory `/home/roeme/minim/buildroot/buildroot/ 
-build_i586/Python-2.4.2'
-/bin/sh: line 8: -/usr/bin/make: No such file or directory
-make: *** [/home/roeme/minim/buildroot/buildroot/build_i586/ 
-Python-2.4.2/.hostpython] Error 127
-<snap>
+Does anyone happen to know how I can edit any .mk file properly to retrieve
+these packages? I just don't understand why these patches are failing. Thank
+you for all the help.
 
-The error is reproduceable.
+On Thu, May 8, 2008 at 6:40 AM, Arun Reddy <reddyac@gmail.com> wrote:
 
-I tried the follow so far, with no luck:
-- disabling all python modules
-- disabling some python modules
-- make distclean; make
-- creating a python package from scratch (by using this doc: http://buildroot.uclibc.org/buildroot.html#add_software) 
-,
-   this brought other errors, so I bailed out on that.
-
-I filed a bugreport (#3274, see http://bugs.busybox.net/view.php? 
-id=3274 ) and since I'm
-in a thight schedule, set out to fix it by myself, despite being a  
-bloody novice.
-
-- Does it take less effort to create a new package instead of fixing  
-the current one?
-- If yes, can somebody give me some hints which files to look at/into  
-to fix it?
-- If I can help out with anything else, please let me know.
-
-Thanks in advance for any help!
+> It seems I am still running into the same problem. I removed bash-3.2 and
+> ran make, but found the same error, so I did a make clean first then built
+> again, and I see the same error. Even the bash-3.2 folder appears again. Is
+> there something else? A setting within buildroot's menuconfig perhaps?
+>
+>
+> On Wed, May 7, 2008 at 10:50 PM, Nigel Kukard <nkukard@lbsd.net> wrote:
+>
+>>
+>> > Are you suggesting that I remove the ~/buildroot/build_arm/bash-3.2
+>> > directory?
+>>
+>> Yep.
+>>
+>> -N
+>>
+>
+>
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: http://busybox.net/lists/buildroot/attachments/20080508/2b391f6d/attachment.htm 
