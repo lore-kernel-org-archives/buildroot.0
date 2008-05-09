@@ -1,107 +1,33 @@
-From: Muktabh Anchlia <m_anchlia@hotmail.com>
-Date: Fri, 9 May 2008 19:33:31 +0000
-Subject: [Buildroot] Application execution fails (John Voltz)
-In-Reply-To: <mailman.1.1210359603.12379.buildroot@uclibc.org>
-References: <mailman.1.1210359603.12379.buildroot@uclibc.org>
-Message-ID: <BAY107-W48974804239AEE2B1C2E559DD30@phx.gbl>
+From: James Ronald <james.ronald@gmail.com>
+Date: Fri, 9 May 2008 18:50:30 -0400
+Subject: [Buildroot] verifying buildroot build options for uClibc and GCC
+Message-ID: <10bd9830805091550j5b4794fbn3406af9bc962ebec@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+ I am trying to get Linux 2.6.25 running on some older hardware that
+uses a Sharp LH7A400 ARM 922T processor (currently running Linux
+2.4.20).  The kernel uncompresses and seems to even be executing.
+Busybox init prints it's Starting Init message but that is about it.
+Nothing in the inittab seems to have executed.  Using the Magic SysRq
+key and option "t" shows that init is running and even switching.
+Replacing Init with simple programs works fine for a number of things
+such as read, write, malloc and floating point.  However, both sprintf
+and printf lock up, without any indication as to why. Some Googling
+about points has me suspecting that perhaps Buildroot is not passing
+the correct options to correctly build ggc or uClibc or such.  I'm
+currently using buildroot-21758, uClibc 0.9.29, binutils 2.18.50.0.1,
+GCC 4.2.1 and Busybox 1.7.2.  Is there a way that I can verify the
+options that were actually used to build uClibc and gcc?  I logged a
+copy of the make for Buildroot building everything but was unable to
+find which options where actually used to build GCC or uClibc.
 
+Also, if there is anyone else on the list running a 2.6.2x kernel on a
+Sharp LH7A400 or LH7A404 I would love to hear words of encouragement
+from you.
 
-Hi John,
-I still get the same error...
-
-" I don't take sides, just the racing line "
-
-> 
-> Message: 1
-> Date: Fri, 9 May 2008 17:46:31 +0000
-> From: Muktabh Anchlia <m_anchlia@hotmail.com>
-> Subject: [Buildroot] Application execution fails
-> To: <buildroot@uclibc.org>
-> Message-ID: <BAY107-W3500673BC0EFE93C658FB49DD30@phx.gbl>
-> Content-Type: text/plain; charset="iso-8859-1"
-> 
-> 
-> Hello,
-> I compiled a cross tool chain for AMD geode processor using buildroot. I wanted to test the cross tools, so wrote a simple hello world application, exported the ...staging-dir/usr/bin/ path and compiled the C code using i686-linux-uclibc-gcc. 
-> 
-> When I run this program on the host machine, it gives me "bad ELF interpreter" as expected. But when I run it on the target, it gives me the following error
-> "syntax error: "(" unexpected"
-> I couldn't figure out where I am going wrong.
-> Any help would be appreciated.
-> 
-> Thanks
-> Muktabh
-> 
-> " I don't take sides, just the racing line "
-> -------------- next part --------------
-> An HTML attachment was scrubbed...
-> URL: http://busybox.net/lists/buildroot/attachments/20080509/8ff756a8/attachment.html 
-> 
-> ------------------------------
-> 
-> Message: 2
-> Date: Fri, 9 May 2008 14:26:43 -0400
-> From: "John Voltz" <john.voltz@gmail.com>
-> Subject: Re: [Buildroot] Application execution fails
-> To: "Buildroot List" <buildroot@uclibc.org>
-> Message-ID:
-> 	<46a136670805091126t2047cf96gef83119ccd45ab13@mail.gmail.com>
-> Content-Type: text/plain; charset="iso-8859-1"
-> 
-> try:
-> 
-> /path/to/buildroot/build_i686/staging_dir/usr/bin/i686-linux-uclibc-gcc
-> -I/path/to/buildroot/build_i686/staging_dir/usr/include
-> -L/path/to/buildroot/build_i686/staging_dir/usr/lib -lc hello_world.c -o
-> hello_world
-> 
-> 
-> 
-> On Fri, May 9, 2008 at 1:46 PM, Muktabh Anchlia <m_anchlia@hotmail.com>
-> wrote:
-> 
-> >  Hello,
-> > I compiled a cross tool chain for AMD geode processor using buildroot. I
-> > wanted to test the cross tools, so wrote a simple hello world application,
-> > exported the ...staging-dir/usr/bin/ path and compiled the C code using
-> > i686-linux-uclibc-gcc.
-> >
-> > When I run this program on the host machine, it gives me "bad ELF
-> > interpreter" as expected. But when I run it on the target, it gives me the
-> > following error
-> > "syntax error: "(" unexpected"
-> > I couldn't figure out where I am going wrong.
-> > Any help would be appreciated.
-> >
-> > Thanks
-> > Muktabh
-> >
-> > *" I don't take sides, just the racing line "*
-> >
-> > _______________________________________________
-> > buildroot mailing list
-> > buildroot at uclibc.org
-> > http://busybox.net/mailman/listinfo/buildroot
-> >
-> -------------- next part --------------
-> An HTML attachment was scrubbed...
-> URL: http://busybox.net/lists/buildroot/attachments/20080509/d2673767/attachment-0001.htm 
-> 
-> ------------------------------
-> 
-> _______________________________________________
-> buildroot mailing list
-> buildroot at uclibc.org
-> http://busybox.net/mailman/listinfo/buildroot
-> 
-> End of buildroot Digest, Vol 23, Issue 20
-> *****************************************
--------------- next part --------------
-An HTML attachment was scrubbed...
-URL: http://busybox.net/lists/buildroot/attachments/20080509/de0130cb/attachment.htm 
+Thanks,
+James Ronald
