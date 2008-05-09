@@ -1,45 +1,40 @@
-From: bugs at busybox.net <bugs@busybox.net>
-Date: Fri, 9 May 2008 02:32:22 -0700
-Subject: [Buildroot] [buildroot 0003294]: libfuse: config option for kernel
-	module
-Message-ID: <41ddb044088d167d81de87a2a75cdb36@bugs.uclibc.org>
+From: jacmet at uclibc.org <jacmet@uclibc.org>
+Date: Fri,  9 May 2008 03:01:00 -0700 (PDT)
+Subject: [Buildroot] svn commit: trunk/buildroot/package/busybox
+Message-ID: <20080509100100.C2C553C7CE@busybox.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+Author: jacmet
+Date: 2008-05-09 03:00:59 -0700 (Fri, 09 May 2008)
+New Revision: 21956
 
-The following issue has been SUBMITTED. 
-====================================================================== 
-http://busybox.net/bugs/view.php?id=3294 
-====================================================================== 
-Reported By:                rhunger
-Assigned To:                buildroot
-====================================================================== 
-Project:                    buildroot
-Issue ID:                   3294
-Category:                   New Features
-Reproducibility:            always
-Severity:                   feature
-Priority:                   normal
-Status:                     assigned
-====================================================================== 
-Date Submitted:             05-09-2008 02:32 PDT
-Last Modified:              05-09-2008 02:32 PDT
-====================================================================== 
-Summary:                    libfuse: config option for kernel module
-Description: 
-Newer kernels have the kernel module for FUSE already integrated.
-This new configuration option allows to select if the kernel module which
-comes with the libfuse package is build or not.
-====================================================================== 
+Log:
+busybox: bump version
 
-Issue History 
-Date Modified   Username       Field                    Change               
-====================================================================== 
-05-09-08 02:32  rhunger        New Issue                                    
-05-09-08 02:32  rhunger        Status                   new => assigned     
-05-09-08 02:32  rhunger        Assigned To               => buildroot       
-05-09-08 02:32  rhunger        File Added: libfuse.patch                    
-======================================================================
+
+Removed:
+   trunk/buildroot/package/busybox/busybox-1.10.1-completion.patch
+   trunk/buildroot/package/busybox/busybox-1.10.1-echo.patch
+   trunk/buildroot/package/busybox/busybox-1.10.1-hppa.patch
+   trunk/buildroot/package/busybox/busybox-1.10.1-ioctl.patch
+   trunk/buildroot/package/busybox/busybox-1.10.1-mdev.patch
+   trunk/buildroot/package/busybox/busybox-1.10.1-pidof.patch
+   trunk/buildroot/package/busybox/busybox-1.10.1-ssd.patch
+   trunk/buildroot/package/busybox/busybox-1.10.1-tar.patch
+   trunk/buildroot/package/busybox/busybox-1.10.1-taskset.patch
+   trunk/buildroot/package/busybox/busybox-1.10.1-trylink.patch
+
+Modified:
+   trunk/buildroot/package/busybox/Config.in
+
+
+Changeset:
+
+Sorry, the patch is too large to include (1043 lines).
+Please use ViewCVS to see it!
+
+http://uclibc.org/cgi-bin/viewcvs.cgi?view=rev&root=svn&rev=21956
