@@ -1,7 +1,8 @@
-From: bugs at busybox.net <bugs@busybox.net>
-Date: Fri, 9 May 2008 03:07:54 -0700
-Subject: [Buildroot] [buildroot 0003274]: Package Python broken
-Message-ID: <38026ed844eef13adeb9cc669b95169c@bugs.uclibc.org>
+From: Hebbar <gururajakr@sanyo.co.in>
+Date: Fri, 9 May 2008 05:29:32 -0700 (PDT)
+Subject: [Buildroot] x11-input-drivers/xdriver_xf86-input-evdev-1.2.0
+ missing inputproto depends
+Message-ID: <17146898.post@talk.nabble.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -9,155 +10,177 @@ Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
 
-A NOTE has been added to this issue. 
-====================================================================== 
-http://busybox.net/bugs/view.php?id=3274 
-====================================================================== 
-Reported By:                roeme
-Assigned To:                buildroot
-====================================================================== 
-Project:                    buildroot
-Issue ID:                   3274
-Category:                   Architecture Specific
-Reproducibility:            always
-Severity:                   major
-Priority:                   normal
-Status:                     assigned
-====================================================================== 
-Date Submitted:             05-07-2008 11:01 PDT
-Last Modified:              05-09-2008 03:07 PDT
-====================================================================== 
-Summary:                    Package Python broken
-Description: 
-When trying to include the python package, the build process fails with the
-following error:
+Hi,
 
+i successfully built x11 server and i am using it on my arm926ejs based
+board. Now i want to use x11 input driver (specifically
+xdriver_xf86-input-evdev-1.2.0). But the build fails because of missing
+header files (xorg-server.h, xf86Xinput.h )as below.
+
+     What i found was the some of the required header fles from
+xserver_xorg-server directory are copied to staging_dir/usr/include/x11
+directory. and also the pkg-config file for xserver_xorg-server  points to
+staging_dir/usr/include but the x11 files are installed in
+staging_dir/usr/include/x11. 
+
+Kindly let me know how to edit the make file inorder to install all the
+required header files to proper location. If required i can do more testing
+and changes.
+
+TIA
+
+Regards
+Gururaja
+
+make[3]: Entering directory
+`/opt/buildroot/build_arm/xdriver_xf86-input-evdev-1.2.0/src'
+/bin/sh ../libtool --tag=CC   --mode=compile
+/opt/buildroot/build_arm/staging_dir/usr/bin/arm-linux-uclibcgnueabi-gcc -Os 
+-I/opt/buildroot/build_arm/staging_dir/usr/include
+-I/opt/buildroot/build_arm/staging_dir/include
+--sysroot=/opt/buildroot/build_arm/staging_dir/ -isysroot
+/opt/buildroot/build_arm/staging_dir -mtune=arm9tdmi -msoft-float
+-DHAVE_CONFIG_H -I. -I..    -Wall -g -O2 -I
+-I/opt/buildroot/build_arm/staging_dir/usr/include    -I../src -MT
+evdev_drv_la-evdev.lo -MD -MP -MF .deps/evdev_drv_la-evdev.Tpo -c -o
+evdev_drv_la-evdev.lo `test -f 'evdev.c' || echo './'`evdev.c
+ /opt/buildroot/build_arm/staging_dir/usr/bin/arm-linux-uclibcgnueabi-gcc
+-Os -I/opt/buildroot/build_arm/staging_dir/usr/include
+-I/opt/buildroot/build_arm/staging_dir/include
+--sysroot=/opt/buildroot/build_arm/staging_dir/ -isysroot
+/opt/buildroot/build_arm/staging_dir -mtune=arm9tdmi -msoft-float
+-DHAVE_CONFIG_H -I. -I.. -Wall -g -O2 -I
+-I/opt/buildroot/build_arm/staging_dir/usr/include -I../src -MT
+evdev_drv_la-evdev.lo -MD -MP -MF .deps/evdev_drv_la-evdev.Tpo -c evdev.c 
+-fPIC -DPIC -o .libs/evdev_drv_la-evdev.o
+In file included from evdev.c:36:
+../config.h:4:25: error: xorg-server.h: No such file or directory
+In file included from evdev.c:43:
+evdev.h:52:24: error: xf86Xinput.h: No such file or directory
+In file included from evdev.h:74,
+                 from evdev.c:43:
+/opt/buildroot/build_arm/staging_dir/usr/include/X11/extensions/XKBstr.h:77:
+error: expected specifier-qualifier-list before 'Bool'
+/opt/buildroot/build_arm/staging_dir/usr/include/X11/extensions/XKBstr.h:490:
+error: expected specifier-qualifier-list before 'Bool'
+/opt/buildroot/build_arm/staging_dir/usr/include/X11/extensions/XKBstr.h:582:
+error: expected specifier-qualifier-list before 'Bool'
+In file included from evdev.c:43:
+evdev.h:94: error: expected ')' before 'pInfo'
+evdev.h:114: error: expected specifier-qualifier-list before
+'evdev_map_func_f'
+evdev.h:135: error: expected specifier-qualifier-list before
+'evdev_map_func_f'
+evdev.h:148: error: expected specifier-qualifier-list before
+'evdev_map_func_f'
+evdev.h:182: error: expected specifier-qualifier-list before 'Bool'
+evdev.h:200: error: expected ')' before 'device'
+evdev.h:201: error: expected ')' before 'device'
+evdev.h:202: error: expected ')' before 'device'
+evdev.h:203: error: expected ')' before 'pInfo'
+evdev.h:204: error: expected ')' before 'pInfo'
+evdev.h:205: error: expected ')' before 'pInfo'
+evdev.h:206: error: expected ')' before 'pInfo'
+evdev.h:207: error: expected ')' before 'pInfo'
+evdev.h:208: error: expected ')' before 'pInfo'
+evdev.h:210: error: expected ')' before 'device'
+evdev.h:211: error: expected ')' before 'device'
+evdev.h:212: error: expected ')' before 'device'
+evdev.h:213: error: expected ')' before 'pInfo'
+evdev.h:214: error: expected ')' before 'pInfo'
+evdev.h:215: error: expected ')' before 'pInfo'
+evdev.h:216: error: expected ')' before 'pInfo'
+evdev.h:217: error: expected ')' before 'pInfo'
+evdev.h:218: error: expected ')' before 'pInfo'
+evdev.h:220: error: expected ')' before 'device'
+evdev.h:221: error: expected ')' before 'pInfo'
+evdev.h:222: error: expected ')' before 'device'
+evdev.h:223: error: expected ')' before 'device'
+evdev.h:224: error: expected ')' before 'pInfo'
+evdev.h:237: error: expected declaration specifiers or '...' before '*'
+token
+evdev.h:237: error: expected ')' before 'pInfo'
+evdev.h:238: error: expected declaration specifiers or '...' before '*'
+token
+evdev.h:238: error: expected ')' before 'pInfo'
+evdev.h:245: error: expected '=', ',', ';', 'asm' or '__attribute__' before
+'EvdevParseMapToRelAxis'
+evdev.h:249: error: expected '=', ',', ';', 'asm' or '__attribute__' before
+'EvdevParseMapToAbsAxis'
+evdev.h:254: error: expected '=', ',', ';', 'asm' or '__attribute__' before
+'EvdevParseMapToButton'
+evdev.h:259: error: expected '=', ',', ';', 'asm' or '__attribute__' before
+'EvdevParseMapToButtons'
+evdev.h:266: error: expected specifier-qualifier-list before
+'evdev_parse_map_func_f'
+evdev.h:270: error: expected '=', ',', ';', 'asm' or '__attribute__' before
+'EvdevParseMapOption'
+evdev.c:45:18: error: xf86.h: No such file or directory
+evdev.c:47:24: error: xf86Module.h: No such file or directory
+evdev.c:48:23: error: mipointer.h: No such file or directory
+evdev.c:49:24: error: xf86_OSlib.h: No such file or directory
+evdev.c:52:25: error: xf86_OSproc.h: No such file or directory
+evdev.c:54: error: expected ')' before 'device'
+evdev.c:63: error: expected '=', ',', ';', 'asm' or '__attribute__' before
+'evdevGetBits'
+evdev.c:95: error: unknown field 'func' specified in initializer
+evdev.c:95: error: 'EvdevParseMapToRelAxis' undeclared here (not in a
+function)
+evdev.c:95: warning: excess elements in struct initializer
+evdev.c:95: warning: (near initialization for 'evdev_map_parsers[0]')
+evdev.c:99: error: unknown field 'func' specified in initializer
+evdev.c:99: error: 'EvdevParseMapToAbsAxis' undeclared here (not in a
+function)
+evdev.c:99: warning: excess elements in struct initializer
+evdev.c:99: warning: (near initialization for 'evdev_map_parsers[1]')
+evdev.c:103: error: unknown field 'func' specified in initializer
+evdev.c:103: error: 'EvdevParseMapToButton' undeclared here (not in a
+function)
+evdev.c:103: warning: excess elements in struct initializer
+evdev.c:103: warning: (near initialization for 'evdev_map_parsers[2]')
+evdev.c:107: error: unknown field 'func' specified in initializer
+evdev.c:107: error: 'EvdevParseMapToButtons' undeclared here (not in a
+function)
+evdev.c:107: warning: excess elements in struct initializer
+evdev.c:107: warning: (near initialization for 'evdev_map_parsers[3]')
+evdev.c:111: error: unknown field 'func' specified in initializer
+evdev.c:111: warning: excess elements in struct initializer
+evdev.c:111: warning: (near initialization for 'evdev_map_parsers[4]')
+evdev.c:116: error: expected '=', ',', ';', 'asm' or '__attribute__' before
+'EvdevParseMapOption'
+evdev.c: In function 'EvdevFreeTokens':
+evdev.c:209: warning: passing argument 1 of 'free' discards qualifiers from
+pointer target type
+evdev.c: At top level:
+evdev.c:219: error: expected ')' before 'pInfo'
+evdev.c:271: error: expected ')' before 'device'
+evdev.c:353: error: expected ')' before 'client'
+evdev.c:375: error: expected '=', ',', ';', 'asm' or '__attribute__' before
+'EvdevPreInit'
+evdev.c:462: error: expected ')' before '*' token
+evdev.c:529: error: expected '=', ',', ';', 'asm' or '__attribute__' before
+'InputDriverRec'
+evdev.c:540: error: expected ')' before 'p'
+evdev.c:545: error: expected '=', ',', ';', 'asm' or '__attribute__' before
+'EvdevPlug'
+evdev.c:554: error: expected '=', ',', ';', 'asm' or '__attribute__' before
+'EvdevVersionRec'
+evdev.c:568: error: expected '=', ',', ';', 'asm' or '__attribute__' before
+'XF86ModuleData'
+make[3]: *** [evdev_drv_la-evdev.lo] Error 1
+make[3]: Leaving directory
+`/opt/buildroot/build_arm/xdriver_xf86-input-evdev-1.2.0/src'
+make[2]: *** [all-recursive] Error 1
+make[2]: Leaving directory
+`/opt/buildroot/build_arm/xdriver_xf86-input-evdev-1.2.0'
+make[1]: *** [all] Error 2
 make[1]: Leaving directory
-`/home/roeme/minim/buildroot/buildroot/build_i586/Python-2.4.2'
-/bin/sh: line 8: -/usr/bin/make: No such file or directory
+`/opt/buildroot/build_arm/xdriver_xf86-input-evdev-1.2.0'
 make: ***
-[/home/roeme/minim/buildroot/buildroot/build_i586/Python-2.4.2/.hostpython]
-Error 127
+[/opt/buildroot/build_arm/xdriver_xf86-input-evdev-1.2.0/.stamp_built] Error
+2
+root at guru_vlinux:/opt/buildroot#
 
-Enabling "Development Files on target" or removing modules marked as
-"unusual" (curses/unicodedata) does not help as well as reducing the
-number of jobs to run simultaneously.
-
-====================================================================== 
-
----------------------------------------------------------------------- 
- bernhardf - 05-07-08 11:37  
----------------------------------------------------------------------- 
-Thy pyhon package wants a big cleanup anyway:
-
-- unpack into one location (I'd use the TOOL_BUIDDIR)
-- build python-host (why is that needed anyway?) into
-(TOOL_BUILDDIR)/$(PYTHON_DIR)-host
-- build python in $(BUILD_DIR) 
-
----------------------------------------------------------------------- 
- roeme - 05-07-08 12:28  
----------------------------------------------------------------------- 
-How can I help? Or what must one do to get the package working?
-
-I'll dive into the docs now. Maybe I'll get something working, I wanted to
-get accustomed to buildroot's internals anyway, to add sw by myself.
-
-However, I'm a bloody novice, so any help on this bug is GREATLY
-appreciated. Since I'm in a thight schedule, it might take several months
-before I even have a clue how to fix it, whereas you guys probably only
-need one day.
-
-There's a typo in the submission, by host system I meant build system.
-
- 
-
----------------------------------------------------------------------- 
- roeme - 05-07-08 12:39  
----------------------------------------------------------------------- 
-Python seems to have cross-compilation support (see also:
-http://mail.python.org/pipermail/patches/2004-October/016312.html )
-
-However, it's not used: 
-(snip)
-checking whether we are cross compiling... no
-(/snip)
-
-(I might be off-track here, but maybe this is of some use to the
-developers) 
-
----------------------------------------------------------------------- 
- roeme - 05-09-08 00:17  
----------------------------------------------------------------------- 
-This particular bug may be closed (It still won't build for me, but it's a
-different error)
-
-> On 08.05.2008, at 19:41, Andrew Dyer wrote:
->
->>On Thu, May 8, 2008 at 9:51 AM, Roman Bigler <roeme@roeme.ch> wrote:
->>Hello List,
->>
->>in the last two days I've tried to use the python package, however, it
->>fails to build.
->>The build process barfs the following at me:
->><snip>
->>make[1]: Leaving directory
-`/home/roeme/minim/buildroot/buildroot/build_i586/Python-2.4.2'
->>/bin/sh: line 8: -/usr/bin/make: No such file or directory
->>make: *** [/home/roeme/minim/buildroot/buildroot/build_i586/
->>Python-2.4.2/.hostpython] Error 127
->><snap>
->>
->>The error is reproduceable.
->>
->
->the patch fragment below fixes the build error for me and was posted
->to the list a couple of days ago.  I did not test the resulting
->executable.
->
->Index: package/python/python.mk
->===================================================================
->--- package/python/python.mk    (revision 21884)
->+++ package/python/python.mk    (working copy)
->@@ -89,7 +89,7 @@
->              $(MAKE) python Parser/pgen && \
->              mv python hostpython && \
->              mv Parser/pgen Parser/hostpgen && \
->-               -$(MAKE) distclean \
->+               $(MAKE) distclean \
->      ) && \
->      touch $@ 
-
----------------------------------------------------------------------- 
- rhunger - 05-09-08 03:07  
----------------------------------------------------------------------- 
-@roeme:
-Python's cross-compilation support actually _is_ used:
-
-"""
-...
-checking whether we are cross compiling... no
-...
-checking whether we are cross compiling... yes
-...
-"""
-
-The first "checking" line comes from compiling python for the build
-system. The second from compiling for the target system. This is done
-explicitly in package/python/python.mk. Probably a native python for the
-build system is needed to be able to cross-compile. 
-
-Issue History 
-Date Modified   Username       Field                    Change               
-====================================================================== 
-05-07-08 11:01  roeme          New Issue                                    
-05-07-08 11:01  roeme          Status                   new => assigned     
-05-07-08 11:01  roeme          Assigned To               => buildroot       
-05-07-08 11:37  bernhardf      Note Added: 0007474                          
-05-07-08 12:04  roeme          Note Added: 0007484                          
-05-07-08 12:28  roeme          Note Edited: 0007484                         
-05-07-08 12:39  roeme          Note Added: 0007494                          
-05-09-08 00:17  roeme          Note Added: 0007544                          
-05-09-08 03:06  rhunger        File Added: python.patch                     
-05-09-08 03:07  rhunger        Note Added: 0007564                          
-======================================================================
+-- 
+View this message in context: http://www.nabble.com/x11-input-drivers-xdriver_xf86-input-evdev-1.2.0-missing-inputproto-depends-tp17146898p17146898.html
+Sent from the BuildRoot mailing list archive at Nabble.com.
