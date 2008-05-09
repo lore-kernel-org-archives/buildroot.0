@@ -1,50 +1,33 @@
-From: John Voltz <john.voltz@gmail.com>
-Date: Fri, 9 May 2008 14:26:43 -0400
-Subject: [Buildroot] Application execution fails
-In-Reply-To: <BAY107-W3500673BC0EFE93C658FB49DD30@phx.gbl>
-References: <BAY107-W3500673BC0EFE93C658FB49DD30@phx.gbl>
-Message-ID: <46a136670805091126t2047cf96gef83119ccd45ab13@mail.gmail.com>
+From: Mike Sander <msander@ripnet.com>
+Date: Fri, 09 May 2008 15:13:41 -0400
+Subject: [Buildroot] Unable to login with slow clock & MTD enabled
+Message-ID: <4824A265.4050708@ripnet.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-try:
+To all,
 
-/path/to/buildroot/build_i686/staging_dir/usr/bin/i686-linux-uclibc-gcc
--I/path/to/buildroot/build_i686/staging_dir/usr/include
--L/path/to/buildroot/build_i686/staging_dir/usr/lib -lc hello_world.c -o
-hello_world
+My target is an at91sam9260EK.  I have enabled MTD so I can mount data 
+flash.  At the "normal" (~200 mhz) processor speed everything works well.  
 
+We intend to run the target at a slower speed.   With a clock speed of a 
+leisurly 18 mhz the system boots to a command prompt.     However after 
+entering "root" at the login prompt,  I get the normal "login from 
+ttyS0" message but then within a couple of seconds the system puts up 
+the login prompt once more. 
 
+If I simply rebuild the kernel with MTD disabled I can boot and login 
+normally at the slow clock speed.
 
-On Fri, May 9, 2008 at 1:46 PM, Muktabh Anchlia <m_anchlia@hotmail.com>
-wrote:
+Anyone have any ideas how a slow processor speed, and MTD can affect the 
+login process?    I have some suspicion that the SPI is not configured 
+(or operating) correctly with the slow clock speed.  How this relates to 
+login problems is what has me intrigued.   Any suggestions on how to 
+debug failed login?
 
->  Hello,
-> I compiled a cross tool chain for AMD geode processor using buildroot. I
-> wanted to test the cross tools, so wrote a simple hello world application,
-> exported the ...staging-dir/usr/bin/ path and compiled the C code using
-> i686-linux-uclibc-gcc.
->
-> When I run this program on the host machine, it gives me "bad ELF
-> interpreter" as expected. But when I run it on the target, it gives me the
-> following error
-> "syntax error: "(" unexpected"
-> I couldn't figure out where I am going wrong.
-> Any help would be appreciated.
->
-> Thanks
-> Muktabh
->
-> *" I don't take sides, just the racing line "*
->
-> _______________________________________________
-> buildroot mailing list
-> buildroot at uclibc.org
-> http://busybox.net/mailman/listinfo/buildroot
->
--------------- next part --------------
-An HTML attachment was scrubbed...
-URL: http://busybox.net/lists/buildroot/attachments/20080509/d2673767/attachment.htm 
+Cheers,
+
+Mike
