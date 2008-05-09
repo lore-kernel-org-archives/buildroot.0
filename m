@@ -1,31 +1,26 @@
-From: Marc Karasek <Marc.Karasek@Sun.COM>
-Date: Fri, 09 May 2008 12:19:07 -0400
-Subject: [Buildroot] Toolchain for x86_64 help
-Message-ID: <4824797B.8020107@sun.com>
+From: Muktabh Anchlia <m_anchlia@hotmail.com>
+Date: Fri, 9 May 2008 17:46:31 +0000
+Subject: [Buildroot] Application execution fails
+Message-ID: <BAY107-W3500673BC0EFE93C658FB49DD30@phx.gbl>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-I am trying to build a x86_64 toolchain on a FC8_64 system.  I am 
-working on coreboot, which uses uclibc.  Coreboot was doingthe -nostdlib 
-trick to force uclibc to link with it.  I saw that the toolchain 
-wrappers were pulled from uclibc in 0.9.22.  Since we are using 0.9.29, 
-I thought it might be wise to update the build for coreboot to use a 
-full uclibc toolchain. 
 
-Unfortunately,  I can not get buildroot to build on FC8_64.   Does 
-anyone know of a configuration that works (gcc, binutils, uclibc, etc..) 
-for a x86_64 system?   Has anyone built buildroot on a  FC8_64 system?
+Hello,
+I compiled a cross tool chain for AMD geode processor using buildroot. I wanted to test the cross tools, so wrote a simple hello world application, exported the ...staging-dir/usr/bin/ path and compiled the C code using i686-linux-uclibc-gcc. 
 
-Marc
+When I run this program on the host machine, it gives me "bad ELF interpreter" as expected. But when I run it on the target, it gives me the following error
+"syntax error: "(" unexpected"
+I couldn't figure out where I am going wrong.
+Any help would be appreciated.
 
--- 
-*********************
-Marc Karasek
-MTS
-Sun Microsystems
-mailto:marc.karasek at sun.com
-ph:770.360.6415
-*********************
+Thanks
+Muktabh
+
+" I don't take sides, just the racing line "
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: http://busybox.net/lists/buildroot/attachments/20080509/8ff756a8/attachment.htm 
