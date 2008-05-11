@@ -1,7 +1,7 @@
 From: ulf at uclibc.org <ulf@uclibc.org>
-Date: Sat, 10 May 2008 23:45:18 -0700 (PDT)
-Subject: [Buildroot] svn commit: trunk/buildroot/package/portage
-Message-ID: <20080511064518.DA0F6F8005@busybox.net>
+Date: Sat, 10 May 2008 23:45:48 -0700 (PDT)
+Subject: [Buildroot] svn commit: trunk/buildroot/package/qtopia4
+Message-ID: <20080511064548.ED746F801D@busybox.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -9,31 +9,29 @@ Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
 Author: ulf
-Date: 2008-05-10 23:45:17 -0700 (Sat, 10 May 2008)
-New Revision: 21967
+Date: 2008-05-10 23:45:47 -0700 (Sat, 10 May 2008)
+New Revision: 21968
 
 Log:
-Bump portage version
+Bump qtopia version
 
 Modified:
-   trunk/buildroot/package/portage/portage.mk
+   trunk/buildroot/package/qtopia4/qtopia4.mk
 
 
 Changeset:
-Modified: trunk/buildroot/package/portage/portage.mk
+Modified: trunk/buildroot/package/qtopia4/qtopia4.mk
 ===================================================================
---- trunk/buildroot/package/portage/portage.mk	2008-05-11 06:44:20 UTC (rev 21966)
-+++ trunk/buildroot/package/portage/portage.mk	2008-05-11 06:45:17 UTC (rev 21967)
-@@ -3,9 +3,9 @@
- # portage
- #
- #############################################################
--PORTAGE_BASE_VERSION:=2.1.3
--PORTAGE_DOWNLOAD_VERSION:=$(PORTAGE_BASE_VERSION).16
--PORTAGE_PATCH_VERSION:=.16
-+PORTAGE_BASE_VERSION:=2.1.4
-+PORTAGE_DOWNLOAD_VERSION:=$(PORTAGE_BASE_VERSION)
-+PORTAGE_PATCH_VERSION:=.4
- PORTAGE_PATCH_APPLY:=n
- PORTAGE_VERSION:=$(PORTAGE_BASE_VERSION)$(PORTAGE_PATCH_VERSION)
- PORTAGE_PATCH:=portage-$(PORTAGE_VERSION).patch.bz2
+--- trunk/buildroot/package/qtopia4/qtopia4.mk	2008-05-11 06:45:17 UTC (rev 21967)
++++ trunk/buildroot/package/qtopia4/qtopia4.mk	2008-05-11 06:45:47 UTC (rev 21968)
+@@ -16,7 +16,9 @@
+ # (cd /usr/include; sudo ln -s dbus-1.0/dbus dbus)
+ # to fix
+ 
+-QTOPIA4_VERSION:=4.4.0-snapshot-20080312
++QTOPIA4_VERSION:=4.4.0-snapshot-20080325
++# QTOPIA4_VERSION:=4.4.1-snapshot-20080511
++# QTOPIA4_VERSION:=4.5.0-snapshot-20080511
+ QTOPIA4_CAT:=$(ZCAT)
+ 
+ BR2_PACKAGE_QTOPIA4_COMMERCIAL_USERNAME:=$(strip $(subst ",, $(BR2_PACKAGE_QTOPIA4_COMMERCIAL_USERNAME)))
