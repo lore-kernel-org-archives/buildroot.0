@@ -1,7 +1,7 @@
 From: ulf at uclibc.org <ulf@uclibc.org>
-Date: Sat, 10 May 2008 23:41:34 -0700 (PDT)
-Subject: [Buildroot] svn commit: trunk/buildroot/package/mutt
-Message-ID: <20080511064134.3B11E3C62E@busybox.net>
+Date: Sat, 10 May 2008 23:43:23 -0700 (PDT)
+Subject: [Buildroot] svn commit: trunk/buildroot/package/mdadm
+Message-ID: <20080511064323.652C63C822@busybox.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -9,54 +9,42 @@ Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
 Author: ulf
-Date: 2008-05-10 23:41:33 -0700 (Sat, 10 May 2008)
-New Revision: 21963
+Date: 2008-05-10 23:43:22 -0700 (Sat, 10 May 2008)
+New Revision: 21964
 
 Log:
-Bump mutt version
+Bump mdadm version
 
 Modified:
-   trunk/buildroot/package/mutt/mutt.mk
+   trunk/buildroot/package/mdadm/mdadm.mk
 
 
 Changeset:
-Modified: trunk/buildroot/package/mutt/mutt.mk
+Modified: trunk/buildroot/package/mdadm/mdadm.mk
 ===================================================================
---- trunk/buildroot/package/mutt/mutt.mk	2008-05-09 18:15:16 UTC (rev 21962)
-+++ trunk/buildroot/package/mutt/mutt.mk	2008-05-11 06:41:33 UTC (rev 21963)
-@@ -3,9 +3,9 @@
- # mutt
- #
+--- trunk/buildroot/package/mdadm/mdadm.mk	2008-05-11 06:41:33 UTC (rev 21963)
++++ trunk/buildroot/package/mdadm/mdadm.mk	2008-05-11 06:43:22 UTC (rev 21964)
+@@ -5,7 +5,7 @@
  #############################################################
--MUTT_VERSION:=1.5.16
-+MUTT_VERSION:=1.5.17+20080114
- MUTT_SOURCE:=mutt_$(MUTT_VERSION).orig.tar.gz
--MUTT_PATCH:=mutt_$(MUTT_VERSION)-3.diff.gz
-+MUTT_PATCH:=mutt_$(MUTT_VERSION)-1.diff.gz
- MUTT_SITE:=$(BR2_DEBIAN_MIRROR)/debian/pool/main/m/mutt/
- MUTT_DIR:=$(BUILD_DIR)/mutt-$(MUTT_VERSION)
- MUTT_CAT:=$(ZCAT)
-@@ -18,11 +18,9 @@
- $(DL_DIR)/$(MUTT_PATCH):
- 	$(WGET) -P $(DL_DIR) $(MUTT_SITE)/$(MUTT_PATCH)
- 
--mutt-source: $(DL_DIR)/$(MUTT_SOURCE) $(DL_DIR)/$(MUTT_PATCH)
--
- $(MUTT_DIR)/.unpacked: $(DL_DIR)/$(MUTT_SOURCE) $(DL_DIR)/$(MUTT_PATCH)
- 	$(MUTT_CAT) $(DL_DIR)/$(MUTT_SOURCE) | tar -C $(BUILD_DIR) $(TAR_OPTIONS) -
--	toolchain/patch-kernel.sh $(MUTT_DIR) package/mutt/ mutt\*.patch
-+	toolchain/patch-kernel.sh $(MUTT_DIR) package/mutt/ mutt-$(MUTT_VERSION)\*.patch
- ifneq ($(MUTT_PATCH),)
- 	(cd $(MUTT_DIR) && $(MUTT_CAT) $(DL_DIR)/$(MUTT_PATCH) | patch -p1)
- 	if [ -d $(MUTT_DIR)/debian/patches ]; then \
-@@ -56,6 +54,10 @@
- 	cp -dpf $(MUTT_DIR)/$(MUTT_BINARY) $@
+ MDADM_VERSION:=2.6.4
+ MDADM_SOURCE:=mdadm_$(MDADM_VERSION).orig.tar.gz
+-MDADM_PATCH:=mdadm_$(MDADM_VERSION)-1.diff.gz
++MDADM_PATCH:=mdadm_$(MDADM_VERSION)-2.diff.gz
+ MDADM_CAT:=$(ZCAT)
+ MDADM_SITE:=$(BR2_DEBIAN_MIRROR)/debian/pool/main/m/mdadm
+ MDADM_DIR:=$(BUILD_DIR)/mdadm-$(MDADM_VERSION)
+@@ -42,10 +42,12 @@
+ 	rm -Rf $(TARGET_DIR)/usr/share/man
  	$(STRIPCMD) $(STRIP_STRIP_ALL) $@
  
-+mutt-source: $(DL_DIR)/$(MUTT_SOURCE) $(DL_DIR)/$(MUTT_PATCH)
++mdadm-source: $(DL_DIR)/$(MDADM_SOURCE) $(MDADM_PATCH_FILE)
 +
-+mutt-unpacked: $(MUTT_DIR)/.unpacked
++mdadm-unpacked: $(MDADM_DIR)/.unpacked
 +
- mutt: uclibc ncurses $(TARGET_DIR)/$(MUTT_TARGET_BINARY)
+ mdadm: uclibc $(TARGET_DIR)/$(MDADM_TARGET_BINARY)
  
- mutt-clean:
+-mdadm-source: $(DL_DIR)/$(MDADM_SOURCE) $(MDADM_PATCH_FILE)
+-
+ mdadm-clean:
+ 	$(MAKE) DESTDIR=$(TARGET_DIR) -C $(MDADM_DIR) uninstall
+ 	-$(MAKE) -C $(MDADM_DIR) clean
