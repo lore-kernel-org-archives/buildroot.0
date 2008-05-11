@@ -1,69 +1,62 @@
-From: =?iso-8859-2?Q?Jir=E1sek_Jaroslav?= <jirasek@sauron.cz>
-Date: Sat, 10 May 2008 13:22:34 +0200
-Subject: [Buildroot] problem with builded buildroot
-Message-ID: <000901c8b290$252c3cb0$f2999258@ch3mik>
+From: ulf at uclibc.org <ulf@uclibc.org>
+Date: Sat, 10 May 2008 23:41:34 -0700 (PDT)
+Subject: [Buildroot] svn commit: trunk/buildroot/package/mutt
+Message-ID: <20080511064134.3B11E3C62E@busybox.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi,
+Author: ulf
+Date: 2008-05-10 23:41:33 -0700 (Sat, 10 May 2008)
+New Revision: 21963
 
-I have problem with compiled buildroot. I use latest snapshot, in "make 
-menuconfig" I checked
-"Generic development system", "Enable WCHAR support" and "development files 
-in target filesystem".
+Log:
+Bump mutt version
 
-I succesfully compiled buildroot, then I mount this, copy tree in another 
-location on harddisk,
-chroot to this. Now I want to compile uClibc-0.9.29 in my new buildroot. 
-After "make menuconfig"
-i got errors:
-
-[root at development uClibc-0.9.29]# make menuconfig
-gcc -DCURSES_LOC="<ncurses.h>" -DLOCALE   -c kxgettext.c -o kxgettext.o
-gcc -DCURSES_LOC="<ncurses.h>" -DLOCALE   -c lxdialog/checklist.c -o 
-lxdialog/checklist.o
-gcc -DCURSES_LOC="<ncurses.h>" -DLOCALE   -c lxdialog/inputbox.c -o 
-lxdialog/inputbox.o
-gcc -DCURSES_LOC="<ncurses.h>" -DLOCALE   -c lxdialog/menubox.c -o 
-lxdialog/menubox.o
-gcc -DCURSES_LOC="<ncurses.h>" -DLOCALE   -c lxdialog/textbox.c -o 
-lxdialog/textbox.o
-gcc -DCURSES_LOC="<ncurses.h>" -DLOCALE   -c lxdialog/util.c -o 
-lxdialog/util.o
-lxdialog/util.c: In function 'print_autowrap':
-
-another "make menuconfig" (on newly copied source on uClibc)
-
-[root at development uClibc-0.9.29]# make menuconfig
-install -d include/bits
-gcc  -DLOCALE  -MM *.c > .depend 2>/dev/null || :
-gcc -DCURSES_LOC="<ncurses.h>" -DLOCALE   -c conf.c -o conf.o
-gcc -DCURSES_LOC="<ncurses.h>" -DLOCALE   -c kxgettext.c -o kxgettext.o
-gcc -DCURSES_LOC="<ncurses.h>" -DLOCALE   -c lxdialog/checklist.c -o 
-lxdialog/checklist.o
-make[1]: *** [lxdialog/checklist.o] Segmentation fault
-make: *** [extra/config/mconf] Error 2
+Modified:
+   trunk/buildroot/package/mutt/mutt.mk
 
 
-Errors discovers randomly ... Sometimes sooner, sometimes later. "make 
-clean" ends with "Segmentation fault".
-Similar errors produce "make menuconfig" on kernel source. But "make config, 
-make dep, make" works.
-My computer is running CentOS 5 with latest updates. I tested this on 
-another computer with x64 CentOS 5 with
-the same errors. I tested many changes in compiling buildroot (gcc-4.1.2, 
-daily snapshot of uClibc, another version
-of binutils....) with no success.
-
-I have old buildroot (I compiled this before 2 years, it is based on 
-uClibc-0.9.27, and this works without problems
-- I can "make menuconfg" uClibc-0.9.29
-
-
-I compiled buildroot perhaps 50 times, now I am despairing, please help me
-
-
-Thank you, Jaroslav Jirasek
+Changeset:
+Modified: trunk/buildroot/package/mutt/mutt.mk
+===================================================================
+--- trunk/buildroot/package/mutt/mutt.mk	2008-05-09 18:15:16 UTC (rev 21962)
++++ trunk/buildroot/package/mutt/mutt.mk	2008-05-11 06:41:33 UTC (rev 21963)
+@@ -3,9 +3,9 @@
+ # mutt
+ #
+ #############################################################
+-MUTT_VERSION:=1.5.16
++MUTT_VERSION:=1.5.17+20080114
+ MUTT_SOURCE:=mutt_$(MUTT_VERSION).orig.tar.gz
+-MUTT_PATCH:=mutt_$(MUTT_VERSION)-3.diff.gz
++MUTT_PATCH:=mutt_$(MUTT_VERSION)-1.diff.gz
+ MUTT_SITE:=$(BR2_DEBIAN_MIRROR)/debian/pool/main/m/mutt/
+ MUTT_DIR:=$(BUILD_DIR)/mutt-$(MUTT_VERSION)
+ MUTT_CAT:=$(ZCAT)
+@@ -18,11 +18,9 @@
+ $(DL_DIR)/$(MUTT_PATCH):
+ 	$(WGET) -P $(DL_DIR) $(MUTT_SITE)/$(MUTT_PATCH)
+ 
+-mutt-source: $(DL_DIR)/$(MUTT_SOURCE) $(DL_DIR)/$(MUTT_PATCH)
+-
+ $(MUTT_DIR)/.unpacked: $(DL_DIR)/$(MUTT_SOURCE) $(DL_DIR)/$(MUTT_PATCH)
+ 	$(MUTT_CAT) $(DL_DIR)/$(MUTT_SOURCE) | tar -C $(BUILD_DIR) $(TAR_OPTIONS) -
+-	toolchain/patch-kernel.sh $(MUTT_DIR) package/mutt/ mutt\*.patch
++	toolchain/patch-kernel.sh $(MUTT_DIR) package/mutt/ mutt-$(MUTT_VERSION)\*.patch
+ ifneq ($(MUTT_PATCH),)
+ 	(cd $(MUTT_DIR) && $(MUTT_CAT) $(DL_DIR)/$(MUTT_PATCH) | patch -p1)
+ 	if [ -d $(MUTT_DIR)/debian/patches ]; then \
+@@ -56,6 +54,10 @@
+ 	cp -dpf $(MUTT_DIR)/$(MUTT_BINARY) $@
+ 	$(STRIPCMD) $(STRIP_STRIP_ALL) $@
+ 
++mutt-source: $(DL_DIR)/$(MUTT_SOURCE) $(DL_DIR)/$(MUTT_PATCH)
++
++mutt-unpacked: $(MUTT_DIR)/.unpacked
++
+ mutt: uclibc ncurses $(TARGET_DIR)/$(MUTT_TARGET_BINARY)
+ 
+ mutt-clean:
