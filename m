@@ -1,51 +1,35 @@
-From: Ulf Samuelsson <ulf@atmel.com>
-Date: Sun, 11 May 2008 08:52:56 +0200
-Subject: [Buildroot] $(DATE) out of sync with system
-In-Reply-To: <48247D01.9030009@ripnet.com>
-References: <4823B69A.2040508@ripnet.com>
-	<000601c8b1ed$8d50afe0$070514ac@atmel.com>
-	<48247D01.9030009@ripnet.com>
-Message-ID: <1210488776.4135.0.camel@aeglos.sweden.atmel.com>
+From: ulf at uclibc.org <ulf@uclibc.org>
+Date: Sat, 10 May 2008 23:55:04 -0700 (PDT)
+Subject: [Buildroot] svn commit: trunk/buildroot
+Message-ID: <20080511065504.6AF0F3C87C@busybox.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-fre 2008-05-09 klockan 12:34 -0400 skrev Mike Sander:
-> Ulf Samuelsson wrote:
-> >> I have Custom rootfs suffix set to the default $(DATE).   I have noticed 
-> >> that a few hours before midnight my rootfs.arm-yyyymmdd.romfs, the dd 
-> >> portion advances prematurely. this breaks a script I have to copy 
-> >> binaries after the build.
-> >>
-> >> I suspect it is somehow related to DATE not using the timezone correctly 
-> >> (maybe I dont have it set correctly?).  I have attempted to find where 
-> >> DATE is being set.  I would imaging that it is using the "date" function 
-> >> & format specifiers.   Unfortunately DATE is a VERY common symbol under 
-> >> buildroot.  I am unable to locate where this symbol is initially set.
-> >>
-> >> Can someone tell me where to look?
-> >>
-> >>     
-> >
-> >
-> > Top Makefile
-> >   
-> Thanks.  I had done a multi level grep for "DATE" and "="..... but this 
-> generated literally hundreds of lines of output..... that proverbial 
-> needle in the hay stack.
-> 
-> The relevant line does the following DATE:= $(shell date -u +%Y%m%d).  
-> Anyone know why the "-u" which specifies Coordinated Universal Time?  
-> This explains the rollover I see a few hours before midnight.  Would it 
-> not make more sense for this just to be local time?    FWIW... I can 
-> update my script to be consistent with the DATE logic now that I know 
-> what is going on.
-> 
-No you are right, I think it should use local time, so I will fix this.
+Author: ulf
+Date: 2008-05-10 23:55:04 -0700 (Sat, 10 May 2008)
+New Revision: 21971
+
+Log:
+Use local time (Thanks Mike)
+
+Modified:
+   trunk/buildroot/Makefile
 
 
--- 
-Best Regards,
-Ulf Samuelsson
+Changeset:
+Modified: trunk/buildroot/Makefile
+===================================================================
+--- trunk/buildroot/Makefile	2008-05-11 06:47:14 UTC (rev 21970)
++++ trunk/buildroot/Makefile	2008-05-11 06:55:04 UTC (rev 21971)
+@@ -25,7 +25,7 @@
+ CONFIG_CONFIG_IN=Config.in
+ CONFIG_DEFCONFIG=.defconfig
+ CONFIG=package/config
+-DATE:=$(shell date -u +%Y%m%d)
++DATE:=$(shell date +%Y%m%d)
+ 
+ noconfig_targets:=menuconfig config oldconfig randconfig \
+ 	defconfig allyesconfig allnoconfig release tags \
