@@ -1,57 +1,99 @@
-From: Mike Sander <msander@ripnet.com>
-Date: Mon, 12 May 2008 07:57:32 -0400
-Subject: [Buildroot] $(DATE) out of sync with system
-In-Reply-To: <1210488776.4135.0.camel@aeglos.sweden.atmel.com>
-References: <4823B69A.2040508@ripnet.com>	
-	<000601c8b1ed$8d50afe0$070514ac@atmel.com>
-	<48247D01.9030009@ripnet.com>
-	<1210488776.4135.0.camel@aeglos.sweden.atmel.com>
-Message-ID: <482830AC.8020206@ripnet.com>
+From: jacmet at uclibc.org <jacmet@uclibc.org>
+Date: Mon, 12 May 2008 05:43:57 -0700 (PDT)
+Subject: [Buildroot] svn commit: trunk/buildroot/target
+Message-ID: <20080512124357.F1E4A3C5FA@busybox.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Ulf Samuelsson wrote:
-> fre 2008-05-09 klockan 12:34 -0400 skrev Mike Sander:
->   
->> Ulf Samuelsson wrote:
->>     
->>>> I have Custom rootfs suffix set to the default $(DATE).   I have noticed 
->>>> that a few hours before midnight my rootfs.arm-yyyymmdd.romfs, the dd 
->>>> portion advances prematurely. this breaks a script I have to copy 
->>>> binaries after the build.
->>>>
->>>> I suspect it is somehow related to DATE not using the timezone correctly 
->>>> (maybe I dont have it set correctly?).  I have attempted to find where 
->>>> DATE is being set.  I would imaging that it is using the "date" function 
->>>> & format specifiers.   Unfortunately DATE is a VERY common symbol under 
->>>> buildroot.  I am unable to locate where this symbol is initially set.
->>>>
->>>> Can someone tell me where to look?
->>>>
->>>>     
->>>>         
->>> Top Makefile
->>>   
->>>       
->> Thanks.  I had done a multi level grep for "DATE" and "="..... but this 
->> generated literally hundreds of lines of output..... that proverbial 
->> needle in the hay stack.
->>
->> The relevant line does the following DATE:= $(shell date -u +%Y%m%d).  
->> Anyone know why the "-u" which specifies Coordinated Universal Time?  
->> This explains the rollover I see a few hours before midnight.  Would it 
->> not make more sense for this just to be local time?    FWIW... I can 
->> update my script to be consistent with the DATE logic now that I know 
->> what is going on.
->>
->>     
-> No you are right, I think it should use local time, so I will fix this.
->
->
->   
-Thank You..
+Author: jacmet
+Date: 2008-05-12 05:43:57 -0700 (Mon, 12 May 2008)
+New Revision: 21972
 
-Mike
+Log:
+toolchain: fix mips abi selection
+
+Based on commit 0e2ab in aldot's tree.
+
+
+Modified:
+   trunk/buildroot/target/Config.in.arch
+
+
+Changeset:
+Modified: trunk/buildroot/target/Config.in.arch
+===================================================================
+--- trunk/buildroot/target/Config.in.arch	2008-05-11 06:55:04 UTC (rev 21971)
++++ trunk/buildroot/target/Config.in.arch	2008-05-12 12:43:57 UTC (rev 21972)
+@@ -148,6 +148,8 @@
+ 	bool "mips 32r2"
+ config BR2_mips_64
+ 	bool "mips 64"
++config BR2_mips_64r2
++	bool "mips 64r2"
+ config BR2_mips_16
+ 	bool "mips 16"
+ endchoice
+@@ -156,16 +158,30 @@
+ choice
+ 	prompt "Target ABI"
+ 	depends BR2_mips || BR2_mipsel
+-	default BR2_MIPS_EABI
++	default BR2_MIPS_OABI32 if BR_mips_32 || BR_mips_32r2
++	default BR2_MIPS_ABI32 if BR_mips_64 || BR_mips_64r2
+ 	help
+ 	  Application Binary Interface to use
+ 
+-config BR2_MIPS_OABI
+-	bool "OABI"
++config BR2_MIPS_OABI32
++	bool "o32"
++config BR2_MIPS_ABI32
++	bool "n32"
++	depends BR2_mips_3 || BR2_mips_4 || BR2_mips_64 || BR2_mips_64r2 || BR2_mips_16
+ config BR2_MIPS_EABI
+-	bool "EABI"
++	bool "eabi"
++	depends BR2_mips_3 || BR2_mips_4 || BR2_mips_64 || BR2_mips_64r2 || BR2_mips_16
+ config BR2_MIPS_ABI64
+-	bool "N64"
++	bool "n64"
++	depends BR2_mips_3 || BR2_mips_4 || BR2_mips_64 || BR2_mips_64r2 || BR2_mips_16
++config BR2_MIPS_OABI64
++	bool "o64"
++	depends BR2_mips_3 || BR2_mips_4 || BR2_mips_64 || BR2_mips_64r2 || BR2_mips_16
++config BR2_MIPS_ABI_none
++	bool "unspecified"
++	depends BR2_mips_16
++	help
++	  Unspecified ABI leaves ABI selection blank.
+ endchoice
+ 
+ choice
+@@ -594,6 +610,7 @@
+ 	default mips32		if BR2_mips_32
+ 	default mips32r2	if BR2_mips_32r2
+ 	default mips64		if BR2_mips_64
++	default mips64r2	if BR2_mips_64r2
+ 	default mips16		if BR2_mips_16
+ 	default 401		if BR2_powerpc_401
+ 	default 403		if BR2_powerpc_403
+@@ -694,11 +711,11 @@
+ 	default aapcs		if BR2_arm_dunno
+ 	default aapcs-linux	if BR2_arm_dunno
+ 	default iwmmxt		if BR2_iwmmxt
+-	default 32		if BR2_mipsel && BR2_MIPS_OABI
+-	default n32		if BR2_mipsel && BR2_MIPS_EABI
+-	default o64		if BR2_mips && BR2_MIPS_OABI
+-	default eabi		if BR2_mips && BR2_MIPS_EABI
+-	default 64		if BR2_mips && BR2_MIPS_ABI64
++	default 32		if BR2_MIPS_OABI32
++	default n32		if BR2_MIPS_ABI32
++	default eabi		if BR2_MIPS_EABI
++	default o64		if BR2_MIPS_OABI64
++	default n64		if BR2_MIPS_ABI64
+ 	default mmixware	if BR2_mmix && BR2_MMIX_ABI_native
+ 	default gnu		if BR2_mmix && !BR2_MMIX_ABI_native
+ 	default altivec		if BR2_powerpc && BR2_PPC_ABI_altivec
