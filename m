@@ -1,36 +1,46 @@
-From: hartleys <hartleys@visionengravers.com>
-Date: Mon, 12 May 2008 12:50:24 -0400
+From: Rex Ashbaugh <rexa@xeratech.com>
+Date: Mon, 12 May 2008 09:54:27 -0700
 Subject: [Buildroot] httpd question
-In-Reply-To: <482555F2.3080501@Kriegisch.name>
+In-Reply-To: <1CF6EDDF0820924DA43C9A52FE7325950B5F057D@MI8NYCMAIL17.Mi8.com>
 References: <1CF6EDDF0820924DA43C9A52FE7325950B569C1A@MI8NYCMAIL17.Mi8.com>
-	<482555F2.3080501@Kriegisch.name>
-Message-ID: <1CF6EDDF0820924DA43C9A52FE7325950B5F07A2@MI8NYCMAIL17.Mi8.com>
+	<20080509204814.1151246e.tonyb@sysdev.org>
+	<1CF6EDDF0820924DA43C9A52FE7325950B5F057D@MI8NYCMAIL17.Mi8.com>
+Message-ID: <6311fe0b0805120954pc3ce04ep84c3ac483b58b550@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Saturday, May 10, 2008 1:00 AM, Alexander Kriegisch wrote:
-> Sounds like you have another process, probably another web server,
-> listening on that port. Find out which process that is by issuing
-> these commands:
->  # Is port 80 listened at?
->  netstat -ln |grep ":80"
->  # If so, by whom? (Hopefully your have 'lsof' installed)
->  lsof -i :80
+what scripts are in your /etc/init.d/ directory?
+do you have the inetd daemon installed?
+-Rex
 
-Ok. Got lsof to download and compile. I had to change the ftp site.
+On Mon, May 12, 2008 at 9:15 AM, hartleys <hartleys@visionengravers.com>
+wrote:
 
-/ # netstat -ln |grep ":80"
-tcp        0      0 0.0.0.0:80              0.0.0.0:*
-LISTEN
-/ # lsof -i :80
-COMMAND PID USER   FD   TYPE DEVICE SIZE NODE NAME
-inetd   372 root   15u  inet     82       TCP *:www (LISTEN)
-/ #
-
-I'm not really sure what this output means. Can you offer any ideas?
-
-Thanks,
-Hartley
+> On Friday, May 09, 2008 9:48 PM, Tony Borras wrote:
+> > > when I try to access the web interface I get the following message
+> in
+> > > my browser:
+> > >
+> > > httpd: bind: Address already in use
+> > >
+> > > For the life of me I can't figure out what might already be bound to
+>
+> > > port 80. Any ideas?
+> >
+> > try:   nmap -p80 localhost
+> >
+> > or instead of localhost the name or ip of your host.
+>
+> I don't think nmap is available as a package in buildroot. At least I
+> can't locate it.
+> _______________________________________________
+> buildroot mailing list
+> buildroot at uclibc.org
+> http://busybox.net/mailman/listinfo/buildroot
+>
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: http://busybox.net/lists/buildroot/attachments/20080512/e9f69d3b/attachment.htm 
