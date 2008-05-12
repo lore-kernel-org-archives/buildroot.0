@@ -1,72 +1,34 @@
-From: ulf at uclibc.org <ulf@uclibc.org>
-Date: Mon, 12 May 2008 14:15:32 -0700 (PDT)
-Subject: [Buildroot] svn commit: trunk/buildroot/target/linux
-Message-ID: <20080512211532.C5E663C5E4@busybox.net>
+From: James Ronald <james.ronald@gmail.com>
+Date: Mon, 12 May 2008 19:24:36 -0400
+Subject: [Buildroot] Help with verifying buildroot build options for uClibc
+	and GCC
+Message-ID: <10bd9830805121624t30f2df56k6e85827be2574a7c@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Author: ulf
-Date: 2008-05-12 14:15:32 -0700 (Mon, 12 May 2008)
-New Revision: 21975
+ I am trying to get Linux 2.6.25 running on some older hardware that
+uses a Sharp LH7A400 ARM 922T processor (currently running Linux
+2.4.20).  The kernel uncompresses and seems to even be executing.
+Busybox init prints it's Starting Init message but that is about it.
+Nothing in the inittab seems to have executed.  Using the Magic SysRq
+key and option "t" shows that init is running and even switching.
+Replacing Init with simple programs works fine for a number of things
+such as read, write, malloc and floating point.  However, both sprintf
+and printf lock up, without any indication as to why. Some Googling
+about points has me suspecting that perhaps Buildroot is not passing
+the correct options to correctly build ggc or uClibc or such.  I'm
+currently using buildroot-21758, uClibc 0.9.29, binutils 2.18.50.0.1,
+GCC 4.2.1 and Busybox 1.7.2.  Is there a way that I can verify the
+options that were actually used to build uClibc and gcc?  I logged a
+copy of the make for Buildroot building everything but was unable to
+find which options where actually used to build GCC or uClibc.
 
-Log:
-Make linux kernel extension visible also when defined in board directory
+Also, if there is anyone else on the list running a 2.6.2x kernel on a
+Sharp LH7A400 or LH7A404 I would love to hear words of encouragement
+from you.
 
-Modified:
-   trunk/buildroot/target/linux/Makefile.in.advanced
-
-
-Changeset:
-Modified: trunk/buildroot/target/linux/Makefile.in.advanced
-===================================================================
---- trunk/buildroot/target/linux/Makefile.in.advanced	2008-05-12 18:56:11 UTC (rev 21974)
-+++ trunk/buildroot/target/linux/Makefile.in.advanced	2008-05-12 21:15:32 UTC (rev 21975)
-@@ -122,37 +122,43 @@
- 
- # -----------------------------------------------------------------------------
- # Has to be set by the target/device
--ifeq ($(LINUX26_BINLOC),)
- 
- # --------------
- # VMLINUX
- ifeq ($(LINUX26_FORMAT),vmlinux)
-+ifeq ($(LINUX26_BINLOC),)
- LINUX26_BINLOC:=$(LINUX26_FORMAT)
-+endif
- KERNEL_EXT:=
- endif
- 
- # --------------
- # UIMAGE
- ifeq ($(LINUX26_FORMAT),uImage)
-+ifeq ($(LINUX26_BINLOC),)
- LINUX26_BINLOC:=arch/$(KERNEL_ARCH)/boot/$(LINUX26_FORMAT)
-+endif
- KERNEL_EXT:=.gz
- endif
- 
- # --------------
- # ZIMAGE
- ifeq ($(LINUX26_FORMAT),zImage)
-+ifeq ($(LINUX26_BINLOC),)
- LINUX26_BINLOC:=arch/$(KERNEL_ARCH)/boot/$(LINUX26_FORMAT)
-+endif
- KERNEL_EXT:=.z
- endif
- 
- # --------------
- # BZIMAGE
- ifeq ($(LINUX26_FORMAT),bzImage)
-+ifeq ($(LINUX26_BINLOC),)
- LINUX26_BINLOC:=arch/$(KERNEL_ARCH)/boot/bzImage
-+endif
- KERNEL_EXT:=.bz
- endif
- 
--endif
- 
- # -----------------------------------------------------------------------------
- # File name for the Linux kernel binary
+Thanks,
+James Ronald
