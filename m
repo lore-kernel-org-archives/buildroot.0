@@ -1,133 +1,97 @@
-From: John Voltz <john.voltz@gmail.com>
-Date: Sun, 11 May 2008 09:05:45 -0400
-Subject: [Buildroot] Application execution fails (John Voltz)
-In-Reply-To: <BAY107-W48974804239AEE2B1C2E559DD30@phx.gbl>
-References: <mailman.1.1210359603.12379.buildroot@uclibc.org>
-	<BAY107-W48974804239AEE2B1C2E559DD30@phx.gbl>
-Message-ID: <46a136670805110605q2b504be7iaa02f88dd8bf5d6a@mail.gmail.com>
+From: Arun Reddy <reddyac@gmail.com>
+Date: Sun, 11 May 2008 20:24:19 -0700
+Subject: [Buildroot] ARM build error with llseek.c
+In-Reply-To: <326f33790805081813lff2c266wfc23c361119452df@mail.gmail.com>
+References: <326f33790805081549v3afdc776u56cdeb8e57167782@mail.gmail.com>
+	<1CF6EDDF0820924DA43C9A52FE7325950B4DA9C3@MI8NYCMAIL17.Mi8.com>
+	<326f33790805081624g2daf1407v15e8e84ad1914b77@mail.gmail.com>
+	<1CF6EDDF0820924DA43C9A52FE7325950B4DAA2E@MI8NYCMAIL17.Mi8.com>
+	<326f33790805081812sc3b8d29v948f331f7fe84653@mail.gmail.com>
+	<326f33790805081813lff2c266wfc23c361119452df@mail.gmail.com>
+Message-ID: <326f33790805112024l75b6e2d5x41f4fb229b982274@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Try running your hello world program with strace. That may show you what's
-going on. I know I've seen this problem before, but I can't remember what
-causes it. Maybe someone else on the list knows?
+Hey everyone,
 
-John
+I was just curious if anyone had any more suggestions on this problem? I am
+still finding myself stuck with it. Thank you.
 
-On Fri, May 9, 2008 at 3:33 PM, Muktabh Anchlia <m_anchlia@hotmail.com>
-wrote:
+On Thu, May 8, 2008 at 6:13 PM, Arun Reddy <reddyac@gmail.com> wrote:
 
+> CC'd buildroot list
 >
-> Hi John,
-> I still get the same error...
 >
-> *" I don't take sides, just the racing line "*
+> On Thu, May 8, 2008 at 6:12 PM, Arun Reddy <reddyac@gmail.com> wrote:
 >
-> >
-> > Message: 1
-> > Date: Fri, 9 May 2008 17:46:31 +0000
-> > From: Muktabh Anchlia <m_anchlia@hotmail.com>
-> > Subject: [Buildroot] Application execution fails
-> > To: <buildroot@uclibc.org>
-> > Message-ID: <BAY107-W3500673BC0EFE93C658FB49DD30@phx.gbl>
-> > Content-Type: text/plain; charset="iso-8859-1"
+> > Thank you for your help. If anyone would like to chime in on how to
+> > define _syscall5 or just with dealing with this problem you would be helping
+> > a lot!
 > >
 > >
-> > Hello,
-> > I compiled a cross tool chain for AMD geode processor using buildroot. I
-> wanted to test the cross tools, so wrote a simple hello world application,
-> exported the ...staging-dir/usr/bin/ path and compiled the C code using
-> i686-linux-uclibc-gcc.
-> >
-> > When I run this program on the host machine, it gives me "bad ELF
-> interpreter" as expected. But when I run it on the target, it gives me the
-> following error
-> > "syntax error: "(" unexpected"
-> > I couldn't figure out where I am going wrong.
-> > Any help would be appreciated.
-> >
-> > Thanks
-> > Muktabh
-> >
-> > " I don't take sides, just the racing line "
-> > -------------- next part --------------
-> > An HTML attachment was scrubbed...
-> > URL:
-> http://busybox.net/lists/buildroot/attachments/20080509/8ff756a8/attachment.html
-> >
-> > ------------------------------
-> >
-> > Message: 2
-> > Date: Fri, 9 May 2008 14:26:43 -0400
-> > From: "John Voltz" <john.voltz@gmail.com>
-> > Subject: Re: [Buildroot] Application execution fails
-> > To: "Buildroot List" <buildroot@uclibc.org>
-> > Message-ID:
-> > <46a136670805091126t2047cf96gef83119ccd45ab13@mail.gmail.com>
-> > Content-Type: text/plain; charset="iso-8859-1"
-> >
-> > try:
-> >
-> > /path/to/buildroot/build_i686/staging_dir/usr/bin/i686-linux-uclibc-gcc
-> > -I/path/to/buildroot/build_i686/staging_dir/usr/include
-> > -L/path/to/buildroot/build_i686/staging_dir/usr/lib -lc hello_world.c -o
-> > hello_world
-> >
-> >
-> >
-> > On Fri, May 9, 2008 at 1:46 PM, Muktabh Anchlia <m_anchlia@hotmail.com>
+> > On Thu, May 8, 2008 at 4:30 PM, hartleys <hartleys@visionengravers.com>
 > > wrote:
 > >
-> > > Hello,
-> > > I compiled a cross tool chain for AMD geode processor using buildroot.
-> I
-> > > wanted to test the cross tools, so wrote a simple hello world
-> application,
-> > > exported the ...staging-dir/usr/bin/ path and compiled the C code
-> using
-> > > i686-linux-uclibc-gcc.
+> > >  Unfortunately no... Like I said I have not yet tried to build a
+> > > toolchain from source. Sorry
 > > >
-> > > When I run this program on the host machine, it gives me "bad ELF
-> > > interpreter" as expected. But when I run it on the target, it gives me
-> the
-> > > following error
-> > > "syntax error: "(" unexpected"
-> > > I couldn't figure out where I am going wrong.
-> > > Any help would be appreciated.
+> > >  ------------------------------
+> > > *From:* Arun Reddy [mailto:reddyac at gmail.com]
+> > > *Sent:* Thursday, May 08, 2008 4:24 PM
+> > > *To:* hartleys
+> > > *Cc:* Buildroot List
+> > > *Subject:* Re: [Buildroot] ARM build error with llseek.c
 > > >
-> > > Thanks
-> > > Muktabh
+> > > Thanks for the information hartleys. Do you know how I can go about
+> > > defining _syscall5? Will I need to go into uClibc's menuconfig and select it
+> > > first?
 > > >
-> > > *" I don't take sides, just the racing line "*
+> > > On Thu, May 8, 2008 at 4:11 PM, hartleys <hartleys@visionengravers.com>
+> > > wrote:
 > > >
-> > > _______________________________________________
-> > > buildroot mailing list
-> > > buildroot at uclibc.org
-> > > http://busybox.net/mailman/listinfo/buildroot
+> > > >  This is just a guess but...
+> > > >
+> > > > I'm still using a prebuilt external toolchain and haven't tried
+> > > > building one from source yet so I'm not sure how to fix it. But, maybe this
+> > > > information to help.
+> > > >
+> > > > It appears you have a problem with your toolchain. That line in
+> > > > llseek.c should be invoving a uClibc macro (_syscall5) but it's not defined
+> > > > so the compiler is dying on the syntax of the "function" _syscall.
+> > > >
+> > > > Just my two cents...
+> > > >
+> > > >
+> > > >  ------------------------------
+> > > > *From:* buildroot-bounces at uclibc.org [mailto:
+> > > > buildroot-bounces at uclibc.org] *On Behalf Of *Arun Reddy
+> > > > *Sent:* Thursday, May 08, 2008 3:49 PM
+> > > > *To:* Buildroot List
+> > > > *Subject:* [Buildroot] ARM build error with llseek.c
+> > > >
+> > > >   Hi everyone,
+> > > >
+> > > > I am continuing with my ARM build and I ran into a problem with
+> > > > llseek.c:
+> > > >
+> > > > http://img211.imageshack.us/img211/6387/e2fsprogsph4.jpg
+> > > >
+> > > > I found that this problem was reported before:
+> > > > http://bugs.busybox.net/view.php?id=1548
+> > > >
+> > > > and the solution seemed to involve enabling large file support in
+> > > > buildroot's configuration. I did this, but still get the same error. Does
+> > > > anyone know why LFS needs to be activated and in my case, why it doesn't
+> > > > resolve this issue? Any help on this problem would be appreciated. Thank
+> > > > you.
+> > > >
+> > > >
 > > >
-> > -------------- next part --------------
-> > An HTML attachment was scrubbed...
-> > URL:
-> http://busybox.net/lists/buildroot/attachments/20080509/d2673767/attachment-0001.htm
 > >
-> > ------------------------------
-> >
-> > _______________________________________________
-> > buildroot mailing list
-> > buildroot at uclibc.org
-> > http://busybox.net/mailman/listinfo/buildroot
-> >
-> > End of buildroot Digest, Vol 23, Issue 20
-> > *****************************************
->
-> _______________________________________________
-> buildroot mailing list
-> buildroot at uclibc.org
-> http://busybox.net/mailman/listinfo/buildroot
 >
 -------------- next part --------------
 An HTML attachment was scrubbed...
-URL: http://busybox.net/lists/buildroot/attachments/20080511/35e5a9fc/attachment-0001.htm 
+URL: http://busybox.net/lists/buildroot/attachments/20080511/4f43bd29/attachment.htm 
