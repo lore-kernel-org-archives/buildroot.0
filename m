@@ -1,47 +1,72 @@
-From: nkukard at uclibc.org <nkukard@uclibc.org>
-Date: Mon, 12 May 2008 11:56:12 -0700 (PDT)
-Subject: [Buildroot] svn commit: trunk/buildroot/target/x86/grub
-Message-ID: <20080512185612.873053C5D1@busybox.net>
+From: ulf at uclibc.org <ulf@uclibc.org>
+Date: Mon, 12 May 2008 14:15:32 -0700 (PDT)
+Subject: [Buildroot] svn commit: trunk/buildroot/target/linux
+Message-ID: <20080512211532.C5E663C5E4@busybox.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Author: nkukard
-Date: 2008-05-12 11:56:11 -0700 (Mon, 12 May 2008)
-New Revision: 21974
+Author: ulf
+Date: 2008-05-12 14:15:32 -0700 (Mon, 12 May 2008)
+New Revision: 21975
 
 Log:
-features.h should never be included explicitly. 
-This fixes the bug where "File not found" error is reported by grub.
-This fix works under both uclibc and glibc.
-
+Make linux kernel extension visible also when defined in board directory
 
 Modified:
-   trunk/buildroot/target/x86/grub/grub.300-honor_UCLIBC_HAS_LFS.patch
+   trunk/buildroot/target/linux/Makefile.in.advanced
 
 
 Changeset:
-Modified: trunk/buildroot/target/x86/grub/grub.300-honor_UCLIBC_HAS_LFS.patch
+Modified: trunk/buildroot/target/linux/Makefile.in.advanced
 ===================================================================
---- trunk/buildroot/target/x86/grub/grub.300-honor_UCLIBC_HAS_LFS.patch	2008-05-12 14:35:56 UTC (rev 21973)
-+++ trunk/buildroot/target/x86/grub/grub.300-honor_UCLIBC_HAS_LFS.patch	2008-05-12 18:56:11 UTC (rev 21974)
-@@ -5,7 +5,7 @@
-   *  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
-   */
-  
--+#include <features.h>
-++/* #include <features.h> - NK */
- +#if !defined __UCLIBC__ || (defined __UCLIBC__ && defined __UCLIBC_HAS_LFS__)
-  /* Try to use glibc's transparant LFS support. */
-  #define _LARGEFILE_SOURCE	1
-@@ -22,7 +22,7 @@
-   *  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
-   */
-  
--+#include <features.h>
-++/* #include <features.h> - NK */
- +#if !defined __UCLIBC__ || (defined __UCLIBC__ && defined __UCLIBC_HAS_LFS__)
-  /* Try to use glibc's transparant LFS support. */
-  #define _LARGEFILE_SOURCE       1
+--- trunk/buildroot/target/linux/Makefile.in.advanced	2008-05-12 18:56:11 UTC (rev 21974)
++++ trunk/buildroot/target/linux/Makefile.in.advanced	2008-05-12 21:15:32 UTC (rev 21975)
+@@ -122,37 +122,43 @@
+ 
+ # -----------------------------------------------------------------------------
+ # Has to be set by the target/device
+-ifeq ($(LINUX26_BINLOC),)
+ 
+ # --------------
+ # VMLINUX
+ ifeq ($(LINUX26_FORMAT),vmlinux)
++ifeq ($(LINUX26_BINLOC),)
+ LINUX26_BINLOC:=$(LINUX26_FORMAT)
++endif
+ KERNEL_EXT:=
+ endif
+ 
+ # --------------
+ # UIMAGE
+ ifeq ($(LINUX26_FORMAT),uImage)
++ifeq ($(LINUX26_BINLOC),)
+ LINUX26_BINLOC:=arch/$(KERNEL_ARCH)/boot/$(LINUX26_FORMAT)
++endif
+ KERNEL_EXT:=.gz
+ endif
+ 
+ # --------------
+ # ZIMAGE
+ ifeq ($(LINUX26_FORMAT),zImage)
++ifeq ($(LINUX26_BINLOC),)
+ LINUX26_BINLOC:=arch/$(KERNEL_ARCH)/boot/$(LINUX26_FORMAT)
++endif
+ KERNEL_EXT:=.z
+ endif
+ 
+ # --------------
+ # BZIMAGE
+ ifeq ($(LINUX26_FORMAT),bzImage)
++ifeq ($(LINUX26_BINLOC),)
+ LINUX26_BINLOC:=arch/$(KERNEL_ARCH)/boot/bzImage
++endif
+ KERNEL_EXT:=.bz
+ endif
+ 
+-endif
+ 
+ # -----------------------------------------------------------------------------
+ # File name for the Linux kernel binary
