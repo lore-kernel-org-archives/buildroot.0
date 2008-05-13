@@ -1,34 +1,43 @@
-From: James Ronald <james.ronald@gmail.com>
-Date: Mon, 12 May 2008 19:24:36 -0400
-Subject: [Buildroot] Help with verifying buildroot build options for uClibc
-	and GCC
-Message-ID: <10bd9830805121624t30f2df56k6e85827be2574a7c@mail.gmail.com>
+From: Hamish Moffatt <hamish@cloud.net.au>
+Date: Tue, 13 May 2008 10:45:48 +1000
+Subject: [Buildroot] httpd question
+In-Reply-To: <1CF6EDDF0820924DA43C9A52FE7325950B5F07A2@MI8NYCMAIL17.Mi8.com>
+References: <1CF6EDDF0820924DA43C9A52FE7325950B569C1A@MI8NYCMAIL17.Mi8.com>
+	<482555F2.3080501@Kriegisch.name>
+	<1CF6EDDF0820924DA43C9A52FE7325950B5F07A2@MI8NYCMAIL17.Mi8.com>
+Message-ID: <20080513004548.GB7473@cloud.net.au>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
- I am trying to get Linux 2.6.25 running on some older hardware that
-uses a Sharp LH7A400 ARM 922T processor (currently running Linux
-2.4.20).  The kernel uncompresses and seems to even be executing.
-Busybox init prints it's Starting Init message but that is about it.
-Nothing in the inittab seems to have executed.  Using the Magic SysRq
-key and option "t" shows that init is running and even switching.
-Replacing Init with simple programs works fine for a number of things
-such as read, write, malloc and floating point.  However, both sprintf
-and printf lock up, without any indication as to why. Some Googling
-about points has me suspecting that perhaps Buildroot is not passing
-the correct options to correctly build ggc or uClibc or such.  I'm
-currently using buildroot-21758, uClibc 0.9.29, binutils 2.18.50.0.1,
-GCC 4.2.1 and Busybox 1.7.2.  Is there a way that I can verify the
-options that were actually used to build uClibc and gcc?  I logged a
-copy of the make for Buildroot building everything but was unable to
-find which options where actually used to build GCC or uClibc.
+On Mon, May 12, 2008 at 12:50:24PM -0400, hartleys wrote:
+> On Saturday, May 10, 2008 1:00 AM, Alexander Kriegisch wrote:
+> > Sounds like you have another process, probably another web server,
+> > listening on that port. Find out which process that is by issuing
+> > these commands:
+> >  # Is port 80 listened at?
+> >  netstat -ln |grep ":80"
+> >  # If so, by whom? (Hopefully your have 'lsof' installed)
+> >  lsof -i :80
+> 
+> Ok. Got lsof to download and compile. I had to change the ftp site.
+> 
+> / # netstat -ln |grep ":80"
+> tcp        0      0 0.0.0.0:80              0.0.0.0:*
+> LISTEN
+> / # lsof -i :80
+> COMMAND PID USER   FD   TYPE DEVICE SIZE NODE NAME
+> inetd   372 root   15u  inet     82       TCP *:www (LISTEN)
+> / #
+> 
+> I'm not really sure what this output means. Can you offer any ideas?
 
-Also, if there is anyone else on the list running a 2.6.2x kernel on a
-Sharp LH7A400 or LH7A404 I would love to hear words of encouragement
-from you.
+It means you have an http service configured in /etc/inetd.conf. Post
+your inetd.conf to this list if you need assistance.
 
-Thanks,
-James Ronald
+cheers
+Hamish
+-- 
+Hamish Moffatt VK3SB <hamish@debian.org> <hamish@cloud.net.au>
