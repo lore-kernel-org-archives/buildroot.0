@@ -1,27 +1,35 @@
-From: Hamish Moffatt <hamish@cloud.net.au>
-Date: Tue, 13 May 2008 13:47:00 +1000
-Subject: [Buildroot] httpd question
-In-Reply-To: <1CF6EDDF0820924DA43C9A52FE7325950B676C89@MI8NYCMAIL17.Mi8.com>
-References: <1CF6EDDF0820924DA43C9A52FE7325950B569C1A@MI8NYCMAIL17.Mi8.com>
-	<482555F2.3080501@Kriegisch.name>
-	<1CF6EDDF0820924DA43C9A52FE7325950B5F07A2@MI8NYCMAIL17.Mi8.com>
-	<20080513004548.GB7473@cloud.net.au>
-	<1CF6EDDF0820924DA43C9A52FE7325950B676C46@MI8NYCMAIL17.Mi8.com>
-	<20080513021451.GA11213@cloud.net.au>
-	<1CF6EDDF0820924DA43C9A52FE7325950B676C89@MI8NYCMAIL17.Mi8.com>
-Message-ID: <20080513034700.GA13136@cloud.net.au>
+From: Will Wagner <will_wagner@carallon.com>
+Date: Tue, 13 May 2008 12:10:04 +0100
+Subject: [Buildroot] GPL compliance
+Message-ID: <4829770C.6090608@carallon.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Mon, May 12, 2008 at 10:21:25PM -0400, hartleys wrote:
-> That's what I figured. Still haven't tried to build a new toolchain.
-> That step scares me ;-) 
+Hi All,
 
-Where'd you get your toolchain from? Was it not built by buildroot?
+We are approaching release of our product and I want to make sure we are 
+meeting out GPL compliance correctly. I was wondering if there is an 
+example out there how is the best way of meeting the requirements.
 
-Hamish
+We are just using buildroot, without any real customisations beyond the 
+config. As I understand it we cannot just list all the packages used 
+with links to where to download them, we actually have to be able to 
+supply all the source code ourselves. Is that correct? Also was 
+wondering if any of the buildroot/uclibc/busybox/linux config files are 
+included under the GPL.
+
+Finally do we have to provide all the toolchain as well, as far as I can 
+tell we do not, it is only the code contained within the application binary.
+
+Thanks,
+
+Will.
 -- 
-Hamish Moffatt VK3SB <hamish@debian.org> <hamish@cloud.net.au>
+------------------------------------------------------------------------
+Will Wagner                                     will_wagner at carallon.com
+Senior Project Engineer                  Office Tel: +44 (0)20 7371 2032
+Carallon Ltd, Studio G20, Shepherds Building, Rockley Rd, London W14 0DA
+------------------------------------------------------------------------
