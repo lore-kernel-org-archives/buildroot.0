@@ -1,30 +1,32 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Thu, 15 May 2008 14:26:49 +0200
-Subject: [Buildroot] [PATCH] Add thumb support to buildroot for the ARM
- architecture
-In-Reply-To: <20080319171615.2f03c690@crazy>
-References: <20080312090846.2cfecec8@crazy> <20080314090331.11f1bddc@crazy>
-	<20080319171615.2f03c690@crazy>
-Message-ID: <20080515142649.1cbcde6e@crazy>
+Date: Thu, 15 May 2008 14:28:00 +0200
+Subject: [Buildroot] How to add a new package?
+In-Reply-To: <1210796316.3291.5.camel@localhost>
+References: <1210695461.3289.16.camel@localhost>
+	<1CF6EDDF0820924DA43C9A52FE7325950B6CA51E@MI8NYCMAIL17.Mi8.com>
+	<1210796316.3291.5.camel@localhost>
+Message-ID: <20080515142800.234b4a9f@crazy>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Le Wed, 19 Mar 2008 17:16:15 +0100,
-Thomas Petazzoni <thomas.petazzoni@free-electrons.com> a ?crit :
+Le Wed, 14 May 2008 22:18:36 +0200,
+Conny Marco Menebr?cker <menebroecker@web.de> a ?crit :
 
-> > Any comments on that ? Are you interested in merging such a patch ?
-> 
-> Still no interest in this patch ? Is the patch wrong ?
+> Thanks for the answer, but I had added the line before.
+> Have I to run something else, than 'make menuconfig'?
+> Have I to run 'make clean' or something else?
 
-Up again. Initial patch sent two months ago, on March, 12th. Please
-tell me something: ?doesn't work, please fix?, ?we don't care about
-your stuff, it's useless? or ? works, but we would like this and this
-to be improved?.
+No, just "make menuconfig". If the menu entry doesn't appear, it's
+probably because your Config.in changes are not correct.
 
-Thanks,
+Can you send the patch corresponding to your Buildroot modifications ?
+That way, instead of trying to guess in the dark, we could actually
+help you.
+
+Sincerly,
 
 Thomas
 -- 
@@ -38,4 +40,4 @@ Name: signature.asc
 Type: application/pgp-signature
 Size: 189 bytes
 Desc: not available
-Url : http://busybox.net/lists/buildroot/attachments/20080515/5adb23a2/attachment.pgp 
+Url : http://busybox.net/lists/buildroot/attachments/20080515/0ea76b28/attachment-0001.pgp 
