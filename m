@@ -1,30 +1,28 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Thu, 15 May 2008 14:28:00 +0200
-Subject: [Buildroot] How to add a new package?
-In-Reply-To: <1210796316.3291.5.camel@localhost>
-References: <1210695461.3289.16.camel@localhost>
-	<1CF6EDDF0820924DA43C9A52FE7325950B6CA51E@MI8NYCMAIL17.Mi8.com>
-	<1210796316.3291.5.camel@localhost>
-Message-ID: <20080515142800.234b4a9f@crazy>
+Date: Thu, 15 May 2008 14:24:46 +0200
+Subject: [Buildroot] Buildroot with java compiler and libgcj problem
+ (arm iwmmxt EABI softfp)
+In-Reply-To: <FBCMMO02kzr0FNacww50004c0c6@FBCMMO02.fbc.local>
+References: <FBCMMO02kzr0FNacww50004c0c6@FBCMMO02.fbc.local>
+Message-ID: <20080515142446.67bff2e1@crazy>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Le Wed, 14 May 2008 22:18:36 +0200,
-Conny Marco Menebr?cker <menebroecker@web.de> a ?crit :
+Le Thu, 3 Apr 2008 20:44:36 +0200,
+<ffileppo@alice.it> a ?crit :
 
-> Thanks for the answer, but I had added the line before.
-> Have I to run something else, than 'make menuconfig'?
-> Have I to run 'make clean' or something else?
+> I'm trying to compile buildroot with java compiler and libgcj for
+> arm-iwmmxt-eabi with software floating point.
+> 
+> I get this error (see below) -- Without java compiler and libgcj
+> buildroot is able to complete the compilation.
 
-No, just "make menuconfig". If the menu entry doesn't appear, it's
-probably because your Config.in changes are not correct.
-
-Can you send the patch corresponding to your Buildroot modifications ?
-That way, instead of trying to guess in the dark, we could actually
-help you.
+Same problem here, reproducible with today's Subversion.
+A bug has been opened (http://busybox.net/bugs/view.php?id=2864), but
+no activity so far.
 
 Sincerly,
 
@@ -40,4 +38,4 @@ Name: signature.asc
 Type: application/pgp-signature
 Size: 189 bytes
 Desc: not available
-Url : http://busybox.net/lists/buildroot/attachments/20080515/0ea76b28/attachment-0001.pgp 
+Url : http://busybox.net/lists/buildroot/attachments/20080515/7f24c450/attachment.pgp 
