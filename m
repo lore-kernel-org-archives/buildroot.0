@@ -1,59 +1,28 @@
-From: bugs at busybox.net <bugs@busybox.net>
-Date: Thu, 15 May 2008 08:44:45 -0700
-Subject: [Buildroot] [buildroot 0003324]: problem: run cross compiled
-	asterisk on openwrt
-Message-ID: <43fa07482b616120f996b90eab5c544e@busybox.net>
+From: Arun Reddy <reddyac@gmail.com>
+Date: Thu, 15 May 2008 12:16:51 -0700
+Subject: [Buildroot] Encountered BusyBox error during ARM build
+Message-ID: <326f33790805151216x655f538fm2d25a5c12af669fc@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+Hi everyone,
 
-A NOTE has been added to this issue. 
-====================================================================== 
-http://busybox.net/bugs/view.php?id=3324 
-====================================================================== 
-Reported By:                gebecom
-Assigned To:                buildroot
-====================================================================== 
-Project:                    buildroot
-Issue ID:                   3324
-Category:                   Architecture Specific
-Reproducibility:            always
-Severity:                   minor
-Priority:                   normal
-Status:                     assigned
-====================================================================== 
-Date Submitted:             05-15-2008 08:08 PDT
-Last Modified:              05-15-2008 08:44 PDT
-====================================================================== 
-Summary:                    problem: run cross compiled asterisk on openwrt
-Description: 
-i have asterisk corss compiled and ported on openwrt. But wenn i under
-/opt/sbin/ run ./asterisk , is the error: Unable to open pid file
-'/opt/var/run/asterisk.pid'; No such file or directory.      wenn i run
-./rasterisk  (-r), is the error : Unable to connect to remote asterisk
-(does /opt/var/run/asterisk.ctl exist?)    wenn i run ./rasterisk -vvvvvvc
- , is the error: Cannot read termcap database; using dumb terminal
-settings. Unable to remote asterisk (does /opt/var/run/asterisk.ctl
-exist?)
-Anyone can help me?
-where is the error?
-thanks in advance!!!!
-====================================================================== 
+Going through the build process for ARM, I have encountered a problem with
+BusyBox which I am not sure if I am isolating correctly. The error is
+mentioned here:
 
----------------------------------------------------------------------- 
- Correa - 05-15-08 08:44  
----------------------------------------------------------------------- 
-OpenWRT and Buildroot are not the same project. Did you try it with
-buildroot? 
+http://img386.imageshack.us/img386/2225/busyboxerrorlb2.jpg
 
-Issue History 
-Date Modified   Username       Field                    Change               
-====================================================================== 
-05-15-08 08:08  gebecom        New Issue                                    
-05-15-08 08:08  gebecom        Status                   new => assigned     
-05-15-08 08:08  gebecom        Assigned To               => buildroot       
-05-15-08 08:44  Correa         Note Added: 0007704                          
-======================================================================
+It looks like fstat64, lstat64 and stat64 have undefined references, which
+are probably a result of something earlier failing. I was wondering if this
+is a problem with my BusyBox configuration in particular, or is it a common
+problem you guys have encountered when using Buildroot in general? I looked
+online and there was a mention about defining STAT64_SUPPORT, but I found no
+explanation on what it does or where it is located, so I thought I would get
+some clarification here. Thank you!
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: http://busybox.net/lists/buildroot/attachments/20080515/fe8f9f0c/attachment.htm 
