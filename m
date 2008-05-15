@@ -1,248 +1,66 @@
 From: Arun Reddy <reddyac@gmail.com>
-Date: Thu, 15 May 2008 16:41:48 -0700
-Subject: [Buildroot] ARM build error with llseek.c
-In-Reply-To: <2590773a0805151620r18b9f1b3qb81e255beee1ad71@mail.gmail.com>
-References: <326f33790805081549v3afdc776u56cdeb8e57167782@mail.gmail.com>
-	<1CF6EDDF0820924DA43C9A52FE7325950B4DA9C3@MI8NYCMAIL17.Mi8.com>
-	<326f33790805081624g2daf1407v15e8e84ad1914b77@mail.gmail.com>
-	<1CF6EDDF0820924DA43C9A52FE7325950B4DAA2E@MI8NYCMAIL17.Mi8.com>
-	<326f33790805081812sc3b8d29v948f331f7fe84653@mail.gmail.com>
-	<326f33790805081813lff2c266wfc23c361119452df@mail.gmail.com>
-	<326f33790805112024l75b6e2d5x41f4fb229b982274@mail.gmail.com>
-	<2590773a0805151620r18b9f1b3qb81e255beee1ad71@mail.gmail.com>
-Message-ID: <326f33790805151641l495774fdpf0efe19c9f060135@mail.gmail.com>
+Date: Thu, 15 May 2008 16:44:54 -0700
+Subject: [Buildroot] Encountered BusyBox error during ARM build
+In-Reply-To: <2590773a0805151623g1b5fb304v54335ccd92d7da68@mail.gmail.com>
+References: <326f33790805151216x655f538fm2d25a5c12af669fc@mail.gmail.com>
+	<2590773a0805151623g1b5fb304v54335ccd92d7da68@mail.gmail.com>
+Message-ID: <326f33790805151644y43c38a1q2c64de32cfbae948@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Thanks Chris,
+Hi Chris,
 
-Looks like the issue was with LFS not being enabled in uclibc
-(CONFIG_UCLIBC_HAS_LFS) and also BusyBox not having
-BR2_PACKAGE_BUSYBOX_HIDE_OTHERS selected. I did a make clean for everything
-and rebuilt, and got past that error.
+I suspected it had to do with my previous error, but the thing is I had
+already done a make clean on BusyBox earlier and found that it did not solve
+this problem. I did do a "make distclean", which I believe gets rid of
+everything "./configure" has built, but found no success.
 
-I am fairly certain I understand why LFS needed to be enabled, because I was
-reading up on a couple threads online about llseek.c being used for large
-file support in general, while lseek.c is used for small files. I want LFS
-for my purposes, and it is possible that by not selecting LFS in the uclibc
-menuconfig, that a specific function or variable wasn't defined correctly in
-a header file used by llseek.c, and therefore it couldn't compile correctly.
-This is of course my best assumption.
+Before I do it, do you think I should clean uclibc as well since I did
+happen to change LFS in the uclibc menuconfig? Thanks for the help!
 
-As for selecting BusyBox's hide others option, I am unsure as to why that
-works, but found it here as a suggestion.
-
-http://buildroot.uclibc.org/lists/buildroot/2007-June/003077.html
-
-I hope this helps anyone in the future.
-
-On Thu, May 15, 2008 at 4:20 PM, Christopher Taylor <chtaylo3@gmail.com>
+On Thu, May 15, 2008 at 4:23 PM, Christopher Taylor <chtaylo3@gmail.com>
 wrote:
 
-> Whops, replied to poster not to list ... sorry everyone ....
+> This is related to your previous post.  You'll have to do a make clean
+> or a make dist-clean inside busybox.
+> for you that's
 >
+> cd /root/buildroot/project_build_arm/uclibc/busybox-1.10.2
+> make dist-clean
+> cd -
+> make
 >
-> I've had bad luck figuring out what parts of the tool chain I need to
-> make clean when I make a change to uclibc.  Look for LFS, large file
-> support and other things like that in
-> menuconfig
-> uclibc-menuconifg
-> busybox-menuconfig
-> linux26-menuconifg
+> If that doesn't work, write back.
 >
-> by suggestion is then to go to the build dir for each of the major
-> components (buildroot, uclibc, busybox, and the kernel) and do a make
-> clean.
->
-> You should have better luck from there.
->
->
-> if that doesn't work, try d/l buildroot again, copy over your config
-> files and rebuild
->
-> HTH
+> HTH!
 > Chris
-> - Show quoted text -
 >
->
-> On Sun, May 11, 2008 at 11:24 PM, Arun Reddy <reddyac@gmail.com> wrote:
-> > Hey everyone,
+> On Thu, May 15, 2008 at 3:16 PM, Arun Reddy <reddyac@gmail.com> wrote:
+> > Hi everyone,
 > >
-> > I was just curious if anyone had any more suggestions on this problem? I
-> am
-> > still finding myself stuck with it. Thank you.
+> > Going through the build process for ARM, I have encountered a problem
+> with
+> > BusyBox which I am not sure if I am isolating correctly. The error is
+> > mentioned here:
 > >
-> > On Thu, May 8, 2008 at 6:13 PM, Arun Reddy <reddyac@gmail.com> wrote:
-> >>
-> >> CC'd buildroot list
-> >>
-> >> On Thu, May 8, 2008 at 6:12 PM, Arun Reddy <reddyac@gmail.com> wrote:
-> >>>
-> >>> Thank you for your help. If anyone would like to chime in on how to
-> >>> define _syscall5 or just with dealing with this problem you would be
-> helping
-> >>> a lot!
-> >>>
-> >>> On Thu, May 8, 2008 at 4:30 PM, hartleys <hartleys@visionengravers.com
+> > http://img386.imageshack.us/img386/2225/busyboxerrorlb2.jpg
 > >
-> >>> wrote:
-> >>>>
-> >>>> Unfortunately no... Like I said I have not yet tried to build a
-> >>>> toolchain from source. Sorry
-> >>>> ________________________________
-> >>>> From: Arun Reddy [mailto:reddyac at gmail.com]
-> >>>> Sent: Thursday, May 08, 2008 4:24 PM
-> >>>> To: hartleys
-> >>>> Cc: Buildroot List
-> >>>> Subject: Re: [Buildroot] ARM build error with llseek.c
-> >>>>
-> >>>> Thanks for the information hartleys. Do you know how I can go about
-> >>>> defining _syscall5? Will I need to go into uClibc's menuconfig and
-> select it
-> >>>> first?
-> >>>>
-> >>>> On Thu, May 8, 2008 at 4:11 PM, hartleys <
-> hartleys at visionengravers.com>
-> >>>> wrote:
-> >>>>>
-> >>>>> This is just a guess but...
-> >>>>>
-> >>>>> I'm still using a prebuilt external toolchain and haven't tried
-> >>>>> building one from source yet so I'm not sure how to fix it. But,
-> maybe this
-> >>>>> information to help.
-> >>>>>
-> >>>>> It appears you have a problem with your toolchain. That line in
-> >>>>> llseek.c should be invoving a uClibc macro (_syscall5) but it's not
-> defined
-> >>>>> so the compiler is dying on the syntax of the "function" _syscall.
-> >>>>>
-> >>>>> Just my two cents...
-> >>>>>
-> >>>>> ________________________________
-> >>>>> From: buildroot-bounces at uclibc.org
-> >>>>> [mailto:buildroot-bounces at uclibc.org] On Behalf Of Arun Reddy
-> >>>>> Sent: Thursday, May 08, 2008 3:49 PM
-> >>>>> To: Buildroot List
-> >>>>> Subject: [Buildroot] ARM build error with llseek.c
-> >>>>>
-> >>>>> Hi everyone,
-> >>>>>
-> >>>>> I am continuing with my ARM build and I ran into a problem with
-> >>>>> llseek.c:
-> >>>>>
-> >>>>> http://img211.imageshack.us/img211/6387/e2fsprogsph4.jpg
-> >>>>>
-> >>>>> I found that this problem was reported before:
-> >>>>> http://bugs.busybox.net/view.php?id=1548
-> >>>>>
-> >>>>> and the solution seemed to involve enabling large file support in
-> >>>>> buildroot's configuration. I did this, but still get the same error.
-> Does
-> >>>>> anyone know why LFS needs to be activated and in my case, why it
-> doesn't
-> >>>>> resolve this issue? Any help on this problem would be appreciated.
-> Thank
-> >>>>> you.
-> >>>>>
-> >>>>
-> >>>
-> >>
-> >
-> >
-> > _______________________________________________
-> > buildroot mailing list
-> > buildroot at uclibc.org
-> > http://busybox.net/mailman/listinfo/buildroot
-> >
->
-> On Sun, May 11, 2008 at 11:24 PM, Arun Reddy <reddyac@gmail.com> wrote:
-> > Hey everyone,
-> >
-> > I was just curious if anyone had any more suggestions on this problem? I
-> am
-> > still finding myself stuck with it. Thank you.
-> >
-> > On Thu, May 8, 2008 at 6:13 PM, Arun Reddy <reddyac@gmail.com> wrote:
-> >>
-> >> CC'd buildroot list
-> >>
-> >> On Thu, May 8, 2008 at 6:12 PM, Arun Reddy <reddyac@gmail.com> wrote:
-> >>>
-> >>> Thank you for your help. If anyone would like to chime in on how to
-> >>> define _syscall5 or just with dealing with this problem you would be
-> helping
-> >>> a lot!
-> >>>
-> >>> On Thu, May 8, 2008 at 4:30 PM, hartleys <hartleys@visionengravers.com
-> >
-> >>> wrote:
-> >>>>
-> >>>> Unfortunately no... Like I said I have not yet tried to build a
-> >>>> toolchain from source. Sorry
-> >>>> ________________________________
-> >>>> From: Arun Reddy [mailto:reddyac at gmail.com]
-> >>>> Sent: Thursday, May 08, 2008 4:24 PM
-> >>>> To: hartleys
-> >>>> Cc: Buildroot List
-> >>>> Subject: Re: [Buildroot] ARM build error with llseek.c
-> >>>>
-> >>>> Thanks for the information hartleys. Do you know how I can go about
-> >>>> defining _syscall5? Will I need to go into uClibc's menuconfig and
-> select it
-> >>>> first?
-> >>>>
-> >>>> On Thu, May 8, 2008 at 4:11 PM, hartleys <
-> hartleys at visionengravers.com>
-> >>>> wrote:
-> >>>>>
-> >>>>> This is just a guess but...
-> >>>>>
-> >>>>> I'm still using a prebuilt external toolchain and haven't tried
-> >>>>> building one from source yet so I'm not sure how to fix it. But,
-> maybe this
-> >>>>> information to help.
-> >>>>>
-> >>>>> It appears you have a problem with your toolchain. That line in
-> >>>>> llseek.c should be invoving a uClibc macro (_syscall5) but it's not
-> defined
-> >>>>> so the compiler is dying on the syntax of the "function" _syscall.
-> >>>>>
-> >>>>> Just my two cents...
-> >>>>>
-> >>>>> ________________________________
-> >>>>> From: buildroot-bounces at uclibc.org
-> >>>>> [mailto:buildroot-bounces at uclibc.org] On Behalf Of Arun Reddy
-> >>>>> Sent: Thursday, May 08, 2008 3:49 PM
-> >>>>> To: Buildroot List
-> >>>>> Subject: [Buildroot] ARM build error with llseek.c
-> >>>>>
-> >>>>> Hi everyone,
-> >>>>>
-> >>>>> I am continuing with my ARM build and I ran into a problem with
-> >>>>> llseek.c:
-> >>>>>
-> >>>>> http://img211.imageshack.us/img211/6387/e2fsprogsph4.jpg
-> >>>>>
-> >>>>> I found that this problem was reported before:
-> >>>>> http://bugs.busybox.net/view.php?id=1548
-> >>>>>
-> >>>>> and the solution seemed to involve enabling large file support in
-> >>>>> buildroot's configuration. I did this, but still get the same error.
-> Does
-> >>>>> anyone know why LFS needs to be activated and in my case, why it
-> doesn't
-> >>>>> resolve this issue? Any help on this problem would be appreciated.
-> Thank
-> >>>>> you.
-> >>>>>
-> >>>>
-> >>>
-> >>
-> >
+> > It looks like fstat64, lstat64 and stat64 have undefined references,
+> which
+> > are probably a result of something earlier failing. I was wondering if
+> this
+> > is a problem with my BusyBox configuration in particular, or is it a
+> common
+> > problem you guys have encountered when using Buildroot in general? I
+> looked
+> > online and there was a mention about defining STAT64_SUPPORT, but I found
+> no
+> > explanation on what it does or where it is located, so I thought I would
+> get
+> > some clarification here. Thank you!
 > >
 > > _______________________________________________
 > > buildroot mailing list
@@ -256,4 +74,4 @@ wrote:
 >
 -------------- next part --------------
 An HTML attachment was scrubbed...
-URL: http://busybox.net/lists/buildroot/attachments/20080515/f6310a99/attachment-0001.htm 
+URL: http://busybox.net/lists/buildroot/attachments/20080515/4c1e77a2/attachment.htm 
