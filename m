@@ -1,8 +1,8 @@
 From: bugs at busybox.net <bugs@busybox.net>
-Date: Thu, 15 May 2008 08:08:27 -0700
+Date: Thu, 15 May 2008 08:44:45 -0700
 Subject: [Buildroot] [buildroot 0003324]: problem: run cross compiled
 	asterisk on openwrt
-Message-ID: <2bd3b73ad455389a54334289d89034fa@www.busybox.net>
+Message-ID: <43fa07482b616120f996b90eab5c544e@busybox.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -10,7 +10,7 @@ Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
 
-The following issue has been SUBMITTED. 
+A NOTE has been added to this issue. 
 ====================================================================== 
 http://busybox.net/bugs/view.php?id=3324 
 ====================================================================== 
@@ -26,7 +26,7 @@ Priority:                   normal
 Status:                     assigned
 ====================================================================== 
 Date Submitted:             05-15-2008 08:08 PDT
-Last Modified:              05-15-2008 08:08 PDT
+Last Modified:              05-15-2008 08:44 PDT
 ====================================================================== 
 Summary:                    problem: run cross compiled asterisk on openwrt
 Description: 
@@ -43,10 +43,17 @@ where is the error?
 thanks in advance!!!!
 ====================================================================== 
 
+---------------------------------------------------------------------- 
+ Correa - 05-15-08 08:44  
+---------------------------------------------------------------------- 
+OpenWRT and Buildroot are not the same project. Did you try it with
+buildroot? 
+
 Issue History 
 Date Modified   Username       Field                    Change               
 ====================================================================== 
 05-15-08 08:08  gebecom        New Issue                                    
 05-15-08 08:08  gebecom        Status                   new => assigned     
 05-15-08 08:08  gebecom        Assigned To               => buildroot       
+05-15-08 08:44  Correa         Note Added: 0007704                          
 ======================================================================
