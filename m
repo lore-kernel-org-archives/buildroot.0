@@ -1,23 +1,52 @@
-From: Hans-Christian Egtvedt <hans-christian.egtvedt@atmel.com>
-Date: Thu, 15 May 2008 17:03:58 +0200
-Subject: [Buildroot] [patch] add SVG selection to Qtopia 4 and fix strip
-	command
-Message-ID: <1210863838.1926.2.camel@localhost>
+From: bugs at busybox.net <bugs@busybox.net>
+Date: Thu, 15 May 2008 08:08:27 -0700
+Subject: [Buildroot] [buildroot 0003324]: problem: run cross compiled
+	asterisk on openwrt
+Message-ID: <2bd3b73ad455389a54334289d89034fa@www.busybox.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-See attached patch
 
--- 
-With kind regards,
-Hans-Christian Egtvedt, Applications Engineer
--------------- next part --------------
-A non-text attachment was scrubbed...
-Name: qtopia4-add-svg-selection-and-fix-strip.patch
-Type: text/x-patch
-Size: 2200 bytes
-Desc: not available
-Url : http://busybox.net/lists/buildroot/attachments/20080515/9e6b667e/attachment.bin 
+The following issue has been SUBMITTED. 
+====================================================================== 
+http://busybox.net/bugs/view.php?id=3324 
+====================================================================== 
+Reported By:                gebecom
+Assigned To:                buildroot
+====================================================================== 
+Project:                    buildroot
+Issue ID:                   3324
+Category:                   Architecture Specific
+Reproducibility:            always
+Severity:                   minor
+Priority:                   normal
+Status:                     assigned
+====================================================================== 
+Date Submitted:             05-15-2008 08:08 PDT
+Last Modified:              05-15-2008 08:08 PDT
+====================================================================== 
+Summary:                    problem: run cross compiled asterisk on openwrt
+Description: 
+i have asterisk corss compiled and ported on openwrt. But wenn i under
+/opt/sbin/ run ./asterisk , is the error: Unable to open pid file
+'/opt/var/run/asterisk.pid'; No such file or directory.      wenn i run
+./rasterisk  (-r), is the error : Unable to connect to remote asterisk
+(does /opt/var/run/asterisk.ctl exist?)    wenn i run ./rasterisk -vvvvvvc
+ , is the error: Cannot read termcap database; using dumb terminal
+settings. Unable to remote asterisk (does /opt/var/run/asterisk.ctl
+exist?)
+Anyone can help me?
+where is the error?
+thanks in advance!!!!
+====================================================================== 
+
+Issue History 
+Date Modified   Username       Field                    Change               
+====================================================================== 
+05-15-08 08:08  gebecom        New Issue                                    
+05-15-08 08:08  gebecom        Status                   new => assigned     
+05-15-08 08:08  gebecom        Assigned To               => buildroot       
+======================================================================
