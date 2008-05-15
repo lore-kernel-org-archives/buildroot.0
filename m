@@ -1,8 +1,8 @@
 From: bugs at busybox.net <bugs@busybox.net>
-Date: Thu, 15 May 2008 05:33:14 -0700
+Date: Thu, 15 May 2008 05:45:21 -0700
 Subject: [Buildroot] [buildroot 0002864]: Java compiler and libgcj build
 	fails (arm-iwmmxt-eabi)
-Message-ID: <a1f8029556dc51bac49e3544a0b3832b@busybox.net>
+Message-ID: <48abf4de9d83cba4c761d99d49f0d9e0@busybox.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -26,7 +26,7 @@ Priority:                   normal
 Status:                     assigned
 ====================================================================== 
 Date Submitted:             04-06-2008 14:28 PDT
-Last Modified:              05-15-2008 05:33 PDT
+Last Modified:              05-15-2008 05:45 PDT
 ====================================================================== 
 Summary:                    Java compiler and libgcj build fails
 (arm-iwmmxt-eabi)
@@ -73,6 +73,27 @@ Error 1
 ---------------------------------------------------------------------- 
 Problem still exists in today's Subversion of Buildroot. 
 
+---------------------------------------------------------------------- 
+ tpetazzoni - 05-15-08 05:45  
+---------------------------------------------------------------------- 
+Ok, the problem is that when you enable the Java compiler, the option
+BR2_INSTALL_LIBGCJ is enabled. When this option is selected,
+toolchain/gcc/gcc-uclibc-4.x.mk does the following thing:
+
+GCC_TARGET_LANGUAGES:=$(GCC_TARGET_LANGUAGES),java
+
+So, Java is added to GCC_TARGET_LANGUAGES.
+
+However, GCC_TARGET_LANGUAGES is used in the optional 3rd step of gcc
+compilation: compilation of a native gcc for the target (not a
+cross-compiler). The list of languages supported by the cross-compiler is
+in GCC_CROSS_LANGUAGES.
+
+However, for some reason, when BR2_INSTALL_LIBGCJ is enabled, at the of
+the second step of gcc compilation (compilation of the final
+cross-compiler), then the Makefile looks for some libgcj.so* files. Which
+of course are not present, since "java" was not in GCC_CROSS_LANGUAGES. 
+
 Issue History 
 Date Modified   Username       Field                    Change               
 ====================================================================== 
@@ -81,4 +102,5 @@ Date Modified   Username       Field                    Change
 04-06-08 14:28  Francesco      Assigned To               => buildroot       
 04-06-08 14:28  Francesco      File Added: .config                          
 05-15-08 05:33  tpetazzoni     Note Added: 0007684                          
+05-15-08 05:45  tpetazzoni     Note Added: 0007694                          
 ======================================================================
