@@ -1,40 +1,41 @@
-From: Ram kumar <ramkumar.research@gmail.com>
-Date: Sat, 17 May 2008 04:40:04 +0530
-Subject: [Buildroot] lockfile-progs 404 not found error
-Message-ID: <6306c640805161610n5075970auf0abad5f37e6a501@mail.gmail.com>
+From: Dmitry Teytelman <dimtey@gmail.com>
+Date: Fri, 16 May 2008 16:38:29 -0700
+Subject: [Buildroot] Bash segfaults and other "niceties"
+Message-ID: <592c74910805161638t76f70f90sdce3b85faa7b24b3@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-hi,
-       Iam trying to build a development environment using the buildroot for
-atmel chip AT91SAM9260.
+Hello,
 
-The buildroot builds everything but it stops at a point lockfile-progs.It is
-trying to get connected  to http://ftp.debian.org and looks for the file
-progs_0.1.11.tar.gz.
+I am having major problems with a recent snapshot of buildroot
+(20080513) and suspect the answer is simple - I am doing something
+completely wrong :(
 
-But the file name in debian.org has been changed to progs_0.1.11-0.1.tar.gz.
+A bit of history. I am running buildroot-based system on mini-ITX
+hardware (Via processor). I have been using an older version
+(20061231) for a while and it has been very reliable. However that
+version no longer compiles after the development machine was upgraded
+from Fedora Core 5 to Fedora 8.
 
-Hers is the error message which iam seeing in the shell ?
+So I tried to recreate the environment with a new buildroot. I can
+build it and install on the target. However I see multiple issues:
 
-wget --passive-ftp -nd  -P /buildroot/dl "http://ftp.debian.org
-"/debian/pool/main/l/lockfile-progs//lockfile-progs_0.1.11.tar.gz
---03:56:16--
-http://ftp.debian.org/debian/pool/main/l/lockfile-progs//lockfile-progs_0.1.11.tar.gz
-           => `/buildroot/dl/lockfile-progs_0.1.11.tar.gz'
-Resolving ftp.debian.org... 128.101.240.212
-Connecting to ftp.debian.org|128.101.240.212|:80... connected.
-HTTP request sent, awaiting response... 404 Not Found
-03:56:17 ERROR 404: Not Found.
+1. If /bin/sh is linked to /bin/bash, startup scripts called by rcS
+segfault. Some randomly, some (ifup/ifdown) reliably. Making /bin/sh
+point to busybox fixes the issue.
 
-Then the build stops.Please guide me whether i have apply any patch for the
-error ?
+2. Running gdb on the target with a program that segfaults kills gdb :(
 
-Regards,
-Ram
--------------- next part --------------
-An HTML attachment was scrubbed...
-URL: http://busybox.net/lists/buildroot/attachments/20080517/79f15a68/attachment.htm 
+3. Perl 5.8.8 no longer compiles on the target. I can get Perl 5.10.0
+to compile.
+
+4. A number of programs compiled on the target die with segmentation violations.
+
+So what am I doing wrong? Program outputs/config information are
+available, if needed. Thanks in advance!
+
+-- 
+Dmitry Teytelman <dimtey@gmail.com>
