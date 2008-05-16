@@ -1,77 +1,51 @@
-From: Arun Reddy <reddyac@gmail.com>
-Date: Thu, 15 May 2008 16:44:54 -0700
-Subject: [Buildroot] Encountered BusyBox error during ARM build
-In-Reply-To: <2590773a0805151623g1b5fb304v54335ccd92d7da68@mail.gmail.com>
-References: <326f33790805151216x655f538fm2d25a5c12af669fc@mail.gmail.com>
-	<2590773a0805151623g1b5fb304v54335ccd92d7da68@mail.gmail.com>
-Message-ID: <326f33790805151644y43c38a1q2c64de32cfbae948@mail.gmail.com>
+From: Bernhard Fischer <rep.dot.nop@gmail.com>
+Date: Fri, 16 May 2008 09:53:30 +0200
+Subject: [Buildroot] ARM build error with llseek.c
+In-Reply-To: <326f33790805151641l495774fdpf0efe19c9f060135@mail.gmail.com>
+References: <326f33790805081549v3afdc776u56cdeb8e57167782@mail.gmail.com>
+	<1CF6EDDF0820924DA43C9A52FE7325950B4DA9C3@MI8NYCMAIL17.Mi8.com>
+	<326f33790805081624g2daf1407v15e8e84ad1914b77@mail.gmail.com>
+	<1CF6EDDF0820924DA43C9A52FE7325950B4DAA2E@MI8NYCMAIL17.Mi8.com>
+	<326f33790805081812sc3b8d29v948f331f7fe84653@mail.gmail.com>
+	<326f33790805081813lff2c266wfc23c361119452df@mail.gmail.com>
+	<326f33790805112024l75b6e2d5x41f4fb229b982274@mail.gmail.com>
+	<2590773a0805151620r18b9f1b3qb81e255beee1ad71@mail.gmail.com>
+	<326f33790805151641l495774fdpf0efe19c9f060135@mail.gmail.com>
+Message-ID: <20080516075330.GA22291@mx.loc>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Chris,
+On Thu, May 15, 2008 at 04:41:48PM -0700, Arun Reddy wrote:
+>Thanks Chris,
+>
+>Looks like the issue was with LFS not being enabled in uclibc
+>(CONFIG_UCLIBC_HAS_LFS) and also BusyBox not having
+>BR2_PACKAGE_BUSYBOX_HIDE_OTHERS selected. I did a make clean for everything
+>and rebuilt, and got past that error.
+>
+>I am fairly certain I understand why LFS needed to be enabled, because I was
+>reading up on a couple threads online about llseek.c being used for large
+>file support in general, while lseek.c is used for small files. I want LFS
+>for my purposes, and it is possible that by not selecting LFS in the uclibc
+>menuconfig, that a specific function or variable wasn't defined correctly in
+>a header file used by llseek.c, and therefore it couldn't compile correctly.
+>This is of course my best assumption.
+>
+>As for selecting BusyBox's hide others option, I am unsure as to why that
+>works, but found it here as a suggestion.
 
-I suspected it had to do with my previous error, but the thing is I had
-already done a make clean on BusyBox earlier and found that it did not solve
-this problem. I did do a "make distclean", which I believe gets rid of
-everything "./configure" has built, but found no success.
+It works because if you enable it then you use busybox and not the big
+util-linux.
 
-Before I do it, do you think I should clean uclibc as well since I did
-happen to change LFS in the uclibc menuconfig? Thanks for the help!
+As for your trouble with toggling LFS and other settings. This is
+believed to be fixed in my tree, i.e. the user doesn't have to take care
+of doing make uclibc-clean gcc-clean et al when she toggles LARGEFILE,
+SJLJ or chooses to add or remove support for a language in her
+cross-compiler or stuff like that.
 
-On Thu, May 15, 2008 at 4:23 PM, Christopher Taylor <chtaylo3@gmail.com>
-wrote:
-
-> This is related to your previous post.  You'll have to do a make clean
-> or a make dist-clean inside busybox.
-> for you that's
->
-> cd /root/buildroot/project_build_arm/uclibc/busybox-1.10.2
-> make dist-clean
-> cd -
-> make
->
-> If that doesn't work, write back.
->
-> HTH!
-> Chris
->
-> On Thu, May 15, 2008 at 3:16 PM, Arun Reddy <reddyac@gmail.com> wrote:
-> > Hi everyone,
-> >
-> > Going through the build process for ARM, I have encountered a problem
-> with
-> > BusyBox which I am not sure if I am isolating correctly. The error is
-> > mentioned here:
-> >
-> > http://img386.imageshack.us/img386/2225/busyboxerrorlb2.jpg
-> >
-> > It looks like fstat64, lstat64 and stat64 have undefined references,
-> which
-> > are probably a result of something earlier failing. I was wondering if
-> this
-> > is a problem with my BusyBox configuration in particular, or is it a
-> common
-> > problem you guys have encountered when using Buildroot in general? I
-> looked
-> > online and there was a mention about defining STAT64_SUPPORT, but I found
-> no
-> > explanation on what it does or where it is located, so I thought I would
-> get
-> > some clarification here. Thank you!
-> >
-> > _______________________________________________
-> > buildroot mailing list
-> > buildroot at uclibc.org
-> > http://busybox.net/mailman/listinfo/buildroot
-> >
-> _______________________________________________
-> buildroot mailing list
-> buildroot at uclibc.org
-> http://busybox.net/mailman/listinfo/buildroot
->
--------------- next part --------------
-An HTML attachment was scrubbed...
-URL: http://busybox.net/lists/buildroot/attachments/20080515/4c1e77a2/attachment.htm 
+PS: It would be helpful if you could send your errors to the list (as
+text, of course) and not send a link to some picture of the error
+message. TIA
