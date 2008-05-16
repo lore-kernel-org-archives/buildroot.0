@@ -1,51 +1,133 @@
-From: Bernhard Fischer <rep.dot.nop@gmail.com>
-Date: Fri, 16 May 2008 09:53:30 +0200
-Subject: [Buildroot] ARM build error with llseek.c
-In-Reply-To: <326f33790805151641l495774fdpf0efe19c9f060135@mail.gmail.com>
-References: <326f33790805081549v3afdc776u56cdeb8e57167782@mail.gmail.com>
-	<1CF6EDDF0820924DA43C9A52FE7325950B4DA9C3@MI8NYCMAIL17.Mi8.com>
-	<326f33790805081624g2daf1407v15e8e84ad1914b77@mail.gmail.com>
-	<1CF6EDDF0820924DA43C9A52FE7325950B4DAA2E@MI8NYCMAIL17.Mi8.com>
-	<326f33790805081812sc3b8d29v948f331f7fe84653@mail.gmail.com>
-	<326f33790805081813lff2c266wfc23c361119452df@mail.gmail.com>
-	<326f33790805112024l75b6e2d5x41f4fb229b982274@mail.gmail.com>
-	<2590773a0805151620r18b9f1b3qb81e255beee1ad71@mail.gmail.com>
-	<326f33790805151641l495774fdpf0efe19c9f060135@mail.gmail.com>
-Message-ID: <20080516075330.GA22291@mx.loc>
+From: Papa Malick SARR <malicksarr@gmail.com>
+Date: Fri, 16 May 2008 16:56:47 +0200
+Subject: [Buildroot] xorg driver building failed
+Message-ID: <a53deff80805160756j27ff7336w31d90dcbe658024e@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Thu, May 15, 2008 at 04:41:48PM -0700, Arun Reddy wrote:
->Thanks Chris,
->
->Looks like the issue was with LFS not being enabled in uclibc
->(CONFIG_UCLIBC_HAS_LFS) and also BusyBox not having
->BR2_PACKAGE_BUSYBOX_HIDE_OTHERS selected. I did a make clean for everything
->and rebuilt, and got past that error.
->
->I am fairly certain I understand why LFS needed to be enabled, because I was
->reading up on a couple threads online about llseek.c being used for large
->file support in general, while lseek.c is used for small files. I want LFS
->for my purposes, and it is possible that by not selecting LFS in the uclibc
->menuconfig, that a specific function or variable wasn't defined correctly in
->a header file used by llseek.c, and therefore it couldn't compile correctly.
->This is of course my best assumption.
->
->As for selecting BusyBox's hide others option, I am unsure as to why that
->works, but found it here as a suggestion.
+When I try to build Buildroot with x11r7.3 support It fails. I get the
+following message. I seem that some headers files
+ are missing to the staging_dir.
 
-It works because if you enable it then you use busybox and not the big
-util-linux.
+Please help
 
-As for your trouble with toggling LFS and other settings. This is
-believed to be fixed in my tree, i.e. the user doesn't have to take care
-of doing make uclibc-clean gcc-clean et al when she toggles LARGEFILE,
-SJLJ or chooses to add or remove support for a language in her
-cross-compiler or stuff like that.
 
-PS: It would be helpful if you could send your errors to the list (as
-text, of course) and not send a link to some picture of the error
-message. TIA
+
+
+make[3]: entrant dans le r?pertoire ?
+/media/sda7/bme-buildroo/packages/buildroot/build_i686/xdriver_xf86-input-evdev-1.1.2/src
+?
+if /bin/bash ../libtool --tag=CC --mode=compile
+/media/sda7/bme-buildroo/packages/buildroot/build_i686/staging_dir/usr/bin/i686-linux-uclibc-gcc
+-Os
+-I/media/sda7/bme-buildroo/packages/buildroot/build_i686/staging_dir/usr/include
+-I/media/sda7/bme-buildroo/packages/buildroot/build_i686/staging_dir/include
+--sysroot=/media/sda7/bme-buildroo/packages/buildroot/build_i686/staging_dir/
+-isysroot /media/sda7/bme-buildroo/packages/buildroot/build_i686/staging_dir
+-mtune=i686 -march=i686 -DHAVE_CONFIG_H -I. -I. -I..    -Wall -g -O2 -I
+-I/media/sda7/bme-buildroo/packages/buildroot/build_i686/staging_dir/usr/include/pixman-1
+-I/media/sda7/bme-buildroo/packages/buildroot/build_i686/staging_dir/usr/include
+-I../src -MT evdev_drv_la-evdev.lo -MD -MP -MF
+".deps/evdev_drv_la-evdev.Tpo" -c -o evdev_drv_la-evdev.lo `test -f
+'evdev.c' || echo './'`evdev.c; \
+        then mv -f ".deps/evdev_drv_la-evdev.Tpo"
+".deps/evdev_drv_la-evdev.Plo"; else rm -f ".deps/evdev_drv_la-evdev.Tpo";
+exit 1; fi
+ /media/sda7/bme-buildroo/packages/buildroot/build_i686/staging_dir/usr/bin/i686-linux-uclibc-gcc
+-Os
+-I/media/sda7/bme-buildroo/packages/buildroot/build_i686/staging_dir/usr/include
+-I/media/sda7/bme-buildroo/packages/buildroot/build_i686/staging_dir/include
+--sysroot=/media/sda7/bme-buildroo/packages/buildroot/build_i686/staging_dir/
+-isysroot /media/sda7/bme-buildroo/packages/buildroot/build_i686/staging_dir
+-mtune=i686 -march=i686 -DHAVE_CONFIG_H -I. -I. -I.. -Wall -g -O2 -I
+-I/media/sda7/bme-buildroo/packages/buildroot/build_i686/staging_dir/usr/include/pixman-1
+-I/media/sda7/bme-buildroo/packages/buildroot/build_i686/staging_dir/usr/include
+-I../src -MT evdev_drv_la-evdev.lo -MD -MP -MF .deps/evdev_drv_la-evdev.Tpo
+-c evdev.c  -fPIC -DPIC -o .libs/evdev_drv_la-evdev.o
+In file included from evdev.c:57:
+../config.h:4:25: error: xorg-server.h: No such file or directory
+In file included from evdev.c:66:
+evdev.h:73:24: error: xf86Xinput.h: No such file or directory
+In file included from evdev.h:109,
+                 from evdev.c:66:
+/media/sda7/bme-buildroo/packages/buildroot/build_i686/staging_dir/usr/include/X11/extensions/XKBstr.h:77:
+error: expected specifier-qualifier-list before 'Bool'
+/media/sda7/bme-buildroo/packages/buildroot/build_i686/staging_dir/usr/include/X11/extensions/XKBstr.h:490:
+error: expected specifier-qualifier-list before 'Bool'
+/media/sda7/bme-buildroo/packages/buildroot/build_i686/staging_dir/usr/include/X11/extensions/XKBstr.h:582:
+error: expected specifier-qualifier-list before 'Bool'
+In file included from evdev.c:66:
+evdev.h:183: error: expected specifier-qualifier-list before 'Bool'
+evdev.h:200: error: expected specifier-qualifier-list before 'InputInfoPtr'
+evdev.h:224: error: expected specifier-qualifier-list before
+'InputDriverPtr'
+evdev.h:234: error: expected '=', ',', ';', 'asm' or '__attribute__' before
+'evdevStart'
+evdev.h:235: error: expected '=', ',', ';', 'asm' or '__attribute__' before
+'evdevNewDriver'
+evdev.h:236: error: expected '=', ',', ';', 'asm' or '__attribute__' before
+'evdevGetBits'
+evdev.h:238: error: expected ')' before 'device'
+evdev.h:239: error: expected ')' before 'device'
+evdev.h:240: error: expected ')' before 'device'
+evdev.h:241: error: expected ')' before 'pInfo'
+evdev.h:242: error: expected ')' before 'pInfo'
+evdev.h:243: error: expected ')' before 'pInfo'
+evdev.h:245: error: expected ')' before 'device'
+evdev.h:246: error: expected ')' before 'device'
+evdev.h:247: error: expected ')' before 'device'
+evdev.h:248: error: expected ')' before 'pInfo'
+evdev.h:249: error: expected ')' before 'pInfo'
+evdev.h:250: error: expected ')' before 'pInfo'
+evdev.h:251: error: expected ')' before 'pInfo'
+evdev.h:253: error: expected ')' before 'device'
+evdev.h:254: error: expected ')' before 'pInfo'
+evdev.h:255: error: expected ')' before 'device'
+evdev.h:256: error: expected ')' before 'device'
+evdev.h:257: error: expected ')' before 'pInfo'
+evdev.c:68:18: error: xf86.h: No such file or directory
+evdev.c:70:24: error: xf86Module.h: No such file or directory
+evdev.c:71:23: error: mipointer.h: No such file or directory
+evdev.c:74:25: error: xf86_OSproc.h: No such file or directory
+evdev.c:81: error: expected ')' before 'pInfo'
+evdev.c:84: error: expected ')' before 'pInfo'
+evdev.c: In function 'EvdevSigioReadInput':
+evdev.c:134: warning: implicit declaration of function 'EvdevReadInput'
+evdev.c:134: error: 'InputInfoPtr' undeclared (first use in this function)
+evdev.c:134: error: (Each undeclared identifier is reported only once
+evdev.c:134: error: for each function it appears in.)
+evdev.c:134: error: expected ')' before 'data'
+evdev.c: At top level:
+evdev.c:138: error: expected ')' before 'device'
+evdev.c:222: error: expected ')' before 'client'
+evdev.c:249: error: expected '=', ',', ';', 'asm' or '__attribute__' before
+'EvdevNew'
+evdev.c: In function 'EvdevParseBits':
+evdev.c:348: warning: implicit declaration of function 'set_bit'
+evdev.c: At top level:
+evdev.c:379: error: expected '=', ',', ';', 'asm' or '__attribute__' before
+'EvdevCorePreInit'
+evdev.c:444: error: expected '=', ',', ';', 'asm' or '__attribute__' before
+'InputDriverRec'
+make[3]: *** [evdev_drv_la-evdev.lo] Erreur 1
+make[3]: quittant le r?pertoire ?
+/media/sda7/bme-buildroo/packages/buildroot/build_i686/xdriver_xf86-input-evdev-1.1.2/src
+?
+make[2]: *** [all-recursive] Erreur 1
+make[2]: quittant le r?pertoire ?
+/media/sda7/bme-buildroo/packages/buildroot/build_i686/xdriver_xf86-input-evdev-1.1.2
+?
+make[1]: *** [all] Erreur 2
+make[1]: quittant le r?pertoire ?
+/media/sda7/bme-buildroo/packages/buildroot/build_i686/xdriver_xf86-input-evdev-1.1.2
+?
+make: ***
+[/media/sda7/bme-buildroo/packages/buildroot/build_i686/xdriver_xf86-input-evdev-1.1.2/.stamp_built]
+Erreur 2
+root at kocc:/media/sda7/bme-buildroo/packages/buildroot#
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: http://busybox.net/lists/buildroot/attachments/20080516/1405ba3f/attachment-0001.htm 
