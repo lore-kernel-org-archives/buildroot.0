@@ -1,8 +1,8 @@
 From: bugs at busybox.net <bugs@busybox.net>
-Date: Mon, 19 May 2008 02:24:32 -0700
-Subject: [Buildroot] =?windows-1252?q?=5Bbuildroot_0003364=5D=3A_ARM-EABI_?=
-	=?windows-1252?q?build_!_=93Illegal_Instruction=94?=
-Message-ID: <95a6f3b893645ec588d7e335cf69d3a2@bugs.uclibc.org>
+Date: Mon, 19 May 2008 06:16:24 -0700
+Subject: [Buildroot] [buildroot 0003324]: problem: run cross compiled
+	asterisk on openwrt
+Message-ID: <fe5b2b7fd8f9a3550c00f1e0f1787191@busybox.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -10,54 +10,58 @@ Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
 
-The following issue has been SUBMITTED. 
+A NOTE has been added to this issue. 
 ====================================================================== 
-http://busybox.net/bugs/view.php?id=3364 
+http://busybox.net/bugs/view.php?id=3324 
 ====================================================================== 
-Reported By:                noel_v
+Reported By:                gebecom
 Assigned To:                buildroot
 ====================================================================== 
 Project:                    buildroot
-Issue ID:                   3364
+Issue ID:                   3324
 Category:                   Architecture Specific
 Reproducibility:            always
-Severity:                   major
+Severity:                   minor
 Priority:                   normal
 Status:                     assigned
 ====================================================================== 
-Date Submitted:             05-19-2008 02:24 PDT
-Last Modified:              05-19-2008 02:24 PDT
+Date Submitted:             05-15-2008 08:08 PDT
+Last Modified:              05-19-2008 06:16 PDT
 ====================================================================== 
-Summary:                    ARM-EABI build ! ?Illegal Instruction?
+Summary:                    problem: run cross compiled asterisk on openwrt
 Description: 
-ARM-EABI build ! ?Illegal Instruction? 
-
-Buildroot: 01/05/2008 
-Target : ARM cpu (AT91SAM9260)
-Kernel : 2.6.25 with latest TARGET patches.
-
-
-+ Buildroot/busybox compiles and runs fine in OABI .
-+ Buildroot/busybox in EABI, compiles BUT lots of things are not working..
-PING fails , UDHCPC fails, INSMOD/MODPROBE fails .. etc... 
-(kernel boots, but some tools (in busybox) are not working).
-
-Double checked build, kernel,buildroot and uclibc have all enabled EABI
-and OABI is disabled ! 
-
-NOTE: started clean new dir .. untarred buildroot .. and rebuild all.
-
-
-
-
-
-
+i have asterisk corss compiled and ported on openwrt. But wenn i under
+/opt/sbin/ run ./asterisk , is the error: Unable to open pid file
+'/opt/var/run/asterisk.pid'; No such file or directory.      wenn i run
+./rasterisk  (-r), is the error : Unable to connect to remote asterisk
+(does /opt/var/run/asterisk.ctl exist?)    wenn i run ./rasterisk -vvvvvvc
+ , is the error: Cannot read termcap database; using dumb terminal
+settings. Unable to remote asterisk (does /opt/var/run/asterisk.ctl
+exist?)
+Anyone can help me?
+where is the error?
+thanks in advance!!!!
 ====================================================================== 
+
+---------------------------------------------------------------------- 
+ Correa - 05-15-08 08:44  
+---------------------------------------------------------------------- 
+OpenWRT and Buildroot are not the same project. Did you try it with
+buildroot? 
+
+---------------------------------------------------------------------- 
+ gebecom - 05-19-08 06:16  
+---------------------------------------------------------------------- 
+yes. i have with buildroot cross compiled. And now i have cross-compiled
+asterisk port to openwrt. But i can not the problem  solve. 
 
 Issue History 
 Date Modified   Username       Field                    Change               
 ====================================================================== 
-05-19-08 02:24  noel_v         New Issue                                    
-05-19-08 02:24  noel_v         Status                   new => assigned     
-05-19-08 02:24  noel_v         Assigned To               => buildroot       
+05-15-08 08:08  gebecom        New Issue                                    
+05-15-08 08:08  gebecom        Status                   new => assigned     
+05-15-08 08:08  gebecom        Assigned To               => buildroot       
+05-15-08 08:44  Correa         Note Added: 0007704                          
+05-19-08 06:14  gebecom        Issue Monitored: gebecom                     
+05-19-08 06:16  gebecom        Note Added: 0007824                          
 ======================================================================
