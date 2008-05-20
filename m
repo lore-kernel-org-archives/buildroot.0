@@ -1,28 +1,40 @@
-From: Jason Valenzuela <jvalenzuela@dspfl.com>
-Date: Tue, 20 May 2008 16:48:32 -0400
-Subject: [Buildroot] Bootloaders
-In-Reply-To: <326f33790805201343q7318f695kd2a69bd3ede6cbc@mail.gmail.com>
-References: <4831FE20.6050508@dspfl.com>	
-	<326f33790805191734n68a95ee2m758c4266aeb4d02e@mail.gmail.com>	
-	<48330E51.6050505@dspfl.com>	
-	<326f33790805201131w57057429ydef6aa0df0bf0ec0@mail.gmail.com>	
-	<48331ABD.1060907@dspfl.com>	
-	<326f33790805201145r785b06hcbec87b888ff8a76@mail.gmail.com>	
-	<48333044.5090301@dspfl.com>
-	<326f33790805201343q7318f695kd2a69bd3ede6cbc@mail.gmail.com>
-Message-ID: <48333920.4070501@dspfl.com>
+From: ulf at uclibc.org <ulf@uclibc.org>
+Date: Tue, 20 May 2008 14:35:55 -0700 (PDT)
+Subject: [Buildroot] svn commit: trunk/buildroot/package/lockfile-progs
+Message-ID: <20080520213556.023BD3C7D7@busybox.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Arun Reddy wrote:
-> Can you post your menu.lst file? I'm mainly interested to see what's in 
-> the /kernel line.
+Author: ulf
+Date: 2008-05-20 14:35:55 -0700 (Tue, 20 May 2008)
+New Revision: 22030
 
-Should I have such a file at this point? I'm still working on the host 
-system with the CF card in the PCMCIA socket, not booting the target yet.
+Log:
+Update lockfile-progs version
+
+Modified:
+   trunk/buildroot/package/lockfile-progs/lockfile-progs.mk
 
 
-Jason Valenzuela
+Changeset:
+Modified: trunk/buildroot/package/lockfile-progs/lockfile-progs.mk
+===================================================================
+--- trunk/buildroot/package/lockfile-progs/lockfile-progs.mk	2008-05-20 20:44:08 UTC (rev 22029)
++++ trunk/buildroot/package/lockfile-progs/lockfile-progs.mk	2008-05-20 21:35:55 UTC (rev 22030)
+@@ -3,11 +3,11 @@
+ # lockfile-progs
+ #
+ #############################################################
+-LOCKFILE_PROGS_VERSION=0.1.11
++LOCKFILE_PROGS_VERSION=0.1.11-0.1
+ LOCKFILE_PROGS_SOURCE:=lockfile-progs_$(LOCKFILE_PROGS_VERSION).tar.gz
+ LOCKFILE_PROGS_SITE:=$(BR2_DEBIAN_MIRROR)/debian/pool/main/l/lockfile-progs/
+ LOCKFILE_PROGS_CAT:=$(ZCAT)
+-LOCKFILE_PROGS_DIR:=$(BUILD_DIR)/sid
++LOCKFILE_PROGS_DIR:=$(BUILD_DIR)/lockfile-progs-0.1.11
+ LOCKFILE_PROGS_BINARY:=usr/bin/lockfile-create
+ 
+ $(DL_DIR)/$(LOCKFILE_PROGS_SOURCE):
