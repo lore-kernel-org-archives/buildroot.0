@@ -1,34 +1,28 @@
-From: Jason Valenzuela <jvalenzuela@dspfl.com>
-Date: Tue, 20 May 2008 16:10:44 -0400
-Subject: [Buildroot] Bootloaders
-In-Reply-To: <326f33790805201145r785b06hcbec87b888ff8a76@mail.gmail.com>
-References: <4831FE20.6050508@dspfl.com>	
-	<326f33790805191734n68a95ee2m758c4266aeb4d02e@mail.gmail.com>	
-	<48330E51.6050505@dspfl.com>	
-	<326f33790805201131w57057429ydef6aa0df0bf0ec0@mail.gmail.com>	
-	<48331ABD.1060907@dspfl.com>
-	<326f33790805201145r785b06hcbec87b888ff8a76@mail.gmail.com>
-Message-ID: <48333044.5090301@dspfl.com>
+From: Onur Savas <osavas@mzeal.com>
+Date: Tue, 20 May 2008 16:08:19 -0400
+Subject: [Buildroot] buildroot on GumStix Verdex
+Message-ID: <002f01c8bab5$3f6a09e0$be3e1da0$@com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Ok, thanks for the help so far. Got uClibc and grub to build ok.
+Heya,
 
-Some booting issues:
+ 
 
-I'm looking to use this to boot from a compact flash. I've partitioned 
-and created an ext2 file system on the CF card. I mounted this partition 
-and untarred the root file system onto the CF. I've copied the kernel 
-from binaries/PROJECT_NAME/ to /boot in the CF file system.
+Did anybody try to add the package "rpm" (in my case, it is required by a
+shell script to query for installation of Java JNI and some other small
+stuff) to the Buildroot to run on GumStix Verdex (ARM processor)? Thanks in
+advance.
 
-Now I'm kind of fuzzy on how to get grub to setup on it. The card shows 
-up as /dev/hdc with the only partition being /dev/hdc1, which seems 
-fine. If I chroot onto it and run grub, when I try and issue a root 
-(hd2,0) I get 'Error 21: Selected disk does not exist'.
+ 
 
+onur
 
-Thanks,
-Jason Valenzuela
+ 
+
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: http://busybox.net/lists/buildroot/attachments/20080520/e8fa939f/attachment.htm 
