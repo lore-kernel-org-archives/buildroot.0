@@ -1,40 +1,25 @@
-From: ulf at uclibc.org <ulf@uclibc.org>
-Date: Tue, 20 May 2008 14:35:55 -0700 (PDT)
-Subject: [Buildroot] svn commit: trunk/buildroot/package/lockfile-progs
-Message-ID: <20080520213556.023BD3C7D7@busybox.net>
+From: Michael.Forkey at elektrobit.com <Michael.Forkey@elektrobit.com>
+Date: Tue, 20 May 2008 17:19:44 -0700
+Subject: [Buildroot] GTK+ build supported?
+Message-ID: <C681C76E0D5F1E4BB01DE79E0A80EEC76FB103@usrdes03.ebgroup.elektrobit.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Author: ulf
-Date: 2008-05-20 14:35:55 -0700 (Tue, 20 May 2008)
-New Revision: 22030
+Does buildroot support building GTK+ directly? I have been told it does.
+But I don't see it as a option anywhere. Am I missing something?
 
-Log:
-Update lockfile-progs version
+As a secondary question: does it build GTK-DFB?
 
-Modified:
-   trunk/buildroot/package/lockfile-progs/lockfile-progs.mk
+Thanks,
+mf
 
 
-Changeset:
-Modified: trunk/buildroot/package/lockfile-progs/lockfile-progs.mk
-===================================================================
---- trunk/buildroot/package/lockfile-progs/lockfile-progs.mk	2008-05-20 20:44:08 UTC (rev 22029)
-+++ trunk/buildroot/package/lockfile-progs/lockfile-progs.mk	2008-05-20 21:35:55 UTC (rev 22030)
-@@ -3,11 +3,11 @@
- # lockfile-progs
- #
- #############################################################
--LOCKFILE_PROGS_VERSION=0.1.11
-+LOCKFILE_PROGS_VERSION=0.1.11-0.1
- LOCKFILE_PROGS_SOURCE:=lockfile-progs_$(LOCKFILE_PROGS_VERSION).tar.gz
- LOCKFILE_PROGS_SITE:=$(BR2_DEBIAN_MIRROR)/debian/pool/main/l/lockfile-progs/
- LOCKFILE_PROGS_CAT:=$(ZCAT)
--LOCKFILE_PROGS_DIR:=$(BUILD_DIR)/sid
-+LOCKFILE_PROGS_DIR:=$(BUILD_DIR)/lockfile-progs-0.1.11
- LOCKFILE_PROGS_BINARY:=usr/bin/lockfile-create
- 
- $(DL_DIR)/$(LOCKFILE_PROGS_SOURCE):
+----------------------------------------------------------------
+Please note: This e-mail may contain confidential information
+intended solely for the addressee. If you have received this
+e-mail in error, please do not disclose it to anyone, notify
+the sender promptly, and delete the message from your system.
+Thank you.
