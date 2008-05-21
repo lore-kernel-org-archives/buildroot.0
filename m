@@ -1,34 +1,72 @@
-From: Jason Valenzuela <jvalenzuela@dspfl.com>
-Date: Wed, 21 May 2008 11:56:55 -0400
-Subject: [Buildroot] malloc/rpl_malloc
-In-Reply-To: <326f33790805201145r785b06hcbec87b888ff8a76@mail.gmail.com>
-References: <4831FE20.6050508@dspfl.com>	
-	<326f33790805191734n68a95ee2m758c4266aeb4d02e@mail.gmail.com>	
-	<48330E51.6050505@dspfl.com>	
-	<326f33790805201131w57057429ydef6aa0df0bf0ec0@mail.gmail.com>	
-	<48331ABD.1060907@dspfl.com>
-	<326f33790805201145r785b06hcbec87b888ff8a76@mail.gmail.com>
-Message-ID: <48344647.4020503@dspfl.com>
+From: Michael.Forkey at elektrobit.com <Michael.Forkey@elektrobit.com>
+Date: Wed, 21 May 2008 10:10:16 -0700
+Subject: [Buildroot] GTK+ build supported?
+In-Reply-To: <46a136670805201809y6cef3bcao27eba8f1dec5a6e0@mail.gmail.com>
+Message-ID: <C681C76E0D5F1E4BB01DE79E0A80EEC76FB1FA@usrdes03.ebgroup.elektrobit.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-I'm trying to compile some packages of my own and am coming up with some 
-problems at link time with the malloc function. According to the uclibc 
-FAQ, MALLOC_GLIBC_COMPAT should be enabled in order for the configure 
-script not to define malloc() to rpl_malloc(). I went to the 
-toolchain_build_ARCH/uClibc-0.9.29 and did a 'make menuconfig'. This 
-option under 'General Library Settings->Malloc returns live pointer for 
-malloc(0)' was indeed enabled, causing me to believe that the uclibc in 
-my buildroot toolchain is already correctly set.
+Thanks for the reply, John. Sorry if these follow up questions are
+stupid, but I am a complete newbie on most of this stuff - new to Linux,
+new to Linux development and therefore GTK, new to embedded development,
+new to Buildroot. Lots of learning curves.
+ 
+I downloaded the latest Buildroot snapshot (20080521) and looked where
+you suggested. But I still don't see it. I see some of its dependencies
+- pango, atk, glib2. But nowhere do I see "GTK"-anything.
+ 
+Is it known by some other name as well? 
+ 
+Does the selected target architecture make a difference? I've selected
+arm, arm926t variant. Although, I looked for it using a couple other
+targets and didn't see it there either.
+ 
+mf
 
-Now going back to the build_ARCH/MY_PACKAGE directory and checking the 
-config.h, HAVE_MALLOC has been defined as 0 and the results in 
-config.log shows that the configure script didn't think malloc() was 
-compatible with the GNU libc version.
+________________________________
+
+From: buildroot-bounces@uclibc.org [mailto:buildroot-bounces at uclibc.org]
+On Behalf Of John Voltz
+Sent: Tuesday, May 20, 2008 6:09 PM
+To: Buildroot List
+Subject: Re: [Buildroot] GTK+ build supported?
 
 
 
-Jason Valenzuela
+
+	Does buildroot support building GTK+ directly? I have been told
+it does.
+	But I don't see it as a option anywhere. Am I missing something?
+	
+
+
+Look under Package selection for the target ->  Graphic libraries and
+applications 
+
+
+
+
+	As a secondary question: does it build GTK-DFB?
+	
+	
+
+ 
+Yes, it does. Just select DirectFB along with GTK.
+
+John
+
+
+
+----------------------------------------------------------------
+Please note: This e-mail may contain confidential information
+intended solely for the addressee. If you have received this
+e-mail in error, please do not disclose it to anyone, notify
+the sender promptly, and delete the message from your system.
+Thank you.
+
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: http://busybox.net/lists/buildroot/attachments/20080521/bbc54aae/attachment-0001.htm 
