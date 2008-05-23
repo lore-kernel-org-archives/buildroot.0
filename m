@@ -1,35 +1,46 @@
-From: ulf at uclibc.org <ulf@uclibc.org>
-Date: Thu, 22 May 2008 14:40:51 -0700 (PDT)
-Subject: [Buildroot] svn commit: trunk/buildroot/package/mpfr
-Message-ID: <20080522214051.7222C3C632@busybox.net>
+From: Michael.Forkey at elektrobit.com <Michael.Forkey@elektrobit.com>
+Date: Thu, 22 May 2008 18:04:42 -0700
+Subject: [Buildroot] GTK+ build supported?
+In-Reply-To: <46a136670805211034s4db036ebsb82374ff6002b162@mail.gmail.com>
+Message-ID: <C681C76E0D5F1E4BB01DE79E0A80EEC7765A95@usrdes03.ebgroup.elektrobit.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Author: ulf
-Date: 2008-05-22 14:40:50 -0700 (Thu, 22 May 2008)
-New Revision: 22058
+I appreciate your help, John. 
+ 
+But I must be missing. I don't see a libgtk2 option either. I don't see
+any option with GTK in it.
+ 
+Sorry if I am just overlooking something obvious. I have re-read the
+menu options probably +20 times and I just don't see it. By now my brain
+is for sure blocking it out if it is there.
+ 
+I went through and turned on every option under Package selection for
+the target ->  Graphic libraries and applications in case it is hidden
+because some dependency wasn't selected. But still no (lib)gtk option of
+any kind. 
+ 
+I have looked for any libgtk files anywhere under buildroot and the only
+files I can find are libgtk2.mk (and libgtk12.mk.) I have searched
+ 
+I can find the libgtk2 directory under /package. But I can't figure out
+how to turn its build on - I just don't see in the menu item.
+ 
+Thanks,
+mf
 
-Log:
-Remove superfluos slash character from MPFR_SITE
-
-Modified:
-   trunk/buildroot/package/mpfr/mpfr.mk
 
 
-Changeset:
-Modified: trunk/buildroot/package/mpfr/mpfr.mk
-===================================================================
---- trunk/buildroot/package/mpfr/mpfr.mk	2008-05-22 21:39:22 UTC (rev 22057)
-+++ trunk/buildroot/package/mpfr/mpfr.mk	2008-05-22 21:40:50 UTC (rev 22058)
-@@ -8,7 +8,7 @@
- MPFR_PATCH_FILE:=mpfr-$(MPFR_VERSION).patch
- MPFR_SOURCE:=mpfr-$(MPFR_VERSION).tar.bz2
- MPFR_CAT:=$(BZCAT)
--MPFR_SITE:=http://www.mpfr.org/mpfr-$(MPFR_VERSION)/
-+MPFR_SITE:=http://www.mpfr.org/mpfr-$(MPFR_VERSION)
- MPFR_DIR:=$(TOOL_BUILD_DIR)/mpfr-$(MPFR_VERSION)
- MPFR_TARGET_DIR:=$(BUILD_DIR)/mpfr-$(MPFR_VERSION)
- MPFR_BINARY:=libmpfr$(LIBTGTEXT)
+----------------------------------------------------------------
+Please note: This e-mail may contain confidential information
+intended solely for the addressee. If you have received this
+e-mail in error, please do not disclose it to anyone, notify
+the sender promptly, and delete the message from your system.
+Thank you.
+
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: http://busybox.net/lists/buildroot/attachments/20080522/824f1f42/attachment.htm 
