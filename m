@@ -1,47 +1,41 @@
-From: Daniel Laird <daniel.j.laird@nxp.com>
-Date: Fri, 23 May 2008 06:40:56 -0700 (PDT)
-Subject: [Buildroot] [PATCH]: ATK may not need X support (i.e directfb only)
-Message-ID: <17425855.post@talk.nabble.com>
+From: Arun Reddy <reddyac@gmail.com>
+Date: Fri, 23 May 2008 12:05:05 -0700
+Subject: [Buildroot] Anyone try simulating their Buildroot-created
+	filesystem image in QEMU?
+Message-ID: <326f33790805231205j302081b1oec193841dac80e0c@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+While this might fall more under a QEMU related problem, I thought it might
+be helpful to ask it here since other Buildroot members may have encountered
+the same problem I'm having.
 
-support building ATK without X support:
+I have successfully built my filesystem image for a versatile (pb)
+baseboard. I have included all the appropriate hardware and drivers for this
+board in my kernel configuration as listed here:
 
-Dan Laird
+http://fabrice.bellard.free.fr/qemu/qemu-doc.html#SEC63
 
---- buildroot/package/atk/atk.mk
-+++ buildroot.new/package/atk/atk.mk 
-@@ -42,6 +42,14 @@
- 		gl_cv_c_restrict=no ac_cv_path_GLIB_GENMARSHAL=/usr/bin/glib-genmarshal \
- 		ac_cv_prog_F77=no ac_cv_prog_CXX=no 
- 
-+ifneq ($(BR2_PACKAGE_XSERVER_none),y)
-+        ATK_CONF_OPT_X = --with-x \
-+		--x-includes=$(STAGING_DIR)/usr/include/X11 \
-+		--x-libraries=$(STAGING_DIR)/usr/lib --disable-glibtest
-+else
-+        ATK_CONF_OPT_X = --without-x 
-+endif
-+
- ATK_CONF_OPT = --target=$(GNU_TARGET_NAME) --host=$(REAL_GNU_TARGET_NAME) \
- 		--build=$(GNU_HOST_NAME) --prefix=/usr \
- 		--exec-prefix=/usr --bindir=/usr/bin \
-@@ -50,9 +58,7 @@
- 		--datadir=/usr/share --localstatedir=/var \
- 		--includedir=/usr/include --mandir=/usr/man \
- 		--infodir=/usr/info --enable-shared \
--		--enable-static --with-x \
--		--x-includes=$(STAGING_DIR)/usr/include/X11 \
--		--x-libraries=$(STAGING_DIR)/usr/lib \
-+		--enable-static $(ATK_CONF_OPT_X) \
- 		--disable-glibtest --enable-explicit-deps=no \
- 		--disable-debug 
- 
+I am trying to now boot it in QEMU, and used the following syntax:
 
--- 
-View this message in context: http://www.nabble.com/-PATCH-%3A-ATK-may-not-need-X-support-%28i.e-directfb-only%29-tp17425855p17425855.html
-Sent from the BuildRoot mailing list archive at Nabble.com.
+qemu-system-arm -M versatilepb -m 128 -kernel arm-linux-2.6.24.4-20080523.gz
+-hda rootfs.arm.ext2 -nographic -append "root=/dev/hda1 console=ttyAMA0"
+
+The kernel image uncompresses fine, but I am getting a kernel panic saying
+that it is unable to mount the root fs on unknown block. I was wondering if
+the problem is coming from the fact that rootfs.arm.ext2 is not a harddisk
+image, and cannot be used with the -hda option? Or does it have to do with
+the device I passed into root=? I know for certain that hda1 is what I wish
+to use so the kernel will know what to use as the root filesystem... in this
+case the local harddisk.
+
+Has anyone here had trouble getting their kernel to boot in qemu after
+finishing their buildroot build process? Should I build my kernel for
+another board supported by QEMU and try again? Thanks for any help you can
+offer!
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: http://busybox.net/lists/buildroot/attachments/20080523/a0e9587c/attachment.htm 
