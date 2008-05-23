@@ -1,68 +1,121 @@
-From: Wayne Keenan <wayne.keenan@gmail.com>
-Date: Fri, 23 May 2008 22:33:35 +0100
-Subject: [Buildroot] Anyone try simulating their Buildroot-created
-	filesystem image in QEMU?
-In-Reply-To: <326f33790805231259i2dff338ct54ed1a7a3640df08@mail.gmail.com>
-References: <326f33790805231205j302081b1oec193841dac80e0c@mail.gmail.com>
-	<c166aa9f0805231244q14df3bdaxce0f87753a5ea2a6@mail.gmail.com>
-	<326f33790805231259i2dff338ct54ed1a7a3640df08@mail.gmail.com>
-Message-ID: <270858e90805231433x411c6337h79b2e19d2ece71c9@mail.gmail.com>
+From: mike sander <msander@ripnet.com>
+Date: Fri, 23 May 2008 17:51:23 -0400
+Subject: [Buildroot] link error building portmap
+Message-ID: <48373C5B.5080905@ripnet.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi,
+I'm trying to use nfs mount within busybox.    This requires mount & 
+portmap.  I am getting a link failure that I cannot figure out.
 
-I've been looking at doing exactly this, and have found the path is trodden.
-Based the info via the links below you will need to mount the RFS via NFS as
-the ARM QEMU emulation doesnt support IDE/SCSI, well, one type of ARM qemu
-doesn't and another one does, please have a read:
+I have enabled busybox  MOUNT, FEATURE_MOUNT_NFS, FEATURE_HAVE_RPC as 
+well as uclibc  UCLIBC_HAS_RPC and top level  
+CONFIG_BR2_PACKAGE_PORTMAP.  I have done a top level "make clean".
 
-http://nepotismia.com/linux/qemu/arm/
-http://www.aurel32.net/info/debian_arm_qemu.php
-
-I haven't used the info yet, but am planning todo so this weekend, so
-apologies if what I am relaying is out of date and misleading.
-
-Regards
-Wayne
+Here is the output of top level make.  I have even explicitly put the 
+full path to libc.a in the link line (in portmap Makefile):
 
 
-On Fri, May 23, 2008 at 8:59 PM, Arun Reddy <reddyac@gmail.com> wrote:
 
-> Hi Andrew,
->
-> Thanks for the suggestion. Unfortunately I get the same kernel panic error
-> with hda as well. I also build my image with initrd support (in the kernel
-> config) and when I tried booting qemu locks up right after uncompressing the
-> kernel. I'll play around with it more but in the meantime if any other
-> members have any feedback please feel free to respond. Thanks!
->
-> On Fri, May 23, 2008 at 12:44 PM, Andrew Dyer <amdyer@gmail.com> wrote:
->
->> On Fri, May 23, 2008 at 2:05 PM, Arun Reddy <reddyac@gmail.com> wrote:
->> > qemu-system-arm -M versatilepb -m 128 -kernel
->> arm-linux-2.6.24.4-20080523.gz
->> > -hda rootfs.arm.ext2 -nographic -append "root=/dev/hda1 console=ttyAMA0"
->>
->> don't know qemu, but it looks to me like you're putting the filesystem
->> image at /dev/hda, but trying to boot the kernel from /dev/hda1 (the
->> one implies a partitioned disk).  try the kernel command line
->> 'root=/dev/hda  ...' instead.
->>
->> --
->> Hardware, n.:
->>  The parts of a computer system that can be kicked.
->>
->
->
-> _______________________________________________
-> buildroot mailing list
-> buildroot at uclibc.org
-> http://busybox.net/mailman/listinfo/buildroot
->
--------------- next part --------------
-An HTML attachment was scrubbed...
-URL: http://busybox.net/lists/buildroot/attachments/20080523/89b16253/attachment-0001.htm 
+mike at himalia:/home/buildroot$ make
+
+Checking build system dependencies:
+BUILDROOT_DL_DIR clean:                         Ok
+CC clean:                                       Ok
+CXX clean:                                      Ok
+CPP clean:                                      Ok
+CFLAGS clean:                                   Ok
+INCLUDES clean:                                 Ok
+CXXFLAGS clean:                                 Ok
+which installed:                                Ok
+sed works:                                      Ok (/bin/sed)
+GNU make version '3.81':                        Ok
+C compiler '/usr/bin/gcc'
+C compiler version '4.1.3':                     Ok
+C++ compiler '/usr/bin/g++'
+C++ compiler version '4.1.3':                   Ok
+bison installed:                                Ok
+flex installed:                                 Ok
+gettext installed:                              Ok
+makeinfo installed:                             Ok
+Build system dependencies:                      Ok
+
+rm -rf /home/buildroot/project_build_arm/uclibc/buildroot-config
+mkdir -p /home/buildroot/project_build_arm/uclibc
+cp -dpRf package/config/buildroot-config 
+/home/buildroot/project_build_arm/uclibc/buildroot-config
+/usr/bin/make -j1 
+CC=/home/buildroot/build_arm/staging_dir/usr/bin/arm-linux-uclibc-gcc 
+O="-Os  -I/home/buildroot/build_arm/staging_dir/usr/include 
+-I/home/buildroot/build_arm/staging_dir/include 
+--sysroot=/home/buildroot/build_arm/staging_dir/ -isysroot 
+/home/buildroot/build_arm/staging_dir -mtune=arm9tdmi" -C 
+/home/buildroot/build_arm/portmap_5beta
+make[1]: Entering directory `/home/buildroot/build_arm/portmap_5beta'
+/home/buildroot/build_arm/staging_dir/usr/bin/arm-linux-uclibc-gcc  
+-Dperror=xperror -DCHECK_PORT  -DFACILITY=LOG_AUTH  
+-DIGNORE_SIGCHLD            -Os  
+-I/home/buildroot/build_arm/staging_dir/usr/include 
+-I/home/buildroot/build_arm/staging_dir/include 
+--sysroot=/home/buildroot/build_arm/staging_dir/ -isysroot 
+/home/buildroot/build_arm/staging_dir -mtune=arm9tdmi    -c -o portmap.o 
+portmap.c
+/home/buildroot/build_arm/staging_dir/usr/bin/arm-linux-uclibc-gcc  
+-Dperror=xperror -DCHECK_PORT  -DFACILITY=LOG_AUTH  
+-DIGNORE_SIGCHLD            -Os  
+-I/home/buildroot/build_arm/staging_dir/usr/include 
+-I/home/buildroot/build_arm/staging_dir/include 
+--sysroot=/home/buildroot/build_arm/staging_dir/ -isysroot 
+/home/buildroot/build_arm/staging_dir -mtune=arm9tdmi    -c -o 
+pmap_check.o pmap_check.c
+/home/buildroot/build_arm/staging_dir/usr/bin/arm-linux-uclibc-gcc  
+-Dperror=xperror -DCHECK_PORT  -DFACILITY=LOG_AUTH  
+-DIGNORE_SIGCHLD            -Os  
+-I/home/buildroot/build_arm/staging_dir/usr/include 
+-I/home/buildroot/build_arm/staging_dir/include 
+--sysroot=/home/buildroot/build_arm/staging_dir/ -isysroot 
+/home/buildroot/build_arm/staging_dir -mtune=arm9tdmi   -o portmap  
+/home/buildroot/build_arm/staging_dir/usr/lib/libc.a  portmap.o 
+pmap_check.o from_local.o get_myaddress.o  
+portmap.o: In function `main':
+portmap.c:(.text+0x914): undefined reference to `svcudp_create'
+portmap.c:(.text+0x9a0): undefined reference to `svctcp_create'
+portmap.c:(.text+0xa1c): undefined reference to `svc_run'
+collect2: ld returned 1 exit status
+make[1]: *** [portmap] Error 1
+make[1]: Leaving directory `/home/buildroot/build_arm/portmap_5beta'
+make: *** [/home/buildroot/build_arm/portmap_5beta/portmap] Error 2
+
+
+
+
+
+
+Make sure I'm pointing to the right libc.a:
+mike at himalia:/home/buildroot$ arm-linux-gcc  -print-file-name=libc.a
+/home/buildroot/build_arm/staging_dir/usr/lib/libc.a
+
+
+
+
+
+Using nm, I verified that libc.a does in fact contain 2 of the 3 
+unresolved external references.
+mike at himalia:/home/buildroot$ nm 
+/home/buildroot/build_arm/staging_dir/usr/lib/libc.a | grep svc_run
+svc_run.os:
+00000028 T svc_run
+mike at himalia:/home/buildroot$ nm 
+/home/buildroot/build_arm/staging_dir/usr/lib/libc.a | grep svctcp_create
+00000354 T svctcp_create
+
+
+
+Anyone have any ideas what is going on here?
+
+Thanks in advance.
+
+Mike
