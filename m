@@ -1,95 +1,101 @@
-From: Wayne Keenan <wayne.keenan@gmail.com>
-Date: Sat, 24 May 2008 14:12:16 +0100
-Subject: [Buildroot] Anyone try simulating their Buildroot-created
-	filesystem image in QEMU?
-In-Reply-To: <326f33790805231653o70b7a216x494d69733a00139e@mail.gmail.com>
-References: <326f33790805231205j302081b1oec193841dac80e0c@mail.gmail.com>
-	<c166aa9f0805231244q14df3bdaxce0f87753a5ea2a6@mail.gmail.com>
-	<326f33790805231259i2dff338ct54ed1a7a3640df08@mail.gmail.com>
-	<270858e90805231433x411c6337h79b2e19d2ece71c9@mail.gmail.com>
-	<326f33790805231653o70b7a216x494d69733a00139e@mail.gmail.com>
-Message-ID: <270858e90805240612k6283b5f5x3b627d277fd62153@mail.gmail.com>
+From: Hebbar <gururajakr@sanyo.co.in>
+Date: Mon, 26 May 2008 02:41:20 -0700 (PDT)
+Subject: [Buildroot] Need few clarification/help regarding qtopia & x11 build
+Message-ID: <17468762.post@talk.nabble.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi,
 
-You might also want to have a read of this:
-http://www.at91.com/phpbb/viewtopic.php?p=13226
+HI all,
 
+This is with respect to porting qtopia-phone to buildroot. 1st i am trying
+at my end. once all goes well will forwar it to buildroot. b4 that i need
+few help,
+
+I used the qtopia build from john voltz buildroot fork tree & Recently i
+came across his google code and found he had made few changes to qtopia
+build. i tried to implement the same into qtopia
+phone(qtopia-opensource-4.3.1) and few bugs here and there. 
+ 
+1 main thing is that when he sed the qmake.conf file for qmake_cxx , it
+edits all the references of qmake_cxx and not just qmake_cxx, i mean it also
+changes below variables. kindly help me to resolve the same. how to make the
+sed edit only the mentioned qmake_cxx.
+
+this edit 
+
+$(SED) '\,QMAKE_CXX, c\QMAKE_CXX = $(TARGET_CXX)'
+$(QTOPIA_PHONE_TARGET_DIR)/qtopiacore/qt/mkspecs/qws/linux-$(BR2_PACKAGE_QTOPIA_PHONE_EMB_PLATFORM)-g++/qmake.conf
+ 
+changes 
+ 
+
+QMAKE_CXX  = arm-linux-g++
+QMAKE_CXXFLAGS  = $$QMAKE_CFLAGS -DQT_QWS_CELLON -DQWS -fno-rtti
+QMAKE_CXXFLAGS_WARN_ON = $$QMAKE_CFLAGS_WARN_ON
+QMAKE_CXXFLAGS_WARN_OFF = $$QMAKE_CFLAGS_WARN_OFF
+QMAKE_CXXFLAGS_RELEASE = $$QMAKE_CFLAGS_RELEASE
+QMAKE_CXXFLAGS_DEBUG = $$QMAKE_CFLAGS_DEBUG
+QMAKE_CXXFLAGS_SHLIB = $$QMAKE_CFLAGS_SHLIB
+QMAKE_CXXFLAGS_YACC = $$QMAKE_CFLAGS_YACC
+QMAKE_CXXFLAGS_THREAD = $$QMAKE_CFLAGS_THREAD
+ 
+to 
+ 
+QMAKE_CXX =
+/opt/buildroot/build_arm/staging_dir/usr/bin/arm-linux-uclibcgnueabi-g++
+QMAKE_CXX =
+/opt/buildroot/build_arm/staging_dir/usr/bin/arm-linux-uclibcgnueabi-g++
+QMAKE_CXX =
+/opt/buildroot/build_arm/staging_dir/usr/bin/arm-linux-uclibcgnueabi-g++
+QMAKE_CXX =
+/opt/buildroot/build_arm/staging_dir/usr/bin/arm-linux-uclibcgnueabi-g++
+QMAKE_CXX =
+/opt/buildroot/build_arm/staging_dir/usr/bin/arm-linux-uclibcgnueabi-g++
+QMAKE_CXX =
+/opt/buildroot/build_arm/staging_dir/usr/bin/arm-linux-uclibcgnueabi-g++
+QMAKE_CXX =
+/opt/buildroot/build_arm/staging_dir/usr/bin/arm-linux-uclibcgnueabi-g++
+QMAKE_CXX =
+/opt/buildroot/build_arm/staging_dir/usr/bin/arm-linux-uclibcgnueabi-g++
+QMAKE_CXX =
+/opt/buildroot/build_arm/staging_dir/usr/bin/arm-linux-uclibcgnueabi-g++
+QMAKE_CXX =
+/opt/buildroot/build_arm/staging_dir/usr/bin/arm-linux-uclibcgnueabi-g++
+ 
+ 
+ 
+Also
+ 
+$(SED) '\,QMAKE_LINK, c\QMAKE_LINK = $(TARGET_CXX)'
+$(QTOPIA_PHONE_TARGET_DIR)/qtopiacore/qt/mkspecs/qws/linux-$(BR2_PACKAGE_QTOPIA_PHONE_EMB_PLATFORM)-g++/qmake.conf
+ 
+changes
+ 
+QMAKE_LINK  = arm-linux-g++
+QMAKE_LINK_SHLIB = arm-linux-g++
+ 
+to 
+ 
+QMAKE_LINK =
+/opt/buildroot/build_arm/staging_dir/usr/bin/arm-linux-uclibcgnueabi-g++
+QMAKE_LINK =
+/opt/buildroot/build_arm/staging_dir/usr/bin/arm-linux-uclibcgnueabi-g++
+ 
+
+Also i think he contributed for the xserver implementation and thanks to he
+i learnt a lot and now i am successfully running xserver on arm926ejs with
+tslib, xcalibrate and many other x11 apps. i added a few patches taken from
+openembedded and now tslib, xcalibrate and many other works very nicely. i
+can send the patch if  buildrrot needs it. 
+ 
+Thanks in advance
+ 
 Regards
-Wayne
-
-On Sat, May 24, 2008 at 12:53 AM, Arun Reddy <reddyac@gmail.com> wrote:
-
-> Thanks Wayne,
->
-> I will look into this. I tried booting the sample debian etch ARM image in
-> the second link you gave me but I had no success. I wonder why the QEMU site
-> says it can support versatile emulation when it doesn't support scsi? Let's
-> hope that isn't really the case!
->
->
-> On Fri, May 23, 2008 at 2:33 PM, Wayne Keenan <wayne.keenan@gmail.com>
-> wrote:
->
->> Hi,
->>
->> I've been looking at doing exactly this, and have found the path is
->> trodden. Based the info via the links below you will need to mount the RFS
->> via NFS as the ARM QEMU emulation doesnt support IDE/SCSI, well, one type of
->> ARM qemu doesn't and another one does, please have a read:
->>
->> http://nepotismia.com/linux/qemu/arm/
->> http://www.aurel32.net/info/debian_arm_qemu.php
->>
->> I haven't used the info yet, but am planning todo so this weekend, so
->> apologies if what I am relaying is out of date and misleading.
->>
->> Regards
->> Wayne
->>
->>
->> On Fri, May 23, 2008 at 8:59 PM, Arun Reddy <reddyac@gmail.com> wrote:
->>
->>> Hi Andrew,
->>>
->>> Thanks for the suggestion. Unfortunately I get the same kernel panic
->>> error with hda as well. I also build my image with initrd support (in the
->>> kernel config) and when I tried booting qemu locks up right after
->>> uncompressing the kernel. I'll play around with it more but in the meantime
->>> if any other members have any feedback please feel free to respond. Thanks!
->>>
->>> On Fri, May 23, 2008 at 12:44 PM, Andrew Dyer <amdyer@gmail.com> wrote:
->>>
->>>>  On Fri, May 23, 2008 at 2:05 PM, Arun Reddy <reddyac@gmail.com> wrote:
->>>> > qemu-system-arm -M versatilepb -m 128 -kernel
->>>> arm-linux-2.6.24.4-20080523.gz
->>>> > -hda rootfs.arm.ext2 -nographic -append "root=/dev/hda1
->>>> console=ttyAMA0"
->>>>
->>>> don't know qemu, but it looks to me like you're putting the filesystem
->>>> image at /dev/hda, but trying to boot the kernel from /dev/hda1 (the
->>>> one implies a partitioned disk).  try the kernel command line
->>>> 'root=/dev/hda  ...' instead.
->>>>
->>>> --
->>>> Hardware, n.:
->>>>  The parts of a computer system that can be kicked.
->>>>
->>>
->>>
->>> _______________________________________________
->>> buildroot mailing list
->>> buildroot at uclibc.org
->>> http://busybox.net/mailman/listinfo/buildroot
->>>
->>
->>
->
--------------- next part --------------
-An HTML attachment was scrubbed...
-URL: http://busybox.net/lists/buildroot/attachments/20080524/ee5132c0/attachment-0001.htm 
+Gururaja
+-- 
+View this message in context: http://www.nabble.com/Need-few-clarification-help-regarding-qtopia----x11-build-tp17468762p17468762.html
+Sent from the BuildRoot mailing list archive at Nabble.com.
