@@ -1,35 +1,28 @@
-From: hamish at uclibc.org <hamish@uclibc.org>
-Date: Tue, 27 May 2008 23:54:03 -0700 (PDT)
-Subject: [Buildroot] svn commit: trunk/buildroot/package/libusb
-Message-ID: <20080528065403.790DB3C617@busybox.net>
+From: Hebbar <gururajakr@sanyo.co.in>
+Date: Wed, 28 May 2008 00:36:09 -0700 (PDT)
+Subject: [Buildroot] [PATCH] x11 xserver: Add xcalibrate proto,
+ xcalibrate lib and xtscal app to xserver
+In-Reply-To: <408540dd0805272208g2b7741cfvfcc533a9ff952756@mail.gmail.com>
+References: <5BF78BCE8D9BF14A83F836BD9E3916BA0DDED8@blrms.slti.sanyo.co.in>
+	<5BF78BCE8D9BF14A83F836BD9E3916BA0DDEE5@blrms.slti.sanyo.co.in>
+	<408540dd0805272208g2b7741cfvfcc533a9ff952756@mail.gmail.com>
+Message-ID: <17506807.post@talk.nabble.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Author: hamish
-Date: 2008-05-27 23:54:02 -0700 (Tue, 27 May 2008)
-New Revision: 22098
 
-Log:
-Fix dependencies to enable autoreconf, without rebuilding every time
+Hi,
 
-Modified:
-   trunk/buildroot/package/libusb/libusb.mk
+I had sent thse patches to buildroot but dont know y it has yet made it to
+the mailing list.
+i will try resending all thos emissing patches again.
 
+Regards
+Gururaja
 
-Changeset:
-Modified: trunk/buildroot/package/libusb/libusb.mk
-===================================================================
---- trunk/buildroot/package/libusb/libusb.mk	2008-05-28 02:12:52 UTC (rev 22097)
-+++ trunk/buildroot/package/libusb/libusb.mk	2008-05-28 06:54:02 UTC (rev 22098)
-@@ -24,7 +24,7 @@
- libusb-source: $(DL_DIR)/$(LIBUSB_SOURCE) $(LIBUSB_PATCH)
- 
- libusb-unpacked: $(LIBUSB_DIR)/.unpacked
--$(LIBUSB_DIR)/.unpacked: host-autoconf $(DL_DIR)/$(LIBUSB_SOURCE)
-+$(LIBUSB_DIR)/.unpacked: $(AUTOCONF) $(AUTOMAKE) $(DL_DIR)/$(LIBUSB_SOURCE)
- 	$(LIBUSB_CAT) $(DL_DIR)/$(LIBUSB_SOURCE) | tar -C $(BUILD_DIR) $(TAR_OPTIONS) -
- ifneq ($(LIBUSB_PATCH_FILE),)
- 	(cd $(LIBUSB_DIR) && $(LIBUSB_CAT) $(LIBUSB_PATCH) | patch -p1)
+-- 
+View this message in context: http://www.nabble.com/-PATCH--x11-xserver%3A-Add-xcalibrate-proto%2C-xcalibrate-lib-and-xtscal-app-to-xserver-tp17484555p17506807.html
+Sent from the BuildRoot mailing list archive at Nabble.com.
