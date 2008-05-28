@@ -1,49 +1,52 @@
-From: Michael.Forkey at elektrobit.com <Michael.Forkey@elektrobit.com>
-Date: Tue, 27 May 2008 15:55:35 -0700
-Subject: [Buildroot] Q: Problem building libgtk2 - libcups?
-Message-ID: <C681C76E0D5F1E4BB01DE79E0A80EEC7765E4E@usrdes03.ebgroup.elektrobit.com>
+From: Gururaja Hebbar K R <gururajakr@sanyo.co.in>
+Date: Wed, 28 May 2008 06:14:50 +0530
+Subject: [Buildroot] [PATCH] x11 xserver: Add xcalibrate proto,
+	xcalibrate lib and xtscal app to xserver
+References: <5BF78BCE8D9BF14A83F836BD9E3916BA0DDED8@blrms.slti.sanyo.co.in>
+	<408540dd0805271509h27419f6an3cef5f4b9ddb625b@mail.gmail.com>
+Message-ID: <5BF78BCE8D9BF14A83F836BD9E3916BA0DDEE5@blrms.slti.sanyo.co.in>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-buildroot-20080523 with the 5 patches Daniel Laird posted to this
-mailing list on Friday 5/23/2008.
+ 
+Hi,
 
-I am having a problem building libcups as part of libgtk2 for the ARM9.
-I get the following:
-Linking pdftops...
-/usr/bin/ld: libxpdf.a(gmem.o): Relocations in generic ELF (EM: 40)
-/usr/bin/ld: libxpdf.a(gmem.o): Relocations in generic ELF (EM: 40)
-/usr/bin/ld: libxpdf.a(gmem.o): Relocations in generic ELF (EM: 40)
-/usr/bin/ld: libxpdf.a(gmem.o): Relocations in generic ELF (EM: 40)
-/usr/bin/ld: libxpdf.a(gmem.o): Relocations in generic ELF (EM: 40)
-/usr/bin/ld: libxpdf.a(gmem.o): Relocations in generic ELF (EM: 40)
-libxpdf.a: could not read symbols: File in wrong format
-collect2: ld returned 1 exit status
-make[2]: *** [pdftops] Error 1
+While adding sources to xcalibrate package, i downloaded the package
+from git, and tarballs from different directory. Really felt bad that i
+hadn't changed it in the package make files.
 
-It looks to me like the correct toolchain is being used - everything
-says "arm-..." (i.e. gcc, ar, etc.) What else should I check?
+For libXcalibrate & xcalibrate i used git to download latest file and
+xtscal i downloaded from http://gpe.linuxtogo.org/download/source/
 
-Is the cups library really needed for libgtk2? I haven't seen any
-reference to it as a requirement in anything I've read about GTK+. I
-don't need printing support. Can I disable building this library?
+Kindly help me to add git commands to package make files. how to set
+package make files to download files from git repository.
 
+once i do this will send correct patches.  kindly place these patches on
+hold till then
 
-Thanks,
-mf
+Regards
+Gururaja
 
+-----Original Message-----
+From: Matthew Dombroski [mailto:matthew.dombroski at gmail.com] 
+Sent: Tuesday, May 27, 2008 3:10 PM
+To: Gururaja Hebbar K R
+Subject: Re: [Buildroot] [PATCH] x11 xserver: Add xcalibrate proto,
+xcalibrate lib and xtscal app to xserver
 
+Hi,
+This may seem to be a silly question but where do the source packages
+come from?
+libXcalibrate-0.1.0.tar.bz2
+xcalibrate-0.1.0.tar.bz2
+xtscal-0.6.3.tar.bz2
 
-----------------------------------------------------------------
-Please note: This e-mail may contain confidential information
-intended solely for the addressee. If you have received this
-e-mail in error, please do not disclose it to anyone, notify
-the sender promptly, and delete the message from your system.
-Thank you.
+I can't find these in the xorg repository or anywhere else....
 
--------------- next part --------------
-An HTML attachment was scrubbed...
-URL: http://busybox.net/lists/buildroot/attachments/20080527/048c6288/attachment.htm 
+~Matt
+
+> Below patch adds support for xcalibrate proto, xcalibrate lib and 
+> xtscal app to xserver
