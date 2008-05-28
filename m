@@ -1,21 +1,35 @@
-From: Matthew Dombroski <matthew.dombroski@gmail.com>
-Date: Wed, 28 May 2008 17:08:43 +1200
-Subject: [Buildroot] [PATCH] x11 xserver: Add xcalibrate proto,
-	xcalibrate lib and xtscal app to xserver
-In-Reply-To: <5BF78BCE8D9BF14A83F836BD9E3916BA0DDEE5@blrms.slti.sanyo.co.in>
-References: <5BF78BCE8D9BF14A83F836BD9E3916BA0DDED8@blrms.slti.sanyo.co.in>
-	<408540dd0805271509h27419f6an3cef5f4b9ddb625b@mail.gmail.com>
-	<5BF78BCE8D9BF14A83F836BD9E3916BA0DDEE5@blrms.slti.sanyo.co.in>
-Message-ID: <408540dd0805272208g2b7741cfvfcc533a9ff952756@mail.gmail.com>
+From: hamish at uclibc.org <hamish@uclibc.org>
+Date: Tue, 27 May 2008 23:54:03 -0700 (PDT)
+Subject: [Buildroot] svn commit: trunk/buildroot/package/libusb
+Message-ID: <20080528065403.790DB3C617@busybox.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Extra patches (for x server) are needed to make xcalibrate extension work.
-They can be found at
-http://www.openembedded.org/repo/org.openembedded.dev/packages/xorg-xserver/xserver-kdrive-git/enable-xcalibrate.patch
-http://www.openembedded.org/repo/org.openembedded.dev/packages/xorg-xserver/xserver-kdrive/xcalibrate-new-input-world-order.patch
+Author: hamish
+Date: 2008-05-27 23:54:02 -0700 (Tue, 27 May 2008)
+New Revision: 22098
 
-~Matt
+Log:
+Fix dependencies to enable autoreconf, without rebuilding every time
+
+Modified:
+   trunk/buildroot/package/libusb/libusb.mk
+
+
+Changeset:
+Modified: trunk/buildroot/package/libusb/libusb.mk
+===================================================================
+--- trunk/buildroot/package/libusb/libusb.mk	2008-05-28 02:12:52 UTC (rev 22097)
++++ trunk/buildroot/package/libusb/libusb.mk	2008-05-28 06:54:02 UTC (rev 22098)
+@@ -24,7 +24,7 @@
+ libusb-source: $(DL_DIR)/$(LIBUSB_SOURCE) $(LIBUSB_PATCH)
+ 
+ libusb-unpacked: $(LIBUSB_DIR)/.unpacked
+-$(LIBUSB_DIR)/.unpacked: host-autoconf $(DL_DIR)/$(LIBUSB_SOURCE)
++$(LIBUSB_DIR)/.unpacked: $(AUTOCONF) $(AUTOMAKE) $(DL_DIR)/$(LIBUSB_SOURCE)
+ 	$(LIBUSB_CAT) $(DL_DIR)/$(LIBUSB_SOURCE) | tar -C $(BUILD_DIR) $(TAR_OPTIONS) -
+ ifneq ($(LIBUSB_PATCH_FILE),)
+ 	(cd $(LIBUSB_DIR) && $(LIBUSB_CAT) $(LIBUSB_PATCH) | patch -p1)
