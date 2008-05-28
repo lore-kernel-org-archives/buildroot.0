@@ -1,7 +1,7 @@
 From: hamish at uclibc.org <hamish@uclibc.org>
-Date: Tue, 27 May 2008 18:21:47 -0700 (PDT)
-Subject: [Buildroot] svn commit: trunk/buildroot/package/kexec
-Message-ID: <20080528012147.A097B3C5D5@busybox.net>
+Date: Tue, 27 May 2008 19:12:56 -0700 (PDT)
+Subject: [Buildroot] svn commit: trunk/buildroot/package/libusb
+Message-ID: <20080528021256.DF89E3C5EB@busybox.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -9,35 +9,30 @@ Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
 Author: hamish
-Date: 2008-05-27 18:21:45 -0700 (Tue, 27 May 2008)
-New Revision: 22096
+Date: 2008-05-27 19:12:52 -0700 (Tue, 27 May 2008)
+New Revision: 22097
 
 Log:
-Remove bashisms
+Fix dependency on host-autoconf
 
 
 Modified:
-   trunk/buildroot/package/kexec/kexec.mk
+   trunk/buildroot/package/libusb/libusb.mk
 
 
 Changeset:
-Modified: trunk/buildroot/package/kexec/kexec.mk
+Modified: trunk/buildroot/package/libusb/libusb.mk
 ===================================================================
---- trunk/buildroot/package/kexec/kexec.mk	2008-05-27 15:57:48 UTC (rev 22095)
-+++ trunk/buildroot/package/kexec/kexec.mk	2008-05-28 01:21:45 UTC (rev 22096)
-@@ -62,13 +62,13 @@
- 	cp -dpf $(KEXEC_DIR)/objdir-$(GNU_TARGET_NAME)/build/sbin/$(KEXEC_BINARY) \
- 		$(KEXEC_DIR)/objdir-$(GNU_TARGET_NAME)/build/sbin/kdump \
- 		$(TARGET_DIR)/sbin/
--	$(STRIPCMD) $(STRIP_STRIP_ALL) $(TARGET_DIR)/sbin/k{exec,dump}
-+	$(STRIPCMD) $(STRIP_STRIP_ALL) $(TARGET_DIR)/sbin/kexec $(TARGET_DIR)/sbin/kdump
+--- trunk/buildroot/package/libusb/libusb.mk	2008-05-28 01:21:45 UTC (rev 22096)
++++ trunk/buildroot/package/libusb/libusb.mk	2008-05-28 02:12:52 UTC (rev 22097)
+@@ -23,8 +23,8 @@
  
- kexec: uclibc $(TARGET_DIR)/$(KEXEC_TARGET_BINARY)
+ libusb-source: $(DL_DIR)/$(LIBUSB_SOURCE) $(LIBUSB_PATCH)
  
- kexec-clean:
- 	-$(MAKE) -C $(KEXEC_DIR) clean
--	rm -f $(TARGET_DIR)/sbin/k{exec,dump}
-+	rm -f $(TARGET_DIR)/sbin/kexec $(TARGET_DIR)/sbin/kdump
- 
- kexec-dirclean:
- 	rm -rf $(KEXEC_DIR)
+-libusb-unpacked: host-automake host-autoconf $(LIBUSB_DIR)/.unpacked
+-$(LIBUSB_DIR)/.unpacked: $(DL_DIR)/$(LIBUSB_SOURCE)
++libusb-unpacked: $(LIBUSB_DIR)/.unpacked
++$(LIBUSB_DIR)/.unpacked: host-autoconf $(DL_DIR)/$(LIBUSB_SOURCE)
+ 	$(LIBUSB_CAT) $(DL_DIR)/$(LIBUSB_SOURCE) | tar -C $(BUILD_DIR) $(TAR_OPTIONS) -
+ ifneq ($(LIBUSB_PATCH_FILE),)
+ 	(cd $(LIBUSB_DIR) && $(LIBUSB_CAT) $(LIBUSB_PATCH) | patch -p1)
