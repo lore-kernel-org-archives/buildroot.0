@@ -1,55 +1,52 @@
-From: bugs at busybox.net <bugs@busybox.net>
-Date: Wed, 28 May 2008 07:01:28 -0700
-Subject: [Buildroot] [buildroot 0003464]: Building Generic development
-	system fails (Second of two bugs)
-Message-ID: <9bb32528e2d2daa9f8310dfef29c332a@bugs.uclibc.org>
+From: Ram kumar <ramkumar.research@gmail.com>
+Date: Thu, 29 May 2008 02:39:28 +0530
+Subject: [Buildroot] undefined macro: AM_PROG_LIBTOOL (buildroot failure)
+Message-ID: <6306c640805281409v1bf5384ag2c1353fd4aead298@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+hi,
+     Iam trying to build a development environment using buildroot for my
+atmel eval kit (AT91SAM9260 ek).I follow the instruaction in the website
+http://www.linux4sam.org/twiki/bin/view/Linux4SAM/BuildRoot. But my
+buildroot fails when it is trying to build libusb.
 
-A NOTE has been added to this issue. 
-====================================================================== 
-http://busybox.net/bugs/view.php?id=3464 
-====================================================================== 
-Reported By:                KHAksnes
-Assigned To:                buildroot
-====================================================================== 
-Project:                    buildroot
-Issue ID:                   3464
-Category:                   Architecture Specific
-Reproducibility:            always
-Severity:                   minor
-Priority:                   normal
-Status:                     assigned
-====================================================================== 
-Date Submitted:             05-28-2008 06:27 PDT
-Last Modified:              05-28-2008 07:01 PDT
-====================================================================== 
-Summary:                    Building Generic development system fails (Second of
-two bugs)
-Description: 
-1. Build of "Generic development system" requires a build of pciutils.
-2. pciutils is not likely to compile if the architecture of the build
-system is   different from the architecture of the target system as lots
-of host applications are run during pciutils configuration. When compiling
-for a mipsel target using a i686 host pciutils tries to compile intel
-spesific code.
-====================================================================== 
+First the buildroot throws 404 file not found error since
+http://ftp.debian.org/pool/main/libu/libusb/ doesn't have
+libusb_0.1.12-9.diff.gz which buildroot looks for......so i edited the
+/buildroot/package/libusb/libusb.mk file to download
+libusb_0.1.12-11.diff.gz which is present in the FTP server.
 
----------------------------------------------------------------------- 
- KHAksnes - 05-28-08 07:01  
----------------------------------------------------------------------- 
-pciutils-3.0.0 seems to have a fix to this via the HOST make variable, This
-variable doesn't seem to do anything useful in pciutils-2.2.10. 
+Build root then succeeds and stops with the following error message.
 
-Issue History 
-Date Modified   Username       Field                    Change               
-====================================================================== 
-05-28-08 06:27  KHAksnes       New Issue                                    
-05-28-08 06:27  KHAksnes       Status                   new => assigned     
-05-28-08 06:27  KHAksnes       Assigned To               => buildroot       
-05-28-08 07:01  KHAksnes       Note Added: 0007874                          
-======================================================================
+configure.in:84: warning: macro `AM_PROG_LIBTOOL' not found in library
+autoreconf: configure.in: tracing
+autoreconf: configure.in: not using Libtool
+autoreconf: running: /buildroot/build_arm/staging_dir/usr/bin/autoconf
+--include=/buildroot/build_arm/staging_dir/usr/share/aclocal --force
+configure.in:84: error: possibly undefined macro: AM_PROG_LIBTOOL
+      If this token and others are legitimate, please use m4_pattern_allow.
+      See the Autoconf documentation.
+autoreconf: /buildroot/build_arm/staging_dir/usr/bin/autoconf failed with
+exit status: 1
+
+Please guide me whether i have to apply any patch to overcome this error ?
+
+I have tried buiding buildroot for several times.But i didn't succeed even
+for a single time.Most of the time i get the file not found error or some
+unknown error.
+
+Is this because iam compiling a recent version or a beta version or an
+unstable version?
+
+Please guide me which version of buildroot will compile properly  ? so that
+i can download that and build a development environment for my research.
+
+Regards,
+Ram
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: http://busybox.net/lists/buildroot/attachments/20080529/46cfde58/attachment.htm 
