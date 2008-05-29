@@ -1,8 +1,8 @@
 From: bugs at busybox.net <bugs@busybox.net>
-Date: Thu, 29 May 2008 08:55:31 -0700
-Subject: [Buildroot] [buildroot 0003494]: Package lighttpd has a dependency
-	on zlib by default
-Message-ID: <236b0a5dbb474f3559e5368dc86db196@bugs.uclibc.org>
+Date: Thu, 29 May 2008 09:02:45 -0700
+Subject: [Buildroot] [buildroot 0003504]: Package php may inadvertently link
+	to host iconv
+Message-ID: <9aee257a96871ecaf595258a42129d07@bugs.uclibc.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -12,39 +12,36 @@ To: buildroot@busybox.net
 
 The following issue has been SUBMITTED. 
 ====================================================================== 
-http://busybox.net/bugs/view.php?id=3494 
+http://busybox.net/bugs/view.php?id=3504 
 ====================================================================== 
 Reported By:                gustavoz
 Assigned To:                buildroot
 ====================================================================== 
 Project:                    buildroot
-Issue ID:                   3494
-Category:                   Other
+Issue ID:                   3504
+Category:                   Shared Library Support
 Reproducibility:            always
 Severity:                   minor
 Priority:                   normal
 Status:                     assigned
 ====================================================================== 
-Date Submitted:             05-29-2008 08:55 PDT
-Last Modified:              05-29-2008 08:55 PDT
+Date Submitted:             05-29-2008 09:02 PDT
+Last Modified:              05-29-2008 09:02 PDT
 ====================================================================== 
-Summary:                    Package lighttpd has a dependency on zlib by default
+Summary:                    Package php may inadvertently link to host iconv
 Description: 
-The lighttpd package uses zlib for mod_compress by default and is currently
-not disabled or an option with buildroot.
-It also lacks the zlib dep so unless zlib is selected/built on buildroot
-lighttpd won't build.
-This patch will introduce a new BR2_PACKAGE_LIGHTTPD_ZLIB option to make
-this conditional since forcing zlib is not really necessary.
+When building php with some libxml2 options enabled it may inadvertently
+link to the host iconv if you lack a target iconv.
+The best solution is to explicitly disable iconv support in libxml2.
 
 ====================================================================== 
 
 Issue History 
 Date Modified   Username       Field                    Change               
 ====================================================================== 
-05-29-08 08:55  gustavoz       New Issue                                    
-05-29-08 08:55  gustavoz       Status                   new => assigned     
-05-29-08 08:55  gustavoz       Assigned To               => buildroot       
-05-29-08 08:55  gustavoz       File Added: buildroot-lighttpd-zlib.patch        
+05-29-08 09:02  gustavoz       New Issue                                    
+05-29-08 09:02  gustavoz       Status                   new => assigned     
+05-29-08 09:02  gustavoz       Assigned To               => buildroot       
+05-29-08 09:02  gustavoz       File Added: buildroot-libxml2-iconv.patch        
            
 ======================================================================
