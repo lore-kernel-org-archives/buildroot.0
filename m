@@ -1,27 +1,28 @@
-From: Arnar Mar Sig <antab@valka.is>
-Date: Fri, 30 May 2008 11:20:19 +0000
+From: Peter Korsgaard <jacmet@uclibc.org>
+Date: Fri, 30 May 2008 13:34:21 +0200
 Subject: [Buildroot] SVN account request
-Message-ID: <68E1DB0A-AFB2-4F33-A547-0AD5AEC63BAA@valka.is>
+In-Reply-To: <68E1DB0A-AFB2-4F33-A547-0AD5AEC63BAA@valka.is> (Arnar Mar Sig's
+	message of "Fri\, 30 May 2008 11\:20\:19 +0000")
+References: <68E1DB0A-AFB2-4F33-A547-0AD5AEC63BAA@valka.is>
+Message-ID: <87fxs0owjm.fsf@macbook.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-I have been fixing and maintaining the Google buildroot fork for some  
-time, John Voltz has been pushing my changes from the google fork to  
-upstream from time to time but it would be much easier if i could  
-commit them myself.
+>>>>> "Arnar" == Arnar Mar Sig <antab@valka.is> writes:
 
-The google fork now contains the lates versions of ATK, Pango, Cairo,  
-GTK and many other packages that have been lagging for a long time in  
-upstream.
+Hi Arnar,
 
-Valka (www.valka.is) the company i work for uses buildroot to build  
-the base system for our industrial controller (John has pushed our  
-device target upstream, but it has not been updated for some time  
-there), so most of the time i spend on buildroot is sponsord by Valka.
+ Arnar> I have been fixing and maintaining the Google buildroot fork
+ Arnar> for some time, John Voltz has been pushing my changes from the
+ Arnar> google fork to upstream from time to time but it would be much
+ Arnar> easier if i could commit them myself.
 
-Thanks
-	Arnar Mar Sig
-	Valka ehf
+Great, send your ssh public key and preferred username to
+vapier at uclibc.org as (more-or-less) described in
+http://buildroot.uclibc.org/developer.html.
+
+-- 
+Bye, Peter Korsgaard
