@@ -1,7 +1,7 @@
 From: jacmet at uclibc.org <jacmet@uclibc.org>
-Date: Sat, 31 May 2008 00:28:05 -0700 (PDT)
-Subject: [Buildroot] svn commit: trunk/buildroot/package/busybox
-Message-ID: <20080531072806.016BD3C8B7@busybox.net>
+Date: Sat, 31 May 2008 00:28:09 -0700 (PDT)
+Subject: [Buildroot] svn commit: trunk/buildroot/toolchain/uClibc
+Message-ID: <20080531072809.B05F13C8C0@busybox.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -9,261 +9,43 @@ Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
 Author: jacmet
-Date: 2008-05-31 00:28:04 -0700 (Sat, 31 May 2008)
-New Revision: 22137
+Date: 2008-05-31 00:28:09 -0700 (Sat, 31 May 2008)
+New Revision: 22138
 
 Log:
-busybox: 1.10.2 patches
+uclibc-0.9.28.3: correct arch list (avr32 missing, stuff only in 0.9.29+)
 
 
-Added:
-   trunk/buildroot/package/busybox/busybox-1.10.2-dnsd.patch
-   trunk/buildroot/package/busybox/busybox-1.10.2-hush.patch
-   trunk/buildroot/package/busybox/busybox-1.10.2-mdev.patch
-   trunk/buildroot/package/busybox/busybox-1.10.2-semicolon.patch
-   trunk/buildroot/package/busybox/busybox-1.10.2-syslogd.patch
+Modified:
+   trunk/buildroot/toolchain/uClibc/uClibc-0.9.28.config
 
 
 Changeset:
-Added: trunk/buildroot/package/busybox/busybox-1.10.2-dnsd.patch
+Modified: trunk/buildroot/toolchain/uClibc/uClibc-0.9.28.config
 ===================================================================
---- trunk/buildroot/package/busybox/busybox-1.10.2-dnsd.patch	                        (rev 0)
-+++ trunk/buildroot/package/busybox/busybox-1.10.2-dnsd.patch	2008-05-31 07:28:04 UTC (rev 22137)
-@@ -0,0 +1,87 @@
-+--- busybox-1.10.2/libbb/udp_io.c	Sat Apr 19 05:50:33 2008
-++++ busybox-1.10.2-dnsd/libbb/udp_io.c	Thu May 22 19:40:32 2008
-+@@ -36,11 +36,12 @@
-+ #else
-+ 	struct iovec iov[1];
-+ 	struct msghdr msg;
-+-	char cbuf[sizeof(struct in_pktinfo)
-++	union {
-++		char cmsg[CMSG_SPACE(sizeof(struct in_pktinfo))];
-+ #if ENABLE_FEATURE_IPV6 && defined(IPV6_PKTINFO)
-+-		| sizeof(struct in6_pktinfo) /* (a|b) is poor man's max(a,b) */
-++		char cmsg6[CMSG_SPACE(sizeof(struct in6_pktinfo))];
-+ #endif
-+-	];
-++	} u;
-+ 	struct cmsghdr* cmsgptr;
-+ 
-+ 	if (from->sa_family != AF_INET
-+@@ -57,15 +58,15 @@
-+ 	iov[0].iov_base = buf;
-+ 	iov[0].iov_len = len;
-+ 
-+-	memset(cbuf, 0, sizeof(cbuf));
-++	memset(&u, 0, sizeof(u));
-+ 
-+ 	memset(&msg, 0, sizeof(msg));
-+ 	msg.msg_name = (void *)(struct sockaddr *)to; /* or compiler will annoy us */
-+ 	msg.msg_namelen = tolen;
-+ 	msg.msg_iov = iov;
-+ 	msg.msg_iovlen = 1;
-+-	msg.msg_control = cbuf;
-+-	msg.msg_controllen = sizeof(cbuf);
-++	msg.msg_control = &u;
-++	msg.msg_controllen = sizeof(u);
-+ 	msg.msg_flags = flags;
-+ 
-+ 	cmsgptr = CMSG_FIRSTHDR(&msg);
-+@@ -89,6 +90,8 @@
-+ 		pktptr->ipi6_addr = ((struct sockaddr_in6*)from)->sin6_addr;
-+ 	}
-+ #endif
-++	msg.msg_controllen = cmsgptr->cmsg_len;
-++
-+ 	return sendmsg(fd, &msg, flags);
-+ #endif
-+ }
-+@@ -109,7 +112,9 @@
-+ 	struct iovec iov[1];
-+ 	union {
-+ 		char cmsg[CMSG_SPACE(sizeof(struct in_pktinfo))];
-++#if ENABLE_FEATURE_IPV6 && defined(IPV6_PKTINFO)
-+ 		char cmsg6[CMSG_SPACE(sizeof(struct in6_pktinfo))];
-++#endif
-+ 	} u;
-+ 	struct cmsghdr *cmsgptr;
-+ 	struct msghdr msg;
-+--- busybox-1.10.2/networking/dnsd.c	Sat Apr 19 05:50:27 2008
-++++ busybox-1.10.2-dnsd/networking/dnsd.c	Thu May 22 19:40:32 2008
-+@@ -194,7 +194,8 @@
-+ 			for (i = 1; i <= (int)(d->name[0]); i++)
-+ 				if (tolower(qs[i]) != d->name[i])
-+ 					break;
-+-			if (i > (int)(d->name[0])) {
-++			if (i > (int)(d->name[0]) ||
-++			    (d->name[0] == 1 && d->name[1] == '*')) {
-+ 				strcpy((char *)as, d->ip);
-+ #if DEBUG
-+ 				fprintf(stderr, " OK as:%s\n", as);
-+@@ -202,7 +203,8 @@
-+ 				return 0;
-+ 			}
-+ 		} else if (type == REQ_PTR) { /* search by IP-address */
-+-			if (!strncmp((char*)&d->rip[1], (char*)&qs[1], strlen(d->rip)-1)) {
-++			if ((d->name[0] != 1 || d->name[1] != '*') &&
-++			    !strncmp((char*)&d->rip[1], (char*)&qs[1], strlen(d->rip)-1)) {
-+ 				strcpy((char *)as, d->name);
-+ 				return 0;
-+ 			}
-+@@ -401,7 +403,7 @@
-+ 		r = process_packet(buf);
-+ 		if (r <= 0)
-+ 			continue;
-+-		send_to_from(udps, buf, r, 0, &to->u.sa, &from->u.sa, lsa->len);
-++		send_to_from(udps, buf, r, 0, &from->u.sa, &to->u.sa, lsa->len);
-+ 	}
-+ 	return 0;
-+ }
-
-Added: trunk/buildroot/package/busybox/busybox-1.10.2-hush.patch
-===================================================================
---- trunk/buildroot/package/busybox/busybox-1.10.2-hush.patch	                        (rev 0)
-+++ trunk/buildroot/package/busybox/busybox-1.10.2-hush.patch	2008-05-31 07:28:04 UTC (rev 22137)
-@@ -0,0 +1,57 @@
-+--- busybox-1.10.2/shell/hush.c	Sat Apr 19 05:50:31 2008
-++++ busybox-1.10.2-hush/shell/hush.c	Mon May 26 00:32:40 2008
-+@@ -699,9 +699,18 @@
-+ 	BLTIN(NULL, NULL, NULL)
-+ };
-+ 
-++/* Signals are grouped, we handle them in batches */
-++static void set_misc_sighandler(void (*handler)(int))
-++{
-++	bb_signals(0
-++		+ (1 << SIGINT)
-++		+ (1 << SIGQUIT)
-++		+ (1 << SIGTERM)
-++		, handler);
-++}
-++
-+ #if ENABLE_HUSH_JOB
-+ 
-+-/* Signals are grouped, we handle them in batches */
-+ static void set_fatal_sighandler(void (*handler)(int))
-+ {
-+ 	bb_signals(0
-+@@ -725,14 +734,6 @@
-+ 		+ (1 << SIGTTOU)
-+ 		, handler);
-+ }
-+-static void set_misc_sighandler(void (*handler)(int))
-+-{
-+-	bb_signals(0
-+-		+ (1 << SIGINT)
-+-		+ (1 << SIGQUIT)
-+-		+ (1 << SIGTERM)
-+-		, handler);
-+-}
-+ /* SIGCHLD is special and handled separately */
-+ 
-+ static void set_every_sighandler(void (*handler)(int))
-+@@ -815,7 +816,6 @@
-+ 
-+ #define set_fatal_sighandler(handler)   ((void)0)
-+ #define set_jobctrl_sighandler(handler) ((void)0)
-+-#define set_misc_sighandler(handler)    ((void)0)
-+ #define hush_exit(e)                    exit(e)
-+ 
-+ #endif /* JOB */
-+@@ -3907,8 +3907,10 @@
-+ 				/* give up */
-+ 				interactive_fd = 0;
-+ 		}
-+-		if (interactive_fd)
-++		if (interactive_fd) {
-+ 			fcntl(interactive_fd, F_SETFD, FD_CLOEXEC);
-++			set_misc_sighandler(SIG_IGN);
-++		}
-+ 	}
-+ #endif
-+ 
-
-Added: trunk/buildroot/package/busybox/busybox-1.10.2-mdev.patch
-===================================================================
---- trunk/buildroot/package/busybox/busybox-1.10.2-mdev.patch	                        (rev 0)
-+++ trunk/buildroot/package/busybox/busybox-1.10.2-mdev.patch	2008-05-31 07:28:04 UTC (rev 22137)
-@@ -0,0 +1,31 @@
-+--- busybox-1.10.2/util-linux/mdev.c	Thu May  8 17:22:48 2008
-++++ busybox-1.10.2-mdev/util-linux/mdev.c	Sat May 24 18:43:40 2008
-+@@ -72,8 +72,14 @@
-+ 	/* Determine device name, type, major and minor */
-+ 	device_name = bb_basename(path);
-+ 	/* http://kernel.org/doc/pending/hotplug.txt says that only
-+-	 * "/sys/block/..." is for block devices. "sys/bus" etc is not! */
-+-	type = (strncmp(&path[5], "block/", 6) == 0 ? S_IFBLK : S_IFCHR);
-++	 * "/sys/block/..." is for block devices. "/sys/bus" etc is not!
-++	 * Since kernel 2.6.25 block devices are also in /sys/class/block. */
-++	/* TODO: would it be acceptable to just use strstr(path, "/block/")? */
-++	if (strncmp(&path[5], "class/block/"+6, 6) != 0
-++	 && strncmp(&path[5], "class/block/", 12) != 0)
-++	        type = S_IFCHR;
-++	else
-++	        type = S_IFBLK;
-+ 
-+ 	if (ENABLE_FEATURE_MDEV_CONF) {
-+ 		FILE *fp;
-+@@ -172,8 +178,9 @@
-+ 					/* substitute %1..9 with off[1..9], if any */
-+ 					n = 0;
-+ 					s = val;
-+-					while (*s && *s++ == '%')
-+-						n++;
-++					while (*s)
-++						if (*s++ == '%')
-++							n++;
-+ 
-+ 					p = alias = xzalloc(strlen(val) + n * strlen(device_name));
-+ 					s = val + 1;
-
-Added: trunk/buildroot/package/busybox/busybox-1.10.2-semicolon.patch
-===================================================================
---- trunk/buildroot/package/busybox/busybox-1.10.2-semicolon.patch	                        (rev 0)
-+++ trunk/buildroot/package/busybox/busybox-1.10.2-semicolon.patch	2008-05-31 07:28:04 UTC (rev 22137)
-@@ -0,0 +1,22 @@
-+--- busybox-1.10.2/networking/interface.c	Sat Apr 19 05:50:27 2008
-++++ busybox-1.10.2-semicolon/networking/interface.c	Thu May 15 21:40:04 2008
-+@@ -223,7 +223,7 @@
-+ 	char *pos;
-+ 	unsigned int i;
-+ 
-+-	if (!buff);
-++	if (!buff)
-+ 		buff = xmalloc(sizeof(struct sockaddr) * 3 + 1);
-+ 	pos = buff;
-+ 	for (i = 0; i < sizeof(struct sockaddr); i++) {
-+--- busybox-1.10.2/networking/isrv_identd.c	Sat Apr 19 05:50:27 2008
-++++ busybox-1.10.2-semicolon/networking/isrv_identd.c	Thu May 15 21:40:04 2008
-+@@ -113,7 +113,7 @@
-+ 		strncpy(bogouser, argv[optind], sizeof(bogouser));
-+ 
-+ 	/* Daemonize if no -f and no -i and no -w */
-+-	if (!(opt & OPT_fiw));
-++	if (!(opt & OPT_fiw))
-+ 		bb_daemonize_or_rexec(0, argv);
-+ 
-+ 	/* Where to log in inetd modes? "Classic" inetd
-
-Added: trunk/buildroot/package/busybox/busybox-1.10.2-syslogd.patch
-===================================================================
---- trunk/buildroot/package/busybox/busybox-1.10.2-syslogd.patch	                        (rev 0)
-+++ trunk/buildroot/package/busybox/busybox-1.10.2-syslogd.patch	2008-05-31 07:28:04 UTC (rev 22137)
-@@ -0,0 +1,16 @@
-+--- busybox-1.10.2/sysklogd/syslogd.c	Sat Apr 19 05:50:29 2008
-++++ busybox-1.10.2-syslogd/sysklogd/syslogd.c	Sat May 24 23:02:56 2008
-+@@ -347,10 +347,11 @@
-+ 				sprintf(newFile, "%s.%d", G.logFilePath, i);
-+ 				if (i == 0) break;
-+ 				sprintf(oldFile, "%s.%d", G.logFilePath, --i);
-+-				xrename(oldFile, newFile);
-++				/* ignore errors - file might be missing */
-++				rename(oldFile, newFile);
-+ 			}
-+ 			/* newFile == "f.0" now */
-+-			xrename(G.logFilePath, newFile);
-++			rename(G.logFilePath, newFile);
-+ 			fl.l_type = F_UNLCK;
-+ 			fcntl(G.logFD, F_SETLKW, &fl);
-+ 			close(G.logFD);
+--- trunk/buildroot/toolchain/uClibc/uClibc-0.9.28.config	2008-05-31 07:28:04 UTC (rev 22137)
++++ trunk/buildroot/toolchain/uClibc/uClibc-0.9.28.config	2008-05-31 07:28:09 UTC (rev 22138)
+@@ -3,6 +3,7 @@
+ #
+ # TARGET_alpha is not set
+ # TARGET_arm is not set
++# TARGET_avr32 is not set
+ # TARGET_bfin is not set
+ # TARGET_cris is not set
+ # TARGET_e1 is not set
+@@ -10,7 +11,6 @@
+ # TARGET_h8300 is not set
+ # TARGET_i386 is not set
+ # TARGET_i960 is not set
+-# TARGET_ia64 is not set
+ # TARGET_m68k is not set
+ # TARGET_microblaze is not set
+ # TARGET_mips is not set
+@@ -21,7 +21,6 @@
+ # TARGET_sh64 is not set
+ # TARGET_sparc is not set
+ # TARGET_v850 is not set
+-# TARGET_vax is not set
+ # TARGET_x86_64 is not set
+ 
+ #
