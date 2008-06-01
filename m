@@ -1,68 +1,85 @@
-From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Sun, 01 Jun 2008 21:31:07 +0200
-Subject: [Buildroot] svn commit: trunk/buildroot/package/php
-In-Reply-To: <20080601180414.033A73C836@busybox.net> (antab@uclibc.org's
-	message of "Sun\, 1 Jun 2008 11\:04\:13 -0700 \(PDT\)")
-References: <20080601180414.033A73C836@busybox.net>
-Message-ID: <8763stkl50.fsf@macbook.be.48ers.dk>
+From: Arnar Mar Sig <antab@valka.is>
+Date: Sun, 1 Jun 2008 19:35:14 +0000
+Subject: [Buildroot] svn commit: trunk/buildroot/package: database
+	database/mysql_client
+In-Reply-To: <87abi5klws.fsf@macbook.be.48ers.dk>
+References: <20080601180849.37DEE3C814@busybox.net>
+	<87abi5klws.fsf@macbook.be.48ers.dk>
+Message-ID: <17D35AC9-FC86-45C6-90AE-874D275697F3@valka.is>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "antab" == antab  <antab@uclibc.org> writes:
 
- antab> Author: antab
- antab> Date: 2008-06-01 11:04:13 -0700 (Sun, 01 Jun 2008)
- antab> New Revision: 22164
+On Jun 1, 2008, at 7:14 PM, Peter Korsgaard wrote:
+> antab> Added: trunk/buildroot/package/database/Config.in
+> antab>  
+> ===================================================================
+> antab> --- trunk/buildroot/package/database/ 
+> Config.in	                        (rev 0)
+> antab> +++ trunk/buildroot/package/database/Config.in	2008-06-01  
+> 18:08:48 UTC (rev 22165)
+> antab> @@ -0,0 +1,5 @@
+> antab> +menu "Database"
+> antab> +
+> antab> +source "package/database/mysql_client/Config.in"
+> antab> +
+> antab> +endmenu
+>
+> The other sub menus use menuconfig instead of menu, please do as well.
+Sorry about that, fixed
 
- antab> Log:
- antab> Dump php to version 5.2.6 and add SimpleXML extension to config menu
+> antab> Added: trunk/buildroot/package/database/mysql_client/Config.in
+> antab>  
+> ===================================================================
+> antab> --- trunk/buildroot/package/database/mysql_client/ 
+> Config.in	                        (rev 0)
+> antab> +++ trunk/buildroot/package/database/mysql_client/Config.in	 
+> 2008-06-01 18:08:48 UTC (rev 22165)
+> antab> @@ -0,0 +1,5 @@
+> antab> +config BR2_PACKAGE_MYSQL_CLIENT
+> antab> +	bool "MySQL 5.1 client"
+> antab> +	default n
+> antab> +	help
+> antab> +	  MySQL 5.1 client
+>
+> Please don't add the version number to the help text.
+Removed from the helptext, Keeping it in the menu text, There are so  
+many changes between the 4.x - 5.x versions that one needs to know the  
+major version number.
+>
+> antab> Added: trunk/buildroot/package/database/mysql_client/ 
+> mysql_client.mk
+> antab>  
+> ===================================================================
+> antab> --- trunk/buildroot/package/database/mysql_client/ 
+> mysql_client.mk	                        (rev 0)
+> antab> +++ trunk/buildroot/package/database/mysql_client/ 
+> mysql_client.mk	2008-06-01 18:08:48 UTC (rev 22165)
+> antab> @@ -0,0 +1,30 @@
+> antab> +#############################################################
+> antab> +#
+> antab> +# MySQL 5.1 Client
+> antab> +#
+> antab> +#############################################################
+> antab> +MYSQL_CLIENT_VERSION = 5.1.23-rc
+> antab> +MYSQL_CLIENT_SOURCE = mysql-$(MYSQL_CLIENT_VERSION).tar.gz
+> antab> +MYSQL_CLIENT_SITE = http://mirrors.24-7-solutions.net/pub/mysql/Downloads/MySQL-5.1
+>
+> Is that the official download URL?
+This mirror was found after searching the mysql.com site.
 
-...
+>
+>
+> -- 
+> Bye, Peter Korsgaard
+> _______________________________________________
+> buildroot mailing list
+> buildroot at uclibc.org
+> http://busybox.net/mailman/listinfo/buildroot
 
- antab>  config BR2_PACKAGE_PHP_EXT_OPENSSL
- antab> -        bool "openssl"
- antab> -        depends on BR2_PACKAGE_PHP && BR2_PACKAGE_OPENSSL
- antab> -        default n
- antab> -        help
- antab> -          openssl support
- antab> +	bool "openssl"
- antab> +	depends on BR2_PACKAGE_PHP && BR2_PACKAGE_OPENSSL
- antab> +	default n
- antab> +	help
- antab> +	  openssl support
-
-Please don't do white space and functional changes in the same commit.
-
- antab> @@ -3,7 +3,7 @@
- antab>  # php
- antab>  #
- antab>  #############################################################
- antab> -PHP_VER:=5.2.5
- antab> +PHP_VER:=5.2.6
- antab>  PHP_SOURCE:=php-$(PHP_VER).tar.bz2
- antab>  PHP_SITE:=http://us.php.net/get/${PHP_SOURCE}/from/us2.php.net/mirror
- antab>  PHP_DIR:=$(BUILD_DIR)/php-$(PHP_VER)
- antab> @@ -58,6 +58,9 @@
- antab>  		 --enable-xmlwriter
- antab>  	PHP_DEPS+=libxml2
- antab>  endif
- antab> +ifeq ($(BR2_PACKAGE_PHP_EXT_SIMPLEXML),y)
- antab> +	PHP_CONFIGURE+=--enable-simplexml
- antab> +endif
- antab>  ifeq ($(BR2_PACKAGE_PHP_EXT_ZLIB),y)
- antab>  	PHP_CONFIGURE+=--with-zlib=$(STAGING_DIR)/usr
- antab>  	PHP_DEPS+=zlib
- antab> @@ -105,20 +108,20 @@
- 
- antab>  ### Database extensions
- antab>  ifeq ($(BR2_PACKAGE_PHP_EXT_SQLITE),y)
- antab> -	PHP_CONFIGURE+=--with-sql
- antab> +	PHP_CONFIGURE+=--with-sqlite
-
-Don't you need a depends on BR2_PACKAGE_SQLITE?
-
--- 
-Bye, Peter Korsgaard
+Greets
+	Arnar Mar Sig
+	Valka ehf
