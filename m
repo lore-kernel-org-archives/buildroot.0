@@ -1,53 +1,78 @@
-From: bugs at busybox.net <bugs@busybox.net>
-Date: Sun, 1 Jun 2008 11:55:52 -0700
-Subject: [Buildroot] [buildroot 0003544]: Installation of tftp-hpa fails
-Message-ID: <fbe2ec75cf627b7e8bc913232af68521@bugs.uclibc.org>
+From: Peter Korsgaard <jacmet@uclibc.org>
+Date: Sun, 01 Jun 2008 21:14:27 +0200
+Subject: [Buildroot] svn commit: trunk/buildroot/package: database
+	database/mysql_client
+In-Reply-To: <20080601180849.37DEE3C814@busybox.net> (antab@uclibc.org's
+	message of "Sun\, 1 Jun 2008 11\:08\:49 -0700 \(PDT\)")
+References: <20080601180849.37DEE3C814@busybox.net>
+Message-ID: <87abi5klws.fsf@macbook.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+>>>>> "antab" == antab  <antab@uclibc.org> writes:
 
-The following issue has been SUBMITTED. 
-====================================================================== 
-http://busybox.net/bugs/view.php?id=3544 
-====================================================================== 
-Reported By:                KHAksnes
-Assigned To:                buildroot
-====================================================================== 
-Project:                    buildroot
-Issue ID:                   3544
-Category:                   Architecture Specific
-Reproducibility:            always
-Severity:                   minor
-Priority:                   normal
-Status:                     assigned
-====================================================================== 
-Date Submitted:             06-01-2008 11:55 PDT
-Last Modified:              06-01-2008 11:55 PDT
-====================================================================== 
-Summary:                    Installation of tftp-hpa fails
-Description: 
-in.tftpd isn't always installed correctly. The following rule fragment from
-package/tftpd/tftpd.mk looks suspect as ! binds tighter than -o at least in
-the shells I have been testing.
+ antab> Author: antab
+ antab> Date: 2008-06-01 11:08:48 -0700 (Sun, 01 Jun 2008)
+ antab> New Revision: 22165
+ antab> Log:
+ antab> Added database menu to config (maybe move the other databases
+ antab> under it to remove the mess from the main package menu) Added
+ antab> mysql 5.1 client package, can be used to provide mysql support
+ antab> for PHP. Note: This package has only been tested on AVR32.
 
- @if [ ! -f $(TFTP_HPA_DIR)/$(TFTP_HPA_BINARY) -o $(TARGET_DIR)/$(TFTP_HP
-A_TARGET_BINARY) \
-        -ot $(TFTP_HPA_DIR)/$(TFTP_HPA_BINARY) ]; then \
-            set -x; \
-            rm -f $(TARGET_DIR)/$(TFTP_HPA_TARGET_BINARY); \
-            cp -a $(TFTP_HPA_DIR)/$(TFTP_HPA_BINARY)
-$(TARGET_DIR)/$(TFTP_HPA_TA
-RGET_BINARY); fi
+...
 
-====================================================================== 
+ antab> Added: trunk/buildroot/package/database/Config.in
+ antab> ===================================================================
+ antab> --- trunk/buildroot/package/database/Config.in	                        (rev 0)
+ antab> +++ trunk/buildroot/package/database/Config.in	2008-06-01 18:08:48 UTC (rev 22165)
+ antab> @@ -0,0 +1,5 @@
+ antab> +menu "Database"
+ antab> +
+ antab> +source "package/database/mysql_client/Config.in"
+ antab> +
+ antab> +endmenu
 
-Issue History 
-Date Modified   Username       Field                    Change               
-====================================================================== 
-06-01-08 11:55  KHAksnes       New Issue                                    
-06-01-08 11:55  KHAksnes       Status                   new => assigned     
-06-01-08 11:55  KHAksnes       Assigned To               => buildroot       
-======================================================================
+The other sub menus use menuconfig instead of menu, please do as well.
+
+ antab> Added: trunk/buildroot/package/database/database.mk
+ antab> ===================================================================
+ antab> --- trunk/buildroot/package/database/database.mk	                        (rev 0)
+ antab> +++ trunk/buildroot/package/database/database.mk	2008-06-01 18:08:48 UTC (rev 22165)
+ antab> @@ -0,0 +1 @@
+ antab> +include package/database/*/*.mk
+
+ antab> Added: trunk/buildroot/package/database/mysql_client/Config.in
+ antab> ===================================================================
+ antab> --- trunk/buildroot/package/database/mysql_client/Config.in	                        (rev 0)
+ antab> +++ trunk/buildroot/package/database/mysql_client/Config.in	2008-06-01 18:08:48 UTC (rev 22165)
+ antab> @@ -0,0 +1,5 @@
+ antab> +config BR2_PACKAGE_MYSQL_CLIENT
+ antab> +	bool "MySQL 5.1 client"
+ antab> +	default n
+ antab> +	help
+ antab> +	  MySQL 5.1 client
+
+Please don't add the version number to the help text.
+
+ antab> Added: trunk/buildroot/package/database/mysql_client/mysql_client.mk
+ antab> ===================================================================
+ antab> --- trunk/buildroot/package/database/mysql_client/mysql_client.mk	                        (rev 0)
+ antab> +++ trunk/buildroot/package/database/mysql_client/mysql_client.mk	2008-06-01 18:08:48 UTC (rev 22165)
+ antab> @@ -0,0 +1,30 @@
+ antab> +#############################################################
+ antab> +#
+ antab> +# MySQL 5.1 Client
+ antab> +#
+ antab> +#############################################################
+ antab> +MYSQL_CLIENT_VERSION = 5.1.23-rc
+ antab> +MYSQL_CLIENT_SOURCE = mysql-$(MYSQL_CLIENT_VERSION).tar.gz
+ antab> +MYSQL_CLIENT_SITE = http://mirrors.24-7-solutions.net/pub/mysql/Downloads/MySQL-5.1
+
+Is that the official download URL?
+
+-- 
+Bye, Peter Korsgaard
