@@ -1,46 +1,31 @@
-From: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Date: Mon, 02 Jun 2008 10:15:56 -0300
-Subject: [Buildroot] svn commit: trunk/buildroot/package/php
-In-Reply-To: <87fxrwf33x.fsf@macbook.be.48ers.dk>
-References: <20080601180414.033A73C836@busybox.net>
-	<87fxrwf33x.fsf@macbook.be.48ers.dk>
-Message-ID: <4843F28C.3020100@zacarias.com.ar>
+From: Christopher Taylor <chtaylo3@gmail.com>
+Date: Mon, 2 Jun 2008 16:08:11 -0400
+Subject: [Buildroot] word swapping doubles on little endian
+Message-ID: <2590773a0806021308j4137d671v15cf0d297e4c5c02@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Peter Korsgaard wrote:
+For some reason, when I write a double to file I'm getting byte
+swapped then word swapped.
 
->>>>>> "antab" == antab  <antab@uclibc.org> writes:
-> 
-> Hi,
-> 
->  antab> Author: antab
->  antab> Date: 2008-06-01 11:04:13 -0700 (Sun, 01 Jun 2008)
->  antab> New Revision: 22164
-> 
->  antab> Log:
->  antab> Dump php to version 5.2.6 and add SimpleXML extension to config menu
-> 
->  
->  antab> +config BR2_PACKAGE_PHP_EXT_SIMPLEXML
->  antab> +	bool "simplexml"
->  antab> +	depends on BR2_PACKAGE_PHP
->  antab> +	select BR2_PACKAGE_PHP_EXIT_LIBXML2
-> 
-> 
-> s/EXIT/EXT ?
-> 
-> package/php/Config.ext:48:warning: 'select' used by config symbol
-> 'BR2_PACKAGE_PHP_EXT_SIMPLEXML' refers to undefined symbol
-> 'BR2_PACKAGE_PHP_EXIT_LIBXML2'
+double value = 2.048;
+printf("%llx", value);
+write(&value,sizeof(double), 1, fd);
 
-Wonder if it's related to my report at 
-http://bugs.uclibc.org/view.php?id=3484
-If simplexml is an option shouldn't xmlreader/writer be so too?
-They all depend on libxml2 so they're unlikely to trigger bloat by 
-themselves.
-For consistency they should all be options or none.
-Regards.
+on a bigendian I'm getting
+printf:  4000 624d d2f1 a9fc
+
+on a little endian I'm getting
+printf:  d2f1 a9fc 4000 624d
+write:  4d62 0040 fca9 f1d2
+
+whereas I would expect on the little endian write:
+fca9 f1d2 4d62 0040
+
+
+any ideas how this is getting screwed up?
+
+-Chris
