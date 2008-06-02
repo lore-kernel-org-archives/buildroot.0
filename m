@@ -1,39 +1,35 @@
-From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Mon, 02 Jun 2008 14:11:46 +0200
-Subject: [Buildroot] svn commit: trunk/buildroot/package/php
-In-Reply-To: <20080601180414.033A73C836@busybox.net> (antab@uclibc.org's
-	message of "Sun\, 1 Jun 2008 11\:04\:13 -0700 \(PDT\)")
-References: <20080601180414.033A73C836@busybox.net>
-Message-ID: <87fxrwf33x.fsf@macbook.be.48ers.dk>
+From: jacmet at uclibc.org <jacmet@uclibc.org>
+Date: Mon,  2 Jun 2008 05:25:17 -0700 (PDT)
+Subject: [Buildroot] svn commit: trunk/buildroot/toolchain/kernel-headers
+Message-ID: <20080602122517.E077B3C8AE@busybox.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "antab" == antab  <antab@uclibc.org> writes:
+Author: jacmet
+Date: 2008-06-02 05:25:17 -0700 (Mon, 02 Jun 2008)
+New Revision: 22179
 
-Hi,
+Log:
+kernel headers: bump 2.6.24.x to 2.6.24.7
 
- antab> Author: antab
- antab> Date: 2008-06-01 11:04:13 -0700 (Sun, 01 Jun 2008)
- antab> New Revision: 22164
 
- antab> Log:
- antab> Dump php to version 5.2.6 and add SimpleXML extension to config menu
+Modified:
+   trunk/buildroot/toolchain/kernel-headers/Config.in
 
+
+Changeset:
+Modified: trunk/buildroot/toolchain/kernel-headers/Config.in
+===================================================================
+--- trunk/buildroot/toolchain/kernel-headers/Config.in	2008-06-02 11:01:40 UTC (rev 22178)
++++ trunk/buildroot/toolchain/kernel-headers/Config.in	2008-06-02 12:25:17 UTC (rev 22179)
+@@ -130,6 +130,6 @@
+ 	default "2.6.22.10"	if BR2_KERNEL_HEADERS_2_6_22_10
+ 	default "2.6.22.10"	if BR2_KERNEL_HEADERS_2_6_22
+ 	default "2.6.23"	if BR2_KERNEL_HEADERS_2_6_23
+-	default "2.6.24"	if BR2_KERNEL_HEADERS_2_6_24
++	default "2.6.24.7"	if BR2_KERNEL_HEADERS_2_6_24
+ 	default "2.6"		if BR2_KERNEL_HEADERS_SNAP
  
- antab> +config BR2_PACKAGE_PHP_EXT_SIMPLEXML
- antab> +	bool "simplexml"
- antab> +	depends on BR2_PACKAGE_PHP
- antab> +	select BR2_PACKAGE_PHP_EXIT_LIBXML2
-
-
-s/EXIT/EXT ?
-
-package/php/Config.ext:48:warning: 'select' used by config symbol
-'BR2_PACKAGE_PHP_EXT_SIMPLEXML' refers to undefined symbol
-'BR2_PACKAGE_PHP_EXIT_LIBXML2'
-
--- 
-Bye, Peter Korsgaard
