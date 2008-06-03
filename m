@@ -1,25 +1,35 @@
-From: Markus Heidelberg <markus.heidelberg@web.de>
-Date: Tue, 3 Jun 2008 10:11:22 +0200
-Subject: [Buildroot] [PATCH] fix tslib inputattach
-Message-ID: <200806031011.23006.markus.heidelberg@web.de>
+From: jacmet at uclibc.org <jacmet@uclibc.org>
+Date: Tue,  3 Jun 2008 03:17:46 -0700 (PDT)
+Subject: [Buildroot] svn commit: trunk/buildroot/package/tslib
+Message-ID: <20080603101746.6C1CA3C667@busybox.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+Author: jacmet
+Date: 2008-06-03 03:17:44 -0700 (Tue, 03 Jun 2008)
+New Revision: 22200
 
-this fixes two errors in the inputattach patch for the package tslib.
+Log:
+tslib: fix inputattach patch typos
 
-Markus
+Patch by Markus Heidelberg.
 
----
+tslib should be changed to use inputattach from the input-tools package
+instead though.
 
-Index: package/tslib/tslib_add_finddef_and_inputattach_utils.patch
+
+Modified:
+   trunk/buildroot/package/tslib/tslib_add_finddef_and_inputattach_utils.patch
+
+
+Changeset:
+Modified: trunk/buildroot/package/tslib/tslib_add_finddef_and_inputattach_utils.patch
 ===================================================================
---- package/tslib/tslib_add_finddef_and_inputattach_utils.patch	(revision 22197)
-+++ package/tslib/tslib_add_finddef_and_inputattach_utils.patch	(working copy)
+--- trunk/buildroot/package/tslib/tslib_add_finddef_and_inputattach_utils.patch	2008-06-03 09:02:32 UTC (rev 22199)
++++ trunk/buildroot/package/tslib/tslib_add_finddef_and_inputattach_utils.patch	2008-06-03 10:17:44 UTC (rev 22200)
 @@ -115,11 +115,11 @@
  +#endif
  +#ifndef SERIO_SUNKBD
