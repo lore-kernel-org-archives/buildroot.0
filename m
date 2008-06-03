@@ -1,25 +1,46 @@
-From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Tue, 03 Jun 2008 12:18:43 +0200
-Subject: [Buildroot] [PATCH] fix tslib inputattach
-In-Reply-To: <200806031011.23006.markus.heidelberg@web.de> (Markus
-	Heidelberg's message of "Tue\, 3 Jun 2008 10\:11\:22 +0200")
-References: <200806031011.23006.markus.heidelberg@web.de>
-Message-ID: <87y75m6cu4.fsf@macbook.be.48ers.dk>
+From: bugs at busybox.net <bugs@busybox.net>
+Date: Tue, 3 Jun 2008 05:00:19 -0700
+Subject: [Buildroot] [buildroot 0003554]: Make libgtk2 visible with DirectFB
+	and not just XORG
+Message-ID: <fa49a2a5d4a615daaeb7f141c70c8f6c@bugs.uclibc.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Markus" == Markus Heidelberg <markus.heidelberg@web.de> writes:
 
- Markus> Hello,
- Markus> this fixes two errors in the inputattach patch for the package tslib.
+The following issue has been SUBMITTED. 
+====================================================================== 
+http://busybox.net/bugs/view.php?id=3554 
+====================================================================== 
+Reported By:                daniellaird
+Assigned To:                buildroot
+====================================================================== 
+Project:                    buildroot
+Issue ID:                   3554
+Category:                   Architecture Specific
+Reproducibility:            always
+Severity:                   major
+Priority:                   normal
+Status:                     assigned
+====================================================================== 
+Date Submitted:             06-03-2008 05:00 PDT
+Last Modified:              06-03-2008 05:00 PDT
+====================================================================== 
+Summary:                    Make libgtk2 visible with DirectFB and not just XORG
+Description: 
+libgtk2 is currently dependent on XORG being selected in some form or
+another.  You may only have DirectFB is which case gtk is currently not
+selectable.
+====================================================================== 
 
-Thanks, fixed. Tslib should be cleaned up to use the inputattach in
-the input-tools package though.
-
-I can do it, but I don't have hw to test tslib, Ulf?
-
--- 
-Bye, Peter Korsgaard
+Issue History 
+Date Modified   Username       Field                    Change               
+====================================================================== 
+06-03-08 05:00  daniellaird    New Issue                                    
+06-03-08 05:00  daniellaird    Status                   new => assigned     
+06-03-08 05:00  daniellaird    Assigned To               => buildroot       
+06-03-08 05:00  daniellaird    File Added: gtk_and_directfb_support.patch       
+            
+======================================================================
