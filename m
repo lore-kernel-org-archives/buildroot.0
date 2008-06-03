@@ -1,46 +1,25 @@
-From: jacmet at uclibc.org <jacmet@uclibc.org>
-Date: Tue,  3 Jun 2008 03:17:46 -0700 (PDT)
-Subject: [Buildroot] svn commit: trunk/buildroot/package/tslib
-Message-ID: <20080603101746.6C1CA3C667@busybox.net>
+From: Peter Korsgaard <jacmet@uclibc.org>
+Date: Tue, 03 Jun 2008 12:18:43 +0200
+Subject: [Buildroot] [PATCH] fix tslib inputattach
+In-Reply-To: <200806031011.23006.markus.heidelberg@web.de> (Markus
+	Heidelberg's message of "Tue\, 3 Jun 2008 10\:11\:22 +0200")
+References: <200806031011.23006.markus.heidelberg@web.de>
+Message-ID: <87y75m6cu4.fsf@macbook.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Author: jacmet
-Date: 2008-06-03 03:17:44 -0700 (Tue, 03 Jun 2008)
-New Revision: 22200
+>>>>> "Markus" == Markus Heidelberg <markus.heidelberg@web.de> writes:
 
-Log:
-tslib: fix inputattach patch typos
+ Markus> Hello,
+ Markus> this fixes two errors in the inputattach patch for the package tslib.
 
-Patch by Markus Heidelberg.
+Thanks, fixed. Tslib should be cleaned up to use the inputattach in
+the input-tools package though.
 
-tslib should be changed to use inputattach from the input-tools package
-instead though.
+I can do it, but I don't have hw to test tslib, Ulf?
 
-
-Modified:
-   trunk/buildroot/package/tslib/tslib_add_finddef_and_inputattach_utils.patch
-
-
-Changeset:
-Modified: trunk/buildroot/package/tslib/tslib_add_finddef_and_inputattach_utils.patch
-===================================================================
---- trunk/buildroot/package/tslib/tslib_add_finddef_and_inputattach_utils.patch	2008-06-03 09:02:32 UTC (rev 22199)
-+++ trunk/buildroot/package/tslib/tslib_add_finddef_and_inputattach_utils.patch	2008-06-03 10:17:44 UTC (rev 22200)
-@@ -115,11 +115,11 @@
- +#endif
- +#ifndef SERIO_SUNKBD
- +  #define SERIO_SUNKBD    0x10
--+#endif SERIO_SUNKBD
-++#endif
- +#ifndef SERIO_WARRIOR
- +  #define SERIO_WARRIOR   0x18
- +#endif
--+#ifndef SERIO_WARRIOR
-++#ifndef SERIO_SPACEORB
- +  #define SERIO_SPACEORB  0x19
- +#endif
- +#ifndef SERIO_MAGELLAN
+-- 
+Bye, Peter Korsgaard
