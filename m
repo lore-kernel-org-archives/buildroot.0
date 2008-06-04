@@ -1,27 +1,31 @@
-From: Bernhard Fischer <rep.dot.nop@gmail.com>
-Date: Wed, 4 Jun 2008 16:49:21 +0200
-Subject: [Buildroot] root fs
-In-Reply-To: <d6cda7730806040711j4cd573ej2001550ff6bc26a2@mail.gmail.com>
-References: <2590773a0806031618y36f52acdub806d896da6ad0ae@mail.gmail.com>
-	<6306c640806031730n7b1a0ffayece31eb66d657615@mail.gmail.com>
-	<326f33790806031753o781d8638l804bbbf9da3001ec@mail.gmail.com>
-	<2590773a0806031759j7ea229e6l797fd9250c6f3243@mail.gmail.com>
-	<d6cda7730806040711j4cd573ej2001550ff6bc26a2@mail.gmail.com>
-Message-ID: <20080604144921.GB28895@mx.loc>
+From: Arun Reddy <reddyac@gmail.com>
+Date: Wed, 4 Jun 2008 13:44:56 -0700
+Subject: [Buildroot] How does an offline build work?
+Message-ID: <326f33790806041344p65f55e31i3e9a507ef1176a72@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Wed, Jun 04, 2008 at 11:11:42AM -0300, Thiago A. Corr?a wrote:
->What I do is rm -rf build_* toolchain_* binaries project_*
+I was curious as to how an offline build works.
 
-a
-realclean:
-	rm -rf build_* toolchain_* project_*
+When I first starting using Buildroot, I downloaded a snapshot for that day.
+As I used that same snapshot for about a month, I would run into different
+Buildroot issues, which came up whenever new changes were implemented. I
+assumed that whenever I typed "make" Buildroot is automatically being
+updated with those changes which could be affecting certain things.
 
-would really be handy, i agree. Note that this does not wipe binaries.
->
->Except for the config, this pretty much resets everything back to
->checkout state.
+I am now using Subversion access so I can update the source tree whenever I
+want, but if I were to go back to using the Buildroot snapshot image, will
+doing an offline build "make source" allow me to do a build without
+Buildroot being updated? Or is it just a way for all the files, packages,
+etc, to be downloaded first so that I can continue the build in a place
+where I do not have network access?
+
+Could someone clarify this? The Buildroot documentation doesn't have a
+detailed explanation on how the offline build is supposed to work. Thank
+you!
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: http://busybox.net/lists/buildroot/attachments/20080604/6894a949/attachment.htm 
