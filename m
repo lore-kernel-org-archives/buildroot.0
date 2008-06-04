@@ -1,26 +1,43 @@
-From: Hebbar <gururajakr@sanyo.co.in>
-Date: Tue, 3 Jun 2008 16:58:34 -0700 (PDT)
-Subject: [Buildroot] [buildroot 0003604]: libxml2 config script
- (xml2-config) is not edited in the same way as freetype-config
-In-Reply-To: <5d8e27e8c9814873b47fcb5e8be538e3@bugs.uclibc.org>
-References: <5d8e27e8c9814873b47fcb5e8be538e3@bugs.uclibc.org>
-Message-ID: <17636436.post@talk.nabble.com>
+From: Ram kumar <ramkumar.research@gmail.com>
+Date: Tue, 3 Jun 2008 17:30:22 -0700
+Subject: [Buildroot] root fs
+In-Reply-To: <2590773a0806031618y36f52acdub806d896da6ad0ae@mail.gmail.com>
+References: <2590773a0806031618y36f52acdub806d896da6ad0ae@mail.gmail.com>
+Message-ID: <6306c640806031730n7b1a0ffayece31eb66d657615@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+hi,
+     you can try this http://www.linuxfromscratch.org/lfs/ . i have not
+tried..i think it describes all the steps including handcrafting the
+filesystem.But make sure whether it is worth scratching your head for
+building the file system from the scratch.
 
-Hi,
+Regards,
+Ram
 
-Thanks for the patch. I was trying to do this but somehow used to fail.
-thanks for the heads up. lots of other packages needs to be updated like
-this
+On Tue, Jun 3, 2008 at 4:18 PM, Christopher Taylor <chtaylo3@gmail.com>
+wrote:
 
-Regards
-Gururaja
-
--- 
-View this message in context: http://www.nabble.com/-buildroot-0003604-%3A-libxml2-config-script-%28xml2-config%29-is-not-edited-in-the-same-way-as-freetype-config-tp17622143p17636436.html
-Sent from the BuildRoot mailing list archive at Nabble.com.
+> Does anyone know how to get the root fs to be built from scratch?  I
+> deleted it with a make clean in buildroot and now some of the files
+> aren't installing into the root dir; most notably: /etc/passwd,
+> /etc/shadow, and /usr/share/udhcpd/default.script
+>
+> There are probably a few others so instead of hunting them down I'd
+> like to try and get BR/BB to install them over again.
+>
+> Any help appreciated!
+>
+> -Chris
+> _______________________________________________
+> buildroot mailing list
+> buildroot at uclibc.org
+> http://busybox.net/mailman/listinfo/buildroot
+>
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: http://busybox.net/lists/buildroot/attachments/20080603/6cef86fe/attachment.htm 
