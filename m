@@ -1,29 +1,21 @@
-From: Christopher Taylor <chtaylo3@gmail.com>
-Date: Wed, 4 Jun 2008 19:57:53 -0400
-Subject: [Buildroot] VFP vs FPA troubles
-Message-ID: <2590773a0806041657s5c4eb25axe70c123e106cb38@mail.gmail.com>
+From: N Cheung <brjerome.1@gmail.com>
+Date: Wed, 4 Jun 2008 22:02:53 -0700
+Subject: [Buildroot] merger kernel u-boot and root fs sources into buildroot
+Message-ID: <c260b4940806042202o16373ebmb22a536645a3f0b@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Ok, I've done a bit more digging around and it looks like the problem
-I'm having is that I'm compiling buildroot for little-endian with
-softfloats. This defaults to FPA which puts doubles in native endian
-byte ordering but big-endian word ordering.  Somehow the previous
-developer got this to build using VFP (as evidenced by the ordering of
-doubles as they were fwritten to a file).
+I have a running ARM kernel 2.6.25 on Atmel's 9260ek  with u-boot
+1.3.2 and root fs (cramfs) all built by using make individually.  The
+kernel build included 2 simple device drivers. I use busybox and
+glibc.
 
-My questions:
+I would like to try BR.  This might be a naive question, how do I
+merge in my source tree with BR, is it just copy?  Is BR uclibc
+specific?
 
-1) Should there be a preference VFP vs FPA?
-2) Which is more common?
-3) Even though he was using gcc 3.4.6 and I'm now using gcc 4.2.1, I
-don't see anything in the old buildroot .config file that specifies
-"--with-float=softfp --with-fpu=vfp"  So why on earth is this
-happening?
-
-Any help would be GREATLY appreciated!
-
--Chris
+Thanks,
+Noman
