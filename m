@@ -1,21 +1,30 @@
-From: Brian Beattie <beattie@beattie-home.net>
-Date: Fri,  6 Jun 2008 14:28:33 -0700 (PDT)
-Subject: [Buildroot] Adding Board support
-Message-ID: <SdW14Cuu.1212787713.2930860.beattie@localhost>
+From: Ram kumar <ramkumar.research@gmail.com>
+Date: Fri, 6 Jun 2008 16:55:26 -0700
+Subject: [Buildroot] Target's /sys directory not created by buildroot
+Message-ID: <6306c640806061655t6be09c97ud175dfdcf0fa82e6@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+hi,
+         When i see the target skeleton of the root file system in the
+directory /buildroot/generic/target_skeleton there is a /sys directory.But
+it is not created under the target root filesystem ie)
+under
+/project_build_<arch>/root/....When i give make.
 
-I'm working with an evaluation board and buildroot and have done a first
-pass at adding support for this board.  I have a couple of questions
-that I was hopeing somebody here could answer or point me to the correct
-forum.
+There is no /sys directory inside the Target's root filesystem though it is
+present in the target_skeleton directory......
 
-1. The directories under target/device, are they layed out by board
-vendor, or processor vendor?
+Do i have to enable any option in the menuconfig to get that directory under
+the target filesystem......????
 
-2. What is the best way to go about getting something like this
-incorporated into the regular distribution?
+Please suggest me.....
+
+Regards,
+Ram
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: http://busybox.net/lists/buildroot/attachments/20080606/ab2b2ac5/attachment.htm 
