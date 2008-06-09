@@ -1,17 +1,18 @@
-From: Paradoxxa <paradoxxa2001@web.de>
-Date: Mon, 09 Jun 2008 08:27:38 +0200
+From: Emil =?ISO-8859-1?Q?Kr=FCper?= <e.krueper@solcon-systemtechnik.de>
+Date: Mon, 09 Jun 2008 08:57:11 +0200
 Subject: [Buildroot] include a own Library Path
-Message-ID: <484CCD5A.90309@web.de>
+In-Reply-To: <484CCD5A.90309@web.de>
+References: <484CCD5A.90309@web.de>
+Message-ID: <1212994631.3239.5.camel@PC-EK.Solcon>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi List,
+You could modify /etc/profile and add something like
+"export LD_LIBRARY_PATH=/path/to/your/libs".
 
-i use buildroot to build my rootfs. I have also installed Xenomai. Now
-i have to export the LD_LIBRARY_PATH on each boot. Is there a possibility
-to make known that direct in buildroot?
+Best regards
 
-Thomas
+Emil Kr?per
