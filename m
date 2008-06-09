@@ -1,18 +1,22 @@
-From: Emil =?ISO-8859-1?Q?Kr=FCper?= <e.krueper@solcon-systemtechnik.de>
-Date: Mon, 09 Jun 2008 08:57:11 +0200
+From: paradoxxa <paradoxxa2001@web.de>
+Date: Mon, 9 Jun 2008 01:35:35 -0700 (PDT)
 Subject: [Buildroot] include a own Library Path
-In-Reply-To: <484CCD5A.90309@web.de>
-References: <484CCD5A.90309@web.de>
-Message-ID: <1212994631.3239.5.camel@PC-EK.Solcon>
+In-Reply-To: <1212994631.3239.5.camel@PC-EK.Solcon>
+References: <484CCD5A.90309@web.de> <1212994631.3239.5.camel@PC-EK.Solcon>
+Message-ID: <17728601.post@talk.nabble.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-You could modify /etc/profile and add something like
-"export LD_LIBRARY_PATH=/path/to/your/libs".
 
-Best regards
+That works for me,
+i appreciate you.
 
-Emil Kr?per
+Best Regards,
+
+Thomas
+-- 
+View this message in context: http://www.nabble.com/include-a-own-Library-Path-tp17727257p17728601.html
+Sent from the BuildRoot mailing list archive at Nabble.com.
