@@ -1,85 +1,84 @@
-From: Joseph G. Boike <joe.boike@acsatlanta.com>
-Date: Tue, 10 Jun 2008 14:51:20 -0500
-Subject: [Buildroot] macro `AM_PROG_LIBTOOL' not found
-Message-ID: <484EDB38.8030308@acsatlanta.com>
+From: Michael.Forkey at elektrobit.com <Michael.Forkey@elektrobit.com>
+Date: Tue, 10 Jun 2008 12:35:50 -0700
+Subject: [Buildroot] Q: Modifying package builds?
+Message-ID: <C681C76E0D5F1E4BB01DE79E0A80EEC77C514F@usrdes03.ebgroup.elektrobit.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi,
-I'm trying to cross compile buildroot for and Atmel at91sam9260 ARM 
-processor and keep getting the same error below.
-I started w/ a clean buildroot subdirectory and used the default make 
-(make at91sam9260_defconfig) setup.
-My native autoconf, automake and libtool are all in /usr/bin
-The error references m4_pattern_allow.  Where do I add that?  How do I 
-keep it if I get a new version of buildroot?
-Regards,
-Joe
+As of about a month ago I was completely new to Linux & Linux
+development, buildroot and development for embedded devices. So there
+are a lot of holes in my buildroot knowledge. If there is a FAQ
+somewhere please point me to it. I haven't found one (at least not one
+for these questions.)
 
-This is the end of the build:
-toolchain/patch-kernel.sh 
-/home/lorenzo/buildroot/build_arm/libusb-0.1.12 package/libusb/ 
-libusb-0.1.12\*.patch*
+I work on a project which uses buildroot targeting the ARM9 processor. I
+run buildroot on both an Ubuntu VM and on a server running Red Hat
+Enterprise 5. This matters because the results are different between the
+2 (very frustrating) which is part of the need to ask this (these)
+questions.
 
-Applying libusb-0.1.12-nocpp.patch using plaintext:
-patching file Makefile.am
-/home/lorenzo/buildroot/toolchain_build_arm/bin/sed -i -e 
-'s,^all:.*,all:,g' 
-/home/lorenzo/buildroot/build_arm/libusb-0.1.12/tests/Makefile.in
-/home/lorenzo/buildroot/toolchain_build_arm/bin/sed -i -e 
-'s,^install:.*,install:,g' 
-/home/lorenzo/buildroot/build_arm/libusb-0.1.12/tests/Makefile.in
-cp -f package/gnuconfig/config.sub package/gnuconfig/config.guess 
-/home/lorenzo/buildroot/build_arm/libusb-0.1.12
-cd /home/lorenzo/buildroot/build_arm/libusb-0.1.12 && 
-PATH="/home/lorenzo/buildroot/toolchain_build_arm/bin:/home/lorenzo/buildroot/build_arm/staging_dir/bin:/home/lorenzo/buildroot/build_arm/staging_dir/usr/bin:/usr/lib/qt-3.3/bin:/usr/kerberos/bin:/usr/lib/ccache:/usr/local/bin:/usr/bin:/bin:/usr/X11R6/bin:/home/lorenzo/usr/cross/arm-newlib/bin:/home/JoeB/bin:/home/lorenzo/usr/cross/arm-newlib/bin:/home/lorenzo/usr/cross/arm-newlib/bin" 
-AR="/usr/bin/ar" AS="/usr/bin/as" LD="/usr/bin/ld " NM="/usr/bin/nm" 
-CC="/usr/lib/ccache/gcc " GCC="/usr/lib/ccache/gcc " 
-CXX="/usr/lib/ccache/g++ " CPP="/usr/bin/cpp " 
-AR_FOR_BUILD="/usr/bin/ar" AS_FOR_BUILD="/usr/bin/as" 
-CC_FOR_BUILD="/usr/lib/ccache/gcc" GCC_FOR_BUILD="/usr/lib/ccache/gcc" 
-CXX_FOR_BUILD="/usr/lib/ccache/g++" LD_FOR_BUILD="/usr/bin/ld" 
-FC_FOR_BUILD="/usr/bin/ld" CFLAGS_FOR_BUILD="" CXXFLAGS_FOR_BUILD="" 
-LDFLAGS_FOR_BUILD="" FCFLAGS_FOR_BUILD="" 
-AR_FOR_TARGET="/home/lorenzo/buildroot/build_arm/staging_dir/usr/bin/arm-linux-uclibc-ar" 
-AS_FOR_TARGET="/home/lorenzo/buildroot/build_arm/staging_dir/usr/bin/arm-linux-uclibc-as" 
-CC_FOR_TARGET="/home/lorenzo/buildroot/build_arm/staging_dir/usr/bin/arm-linux-uclibc-gcc" 
-LD_FOR_TARGET="/home/lorenzo/buildroot/build_arm/staging_dir/usr/bin/arm-linux-uclibc-ld" 
-NM_FOR_TARGET="/home/lorenzo/buildroot/build_arm/staging_dir/usr/bin/arm-linux-uclibc-nm" 
-RANLIB_FOR_TARGET="/home/lorenzo/buildroot/build_arm/staging_dir/usr/bin/arm-linux-uclibc-ranlib" 
-STRIP_FOR_TARGET="/home/lorenzo/buildroot/build_arm/staging_dir/usr/bin/arm-linux-uclibc-strip" 
-OBJCOPY_FOR_TARGET="/home/lorenzo/buildroot/build_arm/staging_dir/usr/bin/arm-linux-uclibc-objcopy" 
-OBJDUMP_FOR_TARGET="/home/lorenzo/buildroot/build_arm/staging_dir/usr/bin/arm-linux-uclibc-objdump" 
-DEFAULT_ASSEMBLER="/home/lorenzo/buildroot/build_arm/staging_dir/usr/bin/arm-linux-uclibc-as" 
-DEFAULT_LINKER="/home/lorenzo/buildroot/build_arm/staging_dir/usr/bin/arm-linux-uclibc-ld" 
-ORIGINAL_AS_FOR_TARGET="/home/lorenzo/buildroot/build_arm/staging_dir/usr/bin/arm-linux-uclibc-as" 
-ORIGINAL_LD_FOR_TARGET="/home/lorenzo/buildroot/build_arm/staging_dir/usr/bin/arm-linux-uclibc-ld" 
-ORIGINAL_NM_FOR_TARGET="/home/lorenzo/buildroot/build_arm/staging_dir/usr/bin/arm-linux-uclibc-nm" 
-ORIGINAL_OBJDUMP_FOR_TARGET="/home/lorenzo/buildroot/build_arm/staging_dir/usr/bin/arm-linux-uclibc-objdump" 
-ACLOCAL="aclocal -I 
-/home/lorenzo/buildroot/build_arm/staging_dir/usr/share/aclocal" 
-autoreconf -v -f -i -I 
-"/home/lorenzo/buildroot/build_arm/staging_dir/usr/share/aclocal"
-autoreconf: Entering directory `.'
-autoreconf: configure.in: not using Gettext
-autoreconf: running: aclocal -I 
-/home/lorenzo/buildroot/build_arm/staging_dir/usr/share/aclocal --force
-configure.in:84: warning: macro `AM_PROG_LIBTOOL' not found in library
-autoreconf: configure.in: tracing
-autoreconf: configure.in: not using Libtool
-autoreconf: running: 
-/home/lorenzo/buildroot/build_arm/staging_dir/usr/bin/autoconf 
---include=/home/lorenzo/buildroot/build_arm/staging_dir/usr/share/aclocal 
---force
-configure.in:84: error: possibly undefined macro: AM_PROG_LIBTOOL
-      If this token and others are legitimate, please use m4_pattern_allow.
-      See the Autoconf documentation.
-autoreconf: 
-/home/lorenzo/buildroot/build_arm/staging_dir/usr/bin/autoconf failed 
-with exit status: 1
-make: *** [/home/lorenzo/buildroot/build_arm/libusb-0.1.12/.unpacked] 
-Error 1
-[JoeB at elab14_linux buildroot]$
+I have to use an older version of buildroot which matches my customer's.
+It is old enough that there are significant differences between it and
+the current version for the packages I am building (libgtk2-directfb)
+and that has made back-porting of some necessary patches a pain. 
+
+I need to be able to predictably modify the package build. I need to
+apply fixes to various files (.mk and Makefile[.am|.in]) and have them
+picked up. Currently the only way I know to reliably get the
+configuration for a package to run is to run "make distclean". Then I
+re-run "make" iteratively until I hit all the breaks and re-apply all my
+fixes.
+
+Some of the fixes I've needed to make are to correct include paths which
+are not correct. For example, I have had failures because the path to a
+header file is .../lib/<package> in the Makefile but it is actually in
+.../lib/usr/<package>. I have also seen the reverse as well (i.e. path
+is under .../lib/usr when it is really under .../lib.)
+
+Another need is to change compiler options - turn off optimizations
+(i.e. -O0 instead of -O2 or -Os), or add -DDEBUG, etc.
+
+**My primary question(s) for this group is**: How can I change the
+configuration of packages before they are built? 
+
+There are a couple ancillary questions which go along with this. 
+
+1. Can I create a patch (for my local use only) and apply it somehow
+after a package is unpacked but before it is built?
+I don't know how to use the patch mechanism yet, but I will learn it if
+it helps (recommendations on useful ways to do that appreciated.) 
+
+2a. What are the points I can interrupt and restart the process without
+screwing it up? 2b. Or how do I make changes and then restart the build
+so they get properly picked up?
+I have tried deleting the .configured file in a package's build_arm
+directory after I have made changes to the package's Makefile or
+Makefile.am (or .in, I can't remember.) But that doesn't seem to
+entirely work right. Some things don't get re-gen'd.
+
+3. Is there anyway to tell the build to continue on errors? 
+I realize some of the failures will cascade into other packages. But I
+want it to unpack everything so I can make all the changes I need to
+once. (I have cataloged all the pieces I need to change in the entire
+build.)
+
+4. As a variant on that question: is there some way to get all the
+packages unpacked before building, i.e. similar to running "make source"
+to get all the packages downloaded? Can I get them downloaded and
+unpacked, too?
+
+Any help is appreciated.
+
+Thanks,
+mf
+
+
+----------------------------------------------------------------
+Please note: This e-mail may contain confidential information
+intended solely for the addressee. If you have received this
+e-mail in error, please do not disclose it to anyone, notify
+the sender promptly, and delete the message from your system.
+Thank you.
