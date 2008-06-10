@@ -1,114 +1,85 @@
-From: bugs at busybox.net <bugs@busybox.net>
-Date: Mon, 9 Jun 2008 22:15:45 -0700
-Subject: [Buildroot] [buildroot 0003684]: Unable to generate jffs2 file
-	system
-Message-ID: <55b0b780e5b772a6aecdb224beafd866@busybox.net>
+From: Joseph G. Boike <joe.boike@acsatlanta.com>
+Date: Tue, 10 Jun 2008 14:51:20 -0500
+Subject: [Buildroot] macro `AM_PROG_LIBTOOL' not found
+Message-ID: <484EDB38.8030308@acsatlanta.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+Hi,
+I'm trying to cross compile buildroot for and Atmel at91sam9260 ARM 
+processor and keep getting the same error below.
+I started w/ a clean buildroot subdirectory and used the default make 
+(make at91sam9260_defconfig) setup.
+My native autoconf, automake and libtool are all in /usr/bin
+The error references m4_pattern_allow.  Where do I add that?  How do I 
+keep it if I get a new version of buildroot?
+Regards,
+Joe
 
-A NOTE has been added to this issue. 
-====================================================================== 
-http://busybox.net/bugs/view.php?id=3684 
-====================================================================== 
-Reported By:                nataraj
-Assigned To:                buildroot
-====================================================================== 
-Project:                    buildroot
-Issue ID:                   3684
-Category:                   Other
-Reproducibility:            always
-Severity:                   major
-Priority:                   normal
-Status:                     assigned
-====================================================================== 
-Date Submitted:             06-09-2008 22:14 PDT
-Last Modified:              06-09-2008 22:15 PDT
-====================================================================== 
-Summary:                    Unable to generate jffs2 file system
-Description: 
-The compilation stops at the following giving errors.
+This is the end of the build:
+toolchain/patch-kernel.sh 
+/home/lorenzo/buildroot/build_arm/libusb-0.1.12 package/libusb/ 
+libusb-0.1.12\*.patch*
 
-Checking build system dependencies:
-BUILDROOT_DL_DIR clean:                         Ok
-CC clean:                                       Ok
-CXX clean:                                      Ok
-CPP clean:                                      Ok
-CFLAGS clean:                                   Ok
-INCLUDES clean:                                 Ok
-CXXFLAGS clean:                                 Ok
-which installed:                                Ok
-sed works:                                      Ok (/bin/sed)
-GNU make version '3.81':                        Ok
-C compiler '/usr/bin/gcc'
-C compiler version '4.2.4':                     Ok
-C++ compiler '/usr/bin/g++'
-C++ compiler version '4.2.4':                   Ok
-bison installed:                                Ok
-flex installed:                                 Ok
-gettext installed:                              Ok
-makeinfo installed:                             Ok
-Build system dependencies:                      Ok
-
-rm -rf /home/kodi/buildroot/project_build_arm/uclibc/buildroot-config
-mkdir -p /home/kodi/buildroot/project_build_arm/uclibc
-cp -dpRf package/config/buildroot-config
-/home/kodi/buildroot/project_build_arm/uclibc/buildroot-config
-rm -rf /home/kodi/buildroot/project_build_arm/uclibc/root/usr/include
-find /home/kodi/buildroot/project_build_arm/uclibc/root/usr/lib -name
-'*.a' -delete 
-find /home/kodi/buildroot/project_build_arm/uclibc/root/lib -name '*.a'
--delete 
-find /home/kodi/buildroot/project_build_arm/uclibc/root/usr/lib -name
-'*.la' -delete 
-find /home/kodi/buildroot/project_build_arm/uclibc/root/lib -name '*.la'
--delete 
-CC="/usr/bin/gcc" CROSS=
-CFLAGS=-I/home/kodi/buildroot/toolchain_build_arm/linux/include \
-                /usr/bin/make -j1 LINUXDIR= \
-                BUILDDIR=/home/kodi/buildroot/toolchain_build_arm/mtd_orig
-\
-                -C /home/kodi/buildroot/toolchain_build_arm/mtd_orig
-mkfs.jffs2
-make[1]: Entering directory
-`/home/kodi/buildroot/toolchain_build_arm/mtd_orig'
-mkdir -p /home/kodi/buildroot/toolchain_build_arm/mtd_orig
-gcc -I./include -O2 -Wall -g -c -o
-/home/kodi/buildroot/toolchain_build_arm/mtd_orig/mkfs.jffs2.o
-mkfs.jffs2.c -g -Wp,-MD    
-,/home/kodi/buildroot/toolchain_build_arm/mtd_orig/.mkfs.jffs2.c.dep
-mkfs.jffs2.c:69:21: error: sys/acl.h: No such file or directory
-mkfs.jffs2.c: In function ???formalize_posix_acl???:
-mkfs.jffs2.c:1084: error: ???ACL_USER_OBJ??? undeclared (first use in this
-function)
-mkfs.jffs2.c:1084: error: (Each undeclared identifier is reported only
-once
-mkfs.jffs2.c:1084: error: for each function it appears in.)
-mkfs.jffs2.c:1085: error: ???ACL_GROUP_OBJ??? undeclared (first use in
-this function)
-mkfs.jffs2.c:1086: error: ???ACL_MASK??? undeclared (first use in this
-function)
-mkfs.jffs2.c:1087: error: ???ACL_OTHER??? undeclared (first use in this
-function)
-mkfs.jffs2.c:1093: error: ???ACL_USER??? undeclared (first use in this
-function)
-
-====================================================================== 
-
----------------------------------------------------------------------- 
- nataraj - 06-09-08 22:15  
----------------------------------------------------------------------- 
-Compiling for ARM AT91SAM9263 EK board. 
-
-Issue History 
-Date Modified   Username       Field                    Change               
-====================================================================== 
-06-09-08 22:14  nataraj        New Issue                                    
-06-09-08 22:14  nataraj        Status                   new => assigned     
-06-09-08 22:14  nataraj        Assigned To               => buildroot       
-06-09-08 22:15  nataraj        Issue Monitored: nataraj                     
-06-09-08 22:15  nataraj        Note Added: 0008154                          
-======================================================================
+Applying libusb-0.1.12-nocpp.patch using plaintext:
+patching file Makefile.am
+/home/lorenzo/buildroot/toolchain_build_arm/bin/sed -i -e 
+'s,^all:.*,all:,g' 
+/home/lorenzo/buildroot/build_arm/libusb-0.1.12/tests/Makefile.in
+/home/lorenzo/buildroot/toolchain_build_arm/bin/sed -i -e 
+'s,^install:.*,install:,g' 
+/home/lorenzo/buildroot/build_arm/libusb-0.1.12/tests/Makefile.in
+cp -f package/gnuconfig/config.sub package/gnuconfig/config.guess 
+/home/lorenzo/buildroot/build_arm/libusb-0.1.12
+cd /home/lorenzo/buildroot/build_arm/libusb-0.1.12 && 
+PATH="/home/lorenzo/buildroot/toolchain_build_arm/bin:/home/lorenzo/buildroot/build_arm/staging_dir/bin:/home/lorenzo/buildroot/build_arm/staging_dir/usr/bin:/usr/lib/qt-3.3/bin:/usr/kerberos/bin:/usr/lib/ccache:/usr/local/bin:/usr/bin:/bin:/usr/X11R6/bin:/home/lorenzo/usr/cross/arm-newlib/bin:/home/JoeB/bin:/home/lorenzo/usr/cross/arm-newlib/bin:/home/lorenzo/usr/cross/arm-newlib/bin" 
+AR="/usr/bin/ar" AS="/usr/bin/as" LD="/usr/bin/ld " NM="/usr/bin/nm" 
+CC="/usr/lib/ccache/gcc " GCC="/usr/lib/ccache/gcc " 
+CXX="/usr/lib/ccache/g++ " CPP="/usr/bin/cpp " 
+AR_FOR_BUILD="/usr/bin/ar" AS_FOR_BUILD="/usr/bin/as" 
+CC_FOR_BUILD="/usr/lib/ccache/gcc" GCC_FOR_BUILD="/usr/lib/ccache/gcc" 
+CXX_FOR_BUILD="/usr/lib/ccache/g++" LD_FOR_BUILD="/usr/bin/ld" 
+FC_FOR_BUILD="/usr/bin/ld" CFLAGS_FOR_BUILD="" CXXFLAGS_FOR_BUILD="" 
+LDFLAGS_FOR_BUILD="" FCFLAGS_FOR_BUILD="" 
+AR_FOR_TARGET="/home/lorenzo/buildroot/build_arm/staging_dir/usr/bin/arm-linux-uclibc-ar" 
+AS_FOR_TARGET="/home/lorenzo/buildroot/build_arm/staging_dir/usr/bin/arm-linux-uclibc-as" 
+CC_FOR_TARGET="/home/lorenzo/buildroot/build_arm/staging_dir/usr/bin/arm-linux-uclibc-gcc" 
+LD_FOR_TARGET="/home/lorenzo/buildroot/build_arm/staging_dir/usr/bin/arm-linux-uclibc-ld" 
+NM_FOR_TARGET="/home/lorenzo/buildroot/build_arm/staging_dir/usr/bin/arm-linux-uclibc-nm" 
+RANLIB_FOR_TARGET="/home/lorenzo/buildroot/build_arm/staging_dir/usr/bin/arm-linux-uclibc-ranlib" 
+STRIP_FOR_TARGET="/home/lorenzo/buildroot/build_arm/staging_dir/usr/bin/arm-linux-uclibc-strip" 
+OBJCOPY_FOR_TARGET="/home/lorenzo/buildroot/build_arm/staging_dir/usr/bin/arm-linux-uclibc-objcopy" 
+OBJDUMP_FOR_TARGET="/home/lorenzo/buildroot/build_arm/staging_dir/usr/bin/arm-linux-uclibc-objdump" 
+DEFAULT_ASSEMBLER="/home/lorenzo/buildroot/build_arm/staging_dir/usr/bin/arm-linux-uclibc-as" 
+DEFAULT_LINKER="/home/lorenzo/buildroot/build_arm/staging_dir/usr/bin/arm-linux-uclibc-ld" 
+ORIGINAL_AS_FOR_TARGET="/home/lorenzo/buildroot/build_arm/staging_dir/usr/bin/arm-linux-uclibc-as" 
+ORIGINAL_LD_FOR_TARGET="/home/lorenzo/buildroot/build_arm/staging_dir/usr/bin/arm-linux-uclibc-ld" 
+ORIGINAL_NM_FOR_TARGET="/home/lorenzo/buildroot/build_arm/staging_dir/usr/bin/arm-linux-uclibc-nm" 
+ORIGINAL_OBJDUMP_FOR_TARGET="/home/lorenzo/buildroot/build_arm/staging_dir/usr/bin/arm-linux-uclibc-objdump" 
+ACLOCAL="aclocal -I 
+/home/lorenzo/buildroot/build_arm/staging_dir/usr/share/aclocal" 
+autoreconf -v -f -i -I 
+"/home/lorenzo/buildroot/build_arm/staging_dir/usr/share/aclocal"
+autoreconf: Entering directory `.'
+autoreconf: configure.in: not using Gettext
+autoreconf: running: aclocal -I 
+/home/lorenzo/buildroot/build_arm/staging_dir/usr/share/aclocal --force
+configure.in:84: warning: macro `AM_PROG_LIBTOOL' not found in library
+autoreconf: configure.in: tracing
+autoreconf: configure.in: not using Libtool
+autoreconf: running: 
+/home/lorenzo/buildroot/build_arm/staging_dir/usr/bin/autoconf 
+--include=/home/lorenzo/buildroot/build_arm/staging_dir/usr/share/aclocal 
+--force
+configure.in:84: error: possibly undefined macro: AM_PROG_LIBTOOL
+      If this token and others are legitimate, please use m4_pattern_allow.
+      See the Autoconf documentation.
+autoreconf: 
+/home/lorenzo/buildroot/build_arm/staging_dir/usr/bin/autoconf failed 
+with exit status: 1
+make: *** [/home/lorenzo/buildroot/build_arm/libusb-0.1.12/.unpacked] 
+Error 1
+[JoeB at elab14_linux buildroot]$
