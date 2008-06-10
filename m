@@ -1,8 +1,8 @@
 From: bugs at busybox.net <bugs@busybox.net>
-Date: Mon, 9 Jun 2008 22:14:15 -0700
+Date: Mon, 9 Jun 2008 22:15:45 -0700
 Subject: [Buildroot] [buildroot 0003684]: Unable to generate jffs2 file
 	system
-Message-ID: <85f1eca519e479fdcf6f2c18da1e6050@busybox.net>
+Message-ID: <55b0b780e5b772a6aecdb224beafd866@busybox.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -10,7 +10,7 @@ Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
 
-The following issue has been SUBMITTED. 
+A NOTE has been added to this issue. 
 ====================================================================== 
 http://busybox.net/bugs/view.php?id=3684 
 ====================================================================== 
@@ -26,7 +26,7 @@ Priority:                   normal
 Status:                     assigned
 ====================================================================== 
 Date Submitted:             06-09-2008 22:14 PDT
-Last Modified:              06-09-2008 22:14 PDT
+Last Modified:              06-09-2008 22:15 PDT
 ====================================================================== 
 Summary:                    Unable to generate jffs2 file system
 Description: 
@@ -98,10 +98,17 @@ function)
 
 ====================================================================== 
 
+---------------------------------------------------------------------- 
+ nataraj - 06-09-08 22:15  
+---------------------------------------------------------------------- 
+Compiling for ARM AT91SAM9263 EK board. 
+
 Issue History 
 Date Modified   Username       Field                    Change               
 ====================================================================== 
 06-09-08 22:14  nataraj        New Issue                                    
 06-09-08 22:14  nataraj        Status                   new => assigned     
 06-09-08 22:14  nataraj        Assigned To               => buildroot       
+06-09-08 22:15  nataraj        Issue Monitored: nataraj                     
+06-09-08 22:15  nataraj        Note Added: 0008154                          
 ======================================================================
