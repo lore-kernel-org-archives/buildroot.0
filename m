@@ -1,55 +1,45 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Wed, 11 Jun 2008 18:03:01 +0200
-Subject: [Buildroot] Still no answer for a contribution made in March
-In-Reply-To: <46a136670806110808x737929a4red33f32c593ae6e2@mail.gmail.com>
-References: <20080611161156.33737116@crazy>
-	<46a136670806110808x737929a4red33f32c593ae6e2@mail.gmail.com>
-Message-ID: <20080611180301.11a8f970@crazy>
+From: Arun Reddy <reddyac@gmail.com>
+Date: Wed, 11 Jun 2008 09:18:45 -0700
+Subject: [Buildroot] mdev.conf missing during kernel boot-up process?
+Message-ID: <326f33790806110918x2d922e13vbd8b62bbc223bac5@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi John,
+I just finished a MIPS build and I seem to have a near-successful boot-up in
+QEMU going. After mounting the root (ext2 filesystem) as ready only, the
+boot up halts saying that it
 
-Thanks for your answer.
+cannot create directory '/dev/pts': File exists
+/bin/sh: /proc/sys/kernel/hotplug: No such file or directory
+mdev: /etc/mdev.conf: No such file or directory
+mdev: /etc/mdev.conf: No such file or directory
+mdev: /etc/mdev.conf: No such file or directory
+mdev: mknod loop2: Read-only file system
+/bin/hostname: invalid option -- F
+Try '/bin/hostname --help' for more information.
 
-Le Wed, 11 Jun 2008 11:08:49 -0400,
-"John Voltz" <john.voltz@gmail.com> a ?crit :
+I checked my BusyBox settings and mdev.conf support is enabled. It seems to
+me that mdev.conf should be automatically generated for me, but after
+mounting my harddisk image and checking inside of /etc, I don't see it. Is
+this because it is supposed to be created after the root filesystem is
+mounted during the boot-up process? Is it being restricted because I haven't
+set rw access? I tried booting it up with rw set, but I still get the same
+mdev.conf error. And when I try to boot it up again, it says that it can't
+mount to my hda1 device because the kernel has unsupported optional features
+set. The only way to try again properly is by remaking my harddisk image.
 
-> I would have expected Ulf to take care of your patch since he usually
-> handles most of the ARM stuff. I've noticed that one of the important
-> methods of working with free software is to be able to make the
-> changes directly yourself.
+Anyone have any idea why mdev.conf is not being generated? Any specific
+BusyBox setting I might be missing? Here's what I have set for mdev in
+BusyBox:
 
-And another more important thing in free software is peer-review and
-patch discussion :-)
+FEATURE_MDEV_EXEC=y
+FEATURE_MDEV_CONF=y
+MDEV=y
 
-More seriously, I am not a regular contributor to Buildroot, so I have
-no idea what are the current trends and orientations, nor what are the
-good approaches to solve a particular problem. So I think that my
-patches have to be reviewed before being applied.
-
-> So I would email Erik for subversion access, and drop it in there
-> myself.
-
-As explained above, I don't want to do that now. I consider my
-Buildroot contributing experience too small to commit patches without
-prior discussion and review.
-
-Thanks !
-
-Thomas
--- 
-Thomas Petazzoni, Free Electrons
-Kernel, drivers and embedded Linux development,
-consulting, training and support.
-http://free-electrons.com
+Thank you for any assistance you guys can offer!
 -------------- next part --------------
-A non-text attachment was scrubbed...
-Name: signature.asc
-Type: application/pgp-signature
-Size: 189 bytes
-Desc: not available
-Url : http://busybox.net/lists/buildroot/attachments/20080611/875ebdbe/attachment-0001.pgp 
+An HTML attachment was scrubbed...
+URL: http://busybox.net/lists/buildroot/attachments/20080611/38110c1d/attachment.htm 
