@@ -1,58 +1,62 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Wed, 11 Jun 2008 16:11:56 +0200
-Subject: [Buildroot] Still no answer for a contribution made in March
-Message-ID: <20080611161156.33737116@crazy>
+From: Will Wagner <will_wagner@carallon.com>
+Date: Wed, 11 Jun 2008 15:37:54 +0100
+Subject: [Buildroot] svn commit: trunk/buildroot/package/tslib
+In-Reply-To: <47D6EDED.5090506@carallon.com>
+References: <20080306182758.09F16120295@busybox.net>	<1204829421.9461.81.camel@localhost>
+	<47D6EDED.5090506@carallon.com>
+Message-ID: <484FE342.3070405@carallon.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi,
+Will Wagner wrote:
+>>> Log:
+>>> patches for tslib
+>>>
+>>> Added:
+>>>    trunk/buildroot/package/tslib/tslib-1.0-absbit.patch
+>>>    trunk/buildroot/package/tslib/tslib-1.0-remove-return-on-error-from-check-df.patch
+>> These two patches are actually wrong, I think the tslib error you (I)
+>> see is because of big-endian architecture. I will hopefully give it a go
+>> next week. As long as I remember it (-:
+> 
+> tslib-1.0-remove-return-on-error-from-check-df.patch is definitely wrong 
+> - with this patch applied I get lots of error messages and inspecting 
+> the code the patch removes code that is needed.
+> 
+> Not sure about the tslib-1.0-absbit.patch patch. I think it is correct 
+> as you only need 16 bits as ABS_MAX is 0x3f
+> 
 
-On March, 12th, I sent a patch adding Thumb support for the ARM
-architecture to this list:
- http://buildroot.uclibc.org/lists/buildroot/2008-March/007427.html
+Have looked at this again and the tslib-1.0-absbit.patch patch is 
+definitely wrong. ABS_MAX is 0x3f which means that it needs 63 bits. 
+There is a seperate bug with tslib though. The ioctl calls to get bit 
+and absbit are wrong. They pass in the size as sizeof(bit) * 8 but the 
+size should be in bytes and not bits. This means that it things the 
+variables are very large. If absbit is declared as only 32 bits (as in 
+the patch) then because of the size being passed to ioctl wrong that 
+call zeros bits as it is adjacent on the stack. Although the test for 
+EV_ABS has already passed is does mean that using_syn is never set.
 
-Two days later, no comments:
- http://buildroot.uclibc.org/lists/buildroot/2008-March/007492.html
+I also think there is a performance optimisation that can be made. 
+Currently ts_input_read() checks is sane_fd == 0 and if so calls 
+check_fd(). I believe once the check has succeeded there is no need to 
+call it again for the device (I don't think input device capabilities 
+can change on the fly). The mechanism is already in place to do this, 
+check_fd() just needs to return >0 on success.
 
-Five days later, no comments:
- http://buildroot.uclibc.org/lists/buildroot/2008-March/007544.html
+Attached is a patch for those two issues.
 
-Two months later, still no comments:
- http://buildroot.uclibc.org/lists/buildroot/2008-May/008723.html
-
-Do you actually care of contributions ?
-
-I don't assume that my patch is perfect or absolutely useful for
-everybody, but I would have at least expected some reaction from
-Buildroot maintainers saying: ?no, thank you, we don't care about this
-feature? or ?interesting feature, but your approach is flawed because of
-this and that?.
-
-FWIW, one user reported interest in such a feature:
- http://buildroot.uclibc.org/lists/buildroot/2008-March/007495.html
-
-This absence of reaction is very frustrating for new potential
-contributors. I would like to contribute more to Buildroot, but this
-experience doesn't really encourage one in spending more time writing
-patches that will be ignored.
-
-Thanks a lot for this great project,
-
-Sincerly,
-
-Thomas
+Will.
 -- 
-Thomas Petazzoni, Free Electrons
-Kernel, drivers and embedded Linux development,
-consulting, training and support.
-http://free-electrons.com
+------------------------------------------------------------------------
+Will Wagner                                     will_wagner at carallon.com
+Senior Project Engineer                  Office Tel: +44 (0)20 7371 2032
+Carallon Ltd, Studio G20, Shepherds Building, Rockley Rd, London W14 0DA
+------------------------------------------------------------------------
 -------------- next part --------------
-A non-text attachment was scrubbed...
-Name: signature.asc
-Type: application/pgp-signature
-Size: 189 bytes
-Desc: not available
-Url : http://busybox.net/lists/buildroot/attachments/20080611/2c41229b/attachment.pgp 
+An embedded and charset-unspecified text was scrubbed...
+Name: tslib-1.0-checkfd_fixes.patch
+Url: http://busybox.net/lists/buildroot/attachments/20080611/34cf45c2/attachment-0001.txt 
