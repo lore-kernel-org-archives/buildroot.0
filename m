@@ -1,33 +1,32 @@
-From: Andreas Kuehn <Andreas.Kuehn@gin.de>
-Date: Wed, 11 Jun 2008 09:40:07 +0200
+From: Peter Korsgaard <jacmet@uclibc.org>
+Date: Wed, 11 Jun 2008 09:55:20 +0200
 Subject: [Buildroot] kernel image size depends on toolchain?
-Message-ID: <484F8157.2050902@gin.de>
+In-Reply-To: <484F8157.2050902@gin.de> (Andreas Kuehn's message of "Wed\,
+	11 Jun 2008 09\:40\:07 +0200")
+References: <484F8157.2050902@gin.de>
+Message-ID: <87hcc0pfrr.fsf@macbook.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Its probably one of these "again" questions but I couldn't get a 
-reasonable/sound answer.
+>>>>> "Andreas" == Andreas Kuehn <Andreas.Kuehn@gin.de> writes:
 
-I'm building an arm rootfs and an 2.6.23.14 kernel with the actual svn 
-buildroot and uclibc. It works quite well but produces really large 
-kernel images.
+Hi,
 
-Created:      Tue Jun 10 11:45:43 2008
-Image Type:   ARM Linux Kernel Image (uncompressed)
-Data Size:    4528112 Bytes = 4421.98 kB = 4.32 MB
+ Andreas> Created:      Tue Jun 10 11:45:43 2008
+ Andreas> Image Type:   ARM Linux Kernel Image (uncompressed)
+ Andreas> Data Size:    4528112 Bytes = 4421.98 kB = 4.32 MB
 
-With an old toolchain I can achive regular sizes:
+ Andreas> With an old toolchain I can achive regular sizes:
 
-Created:      Tue Jun 10 13:44:26 2008
-Image Type:   ARM Linux Kernel Image (uncompressed)
-Data Size:    1412792 Bytes = 1379.68 kB = 1.35 MB
+ Andreas> Created:      Tue Jun 10 13:44:26 2008
+ Andreas> Image Type:   ARM Linux Kernel Image (uncompressed)
+ Andreas> Data Size:    1412792 Bytes = 1379.68 kB = 1.35 MB
 
+Strange. And you are sure you're using the exact same kernel config?
+Do both kernel images boot?
 
-Unfortunately, the old toolchain has a buggy uclibc and I need a new 
-one. -- How can I fix that greedy kernel thing ? --
-
-Thanks in advance...
-akuehn
+-- 
+Bye, Peter Korsgaard
