@@ -1,41 +1,55 @@
-From: jacmet at uclibc.org <jacmet@uclibc.org>
-Date: Wed, 11 Jun 2008 06:07:04 -0700 (PDT)
-Subject: [Buildroot] svn commit: trunk/buildroot/target/u-boot
-Message-ID: <20080611130704.379E93C65A@busybox.net>
+From: Peter Korsgaard <jacmet@uclibc.org>
+Date: Wed, 11 Jun 2008 15:58:11 +0200
+Subject: [Buildroot] kernel image size depends on toolchain?
+In-Reply-To: <484FCC7B.4090704@gin.de> (Andreas Kuehn's message of "Wed\,
+	11 Jun 2008 15\:00\:43 +0200")
+References: <484F8157.2050902@gin.de> <87hcc0pfrr.fsf@macbook.be.48ers.dk>
+	<484F8F05.2040105@gin.de> <87lk1cmi7d.fsf@macbook.be.48ers.dk>
+	<484FA6F4.5010408@gin.de> <87k5gwkz31.fsf@macbook.be.48ers.dk>
+	<484FCC7B.4090704@gin.de>
+Message-ID: <87fxrkjcp8.fsf@macbook.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Author: jacmet
-Date: 2008-06-11 06:07:03 -0700 (Wed, 11 Jun 2008)
-New Revision: 22292
+>>>>> "Andreas" == Andreas Kuehn <Andreas.Kuehn@gin.de> writes:
 
-Log:
-u-boot: evaluate U_BOOT_ARCH at use time, rather than Makefile parse time
+Hi,
 
-U_BOOT_ARCH seems to race with KERNEL_ARCH in some situations,
-so it end up empty. It's only used once, so fix it by using a
-use-time evaluated variable instead (=).
+ Andreas> Right from the .config file....
+ Andreas> BR2_BINUTILS_VERSION="2.18"
+ Andreas> BR2_EXTRA_BINUTILS_CONFIG_OPTIONS=""
 
+ Andreas> I suppose version 2.18 is the "old" version?  Meanwhile, I
+ Andreas> changed to version 2.18.50.0.1 and did a complete rebuild
+ Andreas> with a well known result:
 
+ Andreas> Image Type:   ARM Linux Kernel Image (uncompressed)
+ Andreas> Data Size:    4528100 Bytes = 4421.97 kB = 4.32 MB
 
-Modified:
-   trunk/buildroot/target/u-boot/Makefile.in
+ Andreas> I don't know where that commit you mentioned has gone to
+ Andreas> (where does that 1e621a8e3752367d4aae78a8ab00a18fb2793f34
+ Andreas> belong to). Is it the kernel tree or the binutils and
+ Andreas> finally which version?
 
+It's from the kernel git tree. It's a simple oneliner, you could maybe
+patch it by hand in your Linux checkout:
 
-Changeset:
-Modified: trunk/buildroot/target/u-boot/Makefile.in
-===================================================================
---- trunk/buildroot/target/u-boot/Makefile.in	2008-06-11 13:05:23 UTC (rev 22291)
-+++ trunk/buildroot/target/u-boot/Makefile.in	2008-06-11 13:07:03 UTC (rev 22292)
+diff --git a/arch/arm/Makefile b/arch/arm/Makefile
+index fa4ea9f..6c2d539 100644
+--- a/arch/arm/Makefile
++++ b/arch/arm/Makefile
 @@ -12,7 +12,7 @@
- U_BOOT_BIN:=u-boot.bin
- U_BOOT_TOOLS_BIN:=mkimage
- # u-boot still uses arch=ppc for powerpc
--U_BOOT_ARCH:=$(shell echo $(KERNEL_ARCH)|$(HOST_SED_DIR)/bin/sed 's/powerpc/ppc/')
-+U_BOOT_ARCH=$(shell echo $(KERNEL_ARCH)|$(HOST_SED_DIR)/bin/sed 's/powerpc/ppc/')
  
- ifneq ($(BR2_TARGET_U_BOOT_CONFIG_BOARD),)
- U_BOOT_INC_CONF_FILE:=$(U_BOOT_DIR)/include/configs/$(subst _config,,$(BR2_TARGET_U_BOOT_CONFIG_BOARD)).h
+ LDFLAGS_vmlinux        :=-p --no-undefined -X
+ CPPFLAGS_vmlinux.lds = -DTEXT_OFFSET=$(TEXT_OFFSET)
+-OBJCOPYFLAGS   :=-O binary -R .note -R .comment -S
++OBJCOPYFLAGS   :=-O binary -R .note -R .note.gnu.build-id -R .comment -S
+ GZFLAGS                :=-9
+ #CFLAGS                +=-pipe
+ # Explicitly specifiy 32-bit ARM ISA since toolchain default can be -mthumb:
+
+-- 
+Bye, Peter Korsgaard
