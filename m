@@ -1,59 +1,34 @@
-From: Andreas Kuehn <Andreas.Kuehn@gin.de>
-Date: Wed, 11 Jun 2008 10:49:13 +0200
+From: Peter Korsgaard <jacmet@uclibc.org>
+Date: Wed, 11 Jun 2008 11:31:02 +0200
 Subject: [Buildroot] kernel image size depends on toolchain?
-In-Reply-To: <408540dd0806110130h49a4b38ar1b55c3b86b7c9675@mail.gmail.com>
-References: <484F8157.2050902@gin.de>
-	<408540dd0806110130h49a4b38ar1b55c3b86b7c9675@mail.gmail.com>
-Message-ID: <484F9189.6050700@gin.de>
+In-Reply-To: <484F8F05.2040105@gin.de> (Andreas Kuehn's message of "Wed\,
+	11 Jun 2008 10\:38\:29 +0200")
+References: <484F8157.2050902@gin.de> <87hcc0pfrr.fsf@macbook.be.48ers.dk>
+	<484F8F05.2040105@gin.de>
+Message-ID: <87lk1cmi7d.fsf@macbook.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hey Matt!
+>>>>> "Andreas" == Andreas Kuehn <Andreas.Kuehn@gin.de> writes:
 
-In fact I was a little confused about your question but a found the flag 
-  in the kernels .config file.
+Hi,
 
-# CONFIG_BLK_DEV_INITRD is not set
+ Andreas> That is how I found that thing. It simply doesn't fit into my boot
+ Andreas> flash anymore.
+ Andreas> And Yes, it is the same, not even a copy, .config file for both trys.
 
-And so, initrd is not active.
+ Andreas> The reason why I need the "new" uclibc is, that I need access to the
+ Andreas> PIOs of my at91sam9261 and at91sam9263 controllers. And the "old"
+ Andreas> uclibc has this mmap bug that creates an page overflow error.
 
+ Andreas> Is there a chance that something in the uclibc like the
+ Andreas> LARGEFILESUPPORT creates some static or incompressable data block?
 
+That doesn't sound likely. Are the vmlinux files also different in
+sizes? Try comparing output of $CROSS-nm on the vmlinux files.
 
-Matthew Dombroski wrote:
-> Hi,
-> Have you tried disabling the initrd stuff in the buildroot config?
-> ~Matt
-> 
-> On Wed, Jun 11, 2008 at 7:40 PM, Andreas Kuehn <Andreas.Kuehn@gin.de> wrote:
->> Its probably one of these "again" questions but I couldn't get a
->> reasonable/sound answer.
->>
->> I'm building an arm rootfs and an 2.6.23.14 kernel with the actual svn
->> buildroot and uclibc. It works quite well but produces really large
->> kernel images.
->>
->> Created:      Tue Jun 10 11:45:43 2008
->> Image Type:   ARM Linux Kernel Image (uncompressed)
->> Data Size:    4528112 Bytes = 4421.98 kB = 4.32 MB
->>
->> With an old toolchain I can achive regular sizes:
->>
->> Created:      Tue Jun 10 13:44:26 2008
->> Image Type:   ARM Linux Kernel Image (uncompressed)
->> Data Size:    1412792 Bytes = 1379.68 kB = 1.35 MB
->>
->>
->> Unfortunately, the old toolchain has a buggy uclibc and I need a new
->> one. -- How can I fix that greedy kernel thing ? --
->>
->> Thanks in advance...
->> akuehn
->> _______________________________________________
->> buildroot mailing list
->> buildroot at uclibc.org
->> http://busybox.net/mailman/listinfo/buildroot
->>
-> 
+-- 
+Bye, Peter Korsgaard
