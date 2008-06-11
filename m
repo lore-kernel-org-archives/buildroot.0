@@ -1,55 +1,36 @@
-From: Arun Reddy <reddyac@gmail.com>
-Date: Wed, 11 Jun 2008 11:00:54 -0700
-Subject: [Buildroot] mdev.conf missing during kernel boot-up process?
-In-Reply-To: <20080611172919.GL3795@mx.loc>
-References: <326f33790806110918x2d922e13vbd8b62bbc223bac5@mail.gmail.com>
-	<20080611172919.GL3795@mx.loc>
-Message-ID: <326f33790806111100h3c4a9c1aoa57491db62ce2252@mail.gmail.com>
+From: Peter Korsgaard <jacmet@uclibc.org>
+Date: Wed, 11 Jun 2008 21:24:52 +0200
+Subject: [Buildroot] kernel image size depends on toolchain? -Solved-
+In-Reply-To: <484FEA68.2060507@gin.de> (Andreas Kuehn's message of "Wed\,
+	11 Jun 2008 17\:08\:24 +0200")
+References: <484F8157.2050902@gin.de> <87hcc0pfrr.fsf@macbook.be.48ers.dk>
+	<484F8F05.2040105@gin.de> <87lk1cmi7d.fsf@macbook.be.48ers.dk>
+	<484FA6F4.5010408@gin.de> <87k5gwkz31.fsf@macbook.be.48ers.dk>
+	<484FCC7B.4090704@gin.de> <87fxrkjcp8.fsf@macbook.be.48ers.dk>
+	<484FEA68.2060507@gin.de>
+Message-ID: <873anjixkr.fsf@macbook.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Thank you both for the responses. I thought mdev.conf was required to set
-device node permissions properly, but this doesn't look like it's the case.
-I went ahead and removed support for mdev.conf in BusyBox but haven't
-recompiled yet. From the output posted above it looks like my real problem
-is then with the line:
+>>>>> "Andreas" == Andreas Kuehn <Andreas.Kuehn@gin.de> writes:
 
-/bin/hostname: invalid option -- F.
+Hi,
 
-I am looking into that now to see how I can fix it.
+ Andreas> Created:      Wed Jun 11 16:51:42 2008
+ Andreas> Image Type:   ARM Linux Kernel Image (uncompressed)
+ Andreas> Data Size:    1402212 Bytes = 1369.35 kB = 1.34 MB  <--<< Groovy !
 
-On Wed, Jun 11, 2008 at 10:29 AM, Bernhard Fischer <rep.dot.nop@gmail.com>
-wrote:
+Great!
 
-> On Wed, Jun 11, 2008 at 09:18:45AM -0700, Arun Reddy wrote:
-> >I just finished a MIPS build and I seem to have a near-successful boot-up
-> in
-> >QEMU going. After mounting the root (ext2 filesystem) as ready only, the
-> >boot up halts saying that it
-> >
-> >cannot create directory '/dev/pts': File exists
-> >/bin/sh: /proc/sys/kernel/hotplug: No such file or directory
-> >mdev: /etc/mdev.conf: No such file or directory
-> >mdev: /etc/mdev.conf: No such file or directory
-> >mdev: /etc/mdev.conf: No such file or directory
-> >mdev: mknod loop2: Read-only file system
-> >/bin/hostname: invalid option -- F
-> >Try '/bin/hostname --help' for more information.
-> >
-> >I checked my BusyBox settings and mdev.conf support is enabled. It seems
-> to
-> >me that mdev.conf should be automatically generated for me, but after
->
-> No, it should not. You should only turn on something that you really
-> need. If you don't need an mdev.conf then you should turn support for
-> the config-parsing off. If, OTOH, you _know_ that you need a specific
-> mdev.conf, then you're supposed to use your .conf that you wrote and
-> that does what it is supposed to do.
-> mdev works fine without conf support.
->
--------------- next part --------------
-An HTML attachment was scrubbed...
-URL: http://busybox.net/lists/buildroot/attachments/20080611/7279f9a6/attachment-0001.htm 
+ Andreas> You were right, that patch was missing.
+ Andreas> Really great support.
+ Andreas> Thank you
+ Andreas> 	akuehn  :-)
+
+You're welcome.
+
+-- 
+Bye, Peter Korsgaard
