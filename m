@@ -1,45 +1,36 @@
-From: Arun Reddy <reddyac@gmail.com>
-Date: Wed, 11 Jun 2008 09:18:45 -0700
-Subject: [Buildroot] mdev.conf missing during kernel boot-up process?
-Message-ID: <326f33790806110918x2d922e13vbd8b62bbc223bac5@mail.gmail.com>
+From: Bernhard Fischer <rep.dot.nop@gmail.com>
+Date: Wed, 11 Jun 2008 18:28:05 +0200
+Subject: [Buildroot] Still no answer for a contribution made in March
+In-Reply-To: <46a136670806110903h4c209716yff8bc14781dd0e4@mail.gmail.com>
+References: <20080611161156.33737116@crazy>
+	<46a136670806110808x737929a4red33f32c593ae6e2@mail.gmail.com>
+	<20080611154121.GI3795@mx.loc>
+	<46a136670806110903h4c209716yff8bc14781dd0e4@mail.gmail.com>
+Message-ID: <20080611162805.GK3795@mx.loc>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-I just finished a MIPS build and I seem to have a near-successful boot-up in
-QEMU going. After mounting the root (ext2 filesystem) as ready only, the
-boot up halts saying that it
+On Wed, Jun 11, 2008 at 12:03:52PM -0400, John Voltz wrote:
 
-cannot create directory '/dev/pts': File exists
-/bin/sh: /proc/sys/kernel/hotplug: No such file or directory
-mdev: /etc/mdev.conf: No such file or directory
-mdev: /etc/mdev.conf: No such file or directory
-mdev: /etc/mdev.conf: No such file or directory
-mdev: mknod loop2: Read-only file system
-/bin/hostname: invalid option -- F
-Try '/bin/hostname --help' for more information.
+>> There is a very similar discussion going on at Slashdot this morning about
+>X.org and how it has completely stagnated. Nobody is really fixing the bugs
+>and it seems to be the consensus (at least on Slashdot) that if people in
+>the community are not happy with the rate of changes they should get
+>involved themselves.
 
-I checked my BusyBox settings and mdev.conf support is enabled. It seems to
-me that mdev.conf should be automatically generated for me, but after
-mounting my harddisk image and checking inside of /etc, I don't see it. Is
-this because it is supposed to be created after the root filesystem is
-mounted during the boot-up process? Is it being restricted because I haven't
-set rw access? I tried booting it up with rw set, but I still get the same
-mdev.conf error. And when I try to boot it up again, it says that it can't
-mount to my hda1 device because the kernel has unsupported optional features
-set. The only way to try again properly is by remaking my harddisk image.
+I let you guys use the stuff that apparently works for you, sure. It
+doesn't work for me, and i was not interrested in fruitless arguments
+about taste so i went away after playing patch-monkey for quite some
+time.
 
-Anyone have any idea why mdev.conf is not being generated? Any specific
-BusyBox setting I might be missing? Here's what I have set for mdev in
-BusyBox:
+>                     Still, somebody needs to manage the project to make
+>sure it doesn't turn to crap. I don't think there is an easy answer to the
 
-FEATURE_MDEV_EXEC=y
-FEATURE_MDEV_CONF=y
-MDEV=y
+The "we can fix it later" attitude only works to some small degree,
+YMMV.
 
-Thank you for any assistance you guys can offer!
--------------- next part --------------
-An HTML attachment was scrubbed...
-URL: http://busybox.net/lists/buildroot/attachments/20080611/38110c1d/attachment.htm 
+>problem. The end user is always going to need to know a lot about the
+>project to make sure it works for them.
