@@ -1,55 +1,58 @@
-From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Wed, 11 Jun 2008 15:58:11 +0200
-Subject: [Buildroot] kernel image size depends on toolchain?
-In-Reply-To: <484FCC7B.4090704@gin.de> (Andreas Kuehn's message of "Wed\,
-	11 Jun 2008 15\:00\:43 +0200")
-References: <484F8157.2050902@gin.de> <87hcc0pfrr.fsf@macbook.be.48ers.dk>
-	<484F8F05.2040105@gin.de> <87lk1cmi7d.fsf@macbook.be.48ers.dk>
-	<484FA6F4.5010408@gin.de> <87k5gwkz31.fsf@macbook.be.48ers.dk>
-	<484FCC7B.4090704@gin.de>
-Message-ID: <87fxrkjcp8.fsf@macbook.be.48ers.dk>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Wed, 11 Jun 2008 16:11:56 +0200
+Subject: [Buildroot] Still no answer for a contribution made in March
+Message-ID: <20080611161156.33737116@crazy>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Andreas" == Andreas Kuehn <Andreas.Kuehn@gin.de> writes:
-
 Hi,
 
- Andreas> Right from the .config file....
- Andreas> BR2_BINUTILS_VERSION="2.18"
- Andreas> BR2_EXTRA_BINUTILS_CONFIG_OPTIONS=""
+On March, 12th, I sent a patch adding Thumb support for the ARM
+architecture to this list:
+ http://buildroot.uclibc.org/lists/buildroot/2008-March/007427.html
 
- Andreas> I suppose version 2.18 is the "old" version?  Meanwhile, I
- Andreas> changed to version 2.18.50.0.1 and did a complete rebuild
- Andreas> with a well known result:
+Two days later, no comments:
+ http://buildroot.uclibc.org/lists/buildroot/2008-March/007492.html
 
- Andreas> Image Type:   ARM Linux Kernel Image (uncompressed)
- Andreas> Data Size:    4528100 Bytes = 4421.97 kB = 4.32 MB
+Five days later, no comments:
+ http://buildroot.uclibc.org/lists/buildroot/2008-March/007544.html
 
- Andreas> I don't know where that commit you mentioned has gone to
- Andreas> (where does that 1e621a8e3752367d4aae78a8ab00a18fb2793f34
- Andreas> belong to). Is it the kernel tree or the binutils and
- Andreas> finally which version?
+Two months later, still no comments:
+ http://buildroot.uclibc.org/lists/buildroot/2008-May/008723.html
 
-It's from the kernel git tree. It's a simple oneliner, you could maybe
-patch it by hand in your Linux checkout:
+Do you actually care of contributions ?
 
-diff --git a/arch/arm/Makefile b/arch/arm/Makefile
-index fa4ea9f..6c2d539 100644
---- a/arch/arm/Makefile
-+++ b/arch/arm/Makefile
-@@ -12,7 +12,7 @@
- 
- LDFLAGS_vmlinux        :=-p --no-undefined -X
- CPPFLAGS_vmlinux.lds = -DTEXT_OFFSET=$(TEXT_OFFSET)
--OBJCOPYFLAGS   :=-O binary -R .note -R .comment -S
-+OBJCOPYFLAGS   :=-O binary -R .note -R .note.gnu.build-id -R .comment -S
- GZFLAGS                :=-9
- #CFLAGS                +=-pipe
- # Explicitly specifiy 32-bit ARM ISA since toolchain default can be -mthumb:
+I don't assume that my patch is perfect or absolutely useful for
+everybody, but I would have at least expected some reaction from
+Buildroot maintainers saying: ?no, thank you, we don't care about this
+feature? or ?interesting feature, but your approach is flawed because of
+this and that?.
 
+FWIW, one user reported interest in such a feature:
+ http://buildroot.uclibc.org/lists/buildroot/2008-March/007495.html
+
+This absence of reaction is very frustrating for new potential
+contributors. I would like to contribute more to Buildroot, but this
+experience doesn't really encourage one in spending more time writing
+patches that will be ignored.
+
+Thanks a lot for this great project,
+
+Sincerly,
+
+Thomas
 -- 
-Bye, Peter Korsgaard
+Thomas Petazzoni, Free Electrons
+Kernel, drivers and embedded Linux development,
+consulting, training and support.
+http://free-electrons.com
+-------------- next part --------------
+A non-text attachment was scrubbed...
+Name: signature.asc
+Type: application/pgp-signature
+Size: 189 bytes
+Desc: not available
+Url : http://busybox.net/lists/buildroot/attachments/20080611/2c41229b/attachment.pgp 
