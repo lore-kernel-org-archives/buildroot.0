@@ -1,34 +1,98 @@
-From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Wed, 11 Jun 2008 11:31:02 +0200
-Subject: [Buildroot] kernel image size depends on toolchain?
-In-Reply-To: <484F8F05.2040105@gin.de> (Andreas Kuehn's message of "Wed\,
-	11 Jun 2008 10\:38\:29 +0200")
-References: <484F8157.2050902@gin.de> <87hcc0pfrr.fsf@macbook.be.48ers.dk>
-	<484F8F05.2040105@gin.de>
-Message-ID: <87lk1cmi7d.fsf@macbook.be.48ers.dk>
+From: Teemu Keskinarkaus <Teemu.Keskinarkaus@cc-systems.com>
+Date: Wed, 11 Jun 2008 11:55:28 +0200
+Subject: [Buildroot] root fs
+In-Reply-To: <2590773a0806031759j7ea229e6l797fd9250c6f3243@mail.gmail.com>
+References: <2590773a0806031618y36f52acdub806d896da6ad0ae@mail.gmail.com><6306c640806031730n7b1a0ffayece31eb66d657615@mail.gmail.com><326f33790806031753o781d8638l804bbbf9da3001ec@mail.gmail.com>
+	<2590773a0806031759j7ea229e6l797fd9250c6f3243@mail.gmail.com>
+Message-ID: <330EC2471BF24E48B513AF1A6975EB695782D4@MAIL-UA.ccs.local>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Andreas" == Andreas Kuehn <Andreas.Kuehn@gin.de> writes:
-
 Hi,
 
- Andreas> That is how I found that thing. It simply doesn't fit into my boot
- Andreas> flash anymore.
- Andreas> And Yes, it is the same, not even a copy, .config file for both trys.
+You don't need to do make clean to get rootfs rebuild.
 
- Andreas> The reason why I need the "new" uclibc is, that I need access to the
- Andreas> PIOs of my at91sam9261 and at91sam9263 controllers. And the "old"
- Andreas> uclibc has this mmap bug that creates an page overflow error.
+All you need to do is (in buildroot root):
 
- Andreas> Is there a chance that something in the uclibc like the
- Andreas> LARGEFILESUPPORT creates some static or incompressable data block?
+rm -rf project_build_arm/yourproject/root
+rm project_build_arm/yourproject/.root
+make
 
-That doesn't sound likely. Are the vmlinux files also different in
-sizes? Try comparing output of $CROSS-nm on the vmlinux files.
+It might be sufficient just to remove the .root, but this way you make sure you get fresh rootfs. Those examples are for arm, but I'll hope you find the same things on your buildroot.
 
--- 
-Bye, Peter Korsgaard
+-Teemu
+
+> -----Original Message-----
+> From: buildroot-bounces at uclibc.org [mailto:buildroot-bounces at uclibc.org]
+> On Behalf Of Christopher Taylor
+> Sent: 4. kes?kuuta 2008 3:59
+> To: Arun Reddy
+> Cc: Buildroot List
+> Subject: Re: [Buildroot] root fs
+> 
+> Yeah, I was trying to avoid a make clean/ make distclean ....
+> 
+> I appreciate your assistance!
+> 
+> -Chris
+> 
+> On Tue, Jun 3, 2008 at 8:53 PM, Arun Reddy <reddyac@gmail.com> wrote:
+> > Hi Chris,
+> >
+> > You can also try ensuring you're doing a completely clean build by doing
+> the
+> > following within the main Buildroot directory:
+> >
+> > make clean
+> > make distclean
+> > make menuconfig (your settings will still be there, but you want to exit
+> > right away so the Config.input file gets created)
+> > make
+> >
+> > Make sure you have some time on your hands before doing this though.
+> >
+> > On Tue, Jun 3, 2008 at 5:30 PM, Ram kumar <ramkumar.research@gmail.com>
+> > wrote:
+> >>
+> >> hi,
+> >>      you can try this http://www.linuxfromscratch.org/lfs/ . i have not
+> >> tried..i think it describes all the steps including handcrafting the
+> >> filesystem.But make sure whether it is worth scratching your head for
+> >> building the file system from the scratch.
+> >>
+> >> Regards,
+> >> Ram
+> >>
+> >> On Tue, Jun 3, 2008 at 4:18 PM, Christopher Taylor <chtaylo3@gmail.com>
+> >> wrote:
+> >>>
+> >>> Does anyone know how to get the root fs to be built from scratch?  I
+> >>> deleted it with a make clean in buildroot and now some of the files
+> >>> aren't installing into the root dir; most notably: /etc/passwd,
+> >>> /etc/shadow, and /usr/share/udhcpd/default.script
+> >>>
+> >>> There are probably a few others so instead of hunting them down I'd
+> >>> like to try and get BR/BB to install them over again.
+> >>>
+> >>> Any help appreciated!
+> >>>
+> >>> -Chris
+> >>> _______________________________________________
+> >>> buildroot mailing list
+> >>> buildroot at uclibc.org
+> >>> http://busybox.net/mailman/listinfo/buildroot
+> >>
+> >>
+> >> _______________________________________________
+> >> buildroot mailing list
+> >> buildroot at uclibc.org
+> >> http://busybox.net/mailman/listinfo/buildroot
+> >
+> >
+> _______________________________________________
+> buildroot mailing list
+> buildroot at uclibc.org
+> http://busybox.net/mailman/listinfo/buildroot
