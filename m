@@ -1,33 +1,38 @@
-From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Thu, 12 Jun 2008 09:18:00 +0200
-Subject: [Buildroot] Still no answer for a contribution made in March
-In-Reply-To: <484FF70E.5060808@gmail.com> (Kieran Bingham's message of "Wed\,
-	11 Jun 2008 17\:02\:22 +0100")
-References: <20080611161156.33737116@crazy> <484FF70E.5060808@gmail.com>
-Message-ID: <87ve0ff7fb.fsf@macbook.be.48ers.dk>
+From: jacmet at uclibc.org <jacmet@uclibc.org>
+Date: Thu, 12 Jun 2008 00:27:48 -0700 (PDT)
+Subject: [Buildroot] svn commit: trunk/buildroot/target/u-boot
+Message-ID: <20080612072748.ED59C3C700@busybox.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Kieran" == Kieran Bingham <kieranbingham@gmail.com> writes:
+Author: jacmet
+Date: 2008-06-12 00:27:48 -0700 (Thu, 12 Jun 2008)
+New Revision: 22298
 
- Kieran> I agree,
- Kieran> I posted a patch regarding a simple fix to the buildroot 
- Kieran> gcc-uclibc-[34].x.mk files
+Log:
+u-boot: cleanup arch handling
 
-Link? I've been really busy, and must have missed it.
+Thanks to Hamish Moffatt.
 
- Kieran> I have been working on getting SH2a toolchain support into
- Kieran> buildroot, and was "Dipping my toes in" with this first
- Kieran> patch.
 
- Kieran> Without response, I'm not convinced I should take the time
- Kieran> and effort to bother creating patches to provide support in
- Kieran> mainline buildroot.
+Modified:
+   trunk/buildroot/target/u-boot/Makefile.in
 
-It's your call ofcause, but please do.
 
--- 
-Bye, Peter Korsgaard
+Changeset:
+Modified: trunk/buildroot/target/u-boot/Makefile.in
+===================================================================
+--- trunk/buildroot/target/u-boot/Makefile.in	2008-06-11 18:29:48 UTC (rev 22297)
++++ trunk/buildroot/target/u-boot/Makefile.in	2008-06-12 07:27:48 UTC (rev 22298)
+@@ -12,7 +12,7 @@
+ U_BOOT_BIN:=u-boot.bin
+ U_BOOT_TOOLS_BIN:=mkimage
+ # u-boot still uses arch=ppc for powerpc
+-U_BOOT_ARCH=$(shell echo $(KERNEL_ARCH)|$(HOST_SED_DIR)/bin/sed 's/powerpc/ppc/')
++U_BOOT_ARCH=$(KERNEL_ARCH:powerpc=ppc)
+ 
+ ifneq ($(BR2_TARGET_U_BOOT_CONFIG_BOARD),)
+ U_BOOT_INC_CONF_FILE:=$(U_BOOT_DIR)/include/configs/$(subst _config,,$(BR2_TARGET_U_BOOT_CONFIG_BOARD)).h
