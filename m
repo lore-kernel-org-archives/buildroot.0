@@ -1,26 +1,25 @@
-From: Brian Beattie <beattie@beattie-home.net>
-Date: Wed, 11 Jun 2008 17:20:24 -0700
-Subject: [Buildroot] A question about procedure (ARM related)
-Message-ID: <1213230024.6098.8.camel@kokopelli>
+From: Hamish Moffatt <hamish@cloud.net.au>
+Date: Thu, 12 Jun 2008 14:58:01 +1000
+Subject: [Buildroot] Buildroot and autotools
+In-Reply-To: <2590773a0806070953h7f6ee7b1v62a3ae4019b41620@mail.gmail.com>
+References: <2590773a0806070953h7f6ee7b1v62a3ae4019b41620@mail.gmail.com>
+Message-ID: <20080612045801.GB12527@cloud.net.au>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Ulf,
-I have added support for an at91rm9200 based board (kb9202 from
-KwikByte), to buildroot in the target/device/Atmel directory.  I would
-post a patch or even be willing to add it directly if given svn write
-access.
+On Sat, Jun 07, 2008 at 12:53:27PM -0400, Christopher Taylor wrote:
+> Does anyone with more experience than I with autotools know if there's
+> an easy way to get autoconf to make a cross-compile configure script
+> based on how my buildroot toolchain was configured (as opposed to how
+> my host is configured)?
 
-The reason I have not posted the patch is I'm not sure if the Atmel
-directory is the right place.
+configure should be called with appropriate --target, --host and --build
+switches.. configure itself is not generated for either a native or
+cross-compile, it will do both.
 
+Hamish
 -- 
-A: Because it messes up the order in which people normally read text.
-Q: Why is top-posting a bad thing?
-
-Brian Beattie   LFS12947 | "Honor isn't about making the right choices.
-beattie at beattie-home.net | It's about dealing with the consequences."
-www.beattie-home.net     | -- Midori Koto
+Hamish Moffatt VK3SB <hamish@debian.org> <hamish@cloud.net.au>
