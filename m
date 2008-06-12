@@ -1,38 +1,30 @@
-From: jacmet at uclibc.org <jacmet@uclibc.org>
-Date: Thu, 12 Jun 2008 00:27:48 -0700 (PDT)
+From: Peter Korsgaard <jacmet@uclibc.org>
+Date: Thu, 12 Jun 2008 09:28:32 +0200
 Subject: [Buildroot] svn commit: trunk/buildroot/target/u-boot
-Message-ID: <20080612072748.ED59C3C700@busybox.net>
+In-Reply-To: <20080612051430.GD12527@cloud.net.au> (Hamish Moffatt's message
+	of "Thu\, 12 Jun 2008 15\:14\:30 +1000")
+References: <20080611130704.379E93C65A@busybox.net>
+	<20080612051430.GD12527@cloud.net.au>
+Message-ID: <87d4mnf6xr.fsf@macbook.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Author: jacmet
-Date: 2008-06-12 00:27:48 -0700 (Thu, 12 Jun 2008)
-New Revision: 22298
+>>>>> "Hamish" == Hamish Moffatt <hamish@cloud.net.au> writes:
 
-Log:
-u-boot: cleanup arch handling
+Hi,
 
-Thanks to Hamish Moffatt.
+ >> +U_BOOT_ARCH=$(shell echo $(KERNEL_ARCH)|$(HOST_SED_DIR)/bin/sed 's/powerpc/ppc/')
 
+ Hamish> How about
+ Hamish> U_BOOT_ARCH=$(KERNEL_ARCH:powerpc=ppc)
 
-Modified:
-   trunk/buildroot/target/u-boot/Makefile.in
+ Hamish> anyway.. less ugly than calling the shell + sed.
 
+Ah yes, ofcause - Fixed. U-boot supports ARCH=powerpc from 1.3.3 on
+though.
 
-Changeset:
-Modified: trunk/buildroot/target/u-boot/Makefile.in
-===================================================================
---- trunk/buildroot/target/u-boot/Makefile.in	2008-06-11 18:29:48 UTC (rev 22297)
-+++ trunk/buildroot/target/u-boot/Makefile.in	2008-06-12 07:27:48 UTC (rev 22298)
-@@ -12,7 +12,7 @@
- U_BOOT_BIN:=u-boot.bin
- U_BOOT_TOOLS_BIN:=mkimage
- # u-boot still uses arch=ppc for powerpc
--U_BOOT_ARCH=$(shell echo $(KERNEL_ARCH)|$(HOST_SED_DIR)/bin/sed 's/powerpc/ppc/')
-+U_BOOT_ARCH=$(KERNEL_ARCH:powerpc=ppc)
- 
- ifneq ($(BR2_TARGET_U_BOOT_CONFIG_BOARD),)
- U_BOOT_INC_CONF_FILE:=$(U_BOOT_DIR)/include/configs/$(subst _config,,$(BR2_TARGET_U_BOOT_CONFIG_BOARD)).h
+-- 
+Bye, Peter Korsgaard
