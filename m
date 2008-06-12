@@ -1,43 +1,70 @@
-From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Thu, 12 Jun 2008 10:42:30 +0200
-Subject: [Buildroot] Still no answer for a contribution made in March
-In-Reply-To: <20080612095933.25f3345e@crazy> (Thomas Petazzoni's message of
-	"Thu\, 12 Jun 2008 09\:59\:33 +0200")
-References: <20080611161156.33737116@crazy>
-	<46a136670806110808x737929a4red33f32c593ae6e2@mail.gmail.com>
-	<20080611154121.GI3795@mx.loc> <20080612095933.25f3345e@crazy>
-Message-ID: <871w33doy1.fsf@macbook.be.48ers.dk>
+From: bugs at busybox.net <bugs@busybox.net>
+Date: Thu, 12 Jun 2008 02:25:14 -0700
+Subject: [Buildroot] [buildroot 0003444]: fontconfig fails to build in
+	current svn version of buildroot (mipsel architecture)
+Message-ID: <4b54b47d51d02e73b0fbabfd6b4385e5@bugs.uclibc.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Thomas" == Thomas Petazzoni <thomas.petazzoni@free-electrons.com> writes:
 
-Hi,
+A NOTE has been added to this issue. 
+====================================================================== 
+http://busybox.net/bugs/view.php?id=3444 
+====================================================================== 
+Reported By:                KHAksnes
+Assigned To:                buildroot
+====================================================================== 
+Project:                    buildroot
+Issue ID:                   3444
+Category:                   Architecture Specific
+Reproducibility:            always
+Severity:                   major
+Priority:                   normal
+Status:                     assigned
+====================================================================== 
+Date Submitted:             05-26-2008 06:00 PDT
+Last Modified:              06-12-2008 02:25 PDT
+====================================================================== 
+Summary:                    fontconfig fails to build in current svn version of
+buildroot (mipsel architecture)
+Description: 
+I am using the current head revision of busybox. And are trying to build
+for mipsel target architecture from a fedora8 i686 host platform.
+Somewhere during compilation make tries to run this command:
 
- >> Yea, and that's the reason why the svn-repo is completely fux0red up.
+if /usr/lib/ccache/gcc -DHAVE_CONFIG_H -I. -I. -I.. -I../src -I..
+-I/media/EkstraDisk/buildroot/build_mipsel/staging_dir/usr/include/freetype2
+-I/media/EkstraDisk/buildroot/build_mipsel/staging_dir/usr/include -Wall
+-Wpointer-arith -Wstrict-prototypes     -Wmissing-prototypes
+-Wmissing-declarations     -Wnested-externs -fno-strict-aliasing    -g -O2
+-MT fc-case.o -MD -MP -MF ".deps/fc-case.Tpo" -c -o fc-case.o fc-case.c; \
+        then mv -f ".deps/fc-case.Tpo" ".deps/fc-case.Po"; else rm -f
+".deps/fc-case.Tpo"; exit 1; fi
 
- Thomas> I don't necessarly think so. Here, the issue is not a bottleneck at the
- Thomas> commit level, but rather a patch review bandwidth problem.
+This fails as the host gcc is invoked with an include of target includes.
 
-Agree - And lack of testing before stuff gets checked in. The deeper
-issue is that we don't do releases I guess, so there's a tension
-between doing development, and having something stable for actual use.
+The result is that fontconfig doesn't build at all.
+====================================================================== 
 
-I have gotten a login to the gcc cluster, and have plans to setup a
-buildbot instance to do regression tests on buildroot.
+---------------------------------------------------------------------- 
+ KHAksnes - 06-12-08 02:25  
+---------------------------------------------------------------------- 
+The problem is that 
+freetype-config --cflags returns:
+-I/media/EkstraDisk/buildroot/build_mipsel/staging_dir/usr/include/freetype2
+-I/media/EkstraDisk/buildroot/build_mipsel/staging_dir/usr/include
 
- Thomas> What's the relationship between your Git repo and the
- Thomas> official Subversion tree ? When is your tree pulled into the
- Thomas> official Subversion tree ? Who review the patches and when ?
+The second -I is the cause of the problem compilation problems for fc-case
+and the other host only tools built as part of fontconfig 
 
-Bernard's git tree is a fork of the svn repo from some time
-ago. There's no official sync, but he sometimes cherrypicks commits
-from svn, and I sometimes do the same from his tree.
-
-It's a pity, but has historical reasons.
-
--- 
-Bye, Peter Korsgaard
+Issue History 
+Date Modified   Username       Field                    Change               
+====================================================================== 
+05-26-08 06:00  KHAksnes       New Issue                                    
+05-26-08 06:00  KHAksnes       Status                   new => assigned     
+05-26-08 06:00  KHAksnes       Assigned To               => buildroot       
+06-12-08 02:25  KHAksnes       Note Added: 0008164                          
+======================================================================
