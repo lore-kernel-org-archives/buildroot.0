@@ -1,38 +1,56 @@
-From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Thu, 12 Jun 2008 19:17:16 +0200
+From: Ulf Samuelsson <ulf.samuelsson@atmel.com>
+Date: Thu, 12 Jun 2008 19:08:19 +0200
 Subject: [Buildroot] Still no answer for a contribution made in March
-In-Reply-To: <20080612162636.008f86d6@crazy> (Thomas Petazzoni's message of
-	"Thu\, 12 Jun 2008 16\:26\:36 +0200")
-References: <20080611161156.33737116@crazy>
-	<46a136670806110808x737929a4red33f32c593ae6e2@mail.gmail.com>
-	<20080611154121.GI3795@mx.loc> <20080612095933.25f3345e@crazy>
-	<871w33doy1.fsf@macbook.be.48ers.dk> <20080612162636.008f86d6@crazy>
-Message-ID: <87y75a7eub.fsf@macbook.be.48ers.dk>
+References: <0c2401c8cc99$baad47c0$0c0514ac@atmel.com><561309.27925.qm@web54402.mail.yahoo.com><46a136670806120808m6df5db4cp52f598f359d4a168@mail.gmail.com>
+	<20080612162856.GB14490@real.realitydiluted.com>
+Message-ID: <005401c8ccb1$1a9e0360$0c0514ac@atmel.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Thomas" == Thomas Petazzoni <thomas.petazzoni@free-electrons.com> writes:
+sjhill at realitydiluted.com wrote:
+>> To make an informed decision, everyone ought to read this:
+>> 
+>> http://git.or.cz/gitwiki/GitSvnComparsion
+>> 
+> I did. First, I would like to add a caveat to the Git page:
+> 
+> Git's Major Features Over Subversion
+> - Performance (Speed of Operation)
+>  Yes, as long as you have GBs of memory.
+> 
+> Then:
+> 
+> Subversion's Major Features Over Git
+> - Single Repository
+> - Access Controls
+> - Binary Files
+> 
+> These three items are important with regards to the buildroot system.
+> Another point brought up is that other projects like uClibc and the
+> like use Subversion as well, which is another reason I would like to
+> stay with what we have. As a maintainer and contributer, I recommend
+> we end this thread and get back to worry about doing releases of
+> buildroot.
+> 
 
-Hi,
+OK with me.
 
- >> Bernard's git tree is a fork of the svn repo from some time
- >> ago. There's no official sync, but he sometimes cherrypicks commits
- >> from svn, and I sometimes do the same from his tree.
- >> 
- >> It's a pity, but has historical reasons.
 
- Thomas> What tree should a new user use ? The git tree doesn't seem
- Thomas> to be referenced anywhere. Isn't it possible to find a
- Thomas> solution to get back to a single officiel tree ?
+Best Regards
+Ulf Samuelsson                ulf at atmel.com
+Atmel Nordic AB
+Mail:  Box 2033, 174 02 Sundbyberg, Sweden
+Visit:  Kavalleriv?gen 24, 174 58 Sundbyberg, Sweden
+Phone +46 (8) 441 54 22     Fax +46 (8) 441 54 29
+GSM    +46 (706) 22 44 57
 
-Well, as a buildroot (@uclibc.org) developer, I would certainly say
-use the svn tree ;)
 
-Regarding merging the trees, that's up to Bernhard - Last time we
-talked about it, he didn't seem interested though.
-
--- 
-Bye, Peter Korsgaard
+Technical support when I am not available:
+AT90 AVR Applications Group: mailto:avr at atmel.com
+AT91 ARM Applications Group: mailto:at91support at atmel.com
+AVR32 Applications Group        mailto:avr32 at atmel.com
+http://www.avrfreaks.net/;            http://avr32linux.org/
+http://www.at91.com/ ;                 http://www.linux4sam.org/
