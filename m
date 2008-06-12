@@ -1,40 +1,38 @@
-From: Bernhard Fischer <rep.dot.nop@gmail.com>
-Date: Thu, 12 Jun 2008 13:13:15 +0200
-Subject: [Buildroot] Still no answer for a contribution made in March
-In-Reply-To: <20080612052146.GE12527@cloud.net.au>
-References: <20080611161156.33737116@crazy>
-	<46a136670806110808x737929a4red33f32c593ae6e2@mail.gmail.com>
-	<20080611154121.GI3795@mx.loc>
-	<20080612052146.GE12527@cloud.net.au>
-Message-ID: <20080612111315.GB13098@mx.loc>
+From: Ulf Samuelsson <ulf.samuelsson@atmel.com>
+Date: Thu, 12 Jun 2008 10:45:20 +0200
+Subject: [Buildroot] A question about procedure (ARM related)
+References: <1213230024.6098.8.camel@kokopelli>
+Message-ID: <026b01c8cc7f$d6790f30$0c0514ac@atmel.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Thu, Jun 12, 2008 at 03:21:46PM +1000, Hamish Moffatt wrote:
->On Wed, Jun 11, 2008 at 05:41:21PM +0200, Bernhard Fischer wrote:
->> On Wed, Jun 11, 2008 at 11:08:49AM -0400, John Voltz wrote:
->> >Hi Thomas,
->> >
->> >I would have expected Ulf to take care of your patch since he usually
->> >handles most of the ARM stuff. I've noticed that one of the important
->> >methods of working with free software is to be able to make the changes
->> >directly yourself. So I would email Erik for subversion access, and drop it
->> >in there myself.
->> 
->> Yea, and that's the reason why the svn-repo is completely fux0red up.
->
->What reason? How does that follow?
+I think it is better to have it in a separate directory.
+target/device/KwikByte.
+This way, we can play around with the target/device/Atmel
+without affecting other boards too much.
 
-Many reasons. Ask yourself if you use proper flags, to name just the
-most visible one. But even apart from that there are numerous, just for
-example, random picks:
-http://buildroot.uclibc.org/lists/buildroot/2007-September/005051.html
-http://buildroot.uclibc.org/lists/buildroot/2008-January/006696.html
-http://buildroot.uclibc.org/lists/buildroot/2008-February/006971.html
-http://buildroot.uclibc.org/lists/buildroot/2008-April/007981.html
-http://buildroot.uclibc.org/lists/buildroot/2008-April/008480.html
-http://buildroot.uclibc.org/lists/buildroot/2008-April/008494.html
-etc, etc
+Best Regards
+Ulf Samuelsson 
+
+
+> Ulf,
+> I have added support for an at91rm9200 based board (kb9202 from
+> KwikByte), to buildroot in the target/device/Atmel directory.  I would
+> post a patch or even be willing to add it directly if given svn write
+> access.
+> 
+> The reason I have not posted the patch is I'm not sure if the Atmel
+> directory is the right place.
+> 
+> -- 
+> A: Because it messes up the order in which people normally read text.
+> Q: Why is top-posting a bad thing?
+> 
+> Brian Beattie   LFS12947 | "Honor isn't about making the right choices.
+> beattie at beattie-home.net | It's about dealing with the consequences."
+> www.beattie-home.net     | -- Midori Koto
+> 
+>
