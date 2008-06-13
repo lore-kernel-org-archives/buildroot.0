@@ -1,40 +1,45 @@
-From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Fri, 13 Jun 2008 12:22:50 +0200
-Subject: [Buildroot] Still no answer for a contribution made in March
-In-Reply-To: <200806130136.14442.vapier@gentoo.org> (Mike Frysinger's message
-	of "Fri\, 13 Jun 2008 01\:36\:13 -0400")
+From: Will Newton <will.newton@gmail.com>
+Date: Fri, 13 Jun 2008 12:07:42 +0100
+Subject: [Buildroot] Still no answer for a contribution -- "me too"
+In-Reply-To: <200806130824.42363.buildroot.atmel.com@pollet.net>
 References: <20080611161156.33737116@crazy>
-	<0cd501c8cca5$1be1eb80$0c0514ac@atmel.com>
-	<87fxri7ekt.fsf@macbook.be.48ers.dk>
-	<200806130136.14442.vapier@gentoo.org>
-Message-ID: <87lk19tz0l.fsf@macbook.be.48ers.dk>
+	<200806130824.42363.buildroot.atmel.com@pollet.net>
+Message-ID: <87a5b0800806130407wddd40a0v53712cddcb76b611@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Mike" == Mike Frysinger <vapier@gentoo.org> writes:
+On Fri, Jun 13, 2008 at 8:24 AM, Michel (BusError)
+<buildroot.atmel.com@pollet.net> wrote:
+> On Wednesday 11 June 2008, Thomas Petazzoni wrote:
+>> Hi,
+>>
+>> On March, 12th, I sent a patch adding Thumb support for the ARM
+>> architecture to this list:
+>>  http://buildroot.uclibc.org/lists/buildroot/2008-March/007427.html
+>
+>> This absence of reaction is very frustrating for new potential
+>> contributors. I would like to contribute more to Buildroot, but this
+>> experience doesn't really encourage one in spending more time writing
+>> patches that will be ignored.
+>>
+>> Thomas
+>
+>
+> Hi Thomas,
+>
+> It seems to be the rule more than the exception; I sent a few patches months
+> ago and most of them have been ignored completely -- even the one as simple
+> as adding a package (libswill, iptraf, i2c-tools)
+>
+> I must admit I gave up pushing anything since. Hope you get better luck.
 
-Hi,
+I must confess that has been my experience too. I tried asking Erik
+for commit access but again, no response. Perhaps he is working on
+other projects?
 
- Mike> On Thursday 12 June 2008, Peter Korsgaard wrote:
- >> Mike, would a package mirror
- >> on the uclibc.org machine be possible (2-3GB)?
-
- Mike> unfortunately, no.  uclibc.org is a vm guest donated by OSU and
- Mike> i dont think it even has that much free space now.
-
-That's what I thought ..
-
- Mike> you could talk to the OSU guys or perhaps kernel.org or ibiblio
- Mike> for some space ...
-
-Ok, the issue is going to be how to push updates to them, they are
-probably not particular interested doing svn up && make source kind of
-stuff ..
-
-Thanks anyway.
-
--- 
-Bye, Peter Korsgaard
+It's a hard balance to strike, I don't think it's right to demand
+anything of people on a volunteer led project but some of us have a
+job to do and a limited amount of time to do it in.
