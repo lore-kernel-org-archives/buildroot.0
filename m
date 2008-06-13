@@ -1,45 +1,30 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Fri, 13 Jun 2008 13:59:39 +0200
-Subject: [Buildroot] Getting the toolchain generation out of Buildroot ?
-Message-ID: <20080613135939.44dab265@crazy>
+From: Peter Korsgaard <jacmet@uclibc.org>
+Date: Fri, 13 Jun 2008 14:00:18 +0200
+Subject: [Buildroot] Still no answer for a contribution made in March
+In-Reply-To: <20080613134809.52133fb6@crazy> (Thomas Petazzoni's message of
+	"Fri\, 13 Jun 2008 13\:48\:09 +0200")
+References: <0c2401c8cc99$baad47c0$0c0514ac@atmel.com>
+	<561309.27925.qm@web54402.mail.yahoo.com>
+	<46a136670806120808m6df5db4cp52f598f359d4a168@mail.gmail.com>
+	<20080612162856.GB14490@real.realitydiluted.com>
+	<20080613134809.52133fb6@crazy>
+Message-ID: <87ej71r1d9.fsf@macbook.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+>>>>> "Thomas" == Thomas Petazzoni <thomas.petazzoni@free-electrons.com> writes:
 
-This is certainly a vast topic, but this is something I'm thinking of
-since quite some time. Buildroot is mainly designed to build a root
-filesystem, but also comes with the ability of generating a
-cross-compiling toolchain. However, these two tasks are very distinct:
-you usually generate the toolchain once, then build your root
-filesystem several times until it works, and at some points you might
-want to generate your toolchain again with some more options or other
-versions of the tools. But you always end up to do that separatly.
+Hi,
 
-From my perspective, it would make a lot of sense to have two distinct
-tools, like "buildtoolchain" and "buildroot". And it happens that
-crosstool-ng [1] basically is what "buildtoolchain" could be. What
-about focusing the efforts of toolchain generate on crosstool-ng and
-getting rid of that feature in buildroot so that we have two nice
-tools, with similar behaviour, for these two separate tasks ?
+ Thomas> As I said, I also don't think that Subversion vs. Git is the
+ Thomas> problem.  Whatever the version control system you use, you'll
+ Thomas> still have to get the code reviewed at some point. And this
+ Thomas> what started this thread.
 
-Sincerly,
+Exactly. Want to help? ;)
 
-Thomas
-
-[1] http://ymorin.is-a-geek.org/dokuwiki/projects/crosstool
 -- 
-Thomas Petazzoni, Free Electrons
-Kernel, drivers and embedded Linux development,
-consulting, training and support.
-http://free-electrons.com
--------------- next part --------------
-A non-text attachment was scrubbed...
-Name: signature.asc
-Type: application/pgp-signature
-Size: 189 bytes
-Desc: not available
-Url : http://busybox.net/lists/buildroot/attachments/20080613/654e1c27/attachment.pgp 
+Bye, Peter Korsgaard
