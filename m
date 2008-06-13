@@ -1,36 +1,44 @@
-From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Fri, 13 Jun 2008 13:22:49 +0200
-Subject: [Buildroot] Still no answer for a contribution -- "me too"
-In-Reply-To: <87a5b0800806130407wddd40a0v53712cddcb76b611@mail.gmail.com>
-	(Will Newton's message of "Fri\, 13 Jun 2008 12\:07\:42 +0100")
-References: <20080611161156.33737116@crazy>
-	<200806130824.42363.buildroot.atmel.com@pollet.net>
-	<87a5b0800806130407wddd40a0v53712cddcb76b611@mail.gmail.com>
-Message-ID: <87fxrhsho6.fsf@macbook.be.48ers.dk>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Fri, 13 Jun 2008 13:48:09 +0200
+Subject: [Buildroot] Still no answer for a contribution made in March
+In-Reply-To: <20080612162856.GB14490@real.realitydiluted.com>
+References: <0c2401c8cc99$baad47c0$0c0514ac@atmel.com>
+	<561309.27925.qm@web54402.mail.yahoo.com>
+	<46a136670806120808m6df5db4cp52f598f359d4a168@mail.gmail.com>
+	<20080612162856.GB14490@real.realitydiluted.com>
+Message-ID: <20080613134809.52133fb6@crazy>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Will" == Will Newton <will.newton@gmail.com> writes:
+Le Thu, 12 Jun 2008 11:28:56 -0500,
+sjhill at realitydiluted.com a ?crit :
 
-Hi,
+> These three items are important with regards to the buildroot system.
+> Another point brought up is that other projects like uClibc and the
+> like use Subversion as well, which is another reason I would like to
+> stay with what we have. As a maintainer and contributer, I recommend
+> we end this thread and get back to worry about doing releases of
+> buildroot.
 
- >> I must admit I gave up pushing anything since. Hope you get better luck.
+As I said, I also don't think that Subversion vs. Git is the problem.
+Whatever the version control system you use, you'll still have to get
+the code reviewed at some point. And this what started this thread.
 
- Will> I must confess that has been my experience too. I tried asking Erik
- Will> for commit access but again, no response. Perhaps he is working on
- Will> other projects?
+Sincerly,
 
-Yes, he's not really actively involved anymore. You can ask Mike
-Frysinger instead (vapier at uclibc.org).
-
- Will> It's a hard balance to strike, I don't think it's right to demand
- Will> anything of people on a volunteer led project but some of us have a
- Will> job to do and a limited amount of time to do it in.
-
-I think that covers most of us.
-
+Thomas
 -- 
-Bye, Peter Korsgaard
+Thomas Petazzoni, Free Electrons
+Kernel, drivers and embedded Linux development,
+consulting, training and support.
+http://free-electrons.com
+-------------- next part --------------
+A non-text attachment was scrubbed...
+Name: signature.asc
+Type: application/pgp-signature
+Size: 189 bytes
+Desc: not available
+Url : http://busybox.net/lists/buildroot/attachments/20080613/6168729f/attachment.pgp 
