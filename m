@@ -1,44 +1,52 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Fri, 13 Jun 2008 13:48:09 +0200
-Subject: [Buildroot] Still no answer for a contribution made in March
-In-Reply-To: <20080612162856.GB14490@real.realitydiluted.com>
-References: <0c2401c8cc99$baad47c0$0c0514ac@atmel.com>
-	<561309.27925.qm@web54402.mail.yahoo.com>
-	<46a136670806120808m6df5db4cp52f598f359d4a168@mail.gmail.com>
-	<20080612162856.GB14490@real.realitydiluted.com>
-Message-ID: <20080613134809.52133fb6@crazy>
+From: jacmet at uclibc.org <jacmet@uclibc.org>
+Date: Fri, 13 Jun 2008 04:49:43 -0700 (PDT)
+Subject: [Buildroot] svn commit: trunk/buildroot/toolchain/gcc:  4.2.4
+Message-ID: <20080613114943.756813C832@busybox.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Le Thu, 12 Jun 2008 11:28:56 -0500,
-sjhill at realitydiluted.com a ?crit :
+Author: jacmet
+Date: 2008-06-13 04:49:42 -0700 (Fri, 13 Jun 2008)
+New Revision: 22318
 
-> These three items are important with regards to the buildroot system.
-> Another point brought up is that other projects like uClibc and the
-> like use Subversion as well, which is another reason I would like to
-> stay with what we have. As a maintainer and contributer, I recommend
-> we end this thread and get back to worry about doing releases of
-> buildroot.
+Log:
+toolchain: gcc 4.2.4 support
 
-As I said, I also don't think that Subversion vs. Git is the problem.
-Whatever the version control system you use, you'll still have to get
-the code reviewed at some point. And this what started this thread.
 
-Sincerly,
 
-Thomas
--- 
-Thomas Petazzoni, Free Electrons
-Kernel, drivers and embedded Linux development,
-consulting, training and support.
-http://free-electrons.com
--------------- next part --------------
-A non-text attachment was scrubbed...
-Name: signature.asc
-Type: application/pgp-signature
-Size: 189 bytes
-Desc: not available
-Url : http://busybox.net/lists/buildroot/attachments/20080613/6168729f/attachment.pgp 
+Added:
+   trunk/buildroot/toolchain/gcc/4.2.4/
+   trunk/buildroot/toolchain/gcc/4.2.4/100-uclibc-conf.patch
+   trunk/buildroot/toolchain/gcc/4.2.4/103-uclibc-conf-noupstream.patch
+   trunk/buildroot/toolchain/gcc/4.2.4/104-gnuhurd-uclibc-conf.patch
+   trunk/buildroot/toolchain/gcc/4.2.4/200-uclibc-locale.patch
+   trunk/buildroot/toolchain/gcc/4.2.4/203-uclibc-locale-no__x.patch
+   trunk/buildroot/toolchain/gcc/4.2.4/204-uclibc-locale-wchar_fix.patch
+   trunk/buildroot/toolchain/gcc/4.2.4/205-uclibc-locale-update.patch
+   trunk/buildroot/toolchain/gcc/4.2.4/300-libstdc++-pic.patch
+   trunk/buildroot/toolchain/gcc/4.2.4/301-missing-execinfo_h.patch
+   trunk/buildroot/toolchain/gcc/4.2.4/302-c99-snprintf.patch
+   trunk/buildroot/toolchain/gcc/4.2.4/303-c99-complex-ugly-hack.patch
+   trunk/buildroot/toolchain/gcc/4.2.4/304-index_macro.patch
+   trunk/buildroot/toolchain/gcc/4.2.4/305-libmudflap-susv3-legacy.patch
+   trunk/buildroot/toolchain/gcc/4.2.4/306-libstdc++-namespace.patch
+   trunk/buildroot/toolchain/gcc/4.2.4/307-locale_facets.patch
+   trunk/buildroot/toolchain/gcc/4.2.4/402-libbackend_dep_gcov-iov.h.patch
+   trunk/buildroot/toolchain/gcc/4.2.4/800-arm-bigendian.patch
+   trunk/buildroot/toolchain/gcc/4.2.4/904-flatten-switch-stmt-00.patch
+   trunk/buildroot/toolchain/gcc/4.2.4/910-soft-float.patch
+   trunk/buildroot/toolchain/gcc/4.2.4/920-soft-float.patch
+
+Modified:
+   trunk/buildroot/toolchain/gcc/Config.in
+
+
+Changeset:
+
+Sorry, the patch is too large to include (4284 lines).
+Please use ViewCVS to see it!
+
+http://uclibc.org/cgi-bin/viewcvs.cgi?view=rev&root=svn&rev=22318
