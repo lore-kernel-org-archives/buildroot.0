@@ -1,36 +1,39 @@
-From: jacmet at uclibc.org <jacmet@uclibc.org>
-Date: Fri, 13 Jun 2008 06:46:43 -0700 (PDT)
-Subject: [Buildroot] svn commit: trunk/buildroot/target/u-boot
-Message-ID: <20080613134643.3DDB93C83D@busybox.net>
+From: Ulf Samuelsson <ulf.samuelsson@atmel.com>
+Date: Fri, 13 Jun 2008 15:34:51 +0200
+Subject: [Buildroot] Still no answer for a contribution -- "me too"
+References: <20080611161156.33737116@crazy><200806130824.42363.buildroot.atmel.com@pollet.net><87a5b0800806130407wddd40a0v53712cddcb76b611@mail.gmail.com><20080613120529.GB31396@cloud.net.au>
+	<1213361084.10637.18.camel@kokopelli>
+Message-ID: <006a01c8cd5d$a166f170$040514ac@atmel.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Author: jacmet
-Date: 2008-06-13 06:46:42 -0700 (Fri, 13 Jun 2008)
-New Revision: 22323
+Brian Beattie wrote:
+> On Fri, 2008-06-13 at 22:05 +1000, Hamish Moffatt wrote:
+> 
+>> Personally even though I have commit access I think it is still good
+>> to discuss anything remotely controversial before committing it. Most
+>> changes (new packages, package updates) don't fall in that category
+>> of course.
+> 
+> I have a change I'd love to discuss.  I have asked twice now about the
+> correct place to add support for a new board and have received no
+> response whatever.
+> 
+> This makes me sceptical of even trying to submit a patch.
+> 
+> try #3, I would like to add support for a board from KwikByte based on
+> the at91rm9200 processor. should I add it to target/device/Atmel or
+> should I create a new directory target/device/KwikByte or some other
+> location.
+> 
+> I have a patch for the first option.
 
-Log:
-u-boot: don't depend on gcc (not needed and not provided by ext toolchain)
+I think we already replied that it should go into target/device/KwikByte.
 
 
-Modified:
-   trunk/buildroot/target/u-boot/Makefile.in
 
-
-Changeset:
-Modified: trunk/buildroot/target/u-boot/Makefile.in
-===================================================================
---- trunk/buildroot/target/u-boot/Makefile.in	2008-06-13 13:31:41 UTC (rev 22322)
-+++ trunk/buildroot/target/u-boot/Makefile.in	2008-06-13 13:46:42 UTC (rev 22323)
-@@ -135,7 +135,7 @@
- 	$(STRIPCMD) $(STRIP_STRIP_UNNEEDED) $@
- 	ln -sf fw_printenv $(TARGET_DIR)/usr/sbin/fw_setenv
- 
--u-boot: gcc $(BINARIES_DIR)/$(U_BOOT_BIN) $(U_BOOT_TARGET_TOOLS)
-+u-boot: $(BINARIES_DIR)/$(U_BOOT_BIN) $(U_BOOT_TARGET_TOOLS)
- 
- u-boot-clean:
- 	-$(MAKE) -C $(U_BOOT_DIR) clean
+Best Regards
+Ulf Samuelsson
