@@ -1,29 +1,29 @@
 From: Hamish Moffatt <hamish@cloud.net.au>
-Date: Fri, 13 Jun 2008 15:54:07 +1000
-Subject: [Buildroot] macro `AM_PROG_LIBTOOL' not found
-In-Reply-To: <484EDB38.8030308@acsatlanta.com>
-References: <484EDB38.8030308@acsatlanta.com>
-Message-ID: <20080613055407.GA26459@cloud.net.au>
+Date: Fri, 13 Jun 2008 16:25:09 +1000
+Subject: [Buildroot] svn commit: trunk/buildroot/package/libusb
+In-Reply-To: <20080613055326.B817D3C7CA@busybox.net>
+References: <20080613055326.B817D3C7CA@busybox.net>
+Message-ID: <20080613062509.GA27054@cloud.net.au>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Tue, Jun 10, 2008 at 02:51:20PM -0500, Joseph G. Boike wrote:
-> Hi,
-> I'm trying to cross compile buildroot for and Atmel at91sam9260 ARM 
-> processor and keep getting the same error below.
-> I started w/ a clean buildroot subdirectory and used the default make 
-> (make at91sam9260_defconfig) setup.
-> My native autoconf, automake and libtool are all in /usr/bin
-> The error references m4_pattern_allow.  Where do I add that?  How do I 
-> keep it if I get a new version of buildroot?
+On Thu, Jun 12, 2008 at 10:53:26PM -0700, hamish at uclibc.org wrote:
+> Author: hamish
+> Date: 2008-06-12 22:53:25 -0700 (Thu, 12 Jun 2008)
+> New Revision: 22311
+> 
+> Log:
+> Fix missing libtool when building libusb
+> 
+> 
+> Modified:
+>    trunk/buildroot/package/libusb/libusb.mk
 
-Thanks, I fixed it now in svn (r22311).
+And now we're back to the original problem where libusb gets built over
+and over again. Oh how I love autotools & our autotools packages..
 
-libusb.mk should probably be rewritten to use the autotools stuff.
-
-Hamish
 -- 
 Hamish Moffatt VK3SB <hamish@debian.org> <hamish@cloud.net.au>
