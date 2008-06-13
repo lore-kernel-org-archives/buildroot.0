@@ -1,41 +1,38 @@
-From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Fri, 13 Jun 2008 22:04:49 +0200
-Subject: [Buildroot] Still no answer for a contribution -- "me too"
-In-Reply-To: <d6cda7730806131110y3a4244abm9df4fa91c757964a@mail.gmail.com>
-	("Thiago A. =?utf-8?Q?Corr=C3=AAa=22's?= message of "Fri\, 13 Jun 2008
-	15\:10\:20 -0300")
-References: <20080611161156.33737116@crazy>
-	<200806130824.42363.buildroot.atmel.com@pollet.net>
-	<87a5b0800806130407wddd40a0v53712cddcb76b611@mail.gmail.com>
-	<20080613120529.GB31396@cloud.net.au>
-	<4852A641.9060101@tirsdagsklubben.nu>
-	<d6cda7730806131110y3a4244abm9df4fa91c757964a@mail.gmail.com>
-Message-ID: <873anhf6e6.fsf@macbook.be.48ers.dk>
+From: jacmet at uclibc.org <jacmet@uclibc.org>
+Date: Fri, 13 Jun 2008 13:49:36 -0700 (PDT)
+Subject: [Buildroot] svn commit: trunk/buildroot/package/busybox
+Message-ID: <20080613204936.C323A3C885@busybox.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Thiago" == Thiago A Corr?a <thiago.correa@gmail.com> writes:
+Author: jacmet
+Date: 2008-06-13 13:49:35 -0700 (Fri, 13 Jun 2008)
+New Revision: 22330
 
-Hi,
+Log:
+busybox 1.10.3 patch
 
- Thiago> This is my third attempt, I was able to talk to Mike, and
- Thiago> seams that being vouched for is all that is required. Which
- Thiago> would imply getting some patches sent before.
 
-CC me on the mail to Mike and I'll ack it.
+Added:
+   trunk/buildroot/package/busybox/busybox-1.10.3-tcpudp.patch
 
- Thiago> Yes, that's one of the things that would be greatly
- Thiago> beneficial to the project, along with having releases and
- Thiago> perhaps a continal building system. I tried once to get
- Thiago> builtbot to work with buildroot, even asked for some help
- Thiago> here but no one was interested in replying. :(
 
-I have it running internally at work with the configs we use. I'm
-working on getting an official instance up and running with a bigger
-coverage soon.
-
--- 
-Bye, Peter Korsgaard
+Changeset:
+Added: trunk/buildroot/package/busybox/busybox-1.10.3-tcpudp.patch
+===================================================================
+--- trunk/buildroot/package/busybox/busybox-1.10.3-tcpudp.patch	                        (rev 0)
++++ trunk/buildroot/package/busybox/busybox-1.10.3-tcpudp.patch	2008-06-13 20:49:35 UTC (rev 22330)
+@@ -0,0 +1,10 @@
++--- busybox-1.10.3/networking/tcpudp.c	Sat Apr 19 06:03:13 2008
+++++ busybox-1.10.3-tcpudp/networking/tcpudp.c	Fri Jun 13 11:38:54 2008
++@@ -31,6 +31,7 @@
++ 
++ #include "libbb.h"
++ /* Wants <limits.h> etc, thus included after libbb.h: */
+++#include <linux/types.h> /* for __be32 etc */
++ #include <linux/netfilter_ipv4.h>
++ 
++ // TODO: move into this file:
