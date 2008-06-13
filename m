@@ -1,84 +1,90 @@
-From: bugs at busybox.net <bugs@busybox.net>
-Date: Fri, 13 Jun 2008 08:58:10 -0700
-Subject: [Buildroot] [buildroot 0002914]: X11R7 fails to build with a fork
-	bomb.
-Message-ID: <695d6f64bc6e8487adbbcb1a47774911@bugs.uclibc.org>
+From: =?ISO-8859-1?Q?Knut-H=E5vard_Aksnes?= <kna@tirsdagsklubben.nu>
+Date: Fri, 13 Jun 2008 18:54:25 +0200
+Subject: [Buildroot] Still no answer for a contribution -- "me too"
+In-Reply-To: <20080613120529.GB31396@cloud.net.au>
+References: <20080611161156.33737116@crazy>	<200806130824.42363.buildroot.atmel.com@pollet.net>	<87a5b0800806130407wddd40a0v53712cddcb76b611@mail.gmail.com>
+	<20080613120529.GB31396@cloud.net.au>
+Message-ID: <4852A641.9060101@tirsdagsklubben.nu>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+Hamish Moffatt wrote:
+> On Fri, Jun 13, 2008 at 12:07:42PM +0100, Will Newton wrote:
+>   
+>> I must confess that has been my experience too. I tried asking Erik
+>> for commit access but again, no response. Perhaps he is working on
+>> other projects?
+>>     
+>
+> I think anyone wanting write access should send some patches here first
+> for review. I guess you already did this -- I don't recall sorry.
+>
+> Personally even though I have commit access I think it is still good to
+> discuss anything remotely controversial before committing it. Most
+> changes (new packages, package updates) don't fall in that category of
+> course.
+>
+>   
+>> It's a hard balance to strike, I don't think it's right to demand
+>> anything of people on a volunteer led project but some of us have a
+>> job to do and a limited amount of time to do it in.
+>>     
+>
+> Does your job require your changes to be committed to the master
+> repository?
+>
+> Personally I am using buildroot in a commercial product for my day job.
+> I am contributing everything that is relevant back to the buildroot
+> repository, but we have some changes specific to our application and
+> some proprietary packages which will never be merged. We don't expect to
+> be able to build our whole product directly from the
+> buildroot.uclibc.org repository.
+>
+> I'm committing my own changes back to the master repository where
+> relevant, and I commit patches from this mailing list in areas that are
+> relevant to me and where I think I can properly review them.
+> Unfortunately I don't have company time to work on parts of buildroot
+> that fall outside these categories.
+>   
+I am in a similar situation to many of the other contributors to this 
+list. I am working as consultant mostly for a local customer. As long as 
+my bug reports and patches are related to
+the product development I am doing I can spend some paid time for the 
+common good. My last project was porting of a customer specific firewall 
+from a RedHat derivative to a buildroot based platform. My current 
+project is an attempt to port firefox-3.0 to  DirectFB on a customer 
+specific card. The processor on this card is  a mipsel based "system on 
+a chip".
 
-A NOTE has been added to this issue. 
-====================================================================== 
-http://busybox.net/bugs/view.php?id=2914 
-====================================================================== 
-Reported By:                KHAksnes
-Assigned To:                buildroot
-====================================================================== 
-Project:                    buildroot
-Issue ID:                   2914
-Category:                   Architecture Specific
-Reproducibility:            always
-Severity:                   major
-Priority:                   normal
-Status:                     assigned
-====================================================================== 
-Date Submitted:             04-14-2008 04:35 PDT
-Last Modified:              06-13-2008 08:58 PDT
-====================================================================== 
-Summary:                    X11R7 fails to build with a fork bomb.
-Description: 
-X11R7 fails to build in a nasty way. 
-The package check is missing (As far as I understand this is
-check.sourceforge.net) When ./configure in libxcb-1.1 tries to test for
-this it starts a fork bomb making my development machine (a fedora 8
-laptop) grind to a halt.
+For both these projects parts of what I do is of general interest and 
+fixes should be done in buildroot, other parts are customer specific and 
+will probably of little interest for most other companies.
 
-I am using a current buildroot. (svn at 21732)
-====================================================================== 
+What's important for me is speed and quality :-)
 
----------------------------------------------------------------------- 
- KHAksnes - 04-14-08 07:22  
----------------------------------------------------------------------- 
-Building of RPM shows the same behaviour. The fork bomb involves
-pkg-config, glib-config and sed at least. 
+Personally I would like to have subversion commit access to be able to 
+speed up obvious bug-fixes, but I will at the same time try to avoid 
+making a mess of the repository.
+Obvious fixes, like missing dependencies or faulty configuration 
+parameters can be fixed directly on trunk if they are well tested 
+locally and unlikely to cause regressions in other builds. More tricky 
+or larger fixes, like introducing new packages or upgrading major 
+versions of several interdependent packages at the same time can be done 
+in their own feature branches. Anybody with access to the repository can 
+test and review these changes. If the fix(es) are accepted the feature 
+branch is merged back into trunk and deleted. Creating merging and 
+deleting branches are cheap operations in subversion.
 
----------------------------------------------------------------------- 
- KHAksnes - 04-14-08 07:31  
----------------------------------------------------------------------- 
-I forgot to mention that I was trying to build for i686 using, a fairly
-standard setup with, kernel: 2.6.24, uclibc: 0.9.29, binutils:
-2.18.50.0.1, gcc: 4.2.3, busybox: 1.10. 
 
----------------------------------------------------------------------- 
- KHAksnes - 05-26-08 04:54  
----------------------------------------------------------------------- 
-After meeting similar fork bombs several times I did som further research.
-The problem seems to be pkg-config.
 
-pkg-config have a builtin fallback to gnome-config. Sometimes when
-pkg-config can't find its gnome-config fallback it forks out of control.
-Installing the following shell script as staging_dir/usr/bin/gnome-config
-fixes the problem
 
-#! /bin/sh
-exit 1 
-
----------------------------------------------------------------------- 
- KHAksnes - 06-13-08 08:58  
----------------------------------------------------------------------- 
-Bug hs ben reported upstream to the pkg-config developers. 
-
-Issue History 
-Date Modified   Username       Field                    Change               
-====================================================================== 
-04-14-08 04:35  KHAksnes       New Issue                                    
-04-14-08 04:35  KHAksnes       Status                   new => assigned     
-04-14-08 04:35  KHAksnes       Assigned To               => buildroot       
-04-14-08 07:22  KHAksnes       Note Added: 0006614                          
-04-14-08 07:31  KHAksnes       Note Added: 0006624                          
-05-26-08 04:54  KHAksnes       Note Added: 0007864                          
-06-13-08 08:58  KHAksnes       Note Added: 0008194                          
-======================================================================
+-------------- next part --------------
+A non-text attachment was scrubbed...
+Name: kna.vcf
+Type: text/x-vcard
+Size: 507 bytes
+Desc: not available
+Url : http://busybox.net/lists/buildroot/attachments/20080613/7e248ed0/attachment.vcf 
