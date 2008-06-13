@@ -1,36 +1,29 @@
-From: hamish at uclibc.org <hamish@uclibc.org>
-Date: Thu, 12 Jun 2008 22:53:26 -0700 (PDT)
-Subject: [Buildroot] svn commit: trunk/buildroot/package/libusb
-Message-ID: <20080613055326.B817D3C7CA@busybox.net>
+From: Hamish Moffatt <hamish@cloud.net.au>
+Date: Fri, 13 Jun 2008 15:54:07 +1000
+Subject: [Buildroot] macro `AM_PROG_LIBTOOL' not found
+In-Reply-To: <484EDB38.8030308@acsatlanta.com>
+References: <484EDB38.8030308@acsatlanta.com>
+Message-ID: <20080613055407.GA26459@cloud.net.au>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Author: hamish
-Date: 2008-06-12 22:53:25 -0700 (Thu, 12 Jun 2008)
-New Revision: 22311
+On Tue, Jun 10, 2008 at 02:51:20PM -0500, Joseph G. Boike wrote:
+> Hi,
+> I'm trying to cross compile buildroot for and Atmel at91sam9260 ARM 
+> processor and keep getting the same error below.
+> I started w/ a clean buildroot subdirectory and used the default make 
+> (make at91sam9260_defconfig) setup.
+> My native autoconf, automake and libtool are all in /usr/bin
+> The error references m4_pattern_allow.  Where do I add that?  How do I 
+> keep it if I get a new version of buildroot?
 
-Log:
-Fix missing libtool when building libusb
+Thanks, I fixed it now in svn (r22311).
 
+libusb.mk should probably be rewritten to use the autotools stuff.
 
-Modified:
-   trunk/buildroot/package/libusb/libusb.mk
-
-
-Changeset:
-Modified: trunk/buildroot/package/libusb/libusb.mk
-===================================================================
---- trunk/buildroot/package/libusb/libusb.mk	2008-06-12 22:28:03 UTC (rev 22310)
-+++ trunk/buildroot/package/libusb/libusb.mk	2008-06-13 05:53:25 UTC (rev 22311)
-@@ -24,7 +24,7 @@
- libusb-source: $(DL_DIR)/$(LIBUSB_SOURCE) $(LIBUSB_PATCH)
- 
- libusb-unpacked: $(LIBUSB_DIR)/.unpacked
--$(LIBUSB_DIR)/.unpacked: $(AUTOCONF) $(AUTOMAKE) $(DL_DIR)/$(LIBUSB_SOURCE)
-+$(LIBUSB_DIR)/.unpacked: $(AUTOCONF) $(AUTOMAKE) host-libtool $(DL_DIR)/$(LIBUSB_SOURCE)
- 	$(LIBUSB_CAT) $(DL_DIR)/$(LIBUSB_SOURCE) | tar -C $(BUILD_DIR) $(TAR_OPTIONS) -
- ifneq ($(LIBUSB_PATCH_FILE),)
- 	(cd $(LIBUSB_DIR) && $(LIBUSB_CAT) $(LIBUSB_PATCH) | patch -p1)
+Hamish
+-- 
+Hamish Moffatt VK3SB <hamish@debian.org> <hamish@cloud.net.au>
