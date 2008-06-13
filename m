@@ -1,41 +1,58 @@
-From: Hamish Moffatt <hamish@cloud.net.au>
-Date: Fri, 13 Jun 2008 20:02:49 +1000
+From: Matthew Dombroski <matthew.dombroski@gmail.com>
+Date: Fri, 13 Jun 2008 22:11:35 +1200
 Subject: [Buildroot] svn commit: trunk/buildroot/package/libusb
-In-Reply-To: <20080613084536.0BA573C804@busybox.net>
-References: <20080613084536.0BA573C804@busybox.net>
-Message-ID: <20080613100249.GA31396@cloud.net.au>
+In-Reply-To: <20080613095801.GA31077@cloud.net.au>
+References: <20080613055326.B817D3C7CA@busybox.net>
+	<20080613062509.GA27054@cloud.net.au> <48522AB7.9000501@gmail.com>
+	<20080613095801.GA31077@cloud.net.au>
+Message-ID: <485247D7.5050708@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Fri, Jun 13, 2008 at 01:45:35AM -0700, jacmet at uclibc.org wrote:
-> Author: jacmet
-> Date: 2008-06-13 01:45:35 -0700 (Fri, 13 Jun 2008)
-> New Revision: 22312
-> 
-> Log:
-> libusb: depend on actual host-libtool binary
-> 
-> We need to depend on the actual host-libtool binary instead of the phony
-> host-libtool as libusb otherwise will get recompiled every time.
-> 
-> 
-> Modified:
->    trunk/buildroot/package/libusb/libusb.mk
 
-Thanks, I fixed this already in my local copy but hadn't checked it in
-yet.
+>> -$(LIBUSB_DIR)/.configured: $(LIBUSB_DIR)/.unpacked
+>> -	(cd $(LIBUSB_DIR); rm -rf config.cache; \
+>> -		$(TARGET_CONFIGURE_OPTS) \
+>> -		$(TARGET_CONFIGURE_ARGS) \
+>> -		ac_cv_header_regex_h=no \
+>>     
+>
+> It looked to me like something important was lost in your patch (it
+> doesn't mention ac_cv_header_regex_h anywhere after patching), but
+> looking at libusb's configure script it doesn't seem to be used anyway.
+>   
 
->  libusb-unpacked: $(LIBUSB_DIR)/.unpacked
-> -$(LIBUSB_DIR)/.unpacked: $(AUTOCONF) $(AUTOMAKE) host-libtool $(DL_DIR)/$(LIBUSB_SOURCE)
-> +$(LIBUSB_DIR)/.unpacked: $(AUTOCONF) $(AUTOMAKE) $(STAGING_DIR)/$(LIBTOOL_TARGET_BINARY) $(DL_DIR)/$(LIBUSB_SOURCE)
+I looked around at a few packages (xorg, glib, gtk) and saw they used a 
+really tidy makefile.
+Theres a bunch of targets in packages/Makefile.autotools.in that you can 
+use to automate the process of building packages.
+I just rewrote the entire libusb.mk to take advantage of those targets.
 
-I added a $(LIBTOOL) in libtool/libtool.mk similar to $(AUTOMAKE) and
-used that instead, so that we can hide details of the libtool package.
+>> +$(LIBUSB_TARGET_INSTALL_TARGET): $(LIBUSB_TARGET_INSTALL_STAGING)
+>> +	$(call MESSAGE,"Installing to target")
+>>     
+>> -libusb: uclibc $(TARGET_DIR)/$(LIBUSB_BINARY)
+>> +$(LIBUSB_TARGET_UNINSTALL):
+>> +	$(call MESSAGE,"Uninstalling")
+>>     
+>
+> Why the messages? Is this standard among our autotools-using packages?
 
+Im just copying the format of the package install process in 
+Makefile.autotools.in.
+That and I think it looks better :)
 
-Hamish
--- 
-Hamish Moffatt VK3SB <hamish@debian.org> <hamish@cloud.net.au>
+The purpose of overriding the un/install to target is to stop the 
+copying of static libs and docs to the target filesystem. Theyre still 
+copied to the $(STAGING_DIR) though.
+
+$(LIBUSB_TARGET_INSTALL_TARGET): $(LIBUSB_TARGET_INSTALL_STAGING)
+    $(call MESSAGE,"Installing to target")
+    cp -dpf $(STAGING_DIR)/usr/lib/libusb*.so* $(TARGET_DIR)/usr/lib/
+    $(STRIPCMD) $(STRIP_STRIP_UNNEEDED) $(TARGET_DIR)/usr/lib/libusb*.so*
+    $(Q)touch $@
+
+~Matt
