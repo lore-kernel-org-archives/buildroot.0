@@ -1,54 +1,30 @@
-From: Hamish Moffatt <hamish@cloud.net.au>
-Date: Fri, 13 Jun 2008 19:58:01 +1000
-Subject: [Buildroot] svn commit: trunk/buildroot/package/libusb
-In-Reply-To: <48522AB7.9000501@gmail.com>
-References: <20080613055326.B817D3C7CA@busybox.net>
-	<20080613062509.GA27054@cloud.net.au> <48522AB7.9000501@gmail.com>
-Message-ID: <20080613095801.GA31077@cloud.net.au>
+From: Peter Korsgaard <jacmet@uclibc.org>
+Date: Fri, 13 Jun 2008 11:58:06 +0200
+Subject: [Buildroot] Still no answer for a contribution -- "me too"
+In-Reply-To: <200806130824.42363.buildroot.atmel.com@pollet.net> (Michel's
+	message of "Fri\, 13 Jun 2008 08\:24\:42 +0100")
+References: <20080611161156.33737116@crazy>
+	<200806130824.42363.buildroot.atmel.com@pollet.net>
+Message-ID: <87hcbxwtap.fsf@macbook.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Fri, Jun 13, 2008 at 08:07:19PM +1200, Matthew Dombroski wrote:
->
->> And now we're back to the original problem where libusb gets built over
->> and over again. Oh how I love autotools & our autotools packages..
+>>>>> "Michel" == Michel (BusError) <buildroot.atmel.com@pollet.net> writes:
 
-I've got a fix, which I'll check in anyway.
+Hi,
 
-> I have rewritten libusb.mk. I sent it to the buildroot mailing list  
-> about 2 weeks ago but never heard anything.
+ Michel> It seems to be the rule more than the exception; I sent a few
+ Michel> patches months ago and most of them have been ignored
+ Michel> completely -- even the one as simple as adding a package
+ Michel> (libswill, iptraf, i2c-tools)
 
-Sorry about that.. I don't remember seeing it.
+ Michel> I must admit I gave up pushing anything since. Hope you get
+ Michel> better luck.
 
-> This time I'm sending a proper patch (although its bigger than the  
-> resulting libusb.mk).
-> Can someone confirm that it works?
+Pity. We try, but all have limited time to work on this.
 
-It looks ok, I will test it later (maybe Monday).
-
-> -$(LIBUSB_DIR)/.configured: $(LIBUSB_DIR)/.unpacked
-> -	(cd $(LIBUSB_DIR); rm -rf config.cache; \
-> -		$(TARGET_CONFIGURE_OPTS) \
-> -		$(TARGET_CONFIGURE_ARGS) \
-> -		ac_cv_header_regex_h=no \
-
-It looked to me like something important was lost in your patch (it
-doesn't mention ac_cv_header_regex_h anywhere after patching), but
-looking at libusb's configure script it doesn't seem to be used anyway.
-
-> +$(LIBUSB_TARGET_INSTALL_TARGET): $(LIBUSB_TARGET_INSTALL_STAGING)
-> +	$(call MESSAGE,"Installing to target")
-
-> -libusb: uclibc $(TARGET_DIR)/$(LIBUSB_BINARY)
-> +$(LIBUSB_TARGET_UNINSTALL):
-> +	$(call MESSAGE,"Uninstalling")
-
-Why the messages? Is this standard among our autotools-using packages?
-
-thanks!
-Hamish
 -- 
-Hamish Moffatt VK3SB <hamish@debian.org> <hamish@cloud.net.au>
+Bye, Peter Korsgaard
