@@ -1,50 +1,55 @@
-From: Hamish Moffatt <hamish@cloud.net.au>
-Date: Fri, 13 Jun 2008 22:05:29 +1000
+From: Peter Korsgaard <jacmet@uclibc.org>
+Date: Fri, 13 Jun 2008 14:12:04 +0200
 Subject: [Buildroot] Still no answer for a contribution -- "me too"
-In-Reply-To: <87a5b0800806130407wddd40a0v53712cddcb76b611@mail.gmail.com>
+In-Reply-To: <20080613120529.GB31396@cloud.net.au> (Hamish Moffatt's message
+	of "Fri\, 13 Jun 2008 22\:05\:29 +1000")
 References: <20080611161156.33737116@crazy>
 	<200806130824.42363.buildroot.atmel.com@pollet.net>
 	<87a5b0800806130407wddd40a0v53712cddcb76b611@mail.gmail.com>
-Message-ID: <20080613120529.GB31396@cloud.net.au>
+	<20080613120529.GB31396@cloud.net.au>
+Message-ID: <87bq25pm97.fsf@macbook.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Fri, Jun 13, 2008 at 12:07:42PM +0100, Will Newton wrote:
-> I must confess that has been my experience too. I tried asking Erik
-> for commit access but again, no response. Perhaps he is working on
-> other projects?
+>>>>> "Hamish" == Hamish Moffatt <hamish@cloud.net.au> writes:
 
-I think anyone wanting write access should send some patches here first
-for review. I guess you already did this -- I don't recall sorry.
+Hi,
 
-Personally even though I have commit access I think it is still good to
-discuss anything remotely controversial before committing it. Most
-changes (new packages, package updates) don't fall in that category of
-course.
+ Hamish> On Fri, Jun 13, 2008 at 12:07:42PM +0100, Will Newton wrote:
+ >> I must confess that has been my experience too. I tried asking Erik
+ >> for commit access but again, no response. Perhaps he is working on
+ >> other projects?
 
-> It's a hard balance to strike, I don't think it's right to demand
-> anything of people on a volunteer led project but some of us have a
-> job to do and a limited amount of time to do it in.
+ Hamish> I think anyone wanting write access should send some patches
+ Hamish> here first for review. I guess you already did this -- I
+ Hamish> don't recall sorry.
 
-Does your job require your changes to be committed to the master
-repository?
+ Hamish> Personally even though I have commit access I think it is
+ Hamish> still good to discuss anything remotely controversial before
+ Hamish> committing it. Most changes (new packages, package updates)
+ Hamish> don't fall in that category of course.
 
-Personally I am using buildroot in a commercial product for my day job.
-I am contributing everything that is relevant back to the buildroot
-repository, but we have some changes specific to our application and
-some proprietary packages which will never be merged. We don't expect to
-be able to build our whole product directly from the
-buildroot.uclibc.org repository.
+Agreed.
 
-I'm committing my own changes back to the master repository where
-relevant, and I commit patches from this mailing list in areas that are
-relevant to me and where I think I can properly review them.
-Unfortunately I don't have company time to work on parts of buildroot
-that fall outside these categories.
+ Hamish> Personally I am using buildroot in a commercial product for
+ Hamish> my day job.  I am contributing everything that is relevant
+ Hamish> back to the buildroot repository, but we have some changes
+ Hamish> specific to our application and some proprietary packages
+ Hamish> which will never be merged. We don't expect to be able to
+ Hamish> build our whole product directly from the
+ Hamish> buildroot.uclibc.org repository.
 
-Hamish
+ Hamish> I'm committing my own changes back to the master repository
+ Hamish> where relevant, and I commit patches from this mailing list
+ Hamish> in areas that are relevant to me and where I think I can
+ Hamish> properly review them.  Unfortunately I don't have company
+ Hamish> time to work on parts of buildroot that fall outside these
+ Hamish> categories.
+
+Same here.
+
 -- 
-Hamish Moffatt VK3SB <hamish@debian.org> <hamish@cloud.net.au>
+Bye, Peter Korsgaard
