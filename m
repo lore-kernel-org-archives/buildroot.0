@@ -1,30 +1,34 @@
 From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Fri, 13 Jun 2008 10:48:59 +0200
-Subject: [Buildroot] macro `AM_PROG_LIBTOOL' not found
-In-Reply-To: <484EDB38.8030308@acsatlanta.com> (Joseph G. Boike's message of
-	"Tue\, 10 Jun 2008 14\:51\:20 -0500")
-References: <484EDB38.8030308@acsatlanta.com>
-Message-ID: <87od65yb2c.fsf@macbook.be.48ers.dk>
+Date: Fri, 13 Jun 2008 10:49:50 +0200
+Subject: [Buildroot] undefined macro: AM_PROG_LIBTOOL (buildroot failure)
+In-Reply-To: <6306c640805281409v1bf5384ag2c1353fd4aead298@mail.gmail.com> (Ram
+	kumar's message of "Thu\, 29 May 2008 02\:39\:28 +0530")
+References: <6306c640805281409v1bf5384ag2c1353fd4aead298@mail.gmail.com>
+Message-ID: <87k5gtyb0x.fsf@macbook.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Joseph" == Joseph G Boike <joe.boike@acsatlanta.com> writes:
+>>>>> "Ram" == Ram kumar <ramkumar.research@gmail.com> writes:
 
-Hi,
+ Ram> hi,
 
- Joseph> Hi, I'm trying to cross compile buildroot for and Atmel
- Joseph> at91sam9260 ARM processor and keep getting the same error
- Joseph> below.  I started w/ a clean buildroot subdirectory and used
- Joseph> the default make (make at91sam9260_defconfig) setup.  My
- Joseph> native autoconf, automake and libtool are all in /usr/bin The
- Joseph> error references m4_pattern_allow.  Where do I add that?  How
- Joseph> do I keep it if I get a new version of buildroot?  Regards,
- Joseph> Joe
+ Ram>      Iam trying to build a development environment using
+ Ram> buildroot for my atmel eval kit (AT91SAM9260 ek).I follow the
+ Ram> instruaction in the website http://
+ Ram> www.linux4sam.org/twiki/bin/view/Linux4SAM/BuildRoot. But my
+ Ram> buildroot fails when it is trying to build libusb.
 
-libusb missed a dependency on host-libtool. Fixed in r22311-r22313.
+ Ram> First the buildroot throws 404 file not found error since
+ Ram> http://ftp.debian.org /pool/main/libu/libusb/ doesn't have
+ Ram> libusb_0.1.12-9.diff.gz which buildroot looks for......so i
+ Ram> edited the /buildroot/package/libusb/libusb.mk file to download
+ Ram> libusb_0.1.12-11.diff.gz which is present in the FTP server.
+
+libusb missed a dependency on host-libtool and patch version bumped.
+Fixed in r22311-r22313.
 
 -- 
 Bye, Peter Korsgaard
