@@ -1,36 +1,30 @@
-From: jacmet at uclibc.org <jacmet@uclibc.org>
-Date: Fri, 13 Jun 2008 01:47:55 -0700 (PDT)
-Subject: [Buildroot] svn commit: trunk/buildroot/package/libusb
-Message-ID: <20080613084755.9004A3C804@busybox.net>
+From: Peter Korsgaard <jacmet@uclibc.org>
+Date: Fri, 13 Jun 2008 10:48:59 +0200
+Subject: [Buildroot] macro `AM_PROG_LIBTOOL' not found
+In-Reply-To: <484EDB38.8030308@acsatlanta.com> (Joseph G. Boike's message of
+	"Tue\, 10 Jun 2008 14\:51\:20 -0500")
+References: <484EDB38.8030308@acsatlanta.com>
+Message-ID: <87od65yb2c.fsf@macbook.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Author: jacmet
-Date: 2008-06-13 01:47:55 -0700 (Fri, 13 Jun 2008)
-New Revision: 22313
+>>>>> "Joseph" == Joseph G Boike <joe.boike@acsatlanta.com> writes:
 
-Log:
-libusb: bump patch version
+Hi,
 
+ Joseph> Hi, I'm trying to cross compile buildroot for and Atmel
+ Joseph> at91sam9260 ARM processor and keep getting the same error
+ Joseph> below.  I started w/ a clean buildroot subdirectory and used
+ Joseph> the default make (make at91sam9260_defconfig) setup.  My
+ Joseph> native autoconf, automake and libtool are all in /usr/bin The
+ Joseph> error references m4_pattern_allow.  Where do I add that?  How
+ Joseph> do I keep it if I get a new version of buildroot?  Regards,
+ Joseph> Joe
 
-Modified:
-   trunk/buildroot/package/libusb/libusb.mk
+libusb missed a dependency on host-libtool. Fixed in r22311-r22313.
 
-
-Changeset:
-Modified: trunk/buildroot/package/libusb/libusb.mk
-===================================================================
---- trunk/buildroot/package/libusb/libusb.mk	2008-06-13 08:45:35 UTC (rev 22312)
-+++ trunk/buildroot/package/libusb/libusb.mk	2008-06-13 08:47:55 UTC (rev 22313)
-@@ -4,7 +4,7 @@
- #
- #############################################################
- LIBUSB_VERSION:=0.1.12
--LIBUSB_PATCH_FILE:=libusb_$(LIBUSB_VERSION)-9.diff.gz
-+LIBUSB_PATCH_FILE:=libusb_$(LIBUSB_VERSION)-12.diff.gz
- LIBUSB_SOURCE:=libusb_$(LIBUSB_VERSION).orig.tar.gz
- #LIBUSB_SITE:=http://$(BR2_SOURCEFORGE_MIRROR).dl.sourceforge.net/sourceforge/libusb/
- LIBUSB_SITE:=$(BR2_DEBIAN_MIRROR)/debian/pool/main/libu/libusb
+-- 
+Bye, Peter Korsgaard
