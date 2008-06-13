@@ -1,47 +1,51 @@
 From: Hamish Moffatt <hamish@cloud.net.au>
-Date: Sat, 14 Jun 2008 00:09:23 +1000
+Date: Sat, 14 Jun 2008 00:11:55 +1000
 Subject: [Buildroot] Still no answer for a contribution -- "me too"
-In-Reply-To: <1213361084.10637.18.camel@kokopelli>
-References: <20080611161156.33737116@crazy>
-	<200806130824.42363.buildroot.atmel.com@pollet.net>
-	<87a5b0800806130407wddd40a0v53712cddcb76b611@mail.gmail.com>
-	<20080613120529.GB31396@cloud.net.au>
-	<1213361084.10637.18.camel@kokopelli>
-Message-ID: <20080613140923.GA4318@cloud.net.au>
+In-Reply-To: <006901c8cd5d$a0aca220$040514ac@atmel.com>
+References: <20080613120529.GB31396@cloud.net.au>
+	<006901c8cd5d$a0aca220$040514ac@atmel.com>
+Message-ID: <20080613141155.GB4318@cloud.net.au>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Fri, Jun 13, 2008 at 05:44:44AM -0700, Brian Beattie wrote:
-> On Fri, 2008-06-13 at 22:05 +1000, Hamish Moffatt wrote:
+On Fri, Jun 13, 2008 at 03:33:10PM +0200, Ulf Samuelsson wrote:
+> Hamish Moffatt wrote:
+> > Personally I am using buildroot in a commercial product for my day
+> > job. I am contributing everything that is relevant back to the
+> > buildroot repository, but we have some changes specific to our
+> > application and some proprietary packages which will never be merged.
+> > We don't expect to be able to build our whole product directly from
+> > the buildroot.uclibc.org repository.
 > 
-> > Personally even though I have commit access I think it is still good to
-> > discuss anything remotely controversial before committing it. Most
-> > changes (new packages, package updates) don't fall in that category of
-> > course.
+> I think this is fairly common.
+> That is why I proposed the "local" directory,
+> where the location can be defined as a shell environment variable.
 > 
-> I have a change I'd love to discuss.  I have asked twice now about the
-> correct place to add support for a new board and have received no
-> response whatever.
+> BR2_LOCAL or something.
 > 
-> This makes me sceptical of even trying to submit a patch.
+> By putting your packages here, you should be able to download
+> a new svn and use it without modifications.
 > 
-> try #3, I would like to add support for a board from KwikByte based on
-> the at91rm9200 processor. should I add it to target/device/Atmel or
-> should I create a new directory target/device/KwikByte or some other
-> location.
+> It was a lot of protests at that time, and it was never fully implemented.
 > 
-> I have a patch for the first option.
+> The make saveconfig/getconfig uses the local directory.
+> 
+> I think that it would be easy to expand to have packages in this directory as well.
 
-I don't know the answer.
-Is the board made by Atmel or some other vendor? Are the other boards in
-target/device/Atmel all made by Atmel or a mix of vendors? I guess it
-should follow the lead of the other boards.
+I am using several boards defined in local/<project> already, this
+system works very well for me. 
 
-The Atmel guys seem to be suggesting it should go in
-target/device/KwikByte.
+So far we have added our proprietary packages in a new top-level
+directory and editted the main makefiles to include it. I think it would
+be useful to include this structure in vanilla buildroot though - I
+prefer to minimise my changes to the standard makefiles.
+
+I'd prefer not to mix my packages in with the existing local/ directory.
+It could either be in a user-defined location as you suggest or just a
+new vendor/ directory or similar.
 
 Hamish
 -- 
