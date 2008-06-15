@@ -1,8 +1,7 @@
 From: bugs at busybox.net <bugs@busybox.net>
-Date: Sat, 14 Jun 2008 17:01:43 -0700
-Subject: [Buildroot] [buildroot 0003754]: dnsmasq fails to link on i686
-	platforms
-Message-ID: <94d1462a817668b1bc090ca5aee7f413@bugs.uclibc.org>
+Date: Sun, 15 Jun 2008 03:55:47 -0700
+Subject: [Buildroot] [buildroot 0003764]: elf2flt doesn't support powerpc
+Message-ID: <ee35ed13a6c8089b579774a8eefd08fd@bugs.uclibc.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -12,33 +11,37 @@ To: buildroot@busybox.net
 
 The following issue has been SUBMITTED. 
 ====================================================================== 
-http://busybox.net/bugs/view.php?id=3754 
+http://busybox.net/bugs/view.php?id=3764 
 ====================================================================== 
-Reported By:                KHAksnes
+Reported By:                fabo
 Assigned To:                buildroot
 ====================================================================== 
 Project:                    buildroot
-Issue ID:                   3754
+Issue ID:                   3764
 Category:                   Architecture Specific
 Reproducibility:            always
-Severity:                   block
+Severity:                   minor
 Priority:                   normal
 Status:                     assigned
 ====================================================================== 
-Date Submitted:             06-14-2008 17:01 PDT
-Last Modified:              06-14-2008 17:01 PDT
+Date Submitted:             06-15-2008 03:55 PDT
+Last Modified:              06-15-2008 03:55 PDT
 ====================================================================== 
-Summary:                    dnsmasq fails to link on i686 platforms
+Summary:                    elf2flt doesn't support powerpc
 Description: 
-dnsmask insists on loading libdbus-1.so from /lib instead of
-build_i686/staging_dir/usr/lib ending with linking failure as expected.
-I am using svn version 22342 of buildroot.
+elf2flt doesn't support powerpc:
+
+buildroot/toolchain_build_powerpc/elf2flt/elf2flt.c:115:2: error: #error
+"Don't know how to support your CPU architecture??"
+
+I guess elf2flt must be disabled if powerpc architecture is used.
+However, I've seen some patches on internet that add powerpc support.
 ====================================================================== 
 
 Issue History 
 Date Modified   Username       Field                    Change               
 ====================================================================== 
-06-14-08 17:01  KHAksnes       New Issue                                    
-06-14-08 17:01  KHAksnes       Status                   new => assigned     
-06-14-08 17:01  KHAksnes       Assigned To               => buildroot       
+06-15-08 03:55  fabo           New Issue                                    
+06-15-08 03:55  fabo           Status                   new => assigned     
+06-15-08 03:55  fabo           Assigned To               => buildroot       
 ======================================================================
