@@ -1,50 +1,52 @@
-From: bugs at busybox.net <bugs@busybox.net>
-Date: Sun, 15 Jun 2008 13:40:28 -0700
-Subject: [Buildroot] [buildroot 0003754]: dnsmasq fails to link on i686
-	platforms
-Message-ID: <884452b7d503d82d60b4401573035a36@bugs.busybox.net>
+From: jacmet at uclibc.org <jacmet@uclibc.org>
+Date: Sun, 15 Jun 2008 13:44:06 -0700 (PDT)
+Subject: [Buildroot] svn commit: trunk/buildroot/package/valgrind
+Message-ID: <20080615204406.99DA33C932@busybox.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+Author: jacmet
+Date: 2008-06-15 13:44:05 -0700 (Sun, 15 Jun 2008)
+New Revision: 22359
 
-A NOTE has been added to this issue. 
-====================================================================== 
-http://busybox.net/bugs/view.php?id=3754 
-====================================================================== 
-Reported By:                KHAksnes
-Assigned To:                buildroot
-====================================================================== 
-Project:                    buildroot
-Issue ID:                   3754
-Category:                   Architecture Specific
-Reproducibility:            always
-Severity:                   block
-Priority:                   normal
-Status:                     assigned
-====================================================================== 
-Date Submitted:             06-14-2008 17:01 PDT
-Last Modified:              06-15-2008 13:40 PDT
-====================================================================== 
-Summary:                    dnsmasq fails to link on i686 platforms
-Description: 
-dnsmask insists on loading libdbus-1.so from /lib instead of
-build_i686/staging_dir/usr/lib ending with linking failure as expected.
-I am using svn version 22342 of buildroot.
-====================================================================== 
+Log:
+valgrind: there is no vgskin_none.so anymore, use coregrind/valgrind instead
 
----------------------------------------------------------------------- 
- jacmet - 06-15-08 13:40  
----------------------------------------------------------------------- 
-I cannot reproduce it on ppc, please provide more details 
 
-Issue History 
-Date Modified   Username       Field                    Change               
-====================================================================== 
-06-14-08 17:01  KHAksnes       New Issue                                    
-06-14-08 17:01  KHAksnes       Status                   new => assigned     
-06-14-08 17:01  KHAksnes       Assigned To               => buildroot       
-06-15-08 13:40  jacmet         Note Added: 0008264                          
-======================================================================
+Modified:
+   trunk/buildroot/package/valgrind/valgrind.mk
+
+
+Changeset:
+Modified: trunk/buildroot/package/valgrind/valgrind.mk
+===================================================================
+--- trunk/buildroot/package/valgrind/valgrind.mk	2008-06-15 20:20:33 UTC (rev 22358)
++++ trunk/buildroot/package/valgrind/valgrind.mk	2008-06-15 20:44:05 UTC (rev 22359)
+@@ -39,12 +39,11 @@
+ 	)
+ 	touch $(VALGRIND_DIR)/.configured
+ 
+-$(VALGRIND_DIR)/none/vgskin_none.so: $(VALGRIND_DIR)/.configured
++$(VALGRIND_DIR)/coregrind/valgrind: $(VALGRIND_DIR)/.configured
+ 	$(MAKE) -C $(VALGRIND_DIR)
+-	-$(STRIPCMD) $(STRIP_STRIP_UNNEEDED) $(VALGRIND_DIR)/*.so*
+-	touch -c $(VALGRIND_DIR)/none/vgskin_none.so
++	touch -c $@
+ 
+-$(TARGET_DIR)/usr/bin/valgrind: $(VALGRIND_DIR)/none/vgskin_none.so
++$(TARGET_DIR)/usr/bin/valgrind: $(VALGRIND_DIR)/coregrind/valgrind
+ 	$(MAKE) \
+ 	    prefix=$(TARGET_DIR)/usr \
+ 	    exec_prefix=$(TARGET_DIR)/usr \
+@@ -69,7 +68,7 @@
+ 	#cp $(VALGRIND_DIR)/valgrind.default $(TARGET_DIR)/etc/default/valgrind
+ 	#mkdir -p $(TARGET_DIR)/usr/lib/valgrind
+ 	#cp $(VALGRIND_DIR)/woody.supp $(TARGET_DIR)/usr/lib/valgrind/
+-	touch -c $(TARGET_DIR)/usr/bin/valgrind
++	touch -c $@
+ 
+ valgrind: $(TARGET_DIR)/usr/bin/valgrind
+ 
