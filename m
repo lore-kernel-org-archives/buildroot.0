@@ -1,23 +1,67 @@
-From: Fathi Boudra <fboudra@gmail.com>
-Date: Mon, 16 Jun 2008 00:22:21 +0200
-Subject: [Buildroot] [buildroot 0003764]: elf2flt doesn't support powerpc
-In-Reply-To: <a02c9e436eecc029587d18803589723f@busybox.net>
-References: <a02c9e436eecc029587d18803589723f@busybox.net>
-Message-ID: <6a2e33620806151522t438040dbved3e70da1f74cec4@mail.gmail.com>
+From: Ulf Samuelsson <ulf@atmel.com>
+Date: Mon, 16 Jun 2008 00:01:14 +0200
+Subject: [Buildroot] Looking for svn commit access
+References: <d6cda7730806130736h51dc34bev7e87ee4111ab39ef@mail.gmail.com>
+Message-ID: <012301c8cf33$ba1d1910$40000a0a@atmel.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-----------------------------------------------------------------------
->  jacmet - 06-15-08 13:00
-> ----------------------------------------------------------------------
-> There's afaik no uclinux (E.G. mmu-less Linux) support for powerpc. Why
-> would you want that? What processor are you using?
->
+Thiago A. Corr?a wrote:
+> Hi,
+> 
+>   I've sent an email to Mike about it a couple of days ago, and he
+> said that since he isn't currently tracking much of buildroot
+> development that it would be necessary for current developers to vouch
+> first.
 
-I tried an "allyesconfig" with powerpc/603e build.
--------------- next part --------------
-An HTML attachment was scrubbed...
-URL: http://busybox.net/lists/buildroot/attachments/20080616/92563fec/attachment-0001.htm 
+I vouch for You.
+
+> 
+>  I suppose I'm no stranger on the list, but let me introduce myself
+> properly then *smile*
+> 
+>  I work for a company that produces embedded devices for commercial
+> automation. We are now starting to use embedded linux, thus some of my
+> development time is sponsored, so to speak. We are currently using
+> buildroot for AVR32 AP7000 and x86, so I would be running builds and
+> testing mostly on those two platforms.
+> 
+>  On a less relevant side to buildroot, I'm actually C and C++
+> developer. I participate in other embedded related project, Ethernut,
+> which we also use in our business.
+> 
+>  I've sent patches before, most of which were commited:
+> http://www.nabble.com/-PATCH--Qtopia4-improvements-%28resubmit%29-tp12276190p12276190.html
+> http://www.nabble.com/-PATCH--Fix-pppd-make-clean-and-small-cleanup-tp12339672p12339672.html
+> http://www.nabble.com/-PATCH--Fix-sed-fail-when-building-qtopia-tp12240850p12245923.html
+> 
+>  There are some others but I'm not going to list them all up.
+> 
+>  I have been committing to Google's repository, and I usually IM John
+> to ask for help and comments using gmail, so I guess he knows me best.
+> 
+> Kind Regards,
+>   Thiago A. Correa
+> _______________________________________________
+> buildroot mailing list
+> buildroot at uclibc.org
+> http://busybox.net/mailman/listinfo/buildroot
+
+Best Regards
+Ulf Samuelsson                ulf at atmel.com
+Atmel Nordic AB
+Mail:  Box 2033, 174 02 Sundbyberg, Sweden
+Visit:  Kavalleriv?gen 24, 174 58 Sundbyberg, Sweden
+Phone +46 (8) 441 54 22     Fax +46 (8) 441 54 29
+GSM    +46 (706) 22 44 57
+
+
+Technical support when I am not available:
+AT90 AVR Applications Group: mailto:avr at atmel.com
+AT91 ARM Applications Group: mailto:at91support at atmel.com
+AVR32 Applications Group        mailto:avr32 at atmel.com
+http://www.avrfreaks.net/;            http://avr32linux.org/
+http://www.at91.com/ ;                 http://www.linux4sam.org/
