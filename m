@@ -1,7 +1,7 @@
 From: jacmet at uclibc.org <jacmet@uclibc.org>
-Date: Mon, 16 Jun 2008 04:15:52 -0700 (PDT)
-Subject: [Buildroot] svn commit: trunk/buildroot/package/python
-Message-ID: <20080616111552.31873F800B@busybox.net>
+Date: Mon, 16 Jun 2008 04:16:11 -0700 (PDT)
+Subject: [Buildroot] svn commit: trunk/buildroot/package/libogg
+Message-ID: <20080616111611.6BE11F8012@busybox.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -9,32 +9,34 @@ Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
 Author: jacmet
-Date: 2008-06-16 04:15:51 -0700 (Mon, 16 Jun 2008)
-New Revision: 22369
+Date: 2008-06-16 04:16:10 -0700 (Mon, 16 Jun 2008)
+New Revision: 22370
 
 Log:
-python: fix hostpython target.
+libogg: fix libogg.a target
 
-Remove invalid hyphen in front of -$(MAKE) in the middle of a subshell
-
-Patch by Conrad Parker.
+Based on patch by Conrad Parker.
 
 
 Modified:
-   trunk/buildroot/package/python/python.mk
+   trunk/buildroot/package/libogg/libogg.mk
 
 
 Changeset:
-Modified: trunk/buildroot/package/python/python.mk
+Modified: trunk/buildroot/package/libogg/libogg.mk
 ===================================================================
---- trunk/buildroot/package/python/python.mk	2008-06-16 11:15:31 UTC (rev 22368)
-+++ trunk/buildroot/package/python/python.mk	2008-06-16 11:15:51 UTC (rev 22369)
-@@ -89,7 +89,7 @@
- 		$(MAKE) python Parser/pgen && \
- 		mv python hostpython && \
- 		mv Parser/pgen Parser/hostpgen && \
--		-$(MAKE) distclean \
-+		$(MAKE) distclean \
- 	) && \
- 	touch $@
+--- trunk/buildroot/package/libogg/libogg.mk	2008-06-16 11:15:51 UTC (rev 22369)
++++ trunk/buildroot/package/libogg/libogg.mk	2008-06-16 11:16:10 UTC (rev 22370)
+@@ -55,11 +55,9 @@
+ ifneq ($(strip $(BR2_HAVE_MANPAGES)),y)
+ 	rm -rf $(TARGET_DIR)/usr/share/doc/$(LIBOGG_NAME)
+ endif
+-	touch $@
  
+ $(TARGET_DIR)/usr/lib/libogg.a: $(TARGET_DIR)/usr/lib/libogg.so
+-	cp -dpf $(LIBOGG_DIR)/lib/libogg.a $(TARGET_DIR)/usr/lib/
+-	touch $@
++	cp -dpf $(STAGING_DIR)/usr/lib/libogg.a $@
+ 
+ libogg-header: $(TARGET_DIR)/usr/lib/libogg.a
+ 	mkdir -p $(TARGET_DIR)/usr/include/ogg
