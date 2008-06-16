@@ -1,59 +1,33 @@
-From: bugs at busybox.net <bugs@busybox.net>
-Date: Mon, 16 Jun 2008 04:43:23 -0700
-Subject: [Buildroot] [buildroot 0003814]: libogg & libvorbis instalation
-	fails
-Message-ID: <7522036b51cbaa876f9bc3ac87009de3@busybox.net>
+From: Conrad Parker <conrad@metadecks.org>
+Date: Mon, 16 Jun 2008 21:12:27 +0900
+Subject: [Buildroot] [PATCH] update package/lsof for lsof-4.80 in
+	lsof.mk and lsof-*.patch
+In-Reply-To: <87tzftaaz2.fsf@macbook.be.48ers.dk>
+References: <dba6c0830806152227m7995f83arf8c479b725202101@mail.gmail.com>
+	<87tzftaaz2.fsf@macbook.be.48ers.dk>
+Message-ID: <dba6c0830806160512k2bfedb92sc6aac0e3e20ae6cb@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+2008/6/16 Peter Korsgaard <jacmet@uclibc.org>:
+>>>>>> "Conrad" == Conrad Parker <conrad@metadecks.org> writes:
+>
+>  Conrad> The following patch updates package/lsof to build the current version.
+>  Conrad> (The previous one no longer exists on the upstream server).
+>
+> Thanks, but the patch is badly whitespace damaged. Care to resend with
+> a proper client (E.G. git-send-email)?
 
-The following issue has been RESOLVED. 
-====================================================================== 
-http://busybox.net/bugs/view.php?id=3814 
-====================================================================== 
-Reported By:                tklas
-Assigned To:                buildroot
-====================================================================== 
-Project:                    buildroot
-Issue ID:                   3814
-Category:                   Other
-Reproducibility:            always
-Severity:                   minor
-Priority:                   normal
-Status:                     resolved
-Resolution:                 fixed
-Fixed in Version:           
-====================================================================== 
-Date Submitted:             06-16-2008 04:14 PDT
-Last Modified:              06-16-2008 04:43 PDT
-====================================================================== 
-Summary:                    libogg & libvorbis instalation fails
-Description: 
-Ogg and Vorbis libraries fails to install. I changed libogg.mk and
-libvorbis.mk (attached patch) and it works. But I'm not sure if it is
-correct, please check it.
+gah, sorry about that. I've attached the patch to this email.
 
-====================================================================== 
-
----------------------------------------------------------------------- 
- jacmet - 06-16-08 04:43  
----------------------------------------------------------------------- 
-Thanks, but this is already fixed in trunk (actually, the header install
-targets have been removed as the global BR2_HAVE_DEVFILES option handles
-it) 
-
-Issue History 
-Date Modified   Username       Field                    Change               
-====================================================================== 
-06-16-08 04:14  tklas          New Issue                                    
-06-16-08 04:14  tklas          Status                   new => assigned     
-06-16-08 04:14  tklas          Assigned To               => buildroot       
-06-16-08 04:14  tklas          File Added: vorbis_install.patch                 
-  
-06-16-08 04:43  jacmet         Status                   assigned => resolved
-06-16-08 04:43  jacmet         Resolution               open => fixed       
-06-16-08 04:43  jacmet         Note Added: 0008314                          
-======================================================================
+Conrad.
+-------------- next part --------------
+A non-text attachment was scrubbed...
+Name: 0001-update-package-lsof-for-lsof-4.80-in-lsof.mk-and-lso.patch
+Type: text/x-patch
+Size: 4135 bytes
+Desc: not available
+Url : http://busybox.net/lists/buildroot/attachments/20080616/16e66757/attachment-0001.bin 
