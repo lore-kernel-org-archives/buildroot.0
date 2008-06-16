@@ -1,25 +1,51 @@
-From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Mon, 16 Jun 2008 12:31:47 +0200
-Subject: [Buildroot] [PATCH] build fix for package/libogg
-In-Reply-To: <dba6c0830806152215t614b3748j6d238f59ff342577@mail.gmail.com>
-	(Conrad Parker's message of "Mon\, 16 Jun 2008 14\:15\:13 +0900")
-References: <dba6c0830806152215t614b3748j6d238f59ff342577@mail.gmail.com>
-Message-ID: <87y755acx8.fsf@macbook.be.48ers.dk>
+From: bugs at busybox.net <bugs@busybox.net>
+Date: Mon, 16 Jun 2008 03:40:18 -0700
+Subject: [Buildroot] [buildroot 0003804]: GCC default ABI (EABI/OABI) on ARM
+	depens on "GNU target suffix"
+Message-ID: <f649aba48b6f23d96b37fcb5663a93bd@bugs.uclibc.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Conrad" == Conrad Parker <conrad@metadecks.org> writes:
 
-Hi,
+The following issue has been SUBMITTED. 
+====================================================================== 
+http://busybox.net/bugs/view.php?id=3804 
+====================================================================== 
+Reported By:                tklas
+Assigned To:                buildroot
+====================================================================== 
+Project:                    buildroot
+Issue ID:                   3804
+Category:                   Architecture Specific
+Reproducibility:            always
+Severity:                   minor
+Priority:                   normal
+Status:                     assigned
+====================================================================== 
+Date Submitted:             06-16-2008 03:40 PDT
+Last Modified:              06-16-2008 03:40 PDT
+====================================================================== 
+Summary:                    GCC default ABI (EABI/OABI) on ARM depens on "GNU
+target suffix"
+Description: 
+When "GNU target suffix" (BR2_GNU_TARGET_SUFFIX) is set to linux-*gnueabi,
+GCC uses EABI as default, elsewhere it uses OABI. So when BR2_ARM_EABI is
+selected and BR2_GNU_TARGET_SUFFIX is not *gnueabi, some code is compiled
+with EABI and some with OABI. Compilation is succesfull, but applications
+may crash or do some mysterious things.
 
- Conrad> libogg.a is built in src/.libs/ not lib/ (libogg-1.1.3/lib
- Conrad> does not exist) cheers,
+This problem shoud be documented and BR2_ARM_EABI & BR2_GNU_TARGET_SUFFIX
+combination should be checked before build.
 
-Thanks. I committed a slightly different patch (take libogg.a from
-staging_dir like for the .so).
+====================================================================== 
 
--- 
-Bye, Peter Korsgaard
+Issue History 
+Date Modified   Username       Field                    Change               
+====================================================================== 
+06-16-08 03:40  tklas          New Issue                                    
+06-16-08 03:40  tklas          Status                   new => assigned     
+06-16-08 03:40  tklas          Assigned To               => buildroot       
+======================================================================
