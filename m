@@ -1,35 +1,29 @@
-From: Conrad Parker <conrad@metadecks.org>
-Date: Mon, 16 Jun 2008 14:58:24 +0900
-Subject: [Buildroot] [PATCH] build fix for package/python
-Message-ID: <dba6c0830806152258i78970879leb61228913545743@mail.gmail.com>
+From: Peter Korsgaard <jacmet@uclibc.org>
+Date: Mon, 16 Jun 2008 09:05:17 +0200
+Subject: [Buildroot] [buildroot 0003764]: elf2flt doesn't support powerpc
+In-Reply-To: <6a2e33620806151522t438040dbved3e70da1f74cec4@mail.gmail.com>
+	(Fathi Boudra's message of "Mon\, 16 Jun 2008 00\:22\:21 +0200")
+References: <a02c9e436eecc029587d18803589723f@busybox.net>
+	<6a2e33620806151522t438040dbved3e70da1f74cec4@mail.gmail.com>
+Message-ID: <87y755kggi.fsf@macbook.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Removed invalid hyphen in front of -$(MAKE) in the middle of a subshell;
-this looks like it was left over from an earlier use as a standalone
-makefile rule, where the - would have specified to allow failure.
+>>>>> "Fathi" == Fathi Boudra <fboudra@gmail.com> writes:
 
-Conrad.
+Hi,
 
----
- package/python/python.mk |    2 +-
- 1 files changed, 1 insertions(+), 1 deletions(-)
+ Fathi>     There's afaik no uclinux (E.G. mmu-less Linux) support for
+ Fathi>     powerpc. Why would you want that? What processor are you
+ Fathi>     using?
 
-diff --git a/package/python/python.mk b/package/python/python.mk
-index 82c938e..53d59c8 100644
---- a/package/python/python.mk
-+++ b/package/python/python.mk
-@@ -89,7 +89,7 @@ $(PYTHON_DIR)/.hostpython: $(PYTHON_DIR)/.patched
- 		$(MAKE) python Parser/pgen && \
- 		mv python hostpython && \
- 		mv Parser/pgen Parser/hostpgen && \
--		-$(MAKE) distclean \
-+		$(MAKE) distclean \
- 	) && \
- 	touch $@
+
+ Fathi> I tried an "allyesconfig" with powerpc/603e build.
+
+Ahh, I'll add !powerpc to the depends for that. 
 
 -- 
-1.5.4.3
+Bye, Peter Korsgaard
