@@ -1,7 +1,7 @@
 From: jacmet at uclibc.org <jacmet@uclibc.org>
-Date: Mon, 16 Jun 2008 04:42:16 -0700 (PDT)
+Date: Mon, 16 Jun 2008 04:42:19 -0700 (PDT)
 Subject: [Buildroot] svn commit: trunk/buildroot/package/libvorbis
-Message-ID: <20080616114216.F1D213C96B@busybox.net>
+Message-ID: <20080616114220.06FD23C970@busybox.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -9,13 +9,13 @@ Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
 Author: jacmet
-Date: 2008-06-16 04:42:16 -0700 (Mon, 16 Jun 2008)
-New Revision: 22376
+Date: 2008-06-16 04:42:19 -0700 (Mon, 16 Jun 2008)
+New Revision: 22377
 
 Log:
-libvorbis: make tremor option description more clear
+libvorbis: use BR2_SOFT_FLOAT to set default for tremor
 
-Also remove comment about not being implemented.
+Use BR2_SOFT_FLOAT to set default for tremor instead of hardcoded arch list.
 
 
 Modified:
@@ -25,20 +25,14 @@ Modified:
 Changeset:
 Modified: trunk/buildroot/package/libvorbis/Config.in
 ===================================================================
---- trunk/buildroot/package/libvorbis/Config.in	2008-06-16 11:34:29 UTC (rev 22375)
-+++ trunk/buildroot/package/libvorbis/Config.in	2008-06-16 11:42:16 UTC (rev 22376)
-@@ -16,13 +16,12 @@
- 	  WMA and PAC.
+--- trunk/buildroot/package/libvorbis/Config.in	2008-06-16 11:42:16 UTC (rev 22376)
++++ trunk/buildroot/package/libvorbis/Config.in	2008-06-16 11:42:19 UTC (rev 22377)
+@@ -17,7 +17,7 @@
  
  config BR2_PACKAGE_LIBVORBIS_TREMOR
--	bool "libvorbis integer implementation"
-+	bool "use fixed point implementation (tremor)
- 	default y if BR2_arm || BR2_avr32
+ 	bool "use fixed point implementation (tremor)
+-	default y if BR2_arm || BR2_avr32
++	default y if BR2_SOFT_FLOAT
  	default n
  	depends on BR2_PACKAGE_LIBVORBIS
  	help
- 	  Use the Tremor fixed point implementation
--	  Not yet implemented
- 
- comment "libvorbis requires the package libogg to build"
- 	depends on !BR2_PACKAGE_LIBOGG
