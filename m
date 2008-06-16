@@ -1,38 +1,59 @@
-From: jacmet at uclibc.org <jacmet@uclibc.org>
-Date: Mon, 16 Jun 2008 04:42:19 -0700 (PDT)
-Subject: [Buildroot] svn commit: trunk/buildroot/package/libvorbis
-Message-ID: <20080616114220.06FD23C970@busybox.net>
+From: bugs at busybox.net <bugs@busybox.net>
+Date: Mon, 16 Jun 2008 04:43:23 -0700
+Subject: [Buildroot] [buildroot 0003814]: libogg & libvorbis instalation
+	fails
+Message-ID: <7522036b51cbaa876f9bc3ac87009de3@busybox.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Author: jacmet
-Date: 2008-06-16 04:42:19 -0700 (Mon, 16 Jun 2008)
-New Revision: 22377
 
-Log:
-libvorbis: use BR2_SOFT_FLOAT to set default for tremor
+The following issue has been RESOLVED. 
+====================================================================== 
+http://busybox.net/bugs/view.php?id=3814 
+====================================================================== 
+Reported By:                tklas
+Assigned To:                buildroot
+====================================================================== 
+Project:                    buildroot
+Issue ID:                   3814
+Category:                   Other
+Reproducibility:            always
+Severity:                   minor
+Priority:                   normal
+Status:                     resolved
+Resolution:                 fixed
+Fixed in Version:           
+====================================================================== 
+Date Submitted:             06-16-2008 04:14 PDT
+Last Modified:              06-16-2008 04:43 PDT
+====================================================================== 
+Summary:                    libogg & libvorbis instalation fails
+Description: 
+Ogg and Vorbis libraries fails to install. I changed libogg.mk and
+libvorbis.mk (attached patch) and it works. But I'm not sure if it is
+correct, please check it.
 
-Use BR2_SOFT_FLOAT to set default for tremor instead of hardcoded arch list.
+====================================================================== 
 
+---------------------------------------------------------------------- 
+ jacmet - 06-16-08 04:43  
+---------------------------------------------------------------------- 
+Thanks, but this is already fixed in trunk (actually, the header install
+targets have been removed as the global BR2_HAVE_DEVFILES option handles
+it) 
 
-Modified:
-   trunk/buildroot/package/libvorbis/Config.in
-
-
-Changeset:
-Modified: trunk/buildroot/package/libvorbis/Config.in
-===================================================================
---- trunk/buildroot/package/libvorbis/Config.in	2008-06-16 11:42:16 UTC (rev 22376)
-+++ trunk/buildroot/package/libvorbis/Config.in	2008-06-16 11:42:19 UTC (rev 22377)
-@@ -17,7 +17,7 @@
- 
- config BR2_PACKAGE_LIBVORBIS_TREMOR
- 	bool "use fixed point implementation (tremor)
--	default y if BR2_arm || BR2_avr32
-+	default y if BR2_SOFT_FLOAT
- 	default n
- 	depends on BR2_PACKAGE_LIBVORBIS
- 	help
+Issue History 
+Date Modified   Username       Field                    Change               
+====================================================================== 
+06-16-08 04:14  tklas          New Issue                                    
+06-16-08 04:14  tklas          Status                   new => assigned     
+06-16-08 04:14  tklas          Assigned To               => buildroot       
+06-16-08 04:14  tklas          File Added: vorbis_install.patch                 
+  
+06-16-08 04:43  jacmet         Status                   assigned => resolved
+06-16-08 04:43  jacmet         Resolution               open => fixed       
+06-16-08 04:43  jacmet         Note Added: 0008314                          
+======================================================================
