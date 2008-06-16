@@ -1,8 +1,8 @@
 From: bugs at busybox.net <bugs@busybox.net>
-Date: Mon, 16 Jun 2008 03:47:20 -0700
-Subject: [Buildroot] [buildroot 0003394]: compilation problem :
-	__NR_socketcall, __NR_ipc undefined...
-Message-ID: <b4145096d5c5b14da1afa926102f4598@bugs.uclibc.org>
+Date: Mon, 16 Jun 2008 03:51:59 -0700
+Subject: [Buildroot] =?windows-1252?q?=5Bbuildroot_0003364=5D=3A_ARM-EABI_?=
+	=?windows-1252?q?build_!_=93Illegal_Instruction=94?=
+Message-ID: <99d473119bbbdc0d29e3171a084731d5@bugs.uclibc.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -12,66 +12,60 @@ To: buildroot@busybox.net
 
 A NOTE has been added to this issue. 
 ====================================================================== 
-http://busybox.net/bugs/view.php?id=3394 
+http://busybox.net/bugs/view.php?id=3364 
 ====================================================================== 
-Reported By:                rk_appan
+Reported By:                noel_v
 Assigned To:                buildroot
 ====================================================================== 
 Project:                    buildroot
-Issue ID:                   3394
+Issue ID:                   3364
 Category:                   Architecture Specific
 Reproducibility:            always
-Severity:                   block
+Severity:                   major
 Priority:                   normal
 Status:                     assigned
 ====================================================================== 
-Date Submitted:             05-22-2008 02:04 PDT
-Last Modified:              06-16-2008 03:47 PDT
+Date Submitted:             05-19-2008 02:24 PDT
+Last Modified:              06-16-2008 03:51 PDT
 ====================================================================== 
-Summary:                    compilation problem : __NR_socketcall, __NR_ipc
-undefined...
+Summary:                    ARM-EABI build ! ?Illegal Instruction?
 Description: 
-I am building uClibc(0.9.29), when i enable the strace for the target, i am
-getting the following errors.  target is arm926t with EABI support.
+ARM-EABI build ! ?Illegal Instruction? 
 
-please provide me inputs as how to get out of this problem..
+Buildroot: 01/05/2008 
+Target : ARM cpu (AT91SAM9260)
+Kernel : 2.6.25 with latest TARGET patches.
 
-syscall.c: In function 'get_scno':
-syscall.c:1051: warning: passing argument 4 of 'ptrace' makes integer from
-pointer without a cast
-syscall.c:1080: warning: passing argument 4 of 'ptrace' makes integer from
-pointer without a cast
-syscall.c: In function 'syscall_fixup':
-syscall.c:1350: warning: unused variable 'pid'
-syscall.c: In function 'syscall_enter':
-syscall.c:1928: warning: unused variable 'pid'
-syscall.c: In function 'trace_syscall':
-syscall.c:2408: error: '__NR_socketcall' undeclared (first use in this
-function)
-syscall.c:2408: error: (Each undeclared identifier is reported only once
-syscall.c:2408: error: for each function it appears in.)
-syscall.c:2412: error: '__NR_ipc' undeclared (first use in this function)
-make[2]: *** [syscall.o] Error 1
-make[2]: Leaving directory `/home/kans/buildroot/build_arm/strace-4.5.15'
-make[1]: *** [all] Error 2
-make[1]: Leaving directory `/home/kans/buildroot/build_arm/strace-4.5.15'
-make: *** [/home/kans/buildroot/build_arm/strace-4.5.15/strace] Error 2
+
++ Buildroot/busybox compiles and runs fine in OABI .
++ Buildroot/busybox in EABI, compiles BUT lots of things are not working..
+PING fails , UDHCPC fails, INSMOD/MODPROBE fails .. etc... 
+(kernel boots, but some tools (in busybox) are not working).
+
+Double checked build, kernel,buildroot and uclibc have all enabled EABI
+and OABI is disabled ! 
+
+NOTE: started clean new dir .. untarred buildroot .. and rebuild all.
+
+
+
+
+
 
 ====================================================================== 
 
 ---------------------------------------------------------------------- 
- tklas - 06-16-08 03:47  
+ tklas - 06-16-08 03:51  
 ---------------------------------------------------------------------- 
-I had the same problem. You can try my workaround patch attached above.
-Copy this file to buildroot/package/strace/ and rebuild. 
+Maybe you should set GNU target to "linux-uclibcgnueabi" instead of
+"linux-uclibcgnu". (See bug http://busybox.net/bugs/view.php?id=0003804.) 
 
 Issue History 
 Date Modified   Username       Field                    Change               
 ====================================================================== 
-05-22-08 02:04  rk_appan       New Issue                                    
-05-22-08 02:04  rk_appan       Status                   new => assigned     
-05-22-08 02:04  rk_appan       Assigned To               => buildroot       
-06-16-08 03:45  tklas          File Added:
-strace-armeabi_undefined_syscalls.patch                    
-06-16-08 03:47  tklas          Note Added: 0008284                          
+05-19-08 02:24  noel_v         New Issue                                    
+05-19-08 02:24  noel_v         Status                   new => assigned     
+05-19-08 02:24  noel_v         Assigned To               => buildroot       
+05-19-08 05:57  noel_v         Issue Monitored: noel_v                      
+06-16-08 03:51  tklas          Note Added: 0008294                          
 ======================================================================
