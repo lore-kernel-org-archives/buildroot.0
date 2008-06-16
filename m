@@ -1,29 +1,37 @@
-From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Mon, 16 Jun 2008 09:05:17 +0200
-Subject: [Buildroot] [buildroot 0003764]: elf2flt doesn't support powerpc
-In-Reply-To: <6a2e33620806151522t438040dbved3e70da1f74cec4@mail.gmail.com>
-	(Fathi Boudra's message of "Mon\, 16 Jun 2008 00\:22\:21 +0200")
-References: <a02c9e436eecc029587d18803589723f@busybox.net>
-	<6a2e33620806151522t438040dbved3e70da1f74cec4@mail.gmail.com>
-Message-ID: <87y755kggi.fsf@macbook.be.48ers.dk>
+From: jacmet at uclibc.org <jacmet@uclibc.org>
+Date: Mon, 16 Jun 2008 00:15:39 -0700 (PDT)
+Subject: [Buildroot] svn commit: trunk/buildroot/toolchain/elf2flt
+Message-ID: <20080616071539.E65EEF8018@busybox.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Fathi" == Fathi Boudra <fboudra@gmail.com> writes:
+Author: jacmet
+Date: 2008-06-16 00:15:33 -0700 (Mon, 16 Jun 2008)
+New Revision: 22364
 
-Hi,
-
- Fathi>     There's afaik no uclinux (E.G. mmu-less Linux) support for
- Fathi>     powerpc. Why would you want that? What processor are you
- Fathi>     using?
+Log:
+elf2flt: only allow it to be selected on supported archs
 
 
- Fathi> I tried an "allyesconfig" with powerpc/603e build.
+Modified:
+   trunk/buildroot/toolchain/elf2flt/Config.in
 
-Ahh, I'll add !powerpc to the depends for that. 
 
--- 
-Bye, Peter Korsgaard
+Changeset:
+Modified: trunk/buildroot/toolchain/elf2flt/Config.in
+===================================================================
+--- trunk/buildroot/toolchain/elf2flt/Config.in	2008-06-16 07:12:19 UTC (rev 22363)
++++ trunk/buildroot/toolchain/elf2flt/Config.in	2008-06-16 07:15:33 UTC (rev 22364)
+@@ -1,8 +1,6 @@
+-comment "elf2flt"
+-
+ config BR2_ELF2FLT
+ 	bool "Enable elf2flt support?"
+-	depends !BR2_alpha && !BR2_x86_64
++	depends on BR2_arm || BR2_sh || BR2_sparc
+ 	default n
+ 	help
+ 	  uCLinux uses a Binary Flat format commonly known as BFLT. It
