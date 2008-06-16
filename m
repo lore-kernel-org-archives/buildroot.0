@@ -1,45 +1,91 @@
-From: Bernhard Fischer <rep.dot.nop@gmail.com>
-Date: Mon, 16 Jun 2008 17:35:54 +0200
-Subject: [Buildroot] svn
-	commit:	trunk/buildroot/toolchain/external-toolchain
-In-Reply-To: <87prqh323b.fsf@macbook.be.48ers.dk>
-References: <20080616122246.C821B3C987@busybox.net>
-	<20080616135459.GA21225@mx.loc>
-	<87prqh323b.fsf@macbook.be.48ers.dk>
-Message-ID: <20080616153554.GB21225@mx.loc>
+From: bugs at busybox.net <bugs@busybox.net>
+Date: Mon, 16 Jun 2008 08:41:38 -0700
+Subject: [Buildroot] [buildroot 0003814]: libogg & libvorbis instalation
+	fails
+Message-ID: <46d866f0d0533fa158e6f33a10f92b54@busybox.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Mon, Jun 16, 2008 at 04:07:36PM +0200, Peter Korsgaard wrote:
->>>>>> "Bernhard" == Bernhard Fischer <rep.dot.nop@gmail.com> writes:
->
->Hi,
->
-> >> Author: jacmet
-> >> Date: 2008-06-16 05:22:45 -0700 (Mon, 16 Jun 2008)
-> >> New Revision: 22378
-> >> 
-> >> Log:
-> >> toolchain: more sensible uclibc defaults for external toolchain
->
-> Bernhard> Note that the external toolchain always defaulted to use a
-> Bernhard> glibc-based toolchain. Steven should be notified on such a
-> Bernhard> change since (IIRC) it was him who added the
-> Bernhard> external-toolchain thing..
->
->He afaiks reads this list as well, and it's just defaults, so no big
->deal. BR2_TOOLCHAIN_EXTERNAL_LIBS, BR2_TOOLCHAIN_EXTERNAL_PATH and
->BR2_TOOLCHAIN_EXTERNAL_PREFIX weren't set to anything before, so glibc
->users have to configure it anyway.
 
-It would be nice if you would list example values in the help-text for a
-few libc's then (i did not look if you already do this).
+A NOTE has been added to this issue. 
+====================================================================== 
+http://busybox.net/bugs/view.php?id=3814 
+====================================================================== 
+Reported By:                tklas
+Assigned To:                buildroot
+====================================================================== 
+Project:                    buildroot
+Issue ID:                   3814
+Category:                   Other
+Reproducibility:            always
+Severity:                   minor
+Priority:                   normal
+Status:                     feedback
+====================================================================== 
+Date Submitted:             06-16-2008 04:14 PDT
+Last Modified:              06-16-2008 08:41 PDT
+====================================================================== 
+Summary:                    libogg & libvorbis instalation fails
+Description: 
+Ogg and Vorbis libraries fails to install. I changed libogg.mk and
+libvorbis.mk (attached patch) and it works. But I'm not sure if it is
+correct, please check it.
 
->
->We might as well default to something that is right away usable for
->buildroot users.
+====================================================================== 
 
-.. which would be everything but external toolchain, yes ;)
+---------------------------------------------------------------------- 
+ jacmet - 06-16-08 04:43  
+---------------------------------------------------------------------- 
+Thanks, but this is already fixed in trunk (actually, the header install
+targets have been removed as the global BR2_HAVE_DEVFILES option handles
+it) 
+
+---------------------------------------------------------------------- 
+ tklas - 06-16-08 08:28  
+---------------------------------------------------------------------- 
+No, on my system fails installation of library file libogg.a:
+
+<PRE>
+cp -dpf
+/src/Common/buildroot-20080616-iMX31-423P/build_arm/libogg-1.1.3/lib/libogg.a
+/src/Common/buildroot-20080616-iMX31-423P/project_build_arm/uclibc/root/usr/lib/
+cp: cannot stat
+`/src/Common/buildroot-20080616-iMX31-423P/build_arm/libogg-1.1.3/lib/libogg.a':
+No such file or directory
+make: ***
+[/src/Common/buildroot-20080616-iMX31-423P/project_build_arm/uclibc/root/usr/lib/libogg.a]
+Error 1
+</PRE>
+
+After libogg fixup, libvorbis fails at the similar point. I tested it on
+actual snapshot 20080616, with and without BR2_HAVE_DEVFILES.
+
+ 
+
+---------------------------------------------------------------------- 
+ jacmet - 06-16-08 08:41  
+---------------------------------------------------------------------- 
+But the code that copies libogg.a libvorbis.a is gone from svn - Are you
+using latest trunk? 
+
+Issue History 
+Date Modified   Username       Field                    Change               
+====================================================================== 
+06-16-08 04:14  tklas          New Issue                                    
+06-16-08 04:14  tklas          Status                   new => assigned     
+06-16-08 04:14  tklas          Assigned To               => buildroot       
+06-16-08 04:14  tklas          File Added: vorbis_install.patch                 
+  
+06-16-08 04:43  jacmet         Status                   assigned => resolved
+06-16-08 04:43  jacmet         Resolution               open => fixed       
+06-16-08 04:43  jacmet         Note Added: 0008314                          
+06-16-08 08:26  tklas          Status                   resolved => feedback
+06-16-08 08:26  tklas          Resolution               fixed => reopened   
+06-16-08 08:26  tklas          Note Added: 0008334                          
+06-16-08 08:27  tklas          Note Edited: 0008334                         
+06-16-08 08:28  tklas          Note Edited: 0008334                         
+06-16-08 08:41  jacmet         Note Added: 0008344                          
+======================================================================
