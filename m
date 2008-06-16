@@ -1,10 +1,10 @@
 From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Mon, 16 Jun 2008 12:12:27 +0200
-Subject: [Buildroot] [PATCH] update package/file version to 4.24
-In-Reply-To: <dba6c0830806152200gb3171f7l800cd79945d9c1ef@mail.gmail.com>
-	(Conrad Parker's message of "Mon\, 16 Jun 2008 14\:00\:06 +0900")
-References: <dba6c0830806152200gb3171f7l800cd79945d9c1ef@mail.gmail.com>
-Message-ID: <877icpbsdw.fsf@macbook.be.48ers.dk>
+Date: Mon, 16 Jun 2008 12:15:09 +0200
+Subject: [Buildroot] [PATCH] build fix for package/python
+In-Reply-To: <dba6c0830806152258i78970879leb61228913545743@mail.gmail.com>
+	(Conrad Parker's message of "Mon\, 16 Jun 2008 14\:58\:24 +0900")
+References: <dba6c0830806152258i78970879leb61228913545743@mail.gmail.com>
+Message-ID: <873andbs9e.fsf@macbook.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,10 +13,12 @@ To: buildroot@busybox.net
 
 >>>>> "Conrad" == Conrad Parker <conrad@metadecks.org> writes:
 
- Conrad> Hi,
+Hi,
 
- Conrad> the following patch updates the version of file retrieved
- Conrad> (the tarball for the previous version is 404).
+ Conrad> Removed invalid hyphen in front of -$(MAKE) in the middle of
+ Conrad> a subshell; this looks like it was left over from an earlier
+ Conrad> use as a standalone makefile rule, where the - would have
+ Conrad> specified to allow failure.
 
 Thanks, committed.
 
