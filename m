@@ -1,8 +1,8 @@
 From: bugs at busybox.net <bugs@busybox.net>
-Date: Mon, 16 Jun 2008 08:09:10 -0700
-Subject: [Buildroot] [buildroot 0003714]: oprofile doesn't build because bfd
-	library not found
-Message-ID: <d2b41eed1e9dee05bcabb6e0e618f106@bugs.uclibc.org>
+Date: Mon, 16 Jun 2008 08:26:06 -0700
+Subject: [Buildroot] [buildroot 0003814]: libogg & libvorbis instalation
+	fails
+Message-ID: <a1fdd4450b18ad254d93a4368cb4f292@busybox.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -10,51 +10,70 @@ Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
 
-A NOTE has been added to this issue. 
+The following issue has been REOPENED. 
 ====================================================================== 
-http://busybox.net/bugs/view.php?id=3714 
+http://busybox.net/bugs/view.php?id=3814 
 ====================================================================== 
-Reported By:                fabo
+Reported By:                tklas
 Assigned To:                buildroot
 ====================================================================== 
 Project:                    buildroot
-Issue ID:                   3714
+Issue ID:                   3814
 Category:                   Other
 Reproducibility:            always
 Severity:                   minor
 Priority:                   normal
-Status:                     assigned
+Status:                     feedback
 ====================================================================== 
-Date Submitted:             06-13-2008 02:23 PDT
-Last Modified:              06-16-2008 08:09 PDT
+Date Submitted:             06-16-2008 04:14 PDT
+Last Modified:              06-16-2008 08:26 PDT
 ====================================================================== 
-Summary:                    oprofile doesn't build because bfd library not found
+Summary:                    libogg & libvorbis instalation fails
 Description: 
-checking for bfd_openr in -lbfd... no
-configure: error: bfd library not found
+Ogg and Vorbis libraries fails to install. I changed libogg.mk and
+libvorbis.mk (attached patch) and it works. But I'm not sure if it is
+correct, please check it.
 
-binutils is needed to build oprofile.
-I used gcc4.2.1 toolchain.
 ====================================================================== 
 
 ---------------------------------------------------------------------- 
- fabo - 06-16-08 08:09  
+ jacmet - 06-16-08 04:43  
 ---------------------------------------------------------------------- 
-please, find attached a patch to fix oprofile package:
-- depend on BR2_PACKAGE_GCC_TARGET, we need binutils on target to build
-oprofile. (see failure on the bug report)
-- add OPROFILE_LIBS and OPROFILE_INCS to pass extra includes and libs to
-configure.
-- add --with-kernel-support configure option to use 2.6 kernel (no kernel
-source tree required) 
+Thanks, but this is already fixed in trunk (actually, the header install
+targets have been removed as the global BR2_HAVE_DEVFILES option handles
+it) 
+
+---------------------------------------------------------------------- 
+ tklas - 06-16-08 08:26  
+---------------------------------------------------------------------- 
+No, on my system fails installation of library file libogg.a:
+
+<PRE>
+cp -dpf
+/shared-archiv/touchCUE/src/Common/buildroot-20080616-iMX31-423P/build_arm/libogg-1.1.3/lib/libogg.a
+/shared-archiv/touchCUE/src/Common/buildroot-20080616-iMX31-423P/project_build_arm/uclibc/root/usr/lib/
+cp: cannot stat
+`/shared-archiv/touchCUE/src/Common/buildroot-20080616-iMX31-423P/build_arm/libogg-1.1.3/lib/libogg.a':
+No such file or directory
+make: ***
+[/shared-archiv/touchCUE/src/Common/buildroot-20080616-iMX31-423P/project_build_arm/uclibc/root/usr/lib/libogg.a]
+Error 1
+</PRE>
+
+After libogg fixup, libvorbis fails at the similar point. 
 
 Issue History 
 Date Modified   Username       Field                    Change               
 ====================================================================== 
-06-13-08 02:23  fabo           New Issue                                    
-06-13-08 02:23  fabo           Status                   new => assigned     
-06-13-08 02:23  fabo           Assigned To               => buildroot       
-06-16-08 08:01  fabo           File Added: fix_oprofile_0003714.diff            
-       
-06-16-08 08:09  fabo           Note Added: 0008324                          
+06-16-08 04:14  tklas          New Issue                                    
+06-16-08 04:14  tklas          Status                   new => assigned     
+06-16-08 04:14  tklas          Assigned To               => buildroot       
+06-16-08 04:14  tklas          File Added: vorbis_install.patch                 
+  
+06-16-08 04:43  jacmet         Status                   assigned => resolved
+06-16-08 04:43  jacmet         Resolution               open => fixed       
+06-16-08 04:43  jacmet         Note Added: 0008314                          
+06-16-08 08:26  tklas          Status                   resolved => feedback
+06-16-08 08:26  tklas          Resolution               fixed => reopened   
+06-16-08 08:26  tklas          Note Added: 0008334                          
 ======================================================================
