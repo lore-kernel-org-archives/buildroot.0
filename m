@@ -1,52 +1,36 @@
-From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Mon, 16 Jun 2008 10:03:42 +0200
-Subject: [Buildroot] svn commit: trunk/buildroot/package/valgrind
-In-Reply-To: <20080616075421.GB19499@mx.loc> (Bernhard Fischer's message of
-	"Mon\, 16 Jun 2008 09\:54\:21 +0200")
-References: <20080615204411.C28F33C937@busybox.net>
-	<20080616075421.GB19499@mx.loc>
-Message-ID: <87myllhkm9.fsf@macbook.be.48ers.dk>
+From: jacmet at uclibc.org <jacmet@uclibc.org>
+Date: Mon, 16 Jun 2008 02:49:49 -0700 (PDT)
+Subject: [Buildroot] svn commit: trunk/buildroot/package/php
+Message-ID: <20080616094949.6B2C63C8A5@busybox.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Bernhard" == Bernhard Fischer <rep.dot.nop@gmail.com> writes:
+Author: jacmet
+Date: 2008-06-16 02:49:47 -0700 (Mon, 16 Jun 2008)
+New Revision: 22367
 
-Hi,
+Log:
+php: fix s/EXIT/EXT/ typo in simplexml select
 
- >> Modified: trunk/buildroot/package/valgrind/valgrind.mk
- >> ===================================================================
- >> --- trunk/buildroot/package/valgrind/valgrind.mk	2008-06-15 20:44:05 UTC (rev 22359)
- >> +++ trunk/buildroot/package/valgrind/valgrind.mk	2008-06-15 20:44:10 UTC (rev 22360)
- >> @@ -64,6 +64,7 @@
- -> cp package/valgrind/valgrind.sh $(TARGET_DIR)/usr/bin/valgrind
 
- Bernhard> $(INSTALL)
+Modified:
+   trunk/buildroot/package/php/Config.ext
 
-Sure.
 
- >> chmod a+x $(TARGET_DIR)/usr/bin/valgrind
- >> rm -rf $(TARGET_DIR)/usr/share/doc/valgrind
- >> +	rm -rf $(TARGET_DIR)/usr/lib/pkgconfig
-
- Bernhard> Removing all is a bit generic, no? Think about somebody selecting
- Bernhard> pkgconfig for the target. If i would do this, i would expect
- Bernhard> $(TARGET_DIR)/usr/lib/pkgconfig to be populated and useable..
-
-But we don't have target support for pkgconfig.
-
- >> #mkdir -p $(TARGET_DIR)/etc/default #cp
- >> $(VALGRIND_DIR)/valgrind.default
- >> $(TARGET_DIR)/etc/default/valgrind #mkdir -p
- >> $(TARGET_DIR)/usr/lib/valgrind
-
- Bernhard> cruft. Should have used $(INSTALL) -D
- Bernhard> $(VALGRIND_DIR)/valgrind.default
- Bernhard> $(TARGET_DIR)/etc/default/valgrind anyway.
-
-Yes, I left it there as it's commented out anyway.
-
--- 
-Bye, Peter Korsgaard
+Changeset:
+Modified: trunk/buildroot/package/php/Config.ext
+===================================================================
+--- trunk/buildroot/package/php/Config.ext	2008-06-16 07:32:40 UTC (rev 22366)
++++ trunk/buildroot/package/php/Config.ext	2008-06-16 09:49:47 UTC (rev 22367)
+@@ -45,7 +45,7 @@
+ config BR2_PACKAGE_PHP_EXT_SIMPLEXML
+ 	bool "simplexml"
+ 	depends on BR2_PACKAGE_PHP
+-	select BR2_PACKAGE_PHP_EXIT_LIBXML2
++	select BR2_PACKAGE_PHP_EXT_LIBXML2
+ 	help
+ 	  SimpleXML support
+ 
