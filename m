@@ -1,47 +1,38 @@
-From: bugs at busybox.net <bugs@busybox.net>
-Date: Mon, 16 Jun 2008 04:14:25 -0700
-Subject: [Buildroot] [buildroot 0003814]: libogg & libvorbis instalation
-	fails
-Message-ID: <72862016f7eddab79c70cc3432ee9027@bugs.uclibc.org>
+From: jacmet at uclibc.org <jacmet@uclibc.org>
+Date: Mon, 16 Jun 2008 04:15:32 -0700 (PDT)
+Subject: [Buildroot] svn commit: trunk/buildroot/package/file
+Message-ID: <20080616111532.C1D393C95E@busybox.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+Author: jacmet
+Date: 2008-06-16 04:15:31 -0700 (Mon, 16 Jun 2008)
+New Revision: 22368
 
-The following issue has been SUBMITTED. 
-====================================================================== 
-http://busybox.net/bugs/view.php?id=3814 
-====================================================================== 
-Reported By:                tklas
-Assigned To:                buildroot
-====================================================================== 
-Project:                    buildroot
-Issue ID:                   3814
-Category:                   Other
-Reproducibility:            always
-Severity:                   minor
-Priority:                   normal
-Status:                     assigned
-====================================================================== 
-Date Submitted:             06-16-2008 04:14 PDT
-Last Modified:              06-16-2008 04:14 PDT
-====================================================================== 
-Summary:                    libogg & libvorbis instalation fails
-Description: 
-Ogg and Vorbis libraries fails to install. I changed libogg.mk and
-libvorbis.mk (attached patch) and it works. But I'm not sure if it is
-correct, please check it.
+Log:
+file: bump version
 
-====================================================================== 
+Patch by Conrad Parker.
 
-Issue History 
-Date Modified   Username       Field                    Change               
-====================================================================== 
-06-16-08 04:14  tklas          New Issue                                    
-06-16-08 04:14  tklas          Status                   new => assigned     
-06-16-08 04:14  tklas          Assigned To               => buildroot       
-06-16-08 04:14  tklas          File Added: vorbis_install.patch                 
-  
-======================================================================
+
+Modified:
+   trunk/buildroot/package/file/file.mk
+
+
+Changeset:
+Modified: trunk/buildroot/package/file/file.mk
+===================================================================
+--- trunk/buildroot/package/file/file.mk	2008-06-16 09:49:47 UTC (rev 22367)
++++ trunk/buildroot/package/file/file.mk	2008-06-16 11:15:31 UTC (rev 22368)
+@@ -3,7 +3,7 @@
+ # file
+ #
+ #############################################################
+-FILE_VERSION:=4.23
++FILE_VERSION:=4.24
+ FILE_SOURCE:=file_$(FILE_VERSION).orig.tar.gz
+ FILE_SITE:=$(BR2_DEBIAN_MIRROR)/debian/pool/main/f/file
+ FILE_SOURCE_DIR:=$(BUILD_DIR)/file-$(FILE_VERSION)
