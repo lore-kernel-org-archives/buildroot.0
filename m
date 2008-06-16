@@ -1,41 +1,45 @@
-From: jacmet at uclibc.org <jacmet@uclibc.org>
-Date: Mon, 16 Jun 2008 00:15:47 -0700 (PDT)
-Subject: [Buildroot] svn commit: trunk/buildroot/toolchain
-Message-ID: <20080616071551.53B933C94D@busybox.net>
+From: bugs at busybox.net <bugs@busybox.net>
+Date: Mon, 16 Jun 2008 00:43:19 -0700
+Subject: [Buildroot] [buildroot 0003794]: HAL won't compile for i686 host
+	(Build is fedora 8 on i686)
+Message-ID: <5397fdbbb0afbca5f106a3dbae53441d@bugs.uclibc.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Author: jacmet
-Date: 2008-06-16 00:15:44 -0700 (Mon, 16 Jun 2008)
-New Revision: 22365
 
-Log:
-toolchain: move elf2flt+mklibs under 'Common Toolchain Options'
+The following issue has been SUBMITTED. 
+====================================================================== 
+http://busybox.net/bugs/view.php?id=3794 
+====================================================================== 
+Reported By:                KHAksnes
+Assigned To:                buildroot
+====================================================================== 
+Project:                    buildroot
+Issue ID:                   3794
+Category:                   Architecture Specific
+Reproducibility:            always
+Severity:                   block
+Priority:                   normal
+Status:                     assigned
+====================================================================== 
+Date Submitted:             06-16-2008 00:43 PDT
+Last Modified:              06-16-2008 00:43 PDT
+====================================================================== 
+Summary:                    HAL won't compile for i686 host (Build is fedora 8
+on i686)
+Description: 
+The compilation fails with lots of messages, probably caused by some mess
+in -I options. A transcript from compilation of HAL is attached.
+====================================================================== 
 
-
-Modified:
-   trunk/buildroot/toolchain/Config.in.2
-
-
-Changeset:
-Modified: trunk/buildroot/toolchain/Config.in.2
-===================================================================
---- trunk/buildroot/toolchain/Config.in.2	2008-06-16 07:15:33 UTC (rev 22364)
-+++ trunk/buildroot/toolchain/Config.in.2	2008-06-16 07:15:44 UTC (rev 22365)
-@@ -8,11 +8,11 @@
- source "toolchain/gcc/Config.in"
- source "toolchain/ccache/Config.in"
- source "toolchain/gdb/Config.in"
--source "toolchain/elf2flt/Config.in"
--source "toolchain/mklibs/Config.in"
- 
- comment "Common Toolchain Options"
- 
-+source "toolchain/elf2flt/Config.in"
-+source "toolchain/mklibs/Config.in"
- source "toolchain/sstrip/Config.in"
- 
- config BR2_ENABLE_MULTILIB
+Issue History 
+Date Modified   Username       Field                    Change               
+====================================================================== 
+06-16-08 00:43  KHAksnes       New Issue                                    
+06-16-08 00:43  KHAksnes       Status                   new => assigned     
+06-16-08 00:43  KHAksnes       Assigned To               => buildroot       
+06-16-08 00:43  KHAksnes       File Added: hal-log                          
+======================================================================
