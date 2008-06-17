@@ -1,41 +1,49 @@
-From: jacmet at uclibc.org <jacmet@uclibc.org>
-Date: Tue, 17 Jun 2008 01:04:15 -0700 (PDT)
-Subject: [Buildroot] svn commit: trunk/buildroot/target/u-boot
-Message-ID: <20080617080415.94F9A3C723@busybox.net>
+From: Luigi 'Comio' Mantellini <luigi.mantellini@idf-hit.com>
+Date: Tue, 17 Jun 2008 10:20:42 +0200
+Subject: [Buildroot] patches support gcc4.3
+Message-ID: <1213690842.23450.9.camel@localhost>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Author: jacmet
-Date: 2008-06-17 01:04:15 -0700 (Tue, 17 Jun 2008)
-New Revision: 22394
+Hi All,
 
-Log:
-u-boot tools: make sure destination directory exists
+I'm new in this mailling list.
+I'm trying to understand the actual status of the gcc4.3 support into
+buildroot (and soon). ?I'm working on a (ugly)coldfire 547x cpu and
+gcc4.3 should (re)support my CPU.
+Has anyone information about the actual support status of gcc4.3 into
+buildroot? 
+
+Thanks a lot
+
+luigi
 
 
-Modified:
-   trunk/buildroot/target/u-boot/Makefile.in
 
 
-Changeset:
-Modified: trunk/buildroot/target/u-boot/Makefile.in
-===================================================================
---- trunk/buildroot/target/u-boot/Makefile.in	2008-06-17 07:52:43 UTC (rev 22393)
-+++ trunk/buildroot/target/u-boot/Makefile.in	2008-06-17 08:04:15 UTC (rev 22394)
-@@ -124,11 +124,13 @@
- 	cp -dpf $(U_BOOT_DIR)/tools/$(U_BOOT_TOOLS_BIN) $(STAGING_DIR)/usr/bin/
- 
- $(TARGET_DIR)/usr/bin/mkimage: $(U_BOOT_DIR)/$(U_BOOT_BIN)
-+	mkdir -p $(@D)
- 	$(TARGET_CC) -I$(U_BOOT_DIR)/include -DUSE_HOSTCC -o $@ \
- 		$(U_BOOT_DIR)/tools/mkimage.c $(U_BOOT_DIR)/tools/crc32.c
- 	$(STRIPCMD) $(STRIP_STRIP_UNNEEDED) $@
- 
- $(TARGET_DIR)/usr/sbin/fw_printenv: $(U_BOOT_DIR)/$(U_BOOT_BIN)
-+	mkdir -p $(@D)
- 	$(TARGET_CC) -I$(U_BOOT_DIR)/include -I$(LINUX_HEADERS_DIR)/include \
- 		-DUSE_HOSTCC -o $@ \
- 		$(U_BOOT_DIR)/tools/env/*.c $(U_BOOT_DIR)/tools/crc32.c
+Industrie Dial Face S.p.A.
+Luigi Mantellini
+R&D - Software
+Industrie Dial Face S.p.A.
+Via Canzo, 4 
+20068 Peschiera Borromeo (MI), Italy
+Tel.:   +39 02 5167 2813
+Fax:    +39 02 5167 2459
+E-mail: luigi.mantellini at idf-hit.com
+GPG fingerprint: 3DD1 7B71 FBDF 6376
+1B4A
+                 B003 175F E979 907E
+1650
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: http://busybox.net/lists/buildroot/attachments/20080617/131e8f55/attachment.htm 
+-------------- next part --------------
+A non-text attachment was scrubbed...
+Name: idf_logo.gif
+Type: image/gif
+Size: 4122 bytes
+Desc: not available
+Url : http://busybox.net/lists/buildroot/attachments/20080617/131e8f55/attachment.gif 
