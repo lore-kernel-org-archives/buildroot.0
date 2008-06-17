@@ -1,25 +1,32 @@
-From: Bernhard Fischer <rep.dot.nop@gmail.com>
-Date: Tue, 17 Jun 2008 17:53:38 +0200
-Subject: [Buildroot] svn commit: trunk/buildroot/toolchain/uClibc
-In-Reply-To: <20080617133035.AC6F63C786@busybox.net>
-References: <20080617133035.AC6F63C786@busybox.net>
-Message-ID: <20080617155338.GI27792@mx.loc>
+From: hartleys <hartleys@visionengravers.com>
+Date: Tue, 17 Jun 2008 13:41:02 -0400
+Subject: [Buildroot] Problem with buildroot and external toolchain
+Message-ID: <BD79186B4FD85F4B8E60E381CAEE1909182568@mi8nycmail19.Mi8.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Tue, Jun 17, 2008 at 06:30:35AM -0700, jacmet at uclibc.org wrote:
->Author: jacmet
->Date: 2008-06-17 06:30:35 -0700 (Tue, 17 Jun 2008)
->New Revision: 22401
->
->Log:
->toolchain/uclibc: strip libpthread
+Hello all,
 
-Those are options in uclibc-menuconfig.
+Sorry if this is sent to the wrong list.
 
-By unconditionally stripping it (and not even using the flags!) you
-foobar'ed somebody's setup who wanted to retain just uClibc/lib/lib*so's
-debug symbols.
+I am trying to use buildroot with an external toolchain. I was able to
+get everything setup and the Linux zImage and root filesystem are both
+built. But when the kernel boots I get a kernel panic no init found.
+
+I think I worked the problem down to the external toolchain libraries
+not getting copied to the root filesystem. The copy_toolchain_lib_root
+in ext-tool.mk does locate the libraries to copy but I don't get the
+messages about the libraries being copied.
+
+The only thing I can figure is the find in:
+
+	for FILE in `find $${LIB_DIR} -maxdepth 1 -type l -name
+"$${LIB}*"`; do { \
+
+Is failing for some reason. Can anyone please offer any help on this?
+
+Thanks,
+Hartley
