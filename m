@@ -1,108 +1,53 @@
-From: bugs at busybox.net <bugs@busybox.net>
-Date: Tue, 17 Jun 2008 08:04:41 -0700
-Subject: [Buildroot] [buildroot 0003814]: libogg & libvorbis instalation
-	fails
-Message-ID: <4f77b6cc04c67150bb00917807ed32f6@busybox.net>
+From: Bernhard Fischer <rep.dot.nop@gmail.com>
+Date: Tue, 17 Jun 2008 17:45:58 +0200
+Subject: [Buildroot] svn
+	commit:	trunk/buildroot/toolchain/external-toolchain
+In-Reply-To: <87d4mgkt5l.fsf@macbook.be.48ers.dk>
+References: <20080616122246.C821B3C987@busybox.net>
+	<20080617042319.GA17083@cloud.net.au>
+	<87ej6wwmxw.fsf@macbook.be.48ers.dk>
+	<20080617104754.GA25850@cloud.net.au>
+	<87fxrcmazj.fsf@macbook.be.48ers.dk>
+	<20080617142937.GD27792@mx.loc>
+	<87d4mgkt5l.fsf@macbook.be.48ers.dk>
+Message-ID: <20080617154558.GG27792@mx.loc>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+On Tue, Jun 17, 2008 at 04:55:34PM +0200, Peter Korsgaard wrote:
+>>>>>> "Bernhard" == Bernhard Fischer <rep.dot.nop@gmail.com> writes:
+>
+>Hi,
+>
+> >> So they all put libraries / headers in the same staging_dir? Doesn't
+> >> that give problems with packages detecting optional stuff at compile
+> >> time that might not be available for a specific variant (E.G. one
+> >> variant has expat, and another doesn't - Some configure script checks
+> >> for expat and finds it in staging_dir even though it isn't going to be
+> >> there at runtime).
+> >> 
+> >> The same with the packages offering different versions.
+> >> 
+> >> I think a more common setup would be to install the toolchain
+> >> somewhere common (/opt/<whatever>) and then have multiple boards using
+> >> the same toolchain/c library but potentially different set of
+> >> packages(-versions) and their own staging_dir.
+>
+> Bernhard> If i understand correctly what you are talking about then this is
+> Bernhard> exactly the purpose of that PROJECT thing, fwiw.
+>
+>Me?
 
-The following issue has been RESOLVED. 
-====================================================================== 
-http://busybox.net/bugs/view.php?id=3814 
-====================================================================== 
-Reported By:                tklas
-Assigned To:                buildroot
-====================================================================== 
-Project:                    buildroot
-Issue ID:                   3814
-Category:                   Other
-Reproducibility:            always
-Severity:                   minor
-Priority:                   normal
-Status:                     resolved
-Resolution:                 fixed
-Fixed in Version:           
-====================================================================== 
-Date Submitted:             06-16-2008 04:14 PDT
-Last Modified:              06-17-2008 08:04 PDT
-====================================================================== 
-Summary:                    libogg & libvorbis instalation fails
-Description: 
-Ogg and Vorbis libraries fails to install. I changed libogg.mk and
-libvorbis.mk (attached patch) and it works. But I'm not sure if it is
-correct, please check it.
+no, Hamish.
 
-====================================================================== 
+>    No, the project stuff is (afaik atleast) just about compiling the
+>configurable packages under project_build_* instead of build_*, so you
+>can reuse a single working directory / staging_dir for multiple
+>projects. It has the same drawbacks as what I listed above.
+>
+>It does sound pretty much what Hamish is doing though.
 
----------------------------------------------------------------------- 
- jacmet - 06-16-08 04:43  
----------------------------------------------------------------------- 
-Thanks, but this is already fixed in trunk (actually, the header install
-targets have been removed as the global BR2_HAVE_DEVFILES option handles
-it) 
-
----------------------------------------------------------------------- 
- tklas - 06-16-08 08:28  
----------------------------------------------------------------------- 
-No, on my system fails installation of library file libogg.a:
-
-<PRE>
-cp -dpf
-/src/Common/buildroot-20080616-iMX31-423P/build_arm/libogg-1.1.3/lib/libogg.a
-/src/Common/buildroot-20080616-iMX31-423P/project_build_arm/uclibc/root/usr/lib/
-cp: cannot stat
-`/src/Common/buildroot-20080616-iMX31-423P/build_arm/libogg-1.1.3/lib/libogg.a':
-No such file or directory
-make: ***
-[/src/Common/buildroot-20080616-iMX31-423P/project_build_arm/uclibc/root/usr/lib/libogg.a]
-Error 1
-</PRE>
-
-After libogg fixup, libvorbis fails at the similar point. I tested it on
-actual snapshot 20080616, with and without BR2_HAVE_DEVFILES.
-
- 
-
----------------------------------------------------------------------- 
- jacmet - 06-16-08 08:41  
----------------------------------------------------------------------- 
-But the code that copies libogg.a libvorbis.a is gone from svn - Are you
-using latest trunk? 
-
----------------------------------------------------------------------- 
- tklas - 06-17-08 07:57  
----------------------------------------------------------------------- 
-No, I used yesterday snapshot (20080616). It's ok in SVN and current
-snapshot, thanks. 
-
----------------------------------------------------------------------- 
- jacmet - 06-17-08 08:04  
----------------------------------------------------------------------- 
-Ok, great - closing the issue then. 
-
-Issue History 
-Date Modified   Username       Field                    Change               
-====================================================================== 
-06-16-08 04:14  tklas          New Issue                                    
-06-16-08 04:14  tklas          Status                   new => assigned     
-06-16-08 04:14  tklas          Assigned To               => buildroot       
-06-16-08 04:14  tklas          File Added: vorbis_install.patch                 
-  
-06-16-08 04:43  jacmet         Status                   assigned => resolved
-06-16-08 04:43  jacmet         Resolution               open => fixed       
-06-16-08 04:43  jacmet         Note Added: 0008314                          
-06-16-08 08:26  tklas          Status                   resolved => feedback
-06-16-08 08:26  tklas          Resolution               fixed => reopened   
-06-16-08 08:26  tklas          Note Added: 0008334                          
-06-16-08 08:27  tklas          Note Edited: 0008334                         
-06-16-08 08:28  tklas          Note Edited: 0008334                         
-06-16-08 08:41  jacmet         Note Added: 0008344                          
-06-17-08 07:57  tklas          Note Added: 0008354                          
-06-17-08 08:04  jacmet         Status                   feedback => resolved
-06-17-08 08:04  jacmet         Resolution               reopened => fixed   
-06-17-08 08:04  jacmet         Note Added: 0008364                          
-======================================================================
+Exactly.
