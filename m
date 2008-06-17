@@ -1,31 +1,53 @@
-From: Bernhard Fischer <rep.dot.nop@gmail.com>
-Date: Tue, 17 Jun 2008 11:11:12 +0200
-Subject: [Buildroot] patches support gcc4.3
-In-Reply-To: <873anctpxu.fsf@macbook.be.48ers.dk>
-References: <1213690842.23450.9.camel@localhost>
-	<873anctpxu.fsf@macbook.be.48ers.dk>
-Message-ID: <20080617091112.GF25428@mx.loc>
+From: Hamish Moffatt <hamish@cloud.net.au>
+Date: Tue, 17 Jun 2008 20:47:54 +1000
+Subject: [Buildroot] svn
+	commit:	trunk/buildroot/toolchain/external-toolchain
+In-Reply-To: <87ej6wwmxw.fsf@macbook.be.48ers.dk>
+References: <20080616122246.C821B3C987@busybox.net>
+	<20080617042319.GA17083@cloud.net.au>
+	<87ej6wwmxw.fsf@macbook.be.48ers.dk>
+Message-ID: <20080617104754.GA25850@cloud.net.au>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Tue, Jun 17, 2008 at 10:40:13AM +0200, Peter Korsgaard wrote:
->>>>>> "Luigi" == Luigi 'Comio' Mantellini <luigi.mantellini@idf-hit.com> writes:
->
-> Luigi> Hi All, I'm new in this mailling list.  I'm trying to
-> Luigi> understand the actual status of the gcc4.3 support into
-> Luigi> buildroot (and soon). I'm working on a (ugly)coldfire 547x cpu
-> Luigi> and gcc4.3 should (re) support my CPU.  Has anyone information
-> Luigi> about the actual support status of gcc4.3 into buildroot?
->
->There's so far no gcc 4.3 support in buildroot, but I know Bernhard
->has gcc 4.3.0 support in his git tree. I might try to port it over
->next weekend and update it for 4.3.1.
+On Tue, Jun 17, 2008 at 09:16:43AM +0200, Peter Korsgaard wrote:
+>  Hamish> On Mon, Jun 16, 2008 at 05:22:46AM -0700, jacmet at uclibc.org wrote:
+>  >> config BR2_TOOLCHAIN_EXTERNAL_PATH
+>  >> string "External toolchain path"
+>  >> -	default ""
+>  >> +	default "/path/to/staging_dir/usr"
+>  >> help
+>  >> Path to where the external toolchain is installed.
+> 
+>  Hamish> I've set this to "$(BR2_STAGING_DIR)/usr" here, which might
+>  Hamish> be a good default?
+> 
+> You think so? I wouldn't expect having buildroot install package stuff
+> together with the (potentially read only) external toolchain would be
+> a common setup.
 
-The 4.3.0 patches should apply 1:1 against 4.3.1
+Well I've got one board ("tools", in local/tools/tools.config) to build
+the toolchain which I then use as external toolchain to build several
+other boards (all armeb-linux-uclibcgnu). So my toolchain lives in the
+staging directory in the same tree.
 
-I never tried a coldfire toolchain, so don't be surprised if something
-doesn't work out of the box (with my tree). Please let me know if you
-need help and we'll see what i can do.
+This makes for a nice path-independent setup too.. other developers at
+my company can check out the tree and build everything (including the
+toolchain first) into any path they like.
+
+So if this isn't a common approach then maybe it isn't a good default
+after all.
+
+> Don't you have an armeb-linux symlink? For the stuff I compile (arm,
+> i386, ppc) there's symlinks from the arm-linux-uclibc-<whatever> to
+> arm-linux-<whatever>.
+
+Probably, I'll have to check tomorrow.
+
+thanks
+Hamish
+-- 
+Hamish Moffatt VK3SB <hamish@debian.org> <hamish@cloud.net.au>
