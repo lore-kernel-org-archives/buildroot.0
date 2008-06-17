@@ -1,39 +1,72 @@
-From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Tue, 17 Jun 2008 20:44:09 +0200
-Subject: [Buildroot] svn commit: trunk/buildroot/toolchain/uClibc
-In-Reply-To: <20080617155338.GI27792@mx.loc> (Bernhard Fischer's message of
-	"Tue\, 17 Jun 2008 17\:53\:38 +0200")
-References: <20080617133035.AC6F63C786@busybox.net>
-	<20080617155338.GI27792@mx.loc>
-Message-ID: <87fxrbj406.fsf@macbook.be.48ers.dk>
+From: hartleys <hartleys@visionengravers.com>
+Date: Tue, 17 Jun 2008 14:57:15 -0400
+Subject: [Buildroot] Problem with buildroot and external toolchain
+In-Reply-To: <20080617183841.GA18089@real.realitydiluted.com>
+References: <BD79186B4FD85F4B8E60E381CAEE1909182568@mi8nycmail19.Mi8.com>
+	<20080617183841.GA18089@real.realitydiluted.com>
+Message-ID: <BD79186B4FD85F4B8E60E381CAEE190918260A@mi8nycmail19.Mi8.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Bernhard" == Bernhard Fischer <rep.dot.nop@gmail.com> writes:
+> > I think I worked the problem down to the external toolchain
+libraries 
+> > not getting copied to the root filesystem. The
+copy_toolchain_lib_root 
+> > in ext-tool.mk does locate the libraries to copy but I don't get the
 
- Bernhard> On Tue, Jun 17, 2008 at 06:30:35AM -0700, jacmet at uclibc.org wrote:
- >> Author: jacmet
- >> Date: 2008-06-17 06:30:35 -0700 (Tue, 17 Jun 2008)
- >> New Revision: 22401
- >> 
- >> Log:
- >> toolchain/uclibc: strip libpthread
+> > messages about the libraries being copied.
+> > 
+> > The only thing I can figure is the find in:
+> > 
+> > 	for FILE in `find $${LIB_DIR} -maxdepth 1 -type l -name
+"$${LIB}*"`; 
+> > do { \
+> > 
+> > Is failing for some reason. Can anyone please offer any help on
+this?
+> > 
+> Here is what I have for an external glibc-based toolchain:
+>
+> BR2_TOOLCHAIN_EXTERNAL_LIB_C="libc.so.6"
+> BR2_TOOLCHAIN_EXTERNAL_LIBS="ld.so.1 libcrypt.so libdl.so libgcc_s.so
+libm.so
+> libnsl.so libnss_dns.so libnss_files.so libpthread.so libresolv.so
+librt.so
+> libstdc++.so libutil.so"
+>
+>
+BR2_TOOLCHAIN_EXTERNAL_PATH="/opt/toolchains/gcc-3.4.5-glibc-2.3.6/power
+pc-7450-linux-gnu"
+> BR2_TOOLCHAIN_EXTERNAL_PREFIX="powerpc-7450-linux-gnu"
+>
+> The libraries will be copied from:
+>
+>  $(BR2_TOOLCHAIN_EXTERNAL_PATH)/$(BR2_TOOLCHAIN_EXTERNAL_PREFIX)/lib
+>
+> Hope that helps.
 
- Bernhard> Those are options in uclibc-menuconfig.
+Thanks for the quick reply.
 
-Sorry, I don't see it. Do you mean CONFIG_PTHREADS_DEBUG_SUPPORT?
-uclibc (0.9.28.3) doesn't seem to strip libpthread even with that
-option disabled.
+My setup is for an external uclibc-based toolchain:
 
- Bernhard> By unconditionally stripping it (and not even using the
- Bernhard> flags!) you foobar'ed somebody's setup who wanted to retain
- Bernhard> just uClibc/lib/lib*so's debug symbols.
+BR2_TOOLCHAIN_EXTERNAL_LIB_C="libc.so.0"
+BR2_TOOLCHAIN_EXTERNAL_LIBS="ld-uClibc.so.0 libcrypt.so.0 libdl.so.0
+libm.so.0 ... (others)"
 
-Notice that I'm stripping the ones in TARGET_DIR, not STAGING_DIR, but
-yes - It should probably depend on !CONFIG_BR2_PTHREAD_DEBUG.
+BR2_TOOLCHAIN_EXTERNAL_PATH="/usr/local/arm/4.1.1-920t"
+BR2_TOOLCHAIN_EXTERNAL_PREFIX="arm-linux"
 
--- 
-Bye, Peter Korsgaard
+My library files are in the
+$(BR2_TOOLCHAIN_EXTERNAL_PATH)/$(BR2_TOOLCHAIN_EXTERNAL_PREFIX)/lib
+directory.
+
+But, like I said, the copy_toolchain_lib_root is locating the files but
+not actually copying them. If I manually copy the files to the root file
+system everything works fine.
+
+Any other ideas?
+
+Hartley
