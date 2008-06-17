@@ -1,64 +1,30 @@
-From: jacmet at uclibc.org <jacmet@uclibc.org>
-Date: Tue, 17 Jun 2008 06:33:03 -0700 (PDT)
+From: Peter Korsgaard <jacmet@uclibc.org>
+Date: Tue, 17 Jun 2008 15:33:25 +0200
 Subject: [Buildroot] svn commit: trunk/buildroot/toolchain/gcc
-Message-ID: <20080617133303.244D33C79C@busybox.net>
+In-Reply-To: <1213708213.13476.13.camel@localhost> (Hans-Christian Egtvedt's
+	message of "Tue\, 17 Jun 2008 15\:10\:13 +0200")
+References: <20080617125437.0554F3C70D@busybox.net>
+	<1213708213.13476.13.camel@localhost>
+Message-ID: <87y754mbiy.fsf@macbook.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Author: jacmet
-Date: 2008-06-17 06:33:02 -0700 (Tue, 17 Jun 2008)
-New Revision: 22402
+>>>>> "Hans-Christian" == Hans-Christian Egtvedt <hans-christian.egtvedt@atmel.com> writes:
 
-Log:
-toolchain/gcc: use $(STRIP_STRIP_UNNEEDED)
+ Hans-Christian> On Tue, 2008-06-17 at 05:54 -0700, jacmet at uclibc.org wrote:
+ >> Author: jacmet
 
+ Hans-Christian> <snipp>
 
-Modified:
-   trunk/buildroot/toolchain/gcc/gcc-uclibc-3.x.mk
-   trunk/buildroot/toolchain/gcc/gcc-uclibc-4.x.mk
+ >> -	-strip --strip-unneeded $(TARGET_DIR)/lib/libgcc_s*
+ >> +	-$(STRIPCMD) --strip-unneeded $(TARGET_DIR)/lib/libgcc_s*
 
+ Hans-Christian> $(STRIP_STRIP_UNNEEDED) as well?
 
-Changeset:
-Modified: trunk/buildroot/toolchain/gcc/gcc-uclibc-3.x.mk
-===================================================================
---- trunk/buildroot/toolchain/gcc/gcc-uclibc-3.x.mk	2008-06-17 13:30:35 UTC (rev 22401)
-+++ trunk/buildroot/toolchain/gcc/gcc-uclibc-3.x.mk	2008-06-17 13:33:02 UTC (rev 22402)
-@@ -336,12 +336,12 @@
- 	rm -rf $(TARGET_DIR)/usr/lib/libgcc_s*.so*
- 	-cp -dpf $(STAGING_DIR)/usr/$(REAL_GNU_TARGET_NAME)/lib/libgcc_s* \
- 		$(TARGET_DIR)/lib/
--	-$(STRIPCMD) --strip-unneeded $(TARGET_DIR)/lib/libgcc_s*
-+	-$(STRIPCMD) $(STRIP_STRIP_UNNEEDED) $(TARGET_DIR)/lib/libgcc_s*
- endif
- ifeq ($(BR2_INSTALL_LIBSTDCPP),y)
- ifeq ($(BR2_GCC_SHARED_LIBGCC),y)
- 	-cp -dpf $(STAGING_DIR)/lib/libstdc++.so* $(TARGET_DIR)/usr/lib/
--	-$(STRIPCMD) --strip-unneeded $(TARGET_DIR)/usr/lib/libstdc++.so*
-+	-$(STRIPCMD) $(STRIP_STRIP_UNNEEDED) $(TARGET_DIR)/usr/lib/libstdc++.so*
- endif
- endif
- ifeq ($(BR2_INSTALL_LIBGCJ),y)
+Done (r22402).
 
-Modified: trunk/buildroot/toolchain/gcc/gcc-uclibc-4.x.mk
-===================================================================
---- trunk/buildroot/toolchain/gcc/gcc-uclibc-4.x.mk	2008-06-17 13:30:35 UTC (rev 22401)
-+++ trunk/buildroot/toolchain/gcc/gcc-uclibc-4.x.mk	2008-06-17 13:33:02 UTC (rev 22402)
-@@ -349,13 +349,13 @@
- 	rm -rf $(TARGET_DIR)/usr/lib/libgcc_s*.so*
- 	-cp -dpf $(STAGING_DIR)/usr/$(REAL_GNU_TARGET_NAME)/lib/libgcc_s* \
- 		$(TARGET_DIR)/lib/
--	-$(STRIPCMD) --strip-unneeded $(TARGET_DIR)/lib/libgcc_s*
-+	-$(STRIPCMD) $(STRIP_STRIP_UNNEEDED) $(TARGET_DIR)/lib/libgcc_s*
- endif
- ifeq ($(BR2_INSTALL_LIBSTDCPP),y)
- ifeq ($(BR2_GCC_SHARED_LIBGCC),y)
- 	-cp -dpf $(STAGING_DIR)/usr/$(REAL_GNU_TARGET_NAME)/lib/libstdc++.so* \
- 		$(TARGET_DIR)/usr/lib/
--	-$(STRIPCMD) --strip-unneeded $(TARGET_DIR)/usr/lib/libstdc++.so*
-+	-$(STRIPCMD) $(STRIP_STRIP_UNNEEDED) $(TARGET_DIR)/usr/lib/libstdc++.so*
- endif
- endif
- ifeq ($(BR2_INSTALL_LIBGCJ),y)
+-- 
+Bye, Peter Korsgaard
