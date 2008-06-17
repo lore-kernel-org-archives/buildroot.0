@@ -1,54 +1,41 @@
-From: jacmet at uclibc.org <jacmet@uclibc.org>
-Date: Mon, 16 Jun 2008 08:52:42 -0700 (PDT)
-Subject: [Buildroot] svn commit: trunk/buildroot/toolchain/gdb
-Message-ID: <20080616155242.96F0B3C973@busybox.net>
+From: Hamish Moffatt <hamish@cloud.net.au>
+Date: Tue, 17 Jun 2008 14:23:19 +1000
+Subject: [Buildroot] svn
+	commit:	trunk/buildroot/toolchain/external-toolchain
+In-Reply-To: <20080616122246.C821B3C987@busybox.net>
+References: <20080616122246.C821B3C987@busybox.net>
+Message-ID: <20080617042319.GA17083@cloud.net.au>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Author: jacmet
-Date: 2008-06-16 08:52:41 -0700 (Mon, 16 Jun 2008)
-New Revision: 22383
+On Mon, Jun 16, 2008 at 05:22:46AM -0700, jacmet at uclibc.org wrote:
+>  config BR2_TOOLCHAIN_EXTERNAL_PATH
+>  	string "External toolchain path"
+> -	default ""
+> +	default "/path/to/staging_dir/usr"
+>  	help
+>  	  Path to where the external toolchain is installed.
 
-Log:
-gdb: support external toolchain
+I've set this to "$(BR2_STAGING_DIR)/usr" here, which might be a good
+default?
+
+>  config BR2_TOOLCHAIN_EXTERNAL_PREFIX
+>  	string "External toolchain prefix"
+> -	default ""
+> +	default "$(ARCH)-linux"
+>  	help
+>  	  This the the external toolchain prefix. For example:
+>  	    armeb-unknown-linux-gnu, mipsel-unknown-linux-gnu, etc.
+
+Probably not a useful default, given that all the examples have -gnu etc
+after them? Mine is armeb-linux-uclibcgnu here; again you can probably
+construct something like "$(ARCH)-$(BR2_GNU_TARGET_SUFFIX)".
 
 
-Modified:
-   trunk/buildroot/toolchain/gdb/gdb.mk
-
-
-Changeset:
-Modified: trunk/buildroot/toolchain/gdb/gdb.mk
-===================================================================
---- trunk/buildroot/toolchain/gdb/gdb.mk	2008-06-16 14:35:57 UTC (rev 22382)
-+++ trunk/buildroot/toolchain/gdb/gdb.mk	2008-06-16 15:52:41 UTC (rev 22383)
-@@ -20,21 +20,17 @@
- GDB_PATCH_DIR:=toolchain/gdb/$(GDB_VERSION)
- else
- 
--ifeq ($(BR2_TOOLCHAIN_BUILDROOT),y)
--GDB_SITE:=$(BR2_GNU_MIRROR)/gdb
--else
--GDB_SITE:=$(VENDOR_SITE)
--endif
--
- GDB_OFFICIAL_VERSION:=$(GDB_VERSION)$(VENDOR_SUFFIX)$(VENDOR_GDB_RELEASE)
- 
- GDB_SOURCE:=gdb-$(GDB_OFFICIAL_VERSION).tar.bz2
- GDB_CAT:=$(BZCAT)
- 
--ifeq ($(BR2_TOOLCHAIN_BUILDROOT),y)
--GDB_PATCH_DIR:=toolchain/gdb/$(GDB_OFFICIAL_VERSION)
--else
-+ifeq ($(BR2_TOOLCHAIN_EXTERNAL_SOURCE),y)
-+GDB_SITE:=$(VENDOR_SITE)
- GDB_PATCH_DIR:=$(VENDOR_PATCH_DIR)/gdb-$(GDB_OFFICIAL_VERSION)
-+else
-+GDB_SITE:=$(BR2_GNU_MIRROR)/gdb
-+GDB_PATCH_DIR:=toolchain/gdb/$(GDB_OFFICIAL_VERSION)
- endif
- 
- GDB_DIR:=$(TOOL_BUILD_DIR)/gdb-$(GDB_OFFICIAL_VERSION)
+thanks
+Hamish
+-- 
+Hamish Moffatt VK3SB <hamish@debian.org> <hamish@cloud.net.au>
