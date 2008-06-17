@@ -1,38 +1,26 @@
-From: hamish at uclibc.org <hamish@uclibc.org>
-Date: Tue, 17 Jun 2008 00:08:33 -0700 (PDT)
-Subject: [Buildroot] svn commit: trunk/buildroot/package/mtd/mtd-utils.git
-Message-ID: <20080617070834.08E613C6A5@busybox.net>
+From: Peter Korsgaard <jacmet@uclibc.org>
+Date: Tue, 17 Jun 2008 09:17:14 +0200
+Subject: [Buildroot] svn commit: trunk/buildroot/package/libvorbis
+In-Reply-To: <20080617052948.6FCE53C853@busybox.net> (hamish@uclibc.org's
+	message of "Mon\, 16 Jun 2008 22\:29\:48 -0700 \(PDT\)")
+References: <20080617052948.6FCE53C853@busybox.net>
+Message-ID: <87ve08v8cl.fsf@macbook.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Author: hamish
-Date: 2008-06-17 00:08:32 -0700 (Tue, 17 Jun 2008)
-New Revision: 22389
+>>>>> "hamish" == hamish  <hamish@uclibc.org> writes:
 
-Log:
-Remove patch which isn't required for the specified upstream version
+ hamish> Author: hamish
+ hamish> Date: 2008-06-16 22:29:48 -0700 (Mon, 16 Jun 2008)
+ hamish> New Revision: 22387
 
+ hamish> Log:
+ hamish> Fix missing punctuation
 
-Removed:
-   trunk/buildroot/package/mtd/mtd-utils.git/mtd-utils-all-argp.patch
+Ups, just noticed as well - Thanks for fixing it.
 
-
-Changeset:
-Deleted: trunk/buildroot/package/mtd/mtd-utils.git/mtd-utils-all-argp.patch
-===================================================================
---- trunk/buildroot/package/mtd/mtd-utils.git/mtd-utils-all-argp.patch	2008-06-17 05:43:38 UTC (rev 22388)
-+++ trunk/buildroot/package/mtd/mtd-utils.git/mtd-utils-all-argp.patch	2008-06-17 07:08:32 UTC (rev 22389)
-@@ -1,10 +0,0 @@
----- mtd-utils-e6088d987c545d60a86e1f44836ab8ba072fffd9/ubi-utils/new-utils/src/ubicrc32.c.orig	2008-03-26 16:08:13.000000000 +1100
--+++ mtd-utils-e6088d987c545d60a86e1f44836ab8ba072fffd9/ubi-utils/new-utils/src/ubicrc32.c	2008-03-26 16:08:20.000000000 +1100
--@@ -26,7 +26,6 @@
-- #include <stdint.h>
-- #include <stdlib.h>
-- #include <getopt.h>
---#include <argp.h>
-- #include <unistd.h>
-- #include <mtd/ubi-header.h>
-- 
+-- 
+Bye, Peter Korsgaard
