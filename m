@@ -1,35 +1,41 @@
-From: hamish at uclibc.org <hamish@uclibc.org>
-Date: Tue, 17 Jun 2008 00:23:02 -0700 (PDT)
-Subject: [Buildroot] svn commit: trunk/buildroot/package/axel
-Message-ID: <20080617072304.74D523C6A7@busybox.net>
+From: jacmet at uclibc.org <jacmet@uclibc.org>
+Date: Tue, 17 Jun 2008 01:04:15 -0700 (PDT)
+Subject: [Buildroot] svn commit: trunk/buildroot/target/u-boot
+Message-ID: <20080617080415.94F9A3C723@busybox.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Author: hamish
-Date: 2008-06-17 00:22:29 -0700 (Tue, 17 Jun 2008)
-New Revision: 22390
+Author: jacmet
+Date: 2008-06-17 01:04:15 -0700 (Tue, 17 Jun 2008)
+New Revision: 22394
 
 Log:
-Fix options to configure
+u-boot tools: make sure destination directory exists
+
 
 Modified:
-   trunk/buildroot/package/axel/axel.mk
+   trunk/buildroot/target/u-boot/Makefile.in
 
 
 Changeset:
-Modified: trunk/buildroot/package/axel/axel.mk
+Modified: trunk/buildroot/target/u-boot/Makefile.in
 ===================================================================
---- trunk/buildroot/package/axel/axel.mk	2008-06-17 07:08:32 UTC (rev 22389)
-+++ trunk/buildroot/package/axel/axel.mk	2008-06-17 07:22:29 UTC (rev 22390)
-@@ -23,7 +23,7 @@
+--- trunk/buildroot/target/u-boot/Makefile.in	2008-06-17 07:52:43 UTC (rev 22393)
++++ trunk/buildroot/target/u-boot/Makefile.in	2008-06-17 08:04:15 UTC (rev 22394)
+@@ -124,11 +124,13 @@
+ 	cp -dpf $(U_BOOT_DIR)/tools/$(U_BOOT_TOOLS_BIN) $(STAGING_DIR)/usr/bin/
  
- $(AXEL_DIR)/Makefile.settings: $(AXEL_DIR)/.unpacked
- 	(cd $(AXEL_DIR); \
--		./configure --enable-i18n=0 --prefix=/usr \
-+		./configure --i18n=0 --prefix=/usr \
- 	)
- 	touch $@
+ $(TARGET_DIR)/usr/bin/mkimage: $(U_BOOT_DIR)/$(U_BOOT_BIN)
++	mkdir -p $(@D)
+ 	$(TARGET_CC) -I$(U_BOOT_DIR)/include -DUSE_HOSTCC -o $@ \
+ 		$(U_BOOT_DIR)/tools/mkimage.c $(U_BOOT_DIR)/tools/crc32.c
+ 	$(STRIPCMD) $(STRIP_STRIP_UNNEEDED) $@
  
+ $(TARGET_DIR)/usr/sbin/fw_printenv: $(U_BOOT_DIR)/$(U_BOOT_BIN)
++	mkdir -p $(@D)
+ 	$(TARGET_CC) -I$(U_BOOT_DIR)/include -I$(LINUX_HEADERS_DIR)/include \
+ 		-DUSE_HOSTCC -o $@ \
+ 		$(U_BOOT_DIR)/tools/env/*.c $(U_BOOT_DIR)/tools/crc32.c
