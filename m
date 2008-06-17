@@ -1,41 +1,35 @@
-From: Hamish Moffatt <hamish@cloud.net.au>
-Date: Tue, 17 Jun 2008 14:23:19 +1000
-Subject: [Buildroot] svn
-	commit:	trunk/buildroot/toolchain/external-toolchain
-In-Reply-To: <20080616122246.C821B3C987@busybox.net>
-References: <20080616122246.C821B3C987@busybox.net>
-Message-ID: <20080617042319.GA17083@cloud.net.au>
+From: hamish at uclibc.org <hamish@uclibc.org>
+Date: Mon, 16 Jun 2008 22:29:48 -0700 (PDT)
+Subject: [Buildroot] svn commit: trunk/buildroot/package/libvorbis
+Message-ID: <20080617052948.6FCE53C853@busybox.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Mon, Jun 16, 2008 at 05:22:46AM -0700, jacmet at uclibc.org wrote:
->  config BR2_TOOLCHAIN_EXTERNAL_PATH
->  	string "External toolchain path"
-> -	default ""
-> +	default "/path/to/staging_dir/usr"
->  	help
->  	  Path to where the external toolchain is installed.
+Author: hamish
+Date: 2008-06-16 22:29:48 -0700 (Mon, 16 Jun 2008)
+New Revision: 22387
 
-I've set this to "$(BR2_STAGING_DIR)/usr" here, which might be a good
-default?
+Log:
+Fix missing punctuation
 
->  config BR2_TOOLCHAIN_EXTERNAL_PREFIX
->  	string "External toolchain prefix"
-> -	default ""
-> +	default "$(ARCH)-linux"
->  	help
->  	  This the the external toolchain prefix. For example:
->  	    armeb-unknown-linux-gnu, mipsel-unknown-linux-gnu, etc.
-
-Probably not a useful default, given that all the examples have -gnu etc
-after them? Mine is armeb-linux-uclibcgnu here; again you can probably
-construct something like "$(ARCH)-$(BR2_GNU_TARGET_SUFFIX)".
+Modified:
+   trunk/buildroot/package/libvorbis/Config.in
 
 
-thanks
-Hamish
--- 
-Hamish Moffatt VK3SB <hamish@debian.org> <hamish@cloud.net.au>
+Changeset:
+Modified: trunk/buildroot/package/libvorbis/Config.in
+===================================================================
+--- trunk/buildroot/package/libvorbis/Config.in	2008-06-17 05:11:43 UTC (rev 22386)
++++ trunk/buildroot/package/libvorbis/Config.in	2008-06-17 05:29:48 UTC (rev 22387)
+@@ -16,7 +16,7 @@
+ 	  WMA and PAC.
+ 
+ config BR2_PACKAGE_LIBVORBIS_TREMOR
+-	bool "use fixed point implementation (tremor)
++	bool "use fixed point implementation (tremor)"
+ 	default y if BR2_SOFT_FLOAT
+ 	default n
+ 	depends on BR2_PACKAGE_LIBVORBIS
