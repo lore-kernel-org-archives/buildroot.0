@@ -1,36 +1,37 @@
-From: hartleys <hartleys@visionengravers.com>
-Date: Wed, 18 Jun 2008 14:28:04 -0400
-Subject: [Buildroot] Problem with buildroot and external toolchain
-In-Reply-To: <87myljdyuw.fsf@macbook.be.48ers.dk>
-References: <BD79186B4FD85F4B8E60E381CAEE1909182568@mi8nycmail19.Mi8.com><20080617183841.GA18089@real.realitydiluted.com><BD79186B4FD85F4B8E60E381CAEE190918260A@mi8nycmail19.Mi8.com><87k5gng9wx.fsf@macbook.be.48ers.dk><BD79186B4FD85F4B8E60E381CAEE19091826AF@mi8nycmail19.Mi8.com>
-	<87myljdyuw.fsf@macbook.be.48ers.dk>
-Message-ID: <BD79186B4FD85F4B8E60E381CAEE1909182BBC@mi8nycmail19.Mi8.com>
+From: Bernhard Fischer <rep.dot.nop@gmail.com>
+Date: Wed, 18 Jun 2008 20:29:46 +0200
+Subject: [Buildroot] svn commit: trunk/buildroot/toolchain/gcc
+In-Reply-To: <871w2uy675.fsf@macbook.be.48ers.dk>
+References: <20080618154253.7A97E3C744@busybox.net>
+	<d6cda7730806180933n1407f717s4c2596bcc5f28bcf@mail.gmail.com>
+	<871w2uy675.fsf@macbook.be.48ers.dk>
+Message-ID: <20080618182946.GR10734@mx.loc>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Peter Korsgaard writes:
-> I doubt it. I'm using 4.2.31 (on Debian as well).
+On Wed, Jun 18, 2008 at 07:59:58PM +0200, Peter Korsgaard wrote:
+>>>>>> "Thiago" == Thiago A Corr?a <thiago.correa@gmail.com> writes:
+>
+> >> config BR2_GCC_VERSION_4_0_4
+> >> -               depends !BR2_avr32 && !BR2_nios2
+> >> -               depends BR2_DEPRECATED
+> >> +               depends on !BR2_avr32 && !BR2_nios2
+> >> +               depends on BR2_DEPRECATED
+> >> bool "gcc 4.0.4"
+>
+> Thiago> Hi Peter,
+>
+> Thiago>     I'm not familiar with the kconfig details. Is there a
+> Thiago> difference between depends and depends on? Or is it just
+> Thiago> syntax sugar?
+>
+>According to Documentation/kbuild/kconfig-language.txt in the kernel
+>sources, the correct syntax is 'depends on', we were just lucky that
+>the Kconfig parser was forgiving on this.
 
-Hello Peter,
-
-I've been messing with the ext-tool.mk trying to figure out why the
-external libraries are not getting copied to the root filesystem.
-
-I added some echo statements in copy_toolchain_lib_root and verified
-that the LIB, DEST, and STRIP values are getting set correctly. The
-LIB_DIR is getting set correctly to the path of the external library.
-
-It still appears that the find statement in the for loop is not working
-right. I added a
-
-	echo "FILE=$${FILE}"; \
-
-Right after the "for FILE in ..." stuff and never get an echo statement.
-
-Any other ideas what might be the problem?
-
-Thanks,
-Hartley
+ACK. If you guys ever update to visualise "selects" et al better then
+all of them need fixing. Needless to say that the git repo
+( http://repo.or.cz/w/buildroot ) already has all this..
