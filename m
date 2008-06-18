@@ -1,35 +1,30 @@
-From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Wed, 18 Jun 2008 08:46:31 +0200
-Subject: [Buildroot] Problem with buildroot and external toolchain
-In-Reply-To: <BD79186B4FD85F4B8E60E381CAEE19091826AF@mi8nycmail19.Mi8.com>
-	(hartleys@visionengravers.com's message of "Tue\,
-	17 Jun 2008 16\:15\:47 -0400")
-References: <BD79186B4FD85F4B8E60E381CAEE1909182568@mi8nycmail19.Mi8.com>
-	<20080617183841.GA18089@real.realitydiluted.com>
-	<BD79186B4FD85F4B8E60E381CAEE190918260A@mi8nycmail19.Mi8.com>
-	<87k5gng9wx.fsf@macbook.be.48ers.dk>
-	<BD79186B4FD85F4B8E60E381CAEE19091826AF@mi8nycmail19.Mi8.com>
-Message-ID: <87myljdyuw.fsf@macbook.be.48ers.dk>
+From: Bernhard Fischer <rep.dot.nop@gmail.com>
+Date: Wed, 18 Jun 2008 09:10:56 +0200
+Subject: [Buildroot] svn commit: trunk/buildroot/toolchain/uClibc
+In-Reply-To: <87fxrbj406.fsf@macbook.be.48ers.dk>
+References: <20080617133035.AC6F63C786@busybox.net>
+	<20080617155338.GI27792@mx.loc>
+	<87fxrbj406.fsf@macbook.be.48ers.dk>
+Message-ID: <20080618071056.GA32192@mx.loc>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "hartleys" == hartleys  <hartleys@visionengravers.com> writes:
+On Tue, Jun 17, 2008 at 08:44:09PM +0200, Peter Korsgaard wrote:
+>>>>>> "Bernhard" == Bernhard Fischer <rep.dot.nop@gmail.com> writes:
+>
+> Bernhard> On Tue, Jun 17, 2008 at 06:30:35AM -0700, jacmet at uclibc.org wrote:
+> >> Author: jacmet
+> >> Date: 2008-06-17 06:30:35 -0700 (Tue, 17 Jun 2008)
+> >> New Revision: 22401
+> >> 
+> >> Log:
+> >> toolchain/uclibc: strip libpthread
+>
+> Bernhard> Those are options in uclibc-menuconfig.
+>
+>Sorry, I don't see it. Do you mean CONFIG_PTHREADS_DEBUG_SUPPORT?
 
-Hi,
-
- hartleys> Could the problem I am having with ext-tool.mk not copying
- hartleys> my external toolchain library files be related to the
- hartleys> version of find installed on my system?
-
- hartleys> I'm running Debian etch which has the following find version:
-
- hartleys> $ find --version
- hartleys> GNU find version 4.2.28
-
-I doubt it. I'm using 4.2.31 (on Debian as well).
-
--- 
-Bye, Peter Korsgaard
+no. DOSTRIP
