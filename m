@@ -1,30 +1,32 @@
-From: Bernhard Fischer <rep.dot.nop@gmail.com>
-Date: Wed, 18 Jun 2008 09:10:56 +0200
-Subject: [Buildroot] svn commit: trunk/buildroot/toolchain/uClibc
-In-Reply-To: <87fxrbj406.fsf@macbook.be.48ers.dk>
-References: <20080617133035.AC6F63C786@busybox.net>
-	<20080617155338.GI27792@mx.loc>
-	<87fxrbj406.fsf@macbook.be.48ers.dk>
-Message-ID: <20080618071056.GA32192@mx.loc>
+From: Peter Korsgaard <jacmet@uclibc.org>
+Date: Wed, 18 Jun 2008 09:16:26 +0200
+Subject: [Buildroot] [PATCH] Fix proftpd compile with recent kernels.
+In-Reply-To: <d6cda7730806172058v708be481y167b834a4367834b@mail.gmail.com>
+	("Thiago A. =?utf-8?Q?Corr=C3=AAa=22's?= message of "Wed\, 18 Jun 2008
+	00\:58\:30 -0300")
+References: <d6cda7730806172032n7a564bc7g409d2bbe18c1d471@mail.gmail.com>
+	<d6cda7730806172058v708be481y167b834a4367834b@mail.gmail.com>
+Message-ID: <87k5gnciwl.fsf@macbook.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Tue, Jun 17, 2008 at 08:44:09PM +0200, Peter Korsgaard wrote:
->>>>>> "Bernhard" == Bernhard Fischer <rep.dot.nop@gmail.com> writes:
->
-> Bernhard> On Tue, Jun 17, 2008 at 06:30:35AM -0700, jacmet at uclibc.org wrote:
-> >> Author: jacmet
-> >> Date: 2008-06-17 06:30:35 -0700 (Tue, 17 Jun 2008)
-> >> New Revision: 22401
-> >> 
-> >> Log:
-> >> toolchain/uclibc: strip libpthread
->
-> Bernhard> Those are options in uclibc-menuconfig.
->
->Sorry, I don't see it. Do you mean CONFIG_PTHREADS_DEBUG_SUPPORT?
+>>>>> "Thiago" == Thiago A Corr?a <thiago.correa@gmail.com> writes:
 
-no. DOSTRIP
+ Thiago> *resubmit*
+ Thiago> Missing rule to apply patch in .mk file and change patch to apply with -p1
+
+ Thiago> It now works properly. Please, don't forget to:
+
+ Thiago> svn add package/proftpd/proftpd-1.3.1*
+
+ Thiago> It also seams that the bzero patch is no longer necessary
+ Thiago> (built fine for me using atngw100_defconfig)
+
+Thanks - Please don't include other stuff in your patches though
+(u-boot)
+
+-- 
+Bye, Peter Korsgaard
