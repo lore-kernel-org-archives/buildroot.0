@@ -1,28 +1,29 @@
-From: hartleys <hartleys@visionengravers.com>
-Date: Tue, 17 Jun 2008 16:15:47 -0400
-Subject: [Buildroot] Problem with buildroot and external toolchain
-In-Reply-To: <87k5gng9wx.fsf@macbook.be.48ers.dk>
-References: <BD79186B4FD85F4B8E60E381CAEE1909182568@mi8nycmail19.Mi8.com><20080617183841.GA18089@real.realitydiluted.com><BD79186B4FD85F4B8E60E381CAEE190918260A@mi8nycmail19.Mi8.com>
-	<87k5gng9wx.fsf@macbook.be.48ers.dk>
-Message-ID: <BD79186B4FD85F4B8E60E381CAEE19091826AF@mi8nycmail19.Mi8.com>
+From: Hamish Moffatt <hamish@cloud.net.au>
+Date: Wed, 18 Jun 2008 11:05:18 +1000
+Subject: [Buildroot] svn
+	commit:	trunk/buildroot/toolchain/external-toolchain
+In-Reply-To: <20080617104754.GA25850@cloud.net.au>
+References: <20080616122246.C821B3C987@busybox.net>
+	<20080617042319.GA17083@cloud.net.au>
+	<87ej6wwmxw.fsf@macbook.be.48ers.dk>
+	<20080617104754.GA25850@cloud.net.au>
+Message-ID: <20080618010518.GD4283@cloud.net.au>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Could the problem I am having with ext-tool.mk not copying my external
-toolchain library files be related to the version of find installed on
-my system?
+On Tue, Jun 17, 2008 at 08:47:54PM +1000, Hamish Moffatt wrote:
+> On Tue, Jun 17, 2008 at 09:16:43AM +0200, Peter Korsgaard wrote:
+> > Don't you have an armeb-linux symlink? For the stuff I compile (arm,
+> > i386, ppc) there's symlinks from the arm-linux-uclibc-<whatever> to
+> > arm-linux-<whatever>.
+> 
+> Probably, I'll have to check tomorrow.
 
-I'm running Debian etch which has the following find version:
+Indeed I do have an armeb-linux symlink.
 
-$ find --version
-GNU find version 4.2.28
-Features enabled: D_TYPE O_NOFOLLOW(enabled) LEAF_OPTIMISATION
-
-I see on the GNU site that the latest version is 4.4.0 and the one
-buildroot pulls in is 4.2.31.
-
-Thanks
-Hartley
+Hamish
+-- 
+Hamish Moffatt VK3SB <hamish@debian.org> <hamish@cloud.net.au>
