@@ -1,25 +1,68 @@
-From: Conrad Parker <conrad@metadecks.org>
-Date: Wed, 18 Jun 2008 10:58:46 +0900
-Subject: [Buildroot] Problem building usbutils
-In-Reply-To: <BD79186B4FD85F4B8E60E381CAEE190918280F@mi8nycmail19.Mi8.com>
-References: <BD79186B4FD85F4B8E60E381CAEE190918280F@mi8nycmail19.Mi8.com>
-Message-ID: <dba6c0830806171858v2f2ddb4cl3d260b0f64a1892c@mail.gmail.com>
+From: bugs at busybox.net <bugs@busybox.net>
+Date: Tue, 17 Jun 2008 19:45:25 -0700
+Subject: [Buildroot] [buildroot 0001899]: Using the Atmel supplied build
+	root, openssl fails to build
+Message-ID: <64c1ac2157166b7e45a4e8850beb399f@bugs.busybox.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-2008/6/18 hartleys <hartleys@visionengravers.com>:
->
-> 2) configure for usbutils outputs error: get libusb 0.1.8 or newer
-> Not sure how to fix this one. The libusb in buildroot is 0.1.12. It
-> built fine and the library is in my build_arm/staging_dir/usb/lib
-> directory. For some reason it's not being found. Can anyone offer so
-> insite on what I might have setup wrong?
 
-edit the version in package/libusb/libusb.mk, and try again.
+A NOTE has been added to this issue. 
+====================================================================== 
+http://busybox.net/bugs/view.php?id=1899 
+====================================================================== 
+Reported By:                yogy
+Assigned To:                buildroot
+====================================================================== 
+Project:                    buildroot
+Issue ID:                   1899
+Category:                   Architecture Specific
+Reproducibility:            always
+Severity:                   major
+Priority:                   normal
+Status:                     assigned
+====================================================================== 
+Date Submitted:             01-04-2008 15:34 PST
+Last Modified:              06-17-2008 19:45 PDT
+====================================================================== 
+Summary:                    Using the Atmel supplied build root, openssl fails
+to build
+Description: 
+openssl fails to build because avr32 architecture is not supported.
 
-If it works, send a patch to this list :-)
+I have "hacked" the openssl.patch to change the entry for alpha ev4 (which
+I suppose does not really need buildroot support) to 
 
-Conrad.
++"linux-avr32","gcc:-DTERMIO -O3 -fomit-frame-pointer
+-Wall::-D_REENTRANT::-ldl:BN_LLONG
+DES_RISC1::::::::::dlfcn:linux-shared:-fPIC::.so.\$(SHLIB_MAJOR).\$(SHLIB_MINOR)",
+
+all on one line.
+
+Also, the gcc version used, does not support the -msoft-float option, so I
+had to remove the 
+
+$(SED) 's,/CFLAG=,/CFLAG= $(TARGET_SOFT_FLOAT) ,g' \
+      $(OPENSSL_DIR)/Configure
+
+lines from openssl.mk.  After this, openssl built fine for avr32 .
+====================================================================== 
+
+---------------------------------------------------------------------- 
+ glennswest - 06-17-08 19:45  
+---------------------------------------------------------------------- 
+Building based on current snapshot of buildroot, problem still occurs on
+avr32
+Jun 18, 2008 
+
+Issue History 
+Date Modified   Username       Field                    Change               
+====================================================================== 
+01-04-08 15:34  yogy           New Issue                                    
+01-04-08 15:34  yogy           Status                   new => assigned     
+01-04-08 15:34  yogy           Assigned To               => buildroot       
+06-17-08 19:45  glennswest     Note Added: 0008374                          
+======================================================================
