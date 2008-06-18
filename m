@@ -1,42 +1,40 @@
 From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Wed, 18 Jun 2008 09:36:04 +0200
-Subject: [Buildroot] svn
-	commit:	trunk/buildroot/toolchain/external-toolchain
-In-Reply-To: <20080618011812.GE4283@cloud.net.au> (Hamish Moffatt's message of
-	"Wed\, 18 Jun 2008 11\:18\:12 +1000")
-References: <20080616122246.C821B3C987@busybox.net>
-	<20080617042319.GA17083@cloud.net.au>
-	<87ej6wwmxw.fsf@macbook.be.48ers.dk>
-	<20080617104754.GA25850@cloud.net.au>
-	<87fxrcmazj.fsf@macbook.be.48ers.dk>
-	<20080618011812.GE4283@cloud.net.au>
-Message-ID: <87y753b3ff.fsf@macbook.be.48ers.dk>
+Date: Wed, 18 Jun 2008 09:38:07 +0200
+Subject: [Buildroot] svn commit: trunk/buildroot/toolchain/uClibc
+In-Reply-To: <20080618071056.GA32192@mx.loc> (Bernhard Fischer's message of
+	"Wed\, 18 Jun 2008 09\:10\:56 +0200")
+References: <20080617133035.AC6F63C786@busybox.net>
+	<20080617155338.GI27792@mx.loc> <87fxrbj406.fsf@macbook.be.48ers.dk>
+	<20080618071056.GA32192@mx.loc>
+Message-ID: <87fxrbb3c0.fsf@macbook.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Hamish" == Hamish Moffatt <hamish@cloud.net.au> writes:
+>>>>> "Bernhard" == Bernhard Fischer <rep.dot.nop@gmail.com> writes:
 
-Hi,
+ Bernhard> On Tue, Jun 17, 2008 at 08:44:09PM +0200, Peter Korsgaard wrote:
+ >>>>>>> "Bernhard" == Bernhard Fischer <rep.dot.nop@gmail.com> writes:
+ >> 
+ Bernhard> On Tue, Jun 17, 2008 at 06:30:35AM -0700, jacmet at uclibc.org wrote:
+ >> >> Author: jacmet
+ >> >> Date: 2008-06-17 06:30:35 -0700 (Tue, 17 Jun 2008)
+ >> >> New Revision: 22401
+ >> >> 
+ >> >> Log:
+ >> >> toolchain/uclibc: strip libpthread
+ >> 
+ Bernhard> Those are options in uclibc-menuconfig.
+ >> 
+ >> Sorry, I don't see it. Do you mean CONFIG_PTHREADS_DEBUG_SUPPORT?
 
- Hamish> How would everyone react to a patch which redefines BUILD_DIR
- Hamish> to match PROJECT_BUILD_DIR, ie each project would have
- Hamish> project_build_$arch/$project/staging_dir etc?
+ Bernhard> no. DOSTRIP
 
- Hamish> I think Ulf commented in the past that he doesn't want to
- Hamish> waste the time spent compiling each package for each board
- Hamish> separately, but that seems to be the only way to do it
- Hamish> correctly.
-
-Maybe there's a solution in between. Put packages that really can only
-be built one way under build_, and all other packages under
-project_build, and then have STAGING_DIR under project_build as well
-(with some logic to copy/symlink in the toolchain stuff). Then each
-variant could use different versions / configurations of the packages,
-and we would still only compile the stuff under build_ once (per
-version).
+That doesn't exist in 0.9.28.3 (I'm back at 0.9.28.3 while debugging a
+threading/mutex issue with 0.9.29 and avahi). I'll change the strip to
+only apply when using 0.9.28.3.
 
 -- 
 Bye, Peter Korsgaard
