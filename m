@@ -1,63 +1,72 @@
-From: =?ISO-8859-1?Q?Thiago_A._Corr=EAa?= <thiago.correa@gmail.com>
-Date: Wed, 18 Jun 2008 01:12:51 -0300
-Subject: [Buildroot] Problems building nbd.
-Message-ID: <d6cda7730806172112l67de57b4s3d5923bda024c8f1@mail.gmail.com>
+From: Ulf Samuelsson <ulf.samuelsson@atmel.com>
+Date: Wed, 18 Jun 2008 07:03:24 +0200
+Subject: [Buildroot]
+	svncommit:	trunk/buildroot/toolchain/external-toolchain
+References: <20080616122246.C821B3C987@busybox.net><20080617042319.GA17083@cloud.net.au><87ej6wwmxw.fsf@macbook.be.48ers.dk><20080617104754.GA25850@cloud.net.au><87fxrcmazj.fsf@macbook.be.48ers.dk>
+	<20080618011812.GE4283@cloud.net.au>
+Message-ID: <013b01c8d104$f200c430$030514ac@atmel.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi,
+Hamish Moffatt wrote:
+> On Tue, Jun 17, 2008 at 03:45:04PM +0200, Peter Korsgaard wrote:
+>>  Hamish> Well I've got one board ("tools", in
+>>  Hamish> local/tools/tools.config) to build the toolchain which I
+>>  then Hamish> use as external toolchain to build several other
+>>  boards (all Hamish> armeb-linux-uclibcgnu). So my toolchain lives
+>>  in the staging Hamish> directory in the same tree.
+>> 
+>> So they all put libraries / headers in the same staging_dir? Doesn't
+> 
+> Yes.
+> 
+>> that give problems with packages detecting optional stuff at compile
+>> time that might not be available for a specific variant (E.G. one
+>> variant has expat, and another doesn't - Some configure script checks
+>> for expat and finds it in staging_dir even though it isn't going to
+>> be there at runtime).
+> 
+> Good point. So far all my boards are very similar so this hasn't been
+> a problem, but that won't always be the case.
+> 
+> IMHO this is a flaw of the project support - everything should be
+> built into a project-specific directory. Currently only the kernel
+> and busybox are built in project_build_$arch.
+> 
+> How would everyone react to a patch which redefines BUILD_DIR to match
+> PROJECT_BUILD_DIR, ie each project would have
+> project_build_$arch/$project/staging_dir etc?
 
-   It seams that newer nbd (Allows mounting block devices from the
-network) needs glib to compile, as confirmed by a post from a at their
-own mailing list
-(http://sourceforge.net/mailarchive/message.php?msg_id=20070817120341.GA12011%40country.grep.be)
+No, then you might as well use several buildroot trees.
 
-   So, I tried adding glib support to buildroot, but there seams to be
-some obstacles on the way:
+> 
+> I think Ulf commented in the past that he doesn't want to waste the
+> time spent compiling each package for each board separately, but that
+> seems to be the only way to do it correctly.
+> 
 
-  First, it fails configure. The package seams to try to detect some
-unusual things about the target system, such as stack grow direction.
-One can provide configure with a variable that will make it pass, but
-then again, the value of this variable might be system dependent.
-Thus, I'm not sure how to proceed. It seams that an AVR32 value would
-be  glib_cv_stack_grows=no but I don't know if it holds true for all
-buildroot supported platforms.
+You have to be aware of the limitations, that's for sure.
+There are a number of packages which can only be built one way
+and they can reside in build_<arch>, packages which have different
+options needs to be built in project_build_<arch>
 
-  Googling about the problem, I found that OpenEmbedded has platform
-specific files with such variables set. AFAIK we don't have such
-feature.
+> Hamish
 
-  The other option to fix nbd would be to downgrade to something below
-2.8, but then we would still be unable to support the next package
-that requires glib.
+Best Regards
+Ulf Samuelsson                ulf at atmel.com
+Atmel Nordic AB
+Mail:  Box 2033, 174 02 Sundbyberg, Sweden
+Visit:  Kavalleriv?gen 24, 174 58 Sundbyberg, Sweden
+Phone +46 (8) 441 54 22     Fax +46 (8) 441 54 29
+GSM    +46 (706) 22 44 57
 
-  Any thoughts?
 
-  I'm appending my glibc.mk for reference at the end.
-
-Kind Regards,
-   Thiago A. Correa
-
-#############################################################
-#
-# glib
-#
-#############################################################
-GLIB_VERSION = 2.17.2
-GLIB_SOURCE = glib-$(GLIB_VERSION).tar.bz2
-GLIB_SITE = http://ftp.gnome.org/pub/gnome/sources/glib/2.17
-GLIB_AUTORECONF = YES
-GLIB_INSTALL_STAGING = NO
-GLIB_INSTALL_TARGET = YES
-
-GLIB_CONF_OPT = glib_cv_stack_grows=no glib_cv_uscore=no \
-                ac_cv_func_posix_getpwuid_r=yes \
-                ac_cv_func_posix_getgrgid_r=yes \
-                ac_cv_func_setpgrp_void=yes
-
-GLIB_DEPENDENCIES = uclibc gettext
-
-$(eval $(call AUTOTARGETS,package,glib))
+Technical support when I am not available:
+AT90 AVR Applications Group: mailto:avr at atmel.com
+AT91 ARM Applications Group: mailto:at91support at atmel.com
+AVR32 Applications Group        mailto:avr32 at atmel.com
+http://www.avrfreaks.net/;            http://avr32linux.org/
+http://www.at91.com/ ;                 http://www.linux4sam.org/
