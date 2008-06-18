@@ -1,26 +1,25 @@
-From: hartleys <hartleys@visionengravers.com>
-Date: Tue, 17 Jun 2008 21:48:45 -0400
+From: Conrad Parker <conrad@metadecks.org>
+Date: Wed, 18 Jun 2008 10:58:46 +0900
 Subject: [Buildroot] Problem building usbutils
-Message-ID: <BD79186B4FD85F4B8E60E381CAEE190918280F@mi8nycmail19.Mi8.com>
+In-Reply-To: <BD79186B4FD85F4B8E60E381CAEE190918280F@mi8nycmail19.Mi8.com>
+References: <BD79186B4FD85F4B8E60E381CAEE190918280F@mi8nycmail19.Mi8.com>
+Message-ID: <dba6c0830806171858v2f2ddb4cl3d260b0f64a1892c@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello all,
+2008/6/18 hartleys <hartleys@visionengravers.com>:
+>
+> 2) configure for usbutils outputs error: get libusb 0.1.8 or newer
+> Not sure how to fix this one. The libusb in buildroot is 0.1.12. It
+> built fine and the library is in my build_arm/staging_dir/usb/lib
+> directory. For some reason it's not being found. Can anyone offer so
+> insite on what I might have setup wrong?
 
-I'm having a couple problems getting usbutils to build with buildroot.
+edit the version in package/libusb/libusb.mk, and try again.
 
-1) usbutils requires libusb
-This was the easy one. I just needed to select the libusb package. But,
-shouldn't the Config.in for usbutils select it automatically?
+If it works, send a patch to this list :-)
 
-2) configure for usbutils outputs error: get libusb 0.1.8 or newer
-Not sure how to fix this one. The libusb in buildroot is 0.1.12. It
-built fine and the library is in my build_arm/staging_dir/usb/lib
-directory. For some reason it's not being found. Can anyone offer so
-insite on what I might have setup wrong?
-
-Thanks,
-Hartley
+Conrad.
