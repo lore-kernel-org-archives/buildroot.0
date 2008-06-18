@@ -1,34 +1,33 @@
 From: =?ISO-8859-1?Q?Thiago_A._Corr=EAa?= <thiago.correa@gmail.com>
-Date: Wed, 18 Jun 2008 10:54:14 -0300
-Subject: [Buildroot] Problems building nbd.
-In-Reply-To: <874p7r86p3.fsf@macbook.be.48ers.dk>
-References: <d6cda7730806172112l67de57b4s3d5923bda024c8f1@mail.gmail.com>
-	<874p7r86p3.fsf@macbook.be.48ers.dk>
-Message-ID: <d6cda7730806180654xdfc1fb9m9d66ab668c4cbc3a@mail.gmail.com>
+Date: Wed, 18 Jun 2008 10:56:12 -0300
+Subject: [Buildroot] svn commit: trunk/buildroot/package/proftpd
+In-Reply-To: <d6cda7730806180648u5bf7bd6esd4c882c3de6a118b@mail.gmail.com>
+References: <20080618084529.3973AF8007@busybox.net>
+	<20080618092206.GE32192@mx.loc> <87r6av59np.fsf@macbook.be.48ers.dk>
+	<d6cda7730806180648u5bf7bd6esd4c882c3de6a118b@mail.gmail.com>
+Message-ID: <d6cda7730806180656p13917415j6ec9ea1b7307afb@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Wed, Jun 18, 2008 at 5:53 AM, Peter Korsgaard <jacmet@uclibc.org> wrote:
->>>>>> "Thiago" == Thiago A Corr?a <thiago.correa@gmail.com> writes:
->  Thiago>   The other option to fix nbd would be to downgrade to something below
->  Thiago> 2.8, but then we would still be unable to support the next package
->  Thiago> that requires glib.
+On Wed, Jun 18, 2008 at 10:48 AM, Thiago A. Corr?a
+<thiago.correa@gmail.com> wrote:
+> On Wed, Jun 18, 2008 at 7:18 AM, Peter Korsgaard <jacmet@uclibc.org> wrote:
+>>>>>>> "Bernhard" == Bernhard Fischer <rep.dot.nop@gmail.com> writes:
+>>
+>> Hi,
+>>
+>>  Bernhard> this sounds like it should work without patching by just
+>>  Bernhard> configuring properly. Also these patches are usually named
+>>  Bernhard> "susv3.*legacy" for consistency.
+>>
+>> Could be - Ulf?
 >
->  Thiago>   Any thoughts?
->
->  Thiago>   I'm appending my glibc.mk for reference at the end.
->
-> We DO have glib packages in buildroot (1.2.x and 2.x.x) -
-> package/libglib12 and package/libglib2.
+> I think it works without that patch even, as I didn't rename it on my
+> local copy. Will remove it and try to build again just to make sure.
 
-Ops, I missed that :(
-
-I've added the dependency to nbd.mk and it seams to be working fine now.
-
-Anyway, is that a valid concern (skipping configure tests which
-results might be platform dependent?) or perhaps that's not worth to
-worry about? I see that the libglib2.mk does set the same variables
-that I mentioned earlier.
+It built without that patch at all using atngw100_defconfig, which
+doesn't enable Sus legacy options, so I think it's safe to remove that
+patch.
