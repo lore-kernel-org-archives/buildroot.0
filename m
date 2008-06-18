@@ -1,62 +1,50 @@
 From: hartleys <hartleys@visionengravers.com>
-Date: Wed, 18 Jun 2008 18:20:42 -0400
-Subject: [Buildroot] Problem building usbutils
-In-Reply-To: <BD79186B4FD85F4B8E60E381CAEE1909182D84@mi8nycmail19.Mi8.com>
-References: <BD79186B4FD85F4B8E60E381CAEE190918280F@mi8nycmail19.Mi8.com><871w2v9lm9.fsf@macbook.be.48ers.dk>
-	<BD79186B4FD85F4B8E60E381CAEE1909182D84@mi8nycmail19.Mi8.com>
-Message-ID: <BD79186B4FD85F4B8E60E381CAEE1909182DBC@mi8nycmail19.Mi8.com>
+Date: Wed, 18 Jun 2008 19:50:16 -0400
+Subject: [Buildroot] trouble building grep
+In-Reply-To: <06ee01c8a512$ccac08c0$ad289e86@LPSC0173W>
+References: <1CF6EDDF0820924DA43C9A52FE7325950ABFA085@MI8NYCMAIL17.Mi8.com>
+	<06ee01c8a512$ccac08c0$ad289e86@LPSC0173W>
+Message-ID: <BD79186B4FD85F4B8E60E381CAEE1909182E0D@mi8nycmail19.Mi8.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-> > 1) usbutils requires libusb This was the easy one. I just needed to 
-> > select the libusb package. But, shouldn't the Config.in for usbutils
+> > As far as I can tell the dependants (uclibc, gettext and libintl)
+are 
+> > being built with no problem. When the make runs for grep it appears
+to 
+> > get configured fine but during the actual build I get error messages
 
-> > select it automatically?
+> > that I think are during the link of libgreputils.a. I get undefined 
+> > reference messages for libintl_gettext at various lines in the
+source 
+> > then the build stops.
 >
-> Yes, fixed in trunk.
+> All I can offer is that the grep from busybox works fine, and doesn't
+> need gettext.
+> 
+> I assume you have selected BR2_PACKAGE_GETTEXT in the main config of
+> buildroot.
 >
-> > 2) configure for usbutils outputs error: get libusb 0.1.8 or newer 
-> > Not sure how to fix this one. The libusb in buildroot is 0.1.12. It 
-> > built fine and the library is in my build_arm/staging_dir/usb/lib 
-> > directory. For some reason it's not being found. Can anyone offer so
+> But I think the main problem is with locales (intl) and/or wchar
+> dependencies missing from the uclibc config.
 
-> > insite on what I might have setup wrong?
->
-> Strange, it builds here (i386).
->
-> Could you provide more details, please?
+I've done some googling and "think" the problem has something to do with
+the configure for grep.
 
-Hello Peter,
+http://www.haible.de/bruno/gettext-FAQ.html
 
-Strange... If I add LDFLAGS="$(TARGET_LDFLAGS)" I can get usbutils to
-build.
+During the configure it finds libintl.h and ends up defining
+HAVE_LIBINTL_H in config.h. But none of the final links during the build
+of grep include the option '-lintl' to link the library.
 
-In usbutils.mk:
+According to the website above, this has something to do with @INTLLIBS@
+in Makefile.in but my knowledge of how the autoconf stuff works is
+pretty limited so I'm not sure how to fix it.
 
-$(USBUTILS_DIR)/.configured: $(USBUTILS_DIR)/.unpacked
-	(cd $(USBUTILS_DIR); rm -rf config.cache; \
-		$(TARGET_CONFIGURE_OPTS) \
-		$(TARGET_CONFIGURE_ARGS) \
-+		LDFLAGS= "$(TARGET_LDFLAGS)" \
-		ac_cv_func_malloc_0_nonnull=yes \
-		./configure \
-		--target=$(GNU_TARGET_NAME) \
-		--host=$(GNU_TARGET_NAME) \
-		--build=$(GNU_HOST_NAME) \
-		--prefix=/usr \
-	)
-
-I guess this is because the configure script for usbutils uses:
-
-ac_link='$CC -o conftest$ac_exeext $CFLAGS $CPPFLAGS $LDFLAGS
-conftest.$ac_ext $LIBS >&5'
-
-To build and link the tests.
-
-Is this the "right" way to fix it?
+Can anyone offer any help?
 
 Thanks,
 Hartley
