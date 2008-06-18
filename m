@@ -1,53 +1,44 @@
-From: bugs at busybox.net <bugs@busybox.net>
-Date: Wed, 18 Jun 2008 06:17:04 -0700
-Subject: [Buildroot] [buildroot 0003754]: dnsmasq fails to link on i686
-	platforms
-Message-ID: <7b80249d1ae96a75c2acfbbf3b2d9993@busybox.net>
+From: Bernhard Fischer <rep.dot.nop@gmail.com>
+Date: Wed, 18 Jun 2008 15:21:08 +0200
+Subject: [Buildroot] svn commit: trunk/buildroot/package/dnsmasq
+In-Reply-To: <20080618131201.C636C3C7AE@busybox.net>
+References: <20080618131201.C636C3C7AE@busybox.net>
+Message-ID: <20080618132108.GA1460@mx.loc>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+On Wed, Jun 18, 2008 at 06:12:01AM -0700, jacmet at uclibc.org wrote:
+>Author: jacmet
+>Date: 2008-06-18 06:12:00 -0700 (Wed, 18 Jun 2008)
+>New Revision: 22413
+>
+>Log:
+>dnsmasq: use awk instead of nawk
 
-The following issue has been RESOLVED. 
-====================================================================== 
-http://busybox.net/bugs/view.php?id=3754 
-====================================================================== 
-Reported By:                KHAksnes
-Assigned To:                buildroot
-====================================================================== 
-Project:                    buildroot
-Issue ID:                   3754
-Category:                   Architecture Specific
-Reproducibility:            always
-Severity:                   block
-Priority:                   normal
-Status:                     resolved
-Resolution:                 fixed
-Fixed in Version:           
-====================================================================== 
-Date Submitted:             06-14-2008 17:01 PDT
-Last Modified:              06-18-2008 06:17 PDT
-====================================================================== 
-Summary:                    dnsmasq fails to link on i686 platforms
-Description: 
-dnsmask insists on loading libdbus-1.so from /lib instead of
-build_i686/staging_dir/usr/lib ending with linking failure as expected.
-I am using svn version 22342 of buildroot.
-====================================================================== 
+ok my box didn't come with awk so i installed gawk (which is awk
+compatible) in /opt/mystuff/bin/gawk.
+/opt/mystuff is not in my PATH and build via
+$ SED=/opt/mystuff/bin/sed AWK=/opt/mystuff/bin/gawk make
 
----------------------------------------------------------------------- 
- jacmet - 06-15-08 13:40  
----------------------------------------------------------------------- 
-I cannot reproduce it on ppc, please provide more details 
 
----------------------------------------------------------------------- 
- KHAksnes - 06-15-08 14:07  
----------------------------------------------------------------------- 
-A compile log ( after doing rm -rf build_i686/dnsmasq* )
-are uploaded 
-
----------------------------------------------------------------------- 
- jacmet - 06-18-08 06:06  
----------------------------------------------------------------------- 
+>Modified:
+>   trunk/buildroot/package/dnsmasq/dnsmasq.mk
+>
+>
+>Changeset:
+>Modified: trunk/buildroot/package/dnsmasq/dnsmasq.mk
+>===================================================================
+>--- trunk/buildroot/package/dnsmasq/dnsmasq.mk	2008-06-18 13:11:52 UTC (rev 22412)
+>+++ trunk/buildroot/package/dnsmasq/dnsmasq.mk	2008-06-18 13:12:00 UTC (rev 22413)
+>@@ -43,7 +43,7 @@
+> 	$(SED) 's^.*#define HAVE_DBUS.*^/* #define HAVE_DBUS */^' \
+> 		$(DNSMASQ_DIR)/src/config.h
+> endif
+>-	$(MAKE) CC=$(TARGET_CC) CFLAGS="$(TARGET_CFLAGS)" \
+>+	$(MAKE) CC=$(TARGET_CC) CFLAGS="$(TARGET_CFLAGS)" AWK=awk \
+> 		COPTS='$(DNSMASQ_COPTS)' PREFIX=/usr -C $(DNSMASQ_DIR)
+> 	touch -c $@
+> 
