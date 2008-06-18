@@ -1,31 +1,84 @@
-From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Wed, 18 Jun 2008 16:57:38 +0200
-Subject: [Buildroot] svn commit: trunk/buildroot/package/proftpd
-In-Reply-To: <20080618143958.GA1929@mx.loc> (Bernhard Fischer's message of
-	"Wed\, 18 Jun 2008 16\:39\:58 +0200")
-References: <20080618084529.3973AF8007@busybox.net>
-	<20080618092206.GE32192@mx.loc> <87r6av59np.fsf@macbook.be.48ers.dk>
-	<d6cda7730806180648u5bf7bd6esd4c882c3de6a118b@mail.gmail.com>
-	<d6cda7730806180656p13917415j6ec9ea1b7307afb@mail.gmail.com>
-	<87ve063jt2.fsf@macbook.be.48ers.dk> <20080618143958.GA1929@mx.loc>
-Message-ID: <87iqw623kt.fsf@macbook.be.48ers.dk>
+From: jacmet at uclibc.org <jacmet@uclibc.org>
+Date: Wed, 18 Jun 2008 08:03:10 -0700 (PDT)
+Subject: [Buildroot] svn commit: trunk/buildroot/package/nbd
+Message-ID: <20080618150310.1113C3C721@busybox.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Bernhard" == Bernhard Fischer <rep.dot.nop@gmail.com> writes:
+Author: jacmet
+Date: 2008-06-18 08:03:07 -0700 (Wed, 18 Jun 2008)
+New Revision: 22421
 
-Hi,
+Log:
+nbd: bump version and depend on glib2
 
- >> Ok, thanks - Removed in trunk.
+Patch by Thiago A. Correa.
 
- Bernhard> thanks. Please be more careful.
- Bernhard> Rule of thumb: Fewer patches are better.
 
-Sure, but this isn't a new patch - Ulf added it. I just did a quick
-quilt refresh to make it apply without fuzz to 1.3.1.
+Modified:
+   trunk/buildroot/package/nbd/Config.in
+   trunk/buildroot/package/nbd/nbd.mk
 
--- 
-Bye, Peter Korsgaard
+
+Changeset:
+Modified: trunk/buildroot/package/nbd/Config.in
+===================================================================
+--- trunk/buildroot/package/nbd/Config.in	2008-06-18 15:02:24 UTC (rev 22420)
++++ trunk/buildroot/package/nbd/Config.in	2008-06-18 15:03:07 UTC (rev 22421)
+@@ -1,9 +1,12 @@
+ config BR2_PACKAGE_NBD
+ 	bool "nbd"
+ 	default n
++	select BR2_PACKAGE_LIBGLIB2
+ 	help
+ 	  NBD is a set of utilities to configure network block devices,
+ 	  allowing access to remote block devices over TCP/IP network.
+ 	  Notice: This package only provides the NBD client.
+ 
++	  Depends on glib.
++
+ 	  http://nbd.sf.net/
+
+Modified: trunk/buildroot/package/nbd/nbd.mk
+===================================================================
+--- trunk/buildroot/package/nbd/nbd.mk	2008-06-18 15:02:24 UTC (rev 22420)
++++ trunk/buildroot/package/nbd/nbd.mk	2008-06-18 15:03:07 UTC (rev 22421)
+@@ -4,7 +4,7 @@
+ #
+ #############################################################
+ 
+-NBD_VERSION=2.8.6
++NBD_VERSION=2.9.11
+ NBD_SOURCE=nbd-$(NBD_VERSION).tar.bz2
+ NBD_CAT:=$(BZCAT)
+ NBD_SITE=http://$(BR2_SOURCEFORGE_MIRROR).dl.sourceforge.net/sourceforge/nbd/
+@@ -15,7 +15,7 @@
+ 
+ $(NBD_DIR)/.unpacked: $(DL_DIR)/$(NBD_SOURCE)
+ 	$(NBD_CAT) $(DL_DIR)/$(NBD_SOURCE) | tar -C $(BUILD_DIR) $(TAR_OPTIONS) -
+-	touch $(NBD_DIR)/.unpacked
++	touch $@
+ 
+ $(NBD_DIR)/.configured: $(NBD_DIR)/.unpacked
+ 	(cd $(NBD_DIR); rm -rf config.cache; \
+@@ -28,7 +28,7 @@
+ 		--build=$(GNU_HOST_NAME) \
+ 		--prefix=/usr \
+ 	)
+-	touch $(NBD_DIR)/.configured
++	touch $@
+ 
+ $(NBD_DIR)/nbd-client: $(NBD_DIR)/.configured
+ 	$(MAKE) -C $(NBD_DIR) nbd-client
+@@ -37,7 +37,7 @@
+ 	cp $< $@
+ 	$(STRIPCMD) $@
+ 
+-nbd: uclibc $(TARGET_DIR)/sbin/nbd-client
++nbd: uclibc libglib2 $(TARGET_DIR)/sbin/nbd-client
+ 
+ nbd-source: $(DL_DIR)/$(NBD_SOURCE)
+ 
