@@ -1,33 +1,51 @@
-From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Wed, 18 Jun 2008 12:18:02 +0200
-Subject: [Buildroot] svn commit: trunk/buildroot/package/proftpd
-In-Reply-To: <20080618092206.GE32192@mx.loc> (Bernhard Fischer's message of
-	"Wed\, 18 Jun 2008 11\:22\:06 +0200")
-References: <20080618084529.3973AF8007@busybox.net>
-	<20080618092206.GE32192@mx.loc>
-Message-ID: <87r6av59np.fsf@macbook.be.48ers.dk>
+From: bugs at busybox.net <bugs@busybox.net>
+Date: Wed, 18 Jun 2008 06:06:42 -0700
+Subject: [Buildroot] [buildroot 0003754]: dnsmasq fails to link on i686
+	platforms
+Message-ID: <8ff1d6082f8d792bb52267a3b07e1ad9@busybox.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Bernhard" == Bernhard Fischer <rep.dot.nop@gmail.com> writes:
 
-Hi,
+A NOTE has been added to this issue. 
+====================================================================== 
+http://busybox.net/bugs/view.php?id=3754 
+====================================================================== 
+Reported By:                KHAksnes
+Assigned To:                buildroot
+====================================================================== 
+Project:                    buildroot
+Issue ID:                   3754
+Category:                   Architecture Specific
+Reproducibility:            always
+Severity:                   block
+Priority:                   normal
+Status:                     assigned
+====================================================================== 
+Date Submitted:             06-14-2008 17:01 PDT
+Last Modified:              06-18-2008 06:06 PDT
+====================================================================== 
+Summary:                    dnsmasq fails to link on i686 platforms
+Description: 
+dnsmask insists on loading libdbus-1.so from /lib instead of
+build_i686/staging_dir/usr/lib ending with linking failure as expected.
+I am using svn version 22342 of buildroot.
+====================================================================== 
 
- Bernhard> this sounds like it should work without patching by just
- Bernhard> configuring properly. Also these patches are usually named
- Bernhard> "susv3.*legacy" for consistency.
+---------------------------------------------------------------------- 
+ jacmet - 06-15-08 13:40  
+---------------------------------------------------------------------- 
+I cannot reproduce it on ppc, please provide more details 
 
-Could be - Ulf?
+---------------------------------------------------------------------- 
+ KHAksnes - 06-15-08 14:07  
+---------------------------------------------------------------------- 
+A compile log ( after doing rm -rf build_i686/dnsmasq* )
+are uploaded 
 
- >> trunk/buildroot/package/proftpd/proftpd-1.3.1-fix-kernel-header-capability-version.patch
-
- Bernhard> That one would make me nervous if i would use proftpd but
- Bernhard> there is vsftpd anyway and luckily i don't do neither.
-
-Me neither.
-
--- 
-Bye, Peter Korsgaard
+---------------------------------------------------------------------- 
+ jacmet - 06-18-08 06:06  
+---------------------------------------------------------------------- 
