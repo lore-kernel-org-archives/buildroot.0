@@ -1,37 +1,37 @@
-From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Wed, 18 Jun 2008 10:46:06 +0200
-Subject: [Buildroot] Problem building usbutils
-In-Reply-To: <BD79186B4FD85F4B8E60E381CAEE190918280F@mi8nycmail19.Mi8.com>
-	(hartleys@visionengravers.com's message of "Tue\,
-	17 Jun 2008 21\:48\:45 -0400")
-References: <BD79186B4FD85F4B8E60E381CAEE190918280F@mi8nycmail19.Mi8.com>
-Message-ID: <871w2v9lm9.fsf@macbook.be.48ers.dk>
+From: jacmet at uclibc.org <jacmet@uclibc.org>
+Date: Wed, 18 Jun 2008 01:51:04 -0700 (PDT)
+Subject: [Buildroot] svn commit: trunk/buildroot/toolchain/uClibc
+Message-ID: <20080618085104.E8001F8007@busybox.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "hartleys" == hartleys  <hartleys@visionengravers.com> writes:
+Author: jacmet
+Date: 2008-06-18 01:51:00 -0700 (Wed, 18 Jun 2008)
+New Revision: 22408
 
-Hi,
+Log:
+uclibc: remove obsolete uclibc 0.9.28 handling
 
- hartleys> 1) usbutils requires libusb This was the easy one. I just
- hartleys> needed to select the libusb package. But, shouldn't the
- hartleys> Config.in for usbutils select it automatically?
 
-Yes, fixed in trunk.
+Modified:
+   trunk/buildroot/toolchain/uClibc/uclibc.mk
 
- hartleys> 2) configure for usbutils outputs error: get libusb 0.1.8
- hartleys> or newer Not sure how to fix this one. The libusb in
- hartleys> buildroot is 0.1.12. It built fine and the library is in my
- hartleys> build_arm/staging_dir/usb/lib directory. For some reason
- hartleys> it's not being found. Can anyone offer so insite on what I
- hartleys> might have setup wrong?
 
-Strange, it builds here (i386).
-
-Could you provide more details, please?
-
--- 
-Bye, Peter Korsgaard
+Changeset:
+Modified: trunk/buildroot/toolchain/uClibc/uclibc.mk
+===================================================================
+--- trunk/buildroot/toolchain/uClibc/uclibc.mk	2008-06-18 08:45:23 UTC (rev 22407)
++++ trunk/buildroot/toolchain/uClibc/uclibc.mk	2008-06-18 08:51:00 UTC (rev 22408)
+@@ -29,9 +29,6 @@
+ ifeq ($(BR2_UCLIBC_VERSION_0_9_28_3),y)
+ UCLIBC_VER:=0.9.28.3
+ endif
+-ifeq ($(BR2_UCLIBC_VERSION_0_9_28),y)
+-UCLIBC_VER:=0.9.28
+-endif
+ UCLIBC_SITE:=http://www.uclibc.org/downloads
+ 
+ ifeq ($(BR2_TOOLCHAIN_EXTERNAL_SOURCE),y)
