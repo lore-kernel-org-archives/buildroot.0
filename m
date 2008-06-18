@@ -1,33 +1,201 @@
-From: =?ISO-8859-1?Q?Thiago_A._Corr=EAa?= <thiago.correa@gmail.com>
-Date: Wed, 18 Jun 2008 10:56:12 -0300
+From: jacmet at uclibc.org <jacmet@uclibc.org>
+Date: Wed, 18 Jun 2008 07:21:31 -0700 (PDT)
 Subject: [Buildroot] svn commit: trunk/buildroot/package/proftpd
-In-Reply-To: <d6cda7730806180648u5bf7bd6esd4c882c3de6a118b@mail.gmail.com>
-References: <20080618084529.3973AF8007@busybox.net>
-	<20080618092206.GE32192@mx.loc> <87r6av59np.fsf@macbook.be.48ers.dk>
-	<d6cda7730806180648u5bf7bd6esd4c882c3de6a118b@mail.gmail.com>
-Message-ID: <d6cda7730806180656p13917415j6ec9ea1b7307afb@mail.gmail.com>
+Message-ID: <20080618142131.44CFD3C6BC@busybox.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Wed, Jun 18, 2008 at 10:48 AM, Thiago A. Corr?a
-<thiago.correa@gmail.com> wrote:
-> On Wed, Jun 18, 2008 at 7:18 AM, Peter Korsgaard <jacmet@uclibc.org> wrote:
->>>>>>> "Bernhard" == Bernhard Fischer <rep.dot.nop@gmail.com> writes:
->>
->> Hi,
->>
->>  Bernhard> this sounds like it should work without patching by just
->>  Bernhard> configuring properly. Also these patches are usually named
->>  Bernhard> "susv3.*legacy" for consistency.
->>
->> Could be - Ulf?
->
-> I think it works without that patch even, as I didn't rename it on my
-> local copy. Will remove it and try to build again just to make sure.
+Author: jacmet
+Date: 2008-06-18 07:21:28 -0700 (Wed, 18 Jun 2008)
+New Revision: 22414
 
-It built without that patch at all using atngw100_defconfig, which
-doesn't enable Sus legacy options, so I think it's safe to remove that
-patch.
+Log:
+proftpd: remove unneeded susv3 legacy patch
+
+
+Removed:
+   trunk/buildroot/package/proftpd/proftpd-1.3.1-bcopy.patch
+
+
+Changeset:
+Deleted: trunk/buildroot/package/proftpd/proftpd-1.3.1-bcopy.patch
+===================================================================
+--- trunk/buildroot/package/proftpd/proftpd-1.3.1-bcopy.patch	2008-06-18 13:12:00 UTC (rev 22413)
++++ trunk/buildroot/package/proftpd/proftpd-1.3.1-bcopy.patch	2008-06-18 14:21:28 UTC (rev 22414)
+@@ -1,173 +0,0 @@
+----
+- config.h.in                    |   11 ++++-------
+- contrib/mod_load/mod_load.c.in |    2 +-
+- include/conf.h                 |   11 -----------
+- lib/glibc-glob.c               |   10 ----------
+- lib/libltdl/config-h.in        |    7 ++-----
+- lib/libltdl/ltdl.c             |    4 ----
+- 6 files changed, 7 insertions(+), 38 deletions(-)
+-
+-Index: proftpd-1.3.1/config.h.in
+-===================================================================
+---- proftpd-1.3.1.orig/config.h.in
+-+++ proftpd-1.3.1/config.h.in
+-@@ -202,7 +202,7 @@
+- #undef STACK_DIRECTION
+- 
+- /* Define if you have the ANSI C header files.  */
+--#undef STDC_HEADERS
+-+#define STDC_HEADERS	1
+- 
+- /* Define if you can safely include both <sys/time.h> and <time.h>.  */
+- #undef TIME_WITH_SYS_TIME
+-@@ -214,10 +214,10 @@
+- #undef uid_t
+- 
+- /* The number of bytes in a short.  */
+--#undef SIZEOF_SHORT
+-+#define SIZEOF_SHORT	2
+- 
+- /* The number of bytes in an int.  */
+--#undef SIZEOF_INT
+-+#define SIZEOF_INT	4
+- 
+- /* The number of bytes in a long.  */
+- #undef SIZEOF_LONG
+-@@ -234,9 +234,6 @@
+- /* The number of bytes in a time_t.  */
+- #undef SIZEOF_TIME_T
+- 
+--/* Define if you have the bcopy function.  */
+--#undef HAVE_BCOPY
+--
+- /* Define if you have the crypt function.  */
+- #undef HAVE_CRYPT
+- 
+-@@ -319,7 +316,7 @@
+- #undef HAVE_INET_PTON
+- 
+- /* Define if you have the memcpy function.  */
+--#undef HAVE_MEMCPY
+-+#define HAVE_MEMCPY	1
+- 
+- /* Define if you have the mempcpy function.  */
+- #undef HAVE_MEMPCPY
+-Index: proftpd-1.3.1/contrib/mod_load/mod_load.c.in
+-===================================================================
+---- proftpd-1.3.1.orig/contrib/mod_load/mod_load.c.in
+-+++ proftpd-1.3.1/contrib/mod_load/mod_load.c.in
+-@@ -651,7 +651,7 @@
+-       for (i = 0; i < conf.config_maxclass; ++i)
+-         {
+-           struct class_stats stats;
+--          bzero ((char *) &stats, sizeof stats);
+-+          memset ((char *) &stats, 0, sizeof stats);
+- 
+-           desc.sd_type = CPUTYPE_CLASS;
+-           desc.sd_objid = i;
+-Index: proftpd-1.3.1/include/conf.h
+-===================================================================
+---- proftpd-1.3.1.orig/include/conf.h
+-+++ proftpd-1.3.1/include/conf.h
+-@@ -118,10 +118,6 @@
+- #  define strrchr rindex
+- # endif
+- char *strchr(),*strrchr();
+--# ifndef HAVE_MEMCPY
+--#  define memcpy(d,s,n) bcopy((s),(d),(n))
+--#  define memmove(d,s,n) bcopy((s),(d),(n))
+--# endif
+- #endif
+- 
+- #ifdef HAVE_BSTRING_H
+-@@ -278,13 +274,6 @@
+- off_t lseek(int, off_t, int);
+- #endif
+- 
+--/* See if we have bcopy, if not define them to use the memcpy functions */
+--
+--#ifndef HAVE_BCOPY
+--# define bcopy(s,d,n)	memcpy((d),(s),(n))
+--# define bzero(d,n)	memset((d),0,(n))
+--#endif
+--
+- /* Solaris has __vsnprintf, but no vsnprintf */
+- #if ! defined(HAVE_VSNPRINTF) && defined(HAVE___VSNPRINTF)
+- # undef vsnprintf
+-Index: proftpd-1.3.1/lib/glibc-glob.c
+-===================================================================
+---- proftpd-1.3.1.orig/lib/glibc-glob.c
+-+++ proftpd-1.3.1/lib/glibc-glob.c
+-@@ -215,18 +215,8 @@
+- 
+- #ifndef	ANSI_STRING
+- 
+--# ifndef bzero
+--extern void bzero ();
+--# endif
+--# ifndef bcopy
+--extern void bcopy ();
+--# endif
+--
+--# define memcpy(d, s, n)	bcopy ((s), (d), (n))
+- # define strrchr	rindex
+- /* memset is only used for zero here, but let's be paranoid.  */
+--# define memset(s, better_be_zero, n) \
+--  ((void) ((better_be_zero) == 0 ? (bzero((s), (n)), 0) : (abort(), 0)))
+- #endif	/* Not ANSI_STRING.  */
+- 
+- #if !defined HAVE_STRCOLL && !defined _LIBC
+-Index: proftpd-1.3.1/lib/libltdl/config-h.in
+-===================================================================
+---- proftpd-1.3.1.orig/lib/libltdl/config-h.in
+-+++ proftpd-1.3.1/lib/libltdl/config-h.in
+-@@ -21,9 +21,6 @@
+- /* Define to 1 if you have the <assert.h> header file. */
+- #undef HAVE_ASSERT_H
+- 
+--/* Define to 1 if you have the `bcopy' function. */
+--#undef HAVE_BCOPY
+--
+- /* Define to 1 if you have the `closedir' function. */
+- #undef HAVE_CLOSEDIR
+- 
+-@@ -74,7 +71,7 @@
+- #undef HAVE_MALLOC_H
+- 
+- /* Define to 1 if you have the `memcpy' function. */
+--#undef HAVE_MEMCPY
+-+#define HAVE_MEMCPY	1
+- 
+- /* Define to 1 if you have the `memmove' function. */
+- #undef HAVE_MEMMOVE
+-@@ -180,7 +177,7 @@
+- #undef PACKAGE_VERSION
+- 
+- /* Define to 1 if you have the ANSI C header files. */
+--#undef STDC_HEADERS
+-+#define STDC_HEADERS	1
+- 
+- /* Define to empty if `const' does not conform to ANSI C. */
+- #undef const
+-Index: proftpd-1.3.1/lib/libltdl/ltdl.c
+-===================================================================
+---- proftpd-1.3.1.orig/lib/libltdl/ltdl.c
+-+++ proftpd-1.3.1/lib/libltdl/ltdl.c
+-@@ -372,9 +372,6 @@
+- 	  if you need that behaviour.  */
+- #if ! HAVE_MEMCPY
+- 
+--#  if HAVE_BCOPY
+--#    define memcpy(dest, src, size)	bcopy (src, dest, size)
+--#  else
+- #    define memcpy rpl_memcpy
+- 
+- static lt_ptr memcpy LT_PARAMS((lt_ptr dest, const lt_ptr src, size_t size));
+-@@ -395,7 +392,6 @@
+-   return dest;
+- }
+- 
+--#  endif /* !HAVE_BCOPY */
+- #endif   /* !HAVE_MEMCPY */
+- 
+- #if ! HAVE_MEMMOVE
