@@ -1,84 +1,41 @@
-From: jacmet at uclibc.org <jacmet@uclibc.org>
-Date: Wed, 18 Jun 2008 08:03:10 -0700 (PDT)
-Subject: [Buildroot] svn commit: trunk/buildroot/package/nbd
-Message-ID: <20080618150310.1113C3C721@busybox.net>
+From: Peter Korsgaard <jacmet@uclibc.org>
+Date: Wed, 18 Jun 2008 17:09:24 +0200
+Subject: [Buildroot] [PATCH] Fix nbd compile
+In-Reply-To: <d6cda7730806180745s329ee330of0fdfaf7fb7a8397@mail.gmail.com>
+	("Thiago A. =?utf-8?Q?Corr=C3=AAa=22's?= message of "Wed\, 18 Jun 2008
+	11\:45\:51 -0300")
+References: <d6cda7730806180745s329ee330of0fdfaf7fb7a8397@mail.gmail.com>
+Message-ID: <87ej6u2317.fsf@macbook.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Author: jacmet
-Date: 2008-06-18 08:03:07 -0700 (Wed, 18 Jun 2008)
-New Revision: 22421
+>>>>> "Thiago" == Thiago A Corr?a <thiago.correa@gmail.com> writes:
 
-Log:
-nbd: bump version and depend on glib2
+ Thiago> This will fix nbd compile, since all versions after 2.8 now
+ Thiago> depends on glib.
 
-Patch by Thiago A. Correa.
+Thanks, committed.
 
+The only issue I saw was:
 
-Modified:
-   trunk/buildroot/package/nbd/Config.in
-   trunk/buildroot/package/nbd/nbd.mk
-
-
-Changeset:
-Modified: trunk/buildroot/package/nbd/Config.in
-===================================================================
---- trunk/buildroot/package/nbd/Config.in	2008-06-18 15:02:24 UTC (rev 22420)
-+++ trunk/buildroot/package/nbd/Config.in	2008-06-18 15:03:07 UTC (rev 22421)
-@@ -1,9 +1,12 @@
- config BR2_PACKAGE_NBD
- 	bool "nbd"
- 	default n
-+	select BR2_PACKAGE_LIBGLIB2
- 	help
- 	  NBD is a set of utilities to configure network block devices,
- 	  allowing access to remote block devices over TCP/IP network.
- 	  Notice: This package only provides the NBD client.
- 
-+	  Depends on glib.
-+
- 	  http://nbd.sf.net/
-
-Modified: trunk/buildroot/package/nbd/nbd.mk
-===================================================================
---- trunk/buildroot/package/nbd/nbd.mk	2008-06-18 15:02:24 UTC (rev 22420)
-+++ trunk/buildroot/package/nbd/nbd.mk	2008-06-18 15:03:07 UTC (rev 22421)
-@@ -4,7 +4,7 @@
- #
- #############################################################
- 
--NBD_VERSION=2.8.6
-+NBD_VERSION=2.9.11
- NBD_SOURCE=nbd-$(NBD_VERSION).tar.bz2
- NBD_CAT:=$(BZCAT)
- NBD_SITE=http://$(BR2_SOURCEFORGE_MIRROR).dl.sourceforge.net/sourceforge/nbd/
-@@ -15,7 +15,7 @@
- 
- $(NBD_DIR)/.unpacked: $(DL_DIR)/$(NBD_SOURCE)
- 	$(NBD_CAT) $(DL_DIR)/$(NBD_SOURCE) | tar -C $(BUILD_DIR) $(TAR_OPTIONS) -
--	touch $(NBD_DIR)/.unpacked
-+	touch $@
- 
- $(NBD_DIR)/.configured: $(NBD_DIR)/.unpacked
- 	(cd $(NBD_DIR); rm -rf config.cache; \
-@@ -28,7 +28,7 @@
- 		--build=$(GNU_HOST_NAME) \
- 		--prefix=/usr \
- 	)
--	touch $(NBD_DIR)/.configured
-+	touch $@
- 
- $(NBD_DIR)/nbd-client: $(NBD_DIR)/.configured
- 	$(MAKE) -C $(NBD_DIR) nbd-client
-@@ -37,7 +37,7 @@
- 	cp $< $@
- 	$(STRIPCMD) $@
- 
 -nbd: uclibc $(TARGET_DIR)/sbin/nbd-client
 +nbd: uclibc libglib2 $(TARGET_DIR)/sbin/nbd-client
- 
- nbd-source: $(DL_DIR)/$(NBD_SOURCE)
- 
+
+which doesn't work for parallel builds (libglib's staging install
+might not have completed before the configure step of nbd
+runs). Unfortunately this isn't easy to do with Makefile.autootools.in
+as the libglib version number is part of the .stamp_staging_installed
+path, and LIBGLIB2_TARGET_INSTALL_STAGING isn't defined yet if
+libglib2.mk gets parsed later than nbd.mk.
+
+Perhaps we should get rid of the package version in the stamp files?
+That would ofcause break if you changed package version, but it might
+be preferable to what we have now - E.G.:
+
+$(BUILD_DIR)/libglib2_stamp_staging_installed
+
+-- 
+Bye, Peter Korsgaard
