@@ -1,40 +1,32 @@
 From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Thu, 19 Jun 2008 09:01:39 +0200
-Subject: [Buildroot] svn commit: trunk/buildroot/toolchain/gcc
-In-Reply-To: <20080619003821.GB18139@cloud.net.au> (Hamish Moffatt's message
-	of "Thu\, 19 Jun 2008 10\:38\:21 +1000")
-References: <20080618154649.BB6FB3C6C1@busybox.net>
-	<20080619003821.GB18139@cloud.net.au>
-Message-ID: <877iclykks.fsf@macbook.be.48ers.dk>
+Date: Thu, 19 Jun 2008 09:05:00 +0200
+Subject: [Buildroot] Debugging VICE emulator for AVR32
+In-Reply-To: <46a136670806181844p49b1c2e8lbaedac85bb739f29@mail.gmail.com>
+	(John Voltz's message of "Wed\, 18 Jun 2008 21\:44\:05 -0400")
+References: <46a136670806181844p49b1c2e8lbaedac85bb739f29@mail.gmail.com>
+Message-ID: <877iclx5ur.fsf@macbook.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Hamish" == Hamish Moffatt <hamish@cloud.net.au> writes:
+>>>>> "John" == John Voltz <john.voltz@gmail.com> writes:
 
- Hamish> On Wed, Jun 18, 2008 at 08:46:49AM -0700, jacmet at uclibc.org wrote:
- >> Author: jacmet
- >> Date: 2008-06-18 08:46:48 -0700 (Wed, 18 Jun 2008)
- >> New Revision: 22430
- >> 
- >> Log:
- >> toolchain/gcc: use $(@D)
+ John> Hi,
 
- Hamish> Umm that's not very descriptive :) What does $(@D) do and why is it
- Hamish> preferable to the previous value?
+ John> For some time now, I have been trying to debug the VICE
+ John> emulator in buildroot.  There seems to be a problem with uClibc
+ John> 0.9.29. VICE will not start on x86 or on AVR32, but it would
+ John> run in the past on uClibc 0.9.28. In fact, the old binary of
+ John> VICE that I built for 0.9.28 will run with 0.9.29. I find that
+ John> strange. I'm hoping someone can help me make sense of the gdb
+ John> info. Here is where the segfault occurs immediately after
+ John> starting VICE on AVR32:
 
-$(@D) is the directory part of the target, and it's preferable for the
-same reason we are replacing explicit target names with $@.
-
-Would you rather have a commit message like:
-
-toolchain/gcc: misc cleanup ?
-
-It's not really important, but I'm running though the changes Bernhard
-has made to toolchain/gcc as I'm going to take the 4.3.x patches,
-and I'm applying the trivial fixes I see.
+I've also noticed pthread problems with avahi on uclibc 0.9.29 (on
+PPC), but I haven't had time to debug it yet. The same setup works
+with 0.9.28.3.
 
 -- 
 Bye, Peter Korsgaard
