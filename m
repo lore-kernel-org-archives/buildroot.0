@@ -1,25 +1,28 @@
-From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Thu, 19 Jun 2008 21:09:00 +0200
-Subject: [Buildroot] GIT or SVN
-In-Reply-To: <485A3396.80701@cetrtapot.si> (Hinko Kocevar's message of "Thu\,
-	19 Jun 2008 12\:23\:18 +0200")
-References: <485A3396.80701@cetrtapot.si>
-Message-ID: <87iqw5dyyb.fsf@macbook.be.48ers.dk>
+From: Fathi Boudra <fboudra@gmail.com>
+Date: Thu, 19 Jun 2008 21:11:54 +0200
+Subject: [Buildroot] svn commit: trunk/buildroot/package/config [PATCH]
+In-Reply-To: <BD79186B4FD85F4B8E60E381CAEE19091D654B@mi8nycmail19.Mi8.com>
+References: <20080619081151.B9E73F8008@busybox.net>
+	<BD79186B4FD85F4B8E60E381CAEE19091D654B@mi8nycmail19.Mi8.com>
+Message-ID: <200806192111.54813.fboudra@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Hinko" == Hinko Kocevar <hinko.kocevar@cetrtapot.si> writes:
 
- Hinko> Hello,
- Hinko> I'm new to the uclibc buildroot. I've noticed that there are
- Hinko> two repositories: GIT and SVN. GIT looks more up2date. Is GIT
- Hinko> the tree to use?
-
-It depends ;) Bernhards git tree is more uptodate regarding toolchain,
-but the svn tree has more/newer packages and more developers.
-
--- 
-Bye, Peter Korsgaard
+-------------- next part --------------
+A non-text attachment was scrubbed...
+Name: check.sh
+Type: application/x-shellscript
+Size: 214 bytes
+Desc: not available
+Url : http://busybox.net/lists/buildroot/attachments/20080619/7fd697c1/attachment.bin 
+-------------- next part --------------
+A non-text attachment was scrubbed...
+Name: 00_replace_depends.diff.tar.bz2
+Type: application/x-tbz
+Size: 9434 bytes
+Desc: not available
+Url : http://busybox.net/lists/buildroot/attachments/20080619/7fd697c1/attachment-0001.bin 
