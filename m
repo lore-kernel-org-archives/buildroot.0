@@ -1,37 +1,99 @@
-From: Hinko Kocevar <hinko.kocevar@cetrtapot.si>
-Date: Thu, 19 Jun 2008 15:25:47 +0200
-Subject: [Buildroot] GIT or SVN
-In-Reply-To: <20080619120326.GD6874@mx.loc>
-References: <485A3396.80701@cetrtapot.si> <485A3ABF.90707@cetrtapot.si>
-	<20080619111343.GC6874@mx.loc> <485A48EC.7040704@cetrtapot.si>
-	<20080619120326.GD6874@mx.loc>
-Message-ID: <485A5E5B.1020907@cetrtapot.si>
+From: hartleys <hartleys@visionengravers.com>
+Date: Thu, 19 Jun 2008 12:44:59 -0400
+Subject: [Buildroot] svn commit: trunk/buildroot/package/config
+In-Reply-To: <20080619081151.B9E73F8008@busybox.net>
+References: <20080619081151.B9E73F8008@busybox.net>
+Message-ID: <BD79186B4FD85F4B8E60E381CAEE19091D654B@mi8nycmail19.Mi8.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Bernhard Fischer wrote:
-> On Thu, Jun 19, 2008 at 01:54:20PM +0200, Hinko Kocevar wrote:
-> 
->>  LD libuClibc-0.9.29.so
->> libc/libc_so.a(libc_pthread_init.oS): In function `testandset':
->> libc_pthread_init.c:(.text+0x0): multiple definition of `testandset'
->> libc/libc_so.a(forward.oS):forward.c:(.text+0x0): first defined here
->> make[2]: *** [lib/libc.so] Error 1
->> make[1]: *** [lib/libc.so.0] Error 2
->> make[1]: Leaving directory `/work/stage/buildroot/toolchain_build_cris/uClibc-0.9.29'
->> make: *** [/work/stage/buildroot/toolchain_build_cris/uClibc-0.9.29/lib/libc.a] Error 2
-> 
-> Sounds familiar. I'll take care of it in the evening.
-> 
+Hello all,
 
-This patch takes care of the uClibc compilation problem for me.
--------------- next part --------------
-A non-text attachment was scrubbed...
-Name: uClibc-0.9.29-cris-pthreads.patch
-Type: text/x-patch
-Size: 593 bytes
-Desc: not available
-Url : http://busybox.net/lists/buildroot/attachments/20080619/70794756/attachment-0001.bin 
+I just did an svn up for the latest revision of buildroot (22451). It
+appears something is either broke or I'm missing something.
+
+I also tried a new svn co and have the same problem. With the new svn co
+when I try a make menuconfig I get the following:
+
+bigguiness at etch:~/src/build/buildroot$ make menuconfig
+make CC="/usr/bin/gcc" -C package/config conf mconf
+/bin/sh: ././check.sh: No such file or directory
+make[1]: Entering directory
+`/home/bigguiness/src/build/buildroot/package/config'
+/usr/bin/gcc -DCURSES_LOC="<ncurses.h>" -DLOCALE  -g -O2 -MM *.c >
+.depend 2>/dev/null || :
+make[1]: Leaving directory
+`/home/bigguiness/src/build/buildroot/package/config'/bin/sh:
+././check.sh: No such file or directory
+make[1]: Entering directory
+`/home/bigguiness/src/build/buildroot/package/config'
+/usr/bin/gcc -DCURSES_LOC="<ncurses.h>" -DLOCALE  -g -O2  -c conf.c -o
+conf.o
+/bin/sh: ././check.sh: No such file or directory
+/usr/bin/gcc -DCURSES_LOC="<ncurses.h>" -DLOCALE  -g -O2  -c kxgettext.c
+-o kxgettext.o
+/bin/sh: ././check.sh: No such file or directory
+/usr/bin/gcc -DCURSES_LOC="<ncurses.h>" -DLOCALE  -g -O2  -c
+lxdialog/checklist.c -o lxdialog/checklist.o
+/bin/sh: ././check.sh: No such file or directory
+/usr/bin/gcc -DCURSES_LOC="<ncurses.h>" -DLOCALE  -g -O2  -c
+lxdialog/inputbox.c -o lxdialog/inputbox.o
+/bin/sh: ././check.sh: No such file or directory
+/usr/bin/gcc -DCURSES_LOC="<ncurses.h>" -DLOCALE  -g -O2  -c
+lxdialog/menubox.c -o lxdialog/menubox.o
+/bin/sh: ././check.sh: No such file or directory
+/usr/bin/gcc -DCURSES_LOC="<ncurses.h>" -DLOCALE  -g -O2  -c
+lxdialog/textbox.c -o lxdialog/textbox.o
+/bin/sh: ././check.sh: No such file or directory
+/usr/bin/gcc -DCURSES_LOC="<ncurses.h>" -DLOCALE  -g -O2  -c
+lxdialog/util.c -o lxdialog/util.o
+/bin/sh: ././check.sh: No such file or directory
+/usr/bin/gcc -DCURSES_LOC="<ncurses.h>" -DLOCALE  -g -O2  -c
+lxdialog/yesno.c -o lxdialog/yesno.o
+/bin/sh: ././check.sh: No such file or directory
+/usr/bin/gcc -DCURSES_LOC="<ncurses.h>" -DLOCALE  -g -O2  -c mconf.c -o
+mconf.o
+/bin/sh: ././check.sh: No such file or directory
+/usr/bin/gcc -DCURSES_LOC="<ncurses.h>" -DLOCALE  -g -O2 -I. -c
+zconf.tab.c -o zconf.tab.o
+/bin/sh: ././check.sh: No such file or directory
+/usr/bin/gcc -DCURSES_LOC="<ncurses.h>" -DLOCALE  -g -O2  conf.o
+zconf.tab.o -lncursesw -o conf
+/bin/sh: ././check.sh: No such file or directory
+/usr/bin/gcc -DCURSES_LOC="<ncurses.h>" -DLOCALE  -g -O2  mconf.o
+zconf.tab.o lxdialog/checklist.o lxdialog/util.o lxdialog/inputbox.o
+lxdialog/textbox.o lxdialog/yesno.o lxdialog/menubox.o -lncursesw -o
+mconf
+make[1]: Leaving directory
+`/home/bigguiness/src/build/buildroot/package/config'
+target/Config.in.arch:55: invalid option
+target/Config.in.arch:115: invalid option
+target/Config.in.arch:128: invalid option
+target/Config.in.arch:160: invalid option
+target/Config.in.arch:170: invalid option
+target/Config.in.arch:173: invalid option
+target/Config.in.arch:176: invalid option
+...
+others 'invalid option' messages follow then the make ends
+
+How can I either fix this or is it possible to revert the svn back to an
+older revision?
+
+Thanks,
+Hartley
+
+-----Original Message-----
+From: buildroot-bounces@uclibc.org [mailto:buildroot-bounces at uclibc.org]
+On Behalf Of jacmet at uclibc.org
+Sent: Thursday, June 19, 2008 1:12 AM
+To: buildroot at uclibc.org
+Subject: [Buildroot] svn commit: trunk/buildroot/package/config
+
+Author: jacmet
+Date: 2008-06-19 01:11:51 -0700 (Thu, 19 Jun 2008) New Revision: 22451
+
+Log:
+package/config: rebase from upstream (2.6.24.4)
