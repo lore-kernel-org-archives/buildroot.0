@@ -1,36 +1,39 @@
-From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Fri, 20 Jun 2008 20:32:07 +0200
-Subject: [Buildroot] svn commit: trunk/buildroot/toolchain/gcc: 4.3.1
-In-Reply-To: <6a2e33620806200906h5b27d157s551782a16eb00a36@mail.gmail.com>
-	(Fathi Boudra's message of "Fri\, 20 Jun 2008 18\:06\:17 +0200")
-References: <20080619190606.260DD3C67C@busybox.net>
-	<6a2e33620806200850p4835102as74efd47c020f36e4@mail.gmail.com>
-	<20080620155605.GA15710@mx.loc>
-	<6a2e33620806200906h5b27d157s551782a16eb00a36@mail.gmail.com>
-Message-ID: <87r6as2c0o.fsf@macbook.be.48ers.dk>
+From: jacmet at uclibc.org <jacmet@uclibc.org>
+Date: Fri, 20 Jun 2008 11:38:46 -0700 (PDT)
+Subject: [Buildroot] svn commit: trunk/buildroot/package/busybox
+Message-ID: <20080620183846.6B3B23C732@busybox.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Fathi" == Fathi Boudra <fboudra@gmail.com> writes:
+Author: jacmet
+Date: 2008-06-20 11:38:44 -0700 (Fri, 20 Jun 2008)
+New Revision: 22459
 
- Fathi> /usr/powerpc-linux-gnu/bin/ld: cannot find -lc
- Fathi> collect2: ld returned 1 exit status
+Log:
+budybox: 1.10.3 udhcpc fix
 
- Fathi> btw, it's against libc and not uclibc. I tried against uclibc
- Fathi> but I have another build failure.
 
-I also seem to have problems on powerpc, but haven't looked at it yet
-in detail:
+Added:
+   trunk/buildroot/package/busybox/busybox-1.10.3-udhcpc.patch
 
-/home/peko/source/buildroot/toolchain_build_powerpc/gcc-4.3.1/libgcc/../libdecnumber/decExcept.c:30:18: error: fenv.h: No such file or directory
-make[2]: *** [decExcept.o] Error 1
-make[2]: Leaving directory `/home/peko/source/buildroot/toolchain_build_powerpc/gcc-4.3.1-initial/powerpc-linux-uclibc/libgcc'
-make[1]: *** [all-target-libgcc] Error 2
-make[1]: Leaving directory
-`/home/peko/source/buildroot/toolchain_build_powerpc/gcc-4.3.1-initial'
 
--- 
-Bye, Peter Korsgaard
+Changeset:
+Added: trunk/buildroot/package/busybox/busybox-1.10.3-udhcpc.patch
+===================================================================
+--- trunk/buildroot/package/busybox/busybox-1.10.3-udhcpc.patch	                        (rev 0)
++++ trunk/buildroot/package/busybox/busybox-1.10.3-udhcpc.patch	2008-06-20 18:38:44 UTC (rev 22459)
+@@ -0,0 +1,11 @@
++--- busybox-1.10.3/networking/udhcp/clientsocket.c	Sat Apr 19 06:03:13 2008
+++++ busybox-1.10.3-udhcpc/networking/udhcp/clientsocket.c	Fri Jun 20 16:48:32 2008
++@@ -76,7 +76,7 @@
++ 		BPF_STMT(BPF_LD|BPF_W|BPF_IND, 0),
++ 		BPF_JUMP(BPF_JMP|BPF_JEQ|BPF_K, SERVER_AND_CLIENT_PORTS, 0, 1),	/* L3, L4 */
++ 		/* returns */
++-		BPF_STMT(BPF_RET|BPF_K, (~(uint32_t)0) ),               /* L3: pass */
+++		BPF_STMT(BPF_RET|BPF_K, 0x0fffffff),                    /* L3: pass */
++ 		BPF_STMT(BPF_RET|BPF_K, 0),                             /* L4: reject */
++ 	};
++ 	static const struct sock_fprog filter_prog = {
