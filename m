@@ -1,38 +1,36 @@
 From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Fri, 20 Jun 2008 21:24:13 +0200
-Subject: [Buildroot] problem with dbus.mk
-In-Reply-To: <46a136670806200815p7034b6c5y6dbe39035796af62@mail.gmail.com>
-	(John Voltz's message of "Fri\, 20 Jun 2008 11\:15\:58 -0400")
-References: <46a136670806200815p7034b6c5y6dbe39035796af62@mail.gmail.com>
-Message-ID: <87tzfn29lu.fsf@macbook.be.48ers.dk>
+Date: Fri, 20 Jun 2008 21:32:25 +0200
+Subject: [Buildroot] can't find root fs kernel panic
+In-Reply-To: <485BC6AC.1090301@acsatlanta.com> (Joseph G. Boike's message of
+	"Fri\, 20 Jun 2008 10\:03\:08 -0500")
+References: <mailman.1147.1213963958.1345.buildroot@uclibc.org>
+	<485BC6AC.1090301@acsatlanta.com>
+Message-ID: <87bq1v2986.fsf@macbook.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "John" == John Voltz <john.voltz@gmail.com> writes:
+>>>>> "Joseph" == Joseph G Boike <joe.boike@acsatlanta.com> writes:
 
- John> Hi,
- John> I discovered a bit of a problem in dbus.mk.
+ Joseph> I'm hoping someone can help me with this.
+ Joseph> I'm using this morning buildroot (How do I determine the rev #?)
 
- John> DBUS_XML_DEP:=$(BUILD_DIR)/libxml2-2.6.29/.stamp_staging_installed
+type svn info
 
- John> What happens when libxml2 has not been downloaded, extracted,
- John> or built and you depend on .stamp_staging_installed?
+ Joseph> Built for an Atmel at91sam9260 processor and eval board.
+ Joseph> I've tried using the ext2, ext2.gz and jffs root filesystems
+ Joseph> with the same results.
 
-Normally it would work just fine (we do this all the time), but
-looking closer at it, the Makefile.autotools.in stuff is horribly
-broken as it doesn't have proper dependencies listed.
+<cut>
 
-It also looks like it would break badly for parallel builds (-j)
+ Joseph> Kernel command line: mem=64M console=ttyS0,115200 
+ Joseph> initrd=0x20410000,3145728 root=/dev/ram0 rw
 
-:/
-
- John> Build failure. I would suggest a revert on dbus.mk.
-
-I'll revert the libxml2 hunk. We really need to fixup the autotools
-stuff or stop using it.
+What do you want to do? With jffs2 it sounds like you want to boot
+from a flash partition, but you tell the kernel to boot from a ramdisk
+(initrd).
 
 -- 
 Bye, Peter Korsgaard
