@@ -1,65 +1,103 @@
-From: Zac Wheeler <zac.wheeler@gmail.com>
-Date: Fri, 20 Jun 2008 15:33:39 -0700
-Subject: [Buildroot] u-boot failure and compiler versions
-Message-ID: <206b9e70806201533p76ee5aftd61a76b22008ee5@mail.gmail.com>
+From: Mike Sander <msander@ripnet.com>
+Date: Fri, 20 Jun 2008 21:50:33 -0400
+Subject: [Buildroot] relocate working buildroot
+In-Reply-To: <021a01c8d1cd$d26c8f90$010514ac@atmel.com>
+References: <4859C935.9030800@ripnet.com>
+	<007c01c8d1bd$cb502330$010514ac@atmel.com>
+	<4859E1CF.8070400@ripnet.com>
+	<021a01c8d1cd$d26c8f90$010514ac@atmel.com>
+Message-ID: <485C5E69.5030601@ripnet.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi,
+Ulf Samuelsson wrote:
+> Mike Sander wrote:
+>   
+>> Ulf Samuelsson wrote:
+>>     
+>>> mike sander wrote:
+>>>
+>>>       
+>>>> Hi All,
+>>>>
+>>>> Is anyone able to comment on how best to relocate and/or copy a
+>>>> working buildroot?
+>>>>
+>>>> I have tried it (relocate to new location on same box) and did a
+>>>> "make clean" followed by "make".   Very soon I got failures due to
+>>>> not being able to delete some files at the original location.
+>>>>
+>>>> With a bit of grepping I discovered that the original configuration
+>>>> full path is in numerous (i.e. too many to fix manually) locations
+>>>> throughout buildroot related files.
+>>>>
+>>>> Are there some specific (maybe hidden) buildroot files that could be
+>>>> deleted to force the configuration stage to pick up the new path?
+>>>>
+>>>>
+>>>>         
+>>> I don't think you can.
+>>> I think you need to delete it all and rebuild
+>>>
+>>> build_<arch>
+>>> project_build_<arch>
+>>> toolchain_build_<arch>
+>>>
+>>> needs to go.
+>>>
+>>> If you want to move to another machine, then you
+>>> could try symlinking.
+>>>
+>>>
+>>>       
+>
+>   
+>> Thank You Ulf,
+>>
+>> "make clean" followed by deleting the 3 directories you indicated
+>> worked for relocating the buildroot on the same machine.  The only
+>> casualty was the kernel which is under project_build_<arch>, but that
+>> was easy enough to  back up prior deleting.
+>>
+>> I'll try moving to another machine and report the results later.
+>>
+>>     
+>
+> Create a "local" directory outside the buildroot tree
+> Have to set the BR2_LOCAL (or whatever the name was)
+> environement variable in your shell.
+>
+> Do
+>
+> $ make saveconfig
+>
+> Then your linux config file (and other config files) will be saved
+> in the "local" directory.
+>
+> The rest, assuming identical host installation is a finite statemachine
+> which should generate the same result as the first build.
+>
+>   
+Yes, this appears to work.
 
-I'm compiling u-boot-1.3.3 for AT91 within buildroot and getting some
-subtle problems at runtime. A lot of things work (serial, parallel
-flash). The usb_ohci doesn't. It does with other compilers. It works
-fine when compiled within scratchbox using toolchains
-arm-gcc4.1-uclibc20061004 or arm-linux-2006q3-27 (a glibc codesourcery
-toolchain). So it doesn't appear to be all that fragile. The code has
-a lot of hard-coded delays.
+Thanks again.  much appreciated
 
-The compilation options are the same, the code is the same (I added
-some line breaks for easier comparison):
-
-gcc -g  -Os   -fno-strict-aliasing  -fno-common -ffixed-r8
--msoft-float  -D__KERNEL__ -DTEXT_BASE=0x23f00000
--I/home/zac/buildroot/project_build_arm/board/u-boot-1.3.3/include2
--I/home/zac/buildroot/project_build_arm/board/u-boot-1.3.3/include
--Ibuild_arm/u-boot-1.3.3/include
--fno-builtin -ffreestanding -nostdinc -isystem
-build_arm/staging_dir/usr/bin/../lib/gcc/arm-linux-uclibc/4.2.3/include
--pipe  -DCONFIG_ARM -D__ARM__ -march=armv4 -mabi=apcs-gnu
--march=armv5te  -Wall -Wstrict-prototypes -c -o
-/home/zac/buildroot/project_build_arm/board/u-boot-1.3.3/common/usb_storage.o
-usb_storage.c
-
-gcc -g  -Os   -fno-strict-aliasing  -fno-common -ffixed-r8
--msoft-float  -D__KERNEL__ -DTEXT_BASE=0x23f00000
--I/home/zac/u-boot-1.3.3/include
--fno-builtin -ffreestanding -nostdinc -isystem
-/scratchbox/compilers/arm-gcc4.1-uclibc20061004/lib/gcc/arm-linux-uclibc/4.1.1/include
--pipe  -DCONFIG_ARM -D__ARM__ -march=armv4 -mabi=apcs-gnu
--march=armv5te  -Wall -Wstrict-prototypes -c -o usb_storage.o
-usb_storage.c
-
-The executables are quite different, and the usb_ohci controller times
-out when trying to get in touch with the USB key. I've tried numerous
-USB keys, all work with the scratchbox compilers, and none work with
-any of the buildroot builds. That is 4.1.2, 4.2.1, or 4.2.4. This is
-working from the 20080620 snapshot, but is the same back to at least
-06-10.
-
-Looking at the executable with insight, the only thing that looks
-unusual is that insight shows some <internal disassembler error>
-notices for jmp instructions (specifically within hc_interrupt in
-usb_ohci). Not sure if this is an insight issue or executable issue.
-They are only present in the non-working executable.
-
-Since the code functions fine when built by several other compilers
-I'm hoping that this is something specific to a buildroot patch so
-someone here might recognize the issue.
-
-Any ideas or hints would be appreciated.
-
-Thanks,
-Zac
+Mike
+>> Regards,
+>> Mike
+>>     
+>
+> Best Regards
+> Ulf Samuelsson
+>
+>
+>
+> =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
+> Scanned with Copfilter Version 0.84beta3a (P3Scan 2.2.1)
+> AntiSpam:  SpamAssassin 3.2.3
+> by Markus Madlener @ http://www.copfilter.org
+>
+>   
