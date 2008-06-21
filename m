@@ -1,32 +1,62 @@
-From: Bernhard Fischer <rep.dot.nop@gmail.com>
-Date: Sat, 21 Jun 2008 14:51:01 +0200
-Subject: [Buildroot] svn commit: trunk/buildroot/toolchain/gcc: 4.3.1
-In-Reply-To: <6a2e33620806201313h2ceb6b6yfebe620f4ef3c2d@mail.gmail.com>
-References: <20080619190606.260DD3C67C@busybox.net>
-	<6a2e33620806200906h5b27d157s551782a16eb00a36@mail.gmail.com>
-	<87r6as2c0o.fsf@macbook.be.48ers.dk>
-	<200806202050.32567.fboudra@gmail.com>
-	<6a2e33620806201313h2ceb6b6yfebe620f4ef3c2d@mail.gmail.com>
-Message-ID: <20080621125101.GA10734@mx.loc>
+From: jacmet at uclibc.org <jacmet@uclibc.org>
+Date: Sat, 21 Jun 2008 12:47:17 -0700 (PDT)
+Subject: [Buildroot] svn commit: trunk/buildroot/toolchain/gcc
+Message-ID: <20080621194717.98BEF3C725@busybox.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Fri, Jun 20, 2008 at 10:13:39PM +0200, Fathi Boudra wrote:
->using --disable-decimal-float workaround the issue.
+Author: jacmet
+Date: 2008-06-21 12:47:17 -0700 (Sat, 21 Jun 2008)
+New Revision: 22463
 
-exactly. I've added a knob behind the scenes that takes care of it. I'll
-commit it sometimes next week.
->
->uclibc fails to build later:
->
->  CC libc/sysdeps/linux/common/chdir.os
->In file included from ./include/sys/param.h:22,
->                 from libc/sysdeps/linux/common/chdir.c:13:
->./include/limits.h:124:26: error: limits.h: No such file or directory
+Log:
+toolchain/gcc: use --disable-decimal-float for 4.3.x
 
-I'm not sure why you see this (works for me). Please show me your 
-$ egrep -v "(^#|^$)" .config
-from buildroot
+
+Modified:
+   trunk/buildroot/toolchain/gcc/gcc-uclibc-4.x.mk
+
+
+Changeset:
+Modified: trunk/buildroot/toolchain/gcc/gcc-uclibc-4.x.mk
+===================================================================
+--- trunk/buildroot/toolchain/gcc/gcc-uclibc-4.x.mk	2008-06-20 21:45:27 UTC (rev 22462)
++++ trunk/buildroot/toolchain/gcc/gcc-uclibc-4.x.mk	2008-06-21 19:47:17 UTC (rev 22463)
+@@ -141,6 +141,10 @@
+ EXTRA_GCC1_CONFIG_OPTIONS+=--without-headers
+ endif
+ 
++ifeq ($(BR2_GCC_SUPPORTS_FINEGRAINEDMTUNE),y)
++GCC_DECIMAL_FLOAT:=--disable-decimal-float
++endif
++
+ HOST_SOURCE+=gcc-source
+ 
+ $(DL_DIR)/$(GCC_SOURCE):
+@@ -211,6 +215,7 @@
+ 		$(DISABLE_NLS) \
+ 		$(THREADS) \
+ 		$(MULTILIB) \
++		$(GCC_DECIMAL_FLOAT) \
+ 		$(SOFT_FLOAT_CONFIG_OPTION) \
+ 		$(GCC_WITH_ABI) $(GCC_WITH_ARCH) $(GCC_WITH_TUNE) \
+ 		$(EXTRA_GCC_CONFIG_OPTIONS) \
+@@ -284,6 +289,7 @@
+ 		$(DISABLE_NLS) \
+ 		$(THREADS) \
+ 		$(MULTILIB) \
++		$(GCC_DECIMAL_FLOAT) \
+ 		$(SOFT_FLOAT_CONFIG_OPTION) \
+ 		$(GCC_WITH_ABI) $(GCC_WITH_ARCH) $(GCC_WITH_TUNE) \
+ 		$(GCC_USE_SJLJ_EXCEPTIONS) \
+@@ -429,6 +435,7 @@
+ 		$(DISABLE_NLS) \
+ 		$(THREADS) \
+ 		$(MULTILIB) \
++		$(GCC_DECIMAL_FLOAT) \
+ 		$(SOFT_FLOAT_CONFIG_OPTION) \
+ 		$(GCC_WITH_ABI) $(GCC_WITH_ARCH) $(GCC_WITH_TUNE) \
+ 		$(GCC_USE_SJLJ_EXCEPTIONS) \
