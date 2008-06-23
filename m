@@ -1,23 +1,39 @@
-From: pasteur <agbanle@gmail.com>
-Date: Mon, 23 Jun 2008 15:44:18 +0200
-Subject: [Buildroot] bi-arch with uclibc + glibc
-Message-ID: <7fc538d30806230644o69baac45m1b7a8255ef202d83@mail.gmail.com>
+From: jacmet at uclibc.org <jacmet@uclibc.org>
+Date: Mon, 23 Jun 2008 06:47:48 -0700 (PDT)
+Subject: [Buildroot] svn commit: trunk/buildroot
+Message-ID: <20080623134749.009043C2B3@busybox.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello
+Author: jacmet
+Date: 2008-06-23 06:47:37 -0700 (Mon, 23 Jun 2008)
+New Revision: 22481
 
-any idea about mixing uclibc with glibc ?
-i486-linux-gnu + i486-linux-uclibc working on the same host ?
+Log:
+Makefile: don't include .config from TOPDIR
 
-Indeed, after successfully compiled glibc on uclibc plateform,
-i got bellow error :
+If we ever want to support building out of tree, having the .config in the
+tree is probably not what we want.
 
-For your information the idea is to be able to launch proprietary :-(
-as firefox plugins (flash, ...)
-on uclibc linux like delilinux.org...
 
-Regards
+Modified:
+   trunk/buildroot/Makefile
+
+
+Changeset:
+Modified: trunk/buildroot/Makefile
+===================================================================
+--- trunk/buildroot/Makefile	2008-06-23 13:40:34 UTC (rev 22480)
++++ trunk/buildroot/Makefile	2008-06-23 13:47:37 UTC (rev 22481)
+@@ -44,7 +44,7 @@
+ ifeq ($(filter $(noconfig_targets),$(MAKECMDGOALS)),)
+ ifeq ($(BOARD),)
+ # if "make BOARD=xyz" command
+--include $(TOPDIR).config
++-include .config
+ else
+ # if "make" command
+ -include $(BR2_LOCAL)/$(BOARD)/$(BOARD).config
