@@ -1,7 +1,7 @@
 From: jacmet at uclibc.org <jacmet@uclibc.org>
-Date: Mon, 23 Jun 2008 04:53:41 -0700 (PDT)
+Date: Mon, 23 Jun 2008 04:53:47 -0700 (PDT)
 Subject: [Buildroot] svn commit: trunk/buildroot/package/lm-sensors
-Message-ID: <20080623115341.B0B573C5FA@busybox.net>
+Message-ID: <20080623115347.4802E3C651@busybox.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -9,95 +9,77 @@ Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
 Author: jacmet
-Date: 2008-06-23 04:53:41 -0700 (Mon, 23 Jun 2008)
-New Revision: 22476
+Date: 2008-06-23 04:53:47 -0700 (Mon, 23 Jun 2008)
+New Revision: 22477
 
 Log:
-lm-sensors: bump version and cleanup
-
-- Bump version to 3.0.2 which no longer needs libsysfs
-- Set MACHINE correctly, so it doesn't try to build isa stuff for non-i386
-- Cleanup make invocation
+lm-sensors: remove unused legacy patch
 
 
-Modified:
-   trunk/buildroot/package/lm-sensors/Config.in
-   trunk/buildroot/package/lm-sensors/lm-sensors.mk
+Removed:
+   trunk/buildroot/package/lm-sensors/lm-sensors.01.susv3-legacy.patch.not
 
 
 Changeset:
-Modified: trunk/buildroot/package/lm-sensors/Config.in
+Deleted: trunk/buildroot/package/lm-sensors/lm-sensors.01.susv3-legacy.patch.not
 ===================================================================
---- trunk/buildroot/package/lm-sensors/Config.in	2008-06-23 11:53:35 UTC (rev 22475)
-+++ trunk/buildroot/package/lm-sensors/Config.in	2008-06-23 11:53:41 UTC (rev 22476)
-@@ -1,6 +1,5 @@
- config BR2_PACKAGE_LM_SENSORS
- 	bool "lm-sensors"
--	select BR2_PACKAGE_LIBSYSFS
- 	default n
- 	help
- 	  Lm-sensors is a hardware health monitoring package for
-
-Modified: trunk/buildroot/package/lm-sensors/lm-sensors.mk
-===================================================================
---- trunk/buildroot/package/lm-sensors/lm-sensors.mk	2008-06-23 11:53:35 UTC (rev 22475)
-+++ trunk/buildroot/package/lm-sensors/lm-sensors.mk	2008-06-23 11:53:41 UTC (rev 22476)
-@@ -3,42 +3,25 @@
- # lm-sensors
- #
- #############################################################
--LM_SENSORS_VERSION:=2.10.6
--LM_SENSORS_SOURCE:=lm-sensors_$(LM_SENSORS_VERSION).orig.tar.gz
--LM_SENSORS_PATCH:=lm-sensors_$(LM_SENSORS_VERSION)-2.diff.gz
--LM_SENSORS_SITE:=$(BR2_DEBIAN_MIRROR)/debian/pool/main/l/lm-sensors/
-+LM_SENSORS_VERSION:=3.0.2
-+LM_SENSORS_SOURCE:=lm_sensors-$(LM_SENSORS_VERSION).tar.bz2
-+LM_SENSORS_SITE:=http://dl.lm-sensors.org/lm-sensors/releases
- LM_SENSORS_DIR:=$(BUILD_DIR)/lm_sensors-$(LM_SENSORS_VERSION)
--LM_SENSORS_CAT:=$(ZCAT)
-+LM_SENSORS_CAT:=$(BZCAT)
- LM_SENSORS_BINARY:=prog/sensors/sensors
- LM_SENSORS_TARGET_BINARY:=usr/bin/sensors
- 
- $(DL_DIR)/$(LM_SENSORS_SOURCE):
- 	$(WGET) -P $(DL_DIR) $(LM_SENSORS_SITE)/$(LM_SENSORS_SOURCE)
- 
--ifneq ($(LM_SENSORS_PATCH),)
--LM_SENSORS_PATCH_FILE:=$(DL_DIR)/$(LM_SENSORS_PATCH)
--$(DL_DIR)/$(LM_SENSORS_PATCH):
--	$(WGET) -P $(DL_DIR) $(LM_SENSORS_SITE)/$(LM_SENSORS_PATCH)
--endif
--
--$(LM_SENSORS_DIR)/.unpacked: $(DL_DIR)/$(LM_SENSORS_SOURCE) $(DL_DIR)/$(LM_SENSORS_PATCH)
-+$(LM_SENSORS_DIR)/.unpacked: $(DL_DIR)/$(LM_SENSORS_SOURCE)
- 	$(LM_SENSORS_CAT) $(DL_DIR)/$(LM_SENSORS_SOURCE) | tar -C $(BUILD_DIR) $(TAR_OPTIONS) -
- 	toolchain/patch-kernel.sh $(LM_SENSORS_DIR) package/lm-sensors/ lm-sensors\*.patch
--ifneq ($(LM_SENSORS_PATCH),)
--	(cd $(LM_SENSORS_DIR) && \
--	 $(LM_SENSORS_CAT) $(LM_SENSORS_PATCH_FILE) | patch -p1)
--	if [ -d $(LM_SENSORS_DIR)/debian/patches ]; then \
--		toolchain/patch-kernel.sh $(LM_SENSORS_DIR) $(LM_SENSORS_DIR)/debian/patches \*.patch; \
--	fi
--endif
--	-$(SED) "s/-O[[:digit:]]//g" $(LM_SENSORS_DIR)/Makefile
- 	touch $@
- 
- $(LM_SENSORS_DIR)/$(LM_SENSORS_BINARY): $(LM_SENSORS_DIR)/.unpacked
--	$(MAKE) $(TARGET_CONFIGURE_OPTS) -C $(LM_SENSORS_DIR) \
--		LINUX="$(LINUX_DIR)" KERNELVERSION=$(LINUX_HEADERS_VERSION) \
--		I2C_HEADERS=$(LINUX_DIR)/include \
--		DESTDIR=$(TARGET_DIR) user
-+	$(MAKE) $(TARGET_CONFIGURE_OPTS) MACHINE=$(KERNEL_ARCH)\
-+		-C $(LM_SENSORS_DIR)
- 
- $(TARGET_DIR)/$(LM_SENSORS_TARGET_BINARY): $(LM_SENSORS_DIR)/$(LM_SENSORS_BINARY)
- 	if [ ! -f $(TARGET_DIR)/etc/sensors.conf ]; then \
-@@ -57,7 +40,7 @@
- 
- lm-sensors-unpacked: $(LM_SENSORS_DIR)/.unpacked
- 
--lm-sensors: uclibc libsysfs $(TARGET_DIR)/$(LM_SENSORS_TARGET_BINARY)
-+lm-sensors: uclibc $(TARGET_DIR)/$(LM_SENSORS_TARGET_BINARY)
- 
- lm-sensors-clean:
- 	-$(MAKE) -C $(LM_SENSORS_DIR) clean
+--- trunk/buildroot/package/lm-sensors/lm-sensors.01.susv3-legacy.patch.not	2008-06-23 11:53:41 UTC (rev 22476)
++++ trunk/buildroot/package/lm-sensors/lm-sensors.01.susv3-legacy.patch.not	2008-06-23 11:53:47 UTC (rev 22477)
+@@ -1,57 +0,0 @@
+-diff -rdup lm_sensors-2.10.4.oorig/lib/proc.c lm_sensors-2.10.4/lib/proc.c
+---- lm_sensors-2.10.4.oorig/lib/proc.c	2007-07-17 06:53:06.000000000 +0200
+-+++ lm_sensors-2.10.4/lib/proc.c	2007-09-20 13:30:39.000000000 +0200
+-@@ -93,16 +93,16 @@ int sensors_read_proc_bus(void)
+-   while (fgets(line,255,f)) {
+-     if (strlen(line) > 0)
+-       line[strlen(line)-1] = '\0';
+--    if (! (border = rindex(line,'\t')))
+-+    if (! (border = strrchr(line,'\t')))
+-       goto ERROR;
+-     /* Skip algorithm name */
+-     *border='\0';
+--    if (! (border = rindex(line,'\t')))
+-+    if (! (border = strrchr(line,'\t')))
+-       goto ERROR;
+-     if (! (entry.adapter = strdup(border + 1)))
+-       goto FAT_ERROR;
+-     *border='\0';
+--    if (! (border = rindex(line,'\t')))
+-+    if (! (border = strrchr(line,'\t')))
+-       goto ERROR;
+-     *border='\0';
+-     if (strncmp(line,"i2c-",4))
+-@@ -155,8 +155,8 @@ int sensors_read_proc(sensors_chip_name 
+- 		strcpy(n, name.busname);
+- 		strcat(n, "/");
+- 		strcpy(altn, n);
+--		/* use rindex to append sysname to n */
+--		getsysname(the_feature, rindex(n, '\0'), &mag, rindex(altn, '\0'));
+-+		/* use strrchr to append sysname to n */
+-+		getsysname(the_feature, strrchr(n, '\0'), &mag, strrchr(altn, '\0'));
+- 		if ((f = fopen(n, "r")) != NULL
+- 		 || (f = fopen(altn, "r")) != NULL) {
+- 			int res = fscanf(f, "%lf", value);
+-@@ -198,8 +198,8 @@ int sensors_write_proc(sensors_chip_name
+- 		strcpy(n, name.busname);
+- 		strcat(n, "/");
+- 		strcpy(altn, n);
+--		/* use rindex to append sysname to n */
+--		getsysname(the_feature, rindex(n, '\0'), &mag, rindex(altn, '\0'));
+-+		/* use strrchr to append sysname to n */
+-+		getsysname(the_feature, strrchr(n, '\0'), &mag, strrchr(altn, '\0'));
+- 		if ((f = fopen(n, "w")) != NULL
+- 		 || (f = fopen(altn, "w")) != NULL) {
+- 			for (; mag > 0; mag --)
+-diff -rdup lm_sensors-2.10.4.oorig/prog/dump/i2cbusses.c lm_sensors-2.10.4/prog/dump/i2cbusses.c
+---- lm_sensors-2.10.4.oorig/prog/dump/i2cbusses.c	2007-07-17 06:53:10.000000000 +0200
+-+++ lm_sensors-2.10.4/prog/dump/i2cbusses.c	2007-09-20 13:29:19.000000000 +0200
+-@@ -185,7 +185,7 @@ found:
+- 				fprintf(stderr, "%s: read error\n", n);
+- 				continue;
+- 			}
+--			if((border = index(x, '\n')) != NULL)
+-+			if((border = strchr(x, '\n')) != NULL)
+- 				*border = 0;
+- 			if(count++ == 0 && !procfmt)
+- 				fprintf(stderr,"  Installed I2C busses:\n");
