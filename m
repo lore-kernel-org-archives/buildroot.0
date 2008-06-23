@@ -1,47 +1,35 @@
-From: Daniel Laird <daniel.j.laird@nxp.com>
-Date: Mon, 23 Jun 2008 05:13:20 -0700 (PDT)
-Subject: [Buildroot] [buildroot 0003834]: cairo build broken when
- directfb support is required
-In-Reply-To: <bb1ae9751e255807f2b801d4f8fa6ab3@busybox.net>
-References: <bb1ae9751e255807f2b801d4f8fa6ab3@busybox.net>
-Message-ID: <18067079.post@talk.nabble.com>
+From: Hinko Kocevar <hinko.kocevar@cetrtapot.si>
+Date: Mon, 23 Jun 2008 14:22:25 +0200
+Subject: [Buildroot] uClibc missing limits.h
+Message-ID: <485F9581.2040204@cetrtapot.si>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+Hi,
 
-I too found this:
-A patch was posted:
-DirectFB is needed before cairo builds to get directfb support:
+I've found a way for uClibc to find headers that are not in the $(shell $CC -print-file-name=include), but in $(shell $CC -print-file-name=include)-fixed.
+According to http://sourceware.org/ml/libc-alpha/2007-03/msg00017.html LIBC should also look in other gcc provided header directories (eg. include-fixed) instead only relying on 'include' to contain all correct headers.
 
-Dan Laird
+Below is uClibc patch for this (tested on cris).
 
---- buildroot/package/cairo/cairo.mk
-+++ buildroot.new/package/cairo/cairo.mk
-@@ -43,9 +43,11 @@
- 
- ifeq ($(BR2_PACKAGE_DIRECTFB),y)
-  CAIRO_CONF_OPT = --disable-xlib --without-x --enable-directfb
-+ CAIRO_DEPENDENCIES_EXTRA = directfb
- endif
- 
--CAIRO_DEPENDENCIES = uclibc gettext libintl pkgconfig libglib2 zlib png
-fontconfig $(XSERVER)
-+CAIRO_DEPENDENCIES = uclibc gettext libintl pkgconfig libglib2 zlib png
-fontconfig $(CAIRO_DEPENDENCIES_EXTRA) $(XSERVER)
- 
- $(eval $(call AUTOTARGETS,package,cairo))
- 
-+ 
-And a bug was raised:
-0003584: Cairo does not build directfb if directfb support required
-(dependencies missing) 
-
-It does not appear to have made the mainline SVN.  I hope this helps
-Daniel Laird
-
+Best regards,
+Hinko
 -- 
-View this message in context: http://www.nabble.com/-buildroot-0003834-%3A-cairo-build-broken-when-directfb-support-is-required-tp18040307p18067079.html
-Sent from the BuildRoot mailing list archive at Nabble.com.
+?ETRTA POT, d.o.o., Kranj
+Planina 3
+4000 Kranj
+Slovenia, Europe
+Tel. +386 (0) 4 280 66 03
+E-mail: hinko.kocevar at cetrtapot.si
+Http: www.cetrtapot.si
+
+-------------- next part --------------
+A non-text attachment was scrubbed...
+Name: uClibc-0.9.29-use-gcc-include-fixed-dir.patch
+Type: text/x-patch
+Size: 461 bytes
+Desc: not available
+Url : http://busybox.net/lists/buildroot/attachments/20080623/85c66671/attachment.bin 
