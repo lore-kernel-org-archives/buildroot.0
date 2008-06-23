@@ -1,74 +1,70 @@
-From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Mon, 23 Jun 2008 15:58:14 +0200
-Subject: [Buildroot] Out of tree builds (was Re: svn commit: trunk/buildroot)
-In-Reply-To: <20080623134749.009043C2B3@busybox.net> (jacmet@uclibc.org's
-	message of "Mon\, 23 Jun 2008 06\:47\:48 -0700 \(PDT\)")
-References: <20080623134749.009043C2B3@busybox.net>
-Message-ID: <87bq1si77t.fsf@macbook.be.48ers.dk>
+From: Hinko Kocevar <hinko.kocevar@cetrtapot.si>
+Date: Mon, 23 Jun 2008 16:41:32 +0200
+Subject: [Buildroot] cris
+In-Reply-To: <20080623130323.GB8920@mx.loc>
+References: <485A3396.80701@cetrtapot.si> <87iqw5dyyb.fsf@macbook.be.48ers.dk>
+	<20080620083646.GB12682@mx.loc> <485B6CF6.7040901@cetrtapot.si>
+	<20080620125720.GE12682@mx.loc> <485BAFF8.8090604@cetrtapot.si>
+	<20080620141152.GG12682@mx.loc> <485F507D.5070801@cetrtapot.si>
+	<20080623130323.GB8920@mx.loc>
+Message-ID: <485FB61C.7080403@cetrtapot.si>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "jacmet" == jacmet  <jacmet@uclibc.org> writes:
+Bernhard Fischer wrote:
+> On Mon, Jun 23, 2008 at 09:27:57AM +0200, Hinko Kocevar wrote:
+>> Bernhard Fischer wrote:
+> 
+>>>> +ifeq ($(BR2_ARCH),"cris")
+>>>> +	 cp -a $(LINUX_HEADERS_UNPACK_DIR)/include/linux/user.h $(LINUX_HEADERS_DIR)/include/linux
+>>>> +	 cp -a $(LINUX_HEADERS_UNPACK_DIR)/include/asm-cris/user.h $(LINUX_HEADERS_DIR)/include/asm
+>>>> +	 cp -a $(LINUX_HEADERS_UNPACK_DIR)/include/asm-cris/elf.h $(LINUX_HEADERS_DIR)/include/asm
+>>>> +	 cp -a $(LINUX_HEADERS_UNPACK_DIR)/include/asm-cris/arch-v10 $(LINUX_HEADERS_DIR)/include/asm/arch
+>>>> +	 sed -i -e "/^#include <asm\/page\.h>/d" $(LINUX_HEADERS_DIR)/include/asm/user.h
+>>> as you can see this wouldn't work for v8 and generally should be fixed
+>>> in the kernel (also fails with 2.6.git).
+>> This problem is because include/asm-cris/Kbuild does not include the correct headers when the kernel source is not configured. Both include/asm-cris/arch-vXX directories are left behind when install_headers goes through header-y target. 
+>>
+>> I'll let Axis people sort it out (if ever), till then I guess we are stuck with the hack..
+> 
+> Yes, we'd need to use a prepared kernel ("archprepare"), which means
+> dropping the one from tool_build and setting one up early in project_.
+> 
+> I currently don't have time to do this properly, perhaps you want to
+> give it a try?
 
-Hi,
+The axis devs responded with the solution that does not rely on the CONFIG_ETRAX_ARCH_Vxx but instead includes arch-v10 and arch-v32 dirs in header-y target. I guess it is OK to do so, since we might need headers for v10 and/or v32 CPUs. The only catch would be to make correct symlink to the desired arch-vxx directory.
 
- jacmet> Author: jacmet
- jacmet> Date: 2008-06-23 06:47:37 -0700 (Mon, 23 Jun 2008)
- jacmet> New Revision: 22481
 
- jacmet> Log:
- jacmet> Makefile: don't include .config from TOPDIR
-
- jacmet> If we ever want to support building out of tree, having the
- jacmet> .config in the tree is probably not what we want.
-
-Do we want to support out of tree builds? The toplevel Makefile has
-had a TOPDIR variable since forever, but it'll take a bit of work to
-get it running.
-
-The basics are easy to do, E.G.:
-
-diff --git a/Makefile b/Makefile
-index 73d9208..b81d330 100644
---- a/Makefile
-+++ b/Makefile
-@@ -21,10 +21,17 @@
- # Just run 'make menuconfig', configure stuff, then run 'make'.
- # You shouldn't need to mess with anything beyond this point...
- #--------------------------------------------------------------
--TOPDIR=./
--CONFIG_CONFIG_IN=Config.in
--CONFIG_DEFCONFIG=.defconfig
-+
-+# buildroot sources are in same directory as Makefile
-+TOPDIR:=$(dir $(firstword $(MAKEFILE_LIST)))
-+
-+# for kbuild
-+srctree:=$(TOPDIR)
-+export srctree
-+
-+CONFIG_CONFIG_IN=$(TOPDIR)/Config.in
-+CONFIG_DEFCONFIG=$(TOPDIR)/.defconfig
--CONFIG=package/config
-+CONFIG=$(TOPDIR)/package/config
- DATE:=$(shell date +%Y%m%d)
+diff --git a/include/asm-cris/Kbuild b/include/asm-cris/Kbuild
+index 1745545..d5b6319 100644
+--- a/include/asm-cris/Kbuild
++++ b/include/asm-cris/Kbuild
+@@ -1,7 +1,7 @@
+ include include/asm-generic/Kbuild.asm
  
- noconfig_targets:=menuconfig config oldconfig randconfig \
+-header-$(CONFIG_ETRAX_ARCH_V10) += arch-v10/
+-header-$(CONFIG_ETRAX_ARCH_V32) += arch-v32/
++header-y += arch-v10/
++header-y += arch-v32/
+ 
+ header-y += ethernet.h
+ header-y += rtc.h
 
-But the big issue is everywhere we expect to be in the source
-directory, so we'll need to prepend $(TOPDIR)/ to every include line
-(make -I doesn't work for wildcards), patch-kernel.sh calls and so on.
 
-With all that in place it should be possible to do:
+I think it is the correct path to take, but will still try to work out the best solution with the Axis devs later on..
 
-% mkdir build && cd build
-% make -f /path/to/buildroot/Makefile  menuconfig
-% make -f /path/to/buildroot/Makefile
-
-What do you say?
+Regards,
+Hinko
 
 -- 
-Bye, Peter Korsgaard
+?ETRTA POT, d.o.o., Kranj
+Planina 3
+4000 Kranj
+Slovenia, Europe
+Tel. +386 (0) 4 280 66 03
+E-mail: hinko.kocevar at cetrtapot.si
+Http: www.cetrtapot.si
