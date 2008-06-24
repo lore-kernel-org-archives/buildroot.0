@@ -1,31 +1,20 @@
-From: John Voltz <john.voltz@gmail.com>
-Date: Mon, 23 Jun 2008 19:54:17 -0400
-Subject: [Buildroot] Modular X.org
-In-Reply-To: <d6cda7730806231513y75b87d5am960d9bbc137a8e5b@mail.gmail.com>
-References: <46a136670806231024o11a8f649r583107ac041c23e2@mail.gmail.com>
-	<87od5sau6s.fsf@macbook.be.48ers.dk>
-	<46a136670806231136r421060aatb105a6bb59ef1f4d@mail.gmail.com>
-	<87iqvzalr1.fsf@macbook.be.48ers.dk>
-	<d6cda7730806231513y75b87d5am960d9bbc137a8e5b@mail.gmail.com>
-Message-ID: <46a136670806231654n755f4358wd0dbdcc66ad8a00e@mail.gmail.com>
+From: =?ISO-8859-1?Q?Thiago_A._Corr=EAa?= <thiago.correa@gmail.com>
+Date: Mon, 23 Jun 2008 23:36:44 -0300
+Subject: [Buildroot] buildroot snapshot
+In-Reply-To: <485C6383.8010806@ripnet.com>
+References: <485C6383.8010806@ripnet.com>
+Message-ID: <d6cda7730806231936n7211fd34h929fead0f5ef220a@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Modular X has been tested with the vesa, mouse, and keyboard drivers on x86
-and it works well. One minor caveat, you have to start x with:
+> I guess I am looking for confirmation that the snapshot contains
+> specific versions of packages and patches, and these same ones will be
+> used even if the snapshot is run at a later date.
 
-startx -- -ignoreABI
-
-
-or it may complain about ABI mismatch between driver and server. I'm not
-sure at the moment how the ABI versions are resolved and how to fix it.
-
-Regards,
-
-John
--------------- next part --------------
-An HTML attachment was scrubbed...
-URL: http://busybox.net/lists/buildroot/attachments/20080623/fdbda99f/attachment.htm 
+Yes. Although sometimes packages vanish from their download sites for
+whatever reason. In that case, you might be forced to bump versions or
+update URLs in .mk files. That's unavoidable, unless you save/mirror
+your download folder.
