@@ -1,42 +1,30 @@
-From: jacmet at uclibc.org <jacmet@uclibc.org>
-Date: Tue, 24 Jun 2008 11:35:33 -0700 (PDT)
-Subject: [Buildroot] svn commit: trunk/buildroot/package
-Message-ID: <20080624183533.1A0503C66C@busybox.net>
+From: Peter Korsgaard <jacmet@uclibc.org>
+Date: Tue, 24 Jun 2008 20:36:11 +0200
+Subject: [Buildroot] FW:  Problem: Unable to select packages
+In-Reply-To: <BD79186B4FD85F4B8E60E381CAEE19091D7455@mi8nycmail19.Mi8.com>
+	(hartleys@visionengravers.com's message of "Tue\,
+	24 Jun 2008 11\:59\:43 -0400")
+References: <BD79186B4FD85F4B8E60E381CAEE19091D7455@mi8nycmail19.Mi8.com>
+Message-ID: <87fxr2u1d0.fsf@macbook.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Author: jacmet
-Date: 2008-06-24 11:35:32 -0700 (Tue, 24 Jun 2008)
-New Revision: 22492
+>>>>> "hartleys" == hartleys  <hartleys@visionengravers.com> writes:
 
-Log:
-BR2_GRAPHIC_SUPPORT: Fixup comment to make kconfig happy
+Hi,
 
-It seems like kconfig nowadays don't like paranthesises is comments.
+ hartleys> Hello all,
+ hartleys> This problem still exists with svn 22489.
 
-Reported by Harley.
+ hartleys> Trying to select any package in the "Graphics libraries and
+ hartleys> applications (grpahic/text) -->" sub-menu just moves the
+ hartleys> selection to "*** --> (May be broken in busybox) ***"
 
+It seems like kconfig doesn't like () in comments. Fixed in r22492 -
+Thanks!
 
-Modified:
-   trunk/buildroot/package/Config.in
-
-
-Changeset:
-Modified: trunk/buildroot/package/Config.in
-===================================================================
---- trunk/buildroot/package/Config.in	2008-06-24 16:08:22 UTC (rev 22491)
-+++ trunk/buildroot/package/Config.in	2008-06-24 18:35:32 UTC (rev 22492)
-@@ -341,8 +341,8 @@
- source "package/sdl_ttf/Config.in"
- source "package/tiff/Config.in"
- 
--comment "busybox graphic applications" 
--comment "--> (May be broken in busybox)"
-+comment "busybox graphic applications"
-+comment "--> May be broken in busybox"
- source "package/fbv/Config.in"
- source "package/fbset/Config.in"
- 
+-- 
+Bye, Peter Korsgaard
