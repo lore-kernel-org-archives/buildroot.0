@@ -1,20 +1,42 @@
-From: Brian Beattie <beattie@beattie-home.net>
-Date: Tue, 24 Jun 2008 10:00:32 -0700 (PDT)
-Subject: [Buildroot] building kernel modules
-Message-ID: <QMgOp3TV.1214326832.4244410.beattie@localhost>
+From: jacmet at uclibc.org <jacmet@uclibc.org>
+Date: Tue, 24 Jun 2008 11:35:33 -0700 (PDT)
+Subject: [Buildroot] svn commit: trunk/buildroot/package
+Message-ID: <20080624183533.1A0503C66C@busybox.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+Author: jacmet
+Date: 2008-06-24 11:35:32 -0700 (Tue, 24 Jun 2008)
+New Revision: 22492
 
-Does anybody here know how to build kernel modules for buildroot outside
-the kernel tree?  Any documents or tutorials?  Everything I've found so
-far covers self-hosted builds and does not seem to work for
-cross-compiling.
+Log:
+BR2_GRAPHIC_SUPPORT: Fixup comment to make kconfig happy
 
-I'm working inside the kernel tree, but that is a little clumsy.
+It seems like kconfig nowadays don't like paranthesises is comments.
 
-Baring that, how about forcing a kernel recompile, "make linux26" does
-not seem to do it.
+Reported by Harley.
+
+
+Modified:
+   trunk/buildroot/package/Config.in
+
+
+Changeset:
+Modified: trunk/buildroot/package/Config.in
+===================================================================
+--- trunk/buildroot/package/Config.in	2008-06-24 16:08:22 UTC (rev 22491)
++++ trunk/buildroot/package/Config.in	2008-06-24 18:35:32 UTC (rev 22492)
+@@ -341,8 +341,8 @@
+ source "package/sdl_ttf/Config.in"
+ source "package/tiff/Config.in"
+ 
+-comment "busybox graphic applications" 
+-comment "--> (May be broken in busybox)"
++comment "busybox graphic applications"
++comment "--> May be broken in busybox"
+ source "package/fbv/Config.in"
+ source "package/fbset/Config.in"
+ 
