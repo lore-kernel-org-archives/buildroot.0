@@ -1,48 +1,41 @@
-From: hartleys <hartleys@visionengravers.com>
-Date: Tue, 24 Jun 2008 11:59:43 -0400
-Subject: [Buildroot] FW:  Problem: Unable to select packages
-Message-ID: <BD79186B4FD85F4B8E60E381CAEE19091D7455@mi8nycmail19.Mi8.com>
+From: correa at uclibc.org <correa@uclibc.org>
+Date: Tue, 24 Jun 2008 09:02:24 -0700 (PDT)
+Subject: [Buildroot] svn commit: trunk/buildroot/package/avahi
+Message-ID: <20080624160224.379CD3C664@busybox.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello all,
+Author: correa
+Date: 2008-06-24 09:02:22 -0700 (Tue, 24 Jun 2008)
+New Revision: 22490
 
-This problem still exists with svn 22489.
+Log:
+Fix avahi compile when libexpat is not selected
 
-Trying to select any package in the "Graphics libraries and applications
-(grpahic/text)  -->" sub-menu just moves the selection to "*** --> (May
-be broken in busybox) ***"
+Modified:
+   trunk/buildroot/package/avahi/avahi.mk
 
-I think this started when the new config stuff was merged.
 
-Any ideas?
-
-Thanks,
-Hartley
-
------Original Message-----
-From: buildroot-bounces@uclibc.org [mailto:buildroot-bounces at uclibc.org]
-On Behalf Of hartleys
-Sent: Friday, June 20, 2008 1:41 PM
-To: buildroot at uclibc.org
-Subject: [Buildroot] Problem: Unable to select packages
-
-Hello all,
-
-In the latest svn (22460) I am unable to select packages under
-BR2_GRAPHIC_SUPPORT.
-
-Once you go into the "Graphic libraries and applications (graphic/text)
---->" menu, trying to select anything will highlight "** -> (may be
-broken in busybox) ***".
-
-I also tried a new svn co with the same results.
-
-Hartley
-_______________________________________________
-buildroot mailing list
-buildroot at uclibc.org
-http://busybox.net/mailman/listinfo/buildroot
+Changeset:
+Modified: trunk/buildroot/package/avahi/avahi.mk
+===================================================================
+--- trunk/buildroot/package/avahi/avahi.mk	2008-06-24 14:10:41 UTC (rev 22489)
++++ trunk/buildroot/package/avahi/avahi.mk	2008-06-24 16:02:22 UTC (rev 22490)
+@@ -26,12 +26,12 @@
+ 
+ ifeq ($(strip $(BR2_PACKAGE_AVAHI_DAEMON)),y)
+ AVAHI_TARGETS+=$(TARGET_DIR)/usr/sbin/avahi-daemon
+-AVAHI_DISABLE_EXPAT:=
++AVAHI_DISABLE_EXPAT:=--with-xml=expat
+ # depend on the exact library file instead of expat so avahi isn't always
+ # considered out-of-date
+ AVAHI_EXTRA_DEPS+=$(STAGING_DIR)/usr/lib/libexpat.so.1
+ else
+-AVAHI_DISABLE_EXPAT:=--disable-expat
++AVAHI_DISABLE_EXPAT:=--disable-expat --with-xml=none
+ 
+ endif
+ 
