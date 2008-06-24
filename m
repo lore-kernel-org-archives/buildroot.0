@@ -1,38 +1,48 @@
-From: jacmet at uclibc.org <jacmet@uclibc.org>
-Date: Tue, 24 Jun 2008 06:26:45 -0700 (PDT)
-Subject: [Buildroot] svn commit: trunk/buildroot/package
-Message-ID: <20080624132645.DE0223C5FB@busybox.net>
+From: hartleys <hartleys@visionengravers.com>
+Date: Tue, 24 Jun 2008 11:59:43 -0400
+Subject: [Buildroot] FW:  Problem: Unable to select packages
+Message-ID: <BD79186B4FD85F4B8E60E381CAEE19091D7455@mi8nycmail19.Mi8.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Author: jacmet
-Date: 2008-06-24 06:26:45 -0700 (Tue, 24 Jun 2008)
-New Revision: 22488
+Hello all,
 
-Log:
-Makefile.autotools.in: also support source/source-check
+This problem still exists with svn 22489.
 
+Trying to select any package in the "Graphics libraries and applications
+(grpahic/text)  -->" sub-menu just moves the selection to "*** --> (May
+be broken in busybox) ***"
 
-Modified:
-   trunk/buildroot/package/Makefile.autotools.in
+I think this started when the new config stuff was merged.
 
+Any ideas?
 
-Changeset:
-Modified: trunk/buildroot/package/Makefile.autotools.in
-===================================================================
---- trunk/buildroot/package/Makefile.autotools.in	2008-06-24 09:55:37 UTC (rev 22487)
-+++ trunk/buildroot/package/Makefile.autotools.in	2008-06-24 13:26:45 UTC (rev 22488)
-@@ -130,8 +130,8 @@
- 
- # Retrieve and unpack the archive
- $(BUILD_DIR)/%/.stamp_downloaded:
--# support make external-deps
--ifeq ($(strip $(WGET)),$(TOPDIR)toolchain/wget-show-external-deps.sh)
-+# support make source/source-check/external-deps
-+ifneq ($(filter source,$(MAKECMDGOALS)),)
- 	$(WGET) -P $(DL_DIR) $($(PKG)_SITE)/$($(PKG)_SOURCE)
- else
- 	$(call MESSAGE,"Downloading")
+Thanks,
+Hartley
+
+-----Original Message-----
+From: buildroot-bounces@uclibc.org [mailto:buildroot-bounces at uclibc.org]
+On Behalf Of hartleys
+Sent: Friday, June 20, 2008 1:41 PM
+To: buildroot at uclibc.org
+Subject: [Buildroot] Problem: Unable to select packages
+
+Hello all,
+
+In the latest svn (22460) I am unable to select packages under
+BR2_GRAPHIC_SUPPORT.
+
+Once you go into the "Graphic libraries and applications (graphic/text)
+--->" menu, trying to select anything will highlight "** -> (may be
+broken in busybox) ***".
+
+I also tried a new svn co with the same results.
+
+Hartley
+_______________________________________________
+buildroot mailing list
+buildroot at uclibc.org
+http://busybox.net/mailman/listinfo/buildroot
