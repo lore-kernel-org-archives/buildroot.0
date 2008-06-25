@@ -1,89 +1,30 @@
-From: Mike Sander <msander@ripnet.com>
-Date: Tue, 24 Jun 2008 21:33:40 -0400
-Subject: [Buildroot] buildroot snapshot
-In-Reply-To: <00d201c8d5d2$0328e7c0$0a0514ac@atmel.com>
-References: <485C6383.8010806@ripnet.com><d6cda7730806231936n7211fd34h929fead0f5ef220a@mail.gmail.com>
-	<48607D5C.2040002@ripnet.com>
-	<00d201c8d5d2$0328e7c0$0a0514ac@atmel.com>
-Message-ID: <4861A074.90700@ripnet.com>
+From: Sean Perry <shaleh@speakeasy.net>
+Date: Tue, 24 Jun 2008 23:17:50 -0700
+Subject: [Buildroot] Problem with hotplug
+In-Reply-To: <BD79186B4FD85F4B8E60E381CAEE19091D71FA@mi8nycmail19.Mi8.com>
+References: <BD79186B4FD85F4B8E60E381CAEE19091D71FA@mi8nycmail19.Mi8.com>
+Message-ID: <4861E30E.1090404@speakeasy.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Ulf Samuelsson wrote:
-> Mike Sander wrote:
->   
->> Thiago A. Corr?a wrote:
->>     
->>>> I guess I am looking for confirmation that the snapshot contains
->>>> specific versions of packages and patches, and these same ones will
->>>> be used even if the snapshot is run at a later date.
->>>>
->>>>         
->>> Yes. Although sometimes packages vanish from their download sites for
->>> whatever reason. In that case, you might be forced to bump versions
->>> or update URLs in .mk files. That's unavoidable, unless you
->>> save/mirror your download folder.
->>>
->>>
->>>       
->> Thank You for the confirmation.  Good point about specific bits
->> disappearing.  I'll be sure to archive these.
->>
->> As we move from development to production stability and repeatability
->> become more critical.
->>
->> I have also been thinking about this in the context of "what if one of
->> my development boxes dies?" ... what do I need to do to get back to a
->> working system.
->>     
->
-> Backups ;-)
->
->
-> If you are using a vanilla buildroot without modifications, you
-> can download the  latest svn or you can download a previous version
-> of buildroot (read subversion documentation to find out how)
->
-> It is highly unlikely that a default configuration will be OK for you.
-> You should write down which version of buildroot you are  using,
-> and you need to store somewhere the configuration you are using
-> and any modifications to the buildroot tree.
->
-> Periodically backing up the source tarballs may be helpful.
->
->   
-No I'm not using a vanilla buildroot anymore.    Backing up modified 
-bits & backing up tarballs... all good ideas.
-Thank You for the tips.
-Mike
->> Regards,
->>
->> Mike
->>     
->>> =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
->>> Scanned with Copfilter Version 0.84beta3a (P3Scan 2.2.1)
->>> AntiSpam:  SpamAssassin 3.2.3
->>> by Markus Madlener @ http://www.copfilter.org
->>>
->>>
->>>       
->> _______________________________________________
->> buildroot mailing list
->> buildroot at uclibc.org
->> http://busybox.net/mailman/listinfo/buildroot
->>     
->
-> Best Regards
-> Ulf Samuelsson
->
->
->
-> =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
-> Scanned with Copfilter Version 0.84beta3a (P3Scan 2.2.1)
-> AntiSpam:  SpamAssassin 3.2.3
-> by Markus Madlener @ http://www.copfilter.org
->
->   
+hartleys wrote:
+> Does the hotplug utility work in the latest svn of buildroot?
+> 
+> When I plug in a USB memory stick it gets detected by the kernel but
+> does not auto mount. I'm not sure if I have something else setup wrong
+> or if the hotplug utility is just not working.
+> 
+> I tried enabling DEBUG in the source to get the dbg messages but the
+> code will not compile.
+> 
+> Can anyone offer some assistance please?
+> 
+
+I had the impression that the hotplug in packages was for older 2.6 and 
+2.4 kernels.
+
+The kernel just runs /sbin/hotplug when it detects new hardware. Write a 
+simple script to mount things. Also, consider looking at HAL.
