@@ -1,30 +1,38 @@
-From: Sean Perry <shaleh@speakeasy.net>
-Date: Tue, 24 Jun 2008 23:17:50 -0700
-Subject: [Buildroot] Problem with hotplug
-In-Reply-To: <BD79186B4FD85F4B8E60E381CAEE19091D71FA@mi8nycmail19.Mi8.com>
-References: <BD79186B4FD85F4B8E60E381CAEE19091D71FA@mi8nycmail19.Mi8.com>
-Message-ID: <4861E30E.1090404@speakeasy.net>
+From: Fathi Boudra <fboudra@gmail.com>
+Date: Wed, 25 Jun 2008 21:22:18 +0200
+Subject: [Buildroot] svn commit: trunk/buildroot/toolchain/gcc: 4.3.1
+In-Reply-To: <20080621125101.GA10734@mx.loc>
+References: <20080619190606.260DD3C67C@busybox.net>
+	<6a2e33620806200906h5b27d157s551782a16eb00a36@mail.gmail.com>
+	<87r6as2c0o.fsf@macbook.be.48ers.dk>
+	<200806202050.32567.fboudra@gmail.com>
+	<6a2e33620806201313h2ceb6b6yfebe620f4ef3c2d@mail.gmail.com>
+	<20080621125101.GA10734@mx.loc>
+Message-ID: <6a2e33620806251222lde2c71ra8b01223148dc84b@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-hartleys wrote:
-> Does the hotplug utility work in the latest svn of buildroot?
-> 
-> When I plug in a USB memory stick it gets detected by the kernel but
-> does not auto mount. I'm not sure if I have something else setup wrong
-> or if the hotplug utility is just not working.
-> 
-> I tried enabling DEBUG in the source to get the dbg messages but the
-> code will not compile.
-> 
-> Can anyone offer some assistance please?
-> 
+On Sat, Jun 21, 2008 at 2:51 PM, Bernhard Fischer <rep.dot.nop@gmail.com>
+wrote:
 
-I had the impression that the hotplug in packages was for older 2.6 and 
-2.4 kernels.
+>
+> I'm not sure why you see this (works for me). Please show me your
+> $ egrep -v "(^#|^$)" .config
+> from buildroot
 
-The kernel just runs /sbin/hotplug when it detects new hardware. Write a 
-simple script to mount things. Also, consider looking at HAL.
+
+default config, select powerpc architecture and gcc 4.3.1.
+find attached buildroot config.
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: http://busybox.net/lists/buildroot/attachments/20080625/9c122a85/attachment.htm 
+-------------- next part --------------
+A non-text attachment was scrubbed...
+Name: my.config
+Type: application/octet-stream
+Size: 2524 bytes
+Desc: not available
+Url : http://busybox.net/lists/buildroot/attachments/20080625/9c122a85/attachment.obj 
