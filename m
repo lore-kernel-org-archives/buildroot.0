@@ -1,73 +1,146 @@
-From: udmd-eric wann <udmderic@gmail.com>
-Date: Thu, 26 Jun 2008 13:38:26 +0800
-Subject: [Buildroot] ARM926t EABI issue?
-Message-ID: <46361d9e0806252238s70363e95raf0f491a88af7cea@mail.gmail.com>
+From: hamish at uclibc.org <hamish@uclibc.org>
+Date: Wed, 25 Jun 2008 23:43:35 -0700 (PDT)
+Subject: [Buildroot] svn commit: trunk/buildroot/package:  mii-diag
+Message-ID: <20080626064335.93C843C289@busybox.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear all:
+Author: hamish
+Date: 2008-06-25 23:43:33 -0700 (Wed, 25 Jun 2008)
+New Revision: 22511
 
-        I am newbie to linux and build.
-
-        I use buildroot-20080624 to build my toolchain.
-        I select arm /926t/ EABI and all other setting by default.
-        (My BR2_GNU_TARGET_SUFFIX is default linux-uclibcgnueabi !)
-
-        (My linux kernel build as CONFIG_AEABI=y, CONFIG_OABI_COMPAT=y)
-
-        After a long time to build the toolchain, I got an image.
-
-        I set the inittab as
-
-        null::sysinit:/bin/mount -o remount,rw /
-        null::sysinit:/bin/mount -t proc proc /proc
-        null::sysinit:/bin/mount -a
-        null::sysinit:/bin/hostname -F /etc/hostname
-        ::askfirst:/sbin/getty 115200 ttyS0
-
-        then I can see the output like this
-
-        RAMDISK: Compressed image found at block 0
-        VFS: Mounted root (ext2 filesystem).
-        Freeing init memory: 72K
-
-        Please press Enter to activate this console.
-
-        Welcome.
-        968 login: root
-
-        Dec 31 17:00:05 login[20]: root login on 'ttyS0'
-
-        Please press Enter to activate this console.
+Log:
+Added mii-diag package
 
 
-        Welcome.
-        968 login: root
+Added:
+   trunk/buildroot/package/mii-diag/
+   trunk/buildroot/package/mii-diag/Config.in
+   trunk/buildroot/package/mii-diag/mii-diag-strchr.patch
+   trunk/buildroot/package/mii-diag/mii-diag.mk
 
-        Dec 31 17:00:15 login[21]: root login on 'ttyS0'
+Modified:
+   trunk/buildroot/package/Config.in
 
-        Please press Enter to activate this console.
 
+Changeset:
+Modified: trunk/buildroot/package/Config.in
+===================================================================
+--- trunk/buildroot/package/Config.in	2008-06-26 03:26:57 UTC (rev 22510)
++++ trunk/buildroot/package/Config.in	2008-06-26 06:43:33 UTC (rev 22511)
+@@ -179,6 +179,7 @@
+ if !BR2_PACKAGE_BUSYBOX_HIDE_OTHERS || !BR2_PACKAGE_BUSYBOX_SNAPSHOT
+ source "package/microcom/Config.in"
+ endif
++source "package/mii-diag/Config.in"
+ source "package/mrouted/Config.in"
+ source "package/mutt/Config.in"
+ source "package/nbd/Config.in"
 
-        Welcome.
-        968 login:
+Added: trunk/buildroot/package/mii-diag/Config.in
+===================================================================
+--- trunk/buildroot/package/mii-diag/Config.in	                        (rev 0)
++++ trunk/buildroot/package/mii-diag/Config.in	2008-06-26 06:43:33 UTC (rev 22511)
+@@ -0,0 +1,6 @@
++config BR2_PACKAGE_MIIDIAG
++	bool "mii-diag"
++	default n
++	help
++	  mii-diag allows you to manipulate the MII registers of
++	  network cards.
 
-        Ok... I don't know why it can not login by root...
+Added: trunk/buildroot/package/mii-diag/mii-diag-strchr.patch
+===================================================================
+--- trunk/buildroot/package/mii-diag/mii-diag-strchr.patch	                        (rev 0)
++++ trunk/buildroot/package/mii-diag/mii-diag-strchr.patch	2008-06-26 06:43:33 UTC (rev 22511)
+@@ -0,0 +1,20 @@
++--- mii-diag-2.11.orig/mii-diag.c.orig	2008-06-25 11:08:52.000000000 +1000
+++++ mii-diag-2.11.orig/mii-diag.c	2005-03-27 03:56:33.000000000 +1000
++@@ -174,7 +174,7 @@
++ {
++ 	int c, errflag = 0;
++ 	char **spp, *ifname;
++-    char *progname = rindex(argv[0], '/') ? rindex(argv[0], '/')+1 : argv[0];
+++    char *progname = strrchr(argv[0], '/') ? strrchr(argv[0], '/')+1 : argv[0];
++ 
++ 	while ((c = getopt_long(argc, argv, shortopts, longopts, 0)) != EOF)
++ 		switch (c) {
++@@ -310,7 +310,7 @@
++ 					str = endstr+1;
++ 				else {
++ 					fprintf(stderr, "Invalid driver parameter '%s'.\n", str);
++-					str = index(str, ',');
+++					str = strchr(str, ',');
++ 				}
++ 			} else if (endstr[0] == ',') {
++ 				data32[i] = newval;
 
-        so I change the line "::askfirst:/sbin/getty 115200 ttyS0"
-        to ttyS0::respawn:-/bin/sh
-
-        now I got init hang.... I don't see anything message .....
-        (In fact if I use OABI, I can see the console output...)
-
-        What's wrong with my setting?
-        Does anybody has any suggestions?
-
-        Thanks for your kindly help.
-
-        Best Regrads
-
-        Eric Wann
+Added: trunk/buildroot/package/mii-diag/mii-diag.mk
+===================================================================
+--- trunk/buildroot/package/mii-diag/mii-diag.mk	                        (rev 0)
++++ trunk/buildroot/package/mii-diag/mii-diag.mk	2008-06-26 06:43:33 UTC (rev 22511)
+@@ -0,0 +1,61 @@
++#############################################################
++#
++# mii-diag
++#
++#############################################################
++MIIDIAG_VERSION:=2.11
++MIIDIAG_DEBIAN_PATCH_LEVEL:=2
++MIIDIAG_SOURCE:=mii-diag_$(MIIDIAG_VERSION).orig.tar.gz
++MIIDIAG_PATCH_FILE=mii-diag_$(MIIDIAG_VERSION)-$(MIIDIAG_DEBIAN_PATCH_LEVEL).diff.gz
++MIIDIAG_SITE:=$(BR2_DEBIAN_MIRROR)/debian/pool/main/m/mii-diag
++MIIDIAG_DIR:=$(BUILD_DIR)/mii-diag-$(MIIDIAG_VERSION)
++MIIDIAG_CAT:=$(ZCAT)
++MIIDIAG_BINARY:=usr/sbin/mii-diag
++
++ifneq ($(MIIDIAG_PATCH_FILE),)
++MIIDIAG_PATCH=$(DL_DIR)/$(MIIDIAG_PATCH_FILE)
++$(MIIDIAG_PATCH):
++	$(WGET) -P $(DL_DIR) $(MIIDIAG_SITE)/$(MIIDIAG_PATCH_FILE)
++endif
++
++$(DL_DIR)/$(MIIDIAG_SOURCE):
++	$(WGET) -P $(DL_DIR) $(MIIDIAG_SITE)/$(MIIDIAG_SOURCE)
++
++$(MIIDIAG_DIR)/.unpacked: $(DL_DIR)/$(MIIDIAG_SOURCE) $(MIIDIAG_PATCH)
++	mkdir -p $(MIIDIAG_DIR)
++	$(MIIDIAG_CAT) $(DL_DIR)/$(MIIDIAG_SOURCE) | tar --strip 1 -C $(MIIDIAG_DIR) $(TAR_OPTIONS) -
++ifneq ($(MIIDIAG_PATCH_FILE),)
++	(cd $(MIIDIAG_DIR) && $(MIIDIAG_CAT) $(MIIDIAG_PATCH) | patch -p1)
++endif
++	toolchain/patch-kernel.sh $(MIIDIAG_DIR) package/mii-diag/ mii-diag-\*.patch*
++	touch $@
++
++$(MIIDIAG_DIR)/.configured: $(MIIDIAG_DIR)/.unpacked
++	touch $@
++
++$(MIIDIAG_DIR)/mii-diag: $(MIIDIAG_DIR)/.configured
++	$(MAKE) CC=$(TARGET_CC) CFLAGS="$(TARGET_CFLAGS)" -C $(MIIDIAG_DIR)
++
++$(TARGET_DIR)/$(MIIDIAG_BINARY): $(MIIDIAG_DIR)/mii-diag
++	$(MAKE) CC=$(TARGET_CC) CFLAGS="$(TARGET_CFLAGS)" -C $(MIIDIAG_DIR) DESTDIR=$(TARGET_DIR) install
++	$(STRIPCMD) $@
++	touch $@
++
++mii-diag: uclibc $(TARGET_DIR)/$(MIIDIAG_BINARY)
++
++mii-diag-source: $(DL_DIR)/$(MIIDIAG_SOURCE) $(MIIDIAG_PATCH)
++
++mii-diag-clean:
++	-$(MAKE) -C $(MIIDIAG_DIR) clean
++
++mii-diag-dirclean:
++	rm -rf $(MIIDIAG_DIR)
++
++#############################################################
++#
++# Toplevel Makefile options
++#
++#############################################################
++ifeq ($(strip $(BR2_PACKAGE_MIIDIAG)),y)
++TARGETS+=mii-diag
++endif
