@@ -1,7 +1,7 @@
 From: jacmet at uclibc.org <jacmet@uclibc.org>
-Date: Thu, 26 Jun 2008 04:43:03 -0700 (PDT)
-Subject: [Buildroot] svn commit: trunk/buildroot/package
-Message-ID: <20080626114303.4842D3C642@busybox.net>
+Date: Thu, 26 Jun 2008 07:04:34 -0700 (PDT)
+Subject: [Buildroot] svn commit: trunk/buildroot/package/matchbox
+Message-ID: <20080626140434.3D8093C651@busybox.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -9,32 +9,28 @@ Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
 Author: jacmet
-Date: 2008-06-26 04:43:02 -0700 (Thu, 26 Jun 2008)
-New Revision: 22517
+Date: 2008-06-26 07:04:30 -0700 (Thu, 26 Jun 2008)
+New Revision: 22518
 
 Log:
-Makefile.autotools.in: fix BR2_PRIMARY_SITE check
-
-Empty strings gets defined to "", so check for that instead of if
-the variable is defined.
+matchbox: depend on libXext at configure time
 
 
 Modified:
-   trunk/buildroot/package/Makefile.autotools.in
+   trunk/buildroot/package/matchbox/matchbox.mk
 
 
 Changeset:
-Modified: trunk/buildroot/package/Makefile.autotools.in
+Modified: trunk/buildroot/package/matchbox/matchbox.mk
 ===================================================================
---- trunk/buildroot/package/Makefile.autotools.in	2008-06-26 07:22:19 UTC (rev 22516)
-+++ trunk/buildroot/package/Makefile.autotools.in	2008-06-26 11:43:02 UTC (rev 22517)
-@@ -135,7 +135,8 @@
- 	$(WGET) -P $(DL_DIR) $($(PKG)_SITE)/$($(PKG)_SOURCE)
- else
- 	$(call MESSAGE,"Downloading")
--ifdef BR2_PRIMARY_SITE
-+ifneq ($(strip $(subst ",,$(BR2_PRIMARY_SITE))),)
-+#"))
- 	-$(Q)test -e $(DL_DIR)/$($(PKG)_SOURCE) || $(WGET) -P $(DL_DIR) $(BR2_PRIMARY_SITE)/$($(PKG)_SOURCE)
+--- trunk/buildroot/package/matchbox/matchbox.mk	2008-06-26 11:43:02 UTC (rev 22517)
++++ trunk/buildroot/package/matchbox/matchbox.mk	2008-06-26 14:04:30 UTC (rev 22518)
+@@ -211,7 +211,7 @@
  endif
- 	$(Q)test -e $(DL_DIR)/$($(PKG)_SOURCE) || $(WGET) -P $(DL_DIR) $($(PKG)_SITE)/$($(PKG)_SOURCE)
+ 
+ 
+-$(MATCHBOX_LIB_DIR)/.configured: $(MATCHBOX_LIB_DIR)/.unpacked
++$(MATCHBOX_LIB_DIR)/.configured: $(MATCHBOX_LIB_DIR)/.unpacked xlib_libXext-install-staging
+ 	(cd $(MATCHBOX_LIB_DIR); rm -f config.cache; \
+ 	$(TARGET_CONFIGURE_OPTS) \
+ 	CFLAGS="$(TARGET_CFLAGS) -I$(STAGING_DIR)/usr/include" PKG_CONFIG_PATH="$(STAGING_DIR)/usr/lib/pkgconfig" \
