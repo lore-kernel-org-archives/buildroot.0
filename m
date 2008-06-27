@@ -1,39 +1,44 @@
-From: Ram kumar <ramkumar.research@gmail.com>
-Date: Thu, 26 Jun 2008 11:23:02 -0700
-Subject: [Buildroot] ping illegal instruction error in buidroot with busybox
-Message-ID: <6306c640806261123n4ad6528coca849ed20662d29b@mail.gmail.com>
+From: Fathi Boudra <fboudra@gmail.com>
+Date: Fri, 27 Jun 2008 09:11:28 +0200
+Subject: [Buildroot] [PATCH] add gdb-6.8 support
+Message-ID: <6a2e33620806270011n5dfb63a7o279e26c5826b12e@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-hi,
-         I have built the filesystem with buildroot snapshot.When i connect
-my arm AT91SAM9260 target and type a ping command in the console it says
-illegal instruction.My ifconfig,modprobe,hostname all are working fine.But
-iam not able to use ping command.
+Hi,
 
-I have enabled floating point support in my kernel.
+please find attached patches to add gdb-6.8 support.
 
-#
-# Floating point emulation
-#
+<off-topic>
+gdb-6.7.1 support is broken. patches doesn't apply.
+I guess you could drop all patches except
+600-fix-compile-flag-mismatch.patch
+This patch need to be refreshed.
+gdb-6.5 is broken too. patches need to be refreshed too.
+Let me know if you want these gdb fixed as I don't really care of these
+versions and use 6.8.
+</off-topic>
 
-#
-# At least one emulation must be selected
-#
-CONFIG_FPE_NWFPE=y
-# CONFIG_FPE_NWFPE_XP is not set
-# CONFIG_FPE_FASTFPE is not set
-# CONFIG_VFP is not set
+cheers,
 
-The ping command did not work for both EABI and OABI configuration.
-
-Please guide me to solve the issue ?
-
-Regards,
-Ram
+Fathi
 -------------- next part --------------
 An HTML attachment was scrubbed...
-URL: http://busybox.net/lists/buildroot/attachments/20080626/8a204153/attachment.htm 
+URL: http://busybox.net/lists/buildroot/attachments/20080627/28f1f4b6/attachment.htm 
+-------------- next part --------------
+An embedded message was scrubbed...
+From: unknown sender
+Subject: no subject
+Date: no date
+Size: 3377
+Url: http://busybox.net/lists/buildroot/attachments/20080627/28f1f4b6/attachment.eml 
+-------------- next part --------------
+An embedded message was scrubbed...
+From: unknown sender
+Subject: no subject
+Date: no date
+Size: 1265
+Url: http://busybox.net/lists/buildroot/attachments/20080627/28f1f4b6/attachment-0001.eml 
