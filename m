@@ -1,44 +1,52 @@
-From: Fathi Boudra <fboudra@gmail.com>
-Date: Fri, 27 Jun 2008 09:11:28 +0200
-Subject: [Buildroot] [PATCH] add gdb-6.8 support
-Message-ID: <6a2e33620806270011n5dfb63a7o279e26c5826b12e@mail.gmail.com>
+From: Daniel Laird <daniel.j.laird@nxp.com>
+Date: Fri, 27 Jun 2008 02:05:34 -0700 (PDT)
+Subject: [Buildroot] svn commit: trunk/buildroot/package/busybox
+In-Reply-To: <877iccn0ml.fsf@macbook.be.48ers.dk>
+References: <20080626065112.3F4CB3C289@busybox.net>
+	<877iccn0ml.fsf@macbook.be.48ers.dk>
+Message-ID: <18151015.post@talk.nabble.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi,
 
-please find attached patches to add gdb-6.8 support.
 
-<off-topic>
-gdb-6.7.1 support is broken. patches doesn't apply.
-I guess you could drop all patches except
-600-fix-compile-flag-mismatch.patch
-This patch need to be refreshed.
-gdb-6.5 is broken too. patches need to be refreshed too.
-Let me know if you want these gdb fixed as I don't really care of these
-versions and use 6.8.
-</off-topic>
 
-cheers,
+jacmet wrote:
+> 
+>>>>>> "jacmet" == jacmet  <jacmet@uclibc.org> writes:
+> 
+>  jacmet> Author: jacmet
+>  jacmet> Date: 2008-06-25 23:51:11 -0700 (Wed, 25 Jun 2008)
+>  jacmet> New Revision: 22514
+> 
+>  jacmet> Log:
+>  jacmet> busybox: mark old versions as deprecated
+> 
+> I would like to get rid of the ancient 1.2.1 .. 1.8 versions - Any
+> objections to me removing them completely?
+> 
+> -- 
+> Bye, Peter Korsgaard
+> _______________________________________________
+> buildroot mailing list
+> buildroot at uclibc.org
+> http://busybox.net/mailman/listinfo/buildroot
+> 
+> 
+I use buildroot actively in my company and have kept up to date pretty well.  
+However we are still using busybox 1.2.2.1 in some cases.  Marking as
+deprecated is fine, removing completely would mean me having to hold local
+patches to keep the ability to upgrade buildroot yet not change busybox
+versions.
 
-Fathi
--------------- next part --------------
-An HTML attachment was scrubbed...
-URL: http://busybox.net/lists/buildroot/attachments/20080627/28f1f4b6/attachment.htm 
--------------- next part --------------
-An embedded message was scrubbed...
-From: unknown sender
-Subject: no subject
-Date: no date
-Size: 3377
-Url: http://busybox.net/lists/buildroot/attachments/20080627/28f1f4b6/attachment.eml 
--------------- next part --------------
-An embedded message was scrubbed...
-From: unknown sender
-Subject: no subject
-Date: no date
-Size: 1265
-Url: http://busybox.net/lists/buildroot/attachments/20080627/28f1f4b6/attachment-0001.eml 
+So I vote for not removing just deprecating :-)
+
+Cheers
+Dan
+
+-- 
+View this message in context: http://www.nabble.com/svn-commit%3A-trunk-buildroot-package-busybox-tp18127574p18151015.html
+Sent from the BuildRoot mailing list archive at Nabble.com.
