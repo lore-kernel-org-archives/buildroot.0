@@ -1,43 +1,30 @@
-From: Bernhard Fischer <rep.dot.nop@gmail.com>
-Date: Fri, 27 Jun 2008 14:53:27 +0200
+From: Peter Korsgaard <jacmet@uclibc.org>
+Date: Fri, 27 Jun 2008 15:19:10 +0200
 Subject: [Buildroot] svn commit: trunk/buildroot/package/busybox
-In-Reply-To: <20080627124653.GA31649@real.realitydiluted.com>
+In-Reply-To: <18154265.post@talk.nabble.com> (Daniel Laird's message of "Fri\,
+	27 Jun 2008 05\:49\:32 -0700 \(PDT\)")
 References: <20080626065112.3F4CB3C289@busybox.net>
-	<877iccn0ml.fsf@macbook.be.48ers.dk>
-	<18151015.post@talk.nabble.com>
-	<87y74ri68u.fsf@macbook.be.48ers.dk>
-	<20080627120011.GD32468@mx.loc>
-	<20080627124653.GA31649@real.realitydiluted.com>
-Message-ID: <20080627125327.GD516@mx.loc>
+	<877iccn0ml.fsf@macbook.be.48ers.dk> <18151015.post@talk.nabble.com>
+	<87y74ri68u.fsf@macbook.be.48ers.dk> <20080627120011.GD32468@mx.loc>
+	<18154265.post@talk.nabble.com>
+Message-ID: <8763rvf229.fsf@macbook.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Fri, Jun 27, 2008 at 07:46:53AM -0500, sjhill at realitydiluted.com wrote:
->> >
->> > Daniel> I use buildroot actively in my company and have kept up to
->> > Daniel> date pretty well.  However we are still using busybox 1.2.2.1
->> 
->> And what's the reason for you doing this? Do you like huge .bss and just
->> don't want to benefit from the improvements that went into busybox
->> during the last years?
->> 
->Because some applets work in 1.2.2.1 that don't in newer versions, like
->telnetd for example.
->
->> If there are regressions (something worked with 1.2.2.1 but fails with
->> 1.11.0) no matter if they are behavioural or size-regressions, then you
->> would be better off to report those to the busybox list.
->> 
->Some of us live in the real world where once we ship a product and start
+>>>>> "Daniel" == Daniel Laird <daniel.j.laird@nxp.com> writes:
 
-Come on, Steven. "Real" world doesn't mean you are prohibited to report
-bugs if you encounter them.
+Hi,
 
->providing updates, it becomes cost prohibitive to requalify all the
->software on a platform to make sure everything still plays together.
+ Daniel> I did not raise the issue on mailing lists as I am trying to
+ Daniel> move compilers and thus make the problem go away.  However
+ Daniel> that takes time and I would rather that buildroot marked
+ Daniel> things as deprecated for now instead of removing support.
 
-Of course. But if you know that something broke then it would be nice to
-report this brokenness so that it can be fixed.
+Ok, noted - Nothing keeps you from continuing to use your old (stable)
+buildroot snapshot no matter what we do to trunk ofcause.
+
+-- 
+Bye, Peter Korsgaard
