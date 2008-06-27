@@ -1,68 +1,48 @@
-From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Fri, 27 Jun 2008 16:07:07 +0200
-Subject: [Buildroot] svn commit: trunk/buildroot/package/busybox
-In-Reply-To: <20080627124653.GA31649@real.realitydiluted.com>
-	(sjhill@realitydiluted.com's message of "Fri\,
-	27 Jun 2008 07\:46\:53 -0500")
-References: <20080626065112.3F4CB3C289@busybox.net>
-	<877iccn0ml.fsf@macbook.be.48ers.dk> <18151015.post@talk.nabble.com>
-	<87y74ri68u.fsf@macbook.be.48ers.dk> <20080627120011.GD32468@mx.loc>
-	<20080627124653.GA31649@real.realitydiluted.com>
-Message-ID: <87myl7dl9w.fsf@macbook.be.48ers.dk>
+From: Fathi Boudra <fboudra@gmail.com>
+Date: Fri, 27 Jun 2008 19:33:05 +0200
+Subject: [Buildroot] [PATCH] add gdb-6.8 support
+In-Reply-To: <87wskbgou1.fsf@macbook.be.48ers.dk>
+References: <6a2e33620806270011n5dfb63a7o279e26c5826b12e@mail.gmail.com>
+	<87wskbgou1.fsf@macbook.be.48ers.dk>
+Message-ID: <200806271933.05849.fboudra@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "sjhill" == sjhill  <sjhill@realitydiluted.com> writes:
+> This seems unrelated to 6.8 support - Please do this as a seperate patch.
 
-[resent with stripped to: to please mailman
-]
-Hi,
+right.
 
- >> > Daniel> I use buildroot actively in my company and have kept up to
- >> > Daniel> date pretty well.  However we are still using busybox 1.2.2.1
- >> 
- >> And what's the reason for you doing this? Do you like huge .bss and just
- >> don't want to benefit from the improvements that went into busybox
- >> during the last years?
- >> 
+* Add gdb-6.8 support patches:
+  - add_gdb-6.8_support.diff
+  - 600-fix-compile-flag-mismatch.patch
 
- sjhill> Because some applets work in 1.2.2.1 that don't in newer
- sjhill> versions, like telnetd for example.
+* Disable configure caching in gdb package:
+  - disable_gdb_configure_caching.diff
 
-Ohh, what's the problem? I don't use it myself, but openwrt afaik uses
-it on 1.8.x
+cheers,
 
- >> If there are regressions (something worked with 1.2.2.1 but fails with
- >> 1.11.0) no matter if they are behavioural or size-regressions, then you
- >> would be better off to report those to the busybox list.
- >> 
-
- sjhill> Some of us live in the real world where once we ship a
- sjhill> product and start providing updates, it becomes cost
- sjhill> prohibitive to requalify all the software on a platform to
- sjhill> make sure everything still plays together.
-
-So I guess you freeze your buildroot snapshot as well?
-
-A missing 1.2.2.1 should only be a problem for people starting new
-development and wanting to use 1.2.2.1 (which they shouldn't) - right?
-
- >> >So you are still doing active development (E.G. buildroot stuff) on a
- >> >project where you cannot change the busybox version? 
- >> >
- >> > Daniel> So I vote for not removing just deprecating :-)
- >> >
- >> >Ok, anyone still using 1.6 .. 1.8?
- >> 
- sjhill> I vote for deprecating.
-
-Ok, noted.
-
-But this is bigger than just busybox ofcause - It also goes for all
-other packages.
-
--- 
-Bye, Peter Korsgaard
+Fathi
+-------------- next part --------------
+A non-text attachment was scrubbed...
+Name: 600-fix-compile-flag-mismatch.patch
+Type: text/x-diff
+Size: 0 bytes
+Desc: not available
+Url : http://busybox.net/lists/buildroot/attachments/20080627/57e1f933/attachment.patch 
+-------------- next part --------------
+A non-text attachment was scrubbed...
+Name: add_gdb-6.8_support.diff
+Type: text/x-diff
+Size: 541 bytes
+Desc: not available
+Url : http://busybox.net/lists/buildroot/attachments/20080627/57e1f933/attachment.diff 
+-------------- next part --------------
+A non-text attachment was scrubbed...
+Name: disable_gdb_configure_caching.diff
+Type: text/x-diff
+Size: 1931 bytes
+Desc: not available
+Url : http://busybox.net/lists/buildroot/attachments/20080627/57e1f933/attachment-0001.diff 
