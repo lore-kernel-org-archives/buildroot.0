@@ -1,48 +1,32 @@
-From: Fathi Boudra <fboudra@gmail.com>
-Date: Fri, 27 Jun 2008 19:33:05 +0200
-Subject: [Buildroot] [PATCH] add gdb-6.8 support
-In-Reply-To: <87wskbgou1.fsf@macbook.be.48ers.dk>
-References: <6a2e33620806270011n5dfb63a7o279e26c5826b12e@mail.gmail.com>
-	<87wskbgou1.fsf@macbook.be.48ers.dk>
-Message-ID: <200806271933.05849.fboudra@gmail.com>
+From: =?ISO-8859-1?Q?Thiago_A._Corr=EAa?= <thiago.correa@gmail.com>
+Date: Sat, 28 Jun 2008 00:19:31 -0300
+Subject: [Buildroot] Removing Qt/E
+Message-ID: <d6cda7730806272019i3bbb07dcrd951128d91c17190@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-> This seems unrelated to 6.8 support - Please do this as a seperate patch.
+Hi,
 
-right.
+   Let me first explain the history of this package to those who don't
+follow Qt development: Qt/E was the original name of Qtopia Core (the
+library, not the shell). Recently, Trolltech/Nokia has renamed Qtopia Core
+to Qt for Embedded Linux.
 
-* Add gdb-6.8 support patches:
-  - add_gdb-6.8_support.diff
-  - 600-fix-compile-flag-mismatch.patch
+   Is there anyone who still uses Qt/E? Qt Embedded (original), like Qt 2.x
+is very, very old. If there are no users of this package, I would propose
+removing it and possibly renaming qtopia to Qt Embedded.
 
-* Disable configure caching in gdb package:
-  - disable_gdb_configure_caching.diff
+   The current Qtopia we have is 4.4.0, which was prior to this 4.3 and I
+imagine that at some point it might have been 3.3. All of those versions are
+not 100% source code compatible with one another, in speciall the 3.x to 4.x
+jump. Since support for newer versions have already been dropped in the
+past, I don't see why keep this much older one.
 
-cheers,
-
-Fathi
+Kind Regards,
+   Thiago A. Correa
 -------------- next part --------------
-A non-text attachment was scrubbed...
-Name: 600-fix-compile-flag-mismatch.patch
-Type: text/x-diff
-Size: 0 bytes
-Desc: not available
-Url : http://busybox.net/lists/buildroot/attachments/20080627/57e1f933/attachment.patch 
--------------- next part --------------
-A non-text attachment was scrubbed...
-Name: add_gdb-6.8_support.diff
-Type: text/x-diff
-Size: 541 bytes
-Desc: not available
-Url : http://busybox.net/lists/buildroot/attachments/20080627/57e1f933/attachment.diff 
--------------- next part --------------
-A non-text attachment was scrubbed...
-Name: disable_gdb_configure_caching.diff
-Type: text/x-diff
-Size: 1931 bytes
-Desc: not available
-Url : http://busybox.net/lists/buildroot/attachments/20080627/57e1f933/attachment-0001.diff 
+An HTML attachment was scrubbed...
+URL: http://busybox.net/lists/buildroot/attachments/20080628/f77ef2f9/attachment.htm 
