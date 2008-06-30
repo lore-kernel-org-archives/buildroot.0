@@ -1,48 +1,29 @@
-From: <bogus@does.not.exist.com>
-Date: Mon, 14 Jul 2008 13:16:20 -0000
-Subject: No subject
-Message-ID: <mailman.5.1219868315.1340.buildroot@uclibc.org>
+From: Micha Nelissen <micha@neli.hopto.org>
+Date: Tue, 01 Jul 2008 00:02:34 +0200
+Subject: [Buildroot] libgtk2 configure
+Message-ID: <g4bl9h$1o5$1@ger.gmane.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Modified:
-   trunk/buildroot/package/config/lex.zconf.c_shipped
-   trunk/buildroot/package/config/zconf.l
+Hi,
 
+When libgtk2 is configuring it dynamically determines the variable
+sys_lib_search_path_spec by using -print-search-dirs. These contain the
+staging_dir correctly.
 
-Changeset:
-Modified: trunk/buildroot/package/config/lex.zconf.c_shipped
-===================================================================
---- trunk/buildroot/package/config/lex.zconf.c_shipped	2008-08-27 15:06:41 UTC (rev 23246)
-+++ trunk/buildroot/package/config/lex.zconf.c_shipped	2008-08-27 20:18:33 UTC (rev 23247)
-@@ -815,6 +815,11 @@
- void append_string(const char *str, int size)
- {
- 	int new_size = text_size + size + 1;
-+	if (size > 70) {
-+		fprintf (stderr, "%s:%d warning: Overlong line\n",
-+		current_file->name, current_file->lineno);
-+	}
-+
- 	if (new_size > text_asize) {
- 		new_size += START_STRSIZE - 1;
- 		new_size &= -START_STRSIZE;
+However, afterwards it overwrites it with a default "/usr/lib /lib" in a
+"case $host_os" of "linux* | k*bsd*-gnu".
 
-Modified: trunk/buildroot/package/config/zconf.l
-===================================================================
---- trunk/buildroot/package/config/zconf.l	2008-08-27 15:06:41 UTC (rev 23246)
-+++ trunk/buildroot/package/config/zconf.l	2008-08-27 20:18:33 UTC (rev 23247)
-@@ -49,6 +49,10 @@
- void append_string(const char *str, int size)
- {
- 	int new_size = text_size + size + 1;
-+	if (size > 70) {
-+	        fprintf (stderr, "%s:%d warning: Overlong line\n",
-+			 current_file->name, current_file->lineno);
-+	}
- 	if (new_size > text_asize) {
- 		new_size += START_STRSIZE - 1;
- 		new_size &= -START_STRSIZE;
+Problem is that when linking it will look at host installed libglib2 etc
+which is linked with glibc. It does not look at the cross system root
+(staging_dir/ etc.). glibc will conflict with uclibc, so I get all kinds
+of strange compile errors (can't find glibc symbols).
+
+Where is the problem? autoconf? libgtk2?
+
+Regards,
+
+Micha
