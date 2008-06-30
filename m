@@ -1,37 +1,31 @@
-From: jacmet at uclibc.org <jacmet@uclibc.org>
-Date: Mon, 30 Jun 2008 06:35:15 -0700 (PDT)
-Subject: [Buildroot] svn commit: trunk/buildroot/package/dropbear
-Message-ID: <20080630133515.BB0E13C674@busybox.net>
+From: Peter Korsgaard <jacmet@uclibc.org>
+Date: Mon, 30 Jun 2008 16:59:13 +0200
+Subject: [Buildroot] Modular X.org
+In-Reply-To: <46a136670806231024o11a8f649r583107ac041c23e2@mail.gmail.com>
+	(John Voltz's message of "Mon\, 23 Jun 2008 13\:24\:17 -0400")
+References: <46a136670806231024o11a8f649r583107ac041c23e2@mail.gmail.com>
+Message-ID: <87d4lzdl4u.fsf@macbook.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Author: jacmet
-Date: 2008-06-30 06:35:14 -0700 (Mon, 30 Jun 2008)
-New Revision: 22575
+>>>>> "John" == John Voltz <john.voltz@gmail.com> writes:
 
-Log:
-dropbear: look for xauth in /usr/bin
+Hi,
 
-The xauth package installs into /usr/bin, so look for it there.
+ John> I just wanted to inform anyone who is interested, the buildroot
+ John> tree over at http://code.google.com/p/buildroot can now build
+ John> both modular and tiny X.org servers AND drivers. The modular X
+ John> will likely only build successfully for desktop machine arches
+ John> (i.e. x86, PPC?, etc.) because it requires a PCI bus.
 
+ John> If I can recruit someone with some spare time to generate a
+ John> patch against uClibc.org's tree and submit it upstream, I'm
+ John> sure everyone will appreciate it.
 
-Modified:
-   trunk/buildroot/package/dropbear/dropbear.mk
+I've now committed the relevant chunks - Thanks John.
 
-
-Changeset:
-Modified: trunk/buildroot/package/dropbear/dropbear.mk
-===================================================================
---- trunk/buildroot/package/dropbear/dropbear.mk	2008-06-30 13:30:21 UTC (rev 22574)
-+++ trunk/buildroot/package/dropbear/dropbear.mk	2008-06-30 13:35:14 UTC (rev 22575)
-@@ -20,6 +20,7 @@
- 	$(DROPBEAR_CAT) $(DL_DIR)/$(DROPBEAR_SOURCE) | tar -C $(BUILD_DIR) $(TAR_OPTIONS) -
- 	toolchain/patch-kernel.sh $(DROPBEAR_DIR) package/dropbear/ dropbear\*.patch
- 	$(SED) 's,^/\* #define DROPBEAR_MULTI.*,#define DROPBEAR_MULTI,g' $(DROPBEAR_DIR)/options.h
-+	$(SED) 's,^#define XAUTH_COMMAND.*/xauth,#define XAUTH_COMMAND "/usr/bin/xauth,g' $(DROPBEAR_DIR)/options.h
- 	$(CONFIG_UPDATE) $(DROPBEAR_DIR)
- 	touch $@
- 
+-- 
+Bye, Peter Korsgaard
