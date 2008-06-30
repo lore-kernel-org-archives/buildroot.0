@@ -1,7 +1,8 @@
 From: jacmet at uclibc.org <jacmet@uclibc.org>
-Date: Mon, 30 Jun 2008 06:16:23 -0700 (PDT)
-Subject: [Buildroot] svn commit: trunk/buildroot/package/libxml2
-Message-ID: <20080630131623.A33A53C669@busybox.net>
+Date: Mon, 30 Jun 2008 06:20:46 -0700 (PDT)
+Subject: [Buildroot] svn commit:
+	trunk/buildroot/package/x11r7/xserver_xorg-server
+Message-ID: <20080630132046.55E8B3C68E@busybox.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -9,30 +10,29 @@ Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
 Author: jacmet
-Date: 2008-06-30 06:16:18 -0700 (Mon, 30 Jun 2008)
-New Revision: 22571
+Date: 2008-06-30 06:18:32 -0700 (Mon, 30 Jun 2008)
+New Revision: 22572
 
 Log:
-libxml: fix compilation without large file support
+xserver-xorg: select dbus
+
+xserver-xorg had dbus in it's dependencies, but didn't select it in kconfig.
 
 
 Modified:
-   trunk/buildroot/package/libxml2/libxml2.mk
+   trunk/buildroot/package/x11r7/xserver_xorg-server/Config.in
 
 
 Changeset:
-Modified: trunk/buildroot/package/libxml2/libxml2.mk
+Modified: trunk/buildroot/package/x11r7/xserver_xorg-server/Config.in
 ===================================================================
---- trunk/buildroot/package/libxml2/libxml2.mk	2008-06-30 13:16:00 UTC (rev 22570)
-+++ trunk/buildroot/package/libxml2/libxml2.mk	2008-06-30 13:16:18 UTC (rev 22571)
-@@ -11,6 +11,10 @@
- LIBXML2_INSTALL_STAGING = YES
- LIBXML2_INSTALL_TARGET = YES
- 
-+ifneq ($(BR2_LARGEFILE),y)
-+LIBXML2_CONF_ENV = CC="$(TARGET_CC) $(TARGET_CFLAGS) -DNO_LARGEFILE_SOURCE"
-+endif
-+
- LIBXML2_CONF_OPT = --target=$(GNU_TARGET_NAME) --host=$(GNU_TARGET_NAME) \
- 		--build=$(GNU_HOST_NAME) --prefix=/usr \
- 		--exec-prefix=/usr --bindir=/usr/bin \
+--- trunk/buildroot/package/x11r7/xserver_xorg-server/Config.in	2008-06-30 13:16:18 UTC (rev 22571)
++++ trunk/buildroot/package/x11r7/xserver_xorg-server/Config.in	2008-06-30 13:18:32 UTC (rev 22572)
+@@ -10,6 +10,7 @@
+ 	select BR2_PACKAGE_XPROTO_GLPROTO
+ 	select BR2_PACKAGE_XPROTO_KBPROTO
+ 	select BR2_PACKAGE_XPROTO_RANDRPROTO
++	select BR2_PACKAGE_DBUS
+ 	select BR2_PACKAGE_FREETYPE
+ 	select BR2_PACKAGE_XLIB_LIBX11
+ 	select BR2_PACKAGE_XLIB_LIBXAU
