@@ -1,7 +1,8 @@
 From: jacmet at uclibc.org <jacmet@uclibc.org>
-Date: Mon, 30 Jun 2008 06:00:18 -0700 (PDT)
-Subject: [Buildroot] svn commit: trunk/buildroot/package/x11r7/pixman
-Message-ID: <20080630130018.89B1E3C3F8@busybox.net>
+Date: Mon, 30 Jun 2008 06:06:03 -0700 (PDT)
+Subject: [Buildroot] svn commit: trunk/buildroot/package/x11r7: mesa3d
+	xserver_xorg-server
+Message-ID: <20080630130603.9E0213C671@busybox.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -9,70 +10,529 @@ Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
 Author: jacmet
-Date: 2008-06-30 06:00:18 -0700 (Mon, 30 Jun 2008)
-New Revision: 22566
+Date: 2008-06-30 06:06:02 -0700 (Mon, 30 Jun 2008)
+New Revision: 22567
 
 Log:
-pixman: bump version
+mesa: bump version
 
-Based on googlecode r507 by Arnar Mar Sigurdsson.
+Based on googlecode r559 by John Voltz.
 
 
 Added:
-   trunk/buildroot/package/x11r7/pixman/pixman-0.10.0-no-tests.patch
+   trunk/buildroot/package/x11r7/mesa3d/mesa3d-7.0.3-cleanup.patch
+   trunk/buildroot/package/x11r7/mesa3d/mesa3d-7.0.3-gen_matypes.patch
 
 Removed:
-   trunk/buildroot/package/x11r7/pixman/pixman-0.9.6-no-tests.patch
+   trunk/buildroot/package/x11r7/mesa3d/mesa3d-6.5.3-gen_matypes.patch
 
 Modified:
-   trunk/buildroot/package/x11r7/pixman/pixman.mk
+   trunk/buildroot/package/x11r7/mesa3d/mesa3d.mk
+   trunk/buildroot/package/x11r7/xserver_xorg-server/xserver_xorg-server.mk
 
 
 Changeset:
-Added: trunk/buildroot/package/x11r7/pixman/pixman-0.10.0-no-tests.patch
+Deleted: trunk/buildroot/package/x11r7/mesa3d/mesa3d-6.5.3-gen_matypes.patch
 ===================================================================
---- trunk/buildroot/package/x11r7/pixman/pixman-0.10.0-no-tests.patch	                        (rev 0)
-+++ trunk/buildroot/package/x11r7/pixman/pixman-0.10.0-no-tests.patch	2008-06-30 13:00:18 UTC (rev 22566)
-@@ -0,0 +1,11 @@
-+--- a/Makefile.in.orig	2008-05-23 14:04:37.000000000 +0000
-++++ b/Makefile.in	2008-05-23 14:04:50.000000000 +0000
-+@@ -198,7 +198,7 @@ sysconfdir = @sysconfdir@
-+ target_alias = @target_alias@
-+ top_builddir = @top_builddir@
-+ top_srcdir = @top_srcdir@
-+-SUBDIRS = pixman test
-++SUBDIRS = pixman
-+ pkgconfigdir = $(libdir)/pkgconfig
-+ pkgconfig_DATA = pixman-1.pc
-+ USERNAME = $$USER
-
-Deleted: trunk/buildroot/package/x11r7/pixman/pixman-0.9.6-no-tests.patch
-===================================================================
---- trunk/buildroot/package/x11r7/pixman/pixman-0.9.6-no-tests.patch	2008-06-30 12:55:29 UTC (rev 22565)
-+++ trunk/buildroot/package/x11r7/pixman/pixman-0.9.6-no-tests.patch	2008-06-30 13:00:18 UTC (rev 22566)
+--- trunk/buildroot/package/x11r7/mesa3d/mesa3d-6.5.3-gen_matypes.patch	2008-06-30 13:00:18 UTC (rev 22566)
++++ trunk/buildroot/package/x11r7/mesa3d/mesa3d-6.5.3-gen_matypes.patch	2008-06-30 13:06:02 UTC (rev 22567)
 @@ -1,11 +0,0 @@
----- a/Makefile.in.orig	2008-01-30 12:56:25.000000000 -0500
--+++ b/Makefile.in	2008-01-30 12:56:38.000000000 -0500
--@@ -198,7 +198,7 @@ sbindir = @sbindir@
-- sharedstatedir = @sharedstatedir@
-- sysconfdir = @sysconfdir@
-- target_alias = @target_alias@
---SUBDIRS = pixman test
--+SUBDIRS = pixman 
-- pkgconfigdir = $(libdir)/pkgconfig
-- pkgconfig_DATA = pixman-1.pc
-- RELEASE_OR_SNAPSHOT = $$(if test "x$(CAIRO_VERSION_MINOR)" = "x$$(echo "$(CAIRO_VERSION_MINOR)/2*2" | bc)" ; then echo release; else echo snapshot; fi)
+---- Mesa-6.5.3/src/mesa/x86/Makefile.orig	2007-06-09 06:23:46.000000000 +0200
+-+++ Mesa-6.5.3/src/mesa/x86/Makefile	2007-06-09 06:24:53.000000000 +0200
+-@@ -21,7 +21,7 @@
+- 
+- 
+- gen_matypes: gen_matypes.c
+--	$(CC) $(INCLUDE_DIRS) $(CFLAGS) gen_matypes.c -o gen_matypes
+-+	$(CC_FOR_BUILD) $(INCLUDE_DIRS) $(CFLAGS_FOR_BUILD) gen_matypes.c -o gen_matypes
+- 
+- # need some special rules here, unfortunately
+- matypes.h: ../main/mtypes.h ../tnl/t_context.h gen_matypes
 
-Modified: trunk/buildroot/package/x11r7/pixman/pixman.mk
+Added: trunk/buildroot/package/x11r7/mesa3d/mesa3d-7.0.3-cleanup.patch
 ===================================================================
---- trunk/buildroot/package/x11r7/pixman/pixman.mk	2008-06-30 12:55:29 UTC (rev 22565)
-+++ trunk/buildroot/package/x11r7/pixman/pixman.mk	2008-06-30 13:00:18 UTC (rev 22566)
-@@ -4,7 +4,7 @@
+--- trunk/buildroot/package/x11r7/mesa3d/mesa3d-7.0.3-cleanup.patch	                        (rev 0)
++++ trunk/buildroot/package/x11r7/mesa3d/mesa3d-7.0.3-cleanup.patch	2008-06-30 13:06:02 UTC (rev 22567)
+@@ -0,0 +1,436 @@
++diff -Nwrup Mesa-7.0.3/src/mesa/Makefile~ Mesa-7.0.3-fix/src/mesa/Makefile~
++--- Mesa-7.0.3/src/mesa/Makefile~	2007-11-01 11:30:52.000000000 -0400
+++++ Mesa-7.0.3-fix/src/mesa/Makefile~	1969-12-31 19:00:00.000000000 -0500
++@@ -1,201 +0,0 @@
++-# src/mesa/Makefile
++-
++-TOP = ../..
++-include $(TOP)/configs/current
++-
++-include sources
++-
++-
++-GL_MAJOR = 1
++-GL_MINOR = 5
++-GL_TINY = 0$(MESA_MAJOR)0$(MESA_MINOR)0$(MESA_TINY)
++-
++-
++-.SUFFIXES : .cpp
++-
++-.c.o:
++-	$(CC) -c $(INCLUDE_DIRS) $(CFLAGS) $< -o $@
++-
++-.cpp.o:
++-	$(CXX) -c $(INCLUDE_DIRS) $(CXXFLAGS) $< -o $@
++-
++-.S.o:
++-	$(CC) -c $(INCLUDE_DIRS) $(CFLAGS) $< -o $@
++-
++-
++-# Figure out what to make here
++-default:
++-	@if [ "${DRIVER_DIRS}" = "dri" ] ; then \
++-		$(MAKE) linux-solo ; \
++-	elif [ "${DRIVER_DIRS}" = "osmesa" ] ; then \
++-		$(MAKE) osmesa-only ; \
++-	elif [ "$(DRIVER_DIRS)" = "beos" ]; then \
++-		$(MAKE) beos ; \
++-	elif [ "$(DRIVER_DIRS)" = "directfb" ]; then \
++-		$(MAKE) directfb ; \
++-	elif [ "$(DRIVER_DIRS)" = "fbdev osmesa" ]; then \
++-		$(MAKE) fbdev ; $(MAKE) osmesa-only ; \
++-	else \
++-		$(MAKE) stand-alone ; \
++-	fi
++-
++-
++-######################################################################
++-# BeOS driver target
++-
++-beos: depend subdirs libmesa.a
++-	cd drivers/beos; $(MAKE)
++-
++-
++-######################################################################
++-# Linux DRI drivers
++-
++-# Make archive of core object files
++-libmesa.a: $(SOLO_OBJECTS)
++-	@ $(TOP)/bin/mklib -o mesa -static $(SOLO_OBJECTS);
++-	@if [ "${CONFIG_NAME}" = "beos" ] ; then \
++-		mimeset -f "$@" ; \
++-	fi
++-
++-linux-solo: depend subdirs libmesa.a
++-	cd drivers/dri ; $(MAKE)
++-
++-
++-#####################################################################
++-# Stand-alone Mesa libGL, no built-in drivers (DirectFB)
++-
++-libgl-core: $(CORE_OBJECTS)
++-	@ $(TOP)/bin/mklib -o $(GL_LIB) -linker '$(CC)' -ldflags '$(LDFLAGS) \
++-		-major $(MESA_MAJOR) -minor $(MESA_MINOR) -patch $(MESA_TINY) \
++-		-install $(TOP)/$(LIB_DIR) $(MKLIB_OPTIONS) $(CORE_OBJECTS) \
++-		$(GL_LIB_DEPS)
++-
++-directfb: depend subdirs libgl-core
++-	cd drivers/directfb ; $(MAKE)
++-
++-
++-#####################################################################
++-# fbdev Mesa driver (libGL.so)
++-
++-fbdev: $(CORE_OBJECTS) $(FBDEV_DRIVER_OBJECTS) $(COMMON_DRIVER_OBJECTS)
++-	@ $(TOP)/bin/mklib -o $(GL_LIB) -linker '$(CC)' -ldflags '$(LDFLAGS)' \
++-		-major $(MESA_MAJOR) -minor $(MESA_MINOR) -patch $(MESA_TINY) \
++-		-install $(TOP)/$(LIB_DIR) $(MKLIB_OPTIONS) \
++-		$(CORE_OBJECTS) $(FBDEV_DRIVER_OBJECTS) \
++-		$(COMMON_DRIVER_OBJECTS) $(GL_LIB_DEPS)
++-
++-
++-######################################################################
++-# Stand-alone Mesa libGL and libOSMesa
++-STAND_ALONE_DRIVER_SOURCES = \
++-	$(COMMON_DRIVER_SOURCES) \
++-	$(X11_DRIVER_SOURCES)
++-
++-STAND_ALONE_DRIVER_OBJECTS = $(STAND_ALONE_DRIVER_SOURCES:.c=.o)
++-
++-STAND_ALONE_OBJECTS = \
++-	$(CORE_OBJECTS) \
++-	$(STAND_ALONE_DRIVER_OBJECTS)
++-
++-# For libOSMesa16 or libOSMesa32 we link _all_ the objects into the library,
++-# not just the osmesa.o object (i.e. we don't have a libGL).
++-OSMESA16_OBJECTS = \
++-	$(CORE_OBJECTS) \
++-	$(COMMON_DRIVER_OBJECTS) \
++-	$(OSMESA_DRIVER_OBJECTS)
++-
++-
++-stand-alone: depend subdirs $(TOP)/$(LIB_DIR)/$(GL_LIB_NAME) $(TOP)/$(LIB_DIR)/$(OSMESA_LIB_NAME)
++-
++-osmesa-only: depend subdirs $(TOP)/$(LIB_DIR)/$(OSMESA_LIB_NAME)
++-
++-# Make the GL library
++-$(TOP)/$(LIB_DIR)/$(GL_LIB_NAME): $(STAND_ALONE_OBJECTS)
++-	@ $(TOP)/bin/mklib -o $(GL_LIB) -linker '$(CC)' -ldflags '$(LDFLAGS)' \
++-		-major $(GL_MAJOR) -minor $(GL_MINOR) -patch $(GL_TINY) \
++-		-install $(TOP)/$(LIB_DIR) \
++-		$(MKLIB_OPTIONS) $(GL_LIB_DEPS) $(STAND_ALONE_OBJECTS)
++-
++-# Make the OSMesa library
++-# Note: version is kept at 6.5.3 to simplify app/linking issues
++-$(TOP)/$(LIB_DIR)/$(OSMESA_LIB_NAME): $(OSMESA_DRIVER_OBJECTS) $(OSMESA16_OBJECTS)
++-	@ if [ "${DRIVER_DIRS}" = "osmesa" ] ; then \
++-		$(TOP)/bin/mklib -o $(OSMESA_LIB) -linker '$(CC)' \
++-			-ldflags '$(LDFLAGS)' \
++-			-major 6 -minor 5 -patch 3 \
++-			-install $(TOP)/$(LIB_DIR) $(MKLIB_OPTIONS) \
++-			$(OSMESA_LIB_DEPS) $(OSMESA16_OBJECTS) ; \
++-	else \
++-		$(TOP)/bin/mklib -o $(OSMESA_LIB) -linker '$(CC)' \
++-			-ldflags '$(LDFLAGS)' \
++-			-major 6 -minor 5 -patch 3 \
++-			-install $(TOP)/$(LIB_DIR) $(MKLIB_OPTIONS) \
++-			$(OSMESA_LIB_DEPS) $(OSMESA_DRIVER_OBJECTS) ; \
++-	fi
++-
++-
++-######################################################################
++-# libGL pkg-config file
++-pcedit = sed \
++-	-e 's, at INSTALL_DIR@,$(INSTALL_DIR),' \
++-	-e 's, at LIB_DIR@,$(LIB_DIR),' \
++-	-e 's,@VERSION@,$(MESA_MAJOR).$(MESA_MINOR).$(MESA_TINY),'
++-gl.pc: gl.pc.in
++-	$(pcedit) $< > $@
++-
++-######################################################################
++-# Generic stuff
++-
++-depend: $(ALL_SOURCES)
++-	@ echo "running $(MKDEP)"
++-	@ touch depend
++-	@$(MKDEP) $(MKDEP_OPTIONS) $(DEFINES) $(INCLUDE_DIRS) $(ALL_SOURCES) \
++-		> /dev/null 2>/dev/null
++-
++-
++-subdirs:
++-	@ if echo "$(ASM_FLAGS)" | grep -q USE_X86_ASM ; then \
++-		(cd x86 ; $(MAKE)) ; \
++-	fi
++-	@ if echo "$(ASM_FLAGS)" | grep -q USE_X86_64_ASM ; then \
++-		(cd x86 ; $(MAKE)) ; \
++-		(cd x86-64 ; $(MAKE)) ; \
++-	fi
++-
++-
++-install: default gl.pc
++-	$(INSTALL) -d $(DESTDIR)$(INSTALL_DIR)/include/GL
++-	$(INSTALL) -d $(DESTDIR)$(INSTALL_DIR)/$(LIB_DIR)
++-	$(INSTALL) -d $(DESTDIR)$(INSTALL_DIR)/$(LIB_DIR)/pkgconfig
++-	$(INSTALL) -m 644 $(TOP)/include/GL/*.h $(DESTDIR)$(INSTALL_DIR)/include/GL
++-	@if [ -e $(TOP)/$(LIB_DIR)/$(GL_LIB_NAME) ]; then \
++-		$(INSTALL) $(TOP)/$(LIB_DIR)/libGL* $(DESTDIR)$(INSTALL_DIR)/$(LIB_DIR); \
++-	fi
++-	$(INSTALL) -m 644 gl.pc $(DESTDIR)$(INSTALL_DIR)/$(LIB_DIR)/pkgconfig
++-	@if [ -e $(TOP)/$(LIB_DIR)/$(OSMESA_LIB_NAME) ]; then \
++-		$(INSTALL) $(TOP)/$(LIB_DIR)/libOSMesa* $(DESTDIR)$(INSTALL_DIR)/$(LIB_DIR); \
++-	fi
++-	@if [ "${DRIVER_DIRS}" = "dri" ] ; then \
++-		cd drivers/dri ; $(MAKE) install ; \
++-	fi
++-
++-## NOT INSTALLED YET:
++-## $(INSTALL) -d $(DESTDIR)$(INSTALL_DIR)/include/GLES
++-## $(INSTALL) -m 644 include/GLES/*.h $(DESTDIR)$(INSTALL_DIR)/include/GLES
++-
++-
++-# Emacs tags
++-tags:
++-	etags `find . -name \*.[ch]` $(TOP)/include/GL/*.h
++-
++-clean:
++-	-rm -f */*.o
++-	-rm -f */*/*.o
++-	-rm -f depend depend.bak libmesa.a
++-	-rm -f drivers/*/*.o
++-	(cd drivers/dri ; $(MAKE) clean)
++-	(cd x86 ; $(MAKE) clean)
++-	(cd x86-64 ; $(MAKE) clean)
++-
++-
++-include depend
++diff -Nwrup Mesa-7.0.3/src/mesa/Makefile.orig Mesa-7.0.3-fix/src/mesa/Makefile.orig
++--- Mesa-7.0.3/src/mesa/Makefile.orig	2007-09-12 12:03:23.000000000 -0400
+++++ Mesa-7.0.3-fix/src/mesa/Makefile.orig	1969-12-31 19:00:00.000000000 -0500
++@@ -1,194 +0,0 @@
++-# src/mesa/Makefile
++-
++-TOP = ../..
++-include $(TOP)/configs/current
++-
++-include sources
++-
++-
++-GL_MAJOR = 1
++-GL_MINOR = 5
++-GL_TINY = 0$(MESA_MAJOR)0$(MESA_MINOR)0$(MESA_TINY)
++-
++-
++-.SUFFIXES : .cpp
++-
++-.c.o:
++-	$(CC) -c $(INCLUDE_DIRS) $(CFLAGS) $< -o $@
++-
++-.cpp.o:
++-	$(CXX) -c $(INCLUDE_DIRS) $(CXXFLAGS) $< -o $@
++-
++-.S.o:
++-	$(CC) -c $(INCLUDE_DIRS) $(CFLAGS) $< -o $@
++-
++-
++-# Figure out what to make here
++-default:
++-	@if [ "${DRIVER_DIRS}" = "dri" ] ; then \
++-		$(MAKE) linux-solo ; \
++-	elif [ "${DRIVER_DIRS}" = "osmesa" ] ; then \
++-		$(MAKE) osmesa-only ; \
++-	elif [ "$(DRIVER_DIRS)" = "beos" ]; then \
++-		$(MAKE) beos ; \
++-	elif [ "$(DRIVER_DIRS)" = "directfb" ]; then \
++-		$(MAKE) directfb ; \
++-	elif [ "$(DRIVER_DIRS)" = "fbdev osmesa" ]; then \
++-		$(MAKE) fbdev ; $(MAKE) osmesa-only ; \
++-	else \
++-		$(MAKE) stand-alone ; \
++-	fi
++-
++-
++-######################################################################
++-# BeOS driver target
++-
++-beos: depend subdirs libmesa.a
++-	cd drivers/beos; $(MAKE)
++-
++-
++-######################################################################
++-# Linux DRI drivers
++-
++-# Make archive of core object files
++-libmesa.a: $(SOLO_OBJECTS)
++-	@ $(TOP)/bin/mklib -o mesa -static $(SOLO_OBJECTS);
++-	@if [ "${CONFIG_NAME}" = "beos" ] ; then \
++-		mimeset -f "$@" ; \
++-	fi
++-
++-linux-solo: depend subdirs libmesa.a
++-	cd drivers/dri ; $(MAKE)
++-
++-
++-#####################################################################
++-# Stand-alone Mesa libGL, no built-in drivers (DirectFB)
++-
++-libgl-core: $(CORE_OBJECTS)
++-	@ $(TOP)/bin/mklib -o $(GL_LIB) -linker '$(CC)' \
++-		-major $(MESA_MAJOR) -minor $(MESA_MINOR) -patch $(MESA_TINY) \
++-		-install $(TOP)/$(LIB_DIR) $(MKLIB_OPTIONS) $(CORE_OBJECTS) \
++-		$(GL_LIB_DEPS)
++-
++-directfb: depend subdirs libgl-core
++-	cd drivers/directfb ; $(MAKE)
++-
++-
++-#####################################################################
++-# fbdev Mesa driver (libGL.so)
++-
++-fbdev: $(CORE_OBJECTS) $(FBDEV_DRIVER_OBJECTS) $(COMMON_DRIVER_OBJECTS)
++-	@ $(TOP)/bin/mklib -o $(GL_LIB) -linker '$(CC)' \
++-		-major $(MESA_MAJOR) -minor $(MESA_MINOR) -patch $(MESA_TINY) \
++-		-install $(TOP)/$(LIB_DIR) $(MKLIB_OPTIONS) \
++-		$(CORE_OBJECTS) $(FBDEV_DRIVER_OBJECTS) \
++-		$(COMMON_DRIVER_OBJECTS) $(GL_LIB_DEPS)
++-
++-
++-######################################################################
++-# Stand-alone Mesa libGL and libOSMesa
++-STAND_ALONE_DRIVER_SOURCES = \
++-	$(COMMON_DRIVER_SOURCES) \
++-	$(X11_DRIVER_SOURCES)
++-
++-STAND_ALONE_DRIVER_OBJECTS = $(STAND_ALONE_DRIVER_SOURCES:.c=.o)
++-
++-STAND_ALONE_OBJECTS = \
++-	$(CORE_OBJECTS) \
++-	$(STAND_ALONE_DRIVER_OBJECTS)
++-
++-# For libOSMesa16 or libOSMesa32 we link _all_ the objects into the library,
++-# not just the osmesa.o object (i.e. we don't have a libGL).
++-OSMESA16_OBJECTS = \
++-	$(CORE_OBJECTS) \
++-	$(COMMON_DRIVER_OBJECTS) \
++-	$(OSMESA_DRIVER_OBJECTS)
++-
++-
++-stand-alone: depend subdirs $(TOP)/$(LIB_DIR)/$(GL_LIB_NAME) $(TOP)/$(LIB_DIR)/$(OSMESA_LIB_NAME)
++-
++-osmesa-only: depend subdirs $(TOP)/$(LIB_DIR)/$(OSMESA_LIB_NAME)
++-
++-# Make the GL library
++-$(TOP)/$(LIB_DIR)/$(GL_LIB_NAME): $(STAND_ALONE_OBJECTS)
++-	@ $(TOP)/bin/mklib -o $(GL_LIB) -linker '$(CC)' \
++-		-major $(GL_MAJOR) -minor $(GL_MINOR) -patch $(GL_TINY) \
++-		-install $(TOP)/$(LIB_DIR) \
++-		$(MKLIB_OPTIONS) $(GL_LIB_DEPS) $(STAND_ALONE_OBJECTS)
++-
++-# Make the OSMesa library
++-# Note: version is kept at 6.5.3 to simplify app/linking issues
++-$(TOP)/$(LIB_DIR)/$(OSMESA_LIB_NAME): $(OSMESA_DRIVER_OBJECTS) $(OSMESA16_OBJECTS)
++-	@ if [ "${DRIVER_DIRS}" = "osmesa" ] ; then \
++-		$(TOP)/bin/mklib -o $(OSMESA_LIB) -linker '$(CC)' \
++-			-major 6 -minor 5 -patch 3 \
++-			-install $(TOP)/$(LIB_DIR) $(MKLIB_OPTIONS) \
++-			$(OSMESA_LIB_DEPS) $(OSMESA16_OBJECTS) ; \
++-	else \
++-		$(TOP)/bin/mklib -o $(OSMESA_LIB) -linker '$(CC)' \
++-			-major 6 -minor 5 -patch 3 \
++-			-install $(TOP)/$(LIB_DIR) $(MKLIB_OPTIONS) \
++-			$(OSMESA_LIB_DEPS) $(OSMESA_DRIVER_OBJECTS) ; \
++-	fi
++-
++-
++-######################################################################
++-# libGL pkg-config file
++-pcedit = sed \
++-	-e 's, at INSTALL_DIR@,$(INSTALL_DIR),' \
++-	-e 's, at LIB_DIR@,$(LIB_DIR),' \
++-	-e 's,@VERSION@,$(MESA_MAJOR).$(MESA_MINOR).$(MESA_TINY),'
++-gl.pc: gl.pc.in
++-	$(pcedit) $< > $@
++-
++-######################################################################
++-# Generic stuff
++-
++-depend: $(ALL_SOURCES)
++-	@ echo "running $(MKDEP)"
++-	@ touch depend
++-	@$(MKDEP) $(MKDEP_OPTIONS) $(DEFINES) $(INCLUDE_DIRS) $(ALL_SOURCES) \
++-		> /dev/null 2>/dev/null
++-
++-
++-subdirs:
++-	@ (cd x86 ; $(MAKE))
++-	@ (cd x86-64 ; $(MAKE))
++-
++-
++-install: default gl.pc
++-	$(INSTALL) -d $(DESTDIR)$(INSTALL_DIR)/include/GL
++-	$(INSTALL) -d $(DESTDIR)$(INSTALL_DIR)/$(LIB_DIR)
++-	$(INSTALL) -d $(DESTDIR)$(INSTALL_DIR)/$(LIB_DIR)/pkgconfig
++-	$(INSTALL) -m 644 $(TOP)/include/GL/*.h $(DESTDIR)$(INSTALL_DIR)/include/GL
++-	@if [ -e $(TOP)/$(LIB_DIR)/$(GL_LIB_NAME) ]; then \
++-		$(INSTALL) $(TOP)/$(LIB_DIR)/libGL* $(DESTDIR)$(INSTALL_DIR)/$(LIB_DIR); \
++-	fi
++-	$(INSTALL) -m 644 gl.pc $(DESTDIR)$(INSTALL_DIR)/$(LIB_DIR)/pkgconfig
++-	@if [ -e $(TOP)/$(LIB_DIR)/$(OSMESA_LIB_NAME) ]; then \
++-		$(INSTALL) $(TOP)/$(LIB_DIR)/libOSMesa* $(DESTDIR)$(INSTALL_DIR)/$(LIB_DIR); \
++-	fi
++-	@if [ "${DRIVER_DIRS}" = "dri" ] ; then \
++-		cd drivers/dri ; $(MAKE) install ; \
++-	fi
++-
++-## NOT INSTALLED YET:
++-## $(INSTALL) -d $(DESTDIR)$(INSTALL_DIR)/include/GLES
++-## $(INSTALL) -m 644 include/GLES/*.h $(DESTDIR)$(INSTALL_DIR)/include/GLES
++-
++-
++-# Emacs tags
++-tags:
++-	etags `find . -name \*.[ch]` $(TOP)/include/GL/*.h
++-
++-clean:
++-	-rm -f */*.o
++-	-rm -f */*/*.o
++-	-rm -f depend depend.bak libmesa.a
++-	-rm -f drivers/*/*.o
++-	(cd drivers/dri ; $(MAKE) clean)
++-	(cd x86 ; $(MAKE) clean)
++-	(cd x86-64 ; $(MAKE) clean)
++-
++-
++-include depend
++diff -Nwrup Mesa-7.0.3/src/mesa/Makefile.rej Mesa-7.0.3-fix/src/mesa/Makefile.rej
++--- Mesa-7.0.3/src/mesa/Makefile.rej	2007-09-28 20:43:28.000000000 -0400
+++++ Mesa-7.0.3-fix/src/mesa/Makefile.rej	1969-12-31 19:00:00.000000000 -0500
++@@ -1,29 +0,0 @@
++-***************
++-*** 120,132 ****
++-  $(TOP)/$(LIB_DIR)/$(OSMESA_LIB_NAME): $(OSMESA_DRIVER_OBJECTS) $(OSMESA16_OBJECTS)
++-  	@ if [ "${DRIVER_DIRS}" = "osmesa" ] ; then \
++-  		$(TOP)/bin/mklib -o $(OSMESA_LIB) -linker '$(CC)' \
++-- 			-major $(MESA_MAJOR) \
++-  			-minor $(MESA_MINOR) -patch $(MESA_TINY) \
++-  			-install $(TOP)/$(LIB_DIR) $(MKLIB_OPTIONS) \
++-  			$(OSMESA_LIB_DEPS) $(OSMESA16_OBJECTS) ; \
++-  	else \
++-  		$(TOP)/bin/mklib -o $(OSMESA_LIB) -linker '$(CC)' \
++-- 			-major $(MESA_MAJOR) \
++-  			-minor $(MESA_MINOR) -patch $(GL_TINY) \
++-  			-install $(TOP)/$(LIB_DIR) $(MKLIB_OPTIONS) \
++-  			$(OSMESA_LIB_DEPS) $(OSMESA_DRIVER_OBJECTS) ; \
++---- 120,132 ----
++-  $(TOP)/$(LIB_DIR)/$(OSMESA_LIB_NAME): $(OSMESA_DRIVER_OBJECTS) $(OSMESA16_OBJECTS)
++-  	@ if [ "${DRIVER_DIRS}" = "osmesa" ] ; then \
++-  		$(TOP)/bin/mklib -o $(OSMESA_LIB) -linker '$(CC)' \
++-+ 			-ldflags '$(LDFLAGS)' -major $(MESA_MAJOR) \
++-  			-minor $(MESA_MINOR) -patch $(MESA_TINY) \
++-  			-install $(TOP)/$(LIB_DIR) $(MKLIB_OPTIONS) \
++-  			$(OSMESA_LIB_DEPS) $(OSMESA16_OBJECTS) ; \
++-  	else \
++-  		$(TOP)/bin/mklib -o $(OSMESA_LIB) -linker '$(CC)' \
++-+ 			-ldflags '$(LDFLAGS)' -major $(MESA_MAJOR) \
++-  			-minor $(MESA_MINOR) -patch $(GL_TINY) \
++-  			-install $(TOP)/$(LIB_DIR) $(MKLIB_OPTIONS) \
++-  			$(OSMESA_LIB_DEPS) $(OSMESA_DRIVER_OBJECTS) ; \
+
+Copied: trunk/buildroot/package/x11r7/mesa3d/mesa3d-7.0.3-gen_matypes.patch (from rev 22566, trunk/buildroot/package/x11r7/mesa3d/mesa3d-6.5.3-gen_matypes.patch)
+===================================================================
+--- trunk/buildroot/package/x11r7/mesa3d/mesa3d-7.0.3-gen_matypes.patch	                        (rev 0)
++++ trunk/buildroot/package/x11r7/mesa3d/mesa3d-7.0.3-gen_matypes.patch	2008-06-30 13:06:02 UTC (rev 22567)
+@@ -0,0 +1,11 @@
++--- a/src/mesa/x86/Makefile	2007-06-09 06:23:46.000000000 +0200
+++++ b/src/mesa/x86/Makefile	2007-06-09 06:24:53.000000000 +0200
++@@ -21,7 +21,7 @@
++ 
++ 
++ gen_matypes: gen_matypes.c
++-	$(CC) $(INCLUDE_DIRS) $(CFLAGS) gen_matypes.c -o gen_matypes
+++	$(CC_FOR_BUILD) $(INCLUDE_DIRS) $(CFLAGS_FOR_BUILD) gen_matypes.c -o gen_matypes
++ 
++ # need some special rules here, unfortunately
++ matypes.h: ../main/mtypes.h ../tnl/t_context.h gen_matypes
+
+Modified: trunk/buildroot/package/x11r7/mesa3d/mesa3d.mk
+===================================================================
+--- trunk/buildroot/package/x11r7/mesa3d/mesa3d.mk	2008-06-30 13:00:18 UTC (rev 22566)
++++ trunk/buildroot/package/x11r7/mesa3d/mesa3d.mk	2008-06-30 13:06:02 UTC (rev 22567)
+@@ -3,8 +3,7 @@
+ # mesa3d
  #
- ################################################################################
+ #############################################################
+-MESA3D_VERSION:=6.5.3
+-#MESA3D_VERSION:=6.4.2
++MESA3D_VERSION:=7.0.3
+ MESA3D_SOURCE:=MesaLib-$(MESA3D_VERSION).tar.gz
+ MESA3D_SITE:=http://$(BR2_SOURCEFORGE_MIRROR).dl.sourceforge.net/sourceforge/mesa3d
+ MESA3D_DIR:=$(BUILD_DIR)/Mesa-$(MESA3D_VERSION)
+
+Modified: trunk/buildroot/package/x11r7/xserver_xorg-server/xserver_xorg-server.mk
+===================================================================
+--- trunk/buildroot/package/x11r7/xserver_xorg-server/xserver_xorg-server.mk	2008-06-30 13:00:18 UTC (rev 22566)
++++ trunk/buildroot/package/x11r7/xserver_xorg-server/xserver_xorg-server.mk	2008-06-30 13:06:02 UTC (rev 22567)
+@@ -12,7 +12,7 @@
  
--PIXMAN_VERSION = 0.9.6
-+PIXMAN_VERSION = 0.10.0
- PIXMAN_SOURCE = pixman-$(PIXMAN_VERSION).tar.gz
- PIXMAN_SITE = http://cairographics.org/releases/
- PIXMAN_AUTORECONF = NO
+ ifeq ($(strip $(BR2_PACKAGE_XSERVER_xorg)),y)
+ XSERVER_XORG_MESA_DEPS:=mesa3d
+-XSERVER_XORG_MESA_DIR:=--with-mesa-source="$(BUILD_DIR)/Mesa-6.5.3"
++XSERVER_XORG_MESA_DIR:=--with-mesa-source="$(BUILD_DIR)/Mesa-$(MESA3D_VERSION)"
+ XSERVER_XORG_ENABLE_MODULAR:=--enable-xorg
+ else
+ XSERVER_XORG_ENABLE_MODULAR:=--disable-xorg
