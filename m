@@ -1,7 +1,7 @@
 From: jacmet at uclibc.org <jacmet@uclibc.org>
-Date: Tue,  1 Jul 2008 05:04:19 -0700 (PDT)
-Subject: [Buildroot] svn commit: trunk/buildroot/package
-Message-ID: <20080701120419.9D11CF800F@busybox.net>
+Date: Tue,  1 Jul 2008 05:04:29 -0700 (PDT)
+Subject: [Buildroot] svn commit: trunk/buildroot
+Message-ID: <20080701120429.240FDF801C@busybox.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -9,28 +9,28 @@ Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
 Author: jacmet
-Date: 2008-07-01 05:04:18 -0700 (Tue, 01 Jul 2008)
-New Revision: 22586
+Date: 2008-07-01 05:04:28 -0700 (Tue, 01 Jul 2008)
+New Revision: 22587
 
 Log:
-Makefile.autotools.in: also remove man pages from /usr/share/man
+Makefile: remove target pkgconfig files if BR2_HAVE_DEVFILES isn't enabled
 
 
 Modified:
-   trunk/buildroot/package/Makefile.autotools.in
+   trunk/buildroot/Makefile
 
 
 Changeset:
-Modified: trunk/buildroot/package/Makefile.autotools.in
+Modified: trunk/buildroot/Makefile
 ===================================================================
---- trunk/buildroot/package/Makefile.autotools.in	2008-07-01 11:46:50 UTC (rev 22585)
-+++ trunk/buildroot/package/Makefile.autotools.in	2008-07-01 12:04:18 UTC (rev 22586)
-@@ -238,7 +238,7 @@
- $(BUILD_DIR)/%/.stamp_target_installed:
- 	$(call MESSAGE,"Installing to target")
- 	$($(PKG)_MAKE_ENV) $(MAKE) $($(PKG)_INSTALL_TARGET_OPT) -C $(@D)/$($(PKG)_SUBDIR)
--	$(if $(BR2_HAVE_MANPAGES),,for d in man; do \
-+	$(if $(BR2_HAVE_MANPAGES),,for d in man share/man; do \
- 		rm -rf $(TARGET_DIR)/$$d $(TARGET_DIR)/usr/$$d; \
- 	done)
- 	$(if $(BR2_HAVE_INFOPAGES),,for d in info share/info; do \
+--- trunk/buildroot/Makefile	2008-07-01 12:04:18 UTC (rev 22586)
++++ trunk/buildroot/Makefile	2008-07-01 12:04:28 UTC (rev 22587)
+@@ -332,7 +332,7 @@
+ ifeq ($(BR2_HAVE_DEVFILES),y)
+ 	( scripts/copy.sh $(STAGING_DIR) $(TARGET_DIR) )
+ else
+-	rm -rf $(TARGET_DIR)/usr/include
++	rm -rf $(TARGET_DIR)/usr/include $(TARGET_DIR)/usr/lib/pkgconfig
+ 	find $(TARGET_DIR)/usr/lib -name '*.a' -delete 
+ 	find $(TARGET_DIR)/lib -name '*.a' -delete 
+ 	find $(TARGET_DIR)/usr/lib -name '*.la' -delete 
