@@ -1,38 +1,34 @@
 From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Tue, 01 Jul 2008 21:13:07 +0200
-Subject: [Buildroot] Howto mainline patches I have posted?
-In-Reply-To: <18221527.post@talk.nabble.com> (Daniel Laird's message of "Tue\,
-	1 Jul 2008 10\:46\:28 -0700 \(PDT\)")
-References: <18221527.post@talk.nabble.com>
-Message-ID: <87lk0lwh8c.fsf@macbook.be.48ers.dk>
+Date: Tue, 01 Jul 2008 21:22:05 +0200
+Subject: [Buildroot] Ncurses install problem
+In-Reply-To: <C48FE36B.18B7D%bkubesh@cisco.com> (Blaine Kubesh's message of
+	"Tue\, 01 Jul 2008 13\:36\:43 -0500")
+References: <C48FE36B.18B7D%bkubesh@cisco.com>
+Message-ID: <873amtwgte.fsf@macbook.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Daniel" == Daniel Laird <daniel.j.laird@nxp.com> writes:
+>>>>> "Blaine" == Blaine Kubesh <bkubesh@cisco.com> writes:
 
-Hi,
+ Blaine> I ran into the same thing. Here is my post from 6/2/08.
 
- Daniel> I have posted some patches and raised BUG reports but have
- Daniel> had no feedback and i was wondering how i might get these
- Daniel> changes mainlined?  These changes are all designed to get GTK
- Daniel> building with DirectFB support if DirectFB is enabled and
- Daniel> XORG is not.  I think this would benefit many embedded
- Daniel> buildroot users.
+ Blaine> There is a typo/bug on the commit from 3/31/08. It should be
+ Blaine> soft linking into the TARGET_DIR and not the host filesystem.
 
-Yes, sorry for the slow response :/
+ Blaine> -    ln -sf /usr/share/terminfo $(TARGET_DIR)/usr/lib/terminfo
+ Blaine> +    ln -sf $(TARGET_DIR)/usr/share/terminfo $(TARGET_DIR)/usr/lib/terminfo
 
-We're currently fighting a pretty big backlog of patches, and I
-haven't gotten around to look at yours yet. I also have no experience
-with directfb, so that doesn't help.
+No that won't fly - as you won't have TARGET_DIR on the target
+system. You could maybe argue for a relative link (../share/terminfo).
 
-I'm afraid I won't be able to review your patches until next week.
-Alteratively, if your serious about contributing to buildroot you can
-get svn access:
-
-http://buildroot.uclibc.org/developer.html
+The problem is that ln will follow the $TARGET_DIR/usr/lib/terminfo
+symlink if it already exists and try to create
+$TARGET_DIR/usr/lib/terminfo/terminfo (which is
+/usr/share/terminfo/terminfo) - That ofcause isn't allowed. The
+solution is to use the -n option.
 
 -- 
 Bye, Peter Korsgaard
