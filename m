@@ -1,34 +1,39 @@
-From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Tue, 01 Jul 2008 21:22:05 +0200
-Subject: [Buildroot] Ncurses install problem
-In-Reply-To: <C48FE36B.18B7D%bkubesh@cisco.com> (Blaine Kubesh's message of
-	"Tue\, 01 Jul 2008 13\:36\:43 -0500")
-References: <C48FE36B.18B7D%bkubesh@cisco.com>
-Message-ID: <873amtwgte.fsf@macbook.be.48ers.dk>
+From: jacmet at uclibc.org <jacmet@uclibc.org>
+Date: Tue,  1 Jul 2008 12:24:37 -0700 (PDT)
+Subject: [Buildroot] svn commit: trunk/buildroot/package/ncurses
+Message-ID: <20080701192437.353BD3C650@busybox.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Blaine" == Blaine Kubesh <bkubesh@cisco.com> writes:
+Author: jacmet
+Date: 2008-07-01 12:24:36 -0700 (Tue, 01 Jul 2008)
+New Revision: 22597
 
- Blaine> I ran into the same thing. Here is my post from 6/2/08.
+Log:
+ncurses: don't follow symlink on ln invocation
 
- Blaine> There is a typo/bug on the commit from 3/31/08. It should be
- Blaine> soft linking into the TARGET_DIR and not the host filesystem.
+The ln -sf command would fail if $TARGET_DIR/usr/lib/terminfo already exists
+as we don't have write permissions to the symlink target. Fixed by adding
+-n option (don't dereference link).
 
- Blaine> -    ln -sf /usr/share/terminfo $(TARGET_DIR)/usr/lib/terminfo
- Blaine> +    ln -sf $(TARGET_DIR)/usr/share/terminfo $(TARGET_DIR)/usr/lib/terminfo
+Modified:
+   trunk/buildroot/package/ncurses/ncurses.mk
 
-No that won't fly - as you won't have TARGET_DIR on the target
-system. You could maybe argue for a relative link (../share/terminfo).
 
-The problem is that ln will follow the $TARGET_DIR/usr/lib/terminfo
-symlink if it already exists and try to create
-$TARGET_DIR/usr/lib/terminfo/terminfo (which is
-/usr/share/terminfo/terminfo) - That ofcause isn't allowed. The
-solution is to use the -n option.
-
--- 
-Bye, Peter Korsgaard
+Changeset:
+Modified: trunk/buildroot/package/ncurses/ncurses.mk
+===================================================================
+--- trunk/buildroot/package/ncurses/ncurses.mk	2008-07-01 19:09:50 UTC (rev 22596)
++++ trunk/buildroot/package/ncurses/ncurses.mk	2008-07-01 19:24:36 UTC (rev 22597)
+@@ -113,7 +113,7 @@
+ ifeq ($(strip $(BR2_PACKAGE_NCURSES_TARGET_MENU)),y)
+ 	cp -dpf $(NCURSES_DIR)/lib/libmenu.so* $(TARGET_DIR)/usr/lib/
+ endif
+-	ln -sf /usr/share/terminfo $(TARGET_DIR)/usr/lib/terminfo
++	ln -snf /usr/share/terminfo $(TARGET_DIR)/usr/lib/terminfo
+ 	mkdir -p $(TARGET_DIR)/usr/share/terminfo/x
+ 	cp -dpf $(STAGING_DIR)/usr/share/terminfo/x/xterm $(TARGET_DIR)/usr/share/terminfo/x
+ 	cp -dpf $(STAGING_DIR)/usr/share/terminfo/x/xterm-color $(TARGET_DIR)/usr/share/terminfo/x
