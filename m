@@ -1,23 +1,31 @@
-From: =?ISO-8859-1?Q?Thiago_A._Corr=EAa?= <thiago.correa@gmail.com>
-Date: Wed, 2 Jul 2008 03:52:37 -0300
-Subject: [Buildroot] svn commit: trunk/buildroot/toolchain/gdb/6.7.1
-In-Reply-To: <d6cda7730807012312l2448b678m958b17d5bf2f7541@mail.gmail.com>
-References: <20080701214725.7525C3C684@busybox.net>
-	<d6cda7730807012312l2448b678m958b17d5bf2f7541@mail.gmail.com>
-Message-ID: <d6cda7730807012352q548b6e2aj804f6caf0449ec1a@mail.gmail.com>
+From: Peter Korsgaard <jacmet@uclibc.org>
+Date: Wed, 02 Jul 2008 08:54:15 +0200
+Subject: [Buildroot] bugs.uclibc.org Account "upgrade"
+In-Reply-To: <d6cda7730807011459x4885d566t421701007a7e775@mail.gmail.com>
+	("Thiago A. =?utf-8?Q?Corr=C3=AAa=22's?= message of "Tue\, 1 Jul 2008
+	18\:59\:17 -0300")
+References: <d6cda7730807011459x4885d566t421701007a7e775@mail.gmail.com>
+Message-ID: <873amsrd2g.fsf@macbook.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->    Could you upload the avr32 prepatched gdb 6.7.1 to the at91
-> mirror? It's available at the avr32linux.org:
-> http://avr32linux.org/twiki/bin/view/Main/GDBPatches
->
+>>>>> "Thiago" == Thiago A Corr?a <thiago.correa@gmail.com> writes:
 
+Hi,
 
-Nevermind. I didn't see it before, but it's there. I just had to edit
-target/devices/Config.in.toolchain and fix the patch version number.
+ Thiago> Hi,
+ Thiago>    There is a need to clean up some of the bug reports, and when
+ Thiago> applying patches it would be nice if I could close the ticket. Now
+ Thiago> that I can commit, who should I bug to upgrade my Mantis account?
 
-Sorry for the confusion.
+Mike I think.
+
+Mike, could you give Thiago buildroot rights in mantis?
+
+Thiago, what is your mantis login?
+
+-- 
+Bye, Peter Korsgaard
