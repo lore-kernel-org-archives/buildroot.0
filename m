@@ -1,31 +1,43 @@
-From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Wed, 02 Jul 2008 08:54:15 +0200
-Subject: [Buildroot] bugs.uclibc.org Account "upgrade"
-In-Reply-To: <d6cda7730807011459x4885d566t421701007a7e775@mail.gmail.com>
-	("Thiago A. =?utf-8?Q?Corr=C3=AAa=22's?= message of "Tue\, 1 Jul 2008
-	18\:59\:17 -0300")
-References: <d6cda7730807011459x4885d566t421701007a7e775@mail.gmail.com>
-Message-ID: <873amsrd2g.fsf@macbook.be.48ers.dk>
+From: jacmet at uclibc.org <jacmet@uclibc.org>
+Date: Wed,  2 Jul 2008 00:20:17 -0700 (PDT)
+Subject: [Buildroot] svn commit: trunk/buildroot/package/ifplugd
+Message-ID: <20080702072017.7DBCC3C6FA@busybox.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Thiago" == Thiago A Corr?a <thiago.correa@gmail.com> writes:
+Author: jacmet
+Date: 2008-07-02 00:20:16 -0700 (Wed, 02 Jul 2008)
+New Revision: 22606
 
-Hi,
+Log:
+ifplugd: only install default config if not provided in skeleton
 
- Thiago> Hi,
- Thiago>    There is a need to clean up some of the bug reports, and when
- Thiago> applying patches it would be nice if I could close the ticket. Now
- Thiago> that I can commit, who should I bug to upgrade my Mantis account?
+Modified:
+   trunk/buildroot/package/ifplugd/ifplugd.mk
 
-Mike I think.
 
-Mike, could you give Thiago buildroot rights in mantis?
-
-Thiago, what is your mantis login?
-
--- 
-Bye, Peter Korsgaard
+Changeset:
+Modified: trunk/buildroot/package/ifplugd/ifplugd.mk
+===================================================================
+--- trunk/buildroot/package/ifplugd/ifplugd.mk	2008-07-02 00:17:21 UTC (rev 22605)
++++ trunk/buildroot/package/ifplugd/ifplugd.mk	2008-07-02 07:20:16 UTC (rev 22606)
+@@ -18,12 +18,13 @@
+ 
+ $(IFPLUGD_HOOK_POST_INSTALL):
+ 	$(INSTALL) -d $(TARGET_DIR)/etc/ifplugd
+-	$(INSTALL) $(IFPLUGD_DIR)/conf/ifplugd.conf $(TARGET_DIR)/etc/ifplugd/
++	@if [ ! -f $(TARGET_DIR)/etc/ifplugd/ifplugd.conf ]; then \
++		$(INSTALL) $(IFPLUGD_DIR)/conf/ifplugd.conf $(TARGET_DIR)/etc/ifplugd/; \
++		$(SED) 's^\(ARGS=.*\)w^\1^' $(TARGET_DIR)/etc/ifplugd/ifplugd.conf; \
++	fi
+ 	$(INSTALL) -m 0755 $(IFPLUGD_DIR)/conf/ifplugd.action \
+ 		$(TARGET_DIR)/etc/ifplugd/
+ 	$(INSTALL) -m 0755 $(IFPLUGD_DIR)/conf/ifplugd.init \
+ 		$(TARGET_DIR)/etc/init.d/S45ifplugd
+-	# continue booting without waiting for fork (no -w option)
+-	$(SED) 's^\(ARGS=.*\)w^\1^' $(TARGET_DIR)/etc/ifplugd/ifplugd.conf
+ 	# don't use bash for init script
+ 	$(SED) 's^/bin/bash^/bin/sh^g' $(TARGET_DIR)/etc/init.d/S45ifplugd
