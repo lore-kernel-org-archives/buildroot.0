@@ -1,40 +1,48 @@
-From: Ulf Samuelsson <ulf.samuelsson@atmel.com>
-Date: Wed, 2 Jul 2008 09:33:51 +0200
-Subject: [Buildroot] svn commit: trunk/buildroot/toolchain/gdb/6.7.1
-References: <20080701214725.7525C3C684@busybox.net>
-	<d6cda7730807012312l2448b678m958b17d5bf2f7541@mail.gmail.com>
-	<d6cda7730807012352q548b6e2aj804f6caf0449ec1a@mail.gmail.com>
-Message-ID: <59C3698F62794EECA401B838BFF41356@aeglos>
+From: jacmet at uclibc.org <jacmet@uclibc.org>
+Date: Wed,  2 Jul 2008 01:58:19 -0700 (PDT)
+Subject: [Buildroot] svn commit: trunk/buildroot/package
+Message-ID: <20080702085819.9648B3C632@busybox.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+Author: jacmet
+Date: 2008-07-02 01:58:18 -0700 (Wed, 02 Jul 2008)
+New Revision: 22607
 
------ Original Message ----- 
-From: "Thiago A. Corr?a" <thiago.correa@gmail.com>
-To: <buildroot@uclibc.org>
-Cc: "Ulf Samuelsson" <ulf@atmel.com>
-Sent: Wednesday, July 02, 2008 8:52 AM
-Subject: Re: [Buildroot] svn commit: trunk/buildroot/toolchain/gdb/6.7.1
+Log:
+Makefile.autotools.in: fix source handling
+
+Handling source/source-check/external-deps together doesn't work, as
+wget will then download the sources every time make source is called
+even if it's available in DL_DIR
+
+Instead detect source-check/external-deps from MAKELEVEL.
+
+Support downloadable package patches in source-check/external-deps
+while we're at it.
+
+Modified:
+   trunk/buildroot/package/Makefile.autotools.in
 
 
->>    Could you upload the avr32 prepatched gdb 6.7.1 to the at91
->> mirror? It's available at the avr32linux.org:
->> http://avr32linux.org/twiki/bin/view/Main/GDBPatches
->>
->
->
-> Nevermind. I didn't see it before, but it's there. I just had to edit
-> target/devices/Config.in.toolchain and fix the patch version number.
->
-
-Yes it has been there for some months.
-If you need to apply some patches, then you can do that in
-target/device/Atmel/toolchain
-
-/Ulf
-
-> Sorry for the confusion.
->
+Changeset:
+Modified: trunk/buildroot/package/Makefile.autotools.in
+===================================================================
+--- trunk/buildroot/package/Makefile.autotools.in	2008-07-02 07:20:16 UTC (rev 22606)
++++ trunk/buildroot/package/Makefile.autotools.in	2008-07-02 08:58:18 UTC (rev 22607)
+@@ -130,9 +130,10 @@
+ 
+ # Retrieve and unpack the archive
+ $(BUILD_DIR)/%/.stamp_downloaded:
+-# support make source/source-check/external-deps
+-ifneq ($(filter source,$(MAKECMDGOALS)),)
++# support make source-check/external-deps
++ifeq ($(MAKELEVEL),1)
+ 	$(WGET) -P $(DL_DIR) $($(PKG)_SITE)/$($(PKG)_SOURCE)
++	$(if $($(PKG)_PATCH),$(WGET) -P $(DL_DIR) $($(PKG)_SITE)/$($(PKG)_PATCH))
+ else
+ 	$(call MESSAGE,"Downloading")
+ ifneq ($(strip $(subst ",,$(BR2_PRIMARY_SITE))),)
