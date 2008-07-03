@@ -1,61 +1,89 @@
-From: Bernhard Fischer <rep.dot.nop@gmail.com>
-Date: Thu, 3 Jul 2008 10:05:57 +0200
-Subject: [Buildroot] uClibc missing limits.h
-In-Reply-To: <486C7A22.8000604@cetrtapot.si>
-References: <485F9581.2040204@cetrtapot.si> <486B4357.8060908@cetrtapot.si>
-	<3E421C7434714D94B87F0D1F52CDEA8D@aeglos>
-	<486C7A22.8000604@cetrtapot.si>
-Message-ID: <20080703080557.GA29943@mx.loc>
+From: ulf at uclibc.org <ulf@uclibc.org>
+Date: Thu,  3 Jul 2008 01:11:08 -0700 (PDT)
+Subject: [Buildroot] svn commit:
+	trunk/buildroot/target/device/Atmel/arch-arm:
+	kernel-patches-2.6.25 kernel-patches-2. etc...
+Message-ID: <20080703081109.0D6113C647@busybox.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Thu, Jul 03, 2008 at 09:05:06AM +0200, Hinko Kocevar wrote:
->Ulf Samuelsson wrote:
->> 
->> 
->>> Hinko Kocevar wrote:
->>>> Bernhard Fischer wrote:
->>>>> On Mon, Jun 23, 2008 at 02:22:25PM +0200, Hinko Kocevar wrote:
->>>>>> Hi,
->>>>>>
->>>>>> I've found a way for uClibc to find headers that are not in the
->>>>>> $(shell $CC -print-file-name=include), but in $(shell $CC
->>>>>> -print-file-name=include)-fixed.
->>>>>> According to
->>>>>> http://sourceware.org/ml/libc-alpha/2007-03/msg00017.html LIBC
->>>>>> should also look in other gcc provided header directories (eg.
->>>>>> include-fixed) instead only relying on 'include' to contain all
->>>>>> correct headers.
->>>>>>
->>>>>> Below is uClibc patch for this (tested on cris).
->>>>> Well, that's not really correct since the default search path already
->>>>> should to be
->>>>> $target_triple/$ver/include \
->>>>> $target_triple/$ver/include-fixed \
->>>>>
->> 
->> Removing "-nostdinc" from CFLAGS in "uClibc-0.9.29/Rules.mak"
->> allows the ARM compilation to continue,
->
->But is this OK?
+Author: ulf
+Date: 2008-07-03 01:11:04 -0700 (Thu, 03 Jul 2008)
+New Revision: 22614
 
-no.
->
->> but it again bombs since the function "testandset" has multiple
->> definitions.
->> Detected in libc_pthread_init.c and rpc_thread.c.
->> It is "first defined" in "forward.c"
->
->I guess this would be the problem in uClibc-0.9.29/libpthread/linuxthreads.old/sysdeps/arm/pt-machine.h.
->
->Dirty hack (works on cris arch), change:
-># define PT_EI extern inline
->
->to
->
-># define PT_EI static inline
+Log:
+Add AT91 patches for 2.6.25 and 2.6.25-rc3
 
-Already fixed in svn trunk.
+Added:
+   trunk/buildroot/target/device/Atmel/arch-arm/kernel-patches-2.6.25/
+   trunk/buildroot/target/device/Atmel/arch-arm/kernel-patches-2.6.25/linux-2.6.25-at91.patch.gz
+   trunk/buildroot/target/device/Atmel/arch-arm/kernel-patches-2.6.26-rc3/
+   trunk/buildroot/target/device/Atmel/arch-arm/kernel-patches-2.6.26-rc3/linux-2.6.26-rc3-at91.patch.gz
+
+Modified:
+   trunk/buildroot/target/device/Atmel/arch-arm/Config.in.linux.patches
+
+
+Changeset:
+Modified: trunk/buildroot/target/device/Atmel/arch-arm/Config.in.linux.patches
+===================================================================
+--- trunk/buildroot/target/device/Atmel/arch-arm/Config.in.linux.patches	2008-07-02 22:47:49 UTC (rev 22613)
++++ trunk/buildroot/target/device/Atmel/arch-arm/Config.in.linux.patches	2008-07-03 08:11:04 UTC (rev 22614)
+@@ -2,6 +2,8 @@
+ 	prompt "Add AT91 specific patches"
+ 	depends on BR2_KERNEL_ARCH_PATCH_ENABLED
+ 	depends on BR2_TARGET_ATMEL && BR2_arm
++	default BR2_ARCH_AT91_2_6_26		if BR2_LINUX_2_6_26
++	default BR2_ARCH_AT91_2_6_25		if BR2_LINUX_2_6_25
+ 	default BR2_ARCH_AT91_2_6_24		if BR2_LINUX_2_6_24
+ 	default BR2_ARCH_AT91_2_6_24		if BR2_LINUX_2_6_23
+ 	default BR2_ARCH_AT91_2_6_22_1		if BR2_LINUX_2_6_22_1
+@@ -12,6 +14,16 @@
+ 	help
+ 	  Select a patch to add to the Linux kernel
+ 
++config	BR2_ARCH_AT91_2_6_26_RC3
++	bool "2.6.26-rc3"
++	help
++	  Apply the at91 linux-2.6.26-rc3 patches"
++
++config	BR2_ARCH_AT91_2_6_25
++	bool "2.6.25"
++	help
++	  Apply the at91 linux-2.6.25 patches"
++
+ config	BR2_ARCH_AT91_2_6_24
+ 	bool "2.6.24"
+ 	help
+@@ -43,6 +55,8 @@
+ 	string
+ 	depends on BR2_KERNEL_ARCH_PATCH_ENABLED
+ 	depends on BR2_TARGET_ATMEL && BR2_arm
++	default "2.6.26-rc3" if BR2_ARCH_AT91_2_6_26_RC3
++	default "2.6.25" if BR2_ARCH_AT91_2_6_25
+ 	default "2.6.24" if BR2_ARCH_AT91_2_6_24
+ 	default "2.6.22.1" if BR2_ARCH_AT91_2_6_22_1
+ 	default "2.6.21.5" if BR2_ARCH_AT91_2_6_21_5
+
+Added: trunk/buildroot/target/device/Atmel/arch-arm/kernel-patches-2.6.25/linux-2.6.25-at91.patch.gz
+===================================================================
+(Binary files differ)
+
+
+Property changes on: trunk/buildroot/target/device/Atmel/arch-arm/kernel-patches-2.6.25/linux-2.6.25-at91.patch.gz
+___________________________________________________________________
+Name: svn:mime-type
+   + application/octet-stream
+
+Added: trunk/buildroot/target/device/Atmel/arch-arm/kernel-patches-2.6.26-rc3/linux-2.6.26-rc3-at91.patch.gz
+===================================================================
+(Binary files differ)
+
+
+Property changes on: trunk/buildroot/target/device/Atmel/arch-arm/kernel-patches-2.6.26-rc3/linux-2.6.26-rc3-at91.patch.gz
+___________________________________________________________________
+Name: svn:mime-type
+   + application/octet-stream
