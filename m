@@ -1,7 +1,8 @@
 From: ulf at uclibc.org <ulf@uclibc.org>
-Date: Thu,  3 Jul 2008 01:15:50 -0700 (PDT)
-Subject: [Buildroot] svn commit: trunk/buildroot/target/linux
-Message-ID: <20080703081550.5DAE73C667@busybox.net>
+Date: Thu,  3 Jul 2008 01:27:51 -0700 (PDT)
+Subject: [Buildroot] svn commit: trunk/buildroot/target/device: KwikByte
+	KwikByte/kb9202 KwikByte/kb920 etc...
+Message-ID: <20080703082751.DE6EC3C65B@busybox.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -9,110 +10,76 @@ Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
 Author: ulf
-Date: 2008-07-03 01:15:49 -0700 (Thu, 03 Jul 2008)
-New Revision: 22617
+Date: 2008-07-03 01:27:50 -0700 (Thu, 03 Jul 2008)
+New Revision: 22618
 
 Log:
-Add support for latest kernels
+Add support for KwikByte KB9202 board, courtesy Brian Beattie
 
-Modified:
-   trunk/buildroot/target/linux/Config.in.advanced
+Added:
+   trunk/buildroot/target/device/KwikByte/
+   trunk/buildroot/target/device/KwikByte/Config.in
+   trunk/buildroot/target/device/KwikByte/Makefile.in
+   trunk/buildroot/target/device/KwikByte/kb9202/
+   trunk/buildroot/target/device/KwikByte/kb9202/Makefile.in
+   trunk/buildroot/target/device/KwikByte/kb9202/busybox.config
+   trunk/buildroot/target/device/KwikByte/kb9202/device_table.txt
+   trunk/buildroot/target/device/KwikByte/kb9202/kb9202-linux-2.6.20.config
+   trunk/buildroot/target/device/KwikByte/kb9202/kb9202-linux-2.6.24.config
+   trunk/buildroot/target/device/KwikByte/kb9202/kb9202_defconfig
+   trunk/buildroot/target/device/KwikByte/kb9202/target_skeleton/
+   trunk/buildroot/target/device/KwikByte/kb9202/target_skeleton/bin/
+   trunk/buildroot/target/device/KwikByte/kb9202/target_skeleton/etc/
+   trunk/buildroot/target/device/KwikByte/kb9202/target_skeleton/etc/fstab
+   trunk/buildroot/target/device/KwikByte/kb9202/target_skeleton/etc/group
+   trunk/buildroot/target/device/KwikByte/kb9202/target_skeleton/etc/hostname
+   trunk/buildroot/target/device/KwikByte/kb9202/target_skeleton/etc/init.d/
+   trunk/buildroot/target/device/KwikByte/kb9202/target_skeleton/etc/init.d/rcS
+   trunk/buildroot/target/device/KwikByte/kb9202/target_skeleton/etc/inittab
+   trunk/buildroot/target/device/KwikByte/kb9202/target_skeleton/etc/issue
+   trunk/buildroot/target/device/KwikByte/kb9202/target_skeleton/etc/issue.net
+   trunk/buildroot/target/device/KwikByte/kb9202/target_skeleton/etc/ld.so.cache
+   trunk/buildroot/target/device/KwikByte/kb9202/target_skeleton/etc/ld.so.conf
+   trunk/buildroot/target/device/KwikByte/kb9202/target_skeleton/etc/mdev.conf
+   trunk/buildroot/target/device/KwikByte/kb9202/target_skeleton/etc/mtab
+   trunk/buildroot/target/device/KwikByte/kb9202/target_skeleton/etc/network/
+   trunk/buildroot/target/device/KwikByte/kb9202/target_skeleton/etc/network/if-down.d/
+   trunk/buildroot/target/device/KwikByte/kb9202/target_skeleton/etc/network/if-post-down.d/
+   trunk/buildroot/target/device/KwikByte/kb9202/target_skeleton/etc/network/if-pre-up.d/
+   trunk/buildroot/target/device/KwikByte/kb9202/target_skeleton/etc/network/if-up.d/
+   trunk/buildroot/target/device/KwikByte/kb9202/target_skeleton/etc/network/interfaces
+   trunk/buildroot/target/device/KwikByte/kb9202/target_skeleton/etc/passwd
+   trunk/buildroot/target/device/KwikByte/kb9202/target_skeleton/etc/profile
+   trunk/buildroot/target/device/KwikByte/kb9202/target_skeleton/etc/protocols
+   trunk/buildroot/target/device/KwikByte/kb9202/target_skeleton/etc/services
+   trunk/buildroot/target/device/KwikByte/kb9202/target_skeleton/etc/shadow
+   trunk/buildroot/target/device/KwikByte/kb9202/target_skeleton/etc/vsftpd.conf
+   trunk/buildroot/target/device/KwikByte/kb9202/target_skeleton/home/
+   trunk/buildroot/target/device/KwikByte/kb9202/target_skeleton/lib/
+   trunk/buildroot/target/device/KwikByte/kb9202/target_skeleton/proc/
+   trunk/buildroot/target/device/KwikByte/kb9202/target_skeleton/root/
+   trunk/buildroot/target/device/KwikByte/kb9202/target_skeleton/root/.ash_history
+   trunk/buildroot/target/device/KwikByte/kb9202/target_skeleton/sbin/
+   trunk/buildroot/target/device/KwikByte/kb9202/target_skeleton/sbin/automount.script
+   trunk/buildroot/target/device/KwikByte/kb9202/target_skeleton/sys/
+   trunk/buildroot/target/device/KwikByte/kb9202/target_skeleton/tmp/
+   trunk/buildroot/target/device/KwikByte/kb9202/target_skeleton/usr/
+   trunk/buildroot/target/device/KwikByte/kb9202/target_skeleton/usr/bin/
+   trunk/buildroot/target/device/KwikByte/kb9202/target_skeleton/usr/lib/
+   trunk/buildroot/target/device/KwikByte/kb9202/target_skeleton/usr/sbin/
+   trunk/buildroot/target/device/KwikByte/kb9202/target_skeleton/usr/share/
+   trunk/buildroot/target/device/KwikByte/kb9202/target_skeleton/usr/share/udhcpc/
+   trunk/buildroot/target/device/KwikByte/kb9202/target_skeleton/usr/share/udhcpc/default.script
+   trunk/buildroot/target/device/KwikByte/kb9202/target_skeleton/var/
+   trunk/buildroot/target/device/KwikByte/kb9202/target_skeleton/var/adm
+   trunk/buildroot/target/device/KwikByte/kb9202/target_skeleton/var/log/
+   trunk/buildroot/target/device/KwikByte/kb9202/target_skeleton/var/run/
+   trunk/buildroot/target/device/KwikByte/kb9202/target_skeleton/var/tmp
 
 
 Changeset:
-Modified: trunk/buildroot/target/linux/Config.in.advanced
-===================================================================
---- trunk/buildroot/target/linux/Config.in.advanced	2008-07-03 08:14:54 UTC (rev 22616)
-+++ trunk/buildroot/target/linux/Config.in.advanced	2008-07-03 08:15:49 UTC (rev 22617)
-@@ -32,7 +32,8 @@
- # --- These 'constants' requires regular maintenance, so put them first
- config BR2_KERNEL_PATCH_LEVEL
- 	string
--	default "4" if BR2_LINUX_2_6_24 && BR2_KERNEL_ADD_LATEST_MINORPATCH
-+	default "9" if BR2_LINUX_2_6_25 && BR2_KERNEL_ADD_LATEST_MINORPATCH
-+	default "7" if BR2_LINUX_2_6_24 && BR2_KERNEL_ADD_LATEST_MINORPATCH
- 	default "17" if BR2_LINUX_2_6_23 && BR2_KERNEL_ADD_LATEST_MINORPATCH
- 	default "19" if BR2_LINUX_2_6_22 && BR2_KERNEL_ADD_LATEST_MINORPATCH
- 	default "7" if BR2_LINUX_2_6_21 && BR2_KERNEL_ADD_LATEST_MINORPATCH
-@@ -41,10 +42,11 @@
- 
- config BR2_KERNEL_CURRENT_VERSION
- 	string
--	default "2.6.24.4"
-+	default "2.6.25.9"
- 
- config BR2_KERNEL_NEXT_VERSION
- 	string
-+	default "2.6.27" if BR2_LINUX_2_6_26
- 	default "2.6.26" if BR2_LINUX_2_6_25
- 	default "2.6.25" if BR2_LINUX_2_6_24
- 	default "2.6.24" if BR2_LINUX_2_6_23
-@@ -54,6 +56,8 @@
- 
- config BR2_KERNEL_THIS_VERSION
- 	string
-+	default "2.6.27" if BR2_LINUX_2_6_27
-+	default "2.6.26" if BR2_LINUX_2_6_26
- 	default "2.6.25" if BR2_LINUX_2_6_25
- 	default "2.6.24" if BR2_LINUX_2_6_24
- 	default "2.6.23" if BR2_LINUX_2_6_23
-@@ -63,15 +67,15 @@
- 
- config LINUX26_LATEST_RC_VERSION
- 	string
--	default "2.6.25-rc7" if BR2_KERNEL_ADD_LATEST_RC_PATCH
-+	default "2.6.26-rc8" if BR2_KERNEL_ADD_LATEST_RC_PATCH
- 
- config LINUX26_LATEST_GIT_VERSION
- 	string
--	default "2.6.25-rc7-git5" if BR2_KERNEL_ADD_LATEST_SNAPSHOT
-+	default "2.6.25-rc8-git2" if BR2_KERNEL_ADD_LATEST_SNAPSHOT
- 
- config LINUX26_LATEST_MM_VERSION
- 	string
--	default "2.6.25-rc5-mm1" if BR2_KERNEL_ADD_LATEST_MM_PATCH
-+	default "2.6.26-rc5-mm3" if BR2_KERNEL_ADD_LATEST_MM_PATCH
- 
- config BR2_KERNEL_SITE
- 	string
-@@ -129,10 +133,16 @@
- 	  Select the specific Linux version you want to use
- 
- config BR2_LINUX_2_6_STABLE
--	bool "The latest stable Linux kernel (2.6.24.4)"
-+	bool "The latest stable Linux kernel (2.6.25.9)"
- 	help
--	  Linux 2.6.24.4
-+	  Linux 2.6.25.9
- 
-+config BR2_LINUX_2_6_25
-+	bool "Linux 2.6.25"
-+	select BR2_KERNEL_BASE
-+	help
-+	  Linux 2.6.25
-+
- config BR2_LINUX_2_6_24
- 	bool "Linux 2.6.24"
- 	select BR2_KERNEL_BASE
-@@ -188,12 +198,18 @@
- 	help
- 	  Linux 2.6.20
- 
--config BR2_LINUX_2_6_25
--	bool "Linux 2.6.25"
-+config BR2_LINUX_2_6_26
-+	bool "Linux 2.6.26"
- 	select BR2_KERNEL_BASE
- 	help
--	  Linux 2.6.25
-+	  Linux 2.6.26
- 
-+config BR2_LINUX_2_6_27
-+	bool "Linux 2.6.27"
-+	select BR2_KERNEL_BASE
-+	help
-+	  Linux 2.6.27
-+
- config BR2_LINUX26_CUSTOM
- 	bool "Linux <custom> version"
- 	help
+
+Sorry, the patch is too large to include (5236 lines).
+Please use ViewCVS to see it!
+
+http://uclibc.org/cgi-bin/viewcvs.cgi?view=rev&root=svn&rev=22618
