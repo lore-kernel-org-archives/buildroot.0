@@ -1,34 +1,30 @@
-From: ulf at uclibc.org <ulf@uclibc.org>
-Date: Thu,  3 Jul 2008 01:29:27 -0700 (PDT)
-Subject: [Buildroot] svn commit: trunk/buildroot/target/device
-Message-ID: <20080703082927.2A7863C2C9@busybox.net>
+From: Brian Beattie <beattie@beattie-home.net>
+Date: Thu, 03 Jul 2008 07:04:51 -0700
+Subject: [Buildroot] svn commit: trunk/buildroot/target/device:	KwikByte
+	KwikByte/kb9202 KwikByte/kb920 etc...
+In-Reply-To: <20080703082751.DE6EC3C65B@busybox.net>
+References: <20080703082751.DE6EC3C65B@busybox.net>
+Message-ID: <1215093891.6293.42.camel@kokopelli>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Author: ulf
-Date: 2008-07-03 01:29:26 -0700 (Thu, 03 Jul 2008)
-New Revision: 22619
+On Thu, 2008-07-03 at 01:27 -0700, ulf at uclibc.org wrote:
+> Author: ulf
+> Date: 2008-07-03 01:27:50 -0700 (Thu, 03 Jul 2008)
+> New Revision: 22618
+> 
+> Log:
+> Add support for KwikByte KB9202 board, courtesy Brian Beattie
 
-Log:
-Enable KB9202 board in Config
+Thanks Ulf.
 
-Modified:
-   trunk/buildroot/target/device/Config.in
+-- 
+A: Because it messes up the order in which people normally read text.
+Q: Why is top-posting a bad thing?
 
-
-Changeset:
-Modified: trunk/buildroot/target/device/Config.in
-===================================================================
---- trunk/buildroot/target/device/Config.in	2008-07-03 08:27:50 UTC (rev 22618)
-+++ trunk/buildroot/target/device/Config.in	2008-07-03 08:29:26 UTC (rev 22619)
-@@ -9,6 +9,7 @@
- source "target/device/Atmel/Config.in"
- source "target/device/Hitachi/Config.in"
- source "target/device/jp/Config.in"
-+source "target/device/KwikByte/Config.in"
- source "target/device/Sharp/Config.in"
- source "target/device/Soekris/Config.in"
- source "target/device/valka/Config.in"
+Brian Beattie   LFS12947 | "Honor isn't about making the right choices.
+beattie at beattie-home.net | It's about dealing with the consequences."
+www.beattie-home.net     | -- Midori Koto
