@@ -1,19 +1,70 @@
-From: Douglas Lane <doug@nebkom.co.za>
-Date: Thu, 3 Jul 2008 22:24:44 +0200
-Subject: [Buildroot] MySQL
-Message-ID: <C780E22E-5C85-49A6-8B60-AC9E67CB236A@nebkom.co.za>
+From: bugs at busybox.net <bugs@busybox.net>
+Date: Thu, 3 Jul 2008 14:26:56 -0700
+Subject: [Buildroot] [buildroot 0001133]: build fails if 'UCLIBC_BUILD_SSP'
+	is enabled
+Message-ID: <13e98eec3cac642a33f4e90fae28de45@bugs.uclibc.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi everyone.
 
-I've done a search on the buildroot mailing list, but found nothing on  
-MySQL?
+A NOTE has been added to this issue. 
+====================================================================== 
+http://busybox.net/bugs/view.php?id=1133 
+====================================================================== 
+Reported By:                frank sabella
+Assigned To:                buildroot
+====================================================================== 
+Project:                    buildroot
+Issue ID:                   1133
+Category:                   Security
+Reproducibility:            always
+Severity:                   major
+Priority:                   normal
+Status:                     assigned
+====================================================================== 
+Date Submitted:             12-26-2006 15:06 PST
+Last Modified:              07-03-2008 14:26 PDT
+====================================================================== 
+Summary:                    build fails if 'UCLIBC_BUILD_SSP' is enabled
+Description: 
+Host: x86
+Target: x86
+buildroot svn: 17052
+uClibc svn: 17064
+gcc-4.1.1
+binutils-2.17
 
-Can it be done? Or do I need to convert to SQLite?
+Buildroot fails when compiling uClibc with 'UCLIBC_BUILD_SSP' enabled.
+====================================================================== 
 
-Thanks
-Doug
+---------------------------------------------------------------------- 
+ bernhardf - 09-24-07 00:58  
+---------------------------------------------------------------------- 
+This is supposed to work with uclibc-0.9.29 and current buildroot (with a
+current toolchain). Please retest. 
+
+---------------------------------------------------------------------- 
+ frank sabella - 07-03-08 14:26  
+---------------------------------------------------------------------- 
+gcc-4.2.1
+binutils-2.18
+uClibc-20080629 snapshot
+
+if BR2_PACKAGE_GCC_TARGET=y is used, the build fails with the same error
+as above. Setting it to no allows the build to continue. 
+
+Issue History 
+Date Modified   Username       Field                    Change               
+====================================================================== 
+12-26-06 15:06  frank sabella  New Issue                                    
+12-26-06 15:06  frank sabella  Status                   new => assigned     
+12-26-06 15:06  frank sabella  Assigned To               => uClibc          
+12-26-06 15:07  frank sabella  Issue Monitored: frank sabella                   
+
+02-12-07 05:33  vapier         Assigned To              uClibc => buildroot 
+09-24-07 00:58  bernhardf      Note Added: 0002781                          
+07-03-08 14:26  frank sabella  Note Added: 0008904                          
+======================================================================
