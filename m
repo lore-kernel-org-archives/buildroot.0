@@ -1,9 +1,7 @@
 From: ulf at uclibc.org <ulf@uclibc.org>
-Date: Thu,  3 Jul 2008 01:11:08 -0700 (PDT)
-Subject: [Buildroot] svn commit:
-	trunk/buildroot/target/device/Atmel/arch-arm:
-	kernel-patches-2.6.25 kernel-patches-2. etc...
-Message-ID: <20080703081109.0D6113C647@busybox.net>
+Date: Thu,  3 Jul 2008 01:12:54 -0700 (PDT)
+Subject: [Buildroot] svn commit: trunk/buildroot/package/samba
+Message-ID: <20080703081254.838FB3C647@busybox.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -11,79 +9,42 @@ Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
 Author: ulf
-Date: 2008-07-03 01:11:04 -0700 (Thu, 03 Jul 2008)
-New Revision: 22614
+Date: 2008-07-03 01:12:51 -0700 (Thu, 03 Jul 2008)
+New Revision: 22615
 
 Log:
-Add AT91 patches for 2.6.25 and 2.6.25-rc3
-
-Added:
-   trunk/buildroot/target/device/Atmel/arch-arm/kernel-patches-2.6.25/
-   trunk/buildroot/target/device/Atmel/arch-arm/kernel-patches-2.6.25/linux-2.6.25-at91.patch.gz
-   trunk/buildroot/target/device/Atmel/arch-arm/kernel-patches-2.6.26-rc3/
-   trunk/buildroot/target/device/Atmel/arch-arm/kernel-patches-2.6.26-rc3/linux-2.6.26-rc3-at91.patch.gz
+install SAMBA SWAT correctly, add hint for autoconf, courtesy HC Egtvedt
 
 Modified:
-   trunk/buildroot/target/device/Atmel/arch-arm/Config.in.linux.patches
+   trunk/buildroot/package/samba/samba.mk
 
 
 Changeset:
-Modified: trunk/buildroot/target/device/Atmel/arch-arm/Config.in.linux.patches
+Modified: trunk/buildroot/package/samba/samba.mk
 ===================================================================
---- trunk/buildroot/target/device/Atmel/arch-arm/Config.in.linux.patches	2008-07-02 22:47:49 UTC (rev 22613)
-+++ trunk/buildroot/target/device/Atmel/arch-arm/Config.in.linux.patches	2008-07-03 08:11:04 UTC (rev 22614)
-@@ -2,6 +2,8 @@
- 	prompt "Add AT91 specific patches"
- 	depends on BR2_KERNEL_ARCH_PATCH_ENABLED
- 	depends on BR2_TARGET_ATMEL && BR2_arm
-+	default BR2_ARCH_AT91_2_6_26		if BR2_LINUX_2_6_26
-+	default BR2_ARCH_AT91_2_6_25		if BR2_LINUX_2_6_25
- 	default BR2_ARCH_AT91_2_6_24		if BR2_LINUX_2_6_24
- 	default BR2_ARCH_AT91_2_6_24		if BR2_LINUX_2_6_23
- 	default BR2_ARCH_AT91_2_6_22_1		if BR2_LINUX_2_6_22_1
-@@ -12,6 +14,16 @@
- 	help
- 	  Select a patch to add to the Linux kernel
- 
-+config	BR2_ARCH_AT91_2_6_26_RC3
-+	bool "2.6.26-rc3"
-+	help
-+	  Apply the at91 linux-2.6.26-rc3 patches"
-+
-+config	BR2_ARCH_AT91_2_6_25
-+	bool "2.6.25"
-+	help
-+	  Apply the at91 linux-2.6.25 patches"
-+
- config	BR2_ARCH_AT91_2_6_24
- 	bool "2.6.24"
- 	help
-@@ -43,6 +55,8 @@
- 	string
- 	depends on BR2_KERNEL_ARCH_PATCH_ENABLED
- 	depends on BR2_TARGET_ATMEL && BR2_arm
-+	default "2.6.26-rc3" if BR2_ARCH_AT91_2_6_26_RC3
-+	default "2.6.25" if BR2_ARCH_AT91_2_6_25
- 	default "2.6.24" if BR2_ARCH_AT91_2_6_24
- 	default "2.6.22.1" if BR2_ARCH_AT91_2_6_22_1
- 	default "2.6.21.5" if BR2_ARCH_AT91_2_6_21_5
-
-Added: trunk/buildroot/target/device/Atmel/arch-arm/kernel-patches-2.6.25/linux-2.6.25-at91.patch.gz
-===================================================================
-(Binary files differ)
-
-
-Property changes on: trunk/buildroot/target/device/Atmel/arch-arm/kernel-patches-2.6.25/linux-2.6.25-at91.patch.gz
-___________________________________________________________________
-Name: svn:mime-type
-   + application/octet-stream
-
-Added: trunk/buildroot/target/device/Atmel/arch-arm/kernel-patches-2.6.26-rc3/linux-2.6.26-rc3-at91.patch.gz
-===================================================================
-(Binary files differ)
-
-
-Property changes on: trunk/buildroot/target/device/Atmel/arch-arm/kernel-patches-2.6.26-rc3/linux-2.6.26-rc3-at91.patch.gz
-___________________________________________________________________
-Name: svn:mime-type
-   + application/octet-stream
+--- trunk/buildroot/package/samba/samba.mk	2008-07-03 08:11:04 UTC (rev 22614)
++++ trunk/buildroot/package/samba/samba.mk	2008-07-03 08:12:51 UTC (rev 22615)
+@@ -28,10 +28,13 @@
+ 		samba_cv_HAVE_GETTIMEOFDAY_TZ=yes \
+ 		samba_cv_USE_SETREUID=yes \
+ 		samba_cv_HAVE_KERNEL_OPLOCKS_LINUX=yes \
++		samba_cv_HAVE_IFACE_IFCONF=yes \
+ 		./configure \
+ 		--target=$(GNU_TARGET_NAME) \
+ 		--host=$(GNU_TARGET_NAME) \
+ 		--build=$(GNU_HOST_NAME) \
++		--prefix=/usr \
++		--localstatedir=/var \
+ 		--with-lockdir=/var/cache/samba \
+ 		--with-piddir=/var/run \
+ 		--with-privatedir=/etc/samba \
+@@ -96,6 +99,9 @@
+ 	for file in $(SAMBA_TARGETS_y); do \
+ 		$(STRIPCMD) $(STRIP_STRIP_UNNEEDED) $(TARGET_DIR)/$$file; \
+ 	done
++ifeq ($(strip $(BR2_PACKAGE_SAMBA_SWAT)),y)
++	cp -dpfr $(SAMBA_DIR)/../swat $(TARGET_DIR)/usr/
++endif
+ 	$(INSTALL) -m 0755 package/samba/S91smb $(TARGET_DIR)/etc/init.d
+ 	@if [ ! -f $(TARGET_DIR)/etc/samba/smb.conf ]; then \
+ 		$(INSTALL) -m 0755 -D package/samba/simple.conf $(TARGET_DIR)/etc/samba/smb.conf; \
