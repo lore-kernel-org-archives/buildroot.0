@@ -1,52 +1,54 @@
-From: correa at uclibc.org <correa@uclibc.org>
-Date: Thu,  3 Jul 2008 19:23:20 -0700 (PDT)
-Subject: [Buildroot] svn commit: trunk/buildroot/package/atk
-Message-ID: <20080704022320.2F0D63C608@busybox.net>
+From: bugs at busybox.net <bugs@busybox.net>
+Date: Thu, 3 Jul 2008 19:24:06 -0700
+Subject: [Buildroot] [buildroot 0003594]: ATK does not always require X
+	support to be compiled
+Message-ID: <eaffd330ef6a621aef1e249bf67bcac2@bugs.uclibc.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Author: correa
-Date: 2008-07-03 19:23:19 -0700 (Thu, 03 Jul 2008)
-New Revision: 22621
 
-Log:
-Fix bug #3594: ATK does not always require X support to be compiled
+The following issue has been RESOLVED. 
+====================================================================== 
+http://busybox.net/bugs/view.php?id=3594 
+====================================================================== 
+Reported By:                daniellaird
+Assigned To:                buildroot
+====================================================================== 
+Project:                    buildroot
+Issue ID:                   3594
+Category:                   Architecture Specific
+Reproducibility:            always
+Severity:                   minor
+Priority:                   normal
+Status:                     resolved
+Resolution:                 fixed
+Fixed in Version:           
+====================================================================== 
+Date Submitted:             06-03-2008 05:07 PDT
+Last Modified:              07-03-2008 19:24 PDT
+====================================================================== 
+Summary:                    ATK does not always require X support to be compiled
+Description: 
+ATK does not always require X support to be enabled (DirectFB only for
+instance)
+====================================================================== 
 
-Modified:
-   trunk/buildroot/package/atk/atk.mk
+---------------------------------------------------------------------- 
+ Correa - 07-03-08 19:24  
+---------------------------------------------------------------------- 
+Applied and tested (build) on AVR32. Thanks. 
 
-
-Changeset:
-Modified: trunk/buildroot/package/atk/atk.mk
-===================================================================
---- trunk/buildroot/package/atk/atk.mk	2008-07-04 02:12:21 UTC (rev 22620)
-+++ trunk/buildroot/package/atk/atk.mk	2008-07-04 02:23:19 UTC (rev 22621)
-@@ -42,6 +42,14 @@
- 		gl_cv_c_restrict=no ac_cv_path_GLIB_GENMARSHAL=/usr/bin/glib-genmarshal \
- 		ac_cv_prog_F77=no ac_cv_prog_CXX=no 
- 
-+ifneq ($(BR2_PACKAGE_XSERVER_none),y)
-+ATK_CONF_OPT_X = --with-x \
-+		--x-includes=$(STAGING_DIR)/usr/include/X11 \
-+		--x-libraries=$(STAGING_DIR)/usr/lib
-+else
-+ATK_CONF_OPT_X = --without-x
-+endif
-+
- ATK_CONF_OPT = --target=$(GNU_TARGET_NAME) --host=$(REAL_GNU_TARGET_NAME) \
- 		--build=$(GNU_HOST_NAME) --prefix=/usr \
- 		--exec-prefix=/usr --bindir=/usr/bin \
-@@ -50,9 +58,7 @@
- 		--datadir=/usr/share --localstatedir=/var \
- 		--includedir=/usr/include --mandir=/usr/man \
- 		--infodir=/usr/info --enable-shared \
--		--enable-static --with-x \
--		--x-includes=$(STAGING_DIR)/usr/include/X11 \
--		--x-libraries=$(STAGING_DIR)/usr/lib \
-+		--enable-static $(ATK_CONF_OPT_X) \
- 		--disable-glibtest --enable-explicit-deps=no \
- 		--disable-debug 
- 
+Issue History 
+Date Modified   Username       Field                    Change               
+====================================================================== 
+06-03-08 05:07  daniellaird    New Issue                                    
+06-03-08 05:07  daniellaird    Status                   new => assigned     
+06-03-08 05:07  daniellaird    Assigned To               => buildroot       
+06-03-08 05:07  daniellaird    File Added: atk_no_x.patch                    
+07-03-08 19:24  Correa         Status                   assigned => resolved
+07-03-08 19:24  Correa         Resolution               open => fixed       
+07-03-08 19:24  Correa         Note Added: 0008914                          
+======================================================================
