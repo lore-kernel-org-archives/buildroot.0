@@ -1,54 +1,39 @@
-From: bugs at busybox.net <bugs@busybox.net>
-Date: Thu, 3 Jul 2008 19:24:06 -0700
-Subject: [Buildroot] [buildroot 0003594]: ATK does not always require X
-	support to be compiled
-Message-ID: <eaffd330ef6a621aef1e249bf67bcac2@bugs.uclibc.org>
+From: correa at uclibc.org <correa@uclibc.org>
+Date: Thu,  3 Jul 2008 19:57:14 -0700 (PDT)
+Subject: [Buildroot] svn commit: trunk/buildroot/package/freetype
+Message-ID: <20080704025714.5B6BE3C65A@busybox.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+Author: correa
+Date: 2008-07-03 19:57:13 -0700 (Thu, 03 Jul 2008)
+New Revision: 22622
 
-The following issue has been RESOLVED. 
-====================================================================== 
-http://busybox.net/bugs/view.php?id=3594 
-====================================================================== 
-Reported By:                daniellaird
-Assigned To:                buildroot
-====================================================================== 
-Project:                    buildroot
-Issue ID:                   3594
-Category:                   Architecture Specific
-Reproducibility:            always
-Severity:                   minor
-Priority:                   normal
-Status:                     resolved
-Resolution:                 fixed
-Fixed in Version:           
-====================================================================== 
-Date Submitted:             06-03-2008 05:07 PDT
-Last Modified:              07-03-2008 19:24 PDT
-====================================================================== 
-Summary:                    ATK does not always require X support to be compiled
-Description: 
-ATK does not always require X support to be enabled (DirectFB only for
-instance)
-====================================================================== 
+Log:
+Fix freetype-2.2.1 build in AVR32, possibly other platforms too
 
----------------------------------------------------------------------- 
- Correa - 07-03-08 19:24  
----------------------------------------------------------------------- 
-Applied and tested (build) on AVR32. Thanks. 
+Modified:
+   trunk/buildroot/package/freetype/freetype.mk
 
-Issue History 
-Date Modified   Username       Field                    Change               
-====================================================================== 
-06-03-08 05:07  daniellaird    New Issue                                    
-06-03-08 05:07  daniellaird    Status                   new => assigned     
-06-03-08 05:07  daniellaird    Assigned To               => buildroot       
-06-03-08 05:07  daniellaird    File Added: atk_no_x.patch                    
-07-03-08 19:24  Correa         Status                   assigned => resolved
-07-03-08 19:24  Correa         Resolution               open => fixed       
-07-03-08 19:24  Correa         Note Added: 0008914                          
-======================================================================
+
+Changeset:
+Modified: trunk/buildroot/package/freetype/freetype.mk
+===================================================================
+--- trunk/buildroot/package/freetype/freetype.mk	2008-07-04 02:23:19 UTC (rev 22621)
++++ trunk/buildroot/package/freetype/freetype.mk	2008-07-04 02:57:13 UTC (rev 22622)
+@@ -18,10 +18,11 @@
+ 	$(FREETYPE_CAT) $(DL_DIR)/$(FREETYPE_SOURCE) | tar -C $(BUILD_DIR) $(TAR_OPTIONS) -
+ 	toolchain/patch-kernel.sh $(FREETYPE_DIR) package/freetype/ \*.patch
+ 	$(CONFIG_UPDATE) $(FREETYPE_DIR)
++	$(CONFIG_UPDATE) $(FREETYPE_DIR)/builds/unix
+ 	touch $@
+ 
+ $(FREETYPE_DIR)/.configured: $(FREETYPE_DIR)/.unpacked
+-	(cd $(FREETYPE_DIR) && \
++	(cd $(FREETYPE_DIR);  rm -rf config.cache; \
+ 		$(TARGET_CONFIGURE_OPTS) \
+ 		$(TARGET_CONFIGURE_ARGS) \
+ 		./configure \
