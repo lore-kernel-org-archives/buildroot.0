@@ -1,50 +1,44 @@
-From: bugs at busybox.net <bugs@busybox.net>
-Date: Fri, 4 Jul 2008 01:59:14 -0700
-Subject: [Buildroot] [buildroot 0003924]: Buildroot assumes that host
-	glib-genmarschal is located in /usr/bin/
-Message-ID: <53b2b60630fbbcc60a7c7771aa013c97@bugs.uclibc.org>
+From: ulf at uclibc.org <ulf@uclibc.org>
+Date: Fri,  4 Jul 2008 02:48:26 -0700 (PDT)
+Subject: [Buildroot] svn commit: trunk/buildroot/package/libdaemon
+Message-ID: <20080704094827.025283C642@busybox.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+Author: ulf
+Date: 2008-07-04 02:48:25 -0700 (Fri, 04 Jul 2008)
+New Revision: 22625
 
-The following issue has been SUBMITTED. 
-====================================================================== 
-http://busybox.net/bugs/view.php?id=3924 
-====================================================================== 
-Reported By:                UlfSamuelsson
-Assigned To:                buildroot
-====================================================================== 
-Project:                    buildroot
-Issue ID:                   3924
-Category:                   Other
-Reproducibility:            always
-Severity:                   major
-Priority:                   normal
-Status:                     assigned
-====================================================================== 
-Date Submitted:             07-04-2008 01:59 PDT
-Last Modified:              07-04-2008 01:59 PDT
-====================================================================== 
-Summary:                    Buildroot assumes that host glib-genmarschal is
-located in /usr/bin/
-Description: 
-The build of libglib2-2.15.4 assumes that /usr/bin/glib-genmarschal
-exists.
-On OpenSUSE 10.2 (at least) it it located in
-/opt/gnome/bin/glib-genmarschal.
+Log:
+Make libdaemon use the config files from Buildroot (previously replaced by libtoolize)
 
-A simple fox for this problem is to do:
-sudo ln -s /opt/gnome/bin/glib-genmarshal /usr/bin/glib-genmarshal
+Modified:
+   trunk/buildroot/package/libdaemon/libdaemon.mk
 
-====================================================================== 
 
-Issue History 
-Date Modified   Username       Field                    Change               
-====================================================================== 
-07-04-08 01:59  UlfSamuelsson  New Issue                                    
-07-04-08 01:59  UlfSamuelsson  Status                   new => assigned     
-07-04-08 01:59  UlfSamuelsson  Assigned To               => buildroot       
-======================================================================
+Changeset:
+Modified: trunk/buildroot/package/libdaemon/libdaemon.mk
+===================================================================
+--- trunk/buildroot/package/libdaemon/libdaemon.mk	2008-07-04 08:39:35 UTC (rev 22624)
++++ trunk/buildroot/package/libdaemon/libdaemon.mk	2008-07-04 09:48:25 UTC (rev 22625)
+@@ -24,14 +24,16 @@
+ 
+ libdaemon-source: $(DL_DIR)/$(LIBDAEMON_SOURCE)
+ 
++libdaemon-unpacked: $(LIBDAEMON_DIR)/.unpacked
+ $(LIBDAEMON_DIR)/.unpacked: $(DL_DIR)/$(LIBDAEMON_SOURCE)
+ 	$(LIBDAEMON_CAT) $(DL_DIR)/$(LIBDAEMON_SOURCE) | tar -C $(BUILD_DIR) $(TAR_OPTIONS) -
+ 	toolchain/patch-kernel.sh $(LIBDAEMON_DIR) package/libdaemon/ \*.patch
+-	$(CONFIG_UPDATE) $(LIBDAEMON_DIR)
+ 	touch $@
+ 
++libdaemon-configured: $(LIBDAEMON_DIR)/.configured
+ $(LIBDAEMON_DIR)/.configured: $(LIBDAEMON_DIR)/.unpacked
+ 	(cd $(LIBDAEMON_DIR) && rm -rf config.cache && libtoolize --copy --force && autoreconf)
++	$(CONFIG_UPDATE) $(LIBDAEMON_DIR)
+ 	(cd $(LIBDAEMON_DIR) && \
+ 		$(TARGET_CONFIGURE_OPTS) \
+ 		$(TARGET_CONFIGURE_ARGS) \
