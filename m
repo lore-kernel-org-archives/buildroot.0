@@ -1,34 +1,71 @@
-From: ulf at uclibc.org <ulf@uclibc.org>
-Date: Sat,  5 Jul 2008 14:57:25 -0700 (PDT)
-Subject: [Buildroot] svn commit: trunk/buildroot/target/device
-Message-ID: <20080705215725.EE8993C668@busybox.net>
+From: Ulf Samuelsson <ulf.samuelsson@atmel.com>
+Date: Sat, 05 Jul 2008 23:59:46 +0200
+Subject: [Buildroot] svn commit: trunk/buildroot/package/openssl
+In-Reply-To: <d6cda7730807050855k6554b324v701cf349dd2562fb@mail.gmail.com>
+References: <20080705072509.8CEF53C65A@busybox.net>
+	<d6cda7730807050855k6554b324v701cf349dd2562fb@mail.gmail.com>
+Message-ID: <486FEED2.3060404@atmel.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Author: ulf
-Date: 2008-07-05 14:57:23 -0700 (Sat, 05 Jul 2008)
-New Revision: 22657
+-----BEGIN PGP SIGNED MESSAGE-----
+Hash: SHA1
 
-Log:
-un-deprecate gcc-4.2.1 for AVR32 external toolchain
+Thiago A. Corr?a skrev:
+> On Sat, Jul 5, 2008 at 4:25 AM,  <ulf@uclibc.org> wrote:
+>> Author: ulf
+>> Date: 2008-07-05 00:25:06 -0700 (Sat, 05 Jul 2008)
+>> New Revision: 22646
+>>
+>> Log:
+>> Fix bug [1899] Add table entry to allow openssl to build for AVR32, disabled softfloat
+>>
+>> Added:
+>>   trunk/buildroot/package/openssl/openssl-0.9.7m.patch.avr32
+>>
+>> Modified:
+>>   trunk/buildroot/package/openssl/openssl.mk
+>>
+> (cut)
+>> Modified: trunk/buildroot/package/openssl/openssl.mk
+>> ===================================================================
+>> --- trunk/buildroot/package/openssl/openssl.mk  2008-07-05 06:58:53 UTC (rev 22645)
+>> +++ trunk/buildroot/package/openssl/openssl.mk  2008-07-05 07:25:06 UTC (rev 22646)
+> (cut)
+>> +ifeq ($(BR2_avr32),)
+>>        $(SED) 's,/CFLAG=,/CFLAG= $(TARGET_SOFT_FLOAT) ,g' \
+>>                $(OPENSSL_DIR)/Configure
+>> +endif
+> 
+> Shouldn't this be usefull to all platforms and not just avr32?
 
-Modified:
-   trunk/buildroot/target/device/Config.in.toolchain
+Don't think so, but I am not 100% sure.
+
+This patch will *remove* the TARGET_SOFT_FLOAT switch from openssl
+CFLAGS if compiled for the AVR32,
+because the AVR32 gcc does not support the
+"--with-abi=soft" which gets included as a switch if this is set.
+
+If another architecture is found which does not like the soft-float
+then I guess it is easy to take that into account.
+
+BR
+Ulf
 
 
-Changeset:
-Modified: trunk/buildroot/target/device/Config.in.toolchain
-===================================================================
---- trunk/buildroot/target/device/Config.in.toolchain	2008-07-05 20:29:59 UTC (rev 22656)
-+++ trunk/buildroot/target/device/Config.in.toolchain	2008-07-05 21:57:23 UTC (rev 22657)
-@@ -20,7 +20,6 @@
- config BR2_TOOLCHAIN_ATMEL_AVR32_4_2_1
- 	bool "Use prepatched source for AVR32 gcc-4.2.1 toolchain"
- 	depends on BR2_avr32
--	depends on BR2_DEPRECATED
- 	select BR2_EXT_GCC_VERSION_4_2_1
- 	select BR2_EXT_BINUTILS_VERSION_2_17
- 	select BR2_EXT_UCLIBC_VERSION_0_9_29
+> _______________________________________________
+> buildroot mailing list
+> buildroot at uclibc.org
+> http://busybox.net/mailman/listinfo/buildroot
+
+-----BEGIN PGP SIGNATURE-----
+Version: GnuPG v1.4.5 (GNU/Linux)
+Comment: Using GnuPG with SUSE - http://enigmail.mozdev.org
+
+iD8DBQFIb+7RAyRRH5cXxqwRAms6AJ0TCzu7R0BRMaXsfG2sZg3S+SEgBQCdHZZZ
+GC4ODwDt9x6KO/AIMQ8vKtA=
+=rFgy
+-----END PGP SIGNATURE-----
