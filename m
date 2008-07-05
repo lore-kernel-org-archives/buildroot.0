@@ -1,69 +1,82 @@
-From: bugs at busybox.net <bugs@busybox.net>
-Date: Sat, 5 Jul 2008 02:21:20 -0700
-Subject: [Buildroot] [buildroot 0003924]: Buildroot assumes that host
-	glib-genmarschal is located in /usr/bin/
-Message-ID: <6b1e0984e81ff8485a3e389b122486ff@bugs.uclibc.org>
+From: ulf at uclibc.org <ulf@uclibc.org>
+Date: Sat,  5 Jul 2008 02:22:38 -0700 (PDT)
+Subject: [Buildroot] svn commit: trunk/buildroot
+Message-ID: <20080705092238.AB5163C65B@busybox.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+Author: ulf
+Date: 2008-07-05 02:22:38 -0700 (Sat, 05 Jul 2008)
+New Revision: 22652
 
-A NOTE has been added to this issue. 
-====================================================================== 
-http://busybox.net/bugs/view.php?id=3924 
-====================================================================== 
-Reported By:                UlfSamuelsson
-Assigned To:                buildroot
-====================================================================== 
-Project:                    buildroot
-Issue ID:                   3924
-Category:                   Other
-Reproducibility:            always
-Severity:                   major
-Priority:                   normal
-Status:                     assigned
-====================================================================== 
-Date Submitted:             07-04-2008 01:59 PDT
-Last Modified:              07-05-2008 02:21 PDT
-====================================================================== 
-Summary:                    Buildroot assumes that host glib-genmarschal is
-located in /usr/bin/
-Description: 
-The build of libglib2-2.15.4 assumes that /usr/bin/glib-genmarschal
-exists.
-On OpenSUSE 10.2 (at least) it it located in
-/opt/gnome/bin/glib-genmarschal.
+Log:
+Add configuration possibility for host Gnome Lib installation
 
-A simple fox for this problem is to do:
-sudo ln -s /opt/gnome/bin/glib-genmarshal /usr/bin/glib-genmarshal
+Modified:
+   trunk/buildroot/Config.in
+   trunk/buildroot/Makefile
 
-====================================================================== 
 
----------------------------------------------------------------------- 
- UlfSamuelsson - 07-05-08 01:16  
----------------------------------------------------------------------- 
-Same problem for glib-mkenums when building libgtk2-2.12.6/gdk-pixbuf
+Changeset:
+Modified: trunk/buildroot/Config.in
+===================================================================
+--- trunk/buildroot/Config.in	2008-07-05 09:18:54 UTC (rev 22651)
++++ trunk/buildroot/Config.in	2008-07-05 09:22:38 UTC (rev 22652)
+@@ -78,6 +78,17 @@
+ 
+ 	  The default is $(BASE_DIR)/dl
+ 
++config BR2_HOST_GLIB
++	string "Location of host Gnome library"
++	default "/usr"
++	help
++	  Directory where Gnome is installed on the host
++	  Gnome applications is installed in $(BR2_HOST_LIB)/bin 
++	  This is needed to build libgtk etc.
++	  The default is /usr
++	  It can be overridden by the BUILDROOT_HOST_GLIB
++	  shell variable
++
+ source	"target/device/Config.in.mirrors"
+ 
+ config BR2_STAGING_DIR
 
-sudo ln -s /opt/gnome/bin/glib-mkenums /usr/bin/glib-mkenums 
-
----------------------------------------------------------------------- 
- UlfSamuelsson - 07-05-08 02:21  
----------------------------------------------------------------------- 
-Checking a little bit more, reveals that the glib-genmarshal path
-is hardwired to /usr/bin in the libgtk2.mk configure as well as in other
-packages.
-glib is installed in /opt/gnome in OpenSuSE so this
-better be a configuration item $(HOST_GLIB) with 
-applications in $(HOST_GLIB)/bin 
-
-Issue History 
-Date Modified   Username       Field                    Change               
-====================================================================== 
-07-04-08 01:59  UlfSamuelsson  New Issue                                    
-07-04-08 01:59  UlfSamuelsson  Status                   new => assigned     
-07-04-08 01:59  UlfSamuelsson  Assigned To               => buildroot       
-07-05-08 01:16  UlfSamuelsson  Note Added: 0008974                          
-07-05-08 02:21  UlfSamuelsson  Note Added: 0008984                          
-======================================================================
+Modified: trunk/buildroot/Makefile
+===================================================================
+--- trunk/buildroot/Makefile	2008-07-05 09:18:54 UTC (rev 22651)
++++ trunk/buildroot/Makefile	2008-07-05 09:22:38 UTC (rev 22652)
+@@ -36,7 +36,7 @@
+ ifneq ($(BUILDROOT_LOCAL),)
+ BR2_LOCAL:=$(BUILDROOT_LOCAL)
+ else
+-BR2_LOCAL:=$(TOPDIR)/local
++BR2_LOCAL:=$(TOPDIR)local
+ endif
+ 
+ # $(shell find . -name *_defconfig |sed 's/.*\///')
+@@ -57,6 +57,12 @@
+ endif
+ LOCAL:=$(BR2_LOCAL)
+ 
++ifneq ($(BUILDROOT_HOST_GLIB),)
++HOST_GLIB:=$(BUILDROOT_HOST_GLIB)
++else
++HOST_GLIB:=$(BR2_HOST_GLIB)
++endif
++
+ # To put more focus on warnings, be less verbose as default
+ # Use 'make V=1' to see the full commands
+ ifdef V
+@@ -511,4 +517,8 @@
+ 
+ .PHONY: dummy subdirs release distclean clean config oldconfig \
+ 	menuconfig tags check test depend defconfig help
+-	
++
++status:
++	@echo LOCAL=$(LOCAL)
++	@echo BR2_DL_DIR=$(BR2_DL_DIR)
++	@echo HOST_GLIB=$(HOST_GLIB)
