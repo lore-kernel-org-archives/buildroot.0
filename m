@@ -1,60 +1,87 @@
-From: ulf at uclibc.org <ulf@uclibc.org>
-Date: Sat,  5 Jul 2008 00:25:09 -0700 (PDT)
-Subject: [Buildroot] svn commit: trunk/buildroot/package/openssl
-Message-ID: <20080705072509.8CEF53C65A@busybox.net>
+From: bugs at busybox.net <bugs@busybox.net>
+Date: Sat, 5 Jul 2008 00:27:02 -0700
+Subject: [Buildroot] [buildroot 0001899]: Using the Atmel supplied build
+	root, openssl fails to build
+Message-ID: <15040e7951948bf99f4b0b465c07ff67@bugs.uclibc.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Author: ulf
-Date: 2008-07-05 00:25:06 -0700 (Sat, 05 Jul 2008)
-New Revision: 22646
 
-Log:
-Fix bug [1899] Add table entry to allow openssl to build for AVR32, disabled softfloat
+The following issue has been RESOLVED. 
+====================================================================== 
+http://busybox.net/bugs/view.php?id=1899 
+====================================================================== 
+Reported By:                yogy
+Assigned To:                buildroot
+====================================================================== 
+Project:                    buildroot
+Issue ID:                   1899
+Category:                   Architecture Specific
+Reproducibility:            always
+Severity:                   major
+Priority:                   normal
+Status:                     resolved
+Resolution:                 fixed
+Fixed in Version:           
+====================================================================== 
+Date Submitted:             01-04-2008 15:34 PST
+Last Modified:              07-05-2008 00:27 PDT
+====================================================================== 
+Summary:                    Using the Atmel supplied build root, openssl fails
+to build
+Description: 
+openssl fails to build because avr32 architecture is not supported.
 
-Added:
-   trunk/buildroot/package/openssl/openssl-0.9.7m.patch.avr32
+I have "hacked" the openssl.patch to change the entry for alpha ev4 (which
+I suppose does not really need buildroot support) to 
 
-Modified:
-   trunk/buildroot/package/openssl/openssl.mk
++"linux-avr32","gcc:-DTERMIO -O3 -fomit-frame-pointer
+-Wall::-D_REENTRANT::-ldl:BN_LLONG
+DES_RISC1::::::::::dlfcn:linux-shared:-fPIC::.so.\$(SHLIB_MAJOR).\$(SHLIB_MINOR)",
 
+all on one line.
 
-Changeset:
-Added: trunk/buildroot/package/openssl/openssl-0.9.7m.patch.avr32
-===================================================================
---- trunk/buildroot/package/openssl/openssl-0.9.7m.patch.avr32	                        (rev 0)
-+++ trunk/buildroot/package/openssl/openssl-0.9.7m.patch.avr32	2008-07-05 07:25:06 UTC (rev 22646)
-@@ -0,0 +1,11 @@
-+diff -urN openssl-0.9.7m-0rig/Configure openssl-0.9.7m/Configure
-+--- openssl-0.9.7m-0rig/Configure	2008-07-05 08:59:46.000000000 +0200
-++++ openssl-0.9.7m/Configure	2008-07-05 09:05:10.000000000 +0200
-+@@ -396,6 +396,7 @@
-+ "linux-alpha-ev5","gcc:-DTERMIO -O3 -mcpu=ev5 -fomit-frame-pointer -Wall::-D_REENTRANT::-ldl:SIXTY_FOUR_BIT_LONG RC4_CHUNK DES_RISC1 DES_UNROLL:${alpha_asm}:dlfcn:linux-shared:-fPIC::.so.\$(SHLIB_MAJOR).\$(SHLIB_MINOR)",
-+ "linux-arm","gcc:-DL_ENDIAN -DTERMIO -O3 -fomit-frame-pointer -Wall::-D_REENTRANT::-ldl:BN_LLONG DES_RISC1::::::::::dlfcn:linux-shared:-fPIC::.so.\$(SHLIB_MAJOR).\$(SHLIB_MINOR)",
-+ "linux-armeb","gcc:-DB_ENDIAN -DTERMIO -O3 -fomit-frame-pointer -Wall::-D_REENTRANT::-ldl:BN_LLONG DES_RISC1::::::::::dlfcn:linux-shared:-fPIC::.so.\$(SHLIB_MAJOR).\$(SHLIB_MINOR)",
-++"linux-avr32","gcc:-DTERMIO -O3 -fomit-frame-pointer -Wall::-D_REENTRANT::-ldl:BN_LLONG DES_RISC1::::::::::dlfcn:linux-shared:-fPIC::.so.\$(SHLIB_MAJOR).\$(SHLIB_MINOR)",
-+ "linux-freebsd-alpha","gcc:-DTERMIOS -O -fomit-frame-pointer::(unknown):::SIXTY_FOUR_BIT_LONG RC4_CHUNK DES_INT DES_PTR DES_RISC2::::::::::dlfcn:bsd-gcc-shared:-fPIC::.so.\$(SHLIB_MAJOR).\$(SHLIB_MINOR)",
-+ "linux-freebsd-i386",  "gcc:-DTERMIOS -DL_ENDIAN -fomit-frame-pointer -O3 -m486 -Wall::-pthread -D_REENTRANT -D_THREAD_SAFE -D_THREADSAFE:::BN_LLONG ${x86_gcc_des} ${x86_gcc_opts}:${x86_elf_asm}:dlfcn:bsd-gcc-shared:-fPIC::.so.\$(SHLIB_MAJOR).\$(SHLIB_MINOR)",
-+ "linux-hppa","gcc:-DB_ENDIAN -DTERMIO -O2 -Wall::-D_REENTRANT::-ldl:BN_LLONG MD2_CHAR RC4_INDEX::::::::::dlfcn:linux-shared:-fPIC::.so.\$(SHLIB_MAJOR).\$(SHLIB_MINOR)",
+Also, the gcc version used, does not support the -msoft-float option, so I
+had to remove the 
 
-Modified: trunk/buildroot/package/openssl/openssl.mk
-===================================================================
---- trunk/buildroot/package/openssl/openssl.mk	2008-07-05 06:58:53 UTC (rev 22645)
-+++ trunk/buildroot/package/openssl/openssl.mk	2008-07-05 07:25:06 UTC (rev 22646)
-@@ -31,10 +31,13 @@
- $(OPENSSL_DIR)/.unpacked: $(DL_DIR)/$(OPENSSL_SOURCE)
- 	$(OPENSSL_CAT) $(DL_DIR)/$(OPENSSL_SOURCE) | tar -C $(BUILD_DIR) $(TAR_OPTIONS) -
- 	toolchain/patch-kernel.sh $(OPENSSL_DIR) package/openssl/ openssl\*.patch
-+	toolchain/patch-kernel.sh $(OPENSSL_DIR) package/openssl/ openssl\*.patch.$(ARCH)
- 	# sigh... we have to resort to this just to set a gcc flag.
- 	# grumble.. and of course make sure to escape any '/' in CFLAGS
-+ifeq ($(BR2_avr32),)
- 	$(SED) 's,/CFLAG=,/CFLAG= $(TARGET_SOFT_FLOAT) ,g' \
- 		$(OPENSSL_DIR)/Configure
-+endif
- 	$(SED) '/CFLAG=/s,/;, $(shell echo '$(TARGET_CFLAGS)' | sed -e 's/\//\\\\\//g')/;,' \
- 		$(OPENSSL_DIR)/Configure
- 	$(CONFIG_UPDATE) $(OPENSSL_DIR)
+$(SED) 's,/CFLAG=,/CFLAG= $(TARGET_SOFT_FLOAT) ,g' \
+      $(OPENSSL_DIR)/Configure
+
+lines from openssl.mk.  After this, openssl built fine for avr32 .
+====================================================================== 
+
+---------------------------------------------------------------------- 
+ glennswest - 06-17-08 19:45  
+---------------------------------------------------------------------- 
+Building based on current snapshot of buildroot, problem still occurs on
+avr32
+Jun 18, 2008 
+
+---------------------------------------------------------------------- 
+ UlfSamuelsson - 07-04-08 23:51  
+---------------------------------------------------------------------- 
+Maybe it needs an $(CONFIG_UPDATE) $(OPENSSL_DIR) 
+
+---------------------------------------------------------------------- 
+ UlfSamuelsson - 07-05-08 00:27  
+---------------------------------------------------------------------- 
+Fixed by adding an additional AVR32 specific patch.
+Softfloat disabled if AVR32 is used.
+config.* is updated to latest buildroot version.
+Architecture specific patches allowed (*.patch.$(ARCH)) 
+
+Issue History 
+Date Modified   Username       Field                    Change               
+====================================================================== 
+01-04-08 15:34  yogy           New Issue                                    
+01-04-08 15:34  yogy           Status                   new => assigned     
+01-04-08 15:34  yogy           Assigned To               => buildroot       
+06-17-08 19:45  glennswest     Note Added: 0008374                          
+07-04-08 23:51  UlfSamuelsson  Note Added: 0008934                          
+07-05-08 00:27  UlfSamuelsson  Status                   assigned => resolved
+07-05-08 00:27  UlfSamuelsson  Resolution               open => fixed       
+07-05-08 00:27  UlfSamuelsson  Note Added: 0008944                          
+======================================================================
