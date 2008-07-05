@@ -1,74 +1,76 @@
-From: bugs at busybox.net <bugs@busybox.net>
-Date: Fri, 4 Jul 2008 23:51:06 -0700
-Subject: [Buildroot] [buildroot 0001899]: Using the Atmel supplied build
-	root, openssl fails to build
-Message-ID: <cccc69c2522c8037312c37bb26a56bc2@bugs.uclibc.org>
+From: =?ISO-8859-1?Q?Thiago_A._Corr=EAa?= <thiago.correa@gmail.com>
+Date: Sat, 5 Jul 2008 03:47:19 -0300
+Subject: [Buildroot] svn commit: trunk/buildroot/target/device
+In-Reply-To: <20080705063720.8C5643C608@busybox.net>
+References: <20080705063720.8C5643C608@busybox.net>
+Message-ID: <d6cda7730807042347s4c4c4f8cw39dd088dd891803@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+AFAIK 4.2.1 is the only gcc release that produces valid binaries.
+4.2.2 produces C++ programs that crash. I think we shouldn't deprecate
+it.
 
-A NOTE has been added to this issue. 
-====================================================================== 
-http://busybox.net/bugs/view.php?id=1899 
-====================================================================== 
-Reported By:                yogy
-Assigned To:                buildroot
-====================================================================== 
-Project:                    buildroot
-Issue ID:                   1899
-Category:                   Architecture Specific
-Reproducibility:            always
-Severity:                   major
-Priority:                   normal
-Status:                     assigned
-====================================================================== 
-Date Submitted:             01-04-2008 15:34 PST
-Last Modified:              07-04-2008 23:51 PDT
-====================================================================== 
-Summary:                    Using the Atmel supplied build root, openssl fails
-to build
-Description: 
-openssl fails to build because avr32 architecture is not supported.
-
-I have "hacked" the openssl.patch to change the entry for alpha ev4 (which
-I suppose does not really need buildroot support) to 
-
-+"linux-avr32","gcc:-DTERMIO -O3 -fomit-frame-pointer
--Wall::-D_REENTRANT::-ldl:BN_LLONG
-DES_RISC1::::::::::dlfcn:linux-shared:-fPIC::.so.\$(SHLIB_MAJOR).\$(SHLIB_MINOR)",
-
-all on one line.
-
-Also, the gcc version used, does not support the -msoft-float option, so I
-had to remove the 
-
-$(SED) 's,/CFLAG=,/CFLAG= $(TARGET_SOFT_FLOAT) ,g' \
-      $(OPENSSL_DIR)/Configure
-
-lines from openssl.mk.  After this, openssl built fine for avr32 .
-====================================================================== 
-
----------------------------------------------------------------------- 
- glennswest - 06-17-08 19:45  
----------------------------------------------------------------------- 
-Building based on current snapshot of buildroot, problem still occurs on
-avr32
-Jun 18, 2008 
-
----------------------------------------------------------------------- 
- UlfSamuelsson - 07-04-08 23:51  
----------------------------------------------------------------------- 
-Maybe it needs an $(CONFIG_UPDATE) $(OPENSSL_DIR) 
-
-Issue History 
-Date Modified   Username       Field                    Change               
-====================================================================== 
-01-04-08 15:34  yogy           New Issue                                    
-01-04-08 15:34  yogy           Status                   new => assigned     
-01-04-08 15:34  yogy           Assigned To               => buildroot       
-06-17-08 19:45  glennswest     Note Added: 0008374                          
-07-04-08 23:51  UlfSamuelsson  Note Added: 0008934                          
-======================================================================
+On Sat, Jul 5, 2008 at 3:37 AM,  <ulf@uclibc.org> wrote:
+> Author: ulf
+> Date: 2008-07-04 23:37:17 -0700 (Fri, 04 Jul 2008)
+> New Revision: 22642
+>
+> Log:
+> Run AVR32 toolchain with Sysroot (will fail if not enabled), deprecate 4.1.2 and 4.2.1
+>
+> Modified:
+>   trunk/buildroot/target/device/Config.in.toolchain
+>
+>
+> Changeset:
+> Modified: trunk/buildroot/target/device/Config.in.toolchain
+> ===================================================================
+> --- trunk/buildroot/target/device/Config.in.toolchain   2008-07-05 04:30:05 UTC (rev 22641)
+> +++ trunk/buildroot/target/device/Config.in.toolchain   2008-07-05 06:37:17 UTC (rev 22642)
+> @@ -9,6 +9,7 @@
+>  config BR2_TOOLCHAIN_ATMEL_AVR32_4_1_2
+>        bool "Use prepatched source for AVR32 gcc-4.1.2 toolchain"
+>        depends on BR2_avr32
+> +       depends on BR2_DEPRECATED
+>        select BR2_EXT_GCC_VERSION_4_1_2
+>        select BR2_EXT_BINUTILS_VERSION_2_17
+>        select BR2_EXT_UCLIBC_VERSION_0_9_29
+> @@ -19,10 +20,12 @@
+>  config BR2_TOOLCHAIN_ATMEL_AVR32_4_2_1
+>        bool "Use prepatched source for AVR32 gcc-4.2.1 toolchain"
+>        depends on BR2_avr32
+> +       depends on BR2_DEPRECATED
+>        select BR2_EXT_GCC_VERSION_4_2_1
+>        select BR2_EXT_BINUTILS_VERSION_2_17
+>        select BR2_EXT_UCLIBC_VERSION_0_9_29
+>        select BR2_TOOLCHAIN_ATMEL_AVR32
+> +       select BR2_GCC_SUPPORTS_SYSROOT
+>        help
+>          The gcc-4.2.1 toolchain for the AVR32
+>          * gcc-4.2.1
+> @@ -39,6 +42,7 @@
+>        select BR2_EXT_BINUTILS_VERSION_2_17
+>        select BR2_EXT_UCLIBC_VERSION_0_9_29
+>        select BR2_TOOLCHAIN_ATMEL_AVR32
+> +       select BR2_GCC_SUPPORTS_SYSROOT
+>        help
+>          The gcc-4.2.2 toolchain for the AVR32
+>          * gcc-4.2.2
+> @@ -67,6 +71,7 @@
+>
+>  config BR2_TOOLCHAIN_UNKNOWNVENDOR
+>        bool "Use prepatched source from unknown vendor"
+> +       depends on !BR2_avr32
+>
+>  endchoice
+>
+>
+> _______________________________________________
+> buildroot mailing list
+> buildroot at uclibc.org
+> http://busybox.net/mailman/listinfo/buildroot
+>
