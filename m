@@ -1,8 +1,8 @@
 From: bugs at busybox.net <bugs@busybox.net>
-Date: Sat, 5 Jul 2008 15:07:51 -0700
-Subject: [Buildroot] [buildroot 0003924]: Buildroot assumes that host
-	glib-genmarschal is located in /usr/bin/
-Message-ID: <c8621beb25f2ffa158fd6766a07a2442@busybox.net>
+Date: Sat, 5 Jul 2008 15:10:07 -0700
+Subject: [Buildroot] [buildroot 0003934]: make clean Error with webif option
+	on. rm comamnd fails
+Message-ID: <0886fff0a04744e81608f0464c723907@busybox.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -12,74 +12,82 @@ To: buildroot@busybox.net
 
 The following issue has been CLOSED 
 ====================================================================== 
-http://busybox.net/bugs/view.php?id=3924 
+http://busybox.net/bugs/view.php?id=3934 
 ====================================================================== 
-Reported By:                UlfSamuelsson
+Reported By:                mebarton
 Assigned To:                buildroot
 ====================================================================== 
 Project:                    buildroot
-Issue ID:                   3924
+Issue ID:                   3934
 Category:                   Other
 Reproducibility:            always
-Severity:                   major
+Severity:                   minor
 Priority:                   normal
 Status:                     closed
-Resolution:                 open
+Resolution:                 fixed
 Fixed in Version:           
 ====================================================================== 
-Date Submitted:             07-04-2008 01:59 PDT
-Last Modified:              07-05-2008 15:07 PDT
+Date Submitted:             07-04-2008 12:42 PDT
+Last Modified:              07-05-2008 15:10 PDT
 ====================================================================== 
-Summary:                    Buildroot assumes that host glib-genmarschal is
-located in /usr/bin/
+Summary:                    make clean Error with webif option on. rm comamnd
+fails
 Description: 
-The build of libglib2-2.15.4 assumes that /usr/bin/glib-genmarschal
-exists.
-On OpenSUSE 10.2 (at least) it it located in
-/opt/gnome/bin/glib-genmarschal.
+Need to do a full make with the webif option (Package..--->
+Networking--->Webif selected with install index.html in make menuconfig)
+then do make cleanup
 
-A simple fox for this problem is to do:
-sudo ln -s /opt/gnome/bin/glib-genmarshal /usr/bin/glib-genmarshal
+make clean
+.
+.
+.
+error:
+rm -f /buildroot/project_build_avr32/atngw100/root/www/cgi-bin/webif*
+/buildroot/project_build_avr32/atngw100/root/www/webif.*
+ can not remove the files
+
+
+Fix add the -R to the rm like beload
+
+rm -Rf /buildroot/project_build_avr32/atngw100/root/www/cgi-bin/webif*
+/buildroot/project_build_avr32/atngw100/root/www/webif.*
+
+
+I have seen this on a later Revision (did not recoed it), but I know this
+has the problem.
+svn info
+Path: .
+URL: svn://uclibc.org/trunk/buildroot
+Repository Root: svn://uclibc.org
+Repository UUID: 69ca8d6d-28ef-0310-b511-8ec308f3f277
+Revision: 22403
+Node Kind: directory
+Schedule: normal
+Last Changed Author: jacmet
+Last Changed Rev: 22402
+Last Changed Date: 2008-06-17 09:33:02 -0400 (Tue, 17 Jun 2008)
 
 ====================================================================== 
 
 ---------------------------------------------------------------------- 
- UlfSamuelsson - 07-05-08 01:16  
+ UlfSamuelsson - 07-04-08 23:47  
 ---------------------------------------------------------------------- 
-Same problem for glib-mkenums when building libgtk2-2.12.6/gdk-pixbuf
-
-sudo ln -s /opt/gnome/bin/glib-mkenums /usr/bin/glib-mkenums 
+svn fixed as proposed. 
 
 ---------------------------------------------------------------------- 
- UlfSamuelsson - 07-05-08 02:21  
+ UlfSamuelsson - 07-05-08 15:10  
 ---------------------------------------------------------------------- 
-Checking a little bit more, reveals that the glib-genmarshal path
-is hardwired to /usr/bin in the libgtk2.mk configure as well as in other
-packages.
-glib is installed in /opt/gnome in OpenSuSE so this
-better be a configuration item $(HOST_GLIB) with 
-applications in $(HOST_GLIB)/bin 
-
----------------------------------------------------------------------- 
- UlfSamuelsson - 07-05-08 15:07  
----------------------------------------------------------------------- 
-Apparently, the "/usr/bin" location for GLIB binaries
-is set explicitly in the configure statement of
-several pacakages.
-A new variable (BR2_)HOST_GLIB has been introduced which
-can be set to something else than "/usr" as the location
-for Gnome stuff.
-It can also be set globally in your shell as
-export BUILDROOT_HOST_GLIB=/opt/gnome 
+Fixed in svn 
 
 Issue History 
 Date Modified   Username       Field                    Change               
 ====================================================================== 
-07-04-08 01:59  UlfSamuelsson  New Issue                                    
-07-04-08 01:59  UlfSamuelsson  Status                   new => assigned     
-07-04-08 01:59  UlfSamuelsson  Assigned To               => buildroot       
-07-05-08 01:16  UlfSamuelsson  Note Added: 0008974                          
-07-05-08 02:21  UlfSamuelsson  Note Added: 0008984                          
-07-05-08 15:07  UlfSamuelsson  Status                   assigned => closed  
-07-05-08 15:07  UlfSamuelsson  Note Added: 0009034                          
+07-04-08 12:42  mebarton       New Issue                                    
+07-04-08 12:42  mebarton       Status                   new => assigned     
+07-04-08 12:42  mebarton       Assigned To               => buildroot       
+07-04-08 23:47  UlfSamuelsson  Status                   assigned => resolved
+07-04-08 23:47  UlfSamuelsson  Resolution               open => fixed       
+07-04-08 23:47  UlfSamuelsson  Note Added: 0008924                          
+07-05-08 15:10  UlfSamuelsson  Status                   resolved => closed  
+07-05-08 15:10  UlfSamuelsson  Note Added: 0009044                          
 ======================================================================
