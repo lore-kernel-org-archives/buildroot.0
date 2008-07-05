@@ -1,38 +1,33 @@
-From: =?ISO-8859-1?Q?Thiago_A._Corr=EAa?= <thiago.correa@gmail.com>
-Date: Sat, 5 Jul 2008 12:55:01 -0300
-Subject: [Buildroot] svn commit: trunk/buildroot/package/openssl
-In-Reply-To: <20080705072509.8CEF53C65A@busybox.net>
-References: <20080705072509.8CEF53C65A@busybox.net>
-Message-ID: <d6cda7730807050855k6554b324v701cf349dd2562fb@mail.gmail.com>
+From: Peter Korsgaard <jacmet@uclibc.org>
+Date: Sat, 05 Jul 2008 21:08:36 +0200
+Subject: [Buildroot] svn commit: trunk/buildroot/package/freetype
+In-Reply-To: <20080704025714.5B6BE3C65A@busybox.net> (correa@uclibc.org's
+	message of "Thu\, 3 Jul 2008 19\:57\:14 -0700 \(PDT\)")
+References: <20080704025714.5B6BE3C65A@busybox.net>
+Message-ID: <87k5g0i1xn.fsf@macbook.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Sat, Jul 5, 2008 at 4:25 AM,  <ulf@uclibc.org> wrote:
-> Author: ulf
-> Date: 2008-07-05 00:25:06 -0700 (Sat, 05 Jul 2008)
-> New Revision: 22646
->
-> Log:
-> Fix bug [1899] Add table entry to allow openssl to build for AVR32, disabled softfloat
->
-> Added:
->   trunk/buildroot/package/openssl/openssl-0.9.7m.patch.avr32
->
-> Modified:
->   trunk/buildroot/package/openssl/openssl.mk
->
-(cut)
-> Modified: trunk/buildroot/package/openssl/openssl.mk
-> ===================================================================
-> --- trunk/buildroot/package/openssl/openssl.mk  2008-07-05 06:58:53 UTC (rev 22645)
-> +++ trunk/buildroot/package/openssl/openssl.mk  2008-07-05 07:25:06 UTC (rev 22646)
-(cut)
-> +ifeq ($(BR2_avr32),)
->        $(SED) 's,/CFLAG=,/CFLAG= $(TARGET_SOFT_FLOAT) ,g' \
->                $(OPENSSL_DIR)/Configure
-> +endif
+>>>>> "correa" == correa  <correa@uclibc.org> writes:
 
-Shouldn't this be usefull to all platforms and not just avr32?
+ correa> Author: correa
+ correa> Date: 2008-07-03 19:57:13 -0700 (Thu, 03 Jul 2008)
+ correa> New Revision: 22622
+
+ correa> Log:
+ correa> Fix freetype-2.2.1 build in AVR32, possibly other platforms too
+
+ correa> Modified:
+ correa>    trunk/buildroot/package/freetype/freetype.mk
+ 
+ correa>  $(FREETYPE_DIR)/.configured: $(FREETYPE_DIR)/.unpacked
+ correa> -	(cd $(FREETYPE_DIR) && \
+ correa> +	(cd $(FREETYPE_DIR);  rm -rf config.cache; \
+
+Why rm -r ?
+
+-- 
+Bye, Peter Korsgaard
