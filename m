@@ -1,87 +1,37 @@
-From: bugs at busybox.net <bugs@busybox.net>
-Date: Sat, 5 Jul 2008 00:27:02 -0700
-Subject: [Buildroot] [buildroot 0001899]: Using the Atmel supplied build
-	root, openssl fails to build
-Message-ID: <15040e7951948bf99f4b0b465c07ff67@bugs.uclibc.org>
+From: ulf at uclibc.org <ulf@uclibc.org>
+Date: Sat,  5 Jul 2008 00:44:34 -0700 (PDT)
+Subject: [Buildroot] svn commit: trunk/buildroot/package/curl
+Message-ID: <20080705074434.38F253C679@busybox.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+Author: ulf
+Date: 2008-07-05 00:44:28 -0700 (Sat, 05 Jul 2008)
+New Revision: 22647
 
-The following issue has been RESOLVED. 
-====================================================================== 
-http://busybox.net/bugs/view.php?id=1899 
-====================================================================== 
-Reported By:                yogy
-Assigned To:                buildroot
-====================================================================== 
-Project:                    buildroot
-Issue ID:                   1899
-Category:                   Architecture Specific
-Reproducibility:            always
-Severity:                   major
-Priority:                   normal
-Status:                     resolved
-Resolution:                 fixed
-Fixed in Version:           
-====================================================================== 
-Date Submitted:             01-04-2008 15:34 PST
-Last Modified:              07-05-2008 00:27 PDT
-====================================================================== 
-Summary:                    Using the Atmel supplied build root, openssl fails
-to build
-Description: 
-openssl fails to build because avr32 architecture is not supported.
+Log:
+Use latest config.* from buildroot in curl
 
-I have "hacked" the openssl.patch to change the entry for alpha ev4 (which
-I suppose does not really need buildroot support) to 
+Modified:
+   trunk/buildroot/package/curl/curl.mk
 
-+"linux-avr32","gcc:-DTERMIO -O3 -fomit-frame-pointer
--Wall::-D_REENTRANT::-ldl:BN_LLONG
-DES_RISC1::::::::::dlfcn:linux-shared:-fPIC::.so.\$(SHLIB_MAJOR).\$(SHLIB_MINOR)",
 
-all on one line.
-
-Also, the gcc version used, does not support the -msoft-float option, so I
-had to remove the 
-
-$(SED) 's,/CFLAG=,/CFLAG= $(TARGET_SOFT_FLOAT) ,g' \
-      $(OPENSSL_DIR)/Configure
-
-lines from openssl.mk.  After this, openssl built fine for avr32 .
-====================================================================== 
-
----------------------------------------------------------------------- 
- glennswest - 06-17-08 19:45  
----------------------------------------------------------------------- 
-Building based on current snapshot of buildroot, problem still occurs on
-avr32
-Jun 18, 2008 
-
----------------------------------------------------------------------- 
- UlfSamuelsson - 07-04-08 23:51  
----------------------------------------------------------------------- 
-Maybe it needs an $(CONFIG_UPDATE) $(OPENSSL_DIR) 
-
----------------------------------------------------------------------- 
- UlfSamuelsson - 07-05-08 00:27  
----------------------------------------------------------------------- 
-Fixed by adding an additional AVR32 specific patch.
-Softfloat disabled if AVR32 is used.
-config.* is updated to latest buildroot version.
-Architecture specific patches allowed (*.patch.$(ARCH)) 
-
-Issue History 
-Date Modified   Username       Field                    Change               
-====================================================================== 
-01-04-08 15:34  yogy           New Issue                                    
-01-04-08 15:34  yogy           Status                   new => assigned     
-01-04-08 15:34  yogy           Assigned To               => buildroot       
-06-17-08 19:45  glennswest     Note Added: 0008374                          
-07-04-08 23:51  UlfSamuelsson  Note Added: 0008934                          
-07-05-08 00:27  UlfSamuelsson  Status                   assigned => resolved
-07-05-08 00:27  UlfSamuelsson  Resolution               open => fixed       
-07-05-08 00:27  UlfSamuelsson  Note Added: 0008944                          
-======================================================================
+Changeset:
+Modified: trunk/buildroot/package/curl/curl.mk
+===================================================================
+--- trunk/buildroot/package/curl/curl.mk	2008-07-05 07:25:06 UTC (rev 22646)
++++ trunk/buildroot/package/curl/curl.mk	2008-07-05 07:44:28 UTC (rev 22647)
+@@ -26,7 +26,9 @@
+ 	(cd $(CURL_DIR); rm -rf config.cache; \
+ 		aclocal; \
+ 		libtoolize --force; \
+-		./reconf; \
++		./reconf; )
++	$(CONFIG_UPDATE) $(CURL_DIR)
++	(cd $(CURL_DIR); \
+ 		$(TARGET_CONFIGURE_OPTS) \
+ 		$(TARGET_CONFIGURE_ARGS) \
+ 		./configure \
