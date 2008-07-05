@@ -1,71 +1,85 @@
-From: Ulf Samuelsson <ulf.samuelsson@atmel.com>
-Date: Sat, 05 Jul 2008 23:59:46 +0200
-Subject: [Buildroot] svn commit: trunk/buildroot/package/openssl
-In-Reply-To: <d6cda7730807050855k6554b324v701cf349dd2562fb@mail.gmail.com>
-References: <20080705072509.8CEF53C65A@busybox.net>
-	<d6cda7730807050855k6554b324v701cf349dd2562fb@mail.gmail.com>
-Message-ID: <486FEED2.3060404@atmel.com>
+From: bugs at busybox.net <bugs@busybox.net>
+Date: Sat, 5 Jul 2008 15:07:51 -0700
+Subject: [Buildroot] [buildroot 0003924]: Buildroot assumes that host
+	glib-genmarschal is located in /usr/bin/
+Message-ID: <c8621beb25f2ffa158fd6766a07a2442@busybox.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
------BEGIN PGP SIGNED MESSAGE-----
-Hash: SHA1
 
-Thiago A. Corr?a skrev:
-> On Sat, Jul 5, 2008 at 4:25 AM,  <ulf@uclibc.org> wrote:
->> Author: ulf
->> Date: 2008-07-05 00:25:06 -0700 (Sat, 05 Jul 2008)
->> New Revision: 22646
->>
->> Log:
->> Fix bug [1899] Add table entry to allow openssl to build for AVR32, disabled softfloat
->>
->> Added:
->>   trunk/buildroot/package/openssl/openssl-0.9.7m.patch.avr32
->>
->> Modified:
->>   trunk/buildroot/package/openssl/openssl.mk
->>
-> (cut)
->> Modified: trunk/buildroot/package/openssl/openssl.mk
->> ===================================================================
->> --- trunk/buildroot/package/openssl/openssl.mk  2008-07-05 06:58:53 UTC (rev 22645)
->> +++ trunk/buildroot/package/openssl/openssl.mk  2008-07-05 07:25:06 UTC (rev 22646)
-> (cut)
->> +ifeq ($(BR2_avr32),)
->>        $(SED) 's,/CFLAG=,/CFLAG= $(TARGET_SOFT_FLOAT) ,g' \
->>                $(OPENSSL_DIR)/Configure
->> +endif
-> 
-> Shouldn't this be usefull to all platforms and not just avr32?
+The following issue has been CLOSED 
+====================================================================== 
+http://busybox.net/bugs/view.php?id=3924 
+====================================================================== 
+Reported By:                UlfSamuelsson
+Assigned To:                buildroot
+====================================================================== 
+Project:                    buildroot
+Issue ID:                   3924
+Category:                   Other
+Reproducibility:            always
+Severity:                   major
+Priority:                   normal
+Status:                     closed
+Resolution:                 open
+Fixed in Version:           
+====================================================================== 
+Date Submitted:             07-04-2008 01:59 PDT
+Last Modified:              07-05-2008 15:07 PDT
+====================================================================== 
+Summary:                    Buildroot assumes that host glib-genmarschal is
+located in /usr/bin/
+Description: 
+The build of libglib2-2.15.4 assumes that /usr/bin/glib-genmarschal
+exists.
+On OpenSUSE 10.2 (at least) it it located in
+/opt/gnome/bin/glib-genmarschal.
 
-Don't think so, but I am not 100% sure.
+A simple fox for this problem is to do:
+sudo ln -s /opt/gnome/bin/glib-genmarshal /usr/bin/glib-genmarshal
 
-This patch will *remove* the TARGET_SOFT_FLOAT switch from openssl
-CFLAGS if compiled for the AVR32,
-because the AVR32 gcc does not support the
-"--with-abi=soft" which gets included as a switch if this is set.
+====================================================================== 
 
-If another architecture is found which does not like the soft-float
-then I guess it is easy to take that into account.
+---------------------------------------------------------------------- 
+ UlfSamuelsson - 07-05-08 01:16  
+---------------------------------------------------------------------- 
+Same problem for glib-mkenums when building libgtk2-2.12.6/gdk-pixbuf
 
-BR
-Ulf
+sudo ln -s /opt/gnome/bin/glib-mkenums /usr/bin/glib-mkenums 
 
+---------------------------------------------------------------------- 
+ UlfSamuelsson - 07-05-08 02:21  
+---------------------------------------------------------------------- 
+Checking a little bit more, reveals that the glib-genmarshal path
+is hardwired to /usr/bin in the libgtk2.mk configure as well as in other
+packages.
+glib is installed in /opt/gnome in OpenSuSE so this
+better be a configuration item $(HOST_GLIB) with 
+applications in $(HOST_GLIB)/bin 
 
-> _______________________________________________
-> buildroot mailing list
-> buildroot at uclibc.org
-> http://busybox.net/mailman/listinfo/buildroot
+---------------------------------------------------------------------- 
+ UlfSamuelsson - 07-05-08 15:07  
+---------------------------------------------------------------------- 
+Apparently, the "/usr/bin" location for GLIB binaries
+is set explicitly in the configure statement of
+several pacakages.
+A new variable (BR2_)HOST_GLIB has been introduced which
+can be set to something else than "/usr" as the location
+for Gnome stuff.
+It can also be set globally in your shell as
+export BUILDROOT_HOST_GLIB=/opt/gnome 
 
------BEGIN PGP SIGNATURE-----
-Version: GnuPG v1.4.5 (GNU/Linux)
-Comment: Using GnuPG with SUSE - http://enigmail.mozdev.org
-
-iD8DBQFIb+7RAyRRH5cXxqwRAms6AJ0TCzu7R0BRMaXsfG2sZg3S+SEgBQCdHZZZ
-GC4ODwDt9x6KO/AIMQ8vKtA=
-=rFgy
------END PGP SIGNATURE-----
+Issue History 
+Date Modified   Username       Field                    Change               
+====================================================================== 
+07-04-08 01:59  UlfSamuelsson  New Issue                                    
+07-04-08 01:59  UlfSamuelsson  Status                   new => assigned     
+07-04-08 01:59  UlfSamuelsson  Assigned To               => buildroot       
+07-05-08 01:16  UlfSamuelsson  Note Added: 0008974                          
+07-05-08 02:21  UlfSamuelsson  Note Added: 0008984                          
+07-05-08 15:07  UlfSamuelsson  Status                   assigned => closed  
+07-05-08 15:07  UlfSamuelsson  Note Added: 0009034                          
+======================================================================
