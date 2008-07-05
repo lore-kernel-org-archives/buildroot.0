@@ -1,8 +1,8 @@
 From: bugs at busybox.net <bugs@busybox.net>
-Date: Fri, 4 Jul 2008 23:47:33 -0700
-Subject: [Buildroot] [buildroot 0003934]: make clean Error with webif option
-	on. rm comamnd fails
-Message-ID: <9978f1770207948aa35194f480f06e3d@bugs.uclibc.org>
+Date: Fri, 4 Jul 2008 23:51:06 -0700
+Subject: [Buildroot] [buildroot 0001899]: Using the Atmel supplied build
+	root, openssl fails to build
+Message-ID: <cccc69c2522c8037312c37bb26a56bc2@bugs.uclibc.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -10,77 +10,65 @@ Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
 
-The following issue has been RESOLVED. 
+A NOTE has been added to this issue. 
 ====================================================================== 
-http://busybox.net/bugs/view.php?id=3934 
+http://busybox.net/bugs/view.php?id=1899 
 ====================================================================== 
-Reported By:                mebarton
+Reported By:                yogy
 Assigned To:                buildroot
 ====================================================================== 
 Project:                    buildroot
-Issue ID:                   3934
-Category:                   Other
+Issue ID:                   1899
+Category:                   Architecture Specific
 Reproducibility:            always
-Severity:                   minor
+Severity:                   major
 Priority:                   normal
-Status:                     resolved
-Resolution:                 fixed
-Fixed in Version:           
+Status:                     assigned
 ====================================================================== 
-Date Submitted:             07-04-2008 12:42 PDT
-Last Modified:              07-04-2008 23:47 PDT
+Date Submitted:             01-04-2008 15:34 PST
+Last Modified:              07-04-2008 23:51 PDT
 ====================================================================== 
-Summary:                    make clean Error with webif option on. rm comamnd
-fails
+Summary:                    Using the Atmel supplied build root, openssl fails
+to build
 Description: 
-Need to do a full make with the webif option (Package..--->
-Networking--->Webif selected with install index.html in make menuconfig)
-then do make cleanup
+openssl fails to build because avr32 architecture is not supported.
 
-make clean
-.
-.
-.
-error:
-rm -f /buildroot/project_build_avr32/atngw100/root/www/cgi-bin/webif*
-/buildroot/project_build_avr32/atngw100/root/www/webif.*
- can not remove the files
+I have "hacked" the openssl.patch to change the entry for alpha ev4 (which
+I suppose does not really need buildroot support) to 
 
++"linux-avr32","gcc:-DTERMIO -O3 -fomit-frame-pointer
+-Wall::-D_REENTRANT::-ldl:BN_LLONG
+DES_RISC1::::::::::dlfcn:linux-shared:-fPIC::.so.\$(SHLIB_MAJOR).\$(SHLIB_MINOR)",
 
-Fix add the -R to the rm like beload
+all on one line.
 
-rm -Rf /buildroot/project_build_avr32/atngw100/root/www/cgi-bin/webif*
-/buildroot/project_build_avr32/atngw100/root/www/webif.*
+Also, the gcc version used, does not support the -msoft-float option, so I
+had to remove the 
 
+$(SED) 's,/CFLAG=,/CFLAG= $(TARGET_SOFT_FLOAT) ,g' \
+      $(OPENSSL_DIR)/Configure
 
-I have seen this on a later Revision (did not recoed it), but I know this
-has the problem.
-svn info
-Path: .
-URL: svn://uclibc.org/trunk/buildroot
-Repository Root: svn://uclibc.org
-Repository UUID: 69ca8d6d-28ef-0310-b511-8ec308f3f277
-Revision: 22403
-Node Kind: directory
-Schedule: normal
-Last Changed Author: jacmet
-Last Changed Rev: 22402
-Last Changed Date: 2008-06-17 09:33:02 -0400 (Tue, 17 Jun 2008)
-
+lines from openssl.mk.  After this, openssl built fine for avr32 .
 ====================================================================== 
 
 ---------------------------------------------------------------------- 
- UlfSamuelsson - 07-04-08 23:47  
+ glennswest - 06-17-08 19:45  
 ---------------------------------------------------------------------- 
-svn fixed as proposed. 
+Building based on current snapshot of buildroot, problem still occurs on
+avr32
+Jun 18, 2008 
+
+---------------------------------------------------------------------- 
+ UlfSamuelsson - 07-04-08 23:51  
+---------------------------------------------------------------------- 
+Maybe it needs an $(CONFIG_UPDATE) $(OPENSSL_DIR) 
 
 Issue History 
 Date Modified   Username       Field                    Change               
 ====================================================================== 
-07-04-08 12:42  mebarton       New Issue                                    
-07-04-08 12:42  mebarton       Status                   new => assigned     
-07-04-08 12:42  mebarton       Assigned To               => buildroot       
-07-04-08 23:47  UlfSamuelsson  Status                   assigned => resolved
-07-04-08 23:47  UlfSamuelsson  Resolution               open => fixed       
-07-04-08 23:47  UlfSamuelsson  Note Added: 0008924                          
+01-04-08 15:34  yogy           New Issue                                    
+01-04-08 15:34  yogy           Status                   new => assigned     
+01-04-08 15:34  yogy           Assigned To               => buildroot       
+06-17-08 19:45  glennswest     Note Added: 0008374                          
+07-04-08 23:51  UlfSamuelsson  Note Added: 0008934                          
 ======================================================================
