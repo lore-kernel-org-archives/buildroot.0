@@ -1,154 +1,100 @@
-From: ulf at uclibc.org <ulf@uclibc.org>
-Date: Sat,  5 Jul 2008 02:30:19 -0700 (PDT)
-Subject: [Buildroot] svn commit: trunk/buildroot/package: atk cairo
-	gtk2-engines libglib2 libgtk2 etc...
-Message-ID: <20080705093019.B2EFBF800D@busybox.net>
+From: Ulf Samuelsson <ulf.samuelsson@atmel.com>
+Date: Sat, 5 Jul 2008 13:42:32 +0200
+Subject: [Buildroot] svn commit: trunk/buildroot/target/device
+References: <20080705063720.8C5643C608@busybox.net>
+	<d6cda7730807042347s4c4c4f8cw39dd088dd891803@mail.gmail.com>
+Message-ID: <93C4640F86114ABB9C5B3F75F08E1225@aeglos>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Author: ulf
-Date: 2008-07-05 02:30:17 -0700 (Sat, 05 Jul 2008)
-New Revision: 22653
-
-Log:
-Use HOST_GLIB for packages
-
-Modified:
-   trunk/buildroot/package/atk/atk.mk
-   trunk/buildroot/package/cairo/cairo.mk
-   trunk/buildroot/package/gtk2-engines/gtk2-engines.mk
-   trunk/buildroot/package/libglib2/libglib2.mk
-   trunk/buildroot/package/libgtk2/libgtk2.mk
-   trunk/buildroot/package/metacity/metacity.mk
-   trunk/buildroot/package/pango/pango.mk
-   trunk/buildroot/package/webkit/webkit.mk
+----- Original Message ----- 
+From: "Thiago A. Corr?a" <thiago.correa@gmail.com>
+To: <buildroot@uclibc.org>
+Sent: Saturday, July 05, 2008 8:47 AM
+Subject: Re: [Buildroot] svn commit: trunk/buildroot/target/device
 
 
-Changeset:
-Modified: trunk/buildroot/package/atk/atk.mk
-===================================================================
---- trunk/buildroot/package/atk/atk.mk	2008-07-05 09:22:38 UTC (rev 22652)
-+++ trunk/buildroot/package/atk/atk.mk	2008-07-05 09:30:17 UTC (rev 22653)
-@@ -39,7 +39,7 @@
- 		am_cv_func_working_getline=yes gl_cv_func_mkdir_trailing_slash_bug=no \
- 		gl_cv_func_mkstemp_limitations=no ac_cv_func_working_mktime=yes \
- 		jm_cv_func_working_re_compile_pattern=yes ac_use_included_regex=no \
--		gl_cv_c_restrict=no ac_cv_path_GLIB_GENMARSHAL=/usr/bin/glib-genmarshal \
-+		gl_cv_c_restrict=no ac_cv_path_GLIB_GENMARSHAL=$(HOST_GLIB)/bin/glib-genmarshal \
- 		ac_cv_prog_F77=no ac_cv_prog_CXX=no 
- 
- ifneq ($(BR2_PACKAGE_XSERVER_none),y)
+> AFAIK 4.2.1 is the only gcc release that produces valid binaries.
+> 4.2.2 produces C++ programs that crash. I think we shouldn't deprecate
+> it.
+>
 
-Modified: trunk/buildroot/package/cairo/cairo.mk
-===================================================================
---- trunk/buildroot/package/cairo/cairo.mk	2008-07-05 09:22:38 UTC (rev 22652)
-+++ trunk/buildroot/package/cairo/cairo.mk	2008-07-05 09:30:17 UTC (rev 22653)
-@@ -39,7 +39,7 @@
- 		gl_cv_func_mkdir_trailing_slash_bug=no gl_cv_func_mkstemp_limitations=no \
- 		ac_cv_func_working_mktime=yes jm_cv_func_working_re_compile_pattern=yes \
- 		ac_use_included_regex=no gl_cv_c_restrict=no \
--		ac_cv_path_GLIB_GENMARSHAL=/usr/bin/glib-genmarshal 
-+		ac_cv_path_GLIB_GENMARSHAL=$(HOST_GLIB)/bin/glib-genmarshal 
- 
- ifeq ($(BR2_PACKAGE_DIRECTFB),y)
- 	CAIRO_CONF_OPT = --disable-xlib --without-x --enable-directfb
+I thought you said it did not work in svn!
+Feel free to revert that part of the patch, I lost my broadband just now,
+and connect using WCDMA right now.
+Hope it will be back soon...
 
-Modified: trunk/buildroot/package/gtk2-engines/gtk2-engines.mk
-===================================================================
---- trunk/buildroot/package/gtk2-engines/gtk2-engines.mk	2008-07-05 09:22:38 UTC (rev 22652)
-+++ trunk/buildroot/package/gtk2-engines/gtk2-engines.mk	2008-07-05 09:30:17 UTC (rev 22653)
-@@ -69,7 +69,7 @@
- 		jm_cv_func_working_re_compile_pattern=yes \
- 		ac_use_included_regex=no \
- 		gl_cv_c_restrict=no \
--		ac_cv_path_GLIB_GENMARSHAL=/usr/bin/glib-genmarshal \
-+		ac_cv_path_GLIB_GENMARSHAL=$(HOST_GLIB)/bin/glib-genmarshal \
- 		ac_cv_path_CUPS_CONFIG=no
- 
- 
+Best Regards
+Ulf Samuelsson
 
-Modified: trunk/buildroot/package/libglib2/libglib2.mk
-===================================================================
---- trunk/buildroot/package/libglib2/libglib2.mk	2008-07-05 09:22:38 UTC (rev 22652)
-+++ trunk/buildroot/package/libglib2/libglib2.mk	2008-07-05 09:30:17 UTC (rev 22653)
-@@ -40,7 +40,7 @@
- 		gl_cv_func_mkdir_trailing_slash_bug=no gl_cv_func_mkstemp_limitations=no \
- 		ac_cv_func_working_mktime=yes jm_cv_func_working_re_compile_pattern=yes \
- 		ac_use_included_regex=no gl_cv_c_restrict=no \
--		ac_cv_path_GLIB_GENMARSHAL=/usr/bin/glib-genmarshal ac_cv_prog_F77=no \
-+		ac_cv_path_GLIB_GENMARSHAL=$(HOST_GLIB)/bin/glib-genmarshal ac_cv_prog_F77=no \
- 		ac_cv_prog_CXX=no ac_cv_func_posix_getgrgid_r=no 
- 
- LIBGLIB2_CONF_OPT =	--target=$(GNU_TARGET_NAME) --host=$(GNU_TARGET_NAME) \
-
-Modified: trunk/buildroot/package/libgtk2/libgtk2.mk
-===================================================================
---- trunk/buildroot/package/libgtk2/libgtk2.mk	2008-07-05 09:22:38 UTC (rev 22652)
-+++ trunk/buildroot/package/libgtk2/libgtk2.mk	2008-07-05 09:30:17 UTC (rev 22653)
-@@ -40,9 +40,9 @@
- 		gl_cv_func_mkdir_trailing_slash_bug=no gl_cv_func_mkstemp_limitations=no \
- 		ac_cv_func_working_mktime=yes jm_cv_func_working_re_compile_pattern=yes \
- 		ac_use_included_regex=no gl_cv_c_restrict=no \
--		ac_cv_path_GLIB_GENMARSHAL=/usr/bin/glib-genmarshal \
--		ac_cv_path_GTK_UPDATE_ICON_CACHE=/usr/bin/gtk-update-icon-cache \
--		ac_cv_path_GDK_PIXBUF_CSOURCE=/usr/bin/gdk-pixbuf-csource \
-+		ac_cv_path_GLIB_GENMARSHAL=$(HOST_GLIB)/bin/glib-genmarshal \
-+		ac_cv_path_GTK_UPDATE_ICON_CACHE=$(HOST_GLIB)/bin/gtk-update-icon-cache \
-+		ac_cv_path_GDK_PIXBUF_CSOURCE=$(HOST_GLIB)/bin/gdk-pixbuf-csource \
- 		ac_cv_prog_F77=no ac_cv_prog_CXX=no ac_cv_path_CUPS_CONFIG=no 
- 
- LIBGTK2_CONF_OPT = --target=$(GNU_TARGET_NAME) --host=$(GNU_TARGET_NAME) \
-@@ -55,7 +55,7 @@
- 		--infodir=/usr/info --enable-shared \
- 		--enable-static \
- 		--disable-glibtest --enable-explicit-deps=no \
--		--disable-debug PKG_CONFIG_PATH="$(STAGING_DIR)/usr/lib/pkgconfig" \
-+		--disable-debug \
- 		$(LIBGTK2_CONF_OPT_X)  $(LIBGTK2_CONF_OPT_DFB)
- 
- 
-
-Modified: trunk/buildroot/package/metacity/metacity.mk
-===================================================================
---- trunk/buildroot/package/metacity/metacity.mk	2008-07-05 09:22:38 UTC (rev 22652)
-+++ trunk/buildroot/package/metacity/metacity.mk	2008-07-05 09:30:17 UTC (rev 22653)
-@@ -96,7 +96,7 @@
- 		jm_cv_func_working_re_compile_pattern=yes \
- 		ac_use_included_regex=no \
- 		gl_cv_c_restrict=no \
--		ac_cv_path_GLIB_GENMARSHAL=/usr/bin/glib-genmarshal \
-+		ac_cv_path_GLIB_GENMARSHAL=$(HOST_GLIB)/bin/glib-genmarshal \
- 		--target=$(GNU_TARGET_NAME) \
- 		--host=$(GNU_TARGET_NAME) \
- 		--build=$(GNU_HOST_NAME) \
-
-Modified: trunk/buildroot/package/pango/pango.mk
-===================================================================
---- trunk/buildroot/package/pango/pango.mk	2008-07-05 09:22:38 UTC (rev 22652)
-+++ trunk/buildroot/package/pango/pango.mk	2008-07-05 09:30:17 UTC (rev 22653)
-@@ -40,7 +40,7 @@
- 		gl_cv_func_mkdir_trailing_slash_bug=no gl_cv_func_mkstemp_limitations=no \
- 		ac_cv_func_working_mktime=yes jm_cv_func_working_re_compile_pattern=yes \
- 		ac_use_included_regex=no gl_cv_c_restrict=no PKG_CONFIG_SYSROOT="$(STAGING_DIR)" \
--		ac_cv_path_GLIB_GENMARSHAL=/usr/bin/glib-genmarshal ac_cv_path_FREETYPE_CONFIG=$(STAGING_DIR)/usr/bin/freetype-config 
-+		ac_cv_path_GLIB_GENMARSHAL=$(HOST_GLIB)/bin/glib-genmarshal ac_cv_path_FREETYPE_CONFIG=$(STAGING_DIR)/usr/bin/freetype-config 
- 		
- ifneq ($(BR2_PACKAGE_XSERVER_none),y)
-         PANGO_CONF_OPT_X = --with-x \
-
-Modified: trunk/buildroot/package/webkit/webkit.mk
-===================================================================
---- trunk/buildroot/package/webkit/webkit.mk	2008-07-05 09:22:38 UTC (rev 22652)
-+++ trunk/buildroot/package/webkit/webkit.mk	2008-07-05 09:30:17 UTC (rev 22653)
-@@ -13,7 +13,7 @@
- 
- WEBKIT_AUTORECONF = YES
- WEBKIT_DEPENDENCIES = icu curl libxml2 libxslt xserver_xorg-server libgtk2 sqlite
--WEBKIT_MAKE_OPT = GLIB_GENMARSHAL=/usr/bin/glib-genmarshal GLIB_MKENUMS=/usr/bin/glib-mkenums
-+WEBKIT_MAKE_OPT = GLIB_GENMARSHAL=$(HOST_GLIB)/bin/glib-genmarshal GLIB_MKENUMS=$(HOST_GLIB)/bin/glib-mkenums
- 
- $(eval $(call AUTOTARGETS,package,webkit))
- 
+> On Sat, Jul 5, 2008 at 3:37 AM,  <ulf@uclibc.org> wrote:
+>> Author: ulf
+>> Date: 2008-07-04 23:37:17 -0700 (Fri, 04 Jul 2008)
+>> New Revision: 22642
+>>
+>> Log:
+>> Run AVR32 toolchain with Sysroot (will fail if not enabled), deprecate 
+>> 4.1.2 and 4.2.1
+>>
+>> Modified:
+>>   trunk/buildroot/target/device/Config.in.toolchain
+>>
+>>
+>> Changeset:
+>> Modified: trunk/buildroot/target/device/Config.in.toolchain
+>> ===================================================================
+>> --- trunk/buildroot/target/device/Config.in.toolchain   2008-07-05 
+>> 04:30:05 UTC (rev 22641)
+>> +++ trunk/buildroot/target/device/Config.in.toolchain   2008-07-05 
+>> 06:37:17 UTC (rev 22642)
+>> @@ -9,6 +9,7 @@
+>>  config BR2_TOOLCHAIN_ATMEL_AVR32_4_1_2
+>>        bool "Use prepatched source for AVR32 gcc-4.1.2 toolchain"
+>>        depends on BR2_avr32
+>> +       depends on BR2_DEPRECATED
+>>        select BR2_EXT_GCC_VERSION_4_1_2
+>>        select BR2_EXT_BINUTILS_VERSION_2_17
+>>        select BR2_EXT_UCLIBC_VERSION_0_9_29
+>> @@ -19,10 +20,12 @@
+>>  config BR2_TOOLCHAIN_ATMEL_AVR32_4_2_1
+>>        bool "Use prepatched source for AVR32 gcc-4.2.1 toolchain"
+>>        depends on BR2_avr32
+>> +       depends on BR2_DEPRECATED
+>>        select BR2_EXT_GCC_VERSION_4_2_1
+>>        select BR2_EXT_BINUTILS_VERSION_2_17
+>>        select BR2_EXT_UCLIBC_VERSION_0_9_29
+>>        select BR2_TOOLCHAIN_ATMEL_AVR32
+>> +       select BR2_GCC_SUPPORTS_SYSROOT
+>>        help
+>>          The gcc-4.2.1 toolchain for the AVR32
+>>          * gcc-4.2.1
+>> @@ -39,6 +42,7 @@
+>>        select BR2_EXT_BINUTILS_VERSION_2_17
+>>        select BR2_EXT_UCLIBC_VERSION_0_9_29
+>>        select BR2_TOOLCHAIN_ATMEL_AVR32
+>> +       select BR2_GCC_SUPPORTS_SYSROOT
+>>        help
+>>          The gcc-4.2.2 toolchain for the AVR32
+>>          * gcc-4.2.2
+>> @@ -67,6 +71,7 @@
+>>
+>>  config BR2_TOOLCHAIN_UNKNOWNVENDOR
+>>        bool "Use prepatched source from unknown vendor"
+>> +       depends on !BR2_avr32
+>>
+>>  endchoice
+>>
+>>
+>> _______________________________________________
+>> buildroot mailing list
+>> buildroot at uclibc.org
+>> http://busybox.net/mailman/listinfo/buildroot
+>>
+> _______________________________________________
+> buildroot mailing list
+> buildroot at uclibc.org
+> http://busybox.net/mailman/listinfo/buildroot
+> 
