@@ -1,93 +1,52 @@
-From: bugs at busybox.net <bugs@busybox.net>
-Date: Sat, 5 Jul 2008 15:10:07 -0700
-Subject: [Buildroot] [buildroot 0003934]: make clean Error with webif option
-	on. rm comamnd fails
-Message-ID: <0886fff0a04744e81608f0464c723907@busybox.net>
+From: Ulf Samuelsson <ulf.samuelsson@atmel.com>
+Date: Sun, 06 Jul 2008 01:20:56 +0200
+Subject: [Buildroot] Makefile.autotools.in downloads new copy of tarball,
+ everytime it is called
+Message-ID: <487001D8.9030203@atmel.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+-----BEGIN PGP SIGNED MESSAGE-----
+Hash: SHA1
 
-The following issue has been CLOSED 
-====================================================================== 
-http://busybox.net/bugs/view.php?id=3934 
-====================================================================== 
-Reported By:                mebarton
-Assigned To:                buildroot
-====================================================================== 
-Project:                    buildroot
-Issue ID:                   3934
-Category:                   Other
-Reproducibility:            always
-Severity:                   minor
-Priority:                   normal
-Status:                     closed
-Resolution:                 fixed
-Fixed in Version:           
-====================================================================== 
-Date Submitted:             07-04-2008 12:42 PDT
-Last Modified:              07-05-2008 15:10 PDT
-====================================================================== 
-Summary:                    make clean Error with webif option on. rm comamnd
-fails
-Description: 
-Need to do a full make with the webif option (Package..--->
-Networking--->Webif selected with install index.html in make menuconfig)
-then do make cleanup
+It does not seem to test if there is something in $(DL_DIR)
+and downloads <package>.tar.bz2.<n>,
+where n is an ever increasing number.
 
-make clean
-.
-.
-.
-error:
-rm -f /buildroot/project_build_avr32/atngw100/root/www/cgi-bin/webif*
-/buildroot/project_build_avr32/atngw100/root/www/webif.*
- can not remove the files
+What does MAKELEVEL mean?
+If this is 1, the download occurs, even if there is something,
+but you do not replace "<package>.tar.bz2".
+You get "<package>.tar.bz2.<n>"
 
 
-Fix add the -R to the rm like beload
 
-rm -Rf /buildroot/project_build_avr32/atngw100/root/www/cgi-bin/webif*
-/buildroot/project_build_avr32/atngw100/root/www/webif.*
+How about this?
 
+Index: Makefile.autotools.in
+===================================================================
+- --- Makefile.autotools.in	(revision 22653)
++++ Makefile.autotools.in	(arbetskopia)
+@@ -132,7 +132,7 @@
+ $(BUILD_DIR)/%/.stamp_downloaded:
+ # support make source-check/external-deps
+ ifeq ($(MAKELEVEL),1)
+- -	$(WGET) -P $(DL_DIR) $($(PKG)_SITE)/$($(PKG)_SOURCE)
++	-$(Q)test -e $(DL_DIR)/$($(PKG)_SOURCE) || $(WGET) -P $(DL_DIR)
+$($(PKG)_SITE)/$($(PKG)_SOURCE)
+ 	$(if $($(PKG)_PATCH),$(WGET) -P $(DL_DIR) $($(PKG)_SITE)/$($(PKG)_PATCH))
+ else
+ 	$(call MESSAGE,"Downloading")
 
-I have seen this on a later Revision (did not recoed it), but I know this
-has the problem.
-svn info
-Path: .
-URL: svn://uclibc.org/trunk/buildroot
-Repository Root: svn://uclibc.org
-Repository UUID: 69ca8d6d-28ef-0310-b511-8ec308f3f277
-Revision: 22403
-Node Kind: directory
-Schedule: normal
-Last Changed Author: jacmet
-Last Changed Rev: 22402
-Last Changed Date: 2008-06-17 09:33:02 -0400 (Tue, 17 Jun 2008)
+BR
+Ulf Samuelsson
+-----BEGIN PGP SIGNATURE-----
+Version: GnuPG v1.4.5 (GNU/Linux)
+Comment: Using GnuPG with SUSE - http://enigmail.mozdev.org
 
-====================================================================== 
-
----------------------------------------------------------------------- 
- UlfSamuelsson - 07-04-08 23:47  
----------------------------------------------------------------------- 
-svn fixed as proposed. 
-
----------------------------------------------------------------------- 
- UlfSamuelsson - 07-05-08 15:10  
----------------------------------------------------------------------- 
-Fixed in svn 
-
-Issue History 
-Date Modified   Username       Field                    Change               
-====================================================================== 
-07-04-08 12:42  mebarton       New Issue                                    
-07-04-08 12:42  mebarton       Status                   new => assigned     
-07-04-08 12:42  mebarton       Assigned To               => buildroot       
-07-04-08 23:47  UlfSamuelsson  Status                   assigned => resolved
-07-04-08 23:47  UlfSamuelsson  Resolution               open => fixed       
-07-04-08 23:47  UlfSamuelsson  Note Added: 0008924                          
-07-05-08 15:10  UlfSamuelsson  Status                   resolved => closed  
-07-05-08 15:10  UlfSamuelsson  Note Added: 0009044                          
-======================================================================
+iD8DBQFIcAHYAyRRH5cXxqwRAj0oAJ0WSHxplkiGovBOLUnZMR2RQ6Ia5ACfeNrB
+CcY6cqQsOLsB1mrkeqJBRPE=
+=5kYR
+-----END PGP SIGNATURE-----
