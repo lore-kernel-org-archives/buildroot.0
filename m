@@ -1,8 +1,7 @@
 From: bugs at busybox.net <bugs@busybox.net>
-Date: Sat, 5 Jul 2008 00:56:56 -0700
-Subject: [Buildroot] [buildroot 0003154]: configure option for local package
-	mirror
-Message-ID: <ef2b371918003d2ffae2ac08c993be08@bugs.uclibc.org>
+Date: Sat, 5 Jul 2008 00:58:32 -0700
+Subject: [Buildroot] [buildroot 0002974]: package lighttpd source fails
+Message-ID: <19cadd603fe6fc0d8262cd4dc106d817@bugs.uclibc.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -10,111 +9,99 @@ Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
 
-A NOTE has been added to this issue. 
+The following issue has been CLOSED 
 ====================================================================== 
-http://busybox.net/bugs/view.php?id=3154 
+http://busybox.net/bugs/view.php?id=2974 
 ====================================================================== 
-Reported By:                kendallc
+Reported By:                Jean-Baptiste Maillet
 Assigned To:                buildroot
 ====================================================================== 
 Project:                    buildroot
-Issue ID:                   3154
-Category:                   New Features
-Reproducibility:            N/A
-Severity:                   feature
+Issue ID:                   2974
+Category:                   Other
+Reproducibility:            always
+Severity:                   minor
 Priority:                   normal
-Status:                     assigned
+Status:                     closed
+Resolution:                 open
+Fixed in Version:           
 ====================================================================== 
-Date Submitted:             04-26-2008 19:21 PDT
-Last Modified:              07-05-2008 00:56 PDT
+Date Submitted:             04-20-2008 04:32 PDT
+Last Modified:              07-05-2008 00:58 PDT
 ====================================================================== 
-Summary:                    configure option for local package mirror
+Summary:                    package lighttpd source fails
 Description: 
-It would be nice to have an option for buildroot pull packages from a local
-mirror. This feature would allow users to run a fresh buildroot build
-without an internet connection. It requires the addition of a
-configuration option. It also requires a few lines below the "..._SITE:="
-stuff in every package's makefile.
+$ make lighttpd
+wget --passive-ftp -nd  -P /var/p2p/jbm/sandbox/buildroot/../download
+"http://ftp.debian.org"/debian/pool/main/l/lighttpd/lighttpd_1.4.18.orig.tar.gz
+--2008-04-20 13:25:21-- 
+http://ftp.debian.org/debian/pool/main/l/lighttpd/lighttpd_1.4.18.orig.tar.gz
+Resolving ftp.debian.org... 128.101.240.212
+Connecting to ftp.debian.org|128.101.240.212|:80... connected.
+HTTP request sent, awaiting response... 404 Not Found
+2008-04-20 13:25:21 ERROR 404: Not Found.
 
-I've attached a patch that adds a BR2_PACKAGE_MIRROR option to
-target/device/Config.in.mirrors. The patch adds support for the option to
-uClibc, and busybox. This patch is just an example of how this feature
-could be added to a couple of packages.
+make: ***
+[/var/p2p/jbm/sandbox/buildroot/../download/lighttpd_1.4.18.orig.tar.gz]
+Error 1
 
-The code to add the feature is fairly simple; however, it requires
-touching every package makefile.
 ====================================================================== 
 
 ---------------------------------------------------------------------- 
- hbr_in - 04-26-08 21:38  
+ Jean-Baptiste Maillet - 04-24-08 22:47  
 ---------------------------------------------------------------------- 
-Hi,
+lighttpd has been updated at r21835 (not the attached patch fix), but still
+does not build, missing dep/select or config option.
 
-Instead of adding an option, what i do is that -->
+jbm at polux:/var/p2p/jbm/sandbox/buildroot$ svn up
+...
+D    package/lighttpd/rc.lighttpd
+A    package/lighttpd/lighttpd-1.4.19-configure.patch
+C    package/lighttpd/lighttpd.mk
+C    package/lighttpd/Config.in
+...
+jbm at polux:/var/p2p/jbm/sandbox/buildroot$ rm -rf package/lighttpd
+jbm at polux:/var/p2p/jbm/sandbox/buildroot$ svn up
+A    package/lighttpd
+A    package/lighttpd/lighttpd-1.4.19-configure.patch
+A    package/lighttpd/lighttpd.mk
+A    package/lighttpd/Config.in
+Updated to revision 21853.
+jbm at polux:/var/p2p/jbm/sandbox/buildroot$ make  lighttpd
 
-i have a local directory which contain all my sources. 
+>>> lighttpd 1.4.19 Downloading
 
-my local src --> /opt/source
-my buildroot directory --> /opt/buildroot
-
-Inside Buildroot, i link the above folder to dl directory i.e., to a
-directory where buildroot downloads and stores all package source
-
-/opt/buildroot # ln -s /opt/source dl
-
-So when buildroot starts make it 1st check in dl/ directory (which is my
-local source directory) and if it finds the source there then it doesnt
-need any internet connection.
-
-Regards
-Gururaja 
-
----------------------------------------------------------------------- 
- UlfSamuelsson - 04-27-08 07:18  
----------------------------------------------------------------------- 
-A better implementation would replace $(WGET) with a script
-which test the main location first and then goes through a
-list of mirrors.
-Then no package file need to be touched, and it is easy
-to maintain a number of mirrors. 
-
----------------------------------------------------------------------- 
- kendallc - 04-28-08 19:56  
----------------------------------------------------------------------- 
-There are ways to accomplish this outside of buildroot. My suggestion was
-to integrate this feature into buildroot.
-
-Whatever the implementation, it will take some effort to do it properly. I
-guess the first issue is whether or not this feature useful to enough users
-to warrant implementing. 
+--2008-04-25 07:31:00-- 
+http://www.lighttpd.net/download/lighttpd-1.4.19.tar.bz2
+...
+checking for OpenSSL... no
+checking for perl regular expressions support... no
+checking for zlib support... yes
+checking for deflate in -lz... no
+configure: error: zlib-headers and/or libs where not found, install them
+or build with --without-zlib
+make: ***
+[/var/p2p/jbm/sandbox/buildroot/build_arm/lighttpd-1.4.19/.stamp_configured]
+Error 1 
 
 ---------------------------------------------------------------------- 
- UlfSamuelsson - 07-05-08 00:56  
+ UlfSamuelsson - 07-05-08 00:58  
 ---------------------------------------------------------------------- 
-I think it would be better to replace the WGET command
-with a new command $(DOWNLOAD)
-which a function which has two parameters.
-
-1) SITE
-2) TARBALL
-
-The function will try to download from $(SITE)/$(TARBALL)
-and if this fails, then it will try downloads from
-BR2_PACKAGE_MIRROR which is a list of hosts separated by spaces.
-
-You can also have a file in you home directory ~/.buildroot/mirrors
-containing a list of hosts. 
+Fixed in svn by now 
 
 Issue History 
 Date Modified   Username       Field                    Change               
 ====================================================================== 
-04-26-08 19:21  kendallc       New Issue                                    
-04-26-08 19:21  kendallc       Status                   new => assigned     
-04-26-08 19:21  kendallc       Assigned To               => buildroot       
-04-26-08 19:21  kendallc       File Added: buildroot-local-mirror.patch         
-          
-04-26-08 21:38  hbr_in         Note Added: 0007254                          
-04-27-08 07:18  UlfSamuelsson  Note Added: 0007274                          
-04-28-08 19:56  kendallc       Note Added: 0007294                          
-07-05-08 00:56  UlfSamuelsson  Note Added: 0008954                          
+04-20-08 04:32  Jean-Baptiste MailletNew Issue                                  
+ 
+04-20-08 04:32  Jean-Baptiste MailletStatus                   new => assigned   
+ 
+04-20-08 04:32  Jean-Baptiste MailletAssigned To               => buildroot     
+ 
+04-20-08 04:32  Jean-Baptiste MailletFile Added: lighttpd.patch                 
+  
+04-24-08 22:47  Jean-Baptiste MailletNote Added: 0007124                        
+ 
+07-05-08 00:58  UlfSamuelsson  Status                   assigned => closed  
+07-05-08 00:58  UlfSamuelsson  Note Added: 0008964                          
 ======================================================================
