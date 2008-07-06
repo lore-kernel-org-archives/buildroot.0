@@ -1,8 +1,8 @@
 From: bugs at busybox.net <bugs@busybox.net>
-Date: Sat, 5 Jul 2008 18:17:13 -0700
+Date: Sat, 5 Jul 2008 23:13:01 -0700
 Subject: [Buildroot] [buildroot 0000959]: DirectFB-0.9.25.1' link error:
 	/usr/lib/libpng12.so: could not read symbols: File in wrong format
-Message-ID: <3530f087131103f11cfe33bf8a458cab@busybox.net>
+Message-ID: <1dbbe65a52c75b78e3ecbd5a29a2b904@busybox.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -26,7 +26,7 @@ Priority:                   normal
 Status:                     feedback
 ====================================================================== 
 Date Submitted:             07-16-2006 23:17 PDT
-Last Modified:              07-05-2008 18:17 PDT
+Last Modified:              07-05-2008 23:13 PDT
 ====================================================================== 
 Summary:                    DirectFB-0.9.25.1' link error: 
 /usr/lib/libpng12.so: could not read symbols: File in wrong format
@@ -174,6 +174,43 @@ Question: is the linker compiled *with* sysroot support.
   I saw a comment on the gcc bugzilla which pointed out this 
   as a potential problem. 
 
+---------------------------------------------------------------------- 
+ UlfSamuelsson - 07-05-08 23:13  
+---------------------------------------------------------------------- 
+binutils is configured with:
+
+                [snip]
+		$(BR2_CONFIGURE_DEVEL_SYSROOT) \
+		$(BR2_CONFIGURE_STAGING_SYSROOT) \
+                [snip]
+
+with toolchain/Makefile.in defining these as:
+
+BR2_CONFIGURE_DEVEL_SYSROOT=--with-sysroot=$(TOOL_BUILD_DIR)/uClibc_dev/
+BR2_CONFIGURE_STAGING_SYSROOT=--with-sysroot=$(STAGING_DIR)
+
+----------------
+Looking at binutils.configure, I see that "--with-sysroot" is not known.
+
++++++++++++++++++
+ac_help="$ac_help
+  --with-build-sysroot=sysroot
+                          use sysroot as the system root during the
+build"
+
+-----------------
+
+we should replace "--with-sysroot=sysroot"
+with "--with-build-sysroot=sysroot"
+
+It looks funny to have TWO "--with-sysroot".
+I will try removing
+	$(BR2_CONFIGURE_STAGING_SYSROOT) \
+
+I suspect that having the correct sysroot configuration
+in binutils, should also solve the problems
+with "limits.h" not beeing found, when building gcc-4.3.1 
+
 Issue History 
 Date Modified   Username       Field                    Change               
 ====================================================================== 
@@ -187,4 +224,5 @@ Date Modified   Username       Field                    Change
 07-05-08 08:22  Correa         Status                   assigned => feedback
 07-05-08 14:55  UlfSamuelsson  Note Added: 0009024                          
 07-05-08 18:17  UlfSamuelsson  Note Added: 0009054                          
+07-05-08 23:13  UlfSamuelsson  Note Added: 0009064                          
 ======================================================================
