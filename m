@@ -1,228 +1,189 @@
-From: bugs at busybox.net <bugs@busybox.net>
-Date: Sat, 5 Jul 2008 23:13:01 -0700
-Subject: [Buildroot] [buildroot 0000959]: DirectFB-0.9.25.1' link error:
-	/usr/lib/libpng12.so: could not read symbols: File in wrong format
-Message-ID: <1dbbe65a52c75b78e3ecbd5a29a2b904@busybox.net>
+From: ulf at uclibc.org <ulf@uclibc.org>
+Date: Sat,  5 Jul 2008 23:19:13 -0700 (PDT)
+Subject: [Buildroot] svn commit:
+	trunk/buildroot/target/device/Atmel/atstk100x
+Message-ID: <20080706061913.815EC3C667@busybox.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+Author: ulf
+Date: 2008-07-05 23:19:12 -0700 (Sat, 05 Jul 2008)
+New Revision: 22658
 
-A NOTE has been added to this issue. 
-====================================================================== 
-http://busybox.net/bugs/view.php?id=959 
-====================================================================== 
-Reported By:                bowerymarc
-Assigned To:                buildroot
-====================================================================== 
-Project:                    buildroot
-Issue ID:                   959
-Category:                   Architecture Specific
-Reproducibility:            always
-Severity:                   major
-Priority:                   normal
-Status:                     feedback
-====================================================================== 
-Date Submitted:             07-16-2006 23:17 PDT
-Last Modified:              07-05-2008 23:13 PDT
-====================================================================== 
-Summary:                    DirectFB-0.9.25.1' link error: 
-/usr/lib/libpng12.so: could not read symbols: File in wrong format
-Description: 
-/home/tools/buildroot/build_arm_nofpu/staging_dir/bin/arm-linux-uclibc-gcc
--O3 -ffast-math -pipe -Os -pipe
--I/home/tools/buildroot/build_arm_nofpu/staging_dir/usr/include
--D_GNU_SOURCE -Werror-implicit-function-declaration -o directfb-csource
-directfb-csource.o 
--L/home/tools/buildroot/build_arm_nofpu/staging_dir/lib
--L/home/tools/buildroot/build_arm_nofpu/staging_dir/usr/lib
-/usr/lib/libpng12.so -lz -lm -ldl -lpthread
-/usr/lib/libpng12.so: could not read symbols: File in wrong format
-collect2: ld returned 1 exit status
-make[3]: *** [directfb-csource] Error 1
-make[3]: Leaving directory
-`/home/tools/buildroot/build_arm_nofpu/DirectFB-0.9.25.1/tools'
-make[2]: *** [all-recursive] Error 1
-make[2]: Leaving directory
-`/home/tools/buildroot/build_arm_nofpu/DirectFB-0.9.25.1'
-make[1]: *** [all-recursive-am] Error 2
-make[1]: Leaving directory
-`/home/tools/buildroot/build_arm_nofpu/DirectFB-0.9.25.1'
-make: ***
-[/home/tools/buildroot/build_arm_nofpu/DirectFB-0.9.25.1/.compiled] Error
-2
+Log:
+Update atstk100x defconfig
 
-====================================================================== 
+Modified:
+   trunk/buildroot/target/device/Atmel/atstk100x/atstk100x_defconfig
 
----------------------------------------------------------------------- 
- rashbaugh - 12-31-06 13:43  
----------------------------------------------------------------------- 
-I had this same problem while building an Xscale cross-compile of
-DirectFB-1.0.0-rc2 on an Ubuntu Edgy desktop.
-For some reason libtool makes a substitution of "/usr/lib/libpng12.so"
-when "-lpng12" is specified, and then passes this path to gcc. This path
-happens to be the host libpng12.so library, when we really want the
-target's library, so it has the wrong format. Why libtool does this I have
-no idea, but I was able to work around it by explicitly specifiying the
-full path of target libpng12.so library in the corresponding DirectFB
-"Makefile". In my case, I had to make this correction in only 2 places,
-though "-lpng12" is specified in hundreds of places within the DirectFB
-Makefile source tree.
-For example, in DirectFB/tools/Makefile:
-# LIBPNG = -lpng12 << comment this one out
-# and add this in
-LIBPNG = /home/user/path-to-target-toolchain/lib/libpng12.so 
 
-I also needed this same change in
-DirectFB/interfaces/IDirectFBImageProvider/Makefile.
-Hope this helps. 
-
----------------------------------------------------------------------- 
- Correa - 07-05-08 08:22  
----------------------------------------------------------------------- 
-DirectFB builds now, I think we can close this. It still have some problems
-with pkg-config that have been reported upstream though, but not related to
-this particular report. 
-
----------------------------------------------------------------------- 
- UlfSamuelsson - 07-05-08 14:55  
----------------------------------------------------------------------- 
-I saw the same problem in libgtk2 today.
-Host "/usr/lib/libpng12.so" is used. 
-
----------------------------------------------------------------------- 
- UlfSamuelsson - 07-05-08 18:17  
----------------------------------------------------------------------- 
-Maybe it is related to compiling with sysroot?
-
-$(STAGING_DIR)/usr/lib/pkgconfig/libpng.pc contains
-++++++++++++++++++++++++++++++++++++++++++
-prefix=/usr
-exec_prefix=${prefix}
-libdir=${exec_prefix}/lib
-includedir=${prefix}/include/libpng12
-
-Name: libpng
-Description: Loads and saves PNG files
-Version: 1.2.25
-Libs: -L${libdir} -lpng12
-Cflags: -I${includedir} 
-------------------------------------------
-
-The Configure script will do
-LIBPNG=$PKG_CONFIG --libs libpng12
-
-which will return "-lpng12" if "prefix" in libpng12 is "/usr".
-If the "prefix" is something else, I.E: "/usr/local" then 
-
-LIBPNG=$PKG_CONFIG --libs libpng12
-
-will return 
-"-L/usr/local/lib -lpng12"
-
-I tried editing the libpng12.pc to look like:
-
-++++++++++++++++++++++++++++++++++++++++++
-prefix=<$(STAGING_DIR)>/usr
-exec_prefix=${prefix}
-libdir=${exec_prefix}/lib
-includedir=${prefix}/include/libpng12
-
-Name: libpng
-Description: Loads and saves PNG files
-Version: 1.2.25
-Libs: -L${libdir} -lpng12
-Cflags: -I${includedir} 
-------------------------------------------
-
-This did not help, so I changed the file to
-
-++++++++++++++++++++++++++++++++++++++++++
-prefix=<$(STAGING_DIR)>/usr
-exec_prefix=${prefix}
-libdir=${exec_prefix}/lib
-includedir=${prefix}/include/libpng12
-
-Name: libpng
-Description: Loads and saves PNG files
-Version: 1.2.25
-Libs: -L${libdir} <$(STAGING_DIR)>/libpng12.so
-Cflags: -I${includedir} 
-------------------------------------------
-This allowed the compile to continue, but bombed
-on "/usr/lib/libtiff.so".
-
-Assume that all the <package>.pc files in 
-$(STAGING_DIR)/usr/lib/pkgconfig are changed,
-will this work at run time????
-
-Not sure, but when you link with a dynamic library
-you should not include the contents of the libary
-in the application,
-
-I have this suspicion that when you run the binary
-on the target, it will look at the non-exisiting
-"$(STAGING_DIR)/usr/lib" in the target, if we
-do it this way.
-
-To me, it looks like a bug in gcc, which does
-not honour --sysroot=$(STAGING_DIR)
-
-Question: is the linker compiled *with* sysroot support.
-  I saw a comment on the gcc bugzilla which pointed out this 
-  as a potential problem. 
-
----------------------------------------------------------------------- 
- UlfSamuelsson - 07-05-08 23:13  
----------------------------------------------------------------------- 
-binutils is configured with:
-
-                [snip]
-		$(BR2_CONFIGURE_DEVEL_SYSROOT) \
-		$(BR2_CONFIGURE_STAGING_SYSROOT) \
-                [snip]
-
-with toolchain/Makefile.in defining these as:
-
-BR2_CONFIGURE_DEVEL_SYSROOT=--with-sysroot=$(TOOL_BUILD_DIR)/uClibc_dev/
-BR2_CONFIGURE_STAGING_SYSROOT=--with-sysroot=$(STAGING_DIR)
-
-----------------
-Looking at binutils.configure, I see that "--with-sysroot" is not known.
-
-+++++++++++++++++
-ac_help="$ac_help
-  --with-build-sysroot=sysroot
-                          use sysroot as the system root during the
-build"
-
------------------
-
-we should replace "--with-sysroot=sysroot"
-with "--with-build-sysroot=sysroot"
-
-It looks funny to have TWO "--with-sysroot".
-I will try removing
-	$(BR2_CONFIGURE_STAGING_SYSROOT) \
-
-I suspect that having the correct sysroot configuration
-in binutils, should also solve the problems
-with "limits.h" not beeing found, when building gcc-4.3.1 
-
-Issue History 
-Date Modified   Username       Field                    Change               
-====================================================================== 
-07-16-06 23:17  bowerymarc     New Issue                                    
-07-16-06 23:17  bowerymarc     Status                   new => assigned     
-07-16-06 23:17  bowerymarc     Assigned To               => uClibc          
-10-09-06 12:23  jruere         Issue Monitored: jruere                      
-12-31-06 13:43  rashbaugh      Note Added: 0001949                          
-02-12-07 05:33  vapier         Assigned To              uClibc => buildroot 
-07-05-08 08:22  Correa         Note Added: 0009014                          
-07-05-08 08:22  Correa         Status                   assigned => feedback
-07-05-08 14:55  UlfSamuelsson  Note Added: 0009024                          
-07-05-08 18:17  UlfSamuelsson  Note Added: 0009054                          
-07-05-08 23:13  UlfSamuelsson  Note Added: 0009064                          
-======================================================================
+Changeset:
+Modified: trunk/buildroot/target/device/Atmel/atstk100x/atstk100x_defconfig
+===================================================================
+--- trunk/buildroot/target/device/Atmel/atstk100x/atstk100x_defconfig	2008-07-05 21:57:23 UTC (rev 22657)
++++ trunk/buildroot/target/device/Atmel/atstk100x/atstk100x_defconfig	2008-07-06 06:19:12 UTC (rev 22658)
+@@ -1,6 +1,6 @@
+ #
+ # Automatically generated make config: don't edit
+-# Sat Jul  5 00:11:52 2008
++# Sat Jul  5 10:08:08 2008
+ #
+ BR2_HAVE_DOT_CONFIG=y
+ BR2_VERSION="0.10.0-svn"
+@@ -303,7 +303,7 @@
+ BR2_BUSYBOX_VERSION="1.11.0"
+ BR2_PACKAGE_BUSYBOX_FULLINSTALL=y
+ BR2_PACKAGE_BUSYBOX_CONFIG="target/device/Atmel/atstk100x/busybox-1.9.1.config"
+-BR2_PACKAGE_BUSYBOX_HIDE_OTHERS=y
++# BR2_PACKAGE_BUSYBOX_HIDE_OTHERS is not set
+ BR2_PACKAGE_BUSYBOX_SKELETON=y
+ 
+ #
+@@ -311,10 +311,17 @@
+ #
+ BR2_PACKAGE_BASH=y
+ BR2_PACKAGE_BZIP2=y
++# BR2_PACKAGE_COREUTILS is not set
+ # BR2_PACKAGE_DIFFUTILS is not set
++# BR2_PACKAGE_FINDUTILS is not set
+ # BR2_PACKAGE_FLEX is not set
++# BR2_PACKAGE_GAWK is not set
+ # BR2_PACKAGE_GCC_TARGET is not set
++# BR2_PACKAGE_GREP is not set
+ # BR2_PACKAGE_MAKE is not set
++# BR2_PACKAGE_PATCH is not set
++# BR2_PACKAGE_SED is not set
++# BR2_PACKAGE_TAR is not set
+ 
+ #
+ # Other development stuff
+@@ -346,6 +353,7 @@
+ # BR2_PACKAGE_BEECRYPT is not set
+ # BR2_PACKAGE_BERKELEYDB is not set
+ # BR2_PACKAGE_BSDIFF is not set
++# BR2_PACKAGE_BOOTUTILS is not set
+ # BR2_PACKAGE_CUPS is not set
+ # BR2_PACKAGE_CUSTOMIZE is not set
+ # BR2_PACKAGE_DASH is not set
+@@ -354,6 +362,7 @@
+ # BR2_PACKAGE_ICU is not set
+ # BR2_PACKAGE_IPKG is not set
+ # BR2_PACKAGE_KEXEC is not set
++# BR2_PACKAGE_LESS is not set
+ BR2_PACKAGE_LIBDAEMON=y
+ # BR2_PACKAGE_LIBELF is not set
+ # BR2_PACKAGE_LIBEVENT is not set
+@@ -368,16 +377,31 @@
+ # BR2_PACKAGE_LTP-TESTSUITE is not set
+ # BR2_PACKAGE_LTRACE is not set
+ # BR2_PACKAGE_LTT is not set
++# BR2_PACKAGE_MODULE_INIT_TOOLS is not set
++# BR2_PACKAGE_MODUTILS is not set
+ # BR2_PACKAGE_NG_SPICE_REWORK is not set
+ # BR2_PACKAGE_POPT is not set
+ # BR2_PACKAGE_PORTAGE is not set
++# BR2_PACKAGE_PROCPS is not set
++# BR2_PACKAGE_PSMISC is not set
++# BR2_PACKAGE_RPM is not set
+ # BR2_PACKAGE_SCREEN is not set
+ # BR2_PACKAGE_SQLITE is not set
+ # BR2_PACKAGE_STARTUP_NOTIFICATION is not set
+ BR2_PACKAGE_STRACE=y
+ # BR2_PACKAGE_SUDO is not set
++# BR2_PACKAGE_SYSKLOGD is not set
++# BR2_PACKAGE_SYSVINIT is not set
++# BR2_PACKAGE_TINYLOGIN is not set
++# BR2_PACKAGE_UTIL-LINUX is not set
++# BR2_PACKAGE_WHICH is not set
+ BR2_DATABASE_SUPPORT=y
+ # BR2_PACKAGE_MYSQL_CLIENT is not set
++BR2_TEXTEDIT_SUPPORT=y
++# BR2_PACKAGE_ED is not set
++# BR2_PACKAGE_NANO is not set
++# BR2_PACKAGE_UEMACS is not set
++# BR2_PACKAGE_VIM is not set
+ BR2_NETWORK_SUPPORT=y
+ 
+ #
+@@ -399,6 +423,7 @@
+ # BR2_PACKAGE_BRIDGE is not set
+ # BR2_PACKAGE_CURL is not set
+ # BR2_PACKAGE_LIBCURL is not set
++# BR2_PACKAGE_ISC_DHCP is not set
+ # BR2_PACKAGE_DNSMASQ is not set
+ BR2_PACKAGE_DROPBEAR=y
+ # BR2_PACKAGE_ETHTOOL is not set
+@@ -442,6 +467,7 @@
+ # BR2_PACKAGE_NCFTP_SPOOLER is not set
+ # BR2_PACKAGE_NCFTP_BOOKMARKS is not set
+ # BR2_PACKAGE_NEON is not set
++# BR2_PACKAGE_NETCAT is not set
+ # BR2_PACKAGE_NETKITBASE is not set
+ # BR2_PACKAGE_NETKITTELNET is not set
+ # BR2_PACKAGE_NETPLUG is not set
+@@ -452,7 +478,8 @@
+ # BR2_PACKAGE_OLSR is not set
+ # BR2_PACKAGE_OPENNTPD is not set
+ # BR2_PACKAGE_OPENSSH is not set
+-# BR2_PACKAGE_OPENSSL is not set
++BR2_PACKAGE_OPENSSL=y
++# BR2_PACKAGE_OPENSSL_TARGET_HEADERS is not set
+ # BR2_PACKAGE_OPENVPN is not set
+ # BR2_PACKAGE_OPENSWAN is not set
+ BR2_PACKAGE_PORTMAP=y
+@@ -480,6 +507,17 @@
+ # BR2_PACKAGE_TCPDUMP is not set
+ # BR2_PACKAGE_DHCPDUMP is not set
+ # BR2_PACKAGE_TFTPD is not set
++BR2_PACKAGE_LIGHTTPD=y
++
++#
++# lighttpd packages
++#
++BR2_PACKAGE_LIGHTTPD_OPENSSL=y
++BR2_PACKAGE_LIGHTTPD_ZLIB=y
++BR2_PACKAGE_LIGHTTPD_BZIP2=y
++# BR2_PACKAGE_LIGHTTPD_PCRE is not set
++# BR2_PACKAGE_THTTPD is not set
++# BR2_PACKAGE_TINYHTTPD is not set
+ # BR2_PACKAGE_TN5250 is not set
+ # BR2_PACKAGE_TTCP is not set
+ # BR2_PACKAGE_UDPCAST is not set
+@@ -489,6 +527,7 @@
+ #
+ # BR2_PACKAGE_VTUN is not set
+ # BR2_PACKAGE_WEBIF is not set
++# BR2_PACKAGE_WGET is not set
+ BR2_PACKAGE_WIRELESS_TOOLS=y
+ BR2_BLOCKDEV_SUPPORT=y
+ 
+@@ -504,6 +543,8 @@
+ # BR2_PACKAGE_LIBFUSE is not set
+ # BR2_PACKAGE_GADGETFS_TEST is not set
+ # BR2_PACKAGE_HAL is not set
++# BR2_PACKAGE_HDPARM is not set
++# BR2_PACKAGE_HOTPLUG is not set
+ # BR2_PACKAGE_HWDATA is not set
+ # BR2_PACKAGE_I2C_TOOLS is not set
+ # BR2_PACKAGE_INPUT_TOOLS is not set
+@@ -549,7 +590,9 @@
+ # BR2_PACKAGE_PCMCIA is not set
+ # BR2_PACKAGE_RAIDTOOLS is not set
+ # BR2_PACKAGE_SETSERIAL is not set
++# BR2_PACKAGE_SFDISK is not set
+ # BR2_PACKAGE_SMARTMONTOOLS is not set
++# BR2_PACKAGE_UDEV is not set
+ # BR2_PACKAGE_USBMOUNT is not set
+ # BR2_PACKAGE_USBUTILS is not set
+ # BR2_PACKAGE_WIPE is not set
+@@ -734,6 +777,7 @@
+ BR2_PACKAGE_MPLAYER=y
+ # BR2_PACKAGE_VLC is not set
+ BR2_COMPRESSOR_SUPPORT=y
++# BR2_PACKAGE_GZIP is not set
+ BR2_PACKAGE_LZO=y
+ # BR2_PACKAGE_LZMA_TARGET is not set
+ # BR2_PACKAGE_LZMA_HOST is not set
