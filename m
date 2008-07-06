@@ -1,79 +1,65 @@
-From: ulf at uclibc.org <ulf@uclibc.org>
-Date: Sun,  6 Jul 2008 00:34:41 -0700 (PDT)
-Subject: [Buildroot] svn commit: trunk/buildroot
-Message-ID: <20080706073442.174E03C67A@busybox.net>
+From: bugs at busybox.net <bugs@busybox.net>
+Date: Sun, 6 Jul 2008 02:37:54 -0700
+Subject: [Buildroot] [buildroot 0003954]: gdb fails to build: double
+	patching in gdb.mk
+Message-ID: <c983afcd88e7b7ce0152e441efe4fb2c@bugs.uclibc.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Author: ulf
-Date: 2008-07-06 00:34:41 -0700 (Sun, 06 Jul 2008)
-New Revision: 22663
 
-Log:
-Replace configuring GLIB with autodetect
+The following issue has been SUBMITTED. 
+====================================================================== 
+http://busybox.net/bugs/view.php?id=3954 
+====================================================================== 
+Reported By:                Souf
+Assigned To:                buildroot
+====================================================================== 
+Project:                    buildroot
+Issue ID:                   3954
+Category:                   Other
+Reproducibility:            always
+Severity:                   minor
+Priority:                   normal
+Status:                     assigned
+====================================================================== 
+Date Submitted:             07-06-2008 02:37 PDT
+Last Modified:              07-06-2008 02:37 PDT
+====================================================================== 
+Summary:                    gdb fails to build: double patching in gdb.mk
+Description: 
+gdb-unpacked: $(GDB_DIR)/.unpacked
+$(GDB_DIR)/.unpacked: $(DL_DIR)/$(GDB_SOURCE)
+	mkdir -p $(TOOL_BUILD_DIR)
+	$(GDB_CAT) $(DL_DIR)/$(GDB_SOURCE) | tar -C $(TOOL_BUILD_DIR)
+$(TAR_OPTIONS) -
+ifeq ($(GDB_VERSION),snapshot)
+	GDB_REAL_DIR=$(shell \
+		tar jtf $(DL_DIR)/$(GDB_SOURCE) | head -1 | cut -d"/" -f1)
+	ln -sf $(TOOL_BUILD_DIR)/$(shell tar jtf $(DL_DIR)/$(GDB_SOURCE) | head
+-1 | cut -d"/" -f1) $(GDB_DIR)
+endif
+	toolchain/patch-kernel.sh $(GDB_DIR) $(GDB_PATCH_DIR) \*.patch  <======
+	$(CONFIG_UPDATE) $(GDB_DIR)
+	touch $@
 
-Modified:
-   trunk/buildroot/Config.in
-   trunk/buildroot/Makefile
+gdb-patched: $(GDB_DIR)/.unpacked
+$(GDB_DIR)/.patched: $(GDB_DIR)/.unpacked
+	toolchain/patch-kernel.sh $(GDB_DIR) $(GDB_PATCH_DIR) \*.patch   <======
+	$(CONFIG_UPDATE) $(GDB_DIR)
+	touch $@
 
+gdb-dirclean:
+	rm -rf $(GDB_DIR)
+====================================================================== 
 
-Changeset:
-Modified: trunk/buildroot/Config.in
-===================================================================
---- trunk/buildroot/Config.in	2008-07-06 07:00:11 UTC (rev 22662)
-+++ trunk/buildroot/Config.in	2008-07-06 07:34:41 UTC (rev 22663)
-@@ -78,17 +78,6 @@
- 
- 	  The default is $(BASE_DIR)/dl
- 
--config BR2_HOST_GLIB
--	string "Location of host Gnome library"
--	default "/usr"
--	help
--	  Directory where Gnome is installed on the host
--	  Gnome applications is installed in $(BR2_HOST_LIB)/bin 
--	  This is needed to build libgtk etc.
--	  The default is /usr
--	  It can be overridden by the BUILDROOT_HOST_GLIB
--	  shell variable
--
- source	"target/device/Config.in.mirrors"
- 
- config BR2_STAGING_DIR
-
-Modified: trunk/buildroot/Makefile
-===================================================================
---- trunk/buildroot/Makefile	2008-07-06 07:00:11 UTC (rev 22662)
-+++ trunk/buildroot/Makefile	2008-07-06 07:34:41 UTC (rev 22663)
-@@ -57,12 +57,6 @@
- endif
- LOCAL:=$(BR2_LOCAL)
- 
--ifneq ($(BUILDROOT_HOST_GLIB),)
--HOST_GLIB:=$(BUILDROOT_HOST_GLIB)
--else
--HOST_GLIB:=$(BR2_HOST_GLIB)
--endif
--
- # To put more focus on warnings, be less verbose as default
- # Use 'make V=1' to see the full commands
- ifdef V
-@@ -128,6 +122,10 @@
- HOSTLD:=$(shell $(CONFIG_SHELL) -c "which $(HOSTLD)" || type -p $(HOSTLD) || echo ld)
- HOSTLN:=$(shell $(CONFIG_SHELL) -c "which $(HOSTLN)" || type -p $(HOSTLN) || echo ln)
- HOSTNM:=$(shell $(CONFIG_SHELL) -c "which $(HOSTNM)" || type -p $(HOSTNM) || echo nm)
-+HOST_GLIB_BIN:=`dirname $(shell $(CONFIG_SHELL) -c "which glib-genmarshal" || echo /usr/bin/glib-genmarshal)`
-+HOST_GLIB:=$(shell $(CONFIG_SHELL) -c "dirname $(HOST_GLIB_BIN)" || echo /usr)
-+
-+
- ifndef CFLAGS_FOR_BUILD
- CFLAGS_FOR_BUILD:=-g -O2
- endif
-@@ -522,3 +520,4 @@
- 	@echo LOCAL=$(LOCAL)
- 	@echo BR2_DL_DIR=$(BR2_DL_DIR)
- 	@echo HOST_GLIB=$(HOST_GLIB)
-+	@echo HOST_GLIB_BIN=$(HOST_GLIB_BIN)
+Issue History 
+Date Modified   Username       Field                    Change               
+====================================================================== 
+07-06-08 02:37  Souf           New Issue                                    
+07-06-08 02:37  Souf           Status                   new => assigned     
+07-06-08 02:37  Souf           Assigned To               => buildroot       
+07-06-08 02:37  Souf           File Added: gdb.mk.patch                     
+======================================================================
