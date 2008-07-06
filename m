@@ -1,65 +1,182 @@
-From: bugs at busybox.net <bugs@busybox.net>
-Date: Sun, 6 Jul 2008 02:37:54 -0700
-Subject: [Buildroot] [buildroot 0003954]: gdb fails to build: double
-	patching in gdb.mk
-Message-ID: <c983afcd88e7b7ce0152e441efe4fb2c@bugs.uclibc.org>
+From: jacmet at uclibc.org <jacmet@uclibc.org>
+Date: Sun,  6 Jul 2008 06:55:56 -0700 (PDT)
+Subject: [Buildroot] svn commit: trunk/buildroot/package/busybox
+Message-ID: <20080706135556.9B3C03C650@busybox.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+Author: jacmet
+Date: 2008-07-06 06:55:55 -0700 (Sun, 06 Jul 2008)
+New Revision: 22667
 
-The following issue has been SUBMITTED. 
-====================================================================== 
-http://busybox.net/bugs/view.php?id=3954 
-====================================================================== 
-Reported By:                Souf
-Assigned To:                buildroot
-====================================================================== 
-Project:                    buildroot
-Issue ID:                   3954
-Category:                   Other
-Reproducibility:            always
-Severity:                   minor
-Priority:                   normal
-Status:                     assigned
-====================================================================== 
-Date Submitted:             07-06-2008 02:37 PDT
-Last Modified:              07-06-2008 02:37 PDT
-====================================================================== 
-Summary:                    gdb fails to build: double patching in gdb.mk
-Description: 
-gdb-unpacked: $(GDB_DIR)/.unpacked
-$(GDB_DIR)/.unpacked: $(DL_DIR)/$(GDB_SOURCE)
-	mkdir -p $(TOOL_BUILD_DIR)
-	$(GDB_CAT) $(DL_DIR)/$(GDB_SOURCE) | tar -C $(TOOL_BUILD_DIR)
-$(TAR_OPTIONS) -
-ifeq ($(GDB_VERSION),snapshot)
-	GDB_REAL_DIR=$(shell \
-		tar jtf $(DL_DIR)/$(GDB_SOURCE) | head -1 | cut -d"/" -f1)
-	ln -sf $(TOOL_BUILD_DIR)/$(shell tar jtf $(DL_DIR)/$(GDB_SOURCE) | head
--1 | cut -d"/" -f1) $(GDB_DIR)
-endif
-	toolchain/patch-kernel.sh $(GDB_DIR) $(GDB_PATCH_DIR) \*.patch  <======
-	$(CONFIG_UPDATE) $(GDB_DIR)
-	touch $@
+Log:
+busybox: more 1.11.0 patches
 
-gdb-patched: $(GDB_DIR)/.unpacked
-$(GDB_DIR)/.patched: $(GDB_DIR)/.unpacked
-	toolchain/patch-kernel.sh $(GDB_DIR) $(GDB_PATCH_DIR) \*.patch   <======
-	$(CONFIG_UPDATE) $(GDB_DIR)
-	touch $@
+Added:
+   trunk/buildroot/package/busybox/busybox-1.11.0-man.patch
+   trunk/buildroot/package/busybox/busybox-1.11.0-uname.patch
 
-gdb-dirclean:
-	rm -rf $(GDB_DIR)
-====================================================================== 
 
-Issue History 
-Date Modified   Username       Field                    Change               
-====================================================================== 
-07-06-08 02:37  Souf           New Issue                                    
-07-06-08 02:37  Souf           Status                   new => assigned     
-07-06-08 02:37  Souf           Assigned To               => buildroot       
-07-06-08 02:37  Souf           File Added: gdb.mk.patch                     
-======================================================================
+Changeset:
+Added: trunk/buildroot/package/busybox/busybox-1.11.0-man.patch
+===================================================================
+--- trunk/buildroot/package/busybox/busybox-1.11.0-man.patch	                        (rev 0)
++++ trunk/buildroot/package/busybox/busybox-1.11.0-man.patch	2008-07-06 13:55:55 UTC (rev 22667)
+@@ -0,0 +1,40 @@
++--- busybox-1.11.0/miscutils/man.c	Wed Jun 25 14:51:35 2008
+++++ busybox-1.11.0-man/miscutils/man.c	Fri Jul  4 23:55:56 2008
++@@ -73,7 +73,7 @@
++ 	char *sec_list;
++ 	char *cur_path, *cur_sect;
++ 	char *line, *value;
++-	int count_mp, alloc_mp, cur_mp;
+++	int count_mp, cur_mp;
++ 	int opt;
++ 
++ 	opt_complementary = "-1"; /* at least one argument */
++@@ -81,8 +81,8 @@
++ 	argv += optind;
++ 
++ 	sec_list = xstrdup("1:2:3:4:5:6:7:8:9");
++-	alloc_mp = 10;
++-	man_path_list = xmalloc(10 * sizeof(man_path_list[0]));
+++	/* Last valid man_path_list[] is [0x10] */
+++	man_path_list = xzalloc(0x11 * sizeof(man_path_list[0]));
++ 	count_mp = 0;
++ 	man_path_list[0] = xstrdup(getenv("MANPATH"));
++ 	if (man_path_list[0])
++@@ -107,11 +107,13 @@
++ 				if (strcmp("MANPATH", line) == 0) {
++ 					man_path_list[count_mp] = xstrdup(value);
++ 					count_mp++;
++-					if (alloc_mp == count_mp) {
++-						alloc_mp += 10;
++-						man_path_list = xrealloc(man_path_list, alloc_mp * sizeof(man_path_list[0]));
+++					/* man_path_list is NULL terminated */
+++					man_path_list[count_mp] = NULL;
+++					if (!(count_mp & 0xf)) { /* 0x10, 0x20 etc */
+++						/* so that last valid man_path_list[] is [count_mp + 0x10] */
+++						man_path_list = xrealloc(man_path_list,
+++							(count_mp + 0x11) * sizeof(man_path_list[0]));
++ 					}
++-					/* thus man_path_list is always NULL terminated */
++ 				}
++ 				if (strcmp("MANSECT", line) == 0) {
++ 					free(sec_list);
+
+Added: trunk/buildroot/package/busybox/busybox-1.11.0-uname.patch
+===================================================================
+--- trunk/buildroot/package/busybox/busybox-1.11.0-uname.patch	                        (rev 0)
++++ trunk/buildroot/package/busybox/busybox-1.11.0-uname.patch	2008-07-06 13:55:55 UTC (rev 22667)
+@@ -0,0 +1,108 @@
++--- busybox-1.11.0/applets/individual.c	Wed Jun 25 14:51:37 2008
+++++ busybox-1.11.0-uname/applets/individual.c	Wed Jul  2 13:32:17 2008
++@@ -14,13 +14,11 @@
++ int main(int argc, char **argv)
++ {
++ 	applet_name = argv[0];
++-
++ 	return APPLET_main(argc,argv);
++ }
++ 
++ void bb_show_usage(void)
++ {
++-	printf(APPLET_full_usage "\n");
++-
+++	fputs(APPLET_full_usage "\n", stdout);
++ 	exit(EXIT_FAILURE);
++ }
++--- busybox-1.11.0/coreutils/uname.c	Wed Jun 25 14:51:30 2008
+++++ busybox-1.11.0-uname/coreutils/uname.c	Wed Jul  2 13:32:17 2008
++@@ -17,7 +17,7 @@
++    -m, --machine	sun
++    -a, --all		SunOS rocky8 4.0  sun
++ 
++-   The default behavior is equivalent to `-s'.
+++   The default behavior is equivalent to '-s'.
++ 
++    David MacKenzie <djm@gnu.ai.mit.edu> */
++ 
++@@ -39,47 +39,43 @@
++ } uname_info_t;
++ 
++ static const char options[] ALIGN1 = "snrvmpa";
++-static const unsigned short utsname_offset[] ALIGN2 = {
++-	offsetof(uname_info_t,name.sysname),
++-	offsetof(uname_info_t,name.nodename),
++-	offsetof(uname_info_t,name.release),
++-	offsetof(uname_info_t,name.version),
++-	offsetof(uname_info_t,name.machine),
++-	offsetof(uname_info_t,processor)
+++static const unsigned short utsname_offset[] = {
+++	offsetof(uname_info_t, name.sysname),
+++	offsetof(uname_info_t, name.nodename),
+++	offsetof(uname_info_t, name.release),
+++	offsetof(uname_info_t, name.version),
+++	offsetof(uname_info_t, name.machine),
+++	offsetof(uname_info_t, processor)
++ };
++ 
++ int uname_main(int argc, char **argv) MAIN_EXTERNALLY_VISIBLE;
++-int uname_main(int argc, char **argv)
+++int uname_main(int argc ATTRIBUTE_UNUSED, char **argv)
++ {
++ 	uname_info_t uname_info;
++ #if defined(__sparc__) && defined(__linux__)
++ 	char *fake_sparc = getenv("FAKE_SPARC");
++ #endif
++-	const unsigned short int *delta;
+++	const unsigned short *delta;
++ 	char toprint;
++ 
++ 	toprint = getopt32(argv, options);
++ 
++-	if (argc != optind) {
+++	if (argv[optind]) { /* coreutils-6.9 compat */
++ 		bb_show_usage();
++ 	}
++ 
++-	if (toprint & (1 << 6)) {
+++	if (toprint & (1 << 6)) { /* -a => all opts on */
++ 		toprint = 0x3f;
++ 	}
++ 
++-	if (toprint == 0) {
++-		toprint = 1;			/* sysname */
+++	if (toprint == 0) { /* no opts => -s (sysname) */
+++		toprint = 1;
++ 	}
++ 
++-	if (uname(&uname_info.name) == -1) {
++-		bb_error_msg_and_die("cannot get system name");
++-	}
+++	uname(&uname_info.name); /* never fails */
++ 
++ #if defined(__sparc__) && defined(__linux__)
++-	if ((fake_sparc != NULL)
++-		&& ((fake_sparc[0] == 'y')
++-			|| (fake_sparc[0] == 'Y'))) {
+++	if (fake_sparc && (fake_sparc[0] | 0x20) == 'y') {
++ 		strcpy(uname_info.name.machine, "sparc");
++ 	}
++ #endif
++@@ -89,7 +85,8 @@
++ 	delta = utsname_offset;
++ 	do {
++ 		if (toprint & 1) {
++-			printf(((char *)(&uname_info)) + *delta);
+++			/* printf would not be safe here */
+++			fputs((char *)(&uname_info) + *delta, stdout);
++ 			if (toprint > 1) {
++ 				bb_putchar(' ');
++ 			}
++@@ -98,5 +95,5 @@
++ 	} while (toprint >>= 1);
++ 	bb_putchar('\n');
++ 
++-	fflush_stdout_and_exit(EXIT_SUCCESS);
+++	fflush_stdout_and_exit(EXIT_SUCCESS); /* coreutils-6.9 compat */
++ }
