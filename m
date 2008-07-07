@@ -1,187 +1,88 @@
-From: ulf at uclibc.org <ulf@uclibc.org>
-Date: Mon,  7 Jul 2008 05:04:19 -0700 (PDT)
-Subject: [Buildroot] svn commit: trunk/buildroot/package/midori
-Message-ID: <20080707120419.EC24EF8006@busybox.net>
+From: Ulf Samuelsson <ulf.samuelsson@atmel.com>
+Date: Mon, 07 Jul 2008 14:13:44 +0200
+Subject: [Buildroot] svn commit: trunk/buildroot
+In-Reply-To: <87fxqmg53j.fsf@macbook.be.48ers.dk>
+References: <20080704222950.E76B63C61F@busybox.net>
+	<87fxqmg53j.fsf@macbook.be.48ers.dk>
+Message-ID: <48720878.3070602@atmel.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Author: ulf
-Date: 2008-07-07 05:04:19 -0700 (Mon, 07 Jul 2008)
-New Revision: 22672
+-----BEGIN PGP SIGNED MESSAGE-----
+Hash: SHA1
 
-Log:
-Bump midori version
+Peter Korsgaard skrev:
+>>>>>> "ulf" == ulf  <ulf@uclibc.org> writes:
+> 
+>  ulf> Author: ulf
+>  ulf> Date: 2008-07-04 15:29:50 -0700 (Fri, 04 Jul 2008)
+>  ulf> New Revision: 22640
+> 
+>  ulf> Log:
+>  ulf> Add 'build with log'
+> 
+>  ulf> Modified:
+>  ulf>    trunk/buildroot/Makefile
+> 
+> 
+>  ulf> Changeset:
+>  ulf> Modified: trunk/buildroot/Makefile
+>  ulf> ===================================================================
+>  ulf> --- trunk/buildroot/Makefile	2008-07-04 22:23:20 UTC (rev 22639)
+>  ulf> +++ trunk/buildroot/Makefile	2008-07-04 22:29:50 UTC (rev 22640)
+>  ulf> @@ -475,6 +475,9 @@
+>  
+>  ulf>  prepatch:	gcc-patched binutils-patched gdb-patched uclibc-patched
+>  
+>  ulf> +log:
+>  ulf> +	$(MAKE) > $(PROJECT).log 2>&1 
+> 
+> That breaks the source-check/external-deps check in
+> Makefile.autotools.in (r22607).
+> 
 
-Added:
-   trunk/buildroot/package/midori/midori-0.0.18-webkit.patch
+Is not something like the following to be preferred?
 
-Removed:
-   trunk/buildroot/package/midori/midori-0.0.17-webkit.patch
-
-Modified:
-   trunk/buildroot/package/midori/midori.mk
-
-
-Changeset:
-Deleted: trunk/buildroot/package/midori/midori-0.0.17-webkit.patch
+Index: Makefile
 ===================================================================
---- trunk/buildroot/package/midori/midori-0.0.17-webkit.patch	2008-07-07 11:09:20 UTC (rev 22671)
-+++ trunk/buildroot/package/midori/midori-0.0.17-webkit.patch	2008-07-07 12:04:19 UTC (rev 22672)
-@@ -1,67 +0,0 @@
--diff -rup midori-0.0.17-orig/configure.in midori-0.0.17/configure.in
----- midori-0.0.17-orig/configure.in	2008-01-23 21:47:18.000000000 -0500
--+++ midori-0.0.17/configure.in	2008-02-11 14:11:08.000000000 -0500
--@@ -53,13 +53,13 @@ GTK_VER=`pkg-config --modversion gtk+-2.
-- AC_DEFINE_UNQUOTED([GTK_VER], "$GTK_VER", [GTK+ version])
-- 
-- # Checks for WebKitGtk
---PKG_CHECK_MODULES(WEBKIT, WebKitGtk, have_webkit=true, have_webkit=false)
--+PKG_CHECK_MODULES(WEBKIT, webkit-1.0, have_webkit=true, have_webkit=false)
-- if test "x${have_webkit}" = "xfalse" ; then
--     AC_MSG_ERROR([No WebKitGtk package information found])
-- fi
-- AC_SUBST(WEBKIT_CFLAGS)
-- AC_SUBST(WEBKIT_LIBS)
---WEBKIT_VER=`pkg-config --modversion WebKitGtk`
--+WEBKIT_VER=`pkg-config --modversion webkit-1.0`
-- AC_DEFINE_UNQUOTED([WEBKIT_VER], "$WEBKITGTK_VER", [WebKitGtk version])
-- 
-- # Checks for libsexy
--diff -rup midori-0.0.17-orig/src/global.h midori-0.0.17/src/global.h
----- midori-0.0.17-orig/src/global.h	2008-01-22 21:13:40.000000000 -0500
--+++ midori-0.0.17/src/global.h	2008-02-11 14:01:54.000000000 -0500
--@@ -16,7 +16,7 @@
-- #include "../katze/katze.h"
-- 
-- #include <gtk/gtk.h>
---#include <webkit.h>
--+#include <webkit/webkit.h>
-- 
-- // -- globals
-- 
--diff -rup midori-0.0.17-orig/src/helpers.c midori-0.0.17/src/helpers.c
----- midori-0.0.17-orig/src/helpers.c	2008-01-20 11:46:16.000000000 -0500
--+++ midori-0.0.17/src/helpers.c	2008-02-11 14:03:57.000000000 -0500
--@@ -16,7 +16,7 @@
-- #include "../katze/katze.h"
-- 
-- #include <string.h>
---#include <webkit.h>
--+#include <webkit/webkit.h>
-- 
-- GtkIconTheme* get_icon_theme(GtkWidget* widget)
-- {
--diff -rup midori-0.0.17-orig/src/webSearch.h midori-0.0.17/src/webSearch.h
----- midori-0.0.17-orig/src/webSearch.h	2007-12-14 22:09:47.000000000 -0500
--+++ midori-0.0.17/src/webSearch.h	2008-02-11 14:03:25.000000000 -0500
--@@ -16,7 +16,7 @@
-- 
-- #include <gtk/gtk.h>
-- #include <libsexy/sexy.h>
---#include <webkit.h>
--+#include <webkit/webkit.h>
-- 
-- // -- Types
-- 
--diff -rup midori-0.0.17-orig/src/webView.h midori-0.0.17/src/webView.h
----- midori-0.0.17-orig/src/webView.h	2008-01-04 02:46:44.000000000 -0500
--+++ midori-0.0.17/src/webView.h	2008-02-11 14:02:49.000000000 -0500
--@@ -16,7 +16,7 @@
-- #include "browser.h"
-- #include "debug.h"
-- 
---#include <webkit.h>
--+#include <webkit/webkit.h>
-- 
-- WebKitNavigationResponse
-- on_webView_navigation_requested(GtkWidget* webView, WebKitWebFrame* frame
+- --- Makefile	(revision 22671)
++++ Makefile	(arbetskopia)
+@@ -346,10 +346,10 @@
+ source: $(TARGETS_SOURCE) $(HOST_SOURCE)
 
-Copied: trunk/buildroot/package/midori/midori-0.0.18-webkit.patch (from rev 22671, trunk/buildroot/package/midori/midori-0.0.17-webkit.patch)
-===================================================================
---- trunk/buildroot/package/midori/midori-0.0.18-webkit.patch	                        (rev 0)
-+++ trunk/buildroot/package/midori/midori-0.0.18-webkit.patch	2008-07-07 12:04:19 UTC (rev 22672)
-@@ -0,0 +1,67 @@
-+diff -rup midori-0.0.17-orig/configure.in midori-0.0.17/configure.in
-+--- midori-0.0.17-orig/configure.in	2008-01-23 21:47:18.000000000 -0500
-++++ midori-0.0.17/configure.in	2008-02-11 14:11:08.000000000 -0500
-+@@ -53,13 +53,13 @@ GTK_VER=`pkg-config --modversion gtk+-2.
-+ AC_DEFINE_UNQUOTED([GTK_VER], "$GTK_VER", [GTK+ version])
-+ 
-+ # Checks for WebKitGtk
-+-PKG_CHECK_MODULES(WEBKIT, WebKitGtk, have_webkit=true, have_webkit=false)
-++PKG_CHECK_MODULES(WEBKIT, webkit-1.0, have_webkit=true, have_webkit=false)
-+ if test "x${have_webkit}" = "xfalse" ; then
-+     AC_MSG_ERROR([No WebKitGtk package information found])
-+ fi
-+ AC_SUBST(WEBKIT_CFLAGS)
-+ AC_SUBST(WEBKIT_LIBS)
-+-WEBKIT_VER=`pkg-config --modversion WebKitGtk`
-++WEBKIT_VER=`pkg-config --modversion webkit-1.0`
-+ AC_DEFINE_UNQUOTED([WEBKIT_VER], "$WEBKITGTK_VER", [WebKitGtk version])
-+ 
-+ # Checks for libsexy
-+diff -rup midori-0.0.17-orig/src/global.h midori-0.0.17/src/global.h
-+--- midori-0.0.17-orig/src/global.h	2008-01-22 21:13:40.000000000 -0500
-++++ midori-0.0.17/src/global.h	2008-02-11 14:01:54.000000000 -0500
-+@@ -16,7 +16,7 @@
-+ #include "../katze/katze.h"
-+ 
-+ #include <gtk/gtk.h>
-+-#include <webkit.h>
-++#include <webkit/webkit.h>
-+ 
-+ // -- globals
-+ 
-+diff -rup midori-0.0.17-orig/src/helpers.c midori-0.0.17/src/helpers.c
-+--- midori-0.0.17-orig/src/helpers.c	2008-01-20 11:46:16.000000000 -0500
-++++ midori-0.0.17/src/helpers.c	2008-02-11 14:03:57.000000000 -0500
-+@@ -16,7 +16,7 @@
-+ #include "../katze/katze.h"
-+ 
-+ #include <string.h>
-+-#include <webkit.h>
-++#include <webkit/webkit.h>
-+ 
-+ GtkIconTheme* get_icon_theme(GtkWidget* widget)
-+ {
-+diff -rup midori-0.0.17-orig/src/webSearch.h midori-0.0.17/src/webSearch.h
-+--- midori-0.0.17-orig/src/webSearch.h	2007-12-14 22:09:47.000000000 -0500
-++++ midori-0.0.17/src/webSearch.h	2008-02-11 14:03:25.000000000 -0500
-+@@ -16,7 +16,7 @@
-+ 
-+ #include <gtk/gtk.h>
-+ #include <libsexy/sexy.h>
-+-#include <webkit.h>
-++#include <webkit/webkit.h>
-+ 
-+ // -- Types
-+ 
-+diff -rup midori-0.0.17-orig/src/webView.h midori-0.0.17/src/webView.h
-+--- midori-0.0.17-orig/src/webView.h	2008-01-04 02:46:44.000000000 -0500
-++++ midori-0.0.17/src/webView.h	2008-02-11 14:02:49.000000000 -0500
-+@@ -16,7 +16,7 @@
-+ #include "browser.h"
-+ #include "debug.h"
-+ 
-+-#include <webkit.h>
-++#include <webkit/webkit.h>
-+ 
-+ WebKitNavigationResponse
-+ on_webView_navigation_requested(GtkWidget* webView, WebKitWebFrame* frame
+ _source-check:
+- -	$(MAKE) SPIDER=--spider source
++	$(MAKE) FORCE_DOWNLOAD=y SPIDER=--spider source
 
-Modified: trunk/buildroot/package/midori/midori.mk
+ external-deps:
+- -	@$(MAKE) -Bs BR2_WGET=$(TOPDIR)toolchain/wget-show-external-deps.sh \
++	@$(MAKE) FORCE_DOWNLOAD=y -Bs
+BR2_WGET=$(TOPDIR)toolchain/wget-show-external-deps.sh \
+ 	source
+
+Index: package/Makefile.autotools.in
 ===================================================================
---- trunk/buildroot/package/midori/midori.mk	2008-07-07 11:09:20 UTC (rev 22671)
-+++ trunk/buildroot/package/midori/midori.mk	2008-07-07 12:04:19 UTC (rev 22672)
-@@ -4,7 +4,7 @@
- #
+- --- package/Makefile.autotools.in	(revision 22671)
++++ package/Makefile.autotools.in	(arbetskopia)
+@@ -131,7 +131,7 @@
+ # Retrieve and unpack the archive
+ $(BUILD_DIR)/%/.stamp_downloaded:
+ # support make source-check/external-deps
+- -ifeq ($(MAKELEVEL),1)
++ifeq ($(FORCE_DOWNLOAD),y)
+ 	$(WGET) -P $(DL_DIR) $($(PKG)_SITE)/$($(PKG)_SOURCE)
+ 	$(if $($(PKG)_PATCH),$(WGET) -P $(DL_DIR) $($(PKG)_SITE)/$($(PKG)_PATCH))
+ else
  #############################################################
- 
--MIDORI_VERSION = 0.0.17
-+MIDORI_VERSION = 0.0.18
- MIDORI_SOURCE = midori-$(MIDORI_VERSION).tar.gz
- MIDORI_SITE = http://software.twotoasts.de/media/midori/
- MIDORI_AUTORECONF = YES
+
+-----BEGIN PGP SIGNATURE-----
+Version: GnuPG v1.4.5 (GNU/Linux)
+Comment: Using GnuPG with SUSE - http://enigmail.mozdev.org
+
+iD8DBQFIcgh4AyRRH5cXxqwRArN5AJ9AF/jF0N6l8rj/t3H8PBmIfCL1CgCdH64e
+0AisEv4BygKL0S84UEA5p9k=
+=T0+o
+-----END PGP SIGNATURE-----
