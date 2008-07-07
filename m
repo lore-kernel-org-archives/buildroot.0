@@ -1,26 +1,67 @@
-From: Nathan Paquin <npaquin@zortlabs.com>
-Date: Mon, 7 Jul 2008 14:00:56 -0700
-Subject: [Buildroot] Grub
-In-Reply-To: <A71C3205D8154C559B3290D072023F42@valcom.com>
-References: <A71C3205D8154C559B3290D072023F42@valcom.com>
-Message-ID: <47F8B253803FD546A30B21E6DCBEA83978A7A95EB7@EXVMBX003-2.exch003intermedia.net>
+From: Ulf Samuelsson <ulf.samuelsson@atmel.com>
+Date: Tue, 08 Jul 2008 00:37:00 +0200
+Subject: [Buildroot] svn commit: trunk/buildroot
+In-Reply-To: <877ibxzfh4.fsf@macbook.be.48ers.dk>
+References: <20080706073442.174E03C67A@busybox.net>	<20080707124143.GB15840@mx.loc>
+	<4872169E.2010102@atmel.com>	<20080707132334.GD15840@mx.loc>
+	<48721B90.5070905@atmel.com>	<87mykt4v47.fsf@macbook.be.48ers.dk>	<AAFCB58EA8634B0CADEDE37957685CEC@aeglos>
+	<877ibxzfh4.fsf@macbook.be.48ers.dk>
+Message-ID: <48729A8C.4070303@atmel.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-http://ftp.netspace.net.au/pub/debian/pool/main/g/grub/grub_0.97-35.diff.gz
+-----BEGIN PGP SIGNED MESSAGE-----
+Hash: SHA1
+
+Peter Korsgaard skrev:
+>>>>>> "Ulf" == Ulf Samuelsson <ulf.samuelsson@atmel.com> writes:
+> 
+> Hi,
+> 
+>  >> That would be silly. The standard location for stuff is /usr, and we
+>  >> don't provide settings for all our other packages.
+>  >> 
+
+Then, those packages does not have a broken build.
+
+> 
+>  Ulf> So you think that the situation we have now, when libgtk2 will
+>  Ulf> not compile when gnome is installed in "/opt/gnome2 on the host  is a
+>  Ulf> good one?
+> 
+> No, not particular good, but better than the other way around as /usr
+> is standard, /opt/gnome2 isn't.
+> 
+
+You can't be serious...
+
+Why is it better to have a broken gnome build
+than installing gnome in /opt/gnome?
+
+Anyone with gnome installed in "/usr" will of course
+use "/usr" on the target as well.
+
+You can of course install symlinks from /usr/bin to
+/opt/gnome/bin, but use of "sudo" in buildroot
+has been frowned on before.
 
 
-________________________________________
-From: buildroot-bounces@uclibc.org [buildroot-bounces at uclibc.org] On Behalf Of Robert B. Williams [rwilliams at valcom.com]
-Sent: Monday, July 07, 2008 4:18 PM
-To: buildroot at uclibc.org
-Subject: [Buildroot] Grub
+> How does openembedded handle it?
+> 
 
-I have attempted to build grub and it complains that it cannot download
-http://ftp.debian.org/debian/pool/main/g/grub/grub_0.97-35.diff.gz
+Did not check.
 
-I am sure this has come up before but I am unable to find anything search the mailing lists.
-What is the secret?
+BR
+Ulf Samuelsson
+
+-----BEGIN PGP SIGNATURE-----
+Version: GnuPG v1.4.5 (GNU/Linux)
+Comment: Using GnuPG with SUSE - http://enigmail.mozdev.org
+
+iD8DBQFIcpqMAyRRH5cXxqwRAt9KAKC05Prf9nHqLTX9vztFQdYfUpmtJwCgrCYo
+vs3Meb2y1X/DSTK9bkkqT1c=
+=z52i
+-----END PGP SIGNATURE-----
