@@ -1,39 +1,41 @@
 From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Mon, 07 Jul 2008 16:53:29 +0200
+Date: Mon, 07 Jul 2008 16:55:49 +0200
 Subject: [Buildroot] svn commit: trunk/buildroot
-In-Reply-To: <48721DAA.3080900@atmel.com> (Ulf Samuelsson's message of "Mon\,
-	07 Jul 2008 15\:44\:10 +0200")
+In-Reply-To: <20080707134115.GF15840@mx.loc> (Bernhard Fischer's message of
+	"Mon\, 7 Jul 2008 15\:41\:15 +0200")
 References: <20080704222950.E76B63C61F@busybox.net>
-	<87fxqmg53j.fsf@macbook.be.48ers.dk> <48720878.3070602@atmel.com>
-	<20080707123642.GA15840@mx.loc> <487212CC.7020303@atmel.com>
-	<20080707131123.GC15840@mx.loc> <20080707132821.GE15840@mx.loc>
-	<48721DAA.3080900@atmel.com>
-Message-ID: <871w254ufq.fsf@macbook.be.48ers.dk>
+	<873aml7ru0.fsf@macbook.be.48ers.dk> <48721947.9020804@atmel.com>
+	<20080707134115.GF15840@mx.loc>
+Message-ID: <87wsjx3fre.fsf@macbook.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Ulf" == Ulf Samuelsson <ulf.samuelsson@atmel.com> writes:
+>>>>> "Bernhard" == Bernhard Fischer <rep.dot.nop@gmail.com> writes:
 
 Hi,
 
- Ulf> Not if you want your log file to have the
- Ulf> same name as your project.
+ >> Yes, but that is really not a good implementation.
+ >> The MAKELEVEL has really nothing to do with what you
+ >> want to use it for, it just happens to work, but
+ >> this implementation is easily broken.
 
- Ulf> Try typing
- Ulf> "make > atngw100-expanded-3.log 2>&1"
- Ulf> a couple of times, and you see what I mean.
+ Bernhard> I have to agree to Ulf in this respect, fwiw.
 
-Nothing stops you from defining an alias for make <whatever>_defconfig
-&& make 2>&1 > <whatever>.log in your local .bashrc - What we question
-is the need for adding it to buildroot with the complications it adds
-elsewhere.
+Sure. The proper solution is to fix Makefile.autotools.in - But that's
+not a 5min job.
 
-And given the typical runtime of a buildroot compilation I doubt
-that the command length of the make invocation is the limiting factor
-in developer effeciency ;)
+An alternative solution would be to set DL_DIR to something invalid in
+source-check/external-deps.
+
+ Bernhard> Peter, why did you have to take MAKELEVEL into account?
+ Bernhard> Perhaps we can fix this in a better way.. (pointing me to a
+ Bernhard> detailed commit-message or to the ML archives is
+ Bernhard> sufficient)
+
+See my earlier mail and r22607.
 
 -- 
 Bye, Peter Korsgaard
