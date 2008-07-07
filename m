@@ -1,35 +1,33 @@
-From: hartleys <hartleys@visionengravers.com>
-Date: Mon, 7 Jul 2008 13:04:02 -0400
-Subject: [Buildroot] Problem with external-toolchain copy_toolchain_lib_root
-Message-ID: <BD79186B4FD85F4B8E60E381CAEE1909305C1B@mi8nycmail19.Mi8.com>
+From: Peter Korsgaard <jacmet@uclibc.org>
+Date: Mon, 07 Jul 2008 19:39:55 +0200
+Subject: [Buildroot] svn commit: trunk/buildroot
+In-Reply-To: <20080707152546.GH15840@mx.loc> (Bernhard Fischer's message of
+	"Mon\, 7 Jul 2008 17\:25\:46 +0200")
+References: <20080704222950.E76B63C61F@busybox.net>
+	<87fxqmg53j.fsf@macbook.be.48ers.dk> <48720878.3070602@atmel.com>
+	<20080707123642.GA15840@mx.loc> <87ej654uuu.fsf@macbook.be.48ers.dk>
+	<20080707152546.GH15840@mx.loc>
+Message-ID: <878wwd1tlg.fsf@macbook.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello all,
+>>>>> "Bernhard" == Bernhard Fischer <rep.dot.nop@gmail.com> writes:
 
-I'm not sure if this is a problem with the find utility on my system
-(Debian etch) or a problem in the ext-tool.mk file. The problem is my
-external library files were getting found but not copied to my root
-filesystem.
+Hi,
 
-The following change to ext-tool.mk fixed the problem.
+(will look into the makefile stuff later)
 
-Thanks,
-Hartley
+ >> external-deps doesn't work like it does for the other packages.
 
+ Bernhard> My lack of interrest to support external stuff is deep and profound.
 
-@@ -18,7 +18,7 @@
- 	fi; \
-  \
- 	LIB="$(strip $1)"; \
--	for FILE in `find $${LIB_DIR} -maxdepth 1 -type l -name
-"$${LIB}*"`; do \
-+	for FILE in `find $${LIB_DIR}/ -maxdepth 1 -type l -name
-"$${LIB}*"`; do \
- 		LIB=`basename $${FILE}`; \
- 		while test \! -z "$${LIB}"; do \
- 			echo "copy_toolchain_lib_root lib=$${LIB}
-dst=$${DST}"; \
+external-deps has nothing to do with external toolchains. It simply
+gives you the list of packages in $DL_DIR you'll need to archive
+together with your buildroot snapshot to be able to reproduce your
+build.
+
+-- 
+Bye, Peter Korsgaard
