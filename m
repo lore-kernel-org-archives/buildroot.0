@@ -1,30 +1,56 @@
-From: Hans-Christian Egtvedt <hans-christian.egtvedt@atmel.com>
-Date: Mon, 07 Jul 2008 08:09:29 +0200
-Subject: [Buildroot] svn commit: trunk/buildroot/target/device
-In-Reply-To: <d6cda7730807042347s4c4c4f8cw39dd088dd891803@mail.gmail.com>
-References: <20080705063720.8C5643C608@busybox.net>
-	<d6cda7730807042347s4c4c4f8cw39dd088dd891803@mail.gmail.com>
-Message-ID: <1215410969.15257.8.camel@localhost>
+From: Peter Korsgaard <jacmet@uclibc.org>
+Date: Mon, 07 Jul 2008 08:36:45 +0200
+Subject: [Buildroot] svn commit: trunk/buildroot
+In-Reply-To: <48714AA0.8000809@atmel.com> (Ulf Samuelsson's message of "Mon\,
+	07 Jul 2008 00\:43\:44 +0200")
+References: <20080705092238.AB5163C65B@busybox.net>
+	<87bq1ag4zs.fsf@macbook.be.48ers.dk> <48714AA0.8000809@atmel.com>
+Message-ID: <871w26dwua.fsf@macbook.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Sat, 2008-07-05 at 03:47 -0300, Thiago A. Corr?a wrote:
-> AFAIK 4.2.1 is the only gcc release that produces valid binaries.
-> 4.2.2 produces C++ programs that crash. I think we shouldn't deprecate
-> it.
+>>>>> "Ulf" == Ulf Samuelsson <ulf.samuelsson@atmel.com> writes:
 
-Huh?
+Please keep communication on the list.
 
-GCC 4.2.2.atmel.1.0.8 + the patches on
-http://avr32linux.org/twiki/bin/view/Main/GccPatches is AFAIK more
-bugless than 4.2.1.
+>>>>> "Ulf" == Ulf Samuelsson <ulf.samuelsson@atmel.com> writes:
 
-Do you have an example application which crashes, some stripped C++ code
-I can test with.
+ ulf> config BR2_STAGING_DIR
+ >> 
+ ulf> Modified: trunk/buildroot/Makefile
+ ulf> ===================================================================
+ ulf> --- trunk/buildroot/Makefile	2008-07-05 09:18:54 UTC (rev 22651)
+ ulf> +++ trunk/buildroot/Makefile	2008-07-05 09:22:38 UTC (rev 22652)
+ ulf> @@ -36,7 +36,7 @@
+ ulf> ifneq ($(BUILDROOT_LOCAL),)
+ ulf> BR2_LOCAL:=$(BUILDROOT_LOCAL)
+ ulf> else
+ ulf> -BR2_LOCAL:=$(TOPDIR)/local
+ ulf> +BR2_LOCAL:=$(TOPDIR)local
+ ulf> endif
+ >> 
+ >> Why?
+
+ Ulf> Topdir seems to have a slash already
+ Ulf> so this changes BR2_LOCAL from ".//local" to "./local"
+
+And, is that a problem? This will break if someone forgets the
+trailing slash. Double slashes are normally fine.
+
+ ulf> +
+ ulf> +status:
+ ulf> +	@echo LOCAL=$(LOCAL)
+ ulf> +	@echo BR2_DL_DIR=$(BR2_DL_DIR)
+ ulf> +	@echo HOST_GLIB=$(HOST_GLIB)
+ >> 
+ >> And why?
+
+ Ulf> Just some debugging help
+
+Does it need to be checked in?
 
 -- 
-With kind regards,
-Hans-Christian Egtvedt, Applications Engineer
+Bye, Peter Korsgaard
