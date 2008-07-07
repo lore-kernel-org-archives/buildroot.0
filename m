@@ -1,35 +1,24 @@
-From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Mon, 07 Jul 2008 21:08:53 +0200
-Subject: [Buildroot] svn commit: trunk/buildroot
-In-Reply-To: <402994CA99E94279B9CF869B4BB3942B@aeglos> (Ulf Samuelsson's
-	message of "Mon\, 7 Jul 2008 19\:30\:58 +0200")
-References: <20080704222950.E76B63C61F@busybox.net>
-	<87fxqmg53j.fsf@macbook.be.48ers.dk> <48720878.3070602@atmel.com>
-	<87iqvh4v04.fsf@macbook.be.48ers.dk>
-	<402994CA99E94279B9CF869B4BB3942B@aeglos>
-Message-ID: <873amlzf3u.fsf@macbook.be.48ers.dk>
+From: Robert B. Williams <rwilliams@valcom.com>
+Date: Mon, 7 Jul 2008 16:18:49 -0400
+Subject: [Buildroot] Grub
+Message-ID: <A71C3205D8154C559B3290D072023F42@valcom.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Ulf" == Ulf Samuelsson <ulf.samuelsson@atmel.com> writes:
+I have attempted to build grub and it complains that it cannot download
 
-Hi,
+http://ftp.debian.org/debian/pool/main/g/grub/grub_0.97-35.diff.gz
 
- >> It would be simpler to just set the download directory to an empty dir
- >> - But I still question the need the special purpose log and status
- >> targets you're adding.
- >> 
+ 
 
- Ulf> I actually do not even need buildroot at all, because everything
- Ulf> buildroot does, I can do manually.
- Ulf> It is just more convenient and less error prone to automate
- Ulf> common tasks.
+I am sure this has come up before but I am unable to find anything search
+the mailing lists.
 
-But that's the point. Are they common tasks? I find the new stuff
-pretty special purpose.
+What is the secret?
 
--- 
-Bye, Peter Korsgaard
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: http://busybox.net/lists/buildroot/attachments/20080707/78e751f6/attachment.htm 
