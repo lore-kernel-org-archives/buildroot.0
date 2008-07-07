@@ -1,37 +1,46 @@
 From: Ulf Samuelsson <ulf.samuelsson@atmel.com>
-Date: Mon, 7 Jul 2008 19:28:50 +0200
+Date: Mon, 7 Jul 2008 19:30:58 +0200
 Subject: [Buildroot] svn commit: trunk/buildroot
-References: <20080706073442.174E03C67A@busybox.net><20080707124143.GB15840@mx.loc>
-	<4872169E.2010102@atmel.com><20080707132334.GD15840@mx.loc>
-	<48721B90.5070905@atmel.com> <87mykt4v47.fsf@macbook.be.48ers.dk>
-Message-ID: <AAFCB58EA8634B0CADEDE37957685CEC@aeglos>
+References: <20080704222950.E76B63C61F@busybox.net><87fxqmg53j.fsf@macbook.be.48ers.dk>
+	<48720878.3070602@atmel.com> <87iqvh4v04.fsf@macbook.be.48ers.dk>
+Message-ID: <402994CA99E94279B9CF869B4BB3942B@aeglos>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-
 >>>>>> "Ulf" == Ulf Samuelsson <ulf.samuelsson@atmel.com> writes:
->
+> 
 > Hi,
->
-> Ulf> Maybe it should be possible then in buildroot to
-> Ulf> select where target Gnome is installed?
->
-> That would be silly. The standard location for stuff is /usr, and we
-> don't provide settings for all our other packages.
->
+> 
+> >> That breaks the source-check/external-deps check in
+> >> Makefile.autotools.in (r22607).
+> >> 
+> 
+> Ulf> Is not something like the following to be preferred?
+> 
+> Ulf> Index: Makefile
+> Ulf> ===================================================================
+> Ulf> --- Makefile (revision 22671)
+> Ulf> +++ Makefile (arbetskopia)
+> Ulf> @@ -346,10 +346,10 @@
+> Ulf>  source: $(TARGETS_SOURCE) $(HOST_SOURCE)
+> 
+> Ulf>  _source-check:
+> Ulf> - $(MAKE) SPIDER=--spider source
+> Ulf> + $(MAKE) FORCE_DOWNLOAD=y SPIDER=--spider source
+> 
+> It would be simpler to just set the download directory to an empty dir
+> - But I still question the need the special purpose log and status
+> targets you're adding.
+> 
 
-So you think that the situation we have now, when libgtk2 will
-not compile when gnome is installed in "/opt/gnome2 on the host  is a good 
-one?
-
-You think perhaps that a user which needs libgtk2 should reinstall the PC 
-with
-a Linux distribution which happens to have Gnome installed in /usr instead 
-of "/opt/gnome"
-
+I actually do not even need buildroot at all, because everything
+buildroot does, I can do manually.
+It is just more convenient and less error prone to automate common tasks.
 
 Best Regards
 Ulf Samuelsson
+
+ 
