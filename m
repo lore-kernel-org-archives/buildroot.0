@@ -1,33 +1,67 @@
-From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Mon, 07 Jul 2008 19:39:55 +0200
+From: ulf at uclibc.org <ulf@uclibc.org>
+Date: Mon,  7 Jul 2008 10:48:28 -0700 (PDT)
 Subject: [Buildroot] svn commit: trunk/buildroot
-In-Reply-To: <20080707152546.GH15840@mx.loc> (Bernhard Fischer's message of
-	"Mon\, 7 Jul 2008 17\:25\:46 +0200")
-References: <20080704222950.E76B63C61F@busybox.net>
-	<87fxqmg53j.fsf@macbook.be.48ers.dk> <48720878.3070602@atmel.com>
-	<20080707123642.GA15840@mx.loc> <87ej654uuu.fsf@macbook.be.48ers.dk>
-	<20080707152546.GH15840@mx.loc>
-Message-ID: <878wwd1tlg.fsf@macbook.be.48ers.dk>
+Message-ID: <20080707174828.59C853C2C9@busybox.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Bernhard" == Bernhard Fischer <rep.dot.nop@gmail.com> writes:
+Author: ulf
+Date: 2008-07-07 10:48:27 -0700 (Mon, 07 Jul 2008)
+New Revision: 22673
 
-Hi,
+Log:
+Remove some debug messages
 
-(will look into the makefile stuff later)
+Modified:
+   trunk/buildroot/Makefile
 
- >> external-deps doesn't work like it does for the other packages.
 
- Bernhard> My lack of interrest to support external stuff is deep and profound.
-
-external-deps has nothing to do with external toolchains. It simply
-gives you the list of packages in $DL_DIR you'll need to archive
-together with your buildroot snapshot to be able to reproduce your
-build.
-
--- 
-Bye, Peter Korsgaard
+Changeset:
+Modified: trunk/buildroot/Makefile
+===================================================================
+--- trunk/buildroot/Makefile	2008-07-07 12:04:19 UTC (rev 22672)
++++ trunk/buildroot/Makefile	2008-07-07 17:48:27 UTC (rev 22673)
+@@ -460,7 +460,7 @@
+ #
+ #############################################################
+ clean:
+-	rm -f .config .config.old .config.cmd .tmpconfig.h
++	rm -f .config .config.old .config.cmd .tmpconfig.h .lognr.*
+ 	-$(MAKE) -C $(CONFIG) clean
+ 
+ distclean: clean
+@@ -479,18 +479,14 @@
+ 
+ prepatch:	gcc-patched binutils-patched gdb-patched uclibc-patched
+ 
+-.lognr:
++.lognr.$(PROJECT):
+ 	@echo "0" > .lognr
+ 
+-log:	.lognr
++log:	.lognr.$(PROJECT)
+ 	@expr `cat .lognr` + 1 > .lognr	
+-	@echo Creating $(PROJECT)-`cat .lognr`.log
+-	@$(MAKE) > $(PROJECT)-`cat .lognr`.log 2>&1 
++	@echo Creating $(PROJECT)-`cat .lognr.$(PROJECT)`.log
++	@$(MAKE) > $(PROJECT)-`cat .lognr.$(PROJECT)`.log 2>&1 
+ 
+-tail:
+-	grep "\.tar\."  $(PROJECT)-`cat .lognr`.log
+-	tail --lines=25 $(PROJECT)-`cat .lognr`.log
+-
+ cross: $(BASE_TARGETS)
+ 
+ help:
+@@ -516,8 +512,3 @@
+ .PHONY: dummy subdirs release distclean clean config oldconfig \
+ 	menuconfig tags check test depend defconfig help
+ 
+-status:
+-	@echo LOCAL=$(LOCAL)
+-	@echo BR2_DL_DIR=$(BR2_DL_DIR)
+-	@echo HOST_GLIB=$(HOST_GLIB)
+-	@echo HOST_GLIB_BIN=$(HOST_GLIB_BIN)
