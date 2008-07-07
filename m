@@ -1,76 +1,60 @@
-From: Bernhard Fischer <rep.dot.nop@gmail.com>
-Date: Mon, 7 Jul 2008 15:28:21 +0200
+From: Ulf Samuelsson <ulf.samuelsson@atmel.com>
+Date: Mon, 07 Jul 2008 15:25:27 +0200
 Subject: [Buildroot] svn commit: trunk/buildroot
-In-Reply-To: <20080707131123.GC15840@mx.loc>
+In-Reply-To: <873aml7ru0.fsf@macbook.be.48ers.dk>
 References: <20080704222950.E76B63C61F@busybox.net>
-	<87fxqmg53j.fsf@macbook.be.48ers.dk>
-	<48720878.3070602@atmel.com> <20080707123642.GA15840@mx.loc>
-	<487212CC.7020303@atmel.com> <20080707131123.GC15840@mx.loc>
-Message-ID: <20080707132821.GE15840@mx.loc>
+	<873aml7ru0.fsf@macbook.be.48ers.dk>
+Message-ID: <48721947.9020804@atmel.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Mon, Jul 07, 2008 at 03:11:23PM +0200, Bernhard Fischer wrote:
->On Mon, Jul 07, 2008 at 02:57:48PM +0200, Ulf Samuelsson wrote:
->>-----BEGIN PGP SIGNED MESSAGE-----
->>Hash: SHA1
->>
->>Bernhard Fischer skrev:
->>> On Mon, Jul 07, 2008 at 02:13:44PM +0200, Ulf Samuelsson wrote:
->>>> -----BEGIN PGP SIGNED MESSAGE-----
->>>> Hash: SHA1
->>>>
->>>> Peter Korsgaard skrev:
->>> 
->>>>> That breaks the source-check/external-deps check in
->>>>> Makefile.autotools.in (r22607).
->>>>>
->>>> Is not something like the following to be preferred?
->>
->>Previously the special make targets to check availability
->>of packages on internet would download each target
->>even if the target existed in $(DL_DIR) creating
->><package>.tar.bz2.<n>, or it would not check
->>the package at all.
->>
->>Peter introduced a fix where he will treat the download
->>differently if the MAKELEVEL=0 (normal) or if the
->>MAKELEVEL=1 which is the case for make source-check
->>and make external-deps.
->>
->>When I introduced easy logging by "make log",
->>this breaks the autotools, since this also runs
->>at MAKELEVEL=1.
->>
->>I do not think that MAKELEVEL is a good variable
->>to detect if someone wants to do source-check
->>or external-deps.
->
->make source-check is _supposed_ to download all sources, regardless of
+-----BEGIN PGP SIGNED MESSAGE-----
+Hash: SHA1
 
-Where download is not really appropriate since we do this (for speed and
-volume reasons) deliberately with wget's --spider option, just as a
-sidenote.
+Peter Korsgaard skrev:
+>>>>>> "ulf" == ulf  <ulf@uclibc.org> writes:
+> 
+>  ulf> Author: ulf
+>  ulf> Date: 2008-07-04 15:29:50 -0700 (Fri, 04 Jul 2008)
+>  ulf> New Revision: 22640
+> 
+>  ulf> Log:
+>  ulf> Add 'build with log'
+> 
+> Do we need this in buildroot? What's the advantage of doing this in
+> buildroot instead of in an external wrapper?
 
->whether or not the package exists locally. Keep in mind that it is ment
->to check if packages and patches are (still) downloadable or not and
->explicitely disregarding any local stuff to simulate what users will
->experience.
->
->Perhaps the source-check target should consequently use a
->$(DL_DIR).check dir then. This would avoid breakage elsewhere.
+Mainly that you get the project name automatically as the name of the log.
+Also typing is minimal.
 
-Due to spider, please disregard this comment about $(DL_DIR).check.
->
->Apart from that such a "log" target strikes me as unwarranted.
->Just
->$ (make) 2>&1 >& MY.log
->or
->$ nohup make &
->
->would a more sensible thing to do, IMHO.
->
->HTH,
+There is a counter maintained, which gets incremented
+once per log, so you do not overwrite the old log, but
+that can be implemented in an external wrapper.
+
+
+> 
+> As mentioned earlier, it doesn't work with Makefile.autotools.in using
+> packages.
+> 
+
+Yes, but that is really not a good implementation.
+The MAKELEVEL has really nothing to do with what you
+want to use it for, it just happens to work, but
+this implementation is easily broken.
+
+BR
+Ulf Samuelsson.
+
+
+
+-----BEGIN PGP SIGNATURE-----
+Version: GnuPG v1.4.5 (GNU/Linux)
+Comment: Using GnuPG with SUSE - http://enigmail.mozdev.org
+
+iD8DBQFIchlHAyRRH5cXxqwRAohoAJ9xmlF+jiphUs5wKGF57nytcf/9ZgCeMWL9
+DMoEtSb6vthz4OP/s+gjs9A=
+=0+V9
+-----END PGP SIGNATURE-----
