@@ -1,34 +1,30 @@
-From: jacmet at uclibc.org <jacmet@uclibc.org>
-Date: Sun,  6 Jul 2008 22:30:23 -0700 (PDT)
-Subject: [Buildroot] svn commit: trunk/buildroot/toolchain/kernel-headers
-Message-ID: <20080707053023.471133C608@busybox.net>
+From: Hans-Christian Egtvedt <hans-christian.egtvedt@atmel.com>
+Date: Mon, 07 Jul 2008 08:09:29 +0200
+Subject: [Buildroot] svn commit: trunk/buildroot/target/device
+In-Reply-To: <d6cda7730807042347s4c4c4f8cw39dd088dd891803@mail.gmail.com>
+References: <20080705063720.8C5643C608@busybox.net>
+	<d6cda7730807042347s4c4c4f8cw39dd088dd891803@mail.gmail.com>
+Message-ID: <1215410969.15257.8.camel@localhost>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Author: jacmet
-Date: 2008-07-06 22:30:22 -0700 (Sun, 06 Jul 2008)
-New Revision: 22670
+On Sat, 2008-07-05 at 03:47 -0300, Thiago A. Corr?a wrote:
+> AFAIK 4.2.1 is the only gcc release that produces valid binaries.
+> 4.2.2 produces C++ programs that crash. I think we shouldn't deprecate
+> it.
 
-Log:
-kernel-headers: bump 2.6.25.x version
+Huh?
 
-Modified:
-   trunk/buildroot/toolchain/kernel-headers/Config.in
+GCC 4.2.2.atmel.1.0.8 + the patches on
+http://avr32linux.org/twiki/bin/view/Main/GccPatches is AFAIK more
+bugless than 4.2.1.
 
+Do you have an example application which crashes, some stripped C++ code
+I can test with.
 
-Changeset:
-Modified: trunk/buildroot/toolchain/kernel-headers/Config.in
-===================================================================
---- trunk/buildroot/toolchain/kernel-headers/Config.in	2008-07-07 05:08:39 UTC (rev 22669)
-+++ trunk/buildroot/toolchain/kernel-headers/Config.in	2008-07-07 05:30:22 UTC (rev 22670)
-@@ -137,6 +137,6 @@
- 	default "2.6.22.10"	if BR2_KERNEL_HEADERS_2_6_22
- 	default "2.6.23"	if BR2_KERNEL_HEADERS_2_6_23
- 	default "2.6.24.7"	if BR2_KERNEL_HEADERS_2_6_24
--	default "2.6.25.9"	if BR2_KERNEL_HEADERS_2_6_25
-+	default "2.6.25.10"	if BR2_KERNEL_HEADERS_2_6_25
- 	default "2.6"		if BR2_KERNEL_HEADERS_SNAP
- 
+-- 
+With kind regards,
+Hans-Christian Egtvedt, Applications Engineer
