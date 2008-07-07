@@ -1,41 +1,38 @@
 From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Mon, 07 Jul 2008 16:41:15 +0200
+Date: Mon, 07 Jul 2008 16:44:25 +0200
 Subject: [Buildroot] svn commit: trunk/buildroot
-In-Reply-To: <48720878.3070602@atmel.com> (Ulf Samuelsson's message of "Mon\,
-	07 Jul 2008 14\:13\:44 +0200")
+In-Reply-To: <20080707123642.GA15840@mx.loc> (Bernhard Fischer's message of
+	"Mon\, 7 Jul 2008 14\:36\:42 +0200")
 References: <20080704222950.E76B63C61F@busybox.net>
 	<87fxqmg53j.fsf@macbook.be.48ers.dk> <48720878.3070602@atmel.com>
-Message-ID: <87iqvh4v04.fsf@macbook.be.48ers.dk>
+	<20080707123642.GA15840@mx.loc>
+Message-ID: <87ej654uuu.fsf@macbook.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Ulf" == Ulf Samuelsson <ulf.samuelsson@atmel.com> writes:
+>>>>> "Bernhard" == Bernhard Fischer <rep.dot.nop@gmail.com> writes:
 
-Hi,
-
- >> That breaks the source-check/external-deps check in
- >> Makefile.autotools.in (r22607).
+ Bernhard> On Mon, Jul 07, 2008 at 02:13:44PM +0200, Ulf Samuelsson wrote:
+ >> -----BEGIN PGP SIGNED MESSAGE-----
+ >> Hash: SHA1
  >> 
+ >> Peter Korsgaard skrev:
 
- Ulf> Is not something like the following to be preferred?
+ >>> That breaks the source-check/external-deps check in
+ >>> Makefile.autotools.in (r22607).
+ >>> 
+ >> 
+ >> Is not something like the following to be preferred?
 
- Ulf> Index: Makefile
- Ulf> ===================================================================
- Ulf> --- Makefile	(revision 22671)
- Ulf> +++ Makefile	(arbetskopia)
- Ulf> @@ -346,10 +346,10 @@
- Ulf>  source: $(TARGETS_SOURCE) $(HOST_SOURCE)
+ Bernhard> What were you trying to fix initially?
 
- Ulf>  _source-check:
- Ulf> -	$(MAKE) SPIDER=--spider source
- Ulf> +	$(MAKE) FORCE_DOWNLOAD=y SPIDER=--spider source
-
-It would be simpler to just set the download directory to an empty dir
-- But I still question the need the special purpose log and status
-targets you're adding.
+Me or Ulf? For me, see r22607. Makefile.autotools.in is kinda broken as
+the download target is executed even if the download exists (E.G. it
+uses a phony target instead of the exact file name), so source-check /
+external-deps doesn't work like it does for the other packages.
 
 -- 
 Bye, Peter Korsgaard
