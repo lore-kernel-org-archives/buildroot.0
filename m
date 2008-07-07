@@ -1,68 +1,49 @@
-From: Bernhard Fischer <rep.dot.nop@gmail.com>
-Date: Mon, 7 Jul 2008 15:11:23 +0200
+From: Peter Korsgaard <jacmet@uclibc.org>
+Date: Mon, 07 Jul 2008 15:16:50 +0200
 Subject: [Buildroot] svn commit: trunk/buildroot
-In-Reply-To: <487212CC.7020303@atmel.com>
-References: <20080704222950.E76B63C61F@busybox.net>
-	<87fxqmg53j.fsf@macbook.be.48ers.dk>
-	<48720878.3070602@atmel.com> <20080707123642.GA15840@mx.loc>
-	<487212CC.7020303@atmel.com>
-Message-ID: <20080707131123.GC15840@mx.loc>
+In-Reply-To: <20080707124143.GB15840@mx.loc> (Bernhard Fischer's message of
+	"Mon\, 7 Jul 2008 14\:41\:43 +0200")
+References: <20080706073442.174E03C67A@busybox.net>
+	<20080707124143.GB15840@mx.loc>
+Message-ID: <87abgt7s1p.fsf@macbook.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Mon, Jul 07, 2008 at 02:57:48PM +0200, Ulf Samuelsson wrote:
->-----BEGIN PGP SIGNED MESSAGE-----
->Hash: SHA1
->
->Bernhard Fischer skrev:
->> On Mon, Jul 07, 2008 at 02:13:44PM +0200, Ulf Samuelsson wrote:
->>> -----BEGIN PGP SIGNED MESSAGE-----
->>> Hash: SHA1
->>>
->>> Peter Korsgaard skrev:
->> 
->>>> That breaks the source-check/external-deps check in
->>>> Makefile.autotools.in (r22607).
->>>>
->>> Is not something like the following to be preferred?
->
->Previously the special make targets to check availability
->of packages on internet would download each target
->even if the target existed in $(DL_DIR) creating
-><package>.tar.bz2.<n>, or it would not check
->the package at all.
->
->Peter introduced a fix where he will treat the download
->differently if the MAKELEVEL=0 (normal) or if the
->MAKELEVEL=1 which is the case for make source-check
->and make external-deps.
->
->When I introduced easy logging by "make log",
->this breaks the autotools, since this also runs
->at MAKELEVEL=1.
->
->I do not think that MAKELEVEL is a good variable
->to detect if someone wants to do source-check
->or external-deps.
+>>>>> "Bernhard" == Bernhard Fischer <rep.dot.nop@gmail.com> writes:
 
-make source-check is _supposed_ to download all sources, regardless of
-whether or not the package exists locally. Keep in mind that it is ment
-to check if packages and patches are (still) downloadable or not and
-explicitely disregarding any local stuff to simulate what users will
-experience.
+Hi,
 
-Perhaps the source-check target should consequently use a
-$(DL_DIR).check dir then. This would avoid breakage elsewhere.
+ >> +HOST_GLIB_BIN:=`dirname $(shell $(CONFIG_SHELL) -c "which glib-genmarshal" || echo /usr/bin/glib-genmarshal)`
+ >> +HOST_GLIB:=$(shell $(CONFIG_SHELL) -c "dirname $(HOST_GLIB_BIN)" || echo /usr)
 
-Apart from that such a "log" target strikes me as unwarranted.
-Just
-$ (make) 2>&1 >& MY.log
-or
-$ nohup make &
+ Bernhard> I don't see why
+ Bernhard> 1) "/usr" is a valid fallback here?
+ Bernhard> 2) this stuff is needed in the first place.
 
-would a more sensible thing to do, IMHO.
+ Bernhard> If glib-genmarshal is not in your PATH then it is perfectly fine to
+ Bernhard> fail. If it is in your PATH (which it should be, iff you have it
+ Bernhard> installed), the it should be found by configure.
 
-HTH,
+ Bernhard> Put short, this change should be dropped in my POV.
+
+Agreed.
+
+ >> ifndef CFLAGS_FOR_BUILD
+ >> CFLAGS_FOR_BUILD:=-g -O2
+ >> endif
+ >> @@ -522,3 +520,4 @@
+ >> @echo LOCAL=$(LOCAL)
+ >> @echo BR2_DL_DIR=$(BR2_DL_DIR)
+ >> @echo HOST_GLIB=$(HOST_GLIB)
+ >> +	@echo HOST_GLIB_BIN=$(HOST_GLIB_BIN)
+
+ Bernhard> As already said, you're leaking your local debug stuff into the tree,
+ Bernhard> please don't do that.
+
+Agreed.
+
+-- 
+Bye, Peter Korsgaard
