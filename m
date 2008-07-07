@@ -1,47 +1,58 @@
-From: Ulf Samuelsson <ulf.samuelsson@atmel.com>
-Date: Mon, 7 Jul 2008 19:33:36 +0200
+From: Bernhard Fischer <rep.dot.nop@gmail.com>
+Date: Mon, 7 Jul 2008 20:05:25 +0200
 Subject: [Buildroot] svn commit: trunk/buildroot
-References: <20080704222950.E76B63C61F@busybox.net><87fxqmg53j.fsf@macbook.be.48ers.dk>
-	<48720878.3070602@atmel.com><20080707123642.GA15840@mx.loc>
-	<487212CC.7020303@atmel.com><20080707131123.GC15840@mx.loc>
-	<20080707132821.GE15840@mx.loc><48721DAA.3080900@atmel.com>
-	<871w254ufq.fsf@macbook.be.48ers.dk>
-Message-ID: <3E910904404F43C2BF43B92D95BCD1A4@aeglos>
+In-Reply-To: <20080707174828.59C853C2C9@busybox.net>
+References: <20080707174828.59C853C2C9@busybox.net>
+Message-ID: <20080707180525.GA17569@mx.loc>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-
->>>>>> "Ulf" == Ulf Samuelsson <ulf.samuelsson@atmel.com> writes:
-> 
-> Hi,
-> 
-> Ulf> Not if you want your log file to have the
-> Ulf> same name as your project.
-> 
-> Ulf> Try typing
-> Ulf> "make > atngw100-expanded-3.log 2>&1"
-> Ulf> a couple of times, and you see what I mean.
-> 
-> Nothing stops you from defining an alias for make <whatever>_defconfig
-> && make 2>&1 > <whatever>.log in your local .bashrc - What we question
-> is the need for adding it to buildroot with the complications it adds
-> elsewhere.
-
-It does not add any complication, but it does highlight that
-the autotools has a less desirable implementation.
-
-> 
-> And given the typical runtime of a buildroot compilation I doubt
-> that the command length of the make invocation is the limiting factor
-> in developer effeciency ;)
-> 
-> -- 
-> Bye, Peter Korsgaard
+On Mon, Jul 07, 2008 at 10:48:28AM -0700, ulf at uclibc.org wrote:
+>Author: ulf
+>Date: 2008-07-07 10:48:27 -0700 (Mon, 07 Jul 2008)
+>New Revision: 22673
 >
+>Log:
+>Remove some debug messages
+>
+>Modified:
+>   trunk/buildroot/Makefile
+>
+>
+>Changeset:
+>Modified: trunk/buildroot/Makefile
+>===================================================================
+>--- trunk/buildroot/Makefile	2008-07-07 12:04:19 UTC (rev 22672)
+>+++ trunk/buildroot/Makefile	2008-07-07 17:48:27 UTC (rev 22673)
+>@@ -460,7 +460,7 @@
+> #
+> #############################################################
+> clean:
+>-	rm -f .config .config.old .config.cmd .tmpconfig.h
+>+	rm -f .config .config.old .config.cmd .tmpconfig.h .lognr.*
+> 	-$(MAKE) -C $(CONFIG) clean
+> 
+> distclean: clean
+>@@ -479,18 +479,14 @@
+> 
+> prepatch:	gcc-patched binutils-patched gdb-patched uclibc-patched
+> 
+>-.lognr:
+>+.lognr.$(PROJECT):
+> 	@echo "0" > .lognr
+> 
+>-log:	.lognr
+>+log:	.lognr.$(PROJECT)
+> 	@expr `cat .lognr` + 1 > .lognr	
 
+Ulf, please, if you really insist on adding such crap, then at least
+make it right.
 
-Best Regards
-Ulf Samuelsson 
+Thank you.
+>-	@echo Creating $(PROJECT)-`cat .lognr`.log
+>-	@$(MAKE) > $(PROJECT)-`cat .lognr`.log 2>&1 
+>+	@echo Creating $(PROJECT)-`cat .lognr.$(PROJECT)`.log
+>+	@$(MAKE) > $(PROJECT)-`cat .lognr.$(PROJECT)`.log 2>&1 
