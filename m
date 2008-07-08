@@ -1,7 +1,8 @@
 From: ulf at uclibc.org <ulf@uclibc.org>
-Date: Tue,  8 Jul 2008 12:31:34 -0700 (PDT)
-Subject: [Buildroot] svn commit: trunk/buildroot/toolchain/gcc
-Message-ID: <20080708193134.AA8693C6B6@busybox.net>
+Date: Tue,  8 Jul 2008 12:45:35 -0700 (PDT)
+Subject: [Buildroot] svn commit:
+	trunk/buildroot/toolchain/gcc/ext_source/Atmel/avr32/4.2.2-avr32-2.1.5
+Message-ID: <20080708194535.52B4E3C697@busybox.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -9,27 +10,35 @@ Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
 Author: ulf
-Date: 2008-07-08 12:31:30 -0700 (Tue, 08 Jul 2008)
-New Revision: 22693
+Date: 2008-07-08 12:45:34 -0700 (Tue, 08 Jul 2008)
+New Revision: 22694
 
 Log:
-Fix AVR32 gcc patching, when sysroot option is not enabled
+Add latest gcc patch for AVR32 gcc-4.2.2 prepatched source
 
-Modified:
-   trunk/buildroot/toolchain/gcc/gcc-uclibc-3.x.mk
+Added:
+   trunk/buildroot/toolchain/gcc/ext_source/Atmel/avr32/4.2.2-avr32-2.1.5/903-avr32-fix-removal-of-redundant-cast-operations.patch
 
 
 Changeset:
-Modified: trunk/buildroot/toolchain/gcc/gcc-uclibc-3.x.mk
+Added: trunk/buildroot/toolchain/gcc/ext_source/Atmel/avr32/4.2.2-avr32-2.1.5/903-avr32-fix-removal-of-redundant-cast-operations.patch
 ===================================================================
---- trunk/buildroot/toolchain/gcc/gcc-uclibc-3.x.mk	2008-07-08 14:14:36 UTC (rev 22692)
-+++ trunk/buildroot/toolchain/gcc/gcc-uclibc-3.x.mk	2008-07-08 19:31:30 UTC (rev 22693)
-@@ -36,7 +36,7 @@
- ifneq ($(BR2_TOOLCHAIN_BUILDROOT),y)
- GCC_SITE:=$(VENDOR_SITE)
- GCC_OFFICIAL_VER:=$(GCC_VERSION)$(VENDOR_SUFFIX)$(VENDOR_GCC_RELEASE)
--GCC_PATCH_DIR:=$(VENDOR_PATCH_DIR)/gcc-$(GCC_OFFICIAL_VER)
-+GCC_PATCH_DIR:=toolchain/gcc/ext_source/$(VENDOR_PATCH_DIR)/$(GCC_OFFICIAL_VERSION)
- endif
- 
- GCC_SOURCE:=gcc-$(GCC_OFFICIAL_VER).tar.bz2
+--- trunk/buildroot/toolchain/gcc/ext_source/Atmel/avr32/4.2.2-avr32-2.1.5/903-avr32-fix-removal-of-redundant-cast-operations.patch	                        (rev 0)
++++ trunk/buildroot/toolchain/gcc/ext_source/Atmel/avr32/4.2.2-avr32-2.1.5/903-avr32-fix-removal-of-redundant-cast-operations.patch	2008-07-08 19:45:34 UTC (rev 22694)
+@@ -0,0 +1,16 @@
++Index: trunk/gcc/config/avr32/avr32.c
++===================================================================
++--- trunk/gcc/config/avr32/avr32.c	(revision 43495)
+++++ trunk/gcc/config/avr32/avr32.c	(revision 43496)
++@@ -6499,6 +6499,11 @@
++ 		    break;
++ 		}
++ 
+++              /* Check if we have a call and the register is used as an argument. */
+++              if (CALL_P (scan)
+++                  && find_reg_fusage (scan, USE, reg) )
+++                break;
+++
++ 	      if (!reg_mentioned_p (reg, PATTERN (scan)))
++ 		continue;
++ 
