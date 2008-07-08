@@ -1,35 +1,44 @@
-From: hamish at uclibc.org <hamish@uclibc.org>
-Date: Mon,  7 Jul 2008 23:40:06 -0700 (PDT)
-Subject: [Buildroot] svn commit: trunk/buildroot/package/openssl
-Message-ID: <20080708064006.1998A3C674@busybox.net>
+From: Peter Korsgaard <jacmet@uclibc.org>
+Date: Tue, 08 Jul 2008 08:40:55 +0200
+Subject: [Buildroot] svn commit: trunk/buildroot/package/docker
+In-Reply-To: <20080708054144.507E03C67C@busybox.net> (ulf@uclibc.org's message
+	of "Mon\, 7 Jul 2008 22\:41\:44 -0700 \(PDT\)")
+References: <20080708054144.507E03C67C@busybox.net>
+Message-ID: <877ibwvpxk.fsf@macbook.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Author: hamish
-Date: 2008-07-07 23:40:05 -0700 (Mon, 07 Jul 2008)
-New Revision: 22683
+>>>>> "ulf" == ulf  <ulf@uclibc.org> writes:
 
-Log:
-Don't $(CONFIG_UPDATE) openssl as it doesn't use autotools anyway
+ ulf> Author: ulf
+ ulf> Date: 2008-07-07 22:41:44 -0700 (Mon, 07 Jul 2008)
+ ulf> New Revision: 22682
 
+ ulf> Log:
+ ulf> Add glib2.0 specific include/pkconfig paths in 'docker'
 
-Modified:
-   trunk/buildroot/package/openssl/openssl.mk
+ ulf> Modified:
+ ulf>    trunk/buildroot/package/docker/docker.mk
 
+..
 
-Changeset:
-Modified: trunk/buildroot/package/openssl/openssl.mk
-===================================================================
---- trunk/buildroot/package/openssl/openssl.mk	2008-07-08 05:41:44 UTC (rev 22682)
-+++ trunk/buildroot/package/openssl/openssl.mk	2008-07-08 06:40:05 UTC (rev 22683)
-@@ -40,7 +40,6 @@
- endif
- 	$(SED) '/CFLAG=/s,/;, $(shell echo '$(TARGET_CFLAGS)' | sed -e 's/\//\\\\\//g')/;,' \
- 		$(OPENSSL_DIR)/Configure
--	$(CONFIG_UPDATE) $(OPENSSL_DIR)
- 	touch $@
+ ulf>  DOCKER_MAKE_OPT = CC=$(TARGET_CC) CXX=$(TARGET_CXX) LD=$(TARGET_LD) \
+ ulf> -					CFLAGS="-I$(STAGING_DIR)/usr/include" \
+ ulf> +					CFLAGS="-I$(STAGING_DIR)/usr/include \
+ ulf> +						-I$(STAGING_DIR)/usr/include/glib-2.0 \
+ ulf> +						-I$(STAGING_DIR)/usr/lib/glib-2.0/include" \
+ ulf>  					LDFLAGS="-L$(STAGING_DIR)/usr/lib -L$(STAGING_DIR)/lib" \
+ ulf>  					PKGCONFIG="$(STAGING_DIR)/usr/bin/pkg-config" \
+ ulf> -					PKG_CONFIG_SYSROOT="$(STAGING_DIR)"
+ ulf> +					PKG_CONFIG_SYSROOT="$(STAGING_DIR)" \
+ ulf> +					PKG_CONFIG_PATH="$(STAGING_DIR)/usr/lib/pkgconfig"
  
- $(OPENSSL_DIR)/Makefile: $(OPENSSL_DIR)/.unpacked
+
+Is all of this needed? And shouldn't it be PKG_CONFIG_SYSROOT_DIR
+instead? We don't use the pkgconfig wrapper anymore.
+
+-- 
+Bye, Peter Korsgaard
