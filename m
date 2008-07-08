@@ -1,64 +1,80 @@
-From: Ulf Samuelsson <ulf.samuelsson@atmel.com>
-Date: Tue, 08 Jul 2008 18:48:22 +0200
-Subject: [Buildroot] svn commit: trunk/buildroot/package/openssl
-In-Reply-To: <d6cda7730807080616s2f16871fo498ad1ea9095ef75@mail.gmail.com>
-References: <20080708101305.8702C3C697@busybox.net>	<20080708120426.GB30117@cloud.net.au>	<d6cda7730807080525x78e47b99keb583cec5e3fd045@mail.gmail.com>	<87bq18mtwg.fsf@macbook.be.48ers.dk>
-	<d6cda7730807080616s2f16871fo498ad1ea9095ef75@mail.gmail.com>
-Message-ID: <48739A56.2020905@atmel.com>
+From: Brian Beattie <beattie@beattie-home.net>
+Date: Tue, 08 Jul 2008 11:42:37 -0700
+Subject: [Buildroot] Forcing a kernel rebuild
+Message-ID: <1215542557.6277.21.camel@kokopelli>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
------BEGIN PGP SIGNED MESSAGE-----
-Hash: SHA1
+I'm doing some kernel module development and need to rebuild the kernel
+modules.  Now I can do this by setting the environment to use the
+buildroot cross compiler and running make from within the
+project_{ARCH}/${BOARD}/linux-2.4.24 directory, but I'd really like to
+just run make from the buildroot directory and have all the cross
+compile stuff taken care of.
 
-Thiago A. Corr?a skrev:
-> On Tue, Jul 8, 2008 at 9:39 AM, Peter Korsgaard <jacmet@uclibc.org> wrote:
->>>>>>> "Thiago" == Thiago A Corr?a <thiago.correa@gmail.com> writes:
->>  Thiago>  Ulf is right. You can try building for avr32 and you will
->>  Thiago> see that configure fails with unknown platform/compiler
->>  Thiago> without this. I tried it more or less at the same time as Ulf
->>  Thiago> commited, while I was porting back some google code
->>  Thiago> improvements. If Ulf hadn't committed before me, I would
->>  Thiago> have.
->>
->> Strange, what error does it give exactly? I really don't see any
->> reference to config.sub / config.guess in the openssl package /
->> tarball.
-> 
-> Hmmm after attempting to build without the CONFIG_UPDATE again, it
-> seams that it's really not necessary. I guess I might have confused
-> with another package.
+If there is currently a way to force the kernel modules to be rebuilt I
+have not found it, so I added some targets to target/linux/Makefile.in*
+so that a "make linux26-touch" will touch .configured in the kernel
+directory forcing a kernel and kernel modules recompile for the next
+"make".  I have attached a patch for this and would be interested is
+discussing this approach.  I'm open to any to get this functionality.
 
-It was broken for the AVR32 before I started modifying the stuff.
-openssl-0.9.7m.patch.avr32 is needed.
+-- 
+A: Because it messes up the order in which people normally read text.
+Q: Why is top-posting a bad thing?
 
-Not sure about the exact sequence of changes
-since it was a few days ago, but now when I had
-time to run a check I can also confirm that CONFIG_UPDATE is not needed.
+Brian Beattie   LFS12947 | "Honor isn't about making the right choices.
+beattie at beattie-home.net | It's about dealing with the consequences."
+www.beattie-home.net     | -- Midori Koto
 
-BR
-Ulf Samuelsson
-
-> It built to avr32 without it, but I also have some clean up changes
-> laying here, so I will commit both if it's ok.
-> Basically, this:
-> http://code.google.com/p/buildroot/source/diff?r=638&format=side&path=/trunk/package/openssl/openssl.mk
-> 
-> Regards,
->    Thiago A. Correa
-> _______________________________________________
-> buildroot mailing list
-> buildroot at uclibc.org
-> http://busybox.net/mailman/listinfo/buildroot
-
------BEGIN PGP SIGNATURE-----
-Version: GnuPG v1.4.5 (GNU/Linux)
-Comment: Using GnuPG with SUSE - http://enigmail.mozdev.org
-
-iD8DBQFIc5pWAyRRH5cXxqwRAgzUAJ0b93y/QHy0l8XpVFbDzZvPccl8CgCgvnOb
-j+oxhg4STB61FvA7AIGpeZE=
-=jB76
------END PGP SIGNATURE-----
+------------- Patch Follows ------------------
+Index: target/linux/Makefile.in
+===================================================================
+--- target/linux/Makefile.in	(revision 22673)
++++ target/linux/Makefile.in	(working copy)
+@@ -184,6 +184,9 @@
+ 	$(MAKE) $(LINUX26_MAKE_FLAGS) -C $(LINUX26_DIR) oldconfig
+ 	touch $@
+ 
++$(LINUX26_DIR)/.touch:
++	touch $(LINUX26_DIR)/.configured
++
+ $(LINUX26_DIR)/.depend_done: $(LINUX26_DIR)/.configured
+ 	$(MAKE) $(LINUX26_MAKE_FLAGS) -C $(LINUX26_DIR) prepare
+ 	touch $@
+@@ -230,6 +233,8 @@
+ 
+ linux26-config: host-sed $(LINUX26_DIR)/.configured
+ 
++linux26-touch:	 $(LINUX26_DIR)/.touch
++
+ linux26-update:
+ 	cp -dpf $(LINUX26_DIR)/.config $(LINUX26_KCONFIG)
+ 
+Index: target/linux/Makefile.in.advanced
+===================================================================
+--- target/linux/Makefile.in.advanced	(revision 22673)
++++ target/linux/Makefile.in.advanced	(working copy)
+@@ -378,6 +378,9 @@
+ 	$(MAKE) $(LINUX26_MAKE_FLAGS) -C $(LINUX26_DIR) prepare
+ 	touch $@
+ 
++$(LINUX26_DIR)/.touch:
++	touch $(LINUX26_DIR)/.configured
++
+ $(LINUX26_DIR)/$(LINUX26_BINLOC): $(INITRAMFS_TARGET)
+$(BB_INITRAMFS_TARGET) \
+ 		$(LINUX26_DIR)/.depend_done
+ 	$(MAKE) $(LINUX26_MAKE_FLAGS) \
+@@ -451,6 +454,8 @@
+ 
+ linux26-config: host-sed $(LINUX26_DIR)/.configured
+ 
++linux26-touch:	$(LINUX26_DIR)/.touch
++
+ linux26-update:
+ 	cp -dpf $(LINUX26_DIR)/.config $(LINUX26_KCONFIG)
+ 
