@@ -1,33 +1,38 @@
-From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Tue, 08 Jul 2008 15:59:07 +0200
-Subject: [Buildroot] grub graphics.c
-In-Reply-To: <48736E59.1070400@valcom.com> (Robert B. Williams's message of
-	"Tue\, 08 Jul 2008 09\:40\:41 -0400")
-References: <48736E59.1070400@valcom.com>
-Message-ID: <87r6a4eatw.fsf@macbook.be.48ers.dk>
+From: jacmet at uclibc.org <jacmet@uclibc.org>
+Date: Tue,  8 Jul 2008 07:12:10 -0700 (PDT)
+Subject: [Buildroot] svn commit: trunk/buildroot/package/sqlite
+Message-ID: <20080708141211.029D83C685@busybox.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Robert" == Robert B Williams <rwilliams@valcom.com> writes:
+Author: jacmet
+Date: 2008-07-08 07:12:09 -0700 (Tue, 08 Jul 2008)
+New Revision: 22691
 
- Robert> No rule to make target 'graphics.c', needed by 
- Robert> 'pre_stage2_exec.graphics.o'. stop.
+Log:
+sqlite: strip binary and use $(INSTALL) for installation
 
- Robert> Where is this hiding?
+Modified:
+   trunk/buildroot/package/sqlite/sqlite.mk
 
-Sorry, don't know - Don't use grub.
 
- Robert> Is there a forum for buildroot anywhere?  I noticed that this
- Robert> question was posted in the archive but the response were not.
- Robert> If the responses were captured I wouldn't need to repost this
- Robert> question.
-
-You can use gmane:
-
-http://news.gmane.org/gmane.comp.lib.uclibc.buildroot/
-
--- 
-Bye, Peter Korsgaard
+Changeset:
+Modified: trunk/buildroot/package/sqlite/sqlite.mk
+===================================================================
+--- trunk/buildroot/package/sqlite/sqlite.mk	2008-07-08 13:49:23 UTC (rev 22690)
++++ trunk/buildroot/package/sqlite/sqlite.mk	2008-07-08 14:12:09 UTC (rev 22691)
+@@ -50,8 +50,9 @@
+ 	$(SED) "s,^libdir=.*,libdir=\'$(STAGING_DIR)/usr/lib\',g" $(STAGING_DIR)/usr/lib/libsqlite3.la
+ 
+ $(TARGET_DIR)/usr/bin/sqlite3: $(STAGING_DIR)/usr/bin/sqlite3
+-	cp -a $(STAGING_DIR)/usr/bin/sqlite3 $(TARGET_DIR)/usr/bin
+-	cp -a $(STAGING_DIR)/usr/lib/libsqlite3*.so* $(TARGET_DIR)/usr/lib/
++	$(INSTALL) -m 0755 -D $^ $@
++	$(STRIPCMD) $(STRIP_STRIP_ALL) $@
++	$(INSTALL) -m 0644 -D $(STAGING_DIR)/usr/lib/libsqlite3*.so* $(TARGET_DIR)/usr/lib/
+ 	$(STRIPCMD) $(STRIP_STRIP_UNNEEDED) $(TARGET_DIR)/usr/lib/libsqlite3.so*
+ 
+ sqlite: uclibc readline-target ncurses $(TARGET_DIR)/usr/bin/sqlite3
