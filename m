@@ -1,52 +1,38 @@
-From: bugs at busybox.net <bugs@busybox.net>
-Date: Tue, 8 Jul 2008 06:11:05 -0700
-Subject: [Buildroot] [buildroot 0003974]: [PATCH] new package: LiTE (toolkit
-	engine)
-Message-ID: <2555f5791c1742757d0f9575da60ec90@busybox.net>
+From: =?ISO-8859-1?Q?Thiago_A._Corr=EAa?= <thiago.correa@gmail.com>
+Date: Tue, 8 Jul 2008 10:16:48 -0300
+Subject: [Buildroot] svn commit: trunk/buildroot/package/openssl
+In-Reply-To: <87bq18mtwg.fsf@macbook.be.48ers.dk>
+References: <20080708101305.8702C3C697@busybox.net>
+	<20080708120426.GB30117@cloud.net.au>
+	<d6cda7730807080525x78e47b99keb583cec5e3fd045@mail.gmail.com>
+	<87bq18mtwg.fsf@macbook.be.48ers.dk>
+Message-ID: <d6cda7730807080616s2f16871fo498ad1ea9095ef75@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+On Tue, Jul 8, 2008 at 9:39 AM, Peter Korsgaard <jacmet@uclibc.org> wrote:
+>>>>>> "Thiago" == Thiago A Corr?a <thiago.correa@gmail.com> writes:
+>  Thiago>  Ulf is right. You can try building for avr32 and you will
+>  Thiago> see that configure fails with unknown platform/compiler
+>  Thiago> without this. I tried it more or less at the same time as Ulf
+>  Thiago> commited, while I was porting back some google code
+>  Thiago> improvements. If Ulf hadn't committed before me, I would
+>  Thiago> have.
+>
+> Strange, what error does it give exactly? I really don't see any
+> reference to config.sub / config.guess in the openssl package /
+> tarball.
 
-A NOTE has been added to this issue. 
-====================================================================== 
-http://busybox.net/bugs/view.php?id=3974 
-====================================================================== 
-Reported By:                zonque
-Assigned To:                buildroot
-====================================================================== 
-Project:                    buildroot
-Issue ID:                   3974
-Category:                   New Features
-Reproducibility:            always
-Severity:                   minor
-Priority:                   normal
-Status:                     assigned
-====================================================================== 
-Date Submitted:             07-07-2008 04:29 PDT
-Last Modified:              07-08-2008 06:11 PDT
-====================================================================== 
-Summary:                    [PATCH] new package: LiTE (toolkit engine)
-Description: 
-this patch adds LiTE (DirectFB-based toolkit engine) to the list of
-supported packages. Applies to latest svn here.
-====================================================================== 
+Hmmm after attempting to build without the CONFIG_UPDATE again, it
+seams that it's really not necessary. I guess I might have confused
+with another package.
+It built to avr32 without it, but I also have some clean up changes
+laying here, so I will commit both if it's ok.
+Basically, this:
+http://code.google.com/p/buildroot/source/diff?r=638&format=side&path=/trunk/package/openssl/openssl.mk
 
----------------------------------------------------------------------- 
- daniellaird - 07-08-08 06:11  
----------------------------------------------------------------------- 
-I have updated the patch (It all works fine) but without the examples not
-much to show.  For now the patch just disables the tests and copies all
-supporting pngs/fonts etc into $ROOTFS. 
-
-Issue History 
-Date Modified   Username       Field                    Change               
-====================================================================== 
-07-07-08 04:29  zonque         New Issue                                    
-07-07-08 04:29  zonque         Status                   new => assigned     
-07-07-08 04:29  zonque         Assigned To               => buildroot       
-07-07-08 04:29  zonque         File Added: lite.diff                        
-07-08-08 06:11  daniellaird    Note Added: 0009084                          
-======================================================================
+Regards,
+   Thiago A. Correa
