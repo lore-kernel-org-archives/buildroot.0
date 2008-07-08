@@ -1,30 +1,41 @@
-From: Mark Jackson <mpfj@mimc.co.uk>
-Date: Tue, 08 Jul 2008 12:25:10 +0100
-Subject: [Buildroot] [buildroot 0003994]: Default
- ngw100-base	config	fails with invalid directory when compiling gcc
-In-Reply-To: <20080708111210.GA22206@mx.loc>
-References: <95e7cc33deeab93d180cf51ba6b2a69e@busybox.net>	<48733FE4.2000709@atmel.com>
-	<20080708111210.GA22206@mx.loc>
-Message-ID: <48734E96.9060107@mimc.co.uk>
+From: Hamish Moffatt <hamish@cloud.net.au>
+Date: Tue, 8 Jul 2008 22:03:54 +1000
+Subject: [Buildroot] svn commit: trunk/buildroot/package/openssl
+In-Reply-To: <4873351E.807@atmel.com>
+References: <20080708064006.1998A3C674@busybox.net> <4873351E.807@atmel.com>
+Message-ID: <20080708120354.GA30117@cloud.net.au>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Bernhard Fischer wrote:
-> On Tue, Jul 08, 2008 at 12:22:28PM +0200, Ulf Samuelsson wrote:
->   
->> The config contains
->>
->> # BR2_TOOLCHAIN_SYSROOT is not set
->>
->> This should be set for this toolchain.
->> I.E:
->> BR2_TOOLCHAIN_SYSROOT=y
->>     
->
-> Hello? He can't hear ya -- go to the URL above and PLEASE mark bugs that
-> you consider closed as *closed* and _NOT_ as "resolved".
->   
-I can hear you, but I'll leave this open since it needs fixing surely ?
+On Tue, Jul 08, 2008 at 11:36:30AM +0200, Ulf Samuelsson wrote:
+> -----BEGIN PGP SIGNED MESSAGE-----
+> Hash: SHA1
+> 
+> hamish at uclibc.org skrev:
+> > Author: hamish
+> > Date: 2008-07-07 23:40:05 -0700 (Mon, 07 Jul 2008)
+> > New Revision: 22683
+> > 
+> > Log:
+> > Don't $(CONFIG_UPDATE) openssl as it doesn't use autotools anyway
+> > 
+> 
+> Have you built an AVR32 rootfs without this?
+> 
+> I think you just broke openssl for the AVR32 architecture
+> 
+> Please revert, if you have not successfully tested on the AVR32.
+
+I built it for armeb ok (non-avr32).
+
+There are no config.guess and config.sub in the package when it is
+unpacked. Copying them over, which $(CONFIG_UPDATE) does, will not help
+- the package just doesn't use autoconf!!
+
+cheers
+Hamish
+-- 
+Hamish Moffatt VK3SB <hamish@debian.org> <hamish@cloud.net.au>
