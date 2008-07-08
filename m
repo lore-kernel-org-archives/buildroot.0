@@ -1,33 +1,47 @@
-From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Tue, 08 Jul 2008 14:39:59 +0200
-Subject: [Buildroot] svn commit: trunk/buildroot/package/openssl
-In-Reply-To: <d6cda7730807080525x78e47b99keb583cec5e3fd045@mail.gmail.com>
-	("Thiago A. =?utf-8?Q?Corr=C3=AAa=22's?= message of "Tue\, 8 Jul 2008
-	09\:25\:21 -0300")
-References: <20080708101305.8702C3C697@busybox.net>
-	<20080708120426.GB30117@cloud.net.au>
-	<d6cda7730807080525x78e47b99keb583cec5e3fd045@mail.gmail.com>
-Message-ID: <87bq18mtwg.fsf@macbook.be.48ers.dk>
+From: bugs at busybox.net <bugs@busybox.net>
+Date: Tue, 8 Jul 2008 06:06:08 -0700
+Subject: [Buildroot] [buildroot 0004014]: Alsa-Lib and Alsa-Utils are not
+	the latest versions or using package build system
+Message-ID: <e55d989a713d21c3c4d610a557323222@busybox.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Thiago" == Thiago A Corr?a <thiago.correa@gmail.com> writes:
 
-Hi,
+The following issue has been SUBMITTED. 
+====================================================================== 
+http://busybox.net/bugs/view.php?id=4014 
+====================================================================== 
+Reported By:                daniellaird
+Assigned To:                buildroot
+====================================================================== 
+Project:                    buildroot
+Issue ID:                   4014
+Category:                   New Features
+Reproducibility:            always
+Severity:                   feature
+Priority:                   normal
+Status:                     assigned
+====================================================================== 
+Date Submitted:             07-08-2008 06:06 PDT
+Last Modified:              07-08-2008 06:06 PDT
+====================================================================== 
+Summary:                    Alsa-Lib and Alsa-Utils are not the latest versions
+or using package build system
+Description: 
+Alsa-Lib and Alsa-Utils are now much newer (1.0.16).
+These patches have modified some patches posted by Matthew Dombroski that
+move alsa-lib and alsa-utils to new version and new package build system.
+====================================================================== 
 
- Thiago>  Ulf is right. You can try building for avr32 and you will
- Thiago> see that configure fails with unknown platform/compiler
- Thiago> without this. I tried it more or less at the same time as Ulf
- Thiago> commited, while I was porting back some google code
- Thiago> improvements. If Ulf hadn't committed before me, I would
- Thiago> have.
-
-Strange, what error does it give exactly? I really don't see any
-reference to config.sub / config.guess in the openssl package /
-tarball.
-
--- 
-Bye, Peter Korsgaard
+Issue History 
+Date Modified   Username       Field                    Change               
+====================================================================== 
+07-08-08 06:06  daniellaird    New Issue                                    
+07-08-08 06:06  daniellaird    Status                   new => assigned     
+07-08-08 06:06  daniellaird    Assigned To               => buildroot       
+07-08-08 06:06  daniellaird    File Added: alsa-lib-utils.patch                 
+  
+======================================================================
