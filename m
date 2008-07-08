@@ -1,30 +1,28 @@
 From: Hamish Moffatt <hamish@cloud.net.au>
-Date: Tue, 8 Jul 2008 17:12:24 +1000
+Date: Tue, 8 Jul 2008 17:14:18 +1000
 Subject: [Buildroot] svn commit: trunk/buildroot
-In-Reply-To: <87prppue6v.fsf@macbook.be.48ers.dk>
-References: <20080706073442.174E03C67A@busybox.net>
-	<20080707124143.GB15840@mx.loc> <4872169E.2010102@atmel.com>
-	<20080707132334.GD15840@mx.loc> <48721B90.5070905@atmel.com>
-	<87mykt4v47.fsf@macbook.be.48ers.dk>
-	<AAFCB58EA8634B0CADEDE37957685CEC@aeglos>
-	<877ibxzfh4.fsf@macbook.be.48ers.dk> <48729A8C.4070303@atmel.com>
-	<87prppue6v.fsf@macbook.be.48ers.dk>
-Message-ID: <20080708071224.GA23887@cloud.net.au>
+In-Reply-To: <878wwdvszs.fsf@macbook.be.48ers.dk>
+References: <20080707232011.1D0473C608@busybox.net>
+	<878wwdvszs.fsf@macbook.be.48ers.dk>
+Message-ID: <20080708071418.GB23887@cloud.net.au>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Tue, Jul 08, 2008 at 07:39:52AM +0200, Peter Korsgaard wrote:
->  Ulf> Did not check.
-> 
-> I think they only support distributions with gnome in /usr.
+On Tue, Jul 08, 2008 at 07:34:47AM +0200, Peter Korsgaard wrote:
+> I'm still questioning how general this is. I could imagine other
+> people wanting a different naming convention (E.G. perhaps something
+> with the timestamp instead of just a number), and maybe store it
+> together with the output files (binaries/<project>).
 
-Why do we need to determine the full path anyway rather than using
-$(PATH)? Or always build our own glib-genmarshal rather than trying to
-determine if there's a host one available, or just require that a host
-one is installed in the path.
+Maybe we need to a -include a Makefile.local which would allow Ulf and
+others to customise the make without changing the master Makefile..
+
+Personally I have some makefile mods in my local tree which aren't of
+general interest, but I just merge in the stuff from the buildroot
+repository with no major problems.
 
 Hamish
 -- 
