@@ -1,41 +1,283 @@
-From: Ulf Samuelsson <ulf.samuelsson@atmel.com>
-Date: Tue, 08 Jul 2008 12:01:19 +0200
-Subject: [Buildroot] svn commit: trunk/buildroot/package/docker
-In-Reply-To: <877ibwr9d4.fsf@macbook.be.48ers.dk>
-References: <20080708054144.507E03C67C@busybox.net>	<877ibwvpxk.fsf@macbook.be.48ers.dk>
-	<4873328E.5050001@atmel.com> <877ibwr9d4.fsf@macbook.be.48ers.dk>
-Message-ID: <48733AEF.7020703@atmel.com>
+From: ulf at uclibc.org <ulf@uclibc.org>
+Date: Tue,  8 Jul 2008 03:09:28 -0700 (PDT)
+Subject: [Buildroot] svn commit: trunk/buildroot/package/libgtk2
+Message-ID: <20080708100928.E07693C697@busybox.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
------BEGIN PGP SIGNED MESSAGE-----
-Hash: SHA1
+Author: ulf
+Date: 2008-07-08 03:09:28 -0700 (Tue, 08 Jul 2008)
+New Revision: 22686
 
-Peter Korsgaard skrev:
->>>>>> "Ulf" == Ulf Samuelsson <ulf.samuelsson@atmel.com> writes:
-> 
->  >> Is all of this needed? And shouldn't it be PKG_CONFIG_SYSROOT_DIR
->  >> instead? We don't use the pkgconfig wrapper anymore.
->  >> 
->  Ulf> I tried building both ARM and AVR32 and without this,
->  Ulf> and both are broken.
->  Ulf> docker will use host pkgconfigs instead of target pkgconfigs.
-> 
-> And with PKG_CONFIG_SYSROOT_DIR?
-> 
+Log:
+Support ARCH-unknown-linux-gnu, Use target library paths instead of the host library paths.
 
-I do not mind that you update as long as it builds for ARM & AVR32.
+Added:
+   trunk/buildroot/package/libgtk2/libgtk2-2.12.6-configure.patch
 
-BR
-Ulf Samuelsson
------BEGIN PGP SIGNATURE-----
-Version: GnuPG v1.4.5 (GNU/Linux)
-Comment: Using GnuPG with SUSE - http://enigmail.mozdev.org
 
-iD8DBQFIczrvAyRRH5cXxqwRAosuAKCAldFYwOJ0Dz6iMlzecXyvhHUc8ACfa3cf
-GfvocmwugLh+dHDKTSZ0kG4=
-=Jou7
------END PGP SIGNATURE-----
+Changeset:
+Added: trunk/buildroot/package/libgtk2/libgtk2-2.12.6-configure.patch
+===================================================================
+--- trunk/buildroot/package/libgtk2/libgtk2-2.12.6-configure.patch	                        (rev 0)
++++ trunk/buildroot/package/libgtk2/libgtk2-2.12.6-configure.patch	2008-07-08 10:09:28 UTC (rev 22686)
+@@ -0,0 +1,256 @@
++diff -urN libgtk2-2.12.6-0rig/configure libgtk2-2.12.6/configure
++--- libgtk2-2.12.6-0rig/configure	2008-01-29 04:38:14.000000000 +0100
+++++ libgtk2-2.12.6/configure	2008-07-08 10:54:39.000000000 +0200
++@@ -5094,7 +5094,7 @@
++   ;;
++ 
++ # This must be Linux ELF.
++-linux* | k*bsd*-gnu)
+++*-linux-gnu | linux* | k*bsd*-gnu)
++   lt_cv_deplibs_check_method=pass_all
++   ;;
++ 
++@@ -6973,7 +6973,7 @@
++   lt_cv_sys_global_symbol_to_cdecl="sed -n -e 's/^T .* \(.*\)$/extern int \1();/p' -e 's/^$symcode* .* \(.*\)$/extern char \1;/p'"
++   lt_cv_sys_global_symbol_to_c_name_address="sed -n -e 's/^: \([^ ]*\) $/  {\\\"\1\\\", (lt_ptr) 0},/p' -e 's/^$symcode* \([^ ]*\) \([^ ]*\)$/  {\"\2\", (lt_ptr) \&\2},/p'"
++   ;;
++-linux* | k*bsd*-gnu)
+++*-linux-gnu | linux* | k*bsd*-gnu)
++   if test "$host_cpu" = ia64; then
++     symcode='[ABCDGIRSTW]'
++     lt_cv_sys_global_symbol_to_cdecl="sed -n -e 's/^T .* \(.*\)$/extern int \1();/p' -e 's/^$symcode* .* \(.*\)$/extern char \1;/p'"
++@@ -7943,7 +7943,7 @@
++       lt_prog_compiler_static='-Bstatic'
++       ;;
++ 
++-    linux* | k*bsd*-gnu)
+++    *-linux-gnu | linux* | k*bsd*-gnu)
++       case $cc_basename in
++       icc* | ecc*)
++ 	lt_prog_compiler_wl='-Wl,'
++@@ -8402,7 +8402,7 @@
++       archive_expsym_cmds='sed "s,^,_," $export_symbols >$output_objdir/$soname.expsym~$CC -shared $pic_flag $libobjs $deplibs $compiler_flags ${wl}-h,$soname ${wl}--retain-symbols-file,$output_objdir/$soname.expsym ${wl}--image-base,`expr ${RANDOM-$$} % 4096 / 2 \* 262144 + 1342177280` -o $lib'
++       ;;
++ 
++-    gnu* | linux* | k*bsd*-gnu)
+++    *-linux-gnu | gnu* | linux* | k*bsd*-gnu)
++       if $LD --help 2>&1 | grep ': supported targets:.* elf' > /dev/null; then
++ 	tmp_addflag=
++ 	case $cc_basename,$host_cpu in
++@@ -9336,6 +9336,7 @@
++   if (lt_freq[lt_foo] == 1) { print lt_foo; }
++ }'`
++   sys_lib_search_path_spec=`echo $lt_search_path_spec`
+++
++ else
++   sys_lib_search_path_spec="/lib /usr/lib /usr/local/lib"
++ fi
++@@ -9667,8 +9668,9 @@
++   dynamic_linker=no
++   ;;
++ 
+++
++ # This must be Linux ELF.
++-linux* | k*bsd*-gnu)
+++*-linux-gnu | linux* | k*bsd*-gnu)
++   version_type=linux
++   need_lib_prefix=no
++   need_version=no
++@@ -9681,8 +9683,22 @@
++   # Some rework will be needed to allow for fast_install
++   # before this can be enabled.
++   hardcode_into_libs=yes
++-  sys_lib_search_path_spec="/usr/lib${libsuff} /lib${libsuff} /usr/local/lib${libsuff}"
++-  sys_lib_dlsearch_path_spec="/usr/lib${libsuff} /lib${libsuff}"
+++  #  sys_lib_dlsearch_path_spec="/usr/lib${libsuff} /lib${libsuff}"
+++  # Buildroot: New sys_lib_search_path_spec taken from atk!
+++if test "$GCC" = yes; then
+++  sys_lib_search_path_spec=`$CC -print-search-dirs | grep "^libraries:" | $SED -e "s/^libraries://" -e "s,=/,/,g"`
+++  if echo "$sys_lib_search_path_spec" | grep ';' >/dev/null ; then
+++    # if the path contains ";" then we assume it to be the separator
+++    # otherwise default to the standard path separator (i.e. ":") - it is
+++    # assumed that no part of a normal pathname contains ";" but that should
+++    # okay in the real world where ";" in dirpaths is itself problematic.
+++    sys_lib_search_path_spec=`echo "$sys_lib_search_path_spec" | $SED -e 's/;/ /g'`
+++  else
+++    sys_lib_search_path_spec=`echo "$sys_lib_search_path_spec" | $SED  -e "s/$PATH_SEPARATOR/ /g"`
+++  fi
+++else
+++  sys_lib_search_path_spec="/lib /usr/lib /usr/local/lib"
+++fi
++ 
++   # Append ld.so.conf contents to the search path
++   if test -f /etc/ld.so.conf; then
++@@ -10780,6 +10796,7 @@
++   # Now quote all the things that may contain metacharacters while being
++   # careful not to overquote the AC_SUBSTed values.  We take copies of the
++   # variables and quote the copies for generation of the libtool script.
+++
++   for var in echo old_CC old_CFLAGS AR AR_FLAGS EGREP RANLIB LN_S LTCC LTCFLAGS NM \
++     SED SHELL STRIP \
++     libname_spec library_names_spec soname_spec extract_expsyms_cmds \
++@@ -12109,7 +12126,7 @@
++     hardcode_libdir_flag_spec_CXX='${wl}-rpath ${wl}$libdir'
++     hardcode_libdir_separator_CXX=:
++     ;;
++-  linux* | k*bsd*-gnu)
+++  *-linux-gnu | linux* | k*bsd*-gnu)
++     case $cc_basename in
++       KCC*)
++ 	# Kuck and Associates, Inc. (KAI) C++ Compiler
++@@ -12680,7 +12697,7 @@
++   postdeps_CXX=
++   ;;
++ 
++-linux*)
+++*-linux-gnu | linux*)
++   case `$CC -V 2>&1 | sed 5q` in
++   *Sun\ C*)
++     # Sun C++ 5.9
++@@ -12884,7 +12901,7 @@
++ 	    ;;
++ 	esac
++ 	;;
++-      linux* | k*bsd*-gnu)
+++      *-linux-gnu | linux* | k*bsd*-gnu)
++ 	case $cc_basename in
++ 	  KCC*)
++ 	    # KAI C++ Compiler
++@@ -13636,7 +13653,7 @@
++   ;;
++ 
++ # This must be Linux ELF.
++-linux* | k*bsd*-gnu)
+++*-linux-gnu | linux* | k*bsd*-gnu)
++   version_type=linux
++   need_lib_prefix=no
++   need_version=no
++@@ -13649,7 +13666,24 @@
++   # Some rework will be needed to allow for fast_install
++   # before this can be enabled.
++   hardcode_into_libs=yes
++-  sys_lib_search_path_spec="/usr/lib${libsuff} /lib${libsuff} /usr/local/lib${libsuff}"
+++
+++  # sys_lib_search_path_spec="/usr/lib${libsuff} /lib${libsuff} /usr/local/lib${libsuff}"
+++  # Buildroot: New sys_lib_search_path_spec taken from atk!
+++if test "$GCC" = yes; then
+++  sys_lib_search_path_spec=`$CC -print-search-dirs | grep "^libraries:" | $SED -e "s/^libraries://" -e "s,=/,/,g"`
+++  if echo "$sys_lib_search_path_spec" | grep ';' >/dev/null ; then
+++    # if the path contains ";" then we assume it to be the separator
+++    # otherwise default to the standard path separator (i.e. ":") - it is
+++    # assumed that no part of a normal pathname contains ";" but that should
+++    # okay in the real world where ";" in dirpaths is itself problematic.
+++    sys_lib_search_path_spec=`echo "$sys_lib_search_path_spec" | $SED -e 's/;/ /g'`
+++  else
+++    sys_lib_search_path_spec=`echo "$sys_lib_search_path_spec" | $SED  -e "s/$PATH_SEPARATOR/ /g"`
+++  fi
+++else
+++  sys_lib_search_path_spec="/lib /usr/lib /usr/local/lib"
+++fi
+++
++   sys_lib_dlsearch_path_spec="/usr/lib${libsuff} /lib${libsuff}"
++ 
++   # Append ld.so.conf contents to the search path
++@@ -14586,7 +14620,7 @@
++       lt_prog_compiler_static_F77='-Bstatic'
++       ;;
++ 
++-    linux* | k*bsd*-gnu)
+++    *-linux-gnu | linux* | k*bsd*-gnu)
++       case $cc_basename in
++       icc* | ecc*)
++ 	lt_prog_compiler_wl_F77='-Wl,'
++@@ -15045,7 +15079,7 @@
++       archive_expsym_cmds_F77='sed "s,^,_," $export_symbols >$output_objdir/$soname.expsym~$CC -shared $pic_flag $libobjs $deplibs $compiler_flags ${wl}-h,$soname ${wl}--retain-symbols-file,$output_objdir/$soname.expsym ${wl}--image-base,`expr ${RANDOM-$$} % 4096 / 2 \* 262144 + 1342177280` -o $lib'
++       ;;
++ 
++-    gnu* | linux* | k*bsd*-gnu)
+++    gnu* | *-linux-gnu | linux* | k*bsd*-gnu)
++       if $LD --help 2>&1 | grep ': supported targets:.* elf' > /dev/null; then
++ 	tmp_addflag=
++ 	case $cc_basename,$host_cpu in
++@@ -16239,7 +16273,7 @@
++   ;;
++ 
++ # This must be Linux ELF.
++-linux* | k*bsd*-gnu)
+++*-linux-gnu | linux* | k*bsd*-gnu)
++   version_type=linux
++   need_lib_prefix=no
++   need_version=no
++@@ -16252,7 +16286,23 @@
++   # Some rework will be needed to allow for fast_install
++   # before this can be enabled.
++   hardcode_into_libs=yes
++-  sys_lib_search_path_spec="/usr/lib${libsuff} /lib${libsuff} /usr/local/lib${libsuff}"
+++  # sys_lib_search_path_spec="/usr/lib${libsuff} /lib${libsuff} /usr/local/lib${libsuff}"
+++  # Buildroot: New sys_lib_search_path_spec taken from atk!
+++if test "$GCC" = yes; then
+++  sys_lib_search_path_spec=`$CC -print-search-dirs | grep "^libraries:" | $SED -e "s/^libraries://" -e "s,=/,/,g"`
+++  if echo "$sys_lib_search_path_spec" | grep ';' >/dev/null ; then
+++    # if the path contains ";" then we assume it to be the separator
+++    # otherwise default to the standard path separator (i.e. ":") - it is
+++    # assumed that no part of a normal pathname contains ";" but that should
+++    # okay in the real world where ";" in dirpaths is itself problematic.
+++    sys_lib_search_path_spec=`echo "$sys_lib_search_path_spec" | $SED -e 's/;/ /g'`
+++  else
+++    sys_lib_search_path_spec=`echo "$sys_lib_search_path_spec" | $SED  -e "s/$PATH_SEPARATOR/ /g"`
+++  fi
+++else
+++  sys_lib_search_path_spec="/lib /usr/lib /usr/local/lib"
+++fi
+++
++   sys_lib_dlsearch_path_spec="/usr/lib${libsuff} /lib${libsuff}"
++ 
++   # Append ld.so.conf contents to the search path
++@@ -17169,7 +17219,7 @@
++       lt_prog_compiler_static_GCJ='-Bstatic'
++       ;;
++ 
++-    linux* | k*bsd*-gnu)
+++    *-linux-gnu | linux* | k*bsd*-gnu)
++       case $cc_basename in
++       icc* | ecc*)
++ 	lt_prog_compiler_wl_GCJ='-Wl,'
++@@ -17628,7 +17678,7 @@
++       archive_expsym_cmds_GCJ='sed "s,^,_," $export_symbols >$output_objdir/$soname.expsym~$CC -shared $pic_flag $libobjs $deplibs $compiler_flags ${wl}-h,$soname ${wl}--retain-symbols-file,$output_objdir/$soname.expsym ${wl}--image-base,`expr ${RANDOM-$$} % 4096 / 2 \* 262144 + 1342177280` -o $lib'
++       ;;
++ 
++-    gnu* | linux* | k*bsd*-gnu)
+++    gnu* | *-linux-gnu | linux* | k*bsd*-gnu)
++       if $LD --help 2>&1 | grep ': supported targets:.* elf' > /dev/null; then
++ 	tmp_addflag=
++ 	case $cc_basename,$host_cpu in
++@@ -18842,7 +18892,7 @@
++   ;;
++ 
++ # This must be Linux ELF.
++-linux* | k*bsd*-gnu)
+++*-linux-gnu | linux* | k*bsd*-gnu)
++   version_type=linux
++   need_lib_prefix=no
++   need_version=no
++@@ -18855,7 +18905,22 @@
++   # Some rework will be needed to allow for fast_install
++   # before this can be enabled.
++   hardcode_into_libs=yes
++-  sys_lib_search_path_spec="/usr/lib${libsuff} /lib${libsuff} /usr/local/lib${libsuff}"
+++  #sys_lib_search_path_spec="/usr/lib${libsuff} /lib${libsuff} /usr/local/lib${libsuff}"
+++  # Buildroot: New sys_lib_search_path_spec taken from atk!
+++if test "$GCC" = yes; then
+++  sys_lib_search_path_spec=`$CC -print-search-dirs | grep "^libraries:" | $SED -e "s/^libraries://" -e "s,=/,/,g"`
+++  if echo "$sys_lib_search_path_spec" | grep ';' >/dev/null ; then
+++    # if the path contains ";" then we assume it to be the separator
+++    # otherwise default to the standard path separator (i.e. ":") - it is
+++    # assumed that no part of a normal pathname contains ";" but that should
+++    # okay in the real world where ";" in dirpaths is itself problematic.
+++    sys_lib_search_path_spec=`echo "$sys_lib_search_path_spec" | $SED -e 's/;/ /g'`
+++  else
+++    sys_lib_search_path_spec=`echo "$sys_lib_search_path_spec" | $SED  -e "s/$PATH_SEPARATOR/ /g"`
+++  fi
+++else
+++  sys_lib_search_path_spec="/lib /usr/lib /usr/local/lib"
+++fi
++   sys_lib_dlsearch_path_spec="/usr/lib${libsuff} /lib${libsuff}"
++ 
++   # Append ld.so.conf contents to the search path
