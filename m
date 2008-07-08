@@ -1,135 +1,109 @@
-From: John Voltz <john.voltz@gmail.com>
-Date: Tue, 8 Jul 2008 11:34:03 -0400
-Subject: [Buildroot] svn commit: trunk/buildroot/package/openssl
-In-Reply-To: <87prpobeqx.fsf@macbook.be.48ers.dk>
-References: <20080708101305.8702C3C697@busybox.net>
-	<20080708120426.GB30117@cloud.net.au>
-	<d6cda7730807080525x78e47b99keb583cec5e3fd045@mail.gmail.com>
-	<87bq18mtwg.fsf@macbook.be.48ers.dk>
-	<d6cda7730807080616s2f16871fo498ad1ea9095ef75@mail.gmail.com>
-	<87lk0cjyh3.fsf@macbook.be.48ers.dk>
-	<d6cda7730807080635m5c2949e2me4b4cca844e82e07@mail.gmail.com>
-	<87vdzgh4ko.fsf@macbook.be.48ers.dk>
-	<d6cda7730807080756qb660dd7k19a618ce9d90ad7b@mail.gmail.com>
-	<87prpobeqx.fsf@macbook.be.48ers.dk>
-Message-ID: <46a136670807080834i61e09b53t93d7e8284e95759d@mail.gmail.com>
+From: Ulf Samuelsson <ulf.samuelsson@atmel.com>
+Date: Tue, 08 Jul 2008 17:31:44 +0200
+Subject: [Buildroot] [buildroot 0004004]: Default ngw100-base config
+ fails to find u-boot config
+In-Reply-To: <490107ef7cc12284af8e165a0c530aae@bugs.uclibc.org>
+References: <490107ef7cc12284af8e165a0c530aae@bugs.uclibc.org>
+Message-ID: <48738860.9000606@atmel.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Here's a patch to add SSL certificates to buildroot. It builds them from
-mozilla's svn, so the certs are not likely to have been tampered with. It's
-really pretty slick.
+-----BEGIN PGP SIGNED MESSAGE-----
+Hash: SHA1
 
-diff -Nwrup -x .svn buildroot-orig/package/ca-certificates/
-ca-certificates.mk buildroot/package/ca-certificates/ca-certificates.mk
---- buildroot-orig/package/ca-certificates/ca-certificates.mk    1969-12-31
-19:00:00.000000000 -0500
-+++ buildroot/package/ca-certificates/ca-certificates.mk    2008-07-03
-07:33:36.000000000 -0400
-@@ -0,0 +1,25 @@
-+#############################################################
-+#
-+# ca-certificates
-+#
-+#############################################################
-+
-+package/ca-certificates/ca-bundle.crt:
-+    package/ca-certificates/mkcabundle.pl > $@
-+
-+$(TARGET_DIR)/usr/lib/ssl/cert.pem: package/ca-certificates/ca-bundle.crt
-+    mkdir -p $(TARGET_DIR)/usr/lib/ssl/certs/
-+    mkdir -p $(TARGET_DIR)/usr/lib/ssl/CA/private
-+    cp package/ca-certificates/ca-bundle.crt
-$(TARGET_DIR)/usr/lib/ssl/certs
-+    ln -s certs/ca-bundle.crt $(TARGET_DIR)/usr/lib/ssl/cert.pem
-+
-+ca-certificates: $(TARGET_DIR)/usr/lib/ssl/cert.pem
-+
-+#############################################################
-+#
-+# Toplevel Makefile options
-+#
-+#############################################################
-+ifeq ($(strip $(BR2_PACKAGE_CA_CERTIFICATES)),y)
-+TARGETS+=ca-certificates
-+endif
-\ No newline at end of file
-diff -Nwrup -x .svn buildroot-orig/package/ca-certificates/Config.in
-buildroot/package/ca-certificates/Config.in
---- buildroot-orig/package/ca-certificates/Config.in    1969-12-31
-19:00:00.000000000 -0500
-+++ buildroot/package/ca-certificates/Config.in    2008-07-03
-07:33:36.000000000 -0400
-@@ -0,0 +1,5 @@
-+config BR2_PACKAGE_CA_CERTIFICATES
-+    bool "ssl certificates"
-+    default n
-+    help
-+      SSL certificates for OpenSSL
-diff -Nwrup -x .svn buildroot-orig/package/ca-certificates/mkcabundle.pl
-buildroot/package/ca-certificates/mkcabundle.pl
---- buildroot-orig/package/ca-certificates/mkcabundle.pl    1969-12-31
-19:00:00.000000000 -0500
-+++ buildroot/package/ca-certificates/mkcabundle.pl    2008-07-03
-07:33:36.000000000 -0400
-@@ -0,0 +1,41 @@
-+#!/usr/bin/perl -w
-+#
-+# Used to regenerate ca-bundle.crt from the Mozilla certdata.txt.
-+# Run as ./mkcabundle.pl > ca-bundle.crt
-+#
-+
-+my $cvsroot = ':pserver:anonymous at cvs-mirror.mozilla.org:/cvsroot';
-+my $certdata = 'mozilla/security/nss/lib/ckfw/builtins/certdata.txt';
-+
-+open(IN, "cvs -d $cvsroot co -p $certdata|")
-+    || die "could not check out certdata.txt";
-+
-+my $incert = 0;
-+
-+print<<EOH;
-+# This is a bundle of X.509 certificates of public Certificate
-+# Authorities.  It was generated from the Mozilla root CA list.
-+#
-+# Source: $certdata
-+#
-+EOH
-+
-+while (<IN>) {
-+    if (/^CKA_VALUE MULTILINE_OCTAL/) {
-+        $incert = 1;
-+        open(OUT, "|openssl x509 -text -inform DER -fingerprint")
-+            || die "could not pipe to openssl x509";
-+    } elsif (/^END/ && $incert) {
-+        close(OUT);
-+        $incert = 0;
-+        print "\n\n";
-+    } elsif ($incert) {
-+        my @bs = split(/\\/);
-+        foreach my $b (@bs) {
-+            chomp $b;
-+            printf(OUT "%c", oct($b)) unless $b eq '';
-+        }
-+    } elsif (/^CVS_ID.*Revision: ([^ ]*).*/) {
-+        print "# Generated from certdata.txt RCS revision $1\n#\n";
-+    }
-+}
-\ No newline at end of file
-diff -Nwrup -x .svn buildroot-orig/package/Config.in
-buildroot/package/Config.in
---- buildroot-orig/package/Config.in    2008-07-08 11:19:53.000000000 -0400
-+++ buildroot/package/Config.in    2008-07-08 11:26:07.000000000 -0400
-@@ -150,6 +150,7 @@ source "package/axel/Config.in"
- source "package/boa/Config.in"
- source "package/bind/Config.in"
- source "package/bridge-utils/Config.in"
-+source "package/ca-certificates/Config.in"
- source "package/curl/Config.in"
- if !BR2_PACKAGE_BUSYBOX_HIDE_OTHERS
- source "package/dhcp/Config.in"
--------------- next part --------------
-An HTML attachment was scrubbed...
-URL: http://busybox.net/lists/buildroot/attachments/20080708/e821259b/attachment.htm 
+bugs at busybox.net skrev:
+> The following issue has been SUBMITTED. 
+> ====================================================================== 
+> http://busybox.net/bugs/view.php?id=4004 
+> ====================================================================== 
+> Reported By:                mpfj
+> Assigned To:                buildroot
+> ====================================================================== 
+> Project:                    buildroot
+> Issue ID:                   4004
+> Category:                   Architecture Specific
+> Reproducibility:            always
+> Severity:                   major
+> Priority:                   normal
+> Status:                     assigned
+> ====================================================================== 
+> Date Submitted:             07-08-2008 03:45 PDT
+> Last Modified:              07-08-2008 03:45 PDT
+> ====================================================================== 
+> Summary:                    Default ngw100-base config fails to find u-boot
+> config
+> Description: 
+> Adding u-boot to the default ngw100-base config does not work.  The
+> following error occurs ...
+> 
+> 		/usr/bin/make MAKE='/usr/bin/make -j1 ' -C
+> /usr/local/dev/avr32/buildroot-cvs/project_build_avr32/atngw100-base/u-boot-1.3.3	\
+> 		"atngw100-base"_config
+> make[1]: Entering directory
+> `/usr/local/dev/avr32/buildroot-cvs/project_build_avr32/atngw100-base/u-boot-1.3.3'
+> make[1]: *** No rule to make target `atngw100-base_config'. Stop.
+> make[1]: Leaving directory
+> `/usr/local/dev/avr32/buildroot-cvs/project_build_avr32/atngw100-base/u-boot-1.3.3'
+> make: ***
+> [/usr/local/dev/avr32/buildroot-cvs/project_build_avr32/atngw100-base/u-boot-1.3.3/.configured]
+> Error 2
+> 
+> This can be temp fixed by changing the u-boot board name from $BOARD_NAME
+> to atngw100.
+
+I think the real problem is that the gcc-3.mk file is used instead
+of gcc-4.mk.
+
+This should fix the problem:
+
+Index: toolchain/gcc/gcc-uclibc-3.x.mk
+===================================================================
+- --- toolchain/gcc/gcc-uclibc-3.x.mk	(revision 22686)
++++ toolchain/gcc/gcc-uclibc-3.x.mk	(arbetskopia)
+@@ -36,7 +36,7 @@
+ ifneq ($(BR2_TOOLCHAIN_BUILDROOT),y)
+ GCC_SITE:=$(VENDOR_SITE)
+ GCC_OFFICIAL_VER:=$(GCC_VERSION)$(VENDOR_SUFFIX)$(VENDOR_GCC_RELEASE)
+- -GCC_PATCH_DIR:=$(VENDOR_PATCH_DIR)/gcc-$(GCC_OFFICIAL_VER)
++GCC_PATCH_DIR:=toolchain/gcc/ext_source/$(VENDOR_PATCH_DIR)/gcc-$(GCC_OFFICIAL_VER)
+ endif
+
+ GCC_SOURCE:=gcc-$(GCC_OFFICIAL_VER).tar.bz2
+
+
+
+The names gcc-uclibc-3.x.mk and gcc-uclibc-4.x.mk are really
+misleading since the first will be used if sysroot is not enabled
+and the second will be used if sysroot is enabled.
+It would probably be better to name them
+
+gcc-without-sysroot.mk and gcc-with-sysroot.mk
+
+
+
+> ====================================================================== 
+> 
+> Issue History 
+> Date Modified   Username       Field                    Change               
+> ====================================================================== 
+> 07-08-08 03:45  mpfj           New Issue                                    
+> 07-08-08 03:45  mpfj           Status                   new => assigned     
+> 07-08-08 03:45  mpfj           Assigned To               => buildroot       
+> ======================================================================
+> 
+> _______________________________________________
+> buildroot mailing list
+> buildroot at uclibc.org
+> http://busybox.net/mailman/listinfo/buildroot
+
+-----BEGIN PGP SIGNATURE-----
+Version: GnuPG v1.4.5 (GNU/Linux)
+Comment: Using GnuPG with SUSE - http://enigmail.mozdev.org
+
+iD8DBQFIc4hgAyRRH5cXxqwRAsudAJ0XpoyfcHvD+CvvsoW3QHme/0PeYQCgg3KM
+/eFrrb4R80Hk36uBOxSdJAA=
+=1CAx
+-----END PGP SIGNATURE-----
