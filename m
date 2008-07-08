@@ -1,44 +1,58 @@
-From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Tue, 08 Jul 2008 08:40:55 +0200
-Subject: [Buildroot] svn commit: trunk/buildroot/package/docker
-In-Reply-To: <20080708054144.507E03C67C@busybox.net> (ulf@uclibc.org's message
-	of "Mon\, 7 Jul 2008 22\:41\:44 -0700 \(PDT\)")
-References: <20080708054144.507E03C67C@busybox.net>
-Message-ID: <877ibwvpxk.fsf@macbook.be.48ers.dk>
+From: Hamish Moffatt <hamish@cloud.net.au>
+Date: Tue, 8 Jul 2008 17:10:48 +1000
+Subject: [Buildroot] query about change to $(MAKE) definition
+Message-ID: <20080708071048.GA23482@cloud.net.au>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "ulf" == ulf  <ulf@uclibc.org> writes:
+Peter,
 
- ulf> Author: ulf
- ulf> Date: 2008-07-07 22:41:44 -0700 (Mon, 07 Jul 2008)
- ulf> New Revision: 22682
+Can you explain the rationale behind the following change to 
+package/Makefile.in you made last week?
 
- ulf> Log:
- ulf> Add glib2.0 specific include/pkconfig paths in 'docker'
+It's causing my kernel builds to be very noisy now. I have a custom
+makefile for my kernel build, and I'm now getting a ton of
 
- ulf> Modified:
- ulf>    trunk/buildroot/package/docker/docker.mk
+make[5]: warning: -jN forced in submake: disabling jobserver mode.
 
-..
+warnings from it, because $(MAKE) has changed from
+'/usr/bin/make -j2' to: '/usr/bin/make MAKE=/usr/bin/make -j2'.
 
- ulf>  DOCKER_MAKE_OPT = CC=$(TARGET_CC) CXX=$(TARGET_CXX) LD=$(TARGET_LD) \
- ulf> -					CFLAGS="-I$(STAGING_DIR)/usr/include" \
- ulf> +					CFLAGS="-I$(STAGING_DIR)/usr/include \
- ulf> +						-I$(STAGING_DIR)/usr/include/glib-2.0 \
- ulf> +						-I$(STAGING_DIR)/usr/lib/glib-2.0/include" \
- ulf>  					LDFLAGS="-L$(STAGING_DIR)/usr/lib -L$(STAGING_DIR)/lib" \
- ulf>  					PKGCONFIG="$(STAGING_DIR)/usr/bin/pkg-config" \
- ulf> -					PKG_CONFIG_SYSROOT="$(STAGING_DIR)"
- ulf> +					PKG_CONFIG_SYSROOT="$(STAGING_DIR)" \
- ulf> +					PKG_CONFIG_PATH="$(STAGING_DIR)/usr/lib/pkgconfig"
+So now -j2 is passed to every submake instance, rather than letting make
+itself do the right thing. I'm guessing other builds that do anything
+tricky might also suffer.
+
+Thanks
+Hamish
+
+Index: package/Makefile.in
+===================================================================
+--- package/Makefile.in	(revision 22589)
++++ package/Makefile.in	(revision 22590)
+@@ -6,15 +6,14 @@
+ endif
+ HOSTMAKE :=$(shell $(CONFIG_SHELL) -c "which $(HOSTMAKE)" || type -p $(HOSTMAKE) || echo make)
  
+-MAKE1:=$(HOSTMAKE) MAKE="$(firstword $(HOSTMAKE)) -j1"
+-MAKE:=$(HOSTMAKE) -j$(BR2_JLEVEL)
+-
+ # honor silent mode
+ ifeq (s,$(findstring s,$(MAKEFLAGS)))
+-MAKE1+= -s
+-MAKE+= -s
++MAKESILENT:=-s
+ endif
+ 
++MAKE1:=$(HOSTMAKE) MAKE='$(firstword $(HOSTMAKE)) -j1 $(MAKESILENT)'
++MAKE:=$(HOSTMAKE) MAKE='$(firstword $(HOSTMAKE)) -j$(BR2_JLEVEL) $(MAKESILENT)'
++
+ ifeq ($(BR2_OPTIMIZE_0),y)
+ TARGET_OPTIMIZATION=-O0
+ endif
 
-Is all of this needed? And shouldn't it be PKG_CONFIG_SYSROOT_DIR
-instead? We don't use the pkgconfig wrapper anymore.
 
 -- 
-Bye, Peter Korsgaard
+Hamish Moffatt VK3SB <hamish@debian.org> <hamish@cloud.net.au>
