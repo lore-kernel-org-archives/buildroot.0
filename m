@@ -1,64 +1,70 @@
-From: bugs at busybox.net <bugs@busybox.net>
-Date: Tue, 8 Jul 2008 03:02:47 -0700
-Subject: [Buildroot] [buildroot 0003994]: Default ngw100-base config fails
-	with invalid directory when compiling gcc
-Message-ID: <95e7cc33deeab93d180cf51ba6b2a69e@busybox.net>
+From: Ulf Samuelsson <ulf.samuelsson@atmel.com>
+Date: Tue, 08 Jul 2008 11:59:57 +0200
+Subject: [Buildroot] svn commit: trunk/buildroot
+In-Reply-To: <20080708071224.GA23887@cloud.net.au>
+References: <20080706073442.174E03C67A@busybox.net>	<20080707124143.GB15840@mx.loc>
+	<4872169E.2010102@atmel.com>	<20080707132334.GD15840@mx.loc>
+	<48721B90.5070905@atmel.com>	<87mykt4v47.fsf@macbook.be.48ers.dk>	<AAFCB58EA8634B0CADEDE37957685CEC@aeglos>	<877ibxzfh4.fsf@macbook.be.48ers.dk>
+	<48729A8C.4070303@atmel.com>	<87prppue6v.fsf@macbook.be.48ers.dk>
+	<20080708071224.GA23887@cloud.net.au>
+Message-ID: <48733A9D.8090302@atmel.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+-----BEGIN PGP SIGNED MESSAGE-----
+Hash: SHA1
 
-The following issue has been SUBMITTED. 
-====================================================================== 
-http://busybox.net/bugs/view.php?id=3994 
-====================================================================== 
-Reported By:                mpfj
-Assigned To:                buildroot
-====================================================================== 
-Project:                    buildroot
-Issue ID:                   3994
-Category:                   Architecture Specific
-Reproducibility:            always
-Severity:                   major
-Priority:                   normal
-Status:                     assigned
-====================================================================== 
-Date Submitted:             07-08-2008 03:02 PDT
-Last Modified:              07-08-2008 03:02 PDT
-====================================================================== 
-Summary:                    Default ngw100-base config fails with invalid
-directory when compiling gcc
-Description: 
-Checked out latest svn copy
+Hamish Moffatt skrev:
+> On Tue, Jul 08, 2008 at 07:39:52AM +0200, Peter Korsgaard wrote:
+>>  Ulf> Did not check.
+>>
+>> I think they only support distributions with gnome in /usr.
+> 
+> Why do we need to determine the full path anyway rather than using
+> $(PATH)? Or always build our own glib-genmarshal rather than trying to
+> determine if there's a host one available, or just require that a host
+> one is installed in the path.
+> 
+> Hamish
 
-# make atngw100-base_defconfig
-# make
+The gnome configuration does not use $(PATH) to determine
+where glib-genmarshal is located.
+It also ignores totally the GLIB_GENMARSHAL environment variable.
 
-Fails with the following ...
+It queries "$(PKG_CONFIG_PATH)/glib-2.0.pc" using pkg-config
+PKG_CONFIG_PATH is set to $(STAGING_DIR)/usr/lib/pkgconfig
+The query returns the path to target glib-genmarhal = /usr/lib.
 
-# Apply any files named gcc-*.patch from the source directory to gcc
-toolchain/patch-kernel.sh
-/usr/local/dev/avr32/buildroot-cvs/toolchain_build_avr32/gcc-4.2.2-avr32-2.1.5
-Atmel/avr32/gcc-4.2.2-avr32-2.1.5 \*.patch
-Aborting.  'Atmel/avr32/gcc-4.2.2-avr32-2.1.5' is not a directory.
-make: ***
-[/usr/local/dev/avr32/buildroot-cvs/toolchain_build_avr32/gcc-4.2.2-avr32-2.1.5/.patched]
-Error 1
+If you set PKG_CONFIG_PATH to "/usr/lib/pkgconfig", then
+the build of libgtk2 will fail.
 
-This can be temporarily fixed with ...
+Building your own glib-genmarshal will not do you any good,
+unless you can install it in /usr/bin which requires super-user privileges.
 
-# mkdir Atmel
-# cd Atmel
-# ln -s ../toolchain_build_avr32 avr32
+I managed to successfully build libgtk2 for the ARM architecture
+right now, by symlinking some gnome applications to /usr/bin
+and a patch to libgtk2-2.12.6'configure.
 
-====================================================================== 
+I saved all symlink definitions in a script, which I am
+considering checking in.
 
-Issue History 
-Date Modified   Username       Field                    Change               
-====================================================================== 
-07-08-08 03:02  mpfj           New Issue                                    
-07-08-08 03:02  mpfj           Status                   new => assigned     
-07-08-08 03:02  mpfj           Assigned To               => buildroot       
-======================================================================
+The configure script will not recognize arm-unknown-linux-gnu
+as a host, and "sys_lib_search_path_spec" seems to be hardwired
+to "/usr/lib /lib /usr/local/lib" so the ARM applications
+are linked with host libraries.
+
+Will add this patch right now.
+
+BR
+Ulf Samuelsson
+-----BEGIN PGP SIGNATURE-----
+Version: GnuPG v1.4.5 (GNU/Linux)
+Comment: Using GnuPG with SUSE - http://enigmail.mozdev.org
+
+iD8DBQFIczqdAyRRH5cXxqwRAknTAJ91z6Mc3orgO2LTnQsu3xu76q5hQgCfXqd6
+UyGgxdzHmux9fHB+qEecrrA=
+=vZTY
+-----END PGP SIGNATURE-----
