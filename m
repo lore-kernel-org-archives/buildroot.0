@@ -1,42 +1,69 @@
-From: ulf at uclibc.org <ulf@uclibc.org>
-Date: Mon,  7 Jul 2008 22:41:44 -0700 (PDT)
-Subject: [Buildroot] svn commit: trunk/buildroot/package/docker
-Message-ID: <20080708054144.507E03C67C@busybox.net>
+From: Ulf Samuelsson <ulf.samuelsson@atmel.com>
+Date: Tue, 08 Jul 2008 07:52:31 +0200
+Subject: [Buildroot] svn commit: trunk/buildroot
+In-Reply-To: <878wwdvszs.fsf@macbook.be.48ers.dk>
+References: <20080707232011.1D0473C608@busybox.net>
+	<878wwdvszs.fsf@macbook.be.48ers.dk>
+Message-ID: <4873009F.20308@atmel.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Author: ulf
-Date: 2008-07-07 22:41:44 -0700 (Mon, 07 Jul 2008)
-New Revision: 22682
+-----BEGIN PGP SIGNED MESSAGE-----
+Hash: SHA1
 
-Log:
-Add glib2.0 specific include/pkconfig paths in 'docker'
+Peter Korsgaard skrev:
+>>>>>> "ulf" == ulf  <ulf@uclibc.org> writes:
+> 
+>  ulf> Author: ulf
+>  ulf> Date: 2008-07-07 16:20:09 -0700 (Mon, 07 Jul 2008)
+>  ulf> New Revision: 22676
+> 
+>  ulf> Log:
+>  ulf> Fix log
+> 
+>  ulf> Modified:
+>  ulf>    trunk/buildroot/Makefile
+> 
+> 
+>  ulf> Changeset:
+>  ulf> Modified: trunk/buildroot/Makefile
+>  ulf> ===================================================================
+>  ulf> --- trunk/buildroot/Makefile	2008-07-07 18:32:41 UTC (rev 22675)
+>  ulf> +++ trunk/buildroot/Makefile	2008-07-07 23:20:09 UTC (rev 22676)
+>  ulf> @@ -485,9 +485,8 @@
+>  ulf>  log:	.lognr.$(PROJECT)
+>  ulf>  	@expr `cat .lognr.$(PROJECT)` + 1 > .lognr.$(PROJECT)	
+>  ulf>  	@echo Creating $(PROJECT)-`cat .lognr.$(PROJECT)`.log
+>  ulf> -	@$(MAKE) testing > $(PROJECT)-`cat .lognr.$(PROJECT)`.log 2>&1 
+>  ulf> +	@$(MAKE) > $(PROJECT)-`cat .lognr.$(PROJECT)`.log 2>&1 
+> 
+> I'm still questioning how general this is. I could imagine other
+> people wanting a different naming convention (E.G. perhaps something
+> with the timestamp instead of just a number), and maybe store it
+> together with the output files (binaries/<project>).
+> 
 
-Modified:
-   trunk/buildroot/package/docker/docker.mk
+I do not mind discussing implementation.
+Personally - I think that storing with a time-stamp
+in the binaries/project is OK, for a completed
+build, but intermediate builds are better in the top directory,
+to have easy access and indication of failure.
+
+OpenEmbedded stores the log for each package separately
+which is nice but their build system is very different.
+
+BR
+Ulf Samuelsson
 
 
-Changeset:
-Modified: trunk/buildroot/package/docker/docker.mk
-===================================================================
---- trunk/buildroot/package/docker/docker.mk	2008-07-08 05:14:36 UTC (rev 22681)
-+++ trunk/buildroot/package/docker/docker.mk	2008-07-08 05:41:44 UTC (rev 22682)
-@@ -11,10 +11,13 @@
- DOCKER_INSTALL_TARGET = YES
- 
- DOCKER_MAKE_OPT = CC=$(TARGET_CC) CXX=$(TARGET_CXX) LD=$(TARGET_LD) \
--					CFLAGS="-I$(STAGING_DIR)/usr/include" \
-+					CFLAGS="-I$(STAGING_DIR)/usr/include \
-+						-I$(STAGING_DIR)/usr/include/glib-2.0 \
-+						-I$(STAGING_DIR)/usr/lib/glib-2.0/include" \
- 					LDFLAGS="-L$(STAGING_DIR)/usr/lib -L$(STAGING_DIR)/lib" \
- 					PKGCONFIG="$(STAGING_DIR)/usr/bin/pkg-config" \
--					PKG_CONFIG_SYSROOT="$(STAGING_DIR)"
-+					PKG_CONFIG_SYSROOT="$(STAGING_DIR)" \
-+					PKG_CONFIG_PATH="$(STAGING_DIR)/usr/lib/pkgconfig"
- 
- DOCKER_INSTALL_TARGET_OPT = PREFIX=$(TARGET_DIR)/usr install
- 
+-----BEGIN PGP SIGNATURE-----
+Version: GnuPG v1.4.5 (GNU/Linux)
+Comment: Using GnuPG with SUSE - http://enigmail.mozdev.org
+
+iD8DBQFIcwCfAyRRH5cXxqwRApwmAKCU2FSezvuWlUYLYWx5QGM/1bep2QCdGq6e
+QFLeqdoxHOzBgdyeZ5BJ5oA=
+=0g15
+-----END PGP SIGNATURE-----
