@@ -1,44 +1,29 @@
-From: Hamish Moffatt <hamish@cloud.net.au>
-Date: Tue, 8 Jul 2008 22:04:26 +1000
+From: =?ISO-8859-1?Q?Thiago_A._Corr=EAa?= <thiago.correa@gmail.com>
+Date: Tue, 8 Jul 2008 09:25:21 -0300
 Subject: [Buildroot] svn commit: trunk/buildroot/package/openssl
-In-Reply-To: <20080708101305.8702C3C697@busybox.net>
+In-Reply-To: <20080708120426.GB30117@cloud.net.au>
 References: <20080708101305.8702C3C697@busybox.net>
-Message-ID: <20080708120426.GB30117@cloud.net.au>
+	<20080708120426.GB30117@cloud.net.au>
+Message-ID: <d6cda7730807080525x78e47b99keb583cec5e3fd045@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Tue, Jul 08, 2008 at 03:13:05AM -0700, ulf at uclibc.org wrote:
-> Author: ulf
-> Date: 2008-07-08 03:13:04 -0700 (Tue, 08 Jul 2008)
-> New Revision: 22687
-> 
-> Log:
-> Revert patch which breaks AVR32 build
-> 
-> Modified:
->    trunk/buildroot/package/openssl/openssl.mk
-> 
-> 
-> Changeset:
-> Modified: trunk/buildroot/package/openssl/openssl.mk
-> ===================================================================
-> --- trunk/buildroot/package/openssl/openssl.mk	2008-07-08 10:09:28 UTC (rev 22686)
-> +++ trunk/buildroot/package/openssl/openssl.mk	2008-07-08 10:13:04 UTC (rev 22687)
-> @@ -40,6 +40,7 @@
->  endif
->  	$(SED) '/CFLAG=/s,/;, $(shell echo '$(TARGET_CFLAGS)' | sed -e 's/\//\\\\\//g')/;,' \
->  		$(OPENSSL_DIR)/Configure
-> +	$(CONFIG_UPDATE) $(OPENSSL_DIR)
->  	touch $@
->  
->  $(OPENSSL_DIR)/Makefile: $(OPENSSL_DIR)/.unpacked
+On Tue, Jul 8, 2008 at 9:04 AM, Hamish Moffatt <hamish@cloud.net.au> wrote:
+> On Tue, Jul 08, 2008 at 03:13:05AM -0700, ulf at uclibc.org wrote:
+>
+> Please, did you test before reverting this?
+>
 
-Please, did you test before reverting this?
+Hamish, Peter,
 
+ Ulf is right. You can try building for avr32 and you will see that
+configure fails with unknown platform/compiler without this. I tried
+it more or less at the same time as Ulf commited, while I was porting
+back some google code improvements. If Ulf hadn't committed before me,
+I would have.
 
-Hamish
--- 
-Hamish Moffatt VK3SB <hamish@debian.org> <hamish@cloud.net.au>
+Kind Regards,
+    Thiago A. Correa
