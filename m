@@ -1,44 +1,77 @@
-From: ulf at uclibc.org <ulf@uclibc.org>
-Date: Tue,  8 Jul 2008 12:45:35 -0700 (PDT)
-Subject: [Buildroot] svn commit:
-	trunk/buildroot/toolchain/gcc/ext_source/Atmel/avr32/4.2.2-avr32-2.1.5
-Message-ID: <20080708194535.52B4E3C697@busybox.net>
+From: Ulf Samuelsson <ulf.samuelsson@atmel.com>
+Date: Tue, 08 Jul 2008 22:10:37 +0200
+Subject: [Buildroot] atngw100-base_defconfig does not use "sysroot"
+Message-ID: <4873C9BD.3030005@atmel.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Author: ulf
-Date: 2008-07-08 12:45:34 -0700 (Tue, 08 Jul 2008)
-New Revision: 22694
+-----BEGIN PGP SIGNED MESSAGE-----
+Hash: SHA1
 
-Log:
-Add latest gcc patch for AVR32 gcc-4.2.2 prepatched source
-
-Added:
-   trunk/buildroot/toolchain/gcc/ext_source/Atmel/avr32/4.2.2-avr32-2.1.5/903-avr32-fix-removal-of-redundant-cast-operations.patch
+Any reason why atngw100-base does not use sysroot for the toolchain?
+Anyone minds that I change so that all Atmel AVR defconfigs
+use the same toolchain configuration?
 
 
-Changeset:
-Added: trunk/buildroot/toolchain/gcc/ext_source/Atmel/avr32/4.2.2-avr32-2.1.5/903-avr32-fix-removal-of-redundant-cast-operations.patch
+Index: target/device/Atmel/atngw100-base/atngw100-base_defconfig
 ===================================================================
---- trunk/buildroot/toolchain/gcc/ext_source/Atmel/avr32/4.2.2-avr32-2.1.5/903-avr32-fix-removal-of-redundant-cast-operations.patch	                        (rev 0)
-+++ trunk/buildroot/toolchain/gcc/ext_source/Atmel/avr32/4.2.2-avr32-2.1.5/903-avr32-fix-removal-of-redundant-cast-operations.patch	2008-07-08 19:45:34 UTC (rev 22694)
-@@ -0,0 +1,16 @@
-+Index: trunk/gcc/config/avr32/avr32.c
-+===================================================================
-+--- trunk/gcc/config/avr32/avr32.c	(revision 43495)
-++++ trunk/gcc/config/avr32/avr32.c	(revision 43496)
-+@@ -6499,6 +6499,11 @@
-+ 		    break;
-+ 		}
-+ 
-++              /* Check if we have a call and the register is used as an argument. */
-++              if (CALL_P (scan)
-++                  && find_reg_fusage (scan, USE, reg) )
-++                break;
-++
-+ 	      if (!reg_mentioned_p (reg, PATTERN (scan)))
-+ 		continue;
-+ 
+- --- target/device/Atmel/atngw100-base/atngw100-base_defconfig
+(revision 22692)
++++ target/device/Atmel/atngw100-base/atngw100-base_defconfig
+(arbetskopia)
+@@ -1,6 +1,6 @@
+ #
+ # Automatically generated make config: don't edit
+- -# Fri Jul  4 12:05:11 2008
++# Tue Jul  8 21:25:13 2008
+ #
+ BR2_HAVE_DOT_CONFIG=y
+ BR2_VERSION="0.10.0-svn"
+@@ -164,9 +164,9 @@
+ # BR2_TOOLCHAIN_ATMEL_AVR32_4_1_2 is not set
+ # BR2_TOOLCHAIN_ATMEL_AVR32_4_2_1 is not set
+ BR2_TOOLCHAIN_ATMEL_AVR32_4_2_2=y
+- -# BR2_TOOLCHAIN_ATMEL_AVR32_4_2_3_ENABLE is not set
+ # BR2_TOOLCHAIN_ATMEL_AVR32_4_2_3 is not set
+ # BR2_TOOLCHAIN_UNKNOWNVENDOR is not set
++# BR2_TOOLCHAIN_ATMEL_AVR32_4_2_3_ENABLE is not set
+ BR2_TOOLCHAIN_ATMEL_AVR32=y
+ BR2_VENDOR_SITE="$(BR2_ATMEL_MIRROR)"
+ BR2_VENDOR_SUFFIX="-avr32"
+@@ -244,7 +244,7 @@
+ BR2_GCC_SUPPORTS_SYSROOT=y
+ # BR2_GCC_SUPPORTS_FINEGRAINEDMTUNE is not set
+ BR2_GCC_VERSION="4.2.2"
+- -# BR2_TOOLCHAIN_SYSROOT is not set
++BR2_TOOLCHAIN_SYSROOT=y
+ # BR2_GCC_USE_SJLJ_EXCEPTIONS is not set
+ BR2_EXTRA_GCC_CONFIG_OPTIONS=""
+ BR2_GCC_CROSS_CXX=y
+@@ -362,12 +362,12 @@
+ # BR2_PACKAGE_POPT is not set
+ # BR2_PACKAGE_PORTAGE is not set
+ # BR2_PACKAGE_SCREEN is not set
+- -# BR2_PACKAGE_SQLITE is not set
+ # BR2_PACKAGE_STARTUP_NOTIFICATION is not set
+ # BR2_PACKAGE_STRACE is not set
+ # BR2_PACKAGE_SUDO is not set
+ BR2_DATABASE_SUPPORT=y
+ # BR2_PACKAGE_MYSQL_CLIENT is not set
++# BR2_PACKAGE_SQLITE is not set
+ BR2_NETWORK_SUPPORT=y
+
+ #
+
+BR
+Ulf Samuelsson
+-----BEGIN PGP SIGNATURE-----
+Version: GnuPG v1.4.5 (GNU/Linux)
+Comment: Using GnuPG with SUSE - http://enigmail.mozdev.org
+
+iD8DBQFIc8m9AyRRH5cXxqwRAr9eAJ9T8oDV6YVeKJRFTBXMZ7NLEF75wQCfUcDg
+x2ySmRHD54wwhe+iGz3iLL8=
+=raCU
+-----END PGP SIGNATURE-----
