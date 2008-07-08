@@ -1,10 +1,12 @@
 From: Ulf Samuelsson <ulf.samuelsson@atmel.com>
-Date: Tue, 08 Jul 2008 07:52:31 +0200
+Date: Tue, 08 Jul 2008 08:35:23 +0200
 Subject: [Buildroot] svn commit: trunk/buildroot
-In-Reply-To: <878wwdvszs.fsf@macbook.be.48ers.dk>
-References: <20080707232011.1D0473C608@busybox.net>
-	<878wwdvszs.fsf@macbook.be.48ers.dk>
-Message-ID: <4873009F.20308@atmel.com>
+In-Reply-To: <20080708013803.GB12570@cloud.net.au>
+References: <20080706073442.174E03C67A@busybox.net>	<20080707124143.GB15840@mx.loc>
+	<4872169E.2010102@atmel.com>	<20080707132334.GD15840@mx.loc>
+	<48721B90.5070905@atmel.com>	<87mykt4v47.fsf@macbook.be.48ers.dk>	<AAFCB58EA8634B0CADEDE37957685CEC@aeglos>	<877ibxzfh4.fsf@macbook.be.48ers.dk>
+	<48729A8C.4070303@atmel.com> <20080708013803.GB12570@cloud.net.au>
+Message-ID: <48730AAB.4090109@atmel.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -14,56 +16,26 @@ To: buildroot@busybox.net
 -----BEGIN PGP SIGNED MESSAGE-----
 Hash: SHA1
 
-Peter Korsgaard skrev:
->>>>>> "ulf" == ulf  <ulf@uclibc.org> writes:
+Hamish Moffatt skrev:
+> On Tue, Jul 08, 2008 at 12:37:00AM +0200, Ulf Samuelsson wrote:
+>> Why is it better to have a broken gnome build
+>> than installing gnome in /opt/gnome?
 > 
->  ulf> Author: ulf
->  ulf> Date: 2008-07-07 16:20:09 -0700 (Mon, 07 Jul 2008)
->  ulf> New Revision: 22676
-> 
->  ulf> Log:
->  ulf> Fix log
-> 
->  ulf> Modified:
->  ulf>    trunk/buildroot/Makefile
-> 
-> 
->  ulf> Changeset:
->  ulf> Modified: trunk/buildroot/Makefile
->  ulf> ===================================================================
->  ulf> --- trunk/buildroot/Makefile	2008-07-07 18:32:41 UTC (rev 22675)
->  ulf> +++ trunk/buildroot/Makefile	2008-07-07 23:20:09 UTC (rev 22676)
->  ulf> @@ -485,9 +485,8 @@
->  ulf>  log:	.lognr.$(PROJECT)
->  ulf>  	@expr `cat .lognr.$(PROJECT)` + 1 > .lognr.$(PROJECT)	
->  ulf>  	@echo Creating $(PROJECT)-`cat .lognr.$(PROJECT)`.log
->  ulf> -	@$(MAKE) testing > $(PROJECT)-`cat .lognr.$(PROJECT)`.log 2>&1 
->  ulf> +	@$(MAKE) > $(PROJECT)-`cat .lognr.$(PROJECT)`.log 2>&1 
-> 
-> I'm still questioning how general this is. I could imagine other
-> people wanting a different naming convention (E.G. perhaps something
-> with the timestamp instead of just a number), and maybe store it
-> together with the output files (binaries/<project>).
+> Which distro is so broken as to install it into /opt/gnome?
 > 
 
-I do not mind discussing implementation.
-Personally - I think that storing with a time-stamp
-in the binaries/project is OK, for a completed
-build, but intermediate builds are better in the top directory,
-to have easy access and indication of failure.
+OpenSuSE 10.2
 
-OpenEmbedded stores the log for each package separately
-which is nice but their build system is very different.
+> 
+> Hamish
 
 BR
 Ulf Samuelsson
-
-
 -----BEGIN PGP SIGNATURE-----
 Version: GnuPG v1.4.5 (GNU/Linux)
 Comment: Using GnuPG with SUSE - http://enigmail.mozdev.org
 
-iD8DBQFIcwCfAyRRH5cXxqwRApwmAKCU2FSezvuWlUYLYWx5QGM/1bep2QCdGq6e
-QFLeqdoxHOzBgdyeZ5BJ5oA=
-=0g15
+iD8DBQFIcwqqAyRRH5cXxqwRAny5AJ9LH7hw/ruRiRE31BO+sD0+lT6RHACaAt0X
+TS3m6hh6eM/yQfY60dD4msc=
+=tPz4
 -----END PGP SIGNATURE-----
