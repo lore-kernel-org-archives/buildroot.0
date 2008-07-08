@@ -1,27 +1,45 @@
-From: Hamish Moffatt <hamish@cloud.net.au>
-Date: Tue, 8 Jul 2008 11:38:03 +1000
+From: Peter Korsgaard <jacmet@uclibc.org>
+Date: Tue, 08 Jul 2008 07:34:47 +0200
 Subject: [Buildroot] svn commit: trunk/buildroot
-In-Reply-To: <48729A8C.4070303@atmel.com>
-References: <20080706073442.174E03C67A@busybox.net>
-	<20080707124143.GB15840@mx.loc> <4872169E.2010102@atmel.com>
-	<20080707132334.GD15840@mx.loc> <48721B90.5070905@atmel.com>
-	<87mykt4v47.fsf@macbook.be.48ers.dk>
-	<AAFCB58EA8634B0CADEDE37957685CEC@aeglos>
-	<877ibxzfh4.fsf@macbook.be.48ers.dk> <48729A8C.4070303@atmel.com>
-Message-ID: <20080708013803.GB12570@cloud.net.au>
+In-Reply-To: <20080707232011.1D0473C608@busybox.net> (ulf@uclibc.org's message
+	of "Mon\, 7 Jul 2008 16\:20\:10 -0700 \(PDT\)")
+References: <20080707232011.1D0473C608@busybox.net>
+Message-ID: <878wwdvszs.fsf@macbook.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Tue, Jul 08, 2008 at 12:37:00AM +0200, Ulf Samuelsson wrote:
-> Why is it better to have a broken gnome build
-> than installing gnome in /opt/gnome?
+>>>>> "ulf" == ulf  <ulf@uclibc.org> writes:
 
-Which distro is so broken as to install it into /opt/gnome?
+ ulf> Author: ulf
+ ulf> Date: 2008-07-07 16:20:09 -0700 (Mon, 07 Jul 2008)
+ ulf> New Revision: 22676
+
+ ulf> Log:
+ ulf> Fix log
+
+ ulf> Modified:
+ ulf>    trunk/buildroot/Makefile
 
 
-Hamish
+ ulf> Changeset:
+ ulf> Modified: trunk/buildroot/Makefile
+ ulf> ===================================================================
+ ulf> --- trunk/buildroot/Makefile	2008-07-07 18:32:41 UTC (rev 22675)
+ ulf> +++ trunk/buildroot/Makefile	2008-07-07 23:20:09 UTC (rev 22676)
+ ulf> @@ -485,9 +485,8 @@
+ ulf>  log:	.lognr.$(PROJECT)
+ ulf>  	@expr `cat .lognr.$(PROJECT)` + 1 > .lognr.$(PROJECT)	
+ ulf>  	@echo Creating $(PROJECT)-`cat .lognr.$(PROJECT)`.log
+ ulf> -	@$(MAKE) testing > $(PROJECT)-`cat .lognr.$(PROJECT)`.log 2>&1 
+ ulf> +	@$(MAKE) > $(PROJECT)-`cat .lognr.$(PROJECT)`.log 2>&1 
+
+I'm still questioning how general this is. I could imagine other
+people wanting a different naming convention (E.G. perhaps something
+with the timestamp instead of just a number), and maybe store it
+together with the output files (binaries/<project>).
+
 -- 
-Hamish Moffatt VK3SB <hamish@debian.org> <hamish@cloud.net.au>
+Bye, Peter Korsgaard
