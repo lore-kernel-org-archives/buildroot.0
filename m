@@ -1,59 +1,37 @@
-From: bugs at busybox.net <bugs@busybox.net>
-Date: Tue, 8 Jul 2008 03:45:03 -0700
-Subject: [Buildroot] [buildroot 0004004]: Default ngw100-base config fails
-	to find u-boot config
-Message-ID: <490107ef7cc12284af8e165a0c530aae@bugs.uclibc.org>
+From: jacmet at uclibc.org <jacmet@uclibc.org>
+Date: Tue,  8 Jul 2008 03:53:18 -0700 (PDT)
+Subject: [Buildroot] svn commit: trunk/buildroot/target/u-boot
+Message-ID: <20080708105318.380833C6D4@busybox.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+Author: jacmet
+Date: 2008-07-08 03:53:17 -0700 (Tue, 08 Jul 2008)
+New Revision: 22689
 
-The following issue has been SUBMITTED. 
-====================================================================== 
-http://busybox.net/bugs/view.php?id=4004 
-====================================================================== 
-Reported By:                mpfj
-Assigned To:                buildroot
-====================================================================== 
-Project:                    buildroot
-Issue ID:                   4004
-Category:                   Architecture Specific
-Reproducibility:            always
-Severity:                   major
-Priority:                   normal
-Status:                     assigned
-====================================================================== 
-Date Submitted:             07-08-2008 03:45 PDT
-Last Modified:              07-08-2008 03:45 PDT
-====================================================================== 
-Summary:                    Default ngw100-base config fails to find u-boot
-config
-Description: 
-Adding u-boot to the default ngw100-base config does not work.  The
-following error occurs ...
+Log:
+uboot: revert r22638
 
-		/usr/bin/make MAKE='/usr/bin/make -j1 ' -C
-/usr/local/dev/avr32/buildroot-cvs/project_build_avr32/atngw100-base/u-boot-1.3.3	\
-		"atngw100-base"_config
-make[1]: Entering directory
-`/usr/local/dev/avr32/buildroot-cvs/project_build_avr32/atngw100-base/u-boot-1.3.3'
-make[1]: *** No rule to make target `atngw100-base_config'. Stop.
-make[1]: Leaving directory
-`/usr/local/dev/avr32/buildroot-cvs/project_build_avr32/atngw100-base/u-boot-1.3.3'
-make: ***
-[/usr/local/dev/avr32/buildroot-cvs/project_build_avr32/atngw100-base/u-boot-1.3.3/.configured]
-Error 2
+Go back to 1.3.2 as r22638 breaks mkimage
 
-This can be temp fixed by changing the u-boot board name from $BOARD_NAME
-to atngw100.
-====================================================================== 
+Modified:
+   trunk/buildroot/target/u-boot/Makefile.in
 
-Issue History 
-Date Modified   Username       Field                    Change               
-====================================================================== 
-07-08-08 03:45  mpfj           New Issue                                    
-07-08-08 03:45  mpfj           Status                   new => assigned     
-07-08-08 03:45  mpfj           Assigned To               => buildroot       
-======================================================================
+
+Changeset:
+Modified: trunk/buildroot/target/u-boot/Makefile.in
+===================================================================
+--- trunk/buildroot/target/u-boot/Makefile.in	2008-07-08 10:37:05 UTC (rev 22688)
++++ trunk/buildroot/target/u-boot/Makefile.in	2008-07-08 10:53:17 UTC (rev 22689)
+@@ -3,7 +3,7 @@
+ # U-Boot
+ #
+ #############################################################
+-U_BOOT_VERSION:=1.3.3
++U_BOOT_VERSION:=1.3.2
+ U_BOOT_SOURCE:=u-boot-$(U_BOOT_VERSION).tar.bz2
+ U_BOOT_SITE:=ftp://ftp.denx.de/pub/u-boot
+ U_BOOT_DIR:=$(PROJECT_BUILD_DIR)/u-boot-$(U_BOOT_VERSION)
