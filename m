@@ -1,37 +1,33 @@
-From: jacmet at uclibc.org <jacmet@uclibc.org>
-Date: Tue,  8 Jul 2008 06:49:24 -0700 (PDT)
-Subject: [Buildroot] svn commit: trunk/buildroot/package/openssl
-Message-ID: <20080708134924.70FD83C65B@busybox.net>
+From: Peter Korsgaard <jacmet@uclibc.org>
+Date: Tue, 08 Jul 2008 15:59:07 +0200
+Subject: [Buildroot] grub graphics.c
+In-Reply-To: <48736E59.1070400@valcom.com> (Robert B. Williams's message of
+	"Tue\, 08 Jul 2008 09\:40\:41 -0400")
+References: <48736E59.1070400@valcom.com>
+Message-ID: <87r6a4eatw.fsf@macbook.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Author: jacmet
-Date: 2008-07-08 06:49:23 -0700 (Tue, 08 Jul 2008)
-New Revision: 22690
+>>>>> "Robert" == Robert B Williams <rwilliams@valcom.com> writes:
 
-Log:
-openssl: re-revert r22644
+ Robert> No rule to make target 'graphics.c', needed by 
+ Robert> 'pre_stage2_exec.graphics.o'. stop.
 
-The build without CONFIG_UPDATE has now been verified on arm/armeb/avr32,
-so lets revert this for good.
+ Robert> Where is this hiding?
 
-Modified:
-   trunk/buildroot/package/openssl/openssl.mk
+Sorry, don't know - Don't use grub.
 
+ Robert> Is there a forum for buildroot anywhere?  I noticed that this
+ Robert> question was posted in the archive but the response were not.
+ Robert> If the responses were captured I wouldn't need to repost this
+ Robert> question.
 
-Changeset:
-Modified: trunk/buildroot/package/openssl/openssl.mk
-===================================================================
---- trunk/buildroot/package/openssl/openssl.mk	2008-07-08 10:53:17 UTC (rev 22689)
-+++ trunk/buildroot/package/openssl/openssl.mk	2008-07-08 13:49:23 UTC (rev 22690)
-@@ -40,7 +40,6 @@
- endif
- 	$(SED) '/CFLAG=/s,/;, $(shell echo '$(TARGET_CFLAGS)' | sed -e 's/\//\\\\\//g')/;,' \
- 		$(OPENSSL_DIR)/Configure
--	$(CONFIG_UPDATE) $(OPENSSL_DIR)
- 	touch $@
- 
- $(OPENSSL_DIR)/Makefile: $(OPENSSL_DIR)/.unpacked
+You can use gmane:
+
+http://news.gmane.org/gmane.comp.lib.uclibc.buildroot/
+
+-- 
+Bye, Peter Korsgaard
