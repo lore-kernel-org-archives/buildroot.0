@@ -1,9 +1,12 @@
 From: Ulf Samuelsson <ulf.samuelsson@atmel.com>
-Date: Wed, 09 Jul 2008 16:40:16 +0200
-Subject: [Buildroot] built without large file support
-In-Reply-To: <4874BD76.5030207@valcom.com>
-References: <4874BD76.5030207@valcom.com>
-Message-ID: <4874CDD0.809@atmel.com>
+Date: Wed, 09 Jul 2008 16:45:39 +0200
+Subject: [Buildroot] svn commit: trunk/buildroot
+In-Reply-To: <87hcazxl19.fsf@macbook.be.48ers.dk>
+References: <20080704222950.E76B63C61F@busybox.net>	<87fxqmg53j.fsf@macbook.be.48ers.dk>
+	<48720878.3070602@atmel.com>	<20080707123642.GA15840@mx.loc>
+	<87ej654uuu.fsf@macbook.be.48ers.dk>	<20080707152546.GH15840@mx.loc>
+	<87hcazxl19.fsf@macbook.be.48ers.dk>
+Message-ID: <4874CF13.8010709@atmel.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,39 +16,49 @@ To: buildroot@busybox.net
 -----BEGIN PGP SIGNED MESSAGE-----
 Hash: SHA1
 
-Robert B. Williams skrev:
-> Am trying to compile grub and it is complaining that large file support 
-> is turned off and that _FILE_OFFSET_BITS=64.  I guess one of these 
-> things needs to change....
+Peter Korsgaard skrev:
+>>>>>> "Bernhard" == Bernhard Fischer <rep.dot.nop@gmail.com> writes:
 > 
->  From menuconfig I tried to enable large file support in the toolchain 
-> area....no affect.
+> Hi,
+> 
+>  >> Me or Ulf? For me, see r22607. Makefile.autotools.in is kinda
+>  >> broken as the download target is executed even if the download
+>  >> exists (E.G. it
+> 
+>  Bernhard> Ok that's broken.
+> 
+>  Bernhard> $(BUILD_DIR)/%/.stamp_download_tarball:
+>  Bernhard> 	$(WGET) -P $(DL_DIR) $($(PKG)_SITE)/$($(PKG)_SOURCE)
+>  Bernhard> 	# or $(if $(BR2_PRIMARY_SITE),$(BR2_PRIMARY_SITE),$($(PKG)_SITE))/$($(PKG)_SOURCE) if you want to support that primary site stuff
+>  Bernhard> 	touch $@
+> 
+> That won't work if you do a clean and rebuild or reuse a download dir
+> for another build. You have to really make $(DL_DIR)/$($(PKG)_SOURCE)
+> the target.
+> 
+> I guess we could use wget -c, but that would be kinda lame (and
+> dangerous).
+> 
 
-ONce you have changed a toolchain option, you will have to
-rebuild the toolchain.
-It is problaby best to start with a fresh buildroot tree,
-and use your old .config.
+If a package is present in $(DL_DIR) you only need
+to perform the WGET in very special cases.
+
+Why not tell the autotools this explicitly, like I proposed?
+
+It is an easy fix, and it works as far as I see.
+
+Alternatively, you can make the test for presence in $(DL_DIR)
+a configurable item which can be disabled when make source-check
+or make external-deps is executed.
+
 
 BR
-Ulf Samuelsson
-
-> 
-> Please help...
-> 
-> 2nd:
-> What do I need to do to boot linux with root filesystem in flash?
-> 
-> So far I created a cpio image and well that runs off of a ramdisk.
-> _______________________________________________
-> buildroot mailing list
-> buildroot at uclibc.org
-> http://busybox.net/mailman/listinfo/buildroot
-
+Ulf Samuelsso0n
 -----BEGIN PGP SIGNATURE-----
 Version: GnuPG v1.4.5 (GNU/Linux)
 Comment: Using GnuPG with SUSE - http://enigmail.mozdev.org
 
-iD8DBQFIdM3QAyRRH5cXxqwRAmVEAJ9RZ8LoaDU10H1HAPjiBQM2aI9rgQCgsKSR
-bxz31cC7l/U/QWW0IYXgMLY=
-=oDwY
+iD8DBQFIdM8SAyRRH5cXxqwRAlB5AJ4/32+nRGhMZ6E/CNZNtxtbJjpepQCgiaG5
+rIdprRbYHZ73onRlXG6eGMw=
+=LCps
 -----END PGP SIGNATURE-----
