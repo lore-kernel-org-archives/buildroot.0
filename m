@@ -1,41 +1,23 @@
-From: jacmet at uclibc.org <jacmet@uclibc.org>
-Date: Wed,  9 Jul 2008 04:43:58 -0700 (PDT)
-Subject: [Buildroot] svn commit: trunk/buildroot/target/linux
-Message-ID: <20080709114358.A468C3C681@busybox.net>
+From: Peter Korsgaard <jacmet@uclibc.org>
+Date: Wed, 09 Jul 2008 13:44:28 +0200
+Subject: [Buildroot] Forcing a kernel rebuild
+In-Reply-To: <20080709112926.GA27321@mx.loc> (Bernhard Fischer's message of
+	"Wed\, 9 Jul 2008 13\:29\:26 +0200")
+References: <1215542557.6277.21.camel@kokopelli>
+	<20080709112926.GA27321@mx.loc>
+Message-ID: <87y74b1dur.fsf@macbook.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Author: jacmet
-Date: 2008-07-09 04:43:57 -0700 (Wed, 09 Jul 2008)
-New Revision: 22700
+>>>>> "Bernhard" == Bernhard Fischer <rep.dot.nop@gmail.com> writes:
 
-Log:
-linux: add knob to force a rebuild of the kernel
+ Bernhard> (which i did now) so you can
+ Bernhard> make linux26-force && make linux26
 
-Makes development easier. Thanks to Brian Beattie for this handy idea.
+I've added it to svn as well (r22070) - Thanks.
 
-1df013316b in Bernhards tree.
-
-Modified:
-   trunk/buildroot/target/linux/Makefile.in
-
-
-Changeset:
-Modified: trunk/buildroot/target/linux/Makefile.in
-===================================================================
---- trunk/buildroot/target/linux/Makefile.in	2008-07-09 09:50:33 UTC (rev 22699)
-+++ trunk/buildroot/target/linux/Makefile.in	2008-07-09 11:43:57 UTC (rev 22700)
-@@ -233,6 +233,10 @@
- linux26-update:
- 	cp -dpf $(LINUX26_DIR)/.config $(LINUX26_KCONFIG)
- 
-+# force rebuild
-+linux26-force:
-+	touch $(LINUX26_DIR)/.configured
-+
- # This has been renamed so we do _NOT_ by default run this on 'make clean'
- linux26clean:
- 	rm -f $(LINUX26_KERNEL) $(LINUX26_DIR)/.configured
+-- 
+Bye, Peter Korsgaard
