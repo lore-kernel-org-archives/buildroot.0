@@ -1,40 +1,34 @@
-From: Daniel Laird <daniel.j.laird@nxp.com>
-Date: Thu, 10 Jul 2008 00:37:28 -0700 (PDT)
-Subject: [Buildroot]  Makefile.autotools.in problems
-Message-ID: <18377517.post@talk.nabble.com>
+From: Peter Korsgaard <jacmet@uclibc.org>
+Date: Thu, 10 Jul 2008 09:47:01 +0200
+Subject: [Buildroot] Makefile.autotools.in problems
+In-Reply-To: <18377517.post@talk.nabble.com> (Daniel Laird's message of "Thu\,
+	10 Jul 2008 00\:37\:28 -0700 \(PDT\)")
+References: <18377517.post@talk.nabble.com>
+Message-ID: <87y74aqiyy.fsf@macbook.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+>>>>> "Daniel" == Daniel Laird <daniel.j.laird@nxp.com> writes:
 
-I have a problem with the Makefile.autotools.in when it does the patch
-target.
+Hi,
 
-The target creates a NAMEVER string (pkg_name-version).  It then checks to
-see if it has any version specific files.  i.e pango-1.19.3.*.patch.
-If it has is applies them and exits. (appies no generic patches)
+ Daniel> This is only a problem as I have not deleted patches
+ Daniel> associated with an old version.  However I wanted to raise
+ Daniel> the issue in case it was originally planned that you could
+ Daniel> have multiple patches in the directory for different versions
+ Daniel> and it would apply only those patches that match.
 
-The problem is that if I bounce the version to 1.22.0.  It does the check
-and decides there are no version specific patches.  It then applies all
-patches in the directory regardless.
+Yes, the Makefile.autotools.in is kinda half baked still.
 
-This is only a problem as I have not deleted patches associated with an old
-version.  
-However I wanted to raise the issue in case it was originally planned that
-you could have multiple patches in the directory for different versions and
-it would apply only those patches that match.
+ Daniel> Perhaps we could have a PKG_STRICT_PATCH variable.  That if
+ Daniel> set to true would only apply patches that match the version
+ Daniel> string, if not set it would apply all patches.
 
-Perhaps we could have a PKG_STRICT_PATCH variable.  That if set to true
-would only apply patches that match the version string, if not set it would
-apply all patches.
-
-Any ideas, opinions?
-Cheers
-Dan
-
+That or put the patches in version specific sub directories like
+openembedded does.
 
 -- 
-View this message in context: http://www.nabble.com/Makefile.autotools.in-problems-tp18377517p18377517.html
-Sent from the BuildRoot mailing list archive at Nabble.com.
+Bye, Peter Korsgaard
