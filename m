@@ -1,64 +1,30 @@
-From: Ulf Samuelsson <ulf.samuelsson@atmel.com>
-Date: Thu, 10 Jul 2008 15:58:02 +0200
+From: Peter Korsgaard <jacmet@uclibc.org>
+Date: Thu, 10 Jul 2008 16:21:29 +0200
 Subject: [Buildroot] dbus-1.1.1 is always rebuilt on "make"
-Message-ID: <4876156A.4050200@atmel.com>
+In-Reply-To: <4876156A.4050200@atmel.com> (Ulf Samuelsson's message of "Thu\,
+	10 Jul 2008 15\:58\:02 +0200")
+References: <4876156A.4050200@atmel.com>
+Message-ID: <87zlopom52.fsf@macbook.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
------BEGIN PGP SIGNED MESSAGE-----
-Hash: SHA1
+>>>>> "Ulf" == Ulf Samuelsson <ulf.samuelsson@atmel.com> writes:
 
-It looks like dbus is always rebuilt.
+ Ulf> It looks like dbus is always rebuilt.
+ Ulf> make -d -n dbus shows: (In Swedish :-)
 
+?h nej da!
 
-make -d -n dbus shows: (In Swedish :-)
+/me hands Ulf a LANG=C
 
-++++++++++++++++++++++++++
-...
-          M?ste ?terskapa m?let "".
-          M?lfilen "libxml2-install-staging" ?terskapades.
+That's a known issue with Makefile.autotools.in. See r22461.
 
-         F?rdigst?llde de n?dv?ndiga f?ruts?ttningarna f?r m?lfilen
-"/home/ulf/projects/Buildroot/20080707/buildroot-avr32/build_avr32/dbus-1.1.1/.configured".
+phony rules like libxml2-install-staging are always considered out of
+date. We'll need to move to version independent stamp files like
+recently discussed on the list to handle it.
 
-         Den n?dv?ndiga f?ruts?ttningen
-"/home/ulf/projects/Buildroot/20080707/buildroot-avr32/build_avr32/dbus-1.1.1/.unpacked"
-?r ?ldre ?n m?let
-"/home/ulf/projects/Buildroot/20080707/buildroot-avr32/build_avr32/dbus-1.1.1/.configured".
-
-         Den n?dv?ndiga f?ruts?ttningen "libxml2-install-staging" f?r m?let
-"/home/ulf/projects/Buildroot/20080707/buildroot-avr32/build_avr32/dbus-1.1.1/.configured"
-finns inte.
-        M?ste ?terskapa m?let
-"/home/ulf/projects/Buildroot/20080707/buildroot-avr32/build_avr32/dbus-1.1.1/.configured".
-...
-- ----------------------------
-
-Basically "dbus-1.1.1/.configured" depends on "libxml2-install-staging"
-which does not exist,
-Make cannot find an implicit rule for libxml2-install-staging.
-
-The rule to create dbus-1.1.1/.configured is therefore run, and the
-rest of the dbus targets are then run as well.
-
-
-I tried
-.PHONY: libxml2-install-staging
-but this does not seem to work.
-
-
-Any ideas?
-
-BR
-Ulf Samuelsson
------BEGIN PGP SIGNATURE-----
-Version: GnuPG v1.4.5 (GNU/Linux)
-Comment: Using GnuPG with SUSE - http://enigmail.mozdev.org
-
-iD8DBQFIdhVqAyRRH5cXxqwRApVzAJsG9nBNFYS1BnLrz1NqQvxd53ByOACdHjl6
-yp4Q4mo0hgOso6QinswyVe4=
-=7PXW
------END PGP SIGNATURE-----
+-- 
+Bye, Peter Korsgaard
