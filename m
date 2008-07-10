@@ -1,7 +1,7 @@
 From: jacmet at uclibc.org <jacmet@uclibc.org>
-Date: Thu, 10 Jul 2008 03:12:08 -0700 (PDT)
+Date: Thu, 10 Jul 2008 03:12:12 -0700 (PDT)
 Subject: [Buildroot] svn commit: trunk/buildroot/package/fuse
-Message-ID: <20080710101208.821003C6F0@busybox.net>
+Message-ID: <20080710101212.BF7B43C7BE@busybox.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -9,11 +9,11 @@ Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
 Author: jacmet
-Date: 2008-07-10 03:12:07 -0700 (Thu, 10 Jul 2008)
-New Revision: 22749
+Date: 2008-07-10 03:12:11 -0700 (Thu, 10 Jul 2008)
+New Revision: 22750
 
 Log:
-fuse: cleanup configure args
+fuse: remove commented out lines
 
 Modified:
    trunk/buildroot/package/fuse/libfuse.mk
@@ -22,26 +22,25 @@ Modified:
 Changeset:
 Modified: trunk/buildroot/package/fuse/libfuse.mk
 ===================================================================
---- trunk/buildroot/package/fuse/libfuse.mk	2008-07-10 10:12:00 UTC (rev 22748)
-+++ trunk/buildroot/package/fuse/libfuse.mk	2008-07-10 10:12:07 UTC (rev 22749)
-@@ -25,9 +25,10 @@
- 		--target=$(GNU_TARGET_NAME) \
- 		--host=$(GNU_TARGET_NAME) \
- 		--build=$(GNU_HOST_NAME) \
-+		--prefix=/usr \
-+		--sysconfdir=/etc \
- 		--enable-shared \
- 		--enable-static \
--		--program-prefix="" \
- 		--disable-nls \
- 		--disable-example \
- 		--disable-kernel-module \
-@@ -49,7 +50,7 @@
+--- trunk/buildroot/package/fuse/libfuse.mk	2008-07-10 10:12:07 UTC (rev 22749)
++++ trunk/buildroot/package/fuse/libfuse.mk	2008-07-10 10:12:11 UTC (rev 22750)
+@@ -36,19 +36,11 @@
+ 		--enable-util \
+ 	);
+ 	touch $@
+-#		--disable-example
+-#		--disable-mtab
+-#		--disable-rpath
  
+- 
+ $(LIBFUSE_DIR)/.compiled: $(LIBFUSE_DIR)/.configured
+ 	$(MAKE) CC=$(TARGET_CC) -C $(LIBFUSE_DIR)
+ 	touch $@
+-#		CROSS_COMPILE="$(TARGET_CROSS)"
+-#		AM_CFLAGS="$(TARGET_CFLAGS) -DDISABLE_COMPAT=1" \
+-#		EXTRA_DIST=""
  
+-
  $(STAGING_DIR)/usr/lib/libfuse.so: $(LIBFUSE_DIR)/.compiled
--	$(MAKE) prefix=/usr -C $(LIBFUSE_DIR) DESTDIR=$(STAGING_DIR)/ install
-+	$(MAKE) -C $(LIBFUSE_DIR) DESTDIR=$(STAGING_DIR)/ install
+ 	$(MAKE) -C $(LIBFUSE_DIR) DESTDIR=$(STAGING_DIR)/ install
  	touch -c $@
- 
- $(TARGET_DIR)/usr/lib/libfuse.so: $(STAGING_DIR)/usr/lib/libfuse.so
