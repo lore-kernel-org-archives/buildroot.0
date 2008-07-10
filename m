@@ -1,34 +1,34 @@
-From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Thu, 10 Jul 2008 09:47:01 +0200
-Subject: [Buildroot] Makefile.autotools.in problems
-In-Reply-To: <18377517.post@talk.nabble.com> (Daniel Laird's message of "Thu\,
-	10 Jul 2008 00\:37\:28 -0700 \(PDT\)")
-References: <18377517.post@talk.nabble.com>
-Message-ID: <87y74aqiyy.fsf@macbook.be.48ers.dk>
+From: jacmet at uclibc.org <jacmet@uclibc.org>
+Date: Thu, 10 Jul 2008 01:17:36 -0700 (PDT)
+Subject: [Buildroot] svn commit: trunk/buildroot/package/gperf
+Message-ID: <20080710081736.8A8BE3C75F@busybox.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Daniel" == Daniel Laird <daniel.j.laird@nxp.com> writes:
+Author: jacmet
+Date: 2008-07-10 01:17:35 -0700 (Thu, 10 Jul 2008)
+New Revision: 22737
 
-Hi,
+Log:
+gperf: strip target binary
 
- Daniel> This is only a problem as I have not deleted patches
- Daniel> associated with an old version.  However I wanted to raise
- Daniel> the issue in case it was originally planned that you could
- Daniel> have multiple patches in the directory for different versions
- Daniel> and it would apply only those patches that match.
+Modified:
+   trunk/buildroot/package/gperf/gperf.mk
 
-Yes, the Makefile.autotools.in is kinda half baked still.
 
- Daniel> Perhaps we could have a PKG_STRICT_PATCH variable.  That if
- Daniel> set to true would only apply patches that match the version
- Daniel> string, if not set it would apply all patches.
-
-That or put the patches in version specific sub directories like
-openembedded does.
-
--- 
-Bye, Peter Korsgaard
+Changeset:
+Modified: trunk/buildroot/package/gperf/gperf.mk
+===================================================================
+--- trunk/buildroot/package/gperf/gperf.mk	2008-07-10 03:27:42 UTC (rev 22736)
++++ trunk/buildroot/package/gperf/gperf.mk	2008-07-10 08:17:35 UTC (rev 22737)
+@@ -20,3 +20,7 @@
+ 
+ $(eval $(call AUTOTARGETS,package,gperf))
+ 
++$(GPERF_HOOK_POST_INSTALL): $(TARGET_DIR)/usr/bin/gperf
++	$(STRIPCMD) $(STRIP_STRIP_ALL) $^
++	touch $@
++
