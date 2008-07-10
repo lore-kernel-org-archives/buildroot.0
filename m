@@ -1,8 +1,7 @@
-From: bugs at busybox.net <bugs@busybox.net>
-Date: Wed, 9 Jul 2008 22:13:22 -0700
-Subject: [Buildroot] [buildroot 0004044]: xcursor-themes-1.0.1 requires
-	autotools 1.10.1
-Message-ID: <ac97fccd8ab76f5705983b19acc0784e@bugs.uclibc.org>
+From: Daniel Laird <daniel.j.laird@nxp.com>
+Date: Thu, 10 Jul 2008 00:37:28 -0700 (PDT)
+Subject: [Buildroot]  Makefile.autotools.in problems
+Message-ID: <18377517.post@talk.nabble.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -10,45 +9,32 @@ Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
 
-The following issue has been SUBMITTED. 
-====================================================================== 
-http://busybox.net/bugs/view.php?id=4044 
-====================================================================== 
-Reported By:                UlfSamuelsson
-Assigned To:                buildroot
-====================================================================== 
-Project:                    buildroot
-Issue ID:                   4044
-Category:                   Architecture Specific
-Reproducibility:            always
-Severity:                   minor
-Priority:                   normal
-Status:                     assigned
-====================================================================== 
-Date Submitted:             07-09-2008 22:13 PDT
-Last Modified:              07-09-2008 22:13 PDT
-====================================================================== 
-Summary:                    xcursor-themes-1.0.1 requires autotools 1.10.1
-Description: 
-The xcursor-themes-1.0.1/.configure target
-will call aclocal <...> --install
+I have a problem with the Makefile.autotools.in when it does the patch
+target.
 
-"--install" is not a valid option for aclocal (GNU automake) 1.9.6
-but works for aclocal 1.10.1
+The target creates a NAMEVER string (pkg_name-version).  It then checks to
+see if it has any version specific files.  i.e pango-1.19.3.*.patch.
+If it has is applies them and exits. (appies no generic patches)
 
-We need to think if we want to force this upgrade
-or change the configuration of xcursor-themes-1.0.1.
+The problem is that if I bounce the version to 1.22.0.  It does the check
+and decides there are no version specific patches.  It then applies all
+patches in the directory regardless.
 
-If we want to keep this, then we should name aclocal-1.10.1
-as a dependency.
+This is only a problem as I have not deleted patches associated with an old
+version.  
+However I wanted to raise the issue in case it was originally planned that
+you could have multiple patches in the directory for different versions and
+it would apply only those patches that match.
+
+Perhaps we could have a PKG_STRICT_PATCH variable.  That if set to true
+would only apply patches that match the version string, if not set it would
+apply all patches.
+
+Any ideas, opinions?
+Cheers
+Dan
 
 
-====================================================================== 
-
-Issue History 
-Date Modified   Username       Field                    Change               
-====================================================================== 
-07-09-08 22:13  UlfSamuelsson  New Issue                                    
-07-09-08 22:13  UlfSamuelsson  Status                   new => assigned     
-07-09-08 22:13  UlfSamuelsson  Assigned To               => buildroot       
-======================================================================
+-- 
+View this message in context: http://www.nabble.com/Makefile.autotools.in-problems-tp18377517p18377517.html
+Sent from the BuildRoot mailing list archive at Nabble.com.
