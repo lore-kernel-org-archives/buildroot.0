@@ -1,8 +1,8 @@
 From: ulf at uclibc.org <ulf@uclibc.org>
-Date: Thu, 10 Jul 2008 08:17:03 -0700 (PDT)
+Date: Thu, 10 Jul 2008 09:12:37 -0700 (PDT)
 Subject: [Buildroot] svn commit:
-	trunk/buildroot/package/x11r7/xdata_xcursor-themes
-Message-ID: <20080710151703.B74693C725@busybox.net>
+	trunk/buildroot/target/device/Atmel/arch-avr32/kernel-patches-2.6.25.10
+Message-ID: <20080710161237.B4EDD3C642@busybox.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -10,29 +10,24 @@ Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
 Author: ulf
-Date: 2008-07-10 08:17:03 -0700 (Thu, 10 Jul 2008)
-New Revision: 22764
+Date: 2008-07-10 09:12:36 -0700 (Thu, 10 Jul 2008)
+New Revision: 22766
 
 Log:
-Use correct include dir syntax for xcursor-xthemes
+Do not use a localversion of kernel, to allow modules to be installed in the correct directory
 
-Modified:
-   trunk/buildroot/package/x11r7/xdata_xcursor-themes/xdata_xcursor-themes.mk
+Added:
+   trunk/buildroot/target/device/Atmel/arch-avr32/kernel-patches-2.6.25.10/linux-2.6.25.10-no-localversion.patch
 
 
 Changeset:
-Modified: trunk/buildroot/package/x11r7/xdata_xcursor-themes/xdata_xcursor-themes.mk
+Added: trunk/buildroot/target/device/Atmel/arch-avr32/kernel-patches-2.6.25.10/linux-2.6.25.10-no-localversion.patch
 ===================================================================
---- trunk/buildroot/package/x11r7/xdata_xcursor-themes/xdata_xcursor-themes.mk	2008-07-10 15:15:52 UTC (rev 22763)
-+++ trunk/buildroot/package/x11r7/xdata_xcursor-themes/xdata_xcursor-themes.mk	2008-07-10 15:17:03 UTC (rev 22764)
-@@ -21,8 +21,8 @@
- 
- $(XDATA_XCURSOR_THEMES_DIR)/.configured: $(XDATA_XCURSOR_THEMES_DIR)/.patched
- 	(cd $(XDATA_XCURSOR_THEMES_DIR) && \
--		aclocal -I. -I$(STAGING_DIR)/usr/share/aclocal --install && \
--		autoconf -I$(STAGING_DIR)/usr/share/aclocal && \
-+		aclocal -I . -I $(STAGING_DIR)/usr/share/aclocal --install && \
-+		autoconf -I $(STAGING_DIR)/usr/share/aclocal && \
- 		automake -ac && \
- 		rm -rf config.cache && \
- 		$(TARGET_CONFIGURE_OPTS) \
+--- trunk/buildroot/target/device/Atmel/arch-avr32/kernel-patches-2.6.25.10/linux-2.6.25.10-no-localversion.patch	                        (rev 0)
++++ trunk/buildroot/target/device/Atmel/arch-avr32/kernel-patches-2.6.25.10/linux-2.6.25.10-no-localversion.patch	2008-07-10 16:12:36 UTC (rev 22766)
+@@ -0,0 +1,5 @@
++diff -urN linux-2.6.25.10-0rig/localversion-atmel linux-2.6.25.10/localversion-atmel
++--- linux-2.6.25.10-0rig/localversion-atmel	2008-07-10 16:57:33.000000000 +0200
+++++ linux-2.6.25.10/localversion-atmel	1970-01-01 01:00:00.000000000 +0100
++@@ -1 +0,0 @@
++-.atmel.2
