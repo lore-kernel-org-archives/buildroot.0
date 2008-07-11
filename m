@@ -1,36 +1,23 @@
-From: Chien-Yu Chen <torus0@gmail.com>
-Date: Fri, 11 Jul 2008 12:19:35 -0500
-Subject: [Buildroot] initramfs /initrd support
-Message-ID: <dbc6d8cc0807111019v1be5c43fv2cf3a9f0b0f4e84@mail.gmail.com>
+From: Nathanael D. Noblet <nathanael@gnat.ca>
+Date: Fri, 11 Jul 2008 13:03:15 -0600
+Subject: [Buildroot] uclibc/busybox init getting general protection fault
+Message-ID: <4877AE73.1070100@gnat.ca>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi
-  I posted a message regarding kernel keep on growing each time I change the
-root filesystem and do a make
-I think the problem is because I included initramfs/initrd support.
-since in the directory
+Hello,
 
-project_build_i686/MySling/linux-2.6.25/usr/
-
-the two file
-
-initramfs_data.cpio.gz
-initramfs_data.o
-
-keeps on growing. does anyone have some idea on what's going on?
-I need the initrd since I'll be booting from a CD without a harddrive
-support..
-thanks
-
-chen
+   I've built a very slim rootfs with buildroot from todays latest svn. 
+When I boot the image via qemu, everything is great. However when 
+booting on the hardware ( Via C7 CPU ) It all goes along till we get to 
+init. Where I get a 'general protection' error with some register values 
+somewhere in uclibc (libuClibc.so.0.9.29). I've used i686 and i586 but 
+get the same issue in all of them... Any ideas what could cause this?
 
 -- 
-Any MicroSoft extension file will directly go to trash without any warning
-and regret.
--------------- next part --------------
-An HTML attachment was scrubbed...
-URL: http://busybox.net/lists/buildroot/attachments/20080711/1428eadc/attachment.htm 
+Nathanael d. Noblet
+Gnat Solutions, Inc
+T: 403.875.4613
