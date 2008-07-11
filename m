@@ -1,55 +1,46 @@
-From: Mike Sander <msander@ripnet.com>
-Date: Fri, 11 Jul 2008 00:27:26 -0400
-Subject: [Buildroot] gunzip slows booting
-Message-ID: <4876E12E.6010200@ripnet.com>
+From: Ulf Samuelsson <ulf.samuelsson@atmel.com>
+Date: Fri, 11 Jul 2008 06:50:23 +0200
+Subject: [Buildroot] microcom
+In-Reply-To: <4876CC77.1000308@acsatlanta.com>
+References: <4876CC77.1000308@acsatlanta.com>
+Message-ID: <4876E68F.1060408@atmel.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi All,
+-----BEGIN PGP SIGNED MESSAGE-----
+Hash: SHA1
 
-I'm building a 2.6.25 kernel and initramfs for an atmel at91sam9260ek 
-using buildroot.  I'm not sure if I'm experiencing a buildroot problem 
-per se, but hopefully someone here might have some insight.
-
-With the default uImage (uses compressed zImage) and default compressed 
-initramfs I have a boot time from exiting u-boot to my user space 
-application running (started from iniittab) on the order of 3.0 sec.
-
-If I generate the uImage from Image (uncompressed kernel image),  my 
-boot time drops to approx 2.0 sec.    As far as I can see, the only 
-difference is that gunzip() is not called for the uncompressed kernel.  
-It becomes a simple data copy.  I don't have the image sizes at hand, 
-but gzip typically gives a 2:1 compression ratio.
-
-Similarly, if I generate an uncompressed initramfs ( I simply removed 
-the gzip from gen_initramfs_list.sh) my boot time further drops to 1.2 
-sec.   The filesystem is ~600k compressed and 1.3 MB uncompressed.    
-Again, the unzip is replaced by a data copy operation.
-
-I guess the first question is whether there is a problem or not with 
-gzip appearing to be slow?   I had expected the compressed kernel & 
-initramfs to have quicker boot times than uncompressed.  I suspect the 
-default kernel boot may be optimized for relatively slow disk copy and 
-very fast processors [typical desktop].    In such a configuration a 
-long unzip operation probably is faster than coping a bigger image from 
-a slow disk.
-
-Assuming there is a problem here, I have started to debug this.  
-basically gunzip() calls inflate().   After a few more calls we get to 
-inflate_codes() which ultimate ends in a call to memcpy().  What I have 
-observed and find very strange is that memcpy() is being used to 
-repeatedly copy a very small number of bytes (typically 1 to 4).  
-Occasionally it is called to copy a larger # of bytes.  There are 
-literally  tens (or hundreds) of thousands of memcpy to move a few MB 
-data.   I suspect this is where the vast majority of the time is being 
-spent.   
-
-Is it possible that I am seeing an architecture specific problem?
+Joseph G. Boike skrev:
+| I'm trying to use microcom (the busybox version) to test a gadget serial
+| interface on an at91sam9260 board.
+| gadget serial was compiled into the kernel w/ USE_ACM=1.  I can "cat
+| some_text_file > /dev/ttygserial" and the contents of the text file show
+| up on my laptop running hyperterm w/ windows xp.  So I think the link is
+| ok.  But if I do "microcom /dev/ttygserial" the whole board seems to
+| hang.  I haven't found anything short of cycling power to get the board
+| responding.  (Granted I'm using a serial console so once the program
+| starts I can't just kill it from another terminal window.)
+| Any suggestions?
 
 
-Any comments/suggestions are welcome.
+Recompile microcom with debugging info and debug with gdb.
 
-Mike
+| Thanks,
+| Joe
+|
+| _______________________________________________
+| buildroot mailing list
+| buildroot at uclibc.org
+| http://busybox.net/mailman/listinfo/buildroot
+
+-----BEGIN PGP SIGNATURE-----
+Version: GnuPG v2.0.4-svn0 (GNU/Linux)
+Comment: Using GnuPG with SUSE - http://enigmail.mozdev.org
+
+iD8DBQFIduaPAyRRH5cXxqwRAsx8AJ4jPgLua0//0HHDOmq4ZUQYedbfwgCgjW38
+pGhTFzzyz012sH3p28p19vc=
+=Teqm
+-----END PGP SIGNATURE-----
