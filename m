@@ -1,45 +1,36 @@
-From: jacmet at uclibc.org <jacmet@uclibc.org>
-Date: Fri, 11 Jul 2008 06:44:00 -0700 (PDT)
-Subject: [Buildroot] svn commit: trunk/buildroot/package
-Message-ID: <20080711134400.3064D3C6DD@busybox.net>
+From: Chien-Yu Chen <torus0@gmail.com>
+Date: Fri, 11 Jul 2008 12:19:35 -0500
+Subject: [Buildroot] initramfs /initrd support
+Message-ID: <dbc6d8cc0807111019v1be5c43fv2cf3a9f0b0f4e84@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Author: jacmet
-Date: 2008-07-11 06:43:59 -0700 (Fri, 11 Jul 2008)
-New Revision: 22779
+Hi
+  I posted a message regarding kernel keep on growing each time I change the
+root filesystem and do a make
+I think the problem is because I included initramfs/initrd support.
+since in the directory
 
-Log:
-package/Makefile.in: cleanup MAKE/MAKE1
+project_build_i686/MySling/linux-2.6.25/usr/
 
-The extra stuff doesn't seem to be needed, so lets just get rid of it.
+the two file
 
-Modified:
-   trunk/buildroot/package/Makefile.in
+initramfs_data.cpio.gz
+initramfs_data.o
 
+keeps on growing. does anyone have some idea on what's going on?
+I need the initrd since I'll be booting from a CD without a harddrive
+support..
+thanks
 
-Changeset:
-Modified: trunk/buildroot/package/Makefile.in
-===================================================================
---- trunk/buildroot/package/Makefile.in	2008-07-11 13:43:56 UTC (rev 22778)
-+++ trunk/buildroot/package/Makefile.in	2008-07-11 13:43:59 UTC (rev 22779)
-@@ -6,14 +6,9 @@
- endif
- HOSTMAKE :=$(shell $(CONFIG_SHELL) -c "which $(HOSTMAKE)" || type -p $(HOSTMAKE) || echo make)
- 
--# honor silent mode
--ifeq (s,$(findstring s,$(MAKEFLAGS)))
--MAKESILENT:=-s
--endif
-+MAKE1:=$(HOSTMAKE) -j1
-+MAKE:=$(HOSTMAKE) -j$(BR2_JLEVEL)
- 
--MAKE1:=$(HOSTMAKE) MAKE='$(firstword $(HOSTMAKE)) -j1 $(MAKESILENT)'
--MAKE:=$(HOSTMAKE) MAKE='$(firstword $(HOSTMAKE)) -j$(BR2_JLEVEL) $(MAKESILENT)'
--
- ifeq ($(BR2_OPTIMIZE_0),y)
- TARGET_OPTIMIZATION=-O0
- endif
+chen
+
+-- 
+Any MicroSoft extension file will directly go to trash without any warning
+and regret.
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: http://busybox.net/lists/buildroot/attachments/20080711/1428eadc/attachment.htm 
