@@ -1,153 +1,135 @@
-From: Mike Sander <msander@ripnet.com>
-Date: Fri, 11 Jul 2008 08:27:31 -0400
-Subject: [Buildroot] gunzip slows booting
-In-Reply-To: <4876EA91.1070901@atmel.com>
-References: <4876E12E.6010200@ripnet.com> <4876EA91.1070901@atmel.com>
-Message-ID: <487751B3.7040605@ripnet.com>
+From: Daniel Laird <daniel.j.laird@nxp.com>
+Date: Fri, 11 Jul 2008 05:36:56 -0700 (PDT)
+Subject: [Buildroot] Makefile.autotools.in problems
+In-Reply-To: <18399520.post@talk.nabble.com>
+References: <18377517.post@talk.nabble.com>
+	<87y74aqiyy.fsf@macbook.be.48ers.dk>
+	<20080711081729.GB11051@mx.loc> <18399520.post@talk.nabble.com>
+Message-ID: <18402911.post@talk.nabble.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Ulf Samuelsson wrote:
-> -----BEGIN PGP SIGNED MESSAGE-----
-> Hash: SHA1
->
-> Mike Sander skrev:
-> | Hi All,
-> |
-> | I'm building a 2.6.25 kernel and initramfs for an atmel at91sam9260ek
-> | using buildroot.  I'm not sure if I'm experiencing a buildroot problem
-> | per se, but hopefully someone here might have some insight.
-> |
-> | With the default uImage (uses compressed zImage) and default compressed
-> | initramfs I have a boot time from exiting u-boot to my user space
-> | application running (started from iniittab) on the order of 3.0 sec.
-> |
-> | If I generate the uImage from Image (uncompressed kernel image),  my
-> | boot time drops to approx 2.0 sec.    As far as I can see, the only
-> | difference is that gunzip() is not called for the uncompressed kernel.
-> | It becomes a simple data copy.  I don't have the image sizes at hand,
-> | but gzip typically gives a 2:1 compression ratio.
-> |
-> | Similarly, if I generate an uncompressed initramfs ( I simply removed
-> | the gzip from gen_initramfs_list.sh) my boot time further drops to 1.2
-> | sec.   The filesystem is ~600k compressed and 1.3 MB uncompressed.
-> | Again, the unzip is replaced by a data copy operation.
-> |
-> | I guess the first question is whether there is a problem or not with
-> | gzip appearing to be slow?   I had expected the compressed kernel &
-> | initramfs to have quicker boot times than uncompressed.  I suspect the
-> | default kernel boot may be optimized for relatively slow disk copy and
-> | very fast processors [typical desktop].    In such a configuration a
-> | long unzip operation probably is faster than coping a bigger image from
-> | a slow disk.
-> |
-> | Assuming there is a problem here, I have started to debug this.
-> | basically gunzip() calls inflate().   After a few more calls we get to
-> | inflate_codes() which ultimate ends in a call to memcpy().  What I have
-> | observed and find very strange is that memcpy() is being used to
-> | repeatedly copy a very small number of bytes (typically 1 to 4).
-> | Occasionally it is called to copy a larger # of bytes.  There are
-> | literally  tens (or hundreds) of thousands of memcpy to move a few MB
-> | data.   I suspect this is where the vast majority of the time is being
-> | spent.
-> |
-> | Is it possible that I am seeing an architecture specific problem?
-> |
-> |
-> | Any comments/suggestions are welcome.
->
-> I would be very surprised if you could get a compressed kernel
-> to boot faster than an uncompressed kernel on an ARM
-> if you store in parallel flash
-> You can read a 16 bit parallel flash at about ~20 MB/s
-> and you can write a 32 bit SDRAM at 400 MB/s.
->
-> For 1,3 MB the flash read should be ~67 ms
-> and the SDRAM write should be ~ 3 ms.
->
-> With a compressed kernel you would read at ~33 ms.
-> Then you have to do tab ~20 MB/s out ofle lookup to decompress,
-> and this could take a lot of time.
->
-> zipping the kernel is mainly for reducing the cost
-> by enabling the use of smaller flash.
->
-> Note that if you use NAND flash,then you have to do
-> ECC calculations on all NAND reads and then
-> compression becomes more favourable.
->
-> BR
-> Ulf Samuelsson
->
-Ulf,  Thank You for the quick reply.
 
-My times start immediately after u-boot has finished copying the image 
-[via tftp or from flash] to when user space code is running.   I have 
-not included the time to copy the image from flash -> sdram.  We intend 
-to use nor flash which I do not have yet.  Unless we can xip the image 
-has to be initially copied to sdram. [please correct me if i'm wrong on 
-this point].. so this seems to be a good starting point for timing.
+I have been playing:
+I decided to have a directory called patches-$(VERSION)
+I then modified Makefile.autotools.in with the following:
+ # Retrieve and unpack the archive
+ $(BUILD_DIR)/%/.stamp_extracted:
+@@ -160,16 +170,12 @@
+ 	$(if $($(PKG)_PATCH),toolchain/patch-kernel.sh $(@D) $(DL_DIR)
+$($(PKG)_PATCH))
+ 	$(Q)( \
+ 	if test -d $($(PKG)_DIR_PREFIX)/$($(PKG)_NAME); then \
+-	  if test -d
+$($(PKG)_DIR_PREFIX)/$($(PKG)_NAME)/patches-$($(PKG)_VERSION); then \
+-	    toolchain/patch-kernel.sh $(@D)
+$($(PKG)_DIR_PREFIX)/$($(PKG)_NAME)/patches-$($(PKG)_VERSION)/ \*.patch
+\*.patch.$(ARCH) || exit 1; \
++	  if test "$(wildcard
+$($(PKG)_DIR_PREFIX)/$($(PKG)_NAME)/$(NAMEVER)*.patch*)"; then \
++	    toolchain/patch-kernel.sh $(@D) $($(PKG)_DIR_PREFIX)/$($(PKG)_NAME)
+$(NAMEVER)\*.patch $(NAMEVER)\*.patch.$(ARCH) || exit 1; \
+ 	  else \
+-	    if test "$(wildcard
+$($(PKG)_DIR_PREFIX)/$($(PKG)_NAME)/$(NAMEVER)*.patch*)"; then \
+-	      toolchain/patch-kernel.sh $(@D) $($(PKG)_DIR_PREFIX)/$($(PKG)_NAME)
+$(NAMEVER)\*.patch $(NAMEVER)\*.patch.$(ARCH) || exit 1; \
+-	    else \
+-	      toolchain/patch-kernel.sh $(@D) $($(PKG)_DIR_PREFIX)/$($(PKG)_NAME)
+$($(PKG)_NAME)\*.patch $($(PKG)_NAME)\*.patch.$(ARCH) || exit 1; \
+-	      if test -d package/$($(PKG)_DIR_PREFIX)/$($(PKG)_NAME)/$(NAMEVER);
+then \
+-	        toolchain/patch-kernel.sh $(@D)
+$($(PKG)_DIR_PREFIX)/$($(PKG)_NAME)/$(NAMEVER) \*.patch \*.patch.$(ARCH) ||
+exit 1; \
+-	      fi; \
++	    toolchain/patch-kernel.sh $(@D) $($(PKG)_DIR_PREFIX)/$($(PKG)_NAME)
+$($(PKG)_NAME)\*.patch $($(PKG)_NAME)\*.patch.$(ARCH) || exit 1; \
++	    if test -d package/$($(PKG)_DIR_PREFIX)/$($(PKG)_NAME)/$(NAMEVER);
+then \
++	      toolchain/patch-kernel.sh $(@D)
+$($(PKG)_DIR_PREFIX)/$($(PKG)_NAME)/$(NAMEVER) \*.patch \*.patch.$(ARCH) ||
+exit 1; \
+ 	    fi; \
+ 	  fi; \
+ 	fi; \
+@@ -233,7 +239,7 @@
+ $(BUILD_DIR)/%/.stamp_target_installed:
+ 	$(call MESSAGE,"Installing to target")
+ 	$($(PKG)_MAKE_ENV) $(MAKE) $($(PKG)_INSTALL_TARGET_OPT) -C
+$(@D)/$($(PKG)_SUBDIR)
+-	$(if $(BR2_HAVE_MANPAGES),,for d in man; do \
++	$(if $(BR2_HAVE_MANPAGES),,for d in man share/man; do \
+ 		rm -rf $(TARGET_DIR)/$$d $(TARGET_DIR)/usr/$$d; \
+ 	done)
+ 	$(if $(BR2_HAVE_INFOPAGES),,for d in info share/info; do \
 
-Note that the flash read times you quote are on the order of 10s of 
-msec.    Doing the gunzip() adds approx 1000 msec to the kernel boot 
-process .    This overwhelms the difference in reading the compressed vs 
-uncompressed image.  It is the 1000 msec gunzip() that I am 
-questioning.  Does this seem reasonable to you?
+Any thoughts?
+Dan
 
 
+Daniel Laird wrote:
+> 
+> 
+> 
+> Bernhard Fischer-6 wrote:
+>> 
+>> On Thu, Jul 10, 2008 at 09:47:01AM +0200, Peter Korsgaard wrote:
+>>>>>>>> "Daniel" == Daniel Laird <daniel.j.laird@nxp.com> writes:
+>>>
+>>>Hi,
+>>>
+>>> Daniel> This is only a problem as I have not deleted patches
+>>> Daniel> associated with an old version.  However I wanted to raise
+>>> Daniel> the issue in case it was originally planned that you could
+>>> Daniel> have multiple patches in the directory for different versions
+>>> Daniel> and it would apply only those patches that match.
+>>>
+>>>Yes, the Makefile.autotools.in is kinda half baked still.
+>>>
+>>> Daniel> Perhaps we could have a PKG_STRICT_PATCH variable.  That if
+>>> Daniel> set to true would only apply patches that match the version
+>>> Daniel> string, if not set it would apply all patches.
+>>>
+>>>That or put the patches in version specific sub directories like
+>>>openembedded does.
+>> 
+>> What's the point in keeping patches for multiple versions again?
+>> 
+>> We usually "svn mv" affected patches (or should anyway). There really
+>> are very, very few packages where it makes sense to keep multiple
+>> versions. Except toolchain/* only the kernel comes to mind, the rest
+>> should just have exactly 1 version, but that one should build and work
+>> fine.
+>> _______________________________________________
+>> buildroot mailing list
+>> buildroot at uclibc.org
+>> http://busybox.net/mailman/listinfo/buildroot
+>> 
+>> 
+> The reason for this is making it more flexible and also more stable.
+> For example the current buildroot uses pango 1.19.3 I am testing locally
+> an upgrade to 1.21.3.
+> To do this we overlay buildroot with local modifications and build.
+> The problem is that the 1.19.3 patches get applied to the 1.21.3 code
+> which fail.
+> I cannot easily test all packages that use pango and check they work as
+> well as previously.
+> I could however create a patch-VERSION dir and put the 1.19.3 patches into
+> it.
+> I could then do the same with 1.21.3.
+> I think this is more flexible, more suitable to production environments
+> and is not that much extra maintenance.  
+> I like to be as close to buildroot mainline as possible to get as much
+> help/support as possible.  But some changes just do not work and as such
+> the ability to go back to previously working versions more easily is
+> desirable.
+> I believe it is also similar to OpenEmbedded
+> 
 
-For completeness, this is my boot process.  Perhaps I am using u-boot 
-incorrectly?
-
-When booting via tftp I do the following:
-
-u-boot> tftp 21100000 uImage
-u-boot> bootm
-
-In booting from dataflash (and eventually nor flash) I do the following:
-
-Initially use u-boot to get the image into flash
-u-boot> tftp 21100000 uImage
-u-boot> cp.b 21100000 <flash addr> <image size>
-
-I then set up u-boot bootcmd as follows to boot from the flash image:
-
-u-boot> setenv bootcmd 'cp.b <flash addr> 21100000 <image size>;bootm 
-21100000'
-
-With this configuration bootcmd copies the entire image from flash to 
-sdram, and then u-boot makes the jump to the start of the image in sdram 
-(head.o i believe).  The kernels first task is then to unzip (or copy) 
-the payload to its final execution address.
-
-
-Regards,
-
-Mike
-
->
-> |
-> | Mike
-> | _______________________________________________
-> | buildroot mailing list
-> | buildroot at uclibc.org
-> | http://busybox.net/mailman/listinfo/buildroot
->
-> -----BEGIN PGP SIGNATURE-----
-> Version: GnuPG v2.0.4-svn0 (GNU/Linux)
-> Comment: Using GnuPG with SUSE - http://enigmail.mozdev.org
->
-> iD8DBQFIduqRAyRRH5cXxqwRArogAJ9LHOFYpUbTkc8I2KaaCq874FYxZQCfQ1wK
-> QxxqvTKmeXk7GQCVEUmU+V4=
-> =zE5v
-> -----END PGP SIGNATURE-----
->
->
-> =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
-> Scanned with Copfilter Version 0.84beta3a (P3Scan 2.2.1)
-> AntiSpam:  SpamAssassin 3.2.3
-> by Markus Madlener @ http://www.copfilter.org
->
+-- 
+View this message in context: http://www.nabble.com/Makefile.autotools.in-problems-tp18377517p18402911.html
+Sent from the BuildRoot mailing list archive at Nabble.com.
