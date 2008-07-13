@@ -1,39 +1,23 @@
-From: jacmet at uclibc.org <jacmet@uclibc.org>
-Date: Sat, 12 Jul 2008 23:33:00 -0700 (PDT)
-Subject: [Buildroot] svn commit: trunk/buildroot/target/linux
-Message-ID: <20080713063300.80B253C70D@busybox.net>
+From: Peter Korsgaard <jacmet@uclibc.org>
+Date: Sun, 13 Jul 2008 08:33:34 +0200
+Subject: [Buildroot] Patch target/linux/Makefile.in.advanced
+In-Reply-To: <1215874937.6308.14.camel@kokopelli> (Brian Beattie's message of
+	"Sat\, 12 Jul 2008 08\:02\:17 -0700")
+References: <1215874937.6308.14.camel@kokopelli>
+Message-ID: <8763racmyp.fsf@macbook.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Author: jacmet
-Date: 2008-07-12 23:32:58 -0700 (Sat, 12 Jul 2008)
-New Revision: 22821
+>>>>> "Brian" == Brian Beattie <beattie@beattie-home.net> writes:
 
-Log:
-linux-advanced: add linux26-force like in the simple linux makefile
+ Brian> The included patch adds the linux26-force target to
+ Brian> target/linux/Makefile.in.advanced like it was added to
+ Brian> target/linux/Makefile.in
 
-Patch by Brian Beattie.
+Done - thanks!
 
-Modified:
-   trunk/buildroot/target/linux/Makefile.in.advanced
-
-
-Changeset:
-Modified: trunk/buildroot/target/linux/Makefile.in.advanced
-===================================================================
---- trunk/buildroot/target/linux/Makefile.in.advanced	2008-07-12 23:47:24 UTC (rev 22820)
-+++ trunk/buildroot/target/linux/Makefile.in.advanced	2008-07-13 06:32:58 UTC (rev 22821)
-@@ -454,6 +454,10 @@
- linux26-update:
- 	cp -dpf $(LINUX26_DIR)/.config $(LINUX26_KCONFIG)
- 
-+# force rebuild
-+linux26-force:
-+	touch $(LINUX26_DIR)/.configured
-+
- # This has been renamed so we do _NOT_ by default run this on 'make clean'
- linux26clean:
- 	rm -f $(LINUX26_KERNEL) $(LINUX26_DIR)/.configured
+-- 
+Bye, Peter Korsgaard
