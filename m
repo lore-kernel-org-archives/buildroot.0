@@ -1,35 +1,48 @@
 From: <bogus@does.not.exist.com>
 Date: Mon, 14 Jul 2008 13:16:20 -0000
 Subject: No subject
-Message-ID: <mailman.4.1219477498.1340.buildroot@uclibc.org>
+Message-ID: <mailman.5.1219868315.1340.buildroot@uclibc.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-ttymxc0 device. If so, then the reason why you cannot login is that
-you don't have ttymxc0 listed in /etc/securetty.
+Modified:
+   trunk/buildroot/package/config/lex.zconf.c_shipped
+   trunk/buildroot/package/config/zconf.l
 
-The file comes from target/generic/target_skeleton/etc, but you can
-simply edit it under project_build_arm/uclibc/root/etc and rerun make
-to regenerate your filesystem image.
 
-I don't see any mention of /dev/ttymxcN in Documentation/devices.txt
-in the kernel sources? I take it that the serial driver isn't in the
-mainline kernel?
+Changeset:
+Modified: trunk/buildroot/package/config/lex.zconf.c_shipped
+===================================================================
+--- trunk/buildroot/package/config/lex.zconf.c_shipped	2008-08-27 15:06:41 UTC (rev 23246)
++++ trunk/buildroot/package/config/lex.zconf.c_shipped	2008-08-27 20:18:33 UTC (rev 23247)
+@@ -815,6 +815,11 @@
+ void append_string(const char *str, int size)
+ {
+ 	int new_size = text_size + size + 1;
++	if (size > 70) {
++		fprintf (stderr, "%s:%d warning: Overlong line\n",
++		current_file->name, current_file->lineno);
++	}
++
+ 	if (new_size > text_asize) {
+ 		new_size += START_STRSIZE - 1;
+ 		new_size &= -START_STRSIZE;
 
- > THe other thing I tried to do was pass init=/dev/sh and
- > init=/dev/bash to try to get a direct shell prompt. I don't think
- > it was connecting to the MX31's serial port because I never saw any
- > outputs after the filesystem was mounted. Is there a recommended
- > way to force /dev/sh to appear on a ttyS0 (or actually ttymxc0 for
- > the MX31)
-
-I take it you mean /bin/sh not /dev/sh?
-
-Strange. And you do get output from init and login with the same
-filesystem if you boot without init=/bin/sh?
-
--- 
-Bye, Peter Korsgaard
+Modified: trunk/buildroot/package/config/zconf.l
+===================================================================
+--- trunk/buildroot/package/config/zconf.l	2008-08-27 15:06:41 UTC (rev 23246)
++++ trunk/buildroot/package/config/zconf.l	2008-08-27 20:18:33 UTC (rev 23247)
+@@ -49,6 +49,10 @@
+ void append_string(const char *str, int size)
+ {
+ 	int new_size = text_size + size + 1;
++	if (size > 70) {
++	        fprintf (stderr, "%s:%d warning: Overlong line\n",
++			 current_file->name, current_file->lineno);
++	}
+ 	if (new_size > text_asize) {
+ 		new_size += START_STRSIZE - 1;
+ 		new_size &= -START_STRSIZE;
