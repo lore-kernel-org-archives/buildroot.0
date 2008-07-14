@@ -1,7 +1,7 @@
 From: Leonardo Giordano <lgiordano@gmail.com>
-Date: Mon, 14 Jul 2008 10:01:47 -0300
+Date: Mon, 14 Jul 2008 10:02:41 -0300
 Subject: [Buildroot] Simple buildroot question
-Message-ID: <487B4E3B.9040409@gmail.com>
+Message-ID: <487B4E71.8010102@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
