@@ -1,8 +1,8 @@
 From: bugs at busybox.net <bugs@busybox.net>
-Date: Wed, 16 Jul 2008 08:47:23 -0700
+Date: Wed, 16 Jul 2008 10:24:53 -0700
 Subject: [Buildroot] [buildroot 0004164]: SDL_ttf needs SDL to be compiled
 	first
-Message-ID: <cb6a1ca19aec50557e0bb5136ce245c2@busybox.net>
+Message-ID: <14b6bf85baee0df4df0c072c34a64f27@busybox.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -26,7 +26,7 @@ Priority:                   normal
 Status:                     assigned
 ====================================================================== 
 Date Submitted:             07-16-2008 08:31 PDT
-Last Modified:              07-16-2008 08:47 PDT
+Last Modified:              07-16-2008 10:24 PDT
 ====================================================================== 
 Summary:                    SDL_ttf needs SDL to be compiled first
 Description: 
@@ -70,6 +70,12 @@ like:
 sdl_ttf: uclibc $(TARGET_DIR)/usr/lib/libSDL.so \
 $(TARGET_DIR)/usr/lib/libSDL_ttf.so 
 
+---------------------------------------------------------------------- 
+ artemys - 07-16-08 10:24  
+---------------------------------------------------------------------- 
+sdl_ttf: uclibc sdl $(TARGET_DIR)/usr/lib/libSDL_ttf.so
+will also work, I think... 
+
 Issue History 
 Date Modified   Username       Field                    Change               
 ====================================================================== 
@@ -79,4 +85,5 @@ Date Modified   Username       Field                    Change
 07-16-08 08:31  artemys        File Added: sdl_ttf-depends-on-sdl.patch         
           
 07-16-08 08:47  bernhardf      Note Added: 0009404                          
+07-16-08 10:24  artemys        Note Added: 0009414                          
 ======================================================================
