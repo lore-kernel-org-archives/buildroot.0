@@ -1,60 +1,64 @@
-From: bugs at busybox.net <bugs@busybox.net>
-Date: Wed, 16 Jul 2008 07:38:14 -0700
-Subject: [Buildroot] [buildroot 0004154]: SDL_ttf doesn't compile if
-	freetype package is not selected first
-Message-ID: <50f2b9c6fca1f4418651f3629b869733@busybox.net>
+From: Julien Boibessot <julien.boibessot@free.fr>
+Date: Wed, 16 Jul 2008 16:47:39 +0200
+Subject: [Buildroot] aplay fails because of alsa-lib build issue with
+ uclibc	and versioned symbols - (Solution included)
+In-Reply-To: <5BF78BCE8D9BF14A83F836BD9E3916BA053E63@blrms.slti.sanyo.co.in>
+References: <mailman.1.1203278405.28189.buildroot@uclibc.org>
+	<5BF78BCE8D9BF14A83F836BD9E3916BA053E63@blrms.slti.sanyo.co.in>
+Message-ID: <487E0A0B.7010107@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+Hi,
 
-The following issue has been RESOLVED. 
-====================================================================== 
-http://busybox.net/bugs/view.php?id=4154 
-====================================================================== 
-Reported By:                artemys
-Assigned To:                buildroot
-====================================================================== 
-Project:                    buildroot
-Issue ID:                   4154
-Category:                   Shared Library Support
-Reproducibility:            always
-Severity:                   minor
-Priority:                   normal
-Status:                     resolved
-Resolution:                 fixed
-Fixed in Version:           
-====================================================================== 
-Date Submitted:             07-16-2008 07:24 PDT
-Last Modified:              07-16-2008 07:38 PDT
-====================================================================== 
-Summary:                    SDL_ttf doesn't compile if freetype package is not
-selected first
-Description: 
-Tested on a clean view (ARM configured).
-Choose to build SDL_ttf and launch compilation.
+I was recently faced to the same problem Gururaja encountered some times
+ago:
+(my config is buildroot / uclibc / arm920)
 
-Patch correcting the problem is attached to this report.
-====================================================================== 
+Gururaja Hebbar K R a ?crit :
+> when i tried aplay built shared with buildroot uclibc arm926ejs
+> toolchain it failed with below error
+>
+> mnt/mmc # aplay /home/default/10Sec_44.1K.wav
+> Playing WAVE '/home/default/10Sec_44.1K.wav' : Signed 16 bit Little
+> Endian, Rate 44100 Hz, Stereo
+> aplay: set_params:1012: unable to install sw params:
+> start_mode: DATA
+> ...
+>   
+aplay fails with a strange error...
+> When i searched on the internet for below error, i found that this error
+> is mainly related to alsa-lib and uclibc and it requires adding
+> --with-versioned=no as an option to alsa-lib ./configure.
+>
+> http://article.gmane.org/gmane.linux.alsa.devel/50595
+>
+> i added the same to alsa-lib.mk and now its working fine.
+>
+> 		./configure \
+> 		--target=$(GNU_TARGET_NAME) \
+> 		--host=$(GNU_TARGET_NAME) \
+> 		--build=$(GNU_HOST_NAME) \
+> 		--prefix=/usr \
+> 		--with-versioned=no \
+> 		--sysconfdir=/etc \
+> 		--enable-shared \
+> 		--enable-static \
+> 		--disable-docs \
+> 		$(DISABLE_NLS) \
+>
+>   
+Gururaja suggested to add "--with-versioned=no" to alsa-lib configuration.
+It was the solution for me too, even if I have no idea why yet.
 
----------------------------------------------------------------------- 
- jacmet - 07-16-08 07:38  
----------------------------------------------------------------------- 
-Thanks. I've committed a slightly modified version as r22843 (the package
-doesn't install showfont, so don't mention it in help and use select
-instead of depends) 
+Do the "non-arm" people have the same problem ? Is it related to uclibc
+for all architectures ?
 
-Issue History 
-Date Modified   Username       Field                    Change               
-====================================================================== 
-07-16-08 07:24  artemys        New Issue                                    
-07-16-08 07:24  artemys        Status                   new => assigned     
-07-16-08 07:24  artemys        Assigned To               => buildroot       
-07-16-08 07:24  artemys        File Added: sdl_ttf-depends-on-freetype.patch    
-               
-07-16-08 07:38  jacmet         Status                   assigned => resolved
-07-16-08 07:38  jacmet         Resolution               open => fixed       
-07-16-08 07:38  jacmet         Note Added: 0009384                          
-======================================================================
+Should I open a bug report to see this problem corrected ?
+
+Regards,
+Julien
+http://www.armadeus.com
