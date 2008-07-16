@@ -1,8 +1,9 @@
-From: bugs at busybox.net <bugs@busybox.net>
-Date: Wed, 16 Jul 2008 08:31:45 -0700
-Subject: [Buildroot] [buildroot 0004164]: SDL_ttf needs SDL to be compiled
-	first
-Message-ID: <6244397a4170b423d15918a87a03a1ed@busybox.net>
+From: Joseph G. Boike <joe.boike@acsatlanta.com>
+Date: Wed, 16 Jul 2008 10:31:14 -0500
+Subject: [Buildroot] buildroot size ballooned
+In-Reply-To: <mailman.29.1216219095.1344.buildroot@uclibc.org>
+References: <mailman.29.1216219095.1344.buildroot@uclibc.org>
+Message-ID: <487E1442.2040004@acsatlanta.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -10,39 +11,30 @@ Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
 
-The following issue has been SUBMITTED. 
-====================================================================== 
-http://busybox.net/bugs/view.php?id=4164 
-====================================================================== 
-Reported By:                artemys
-Assigned To:                buildroot
-====================================================================== 
-Project:                    buildroot
-Issue ID:                   4164
-Category:                   Shared Library Support
-Reproducibility:            always
-Severity:                   minor
-Priority:                   normal
-Status:                     assigned
-====================================================================== 
-Date Submitted:             07-16-2008 08:31 PDT
-Last Modified:              07-16-2008 08:31 PDT
-====================================================================== 
-Summary:                    SDL_ttf needs SDL to be compiled first
-Description: 
-It is possible to select the build of SDL_ttf even if SDL is not selected.
--> compilation error
-
-Correction patch attached.
-Same should apply to SDL_mixer...
-====================================================================== 
-
-Issue History 
-Date Modified   Username       Field                    Change               
-====================================================================== 
-07-16-08 08:31  artemys        New Issue                                    
-07-16-08 08:31  artemys        Status                   new => assigned     
-07-16-08 08:31  artemys        Assigned To               => buildroot       
-07-16-08 08:31  artemys        File Added: sdl_ttf-depends-on-sdl.patch         
-          
-======================================================================
+> Date: Tue, 15 Jul 2008 21:52:10 -0600
+> From: "Nathanael D. Noblet" <nathanael@gnat.ca>
+> Subject: Re: [Buildroot] buildroot size ballooned
+> To: "Joseph G. Boike" <joe.boike@acsatlanta.com>
+> Cc: build root <buildroot@uclibc.org>
+> Message-ID: <487D706A.30908@gnat.ca>
+> Content-Type: text/plain; charset=ISO-8859-1; format=flowed
+>
+> Joseph G. Boike wrote:
+>   
+>> Hi, my buildroot filesize had been around 3-4M (w/ r 22508)
+>> With r 225765 and building using at91sam9260dfc_defconfig the filesize 
+>> has jumped to ~14M.
+>> Any thoughts on why?
+>> (I have kernel 2.6.26 now.  The kernel size has been fairly consistent 
+>> around 1.5M.)
+>>     
+>
+>
+> No idea, but a clarification, are you talking about buildroot's 
+> outputted final rootfs, or buildroot project in svn?
+>
+>   
+The final output file (rootfs.arm-2008xxxx.ext2.gz) to be burned into my 
+serial flash.
+Regards,
+Joe
