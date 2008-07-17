@@ -1,8 +1,8 @@
 From: bugs at busybox.net <bugs@busybox.net>
-Date: Thu, 17 Jul 2008 03:40:17 -0700
-Subject: [Buildroot] [buildroot 0001579]: libstdc++ build fails with uclibc
-	headers
-Message-ID: <53012683433d83360af402b2c6659b0d@busybox.net>
+Date: Thu, 17 Jul 2008 03:40:20 -0700
+Subject: [Buildroot] [buildroot 0001479]: enabling coreutils in revision
+	19733 results in fatal build errors
+Message-ID: <f0bf6f35e0ebfcbf18c7f38b452551c9@busybox.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -12,69 +12,117 @@ To: buildroot@busybox.net
 
 The following issue has been CLOSED 
 ====================================================================== 
-http://busybox.net/bugs/view.php?id=1579 
+http://busybox.net/bugs/view.php?id=1479 
 ====================================================================== 
-Reported By:                atle
+Reported By:                spditner
 Assigned To:                buildroot
 ====================================================================== 
 Project:                    buildroot
-Issue ID:                   1579
-Category:                   Other
+Issue ID:                   1479
+Category:                   Architecture Specific
 Reproducibility:            always
-Severity:                   minor
+Severity:                   major
 Priority:                   normal
 Status:                     closed
-Resolution:                 no change required
+Resolution:                 fixed
 Fixed in Version:           
 ====================================================================== 
-Date Submitted:             11-08-2007 03:30 PST
+Date Submitted:             08-29-2007 12:05 PDT
 Last Modified:              07-17-2008 03:40 PDT
 ====================================================================== 
-Summary:                    libstdc++ build fails with uclibc headers
+Summary:                    enabling coreutils in revision 19733 results in
+fatal build errors
 Description: 
-Building gcc-3.4.6 with c++ support still fails as reported in the closed
-issue http://bugs.uclibc.org/view.php?id=904.
-The issue is reported in gcc PR14939,
-http://gcc.gnu.org/bugzilla/show_bug.cgi?id=14939
-and a patch (incorporated in 4.2) is found here:
-http://gcc.gnu.org/bugzilla/attachment.cgi?id=6132
+with BR2_PACKAGE_COREUTILS=y,
+make fails with the following:
 
-The patch is tested with gcc-3.4.6 and uClibc-0.9.29 for the nios2
-architecture, and works well. Could you please include this patch in
-toolchain/gcc/3.4.6 ?
-This issue is a show-stopper for compiling libstdc++ on the nios2 as we're
-stuck with gcc 3.4.x.
+In file included from mbchar.h:157,
+                 from mbchar.c:22:
+./wchar.h:41:12: error: empty filename in #include
+In file included from mbchar.c:22:
+mbchar.h:242: error: expected ')' before 'wc'
+make[3]: *** [mbchar.o] Error 1
+make[3]: Leaving directory
+`/home/simon/buildroot/build_i386/coreutils-6.9/lib'
+make[2]: *** [all] Error 2
+make[2]: Leaving directory
+`/home/simon/buildroot/build_i386/coreutils-6.9/lib'
+make[1]: *** [all-recursive] Error 1
+make[1]: Leaving directory
+`/home/simon/buildroot/build_i386/coreutils-6.9'
+make: *** [/home/simon/buildroot/build_i386/coreutils-6.9/src/vdir] Error
+2
+
+
+Ubuntu 7.04, kernel 2.6.20-16-generic, gcc version 4.1.2 (Ubuntu
+4.1.2-0ubuntu4)
 
 ====================================================================== 
 
 ---------------------------------------------------------------------- 
- atle - 11-09-07 05:46  
+ hwstar - 10-02-07 18:19  
 ---------------------------------------------------------------------- 
-I'll be darned... It works without the mentioned patch now (for nios2).
-Must have been a configuration issue. Well, I guess this issue can be
-closed. 
+I'm having the same exact problem. Here's the output from the failed
+build:
+
+/home/srodgers/projects/limey-linux/limey-linux-test/buildroot/build_i586/staging_dir/usr/bin/i586-linux-uclibc-gcc
+-Os -pipe 
+-I/home/srodgers/projects/limey-linux/limey-linux-test/buildroot/build_i586/staging_dir/usr/include
+-I/home/srodgers/projects/limey-linux/limey-linux-test/buildroot/build_i586/staging_dir/include
+--sysroot=/home/srodgers/projects/limey-linux/limey-linux-test/buildroot/build_i586/staging_dir/
+-isysroot
+/home/srodgers/projects/limey-linux/limey-linux-test/buildroot/build_i586/staging_dir
+-mtune=i586 -march=i586  -I.      -g -O2 -c mbchar.c
+In file included from mbchar.h:157,
+                 from mbchar.c:22:
+./wchar.h:41:12: error: empty filename in #include
+In file included from mbchar.c:22:
+mbchar.h:242: error: expected ')' before 'wc'
+make[3]: *** [mbchar.o] Error 1
+make[3]: Leaving directory
+`/home/srodgers/projects/limey-linux/limey-linux-test/buildroot/build_i586/coreutils-6.9/lib'
+make[2]: *** [all] Error 2
+make[2]: Leaving directory
+`/home/srodgers/projects/limey-linux/limey-linux-test/buildroot/build_i586/coreutils-6.9/lib'
+make[1]: *** [all-recursive] Error 1
+make[1]: Leaving directory
+`/home/srodgers/projects/limey-linux/limey-linux-test/buildroot/build_i586/coreutils-6.9'
+make: ***
+[/home/srodgers/projects/limey-linux/limey-linux-test/buildroot/build_i586/coreutils-6.9/src/vdir]
+Error 2
+
+Target: i586, Host OS: Ubuntu 7.04, Host CC: GCC 4.1.2 (Ubuntu
+4.1.2-0ubuntu4)
+
+ 
 
 ---------------------------------------------------------------------- 
- vanokuten - 11-09-07 06:07  
+ hwstar - 10-15-07 20:17  
 ---------------------------------------------------------------------- 
-atle, I'm closing this issue - if you will be able to reproduce - just
-reopen bug. 
+Enabling WCHAR support in menuconfig resolves this issue. However,
+selecting the "development system" in menuconfig should automatically
+enable WCHAR support as the development system build findutils and
+coreutils 
+
+---------------------------------------------------------------------- 
+ UlfSamuelsson - 10-16-07 22:56  
+---------------------------------------------------------------------- 
+Coreutils, requires toolchain to be built with WCHAR support 
 
 Issue History 
 Date Modified   Username       Field                    Change               
 ====================================================================== 
-11-08-07 03:30  atle           New Issue                                    
-11-08-07 03:30  atle           Status                   new => assigned     
-11-08-07 03:30  atle           Assigned To               => buildroot       
-11-08-07 03:31  atle           Issue Monitored: atle                        
-11-09-07 05:46  atle           Note Added: 0002904                          
-11-09-07 06:07  vanokuten      Status                   assigned => closed  
-11-09-07 06:07  vanokuten      Note Added: 0002905                          
-11-09-07 06:07  vanokuten      Resolution               open => unable to
-reproduce
-11-27-07 13:51  UlfSamuelsson  Status                   closed => resolved  
-11-27-07 13:51  UlfSamuelsson  Resolution               unable to reproduce =>
-no change required
+08-29-07 12:05  spditner       New Issue                                    
+08-29-07 12:05  spditner       Status                   new => assigned     
+08-29-07 12:05  spditner       Assigned To               => buildroot       
+10-02-07 18:13  hwstar         Note Added: 0002808                          
+10-02-07 18:19  hwstar         Note Edited: 0002808                         
+10-13-07 16:59  hwstar         Issue Monitored: hwstar                      
+10-15-07 20:17  hwstar         Note Added: 0002825                          
+10-16-07 06:04  tim            Issue Monitored: tim                         
+10-16-07 22:56  UlfSamuelsson  Status                   assigned => resolved
+10-16-07 22:56  UlfSamuelsson  Resolution               open => fixed       
+10-16-07 22:56  UlfSamuelsson  Note Added: 0002828                          
 07-16-08 08:02  bernhardf      Status                   resolved => new     
 07-17-08 03:40  bernhardf      Status                   new => closed       
 ======================================================================
