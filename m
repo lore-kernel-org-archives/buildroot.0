@@ -1,7 +1,7 @@
 From: bugs at busybox.net <bugs@busybox.net>
-Date: Thu, 17 Jul 2008 05:41:25 -0700
+Date: Thu, 17 Jul 2008 05:42:28 -0700
 Subject: [Buildroot] [buildroot 0004194]: Add SDL_image to Buildroot
-Message-ID: <9b8f73bf9360242c336ded7184b5c7c7@busybox.net>
+Message-ID: <8abc3f393e9444461d44fbf07f0f2464@busybox.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -9,7 +9,7 @@ Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
 
-The following issue has been REOPENED. 
+The following issue has been CLOSED 
 ====================================================================== 
 http://busybox.net/bugs/view.php?id=4194 
 ====================================================================== 
@@ -22,10 +22,12 @@ Category:                   New Features
 Reproducibility:            always
 Severity:                   minor
 Priority:                   normal
-Status:                     feedback
+Status:                     closed
+Resolution:                 reopened
+Fixed in Version:           
 ====================================================================== 
 Date Submitted:             07-17-2008 00:13 PDT
-Last Modified:              07-17-2008 05:41 PDT
+Last Modified:              07-17-2008 05:42 PDT
 ====================================================================== 
 Summary:                    Add SDL_image to Buildroot
 Description: 
@@ -51,4 +53,5 @@ Date Modified   Username       Field                    Change
 07-17-08 05:40  jacmet         Resolution               open => fixed       
 07-17-08 05:41  jacmet         Status                   closed => feedback  
 07-17-08 05:41  jacmet         Resolution               fixed => reopened   
+07-17-08 05:42  jacmet         Status                   feedback => closed  
 ======================================================================
