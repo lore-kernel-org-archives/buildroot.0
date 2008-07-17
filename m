@@ -1,8 +1,8 @@
 From: bugs at busybox.net <bugs@busybox.net>
-Date: Thu, 17 Jul 2008 03:39:50 -0700
-Subject: [Buildroot] [buildroot 0003814]: libogg & libvorbis instalation
-	fails
-Message-ID: <32b102dc6a743572c213757770c16a9b@busybox.net>
+Date: Thu, 17 Jul 2008 03:39:51 -0700
+Subject: [Buildroot] [buildroot 0003774]: valgrind doesn't build for powerpc
+	target
+Message-ID: <0ee499fa8ce0416d26a32d88f2d78d9c@busybox.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -12,14 +12,14 @@ To: buildroot@busybox.net
 
 The following issue has been CLOSED 
 ====================================================================== 
-http://busybox.net/bugs/view.php?id=3814 
+http://busybox.net/bugs/view.php?id=3774 
 ====================================================================== 
-Reported By:                tklas
+Reported By:                fabo
 Assigned To:                buildroot
 ====================================================================== 
 Project:                    buildroot
-Issue ID:                   3814
-Category:                   Other
+Issue ID:                   3774
+Category:                   Architecture Specific
 Reproducibility:            always
 Severity:                   minor
 Priority:                   normal
@@ -27,84 +27,47 @@ Status:                     closed
 Resolution:                 fixed
 Fixed in Version:           
 ====================================================================== 
-Date Submitted:             06-16-2008 04:14 PDT
+Date Submitted:             06-15-2008 03:58 PDT
 Last Modified:              07-17-2008 03:39 PDT
 ====================================================================== 
-Summary:                    libogg & libvorbis instalation fails
+Summary:                    valgrind doesn't build for powerpc target
 Description: 
-Ogg and Vorbis libraries fails to install. I changed libogg.mk and
-libvorbis.mk (attached patch) and it works. But I'm not sure if it is
-correct, please check it.
-
+then mv -f ".deps/libcoregrind_ppc32_linux_a-readstabs.Tpo"
+".deps/libcoregrind_ppc32_linux_a-readstabs.Po"; else rm -f
+".deps/libcoregrind_ppc32_linux_a-readstabs.Tpo"; exit 1; fi
+In file included from m_debuginfo/readstabs.c:46:
+/home/test/build-area/buildroot/buildroot/build_powerpc/staging_dir/usr/include/a.out.h:4:26:
+error: linux/a.out.h: No such file or directory
+m_debuginfo/readstabs.c: In function
+'vgModuleLocal_read_debuginfo_stabs':
+m_debuginfo/readstabs.c:123: error: invalid application of 'sizeof' to
+incomplete type 'struct nlist'
+m_debuginfo/readstabs.c:123: warning: division by zero
+m_debuginfo/readstabs.c:126: error: invalid use of undefined type 'struct
+nlist'
+m_debuginfo/readstabs.c:126: error: dereferencing pointer to incomplete
+type
 ====================================================================== 
 
 ---------------------------------------------------------------------- 
- jacmet - 06-16-08 04:43  
+ jacmet - 06-15-08 12:19  
 ---------------------------------------------------------------------- 
-Thanks, but this is already fixed in trunk (actually, the header install
-targets have been removed as the global BR2_HAVE_DEVFILES option handles
-it) 
+Thanks. There were 2 problems:
 
----------------------------------------------------------------------- 
- tklas - 06-16-08 08:28  
----------------------------------------------------------------------- 
-No, on my system fails installation of library file libogg.a:
+- valgrind didn't search kernel headers (fixed in r22355)
+- linux/a.out.h wasn't exported from the kernel (fixed in r22354)
 
-<PRE>
-cp -dpf
-/src/Common/buildroot-20080616-iMX31-423P/build_arm/libogg-1.1.3/lib/libogg.a
-/src/Common/buildroot-20080616-iMX31-423P/project_build_arm/uclibc/root/usr/lib/
-cp: cannot stat
-`/src/Common/buildroot-20080616-iMX31-423P/build_arm/libogg-1.1.3/lib/libogg.a':
-No such file or directory
-make: ***
-[/src/Common/buildroot-20080616-iMX31-423P/project_build_arm/uclibc/root/usr/lib/libogg.a]
-Error 1
-</PRE>
-
-After libogg fixup, libvorbis fails at the similar point. I tested it on
-actual snapshot 20080616, with and without BR2_HAVE_DEVFILES.
-
- 
-
----------------------------------------------------------------------- 
- jacmet - 06-16-08 08:41  
----------------------------------------------------------------------- 
-But the code that copies libogg.a libvorbis.a is gone from svn - Are you
-using latest trunk? 
-
----------------------------------------------------------------------- 
- tklas - 06-17-08 07:57  
----------------------------------------------------------------------- 
-No, I used yesterday snapshot (20080616). It's ok in SVN and current
-snapshot, thanks. 
-
----------------------------------------------------------------------- 
- jacmet - 06-17-08 08:04  
----------------------------------------------------------------------- 
-Ok, great - closing the issue then. 
+Notice that you need to use 2.6.25.x kernel headers for it to work. 
 
 Issue History 
 Date Modified   Username       Field                    Change               
 ====================================================================== 
-06-16-08 04:14  tklas          New Issue                                    
-06-16-08 04:14  tklas          Status                   new => assigned     
-06-16-08 04:14  tklas          Assigned To               => buildroot       
-06-16-08 04:14  tklas          File Added: vorbis_install.patch                 
-  
-06-16-08 04:43  jacmet         Status                   assigned => resolved
-06-16-08 04:43  jacmet         Resolution               open => fixed       
-06-16-08 04:43  jacmet         Note Added: 0008314                          
-06-16-08 08:26  tklas          Status                   resolved => feedback
-06-16-08 08:26  tklas          Resolution               fixed => reopened   
-06-16-08 08:26  tklas          Note Added: 0008334                          
-06-16-08 08:27  tklas          Note Edited: 0008334                         
-06-16-08 08:28  tklas          Note Edited: 0008334                         
-06-16-08 08:41  jacmet         Note Added: 0008344                          
-06-17-08 07:57  tklas          Note Added: 0008354                          
-06-17-08 08:04  jacmet         Status                   feedback => resolved
-06-17-08 08:04  jacmet         Resolution               reopened => fixed   
-06-17-08 08:04  jacmet         Note Added: 0008364                          
+06-15-08 03:58  fabo           New Issue                                    
+06-15-08 03:58  fabo           Status                   new => assigned     
+06-15-08 03:58  fabo           Assigned To               => buildroot       
+06-15-08 12:19  jacmet         Status                   assigned => resolved
+06-15-08 12:19  jacmet         Resolution               open => fixed       
+06-15-08 12:19  jacmet         Note Added: 0008244                          
 07-16-08 08:02  bernhardf      Status                   resolved => new     
 07-17-08 03:39  bernhardf      Status                   new => closed       
 ======================================================================
