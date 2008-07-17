@@ -1,8 +1,8 @@
 From: bugs at busybox.net <bugs@busybox.net>
-Date: Thu, 17 Jul 2008 01:29:00 -0700
+Date: Thu, 17 Jul 2008 02:51:44 -0700
 Subject: [Buildroot] [buildroot 0004164]: SDL_ttf needs SDL to be compiled
 	first
-Message-ID: <15b81bf9a855ddbbf3cc15ca359a67c3@busybox.net>
+Message-ID: <5786d6505a012e95c77aa3f23ba70b6a@busybox.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -10,7 +10,7 @@ Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
 
-A NOTE has been added to this issue. 
+The following issue has been RESOLVED. 
 ====================================================================== 
 http://busybox.net/bugs/view.php?id=4164 
 ====================================================================== 
@@ -23,10 +23,12 @@ Category:                   Shared Library Support
 Reproducibility:            always
 Severity:                   minor
 Priority:                   normal
-Status:                     assigned
+Status:                     resolved
+Resolution:                 fixed
+Fixed in Version:           
 ====================================================================== 
 Date Submitted:             07-16-2008 08:31 PDT
-Last Modified:              07-17-2008 01:29 PDT
+Last Modified:              07-17-2008 02:51 PDT
 ====================================================================== 
 Summary:                    SDL_ttf needs SDL to be compiled first
 Description: 
@@ -97,6 +99,11 @@ Bernhard
 ---------------------------------------------------------------------- 
 New patch added (sdl_ttf-depends-on-sdl_v2.patch) 
 
+---------------------------------------------------------------------- 
+ jacmet - 07-17-08 02:51  
+---------------------------------------------------------------------- 
+Thanks, committed. 
+
 Issue History 
 Date Modified   Username       Field                    Change               
 ====================================================================== 
@@ -113,4 +120,7 @@ Date Modified   Username       Field                    Change
 07-17-08 01:28  artemys        File Added: sdl_ttf-depends-on-sdl_v2.patch      
              
 07-17-08 01:29  artemys        Note Added: 0009554                          
+07-17-08 02:51  jacmet         Status                   assigned => resolved
+07-17-08 02:51  jacmet         Resolution               open => fixed       
+07-17-08 02:51  jacmet         Note Added: 0009594                          
 ======================================================================
