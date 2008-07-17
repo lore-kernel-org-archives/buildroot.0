@@ -1,8 +1,8 @@
 From: bugs at busybox.net <bugs@busybox.net>
-Date: Thu, 17 Jul 2008 03:37:39 -0700
-Subject: [Buildroot] [buildroot 0004164]: SDL_ttf needs SDL to be compiled
-	first
-Message-ID: <4ff47d94097bad8f962bc460a8ed2f55@busybox.net>
+Date: Thu, 17 Jul 2008 03:39:50 -0700
+Subject: [Buildroot] [buildroot 0003814]: libogg & libvorbis instalation
+	fails
+Message-ID: <32b102dc6a743572c213757770c16a9b@busybox.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -10,128 +10,101 @@ Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
 
-The following issue has been REOPENED. 
+The following issue has been CLOSED 
 ====================================================================== 
-http://busybox.net/bugs/view.php?id=4164 
+http://busybox.net/bugs/view.php?id=3814 
 ====================================================================== 
-Reported By:                artemys
+Reported By:                tklas
 Assigned To:                buildroot
 ====================================================================== 
 Project:                    buildroot
-Issue ID:                   4164
-Category:                   Shared Library Support
+Issue ID:                   3814
+Category:                   Other
 Reproducibility:            always
 Severity:                   minor
 Priority:                   normal
-Status:                     feedback
+Status:                     closed
+Resolution:                 fixed
+Fixed in Version:           
 ====================================================================== 
-Date Submitted:             07-16-2008 08:31 PDT
-Last Modified:              07-17-2008 03:37 PDT
+Date Submitted:             06-16-2008 04:14 PDT
+Last Modified:              07-17-2008 03:39 PDT
 ====================================================================== 
-Summary:                    SDL_ttf needs SDL to be compiled first
+Summary:                    libogg & libvorbis instalation fails
 Description: 
-It is possible to select the build of SDL_ttf even if SDL is not selected.
--> compilation error
+Ogg and Vorbis libraries fails to install. I changed libogg.mk and
+libvorbis.mk (attached patch) and it works. But I'm not sure if it is
+correct, please check it.
 
-Correction patch attached.
-Same should apply to SDL_mixer...
-======================================================================
-Relationships       ID      Summary
-----------------------------------------------------------------------
-has duplicate       0004154 SDL_ttf doesn't compile if freetype pac...
 ====================================================================== 
 
 ---------------------------------------------------------------------- 
- bernhardf - 07-16-08 08:47  
+ jacmet - 06-16-08 04:43  
 ---------------------------------------------------------------------- 
---- package/sdl_ttf/Config.in.org	2008-07-16 17:10:29.000000000 +0200
-+++ package/sdl_ttf/Config.in	2008-07-16 17:10:57.000000000 +0200
-@@ -1,6 +1,7 @@
- config BR2_PACKAGE_SDL_TTF
- 	bool "SDL_TTF"
- 	default n
-+	depends on BR2_PACKAGE_SDL
+Thanks, but this is already fixed in trunk (actually, the header install
+targets have been removed as the global BR2_HAVE_DEVFILES option handles
+it) 
 
-yes, exactly.
+---------------------------------------------------------------------- 
+ tklas - 06-16-08 08:28  
+---------------------------------------------------------------------- 
+No, on my system fails installation of library file libogg.a:
 
- 	select BR2_PACKAGE_FREETYPE
- 	help
- 	  SDL_ttf is a sample TrueType font library. It allows you to
---- package/sdl_ttf/sdl_ttf.mk.org	2008-07-16 17:29:42.000000000 +0200
-+++ package/sdl_ttf/sdl_ttf.mk	2008-07-16 17:30:06.000000000 +0200
-@@ -60,7 +60,7 @@
- 	cp -dpf $(STAGING_DIR)/usr/lib/libSDL_ttf*.so* $(TARGET_DIR)/usr/lib/
- 	-$(STRIPCMD) $(STRIP_STRIP_UNNEEDED)
-$(TARGET_DIR)/usr/lib/libSDL_ttf.so
+<PRE>
+cp -dpf
+/src/Common/buildroot-20080616-iMX31-423P/build_arm/libogg-1.1.3/lib/libogg.a
+/src/Common/buildroot-20080616-iMX31-423P/project_build_arm/uclibc/root/usr/lib/
+cp: cannot stat
+`/src/Common/buildroot-20080616-iMX31-423P/build_arm/libogg-1.1.3/lib/libogg.a':
+No such file or directory
+make: ***
+[/src/Common/buildroot-20080616-iMX31-423P/project_build_arm/uclibc/root/usr/lib/libogg.a]
+Error 1
+</PRE>
+
+After libogg fixup, libvorbis fails at the similar point. I tested it on
+actual snapshot 20080616, with and without BR2_HAVE_DEVFILES.
+
  
--SDL sdl_ttf: uclibc $(TARGET_DIR)/usr/lib/libSDL_ttf.so
-+SDL_TTF sdl_ttf: uclibc $(TARGET_DIR)/usr/lib/libSDL_ttf.so
-
-That caps "SDL_TTF" sounds wrong (or at least redundant).
-Also, i suspect that you will need to have libsdl.so as prereq, something
-like:
-
-sdl_ttf: uclibc $(TARGET_DIR)/usr/lib/libSDL.so \
-$(TARGET_DIR)/usr/lib/libSDL_ttf.so 
 
 ---------------------------------------------------------------------- 
- artemys - 07-16-08 10:24  
+ jacmet - 06-16-08 08:41  
 ---------------------------------------------------------------------- 
-sdl_ttf: uclibc sdl $(TARGET_DIR)/usr/lib/libSDL_ttf.so
-will also work, I think... 
+But the code that copies libogg.a libvorbis.a is gone from svn - Are you
+using latest trunk? 
 
 ---------------------------------------------------------------------- 
- artemys - 07-17-08 00:20  
+ tklas - 06-17-08 07:57  
 ---------------------------------------------------------------------- 
-If I try to compile SDL_ttf with SDL not already selected, then I have the
-same problem as issue http://busybox.net/bugs/view.php?id=2174 
+No, I used yesterday snapshot (20080616). It's ok in SVN and current
+snapshot, thanks. 
 
 ---------------------------------------------------------------------- 
- bernhardf - 07-17-08 00:59  
+ jacmet - 06-17-08 08:04  
 ---------------------------------------------------------------------- 
-That's why "depends on BR2_PACKAGE_SDL" is the correct thing to do, yes
-(and i stated it was correct).
-
-Please attach a complete, tested patch so somebody can apply it to svn.
-TIA and cheers,
-Bernhard 
-
----------------------------------------------------------------------- 
- artemys - 07-17-08 01:29  
----------------------------------------------------------------------- 
-New patch added (sdl_ttf-depends-on-sdl_v2.patch) 
-
----------------------------------------------------------------------- 
- jacmet - 07-17-08 02:51  
----------------------------------------------------------------------- 
-Thanks, committed. 
-
----------------------------------------------------------------------- 
- bernhardf - 07-17-08 03:37  
----------------------------------------------------------------------- 
-If an issue is fixed then the convention is to set it to "closed". 
+Ok, great - closing the issue then. 
 
 Issue History 
 Date Modified   Username       Field                    Change               
 ====================================================================== 
-07-16-08 08:31  artemys        New Issue                                    
-07-16-08 08:31  artemys        Status                   new => assigned     
-07-16-08 08:31  artemys        Assigned To               => buildroot       
-07-16-08 08:31  artemys        File Added: sdl_ttf-depends-on-sdl.patch         
-          
-07-16-08 08:47  bernhardf      Note Added: 0009404                          
-07-16-08 10:24  artemys        Note Added: 0009414                          
-07-17-08 00:20  artemys        Note Added: 0009524                          
-07-17-08 00:59  bernhardf      Note Added: 0009534                          
-07-17-08 01:27  artemys        Issue Monitored: artemys                     
-07-17-08 01:28  artemys        File Added: sdl_ttf-depends-on-sdl_v2.patch      
-             
-07-17-08 01:29  artemys        Note Added: 0009554                          
-07-17-08 02:51  jacmet         Status                   assigned => resolved
-07-17-08 02:51  jacmet         Resolution               open => fixed       
-07-17-08 02:51  jacmet         Note Added: 0009594                          
-07-17-08 03:36  bernhardf      Relationship added       has duplicate 0004154
-07-17-08 03:37  bernhardf      Status                   resolved => feedback
-07-17-08 03:37  bernhardf      Resolution               fixed => reopened   
-07-17-08 03:37  bernhardf      Note Added: 0009604                          
+06-16-08 04:14  tklas          New Issue                                    
+06-16-08 04:14  tklas          Status                   new => assigned     
+06-16-08 04:14  tklas          Assigned To               => buildroot       
+06-16-08 04:14  tklas          File Added: vorbis_install.patch                 
+  
+06-16-08 04:43  jacmet         Status                   assigned => resolved
+06-16-08 04:43  jacmet         Resolution               open => fixed       
+06-16-08 04:43  jacmet         Note Added: 0008314                          
+06-16-08 08:26  tklas          Status                   resolved => feedback
+06-16-08 08:26  tklas          Resolution               fixed => reopened   
+06-16-08 08:26  tklas          Note Added: 0008334                          
+06-16-08 08:27  tklas          Note Edited: 0008334                         
+06-16-08 08:28  tklas          Note Edited: 0008334                         
+06-16-08 08:41  jacmet         Note Added: 0008344                          
+06-17-08 07:57  tklas          Note Added: 0008354                          
+06-17-08 08:04  jacmet         Status                   feedback => resolved
+06-17-08 08:04  jacmet         Resolution               reopened => fixed   
+06-17-08 08:04  jacmet         Note Added: 0008364                          
+07-16-08 08:02  bernhardf      Status                   resolved => new     
+07-17-08 03:39  bernhardf      Status                   new => closed       
 ======================================================================
