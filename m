@@ -1,8 +1,8 @@
 From: bugs at busybox.net <bugs@busybox.net>
-Date: Thu, 17 Jul 2008 03:36:50 -0700
-Subject: [Buildroot] [buildroot 0004164]: SDL_ttf needs SDL to be compiled
-	first
-Message-ID: <0e850526b1143ee5609ddc0c970bbfc2@busybox.net>
+Date: Thu, 17 Jul 2008 03:37:19 -0700
+Subject: [Buildroot] [buildroot 0004154]: SDL_ttf doesn't compile if
+	freetype package is not selected first
+Message-ID: <c9d6d9fbeab84746cf5c9439c6b82a4b@busybox.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -10,122 +10,64 @@ Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
 
-The issue 0004154 has been set as DUPLICATE OF the following issue. 
+The following issue has been CLOSED 
 ====================================================================== 
-http://busybox.net/bugs/view.php?id=4164 
+http://busybox.net/bugs/view.php?id=4154 
 ====================================================================== 
 Reported By:                artemys
 Assigned To:                buildroot
 ====================================================================== 
 Project:                    buildroot
-Issue ID:                   4164
+Issue ID:                   4154
 Category:                   Shared Library Support
 Reproducibility:            always
 Severity:                   minor
 Priority:                   normal
-Status:                     resolved
+Status:                     closed
 Resolution:                 fixed
 Fixed in Version:           
 ====================================================================== 
-Date Submitted:             07-16-2008 08:31 PDT
-Last Modified:              07-17-2008 02:51 PDT
+Date Submitted:             07-16-2008 07:24 PDT
+Last Modified:              07-17-2008 03:37 PDT
 ====================================================================== 
-Summary:                    SDL_ttf needs SDL to be compiled first
+Summary:                    SDL_ttf doesn't compile if freetype package is not
+selected first
 Description: 
-It is possible to select the build of SDL_ttf even if SDL is not selected.
--> compilation error
+Tested on a clean view (ARM configured).
+Choose to build SDL_ttf and launch compilation.
 
-Correction patch attached.
-Same should apply to SDL_mixer...
+Patch correcting the problem is attached to this report.
 ======================================================================
 Relationships       ID      Summary
 ----------------------------------------------------------------------
-has duplicate       0004154 SDL_ttf doesn't compile if freetype pac...
+duplicate of        0004164 SDL_ttf needs SDL to be compiled first
 ====================================================================== 
 
 ---------------------------------------------------------------------- 
- bernhardf - 07-16-08 08:47  
+ jacmet - 07-16-08 07:38  
 ---------------------------------------------------------------------- 
---- package/sdl_ttf/Config.in.org	2008-07-16 17:10:29.000000000 +0200
-+++ package/sdl_ttf/Config.in	2008-07-16 17:10:57.000000000 +0200
-@@ -1,6 +1,7 @@
- config BR2_PACKAGE_SDL_TTF
- 	bool "SDL_TTF"
- 	default n
-+	depends on BR2_PACKAGE_SDL
-
-yes, exactly.
-
- 	select BR2_PACKAGE_FREETYPE
- 	help
- 	  SDL_ttf is a sample TrueType font library. It allows you to
---- package/sdl_ttf/sdl_ttf.mk.org	2008-07-16 17:29:42.000000000 +0200
-+++ package/sdl_ttf/sdl_ttf.mk	2008-07-16 17:30:06.000000000 +0200
-@@ -60,7 +60,7 @@
- 	cp -dpf $(STAGING_DIR)/usr/lib/libSDL_ttf*.so* $(TARGET_DIR)/usr/lib/
- 	-$(STRIPCMD) $(STRIP_STRIP_UNNEEDED)
-$(TARGET_DIR)/usr/lib/libSDL_ttf.so
- 
--SDL sdl_ttf: uclibc $(TARGET_DIR)/usr/lib/libSDL_ttf.so
-+SDL_TTF sdl_ttf: uclibc $(TARGET_DIR)/usr/lib/libSDL_ttf.so
-
-That caps "SDL_TTF" sounds wrong (or at least redundant).
-Also, i suspect that you will need to have libsdl.so as prereq, something
-like:
-
-sdl_ttf: uclibc $(TARGET_DIR)/usr/lib/libSDL.so \
-$(TARGET_DIR)/usr/lib/libSDL_ttf.so 
+Thanks. I've committed a slightly modified version as r22843 (the package
+doesn't install showfont, so don't mention it in help and use select
+instead of depends) 
 
 ---------------------------------------------------------------------- 
- artemys - 07-16-08 10:24  
+ bernhardf - 07-16-08 08:00  
 ---------------------------------------------------------------------- 
-sdl_ttf: uclibc sdl $(TARGET_DIR)/usr/lib/libSDL_ttf.so
-will also work, I think... 
-
----------------------------------------------------------------------- 
- artemys - 07-17-08 00:20  
----------------------------------------------------------------------- 
-If I try to compile SDL_ttf with SDL not already selected, then I have the
-same problem as issue http://busybox.net/bugs/view.php?id=2174 
-
----------------------------------------------------------------------- 
- bernhardf - 07-17-08 00:59  
----------------------------------------------------------------------- 
-That's why "depends on BR2_PACKAGE_SDL" is the correct thing to do, yes
-(and i stated it was correct).
-
-Please attach a complete, tested patch so somebody can apply it to svn.
-TIA and cheers,
-Bernhard 
-
----------------------------------------------------------------------- 
- artemys - 07-17-08 01:29  
----------------------------------------------------------------------- 
-New patch added (sdl_ttf-depends-on-sdl_v2.patch) 
-
----------------------------------------------------------------------- 
- jacmet - 07-17-08 02:51  
----------------------------------------------------------------------- 
-Thanks, committed. 
+If an issue is fixed then the convention is to set it to "closed". 
 
 Issue History 
 Date Modified   Username       Field                    Change               
 ====================================================================== 
-07-16-08 08:31  artemys        New Issue                                    
-07-16-08 08:31  artemys        Status                   new => assigned     
-07-16-08 08:31  artemys        Assigned To               => buildroot       
-07-16-08 08:31  artemys        File Added: sdl_ttf-depends-on-sdl.patch         
-          
-07-16-08 08:47  bernhardf      Note Added: 0009404                          
-07-16-08 10:24  artemys        Note Added: 0009414                          
-07-17-08 00:20  artemys        Note Added: 0009524                          
-07-17-08 00:59  bernhardf      Note Added: 0009534                          
-07-17-08 01:27  artemys        Issue Monitored: artemys                     
-07-17-08 01:28  artemys        File Added: sdl_ttf-depends-on-sdl_v2.patch      
-             
-07-17-08 01:29  artemys        Note Added: 0009554                          
-07-17-08 02:51  jacmet         Status                   assigned => resolved
-07-17-08 02:51  jacmet         Resolution               open => fixed       
-07-17-08 02:51  jacmet         Note Added: 0009594                          
-07-17-08 03:36  bernhardf      Relationship added       has duplicate 0004154
+07-16-08 07:24  artemys        New Issue                                    
+07-16-08 07:24  artemys        Status                   new => assigned     
+07-16-08 07:24  artemys        Assigned To               => buildroot       
+07-16-08 07:24  artemys        File Added: sdl_ttf-depends-on-freetype.patch    
+               
+07-16-08 07:38  jacmet         Status                   assigned => resolved
+07-16-08 07:38  jacmet         Resolution               open => fixed       
+07-16-08 07:38  jacmet         Note Added: 0009384                          
+07-16-08 08:00  bernhardf      Note Added: 0009394                          
+07-16-08 08:00  bernhardf      Status                   resolved => assigned
+07-17-08 03:36  bernhardf      Relationship added       duplicate of 0004164
+07-17-08 03:37  bernhardf      Status                   assigned => closed  
 ======================================================================
