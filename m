@@ -1,126 +1,50 @@
-From: bugs at busybox.net <bugs@busybox.net>
-Date: Thu, 17 Jul 2008 02:51:44 -0700
-Subject: [Buildroot] [buildroot 0004164]: SDL_ttf needs SDL to be compiled
-	first
-Message-ID: <5786d6505a012e95c77aa3f23ba70b6a@busybox.net>
+From: jacmet at uclibc.org <jacmet@uclibc.org>
+Date: Thu, 17 Jul 2008 02:55:23 -0700 (PDT)
+Subject: [Buildroot] svn commit: trunk/buildroot/package/sdl_ttf
+Message-ID: <20080717095523.CD3673C84C@busybox.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+Author: jacmet
+Date: 2008-07-17 02:55:23 -0700 (Thu, 17 Jul 2008)
+New Revision: 22855
 
-The following issue has been RESOLVED. 
-====================================================================== 
-http://busybox.net/bugs/view.php?id=4164 
-====================================================================== 
-Reported By:                artemys
-Assigned To:                buildroot
-====================================================================== 
-Project:                    buildroot
-Issue ID:                   4164
-Category:                   Shared Library Support
-Reproducibility:            always
-Severity:                   minor
-Priority:                   normal
-Status:                     resolved
-Resolution:                 fixed
-Fixed in Version:           
-====================================================================== 
-Date Submitted:             07-16-2008 08:31 PDT
-Last Modified:              07-17-2008 02:51 PDT
-====================================================================== 
-Summary:                    SDL_ttf needs SDL to be compiled first
-Description: 
-It is possible to select the build of SDL_ttf even if SDL is not selected.
--> compilation error
+Log:
+sdl_ttf: fix sdl dependency
 
-Correction patch attached.
-Same should apply to SDL_mixer...
-====================================================================== 
+Patch by artemys - Closes #4164.
 
----------------------------------------------------------------------- 
- bernhardf - 07-16-08 08:47  
----------------------------------------------------------------------- 
---- package/sdl_ttf/Config.in.org	2008-07-16 17:10:29.000000000 +0200
-+++ package/sdl_ttf/Config.in	2008-07-16 17:10:57.000000000 +0200
-@@ -1,6 +1,7 @@
+Modified:
+   trunk/buildroot/package/sdl_ttf/Config.in
+   trunk/buildroot/package/sdl_ttf/sdl_ttf.mk
+
+
+Changeset:
+Modified: trunk/buildroot/package/sdl_ttf/Config.in
+===================================================================
+--- trunk/buildroot/package/sdl_ttf/Config.in	2008-07-17 09:17:51 UTC (rev 22854)
++++ trunk/buildroot/package/sdl_ttf/Config.in	2008-07-17 09:55:23 UTC (rev 22855)
+@@ -1,5 +1,6 @@
  config BR2_PACKAGE_SDL_TTF
  	bool "SDL_TTF"
- 	default n
 +	depends on BR2_PACKAGE_SDL
-
-yes, exactly.
-
+ 	default n
  	select BR2_PACKAGE_FREETYPE
  	help
- 	  SDL_ttf is a sample TrueType font library. It allows you to
---- package/sdl_ttf/sdl_ttf.mk.org	2008-07-16 17:29:42.000000000 +0200
-+++ package/sdl_ttf/sdl_ttf.mk	2008-07-16 17:30:06.000000000 +0200
+
+Modified: trunk/buildroot/package/sdl_ttf/sdl_ttf.mk
+===================================================================
+--- trunk/buildroot/package/sdl_ttf/sdl_ttf.mk	2008-07-17 09:17:51 UTC (rev 22854)
++++ trunk/buildroot/package/sdl_ttf/sdl_ttf.mk	2008-07-17 09:55:23 UTC (rev 22855)
 @@ -60,7 +60,7 @@
  	cp -dpf $(STAGING_DIR)/usr/lib/libSDL_ttf*.so* $(TARGET_DIR)/usr/lib/
- 	-$(STRIPCMD) $(STRIP_STRIP_UNNEEDED)
-$(TARGET_DIR)/usr/lib/libSDL_ttf.so
+ 	-$(STRIPCMD) $(STRIP_STRIP_UNNEEDED) $(TARGET_DIR)/usr/lib/libSDL_ttf.so
  
 -SDL sdl_ttf: uclibc $(TARGET_DIR)/usr/lib/libSDL_ttf.so
-+SDL_TTF sdl_ttf: uclibc $(TARGET_DIR)/usr/lib/libSDL_ttf.so
-
-That caps "SDL_TTF" sounds wrong (or at least redundant).
-Also, i suspect that you will need to have libsdl.so as prereq, something
-like:
-
-sdl_ttf: uclibc $(TARGET_DIR)/usr/lib/libSDL.so \
-$(TARGET_DIR)/usr/lib/libSDL_ttf.so 
-
----------------------------------------------------------------------- 
- artemys - 07-16-08 10:24  
----------------------------------------------------------------------- 
-sdl_ttf: uclibc sdl $(TARGET_DIR)/usr/lib/libSDL_ttf.so
-will also work, I think... 
-
----------------------------------------------------------------------- 
- artemys - 07-17-08 00:20  
----------------------------------------------------------------------- 
-If I try to compile SDL_ttf with SDL not already selected, then I have the
-same problem as issue http://busybox.net/bugs/view.php?id=2174 
-
----------------------------------------------------------------------- 
- bernhardf - 07-17-08 00:59  
----------------------------------------------------------------------- 
-That's why "depends on BR2_PACKAGE_SDL" is the correct thing to do, yes
-(and i stated it was correct).
-
-Please attach a complete, tested patch so somebody can apply it to svn.
-TIA and cheers,
-Bernhard 
-
----------------------------------------------------------------------- 
- artemys - 07-17-08 01:29  
----------------------------------------------------------------------- 
-New patch added (sdl_ttf-depends-on-sdl_v2.patch) 
-
----------------------------------------------------------------------- 
- jacmet - 07-17-08 02:51  
----------------------------------------------------------------------- 
-Thanks, committed. 
-
-Issue History 
-Date Modified   Username       Field                    Change               
-====================================================================== 
-07-16-08 08:31  artemys        New Issue                                    
-07-16-08 08:31  artemys        Status                   new => assigned     
-07-16-08 08:31  artemys        Assigned To               => buildroot       
-07-16-08 08:31  artemys        File Added: sdl_ttf-depends-on-sdl.patch         
-          
-07-16-08 08:47  bernhardf      Note Added: 0009404                          
-07-16-08 10:24  artemys        Note Added: 0009414                          
-07-17-08 00:20  artemys        Note Added: 0009524                          
-07-17-08 00:59  bernhardf      Note Added: 0009534                          
-07-17-08 01:27  artemys        Issue Monitored: artemys                     
-07-17-08 01:28  artemys        File Added: sdl_ttf-depends-on-sdl_v2.patch      
-             
-07-17-08 01:29  artemys        Note Added: 0009554                          
-07-17-08 02:51  jacmet         Status                   assigned => resolved
-07-17-08 02:51  jacmet         Resolution               open => fixed       
-07-17-08 02:51  jacmet         Note Added: 0009594                          
-======================================================================
++sdl_ttf: uclibc sdl $(TARGET_DIR)/usr/lib/libSDL_ttf.so
+ 
+ sdl_ttf-clean:
+ 	$(MAKE) DESTDIR=$(TARGET_DIR) CC=$(TARGET_CC) -C $(SDL_TTF_DIR) uninstall
