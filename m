@@ -1,8 +1,8 @@
 From: bugs at busybox.net <bugs@busybox.net>
-Date: Thu, 17 Jul 2008 00:20:33 -0700
+Date: Thu, 17 Jul 2008 00:59:45 -0700
 Subject: [Buildroot] [buildroot 0004164]: SDL_ttf needs SDL to be compiled
 	first
-Message-ID: <4193670882faf7fa7a92c3cf637960e8@busybox.net>
+Message-ID: <91629b6a87314b38f768fbae9d73eeba@busybox.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -26,7 +26,7 @@ Priority:                   normal
 Status:                     assigned
 ====================================================================== 
 Date Submitted:             07-16-2008 08:31 PDT
-Last Modified:              07-17-2008 00:20 PDT
+Last Modified:              07-17-2008 00:59 PDT
 ====================================================================== 
 Summary:                    SDL_ttf needs SDL to be compiled first
 Description: 
@@ -82,6 +82,16 @@ will also work, I think...
 If I try to compile SDL_ttf with SDL not already selected, then I have the
 same problem as issue http://busybox.net/bugs/view.php?id=2174 
 
+---------------------------------------------------------------------- 
+ bernhardf - 07-17-08 00:59  
+---------------------------------------------------------------------- 
+That's why "depends on BR2_PACKAGE_SDL" is the correct thing to do, yes
+(and i stated it was correct).
+
+Please attach a complete, tested patch so somebody can apply it to svn.
+TIA and cheers,
+Bernhard 
+
 Issue History 
 Date Modified   Username       Field                    Change               
 ====================================================================== 
@@ -93,4 +103,5 @@ Date Modified   Username       Field                    Change
 07-16-08 08:47  bernhardf      Note Added: 0009404                          
 07-16-08 10:24  artemys        Note Added: 0009414                          
 07-17-08 00:20  artemys        Note Added: 0009524                          
+07-17-08 00:59  bernhardf      Note Added: 0009534                          
 ======================================================================
