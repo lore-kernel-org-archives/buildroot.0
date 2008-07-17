@@ -1,7 +1,7 @@
 From: jacmet at uclibc.org <jacmet@uclibc.org>
-Date: Thu, 17 Jul 2008 02:55:23 -0700 (PDT)
-Subject: [Buildroot] svn commit: trunk/buildroot/package/sdl_ttf
-Message-ID: <20080717095523.CD3673C84C@busybox.net>
+Date: Thu, 17 Jul 2008 02:55:31 -0700 (PDT)
+Subject: [Buildroot] svn commit: trunk/buildroot/package/sdl_mixer
+Message-ID: <20080717095531.E3D263C867@busybox.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -9,42 +9,43 @@ Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
 Author: jacmet
-Date: 2008-07-17 02:55:23 -0700 (Thu, 17 Jul 2008)
-New Revision: 22855
+Date: 2008-07-17 02:55:27 -0700 (Thu, 17 Jul 2008)
+New Revision: 22856
 
 Log:
-sdl_ttf: fix sdl dependency
-
-Patch by artemys - Closes #4164.
+sdl_mixer: fix sdl dependency
 
 Modified:
-   trunk/buildroot/package/sdl_ttf/Config.in
-   trunk/buildroot/package/sdl_ttf/sdl_ttf.mk
+   trunk/buildroot/package/sdl_mixer/Config.in
+   trunk/buildroot/package/sdl_mixer/sdl_mixer.mk
 
 
 Changeset:
-Modified: trunk/buildroot/package/sdl_ttf/Config.in
+Modified: trunk/buildroot/package/sdl_mixer/Config.in
 ===================================================================
---- trunk/buildroot/package/sdl_ttf/Config.in	2008-07-17 09:17:51 UTC (rev 22854)
-+++ trunk/buildroot/package/sdl_ttf/Config.in	2008-07-17 09:55:23 UTC (rev 22855)
-@@ -1,5 +1,6 @@
- config BR2_PACKAGE_SDL_TTF
- 	bool "SDL_TTF"
-+	depends on BR2_PACKAGE_SDL
+--- trunk/buildroot/package/sdl_mixer/Config.in	2008-07-17 09:55:23 UTC (rev 22855)
++++ trunk/buildroot/package/sdl_mixer/Config.in	2008-07-17 09:55:27 UTC (rev 22856)
+@@ -1,8 +1,8 @@
+ config BR2_PACKAGE_SDL_MIXER
+ 	bool "SDL_mixer"
  	default n
- 	select BR2_PACKAGE_FREETYPE
++	depends on BR2_PACKAGE_SDL
  	help
+-
+ 	  SDL_mixer is a sample multi-channel audio mixer library.
+ 	  It supports any number of simultaneously playing channels of
+ 	  16 bit stereo audio, plus a single channel of music, mixed
 
-Modified: trunk/buildroot/package/sdl_ttf/sdl_ttf.mk
+Modified: trunk/buildroot/package/sdl_mixer/sdl_mixer.mk
 ===================================================================
---- trunk/buildroot/package/sdl_ttf/sdl_ttf.mk	2008-07-17 09:17:51 UTC (rev 22854)
-+++ trunk/buildroot/package/sdl_ttf/sdl_ttf.mk	2008-07-17 09:55:23 UTC (rev 22855)
-@@ -60,7 +60,7 @@
- 	cp -dpf $(STAGING_DIR)/usr/lib/libSDL_ttf*.so* $(TARGET_DIR)/usr/lib/
- 	-$(STRIPCMD) $(STRIP_STRIP_UNNEEDED) $(TARGET_DIR)/usr/lib/libSDL_ttf.so
+--- trunk/buildroot/package/sdl_mixer/sdl_mixer.mk	2008-07-17 09:55:23 UTC (rev 22855)
++++ trunk/buildroot/package/sdl_mixer/sdl_mixer.mk	2008-07-17 09:55:27 UTC (rev 22856)
+@@ -48,7 +48,7 @@
+ 	cp -dpf $(STAGING_DIR)/usr/lib/libSDL_mixer*.so* $(TARGET_DIR)/usr/lib/
+ 	-$(STRIPCMD) $(STRIP_STRIP_UNNEEDED) $(TARGET_DIR)/usr/lib/libSDL_mixer*.so*
  
--SDL sdl_ttf: uclibc $(TARGET_DIR)/usr/lib/libSDL_ttf.so
-+sdl_ttf: uclibc sdl $(TARGET_DIR)/usr/lib/libSDL_ttf.so
+-sdl_mixer: uclibc $(TARGET_DIR)/usr/lib/libSDL_mixer.so
++sdl_mixer: sdl uclibc $(TARGET_DIR)/usr/lib/libSDL_mixer.so
  
- sdl_ttf-clean:
- 	$(MAKE) DESTDIR=$(TARGET_DIR) CC=$(TARGET_CC) -C $(SDL_TTF_DIR) uninstall
+ sdl_mixer-clean:
+ 	rm -f $(TARGET_DIR)/usr/lib/libSDL_mixer*.so*
