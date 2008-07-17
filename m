@@ -1,29 +1,37 @@
-From: Bernhard Fischer <rep.dot.nop@gmail.com>
-Date: Thu, 17 Jul 2008 17:06:06 +0200
-Subject: [Buildroot] [buildroot 0003594]: ATK does not always require
-	X	support to be compiled
-In-Reply-To: <d6cda7730807170738u666274cdwf7e848157eaf520d@mail.gmail.com>
-References: <3222a1d329b3a683d89849f7a60e194c@busybox.net>
-	<d6cda7730807170738u666274cdwf7e848157eaf520d@mail.gmail.com>
-Message-ID: <20080717150606.GC27869@mx.loc>
+From: Robert B. Williams <rwilliams@valcom.com>
+Date: Thu, 17 Jul 2008 11:17:04 -0400
+Subject: [Buildroot] SVN guidance request
+Message-ID: <487F6270.1090301@valcom.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Thu, Jul 17, 2008 at 11:38:14AM -0300, Thiago A. Corr?a wrote:
->On Thu, Jul 17, 2008 at 7:39 AM,  <bugs@busybox.net> wrote:
+I am very new to buildroot.  Nice work!
 
->> 07-03-08 19:24  Correa         Status                   assigned => resolved
->> 07-03-08 19:24  Correa         Resolution               open => fixed
->> 07-03-08 19:24  Correa         Note Added: 0008914
->> 07-16-08 08:02  bernhardf      Status                   resolved => new
->> 07-17-08 03:39  bernhardf      Status                   new => closed
->> ======================================================================
->>
->
->Is there any reason to change the status from Fixed to Closed?
+Anyway, I would like some advice on how to best version control 
+buildroot with my work.
 
-yes. The convention is to close issues and not to resolve them.
-I'm asking anybody to adhere to this. TIA
+I was hoping to put buildroot and the multiple projects I create with it 
+in an SVN repository.  I'll need to be able to merge releases from 
+buildroot from time to time while maintaining my project related 
+changes.  I am also considering saving the downloads, in case older 
+versions become unavailable. 
+
+The documentation indicates that any changes made to 
+project_build_ARCH/root/ will be lost during a toolchain build.  Does 
+this mean I will need to build everything once (or kill the process 
+after the toolchain is built) and then update my 
+project_build_ARCH/root/ from my repository and then build the project 
+again?  Or is there a better approach to storing project specific root 
+files?  I know alot of the common files could simply be stored in the 
+target/generic/target_skeleton but what about the ones that differ 
+between projects? 
+
+If there is documentation, hints, faqs, wiki, or any experience in this 
+areas please let me know.
+
+In the meantime I'll start experimenting.
+
+Cheers!
