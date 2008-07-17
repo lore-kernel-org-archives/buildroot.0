@@ -1,39 +1,31 @@
-From: jacmet at uclibc.org <jacmet@uclibc.org>
-Date: Thu, 17 Jul 2008 06:25:36 -0700 (PDT)
-Subject: [Buildroot] svn commit: trunk/buildroot/package/fuse
-Message-ID: <20080717132536.F29863C885@busybox.net>
+From: =?ISO-8859-1?Q?Thiago_A._Corr=EAa?= <thiago.correa@gmail.com>
+Date: Thu, 17 Jul 2008 11:38:14 -0300
+Subject: [Buildroot] [buildroot 0003594]: ATK does not always require X
+	support to be compiled
+In-Reply-To: <3222a1d329b3a683d89849f7a60e194c@busybox.net>
+References: <3222a1d329b3a683d89849f7a60e194c@busybox.net>
+Message-ID: <d6cda7730807170738u666274cdwf7e848157eaf520d@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Author: jacmet
-Date: 2008-07-17 06:25:35 -0700 (Thu, 17 Jul 2008)
-New Revision: 22864
+On Thu, Jul 17, 2008 at 7:39 AM,  <bugs@busybox.net> wrote:
 
-Log:
-fuse: fix target install
+> Issue History
+> Date Modified   Username       Field                    Change
+> ======================================================================
+> 06-03-08 05:07  daniellaird    New Issue
+> 06-03-08 05:07  daniellaird    Status                   new => assigned
+> 06-03-08 05:07  daniellaird    Assigned To               => buildroot
+> 06-03-08 05:07  daniellaird    File Added: atk_no_x.patch
+> 07-03-08 19:24  Correa         Status                   assigned => resolved
+> 07-03-08 19:24  Correa         Resolution               open => fixed
+> 07-03-08 19:24  Correa         Note Added: 0008914
+> 07-16-08 08:02  bernhardf      Status                   resolved => new
+> 07-17-08 03:39  bernhardf      Status                   new => closed
+> ======================================================================
+>
 
-Also copy libfuse.so symlink so fuse target isn't considered out of date
-
-Modified:
-   trunk/buildroot/package/fuse/libfuse.mk
-
-
-Changeset:
-Modified: trunk/buildroot/package/fuse/libfuse.mk
-===================================================================
---- trunk/buildroot/package/fuse/libfuse.mk	2008-07-17 13:20:37 UTC (rev 22863)
-+++ trunk/buildroot/package/fuse/libfuse.mk	2008-07-17 13:25:35 UTC (rev 22864)
-@@ -51,8 +51,8 @@
- 	mkdir -p $(TARGET_DIR)/usr/bin
- 	cp -dpf $(STAGING_DIR)/usr/bin/fusermount $(TARGET_DIR)/usr/bin/
- 	$(STRIPCMD) $(STRIP_STRIP_ALL) $(TARGET_DIR)/usr/bin/fusermount
--	cp -dpf $(STAGING_DIR)/usr/lib/libfuse.so.* $(TARGET_DIR)/usr/lib/
--	$(STRIPCMD) $(STRIP_STRIP_UNNEEDED) $(TARGET_DIR)/usr/lib/libfuse.so.*
-+	cp -dpf $(STAGING_DIR)/usr/lib/libfuse.so* $(TARGET_DIR)/usr/lib/
-+	$(STRIPCMD) $(STRIP_STRIP_UNNEEDED) $(TARGET_DIR)/usr/lib/libfuse.so
- 	touch -c $@
- 
- libfuse: uclibc $(TARGET_DIR)/usr/lib/libfuse.so
+Is there any reason to change the status from Fixed to Closed?
