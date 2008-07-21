@@ -1,24 +1,70 @@
 From: Hans-Christian Egtvedt <hans-christian.egtvedt@atmel.com>
-Date: Mon, 21 Jul 2008 15:28:15 +0200
-Subject: [Buildroot] lxdoom - only supported if you have an X server?
-In-Reply-To: <46a136670807210627y65b4a7f0mbe0cfc1c6bbcead1@mail.gmail.com>
-References: <1216644796.21551.8.camel@localhost>
-	<46a136670807210625u1407699el243983835865607f@mail.gmail.com>
-	<46a136670807210627y65b4a7f0mbe0cfc1c6bbcead1@mail.gmail.com>
-Message-ID: <1216646895.21551.16.camel@localhost>
+Date: Mon, 21 Jul 2008 15:55:39 +0200
+Subject: [Buildroot] [PATCH 2/2] lxdoom-wad: make installation of Doom
+	shareware wad file be more generic
+In-Reply-To: <1216648539-19020-1-git-send-email-hans-christian.egtvedt@atmel.com>
+References: <1216648539-19020-1-git-send-email-hans-christian.egtvedt@atmel.com>
+Message-ID: <1216648539-19020-2-git-send-email-hans-christian.egtvedt@atmel.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Mon, 2008-07-21 at 09:27 -0400, John Voltz wrote:
-> I think it's called prboom :^)
-> 
+This patch will let the user install the Doom shareware wad file if lxdoom or
+lsdldoom is selected. The wad file will also be installed into
+/usr/share/games/doom directory, since the client will search this directory
+when starting.
 
-prboom is, AFAICT, an OpenGL implementation. Please correct me if I am
-wrong :)
+The Makefile rule has also been altered to depend on the installed wad file, so
+it will be multiple project safe.
 
+Signed-off-by: Hans-Christian Egtvedt <hans-christian.egtvedt@atmel.com>
+---
+ package/lxdoom/Config.in     |    8 +++++---
+ package/lxdoom/lxdoom-wad.mk |   10 +++++-----
+ 2 files changed, 10 insertions(+), 8 deletions(-)
+
+diff --git a/package/lxdoom/Config.in b/package/lxdoom/Config.in
+index 892e45c..4775781 100644
+--- a/package/lxdoom/Config.in
++++ b/package/lxdoom/Config.in
+@@ -3,7 +3,9 @@ config BR2_PACKAGE_LXDOOM
+ 	help
+ 	  This is the linux version of the popular doom game.
+ config BR2_PACKAGE_LXDOOM_WAD
+-	bool "lxdoom-wad"
+-	depends on BR2_PACKAGE_LXDOOM
++	bool "doom shareware wad file"
++	depends on BR2_PACKAGE_LXDOOM || BR2_PACKAGE_LSDLDOOM
+ 	help
+-	  This is the shareware wad data files for the doom game.
++	  This will install the the shareware wad data file for the doom game.
++
++	  The wad file will be placed in /usr/share/games/doom/doom1.wad
+diff --git a/package/lxdoom/lxdoom-wad.mk b/package/lxdoom/lxdoom-wad.mk
+index 41b8ed8..4e38574 100644
+--- a/package/lxdoom/lxdoom-wad.mk
++++ b/package/lxdoom/lxdoom-wad.mk
+@@ -15,14 +15,14 @@ $(DL_DIR)/$(LXDOOM_WAD_SOURCE):
+ $(LXDOOM_WAD_DIR)/.unpacked: $(DL_DIR)/$(LXDOOM_WAD_SOURCE)
+ 	mkdir -p $(LXDOOM_WAD_DIR)
+ 	cp -f $(DL_DIR)/$(LXDOOM_WAD_SOURCE) $(LXDOOM_WAD_DIR)
+-	gunzip -d $(LXDOOM_WAD_DIR)/$(LXDOOM_WAD_SOURCE) 
++	gunzip -d $(LXDOOM_WAD_DIR)/$(LXDOOM_WAD_SOURCE)
+ 	touch $@
+ 
+-$(LXDOOM_WAD_DIR)/.installed: $(LXDOOM_WAD_DIR)/.unpacked
+-	cp -f $(LXDOOM_WAD_DIR)/* $(TARGET_DIR)/usr/games
+-	touch $@
++$(TARGET_DIR)/usr/share/games/doom/doom1.wad: $(LXDOOM_WAD_DIR)/.unpacked
++	mkdir -p $(TARGET_DIR)/usr/share/games/doom
++	cp -f $(LXDOOM_WAD_DIR)/doom-$(LXDOOM_WAD_VERSION).wad $@
+ 
+-lxdoom-wad: lxdoom $(LXDOOM_WAD_DIR)/.installed
++lxdoom-wad: uclibc $(TARGET_DIR)/usr/share/games/doom/doom1.wad
+ 
+ #############################################################
+ #
 -- 
-With kind regards,
-Hans-Christian Egtvedt, Applications Engineer
+1.5.4.3
