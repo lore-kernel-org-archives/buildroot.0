@@ -1,192 +1,194 @@
-From: Hans-Christian Egtvedt <hans-christian.egtvedt@atmel.com>
-Date: Mon, 21 Jul 2008 15:55:38 +0200
-Subject: [Buildroot] [PATCH 1/2] lsdldoom: new package lsdldoom
-Message-ID: <1216648539-19020-1-git-send-email-hans-christian.egtvedt@atmel.com>
+From: Daniel Laird <daniel.j.laird@nxp.com>
+Date: Mon, 21 Jul 2008 14:57:19 +0100
+Subject: [Buildroot] Suggestion for re-arranging package/Config.in
+Message-ID: <1216648639.30984.6.camel@lnx32dtp04>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-This patch adds a new package lsdldoom, this Doom client is based on the SDL
-framework. An alternative to the lxdoom package.
+I have found that there are many many options under package/Config.in
+and in particular a large number of options for BR2_GRAPHIC_SUPPORT.
 
-Signed-off-by: Hans-Christian Egtvedt <hans-christian.egtvedt@atmel.com>
----
- package/Config.in                                  |    1 +
- package/lsdldoom/Config.in                         |    9 ++
- .../lsdldoom/lsdldoom-1.4.4.4-fix-c-syntax.patch   |  104 ++++++++++++++++++++
- package/lsdldoom/lsdldoom.mk                       |   23 +++++
- 4 files changed, 137 insertions(+), 0 deletions(-)
- create mode 100644 package/lsdldoom/Config.in
- create mode 100644 package/lsdldoom/lsdldoom-1.4.4.4-fix-c-syntax.patch
- create mode 100644 package/lsdldoom/lsdldoom.mk
+I was wondering if the following might be a nice tidy up (it makes sense
+to me).  I feel this would make options easier to handle.
+LiTe/Directfb-examples are both in bug database now.  
+Web browser support could include firefox soon as there are examples of
+that now running on mips and others.
 
-diff --git a/package/Config.in b/package/Config.in
-index 2941033..e23acc0 100644
---- a/package/Config.in
-+++ b/package/Config.in
-@@ -489,6 +489,7 @@ menuconfig BR2_GAMES
- 	  Support for games
- 
- if BR2_GAMES
-+source "package/lsdldoom/Config.in"
- source "package/lxdoom/Config.in"
- source "package/ace_of_penguins/Config.in"
- source "package/gnuchess/Config.in"
-diff --git a/package/lsdldoom/Config.in b/package/lsdldoom/Config.in
-new file mode 100644
-index 0000000..49191fa
---- /dev/null
-+++ b/package/lsdldoom/Config.in
-@@ -0,0 +1,9 @@
-+config BR2_PACKAGE_LSDLDOOM
-+	bool "lsdldoom"
-+	depends on BR2_PACKAGE_SDL
-+	help
-+	  This is the linux version of the popular doom game using the SDL
-+	  library, lsdldoom is an alternative to the lxdoom package.
-+
-+	  It is recommended to add the SDL_mixer package for audio support, but
-+	  it is not required.
-diff --git a/package/lsdldoom/lsdldoom-1.4.4.4-fix-c-syntax.patch b/package/lsdldoom/lsdldoom-1.4.4.4-fix-c-syntax.patch
-new file mode 100644
-index 0000000..628ef63
---- /dev/null
-+++ b/package/lsdldoom/lsdldoom-1.4.4.4-fix-c-syntax.patch
-@@ -0,0 +1,104 @@
-+Index: lsdldoom-1.4.4.4/src/d_main.c
-+===================================================================
-+--- lsdldoom-1.4.4.4.orig/src/d_main.c	2008-07-21 10:33:34.000000000 +0200
-++++ lsdldoom-1.4.4.4/src/d_main.c	2008-07-21 10:36:16.000000000 +0200
-+@@ -230,6 +230,7 @@
-+     case GS_LEVEL:
-+       V_SetPalette(0); // cph - use default (basic) palette  
-+     default:
-++      break;
-+     }
-+ 
-+     switch (gamestate) {
-+@@ -243,6 +244,7 @@
-+       D_PageDrawer();
-+       break;
-+     default:
-++      break;
-+     }
-+   } else if (gametic) { // In a level
-+     boolean redrawborderstuff;
-+Index: lsdldoom-1.4.4.4/src/g_game.c
-+===================================================================
-+--- lsdldoom-1.4.4.4.orig/src/g_game.c	2008-07-21 10:33:34.000000000 +0200
-++++ lsdldoom-1.4.4.4/src/g_game.c	2008-07-21 10:34:06.000000000 +0200
-+@@ -875,6 +875,7 @@
-+     case GS_INTERMISSION:
-+       WI_End();
-+     default:
-++      break;
-+     }
-+     prevgamestate = gamestate;
-+   }
-+Index: lsdldoom-1.4.4.4/src/p_maputl.h
-+===================================================================
-+--- lsdldoom-1.4.4.4.orig/src/p_maputl.h	2008-07-21 10:33:40.000000000 +0200
-++++ lsdldoom-1.4.4.4/src/p_maputl.h	2008-07-21 10:46:35.000000000 +0200
-+@@ -82,7 +82,7 @@
-+ void    P_SetThingPosition(mobj_t *thing);
-+ boolean P_BlockLinesIterator (int x, int y, boolean func(line_t *));
-+ boolean P_BlockThingsIterator(int x, int y, boolean func(mobj_t *));
-+-boolean ThingIsOnLine(const mobj_t *t, const line_t *l);  /* killough 3/15/98 */
-++boolean CONSTFUNC ThingIsOnLine(const mobj_t *t, const line_t *l);  /* killough 3/15/98 */
-+ boolean P_PathTraverse(fixed_t x1, fixed_t y1, fixed_t x2, fixed_t y2,
-+                        int flags, boolean trav(intercept_t *));
-+ 
-+Index: lsdldoom-1.4.4.4/src/r_segs.c
-+===================================================================
-+--- lsdldoom-1.4.4.4.orig/src/r_segs.c	2008-07-21 10:33:35.000000000 +0200
-++++ lsdldoom-1.4.4.4/src/r_segs.c	2008-07-21 10:35:47.000000000 +0200
-+@@ -47,9 +47,9 @@
-+ // killough 1/6/98: replaced globals with statics where appropriate
-+ 
-+ // True if any of the segs textures might be visible.
-+-static boolean  segtextured;
-+-static boolean  markfloor;      // False if the back side is the same plane.
-+-static boolean  markceiling;
-++boolean         segtextured;
-++boolean         markfloor;      // False if the back side is the same plane.
-++boolean         markceiling;
-+ static boolean  maskedtexture;
-+ static int      toptexture;
-+ static int      bottomtexture;
-+@@ -65,8 +65,8 @@
-+ //
-+ // regular wall
-+ //
-+-static int      rw_x;
-+-static int      rw_stopx;
-++int             rw_x;
-++int             rw_stopx;
-+ static angle_t  rw_centerangle;
-+ static fixed_t  rw_offset;
-+ static fixed_t  rw_scale;
-+Index: lsdldoom-1.4.4.4/src/wi_stuff.c
-+===================================================================
-+--- lsdldoom-1.4.4.4.orig/src/wi_stuff.c	2008-07-21 10:33:35.000000000 +0200
-++++ lsdldoom-1.4.4.4/src/wi_stuff.c	2008-07-21 10:45:41.000000000 +0200
-+@@ -368,7 +368,7 @@
-+ static const patch_t  * frags;
-+ 
-+ // Time sucks.
-+-static const patch_t  * time;
-++static const patch_t  * witime;
-+ static const patch_t  * par;
-+ static const patch_t  * sucks;
-+ 
-+@@ -806,7 +806,7 @@
-+ 
-+ static void WI_drawTimeStats(int cnt_time, int cnt_total_time, int cnt_par)
-+ {
-+-  V_DrawMemPatch(SP_TIMEX, SP_TIMEY, FB, time, NULL, VPT_STRETCH);
-++  V_DrawMemPatch(SP_TIMEX, SP_TIMEY, FB, witime, NULL, VPT_STRETCH);
-+   WI_drawTime(320/2 - SP_TIMEX, SP_TIMEY, cnt_time);
-+ 
-+   V_DrawMemPatch(SP_TIMEX, (SP_TIMEY+200)/2, FB, total, NULL, VPT_STRETCH);
-+@@ -1790,7 +1790,7 @@
-+   { "WIOSTI", &items },
-+   { "WIFRGS", &frags },
-+   { "WICOLON",&colon },
-+-  { "WITIME", &time  },
-++  { "WITIME", &witime  },
-+   { "WISUCKS",&sucks },
-+   { "WIPAR",  &par   },
-+   { "WIKILRS",&killers},
-diff --git a/package/lsdldoom/lsdldoom.mk b/package/lsdldoom/lsdldoom.mk
-new file mode 100644
-index 0000000..464eef8
---- /dev/null
-+++ b/package/lsdldoom/lsdldoom.mk
-@@ -0,0 +1,23 @@
-+#############################################################
-+#
-+# lsdldoom
-+#
-+#############################################################
-+
-+LSDLDOOM_VERSION = 1.4.4.4
-+LSDLDOOM_SOURCE = lsdldoom-$(LSDLDOOM_VERSION).tar.gz
-+LSDLDOOM_SITE = http://firehead.org/~jessh/lsdldoom/src
-+LSDLDOOM_AUTORECONF = NO
-+LSDLDOOM_INSTALL_STAGING = NO
-+LSDLDOOM_INSTALL_TARGET = YES
-+LSDLDOOM_INSTALL_TARGET_OPT = DESTDIR=$(TARGET_DIR) install
-+
-+LSDLDOOM_MAKE_ENV = CC=$(TARGET_CC)
-+
-+LSDLDOOM_CONF_OPT = --target=$(GNU_TARGET_NAME) --host=$(GNU_TARGET_NAME) \
-+		--build=$(GNU_HOST_NAME) --prefix=/usr \
-+		$(DISABLE_NLS)
-+
-+LSDLDOOM_DEPENDENCIES = sdl
-+
-+$(eval $(call AUTOTARGETS,package,lsdldoom))
--- 
-1.5.4.3
+I think this would be easier to maintain and perhaps if this was agreed
+we could then do a mass move and create subdirs for each of the menus
+(like you have done for some of the other submenus) and then it would be
+better in the future.
+
+Let me know your thoughts!
+
+
+menuconfig BR2_GRAPHIC_SUPPORT
+	bool "Graphic libraries and applications (graphic/text)"
+	default y
+	help
+	  Support for graphic libraries, X Window system and related
+	  packages, graphical toolkits, etc.
+
+if BR2_GRAPHIC_SUPPORT
+
+menuconfig BR2_TEXT_RENDERING_LIBS
+	bool "Text Rendering Libraries"
+	default y
+	help
+	  Support for text rendering libraries, packages etc (ncurses, slang
+etc).
+if BR2_TEXT_RENDERING_LIBS
+source "package/ncurses/Config.in"
+source "package/newt/Config.in"
+source "package/slang/Config.in"
+source "package/dialog/Config.in"
+endif
+
+menuconfig BR2_DIRECTFB_LIBS
+	bool "DirectFB Libraries and Applications"
+	default y
+	help
+	  Support for DirectFB libraries, packages etc (directfb, fusion etc).
+
+if BR2_DIRECTFB_LIBS
+source "package/directfb/Config.in"
+source "package/directfb-examples/Config.in"
+source "package/fusion/Config.in"
+source "package/lite/Config.in"
+endif
+
+menuconfig BR2_IMAGE_SUPPORT
+	bool "Image decoders / libraries"
+	default y
+	help
+	  Support for image  libraries. (jpeg etc)
+
+if BR2_IMAGE_SUPPORT
+source "package/imagemagick/Config.in"
+source "package/jpeg/Config.in"
+source "package/libart/Config.in"
+source "package/libpng/Config.in"
+source "package/libungif/Config.in"
+source "package/tiff/Config.in"
+endif
+
+menuconfig BR2_SDL_SUPPORT
+	bool "Support for SDL libraries etc"
+	default y
+	help
+	  Support for sdl libraries. 
+if BR2_SDL_SUPPORT
+source "package/sdl/Config.in"
+source "package/sdl_image/Config.in"
+source "package/sdl_mixer/Config.in"
+source "package/sdl_ttf/Config.in"
+endif
+
+comment "busybox graphic applications"
+comment "--> May be broken in busybox"
+source "package/fbv/Config.in"
+source "package/fbset/Config.in"
+
+menuconfig BR2_QT_SUPPORT
+	bool "Support for QT/QtE etc"
+	default y
+	help
+	  Support for Qt/Qt/e libraries. 
+if BR2_QT_SUPPORT
+source "package/qte/Config.in"
+source "package/qtopia4/Config.in"
+endif
+
+menuconfig BR2_GTK_SUPPORT
+	bool "Support for GTK etc"
+	default y
+	help
+	  Support for GTK libraries. 
+
+if BR2_GTK_SUPPORT
+source "package/libgtk12/Config.in"
+source "package/libgtk2/Config.in"
+source "package/gtk2-engines/Config.in"
+source "package/gtk2-themes/Config.in"
+endif
+
+menuconfig BR2_WEB_BROWSERS
+	bool "Support for Web Browsers"
+	default y
+	help
+	  Support for some common web browsers. 
+
+if BR2_WEB_BROWSERS
+source "package/dillo/Config.in"
+source "package/webkit/Config.in"
+endif
+
+menu "X Window System server"
+config BR2_PACKAGE_XSERVER_none
+	bool "none"
+	default y
+config BR2_PACKAGE_XSERVER_xorg
+	bool "modular xorg"
+	depends on !BR2_PACKAGE_XSERVER_none
+config BR2_PACKAGE_XSERVER_tinyx
+	bool "tinyx"
+	depends on !BR2_PACKAGE_XSERVER_none
+endmenu
+
+config BR2_X11_PREFIX
+	string
+	default "/usr/X11R6"	if BR2_PACKAGE_XSERVER_xorg ||
+BR2_PACKAGE_XSERVER_tinyx
+	default "/usr"		if !BR2_PACKAGE_XSERVER_xorg && !
+BR2_PACKAGE_XSERVER_tinyx
+	help
+	  X11 apps root location
+
+if !BR2_PACKAGE_XSERVER_none
+source "package/x11r7/Config.in"
+endif
+
+comment "X libraries and helper libraries"
+#XXX: maybe some of these should depend on !BR2_PACKAGE_XSERVER_none
+source "package/atk/Config.in"
+source "package/cairo/Config.in"
+source "package/pango/Config.in"
+source "package/libdrm/Config.in"
+source "package/libglib12/Config.in"
+source "package/libglib2/Config.in"
+source "package/libsexy/Config.in"
+source "package/fltk/Config.in"
+source "package/openmotif/Config.in"
+source "package/fontconfig/Config.in"
+source "package/freetype/Config.in"
+source "package/tslib/Config.in"
+
+comment "X Window managers"
+source "package/matchbox/Config.in"
+source "package/metacity/Config.in"
+source "package/blackbox/Config.in"
+
+comment "X applications"
+source "package/alsamixergui/Config.in"
+source "package/docker/Config.in"
+source "package/gqview/Config.in"
+source "package/leafpad/Config.in"
+source "package/midori/Config.in"
+source "package/pcmanfm/Config.in"
+source "package/rdesktop/Config.in"
+source "package/rxvt/Config.in"
+source "package/sylpheed/Config.in"
+source "package/synergy/Config.in"
+source "package/torsmo/Config.in"
+source "package/x11vnc/Config.in"
+source "package/xpdf/Config.in"
+source "package/xstroke/Config.in"
+source "package/xvkbd/Config.in"
+
+comment "Video libraries/codecs and applications"
+source "package/mplayer/Config.in"
+source "package/vlc/Config.in"
+endif
