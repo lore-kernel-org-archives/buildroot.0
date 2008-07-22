@@ -1,34 +1,68 @@
-From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Tue, 22 Jul 2008 21:44:34 +0200
-Subject: [Buildroot] [PATCH] Fix and enable vsftpd build
-In-Reply-To: <bbbeeccd0807220958o7e86e928g529a8c410a72d89c@mail.gmail.com>
-	(Wade Berrier's message of "Tue\, 22 Jul 2008 10\:58\:39 -0600")
-References: <bbbeeccd0807220958o7e86e928g529a8c410a72d89c@mail.gmail.com>
-Message-ID: <878wvt4sbh.fsf@macbook.be.48ers.dk>
+From: jacmet at uclibc.org <jacmet@uclibc.org>
+Date: Tue, 22 Jul 2008 12:47:41 -0700 (PDT)
+Subject: [Buildroot] svn commit: trunk/buildroot/package:  vsftpd
+Message-ID: <20080722194741.76AD23C860@busybox.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Wade" == Wade Berrier <wberrier@gmail.com> writes:
+Author: jacmet
+Date: 2008-07-22 12:47:41 -0700 (Tue, 22 Jul 2008)
+New Revision: 22921
 
- Wade> Hi, 
+Log:
+vsftp: enable and fix linking
 
- Wade> I see that vsftpd is included, but it was not enabled.  It
- Wade> also didn't build because of the missing _TARGET_BINARY
- Wade> directive.
+Patch by Wade Berrier.
 
-Thanks.
+It still errors out on sysdeputil.c for me, but this is no worse than
+it was before, so committing.
 
- Wade> Attached is a patch to fix this (as well as add the correct
- Wade> link flags for ssl depending if that's selected).
+Modified:
+   trunk/buildroot/package/Config.in
+   trunk/buildroot/package/vsftpd/vsftpd.mk
 
-It still doesn't compile for me (errors out in sysdeputil.c:162),
-which seems to be why Bernhard didn't enable it to begin with judging
-from the commit msg - What arch are you compiling for?
 
-Anyway, it's no worse than before, so committing.
+Changeset:
+Modified: trunk/buildroot/package/Config.in
+===================================================================
+--- trunk/buildroot/package/Config.in	2008-07-22 19:38:57 UTC (rev 22920)
++++ trunk/buildroot/package/Config.in	2008-07-22 19:47:41 UTC (rev 22921)
+@@ -227,6 +227,7 @@
+ #endif
+ source "package/udpcast/Config.in"
+ source "package/vpnc/Config.in"
++source "package/vsftpd/Config.in"
+ source "package/vtun/Config.in"
+ source "package/webif/Config.in"
+ if !BR2_PACKAGE_BUSYBOX_HIDE_OTHERS
 
--- 
-Bye, Peter Korsgaard
+Modified: trunk/buildroot/package/vsftpd/vsftpd.mk
+===================================================================
+--- trunk/buildroot/package/vsftpd/vsftpd.mk	2008-07-22 19:38:57 UTC (rev 22920)
++++ trunk/buildroot/package/vsftpd/vsftpd.mk	2008-07-22 19:47:41 UTC (rev 22921)
+@@ -9,9 +9,13 @@
+ VSFTPD_DIR:=$(BUILD_DIR)/vsftpd-$(VSFTPD_VERSION)
+ VSFTPD_CAT:=$(ZCAT)
+ VSFTPD_BINARY:=vsftpd
++VSFTPD_TARGET_BINARY:=usr/sbin/vsftpd
+ 
+ ifeq ($(BR2_PACKAGE_OPENSSL),y)
+ VSFTPF_PREREQ:=openssl
++VSFTPD_LIBS:=-lcrypt -lssl
++else
++VSFTPD_LIBS:=-lcrypt
+ endif
+ ifeq ($(BR2_LARGEFILE),)
+ #BR2_VSFTPD_CFLAGS:=-U_LARGEFILE64_SOURCE -U_FILE_OFFSET_BITS
+@@ -45,7 +49,7 @@
+ 
+ 
+ $(VSFTPD_DIR)/$(VSFTPD_BINARY): $(VSFTPF_PREREQ) $(VSFTPD_DIR)/.configured
+-	$(MAKE) CC=$(TARGET_CC) CFLAGS="$(TARGET_CFLAGS) $(BR2_VSFTPD_CFLAGS)" -C $(VSFTPD_DIR)
++	$(MAKE) CC=$(TARGET_CC) CFLAGS="$(TARGET_CFLAGS) $(BR2_VSFTPD_CFLAGS)" LIBS="$(VSFTPD_LIBS)" -C $(VSFTPD_DIR)
+ 
+ $(TARGET_DIR)/usr/sbin/$(VSFTPD_BINARY): $(VSFTPD_DIR)/$(VSFTPD_BINARY)
+ 	cp -dpf $< $@
