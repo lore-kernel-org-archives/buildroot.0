@@ -1,47 +1,34 @@
-From: John Voltz <john.voltz@gmail.com>
-Date: Tue, 22 Jul 2008 15:34:21 -0400
-Subject: [Buildroot] Debugging VICE emulator for AVR32
-In-Reply-To: <48863574.4040806@mimc.co.uk>
-References: <46a136670806181844p49b1c2e8lbaedac85bb739f29@mail.gmail.com>
-	<877iclx5ur.fsf@macbook.be.48ers.dk> <48863574.4040806@mimc.co.uk>
-Message-ID: <46a136670807221234g363b7764wbdec66c7bfad05f7@mail.gmail.com>
+From: Peter Korsgaard <jacmet@uclibc.org>
+Date: Tue, 22 Jul 2008 21:44:34 +0200
+Subject: [Buildroot] [PATCH] Fix and enable vsftpd build
+In-Reply-To: <bbbeeccd0807220958o7e86e928g529a8c410a72d89c@mail.gmail.com>
+	(Wade Berrier's message of "Tue\, 22 Jul 2008 10\:58\:39 -0600")
+References: <bbbeeccd0807220958o7e86e928g529a8c410a72d89c@mail.gmail.com>
+Message-ID: <878wvt4sbh.fsf@macbook.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-My problem was that VICE wasn't being linked against libpthread. Simply
-adding a LDFLAGS="-lpthread" to the configure statement fixed it.
+>>>>> "Wade" == Wade Berrier <wberrier@gmail.com> writes:
 
-John
+ Wade> Hi, 
 
+ Wade> I see that vsftpd is included, but it was not enabled.  It
+ Wade> also didn't build because of the missing _TARGET_BINARY
+ Wade> directive.
 
-On Tue, Jul 22, 2008 at 3:31 PM, Mark Jackson <mpfj@mimc.co.uk> wrote:
+Thanks.
 
-> Peter Korsgaard wrote:
->
->> I've also noticed pthread problems with avahi on uclibc 0.9.29 (on
->> PPC), but I haven't had time to debug it yet. The same setup works
->> with 0.9.28.3
->>
-> Hi Peter,
->
-> I'm also having problems with avahi-daemon segfaulting (on the NGW100
-> defconfig plus avahi).
->
-> I raised a ticket on avahi.org (http://avahi.org/ticket/224), and after a
-> bit of novice gdb investgations have shown up a "pthread" function may well
-> be the cause.
->
-> In case of a post 0.9.29 bug fix, I did try to use the uclibc daily
-> snapshot, but it didn't compile at all.
->
-> Did you manage to get anywhere with this, or is it still outstanding ?
->
-> Regards
-> Mark
->
--------------- next part --------------
-An HTML attachment was scrubbed...
-URL: http://busybox.net/lists/buildroot/attachments/20080722/2a9a5c32/attachment.htm 
+ Wade> Attached is a patch to fix this (as well as add the correct
+ Wade> link flags for ssl depending if that's selected).
+
+It still doesn't compile for me (errors out in sysdeputil.c:162),
+which seems to be why Bernhard didn't enable it to begin with judging
+from the commit msg - What arch are you compiling for?
+
+Anyway, it's no worse than before, so committing.
+
+-- 
+Bye, Peter Korsgaard
