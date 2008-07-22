@@ -1,26 +1,26 @@
-From: sjhill at realitydiluted.com <sjhill@realitydiluted.com>
-Date: Tue, 22 Jul 2008 10:10:11 -0500
-Subject: [Buildroot] [PATCH] Fix util-linux dependencies
-In-Reply-To: <bbbeeccd0807220739l51feb073pb6ebcc0726f16a53@mail.gmail.com>
-References: <bbbeeccd0807220724p4ba4f00epbf48eacb73a28f9e@mail.gmail.com>
-	<bbbeeccd0807220739l51feb073pb6ebcc0726f16a53@mail.gmail.com>
-Message-ID: <20080722151011.GA18680@real.realitydiluted.com>
+From: Wade Berrier <wberrier@gmail.com>
+Date: Tue, 22 Jul 2008 10:58:39 -0600
+Subject: [Buildroot] [PATCH] Fix and enable vsftpd build
+Message-ID: <bbbeeccd0807220958o7e86e928g529a8c410a72d89c@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Tue, Jul 22, 2008 at 08:39:14AM -0600, Wade Berrier wrote:
-> 
-> On Tue, Jul 22, 2008 at 8:24 AM, Wade Berrier <wberrier@gmail.com> wrote:
-> > util-linux appears to depend on RPC support.
-> >
-Before making a wholesale change like this, you should probably look at
-the 'configure' and 'MCONFIG' files and discover exactly what RPC
-support is needed. If changing a config option to not include certain
-utilities depending on RPC is possible, then the preferred method is to
-add a patch for that instead of blindly enabling an option for the
-entire buildroot.
+Hi,
 
--Steve
+I see that vsftpd is included, but it was not enabled.  It also didn't
+build because of the missing _TARGET_BINARY directive.
+
+Attached is a patch to fix this (as well as add the correct link flags
+for ssl depending if that's selected).
+
+Wade
+-------------- next part --------------
+A non-text attachment was scrubbed...
+Name: buildroot_fix_vsftpd_build.patch
+Type: text/x-diff
+Size: 1347 bytes
+Desc: not available
+Url : http://busybox.net/lists/buildroot/attachments/20080722/801b2140/attachment.patch 
