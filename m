@@ -1,32 +1,49 @@
-From: Wade Berrier <wberrier@gmail.com>
-Date: Tue, 22 Jul 2008 16:02:49 -0600
-Subject: [Buildroot] [PATCH] grep intl link fix
-In-Reply-To: <bbbeeccd0807221305l471d1cd3s77cc1e435cb800ca@mail.gmail.com>
-References: <bbbeeccd0807221305l471d1cd3s77cc1e435cb800ca@mail.gmail.com>
-Message-ID: <bbbeeccd0807221502i366ad0e6j4f6ef11a6c9e0a06@mail.gmail.com>
+From: bugs at busybox.net <bugs@busybox.net>
+Date: Tue, 22 Jul 2008 15:31:48 -0700
+Subject: [Buildroot] [buildroot 0004234]: Mesa doesn't build on x86_64 for
+	mipsel target
+Message-ID: <f5f048ecc40d6baf8754e439ec9e7a9b@bugs.uclibc.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Oops, I missed a grep.mk change that applies that patch :(
 
-Here's an updated patch.
+The following issue has been SUBMITTED. 
+====================================================================== 
+http://busybox.net/bugs/view.php?id=4234 
+====================================================================== 
+Reported By:                KHAksnes
+Assigned To:                buildroot
+====================================================================== 
+Project:                    buildroot
+Issue ID:                   4234
+Category:                   Architecture Specific
+Reproducibility:            always
+Severity:                   major
+Priority:                   normal
+Status:                     assigned
+====================================================================== 
+Date Submitted:             07-22-2008 15:31 PDT
+Last Modified:              07-22-2008 15:31 PDT
+====================================================================== 
+Summary:                    Mesa doesn't build on x86_64 for mipsel target
+Description: 
+  Target Architecture: mipsel
+  Target Architecture Variant: mips 32
+  Target ABI: o32          
+  Target arcitecture is nofpu.
+  Compilation is done on a machine running fedora 9 on x86_64
+architecture.
+  gcc  version is 4.2.4 as 4.3.1 fails for mipsel target.
+====================================================================== 
 
-Wade
-
-On Tue, Jul 22, 2008 at 2:05 PM, Wade Berrier <wberrier@gmail.com> wrote:
-> Hi,
->
-> This fixes linking for grep (using 3.4.6 compiler).
->
-> Wade
->
--------------- next part --------------
-A non-text attachment was scrubbed...
-Name: buildroot-grep_intl_link.patch.2
-Type: application/octet-stream
-Size: 1242 bytes
-Desc: not available
-Url : http://busybox.net/lists/buildroot/attachments/20080722/282622e4/attachment.obj 
+Issue History 
+Date Modified   Username       Field                    Change               
+====================================================================== 
+07-22-08 15:31  KHAksnes       New Issue                                    
+07-22-08 15:31  KHAksnes       Status                   new => assigned     
+07-22-08 15:31  KHAksnes       Assigned To               => buildroot       
+07-22-08 15:31  KHAksnes       File Added: buildlog                         
+======================================================================
