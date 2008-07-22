@@ -1,29 +1,22 @@
-From: Hans-Christian Egtvedt <hans-christian.egtvedt@atmel.com>
-Date: Tue, 22 Jul 2008 08:00:19 +0200
-Subject: [Buildroot] [PATCH 1/2] lsdldoom: new package lsdldoom
-In-Reply-To: <87r69nb17i.fsf@macbook.be.48ers.dk>
-References: <1216648539-19020-1-git-send-email-hans-christian.egtvedt@atmel.com>
-	<87r69nb17i.fsf@macbook.be.48ers.dk>
-Message-ID: <1216706419.13039.6.camel@localhost>
+From: Matuschka, Sebastian <Sebastian.Matuschka@gcd-solutions.de>
+Date: Tue, 22 Jul 2008 11:48:39 +0200
+Subject: [Buildroot] After make clean u-boot isn't recompiled
+Message-ID: <49ED01FC03EE524BB7BB258E8F93BFF32652FE@bfl-exchange-1.BFL.local>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Mon, 2008-07-21 at 19:23 +0200, Peter Korsgaard wrote:
-> >>>>> "Hans-Christian" == Hans-Christian Egtvedt <hans-christian.egtvedt@atmel.com> writes:
-> 
->  Hans-Christian> This patch adds a new package lsdldoom, this Doom
->  Hans-Christian> client is based on the SDL framework. An alternative
->  Hans-Christian> to the lxdoom package.
-> 
-> Couldn't we just standardize on prboom instead of N doom variants?
-> 
+Hi,
 
-I'll see what I can figure out of prboom. It would be nice to have one
-client usable with SDL and also usable with X.
-
--- 
-With kind regards,
-Hans-Christian Egtvedt, Applications Engineer
+everytime i do a 'make clean' in the buildroot root i must compile
+u-boot manually, everything else is compiled by make, except u-boot. I
+have a symbolic link in /usr/bin to the mkimage in u-boot, and the
+mkimage binary is deleted by clean. U-boot isn't recompiled and the
+kernel fails to make an uImage.
+I'm not (yet) very familiar with buildroot so I can't send a patch, but
+I guess it's just a little change in a script.
+Btw: Many thanks for this great tool.
+Regards
+Sebastian
