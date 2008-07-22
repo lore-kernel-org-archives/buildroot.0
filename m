@@ -1,26 +1,26 @@
-From: Tim Barr <tbarr@multitech.com>
-Date: Tue, 22 Jul 2008 09:52:03 -0500
-Subject: [Buildroot] Every time I svn buildroot something else stops working
-Message-ID: <1CD05B980C94AC408B37C82BBABAA3E60CECCC37@mtsexchange.dc.multitech.prv>
+From: sjhill at realitydiluted.com <sjhill@realitydiluted.com>
+Date: Tue, 22 Jul 2008 10:10:11 -0500
+Subject: [Buildroot] [PATCH] Fix util-linux dependencies
+In-Reply-To: <bbbeeccd0807220739l51feb073pb6ebcc0726f16a53@mail.gmail.com>
+References: <bbbeeccd0807220724p4ba4f00epbf48eacb73a28f9e@mail.gmail.com>
+	<bbbeeccd0807220739l51feb073pb6ebcc0726f16a53@mail.gmail.com>
+Message-ID: <20080722151011.GA18680@real.realitydiluted.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-After doing a "svn up", I now get an error on uclibc. It tries to apply
-a reverse patch and fails. I have done a "make clean" and "make
-dirclean" but still get this error. What should I do now? Delete the
-uclibc directory and have it rebuild from scratch?
- 
+On Tue, Jul 22, 2008 at 08:39:14AM -0600, Wade Berrier wrote:
+> 
+> On Tue, Jul 22, 2008 at 8:24 AM, Wade Berrier <wberrier@gmail.com> wrote:
+> > util-linux appears to depend on RPC support.
+> >
+Before making a wholesale change like this, you should probably look at
+the 'configure' and 'MCONFIG' files and discover exactly what RPC
+support is needed. If changing a config option to not include certain
+utilities depending on RPC is possible, then the preferred method is to
+add a patch for that instead of blindly enabling an option for the
+entire buildroot.
 
-
-Timothy Barr
-Hardware Development Engineer
-for Multi-Tech Systems, Inc.
- <mailto:tbarr@multitech.com> tbarr at multitech.com 
-
- 
--------------- next part --------------
-An HTML attachment was scrubbed...
-URL: http://busybox.net/lists/buildroot/attachments/20080722/d0cc2459/attachment.htm 
+-Steve
