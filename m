@@ -1,28 +1,31 @@
 From: Wade Berrier <wberrier@gmail.com>
-Date: Tue, 22 Jul 2008 15:24:16 -0600
-Subject: [Buildroot] [PATCH] Add logrotate package
-In-Reply-To: <bbbeeccd0807221141r43ab2575t77c7b11a29487e29@mail.gmail.com>
-References: <bbbeeccd0807221141r43ab2575t77c7b11a29487e29@mail.gmail.com>
-Message-ID: <bbbeeccd0807221424p2ae1dcaakb463e86a9f7d3f68@mail.gmail.com>
+Date: Tue, 22 Jul 2008 15:54:59 -0600
+Subject: [Buildroot] [PATCH] busybox insmod.c on powerpc
+Message-ID: <bbbeeccd0807221454v112a5f97ya204c176e45e48d1@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-And now, actually attaching the patch :)
+Hi,
 
-On Tue, Jul 22, 2008 at 12:41 PM, Wade Berrier <wberrier@gmail.com> wrote:
-> Hi,
->
-> Here's a patch to add logrotate.
->
-> Wade
->
+This patch was needed to compile busybox on powerpc.
+
+I'm using a kernel without loadable module support so I'm not sure of
+the accuracy.
+
+But, there's ppc code in that file that references the 'ifile' symbol.
+ (USE_PLT_ENTRIES is defined for powerpc but 'ifile' isn't defined for
+powerpc without this patch)
+
+So someone else may have to take a look.
+
+Wade
 -------------- next part --------------
 A non-text attachment was scrubbed...
-Name: buildroot-add_logrotate.patch
+Name: buildroot-busybox_ppc_insmod.patch
 Type: text/x-diff
-Size: 3289 bytes
+Size: 810 bytes
 Desc: not available
-Url : http://busybox.net/lists/buildroot/attachments/20080722/44222afe/attachment.patch 
+Url : http://busybox.net/lists/buildroot/attachments/20080722/ba4b58a0/attachment-0001.patch 
