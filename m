@@ -1,45 +1,28 @@
-From: jacmet at uclibc.org <jacmet@uclibc.org>
-Date: Tue, 22 Jul 2008 06:59:43 -0700 (PDT)
-Subject: [Buildroot] svn commit: trunk/buildroot/package/which
-Message-ID: <20080722135943.8F8033C799@busybox.net>
+From: Peter Korsgaard <jacmet@uclibc.org>
+Date: Tue, 22 Jul 2008 16:00:53 +0200
+Subject: [Buildroot] which build .patch
+In-Reply-To: <bbbeeccd0807211543l286551abnb421aa890a294533@mail.gmail.com>
+	(Wade Berrier's message of "Mon\, 21 Jul 2008 16\:43\:31 -0600")
+References: <bbbeeccd0807211543l286551abnb421aa890a294533@mail.gmail.com>
+Message-ID: <87zloa6msq.fsf@macbook.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Author: jacmet
-Date: 2008-07-22 06:59:42 -0700 (Tue, 22 Jul 2008)
-New Revision: 22915
+>>>>> "Wade" == Wade Berrier <wberrier@gmail.com> writes:
 
-Log:
-which: install into /usr/bin
+Hi,
 
-Modified:
-   trunk/buildroot/package/which/which.mk
+ Wade> Hi, 'which' depends on readline.  Attached is a patch to force
+ Wade> that dep in buildroot.
 
+Thanks - Committed as r22913.
 
-Changeset:
-Modified: trunk/buildroot/package/which/which.mk
-===================================================================
---- trunk/buildroot/package/which/which.mk	2008-07-22 13:59:39 UTC (rev 22914)
-+++ trunk/buildroot/package/which/which.mk	2008-07-22 13:59:42 UTC (rev 22915)
-@@ -9,7 +9,7 @@
- WHICH_DIR:=$(BUILD_DIR)/which-$(WHICH_VERSION)
- WHICH_CAT:=$(ZCAT)
- WHICH_BINARY:=which
--WHICH_TARGET_BINARY:=bin/which
-+WHICH_TARGET_BINARY:=usr/bin/which
- 
- $(DL_DIR)/$(WHICH_SOURCE):
- 	$(WGET) -P $(DL_DIR) $(WHICH_SITE)/$(WHICH_SOURCE)
-@@ -29,7 +29,8 @@
- 		--target=$(GNU_TARGET_NAME) \
- 		--host=$(GNU_TARGET_NAME) \
- 		--build=$(GNU_HOST_NAME) \
--		--prefix=/ \
-+		--prefix=/usr \
-+		--sysconfdir=/etc \
- 	)
- 	touch $@
- 
+Notice that your patch didn't apply anymore as we recently removed the
+redundant 'default n' lines. Please create patches against latest
+trunk.
+
+-- 
+Bye, Peter Korsgaard
