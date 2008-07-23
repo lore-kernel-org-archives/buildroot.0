@@ -1,23 +1,34 @@
-From: Bernhard Fischer <rep.dot.nop@gmail.com>
-Date: Wed, 23 Jul 2008 16:23:18 +0200
-Subject: [Buildroot] svn commit: trunk/buildroot/package/gettext
-In-Reply-To: <20080723134217.GC27147@cloud.net.au>
-References: <20080723103550.70E8B3C7D7@busybox.net>
-	<20080723134217.GC27147@cloud.net.au>
-Message-ID: <20080723142318.GA27902@mx.loc>
+From: Nathanael D. Noblet <nathanael@gnat.ca>
+Date: Wed, 23 Jul 2008 09:36:15 -0600
+Subject: [Buildroot] Openssl won't compile
+In-Reply-To: <20080723133519.GA27147@cloud.net.au>
+References: <4886A1F4.1010900@gnat.ca> <20080723133519.GA27147@cloud.net.au>
+Message-ID: <48874FEF.9070208@gnat.ca>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Wed, Jul 23, 2008 at 11:42:17PM +1000, Hamish Moffatt wrote:
->On Wed, Jul 23, 2008 at 03:35:50AM -0700, jacmet at uclibc.org wrote:
+Hamish Moffatt wrote:
+> On Tue, Jul 22, 2008 at 09:13:56PM -0600, Nathanael D. Noblet wrote:
+>> Hello,
+>>    Anyone experience difficulty compiling openssl (0.9.7m)? I get a 
+>> missing sys/timeb.h, upgrading to ssl 0.9.8g) is no better as the 
+>> patches don't apply and I'm not sure what the ones I couldn't fix were 
+>> doing.
+>>
+>>    For what it is worth, I'm using gcc-3.1 and a daily snapshot of uclibc.
+> 
+> I'm not having any trouble building it for armeb with gcc 4.1.2 with
+> uClibc 0.9.29.
 
->Personally I think the shared build_$(ARCH) is just wrong with multiple
->projects. I might hack my local copy to define BUILD_DIR to match
->PROJECT_BUILD_DIR to fix this.
+Using 0.9.29 I can't boot my target device. The rootfs boots in qemu but 
+I get a general protection fault on the real hardware. I've tried 4.2.x 
+and 4.3 and 4.4. Perhaps I'll try 4.1.2....
 
-The project thing as it is now should not have been applied in the first
-place. It's misguided and not thought through, let alone implemented
-properly. Nothing new. Dead horse.
+
+-- 
+Nathanael d. Noblet
+Gnat Solutions, Inc
+T: 403.875.4613
