@@ -1,8 +1,7 @@
 From: bugs at busybox.net <bugs@busybox.net>
-Date: Wed, 23 Jul 2008 16:00:50 -0700
-Subject: [Buildroot] [buildroot 0004284]: procps compile fails due to
-	missing page.h
-Message-ID: <89b3954e3c938329bab66a6d5a1bc03c@bugs.uclibc.org>
+Date: Wed, 23 Jul 2008 16:07:20 -0700
+Subject: [Buildroot] [buildroot 0004294]: portage does not compile
+Message-ID: <5e4ba10713eef56c95456f269494b0ac@bugs.uclibc.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -12,40 +11,45 @@ To: buildroot@busybox.net
 
 The following issue has been SUBMITTED. 
 ====================================================================== 
-http://busybox.net/bugs/view.php?id=4284 
+http://busybox.net/bugs/view.php?id=4294 
 ====================================================================== 
 Reported By:                pepe
 Assigned To:                buildroot
 ====================================================================== 
 Project:                    buildroot
-Issue ID:                   4284
+Issue ID:                   4294
 Category:                   Architecture Specific
 Reproducibility:            always
 Severity:                   major
 Priority:                   normal
 Status:                     assigned
 ====================================================================== 
-Date Submitted:             07-23-2008 16:00 PDT
-Last Modified:              07-23-2008 16:00 PDT
+Date Submitted:             07-23-2008 16:07 PDT
+Last Modified:              07-23-2008 16:07 PDT
 ====================================================================== 
-Summary:                    procps compile fails due to missing page.h
+Summary:                    portage does not compile
 Description: 
-Google seems to be telling me this file is deprecated. There is code for
-the case that PAGE_SIZE is not declared in page. But procps is trying to
-include the page.h in ps/common.h anyway, which fails in current buildroot
-for i686.
+In buildroot, portage 2.1.4 has a patch to update to 2.1.4.4.
 
-The include-line can simply be removed to let the programm compile.
-Instead, PROCPS_VERSION can simply be incremented from 3.2.5 to 3.2.7 to
-get a working version from upstream.
+The portage.mk does not apply the patch by default(why?):
 
+> PORTAGE_PATCH_APPLY:=n
 
+But sets the final build directory with the updated version number, so the
+(not actually updated) tree is not found:
+
+> PORTAGE_VERSION:=$(PORTAGE_BASE_VERSION)$(PORTAGE_PATCH_VERSION)
+
+Attached a simple fix to make the directory name depend on whether the
+patch is applied or not.
 ====================================================================== 
 
 Issue History 
 Date Modified   Username       Field                    Change               
 ====================================================================== 
-07-23-08 16:00  pepe           New Issue                                    
-07-23-08 16:00  pepe           Status                   new => assigned     
-07-23-08 16:00  pepe           Assigned To               => buildroot       
+07-23-08 16:07  pepe           New Issue                                    
+07-23-08 16:07  pepe           Status                   new => assigned     
+07-23-08 16:07  pepe           Assigned To               => buildroot       
+07-23-08 16:07  pepe           File Added: portage_vers.patch                   
+
 ======================================================================
