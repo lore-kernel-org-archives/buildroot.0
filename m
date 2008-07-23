@@ -1,45 +1,25 @@
-From: jacmet at uclibc.org <jacmet@uclibc.org>
-Date: Wed, 23 Jul 2008 03:36:00 -0700 (PDT)
-Subject: [Buildroot] svn commit: trunk/buildroot/package/grep
-Message-ID: <20080723103600.46D573C828@busybox.net>
+From: Peter Korsgaard <jacmet@uclibc.org>
+Date: Wed, 23 Jul 2008 12:35:43 +0200
+Subject: [Buildroot] [PATCH] grep intl link fix
+In-Reply-To: <bbbeeccd0807221502i366ad0e6j4f6ef11a6c9e0a06@mail.gmail.com>
+	(Wade Berrier's message of "Tue\, 22 Jul 2008 16\:02\:49 -0600")
+References: <bbbeeccd0807221305l471d1cd3s77cc1e435cb800ca@mail.gmail.com>
+	<bbbeeccd0807221502i366ad0e6j4f6ef11a6c9e0a06@mail.gmail.com>
+Message-ID: <87vdywyjk0.fsf@macbook.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Author: jacmet
-Date: 2008-07-23 03:35:59 -0700 (Wed, 23 Jul 2008)
-New Revision: 22932
+>>>>> "Wade" == Wade Berrier <wberrier@gmail.com> writes:
 
-Log:
-grep: cleanup configure args
+ Wade> Oops, I missed a grep.mk change that applies that patch :(
+ Wade> Here's an updated patch.
 
-Modified:
-   trunk/buildroot/package/grep/grep.mk
+NAK, libintl linking is handled by INTLLIBS. Configure finds it ok if
+locale support is enabled, and it isn't needed otherwise. See my
+recent grep commits for details.
 
-
-Changeset:
-Modified: trunk/buildroot/package/grep/grep.mk
-===================================================================
---- trunk/buildroot/package/grep/grep.mk	2008-07-23 10:35:56 UTC (rev 22931)
-+++ trunk/buildroot/package/grep/grep.mk	2008-07-23 10:35:59 UTC (rev 22932)
-@@ -37,17 +37,7 @@
- 		--target=$(GNU_TARGET_NAME) \
- 		--host=$(GNU_TARGET_NAME) \
- 		--build=$(GNU_HOST_NAME) \
--		--prefix=/usr \
--		--exec-prefix=/usr \
--		--bindir=/usr/bin \
--		--sbindir=/usr/sbin \
--		--libdir=/lib \
--		--libexecdir=/usr/lib \
--		--sysconfdir=/etc \
--		--datadir=/usr/share \
--		--localstatedir=/var \
--		--mandir=/usr/man \
--		--infodir=/usr/info \
-+		--prefix=/ \
- 		$(DISABLE_NLS) \
- 		$(DISABLE_LARGEFILE) \
- 		--disable-perl-regexp \
+-- 
+Bye, Peter Korsgaard
