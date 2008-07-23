@@ -1,29 +1,22 @@
-From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Wed, 23 Jul 2008 14:09:06 +0200
-Subject: [Buildroot] svn commit: trunk/buildroot/package/grep
-In-Reply-To: <20080723112738.GA26543@mx.loc> (Bernhard Fischer's message of
-	"Wed\, 23 Jul 2008 13\:27\:38 +0200")
-References: <20080723103553.C15B83C806@busybox.net>
-	<20080723112738.GA26543@mx.loc>
-Message-ID: <87od4ox0nx.fsf@macbook.be.48ers.dk>
+From: Richard <mr.resistor@gmail.com>
+Date: Wed, 23 Jul 2008 13:39:32 +0100
+Subject: [Buildroot] undefined reference to open64
+Message-ID: <ea6597e70807230539k29aa1f26idf11872dd03cfeb0@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Bernhard" == Bernhard Fischer <rep.dot.nop@gmail.com> writes:
- >> -grep: uclibc gettext libintl grep-target_binary
- >> +grep: uclibc $(GNUGREP_EXTRA_DEPS) grep-target_binary
+hey
 
- Bernhard> grep: uclibc $(if $(BR2_ENABLE_LOCALE),gettext libintl) \
- Bernhard> 	$(TARGET_DIR)/$(GNUGREP_TARGET_BINARY)
+i am building a system with the most recent buildroot snapshot (23/07) for
+an ARM9 board, which is failing if i try to build php / lighttpd / many
+others. they all give the same error message, which is:
 
- Bernhard> would have been less chatty, fwiw.
+conf_to_src.c:(.text+0x6c0): undefined reference to `open64'
 
-True. It does make for a pretty long line though - Fixed.
-
-Thanks.
-
--- 
-Bye, Peter Korsgaard
+can anyone tell me how to go about fixing this?
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: http://busybox.net/lists/buildroot/attachments/20080723/26326e33/attachment.htm 
