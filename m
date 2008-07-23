@@ -1,51 +1,29 @@
-From: jacmet at uclibc.org <jacmet@uclibc.org>
-Date: Wed, 23 Jul 2008 05:08:53 -0700 (PDT)
+From: Peter Korsgaard <jacmet@uclibc.org>
+Date: Wed, 23 Jul 2008 14:09:06 +0200
 Subject: [Buildroot] svn commit: trunk/buildroot/package/grep
-Message-ID: <20080723120854.0FE453C7D3@busybox.net>
+In-Reply-To: <20080723112738.GA26543@mx.loc> (Bernhard Fischer's message of
+	"Wed\, 23 Jul 2008 13\:27\:38 +0200")
+References: <20080723103553.C15B83C806@busybox.net>
+	<20080723112738.GA26543@mx.loc>
+Message-ID: <87od4ox0nx.fsf@macbook.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Author: jacmet
-Date: 2008-07-23 05:08:53 -0700 (Wed, 23 Jul 2008)
-New Revision: 22936
+>>>>> "Bernhard" == Bernhard Fischer <rep.dot.nop@gmail.com> writes:
+ >> -grep: uclibc gettext libintl grep-target_binary
+ >> +grep: uclibc $(GNUGREP_EXTRA_DEPS) grep-target_binary
 
-Log:
-grep: make locale handling less verbose
+ Bernhard> grep: uclibc $(if $(BR2_ENABLE_LOCALE),gettext libintl) \
+ Bernhard> 	$(TARGET_DIR)/$(GNUGREP_TARGET_BINARY)
 
-As suggested by Bernhard.
+ Bernhard> would have been less chatty, fwiw.
 
-Modified:
-   trunk/buildroot/package/grep/grep.mk
+True. It does make for a pretty long line though - Fixed.
 
+Thanks.
 
-Changeset:
-Modified: trunk/buildroot/package/grep/grep.mk
-===================================================================
---- trunk/buildroot/package/grep/grep.mk	2008-07-23 11:23:36 UTC (rev 22935)
-+++ trunk/buildroot/package/grep/grep.mk	2008-07-23 12:08:53 UTC (rev 22936)
-@@ -11,10 +11,6 @@
- GNUGREP_BINARY:=src/grep
- GNUGREP_TARGET_BINARY:=bin/grep
- 
--ifeq ($(BR2_ENABLE_LOCALE),y)
--GNUGREP_EXTRA_DEPS:=gettext libintl
--endif
--
- $(DL_DIR)/$(GNUGREP_SOURCE):
- 	 $(WGET) -P $(DL_DIR) $(GNUGREP_SITE)/$(GNUGREP_SOURCE)
- 
-@@ -54,8 +50,9 @@
- 	done
- 	$(STRIPCMD) $(STRIP_STRIP_ALL) $@
- 
--grep: uclibc $(GNUGREP_EXTRA_DEPS) $(TARGET_DIR)/$(GNUGREP_TARGET_BINARY)
--
-+grep: uclibc $(if $(BR2_ENABLE_LOCALE),gettext libintl) \
-+	 $(TARGET_DIR)/$(GNUGREP_TARGET_BINARY)
-+	echo deps: $^
- grep-clean:
- 	rm -f $(addprefix $(TARGET_DIR)/bin/,egrep fgrep grep)
- 	-$(MAKE) -C $(GNUGREP_DIR) clean
+-- 
+Bye, Peter Korsgaard
