@@ -1,29 +1,28 @@
-From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Wed, 23 Jul 2008 15:22:13 +0200
-Subject: [Buildroot] undefined reference to open64
-In-Reply-To: <ea6597e70807230539k29aa1f26idf11872dd03cfeb0@mail.gmail.com>
-	(Richard's message of "Wed\, 23 Jul 2008 13\:39\:32 +0100")
-References: <ea6597e70807230539k29aa1f26idf11872dd03cfeb0@mail.gmail.com>
-Message-ID: <87prp4vipm.fsf@macbook.be.48ers.dk>
+From: Hamish Moffatt <hamish@cloud.net.au>
+Date: Wed, 23 Jul 2008 23:35:19 +1000
+Subject: [Buildroot] Openssl won't compile
+In-Reply-To: <4886A1F4.1010900@gnat.ca>
+References: <4886A1F4.1010900@gnat.ca>
+Message-ID: <20080723133519.GA27147@cloud.net.au>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Richard" == Richard  <mr.resistor@gmail.com> writes:
+On Tue, Jul 22, 2008 at 09:13:56PM -0600, Nathanael D. Noblet wrote:
+> Hello,
+>    Anyone experience difficulty compiling openssl (0.9.7m)? I get a 
+> missing sys/timeb.h, upgrading to ssl 0.9.8g) is no better as the 
+> patches don't apply and I'm not sure what the ones I couldn't fix were 
+> doing.
+> 
+>    For what it is worth, I'm using gcc-3.1 and a daily snapshot of uclibc.
 
- Richard> hey
+I'm not having any trouble building it for armeb with gcc 4.1.2 with
+uClibc 0.9.29.
 
- Richard> i am building a system with the most recent buildroot
- Richard> snapshot (23/07) for an ARM9 board, which is failing if i
- Richard> try to build php / lighttpd / many others.  they all give
- Richard> the same error message, which is:
 
- Richard> conf_to_src.c:(.text+0x6c0): undefined reference to `open64'
-
-Sounds like a largefile issue. Did you maybe tweak BR2_LARGEFILE
-without doing a complete rebuild (rm -rf *_build_*)?
-
+Hamish
 -- 
-Bye, Peter Korsgaard
+Hamish Moffatt VK3SB <hamish@debian.org> <hamish@cloud.net.au>
