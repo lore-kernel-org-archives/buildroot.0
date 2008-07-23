@@ -1,73 +1,51 @@
-From: Bernhard Fischer <rep.dot.nop@gmail.com>
-Date: Wed, 23 Jul 2008 13:27:38 +0200
+From: jacmet at uclibc.org <jacmet@uclibc.org>
+Date: Wed, 23 Jul 2008 05:08:53 -0700 (PDT)
 Subject: [Buildroot] svn commit: trunk/buildroot/package/grep
-In-Reply-To: <20080723103553.C15B83C806@busybox.net>
-References: <20080723103553.C15B83C806@busybox.net>
-Message-ID: <20080723112738.GA26543@mx.loc>
+Message-ID: <20080723120854.0FE453C7D3@busybox.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Wed, Jul 23, 2008 at 03:35:53AM -0700, jacmet at uclibc.org wrote:
->Author: jacmet
->Date: 2008-07-23 03:35:53 -0700 (Wed, 23 Jul 2008)
->New Revision: 22930
->
->Log:
->grep: gettext/libintl is only required if locale is enabled
->
->Modified:
->   trunk/buildroot/package/grep/Config.in
->   trunk/buildroot/package/grep/grep.mk
->
->
->Changeset:
->Modified: trunk/buildroot/package/grep/Config.in
->===================================================================
->--- trunk/buildroot/package/grep/Config.in	2008-07-23 10:35:50 UTC (rev 22929)
->+++ trunk/buildroot/package/grep/Config.in	2008-07-23 10:35:53 UTC (rev 22930)
->@@ -1,8 +1,8 @@
-> config BR2_PACKAGE_GREP
-> 	bool "grep"
->-	select BR2_PACKAGE_GETTEXT
->-	select BR2_PACKAGE_LIBINTL
->+	select BR2_PACKAGE_GETTEXT if BR2_ENABLE_LOCALE
->+	select BR2_PACKAGE_LIBINTL if BR2_ENABLE_LOCALE
-> 	help
-> 	  The GNU regular expression matcher.
->-	  Needs gettext
->+
-> 	  http://www.gnu.org/software/grep/grep.html
->
->Modified: trunk/buildroot/package/grep/grep.mk
->===================================================================
->--- trunk/buildroot/package/grep/grep.mk	2008-07-23 10:35:50 UTC (rev 22929)
->+++ trunk/buildroot/package/grep/grep.mk	2008-07-23 10:35:53 UTC (rev 22930)
->@@ -11,6 +11,10 @@
-> GNUGREP_BINARY:=src/grep
-> GNUGREP_TARGET_BINARY:=bin/grep
-> 
->+ifeq ($(BR2_ENABLE_LOCALE),y)
->+GNUGREP_EXTRA_DEPS:=gettext libintl
->+endif
->+
-> $(DL_DIR)/$(GNUGREP_SOURCE):
-> 	 $(WGET) -P $(DL_DIR) $(GNUGREP_SITE)/$(GNUGREP_SOURCE)
-> 
->@@ -65,7 +69,7 @@
-> 	    cp -a $(GNUGREP_DIR)/src/grep $(GNUGREP_DIR)/src/egrep \
-> 		$(GNUGREP_DIR)/src/fgrep $(TARGET_DIR)/bin/; fi
-> 
->-grep: uclibc gettext libintl grep-target_binary
->+grep: uclibc $(GNUGREP_EXTRA_DEPS) grep-target_binary
+Author: jacmet
+Date: 2008-07-23 05:08:53 -0700 (Wed, 23 Jul 2008)
+New Revision: 22936
 
-grep: uclibc $(if $(BR2_ENABLE_LOCALE),gettext libintl) \
-	$(TARGET_DIR)/$(GNUGREP_TARGET_BINARY)
+Log:
+grep: make locale handling less verbose
 
-would have been less chatty, fwiw.
+As suggested by Bernhard.
 
-> 
-> grep-clean:
-> 	$(MAKE) DESTDIR=$(TARGET_DIR) -C $(GNUGREP_DIR) uninstall
+Modified:
+   trunk/buildroot/package/grep/grep.mk
+
+
+Changeset:
+Modified: trunk/buildroot/package/grep/grep.mk
+===================================================================
+--- trunk/buildroot/package/grep/grep.mk	2008-07-23 11:23:36 UTC (rev 22935)
++++ trunk/buildroot/package/grep/grep.mk	2008-07-23 12:08:53 UTC (rev 22936)
+@@ -11,10 +11,6 @@
+ GNUGREP_BINARY:=src/grep
+ GNUGREP_TARGET_BINARY:=bin/grep
+ 
+-ifeq ($(BR2_ENABLE_LOCALE),y)
+-GNUGREP_EXTRA_DEPS:=gettext libintl
+-endif
+-
+ $(DL_DIR)/$(GNUGREP_SOURCE):
+ 	 $(WGET) -P $(DL_DIR) $(GNUGREP_SITE)/$(GNUGREP_SOURCE)
+ 
+@@ -54,8 +50,9 @@
+ 	done
+ 	$(STRIPCMD) $(STRIP_STRIP_ALL) $@
+ 
+-grep: uclibc $(GNUGREP_EXTRA_DEPS) $(TARGET_DIR)/$(GNUGREP_TARGET_BINARY)
+-
++grep: uclibc $(if $(BR2_ENABLE_LOCALE),gettext libintl) \
++	 $(TARGET_DIR)/$(GNUGREP_TARGET_BINARY)
++	echo deps: $^
+ grep-clean:
+ 	rm -f $(addprefix $(TARGET_DIR)/bin/,egrep fgrep grep)
+ 	-$(MAKE) -C $(GNUGREP_DIR) clean
