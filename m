@@ -1,33 +1,34 @@
-From: Dirk Vermaak <dirk.vermaak@ntlworld.com>
-Date: Wed, 23 Jul 2008 11:14:37 +0100
-Subject: [Buildroot] UDEV-114 : Has it changed?
-Message-ID: <200807231114.37318.dirk.vermaak@ntlworld.com>
+From: jacmet at uclibc.org <jacmet@uclibc.org>
+Date: Wed, 23 Jul 2008 03:35:50 -0700 (PDT)
+Subject: [Buildroot] svn commit: trunk/buildroot/package/gettext
+Message-ID: <20080723103550.70E8B3C7D7@busybox.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi guys,
+Author: jacmet
+Date: 2008-07-23 03:35:50 -0700 (Wed, 23 Jul 2008)
+New Revision: 22929
 
-I suddenly have a problem with building under Buildroot. At about 10.30GMT 
-UDEV-114 suddenly broke during a build and now seems to not build due to 
-directories being missing etc.
+Log:
+gettext: also remove from staging on -clean
 
-Did it suddenly change today?
+Modified:
+   trunk/buildroot/package/gettext/gettext.mk
 
-------------------------------------------------------------------------------------------------------------------------------------------------------------------
-/usr/bin/install -m 
-0755 -D /home/dirk/diarre/linux/build6/buildroot/build_arm/udev-114/extras/volume_id/vol_id /home/dirk/diarre/linux/build6/buildroot/project_build_arm/at91sam9260dfc/root/lib/udev/vol_id
-/usr/bin/install: cannot stat 
-`/home/dirk/diarre/linux/build6/buildroot/build_arm/udev-114/extras/volume_id/vol_id': 
-No such file or directory
-make: *** 
-[/home/dirk/diarre/linux/build6/buildroot/project_build_arm/at91sam9260dfc/root/lib/udev/vol_id] 
-Error 1
 
-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
-
-Thanks,
-
-Dirk Vermaak
+Changeset:
+Modified: trunk/buildroot/package/gettext/gettext.mk
+===================================================================
+--- trunk/buildroot/package/gettext/gettext.mk	2008-07-23 08:41:08 UTC (rev 22928)
++++ trunk/buildroot/package/gettext/gettext.mk	2008-07-23 10:35:50 UTC (rev 22929)
+@@ -125,6 +125,7 @@
+ gettext-unpacked: $(GETTEXT_DIR)/.unpacked
+ 
+ gettext-clean:
++	-$(MAKE) DESTDIR=$(STAGING_DIR) CC=$(TARGET_CC) -C $(GETTEXT_DIR) uninstall
+ 	-$(MAKE) DESTDIR=$(TARGET_DIR) CC=$(TARGET_CC) -C $(GETTEXT_DIR) uninstall
+ 	-$(MAKE) -C $(GETTEXT_DIR) clean
+ 
