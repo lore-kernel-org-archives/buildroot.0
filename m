@@ -1,60 +1,39 @@
-From: Hamish Moffatt <hamish@cloud.net.au>
-Date: Wed, 23 Jul 2008 14:14:12 +1000
-Subject: [Buildroot] svn commit: trunk/buildroot/package/which
-In-Reply-To: <1216785448.15083.3.camel@berrier.lan>
-References: <20080722135936.23DC43C70D@busybox.net>
-	<20080723005004.GC11904@cloud.net.au>
-	<1216785448.15083.3.camel@berrier.lan>
-Message-ID: <20080723041412.GA16743@cloud.net.au>
+From: jacmet at uclibc.org <jacmet@uclibc.org>
+Date: Tue, 22 Jul 2008 23:01:51 -0700 (PDT)
+Subject: [Buildroot] svn commit: trunk/buildroot/package/busybox
+Message-ID: <20080723060151.51F803C827@busybox.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Tue, Jul 22, 2008 at 09:57:28PM -0600, Wade Berrier wrote:
-> On Wed, 2008-07-23 at 10:50 +1000, Hamish Moffatt wrote:
-> > On Tue, Jul 22, 2008 at 06:59:36AM -0700, jacmet at uclibc.org wrote:
-> > > Author: jacmet
-> > > Date: 2008-07-22 06:59:35 -0700 (Tue, 22 Jul 2008)
-> > > New Revision: 22913
-> > > 
-> > > Log:
-> > > which: needs readline
-> > 
-> > What does this package do that busybox's which doesn't?
-> 
-> berrier:/home/wberrier # which --help
-> Usage: which [options] [--] programname [...]
+Author: jacmet
+Date: 2008-07-22 23:01:50 -0700 (Tue, 22 Jul 2008)
+New Revision: 22925
 
-> Options: --version, -[vV] Print version and exit successfully.
->          --help,          Print this help and exit successfully.
->          --skip-dot       Skip directories in PATH that start with a
-> dot.
->          --skip-tilde     Skip directories in PATH that start with a
-> tilde.
->          --show-dot       Don't expand a dot to current directory in
-> output.
->          --show-tilde     Output a tilde for HOME directory for
-> non-root.
->          --tty-only       Stop processing options on the right if not on
-> tty.
->          --all, -a        Print all matches in PATH, not just the first
->          --read-alias, -i Read list of aliases from stdin.
->          --skip-alias     Ignore option --read-alias; don't read stdin.
->          --read-functions Read shell functions from stdin.
->          --skip-functions Ignore option --read-functions; don't read
-> stdin.
+Log:
+busybox: additional 1.11.1 fix
 
-Wow. busybox's version doesn't have any of that, and neither does zsh's.
-debian's debianutils version only has -a.
+Added:
+   trunk/buildroot/package/busybox/busybox-1.11.1-modutils.patch
 
-Very fancy. I can't imagine ever wanting most of those features - which
-is meant to show you which command is being run, to skipping aliases and
-parts of your $PATH doesn't seem very useful.
 
-Anyway, thanks for the info.
-
-Hamish
--- 
-Hamish Moffatt VK3SB <hamish@debian.org> <hamish@cloud.net.au>
+Changeset:
+Added: trunk/buildroot/package/busybox/busybox-1.11.1-modutils.patch
+===================================================================
+--- trunk/buildroot/package/busybox/busybox-1.11.1-modutils.patch	                        (rev 0)
++++ trunk/buildroot/package/busybox/busybox-1.11.1-modutils.patch	2008-07-23 06:01:50 UTC (rev 22925)
+@@ -0,0 +1,12 @@
++--- busybox-1.11.1/modutils/insmod.c	Wed Jun 25 14:51:18 2008
+++++ busybox-1.11.1-modutils/modutils/insmod.c	Wed Jul 23 00:46:08 2008
++@@ -840,7 +840,8 @@
++ 				ElfW(RelM) *rel, ElfW(Addr) v)
++ {
++ #if defined(__arm__) || defined(__i386__) || defined(__mc68000__) \
++- || defined(__sh__) || defined(__s390__) || defined(__x86_64__)
+++ || defined(__sh__) || defined(__s390__) || defined(__x86_64__) \
+++ || defined(__powerpc__) || defined(__mips__)
++ 	struct arch_file *ifile = (struct arch_file *) f;
++ #endif
++ 	enum obj_reloc ret = obj_reloc_ok;
