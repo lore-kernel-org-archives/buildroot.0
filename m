@@ -1,60 +1,47 @@
-From: bugs at busybox.net <bugs@busybox.net>
-Date: Thu, 24 Jul 2008 04:09:24 -0700
-Subject: [Buildroot] [buildroot 0003974]: [PATCH] new package: LiTE (toolkit
-	engine)
-Message-ID: <87c9dbe739167931772e8a85f045352f@bugs.uclibc.org>
+From: Hans-Christian Egtvedt <hans-christian.egtvedt@atmel.com>
+Date: Thu, 24 Jul 2008 13:38:33 +0200
+Subject: [Buildroot] [PATCH 1/2] lsdldoom: new package lsdldoom
+In-Reply-To: <1216706419.13039.6.camel@localhost>
+References: <1216648539-19020-1-git-send-email-hans-christian.egtvedt@atmel.com>
+	<87r69nb17i.fsf@macbook.be.48ers.dk>
+	<1216706419.13039.6.camel@localhost>
+Message-ID: <1216899513.29392.12.camel@localhost>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+On Tue, 2008-07-22 at 08:00 +0200, Hans-Christian Egtvedt wrote:
+> On Mon, 2008-07-21 at 19:23 +0200, Peter Korsgaard wrote:
+> > >>>>> "Hans-Christian" == Hans-Christian Egtvedt <hans-christian.egtvedt@atmel.com> writes:
+> > 
+> >  Hans-Christian> This patch adds a new package lsdldoom, this Doom
+> >  Hans-Christian> client is based on the SDL framework. An alternative
+> >  Hans-Christian> to the lxdoom package.
+> > 
+> > Couldn't we just standardize on prboom instead of N doom variants?
+> > 
+> 
+> I'll see what I can figure out of prboom. It would be nice to have one
+> client usable with SDL and also usable with X.
+> 
 
-A NOTE has been added to this issue. 
-====================================================================== 
-http://busybox.net/bugs/view.php?id=3974 
-====================================================================== 
-Reported By:                zonque
-Assigned To:                buildroot
-====================================================================== 
-Project:                    buildroot
-Issue ID:                   3974
-Category:                   New Features
-Reproducibility:            always
-Severity:                   minor
-Priority:                   normal
-Status:                     assigned
-====================================================================== 
-Date Submitted:             07-07-2008 04:29 PDT
-Last Modified:              07-24-2008 04:09 PDT
-====================================================================== 
-Summary:                    [PATCH] new package: LiTE (toolkit engine)
-Description: 
-this patch adds LiTE (DirectFB-based toolkit engine) to the list of
-supported packages. Applies to latest svn here.
-====================================================================== 
+prboom works fine, at least on AVR32. My main question is if we should
+replace lxdoom (and the lsdldoom I submitted earlier) with prboom.
 
----------------------------------------------------------------------- 
- daniellaird - 07-08-08 06:11  
----------------------------------------------------------------------- 
-I have updated the patch (It all works fine) but without the examples not
-much to show.  For now the patch just disables the tests and copies all
-supporting pngs/fonts etc into $ROOTFS. 
+prboom links against SDL, and SDL can again be linked against
+framebuffer, DirectFB, Qtopia and X11. Should be good enough for
+everybody?
 
----------------------------------------------------------------------- 
- zonque - 07-24-08 04:09  
----------------------------------------------------------------------- 
-can this go upstream, please?
+prboom is also fairly updated, last release was in 2006, in opposite to
+lxdoom and lsdldoom which had the last release back in 2000.
 
-Daniel 
+I have not tested the network mode, but it compiles.
 
-Issue History 
-Date Modified   Username       Field                    Change               
-====================================================================== 
-07-07-08 04:29  zonque         New Issue                                    
-07-07-08 04:29  zonque         Status                   new => assigned     
-07-07-08 04:29  zonque         Assigned To               => buildroot       
-07-07-08 04:29  zonque         File Added: lite.diff                        
-07-08-08 06:11  daniellaird    Note Added: 0009084                          
-07-24-08 04:09  zonque         Note Added: 0009934                          
-======================================================================
+I at least prefer prboom above lsdldoom for targets without X11, so
+either way I would like it added.
+
+-- 
+With kind regards,
+Hans-Christian Egtvedt, Applications Engineer
