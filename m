@@ -1,100 +1,78 @@
-From: bugs at busybox.net <bugs@busybox.net>
-Date: Thu, 24 Jul 2008 07:27:44 -0700
-Subject: [Buildroot] [buildroot 0003974]: [PATCH] new package: LiTE (toolkit
-	engine)
-Message-ID: <b1375ad827abcc489333e10ea63d7124@busybox.net>
+From: Bernhard Fischer <rep.dot.nop@gmail.com>
+Date: Thu, 24 Jul 2008 16:33:41 +0200
+Subject: [Buildroot] [PATCH 1/5] lxdoom-wad: make installation of
+	Doom	shareware wad file be more generic
+In-Reply-To: <1216905717-9197-1-git-send-email-hans-christian.egtvedt@atmel.com>
+References: <1216905717-9197-1-git-send-email-hans-christian.egtvedt@atmel.com>
+Message-ID: <20080724143341.GA4991@mx.loc>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+On Thu, Jul 24, 2008 at 03:21:53PM +0200, Hans-Christian Egtvedt wrote:
+>This patch will let the user install the Doom shareware wad file if lxdoom or
+>lsdldoom is selected. The wad file will also be installed into
+>/usr/share/games/doom directory, since the client will search this directory
+>when starting.
 
-A NOTE has been added to this issue. 
-====================================================================== 
-http://busybox.net/bugs/view.php?id=3974 
-====================================================================== 
-Reported By:                zonque
-Assigned To:                buildroot
-====================================================================== 
-Project:                    buildroot
-Issue ID:                   3974
-Category:                   New Features
-Reproducibility:            always
-Severity:                   minor
-Priority:                   normal
-Status:                     assigned
-====================================================================== 
-Date Submitted:             07-07-2008 04:29 PDT
-Last Modified:              07-24-2008 07:27 PDT
-====================================================================== 
-Summary:                    [PATCH] new package: LiTE (toolkit engine)
-Description: 
-this patch adds LiTE (DirectFB-based toolkit engine) to the list of
-supported packages. Applies to latest svn here.
-====================================================================== 
+weeeeh
+http://www.ggi-project.org/screenshots.html
+>
+>The Makefile rule has also been altered to depend on the installed wad file, so
+>it will be multiple project safe.
+>
+>Signed-off-by: Hans-Christian Egtvedt <hans-christian.egtvedt@atmel.com>
+>---
+> package/lxdoom/Config.in     |    6 ++++--
+> package/lxdoom/lxdoom-wad.mk |   10 +++++-----
+> 2 files changed, 9 insertions(+), 7 deletions(-)
+>
+>diff --git a/package/lxdoom/Config.in b/package/lxdoom/Config.in
+>index 892e45c..3b318e1 100644
+>--- a/package/lxdoom/Config.in
+>+++ b/package/lxdoom/Config.in
+>@@ -3,7 +3,9 @@ config BR2_PACKAGE_LXDOOM
+> 	help
+> 	  This is the linux version of the popular doom game.
+> config BR2_PACKAGE_LXDOOM_WAD
+>-	bool "lxdoom-wad"
+>+	bool "doom shareware wad file"
+> 	depends on BR2_PACKAGE_LXDOOM
+> 	help
+>-	  This is the shareware wad data files for the doom game.
+>+	  This will install the the shareware wad data file for the doom game.
 
----------------------------------------------------------------------- 
- daniellaird - 07-08-08 06:11  
----------------------------------------------------------------------- 
-I have updated the patch (It all works fine) but without the examples not
-much to show.  For now the patch just disables the tests and copies all
-supporting pngs/fonts etc into $ROOTFS. 
+the the the contains a surplus the ;)
 
----------------------------------------------------------------------- 
- zonque - 07-24-08 04:09  
----------------------------------------------------------------------- 
-can this go upstream, please?
+>+
+>+	  The wad file will be placed in /usr/share/games/doom/doom1.wad
+>diff --git a/package/lxdoom/lxdoom-wad.mk b/package/lxdoom/lxdoom-wad.mk
+>index 41b8ed8..4e38574 100644
+>--- a/package/lxdoom/lxdoom-wad.mk
+>+++ b/package/lxdoom/lxdoom-wad.mk
+>@@ -15,14 +15,14 @@ $(DL_DIR)/$(LXDOOM_WAD_SOURCE):
+> $(LXDOOM_WAD_DIR)/.unpacked: $(DL_DIR)/$(LXDOOM_WAD_SOURCE)
+> 	mkdir -p $(LXDOOM_WAD_DIR)
+> 	cp -f $(DL_DIR)/$(LXDOOM_WAD_SOURCE) $(LXDOOM_WAD_DIR)
+>-	gunzip -d $(LXDOOM_WAD_DIR)/$(LXDOOM_WAD_SOURCE) 
+>+	gunzip -d $(LXDOOM_WAD_DIR)/$(LXDOOM_WAD_SOURCE)
 
-Daniel 
+no. There is no gunzip. So who added this stuff? I'm 100% sure that when
+i left there were no hardcoded decompressors in there. You should listen
+to what user say (resp. configure).
 
----------------------------------------------------------------------- 
- bernhardf - 07-24-08 05:17  
----------------------------------------------------------------------- 
-this package should use package/Makefile.autotools.in
+> 	touch $@
+> 
+>-$(LXDOOM_WAD_DIR)/.installed: $(LXDOOM_WAD_DIR)/.unpacked
+>-	cp -f $(LXDOOM_WAD_DIR)/* $(TARGET_DIR)/usr/games
+>-	touch $@
+>+$(TARGET_DIR)/usr/share/games/doom/doom1.wad: $(LXDOOM_WAD_DIR)/.unpacked
+>+	mkdir -p $(TARGET_DIR)/usr/share/games/doom
+>+	cp -f $(LXDOOM_WAD_DIR)/doom-$(LXDOOM_WAD_VERSION).wad $@
 
-See various other packages for examples on how this should look like.
-Please redo it and attach an updated patch. TIA 
+$(INSTALL) -D $(LXDOOM_WAD_DIR)/doom-$(LXDOOM_WAD_VERSION).wad $@
 
----------------------------------------------------------------------- 
- daniellaird - 07-24-08 05:52  
----------------------------------------------------------------------- 
-Please find updated patch (adding_lite.patch) 
-
----------------------------------------------------------------------- 
- bernhardf - 07-24-08 07:27  
----------------------------------------------------------------------- 
-+$(LITE_HOOK_POST_INSTALL):
-+	mkdir -p $(ROOTFS)/usr/share/fonts/truetype/
-+	mkdir -p $(ROOTFS)/usr/share/LiTE/examples/
-+	cp -R $(LITE_DIR)/examples/*.png $(ROOTFS)/usr/share/LiTE/examples/
-+	cp -R $(LITE_DIR)/data/*.png $(ROOTFS)/usr/share/LiTE/
-+	cp -R $(LITE_DIR)/fonts/*.ttf $(ROOTFS)/usr/share/fonts/truetype/
-+	touch $@
-
-ROOTFS? You probably mean $(TARGET_DIR)
-It would be better if you would use $(INSTALL), e.g.:
-$(INSTALL) -d $(TARGET_DIR)/usr/share/LiTE/examples/
-$(INSTALL) -d $(TARGET_DIR)/usr/share/fonts/truetype
-$(INSTALL) -m0644 $(LITE_DIR)/data/*.png $(TARGET_DIR)/usr/share/LiTE/
-$(INSTALL) -m0644 $(LITE_DIR)/examples/*.png
-$(TARGET_DIR)/usr/share/LiTE/examples/
-$(INSTALL) -m0644 $(LITE_DIR)/fonts/*.ttf
-$(TARGET_DIR)/usr/share/fonts/truetype/
-
-other than that it looks somewhat reasonable 
-
-Issue History 
-Date Modified   Username       Field                    Change               
-====================================================================== 
-07-07-08 04:29  zonque         New Issue                                    
-07-07-08 04:29  zonque         Status                   new => assigned     
-07-07-08 04:29  zonque         Assigned To               => buildroot       
-07-07-08 04:29  zonque         File Added: lite.diff                        
-07-08-08 06:11  daniellaird    Note Added: 0009084                          
-07-24-08 04:09  zonque         Note Added: 0009934                          
-07-24-08 05:17  bernhardf      Note Added: 0009944                          
-07-24-08 05:51  daniellaird    File Added: adding_lite.patch                    
-07-24-08 05:52  daniellaird    Note Added: 0009954                          
-07-24-08 07:27  bernhardf      Note Added: 0009964                          
-======================================================================
+It's not only shorter but also avoiding broken cp and mkdir
+implementations and is IMO the preferred way to copy stuff.
