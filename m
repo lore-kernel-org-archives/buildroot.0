@@ -1,25 +1,69 @@
-From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Thu, 24 Jul 2008 14:01:46 +0200
-Subject: [Buildroot] [PATCH 1/2] lsdldoom: new package lsdldoom
-In-Reply-To: <1216899513.29392.12.camel@localhost> (Hans-Christian Egtvedt's
-	message of "Thu\, 24 Jul 2008 13\:38\:33 +0200")
-References: <1216648539-19020-1-git-send-email-hans-christian.egtvedt@atmel.com>
-	<87r69nb17i.fsf@macbook.be.48ers.dk>
-	<1216706419.13039.6.camel@localhost>
-	<1216899513.29392.12.camel@localhost>
-Message-ID: <878wvrqymt.fsf@macbook.be.48ers.dk>
+From: bugs at busybox.net <bugs@busybox.net>
+Date: Thu, 24 Jul 2008 05:17:11 -0700
+Subject: [Buildroot] [buildroot 0003974]: [PATCH] new package: LiTE (toolkit
+	engine)
+Message-ID: <bf602077e33f69331355b5fc2d39442f@busybox.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Hans-Christian" == Hans-Christian Egtvedt <hans-christian.egtvedt@atmel.com> writes:
 
- Hans-Christian> I at least prefer prboom above lsdldoom for targets
- Hans-Christian> without X11, so either way I would like it added.
+A NOTE has been added to this issue. 
+====================================================================== 
+http://busybox.net/bugs/view.php?id=3974 
+====================================================================== 
+Reported By:                zonque
+Assigned To:                buildroot
+====================================================================== 
+Project:                    buildroot
+Issue ID:                   3974
+Category:                   New Features
+Reproducibility:            always
+Severity:                   minor
+Priority:                   normal
+Status:                     assigned
+====================================================================== 
+Date Submitted:             07-07-2008 04:29 PDT
+Last Modified:              07-24-2008 05:17 PDT
+====================================================================== 
+Summary:                    [PATCH] new package: LiTE (toolkit engine)
+Description: 
+this patch adds LiTE (DirectFB-based toolkit engine) to the list of
+supported packages. Applies to latest svn here.
+====================================================================== 
 
-+1.
+---------------------------------------------------------------------- 
+ daniellaird - 07-08-08 06:11  
+---------------------------------------------------------------------- 
+I have updated the patch (It all works fine) but without the examples not
+much to show.  For now the patch just disables the tests and copies all
+supporting pngs/fonts etc into $ROOTFS. 
 
--- 
-Bye, Peter Korsgaard
+---------------------------------------------------------------------- 
+ zonque - 07-24-08 04:09  
+---------------------------------------------------------------------- 
+can this go upstream, please?
+
+Daniel 
+
+---------------------------------------------------------------------- 
+ bernhardf - 07-24-08 05:17  
+---------------------------------------------------------------------- 
+this package should use package/Makefile.autotools.in
+
+See various other packages for examples on how this should look like.
+Please redo it and attach an updated patch. TIA 
+
+Issue History 
+Date Modified   Username       Field                    Change               
+====================================================================== 
+07-07-08 04:29  zonque         New Issue                                    
+07-07-08 04:29  zonque         Status                   new => assigned     
+07-07-08 04:29  zonque         Assigned To               => buildroot       
+07-07-08 04:29  zonque         File Added: lite.diff                        
+07-08-08 06:11  daniellaird    Note Added: 0009084                          
+07-24-08 04:09  zonque         Note Added: 0009934                          
+07-24-08 05:17  bernhardf      Note Added: 0009944                          
+======================================================================
