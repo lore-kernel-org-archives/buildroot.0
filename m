@@ -1,44 +1,54 @@
-From: Hamish Moffatt <hamish@cloud.net.au>
-Date: Thu, 24 Jul 2008 10:58:43 +1000
-Subject: [Buildroot] Openssl won't compile
-In-Reply-To: <48874FEF.9070208@gnat.ca>
-References: <4886A1F4.1010900@gnat.ca> <20080723133519.GA27147@cloud.net.au>
-	<48874FEF.9070208@gnat.ca>
-Message-ID: <20080724005843.GB19842@cloud.net.au>
+From: Dirk Vermaak <dirk.vermaak@ntlworld.com>
+Date: Thu, 24 Jul 2008 09:20:26 +0100
+Subject: [Buildroot] Cannot build a worling alsactl or alsamixer using
+	buildroot
+Message-ID: <200807240920.26295.dirk.vermaak@ntlworld.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Wed, Jul 23, 2008 at 09:36:15AM -0600, Nathanael D. Noblet wrote:
-> Hamish Moffatt wrote:
-> > On Tue, Jul 22, 2008 at 09:13:56PM -0600, Nathanael D. Noblet wrote:
-> >> Hello,
-> >>    Anyone experience difficulty compiling openssl (0.9.7m)? I get a 
-> >> missing sys/timeb.h, upgrading to ssl 0.9.8g) is no better as the 
-> >> patches don't apply and I'm not sure what the ones I couldn't fix were 
-> >> doing.
-> >>
-> >>    For what it is worth, I'm using gcc-3.1 and a daily snapshot of uclibc.
-> > 
-> > I'm not having any trouble building it for armeb with gcc 4.1.2 with
-> > uClibc 0.9.29.
-> 
-> Using 0.9.29 I can't boot my target device. The rootfs boots in qemu but 
-> I get a general protection fault on the real hardware. I've tried 4.2.x 
-> and 4.3 and 4.4. Perhaps I'll try 4.1.2....
+Hi,
+For over a week now we have been trying to build alsa-utils to work on our 
+sam9269-ek development board with a 2.6.24.4 kernel patched with the AT91 
+patch, and the first experimental patch. We use the buildroot environment and 
+have everything else working fine. I have scoured these lists and found a few 
+threads that discuss having to change the make file for alsa-utils. So far 
+nothing we do appears to change the behaviour.
 
-I'm using 4.1.2 because I couldn't get 4.2 to build for armeb with
-either OABI or EABI, though that was about 8-9 months ago. I'm using
-OABI with 4.1.2 successfully (I don't think EABI builds though).
+with alsa lib and utils we have tried
 
-What is your target hardware?
+1.0.14a 
+1.014a with the  -mabi=aapcs-linux option
+1.014a with the  -mabi=aapcs-linux and --with-versioned=no
+(both of these changes I found here on the site)
 
-gcc-3.1 is old; you might be able to get away with 3.3 but 4.x would be
-much better (and you'll have more chance of getting assistance from the
-community).
+Folllowing this I tried the latest Alsa stuff (1.0.16)  including patching 
+both the lib and utils make files with the patch from Daniel Laird and Matt 
+Dombroski. 
 
-Hamish
--- 
-Hamish Moffatt VK3SB <hamish@debian.org> <hamish@cloud.net.au>
+All of this appears to be of no avail. 
+
+alsactl always returns : Cannot read control '2,0,0,Master Playback Volume,0': 
+Inappropriate ioctl for device
+
+alsamixer returns 
+
+ioctl(3, USBDEVFS_IOCTL, 0xbeae7188)    = -1 ENOTTY (Inappropriate ioctl for 
+device)
+write(1, "\n", 1
+)                       = 1
+write(2, "alsamixer: function ", 20alsamixer: function )    = 20
+write(2, "snd_mixer_load", 14snd_mixer_load)          = 14
+write(2, " failed: ", 9 failed: )                = 9
+write(2, "Inappropriate ioctl for device", 30Inappropriate ioctl for device) = 
+30
+write(2, "\n", 1
+
+Does anyone have any ideas as to how to get a working build of Alsa. Any help 
+would be greatly appreciated.
+
+Thanks,
+
+Dirk.
