@@ -1,38 +1,30 @@
 From: Hans-Christian Egtvedt <hans-christian.egtvedt@atmel.com>
-Date: Thu, 24 Jul 2008 15:21:56 +0200
-Subject: [Buildroot] [PATCH 4/5] lxdoom-wad: enable kconfig entry for PrBoom
-	package
-In-Reply-To: <1216905717-9197-3-git-send-email-hans-christian.egtvedt@atmel.com>
+Date: Thu, 24 Jul 2008 15:23:40 +0200
+Subject: [Buildroot] [PATCH 5/5] lxdoom: make package depend on X11
+	server
+In-Reply-To: <1216905717-9197-5-git-send-email-hans-christian.egtvedt@atmel.com>
 References: <1216905717-9197-1-git-send-email-hans-christian.egtvedt@atmel.com>
 	<1216905717-9197-2-git-send-email-hans-christian.egtvedt@atmel.com>
 	<1216905717-9197-3-git-send-email-hans-christian.egtvedt@atmel.com>
-Message-ID: <1216905717-9197-4-git-send-email-hans-christian.egtvedt@atmel.com>
+	<1216905717-9197-4-git-send-email-hans-christian.egtvedt@atmel.com>
+	<1216905717-9197-5-git-send-email-hans-christian.egtvedt@atmel.com>
+Message-ID: <1216905820.29392.15.camel@localhost>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-This patch will let the user install the Doom shareware wad file if PrBoom is
-selected.
+On Thu, 2008-07-24 at 15:21 +0200, Hans-Christian Egtvedt wrote:
+> lxdoom depends on a X11 server to be built, this patch will only show lxdoom if
+> a X11 server is selected and add xserver_xorg-server to the dependency list.
+> 
 
-Signed-off-by: Hans-Christian Egtvedt <hans-christian.egtvedt@atmel.com>
----
- package/lxdoom/Config.in |    2 +-
- 1 files changed, 1 insertions(+), 1 deletions(-)
+For the record, I have no idea how the X11 server stuff is working, so I
+added the code on an assumption of how it works.
 
-diff --git a/package/lxdoom/Config.in b/package/lxdoom/Config.in
-index 3b318e1..e3c9be8 100644
---- a/package/lxdoom/Config.in
-+++ b/package/lxdoom/Config.in
-@@ -4,7 +4,7 @@ config BR2_PACKAGE_LXDOOM
- 	  This is the linux version of the popular doom game.
- config BR2_PACKAGE_LXDOOM_WAD
- 	bool "doom shareware wad file"
--	depends on BR2_PACKAGE_LXDOOM
-+	depends on BR2_PACKAGE_LXDOOM || BR2_PACKAGE_PRBOOM
- 	help
- 	  This will install the the shareware wad data file for the doom game.
- 
+<snipp patch>
+
 -- 
-1.5.4.3
+With kind regards,
+Hans-Christian Egtvedt, Applications Engineer
