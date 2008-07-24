@@ -1,54 +1,72 @@
-From: Dirk Vermaak <dirk.vermaak@ntlworld.com>
-Date: Thu, 24 Jul 2008 09:20:26 +0100
-Subject: [Buildroot] Cannot build a worling alsactl or alsamixer using
-	buildroot
-Message-ID: <200807240920.26295.dirk.vermaak@ntlworld.com>
+From: bugs at busybox.net <bugs@busybox.net>
+Date: Thu, 24 Jul 2008 02:04:47 -0700
+Subject: [Buildroot] =?windows-1252?q?=5Bbuildroot_0004304=5D=3A_=5BBuildR?=
+	=?windows-1252?q?oot=5D_Fix_=91make_clean=92_so_=91make_clean=3B_m?=
+	=?windows-1252?q?ake=92_works?=
+Message-ID: <d36c709a7391e18ce9f44d152595453f@busybox.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi,
-For over a week now we have been trying to build alsa-utils to work on our 
-sam9269-ek development board with a 2.6.24.4 kernel patched with the AT91 
-patch, and the first experimental patch. We use the buildroot environment and 
-have everything else working fine. I have scoured these lists and found a few 
-threads that discuss having to change the make file for alsa-utils. So far 
-nothing we do appears to change the behaviour.
 
-with alsa lib and utils we have tried
+The following issue has been SUBMITTED. 
+====================================================================== 
+http://busybox.net/bugs/view.php?id=4304 
+====================================================================== 
+Reported By:                blf
+Assigned To:                buildroot
+====================================================================== 
+Project:                    buildroot
+Issue ID:                   4304
+Category:                   Other
+Reproducibility:            always
+Severity:                   minor
+Priority:                   normal
+Status:                     assigned
+====================================================================== 
+Date Submitted:             07-24-2008 02:04 PDT
+Last Modified:              07-24-2008 02:04 PDT
+====================================================================== 
+Summary:                    [BuildRoot] Fix ?make clean? so ?make clean; make?
+works
+Description: 
+    ?make clean? failed to remove all the state, causing a
+    subsequent ?make? to skip some rather key steps (e.g.,
+    creating a properly-populated skelton root filesystem).
+    
+    Signed-off-by: Brian Foster <brian.foster@innova-card.com>
+---
+ This patch is against r22481.
 
-1.0.14a 
-1.014a with the  -mabi=aapcs-linux option
-1.014a with the  -mabi=aapcs-linux and --with-versioned=no
-(both of these changes I found here on the site)
+ Makefile |    2 --
+ 1 files changed, 0 insertions(+), 2 deletions(-)
 
-Folllowing this I tried the latest Alsa stuff (1.0.16)  including patching 
-both the lib and utils make files with the patch from Daniel Laird and Matt 
-Dombroski. 
 
-All of this appears to be of no avail. 
+diff --git a/Makefile b/Makefile
+index fcf69ce..9c6fa4c 100644
+--- a/Makefile
++++ b/Makefile
+@@ -355,9 +355,11 @@ external-deps:
+ #############################################################
+ clean: $(TARGETS_CLEAN)
+ 	rm -rf $(STAGING_DIR) $(TARGET_DIR) $(IMAGE)
++	rm -f $(PROJECT_BUILD_DIR)/.root
+ 
+ dirclean: $(TARGETS_DIRCLEAN)
+ 	rm -rf $(STAGING_DIR) $(TARGET_DIR) $(IMAGE)
++	rm -f $(PROJECT_BUILD_DIR)/.root
+ 
+ distclean:
+ ifeq ($(DL_DIR),$(BASE_DIR)/dl)
 
-alsactl always returns : Cannot read control '2,0,0,Master Playback Volume,0': 
-Inappropriate ioctl for device
+====================================================================== 
 
-alsamixer returns 
-
-ioctl(3, USBDEVFS_IOCTL, 0xbeae7188)    = -1 ENOTTY (Inappropriate ioctl for 
-device)
-write(1, "\n", 1
-)                       = 1
-write(2, "alsamixer: function ", 20alsamixer: function )    = 20
-write(2, "snd_mixer_load", 14snd_mixer_load)          = 14
-write(2, " failed: ", 9 failed: )                = 9
-write(2, "Inappropriate ioctl for device", 30Inappropriate ioctl for device) = 
-30
-write(2, "\n", 1
-
-Does anyone have any ideas as to how to get a working build of Alsa. Any help 
-would be greatly appreciated.
-
-Thanks,
-
-Dirk.
+Issue History 
+Date Modified   Username       Field                    Change               
+====================================================================== 
+07-24-08 02:04  blf            New Issue                                    
+07-24-08 02:04  blf            Status                   new => assigned     
+07-24-08 02:04  blf            Assigned To               => buildroot       
+======================================================================
