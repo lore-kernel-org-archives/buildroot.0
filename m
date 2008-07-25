@@ -1,8 +1,8 @@
 From: bugs at busybox.net <bugs@busybox.net>
-Date: Fri, 25 Jul 2008 13:36:25 -0700
-Subject: [Buildroot] [buildroot 0004344]: [PATCH] qtopia4 does not build
-	correctly for x86 target
-Message-ID: <4b5f57f121391c62092d5c7ce98324d3@busybox.net>
+Date: Fri, 25 Jul 2008 15:30:40 -0700
+Subject: [Buildroot] [buildroot 0004234]: Mesa doesn't build on x86_64 for
+	mipsel target
+Message-ID: <6c0496763b0389851a852c87db2ebe5c@bugs.busybox.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -10,41 +10,82 @@ Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
 
-The following issue has been SUBMITTED. 
+A NOTE has been added to this issue. 
 ====================================================================== 
-http://busybox.net/bugs/view.php?id=4344 
+http://busybox.net/bugs/view.php?id=4234 
 ====================================================================== 
-Reported By:                patricks
+Reported By:                KHAksnes
 Assigned To:                buildroot
 ====================================================================== 
 Project:                    buildroot
-Issue ID:                   4344
+Issue ID:                   4234
 Category:                   Architecture Specific
 Reproducibility:            always
-Severity:                   minor
+Severity:                   major
 Priority:                   normal
 Status:                     assigned
 ====================================================================== 
-Date Submitted:             07-25-2008 13:36 PDT
-Last Modified:              07-25-2008 13:36 PDT
+Date Submitted:             07-22-2008 15:31 PDT
+Last Modified:              07-25-2008 15:30 PDT
 ====================================================================== 
-Summary:                    [PATCH] qtopia4 does not build correctly for x86
-target
+Summary:                    Mesa doesn't build on x86_64 for mipsel target
 Description: 
-The sed commands to change the compiler in the mkspec file were not working
-for x86 targets.  I changed the sed commands to hopefully work on all
-targets.  I haven't tested on anything other than x86 though.  Also, I
-added sed commands to alter the configure script and several .pro files so
-that programs run on the host are built with the host compiler.  I also
-added automatic checking for a qconfig-myfile.h.  Also, the docs and tools
-build targets are eliminated.
+  Target Architecture: mipsel
+  Target Architecture Variant: mips 32
+  Target ABI: o32          
+  Target arcitecture is nofpu.
+  Compilation is done on a machine running fedora 9 on x86_64
+architecture.
+  gcc  version is 4.2.4 as 4.3.1 fails for mipsel target.
 ====================================================================== 
+
+---------------------------------------------------------------------- 
+ pepe - 07-22-08 18:32  
+---------------------------------------------------------------------- 
+The attached log ends with 
+
+"Please run 'make realclean' before changing configs"
+
+which is probably not the actual error.
+
+On i686, make goes into an endless loop while failing to compile due to
+missing include files. Log attached. 
+
+It misses a stddef.h which is installed as <linux/stddef.h> but included
+as <stddef.h>. After copying stddef.h in to staging/usr/include/, it does
+not find "GL/...". I'm unable to find where to set these paths in the .mk
+file.. :-( 
+
+---------------------------------------------------------------------- 
+ KHAksnes - 07-25-08 15:30  
+---------------------------------------------------------------------- 
+I forgot to mention that make fails by going into a fork bomb if you
+doesn't drop the following gnome-config file into
+build_mipsel/staging_dir/usr/bin/
+
+#!/bin/sh
+exit 0
+
+It must be made executable using chmod or install -m.
+This to avoid pkg-config calling gnome-config calling pkg-config ad
+infinitum. The bug is reported uppstream on pkg-config. This bug rears its
+ugly head during the configuration of several of the packages in
+buildroot.
+
+I usually clean up using: rm -rf *mipsel* binaries
+as make clean and make realclean fails in some of the packages.
+
+The log attached is made after running make -k first to shorten the log as
+much as possible without manually changing anything. 
 
 Issue History 
 Date Modified   Username       Field                    Change               
 ====================================================================== 
-07-25-08 13:36  patricks       New Issue                                    
-07-25-08 13:36  patricks       Status                   new => assigned     
-07-25-08 13:36  patricks       Assigned To               => buildroot       
-07-25-08 13:36  patricks       File Added: qtopia4.mk.patch                    
+07-22-08 15:31  KHAksnes       New Issue                                    
+07-22-08 15:31  KHAksnes       Status                   new => assigned     
+07-22-08 15:31  KHAksnes       Assigned To               => buildroot       
+07-22-08 15:31  KHAksnes       File Added: buildlog                         
+07-22-08 18:32  pepe           Note Added: 0009904                          
+07-22-08 18:33  pepe           File Added: buildlog_actual                    
+07-25-08 15:30  KHAksnes       Note Added: 0009984                          
 ======================================================================
