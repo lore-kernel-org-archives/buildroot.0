@@ -1,57 +1,28 @@
-From: bugs at busybox.net <bugs@busybox.net>
-Date: Thu, 24 Jul 2008 17:02:54 -0700
-Subject: [Buildroot] [buildroot 0004014]: Alsa-Lib and Alsa-Utils are not
-	the latest versions or using package build system
-Message-ID: <3cffc87daa9b02b2b4e2c9fd38efa5bc@bugs.uclibc.org>
+From: Hamish Moffatt <hamish@cloud.net.au>
+Date: Fri, 25 Jul 2008 10:12:43 +1000
+Subject: [Buildroot] Makefile.autotools.in does not work well
+	with	projects
+In-Reply-To: <1216910589.29392.18.camel@localhost>
+References: <1216910589.29392.18.camel@localhost>
+Message-ID: <20080725001242.GB25141@cloud.net.au>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+On Thu, Jul 24, 2008 at 04:43:09PM +0200, Hans-Christian Egtvedt wrote:
+> The Makefile.autotools.in uses a rule which touches a
+> stamp_target_installed file, this does not work well with projects.
+> 
+> The Makefile should depend on a file on the target root file system,
+> file not there => install to target again.
 
-A NOTE has been added to this issue. 
-====================================================================== 
-http://busybox.net/bugs/view.php?id=4014 
-====================================================================== 
-Reported By:                daniellaird
-Assigned To:                buildroot
-====================================================================== 
-Project:                    buildroot
-Issue ID:                   4014
-Category:                   New Features
-Reproducibility:            always
-Severity:                   feature
-Priority:                   normal
-Status:                     assigned
-====================================================================== 
-Date Submitted:             07-08-2008 06:06 PDT
-Last Modified:              07-24-2008 17:02 PDT
-====================================================================== 
-Summary:                    Alsa-Lib and Alsa-Utils are not the latest versions
-or using package build system
-Description: 
-Alsa-Lib and Alsa-Utils are now much newer (1.0.16).
-These patches have modified some patches posted by Matthew Dombroski that
-move alsa-lib and alsa-utils to new version and new package build system.
-====================================================================== 
+Indeed - install stamps are pure evil. They don't work with multiple
+projects and they mean you can't "rm -rf
+project_build_$(ARCH)/$(PROJECT)/root".
 
----------------------------------------------------------------------- 
- mdombroski - 07-24-08 17:02  
----------------------------------------------------------------------- 
-I have uploaded new alsa-utils.mk and alsa-lib.mk.
-The --with-versioned=no flag is set by default
--mabi=aapcs-linux is only set for EABI arm targets. 
 
-Issue History 
-Date Modified   Username       Field                    Change               
-====================================================================== 
-07-08-08 06:06  daniellaird    New Issue                                    
-07-08-08 06:06  daniellaird    Status                   new => assigned     
-07-08-08 06:06  daniellaird    Assigned To               => buildroot       
-07-08-08 06:06  daniellaird    File Added: alsa-lib-utils.patch                 
-  
-07-24-08 17:01  mdombroski     File Added: alsa-lib.mk                      
-07-24-08 17:01  mdombroski     File Added: alsa-utils.mk                    
-07-24-08 17:02  mdombroski     Note Added: 0009974                          
-======================================================================
+Hamish
+-- 
+Hamish Moffatt VK3SB <hamish@debian.org> <hamish@cloud.net.au>
