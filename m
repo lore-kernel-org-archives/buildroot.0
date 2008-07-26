@@ -1,8 +1,8 @@
-From: bugs at busybox.net <bugs@busybox.net>
-Date: Fri, 25 Jul 2008 15:30:40 -0700
-Subject: [Buildroot] [buildroot 0004234]: Mesa doesn't build on x86_64 for
-	mipsel target
-Message-ID: <6c0496763b0389851a852c87db2ebe5c@bugs.busybox.net>
+From: Ulf Samuelsson <ulf.samuelsson@atmel.com>
+Date: Sat, 26 Jul 2008 08:49:18 +0200
+Subject: [Buildroot] Improving buildroot
+References: <48892EB8.7090909@redfish-solutions.com>
+Message-ID: <AFF9BFF1308046B78E6ED0DA3324E847@aeglos>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -10,82 +10,108 @@ Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
 
-A NOTE has been added to this issue. 
-====================================================================== 
-http://busybox.net/bugs/view.php?id=4234 
-====================================================================== 
-Reported By:                KHAksnes
-Assigned To:                buildroot
-====================================================================== 
-Project:                    buildroot
-Issue ID:                   4234
-Category:                   Architecture Specific
-Reproducibility:            always
-Severity:                   major
-Priority:                   normal
-Status:                     assigned
-====================================================================== 
-Date Submitted:             07-22-2008 15:31 PDT
-Last Modified:              07-25-2008 15:30 PDT
-====================================================================== 
-Summary:                    Mesa doesn't build on x86_64 for mipsel target
-Description: 
-  Target Architecture: mipsel
-  Target Architecture Variant: mips 32
-  Target ABI: o32          
-  Target arcitecture is nofpu.
-  Compilation is done on a machine running fedora 9 on x86_64
-architecture.
-  gcc  version is 4.2.4 as 4.3.1 fails for mipsel target.
-====================================================================== 
+Best Regards
+Ulf Samuelsson
 
----------------------------------------------------------------------- 
- pepe - 07-22-08 18:32  
----------------------------------------------------------------------- 
-The attached log ends with 
+> Hi.
+> 
+> I'm new to the list, but not to linux nor the idea of cross-compiling 
+> under Unix.
+> 
+[snip]
+> 
+> One of the first things I noticed was that there are a lot of braindead 
+> configure.ac scripts out there that don't handle cross-compilation.  
+> That won't be of news to anyone I don't think.  The 2nd thing that I 
+> followed on with was that by using the appropriate --with, --without, 
+> --enable, --disable, and ac_cv_foo values when invoking ./configure, a 
+> lot of this stuff could be mitigated.
+> 
 
-"Please run 'make realclean' before changing configs"
+> The 2nd argument to AC_CHECK_SIZEOF() is a travesty, and there's no good 
+> reason for having it.  It will be wrong as often as it will be right, so 
+> why bother having it at all?
+> 
+> I also noticed that some of the buildroot makefile's don't properly 
+> order their targets or rely on their dependencies' ages properly, so 
+> that doing a "make all" followed by another "make all" doesn't, in fact, 
+> result in "Nothing to be done for `all'" as the result... but instead a 
+> lot of rules are run again for no apparent reason.
+> 
 
-which is probably not the actual error.
+Yes, this happens from time to time, when the rules are changed.
+Patches to fix this are definitely welcome.
 
-On i686, make goes into an endless loop while failing to compile due to
-missing include files. Log attached. 
 
-It misses a stddef.h which is installed as <linux/stddef.h> but included
-as <stddef.h>. After copying stddef.h in to staging/usr/include/, it does
-not find "GL/...". I'm unable to find where to set these paths in the .mk
-file.. :-( 
+> I try to fix these as I encounter them, but I've not been very diligent 
+> about noting them.  I'll try to do better, and indeed to post my patches 
+> to makefiles as I find them.
+> 
+> So... getting back to the first issue... incorrect detection of the 
+> target environment's characteristics when cross-compiling...  Why don't 
+> we just capture most of this into a Makefile statically?
+> 
+> In the astlinux project, for instance, we have in one of our Makefiles 
+> something like:
+> 
+> LINUX_VERSION_MAJOR:=$(shell echo $(LINUX_VERSION) | cut -d. -f1)
+> LINUX_VERSION_MINOR:=$(shell echo $(LINUX_VERSION) | cut -d. -f2)
+> LINUX_VERSION_TRIPLE:=$(shell echo $(LINUX_VERSION) | cut -d. -f1-3)
+> TARGET_CONFIGURE_OPTS+=\
+>                ac_cv_linux_vers=$(LINUX_VERSION_MAJOR)
+> 
+> 
+> 
+> (yeah, it could be better written and more standardized... but it works 
+> for now.) and in target/device/geni586/Makefile.in:
+> 
+> ifeq ($(ARCH),i586)
+> TARGET_CONFIGURE_OPTS+=\
+>                ac_cv_sizeof_char=1 \
+>                ac_cv_sizeof_unsigned_char=1 \
+>                ac_cv_sizeof_short=2 \
+>                ac_cv_sizeof_short_int=2 \
+>                ac_cv_sizeof_unsigned_short=2 \
+>                ac_cv_sizeof_unsigned_short_int=2 \
+>                ac_cv_sizeof_int=4 \
+>                ac_cv_sizeof_long=4 \
+>                ac_cv_sizeof_long_int=4 \
+>                ac_cv_sizeof_unsigned=4 \
+>                ac_cv_sizeof_unsigned_int=4 \
+>                ac_cv_sizeof_unsigned_long=4 \
+>                ac_cv_sizeof_unsigned_long_int=4 \
+>                ac_cv_sizeof_off_t=4 \
+>                ac_cv_sizeof_size_t=4 \
+>                ac_cv_sizeof_char_p=4 \
+>                ac_cv_sizeof_unsigned_char_p=4 \
+>                ac_cv_sizeof_voidp=4 \
+>                ac_cv_sizeof_long_long=8 \
+>                ac_cv_sizeof_long_long_int=8 \
+>                ac_cv_sizeof_unsigned_long_long=8 \
+>                ac_cv_sizeof_unsigned_long_long_int=8 \
+>                ac_cv_sizeof_off64_t=8 \
+>                ac_cv_sizeof_loff_t=8
+> endif
+> 
+> 
+> Since there are a lot of broken "configure" scripts out there, and 
+> there's no point in having 50 or more packages try to figure out the 
+> native size of a "long", then why not predefine a lot of this?
+> 
 
----------------------------------------------------------------------- 
- KHAksnes - 07-25-08 15:30  
----------------------------------------------------------------------- 
-I forgot to mention that make fails by going into a fork bomb if you
-doesn't drop the following gnome-config file into
-build_mipsel/staging_dir/usr/bin/
+Probably because noone thought about this.
 
-#!/bin/sh
-exit 0
-
-It must be made executable using chmod or install -m.
-This to avoid pkg-config calling gnome-config calling pkg-config ad
-infinitum. The bug is reported uppstream on pkg-config. This bug rears its
-ugly head during the configuration of several of the packages in
-buildroot.
-
-I usually clean up using: rm -rf *mipsel* binaries
-as make clean and make realclean fails in some of the packages.
-
-The log attached is made after running make -k first to shorten the log as
-much as possible without manually changing anything. 
-
-Issue History 
-Date Modified   Username       Field                    Change               
-====================================================================== 
-07-22-08 15:31  KHAksnes       New Issue                                    
-07-22-08 15:31  KHAksnes       Status                   new => assigned     
-07-22-08 15:31  KHAksnes       Assigned To               => buildroot       
-07-22-08 15:31  KHAksnes       File Added: buildlog                         
-07-22-08 18:32  pepe           Note Added: 0009904                          
-07-22-08 18:33  pepe           File Added: buildlog_actual                    
-07-25-08 15:30  KHAksnes       Note Added: 0009984                          
-======================================================================
+> What am I missing?
+> 
+> I'll try to go over my mods to the makefiles, and if I see anything 
+> useful, I'll post the diffs.
+> 
+> Thanks,
+> 
+> -Philip
+> 
+> _______________________________________________
+> buildroot mailing list
+> buildroot at uclibc.org
+> http://busybox.net/mailman/listinfo/buildroot
+>
