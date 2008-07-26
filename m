@@ -1,39 +1,37 @@
-From: Jonathan and Caroline Moore <jandcmoore@gmail.com>
-Date: Sat, 26 Jul 2008 08:46:57 +0100
-Subject: [Buildroot] Bash failing
-Message-ID: <8bf7d05b0807260046q35afd439kf3d0a8b950dc5344@mail.gmail.com>
+From: Ulf Samuelsson <ulf.samuelsson@atmel.com>
+Date: Sat, 26 Jul 2008 09:28:20 +0200
+Subject: [Buildroot] svn commit: trunk/buildroot/package/gettext
+References: <20080723103550.70E8B3C7D7@busybox.net><20080723134217.GC27147@cloud.net.au>
+	<20080723142318.GA27902@mx.loc>
+Message-ID: <C7AE0FB127ED41699C433B5F47164972@aeglos>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Anyone able to help me out with these bash complaints please.
+> On Wed, Jul 23, 2008 at 11:42:17PM +1000, Hamish Moffatt wrote:
+>>On Wed, Jul 23, 2008 at 03:35:50AM -0700, jacmet at uclibc.org wrote:
+>
+>>Personally I think the shared build_$(ARCH) is just wrong with multiple
+>>projects. I might hack my local copy to define BUILD_DIR to match
+>>PROJECT_BUILD_DIR to fix this.
+>
+> The project thing as it is now should not have been applied in the first
+> place. It's misguided and not thought through, let alone implemented
+> properly. Nothing new. Dead horse.
 
-Jonathan (buildroot 20080725)
+The project "thing" will allow you to experiment with different kernels,
+using a single toolchain
+You can select to include or not include a package, but if you
+use the package, it has to have the same options in each project.
 
-In file included from display.c:49:
-tcap.h:35:23: error: termcap.h: No such file or directory
-display.c: In function 'rl_character_len':
-display.c:1961: warning: comparison is always true due to limited
-range of data type
-display.c: In function 'insert_some_chars':
-display.c:2225: warning: assignment makes pointer from integer without a cast
-display.c: In function 'delete_chars':
-display.c:2268: warning: assignment makes pointer from integer without a cast
-make[2]: *** [display.o] Error 1
-make[2]: Leaving directory
-`/home/jm/git/Arm.2410/buildroot-20080725/build_arm/bash-3.2/lib/readline'
-make[1]: *** [lib/readline/libreadline.a] Error 1
-make[1]: Leaving directory
-`/home/jm/git/Arm.2410/buildroot-20080725/build_arm/bash-3.2'
-make: *** [/home/jm/git/Arm.2410/buildroot-20080725/build_arm/bash-3.2/bash]
-Error 2
+Patches that will move packages with buildroot options to 
+project_build_$(ARCH)
+will of course improve the functionality.
 
--- 
-Jonathan (and Caroline)
+If you do not like the project feature, you can always use separate
+buildroot trees.
 
-Jonathan and Caroline Moore
-JandCMoore at gmail.com (Jonathan)
-CandJMoore at gmail.com (Caroline)
-http://jandcmoore.googlepages.com/
+Best Regards
+Ulf Samuelsson
