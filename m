@@ -1,41 +1,39 @@
-From: Ulf Samuelsson <ulf.samuelsson@atmel.com>
-Date: Sat, 26 Jul 2008 08:53:43 +0200
-Subject: [Buildroot] Makefile.autotools.in does not work
-	wellwith	projects
-References: <1216910589.29392.18.camel@localhost>
-	<20080725001242.GB25141@cloud.net.au>
-Message-ID: <80DE307AE1CF4656A7072295EA2408F8@aeglos>
+From: Jonathan and Caroline Moore <jandcmoore@gmail.com>
+Date: Sat, 26 Jul 2008 08:46:57 +0100
+Subject: [Buildroot] Bash failing
+Message-ID: <8bf7d05b0807260046q35afd439kf3d0a8b950dc5344@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Subject: Re: [Buildroot] Makefile.autotools.in does not work wellwith 
-projects
+Anyone able to help me out with these bash complaints please.
 
+Jonathan (buildroot 20080725)
 
-> On Thu, Jul 24, 2008 at 04:43:09PM +0200, Hans-Christian Egtvedt wrote:
->> The Makefile.autotools.in uses a rule which touches a
->> stamp_target_installed file, this does not work well with projects.
->>
->> The Makefile should depend on a file on the target root file system,
->> file not there => install to target again.
->
-> Indeed - install stamps are pure evil. They don't work with multiple
-> projects and they mean you can't "rm -rf
-> project_build_$(ARCH)/$(PROJECT)/root".
->
->
+In file included from display.c:49:
+tcap.h:35:23: error: termcap.h: No such file or directory
+display.c: In function 'rl_character_len':
+display.c:1961: warning: comparison is always true due to limited
+range of data type
+display.c: In function 'insert_some_chars':
+display.c:2225: warning: assignment makes pointer from integer without a cast
+display.c: In function 'delete_chars':
+display.c:2268: warning: assignment makes pointer from integer without a cast
+make[2]: *** [display.o] Error 1
+make[2]: Leaving directory
+`/home/jm/git/Arm.2410/buildroot-20080725/build_arm/bash-3.2/lib/readline'
+make[1]: *** [lib/readline/libreadline.a] Error 1
+make[1]: Leaving directory
+`/home/jm/git/Arm.2410/buildroot-20080725/build_arm/bash-3.2'
+make: *** [/home/jm/git/Arm.2410/buildroot-20080725/build_arm/bash-3.2/bash]
+Error 2
 
-I do not think that you want to have install stamps in the root file system
-because they will end up in the target (unless they are ignored when
-the rootfs is created).
+-- 
+Jonathan (and Caroline)
 
-You could have install stamps in a 
-"project_build_$(ARCH)/$(PROJECT)/.stamps"
-directory. Of course you would have to remember to delete this directory
-when you delete  "project_build_$(ARCH)/$(PROJECT)/root"
-
-Best Regards
-Ulf Samuelsson
+Jonathan and Caroline Moore
+JandCMoore at gmail.com (Jonathan)
+CandJMoore at gmail.com (Caroline)
+http://jandcmoore.googlepages.com/
