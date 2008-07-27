@@ -1,8 +1,8 @@
 From: bugs at busybox.net <bugs@busybox.net>
-Date: Sun, 27 Jul 2008 14:52:03 -0700
+Date: Sun, 27 Jul 2008 14:53:36 -0700
 Subject: [Buildroot] [buildroot 0004234]: Mesa doesn't build on x86_64 for
 	mipsel target
-Message-ID: <a9d855990fd61128b18c83d3a52eda8f@bugs.uclibc.org>
+Message-ID: <af17d1371d2564518ba943ea0e575c0a@bugs.uclibc.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -26,7 +26,7 @@ Priority:                   normal
 Status:                     assigned
 ====================================================================== 
 Date Submitted:             07-22-2008 15:31 PDT
-Last Modified:              07-27-2008 14:52 PDT
+Last Modified:              07-27-2008 14:53 PDT
 ====================================================================== 
 Summary:                    Mesa doesn't build on x86_64 for mipsel target
 Description: 
@@ -83,6 +83,11 @@ much as possible without manually changing anything.
 ---------------------------------------------------------------------- 
 A fixed logfile is attached 
 
+---------------------------------------------------------------------- 
+ KHAksnes - 07-27-08 14:53  
+---------------------------------------------------------------------- 
+Oops wrong file the right will be attached 
+
 Issue History 
 Date Modified   Username       Field                    Change               
 ====================================================================== 
@@ -94,4 +99,6 @@ Date Modified   Username       Field                    Change
 07-22-08 18:33  pepe           File Added: buildlog_actual                    
 07-25-08 15:30  KHAksnes       Note Added: 0009984                          
 07-27-08 14:52  KHAksnes       Note Added: 0010044                          
+07-27-08 14:52  KHAksnes       File Added: bugreport                        
+07-27-08 14:53  KHAksnes       Note Added: 0010054                          
 ======================================================================
