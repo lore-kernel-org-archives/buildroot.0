@@ -1,108 +1,20 @@
-From: bugs at busybox.net <bugs@busybox.net>
-Date: Mon, 28 Jul 2008 02:10:37 -0700
-Subject: [Buildroot] [buildroot 0003974]: [PATCH] new package: LiTE (toolkit
-	engine)
-Message-ID: <d1e86e6b2348fc8bfd4e3010d19b9fc3@bugs.uclibc.org>
+From: Pier Paolo Glave <glave@inwind.it>
+Date: Mon, 28 Jul 2008 12:00:18 +0200
+Subject: [Buildroot] freetype include files installation
+Message-ID: <K4PNSI$B03ECF4679398500773418F4762DE9D1@libero.it>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+Hi all,
 
-A NOTE has been added to this issue. 
-====================================================================== 
-http://busybox.net/bugs/view.php?id=3974 
-====================================================================== 
-Reported By:                zonque
-Assigned To:                buildroot
-====================================================================== 
-Project:                    buildroot
-Issue ID:                   3974
-Category:                   New Features
-Reproducibility:            always
-Severity:                   minor
-Priority:                   normal
-Status:                     assigned
-====================================================================== 
-Date Submitted:             07-07-2008 04:29 PDT
-Last Modified:              07-28-2008 02:10 PDT
-====================================================================== 
-Summary:                    [PATCH] new package: LiTE (toolkit engine)
-Description: 
-this patch adds LiTE (DirectFB-based toolkit engine) to the list of
-supported packages. Applies to latest svn here.
-====================================================================== 
+I've tried building freetype in my environment (mipsel-linux), and I've seen that the latest freetype.mk installs all the header files and the ".a" library onto the target rootfs.
+Is there a reason for that?
+(Or maybe I'm wrong, since my buildroot tree is not up to date?)
 
----------------------------------------------------------------------- 
- daniellaird - 07-08-08 06:11  
----------------------------------------------------------------------- 
-I have updated the patch (It all works fine) but without the examples not
-much to show.  For now the patch just disables the tests and copies all
-supporting pngs/fonts etc into $ROOTFS. 
+I've tried the revision 20986 of freetype.mk, and it's better for my needs.
 
----------------------------------------------------------------------- 
- zonque - 07-24-08 04:09  
----------------------------------------------------------------------- 
-can this go upstream, please?
-
-Daniel 
-
----------------------------------------------------------------------- 
- bernhardf - 07-24-08 05:17  
----------------------------------------------------------------------- 
-this package should use package/Makefile.autotools.in
-
-See various other packages for examples on how this should look like.
-Please redo it and attach an updated patch. TIA 
-
----------------------------------------------------------------------- 
- daniellaird - 07-24-08 05:52  
----------------------------------------------------------------------- 
-Please find updated patch (adding_lite.patch) 
-
----------------------------------------------------------------------- 
- bernhardf - 07-24-08 07:27  
----------------------------------------------------------------------- 
-+$(LITE_HOOK_POST_INSTALL):
-+	mkdir -p $(ROOTFS)/usr/share/fonts/truetype/
-+	mkdir -p $(ROOTFS)/usr/share/LiTE/examples/
-+	cp -R $(LITE_DIR)/examples/*.png $(ROOTFS)/usr/share/LiTE/examples/
-+	cp -R $(LITE_DIR)/data/*.png $(ROOTFS)/usr/share/LiTE/
-+	cp -R $(LITE_DIR)/fonts/*.ttf $(ROOTFS)/usr/share/fonts/truetype/
-+	touch $@
-
-ROOTFS? You probably mean $(TARGET_DIR)
-It would be better if you would use $(INSTALL), e.g.:
-$(INSTALL) -d $(TARGET_DIR)/usr/share/LiTE/examples/
-$(INSTALL) -d $(TARGET_DIR)/usr/share/fonts/truetype
-$(INSTALL) -m0644 $(LITE_DIR)/data/*.png $(TARGET_DIR)/usr/share/LiTE/
-$(INSTALL) -m0644 $(LITE_DIR)/examples/*.png
-$(TARGET_DIR)/usr/share/LiTE/examples/
-$(INSTALL) -m0644 $(LITE_DIR)/fonts/*.ttf
-$(TARGET_DIR)/usr/share/fonts/truetype/
-
-other than that it looks somewhat reasonable 
-
----------------------------------------------------------------------- 
- daniellaird - 07-28-08 02:10  
----------------------------------------------------------------------- 
-Updated patch to not use $ROOTFS and use INSTALL.
-Cheers
-Daniel Laird 
-
-Issue History 
-Date Modified   Username       Field                    Change               
-====================================================================== 
-07-07-08 04:29  zonque         New Issue                                    
-07-07-08 04:29  zonque         Status                   new => assigned     
-07-07-08 04:29  zonque         Assigned To               => buildroot       
-07-07-08 04:29  zonque         File Added: lite.diff                        
-07-08-08 06:11  daniellaird    Note Added: 0009084                          
-07-24-08 04:09  zonque         Note Added: 0009934                          
-07-24-08 05:17  bernhardf      Note Added: 0009944                          
-07-24-08 05:51  daniellaird    File Added: adding_lite.patch                    
-07-24-08 05:52  daniellaird    Note Added: 0009954                          
-07-24-08 07:27  bernhardf      Note Added: 0009964                          
-07-28-08 02:10  daniellaird    Note Added: 0010114                          
-======================================================================
+Thanks
+Pier
