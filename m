@@ -1,5 +1,5 @@
 From: Hans-Christian Egtvedt <hans-christian.egtvedt@atmel.com>
-Date: Mon, 28 Jul 2008 10:35:24 +0200
+Date: Mon, 28 Jul 2008 10:42:37 +0200
 Subject: [Buildroot] Makefile.autotools.in does not
 	work	wellwith	projects
 In-Reply-To: <20080727013317.GA1706@cloud.net.au>
@@ -7,7 +7,7 @@ References: <1216910589.29392.18.camel@localhost>
 	<20080725001242.GB25141@cloud.net.au>
 	<80DE307AE1CF4656A7072295EA2408F8@aeglos>
 	<20080727013317.GA1706@cloud.net.au>
-Message-ID: <1217234124.7955.6.camel@localhost>
+Message-ID: <1217234557.7955.8.camel@localhost>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -18,7 +18,6 @@ On Sun, 2008-07-27 at 11:33 +1000, Hamish Moffatt wrote:
 > On Sat, Jul 26, 2008 at 08:53:43AM +0200, Ulf Samuelsson wrote:
 > > Subject: Re: [Buildroot] Makefile.autotools.in does not work wellwith  
 > > projects
-> >
 > >
 > >> On Thu, Jul 24, 2008 at 04:43:09PM +0200, Hans-Christian Egtvedt wrote:
 > >>> The Makefile.autotools.in uses a rule which touches a
@@ -39,12 +38,8 @@ On Sun, 2008-07-27 at 11:33 +1000, Hamish Moffatt wrote:
 > instead.
 > 
 
-Yes, something in the order of a must defined variable pointing to
-$(TARGET_DIR)/$(FOO_TARGET_INSTALLED_FILE) ?
-
-I tried jugling the Makefile magic, but I was not able to generate a
-nice dotfile in the $(PROJECT_BUILD_DIR). See the patch below, 0.02 ? to
-anybody who can spot what I do wrong.
+And two minutes later I have a RFC for this solution, see attached
+patch.
 
 -- 
 With kind regards,
@@ -53,6 +48,6 @@ Hans-Christian Egtvedt, Applications Engineer
 A non-text attachment was scrubbed...
 Name: makefile-autotools-in.patch
 Type: text/x-patch
-Size: 1889 bytes
+Size: 1493 bytes
 Desc: not available
-Url : http://busybox.net/lists/buildroot/attachments/20080728/9659faa4/attachment.bin 
+Url : http://busybox.net/lists/buildroot/attachments/20080728/5703bd59/attachment.bin 
