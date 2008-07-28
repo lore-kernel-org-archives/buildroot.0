@@ -1,53 +1,33 @@
-From: Hans-Christian Egtvedt <hans-christian.egtvedt@atmel.com>
-Date: Mon, 28 Jul 2008 10:42:37 +0200
-Subject: [Buildroot] Makefile.autotools.in does not
-	work	wellwith	projects
-In-Reply-To: <20080727013317.GA1706@cloud.net.au>
-References: <1216910589.29392.18.camel@localhost>
-	<20080725001242.GB25141@cloud.net.au>
-	<80DE307AE1CF4656A7072295EA2408F8@aeglos>
-	<20080727013317.GA1706@cloud.net.au>
-Message-ID: <1217234557.7955.8.camel@localhost>
+From: Hinko Kocevar <hinko.kocevar@cetrtapot.si>
+Date: Mon, 28 Jul 2008 10:42:57 +0200
+Subject: [Buildroot] Bash failing
+In-Reply-To: <8bf7d05b0807260046q35afd439kf3d0a8b950dc5344@mail.gmail.com>
+References: <8bf7d05b0807260046q35afd439kf3d0a8b950dc5344@mail.gmail.com>
+Message-ID: <488D8691.6070904@cetrtapot.si>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Sun, 2008-07-27 at 11:33 +1000, Hamish Moffatt wrote:
-> On Sat, Jul 26, 2008 at 08:53:43AM +0200, Ulf Samuelsson wrote:
-> > Subject: Re: [Buildroot] Makefile.autotools.in does not work wellwith  
-> > projects
-> >
-> >> On Thu, Jul 24, 2008 at 04:43:09PM +0200, Hans-Christian Egtvedt wrote:
-> >>> The Makefile.autotools.in uses a rule which touches a
-> >>> stamp_target_installed file, this does not work well with projects.
-> >>>
-> >>> The Makefile should depend on a file on the target root file system,
-> >>> file not there => install to target again.
-> >>
-> >> Indeed - install stamps are pure evil. They don't work with multiple
-> >> projects and they mean you can't "rm -rf
-> >> project_build_$(ARCH)/$(PROJECT)/root".
-> >
-> > I do not think that you want to have install stamps in the root file system
-> > because they will end up in the target (unless they are ignored when
-> > the rootfs is created).
+Jonathan and Caroline Moore wrote:
+> Anyone able to help me out with these bash complaints please.
 > 
-> I don't think you should use stamps at all - test for a target file
-> instead.
+> Jonathan (buildroot 20080725)
 > 
+> In file included from display.c:49:
+> tcap.h:35:23: error: termcap.h: No such file or directory
 
-And two minutes later I have a RFC for this solution, see attached
-patch.
+This would suggest that termcap lib was a) not built prior to bash or b) the termcap.h is not present in staging folders.
+
+HTH,
+Hinko
 
 -- 
-With kind regards,
-Hans-Christian Egtvedt, Applications Engineer
--------------- next part --------------
-A non-text attachment was scrubbed...
-Name: makefile-autotools-in.patch
-Type: text/x-patch
-Size: 1493 bytes
-Desc: not available
-Url : http://busybox.net/lists/buildroot/attachments/20080728/5703bd59/attachment.bin 
+?ETRTA POT, d.o.o., Kranj
+Planina 3
+4000 Kranj
+Slovenia, Europe
+Tel. +386 (0) 4 280 66 03
+E-mail: hinko.kocevar at cetrtapot.si
+Http: www.cetrtapot.si
