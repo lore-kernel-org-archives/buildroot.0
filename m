@@ -1,93 +1,54 @@
-From: Matuschka, Sebastian <Sebastian.Matuschka@gcd-solutions.de>
-Date: Wed, 30 Jul 2008 09:22:41 +0200
-Subject: [Buildroot] When wchar is enabled then gcc can't be built with c++
-	cross-compiler support
-Message-ID: <49ED01FC03EE524BB7BB258E8F93BFF326540C@bfl-exchange-1.BFL.local>
+From: Hinko Kocevar <hinko.kocevar@cetrtapot.si>
+Date: Wed, 30 Jul 2008 10:20:02 +0200
+Subject: [Buildroot] GIT or SVN
+In-Reply-To: <87tzfo8cta.fsf@macbook.be.48ers.dk>
+References: <485A3396.80701@cetrtapot.si>
+	<87iqw5dyyb.fsf@macbook.be.48ers.dk>	<20080620083646.GB12682@mx.loc>
+	<485B6CF6.7040901@cetrtapot.si>
+	<87tzfo8cta.fsf@macbook.be.48ers.dk>
+Message-ID: <48902432.2010903@cetrtapot.si>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi,
+Peter Korsgaard wrote:
+>>>>>> "Hinko" == Hinko Kocevar <hinko.kocevar@cetrtapot.si> writes:
+> 
+> Hi,
+> 
+>  Hinko> I've been looking for recent gcc for the cris arch as I was
+>  Hinko> seeing gcc internal errors when compiling kernel or openssl
+>  Hinko> source with gcc 4.2.3 or 4.2.4.  With gcc 4.3.1 gcc internal
+>  Hinko> errors went away, so I'm really glad I found the GIT tree!
+> 
+> Notice that 4.3.1 also has issues (on i686 atleast):
+> 
+> http://kerneltrap.org/Linux/Compiler_Oops
+> 
 
-I get a lot of errors when I try to compile the gcc with c++
-cross-compiler support and wchar enabled in the uClibc.
-I attached a file wich shows more errormessages, the main buildroot
-.config file and the uclibc .config file.
-I made a make clean and then a new make, but that doesn't help.
-I hope someone knows how to fix this or has some ideas, because I really
-need c++ cross-compiler support.
-If you need more infos please answer what is needed.
+To somehow close the thread about the 4.3.1 gcc and cris architecture. There
+are some nice people at Axis that made some effort in order to fix the
+internal compiler error (Thank you!!). The bug report exists in bugzilla 
+http://gcc.gnu.org/bugzilla/show_bug.cgi?id=35492.
 
-Here are the last few lines with error messages:
-bits/locale_facets.tcc:2700: error: template argument 3 is invalid
-/atmel/buildrootWork/toolchain_build_avr32/gcc-4.2.2-final/avr32-linux-u
-clibc/libstdc++-v3/include/bits/locale_facets.tcc:2700: error:
-template-id 'has_facet<<expression error> >' for 'bool
-std::has_facet(const std::locale&)' does not match any template
-declaration In file included from
-/atmel/buildrootWork/toolchain_build_avr32/gcc-4.2.2-final/avr32-linux-u
-clibc/libstdc++-v3/include/fstream:805,
-                 from
-/atmel/buildrootWork/toolchain_build_avr32/gcc-4.2.2-avr32-2.1.5/libstdc
-++-v3/include/precompiled/stdc++.h:60:
-/atmel/buildrootWork/toolchain_build_avr32/gcc-4.2.2-final/avr32-linux-u
-clibc/libstdc++-v3/include/fstream: In instantiation of
-'std::basic_filebuf<char, std::char_traits<char> >':
-/atmel/buildrootWork/toolchain_build_avr32/gcc-4.2.2-final/avr32-linux-u
-clibc/libstdc++-v3/include/bits/fstream.tcc:893:   instantiated from
-here
-/atmel/buildrootWork/toolchain_build_avr32/gcc-4.2.2-final/avr32-linux-u
-clibc/libstdc++-v3/include/fstream:82: error: no type named 'state_type'
-in 'struct std::char_traits<char>'
-/atmel/buildrootWork/toolchain_build_avr32/gcc-4.2.2-final/avr32-linux-u
-clibc/libstdc++-v3/include/fstream:83: error: no type named 'state_type'
-in 'struct std::char_traits<char>'
-/atmel/buildrootWork/toolchain_build_avr32/gcc-4.2.2-final/avr32-linux-u
-clibc/libstdc++-v3/include/fstream:103: error: no type named
-'state_type' in 'struct std::char_traits<char>'
-/atmel/buildrootWork/toolchain_build_avr32/gcc-4.2.2-final/avr32-linux-u
-clibc/libstdc++-v3/include/fstream:108: error: no type named
-'state_type' in 'struct std::char_traits<char>'
-/atmel/buildrootWork/toolchain_build_avr32/gcc-4.2.2-final/avr32-linux-u
-clibc/libstdc++-v3/include/fstream:112: error: no type named
-'state_type' in 'struct std::char_traits<char>'
-/atmel/buildrootWork/toolchain_build_avr32/gcc-4.2.2-final/avr32-linux-u
-clibc/libstdc++-v3/include/fstream:160: error: no type named
-'state_type' in 'struct std::char_traits<char>'
-/atmel/buildrootWork/toolchain_build_avr32/gcc-4.2.2-final/avr32-linux-u
-clibc/libstdc++-v3/include/bits/fstream.tcc:736: error: no type named
-'state_type' in 'struct std::char_traits<char>'
-make[5]: *** [avr32-linux-uclibc/bits/stdc++.h.gch/O0g.gch] Fehler 1
-make[5]: Leaving directory
-`/atmel/buildrootWork/toolchain_build_avr32/gcc-4.2.2-final/avr32-linux-
-uclibc/libstdc++-v3/include'
-make[4]: *** [all-recursive] Fehler 1
-make[4]: Leaving directory
-`/atmel/buildrootWork/toolchain_build_avr32/gcc-4.2.2-final/avr32-linux-
-uclibc/libstdc++-v3'
-make[3]: *** [all] Fehler 2
-make[3]: Leaving directory
-`/atmel/buildrootWork/toolchain_build_avr32/gcc-4.2.2-final/avr32-linux-
-uclibc/libstdc++-v3'
-make[2]: *** [all-target-libstdc++-v3] Fehler 2
-make[2]: Leaving directory
-`/atmel/buildrootWork/toolchain_build_avr32/gcc-4.2.2-final'
-make[1]: *** [all] Fehler 2
-make[1]: Leaving directory
-`/atmel/buildrootWork/toolchain_build_avr32/gcc-4.2.2-final'
-make: ***
-[/atmel/buildrootWork/toolchain_build_avr32/gcc-4.2.2-final/.compiled]
-Fehler 2
+The bug report has a patch that was tested by me and it passed the 
+build of kernel and openssl that used to fail with internal compiler error
+ - I haven't noticed problems with other packages yet.
 
+Patch is at http://gcc.gnu.org/bugzilla/attachment.cgi?id=15874&action=view
 
-Best Regards
-Sebastian
--------------- next part --------------
-A non-text attachment was scrubbed...
-Name: configs.zip
-Type: application/x-zip-compressed
-Size: 15232 bytes
-Desc: configs.zip
-Url : http://busybox.net/lists/buildroot/attachments/20080730/41411e08/attachment-0001.bin 
+Could you please pull the patch for gcc 4.3.1 into the buildroot?
+
+Thank you,
+Hinko
+
+-- 
+?ETRTA POT, d.o.o., Kranj
+Planina 3
+4000 Kranj
+Slovenia, Europe
+Tel. +386 (0) 4 280 66 03
+E-mail: hinko.kocevar at cetrtapot.si
+Http: www.cetrtapot.si
