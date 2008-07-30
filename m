@@ -1,69 +1,44 @@
-From: Bernhard Fischer <rep.dot.nop@gmail.com>
-Date: Wed, 30 Jul 2008 12:19:52 +0200
-Subject: [Buildroot] Makefile.autotools.in does not work
-	wellwith	projects
-In-Reply-To: <1217235161.7955.12.camel@localhost>
-References: <1216910589.29392.18.camel@localhost>
-	<20080725001242.GB25141@cloud.net.au>
-	<80DE307AE1CF4656A7072295EA2408F8@aeglos>
-	<20080727013317.GA1706@cloud.net.au>
-	<1217234557.7955.8.camel@localhost>
-	<20080728085003.GA22274@cloud.net.au>
-	<1217235161.7955.12.camel@localhost>
-Message-ID: <20080730101952.GB27907@mx.loc>
+From: J. L. Sloan <jsloan@diag.com>
+Date: Wed, 30 Jul 2008 08:07:36 -0600
+Subject: [Buildroot] Buildroot for AT91RM9200-EK?
+In-Reply-To: <00e101c8f1d2$e4df1330$ae9d3990$@com>
+References: <00c101c8f1c9$ad9f5500$08ddff00$@com>
+	<00e101c8f1d2$e4df1330$ae9d3990$@com>
+Message-ID: <010101c8f24d$a36332d0$ea299870$@com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Mon, Jul 28, 2008 at 10:52:41AM +0200, Hans-Christian Egtvedt wrote:
->On Mon, 2008-07-28 at 18:50 +1000, Hamish Moffatt wrote:
->> On Mon, Jul 28, 2008 at 10:42:37AM +0200, Hans-Christian Egtvedt wrote:
->> > On Sun, 2008-07-27 at 11:33 +1000, Hamish Moffatt wrote:
->
-><snipp>
->
->> > And two minutes later I have a RFC for this solution, see attached
->> > patch.
->> [..]
->> >  # Install to target dir
->> > -$(BUILD_DIR)/%/.stamp_target_installed:
->> > +$(TARGET_DIR)/%/$($($(PKG)_NAME)_TARGET_INSTALLED_TOUCH_FILE):
->> >  	$(call MESSAGE,"Installing to target")
->> > -	$($(PKG)_MAKE_ENV) $(MAKE) $($(PKG)_INSTALL_TARGET_OPT) -C $(@D)/$($(PKG)_SUBDIR)
->> > +	$($(PKG)_MAKE_ENV) $(MAKE) $($(PKG)_INSTALL_TARGET_OPT) -C $($(PKG)_DIR)/$($(PKG)_SUBDIR)
->> [..]
->> >  # define sub-target stamps
->> > -$(2)_TARGET_INSTALL_TARGET =	$$($(2)_DIR)/.stamp_target_installed
->> > +$(2)_TARGET_INSTALL_TARGET =	$$(TARGET_DIR)/$$($(2)_TARGET_INSTALLED_TOUCH_FILE)
->> 
->> Will every package that uses Makefile.autotools.in need to be modified
->> to define the target installed file? If so, would you like to prepare a
->> large patch? :)
->
->Not really, since I do not have knowledge about each package and what
->they will need to depend on installed on target.
->
->> Alternatively, perhaps $(2)_TARGET_INSTALL_TARGET could
->> be fall back to the old definition if the new variable is not supplied,
->> using some ifeq logic.
->> 
->
->Yes, there should be a fallback when the variable is not supplied. The
->Makefile should print a warning message as well, demanding an update ;)
->
->I'll see what I can figure out.
+Fiddling with the init= and rdinit= parameters on the command line suggests
 
-Let me suggest to rename that variable to $(2)_TARGET_FILES
-and do
-$(2)_TARGET_INSTALL_TARGET = $(firstword $($(2)_TARGET_FILES))
+that the kernel isn't seeing the initramfs. So at least I've got something
+to
 
-foo_tmp=$(firstword $($(2)_TARGET_FILES))
-or somthing like $(if $(foo_tmp),$(foo_tmp),$($(2).old_stamp_file))
+debug. I can try passing an initrd instead, or a separate initramfs instead
+of the
 
-Reasoning:
-You really want to only have a few files in $(TARGET_DIR) as opposed to
-$(STAGING_DIR). Those $(2)_TARGET_FILES should ideally be the only files
-installed into the final image (think of a gazillion superfluous termcap
-entries or other unneeded files).
+one integrated in the kernel image.
+
+ 
+
+--
+
+ <http://www.diag.com/navigation/metadata/jsloan.html> John Sloan
+Consulting Technologist
+
+ <mailto:jsloan@diag.com> jsloan at diag.com           <http://www.diag.com/>
+Digital Aggregates Corporation
+
++1 303 489 5178 (Mobile)
+<http://www.google.com/maps?f=q&hl=en&geocode=&q=Arvada+Colorado&ie=UTF8&z=1
+1&iwloc=addr&om=1> Arvada Colorado 80001-0587 USA
+
++1 303 940 9064 (Office)  <http://www.diag.com/> www.diag.com
+
+ 
+
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: http://busybox.net/lists/buildroot/attachments/20080730/c95a2a19/attachment.htm 
