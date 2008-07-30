@@ -1,54 +1,69 @@
-From: Hinko Kocevar <hinko.kocevar@cetrtapot.si>
-Date: Wed, 30 Jul 2008 10:20:02 +0200
-Subject: [Buildroot] GIT or SVN
-In-Reply-To: <87tzfo8cta.fsf@macbook.be.48ers.dk>
-References: <485A3396.80701@cetrtapot.si>
-	<87iqw5dyyb.fsf@macbook.be.48ers.dk>	<20080620083646.GB12682@mx.loc>
-	<485B6CF6.7040901@cetrtapot.si>
-	<87tzfo8cta.fsf@macbook.be.48ers.dk>
-Message-ID: <48902432.2010903@cetrtapot.si>
+From: Bernhard Fischer <rep.dot.nop@gmail.com>
+Date: Wed, 30 Jul 2008 12:19:52 +0200
+Subject: [Buildroot] Makefile.autotools.in does not work
+	wellwith	projects
+In-Reply-To: <1217235161.7955.12.camel@localhost>
+References: <1216910589.29392.18.camel@localhost>
+	<20080725001242.GB25141@cloud.net.au>
+	<80DE307AE1CF4656A7072295EA2408F8@aeglos>
+	<20080727013317.GA1706@cloud.net.au>
+	<1217234557.7955.8.camel@localhost>
+	<20080728085003.GA22274@cloud.net.au>
+	<1217235161.7955.12.camel@localhost>
+Message-ID: <20080730101952.GB27907@mx.loc>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Peter Korsgaard wrote:
->>>>>> "Hinko" == Hinko Kocevar <hinko.kocevar@cetrtapot.si> writes:
-> 
-> Hi,
-> 
->  Hinko> I've been looking for recent gcc for the cris arch as I was
->  Hinko> seeing gcc internal errors when compiling kernel or openssl
->  Hinko> source with gcc 4.2.3 or 4.2.4.  With gcc 4.3.1 gcc internal
->  Hinko> errors went away, so I'm really glad I found the GIT tree!
-> 
-> Notice that 4.3.1 also has issues (on i686 atleast):
-> 
-> http://kerneltrap.org/Linux/Compiler_Oops
-> 
+On Mon, Jul 28, 2008 at 10:52:41AM +0200, Hans-Christian Egtvedt wrote:
+>On Mon, 2008-07-28 at 18:50 +1000, Hamish Moffatt wrote:
+>> On Mon, Jul 28, 2008 at 10:42:37AM +0200, Hans-Christian Egtvedt wrote:
+>> > On Sun, 2008-07-27 at 11:33 +1000, Hamish Moffatt wrote:
+>
+><snipp>
+>
+>> > And two minutes later I have a RFC for this solution, see attached
+>> > patch.
+>> [..]
+>> >  # Install to target dir
+>> > -$(BUILD_DIR)/%/.stamp_target_installed:
+>> > +$(TARGET_DIR)/%/$($($(PKG)_NAME)_TARGET_INSTALLED_TOUCH_FILE):
+>> >  	$(call MESSAGE,"Installing to target")
+>> > -	$($(PKG)_MAKE_ENV) $(MAKE) $($(PKG)_INSTALL_TARGET_OPT) -C $(@D)/$($(PKG)_SUBDIR)
+>> > +	$($(PKG)_MAKE_ENV) $(MAKE) $($(PKG)_INSTALL_TARGET_OPT) -C $($(PKG)_DIR)/$($(PKG)_SUBDIR)
+>> [..]
+>> >  # define sub-target stamps
+>> > -$(2)_TARGET_INSTALL_TARGET =	$$($(2)_DIR)/.stamp_target_installed
+>> > +$(2)_TARGET_INSTALL_TARGET =	$$(TARGET_DIR)/$$($(2)_TARGET_INSTALLED_TOUCH_FILE)
+>> 
+>> Will every package that uses Makefile.autotools.in need to be modified
+>> to define the target installed file? If so, would you like to prepare a
+>> large patch? :)
+>
+>Not really, since I do not have knowledge about each package and what
+>they will need to depend on installed on target.
+>
+>> Alternatively, perhaps $(2)_TARGET_INSTALL_TARGET could
+>> be fall back to the old definition if the new variable is not supplied,
+>> using some ifeq logic.
+>> 
+>
+>Yes, there should be a fallback when the variable is not supplied. The
+>Makefile should print a warning message as well, demanding an update ;)
+>
+>I'll see what I can figure out.
 
-To somehow close the thread about the 4.3.1 gcc and cris architecture. There
-are some nice people at Axis that made some effort in order to fix the
-internal compiler error (Thank you!!). The bug report exists in bugzilla 
-http://gcc.gnu.org/bugzilla/show_bug.cgi?id=35492.
+Let me suggest to rename that variable to $(2)_TARGET_FILES
+and do
+$(2)_TARGET_INSTALL_TARGET = $(firstword $($(2)_TARGET_FILES))
 
-The bug report has a patch that was tested by me and it passed the 
-build of kernel and openssl that used to fail with internal compiler error
- - I haven't noticed problems with other packages yet.
+foo_tmp=$(firstword $($(2)_TARGET_FILES))
+or somthing like $(if $(foo_tmp),$(foo_tmp),$($(2).old_stamp_file))
 
-Patch is at http://gcc.gnu.org/bugzilla/attachment.cgi?id=15874&action=view
-
-Could you please pull the patch for gcc 4.3.1 into the buildroot?
-
-Thank you,
-Hinko
-
--- 
-?ETRTA POT, d.o.o., Kranj
-Planina 3
-4000 Kranj
-Slovenia, Europe
-Tel. +386 (0) 4 280 66 03
-E-mail: hinko.kocevar at cetrtapot.si
-Http: www.cetrtapot.si
+Reasoning:
+You really want to only have a few files in $(TARGET_DIR) as opposed to
+$(STAGING_DIR). Those $(2)_TARGET_FILES should ideally be the only files
+installed into the final image (think of a gazillion superfluous termcap
+entries or other unneeded files).
