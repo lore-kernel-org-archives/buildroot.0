@@ -1,46 +1,82 @@
-From: J. L. Sloan <jsloan@diag.com>
-Date: Wed, 30 Jul 2008 16:39:56 -0600
-Subject: [Buildroot] Buildroot for AT91RM9200-EK?
-In-Reply-To: <001101c8f281$a79baec0$f6d30c40$@com>
-References: <00c101c8f1c9$ad9f5500$08ddff00$@com>	<00e101c8f1d2$e4df1330$ae9d3990$@com>
-	<001101c8f281$a79baec0$f6d30c40$@com>
-Message-ID: <002a01c8f295$35a7fdf0$a0f7f9d0$@com>
+From: Brian Beattie <beattie@beattie-home.net>
+Date: Wed, 30 Jul 2008 15:43:57 -0700
+Subject: [Buildroot] buildroot failing when jffs2 output selected
+Message-ID: <1217457837.6526.6.camel@kokopelli>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Thanks for everyone for putting up with my nattering. I've got a shell
-prompt on my AT91RM9200-EK board now.
+I'm trying the build a jffs2 filesystem but buildroot fails when trying
+the build the host utilities with a missing include file "acl.h" (see
+error log) after faking that file and two others the link fails due to
+missing -llzo2.
 
-The last problem was a severe case of irony: I had hooked up my BDI3000 to
-debug an issue very early in the boot
+Any hints?
 
-process, fixed that, then left it hooked up not realizing I had it
-configured via VECTOR CATCH to catch various traps
+--------------------------------------
+make[1]: Entering directory
+`/work/users/beattie/buildroot/toolchain_build_arm/m
+td_orig'
+mkdir -p /work/users/beattie/buildroot/toolchain_build_arm/mtd_orig
+gcc -I./include -O2 -Wall -g -c
+-o /work/users/beattie/buildroot/toolchain_build
+_arm/mtd_orig/mkfs.jffs2.o mkfs.jffs2.c -g
+-Wp,-MD,/work/users/beattie/buildroot
+/toolchain_build_arm/mtd_orig/.mkfs.jffs2.c.dep
+mkfs.jffs2.c:69:21: error: sys/acl.h: No such file or directory
+mkfs.jffs2.c: In function ?formalize_posix_acl?:
+mkfs.jffs2.c:1084: error: ?ACL_USER_OBJ? undeclared (first use in this
+function)
+mkfs.jffs2.c:1084: error: (Each undeclared identifier is reported only
+once
+mkfs.jffs2.c:1084: error: for each function it appears in.)
+mkfs.jffs2.c:1085: error: ?ACL_GROUP_OBJ? undeclared (first use in this
+function
+)
+mkfs.jffs2.c:1086: error: ?ACL_MASK? undeclared (first use in this
+function)
+mkfs.jffs2.c:1087: error: ?ACL_OTHER? undeclared (first use in this
+function)
+mkfs.jffs2.c:1093: error: ?ACL_USER? undeclared (first use in this
+function)
+mkfs.jffs2.c:1094: error: ?ACL_GROUP? undeclared (first use in this
+function)
+mkfs.jffs2.c: In function ?process_buffer?:
+mkfs.jffs2.c:1507: warning: format ?%08x? expects type ?unsigned int?,
+but argum
+ent 2 has type ?long int?
+mkfs.jffs2.c:1531: warning: format ?%08x? expects type ?unsigned int?,
+but argum
+ent 3 has type ?long int?
+mkfs.jffs2.c:1548: warning: format ?%08x? expects type ?unsigned int?,
+but argum
+ent 3 has type ?long int?
+mkfs.jffs2.c:1557: warning: format ?%08x? expects type ?unsigned int?,
+but argum
+ent 3 has type ?long int?
+mkfs.jffs2.c:1567: warning: format ?%08x? expects type ?unsigned int?,
+but argum
+ent 3 has type ?long int?
+mkfs.jffs2.c:1581: warning: format ?%08x? expects type ?unsigned int?,
+but argum
+ent 3 has type ?long int?
+make[1]: ***
+[/work/users/beattie/buildroot/toolchain_build_arm/mtd_orig/mkfs.jf
+fs2.o] Error 1
+make[1]: Leaving directory
+`/work/users/beattie/buildroot/toolchain_build_arm/mt
+d_orig'
+make: ***
+[/work/users/beattie/buildroot/toolchain_build_arm/mtd_orig/mkfs.jffs2
+] Error 2
 
-intended for the kernel, like data aborts that cause the kernel to map
-pages. Oops. Thanks again.
 
- 
+-- 
+A: Because it messes up the order in which people normally read text.
+Q: Why is top-posting a bad thing?
 
---
-
- <http://www.diag.com/navigation/metadata/jsloan.html> John Sloan
-Consulting Technologist
-
- <mailto:jsloan@diag.com> jsloan at diag.com           <http://www.diag.com/>
-Digital Aggregates Corporation
-
-+1 303 489 5178 (Mobile)
-<http://www.google.com/maps?f=q&hl=en&geocode=&q=Arvada+Colorado&ie=UTF8&z=1
-1&iwloc=addr&om=1> Arvada Colorado 80001-0587 USA
-
-+1 303 940 9064 (Office)  <http://www.diag.com/> www.diag.com
-
- 
-
--------------- next part --------------
-An HTML attachment was scrubbed...
-URL: http://busybox.net/lists/buildroot/attachments/20080730/cda2972f/attachment-0001.htm 
+Brian Beattie   LFS12947 | "Honor isn't about making the right choices.
+beattie at beattie-home.net | It's about dealing with the consequences."
+www.beattie-home.net     | -- Midori Koto
