@@ -1,39 +1,43 @@
-From: Tiago Maluta <maluta_tiago@yahoo.com.br>
-Date: Sun, 31 Aug 2008 20:39:30 -0700 (PDT)
-Subject: [Buildroot] Compiling Error (Trying libraries: crypt m)
-Message-ID: <262689.92512.qm@web50705.mail.re2.yahoo.com>
+From: Hinko Kocevar <hinko.kocevar@cetrtapot.si>
+Date: Fri, 01 Aug 2008 09:24:31 +0200
+Subject: [Buildroot] my /etc/init.d/rcS won't run
+In-Reply-To: <oVJvhsJM.1217543786.9718410.beattie@localhost>
+References: <oVJvhsJM.1217543786.9718410.beattie@localhost>
+Message-ID: <4892BA2F.60606@cetrtapot.si>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi,
+Brian Beattie wrote:
+> I'm building a generic powerpc buildroot and it's all working as far as
+> I can tell, except the /etc/init.d/rcS will not run.  The line
+> "null::sysinit:/etc/init.d/rcS" is in /etc/inittab (I'm using
+> target/generic/target_skeleton/...).  Everything else in inittab seems
+> to be working and when I take the entries that mount /proc and all out
+> /proc does not get mounted.  When I run /etc/rcS it works fine.  The
+> permissions look OK.  I even put "echo $0>>/tag" as the first
+> executable line in the file, but rcS just does not want to run.
+> 
+> I'm baffeled, has anybody else run into this?
 
-I'm trying use buildroot to cross compiling to avr32. It seems that some crypt lib is missing, but I didn't figure out how to fix that. 
+Is the /etc on the same partition as /bin, /sbin?
 
-I attached my .config and output after 'make'
+Can you post the error displayed? Also you might want to use this shabang
 
+#!/bin/sh -x
+
+in the /etc/init.d/rcS to see some debugging..
+
+HTH,
+Hinko
 
 -- 
-Tiago M. <maluta 'at' unifei.edu.br> 
-Federal University of Itajub? - Computer Engineering 
-
-
-
-      Novos endere?os, o Yahoo! que voc? conhece. Crie um email novo com a sua cara @ymail.com ou @rocketmail.com.
-http://br.new.mail.yahoo.com/addresses
--------------- next part --------------
-A non-text attachment was scrubbed...
-Name: .config
-Type: application/octet-stream
-Size: 17709 bytes
-Desc: not available
-Url : http://lists.busybox.net/pipermail/buildroot/attachments/20080831/0181f9ed/attachment-0004.obj 
--------------- next part --------------
-A non-text attachment was scrubbed...
-Name: make.out
-Type: application/octet-stream
-Size: 5105 bytes
-Desc: not available
-Url : http://lists.busybox.net/pipermail/buildroot/attachments/20080831/0181f9ed/attachment-0005.obj 
+?ETRTA POT, d.o.o., Kranj
+Planina 3
+4000 Kranj
+Slovenia, Europe
+Tel. +386 (0) 4 280 66 03
+E-mail: hinko.kocevar at cetrtapot.si
+Http: www.cetrtapot.si
