@@ -1,43 +1,47 @@
-From: Hinko Kocevar <hinko.kocevar@cetrtapot.si>
-Date: Fri, 01 Aug 2008 09:24:31 +0200
-Subject: [Buildroot] my /etc/init.d/rcS won't run
-In-Reply-To: <oVJvhsJM.1217543786.9718410.beattie@localhost>
-References: <oVJvhsJM.1217543786.9718410.beattie@localhost>
-Message-ID: <4892BA2F.60606@cetrtapot.si>
+From: Matuschka, Sebastian <Sebastian.Matuschka@gcd-solutions.de>
+Date: Fri, 1 Aug 2008 13:43:28 +0200
+Subject: [Buildroot] Error when compiling Mesa-7.0.3
+Message-ID: <49ED01FC03EE524BB7BB258E8F93BFF3265494@bfl-exchange-1.BFL.local>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Brian Beattie wrote:
-> I'm building a generic powerpc buildroot and it's all working as far as
-> I can tell, except the /etc/init.d/rcS will not run.  The line
-> "null::sysinit:/etc/init.d/rcS" is in /etc/inittab (I'm using
-> target/generic/target_skeleton/...).  Everything else in inittab seems
-> to be working and when I take the entries that mount /proc and all out
-> /proc does not get mounted.  When I run /etc/rcS it works fine.  The
-> permissions look OK.  I even put "echo $0>>/tag" as the first
-> executable line in the file, but rcS just does not want to run.
-> 
-> I'm baffeled, has anybody else run into this?
+I got the following error when trying to let buildroot compile
+Mesa-7.0.3:
 
-Is the /etc on the same partition as /bin, /sbin?
 
-Can you post the error displayed? Also you might want to use this shabang
+make[4]: Entering directory
+`/atmel/buildrootWork/build_avr32/Mesa-7.0.3/src/glx/x11'
+Makefile:91: depend: Datei oder Verzeichnis nicht gefunden
+touch depend
+makedepend -I -fdepend -I. -I../../../include
+-I../../../include/GL/internal -I../../../src/mesa/main
+-I../../../src/mesa/glapi `pkg-config --cflags libdrm`  glcontextmodes.c
+clientattrib.c compsize.c eval.c glxcmds.c glxext.c glxextensions.c
+indirect.c indirect_init.c indirect_size.c indirect_window_pos.c
+indirect_transpose_matrix.c indirect_vertex_array.c
+indirect_vertex_program.c pixel.c pixelstore.c render2.c renderpix.c
+single2.c singlepix.c vertarr.c xfont.c glx_pbuffer.c glx_query.c
+glx_texture_compression.c dri_glx.c XF86dri.c \
+                ../../../src/mesa/main/dispatch.c
+../../../src/mesa/glapi/glapi.c ../../../src/mesa/glapi/glthread.c
+../../../src/mesa/x86/glapi_x86.S
+/bin/sh:
+/atmel/buildrootWork/build_avr32/staging_dir/usr/bin/makedepend: cannot
+execute binary file
+make[4]: *** [depend] Fehler 126
+make[4]: Leaving directory
+`/atmel/buildrootWork/build_avr32/Mesa-7.0.3/src/glx/x11'
+make[3]: *** [subdirs] Fehler 1
+make[3]: Leaving directory
+`/atmel/buildrootWork/build_avr32/Mesa-7.0.3/src'
+make[2]: *** [default] Fehler 1
+make[2]: Leaving directory `/atmel/buildrootWork/build_avr32/Mesa-7.0.3'
+make[1]: *** [linux-dri-x86] Fehler 2
+make[1]: Leaving directory `/atmel/buildrootWork/build_avr32/Mesa-7.0.3'
+make: *** [/atmel/buildrootWork/build_avr32/Mesa-7.0.3/.built] Fehler 2
 
-#!/bin/sh -x
 
-in the /etc/init.d/rcS to see some debugging..
-
-HTH,
-Hinko
-
--- 
-?ETRTA POT, d.o.o., Kranj
-Planina 3
-4000 Kranj
-Slovenia, Europe
-Tel. +386 (0) 4 280 66 03
-E-mail: hinko.kocevar at cetrtapot.si
-Http: www.cetrtapot.si
+makedepend exists and is a binary. What does Mesa expects here?
