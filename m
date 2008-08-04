@@ -1,21 +1,74 @@
-From: Richard <mr.resistor@gmail.com>
-Date: Mon, 4 Aug 2008 11:28:14 +0100
-Subject: [Buildroot] problem with kernel 2.6.26 and VFP
-Message-ID: <ea6597e70808040328s6a5d41eeyd26295990b9a04f3@mail.gmail.com>
+From: Richard Hardy <richardh@oakleafconsultancy.com>
+Date: Mon, 4 Aug 2008 11:29:38 +0100
+Subject: [Buildroot] C double type problem - at91sam9263
+Message-ID: <223E6519BDCAC74695BEE9D163F8E6592306E3@oakleaf10.oakleafconsultancy.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-hey
+Hi Everyone,
 
-i am having no luck compiling a 2.6.26 kernel with GCC 4.2.4, keep
-failing with the following error:
+I am quite new to using buildroot and embedded linux systems in general.
+However, I have managed to use buildroot to get a (nearly) working
+system up and running for an at91sam9263 board. (kernel v 2.6.22, uClibc
+v 0.9.29)
 
-/home/dikkie/Documents/dns323/uclibc/buildroot/build_arm/staging_dir/usr/bin/arm-linux-uclibc-ld:
-ERROR: arch/arm/vfp/entry.o uses VFP instructions, whereas
-arch/arm/vfp/vfp.o does not
+ 
 
-i have left the busybox and uclibc settings as default, and the
-processor is an ARM926T. does anyone know how i can resolve this?
+I have one annoying problem though. One of the packages I am compiling
+from source uses C's "double" type, and this does not seem to be
+behaving as I need it to.
+
+ 
+
+I have created a simple example program:
+
+ 
+
+...
+
+int main (int argc, char *argv[])
+
+{
+
+double test;
+
+test = 1;
+
+fprintf(stderr, "Test double = %f.\n", test);
+
+}
+
+ 
+
+And the output that I see is:
+
+ 
+
+Test double = 1000000.
+
+ 
+
+ 
+
+I guess that this is due to one of the options, somewhere, in either the
+Linux Kernel, uClibc or something else, but I don't know how to find out
+which one. 
+
+ 
+
+Can anyone point me in the right direction of where to look?
+
+ 
+
+Thanks for your help,
+
+ 
+
+Richard.
+
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: http://busybox.net/lists/buildroot/attachments/20080804/8b13e62e/attachment.htm 
