@@ -1,31 +1,28 @@
-From: sjhill at realitydiluted.com <sjhill@realitydiluted.com>
-Date: Mon, 4 Aug 2008 08:31:10 -0500
-Subject: [Buildroot] Why linux26-modules before linux26
-In-Reply-To: <20080804130121.GB27672@mx.loc>
-References: <1217651676.6280.11.camel@kokopelli>
-	<20080804130121.GB27672@mx.loc>
-Message-ID: <20080804133110.GA2348@real.realitydiluted.com>
+From: Richard Hardy <richardh@oakleafconsultancy.com>
+Date: Mon, 4 Aug 2008 14:52:54 +0100
+Subject: [Buildroot] C double type problem - at91sam9263
+Message-ID: <223E6519BDCAC74695BEE9D163F8E6592306E7@oakleaf10.oakleafconsultancy.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-> On Fri, Aug 01, 2008 at 09:34:36PM -0700, Brian Beattie wrote:
-> >I have a kernel that does not want to compile the modules before the
-> >rest of the kernel.  I've worked around that, but it does raise a
-> >question that maybe somebody knows the answer to, why are the makefiles
-> >set  to compile the kernel-modules so early compared to the rest of the
-> >kernel?
-> 
-> This was added by Steven, IIRC. I don't see a reason why the modules are
-> built before the kernel.
-> 
-> Steven, can you please explain?
->
-Originally when I added that, the modules were getting built and
-installed after the root file system image had been created. Thus,
-no modules in the final image. If someone has a better method of
-doing this, please feel free to submit a patch.
 
--Steve
+> Do you get any warnings when compiling your test program? What happens
+if
+> you: test = 1.0;
+> 
+> I'm thinking maybe it's a casting problem.
+> 
+> John
+> 
+
+If I do:
+test = 1.0;
+fprintf(stderr, "Test double = %f.\n", test);
+
+I get exactly the same results. i.e. it displays:
+1000000
+
+Richard.
