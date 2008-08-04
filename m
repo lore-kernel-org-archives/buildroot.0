@@ -1,7 +1,7 @@
 From: jacmet at uclibc.org <jacmet@uclibc.org>
-Date: Mon,  4 Aug 2008 12:07:36 -0700 (PDT)
-Subject: [Buildroot] svn commit: trunk/buildroot/package
-Message-ID: <20080804190736.573463C89F@busybox.net>
+Date: Mon,  4 Aug 2008 12:07:39 -0700 (PDT)
+Subject: [Buildroot] svn commit: trunk/buildroot/package/strace
+Message-ID: <20080804190739.406FD3C88D@busybox.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -9,57 +9,28 @@ Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
 Author: jacmet
-Date: 2008-08-04 12:07:36 -0700 (Mon, 04 Aug 2008)
-New Revision: 23023
+Date: 2008-08-04 12:07:38 -0700 (Mon, 04 Aug 2008)
+New Revision: 23024
 
 Log:
-package: more BR2_PACKAGE_BUSYBOX_HIDE_OTHERS annotations
+strace: also remove from target-utils on clean
 
 Modified:
-   trunk/buildroot/package/Config.in
+   trunk/buildroot/package/strace/strace.mk
 
 
 Changeset:
-Modified: trunk/buildroot/package/Config.in
+Modified: trunk/buildroot/package/strace/strace.mk
 ===================================================================
---- trunk/buildroot/package/Config.in	2008-08-04 19:07:33 UTC (rev 23022)
-+++ trunk/buildroot/package/Config.in	2008-08-04 19:07:36 UTC (rev 23023)
-@@ -4,13 +4,11 @@
+--- trunk/buildroot/package/strace/strace.mk	2008-08-04 19:07:36 UTC (rev 23023)
++++ trunk/buildroot/package/strace/strace.mk	2008-08-04 19:07:38 UTC (rev 23024)
+@@ -64,7 +64,8 @@
+ strace: uclibc $(TARGET_DIR)/usr/bin/strace
  
- comment "The minimum needed to build a uClibc development system"
+ strace-clean:
+-	rm -f $(TARGET_DIR)/usr/bin/strace
++	rm -f $(TARGET_DIR)/usr/bin/strace \
++	      $(STAGING_DIR)/$(REAL_GNU_TARGET_NAME)/target_utils/strace
+ 	-$(MAKE) -C $(STRACE_DIR) clean
  
-+if !BR2_PACKAGE_BUSYBOX_HIDE_OTHERS
- source "package/bash/Config.in"
- source "package/bzip2/Config.in"
--if !BR2_PACKAGE_BUSYBOX_HIDE_OTHERS
- source "package/coreutils/Config.in"
--endif
- source "package/diffutils/Config.in"
--if !BR2_PACKAGE_BUSYBOX_HIDE_OTHERS
- source "package/findutils/Config.in"
- endif
- source "package/flex/Config.in"
-@@ -106,8 +104,6 @@
- endif
- if !BR2_PACKAGE_BUSYBOX_HIDE_OTHERS
- source "package/psmisc/Config.in"
--endif
--if !BR2_PACKAGE_BUSYBOX_HIDE_OTHERS
- source "package/rpm/Config.in"
- endif
- source "package/screen/Config.in"
-@@ -118,14 +114,8 @@
- source "package/sysklogd/Config.in"
- # busybox has init and the runit stuff
- source "package/sysvinit/Config.in"
--endif
--if !BR2_PACKAGE_BUSYBOX_HIDE_OTHERS
- source "package/tinylogin/Config.in"
--endif
--if !BR2_PACKAGE_BUSYBOX_HIDE_OTHERS
- source "package/util-linux/Config.in"
--endif
--if !BR2_PACKAGE_BUSYBOX_HIDE_OTHERS
- source "package/which/Config.in"
- endif
- 
+ strace-dirclean:
