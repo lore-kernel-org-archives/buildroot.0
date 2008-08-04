@@ -1,7 +1,7 @@
 From: jacmet at uclibc.org <jacmet@uclibc.org>
-Date: Mon,  4 Aug 2008 12:04:06 -0700 (PDT)
-Subject: [Buildroot] svn commit: trunk/buildroot/package/sed
-Message-ID: <20080804190406.9EFA23C844@busybox.net>
+Date: Mon,  4 Aug 2008 12:06:11 -0700 (PDT)
+Subject: [Buildroot] svn commit: trunk/buildroot/package/strace
+Message-ID: <20080804190611.265323C846@busybox.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -9,29 +9,29 @@ Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
 Author: jacmet
-Date: 2008-08-04 12:04:05 -0700 (Mon, 04 Aug 2008)
-New Revision: 23013
+Date: 2008-08-04 12:06:10 -0700 (Mon, 04 Aug 2008)
+New Revision: 23014
 
 Log:
-sed: fix CPPFLAGS typo
+strace: fix LARGEFILE typo
 
 Patch by Claus Klein.
 
 Modified:
-   trunk/buildroot/package/sed/sed.mk
+   trunk/buildroot/package/strace/strace.mk
 
 
 Changeset:
-Modified: trunk/buildroot/package/sed/sed.mk
+Modified: trunk/buildroot/package/strace/strace.mk
 ===================================================================
---- trunk/buildroot/package/sed/sed.mk	2008-08-04 14:40:58 UTC (rev 23012)
-+++ trunk/buildroot/package/sed/sed.mk	2008-08-04 19:04:05 UTC (rev 23013)
-@@ -113,7 +113,7 @@
- 	(cd $(SED_DIR2); rm -rf config.cache; \
+--- trunk/buildroot/package/strace/strace.mk	2008-08-04 19:04:05 UTC (rev 23013)
++++ trunk/buildroot/package/strace/strace.mk	2008-08-04 19:06:10 UTC (rev 23014)
+@@ -28,7 +28,7 @@
+ 
+ $(STRACE_DIR)/.configured: $(STRACE_DIR)/.unpacked
+ 	(cd $(STRACE_DIR); rm -rf config.cache; \
+-		$(if $(BR_LARGEFILE),ac_cv_type_stat64=yes,ac_cv_type_stat64=no) \
++		$(if $(BR2_LARGEFILE),ac_cv_type_stat64=yes,ac_cv_type_stat64=no) \
  		$(TARGET_CONFIGURE_OPTS) \
  		$(TARGET_CONFIGURE_ARGS) \
--		CPPFLAGS="$(SED_CFLAGS)" \
-+		CPPFLAGS="$(SED_CPPFLAGS)" \
- 		./configure \
- 		--target=$(GNU_TARGET_NAME) \
- 		--host=$(GNU_TARGET_NAME) \
+ 		CFLAGS="$(TARGET_CFLAGS) $(BR2_STRACE_CFLAGS)" \
