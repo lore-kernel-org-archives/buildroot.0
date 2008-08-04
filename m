@@ -1,7 +1,7 @@
 From: jacmet at uclibc.org <jacmet@uclibc.org>
-Date: Mon,  4 Aug 2008 12:06:11 -0700 (PDT)
-Subject: [Buildroot] svn commit: trunk/buildroot/package/strace
-Message-ID: <20080804190611.265323C846@busybox.net>
+Date: Mon,  4 Aug 2008 12:06:19 -0700 (PDT)
+Subject: [Buildroot] svn commit: trunk/buildroot/package/busybox
+Message-ID: <20080804190619.5F2293C851@busybox.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -9,29 +9,30 @@ Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
 Author: jacmet
-Date: 2008-08-04 12:06:10 -0700 (Mon, 04 Aug 2008)
-New Revision: 23014
+Date: 2008-08-04 12:06:19 -0700 (Mon, 04 Aug 2008)
+New Revision: 23015
 
 Log:
-strace: fix LARGEFILE typo
+busybox: default HIDE_OTHERS to y for all versions
 
-Patch by Claus Klein.
+There's no particular reason to only enable BR2_PACKAGE_BUSYBOX_HIDE_OTHERS
+by default for the snapshot version.
 
 Modified:
-   trunk/buildroot/package/strace/strace.mk
+   trunk/buildroot/package/busybox/Config.in
 
 
 Changeset:
-Modified: trunk/buildroot/package/strace/strace.mk
+Modified: trunk/buildroot/package/busybox/Config.in
 ===================================================================
---- trunk/buildroot/package/strace/strace.mk	2008-08-04 19:04:05 UTC (rev 23013)
-+++ trunk/buildroot/package/strace/strace.mk	2008-08-04 19:06:10 UTC (rev 23014)
-@@ -28,7 +28,7 @@
- 
- $(STRACE_DIR)/.configured: $(STRACE_DIR)/.unpacked
- 	(cd $(STRACE_DIR); rm -rf config.cache; \
--		$(if $(BR_LARGEFILE),ac_cv_type_stat64=yes,ac_cv_type_stat64=no) \
-+		$(if $(BR2_LARGEFILE),ac_cv_type_stat64=yes,ac_cv_type_stat64=no) \
- 		$(TARGET_CONFIGURE_OPTS) \
- 		$(TARGET_CONFIGURE_ARGS) \
- 		CFLAGS="$(TARGET_CFLAGS) $(BR2_STRACE_CFLAGS)" \
+--- trunk/buildroot/package/busybox/Config.in	2008-08-04 19:06:10 UTC (rev 23014)
++++ trunk/buildroot/package/busybox/Config.in	2008-08-04 19:06:19 UTC (rev 23015)
+@@ -91,7 +91,7 @@
+ config BR2_PACKAGE_BUSYBOX_HIDE_OTHERS
+ 	bool "Hide applications that are provided by busybox"
+ 	depends on BR2_PACKAGE_BUSYBOX
+-	default y if BR2_PACKAGE_BUSYBOX_SNAPSHOT
++	default y
+ 	help
+ 	  Do not show packages in menuconfig that are potentially provided
+ 	  by busybox.
