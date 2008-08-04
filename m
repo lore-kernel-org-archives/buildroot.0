@@ -1,7 +1,7 @@
 From: jacmet at uclibc.org <jacmet@uclibc.org>
-Date: Mon,  4 Aug 2008 12:07:41 -0700 (PDT)
-Subject: [Buildroot] svn commit: trunk/buildroot/package/strace
-Message-ID: <20080804190741.DDA103C8AA@busybox.net>
+Date: Mon,  4 Aug 2008 12:07:45 -0700 (PDT)
+Subject: [Buildroot] svn commit: trunk/buildroot/package/ethtool
+Message-ID: <20080804190745.CE8A63C8AE@busybox.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -9,108 +9,77 @@ Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
 Author: jacmet
-Date: 2008-08-04 12:07:41 -0700 (Mon, 04 Aug 2008)
-New Revision: 23025
+Date: 2008-08-04 12:07:45 -0700 (Mon, 04 Aug 2008)
+New Revision: 23026
 
 Log:
-strace: convert to makefile.autotools.in format
+ethtool: convert to Makefile.autotools.in format
 
 Modified:
-   trunk/buildroot/package/strace/strace.mk
+   trunk/buildroot/package/ethtool/ethtool.mk
 
 
 Changeset:
-Modified: trunk/buildroot/package/strace/strace.mk
+Modified: trunk/buildroot/package/ethtool/ethtool.mk
 ===================================================================
---- trunk/buildroot/package/strace/strace.mk	2008-08-04 19:07:38 UTC (rev 23024)
-+++ trunk/buildroot/package/strace/strace.mk	2008-08-04 19:07:41 UTC (rev 23025)
-@@ -6,77 +6,24 @@
- STRACE_VERSION:=4.5.15
- STRACE_SOURCE:=strace-$(STRACE_VERSION).tar.bz2
- STRACE_SITE:=http://$(BR2_SOURCEFORGE_MIRROR).dl.sourceforge.net/sourceforge/strace
--STRACE_CAT:=$(BZCAT)
--STRACE_DIR:=$(BUILD_DIR)/strace-$(STRACE_VERSION)
-+STRACE_AUTORECONF:=no
-+STRACE_INSTALL_STAGING:=NO
-+STRACE_INSTALL_TARGET:=YES
+--- trunk/buildroot/package/ethtool/ethtool.mk	2008-08-04 19:07:41 UTC (rev 23025)
++++ trunk/buildroot/package/ethtool/ethtool.mk	2008-08-04 19:07:45 UTC (rev 23026)
+@@ -7,51 +7,12 @@
+ ETHTOOL_VERSION:=6
+ ETHTOOL_SOURCE:=ethtool-$(ETHTOOL_VERSION).tar.gz
+ ETHTOOL_SITE:=http://$(BR2_SOURCEFORGE_MIRROR).dl.sourceforge.net/sourceforge/gkernel/
+-ETHTOOL_DIR:=$(BUILD_DIR)/ethtool-$(ETHTOOL_VERSION)
+-ETHTOOL_CAT:=$(ZCAT)
+-ETHTOOL_BINARY=usr/sbin/ethtool
++ETHTOOL_AUTORECONF:=no
++ETHTOOL_INSTALL_STAGING:=NO
++ETHTOOL_INSTALL_TARGET:=YES
++ETHTOOL_INSTALL_TARGET_OPT:=DESTDIR=$(TARGET_DIR) STRIPPROG='$(STRIPCMD)' install-strip
++ETHTOOL_UNINSTALL_TARGET_OPT:=DESTDIR=$(TARGET_DIR) uninstall
  
--$(DL_DIR)/$(STRACE_SOURCE):
--	 $(WGET) -P $(DL_DIR) $(STRACE_SITE)/$(STRACE_SOURCE)
-+STRACE_DEPENDENCIES:=uclibc
+-$(DL_DIR)/$(ETHTOOL_SOURCE):
+-	$(WGET) -P $(DL_DIR) $(ETHTOOL_SITE)/$(ETHTOOL_SOURCE)
++ETHTOOL_DEPENDENCIES:=uclibc
  
--strace-source: $(DL_DIR)/$(STRACE_SOURCE)
-+STRACE_CONF_ENV:= ac_cv_header_linux_if_packet_h=yes \
-+		  ac_cv_header_linux_netlink_h=yes \
-+	          $(if $(BR2_LARGEFILE),ac_cv_type_stat64=yes,ac_cv_type_stat64=no)
- 
--$(STRACE_DIR)/.unpacked: $(DL_DIR)/$(STRACE_SOURCE)
--	$(STRACE_CAT) $(DL_DIR)/$(STRACE_SOURCE) | tar -C $(BUILD_DIR) $(TAR_OPTIONS) -
--	toolchain/patch-kernel.sh $(STRACE_DIR) package/strace \
--		strace\*.patch strace\*.patch.$(ARCH)
--	$(CONFIG_UPDATE) $(STRACE_DIR)
--	touch $(STRACE_DIR)/.unpacked
-+$(eval $(call AUTOTARGETS,package,strace))
- 
--$(STRACE_DIR)/.configured: $(STRACE_DIR)/.unpacked
--	(cd $(STRACE_DIR); rm -rf config.cache; \
--		$(if $(BR2_LARGEFILE),ac_cv_type_stat64=yes,ac_cv_type_stat64=no) \
+-$(ETHTOOL_DIR)/.unpacked: $(DL_DIR)/$(ETHTOOL_SOURCE)
+-	$(ETHTOOL_CAT) $(DL_DIR)/$(ETHTOOL_SOURCE) | tar -C $(BUILD_DIR) $(TAR_OPTIONS) -
+-	touch $@
+-
+-$(ETHTOOL_DIR)/.configured: $(ETHTOOL_DIR)/.unpacked
+-	(cd $(ETHTOOL_DIR); rm -rf config.cache; \
 -		$(TARGET_CONFIGURE_OPTS) \
 -		$(TARGET_CONFIGURE_ARGS) \
--		CFLAGS="$(TARGET_CFLAGS)" \
--		ac_cv_header_linux_if_packet_h=yes \
--		ac_cv_header_linux_netlink_h=yes \
 -		./configure \
--		--target=$(REAL_GNU_TARGET_NAME) \
--		--host=$(REAL_GNU_TARGET_NAME) \
+-		--target=$(GNU_TARGET_NAME) \
+-		--host=$(GNU_TARGET_NAME) \
 -		--build=$(GNU_HOST_NAME) \
 -		--prefix=/usr \
--		--exec-prefix=/usr \
--		--bindir=/usr/bin \
--		--sbindir=/usr/sbin \
--		--libdir=/lib \
--		--libexecdir=/usr/lib \
 -		--sysconfdir=/etc \
--		--datadir=/usr/share \
--		--localstatedir=/var \
--		--mandir=/usr/man \
--		--infodir=/usr/info \
--		$(DISABLE_NLS) \
--		$(DISABLE_LARGEFILE) \
 -	)
--	touch $(STRACE_DIR)/.configured
+-	touch $@
 -
--$(STRACE_DIR)/strace: $(STRACE_DIR)/.configured
--	$(MAKE) CC=$(TARGET_CC) -C $(STRACE_DIR)
+-$(ETHTOOL_DIR)/ethtool: $(ETHTOOL_DIR)/.configured
+-	$(MAKE) CC=$(TARGET_CC) -C $(ETHTOOL_DIR)
 -
--$(TARGET_DIR)/usr/bin/strace: $(STRACE_DIR)/strace
--	install -c $(STRACE_DIR)/strace $(TARGET_DIR)/usr/bin/strace
--	$(STRIPCMD) $(TARGET_DIR)/usr/bin/strace > /dev/null 2>&1
-+$(STRACE_HOOK_POST_INSTALL): $(STRACE_TARGET_INSTALL_TARGET)
-+	$(STRIPCMD) $(STRIP_STRIP_ALL) $(TARGET_DIR)/usr/bin/strace
-+	rm -f $(TARGET_DIR)/usr/bin/strace-graph
- ifeq ($(strip $(BR2_CROSS_TOOLCHAIN_TARGET_UTILS)),y)
- 	mkdir -p $(STAGING_DIR)/$(REAL_GNU_TARGET_NAME)/target_utils
- 	install -c $(TARGET_DIR)/usr/bin/strace \
- 		$(STAGING_DIR)/$(REAL_GNU_TARGET_NAME)/target_utils/strace
- endif
+-$(TARGET_DIR)/$(ETHTOOL_BINARY): $(ETHTOOL_DIR)/ethtool
+-	cp $(ETHTOOL_DIR)/ethtool $@
+-	$(STRIPCMD) $@
 -
--strace: uclibc $(TARGET_DIR)/usr/bin/strace
+-ethtool: uclibc $(TARGET_DIR)/$(ETHTOOL_BINARY)
 -
--strace-clean:
--	rm -f $(TARGET_DIR)/usr/bin/strace \
--	      $(STAGING_DIR)/$(REAL_GNU_TARGET_NAME)/target_utils/strace
--	-$(MAKE) -C $(STRACE_DIR) clean
+-ethtool-source: $(DL_DIR)/$(ETHTOOL_SOURCE)
 -
--strace-dirclean:
--	rm -rf $(STRACE_DIR)
+-ethtool-clean:
+-	-$(MAKE) -C $(ETHTOOL_DIR) clean
 -
--
+-ethtool-dirclean:
+-	rm -rf $(ETHTOOL_DIR)
 -#############################################################
 -#
 -# Toplevel Makefile options
 -#
 -#############################################################
--ifeq ($(strip $(BR2_PACKAGE_STRACE)),y)
--TARGETS+=strace
+-ifeq ($(strip $(BR2_PACKAGE_ETHTOOL)),y)
+-TARGETS+=ethtool
 -endif
-+	touch $@
++$(eval $(call AUTOTARGETS,package,ethtool))
