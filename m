@@ -1,8 +1,8 @@
 From: jacmet at uclibc.org <jacmet@uclibc.org>
-Date: Mon,  4 Aug 2008 12:07:06 -0700 (PDT)
-Subject: [Buildroot] svn commit: trunk/buildroot: package
-	package/ace_of_penguins package etc...
-Message-ID: <20080804190706.CC3F83C85C@busybox.net>
+Date: Mon,  4 Aug 2008 12:07:19 -0700 (PDT)
+Subject: [Buildroot] svn commit: trunk/buildroot/package: lzma mkdosfs newt
+	slang strace vsftpd z etc...
+Message-ID: <20080804190719.08F223C85E@busybox.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -10,142 +10,206 @@ Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
 Author: jacmet
-Date: 2008-08-04 12:07:05 -0700 (Mon, 04 Aug 2008)
-New Revision: 23016
+Date: 2008-08-04 12:07:18 -0700 (Mon, 04 Aug 2008)
+New Revision: 23017
 
 Log:
-buildroot: remove trailing spaces
-
-for i in `find -name 'Config*' -o -name 'Makefile*' -o -name '*.mk'`;
-do
-	sed -i 's/ \+$//' $i;
-done
+package: global largefile CFLAGS handling
 
 Modified:
-   trunk/buildroot/Config.in
-   trunk/buildroot/Makefile
-   trunk/buildroot/package/Config.in
-   trunk/buildroot/package/Makefile.autotools.in
-   trunk/buildroot/package/ace_of_penguins/ace_of_penguins.mk
-   trunk/buildroot/package/atk/atk.mk
-   trunk/buildroot/package/autoconf/Config.in
-   trunk/buildroot/package/automake/Config.in
-   trunk/buildroot/package/berkeleydb/Config.in
-   trunk/buildroot/package/bind/Config.in
-   trunk/buildroot/package/bison/Config.in
-   trunk/buildroot/package/blackbox/blackbox.mk
-   trunk/buildroot/package/boa/Config.in
-   trunk/buildroot/package/bootutils/Config.in
-   trunk/buildroot/package/bzip2/Config.in
-   trunk/buildroot/package/cairo/cairo.mk
-   trunk/buildroot/package/coreutils/Config.in
-   trunk/buildroot/package/distcc/Config.in
-   trunk/buildroot/package/dnsmasq/Config.in
-   trunk/buildroot/package/docker/docker.mk
-   trunk/buildroot/package/editors/ed/Config.in
-   trunk/buildroot/package/editors/nano/Config.in
-   trunk/buildroot/package/festival/speech-tools/speech-tools.mk
-   trunk/buildroot/package/file/Config.in
-   trunk/buildroot/package/findutils/Config.in
-   trunk/buildroot/package/flex/Config.in
-   trunk/buildroot/package/fltk/fltk.mk
-   trunk/buildroot/package/gawk/Config.in
-   trunk/buildroot/package/gnuchess/gnuchess.mk
-   trunk/buildroot/package/gzip/Config.in
-   trunk/buildroot/package/hostap/Config.in
-   trunk/buildroot/package/icu/icu.mk
-   trunk/buildroot/package/ipkg/ipkg.mk
-   trunk/buildroot/package/iproute2/Config.in
-   trunk/buildroot/package/ipsec-tools/Config.in
-   trunk/buildroot/package/irda-utils/Config.in
-   trunk/buildroot/package/java/classpath/classpath.mk
-   trunk/buildroot/package/java/concierge/concierge.mk
-   trunk/buildroot/package/java/jamvm/Config.in
-   trunk/buildroot/package/java/jamvm/jamvm.mk
-   trunk/buildroot/package/kismet/Config.in
-   trunk/buildroot/package/libcgi/Config.in
-   trunk/buildroot/package/libdaemon/Config.in
-   trunk/buildroot/package/libeXosip2/Config.in
-   trunk/buildroot/package/libeXosip2/libeXosip2.mk
-   trunk/buildroot/package/libfloat/Config.in
-   trunk/buildroot/package/libgcrypt/Config.in
-   trunk/buildroot/package/libglib2/libglib2.mk
-   trunk/buildroot/package/libgtk2/libgtk2.mk
-   trunk/buildroot/package/libiconv/libiconv.mk
-   trunk/buildroot/package/libosip2/Config.in
-   trunk/buildroot/package/libsndfile/Config.in
-   trunk/buildroot/package/libtool/Config.in
-   trunk/buildroot/package/lighttpd/Config.in
-   trunk/buildroot/package/lighttpd/lighttpd.mk
-   trunk/buildroot/package/lsof/Config.in
-   trunk/buildroot/package/lxdoom/lxdoom-wad.mk
-   trunk/buildroot/package/lxdoom/lxdoom.mk
-   trunk/buildroot/package/magiccube4d/magiccube4d.mk
-   trunk/buildroot/package/make/Config.in
-   trunk/buildroot/package/microperl/Config.in
-   trunk/buildroot/package/microwin/Config.in
-   trunk/buildroot/package/module-init-tools/Config.in
-   trunk/buildroot/package/modutils/Config.in
-   trunk/buildroot/package/ncurses/Config.in
-   trunk/buildroot/package/neon/Config.in
-   trunk/buildroot/package/netcat/Config.in
-   trunk/buildroot/package/netsnmp/Config.in
-   trunk/buildroot/package/ng-spice-rework/ng-spice-rework.mk
-   trunk/buildroot/package/ntfs-3g/ntfs-3g.mk
-   trunk/buildroot/package/olsr/Config.in
-   trunk/buildroot/package/openmotif/openmotif.mk
-   trunk/buildroot/package/openssh/Config.in
-   trunk/buildroot/package/openssl/Config.in
-   trunk/buildroot/package/openvpn/Config.in
-   trunk/buildroot/package/oprofile/Config.in
-   trunk/buildroot/package/pango/pango.mk
-   trunk/buildroot/package/patch/Config.in
-   trunk/buildroot/package/php/Config.in
-   trunk/buildroot/package/php/php.mk
-   trunk/buildroot/package/popt/popt.mk
-   trunk/buildroot/package/python/Config.in
-   trunk/buildroot/package/qtopia4/Config.in
-   trunk/buildroot/package/rubix/rubix.mk
-   trunk/buildroot/package/screen/Config.in
-   trunk/buildroot/package/speex/Config.in
-   trunk/buildroot/package/startup-notification/startup-notification.mk
-   trunk/buildroot/package/strace/Config.in
-   trunk/buildroot/package/synergy/Config.in
-   trunk/buildroot/package/synergy/synergy.mk
-   trunk/buildroot/package/tar/Config.in
-   trunk/buildroot/package/tinyhttpd/Config.in
-   trunk/buildroot/package/tinyhttpd/tinyhttpd.mk
-   trunk/buildroot/package/tinylogin/Config.in
-   trunk/buildroot/package/torsmo/torsmo.mk
-   trunk/buildroot/package/udhcp/Config.in
-   trunk/buildroot/package/vice/vice.mk
-   trunk/buildroot/package/vlc/vlc.mk
-   trunk/buildroot/package/vtun/Config.in
-   trunk/buildroot/package/webkit/Config.in
-   trunk/buildroot/package/webkit/webkit.mk
-   trunk/buildroot/package/x11r7/pthread-stubs/Config.in
-   trunk/buildroot/package/x11r7/xkeyboard-config/xkeyboard-config.mk
-   trunk/buildroot/package/xpdf/xpdf.mk
-   trunk/buildroot/package/zlib/Config.in
-   trunk/buildroot/target/Config.in.arch
-   trunk/buildroot/target/cpio/Config.in
-   trunk/buildroot/target/device/Atmel/Config.in.mirrors
-   trunk/buildroot/target/device/Atmel/arch-avr32/Config.in.linux.patches
-   trunk/buildroot/target/device/Sharp/Config.in
-   trunk/buildroot/target/initramfs/Config.in
-   trunk/buildroot/target/linux/Config.in.advanced
-   trunk/buildroot/target/linux/Makefile.in
-   trunk/buildroot/target/linux/Makefile.in.advanced
-   trunk/buildroot/target/x86/grub/Config.in
-   trunk/buildroot/target/x86/grub2/Config.in
-   trunk/buildroot/toolchain/Config.in
-   trunk/buildroot/toolchain/uClibc/Config.in
-   trunk/buildroot/toolchain/uClibc/uclibc.mk
+   trunk/buildroot/package/Makefile.in
+   trunk/buildroot/package/lzma/lzma.mk
+   trunk/buildroot/package/mkdosfs/mkdosfs.mk
+   trunk/buildroot/package/newt/newt.mk
+   trunk/buildroot/package/slang/slang.mk
+   trunk/buildroot/package/strace/strace.mk
+   trunk/buildroot/package/vsftpd/vsftpd.mk
+   trunk/buildroot/package/zlib/zlib.mk
 
 
 Changeset:
+Modified: trunk/buildroot/package/Makefile.in
+===================================================================
+--- trunk/buildroot/package/Makefile.in	2008-08-04 19:07:05 UTC (rev 23016)
++++ trunk/buildroot/package/Makefile.in	2008-08-04 19:07:18 UTC (rev 23017)
+@@ -80,6 +80,10 @@
+ TARGET_CFLAGS+=-fno-pic -mno-abicalls
+ endif
+ 
++ifeq ($(BR2_LARGEFILE),y)
++TARGET_CFLAGS+=-D_LARGEFILE_SOURCE -D_LARGEFILE64_SOURCE -D_FILE_OFFSET_BITS=64
++endif
++
+ TARGET_CXXFLAGS=$(TARGET_CFLAGS)
+ 
+ # else it's an external toolchain
 
-Sorry, the patch is too large to include (2176 lines).
-Please use ViewCVS to see it!
+Modified: trunk/buildroot/package/lzma/lzma.mk
+===================================================================
+--- trunk/buildroot/package/lzma/lzma.mk	2008-08-04 19:07:05 UTC (rev 23016)
++++ trunk/buildroot/package/lzma/lzma.mk	2008-08-04 19:07:18 UTC (rev 23017)
+@@ -9,10 +9,6 @@
+ LZMA_SITE:=http://tukaani.org/lzma/
+ LZMA_HOST_DIR:=$(TOOL_BUILD_DIR)/lzma-$(LZMA_VERSION)
+ LZMA_TARGET_DIR:=$(BUILD_DIR)/lzma-$(LZMA_VERSION)
+-LZMA_CFLAGS:=$(TARGET_CFLAGS)
+-ifeq ($(BR2_LARGEFILE),y)
+-LZMA_CFLAGS+=-D_LARGEFILE_SOURCE -D_LARGEFILE64_SOURCE -D_FILE_OFFSET_BITS=64
+-endif
+ LZMA_TARGET_BINARY:=bin/lzma
+ 
+ # lzma binary for use on the host
+@@ -92,7 +88,7 @@
+ 	(cd $(LZMA_TARGET_DIR); rm -f config.cache;\
+ 		$(TARGET_CONFIGURE_OPTS) \
+ 		$(TARGET_CONFIGURE_ARGS) \
+-		CFLAGS="$(TARGET_CFLAGS) $(LZMA_CFLAGS)" \
++		CFLAGS="$(TARGET_CFLAGS)" \
+ 		ac_cv_func_malloc_0_nonnull=yes \
+ 		./configure \
+ 		--target=$(GNU_TARGET_NAME) \
 
-http://uclibc.org/cgi-bin/viewcvs.cgi?view=rev&root=svn&rev=23016
+Modified: trunk/buildroot/package/mkdosfs/mkdosfs.mk
+===================================================================
+--- trunk/buildroot/package/mkdosfs/mkdosfs.mk	2008-08-04 19:07:05 UTC (rev 23016)
++++ trunk/buildroot/package/mkdosfs/mkdosfs.mk	2008-08-04 19:07:18 UTC (rev 23017)
+@@ -11,11 +11,6 @@
+ MKDOSFS_BINARY:=mkdosfs/mkdosfs
+ MKDOSFS_TARGET_BINARY:=sbin/mkdosfs
+ 
+-MKDOSFS_CFLAGS=$(TARGET_CFLAGS)
+-ifeq ($(BR2_LARGEFILE),y)
+-MKDOSFS_CFLAGS+= -D_LARGEFILE_SOURCE -D_LARGEFILE64_SOURCE -D_FILE_OFFSET_BITS=64
+-endif
+-
+ $(DL_DIR)/$(MKDOSFS_SOURCE):
+ 	 $(WGET) -P $(DL_DIR) $(MKDOSFS_SITE)/$(MKDOSFS_SOURCE)
+ 
+@@ -26,7 +21,7 @@
+ 	touch $(MKDOSFS_DIR)/.unpacked
+ 
+ $(MKDOSFS_DIR)/$(MKDOSFS_BINARY): $(MKDOSFS_DIR)/.unpacked
+-	$(MAKE) CFLAGS="$(MKDOSFS_CFLAGS)" CC="$(TARGET_CC)" -C $(MKDOSFS_DIR)
++	$(MAKE) CFLAGS="$(TARGET_CFLAGS)" CC="$(TARGET_CC)" -C $(MKDOSFS_DIR)
+ 	$(STRIPCMD) $(MKDOSFS_DIR)/mkdosfs/mkdosfs
+ 	touch -c $(MKDOSFS_DIR)/mkdosfs/mkdosfs
+ 
+
+Modified: trunk/buildroot/package/newt/newt.mk
+===================================================================
+--- trunk/buildroot/package/newt/newt.mk	2008-08-04 19:07:05 UTC (rev 23016)
++++ trunk/buildroot/package/newt/newt.mk	2008-08-04 19:07:18 UTC (rev 23017)
+@@ -8,12 +8,7 @@
+ NEWT_SITE=http://www.uclibc.org/
+ NEWT_DIR=$(BUILD_DIR)/newt-0.51.0
+ NEWT_VERSION=0.51.0
+-ifeq ($(BR2_LARGEFILE),y)
+-NEWT_CFLAGS=-Os -g -D_LARGEFILE_SOURCE -D_LARGEFILE64_SOURCE -D_FILE_OFFSET_BITS=64
+-else
+-NEWT_CFLAGS=-Os -g
+-endif
+-NEWT_CFLAGS+=-fPIC
++NEWT_CFLAGS=-Os -g -fPIC
+ 
+ $(DL_DIR)/$(NEWT_SOURCE):
+ 	$(WGET) -P $(DL_DIR) $(NEWT_SITE)/$(NEWT_SOURCE)
+
+Modified: trunk/buildroot/package/slang/slang.mk
+===================================================================
+--- trunk/buildroot/package/slang/slang.mk	2008-08-04 19:07:05 UTC (rev 23016)
++++ trunk/buildroot/package/slang/slang.mk	2008-08-04 19:07:18 UTC (rev 23017)
+@@ -8,10 +8,6 @@
+ SLANG_CAT:=$(BZCAT)
+ SLANG_SITE:=http://www.uclibc.org/
+ SLANG_DIR=$(BUILD_DIR)/slang-$(SLANG_VERSION)-mini
+-ifeq ($(BR2_LARGEFILE),y)
+-SLANG_CFLAGS=-D_LARGEFILE_SOURCE -D_LARGEFILE64_SOURCE -D_FILE_OFFSET_BITS=64
+-endif
+-SLANG_CFLAGS+=-fPIC
+ 
+ $(DL_DIR)/$(SLANG_SOURCE):
+ 	$(WGET) -P $(DL_DIR) $(SLANG_SITE)/$(SLANG_SOURCE)
+@@ -20,7 +16,7 @@
+ 	$(SLANG_CAT) $(DL_DIR)/$(SLANG_SOURCE) | tar -C $(BUILD_DIR) $(TAR_OPTIONS) -
+ 
+ $(SLANG_DIR)/libslang.so: $(SLANG_DIR)
+-	$(MAKE1) CFLAGS="-Os -g $(SLANG_CFLAGS)" CC=$(TARGET_CC) -C $(SLANG_DIR)
++	$(MAKE1) CFLAGS="-Os -g -fPIC $(TARGET_CFLAGS)" CC=$(TARGET_CC) -C $(SLANG_DIR)
+ 
+ $(STAGING_DIR)/lib/libslang.so.1: $(SLANG_DIR)/libslang.so
+ 	cp -dpf $(SLANG_DIR)/libslang.a $(STAGING_DIR)/usr/lib
+
+Modified: trunk/buildroot/package/strace/strace.mk
+===================================================================
+--- trunk/buildroot/package/strace/strace.mk	2008-08-04 19:07:05 UTC (rev 23016)
++++ trunk/buildroot/package/strace/strace.mk	2008-08-04 19:07:18 UTC (rev 23017)
+@@ -9,11 +9,6 @@
+ STRACE_CAT:=$(BZCAT)
+ STRACE_DIR:=$(BUILD_DIR)/strace-$(STRACE_VERSION)
+ 
+-BR2_STRACE_CFLAGS:=
+-ifeq ($(BR2_LARGEFILE),)
+-BR2_STRACE_CFLAGS+=-U_LARGEFILE64_SOURCE -U__USE_LARGEFILE64 -U__USE_FILE_OFFSET64
+-endif
+-
+ $(DL_DIR)/$(STRACE_SOURCE):
+ 	 $(WGET) -P $(DL_DIR) $(STRACE_SITE)/$(STRACE_SOURCE)
+ 
+@@ -31,7 +26,7 @@
+ 		$(if $(BR2_LARGEFILE),ac_cv_type_stat64=yes,ac_cv_type_stat64=no) \
+ 		$(TARGET_CONFIGURE_OPTS) \
+ 		$(TARGET_CONFIGURE_ARGS) \
+-		CFLAGS="$(TARGET_CFLAGS) $(BR2_STRACE_CFLAGS)" \
++		CFLAGS="$(TARGET_CFLAGS)" \
+ 		ac_cv_header_linux_if_packet_h=yes \
+ 		ac_cv_header_linux_netlink_h=yes \
+ 		./configure \
+
+Modified: trunk/buildroot/package/vsftpd/vsftpd.mk
+===================================================================
+--- trunk/buildroot/package/vsftpd/vsftpd.mk	2008-08-04 19:07:05 UTC (rev 23016)
++++ trunk/buildroot/package/vsftpd/vsftpd.mk	2008-08-04 19:07:18 UTC (rev 23017)
+@@ -17,9 +17,6 @@
+ else
+ VSFTPD_LIBS:=-lcrypt
+ endif
+-ifeq ($(BR2_LARGEFILE),)
+-#BR2_VSFTPD_CFLAGS:=-U_LARGEFILE64_SOURCE -U_FILE_OFFSET_BITS
+-endif
+ 
+ $(DL_DIR)/$(VSFTPD_SOURCE):
+ 	 $(WGET) -P $(DL_DIR) $(VSFTPD_SITE)/$(VSFTPD_SOURCE)
+@@ -49,7 +46,7 @@
+ 
+ 
+ $(VSFTPD_DIR)/$(VSFTPD_BINARY): $(VSFTPF_PREREQ) $(VSFTPD_DIR)/.configured
+-	$(MAKE) CC=$(TARGET_CC) CFLAGS="$(TARGET_CFLAGS) $(BR2_VSFTPD_CFLAGS)" LIBS="$(VSFTPD_LIBS)" -C $(VSFTPD_DIR)
++	$(MAKE) CC=$(TARGET_CC) CFLAGS="$(TARGET_CFLAGS)" LIBS="$(VSFTPD_LIBS)" -C $(VSFTPD_DIR)
+ 
+ $(TARGET_DIR)/usr/sbin/$(VSFTPD_BINARY): $(VSFTPD_DIR)/$(VSFTPD_BINARY)
+ 	cp -dpf $< $@
+
+Modified: trunk/buildroot/package/zlib/zlib.mk
+===================================================================
+--- trunk/buildroot/package/zlib/zlib.mk	2008-08-04 19:07:05 UTC (rev 23016)
++++ trunk/buildroot/package/zlib/zlib.mk	2008-08-04 19:07:18 UTC (rev 23017)
+@@ -8,10 +8,6 @@
+ ZLIB_CAT:=$(BZCAT)
+ ZLIB_SITE:=http://$(BR2_SOURCEFORGE_MIRROR).dl.sourceforge.net/sourceforge/libpng
+ ZLIB_DIR:=$(BUILD_DIR)/zlib-$(ZLIB_VERSION)
+-ZLIB_CFLAGS:=-fPIC
+-ifeq ($(BR2_LARGEFILE),y)
+-ZLIB_CFLAGS+=-D_LARGEFILE_SOURCE -D_LARGEFILE64_SOURCE -D_FILE_OFFSET_BITS=64
+-endif
+ 
+ $(DL_DIR)/$(ZLIB_SOURCE):
+ 	$(WGET) -P $(DL_DIR) $(ZLIB_SITE)/$(ZLIB_SOURCE)
+@@ -26,7 +22,7 @@
+ 	(cd $(ZLIB_DIR); rm -rf config.cache; \
+ 		$(TARGET_CONFIGURE_ARGS) \
+ 		$(TARGET_CONFIGURE_OPTS) \
+-		CFLAGS="$(ZLIB_CFLAGS)" \
++		CFLAGS="$(TARGET_CFLAGS) -fPIC" \
+ 		./configure \
+ 		--shared \
+ 		--prefix=/usr \
