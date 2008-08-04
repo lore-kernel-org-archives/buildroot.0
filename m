@@ -1,7 +1,7 @@
 From: jacmet at uclibc.org <jacmet@uclibc.org>
-Date: Mon,  4 Aug 2008 12:07:49 -0700 (PDT)
-Subject: [Buildroot] svn commit: trunk/buildroot/package/ltrace
-Message-ID: <20080804190749.229FA3C8B1@busybox.net>
+Date: Mon,  4 Aug 2008 12:07:52 -0700 (PDT)
+Subject: [Buildroot] svn commit: trunk/buildroot/package
+Message-ID: <20080804190752.0A96D3C8BD@busybox.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -9,27 +9,61 @@ Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
 Author: jacmet
-Date: 2008-08-04 12:07:48 -0700 (Mon, 04 Aug 2008)
-New Revision: 23027
+Date: 2008-08-04 12:07:51 -0700 (Mon, 04 Aug 2008)
+New Revision: 23028
 
 Log:
-ltrace: expand help text
+package: add package managers sub menu
 
 Modified:
-   trunk/buildroot/package/ltrace/Config.in
+   trunk/buildroot/package/Config.in
 
 
 Changeset:
-Modified: trunk/buildroot/package/ltrace/Config.in
+Modified: trunk/buildroot/package/Config.in
 ===================================================================
---- trunk/buildroot/package/ltrace/Config.in	2008-08-04 19:07:45 UTC (rev 23026)
-+++ trunk/buildroot/package/ltrace/Config.in	2008-08-04 19:07:48 UTC (rev 23027)
-@@ -4,5 +4,8 @@
- 	select BR2_PACKAGE_LIBELF_HEADERS
- 	help
- 	  Debugging program which runs a specified command until it exits.
-+	  While the command is executing, ltrace intercepts and records
-+	  the dynamic library calls which are called by the executed
-+	  process and the signals received by that process.
+--- trunk/buildroot/package/Config.in	2008-08-04 19:07:48 UTC (rev 23027)
++++ trunk/buildroot/package/Config.in	2008-08-04 19:07:51 UTC (rev 23028)
+@@ -73,7 +73,6 @@
+ source "package/file/Config.in"
+ source "package/gamin/Config.in"
+ source "package/icu/Config.in"
+-source "package/ipkg/Config.in"
+ source "package/kexec/Config.in"
+ if !BR2_PACKAGE_BUSYBOX_HIDE_OTHERS
+ source "package/less/Config.in"
+@@ -98,13 +97,11 @@
+ endif
+ source "package/ng-spice-rework/Config.in"
+ source "package/popt/Config.in"
+-source "package/portage/Config.in"
+ if !BR2_PACKAGE_BUSYBOX_HIDE_OTHERS
+ source "package/procps/Config.in"
+ endif
+ if !BR2_PACKAGE_BUSYBOX_HIDE_OTHERS
+ source "package/psmisc/Config.in"
+-source "package/rpm/Config.in"
+ endif
+ source "package/screen/Config.in"
+ source "package/startup-notification/Config.in"
+@@ -436,6 +433,20 @@
+ source "package/zlib/Config.in"
+ endif
  
- 	  http://packages.debian.org/unstable/utils/ltrace.html
++menuconfig BR2_PACKAGEMGRS_SUPPORT
++	bool "Package managers"
++	default y
++	help
++	  Support for package managers like rpm, portage, ipkg, ..
++
++if BR2_PACKAGEMGRS_SUPPORT
++source "package/ipkg/Config.in"
++source "package/portage/Config.in"
++if !BR2_PACKAGE_BUSYBOX_HIDE_OTHERS
++source "package/rpm/Config.in"
++endif
++endif
++
+ menuconfig BR2_SCRIPTING_SUPPORT
+ 	bool "Interpreter languages / Scripting"
+ 	default y
