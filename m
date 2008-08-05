@@ -1,38 +1,50 @@
-From: Matuschka, Sebastian <Sebastian.Matuschka@gcd-solutions.de>
-Date: Tue, 5 Aug 2008 09:45:53 +0200
-Subject: [Buildroot] gdb debugger for atmel is not possible
-Message-ID: <49ED01FC03EE524BB7BB258E8F93BFF32654FC@bfl-exchange-1.BFL.local>
+From: Hinko Kocevar <hinko.kocevar@cetrtapot.si>
+Date: Tue, 05 Aug 2008 10:31:20 +0200
+Subject: [Buildroot] C double type problem - at91sam9263
+In-Reply-To: <408540dd0808041427x493ba179j78d111b5dcaa30e1@mail.gmail.com>
+References: <223E6519BDCAC74695BEE9D163F8E6592306E8@oakleaf10.oakleafconsultancy.com>	<48970F48.9020104@cetrtapot.si>
+	<408540dd0808041427x493ba179j78d111b5dcaa30e1@mail.gmail.com>
+Message-ID: <48980FD8.1060406@cetrtapot.si>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi,
+Matthew Dombroski wrote:
+> On Tue, Aug 5, 2008 at 2:16 AM, Hinko Kocevar
+> <hinko.kocevar@cetrtapot.si> wrote:
+>> Richard Hardy wrote:
+>>>> I see it too on cris architecture. I think it is uClibc related, at
+>>> least
+>>>> 0.9.29.
+>>>> I'll try to reproduce on x86..
+>>>> IMHO only printf is buggy, otherwise doubles and floats seem to have
+>>>> correct value.
+> 
+> I had this problem some time ago, as have others, and found the
+> solution to be disabling uClibc's locale support.
+> Not ideal, but at least you can display floats, dates, etc.
+> 
+> http://www.busybox.net/lists/buildroot/2007-March/002232.html
+> http://buildroot.uclibc.org/lists/buildroot/2008-June/008945.html
+> http://buildroot.uclibc.org/lists/buildroot/2008-April/008176.html
+> 
 
-when I enable the Gdb debugger or server for the target (Atmel AVR32) i
-get the following message:
-configure: error: "*** Gdb does not support native target
-avr32-unknown-linux-uclibc"
-make[2]: *** [configure-gdb] Error 1
-make[2]: Leaving directory
-`/atmel/buildrootWork/build_avr32/gdb-6.7.1-target'
-make[1]: *** [all] Error 2
-make[1]: Leaving directory
-`/atmel/buildrootWork/build_avr32/gdb-6.7.1-target'
-make: *** [/atmel/buildrootWork/build_avr32/gdb-6.7.1-target/gdb/gdb]
-Error 2
+Right.
+I've confirmed that floats for cris architecture with uClibc without locale work.
 
-I'm using the most recent buildroot. How can I build gdb for avr32?
-Could someone add this to buildroot please?
-I attached my buildroot .config in case it is necessary.
-Thanks
-Sebastian
+But what about i386 toolchain with uClibc and locale enabled? It seem to work in my case.. I'll redo the test with clean buildroot just to be sure.
 
--------------- next part --------------
-A non-text attachment was scrubbed...
-Name: buildroot.config
-Type: application/octet-stream
-Size: 28659 bytes
-Desc: buildroot.config
-Url : http://busybox.net/lists/buildroot/attachments/20080805/adabd653/attachment-0001.obj 
+
+Best regards,
+Hinko
+
+-- 
+?ETRTA POT, d.o.o., Kranj
+Planina 3
+4000 Kranj
+Slovenia, Europe
+Tel. +386 (0) 4 280 66 03
+E-mail: hinko.kocevar at cetrtapot.si
+Http: www.cetrtapot.si
