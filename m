@@ -1,44 +1,26 @@
-From: bugs at busybox.net <bugs@busybox.net>
-Date: Mon, 4 Aug 2008 16:07:52 -0700
-Subject: [Buildroot] [buildroot 0004454]: makefile.autotools.in breaks
-	_CONF_OPT
-Message-ID: <1662f353447bd46e16574c3c25d31796@busybox.net>
+From: Peter Korsgaard <jacmet@uclibc.org>
+Date: Tue, 05 Aug 2008 07:53:16 +0200
+Subject: [Buildroot] Every time I svn buildroot something else stops
+	working
+In-Reply-To: <1CD05B980C94AC408B37C82BBABAA3E60CECCC37@mtsexchange.dc.multitech.prv>
+	(Tim Barr's message of "Tue\, 22 Jul 2008 09\:52\:03 -0500")
+References: <1CD05B980C94AC408B37C82BBABAA3E60CECCC37@mtsexchange.dc.multitech.prv>
+Message-ID: <87r6946m9f.fsf@macbook.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+>>>>> "Tim" == Tim Barr <tbarr@multitech.com> writes:
 
-The following issue has been SUBMITTED. 
-====================================================================== 
-http://busybox.net/bugs/view.php?id=4454 
-====================================================================== 
-Reported By:                mdombroski
-Assigned To:                buildroot
-====================================================================== 
-Project:                    buildroot
-Issue ID:                   4454
-Category:                   New Features
-Reproducibility:            always
-Severity:                   major
-Priority:                   normal
-Status:                     assigned
-====================================================================== 
-Date Submitted:             08-04-2008 16:07 PDT
-Last Modified:              08-04-2008 16:07 PDT
-====================================================================== 
-Summary:                    makefile.autotools.in breaks _CONF_OPT
-Description: 
-The $($(PKG)_CONF_OPT) line is left off ./configure in
-makefile.autotools.in due to forgotten newline.
+ Tim> After doing a "svn up", I now get an error on uclibc. It tries
+ Tim> to apply a reverse patch and fails. I have done a "make clean"
+ Tim> and "make dirclean" but still get this error. What should I do
+ Tim> now? Delete the uclibc directory and have it rebuild from
+ Tim> scratch?
+ 
+Try a rm -rf *build_*
 
-====================================================================== 
-
-Issue History 
-Date Modified   Username       Field                    Change               
-====================================================================== 
-08-04-08 16:07  mdombroski     New Issue                                    
-08-04-08 16:07  mdombroski     Status                   new => assigned     
-08-04-08 16:07  mdombroski     Assigned To               => buildroot       
-======================================================================
+-- 
+Bye, Peter Korsgaard
