@@ -1,55 +1,83 @@
 From: Hans-Christian Egtvedt <hans-christian.egtvedt@atmel.com>
-Date: Wed, 06 Aug 2008 08:18:02 +0200
-Subject: [Buildroot] [PATCH] Robusitfy compiler version checks
-Message-ID: <1218003482.29697.6.camel@localhost>
+Date: Wed, 06 Aug 2008 08:31:54 +0200
+Subject: [Buildroot] Makefile.autotools.in does not work
+	wellwith	projects
+In-Reply-To: <20080730101952.GB27907@mx.loc>
+References: <1216910589.29392.18.camel@localhost>
+	<20080725001242.GB25141@cloud.net.au>
+	<80DE307AE1CF4656A7072295EA2408F8@aeglos>
+	<20080727013317.GA1706@cloud.net.au>
+	<1217234557.7955.8.camel@localhost>
+	<20080728085003.GA22274@cloud.net.au>
+	<1217235161.7955.12.camel@localhost>
+	<20080730101952.GB27907@mx.loc>
+Message-ID: <1218004314.29697.10.camel@localhost>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-The output of "gcc --version" (and equivalently for g++) is somewhat
-volatile.  Specifically, the output from GCC 4.3.1 prerelease which
-ships with OpenSUSE 11.0 doesn't come close to matching the required
-pattern in the dependency check script.
+On Wed, 2008-07-30 at 12:19 +0200, Bernhard Fischer wrote:
+> On Mon, Jul 28, 2008 at 10:52:41AM +0200, Hans-Christian Egtvedt wrote:
+> >On Mon, 2008-07-28 at 18:50 +1000, Hamish Moffatt wrote:
+> >> On Mon, Jul 28, 2008 at 10:42:37AM +0200, Hans-Christian Egtvedt wrote:
+> >> > On Sun, 2008-07-27 at 11:33 +1000, Hamish Moffatt wrote:
+> >
+> ><snipp>
+> >
+> >> > And two minutes later I have a RFC for this solution, see attached
+> >> > patch.
+> >> [..]
+> >> >  # Install to target dir
+> >> > -$(BUILD_DIR)/%/.stamp_target_installed:
+> >> > +$(TARGET_DIR)/%/$($($(PKG)_NAME)_TARGET_INSTALLED_TOUCH_FILE):
+> >> >  	$(call MESSAGE,"Installing to target")
+> >> > -	$($(PKG)_MAKE_ENV) $(MAKE) $($(PKG)_INSTALL_TARGET_OPT) -C $(@D)/$($(PKG)_SUBDIR)
+> >> > +	$($(PKG)_MAKE_ENV) $(MAKE) $($(PKG)_INSTALL_TARGET_OPT) -C $($(PKG)_DIR)/$($(PKG)_SUBDIR)
+> >> [..]
+> >> >  # define sub-target stamps
+> >> > -$(2)_TARGET_INSTALL_TARGET =	$$($(2)_DIR)/.stamp_target_installed
+> >> > +$(2)_TARGET_INSTALL_TARGET =	$$(TARGET_DIR)/$$($(2)_TARGET_INSTALLED_TOUCH_FILE)
+> >> 
+> >> Will every package that uses Makefile.autotools.in need to be modified
+> >> to define the target installed file? If so, would you like to prepare a
+> >> large patch? :)
+> >
+> >Not really, since I do not have knowledge about each package and what
+> >they will need to depend on installed on target.
+> >
+> >> Alternatively, perhaps $(2)_TARGET_INSTALL_TARGET could
+> >> be fall back to the old definition if the new variable is not supplied,
+> >> using some ifeq logic.
+> >> 
+> >
+> >Yes, there should be a fallback when the variable is not supplied. The
+> >Makefile should print a warning message as well, demanding an update ;)
+> >
+> >I'll see what I can figure out.
+> 
+> Let me suggest to rename that variable to $(2)_TARGET_FILES
+> and do
+> $(2)_TARGET_INSTALL_TARGET = $(firstword $($(2)_TARGET_FILES))
+> 
+> foo_tmp=$(firstword $($(2)_TARGET_FILES))
+> or somthing like $(if $(foo_tmp),$(foo_tmp),$($(2).old_stamp_file))
+> 
+> Reasoning:
+> You really want to only have a few files in $(TARGET_DIR) as opposed to
+> $(STAGING_DIR). Those $(2)_TARGET_FILES should ideally be the only files
+> installed into the final image (think of a gazillion superfluous termcap
+> entries or other unneeded files).
 
-The output of gcc -v however is standard between releases and across
-platforms.  It contains a line of the form
+Then you need to overwrite the install rule anyway, my patch was
+intended to fix the general installation of applications.
 
-gcc version <version> <spoodge>
+You seem to want a rule which will install only the binaries needed?
 
-We can match this reliably and safely, so let's do that instead.
+Some applications and libraries are actually installed quite minimal and
+correct by using make DESTDIR install :)
 
-This has been tested across all the systems I have to hand - openSUSE
-10.3, 11.0, Xandros, Debian and Cygwin.
-
-Someone with a black belt in sed-fu might be able to simplify this a
-bit :-)
-
-Signed-off-by: Ben Nizette <bn@niasdigital.com>
----
-
-diff --git a/toolchain/dependencies/dependencies.sh b/toolchain/dependencies/dependencies.sh
-index 6b026fd..0d67e3a 100755
---- a/toolchain/dependencies/dependencies.sh
-+++ b/toolchain/dependencies/dependencies.sh
-@@ -194,7 +194,8 @@ if [ -z "$COMPILER" ]; then
- 	exit 1
- fi
- 
--COMPILER_VERSION=$($COMPILER --version 2>&1 | $XSED -e 's/^.*(.CC) \([0-9\.]\)/\1/g' -e "s/[-\ ].*//g" -e '1q')
-+COMPILER_VERSION=$($COMPILER -v 2>&1 | $XSED -n '/^gcc version/p' |
-+	$XSED -e 's/^gcc version \([0-9\.]\)/\1/g' -e 's/[-\ ].*//g' -e '1q')
- if [ -z "$COMPILER_VERSION" ]; then
- 	echo "gcc installed:					FALSE"
- 	/bin/echo -e "\n\nYou must install 'gcc' on your build machine\n"
-@@ -224,7 +225,8 @@ if [ -z "$CXXCOMPILER" ]; then
- 	/bin/echo -e "\nYou may have to install 'g++' on your build machine\n"
- 	#exit 1
- else
--	CXXCOMPILER_VERSION=$($CXXCOMPILER --version 2>&1 | $XSED -e 's/^.*(.CC) \([0-9\.]\)/\1/g' -e "s/[-\ ].*//g" -e '1q')
-+	CXXCOMPILER_VERSION=$($CXXCOMPILER -v 2>&1 | $XSED -n '/^gcc version/p' |
-+		$XSED -e 's/^gcc version \([0-9\.]\)/\1/g' -e 's/[-\ ].*//g' -e '1q')
- 	if [ -z "$CXXCOMPILER_VERSION" ]; then
- 		echo "c++ installed:					FALSE"
- 		/bin/echo -e "\nYou may have to install 'g++' on your build machine\n"
+-- 
+With kind regards,
+Hans-Christian Egtvedt, Applications Engineer
