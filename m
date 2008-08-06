@@ -1,23 +1,43 @@
-From: dangbinghoo <dangbinghoo@gmail.com>
-Date: Thu, 07 Aug 2008 03:00:48 +0800
-Subject: [Buildroot] About the uclibc headers ?!
-Message-ID: <1218049248.5116.15.camel@gentoo-dang.org>
+From: jacmet at uclibc.org <jacmet@uclibc.org>
+Date: Wed,  6 Aug 2008 05:56:32 -0700 (PDT)
+Subject: [Buildroot] svn commit: trunk/buildroot/package/busybox
+Message-ID: <20080806125632.6AA693C6B6@busybox.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
-	I am new in cross toolchain building for ARM.the official uclibc site
-pointed to the buildroot for a toolchain building based on uclibc.But I
-want to know what details happend. The cross linux from scratch project
-has a book (which now still in svn phase),and there is a problem when
-build the uclibc headers,and the uclibc header was forced to build when
-even the cross toolchain was not ready,clfs solved this by simply
-removed the uclibc headers build.But when I use buildroot I found
-buildroot is now building the uclibc headers ,what things puzzled me is
-that the step for building uclibc headers was failed ,and buildroot
-simply ignored that.So,my question is dose it really need build uclibc
-headers for the toolchain building ? If not,and what actually the
-buildroot do in the uclibc headers building step?
+Author: jacmet
+Date: 2008-08-06 05:56:31 -0700 (Wed, 06 Aug 2008)
+New Revision: 23065
+
+Log:
+busybox: fix missing dependencies in unpacked and config rules
+
+Aadds dependency to host-sed and $(PROJECT_BUILD_DIR) when running
+make busybox-config and busybox-unpacked.
+
+Signed-off-by: Hans-Christian Egtvedt <hans-christian.egtvedt@atmel.com>
+
+Modified:
+   trunk/buildroot/package/busybox/busybox.mk
+
+
+Changeset:
+Modified: trunk/buildroot/package/busybox/busybox.mk
+===================================================================
+--- trunk/buildroot/package/busybox/busybox.mk	2008-08-06 10:04:22 UTC (rev 23064)
++++ trunk/buildroot/package/busybox/busybox.mk	2008-08-06 12:56:31 UTC (rev 23065)
+@@ -127,9 +127,9 @@
+ 
+ busybox-source: $(DL_DIR)/$(BUSYBOX_SOURCE)
+ 
+-busybox-unpacked: $(BUSYBOX_DIR)/.unpacked
++busybox-unpacked: host-sed $(PROJECT_BUILD_DIR) $(BUSYBOX_DIR)/.unpacked
+ 
+-busybox-config: $(BUSYBOX_DIR)/.configured
++busybox-config: host-sed $(PROJECT_BUILD_DIR) $(BUSYBOX_DIR)/.configured
+ 
+ busybox-menuconfig: host-sed $(PROJECT_BUILD_DIR) busybox-source $(BUSYBOX_DIR)/.configured
+ 	$(MAKE) __TARGET_ARCH=$(ARCH) -C $(BUSYBOX_DIR) menuconfig
