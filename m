@@ -1,44 +1,75 @@
-From: Leonardo Giordano <lgiordano@gmail.com>
-Date: Thu, 07 Aug 2008 11:33:04 -0300
-Subject: [Buildroot] Python / Lua socket programming
-In-Reply-To: <489AFEB8.6000406@cetrtapot.si>
-References: <489AEA22.80700@gmail.com> <489AFEB8.6000406@cetrtapot.si>
-Message-ID: <489B07A0.1090401@gmail.com>
+From: bugs at busybox.net <bugs@busybox.net>
+Date: Thu, 7 Aug 2008 09:43:34 -0700
+Subject: [Buildroot] [buildroot 0002724]: freetype-2.3.5 configure fails
+Message-ID: <ed31a9a73f076ef56653a20aab417b11@busybox.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hinko,
-I will try it. I haven't downloaded luasocket yet.
-Best regards,
+
+A NOTE has been added to this issue. 
+====================================================================== 
+http://busybox.net/bugs/view.php?id=2724 
+====================================================================== 
+Reported By:                seek
+Assigned To:                buildroot
+====================================================================== 
+Project:                    buildroot
+Issue ID:                   2724
+Category:                   Architecture Specific
+Reproducibility:            always
+Severity:                   major
+Priority:                   normal
+Status:                     assigned
+====================================================================== 
+Date Submitted:             04-02-2008 06:54 PDT
+Last Modified:              08-07-2008 09:43 PDT
+====================================================================== 
+Summary:                    freetype-2.3.5 configure fails
+Description: 
+Building of freetype-2.3.5 stops with this error:
+
+checking for x86_64-pc-linux-gnu-gcc... x86_64-pc-linux-gnu
+checking for x86_64-pc-linux-gnu-gcc... (cached) x86_64-pc-linux-gnu
+checking for x86_64-pc-linux-gnu-gcc... (cached) x86_64-pc-linux-gnu
+checking for suffix of native executables... ./configure: line 3392:
+x86_64-pc-linux-gnu: command not found
+configure: error: native C compiler is not working
+make[1]: *** [setup] Fehler 1
+
+freetype-2.2.1 works as expected.
 
 
-Hinko Kocevar escribi?:
-> Leonardo Giordano wrote:
->
->   
->> For lua, I should add luasocket library but I don't know how.
->>
->> Any comments?
->>     
->
-> You'll need to build lua first, then luasocket as another package, independently.
-> luasocket relies on lua headers/libs. You'll probably need to fix some
-> paths in lua(socket) in order for luasocket to find lua stuff inside the
-> buildroot.
->
-> these steps might help:
-> cd lua-5.1.3
-> make linux
-> make install INSTALL_TOP=/home/hinkok/Desktop/lua/out
-> cd ../luasocket-2.0.2
-> LUAINC=-I/home/hinkok/Desktop/lua/out/include INSTALL_TOP_SHARE=/home/hinkok/Desktop/lua/out/share INSTALL_TOP_LIB=/home/hinkok/Desktop/lua/out/lib/lua/5.1 make
-> make install INSTALL_TOP_SHARE=/home/hinkok/Desktop/lua/out/share INSTALL_TOP_LIB=/home/hinkok/Desktop/lua/out/lib/lua/5.1
->
->
-> HTH,
-> Hinko
->
->   
+
+====================================================================== 
+
+---------------------------------------------------------------------- 
+ antialize - 08-07-08 09:43  
+---------------------------------------------------------------------- 
+The bug is still there:
+
+cd builds/unix; ./configure  "--target=i686-linux" "--host=i686-linux"
+"--build=x86_64-pc-linux-gnu" "--prefix=/usr" "--exec-prefix=/usr"
+"--bindir=/usr/bin" "--sbindir=/usr/sbin" "--libdir=/usr/lib"
+"--libexecdir=/usr/lib" "--sysconfdir=/etc" "--datadir=/usr/share"
+"--localstatedir=/var" "--includedir=/usr/include" "--mandir=/usr/man"
+"--infodir=/usr/info" " "
+configure: WARNING: you should use --build, --host, --target
+configure: WARNING: invalid host type:
+...
+checking for suffix of native executables... ./configure: line 3392:
+x86_64-pc-linux-gnu: command not found
+configure: error: native C compiler is not working
+
+freetype-2.2.1 does not work for me 
+
+Issue History 
+Date Modified   Username       Field                    Change               
+====================================================================== 
+04-02-08 06:54  seek           New Issue                                    
+04-02-08 06:54  seek           Status                   new => assigned     
+04-02-08 06:54  seek           Assigned To               => buildroot       
+08-07-08 09:43  antialize      Note Added: 0010314                          
+======================================================================
