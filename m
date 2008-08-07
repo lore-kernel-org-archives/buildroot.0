@@ -1,20 +1,27 @@
-From: Leonardo Giordano <lgiordano@gmail.com>
-Date: Thu, 07 Aug 2008 09:27:14 -0300
-Subject: [Buildroot] Python / Lua socket programming
-Message-ID: <489AEA22.80700@gmail.com>
+From: Bernhard Fischer <rep.dot.nop@gmail.com>
+Date: Thu, 7 Aug 2008 15:23:57 +0200
+Subject: [Buildroot] ser2net package
+In-Reply-To: <4899F123.70204@gmail.com>
+References: <4899C35D.20307@gmail.com>
+	<20080806155201.GA10314@real.realitydiluted.com>
+	<4899F123.70204@gmail.com>
+Message-ID: <20080807132357.GA10497@mx.loc>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi, I am trying to have an easy programming (or scripting) language. I 
-have both Lua and Python compiled with buildroot. However, I don't know 
-how to enable socket programming. I mean:
-For python, it should have a socket module but it is not. I do "import 
-socket" but is says it is not present. Maybe is a path problem?
-For lua, I should add luasocket library but I don't know how.
+Leonardo,
 
-Any comments?
+On Wed, Aug 06, 2008 at 03:44:51PM -0300, Leonardo Giordano wrote:
+><!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+><html>
+><head>
+>  <meta content="text/html;charset=ISO-8859-1" http-equiv="Content-Type">
+>  <title></title>
+></head>
+><body bgcolor="#ffffff" text="#000000">
 
-Regards,
+Please do not send HTML mail.
+TIA,
