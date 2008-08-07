@@ -1,34 +1,29 @@
-From: Christopher Taylor <chtaylo3@gmail.com>
-Date: Wed, 6 Aug 2008 23:26:18 -0400
-Subject: [Buildroot] efficient usb plug in notification
-In-Reply-To: <64180.1218043142@speakeasy.net>
-References: <64180.1218043142@speakeasy.net>
-Message-ID: <2590773a0808062026p25ed61c7v23377da3849ad661@mail.gmail.com>
+From: Hinko Kocevar <hinko.kocevar@cetrtapot.si>
+Date: Thu, 07 Aug 2008 09:37:19 +0200
+Subject: [Buildroot] ser2net package
+In-Reply-To: <4899C35D.20307@gmail.com>
+References: <4899C35D.20307@gmail.com>
+Message-ID: <489AA62F.2020109@cetrtapot.si>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-> You can replace /sbin/hotplug with a shell script/program of your choice.
-> This gets called by the kernel for every plug event. Just have your version
-> of hotplug react to the plug events you care about. Then you "just" need to
-> figure out how to interact between the hotplug script and your user space
-> libraries, programs, etc.
->
+Leonardo Giordano wrote:
+> Any other suggestion will be appreciated.
+> 
 
-Given the power concerns that we have, this may be the best idea.
-I'll have to look into what's passed to the hotplug script/program and
-see if we can get all the information from that.  Thanx so much for
-this tip!
+Have you tried http://buildroot.uclibc.org/buildroot.html#add_software ?
 
-I'm moderately familiar with udev/dbus/hal but I have some
-reservations about using them due to the extra cycles taken up.
+Regards,
+Hinko
 
-This hotplyg approach seems promising for power conscious platforms
-assuming it provides enough information.   A named pipe to our
-application should solve this problem.
-
-Thanx everyone for sharing your experience!
-
--Chris
+-- 
+?ETRTA POT, d.o.o., Kranj
+Planina 3
+4000 Kranj
+Slovenia, Europe
+Tel. +386 (0) 4 280 66 03
+E-mail: hinko.kocevar at cetrtapot.si
+Http: www.cetrtapot.si
