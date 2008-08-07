@@ -1,94 +1,75 @@
-From: bugs at busybox.net <bugs@busybox.net>
-Date: Thu, 7 Aug 2008 11:47:10 -0700
-Subject: [Buildroot] [buildroot 0002724]: freetype-2.3.5 configure fails
-Message-ID: <f4164d1ac64dcb7d00be2d261e847166@bugs.uclibc.org>
+From: Malek <souf_oued@yahoo.fr>
+Date: Thu, 07 Aug 2008 19:57:04 +0000
+Subject: [Buildroot] GPSD package
+In-Reply-To: <4899B742.4050706@gmail.com>
+References: <4898BAF3.3000800@gmail.com>	<f90898420808060046v4cae4952yd705f158e78fcd32@mail.gmail.com>
+	<4899B742.4050706@gmail.com>
+Message-ID: <489B5390.7070501@yahoo.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+Hi,
+I use these files: gpsd.mk and Config.in
+and I add:
+source "package/gpsd/Config.in"
 
-A NOTE has been added to this issue. 
-====================================================================== 
-http://busybox.net/bugs/view.php?id=2724 
-====================================================================== 
-Reported By:                seek
-Assigned To:                buildroot
-====================================================================== 
-Project:                    buildroot
-Issue ID:                   2724
-Category:                   Architecture Specific
-Reproducibility:            always
-Severity:                   major
-Priority:                   normal
-Status:                     assigned
-====================================================================== 
-Date Submitted:             04-02-2008 06:54 PDT
-Last Modified:              08-07-2008 11:47 PDT
-====================================================================== 
-Summary:                    freetype-2.3.5 configure fails
-Description: 
-Building of freetype-2.3.5 stops with this error:
+in: package/Config.in just after :
 
-checking for x86_64-pc-linux-gnu-gcc... x86_64-pc-linux-gnu
-checking for x86_64-pc-linux-gnu-gcc... (cached) x86_64-pc-linux-gnu
-checking for x86_64-pc-linux-gnu-gcc... (cached) x86_64-pc-linux-gnu
-checking for suffix of native executables... ./configure: line 3392:
-x86_64-pc-linux-gnu: command not found
-configure: error: native C compiler is not working
-make[1]: *** [setup] Fehler 1
+source "package/gadgetfs-test/Config.in"
 
-freetype-2.2.1 works as expected.
+Malek
 
+Leonardo Giordano a ?crit :
+> Hi Simon,
+> It works great! It was a big help to me.
+> Many thanks!
+> Best regards,
+> 
+> Leo
+> 
+> Simon Pasch escribi?:
+>> Hi,
+>>
+>> I'm using this Makefile.
+>>
+>> Perhaps, it needs some finetuning, but it works for me.
+>>
+>>
+>> Simon
+>>
+>>
+>>
+>> 2008/8/5 Leonardo Giordano <lgiordano@gmail.com>:
+>>   
+>>> Hi,
+>>> I am trying to add gpsd package (http://gpsd.berlios.de/) but I am
+>>> having trouble on doing the gpsd.mk file. I just want the daemon,
+>>> nothing more.
+>>> Has anybody been successful on this?
+>>> Any comments will be appreciated.
+>>>
+>>> Best wishes from Argentina!
+>>>
+>>> _______________________________________________
+>>> buildroot mailing list
+>>> buildroot at uclibc.org
+>>> http://busybox.net/mailman/listinfo/buildroot
+>>>
+>>>     
+> _______________________________________________
+> buildroot mailing list
+> buildroot at uclibc.org
+> http://busybox.net/mailman/listinfo/buildroot
+> 
 
-
-====================================================================== 
-
----------------------------------------------------------------------- 
- antialize - 08-07-08 09:45  
----------------------------------------------------------------------- 
-The bug is still there:
-
-cd builds/unix; ./configure  "--target=i686-linux" "--host=i686-linux"
-"--build=x86_64-pc-linux-gnu" "--prefix=/usr" "--exec-prefix=/usr"
-"--bindir=/usr/bin" "--sbindir=/usr/sbin" "--libdir=/usr/lib"
-"--libexecdir=/usr/lib" "--sysconfdir=/etc" "--datadir=/usr/share"
-"--localstatedir=/var" "--includedir=/usr/include" "--mandir=/usr/man"
-"--infodir=/usr/info" " "
-configure: WARNING: you should use --build, --host, --target
-configure: WARNING: invalid host type:
-...
-checking for suffix of native executables... ./configure: line 3392:
-x86_64-pc-linux-gnu: command not found
-configure: error: native C compiler is not working
-
-freetype-2.2.1 does not work for me
-
-revision: 23068
-
- 
-
----------------------------------------------------------------------- 
- antialize - 08-07-08 11:47  
----------------------------------------------------------------------- 
-The bug is on line 43 in build/configure.raw
-It saies
-AC_CHECK_PROG(CC_BUILD, ${build}-gcc, ${build-gcc})
-It should be
-AC_CHECK_PROG(CC_BUILD, ${build}-gcc, ${build}-gcc)
-
-It seems this bug has already been fixed upstream, can we get a vertion
-bump? 
-
-Issue History 
-Date Modified   Username       Field                    Change               
-====================================================================== 
-04-02-08 06:54  seek           New Issue                                    
-04-02-08 06:54  seek           Status                   new => assigned     
-04-02-08 06:54  seek           Assigned To               => buildroot       
-08-07-08 09:43  antialize      Note Added: 0010314                          
-08-07-08 09:45  antialize      Note Edited: 0010314                         
-08-07-08 10:25  antialize      Issue Monitored: antialize                    
-08-07-08 11:47  antialize      Note Added: 0010324                          
-======================================================================
+-------------- next part --------------
+An embedded and charset-unspecified text was scrubbed...
+Name: Config.in
+Url: http://busybox.net/lists/buildroot/attachments/20080807/df4b1854/attachment.txt 
+-------------- next part --------------
+An embedded and charset-unspecified text was scrubbed...
+Name: gpsd.mk
+Url: http://busybox.net/lists/buildroot/attachments/20080807/df4b1854/attachment-0001.txt 
