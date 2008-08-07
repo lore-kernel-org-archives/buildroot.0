@@ -1,27 +1,43 @@
-From: Bernhard Fischer <rep.dot.nop@gmail.com>
-Date: Thu, 7 Aug 2008 15:23:57 +0200
-Subject: [Buildroot] ser2net package
-In-Reply-To: <4899F123.70204@gmail.com>
-References: <4899C35D.20307@gmail.com>
-	<20080806155201.GA10314@real.realitydiluted.com>
-	<4899F123.70204@gmail.com>
-Message-ID: <20080807132357.GA10497@mx.loc>
+From: Hinko Kocevar <hinko.kocevar@cetrtapot.si>
+Date: Thu, 07 Aug 2008 15:55:04 +0200
+Subject: [Buildroot] Python / Lua socket programming
+In-Reply-To: <489AEA22.80700@gmail.com>
+References: <489AEA22.80700@gmail.com>
+Message-ID: <489AFEB8.6000406@cetrtapot.si>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Leonardo,
+Leonardo Giordano wrote:
 
-On Wed, Aug 06, 2008 at 03:44:51PM -0300, Leonardo Giordano wrote:
-><!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
-><html>
-><head>
->  <meta content="text/html;charset=ISO-8859-1" http-equiv="Content-Type">
->  <title></title>
-></head>
-><body bgcolor="#ffffff" text="#000000">
+> For lua, I should add luasocket library but I don't know how.
+> 
+> Any comments?
 
-Please do not send HTML mail.
-TIA,
+You'll need to build lua first, then luasocket as another package, independently.
+luasocket relies on lua headers/libs. You'll probably need to fix some
+paths in lua(socket) in order for luasocket to find lua stuff inside the
+buildroot.
+
+these steps might help:
+cd lua-5.1.3
+make linux
+make install INSTALL_TOP=/home/hinkok/Desktop/lua/out
+cd ../luasocket-2.0.2
+LUAINC=-I/home/hinkok/Desktop/lua/out/include INSTALL_TOP_SHARE=/home/hinkok/Desktop/lua/out/share INSTALL_TOP_LIB=/home/hinkok/Desktop/lua/out/lib/lua/5.1 make
+make install INSTALL_TOP_SHARE=/home/hinkok/Desktop/lua/out/share INSTALL_TOP_LIB=/home/hinkok/Desktop/lua/out/lib/lua/5.1
+
+
+HTH,
+Hinko
+
+-- 
+?ETRTA POT, d.o.o., Kranj
+Planina 3
+4000 Kranj
+Slovenia, Europe
+Tel. +386 (0) 4 280 66 03
+E-mail: hinko.kocevar at cetrtapot.si
+Http: www.cetrtapot.si
