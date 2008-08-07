@@ -1,15 +1,24 @@
-From: Leonardo Giordano <lgiordano@gmail.com>
-Date: Wed, 06 Aug 2008 15:44:51 -0300
-Subject: [Buildroot] ser2net package
-In-Reply-To: <20080806155201.GA10314@real.realitydiluted.com>
-References: <4899C35D.20307@gmail.com>
-	<20080806155201.GA10314@real.realitydiluted.com>
-Message-ID: <4899F123.70204@gmail.com>
+From: dangbinghoo <dangbinghoo@gmail.com>
+Date: Thu, 07 Aug 2008 18:05:45 +0800
+Subject: [Buildroot] Problem on uclibc headers !
+Message-ID: <1218103545.4958.1.camel@gentoo-dang.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-An HTML attachment was scrubbed...
-URL: http://busybox.net/lists/buildroot/attachments/20080806/d46e7183/attachment.htm 
+Hello,
+  I am new in cross toolchain building for ARM.the official uclibc site
+pointed to the buildroot for a toolchain building based on uclibc.But I
+want to know what details happend. The cross linux from scratch project
+has a book (which now still in svn phase),and there is a problem when
+build the uclibc headers,and the uclibc header was forced to build when
+even the cross toolchain was not ready,clfs solved this by simply
+removed the uclibc headers build.But when I use buildroot I found
+buildroot is now building the uclibc headers ,what things puzzled me is
+that the step for building uclibc headers was failed ,and buildroot
+simply ignored that.So,my question is dose it really need build uclibc
+headers for the toolchain building ? If not,and what actually the
+buildroot do in the uclibc headers building step?
+  Anyone who knows this? Help me please! Thank you!
