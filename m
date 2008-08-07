@@ -1,7 +1,7 @@
 From: bugs at busybox.net <bugs@busybox.net>
-Date: Thu, 7 Aug 2008 09:43:34 -0700
+Date: Thu, 7 Aug 2008 11:47:10 -0700
 Subject: [Buildroot] [buildroot 0002724]: freetype-2.3.5 configure fails
-Message-ID: <ed31a9a73f076ef56653a20aab417b11@busybox.net>
+Message-ID: <f4164d1ac64dcb7d00be2d261e847166@bugs.uclibc.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -25,7 +25,7 @@ Priority:                   normal
 Status:                     assigned
 ====================================================================== 
 Date Submitted:             04-02-2008 06:54 PDT
-Last Modified:              08-07-2008 09:43 PDT
+Last Modified:              08-07-2008 11:47 PDT
 ====================================================================== 
 Summary:                    freetype-2.3.5 configure fails
 Description: 
@@ -46,7 +46,7 @@ freetype-2.2.1 works as expected.
 ====================================================================== 
 
 ---------------------------------------------------------------------- 
- antialize - 08-07-08 09:43  
+ antialize - 08-07-08 09:45  
 ---------------------------------------------------------------------- 
 The bug is still there:
 
@@ -63,7 +63,23 @@ checking for suffix of native executables... ./configure: line 3392:
 x86_64-pc-linux-gnu: command not found
 configure: error: native C compiler is not working
 
-freetype-2.2.1 does not work for me 
+freetype-2.2.1 does not work for me
+
+revision: 23068
+
+ 
+
+---------------------------------------------------------------------- 
+ antialize - 08-07-08 11:47  
+---------------------------------------------------------------------- 
+The bug is on line 43 in build/configure.raw
+It saies
+AC_CHECK_PROG(CC_BUILD, ${build}-gcc, ${build-gcc})
+It should be
+AC_CHECK_PROG(CC_BUILD, ${build}-gcc, ${build}-gcc)
+
+It seems this bug has already been fixed upstream, can we get a vertion
+bump? 
 
 Issue History 
 Date Modified   Username       Field                    Change               
@@ -72,4 +88,7 @@ Date Modified   Username       Field                    Change
 04-02-08 06:54  seek           Status                   new => assigned     
 04-02-08 06:54  seek           Assigned To               => buildroot       
 08-07-08 09:43  antialize      Note Added: 0010314                          
+08-07-08 09:45  antialize      Note Edited: 0010314                         
+08-07-08 10:25  antialize      Issue Monitored: antialize                    
+08-07-08 11:47  antialize      Note Added: 0010324                          
 ======================================================================
