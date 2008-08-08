@@ -1,8 +1,8 @@
 From: bugs at busybox.net <bugs@busybox.net>
-Date: Fri, 8 Aug 2008 01:33:41 -0700
-Subject: [Buildroot] [buildroot 0004524]: Missing \ in Makefile.autotools.in
-	makes fontconfig fail to compile
-Message-ID: <c2a65c19689a51857e3f4f9d0f633542@bugs.uclibc.org>
+Date: Fri, 8 Aug 2008 05:51:25 -0700
+Subject: [Buildroot] [buildroot 0004534]: errors in gdb.mk,
+	leading to build failures
+Message-ID: <984933adc611b1a08ced5d07db90efab@busybox.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -10,48 +10,48 @@ Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
 
-A NOTE has been added to this issue. 
+The following issue has been SUBMITTED. 
 ====================================================================== 
-http://busybox.net/bugs/view.php?id=4524 
+http://busybox.net/bugs/view.php?id=4534 
 ====================================================================== 
-Reported By:                antialize
+Reported By:                rbuergel
 Assigned To:                buildroot
 ====================================================================== 
 Project:                    buildroot
-Issue ID:                   4524
-Category:                   Architecture Specific
-Reproducibility:            always
+Issue ID:                   4534
+Category:                   Other
+Reproducibility:            have not tried
 Severity:                   major
 Priority:                   normal
 Status:                     assigned
 ====================================================================== 
-Date Submitted:             08-08-2008 01:31 PDT
-Last Modified:              08-08-2008 01:33 PDT
+Date Submitted:             08-08-2008 05:51 PDT
+Last Modified:              08-08-2008 05:51 PDT
 ====================================================================== 
-Summary:                    Missing \ in Makefile.autotools.in makes fontconfig
-fail to compile
+Summary:                    errors in gdb.mk, leading to build failures
 Description: 
-There is a missing \ in Makefile.autotools.in that affects fontconfig, and
-possible alot of other not to configure.
+1. gdb is eventually patched twice:
+  first during the .unpacked-target and a second time during the
+.patched-target
 
-I have attached a patch that fixes the issue, and also cleans up the
-fontconfig.mk
+2. gdbserver and gdb on host depend on .unpacked instead of .patched
 
-(Rev 23070)
+
+svn blame shows, that when the .patched-target was introduced, the
+patching wasn't removed from .unpacked, but target-gdb depends on
+.patched, leading to a situation, where the patches were applied twice.
+The change was correct, but it was only the half of what has to be done.
+The appended patch changes the remaining parts. It changes gdbserver and
+host-gdb to depend on .patched and removed the patching from the
+.unpacked-target.
+
 ====================================================================== 
-
----------------------------------------------------------------------- 
- antialize - 08-08-08 01:33  
----------------------------------------------------------------------- 
-This is a dup of,
-0004474 and 0004454 
 
 Issue History 
 Date Modified   Username       Field                    Change               
 ====================================================================== 
-08-08-08 01:31  antialize      New Issue                                    
-08-08-08 01:31  antialize      Status                   new => assigned     
-08-08-08 01:31  antialize      Assigned To               => buildroot       
-08-08-08 01:31  antialize      File Added: fix.patch                        
-08-08-08 01:33  antialize      Note Added: 0010334                          
+08-08-08 05:51  rbuergel       New Issue                                    
+08-08-08 05:51  rbuergel       Status                   new => assigned     
+08-08-08 05:51  rbuergel       Assigned To               => buildroot       
+08-08-08 05:51  rbuergel       File Added: gdb.mk.patch                     
 ======================================================================
