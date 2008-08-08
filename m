@@ -1,75 +1,43 @@
-From: Malek <souf_oued@yahoo.fr>
-Date: Thu, 07 Aug 2008 19:57:04 +0000
-Subject: [Buildroot] GPSD package
-In-Reply-To: <4899B742.4050706@gmail.com>
-References: <4898BAF3.3000800@gmail.com>	<f90898420808060046v4cae4952yd705f158e78fcd32@mail.gmail.com>
-	<4899B742.4050706@gmail.com>
-Message-ID: <489B5390.7070501@yahoo.fr>
+From: Sean Perry <shaleh@speakeasy.net>
+Date: Thu, 07 Aug 2008 19:04:44 -0700
+Subject: [Buildroot] efficient usb plug in notification
+In-Reply-To: <2590773a0808062026p25ed61c7v23377da3849ad661@mail.gmail.com>
+References: <64180.1218043142@speakeasy.net>
+	<2590773a0808062026p25ed61c7v23377da3849ad661@mail.gmail.com>
+Message-ID: <489BA9BC.7080300@speakeasy.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi,
-I use these files: gpsd.mk and Config.in
-and I add:
-source "package/gpsd/Config.in"
-
-in: package/Config.in just after :
-
-source "package/gadgetfs-test/Config.in"
-
-Malek
-
-Leonardo Giordano a ?crit :
-> Hi Simon,
-> It works great! It was a big help to me.
-> Many thanks!
-> Best regards,
+Christopher Taylor wrote:
+>> You can replace /sbin/hotplug with a shell script/program of your choice.
+>> This gets called by the kernel for every plug event. Just have your version
+>> of hotplug react to the plug events you care about. Then you "just" need to
+>> figure out how to interact between the hotplug script and your user space
+>> libraries, programs, etc.
+>>
 > 
-> Leo
+> Given the power concerns that we have, this may be the best idea.
+> I'll have to look into what's passed to the hotplug script/program and
+> see if we can get all the information from that.  Thanx so much for
+> this tip!
 > 
-> Simon Pasch escribi?:
->> Hi,
->>
->> I'm using this Makefile.
->>
->> Perhaps, it needs some finetuning, but it works for me.
->>
->>
->> Simon
->>
->>
->>
->> 2008/8/5 Leonardo Giordano <lgiordano@gmail.com>:
->>   
->>> Hi,
->>> I am trying to add gpsd package (http://gpsd.berlios.de/) but I am
->>> having trouble on doing the gpsd.mk file. I just want the daemon,
->>> nothing more.
->>> Has anybody been successful on this?
->>> Any comments will be appreciated.
->>>
->>> Best wishes from Argentina!
->>>
->>> _______________________________________________
->>> buildroot mailing list
->>> buildroot at uclibc.org
->>> http://busybox.net/mailman/listinfo/buildroot
->>>
->>>     
-> _______________________________________________
-> buildroot mailing list
-> buildroot at uclibc.org
-> http://busybox.net/mailman/listinfo/buildroot
+> I'm moderately familiar with udev/dbus/hal but I have some
+> reservations about using them due to the extra cycles taken up.
+> 
+> This hotplyg approach seems promising for power conscious platforms
+> assuming it provides enough information.   A named pipe to our
+> application should solve this problem.
 > 
 
--------------- next part --------------
-An embedded and charset-unspecified text was scrubbed...
-Name: Config.in
-Url: http://busybox.net/lists/buildroot/attachments/20080807/df4b1854/attachment.txt 
--------------- next part --------------
-An embedded and charset-unspecified text was scrubbed...
-Name: gpsd.mk
-Url: http://busybox.net/lists/buildroot/attachments/20080807/df4b1854/attachment-0001.txt 
+Everything comes in via the environment, so look there. Should have 
+everything you need.
+
+mdev just adds a /dev/$node and then calls a script with 
+$MDEV=/dev/$node. Definitely not enough info and it depends on the 
+device actually have an entry in /dev -- the usb devices I use do not.
+
+I had our custom hotplug script call mdev when it is done so all of the 
+device nodes get created correctly.
