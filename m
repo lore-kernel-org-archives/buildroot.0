@@ -1,27 +1,50 @@
-From: Daniel Ng <daniel_ng11@lycos.com>
-Date: Fri, 8 Aug 2008 02:24:39 +0000 (UTC)
-Subject: [Buildroot] IPv4 Unnumbered Multicast?
-Message-ID: <loom.20080808T022349-632@post.gmane.org>
+From: bugs at busybox.net <bugs@busybox.net>
+Date: Fri, 8 Aug 2008 01:31:53 -0700
+Subject: [Buildroot] [buildroot 0004524]: Missing \ in Makefile.autotools.in
+	makes fontconfig fail to compile
+Message-ID: <ecd59cb74c3092dc225280064a09871f@bugs.uclibc.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi,
 
-Would someone please tell me if the latest uClibc is able to handle Multicast 
-IGMP Joins and sending of Multicast packets on multiple Unnumbered PPP links?
+The following issue has been SUBMITTED. 
+====================================================================== 
+http://busybox.net/bugs/view.php?id=4524 
+====================================================================== 
+Reported By:                antialize
+Assigned To:                buildroot
+====================================================================== 
+Project:                    buildroot
+Issue ID:                   4524
+Category:                   Architecture Specific
+Reproducibility:            always
+Severity:                   major
+Priority:                   normal
+Status:                     assigned
+====================================================================== 
+Date Submitted:             08-08-2008 01:31 PDT
+Last Modified:              08-08-2008 01:31 PDT
+====================================================================== 
+Summary:                    Missing \ in Makefile.autotools.in makes fontconfig
+fail to compile
+Description: 
+There is a missing \ in Makefile.autotools.in that affects fontconfig, and
+possible alot of other not to configure.
 
-As you probably know, for IPv4, Unnumbered PPP links 'share' the IP address of 
-another interface on the same machine. Therefore, you could potentially have 
-multiple PPP links on one machine, all with exactly the same local IP address. 
-We might want any number of these PPP interfaces to join the same Multicast 
-Group.
+I have attached a patch that fixes the issue, and also cleans up the
+fontconfig.mk
 
-Can we multicast send/receive in this scenario? The setsockopt() 
-IP_MULTICAST_IF and IP_ADD_MEMBERSHIP options only seem to distinguish 
-interfaces by their IP address.
+(Rev 23070)
+====================================================================== 
 
-Cheers,
-Daniel
+Issue History 
+Date Modified   Username       Field                    Change               
+====================================================================== 
+08-08-08 01:31  antialize      New Issue                                    
+08-08-08 01:31  antialize      Status                   new => assigned     
+08-08-08 01:31  antialize      Assigned To               => buildroot       
+08-08-08 01:31  antialize      File Added: fix.patch                        
+======================================================================
