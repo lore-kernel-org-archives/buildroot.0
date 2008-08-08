@@ -1,31 +1,27 @@
-From: hartleys <hartleys@visionengravers.com>
-Date: Thu, 7 Aug 2008 22:11:42 -0400
-Subject: [Buildroot] Package haserl does not install to root filesystem
-Message-ID: <BD79186B4FD85F4B8E60E381CAEE190960E889@mi8nycmail19.Mi8.com>
+From: Daniel Ng <daniel_ng11@lycos.com>
+Date: Fri, 8 Aug 2008 02:24:39 +0000 (UTC)
+Subject: [Buildroot] IPv4 Unnumbered Multicast?
+Message-ID: <loom.20080808T022349-632@post.gmane.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello all,
+Hi,
 
-I have the haserl package selected (due to webif) but it does not get
-installed when I do a make.
+Would someone please tell me if the latest uClibc is able to handle Multicast 
+IGMP Joins and sending of Multicast packets on multiple Unnumbered PPP links?
 
-After the initial make is complete and the root filesystem exists in my
-$(TARGET_DIR) I can do the following to get it to install:
+As you probably know, for IPv4, Unnumbered PPP links 'share' the IP address of 
+another interface on the same machine. Therefore, you could potentially have 
+multiple PPP links on one machine, all with exactly the same local IP address. 
+We might want any number of these PPP interfaces to join the same Multicast 
+Group.
 
-$ make haserl-dirclean
-$ make
+Can we multicast send/receive in this scenario? The setsockopt() 
+IP_MULTICAST_IF and IP_ADD_MEMBERSHIP options only seem to distinguish 
+interfaces by their IP address.
 
-Any ideas how to fix it?
-
-Also, I'm not sure it matters but, the haserl.mk looks different than
-most the other .mk that use AUTOTARGETS. It uses := instead of = to set
-all the variables.
-
-The ethtool, lighttpd, strace, and which packages are setup similarly.
-
-Thanks,
-Hartley
+Cheers,
+Daniel
