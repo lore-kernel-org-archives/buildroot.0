@@ -1,57 +1,48 @@
-From: bugs at busybox.net <bugs@busybox.net>
-Date: Fri, 8 Aug 2008 05:51:25 -0700
-Subject: [Buildroot] [buildroot 0004534]: errors in gdb.mk,
-	leading to build failures
-Message-ID: <984933adc611b1a08ced5d07db90efab@busybox.net>
+From: jacmet at uclibc.org <jacmet@uclibc.org>
+Date: Fri,  8 Aug 2008 11:15:30 -0700 (PDT)
+Subject: [Buildroot] svn commit: trunk/buildroot/package/dnsmasq
+Message-ID: <20080808181530.772AB3C632@busybox.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+Author: jacmet
+Date: 2008-08-08 11:15:29 -0700 (Fri, 08 Aug 2008)
+New Revision: 23071
 
-The following issue has been SUBMITTED. 
-====================================================================== 
-http://busybox.net/bugs/view.php?id=4534 
-====================================================================== 
-Reported By:                rbuergel
-Assigned To:                buildroot
-====================================================================== 
-Project:                    buildroot
-Issue ID:                   4534
-Category:                   Other
-Reproducibility:            have not tried
-Severity:                   major
-Priority:                   normal
-Status:                     assigned
-====================================================================== 
-Date Submitted:             08-08-2008 05:51 PDT
-Last Modified:              08-08-2008 05:51 PDT
-====================================================================== 
-Summary:                    errors in gdb.mk, leading to build failures
-Description: 
-1. gdb is eventually patched twice:
-  first during the .unpacked-target and a second time during the
-.patched-target
+Log:
+dnsmasq: bump version
 
-2. gdbserver and gdb on host depend on .unpacked instead of .patched
+fixes dns spoofing vulnerability.
+
+Modified:
+   trunk/buildroot/package/dnsmasq/dnsmasq.mk
 
 
-svn blame shows, that when the .patched-target was introduced, the
-patching wasn't removed from .unpacked, but target-gdb depends on
-.patched, leading to a situation, where the patches were applied twice.
-The change was correct, but it was only the half of what has to be done.
-The appended patch changes the remaining parts. It changes gdbserver and
-host-gdb to depend on .patched and removed the patching from the
-.unpacked-target.
-
-====================================================================== 
-
-Issue History 
-Date Modified   Username       Field                    Change               
-====================================================================== 
-08-08-08 05:51  rbuergel       New Issue                                    
-08-08-08 05:51  rbuergel       Status                   new => assigned     
-08-08-08 05:51  rbuergel       Assigned To               => buildroot       
-08-08-08 05:51  rbuergel       File Added: gdb.mk.patch                     
-======================================================================
+Changeset:
+Modified: trunk/buildroot/package/dnsmasq/dnsmasq.mk
+===================================================================
+--- trunk/buildroot/package/dnsmasq/dnsmasq.mk	2008-08-08 07:28:16 UTC (rev 23070)
++++ trunk/buildroot/package/dnsmasq/dnsmasq.mk	2008-08-08 18:15:29 UTC (rev 23071)
+@@ -5,7 +5,7 @@
+ #############################################################
+ 
+ DNSMASQ_SITE:=http://thekelleys.org.uk/dnsmasq
+-DNSMASQ_UPVER:=2.41
++DNSMASQ_UPVER:=2.45
+ DNSMASQ_SOURCE:=dnsmasq-$(DNSMASQ_UPVER).tar.gz
+ DNSMASQ_DIR:=$(BUILD_DIR)/dnsmasq-$(DNSMASQ_UPVER)
+ DNSMASQ_BINARY:=dnsmasq
+@@ -21,6 +21,10 @@
+ DNSMASQ_COPTS+=-DNO_TFTP
+ endif
+ 
++ifneq ($(BR2_LARGEFILE),y)
++DNSMASQ_COPTS+=-DNO_LARGEFILE
++endif
++
+ ifeq ($(strip $(BR2_PACKAGE_DBUS)),y)
+ DNSMASQ_DBUS:=$(TARGET_DIR)/usr/bin/dbus-daemon
+ else
