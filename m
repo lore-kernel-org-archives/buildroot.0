@@ -1,38 +1,44 @@
-From: Markus Heidelberg <markus.heidelberg@web.de>
-Date: Sat, 9 Aug 2008 21:01:16 +0200
-Subject: [Buildroot] [PATCH] Makefile: also copy top level hidden files to
-	the rootfs
-Message-ID: <200808092101.16455.markus.heidelberg@web.de>
+From: Steffen Schulz <pepe_ml@gmx.net>
+Date: Sun, 10 Aug 2008 07:06:49 +0200
+Subject: [Buildroot] New package util-linux-ng
+Message-ID: <20080810050649.GA26515@cbg.dyndns.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-I'm not sure about the filename pattern .[^.]*
-Is it dependent on the shell, does this work with others than bash? Or should
-there be another solution?
+Hi,
 
 
-Makefile: also copy top level hidden files to the rootfs
+I was trying to fix bug2254 by adding util-linux-ng to buildroot.
+And just before adding it to the bugtracker today I read that
+Makefile.autotoools.in should be used.
 
-Hidden files and directories that are located directly under / haven't been
-copied to the target rootfs. But for example you may need the shell startup
-file /.profile when your home directory is set to /
----
- Makefile |    2 +-
- 1 files changed, 1 insertions(+), 1 deletions(-)
+Long story short, the attached patch has some issues:
 
-diff --git a/Makefile b/Makefile
-index 1f9e7f6..54462b6 100644
---- a/Makefile
-+++ b/Makefile
-@@ -319,7 +319,7 @@ $(PROJECT_BUILD_DIR)/.root:
- 	mkdir -p $(TARGET_DIR)
- 	if ! [ -d "$(TARGET_DIR)/bin" ]; then \
- 		if [ -d "$(TARGET_SKELETON)" ]; then \
--			cp -fa $(TARGET_SKELETON)/* $(TARGET_DIR)/; \
-+			cp -fa $(TARGET_SKELETON)/* $(TARGET_SKELETON)/.[^.]* $(TARGET_DIR)/; \
- 		fi; \
- 		touch $(STAGING_DIR)/.fakeroot.00000; \
- 	fi
+
+- util-linux still wants to compile even though it was not selected and
+  removed from Config.in
+- with util-linux-ng.mk, the are no errors, the package is simply ignored
+- with util-linux-ng.mk.old, the packet works. But the staging_dir
+  misses a file <linux/a.out.h> which is included in <a.out.h>. I think
+  this is a bug in some other packet?
+
+
+Any comments on my fixes in #4274, #4284 and #4294?
+
+
+/steffen
+-- 
+  ,''`,
+ : :' :                                                +49/1781384223
+ `. `'                                        gpg --recv-key A04D7875
+   `-  www.debian.org                     mailto: pepe at cbg.dyndns.org
+-------------- next part --------------
+A non-text attachment was scrubbed...
+Name: util-linux-ng.patch
+Type: text/x-diff
+Size: 19895 bytes
+Desc: not available
+Url : http://busybox.net/lists/buildroot/attachments/20080810/c9d8eb94/attachment.patch 
