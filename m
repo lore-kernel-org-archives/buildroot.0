@@ -1,7 +1,10 @@
-From: Steffen Schulz <pepe_ml@gmx.net>
-Date: Sun, 10 Aug 2008 07:06:49 +0200
-Subject: [Buildroot] New package util-linux-ng
-Message-ID: <20080810050649.GA26515@cbg.dyndns.org>
+From: Markus Heidelberg <markus.heidelberg@web.de>
+Date: Sun, 10 Aug 2008 10:46:34 +0200
+Subject: [Buildroot] [PATCH 2b/2] Vim: bump to 7.1.295
+In-Reply-To: <200807240020.57641.markus.heidelberg@web.de>
+References: <200807230146.01380.markus.heidelberg@web.de>
+	<200807240020.57641.markus.heidelberg@web.de>
+Message-ID: <200808101046.34802.markus.heidelberg@web.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -10,35 +13,68 @@ To: buildroot@busybox.net
 
 Hi,
 
+what about the following Vim patches, I sent on 23./24.07.?
+[PATCH 1/2] Vim: don't use "extra" archive
+[PATCH 2/2] Vim: bump to 7.1.330
 
-I was trying to fix bug2254 by adding util-linux-ng to buildroot.
-And just before adding it to the bugtracker today I read that
-Makefile.autotoools.in should be used.
+I'm unsure about the file packages/editors/vim/configure.patch. What's its
+purpose?  <VIM>/src/auto/configure is created by autoconf 2.61, the original by
+2.59. I don't think this patch is needed.
 
-Long story short, the attached patch has some issues:
+I created a new patch that only updates Vim up to 7.1.295. An update to
+configure.patch is not necessary, it applies with offset and fuzz. 7.1.296
+introduces selinux support and needs an update of configure.patch.
 
+By the way Vim-7.2 has been released yesterday, configure is created by
+autoconf 2.62. Is configure.patch still needed, if it ever was?
 
-- util-linux still wants to compile even though it was not selected and
-  removed from Config.in
-- with util-linux-ng.mk, the are no errors, the package is simply ignored
-- with util-linux-ng.mk.old, the packet works. But the staging_dir
-  misses a file <linux/a.out.h> which is included in <a.out.h>. I think
-  this is a bug in some other packet?
-
-
-Any comments on my fixes in #4274, #4284 and #4294?
+But I wonder whether there really exist users of Vim in Buildroot. Who uses it
+without runtime files because of the error that PATCH 1/2 fixes?
 
 
-/steffen
--- 
-  ,''`,
- : :' :                                                +49/1781384223
- `. `'                                        gpg --recv-key A04D7875
-   `-  www.debian.org                     mailto: pepe at cbg.dyndns.org
--------------- next part --------------
-A non-text attachment was scrubbed...
-Name: util-linux-ng.patch
-Type: text/x-diff
-Size: 19895 bytes
-Desc: not available
-Url : http://busybox.net/lists/buildroot/attachments/20080810/c9d8eb94/attachment.patch 
+
+diff --git a/package/editors/vim/patches b/package/editors/vim/patches
+index 856a8db..7161e2e 100644
+--- a/package/editors/vim/patches
++++ b/package/editors/vim/patches
+@@ -231,3 +231,40 @@
+ 250
+ 251
+ 252
++253
++254
++255
++256
++257
++258
++259
++260
++261
++262
++263
++264
++265
++266
++267
++268
++269
++270
++271
++272
++273
++274
++276
++277
++279
++281
++284
++286
++287
++288
++289
++290
++291
++292
++293
++294
++295
