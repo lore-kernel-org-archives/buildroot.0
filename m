@@ -1,27 +1,66 @@
-From: Ormund Williams <ormundw@panix.com>
-Date: Sun, 10 Aug 2008 20:49:35 -0400
-Subject: [Buildroot] Error building fontconfig-2.6.0
-In-Reply-To: <408540dd0808101656ia4aa363v716f53b28852691c@mail.gmail.com>
-References: <1218410621.27761.98.camel@localhost.localdomain>
-	<408540dd0808101656ia4aa363v716f53b28852691c@mail.gmail.com>
-Message-ID: <1218415775.27761.104.camel@localhost.localdomain>
+From: Teemu Keskinarkaus <Teemu.Keskinarkaus@cc-systems.com>
+Date: Mon, 11 Aug 2008 09:25:19 +0200
+Subject: [Buildroot] Errors on rootfs
+Message-ID: <330EC2471BF24E48B513AF1A6975EB695D59E2@MAIL-UA.ccs.local>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Mon, 2008-08-11 at 11:56 +1200, Matthew Dombroski wrote:
-> theres a bug causing this-
-> http://busybox.net/bugs/view.php?id=0004454
-> 
-> I don't know why it hasnt been fixed yet....
-> revision 23038 of Makefile.autotools.in will work, or you could fix it
-> in your local tree.
-> 
-Thanks Matt,
+Hi,
 
-Now on to problems with ciaro...
+ 
 
-__
-Ormund
+I'm using buildroot to generate system for AT91SAM9263ek board.
+Everything works fine except rootfs mount gives few errors when
+mounting.
+
+ 
+
+Maybe 20 errors like these:
+
+[    1.133916] CLEANMARKER node found at 0x00060000 has totlen 0xc !=
+normal 0x0
+
+[    1.170913] CLEANMARKER node found at 0x00080000 has totlen 0xc !=
+normal 0x0
+
+ 
+
+And maybe 10 errors like these:
+
+[    1.834864] jffs2_scan_eraseblock(): Magic bitmask 0x1985 not found
+at 0x002b73f0 0x90fa instead
+
+[    1.843863] jffs2_scan_eraseblock(): Magic bitmask 0x1985 not found
+at 0x002b73f4 0xac8f instead
+
+ 
+
+First errors seem to come from every block that is used for rootfs.
+
+ 
+
+I'm using Samba/USB to program the rootfs to board. At the moment board
+is Atmel's evaluation board. I verified before rebooting the board that
+flash contained exactly the same image that there were supposed to be.
+So for some reason buildroot generates broken rootfs or am I doing
+something wrong? Block size is correct since filesystem is working just
+fine except those errors on boot. They will stay on every boot.
+
+ 
+
+I wouldn't mind that, but I need to get system up and running as fast as
+possible and those errors take about 1.5seconds and in this case every
+seconds count. ;)
+
+ 
+
+Teemu K.
+
+ 
+
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: http://busybox.net/lists/buildroot/attachments/20080811/6a20119e/attachment.htm 
