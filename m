@@ -1,64 +1,37 @@
-From: Michel Benoit <murpme@gmail.com>
-Date: Mon, 11 Aug 2008 17:42:15 +0200
-Subject: [Buildroot] cross compile curl with buildroot
-Message-ID: <c88e466f0808110842o35e633c3mb28a3c178ad0a829@mail.gmail.com>
+From: Steffen Schulz <pepe_ml@gmx.net>
+Date: Mon, 11 Aug 2008 19:01:57 +0200
+Subject: [Buildroot] New package util-linux-ng
+In-Reply-To: <20080810050649.GA26515@cbg.dyndns.org>
+References: <20080810050649.GA26515@cbg.dyndns.org>
+Message-ID: <20080811170157.GA20864@cbg.dyndns.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi
-
-I'm trying to cross compile curl and libcurl for an arm based
-at91sam9260 platform with buildroot (latest svn version 23075).
-
-Curl compiles correctly but when I try to run it on the target I get
-an "Illegal instruction" error after the first chunk of data is
-received from an http url.
+On 080810 at 07:27, Steffen Schulz wrote:
+> - util-linux still wants to compile even though it was not selected and
+>   removed from Config.in
+> - with util-linux-ng.mk, the are no errors, the package is simply ignored
 
 
-#
-# curl www.dn.se
+Maybe I should have phrased that more like a question. I have a similar
+problem now with a strongSwan package I need in buildroot.
 
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
-        "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
-<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="sv-SE" lang="sv-SE">
-<head>
-        <meta http-equiv="Content-Type" content="text/html;
-charset=ISO-8859-1" />
-        <link rel="shortcut icon"
-href="http://www.dn.se/DNet/images/favicon.ico" />
-        <link rel="alternate" href="http://www.dn.se/huvudnyheter-rss"
-type="application/rss+xml" title="DN - Viktigaste nyh>
-        <link rel="alternate" href="http://www.dn.se/nyheter-rss"
-type="application/rss+xml" title="DN - Nyheter" />
-        <link rel="alternate" href="http://www.dn.se/ekonomi-rss"
-type="application/rss+xml" title="DN - Ekonomi" />
-        <link rel="alternate" href="http://www.dn.se/sport-rss"
-type="application/rss+xml" title="DN - Sport" />
-        <link rel="alternate" href="http://www.dn.se/fotboll-rss"
-type="application/rss+xml" title="DN - Fotboll" />
-        <link rel="alternate" href="http://www.dn.se/stockholm-rss"
-type="application/rss+xml" title="DN - Stockholm" />
-        <link rel="alternate" href="http://www.dn.se/politik-rss"
-type="application/rss+xml" title="
-Illegal instruction
-#
+I created a .mk that uses makefile.autotools.in. I select the new
+packet in menuconfig and type make, but the package is simply ignored.
+No errors.
+
+If I use .mk files without Makefile.autotools.in, both packages are
+correctly processed. Is there any magic thuss missing in my patch? I
+also didn't find any cache files that could be responsible for this.
+
+Using most recent svn trunks here.
 
 
-
-I have an older version of libcurl (that I built manually using an
-older version of buildroot's arm-linux compiler tools)  which works
-fine if I copy it over manually to my target.  That would seem to
-indicate that there is nothing missing on the target and that somehow
-libcurl is being corrupted during the config, build, link or install
-steps of buildroot.
-
-I am using GCC 4.2.4 and binutils 2.18.
-
-Does anyone have an idea what could be causing libcurl to throw an
-Illegal instruction signal?
-Has anyone successfully cross-compiled curl for an arm target?
-
-Michel
+Any help appreciated,
+/Steffen
+-- 
+Hi, I'm a unix-virus.
+Please copy me into your .signature to help me spread!
