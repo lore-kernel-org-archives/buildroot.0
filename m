@@ -1,37 +1,35 @@
-From: Steffen Schulz <pepe_ml@gmx.net>
-Date: Mon, 11 Aug 2008 19:01:57 +0200
-Subject: [Buildroot] New package util-linux-ng
-In-Reply-To: <20080810050649.GA26515@cbg.dyndns.org>
-References: <20080810050649.GA26515@cbg.dyndns.org>
-Message-ID: <20080811170157.GA20864@cbg.dyndns.org>
+From: Wade Berrier <wberrier@gmail.com>
+Date: Mon, 11 Aug 2008 12:41:26 -0600
+Subject: [Buildroot] samba and fpie
+Message-ID: <bbbeeccd0808111141t7828b2eeq1ed0b2d9f7227697@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 080810 at 07:27, Steffen Schulz wrote:
-> - util-linux still wants to compile even though it was not selected and
->   removed from Config.in
-> - with util-linux-ng.mk, the are no errors, the package is simply ignored
+Hi,
 
+In upgrading from uClibc 0.9.28.3 to 0.9.29 I had issues with samba segfaulting.
 
-Maybe I should have phrased that more like a question. I have a similar
-problem now with a strongSwan package I need in buildroot.
+The segfaulting was fixed by pulling the following revisions from the
+0.9.29 branch:
 
-I created a .mk that uses makefile.autotools.in. I select the new
-packet in menuconfig and type make, but the package is simply ignored.
-No errors.
+r20786
+r20881
 
-If I use .mk files without Makefile.autotools.in, both packages are
-correctly processed. Is there any magic thuss missing in my patch? I
-also didn't find any cache files that could be responsible for this.
+That fixed the segfault but I wasn't able to get samba running without doing:
 
-Using most recent svn trunks here.
++               samba_cv_fpie=no \
 
+In it's configure line.  (The patch also forces mkstemp to avoid
+warnings in uclibc)
 
-Any help appreciated,
-/Steffen
--- 
-Hi, I'm a unix-virus.
-Please copy me into your .signature to help me spread!
+Wade
+-------------- next part --------------
+A non-text attachment was scrubbed...
+Name: buildroot-samba_uclibc_0.9.29_nopie_mkstemp.patch
+Type: text/x-diff
+Size: 438 bytes
+Desc: not available
+Url : http://busybox.net/lists/buildroot/attachments/20080811/5333a424/attachment-0001.patch 
