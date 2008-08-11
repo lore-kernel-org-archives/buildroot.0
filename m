@@ -1,28 +1,27 @@
 From: Ormund Williams <ormundw@panix.com>
-Date: Sun, 10 Aug 2008 19:23:41 -0400
+Date: Sun, 10 Aug 2008 20:49:35 -0400
 Subject: [Buildroot] Error building fontconfig-2.6.0
-Message-ID: <1218410621.27761.98.camel@localhost.localdomain>
+In-Reply-To: <408540dd0808101656ia4aa363v716f53b28852691c@mail.gmail.com>
+References: <1218410621.27761.98.camel@localhost.localdomain>
+	<408540dd0808101656ia4aa363v716f53b28852691c@mail.gmail.com>
+Message-ID: <1218415775.27761.104.camel@localhost.localdomain>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi,
+On Mon, 2008-08-11 at 11:56 +1200, Matthew Dombroski wrote:
+> theres a bug causing this-
+> http://busybox.net/bugs/view.php?id=0004454
+> 
+> I don't know why it hasnt been fixed yet....
+> revision 23038 of Makefile.autotools.in will work, or you could fix it
+> in your local tree.
+> 
+Thanks Matt,
 
-I was trying to make buildroot and ran into this error:
-
-> configure: error: Cannot autodetect architecture in cross compile
-> environment
->            Use --with-arch=ARCH to specify architecture
-> make: *** 
-> [/home/ormund/buildroot/build_i686/fontconfig-2.6.0/.stamp_configured]
-> Error 1
-
-I checked ~/buildroot/package/fontconfig/fontconfig.mk and found:
-	--with-arch=$(GNU_TARGET_NAME)
-
-Where do I look now?
+Now on to problems with ciaro...
 
 __
 Ormund
