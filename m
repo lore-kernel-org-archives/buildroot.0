@@ -1,27 +1,66 @@
 From: Hans-Christian Egtvedt <hans-christian.egtvedt@atmel.com>
-Date: Tue, 12 Aug 2008 13:19:13 +0200
-Subject: [Buildroot] [patch] oprofile: bump version to 0.9.4 and
-	make	architecture independent
-In-Reply-To: <1216995456.18524.3.camel@localhost>
-References: <1216995456.18524.3.camel@localhost>
-Message-ID: <1218539953.7930.14.camel@localhost>
+Date: Tue, 12 Aug 2008 13:19:25 +0200
+Subject: [Buildroot] [PATCH] Robusitfy compiler version checks
+In-Reply-To: <1218003482.29697.6.camel@localhost>
+References: <1218003482.29697.6.camel@localhost>
+Message-ID: <1218539965.7930.16.camel@localhost>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Fri, 2008-07-25 at 16:17 +0200, Hans-Christian Egtvedt wrote:
+On Wed, 2008-08-06 at 08:18 +0200, Hans-Christian Egtvedt wrote:
 
 Bump
 
-> This patch will bump the version to 0.9.4 and let the build process be
-> architecture independent.
->     
-> The old patches are not needed anymore, but a new patch for AVR32 has
-> been added to enable lookup_dcookie functionality.
->     
-> Signed-off-by: Hans-Christian Egtvedt <hans-christian.egtvedt@atmel.com>
+> The output of "gcc --version" (and equivalently for g++) is somewhat
+> volatile.  Specifically, the output from GCC 4.3.1 prerelease which
+> ships with OpenSUSE 11.0 doesn't come close to matching the required
+> pattern in the dependency check script.
+> 
+> The output of gcc -v however is standard between releases and across
+> platforms.  It contains a line of the form
+> 
+> gcc version <version> <spoodge>
+> 
+> We can match this reliably and safely, so let's do that instead.
+> 
+> This has been tested across all the systems I have to hand - openSUSE
+> 10.3, 11.0, Xandros, Debian and Cygwin.
+> 
+> Someone with a black belt in sed-fu might be able to simplify this a
+> bit :-)
+> 
+> Signed-off-by: Ben Nizette <bn@niasdigital.com>
+> ---
+> 
+> diff --git a/toolchain/dependencies/dependencies.sh b/toolchain/dependencies/dependencies.sh
+> index 6b026fd..0d67e3a 100755
+> --- a/toolchain/dependencies/dependencies.sh
+> +++ b/toolchain/dependencies/dependencies.sh
+> @@ -194,7 +194,8 @@ if [ -z "$COMPILER" ]; then
+>  	exit 1
+>  fi
+>  
+> -COMPILER_VERSION=$($COMPILER --version 2>&1 | $XSED -e 's/^.*(.CC) \([0-9\.]\)/\1/g' -e "s/[-\ ].*//g" -e '1q')
+> +COMPILER_VERSION=$($COMPILER -v 2>&1 | $XSED -n '/^gcc version/p' |
+> +	$XSED -e 's/^gcc version \([0-9\.]\)/\1/g' -e 's/[-\ ].*//g' -e '1q')
+>  if [ -z "$COMPILER_VERSION" ]; then
+>  	echo "gcc installed:					FALSE"
+>  	/bin/echo -e "\n\nYou must install 'gcc' on your build machine\n"
+> @@ -224,7 +225,8 @@ if [ -z "$CXXCOMPILER" ]; then
+>  	/bin/echo -e "\nYou may have to install 'g++' on your build machine\n"
+>  	#exit 1
+>  else
+> -	CXXCOMPILER_VERSION=$($CXXCOMPILER --version 2>&1 | $XSED -e 's/^.*(.CC) \([0-9\.]\)/\1/g' -e "s/[-\ ].*//g" -e '1q')
+> +	CXXCOMPILER_VERSION=$($CXXCOMPILER -v 2>&1 | $XSED -n '/^gcc version/p' |
+> +		$XSED -e 's/^gcc version \([0-9\.]\)/\1/g' -e 's/[-\ ].*//g' -e '1q')
+>  	if [ -z "$CXXCOMPILER_VERSION" ]; then
+>  		echo "c++ installed:					FALSE"
+>  		/bin/echo -e "\nYou may have to install 'g++' on your build machine\n"
+> 
+> 
 > 
 > _______________________________________________
 > buildroot mailing list
