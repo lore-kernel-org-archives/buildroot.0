@@ -1,28 +1,46 @@
-From: Dirk Vermaak <dirk.vermaak@ntlworld.com>
-Date: Tue, 12 Aug 2008 16:20:57 +0100
-Subject: [Buildroot]
-	=?iso-8859-1?q?Difficulties_with_dynamically_linking?=
-	=?iso-8859-1?q?=A0=A0to=A0libasound=2Eso=2E2=2E0=2E0_=28Solution?=
-	=?iso-8859-1?q?=29?=
-In-Reply-To: <mailman.378.1217857913.1344.buildroot@uclibc.org>
-References: <mailman.378.1217857913.1344.buildroot@uclibc.org>
-Message-ID: <200808121620.57969.dirk.vermaak@ntlworld.com>
+From: Steffen Schulz <pepe_ml@gmx.net>
+Date: Tue, 12 Aug 2008 17:41:03 +0200
+Subject: [Buildroot] New package util-linux-ng
+In-Reply-To: <20080812074455.GA2451@mx.loc>
+References: <20080810050649.GA26515@cbg.dyndns.org>
+	<20080811170157.GA20864@cbg.dyndns.org>
+	<20080812074455.GA2451@mx.loc>
+Message-ID: <20080812154103.GA20961@cbg.dyndns.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-For anyone interested in the future, we know know why our build was failing to 
-work.
+On 080812 at 10:00, Bernhard Fischer wrote:
+> On Mon, Aug 11, 2008 at 07:01:57PM +0200, Steffen Schulz wrote:
+> >On 080810 at 07:27, Steffen Schulz wrote:
+> >> - util-linux still wants to compile even though it was not selected and
+> >>   removed from Config.in
+> >> - with util-linux-ng.mk, the are no errors, the package is simply ignored
+> >
+> >Maybe I should have phrased that more like a question. I have a similar
+> >problem now with a strongSwan package I need in buildroot.
+> >
+> >I created a .mk that uses makefile.autotools.in. I select the new
+> >packet in menuconfig and type make, but the package is simply ignored.
+> 
+> Make sure to run 'make oldconfig' or menuconfig so the package shows up
+> in .config ?
 
-When linking with -l asound you also need -l pthread in your command. Thus
+I did a menuconfig and selected the packages. And indeed .config says:
 
-arm-linux-gcc -fPIC  -oramps DAudio1.1.c  -lasound -lpthread
+BR2_PACKAGE_strongSwan=y
+BR2_PACKAGE_UTIL-LINUX-NG=y
 
-will make the file ramps from DAudio1.1.c and it will run without seg 
-faulting. It appears that you need the pthread library for asound to work.
 
-Cheers,
+But they are still ignored when typing 'make'. No directories in
+/build_i686/ and no errors.
 
-Dirk
+
+Most notably, when I replace the .mk files with equivalents that don't
+use Makefile.autotools.in, both packages are processed. So I guess I
+miss some magic in my .mk files?
+
+
+/steffen
