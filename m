@@ -1,46 +1,82 @@
-From: Steffen Schulz <pepe_ml@gmx.net>
-Date: Tue, 12 Aug 2008 17:41:03 +0200
-Subject: [Buildroot] New package util-linux-ng
-In-Reply-To: <20080812074455.GA2451@mx.loc>
-References: <20080810050649.GA26515@cbg.dyndns.org>
-	<20080811170157.GA20864@cbg.dyndns.org>
-	<20080812074455.GA2451@mx.loc>
-Message-ID: <20080812154103.GA20961@cbg.dyndns.org>
+From: Ormund Williams <ormundw@panix.com>
+Date: Tue, 12 Aug 2008 11:54:52 -0400
+Subject: [Buildroot] Building Cairo using DirectFB
+In-Reply-To: <18945810.post@talk.nabble.com>
+References: <1218467304.18656.19.camel@localhost.localdomain>
+	<18940236.post@talk.nabble.com>
+	<1218548459.6402.6.camel@localhost.localdomain>
+	<18945810.post@talk.nabble.com>
+Message-ID: <1218556492.25677.8.camel@localhost.localdomain>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 080812 at 10:00, Bernhard Fischer wrote:
-> On Mon, Aug 11, 2008 at 07:01:57PM +0200, Steffen Schulz wrote:
-> >On 080810 at 07:27, Steffen Schulz wrote:
-> >> - util-linux still wants to compile even though it was not selected and
-> >>   removed from Config.in
-> >> - with util-linux-ng.mk, the are no errors, the package is simply ignored
-> >
-> >Maybe I should have phrased that more like a question. I have a similar
-> >problem now with a strongSwan package I need in buildroot.
-> >
-> >I created a .mk that uses makefile.autotools.in. I select the new
-> >packet in menuconfig and type make, but the package is simply ignored.
+On Tue, 2008-08-12 at 07:48 -0700, Daniel Laird wrote:
+> I have modified it to build for both versions of DirectFB 1.0.x and 1.2.x
+> (see bug/features in buildroot bugzilla - cant remember the number):
 > 
-> Make sure to run 'make oldconfig' or menuconfig so the package shows up
-> in .config ?
+> I have also added package/pixman as a package
+> See Files below:
+> #package/pixman/pixman.mk
+> #############################################################
+> #
+> # pixman-0.10.0
+> #
+> #############################################################
+> PIXMAN_VERSION = 0.10.0
+> PIXMAN_SOURCE = pixman-$(PIXMAN_VERSION).tar.gz
+> PIXMAN_SITE = http://www.cairographics.org/releases/
+> PIXMAN_AUTORECONF = NO
+> PIXMAN_INSTALL_STAGING = YES
+> PIXMAN_INSTALL_TARGET = YES
+> PIXMAN_INSTALL_STAGING_OPT = DESTDIR=$(STAGING_DIR) install 
+> PIXMAN_INSTALL_TARGET_OPT = DESTDIR=$(TARGET_DIR) install 
+> 
+> ifeq ($(BR2_PREFER_STATIC_LIB),y)
+> 	PIXMAN_CONF_OPT_STATIC = --enable-static
+> endif
+> 
+> PIXMAN_CONF_OPT = --target=$(GNU_TARGET_NAME) --host=$(GNU_TARGET_NAME) \
+> 		--build=$(GNU_HOST_NAME) --prefix=/usr \
+> 		--exec-prefix=/usr --bindir=/usr/bin \
+> 		--sbindir=/usr/sbin --libdir=/usr/lib \
+> 		--libexecdir=/usr/lib --sysconfdir=/etc \
+> 		--datadir=/usr/share --localstatedir=/var \
+> 		--includedir=/usr/include --mandir=/usr/man \
+> 		--infodir=/usr/info --enable-shared \
+> 		$(PIXMAN_CONF_OPT_STATIC)
+> 
+> PIXMAN_DEPENDENCIES = uclibc 
+> 
+> $(eval $(call AUTOTARGETS,package,pixman))
+> 
+> #package/pixman/Config.in
+> config BR2_PACKAGE_PIXMAN
+> 	bool "pixman"
+> 	default n
+> 	depends on BR2_PACKAGE_CAIRO
+> 	help
+>           pixman is a library that provides low-level pixel manipulation
+>           features such as image compositing and trapezoid rasterization.
+> 
+> #package/Config.in
+> source "package/pixman/Config.in"
+> 
+> Hope this helps, there is a pixman under XORG but this should be moved from
+> out of xorg as it is cairo dependent not XORG dependent.
+> 
+The above solved the pixman problem but it still seems that Cairo is
+getting the wrong include path for DirectFB.  Looking at the directfb.pc
+file, I see this line:
+	Cflags: -D_REENTRANT -I/include/directfb
+shouldn't that line be:
+	Cflags: -D_REENTRANT -I/usr/include/directfb
 
-I did a menuconfig and selected the packages. And indeed .config says:
+Can you send me your ..package/directfb/directfb.mk 
 
-BR2_PACKAGE_strongSwan=y
-BR2_PACKAGE_UTIL-LINUX-NG=y
+Thanks
 
-
-But they are still ignored when typing 'make'. No directories in
-/build_i686/ and no errors.
-
-
-Most notably, when I replace the .mk files with equivalents that don't
-use Makefile.autotools.in, both packages are processed. So I guess I
-miss some magic in my .mk files?
-
-
-/steffen
+__
+Ormund
