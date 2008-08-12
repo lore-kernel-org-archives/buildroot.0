@@ -1,74 +1,28 @@
-From: Daniel Laird <daniel.j.laird@nxp.com>
-Date: Tue, 12 Aug 2008 07:48:37 -0700 (PDT)
-Subject: [Buildroot] Building Cairo using DirectFB
-In-Reply-To: <1218548459.6402.6.camel@localhost.localdomain>
-References: <1218467304.18656.19.camel@localhost.localdomain>
-	<18940236.post@talk.nabble.com>
-	<1218548459.6402.6.camel@localhost.localdomain>
-Message-ID: <18945810.post@talk.nabble.com>
+From: Dirk Vermaak <dirk.vermaak@ntlworld.com>
+Date: Tue, 12 Aug 2008 16:20:57 +0100
+Subject: [Buildroot]
+	=?iso-8859-1?q?Difficulties_with_dynamically_linking?=
+	=?iso-8859-1?q?=A0=A0to=A0libasound=2Eso=2E2=2E0=2E0_=28Solution?=
+	=?iso-8859-1?q?=29?=
+In-Reply-To: <mailman.378.1217857913.1344.buildroot@uclibc.org>
+References: <mailman.378.1217857913.1344.buildroot@uclibc.org>
+Message-ID: <200808121620.57969.dirk.vermaak@ntlworld.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+For anyone interested in the future, we know know why our build was failing to 
+work.
 
-I have modified it to build for both versions of DirectFB 1.0.x and 1.2.x
-(see bug/features in buildroot bugzilla - cant remember the number):
+When linking with -l asound you also need -l pthread in your command. Thus
 
-I have also added package/pixman as a package
-See Files below:
-#package/pixman/pixman.mk
-#############################################################
-#
-# pixman-0.10.0
-#
-#############################################################
-PIXMAN_VERSION = 0.10.0
-PIXMAN_SOURCE = pixman-$(PIXMAN_VERSION).tar.gz
-PIXMAN_SITE = http://www.cairographics.org/releases/
-PIXMAN_AUTORECONF = NO
-PIXMAN_INSTALL_STAGING = YES
-PIXMAN_INSTALL_TARGET = YES
-PIXMAN_INSTALL_STAGING_OPT = DESTDIR=$(STAGING_DIR) install 
-PIXMAN_INSTALL_TARGET_OPT = DESTDIR=$(TARGET_DIR) install 
+arm-linux-gcc -fPIC  -oramps DAudio1.1.c  -lasound -lpthread
 
-ifeq ($(BR2_PREFER_STATIC_LIB),y)
-	PIXMAN_CONF_OPT_STATIC = --enable-static
-endif
+will make the file ramps from DAudio1.1.c and it will run without seg 
+faulting. It appears that you need the pthread library for asound to work.
 
-PIXMAN_CONF_OPT = --target=$(GNU_TARGET_NAME) --host=$(GNU_TARGET_NAME) \
-		--build=$(GNU_HOST_NAME) --prefix=/usr \
-		--exec-prefix=/usr --bindir=/usr/bin \
-		--sbindir=/usr/sbin --libdir=/usr/lib \
-		--libexecdir=/usr/lib --sysconfdir=/etc \
-		--datadir=/usr/share --localstatedir=/var \
-		--includedir=/usr/include --mandir=/usr/man \
-		--infodir=/usr/info --enable-shared \
-		$(PIXMAN_CONF_OPT_STATIC)
+Cheers,
 
-PIXMAN_DEPENDENCIES = uclibc 
-
-$(eval $(call AUTOTARGETS,package,pixman))
-
-#package/pixman/Config.in
-config BR2_PACKAGE_PIXMAN
-	bool "pixman"
-	default n
-	depends on BR2_PACKAGE_CAIRO
-	help
-          pixman is a library that provides low-level pixel manipulation
-          features such as image compositing and trapezoid rasterization.
-
-#package/Config.in
-source "package/pixman/Config.in"
-
-Hope this helps, there is a pixman under XORG but this should be moved from
-out of xorg as it is cairo dependent not XORG dependent.
-
-Many thanks
-Daniel Laird
-
--- 
-View this message in context: http://www.nabble.com/Building-Cairo-using-DirectFB-tp18927643p18945810.html
-Sent from the BuildRoot mailing list archive at Nabble.com.
+Dirk
