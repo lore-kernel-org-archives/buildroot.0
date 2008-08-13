@@ -1,15 +1,16 @@
 From: Brian Beattie <beattie@beattie-home.net>
-Date: Wed, 13 Aug 2008 12:38:15 -0700
-Subject: [Buildroot] [PATCH] Add help target to Makefile.in.advanced
-Message-ID: <1218656295.6490.6.camel@kokopelli>
+Date: Wed, 13 Aug 2008 12:40:43 -0700
+Subject: [Buildroot] [PATCH] Add help target to target/linux/Makefile.in
+Message-ID: <1218656443.6490.10.camel@kokopelli>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-This patch adds the target "linux26-help" which will list the targets
-available, because I can never keep track of them.
+This patch adds the target "linux26-help" to target/linux/Makefile.in
+which lists the targets avail for the kernel, be cause I can never
+remember them.
 -- 
 A: Because it messes up the order in which people normally read text.
 Q: Why is top-posting a bad thing?
@@ -18,14 +19,13 @@ Brian Beattie   LFS12947 | "Honor isn't about making the right choices.
 beattie at beattie-home.net | It's about dealing with the consequences."
 www.beattie-home.net     | -- Midori Koto
 
------------------------------------ patch ---------------------------
-
-Index: target/linux/Makefile.in
+------------------------------- patch ----------------------------
+Index: target/linux/Makefile.in.advanced
 ===================================================================
---- target/linux/Makefile.in	(revision 23076)
-+++ target/linux/Makefile.in	(working copy)
-@@ -246,3 +246,23 @@
- 	rm -rf $(LINUX26_DIR)
+--- target/linux/Makefile.in.advanced	(revision 23076)
++++ target/linux/Makefile.in.advanced	(working copy)
+@@ -511,3 +511,23 @@
+ 	@echo KERNEL_EXT=$(KERNEL_EXT)
  
  endif
 +
