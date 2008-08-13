@@ -1,51 +1,54 @@
-From: Hans-Christian Egtvedt <hans-christian.egtvedt@atmel.com>
-Date: Wed, 13 Aug 2008 07:39:18 +0200
-Subject: [Buildroot] [PATCH v2 1/1] openssl:
-	convert	to	Makefile.autotools.in and bump version to 0.9.8g
-In-Reply-To: <20080813032408.GA1773@cloud.net.au>
-References: <1218542611-21908-1-git-send-email-hans-christian.egtvedt@atmel.com>
-	<20080813032408.GA1773@cloud.net.au>
-Message-ID: <1218605958.12416.6.camel@localhost>
+From: bugs at busybox.net <bugs@busybox.net>
+Date: Wed, 13 Aug 2008 00:19:39 -0700
+Subject: [Buildroot] [buildroot 0002254]: util-linux fails to compile for
+	i686 using svn(21060) version of buildroot
+Message-ID: <ce6752c9e8b4cbcf23cfb7cc30562933@bugs.uclibc.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Wed, 2008-08-13 at 13:24 +1000, Hamish Moffatt wrote:
-> On Tue, Aug 12, 2008 at 02:03:31PM +0200, Hans-Christian Egtvedt wrote:
-> > This patch converts building of OpenSSL to use Makefile.autotools.in and bumps
-> 
-> OpenSSL doesn't use autotools though, so is this a good idea?
-> 
-> > +$(OPENSSL_TARGET_CONFIGURE):
-> > +	(cd $(OPENSSL_DIR); \
-> > +		$(TARGET_CONFIGURE_ARGS) \
-> > +		$(TARGET_CONFIGURE_OPTS) \
-> > +		./Configure \
-> > +			linux-$(OPENSSL_TARGET_ARCH) \
-> > +			--prefix=/usr \
-> > +			--openssldir=/usr/lib/ssl \
-> > +			threads \
-> > +			shared \
-> > +			no-idea \
-> > +			no-mdc2 \
-> > +			no-rc5 \
-> > +			zlib-dynamic \
-> >  	)
-> 
-> Once you've overriden the CONFIGURE stage, is there much benefit left in
-> using Makefile.autotools.in?
-> 
 
-The Makefile is smaller now, and IMHO easier to read.
+A NOTE has been added to this issue. 
+====================================================================== 
+http://busybox.net/bugs/view.php?id=2254 
+====================================================================== 
+Reported By:                KHAksnes
+Assigned To:                buildroot
+====================================================================== 
+Project:                    buildroot
+Issue ID:                   2254
+Category:                   Architecture Specific
+Reproducibility:            always
+Severity:                   minor
+Priority:                   normal
+Status:                     assigned
+====================================================================== 
+Date Submitted:             02-19-2008 02:39 PST
+Last Modified:              08-13-2008 00:19 PDT
+====================================================================== 
+Summary:                    util-linux fails to compile for i686 using
+svn(21060) version of buildroot
+Description: 
+util-linux fails to compile and is required by development platform builds.
+====================================================================== 
 
-Installation of man pages, info pages and header/development works
-better now.
+---------------------------------------------------------------------- 
+ pepe - 08-13-08 00:19  
+---------------------------------------------------------------------- 
+The patch adds util-linux-ng to buildroot.
 
-I though the autotools was not purely for autotools stuff, but a way to
-make every package simpler to read and install in a more general way?
+It conflicts with util-linux and requires either e2fsprogs or udev. 
 
--- 
-With kind regards,
-Hans-Christian Egtvedt, Applications Engineer
+Issue History 
+Date Modified   Username       Field                    Change               
+====================================================================== 
+02-19-08 02:39  KHAksnes       New Issue                                    
+02-19-08 02:39  KHAksnes       Status                   new => assigned     
+02-19-08 02:39  KHAksnes       Assigned To               => buildroot       
+08-13-08 00:16  pepe           Issue Monitored: pepe                        
+08-13-08 00:18  pepe           File Added: util-linux-ng.patch                  
+ 
+08-13-08 00:19  pepe           Note Added: 0010394                          
+======================================================================
