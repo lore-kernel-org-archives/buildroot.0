@@ -1,143 +1,42 @@
-From: bugs at busybox.net <bugs@busybox.net>
-Date: Wed, 13 Aug 2008 10:06:37 -0700
-Subject: [Buildroot] [buildroot 0001282]: ccache
-Message-ID: <5e59d75f6424294d06e7f4c49b876424@bugs.busybox.net>
+From: Peter Korsgaard <jacmet@uclibc.org>
+Date: Wed, 13 Aug 2008 21:01:10 +0200
+Subject: [Buildroot] Package haserl does not install to root filesystem
+In-Reply-To: <BD79186B4FD85F4B8E60E381CAEE190960E889@mi8nycmail19.Mi8.com>
+	(hartleys@visionengravers.com's message of "Thu\,
+	7 Aug 2008 22\:11\:42 -0400")
+References: <BD79186B4FD85F4B8E60E381CAEE190960E889@mi8nycmail19.Mi8.com>
+Message-ID: <873al8rb7t.fsf@macbook.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+>>>>> "hartleys" == hartleys  <hartleys@visionengravers.com> writes:
 
-A NOTE has been added to this issue. 
-====================================================================== 
-http://busybox.net/bugs/view.php?id=1282 
-====================================================================== 
-Reported By:                Franck78
-Assigned To:                buildroot
-====================================================================== 
-Project:                    buildroot
-Issue ID:                   1282
-Category:                   Architecture Specific
-Reproducibility:            always
-Severity:                   feature
-Priority:                   normal
-Status:                     assigned
-====================================================================== 
-Date Submitted:             03-21-2007 11:56 PDT
-Last Modified:              08-13-2008 10:06 PDT
-====================================================================== 
-Summary:                    ccache
-Description: 
-Hello,
+ hartleys> Hello all,
 
-1) ccache is built at the end of the toolchain (gcc/uclibc/binutils). It
-serves for nothing (ok I except if you slected other package it may...).
+ hartleys> I have the haserl package selected (due to webif) but it
+ hartleys> does not get installed when I do a make.
 
-2) the ccache_dir is fixed inside 'toolchain_build_i486' It would be
-better if the  CCACHE_DIR could be setup somewhere else outside
-'buildroot'.
-Why? In automated procedure constructing distro, buildroot.tar.gz is
-expanded then configured then built as all other packages making the
-distro.
-It means everytime, buildroot dir is like a virgin.. ;-) No ccache_dir
-inside.
+ hartleys> After the initial make is complete and the root filesystem
+ hartleys> exists in my $(TARGET_DIR) I can do the following to get it
+ hartleys> to install:
 
-but if ccache_dir is outside....ok, it will be preserved accross rebuilds
-and the final touch would have ccache used for ALL the toolchain
-construction...!
+ hartleys> $ make haserl-dirclean
+ hartleys> $ make
 
+ hartleys> Any ideas how to fix it?
 
-Adding a new option in 'make menuconfig' is beyond my knowledge of
-buildroot for now.
+Could you be a bit more specific? Does it error out or does the haserl
+install step never run? It seems to work here.
 
-Franck
-====================================================================== 
+ hartleys> Also, I'm not sure it matters but, the haserl.mk looks
+ hartleys> different than most the other .mk that use AUTOTARGETS. It
+ hartleys> uses := instead of = to set all the variables.
 
----------------------------------------------------------------------- 
- bernhardf - 06-25-07 11:02  
----------------------------------------------------------------------- 
-Although i don't understand a word, i think that this sounds like "Doctor,
-it hurts when i do.."
+That's afaik ok. := is more efficient than = so it should normally be
+used.
 
-Please describe the problem you are facing and suggest what should be done
-why and how, i shall close this bug otherwise. 
-
----------------------------------------------------------------------- 
- Franck78 - 06-25-07 11:38  
----------------------------------------------------------------------- 
-Ok,
-A distro is something more complete than buildroot alone. The buildroot
-package is only 'one step among others'. The full build can follow some
-method like lfs (linux from scratch). 
-Having ccache dir outside of the tree build avoid loosing what have been
-already compiled when some kind of full rebuild of the distro is
-performed. In other words, the cachedir is in a safe configurable place. 
-
-tchuss. 
-
----------------------------------------------------------------------- 
- chickenandporn - 06-25-07 21:13  
----------------------------------------------------------------------- 
-It seems the request is:
-
-Add a Config.in/Kconfig option for user-specified CCACHE_DIR defaulting to
-current value
-
-This is within my ability, but I don't have a ccache build working (I'm
-broken with MacOSX right now).  I will contact submitter. 
-
----------------------------------------------------------------------- 
- UlfSamuelsson - 09-23-07 16:15  
----------------------------------------------------------------------- 
-ccache will do by default, what you need, but buildroot does:
-
-$(SED) "s,getenv(\"CCACHE_PATH\"),\"$(STAGING_DIR)/usr/bin-ccache\",g" \
-	$(CCACHE_DIR1)/execute.c
-$(SED) "s,getenv(\"CCACHE_DIR\"),\"$(CCACHE_DIR1)/cache\",g" \
-	$(CCACHE_DIR1)/ccache.c
-
-If it did not do that replacement, or replaced with
-getenv("BUILDROOT_CCACHE_PATH") and 
-getenv("BUILDROOT_CCACHE_DIR") you would be OK.
-
-Then the user has to set up these variables outside Buildroot,
-so Buildroot needs to set up these to a default. 
-
----------------------------------------------------------------------- 
- bernhardf - 09-24-07 00:49  
----------------------------------------------------------------------- 
-Using the established CCACHE_PATH and CCACHE_DIR (i.e. dropping our
-patching those out) and providing menuconfig-entries depending on ccache
-would IMO be the proper thing to do.
-
-Is anybody willing to attach such a patch (that is tested and works for
-him/her)?
-
-thanks, 
-
----------------------------------------------------------------------- 
- wberrier - 08-13-08 10:06  
----------------------------------------------------------------------- 
-This patch works well for me.  I leave CCACHE_PATH as is since those should
-be relative to the toolchain's staging dir.
-
-But I make CCACHE_DIR configurable so I can build a cross compiler for
-others to use without having to keep the builddir around and accessible to
-them. 
-
-Issue History 
-Date Modified   Username       Field                    Change               
-====================================================================== 
-03-21-07 11:56  Franck78       New Issue                                    
-03-21-07 11:56  Franck78       Status                   new => assigned     
-03-21-07 11:56  Franck78       Assigned To               => buildroot       
-06-25-07 11:02  bernhardf      Note Added: 0002507                          
-06-25-07 11:38  Franck78       Note Added: 0002513                          
-06-25-07 21:13  chickenandporn Note Added: 0002515                          
-09-23-07 16:15  UlfSamuelsson  Note Added: 0002773                          
-09-24-07 00:49  bernhardf      Note Added: 0002778                          
-08-13-08 10:03  wberrier       File Added: buildroot-custom_ccache_dir.patch    
-               
-08-13-08 10:06  wberrier       Note Added: 0010404                          
-======================================================================
+-- 
+Bye, Peter Korsgaard
