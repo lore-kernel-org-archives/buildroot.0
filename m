@@ -1,16 +1,17 @@
 From: Brian Beattie <beattie@beattie-home.net>
-Date: Wed, 13 Aug 2008 12:40:43 -0700
-Subject: [Buildroot] [PATCH] Add help target to target/linux/Makefile.in
-Message-ID: <1218656443.6490.10.camel@kokopelli>
+Date: Wed, 13 Aug 2008 12:43:56 -0700
+Subject: [Buildroot] [PATCH] Add package help targets help-all
+Message-ID: <1218656636.6490.15.camel@kokopelli>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-This patch adds the target "linux26-help" to target/linux/Makefile.in
-which lists the targets avail for the kernel, be cause I can never
-remember them.
+This patch will add the target "help-all" which depends on
+$(HELP_TARGETS) which is set in the previous two patches I sent.  If
+this patch is accepted I can do patches for other packages.
+
 -- 
 A: Because it messes up the order in which people normally read text.
 Q: Why is top-posting a bad thing?
@@ -19,34 +20,41 @@ Brian Beattie   LFS12947 | "Honor isn't about making the right choices.
 beattie at beattie-home.net | It's about dealing with the consequences."
 www.beattie-home.net     | -- Midori Koto
 
-------------------------------- patch ----------------------------
-Index: target/linux/Makefile.in.advanced
+------------------------------- patch
+----------------------------------Index: Makefile
 ===================================================================
---- target/linux/Makefile.in.advanced	(revision 23076)
-+++ target/linux/Makefile.in.advanced	(working copy)
-@@ -511,3 +511,23 @@
- 	@echo KERNEL_EXT=$(KERNEL_EXT)
+--- Makefile	(revision 23076)
++++ Makefile	(working copy)
+@@ -26,6 +26,7 @@
+ CONFIG_DEFCONFIG=.defconfig
+ CONFIG=package/config
+ DATE:=$(shell date +%Y%m%d)
++HELP_TARGETS:=help
  
- endif
-+
-+linux26-help:
-+	@echo 
-+	@echo "==================="
-+	@echo "linux26 targets"
-+	@echo
-+	@echo "linux26-menuconfig - Run menuconfig for kernel"
-+	@echo "linux26-xconfig    - Run xconfig for kernel"
-+	@echo "linux26            - Make kernel"
-+	@echo "linux26-modules    - Make kernel modules"
-+	@echo "linux26-source     - Get kernel source distribution"
-+	@echo "linux26-unpacked   - Unpack kernel source and apply patches"
-+	@echo "linux26-config     - Configure kernel"
-+	@echo "linux26-update     - Save current kernel configuration"
-+	@echo "linux26-force      - Force complete kernel build on next \"make
-\""
-+	@echo "linux26clean       - Mark kernel source unconfigured and run
-\"make clean\""
-+	@echo "linux26-dirclean   - Remove kernel source directory"
-+	@echo 
-+
+ noconfig_targets:=menuconfig config oldconfig randconfig \
+ 	defconfig allyesconfig allnoconfig release tags \
+@@ -251,6 +252,7 @@
+ 
+ ifeq ($(BR2_PACKAGE_LINUX),y)
+ TARGETS+=linux26-modules
 +HELP_TARGETS+=linux26-help
+ endif
+ 
+ include package/*/*.mk
+@@ -507,9 +509,14 @@
+ 	@echo '  source-check           - check all packages for valid
+download URLs'
+ 	@echo '  external-deps          - list external packages used'
+ 	@echo
++	@echo '  help-all               - list package help'
++	@echo
+ 	@echo 'See docs/README and docs/buildroot.html for further details'
+ 	@echo
+ 
++help-all:	$(HELP_TARGETS)
++
+ .PHONY: dummy subdirs release distclean clean config oldconfig \
+-	menuconfig tags check test depend defconfig help
++	menuconfig tags check test depend defconfig help \
++	help-all $(HELP_TARGETS)
+ 
