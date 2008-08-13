@@ -1,60 +1,36 @@
-From: Brian Beattie <beattie@beattie-home.net>
-Date: Wed, 13 Aug 2008 12:43:56 -0700
-Subject: [Buildroot] [PATCH] Add package help targets help-all
-Message-ID: <1218656636.6490.15.camel@kokopelli>
+From: hartleys <hartleys@visionengravers.com>
+Date: Wed, 13 Aug 2008 17:05:31 -0400
+Subject: [Buildroot] Package ace_of_penguins sets unneeded variable
+Message-ID: <BD79186B4FD85F4B8E60E381CAEE190966BE6A@mi8nycmail19.Mi8.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-This patch will add the target "help-all" which depends on
-$(HELP_TARGETS) which is set in the previous two patches I sent.  If
-this patch is accepted I can do patches for other packages.
+Hello all,
 
--- 
-A: Because it messes up the order in which people normally read text.
-Q: Why is top-posting a bad thing?
+The ace_of_penguins package sets:
 
-Brian Beattie   LFS12947 | "Honor isn't about making the right choices.
-beattie at beattie-home.net | It's about dealing with the consequences."
-www.beattie-home.net     | -- Midori Koto
+ACE_OF_PENGUINS_CONF_OPT = --target=$(GNU_TARGET_NAME) \
+		--host=$(GNU_TARGET_NAME) --build=$(GNU_HOST_NAME) \
+		--prefix=/usr --sysconfdir=/etc
 
-------------------------------- patch
-----------------------------------Index: Makefile
-===================================================================
---- Makefile	(revision 23076)
-+++ Makefile	(working copy)
-@@ -26,6 +26,7 @@
- CONFIG_DEFCONFIG=.defconfig
- CONFIG=package/config
- DATE:=$(shell date +%Y%m%d)
-+HELP_TARGETS:=help
- 
- noconfig_targets:=menuconfig config oldconfig randconfig \
- 	defconfig allyesconfig allnoconfig release tags \
-@@ -251,6 +252,7 @@
- 
- ifeq ($(BR2_PACKAGE_LINUX),y)
- TARGETS+=linux26-modules
-+HELP_TARGETS+=linux26-help
- endif
- 
- include package/*/*.mk
-@@ -507,9 +509,14 @@
- 	@echo '  source-check           - check all packages for valid
-download URLs'
- 	@echo '  external-deps          - list external packages used'
- 	@echo
-+	@echo '  help-all               - list package help'
-+	@echo
- 	@echo 'See docs/README and docs/buildroot.html for further details'
- 	@echo
- 
-+help-all:	$(HELP_TARGETS)
-+
- .PHONY: dummy subdirs release distclean clean config oldconfig \
--	menuconfig tags check test depend defconfig help
-+	menuconfig tags check test depend defconfig help \
-+	help-all $(HELP_TARGETS)
- 
+This appears to be unnecessary since Makefile.autotools.in sets those
+automatically:
+
+	cd $(@D)/$($(PKG)_SUBDIR) && rm -f config.cache && \
+	$(TARGET_CONFIGURE_OPTS) \
+	$(TARGET_CONFIGURE_ARGS) \
+	$($(PKG)_CONF_ENV) \
+		./configure \
+		--target=$(GNU_TARGET_NAME) \
+		--host=$(GNU_TARGET_NAME) \
+		--build=$(GNU_HOST_NAME) \
+		--prefix=/usr \
+		--exec-prefix=/usr \
+		--sysconfdir=/etc \
+		$(if $(findstring s,$(MAKEFLAGS)),--quiet,)
+		$($(PKG)_CONF_OPT)
+
+Hartley
