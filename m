@@ -1,36 +1,28 @@
-From: hartleys <hartleys@visionengravers.com>
-Date: Wed, 13 Aug 2008 17:05:31 -0400
-Subject: [Buildroot] Package ace_of_penguins sets unneeded variable
-Message-ID: <BD79186B4FD85F4B8E60E381CAEE190966BE6A@mi8nycmail19.Mi8.com>
+From: Wade Berrier <wberrier@gmail.com>
+Date: Wed, 13 Aug 2008 16:46:33 -0600
+Subject: [Buildroot] [PATCH] Makefile.autotools.in compatible with tar 1.14
+Message-ID: <bbbeeccd0808131546j2b099b32t9df286eeba21958b@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello all,
+Hi,
 
-The ace_of_penguins package sets:
+I came across a scenario where I needed to build on an older system
+that only has tar 1.14.
 
-ACE_OF_PENGUINS_CONF_OPT = --target=$(GNU_TARGET_NAME) \
-		--host=$(GNU_TARGET_NAME) --build=$(GNU_HOST_NAME) \
-		--prefix=/usr --sysconfdir=/etc
+This patch will automatically detect whether tar should use
+--strip-components or --strip-path.
 
-This appears to be unnecessary since Makefile.autotools.in sets those
-automatically:
+The shell is kinda clunky, but it works.
 
-	cd $(@D)/$($(PKG)_SUBDIR) && rm -f config.cache && \
-	$(TARGET_CONFIGURE_OPTS) \
-	$(TARGET_CONFIGURE_ARGS) \
-	$($(PKG)_CONF_ENV) \
-		./configure \
-		--target=$(GNU_TARGET_NAME) \
-		--host=$(GNU_TARGET_NAME) \
-		--build=$(GNU_HOST_NAME) \
-		--prefix=/usr \
-		--exec-prefix=/usr \
-		--sysconfdir=/etc \
-		$(if $(findstring s,$(MAKEFLAGS)),--quiet,)
-		$($(PKG)_CONF_OPT)
-
-Hartley
+Wade
+-------------- next part --------------
+A non-text attachment was scrubbed...
+Name: buildroot-autotools_tar.patch
+Type: text/x-diff
+Size: 1102 bytes
+Desc: not available
+Url : http://busybox.net/lists/buildroot/attachments/20080813/e219abef/attachment.patch 
