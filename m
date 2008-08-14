@@ -1,27 +1,38 @@
-From: Mikael Sundberg <micke@oddjob.se>
-Date: Thu, 14 Aug 2008 16:59:24 +0200
+From: Ormund Williams <ormundw@panix.com>
+Date: Thu, 14 Aug 2008 11:37:19 -0400
 Subject: [Buildroot] Autodetect architechture
-Message-ID: <48A4484C.9020000@oddjob.se>
+In-Reply-To: <48A4484C.9020000@oddjob.se>
+References: <48A4484C.9020000@oddjob.se>
+Message-ID: <1218728239.5564.6.camel@localhost.localdomain>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi everyone, I?m new on this list and have a problem.
+On Thu, 2008-08-14 at 16:59 +0200, Mikael Sundberg wrote:
+> Hi everyone, I?m new on this list and have a problem.
+> 
+> When I try to build with "fontconfig" enabled I get a configuration 
+> error saying:
+>  - "Cannot autodetect architecture while crosscompiling", bails out and 
+> tells me to use the "--with-arch" option.
+> In "package/fontconfig/fontconfig.mk" there a 
+> "--with-arch=$(GNU_TARGET_NAME)" in the FONTCONFIG_CONF_OPT but it 
+> doesn?t seem to be added when the configure script runs.
+> 
+> Any ideas? Need more info?
+> 
+I asked that same question a few days ago, here's the answer
 
-When I try to build with "fontconfig" enabled I get a configuration 
-error saying:
- - "Cannot autodetect architecture while crosscompiling", bails out and 
-tells me to use the "--with-arch" option.
-In "package/fontconfig/fontconfig.mk" there a 
-"--with-arch=$(GNU_TARGET_NAME)" in the FONTCONFIG_CONF_OPT but it 
-doesn?t seem to be added when the configure script runs.
+On Mon, 2008-08-11 at 11:56 +1200, Matthew Dombroski wrote:
+> theres a bug causing this-
+> http://busybox.net/bugs/view.php?id=0004454
+> 
+> I don't know why it hasnt been fixed yet....
+> revision 23038 of Makefile.autotools.in will work, or you could fix it
+> in your local tree.
+> 
 
-Any ideas? Need more info?
-
-I have been able to build buildroot in the past without this problem but 
-then I got a HDD-crash and the working environment was lost.
-
-regards,
-Mikael Sundberg
+__
+Ormund
