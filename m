@@ -1,51 +1,58 @@
 From: hartleys <hartleys@visionengravers.com>
-Date: Wed, 13 Aug 2008 20:49:20 -0400
+Date: Wed, 13 Aug 2008 21:29:30 -0400
 Subject: [Buildroot] Problem compiling c++ files
-Message-ID: <BD79186B4FD85F4B8E60E381CAEE190966BEED@mi8nycmail19.Mi8.com>
+In-Reply-To: <BD79186B4FD85F4B8E60E381CAEE190966BEED@mi8nycmail19.Mi8.com>
+References: <BD79186B4FD85F4B8E60E381CAEE190966BEED@mi8nycmail19.Mi8.com>
+Message-ID: <BD79186B4FD85F4B8E60E381CAEE190966BEF4@mi8nycmail19.Mi8.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello all,
+On Wednesday, August 13, 2008 5:49 PM, hartleys wrote:
+> Hello all,
+>
+> I'm not sure if this is a buildroot problem or something with
+> automake. Hopefully someone can help.
+>
+> I'm trying to cross-compile a c++ program under buildroot with
+> an external toolchain. For some reason the ./configure output
+> does not set the CXX and CXXCPP variables with the full path to
+> the executables. Then during the make step I get the following
+> error:
 
-I'm not sure if this is a buildroot problem or something with automake.
-Hopefully someone can help.
+<SNIP>
 
-I'm trying to cross-compile a c++ program under buildroot with an
-external toolchain. For some reason the ./configure output does not set
-the CXX and CXXCPP variables with the full path to the executables. Then
-during the make step I get  the following error:
+I think I found the problem but I'm not sure where to fix it...
 
-if arm-linux-g++ -DHAVE_CONFIG_H -I. -I. -I../..   -I../..
--I../../include  -g -O2 -MT test.o -MD -MP -MF ".deps/test.Tpo" -c -o
-test.o test.cpp; \
-        then mv -f ".deps/test.Tpo" ".deps/test.Po"; else rm -f
-".deps/test.Tpo"; exit 1; fi
-/bin/sh: arm-linux-g++: command not found
+Toward the end of package/Makefile.in there is this setting:
 
-Here's the relevant section of the generated Makefile:
+ifneq ($(BR2_GCC_CROSS_CXX),y)
+TARGET_CONFIGURE_OPTS+=CXX=""
+endif
 
-CC = /usr/local/arm/4.1.1-920t/bin/arm-linux-gcc -Os
--I/home/cross/buildroot/build_arm/staging_dir/include
--I/home/cross/buildroot/build_arm/staging_dir/usr/include
--I/usr/local/arm/4.1.1-920t/arm-linux/include
-CCDEPMODE = depmode=gcc3
-CFLAGS = -g -O2 -Wall
-CPP = /usr/local/arm/4.1.1-920t/bin/arm-linux-cpp -Os
--I/home/cross/buildroot/build_arm/staging_dir/include
--I/home/cross/buildroot/build_arm/staging_dir/usr/include
--I/usr/local/arm/4.1.1-920t/arm-linux/include
-CPPFLAGS = 
-CXX = arm-linux-g++
-CXXCPP = arm-linux-g++ -E
+I think that's what's mucking up automake. As far as I can tell
+BR2_GCC_CROSS_CXX is only set in toolchain/gcc/Config.in. Walking thru
+the various configs I get.
 
-Shouldn't the CXX and CXXCPP also be prefixed by
-/usr/local/arm/4.1.1-920t/bin/?
+1) I'm using an external binary toolchain (BR2_TOOLCHAIN_EXTERNAL=y from
+toolchain/Config.in).
+   This results in BR2_TOOLCHAIN_SOURCE=n (same file).
+2) When toolchain/Config.in.2 then gets processed the whole file gets
+skipped except for the source "toolchain/kernel-headers/Config.in" at
+the beginning.
+   This results in toolchain/gcc/Config.in getting skipped.
 
-All the other programs in the external toolchain, such as AR, RANLIB and
-STRIP, have the prefix.
+If I add the following to toolchain/external-toolchain/Config.in the
+build works fine.
+
+config BR2_GCC_CROSS_CXX
+	bool "C++ cross-compiler support"
+	help
+	  Enable C++ cross-compiler support.
+
+I'm just not sure if this is the correct approach.
 
 Thanks,
 Hartley
