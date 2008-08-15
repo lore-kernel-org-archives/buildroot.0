@@ -1,22 +1,28 @@
-From: Christopher Taylor <chtaylo3@gmail.com>
-Date: Thu, 14 Aug 2008 17:32:31 -0400
+From: markus.heidelberg at web.de <markus.heidelberg@web.de>
+Date: Fri, 15 Aug 2008 08:09:33 +0200
 Subject: [Buildroot] GDB attempting to apply patches severla times
-In-Reply-To: <2590773a0808141419g315df3dcq25eb9fcd7db34649@mail.gmail.com>
-References: <2590773a0808141241u4210fa5bh114585858cff6080@mail.gmail.com>
-	<2590773a0808141245y57fe1166n3d1646ab285b9824@mail.gmail.com>
-	<2590773a0808141256m12ee7203i5597833fa132c05@mail.gmail.com>
-	<200808142251.50196.markus.heidelberg@web.de>
-	<2590773a0808141419g315df3dcq25eb9fcd7db34649@mail.gmail.com>
-Message-ID: <2590773a0808141432x71264999x49e02ba368e7756@mail.gmail.com>
+Message-ID: <619657791@web.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-for some reason, br wants to rebuild gdb every time now :/  I'll
-fiddle with this some more tomorrow.
+> > diff --git a/toolchain/gdb/gdb.mk b/toolchain/gdb/gdb.mk
+> > index 6220cd9..d156758 100644
+> > --- a/toolchain/gdb/gdb.mk
+> > +++ b/toolchain/gdb/gdb.mk
+> > @@ -57,11 +57,8 @@ ifeq ($(GDB_VERSION),snapshot)
+> >                tar jtf $(DL_DIR)/$(GDB_SOURCE) | head -1 | cut -d"/" -f1)
+> >        ln -sf $(TOOL_BUILD_DIR)/$(shell tar jtf $(DL_DIR)/$(GDB_SOURCE) | head -1 | cut -d"/" -f1) $(GDB_DIR)
+> >  endif
+> > -       toolchain/patch-kernel.sh $(GDB_DIR) $(GDB_PATCH_DIR) \*.patch
+> > -       $(CONFIG_UPDATE) $(GDB_DIR)
+> > -       touch $@
 
--Chris
+Oh, we don't want to delete the last command "touch $@". That's the reason why br wants to rebuild gdb every time now, br thinks it has never been unpacked. But I think that should have occured with your patch the same way already, I have just taken this part from your patch. However...
 
-O
+Markus
+_______________________________________________________________________
+EINE F?R ALLE: die kostenlose WEB.DE-Plattform f?r Freunde und Deine
+Homepage mit eigenem Namen. Jetzt starten! http://unddu.de/?kid=kid at mf2
