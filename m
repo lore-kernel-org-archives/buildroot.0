@@ -1,46 +1,29 @@
-From: jacmet at uclibc.org <jacmet@uclibc.org>
-Date: Sat, 16 Aug 2008 12:36:37 -0700 (PDT)
-Subject: [Buildroot] svn commit: trunk/buildroot/package/pcre
-Message-ID: <20080816193637.0E5DF3C7BC@busybox.net>
+From: Peter Korsgaard <jacmet@uclibc.org>
+Date: Sat, 16 Aug 2008 21:38:55 +0200
+Subject: [Buildroot] problem compiling lighttpd (pcre problem)
+In-Reply-To: <ea6597e70807241051y2aeb1c8bt65a841c29c1d5b08@mail.gmail.com>
+	(Richard's message of "Thu\, 24 Jul 2008 18\:51\:07 +0100")
+References: <ea6597e70807241051y2aeb1c8bt65a841c29c1d5b08@mail.gmail.com>
+Message-ID: <87ej4oiwc0.fsf@macbook.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Author: jacmet
-Date: 2008-08-16 12:36:36 -0700 (Sat, 16 Aug 2008)
-New Revision: 23094
+>>>>> "Richard" == Richard  <mr.resistor@gmail.com> writes:
 
-Log:
-pcre: fix target install
+ Richard> hey
+ Richard> i have finally got everything i want to compile, except for
+ Richard> lighttpd.  the error message given is :
 
-Use install-strip and clean up documentation files instead of
-install-exec so files get stripped and manpages installed if
-requested.
+ Richard>  skipping incompatible /usr/lib/libpcre.so when searching
+ Richard> for -lpcre
+ Richard> /dns323/uclibc/buildroot/build_arm/staging_dir/usr/bin/../lib/gcc/arm-linux-uclibc/4.2.4/../../../../arm-linux-uclibc/bin/ld:
+ Richard> cannot find -lpcre
 
-Modified:
-   trunk/buildroot/package/pcre/pcre.mk
+That's an error in libpcre, not lighttpd when compiling without C++
+support. It should be fixed in trunk now.
 
-
-Changeset:
-Modified: trunk/buildroot/package/pcre/pcre.mk
-===================================================================
---- trunk/buildroot/package/pcre/pcre.mk	2008-08-16 19:13:53 UTC (rev 23093)
-+++ trunk/buildroot/package/pcre/pcre.mk	2008-08-16 19:36:36 UTC (rev 23094)
-@@ -8,6 +8,7 @@
- PCRE_SITE = ftp://ftp.csx.cam.ac.uk/pub/software/programming/pcre
- PCRE_INSTALL_STAGING = YES
- PCRE_INSTALL_TARGET = YES
-+PCRE_INSTALL_TARGET_OPT:=DESTDIR=$(TARGET_DIR) install-strip
- 
- ifneq ($(BR2_INSTALL_LIBSTDCPP),y)
- # pcre will use the host g++ if a cross version isn't available
-@@ -17,3 +18,7 @@
- PCRE_DEPENDENCIES = uclibc
- 
- $(eval $(call AUTOTARGETS,package,pcre))
-+
-+$(PCRE_HOOK_POST_INSTALL): $(PCRE_TARGET_INSTALL_TARGET)
-+	rm -rf $(TARGET_DIR)/usr/share/doc/pcre
-+	touch $@
+-- 
+Bye, Peter Korsgaard
