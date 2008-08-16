@@ -1,148 +1,46 @@
-From: bugs at busybox.net <bugs@busybox.net>
-Date: Sat, 16 Aug 2008 12:18:20 -0700
-Subject: [Buildroot] [buildroot 0004164]: SDL_ttf needs SDL to be compiled
-	first
-Message-ID: <8cb2df250d1d7db223d621807ef42729@bugs.busybox.net>
+From: jacmet at uclibc.org <jacmet@uclibc.org>
+Date: Sat, 16 Aug 2008 12:36:37 -0700 (PDT)
+Subject: [Buildroot] svn commit: trunk/buildroot/package/pcre
+Message-ID: <20080816193637.0E5DF3C7BC@busybox.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+Author: jacmet
+Date: 2008-08-16 12:36:36 -0700 (Sat, 16 Aug 2008)
+New Revision: 23094
 
-The following issue has been CLOSED 
-====================================================================== 
-http://busybox.net/bugs/view.php?id=4164 
-====================================================================== 
-Reported By:                artemys
-Assigned To:                buildroot
-====================================================================== 
-Project:                    buildroot
-Issue ID:                   4164
-Category:                   Shared Library Support
-Reproducibility:            always
-Severity:                   minor
-Priority:                   normal
-Status:                     closed
-Resolution:                 reopened
-Fixed in Version:           
-====================================================================== 
-Date Submitted:             07-16-2008 08:31 PDT
-Last Modified:              08-16-2008 12:18 PDT
-====================================================================== 
-Summary:                    SDL_ttf needs SDL to be compiled first
-Description: 
-It is possible to select the build of SDL_ttf even if SDL is not selected.
--> compilation error
+Log:
+pcre: fix target install
 
-Correction patch attached.
-Same should apply to SDL_mixer...
-======================================================================
-Relationships       ID      Summary
-----------------------------------------------------------------------
-has duplicate       0004154 SDL_ttf doesn't compile if freetype pac...
-====================================================================== 
+Use install-strip and clean up documentation files instead of
+install-exec so files get stripped and manpages installed if
+requested.
 
----------------------------------------------------------------------- 
- bernhardf - 07-16-08 08:47  
----------------------------------------------------------------------- 
---- package/sdl_ttf/Config.in.org	2008-07-16 17:10:29.000000000 +0200
-+++ package/sdl_ttf/Config.in	2008-07-16 17:10:57.000000000 +0200
-@@ -1,6 +1,7 @@
- config BR2_PACKAGE_SDL_TTF
- 	bool "SDL_TTF"
- 	default n
-+	depends on BR2_PACKAGE_SDL
+Modified:
+   trunk/buildroot/package/pcre/pcre.mk
 
-yes, exactly.
 
- 	select BR2_PACKAGE_FREETYPE
- 	help
- 	  SDL_ttf is a sample TrueType font library. It allows you to
---- package/sdl_ttf/sdl_ttf.mk.org	2008-07-16 17:29:42.000000000 +0200
-+++ package/sdl_ttf/sdl_ttf.mk	2008-07-16 17:30:06.000000000 +0200
-@@ -60,7 +60,7 @@
- 	cp -dpf $(STAGING_DIR)/usr/lib/libSDL_ttf*.so* $(TARGET_DIR)/usr/lib/
- 	-$(STRIPCMD) $(STRIP_STRIP_UNNEEDED)
-$(TARGET_DIR)/usr/lib/libSDL_ttf.so
+Changeset:
+Modified: trunk/buildroot/package/pcre/pcre.mk
+===================================================================
+--- trunk/buildroot/package/pcre/pcre.mk	2008-08-16 19:13:53 UTC (rev 23093)
++++ trunk/buildroot/package/pcre/pcre.mk	2008-08-16 19:36:36 UTC (rev 23094)
+@@ -8,6 +8,7 @@
+ PCRE_SITE = ftp://ftp.csx.cam.ac.uk/pub/software/programming/pcre
+ PCRE_INSTALL_STAGING = YES
+ PCRE_INSTALL_TARGET = YES
++PCRE_INSTALL_TARGET_OPT:=DESTDIR=$(TARGET_DIR) install-strip
  
--SDL sdl_ttf: uclibc $(TARGET_DIR)/usr/lib/libSDL_ttf.so
-+SDL_TTF sdl_ttf: uclibc $(TARGET_DIR)/usr/lib/libSDL_ttf.so
-
-That caps "SDL_TTF" sounds wrong (or at least redundant).
-Also, i suspect that you will need to have libsdl.so as prereq, something
-like:
-
-sdl_ttf: uclibc $(TARGET_DIR)/usr/lib/libSDL.so \
-$(TARGET_DIR)/usr/lib/libSDL_ttf.so 
-
----------------------------------------------------------------------- 
- artemys - 07-16-08 10:24  
----------------------------------------------------------------------- 
-sdl_ttf: uclibc sdl $(TARGET_DIR)/usr/lib/libSDL_ttf.so
-will also work, I think... 
-
----------------------------------------------------------------------- 
- artemys - 07-17-08 00:20  
----------------------------------------------------------------------- 
-If I try to compile SDL_ttf with SDL not already selected, then I have the
-same problem as issue http://busybox.net/bugs/view.php?id=2174 
-
----------------------------------------------------------------------- 
- bernhardf - 07-17-08 00:59  
----------------------------------------------------------------------- 
-That's why "depends on BR2_PACKAGE_SDL" is the correct thing to do, yes
-(and i stated it was correct).
-
-Please attach a complete, tested patch so somebody can apply it to svn.
-TIA and cheers,
-Bernhard 
-
----------------------------------------------------------------------- 
- artemys - 07-17-08 01:29  
----------------------------------------------------------------------- 
-New patch added (sdl_ttf-depends-on-sdl_v2.patch) 
-
----------------------------------------------------------------------- 
- jacmet - 07-17-08 02:51  
----------------------------------------------------------------------- 
-Thanks, committed. 
-
----------------------------------------------------------------------- 
- bernhardf - 07-17-08 03:37  
----------------------------------------------------------------------- 
-If an issue is fixed then the convention is to set it to "closed". 
-
----------------------------------------------------------------------- 
- bernhardf - 07-17-08 03:38  
----------------------------------------------------------------------- 
-So, if this is fixed then it should be closed as in "closed".
-TIA 
-
-Issue History 
-Date Modified   Username       Field                    Change               
-====================================================================== 
-07-16-08 08:31  artemys        New Issue                                    
-07-16-08 08:31  artemys        Status                   new => assigned     
-07-16-08 08:31  artemys        Assigned To               => buildroot       
-07-16-08 08:31  artemys        File Added: sdl_ttf-depends-on-sdl.patch         
-          
-07-16-08 08:47  bernhardf      Note Added: 0009404                          
-07-16-08 10:24  artemys        Note Added: 0009414                          
-07-17-08 00:20  artemys        Note Added: 0009524                          
-07-17-08 00:59  bernhardf      Note Added: 0009534                          
-07-17-08 01:27  artemys        Issue Monitored: artemys                     
-07-17-08 01:28  artemys        File Added: sdl_ttf-depends-on-sdl_v2.patch      
-             
-07-17-08 01:29  artemys        Note Added: 0009554                          
-07-17-08 02:51  jacmet         Status                   assigned => resolved
-07-17-08 02:51  jacmet         Resolution               open => fixed       
-07-17-08 02:51  jacmet         Note Added: 0009594                          
-07-17-08 03:36  bernhardf      Relationship added       has duplicate 0004154
-07-17-08 03:37  bernhardf      Status                   resolved => feedback
-07-17-08 03:37  bernhardf      Resolution               fixed => reopened   
-07-17-08 03:37  bernhardf      Note Added: 0009604                          
-07-17-08 03:38  bernhardf      Note Added: 0009614                          
-07-17-08 03:38  bernhardf      Status                   feedback => assigned
-08-16-08 12:18  jacmet         Status                   assigned => closed  
-======================================================================
+ ifneq ($(BR2_INSTALL_LIBSTDCPP),y)
+ # pcre will use the host g++ if a cross version isn't available
+@@ -17,3 +18,7 @@
+ PCRE_DEPENDENCIES = uclibc
+ 
+ $(eval $(call AUTOTARGETS,package,pcre))
++
++$(PCRE_HOOK_POST_INSTALL): $(PCRE_TARGET_INSTALL_TARGET)
++	rm -rf $(TARGET_DIR)/usr/share/doc/pcre
++	touch $@
