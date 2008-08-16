@@ -1,8 +1,8 @@
 From: bugs at busybox.net <bugs@busybox.net>
-Date: Sat, 16 Aug 2008 12:15:11 -0700
-Subject: [Buildroot] [buildroot 0004524]: Missing \ in Makefile.autotools.in
-	makes fontconfig fail to compile
-Message-ID: <cba8591198fe2003fa83de80233561f8@bugs.busybox.net>
+Date: Sat, 16 Aug 2008 12:18:20 -0700
+Subject: [Buildroot] [buildroot 0004164]: SDL_ttf needs SDL to be compiled
+	first
+Message-ID: <8cb2df250d1d7db223d621807ef42729@bugs.busybox.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -12,56 +12,137 @@ To: buildroot@busybox.net
 
 The following issue has been CLOSED 
 ====================================================================== 
-http://busybox.net/bugs/view.php?id=4524 
+http://busybox.net/bugs/view.php?id=4164 
 ====================================================================== 
-Reported By:                antialize
+Reported By:                artemys
 Assigned To:                buildroot
 ====================================================================== 
 Project:                    buildroot
-Issue ID:                   4524
-Category:                   Architecture Specific
+Issue ID:                   4164
+Category:                   Shared Library Support
 Reproducibility:            always
-Severity:                   major
+Severity:                   minor
 Priority:                   normal
 Status:                     closed
-Resolution:                 open
+Resolution:                 reopened
 Fixed in Version:           
 ====================================================================== 
-Date Submitted:             08-08-2008 01:31 PDT
-Last Modified:              08-16-2008 12:15 PDT
+Date Submitted:             07-16-2008 08:31 PDT
+Last Modified:              08-16-2008 12:18 PDT
 ====================================================================== 
-Summary:                    Missing \ in Makefile.autotools.in makes fontconfig
-fail to compile
+Summary:                    SDL_ttf needs SDL to be compiled first
 Description: 
-There is a missing \ in Makefile.autotools.in that affects fontconfig, and
-possible alot of other not to configure.
+It is possible to select the build of SDL_ttf even if SDL is not selected.
+-> compilation error
 
-I have attached a patch that fixes the issue, and also cleans up the
-fontconfig.mk
-
-(Rev 23070)
+Correction patch attached.
+Same should apply to SDL_mixer...
+======================================================================
+Relationships       ID      Summary
+----------------------------------------------------------------------
+has duplicate       0004154 SDL_ttf doesn't compile if freetype pac...
 ====================================================================== 
 
 ---------------------------------------------------------------------- 
- antialize - 08-08-08 01:33  
+ bernhardf - 07-16-08 08:47  
 ---------------------------------------------------------------------- 
-This is a dup of,
-0004474 and 0004454 
+--- package/sdl_ttf/Config.in.org	2008-07-16 17:10:29.000000000 +0200
++++ package/sdl_ttf/Config.in	2008-07-16 17:10:57.000000000 +0200
+@@ -1,6 +1,7 @@
+ config BR2_PACKAGE_SDL_TTF
+ 	bool "SDL_TTF"
+ 	default n
++	depends on BR2_PACKAGE_SDL
+
+yes, exactly.
+
+ 	select BR2_PACKAGE_FREETYPE
+ 	help
+ 	  SDL_ttf is a sample TrueType font library. It allows you to
+--- package/sdl_ttf/sdl_ttf.mk.org	2008-07-16 17:29:42.000000000 +0200
++++ package/sdl_ttf/sdl_ttf.mk	2008-07-16 17:30:06.000000000 +0200
+@@ -60,7 +60,7 @@
+ 	cp -dpf $(STAGING_DIR)/usr/lib/libSDL_ttf*.so* $(TARGET_DIR)/usr/lib/
+ 	-$(STRIPCMD) $(STRIP_STRIP_UNNEEDED)
+$(TARGET_DIR)/usr/lib/libSDL_ttf.so
+ 
+-SDL sdl_ttf: uclibc $(TARGET_DIR)/usr/lib/libSDL_ttf.so
++SDL_TTF sdl_ttf: uclibc $(TARGET_DIR)/usr/lib/libSDL_ttf.so
+
+That caps "SDL_TTF" sounds wrong (or at least redundant).
+Also, i suspect that you will need to have libsdl.so as prereq, something
+like:
+
+sdl_ttf: uclibc $(TARGET_DIR)/usr/lib/libSDL.so \
+$(TARGET_DIR)/usr/lib/libSDL_ttf.so 
 
 ---------------------------------------------------------------------- 
- jacmet - 08-16-08 12:15  
+ artemys - 07-16-08 10:24  
 ---------------------------------------------------------------------- 
-Thanks, fixed in r23089 / r23093 
+sdl_ttf: uclibc sdl $(TARGET_DIR)/usr/lib/libSDL_ttf.so
+will also work, I think... 
+
+---------------------------------------------------------------------- 
+ artemys - 07-17-08 00:20  
+---------------------------------------------------------------------- 
+If I try to compile SDL_ttf with SDL not already selected, then I have the
+same problem as issue http://busybox.net/bugs/view.php?id=2174 
+
+---------------------------------------------------------------------- 
+ bernhardf - 07-17-08 00:59  
+---------------------------------------------------------------------- 
+That's why "depends on BR2_PACKAGE_SDL" is the correct thing to do, yes
+(and i stated it was correct).
+
+Please attach a complete, tested patch so somebody can apply it to svn.
+TIA and cheers,
+Bernhard 
+
+---------------------------------------------------------------------- 
+ artemys - 07-17-08 01:29  
+---------------------------------------------------------------------- 
+New patch added (sdl_ttf-depends-on-sdl_v2.patch) 
+
+---------------------------------------------------------------------- 
+ jacmet - 07-17-08 02:51  
+---------------------------------------------------------------------- 
+Thanks, committed. 
+
+---------------------------------------------------------------------- 
+ bernhardf - 07-17-08 03:37  
+---------------------------------------------------------------------- 
+If an issue is fixed then the convention is to set it to "closed". 
+
+---------------------------------------------------------------------- 
+ bernhardf - 07-17-08 03:38  
+---------------------------------------------------------------------- 
+So, if this is fixed then it should be closed as in "closed".
+TIA 
 
 Issue History 
 Date Modified   Username       Field                    Change               
 ====================================================================== 
-08-08-08 01:31  antialize      New Issue                                    
-08-08-08 01:31  antialize      Status                   new => assigned     
-08-08-08 01:31  antialize      Assigned To               => buildroot       
-08-08-08 01:31  antialize      File Added: fix.patch                        
-08-08-08 01:33  antialize      Note Added: 0010334                          
-08-08-08 01:34  antialize      Issue Monitored: antialize                    
-08-16-08 12:15  jacmet         Status                   assigned => closed  
-08-16-08 12:15  jacmet         Note Added: 0010514                          
+07-16-08 08:31  artemys        New Issue                                    
+07-16-08 08:31  artemys        Status                   new => assigned     
+07-16-08 08:31  artemys        Assigned To               => buildroot       
+07-16-08 08:31  artemys        File Added: sdl_ttf-depends-on-sdl.patch         
+          
+07-16-08 08:47  bernhardf      Note Added: 0009404                          
+07-16-08 10:24  artemys        Note Added: 0009414                          
+07-17-08 00:20  artemys        Note Added: 0009524                          
+07-17-08 00:59  bernhardf      Note Added: 0009534                          
+07-17-08 01:27  artemys        Issue Monitored: artemys                     
+07-17-08 01:28  artemys        File Added: sdl_ttf-depends-on-sdl_v2.patch      
+             
+07-17-08 01:29  artemys        Note Added: 0009554                          
+07-17-08 02:51  jacmet         Status                   assigned => resolved
+07-17-08 02:51  jacmet         Resolution               open => fixed       
+07-17-08 02:51  jacmet         Note Added: 0009594                          
+07-17-08 03:36  bernhardf      Relationship added       has duplicate 0004154
+07-17-08 03:37  bernhardf      Status                   resolved => feedback
+07-17-08 03:37  bernhardf      Resolution               fixed => reopened   
+07-17-08 03:37  bernhardf      Note Added: 0009604                          
+07-17-08 03:38  bernhardf      Note Added: 0009614                          
+07-17-08 03:38  bernhardf      Status                   feedback => assigned
+08-16-08 12:18  jacmet         Status                   assigned => closed  
 ======================================================================
