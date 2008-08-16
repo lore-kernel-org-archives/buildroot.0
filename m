@@ -1,46 +1,26 @@
-From: jazzman at exdomain.org <jazzman@exdomain.org>
-Date: Fri, 15 Aug 2008 23:30:00 -0400 (EDT)
-Subject: [Buildroot] Buildroot not installing TAR or SED (7-28-08 snapshot)
-Message-ID: <Pine.LNX.4.44.0808152329330.13212-100000@exdomain.org>
+From: Markus Heidelberg <markus.heidelberg@web.de>
+Date: Sat, 16 Aug 2008 09:45:09 +0200
+Subject: [Buildroot] [PATCH] Fix VIM_RUNTIME typo
+In-Reply-To: <1218839444.5287.4.camel@wberrierlx.appsig.com>
+References: <1218839444.5287.4.camel@wberrierlx.appsig.com>
+Message-ID: <200808160945.09848.markus.heidelberg@web.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi all.
+Wade Berrier, 16.08.2008:
+> Simple patch to enable installing of the vim runtime (highlighting,
+> macros, etc...)
 
-I'm trying to build a uclibc toolchain that I can the use to build an
-embedded linux as a project. I've got the 7/28/08 snapshot of buildroot 
-and
-it builds just fine, but it leaves out 2 packages. I have explicitly 
-checked
-"SED" and "TAR" in packages for target filesystem, and it appears to have
-downloaded the source for them but they do are not installed in the final
-filesystem.
+Haven't you read my mail "[PATCH 1/2] Vim: don't use "extra" archive" from
+23.07.08 and the follow-ups, two days after your mail "vim patches .patch"? If
+you use Vim, you should have read it.
 
-Originally I was using busybox for these tools, but the busybox
-implementations of TAR and AR have some problems that prevent me from
-compiling some things (AR doesn't support -u apparently, and TAR
-occasionally gives "Invalid TAR Magic" for some files, which prevents me
-from building X). So I left busybox out and now I don't have TAR or SED. I
-tried building TAR with the generated root file system, but it requires 
-SED
-to run the configure script. So I tried to compile SED, but guess what? It
-ALSO requires SED to run the configure script.
+see:
+http://buildroot.uclibc.org/lists/buildroot/2008-July/009846.html
+(http://buildroot.uclibc.org/lists/buildroot/2008-July/009873.html)
+http://buildroot.uclibc.org/lists/buildroot/2008-August/010104.html
 
-So then i tried to build busybox but not have it install any of the 
-symlinks
-so that I could use busybox's SED to at least build the full SED and then 
-go
-from there, but no matter what I do busybox insists on installing it's
-symlinks (even when I manually edited the config file for busybox to NOT
-install symlinks) and that overwrites things like ar. This is a problem
-because, as previously stated, busybox's AR does not have the -u option,
-which causes errors when building SED. It's a vicious cycle :)
-
-Does anyone have any ideas why I can't get buildroot to just build/install
-SED and TAR in the first place?!?
-
-Thanks in advance
-Marc
+Markus
