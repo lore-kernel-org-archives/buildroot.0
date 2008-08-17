@@ -1,49 +1,26 @@
-From: bugs at busybox.net <bugs@busybox.net>
-Date: Sun, 17 Aug 2008 03:55:11 -0700
-Subject: [Buildroot] [buildroot 0004614]: Unable to build varius xorg X11
-	drivers.
-Message-ID: <261208e429d676420ddeeab665e4526f@bugs.uclibc.org>
+From: Peter Korsgaard <jacmet@uclibc.org>
+Date: Sun, 17 Aug 2008 14:36:09 +0200
+Subject: [Buildroot] [PATCH] speex: convert to Makefile.autotools.in and
+	bump version to 1.2rc1
+In-Reply-To: <48A80032.6000106@yahoo.fr> (Malek's message of "Sun\,
+	17 Aug 2008 10\:40\:50 +0000")
+References: <48A80032.6000106@yahoo.fr>
+Message-ID: <87k5efes3q.fsf@macbook.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+>>>>> "Malek" == Malek  <souf_oued@yahoo.fr> writes:
 
-The following issue has been SUBMITTED. 
-====================================================================== 
-http://busybox.net/bugs/view.php?id=4614 
-====================================================================== 
-Reported By:                antialize
-Assigned To:                buildroot
-====================================================================== 
-Project:                    buildroot
-Issue ID:                   4614
-Category:                   Architecture Specific
-Reproducibility:            always
-Severity:                   major
-Priority:                   normal
-Status:                     assigned
-====================================================================== 
-Date Submitted:             08-17-2008 03:55 PDT
-Last Modified:              08-17-2008 03:55 PDT
-====================================================================== 
-Summary:                    Unable to build varius xorg X11 drivers.
-Description: 
-One cannot build the x11 {joystick,mouse}-input-driver, amongst others. As
-it seems they expect pixman.h to be located in /usr/include/ and not
-/usr/include/pixman-1/ after all.  As almost all input drivers I have
-tried expects this, I would suggest to change the pixman package to place
-a copy of the files there.
+ Malek> This patch converts speex to use Makefile.autotools.in and bump the
+ Malek> version to 1.2rc1
 
-I have submitted a patch to that effect.
-====================================================================== 
+Thanks. Your patch was word wrapped and listed twice, but I fixed it
+up.
 
-Issue History 
-Date Modified   Username       Field                    Change               
-====================================================================== 
-08-17-08 03:55  antialize      New Issue                                    
-08-17-08 03:55  antialize      Status                   new => assigned     
-08-17-08 03:55  antialize      Assigned To               => buildroot       
-08-17-08 03:55  antialize      File Added: pixman-copy.patch                    
-======================================================================
+The target install doesn't strip the libs/programs - I'll fix that up.
+
+-- 
+Bye, Peter Korsgaard
