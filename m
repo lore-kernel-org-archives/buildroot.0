@@ -1,21 +1,17 @@
-From: Mikael Sundberg <micke@oddjob.se>
-Date: Mon, 18 Aug 2008 16:09:47 +0200
-Subject: [Buildroot] undefined reference to `__ctype_tolower_loc'
-Message-ID: <48A982AB.7040106@oddjob.se>
+From: hartleys <hartleys@visionengravers.com>
+Date: Mon, 18 Aug 2008 12:42:41 -0400
+Subject: [Buildroot] Patch files with Makefile.autotools.in
+Message-ID: <BD79186B4FD85F4B8E60E381CAEE19096D931D@mi8nycmail19.Mi8.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi again,
+Hello all,
 
-When trying to compile gettext-0.16.1 i get:
-../intl/.libs/libintl.so: undefined reference to `__ctype_tolower_loc'
-../intl/.libs/libintl.so: undefined reference to `__ctype_b_loc'
+Does anything have to be added to a FOO.mk file to get patches in the
+FOO directory applied?
 
-I dont know where to start looking... Is this related to the locale 
-support?
-
-thanks,
-Mikael Sundberg
+Thanks,
+Hartley
