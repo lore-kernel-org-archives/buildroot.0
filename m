@@ -1,38 +1,92 @@
-From: jacmet at uclibc.org <jacmet@uclibc.org>
-Date: Sun, 17 Aug 2008 06:46:46 -0700 (PDT)
-Subject: [Buildroot] svn commit: trunk/buildroot/package/speex
-Message-ID: <20080817134646.682263C729@busybox.net>
+From: bugs at busybox.net <bugs@busybox.net>
+Date: Sun, 17 Aug 2008 23:36:25 -0700
+Subject: [Buildroot] [buildroot 0004624]: Cannot build Modular X.org:
+	undefined references in libX11.so
+Message-ID: <53b2452d56a2157af890fd13a693492c@busybox.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Author: jacmet
-Date: 2008-08-17 06:46:46 -0700 (Sun, 17 Aug 2008)
-New Revision: 23100
 
-Log:
-speex: also compile static libraries
+The following issue has been SUBMITTED. 
+====================================================================== 
+http://busybox.net/bugs/view.php?id=4624 
+====================================================================== 
+Reported By:                lykowdk
+Assigned To:                buildroot
+====================================================================== 
+Project:                    buildroot
+Issue ID:                   4624
+Category:                   Shared Library Support
+Reproducibility:            always
+Severity:                   major
+Priority:                   normal
+Status:                     assigned
+====================================================================== 
+Date Submitted:             08-17-2008 23:36 PDT
+Last Modified:              08-17-2008 23:36 PDT
+====================================================================== 
+Summary:                    Cannot build Modular X.org: undefined references in
+libX11.so
+Description: 
+Trying to build Modular X.org it crashes here..
+I've tried everything I can think of to find the dependencies.
+I am building with WCHAR enabled.
 
-Modified:
-   trunk/buildroot/package/speex/speex.mk
+/bin/bash ../libtool --tag=CC   --mode=link
+/home/lykowdk/buildroot/build_i686/staging_dir/usr/bin/i686-linux-uclibc-gcc
+-Os  -I/home/lykowdk/buildroot/build_i686/staging_dir/usr/include
+-I/home/lykowdk/buildroot/build_i686/staging_dir/include
+--sysroot=/home/lykowdk/buildroot/build_i686/staging_dir/ -isysroot
+/home/lykowdk/buildroot/build_i686/staging_dir -mtune=i686 -march=i686 
+-Wall -Wpointer-arith -Wstrict-prototypes 	-Wmissing-prototypes
+-Wmissing-declarations 	-Wnested-externs -fno-strict-aliasing -g -O2   -o
+sxpm sxpm.o -lX11   -lXt -lX11 -lSM -lICE -lXext   ../src/libXpm.la 
+/home/lykowdk/buildroot/build_i686/staging_dir/usr/bin/i686-linux-uclibc-gcc
+-Os -I/home/lykowdk/buildroot/build_i686/staging_dir/usr/include
+-I/home/lykowdk/buildroot/build_i686/staging_dir/include
+--sysroot=/home/lykowdk/buildroot/build_i686/staging_dir/ -isysroot
+/home/lykowdk/buildroot/build_i686/staging_dir -mtune=i686 -march=i686
+-Wall -Wpointer-arith -Wstrict-prototypes -Wmissing-prototypes
+-Wmissing-declarations -Wnested-externs -fno-strict-aliasing -g -O2 -o
+sxpm sxpm.o 
+/home/lykowdk/buildroot/build_i686/staging_dir//usr/lib//libXt.so
+/home/lykowdk/buildroot/build_i686/staging_dir//usr/lib//libSM.so
+/home/lykowdk/buildroot/build_i686/staging_dir//usr/lib//libICE.so
+/home/lykowdk/buildroot/build_i686/staging_dir//usr/lib//libXext.so
+../src/.libs/libXpm.so
+/home/lykowdk/buildroot/build_i686/staging_dir//usr/lib//libX11.so
+/home/lykowdk/buildroot/build_i686/staging_dir/usr/lib/libxcb-xlib.so
+/home/lykowdk/buildroot/build_i686/libxcb-1.1/src/.libs/libxcb.so
+/home/lykowdk/buildroot/build_i686/staging_dir/usr/lib/libxcb.so
+/home/lykowdk/buildroot/build_i686/staging_dir//usr/lib//libXau.so
+/home/lykowdk/buildroot/build_i686/staging_dir//usr/lib//libXdmcp.so -ldl
+-Wl,--rpath -Wl,/home/lykowdk/buildroot/build_i686/staging_dir//usr/lib/
+-Wl,--rpath
+-Wl,/home/lykowdk/buildroot/build_i686/xlib_libXpm-3.5.7/src/.libs
+-Wl,--rpath -Wl,/home/lykowdk/buildroot/build_i686/staging_dir/usr/lib
+-Wl,--rpath -Wl,/home/lykowdk/buildroot/build_i686/libxcb-1.1/src/.libs
+-Wl,--rpath -Wl,/home/lykowdk/buildroot/build_i686/staging_dir//usr/lib/
+-Wl,--rpath -Wl,/home/lykowdk/buildroot/build_i686/staging_dir/usr/lib
+/home/lykowdk/buildroot/build_i686/staging_dir//usr/lib//libX11.so:
+undefined reference to `wctomb'
+/home/lykowdk/buildroot/build_i686/staging_dir//usr/lib//libX11.so:
+undefined reference to `mbstowcs'
+/home/lykowdk/buildroot/build_i686/staging_dir//usr/lib//libX11.so:
+undefined reference to `mbtowc'
+/home/lykowdk/buildroot/build_i686/staging_dir//usr/lib//libX11.so:
+undefined reference to `_stdlib_mb_cur_max'
+/home/lykowdk/buildroot/build_i686/staging_dir//usr/lib//libX11.so:
+undefined reference to `mblen'
 
+====================================================================== 
 
-Changeset:
-Modified: trunk/buildroot/package/speex/speex.mk
-===================================================================
---- trunk/buildroot/package/speex/speex.mk	2008-08-17 13:46:42 UTC (rev 23099)
-+++ trunk/buildroot/package/speex/speex.mk	2008-08-17 13:46:46 UTC (rev 23100)
-@@ -11,8 +11,9 @@
- SPEEX_INSTALL_TARGET = YES
- SPEEX_INSTALL_TARGET_OPT:=DESTDIR=$(TARGET_DIR) install-strip
- SPEEX_DEPENDENCIES = libogg
--SPEEX_CONF_OPT = --with-ogg-libraries=$(STAGING_DIR)/usr/lib --with-ogg-includes=$(STAGING_DIR)/usr/include \
--		--disable-static --enable-fixed-point $(DISABLE_NLS)
-+SPEEX_CONF_OPT = --with-ogg-libraries=$(STAGING_DIR)/usr/lib \
-+		 --with-ogg-includes=$(STAGING_DIR)/usr/include \
-+		 --enable-fixed-point $(DISABLE_NLS)
- 
- ifeq ($(BR2_PACKAGE_SPEEX_ARM4),y)
- 	SPEEX_CONF_OPT += --enable-arm4-asm
+Issue History 
+Date Modified   Username       Field                    Change               
+====================================================================== 
+08-17-08 23:36  lykowdk        New Issue                                    
+08-17-08 23:36  lykowdk        Status                   new => assigned     
+08-17-08 23:36  lykowdk        Assigned To               => buildroot       
+======================================================================
