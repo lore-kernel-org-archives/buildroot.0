@@ -1,40 +1,34 @@
-From: Mikael Sundberg <micke@oddjob.se>
-Date: Mon, 18 Aug 2008 21:28:41 +0200
-Subject: [Buildroot] undefined reference to `__ctype_tolower_loc'
-In-Reply-To: <48A982AB.7040106@oddjob.se>
-References: <48A982AB.7040106@oddjob.se>
-Message-ID: <48A9CD69.2040808@oddjob.se>
+From: Wade Berrier <wberrier@gmail.com>
+Date: Mon, 18 Aug 2008 15:39:25 -0600
+Subject: [Buildroot] [PATCH] Fix VIM_RUNTIME typo
+In-Reply-To: <200808160945.09848.markus.heidelberg@web.de>
+References: <1218839444.5287.4.camel@wberrierlx.appsig.com>
+	<200808160945.09848.markus.heidelberg@web.de>
+Message-ID: <1219095565.3144.1.camel@wberrierlx.appsig.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-hm, I think I?ve solved it...
+On Sat, 2008-08-16 at 09:45 +0200, Markus Heidelberg wrote:
+> Wade Berrier, 16.08.2008:
+> > Simple patch to enable installing of the vim runtime (highlighting,
+> > macros, etc...)
+> 
+> Haven't you read my mail "[PATCH 1/2] Vim: don't use "extra" archive" from
+> 23.07.08 and the follow-ups, two days after your mail "vim patches .patch"? If
+> you use Vim, you should have read it.
+> 
+> see:
+> http://buildroot.uclibc.org/lists/buildroot/2008-July/009846.html
+> (http://buildroot.uclibc.org/lists/buildroot/2008-July/009873.html)
+> http://buildroot.uclibc.org/lists/buildroot/2008-August/010104.html
+> 
 
-I disabled all widechar and locale features in uclibc, recompiled and 
-the error was gone...
+Dah, my apologies.  I previously glanced over those mails but didn't
+realize the typo had been corrected since it wasn't committed yet.
 
-I still dont know why I got this error in the first place \=
+Thanks,
 
-regards,
-Mikael Sundberg
-
-Mikael Sundberg skrev:
-> Hi again,
->
-> When trying to compile gettext-0.16.1 i get:
-> ../intl/.libs/libintl.so: undefined reference to `__ctype_tolower_loc'
-> ../intl/.libs/libintl.so: undefined reference to `__ctype_b_loc'
->
-> I dont know where to start looking... Is this related to the locale 
-> support?
->
-> thanks,
-> Mikael Sundberg
->
-> _______________________________________________
-> buildroot mailing list
-> buildroot at uclibc.org
-> http://busybox.net/mailman/listinfo/buildroot
->   
+Wade
