@@ -1,96 +1,97 @@
-From: Teemu Keskinarkaus <Teemu.Keskinarkaus@cc-systems.com>
-Date: Tue, 19 Aug 2008 08:53:21 +0200
-Subject: [Buildroot] Errors on rootfs
-In-Reply-To: <330EC2471BF24E48B513AF1A6975EB695D59E2@MAIL-UA.ccs.local>
-References: <330EC2471BF24E48B513AF1A6975EB695D59E2@MAIL-UA.ccs.local>
-Message-ID: <330EC2471BF24E48B513AF1A6975EB696041F3@MAIL-UA.ccs.local>
+From: Sebastian Meisner <the-b@gmx.de>
+Date: Tue, 19 Aug 2008 10:20:21 +0200
+Subject: [Buildroot] gettext Segmentation Fault
+Message-ID: <48AA8245.6000505@gmx.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Am I really the only one that has problems with RootFS generation?
+Hi!
 
- 
+I use the buildroot snapshot from 2008.08.05 and compile for a ARM
+architecture. See the attached .config file.
 
-I keep getting same error with the actual hardware. Other than that,
-things are working ok.
+I activated the gettext package and i18n support in the toolchain, as i need
+localization support in shell scripts. These shell scripts generate some
+webpages, that display their messages in different languages.
 
- 
+As soon as i set LC_ALL to de_DE or any other legal language code, gettext
+segfaults:
 
-Those errors appear only with rootfs. I have another partition that I
-generate fs myself and when I'm mounting it I don't get any errors.
+# export LC_ALL=de_DE
+# gettext "Hello"
+Segmentation fault
 
- 
+But en_EN seems to be ok :
 
-Teemu K.
+# export LC_ALL=en_EN
+# gettext "Hello"
+Hello#
 
- 
+As well as any random string:
 
-________________________________
+# export LC_ALL=foo
+# gettext "Hello"
+Hello#
 
-From: buildroot-bounces@uclibc.org [mailto:buildroot-bounces at uclibc.org]
-On Behalf Of Teemu Keskinarkaus
-Sent: 11. elokuuta 2008 10:25
-To: buildroot at uclibc.org
-Subject: [Buildroot] Errors on rootfs
+I 'ltrace'ed gettext and got the following output:
 
- 
+# export LC_ALL=de_DE
+# ltrace gettext "Hello"
+__uClibc_main(37544, 2, 0xbefb3dc4, 35696, 45824 <unfinished ...>
+__errno_location()                               = 0x400b4470
+getenv("TEXTDOMAIN")                             = NULL
+getenv("TEXTDOMAINDIR")                          = NULL
+strrchr("gettext", '/')                          = NULL
+strncmp("gettext", "lt-", 3)                     = -5
+setlocale(6, "" <unfinished ...>
+--- SIGSEGV (Segmentation fault) ---
++++ killed by SIGSEGV +++
 
-Hi,
+It crashes in the function "setlocale" which schould be part of the uClibc, right?
 
- 
+A normal run looks like this, with LC_ALL empty:
 
-I'm using buildroot to generate system for AT91SAM9263ek board.
-Everything works fine except rootfs mount gives few errors when
-mounting.
+# ltrace gettext hello
+__uClibc_main(37548, 2, 0xbea68dd4, 35700, 45828 <unfinished ...>
+__errno_location()                               = 0x400b5470
+getenv("TEXTDOMAIN")                             = NULL
+getenv("TEXTDOMAINDIR")                          = NULL
+strrchr("gettext", '/')                          = NULL
+strncmp("gettext", "lt-", 3)                     = -5
+setlocale(6, "")                                 = "C"
+libintl_bindtextdomain(47140, 47016, 0, 0x400b5478, 0xbea68dd4) = 0x40014ce4
+libintl_textdomain(47140, 0x4001d3d4, 284, 0, 0xbea68dd4) = 81960
+__cxa_atexit(38652, 0, 0, 80860, 0xbea68dd4)     = 0
+getopt_long(2, 0xbea68dd4, "+d:eEhnsV", 0xb9a8, NULL) = -1
+fputs("hello", 0x400b515c)                       = 5
+exit(0 <unfinished ...>
+__errno_location()                               = 0x400b5470
+ferror(0x400b515c)                               = 0
+fflush(0x400b515chello)                               = 0
+fclose(0x400b515c)                               = 0
+__errno_location()                               = 0x400b5470
+ferror(0x400b51c4)                               = 0
+fflush(0x400b51c4)                               = 0
+fclose(0x400b51c4)                               = 0
++++ exited (status 0) +++
 
- 
+I did a 'make uclibc-menuconfig' and checked the localization options, 
+everything needed seems to be activated.
 
-Maybe 20 errors like these:
+Is this a configuration problem?
 
-[    1.133916] CLEANMARKER node found at 0x00060000 has totlen 0xc !=
-normal 0x0
-
-[    1.170913] CLEANMARKER node found at 0x00080000 has totlen 0xc !=
-normal 0x0
-
- 
-
-And maybe 10 errors like these:
-
-[    1.834864] jffs2_scan_eraseblock(): Magic bitmask 0x1985 not found
-at 0x002b73f0 0x90fa instead
-
-[    1.843863] jffs2_scan_eraseblock(): Magic bitmask 0x1985 not found
-at 0x002b73f4 0xac8f instead
-
- 
-
-First errors seem to come from every block that is used for rootfs.
-
- 
-
-I'm using Samba/USB to program the rootfs to board. At the moment board
-is Atmel's evaluation board. I verified before rebooting the board that
-flash contained exactly the same image that there were supposed to be.
-So for some reason buildroot generates broken rootfs or am I doing
-something wrong? Block size is correct since filesystem is working just
-fine except those errors on boot. They will stay on every boot.
-
- 
-
-I wouldn't mind that, but I need to get system up and running as fast as
-possible and those errors take about 1.5seconds and in this case every
-seconds count. ;)
-
- 
-
-Teemu K.
-
- 
-
+Sebastian
 -------------- next part --------------
-An HTML attachment was scrubbed...
-URL: http://busybox.net/lists/buildroot/attachments/20080819/6256423c/attachment.htm 
+An embedded and charset-unspecified text was scrubbed...
+Name: .config-uclibc
+Url: http://busybox.net/lists/buildroot/attachments/20080819/f0604ec6/attachment-0001.txt 
+-------------- next part --------------
+A non-text attachment was scrubbed...
+Name: .config
+Type: application/xml
+Size: 14716 bytes
+Desc: not available
+Url : http://busybox.net/lists/buildroot/attachments/20080819/f0604ec6/attachment-0001.xml 
