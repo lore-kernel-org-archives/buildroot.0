@@ -1,26 +1,38 @@
-From: Bernhard Reutner-Fischer <rep.dot.nop@gmail.com>
-Date: Tue, 19 Aug 2008 18:28:09 +0200
-Subject: [Buildroot] ARM EABI toolchain - anyone build it successfully?
-In-Reply-To: <48AAECB6.6020309@wpkg.org>
-References: <48AAE812.4020706@wpkg.org> <20080819154955.GA15608@mx.loc>
-	<48AAECB6.6020309@wpkg.org>
-Message-ID: <20080819162809.GA15851@mx.loc>
+From: hartleys <hartleys@visionengravers.com>
+Date: Tue, 19 Aug 2008 19:45:21 -0400
+Subject: [Buildroot] Patch files with Makefile.autotools.in
+In-Reply-To: <20080819075608.54c5d9c7@atmel.com>
+References: <BD79186B4FD85F4B8E60E381CAEE19096D931D@mi8nycmail19.Mi8.com>
+	<20080819075608.54c5d9c7@atmel.com>
+Message-ID: <BD79186B4FD85F4B8E60E381CAEE19096D9982@mi8nycmail19.Mi8.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Tue, Aug 19, 2008 at 05:54:30PM +0200, Tomasz Chmielewski wrote:
-> Bernhard Reutner-Fischer schrieb:
->> On Tue, Aug 19, 2008 at 05:34:42PM +0200, Tomasz Chmielewski wrote:
->>
->>> So my question - did anyone manage to build ARM EABI toolchain with  
->>> buildroot (GCC 4.3.1 + uClibc; I also need busybox)?
->>
->> Built fine for me last time i tried.
->
-> Do you still have it anywhere?
+Monday, August 18, 2008 10:56 PM, Hans-Christian Egtvedt wrote:
+>> Does anything have to be added to a FOO.mk file to get patches in the
 
-Unfortunately i've lost the disk that contained the configs, but going
-off a minimal config should work fine.
+>> FOO directory applied?
+>> 
+>
+> No, but the patch name should preferably be on the form:
+> <package name>-<version>-<something descriptive>.patch {.gz,.bz2}
+>
+> See the stamp_patched rule in package/Makefile.autotools.in
+
+Well, that's how I have it setup but the patch does not get applied.
+
+I see the "Patching $($(PKG)_DIR_PREFIX)/$($PKG)_NAME)" message but when
+I examine the source the patch is not present.
+
+I think the problem is related to the FIXME note above the rule. I'm
+trying to apply a patch to a package that is not supplied in buildroot.
+To keep it separate I have the package in package/customize/<package
+name>.
+
+Any ideas on how to fix the FIXME?
+
+Thanks for the reply,
+Hartley
