@@ -1,86 +1,29 @@
-From: jacmet at uclibc.org <jacmet@uclibc.org>
-Date: Tue, 19 Aug 2008 08:01:36 -0700 (PDT)
-Subject: [Buildroot] svn commit: trunk/buildroot/toolchain/kernel-headers
-Message-ID: <20080819150136.E673B3C870@busybox.net>
+From: Tomasz Chmielewski <mangoo@wpkg.org>
+Date: Tue, 19 Aug 2008 17:34:42 +0200
+Subject: [Buildroot] ARM EABI toolchain - anyone build it successfully?
+Message-ID: <48AAE812.4020706@wpkg.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Author: jacmet
-Date: 2008-08-19 08:01:36 -0700 (Tue, 19 Aug 2008)
-New Revision: 23108
+I'm trying to make ARM EABI toolchain using the latest snapshot of 
+Buildroot.
+However, no matter which options I use (thread library implementation, 
+uClibc version etc.) I'm only able to build GCC (4.3.1).
 
-Log:
-kernel-headers: rename aout patch so it gets applied to 2.6.25.15
+Then, it breaks later on on building uClibc.
 
-Needed by valgrind.
+I also tried building uClibc from nptl branch, but it also failed.
 
-Added:
-   trunk/buildroot/toolchain/kernel-headers/linux-2.6.25.15-export-linux-aout.patch
+As different thread library implementations and uClibc versions give 
+different errors, I won't paste it here, unless requested.
 
-Removed:
-   trunk/buildroot/toolchain/kernel-headers/linux-2.6.25.9-export-linux-aout.patch
+So my question - did anyone manage to build ARM EABI toolchain with 
+buildroot (GCC 4.3.1 + uClibc; I also need busybox)?
 
 
-Changeset:
-Copied: trunk/buildroot/toolchain/kernel-headers/linux-2.6.25.15-export-linux-aout.patch (from rev 23107, trunk/buildroot/toolchain/kernel-headers/linux-2.6.25.9-export-linux-aout.patch)
-===================================================================
---- trunk/buildroot/toolchain/kernel-headers/linux-2.6.25.15-export-linux-aout.patch	                        (rev 0)
-+++ trunk/buildroot/toolchain/kernel-headers/linux-2.6.25.15-export-linux-aout.patch	2008-08-19 15:01:36 UTC (rev 23108)
-@@ -0,0 +1,24 @@
-+[PATCH] export linux/a.out.h
-+
-+Export linux/a.out.h like we do for asm/a.out.h. One minor complication is
-+that the interesting stuff is protected by an CONFIG_ARCH_SUPPORTS_AOUT ifdef,
-+so make sure this gets defined for unifdef.
-+
-+Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
-+---
-+ include/linux/Kbuild |    2 ++
-+ 1 file changed, 2 insertions(+)
-+
-+Index: linux-2.6.25.6/include/linux/Kbuild
-+===================================================================
-+--- linux-2.6.25.6.orig/include/linux/Kbuild
-++++ linux-2.6.25.6/include/linux/Kbuild
-+@@ -159,6 +159,8 @@
-+ header-y += videotext.h
-+ header-y += x25.h
-+ 
-++UNIFDEF += -DCONFIG_ARCH_SUPPORTS_AOUT
-++unifdef-y += a.out.h
-+ unifdef-y += acct.h
-+ unifdef-y += adb.h
-+ unifdef-y += adfs_fs.h
-
-Deleted: trunk/buildroot/toolchain/kernel-headers/linux-2.6.25.9-export-linux-aout.patch
-===================================================================
---- trunk/buildroot/toolchain/kernel-headers/linux-2.6.25.9-export-linux-aout.patch	2008-08-19 15:01:33 UTC (rev 23107)
-+++ trunk/buildroot/toolchain/kernel-headers/linux-2.6.25.9-export-linux-aout.patch	2008-08-19 15:01:36 UTC (rev 23108)
-@@ -1,24 +0,0 @@
--[PATCH] export linux/a.out.h
--
--Export linux/a.out.h like we do for asm/a.out.h. One minor complication is
--that the interesting stuff is protected by an CONFIG_ARCH_SUPPORTS_AOUT ifdef,
--so make sure this gets defined for unifdef.
--
--Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
-----
-- include/linux/Kbuild |    2 ++
-- 1 file changed, 2 insertions(+)
--
--Index: linux-2.6.25.6/include/linux/Kbuild
--===================================================================
----- linux-2.6.25.6.orig/include/linux/Kbuild
--+++ linux-2.6.25.6/include/linux/Kbuild
--@@ -159,6 +159,8 @@
-- header-y += videotext.h
-- header-y += x25.h
-- 
--+UNIFDEF += -DCONFIG_ARCH_SUPPORTS_AOUT
--+unifdef-y += a.out.h
-- unifdef-y += acct.h
-- unifdef-y += adb.h
-- unifdef-y += adfs_fs.h
+-- 
+Tomasz Chmielewski
+http://wpkg.org
