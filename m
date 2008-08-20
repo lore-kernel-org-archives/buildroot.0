@@ -1,26 +1,19 @@
-From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Wed, 20 Aug 2008 17:23:33 +0200
-Subject: [Buildroot] Commit privileges for messing about with Buildroot
-In-Reply-To: <20080820103125.701e5ad1@atmel.com> (Hans-Christian Egtvedt's
-	message of "Wed\, 20 Aug 2008 10\:31\:25 +0200")
-References: <20080820094454.4b399b14@atmel.com>
-	<20080820082506.GD19268@mx.loc> <20080820103125.701e5ad1@atmel.com>
-Message-ID: <87iqtvr9qi.fsf@macbook.be.48ers.dk>
+From: Daniel Laird <daniel.j.laird@nxp.com>
+Date: Wed, 20 Aug 2008 16:26:14 +0100
+Subject: [Buildroot] Getting Commit access to buildroot.
+Message-ID: <1219245974.23358.2.camel@lnx32dtp04>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Hans-Christian" == Hans-Christian Egtvedt <hans-christian.egtvedt@atmel.com> writes:
+I have contacted Erik regarding getting SVN access to buildroot as I
+think I could add some of the stuff we have in our buildroot tree.
+Especially around DirectFB usage/GTK/Cairo etc.
 
+Having seen the other messages today thought I would post on the mailing
+list as well to try and get a few ACK's in case that was how this
+worked.
 
- Hans-Christian> You tree is the one on Google?
-
-No, there's 3 trees (or apparently you're maintaining a 4th for Atmel):
-
-uclibc.org (this one), repo.or.cz (Bernhard), googlecode (John Voltz
-and friends).
-
--- 
-Bye, Peter Korsgaard
+Daniel Laird
