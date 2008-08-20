@@ -1,10 +1,11 @@
 From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Wed, 20 Aug 2008 17:21:22 +0200
+Date: Wed, 20 Aug 2008 17:23:33 +0200
 Subject: [Buildroot] Commit privileges for messing about with Buildroot
-In-Reply-To: <20080820094454.4b399b14@atmel.com> (Hans-Christian Egtvedt's
-	message of "Wed\, 20 Aug 2008 09\:44\:54 +0200")
+In-Reply-To: <20080820103125.701e5ad1@atmel.com> (Hans-Christian Egtvedt's
+	message of "Wed\, 20 Aug 2008 10\:31\:25 +0200")
 References: <20080820094454.4b399b14@atmel.com>
-Message-ID: <87myj7r9u5.fsf@macbook.be.48ers.dk>
+	<20080820082506.GD19268@mx.loc> <20080820103125.701e5ad1@atmel.com>
+Message-ID: <87iqtvr9qi.fsf@macbook.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,17 +14,13 @@ To: buildroot@busybox.net
 
 >>>>> "Hans-Christian" == Hans-Christian Egtvedt <hans-christian.egtvedt@atmel.com> writes:
 
- Hans-Christian> Hi,
 
- Hans-Christian> I have submitted some patches during my one year
- Hans-Christian> involvement with Buildroot. As people might know I
- Hans-Christian> maintain the AVR32 fork Atmel uses. I would like to
- Hans-Christian> contribute back as much as possible with quirks and
- Hans-Christian> fixes I do which will contribute to everybody. Do the
- Hans-Christian> other maintainers feel like I have something to
- Hans-Christian> contribute with?
+ Hans-Christian> You tree is the one on Google?
 
-+1 from here - Welcome on board!
+No, there's 3 trees (or apparently you're maintaining a 4th for Atmel):
+
+uclibc.org (this one), repo.or.cz (Bernhard), googlecode (John Voltz
+and friends).
 
 -- 
 Bye, Peter Korsgaard
