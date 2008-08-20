@@ -1,41 +1,49 @@
-From: Hans-Christian Egtvedt <hans-christian.egtvedt@atmel.com>
-Date: Wed, 20 Aug 2008 10:44:36 +0200
-Subject: [Buildroot] [buildroot 0004674]: The Openchrome package is
- br0ken..
-In-Reply-To: <74b075a6b3ba6c7ebcab73b3dd3328d4@bugs.uclibc.org>
-References: <74b075a6b3ba6c7ebcab73b3dd3328d4@bugs.uclibc.org>
-Message-ID: <20080820104436.48e270cc@atmel.com>
+From: Tomasz Chmielewski <mangoo@wpkg.org>
+Date: Wed, 20 Aug 2008 11:29:02 +0200
+Subject: [Buildroot] ARM EABI toolchain - anyone build it successfully?
+In-Reply-To: <20080819162809.GA15851@mx.loc>
+References: <48AAE812.4020706@wpkg.org> <20080819154955.GA15608@mx.loc>
+	<48AAECB6.6020309@wpkg.org> <20080819162809.GA15851@mx.loc>
+Message-ID: <48ABE3DE.80908@wpkg.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Wed, 20 Aug 2008 01:37:42 -0700
-bugs at busybox.net wrote:
-
-<snipp>
-
-> The openchrome package is broken. It needs, to do install instead of
-> install-exec just like ALL the other xorg vidio drivers do, currently
-> only extra libs are installed, not the actual graphics driver!
+Bernhard Reutner-Fischer schrieb:
+> On Tue, Aug 19, 2008 at 05:54:30PM +0200, Tomasz Chmielewski wrote:
+>> Bernhard Reutner-Fischer schrieb:
+>>> On Tue, Aug 19, 2008 at 05:34:42PM +0200, Tomasz Chmielewski wrote:
+>>>
+>>>> So my question - did anyone manage to build ARM EABI toolchain with  
+>>>> buildroot (GCC 4.3.1 + uClibc; I also need busybox)?
+>>> Built fine for me last time i tried.
+>> Do you still have it anywhere?
 > 
-> Index: openchrome.mk
-> ===================================================================
-> --- openchrome.mk       (revision 23102)
-> +++ openchrome.mk       (working copy)
-> @@ -11,5 +11,6 @@
-> 
->  OPENCHROME_AUTORECONF = YES
->  OPENCHROME_CONF_OPT = --enable-shared --disable-static
-> +OPENCHROME_INSTALL_TARGET_OPT = DESTDIR=$(TARGET_DIR)/usr install
-> 
+> Unfortunately i've lost the disk that contained the configs, but going
+> off a minimal config should work fine.
 
-Hmm, the DESTDIR looks wrong, why /usr to the end? The /usr should be
-part of the prefix when configured.
+OK, it builds (I had a custom uClibc config, which perhaps made some 
+problems), but even then, lots of Busybox things don't work.
 
-<snipp rest of bug report>
+I.e.:
+
+# ./busybox
+(...)
+Currently defined functions:
+         ash, cat, mount, sh, sleep, switch_root, umount, whoami
+
+# ./busybox ash
+Illegal instruction
+
+
+Similar to: http://bugs.busybox.net/view.php?id=3364 which maybe points 
+to http://bugs.busybox.net/view.php?id=0003804 (some things are build as 
+EABI, and some things are build as OABI, although EABI is chosen).
+
+
 
 -- 
-Best regards,
-Hans-Christian Egtvedt
+Tomasz Chmielewski
+http://wpkg.org
