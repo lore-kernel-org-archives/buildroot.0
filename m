@@ -1,57 +1,18 @@
-From: bugs at busybox.net <bugs@busybox.net>
-Date: Wed, 20 Aug 2008 01:37:42 -0700
-Subject: [Buildroot] [buildroot 0004674]: The Openchrome package is br0ken..
-Message-ID: <74b075a6b3ba6c7ebcab73b3dd3328d4@bugs.uclibc.org>
+From: Bernhard Reutner-Fischer <rep.dot.nop@gmail.com>
+Date: Wed, 20 Aug 2008 10:37:30 +0200
+Subject: [Buildroot] Commit privileges for messing about with Buildroot
+In-Reply-To: <20080820103125.701e5ad1@atmel.com>
+References: <20080820094454.4b399b14@atmel.com> <20080820082506.GD19268@mx.loc>
+	<20080820103125.701e5ad1@atmel.com>
+Message-ID: <20080820083730.GA19804@mx.loc>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+On Wed, Aug 20, 2008 at 10:31:25AM +0200, Hans-Christian Egtvedt wrote:
 
-The following issue has been SUBMITTED. 
-====================================================================== 
-http://busybox.net/bugs/view.php?id=4674 
-====================================================================== 
-Reported By:                antialize
-Assigned To:                buildroot
-====================================================================== 
-Project:                    buildroot
-Issue ID:                   4674
-Category:                   Architecture Specific
-Reproducibility:            always
-Severity:                   major
-Priority:                   normal
-Status:                     assigned
-====================================================================== 
-Date Submitted:             08-20-2008 01:37 PDT
-Last Modified:              08-20-2008 01:37 PDT
-====================================================================== 
-Summary:                    The Openchrome package is br0ken..
-Description: 
-The openchrome package is broken. It needs, to do install instead of
-install-exec just like ALL the other xorg vidio drivers do, currently only
-extra libs are installed, not the actual graphics driver!
+>You tree is the one on Google?
 
-Index: openchrome.mk
-===================================================================
---- openchrome.mk       (revision 23102)
-+++ openchrome.mk       (working copy)
-@@ -11,5 +11,6 @@
-
- OPENCHROME_AUTORECONF = YES
- OPENCHROME_CONF_OPT = --enable-shared --disable-static
-+OPENCHROME_INSTALL_TARGET_OPT = DESTDIR=$(TARGET_DIR)/usr install
-
- $(eval $(call AUTOTARGETS,package/x11r7,openchrome))
-
-====================================================================== 
-
-Issue History 
-Date Modified   Username       Field                    Change               
-====================================================================== 
-08-20-08 01:37  antialize      New Issue                                    
-08-20-08 01:37  antialize      Status                   new => assigned     
-08-20-08 01:37  antialize      Assigned To               => buildroot       
-08-20-08 01:37  antialize      File Added: openchome.patch                    
-======================================================================
+nope, the one at repo.or.cz
