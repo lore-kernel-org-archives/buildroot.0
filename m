@@ -1,49 +1,92 @@
-From: Tomasz Chmielewski <mangoo@wpkg.org>
-Date: Wed, 20 Aug 2008 11:29:02 +0200
-Subject: [Buildroot] ARM EABI toolchain - anyone build it successfully?
-In-Reply-To: <20080819162809.GA15851@mx.loc>
-References: <48AAE812.4020706@wpkg.org> <20080819154955.GA15608@mx.loc>
-	<48AAECB6.6020309@wpkg.org> <20080819162809.GA15851@mx.loc>
-Message-ID: <48ABE3DE.80908@wpkg.org>
+From: bugs at busybox.net <bugs@busybox.net>
+Date: Wed, 20 Aug 2008 02:45:01 -0700
+Subject: [Buildroot] =?windows-1252?q?=5Bbuildroot_0003364=5D=3A_ARM-EABI_?=
+	=?windows-1252?q?build_!_=93Illegal_Instruction=94?=
+Message-ID: <04bf671c472a5e2540df1d5b6315e96d@bugs.busybox.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Bernhard Reutner-Fischer schrieb:
-> On Tue, Aug 19, 2008 at 05:54:30PM +0200, Tomasz Chmielewski wrote:
->> Bernhard Reutner-Fischer schrieb:
->>> On Tue, Aug 19, 2008 at 05:34:42PM +0200, Tomasz Chmielewski wrote:
->>>
->>>> So my question - did anyone manage to build ARM EABI toolchain with  
->>>> buildroot (GCC 4.3.1 + uClibc; I also need busybox)?
->>> Built fine for me last time i tried.
->> Do you still have it anywhere?
-> 
-> Unfortunately i've lost the disk that contained the configs, but going
-> off a minimal config should work fine.
 
-OK, it builds (I had a custom uClibc config, which perhaps made some 
-problems), but even then, lots of Busybox things don't work.
+A NOTE has been added to this issue. 
+====================================================================== 
+http://busybox.net/bugs/view.php?id=3364 
+====================================================================== 
+Reported By:                noel_v
+Assigned To:                buildroot
+====================================================================== 
+Project:                    buildroot
+Issue ID:                   3364
+Category:                   Architecture Specific
+Reproducibility:            always
+Severity:                   major
+Priority:                   normal
+Status:                     assigned
+====================================================================== 
+Date Submitted:             05-19-2008 02:24 PDT
+Last Modified:              08-20-2008 02:45 PDT
+====================================================================== 
+Summary:                    ARM-EABI build ! ?Illegal Instruction?
+Description: 
+ARM-EABI build ! ?Illegal Instruction? 
 
-I.e.:
+Buildroot: 01/05/2008 
+Target : ARM cpu (AT91SAM9260)
+Kernel : 2.6.25 with latest TARGET patches.
+
+
++ Buildroot/busybox compiles and runs fine in OABI .
++ Buildroot/busybox in EABI, compiles BUT lots of things are not working..
+PING fails , UDHCPC fails, INSMOD/MODPROBE fails .. etc... 
+(kernel boots, but some tools (in busybox) are not working).
+
+Double checked build, kernel,buildroot and uclibc have all enabled EABI
+and OABI is disabled ! 
+
+NOTE: started clean new dir .. untarred buildroot .. and rebuild all.
+
+
+
+
+
+
+====================================================================== 
+
+---------------------------------------------------------------------- 
+ tklas - 06-16-08 03:51  
+---------------------------------------------------------------------- 
+Maybe you should set GNU target to "linux-uclibcgnueabi" instead of
+"linux-uclibcgnu". (See bug http://busybox.net/bugs/view.php?id=0003804.) 
+
+---------------------------------------------------------------------- 
+ mangoo - 08-20-08 02:45  
+---------------------------------------------------------------------- 
+I can confirm it:
 
 # ./busybox
+BusyBox v1.11.1 (2008-08-20 10:00:10 CEST) multi-call binary
 (...)
 Currently defined functions:
-         ash, cat, mount, sh, sleep, switch_root, umount, whoami
+        ash, cat, mount, sh, sleep, switch_root, umount, whoami
+
+# ./busybox whoami
+root
 
 # ./busybox ash
 Illegal instruction
 
 
-Similar to: http://bugs.busybox.net/view.php?id=3364 which maybe points 
-to http://bugs.busybox.net/view.php?id=0003804 (some things are build as 
-EABI, and some things are build as OABI, although EABI is chosen).
+I already had my target set to "linux-uclibcgnueabi". 
 
-
-
--- 
-Tomasz Chmielewski
-http://wpkg.org
+Issue History 
+Date Modified   Username       Field                    Change               
+====================================================================== 
+05-19-08 02:24  noel_v         New Issue                                    
+05-19-08 02:24  noel_v         Status                   new => assigned     
+05-19-08 02:24  noel_v         Assigned To               => buildroot       
+05-19-08 05:57  noel_v         Issue Monitored: noel_v                      
+06-16-08 03:51  tklas          Note Added: 0008294                          
+08-20-08 02:45  mangoo         Note Added: 0010544                          
+======================================================================
