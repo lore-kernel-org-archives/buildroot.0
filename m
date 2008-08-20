@@ -1,92 +1,30 @@
-From: bugs at busybox.net <bugs@busybox.net>
-Date: Wed, 20 Aug 2008 02:45:01 -0700
-Subject: [Buildroot] =?windows-1252?q?=5Bbuildroot_0003364=5D=3A_ARM-EABI_?=
-	=?windows-1252?q?build_!_=93Illegal_Instruction=94?=
-Message-ID: <04bf671c472a5e2540df1d5b6315e96d@bugs.busybox.net>
+From: Bernhard Reutner-Fischer <rep.dot.nop@gmail.com>
+Date: Wed, 20 Aug 2008 11:49:42 +0200
+Subject: [Buildroot] ARM EABI toolchain - anyone build it successfully?
+In-Reply-To: <48ABE3DE.80908@wpkg.org>
+References: <48AAE812.4020706@wpkg.org> <20080819154955.GA15608@mx.loc>
+	<48AAECB6.6020309@wpkg.org> <20080819162809.GA15851@mx.loc>
+	<48ABE3DE.80908@wpkg.org>
+Message-ID: <20080820094942.GA20189@mx.loc>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+On Wed, Aug 20, 2008 at 11:29:02AM +0200, Tomasz Chmielewski wrote:
 
-A NOTE has been added to this issue. 
-====================================================================== 
-http://busybox.net/bugs/view.php?id=3364 
-====================================================================== 
-Reported By:                noel_v
-Assigned To:                buildroot
-====================================================================== 
-Project:                    buildroot
-Issue ID:                   3364
-Category:                   Architecture Specific
-Reproducibility:            always
-Severity:                   major
-Priority:                   normal
-Status:                     assigned
-====================================================================== 
-Date Submitted:             05-19-2008 02:24 PDT
-Last Modified:              08-20-2008 02:45 PDT
-====================================================================== 
-Summary:                    ARM-EABI build ! ?Illegal Instruction?
-Description: 
-ARM-EABI build ! ?Illegal Instruction? 
+> OK, it builds (I had a custom uClibc config, which perhaps made some  
+> problems), but even then, lots of Busybox things don't work.
+>
+> I.e.:
+>
+> # ./busybox
+> (...)
+> Currently defined functions:
+>         ash, cat, mount, sh, sleep, switch_root, umount, whoami
+>
+> # ./busybox ash
+> Illegal instruction
 
-Buildroot: 01/05/2008 
-Target : ARM cpu (AT91SAM9260)
-Kernel : 2.6.25 with latest TARGET patches.
-
-
-+ Buildroot/busybox compiles and runs fine in OABI .
-+ Buildroot/busybox in EABI, compiles BUT lots of things are not working..
-PING fails , UDHCPC fails, INSMOD/MODPROBE fails .. etc... 
-(kernel boots, but some tools (in busybox) are not working).
-
-Double checked build, kernel,buildroot and uclibc have all enabled EABI
-and OABI is disabled ! 
-
-NOTE: started clean new dir .. untarred buildroot .. and rebuild all.
-
-
-
-
-
-
-====================================================================== 
-
----------------------------------------------------------------------- 
- tklas - 06-16-08 03:51  
----------------------------------------------------------------------- 
-Maybe you should set GNU target to "linux-uclibcgnueabi" instead of
-"linux-uclibcgnu". (See bug http://busybox.net/bugs/view.php?id=0003804.) 
-
----------------------------------------------------------------------- 
- mangoo - 08-20-08 02:45  
----------------------------------------------------------------------- 
-I can confirm it:
-
-# ./busybox
-BusyBox v1.11.1 (2008-08-20 10:00:10 CEST) multi-call binary
-(...)
-Currently defined functions:
-        ash, cat, mount, sh, sleep, switch_root, umount, whoami
-
-# ./busybox whoami
-root
-
-# ./busybox ash
-Illegal instruction
-
-
-I already had my target set to "linux-uclibcgnueabi". 
-
-Issue History 
-Date Modified   Username       Field                    Change               
-====================================================================== 
-05-19-08 02:24  noel_v         New Issue                                    
-05-19-08 02:24  noel_v         Status                   new => assigned     
-05-19-08 02:24  noel_v         Assigned To               => buildroot       
-05-19-08 05:57  noel_v         Issue Monitored: noel_v                      
-06-16-08 03:51  tklas          Note Added: 0008294                          
-08-20-08 02:45  mangoo         Note Added: 0010544                          
-======================================================================
+what CPU did you select? ISTR that i have fixed this for iWMMXT && EABI
