@@ -1,56 +1,99 @@
-From: Tomasz Chmielewski <mangoo@wpkg.org>
-Date: Wed, 20 Aug 2008 13:24:19 +0200
-Subject: [Buildroot] ARM EABI toolchain - anyone build it successfully?
-In-Reply-To: <48ABF926.4050402@wpkg.org>
-References: <48AAE812.4020706@wpkg.org>
-	<20080819154955.GA15608@mx.loc>	<48AAECB6.6020309@wpkg.org>
-	<20080819162809.GA15851@mx.loc>	<48ABE3DE.80908@wpkg.org>
-	<20080820094942.GA20189@mx.loc>	<48ABECD6.8000604@wpkg.org>
-	<20080820101654.GA20285@mx.loc> <48ABF926.4050402@wpkg.org>
-Message-ID: <48ABFEE3.6000909@wpkg.org>
+From: bugs at busybox.net <bugs@busybox.net>
+Date: Wed, 20 Aug 2008 06:41:19 -0700
+Subject: [Buildroot] [buildroot 0004624]: Cannot build Modular X.org:
+	undefined references in libX11.so
+Message-ID: <a462771e7d17bb9b6da8fc37fd07bb85@bugs.uclibc.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Tomasz Chmielewski schrieb:
 
-(...)
+A NOTE has been added to this issue. 
+====================================================================== 
+http://busybox.net/bugs/view.php?id=4624 
+====================================================================== 
+Reported By:                lykowdk
+Assigned To:                buildroot
+====================================================================== 
+Project:                    buildroot
+Issue ID:                   4624
+Category:                   Shared Library Support
+Reproducibility:            always
+Severity:                   major
+Priority:                   normal
+Status:                     assigned
+====================================================================== 
+Date Submitted:             08-17-2008 23:36 PDT
+Last Modified:              08-20-2008 06:41 PDT
+====================================================================== 
+Summary:                    Cannot build Modular X.org: undefined references in
+libX11.so
+Description: 
+Trying to build Modular X.org it crashes here..
+I've tried everything I can think of to find the dependencies.
+I am building with WCHAR enabled.
 
-> Out of all shels, only hush and lush work:
-> 
-> # ./busybox
-> (...)
-> Currently defined functions:
->          ash, cat, hush, lash, mount, msh, sh, sleep, switch_root, 
-> umount, whoami
-> 
-> 
-> # ./busybox ash
-> Illegal instruction
-> # ./busybox hush
-> /tmp # exit
-> # ./busybox lash
-> /tmp # exit
-> # ./busybox msh
-> # Illegal instruction
-> # ./busybox sh
-> Illegal instruction
-> 
-> 
-> Hopefully hush is enough ;)
+/bin/bash ../libtool --tag=CC   --mode=link
+/home/lykowdk/buildroot/build_i686/staging_dir/usr/bin/i686-linux-uclibc-gcc
+-Os  -I/home/lykowdk/buildroot/build_i686/staging_dir/usr/include
+-I/home/lykowdk/buildroot/build_i686/staging_dir/include
+--sysroot=/home/lykowdk/buildroot/build_i686/staging_dir/ -isysroot
+/home/lykowdk/buildroot/build_i686/staging_dir -mtune=i686 -march=i686 
+-Wall -Wpointer-arith -Wstrict-prototypes 	-Wmissing-prototypes
+-Wmissing-declarations 	-Wnested-externs -fno-strict-aliasing -g -O2   -o
+sxpm sxpm.o -lX11   -lXt -lX11 -lSM -lICE -lXext   ../src/libXpm.la 
+/home/lykowdk/buildroot/build_i686/staging_dir/usr/bin/i686-linux-uclibc-gcc
+-Os -I/home/lykowdk/buildroot/build_i686/staging_dir/usr/include
+-I/home/lykowdk/buildroot/build_i686/staging_dir/include
+--sysroot=/home/lykowdk/buildroot/build_i686/staging_dir/ -isysroot
+/home/lykowdk/buildroot/build_i686/staging_dir -mtune=i686 -march=i686
+-Wall -Wpointer-arith -Wstrict-prototypes -Wmissing-prototypes
+-Wmissing-declarations -Wnested-externs -fno-strict-aliasing -g -O2 -o
+sxpm sxpm.o 
+/home/lykowdk/buildroot/build_i686/staging_dir//usr/lib//libXt.so
+/home/lykowdk/buildroot/build_i686/staging_dir//usr/lib//libSM.so
+/home/lykowdk/buildroot/build_i686/staging_dir//usr/lib//libICE.so
+/home/lykowdk/buildroot/build_i686/staging_dir//usr/lib//libXext.so
+../src/.libs/libXpm.so
+/home/lykowdk/buildroot/build_i686/staging_dir//usr/lib//libX11.so
+/home/lykowdk/buildroot/build_i686/staging_dir/usr/lib/libxcb-xlib.so
+/home/lykowdk/buildroot/build_i686/libxcb-1.1/src/.libs/libxcb.so
+/home/lykowdk/buildroot/build_i686/staging_dir/usr/lib/libxcb.so
+/home/lykowdk/buildroot/build_i686/staging_dir//usr/lib//libXau.so
+/home/lykowdk/buildroot/build_i686/staging_dir//usr/lib//libXdmcp.so -ldl
+-Wl,--rpath -Wl,/home/lykowdk/buildroot/build_i686/staging_dir//usr/lib/
+-Wl,--rpath
+-Wl,/home/lykowdk/buildroot/build_i686/xlib_libXpm-3.5.7/src/.libs
+-Wl,--rpath -Wl,/home/lykowdk/buildroot/build_i686/staging_dir/usr/lib
+-Wl,--rpath -Wl,/home/lykowdk/buildroot/build_i686/libxcb-1.1/src/.libs
+-Wl,--rpath -Wl,/home/lykowdk/buildroot/build_i686/staging_dir//usr/lib/
+-Wl,--rpath -Wl,/home/lykowdk/buildroot/build_i686/staging_dir/usr/lib
+/home/lykowdk/buildroot/build_i686/staging_dir//usr/lib//libX11.so:
+undefined reference to `wctomb'
+/home/lykowdk/buildroot/build_i686/staging_dir//usr/lib//libX11.so:
+undefined reference to `mbstowcs'
+/home/lykowdk/buildroot/build_i686/staging_dir//usr/lib//libX11.so:
+undefined reference to `mbtowc'
+/home/lykowdk/buildroot/build_i686/staging_dir//usr/lib//libX11.so:
+undefined reference to `_stdlib_mb_cur_max'
+/home/lykowdk/buildroot/build_i686/staging_dir//usr/lib//libX11.so:
+undefined reference to `mblen'
 
-Unfortunately, it breaks, too:
+====================================================================== 
 
-# ./busybox hush
-/tmp # BLAH=1
-/tmp # if [ $BLAH == 1 ] ; then
- > ./busybox whoami
- > fi
-Illegal instruction
+---------------------------------------------------------------------- 
+ antialize - 08-20-08 06:41  
+---------------------------------------------------------------------- 
+Have you tried adding "locale support" in "make uclibc-menuconfig", it did
+the trick for me! 
 
-
--- 
-Tomasz Chmielewski
-http://wpkg.org
+Issue History 
+Date Modified   Username       Field                    Change               
+====================================================================== 
+08-17-08 23:36  lykowdk        New Issue                                    
+08-17-08 23:36  lykowdk        Status                   new => assigned     
+08-17-08 23:36  lykowdk        Assigned To               => buildroot       
+08-20-08 06:41  antialize      Note Added: 0010554                          
+======================================================================
