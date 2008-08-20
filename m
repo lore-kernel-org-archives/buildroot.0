@@ -1,99 +1,93 @@
-From: bugs at busybox.net <bugs@busybox.net>
-Date: Wed, 20 Aug 2008 06:41:19 -0700
-Subject: [Buildroot] [buildroot 0004624]: Cannot build Modular X.org:
-	undefined references in libX11.so
-Message-ID: <a462771e7d17bb9b6da8fc37fd07bb85@bugs.uclibc.org>
+From: jacmet at uclibc.org <jacmet@uclibc.org>
+Date: Wed, 20 Aug 2008 07:15:10 -0700 (PDT)
+Subject: [Buildroot] svn commit: trunk/buildroot/package/rsync
+Message-ID: <20080820141511.09EE33C6FA@busybox.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+Author: jacmet
+Date: 2008-08-20 07:15:10 -0700 (Wed, 20 Aug 2008)
+New Revision: 23118
 
-A NOTE has been added to this issue. 
-====================================================================== 
-http://busybox.net/bugs/view.php?id=4624 
-====================================================================== 
-Reported By:                lykowdk
-Assigned To:                buildroot
-====================================================================== 
-Project:                    buildroot
-Issue ID:                   4624
-Category:                   Shared Library Support
-Reproducibility:            always
-Severity:                   major
-Priority:                   normal
-Status:                     assigned
-====================================================================== 
-Date Submitted:             08-17-2008 23:36 PDT
-Last Modified:              08-20-2008 06:41 PDT
-====================================================================== 
-Summary:                    Cannot build Modular X.org: undefined references in
-libX11.so
-Description: 
-Trying to build Modular X.org it crashes here..
-I've tried everything I can think of to find the dependencies.
-I am building with WCHAR enabled.
+Log:
+rsync: convert to Makefile.autotools.in format
 
-/bin/bash ../libtool --tag=CC   --mode=link
-/home/lykowdk/buildroot/build_i686/staging_dir/usr/bin/i686-linux-uclibc-gcc
--Os  -I/home/lykowdk/buildroot/build_i686/staging_dir/usr/include
--I/home/lykowdk/buildroot/build_i686/staging_dir/include
---sysroot=/home/lykowdk/buildroot/build_i686/staging_dir/ -isysroot
-/home/lykowdk/buildroot/build_i686/staging_dir -mtune=i686 -march=i686 
--Wall -Wpointer-arith -Wstrict-prototypes 	-Wmissing-prototypes
--Wmissing-declarations 	-Wnested-externs -fno-strict-aliasing -g -O2   -o
-sxpm sxpm.o -lX11   -lXt -lX11 -lSM -lICE -lXext   ../src/libXpm.la 
-/home/lykowdk/buildroot/build_i686/staging_dir/usr/bin/i686-linux-uclibc-gcc
--Os -I/home/lykowdk/buildroot/build_i686/staging_dir/usr/include
--I/home/lykowdk/buildroot/build_i686/staging_dir/include
---sysroot=/home/lykowdk/buildroot/build_i686/staging_dir/ -isysroot
-/home/lykowdk/buildroot/build_i686/staging_dir -mtune=i686 -march=i686
--Wall -Wpointer-arith -Wstrict-prototypes -Wmissing-prototypes
--Wmissing-declarations -Wnested-externs -fno-strict-aliasing -g -O2 -o
-sxpm sxpm.o 
-/home/lykowdk/buildroot/build_i686/staging_dir//usr/lib//libXt.so
-/home/lykowdk/buildroot/build_i686/staging_dir//usr/lib//libSM.so
-/home/lykowdk/buildroot/build_i686/staging_dir//usr/lib//libICE.so
-/home/lykowdk/buildroot/build_i686/staging_dir//usr/lib//libXext.so
-../src/.libs/libXpm.so
-/home/lykowdk/buildroot/build_i686/staging_dir//usr/lib//libX11.so
-/home/lykowdk/buildroot/build_i686/staging_dir/usr/lib/libxcb-xlib.so
-/home/lykowdk/buildroot/build_i686/libxcb-1.1/src/.libs/libxcb.so
-/home/lykowdk/buildroot/build_i686/staging_dir/usr/lib/libxcb.so
-/home/lykowdk/buildroot/build_i686/staging_dir//usr/lib//libXau.so
-/home/lykowdk/buildroot/build_i686/staging_dir//usr/lib//libXdmcp.so -ldl
--Wl,--rpath -Wl,/home/lykowdk/buildroot/build_i686/staging_dir//usr/lib/
--Wl,--rpath
--Wl,/home/lykowdk/buildroot/build_i686/xlib_libXpm-3.5.7/src/.libs
--Wl,--rpath -Wl,/home/lykowdk/buildroot/build_i686/staging_dir/usr/lib
--Wl,--rpath -Wl,/home/lykowdk/buildroot/build_i686/libxcb-1.1/src/.libs
--Wl,--rpath -Wl,/home/lykowdk/buildroot/build_i686/staging_dir//usr/lib/
--Wl,--rpath -Wl,/home/lykowdk/buildroot/build_i686/staging_dir/usr/lib
-/home/lykowdk/buildroot/build_i686/staging_dir//usr/lib//libX11.so:
-undefined reference to `wctomb'
-/home/lykowdk/buildroot/build_i686/staging_dir//usr/lib//libX11.so:
-undefined reference to `mbstowcs'
-/home/lykowdk/buildroot/build_i686/staging_dir//usr/lib//libX11.so:
-undefined reference to `mbtowc'
-/home/lykowdk/buildroot/build_i686/staging_dir//usr/lib//libX11.so:
-undefined reference to `_stdlib_mb_cur_max'
-/home/lykowdk/buildroot/build_i686/staging_dir//usr/lib//libX11.so:
-undefined reference to `mblen'
+Modified:
+   trunk/buildroot/package/rsync/rsync.mk
 
-====================================================================== 
 
----------------------------------------------------------------------- 
- antialize - 08-20-08 06:41  
----------------------------------------------------------------------- 
-Have you tried adding "locale support" in "make uclibc-menuconfig", it did
-the trick for me! 
-
-Issue History 
-Date Modified   Username       Field                    Change               
-====================================================================== 
-08-17-08 23:36  lykowdk        New Issue                                    
-08-17-08 23:36  lykowdk        Status                   new => assigned     
-08-17-08 23:36  lykowdk        Assigned To               => buildroot       
-08-20-08 06:41  antialize      Note Added: 0010554                          
-======================================================================
+Changeset:
+Modified: trunk/buildroot/package/rsync/rsync.mk
+===================================================================
+--- trunk/buildroot/package/rsync/rsync.mk	2008-08-20 08:50:02 UTC (rev 23117)
++++ trunk/buildroot/package/rsync/rsync.mk	2008-08-20 14:15:10 UTC (rev 23118)
+@@ -3,57 +3,17 @@
+ # rsync
+ #
+ #############################################################
++
+ RSYNC_VERSION:=2.6.9
+ RSYNC_SOURCE:=rsync-$(RSYNC_VERSION).tar.gz
+ RSYNC_SITE:=http://rsync.samba.org/ftp/rsync/src
+-RSYNC_DIR:=$(BUILD_DIR)/rsync-$(RSYNC_VERSION)
+-RSYNC_CAT:=$(ZCAT)
+-RSYNC_BINARY:=rsync
+-RSYNC_TARGET_BINARY:=usr/bin/rsync
++RSYNC_AUTORECONF:=no
++RSYNC_INSTALL_STAGING:=NO
++RSYNC_INSTALL_TARGET:=YES
++RSYNC_INSTALL_TARGET_OPT:=DESTDIR=$(TARGET_DIR) INSTALLCMD='./install-sh -c' \
++			  STRIPPROG="$(TARGET_STRIP)" install-strip
++RSYNC_CONF_OPT:=--with-included-popt
+ 
+-$(DL_DIR)/$(RSYNC_SOURCE):
+-	$(WGET) -P $(DL_DIR) $(RSYNC_SITE)/$(RSYNC_SOURCE)
++RSYNC_DEPENDENCIES:=uclibc
+ 
+-rsync-source: $(DL_DIR)/$(RSYNC_SOURCE)
+-
+-$(RSYNC_DIR)/.unpacked: $(DL_DIR)/$(RSYNC_SOURCE)
+-	$(RSYNC_CAT) $(DL_DIR)/$(RSYNC_SOURCE) | tar -C $(BUILD_DIR) $(TAR_OPTIONS) -
+-	toolchain/patch-kernel.sh $(RSYNC_DIR) package/rsync/ rsync\*.patch
+-	$(CONFIG_UPDATE) $(RSYNC_DIR)
+-	touch $@
+-
+-$(RSYNC_DIR)/.configured: $(RSYNC_DIR)/.unpacked
+-	(cd $(RSYNC_DIR); rm -rf config.cache; \
+-		$(TARGET_CONFIGURE_OPTS) \
+-		$(TARGET_CONFIGURE_ARGS) \
+-		./configure \
+-		--target=$(GNU_TARGET_NAME) \
+-		--host=$(GNU_TARGET_NAME) \
+-		--build=$(GNU_HOST_NAME) \
+-		--prefix=/usr \
+-		--with-included-popt \
+-	)
+-	touch $@
+-
+-$(RSYNC_DIR)/$(RSYNC_BINARY): $(RSYNC_DIR)/.configured
+-	$(MAKE) $(TARGET_CONFIGURE_OPTS) -C $(RSYNC_DIR)
+-
+-$(TARGET_DIR)/$(RSYNC_TARGET_BINARY): $(RSYNC_DIR)/$(RSYNC_BINARY)
+-	install -D $(RSYNC_DIR)/$(RSYNC_BINARY) $(TARGET_DIR)/$(RSYNC_TARGET_BINARY)
+-
+-rsync: uclibc $(TARGET_DIR)/$(RSYNC_TARGET_BINARY)
+-
+-rsync-clean:
+-	rm -f $(TARGET_DIR)/$(RSYNC_TARGET_BINARY)
+-	-$(MAKE) -C $(RSYNC_DIR) clean
+-
+-rsync-dirclean:
+-	rm -rf $(RSYNC_DIR)
+-#############################################################
+-#
+-# Toplevel Makefile options
+-#
+-#############################################################
+-ifeq ($(strip $(BR2_PACKAGE_RSYNC)),y)
+-TARGETS+=rsync
+-endif
++$(eval $(call AUTOTARGETS,package,rsync))
