@@ -1,49 +1,57 @@
-From: Hans-Christian Egtvedt <hans-christian.egtvedt@atmel.com>
-Date: Wed, 20 Aug 2008 10:31:25 +0200
-Subject: [Buildroot] Commit privileges for messing about with Buildroot
-In-Reply-To: <20080820082506.GD19268@mx.loc>
-References: <20080820094454.4b399b14@atmel.com> <20080820082506.GD19268@mx.loc>
-Message-ID: <20080820103125.701e5ad1@atmel.com>
+From: bugs at busybox.net <bugs@busybox.net>
+Date: Wed, 20 Aug 2008 01:37:42 -0700
+Subject: [Buildroot] [buildroot 0004674]: The Openchrome package is br0ken..
+Message-ID: <74b075a6b3ba6c7ebcab73b3dd3328d4@bugs.uclibc.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Wed, 20 Aug 2008 10:25:06 +0200
-Bernhard Reutner-Fischer <rep.dot.nop@gmail.com> wrote:
-> On Wed, Aug 20, 2008 at 09:44:54AM +0200, Hans-Christian Egtvedt
-> wrote:
-> >I have submitted some patches during my one year involvement with
-> >Buildroot. As people might know I maintain the AVR32 fork Atmel
-> >uses. I would like to contribute back as much as possible with
-> >quirks and fixes I do which will contribute to everybody. Do the
-> >other maintainers feel like I have something to contribute with?
-> 
-> As you know i was forced to maintain my own buildroot tree so i do not
-> regard me as buildroot maintainer anymore. Nonetheless, based on the
-> quality of your patches and the (positive and professional) attitude
-> you react in conversations i would ACK you committing to buildroot.
-> 
 
-Thanks (-:
+The following issue has been SUBMITTED. 
+====================================================================== 
+http://busybox.net/bugs/view.php?id=4674 
+====================================================================== 
+Reported By:                antialize
+Assigned To:                buildroot
+====================================================================== 
+Project:                    buildroot
+Issue ID:                   4674
+Category:                   Architecture Specific
+Reproducibility:            always
+Severity:                   major
+Priority:                   normal
+Status:                     assigned
+====================================================================== 
+Date Submitted:             08-20-2008 01:37 PDT
+Last Modified:              08-20-2008 01:37 PDT
+====================================================================== 
+Summary:                    The Openchrome package is br0ken..
+Description: 
+The openchrome package is broken. It needs, to do install instead of
+install-exec just like ALL the other xorg vidio drivers do, currently only
+extra libs are installed, not the actual graphics driver!
 
-> Perhaps you would even be willing to cleanup some of the stuff that
-> ultimately made me drop out of actively supporting buildroot in svn
-> (see individual commits in my tree in case you're curious..).
->
+Index: openchrome.mk
+===================================================================
+--- openchrome.mk       (revision 23102)
++++ openchrome.mk       (working copy)
+@@ -11,5 +11,6 @@
 
-You tree is the one on Google?
+ OPENCHROME_AUTORECONF = YES
+ OPENCHROME_CONF_OPT = --enable-shared --disable-static
++OPENCHROME_INSTALL_TARGET_OPT = DESTDIR=$(TARGET_DIR)/usr install
 
-> >I already have an account on busybox server, will this account work
-> >automatically with Buildroot as well? Do I need to be added to a
-> >group perhaps?
-> 
-> Nothing needs to be done, you can commit right away.
-> 
+ $(eval $(call AUTOTARGETS,package/x11r7,openchrome))
 
-That was what I thought, seems like the cvsd group is the place to be.
+====================================================================== 
 
--- 
-Best regards,
-Hans-Christian Egtvedt
+Issue History 
+Date Modified   Username       Field                    Change               
+====================================================================== 
+08-20-08 01:37  antialize      New Issue                                    
+08-20-08 01:37  antialize      Status                   new => assigned     
+08-20-08 01:37  antialize      Assigned To               => buildroot       
+08-20-08 01:37  antialize      File Added: openchome.patch                    
+======================================================================
