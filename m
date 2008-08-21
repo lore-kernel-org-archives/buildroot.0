@@ -1,8 +1,8 @@
 From: bugs at busybox.net <bugs@busybox.net>
-Date: Thu, 21 Aug 2008 15:18:31 -0700
-Subject: [Buildroot] [buildroot 0004614]: Unable to build varius xorg X11
-	drivers.
-Message-ID: <0b081e9a5d4e20edf3100e007e8e167f@bugs.uclibc.org>
+Date: Thu, 21 Aug 2008 15:55:45 -0700
+Subject: [Buildroot] [buildroot 0004624]: Cannot build Modular X.org:
+	undefined references in libX11.so
+Message-ID: <49a54975a573bcb3b46c1f3ad13e6092@bugs.uclibc.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -12,60 +12,97 @@ To: buildroot@busybox.net
 
 A NOTE has been added to this issue. 
 ====================================================================== 
-http://busybox.net/bugs/view.php?id=4614 
+http://busybox.net/bugs/view.php?id=4624 
 ====================================================================== 
-Reported By:                antialize
+Reported By:                lykowdk
 Assigned To:                buildroot
 ====================================================================== 
 Project:                    buildroot
-Issue ID:                   4614
-Category:                   Architecture Specific
+Issue ID:                   4624
+Category:                   Shared Library Support
 Reproducibility:            always
 Severity:                   major
 Priority:                   normal
 Status:                     assigned
 ====================================================================== 
-Date Submitted:             08-17-2008 03:55 PDT
-Last Modified:              08-21-2008 15:18 PDT
+Date Submitted:             08-17-2008 23:36 PDT
+Last Modified:              08-21-2008 15:55 PDT
 ====================================================================== 
-Summary:                    Unable to build varius xorg X11 drivers.
+Summary:                    Cannot build Modular X.org: undefined references in
+libX11.so
 Description: 
-One cannot build the x11 {joystick,mouse}-input-driver, amongst others. As
-it seems they expect pixman.h to be located in /usr/include/ and not
-/usr/include/pixman-1/ after all.  As almost all input drivers I have
-tried expects this, I would suggest to change the pixman package to place
-a copy of the files there.
+Trying to build Modular X.org it crashes here..
+I've tried everything I can think of to find the dependencies.
+I am building with WCHAR enabled.
 
-I have submitted a patch to that effect.
+/bin/bash ../libtool --tag=CC   --mode=link
+/home/lykowdk/buildroot/build_i686/staging_dir/usr/bin/i686-linux-uclibc-gcc
+-Os  -I/home/lykowdk/buildroot/build_i686/staging_dir/usr/include
+-I/home/lykowdk/buildroot/build_i686/staging_dir/include
+--sysroot=/home/lykowdk/buildroot/build_i686/staging_dir/ -isysroot
+/home/lykowdk/buildroot/build_i686/staging_dir -mtune=i686 -march=i686 
+-Wall -Wpointer-arith -Wstrict-prototypes 	-Wmissing-prototypes
+-Wmissing-declarations 	-Wnested-externs -fno-strict-aliasing -g -O2   -o
+sxpm sxpm.o -lX11   -lXt -lX11 -lSM -lICE -lXext   ../src/libXpm.la 
+/home/lykowdk/buildroot/build_i686/staging_dir/usr/bin/i686-linux-uclibc-gcc
+-Os -I/home/lykowdk/buildroot/build_i686/staging_dir/usr/include
+-I/home/lykowdk/buildroot/build_i686/staging_dir/include
+--sysroot=/home/lykowdk/buildroot/build_i686/staging_dir/ -isysroot
+/home/lykowdk/buildroot/build_i686/staging_dir -mtune=i686 -march=i686
+-Wall -Wpointer-arith -Wstrict-prototypes -Wmissing-prototypes
+-Wmissing-declarations -Wnested-externs -fno-strict-aliasing -g -O2 -o
+sxpm sxpm.o 
+/home/lykowdk/buildroot/build_i686/staging_dir//usr/lib//libXt.so
+/home/lykowdk/buildroot/build_i686/staging_dir//usr/lib//libSM.so
+/home/lykowdk/buildroot/build_i686/staging_dir//usr/lib//libICE.so
+/home/lykowdk/buildroot/build_i686/staging_dir//usr/lib//libXext.so
+../src/.libs/libXpm.so
+/home/lykowdk/buildroot/build_i686/staging_dir//usr/lib//libX11.so
+/home/lykowdk/buildroot/build_i686/staging_dir/usr/lib/libxcb-xlib.so
+/home/lykowdk/buildroot/build_i686/libxcb-1.1/src/.libs/libxcb.so
+/home/lykowdk/buildroot/build_i686/staging_dir/usr/lib/libxcb.so
+/home/lykowdk/buildroot/build_i686/staging_dir//usr/lib//libXau.so
+/home/lykowdk/buildroot/build_i686/staging_dir//usr/lib//libXdmcp.so -ldl
+-Wl,--rpath -Wl,/home/lykowdk/buildroot/build_i686/staging_dir//usr/lib/
+-Wl,--rpath
+-Wl,/home/lykowdk/buildroot/build_i686/xlib_libXpm-3.5.7/src/.libs
+-Wl,--rpath -Wl,/home/lykowdk/buildroot/build_i686/staging_dir/usr/lib
+-Wl,--rpath -Wl,/home/lykowdk/buildroot/build_i686/libxcb-1.1/src/.libs
+-Wl,--rpath -Wl,/home/lykowdk/buildroot/build_i686/staging_dir//usr/lib/
+-Wl,--rpath -Wl,/home/lykowdk/buildroot/build_i686/staging_dir/usr/lib
+/home/lykowdk/buildroot/build_i686/staging_dir//usr/lib//libX11.so:
+undefined reference to `wctomb'
+/home/lykowdk/buildroot/build_i686/staging_dir//usr/lib//libX11.so:
+undefined reference to `mbstowcs'
+/home/lykowdk/buildroot/build_i686/staging_dir//usr/lib//libX11.so:
+undefined reference to `mbtowc'
+/home/lykowdk/buildroot/build_i686/staging_dir//usr/lib//libX11.so:
+undefined reference to `_stdlib_mb_cur_max'
+/home/lykowdk/buildroot/build_i686/staging_dir//usr/lib//libX11.so:
+undefined reference to `mblen'
+
 ====================================================================== 
 
 ---------------------------------------------------------------------- 
- lykowdk - 08-21-08 15:18  
+ antialize - 08-20-08 06:41  
 ---------------------------------------------------------------------- 
-I don't see it so much as being put in the wrong place as much as it is
-looking in the wrong place on my machine.
+Have you tried adding "locale support" in "make uclibc-menuconfig", it did
+the trick for me! 
 
-...
+---------------------------------------------------------------------- 
+ lykowdk - 08-21-08 15:55  
+---------------------------------------------------------------------- 
+That did the trick.. So how do I close this out?
 
--I/home/lykowdk/buildroot/build_i686/staging_dir/home/lykowdk/buildroot/build_i686/staging_dir/usr/include/pixman-1
-...
-
-Should be
-
-...
- -I/home/lykowdk/buildroot/build_i686/staging_dir/usr/include/pixman-1
-...
-
-Changing the makefiles by hand fixes the build issues.. So.. Where is this
-include generated from? 
+Shouldn't there be an autodependency defined such that both WCHAR and
+locale support are added automatically when Xorg is selected? 
 
 Issue History 
 Date Modified   Username       Field                    Change               
 ====================================================================== 
-08-17-08 03:55  antialize      New Issue                                    
-08-17-08 03:55  antialize      Status                   new => assigned     
-08-17-08 03:55  antialize      Assigned To               => buildroot       
-08-17-08 03:55  antialize      File Added: pixman-copy.patch                    
-08-17-08 03:59  antialize      Issue Monitored: antialize                    
-08-21-08 15:18  lykowdk        Note Added: 0010604                          
+08-17-08 23:36  lykowdk        New Issue                                    
+08-17-08 23:36  lykowdk        Status                   new => assigned     
+08-17-08 23:36  lykowdk        Assigned To               => buildroot       
+08-20-08 06:41  antialize      Note Added: 0010554                          
+08-21-08 15:55  lykowdk        Note Added: 0010614                          
 ======================================================================
