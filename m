@@ -1,30 +1,35 @@
-From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Thu, 21 Aug 2008 15:10:41 +0200
-Subject: [Buildroot] Package ace_of_penguins sets unneeded variable
-In-Reply-To: <BD79186B4FD85F4B8E60E381CAEE190966BE6A@mi8nycmail19.Mi8.com>
-	(hartleys@visionengravers.com's message of "Wed\,
-	13 Aug 2008 17\:05\:31 -0400")
-References: <BD79186B4FD85F4B8E60E381CAEE190966BE6A@mi8nycmail19.Mi8.com>
-Message-ID: <87od3ma4z2.fsf@macbook.be.48ers.dk>
+From: jacmet at uclibc.org <jacmet@uclibc.org>
+Date: Thu, 21 Aug 2008 07:51:14 -0700 (PDT)
+Subject: [Buildroot] svn commit: trunk/buildroot/package/database/sqlite
+Message-ID: <20080821145114.D65AE3C3F8@busybox.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "hartleys" == hartleys  <hartleys@visionengravers.com> writes:
+Author: jacmet
+Date: 2008-08-21 07:51:14 -0700 (Thu, 21 Aug 2008)
+New Revision: 23162
 
- hartleys> Hello all,
- hartleys> The ace_of_penguins package sets:
+Log:
+sqlite: bump version
 
- hartleys> ACE_OF_PENGUINS_CONF_OPT = --target=$(GNU_TARGET_NAME) \
- hartleys> 		--host=$(GNU_TARGET_NAME) --build=$(GNU_HOST_NAME) \
- hartleys> 		--prefix=/usr --sysconfdir=/etc
+Modified:
+   trunk/buildroot/package/database/sqlite/sqlite.mk
 
- hartleys> This appears to be unnecessary since Makefile.autotools.in sets those
- hartleys> automatically:
 
-Thanks, fixed in trunk.
-
--- 
-Bye, Peter Korsgaard
+Changeset:
+Modified: trunk/buildroot/package/database/sqlite/sqlite.mk
+===================================================================
+--- trunk/buildroot/package/database/sqlite/sqlite.mk	2008-08-21 14:37:14 UTC (rev 23161)
++++ trunk/buildroot/package/database/sqlite/sqlite.mk	2008-08-21 14:51:14 UTC (rev 23162)
+@@ -4,7 +4,7 @@
+ #
+ #############################################################
+ 
+-SQLITE_VERSION:=3.5.9
++SQLITE_VERSION:=3.6.1
+ SQLITE_SOURCE:=sqlite-$(SQLITE_VERSION).tar.gz
+ SQLITE_SITE:=http://www.sqlite.org
+ SQLITE_DIR:=$(BUILD_DIR)/sqlite-$(SQLITE_VERSION)
