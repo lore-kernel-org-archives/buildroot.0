@@ -1,20 +1,38 @@
 From: Hinko Kocevar <hinko.kocevar@cetrtapot.si>
-Date: Thu, 21 Aug 2008 13:24:50 +0200
-Subject: [Buildroot] cris stuff
-Message-ID: <48AD5082.4070101@cetrtapot.si>
+Date: Thu, 21 Aug 2008 14:03:50 +0200
+Subject: [Buildroot] mpfr for host on gentoo
+Message-ID: <48AD59A6.3040607@cetrtapot.si>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi,
+Fix for mpfr on gentoo host.
+...
+checking for i386-pc-linux-gnu-ar... no
+checking for ar... ar
+checking for i386-pc-linux-gnu-ranlib... no
+checking for ranlib... ranlib
+checking for i386-pc-linux-gnu-strip... no
+checking for strip... strip
+checking for correct ltmain.sh version... no
+configure: error:
 
-I've put up a small page for cris arch related patches and fixes that apply to buildroot GIT tree. This way there will be a place for cris patches and will not be lost in the swamp of e-mails on the mailing lists. The patches were tested by me and are applied to our latest uClibc based firmware that is due to be released in October '08. Since both uClibc buildroot and openWRT support cris arch patches should be useful for both SDKs.
+*** [Gentoo] sanity check failed! ***
+*** libtool.m4 and ltmain.sh have a version mismatch! ***
+*** (libtool.m4 = 1.5.26, ltmain.sh = "1.5.24 Debian 1.5.24-1") ***
 
-If anyone is interested, please feel free to visit the page and use patches. Any reports on success or failure is greatly appreciated.
+Please run:
 
-Visit http://hinkocevar.googlepages.com/linuxxstuff .
+  libtoolize --copy --force
+
+if appropriate, please contact the maintainer of this
+package (or your distribution) for help.
+
+make[1]: *** [config.status] Error 1
+make[1]: Leaving directory `/work/buildroot/toolchain_build_cris/mpfr-2.3.1-host'
+make: *** [/work/buildroot/toolchain_build_cris/mpfr/lib/libmpfr.so] Error 2
 
 Thank you,
 Hinko
@@ -27,3 +45,11 @@ Slovenia, Europe
 Tel. +386 (0) 4 280 66 03
 E-mail: hinko.kocevar at cetrtapot.si
 Http: www.cetrtapot.si
+
+-------------- next part --------------
+A non-text attachment was scrubbed...
+Name: mpfr.patch
+Type: text/x-patch
+Size: 411 bytes
+Desc: not available
+Url : http://busybox.net/lists/buildroot/attachments/20080821/2a8520fa/attachment.bin 
