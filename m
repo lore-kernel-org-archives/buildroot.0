@@ -1,21 +1,30 @@
-From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Wed, 20 Aug 2008 22:05:00 +0200
-Subject: [Buildroot] [PATCH] u-boot: fix wrong syntax in Makefile
-In-Reply-To: <200808091403.44855.markus.heidelberg@web.de> (Markus
-	Heidelberg's message of "Sat\, 9 Aug 2008 14\:03\:44 +0200")
-References: <200808091403.44855.markus.heidelberg@web.de>
-Message-ID: <87skszfo5v.fsf@macbook.be.48ers.dk>
+From: Ulf Samuelsson <ulf.samuelsson@atmel.com>
+Date: Thu, 21 Aug 2008 06:40:18 +0200
+Subject: [Buildroot] Commit privileges for messing about with Buildroot
+References: <20080820094454.4b399b14@atmel.com>
+	<87myj7r9u5.fsf@macbook.be.48ers.dk>
+Message-ID: <BBEE9D8F2C3D45B2A632086E60853BC3@aeglos>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Markus" == Markus Heidelberg <markus.heidelberg@web.de> writes:
+> 
+> Hans-Christian> Hi,
+> 
+> Hans-Christian> I have submitted some patches during my one year
+> Hans-Christian> involvement with Buildroot. As people might know I
+> Hans-Christian> maintain the AVR32 fork Atmel uses. I would like to
+> Hans-Christian> contribute back as much as possible with quirks and
+> Hans-Christian> fixes I do which will contribute to everybody. Do the
+> Hans-Christian> other maintainers feel like I have something to
+> Hans-Christian> contribute with?
+> 
+> +1 from here - Welcome on board!
+> 
 
- Markus> u-boot: fix wrong syntax in Makefile
+Yes!
 
-Thanks, both patches are committed to trunk.
-
--- 
-Bye, Peter Korsgaard
+Best Regards
+Ulf Samuelsson
