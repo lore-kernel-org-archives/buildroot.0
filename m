@@ -1,40 +1,30 @@
-From: jacmet at uclibc.org <jacmet@uclibc.org>
-Date: Thu, 21 Aug 2008 06:10:27 -0700 (PDT)
-Subject: [Buildroot] svn commit: trunk/buildroot/package/ace_of_penguins
-Message-ID: <20080821131027.48EEA3C650@busybox.net>
+From: Peter Korsgaard <jacmet@uclibc.org>
+Date: Thu, 21 Aug 2008 15:10:41 +0200
+Subject: [Buildroot] Package ace_of_penguins sets unneeded variable
+In-Reply-To: <BD79186B4FD85F4B8E60E381CAEE190966BE6A@mi8nycmail19.Mi8.com>
+	(hartleys@visionengravers.com's message of "Wed\,
+	13 Aug 2008 17\:05\:31 -0400")
+References: <BD79186B4FD85F4B8E60E381CAEE190966BE6A@mi8nycmail19.Mi8.com>
+Message-ID: <87od3ma4z2.fsf@macbook.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Author: jacmet
-Date: 2008-08-21 06:10:27 -0700 (Thu, 21 Aug 2008)
-New Revision: 23152
+>>>>> "hartleys" == hartleys  <hartleys@visionengravers.com> writes:
 
-Log:
-ace_of_penguins: remove redundant configure settings
+ hartleys> Hello all,
+ hartleys> The ace_of_penguins package sets:
 
-Reported by Hartleys.
+ hartleys> ACE_OF_PENGUINS_CONF_OPT = --target=$(GNU_TARGET_NAME) \
+ hartleys> 		--host=$(GNU_TARGET_NAME) --build=$(GNU_HOST_NAME) \
+ hartleys> 		--prefix=/usr --sysconfdir=/etc
 
-Modified:
-   trunk/buildroot/package/ace_of_penguins/ace_of_penguins.mk
+ hartleys> This appears to be unnecessary since Makefile.autotools.in sets those
+ hartleys> automatically:
 
+Thanks, fixed in trunk.
 
-Changeset:
-Modified: trunk/buildroot/package/ace_of_penguins/ace_of_penguins.mk
-===================================================================
---- trunk/buildroot/package/ace_of_penguins/ace_of_penguins.mk	2008-08-21 12:52:45 UTC (rev 23151)
-+++ trunk/buildroot/package/ace_of_penguins/ace_of_penguins.mk	2008-08-21 13:10:27 UTC (rev 23152)
-@@ -11,10 +11,6 @@
- ACE_OF_PENGUINS_STAGING = NO
- ACE_OF_PENGUINS_TARGET = YES
- 
--ACE_OF_PENGUINS_CONF_OPT = --target=$(GNU_TARGET_NAME) \
--		--host=$(GNU_TARGET_NAME) --build=$(GNU_HOST_NAME) \
--		--prefix=/usr --sysconfdir=/etc
--
- ACE_OF_PENGUINS_DEPENDENCIES = uclibc libpng $(XSERVER)
- 
- $(eval $(call AUTOTARGETS,package,ace_of_penguins))
-\ No newline at end of file
+-- 
+Bye, Peter Korsgaard
