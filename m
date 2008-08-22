@@ -1,38 +1,29 @@
-From: jacmet at uclibc.org <jacmet@uclibc.org>
-Date: Fri, 22 Aug 2008 07:01:56 -0700 (PDT)
-Subject: [Buildroot] svn commit: trunk/buildroot/package
-Message-ID: <20080822140156.9712E3C717@busybox.net>
+From: Peter Korsgaard <jacmet@uclibc.org>
+Date: Fri, 22 Aug 2008 16:00:34 +0200
+Subject: [Buildroot] [PATCH] gcc softfloat on powerpc
+In-Reply-To: <1219347404.7367.21.camel@wberrierlx.appsig.com> (Wade Berrier's
+	message of "Thu\, 21 Aug 2008 13\:36\:44 -0600")
+References: <1219347404.7367.21.camel@wberrierlx.appsig.com>
+Message-ID: <878wup2lq5.fsf@macbook.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Author: jacmet
-Date: 2008-08-22 07:01:56 -0700 (Fri, 22 Aug 2008)
-New Revision: 23179
+>>>>> "Wade" == Wade Berrier <wberrier@gmail.com> writes:
 
-Log:
-Makefile.autotools.in: remove unused BR2_HAVE_INCLUDES handling
+ Wade> Hi,
+ Wade> I'm running into the same situation described here:
 
-Patch by Wade Berrier.
+ Wade> http://www.uclibc.org/lists/busybox/2007-July/028210.html
 
-Modified:
-   trunk/buildroot/package/Makefile.autotools.in
+ Wade> I'm using softfloat on ppc, and also noticed that '-float-abi'
+ Wade> is only for arm.
 
+I don't quite see why openssl needs to mess with that setting, but it
+does indeed seem fishy to use -mfloat-abit on non-ARM. Committed as
+r23178 - Thanks.
 
-Changeset:
-Modified: trunk/buildroot/package/Makefile.autotools.in
-===================================================================
---- trunk/buildroot/package/Makefile.autotools.in	2008-08-22 13:59:06 UTC (rev 23178)
-+++ trunk/buildroot/package/Makefile.autotools.in	2008-08-22 14:01:56 UTC (rev 23179)
-@@ -244,9 +244,6 @@
- 	$(if $(BR2_HAVE_INFOPAGES),,for d in info share/info; do \
- 		rm -rf $(TARGET_DIR)/$$d $(TARGET_DIR)/usr/$$d; \
- 	done)
--	$(if $(BR2_HAVE_INCLUDES),,for d in include; do \
--		rm -rf $(TARGET_DIR)/$$d $(TARGET_DIR)/usr/$$d; \
--	done)
- 	touch $@
- 
- $(BUILD_DIR)/%/.stamp_cleaned:
+-- 
+Bye, Peter Korsgaard
