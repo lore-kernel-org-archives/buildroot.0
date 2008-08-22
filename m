@@ -1,139 +1,41 @@
-From: bugs at busybox.net <bugs@busybox.net>
-Date: Fri, 22 Aug 2008 01:10:18 -0700
-Subject: [Buildroot] [buildroot 0004624]: Cannot build Modular X.org:
-	undefined references in libX11.so
-Message-ID: <d8912db7c2d26f3d5e2eb5cf244e789e@busybox.net>
+From: jacmet at uclibc.org <jacmet@uclibc.org>
+Date: Fri, 22 Aug 2008 06:59:06 -0700 (PDT)
+Subject: [Buildroot] svn commit: trunk/buildroot/toolchain/gcc
+Message-ID: <20080822135906.CF3E53C669@busybox.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+Author: jacmet
+Date: 2008-08-22 06:59:06 -0700 (Fri, 22 Aug 2008)
+New Revision: 23178
 
-A NOTE has been added to this issue. 
-====================================================================== 
-http://busybox.net/bugs/view.php?id=4624 
-====================================================================== 
-Reported By:                lykowdk
-Assigned To:                buildroot
-====================================================================== 
-Project:                    buildroot
-Issue ID:                   4624
-Category:                   Shared Library Support
-Reproducibility:            always
-Severity:                   major
-Priority:                   normal
-Status:                     assigned
-====================================================================== 
-Date Submitted:             08-17-2008 23:36 PDT
-Last Modified:              08-22-2008 01:10 PDT
-====================================================================== 
-Summary:                    Cannot build Modular X.org: undefined references in
-libX11.so
-Description: 
-Trying to build Modular X.org it crashes here..
-I've tried everything I can think of to find the dependencies.
-I am building with WCHAR enabled.
+Log:
+gcc: only use -mfloat-abi for ARM, use -msoft-float for other archs
 
-/bin/bash ../libtool --tag=CC   --mode=link
-/home/lykowdk/buildroot/build_i686/staging_dir/usr/bin/i686-linux-uclibc-gcc
--Os  -I/home/lykowdk/buildroot/build_i686/staging_dir/usr/include
--I/home/lykowdk/buildroot/build_i686/staging_dir/include
---sysroot=/home/lykowdk/buildroot/build_i686/staging_dir/ -isysroot
-/home/lykowdk/buildroot/build_i686/staging_dir -mtune=i686 -march=i686 
--Wall -Wpointer-arith -Wstrict-prototypes 	-Wmissing-prototypes
--Wmissing-declarations 	-Wnested-externs -fno-strict-aliasing -g -O2   -o
-sxpm sxpm.o -lX11   -lXt -lX11 -lSM -lICE -lXext   ../src/libXpm.la 
-/home/lykowdk/buildroot/build_i686/staging_dir/usr/bin/i686-linux-uclibc-gcc
--Os -I/home/lykowdk/buildroot/build_i686/staging_dir/usr/include
--I/home/lykowdk/buildroot/build_i686/staging_dir/include
---sysroot=/home/lykowdk/buildroot/build_i686/staging_dir/ -isysroot
-/home/lykowdk/buildroot/build_i686/staging_dir -mtune=i686 -march=i686
--Wall -Wpointer-arith -Wstrict-prototypes -Wmissing-prototypes
--Wmissing-declarations -Wnested-externs -fno-strict-aliasing -g -O2 -o
-sxpm sxpm.o 
-/home/lykowdk/buildroot/build_i686/staging_dir//usr/lib//libXt.so
-/home/lykowdk/buildroot/build_i686/staging_dir//usr/lib//libSM.so
-/home/lykowdk/buildroot/build_i686/staging_dir//usr/lib//libICE.so
-/home/lykowdk/buildroot/build_i686/staging_dir//usr/lib//libXext.so
-../src/.libs/libXpm.so
-/home/lykowdk/buildroot/build_i686/staging_dir//usr/lib//libX11.so
-/home/lykowdk/buildroot/build_i686/staging_dir/usr/lib/libxcb-xlib.so
-/home/lykowdk/buildroot/build_i686/libxcb-1.1/src/.libs/libxcb.so
-/home/lykowdk/buildroot/build_i686/staging_dir/usr/lib/libxcb.so
-/home/lykowdk/buildroot/build_i686/staging_dir//usr/lib//libXau.so
-/home/lykowdk/buildroot/build_i686/staging_dir//usr/lib//libXdmcp.so -ldl
--Wl,--rpath -Wl,/home/lykowdk/buildroot/build_i686/staging_dir//usr/lib/
--Wl,--rpath
--Wl,/home/lykowdk/buildroot/build_i686/xlib_libXpm-3.5.7/src/.libs
--Wl,--rpath -Wl,/home/lykowdk/buildroot/build_i686/staging_dir/usr/lib
--Wl,--rpath -Wl,/home/lykowdk/buildroot/build_i686/libxcb-1.1/src/.libs
--Wl,--rpath -Wl,/home/lykowdk/buildroot/build_i686/staging_dir//usr/lib/
--Wl,--rpath -Wl,/home/lykowdk/buildroot/build_i686/staging_dir/usr/lib
-/home/lykowdk/buildroot/build_i686/staging_dir//usr/lib//libX11.so:
-undefined reference to `wctomb'
-/home/lykowdk/buildroot/build_i686/staging_dir//usr/lib//libX11.so:
-undefined reference to `mbstowcs'
-/home/lykowdk/buildroot/build_i686/staging_dir//usr/lib//libX11.so:
-undefined reference to `mbtowc'
-/home/lykowdk/buildroot/build_i686/staging_dir//usr/lib//libX11.so:
-undefined reference to `_stdlib_mb_cur_max'
-/home/lykowdk/buildroot/build_i686/staging_dir//usr/lib//libX11.so:
-undefined reference to `mblen'
+Patch by Wade Berrier.
 
-====================================================================== 
+Modified:
+   trunk/buildroot/toolchain/gcc/Makefile.in
 
----------------------------------------------------------------------- 
- antialize - 08-20-08 06:41  
----------------------------------------------------------------------- 
-Have you tried adding "locale support" in "make uclibc-menuconfig", it did
-the trick for me! 
 
----------------------------------------------------------------------- 
- lykowdk - 08-21-08 15:55  
----------------------------------------------------------------------- 
-That did the trick.. So how do I close this out?
-
-Shouldn't there be an autodependency defined such that both WCHAR and
-locale support are added automatically when Xorg is selected? 
-
----------------------------------------------------------------------- 
- antialize - 08-22-08 00:15  
----------------------------------------------------------------------- 
-I'v been trying to look into how one would go about doing that, currently
-it is not possible to add deps between different menuconfigs. I have found
-several places where there realy should be deps between buildroot and
-linux26,uclibc or bussybox. 
-
----------------------------------------------------------------------- 
- Paul Bussmann - 08-22-08 00:22  
----------------------------------------------------------------------- 
-AFAIK buildroot does such stuff by adding e.g. 
-
-echo "CONFIG_FEATURE_HAVE_RPC=y" >>
-project_build_arm/uclibc/busybox-1.10.3/.config 
-that will overrride the setting before and then doing something like "make
-oldconfig" ...
-
-I'm not really familiar with it, but I think, I've seen it from time to
-time. 
-
----------------------------------------------------------------------- 
- bernhardf - 08-22-08 01:10  
----------------------------------------------------------------------- 
-The correct thing to do is to fix Xorg (upstream, of course) not to rely on
-locale support unless it's available and not explicitely turned off in the
-configuration. 
-
-Issue History 
-Date Modified   Username       Field                    Change               
-====================================================================== 
-08-17-08 23:36  lykowdk        New Issue                                    
-08-17-08 23:36  lykowdk        Status                   new => assigned     
-08-17-08 23:36  lykowdk        Assigned To               => buildroot       
-08-20-08 06:41  antialize      Note Added: 0010554                          
-08-21-08 15:55  lykowdk        Note Added: 0010614                          
-08-22-08 00:15  antialize      Note Added: 0010634                          
-08-22-08 00:22  Paul Bussmann  Note Added: 0010644                          
-08-22-08 01:10  bernhardf      Note Added: 0010654                          
-======================================================================
+Changeset:
+Modified: trunk/buildroot/toolchain/gcc/Makefile.in
+===================================================================
+--- trunk/buildroot/toolchain/gcc/Makefile.in	2008-08-22 11:16:52 UTC (rev 23177)
++++ trunk/buildroot/toolchain/gcc/Makefile.in	2008-08-22 13:59:06 UTC (rev 23178)
+@@ -40,8 +40,12 @@
+ ifeq ($(BR2_SOFT_FLOAT_FP),y)
+ TARGET_SOFT_FLOAT:=-mfloat-abi=softfp
+ else # no fp at all
++ifeq ($(BR2_arm),y) # only set float-abi for arm
+ TARGET_SOFT_FLOAT:=-mfloat-abi=soft
++else
++TARGET_SOFT_FLOAT:=-msoft-float
+ endif
++endif
+ else # not gcc-4.x
+ TARGET_SOFT_FLOAT:=-msoft-float
+ endif
