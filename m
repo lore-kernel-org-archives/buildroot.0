@@ -1,7 +1,7 @@
 From: jacmet at uclibc.org <jacmet@uclibc.org>
-Date: Fri, 22 Aug 2008 06:59:06 -0700 (PDT)
-Subject: [Buildroot] svn commit: trunk/buildroot/toolchain/gcc
-Message-ID: <20080822135906.CF3E53C669@busybox.net>
+Date: Fri, 22 Aug 2008 07:01:56 -0700 (PDT)
+Subject: [Buildroot] svn commit: trunk/buildroot/package
+Message-ID: <20080822140156.9712E3C717@busybox.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -9,33 +9,30 @@ Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
 Author: jacmet
-Date: 2008-08-22 06:59:06 -0700 (Fri, 22 Aug 2008)
-New Revision: 23178
+Date: 2008-08-22 07:01:56 -0700 (Fri, 22 Aug 2008)
+New Revision: 23179
 
 Log:
-gcc: only use -mfloat-abi for ARM, use -msoft-float for other archs
+Makefile.autotools.in: remove unused BR2_HAVE_INCLUDES handling
 
 Patch by Wade Berrier.
 
 Modified:
-   trunk/buildroot/toolchain/gcc/Makefile.in
+   trunk/buildroot/package/Makefile.autotools.in
 
 
 Changeset:
-Modified: trunk/buildroot/toolchain/gcc/Makefile.in
+Modified: trunk/buildroot/package/Makefile.autotools.in
 ===================================================================
---- trunk/buildroot/toolchain/gcc/Makefile.in	2008-08-22 11:16:52 UTC (rev 23177)
-+++ trunk/buildroot/toolchain/gcc/Makefile.in	2008-08-22 13:59:06 UTC (rev 23178)
-@@ -40,8 +40,12 @@
- ifeq ($(BR2_SOFT_FLOAT_FP),y)
- TARGET_SOFT_FLOAT:=-mfloat-abi=softfp
- else # no fp at all
-+ifeq ($(BR2_arm),y) # only set float-abi for arm
- TARGET_SOFT_FLOAT:=-mfloat-abi=soft
-+else
-+TARGET_SOFT_FLOAT:=-msoft-float
- endif
-+endif
- else # not gcc-4.x
- TARGET_SOFT_FLOAT:=-msoft-float
- endif
+--- trunk/buildroot/package/Makefile.autotools.in	2008-08-22 13:59:06 UTC (rev 23178)
++++ trunk/buildroot/package/Makefile.autotools.in	2008-08-22 14:01:56 UTC (rev 23179)
+@@ -244,9 +244,6 @@
+ 	$(if $(BR2_HAVE_INFOPAGES),,for d in info share/info; do \
+ 		rm -rf $(TARGET_DIR)/$$d $(TARGET_DIR)/usr/$$d; \
+ 	done)
+-	$(if $(BR2_HAVE_INCLUDES),,for d in include; do \
+-		rm -rf $(TARGET_DIR)/$$d $(TARGET_DIR)/usr/$$d; \
+-	done)
+ 	touch $@
+ 
+ $(BUILD_DIR)/%/.stamp_cleaned:
