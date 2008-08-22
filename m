@@ -1,8 +1,8 @@
 From: bugs at busybox.net <bugs@busybox.net>
-Date: Fri, 22 Aug 2008 00:22:56 -0700
+Date: Fri, 22 Aug 2008 01:10:18 -0700
 Subject: [Buildroot] [buildroot 0004624]: Cannot build Modular X.org:
 	undefined references in libX11.so
-Message-ID: <b4c1bae092f967fd79d546459f395bc0@busybox.net>
+Message-ID: <d8912db7c2d26f3d5e2eb5cf244e789e@busybox.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -26,7 +26,7 @@ Priority:                   normal
 Status:                     assigned
 ====================================================================== 
 Date Submitted:             08-17-2008 23:36 PDT
-Last Modified:              08-22-2008 00:22 PDT
+Last Modified:              08-22-2008 01:10 PDT
 ====================================================================== 
 Summary:                    Cannot build Modular X.org: undefined references in
 libX11.so
@@ -118,6 +118,13 @@ oldconfig" ...
 I'm not really familiar with it, but I think, I've seen it from time to
 time. 
 
+---------------------------------------------------------------------- 
+ bernhardf - 08-22-08 01:10  
+---------------------------------------------------------------------- 
+The correct thing to do is to fix Xorg (upstream, of course) not to rely on
+locale support unless it's available and not explicitely turned off in the
+configuration. 
+
 Issue History 
 Date Modified   Username       Field                    Change               
 ====================================================================== 
@@ -128,4 +135,5 @@ Date Modified   Username       Field                    Change
 08-21-08 15:55  lykowdk        Note Added: 0010614                          
 08-22-08 00:15  antialize      Note Added: 0010634                          
 08-22-08 00:22  Paul Bussmann  Note Added: 0010644                          
+08-22-08 01:10  bernhardf      Note Added: 0010654                          
 ======================================================================
