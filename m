@@ -1,66 +1,35 @@
-From: bugs at busybox.net <bugs@busybox.net>
-Date: Fri, 22 Aug 2008 07:42:48 -0700
-Subject: [Buildroot] [buildroot 0004674]: The Openchrome package is br0ken..
-Message-ID: <e96fe4be16f1f499ca5ae5378f2c6196@busybox.net>
+From: steve at fl-eng.com <steve@fl-eng.com>
+Date: Fri, 22 Aug 2008 21:16:36 -0500
+Subject: [Buildroot] ### ARM11 Buildroot for MX31
+Message-ID: <6gvfio$77k560@rrcs-agw-01b.hrndva.rr.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+Hello
 
-The following issue has been CLOSED 
-====================================================================== 
-http://busybox.net/bugs/view.php?id=4674 
-====================================================================== 
-Reported By:                antialize
-Assigned To:                buildroot
-====================================================================== 
-Project:                    buildroot
-Issue ID:                   4674
-Category:                   Architecture Specific
-Reproducibility:            always
-Severity:                   major
-Priority:                   normal
-Status:                     closed
-Resolution:                 open
-Fixed in Version:           
-====================================================================== 
-Date Submitted:             08-20-2008 01:37 PDT
-Last Modified:              08-22-2008 07:42 PDT
-====================================================================== 
-Summary:                    The Openchrome package is br0ken..
-Description: 
-The openchrome package is broken. It needs, to do install instead of
-install-exec just like ALL the other xorg vidio drivers do, currently only
-extra libs are installed, not the actual graphics driver!
+I have downloaded the buildroot package and have built it for the ARM11 
+MX31 processor from Freescale. It is running with kernel 2.6.22
 
-Index: openchrome.mk
-===================================================================
---- openchrome.mk       (revision 23102)
-+++ openchrome.mk       (working copy)
-@@ -11,5 +11,6 @@
+Everything compiles and loads up, I can get a login prompt for 
+username/password from the filesystem produced by buildroot.
 
- OPENCHROME_AUTORECONF = YES
- OPENCHROME_CONF_OPT = --enable-shared --disable-static
-+OPENCHROME_INSTALL_TARGET_OPT = DESTDIR=$(TARGET_DIR)/usr install
+However, I cannot seem to login. I assumed that the login would be "root" 
+and no password. I looked into the /etc/passwd and /etc/shadow files which 
+seemed to confirm that perhaps root(nopassword) and maybe user(user) was 
+also a login. 
 
- $(eval $(call AUTOTARGETS,package/x11r7,openchrome))
+Can anyone provide some suggestions on what the login should be and, 
+ideally, how to reset it during the filesystem generation?
 
-====================================================================== 
+THe other thing I tried to do was pass init=/dev/sh and init=/dev/bash to try 
+to get a direct shell prompt. I don't think it was connecting to the MX31's 
+serial port because I never saw any outputs after the filesystem was 
+mounted. Is there a recommended way to force /dev/sh to appear on a ttyS0 
+(or actually ttymxc0 for the MX31)
 
----------------------------------------------------------------------- 
- jacmet - 08-22-08 07:42  
----------------------------------------------------------------------- 
-A quick test seems to show that /usr isn't needed. Fixed in r23182. 
+Thank you
 
-Issue History 
-Date Modified   Username       Field                    Change               
-====================================================================== 
-08-20-08 01:37  antialize      New Issue                                    
-08-20-08 01:37  antialize      Status                   new => assigned     
-08-20-08 01:37  antialize      Assigned To               => buildroot       
-08-20-08 01:37  antialize      File Added: openchome.patch                    
-08-22-08 07:42  jacmet         Status                   assigned => closed  
-08-22-08 07:42  jacmet         Note Added: 0010684                          
-======================================================================
+Steve Spano
