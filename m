@@ -1,32 +1,38 @@
-From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Sat, 23 Aug 2008 09:44:44 +0200
-Subject: [Buildroot] ### ARM11 Buildroot for MX31
-In-Reply-To: <6gvfio$77k560@rrcs-agw-01b.hrndva.rr.com> (steve@fl-eng.com's
-	message of "Fri\, 22 Aug 2008 21\:16\:36 -0500")
-References: <6gvfio$77k560@rrcs-agw-01b.hrndva.rr.com>
-Message-ID: <87od3kuqdv.fsf@macbook.be.48ers.dk>
+From: jacmet at uclibc.org <jacmet@uclibc.org>
+Date: Sat, 23 Aug 2008 06:08:28 -0700 (PDT)
+Subject: [Buildroot] svn commit: trunk/buildroot/package/libxml2
+Message-ID: <20080823130828.CB1E3F8008@busybox.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>>   <steve@fl-eng.com> writes:
+Author: jacmet
+Date: 2008-08-23 06:08:28 -0700 (Sat, 23 Aug 2008)
+New Revision: 23183
 
-Hi,
+Log:
+libxml2: remove unused BR2_PACKAGE_LIBXML2_TARGET_HEADERS option
 
- > Hello I have downloaded the buildroot package and have built it for
- > the ARM11 MX31 processor from Freescale. It is running with kernel
- > 2.6.22
+Modified:
+   trunk/buildroot/package/libxml2/Config.in
 
- > Everything compiles and loads up, I can get a login prompt for
- > username/password from the filesystem produced by buildroot.
 
- > However, I cannot seem to login. I assumed that the login would be
- > "root" and no password. I looked into the /etc/passwd and
- > /etc/shadow files which seemed to confirm that perhaps
- > root(nopassword) and maybe user(user) was also a login.
-
-Yes, if you use the generic target skeleton (E.G. don't specify
-anything special) you will have a root account without a password (but
-no "user" account).
+Changeset:
+Modified: trunk/buildroot/package/libxml2/Config.in
+===================================================================
+--- trunk/buildroot/package/libxml2/Config.in	2008-08-22 14:42:00 UTC (rev 23182)
++++ trunk/buildroot/package/libxml2/Config.in	2008-08-23 13:08:28 UTC (rev 23183)
+@@ -3,11 +3,3 @@
+ 	help
+ 	  XML C Parser
+ 	  ftp://xmlsoft.org/libxml2
+-
+-config BR2_PACKAGE_LIBXML2_TARGET_HEADERS
+-	bool "libxml2 target headers"
+-	depends on BR2_PACKAGE_LIBXML2
+-	help
+-	  XML C Parser
+-	  ftp://xmlsoft.org/libxml2
+-
