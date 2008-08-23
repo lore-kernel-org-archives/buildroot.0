@@ -1,46 +1,78 @@
-From: jacmet at uclibc.org <jacmet@uclibc.org>
-Date: Sat, 23 Aug 2008 06:08:37 -0700 (PDT)
-Subject: [Buildroot] svn commit: trunk/buildroot/package/libxml2
-Message-ID: <20080823130837.A5AC0F801B@busybox.net>
+From: steve at fl-eng.com <steve@fl-eng.com>
+Date: Sat, 23 Aug 2008 8:27:36 -0500
+Subject: [Buildroot] ### ARM11 Buildroot for MX31
+Message-ID: <6u80qt$757icq@rrcs-agw-02b.hrndva.rr.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Author: jacmet
-Date: 2008-08-23 06:08:37 -0700 (Sat, 23 Aug 2008)
-New Revision: 23186
+HI
 
-Log:
-libxml2: use install-strip instead of install-exec for target install
+Thanks for the reply. I will try the securetty file and add ttymxc0. The serial 
+port drivers for the MX31 use ttymxc0 as their device ID. I was also thinking 
+of changing the driver to use ttyS so it came up as a standard serial port 
+driver because probably everything else may be thinking ttyS and not ttymxc. 
+I had to add ttymxc and its major/minor number to the devices.txt file in the 
+target/generic  folder.
 
-Use install-strip so binaries gets stripped and man pages / header files
-gets installed.
+I'll try some more tests and post results later today.
 
-Modified:
-   trunk/buildroot/package/libxml2/libxml2.mk
+Thanks for the reply!
 
-
-Changeset:
-Modified: trunk/buildroot/package/libxml2/libxml2.mk
-===================================================================
---- trunk/buildroot/package/libxml2/libxml2.mk	2008-08-23 13:08:34 UTC (rev 23185)
-+++ trunk/buildroot/package/libxml2/libxml2.mk	2008-08-23 13:08:37 UTC (rev 23186)
-@@ -10,6 +10,7 @@
- LIBXML2_AUTORECONF = NO
- LIBXML2_INSTALL_STAGING = YES
- LIBXML2_INSTALL_TARGET = YES
-+LIBXML2_INSTALL_TARGET_OPT:=DESTDIR=$(TARGET_DIR) install-strip
- 
- ifneq ($(BR2_LARGEFILE),y)
- LIBXML2_CONF_ENV = CC="$(TARGET_CC) $(TARGET_CFLAGS) -DNO_LARGEFILE_SOURCE"
-@@ -25,5 +26,7 @@
- $(eval $(call AUTOTARGETS,package,libxml2))
- 
- $(LIBXML2_HOOK_POST_INSTALL):
--	$(STRIPCMD) $(STRIP_STRIP_UNNEEDED) $(TARGET_DIR)/usr/lib/libxml2*so*
-+	rm -rf $(TARGET_DIR)/usr/share/aclocal \
-+	       $(TARGET_DIR)/usr/share/doc/libxml2-$(LIBXML2_VERSION) \
-+	       $(TARGET_DIR)/usr/share/gtk-doc
- 	touch $@
+Steve
+> 
+> From: Peter Korsgaard <jacmet@uclibc.org>
+> Date: 2008/08/23 Sat AM 02:44:44 EST
+> To: <steve@fl-eng.com>
+> CC: <buildroot@uclibc.org>
+> Subject: Re: [Buildroot] ### ARM11 Buildroot for MX31
+> 
+> >>>>>   <steve@fl-eng.com> writes:
+> 
+> Hi,
+> 
+>  > Hello I have downloaded the buildroot package and have built it for
+>  > the ARM11 MX31 processor from Freescale. It is running with kernel
+>  > 2.6.22
+> 
+>  > Everything compiles and loads up, I can get a login prompt for
+>  > username/password from the filesystem produced by buildroot.
+> 
+>  > However, I cannot seem to login. I assumed that the login would be
+>  > "root" and no password. I looked into the /etc/passwd and
+>  > /etc/shadow files which seemed to confirm that perhaps
+>  > root(nopassword) and maybe user(user) was also a login.
+> 
+> Yes, if you use the generic target skeleton (E.G. don't specify
+> anything special) you will have a root account without a password (but
+> no "user" account).
+> 
+> From below it seems like you try to login over the serial port using a
+> ttymxc0 device. If so, then the reason why you cannot login is that
+> you don't have ttymxc0 listed in /etc/securetty.
+> 
+> The file comes from target/generic/target_skeleton/etc, but you can
+> simply edit it under project_build_arm/uclibc/root/etc and rerun make
+> to regenerate your filesystem image.
+> 
+> I don't see any mention of /dev/ttymxcN in Documentation/devices.txt
+> in the kernel sources? I take it that the serial driver isn't in the
+> mainline kernel?
+> 
+>  > THe other thing I tried to do was pass init=/dev/sh and
+>  > init=/dev/bash to try to get a direct shell prompt. I don't think
+>  > it was connecting to the MX31's serial port because I never saw any
+>  > outputs after the filesystem was mounted. Is there a recommended
+>  > way to force /dev/sh to appear on a ttyS0 (or actually ttymxc0 for
+>  > the MX31)
+> 
+> I take it you mean /bin/sh not /dev/sh?
+> 
+> Strange. And you do get output from init and login with the same
+> filesystem if you boot without init=/bin/sh?
+> 
+> -- 
+> Bye, Peter Korsgaard
+> 
