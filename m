@@ -1,34 +1,34 @@
-From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Sun, 24 Aug 2008 10:54:39 +0200
-Subject: [Buildroot] New package util-linux-ng
-In-Reply-To: <20080810050649.GA26515@cbg.dyndns.org> (Steffen Schulz's message
-	of "Sun\, 10 Aug 2008 07\:06\:49 +0200")
-References: <20080810050649.GA26515@cbg.dyndns.org>
-Message-ID: <87iqtqpzcg.fsf@macbook.be.48ers.dk>
+From: jacmet at uclibc.org <jacmet@uclibc.org>
+Date: Sun, 24 Aug 2008 05:40:33 -0700 (PDT)
+Subject: [Buildroot] svn commit: trunk/buildroot/package/procps
+Message-ID: <20080824124033.1D0283C658@busybox.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Steffen" == Steffen Schulz <pepe_ml@gmx.net> writes:
+Author: jacmet
+Date: 2008-08-24 05:40:32 -0700 (Sun, 24 Aug 2008)
+New Revision: 23194
 
-Hi,
+Log:
+procps: needs WCHAR
 
- Steffen>   misses a file <linux/a.out.h> which is included in
- Steffen>   <a.out.h>. I think this is a bug in some other packet?
+Modified:
+   trunk/buildroot/package/procps/Config.in
 
-What kernel headers version are you using? There used to be a bug
-where linux/a.out.h wasn't exported. I reported it and dwmw fixed it
-for 2.6.26:
 
-http://git.kernel.org/?p=linux/kernel/git/torvalds/linux-2.6.git;a=commit;h=e53d6a152793a38aa334d6f7a4850642ae45cedc
-
-I've backported the fix to 2.6.25, so either of those should work.
-
- Steffen> Any comments on my fixes in #4274, #4284 and #4294?
-
-Sorry, haven't looked at those yet, I'll take a look today.
-
--- 
-Bye, Peter Korsgaard
+Changeset:
+Modified: trunk/buildroot/package/procps/Config.in
+===================================================================
+--- trunk/buildroot/package/procps/Config.in	2008-08-24 07:48:22 UTC (rev 23193)
++++ trunk/buildroot/package/procps/Config.in	2008-08-24 12:40:32 UTC (rev 23194)
+@@ -1,6 +1,7 @@
+ config BR2_PACKAGE_PROCPS
+ 	bool "procps"
+ 	select BR2_PACKAGE_NCURSES
++	depends on BR2_USE_WCHAR
+ 	help
+ 	  Standard informational utilities and process-handling tools.
+ 	  Provides things like kill, ps, uptime, free, top, etc...
