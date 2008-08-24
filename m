@@ -1,61 +1,35 @@
-From: ulf at uclibc.org <ulf@uclibc.org>
-Date: Sat, 23 Aug 2008 13:45:43 -0700 (PDT)
-Subject: [Buildroot] svn commit:
-	trunk/buildroot/target/device/Atmel/arch-arm: kernel-patches-2.6.26
-Message-ID: <20080823204543.23D7DF8008@busybox.net>
+From: jacmet at uclibc.org <jacmet@uclibc.org>
+Date: Sun, 24 Aug 2008 00:48:15 -0700 (PDT)
+Subject: [Buildroot] svn commit: trunk/buildroot/package/libxml2
+Message-ID: <20080824074815.74A533C2A9@busybox.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Author: ulf
-Date: 2008-08-23 13:45:42 -0700 (Sat, 23 Aug 2008)
-New Revision: 23188
+Author: jacmet
+Date: 2008-08-24 00:48:15 -0700 (Sun, 24 Aug 2008)
+New Revision: 23192
 
 Log:
-Update AT91 patches to latest Linux
-
-Added:
-   trunk/buildroot/target/device/Atmel/arch-arm/kernel-patches-2.6.26/
-   trunk/buildroot/target/device/Atmel/arch-arm/kernel-patches-2.6.26/2.6.26-at91.patch.gz
+libxml2: enable ipv6 support if enabled in buildroot
 
 Modified:
-   trunk/buildroot/target/device/Atmel/arch-arm/Config.in.linux.patches
+   trunk/buildroot/package/libxml2/libxml2.mk
 
 
 Changeset:
-Modified: trunk/buildroot/target/device/Atmel/arch-arm/Config.in.linux.patches
+Modified: trunk/buildroot/package/libxml2/libxml2.mk
 ===================================================================
---- trunk/buildroot/target/device/Atmel/arch-arm/Config.in.linux.patches	2008-08-23 20:25:29 UTC (rev 23187)
-+++ trunk/buildroot/target/device/Atmel/arch-arm/Config.in.linux.patches	2008-08-23 20:45:42 UTC (rev 23188)
-@@ -14,6 +14,11 @@
- 	help
- 	  Select a patch to add to the Linux kernel
+--- trunk/buildroot/package/libxml2/libxml2.mk	2008-08-24 00:02:18 UTC (rev 23191)
++++ trunk/buildroot/package/libxml2/libxml2.mk	2008-08-24 07:48:15 UTC (rev 23192)
+@@ -17,7 +17,7 @@
+ endif
  
-+config	BR2_ARCH_AT91_2_6_26
-+	bool "2.6.26"
-+	help
-+	  Apply the at91 linux-2.6.26 patches
-+
- config	BR2_ARCH_AT91_2_6_26_RC3
- 	bool "2.6.26-rc3"
- 	help
-@@ -55,6 +60,7 @@
- 	string
- 	depends on BR2_KERNEL_ARCH_PATCH_ENABLED
- 	depends on BR2_TARGET_ATMEL && BR2_arm
-+	default "2.6.26" if BR2_ARCH_AT91_2_6_26
- 	default "2.6.26-rc3" if BR2_ARCH_AT91_2_6_26_RC3
- 	default "2.6.25" if BR2_ARCH_AT91_2_6_25
- 	default "2.6.24" if BR2_ARCH_AT91_2_6_24
-
-Added: trunk/buildroot/target/device/Atmel/arch-arm/kernel-patches-2.6.26/2.6.26-at91.patch.gz
-===================================================================
-(Binary files differ)
-
-
-Property changes on: trunk/buildroot/target/device/Atmel/arch-arm/kernel-patches-2.6.26/2.6.26-at91.patch.gz
-___________________________________________________________________
-Name: svn:mime-type
-   + application/octet-stream
+ LIBXML2_CONF_OPT = --with-gnu-ld --enable-shared \
+-		--enable-static --enable-ipv6=no \
++		--enable-static $(DISABLE_IPV6) \
+ 		--without-debugging --without-python \
+ 		--without-threads $(DISABLE_NLS)
+ 
