@@ -1,75 +1,60 @@
-From: jacmet at uclibc.org <jacmet@uclibc.org>
-Date: Sun, 24 Aug 2008 05:40:36 -0700 (PDT)
-Subject: [Buildroot] svn commit: trunk/buildroot/package/procps
-Message-ID: <20080824124036.73E683C675@busybox.net>
+From: bugs at busybox.net <bugs@busybox.net>
+Date: Sun, 24 Aug 2008 05:40:57 -0700
+Subject: [Buildroot] [buildroot 0004284]: procps compile fails due to
+	missing page.h
+Message-ID: <3708058e2b08402560b0d4e976e0c012@bugs.busybox.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Author: jacmet
-Date: 2008-08-24 05:40:36 -0700 (Sun, 24 Aug 2008)
-New Revision: 23195
 
-Log:
-procps: bump version
+The following issue has been CLOSED 
+====================================================================== 
+http://busybox.net/bugs/view.php?id=4284 
+====================================================================== 
+Reported By:                pepe
+Assigned To:                buildroot
+====================================================================== 
+Project:                    buildroot
+Issue ID:                   4284
+Category:                   Architecture Specific
+Reproducibility:            always
+Severity:                   major
+Priority:                   normal
+Status:                     closed
+Resolution:                 open
+Fixed in Version:           
+====================================================================== 
+Date Submitted:             07-23-2008 16:00 PDT
+Last Modified:              08-24-2008 05:40 PDT
+====================================================================== 
+Summary:                    procps compile fails due to missing page.h
+Description: 
+Google seems to be telling me this file is deprecated. There is code for
+the case that PAGE_SIZE is not declared in page. But procps is trying to
+include the page.h in ps/common.h anyway, which fails in current buildroot
+for i686.
 
-Closes #4284.
-
-Removed:
-   trunk/buildroot/package/procps/procps-mips-define-pagesize.patch
-
-Modified:
-   trunk/buildroot/package/procps/procps.mk
+The include-line can simply be removed to let the programm compile.
+Instead, PROCPS_VERSION can simply be incremented from 3.2.5 to 3.2.7 to
+get a working version from upstream.
 
 
-Changeset:
-Deleted: trunk/buildroot/package/procps/procps-mips-define-pagesize.patch
-===================================================================
---- trunk/buildroot/package/procps/procps-mips-define-pagesize.patch	2008-08-24 12:40:32 UTC (rev 23194)
-+++ trunk/buildroot/package/procps/procps-mips-define-pagesize.patch	2008-08-24 12:40:36 UTC (rev 23195)
-@@ -1,29 +0,0 @@
--diff -Naurp procps-3.2.3.orig/minimal.c procps-3.2.3/minimal.c
----- procps-3.2.3.orig/minimal.c	2004-05-04 20:26:14.000000000 -0400
--+++ procps-3.2.3/minimal.c	2004-08-20 02:01:35.868100752 -0400
--@@ -68,8 +68,8 @@
-- ///////////////////////////////////////////////////////////
-- 
-- #ifndef PAGE_SIZE
---#warning PAGE_SIZE not defined, assuming it is 4096
---#define PAGE_SIZE 4096
--+#warning PAGE_SIZE not defined, using sysconf() to determine correct value
--+#define PAGE_SIZE (sysconf(_SC_PAGESIZE))
-- #endif
-- 
-- 
--diff -Naurp procps-3.2.3.orig/ps/common.h procps-3.2.3/ps/common.h
----- procps-3.2.3.orig/ps/common.h	2004-04-25 17:03:18.000000000 -0400
--+++ procps-3.2.3/ps/common.h	2004-08-20 02:00:59.228670792 -0400
--@@ -16,6 +16,11 @@
-- #include "../proc/readproc.h"
-- #include <asm/page.h>  /* looks safe for glibc, we need PAGE_SIZE */
-- 
--+#ifndef PAGE_SIZE
--+#warning PAGE_SIZE not defined, using sysconf() to determine correct value
--+#define PAGE_SIZE (sysconf(_SC_PAGESIZE))
--+#endif
--+
-- #if 0
-- #define trace(args...) printf(## args)
-- #else
+====================================================================== 
 
-Modified: trunk/buildroot/package/procps/procps.mk
-===================================================================
---- trunk/buildroot/package/procps/procps.mk	2008-08-24 12:40:32 UTC (rev 23194)
-+++ trunk/buildroot/package/procps/procps.mk	2008-08-24 12:40:36 UTC (rev 23195)
-@@ -3,7 +3,7 @@
- # procps
- #
- #############################################################
--PROCPS_VERSION:=3.2.5
-+PROCPS_VERSION:=3.2.7
- PROCPS_SOURCE:=procps-$(PROCPS_VERSION).tar.gz
- PROCPS_SITE:=http://procps.sourceforge.net/
- PROCPS_DIR:=$(BUILD_DIR)/procps-$(PROCPS_VERSION)
+---------------------------------------------------------------------- 
+ jacmet - 08-24-08 05:40  
+---------------------------------------------------------------------- 
+Thanks, fixed in r23195. 
+
+Issue History 
+Date Modified   Username       Field                    Change               
+====================================================================== 
+07-23-08 16:00  pepe           New Issue                                    
+07-23-08 16:00  pepe           Status                   new => assigned     
+07-23-08 16:00  pepe           Assigned To               => buildroot       
+08-24-08 05:40  jacmet         Status                   assigned => closed  
+08-24-08 05:40  jacmet         Note Added: 0010744                          
+======================================================================
