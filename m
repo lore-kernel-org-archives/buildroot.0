@@ -1,51 +1,76 @@
-From: jacmet at uclibc.org <jacmet@uclibc.org>
-Date: Sun, 24 Aug 2008 00:48:22 -0700 (PDT)
-Subject: [Buildroot] svn commit: trunk/buildroot/toolchain/gdb
-Message-ID: <20080824074822.948193C2BA@busybox.net>
+From: bugs at busybox.net <bugs@busybox.net>
+Date: Sun, 24 Aug 2008 00:50:15 -0700
+Subject: [Buildroot] [buildroot 0003954]: gdb fails to build: double
+	patching in gdb.mk
+Message-ID: <16a874e45f7819860e7b3df624e742cc@busybox.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Author: jacmet
-Date: 2008-08-24 00:48:22 -0700 (Sun, 24 Aug 2008)
-New Revision: 23193
 
-Log:
-toolchain/gdb: unbreak target gdb support
+The following issue has been CLOSED 
+====================================================================== 
+http://busybox.net/bugs/view.php?id=3954 
+====================================================================== 
+Reported By:                Souf
+Assigned To:                buildroot
+====================================================================== 
+Project:                    buildroot
+Issue ID:                   3954
+Category:                   Other
+Reproducibility:            always
+Severity:                   minor
+Priority:                   normal
+Status:                     closed
+Resolution:                 open
+Fixed in Version:           
+====================================================================== 
+Date Submitted:             07-06-2008 02:37 PDT
+Last Modified:              08-24-2008 00:50 PDT
+====================================================================== 
+Summary:                    gdb fails to build: double patching in gdb.mk
+Description: 
+gdb-unpacked: $(GDB_DIR)/.unpacked
+$(GDB_DIR)/.unpacked: $(DL_DIR)/$(GDB_SOURCE)
+	mkdir -p $(TOOL_BUILD_DIR)
+	$(GDB_CAT) $(DL_DIR)/$(GDB_SOURCE) | tar -C $(TOOL_BUILD_DIR)
+$(TAR_OPTIONS) -
+ifeq ($(GDB_VERSION),snapshot)
+	GDB_REAL_DIR=$(shell \
+		tar jtf $(DL_DIR)/$(GDB_SOURCE) | head -1 | cut -d"/" -f1)
+	ln -sf $(TOOL_BUILD_DIR)/$(shell tar jtf $(DL_DIR)/$(GDB_SOURCE) | head
+-1 | cut -d"/" -f1) $(GDB_DIR)
+endif
+	toolchain/patch-kernel.sh $(GDB_DIR) $(GDB_PATCH_DIR) \*.patch  <======
+	$(CONFIG_UPDATE) $(GDB_DIR)
+	touch $@
 
-r22624 (Ulf: Add prepatched AVR32 gcc-4.2.2 toolchain) broke target gdb
-support as it tries to apply gdb patches twice. Unbreak it.
+gdb-patched: $(GDB_DIR)/.unpacked
+$(GDB_DIR)/.patched: $(GDB_DIR)/.unpacked
+	toolchain/patch-kernel.sh $(GDB_DIR) $(GDB_PATCH_DIR) \*.patch   <======
+	$(CONFIG_UPDATE) $(GDB_DIR)
+	touch $@
 
-Closes #3954.
+gdb-dirclean:
+	rm -rf $(GDB_DIR)
+====================================================================== 
 
-Modified:
-   trunk/buildroot/toolchain/gdb/gdb.mk
+---------------------------------------------------------------------- 
+ jacmet - 08-24-08 00:50  
+---------------------------------------------------------------------- 
+Sorry about that - Got broken in r22624 and is now fixed in r23193.
 
+Thanks! 
 
-Changeset:
-Modified: trunk/buildroot/toolchain/gdb/gdb.mk
-===================================================================
---- trunk/buildroot/toolchain/gdb/gdb.mk	2008-08-24 07:48:15 UTC (rev 23192)
-+++ trunk/buildroot/toolchain/gdb/gdb.mk	2008-08-24 07:48:22 UTC (rev 23193)
-@@ -62,10 +62,6 @@
- 	touch $@
- 
- gdb-patched: $(GDB_DIR)/.unpacked
--$(GDB_DIR)/.patched: $(GDB_DIR)/.unpacked
--	toolchain/patch-kernel.sh $(GDB_DIR) $(GDB_PATCH_DIR) \*.patch
--	$(CONFIG_UPDATE) $(GDB_DIR)
--	touch $@
- 
- gdb-dirclean:
- 	rm -rf $(GDB_DIR)
-@@ -88,7 +84,7 @@
- 	bash_cv_func_sigsetjmp=present \
- 	bash_cv_have_mbstate_t=yes
- 
--$(GDB_TARGET_DIR)/.configured: $(GDB_DIR)/.patched
-+$(GDB_TARGET_DIR)/.configured: $(GDB_DIR)/.unpacked
- 	mkdir -p $(GDB_TARGET_DIR)
- 	(cd $(GDB_TARGET_DIR); \
- 		gdb_cv_func_sigsetjmp=yes \
+Issue History 
+Date Modified   Username       Field                    Change               
+====================================================================== 
+07-06-08 02:37  Souf           New Issue                                    
+07-06-08 02:37  Souf           Status                   new => assigned     
+07-06-08 02:37  Souf           Assigned To               => buildroot       
+07-06-08 02:37  Souf           File Added: gdb.mk.patch                     
+08-24-08 00:50  jacmet         Status                   assigned => closed  
+08-24-08 00:50  jacmet         Note Added: 0010724                          
+======================================================================
