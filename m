@@ -1,54 +1,56 @@
-From: jacmet at uclibc.org <jacmet@uclibc.org>
-Date: Mon, 25 Aug 2008 02:05:03 -0700 (PDT)
-Subject: [Buildroot] svn commit: trunk/buildroot/package/psmisc
-Message-ID: <20080825090504.7EE6F3C72F@busybox.net>
+From: bugs at busybox.net <bugs@busybox.net>
+Date: Mon, 25 Aug 2008 02:05:21 -0700
+Subject: [Buildroot] [buildroot 0004274]: psmisc does not build if locales
+	enabled
+Message-ID: <18dbd68e32a67e246f83cf347797df24@bugs.busybox.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Author: jacmet
-Date: 2008-08-25 02:05:00 -0700 (Mon, 25 Aug 2008)
-New Revision: 23199
 
-Log:
-psmic: locale support
+The following issue has been CLOSED 
+====================================================================== 
+http://busybox.net/bugs/view.php?id=4274 
+====================================================================== 
+Reported By:                pepe
+Assigned To:                buildroot
+====================================================================== 
+Project:                    buildroot
+Issue ID:                   4274
+Category:                   Architecture Specific
+Reproducibility:            always
+Severity:                   major
+Priority:                   normal
+Status:                     closed
+Resolution:                 open
+Fixed in Version:           
+====================================================================== 
+Date Submitted:             07-23-2008 15:43 PDT
+Last Modified:              08-25-2008 02:05 PDT
+====================================================================== 
+Summary:                    psmisc does not build if locales enabled
+Description: 
+psmisc supports localization but does not depend on gettext/libintl, nor
+does it find the libs.
 
-Closes #4274.
+The makefile stuff always seemed obscure too me, but the attached fix
+seems to work with and without localization.
+====================================================================== 
 
-Modified:
-   trunk/buildroot/package/psmisc/Config.in
-   trunk/buildroot/package/psmisc/psmisc.mk
+---------------------------------------------------------------------- 
+ jacmet - 08-25-08 02:05  
+---------------------------------------------------------------------- 
+Thanks - Fixed in r23199 
 
-
-Changeset:
-Modified: trunk/buildroot/package/psmisc/Config.in
-===================================================================
---- trunk/buildroot/package/psmisc/Config.in	2008-08-25 09:04:49 UTC (rev 23198)
-+++ trunk/buildroot/package/psmisc/Config.in	2008-08-25 09:05:00 UTC (rev 23199)
-@@ -1,6 +1,8 @@
- config BR2_PACKAGE_PSMISC
- 	bool "psmisc"
- 	select BR2_PACKAGE_NCURSES
-+	select BR2_PACKAGE_GETTEXT if BR2_ENABLE_LOCALE
-+	select BR2_PACKAGE_LIBINTL if BR2_ENABLE_LOCALE
- 	help
- 	  Helpful /proc related utilities such as pstree, fuser, and killall
- 
-
-Modified: trunk/buildroot/package/psmisc/psmisc.mk
-===================================================================
---- trunk/buildroot/package/psmisc/psmisc.mk	2008-08-25 09:04:49 UTC (rev 23198)
-+++ trunk/buildroot/package/psmisc/psmisc.mk	2008-08-25 09:05:00 UTC (rev 23199)
-@@ -15,4 +15,10 @@
- PSMISC_CONF_OPT:= $(DISABLE_NLS) $(DISABLE_IPV6)
- PSMISC_DEPENDENCIES:=uclibc ncurses
- 
-+ifeq ($(BR2_ENABLE_LOCALE),y)
-+# psmisc gets confused and forgets to link with libintl
-+PSMISC_MAKE_OPT:=LIBS=-lintl
-+PSMISC_DEPENDENCIES+= gettext libintl
-+endif
-+
- $(eval $(call AUTOTARGETS,package,psmisc))
+Issue History 
+Date Modified   Username       Field                    Change               
+====================================================================== 
+07-23-08 15:43  pepe           New Issue                                    
+07-23-08 15:43  pepe           Status                   new => assigned     
+07-23-08 15:43  pepe           Assigned To               => buildroot       
+07-23-08 15:43  pepe           File Added: psmisc_intl.patch                    
+08-25-08 02:05  jacmet         Status                   assigned => closed  
+08-25-08 02:05  jacmet         Note Added: 0010754                          
+======================================================================
