@@ -1,31 +1,93 @@
-From: Daniel Laird <daniel.j.laird@nxp.com>
-Date: Tue, 26 Aug 2008 10:32:40 +0100
-Subject: [Buildroot] Static Library Building - On/Off/Configurable?
-Message-ID: <1219743160.9701.5.camel@lnx32dtp04>
+From: laird at uclibc.org <laird@uclibc.org>
+Date: Tue, 26 Aug 2008 05:19:30 -0700 (PDT)
+Subject: [Buildroot] svn commit: trunk/buildroot/package/libgtk2
+Message-ID: <20080826121930.77B8B3C79C@busybox.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-All,
+Author: laird
+Date: 2008-08-26 05:19:29 -0700 (Tue, 26 Aug 2008)
+New Revision: 23204
 
-Currently many of the packages that are in buildroot have a setting of
---enable-static
+Log:
+The changes below add better support for DirectFB and libgtk2.
+Should be no different for X builds.
 
-This takes extra compile time and seems somewhat unnecessary.  It means
-that it is not very configurable. (default on)
-What are peoples opinion on using the following:
+ Config.in  |    3 +--
+ libgtk2.mk |    7 +++----
+ 2 files changed, 4 insertions(+), 6 deletions(-)
 
-ifeq ($(BR2_PREFER_STATIC_LIB),y)
-	OPT_STATIC = --enable-static
-endif
+Signed-off-by: daniel.j.laird at nxp.com
 
-This could be added(not quite like above but similar) to
-Makefile.autotools.in, 
-I believe that --enable-static is a default parameter to configure
-scripts so that should be safe, its just it would mean a central
-'switch' to enable static compilation and would make things a lot
-simpler.
+package/libgtk2/Config.in
+Allow DirectFB to turn on LIBGTK2 support without X being enabled.
+Disable autoselection of cups.  May not be wanted (Can cause crosscompilation issues).
 
-Dan Laird
+package/libgtk2/libgtk2.mk
+Remove unnessary redefine of PKG_CONFIG_*
+Pass $(DISABLE_LARGEFILE) to configure (supports large file or not)
+Move 'cups' to X extra dependencies instead of general.
+
+
+
+
+
+
+Modified:
+   trunk/buildroot/package/libgtk2/Config.in
+   trunk/buildroot/package/libgtk2/libgtk2.mk
+
+
+Changeset:
+Modified: trunk/buildroot/package/libgtk2/Config.in
+===================================================================
+--- trunk/buildroot/package/libgtk2/Config.in	2008-08-26 01:32:33 UTC (rev 23203)
++++ trunk/buildroot/package/libgtk2/Config.in	2008-08-26 12:19:29 UTC (rev 23204)
+@@ -2,14 +2,13 @@
+ 	bool "libgtk2"
+ 	select BR2_PACKAGE_ATK
+ 	select BR2_PACKAGE_CAIRO
+-	select BR2_PACKAGE_CUPS
+ 	select BR2_PACKAGE_JPEG
+ 	select BR2_PACKAGE_LIBGLIB2
+ 	select BR2_PACKAGE_LIBPNG
+ 	select BR2_PACKAGE_PANGO
+ 	select BR2_PACKAGE_PKGCONFIG
+ 	select BR2_PACKAGE_TIFF
+-	depends on BR2_PACKAGE_XORG||BR2_PACKAGE_XORG7||BR2_PACKAGE_TINYX
++	depends on BR2_PACKAGE_XORG||BR2_PACKAGE_XORG7||BR2_PACKAGE_TINYX||BR2_PACKAGE_DIRECTFB
+ 	help
+ 	  The GTK+ version 2 graphical user interface library
+ 
+
+Modified: trunk/buildroot/package/libgtk2/libgtk2.mk
+===================================================================
+--- trunk/buildroot/package/libgtk2/libgtk2.mk	2008-08-26 01:32:33 UTC (rev 23203)
++++ trunk/buildroot/package/libgtk2/libgtk2.mk	2008-08-26 12:19:29 UTC (rev 23204)
+@@ -92,8 +92,7 @@
+ 		--disable-glibtest \
+ 		--enable-explicit-deps=no \
+ 		--disable-debug \
+-		PKG_CONFIG_PATH="$(STAGING_DIR)/usr/lib/pkgconfig" \
+-		PKG_CONFIG="$(STAGING_DIR)/usr/bin/pkg-config" \
++		$(DISABLE_LARGEFILE) \
+ 		$(LIBGTK2_CONF_OPT_X)  \
+ 		$(LIBGTK2_CONF_OPT_DFB)
+ 
+@@ -109,11 +108,11 @@
+ 		--x-includes=$(STAGING_DIR)/usr/include/X11 \
+ 		--x-libraries=$(STAGING_DIR)/usr/lib \
+ 		--with-gdktarget=x11
+-	LIBGTK2_DEPENDENCIES_EXTRA = xlib_libXcomposite $(XSERVER)
++	LIBGTK2_DEPENDENCIES_EXTRA = xlib_libXcomposite $(XSERVER) cups
+ else
+ 	LIBGTK2_CONF_OPT += --without-x
+ endif
+ 
+-LIBGTK2_DEPENDENCIES = uclibc pkgconfig png jpeg tiff $(LIBGTK2_DEPENDENCIES_EXTRA) libglib2 cups cairo pango atk
++LIBGTK2_DEPENDENCIES = uclibc pkgconfig png jpeg tiff $(LIBGTK2_DEPENDENCIES_EXTRA) libglib2 cairo pango atk
+ 
+ $(eval $(call AUTOTARGETS,package,libgtk2))
