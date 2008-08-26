@@ -1,50 +1,36 @@
 From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Tue, 26 Aug 2008 15:36:16 +0200
-Subject: [Buildroot] svn commit: trunk/buildroot/package/i2c-tools
-In-Reply-To: <20080826130305.B90693C7BC@busybox.net> (laird@uclibc.org's
-	message of "Tue\, 26 Aug 2008 06\:03\:05 -0700 \(PDT\)")
-References: <20080826130305.B90693C7BC@busybox.net>
-Message-ID: <87prnvew4v.fsf@macbook.be.48ers.dk>
+Date: Tue, 26 Aug 2008 15:38:46 +0200
+Subject: [Buildroot] svn commit: trunk/buildroot/package/libgtk2
+In-Reply-To: <19162136.post@talk.nabble.com> (Daniel Laird's message of "Tue\,
+	26 Aug 2008 06\:32\:13 -0700 \(PDT\)")
+References: <20080826121930.77B8B3C79C@busybox.net>
+	<87k5e3gbne.fsf@macbook.be.48ers.dk> <19162136.post@talk.nabble.com>
+Message-ID: <878wujew0p.fsf@macbook.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "laird" == laird  <laird@uclibc.org> writes:
+>>>>> "Daniel" == Daniel Laird <daniel.j.laird@nxp.com> writes:
 
- laird> Author: laird
- laird> Date: 2008-08-26 06:03:05 -0700 (Tue, 26 Aug 2008)
- laird> New Revision: 23205
+ Daniel> I will amend the Config.in to do as suggested:
+ Daniel> Config.in
+ Daniel> select CUPS if ......
 
- laird> Log:
- laird> The changes below move i2c-tools.mk to use Makefile.autotools.in
+Thanks.
 
-But i2c-tools doesn't use autotools!
- laird> @@ -6,45 +6,22 @@
- laird>  I2C_TOOLS_VERSION:=3.0.1
- laird>  I2C_TOOLS_SOURCE:=i2c-tools-$(I2C_TOOLS_VERSION).tar.bz2
- laird>  I2C_TOOLS_SITE:=http://dl.lm-sensors.org/i2c-tools/releases/
- laird> -I2C_TOOLS_DIR:=$(BUILD_DIR)/i2c-tools-$(I2C_TOOLS_VERSION)
- laird> -I2C_TOOLS_BINARY:=tools/i2cdetect
- laird> -I2C_TOOLS_TARGET_BINARY:=usr/bin/i2cdetect
- laird> +I2C_TOOLS_AUTORECONF = NO
- laird> +I2C_TOOLS_INSTALL_STAGING = YES
 
-Why install into staging (usr/local even)?
+ Daniel> However this does raise the wider issue of what should be
+ Daniel> auto selected and what should be chosen IMHO I feel CUPS is
+ Daniel> not a necessary thing for GTK??  Therefore why is it being
+ Daniel> autoselected for X builds.  If someone wants cups then they
+ Daniel> should select it in their configuration file.  Packages that
+ Daniel> compile differently due to the selection of another package
+ Daniel> could use something like:
 
- laird> +$(I2C_TOOLS_TARGET_INSTALL_TARGET):
- laird>  	for i in i2cdump i2cget i2cset i2cdetect; \
- laird>  	do \
- laird> -		$(INSTALL) -m 755 $(<D)/$$i $(@D); \
- laird> -		$(STRIPCMD) $(STRIP_STRIP_UNNEEDED) $(@D)/$$i; \
- laird> +		$(INSTALL) -m 755 $(I2C_TOOLS_DIR)/tools/$$i $(TARGET_DIR)/usr/bin; \
- laird> +		$(STRIPCMD) $(STRIP_STRIP_UNNEEDED) $(TARGET_DIR)/usr/bin/$$i; \
- laird>  	done
-
-You don't remove these files on -clean.
-
-Sorry, I don't really see this as an improvement.
+Sorry, I have no idea why gtk wants to select cups. Ninevoltz added it
+in r21206.
 
 -- 
 Bye, Peter Korsgaard
