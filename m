@@ -1,7 +1,7 @@
 From: jacmet at uclibc.org <jacmet@uclibc.org>
-Date: Tue, 26 Aug 2008 15:37:24 -0700 (PDT)
-Subject: [Buildroot] svn commit: trunk/buildroot/package/atk
-Message-ID: <20080826223724.5DCF33C780@busybox.net>
+Date: Tue, 26 Aug 2008 15:37:27 -0700 (PDT)
+Subject: [Buildroot] svn commit: trunk/buildroot/package/libglib2
+Message-ID: <20080826223727.C982F3C7AE@busybox.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -9,34 +9,40 @@ Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
 Author: jacmet
-Date: 2008-08-26 15:37:23 -0700 (Tue, 26 Aug 2008)
-New Revision: 23227
+Date: 2008-08-26 15:37:27 -0700 (Tue, 26 Aug 2008)
+New Revision: 23228
 
 Log:
-atk: remove redundant configure args
+libglib2: select libiconv
 
 Modified:
-   trunk/buildroot/package/atk/atk.mk
+   trunk/buildroot/package/libglib2/Config.in
+   trunk/buildroot/package/libglib2/libglib2.mk
 
 
 Changeset:
-Modified: trunk/buildroot/package/atk/atk.mk
+Modified: trunk/buildroot/package/libglib2/Config.in
 ===================================================================
---- trunk/buildroot/package/atk/atk.mk	2008-08-26 22:37:20 UTC (rev 23226)
-+++ trunk/buildroot/package/atk/atk.mk	2008-08-26 22:37:23 UTC (rev 23227)
-@@ -50,14 +50,7 @@
- ATK_CONF_OPT_X = --without-x
- endif
+--- trunk/buildroot/package/libglib2/Config.in	2008-08-26 22:37:23 UTC (rev 23227)
++++ trunk/buildroot/package/libglib2/Config.in	2008-08-26 22:37:27 UTC (rev 23228)
+@@ -3,6 +3,7 @@
+ 	select BR2_ENABLE_LOCALE
+ 	select BR2_PACKAGE_GETTEXT
+ 	select BR2_PACKAGE_LIBINTL
++	select BR2_PACKAGE_LIBICONV
+ 	select BR2_PACKAGE_PKGCONFIG
+ 	help
+ 	  Low-level core library that forms the basis of GTK+ and GNOME.
+
+Modified: trunk/buildroot/package/libglib2/libglib2.mk
+===================================================================
+--- trunk/buildroot/package/libglib2/libglib2.mk	2008-08-26 22:37:23 UTC (rev 23227)
++++ trunk/buildroot/package/libglib2/libglib2.mk	2008-08-26 22:37:27 UTC (rev 23228)
+@@ -53,6 +53,6 @@
+ 		--infodir=/usr/info --enable-shared \
+ 		--enable-static $(DISABLE_NLS)
  
--ATK_CONF_OPT = --target=$(GNU_TARGET_NAME) --host=$(REAL_GNU_TARGET_NAME) \
--		--build=$(GNU_HOST_NAME) --prefix=/usr \
--		--exec-prefix=/usr --bindir=/usr/bin \
--		--sbindir=/usr/sbin --libdir=/usr/lib \
--		--libexecdir=/usr/lib --sysconfdir=/etc \
--		--datadir=/usr/share --localstatedir=/var \
--		--includedir=/usr/include --mandir=/usr/man \
--		--infodir=/usr/info --enable-shared \
-+ATK_CONF_OPT =  --enable-shared \
- 		--enable-static $(ATK_CONF_OPT_X) \
- 		--disable-glibtest --enable-explicit-deps=no \
- 		--disable-debug
+-LIBGLIB2_DEPENDENCIES = uclibc gettext libintl pkgconfig
++LIBGLIB2_DEPENDENCIES = uclibc gettext libintl libiconv pkgconfig
+ 
+ $(eval $(call AUTOTARGETS,package,libglib2))
