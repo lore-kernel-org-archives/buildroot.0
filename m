@@ -1,89 +1,63 @@
-From: laird at uclibc.org <laird@uclibc.org>
-Date: Tue, 26 Aug 2008 07:01:37 -0700 (PDT)
+From: Bernhard Reutner-Fischer <rep.dot.nop@gmail.com>
+Date: Tue, 26 Aug 2008 16:03:49 +0200
 Subject: [Buildroot] svn commit: trunk/buildroot/package/i2c-tools
-Message-ID: <20080826140137.EB84E3C80A@busybox.net>
+In-Reply-To: <87prnvew4v.fsf@macbook.be.48ers.dk>
+References: <20080826130305.B90693C7BC@busybox.net>
+	<87prnvew4v.fsf@macbook.be.48ers.dk>
+Message-ID: <20080826140349.GM2213@mx.loc>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Author: laird
-Date: 2008-08-26 07:01:37 -0700 (Tue, 26 Aug 2008)
-New Revision: 23207
+On Tue, Aug 26, 2008 at 03:36:16PM +0200, Peter Korsgaard wrote:
+>>>>>> "laird" == laird  <laird@uclibc.org> writes:
+>
+> laird> Author: laird
+> laird> Date: 2008-08-26 06:03:05 -0700 (Tue, 26 Aug 2008)
+> laird> New Revision: 23205
+>
+> laird> Log:
+> laird> The changes below move i2c-tools.mk to use Makefile.autotools.in
+>
+>But i2c-tools doesn't use autotools!
+> laird> @@ -6,45 +6,22 @@
+> laird>  I2C_TOOLS_VERSION:=3.0.1
+> laird>  I2C_TOOLS_SOURCE:=i2c-tools-$(I2C_TOOLS_VERSION).tar.bz2
+> laird>  I2C_TOOLS_SITE:=http://dl.lm-sensors.org/i2c-tools/releases/
+> laird> -I2C_TOOLS_DIR:=$(BUILD_DIR)/i2c-tools-$(I2C_TOOLS_VERSION)
+> laird> -I2C_TOOLS_BINARY:=tools/i2cdetect
+> laird> -I2C_TOOLS_TARGET_BINARY:=usr/bin/i2cdetect
+> laird> +I2C_TOOLS_AUTORECONF = NO
+> laird> +I2C_TOOLS_INSTALL_STAGING = YES
+>
+>Why install into staging (usr/local even)?
+>
+> laird> +$(I2C_TOOLS_TARGET_INSTALL_TARGET):
+> laird>  	for i in i2cdump i2cget i2cset i2cdetect; \
+> laird>  	do \
+> laird> -		$(INSTALL) -m 755 $(<D)/$$i $(@D); \
+> laird> -		$(STRIPCMD) $(STRIP_STRIP_UNNEEDED) $(@D)/$$i; \
+> laird> +		$(INSTALL) -m 755 $(I2C_TOOLS_DIR)/tools/$$i $(TARGET_DIR)/usr/bin; \
+> laird> +		$(STRIPCMD) $(STRIP_STRIP_UNNEEDED) $(TARGET_DIR)/usr/bin/$$i; \
+> laird>  	done
+>
+>You don't remove these files on -clean.
+>
+>Sorry, I don't really see this as an improvement.
 
-Log:
-reverse changes to i2c-tools.mk until I tidy it up (get clean working for example)
-Still feel a good change to make as some of the suggestions recently made it look
-like Makefile.autotools.in might add support for installing a list of binaries etc
-and this would benefit this package.
+Folks,
 
+Please think about $(STRIP_STRIP_UNNEEDED) vs. $(STRIP_STRIP_ALL).
 
+Ask yourself:
+1) Do i want my libraries be able to load?
+   If you answer Y here, then use _UNNEEDED
+2) Do i want my binaries small?
+   If you answer Y here, then use _ALL
 
-Modified:
-   trunk/buildroot/package/i2c-tools/i2c-tools.mk
+Read the corresponding manpage for details and try to correct the
+incorrectly stripped stuff that accumulated during the last months.
 
-
-Changeset:
-Modified: trunk/buildroot/package/i2c-tools/i2c-tools.mk
-===================================================================
---- trunk/buildroot/package/i2c-tools/i2c-tools.mk	2008-08-26 13:45:39 UTC (rev 23206)
-+++ trunk/buildroot/package/i2c-tools/i2c-tools.mk	2008-08-26 14:01:37 UTC (rev 23207)
-@@ -6,22 +6,45 @@
- I2C_TOOLS_VERSION:=3.0.1
- I2C_TOOLS_SOURCE:=i2c-tools-$(I2C_TOOLS_VERSION).tar.bz2
- I2C_TOOLS_SITE:=http://dl.lm-sensors.org/i2c-tools/releases/
--I2C_TOOLS_AUTORECONF = NO
--I2C_TOOLS_INSTALL_STAGING = YES
--I2C_TOOLS_CONF_ENV =
--I2C_TOOLS_CONF_OPT =
--I2C_TOOLS_MAKE_OPT = $(TARGET_CONFIGURE_OPTS)
--I2C_TOOLS_DEPENDENCIES =
-+I2C_TOOLS_DIR:=$(BUILD_DIR)/i2c-tools-$(I2C_TOOLS_VERSION)
-+I2C_TOOLS_BINARY:=tools/i2cdetect
-+I2C_TOOLS_TARGET_BINARY:=usr/bin/i2cdetect
- 
--$(eval $(call AUTOTARGETS,package,i2c-tools))
-+$(DL_DIR)/$(I2C_TOOLS_SOURCE):
-+	$(WGET) -P $(DL_DIR) $(I2C_TOOLS_SITE)/$(I2C_TOOLS_SOURCE)
- 
--$(I2C_TOOLS_TARGET_CONFIGURE):
-+$(I2C_TOOLS_DIR)/.unpacked: $(DL_DIR)/$(I2C_TOOLS_SOURCE)
-+	$(BZCAT) $(DL_DIR)/$(I2C_TOOLS_SOURCE) | tar -C $(BUILD_DIR) $(TAR_OPTIONS) -
-+	toolchain/patch-kernel.sh $(I2C_TOOLS_DIR) package/i2c-tools/ i2c-tools-$(I2C_TOOLS_VERSION)\*.patch
- 	touch $@
- 
--$(I2C_TOOLS_TARGET_INSTALL_TARGET):
-+$(I2C_TOOLS_DIR)/$(I2C_TOOLS_BINARY): $(I2C_TOOLS_DIR)/.unpacked
-+	$(MAKE) $(TARGET_CONFIGURE_OPTS) -C $(I2C_TOOLS_DIR)
-+
-+$(TARGET_DIR)/$(I2C_TOOLS_TARGET_BINARY): $(I2C_TOOLS_DIR)/$(I2C_TOOLS_BINARY)
-+	$(INSTALL) -m 755 -d $(@D)
- 	for i in i2cdump i2cget i2cset i2cdetect; \
- 	do \
--		$(INSTALL) -m 755 $(I2C_TOOLS_DIR)/tools/$$i $(TARGET_DIR)/usr/bin; \
--		$(STRIPCMD) $(STRIP_STRIP_UNNEEDED) $(TARGET_DIR)/usr/bin/$$i; \
-+		$(INSTALL) -m 755 $(<D)/$$i $(@D); \
-+		$(STRIPCMD) $(STRIP_STRIP_UNNEEDED) $(@D)/$$i; \
- 	done
--	touch $@
-+
-+i2c-tools: uclibc $(TARGET_DIR)/$(I2C_TOOLS_TARGET_BINARY)
-+
-+i2c-tools-source: $(DL_DIR)/$(I2C_TOOLS_SOURCE)
-+
-+i2c-tools-clean:
-+	rm -f $(addprefix $(TARGET_DIR)/usr/bin/,i2cdump i2cget i2cset i2cdetect)
-+	-$(MAKE) -C $(I2C_TOOLS_DIR) clean
-+
-+i2c-tools-dirclean:
-+	rm -rf $(I2C_TOOLS_DIR)
-+
-+#############################################################
-+#
-+# Toplevel Makefile options
-+#
-+#############################################################
-+ifeq ($(strip $(BR2_PACKAGE_I2C_TOOLS)),y)
-+TARGETS+=i2c-tools
-+endif
+HTH,
