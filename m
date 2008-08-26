@@ -1,47 +1,50 @@
-From: Daniel Laird <daniel.j.laird@nxp.com>
-Date: Tue, 26 Aug 2008 06:32:13 -0700 (PDT)
-Subject: [Buildroot] svn commit: trunk/buildroot/package/libgtk2
-In-Reply-To: <87k5e3gbne.fsf@macbook.be.48ers.dk>
-References: <20080826121930.77B8B3C79C@busybox.net>
-	<87k5e3gbne.fsf@macbook.be.48ers.dk>
-Message-ID: <19162136.post@talk.nabble.com>
+From: Peter Korsgaard <jacmet@uclibc.org>
+Date: Tue, 26 Aug 2008 15:36:16 +0200
+Subject: [Buildroot] svn commit: trunk/buildroot/package/i2c-tools
+In-Reply-To: <20080826130305.B90693C7BC@busybox.net> (laird@uclibc.org's
+	message of "Tue\, 26 Aug 2008 06\:03\:05 -0700 \(PDT\)")
+References: <20080826130305.B90693C7BC@busybox.net>
+Message-ID: <87prnvew4v.fsf@macbook.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+>>>>> "laird" == laird  <laird@uclibc.org> writes:
 
-I will amend the Config.in to do as suggested:
-Config.in
-select CUPS if ......
+ laird> Author: laird
+ laird> Date: 2008-08-26 06:03:05 -0700 (Tue, 26 Aug 2008)
+ laird> New Revision: 23205
 
-and
+ laird> Log:
+ laird> The changes below move i2c-tools.mk to use Makefile.autotools.in
 
-libgtk2.mk
-ifeq ($(BR2_PACKAGE_CUPS),y)
-	LIBGTK2_DEPENDENCIES_EXTRA = cups
-endif
+But i2c-tools doesn't use autotools!
+ laird> @@ -6,45 +6,22 @@
+ laird>  I2C_TOOLS_VERSION:=3.0.1
+ laird>  I2C_TOOLS_SOURCE:=i2c-tools-$(I2C_TOOLS_VERSION).tar.bz2
+ laird>  I2C_TOOLS_SITE:=http://dl.lm-sensors.org/i2c-tools/releases/
+ laird> -I2C_TOOLS_DIR:=$(BUILD_DIR)/i2c-tools-$(I2C_TOOLS_VERSION)
+ laird> -I2C_TOOLS_BINARY:=tools/i2cdetect
+ laird> -I2C_TOOLS_TARGET_BINARY:=usr/bin/i2cdetect
+ laird> +I2C_TOOLS_AUTORECONF = NO
+ laird> +I2C_TOOLS_INSTALL_STAGING = YES
 
-However this does raise the wider issue of what should be auto selected and
-what should be chosen
-IMHO I feel CUPS is not a necessary thing for GTK??
-Therefore why is it being autoselected for X builds.
-If someone wants cups then they should select it in their configuration
-file.
-Packages that compile differently due to the selection of another package
-could use something like:
+Why install into staging (usr/local even)?
 
-ifeq ($(BR2_PACKAGE_CUPS),y)
-	........ (--enable-cups) or whatever
-endif
+ laird> +$(I2C_TOOLS_TARGET_INSTALL_TARGET):
+ laird>  	for i in i2cdump i2cget i2cset i2cdetect; \
+ laird>  	do \
+ laird> -		$(INSTALL) -m 755 $(<D)/$$i $(@D); \
+ laird> -		$(STRIPCMD) $(STRIP_STRIP_UNNEEDED) $(@D)/$$i; \
+ laird> +		$(INSTALL) -m 755 $(I2C_TOOLS_DIR)/tools/$$i $(TARGET_DIR)/usr/bin; \
+ laird> +		$(STRIPCMD) $(STRIP_STRIP_UNNEEDED) $(TARGET_DIR)/usr/bin/$$i; \
+ laird>  	done
 
-This I think is far better than someone building X and GTK and finding their
-build fails because of cups.  If they want it they should enable it.
+You don't remove these files on -clean.
 
-Dan laird
-
+Sorry, I don't really see this as an improvement.
 
 -- 
-View this message in context: http://www.nabble.com/svn-commit%3A-trunk-buildroot-package-libgtk2-tp19160871p19162136.html
-Sent from the BuildRoot mailing list archive at Nabble.com.
+Bye, Peter Korsgaard
