@@ -1,44 +1,33 @@
-From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Tue, 26 Aug 2008 15:15:49 +0200
-Subject: [Buildroot] svn commit: trunk/buildroot/package/libgtk2
-In-Reply-To: <20080826121930.77B8B3C79C@busybox.net> (laird@uclibc.org's
-	message of "Tue\, 26 Aug 2008 05\:19\:30 -0700 \(PDT\)")
-References: <20080826121930.77B8B3C79C@busybox.net>
-Message-ID: <87k5e3gbne.fsf@macbook.be.48ers.dk>
+From: Bernhard Reutner-Fischer <rep.dot.nop@gmail.com>
+Date: Tue, 26 Aug 2008 15:15:47 +0200
+Subject: [Buildroot] Linux Kernel 2.6.17 support in Buildroot
+In-Reply-To: <1B0F60C9E236904CB364F9EF52E0AFD90241B20E@sma10.technidata-ag.com>
+References: <1B0F60C9E236904CB364F9EF52E0AFD90241B20E@sma10.technidata-ag.com>
+Message-ID: <20080826131547.GI2213@mx.loc>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "laird" == laird  <laird@uclibc.org> writes:
+Hi Paul,
 
- laird> Author: laird
- laird> Date: 2008-08-26 05:19:29 -0700 (Tue, 26 Aug 2008)
- laird> New Revision: 23204
+On Mon, Aug 25, 2008 at 10:01:18AM +0200, Bussmann, Paul wrote:
 
-Welcome!
+>Unfortunately, the current Linux Kernel does not support the Board and
+>adding support to it is much too difficult to me.
 
- laird> Log:
- laird> The changes below add better support for DirectFB and libgtk2.
- laird> Should be no different for X builds.
+2.6.17 was released around Jun 18  2006. I'd ask those people for a
+vaguely recent kernel.
 
-Could you please check these things in seperately?
+>I was glad about the feature that a custom Kernel is selectable in the
+>Buildroot project configuration.
+>Concerning the Toolchain settings, it seems to be not possible to select
+>a custom version or version 2.6.17.
+>
+>How can I test if Buildroot would create a correct Toolchain using Linux
+>2.6.17 instead of 2.6.26?
 
- laird> Changeset:
- laird> Modified: trunk/buildroot/package/libgtk2/Config.in
- laird> ===================================================================
- laird> --- trunk/buildroot/package/libgtk2/Config.in	2008-08-26 01:32:33 UTC (rev 23203)
- laird> +++ trunk/buildroot/package/libgtk2/Config.in	2008-08-26 12:19:29 UTC (rev 23204)
- laird> @@ -2,14 +2,13 @@
- laird>  	bool "libgtk2"
- laird>  	select BR2_PACKAGE_ATK
- laird>  	select BR2_PACKAGE_CAIRO
- laird> -	select BR2_PACKAGE_CUPS
+LTP comes to mind.
 
-Shouldn't that instead be something like:
-
-select BR2_PACKAGE_CUPS if BR2_PACKAGE_XORG||BR2_PACKAGE_XORG7||BR2_PACKAGE_TINYX
-
--- 
-Bye, Peter Korsgaard
+HTH,
