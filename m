@@ -1,28 +1,30 @@
-From: Daniel Laird <daniel.j.laird@nxp.com>
-Date: Tue, 26 Aug 2008 07:56:03 -0700 (PDT)
-Subject: [Buildroot] [RFC] The svn commit of LiTE highlights an issue in
- Makefile.autotools.in
-Message-ID: <19163684.post@talk.nabble.com>
+From: Peter Korsgaard <jacmet@uclibc.org>
+Date: Tue, 26 Aug 2008 16:54:39 +0200
+Subject: [Buildroot] svn commit: trunk/buildroot/package/libgtk2
+In-Reply-To: <20080826140744.GO2213@mx.loc> (Bernhard Reutner-Fischer's
+	message of "Tue\, 26 Aug 2008 16\:07\:44 +0200")
+References: <20080826121930.77B8B3C79C@busybox.net>
+	<87k5e3gbne.fsf@macbook.be.48ers.dk> <19162136.post@talk.nabble.com>
+	<20080826140744.GO2213@mx.loc>
+Message-ID: <87fxorbzdc.fsf@macbook.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+>>>>> "Bernhard" == Bernhard Reutner-Fischer <rep.dot.nop@gmail.com> writes:
 
-Many packages don't install as well as we would like.  
-The Makefile.autotools.in helps us standardise the way things are done but
-does not always help.
-In the case of LiTE the make command installs some bits and not others,
-So I use HOOK_POST_INSTALL to install all the necessary files.
+Hi,
 
-However I think that a HOOK_POST_CLEAN is needed so that when you write  a
-HOOK_POST_INSTALL target you automatically write a HOOK_POST_CLEAN that
-undoes the extra bits you put in.
-Currently without this, cleaning up after usage of HOOK_POST_INSTALL is a
-real pain.
-What do people think?
-Daniel Laird
+ Bernhard> Exactly. selecting cruft behind the scenes is almost always the wrong
+ Bernhard> thing to do.
+ Bernhard> We did not do this until recently, when e.g. Ulf started to add
+ Bernhard> gazillions of (imho unwarranted) select's.
+
+Well, selects are imho good for real dependencies instead of those
+comments we used to have (foo depends on bar) - But it shoudl ofcause
+only be used for required dependencies.
+
 -- 
-View this message in context: http://www.nabble.com/-RFC--The-svn-commit-of-LiTE-highlights-an-issue-in-Makefile.autotools.in-tp19163684p19163684.html
-Sent from the BuildRoot mailing list archive at Nabble.com.
+Bye, Peter Korsgaard
