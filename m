@@ -1,93 +1,44 @@
-From: laird at uclibc.org <laird@uclibc.org>
-Date: Tue, 26 Aug 2008 06:03:05 -0700 (PDT)
-Subject: [Buildroot] svn commit: trunk/buildroot/package/i2c-tools
-Message-ID: <20080826130305.B90693C7BC@busybox.net>
+From: Peter Korsgaard <jacmet@uclibc.org>
+Date: Tue, 26 Aug 2008 15:15:49 +0200
+Subject: [Buildroot] svn commit: trunk/buildroot/package/libgtk2
+In-Reply-To: <20080826121930.77B8B3C79C@busybox.net> (laird@uclibc.org's
+	message of "Tue\, 26 Aug 2008 05\:19\:30 -0700 \(PDT\)")
+References: <20080826121930.77B8B3C79C@busybox.net>
+Message-ID: <87k5e3gbne.fsf@macbook.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Author: laird
-Date: 2008-08-26 06:03:05 -0700 (Tue, 26 Aug 2008)
-New Revision: 23205
+>>>>> "laird" == laird  <laird@uclibc.org> writes:
 
-Log:
-The changes below move i2c-tools.mk to use Makefile.autotools.in
+ laird> Author: laird
+ laird> Date: 2008-08-26 05:19:29 -0700 (Tue, 26 Aug 2008)
+ laird> New Revision: 23204
 
-package/i2c-tools/i2c-tools.mk
-Use Makefile.autotools.in
+Welcome!
 
+ laird> Log:
+ laird> The changes below add better support for DirectFB and libgtk2.
+ laird> Should be no different for X builds.
 
+Could you please check these things in seperately?
 
+ laird> Changeset:
+ laird> Modified: trunk/buildroot/package/libgtk2/Config.in
+ laird> ===================================================================
+ laird> --- trunk/buildroot/package/libgtk2/Config.in	2008-08-26 01:32:33 UTC (rev 23203)
+ laird> +++ trunk/buildroot/package/libgtk2/Config.in	2008-08-26 12:19:29 UTC (rev 23204)
+ laird> @@ -2,14 +2,13 @@
+ laird>  	bool "libgtk2"
+ laird>  	select BR2_PACKAGE_ATK
+ laird>  	select BR2_PACKAGE_CAIRO
+ laird> -	select BR2_PACKAGE_CUPS
 
+Shouldn't that instead be something like:
 
+select BR2_PACKAGE_CUPS if BR2_PACKAGE_XORG||BR2_PACKAGE_XORG7||BR2_PACKAGE_TINYX
 
-
-Modified:
-   trunk/buildroot/package/i2c-tools/i2c-tools.mk
-
-
-Changeset:
-Modified: trunk/buildroot/package/i2c-tools/i2c-tools.mk
-===================================================================
---- trunk/buildroot/package/i2c-tools/i2c-tools.mk	2008-08-26 12:19:29 UTC (rev 23204)
-+++ trunk/buildroot/package/i2c-tools/i2c-tools.mk	2008-08-26 13:03:05 UTC (rev 23205)
-@@ -6,45 +6,22 @@
- I2C_TOOLS_VERSION:=3.0.1
- I2C_TOOLS_SOURCE:=i2c-tools-$(I2C_TOOLS_VERSION).tar.bz2
- I2C_TOOLS_SITE:=http://dl.lm-sensors.org/i2c-tools/releases/
--I2C_TOOLS_DIR:=$(BUILD_DIR)/i2c-tools-$(I2C_TOOLS_VERSION)
--I2C_TOOLS_BINARY:=tools/i2cdetect
--I2C_TOOLS_TARGET_BINARY:=usr/bin/i2cdetect
-+I2C_TOOLS_AUTORECONF = NO
-+I2C_TOOLS_INSTALL_STAGING = YES
-+I2C_TOOLS_CONF_ENV =
-+I2C_TOOLS_CONF_OPT =
-+I2C_TOOLS_MAKE_OPT = $(TARGET_CONFIGURE_OPTS)
-+I2C_TOOLS_DEPENDENCIES =
- 
--$(DL_DIR)/$(I2C_TOOLS_SOURCE):
--	$(WGET) -P $(DL_DIR) $(I2C_TOOLS_SITE)/$(I2C_TOOLS_SOURCE)
-+$(eval $(call AUTOTARGETS,package,i2c-tools))
- 
--$(I2C_TOOLS_DIR)/.unpacked: $(DL_DIR)/$(I2C_TOOLS_SOURCE)
--	$(BZCAT) $(DL_DIR)/$(I2C_TOOLS_SOURCE) | tar -C $(BUILD_DIR) $(TAR_OPTIONS) -
--	toolchain/patch-kernel.sh $(I2C_TOOLS_DIR) package/i2c-tools/ i2c-tools-$(I2C_TOOLS_VERSION)\*.patch
-+$(I2C_TOOLS_TARGET_CONFIGURE):
- 	touch $@
- 
--$(I2C_TOOLS_DIR)/$(I2C_TOOLS_BINARY): $(I2C_TOOLS_DIR)/.unpacked
--	$(MAKE) $(TARGET_CONFIGURE_OPTS) -C $(I2C_TOOLS_DIR)
--
--$(TARGET_DIR)/$(I2C_TOOLS_TARGET_BINARY): $(I2C_TOOLS_DIR)/$(I2C_TOOLS_BINARY)
--	$(INSTALL) -m 755 -d $(@D)
-+$(I2C_TOOLS_TARGET_INSTALL_TARGET):
- 	for i in i2cdump i2cget i2cset i2cdetect; \
- 	do \
--		$(INSTALL) -m 755 $(<D)/$$i $(@D); \
--		$(STRIPCMD) $(STRIP_STRIP_UNNEEDED) $(@D)/$$i; \
-+		$(INSTALL) -m 755 $(I2C_TOOLS_DIR)/tools/$$i $(TARGET_DIR)/usr/bin; \
-+		$(STRIPCMD) $(STRIP_STRIP_UNNEEDED) $(TARGET_DIR)/usr/bin/$$i; \
- 	done
--
--i2c-tools: uclibc $(TARGET_DIR)/$(I2C_TOOLS_TARGET_BINARY)
--
--i2c-tools-source: $(DL_DIR)/$(I2C_TOOLS_SOURCE)
--
--i2c-tools-clean:
--	rm -f $(addprefix $(TARGET_DIR)/usr/bin/,i2cdump i2cget i2cset i2cdetect)
--	-$(MAKE) -C $(I2C_TOOLS_DIR) clean
--
--i2c-tools-dirclean:
--	rm -rf $(I2C_TOOLS_DIR)
--
--#############################################################
--#
--# Toplevel Makefile options
--#
--#############################################################
--ifeq ($(strip $(BR2_PACKAGE_I2C_TOOLS)),y)
--TARGETS+=i2c-tools
--endif
-+	touch $@
+-- 
+Bye, Peter Korsgaard
