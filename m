@@ -1,36 +1,31 @@
-From: hamish at uclibc.org <hamish@uclibc.org>
-Date: Mon, 25 Aug 2008 18:05:52 -0700 (PDT)
-Subject: [Buildroot] svn commit: trunk/buildroot/package/busybox
-Message-ID: <20080826010552.0BC093C6C1@busybox.net>
+From: Daniel Laird <daniel.j.laird@nxp.com>
+Date: Tue, 26 Aug 2008 10:32:40 +0100
+Subject: [Buildroot] Static Library Building - On/Off/Configurable?
+Message-ID: <1219743160.9701.5.camel@lnx32dtp04>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Author: hamish
-Date: 2008-08-25 18:05:51 -0700 (Mon, 25 Aug 2008)
-New Revision: 23202
+All,
 
-Log:
-Bump 1.11.x version to 1.11.2 (no patches yet)
+Currently many of the packages that are in buildroot have a setting of
+--enable-static
 
+This takes extra compile time and seems somewhat unnecessary.  It means
+that it is not very configurable. (default on)
+What are peoples opinion on using the following:
 
-Modified:
-   trunk/buildroot/package/busybox/Config.in
+ifeq ($(BR2_PREFER_STATIC_LIB),y)
+	OPT_STATIC = --enable-static
+endif
 
+This could be added(not quite like above but similar) to
+Makefile.autotools.in, 
+I believe that --enable-static is a default parameter to configure
+scripts so that should be safe, its just it would mean a central
+'switch' to enable static compilation and would make things a lot
+simpler.
 
-Changeset:
-Modified: trunk/buildroot/package/busybox/Config.in
-===================================================================
---- trunk/buildroot/package/busybox/Config.in	2008-08-26 00:41:29 UTC (rev 23201)
-+++ trunk/buildroot/package/busybox/Config.in	2008-08-26 01:05:51 UTC (rev 23202)
-@@ -59,7 +59,7 @@
- 	default "1.8.3"		if BR2_BUSYBOX_VERSION_1_8_X
- 	default "1.9.2"		if BR2_BUSYBOX_VERSION_1_9_X
- 	default "1.10.4"	if BR2_BUSYBOX_VERSION_1_10_X
--	default "1.11.1"	if BR2_BUSYBOX_VERSION_1_11_X
-+	default "1.11.2"	if BR2_BUSYBOX_VERSION_1_11_X
- 	default "1.12.0"	if BR2_BUSYBOX_VERSION_1_12_X
- 
- config BR2_PACKAGE_BUSYBOX_FULLINSTALL
+Dan Laird
