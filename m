@@ -1,7 +1,7 @@
 From: laird at uclibc.org <laird@uclibc.org>
-Date: Tue, 26 Aug 2008 05:19:30 -0700 (PDT)
-Subject: [Buildroot] svn commit: trunk/buildroot/package/libgtk2
-Message-ID: <20080826121930.77B8B3C79C@busybox.net>
+Date: Tue, 26 Aug 2008 06:03:05 -0700 (PDT)
+Subject: [Buildroot] svn commit: trunk/buildroot/package/i2c-tools
+Message-ID: <20080826130305.B90693C7BC@busybox.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -9,27 +9,15 @@ Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
 Author: laird
-Date: 2008-08-26 05:19:29 -0700 (Tue, 26 Aug 2008)
-New Revision: 23204
+Date: 2008-08-26 06:03:05 -0700 (Tue, 26 Aug 2008)
+New Revision: 23205
 
 Log:
-The changes below add better support for DirectFB and libgtk2.
-Should be no different for X builds.
+The changes below move i2c-tools.mk to use Makefile.autotools.in
 
- Config.in  |    3 +--
- libgtk2.mk |    7 +++----
- 2 files changed, 4 insertions(+), 6 deletions(-)
+package/i2c-tools/i2c-tools.mk
+Use Makefile.autotools.in
 
-Signed-off-by: daniel.j.laird at nxp.com
-
-package/libgtk2/Config.in
-Allow DirectFB to turn on LIBGTK2 support without X being enabled.
-Disable autoselection of cups.  May not be wanted (Can cause crosscompilation issues).
-
-package/libgtk2/libgtk2.mk
-Remove unnessary redefine of PKG_CONFIG_*
-Pass $(DISABLE_LARGEFILE) to configure (supports large file or not)
-Move 'cups' to X extra dependencies instead of general.
 
 
 
@@ -37,57 +25,69 @@ Move 'cups' to X extra dependencies instead of general.
 
 
 Modified:
-   trunk/buildroot/package/libgtk2/Config.in
-   trunk/buildroot/package/libgtk2/libgtk2.mk
+   trunk/buildroot/package/i2c-tools/i2c-tools.mk
 
 
 Changeset:
-Modified: trunk/buildroot/package/libgtk2/Config.in
+Modified: trunk/buildroot/package/i2c-tools/i2c-tools.mk
 ===================================================================
---- trunk/buildroot/package/libgtk2/Config.in	2008-08-26 01:32:33 UTC (rev 23203)
-+++ trunk/buildroot/package/libgtk2/Config.in	2008-08-26 12:19:29 UTC (rev 23204)
-@@ -2,14 +2,13 @@
- 	bool "libgtk2"
- 	select BR2_PACKAGE_ATK
- 	select BR2_PACKAGE_CAIRO
--	select BR2_PACKAGE_CUPS
- 	select BR2_PACKAGE_JPEG
- 	select BR2_PACKAGE_LIBGLIB2
- 	select BR2_PACKAGE_LIBPNG
- 	select BR2_PACKAGE_PANGO
- 	select BR2_PACKAGE_PKGCONFIG
- 	select BR2_PACKAGE_TIFF
--	depends on BR2_PACKAGE_XORG||BR2_PACKAGE_XORG7||BR2_PACKAGE_TINYX
-+	depends on BR2_PACKAGE_XORG||BR2_PACKAGE_XORG7||BR2_PACKAGE_TINYX||BR2_PACKAGE_DIRECTFB
- 	help
- 	  The GTK+ version 2 graphical user interface library
+--- trunk/buildroot/package/i2c-tools/i2c-tools.mk	2008-08-26 12:19:29 UTC (rev 23204)
++++ trunk/buildroot/package/i2c-tools/i2c-tools.mk	2008-08-26 13:03:05 UTC (rev 23205)
+@@ -6,45 +6,22 @@
+ I2C_TOOLS_VERSION:=3.0.1
+ I2C_TOOLS_SOURCE:=i2c-tools-$(I2C_TOOLS_VERSION).tar.bz2
+ I2C_TOOLS_SITE:=http://dl.lm-sensors.org/i2c-tools/releases/
+-I2C_TOOLS_DIR:=$(BUILD_DIR)/i2c-tools-$(I2C_TOOLS_VERSION)
+-I2C_TOOLS_BINARY:=tools/i2cdetect
+-I2C_TOOLS_TARGET_BINARY:=usr/bin/i2cdetect
++I2C_TOOLS_AUTORECONF = NO
++I2C_TOOLS_INSTALL_STAGING = YES
++I2C_TOOLS_CONF_ENV =
++I2C_TOOLS_CONF_OPT =
++I2C_TOOLS_MAKE_OPT = $(TARGET_CONFIGURE_OPTS)
++I2C_TOOLS_DEPENDENCIES =
  
-
-Modified: trunk/buildroot/package/libgtk2/libgtk2.mk
-===================================================================
---- trunk/buildroot/package/libgtk2/libgtk2.mk	2008-08-26 01:32:33 UTC (rev 23203)
-+++ trunk/buildroot/package/libgtk2/libgtk2.mk	2008-08-26 12:19:29 UTC (rev 23204)
-@@ -92,8 +92,7 @@
- 		--disable-glibtest \
- 		--enable-explicit-deps=no \
- 		--disable-debug \
--		PKG_CONFIG_PATH="$(STAGING_DIR)/usr/lib/pkgconfig" \
--		PKG_CONFIG="$(STAGING_DIR)/usr/bin/pkg-config" \
-+		$(DISABLE_LARGEFILE) \
- 		$(LIBGTK2_CONF_OPT_X)  \
- 		$(LIBGTK2_CONF_OPT_DFB)
+-$(DL_DIR)/$(I2C_TOOLS_SOURCE):
+-	$(WGET) -P $(DL_DIR) $(I2C_TOOLS_SITE)/$(I2C_TOOLS_SOURCE)
++$(eval $(call AUTOTARGETS,package,i2c-tools))
  
-@@ -109,11 +108,11 @@
- 		--x-includes=$(STAGING_DIR)/usr/include/X11 \
- 		--x-libraries=$(STAGING_DIR)/usr/lib \
- 		--with-gdktarget=x11
--	LIBGTK2_DEPENDENCIES_EXTRA = xlib_libXcomposite $(XSERVER)
-+	LIBGTK2_DEPENDENCIES_EXTRA = xlib_libXcomposite $(XSERVER) cups
- else
- 	LIBGTK2_CONF_OPT += --without-x
- endif
+-$(I2C_TOOLS_DIR)/.unpacked: $(DL_DIR)/$(I2C_TOOLS_SOURCE)
+-	$(BZCAT) $(DL_DIR)/$(I2C_TOOLS_SOURCE) | tar -C $(BUILD_DIR) $(TAR_OPTIONS) -
+-	toolchain/patch-kernel.sh $(I2C_TOOLS_DIR) package/i2c-tools/ i2c-tools-$(I2C_TOOLS_VERSION)\*.patch
++$(I2C_TOOLS_TARGET_CONFIGURE):
+ 	touch $@
  
--LIBGTK2_DEPENDENCIES = uclibc pkgconfig png jpeg tiff $(LIBGTK2_DEPENDENCIES_EXTRA) libglib2 cups cairo pango atk
-+LIBGTK2_DEPENDENCIES = uclibc pkgconfig png jpeg tiff $(LIBGTK2_DEPENDENCIES_EXTRA) libglib2 cairo pango atk
- 
- $(eval $(call AUTOTARGETS,package,libgtk2))
+-$(I2C_TOOLS_DIR)/$(I2C_TOOLS_BINARY): $(I2C_TOOLS_DIR)/.unpacked
+-	$(MAKE) $(TARGET_CONFIGURE_OPTS) -C $(I2C_TOOLS_DIR)
+-
+-$(TARGET_DIR)/$(I2C_TOOLS_TARGET_BINARY): $(I2C_TOOLS_DIR)/$(I2C_TOOLS_BINARY)
+-	$(INSTALL) -m 755 -d $(@D)
++$(I2C_TOOLS_TARGET_INSTALL_TARGET):
+ 	for i in i2cdump i2cget i2cset i2cdetect; \
+ 	do \
+-		$(INSTALL) -m 755 $(<D)/$$i $(@D); \
+-		$(STRIPCMD) $(STRIP_STRIP_UNNEEDED) $(@D)/$$i; \
++		$(INSTALL) -m 755 $(I2C_TOOLS_DIR)/tools/$$i $(TARGET_DIR)/usr/bin; \
++		$(STRIPCMD) $(STRIP_STRIP_UNNEEDED) $(TARGET_DIR)/usr/bin/$$i; \
+ 	done
+-
+-i2c-tools: uclibc $(TARGET_DIR)/$(I2C_TOOLS_TARGET_BINARY)
+-
+-i2c-tools-source: $(DL_DIR)/$(I2C_TOOLS_SOURCE)
+-
+-i2c-tools-clean:
+-	rm -f $(addprefix $(TARGET_DIR)/usr/bin/,i2cdump i2cget i2cset i2cdetect)
+-	-$(MAKE) -C $(I2C_TOOLS_DIR) clean
+-
+-i2c-tools-dirclean:
+-	rm -rf $(I2C_TOOLS_DIR)
+-
+-#############################################################
+-#
+-# Toplevel Makefile options
+-#
+-#############################################################
+-ifeq ($(strip $(BR2_PACKAGE_I2C_TOOLS)),y)
+-TARGETS+=i2c-tools
+-endif
++	touch $@
