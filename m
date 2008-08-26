@@ -1,27 +1,40 @@
-From: Daniel Laird <daniel.j.laird@nxp.com>
-Date: Tue, 26 Aug 2008 07:13:28 -0700 (PDT)
-Subject: [Buildroot] svn commit: trunk/buildroot/package/libgtk2
-In-Reply-To: <87ej4bdg3x.fsf@macbook.be.48ers.dk>
-References: <20080826121930.77B8B3C79C@busybox.net>
-	<87k5e3gbne.fsf@macbook.be.48ers.dk> <20080826134856.GK2213@mx.loc>
-	<87ej4bdg3x.fsf@macbook.be.48ers.dk>
-Message-ID: <19162907.post@talk.nabble.com>
+From: Peter Korsgaard <jacmet@uclibc.org>
+Date: Tue, 26 Aug 2008 16:15:21 +0200
+Subject: [Buildroot] svn commit: trunk/buildroot/package/i2c-tools
+In-Reply-To: <20080826140349.GM2213@mx.loc> (Bernhard Reutner-Fischer's
+	message of "Tue\, 26 Aug 2008 16\:03\:49 +0200")
+References: <20080826130305.B90693C7BC@busybox.net>
+	<87prnvew4v.fsf@macbook.be.48ers.dk> <20080826140349.GM2213@mx.loc>
+Message-ID: <87wsi3c16u.fsf@macbook.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+>>>>> "Bernhard" == Bernhard Reutner-Fischer <rep.dot.nop@gmail.com> writes:
 
-I am more than happy to remove cups from the dependencies and the select in
-Config.in
-However I will wait to see if 'ninevoltz' has any thoughts.
-If I hear nothing (give a few days) then I will tidy this up as I 100% agree
-that we should have as few dependencies and selects as possible and only add
-dependencies if packages have been chosen by users and the configure args
-would change as a result.
-Dan
+Him
+
+ Bernhard> Please think about $(STRIP_STRIP_UNNEEDED) vs. $(STRIP_STRIP_ALL).
+
+ Bernhard> Ask yourself:
+ Bernhard> 1) Do i want my libraries be able to load?
+ Bernhard>    If you answer Y here, then use _UNNEEDED
+ Bernhard> 2) Do i want my binaries small?
+ Bernhard>    If you answer Y here, then use _ALL
+
+ Bernhard> Read the corresponding manpage for details and try to correct the
+ Bernhard> incorrectly stripped stuff that accumulated during the last months.
+
+Yeah. Maybe we should simply have called them STRIP_BIN / STRIP_LIB
+instead to make it completely clear. The issue is kinda moot though
+with Makefile.autotools.in as make install-strip doesn't differenciate
+between binaries and libs.
+
+Perhaps we should simply add $(STRIP_STRIP_UNNEEDED) to $(STRIPCMD)
+and run $(STRIP_STRIP_ALL) on all files in
+$(TARGET_DIR)/{bin,sbin,usr/bin,sbin} as a post processing step?
 
 -- 
-View this message in context: http://www.nabble.com/svn-commit%3A-trunk-buildroot-package-libgtk2-tp19160871p19162907.html
-Sent from the BuildRoot mailing list archive at Nabble.com.
+Bye, Peter Korsgaard
