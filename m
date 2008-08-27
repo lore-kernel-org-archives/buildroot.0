@@ -1,35 +1,44 @@
-From: jacmet at uclibc.org <jacmet@uclibc.org>
-Date: Wed, 27 Aug 2008 00:46:56 -0700 (PDT)
-Subject: [Buildroot] svn commit: trunk/buildroot/target/squashfs
-Message-ID: <20080827074656.14DEF3C6A5@busybox.net>
+From: Bernhard Reutner-Fischer <rep.dot.nop@gmail.com>
+Date: Wed, 27 Aug 2008 10:15:59 +0200
+Subject: [Buildroot] svn commit: trunk/buildroot/package/avahi
+In-Reply-To: <20080827072921.BE910F8014@busybox.net>
+References: <20080827072921.BE910F8014@busybox.net>
+Message-ID: <20080827081559.GA25436@mx.loc>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Author: jacmet
-Date: 2008-08-27 00:46:55 -0700 (Wed, 27 Aug 2008)
-New Revision: 23238
+On Wed, Aug 27, 2008 at 12:29:21AM -0700, jacmet at uclibc.org wrote:
+>Author: jacmet
+>Date: 2008-08-27 00:29:20 -0700 (Wed, 27 Aug 2008)
+>New Revision: 23235
 
-Log:
-squashfs: bump version
+>Modified: trunk/buildroot/package/avahi/avahi.mk
+>===================================================================
+>--- trunk/buildroot/package/avahi/avahi.mk	2008-08-27 07:29:16 UTC (rev 23234)
+>+++ trunk/buildroot/package/avahi/avahi.mk	2008-08-27 07:29:20 UTC (rev 23235)
+>@@ -142,7 +142,7 @@
+> 	touch $@
+> 
+> $(AVAHI_DIR)/.compiled: $(AVAHI_DIR)/.configured
+>-	$(MAKE) -C $(AVAHI_DIR)
+>+	$(MAKE) -C $(AVAHI_DIR) $(if $(BR2_ENABLE_LOCALE),LIBS=-lintl)
+> 	touch $@
+> 
+> $(AVAHI_DIR)/.installed: $(AVAHI_DIR)/.compiled
+>@@ -180,7 +180,7 @@
+> 		 $(TARGET_DIR)/usr/sbin/avahi-daemon
+> 	$(STRIPCMD) $(STRIP_STRIP_UNNEEDED) $@
+> 
+>-avahi: uclibc libdaemon $(AVAHI_TARGETS)
+>+avahi: uclibc libdaemon $(AVAHI_TARGETS) $(if $(BR2_ENABLE_LOCALE),gettext libintl)
 
-Modified:
-   trunk/buildroot/target/squashfs/squashfsroot.mk
+are you sure that the order is correct? Getting this proper for toplevel
+parallel make would be fun:
 
-
-Changeset:
-Modified: trunk/buildroot/target/squashfs/squashfsroot.mk
-===================================================================
---- trunk/buildroot/target/squashfs/squashfsroot.mk	2008-08-27 07:39:57 UTC (rev 23237)
-+++ trunk/buildroot/target/squashfs/squashfsroot.mk	2008-08-27 07:46:55 UTC (rev 23238)
-@@ -3,7 +3,7 @@
- # mksquashfs to build to target squashfs filesystems
- #
- #############################################################
--SQUASHFS_VERSION:=3.3
-+SQUASHFS_VERSION:=3.4
- SQUASHFS_DIR:=$(BUILD_DIR)/squashfs$(SQUASHFS_VERSION)
- SQUASHFS_SOURCE:=squashfs$(SQUASHFS_VERSION).tar.gz
- SQUASHFS_SITE:=http://$(BR2_SOURCEFORGE_MIRROR).dl.sourceforge.net/sourceforge/squashfs
+# make sure to set JLEVEL=1
+$ make oldconfig
+$ rm -rf {toolchain,build,project}_*
+$ make -j avahi
