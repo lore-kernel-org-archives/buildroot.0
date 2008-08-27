@@ -1,56 +1,25 @@
-From: laird at uclibc.org <laird@uclibc.org>
-Date: Wed, 27 Aug 2008 04:40:03 -0700 (PDT)
-Subject: [Buildroot] svn commit: trunk/buildroot/package/fbdump
-Message-ID: <20080827114003.31C683C758@busybox.net>
+From: Daniel Laird <daniel.j.laird@nxp.com>
+Date: Wed, 27 Aug 2008 04:53:01 -0700 (PDT)
+Subject: [Buildroot]  MTD-utils version bounce
+Message-ID: <19179409.post@talk.nabble.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Author: laird
-Date: 2008-08-27 04:40:02 -0700 (Wed, 27 Aug 2008)
-New Revision: 23240
 
-Log:
-fbdump: Fix help text indentation and remove staging dir installation
+All,
 
-Tidy up fbdump package.
+I would like to bounce the mtd-utils version from 1.1.0 to 1.2.0.  This is
+the latest release and contains many fixes.  However I do not want to do
+this if it breaks stuff for everyone else.
+I am not happy with using a GIT checkout every time.  
+So the question is 
+1.) Do I bounce version and make makefile like mtd-utils.git
+2.) Create another mtd target of 1.2.0 
 
-
-
-Modified:
-   trunk/buildroot/package/fbdump/Config.in
-   trunk/buildroot/package/fbdump/fbdump.mk
-
-
-Changeset:
-Modified: trunk/buildroot/package/fbdump/Config.in
-===================================================================
---- trunk/buildroot/package/fbdump/Config.in	2008-08-27 11:01:16 UTC (rev 23239)
-+++ trunk/buildroot/package/fbdump/Config.in	2008-08-27 11:40:02 UTC (rev 23240)
-@@ -1,7 +1,8 @@
- config BR2_PACKAGE_FBDUMP
- 	bool "fbdump (Framebuffer Capture Tool)"
- 	help
--	   fbdump is a simple tool to capture snapshots from the Linux kernel framebuffer
--	   device and write them out as a PPM file. Currently, most packed-pixel framebuffer
--       formats and the vga16 framebuffer are supported.
-+	  fbdump is a simple tool to capture snapshots from the Linux kernel
-+	  framebuffer  device and write them out as a PPM file. Currently,
-+	  most packed-pixel framebuffer formats and the vga16 framebuffer
-+	  are supported.
- 
-
-Modified: trunk/buildroot/package/fbdump/fbdump.mk
-===================================================================
---- trunk/buildroot/package/fbdump/fbdump.mk	2008-08-27 11:01:16 UTC (rev 23239)
-+++ trunk/buildroot/package/fbdump/fbdump.mk	2008-08-27 11:40:02 UTC (rev 23240)
-@@ -8,7 +8,6 @@
- FBDUMP_SITE:=http://www.rcdrummond.net/fbdump
- FBDUMP_AUTORECONF = NO
- FBDUMP_CONF_ENV = ac_cv_func_malloc_0_nonnull=yes
--FBDUMP_INSTALL_STAGING = YES
- FBDUMP_INSTALL_TARGET = YES
- FBDUMP_INSTALL_TARGET_OPT = DESTDIR=$(TARGET_DIR) install-strip
- 
+Daniel Laird
+-- 
+View this message in context: http://www.nabble.com/MTD-utils-version-bounce-tp19179409p19179409.html
+Sent from the BuildRoot mailing list archive at Nabble.com.
