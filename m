@@ -1,78 +1,69 @@
-From: jacmet at uclibc.org <jacmet@uclibc.org>
-Date: Wed, 27 Aug 2008 13:19:53 -0700 (PDT)
-Subject: [Buildroot] svn commit: trunk/buildroot/target/ubifs
-Message-ID: <20080827201953.C20A63C878@busybox.net>
+From: Steve Spano <steve@fl-eng.com>
+Date: Wed, 27 Aug 2008 16:55:02 -0400
+Subject: [Buildroot] ### Executing FIles
+In-Reply-To: <48B56BCD.2000101@gnat.ca>
+Message-ID: <002e01c90887$2dad5070$1a01a8c0@flexeon32>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Author: jacmet
-Date: 2008-08-27 13:19:53 -0700 (Wed, 27 Aug 2008)
-New Revision: 23269
+Hello Folks
 
-Log:
-ubifs: fix long help text lines
+Thanks for the help
 
-Modified:
-   trunk/buildroot/target/ubifs/Config.in
+The uCLibc/glibc issue was the problem. Thank you again for the help!
+
+Steve Spano, President
+Finger Lakes Engineering
 
 
-Changeset:
-Modified: trunk/buildroot/target/ubifs/Config.in
-===================================================================
---- trunk/buildroot/target/ubifs/Config.in	2008-08-27 20:19:50 UTC (rev 23268)
-+++ trunk/buildroot/target/ubifs/Config.in	2008-08-27 20:19:53 UTC (rev 23269)
-@@ -38,7 +38,8 @@
- 	default BR2_TARGET_ROOTFS_UBIFS_RT_LZO
- 	depends on BR2_TARGET_ROOTFS_UBIFS
- 	help
--	  Select which compression format to use at run-time within the ubifs file system.
-+	  Select which compression format to use at run-time within
-+	  the ubifs file system.
- 
- config BR2_TARGET_ROOTFS_UBIFS_RT_NONE
- 	bool "no compression"
-@@ -62,7 +63,8 @@
- 	default BR2_TARGET_ROOTFS_UBIFS_NONE
- 	depends on BR2_TARGET_ROOTFS_UBIFS
- 	help
--	  Select which compression format to compress the final image into.
-+	  Select which compression format to compress the final image
-+	  into.
- 
- config BR2_TARGET_ROOTFS_UBIFS_NONE
- 	bool "no compression"
-@@ -73,22 +75,25 @@
- 	bool "gzip"
- 	help
- 	  Do compress the ubifs filesystem with gzip.
--	  Note that you either have to have gzip installed on your host
--	  or select to build a gzip for your host. See the packages submenu.
-+	  Note that you either have to have gzip installed on your
-+	  host or select to build a gzip for your host. See the
-+	  packages submenu.
- 
- config BR2_TARGET_ROOTFS_UBIFS_BZIP2
- 	bool "bzip2"
- 	help
- 	  Do compress the ubifs filesystem with bzip2.
--	  Note that you either have to have bzip2 installed on your host
--	  or select to build a bzip2 for your host. See the packages submenu.
-+	  Note that you either have to have bzip2 installed on your
-+	  host or select to build a bzip2 for your host. See the
-+	  packages submenu.
- 
- config BR2_TARGET_ROOTFS_UBIFS_LZMA
- 	bool "lzma"
- 	help
- 	  Do compress the ubifs filesystem with lzma.
--	  Note that you either have to have lzma installed on your host
--	  or select to build a lzma for your host. See the packages submenu.
-+	  Note that you either have to have lzma installed on your
-+	  host or select to build a lzma for your host. See the
-+	  packages submenu.
- 
- endchoice
- 
+-----Original Message-----
+From: Nathanael D. Noblet [mailto:nathanael at gnat.ca] 
+Sent: Wednesday, August 27, 2008 10:59 AM
+To: John Voltz
+Cc: steve at fl-eng.com; buildroot at uclibc.org
+Subject: Re: [Buildroot] ### Executing FIles
+
+John Voltz wrote:
+> On Tue, Aug 26, 2008 at 6:42 PM, Steve Spano <steve@fl-eng.com 
+> <mailto:steve@fl-eng.com>> wrote:
+> 
+>     Hello
+> 
+>     I am stumped on this issue
+> 
+>     I have a buildroot filesystem running and I cannot seem to execute
+>     new files
+>     that I have placed on it.
+> 
+>     For example, I upload a new executable file that I compile on a host
+PC.
+>     I change its permissions to execute and I type "./myfile"
+>     It comes back saying "-sh: myfile not found"
+>     BUT, I can vi the file, I can copy it, delete it /etc/etc
+>     If I change its permissions to read-only and then try to execute it,
+the
+>     shell tells me "permission denied".
+
+If you are executing a shell script, I've seen that error before when 
+there were hidden utf-8 marks or dos line feeds in the first line.
+
+I think I've also seen it when you compile a program and link it against 
+  glibc and then try to run it against uclibc. It can't load the loader 
+portion of the C library I think. Otherwise other missing linked library 
+files typically provide an error message about 'unable to load libxxx.so'
+
+
+-- 
+Nathanael d. Noblet
+Gnat Solutions, Inc
+T: 403.875.4613
+
+
+-- 
+Internal Virus Database is out-of-date.
+Checked by AVG. 
+Version: 7.5.524 / Virus Database: 270.6.0/1602 - Release Date: 8/9/2008
+1:22 PM
