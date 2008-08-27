@@ -1,80 +1,26 @@
-From: laird at uclibc.org <laird@uclibc.org>
-Date: Wed, 27 Aug 2008 05:21:09 -0700 (PDT)
+From: Bernhard Reutner-Fischer <rep.dot.nop@gmail.com>
+Date: Wed, 27 Aug 2008 14:29:14 +0200
 Subject: [Buildroot] svn commit: trunk/buildroot/package:  gtkperf
-Message-ID: <20080827122109.F24AB3C808@busybox.net>
+In-Reply-To: <20080827122109.F24AB3C808@busybox.net>
+References: <20080827122109.F24AB3C808@busybox.net>
+Message-ID: <20080827122914.GC30508@mx.loc>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Author: laird
-Date: 2008-08-27 05:21:09 -0700 (Wed, 27 Aug 2008)
-New Revision: 23241
+On Wed, Aug 27, 2008 at 05:21:09AM -0700, laird at uclibc.org wrote:
+>Author: laird
+>Date: 2008-08-27 05:21:09 -0700 (Wed, 27 Aug 2008)
+>New Revision: 23241
 
-Log:
-gtkperf: Adding gtkperf package
+>+GTKPERF_AUTORECONF = NO
 
-Allows some benchmarking of GTK on different targets.
+No is the default, so please remove this. Autoreconf should not be
+needed at all unless you desparately need to fix an utterly broken
+package that cannot be fixed upstream to DTRT in the first place.
+For a long time, buildroot worked without having any of automake or
+autoconf installed, which i consider a feature.
 
-
-
-Added:
-   trunk/buildroot/package/gtkperf/
-   trunk/buildroot/package/gtkperf/Config.in
-   trunk/buildroot/package/gtkperf/gtkperf.mk
-
-Modified:
-   trunk/buildroot/package/Config.in
-
-
-Changeset:
-Modified: trunk/buildroot/package/Config.in
-===================================================================
---- trunk/buildroot/package/Config.in	2008-08-27 11:40:02 UTC (rev 23240)
-+++ trunk/buildroot/package/Config.in	2008-08-27 12:21:09 UTC (rev 23241)
-@@ -405,6 +405,7 @@
- source "package/dillo/Config.in"
- source "package/docker/Config.in"
- source "package/gqview/Config.in"
-+source "package/gtkperf/Config.in"
- source "package/leafpad/Config.in"
- source "package/midori/Config.in"
- source "package/pcmanfm/Config.in"
-
-Added: trunk/buildroot/package/gtkperf/Config.in
-===================================================================
---- trunk/buildroot/package/gtkperf/Config.in	                        (rev 0)
-+++ trunk/buildroot/package/gtkperf/Config.in	2008-08-27 12:21:09 UTC (rev 23241)
-@@ -0,0 +1,10 @@
-+config BR2_PACKAGE_GTKPERF
-+	bool "gtkperf (performance test for GTK2)"
-+	depends on BR2_PACKAGE_LIBGTK2
-+	help
-+	  GtkPerf is an application designed to test GTK+ performance.
-+	  The point is to create common testing platform to run
-+	  predefined GTK+ widgets
-+	  e.g. (opening comboboxes, toggling buttons, scrolling text yms.)
-+	  and this way define the speed of device/platform.
-+
-
-Added: trunk/buildroot/package/gtkperf/gtkperf.mk
-===================================================================
---- trunk/buildroot/package/gtkperf/gtkperf.mk	                        (rev 0)
-+++ trunk/buildroot/package/gtkperf/gtkperf.mk	2008-08-27 12:21:09 UTC (rev 23241)
-@@ -0,0 +1,15 @@
-+#############################################################
-+#
-+# GtkPerf
-+#
-+#############################################################
-+GTKPERF_VERSION:=0.40
-+GTKPERF_SOURCE:=gtkperf_$(GTKPERF_VERSION).tar.gz
-+GTKPERF_SITE:=http://$(BR2_SOURCEFORGE_MIRROR).dl.sourceforge.net/sourceforge/gtkperf
-+GTKPERF_AUTORECONF = NO
-+GTKPERF_INSTALL_TARGET = YES
-+GTKPERF_INSTALL_TARGET_OPT = DESTDIR=$(TARGET_DIR) install
-+GTKPERF_DEPENDENCIES = libgtk2
-+
-+$(eval $(call AUTOTARGETS,package,gtkperf))
-+
+cheers,
