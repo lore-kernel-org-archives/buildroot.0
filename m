@@ -1,7 +1,7 @@
 From: jacmet at uclibc.org <jacmet@uclibc.org>
-Date: Wed, 27 Aug 2008 13:18:45 -0700 (PDT)
-Subject: [Buildroot] svn commit: trunk/buildroot/package/sudo
-Message-ID: <20080827201845.1767F3C831@busybox.net>
+Date: Wed, 27 Aug 2008 13:18:51 -0700 (PDT)
+Subject: [Buildroot] svn commit: trunk/buildroot/package/kismet
+Message-ID: <20080827201851.8D2683C83D@busybox.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -9,30 +9,46 @@ Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
 Author: jacmet
-Date: 2008-08-27 13:18:43 -0700 (Wed, 27 Aug 2008)
-New Revision: 23250
+Date: 2008-08-27 13:18:51 -0700 (Wed, 27 Aug 2008)
+New Revision: 23251
 
 Log:
-sudo: fix long help text lines
+kismet: fix long help text lines
+
+And add homepage while we're at it.
 
 Modified:
-   trunk/buildroot/package/sudo/Config.in
+   trunk/buildroot/package/kismet/Config.in
 
 
 Changeset:
-Modified: trunk/buildroot/package/sudo/Config.in
+Modified: trunk/buildroot/package/kismet/Config.in
 ===================================================================
---- trunk/buildroot/package/sudo/Config.in	2008-08-27 20:18:40 UTC (rev 23249)
-+++ trunk/buildroot/package/sudo/Config.in	2008-08-27 20:18:43 UTC (rev 23250)
-@@ -1,7 +1,7 @@
- config BR2_PACKAGE_SUDO
- 	bool "sudo"
- 	help
--	 Sudo is a program designed to allow a sysadmin to give limited root
--	 privileges to users and log root activity.  The basic philosophy is to give
--	 as few privileges as possible but still allow people to get their work done.
+--- trunk/buildroot/package/kismet/Config.in	2008-08-27 20:18:43 UTC (rev 23250)
++++ trunk/buildroot/package/kismet/Config.in	2008-08-27 20:18:51 UTC (rev 23251)
+@@ -4,14 +4,17 @@
+ 	select BR2_PACKAGE_LIBPCAP
+ 	select BR2_PACKAGE_DBUS
+ 	select BR2_PACKAGE_DBUS_GLIB
 -
-+	  Sudo is a program designed to allow a sysadmin to give
-+	  limited root privileges to users and log root activity.  The
-+	  basic philosophy is to give as few privileges as possible
-+	  but still allow people to get their work done.
+ 	help
+-		Kismet - 802.11 layer2 wireless network detector, sniffer, and intrusion detection system
++	  Kismet - 802.11 layer2 wireless network detector, sniffer,
++	  and intrusion detection system.
+ 
+-		Kismet will work with any wireless card which supports raw monitoring (rfmon) mode, and can
+-		sniff 802.11b, 802.11a, and 802.11g traffic.
+-		
+-		Kismet identifies networks by passively collecting packets and detecting standard named
+-		networks, detecting (and given time, decloaking) hidden networks, and infering the presence
+-		of nonbeaconing networks via data traffic.
++	  Kismet will work with any wireless card which supports raw
++	  monitoring (rfmon) mode, and can sniff 802.11b, 802.11a, and
++	  802.11g traffic.
+ 
++	  Kismet identifies networks by passively collecting packets
++	  and detecting standard named networks, detecting (and given
++	  time, decloaking) hidden networks, and infering the presence
++	  of nonbeaconing networks via data traffic.
++
++	  http://www.kismetwireless.net
