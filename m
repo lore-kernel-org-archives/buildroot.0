@@ -1,22 +1,37 @@
-From: NITIN SEHGAL <sehgal_n@hotmail.com>
-Date: Wed, 27 Aug 2008 21:21:28 +0000
-Subject: [Buildroot] FW: IBM 750 GX support
-Message-ID: <BAY103-W529473C49FEB850CDD0BF2EA610@phx.gbl>
+From: Hamish Moffatt <hamish@cloud.net.au>
+Date: Thu, 28 Aug 2008 10:17:20 +1000
+Subject: [Buildroot] MTD-utils version bounce
+In-Reply-To: <19179409.post@talk.nabble.com>
+References: <19179409.post@talk.nabble.com>
+Message-ID: <20080828001719.GA10828@cloud.net.au>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+On Wed, Aug 27, 2008 at 04:53:01AM -0700, Daniel Laird wrote:
+> I would like to bounce the mtd-utils version from 1.1.0 to 1.2.0.  This is
+> the latest release and contains many fixes.  However I do not want to do
+> this if it breaks stuff for everyone else.
+> I am not happy with using a GIT checkout every time.  
+> So the question is 
+> 1.) Do I bounce version and make makefile like mtd-utils.git
+> 2.) Create another mtd target of 1.2.0 
 
+Hi Daniel,
 
+I think the BR2_PACKAGE_MTD_UTILS variant, currently 1.1.0, should be
+upgraded to 1.2.0. Only the old 2005/2006 versions need to be kept for
+special reasons[*].
 
-Hi All, I am working on 750GX IBM PowerPC and compiled the build root with  Target Processor as PowerPC and sub target as 750.  But when I execute powerpc-linux-as --help it does not show 750 or 750gx in the -m cpu options. Can you please suggest what i need to specify with -m option to generate code for 750GX processor? regardsNitin
+You probably need some of the Makefile changes/patches from my
+mtd-utils.git package.
 
-Searching for weekend getaways? Try Live.com Try it! 
-_________________________________________________________________
-Searching for the best deals on travel? Visit MSN Travel.
-http://msn.coxandkings.co.in/cnk/cnk.do
--------------- next part --------------
-An HTML attachment was scrubbed...
-URL: http://busybox.net/lists/buildroot/attachments/20080827/b6e48013/attachment.htm 
+[*] I don't know what those reasons are, and if they are still valid. If
+they are, mtd-utils upstream should be informed so they can be fixed.
+
+thanks,
+Hamish
+-- 
+Hamish Moffatt VK3SB <hamish@debian.org> <hamish@cloud.net.au>
