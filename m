@@ -1,42 +1,44 @@
-From: jacmet at uclibc.org <jacmet@uclibc.org>
-Date: Wed, 27 Aug 2008 21:57:27 -0700 (PDT)
-Subject: [Buildroot] svn commit: trunk/buildroot/package/busybox
-Message-ID: <20080828045727.E7DC83C810@busybox.net>
+From: Peter Korsgaard <jacmet@uclibc.org>
+Date: Thu, 28 Aug 2008 07:02:09 +0200
+Subject: [Buildroot] svn commit: trunk/buildroot/package/fltk
+In-Reply-To: <20080828002656.GB10828@cloud.net.au> (Hamish Moffatt's message
+	of "Thu\, 28 Aug 2008 10\:26\:56 +1000")
+References: <20080827201919.E9B3DF8006@busybox.net>
+	<20080828002656.GB10828@cloud.net.au>
+Message-ID: <87vdxlu3zi.fsf@macbook.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Author: jacmet
-Date: 2008-08-27 21:57:27 -0700 (Wed, 27 Aug 2008)
-New Revision: 23272
+>>>>> "Hamish" == Hamish Moffatt <hamish@cloud.net.au> writes:
 
-Log:
-busybox: udhcpc patch for 1.12.0
+Hi,
 
-Added:
-   trunk/buildroot/package/busybox/busybox-1.12.0-dhcp.patch
+ >> -comment "fltk		- disabled (requires Xorg(7))"
+ >> -	depends on !(BR2_PACKAGE_XORG || BR2_PACKAGE_XORG7)
+ >> 
 
+ Hamish> I think those comments are kind of helpful. Otherwise, if you know a
+ Hamish> package exists but can't find it in menuconfig, you need to open up
+ Hamish> Config.in to find the dependencies.
 
-Changeset:
-Added: trunk/buildroot/package/busybox/busybox-1.12.0-dhcp.patch
-===================================================================
---- trunk/buildroot/package/busybox/busybox-1.12.0-dhcp.patch	                        (rev 0)
-+++ trunk/buildroot/package/busybox/busybox-1.12.0-dhcp.patch	2008-08-28 04:57:27 UTC (rev 23272)
-@@ -0,0 +1,15 @@
-+--- busybox-1.12.0/networking/udhcp/dhcpc.c	Wed Aug  6 00:55:58 2008
-++++ busybox-1.12.0-dhcp/networking/udhcp/dhcpc.c	Thu Aug 28 00:05:23 2008
-+@@ -259,9 +259,10 @@
-+ 	if (opt & OPT_o)
-+ 		client_config.no_default_options = 1;
-+ 	while (list_O) {
-+-		int n = index_in_strings(dhcp_option_strings, llist_pop(&list_O));
-++		char *optstr = llist_pop(&list_O);
-++		int n = index_in_strings(dhcp_option_strings, optstr);
-+ 		if (n < 0)
-+-			bb_error_msg_and_die("unknown option '%s'", list_O->data);
-++			bb_error_msg_and_die("unknown option '%s'", optstr);
-+ 		n = dhcp_options[n].code;
-+ 		client_config.opt_mask[n >> 3] |= 1 << (n & 7);
-+ 	}
+Sometimes they are, but having tons of those lines listed for all X
+programs when you haven't selected X is imho not.
+
+We should probably move X applications / libraries to it's own sub
+menu.
+
+ Hamish> Alternatively the package could use select instead of depends.
+
+Yeah, but that wouldn't work here as there's multiple providers of X
+(and anyway, including a monster like X behind your back isn't really
+userfriendly either).
+
+But in general I agree - Use select for hard dependencies and only
+print those comment lines for stuff like toolchain settings (locales,
+wchar, ..).
+
+-- 
+Bye, Peter Korsgaard
