@@ -1,50 +1,28 @@
-From: Will Wagner <will_wagner@carallon.com>
-Date: Thu, 28 Aug 2008 18:59:47 +0100
-Subject: [Buildroot] [PATCH] x11 xserver: fix pixman define for xserver
- pkg config
-In-Reply-To: <5BF78BCE8D9BF14A83F836BD9E3916BA0DDED6@blrms.slti.sanyo.co.in>
-References: <5BF78BCE8D9BF14A83F836BD9E3916BA0DDED6@blrms.slti.sanyo.co.in>
-Message-ID: <48B6E793.9070407@carallon.com>
+From: Hamish Moffatt <hamish@cloud.net.au>
+Date: Fri, 29 Aug 2008 10:38:13 +1000
+Subject: [Buildroot] svn commit: trunk/buildroot/package/fltk
+In-Reply-To: <87vdxlu3zi.fsf@macbook.be.48ers.dk>
+References: <20080827201919.E9B3DF8006@busybox.net>
+	<20080828002656.GB10828@cloud.net.au>
+	<87vdxlu3zi.fsf@macbook.be.48ers.dk>
+Message-ID: <20080829003813.GB13192@cloud.net.au>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+On Thu, Aug 28, 2008 at 07:02:09AM +0200, Peter Korsgaard wrote:
+> But in general I agree - Use select for hard dependencies and only
+> print those comment lines for stuff like toolchain settings (locales,
+> wchar, ..).
 
-> ------------------------------------------------------------------------
-> *From:* Gururaja Hebbar K R
-> *Sent:* Tuesday, May 27, 2008 3:22 PM
-> *To:* 'Thiago A. Corr?a'
-> *Cc:* 'buildroot at uclibc.org'; 'john.voltz at gmail.com'
-> *Subject:* [PATCH] x11 xserver: fix pixman define for xserver pkg config
-> 
-> Hi,
->  
-> Below patch fixes pixman defines in pkg config for xserver
+Speaking of wchar and locales, do these work well enough in uClibc to
+enable them? I noticed that the latest procps requires wchar, but I have
+it disabled because in the past it broke floating point string
+conversions in uClibc. Or maybe it was locales that caused that.
+I am planning to write a patch for procps to make wchar optional.
 
-I have just run into this same issue and this patch solves the problem. Any chance of 
-getting it applied?
-
-Regards
-Will
-
->  
-> Regards
-> Gururaja
->  
-> 
-> 
-> ------------------------------------------------------------------------
-> 
-> _______________________________________________
-> buildroot mailing list
-> buildroot at uclibc.org
-> http://busybox.net/mailman/listinfo/buildroot
-
+Hamish
 -- 
-------------------------------------------------------------------------
-Will Wagner                                     will_wagner at carallon.com
-Senior Project Engineer                  Office Tel: +44 (0)20 7371 2032
-Carallon Ltd, Studio G20, Shepherds Building, Rockley Rd, London W14 0DA
-------------------------------------------------------------------------
+Hamish Moffatt VK3SB <hamish@debian.org> <hamish@cloud.net.au>
