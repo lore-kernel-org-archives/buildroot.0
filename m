@@ -1,55 +1,59 @@
-From: John Voltz <john.voltz@gmail.com>
-Date: Fri, 29 Aug 2008 14:13:08 -0400
-Subject: [Buildroot] xserver help
-In-Reply-To: <48B83724.2060709@carallon.com>
-References: <48B83724.2060709@carallon.com>
-Message-ID: <46a136670808291113v4695d5dcm1f6d8fa893869b8a@mail.gmail.com>
+From: danieljlaird at hotmail.com <danieljlaird@hotmail.com>
+Date: Fri, 29 Aug 2008 19:16:45 +0100
+Subject: [Buildroot] svn commit: trunk/buildroot/package: games
+	games/ace_of_penguins games/gnuch etc...
+In-Reply-To: <20080829132737.BF3503C864@busybox.net><20080829153841.37df370c@atmel.com><BD79186B4FD85F4B8E60E381CAEE19097AE654@mi8nycmail19.Mi8.com>
+	<19223815.post@talk.nabble.com>
+References: <20080829132737.BF3503C864@busybox.net><20080829153841.37df370c@atmel.com><BD79186B4FD85F4B8E60E381CAEE19097AE654@mi8nycmail19.Mi8.com>
+	<19223815.post@talk.nabble.com>
+Message-ID: <COL102-DS131551BA49AC350CABE3EFDC630@phx.gbl>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->
->
-> I'm trying to get the x.org server up and running for an x86 target with
-> intel 945G
-> graphics chip.
->
-> I have been running into a number of errors and was hoping for some help.
->
-> First off I am not sure which packages I should select, there are a lot of
-> packages and I
-> have no recent experience with x11. Does someone have an example
-> configuration they could
-> send me so I can see what packages you are selecting? Is there anywhere
-> with documentation
-> on all the packages and which ones are needed to get the xserver running?
->
-> Any help much appreciated.
->
-> Will
-> --
+Not sure my ace_of_penguins check was valid.
 
+However jamvm is definately ok and that lives in a subdir.
+I believe that the problem might lie not in subdirs specifically but in 
+Makefile.autotools.in handling of packages called one thing and living in 
+another directory or a combination of packages in subdirs with a name that 
+does not match the extracted directory path
 
-First you need to decide whether you want to use the tinyX (also known as
-kdrive or framebuffer X) or the modular X.org server. Then you need the X
-libraries, I would just select them all, unless your file system space is
-limited. Then select the fonts you want. And last, if you are building the
-modular system, you need the xdriver_xf86-video-intel for your video, then
-the mouse (xdriver_xf86-input-mouse) and keyboard
-(xdriver_xf86-input-keyboard) drivers. You will need to create an xorg.conf
-file for your system as well, and save it to /etc/X11/xorg.conf. I think
-there is an example in the default target skeleton directory in buildroot.
+ace_of_penguins lives in a directory called ace.
+Maybe this is common to the packages you have suggested are failing.
 
-On your first boot you will also need to run fontconfig to build your font
-cache, or it will take bloody ages for any applications to start in X. Make
-sure your fonts end up in /usr/share/X11/fonts, or make a symbolic link to
-them from there.
+I will look into this on monday
+Daniel
 
-Regards,
+--------------------------------------------------
+From: "Daniel Laird" <daniel.j.laird@nxp.com>
+Sent: Friday, August 29, 2008 5:59 PM
+To: <buildroot@uclibc.org>
+Subject: Re: [Buildroot] svn commit: trunk/buildroot/package: games 
+games/ace_of_penguins games/gnuch etc...
 
-John
--------------- next part --------------
-An HTML attachment was scrubbed...
-URL: http://busybox.net/lists/buildroot/attachments/20080829/acdd5dd5/attachment.htm 
+>
+> what package were you having issues with?
+> The more I can test the better currently I can see that the patch target
+> succeeds and patches the correct files if I build jamvm or ace_of_penguins
+> both of which live in subdirs.
+>
+> I will try again ASAP (monday now) but the more bad cases I have the 
+> better
+> I can solve this - I want to try and keep this change but not at the 
+> expense
+> of everyone else :-)
+>
+> Daniel
+> -- 
+> View this message in context: 
+> http://www.nabble.com/svn-commit%3A-trunk-buildroot-package%3A-games-games-ace_of_penguins-games-gnuch-etc...-tp19219940p19223815.html
+> Sent from the BuildRoot mailing list archive at Nabble.com.
+>
+> _______________________________________________
+> buildroot mailing list
+> buildroot at uclibc.org
+> http://busybox.net/mailman/listinfo/buildroot
+> 
