@@ -1,29 +1,31 @@
-From: Daniel Laird <daniel.j.laird@nxp.com>
-Date: Fri, 29 Aug 2008 09:59:26 -0700 (PDT)
-Subject: [Buildroot] svn commit: trunk/buildroot/package: games
- games/ace_of_penguins games/gnuch etc...
-In-Reply-To: <BD79186B4FD85F4B8E60E381CAEE19097AE654@mi8nycmail19.Mi8.com>
-References: <20080829132737.BF3503C864@busybox.net>
-	<20080829153841.37df370c@atmel.com>
-	<BD79186B4FD85F4B8E60E381CAEE19097AE654@mi8nycmail19.Mi8.com>
-Message-ID: <19223815.post@talk.nabble.com>
+From: Will Wagner <will_wagner@carallon.com>
+Date: Fri, 29 Aug 2008 18:51:32 +0100
+Subject: [Buildroot] xserver help
+Message-ID: <48B83724.2060709@carallon.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+Hello,
 
-what package were you having issues with?
-The more I can test the better currently I can see that the patch target
-succeeds and patches the correct files if I build jamvm or ace_of_penguins
-both of which live in subdirs.
+I'm trying to get the x.org server up and running for an x86 target with intel 945G 
+graphics chip.
 
-I will try again ASAP (monday now) but the more bad cases I have the better
-I can solve this - I want to try and keep this change but not at the expense
-of everyone else :-)
+I have been running into a number of errors and was hoping for some help.
 
-Daniel 
+First off I am not sure which packages I should select, there are a lot of packages and I 
+have no recent experience with x11. Does someone have an example configuration they could 
+send me so I can see what packages you are selecting? Is there anywhere with documentation 
+on all the packages and which ones are needed to get the xserver running?
+
+Any help much appreciated.
+
+Will
 -- 
-View this message in context: http://www.nabble.com/svn-commit%3A-trunk-buildroot-package%3A-games-games-ace_of_penguins-games-gnuch-etc...-tp19219940p19223815.html
-Sent from the BuildRoot mailing list archive at Nabble.com.
+------------------------------------------------------------------------
+Will Wagner                                     will_wagner at carallon.com
+Senior Project Engineer                  Office Tel: +44 (0)20 7371 2032
+Carallon Ltd, Studio G20, Shepherds Building, Rockley Rd, London W14 0DA
+------------------------------------------------------------------------
