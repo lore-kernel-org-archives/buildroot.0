@@ -1,11 +1,7 @@
-From: Daniel Laird <daniel.j.laird@nxp.com>
-Date: Fri, 29 Aug 2008 06:52:19 -0700 (PDT)
-Subject: [Buildroot] svn commit: trunk/buildroot/package: games
- games/ace_of_penguins games/gnuch etc...
-In-Reply-To: <20080829153841.37df370c@atmel.com>
-References: <20080829132737.BF3503C864@busybox.net>
-	<20080829153841.37df370c@atmel.com>
-Message-ID: <19220408.post@talk.nabble.com>
+From: bugs at busybox.net <bugs@busybox.net>
+Date: Fri, 29 Aug 2008 08:09:43 -0700
+Subject: [Buildroot] [buildroot 0004794]: Add new package eeprog to buildroot
+Message-ID: <c6117030ff6ede546c15e546d38de42c@bugs.uclibc.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,12 +9,36 @@ Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
 
-I have tried building the games/ace_of_penguins and packages in java/jamvm
-and it is applying the patches that I expect it to.
-If anyone else finds this to be wrong then I will reverse this change or fix
-Makefile.autotools.in but for now it appears to be patching all correctly.
+The following issue has been SUBMITTED. 
+====================================================================== 
+http://busybox.net/bugs/view.php?id=4794 
+====================================================================== 
+Reported By:                gustavoz
+Assigned To:                buildroot
+====================================================================== 
+Project:                    buildroot
+Issue ID:                   4794
+Category:                   New Features
+Reproducibility:            always
+Severity:                   feature
+Priority:                   normal
+Status:                     assigned
+====================================================================== 
+Date Submitted:             08-29-2008 08:09 PDT
+Last Modified:              08-29-2008 08:09 PDT
+====================================================================== 
+Summary:                    Add new package eeprog to buildroot
+Description: 
+Add the eeprog (i2c eeprom userland programmer) package to buildroot.
 
-Daniel Laird
--- 
-View this message in context: http://www.nabble.com/svn-commit%3A-trunk-buildroot-package%3A-games-games-ace_of_penguins-games-gnuch-etc...-tp19219940p19220408.html
-Sent from the BuildRoot mailing list archive at Nabble.com.
+====================================================================== 
+
+Issue History 
+Date Modified   Username       Field                    Change               
+====================================================================== 
+08-29-08 08:09  gustavoz       New Issue                                    
+08-29-08 08:09  gustavoz       Status                   new => assigned     
+08-29-08 08:09  gustavoz       Assigned To               => buildroot       
+08-29-08 08:09  gustavoz       File Added: buildroot-eeprog.patch               
+    
+======================================================================
