@@ -1,71 +1,28 @@
-From: jacmet at uclibc.org <jacmet@uclibc.org>
-Date: Sun, 31 Aug 2008 13:23:47 -0700 (PDT)
-Subject: [Buildroot] svn commit: trunk/buildroot: docs project
-Message-ID: <20080831202347.8128B3C6FB@busybox.net>
+From: Peter Korsgaard <jacmet@uclibc.org>
+Date: Sun, 31 Aug 2008 22:24:37 +0200
+Subject: [Buildroot] svn commit: trunk/buildroot/package/libglib2
+In-Reply-To: <1220114542.3307.209.camel@localhost.localdomain> (Ormund
+	Williams's message of "Sat\, 30 Aug 2008 12\:42\:22 -0400")
+References: <20080826223727.C982F3C7AE@busybox.net>
+	<1220114542.3307.209.camel@localhost.localdomain>
+Message-ID: <87hc913pbu.fsf@macbook.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Author: jacmet
-Date: 2008-08-31 13:23:47 -0700 (Sun, 31 Aug 2008)
-New Revision: 23287
+>>>>> "Ormund" == Ormund Williams <ormundw@panix.com> writes:
 
-Log:
-buildroot: support out-of-tree builds
+ >> -LIBGLIB2_DEPENDENCIES = uclibc gettext libintl pkgconfig
+ >> +LIBGLIB2_DEPENDENCIES = uclibc gettext libintl libiconv pkgconfig
+ >> 
+ >> $(eval $(call AUTOTARGETS,package,libglib2))
 
-Add support and documentation for out-of-tree builds with syntax
-like the Linux kernel (make O=<dir>).
+ Ormund> I'm having a problem with this commit, glib2 fails to build
+ Ormund> with this error:
 
-Modified:
-   trunk/buildroot/docs/buildroot.html
-   trunk/buildroot/project/Makefile.in
+Sorry, my bad. Should be fixed in r23286.
 
-
-Changeset:
-Modified: trunk/buildroot/docs/buildroot.html
-===================================================================
---- trunk/buildroot/docs/buildroot.html	2008-08-31 20:23:41 UTC (rev 23286)
-+++ trunk/buildroot/docs/buildroot.html	2008-08-31 20:23:47 UTC (rev 23287)
-@@ -217,6 +217,20 @@
-     <p>You can now disconnect or copy the content of your <code>dl</code> 
-     directory to the build-host. </p>
- 
-+    <h3><a name="building_out_of_tree" id="building_out_of_tree"></a>
-+    Building out-of-tree</h3>
-+
-+    <p>Buildroot supports building out of tree with a syntax similar
-+    to the Linux kernel. To use it, add O=&lt;directory&gt; to the
-+    make command line, E.G.:</p>
-+
-+<pre>
-+ $ make O=/tmp/build
-+</pre>
-+
-+    <p>And all the output files will be located under
-+    <code>/tmp/build</code>.</p>
-+
-     <h3><a name="environment_variables" id="environment_variables"></a>
-     Environment variables</h3>
- 
-
-Modified: trunk/buildroot/project/Makefile.in
-===================================================================
---- trunk/buildroot/project/Makefile.in	2008-08-31 20:23:41 UTC (rev 23286)
-+++ trunk/buildroot/project/Makefile.in	2008-08-31 20:23:47 UTC (rev 23287)
-@@ -25,7 +25,14 @@
- #")
- 
- 
-+# Buildroot supports building out of tree similarly to the Linux kernel.
-+# To use, add O= to the make command line (make O=/tmp/build)
- BASE_DIR:=$(shell pwd)
-+ifdef O
-+ifeq ("$(origin O)", "command line")
-+BASE_DIR := $(O)
-+endif
-+endif
- 
- TOPDIR_PREFIX:=$(strip $(subst ",, $(BR2_TOPDIR_PREFIX)))_
- #"))
+-- 
+Bye, Peter Korsgaard
