@@ -1,35 +1,37 @@
-From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Sun, 31 Aug 2008 08:23:44 +0200
-Subject: [Buildroot] Make error
-In-Reply-To: <ed4892840808301750t13e320a6ne218b2a0e96168f@mail.gmail.com>
-	(Steven Woody's message of "Sun\, 31 Aug 2008 08\:50\:14 +0800")
-References: <ed4892840808301750t13e320a6ne218b2a0e96168f@mail.gmail.com>
-Message-ID: <87od3966tr.fsf@macbook.be.48ers.dk>
+From: jacmet at uclibc.org <jacmet@uclibc.org>
+Date: Sat, 30 Aug 2008 23:26:41 -0700 (PDT)
+Subject: [Buildroot] svn commit: trunk/buildroot/target/generic
+Message-ID: <20080831062641.6BEF93C72F@busybox.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Steven" == Steven Woody <narkewoody@gmail.com> writes:
+Author: jacmet
+Date: 2008-08-30 23:26:40 -0700 (Sat, 30 Aug 2008)
+New Revision: 23284
 
- Steven> Following were outputed when run 'make', but I don't know
- Steven> what step it is related to:
+Log:
+target/generic/mini: remove udhcpc default.script entry
 
- Steven> table='target/generic/mini_device_table.txt' makedevs: line
- Steven> 53: regular file
- Steven> '/home/narke/buildroot/project_build_arm/uclibc/
- Steven> root/usr/share/udhcpc/default.script' does not exist: No such
- Steven> file or directory
+It isn't provided in the target skeleton, and avahi gets the
+permissions correct so it isn't needed and just confuses users.
 
-Not a big deal. The mini config you have selected
-(BR2_PACKAGE_BUSYBOX_SKELETON) has the udhcpc script listed in its
-device table to ensure it gets to be executable, but doesn't have a
-default script. If you don't enable avahi (which provides such a
-script) you'll get this warning.
+Modified:
+   trunk/buildroot/target/generic/mini_device_table.txt
 
-The avahi package nowadays ensures that it's udhcpc script gets to be
-executable, so I'll remove the entry from the device table.
 
--- 
-Bye, Peter Korsgaard
+Changeset:
+Modified: trunk/buildroot/target/generic/mini_device_table.txt
+===================================================================
+--- trunk/buildroot/target/generic/mini_device_table.txt	2008-08-29 13:27:37 UTC (rev 23283)
++++ trunk/buildroot/target/generic/mini_device_table.txt	2008-08-31 06:26:40 UTC (rev 23284)
+@@ -50,7 +50,6 @@
+ /etc/network/if-pre-up.d		d	755	0	0	-	-	-	-	-
+ /etc/network/if-down.d			d	755	0	0	-	-	-	-	-
+ /etc/network/if-post-down.d		d	755	0	0	-	-	-	-	-
+-/usr/share/udhcpc/default.script	f	755	0	0	-	-	-	-	-
+ # uncomment this to allow starting x as non-root
+ #/usr/X11R6/bin/Xfbdev		f	4755	0	0	-	-	-	-	-
+ # Normal system devices
