@@ -1,37 +1,35 @@
-From: Steven Woody <narkewoody@gmail.com>
-Date: Sun, 31 Aug 2008 09:59:11 +0800
+From: Peter Korsgaard <jacmet@uclibc.org>
+Date: Sun, 31 Aug 2008 08:23:44 +0200
 Subject: [Buildroot] Make error
 In-Reply-To: <ed4892840808301750t13e320a6ne218b2a0e96168f@mail.gmail.com>
+	(Steven Woody's message of "Sun\, 31 Aug 2008 08\:50\:14 +0800")
 References: <ed4892840808301750t13e320a6ne218b2a0e96168f@mail.gmail.com>
-Message-ID: <ed4892840808301859s363bdcc5t5e821e5f6a868aec@mail.gmail.com>
+Message-ID: <87od3966tr.fsf@macbook.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Sun, Aug 31, 2008 at 8:50 AM, Steven Woody <narkewoody@gmail.com> wrote:
-> Following were outputed when run 'make', but I don't know what step it
-> is related to:
->
-> table='target/generic/mini_device_table.txt'
-> makedevs: line 53: regular file '/home/narke/buildroot/project_build_arm/uclibc/
-> root/usr/share/udhcpc/default.script' does not exist: No such file or directory
-> -rw-r--r-- 1 narke users 10530816 2008-08-31 08:47 /home/narke/buildroot/binarie
-> s/uclibc/rootfs.arm.ext2
-> rm -f /home/narke/buildroot/project_build_arm/uclibc/.fakeroot*
->
->
-> Do you know what's wrong with the making?
->
-> Thanks.
->
+>>>>> "Steven" == Steven Woody <narkewoody@gmail.com> writes:
 
-I now attach my .config for your reference.
--------------- next part --------------
-A non-text attachment was scrubbed...
-Name: _config
-Type: application/octet-stream
-Size: 15661 bytes
-Desc: not available
-Url : http://busybox.net/lists/buildroot/attachments/20080831/e7257b97/attachment.obj 
+ Steven> Following were outputed when run 'make', but I don't know
+ Steven> what step it is related to:
+
+ Steven> table='target/generic/mini_device_table.txt' makedevs: line
+ Steven> 53: regular file
+ Steven> '/home/narke/buildroot/project_build_arm/uclibc/
+ Steven> root/usr/share/udhcpc/default.script' does not exist: No such
+ Steven> file or directory
+
+Not a big deal. The mini config you have selected
+(BR2_PACKAGE_BUSYBOX_SKELETON) has the udhcpc script listed in its
+device table to ensure it gets to be executable, but doesn't have a
+default script. If you don't enable avahi (which provides such a
+script) you'll get this warning.
+
+The avahi package nowadays ensures that it's udhcpc script gets to be
+executable, so I'll remove the entry from the device table.
+
+-- 
+Bye, Peter Korsgaard
